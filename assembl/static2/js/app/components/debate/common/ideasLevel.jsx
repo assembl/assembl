@@ -49,7 +49,7 @@ class IdeasLevel extends React.Component {
     return sliderWidth;
   }
   render() {
-    const { ideas, identifier, setLevelsToDisplay, currentLevel, ideaLevel } = this.props;
+    const { ideas, identifier, setSelectedIdeas, currentLevel, ideaLevel, selectedIdeaId } = this.props;
     const slug = getDiscussionSlug();
     return (
       <div className="slider" style={currentLevel > 1 ? { width: `${this.getSliderWidth()}px` } : {}}>
@@ -69,13 +69,13 @@ class IdeasLevel extends React.Component {
                   numPosts={idea.numPosts}
                   numContributors={idea.numContributors}
                   numChildren={idea.numChildren}
-                  isSelected={false}
                   link={`${getRoute('debate', { slug: slug, phase: identifier })}${getRoute('theme', { themeId: idea.id })}`}
                   title={idea.title}
                   description={idea.description}
-                  setLevelsToDisplay={setLevelsToDisplay}
+                  setSelectedIdeas={setSelectedIdeas}
                   ideaId={idea.id}
                   ideaLevel={ideaLevel}
+                  selectedIdeaId={selectedIdeaId}
                 />
               </Col>
             );

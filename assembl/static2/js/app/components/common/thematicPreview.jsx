@@ -6,10 +6,8 @@ class Thematic extends React.Component {
   render() {
     const { imgUrl, link, title, description, numPosts, numContributors } = this.props;
     return (
-      <div className="illustration illustration-box">
-        <div className="image-box" style={{ backgroundImage: `url(${imgUrl})` }}>
-          &nbsp;
-        </div>
+      <div className="illustration-box idea-preview idea-preview-level-0">
+        <div className="image-box" style={{ backgroundImage: `url(${imgUrl})` }} />
         <Link className="content-box" to={link}>
           <h3 className="light-title-3 center">
             {title}

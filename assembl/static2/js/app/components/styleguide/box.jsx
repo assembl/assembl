@@ -17,7 +17,7 @@ class Box extends React.Component {
           </div>
           <Row>
             <Col xs={12} md={4} className="no-padding">
-              <div className="illustration-box margin-m">
+              <div className="illustration-box margin-m" style={{height: '480px'}}>
                 <div className="image-box" style={{ backgroundImage: 'url(' + imgUrl + ')' }}>&nbsp;</div>
                 <a className="content-box">&nbsp;</a>
                 <div className="color-box">&nbsp;</div>
@@ -26,7 +26,7 @@ class Box extends React.Component {
               </div>
             </Col>
           </Row>
-          <div className="margin-m">&nbsp;</div>
+          <div className="margin-xl">&nbsp;</div>
           <div className="theme-box" style={{ width: `${300}px`, height: `${300}px`, borderTop: '1px solid #f3f0f4', borderRight: '1px solid #f3f0f4', borderBottom: '1px solid #f3f0f4' }}>&nbsp;</div>
         </section>
         <section>

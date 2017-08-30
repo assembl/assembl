@@ -1,48 +1,107 @@
 .idea-preview {
     height: 200px;
-    &.idea-preview-selected {
-        .color-box {
-            display: block;
-        }
+    .light-title-3 {
+        position: absolute;
+        top: 0;
+        width: calc(100% - 40px);
     }
-    .content-box {
-        cursor: initial;
-    }
-    .content-box:hover {
-        .text-box {
-            bottom: 25px;
-            width: calc(100% - 40px);
-            padding: 0;
-            margin: 0;
-        }
-        .stats {
-            height: 10px;
-        }
+    .access-discussion {
+        position: absolute;
+        top: calc(50% - 22px);
+        width: calc(100% - 40px);
+        text-align: center;
     }
     .see-discussion {
-        margin-top: 30px;
-    }
-    .action-separator {
-        margin: 2px;
-        &:before {
-            content: "/";
+        width: 100%;
+        text-align: center;
+        a {
+            color: $second-color;
+            text-transform: uppercase;
+            font-size: $font-size-xs;
+            font-family: $font-family3;
+            &:hover {
+                color: $second-color;
+            }
         }
     }
     .see-sub-ideas {
-        margin-top: 5px;
-        cursor: pointer;
-    }
-    .see-discussion, .action-separator, .see-sub-ideas, a, a:hover {
         color: $second-color;
-        text-align: center;
         text-transform: uppercase;
-        font-weight: bold;
+        font-size: $font-size-xs;
+        font-family: $font-family3;
+        width: 100%;
+        text-align: center;
+        &:before {
+            content: "/";
+            display: block;
+            margin: 5px 0;
+        }
+    }
+    .stats {
+        position: absolute;
+        bottom: 20px;
+        width: calc(100% - 40px);
+        text-align: center;
+        .stat-nb {
+            display: inline-block;
+        }
+        .dash {
+            display: inline-block;
+            padding: 0 5px 0 0;
+        }
+    }
+    .selected-idea-arrow {
+        bottom: 10px;
+        display: none;
+        text-align: center;
+        position: absolute;
+        width: calc(100% - 40px);
+        .assembl-icon-down-open {
+            margin-left: -40px;
+            color: $second-color;
+            &:before {
+                font-size: $font-size-xl;
+                transform: scaleY(0.6);
+            }
+        }
+    }
+}
+
+.idea-preview-selected {
+    .color-box {
+        background-color: $opacity-color;
+    }
+    .selected-idea-arrow {
+        display: block;
+    }
+    .stats {
+        display: none;
+    }
+}
+
+.idea-preview-level-0 {
+    height: 500px;
+    .light-title-3 {
+        position: absolute;
+        top: 150px;
+        width: calc(100% - 40px);
     }
 }
 
 .idea-preview-level-1 {
     height: 500px;
+    .light-title-3 {
+        position: absolute;
+        top: 80px;
+        width: calc(100% - 40px);
+    }
 }
+
 .idea-preview-level-2 {
     height: 300px;
+    .light-title-3 {
+        position: absolute;
+        top: 20px;
+        width: calc(100% - 40px);
+    }
 }

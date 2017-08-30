@@ -7,11 +7,11 @@ class Ideas extends React.Component {
   constructor(props) {
     super(props);
     const { rootIdeaId } = this.props;
-    this.state = { levelsToDisplay: [rootIdeaId] };
+    this.state = { levelsToDisplay: [rootIdeaId], selectedIdeaId: rootIdeaId };
     this.listIdeasToDisplay = this.listIdeasToDisplay.bind(this);
-    this.setLevelsToDisplay = this.setLevelsToDisplay.bind(this);
+    this.setSelectedIdeas = this.setSelectedIdeas.bind(this);
   }
-  setLevelsToDisplay(selectedIdeaId, ideaLevel) {
+  setSelectedIdeas(selectedIdeaId, ideaLevel) {
     const currentLevel = this.state.levelsToDisplay.length;
     const arr = this.state.levelsToDisplay;
     if (arr.indexOf(selectedIdeaId) <= -1 && ideaLevel === currentLevel) {
@@ -26,6 +26,7 @@ class Ideas extends React.Component {
         levelsToDisplay: arr
       });
     }
+    this.setState({ selectedIdeaId: selectedIdeaId });
   }
   listIdeasToDisplay(selectedIdeaId) {
     const { ideas } = this.props;
@@ -50,15 +51,16 @@ class Ideas extends React.Component {
               </h1>
             </div>
             <div className="content-section">
-              {this.state.levelsToDisplay.map((selectedIdeaId, index) => {
+              {this.state.levelsToDisplay.map((ideaId, index) => {
                 return (
                   <IdeasLevel
-                    ideas={this.listIdeasToDisplay(selectedIdeaId)}
+                    ideas={this.listIdeasToDisplay(ideaId)}
                     identifier={identifier}
                     key={index}
-                    setLevelsToDisplay={this.setLevelsToDisplay}
+                    setSelectedIdeas={this.setSelectedIdeas}
                     currentLevel={this.state.levelsToDisplay.length}
                     ideaLevel={index + 1}
+                    selectedIdeaId={this.state.selectedIdeaId}
                   />
                 );
               })}

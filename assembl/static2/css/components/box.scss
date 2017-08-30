@@ -42,72 +42,59 @@
 }
 
 .illustration-box {
-  height: 500px;
 
-  .image-box {
-    background-color: $grey2;
-    background-position: top left;
-    background-repeat: no-repeat;
-    background-size: cover;
-    height: 500px;
-    position: absolute;
     width: calc(100% - 2px);
-    z-index: 0;
-  }
 
-  .color-box {
-    background-color: $opacity-color;
-    display: none;
-    height: 500px;
-    position: absolute;
-    width: calc(100% - 2px);
-    z-index: 1;
-  }
-
-  .content-box {
-    color: $white;
-    cursor: pointer;
-    height: 500px;
-    padding: 0 20px;
-    position: absolute;
-    width: calc(100% - 2px);
-    z-index: 4;
-
-    &:hover {
-      ~ .color-box {
-        display: block;
-      }
-
-      ~ .rotate-hyphen {
-        display: block;
-      }
-
-      .text-box {
-        display: block;
-      }
+    .image-box {
+      background-color: $grey2;
+      background-position: top left;
+      background-repeat: no-repeat;
+      background-size: cover;
+      height: 100%;
+      position: absolute;
+      width: calc(100% - 2px);
+      z-index: 0;
     }
 
-    .text-box {
-      display: none;
-      font-family: $font-family4;
-      font-size: $font-size-s;
-      letter-spacing: $text-letter-spacing;
-      padding: 0 20px;
-      text-align: center;
+    .content-box {
+        color: $white;
+        cursor: pointer;
+        height: 100%;
+        padding: 0 20px;
+        position: absolute;
+        width: calc(100% - 2px);
+        z-index: 4;
+
+        &:hover {
+          ~ .color-box {
+            background-color: $opacity-color;
+          }
+
+          ~ .rotate-hyphen {
+              margin: 0 0 -10px -10px;
+              transform: rotate(90deg);
+          }
+        }
     }
-  }
 
-  .box-hyphen {
-    margin: 250px 0 0;
-    position: absolute;
-    z-index: 2;
-  }
+    .color-box {
+      background-color: rgba(0, 0, 0, 0.5);
+      height: 500px;
+      position: absolute;
+      width: calc(100% - 2px);
+      z-index: 1;
+    }
 
-  .rotate-hyphen {
-    display: none;
-    margin: 240px 0 0 -10px;
-    position: absolute;
-    transform: rotate(90deg);
-    z-index: 3;
-  }
+    .box-hyphen {
+      margin: 10px 0 0;
+      position: absolute;
+      z-index: 2;
+      top: 50%;
+    }
+
+    .rotate-hyphen {
+      position: absolute;
+      z-index: 3;
+      transition: all 0.2s ease-in;
+    }
 }
