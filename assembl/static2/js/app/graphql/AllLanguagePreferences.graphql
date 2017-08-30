@@ -1,0 +1,14 @@
+query AllLanguagePreferences($inLocale: String!) {
+	defaultPreferences {
+	    languages {
+	      locale
+	      name(inLocale: $inLocale)
+	    }
+	}
+	discussionPreferences {
+	    languages {
+	      locale
+	      name(inLocale: $inLocale)
+	    }
+	} 
+}
