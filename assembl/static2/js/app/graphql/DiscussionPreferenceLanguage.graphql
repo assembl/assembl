@@ -1,0 +1,8 @@
+query DiscussionPreferences($inLocale: String!) {
+	discussionPreferences {
+    languages {
+      locale
+      name(inLocale: $inLocale)
+    }
+  }
+}
