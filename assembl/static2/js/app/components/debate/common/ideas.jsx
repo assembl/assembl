@@ -7,26 +7,25 @@ class Ideas extends React.Component {
   constructor(props) {
     super(props);
     const { rootIdeaId } = this.props;
-    this.state = { levelsToDisplay: [rootIdeaId], selectedIdeaId: rootIdeaId };
+    this.state = { selectedIdeasId: [rootIdeaId] };
     this.listIdeasToDisplay = this.listIdeasToDisplay.bind(this);
     this.setSelectedIdeas = this.setSelectedIdeas.bind(this);
   }
   setSelectedIdeas(selectedIdeaId, ideaLevel) {
-    const currentLevel = this.state.levelsToDisplay.length;
-    const arr = this.state.levelsToDisplay;
+    const currentLevel = this.state.selectedIdeasId.length;
+    const arr = this.state.selectedIdeasId;
     if (arr.indexOf(selectedIdeaId) <= -1 && ideaLevel === currentLevel) {
       arr.push(selectedIdeaId);
       this.setState({
-        levelsToDisplay: arr
+        selectedIdeasId: arr
       });
     } else if (ideaLevel < currentLevel) {
-      const nbToRemove = this.state.levelsToDisplay.length - ideaLevel;
+      const nbToRemove = this.state.selectedIdeasId.length - ideaLevel;
       arr.splice(ideaLevel, nbToRemove, selectedIdeaId);
       this.setState({
-        levelsToDisplay: arr
+        selectedIdeasId: arr
       });
     }
-    this.setState({ selectedIdeaId: selectedIdeaId });
   }
   listIdeasToDisplay(selectedIdeaId) {
     const { ideas } = this.props;
@@ -51,16 +50,16 @@ class Ideas extends React.Component {
               </h1>
             </div>
             <div className="content-section">
-              {this.state.levelsToDisplay.map((ideaId, index) => {
+              {this.state.selectedIdeasId.map((ideaId, index) => {
                 return (
                   <IdeasLevel
                     ideas={this.listIdeasToDisplay(ideaId)}
                     identifier={identifier}
                     key={index}
                     setSelectedIdeas={this.setSelectedIdeas}
-                    currentLevel={this.state.levelsToDisplay.length}
+                    currentLevel={this.state.selectedIdeasId.length}
                     ideaLevel={index + 1}
-                    selectedIdeaId={this.state.selectedIdeaId}
+                    selectedIdeasId={this.state.selectedIdeasId}
                   />
                 );
               })}

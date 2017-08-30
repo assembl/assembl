@@ -4,7 +4,7 @@ import { Translate } from 'react-redux-i18n';
 import Statistic from './statistic';
 
 const IdeaPreview = ({
-  selectedIdeaId,
+  selectedIdeasId,
   imgUrl,
   link,
   title,
@@ -18,7 +18,7 @@ const IdeaPreview = ({
   return (
     <div
       className={
-        selectedIdeaId === ideaId
+        selectedIdeasId.indexOf(ideaId) > -1
           ? `illustration-box idea-preview idea-preview-level-${ideaLevel} idea-preview-selected`
           : `illustration-box idea-preview idea-preview-level-${ideaLevel}`
       }
