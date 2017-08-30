@@ -853,6 +853,7 @@ class Query(graphene.ObjectType):
     thematics = graphene.List(Thematic, identifier=graphene.String(required=True))
     num_participants = graphene.Int()
     discussion_preferences = graphene.Field(DiscussionPreference)
+    default_preferences = graphene.Field(DiscussionPreference)
 
     def resolve_root_idea(self, args, context, info):
         discussion_id = context.matchdict['discussion_id']
@@ -899,6 +900,13 @@ class Query(graphene.ObjectType):
         locales = prefs.get('preferred_locales', [])
         return DiscussionPreference(
             languages=[LocalePreference(locale=x) for x in locales])
+
+    def resolve_default_preferences(self, args, context, info):
+        default = models.Preferences.get_default_preferences()
+        preferred_locales = default['preferred_locales'] or []
+        return DiscussionPreference(
+            languages=[LocalePreference(locale=x) for x in preferred_locales])
+
 
 
 class VideoInput(graphene.InputObjectType):

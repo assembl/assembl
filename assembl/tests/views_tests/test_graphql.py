@@ -1439,3 +1439,17 @@ query { discussionPreferences { languages { locale, name(inLocale:"fr") } } } ""
                 ]
         }
     }
+
+
+def test_query_default_discussion_preferences(graphql_request,
+                                              discussion_with_lang_prefs):
+    res = schema.execute(u"""
+query { defaultPreferences { languages { locale, name(inLocale:"fr") } } }""", context_value=graphql_request)
+    assert json.loads(json.dumps(res.data)) == {
+        u'defaultPreferences': {
+            u'languages': [
+                {u'locale': u'fr', u'name': u'français'},
+                {u'locale': u'en', u'name': u'anglais'}
+            ]
+        }
+    }
