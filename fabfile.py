@@ -853,7 +853,7 @@ def webservers_stop():
     if env.uses_ngnix:
         # Nginx
         if exists('/etc/init.d/nginx'):
-            sudo('/etc/init.d/nginx stop')
+            run('sudo /etc/init.d/nginx stop')
         elif env.mac:
             sudo('killall nginx')
 
@@ -872,7 +872,7 @@ def webservers_start():
     if env.uses_ngnix:
         # Nginx
         if exists('/etc/init.d/nginx'):
-            sudo('/etc/init.d/nginx start')
+            run('sudo /etc/init.d/nginx start')
         elif env.mac and exists('/usr/local/nginx/sbin/nginx'):
             sudo('/usr/local/nginx/sbin/nginx')
 
