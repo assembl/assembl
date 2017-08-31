@@ -21,7 +21,7 @@ class Footer extends React.Component {
                   {debateData.socialMedias.map((sMedia, index) => {
                     return (
                       <Link to={sMedia.url} target="_blank" key={index}>
-                        <i className={`assembl-icon-${sMedia.name}-circle`} size={30} />
+                        <i className={`assembl-icon-${sMedia.name}-circle`} />
                       </Link>
                     );
                   })}
