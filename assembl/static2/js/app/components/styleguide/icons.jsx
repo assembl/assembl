@@ -11,8 +11,13 @@ import Ellipsis from '../svg/ellipsis';
 
 const icons = [
   'assembl-icon-google',
+  'assembl-icon-google-circle',
   'assembl-icon-facebook',
+  'assembl-icon-facebook-circle',
   'assembl-icon-twitter',
+  'assembl-icon-twitter-circle',
+  'assembl-icon-linkedin',
+  'assembl-icon-linkedin-circle',
   'assembl-icon-add',
   'assembl-icon-catch',
   'assembl-icon-checked',
