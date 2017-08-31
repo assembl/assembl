@@ -10,7 +10,7 @@ import Timeline from '../components/debate/navigation/timeline';
 import withLoadingIndicator from '../components/common/withLoadingIndicator';
 import AllIdeasQuery from '../graphql/AllIdeasQuery.graphql';
 
-const DebateThread = ({ identifier, isNavbarHidden, data, params, children, slug }) => {
+const DebateThread = ({ identifier, data, params, children, slug }) => {
   const rootIdeaId = 'rootIdea' in data && 'id' in data.rootIdea ? data.rootIdea.id : null;
   const thematics = 'ideas' in data ? data.ideas : null;
   const isParentRoute = !params.themeId || false;
@@ -28,7 +28,7 @@ const DebateThread = ({ identifier, isNavbarHidden, data, params, children, slug
     <div className="debate">
       {thematics &&
         <div>
-          <section className={isNavbarHidden ? 'timeline-section timeline-top' : 'timeline-section timeline-shifted'} id="timeline">
+          <section className="timeline-section" id="timeline">
             <div className="max-container">
               {!isParentRoute &&
                 <Link className="burger-menu grey" to={get('debate', { slug: slug, phase: identifier })}>

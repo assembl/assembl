@@ -32,7 +32,7 @@ class Debate extends React.Component {
   }
   render() {
     const { loading, thematics } = this.props.data;
-    const { identifier, isNavbarHidden } = this.props;
+    const { identifier } = this.props;
     const isParentRoute = !this.props.params.themeId || false;
     const themeId = this.props.params.themeId || null;
     const children = React.Children.map(this.props.children, (child) => {
@@ -46,7 +46,7 @@ class Debate extends React.Component {
         {loading && <Loader color="black" />}
         {thematics &&
           <div>
-            <section className={isNavbarHidden ? 'timeline-section timeline-top' : 'timeline-section timeline-shifted'} id="timeline">
+            <section className="timeline-section" id="timeline">
               <div className="max-container">
                 {!isParentRoute &&
                   <div className="burger-menu grey" onMouseOver={this.showThumbnails} onClick={this.displayThumbnails}>
@@ -62,13 +62,7 @@ class Debate extends React.Component {
             {!isParentRoute &&
               <section className="debate-section">
                 <div className={this.state.isThumbnailsHidden ? 'hiddenThumb' : 'shown'} onMouseLeave={this.hideThumbnails}>
-                  <Thumbnails
-                    showNavigation={!isParentRoute}
-                    thematics={thematics}
-                    identifier={identifier}
-                    themeId={themeId}
-                    isNavbarHidden={isNavbarHidden}
-                  />
+                  <Thumbnails showNavigation={!isParentRoute} thematics={thematics} identifier={identifier} themeId={themeId} />
                 </div>
                 {children}
               </section>}

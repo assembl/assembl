@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { scrollToPosition, getDiscussionId, getDocumentScrollTop, getDiscussionSlug } from './utils/globalFunctions';
+import { scrollToPosition, getDiscussionId } from './utils/globalFunctions';
 import { getCurrentPhaseIdentifier } from './utils/timeline';
 import { fetchSynthesis } from './actions/synthesisActions';
 import { addRedirectionToV1 } from './actions/phaseActions';
@@ -17,7 +17,6 @@ class Main extends React.Component {
       identifier: queryIdentifier,
       location: this.props.location.pathname
     };
-    this.displayHeader = this.displayHeader.bind(this);
   }
   componentWillMount() {
     const discussionId = getDiscussionId();
@@ -37,7 +36,6 @@ class Main extends React.Component {
     const queryIdentifier = nextProps.location.query.phase || paramsIdentifier;
     this.setState({
       identifier: queryIdentifier,
-      isNavbarHidden: false,
       location: location
     });
 
@@ -46,31 +44,16 @@ class Main extends React.Component {
   componentWillUnmount() {
     window.removeEventListener('scroll', this.displayHeader);
   }
-  displayHeader() {
-    const slug = getDiscussionSlug();
-    const isDebateView = this.props.location.pathname.indexOf(`${slug}/debate`) > -1;
-    const top = getDocumentScrollTop();
-    if (top > 400 && isDebateView) {
-      this.setState({
-        isNavbarHidden: true
-      });
-    } else {
-      this.setState({
-        isNavbarHidden: false
-      });
-    }
-  }
   render() {
     const that = this;
     const children = React.Children.map(this.props.children, (child) => {
       return React.cloneElement(child, {
-        identifier: that.state.identifier,
-        isNavbarHidden: that.state.isNavbarHidden
+        identifier: that.state.identifier
       });
     });
     return (
       <div className="main">
-        <Navbar isHidden={this.state.isNavbarHidden} location={this.state.location} />
+        <Navbar location={this.state.location} />
         <div className="app-content">
           {children}
         </div>
