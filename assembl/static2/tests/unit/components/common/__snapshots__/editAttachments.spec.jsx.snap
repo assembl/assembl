@@ -1,0 +1,44 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`EditAttachments component should render the list of attachments with delete buttons 1`] = `
+<div
+  className="attachments"
+>
+  <div
+    className="attachment"
+  >
+    <span
+      className="assembl-icon-text-attachment"
+    />
+    <a
+      href="http://www.example.com/foo"
+      rel="noopener noreferrer"
+      target="_blank"
+    >
+      Foo
+    </a>
+    <span
+      className="assembl-icon-delete"
+      onClick={[Function]}
+    />
+  </div>
+  <div
+    className="attachment"
+  >
+    <span
+      className="assembl-icon-text-attachment"
+    />
+    <a
+      href="http://www.example.com/bar.jpg"
+      rel="noopener noreferrer"
+      target="_blank"
+    >
+      Bar.jpg
+    </a>
+    <span
+      className="assembl-icon-delete"
+      onClick={[Function]}
+    />
+  </div>
+</div>
+`;
