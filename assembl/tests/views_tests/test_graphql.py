@@ -1316,3 +1316,75 @@ mutation addPostAttachment($postId: ID!, $file: String!) {
             }
         }
     }
+
+
+def test_mutation_delete_post_attachment(graphql_request, idea_in_thread_phase, top_post_in_thread_phase):
+    # TODO: create a top_post_in_thread_phase_with_attachment fixture?
+    idea_id = idea_in_thread_phase
+    in_reply_to_post_id = top_post_in_thread_phase
+    import os
+    from io import BytesIO
+
+    class FieldStorage(object):
+        file = BytesIO(os.urandom(16))
+        filename = u'path/to/image.png'
+        type = 'image/png'
+
+    graphql_request.POST['variables.attachment'] = FieldStorage()
+    res = schema.execute(u"""
+mutation addPostAttachment($postId: ID!, $file: String!) {
+    addPostAttachment(
+        postId: $postId,
+        file: $file,
+    ) {
+        post {
+            ... on Post {
+                attachments {
+                    id
+                    title
+                    externalUrl
+                    mimeType
+                }
+            }
+        }
+    }
+}
+""", context_value=graphql_request,
+        variable_values={
+            "postId": top_post_in_thread_phase,
+            "file": "variables.attachment"
+            })
+    assert res.errors == []
+    document_id = res.data['addPostAttachment']['post']['attachments'][-1]['id']
+
+    res = schema.execute(u"""
+mutation deletePostAttachment($postId: ID!, $documentId: Int!) {
+    deletePostAttachment(
+        postId: $postId,
+        documentId: $documentId,
+    ) {
+        post {
+            ... on Post {
+                attachments {
+                    id
+                    title
+                    externalUrl
+                    mimeType
+                }
+            }
+        }
+    }
+}
+""", context_value=graphql_request,
+    variable_values={
+        "documentId": document_id,
+        "postId": top_post_in_thread_phase,
+        })
+
+    assert json.loads(json.dumps(res.data)) == {
+        u'deletePostAttachment': {
+            u'post': {
+                u'attachments': []
+            }
+        }
+    }

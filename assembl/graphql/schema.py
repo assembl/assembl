@@ -1661,6 +1661,39 @@ class AddPostAttachment(graphene.Mutation):
         return AddPostAttachment(post=post)
 
 
+class DeletePostAttachment(graphene.Mutation):
+    class Input:
+        post_id = graphene.ID(required=True)
+        document_id = graphene.Int(required=True)
+
+    post = graphene.Field(lambda: Post)
+
+    @staticmethod
+    def mutate(root, args, context, info):
+        discussion_id = context.matchdict['discussion_id']
+        discussion = models.Discussion.get(discussion_id)
+
+        user_id = context.authenticated_userid or Everyone
+
+        post_id = args.get('post_id')
+        post_id = int(Node.from_global_id(post_id)[1])
+        post = models.Post.get(post_id)
+
+        cls = models.PostAttachment
+        permissions = get_permissions(user_id, discussion_id)
+        allowed = cls.user_can_cls(user_id, CrudPermissions.DELETE, permissions)
+        if not allowed:
+            raise HTTPUnauthorized()
+
+        document_id = args.get('document_id')
+        post_attachment = post.db.query(models.PostAttachment).filter_by(
+            discussion_id=discussion_id, post_id=post_id, document_id=document_id).first()
+        post.attachments.remove(post_attachment)
+        post.db.flush()
+
+        return DeletePostAttachment(post=post)
+
+
 class Mutations(graphene.ObjectType):
     create_thematic = CreateThematic.Field()
     update_thematic = UpdateThematic.Field()
@@ -1673,6 +1706,7 @@ class Mutations(graphene.ObjectType):
     add_sentiment = AddSentiment.Field()
     delete_sentiment = DeleteSentiment.Field()
     add_post_attachment = AddPostAttachment.Field()
+    delete_post_attachment = DeletePostAttachment.Field()
 
 
 Schema = graphene.Schema(query=Query, mutation=Mutations)

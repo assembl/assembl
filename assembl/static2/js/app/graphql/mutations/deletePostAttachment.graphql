@@ -1,0 +1,9 @@
+#import "../Post.graphql"
+
+mutation deletePostAttachment($postId: ID!, $documentId: Int!) {
+  deletePostAttachment(postId: $postId, documentId: $documentId) {
+    post {
+      ...Post
+    }
+  }
+}
