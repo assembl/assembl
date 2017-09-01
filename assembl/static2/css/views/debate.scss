@@ -1,8 +1,4 @@
 .debate {
-  .timeline-top {
-    top: 0;
-  }
-
   .timeline-shifted {
     top: $navbar-height;
   }
@@ -16,6 +12,7 @@
     position: fixed;
     width: 100%;
     z-index: 200;
+    top: $navbar-height;
 
     .timeline-container {
       margin: 0 0 0 100px;

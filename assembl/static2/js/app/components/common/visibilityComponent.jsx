@@ -1,9 +1,9 @@
 import React from 'react';
 
-const VisibilityComponent = ({ className, isVisible }) => {
+const VisibilityComponent = ({ classname, isVisible, children }) => {
   return (
-    <div className={isVisible ? className : 'hidden'}>
-      {this.props.children}
+    <div className={isVisible ? classname : 'hidden'}>
+      {children}
     </div>
   );
 };

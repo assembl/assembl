@@ -12,14 +12,14 @@ class Ideas extends React.Component {
     this.setSelectedIdeas = this.setSelectedIdeas.bind(this);
   }
   setSelectedIdeas(selectedIdeaId, ideaLevel) {
-    const currentLevel = this.state.selectedIdeasId.length;
+    const nbLevel = this.state.selectedIdeasId.length;
     const arr = this.state.selectedIdeasId;
-    if (arr.indexOf(selectedIdeaId) <= -1 && ideaLevel === currentLevel) {
+    if (arr.indexOf(selectedIdeaId) <= -1 && ideaLevel === nbLevel) {
       arr.push(selectedIdeaId);
       this.setState({
         selectedIdeasId: arr
       });
-    } else if (ideaLevel < currentLevel) {
+    } else if (ideaLevel < nbLevel) {
       const nbToRemove = this.state.selectedIdeasId.length - ideaLevel;
       arr.splice(ideaLevel, nbToRemove, selectedIdeaId);
       this.setState({
@@ -55,10 +55,10 @@ class Ideas extends React.Component {
                   <IdeasLevel
                     ideas={this.listIdeasToDisplay(ideaId)}
                     identifier={identifier}
-                    key={index}
                     setSelectedIdeas={this.setSelectedIdeas}
-                    currentLevel={this.state.selectedIdeasId.length}
+                    nbLevel={this.state.selectedIdeasId.length}
                     ideaLevel={index + 1}
+                    key={index}
                     selectedIdeasId={this.state.selectedIdeasId}
                   />
                 );

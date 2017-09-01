@@ -1,9 +1,48 @@
 .themes-section {
   margin: 120px 0 0;
-  .slider {
+  .slider-container {
       width: 100%;
       overflow: hidden;
       margin: 0 0 40px 0;
+      .slider {
+          position: relative;
+      }
+      .slider-arrow-container {
+          display: none;
+      }
+      .slider-arrow {
+          cursor: pointer;
+          background-color: rgba(255, 255, 255, 0.5);
+          position: absolute;
+          top: calc(50% - 36px);
+          z-index: 10;
+          height: 100px;
+          padding: 20px 10px 0;
+      }
+      .slider-arrow-left {
+          .assembl-icon-down-open {
+              display: block;
+              transform: rotate(90deg);
+              &:before {
+                  font-size: 30px;
+              }
+          }
+      }
+      .slider-arrow-right {
+          right: 0;
+          .assembl-icon-up-open {
+              display: block;
+              transform: rotate(90deg);
+              &:before {
+                  font-size: 30px;
+              }
+          }
+      }
+      &:hover {
+        .slider-arrow-container {
+            display: block;
+        }
+      }
   }
   .theme.theme-first-row-0 {
       margin-top: 80px;
