@@ -4,6 +4,7 @@ import { compose, graphql } from 'react-apollo';
 import { Row, Col } from 'react-bootstrap';
 
 import { getDomElementOffset } from '../../../utils/globalFunctions';
+import Attachments from '../../common/attachments';
 import ProfileLine from '../../common/profileLine';
 import PostTranslate from '../common/postTranslate';
 import PostActions from './postActions';
@@ -195,23 +196,9 @@ class Post extends React.PureComponent {
                 className={`body ${bodyMimeType === 'text/plain' ? 'pre-wrap' : ''}`}
                 dangerouslySetInnerHTML={{ __html: body }}
               />
-              <div className="attachments">
-                {attachments.map((attachment, idx) => {
-                  return (
-                    <div key={idx}>
-                      {attachment.mimeType && attachment.mimeType.indexOf('image') > -1
-                        ? <a href={attachment.externalUrl} target="_blank" rel="noopener noreferrer">
-                          <img src={attachment.externalUrl} title={attachment.title} alt="" width="100%" />
-                        </a>
-                        : <span>
-                          <a href={attachment.externalUrl} target="_blank" rel="noopener noreferrer">
-                            {attachment.title || attachment.externalUrl}
-                          </a>
-                        </span>}
-                    </div>
-                  );
-                })}
-              </div>
+
+              <Attachments attachments={attachments} />
+
               {indirectIdeaContentLinks.length
                 ? <div className="link-idea">
                   <div className="label">
