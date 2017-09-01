@@ -1,0 +1,17 @@
+.attachment {
+  margin: 5px;
+  a {
+    margin: 5px;
+  }
+
+  .assembl-icon-text-attachment, .assembl-icon-delete {
+    &:before {
+      color: $first-color;
+      font-size: $font-size-s;
+    }
+  }
+
+  .assembl-icon-delete {
+    cursor: pointer;
+  }
+}
