@@ -4,26 +4,30 @@ import IdeaPreview from '../../common/ideaPreview';
 import { get as getRoute } from '../../../utils/routeMap';
 import { getDiscussionSlug } from '../../../utils/globalFunctions';
 import VisibilityComponent from '../../common/visibilityComponent';
-import {
-  APP_CONTAINER_MAX_WIDTH,
-  IDEA_PREVIEW_MAX_WIDTH,
-  IDEA_PREVIEW_MIN_WIDTH,
-  NB_IDEA_PREVIEW_TO_SHOW,
-  APP_CONTAINER_PADDING
-} from '../../../constants';
+import { APP_CONTAINER_MAX_WIDTH, NB_IDEA_PREVIEW_TO_SHOW, APP_CONTAINER_PADDING, IDEA_PREVIEW_MAX_WIDTH } from '../../../constants';
 
 class IdeasLevel extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { sliderCount: 0, sliderLeftPosition: 0 };
-    this.getColClassNames = this.getColClassNames.bind(this);
-    this.getIdeaPrewiewWidth = this.getIdeaPrewiewWidth.bind(this);
-    this.getSliderLimitValue = this.getSliderLimitValue.bind(this);
-    this.getSliderContainerWidth = this.getSliderContainerWidth.bind(this);
-    this.getSliderRightOverflow = this.getSliderRightOverflow.bind(this);
-    this.getLastMoveToRightValue = this.getLastMoveToRightValue.bind(this);
-    this.handleClickArrowLeft = this.handleClickArrowLeft.bind(this);
-    this.handleClickArrowRight = this.handleClickArrowRight.bind(this);
+    this.state = {
+      sliderCount: 0,
+      sliderLeftPosition: 0,
+      sliderContainerWidth: 0,
+      ideaPreviewWidth: 0
+    };
+  }
+  componentWillMount() {
+    if (window.innerWidth > APP_CONTAINER_MAX_WIDTH) {
+      this.setState({
+        sliderContainerWidth: APP_CONTAINER_MAX_WIDTH + this.getRightOverflowValue(),
+        ideaPreviewWidth: APP_CONTAINER_MAX_WIDTH / NB_IDEA_PREVIEW_TO_SHOW
+      });
+    } else {
+      this.setState({
+        sliderContainerWidth: window.innerWidth - APP_CONTAINER_PADDING,
+        ideaPreviewWidth: (window.innerWidth - APP_CONTAINER_PADDING) / (NB_IDEA_PREVIEW_TO_SHOW + 0.5)
+      });
+    }
   }
   componentWillReceiveProps(nextProps) {
     const { ideaLevel, nbLevel } = nextProps;
@@ -50,99 +54,80 @@ class IdeasLevel extends React.Component {
     }
     return styles;
   }
-  getSliderContainerWidth() {
-    let sliderContainerWidth = APP_CONTAINER_MAX_WIDTH + this.getSliderRightOverflow();
-    if (window.innerWidth < APP_CONTAINER_MAX_WIDTH) {
-      sliderContainerWidth = window.innerWidth - APP_CONTAINER_PADDING;
-    }
-    return sliderContainerWidth;
-  }
-  getIdeaPrewiewWidth() {
-    this.ideaPreviewWidth = IDEA_PREVIEW_MAX_WIDTH;
-    if (window.innerWidth < APP_CONTAINER_MAX_WIDTH) {
-      this.ideaPreviewWidth = window.innerWidth / NB_IDEA_PREVIEW_TO_SHOW;
-      if (this.ideaPreviewWidth < IDEA_PREVIEW_MIN_WIDTH) {
-        this.ideaPreviewWidth = IDEA_PREVIEW_MIN_WIDTH;
-      }
-    }
-    return this.ideaPreviewWidth;
-  }
-  getSliderRightOverflow() {
-    this.availableRightSpace = (window.innerWidth - APP_CONTAINER_MAX_WIDTH) / 2;
-    if (this.availableRightSpace > this.getIdeaPrewiewWidth() / 2) {
-      this.availableRightSpace = this.getIdeaPrewiewWidth() / 2;
-    }
-    return this.availableRightSpace;
-  }
-  getLastMoveToRightValue() {
-    let lastRightSpaceSize = this.getIdeaPrewiewWidth() - this.getSliderRightOverflow();
-    if (window.innerWidth < APP_CONTAINER_MAX_WIDTH) {
-      lastRightSpaceSize = this.getIdeaPrewiewWidth() - (this.getSliderContainerWidth() - this.getIdeaPrewiewWidth() * 4);
-    }
-    return lastRightSpaceSize;
-  }
-  getSliderLimitValue() {
-    const { sliderLeftPosition } = this.state;
-    const valueToReach = sliderLeftPosition + (this.getIdeaPrewiewWidth() - this.getLastMoveToRightValue() / 2);
-    return valueToReach;
-  }
-  handleClickArrowLeft() {
-    const { sliderCount, sliderLeftPosition } = this.state;
-    let count = sliderCount;
-    let left = sliderLeftPosition;
-    if (count > 1) {
-      count -= 1;
-      this.setState({ sliderCount: count });
-      const { ideas } = this.props;
-      const totalIdeaPreviewWidth = ideas.length * this.getIdeaPrewiewWidth();
-      const hiddenSliderWidth = totalIdeaPreviewWidth - this.getSliderContainerWidth();
-      if (left === hiddenSliderWidth) {
-        left -= this.getIdeaPrewiewWidth() - this.getLastMoveToRightValue() / 2;
-        this.setState({ sliderLeftPosition: left, sliderCount: count });
-      } else {
-        left -= this.getIdeaPrewiewWidth();
-        this.setState({ sliderLeftPosition: left, sliderCount: count });
+  getRightOverflowValue() {
+    const { sliderContainerWidth, ideaPreviewWidth } = this.state;
+    let rightOverflowValue = 0;
+    if (window.innerWidth > APP_CONTAINER_MAX_WIDTH) {
+      rightOverflowValue = (window.innerWidth - APP_CONTAINER_MAX_WIDTH) / 2;
+      if (rightOverflowValue > IDEA_PREVIEW_MAX_WIDTH / 2) {
+        rightOverflowValue = IDEA_PREVIEW_MAX_WIDTH / 2;
       }
     } else {
-      count = 0;
-      this.setState({ sliderLeftPosition: 0, sliderCount: count });
+      rightOverflowValue = sliderContainerWidth - ideaPreviewWidth * NB_IDEA_PREVIEW_TO_SHOW;
     }
+    return rightOverflowValue;
+  }
+  getSliderWidth() {
+    const { ideas } = this.props;
+    const { ideaPreviewWidth } = this.state;
+    return ideas.length * ideaPreviewWidth;
+  }
+  getHiddenSliderWidth() {
+    const { sliderContainerWidth } = this.state;
+    return this.getSliderWidth() - sliderContainerWidth;
+  }
+  getStartEndMovingValue() {
+    const { ideaPreviewWidth } = this.state;
+    return ideaPreviewWidth - this.getRightOverflowValue() / 2;
+  }
+  isLeftLimitReached() {
+    const { sliderLeftPosition } = this.state;
+    return sliderLeftPosition === this.getStartEndMovingValue();
+  }
+  isRightLimitReached() {
+    const { sliderLeftPosition } = this.state;
+    return sliderLeftPosition >= this.getHiddenSliderWidth();
+  }
+  handleClickArrowLeft() {
+    const { ideas } = this.props;
+    const { sliderCount, sliderLeftPosition, ideaPreviewWidth } = this.state;
+    let count = sliderCount;
+    let left = sliderLeftPosition;
+    if (count > 0) {
+      count -= 1;
+    }
+    if (count === 0) {
+      left = 0;
+    } else if (count === ideas.length - NB_IDEA_PREVIEW_TO_SHOW - 1) {
+      left -= this.getStartEndMovingValue();
+    } else {
+      left -= ideaPreviewWidth;
+    }
+    this.setState({ sliderCount: count });
+    this.setState({ sliderLeftPosition: left });
   }
   handleClickArrowRight() {
     const { ideas } = this.props;
-    const { sliderCount, sliderLeftPosition } = this.state;
+    const { sliderCount, sliderLeftPosition, ideaPreviewWidth } = this.state;
     let count = sliderCount;
     let left = sliderLeftPosition;
-    const totalIdeaPreviewWidth = ideas.length * this.getIdeaPrewiewWidth();
-    const hiddenSliderWidth = totalIdeaPreviewWidth - this.getSliderContainerWidth();
-    const isLimitValueReached = this.getSliderLimitValue() >= hiddenSliderWidth;
-    if (!isLimitValueReached) {
+    if (!this.isRightLimitReached()) {
       count += 1;
-      this.setState({ sliderCount: count });
-      if (count === 1) {
-        left += this.getIdeaPrewiewWidth() - this.getLastMoveToRightValue() / 2;
-        this.setState({ sliderLeftPosition: left, sliderCount: count });
-      } else {
-        left += this.getIdeaPrewiewWidth();
-        this.setState({ sliderLeftPosition: left, sliderCount: count });
-      }
-    } else {
-      if (left < hiddenSliderWidth) {
-        count += 1;
-      }
-      this.setState({ sliderLeftPosition: hiddenSliderWidth, sliderCount: count });
     }
+    if (count === 1 || count === ideas.length - NB_IDEA_PREVIEW_TO_SHOW) {
+      left += this.getStartEndMovingValue();
+    } else {
+      left += ideaPreviewWidth;
+    }
+    this.setState({ sliderCount: count });
+    this.setState({ sliderLeftPosition: left });
   }
   render() {
     const { ideas, identifier, setSelectedIdeas, nbLevel, ideaLevel, selectedIdeasId } = this.props;
-    const { sliderLeftPosition, sliderCount } = this.state;
+    const { sliderLeftPosition, sliderCount, sliderContainerWidth, ideaPreviewWidth } = this.state;
     const slug = getDiscussionSlug();
-    const ideaPreviewWidth = this.getIdeaPrewiewWidth();
-    const totalIdeaPreviewWidth = ideas.length * ideaPreviewWidth;
-    const sliderContainerWidth = this.getSliderContainerWidth();
-    const hiddenSliderWidth = totalIdeaPreviewWidth - sliderContainerWidth;
-    const isSliderLimitReached = sliderLeftPosition === hiddenSliderWidth;
-    const isArrowVisible = totalIdeaPreviewWidth > this.getSliderContainerWidth();
+    const isRightLimitReached = this.isRightLimitReached();
+    const isArrowVisible = this.getSliderWidth() > sliderContainerWidth;
     return (
       <div className="slider-container relative" style={nbLevel > 1 ? { width: `${sliderContainerWidth}px` } : {}}>
         <VisibilityComponent isVisible={isArrowVisible && nbLevel > 1 && sliderCount > 0} classname="slider-arrow-container">
@@ -185,7 +170,7 @@ class IdeasLevel extends React.Component {
             })}
           </Row>
         </div>
-        <VisibilityComponent isVisible={isArrowVisible && nbLevel > 1 && !isSliderLimitReached} classname="slider-arrow-container">
+        <VisibilityComponent isVisible={isArrowVisible && nbLevel > 1 && !isRightLimitReached} classname="slider-arrow-container">
           <div
             className="slider-arrow slider-arrow-right"
             onClick={() => {
