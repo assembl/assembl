@@ -24,7 +24,7 @@ class IdeasLevel extends React.Component {
       });
     } else {
       this.setState({
-        sliderContainerWidth: window.innerWidth - APP_CONTAINER_PADDING,
+        sliderContainerWidth: window.innerWidth - APP_CONTAINER_PADDING * 2,
         ideaPreviewWidth: (window.innerWidth - APP_CONTAINER_PADDING) / (NB_IDEA_PREVIEW_TO_SHOW + 0.5)
       });
     }
@@ -77,7 +77,11 @@ class IdeasLevel extends React.Component {
     return this.getSliderWidth() - sliderContainerWidth;
   }
   getStartEndMovingValue() {
+    const { ideas } = this.props;
     const { ideaPreviewWidth } = this.state;
+    if (ideas.length === NB_IDEA_PREVIEW_TO_SHOW + 1) {
+      return ideaPreviewWidth - this.getRightOverflowValue();
+    }
     return ideaPreviewWidth - this.getRightOverflowValue() / 2;
   }
   isLeftLimitReached() {

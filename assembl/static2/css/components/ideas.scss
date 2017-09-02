@@ -44,37 +44,44 @@
         }
       }
   }
-  .theme.theme-first-row-0 {
+  .theme-first-row-0 {
       margin-top: 80px;
+
   }
-  .theme.theme-first-row-1 {
+  .theme-first-row-1 {
       margin-top: 0;
+
   }
-  .theme.theme-first-row-2 {
+  .theme-first-row-2 {
       margin-top: 80px;
+
   }
-  .theme.theme-first-row-3 {
+  .theme-first-row-3 {
       margin-top: 40px;
+
   }
-  .theme.theme-0 {
+  .theme-0 {
       margin-top: 2px;
+
   }
-  .theme.theme-1 {
+  .theme-1 {
       margin-top: -78px;
+
   }
-  .theme.theme-2 {
+  .theme-2 {
       margin-top: 2px;
   }
-  .theme.theme-3 {
+  .theme-3 {
       margin-top: -38px;
   }
-  .theme.theme-inline {
+  .theme-inline {
       min-width: 280px;
       max-width: 350px;
       margin-top: 0;
   }
   .theme {
       padding: 0;
+      transition: all 2s ease-out;
   }
   .row-inline {
       display: flex;
