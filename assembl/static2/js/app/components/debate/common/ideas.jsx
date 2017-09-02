@@ -7,13 +7,14 @@ class Ideas extends React.Component {
   constructor(props) {
     super(props);
     const { rootIdeaId } = this.props;
-    this.state = { selectedIdeasId: [rootIdeaId] };
+    this.state = { selectedIdeasId: [rootIdeaId], selectedIdeaIndex: 0 };
     this.listIdeasToDisplay = this.listIdeasToDisplay.bind(this);
     this.setSelectedIdeas = this.setSelectedIdeas.bind(this);
   }
-  setSelectedIdeas(selectedIdeaId, ideaLevel) {
+  setSelectedIdeas(selectedIdeaId, ideaLevel, ideaIndex) {
     const nbLevel = this.state.selectedIdeasId.length;
     const arr = this.state.selectedIdeasId;
+    this.setState({ selectedIdeaIndex: ideaIndex });
     if (arr.indexOf(selectedIdeaId) <= -1 && ideaLevel === nbLevel) {
       arr.push(selectedIdeaId);
       this.setState({
@@ -60,6 +61,7 @@ class Ideas extends React.Component {
                     ideaLevel={index + 1}
                     key={index}
                     selectedIdeasId={this.state.selectedIdeasId}
+                    selectedIdeaIndex={this.state.selectedIdeaIndex}
                   />
                 );
               })}

@@ -37,10 +37,12 @@ class IdeasLevel extends React.Component {
     this.runTransition();
   }
   componentWillReceiveProps(nextProps) {
-    const { ideaLevel, nbLevel } = nextProps;
+    const { ideaLevel, nbLevel, selectedIdeaIndex } = nextProps;
     const isCountShouldIncrease = ideaLevel < nbLevel;
     if (!isCountShouldIncrease) {
       this.setState({ sliderCount: 0, sliderLeftPosition: 0 });
+    } else if (this.props.nbLevel <= 1) {
+      this.moveToSelectedIdea(selectedIdeaIndex);
     }
   }
   getColClassNames(index) {
@@ -90,6 +92,26 @@ class IdeasLevel extends React.Component {
       return ideaPreviewWidth - this.getRightOverflowValue();
     }
     return ideaPreviewWidth - this.getRightOverflowValue() / 2;
+  }
+  moveToSelectedIdea(selectedIdeaIndex) {
+    const { ideas } = this.props;
+    const { sliderLeftPosition, ideaPreviewWidth } = this.state;
+    let count = selectedIdeaIndex;
+    let left = sliderLeftPosition;
+    if (selectedIdeaIndex >= NB_IDEA_PREVIEW_TO_SHOW) {
+      for (let i = 0; i < count; i += 1) {
+        if (i === 0 || i === ideas.length - NB_IDEA_PREVIEW_TO_SHOW - 1) {
+          left += this.getStartEndMovingValue();
+        } else if (i < ideas.length - NB_IDEA_PREVIEW_TO_SHOW - 1) {
+          left += ideaPreviewWidth;
+        }
+      }
+      if (selectedIdeaIndex > ideas.length - NB_IDEA_PREVIEW_TO_SHOW) {
+        count = ideas.length - NB_IDEA_PREVIEW_TO_SHOW;
+      }
+      this.setState({ sliderCount: count });
+      this.setState({ sliderLeftPosition: left });
+    }
   }
   runTransition() {
     const { nbLevel } = this.props;
@@ -186,6 +208,7 @@ class IdeasLevel extends React.Component {
                     ideaId={idea.id}
                     ideaLevel={ideaLevel}
                     selectedIdeasId={selectedIdeasId}
+                    ideaIndex={index}
                   />
                 </Col>
               );

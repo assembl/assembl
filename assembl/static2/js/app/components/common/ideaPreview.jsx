@@ -14,7 +14,8 @@ const IdeaPreview = ({
   numChildren,
   setSelectedIdeas,
   ideaId,
-  ideaLevel
+  ideaLevel,
+  ideaIndex
 }) => {
   return (
     <div
@@ -39,10 +40,13 @@ const IdeaPreview = ({
             ? <div
               className="see-sub-ideas"
               onClick={() => {
-                setSelectedIdeas(ideaId, ideaLevel);
-                setTimeout(() => {
-                  scrollToPosition(document.body.scrollHeight - window.innerHeight, 800);
-                }, 600);
+                setSelectedIdeas(ideaId, ideaLevel, ideaIndex);
+                const scrollValue = document.body.scrollHeight - window.innerHeight - 120;
+                if (scrollValue > 0) {
+                  setTimeout(() => {
+                    scrollToPosition(document.body.scrollHeight - window.innerHeight - 120, 800);
+                  }, 500);
+                }
               }}
             >
               <Translate value="debate.thread.seeSubIdeas" count={numChildren} />
