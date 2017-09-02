@@ -37,19 +37,22 @@ const IdeaPreview = ({
             </Link>
           </div>
           {numChildren
-            ? <div
-              className="see-sub-ideas"
-              onClick={() => {
-                setSelectedIdeas(ideaId, ideaLevel, ideaIndex);
-                const scrollValue = document.body.scrollHeight - window.innerHeight - 120;
-                if (scrollValue > 0) {
-                  setTimeout(() => {
-                    scrollToPosition(document.body.scrollHeight - window.innerHeight - 120, 800);
-                  }, 500);
-                }
-              }}
-            >
-              <Translate value="debate.thread.seeSubIdeas" count={numChildren} />
+            ? <div>
+              <div>/</div>
+              <div
+                className="see-sub-ideas"
+                onClick={() => {
+                  setSelectedIdeas(ideaId, ideaLevel, ideaIndex);
+                  const scrollValue = document.body.scrollHeight + 500 - window.innerHeight - 120;
+                  if (scrollValue > 0) {
+                    setTimeout(() => {
+                      scrollToPosition(scrollValue, 800);
+                    }, 500);
+                  }
+                }}
+              >
+                <Translate value="debate.thread.seeSubIdeas" count={numChildren} />
+              </div>
             </div>
             : <div />}
         </div>

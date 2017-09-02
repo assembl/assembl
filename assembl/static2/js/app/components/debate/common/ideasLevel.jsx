@@ -17,7 +17,8 @@ class IdeasLevel extends React.Component {
       sliderCount: 0,
       sliderLeftPosition: 0,
       sliderContainerWidth: 0,
-      ideaPreviewWidth: 0
+      ideaPreviewWidth: 0,
+      sliderMarginTop: -500
     };
   }
   componentWillMount() {
@@ -32,16 +33,19 @@ class IdeasLevel extends React.Component {
         ideaPreviewWidth: (window.innerWidth - APP_CONTAINER_PADDING) / (NB_IDEA_PREVIEW_TO_SHOW + 0.5)
       });
     }
+    this.runBottomTransition(0, 1000);
   }
   componentDidMount() {
-    this.runTransition();
+    this.runFirstTransition();
   }
   componentWillReceiveProps(nextProps) {
     const { ideaLevel, nbLevel, selectedIdeaIndex } = nextProps;
-    const isCountShouldIncrease = ideaLevel < nbLevel;
-    if (!isCountShouldIncrease) {
-      this.setState({ sliderCount: 0, sliderLeftPosition: 0 });
-    } else if (this.props.nbLevel <= 1) {
+    const shouldSliderBeInitialize = ideaLevel < nbLevel;
+    const isSliderInitialized = this.props.nbLevel <= 1;
+    if (!shouldSliderBeInitialize) {
+      this.setState({ sliderCount: 0, sliderLeftPosition: 0, sliderMarginTop: -500 });
+      this.runBottomTransition(0, 700);
+    } else if (isSliderInitialized) {
       setTimeout(() => {
         this.moveToSelectedIdea(selectedIdeaIndex);
       }, 500);
@@ -49,9 +53,10 @@ class IdeasLevel extends React.Component {
   }
   getColClassNames(index) {
     const { ideaLevel } = this.props;
+    const isFirsStepActif = ideaLevel <= 1;
     this.index = index;
     let styles = 'theme';
-    if (ideaLevel <= 1) {
+    if (isFirsStepActif) {
       if (this.index % 4 === 0) {
         styles += ' clear';
       }
@@ -83,11 +88,11 @@ class IdeasLevel extends React.Component {
     const { ideaPreviewWidth } = this.state;
     return ideas.length * ideaPreviewWidth;
   }
-  getHiddenSliderWidth() {
+  getSliderHiddenWidth() {
     const { sliderContainerWidth } = this.state;
     return this.getSliderWidth() - sliderContainerWidth;
   }
-  getStartEndMovingValue() {
+  getLastMovingValue() {
     const { ideas } = this.props;
     const { ideaPreviewWidth } = this.state;
     if (ideas.length === NB_IDEA_PREVIEW_TO_SHOW + 1) {
@@ -103,7 +108,7 @@ class IdeasLevel extends React.Component {
     if (selectedIdeaIndex >= NB_IDEA_PREVIEW_TO_SHOW) {
       for (let i = 0; i < count; i += 1) {
         if (i === 0 || i === ideas.length - NB_IDEA_PREVIEW_TO_SHOW - 1) {
-          left += this.getStartEndMovingValue();
+          left += this.getLastMovingValue();
         } else if (i < ideas.length - NB_IDEA_PREVIEW_TO_SHOW - 1) {
           left += ideaPreviewWidth;
         }
@@ -115,7 +120,7 @@ class IdeasLevel extends React.Component {
       this.setState({ sliderLeftPosition: left });
     }
   }
-  runTransition() {
+  runFirstTransition() {
     const { nbLevel } = this.props;
     const themes = document.getElementById('row-1').getElementsByClassName('theme');
     if (nbLevel > 1) {
@@ -126,13 +131,18 @@ class IdeasLevel extends React.Component {
       }, 10);
     }
   }
+  runBottomTransition(sliderMarginTop, duration) {
+    setTimeout(() => {
+      this.setState({ sliderMarginTop: sliderMarginTop });
+    }, duration);
+  }
   isLeftLimitReached() {
     const { sliderLeftPosition } = this.state;
-    return sliderLeftPosition === this.getStartEndMovingValue();
+    return sliderLeftPosition === this.getLastMovingValue();
   }
   isRightLimitReached() {
     const { sliderLeftPosition } = this.state;
-    return sliderLeftPosition >= this.getHiddenSliderWidth();
+    return sliderLeftPosition >= this.getSliderHiddenWidth();
   }
   handleClickArrowLeft() {
     const { ideas } = this.props;
@@ -145,7 +155,7 @@ class IdeasLevel extends React.Component {
     if (count === 0) {
       left = 0;
     } else if (count === ideas.length - NB_IDEA_PREVIEW_TO_SHOW - 1) {
-      left -= this.getStartEndMovingValue();
+      left -= this.getLastMovingValue();
     } else {
       left -= ideaPreviewWidth;
     }
@@ -161,7 +171,7 @@ class IdeasLevel extends React.Component {
       count += 1;
     }
     if (count === 1 || count === ideas.length - NB_IDEA_PREVIEW_TO_SHOW) {
-      left += this.getStartEndMovingValue();
+      left += this.getLastMovingValue();
     } else {
       left += ideaPreviewWidth;
     }
@@ -170,7 +180,7 @@ class IdeasLevel extends React.Component {
   }
   render() {
     const { ideas, identifier, setSelectedIdeas, nbLevel, ideaLevel, selectedIdeasId } = this.props;
-    const { sliderLeftPosition, sliderCount, sliderContainerWidth, ideaPreviewWidth } = this.state;
+    const { sliderLeftPosition, sliderCount, sliderContainerWidth, ideaPreviewWidth, sliderMarginTop } = this.state;
     const slug = getDiscussionSlug();
     const isRightLimitReached = this.isRightLimitReached();
     const isArrowVisible = this.getSliderWidth() > sliderContainerWidth;
@@ -186,7 +196,14 @@ class IdeasLevel extends React.Component {
             <span className="assembl-icon-down-open" />
           </div>
         </VisibilityComponent>
-        <div className="slider" style={{ left: `-${sliderLeftPosition}px`, transition: 'all .2s ease-out' }}>
+        <div
+          className="slider"
+          style={
+            ideaLevel > 1
+              ? { left: `-${sliderLeftPosition}px`, marginTop: `${sliderMarginTop}px`, transition: 'all .5s ease-out' }
+              : { left: `-${sliderLeftPosition}px`, transition: 'all .2s ease-out' }
+          }
+        >
           <Row id={`row-${ideaLevel}`} className={nbLevel > 1 ? 'no-margin row-inline' : 'no-margin'}>
             {ideas.map((idea, index) => {
               return (

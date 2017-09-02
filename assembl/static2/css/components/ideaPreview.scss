@@ -21,7 +21,7 @@
             font-size: $font-size-xxs;
             font-family: $font-family2;
             &:hover {
-                color: $second-color;
+                text-decoration: underline;
             }
         }
     }
@@ -32,10 +32,8 @@
         font-family: $font-family2;
         width: 100%;
         text-align: center;
-        &:before {
-            content: "/";
-            display: block;
-            margin: 5px 0;
+        &:hover {
+            text-decoration: underline;
         }
     }
     .stats {
