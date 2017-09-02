@@ -6,6 +6,10 @@ import { getDiscussionSlug } from '../../../utils/globalFunctions';
 import VisibilityComponent from '../../common/visibilityComponent';
 import { APP_CONTAINER_MAX_WIDTH, NB_IDEA_PREVIEW_TO_SHOW, APP_CONTAINER_PADDING, IDEA_PREVIEW_MAX_WIDTH } from '../../../constants';
 
+const xsCol = 12;
+const smCol = 6;
+const mdCol = 3;
+
 class IdeasLevel extends React.Component {
   constructor(props) {
     super(props);
@@ -29,6 +33,9 @@ class IdeasLevel extends React.Component {
       });
     }
   }
+  componentDidMount() {
+    this.runTransition();
+  }
   componentWillReceiveProps(nextProps) {
     const { ideaLevel, nbLevel } = nextProps;
     const isCountShouldIncrease = ideaLevel < nbLevel;
@@ -37,10 +44,10 @@ class IdeasLevel extends React.Component {
     }
   }
   getColClassNames(index) {
-    const { nbLevel } = this.props;
+    const { ideaLevel } = this.props;
     this.index = index;
     let styles = 'theme';
-    if (nbLevel <= 1) {
+    if (ideaLevel <= 1) {
       if (this.index % 4 === 0) {
         styles += ' clear';
       }
@@ -50,7 +57,7 @@ class IdeasLevel extends React.Component {
         styles += ` theme-${this.index % 4}`;
       }
     } else {
-      styles += ' theme-inline';
+      styles = 'theme theme-inline';
     }
     return styles;
   }
@@ -83,6 +90,17 @@ class IdeasLevel extends React.Component {
       return ideaPreviewWidth - this.getRightOverflowValue();
     }
     return ideaPreviewWidth - this.getRightOverflowValue() / 2;
+  }
+  runTransition() {
+    const { nbLevel } = this.props;
+    const themes = document.getElementById('row-1').getElementsByClassName('theme');
+    if (nbLevel > 1) {
+      setTimeout(() => {
+        for (let i = 0; i < themes.length; i += 1) {
+          themes[i].className = `theme theme-inline col-md-${mdCol} col-sm-${smCol} col-xs-${xsCol}`;
+        }
+      }, 10);
+    }
   }
   isLeftLimitReached() {
     const { sliderLeftPosition } = this.state;
@@ -145,13 +163,13 @@ class IdeasLevel extends React.Component {
           </div>
         </VisibilityComponent>
         <div className="slider" style={{ left: `-${sliderLeftPosition}px`, transition: 'all .2s ease-out' }}>
-          <Row className={nbLevel > 1 ? 'no-margin row-inline' : 'no-margin'}>
+          <Row id={`row-${ideaLevel}`} className={nbLevel > 1 ? 'no-margin row-inline' : 'no-margin'}>
             {ideas.map((idea, index) => {
               return (
                 <Col
-                  xs={12}
-                  sm={6}
-                  md={3}
+                  xs={xsCol}
+                  sm={smCol}
+                  md={mdCol}
                   key={index}
                   className={this.getColClassNames(index)}
                   style={nbLevel > 1 ? { width: ideaPreviewWidth } : {}}

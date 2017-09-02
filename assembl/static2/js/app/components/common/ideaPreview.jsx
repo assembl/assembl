@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router';
 import { Translate } from 'react-redux-i18n';
 import Statistic from './statistic';
+import { scrollToPosition } from '../../utils/globalFunctions';
 
 const IdeaPreview = ({
   selectedIdeasId,
@@ -39,6 +40,9 @@ const IdeaPreview = ({
               className="see-sub-ideas"
               onClick={() => {
                 setSelectedIdeas(ideaId, ideaLevel);
+                setTimeout(() => {
+                  scrollToPosition(document.body.scrollHeight - window.innerHeight, 800);
+                }, 600);
               }}
             >
               <Translate value="debate.thread.seeSubIdeas" count={numChildren} />

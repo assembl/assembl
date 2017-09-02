@@ -8,6 +8,7 @@ body {
   font-size: $font-size-s;
   letter-spacing: $text-letter-spacing;
   overflow-y: scroll;
+  overflow-x: hidden;
 }
 
 a {
