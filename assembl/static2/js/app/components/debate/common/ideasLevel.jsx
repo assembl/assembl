@@ -42,7 +42,9 @@ class IdeasLevel extends React.Component {
     if (!isCountShouldIncrease) {
       this.setState({ sliderCount: 0, sliderLeftPosition: 0 });
     } else if (this.props.nbLevel <= 1) {
-      this.moveToSelectedIdea(selectedIdeaIndex);
+      setTimeout(() => {
+        this.moveToSelectedIdea(selectedIdeaIndex);
+      }, 500);
     }
   }
   getColClassNames(index) {
