@@ -80,7 +80,18 @@
   }
 }
 
+$deleted-post-border: 1px solid $grey1 !default;
+.idea .level .deleted-post .box {
+  border-left: $deleted-post-border;
+}
+
 .posts {
+    &.deleted-post {
+      .body {
+        font-style: italic;
+        font-family: $font-family;
+      }
+    }
     .post-row {
         margin-right: -20px;
         margin-left: -20px;
@@ -179,6 +190,16 @@
         &:hover {
             transform: scale(1.2);
         }
+    }
+
+    .overflow-action {
+      cursor: pointer;
+      margin: 20px 0 0 5px;
+      color: $first-color-opacity-70;
+
+      &:hover {
+        color: $first-color;
+      }
     }
 
     .add-sentiment {
@@ -340,7 +361,7 @@
             border-top: 1px solid $grey1;
             padding: 18px 0 10px;
 
-            .post-action {
+            .post-action, .overflow-action {
                 display: inline-block;
                 margin: 0 10px;
             }
@@ -350,7 +371,7 @@
                 margin: 0;
 
                 .sentiment {
-                    margin: 0 10px;
+                    margin: 0 10px 5px 10px;
                 }
             }
         }
@@ -362,13 +383,13 @@
         }
 
         .sentiments-count {
-            float: left;
+          float: left;
 
-            .txt {
-                margin-left: 30px;
-                text-align: left;
-                padding: 0 0 0 30px;
-            }
+          .txt {
+              margin-left: 20px;
+              text-align: left;
+              padding: 1px 0 0 20px;
+          }
         }
 
         .min-sentiment {

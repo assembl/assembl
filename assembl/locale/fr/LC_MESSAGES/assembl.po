@@ -2369,7 +2369,7 @@ msgstr "Courriel"
 #: assembl/templates/views/sourceFacebook.tmpl:3
 #: assembl/templates/views/userAccount.tmpl:47
 msgid "Save"
-msgstr "Enregister"
+msgstr "Enregistrer"
 
 #: assembl/templates/profile.jinja2:206
 msgid "Connect other accounts to Assembl"

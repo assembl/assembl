@@ -59,6 +59,7 @@ def get_global_base_url(require_secure=None, override_port=None):
         elif port == "80":
             if require_secure_connection:
                 service += 's'  # assume standard port upgrade
+                port = "443"
         else:
             if require_secure_connection:
                 service += 's'

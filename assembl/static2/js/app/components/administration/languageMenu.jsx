@@ -6,7 +6,7 @@ import { languageTooltip } from '../common/tooltips';
 import { updateSelectedLocale } from '../../actions/adminActions';
 import En from '../svg/flags/en';
 import Fr from '../svg/flags/fr';
-import Jp from '../svg/flags/jp';
+import Ja from '../svg/flags/ja';
 
 // TO DO get it dynamically
 const Flag = ({ locale }) => {
@@ -15,8 +15,8 @@ const Flag = ({ locale }) => {
     return <En />;
   case 'fr':
     return <Fr />;
-  case 'jp':
-    return <Jp />;
+  case 'ja':
+    return <Ja />;
   default:
     return (
       <span>

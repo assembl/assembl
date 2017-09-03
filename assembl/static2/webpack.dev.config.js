@@ -46,6 +46,7 @@ module.exports = {
     },
     entry: _.extend(theme_entries(), {
         bundle: [
+            'babel-polyfill', // this is already in index.jsx but we need it to be first, otherwise it doesn't work on IE 11
             'webpack-dev-server/client?' + process.env.WEBPACK_URL,
             'react-hot-loader/patch',
             './js/app/index',
@@ -62,49 +63,65 @@ module.exports = {
         publicPath: process.env.WEBPACK_URL + '/build/'
     },
     module: {
-        loaders: [
+        rules: [
         {
             test: /\.jsx?(\?v=\d)?$/,
-            loader: 'babel-loader',
-            include: path.join(__dirname, 'js')
+            use: {
+              loader: 'babel-loader',
+              options: {
+                forceEnv: 'development',
+                plugins: [
+                  'transform-object-rest-spread', 'transform-class-properties',
+                  ['transform-runtime', { helpers: true, polyfill: false }]
+                ],
+                presets: [["env", { "modules": false, "targets": { "ie": 11 },
+                                    "debug": true, "useBuiltIns": true,
+                                    "exclude": ["web.timers", "web.immediate", "web.dom.iterable"] }],
+                          "react", "flow"]
+              }
+            },
+            include: [
+              path.join(__dirname, 'js'),
+              path.join(__dirname, 'node_modules/react-tweet-embed')
+            ]
         },
         {
             test: /\.scss$/,
-            loaders: ['style-loader', 'css-loader', 'sass-loader']
+            use: ['style-loader', 'css-loader', 'sass-loader']
         },
         {
             test: /\.css$/,
-            loaders: ['style-loader', 'css-loader', 'sass-loader']
+            use: ['style-loader', 'css-loader', 'sass-loader']
         },
         {
             test: /\.png$/,
-            loader: 'url-loader?limit=100000'
+            use: 'url-loader?limit=100000'
         },
         {
             test: /\.jpg$/,
-            loader: 'file-loader'
+            use: 'file-loader'
         },
         {
             test: /\.(eot|woff|woff2|ttf|svg|png|jpe?g|gif)(\?\S*)?$/,
-            loader: 'url-loader?limit=100000&name=[name].[ext]'
+            use: 'url-loader?limit=100000&name=[name].[ext]'
         },
         {
             test: /\.eot(\?v=\d+\.\d+\.\d+)?$/,
-            loader: 'file-loader'
+            use: 'file-loader'
         },
         {
           test: /\.(graphql|gql)$/,
           exclude: /node_modules/,
-          loader: 'graphql-tag/loader'
+          use: 'graphql-tag/loader'
         },
         {
           test: /\.json$/,
-          loader: 'json-loader'
+          use: 'json-loader'
         },
         ]
     },
     resolve:{
-        extensions:['', '.js', '.jsx']
+        extensions:['.js', '.jsx']
     },
     plugins: [
         new webpack.HotModuleReplacementPlugin(),

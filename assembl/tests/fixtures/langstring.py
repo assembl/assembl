@@ -8,27 +8,27 @@ def langstring_entry_values():
     """Dict fixture of content in multiple languages"""
     return {
         "subject": {
-            "english":
+            "en":
                 u"Here is an English subject that is very cool and hip.",
-            "french":
+            "fr":
                 u"Voici un sujet anglais qui " +
                 u"est très cool et branché.",
-            "italian": u"Ecco un soggetto inglese che " +
+            "it": u"Ecco un soggetto inglese che " +
                        u"è molto cool e alla moda.",
-            "german": u"Hier ist ein englisches Thema, " +
+            "de": u"Hier ist ein englisches Thema, " +
                       u"das sehr cool und hip ist.",
-            "turkish": u"Burada çok serin ve kalça bir İngiliz konudur.",
+            "tr": u"Burada çok serin ve kalça bir İngiliz konudur.",
         },
         "body": {
-            "english": u"Here is an English body that is " +
+            "en": u"Here is an English body that is " +
                        u"very cool and hip. And it is also longer.",
-            "french": u"Voici un body anglais qui est très cool et branché. " +
+            "fr": u"Voici un body anglais qui est très cool et branché. " +
                       u"Et il est également plus longue.",
-            "italian": u"Qui è un organismo inglese che " +
+            "it": u"Qui è un organismo inglese che " +
                        u" è molto cool e alla moda. Ed è anche più.",
-            "german": u"Hier ist ein englischer Körper, die sehr cool " +
+            "de": u"Hier ist ein englischer Körper, die sehr cool " +
                       u"und hip ist. Und es ist auch länger.",
-            "turkish": u"Burada çok serin ve kalça bir İngiliz" +
+            "tr": u"Burada çok serin ve kalça bir İngiliz" +
                        u"organıdır. Ve aynı zamanda daha uzun."
         }
     }
@@ -45,7 +45,7 @@ def en_langstring_entry(request, test_session, en_locale,
         locale_confirmed=False,
         langstring=langstring_body,
         locale=en_locale,
-        value=langstring_entry_values.get('body').get('english')
+        value=langstring_entry_values.get('body').get('en')
     )
 
     test_session.expire(langstring_body, ["entries"])
@@ -71,7 +71,7 @@ def fr_langstring_entry(request, test_session, fr_locale,
         locale_confirmed=False,
         langstring=langstring_body,
         locale=fr_locale,
-        value=langstring_entry_values.get('body').get('french')
+        value=langstring_entry_values.get('body').get('fr')
     )
 
     test_session.expire(langstring_body, ["entries"])
@@ -97,7 +97,7 @@ def it_langstring_entry(request, test_session, it_locale,
         locale_confirmed=False,
         langstring=langstring_body,
         locale=it_locale,
-        value=langstring_entry_values.get('body').get('italian')
+        value=langstring_entry_values.get('body').get('it')
     )
 
     test_session.expire(langstring_body, ["entries"])
@@ -123,7 +123,7 @@ def tr_langstring_entry(request, test_session, tr_locale,
         locale_confirmed=False,
         langstring=langstring_body,
         locale=tr_locale,
-        value=langstring_entry_values.get('body').get('turkish')
+        value=langstring_entry_values.get('body').get('tr')
     )
 
     test_session.expire(langstring_body, ["entries"])
@@ -149,7 +149,7 @@ def und_langstring_entry(request, test_session, undefined_locale,
         locale_confirmed=False,
         langstring=langstring_body,
         locale=undefined_locale,
-        value=langstring_entry_values.get('body').get('english')
+        value=langstring_entry_values.get('body').get('en')
     )
 
     test_session.expire(langstring_body, ["entries"])
@@ -176,7 +176,7 @@ def non_linguistic_langstring_entry(request, test_session,
         locale_confirmed=False,
         langstring=langstring_body,
         locale=non_linguistic_locale,
-        value=langstring_entry_values.get('body').get('english')
+        value=langstring_entry_values.get('body').get('en')
     )
 
     test_session.expire(langstring_body, ["entries"])
@@ -203,7 +203,7 @@ def fr_from_en_langstring_entry(request, test_session, fr_from_en_locale,
         locale_confirmed=False,
         langstring=langstring_body,
         locale=fr_from_en_locale,
-        value=langstring_entry_values.get('body').get('french')
+        value=langstring_entry_values.get('body').get('fr')
     )
 
     test_session.expire(langstring_body, ["entries"])
@@ -231,7 +231,7 @@ def en_from_fr_langstring_entry(request, test_session, en_from_fr_locale,
         locale_confirmed=False,
         langstring=langstring_body,
         locale=en_from_fr_locale,
-        value=langstring_entry_values.get('body').get('english')
+        value=langstring_entry_values.get('body').get('en')
     )
 
     test_session.expire(langstring_body, ["entries"])
@@ -258,7 +258,7 @@ def it_from_en_langstring_entry(request, test_session, it_from_en_locale,
         locale_confirmed=False,
         langstring=langstring_body,
         locale=it_from_en_locale,
-        value=langstring_entry_values.get('body').get('italian')
+        value=langstring_entry_values.get('body').get('it')
     )
 
     test_session.expire(langstring_body, ["entries"])
@@ -285,7 +285,7 @@ def en_from_it_langstring_entry(request, test_session, en_from_it_locale,
         locale_confirmed=False,
         langstring=langstring_body,
         locale=en_from_it_locale,
-        value=langstring_entry_values.get('body').get('english')
+        value=langstring_entry_values.get('body').get('en')
     )
 
     test_session.expire(langstring_body, ["entries"])
@@ -312,7 +312,7 @@ def it_from_fr_langstring_entry(request, test_session, it_from_fr_locale,
         locale_confirmed=False,
         langstring=langstring_body,
         locale=it_from_fr_locale,
-        value=langstring_entry_values.get('body').get('italian')
+        value=langstring_entry_values.get('body').get('it')
     )
 
     test_session.expire(langstring_body, ["entries"])
@@ -339,7 +339,7 @@ def fr_from_it_langstring_entry(request, test_session, fr_from_it_locale,
         locale_confirmed=False,
         langstring=langstring_body,
         locale=fr_from_it_locale,
-        value=langstring_entry_values.get('body').get('french')
+        value=langstring_entry_values.get('body').get('fr')
     )
 
     test_session.expire(langstring_body, ["entries"])
@@ -366,7 +366,7 @@ def en_from_tr_langstring_entry(request, test_session, en_from_tr_locale,
         locale_confirmed=False,
         langstring=langstring_body,
         locale=en_from_tr_locale,
-        value=langstring_entry_values.get('body').get('english')
+        value=langstring_entry_values.get('body').get('en')
     )
 
     test_session.expire(langstring_body, ["entries"])
@@ -393,7 +393,7 @@ def de_from_tr_langstring_entry(request, test_session, de_from_tr_locale,
         locale_confirmed=False,
         langstring=langstring_body,
         locale=de_from_tr_locale,
-        value=langstring_entry_values.get('body').get('german')
+        value=langstring_entry_values.get('body').get('de')
     )
 
     test_session.expire(langstring_body, ["entries"])
@@ -420,7 +420,7 @@ def fr_from_und_langstring_entry(request, test_session, fr_from_und_locale,
         locale_confirmed=False,
         langstring=langstring_body,
         locale=fr_from_und_locale,
-        value=langstring_entry_values.get('body').get('french')
+        value=langstring_entry_values.get('body').get('fr')
     )
 
     test_session.expire(langstring_body, ["entries"])
@@ -464,6 +464,26 @@ def langstring_subject(request, test_session):
     test_session.flush()
 
     def fin():
+        test_session.delete(ls)
+        test_session.flush()
+
+    request.addfinalizer(fin)
+    return ls
+
+
+@pytest.fixture
+def ambiguous_langstring(request, test_session, undefined_locale):
+    from assembl.models.langstrings import LangString
+
+    # This string is chosen because it is close to 50/50
+    # en vs fr in the langdetect algorithm.
+    ls = LangString.create("testa", "und")
+    test_session.add(ls)
+    test_session.flush()
+
+    def fin():
+        for entry in ls.entries:
+            test_session.delete(entry)
         test_session.delete(ls)
         test_session.flush()
 

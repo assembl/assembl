@@ -1,4 +1,4 @@
-How to perform common developper tasks
+How to perform common developer tasks
 ======================================
 I want to:
 

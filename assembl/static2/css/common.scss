@@ -9,6 +9,7 @@ body {
   letter-spacing: $text-letter-spacing;
   overflow-y: scroll;
   overflow-x: hidden;
+  -ms-overflow-style: scrollbar; // prevent transparent scrollbar in IE
 }
 
 a {
@@ -49,6 +50,10 @@ input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
 
 input.placeholder, textarea.placeholder {
   font-family: $font-family6;
+}
+
+.pre-wrap {
+  white-space: pre-wrap;
 }
 
 .white {

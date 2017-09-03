@@ -77,3 +77,5 @@ docker_secure_rproxy = true
 # Will we use the certbot on this docker instance?
 docker_certbot =
 
+# Should we return a restrictive robots.txt?
+disallow_robots =

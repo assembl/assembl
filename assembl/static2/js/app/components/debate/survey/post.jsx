@@ -40,9 +40,9 @@ class Post extends React.Component {
     }
   }
   handleAddSentiment(target, type) {
-    const { id, refetchTheme } = this.props;
+    const { refetchTheme } = this.props;
     this.props
-      .addSentiment({ variables: { postId: id, type: type } })
+      .addSentiment({ variables: { postId: this.props.post.id, type: type } })
       .then(() => {
         refetchTheme();
         target.setAttribute('class', 'sentiment sentiment-active');
@@ -52,9 +52,9 @@ class Post extends React.Component {
       });
   }
   handleDeleteSentiment(target) {
-    const { id, refetchTheme } = this.props;
+    const { refetchTheme } = this.props;
     this.props
-      .deleteSentiment({ variables: { postId: id } })
+      .deleteSentiment({ variables: { postId: this.props.post.id } })
       .then(() => {
         refetchTheme();
         target.setAttribute('class', 'sentiment');
@@ -64,14 +64,15 @@ class Post extends React.Component {
       });
   }
   render() {
-    const { postIndex, moreProposals, post, id } = this.props;
+    const { postIndex, moreProposals, post } = this.props;
     return (
       <div className={postIndex < 3 || moreProposals ? 'shown box' : 'hidden box'}>
         <div className="content">
-          <PostCreator id={id} />
-          <div className="body">
-            {post.body}
-          </div>
+          <PostCreator name={post.creator.name} />
+          <div
+            className={`body ${post.bodyMimeType === 'text/plain' ? 'pre-wrap' : ''}`}
+            dangerouslySetInnerHTML={{ __html: post.body }}
+          />
           <div className="sentiments">
             <div className="sentiment-label">
               <Translate value="debate.survey.react" />

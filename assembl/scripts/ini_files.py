@@ -127,6 +127,9 @@ def generate_ini_files(config, config_fname):
     # if port != default_port:
     if port not in (80, 443):
         url += ':' + str(port)
+    if secure and port == 80:
+        # old misconfiguration
+        port = 443
     webpack_port = 8080
     if config.has_option(SECTION, 'webpack_port'):
         webpack_port = config.getint(SECTION, 'webpack_port')

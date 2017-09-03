@@ -126,33 +126,71 @@ def test_graphql_discussion_counters_thread_phase(graphql_request, proposals):
     assert res.data['numParticipants'] == 1
 
 
-# this test works in isolation, but not with all tests...
-def xtest_graphql_indirect_dea_content_links(jack_layton_linked_discussion, graphql_request):
-    res = schema.execute(
-        u"""query {
-            ideas {
-                ... on Idea {
-                    id
-                    title
-                    titleEntries { value, localeCode }
-                    contributors { id, name }
-                    shortTitle
-                    numPosts
-                    numContributors
-                    parentId
-                    order
-                    posts(first:1) {
-                        edges {
-                            node {
-                                ... on Post {
-                                    indirectIdeaContentLinks { ideaId, type } subject body
-        } } } } } } }
-        """, context_value=graphql_request)
-    idea_ids = [idea['id'] for idea in res.data['ideas']]
-    idea_content_links = res.data['ideas'][0]['posts']['edges'][0]['node']['indirectIdeaContentLinks']
-    assert len(idea_content_links) == 7
-    assert idea_content_links[0]['ideaId'] in idea_ids
-    assert idea_content_links[0]['type'] == u'IdeaContentPositiveLink'
-    contributors = res.data['ideas'][0]['contributors']
-    assert len(contributors) == 9
-    assert contributors[0]['name'] == u'M. Animator'
+def test_get_long_title_on_idea(graphql_request, idea_in_thread_phase):
+    # This is the "What you need to know"
+    idea_id = idea_in_thread_phase
+    from graphene.relay import Node
+    raw_id = int(Node.from_global_id(idea_id)[1])
+    from assembl.models import Idea
+    idea = Idea.get(raw_id)
+    idea.long_title = u'What you need to know'
+    idea.db.flush()
+    res = schema.execute(u"""
+query Idea($lang: String!, $id: ID!) {
+  idea: node(id: $id) {
+    ... on Idea {
+      title(lang: $lang)
+      longTitle
+      description(lang: $lang)
+      imgUrl
+    }
+  }
+}
+""", context_value=graphql_request, variable_values={
+        "id": idea_id,
+        "lang": u'en',
+    })
+    assert json.loads(json.dumps(res.data)) == {
+        u'idea': {
+            u'title': u'Understanding the dynamics and issues',
+            u'longTitle': u'What you need to know',
+            u'description': None,
+            u'imgUrl': None
+    }}
+
+
+def test_extracts_on_post(admin_user, graphql_request, discussion, top_post_in_thread_phase):
+    from graphene.relay import Node
+    raw_id = int(Node.from_global_id(top_post_in_thread_phase)[1])
+    from assembl.models import Extract, Post
+    post = Post.get(raw_id)
+    post.extracts.append(
+        Extract(body=u"super quote", important=False,
+                creator=admin_user, owner=admin_user, discussion=discussion))
+    post.extracts.append(
+        Extract(body=u"super important quote", important=True,
+                creator=admin_user, owner=admin_user, discussion=discussion))
+    post.db.flush()
+    res = schema.execute(u"""
+query Post($id: ID!) {
+  post: node(id: $id) {
+    ... on Post {
+      extracts {
+        body
+        important
+      }
+    }
+  }
+}
+""", context_value=graphql_request, variable_values={
+        "id": top_post_in_thread_phase,
+    })
+    assert json.loads(json.dumps(res.data)) == {
+        u'post': {
+            u'extracts': [
+                {u'body': u'super quote',
+                 u'important': False},
+                {u'body': u'super important quote',
+                 u'important': True},
+                ]
+    }}

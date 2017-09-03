@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 import pytest
 from datetime import datetime
 
@@ -195,6 +197,101 @@ def reply_to_deleted_post_5(
 
     def fin():
         print "finalizer reply_to_deleted_post_5"
+        test_session.delete(p)
+        test_session.flush()
+    request.addfinalizer(fin)
+    return p
+
+
+@pytest.fixture(scope="function")
+def fully_ambiguous_post(
+        request, test_session, discussion, participant1_user,
+        undefined_locale, fr_locale, en_locale):
+    from assembl.models import Content, LangString
+    p = Content(
+        discussion=discussion,
+        subject=LangString.create(u"testa"),
+        body=LangString.create(u"testa"))
+    test_session.add(p)
+    test_session.flush()
+
+    def fin():
+        print "finalizer fully_ambiguous_post"
+        test_session.delete(p)
+        test_session.flush()
+    request.addfinalizer(fin)
+    return p
+
+
+@pytest.fixture(scope="function")
+def post_subject_locale_determined_by_body(
+        request, test_session, discussion,
+        undefined_locale, fr_locale, en_locale):
+    from assembl.models import Content, LangString
+    p = Content(
+        discussion=discussion,
+        subject=LangString.create(u"testa"),
+        body=LangString.create(u"Contenu clairement en français"))
+    test_session.add(p)
+    test_session.flush()
+
+    def fin():
+        print "finalizer post_subject_locale_determined_by_body"
+        test_session.delete(p)
+        test_session.flush()
+    request.addfinalizer(fin)
+    return p
+
+
+@pytest.fixture(scope="function")
+def post_body_locale_determined_by_creator(
+        request, test_session, discussion, admin_user,
+        user_language_preference_fr_cookie,
+        undefined_locale, fr_locale, en_locale):
+    from assembl.models import Post, LangString
+    p = Post(
+        discussion=discussion, creator=admin_user,
+        subject=LangString.create(u"testa"),
+        body=LangString.create(u"testa"),
+        message_id="msg9@example.com")
+    test_session.add(p)
+    test_session.flush()
+
+    def fin():
+        print "finalizer post_subject_locale_determined_by_creator"
+        test_session.delete(p)
+        test_session.flush()
+    request.addfinalizer(fin)
+    return p
+
+
+@pytest.fixture(scope="function")
+def post_body_locale_determined_by_import(
+        request, test_session, discussion, admin_user, mailbox,
+        undefined_locale, fr_locale, en_locale):
+    from assembl.models import Email, LangString
+    p = Email(
+        discussion=discussion, creator=admin_user,
+        subject=LangString.create(u"testa"),
+        body=LangString.create(u"testa"),
+        source=mailbox,
+        body_mime_type="text/plain",
+        sender="admin@assembl.com",
+        recipients="whoever@example.com",
+        message_id="msg10@example.com",
+        imported_blob="""Subject: testa
+From: Mr. Administrator <admin@assembl.com>
+Content-Language: fr
+Content-Type: text/plain; charset="iso-8859-1"
+
+testa""")
+    # must be done after the source is set
+    p.source_post_id = "msg10@example.com"
+    test_session.add(p)
+    test_session.flush()
+
+    def fin():
+        print "finalizer post_subject_locale_determined_by_creator"
         test_session.delete(p)
         test_session.flush()
     request.addfinalizer(fin)

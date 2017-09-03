@@ -18,11 +18,11 @@ query ThematicsQuery($identifier: String!) {
       descriptionEntriesBottom {
         localeCode
         value
-      },
+      }
       descriptionEntriesSide {
         localeCode
         value
-      },
+      }
       htmlCode
     }
     questions {

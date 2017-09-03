@@ -853,7 +853,7 @@ def webservers_stop():
     if env.uses_ngnix:
         # Nginx
         if exists('/etc/init.d/nginx'):
-            sudo('/etc/init.d/nginx stop')
+            run('sudo /etc/init.d/nginx stop')
         elif env.mac:
             sudo('killall nginx')
 
@@ -872,7 +872,7 @@ def webservers_start():
     if env.uses_ngnix:
         # Nginx
         if exists('/etc/init.d/nginx'):
-            sudo('/etc/init.d/nginx start')
+            run('sudo /etc/init.d/nginx start')
         elif env.mac and exists('/usr/local/nginx/sbin/nginx'):
             sudo('/usr/local/nginx/sbin/nginx')
 
@@ -1460,8 +1460,16 @@ def database_restore():
     """
     assert(env.wsginame in ('staging.wsgi', 'dev.wsgi'))
 
+    processes = filter_autostart_processes([
+        "dev:pserve" "celery_imap", "changes_router", "celery_notify",
+        "celery_notification_dispatch", "source_reader"])
+
     if(env.wsginame != 'dev.wsgi'):
         execute(webservers_stop)
+        processes.append("prod:uwsgi")  # possibly not autostarted
+
+    for process in processes:
+        supervisor_process_stop(process)
 
     # Kill postgres processes in order to be able to drop tables
     #execute(postgres_user_detach)
@@ -1490,6 +1498,9 @@ def database_restore():
                 env.db_user,
                 remote_db_path())
         )
+
+    for process in processes:
+        supervisor_process_start(process)
 
     if(env.wsginame != 'dev.wsgi'):
         execute(webservers_start)

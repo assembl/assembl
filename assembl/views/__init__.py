@@ -181,7 +181,7 @@ def get_default_context(request, **kwargs):
     from ..auth.util import get_user, get_current_discussion
     if request.scheme == "http"\
             and asbool(config.get("require_secure_connection")):
-        raise HTTPFound("https://" + request.host + request.path_qs)
+        raise HTTPFound(get_global_base_url(True) + request.path_qs)
     react_url = '/static2'
     use_webpack_server = asbool(config.get('use_webpack_server'))
     if use_webpack_server:
@@ -202,6 +202,7 @@ def get_default_context(request, **kwargs):
         asbool(config.get("require_secure_connection"))
         or (asbool(config.get("accept_secure_connection"))
             and request.url.startswith('https:')))
+    application_url = get_global_base_url()
     socket_url = get_global_base_url(
         secure_socket, websocket_port) + config.get('changes.prefix')
 
@@ -312,6 +313,7 @@ def get_default_context(request, **kwargs):
     return dict(
         kwargs,
         request=request,
+        application_url=application_url,
         get_route=get_route,
         user=user,
         templates=get_template_views(),

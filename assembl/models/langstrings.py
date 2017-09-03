@@ -283,6 +283,7 @@ class Locale(Base):
 
     @classmethod
     def populate_db(cls, db=None):
+        db.execute("lock table %s in exclusive mode" % cls.__table__.name)
         for loc_code in (
                 cls.UNDEFINED, cls.MULTILINGUAL, cls.NON_LINGUISTIC):
             cls.get_or_create(loc_code, db=db)
@@ -369,6 +370,7 @@ class LocaleLabel(Base):
         """Populate the locale_label table."""
         from os.path import dirname, join
         db = db or cls.default_db
+        db.execute("lock table %s in exclusive mode" % cls.__table__.name)
         fname = join(dirname(dirname(__file__)),
                      'nlp/data/language-names.json')
         with open(fname) as f:
@@ -422,9 +424,43 @@ class LangString(Base):
                 self.id_sequence.next_value().select()).first()
             self.id = id
 
-    def add_entry(self, entry):
+    def add_entry(self, entry, allow_replacement=True):
+        """Add a LangStringEntry to the langstring.
+        Previous versions with the same language will be tombstoned,
+        and translations based on such a version will be suppressed."""
         if entry and isinstance(entry, LangStringEntry):
-            self.entries.append(entry)
+            entry_locale = entry.locale or Locale.get(entry.locale_id)
+            base_locale = entry_locale.base_locale
+            for ex_entry in self.entries:
+                # Loop on the entries means that repeated calls to
+                # add_entry will be O(n^2). If this becomes an issue,
+                # create an add_entries method.
+                if ex_entry is entry:
+                    continue
+                if ex_entry.value == entry.value:
+                    if entry in self.entries:
+                        self.entries.remove(entry)
+                    return ex_entry
+                ex_locale = ex_entry.locale or Locale.get(ex_entry.locale_id)
+                if base_locale == ex_locale.base_locale:
+                    if ex_locale.is_machine_translated:
+                        self.entries.remove(ex_entry)
+                    else:
+                        if not allow_replacement:
+                            return None
+                        ex_entry.is_tombstone = True
+                        self.remove_translations_of(base_locale)
+                        if inspect(self).persistent:
+                            self.db.expire(self, ["entries"])
+            entry.langstring = self
+            return entry
+
+    def remove_translations_of(self, local_code):
+        """Remove all translations based on this code."""
+        for trans in self.entries[:]:
+            trans_locale = trans.locale or Locale.get(trans.locale_id)
+            if trans_locale.machine_translated_from == local_code:
+                trans.delete()
 
     def __repr__(self):
         return 'LangString (%d): %s\n' % (
@@ -437,6 +473,33 @@ class LangString(Base):
             langstring=ls, value=value,
             locale_id=Locale.get_id_of(locale_code))
         return ls
+
+    def add_value(self, value, locale_code=Locale.UNDEFINED,
+                  allow_replacement=True):
+        return self.add_entry(LangStringEntry(
+            langstring=self, value=value,
+            locale_id=Locale.get_id_of(locale_code)),
+            allow_replacement=allow_replacement)
+
+    @classmethod
+    def create_localized_langstring(
+            cls, trans_string, desired_locales=None, known_translations=None):
+        """Construct a langstring from a localized string.
+        Call with a TranslationString."""
+        inst = cls.create(trans_string, 'en')
+        known_translations = known_translations or {}
+        for loc in desired_locales or ():
+            if loc == 'en':
+                continue
+            elif loc in known_translations:
+                inst.add_value(known_translations[loc], loc)
+            else:
+                from pyramid.i18n import make_localizer
+                from os.path import dirname, join
+                loc_dir = join(dirname(dirname(__file__)), 'locale')
+                localizer = make_localizer(loc, loc_dir)
+                inst.add_value(localizer.translate(trans_string), loc)
+        return inst
 
     @property
     def entries_as_dict(self):
@@ -667,17 +730,9 @@ class LangString(Base):
                         entries = filter(lambda e: not e.error_code, entries)
                     for pref in candidates:
                         if pref.translate_to:
-                            target_locale = pref.translate_to_code
-
-                            def common_len(e):
-                                return Locale.compatible(
-                                    target_locale,
-                                    Locale.extract_base_locale(e.locale_code))
-                            common_entries = filter(common_len, entries)
-                            if common_entries:
-                                common_entries.sort(
-                                    key=common_len, reverse=True)
-                                return common_entries[0]
+                            best = self.closest_entry(pref.translate_to_code)
+                            if best:
+                                return best
                         else:
                             return entriesByLocale[pref.locale_code]
         # give up and give first original
@@ -707,6 +762,55 @@ class LangString(Base):
         if all((e.is_machine_translated for e in entries)):
             entries.extend(self.non_mt_entries())
         return entries
+
+    def closest_entry(self, target_locale):
+        def common_len(e):
+            return Locale.compatible(
+                target_locale,
+                Locale.extract_base_locale(e.locale_code))
+        entries = [(common_len(e), e) for e in self.entries if not e.error_code]
+        if entries:
+            entries.sort(reverse=True)
+            if entries[0][0]:
+                return entries[0][1]
+
+    def simplistic_best_entries_with_originals_in_request(self):
+        from pyramid.threadlocal import get_current_request
+        r = get_current_request()
+        # CAN ONLY BE CALLED IF THERE IS A CURRENT REQUEST.
+        assert r
+        locale = r.locale_name
+        # Or should I use assembl.views.get_locale_from_request ?
+        return self.simplistic_best_entries_with_originals(locale)
+
+    def simplistic_best_entries_with_originals(self, target_locale):
+        """For v2, where user cannot manipulate languagePreferenceCollection
+        Always give the version of the Assembl UI and the original;
+        but also say whether the original is understood or not.
+        We could send a boolean indicating whether the language is deemed understood,
+        but either way first entry should be shown to user. (original if understood,
+        translation if original isn't)
+        """
+        from .auth import LanguagePreferenceCollection
+        for lse in self.non_mt_entries():
+            if Locale.compatible(lse.locale_code, target_locale):
+                return [(lse, True)]
+                # return [lse]
+        original = self.first_original()
+        best = self.closest_entry(target_locale)
+        prefs = LanguagePreferenceCollection.getCurrent()
+        pref = prefs.find_locale(target_locale, self.db)
+        if best:
+            if pref.translate_to:
+                return [(best, True), (original, False)]
+                # return [best, original]
+            else:
+                return [(original, True), (best, True)]
+                # return [original, best]
+        else:
+            # missing translation
+            return [(original, not pref.translate_to)]
+            # return [original]
 
     def remove_translations(self, forget_identification=True):
         for entry in list(self.entries):
@@ -854,25 +958,19 @@ class LangStringEntry(TombstonableMixin, Base):
         # Only works if the Locale is part of the join
         return Locale.is_machine_translated
 
-    def change_value(self, new_value):
-        self.tombstone_date = datetime.utcnow()
-        new_version = self.__class__(
-            langstring_id=self.langstring_id,
-            locale_id=self.locale_id,
-            value=new_value)
-        self.db.add(new_version)
-        return new_version
-
     def identify_locale(self, locale_code, data, certainty=False):
         # A translation service proposes a data identification.
         # the information is deemed confirmed if it fits the initial
         # hypothesis given at LSE creation.
         changed = False
-        if self.locale.is_machine_translated:
+        old_locale_code = self.locale_code
+        langstring = self.langstring or (
+            LangString.get(self.langstring_id) if self.langstring_id else None)
+        if Locale.locale_is_machine_translated(self.locale_code):
             raise RuntimeError("Why identify a machine-translated locale?")
         data = data or {}
         original = self.locale_identification_data_json.get("original", None)
-        if not locale_code:
+        if not locale_code or locale_code == Locale.UNDEFINED:
             if not self.locale_code or self.locale_code == Locale.UNDEFINED:
                 # replace id data with new one.
                 if original:
@@ -880,12 +978,12 @@ class LangStringEntry(TombstonableMixin, Base):
                 self.locale_identification_data_json = data
             return False
         elif original and locale_code == original:
-            if locale_code != self.locale_code:
+            if locale_code != old_locale_code:
                 self.locale_code = locale_code
                 changed = True
             self.locale_identification_data_json = data
             self.locale_confirmed = True
-        elif locale_code != self.locale_code:
+        elif locale_code != old_locale_code:
             if self.locale_confirmed:
                 if certainty:
                     raise RuntimeError("Conflict of certainty")
@@ -894,7 +992,7 @@ class LangStringEntry(TombstonableMixin, Base):
             # compare data? replacing with new for now.
             if not original and self.locale_identification_data:
                 original = Locale.UNDEFINED
-            original = original or self.locale_code
+            original = original or old_locale_code
             if original != locale_code and original != Locale.UNDEFINED:
                 data["original"] = original
             self.locale_code = locale_code
@@ -907,7 +1005,16 @@ class LangStringEntry(TombstonableMixin, Base):
             self.locale_identification_data_json = data
             self.locale_confirmed = certainty or locale_code == original
         if changed:
-            self.langstring.remove_translations(False)
+            if langstring:
+                langstring.remove_translations_of(old_locale_code)
+                # Re-adding to verify there's no conflict
+                added = langstring.add_entry(self, certainty)
+                if added is None:
+                    # We identified an entry with something that existed
+                    # as a known original. Not sure what to do now,
+                    # reverting just in case.
+                    self.locale_code = old_locale_code
+                    changed = False
         return changed
 
     def forget_identification(self, force=False):

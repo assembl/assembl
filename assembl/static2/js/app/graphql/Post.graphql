@@ -1,0 +1,32 @@
+#import "./AgentProfileInfo.graphql"
+
+fragment Post on Post {
+  id
+  subject
+  body
+  mySentiment
+  sentimentCounts {
+    like
+    disagree
+    dontUnderstand
+    moreInfo
+  }
+  indirectIdeaContentLinks {
+    idea {
+      id
+      title
+    }
+  }
+  creator {
+    ...AgentProfileInfo
+  }
+  # parentId
+  # creationDate already retrieved by IdeaWithPosts query
+  modificationDate
+  bodyMimeType
+  publicationState
+  extracts {
+    id
+    body
+  }
+}

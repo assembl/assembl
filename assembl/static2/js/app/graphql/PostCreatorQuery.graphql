@@ -1,9 +1,0 @@
-query postCreator($id: ID!) {
-  proposition: node(id: $id) {
-    ... on Post {
-      creator {
-        name
-      }
-    }
-  }
-}

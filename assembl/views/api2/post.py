@@ -125,6 +125,7 @@ def post_put_json(request):
         json_data['moderated_on'] = datetime.utcnow().isoformat()+"Z"
         json_data['moderator'] = User.uri_generic(
             authenticated_userid(request))
+    # TODO: apply guess_languages
     return instance_put_json(request, json_data)
 
 
@@ -142,6 +143,7 @@ def post_put(request):
         form_data['moderated_on'] = datetime.utcnow().isoformat()+"Z"
         form_data['moderator'] = User.uri_generic(
             authenticated_userid(request))
+    # TODO: apply guess_languages
     return instance_put_form(request, form_data)
 
 
@@ -151,6 +153,7 @@ def post_put(request):
 def add_post_form(request):
     if has_moderation(request.params):
         raise HTTPBadRequest("Cannot moderate at post creation")
+    # TODO: apply guess_languages
     return collection_add_with_params(request)
 
 
@@ -160,4 +163,5 @@ def add_post_form(request):
 def add_post_json(request):
     if has_moderation(request.json):
         raise HTTPBadRequest("Cannot moderate at post creation")
+    # TODO: apply guess_languages
     return collection_add_json(request)

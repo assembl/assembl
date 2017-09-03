@@ -49,6 +49,7 @@ from assembl.lib.config import get_config
 from assembl.lib.parsedatetime import parse_datetime
 from assembl.lib.sqla import ObjectNotUniqueError
 from assembl.lib.json import DateJSONEncoder
+from assembl.lib.utils import get_global_base_url
 from assembl.auth import (
     P_READ, P_READ_PUBLIC_CIF, P_ADMIN_DISC, P_DISC_STATS, P_SYSADMIN,
     R_ADMINISTRATOR)
@@ -240,7 +241,7 @@ def discussion_instance_view_jsonld(request):
 def user_private_view_jsonld(request):
     if request.scheme == "http" and asbool(request.registry.settings.get(
             'accept_secure_connection', False)):
-        return HTTPFound("https://" + request.host + request.path_qs)
+        return HTTPFound(get_global_base_url(True) + request.path_qs)
     discussion_id = request.context.get_discussion_id()
     user_id, permissions, salt = read_user_token(request)
     if P_READ not in permissions:
@@ -864,12 +865,16 @@ def get_analytics_alerts(discussion, user_id, types, all_users=False):
         'metrics_server_endpoint',
         'https://discussions.bluenove.com/analytics/accept')
     verify_metrics = False  # weird SNI bug on some platforms
-    protocol = 'https' if asbool(settings.get(
-        'accept_secure_connection', False)) else 'http'
+    secure = asbool(settings.get(
+        'accept_secure_connection', False))
+    protocol = 'https' if secure else 'http'
     host = settings.get('public_hostname')
-    if settings.get('public_port', 80) != 80:
-        # TODO: public_secure_port?
-        host += ':'+str(settings.get('public_port'))
+    port = settings.get('public_port', '80')
+    if secure and port == '80':
+        # old misconfiguration
+        port = '443'
+    if (secure and port != '443') or (not secure and port != '80'):
+        host += ':' + port
     seed = urandom(8)
     obfuscator = AESObfuscator(seed)
     token = permission_token(user_id, discussion.id, [P_READ_PUBLIC_CIF], seed)

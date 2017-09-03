@@ -24,6 +24,7 @@ from jwzthreading import restrip_pat
 import transaction
 
 from assembl.lib.parsedatetime import parse_datetime
+from assembl.lib.clean_input import sanitize_html, sanitize_text
 from assembl.views.api import API_DISCUSSION_PREFIX
 from assembl.auth import P_READ, P_ADD_POST
 from assembl.auth.util import get_permissions
@@ -347,7 +348,7 @@ def get_posts(request):
                 posts = posts.filter(ViewPost.id != None)
         user = AgentProfile.get(user_id)
         service = discussion.translation_service()
-        if service:
+        if service.canTranslate is not None:
             translations = PrefCollectionTranslationTable(
                 service, LanguagePreferenceCollection.getCurrent(request))
     else:
@@ -629,38 +630,53 @@ def create_post(request):
     if html:
         log.warning("Still using html")
         # how to guess locale in this case?
-        body = LangString.create(html)
+        body = LangString.create(sanitize_html(html))
+        # TODO: AssemblPosts are pure text right now.
+        # Allowing HTML requires changes to the model.
     elif body:
+        # TODO: Accept HTML body.
+        for e in body['entries']:
+            e['value'] = sanitize_text(e['value'])
         body = LangString.create_from_json(
             body, context=ctx, user_id=user_id)
     else:
         body = LangString.EMPTY(discussion.db)
 
     if subject:
+        for e in subject['entries']:
+            e['value'] = sanitize_text(e['value'])
         subject = LangString.create_from_json(
             subject, context=ctx, user_id=user_id)
     else:
+        from assembl.models import Locale
+        locale = Locale.UNDEFINED
         # print(in_reply_to_post.subject, discussion.topic)
-        if in_reply_to_post:
-            subject = (
-                in_reply_to_post.get_title().first_original().value or ''
-                if in_reply_to_post.get_title() else '')
+        if in_reply_to_post and in_reply_to_post.get_title():
+            original_subject = in_reply_to_post.get_title().first_original()
+            if original_subject:
+                locale = original_subject.locale_code
+                subject = (
+                    original_subject.value or ''
+                    if in_reply_to_post.get_title() else '')
         elif in_reply_to_idea:
             # TODO:  THis should use a cascade like the frontend
+            # also, some ideas have extra langstring titles
             subject = (in_reply_to_idea.short_title
                        if in_reply_to_idea.short_title else '')
+            locale = discussion.main_locale
         else:
             subject = discussion.topic if discussion.topic else ''
+            locale = discussion.main_locale
         # print subject
         if subject is not None and len(subject):
-            new_subject = "Re: " + restrip_pat.sub('', subject).strip()
+            new_subject = restrip_pat.sub('', subject).strip()
             if (in_reply_to_post and new_subject == subject and
                     in_reply_to_post.get_title()):
                 # reuse subject and translations
                 subject = in_reply_to_post.get_title().clone(discussion.db)
             else:
                 # how to guess locale in this case?
-                subject = LangString.create(new_subject)
+                subject = LangString.create(new_subject, locale)
         else:
             capture_message(
                 "A message is about to be written to the database with an "
@@ -673,7 +689,7 @@ def create_post(request):
         'message_classifier': message_classifier,
         'subject': subject,
         'body': body
-        }
+    }
 
     if publishes_synthesis_id:
         published_synthesis = Synthesis.get_instance(publishes_synthesis_id)
@@ -682,6 +698,7 @@ def create_post(request):
         new_post.finalize_publish()
     else:
         new_post = AssemblPost(**post_constructor_args)
+    new_post.guess_languages()
 
     discussion.db.add(new_post)
     discussion.db.flush()

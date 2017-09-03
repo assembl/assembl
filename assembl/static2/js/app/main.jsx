@@ -2,7 +2,6 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { scrollToPosition, getDiscussionId } from './utils/globalFunctions';
 import { getCurrentPhaseIdentifier } from './utils/timeline';
-import { fetchSynthesis } from './actions/synthesisActions';
 import { addRedirectionToV1 } from './actions/phaseActions';
 import Navbar from './components/common/navbar';
 import Footer from './components/common/footer';
@@ -19,12 +18,10 @@ class Main extends React.Component {
     };
   }
   componentWillMount() {
-    const discussionId = getDiscussionId();
     const { debateData } = this.props.debate;
     const currentPhaseIdentifier = getCurrentPhaseIdentifier(debateData.timeline);
     const isRedirectionToV1 = currentPhaseIdentifier !== 'survey';
     this.props.addRedirectionToV1(isRedirectionToV1);
-    this.props.fetchSynthesis(discussionId);
   }
   componentDidMount() {
     window.addEventListener('scroll', this.displayHeader);
@@ -71,9 +68,6 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    fetchSynthesis: (discussionId) => {
-      dispatch(fetchSynthesis(discussionId));
-    },
     addRedirectionToV1: (discussionId) => {
       dispatch(addRedirectionToV1(discussionId));
     }

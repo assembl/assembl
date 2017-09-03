@@ -1,6 +1,6 @@
 import React from 'react';
 import { browserHistory } from 'react-router';
-import { Translate, Localize, I18n } from 'react-redux-i18n';
+import { Translate, I18n } from 'react-redux-i18n';
 import { connect } from 'react-redux';
 import { Grid, Row, Button } from 'react-bootstrap';
 import Statistic from './header/statistic';
@@ -60,13 +60,11 @@ class Header extends React.Component {
                   </span>}
                 {debateData.dates &&
                   <div>
-                    <Translate value="home.from" />
-                    <span>&nbsp;</span>
-                    <Localize value={debateData.dates.startDate} dateFormat="date.format" />
-                    <span>&nbsp;</span>
-                    <Translate value="home.to" />
-                    <span>&nbsp;</span>
-                    <Localize value={debateData.dates.endDate} dateFormat="date.format" />
+                    <Translate
+                      value="home.from_start_to_end"
+                      start={I18n.l(debateData.dates.startDate, { dateFormat: 'date.format' })}
+                      end={I18n.l(debateData.dates.endDate, { dateFormat: 'date.format' })}
+                    />
                   </div>}
               </h4>
               <Button onClick={this.displayPhase} className="button-submit button-light margin-xl">

@@ -4,7 +4,7 @@ from abc import ABCMeta, abstractmethod
 import uuid
 import logging
 
-from bs4 import BeautifulSoup
+from ..lib.clean_input import sanitize_text
 import simplejson as json
 from sqlalchemy import (
     Column,
@@ -175,6 +175,9 @@ class Post(Content):
         'with_polymorphic': '*'
     }
 
+    def is_owner(self, user_id):
+        return self.creator_id == user_id
+
     def get_descendants(self):
         assert self.id
         descendants = self.db.query(Post).filter(
@@ -203,7 +206,7 @@ class Post(Content):
         shortened = False
         html_len = 2 * target_len
         while True:
-            pure_text = BeautifulSoup(text[:html_len]).get_text().strip()
+            pure_text = sanitize_text(text[:html_len])
             if html_len >= len(text) or len(pure_text) > target_len:
                 shortened = html_len < len(text)
                 text = pure_text
@@ -520,6 +523,32 @@ class Post(Content):
             icls = self.filter_idea_content_links_r(icls)
         return icls
 
+    def language_priors(self, translation_service):
+        from .auth import User, UserLanguagePreferenceCollection
+        priors = super(Post, self).language_priors(translation_service)
+        creator = self.creator or AgentProfile.get(self.creator_id)
+        if creator and isinstance(creator, User):
+            # probably a language that the user knows
+            try:
+                prefs = UserLanguagePreferenceCollection(creator.id)
+                known_languages = prefs.known_languages()
+            except AssertionError:  # user without prefs
+                from pyramid.threadlocal import get_current_request
+                request = get_current_request()
+                if request:
+                    known_languages = [request.locale_name]
+                else:
+                    return priors
+                known_languages = []
+            known_languages = {translation_service.asKnownLocale(loc)
+                               for loc in known_languages}
+            priors = {k: v * (1 if k in known_languages else 0.7)
+                      for (k, v) in priors.iteritems()}
+            for lang in known_languages:
+                if lang not in priors:
+                    priors[lang] = 1
+        return priors
+
     @classmethod
     def extra_collections(cls):
         from .idea_content_link import IdeaContentLink
@@ -602,12 +631,19 @@ class AssemblPost(Post):
         onupdate='CASCADE'
     ), primary_key=True)
 
+    modification_date = Column(DateTime)
+
+    body_mime_type = Column(CoerceUnicode(),
+                        nullable=False,
+                        server_default="text/plain",
+                        doc="The mime type of the body.  See Content::get_body_mime_type() for allowed values.")
+
     __mapper_args__ = {
         'polymorphic_identity': 'assembl_post',
     }
 
     def get_body_mime_type(self):
-        return "text/plain"
+        return self.body_mime_type
 
 
 class SynthesisPost(AssemblPost):

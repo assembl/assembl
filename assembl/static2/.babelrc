@@ -1,4 +1,12 @@
 {
-  "plugins" : ["transform-object-rest-spread", "react-hot-loader/babel"],
-  "presets" : ["es2015", "react"]
+  "plugins" : [
+    "transform-object-rest-spread", "transform-class-properties",
+    ["transform-runtime", { "helpers": true, "polyfill": false }]
+  ],
+  "presets" : [["env", { "targets": { "node": 6 } }], "react", "flow"],
+  "env": {
+    "development": {
+      "plugins" : ["react-hot-loader/babel"],
+    }
+  }
 }

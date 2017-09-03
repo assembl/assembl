@@ -1,116 +1,182 @@
 import React from 'react';
-import { connect } from 'react-redux';
 import { Translate } from 'react-redux-i18n';
+import { compose, graphql } from 'react-apollo';
 import { Row, Col } from 'react-bootstrap';
-import { createSelector } from 'reselect';
 
-import { updateActiveAnswerFormId, updateAnswerPostBody } from '../../../actions/postsActions';
-import { postSelector } from '../../../selectors';
 import { getDomElementOffset, scrollToPosition } from '../../../utils/globalFunctions';
 import ProfileLine from '../../common/profileLine';
 import PostActions from './postActions';
-import { SHOW_POST_RESPONSES } from '../../../constants';
 import AnswerForm from './answerForm';
-
-const postMapStateToProps = createSelector(postSelector, (post) => {
-  return { expanded: post.get('showResponses', SHOW_POST_RESPONSES) };
-});
-
-export const connectPostToState = connect(postMapStateToProps);
+import EditPostForm from './editPostForm';
+import DeletedPost from './deletedPost';
+import PostQuery from '../../../graphql/PostQuery.graphql';
+import withLoadingIndicator from '../../../components/common/withLoadingIndicator';
+import { DeletedPublicationStates, PublicationStates } from '../../../constants';
 
 export const PostFolded = ({ nbPosts }) => {
   return <Translate value="debate.thread.foldedPostLink" count={nbPosts} />;
 };
 
-const Post = ({
-  id,
-  children,
-  subject,
-  body,
-  indirectIdeaContentLinks,
-  creator,
-  creationDate,
-  showAnswerForm,
-  activeAnswerFormId,
-  ideaId,
-  refetchIdea,
-  sentimentCounts,
-  mySentiment,
-  updateAnswerBody
-}) => {
-  const handleAnswerClick = () => {
-    updateAnswerBody('');
-    showAnswerForm(id);
-    setTimeout(() => {
-      const txtarea = document.getElementById(`txt${id}`);
-      const txtareaOffset = getDomElementOffset(txtarea).top;
-      scrollToPosition(txtareaOffset - txtarea.clientHeight, 600);
-      txtarea.focus();
-    }, 500);
-  };
+const getFullLevelString = (fullLevel) => {
   return (
-    <div className="posts" id={id}>
-      <div className="box">
-        <Row className="post-row">
-          <Col xs={12} md={11} className="post-left">
-            {creator && <ProfileLine userId={creator.userId} userName={creator.name} creationDate={creationDate} />}
-            <h3 className="dark-title-3">
-              {subject}
-            </h3>
-            <div className="body" dangerouslySetInnerHTML={{ __html: body.replace(/\n/g, '<br/>') }} />
-            <div className="link-idea">
-              <div className="label">
-                <Translate value="debate.thread.linkIdea" />
-              </div>
-              <div className="badges">
-                {indirectIdeaContentLinks &&
-                  indirectIdeaContentLinks.map((link) => {
-                    return (
-                      <span className="badge" key={link.idea.id}>
-                        {link.idea.title}
-                      </span>
-                    );
-                  })}
-              </div>
-            </div>
-            <div className="answers annotation">
-              <Translate value="debate.thread.numberOfResponses" count={children ? children.length : 0} />
-            </div>
-          </Col>
-          <Col xs={12} md={1} className="post-right">
-            <PostActions
-              handleAnswerClick={handleAnswerClick}
-              sentimentCounts={sentimentCounts}
-              mySentiment={mySentiment}
-              postChildren={children}
-            />
-          </Col>
-        </Row>
-      </div>
-      {activeAnswerFormId === id
-        ? <div className="answer-form">
-          <AnswerForm parentId={id} ideaId={ideaId} refetchIdea={refetchIdea} />
-        </div>
-        : null}
-    </div>
+    fullLevel &&
+    <span className="subject-prefix">
+      {`Rep. ${fullLevel
+        .map((level) => {
+          return `${level + 1}`;
+        })
+        .join('.')}: `}
+    </span>
   );
 };
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    updateAnswerBody: (body) => {
-      return dispatch(updateAnswerPostBody(body));
-    },
-    showAnswerForm: (activeAnswerFormId) => {
-      return dispatch(updateActiveAnswerFormId(activeAnswerFormId));
+class Post extends React.PureComponent {
+  constructor() {
+    super();
+    this.state = {
+      showAnswerForm: false,
+      mode: 'view'
+    };
+  }
+
+  componentDidMount() {
+    this.props.measureTreeHeight(400);
+  }
+
+  componentDidUpdate(prevProps) {
+    if (this.props.lang !== prevProps.lang || this.props.data.post.publicationState !== prevProps.data.post.publicationState) {
+      this.props.measureTreeHeight(200);
     }
-  };
-};
+    // Object.keys(nextProps).forEach((key) => {
+    //   if (nextProps[key] !== this.props[key]) {
+    //     console.log('prop changed', key);
+    //   }
+    // });
+  }
 
-const mapStateToProps = ({ posts }) => {
-  return {
-    activeAnswerFormId: posts.activeAnswerFormId
+  handleAnswerClick = () => {
+    this.setState({ showAnswerForm: true }, this.props.measureTreeHeight);
+    setTimeout(() => {
+      if (!this.answerTextarea) return;
+      const txtareaOffset = getDomElementOffset(this.answerTextarea).top;
+      scrollToPosition(txtareaOffset - this.answerTextarea.clientHeight, 200);
+    }, 200);
   };
-};
 
-export default connect(mapStateToProps, mapDispatchToProps)(Post);
+  hideAnswerForm = () => {
+    this.setState({ showAnswerForm: false }, this.props.measureTreeHeight);
+  };
+
+  handleEditClick = () => {
+    this.setState({ mode: 'edit' }, this.props.measureTreeHeight);
+  };
+
+  goBackToViewMode = () => {
+    this.setState({ mode: 'view' }, this.props.measureTreeHeight);
+  };
+
+  render() {
+    const {
+      id,
+      children,
+      subject,
+      body,
+      bodyMimeType,
+      indirectIdeaContentLinks,
+      creator,
+      modificationDate,
+      sentimentCounts,
+      mySentiment,
+      publicationState
+    } = this.props.data.post;
+    const { lang, ideaId, refetchIdea, creationDate, fullLevel } = this.props;
+    // creationDate is retrieved by IdeaWithPosts query, not PostQuery
+
+    if (publicationState in DeletedPublicationStates) {
+      return (
+        <DeletedPost id={id} subject={subject} deletedBy={publicationState === PublicationStates.DELETED_BY_USER ? 'user' : 'admin'} />
+      );
+    }
+
+    if (this.state.mode === 'edit') {
+      return (
+        <div className="posts">
+          <div className="answer-form" id={id}>
+            <EditPostForm id={id} body={body} subject={subject} refetchIdea={refetchIdea} goBackToViewMode={this.goBackToViewMode} />
+          </div>
+        </div>
+      );
+    }
+
+    const answerTextareaRef = (el) => {
+      this.answerTextarea = el;
+    };
+
+    return (
+      <div className="posts" id={id}>
+        <div className="box">
+          <Row className="post-row">
+            <Col xs={12} md={11} className="post-left">
+              {creator &&
+                <ProfileLine
+                  userId={creator.userId}
+                  userName={creator.name}
+                  creationDate={creationDate}
+                  locale={lang}
+                  modified={modificationDate !== null}
+                />}
+              <h3 className="dark-title-3">
+                {getFullLevelString(fullLevel)}
+                {subject}
+              </h3>
+              <div className={`body ${bodyMimeType === 'text/plain' ? 'pre-wrap' : ''}`} dangerouslySetInnerHTML={{ __html: body }} />
+              {indirectIdeaContentLinks.length
+                ? <div className="link-idea">
+                  <div className="label">
+                    <Translate value="debate.thread.linkIdea" />
+                  </div>
+                  <div className="badges">
+                    {indirectIdeaContentLinks.map((link) => {
+                      return (
+                        <span className="badge" key={link.idea.id}>
+                          {link.idea.title}
+                        </span>
+                      );
+                    })}
+                  </div>
+                </div>
+                : null}
+              <div className="answers annotation">
+                <Translate value="debate.thread.numberOfResponses" count={children ? children.length : 0} />
+              </div>
+            </Col>
+            <Col xs={12} md={1} className="post-right">
+              <PostActions
+                creatorUserId={creator.userId}
+                postId={id}
+                handleAnswerClick={this.handleAnswerClick}
+                handleEditClick={this.handleEditClick}
+                sentimentCounts={sentimentCounts}
+                mySentiment={mySentiment}
+                postChildren={children}
+              />
+            </Col>
+          </Row>
+        </div>
+        {this.state.showAnswerForm
+          ? <div className="answer-form">
+            <AnswerForm
+              parentId={id}
+              ideaId={ideaId}
+              refetchIdea={refetchIdea}
+              textareaRef={answerTextareaRef}
+              hideAnswerForm={this.hideAnswerForm}
+            />
+          </div>
+          : null}
+      </div>
+    );
+  }
+}
+
+export default compose(graphql(PostQuery), withLoadingIndicator())(Post);

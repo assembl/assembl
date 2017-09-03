@@ -56,35 +56,29 @@ const VideoForm = ({
             <FormControlWithLabel
               componentClass="textarea"
               id="video-description-top"
-              type="text-area"
+              type="rich-text"
               label={descriptionTopPh}
               value={descriptionTop}
               labelAlwaysVisible
-              onChange={(e) => {
-                return updateDescriptionTop(e.target.value);
-              }}
+              onChange={updateDescriptionTop}
             />
             <FormControlWithLabel
               componentClass="textarea"
               id="video-description-bottom"
-              type="text-area"
+              type="rich-text"
               label={descriptionBottomPh}
               value={descriptionBottom}
               labelAlwaysVisible
-              onChange={(e) => {
-                return updateDescriptionBottom(e.target.value);
-              }}
+              onChange={updateDescriptionBottom}
             />
             <FormControlWithLabel
               componentClass="textarea"
               id="video-description-side"
-              type="text-area"
+              type="rich-text"
               label={quotePh}
               value={descriptionSide}
               labelAlwaysVisible
-              onChange={(e) => {
-                return updateDescriptionSide(e.target.value);
-              }}
+              onChange={updateDescriptionSide}
             />
             <FormControlWithLabel
               id="video-link"
@@ -104,20 +98,20 @@ const VideoForm = ({
   );
 };
 
-const getEntryValueForLocale = (entries, locale) => {
+const getEntryValueForLocale = (entries, locale, defaultValue = undefined) => {
   const entry = entries.find((e) => {
     return e.get('localeCode') === locale;
   });
 
-  return entry ? entry.get('value') : '';
+  return entry ? entry.get('value') : defaultValue;
 };
 
 export const mapStateToProps = ({ admin: { thematicsById } }, { thematicId, selectedLocale }) => {
   const video = thematicsById.getIn([thematicId, 'video']);
   const hasVideo = video !== null;
-  let descriptionTop = '';
-  let descriptionBottom = '';
-  let descriptionSide = '';
+  let descriptionTop;
+  let descriptionBottom;
+  let descriptionSide;
   let htmlCode = '';
   let title = '';
   if (hasVideo) {
@@ -125,12 +119,12 @@ export const mapStateToProps = ({ admin: { thematicsById } }, { thematicId, sele
     descriptionBottom = getEntryValueForLocale(video.get('descriptionEntriesBottom'), selectedLocale);
     descriptionSide = getEntryValueForLocale(video.get('descriptionEntriesSide'), selectedLocale);
     htmlCode = video.get('htmlCode', '');
-    title = getEntryValueForLocale(video.get('titleEntries'), selectedLocale);
+    title = getEntryValueForLocale(video.get('titleEntries'), selectedLocale, '');
   }
   return {
-    descriptionTop: descriptionTop,
-    descriptionBottom: descriptionBottom,
-    descriptionSide: descriptionSide,
+    descriptionTop: descriptionTop ? descriptionTop.toJS() : undefined,
+    descriptionBottom: descriptionBottom ? descriptionBottom.toJS() : undefined,
+    descriptionSide: descriptionSide ? descriptionSide.toJS() : undefined,
     hasVideo: hasVideo,
     htmlCode: htmlCode,
     title: title

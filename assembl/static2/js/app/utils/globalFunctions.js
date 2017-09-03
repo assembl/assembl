@@ -1,8 +1,23 @@
+import { I18n } from 'react-redux-i18n';
+
 import deepen from './deepen';
 import Translations from './translations';
-import jp from '../../../translations/jp.json';
+import ja from '../../../translations/ja.json';
 
-Translations.jp = deepen(jp);
+Translations.ja = deepen(ja);
+
+const fallbackLocale = 'en';
+const myHandleMissingTranslation = function (key, replacements) {
+  // We need to use a function, not a arrow function here to be able to use 'this'.
+  let translation = '';
+  try {
+    translation = this._fetchTranslation(this._translations, `${fallbackLocale}.${key}`, replacements.count); // eslint-disable-line
+  } catch (err) {
+    return `Missing translation: ${key}`;
+  }
+  return this._replace(translation, replacements); // eslint-disable-line
+};
+I18n.setHandleMissingTranslation(myHandleMissingTranslation);
 
 export const getTranslations = () => {
   return Translations;
@@ -32,8 +47,12 @@ export const getDiscussionSlug = () => {
   return document.getElementById('discussion-slug') ? document.getElementById('discussion-slug').value : null;
 };
 
+// cache userId to avoid accessing the dom at each permission check
+let userId;
 export const getConnectedUserId = () => {
-  const userId = document.getElementById('user-id') ? document.getElementById('user-id').value : null;
+  if (userId === undefined) {
+    userId = document.getElementById('user-id') ? document.getElementById('user-id').value : null;
+  }
   return userId;
 };
 
@@ -42,9 +61,13 @@ export const getConnectedUserName = () => {
   return userName;
 };
 
+// cache permissions to avoid accessing the dom at each permission check
+let permissions;
 export const getConnectedUserPermissions = () => {
-  let permissions = document.getElementById('permissions-json') ? document.getElementById('permissions-json').text : '[]';
-  permissions = JSON.parse(permissions);
+  if (permissions === undefined) {
+    permissions = document.getElementById('permissions-json') ? document.getElementById('permissions-json').text : '[]';
+    permissions = JSON.parse(permissions);
+  }
   return permissions;
 };
 

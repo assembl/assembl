@@ -21,10 +21,7 @@ from sqlalchemy import (
 )
 from sqlalchemy.orm import relationship, backref, aliased
 from sqlalchemy.sql.functions import count
-from ..lib.sqla_types import CoerceUnicode
 from sqla_rdfbridge.mapping import PatternIriClass
-# from virtuoso.textindex import TextIndex, TableWithTextIndex
-from bs4 import BeautifulSoup
 
 from ..lib.sqla import (CrudOperation, get_model_watcher, Base)
 from ..lib.utils import get_global_base_url
@@ -32,13 +29,14 @@ from . import DiscussionBoundBase
 from .langstrings import (LangString, LangStringEntry)
 from ..semantic.virtuoso_mapping import QuadMapPatternS
 from ..auth import (
-    CrudPermissions, P_ADD_POST, P_READ, P_ADMIN_DISC, P_EDIT_POST)
+    CrudPermissions, P_ADD_POST, P_READ, P_ADMIN_DISC, P_EDIT_POST,
+    P_EDIT_MY_POST, P_DELETE_POST, P_DELETE_MY_POST)
 from ..auth.util import get_current_user_id
 from ..semantic.namespaces import (
     SIOC, CATALYST, ASSEMBL, DCTERMS, QUADNAMES, FOAF)
 from .discussion import Discussion
-from assembl.views.traversal import AbstractCollectionDefinition
 from ..lib.history_mixin import TombstonableMixin
+from ..lib.clean_input import sanitize_text, sanitize_html
 
 
 log = logging.getLogger('assembl')
@@ -375,6 +373,19 @@ class Content(TombstonableMixin, DiscussionBoundBase):
     def get_title(self):
         return self.subject
 
+    def safe_set_body(self, body):
+        if self.get_body_mime_type() == 'text/plain':
+            for e in body['entries']:
+                e['value'] = sanitize_text(e['value'])
+        else:
+            for e in body['entries']:
+                e['value'] = sanitize_html(e['value'])
+
+    def safe_set_subject(self, subject):
+        for e in subject['entries']:
+            if "<" in e['value']:
+                e['value'] = sanitize_text(e['value'])
+
     def remove_translations(self):
         if self.subject:
             self.subject.remove_translations()
@@ -430,7 +441,7 @@ class Content(TombstonableMixin, DiscussionBoundBase):
         if mimetype == 'text/plain':
             return body
         elif mimetype == 'text/html':
-            return BeautifulSoup(body).get_text().strip()
+            return sanitize_text(body)
         else:
             log.error("What is this mimetype?" + mimetype)
             return body
@@ -467,12 +478,22 @@ class Content(TombstonableMixin, DiscussionBoundBase):
             ls = LangString()
             for e in body.entries:
                 _ = LangStringEntry(
-                    value=BeautifulSoup(e.value).get_text().strip(),
+                    value=sanitize_text(e.value),
                     langstring=ls, locale_id=e.locale_id)
             return ls
         else:
             log.error("What is this mimetype?" + mimetype)
             return body
+
+    def maybe_translate(self, pref_collection):
+        from assembl.tasks.translate import (
+            translate_content, PrefCollectionTranslationTable)
+        service = self.discussion.translation_service()
+        if service.canTranslate is not None:
+            translations = PrefCollectionTranslationTable(
+                service, pref_collection)
+            translate_content(
+                self, translation_table=translations, service=service)
 
     def send_to_changes(self, connection=None, operation=CrudOperation.UPDATE,
                         discussion_id=None, view_def="changes"):
@@ -531,6 +552,31 @@ class Content(TombstonableMixin, DiscussionBoundBase):
         user_id = get_current_user_id()
         return User.uri_generic(user_id)
 
+    def language_priors(self, translation_service):
+        discussion = self.discussion
+        discussion_locales = discussion.discussion_locales
+        return {translation_service.asKnownLocale(loc): 1
+                for loc in discussion_locales}
+
+    def guess_languages(self):
+        from .langstrings import Locale
+        if self.discussion is None:
+            self.discussion = Discussion.get(self.discussion_id)
+        assert self.discussion
+        ts = self.discussion.translation_service()
+        priors = self.language_priors(ts)
+        if self.body:
+            body_original = self.body.first_original()
+            ts.confirm_locale(body_original, priors)
+        if self.subject:
+            if self.body and body_original.locale_code not in (
+                    Locale.UNDEFINED, Locale.NON_LINGUISTIC):
+                # boost the body's language
+                priors = {k: v * 0.6 for (k, v) in priors.iteritems()}
+                priors[body_original.locale_code] = 1
+            subject_original = self.subject.first_original()
+            ts.confirm_locale(subject_original, priors)
+
     @property
     def my_sentiment(self):
         # Use only within request
@@ -551,8 +597,8 @@ class Content(TombstonableMixin, DiscussionBoundBase):
         return [Idea.uri_generic(wil.idea_id) for wil in self.widget_idea_links]
 
     crud_permissions = CrudPermissions(
-            P_ADD_POST, P_READ, P_EDIT_POST, P_ADMIN_DISC,
-            P_EDIT_POST, P_ADMIN_DISC)
+            P_ADD_POST, P_READ, P_EDIT_POST, P_DELETE_POST,
+            P_EDIT_MY_POST, P_DELETE_MY_POST)
 
 
 LangString.setup_ownership_load_event(Content, ['subject', 'body'])

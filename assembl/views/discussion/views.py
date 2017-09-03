@@ -152,7 +152,7 @@ def home_view(request):
     translation_service_data = {}
     try:
         service = discussion.translation_service()
-        if service:
+        if service.canTranslate is not None:
             translation_service_data = service.serviceData()
     except:
         pass
@@ -218,6 +218,7 @@ def react_view(request, required_permission=P_READ):
         "REACT_URL": old_context['REACT_URL'],
         "NODE_ENV": node_env,
         "assembl_version": pkg_resources.get_distribution("assembl").version,
+        "web_analytics": old_context['web_analytics'],
     }
 
     if discussion:

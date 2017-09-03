@@ -48,7 +48,7 @@ from assembl.auth.util import (
     get_permissions)
 from ...lib import config
 from assembl.lib.sqla_types import EmailString
-from assembl.lib.utils import normalize_email_name
+from assembl.lib.utils import normalize_email_name, get_global_base_url
 from .. import (
     get_default_context, JSONError, get_provider_data,
     HTTPTemporaryRedirect, create_get_route)
@@ -209,7 +209,7 @@ def logout(request):
 def login_view(request):
     if request.scheme == "http"\
             and asbool(config.get("accept_secure_connection")):
-        return HTTPFound("https://" + request.host + request.path_qs)
+        return HTTPFound(get_global_base_url(True) + request.path_qs)
     force_providers = request.matched_route.name.endswith('_forceproviders')
     if request.matched_route.name == 'contextual_login':
         contextual_login = get_social_autologin(request)
@@ -373,7 +373,7 @@ def assembl_register_view(request):
     if not request.params.get('email'):
         if request.scheme == "http"\
                 and asbool(config.get("accept_secure_connection")):
-            return HTTPFound("https://" + request.host + request.path_qs)
+            return HTTPFound(get_global_base_url(True) + request.path_qs)
         response = get_login_context(request)
         return response
     forget(request)
@@ -1118,7 +1118,7 @@ def send_change_password_email(
     route_maker = create_get_route(request, discussion)
     data = dict(
         assembl="Assembl", name=profile.name,
-        confirm_url=request.host_url + route_maker(
+        confirm_url=get_global_base_url() + route_maker(
             'welcome' if welcome else 'do_password_change',
             token=password_change_token(profile)))
     sender_email = config.get('assembl.admin_email')

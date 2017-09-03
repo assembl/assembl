@@ -556,6 +556,7 @@ class IdentityProvider(Base):
             providers = providers.split()
         if not isinstance(trusted_providers, list):
             trusted_providers = trusted_providers.split()
+        db.execute("lock table %s in exclusive mode" % cls.__table__.name)
         db_providers = db.query(cls).all()
         db_providers_by_type = {
             p.provider_type: p for p in db_providers}
@@ -1164,6 +1165,7 @@ class Role(Base):
     @classmethod
     def populate_db(cls, db=None):
         db = db or cls.default_db()
+        db.execute("lock table %s in exclusive mode" % cls.__table__.name)
         roles = {r[0] for r in db.query(cls.name).all()}
         for role in SYSTEM_ROLES - roles:
             db.add(cls(name=role))
@@ -1375,6 +1377,7 @@ class Permission(Base):
     @classmethod
     def populate_db(cls, db=None):
         db = db or cls.default_db()
+        db.execute("lock table %s in exclusive mode" % cls.__table__.name)
         perms = {p[0] for p in db.query(cls.name).all()}
         for perm in ASSEMBL_PERMISSIONS - perms:
             db.add(cls(name=perm))
@@ -1695,6 +1698,9 @@ class LanguagePreferenceCollection(object):
     def default_locale_code(self):
         pass
 
+    @abstractmethod
+    def known_languages(self):
+        return []
 
 class LanguagePreferenceCollectionWithDefault(LanguagePreferenceCollection):
     """A LanguagePreferenceCollection with a fallback language."""
@@ -1716,6 +1722,9 @@ class LanguagePreferenceCollectionWithDefault(LanguagePreferenceCollection):
                 translate_to_locale=self.default_locale,
                 translate_to=self.default_locale.id,
                 source_of_evidence=LanguagePreferenceOrder.Cookie.value)
+
+    def known_languages(self):
+        return [self.default_locale]
 
 
 class UserLanguagePreferenceCollection(LanguagePreferenceCollection):
@@ -1792,6 +1801,10 @@ class UserLanguagePreferenceCollection(LanguagePreferenceCollection):
             translate_to=self.default_pref.locale.id,
             source_of_evidence=self.default_pref.source_of_evidence,
             user=None)  # Do not give the user or this gets added to session
+
+    def known_languages(self):
+        return list({pref.translate_to_code or pref.locale_code
+                     for pref in self.user_prefs.itervalues()})
 
 
 class UserLanguagePreference(Base):

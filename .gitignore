@@ -96,7 +96,7 @@ var/db/virtuoso.trx
 var/db/virtuoso.lck
 assembl-virtuoso-backup.bp
 
-#test 
+#test
 junit.xml
 htmlcov/
 
@@ -112,3 +112,9 @@ doc/jsdoc
 #elasticsearch
 var/elasticsearch/
 var/esdata/
+
+assembl-backup.pgdump
+celerybeat-schedule
+celerybeat.pid
+doc/er_diagram.svg
+local.ini.*

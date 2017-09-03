@@ -1,0 +1,19 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Toolbar component should render a toolbar 1`] = `
+<div
+  className="editor-toolbar"
+>
+  <button
+    className="btn btn-default"
+    disabled={false}
+    onClick={[Function]}
+    title="Bold"
+    type="button"
+  >
+    <span
+      className="assembl-icon-text-bold"
+    />
+  </button>
+</div>
+`;

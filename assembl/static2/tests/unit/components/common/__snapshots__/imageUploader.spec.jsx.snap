@@ -8,7 +8,10 @@ exports[`ImageUploader component should render an image uploader 1`] = `
     onClick={[Function]}
     type="button"
   >
-    <span>
+    <span
+      className={undefined}
+      style={undefined}
+    >
       Upload Button
     </span>
   </button>

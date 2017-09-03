@@ -42,6 +42,7 @@ from ..lib import config
 from .auth import (
     User, Everyone, P_ADMIN_DISC, CrudPermissions, P_READ, UserTemplate)
 from .discussion import Discussion
+from .generic import Content
 from .post import Post, SynthesisPost
 from assembl.semantic.virtuoso_mapping import QuadMapPatternS
 from assembl.semantic.namespaces import ASSEMBL
@@ -743,7 +744,7 @@ class ModelEventWatcherNotificationSubscriptionDispatcher(object):
 
     def processPostCreated(self, id):
         print "processPostCreated", id
-        self.processEvent(CrudVerbs.CREATE, Post, id)
+        self.processEvent(CrudVerbs.CREATE, Content, id)
 
     def processIdeaCreated(self, id):
         print "processIdeaCreated", id

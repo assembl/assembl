@@ -147,8 +147,8 @@
     "Content": {
         "date": "creation_date",
         "bodyMimeType": false,
-        "body": true,
-        "subject": true,
+        "body": "&safe_set_body",
+        "subject": "&safe_set_subject",
         "message_classifier": true,
         "widget_ideas": false
     },

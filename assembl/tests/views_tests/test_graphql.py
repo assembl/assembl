@@ -694,7 +694,10 @@ mutation myFirstMutation {
             ... on Post {
                 subject,
                 body,
+                bodyEntries { localeCode value },
                 creator { name },
+                bodyMimeType
+                publicationState
             }
         }
     }
@@ -705,7 +708,10 @@ mutation myFirstMutation {
             u'post': {
                 u'subject': u'Proposition 1',
                 u'body': u"une proposition...",
-                u'creator': {u'name': u'Mr. Administrator'}
+                u'bodyEntries': [{u'value': u"une proposition...", u'localeCode': u'fr'}],
+                u'creator': {u'name': u'Mr. Administrator'},
+                u'bodyMimeType': u'text/html',
+                u'publicationState': u'PUBLISHED'
     }}}
 
 
@@ -731,10 +737,88 @@ mutation myFirstMutation {
     assert json.loads(json.dumps(res.data)) == {
         u'createPost': {
             u'post': {
-                u'subject': u'Proposition',
+                u'subject': u'Proposal',
                 u'body': u"une proposition...",
                 u'creator': {u'name': u'Mr. Administrator'},
                 u'mySentiment': None
+    }}}
+
+
+def test_mutation_delete_post(graphql_request, top_post_in_thread_phase):
+    res = schema.execute(u"""
+mutation myMutation($postId: ID!) {
+    deletePost(postId: $postId) {
+        post {
+            ... on Post {
+                subject
+                body
+                parentId
+                creator { name }
+                publicationState
+            }
+        }
+    }
+}
+""", context_value=graphql_request, variable_values={"postId": top_post_in_thread_phase})
+    assert json.loads(json.dumps(res.data)) == {
+        u'deletePost': {
+            u'post': {
+                u'subject': u'Manger des choux à la crème',
+                u'body': None,
+                u'parentId': None,
+                u'creator': {u'name': u'Mr. Administrator'},
+                u'publicationState': 'DELETED_BY_USER'
+    }}}
+
+
+def test_mutation_undelete_post(graphql_request, top_post_in_thread_phase):
+    res = schema.execute(u"""
+mutation myMutation($postId: ID!) {
+    deletePost(postId: $postId) {
+        post {
+            ... on Post {
+                subject
+                body
+                parentId
+                creator { name }
+                publicationState
+            }
+        }
+    }
+}
+""", context_value=graphql_request, variable_values={"postId": top_post_in_thread_phase})
+    assert json.loads(json.dumps(res.data)) == {
+        u'deletePost': {
+            u'post': {
+                u'subject': u'Manger des choux à la crème',
+                u'body': None,
+                u'parentId': None,
+                u'creator': {u'name': u'Mr. Administrator'},
+                u'publicationState': 'DELETED_BY_USER'
+    }}}
+    res = schema.execute(u"""
+mutation myMutation($postId: ID!) {
+    undeletePost(postId: $postId) {
+        post {
+            ... on Post {
+                subject
+                body
+                parentId
+                creator { name }
+                publicationState
+            }
+        }
+    }
+}
+""", context_value=graphql_request, variable_values={"postId": top_post_in_thread_phase})
+    assert json.loads(json.dumps(res.data)) == {
+        u'undeletePost': {
+            u'post': {
+                u'subject': u'Manger des choux à la crème',
+                u'body': u"Je recommande de manger des choux à la crème, c'est très bon, et ça permet de maintenir l'industrie de la patisserie française.",
+                u'parentId': None,
+                u'creator': {u'name': u'Mr. Administrator'},
+                u'publicationState': 'PUBLISHED'
     }}}
 
 
@@ -900,7 +984,74 @@ mutation myFirstMutation {
         }
     }
 
+def test_mutation_create_top_post(graphql_request, idea_in_thread_phase, top_post_in_thread_phase):
+    idea_id = idea_in_thread_phase
+    in_reply_to_post_id = top_post_in_thread_phase
+    res = schema.execute(u"""
+mutation createPost($ideaId: ID!, $subject: String, $body: String!, $parentId: ID) {
+  createPost(ideaId: $ideaId, subject: $subject, body: $body, parentId: $parentId) {
+        post {
+            ... on Post {
+                subject,
+                body,
+                parentId,
+                creator { name },
+                indirectIdeaContentLinks { idea { id } }
+            }
+        }
+    }
+}
+""", context_value=graphql_request, variable_values={
+        "ideaId": idea_id,
+        "parentId": None,
+        "subject": u"Proposition 1",
+        "body": u"une proposition..."
+    })
+    assert json.loads(json.dumps(res.data)) == {
+        u'createPost': {
+            u'post': {
+                u'subject': u'Proposition 1',
+                u'body': u"une proposition...",
+                u'parentId': None,
+                u'creator': {u'name': u'Mr. Administrator'},
+                u'indirectIdeaContentLinks': [{u'idea': { u'id': idea_in_thread_phase }}]
+    }}}
+
 def test_mutation_create_reply_post(graphql_request, idea_in_thread_phase, top_post_in_thread_phase):
+    idea_id = idea_in_thread_phase
+    in_reply_to_post_id = top_post_in_thread_phase
+    res = schema.execute(u"""
+mutation createPost($ideaId: ID!, $subject: String, $body: String!, $parentId: ID) {
+  createPost(ideaId: $ideaId, subject: $subject, body: $body, parentId: $parentId) {
+        post {
+            ... on Post {
+                subject,
+                body,
+                parentId,
+                creator { name },
+                indirectIdeaContentLinks { idea { id } }
+            }
+        }
+    }
+}
+""", context_value=graphql_request, variable_values={
+        "ideaId": idea_id,
+        "parentId": in_reply_to_post_id,
+        "subject": u"Proposition 1",
+        "body": u"une proposition..."
+    })
+    assert json.loads(json.dumps(res.data)) == {
+        u'createPost': {
+            u'post': {
+                u'subject': u'Proposition 1',
+                u'body': u"une proposition...",
+                u'parentId': in_reply_to_post_id,
+                u'creator': {u'name': u'Mr. Administrator'},
+                u'indirectIdeaContentLinks': [{u'idea': { u'id': idea_in_thread_phase }}]
+    }}}
+
+
+def test_mutation_create_reply_post_no_subject(graphql_request, idea_in_thread_phase, top_post_in_thread_phase):
     idea_id = idea_in_thread_phase
     in_reply_to_post_id = top_post_in_thread_phase
     res = schema.execute(u"""
@@ -908,7 +1059,6 @@ mutation myFirstMutation {
     createPost(
         ideaId:"%s",
         parentId:"%s",
-        subject:"Proposition 1",
         body:"une proposition..."
     ) {
         post {
@@ -922,11 +1072,10 @@ mutation myFirstMutation {
     }
 }
 """ % (idea_id, in_reply_to_post_id), context_value=graphql_request)
-    #import pdb; pdb.set_trace()
     assert json.loads(json.dumps(res.data)) == {
         u'createPost': {
             u'post': {
-                u'subject': u'Proposition 1',
+                u'subject': u'Re: Manger des choux à la crème',
                 u'body': u"une proposition...",
                 u'parentId': in_reply_to_post_id,
                 u'creator': {u'name': u'Mr. Administrator'}
@@ -1024,3 +1173,95 @@ mutation myMutation {
             {u'order': 2.0, u'title': u'AI revolution'}
         ]
     }
+
+def test_mutation_update_post(graphql_request, idea_in_thread_phase, top_post_in_thread_phase):
+    idea_id = idea_in_thread_phase
+    in_reply_to_post_id = top_post_in_thread_phase
+    res = schema.execute(u"""
+mutation myMutation($postId: ID!, $subject: String, $body: String!) {
+    updatePost(
+        postId: $postId,
+        subject: $subject,
+        body: $body
+    ) {
+        post {
+            ... on Post {
+                subject
+                body
+            }
+        }
+    }
+}
+""", context_value=graphql_request,
+        variable_values={
+            "postId": top_post_in_thread_phase,
+            "subject": u"modified proposal",
+            "body": u"the modified proposal..."
+            })
+    assert json.loads(json.dumps(res.data)) == {
+        u'updatePost': {
+            u'post': {
+                u'subject': u'modified proposal',
+                u'body': u"the modified proposal...",
+    }}}
+
+def test_mutation_update_post_with_subject_null(graphql_request, idea_in_thread_phase, top_post_in_thread_phase):
+    idea_id = idea_in_thread_phase
+    in_reply_to_post_id = top_post_in_thread_phase
+    res = schema.execute(u"""
+mutation myMutation($postId: ID!, $subject: String, $body: String!) {
+    updatePost(
+        postId: $postId,
+        subject: $subject,
+        body: $body
+    ) {
+        post {
+            ... on Post {
+                subject
+                body
+            }
+        }
+    }
+}
+""", context_value=graphql_request,
+        variable_values={
+            "postId": top_post_in_thread_phase,
+            "body": u"the modified proposal..."
+            })
+    assert json.loads(json.dumps(res.data)) == {
+        u'updatePost': {
+            u'post': {
+                u'subject': u'Manger des choux à la crème',
+                u'body': u"the modified proposal...",
+    }}}
+
+def test_mutation_update_post_with_subject_empty_string(graphql_request, idea_in_thread_phase, top_post_in_thread_phase):
+    idea_id = idea_in_thread_phase
+    in_reply_to_post_id = top_post_in_thread_phase
+    res = schema.execute(u"""
+mutation myMutation($postId: ID!, $subject: String, $body: String!) {
+    updatePost(
+        postId: $postId,
+        subject: $subject,
+        body: $body
+    ) {
+        post {
+            ... on Post {
+                subject
+                body
+            }
+        }
+    }
+}
+""", context_value=graphql_request,
+        variable_values={
+            "postId": top_post_in_thread_phase,
+            "subject": u"",
+            "body": u"the modified proposal..."
+            })
+    assert json.loads(json.dumps(res.data)) == {
+        u'updatePost': {
+            u'post': {
+                u'subject': u'Manger des choux à la crème',
+                u'body': u"the modified proposal...",
+    }}}

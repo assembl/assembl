@@ -5,19 +5,19 @@ All custom events that will currently be fired by assembl are defined
 in: ``../../assembl/static/js/app/internal\_modules/analytics/abstract.js``
 
 Events in Piwik (and other Analytics software) are on a multi-axis
-spectrum. These axis are:
+spectrum. These axes are:
 
 Category, Action, and Event Name
 
-Often times, these axii are orthogonal to each other. As a result,
+Often times, these axes are orthogonal to each other. As a result,
 events can be defined in multi-dimensional space. Do not let this
 concept bog you down, however. It simply means that analytic events
 simply have some luggage with them. That luggage is the contexts in which
 the event was fired. Within Piwik, each axis can be viewed in
-relation to 1 of the other axii. Assembl has decided that these axis
+relation to 1 of the other axes. Assembl has decided that these axes
 should convey a meaningful structure. This means that the context of an
 event should have value to the analytst who reads reports generated upon
-events being fired. Assembl tries to simply this by defining the axis as
+events being fired. Assembl tries to simplify this by defining the axes as
 follows:
 
 -  Category: Which physical UI element did the event originate from?  Typically

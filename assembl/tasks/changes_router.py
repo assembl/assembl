@@ -41,6 +41,12 @@ WEBSERVER_PORT = settings.getint(SECTION, 'changes.websocket.port')
 # NOTE: Not sure those are always what we want.
 SERVER_HOST = settings.get(SECTION, 'public_hostname')
 SERVER_PORT = settings.getint(SECTION, 'public_port')
+REQUIRES_SECURE = settings.getboolean(SECTION, 'require_secure_connection')
+SERVER_PROTOCOL = 'https' if REQUIRES_SECURE else 'http'
+if REQUIRES_SECURE and SERVER_PORT == 80:
+    # old misconfiguration
+    SERVER_PORT = 443
+SERVER_URL = "%s://%s:%d" % (SERVER_PROTOCOL, SERVER_HOST, SERVER_PORT)
 setup_raven(settings)
 
 context = zmq.Context.instance()
@@ -113,8 +119,8 @@ class ZMQRouter(SockJSConnection):
             if self.token and self.discussion:
                 # Check if token authorizes discussion
                 r = requests.get(
-                    'http://%s:%d/api/v1/discussion/%s/permissions/read/u/%s' %
-                    (SERVER_HOST, SERVER_PORT, self.discussion,
+                    '%s/api/v1/discussion/%s/permissions/read/u/%s' %
+                    (SERVER_URL, self.discussion,
                         self.token['userId']))
                 print r.text
                 if r.text != 'true':
@@ -156,7 +162,8 @@ def log_queue():
 log_queue()
 
 sockjs_router = SockJSRouter(
-    ZMQRouter, prefix=CHANGES_PREFIX, io_loop=io_loop)
+    ZMQRouter, prefix=CHANGES_PREFIX, io_loop=io_loop,
+    user_settings={"websocket_allow_origin": SERVER_URL})
 routes = sockjs_router.urls
 web_app = web.Application(routes, debug=False)
 

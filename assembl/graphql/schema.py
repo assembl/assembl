@@ -4,7 +4,7 @@ import pytz
 import os.path
 from random import sample as random_sample
 
-from sqlalchemy import desc
+from sqlalchemy import desc, inspect
 from sqlalchemy.orm.exc import NoResultFound
 from sqlalchemy.orm import joinedload_all, undefer
 import graphene
@@ -18,18 +18,23 @@ from graphene_sqlalchemy.converter import (
 from graphene_sqlalchemy.utils import get_query, is_mapped
 from pyramid.httpexceptions import HTTPUnauthorized
 from pyramid.security import Everyone
+from pyramid.i18n import TranslationStringFactory
 from jwzthreading import restrip_pat
 
 from assembl.auth import IF_OWNED, CrudPermissions
+from assembl.auth import P_DELETE_POST, P_DELETE_MY_POST
 from assembl.auth.util import get_permissions
 from assembl.lib.sqla_types import EmailString
+from assembl.lib.clean_input import sanitize_text, sanitize_html
 from assembl import models
 from assembl.models.action import (
     SentimentOfPost,
     LikeSentimentOfPost, DisagreeSentimentOfPost,
     DontUnderstandSentimentOfPost, MoreInfoSentimentOfPost)
+from assembl.models.auth import LanguagePreferenceCollection
 from .types import SQLAlchemyInterface, SQLAlchemyUnion
 
+_ = TranslationStringFactory('assembl')
 convert_sqlalchemy_type.register(EmailString)(convert_column_to_string)
 models.Base.query = models.Base.default_db.query_property()
 
@@ -95,29 +100,62 @@ def resolve_langstring(langstring, locale_code):
     if not entries:
         return None
 
-    if locale_code is None:
-        return langstring.best_entry_in_request().value
-
-    cache = {e.locale_code: e.value for e in entries}
-    text = cache.get(locale_code, None)
-
-    if not text:
-        return langstring.best_lang().value
-
-    return text
+    if locale_code:
+        closest = langstring.closest_entry(locale_code)
+        if closest:
+            return closest.value
+    return langstring.best_lang(
+        LanguagePreferenceCollection.getCurrent(), False).value
 
 
 def resolve_langstring_entries(obj, attr):
     langstring = getattr(obj, attr, None)
-    if langstring is None:
+    if langstring is None or langstring is models.LangString.EMPTY:
         return []
 
     entries = []
     for entry in sorted(langstring.entries, key=lambda e: e.locale_code):
         entries.append(
             LangStringEntry(
-                locale_code=entry.locale_code,
-                value=entry.value
+                locale_code=entry.locale.base_locale,
+                error_code=entry.error_code,
+                translated_from_locale_code=entry.locale.machine_translated_from,
+                value=entry.value or '',
+            )
+        )
+
+    return entries
+
+
+def resolve_best_langstring_entries(langstring, target_locale=None):
+    if langstring is None or langstring is models.LangString.EMPTY:
+        return []
+
+    entries = []
+    if target_locale:
+        entry = langstring.closest_entry(target_locale)
+        if entry:
+            entries.append(entry)
+            if entry.is_machine_translated:
+                entry = langstring.closest_entry(entry.locale.machine_translated_from)
+                assert entry
+                entries.append(entry)
+        else:
+            entries.append(langstring.first_original())
+        return entries
+
+    # use request's idea of target_locale
+    lsentries = langstring.best_entries_in_request_with_originals()
+    lp = LanguagePreferenceCollection.getCurrent()
+    for entry in lsentries:
+        entries.append(
+            LangStringEntry(
+                locale_code=entry.locale.base_locale,
+                error_code=entry.error_code,
+                translated_from_locale_code=entry.locale.machine_translated_from,
+                supposed_understood=not lp.find_locale(
+                    entry.locale.base_locale).translate_to_locale,
+                value=entry.value or '',
             )
         )
 
@@ -149,6 +187,8 @@ def langstring_from_input_entries(entries):
 def update_langstring_from_input_entries(obj, attr, entries):
     """Update langstring from getattr(obj, attr) based on GraphQL LangStringEntryInput entries.
     """
+    if entries is None:
+        return
     langstring = getattr(obj, attr, None)
     if langstring is None:
         new_langstring = langstring_from_input_entries(entries)
@@ -156,33 +196,16 @@ def update_langstring_from_input_entries(obj, attr, entries):
             setattr(obj, attr, new_langstring)
         return
 
-    current_title_entries_by_locale_code = {
-        e.locale_code: e for e in langstring.entries}
-    if entries is not None:
-        # if we have an empty list, remove all existing entries
-        if len(entries) == 0:
-            for e in current_title_entries_by_locale_code.values():
-                e.tombstone_date = datetime.utcnow()
+    locales = set()
+    for entry in entries:
+        locales.add(entry['locale_code'])
+        langstring.add_value(entry['value'], entry['locale_code'])
+    for entry in langstring.non_mt_entries():
+        if entry.locale_code not in locales:
+            entry.is_tombstone = True
 
-        for entry in entries:
-            locale_code = entry['locale_code']
-            current_entry = current_title_entries_by_locale_code.get(locale_code, None)
-            if current_entry is not None:
-                if current_entry.value != entry['value']:
-                    if not entry['value']:
-                        current_entry.tombstone_date = datetime.utcnow()
-                    else:
-                        current_entry.change_value(entry['value'])
-            else:
-                locale_id = models.Locale.get_id_of(locale_code)
-                langstring.add_entry(
-                    models.LangStringEntry(
-                        langstring=langstring,
-                        value=entry['value'],
-                        locale_id=locale_id
-                    )
-                )
-    langstring.db.expire(langstring, ['entries'])
+    if inspect(langstring).persistent:
+        langstring.db.expire(langstring, ['entries'])
     langstring.db.flush()
 
 
@@ -192,7 +215,9 @@ class LangStringEntryFields(graphene.AbstractType):
 
 
 class LangStringEntry(graphene.ObjectType, LangStringEntryFields):
-    pass
+    translated_from_locale_code = graphene.String(required=False)
+    supposed_understood = graphene.Boolean(required=False)
+    error_code = graphene.Int(required=False)
 
 
 class LangStringEntryInput(graphene.InputObjectType, LangStringEntryFields):
@@ -205,6 +230,11 @@ sentiments_enum = PyEnum('SentimentTypes', (
     ('DONT_UNDERSTAND', 'DONT_UNDERSTAND'),
     ('MORE_INFO', 'MORE_INFO')))
 SentimentTypes = graphene.Enum.from_enum(sentiments_enum)
+
+
+publication_states_enum = PyEnum('PublicationStates',
+    [(k, k) for k in models.PublicationStates.values()])
+PublicationStates = graphene.Enum.from_enum(publication_states_enum)
 
 
 class AgentProfile(SecureObjectType, SQLAlchemyObjectType):
@@ -233,13 +263,36 @@ class SentimentCounts(graphene.ObjectType):
     more_info = graphene.Int()
 
 
+class Extract(SecureObjectType, SQLAlchemyObjectType):
+    class Meta:
+        model = models.Extract
+        interfaces = (Node, )
+        only_fields = ('id', 'body', 'important')
+
+
 class IdeaContentLink(graphene.ObjectType):
-    idea_id = graphene.Int(required=True)
+    idea_id = graphene.Int()
+    post_id = graphene.Int()
+    creator_id = graphene.Int()
     type = graphene.String(required=True)
     idea = graphene.Field(lambda: Idea)
+    post = graphene.Field(lambda: Post)
+    creator = graphene.Field(lambda: AgentProfile)
+    creation_date = DateTime()
 
     def resolve_idea(self, args, context, info):
-        return models.Idea.get(self.idea_id)
+        if self.idea_id is not None:
+            idea = models.Idea.get(self.idea_id)
+            if type(idea) == models.Idea:  # only resolve if it's an Idea, not a Question
+                return idea
+
+    def resolve_post(self, args, context, info):
+        if self.post_id is not None:
+            return models.Post.get(self.post_id)
+
+    def resolve_creator(self, args, context, info):
+        if self.creator_id is not None:
+            return models.AgentProfile.get(self.creator_id)
 
 
 class PostInterface(SQLAlchemyInterface):
@@ -250,19 +303,60 @@ class PostInterface(SQLAlchemyInterface):
         # will be just the primary key, not the base64 type:id
 
     creation_date = DateTime()
+    modification_date = DateTime()
     subject = graphene.String(lang=graphene.String())
     body = graphene.String(lang=graphene.String())
+    subject_entries = graphene.List(LangStringEntry, lang=graphene.String())
+    body_entries = graphene.List(LangStringEntry, lang=graphene.String())
     sentiment_counts = graphene.Field(SentimentCounts)
     my_sentiment = graphene.Field(type=SentimentTypes)
     indirect_idea_content_links = graphene.List(IdeaContentLink)
+    extracts = graphene.List(Extract)
     parent_id = graphene.ID()
+    body_mime_type = graphene.String(required=True)
+    publication_state = graphene.Field(type=PublicationStates)
 
     def resolve_subject(self, args, context, info):
-        subject = resolve_langstring(self.get_subject(), args.get('lang'))
+        # Use self.subject and not self.get_subject() because we still
+        # want the subject even when the post is deleted.
+        subject = resolve_langstring(self.subject, args.get('lang'))
         return subject
 
     def resolve_body(self, args, context, info):
         body = resolve_langstring(self.get_body(), args.get('lang'))
+        return body
+
+    @staticmethod
+    def _maybe_translate(post, locale, request):
+        if request.authenticated_userid == Everyone:
+            # anonymous cannot trigger translations
+            return
+        lpc = LanguagePreferenceCollection.getCurrent(request)
+        for ls in (post.body, post.subject):
+            source_locale = ls.first_original().locale_code
+            if locale:
+                target_locale = locale
+            else:
+                pref = lpc.find_locale(source_locale)
+                target_locale = pref.translate_to_locale
+                if not target_locale:
+                    continue
+                target_locale = target_locale.code
+            if not ls.closest_entry(target_locale):
+                post.maybe_translate(lpc)
+
+    def resolve_subject_entries(self, args, context, info):
+        lp = LanguagePreferenceCollection.getCurrent()
+        lang = lp.default_locale_code()
+        PostInterface._maybe_translate(self, args.get('lang'), context)
+        subject = resolve_best_langstring_entries(
+            self.get_subject(), args.get('lang'))
+        return subject
+
+    def resolve_body_entries(self, args, context, info):
+        PostInterface._maybe_translate(self, args.get('lang'), context)
+        body = resolve_best_langstring_entries(
+            self.get_body(), args.get('lang'))
         return body
 
     def resolve_sentiment_counts(self, args, context, info):
@@ -282,19 +376,36 @@ class PostInterface(SQLAlchemyInterface):
         return my_sentiment.name.upper()
 
     def resolve_indirect_idea_content_links(self, args, context, info):
-        links = [(models.Idea.get_database_id(link['idIdea']), link['@type'])
-                    for link in self.indirect_idea_content_links_with_cache()]
-        # for @type == 'Extract', idIdea is None
+        # example:
+        #  {'@id': 'local:IdeaContentLink/101',
+        #   '@type': 'Extract',
+        #   'created': '2014-04-25T17:51:52Z',
+        #   'idCreator': 'local:AgentProfile/152',
+        #   'idIdea': 'local:Idea/52',
+        #   'idPost': 'local:Content/1467'},
+        # for @type == 'Extract', idIdea may be None
+        # @type == 'IdeaRelatedPostLink' for idea links
+        links = [IdeaContentLink(
+                    idea_id=models.Idea.get_database_id(link['idIdea']),
+                    post_id=models.Post.get_database_id(link['idPost']),
+                    type=link['@type'],
+                    creation_date=link['created'],
+                    creator_id=link['idCreator'])
+                 for link in self.indirect_idea_content_links_with_cache()]
         # only return links with the IdeaRelatedPostLink type
-        return [IdeaContentLink(idea_id=idea_id,
-                                type=type)
-                for idea_id, type in links if type == 'IdeaRelatedPostLink']
+        return [link for link in links if link.type == 'IdeaRelatedPostLink']
 
     def resolve_parent_id(self, args, context, info):
         if self.parent_id is None:
             return None
 
         return Node.to_global_id('Post', self.parent_id)
+
+    def resolve_body_mime_type(self, args, context, info):
+        return self.get_body_mime_type()
+
+    def resolve_publication_state(self, args, context, info):
+        return self.publication_state.name
 
 
 class Post(SecureObjectType, SQLAlchemyObjectType):
@@ -352,6 +463,7 @@ class Idea(SecureObjectType, SQLAlchemyObjectType):
 
     title = graphene.String(lang=graphene.String())
     title_entries = graphene.List(LangStringEntry)
+    long_title = graphene.String(lang=graphene.String())  # This is the "What you need to know"
     description = graphene.String(lang=graphene.String())
     description_entries = graphene.List(LangStringEntry)
     children = graphene.List(lambda: Idea)
@@ -424,7 +536,6 @@ class Idea(SecureObjectType, SQLAlchemyObjectType):
         Post = models.Post
         query = Post.query.join(
             related, Post.id == related.c.post_id
-            ).filter(Post.publication_state == models.PublicationStates.PUBLISHED
             ).order_by(desc(Post.creation_date), Post.id
             ).options(
                 joinedload_all(Post.creator),
@@ -481,8 +592,7 @@ class Question(SecureObjectType, SQLAlchemyObjectType):
                     ).order_by(desc(Post.creation_date), Post.id).first()
 
             query = Post.default_db.query(Post.id).join(
-                related, Post.id == related.c.post_id
-                ).filter(Post.publication_state == models.PublicationStates.PUBLISHED)
+                related, Post.id == related.c.post_id)
             # retrieve ids, do the random and get the posts for these ids
             post_ids = [e[0] for e in query]
             limit = args.get('first', 10)
@@ -603,7 +713,6 @@ class IdeaUnion(SQLAlchemyUnion):
 
 class Query(graphene.ObjectType):
     node = Node.Field()
-    posts = SQLAlchemyConnectionField(PostConnection, idea_id=graphene.ID())
     root_idea = graphene.Field(IdeaUnion, identifier=graphene.String())
     ideas = graphene.List(Idea)
     thematics = graphene.List(Thematic, identifier=graphene.String(required=True))
@@ -629,37 +738,6 @@ class Query(graphene.ObjectType):
             root_idea_id, inclusive=True)
         query = query.filter(model.id.in_(descendants_query)
             ).filter(model.hidden == False).filter(model.sqla_type.in_(('idea', 'root_idea'))).order_by(model.id)
-        return query
-
-    def resolve_posts(self, args, context, info):
-        discussion_id = context.matchdict['discussion_id']
-        discussion = models.Discussion.get(discussion_id)
-        idea_id = args.get('idea_id', None)
-        if idea_id is not None:
-            id_ = int(Node.from_global_id(idea_id)[1])
-            idea = models.Idea.get(id_)
-            if idea.discussion_id != discussion_id:
-                return None
-        else:
-            discussion = models.Discussion.get(discussion_id)
-            idea = discussion.root_idea
-
-        Post = models.Post
-        related = idea.get_related_posts_query(True)
-        query = Post.query.join(
-            related, Post.id == related.c.post_id
-            ).filter(Post.publication_state == models.PublicationStates.PUBLISHED
-            ).order_by(desc(Post.creation_date), Post.id
-            ).options(
-                joinedload_all(Post.creator),
-                undefer(Post.idea_content_links_above_post)
-            )
-        if len(discussion.discussion_locales) > 1:
-            query = query.options(*models.Content.subqueryload_options())
-        else:
-            query = query.options(*models.Content.joinedload_options())
-
-        # pagination is done after that, no need to do it ourself
         return query
 
     def resolve_thematics(self, args, context, info):
@@ -985,12 +1063,11 @@ class UpdateThematic(graphene.Mutation):
 
         permissions = get_permissions(user_id, discussion_id)
         allowed = thematic.user_can(user_id, CrudPermissions.UPDATE, permissions)
-        if not allowed or (allowed == IF_OWNED and user_id == Everyone):
+        if not allowed:
             raise HTTPUnauthorized()
 
         with cls.default_db.no_autoflush:
             # introducing history at every step, including thematics + questions
-            # TODO: review performance impact
             thematic.copy(tombstone=True)
             title_entries = args.get('title_entries')
             if title_entries is not None and len(title_entries) == 0:
@@ -1055,7 +1132,6 @@ class UpdateThematic(graphene.Mutation):
 
                 attachment = models.IdeaAttachment(
                     document=document,
-                    # idea=thematic,
                     discussion=discussion,
                     creator_id=context.authenticated_userid,
                     title=filename,
@@ -1073,8 +1149,7 @@ class UpdateThematic(graphene.Mutation):
                         id_ = int(Node.from_global_id(question_input['id'])[1])
                         updated_questions.add(id_)
                         question = models.Question.get(id_)
-                        # Again, archiving the question
-                        # TODO: review performance impact
+                        # archive the question
                         question.copy(tombstone=True)
                         update_langstring_from_input_entries(
                             question, 'title', question_input['title_entries'])
@@ -1117,8 +1192,8 @@ class DeleteThematic(graphene.Mutation):
         thematic = models.Thematic.get(thematic_id)
 
         permissions = get_permissions(user_id, discussion_id)
-        allowed = models.Thematic.user_can_cls(user_id, CrudPermissions.DELETE, permissions)
-        if not allowed or (allowed == IF_OWNED and user_id == Everyone):
+        allowed = thematic.user_can(user_id, CrudPermissions.DELETE, permissions)
+        if not allowed:
             raise HTTPUnauthorized()
 
         thematic.is_tombstone = True
@@ -1160,57 +1235,191 @@ class CreatePost(graphene.Mutation):
 
         permissions = get_permissions(user_id, discussion_id)
         allowed = cls.user_can_cls(user_id, CrudPermissions.CREATE, permissions)
-        if not allowed or (allowed == IF_OWNED and user_id == Everyone):
+        if not allowed:
             raise HTTPUnauthorized()
 
         with cls.default_db.no_autoflush:
             subject = args.get('subject')
             body = args.get('body')
-            if subject is not None:
-                subject_langstring = models.LangString.create(subject, u'und')
+            body = sanitize_html(body)
+            body_langstring = models.LangString.create(body)
+            if subject:
+                subject = sanitize_text(subject)
+                subject_langstring = models.LangString.create(subject)
+            elif issubclass(cls, models.PropositionPost):
+                # Specific case first. Respect inheritance. Since we are using
+                # a specific value, construct it with localization machinery.
+                subject_langstring = models.LangString.create_localized_langstring(
+                    _('Proposal'), discussion.discussion_locales, {'fr': 'Proposition'})
             else:  # We apply the same logic than in views/api/post.py::create_post
-                if cls == models.AssemblPost:
-                    if in_reply_to_post:
-                        subject = (
-                            in_reply_to_post.get_title().first_original().value or ''
-                            if in_reply_to_post.get_title() else '')
-                    elif in_reply_to_idea:
-                        subject = (in_reply_to_idea.short_title
-                                   if in_reply_to_idea.short_title else '')
-                    else:
-                        subject = discussion.topic if discussion.topic else ''
-
-                    if subject is not None and len(subject):
-                        new_subject = u'Re: ' + restrip_pat.sub('', subject).strip()
-                        if (in_reply_to_post and new_subject == subject and
-                            in_reply_to_post.get_title()):
-                            # reuse subject and translations
-                            subject_langstring = in_reply_to_post.get_title().clone(discussion.db)
-                        else:
-                            subject_langstring = models.LangString.create(new_subject, u'und')
-
+                locale = models.Locale.UNDEFINED
+                if in_reply_to_post and in_reply_to_post.get_title():
+                    original_subject = in_reply_to_post.get_title().first_original()
+                    locale = original_subject.locale_code
+                    subject = original_subject.value
+                elif in_reply_to_idea:
+                    # TODO: some ideas have extra langstring titles
+                    subject = (in_reply_to_idea.short_title
+                               if in_reply_to_idea.short_title else '')
+                    locale = discussion.main_locale
                 else:
-                    subject_langstring = models.LangString.create(u'Proposition', u'und')
+                    subject = discussion.topic if discussion.topic else ''
+                    locale = discussion.main_locale
 
-            body_langstring = models.LangString.create(body, u'und')
+                if subject:
+                    new_subject = restrip_pat.sub('', subject).strip()
+                    if (in_reply_to_post and new_subject == subject and
+                        in_reply_to_post.get_title()):
+                        # reuse subject and translations
+                        subject_langstring = in_reply_to_post.get_title().clone(discussion.db)
+                    else:
+                        subject_langstring = models.LangString.create(new_subject, locale)
+
+
             new_post = cls(
                 discussion=discussion,
                 subject=subject_langstring,
                 body=body_langstring,
                 creator_id=user_id,
-                parent=in_reply_to_post
+                body_mime_type=u'text/html'
             )
+            new_post.guess_languages()
             db = new_post.db
             db.add(new_post)
-            idea_post_link = models.IdeaRelatedPostLink(
-                creator_id=user_id,
-                content=new_post,
-                idea=in_reply_to_idea
-            )
-            db.add(idea_post_link)
             db.flush()
+            if in_reply_to_post:
+                new_post.set_parent(in_reply_to_post)
+            elif in_reply_to_idea:
+                # don't create IdeaRelatedPostLink when we have both
+                # in_reply_to_post and in_reply_to_idea
+                idea_post_link = models.IdeaRelatedPostLink(
+                    creator_id=user_id,
+                    content=new_post,
+                    idea=in_reply_to_idea
+                )
+                db.add(idea_post_link)
+
+            db.flush()
+            new_post.db.expire(new_post, ['idea_content_links_above_post'])
 
         return CreatePost(post=new_post)
+
+
+class UpdatePost(graphene.Mutation):
+    class Input:
+        post_id = graphene.ID(required=True)
+        subject = graphene.String()
+        body = graphene.String(required=True)
+
+    post = graphene.Field(lambda: Post)
+
+    @staticmethod
+    def mutate(root, args, context, info):
+        discussion_id = context.matchdict['discussion_id']
+
+        user_id = context.authenticated_userid or Everyone
+        discussion = models.Discussion.get(discussion_id)
+
+        post_id = args.get('post_id')
+        post_id = int(Node.from_global_id(post_id)[1])
+        post = models.Post.get(post_id)
+
+        permissions = get_permissions(user_id, discussion_id)
+        allowed = post.user_can(user_id, CrudPermissions.UPDATE, permissions)
+        if not allowed:
+            raise HTTPUnauthorized()
+
+        changed = False
+        subject = args.get('subject')
+        if subject:
+            subject = sanitize_text(subject)
+        body = args.get('body')
+        if body:
+            body = sanitize_html(body)
+        # TODO: Here, an assumption that the modification uses the same
+        # language as the original. May need revisiting.
+        original_subject_entry = post.subject.first_original()
+        # subject is not required, be careful to not remove it if not specified
+        if subject and subject != original_subject_entry.value:
+            post.subject.add_value(subject, original_subject_entry.locale_code)
+            changed = True
+
+        original_body_entry = post.body.first_original()
+        if body != original_body_entry.value:
+            post.body.add_value(body, original_body_entry.locale_code)
+            changed = True
+
+        if changed:
+            post.modification_date = datetime.utcnow()
+            post.body_mime_type = u'text/html'
+            post.db.flush()
+
+        return UpdatePost(post=post)
+
+
+class DeletePost(graphene.Mutation):
+    class Input:
+        post_id = graphene.ID(required=True)
+
+    post = graphene.Field(lambda: Post)
+
+    @staticmethod
+    def mutate(root, args, context, info):
+        discussion_id = context.matchdict['discussion_id']
+
+        user_id = context.authenticated_userid or Everyone
+        discussion = models.Discussion.get(discussion_id)
+
+        post_id = args.get('post_id')
+        post_id = int(Node.from_global_id(post_id)[1])
+        post = models.Post.get(post_id)
+
+        permissions = get_permissions(user_id, discussion_id)
+        allowed = post.user_can(user_id, CrudPermissions.DELETE, permissions)
+        if not allowed:
+            raise HTTPUnauthorized()
+
+        # Same logic as in assembl/views/api2/post.py:delete_post_instance
+        # Remove extracts associated to this post
+        extracts_to_remove = post.db.query(models.Extract).filter(models.Extract.content_id == post.id).all()
+        for extract in extracts_to_remove:
+            extract.delete()
+
+        if user_id == post.creator_id and P_DELETE_MY_POST in permissions:
+            cause = models.PublicationStates.DELETED_BY_USER
+        elif P_DELETE_POST in permissions:
+            cause = models.PublicationStates.DELETED_BY_ADMIN
+
+        post.delete_post(cause)
+        post.db.flush()
+        return DeletePost(post=post)
+
+
+class UndeletePost(graphene.Mutation):
+    class Input:
+        post_id = graphene.ID(required=True)
+
+    post = graphene.Field(lambda: Post)
+
+    @staticmethod
+    def mutate(root, args, context, info):
+        discussion_id = context.matchdict['discussion_id']
+
+        user_id = context.authenticated_userid or Everyone
+        discussion = models.Discussion.get(discussion_id)
+
+        post_id = args.get('post_id')
+        post_id = int(Node.from_global_id(post_id)[1])
+        post = models.Post.get(post_id)
+
+        permissions = get_permissions(user_id, discussion_id)
+        allowed = post.user_can(user_id, CrudPermissions.DELETE, permissions)
+        if not allowed:
+            raise HTTPUnauthorized()
+
+        post.undelete_post()
+        post.db.flush()
+        return UndeletePost(post=post)
 
 
 class AddSentiment(graphene.Mutation):
@@ -1236,7 +1445,7 @@ class AddSentiment(graphene.Mutation):
 
         permissions = get_permissions(user_id, discussion_id)
         allowed = SentimentOfPost.user_can_cls(user_id, CrudPermissions.CREATE, permissions)
-        if not allowed or (allowed == IF_OWNED and user_id == Everyone):
+        if not allowed:
             raise HTTPUnauthorized()
 
         sentiment_type = args.get('type')
@@ -1276,11 +1485,11 @@ class DeleteSentiment(graphene.Mutation):
         post = models.Post.get(post_id)
 
         permissions = get_permissions(user_id, discussion_id)
-        allowed = SentimentOfPost.user_can_cls(user_id, CrudPermissions.DELETE, permissions)
-        if not allowed or (allowed == IF_OWNED and user_id == Everyone):
+        allowed = post.my_sentiment.user_can(user_id, CrudPermissions.DELETE, permissions)
+        if not allowed:
             raise HTTPUnauthorized()
 
-        post.my_sentiment.tombstone_date = datetime.utcnow()
+        post.my_sentiment.is_tombstone = True
         post.db.flush()
         return DeleteSentiment(post=post)
 
@@ -1291,6 +1500,9 @@ class Mutations(graphene.ObjectType):
     delete_thematic = DeleteThematic.Field()
     create_idea = CreateIdea.Field()
     create_post = CreatePost.Field()
+    update_post = UpdatePost.Field()
+    delete_post = DeletePost.Field()
+    undelete_post = UndeletePost.Field()
     add_sentiment = AddSentiment.Field()
     delete_sentiment = DeleteSentiment.Field()
 
