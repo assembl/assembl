@@ -1311,6 +1311,7 @@ class CreatePost(graphene.Mutation):
         body = graphene.String(required=True)
         idea_id = graphene.ID(required=True)
         parent_id = graphene.ID() # A Post (except proposals in survey phase) can reply to another post. See related code in views/api/post.py
+        attachments = graphene.List(graphene.String)
 
     post = graphene.Field(lambda: Post)
 
@@ -1405,6 +1406,20 @@ class CreatePost(graphene.Mutation):
 
             db.flush()
             new_post.db.expire(new_post, ['idea_content_links_above_post'])
+
+            attachments = args.get('attachments', [])
+            for document_id in attachments:
+                document = models.Document.get(document_id)
+                attachment = models.PostAttachment(
+                    document=document,
+                    discussion=discussion,
+                    creator_id=context.authenticated_userid,
+                    post=new_post,
+                    title=document.title,
+                    attachmentPurpose="EMBED_ATTACHMENT"
+                )
+
+            db.flush()
 
         return CreatePost(post=new_post)
 
