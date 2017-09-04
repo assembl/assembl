@@ -1,0 +1,11 @@
+mutation uploadDocument($file: String!) {
+  uploadDocument(file: $file) {
+    document {
+      ... on Document {
+        id
+        externalUrl
+        mimeType
+      }
+    }
+  }
+}

@@ -1622,6 +1622,43 @@ class DeleteSentiment(graphene.Mutation):
         return DeleteSentiment(post=post)
 
 
+class UploadDocument(graphene.Mutation):
+    class Input:
+        file = graphene.String(
+            required=True
+        )
+
+    document = graphene.Field(lambda: Document)
+
+    @staticmethod
+    def mutate(root, args, context, info):
+        discussion_id = context.matchdict['discussion_id']
+        discussion = models.Discussion.get(discussion_id)
+
+        user_id = context.authenticated_userid or Everyone
+        cls = models.Document
+        permissions = get_permissions(user_id, discussion_id)
+        allowed = cls.user_can_cls(user_id, CrudPermissions.CREATE, permissions)
+        if not allowed:
+            raise HTTPUnauthorized()
+
+        uploaded_file = args.get('file')
+        if uploaded_file is not None:
+            filename = os.path.basename(context.POST[uploaded_file].filename)
+            mime_type = context.POST[uploaded_file].type
+            uploaded_file = context.POST[uploaded_file].file
+            uploaded_file.seek(0)
+            data = uploaded_file.read()
+            document = models.File(
+                discussion=discussion,
+                mime_type=mime_type,
+                title=filename,
+                data=data)
+            document.db.flush()
+
+        return UploadDocument(document=document)
+
+
 class AddPostAttachment(graphene.Mutation):
     class Input:
         post_id = graphene.ID(required=True)
@@ -1720,6 +1757,7 @@ class Mutations(graphene.ObjectType):
     add_sentiment = AddSentiment.Field()
     delete_sentiment = DeleteSentiment.Field()
     add_post_attachment = AddPostAttachment.Field()
+    upload_document = UploadDocument.Field()
     delete_post_attachment = DeletePostAttachment.Field()
 
 
