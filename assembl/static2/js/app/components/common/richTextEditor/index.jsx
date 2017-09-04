@@ -17,7 +17,8 @@ type RichTextEditorProps = {
   placeholder: string,
   textareaRef: Function,
   toolbarPosition: string,
-  updateContentState: Function
+  updateContentState: Function,
+  withAttachmentButton: boolean
 };
 
 type RichTextEditorState = {
@@ -45,7 +46,8 @@ export default class RichTextEditor extends React.Component<Object, RichTextEdit
   static defaultProps = {
     handleInputFocus: null,
     maxLength: 0,
-    toolbarPosition: 'top'
+    toolbarPosition: 'top',
+    withAttachmentButton: false
   };
 
   constructor(props: RichTextEditorProps): void {
@@ -165,6 +167,7 @@ export default class RichTextEditor extends React.Component<Object, RichTextEdit
         editorState={this.state.editorState}
         focusEditor={this.focusEditor}
         onChange={this.onChange}
+        withAttachmentButton={this.props.withAttachmentButton}
       />
     );
   };

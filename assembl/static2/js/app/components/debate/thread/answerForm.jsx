@@ -88,6 +88,7 @@ class AnswerForm extends React.PureComponent {
                 placeholder={I18n.t('debate.insert')}
                 updateContentState={this.updateBody}
                 textareaRef={textareaRef}
+                withAttachmentButton
               />
               <div className="button-container">
                 <Button className="button-cancel button-dark btn btn-default left" onClick={this.handleCancel}>

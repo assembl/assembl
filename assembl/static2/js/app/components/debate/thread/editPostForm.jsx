@@ -153,6 +153,7 @@ class EditPostForm extends React.PureComponent<void, EditPostFormProps, EditPost
                 placeholder={I18n.t('debate.edit.body')}
                 updateContentState={this.updateBody}
                 maxLength={TEXT_AREA_MAX_LENGTH}
+                withAttachmentButton
               />
 
               <EditAttachments attachments={attachments} onDelete={this.deleteAttachment} />

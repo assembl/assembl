@@ -41,6 +41,7 @@ class FormControlWithLabel extends React.Component {
         updateContentState={(cs) => {
           return onChange(cs);
         }}
+        withAttachmentButton={false}
       />
     );
   };

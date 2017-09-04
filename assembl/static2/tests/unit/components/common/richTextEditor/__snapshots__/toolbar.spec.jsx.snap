@@ -36,3 +36,25 @@ exports[`Toolbar component should render a toolbar 1`] = `
   </div>
 </div>
 `;
+
+exports[`Toolbar component should render a toolbar without the "Attach a file" button 1`] = `
+<div
+  className="editor-toolbar"
+>
+  <div
+    className="btn-group"
+  >
+    <button
+      className="btn btn-default"
+      disabled={false}
+      onClick={[Function]}
+      title="Bold"
+      type="button"
+    >
+      <span
+        className="assembl-icon-text-bold"
+      />
+    </button>
+  </div>
+</div>
+`;

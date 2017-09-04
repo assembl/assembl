@@ -121,6 +121,7 @@ class TopPostForm extends React.Component {
                   maxLength={TEXT_AREA_MAX_LENGTH}
                   placeholder={I18n.t('debate.insert')}
                   updateContentState={this.updateBody}
+                  withAttachmentButton
                 />
                 <Button className="button-cancel button-dark btn btn-default left margin-l" onClick={this.resetForm}>
                   <Translate value="cancel" />

@@ -14,8 +14,10 @@ type ToolbarProps = {
   editorState: Function,
   focusEditor: Function,
   onChange: Function,
-  uploadDocument: Function
+  uploadDocument: Function,
+  withAttachmentButton: boolean
 };
+
 type ToolbarState = {
   showAttachFileForm: boolean
 };
@@ -116,7 +118,7 @@ class Toolbar extends React.Component<void, ToolbarProps, ToolbarState> {
   };
 
   render() {
-    const { buttonsConfig } = this.props;
+    const { buttonsConfig, withAttachmentButton } = this.props;
     const { showAttachFileForm } = this.state;
     this.currentStyle = this.props.editorState.getCurrentInlineStyle();
     this.currentBlockType = this.getCurrentBlockType();
@@ -128,16 +130,18 @@ class Toolbar extends React.Component<void, ToolbarProps, ToolbarState> {
           })}
         </div>
 
-        <div className="btn-group">
-          <ToolbarButton
-            key="button-attachment"
-            id="attachment"
-            icon="text-attachment"
-            label={I18n.t('common.editor.attachment')}
-            isActive={this.state.showAttachFileForm}
-            onToggle={this.toggleAttachFileForm}
-          />
-        </div>
+        {withAttachmentButton
+          ? <div className="btn-group">
+            <ToolbarButton
+              key="button-attachment"
+              id="attachment"
+              icon="text-attachment"
+              label={I18n.t('common.editor.attachment')}
+              isActive={this.state.showAttachFileForm}
+              onToggle={this.toggleAttachFileForm}
+            />
+          </div>
+          : null}
 
         {showAttachFileForm
           ? <div className="insertion-box box">
