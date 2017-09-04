@@ -10,6 +10,7 @@ import { displayAlert, inviteUserToLogin } from '../../../utils/utilityManager';
 import { getConnectedUserId } from '../../../utils/globalFunctions';
 import { convertRawContentStateToHTML, rawContentStateIsEmpty } from '../../../utils/draftjs';
 import RichTextEditor from '../../common/richTextEditor';
+import attachmentsPlugin from '../../common/richTextEditor/attachmentsPlugin';
 import { TEXT_AREA_MAX_LENGTH } from './topPostForm';
 import { getContentLocale } from '../../../reducers/rootReducer';
 
@@ -45,11 +46,13 @@ class AnswerForm extends React.PureComponent {
     this.setState({ submitting: true });
     const bodyIsEmpty = !body || rawContentStateIsEmpty(body);
     if (!bodyIsEmpty) {
+      const attachments = attachmentsPlugin.getAttachments(body);
       const variables = {
         contentLocale: contentLocale,
         ideaId: ideaId,
         parentId: parentId,
-        body: convertRawContentStateToHTML(body)
+        body: convertRawContentStateToHTML(body),
+        attachments: attachments
       };
       displayAlert('success', I18n.t('loading.wait'));
       mutate({ variables: variables })

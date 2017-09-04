@@ -14,6 +14,7 @@ import { convertToRawContentState, convertRawContentStateToHTML, rawContentState
 import EditAttachments from '../../common/editAttachments';
 import type { Attachment } from '../../common/attachments';
 import RichTextEditor from '../../common/richTextEditor';
+import attachmentsPlugin from '../../common/richTextEditor/attachmentsPlugin';
 import { TextInputWithRemainingChars } from '../../common/textInputWithRemainingChars';
 import { TEXT_INPUT_MAX_LENGTH, TEXT_AREA_MAX_LENGTH } from './topPostForm';
 import { getContentLocale } from '../../../reducers/rootReducer';
@@ -74,14 +75,17 @@ class EditPostForm extends React.PureComponent<void, EditPostFormProps, EditPost
   };
 
   handleSubmit = (): void => {
+    const { body } = this.state;
     const subjectIsEmpty = this.state.subject.length === 0;
-    const bodyIsEmpty = rawContentStateIsEmpty(this.state.body);
+    const bodyIsEmpty = rawContentStateIsEmpty(body);
     if (!subjectIsEmpty && !bodyIsEmpty) {
+      const attachments = attachmentsPlugin.getAttachments(body);
       const variables = {
         contentLocale: this.props.contentLocale,
         postId: this.props.id,
         subject: this.state.subject,
-        body: convertRawContentStateToHTML(this.state.body)
+        body: convertRawContentStateToHTML(body),
+        attachments: attachments
       };
       displayAlert('success', I18n.t('loading.wait'));
       const oldSubject = this.props.subject;

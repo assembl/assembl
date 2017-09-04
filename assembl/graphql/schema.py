@@ -1429,6 +1429,7 @@ class UpdatePost(graphene.Mutation):
         post_id = graphene.ID(required=True)
         subject = graphene.String()
         body = graphene.String(required=True)
+        attachments = graphene.List(graphene.String)
 
     post = graphene.Field(lambda: Post)
 
@@ -1474,6 +1475,22 @@ class UpdatePost(graphene.Mutation):
         if body != original_body_entry.value:
             post.body.add_value(body, original_body_entry.locale_code)
             changed = True
+
+            original_attachments = post.attachments
+            if original_attachments:
+                original_attachments_doc_ids = [str(a.document_id) for a in original_attachments]
+                attachments = args.get('attachments', [])
+                for document_id in attachments:
+                    if document_id not in original_attachments_doc_ids:
+                        document = models.Document.get(document_id)
+                        models.PostAttachment(
+                            document=document,
+                            discussion=discussion,
+                            creator_id=context.authenticated_userid,
+                            post=post,
+                            title=document.title,
+                            attachmentPurpose="EMBED_ATTACHMENT"
+                        )
 
         if changed:
             post.modification_date = datetime.utcnow()
