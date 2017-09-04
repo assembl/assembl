@@ -5,6 +5,7 @@ mutation uploadDocument($file: String!) {
         id
         externalUrl
         mimeType
+        title
       }
     }
   }
