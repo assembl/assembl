@@ -146,20 +146,24 @@ export default class RichTextEditor extends React.Component<Object, RichTextEdit
     );
   };
 
+  renderToolbar = () => {
+    return (
+      <Toolbar
+        buttonsConfig={this.getToolbarButtons()}
+        editorState={this.state.editorState}
+        focusEditor={this.focusEditor}
+        onChange={this.onChange}
+      />
+    );
+  };
+
   render() {
     const { maxLength, placeholder, textareaRef, toolbarPosition } = this.props;
-    const editorState = this.state.editorState;
+    const { editorState } = this.state;
     const divClassName = classNames('rich-text-editor', { hidePlaceholder: this.shouldHidePlaceholder() });
     return (
       <div className={divClassName} ref={textareaRef}>
-        {toolbarPosition === 'top'
-          ? <Toolbar
-            buttonsConfig={this.getToolbarButtons()}
-            editorState={editorState}
-            focusEditor={this.focusEditor}
-            onChange={this.onChange}
-          />
-          : null}
+        {toolbarPosition === 'top' ? this.renderToolbar() : null}
         <div onClick={this.focusEditor}>
           <Editor
             editorState={editorState}
@@ -174,14 +178,7 @@ export default class RichTextEditor extends React.Component<Object, RichTextEdit
           />
         </div>
         {maxLength ? this.renderRemainingChars() : null}
-        {toolbarPosition === 'bottom'
-          ? <Toolbar
-            buttonsConfig={this.getToolbarButtons()}
-            editorState={editorState}
-            focusEditor={this.focusEditor}
-            onChange={this.onChange}
-          />
-          : null}
+        {toolbarPosition === 'bottom' ? this.renderToolbar() : null}
       </div>
     );
   }
