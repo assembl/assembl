@@ -35,7 +35,17 @@
 .rich-text-editor {
   font-family: $font-family;
 
+  .insertion-box {
+    min-height: 200px;
+    position: absolute;
+    width: 500px;
+    z-index: 1000;
+  }
+
   .editor-toolbar {
+    .btn-group {
+      margin-right: 5px;
+    }
 
     .btn {
       font-size: 10px;

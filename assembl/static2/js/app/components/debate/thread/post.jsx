@@ -148,6 +148,7 @@ class Post extends React.PureComponent {
         <div className="posts">
           <div className="answer-form" id={id}>
             <EditPostForm
+              attachments={attachments}
               id={id}
               body={originalBody}
               subject={originalSubject}
@@ -199,8 +200,8 @@ class Post extends React.PureComponent {
 
               <Attachments attachments={attachments} />
 
-              {indirectIdeaContentLinks.length
-                ? <div className="link-idea">
+              {indirectIdeaContentLinks.length ? (
+                <div className="link-idea">
                   <div className="label">
                     <Translate value="debate.thread.linkIdea" />
                   </div>

@@ -4,16 +4,35 @@ exports[`Toolbar component should render a toolbar 1`] = `
 <div
   className="editor-toolbar"
 >
-  <button
-    className="btn btn-default"
-    disabled={false}
-    onClick={[Function]}
-    title="Bold"
-    type="button"
+  <div
+    className="btn-group"
   >
-    <span
-      className="assembl-icon-text-bold"
-    />
-  </button>
+    <button
+      className="btn btn-default"
+      disabled={false}
+      onClick={[Function]}
+      title="Bold"
+      type="button"
+    >
+      <span
+        className="assembl-icon-text-bold"
+      />
+    </button>
+  </div>
+  <div
+    className="btn-group"
+  >
+    <button
+      className="btn btn-default"
+      disabled={false}
+      onClick={[Function]}
+      title="Attachment"
+      type="button"
+    >
+      <span
+        className="assembl-icon-text-attachment"
+      />
+    </button>
+  </div>
 </div>
 `;

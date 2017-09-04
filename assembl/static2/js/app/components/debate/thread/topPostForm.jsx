@@ -10,6 +10,7 @@ import { displayAlert, promptForLoginOr } from '../../../utils/utilityManager';
 import { TextInputWithRemainingChars } from '../../common/textInputWithRemainingChars';
 import RichTextEditor from '../../common/richTextEditor';
 import { getContentLocale } from '../../../reducers/rootReducer';
+import attachmentsPlugin from '../../common/richTextEditor/attachmentsPlugin';
 
 export const TEXT_INPUT_MAX_LENGTH = 140;
 export const TEXT_AREA_MAX_LENGTH = 3000;
@@ -43,11 +44,13 @@ class TopPostForm extends React.Component {
     this.setState({ submitting: true });
     const bodyIsEmpty = !body || rawContentStateIsEmpty(body);
     if (subject && !bodyIsEmpty) {
+      const attachments = attachmentsPlugin.getAttachments(body);
       const variables = {
         contentLocale: contentLocale,
         ideaId: ideaId,
         subject: subject,
-        body: convertRawContentStateToHTML(body)
+        body: convertRawContentStateToHTML(body),
+        attachments: attachments
       };
       displayAlert('success', I18n.t('loading.wait'));
       mutate({ variables: variables })

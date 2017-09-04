@@ -159,7 +159,15 @@ const Translations = {
       title: "synthèse"
     },
     common: {
+      attachFileForm: {
+        label: "Insérer une pièce jointe",
+        submit: "Valider"
+      },
+      attachments: {
+        download: "Télécharger"
+      },
       editor: {
+        attachment: "Joindre un fichier",
         bold: "Gras",
         italic: "Italique",
         bulletList: "Liste de puces"
@@ -457,7 +465,15 @@ const Translations = {
       panelTitle: "Welcome to Assembl community page"
     },
     common: {
+      attachFileForm: {
+        label: "Add a attachment",
+        submit: "Submit"
+      },
+      attachments: {
+        download: "Download"
+      },
       editor: {
+        attachment: "Add a file",
         bold: "Bold",
         italic: "Italic",
         bulletList: "Bullet list"

@@ -6,10 +6,22 @@
 import { convertToRaw, convertFromRaw, ContentState, EditorState, RawContentState } from 'draft-js';
 import { convertFromHTML, convertToHTML } from 'draft-convert';
 
+import attachmentsPlugin from '../components/common/richTextEditor/attachmentsPlugin';
+
 type Entry = {
   localeCode: string,
   value: string | EditorState
 };
+
+const customConvertFromHTML = convertFromHTML({
+  htmlToBlock: attachmentsPlugin.htmlToBlock,
+  htmlToEntity: attachmentsPlugin.htmlToEntity
+});
+
+const customConvertToHTML = convertToHTML({
+  blockToHTML: attachmentsPlugin.blockToHTML,
+  entityToHTML: attachmentsPlugin.entityToHTML
+});
 
 export function createEmptyEditorState(): EditorState {
   return EditorState.createEmpty();
@@ -24,7 +36,7 @@ export const textToRawContentState = (text: string): RawContentState => {
 };
 
 export function convertToRawContentState(value: string): RawContentState {
-  return convertToRaw(convertFromHTML(value));
+  return convertToRaw(customConvertFromHTML(value));
 }
 
 export function convertEntries(converter: Function): Function {
@@ -40,7 +52,7 @@ export function convertEntries(converter: Function): Function {
 
 export const convertEntriesToRawContentState = convertEntries(convertToRawContentState);
 export const convertRawContentStateToHTML = (cs: RawContentState): string => {
-  return convertToHTML(convertFromRaw(cs));
+  return customConvertToHTML(convertFromRaw(cs));
 };
 export const convertEntriesToHTML = convertEntries(convertRawContentStateToHTML);
 

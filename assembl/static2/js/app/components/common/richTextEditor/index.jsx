@@ -2,11 +2,13 @@
 import React from 'react';
 import { Translate, I18n } from 'react-redux-i18n';
 import { convertFromRaw, convertToRaw, Editor, EditorState, RawContentState } from 'draft-js';
+
 import classNames from 'classnames';
 import punycode from 'punycode';
 
+import AtomicBlockRenderer from './atomicBlockRenderer';
 import Toolbar from './toolbar';
-import type ButtonConfigType from './toolbarButton';
+import type { ButtonConfigType } from './buttonConfigType';
 
 type RichTextEditorProps = {
   rawContentState: RawContentState,
@@ -19,10 +21,20 @@ type RichTextEditorProps = {
 };
 
 type RichTextEditorState = {
-  activeInsertButton: string,
   editorState: EditorState,
   editorHasFocus: boolean
 };
+
+function customBlockRenderer(block) {
+  if (block.getType() === 'atomic') {
+    return {
+      component: AtomicBlockRenderer,
+      editable: false
+    };
+  }
+
+  return null;
+}
 
 export default class RichTextEditor extends React.Component<Object, RichTextEditorProps, RichTextEditorState> {
   editor: HTMLDivElement;
@@ -166,6 +178,7 @@ export default class RichTextEditor extends React.Component<Object, RichTextEdit
         {toolbarPosition === 'top' ? this.renderToolbar() : null}
         <div onClick={this.focusEditor}>
           <Editor
+            blockRendererFn={customBlockRenderer}
             editorState={editorState}
             onBlur={this.onBlur}
             onChange={this.onChange}
