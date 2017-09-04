@@ -88,6 +88,8 @@
 
   .public-DraftEditor-content {
     min-height: 12em;
+    max-height: 200px;
+    overflow: auto;
   }
 
 }
