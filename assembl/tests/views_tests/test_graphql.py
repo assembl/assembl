@@ -1314,8 +1314,6 @@ def test_mutation_add_post_attachment(graphql_request, idea_in_thread_phase, top
         type = 'image/png'
 
     graphql_request.POST['variables.attachment'] = FieldStorage()
-    # idea_id = idea_in_thread_phase
-    # in_reply_to_post_id = top_post_in_thread_phase
     res = schema.execute(u"""
 mutation addPostAttachment($postId: ID!, $file: String!) {
     addPostAttachment(
