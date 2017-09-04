@@ -55,7 +55,10 @@ const plugin = {
       block.findEntityRanges((entityRange) => {
         const entityKey = entityRange.entity;
         if (entityKey) {
-          attachments.push(contentState.getEntity(entityKey).data.id);
+          const entity = contentState.getEntity(entityKey);
+          if (entity && entity.data.id) {
+            attachments.push(entity.data.id);
+          }
         }
       });
     });
