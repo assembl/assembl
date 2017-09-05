@@ -56,18 +56,13 @@ class IdeasLevel extends React.Component {
     const { ideaLevel } = this.props;
     const isFirsStepActif = ideaLevel <= 1;
     this.index = index;
-    let styles;
-    if (isFirsStepActif) {
-      styles = classNames(
-        'theme',
-        { clear: this.index % 4 === 0 },
-        { [` theme-first-row-${this.index % 4}`]: this.index <= 3 },
-        { [` theme-${this.index % 4}`]: this.index > 3 }
-      );
-    } else {
-      styles = classNames('theme', 'theme-inline');
-    }
-    return styles;
+    return classNames(
+      'theme',
+      { clear: this.index % 4 === 0 && isFirsStepActif },
+      { [` theme-first-row-${this.index % 4}`]: this.index <= 3 && isFirsStepActif },
+      { [` theme-${this.index % 4}`]: this.index > 3 && isFirsStepActif },
+      { 'theme-inline': !isFirsStepActif }
+    );
   }
   getRightOverflowValue() {
     const { sliderContainerWidth, ideaPreviewWidth } = this.state;
