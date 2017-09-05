@@ -16,6 +16,7 @@ import Permissions, { connectedUserCan } from '../utils/permissions';
 import { getConnectedUserId } from '../utils/globalFunctions';
 
 import TopPostForm from './../components/debate/thread/topPostForm';
+import Announcement from './../components/debate/thread/announcement';
 
 export const transformPosts = (edges, additionnalProps = {}) => {
   const postsByParent = {};
@@ -74,28 +75,37 @@ class Idea extends React.Component {
       <div className="idea">
         <Header title={idea.title} longTitle={idea.longTitle} imgUrl={idea.imgUrl} identifier="thread" />
         <section className="post-section">
-          {!isUserConnected || connectedUserCan(Permissions.ADD_POST)
-            ? <Grid fluid className="background-color">
+          <Grid fluid className="background-grey">
+            <div className="max-container">
+              <div className="content-section">
+                <Announcement />
+              </div>
+            </div>
+          </Grid>
+          {!isUserConnected || connectedUserCan(Permissions.ADD_POST) ? (
+            <Grid fluid className="background-color">
               <div className="max-container">
                 <div className="top-post-form">
                   <TopPostForm ideaId={idea.id} refetchIdea={refetchIdea} />
                 </div>
               </div>
             </Grid>
-            : null}
+          ) : null}
           <Grid fluid className="background-grey">
             <div className="max-container">
               <div className="content-section">
-                {ideaWithPostsData.loading
-                  ? <Loader />
-                  : <Tree
+                {ideaWithPostsData.loading ? (
+                  <Loader />
+                ) : (
+                  <Tree
                     lang={lang}
                     data={topPosts}
                     InnerComponent={Post}
                     InnerComponentFolded={PostFolded}
                     noRowsRenderer={noRowsRenderer}
                     SeparatorComponent={InfiniteSeparator}
-                  />}
+                  />
+                )}
               </div>
             </div>
           </Grid>
