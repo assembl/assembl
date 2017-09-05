@@ -1,12 +1,12 @@
 import React from 'react';
 import renderer from 'react-test-renderer';
 
-import ImageUploader from '../../../../js/app/components/common/imageUploader';
+import FileUploader from '../../../../js/app/components/common/fileUploader';
 
-describe('ImageUploader component', () => {
+describe('FileUploader component', () => {
   it('should render an image uploader', () => {
     const handleChangeSpy = jest.fn(() => {});
-    const component = renderer.create(<ImageUploader imgUrl="http://www.example.com/foobar.png" handleChange={handleChangeSpy} />);
+    const component = renderer.create(<FileUploader fileOrUrl="http://www.example.com/foobar.png" handleChange={handleChangeSpy} />);
     const tree = component.toJSON();
     expect(tree).toMatchSnapshot();
   });
@@ -14,7 +14,7 @@ describe('ImageUploader component', () => {
   it('should render an image uploader without preview', () => {
     const handleChangeSpy = jest.fn(() => {});
     const file = new File([''], 'foobar.png');
-    const component = renderer.create(<ImageUploader imgUrl={file} handleChange={handleChangeSpy} withPreview={false} />);
+    const component = renderer.create(<FileUploader fileOrUrl={file} handleChange={handleChangeSpy} withPreview={false} />);
     const tree = component.toJSON();
     expect(tree).toMatchSnapshot();
   });

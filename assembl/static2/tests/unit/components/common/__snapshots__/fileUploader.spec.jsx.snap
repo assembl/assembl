@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`ImageUploader component should render an image uploader 1`] = `
+exports[`FileUploader component should render an image uploader 1`] = `
 <div>
   <button
     className="btn btn-default"
@@ -36,7 +36,7 @@ exports[`ImageUploader component should render an image uploader 1`] = `
 </div>
 `;
 
-exports[`ImageUploader component should render an image uploader without preview 1`] = `
+exports[`FileUploader component should render an image uploader without preview 1`] = `
 <div>
   <button
     className="btn btn-default"

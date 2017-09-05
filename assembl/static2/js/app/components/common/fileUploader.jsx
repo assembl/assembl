@@ -2,7 +2,7 @@ import React from 'react';
 import { Translate } from 'react-redux-i18n';
 import { Button } from 'react-bootstrap';
 
-class ImageUploader extends React.Component {
+class FileUploader extends React.Component {
   static defaultProps = {
     withPreview: true
   };
@@ -10,21 +10,21 @@ class ImageUploader extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      imgName: '',
-      imgSrc: undefined
+      filename: '',
+      fileSrc: undefined
     };
     this.handleChangePreview = this.handleChangePreview.bind(this);
     this.handleUploadButtonClick = this.handleUploadButtonClick.bind(this);
-    this.updateImageInfo = this.updateImageInfo.bind(this);
+    this.updateInfo = this.updateInfo.bind(this);
   }
 
   componentDidMount() {
-    this.updateImageInfo(this.props.imgUrl);
+    this.updateInfo(this.props.fileOrUrl);
   }
 
   componentWillReceiveProps(nextProps) {
-    if (this.props.imgUrl !== nextProps.imgUrl) {
-      this.updateImageInfo(nextProps.imgUrl);
+    if (this.props.fileOrUrl !== nextProps.fileOrUrl) {
+      this.updateInfo(nextProps.fileOrUrl);
     }
   }
 
@@ -35,32 +35,32 @@ class ImageUploader extends React.Component {
   handleChangePreview() {
     const file = this.fileInput.files[0];
     this.setState({
-      imgName: file.name || ''
+      filename: file.name || ''
     });
-    this.props.handleImageChange(file);
+    this.props.handleChange(file);
   }
 
-  updateImageInfo(imgUrl) {
-    // warning: here imgUrl can be an url or a File object
-    // update image src and name if imgUrl is a File
-    if (imgUrl && Object.getPrototypeOf(imgUrl) === File.prototype) {
-      const file = imgUrl;
+  updateInfo(fileOrUrl) {
+    // warning: here fileOrUrl can be an url or a File object
+    // update file src and name if fileOrUrl is a File
+    if (fileOrUrl && Object.getPrototypeOf(fileOrUrl) === File.prototype) {
+      const file = fileOrUrl;
       const reader = new FileReader();
       reader.addEventListener(
         'load',
         () => {
           this.setState({
-            imgName: file.name || '',
-            imgSrc: reader.result
+            filename: file.name || '',
+            fileSrc: reader.result
           });
         },
         false
       );
       if (file) {
-        reader.readAsDataURL(imgUrl);
+        reader.readAsDataURL(fileOrUrl);
       }
     } else {
-      this.setState({ imgSrc: imgUrl });
+      this.setState({ fileSrc: fileOrUrl });
     }
   }
 
@@ -71,9 +71,9 @@ class ImageUploader extends React.Component {
           <Translate value="common.uploadButton" />
         </Button>
         {this.props.withPreview
-          ? <div className={this.state.imgSrc ? 'preview' : 'hidden'}>
+          ? <div className={this.state.fileSrc ? 'preview' : 'hidden'}>
             <img
-              src={this.state.imgSrc}
+              src={this.state.fileSrc}
               ref={(p) => {
                 this.preview = p;
               }}
@@ -82,7 +82,7 @@ class ImageUploader extends React.Component {
           </div>
           : null}
         <div className="preview-title">
-          {this.state.imgName}
+          {this.state.filename}
         </div>
         <input
           type="file"
@@ -97,4 +97,4 @@ class ImageUploader extends React.Component {
   }
 }
 
-export default ImageUploader;
+export default FileUploader;
