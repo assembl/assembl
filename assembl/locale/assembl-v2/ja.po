@@ -3,13 +3,14 @@ msgstr ""
 "Project-Id-Version: \n"
 "POT-Creation-Date: 2017-08-03T09:39:15.282Z\n"
 "PO-Revision-Date: \n"
-"Last-Translator: Vincent Fretin <vincent.fretin@gmail.com>\n"
+"Last-Translator: Vincent Fretin <vincent.fretin@gmail."
+"com>\n"
 "Language-Team: \n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 1.6.10\n"
+"X-Generator: Poedit 2.0.3\n"
 
 #. [administration.addQuestion]
 #. defaultMessage is:
@@ -166,8 +167,8 @@ msgstr "データのエクスポート"
 #: messages.json
 msgid "administration.surveyExport.annotation"
 msgstr ""
-"すべての議論データをエクスポートするには、エクスポートボタンをクリックしてく"
-"ださい"
+"すべての議論データをエクスポートするには、エクスポートボ"
+"タンをクリックしてください"
 
 #. [administration.surveyExport.link]
 #. defaultMessage is:
@@ -209,7 +210,7 @@ msgstr "ビデオモジュール"
 #. Annuler
 #: messages.json
 msgid "cancel"
-msgstr ""
+msgstr "キャンセル"
 
 #. [changePassword.panelTitle]
 #. defaultMessage is:
@@ -304,7 +305,9 @@ msgstr "もっと知りたいですか？"
 #. The %{phaseName} phase has not started. Please come back from
 #: messages.json
 msgid "debate.notStarted"
-msgstr "%{phaseName}フェーズは開始していません。後日オープンします"
+msgstr ""
+"%{phaseName}フェーズは開始していません。後日オープンしま"
+"す"
 
 #. [debate.post]
 #. defaultMessage is:
@@ -358,14 +361,16 @@ msgstr "その他の提案"
 #: messages.json
 msgid "debate.survey.noProposals"
 msgstr ""
-"現時点ではまだコメントは投稿されていません。最初の投稿者になりませんか？"
+"現時点ではまだコメントは投稿されていません。最初の投稿者"
+"になりませんか？"
 
 #. [debate.survey.postSuccess]
 #. defaultMessage is:
 #. Thanks for your participation. Your proposal has been sent!
 #: messages.json
 msgid "debate.survey.postSuccess"
-msgstr "ありがとうございます。あなたのコメントは送信されました！"
+msgstr ""
+"ありがとうございます。あなたのコメントは送信されました！"
 
 #. [debate.survey.proposalsTitle]
 #. defaultMessage is:
@@ -436,7 +441,8 @@ msgstr "テーマ"
 #: messages.json
 #, fuzzy
 msgid "debate.thread.fillBody"
-msgstr "コメントと投票を行うには、ログインする必要があります。"
+msgstr ""
+"コメントと投票を行うには、ログインする必要があります。"
 
 #. [debate.thread.fillSubject]
 #. defaultMessage is:
@@ -502,7 +508,8 @@ msgstr ""
 #: messages.json
 #, fuzzy
 msgid "debate.thread.postSuccess"
-msgstr "ありがとうございます。あなたのコメントは送信されました！"
+msgstr ""
+"ありがとうございます。あなたのコメントは送信されました！"
 
 #. [debate.thread.startDiscussion]
 #. defaultMessage is:
@@ -637,7 +644,8 @@ msgstr "最近の議論"
 #. Find your most controversial and highly acclaimed discussions on the front page
 #: messages.json
 msgid "home.themesSubtitle"
-msgstr "フロントページで一番様々な意見が寄せられた議論を探す"
+msgstr ""
+"フロントページで一番様々な意見が寄せられた議論を探す"
 
 #. [home.themesTitle]
 #. defaultMessage is:
@@ -708,8 +716,9 @@ msgstr "あなたのアカウントが作成されました"
 #: messages.json
 msgid "login.accountCreatedMsg"
 msgstr ""
-"確認メールを送信しました。確認のためのリンクをクリックしてください。メールを"
-"受け取っていない場合、スパムフォルダをご確認ください。"
+"確認メールを送信しました。確認のためのリンクをクリックし"
+"てください。メールを受け取っていない場合、スパムフォルダ"
+"をご確認ください。"
 
 #. [login.alreadyAccount]
 #. defaultMessage is:
@@ -744,7 +753,9 @@ msgstr "Eメール"
 #. The email you have entered was not found. Please try again.
 #: messages.json
 msgid "login.emailNotFound"
-msgstr "メールアドレスが見つかりませんでした。もう一度ご確認ください。"
+msgstr ""
+"メールアドレスが見つかりませんでした。もう一度ご確認くだ"
+"さい。"
 
 #. [login.existingEmail]
 #. defaultMessage is:
@@ -786,7 +797,9 @@ msgstr "入力したパスワードが一致しません"
 #. The password you have entered does not match with the entered user. Please try again.
 #: messages.json
 msgid "login.incorrectPasswordLogin"
-msgstr "入力したパスワードが一致しません。もう一度お試しください。"
+msgstr ""
+"入力したパスワードが一致しません。もう一度お試しくださ"
+"い。"
 
 #. [login.invalidEmail]
 #. defaultMessage is:
@@ -873,8 +886,8 @@ msgstr "問題があるようです。後でもう一度お試しください。
 #: messages.json
 msgid "login.passwordChangeRequestSuccess"
 msgstr ""
-"アカウントにメールを送信しました。受け取っていない場合、迷惑メールフォルダを"
-"確認してください"
+"アカウントにメールを送信しました。受け取っていない場合、"
+"迷惑メールフォルダを確認してください"
 
 #. [login.resend]
 #. defaultMessage is:
@@ -903,8 +916,9 @@ msgstr "パスワードを変更してください"
 #: messages.json
 msgid "login.sendPwdMsg"
 msgstr ""
-"仮接続のためのリンクをメールに送りました。ログインしてパスワードを変更してく"
-"ださい。受け取っていない場合、迷惑メールフォルダを確認してください。"
+"仮接続のためのリンクをメールに送りました。ログインしてパ"
+"スワードを変更してください。受け取っていない場合、迷惑"
+"メールフォルダを確認してください。"
 
 #. [login.signUp]
 #. defaultMessage is:
