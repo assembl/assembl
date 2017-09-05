@@ -12,13 +12,16 @@ class Synthesis extends React.Component {
     const next = getCurrentView();
     return (
       <div className="synthesis-container">
-        {Object.keys(synthesis.lastPublishedSynthesis).length > 0 &&
-          synthesis.lastPublishedSynthesis.introduction &&
+        {synthesis &&
+        Object.keys(synthesis.lastPublishedSynthesis).length > 0 &&
+        synthesis.lastPublishedSynthesis.introduction && (
           <a
             href={
-              connectedUserId
-                ? `${get('oldDebate', slug)}/posts/${synthesis.lastPublishedSynthesis.published_in_post}`
-                : `${getContextual('login', slug)}?next=${next}`
+              connectedUserId ? (
+                `${get('oldDebate', slug)}/posts/${synthesis.lastPublishedSynthesis.published_in_post}`
+              ) : (
+                `${getContextual('login', slug)}?next=${next}`
+              )
             }
           >
             <div className="insert-box">
@@ -26,9 +29,7 @@ class Synthesis extends React.Component {
                 <div>
                   <Translate value="synthesis.title" />
                 </div>
-                <div className="ellipsis margin-xs">
-                  {synthesis.lastPublishedSynthesis.subject}
-                </div>
+                <div className="ellipsis margin-xs">{synthesis.lastPublishedSynthesis.subject}</div>
               </h3>
               <div className="box-hyphen">&nbsp;</div>
               <div className="date">
@@ -38,7 +39,8 @@ class Synthesis extends React.Component {
                 {<p dangerouslySetInnerHTML={{ __html: synthesis.lastPublishedSynthesis.introduction }} />}
               </div>
             </div>
-          </a>}
+          </a>
+        )}
       </div>
     );
   }
