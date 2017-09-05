@@ -1,5 +1,6 @@
 import React from 'react';
 import { Row, Col } from 'react-bootstrap';
+import classNames from 'classnames';
 import IdeaPreview from '../../common/ideaPreview';
 import { get as getRoute } from '../../../utils/routeMap';
 import { getDiscussionSlug } from '../../../utils/globalFunctions';
@@ -55,18 +56,16 @@ class IdeasLevel extends React.Component {
     const { ideaLevel } = this.props;
     const isFirsStepActif = ideaLevel <= 1;
     this.index = index;
-    let styles = 'theme';
+    let styles;
     if (isFirsStepActif) {
-      if (this.index % 4 === 0) {
-        styles += ' clear';
-      }
-      if (this.index <= 3) {
-        styles += ` theme-first-row-${this.index % 4}`;
-      } else {
-        styles += ` theme-${this.index % 4}`;
-      }
+      styles = classNames(
+        'theme',
+        { clear: this.index % 4 === 0 },
+        { [` theme-first-row-${this.index % 4}`]: this.index <= 3 },
+        { [` theme-${this.index % 4}`]: this.index > 3 }
+      );
     } else {
-      styles = 'theme theme-inline';
+      styles = classNames('theme', 'theme-inline');
     }
     return styles;
   }
