@@ -698,7 +698,8 @@ class Idea(HistoryMixin, DiscussionBoundBase):
         return self.discussion_id or self.discussion.id
 
     def get_definition_preview(self):
-        body = self.definition.strip()
+        definition = self.definition or ""
+        body = definition.strip()
         target_len = 120
         shortened = False
         html_len = 2 * target_len

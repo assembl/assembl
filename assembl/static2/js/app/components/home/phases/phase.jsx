@@ -59,9 +59,7 @@ class Phase extends React.Component {
     const stepNumber = index + 1;
     return (
       <div className="illustration-box">
-        <div className="image-box" style={{ backgroundImage: `url(${imgUrl})` }}>
-          &nbsp;
-        </div>
+        <div className="image-box" style={{ backgroundImage: `url(${imgUrl})` }} />
         <div onClick={this.displayPhase} className="content-box">
           <h1 className="light-title-1">
             {stepNumber}
@@ -80,7 +78,7 @@ class Phase extends React.Component {
             <Localize value={startDate} dateFormat="date.format2" />
           </h4>
           {description &&
-            <div className="text-box">
+            <div className="description-box">
               {description.entries.map((entry, index3) => {
                 return (
                   <span key={index3}>

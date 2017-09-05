@@ -7,13 +7,13 @@ import { get } from '../../../utils/routeMap';
 
 class Thumbnails extends React.Component {
   render() {
-    const { showNavigation, identifier, thematics, themeId, isNavbarHidden } = this.props;
+    const { showNavigation, identifier, thematics, themeId } = this.props;
     const { debateData } = this.props.debate;
     const slug = debateData.slug;
     const phaseStarted = isPhaseStarted(debateData.timeline, identifier);
     return (
       <Grid fluid className={showNavigation && phaseStarted ? 'thumbnails-nav no-padding' : 'hidden'}>
-        <div className={isNavbarHidden ? 'thumbnails-container' : 'thumbnails-container shifted'}>
+        <div className="thumbnails-container">
           <div className="max-container">
             <div className="thumbnails">
               {thematics.map((thematic, index) => {

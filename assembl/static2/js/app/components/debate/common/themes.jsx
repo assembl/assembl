@@ -6,6 +6,23 @@ import { get } from '../../../utils/routeMap';
 import { getDiscussionSlug } from '../../../utils/globalFunctions';
 
 class Themes extends React.Component {
+  constructor(props) {
+    super(props);
+    this.getColClassNames = this.getColClassNames.bind(this);
+  }
+  getColClassNames(index) {
+    this.index = index;
+    let styles = 'theme';
+    if (this.index % 4 === 0) {
+      styles += ' clear';
+    }
+    if (this.index <= 3) {
+      styles += ` theme-first-row-${this.index % 4}`;
+    } else {
+      styles += ` theme-${this.index % 4}`;
+    }
+    return styles;
+  }
   render() {
     const { thematics, identifier } = this.props;
     const slug = getDiscussionSlug();
@@ -23,13 +40,7 @@ class Themes extends React.Component {
               <Row className="no-margin">
                 {thematics.map((thematic, index) => {
                   return (
-                    <Col
-                      xs={12}
-                      sm={6}
-                      md={3}
-                      className={index % 4 === 0 ? 'theme no-padding clear' : 'theme no-padding'}
-                      key={index}
-                    >
+                    <Col xs={12} sm={6} md={3} className={this.getColClassNames(index)} key={index}>
                       <ThematicPreview
                         imgUrl={thematic.imgUrl}
                         numPosts={thematic.numPosts}
