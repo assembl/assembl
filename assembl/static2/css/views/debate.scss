@@ -1,8 +1,4 @@
 .debate {
-  .timeline-top {
-    top: 0;
-  }
-
   .timeline-shifted {
     top: $navbar-height;
   }
@@ -16,6 +12,7 @@
     position: fixed;
     width: 100%;
     z-index: 200;
+    top: $navbar-height;
 
     .timeline-container {
       margin: 0 0 0 100px;
@@ -39,152 +36,6 @@
 
   .shifted {
     margin: $navbar-height 0 0;
-  }
-
-  .themes-section {
-    margin: 120px 0 0;
-    .theme {
-      &:nth-child(1) {
-        margin: 80px 0 0;
-      }
-
-      &:nth-child(2) {
-        margin: 0;
-      }
-
-      &:nth-child(3) {
-        margin: 80px 0 0;
-      }
-
-      &:nth-child(4) {
-        margin: 40px 0 0;
-      }
-
-      &:nth-child(5) {
-        margin: 2px 0 0;
-      }
-
-      &:nth-child(6) {
-        margin: -78px 0 0;
-      }
-
-      &:nth-child(7) {
-        margin: 2px 0 0;
-      }
-
-      &:nth-child(8) {
-        margin: -38px 0 0;
-      }
-
-      &:nth-child(9) {
-        margin: 2px 0 0;
-      }
-
-      &:nth-child(10) {
-        margin: -78px 0 0;
-      }
-
-      &:nth-child(11) {
-        margin: 2px 0 0;
-      }
-
-      &:nth-child(12) {
-        margin: -38px 0 0;
-      }
-
-      &:nth-child(13) {
-        margin: 2px 0 0;
-      }
-
-      &:nth-child(14) {
-        margin: -78px 0 0;
-      }
-
-      &:nth-child(15) {
-        margin: 2px 0 0;
-      }
-
-      &:nth-child(16) {
-        margin: -38px 0 0;
-      }
-    }
-
-    .illustration {
-      .light-title-3 {
-        margin: 200px 20px 0;
-      }
-
-      .content-box {
-        &:hover {
-          .text-box {
-            position: absolute;
-            bottom: 50px;
-          }
-
-          .stat-nb {
-            display: block;
-          }
-
-          .dash {
-            display: none;
-          }
-
-          .stats {
-            color: $white;
-            text-align: left;
-            top: 50px;
-          }
-        }
-      }
-
-      .stats {
-        bottom: 50px;
-        color: $white;
-        padding: 0 20px 0 0;
-        position: absolute;
-        text-align: center;
-        width: 100%;
-
-        .stat-nb {
-          display: inline;
-          padding: 10px 0 0;
-        }
-
-        .glyph-white {
-          padding: 0 0 0 5px;
-          vertical-align: middle;
-        }
-
-        .dash {
-          display: inline;
-          padding: 0 10px;
-        }
-
-        img {
-          margin: 0 0 5px 5px;
-        }
-      }
-
-      .white-icon {
-        padding: 0 0 0 5px;
-
-        span {
-          font-size: 13px;
-        }
-      }
-
-      .text-box {
-        -webkit-line-clamp: $lines-to-show;
-        -webkit-box-orient: vertical;
-        font-size: $font-size-s;
-        height: $font-size-s * $line-height * $lines-to-show;
-        line-height: $line-height;
-        margin: 0 auto;
-        overflow: hidden;
-        text-align: center;
-        text-overflow: ellipsis;
-      }
-    }
   }
 
   .header-section {
@@ -485,78 +336,6 @@
 
     .shifted {
       margin: 0;
-    }
-  }
-}
-
-@media screen and (max-width: 991px) {
-  .debate {
-    .themes-section {
-      .theme {
-        &:nth-child(1) {
-          margin: 2px 0 0;
-        }
-
-        &:nth-child(2) {
-          margin: 2px 0 0;
-        }
-
-        &:nth-child(3) {
-          margin: 2px 0 0;
-        }
-
-        &:nth-child(4) {
-          margin: 2px 0 0;
-        }
-
-        &:nth-child(5) {
-          margin: 2px 0 0;
-        }
-
-        &:nth-child(6) {
-          margin: 2px 0 0;
-        }
-
-        &:nth-child(7) {
-          margin: 2px 0 0;
-        }
-
-        &:nth-child(8) {
-          margin: 2px 0 0;
-        }
-
-        &:nth-child(9) {
-          margin: 2px 0 0;
-        }
-
-        &:nth-child(10) {
-          margin: 2px 0 0;
-        }
-
-        &:nth-child(11) {
-          margin: 2px 0 0;
-        }
-
-        &:nth-child(12) {
-          margin: 2px 0 0;
-        }
-
-        &:nth-child(13) {
-          margin: 2px 0 0;
-        }
-
-        &:nth-child(14) {
-          margin: 2px 0 0;
-        }
-
-        &:nth-child(15) {
-          margin: 2px 0 0;
-        }
-
-        &:nth-child(16) {
-          margin: 2px 0 0;
-        }
-      }
     }
   }
 }
