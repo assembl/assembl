@@ -3,12 +3,14 @@ import React from 'react';
 import { Button } from 'react-bootstrap';
 import { Translate } from 'react-redux-i18n';
 
+import ImageUploader from './imageUploader';
+
 type AttachFileFormProps = {
   onSubmit: Function
 };
 
 type AttachFileFormState = {
-  file: Object | null
+  file: File | null
 };
 
 class AttachFileForm extends React.Component<*, AttachFileFormProps, AttachFileFormState> {
@@ -24,8 +26,13 @@ class AttachFileForm extends React.Component<*, AttachFileFormProps, AttachFileF
   }
 
   handleSubmit = (): void => {
-    const file = this.fileInput.files[0];
-    this.props.onSubmit(file);
+    this.props.onSubmit(this.state.file);
+  };
+
+  handleImageChange = (file: File): void => {
+    this.setState({
+      file: file
+    });
   };
 
   render() {
@@ -34,13 +41,7 @@ class AttachFileForm extends React.Component<*, AttachFileFormProps, AttachFileF
         <label htmlFor="attachment">
           <Translate value="common.attachFileForm.label" />
         </label>
-        <input
-          name="attachment"
-          type="file"
-          ref={(p) => {
-            return (this.fileInput = p);
-          }}
-        />
+        <ImageUploader handleImageChange={this.handleImageChange} imgUrl={this.state.file} withPreview={false} />
         <Button className="button-submit button-dark btn btn-default right" onClick={this.handleSubmit}>
           <Translate value="common.attachFileForm.submit" />
         </Button>

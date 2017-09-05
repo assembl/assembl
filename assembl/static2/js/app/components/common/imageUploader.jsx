@@ -3,6 +3,10 @@ import { Translate } from 'react-redux-i18n';
 import { Button } from 'react-bootstrap';
 
 class ImageUploader extends React.Component {
+  static defaultProps = {
+    withPreview: true
+  };
+
   constructor(props) {
     super(props);
     this.state = {
@@ -66,15 +70,17 @@ class ImageUploader extends React.Component {
         <Button onClick={this.handleUploadButtonClick}>
           <Translate value="common.uploadButton" />
         </Button>
-        <div className={this.state.imgSrc ? 'preview' : 'hidden'}>
-          <img
-            src={this.state.imgSrc}
-            ref={(p) => {
-              this.preview = p;
-            }}
-            alt="preview"
-          />
-        </div>
+        {this.props.withPreview
+          ? <div className={this.state.imgSrc ? 'preview' : 'hidden'}>
+            <img
+              src={this.state.imgSrc}
+              ref={(p) => {
+                this.preview = p;
+              }}
+              alt="preview"
+            />
+          </div>
+          : null}
         <div className="preview-title">
           {this.state.imgName}
         </div>
