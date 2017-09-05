@@ -1,49 +1,62 @@
+// @flow
 import React from 'react';
 import { Translate } from 'react-redux-i18n';
 import { Button } from 'react-bootstrap';
 
-class FileUploader extends React.Component {
+type FileUploaderProps = {
+  fileOrUrl: File | string,
+  handleChange: Function
+};
+
+type FileUploaderState = {
+  filename: string,
+  fileSrc?: string | ArrayBuffer
+};
+
+class FileUploader extends React.Component<Object, FileUploaderProps, FileUploaderState> {
+  props: FileUploaderProps;
+  state: FileUploaderState;
+  fileInput: HTMLInputElement;
+  preview: HTMLImageElement;
+
   static defaultProps = {
     withPreview: true
   };
 
-  constructor(props) {
+  constructor(props: FileUploaderProps) {
     super(props);
     this.state = {
       filename: '',
       fileSrc: undefined
     };
-    this.handleChangePreview = this.handleChangePreview.bind(this);
-    this.handleUploadButtonClick = this.handleUploadButtonClick.bind(this);
-    this.updateInfo = this.updateInfo.bind(this);
   }
 
   componentDidMount() {
     this.updateInfo(this.props.fileOrUrl);
   }
 
-  componentWillReceiveProps(nextProps) {
+  componentWillReceiveProps(nextProps: FileUploaderProps) {
     if (this.props.fileOrUrl !== nextProps.fileOrUrl) {
       this.updateInfo(nextProps.fileOrUrl);
     }
   }
 
-  handleUploadButtonClick() {
+  handleUploadButtonClick = () => {
     this.fileInput.click();
-  }
+  };
 
-  handleChangePreview() {
+  handleChangePreview = () => {
     const file = this.fileInput.files[0];
     this.setState({
       filename: file.name || ''
     });
     this.props.handleChange(file);
-  }
+  };
 
-  updateInfo(fileOrUrl) {
+  updateInfo = (fileOrUrl: File | string) => {
     // warning: here fileOrUrl can be an url or a File object
     // update file src and name if fileOrUrl is a File
-    if (fileOrUrl && Object.getPrototypeOf(fileOrUrl) === File.prototype) {
+    if (fileOrUrl && fileOrUrl instanceof File) {
       const file = fileOrUrl;
       const reader = new FileReader();
       reader.addEventListener(
@@ -59,10 +72,10 @@ class FileUploader extends React.Component {
       if (file) {
         reader.readAsDataURL(fileOrUrl);
       }
-    } else {
+    } else if (typeof fileOrUrl === 'string') {
       this.setState({ fileSrc: fileOrUrl });
     }
-  }
+  };
 
   render() {
     return (
