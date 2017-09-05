@@ -8,35 +8,31 @@ class Ideas extends React.Component {
     super(props);
     const { rootIdeaId } = this.props;
     this.state = { selectedIdeasId: [rootIdeaId], selectedIdeaIndex: 0 };
-    this.listIdeasToDisplay = this.listIdeasToDisplay.bind(this);
+    this.getIdeaChildren = this.getIdeaChildren.bind(this);
     this.setSelectedIdeas = this.setSelectedIdeas.bind(this);
   }
   setSelectedIdeas(selectedIdeaId, ideaLevel, ideaIndex) {
     const nbLevel = this.state.selectedIdeasId.length;
-    const arr = this.state.selectedIdeasId;
+    const ideasArray = this.state.selectedIdeasId;
     this.setState({ selectedIdeaIndex: ideaIndex });
-    if (arr.indexOf(selectedIdeaId) <= -1 && ideaLevel === nbLevel) {
-      arr.push(selectedIdeaId);
+    if (ideasArray.indexOf(selectedIdeaId) <= -1 && ideaLevel === nbLevel) {
+      ideasArray.push(selectedIdeaId);
       this.setState({
-        selectedIdeasId: arr
+        selectedIdeasId: ideasArray
       });
     } else if (ideaLevel < nbLevel) {
       const nbToRemove = this.state.selectedIdeasId.length - ideaLevel;
-      arr.splice(ideaLevel, nbToRemove, selectedIdeaId);
+      ideasArray.splice(ideaLevel, nbToRemove, selectedIdeaId);
       this.setState({
-        selectedIdeasId: arr
+        selectedIdeasId: ideasArray
       });
     }
   }
-  listIdeasToDisplay(selectedIdeaId) {
+  getIdeaChildren(selectedIdeaId) {
     const { ideas } = this.props;
-    const listedIdeas = [];
-    ideas.forEach((idea) => {
-      if (idea.parentId === selectedIdeaId) {
-        listedIdeas.push(idea);
-      }
+    return ideas.filter((idea) => {
+      return idea.parentId === selectedIdeaId;
     });
-    return listedIdeas;
   }
   render() {
     const { identifier } = this.props;
@@ -54,7 +50,7 @@ class Ideas extends React.Component {
               {this.state.selectedIdeasId.map((ideaId, index) => {
                 return (
                   <IdeasLevel
-                    ideas={this.listIdeasToDisplay(ideaId)}
+                    ideas={this.getIdeaChildren(ideaId)}
                     identifier={identifier}
                     setSelectedIdeas={this.setSelectedIdeas}
                     nbLevel={this.state.selectedIdeasId.length}
