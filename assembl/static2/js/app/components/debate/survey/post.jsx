@@ -106,7 +106,9 @@ class Post extends React.Component {
           <div className="sentimentsCountLabel">
             <Translate value="debate.survey.reactions" />
           </div>
-          <Doughnut like={post.sentimentCounts.like} disagree={post.sentimentCounts.disagree} />
+          <Doughnut
+            elements={[{ name: 'green', count: post.sentimentCounts.like }, { name: 'red', count: post.sentimentCounts.disagree }]}
+          />
           <div className="stat-sentiment">
             <div>
               <div className="min-sentiment">
