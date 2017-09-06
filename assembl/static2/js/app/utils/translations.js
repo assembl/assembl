@@ -19,8 +19,7 @@ const Translations = {
         NoResultsFound: "Aucun résultat trouvé pour {query}.",
         DidYouMean: "Rechercher pour {suggestion}.",
         SearchWithoutFilters: "Rechercher {query} sans filtres",
-        NoResultsFoundDidYouMean:
-          "Aucun résultat trouvé pour {query}. Vous vouliez peut-être {suggestion} ?"
+        NoResultsFoundDidYouMean: "Aucun résultat trouvé pour {query}. Vous vouliez peut-être {suggestion} ?"
       },
       hitstats: {
         results_found: "{hitCount} résultats trouvés"
@@ -39,10 +38,8 @@ const Translations = {
       published_on: "Publié le",
       member_since: "Membre depuis le",
       by: "par",
-      search_come_from_what_you_need_to_know:
-        'Recherche effectuée dans la section "à retenir" de cette discussion',
-      search_come_from_announcement:
-        'Recherche effectuée dans la section "consigne" de cette discussion',
+      search_come_from_what_you_need_to_know: "Recherche effectuée dans la section \"à retenir\" de cette discussion",
+      search_come_from_announcement: "Recherche effectuée dans la section \"consigne\" de cette discussion",
       expand_search: "Afficher la recherche",
       collapse_search: "Cacher la recherche",
       Categories: "Catégories",
@@ -66,16 +63,12 @@ const Translations = {
       "Most controversial messages": "Messages les plus polémiques",
       "Most consensus messages": "Messages les plus consensuels",
       "Messages judged unclear": "Messages jugés peu clairs",
-      "Participants having the most posted messages":
-        "Participants ayant le plus grand nombre de messages",
-      "Participants having the less posted messages":
-        "Participants ayant le moins grand nombre de messages",
-      "Participants pleased by their peers":
-        "Participants plébiscités par leurs pairs",
+      "Participants having the most posted messages": "Participants ayant le plus grand nombre de messages",
+      "Participants having the less posted messages": "Participants ayant le moins grand nombre de messages",
+      "Participants pleased by their peers": "Participants plébiscités par leurs pairs",
       "Filter by date": "Filtrer par période",
       "My messages": "Mes messages",
-      "Messages in response to my contributions":
-        "Messages en réponse à mes contributions",
+      "Messages in response to my contributions": "Messages en réponse à mes contributions",
       "Creative participants": "Participants créatifs",
       "Reactive participants": "Participants réactifs",
       "Learning participants": "Participants apprenants"
@@ -117,23 +110,16 @@ const Translations = {
       accountCreatedMsg:
         "Un email de confirmation vient de vous être envoyé et devrait être dans votre boîte de réception dans quelques minutes. Il contient un lien de confirmation, veuillez cliquer dessus afin de confirmer votre adresse email. Si l'email n'est pas arrivé dans votre boîte de réception, veuillez vérifier dans vos spams.",
       changePassword: "Changez votre mot de passe",
-      incorrectPassword:
-        "Les mots de passe que vous avez écrits ne correspondent pas",
-      somethingWentWrong:
-        "Nous sommes desolés ! Quelque chose s'est mal passé. Veuillez ré-essayer",
+      incorrectPassword: "Les mots de passe que vous avez écrits ne correspondent pas",
+      somethingWentWrong: "Nous sommes desolés ! Quelque chose s'est mal passé. Veuillez ré-essayer",
       userName: "Nom d'utilisateur (optionnel)",
-      passwordChangeRequestSuccess:
-        "Super ! Un e-mail vous a été envoyé. Assurez-vous de vérifier également votre dossier spam",
-      passwordChangeRequestError:
-        "Oh oh ! Il semble y avoir un problème de notre côté. Veuillez réessayer plus tard",
+      passwordChangeRequestSuccess: "Super ! Un e-mail vous a été envoyé. Assurez-vous de vérifier également votre dossier spam",
+      passwordChangeRequestError: "Oh oh ! Il semble y avoir un problème de notre côté. Veuillez réessayer plus tard",
       invalidEmail: "L’e-mail que vous avez renseigné est invalide",
-      existingUsername:
-        "Le nom d’utilisateur que vous avez renseigné existe déjà",
+      existingUsername: "Le nom d’utilisateur que vous avez renseigné existe déjà",
       existingEmail: "L’e-mail que vous avez renseigné existe déjà",
-      emailNotFound:
-        "L’e-mail que vous avez renseigné n’a pas été trouvé. Veuillez réessayer.",
-      incorrectPasswordLogin:
-        "Le mot de passe que vous avez entré ne correspond pas avec l’utilisateur saisi. Veuillez réessayer.",
+      emailNotFound: "L’e-mail que vous avez renseigné n’a pas été trouvé. Veuillez réessayer.",
+      incorrectPasswordLogin: "Le mot de passe que vous avez entré ne correspond pas avec l’utilisateur saisi. Veuillez réessayer.",
       newPassword: "Nouveau mot de passe",
       newPassword2: "Ré-entrez le nouveau mot de passe"
     },
@@ -148,8 +134,7 @@ const Translations = {
       viewedPages: "pages vues",
       partners: "Partenaires",
       themesTitle: "Les thématiques du débat en cours",
-      themesSubtitle:
-        "Retrouvez vos discussions à la unes, des plus polémiques au plus plébiscitées",
+      themesSubtitle: "Retrouvez vos discussions à la unes, des plus polémiques au plus plébiscitées",
       controversial: "Discussions polémiques",
       longerThread: "Thread le plus long",
       topContributor: "Top contributeur",
@@ -206,27 +191,22 @@ const Translations = {
         reactions: "Réactions",
         react: "Réagissez :",
         moreProposals: "Voir plus de propositions",
-        noProposals:
-          "Il n'y a pas de propositions. Soyez le premier à contribuer !",
+        noProposals: "Il n'y a pas de propositions. Soyez le premier à contribuer !",
         submit: "Envoyer",
-        postSuccess:
-          "Merci pour votre participation. Votre proposition a bien été envoyée !",
+        postSuccess: "Merci pour votre participation. Votre proposition a bien été envoyée !",
         endPhase: "La phase %{closedPhaseName} est terminée."
       },
       thread: {
-        postDeletedByAdmin:
-          "Ce message a été supprimé par l'administrateur du débat. ",
+        postDeletedByAdmin: "Ce message a été supprimé par l'administrateur du débat. ",
         postDeletedByUser: "Ce message a été supprimé par son auteur. ",
         postEdited: "modifié",
-        postSuccess:
-          "Merci pour votre participation. Votre message a bien été envoyé !",
+        postSuccess: "Merci pour votre participation. Votre message a bien été envoyé !",
         fillSubject: "Veuillez écrire un titre",
         fillBody: "Veuillez écrire un message",
         linkIdea: "Ce post est en lien avec les thématiques suivantes :",
         foldedPostLink: "Voir les %{count} réponses",
         foldedPostLink_1: "Voir la réponse",
-        noPostsInThread:
-          "Soyez le premier à contribuer, démarrez une discussion !",
+        noPostsInThread: "Soyez le premier à contribuer, démarrez une discussion !",
         numberOfResponses: "%{count} réponses à ce post",
         numberOfResponses_0: "Aucune réponse à ce post",
         numberOfResponses_1: "%{count} réponse à ce post",
@@ -238,8 +218,7 @@ const Translations = {
         seeSubIdeas_1: "Voir le sous-thème"
       },
       themes: "Thèmes",
-      notStarted:
-        "La phase %{phaseName} n'a pas encore commencé. Merci de revenir à partir du ",
+      notStarted: "La phase %{phaseName} n'a pas encore commencé. Merci de revenir à partir du ",
       edit: {
         title: "Je modifie mon message",
         subject: "Titre",
@@ -281,8 +260,7 @@ const Translations = {
         1: "Renseigner les questions",
         2: "Exporter les données"
       },
-      annotation:
-        "Module à renseigner obligatoirement. Les champs * sont requis.",
+      annotation: "Module à renseigner obligatoirement. Les champs * sont requis.",
       themeNum: "Thématique %{index}",
       ph: {
         title: "*Titre",
@@ -293,8 +271,7 @@ const Translations = {
       },
       surveyExport: {
         title: "Exporter les données du débat",
-        annotation:
-          "Vous pouvez exporter l'ensemble des données du débat en cliquant simplement sur le bouton Exporter",
+        annotation: "Vous pouvez exporter l'ensemble des données du débat en cliquant simplement sur le bouton Exporter",
         link: "Exporter"
       },
       step_x_total: "Section %{num} sur %{total}",
@@ -302,8 +279,7 @@ const Translations = {
       successThemeCreation: "Les thématiques ont été enregistrées avec succès !"
     },
     unauthorizedAdministration: {
-      unauthorizedMessage:
-        "Vous n'êtes pas autorisé à accéder à l'administration. Veuillez contacter l'administrateur du site.",
+      unauthorizedMessage: "Vous n'êtes pas autorisé à accéder à l'administration. Veuillez contacter l'administrateur du site.",
       returnButton: "Retour à l'accueil"
     },
     date: {
@@ -328,8 +304,7 @@ const Translations = {
         NoResultsFound: "No results found for {query}.",
         DidYouMean: "Search for {suggestion}.",
         SearchWithoutFilters: "Search for {query} without filters",
-        NoResultsFoundDidYouMean:
-          "No results found for {query}. Did you mean {suggestion}?"
+        NoResultsFoundDidYouMean: "No results found for {query}. Did you mean {suggestion}?"
       },
       hitstats: {
         results_found: "{hitCount} results found"
@@ -345,10 +320,8 @@ const Translations = {
         from: "From",
         to: "To"
       },
-      search_come_from_what_you_need_to_know:
-        'Search done in the "What you need to know" section of this discussion',
-      search_come_from_announcement:
-        'Search done in the "announcement" section of this discussion',
+      search_come_from_what_you_need_to_know: "Search done in the \"What you need to know\" section of this discussion",
+      search_come_from_announcement: "Search done in the \"announcement\" section of this discussion",
       published_on: "Published on",
       member_since: "Member since",
       by: "by",
@@ -375,16 +348,12 @@ const Translations = {
       "Most controversial messages": "Most controversial messages",
       "Most consensus messages": "Most consensus messages",
       "Messages judged unclear": "Messages judged unclear",
-      "Participants having the most posted messages":
-        "Participants having the most posted messages",
-      "Participants having the less posted messages":
-        "Participants having the less posted messages",
-      "Participants pleased by their peers":
-        "Participants pleased by their peers",
+      "Participants having the most posted messages": "Participants having the most posted messages",
+      "Participants having the less posted messages": "Participants having the less posted messages",
+      "Participants pleased by their peers": "Participants pleased by their peers",
       "Filter by date": "Filter by date",
       "My messages": "My messages",
-      "Messages in response to my contributions":
-        "Messages in response to my contributions",
+      "Messages in response to my contributions": "Messages in response to my contributions",
       "Creative participants": "Creative participants",
       "Reactive participants": "Reactive participants",
       "Learning participants": "Learning participants"
@@ -427,20 +396,15 @@ const Translations = {
         "A confirmation e-mail has been sent to your account and should be in your inbox in a few minutes. It contains a confirmation link, please click on it in order to confirm your e-mail address. Check your spam folder if you did not receive a confirmation e-mail.",
       changePassword: "Change Password",
       incorrectPassword: "The passwords that you have entered do not match",
-      somethingWentWrong:
-        "We are sorry! Something went terribly wrong. Please try again",
+      somethingWentWrong: "We are sorry! Something went terribly wrong. Please try again",
       userName: "Username (optional)",
-      passwordChangeRequestSuccess:
-        "Great! An email has been sent to your account. Make sure to check your spam folder as well",
-      passwordChangeRequestError:
-        "Oh oh! There seems to be a problem on our end. Please try again later.",
+      passwordChangeRequestSuccess: "Great! An email has been sent to your account. Make sure to check your spam folder as well",
+      passwordChangeRequestError: "Oh oh! There seems to be a problem on our end. Please try again later.",
       invalidEmail: "The email you have entered is invalid",
       existingUsername: "The username you have entered already exists",
       existingEmail: "The email you have entered already exists",
-      emailNotFound:
-        "The email you have entered was not found. Please try again.",
-      incorrectPasswordLogin:
-        "The password you have entered does not match with the entered user. Please try again.",
+      emailNotFound: "The email you have entered was not found. Please try again.",
+      incorrectPasswordLogin: "The password you have entered does not match with the entered user. Please try again.",
       newPassword: "New password",
       newPassword2: "Re-enter new password"
     },
@@ -455,8 +419,7 @@ const Translations = {
       viewedPages: "Viewed pages",
       partners: "Partners",
       themesTitle: "Themes of the ongoing debate",
-      themesSubtitle:
-        "Find your most controversial and highly acclaimed discussions on the front page",
+      themesSubtitle: "Find your most controversial and highly acclaimed discussions on the front page",
       controversial: "Controversial discussions",
       longerThread: "Longer thread",
       topContributor: "Top contributor",
@@ -513,20 +476,16 @@ const Translations = {
         reactions: "Reactions",
         react: "React:",
         moreProposals: "More points of view",
-        noProposals:
-          "There is no point of view for the moment. Be the first to contribute!",
+        noProposals: "There is no point of view for the moment. Be the first to contribute!",
         submit: "Submit",
-        postSuccess:
-          "Thanks for your participation. Your proposal has been sent!",
+        postSuccess: "Thanks for your participation. Your proposal has been sent!",
         endPhase: "The %{closedPhaseName} phase is closed."
       },
       thread: {
-        postDeletedByAdmin:
-          "This message has been deleted by the community manager.",
+        postDeletedByAdmin: "This message has been deleted by the community manager.",
         postDeletedByUser: "This message has been deleted by the author.",
         postEdited: "edited",
-        postSuccess:
-          "Thanks for your participation. Your comment has been sent!",
+        postSuccess: "Thanks for your participation. Your comment has been sent!",
         fillSubject: "Please, write a title",
         fillBody: "Please, write a comment",
         linkIdea: "This post is related to the following themes:",
@@ -544,8 +503,7 @@ const Translations = {
         seeSubIdeas_1: "See sub-thematic"
       },
       themes: "Themes",
-      notStarted:
-        "The %{phaseName} phase has not started. Please come back from ",
+      notStarted: "The %{phaseName} phase has not started. Please come back from ",
       edit: {
         title: "I edit my message",
         subject: "Body",
@@ -598,8 +556,7 @@ const Translations = {
       },
       surveyExport: {
         title: "Export the debate data",
-        annotation:
-          "You can export all the debate data by clicking on the Export button",
+        annotation: "You can export all the debate data by clicking on the Export button",
         link: "Export"
       },
       step_x_total: "Section %{num} on %{total}",
