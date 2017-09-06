@@ -154,7 +154,7 @@ query Idea($lang: String!, $id: ID!) {
         u'idea': {
             u'title': u'Understanding the dynamics and issues',
             u'longTitle': u'What you need to know',
-            u'description': None,
+            u'description': u'',
             u'imgUrl': None
     }}
 
