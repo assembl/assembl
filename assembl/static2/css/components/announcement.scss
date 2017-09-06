@@ -1,0 +1,30 @@
+.announcement {
+  text-align: center;
+
+  .announcement-title {
+    text-align: left;
+  }
+
+  .statistics-container{
+    display: inline-block;
+
+    .statistics {
+      width: 140px;
+      height: 140px;
+      position: relative;
+
+      .superpose {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+      }
+
+      .superpose-label {
+        top: 4.8em;
+        font-size: 0.75em;
+      }
+    }
+  }
+}
