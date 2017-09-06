@@ -154,7 +154,6 @@ class Child extends React.PureComponent {
                 InnerComponentFolded={InnerComponentFolded}
                 SeparatorComponent={SeparatorComponent}
                 fullLevel={fullLevelNew}
-                numChildren={numChildren}
               />
             );
           })

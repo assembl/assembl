@@ -91,8 +91,6 @@ class Post extends React.PureComponent {
     } = this.props.data.post;
     const { lang, ideaId, refetchIdea, creationDate, fullLevel, numChildren } = this.props;
     // creationDate is retrieved by IdeaWithPosts query, not PostQuery
-    console.log(numChildren);
-
     if (publicationState in DeletedPublicationStates) {
       return (
         <DeletedPost id={id} subject={subject} deletedBy={publicationState === PublicationStates.DELETED_BY_USER ? 'user' : 'admin'} />
@@ -149,7 +147,7 @@ class Post extends React.PureComponent {
                 </div>
               ) : null}
               <div className="answers annotation">
-                <Translate value="debate.thread.numberOfResponses" count={numChildren || 0} />
+                <Translate value="debate.thread.numberOfResponses" count={numChildren} />
               </div>
             </Col>
             <Col xs={12} md={1} className="post-right">
@@ -160,7 +158,7 @@ class Post extends React.PureComponent {
                 handleEditClick={this.handleEditClick}
                 sentimentCounts={sentimentCounts}
                 mySentiment={mySentiment}
-                postChildren={numChildren}
+                numChildren={numChildren}
               />
             </Col>
           </Row>

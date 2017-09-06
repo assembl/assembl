@@ -34,16 +34,7 @@ class PostActions extends React.Component {
     });
   }
   render() {
-    const {
-      client,
-      creatorUserId,
-      postId,
-      sentimentCounts,
-      mySentiment,
-      handleAnswerClick,
-      handleEditClick,
-      postChildren
-    } = this.props;
+    const { client, creatorUserId, postId, sentimentCounts, mySentiment, handleAnswerClick, handleEditClick, numChildren } = this.props;
     let count = 0;
     const totalSentimentsCount = sentimentCounts
       ? sentimentCounts.like + sentimentCounts.disagree + sentimentCounts.dontUnderstand + sentimentCounts.moreInfo
@@ -66,9 +57,11 @@ class PostActions extends React.Component {
             overlay={getOverflowMenuForPost(postId, userCanDeleteThisMessage, userCanEditThisMessage, client, handleEditClick)}
           >
             <div>
-              {this.state.screenWidth >= MEDIUM_SCREEN_WIDTH
-                ? <span className="assembl-icon-ellipsis-vert">&nbsp;</span>
-                : <span className="assembl-icon-ellipsis">&nbsp;</span>}
+              {this.state.screenWidth >= MEDIUM_SCREEN_WIDTH ? (
+                <span className="assembl-icon-ellipsis-vert">&nbsp;</span>
+              ) : (
+                <span className="assembl-icon-ellipsis">&nbsp;</span>
+              )}
             </div>
           </OverlayTrigger>
         </div>
@@ -77,13 +70,13 @@ class PostActions extends React.Component {
     return (
       <div>
         <div className="post-icons">
-          {connectedUserCan(Permissions.ADD_POST)
-            ? <div className="post-action" onClick={handleAnswerClick}>
+          {connectedUserCan(Permissions.ADD_POST) ? (
+            <div className="post-action" onClick={handleAnswerClick}>
               <OverlayTrigger placement={this.state.screenWidth >= MEDIUM_SCREEN_WIDTH ? 'right' : 'top'} overlay={answerTooltip}>
                 <span className="assembl-icon-back-arrow color" />
               </OverlayTrigger>
             </div>
-            : null}
+          ) : null}
           <div className="post-action">
             <OverlayTrigger placement={this.state.screenWidth >= MEDIUM_SCREEN_WIDTH ? 'right' : 'top'} overlay={shareTooltip}>
               <span className="assembl-icon-share color" />
@@ -92,7 +85,7 @@ class PostActions extends React.Component {
           <Sentiments mySentiment={mySentiment} screenWidth={this.state.screenWidth} client={client} postId={postId} />
           {this.state.screenWidth >= MEDIUM_SCREEN_WIDTH ? null : overflowMenu}
         </div>
-        {totalSentimentsCount > 0 &&
+        {totalSentimentsCount > 0 && (
           <OverlayTrigger overlay={getSentimentStats(totalSentimentsCount, sentimentCounts, mySentiment)} placement="right">
             <div className="sentiments-count margin-m">
               <div>
@@ -108,15 +101,18 @@ class PostActions extends React.Component {
                 }, [])}
               </div>
               <div className="txt">
-                {this.state.screenWidth >= MEDIUM_SCREEN_WIDTH
-                  ? totalSentimentsCount
-                  : <Translate value="debate.thread.numberOfReactions" count={totalSentimentsCount} />}
+                {this.state.screenWidth >= MEDIUM_SCREEN_WIDTH ? (
+                  totalSentimentsCount
+                ) : (
+                  <Translate value="debate.thread.numberOfReactions" count={totalSentimentsCount} />
+                )}
               </div>
             </div>
-          </OverlayTrigger>}
+          </OverlayTrigger>
+        )}
         {this.state.screenWidth >= MEDIUM_SCREEN_WIDTH ? overflowMenu : null}
         <div className="answers annotation">
-          <Translate value="debate.thread.numberOfResponses" count={postChildren ? postChildren.length : 0} />
+          <Translate value="debate.thread.numberOfResponses" count={numChildren ? numChildren.length : 0} />
         </div>
         <div className="clear">&nbsp;</div>
       </div>
