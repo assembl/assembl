@@ -1,4 +1,4 @@
-/* eslint max-len: "off" */
+/* eslint max-len: "off", quotes: ["error", "double"] */
 const Translations = {
   fr: {
     "Number of contributions": "Nombre de messages",

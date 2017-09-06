@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { scrollToPosition, getDiscussionId } from './utils/globalFunctions';
+import { scrollToPosition } from './utils/globalFunctions';
 import { getCurrentPhaseIdentifier } from './utils/timeline';
 import { addRedirectionToV1 } from './actions/phaseActions';
 import Navbar from './components/common/navbar';
