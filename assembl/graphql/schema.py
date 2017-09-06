@@ -1267,7 +1267,7 @@ class CreatePost(graphene.Mutation):
                     locale = discussion.main_locale
 
                 if subject:
-                    new_subject = restrip_pat.sub('', subject).strip()
+                    new_subject = u'Re: ' + restrip_pat.sub('', subject).strip()
                     if (in_reply_to_post and new_subject == subject and
                         in_reply_to_post.get_title()):
                         # reuse subject and translations
