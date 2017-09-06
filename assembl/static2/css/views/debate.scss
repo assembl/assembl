@@ -194,25 +194,37 @@
     position: relative;
     z-index: 10;
 
+    .max-container {
+      max-width: 45%;
+    }
+
+    .wyntk-box {
+      top: 20%;
+      height: 73%;
+      width: 350px;
+
+      .wyntk-title {
+        text-transform: uppercase;
+        margin-top: 10%;
+        margin-bottom: 1%;
+        margin-left: 1%;
+      }
+
+      .wyntk-text {
+        overflow-y: scroll;
+        overflow-x: hidden;
+        color: rgba($first-color, 0.7);
+        margin-top: 5%;
+        margin-left: 1%;
+        height: 70%;
+      }
+    }
+
     .header-content {
       margin: $margin-section 0 0;
       position: relative;
       text-align: center;
       z-index: 2;
-
-      .wyntk-box {
-        top: -30px;
-        height: 100%;
-        .wyntk-title {
-          text-transform: uppercase;
-        }
-        .wyntk-text {
-          overflow-y: scroll;
-          overflow-x: hidden;
-          color: rgba($first-color, 0.7);
-          height: 72%;
-        }
-      }
 
       .max-text-width {
         margin: 0 auto;
