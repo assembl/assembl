@@ -98,7 +98,7 @@ const VideoForm = ({
   );
 };
 
-const getEntryValueForLocale = (entries, locale, defaultValue = undefined) => {
+const getEntryValueForLocale = (entries, locale, defaultValue = null) => {
   const entry = entries.find((e) => {
     return e.get('localeCode') === locale;
   });
@@ -122,9 +122,9 @@ export const mapStateToProps = ({ admin: { thematicsById } }, { thematicId, sele
     title = getEntryValueForLocale(video.get('titleEntries'), selectedLocale, '');
   }
   return {
-    descriptionTop: descriptionTop ? descriptionTop.toJS() : undefined,
-    descriptionBottom: descriptionBottom ? descriptionBottom.toJS() : undefined,
-    descriptionSide: descriptionSide ? descriptionSide.toJS() : undefined,
+    descriptionTop: descriptionTop ? descriptionTop.toJS() : null,
+    descriptionBottom: descriptionBottom ? descriptionBottom.toJS() : null,
+    descriptionSide: descriptionSide ? descriptionSide.toJS() : null,
     hasVideo: hasVideo,
     htmlCode: htmlCode,
     title: title

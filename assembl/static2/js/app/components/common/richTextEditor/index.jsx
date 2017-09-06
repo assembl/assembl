@@ -58,6 +58,8 @@ export default class RichTextEditor extends React.PureComponent<Object, RichText
         editorState: EditorState.createEmpty()
       });
     }
+
+    this.state.editorState = EditorState.createWithContent(convertFromRaw(nextProps.rawContentState));
   }
 
   onBlur = () => {
