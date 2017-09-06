@@ -14,6 +14,7 @@ import { inviteUserToLogin, displayAlert } from '../../../utils/utilityManager';
 import addSentimentMutation from '../../../graphql/mutations/addSentiment.graphql';
 import deleteSentimentMutation from '../../../graphql/mutations/deleteSentiment.graphql';
 import { likeTooltip, disagreeTooltip } from '../../common/tooltips';
+import { sentimentDefinitionsObject } from '../thread/sentimentDefinitions';
 
 class Post extends React.Component {
   constructor(props) {
@@ -107,7 +108,10 @@ class Post extends React.Component {
             <Translate value="debate.survey.reactions" />
           </div>
           <Doughnut
-            elements={[{ name: 'green', count: post.sentimentCounts.like }, { name: 'red', count: post.sentimentCounts.disagree }]}
+            elements={[
+              { color: sentimentDefinitionsObject.like.color, count: post.sentimentCounts.like },
+              { color: sentimentDefinitionsObject.disagree.color, count: post.sentimentCounts.disagree }
+            ]}
           />
           <div className="stat-sentiment">
             <div>
