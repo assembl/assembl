@@ -5381,9 +5381,9 @@ react-test-renderer@^15.4.1:
     fbjs "^0.8.9"
     object-assign "^4.1.0"
 
-react-tweet-embed@^1.0.7:
-  version "1.0.7"
-  resolved "https://registry.yarnpkg.com/react-tweet-embed/-/react-tweet-embed-1.0.7.tgz#102d63d9e4d2cca36275554358b4d0f9de06cfc3"
+react-tweet-embed@^1.0.8:
+  version "1.0.8"
+  resolved "https://registry.yarnpkg.com/react-tweet-embed/-/react-tweet-embed-1.0.8.tgz#5d339b27d05d9f8e9a7d277f3ed80d12f38824d9"
 
 react-virtualized@^9.9.0:
   version "9.9.0"
