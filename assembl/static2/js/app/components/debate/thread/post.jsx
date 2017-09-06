@@ -127,7 +127,7 @@ class Post extends React.PureComponent {
                 />}
               <h3 className="dark-title-3">
                 {getFullLevelString(fullLevel)}
-                {subject}
+                {subject.replace('Re: ', '')}
               </h3>
               <div className={`body ${bodyMimeType === 'text/plain' ? 'pre-wrap' : ''}`} dangerouslySetInnerHTML={{ __html: body }} />
               {indirectIdeaContentLinks.length
