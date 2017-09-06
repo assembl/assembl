@@ -65,7 +65,6 @@
     "node-bourbon": "~4.2.8",
     "node-gyp": "~3",
     "node-sass": "~3.8.0",
-    "phantomjs-prebuilt": "~2.1.7",
     "po2json": "~0.4.1",
     "postcss": "~5.0.0",
     "sinon": "~1.17.3",

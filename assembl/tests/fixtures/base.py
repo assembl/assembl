@@ -293,11 +293,13 @@ def browser(request):
     """A Splinter-based browser fixture - used for integration
     testing"""
 
-    from os.path import dirname
-    # interference from system phantomjs
-    phantomjs = dirname(dirname(dirname(dirname(__file__)))) +\
-        "/assembl/static/js/node_modules/.bin/phantomjs"
-    browser = Browser('phantomjs', executable_path=phantomjs)
+    import sys
+    import os
+    from os.path import exists
+    if sys.platform == 'linux2' and exists(
+            '/usr/lib/chromium-browser/chromedriver'):
+        os.environ["PATH"] += ":/usr/lib/chromium-browser"
+    browser = Browser('chrome', headless=True)
 
     def fin():
         import signal
