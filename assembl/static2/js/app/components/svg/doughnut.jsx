@@ -1,39 +1,36 @@
 import React from 'react';
 import { calculatePercentage } from '../../utils/globalFunctions';
 
-class Circle extends React.Component {
-  render() {
-    const { like, disagree } = this.props;
-    const totalCount = like + disagree;
-    const radius = 2.5;
-    const circumference = 2 * radius * Math.PI;
-    const green = (100 - calculatePercentage(like, totalCount)) / 100;
-    const red = (100 - calculatePercentage(disagree, totalCount)) / 100;
-    const redOffset = -circumference * red;
-    const greenOffset = circumference * green;
-    return (
-      <svg className="doughnut" height="10em" width="10em">
-        <circle
-          className="circle radial-red"
-          r={`${radius}em`}
-          cx={`${5}em`}
-          cy={`${5}em`}
-          fill="transparent"
-          strokeDasharray={`-${circumference}em`}
-          strokeDashoffset={`${redOffset}em`}
-        />
-        <circle
-          className="circle radial-green"
-          r={`${radius}em`}
-          cx={`${5}em`}
-          cy={`${5}em`}
-          fill="transparent"
-          strokeDasharray={`${circumference}em`}
-          strokeDashoffset={`${greenOffset}em`}
-        />
-      </svg>
-    );
-  }
-}
-
-export default Circle;
+export default ({ like, disagree }) => {
+  const totalCount = like + disagree;
+  const radius = 2.5;
+  const circumference = 2 * radius * Math.PI;
+  const elements = [{ name: 'green', count: like }, { name: 'red', count: disagree }];
+  let lastSize = 0;
+  return (
+    <svg className="doughnut" height="10em" width="10em">
+      {elements
+        .filter(({ count }) => {
+          return count > 0;
+        })
+        .map(({ name, count }, index) => {
+          const normalizedSize = calculatePercentage(count, totalCount) / 100;
+          const offset = lastSize;
+          const size = circumference * normalizedSize;
+          lastSize = size;
+          const gap = circumference - size;
+          return (
+            <circle
+              key={index}
+              className={`circle radial-${name}`}
+              r={`${radius}em`}
+              cx={`${5}em`}
+              cy={`${5}em`}
+              strokeDasharray={`${size}em ${gap}em`}
+              strokeDashoffset={`${offset}em`}
+            />
+          );
+        })}
+    </svg>
+  );
+};

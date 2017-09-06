@@ -65,42 +65,15 @@
   padding: 10px 0 0;
 }
 
-$like-color: #46D081;
-#likeTooltip {
-  .tooltip-inner {
-    background-color: $like-color;
-  }
-  .tooltip-arrow {
-    border-right-color: $like-color;
-  }
+@mixin color-tooltip($color) {
+  .tooltip-inner { background-color: $color; }
+  &.top > .tooltip-arrow { border-top-color: $color; }
+  &.right > .tooltip-arrow { border-right-color: $color; }
+  &.bottom > .tooltip-arrow { border-bottom-color: $color; }
+  &.left > .tooltip-arrow { border-left-color: $color; }
 }
 
-$disagree-color: #F2474D;
-#disagreeTooltip {
-  .tooltip-inner {
-    background-color: $disagree-color;
-  }
-  .tooltip-arrow {
-    border-right-color: $disagree-color;
-  }
-}
-
-$dontUnderstand-color: #FAC16F;
-#dontUnderstandTooltip {
-  .tooltip-inner {
-    background-color: $dontUnderstand-color;
-  }
-  .tooltip-arrow {
-    border-right-color: $dontUnderstand-color;
-  }
-}
-
-$moreInfo-color: #9374FF;
-#moreInfoTooltip {
-  .tooltip-inner {
-    background-color: $moreInfo-color;
-  }
-  .tooltip-arrow {
-    border-right-color: $moreInfo-color;
-  }
-}
+#likeTooltip { @include color-tooltip(#46D081); }
+#disagreeTooltip { @include color-tooltip(#F2474D); }
+#dontUnderstandTooltip { @include color-tooltip(#FAC16F); }
+#moreInfoTooltip { @include color-tooltip(#9374FF); }
