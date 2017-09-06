@@ -132,14 +132,14 @@ class Child extends React.PureComponent {
     };
     const numChildren = children ? children.length : 0;
     const expanded = this.state.expanded;
-    const forwardProps = { ...this.props };
+    const forwardProps = { ...this.props, numChildren: numChildren };
     delete forwardProps.children;
     return (
       <div className={cssClasses()}>
         <InnerComponent {...forwardProps} measureTreeHeight={this.resizeTreeHeight} />
         {numChildren > 0 ? this.renderToggleLink(expanded, level < 4) : null}
-        {numChildren > 0
-          ? children.map((child, idx) => {
+        {numChildren > 0 ? (
+          children.map((child, idx) => {
             const fullLevelNew = 'fullLevel' in this.props ? [...this.props.fullLevel] : [];
             fullLevelNew[level] = idx;
             return (
@@ -154,12 +154,13 @@ class Child extends React.PureComponent {
                 InnerComponentFolded={InnerComponentFolded}
                 SeparatorComponent={SeparatorComponent}
                 fullLevel={fullLevelNew}
+                numChildren={numChildren}
               />
             );
           })
-          : null}
-        {numChildren > 0 && !expanded
-          ? <div
+        ) : null}
+        {numChildren > 0 && !expanded ? (
+          <div
             className="postfolded-container"
             onClick={(event) => {
               if (expanded) {
@@ -172,7 +173,7 @@ class Child extends React.PureComponent {
               <InnerComponentFolded nbPosts={numChildren} />
             </div>
           </div>
-          : null}
+        ) : null}
       </div>
     );
   }
