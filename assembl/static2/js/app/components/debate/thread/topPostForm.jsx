@@ -5,8 +5,7 @@ import { I18n, Translate } from 'react-redux-i18n';
 
 import createPostMutation from '../../../graphql/mutations/createPost.graphql';
 import { convertRawContentStateToHTML, rawContentStateIsEmpty } from '../../../utils/draftjs';
-import { displayAlert, inviteUserToLogin } from '../../../utils/utilityManager';
-import { getConnectedUserId } from '../../../utils/globalFunctions';
+import { displayAlert, promptForLoginOr } from '../../../utils/utilityManager';
 import { TextInputWithRemainingChars } from '../../common/textInputWithRemainingChars';
 import RichTextEditor from '../../common/richTextEditor';
 
@@ -68,14 +67,9 @@ class TopPostForm extends React.Component {
     }
   };
 
-  handleInputFocus = () => {
-    const isUserConnected = getConnectedUserId(); // TO DO put isUserConnected in the store
-    if (!isUserConnected) {
-      inviteUserToLogin();
-    } else {
-      this.displayForm(true);
-    }
-  };
+  handleInputFocus = promptForLoginOr(() => {
+    return this.displayForm(true);
+  });
 
   updateBody = (newValue) => {
     this.setState({
