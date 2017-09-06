@@ -1,6 +1,6 @@
 import { I18n } from 'react-redux-i18n';
 import { getCurrentView, getContextual } from '../utils/routeMap';
-import { getDiscussionSlug } from '../utils/globalFunctions';
+import { getConnectedUserId, getDiscussionSlug } from '../utils/globalFunctions';
 
 /*
   Singleton object that will contain the AlertManager, ModalManager which will
@@ -72,4 +72,16 @@ export const inviteUserToLogin = () => {
     internalLink: true
   };
   displayModal(null, modalBody, true, null, button, true);
+};
+
+/* if user is not connected, ask for login, else, execute given action */
+export const promptForLoginOr = (action) => {
+  return () => {
+    const isUserConnected = getConnectedUserId(); // TO DO put isUserConnected in the store
+    if (!isUserConnected) {
+      inviteUserToLogin();
+    } else {
+      action();
+    }
+  };
 };

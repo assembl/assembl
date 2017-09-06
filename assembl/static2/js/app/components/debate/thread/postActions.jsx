@@ -7,6 +7,7 @@ import { answerTooltip, shareTooltip } from '../../common/tooltips';
 
 import getOverflowMenuForPost from './overflowMenu';
 import { getConnectedUserId } from '../../../utils/globalFunctions';
+import { promptForLoginOr } from '../../../utils/utilityManager';
 import Permissions, { connectedUserCan } from '../../../utils/permissions';
 import Sentiments from './sentiments';
 import getSentimentStats from './sentimentStats';
@@ -33,6 +34,7 @@ class PostActions extends React.Component {
       screenWidth: screenWidth
     });
   }
+
   render() {
     const { client, creatorUserId, postId, sentimentCounts, mySentiment, handleAnswerClick, handleEditClick, numChildren } = this.props;
     let count = 0;
@@ -70,13 +72,11 @@ class PostActions extends React.Component {
     return (
       <div>
         <div className="post-icons">
-          {connectedUserCan(Permissions.ADD_POST) ? (
-            <div className="post-action" onClick={handleAnswerClick}>
-              <OverlayTrigger placement={this.state.screenWidth >= MEDIUM_SCREEN_WIDTH ? 'right' : 'top'} overlay={answerTooltip}>
-                <span className="assembl-icon-back-arrow color" />
-              </OverlayTrigger>
-            </div>
-          ) : null}
+          <div className="post-action" onClick={promptForLoginOr(handleAnswerClick)}>
+            <OverlayTrigger placement={this.state.screenWidth >= MEDIUM_SCREEN_WIDTH ? 'right' : 'top'} overlay={answerTooltip}>
+              <span className="assembl-icon-back-arrow color" />
+            </OverlayTrigger>
+          </div>
           <div className="post-action">
             <OverlayTrigger placement={this.state.screenWidth >= MEDIUM_SCREEN_WIDTH ? 'right' : 'top'} overlay={shareTooltip}>
               <span className="assembl-icon-share color" />
