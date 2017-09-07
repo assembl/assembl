@@ -1,7 +1,7 @@
 // @flow
 /* draft-js plugin for attachment management */
 import { convertFromRaw, convertToRaw, Entity, Modifier, RawContentState, SelectionState } from 'draft-js';
-import type { Attachment } from '../attachments';
+import type { Document } from '../attachments';
 
 const ENTITY_TYPE = 'document';
 const BLOCK_TYPE = 'atomic';
@@ -18,7 +18,7 @@ const plugin = {
 
     return null;
   },
-  entityToHTML: (entity: { data: Attachment }, originalText: string): string => {
+  entityToHTML: (entity: { data: Document }, originalText: string): string => {
     if (entity.type === ENTITY_TYPE) {
       const { externalUrl, id, mimeType, title } = entity.data;
       if (mimeType && mimeType.startsWith('image')) {

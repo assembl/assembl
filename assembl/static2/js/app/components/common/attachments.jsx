@@ -2,14 +2,16 @@
 import React from 'react';
 import { Translate } from 'react-redux-i18n';
 
+export type Document = {
+  id: string,
+  title: string,
+  externalUrl: string,
+  mimeType?: string
+};
+
 export type Attachment = {
   id: string,
-  document: {
-    id: string,
-    title: string,
-    externalUrl: string,
-    mimeType?: string
-  }
+  document: Document
 };
 
 type AttachmentsProps = {
