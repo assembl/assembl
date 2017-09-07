@@ -39,9 +39,8 @@ const placementFromAngle = (angle) => {
 
   if ((angle >= firstQuartant && angle < 360) || (angle >= 0 && angle < secondQuartant)) return 'top';
   if (angle >= secondQuartant && angle < thirdQuartant) return 'right';
-  if (angle >= thirdQuartant && angle < fourthQuartant) return 'bottom'; // should be 'bottom' but it doesn't show up for whatever reason
+  if (angle >= thirdQuartant && angle < fourthQuartant) return 'bottom';
   if (angle >= fourthQuartant && angle < firstQuartant) return 'left';
-
   return 'right';
 };
 
