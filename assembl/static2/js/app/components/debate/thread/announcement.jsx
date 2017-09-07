@@ -39,7 +39,6 @@ export const StatisticsDoughnut = ({ elements }) => {
 class Announcement extends React.Component {
   render = () => {
     const { idea } = this.props.ideaWithPostsData;
-    console.log(this.props.ideaWithPostsData);
     const { numContributors, numPosts } = idea;
     return (
       <div className="announcement">
@@ -77,8 +76,9 @@ class Announcement extends React.Component {
                 ]}
               />
             </div>
-            <br />
-            {numPosts} <span className="assembl-icon-message" /> - {numContributors} <span className="assembl-icon-profil" />
+            <div>
+              {numPosts} <span className="assembl-icon-message" /> - {numContributors} <span className="assembl-icon-profil" />
+            </div>
           </div>
         </Col>
         <Col xs={12} md={9} className="announcement-right">
