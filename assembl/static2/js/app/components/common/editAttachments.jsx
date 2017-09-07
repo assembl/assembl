@@ -11,12 +11,13 @@ type EditAttachmentsProps = {
 const EditAttachments = ({ attachments, onDelete }: EditAttachmentsProps) => {
   return (
     <div className="attachments">
-      {attachments.map((attachment, idx) => {
+      {attachments.map((attachment) => {
+        const { externalUrl, title } = attachment.document;
         return (
-          <div className="attachment" key={idx}>
+          <div className="attachment" key={attachment.id}>
             <span className="assembl-icon-text-attachment" />
-            <a href={attachment.externalUrl} target="_blank" rel="noopener noreferrer">
-              {attachment.title || attachment.externalUrl}
+            <a href={externalUrl} target="_blank" rel="noopener noreferrer">
+              {title || externalUrl}
             </a>
             <span
               className="assembl-icon-delete"

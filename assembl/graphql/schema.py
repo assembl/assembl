@@ -360,6 +360,15 @@ class Document(SecureObjectType, SQLAlchemyObjectType):
     external_url = graphene.String()
 
 
+class PostAttachment(SecureObjectType, SQLAlchemyObjectType):
+    class Meta:
+        model = models.PostAttachment
+        only_fields = ('id',)
+
+    document = graphene.Field(Document)
+
+
+
 class PostInterface(SQLAlchemyInterface):
     class Meta:
         model = models.Post
@@ -380,7 +389,7 @@ class PostInterface(SQLAlchemyInterface):
     parent_id = graphene.ID()
     body_mime_type = graphene.String(required=True)
     publication_state = graphene.Field(type=PublicationStates)
-    attachments = graphene.List(Document)
+    attachments = graphene.List(PostAttachment)
 
     def resolve_subject(self, args, context, info):
         # Use self.subject and not self.get_subject() because we still
@@ -482,9 +491,6 @@ class PostInterface(SQLAlchemyInterface):
 
     def resolve_publication_state(self, args, context, info):
         return self.publication_state.name
-
-    def resolve_attachments(self, args, context, info):
-        return [attachment.document for attachment in self.attachments]
 
 
 
@@ -1732,29 +1738,24 @@ class AddPostAttachment(graphene.Mutation):
 class DeletePostAttachment(graphene.Mutation):
     class Input:
         post_id = graphene.ID(required=True)
-        document_id = graphene.Int(required=True)
+        attachment_id = graphene.Int(required=True)
 
     post = graphene.Field(lambda: Post)
 
     @staticmethod
     def mutate(root, args, context, info):
         discussion_id = context.matchdict['discussion_id']
-        discussion = models.Discussion.get(discussion_id)
-
         user_id = context.authenticated_userid or Everyone
-
         post_id = args.get('post_id')
         post_id = int(Node.from_global_id(post_id)[1])
         post = models.Post.get(post_id)
-
         permissions = get_permissions(user_id, discussion_id)
+        post_attachment_id = args.get('attachment_id')
+        post_attachment = models.PostAttachment.get(post_attachment_id)
         allowed = post_attachment.user_can(user_id, CrudPermissions.DELETE, permissions)
         if not allowed:
             raise HTTPUnauthorized()
 
-        document_id = args.get('document_id')
-        post_attachment = post.db.query(models.PostAttachment).filter_by(
-            discussion_id=discussion_id, post_id=post_id, document_id=document_id).first()
         post.attachments.remove(post_attachment)
         post.db.flush()
 

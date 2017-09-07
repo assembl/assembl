@@ -113,13 +113,13 @@ class EditPostForm extends React.PureComponent<void, EditPostFormProps, EditPost
     }
   };
 
-  deleteAttachment = (documentId) => {
+  deleteAttachment = (attachmentId) => {
     const variables = {
-      documentId: documentId,
+      attachmentId: attachmentId,
       postId: this.props.id
     };
     this.setState({
-      body: attachmentsPlugin.removeAttachment(this.state.body, documentId)
+      body: attachmentsPlugin.removeAttachment(this.state.body, attachmentId)
     });
     this.props.deletePostAttachment({ variables: variables }).then(() => {
       this.props.refetchIdea();
