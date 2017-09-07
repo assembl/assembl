@@ -58,12 +58,18 @@ const circlePaths = (elements, totalCount) => {
         <path d={describeArc(70, 70, 35, startAngle, endAngle)} stroke={color} fill="transparent" className={'circle'} />
       </OverlayTrigger>
     ) : (
-      <path key={index} d={describeArc(70, 70, 35, startAngle, endAngle)} stroke={color} fill="transparent" className={'circle'} />
+      <path
+        key={index}
+        d={describeArc(70, 70, 35, startAngle, endAngle)}
+        stroke={color}
+        fill="transparent"
+        className={'circle'}
+      />
     );
   });
 };
 
-export default ({ elements }) => {
+export default ({ elements, strokeWidth }) => {
   const filteredElements = elements.filter(({ count }) => {
     return count > 0;
   });
@@ -74,7 +80,11 @@ export default ({ elements }) => {
     false
   ) : (
     <svg className="doughnut" viewBox="0 0 140 140">
-      {filteredElements.length === 1 ? simpleCircle(filteredElements[0]) : circlePaths(filteredElements, totalCount)}
+      {filteredElements.length === 1 ? (
+        simpleCircle(filteredElements[0], strokeWidth)
+      ) : (
+        circlePaths(filteredElements, totalCount, strokeWidth)
+      )}
     </svg>
   );
 };
