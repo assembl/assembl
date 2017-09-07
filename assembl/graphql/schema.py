@@ -1656,7 +1656,7 @@ class UploadDocument(graphene.Mutation):
         cls = models.Document
         permissions = get_permissions(user_id, discussion_id)
         allowed = cls.user_can_cls(user_id, CrudPermissions.CREATE, permissions)
-        if not allowed:
+        if not allowed or (allowed == IF_OWNED and user_id == Everyone):
             raise HTTPUnauthorized()
 
         uploaded_file = args.get('file')
