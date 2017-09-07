@@ -1,6 +1,6 @@
 // @flow
 /* draft-js plugin for attachment management */
-import { convertFromRaw, Entity, RawContentState } from 'draft-js';
+import { convertFromRaw, convertToRaw, Entity, Modifier, RawContentState, SelectionState } from 'draft-js';
 import type { Attachment } from '../attachments';
 
 const ENTITY_TYPE = 'document';
@@ -63,6 +63,36 @@ const plugin = {
       });
     });
     return attachments;
+  },
+  removeAttachment: (rawContentState: RawContentState, documentId: string): RawContentState => {
+    let contentState = convertFromRaw(rawContentState);
+    let targetBlock = null;
+    contentState.getBlockMap().forEach((block) => {
+      block.findEntityRanges((entityRange) => {
+        const entityKey = entityRange.entity;
+        if (entityKey) {
+          const entity = contentState.getEntity(entityKey);
+          if (entity && entity.data.id && entity.data.id === documentId) {
+            targetBlock = block;
+          }
+        }
+      });
+    });
+
+    if (targetBlock) {
+      const targetRange = new SelectionState({
+        anchorKey: targetBlock.key,
+        anchorOffset: 0,
+        focusKey: targetBlock.key,
+        focusOffset: 1
+      });
+
+      contentState = Modifier.removeRange(contentState, targetRange, 'backward');
+      contentState = Modifier.setBlockType(contentState, targetRange, 'unstyled');
+      return convertToRaw(contentState);
+    }
+
+    return rawContentState;
   }
 };
 
