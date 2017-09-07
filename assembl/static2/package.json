@@ -16,6 +16,7 @@
     "eslint:fix": "eslint . --ext .js --ext .jsx --fix",
     "eslint:table": "eslint . --ext .js --ext .jsx --cache --format table",
     "eslint:summary": "eslint . --ext .js --ext .jsx --cache --format 'node_modules/eslint-friendly-formatter'",
+    "format": "prettier-eslint --write 'js/**/*.js?' 'tests/**/*.js?'",
     "i18n:export": "node ./scripts/translations2messages.js && rip json2pot messages.json -k id -o ../locale/assembl-v2.pot && ./scripts/merge_po_files.bash",
     "i18n:import": "rip po2json '../locale/assembl-v2/*.po' -m messages.json -k id -o './translations'"
   },
@@ -52,6 +53,9 @@
     "jest": "^20.0.4",
     "jest-transform-graphql": "^2.1.0",
     "node-sass": "^4.5.3",
+    "prettier": "1.5.3",
+    "prettier-eslint": "6.4.3",
+    "prettier-eslint-cli": "4.2.3",
     "react-test-renderer": "^15.4.1",
     "sass-loader": "^6.0.6",
     "style-loader": "^0.18.2",
