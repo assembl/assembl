@@ -276,6 +276,7 @@ const Translations = {
       menu: {
         phase: "Phase %{count} - %{description}"
       },
+      noTimeline: "Aucune timeline n'a été configurée pour ce débat.",
       survey: {
         0: "Renseigner les thématiques",
         1: "Renseigner les questions",
@@ -582,6 +583,7 @@ const Translations = {
       menu: {
         phase: "Phase %{count} - %{description}"
       },
+      noTimeline: "No timeline has been configured yet",
       survey: {
         0: "Set themes",
         1: "Set questions",
