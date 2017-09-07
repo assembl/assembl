@@ -19,15 +19,14 @@ export const PostFolded = ({ nbPosts }) => {
 
 const getFullLevelString = (fullLevel) => {
   return (
-    fullLevel && (
-      <span className="subject-prefix">
-        {`Rep. ${fullLevel
-          .map((level) => {
-            return `${level + 1}`;
-          })
-          .join('.')}: `}
-      </span>
-    )
+    fullLevel &&
+    <span className="subject-prefix">
+      {`Rep. ${fullLevel
+        .map((level) => {
+          return `${level + 1}`;
+        })
+        .join('.')}: `}
+    </span>
   );
 };
 
@@ -93,7 +92,11 @@ class Post extends React.PureComponent {
     // creationDate is retrieved by IdeaWithPosts query, not PostQuery
     if (publicationState in DeletedPublicationStates) {
       return (
-        <DeletedPost id={id} subject={subject} deletedBy={publicationState === PublicationStates.DELETED_BY_USER ? 'user' : 'admin'} />
+        <DeletedPost
+          id={id}
+          subject={subject}
+          deletedBy={publicationState === PublicationStates.DELETED_BY_USER ? 'user' : 'admin'}
+        />
       );
     }
 
@@ -101,7 +104,13 @@ class Post extends React.PureComponent {
       return (
         <div className="posts">
           <div className="answer-form" id={id}>
-            <EditPostForm id={id} body={body} subject={subject} refetchIdea={refetchIdea} goBackToViewMode={this.goBackToViewMode} />
+            <EditPostForm
+              id={id}
+              body={body}
+              subject={subject}
+              refetchIdea={refetchIdea}
+              goBackToViewMode={this.goBackToViewMode}
+            />
           </div>
         </div>
       );
@@ -116,22 +125,24 @@ class Post extends React.PureComponent {
         <div className="box">
           <Row className="post-row">
             <Col xs={12} md={11} className="post-left">
-              {creator && (
+              {creator &&
                 <ProfileLine
                   userId={creator.userId}
                   userName={creator.name}
                   creationDate={creationDate}
                   locale={lang}
                   modified={modificationDate !== null}
-                />
-              )}
+                />}
               <h3 className="dark-title-3">
                 {getFullLevelString(fullLevel)}
                 {subject.replace('Re: ', '')}
               </h3>
-              <div className={`body ${bodyMimeType === 'text/plain' ? 'pre-wrap' : ''}`} dangerouslySetInnerHTML={{ __html: body }} />
-              {indirectIdeaContentLinks.length ? (
-                <div className="link-idea">
+              <div
+                className={`body ${bodyMimeType === 'text/plain' ? 'pre-wrap' : ''}`}
+                dangerouslySetInnerHTML={{ __html: body }}
+              />
+              {indirectIdeaContentLinks.length
+                ? <div className="link-idea">
                   <div className="label">
                     <Translate value="debate.thread.linkIdea" />
                   </div>
@@ -145,7 +156,7 @@ class Post extends React.PureComponent {
                     })}
                   </div>
                 </div>
-              ) : null}
+                : null}
               <div className="answers annotation">
                 <Translate value="debate.thread.numberOfResponses" count={numChildren} />
               </div>
@@ -163,8 +174,8 @@ class Post extends React.PureComponent {
             </Col>
           </Row>
         </div>
-        {this.state.showAnswerForm ? (
-          <div className="answer-form">
+        {this.state.showAnswerForm
+          ? <div className="answer-form">
             <AnswerForm
               parentId={id}
               ideaId={ideaId}
@@ -173,7 +184,7 @@ class Post extends React.PureComponent {
               hideAnswerForm={this.hideAnswerForm}
             />
           </div>
-        ) : null}
+          : null}
       </div>
     );
   }

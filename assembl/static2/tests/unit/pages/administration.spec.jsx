@@ -10,7 +10,10 @@ describe('convertVideoDescriptions function', () => {
         video: {
           descriptionEntriesBottom: [],
           descriptionEntriesSide: [],
-          descriptionEntriesTop: [{ locale: 'en', value: 'My top description' }, { locale: 'fr', value: 'Ma description en haut' }]
+          descriptionEntriesTop: [
+            { locale: 'en', value: 'My top description' },
+            { locale: 'fr', value: 'Ma description en haut' }
+          ]
         }
       }
     ];

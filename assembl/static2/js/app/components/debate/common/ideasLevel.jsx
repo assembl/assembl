@@ -5,7 +5,12 @@ import IdeaPreview from '../../common/ideaPreview';
 import { get as getRoute } from '../../../utils/routeMap';
 import { getDiscussionSlug } from '../../../utils/globalFunctions';
 import VisibilityComponent from '../../common/visibilityComponent';
-import { APP_CONTAINER_MAX_WIDTH, NB_IDEA_PREVIEW_TO_SHOW, APP_CONTAINER_PADDING, IDEA_PREVIEW_MAX_WIDTH } from '../../../constants';
+import {
+  APP_CONTAINER_MAX_WIDTH,
+  NB_IDEA_PREVIEW_TO_SHOW,
+  APP_CONTAINER_PADDING,
+  IDEA_PREVIEW_MAX_WIDTH
+} from '../../../constants';
 
 const xsCol = 12;
 const smCol = 6;

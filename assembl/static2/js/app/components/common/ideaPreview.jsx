@@ -56,7 +56,9 @@ const IdeaPreview = ({
             </div>
             : <div />}
         </div>
-        <div className="selected-idea-arrow"><span className="assembl-icon-down-open" /></div>
+        <div className="selected-idea-arrow">
+          <span className="assembl-icon-down-open" />
+        </div>
         <Statistic numPosts={numPosts} numContributors={numContributors} />
       </div>
       <div className="color-box">&nbsp;</div>

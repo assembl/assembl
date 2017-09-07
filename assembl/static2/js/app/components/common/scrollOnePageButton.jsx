@@ -7,7 +7,11 @@ const scrollOnePageDown = () => {
 const ScrollOnePageButton = ({ hidden }) => {
   const scrollOnePageTopPosition = window.innerHeight - 50;
   return (
-    <a className={`scroll-one-page ${hidden ? 'hidden' : ''}`} onClick={scrollOnePageDown} style={{ top: scrollOnePageTopPosition }}>
+    <a
+      className={`scroll-one-page ${hidden ? 'hidden' : ''}`}
+      onClick={scrollOnePageDown}
+      style={{ top: scrollOnePageTopPosition }}
+    >
       <span>
         <span className="icon assembl-icon-down-open">&nbsp;</span>
       </span>

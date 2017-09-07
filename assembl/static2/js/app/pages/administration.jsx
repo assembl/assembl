@@ -25,8 +25,12 @@ export function convertVideoDescriptions(thematics) {
         descriptionEntriesBottom: t.video.descriptionEntriesBottom
           ? convertEntriesToRawContentState(t.video.descriptionEntriesBottom)
           : null,
-        descriptionEntriesSide: t.video.descriptionEntriesSide ? convertEntriesToRawContentState(t.video.descriptionEntriesSide) : null,
-        descriptionEntriesTop: t.video.descriptionEntriesTop ? convertEntriesToRawContentState(t.video.descriptionEntriesTop) : null
+        descriptionEntriesSide: t.video.descriptionEntriesSide
+          ? convertEntriesToRawContentState(t.video.descriptionEntriesSide)
+          : null,
+        descriptionEntriesTop: t.video.descriptionEntriesTop
+          ? convertEntriesToRawContentState(t.video.descriptionEntriesTop)
+          : null
       }
     };
   });

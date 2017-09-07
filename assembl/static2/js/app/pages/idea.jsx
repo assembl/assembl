@@ -12,7 +12,7 @@ import Post, { PostFolded } from '../components/debate/thread/post';
 import GoUp from '../components/common/goUp';
 import Tree from '../components/common/tree';
 import Loader from '../components/common/loader';
-import Permissions, { connectedUserCan } from '../utils/permissions';
+// import Permissions, { connectedUserCan } from '../utils/permissions';
 
 import TopPostForm from './../components/debate/thread/topPostForm';
 
@@ -65,7 +65,8 @@ class Idea extends React.Component {
 
     const { idea } = ideaData;
     const topPosts =
-      !ideaWithPostsData.loading && transformPosts(ideaWithPostsData.idea.posts.edges, { refetchIdea: refetchIdea, ideaId: idea.id });
+      !ideaWithPostsData.loading &&
+      transformPosts(ideaWithPostsData.idea.posts.edges, { refetchIdea: refetchIdea, ideaId: idea.id });
 
     return (
       <div className="idea">
@@ -81,18 +82,16 @@ class Idea extends React.Component {
           <Grid fluid className="background-grey">
             <div className="max-container">
               <div className="content-section">
-                {ideaWithPostsData.loading ? (
-                  <Loader />
-                ) : (
-                  <Tree
+                {ideaWithPostsData.loading
+                  ? <Loader />
+                  : <Tree
                     lang={lang}
                     data={topPosts}
                     InnerComponent={Post}
                     InnerComponentFolded={PostFolded}
                     noRowsRenderer={noRowsRenderer}
                     SeparatorComponent={InfiniteSeparator}
-                  />
-                )}
+                  />}
               </div>
             </div>
           </Grid>

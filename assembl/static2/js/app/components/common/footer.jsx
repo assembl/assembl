@@ -3,7 +3,6 @@ import { Link } from 'react-router';
 import { Translate } from 'react-redux-i18n';
 import { Grid } from 'react-bootstrap';
 import { connect } from 'react-redux';
-import Glyphicon from './glyphicon';
 
 class Footer extends React.Component {
   render() {
