@@ -12,7 +12,8 @@ import Post, { PostFolded } from '../components/debate/thread/post';
 import GoUp from '../components/common/goUp';
 import Tree from '../components/common/tree';
 import Loader from '../components/common/loader';
-// import Permissions, { connectedUserCan } from '../utils/permissions';
+import Permissions, { connectedUserCan } from '../utils/permissions';
+import { getConnectedUserId } from '../utils/globalFunctions';
 
 import TopPostForm from './../components/debate/thread/topPostForm';
 
@@ -68,30 +69,35 @@ class Idea extends React.Component {
       !ideaWithPostsData.loading &&
       transformPosts(ideaWithPostsData.idea.posts.edges, { refetchIdea: refetchIdea, ideaId: idea.id });
 
+    const isUserConnected = getConnectedUserId();
     return (
       <div className="idea">
         <Header title={idea.title} longTitle={idea.longTitle} imgUrl={idea.imgUrl} identifier="thread" />
         <section className="post-section">
-          <Grid fluid className="background-color">
-            <div className="max-container">
-              <div className="top-post-form">
-                <TopPostForm ideaId={idea.id} refetchIdea={refetchIdea} />
+          {!isUserConnected || connectedUserCan(Permissions.ADD_POST) ? (
+            <Grid fluid className="background-color">
+              <div className="max-container">
+                <div className="top-post-form">
+                  <TopPostForm ideaId={idea.id} refetchIdea={refetchIdea} />
+                </div>
               </div>
-            </div>
-          </Grid>
+            </Grid>
+          ) : null}
           <Grid fluid className="background-grey">
             <div className="max-container">
               <div className="content-section">
-                {ideaWithPostsData.loading
-                  ? <Loader />
-                  : <Tree
+                {ideaWithPostsData.loading ? (
+                  <Loader />
+                ) : (
+                  <Tree
                     lang={lang}
                     data={topPosts}
                     InnerComponent={Post}
                     InnerComponentFolded={PostFolded}
                     noRowsRenderer={noRowsRenderer}
                     SeparatorComponent={InfiniteSeparator}
-                  />}
+                  />
+                )}
               </div>
             </div>
           </Grid>
