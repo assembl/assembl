@@ -21,7 +21,6 @@ const EditAttachments = ({ attachments, onDelete }: EditAttachmentsProps) => {
             <span
               className="assembl-icon-delete"
               onClick={() => {
-                // TODO: also remove the editorState's entity and atomic block
                 return onDelete(attachment.id);
               }}
             />
