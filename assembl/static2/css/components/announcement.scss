@@ -54,6 +54,9 @@
 
 .announcement {
   text-align: right;
+  @media (max-width: 991px) {
+    text-align: center;
+  }
 
   .announcement-left {
     .announcement-title {
@@ -66,16 +69,16 @@
 
       .superpose-label {
         top: calc(50% - 1.7em);
-      }
 
-      .doughnut-label-count {
-        font-size: $font-size-m;
-      }
+        .doughnut-label-count {
+          font-size: $font-size-m;
+        }
 
-      .doughnut-label-text {
-        font-family: latoRegular;
-        font-size: $font-size-xs;
-        letter-spacing: 0.08em;
+        .doughnut-label-text {
+          font-family: latoRegular;
+          font-size: $font-size-xs;
+          letter-spacing: 0.08em;
+        }
       }
     }
   }
