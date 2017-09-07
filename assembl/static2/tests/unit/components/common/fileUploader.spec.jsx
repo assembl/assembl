@@ -6,7 +6,9 @@ import FileUploader from '../../../../js/app/components/common/fileUploader';
 describe('FileUploader component', () => {
   it('should render an image uploader', () => {
     const handleChangeSpy = jest.fn(() => {});
-    const component = renderer.create(<FileUploader fileOrUrl="http://www.example.com/foobar.png" handleChange={handleChangeSpy} />);
+    const component = renderer.create(
+      <FileUploader fileOrUrl="http://www.example.com/foobar.png" handleChange={handleChangeSpy} />
+    );
     const tree = component.toJSON();
     expect(tree).toMatchSnapshot();
   });
