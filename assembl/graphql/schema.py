@@ -531,7 +531,7 @@ class Idea(SecureObjectType, SQLAlchemyObjectType):
     def resolve_posts(self, args, context, info):
         discussion_id = context.matchdict['discussion_id']
         discussion = models.Discussion.get(discussion_id)
-        related = self.get_related_posts_query(True)
+        related = self.get_related_posts_query(partial=True, include_deleted=None)  # include_deleted=None means all posts (live and tombstoned)
         # The related query returns a list of (<PropositionPost id=2 >, None) instead of <PropositionPost id=2 > when authenticated, this is why we do another query here:
         Post = models.Post
         query = Post.query.join(
