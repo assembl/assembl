@@ -90,11 +90,17 @@ class Post extends React.PureComponent {
     } = this.props.data.post;
     const { lang, ideaId, refetchIdea, creationDate, fullLevel, numChildren } = this.props;
     // creationDate is retrieved by IdeaWithPosts query, not PostQuery
+    const modifiedSubject = (
+      <span>
+        {getFullLevelString(fullLevel)}
+        {subject.replace('Re: ', '')}
+      </span>
+    );
     if (publicationState in DeletedPublicationStates) {
       return (
         <DeletedPost
           id={id}
-          subject={subject}
+          subject={modifiedSubject}
           deletedBy={publicationState === PublicationStates.DELETED_BY_USER ? 'user' : 'admin'}
         />
       );
@@ -134,8 +140,7 @@ class Post extends React.PureComponent {
                   modified={modificationDate !== null}
                 />}
               <h3 className="dark-title-3">
-                {getFullLevelString(fullLevel)}
-                {subject.replace('Re: ', '')}
+                {modifiedSubject}
               </h3>
               <div
                 className={`body ${bodyMimeType === 'text/plain' ? 'pre-wrap' : ''}`}
