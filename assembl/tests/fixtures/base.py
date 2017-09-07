@@ -6,7 +6,7 @@ The core fixtures that will:
     4) drop the tables (upon completion)
     5) create a pyramid test application
     6) create a databse session
-    7) A fixture for a headless browser (phantomjs)
+    7) A fixture for a headless browser
 """
 
 import pytest
@@ -296,9 +296,11 @@ def browser(request):
     import sys
     import os
     from os.path import exists
-    if sys.platform == 'linux2' and exists(
-            '/usr/lib/chromium-browser/chromedriver'):
-        os.environ["PATH"] += ":/usr/lib/chromium-browser"
+    if sys.platform == 'linux2':
+        if exists('/usr/lib/chromium-browser/chromedriver'):  # ubuntu
+            os.environ["PATH"] += ":/usr/lib/chromium-browser"
+        if exists('/usr/lib/chromium/chromedriver'):  # debian jessie (on stretch it's /usr/bin/chromedriver)
+            os.environ["PATH"] += ":/usr/lib/chromium"
     browser = Browser('chrome', headless=True)
 
     def fin():

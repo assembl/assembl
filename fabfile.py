@@ -1085,7 +1085,12 @@ def install_builddeps():
         sudo('apt-get install -y build-essential python-dev pandoc')
         sudo('apt-get install -y automake bison flex gperf gawk')
         sudo('apt-get install -y graphviz pkg-config gfortran')
-        sudo('apt-get install -y phantomjs', warn_only=True)
+        release_info = run("lsb_release -i")
+        if "Debian" in release_info:
+            sudo('apt-get install -y chromedriver', warn_only=True)  # jessie
+            sudo('apt-get install -y chromium-driver', warn_only=True)  # stretch
+        if "Ubuntu" in release_info:
+            sudo('apt-get install -y chromium-chromedriver', warn_only=True)
     execute(update_python_package_builddeps)
 
 
