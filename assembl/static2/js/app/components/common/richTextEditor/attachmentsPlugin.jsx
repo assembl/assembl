@@ -39,7 +39,7 @@ const plugin = {
     if ((nodeName === 'figure' && node.firstChild.nodeName === 'IMG') || nodeName === 'img') {
       return Entity.create(ENTITY_TYPE, 'IMMUTABLE', {
         externalUrl: node.src,
-        id: node.dataId,
+        id: node.dataset.id,
         title: node.title,
         type: 'document',
         mimeType: 'image/type'
