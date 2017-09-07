@@ -31,6 +31,20 @@ const simpleCircle = (element) => {
   return <circle className="circle" cx="5em" cy="5em" r="2.5em" stroke={getColor(element)} />;
 };
 
+const placementFromAngle = (angle) => {
+  const firstQuartant = 360 - 45;
+  const secondQuartant = 45;
+  const thirdQuartant = secondQuartant + 90;
+  const fourthQuartant = thirdQuartant + 90;
+
+  if ((angle >= firstQuartant && angle < 360) || (angle >= 0 && angle < secondQuartant)) return 'top';
+  if (angle >= secondQuartant && angle < thirdQuartant) return 'right';
+  if (angle >= thirdQuartant && angle < fourthQuartant) return 'bottom'; // should be 'bottom' but it doesn't show up for whatever reason
+  if (angle >= fourthQuartant && angle < firstQuartant) return 'left';
+
+  return 'right';
+};
+
 const circlePaths = (elements, totalCount) => {
   let nextStartAngle = 0;
   return elements.map((element, index) => {
@@ -39,8 +53,9 @@ const circlePaths = (elements, totalCount) => {
     const endAngle = startAngle + normalizedSize * 360;
     nextStartAngle = endAngle;
     const color = getColor(element);
+    const middleAngle = startAngle + (endAngle - startAngle) / 2;
     return 'Tooltip' in element ? (
-      <OverlayTrigger key={index} container={this} overlay={element.Tooltip}>
+      <OverlayTrigger key={index} container={this} overlay={element.Tooltip} placement={placementFromAngle(middleAngle)}>
         <path d={describeArc(70, 70, 35, startAngle, endAngle)} stroke={color} fill="transparent" className={'circle'} />
       </OverlayTrigger>
     ) : (

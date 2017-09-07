@@ -8,7 +8,11 @@ import '../../../../../css/components/announcement.scss';
 import Video from '../survey/video';
 
 const createTooltip = (sentiment, count) => {
-  return <Tooltip id={`${sentiment.camelType}Tooltip`}>{`${count} ${I18n.t(`debate.${sentiment.camelType}`)}`}</Tooltip>;
+  return (
+    <Tooltip id={`${sentiment.camelType}Tooltip`} className="no-arrow-tooltip">{`${count} ${I18n.t(
+      `debate.${sentiment.camelType}`
+    )}`}</Tooltip>
+  );
 };
 
 export const StatisticsDoughnut = ({ elements }) => {

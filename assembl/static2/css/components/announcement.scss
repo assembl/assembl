@@ -1,5 +1,11 @@
 @import '../variables.scss';
 
+.no-arrow-tooltip {
+  .tooltip-arrow {
+    display: none;
+  }
+}
+
 .statistics-container{
   text-align: center;
   display: inline-block;
