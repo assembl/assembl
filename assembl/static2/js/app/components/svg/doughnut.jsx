@@ -39,11 +39,13 @@ const circlePaths = (elements, totalCount) => {
     const endAngle = startAngle + normalizedSize * 360;
     nextStartAngle = endAngle;
     const color = getColor(element);
-    return 'Tooltip' in element
-      ? <OverlayTrigger key={index} container={this} overlay={element.Tooltip}>
+    return 'Tooltip' in element ? (
+      <OverlayTrigger key={index} container={this} overlay={element.Tooltip}>
         <path d={describeArc(70, 70, 35, startAngle, endAngle)} stroke={color} fill="transparent" className={'circle'} />
       </OverlayTrigger>
-      : <path key={index} d={describeArc(70, 70, 35, startAngle, endAngle)} stroke={color} fill="transparent" className={'circle'} />;
+    ) : (
+      <path key={index} d={describeArc(70, 70, 35, startAngle, endAngle)} stroke={color} fill="transparent" className={'circle'} />
+    );
   });
 };
 
@@ -54,9 +56,11 @@ export default ({ elements }) => {
   const totalCount = filteredElements.reduce((total, element) => {
     return total + element.count;
   }, 0);
-  return totalCount === 0
-    ? false
-    : <svg className="doughnut" height="10em" width="10em">
+  return totalCount === 0 ? (
+    false
+  ) : (
+    <svg className="doughnut" viewBox="0 0 140 140">
       {filteredElements.length === 1 ? simpleCircle(filteredElements[0]) : circlePaths(filteredElements, totalCount)}
-    </svg>;
+    </svg>
+  );
 };

@@ -7,7 +7,6 @@ import { OverlayTrigger } from 'react-bootstrap';
 import { getConnectedUserId } from '../../../utils/globalFunctions';
 import { getIfPhaseCompletedByIdentifier } from '../../../utils/timeline';
 import PostCreator from './postCreator';
-import Doughnut from '../../svg/doughnut';
 import Like from '../../svg/like';
 import Disagree from '../../svg/disagree';
 import { inviteUserToLogin, displayAlert } from '../../../utils/utilityManager';
@@ -15,6 +14,7 @@ import addSentimentMutation from '../../../graphql/mutations/addSentiment.graphq
 import deleteSentimentMutation from '../../../graphql/mutations/deleteSentiment.graphql';
 import { likeTooltip, disagreeTooltip } from '../../common/tooltips';
 import { sentimentDefinitionsObject } from '../thread/sentimentDefinitions';
+import { StatisticsDoughnut } from '../thread/announcement';
 
 class Post extends React.Component {
   constructor(props) {
@@ -101,13 +101,7 @@ class Post extends React.Component {
           </div>
         </div>
         <div className="statistic">
-          <div className="totalSentimentsCount">
-            {post.sentimentCounts.like + post.sentimentCounts.disagree}
-          </div>
-          <div className="sentimentsCountLabel">
-            <Translate value="debate.survey.reactions" />
-          </div>
-          <Doughnut
+          <StatisticsDoughnut
             elements={[
               { color: sentimentDefinitionsObject.like.color, count: post.sentimentCounts.like },
               { color: sentimentDefinitionsObject.disagree.color, count: post.sentimentCounts.disagree }
