@@ -1756,7 +1756,11 @@ class DeletePostAttachment(graphene.Mutation):
         if not allowed:
             raise HTTPUnauthorized()
 
-        post.attachments.remove(post_attachment)
+        cls = models.Post
+        with cls.default_db.no_autoflush:
+            post.db.delete(post_attachment.document)
+            post.attachments.remove(post_attachment)
+
         post.db.flush()
 
         return DeletePostAttachment(post=post)
