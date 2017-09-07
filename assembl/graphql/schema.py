@@ -1747,9 +1747,8 @@ class DeletePostAttachment(graphene.Mutation):
         post_id = int(Node.from_global_id(post_id)[1])
         post = models.Post.get(post_id)
 
-        cls = models.PostAttachment
         permissions = get_permissions(user_id, discussion_id)
-        allowed = cls.user_can_cls(user_id, CrudPermissions.DELETE, permissions)
+        allowed = post_attachment.user_can(user_id, CrudPermissions.DELETE, permissions)
         if not allowed:
             raise HTTPUnauthorized()
 
