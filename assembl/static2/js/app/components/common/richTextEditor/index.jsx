@@ -37,39 +37,29 @@ export default class RichTextEditor extends React.PureComponent<Object, RichText
 
   constructor(props: RichTextEditorProps): void {
     super(props);
+    const editorState = props.rawContentState
+      ? EditorState.createWithContent(convertFromRaw(props.rawContentState))
+      : EditorState.createEmpty();
     this.state = {
-      editorState: EditorState.createEmpty(),
+      editorState: editorState,
       editorHasFocus: false
     };
-
-    if (props.rawContentState) {
-      this.state.editorState = EditorState.createWithContent(convertFromRaw(props.rawContentState));
-    }
   }
 
   componentDidMount() {
     this.editor.focus();
   }
 
-  componentWillReceiveProps(nextProps: RichTextEditorProps): void {
-    // we want to reset the editor state only if rawContentState is null (i.e. in case the form has been reset)
-    if (!nextProps.rawContentState) {
-      this.setState({
-        editorState: EditorState.createEmpty()
-      });
-    } else {
-      this.setState({
-        editorState: EditorState.createWithContent(convertFromRaw(nextProps.rawContentState))
-      });
-    }
-  }
-
   onBlur = () => {
-    const rawContentState = convertToRaw(this.state.editorState.getCurrentContent());
-    this.setState({
-      editorHasFocus: false
-    });
-    this.props.updateContentState(rawContentState);
+    this.setState(
+      {
+        editorHasFocus: false
+      },
+      () => {
+        const rawContentState = convertToRaw(this.state.editorState.getCurrentContent());
+        this.props.updateContentState(rawContentState);
+      }
+    );
   };
 
   onChange = (newEditorState: EditorState): void => {

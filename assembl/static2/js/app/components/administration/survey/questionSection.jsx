@@ -50,8 +50,16 @@ class QuestionSection extends React.Component {
           </Row>
           {selectedThematicId &&
             <Row>
-              <VideoForm thematicId={selectedThematicId} selectedLocale={selectedLocale} />
-              <QuestionsForm thematicId={selectedThematicId} selectedLocale={selectedLocale} />
+              <VideoForm
+                key={`video-form-${selectedThematicId}`}
+                thematicId={selectedThematicId}
+                selectedLocale={selectedLocale}
+              />
+              <QuestionsForm
+                key={`questions-form-${selectedThematicId}`}
+                thematicId={selectedThematicId}
+                selectedLocale={selectedLocale}
+              />
             </Row>}
         </div>
       </div>
