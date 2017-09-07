@@ -1,4 +1,4 @@
-/* eslint-disable no-nested-ternary*/
+/* eslint-disable no-nested-ternary */
 /*
   FormGroup that contains a FormControl for which:
     - if there is a value, displays a label

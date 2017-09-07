@@ -13,7 +13,7 @@ export default function deepen(o) {
     const key = parts.pop();
     while (parts.length) {
       const part = parts.shift();
-      t = t[part] = t[part] || {};
+      t = t[part] = t[part] || {}; // eslint-disable-line
     }
     t[key] = o[k];
   });

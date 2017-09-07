@@ -177,7 +177,7 @@ export default class RichTextEditor extends React.PureComponent<Object, RichText
             onFocus={this.handleEditorFocus}
             placeholder={placeholder}
             ref={(e) => {
-              return (this.editor = e);
+              this.editor = e;
             }}
             spellCheck
           />

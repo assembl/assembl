@@ -70,7 +70,7 @@ class ImageUploader extends React.Component {
           <img
             src={this.state.imgSrc}
             ref={(p) => {
-              return (this.preview = p);
+              this.preview = p;
             }}
             alt="preview"
           />
@@ -83,7 +83,7 @@ class ImageUploader extends React.Component {
           onChange={this.handleChangePreview}
           className="hidden"
           ref={(p) => {
-            return (this.fileInput = p);
+            this.fileInput = p;
           }}
         />
       </div>

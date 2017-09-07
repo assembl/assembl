@@ -39,7 +39,7 @@ class Video extends React.Component {
                     </Col>}
                   <Col xs={12} sm={descriptionSide ? 6 : 8} smOffset={descriptionSide ? 0 : 2}>
                     <div className="video-container" id="video-vid">
-                      <iframe src={htmlCode} frameBorder="0" width="560" height="315" />
+                      <iframe src={htmlCode} frameBorder="0" width="560" height="315" title="video" />
                     </div>
                   </Col>
                 </Row>

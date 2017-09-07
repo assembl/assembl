@@ -4,7 +4,7 @@ import { capitalize } from './globalFunctions';
 /*
   A global map of routes managed by React front-end.
 */
-/* eslint no-template-curly-in-string: "off"*/
+/* eslint no-template-curly-in-string: "off" */
 const routes = {
   oldLogout: 'legacy/logout',
   oldLogin: 'legacy/login',

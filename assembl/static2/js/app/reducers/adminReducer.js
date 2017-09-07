@@ -30,10 +30,10 @@ export const thematicsInOrder = (state = List(), action) => {
     return state.push(action.id);
   case 'UPDATE_THEMATICS': {
     return List(
-        action.thematics.map((t) => {
-          return t.id;
-        })
-      );
+      action.thematics.map((t) => {
+        return t.id;
+      })
+    );
   }
   default:
     return state;
@@ -97,9 +97,9 @@ export const thematicsById = (state = Map(), action) => {
   case 'UPDATE_THEMATICS': {
     const newState = {};
     action.thematics.forEach((t) => {
-      return (newState[t.id] = {
+      newState[t.id] = {
         ...t
-      });
+      };
     });
     return fromJS(newState);
   }
@@ -119,7 +119,10 @@ export const thematicsById = (state = Map(), action) => {
   case 'UPDATE_VIDEO_DESCRIPTION_TOP':
     return state.updateIn([action.id, 'video', 'descriptionEntriesTop'], updateInEntries(action.locale, fromJS(action.value)));
   case 'UPDATE_VIDEO_DESCRIPTION_BOTTOM':
-    return state.updateIn([action.id, 'video', 'descriptionEntriesBottom'], updateInEntries(action.locale, fromJS(action.value)));
+    return state.updateIn(
+      [action.id, 'video', 'descriptionEntriesBottom'],
+      updateInEntries(action.locale, fromJS(action.value))
+    );
   case 'UPDATE_VIDEO_DESCRIPTION_SIDE':
     return state.updateIn([action.id, 'video', 'descriptionEntriesSide'], updateInEntries(action.locale, fromJS(action.value)));
   case 'UPDATE_VIDEO_HTML_CODE':

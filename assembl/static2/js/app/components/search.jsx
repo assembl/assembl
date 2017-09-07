@@ -91,7 +91,7 @@ if (__resourceQuery) {
     case 'idea':
       return `${slug}/idea/local:Idea/${id}`;
     default:
-        // post
+      // post
       return `${slug}/posts/local:Content/${id}`;
     }
   };
@@ -108,7 +108,7 @@ if (__resourceQuery) {
     case 'idea':
       return `ideas/${id}`;
     default:
-        // post
+      // post
       return `posts/${id}`;
     }
   };
@@ -127,7 +127,7 @@ const PublishedInfo = (props) => {
 };
 
 const ImageType = (props) => {
-  return <img className={props.className} src={`/static2/img/icon-${props.type}.svg`} role="presentation" />;
+  return <img className={props.className} src={`/static2/img/icon-${props.type}.svg`} alt="" />;
 };
 
 const DumbPostHit = (props) => {
@@ -307,7 +307,7 @@ const HitItem = (props) => {
   case 'idea':
     return <IdeaHit {...props} />;
   default:
-      // post
+    // post
     return <PostHit {...props} />;
   }
 };
@@ -541,9 +541,9 @@ export class SearchComponent extends React.Component {
                     title={I18n.t('search.Creative participants')}
                     label={I18n.t('search.Creative participants')}
                     filter={HasChildQuery(
-                        'post',
-                        BoolMust([TermQuery('discussion_id', discussionId), TermQuery('parent_id', 0)])
-                      )}
+                      'post',
+                      BoolMust([TermQuery('discussion_id', discussionId), TermQuery('parent_id', 0)])
+                    )}
                   />
                   <CheckboxFilter
                     containerComponent={NoPanel}
@@ -552,12 +552,12 @@ export class SearchComponent extends React.Component {
                     label={I18n.t('search.Reactive participants')}
                     filter={BoolMust([
                       HasChildQuery(
-                          'post',
-                          BoolMust([TermQuery('discussion_id', discussionId), RangeQuery('parent_id', { gt: 0 })])
-                        ),
+                        'post',
+                        BoolMust([TermQuery('discussion_id', discussionId), RangeQuery('parent_id', { gt: 0 })])
+                      ),
                       BoolMustNot(
-                          HasChildQuery('post', BoolMust([TermQuery('discussion_id', discussionId), TermQuery('parent_id', 0)]))
-                        )
+                        HasChildQuery('post', BoolMust([TermQuery('discussion_id', discussionId), TermQuery('parent_id', 0)]))
+                      )
                     ])}
                   />
                   <CheckboxFilter
@@ -573,9 +573,9 @@ export class SearchComponent extends React.Component {
                     title={I18n.t('search.Participants pleased by their peers')}
                     label={I18n.t('search.Participants pleased by their peers')}
                     filter={HasChildQuery(
-                        'post',
-                        BoolMust([TermQuery('discussion_id', discussionId), RangeQuery('sentiment_counts.like', { gt: 0 })])
-                      )}
+                      'post',
+                      BoolMust([TermQuery('discussion_id', discussionId), RangeQuery('sentiment_counts.like', { gt: 0 })])
+                    )}
                   />
                 </Panel>
                 : null}
