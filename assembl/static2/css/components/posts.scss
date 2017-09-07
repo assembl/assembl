@@ -204,6 +204,11 @@ $deleted-post-border: 1px solid $grey1 !default;
 
     .add-sentiment {
         margin: 20px 0 0;
+
+        .sentiment {
+          margin-left: auto;
+          margin-right: auto;
+        }
     }
 
     .answer-form {
