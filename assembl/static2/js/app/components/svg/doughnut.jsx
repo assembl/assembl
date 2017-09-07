@@ -32,7 +32,11 @@ const getColor = (element) => {
 };
 
 const simpleCircle = (element) => {
-  return <circle className="circle" cx={cx} cy={cy} r={r * 1.11} stroke={getColor(element)} />;
+  return 'Tooltip' in element
+    ? <OverlayTrigger container={this} overlay={element.Tooltip} placement="bottom">
+      <circle className="circle" cx={cx} cy={cy} r={r * 1.11} stroke={getColor(element)} />
+    </OverlayTrigger>
+    : <circle className="circle" cx={cx} cy={cy} r={r * 1.11} stroke={getColor(element)} />;
 };
 
 const placementFromAngle = (angle) => {
@@ -57,13 +61,17 @@ const circlePaths = (elements, totalCount) => {
     nextStartAngle = endAngle;
     const color = getColor(element);
     const middleAngle = startAngle + (endAngle - startAngle) / 2;
-    return 'Tooltip' in element ? (
-      <OverlayTrigger key={index} container={this} overlay={element.Tooltip} placement={placementFromAngle(middleAngle)}>
+    return 'Tooltip' in element
+      ? <OverlayTrigger key={index} container={this} overlay={element.Tooltip} placement={placementFromAngle(middleAngle)}>
         <path d={describeArc(cx, cy, r, startAngle, endAngle)} stroke={color} fill="transparent" className={'circle'} />
       </OverlayTrigger>
-    ) : (
-      <path key={index} d={describeArc(cx, cy, r, startAngle, endAngle)} stroke={color} fill="transparent" className={'circle'} />
-    );
+      : <path
+        key={index}
+        d={describeArc(cx, cy, r, startAngle, endAngle)}
+        stroke={color}
+        fill="transparent"
+        className={'circle'}
+      />;
   });
 };
 
@@ -74,15 +82,11 @@ export default ({ elements, strokeWidth }) => {
   const totalCount = filteredElements.reduce((total, element) => {
     return total + element.count;
   }, 0);
-  return totalCount === 0 ? (
-    false
-  ) : (
-    <svg className="doughnut" viewBox="0 0 140 140">
-      {filteredElements.length === 1 ? (
-        simpleCircle(filteredElements[0], strokeWidth)
-      ) : (
-        circlePaths(filteredElements, totalCount, strokeWidth)
-      )}
-    </svg>
-  );
+  return totalCount === 0
+    ? false
+    : <svg className="doughnut" viewBox="0 0 140 140">
+      {filteredElements.length === 1
+        ? simpleCircle(filteredElements[0], strokeWidth)
+        : circlePaths(filteredElements, totalCount, strokeWidth)}
+    </svg>;
 };

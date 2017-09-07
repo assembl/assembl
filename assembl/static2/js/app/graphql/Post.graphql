@@ -5,12 +5,6 @@ fragment Post on Post {
   subject
   body
   mySentiment
-  sentimentCounts {
-    like
-    disagree
-    dontUnderstand
-    moreInfo
-  }
   indirectIdeaContentLinks {
     idea {
       id

@@ -11,6 +11,12 @@ query IdeaWithPosts($id: ID!) {
               id
               parentId
               creationDate
+              sentimentCounts {
+                like
+                disagree
+                dontUnderstand
+                moreInfo
+              }
             }
           }
         }

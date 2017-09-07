@@ -23,7 +23,9 @@ export const StatisticsDoughnut = ({ elements }) => {
     <div className="statistics-container">
       <div className="statistics">
         <div className="superpose-label superpose">
-          <div className="doughnut-label-count">{totalCount}</div>
+          <div className="doughnut-label-count">
+            {totalCount}
+          </div>
           <div className="doughnut-label-text">
             <Translate value="debate.survey.reactions" />
           </div>
@@ -36,10 +38,34 @@ export const StatisticsDoughnut = ({ elements }) => {
   );
 };
 
+const getSentimentsCount = (posts) => {
+  const counters = { ...sentimentDefinitionsObject };
+  Object.keys(counters).forEach((key) => {
+    counters[key].count = 0;
+  });
+  posts.edges.forEach(({ node: { sentimentCounts } }) => {
+    Object.keys(counters).forEach((key) => {
+      counters[key].count += sentimentCounts[key];
+    });
+  });
+  return counters;
+};
+
+const createDoughnutElements = (sentimentCounts) => {
+  return Object.keys(sentimentCounts).map((key) => {
+    return {
+      color: sentimentCounts[key].color,
+      count: sentimentCounts[key].count,
+      Tooltip: createTooltip(sentimentCounts[key], sentimentCounts[key].count)
+    };
+  });
+};
+
 class Announcement extends React.Component {
   render = () => {
     const { idea } = this.props.ideaWithPostsData;
-    const { numContributors, numPosts } = idea;
+    const { numContributors, numPosts, posts } = idea;
+    const sentimentsCount = getSentimentsCount(posts);
     return (
       <div className="announcement">
         <Col xs={12} md={3} className="announcement-left">
@@ -51,30 +77,7 @@ class Announcement extends React.Component {
           </div>
           <div className="announcement-bottom">
             <div style={{ width: '200px', height: '200px' }} className="announcement-doughnut">
-              <StatisticsDoughnut
-                elements={[
-                  {
-                    color: sentimentDefinitionsObject.dontUnderstand.color,
-                    count: 2,
-                    Tooltip: createTooltip(sentimentDefinitionsObject.dontUnderstand, 2)
-                  },
-                  {
-                    color: sentimentDefinitionsObject.moreInfo.color,
-                    count: 5,
-                    Tooltip: createTooltip(sentimentDefinitionsObject.moreInfo, 5)
-                  },
-                  {
-                    color: sentimentDefinitionsObject.like.color,
-                    count: 6,
-                    Tooltip: createTooltip(sentimentDefinitionsObject.like, 6)
-                  },
-                  {
-                    color: sentimentDefinitionsObject.disagree.color,
-                    count: 6,
-                    Tooltip: createTooltip(sentimentDefinitionsObject.disagree, 6)
-                  }
-                ]}
-              />
+              <StatisticsDoughnut elements={createDoughnutElements(sentimentsCount)} />
             </div>
             <div>
               {numPosts} <span className="assembl-icon-message" /> - {numContributors} <span className="assembl-icon-profil" />
