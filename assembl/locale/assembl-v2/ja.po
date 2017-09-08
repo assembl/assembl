@@ -1,10 +1,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"POT-Creation-Date: 2017-08-03T09:39:15.282Z\n"
+"POT-Creation-Date: 2017-09-08T12:50:48.885Z\n"
 "PO-Revision-Date: \n"
-"Last-Translator: Vincent Fretin <vincent.fretin@gmail."
-"com>\n"
+"Last-Translator: Vincent Fretin <vincent.fretin@gmail.com>\n"
 "Language-Team: \n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
@@ -167,8 +166,8 @@ msgstr "データのエクスポート"
 #: messages.json
 msgid "administration.surveyExport.annotation"
 msgstr ""
-"すべての議論データをエクスポートするには、エクスポートボ"
-"タンをクリックしてください"
+"すべての議論データをエクスポートするには、エクスポートボタンをクリックしてく"
+"ださい"
 
 #. [administration.surveyExport.link]
 #. defaultMessage is:
@@ -219,6 +218,27 @@ msgstr "キャンセル"
 msgid "changePassword.panelTitle"
 msgstr "Assemblパスワード忘れのページへようこそ"
 
+#. [common.editor.bold]
+#. defaultMessage is:
+#. Bold
+#: messages.json
+msgid "common.editor.bold"
+msgstr ""
+
+#. [common.editor.bulletList]
+#. defaultMessage is:
+#. Bullet list
+#: messages.json
+msgid "common.editor.bulletList"
+msgstr ""
+
+#. [common.editor.italic]
+#. defaultMessage is:
+#. Italic
+#: messages.json
+msgid "common.editor.italic"
+msgstr ""
+
 #. [common.goUp]
 #. defaultMessage is:
 #. Back to top
@@ -249,7 +269,7 @@ msgstr "LL"
 
 #. [date.format2]
 #. defaultMessage is:
-#. MM-DD-YYYY
+#. YYYY-MM-DD
 #: messages.json
 msgid "date.format2"
 msgstr "LL"
@@ -261,6 +281,42 @@ msgstr "LL"
 #, fuzzy
 msgid "debate.answer"
 msgstr "いいね！"
+
+#. [debate.confirmDeletionBody]
+#. defaultMessage is:
+#. Are you sure you want to delete this message?
+#: messages.json
+msgid "debate.confirmDeletionBody"
+msgstr ""
+
+#. [debate.confirmDeletionButtonCancel]
+#. defaultMessage is:
+#. Cancel
+#: messages.json
+msgid "debate.confirmDeletionButtonCancel"
+msgstr ""
+
+#. [debate.confirmDeletionButtonDelete]
+#. defaultMessage is:
+#. Delete
+#: messages.json
+msgid "debate.confirmDeletionButtonDelete"
+msgstr ""
+
+#. [debate.confirmDeletionTitle]
+#. defaultMessage is:
+#. Confirm deletion
+#: messages.json
+msgid "debate.confirmDeletionTitle"
+msgstr ""
+
+#. [debate.deleteMessage]
+#. defaultMessage is:
+#. Delete this message
+#: messages.json
+#, fuzzy
+msgid "debate.deleteMessage"
+msgstr "同意しない"
 
 #. [debate.disagree]
 #. defaultMessage is:
@@ -276,6 +332,38 @@ msgstr "同意しない"
 #, fuzzy
 msgid "debate.dontUnderstand"
 msgstr "もう少し詳しく"
+
+#. [debate.edit.body]
+#. defaultMessage is:
+#. Comment
+#: messages.json
+#, fuzzy
+msgid "debate.edit.body"
+msgstr "コメントと投票を行うには、ログインする必要があります。"
+
+#. [debate.edit.subject]
+#. defaultMessage is:
+#. Body
+#: messages.json
+#, fuzzy
+msgid "debate.edit.subject"
+msgstr "反応："
+
+#. [debate.edit.title]
+#. defaultMessage is:
+#. I edit my message
+#: messages.json
+#, fuzzy
+msgid "debate.edit.title"
+msgstr "テーマをよりよく理解するためのビデオ"
+
+#. [debate.editMessage]
+#. defaultMessage is:
+#. Edit this message
+#: messages.json
+#, fuzzy
+msgid "debate.editMessage"
+msgstr "同意しない"
 
 #. [debate.insert]
 #. defaultMessage is:
@@ -302,12 +390,10 @@ msgstr "もっと知りたいですか？"
 
 #. [debate.notStarted]
 #. defaultMessage is:
-#. The %{phaseName} phase has not started. Please come back from
+#. The %{phaseName} phase has not started. Please come back from 
 #: messages.json
 msgid "debate.notStarted"
-msgstr ""
-"%{phaseName}フェーズは開始していません。後日オープンしま"
-"す"
+msgstr "%{phaseName}フェーズは開始していません。後日オープンします"
 
 #. [debate.post]
 #. defaultMessage is:
@@ -361,16 +447,14 @@ msgstr "その他の提案"
 #: messages.json
 msgid "debate.survey.noProposals"
 msgstr ""
-"現時点ではまだコメントは投稿されていません。最初の投稿者"
-"になりませんか？"
+"現時点ではまだコメントは投稿されていません。最初の投稿者になりませんか？"
 
 #. [debate.survey.postSuccess]
 #. defaultMessage is:
 #. Thanks for your participation. Your proposal has been sent!
 #: messages.json
 msgid "debate.survey.postSuccess"
-msgstr ""
-"ありがとうございます。あなたのコメントは送信されました！"
+msgstr "ありがとうございます。あなたのコメントは送信されました！"
 
 #. [debate.survey.proposalsTitle]
 #. defaultMessage is:
@@ -441,8 +525,7 @@ msgstr "テーマ"
 #: messages.json
 #, fuzzy
 msgid "debate.thread.fillBody"
-msgstr ""
-"コメントと投票を行うには、ログインする必要があります。"
+msgstr "コメントと投票を行うには、ログインする必要があります。"
 
 #. [debate.thread.fillSubject]
 #. defaultMessage is:
@@ -466,6 +549,14 @@ msgstr ""
 msgid "debate.thread.foldedPostLink_1"
 msgstr "いいね！"
 
+#. [debate.thread.goToIdea]
+#. defaultMessage is:
+#. Access the thread
+#: messages.json
+#, fuzzy
+msgid "debate.thread.goToIdea"
+msgstr "いいね！"
+
 #. [debate.thread.linkIdea]
 #. defaultMessage is:
 #. This post is related to the following themes:
@@ -474,12 +565,35 @@ msgstr "いいね！"
 msgid "debate.thread.linkIdea"
 msgstr "いいね！"
 
+#. [debate.thread.messageTranslatedFrom]
+#. defaultMessage is:
+#. This message has been translated from %{language}.
+#: messages.json
+msgid "debate.thread.messageTranslatedFrom"
+msgstr ""
+
 #. [debate.thread.noPostsInThread]
 #. defaultMessage is:
 #. Be the first to contribute, start a discussion!
 #: messages.json
 msgid "debate.thread.noPostsInThread"
 msgstr ""
+
+#. [debate.thread.numberOfReactions]
+#. defaultMessage is:
+#. %{count} reactions
+#: messages.json
+#, fuzzy
+msgid "debate.thread.numberOfReactions"
+msgstr "反応"
+
+#. [debate.thread.numberOfReactions_1]
+#. defaultMessage is:
+#. %{count} reaction
+#: messages.json
+#, fuzzy
+msgid "debate.thread.numberOfReactions_1"
+msgstr "反応"
 
 #. [debate.thread.numberOfResponses]
 #. defaultMessage is:
@@ -502,14 +616,61 @@ msgstr ""
 msgid "debate.thread.numberOfResponses_1"
 msgstr ""
 
+#. [debate.thread.postDeletedByAdmin]
+#. defaultMessage is:
+#. This message has been deleted by the community manager.
+#: messages.json
+#, fuzzy
+msgid "debate.thread.postDeletedByAdmin"
+msgstr "ありがとうございます。あなたのコメントは送信されました！"
+
+#. [debate.thread.postDeletedByUser]
+#. defaultMessage is:
+#. This message has been deleted by the author.
+#: messages.json
+#, fuzzy
+msgid "debate.thread.postDeletedByUser"
+msgstr "ありがとうございます。あなたのコメントは送信されました！"
+
+#. [debate.thread.postEdited]
+#. defaultMessage is:
+#. edited
+#: messages.json
+#, fuzzy
+msgid "debate.thread.postEdited"
+msgstr "ありがとうございます。あなたのコメントは送信されました！"
+
 #. [debate.thread.postSuccess]
 #. defaultMessage is:
 #. Thanks for your participation. Your comment has been sent!
 #: messages.json
 #, fuzzy
 msgid "debate.thread.postSuccess"
-msgstr ""
-"ありがとうございます。あなたのコメントは送信されました！"
+msgstr "ありがとうございます。あなたのコメントは送信されました！"
+
+#. [debate.thread.seeSubIdeas]
+#. defaultMessage is:
+#. See %{count} sub-thematics
+#: messages.json
+#, fuzzy
+msgid "debate.thread.seeSubIdeas"
+msgstr "いいね！"
+
+#. [debate.thread.seeSubIdeas_1]
+#. defaultMessage is:
+#. See sub-thematic
+#: messages.json
+#, fuzzy
+msgid "debate.thread.seeSubIdeas_1"
+msgstr "いいね！"
+
+#. [debate.thread.showOriginal]
+#. defaultMessage is:
+#. Don't translate
+#: messages.json
+#, fuzzy
+msgid "debate.thread.showOriginal"
+msgstr "いいね！"
 
 #. [debate.thread.startDiscussion]
 #. defaultMessage is:
@@ -519,6 +680,14 @@ msgstr ""
 msgid "debate.thread.startDiscussion"
 msgstr "最近の議論"
 
+#. [debate.thread.translate]
+#. defaultMessage is:
+#. Translate
+#: messages.json
+#, fuzzy
+msgid "debate.thread.translate"
+msgstr "いいね！"
+
 #. [debate.toAnswer]
 #. defaultMessage is:
 #. Answer
@@ -526,6 +695,13 @@ msgstr "最近の議論"
 #, fuzzy
 msgid "debate.toAnswer"
 msgstr "テーマ"
+
+#. [debate.whatYouNeedToKnow]
+#. defaultMessage is:
+#. What you need to know
+#: messages.json
+msgid "debate.whatYouNeedToKnow"
+msgstr ""
 
 #. [error.reason]
 #. defaultMessage is:
@@ -644,8 +820,7 @@ msgstr "最近の議論"
 #. Find your most controversial and highly acclaimed discussions on the front page
 #: messages.json
 msgid "home.themesSubtitle"
-msgstr ""
-"フロントページで一番様々な意見が寄せられた議論を探す"
+msgstr "フロントページで一番様々な意見が寄せられた議論を探す"
 
 #. [home.themesTitle]
 #. defaultMessage is:
@@ -716,9 +891,8 @@ msgstr "あなたのアカウントが作成されました"
 #: messages.json
 msgid "login.accountCreatedMsg"
 msgstr ""
-"確認メールを送信しました。確認のためのリンクをクリックし"
-"てください。メールを受け取っていない場合、スパムフォルダ"
-"をご確認ください。"
+"確認メールを送信しました。確認のためのリンクをクリックしてください。メールを"
+"受け取っていない場合、スパムフォルダをご確認ください。"
 
 #. [login.alreadyAccount]
 #. defaultMessage is:
@@ -753,9 +927,7 @@ msgstr "Eメール"
 #. The email you have entered was not found. Please try again.
 #: messages.json
 msgid "login.emailNotFound"
-msgstr ""
-"メールアドレスが見つかりませんでした。もう一度ご確認くだ"
-"さい。"
+msgstr "メールアドレスが見つかりませんでした。もう一度ご確認ください。"
 
 #. [login.existingEmail]
 #. defaultMessage is:
@@ -797,9 +969,7 @@ msgstr "入力したパスワードが一致しません"
 #. The password you have entered does not match with the entered user. Please try again.
 #: messages.json
 msgid "login.incorrectPasswordLogin"
-msgstr ""
-"入力したパスワードが一致しません。もう一度お試しくださ"
-"い。"
+msgstr "入力したパスワードが一致しません。もう一度お試しください。"
 
 #. [login.invalidEmail]
 #. defaultMessage is:
@@ -886,8 +1056,8 @@ msgstr "問題があるようです。後でもう一度お試しください。
 #: messages.json
 msgid "login.passwordChangeRequestSuccess"
 msgstr ""
-"アカウントにメールを送信しました。受け取っていない場合、"
-"迷惑メールフォルダを確認してください"
+"アカウントにメールを送信しました。受け取っていない場合、迷惑メールフォルダを"
+"確認してください"
 
 #. [login.resend]
 #. defaultMessage is:
@@ -916,9 +1086,8 @@ msgstr "パスワードを変更してください"
 #: messages.json
 msgid "login.sendPwdMsg"
 msgstr ""
-"仮接続のためのリンクをメールに送りました。ログインしてパ"
-"スワードを変更してください。受け取っていない場合、迷惑"
-"メールフォルダを確認してください。"
+"仮接続のためのリンクをメールに送りました。ログインしてパスワードを変更してく"
+"ださい。受け取っていない場合、迷惑メールフォルダを確認してください。"
 
 #. [login.signUp]
 #. defaultMessage is:
@@ -1163,6 +1332,14 @@ msgstr "フィルタなしで{query}を検索する"
 #: messages.json
 msgid "search.Oldest first"
 msgstr "古いものから"
+
+#. [search.Participants]
+#. defaultMessage is:
+#. Participants
+#: messages.json
+#, fuzzy
+msgid "search.Participants"
+msgstr "新コメント作成者"
 
 #. [search.Participants having the less posted messages]
 #. defaultMessage is:
