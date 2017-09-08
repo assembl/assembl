@@ -75,39 +75,36 @@ class Idea extends React.Component {
       <div className="idea">
         <Header title={idea.title} longTitle={idea.longTitle} imgUrl={idea.imgUrl} identifier="thread" />
         <section className="post-section">
-          {!ideaWithPostsData.loading && (
+          {!ideaWithPostsData.loading &&
             <Grid fluid className="background-grey">
               <div className="max-container">
                 <div className="content-section">
                   <Announcement ideaWithPostsData={ideaWithPostsData} />
                 </div>
               </div>
-            </Grid>
-          )}
-          {!isUserConnected || connectedUserCan(Permissions.ADD_POST) ? (
-            <Grid fluid className="background-color">
+            </Grid>}
+          {!isUserConnected || connectedUserCan(Permissions.ADD_POST)
+            ? <Grid fluid className="background-color">
               <div className="max-container">
                 <div className="top-post-form">
                   <TopPostForm ideaId={idea.id} refetchIdea={refetchIdea} />
                 </div>
               </div>
             </Grid>
-          ) : null}
+            : null}
           <Grid fluid className="background-grey">
             <div className="max-container">
               <div className="content-section">
-                {ideaWithPostsData.loading ? (
-                  <Loader />
-                ) : (
-                  <Tree
+                {ideaWithPostsData.loading
+                  ? <Loader />
+                  : <Tree
                     lang={lang}
                     data={topPosts}
                     InnerComponent={Post}
                     InnerComponentFolded={PostFolded}
                     noRowsRenderer={noRowsRenderer}
                     SeparatorComponent={InfiniteSeparator}
-                  />
-                )}
+                  />}
               </div>
             </div>
           </Grid>
