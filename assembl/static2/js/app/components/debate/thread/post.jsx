@@ -47,6 +47,9 @@ class Post extends React.PureComponent {
 
   componentDidMount() {
     this.props.measureTreeHeight(400);
+    this.props.data.post.extracts.map((extract) => {
+      return console.log(extract);
+    });
   }
 
   componentDidUpdate(prevProps) {
@@ -93,7 +96,8 @@ class Post extends React.PureComponent {
       sentimentCounts,
       mySentiment,
       publicationState,
-      attachments
+      attachments,
+      extracts
     } = this.props.data.post;
     const { lang, ideaId, refetchIdea, creationDate, fullLevel, numChildren } = this.props;
     // creationDate is retrieved by IdeaWithPosts query, not PostQuery
@@ -167,6 +171,29 @@ class Post extends React.PureComponent {
     };
     return (
       <div className="posts" id={id}>
+        {extracts.length
+          ? <div className="extracts" style={{ position: 'absolute', left: '100px', width: '250px', lineHeight: '30px' }}>
+            <div className="badges">
+              {extracts.map((extract) => {
+                return (
+                  <div className="nugget">
+                    <div className="nugget-img">
+                      <span className="assembl-icon-pepite color2" style={{ fontSize: '50px' }}>
+                          &nbsp;
+                      </span>
+                    </div>
+                    <div className="nugget-txt" style={{ padding: '25px 0', marginRight: '20px', fontStyle: 'italic' }}>
+                      <span key={extract.id} style={{ color: '#5404D7' }}>
+                        {extract.body}
+                      </span>
+                    </div>
+                    <div className="box-hyphen left">&nbsp;</div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+          : null}{' '}
         <div className="box">
           <Row className="post-row">
             <Col xs={12} md={11} className="post-left">
