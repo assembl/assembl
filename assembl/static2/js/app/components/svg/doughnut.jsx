@@ -34,9 +34,9 @@ const getColor = (element) => {
 const simpleCircle = (element) => {
   return 'Tooltip' in element
     ? <OverlayTrigger container={this} overlay={element.Tooltip} placement="bottom">
-      <circle className="circle" cx={cx} cy={cy} r={r * 1.11} stroke={getColor(element)} />
+      <circle className="circle" cx={cx} cy={cy} r={r} stroke={getColor(element)} />
     </OverlayTrigger>
-    : <circle className="circle" cx={cx} cy={cy} r={r * 1.11} stroke={getColor(element)} />;
+    : <circle className="circle" cx={cx} cy={cy} r={r} stroke={getColor(element)} />;
 };
 
 const placementFromAngle = (angle) => {
@@ -63,19 +63,19 @@ const circlePaths = (elements, totalCount) => {
     const middleAngle = startAngle + (endAngle - startAngle) / 2;
     return 'Tooltip' in element
       ? <OverlayTrigger key={index} container={this} overlay={element.Tooltip} placement={placementFromAngle(middleAngle)}>
-        <path d={describeArc(cx, cy, r, startAngle, endAngle)} stroke={color} fill="transparent" className={'circle'} />
+        <path d={describeArc(cx, cy, r, startAngle, endAngle)} stroke={color} fill="transparent" className="circle" />
       </OverlayTrigger>
       : <path
         key={index}
         d={describeArc(cx, cy, r, startAngle, endAngle)}
         stroke={color}
         fill="transparent"
-        className={'circle'}
+        className="circle"
       />;
   });
 };
 
-export default ({ elements, strokeWidth }) => {
+const Doughnut = ({ elements, strokeWidth }) => {
   const filteredElements = elements.filter(({ count }) => {
     return count > 0;
   });
@@ -90,3 +90,5 @@ export default ({ elements, strokeWidth }) => {
         : circlePaths(filteredElements, totalCount, strokeWidth)}
     </svg>;
 };
+
+export default Doughnut;

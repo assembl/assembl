@@ -273,6 +273,14 @@ $deleted-post-border: 1px solid $grey1 !default;
       position: absolute;
       right: 0;
       width: 20%;
+
+      .statistics-doughnut {
+        width: 80%;
+        height: 70%;
+        .circle {
+          stroke-width: 13px;
+        }
+      }
     }
 
     .body {

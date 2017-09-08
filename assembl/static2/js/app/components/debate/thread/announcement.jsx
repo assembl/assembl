@@ -1,40 +1,16 @@
 import React from 'react';
-import { Translate, I18n } from 'react-redux-i18n';
+import { Translate } from 'react-redux-i18n';
 import { Col, Tooltip } from 'react-bootstrap';
 
-import Doughnut from '../../svg/doughnut';
+import StatisticsDoughnut from '../common/statisticsDoughnut';
 import { sentimentDefinitionsObject } from './sentimentDefinitions';
-import '../../../../../css/components/announcement.scss';
 import Video from '../survey/video';
 
 const createTooltip = (sentiment, count) => {
   return (
-    <Tooltip id={`${sentiment.camelType}Tooltip`} className="no-arrow-tooltip">{`${count} ${I18n.t(
-      `debate.${sentiment.camelType}`
-    )}`}</Tooltip>
-  );
-};
-
-export const StatisticsDoughnut = ({ elements }) => {
-  const totalCount = elements.reduce((result, element) => {
-    return result + element.count;
-  }, 0);
-  return (
-    <div className="statistics-container">
-      <div className="statistics">
-        <div className="superpose-label superpose">
-          <div className="doughnut-label-count">
-            {totalCount}
-          </div>
-          <div className="doughnut-label-text">
-            <Translate value="debate.survey.reactions" />
-          </div>
-        </div>
-        <div className="superpose">
-          <Doughnut elements={elements} />
-        </div>
-      </div>
-    </div>
+    <Tooltip id={`${sentiment.camelType}Tooltip`} className="no-arrow-tooltip">
+      {count} <Translate value={`debate.${sentiment.camelType}`} />
+    </Tooltip>
   );
 };
 
@@ -74,16 +50,16 @@ class Announcement extends React.Component {
             <Translate value="debate.thread.announcement" />
           </h3>
         </div>
-        <Col xs={12} md={9} className="announcement-right col-md-push-3">
+        <Col xs={12} sm={8} className="announcement-video col-sm-push-4">
           <Video
             descriptionTop={'Now we here'}
             descriptionBottom={'Started at the bottom'}
             htmlCode="https://www.youtube.com/embed/dQw4w9WgXcQ"
           />
         </Col>
-        <Col xs={12} md={3} className="announcement-left col-md-pull-9">
-          <div className="announcement-bottom">
-            <div style={{ width: '150px', height: '150px' }} className="announcement-doughnut">
+        <Col xs={12} sm={4} className="col-sm-pull-8">
+          <div className="announcement-statistics">
+            <div className="announcement-doughnut">
               <StatisticsDoughnut elements={createDoughnutElements(sentimentsCount)} />
             </div>
             <div className="announcement-numbers">

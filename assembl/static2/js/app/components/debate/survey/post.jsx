@@ -14,7 +14,7 @@ import addSentimentMutation from '../../../graphql/mutations/addSentiment.graphq
 import deleteSentimentMutation from '../../../graphql/mutations/deleteSentiment.graphql';
 import { likeTooltip, disagreeTooltip } from '../../common/tooltips';
 import { sentimentDefinitionsObject } from '../thread/sentimentDefinitions';
-import { StatisticsDoughnut } from '../thread/announcement';
+import StatisticsDoughnut from '../common/statisticsDoughnut';
 
 class Post extends React.Component {
   constructor(props) {

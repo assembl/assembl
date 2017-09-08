@@ -41,3 +41,9 @@
     background-color: $warning-alert;
     color: $orange2;
 }
+
+.no-arrow-tooltip {
+  .tooltip-arrow {
+    display: none;
+  }
+}
