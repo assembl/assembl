@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"POT-Creation-Date: 2017-08-03T09:39:15.282Z\n"
+"POT-Creation-Date: 2017-09-08T12:48:15.717Z\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "MIME-Version: 1.0\n"
@@ -211,6 +211,27 @@ msgid "changePassword.panelTitle"
 msgstr ""
 
 #: messages.json
+#. [common.editor.bold]
+#. defaultMessage is:
+#. Bold
+msgid "common.editor.bold"
+msgstr ""
+
+#: messages.json
+#. [common.editor.bulletList]
+#. defaultMessage is:
+#. Bullet list
+msgid "common.editor.bulletList"
+msgstr ""
+
+#: messages.json
+#. [common.editor.italic]
+#. defaultMessage is:
+#. Italic
+msgid "common.editor.italic"
+msgstr ""
+
+#: messages.json
 #. [common.goUp]
 #. defaultMessage is:
 #. Back to top
@@ -241,7 +262,7 @@ msgstr ""
 #: messages.json
 #. [date.format2]
 #. defaultMessage is:
-#. MM-DD-YYYY
+#. YYYY-MM-DD
 msgid "date.format2"
 msgstr ""
 
@@ -250,6 +271,41 @@ msgstr ""
 #. defaultMessage is:
 #. I answer:
 msgid "debate.answer"
+msgstr ""
+
+#: messages.json
+#. [debate.confirmDeletionBody]
+#. defaultMessage is:
+#. Are you sure you want to delete this message?
+msgid "debate.confirmDeletionBody"
+msgstr ""
+
+#: messages.json
+#. [debate.confirmDeletionButtonCancel]
+#. defaultMessage is:
+#. Cancel
+msgid "debate.confirmDeletionButtonCancel"
+msgstr ""
+
+#: messages.json
+#. [debate.confirmDeletionButtonDelete]
+#. defaultMessage is:
+#. Delete
+msgid "debate.confirmDeletionButtonDelete"
+msgstr ""
+
+#: messages.json
+#. [debate.confirmDeletionTitle]
+#. defaultMessage is:
+#. Confirm deletion
+msgid "debate.confirmDeletionTitle"
+msgstr ""
+
+#: messages.json
+#. [debate.deleteMessage]
+#. defaultMessage is:
+#. Delete this message
+msgid "debate.deleteMessage"
 msgstr ""
 
 #: messages.json
@@ -264,6 +320,34 @@ msgstr ""
 #. defaultMessage is:
 #. Did not get it
 msgid "debate.dontUnderstand"
+msgstr ""
+
+#: messages.json
+#. [debate.edit.body]
+#. defaultMessage is:
+#. Comment
+msgid "debate.edit.body"
+msgstr ""
+
+#: messages.json
+#. [debate.edit.subject]
+#. defaultMessage is:
+#. Body
+msgid "debate.edit.subject"
+msgstr ""
+
+#: messages.json
+#. [debate.edit.title]
+#. defaultMessage is:
+#. I edit my message
+msgid "debate.edit.title"
+msgstr ""
+
+#: messages.json
+#. [debate.editMessage]
+#. defaultMessage is:
+#. Edit this message
+msgid "debate.editMessage"
 msgstr ""
 
 #: messages.json
@@ -442,6 +526,13 @@ msgid "debate.thread.foldedPostLink_1"
 msgstr ""
 
 #: messages.json
+#. [debate.thread.goToIdea]
+#. defaultMessage is:
+#. Access the thread
+msgid "debate.thread.goToIdea"
+msgstr ""
+
+#: messages.json
 #. [debate.thread.linkIdea]
 #. defaultMessage is:
 #. This post is related to the following themes:
@@ -449,10 +540,31 @@ msgid "debate.thread.linkIdea"
 msgstr ""
 
 #: messages.json
+#. [debate.thread.messageTranslatedFrom]
+#. defaultMessage is:
+#. This message has been translated from %{language}.
+msgid "debate.thread.messageTranslatedFrom"
+msgstr ""
+
+#: messages.json
 #. [debate.thread.noPostsInThread]
 #. defaultMessage is:
 #. Be the first to contribute, start a discussion!
 msgid "debate.thread.noPostsInThread"
+msgstr ""
+
+#: messages.json
+#. [debate.thread.numberOfReactions]
+#. defaultMessage is:
+#. %{count} reactions
+msgid "debate.thread.numberOfReactions"
+msgstr ""
+
+#: messages.json
+#. [debate.thread.numberOfReactions_1]
+#. defaultMessage is:
+#. %{count} reaction
+msgid "debate.thread.numberOfReactions_1"
 msgstr ""
 
 #: messages.json
@@ -477,10 +589,52 @@ msgid "debate.thread.numberOfResponses_1"
 msgstr ""
 
 #: messages.json
+#. [debate.thread.postDeletedByAdmin]
+#. defaultMessage is:
+#. This message has been deleted by the community manager.
+msgid "debate.thread.postDeletedByAdmin"
+msgstr ""
+
+#: messages.json
+#. [debate.thread.postDeletedByUser]
+#. defaultMessage is:
+#. This message has been deleted by the author.
+msgid "debate.thread.postDeletedByUser"
+msgstr ""
+
+#: messages.json
+#. [debate.thread.postEdited]
+#. defaultMessage is:
+#. edited
+msgid "debate.thread.postEdited"
+msgstr ""
+
+#: messages.json
 #. [debate.thread.postSuccess]
 #. defaultMessage is:
 #. Thanks for your participation. Your comment has been sent!
 msgid "debate.thread.postSuccess"
+msgstr ""
+
+#: messages.json
+#. [debate.thread.seeSubIdeas]
+#. defaultMessage is:
+#. See %{count} sub-thematics
+msgid "debate.thread.seeSubIdeas"
+msgstr ""
+
+#: messages.json
+#. [debate.thread.seeSubIdeas_1]
+#. defaultMessage is:
+#. See sub-thematic
+msgid "debate.thread.seeSubIdeas_1"
+msgstr ""
+
+#: messages.json
+#. [debate.thread.showOriginal]
+#. defaultMessage is:
+#. Don't translate
+msgid "debate.thread.showOriginal"
 msgstr ""
 
 #: messages.json
@@ -491,10 +645,24 @@ msgid "debate.thread.startDiscussion"
 msgstr ""
 
 #: messages.json
+#. [debate.thread.translate]
+#. defaultMessage is:
+#. Translate
+msgid "debate.thread.translate"
+msgstr ""
+
+#: messages.json
 #. [debate.toAnswer]
 #. defaultMessage is:
 #. Answer
 msgid "debate.toAnswer"
+msgstr ""
+
+#: messages.json
+#. [debate.whatYouNeedToKnow]
+#. defaultMessage is:
+#. What you need to know
+msgid "debate.whatYouNeedToKnow"
 msgstr ""
 
 #: messages.json
@@ -1111,6 +1279,13 @@ msgstr ""
 #. defaultMessage is:
 #. Oldest first
 msgid "search.Oldest first"
+msgstr ""
+
+#: messages.json
+#. [search.Participants]
+#. defaultMessage is:
+#. Participants
+msgid "search.Participants"
 msgstr ""
 
 #: messages.json
