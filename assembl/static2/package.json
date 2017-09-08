@@ -98,6 +98,7 @@
     "redux-thunk": "^2.1.0",
     "reselect": "^3.0.1",
     "searchkit": "1.0.0-7",
+    "smoothscroll-polyfill": "^0.3.6",
     "url-join": "^2.0.0"
   },
   "//": "See https://facebook.github.io/jest/docs/webpack.html for more info",
