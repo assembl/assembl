@@ -1,7 +1,7 @@
 import React from 'react';
 import { Row, Col } from 'react-bootstrap';
 import classNames from 'classnames';
-import IdeaPreview from '../../common/ideaPreview';
+import IdeaPreview from './ideaPreview';
 import { get as getRoute } from '../../../utils/routeMap';
 import { getDiscussionSlug } from '../../../utils/globalFunctions';
 import VisibilityComponent from '../../common/visibilityComponent';
