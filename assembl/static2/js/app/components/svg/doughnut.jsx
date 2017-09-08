@@ -25,7 +25,7 @@ const describeArc = (x, y, radius, startAngle, endAngle) => {
 
 const cx = 70;
 const cy = 70;
-const r = 35;
+const r = 50;
 
 const getColor = (element) => {
   return 'color' in element ? element.color : 'grey';
