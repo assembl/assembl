@@ -79,7 +79,7 @@ class Idea extends React.Component {
             <Grid fluid className="background-grey">
               <div className="max-container">
                 <div className="content-section">
-                  <Announcement ideaWithPostsData={ideaWithPostsData} />
+                  <Announcement ideaWithPostsData={ideaWithPostsData} topDescription={idea.announcementBody} />
                 </div>
               </div>
             </Grid>}

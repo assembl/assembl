@@ -5,6 +5,7 @@ query Idea($lang: String!, $id: ID!) {
       title(lang: $lang)
       longTitle
       description(lang: $lang)
+      announcementBody
       imgUrl
     }
   }

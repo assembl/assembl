@@ -39,7 +39,8 @@ const createDoughnutElements = (sentimentCounts) => {
 
 class Announcement extends React.Component {
   render = () => {
-    const { idea } = this.props.ideaWithPostsData;
+    const { ideaWithPostsData: { idea }, topDescription } = this.props;
+    console.log('Topdesc:', topDescription);
     const { numContributors, numPosts, posts } = idea;
     const sentimentsCount = getSentimentsCount(posts);
     return (
@@ -52,7 +53,7 @@ class Announcement extends React.Component {
         </div>
         <Col xs={12} sm={8} className="announcement-video col-sm-push-4">
           <Video
-            descriptionTop={'Now we here'}
+            descriptionTop={topDescription}
             descriptionBottom={'Started at the bottom'}
             htmlCode="https://www.youtube.com/embed/dQw4w9WgXcQ"
           />
