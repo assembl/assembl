@@ -7,15 +7,17 @@ class Video extends React.Component {
     const { title, descriptionTop, descriptionBottom, descriptionSide, htmlCode } = this.props;
     return (
       <section className="video-section relative">
-        {htmlCode && (
+        {htmlCode &&
           <Grid fluid className="background-light">
             <div className="max-container">
               <div className="video-title-section">
                 <div className="title-hyphen">&nbsp;</div>
-                <h1 className="dark-title-1">{title || I18n.t('debate.survey.titleVideo')}</h1>
+                <h1 className="dark-title-1">
+                  {title || I18n.t('debate.survey.titleVideo')}
+                </h1>
               </div>
               <div className="content-section">
-                {descriptionTop && (
+                {descriptionTop &&
                   <Row>
                     <Col xs={12} sm={descriptionSide ? 6 : 8} smOffset={descriptionSide ? 4 : 2}>
                       <div
@@ -23,10 +25,9 @@ class Video extends React.Component {
                         dangerouslySetInnerHTML={{ __html: descriptionTop }}
                       />
                     </Col>
-                  </Row>
-                )}
+                  </Row>}
                 <Row>
-                  {descriptionSide && (
+                  {descriptionSide &&
                     <Col xs={12} sm={3} smOffset={1}>
                       <div className="video-description">
                         <div>
@@ -35,8 +36,7 @@ class Video extends React.Component {
                         <div className="description-txt" dangerouslySetInnerHTML={{ __html: descriptionSide }} />
                         <div className="box-hyphen left">&nbsp;</div>
                       </div>
-                    </Col>
-                  )}
+                    </Col>}
                   <Col xs={12} sm={descriptionSide ? 6 : 8} smOffset={descriptionSide ? 0 : 2}>
                     <div className="video-container" id="video-vid">
                       <iframe src={htmlCode} frameBorder="0" width="560" height="315" title="video" />
@@ -44,19 +44,17 @@ class Video extends React.Component {
                   </Col>
                 </Row>
                 <Row>
-                  {descriptionBottom && (
+                  {descriptionBottom &&
                     <Col xs={12} sm={descriptionSide ? 6 : 8} smOffset={descriptionSide ? 4 : 2}>
                       <div
                         className="video-description-layer video-description-bottom"
                         dangerouslySetInnerHTML={{ __html: descriptionBottom }}
                       />
-                    </Col>
-                  )}
+                    </Col>}
                 </Row>
               </div>
             </div>
-          </Grid>
-        )}
+          </Grid>}
       </section>
     );
   }
