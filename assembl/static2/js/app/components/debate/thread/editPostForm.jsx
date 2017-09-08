@@ -21,8 +21,7 @@ type EditPostFormProps = {
   id: string,
   subject: string,
   goBackToViewMode: Function,
-  mutate: Function,
-  refetchIdea: Function
+  mutate: Function
 };
 
 type EditPostFormState = {
@@ -79,7 +78,6 @@ class EditPostForm extends React.PureComponent<void, EditPostFormProps, EditPost
       this.props
         .mutate({ variables: variables })
         .then(() => {
-          this.props.refetchIdea();
           displayAlert('success', I18n.t('debate.thread.postSuccess'));
           this.props.goBackToViewMode();
         })
