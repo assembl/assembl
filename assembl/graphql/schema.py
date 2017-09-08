@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from collections import defaultdict
 from datetime import datetime
 import pytz
 import os.path
@@ -7,6 +8,7 @@ from random import sample as random_sample
 from sqlalchemy import desc, inspect
 from sqlalchemy.orm.exc import NoResultFound
 from sqlalchemy.orm import joinedload_all, undefer
+from sqlalchemy.sql.functions import count
 import graphene
 from graphene.pyutils.enum import Enum as PyEnum
 from graphene.relay import Node
@@ -360,7 +362,17 @@ class PostInterface(SQLAlchemyInterface):
         return body
 
     def resolve_sentiment_counts(self, args, context, info):
-        sentiment_counts = self.sentiment_counts
+        # get the sentiment counts from the cache if it exists instead of
+        # tiggering a sql query
+        cache = getattr(context, 'sentiment_counts_by_post_id', None)
+        if cache is not None:
+            sentiment_counts = {
+                name: 0 for name in models.SentimentOfPost.all_sentiments
+            }
+            sentiment_counts.update(cache[self.id])
+        else:
+            sentiment_counts = self.sentiment_counts
+
         return SentimentCounts(
             dont_understand=sentiment_counts['dont_understand'],
             disagree=sentiment_counts['disagree'],
@@ -545,6 +557,23 @@ class Idea(SecureObjectType, SQLAlchemyObjectType):
             query = query.options(*models.Content.subqueryload_options())
         else:
             query = query.options(*models.Content.joinedload_options())
+
+        # do only one sql query to calculate sentiment_counts
+        # instead of doing one query for each post
+        sentiment_counts = discussion.db.query(
+                models.Post.id, models.SentimentOfPost.type, count(models.SentimentOfPost.id)
+            ).join(models.SentimentOfPost
+            ).filter(models.Post.id.in_(query.with_entities(models.Post.id).subquery()),
+                     models.SentimentOfPost.tombstone_condition()
+            ).group_by(models.Post.id, models.SentimentOfPost.type)
+        sentiment_counts_by_post_id = defaultdict(dict)
+        for (post_id, sentiment_type, sentiment_count) in sentiment_counts:
+            sentiment_counts_by_post_id[post_id][
+                sentiment_type[SentimentOfPost.TYPE_PREFIX_LEN:]
+            ] = sentiment_count
+        # set sentiment_counts_by_post_id on the request to use it
+        # in Post's resolve_sentiment_counts
+        context.sentiment_counts_by_post_id = sentiment_counts_by_post_id
 
         # pagination is done after that, no need to do it ourself
         return query
