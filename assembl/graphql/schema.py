@@ -477,7 +477,6 @@ class Idea(SecureObjectType, SQLAlchemyObjectType):
     title_entries = graphene.List(LangStringEntry)
     long_title = graphene.String(lang=graphene.String())  # This is the "What you need to know"
     description = graphene.String(lang=graphene.String())
-    definition = graphene.String()  # This is the "Announcement"
     description_entries = graphene.List(LangStringEntry)
     children = graphene.List(lambda: Idea)
     parent_id = graphene.ID()
