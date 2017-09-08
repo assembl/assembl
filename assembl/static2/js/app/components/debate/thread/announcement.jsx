@@ -74,7 +74,14 @@ class Announcement extends React.Component {
             <Translate value="debate.thread.announcement" />
           </h3>
         </div>
-        <div className="announcement-left">
+        <Col xs={12} md={9} className="announcement-right col-md-push-3">
+          <Video
+            descriptionTop={'Now we here'}
+            descriptionBottom={'Started at the bottom'}
+            htmlCode="https://www.youtube.com/embed/dQw4w9WgXcQ"
+          />
+        </Col>
+        <Col xs={12} md={3} className="announcement-left col-md-pull-9">
           <div className="announcement-bottom">
             <div style={{ width: '150px', height: '150px' }} className="announcement-doughnut">
               <StatisticsDoughnut elements={createDoughnutElements(sentimentsCount)} />
@@ -83,14 +90,7 @@ class Announcement extends React.Component {
               {numPosts} <span className="assembl-icon-message" /> - {numContributors} <span className="assembl-icon-profil" />
             </div>
           </div>
-        </div>
-        <div className="announcement-right">
-          <Video
-            descriptionTop={'Now we here'}
-            descriptionBottom={'Started at the bottom'}
-            htmlCode="https://www.youtube.com/embed/dQw4w9WgXcQ"
-          />
-        </div>
+        </Col>
       </div>
     );
   };
