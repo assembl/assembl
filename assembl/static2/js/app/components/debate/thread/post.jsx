@@ -99,19 +99,25 @@ class Post extends React.PureComponent {
     let body;
     let subject;
     let originalBodyLocale;
+    let originalBody;
+    let originalSubject;
     if (bodyEntries.length > 1) {
       // first entry is the translated version, example localeCode "fr-x-mtfrom-en"
       // second entry is the original, example localeCode "en"
       body = this.state.showOriginal ? bodyEntries[1].value : bodyEntries[0].value;
       originalBodyLocale = bodyEntries[1].localeCode;
+      originalBody = bodyEntries[1].value;
     } else {
       // translation is not enabled or the message is already in the desired locale
       body = bodyEntries[0].value;
+      originalBody = bodyEntries[0].value;
     }
     if (subjectEntries.length > 1) {
       subject = this.state.showOriginal ? subjectEntries[1].value : subjectEntries[0].value;
+      originalSubject = subjectEntries[1].value;
     } else {
       subject = subjectEntries[0].value;
+      originalSubject = subjectEntries[0].value;
     }
 
     const modifiedSubject = (
@@ -136,8 +142,8 @@ class Post extends React.PureComponent {
           <div className="answer-form" id={id}>
             <EditPostForm
               id={id}
-              body={body}
-              subject={subject}
+              body={originalBody}
+              subject={originalSubject}
               refetchIdea={refetchIdea}
               goBackToViewMode={this.goBackToViewMode}
             />
