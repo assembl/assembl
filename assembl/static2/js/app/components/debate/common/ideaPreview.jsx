@@ -3,8 +3,6 @@ import { Link } from 'react-router';
 import { Translate } from 'react-redux-i18n';
 import Statistic from '../../common/statistic';
 
-require('smoothscroll-polyfill').polyfill();
-
 const IdeaPreview = ({
   selectedIdeasId,
   imgUrl,
@@ -45,7 +43,7 @@ const IdeaPreview = ({
                 onClick={() => {
                   setSelectedIdeas(ideaId, ideaLevel, ideaIndex);
                   const scrollPosition = document.documentElement.scrollTop || document.body.scrollTop;
-                  const scrollValue = scrollPosition + 300;
+                  const scrollValue = scrollPosition + 500;
                   setTimeout(() => {
                     window.scrollTo({ top: scrollValue, left: 0, behavior: 'smooth' });
                   }, 500);

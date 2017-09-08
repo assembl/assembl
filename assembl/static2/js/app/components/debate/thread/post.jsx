@@ -3,7 +3,7 @@ import { Translate } from 'react-redux-i18n';
 import { compose, graphql } from 'react-apollo';
 import { Row, Col } from 'react-bootstrap';
 
-import { getDomElementOffset, scrollToPosition } from '../../../utils/globalFunctions';
+import { getDomElementOffset } from '../../../utils/globalFunctions';
 import ProfileLine from '../../common/profileLine';
 import PostActions from './postActions';
 import AnswerForm from './answerForm';
@@ -59,7 +59,7 @@ class Post extends React.PureComponent {
     setTimeout(() => {
       if (!this.answerTextarea) return;
       const txtareaOffset = getDomElementOffset(this.answerTextarea).top;
-      scrollToPosition(txtareaOffset - this.answerTextarea.clientHeight, 200);
+      window.scrollTo({ top: txtareaOffset - this.answerTextarea.clientHeight, left: 0, behavior: 'smooth' });
     }, 200);
   };
 

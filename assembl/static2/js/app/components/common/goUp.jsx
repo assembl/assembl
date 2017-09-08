@@ -1,8 +1,6 @@
 import React from 'react';
 import { Translate } from 'react-redux-i18n';
 
-import { scrollToPosition } from '../../utils/globalFunctions';
-
 class GoUp extends React.Component {
   constructor(props) {
     super(props);
@@ -45,7 +43,7 @@ class GoUp extends React.Component {
         <div>
           <a
             onClick={() => {
-              return scrollToPosition(0, 200);
+              return window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
             }}
           >
             <span className="assembl-icon-up-open">&nbsp;</span>

@@ -2,7 +2,7 @@ import React from 'react';
 import { Grid, Col } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { Translate } from 'react-redux-i18n';
-import { getDomElementOffset, scrollToPosition, calculatePercentage } from '../../../utils/globalFunctions';
+import { getDomElementOffset, calculatePercentage } from '../../../utils/globalFunctions';
 import { getIfPhaseCompletedByIdentifier } from '../../../utils/timeline';
 import { SMALL_SCREEN_WIDTH } from '../../../constants';
 
@@ -119,7 +119,7 @@ class Navigation extends React.Component {
       target = document.getElementById(`q${questionIndex}`);
     }
     const targetOffset = Number(getDomElementOffset(target).top) + navbarHeight;
-    scrollToPosition(targetOffset - 40, 600);
+    window.scrollTo({ top: targetOffset - 80, left: 0, behavior: 'smooth' });
     this.props.scrollToQuestion(false);
   }
   render() {

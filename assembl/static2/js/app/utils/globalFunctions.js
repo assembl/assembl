@@ -132,31 +132,3 @@ export const getDomElementOffset = (el) => {
   const scrollLeft = window.pageXOffset || document.documentElement.scrollLeft || document.body.scrollLeft || 0;
   return { top: rect.top + scrollTop, left: rect.left + scrollLeft };
 };
-
-let scrollInterval;
-
-export const scrollToPosition = (to, duration) => {
-  const startPosition = getDocumentScrollTop();
-  if (startPosition === to) return;
-  clearInterval(scrollInterval);
-  const diff = to - startPosition;
-  const scrollStep = Math.PI / (duration / 10);
-  let count = 0;
-  let currPos = 0;
-  const start = startPosition;
-  scrollInterval = setInterval(() => {
-    if (
-      Math.round(getDocumentScrollTop() / 10) * 10 === Math.round(to / 10) * 10 ||
-      window.innerHeight + window.scrollY >= document.body.offsetHeight
-    ) {
-      clearInterval(scrollInterval);
-      document.body.scrollTop = to;
-      document.documentElement.scrollTop = to;
-    } else {
-      count += 1;
-      currPos = start + diff * (0.5 - 0.5 * Math.cos(count * scrollStep));
-      document.body.scrollTop = currPos; // Chrome/FF
-      document.documentElement.scrollTop = currPos; // Firefox
-    }
-  }, 10);
-};

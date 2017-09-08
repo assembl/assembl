@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { AutoSizer, CellMeasurer, CellMeasurerCache, List, WindowScroller } from 'react-virtualized';
-import { getDomElementOffset, scrollToPosition } from '../../utils/globalFunctions';
+import { getDomElementOffset } from '../../utils/globalFunctions';
 
 let globalList;
 
@@ -99,8 +99,8 @@ class Child extends React.PureComponent {
   }
 
   scrollToElement() {
-    const elmOffset = getDomElementOffset(this.scrollAnchor).top - 20;
-    scrollToPosition(elmOffset, 200);
+    const elmOffset = getDomElementOffset(this.scrollAnchor).top - 80;
+    window.scrollTo({ top: elmOffset, left: 0, behavior: 'smooth' });
   }
 
   render() {

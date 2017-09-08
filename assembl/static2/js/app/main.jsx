@@ -1,6 +1,5 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { scrollToPosition } from './utils/globalFunctions';
 import { getCurrentPhaseIdentifier } from './utils/timeline';
 import { addRedirectionToV1 } from './actions/phaseActions';
 import Navbar from './components/common/navbar';
@@ -36,7 +35,7 @@ class Main extends React.Component {
       location: location
     });
 
-    scrollToPosition(0, 0);
+    window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
   }
   componentWillUnmount() {
     window.removeEventListener('scroll', this.displayHeader);
