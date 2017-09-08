@@ -1354,6 +1354,8 @@ class UpdatePost(graphene.Mutation):
             post.modification_date = datetime.utcnow()
             post.body_mime_type = u'text/html'
             post.db.flush()
+            post.db.expire(post.subject, ["entries"])
+            post.db.expire(post.body, ["entries"])
 
         return UpdatePost(post=post)
 
