@@ -68,29 +68,29 @@ class Announcement extends React.Component {
     const sentimentsCount = getSentimentsCount(posts);
     return (
       <div className="announcement">
-        <Col xs={12} md={3} className="announcement-left">
-          <div className="announcement-title">
-            <div className="title-hyphen">&nbsp;</div>
-            <h3 className="dark-title-1">
-              <Translate value="debate.thread.announcement" />
-            </h3>
-          </div>
+        <div className="announcement-title">
+          <div className="title-hyphen">&nbsp;</div>
+          <h3 className="dark-title-1">
+            <Translate value="debate.thread.announcement" />
+          </h3>
+        </div>
+        <div className="announcement-left">
           <div className="announcement-bottom">
-            <div style={{ width: '200px', height: '200px' }} className="announcement-doughnut">
+            <div style={{ width: '150px', height: '150px' }} className="announcement-doughnut">
               <StatisticsDoughnut elements={createDoughnutElements(sentimentsCount)} />
             </div>
-            <div>
+            <div className="announcement-numbers">
               {numPosts} <span className="assembl-icon-message" /> - {numContributors} <span className="assembl-icon-profil" />
             </div>
           </div>
-        </Col>
-        <Col xs={12} md={9} className="announcement-right">
+        </div>
+        <div className="announcement-right">
           <Video
             descriptionTop={'Now we here'}
             descriptionBottom={'Started at the bottom'}
             htmlCode="https://www.youtube.com/embed/dQw4w9WgXcQ"
           />
-        </Col>
+        </div>
       </div>
     );
   };
