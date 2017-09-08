@@ -347,11 +347,11 @@ class PostInterface(SQLAlchemyInterface):
                 post.maybe_translate(lpc)
 
     def resolve_subject_entries(self, args, context, info):
-        lp = LanguagePreferenceCollection.getCurrent()
-        lang = lp.default_locale_code()
+        # Use self.subject and not self.get_subject() because we still
+        # want the subject even when the post is deleted.
         PostInterface._maybe_translate(self, args.get('lang'), context)
         subject = resolve_best_langstring_entries(
-            self.get_subject(), args.get('lang'))
+            self.subject, args.get('lang'))
         return subject
 
     def resolve_body_entries(self, args, context, info):
