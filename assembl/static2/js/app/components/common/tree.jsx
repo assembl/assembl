@@ -99,7 +99,7 @@ class Child extends React.PureComponent {
   }
 
   scrollToElement() {
-    const elmOffset = getDomElementOffset(this.scrollAnchor).top - 20;
+    const elmOffset = getDomElementOffset(this.scrollAnchor).top - 80;
     scrollToPosition(elmOffset, 200);
   }
 
