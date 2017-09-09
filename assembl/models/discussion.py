@@ -659,6 +659,12 @@ class Discussion(DiscussionBoundBase, NamedClassMixin):
             & (LocalUserRole.requested == False)),
         backref="participant_in_discussion")
 
+    def current_discussion_phase(self):
+        now = datetime.now()
+        for phase in self.timeline_phases:
+            if phase.start <= now <= (phase.end or now):
+                return phase
+
     def get_participants_query(self, ids_only=False, include_readers=False):
         from .auth import AgentProfile, LocalUserRole
         from .generic import Content
