@@ -40,7 +40,7 @@ class FrontendUrls(object):
         'user_discussion_preferences': '/user/discussion_preferences',
         'sentrytest': '/sentrytest',
         'groupSpec': '/G/*remainder',
-        'purl_posts': '/posts*remainder',
+        # 'purl_posts': '/posts*remainder',
         'purl_idea': '/idea*remainder',
         'purl_user': '/profile*remainder',
         'purl_widget': '/widget*remainder'

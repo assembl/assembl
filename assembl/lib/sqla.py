@@ -457,6 +457,14 @@ class BaseOps(object):
         return cls.base_polymorphic_class().external_typename()
 
     @classmethod
+    def graphene_id_for(cls, id):
+        from graphene.relay import Node
+        return Node.to_global_id(cls.external_typename_with_inheritance(), id)
+
+    def graphene_id(self):
+        return self.graphene_id_for(self.id)
+
+    @classmethod
     def uri_generic(cls, id, base_uri='local:'):
         """Return the identity of this object as a URI in the `local:` namespace
 
