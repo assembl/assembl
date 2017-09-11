@@ -14,7 +14,7 @@ fragment Post on Post {
   creator {
     ...AgentProfileInfo
   }
-  # parentId
+  # parentId already retrieved by IdeaWithPosts query
   # creationDate already retrieved by IdeaWithPosts query
   modificationDate
   bodyMimeType
