@@ -5,6 +5,7 @@ import { Col, Tooltip } from 'react-bootstrap';
 import StatisticsDoughnut from '../common/statisticsDoughnut';
 import { sentimentDefinitionsObject } from './sentimentDefinitions';
 import Video from '../survey/video';
+import { PublicationStates } from '../../../constants';
 
 const createTooltip = (sentiment, count) => {
   return (
@@ -19,10 +20,12 @@ const getSentimentsCount = (posts) => {
   Object.keys(counters).forEach((key) => {
     counters[key].count = 0;
   });
-  posts.edges.forEach(({ node: { sentimentCounts } }) => {
-    Object.keys(counters).forEach((key) => {
-      counters[key].count += sentimentCounts[key];
-    });
+  posts.edges.forEach(({ node: { sentimentCounts, publicationState } }) => {
+    if (publicationState === PublicationStates.PUBLISHED) {
+      Object.keys(counters).forEach((key) => {
+        counters[key].count += sentimentCounts[key];
+      });
+    }
   });
   return counters;
 };

@@ -11,6 +11,7 @@ query IdeaWithPosts($id: ID!) {
               id
               parentId
               creationDate
+              publicationState
               sentimentCounts {
                 like
                 disagree
