@@ -352,8 +352,8 @@ def purl_post(request):
     if not discussion:
         raise HTTPNotFound()
     phase = discussion.current_discussion_phase()
-    if (discussion.preferences['landing_page'] and
-            phase is not None and phase.previous_event is None):
+    if (discussion.preferences['landing_page'] and (
+            phase is None or not phase.interface_v1)):
         # Only for a discussion currently in phase 1 for now.
         # Shortly: look at the phase's interface_v1 flag
         post_id = FrontendUrls.getRequestedPostId(request)

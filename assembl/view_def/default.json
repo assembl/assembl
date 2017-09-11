@@ -534,7 +534,8 @@
     "DiscussionPhase": {
         "@extends": "TimelineEvent",
         "start": true,
-        "end": true
+        "end": true,
+        "interface_v1": true
     },
     "DiscussionSession": {
         "@extends": "TimelineEvent",

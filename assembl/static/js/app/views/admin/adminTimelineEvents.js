@@ -132,6 +132,7 @@ var TimelineEventView = Marionette.LayoutView.extend({
     eventIdentifier: '.js_identifier',
     eventStartDate: '.js_start_date',
     eventEndDate: '.js_end_date',
+    eventInterfaceV1: '.js_interface_v1',
     eventUp: '.js_timeline_up',
     eventDown: '.js_timeline_down',
     eventDelete: '.js_timeline_delete',
@@ -148,6 +149,7 @@ var TimelineEventView = Marionette.LayoutView.extend({
     'change @ui.eventIdentifier': 'changeIdentifier',
     'change @ui.eventStartDate': 'changeStartDate',
     'change @ui.eventEndDate': 'changeEndDate',
+    'change @ui.eventInterfaceV1': 'changeInterfaceV1',
   },
   getIndex: function() {
     return _.indexOf(this.model.collection.models, this.model);
@@ -217,6 +219,11 @@ var TimelineEventView = Marionette.LayoutView.extend({
   },
   changeImageUrl: function(ev) {
     this.model.set('image_url', ev.currentTarget.value);
+    this.model.save();
+    ev.preventDefault();
+  },
+  changeInterfaceV1: function(ev) {
+    this.model.set('interface_v1', ev.currentTarget.checked);
     this.model.save();
     ev.preventDefault();
   },
