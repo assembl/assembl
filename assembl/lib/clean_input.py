@@ -17,6 +17,11 @@ VALID_TAGS = ['a',
               # We do not allow img tags, either the reference is a local
               # file (which we don't support yet), our we could link to a
               # bunch of outside scripts.
+
+              'img',
+              'figure',
+              'div',
+
               'li',
               'ol',
               'p',
@@ -38,6 +43,9 @@ VALID_TAGS = ['a',
 VALID_ATTRIBUTES = ['href',  # For hyperlinks
                     'alt',  # For accessiblity
                     'colspan', 'headers', 'abbr',
+
+                    'title', 'src', 'width', 'data-id', 'data-mimeType', 'data-blockType',
+
                     'scope', 'sorted'  # For tables
                     ]
 
