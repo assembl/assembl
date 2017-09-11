@@ -1,6 +1,6 @@
 #import "./Post.graphql"
 
-query Post($id: ID!) {
+query Post($contentLocale: String!, $id: ID!) {
   post: node(id: $id) {
     ...Post
   }

@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { AutoSizer, CellMeasurer, CellMeasurerCache, List, WindowScroller } from 'react-virtualized';
-import { getDomElementOffset, scrollToPosition } from '../../utils/globalFunctions';
+import { getDomElementOffset } from '../../utils/globalFunctions';
 
 let globalList;
 
@@ -99,13 +99,14 @@ class Child extends React.PureComponent {
   }
 
   scrollToElement() {
-    const elmOffset = getDomElementOffset(this.scrollAnchor).top - 20;
-    scrollToPosition(elmOffset, 200);
+    const elmOffset = getDomElementOffset(this.scrollAnchor).top - 80;
+    window.scrollTo({ top: elmOffset, left: 0, behavior: 'smooth' });
   }
 
   render() {
     const {
       hidden,
+      contentLocale,
       lang,
       children,
       InnerComponent,
@@ -147,6 +148,7 @@ class Child extends React.PureComponent {
                 hidden={!expanded}
                 key={idx}
                 {...child}
+                contentLocale={contentLocale}
                 lang={lang}
                 rowIndex={rowIndex}
                 level={level + 1}
@@ -183,7 +185,7 @@ Child.defaultProps = {
 };
 
 const cellRenderer = ({ index, key, parent, style }) => {
-  const { lang, data, InnerComponent, InnerComponentFolded, SeparatorComponent } = parent.props;
+  const { contentLocale, lang, data, InnerComponent, InnerComponentFolded, SeparatorComponent } = parent.props;
   const childData = data[index];
   return (
     <CellMeasurer cache={cache} columnIndex={0} key={key} parent={parent} rowIndex={index}>
@@ -191,6 +193,7 @@ const cellRenderer = ({ index, key, parent, style }) => {
         {index > 0 ? <SeparatorComponent /> : null}
         <Child
           {...childData}
+          contentLocale={contentLocale}
           lang={lang}
           rowIndex={index}
           InnerComponent={InnerComponent}
@@ -227,6 +230,7 @@ class Tree extends React.Component {
 
   render() {
     const {
+      contentLocale,
       lang,
       data,
       InnerComponent, // component that will be rendered in the child
@@ -256,6 +260,7 @@ class Tree extends React.Component {
                     autoHeight
                     rowHeight={cache.rowHeight}
                     deferredMeasurementCache={cache}
+                    contentLocale={contentLocale}
                     lang={lang}
                     data={data}
                     InnerComponent={InnerComponent}

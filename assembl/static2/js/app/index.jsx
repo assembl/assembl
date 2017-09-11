@@ -11,6 +11,8 @@ import createAppStore from './store';
 import client from './client';
 import Routes from './routes';
 
+require('smoothscroll-polyfill').polyfill();
+
 /*
 `piwik-react-router` expects that we provide it with a browser history.
 We provide it with `react-router`'s `browserHistory`.

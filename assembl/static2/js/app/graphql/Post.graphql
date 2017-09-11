@@ -2,8 +2,16 @@
 
 fragment Post on Post {
   id
-  subject
-  body
+  subjectEntries(lang: $contentLocale) {
+    value
+    localeCode
+  }
+  bodyEntries(lang: $contentLocale) {
+    value
+    localeCode
+    translatedFromLocaleCode
+    supposedUnderstood
+  }
   mySentiment
   indirectIdeaContentLinks {
     idea {

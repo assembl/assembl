@@ -15,10 +15,14 @@ import deleteSentimentMutation from '../../../graphql/mutations/deleteSentiment.
 import { likeTooltip, disagreeTooltip } from '../../common/tooltips';
 import { sentimentDefinitionsObject } from '../thread/sentimentDefinitions';
 import StatisticsDoughnut from '../common/statisticsDoughnut';
+import PostTranslate from '../common/postTranslate';
 
 class Post extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {
+      showOriginal: false
+    };
     this.handleSentiment = this.handleSentiment.bind(this);
   }
   handleSentiment(event, type) {
@@ -66,13 +70,39 @@ class Post extends React.Component {
   }
   render() {
     const { postIndex, moreProposals, post } = this.props;
+    const { bodyEntries } = post;
+
+    let body;
+    let originalBodyLocale;
+    if (bodyEntries.length > 1) {
+      // first entry is the translated version, example localeCode "fr-x-mtfrom-en"
+      // second entry is the original, example localeCode "en"
+      body = this.state.showOriginal ? bodyEntries[1].value : bodyEntries[0].value;
+      originalBodyLocale = bodyEntries[1].localeCode;
+    } else {
+      // translation is not enabled or the message is already in the desired locale
+      body = bodyEntries[0].value;
+    }
+
     return (
       <div className={postIndex < 3 || moreProposals ? 'shown box' : 'hidden box'}>
         <div className="content">
           <PostCreator name={post.creator.name} />
+          {originalBodyLocale
+            ? <PostTranslate
+              id={post.id}
+              showOriginal={this.state.showOriginal}
+              originalBodyLocale={originalBodyLocale}
+              toggle={() => {
+                return this.setState((state) => {
+                  return { showOriginal: !state.showOriginal };
+                });
+              }}
+            />
+            : null}
           <div
             className={`body ${post.bodyMimeType === 'text/plain' ? 'pre-wrap' : ''}`}
-            dangerouslySetInnerHTML={{ __html: post.body }}
+            dangerouslySetInnerHTML={{ __html: body }}
           />
           <div className="sentiments">
             <div className="sentiment-label">

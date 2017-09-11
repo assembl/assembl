@@ -13,6 +13,7 @@ import Navigation from '../components/debate/survey/navigation';
 import Proposals from '../components/debate/survey/proposals';
 import { getIfPhaseCompletedByIdentifier } from '../utils/timeline';
 import ThematicQuery from '../graphql/ThematicQuery.graphql';
+import { getContentLocale } from '../reducers/rootReducer';
 
 class Survey extends React.Component {
   constructor(props) {
@@ -144,8 +145,9 @@ Survey.propTypes = {
 
 const mapStateToProps = (state) => {
   return {
-    lang: state.i18n.locale,
-    debate: state.debate
+    contentLocale: getContentLocale(state),
+    debate: state.debate,
+    lang: state.i18n.locale
   };
 };
 

@@ -1,6 +1,7 @@
 // @flow
 import React from 'react';
-import { graphql } from 'react-apollo';
+import { compose, graphql } from 'react-apollo';
+import { connect } from 'react-redux';
 import { Row, Col, FormGroup, Button } from 'react-bootstrap';
 import { Translate, I18n } from 'react-redux-i18n';
 import { RawContentState } from 'draft-js';
@@ -12,14 +13,15 @@ import { convertToRawContentState, convertRawContentStateToHTML, rawContentState
 import RichTextEditor from '../../common/richTextEditor';
 import { TextInputWithRemainingChars } from '../../common/textInputWithRemainingChars';
 import { TEXT_INPUT_MAX_LENGTH, TEXT_AREA_MAX_LENGTH } from './topPostForm';
+import { getContentLocale } from '../../../reducers/rootReducer';
 
 type EditPostFormProps = {
+  contentLocale: string,
   body: string,
   id: string,
   subject: string,
   goBackToViewMode: Function,
-  mutate: Function,
-  refetchIdea: Function
+  mutate: Function
 };
 
 type EditPostFormState = {
@@ -67,6 +69,7 @@ class EditPostForm extends React.PureComponent<void, EditPostFormProps, EditPost
     const bodyIsEmpty = rawContentStateIsEmpty(this.state.body);
     if (!subjectIsEmpty && !bodyIsEmpty) {
       const variables = {
+        contentLocale: this.props.contentLocale,
         postId: this.props.id,
         subject: this.state.subject,
         body: convertRawContentStateToHTML(this.state.body)
@@ -75,7 +78,6 @@ class EditPostForm extends React.PureComponent<void, EditPostFormProps, EditPost
       this.props
         .mutate({ variables: variables })
         .then(() => {
-          this.props.refetchIdea();
           displayAlert('success', I18n.t('debate.thread.postSuccess'));
           this.props.goBackToViewMode();
         })
@@ -132,6 +134,10 @@ class EditPostForm extends React.PureComponent<void, EditPostFormProps, EditPost
   }
 }
 
-const EditPostFormWithMutation = graphql(updatePostMutation)(EditPostForm);
+const mapStateToProps = (state) => {
+  return {
+    contentLocale: getContentLocale(state)
+  };
+};
 
-export default EditPostFormWithMutation;
+export default compose(connect(mapStateToProps), graphql(updatePostMutation))(EditPostForm);

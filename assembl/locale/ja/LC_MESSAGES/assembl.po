@@ -24,7 +24,7 @@ msgid "The CSV file must have two columns"
 msgstr "CSVファイルには2つの列が必要です"
 
 #: assembl/auth/util.py:500
-#, fuzzy, python-format
+#, python-format
 msgid "Not an email: <%s> at line %d"
 msgstr "メールではない：<%s> ラインで %d"
 
@@ -39,7 +39,7 @@ msgstr "${val} シリアル化できません: ${err}"
 
 #: assembl/lib/colander.py:193
 msgid "${val} is not a string: ${err}"
-msgstr "${val} 文字列ではありません： ${err}"
+msgstr "${val} 文字列ではありません：${err}"
 
 #: assembl/models/edgesense_drupal.py:173
 msgid "Unknown User ${uid}"
@@ -356,7 +356,7 @@ msgstr "追加のアクセス権は必要ありません"
 #: assembl/static/js/app/models/agents.js:147
 #, python-format
 msgid "you must first <a href='%s'>Sign in</a>"
-msgstr "あなたはまず <a href=‘%s’>サインイン</a>する必要があります"
+msgstr "あなたはまず <a href='%s'>サインイン</a>する必要があります"
 
 #: assembl/static/js/app/models/agents.js:153
 msgid "you must first join this discussion"
@@ -601,7 +601,7 @@ msgstr "この論点でクリエイティビティセッションが行われま
 #: assembl/static/js/app/models/widget.js:1086
 #, python-format
 msgid "You have %s to participate"
-msgstr "参加するための ％s があります"
+msgstr "参加するための %s があります"
 
 #: assembl/static/js/app/models/widget.js:1162
 msgid "Create an inspiration module on this idea"
@@ -720,7 +720,6 @@ msgid "You can click on this idea to see current discussions happening on it. Yo
 msgstr "このアイデアをクリックすると、現在のディスカッションが表示されます。あなたはそこからこのアイデアに投稿することができます."
 
 #: assembl/static/js/app/utils/tours/assemblTours.js:170
-#, fuzzy
 msgid "Stay informed"
 msgstr "情報を得る"
 
@@ -744,7 +743,7 @@ msgstr "この告知の内容をここに書いてください"
 #: assembl/static/js/app/views/attachments.js:138
 #, python-format
 msgid "For URL %s in the text above"
-msgstr "上記のテキストのURL％sについて"
+msgstr "上記のテキストのURL%sについて"
 
 #: assembl/static/js/app/views/attachments.js:260 assembl/templates/views/langStringEntry.tmpl:12
 msgid "Remove"
@@ -757,7 +756,7 @@ msgstr "アップロードされたファイル"
 #: assembl/static/js/app/views/attachments.js:336
 #, python-format
 msgid "We are sorry, there was an error during the upload of the file \"%s\". Please try again."
-msgstr "申し訳ありません、ファイル \"％s\"のアップロード中にエラーが発生しました。もう一度お試しください。"
+msgstr "申し訳ありません、ファイル “%s” のアップロード中にエラーが発生しました。もう一度お試しください。"
 
 #: assembl/static/js/app/views/attachments.js:507
 msgid "Upload an Image to the Idea Panel"
@@ -869,7 +868,7 @@ msgid ""
 "The following message was posted on Assembl:\n"
 "\n"
 "\n"
-msgstr "次のメッセージがAssemblに掲載されました：\\ n \\ n \\ n\n"
+msgstr "次のメッセージがAssemblに掲載されました：\n\n\n"
 
 #: assembl/static/js/app/views/facebookViews.js:42
 #, python-format
@@ -877,7 +876,7 @@ msgid ""
 "The following message was posted by %s on Assembl:\n"
 "\n"
 "\n"
-msgstr "次のメッセージがAssemblに%sによって投稿されました：\\ n \\ n \\ n\n"
+msgstr "次のメッセージがAssemblに%sによって投稿されました：\n\n\n"
 
 #: assembl/static/js/app/views/facebookViews.js:51
 msgid "Please be aware that comments below will be imported into a discussion found at "
@@ -1130,7 +1129,7 @@ msgstr "最も古いメッセージが最初に"
 #, python-format
 msgid "%d message on theme “%s”"
 msgid_plural "%d messages on theme “%s”"
-msgstr[0] "テーマ \" %s \"の %d メッセージ"
+msgstr[0] "%d メッセージ, テーマ \" %s \""
 
 #: assembl/static/js/app/views/messageColumnsPanel.js:406
 #, python-format
@@ -1304,7 +1303,7 @@ msgstr "別の言語に翻訳する"
 #, python-format
 msgid "%s (%s)"
 msgid_plural "%s (%s)"
-msgstr[0] "%1$s %2$s"
+msgstr[0] "%s (%s)"
 
 #: assembl/static/js/app/views/postFilters.js:183
 #, python-format
@@ -1353,7 +1352,7 @@ msgstr "指定された投稿返信スレッドに含まれるメッセージの
 #: assembl/static/js/app/views/postFilters.js:275 assembl/static/js/app/views/postFilters.js:317
 #, python-format
 msgid "synthesis \"%s\""
-msgstr "シンセシス\\ \" %s \""
+msgstr "シンセシス \" %s \""
 
 #: assembl/static/js/app/views/postFilters.js:278 assembl/static/js/app/views/postFilters.js:320
 #, python-format
@@ -1363,7 +1362,7 @@ msgstr "メッセージ \" %s \""
 #: assembl/static/js/app/views/postFilters.js:284
 #, python-format
 msgid "Are in the conversation that follows: %s"
-msgstr "次の会話に参加しています： %s"
+msgstr "次の会話に参加しています：%s"
 
 #: assembl/static/js/app/views/postFilters.js:302
 msgid "Part of the context of"
@@ -1423,7 +1422,7 @@ msgstr "列カテゴリ"
 
 #: assembl/static/js/app/views/postFilters.js:437
 msgid "Only include messages that were classified in a specific category. Use \"null\" for no category."
-msgstr "特定のカテゴリに分類されたメッセージのみを含めます。カテゴリがない場合は\\ \"null \"を使用します。"
+msgstr "特定のカテゴリに分類されたメッセージのみを含めます。カテゴリがない場合は\"null\"を使用します。"
 
 #: assembl/static/js/app/views/postFilters.js:444
 #, python-format
@@ -1455,7 +1454,6 @@ msgid "Only include messages that represent a synthesis of the discussion."
 msgstr "ディスカッションのシンセシスを表すメッセージのみを含める。"
 
 #: assembl/static/js/app/views/postFilters.js:533
-#, fuzzy
 msgid "Have unread value"
 msgstr "unread valueを持つ"
 
@@ -1510,7 +1508,7 @@ msgstr "日付を入力してください。その日付より前に作成され
 #: assembl/static/js/app/views/postFilters.js:737
 #, python-format
 msgid "Messages posted since the last synthesis (%s)"
-msgstr "最後のシンセシス以降に投稿されたメッセージ（ %s ）"
+msgstr "最後のシンセシス以降に投稿されたメッセージ（%s）"
 
 #: assembl/static/js/app/views/postFilters.js:741
 msgid "Only include posts created after the last synthesis."
@@ -1706,7 +1704,7 @@ msgstr "シンセシスの公開に失敗しました！"
 #, python-format
 msgid "<span class='available-tokens-number'>%d</span> remaining %s token"
 msgid_plural "<span class='available-tokens-number'>%d</span> remaining %s tokens"
-msgstr[0] "<span class = 'available-tokens-number>> %d </ span>残りの%sトークン"
+msgstr[0] "<span class='available-tokens-number'>%d</span>残りの%sトークン"
 
 #: assembl/static/js/app/views/tokenVoteSession.js:530
 #, python-format
@@ -1725,7 +1723,7 @@ msgstr "説明を参照してください"
 #, python-format
 msgid "%d token \"%s\" was voted on this idea, out of a total %d \"%s\" tokens voted "
 msgid_plural "%d tokens \"%s\" were voted on this idea, out of a total %d \"%s\" tokens voted"
-msgstr[0] "合計で%d “%s”投票されたトークンのうち、このアイデアには%d のトークン \" %s “が投票されました。"
+msgstr[0] "合計で%d “%s”投票されたトークンのうち、このアイデアには%d のトークン “%s” が投票されました。"
 
 #: assembl/static/js/app/views/tokenVoteSession.js:1089
 msgid "Hide Description"
@@ -1734,7 +1732,7 @@ msgstr "説明を隠す"
 #: assembl/static/js/app/views/tokenVoteSession.js:1210
 #, python-format
 msgid "Token: \"%s\""
-msgstr "トークン：\\ \" %s \""
+msgstr "トークン：\" %s \""
 
 #: assembl/static/js/app/views/tokenVoteSession.js:1332
 #, python-format
@@ -1746,7 +1744,7 @@ msgstr[0] "%d人が%sと%s間で投票しました。参加者1人あたりの�
 #, python-format
 msgid "<strong>%d</strong> token of type \"%s\""
 msgid_plural "<strong>%d</strong> tokens of type \"%s\""
-msgstr[0] "\\ \" %s \"タイプのトークン<strong> %d </ strong>"
+msgstr[0] "<strong>%d</strong> \" %s \"タイプのトークン"
 
 #: assembl/static/js/app/views/tokenVoteSession.js:1390
 msgid "Token Vote Results"
@@ -1957,7 +1955,7 @@ msgstr "このアイデア周辺の会話を見る"
 #: assembl/templates/login.jinja2:31
 #, python-format
 msgid "Log in to \"%(discussion_title)s\""
-msgstr "/“％(discussion_title)s \"にログインする"
+msgstr "/“%(discussion_title)s”にログインする"
 
 #: assembl/templates/login.jinja2:31
 msgid "Log in to Assembl"
@@ -2059,7 +2057,7 @@ msgstr "Assemblに他のアカウントを接続する"
 #: assembl/templates/react_unauthorized.jinja2:10
 #, python-format
 msgid "Unauthorized <small>Error %(error_num)s</small>"
-msgstr "不正な<small>エラー％（error_num）s </ small>"
+msgstr "不正な<small>エラー%(error_num)s</small>"
 
 #: assembl/templates/react_unauthorized.jinja2:11
 msgid "The requested resource requires proper permissions."
@@ -2073,12 +2071,12 @@ msgstr "<a href='%(logout)s'>ログアウト</a>して、許可されたユー�
 #: assembl/templates/react_unauthorized.jinja2:16
 #, python-format
 msgid "Technical Contact: <a href=mailto:%(admin_email)s>%(admin_email)s</a>"
-msgstr "テクニカルコンタクト：<a href=mailto:%(admin_email)s>％（admin_email）s </a>"
+msgstr "テクニカルコンタクト：<a href=mailto:%(admin_email)s>%(admin_email)s</a>"
 
 #: assembl/templates/register.jinja2:12
 #, python-format
 msgid "Join \"%(discussion_title)s\""
-msgstr "\\ \"％（discussion_title）s \"に参加する"
+msgstr "“%(discussion_title)s”に参加する"
 
 #: assembl/templates/register.jinja2:12
 msgid "Join Assembl"
@@ -2146,7 +2144,7 @@ msgstr "CSVファイルには、フルネーム、電子メールの順に2つ�
 
 #: assembl/templates/admin/discussion_permissions.jinja2:99
 msgid "The invite message will not be sent to existing users, even if created on another discussion. If you do not get Assembl to \"Send an invite message\", send one yourself, explaining how to reset password."
-msgstr "招待メッセージは、別のディスカッションで作成されたとしても、既存のユーザーには送信されません。 Assemblを\\ \"招待メッセージを送信する\"にしていない場合は、あなた自身で送信し、パスワードをリセットする方法を説明してください。"
+msgstr "招待メッセージは、別のディスカッションで作成されたとしても、既存のユーザーには送信されません。 Assemblを\"招待メッセージを送信する\"にしていない場合は、あなた自身で送信し、パスワードをリセットする方法を説明してください。"
 
 #: assembl/templates/admin/discussion_permissions.jinja2:101
 msgid "Role"
@@ -2187,7 +2185,7 @@ msgid ""
 "\n"
 "Best regards,\n"
 "The Assembl Team\n"
-msgstr "こんにちは、{name}！\\ nあなたはAssemblディスカッションに招待されました。{discussion_topic} \\ nこのリンクをクリックすると、パスワードを設定してログインできます。\\ n <{confirm_url}> \\ n \\ n参加の申請をしていない場合は、このメールを無視してください。\\ n \\ nありがとうございます。\\ nAssemblチーム\\ n\n"
+msgstr "こんにちは、{name}！\nあなたはAssemblディスカッションに招待されました。{discussion_topic}\nこのリンクをクリックすると、パスワードを設定してログインできます。\n<{confirm_url}>\n\n参加の申請をしていない場合は、このメールを無視してください。\n\nありがとうございます。\nAssemblチーム\n"
 
 #: assembl/templates/admin/discussion_permissions.jinja2:137
 msgid "HTML email message:"
@@ -2200,7 +2198,7 @@ msgid ""
 "Please <a href=\"{confirm_url}\">click here</a> to set your password, after which you can log in.</p>\n"
 "<p>If you did not ask to join please disregard this email.</p>\n"
 "<p>Best regards,<br />The Assembl Team</p>\n"
-msgstr "<p>こんにちは、{name}！</ p> \\ n <p>Assemblディスカッション<a href=\"{discussion_url}\"> {discussion_topic} </a>に招待されました。\\ n <aパスワードを設定するには、href = \\ \"{confirm_url} \">ここをクリック</a>してください。その後、ログインすることができます。</ p> \\ n <p> / p> \\ n <p>よろしくお願いいたします。<br />Assemblチーム</ p> \\ n\n"
+msgstr "<p>こんにちは、{name}！</p>\n<p>Assemblディスカッション<a href=\"{discussion_url}\">{discussion_topic}</a>に招待されました。\nパスワードを設定するには、<a href=\"{confirm_url}\">ここをクリック</a>してください。<p>その後、ログインすることができます。</p>\n<p>よろしくお願いいたします。<br />Assemblチーム</p>\n"
 
 #: assembl/templates/admin/discussion_permissions.jinja2:145
 msgid "Re-send to people who did not log in yet (USE SPARINGLY)"
@@ -2212,7 +2210,7 @@ msgstr "グローバルな役割"
 
 #: assembl/templates/includes/updatebrowser.jinja2:41
 msgid "Your version of <strong>{0}</strong> is outdated and may deteriorate your experience on Assembl."
-msgstr "<strong> {0} </ strong>のバージョンが古く、Assemblの使用経験の質が低下する可能性があります。"
+msgstr "<strong>{0}</strong>のバージョンが古く、Assemblの使用経験の質が低下する可能性があります。"
 
 #: assembl/templates/includes/updatebrowser.jinja2:42
 msgid "update your browser"
@@ -2225,7 +2223,7 @@ msgstr "ありがとうございます！"
 #: assembl/templates/notifications/html_mail.jinja2:81
 #, python-format
 msgid "You are receiving this because you are %(notificationConfigLink)s to discussion %(discussionLink)s.  Specifically, you currently receive a notification when:"
-msgstr "あなたはディスカッション％（discussionLink）の％（notificationConfigLink）sなので、これを受け取っています。具体的には、あなたは次の場合に通知を受け取ります。"
+msgstr "あなたはディスカッション%(discussionLink)sの%(notificationConfigLink)sなので、これを受け取っています。具体的には、あなたは次の場合に通知を受け取ります。"
 
 #: assembl/templates/notifications/html_mail.jinja2:83 assembl/templates/views/userSubscriber.tmpl:11
 msgid "subscribed"
@@ -2250,10 +2248,10 @@ msgid ""
 "<p>You will find <a href='{documentation_url}'>documentation here</a>.</p>\n"
 "<p>The Assembl tool enables consultations involving a great number of users (hundreds or thousands of users, public officials, etc.) in the co-design of a deliverable. If you need advice on structuring your consultation process and building skills in using Assembl, you can contact <a href='mailto:{admin_email}'>{admin_name}</a> from <a href='{admin_org_url}'>{admin_org_name}</a>.</p>"
 msgstr ""
-"<h1> <a href='{discussion_url}'>Assembl協議</a>の準備が整いました。</ h1>\n"
-" <p> </ p> \n"
-" <p> Assemblツールを使用すると、あなたのパスワードを定義することができます。</ p> \\ n <p> <a href='{documentation_url}'>ドキュメンテーション</a>をご覧ください。成果物の共同設計において、非常に多くのユーザー（数百人または数千人のユーザー、公務員など）が関与しています。 Assemblを使用して相談プロセスを構築し、スキルを習得するためのアドバイスが必要な場合は、<a href='{admin_org_url}'> {admin_org_url}}から<a href='mailto:"
-"{admin_email}'> {admin_name} </a>までご連絡ください。 admin_org_name} </a>。</ p>"
+"<h1><a href='{discussion_url}'>Assembl協議</a>の準備が整いました。</h1>\n"
+"<p>Assemblツールを使用すると、あなたのパスワードを定義することができます。</p>\n"
+"<p><a href='{documentation_url}'>ドキュメンテーション</a>をご覧ください。成果物の共同設計において、非常に多くのユーザー（数百人または数千人のユーザー、公務員など）が関与しています。Assemblを使用して相談プロセスを構築し、スキルを習得するためのアドバイスが必要な場合は、<a href='{admin_org_url}'> {admin_org_url} </a>から<a href='mailto:"
+"{admin_email}'> {admin_name} </a>までご連絡ください。</p>"
 
 #: assembl/templates/notifications/txt_new_discussion.jinja2:16
 msgid ""
@@ -2266,7 +2264,9 @@ msgid ""
 "\n"
 "The Assembl tool enables consultations involving a great number of users (hundreds or thousands of users, public officials, etc.) in the co-design of a deliverable. If you need advice on structuring your consultation process and building skills in using Assembl, you can contact {admin_name} at <{admin_email}>, from {admin_org_name} ({admin_org_url}) for more details."
 msgstr ""
-"\\ n {discussion_url} \\ n次のリンクを使用してパスワードを定義することができます：\\ n {connection_url} \\ nここにドキュメントを\\ n {documentation_url} \\ n見つけることができます。 n \\ nAssenblツールを使用すると、多数のユーザー（数百人または数千人のユーザー、公務員など）が関与するコンサルテーションが可能になります。 Assemblの使用に関するコンサルテーションプロセスの構築とスキルの習得についてアドバイスが必要な場合は、"
+"{discussion_url}\n次のリンクを使用してパスワードを定義することができます：\n{connection_url}\n"
+"ここにドキュメントを\n{documentation_url}\n見つけることができます。\n"
+"Assemblツールを使用すると、多数のユーザー（数百人または数千人のユーザー、公務員など）が関与するコンサルテーションが可能になります。 Assemblの使用に関するコンサルテーションプロセスの構築とスキルの習得についてアドバイスが必要な場合は、"
 "{admin_org_name}（{admin_org_url}）から{admin_email}の{admin_name}までご連絡ください。"
 
 #: assembl/templates/styleguide/components/Dialogs.jinja2:120 assembl/templates/styleguide/components/Dialogs.jinja2:147 assembl/templates/views/adminPartnerEditForm.tmpl:72 assembl/templates/views/adminPartnerForm.tmpl:70 assembl/templates/views/create-group.tmpl:129 assembl/templates/views/message_translation_question_selection.tmpl:12
@@ -2304,8 +2304,17 @@ msgid ""
 "\t\t<li>Based on these ideas, they will reorganize the ideas into a table of contents of the ideas shared</li>\n"
 "\t</ol>"
 msgstr ""
-"<p>ディスカッションに参加する方法\\ \"％（debate_name）s \"：</ p> \\ n \\ t <ol> \\ n \\ t \\ t <li> 既存のアイデアを使ってディスカッションを探します </li> \\ n \\ t \\ t <li>参加者の投稿に直接返信して会話に参加します。</ li> \\ n \\ t \\ t <li>特定のアイデアに関するディスカッションを活性化したい場合は、新たなトピックを開始します \\ n \\ t </ ol> \\ n \\ t <li>プロセスがどのように機能するか：</ p> \\ n \\ t <ol> \\ "
-"n \\ t \\ t <li>あなたが投稿するにつれて、ハーベースターはあなたのメッセージから重要なアイデアを選択します - あなたの投稿が気づかれるようにするために彼らはいます。\\ n \\ t \\ t <li>この発想に基づいて、彼らはアイデアを共有されたアイデアの目次の中に再構成します</ li> \\ n \\ t </ ol>"
+"<p>ディスカッションに参加する方法 \"%(debate_name)s\"：</p>\n"
+"\t<ol>\n"
+"\t\t<li>既存のアイデアを使ってディスカッションを探します</li>\n"
+"\t\t<li>参加者の投稿に直接返信して会話に参加します。</li>\n"
+"\t\t<li>特定のアイデアに関するディスカッションを活性化したい場合は、新たなトピックを開始します</li>\n"
+"\t</ol>\n"
+"\t<p>プロセスがどのように機能するか：</p>\n"
+"\t<ol>\n"
+"\t\t<li>あなたが投稿するにつれて、ハーベースターはあなたのメッセージから重要なアイデアを選択します - あなたの投稿が気づかれるようにするために彼らはいます。</li>\n"
+"\t\t<li>この発想に基づいて、彼らはアイデアを共有されたアイデアの目次の中に再構成します</li>\n"
+"\t</ol>"
 
 #: assembl/templates/views/about.tmpl:18
 msgid "Join the discussions"
@@ -2358,7 +2367,7 @@ msgstr "ウェブ解析：Piwik idサイト"
 #: assembl/templates/views/adminDiscussion.tmpl:68
 #, python-format
 msgid "URL of the Help page (use \"%s\" for language)"
-msgstr "ヘルプページのURL（言語に\\ \" %s \"を使用）"
+msgstr "ヘルプページのURL（言語に\" %s \"を使用）"
 
 #: assembl/templates/views/adminDiscussion.tmpl:76
 msgid "Homepage URL (optional)"
@@ -2450,7 +2459,7 @@ msgstr "デフォルトの通知"
 
 #: assembl/templates/views/adminNotificationSubscriptions.tmpl:18
 msgid "These are the notifications which a user gets subscribed to when one of these conditions is matched: 1. The user clicks on the \"Join this discussion\" button. 2. The user posts his/her first message, Assembl shows a subscription pop-in, and the user accepts subscribing. 3. The discussion parameter \"Auto-subscribe users to default notifications when they register\" is active and the user confirms their account."
-msgstr "これらは、次のいずれかの条件が満たされたときにユーザーが購読する通知です。1.ユーザーが「このディスカッションに参加する」ボタンをクリックする。 2.ユーザが最初のメッセージを投稿し、Assemblが購読ポップインを表示し、ユーザが購読を受け入れる。 3.ディスカッションパラメータ \"登録時にユーザーをデフォルトの自動通知に登録”がアクティブで、ユーザーが自分のアカウントを確認する。"
+msgstr "これらは、次のいずれかの条件が満たされたときにユーザーが購読する通知です。1.ユーザーが「このディスカッションに参加する」ボタンをクリックする。 2.ユーザが最初のメッセージを投稿し、Assemblが購読ポップインを表示し、ユーザが購読を受け入れる。 3.ディスカッションパラメータ 登録時にユーザーをデフォルトの自動通知に登録”がアクティブで、ユーザーが自分のアカウントを確認する。"
 
 #: assembl/templates/views/adminNotificationSubscriptions.tmpl:21
 msgid "Auto-subscribe users to default notifications"
@@ -2615,7 +2624,7 @@ msgstr "このアイデアに新しいアナウンスを追加する"
 #: assembl/templates/views/announcementMessage.tmpl:10 assembl/templates/views/message.tmpl:150 assembl/templates/views/message.tmpl:169 assembl/templates/views/messageDeletedByUser.tmpl:53 assembl/templates/views/messageDeletedByUser.tmpl:72
 #, python-format
 msgid "<time title=\"%(precise_date)s\">%(nice_date)s</time>"
-msgstr "<time title = \\ “％（precise_date）s \">％（nice_date）s </時間>"
+msgstr "<time title=\"%(precise_date)s\">%(nice_date)s</time>"
 
 #: assembl/templates/views/associateAccount.tmpl:24
 msgid "Validate this email"
@@ -2646,7 +2655,6 @@ msgid "Drag this button to your bookmark bar to create a bookmarklet. You can th
 msgstr "このボタンをブックマークバーにドラッグすると、ブックマークレットが作成されます。その後、次の手順によって、ほとんどのWebページ（httpsで保護されていないもの）からの抜粋を取り込むことができます。１.ブックマークレットをクリックし、2.ディスカッションに送信したいテキストのセクションをハイライト表示します。"
 
 #: assembl/templates/views/bookmarket.tmpl:12
-#, fuzzy
 msgid "Web capture to"
 msgstr "へのウェブキャプチャ"
 
@@ -3024,7 +3032,7 @@ msgstr "最大スレッド数"
 
 #: assembl/templates/views/facebookSourceForm.tmpl:14
 msgid "When has been posted the oldest post you would like to import? Use ISO 8601 UTC. (ex: 2015-10-20T00:00:00Z ) Leave blank for no limit"
-msgstr "あなたがインポートしたい最も古い投稿はいつ投稿されましたか？ ISO 8601 UTCを使用してください。 （例：2015-10-20T00：00：00Z）無制限の場合は空白のままにしてください"
+msgstr "あなたがインポートしたい最も古い投稿はいつ投稿されましたか？ ISO 8601 UTCを使用してください。 （例：2015-10-20T00:00:00Z）無制限の場合は空白のままにしてください"
 
 #: assembl/templates/views/facebookSourceForm.tmpl:14
 msgid "Minimum date"
@@ -3032,7 +3040,7 @@ msgstr "日付の最小値"
 
 #: assembl/templates/views/facebookSourceForm.tmpl:21
 msgid "When has been posted the newest post you would like to import? Use ISO 8601 UTC. (ex: 2015-10-20T00:00:00Z ) Leave blank for no limit"
-msgstr "あなたがインポートしたい最新の投稿はいつ投稿されましたか？ ISO 8601 UTCを使用してください。 （例：2015-10-20T00：00：00Z）無制限の場合は空白のままにしてください"
+msgstr "あなたがインポートしたい最新の投稿はいつ投稿されましたか？ ISO 8601 UTCを使用してください。 （例：2015-10-20T00:00:00Z）無制限の場合は空白のままにしてください"
 
 #: assembl/templates/views/facebookSourceForm.tmpl:21
 msgid "Maximum date"
@@ -3093,7 +3101,7 @@ msgstr "ここは安全で礼儀正しい空間です。全てのアイデアは
 #: assembl/templates/views/ideaClassification_directExtract.tmpl:3
 #, python-format
 msgid "<span class=\"harvester\">%s</span> has considered this message relevant to the idea:"
-msgstr "<span class = \\ \"harvester \"> %s </ span>は、このメッセージがアイデアに関連すると考えました"
+msgstr "<span class=\"harvester\">%s</span>は、このメッセージがアイデアに関連すると考えました"
 
 #: assembl/templates/views/ideaClassification_directExtract.tmpl:7 assembl/templates/views/ideaClassification_indirectExtract.tmpl:7
 msgid "Considering this extract:"
@@ -3107,17 +3115,17 @@ msgstr "投稿者: %s"
 #: assembl/templates/views/ideaClassification_directMessage.tmpl:3
 #, python-format
 msgid "<span class=\"author\">%s</span> started this new discussion thread directly on the idea:"
-msgstr "<span class = \\ \"author \"> %s </ span>はこの新しいディスカッションスレッドをアイデアに直接開始しました："
+msgstr "<span class=\"author\">%s</span>はこの新しいディスカッションスレッドをアイデアに直接開始しました："
 
 #: assembl/templates/views/ideaClassification_indirectExtract.tmpl:3
 #, python-format
 msgid "This message is part of a thread, which <span class=\"harvester\">%s</span> considered relevant to the idea:"
-msgstr "このメッセージは、<span class = \\ \"harvester \"> %s </ span>がアイデアに関連すると考えたスレッドの一部です："
+msgstr "このメッセージは、<span class=\"harvester\">%s</span>がアイデアに関連すると考えたスレッドの一部です："
 
 #: assembl/templates/views/ideaClassification_indirectMessage.tmpl:3
 #, python-format
 msgid "This message is part of a thread, started by <span class=\"author\">%s</span> on the idea:"
-msgstr "このメッセージは、<span class = \\ \"author \"> %s </ span>によってアイデア上に開始されたスレッドの一部です："
+msgstr "このメッセージは、<span class=\"author\">%s</span>によってアイデア上に開始されたスレッドの一部です："
 
 #: assembl/templates/views/ideaInIdeaList.tmpl:7
 msgid "Remove from next synthesis"
@@ -3487,12 +3495,12 @@ msgstr "あなたのメッセージが投稿されます："
 #: assembl/templates/views/messageSend.tmpl:29
 #, python-format
 msgid "Under the idea \"%s\""
-msgstr "\\ \" %s \"という考え方のもとで、"
+msgstr "\" %s \"という考え方のもとで、"
 
 #: assembl/templates/views/messageSend.tmpl:31
 #, python-format
 msgid "In the general \"%s\" conversation (a community manager will organize your contribution in the table of ideas afterwards, possibly by creating a new idea)"
-msgstr "一般的な\\ \" %s \"の会話（コミュニティマネージャーは新しいアイデアを作成することによって、後であなたの投稿をアイデア表に反映します）"
+msgstr "一般的な \" %s \"の会話（コミュニティマネージャーは新しいアイデアを作成することによって、後であなたの投稿をアイデア表に反映します）"
 
 #: assembl/templates/views/messageSend.tmpl:33
 msgid "Your message will be posted as a child of the previous message."
@@ -3617,7 +3625,7 @@ msgstr "設定"
 #: assembl/templates/views/segment.tmpl:8
 #, python-format
 msgid "Harvested by %(name)s %(date)s"
-msgstr "％（name）s％（date）sによって収穫されました\\"
+msgstr "%(name)s %(date)sによって収穫されました"
 
 #: assembl/templates/views/segment.tmpl:11
 msgid "Click here to see the original contribution this segment is quoted from."
@@ -3634,12 +3642,12 @@ msgstr "この抜粋を参加者に表示するか非表示にする"
 #: assembl/templates/views/segment.tmpl:35
 #, python-format
 msgid "%(img)s"
-msgstr "％(img)s"
+msgstr "%(img)s"
 
 #: assembl/templates/views/segment.tmpl:54
 #, python-format
 msgid "Posted %(nice_date)s by %(name)s"
-msgstr "％（nice_date）s％（name）sによって投稿されました"
+msgstr "%(nice_date)s %(name)sによって投稿されました"
 
 #: assembl/templates/views/segment.tmpl:61
 msgid "Document extracted from the web"
@@ -3757,7 +3765,7 @@ msgstr "別のメールを追加"
 
 #: assembl/templates/views/userAccount.tmpl:55
 msgid "Linking your account allows you to connect through social networks, and to use your profile's picture. Otherwise, you can set your profile picture with the <a href='http://en.gravatar.com/'>gravatar</a> service."
-msgstr "あなたのアカウントをリンクすることで、ソーシャルネットワークを介して接続し、あなたのプロフィールの画像を使用することができます. それ以外の場合は、プロフィール画像 を<a href=‘http://en.gravatar.com/‘>グラバター</a> サービスによって設定できます。"
+msgstr "あなたのアカウントをリンクすることで、ソーシャルネットワークを介して接続し、あなたのプロフィールの画像を使用することができます. それ以外の場合は、プロフィール画像 を<a href='http://en.gravatar.com/'>グラバター</a> サービスによって設定できます。"
 
 #: assembl/templates/views/userAccountForm.tmpl:10
 msgid "You can set a username as an alternate way to login."
@@ -3777,7 +3785,7 @@ msgstr "パスワードを認証する"
 
 #: assembl/templates/views/userAccountForm.tmpl:37
 msgid "You can set your profile picture with the <a href='http://en.gravatar.com/'>gravatar</a> service."
-msgstr "プロフィール画像を <a href=‘http://en.gravatar.com/‘>グラバター</a> サービスによって設定することができます"
+msgstr "プロフィール画像を <a href='http://en.gravatar.com/'>グラバター</a> サービスによって設定することができます"
 
 #: assembl/templates/views/userNavigationMenu.tmpl:3
 msgid "Modify your profile"
@@ -3883,7 +3891,7 @@ msgstr "既にこのユーザー名を持つユーザーがいます."
 #: assembl/views/auth/views.py:290
 #, python-format
 msgid "The username %s is already used"
-msgstr "ユーザー名 ％s は既に使用されています"
+msgstr "ユーザー名 %s は既に使用されています"
 
 #: assembl/views/auth/views.py:309 assembl/views/auth/views.py:1040
 msgid "The passwords are not identical"
@@ -3924,7 +3932,7 @@ msgstr "あなたのアカウントに確認メールが送信されました。
 #: assembl/views/auth/views.py:653 assembl/views/auth/views.py:677 assembl/views/auth/views.py:699
 #, python-format
 msgid "Email <%s> already confirmed"
-msgstr "既に確認済みのメール< %s >"
+msgstr "既に確認済みのメール<%s>"
 
 #: assembl/views/auth/views.py:665
 msgid "This link was not valid. We sent another."
@@ -3970,11 +3978,11 @@ msgstr "一時的に有効なリンクを記載したメールをお送りして
 
 #: assembl/views/auth/views.py:973
 msgid "You will enter the discussion as <b>{name}</b>."
-msgstr "あなたは<b> {name} </ b>としてディスカッションに参加します。"
+msgstr "あなたは<b> {name} </b>としてディスカッションに参加します。"
 
 #: assembl/views/auth/views.py:977
 msgid "You will enter Assembl as <b>{name}</b>."
-msgstr "Assemblに<b> {name} </ b>として参加します。"
+msgstr "Assemblに<b> {name} </b>として参加します。"
 
 #: assembl/views/auth/views.py:980
 msgid "Please choose your password for security reasons."
@@ -3994,7 +4002,7 @@ msgstr "eメール"
 
 #: assembl/views/auth/views.py:1063
 msgid "Please confirm your {confirm_what} with {assembl}"
-msgstr "{assembly_}で{confirm_what}を確認してください"
+msgstr "{assembl}で{confirm_what}を確認してください"
 
 #: assembl/views/auth/views.py:1065
 msgid "account"
@@ -4009,7 +4017,13 @@ msgid ""
 "\n"
 "Best regards,\n"
 "The {assembl} Team"
-msgstr "Assemblへようこそ！\\ n \\ n下記のリンクをクリックしてメールアドレスを確認し、登録を完了してください。\\ n <{confirm_url}> \\ n \\ nよろしくお願いします。\\ n {Assembl}チーム"
+msgstr "Assemblへようこそ！\n"
+"\n"
+"下記のリンクをクリックしてメールアドレスを確認し、登録を完了してください。\n"
+"<{confirm_url}>\n"
+"\n"
+"よろしくお願いします。\n"
+"{assembl}チーム"
 
 #: assembl/views/auth/views.py:1073
 msgid ""
@@ -4017,7 +4031,10 @@ msgid ""
 "<p>Please <a href=\"{confirm_url}\">click here to confirm your email address</a>\n"
 "and complete your registration.</p>\n"
 "<p>Best regards,<br />The {assembl} Team</p>"
-msgstr "<p> Hello、{name}、{assembl}へようこそ！</ p> \\ n <p> あなたのメールアドレスを確認するために<a href=\"{confirm_url}\">ここをクリックし、</a> \\あなたの登録を完了してください。</ p> \\ n <p>よろしくお願いいたします。<br /> {Assembl}チーム</ p>"
+msgstr "<p> Hello、{name}、{assembl}へようこそ！</p>\n"
+"<p>あなたのメールアドレスを確認するために<a href=\"{confirm_url}\">ここをクリックし、</a>\n"
+"あなたの登録を完了してください。</p>\n"
+"<p>よろしくお願いいたします。<br />{assembl}チーム</p>"
 
 #: assembl/views/auth/views.py:1078
 msgid ""
@@ -4036,7 +4053,9 @@ msgid ""
 "<p>Please <a href=\"{confirm_url}\">click here to confirm your new email address</a>\n"
 "on your {assembl} account.</p>\n"
 "<p>Best regards,<br />The {assembl} Team</p>"
-msgstr "<p> Hello、{name}！</ p> \\ n <p> 新しい電子メールアドレスを確認するには<a href=\"{confirm_url}\">ここをクリック</a>してください。 </ p> \\ n <p>よろしくお願いいたします。<br /> {Assembl}チーム</ p>"
+msgstr "<p>Hello、{name}！</p>\n"
+"<p>新しい電子メールアドレスを確認するには<a href=\"{confirm_url}\">ここをクリック</a>してください。</p>\n"
+"<p>よろしくお願いいたします。<br />{assembl}チーム</p>"
 
 #: assembl/views/auth/views.py:1136
 msgid "Request for password change"
@@ -4050,11 +4069,11 @@ msgid ""
 "<p>If you did not ask to reset your password please disregard this email.</p>\n"
 "<p>Best regards,<br />The {assembl} Team</p>\n"
 msgstr ""
-"<p> Hello、{name}！</ p> \n"
-" <p> あなたの{Assembl}アカウントのパスワード変更リクエストを受け取りました。\n"
-" パスワードを変更するには、<a href=\"{confirm_url}\">ここをクリックしてください</ p> \n"
-" <p>パスワード変更の申請をしていない場合は、このメールを無視してください。</ p> \n"
-" <p>よろしくお願いします。<br /> {Assembl}チーム</ p> \\ n\n"
+"<p>Hello、{name}！</p>\n"
+"<p>あなたの{assembl}アカウントのパスワード変更リクエストを受け取りました。\n"
+"パスワードを変更するには、<a href=\"{confirm_url}\">ここをクリックしてください</p> \n"
+"<p>パスワード変更の申請をしていない場合は、このメールを無視してください。</p> \n"
+"<p>よろしくお願いします。<br /> {assembl}チーム</p>\n"
 
 #: assembl/views/auth/views.py:1146
 msgid ""
@@ -4068,8 +4087,8 @@ msgid ""
 "Best regards,\n"
 "The {assembl} Team\n"
 msgstr ""
-"こんにちは、 {name}!\n"
-"{assembl}アカウントのパスワード変更リクエストを受け取りました。.\n"
+"こんにちは、{name}!\n"
+"{assembl}アカウントのパスワード変更リクエストを受け取りました。\n"
 "パスワードの変更を確認するには、下のリンクをクリックしてください。\n"
 "<{confirm_url}>\n"
 "\n"

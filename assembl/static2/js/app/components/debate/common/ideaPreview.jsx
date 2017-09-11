@@ -1,8 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router';
 import { Translate } from 'react-redux-i18n';
-import Statistic from './statistic';
-import { scrollToPosition } from '../../utils/globalFunctions';
+import Statistic from '../../common/statistic';
 
 const IdeaPreview = ({
   selectedIdeasId,
@@ -43,12 +42,11 @@ const IdeaPreview = ({
                 className="see-sub-ideas"
                 onClick={() => {
                   setSelectedIdeas(ideaId, ideaLevel, ideaIndex);
-                  const scrollValue = document.body.scrollHeight + 500 - window.innerHeight - 120;
-                  if (scrollValue > 0) {
-                    setTimeout(() => {
-                      scrollToPosition(scrollValue, 800);
-                    }, 500);
-                  }
+                  const scrollPosition = document.documentElement.scrollTop || document.body.scrollTop;
+                  const scrollValue = scrollPosition + 500;
+                  setTimeout(() => {
+                    window.scrollTo({ top: scrollValue, left: 0, behavior: 'smooth' });
+                  }, 500);
                 }}
               >
                 <Translate value="debate.thread.seeSubIdeas" count={numChildren} />

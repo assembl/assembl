@@ -14,9 +14,9 @@ import Tree from '../components/common/tree';
 import Loader from '../components/common/loader';
 import Permissions, { connectedUserCan } from '../utils/permissions';
 import { getConnectedUserId } from '../utils/globalFunctions';
-
-import TopPostForm from './../components/debate/thread/topPostForm';
 import Announcement from './../components/debate/thread/announcement';
+import TopPostForm from '../components/debate/thread/topPostForm';
+import { getContentLocale } from '../reducers/rootReducer';
 
 export const transformPosts = (edges, additionnalProps = {}) => {
   const postsByParent = {};
@@ -55,7 +55,7 @@ const noRowsRenderer = () => {
 
 class Idea extends React.Component {
   render() {
-    const { lang, ideaData, ideaWithPostsData } = this.props;
+    const { contentLocale, lang, ideaData, ideaWithPostsData } = this.props;
     const refetchIdea = ideaWithPostsData.refetch;
     if (ideaData.loading) {
       return (
@@ -98,6 +98,7 @@ class Idea extends React.Component {
                 {ideaWithPostsData.loading
                   ? <Loader />
                   : <Tree
+                    contentLocale={contentLocale}
                     lang={lang}
                     data={topPosts}
                     InnerComponent={Post}
@@ -117,7 +118,8 @@ class Idea extends React.Component {
 
 const mapStateToProps = (state) => {
   return {
-    lang: state.i18n.locale
+    lang: state.i18n.locale,
+    contentLocale: getContentLocale(state)
   };
 };
 

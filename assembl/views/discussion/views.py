@@ -14,6 +14,7 @@ from pyramid.i18n import TranslationStringFactory
 from sqlalchemy.orm.exc import NoResultFound
 
 from ...lib.utils import path_qs
+from ...lib.sqla import get_named_object
 from ...lib.frontend_urls import FrontendUrls
 from ...auth import P_READ, P_ADD_EXTRACT, P_ADMIN_DISC
 from ...auth.util import user_has_permission
@@ -343,6 +344,32 @@ def not_found(context, request):
     return {}
 
 
+@view_config(route_name='legacy_purl_posts', request_method='GET')
+@view_config(route_name='purl_posts', request_method='GET')
+def purl_post(request):
+    slug = request.matchdict['discussion_slug']
+    discussion = Discussion.default_db.query(Discussion).filter_by(slug=slug).first()
+    if not discussion:
+        raise HTTPNotFound()
+    phase = discussion.current_discussion_phase()
+    if (discussion.preferences['landing_page'] and
+            phase is not None and phase.previous_event is None):
+        # Only for a discussion currently in phase 1 for now.
+        # Shortly: look at the phase's interface_v1 flag
+        post_id = FrontendUrls.getRequestedPostId(request)
+        post = get_named_object(post_id)
+        if not post:
+            raise HTTPNotFound()
+        thematic = post.get_closest_thematic()
+        if not thematic:
+            return HTTPSeeOther(location=request.route_url(
+                'new_home', discussion_slug=discussion.slug))
+        # Temporary: assume phase 1
+        return HTTPSeeOther(location=discussion.get_base_url() +
+            "/" + discussion.slug + "/debate/survey/theme/" + thematic.graphene_id())
+    return home_view(request)
+
+
 def register_react_views(config, routes, view=react_view):
     """Add list of routes to the `assembl.views.discussion.views.react_view` method."""
     if not routes:
@@ -360,6 +387,8 @@ def includeme(config):
     config.add_route('bare_slug', '/{discussion_slug}')
     config.add_route('auto_bare_slug', '/{discussion_slug}/')
     config.add_route('admin_react_page', '/{discussion_slug}/administration*extra_path')
+    config.add_route('purl_posts', '/debate/{discussion_slug}/posts/*remainder')
+    config.add_route('legacy_purl_posts', '/{discussion_slug}/posts/*remainder')
     config.add_route('general_react_page', '/{discussion_slug}/*extra_path')
 
     admin_react_routes = [

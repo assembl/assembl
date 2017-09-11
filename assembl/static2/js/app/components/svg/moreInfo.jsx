@@ -5,7 +5,7 @@ class MoreInfo extends React.Component {
     const { size } = this.props;
     return (
       <svg width={`${size}px`} height={`${size}px`} viewBox="0 0 28 28">
-        <g strokeWidth="1">
+        <g>
           <path
             d="M14,1.39072848 C7.08344371,
                 1.39072848 1.48344371,
