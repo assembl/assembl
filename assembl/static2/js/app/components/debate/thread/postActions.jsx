@@ -54,9 +54,7 @@ class PostActions extends React.Component {
     const userCanDeleteThisMessage =
       (connectedUserId === String(creatorUserId) && connectedUserCan(Permissions.DELETE_MY_POST)) ||
       connectedUserCan(Permissions.DELETE_POST);
-    const userCanEditThisMessage =
-      (connectedUserId === String(creatorUserId) && connectedUserCan(Permissions.EDIT_MY_POST)) ||
-      connectedUserCan(Permissions.EDIT_POST);
+    const userCanEditThisMessage = connectedUserId === String(creatorUserId) && connectedUserCan(Permissions.EDIT_MY_POST);
     let overflowMenu = null;
     if (userCanDeleteThisMessage || userCanEditThisMessage) {
       overflowMenu = (
