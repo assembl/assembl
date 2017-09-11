@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from datetime import datetime
+import logging
 import pytz
 import os.path
 from random import sample as random_sample
@@ -38,6 +39,8 @@ from .types import SQLAlchemyInterface, SQLAlchemyUnion
 _ = TranslationStringFactory('assembl')
 convert_sqlalchemy_type.register(EmailString)(convert_column_to_string)
 models.Base.query = models.Base.default_db.query_property()
+
+log = logging.getLogger('assembl')
 
 
 class DateTime(Scalar):
@@ -349,13 +352,20 @@ class PostInterface(SQLAlchemyInterface):
     def resolve_subject_entries(self, args, context, info):
         # Use self.subject and not self.get_subject() because we still
         # want the subject even when the post is deleted.
-        PostInterface._maybe_translate(self, args.get('lang'), context)
+        try:
+            PostInterface._maybe_translate(self, args.get('lang'), context)
+        except Exception:
+            log.exception('Error in Post.resolve_subject_entries _maybe_translate')
         subject = resolve_best_langstring_entries(
             self.subject, args.get('lang'))
         return subject
 
     def resolve_body_entries(self, args, context, info):
-        PostInterface._maybe_translate(self, args.get('lang'), context)
+        try:
+            PostInterface._maybe_translate(self, args.get('lang'), context)
+        except Exception:
+            log.exception('Error in Post.resolve_body_entries _maybe_translate')
+
         body = resolve_best_langstring_entries(
             self.get_body(), args.get('lang'))
         return body

@@ -511,7 +511,7 @@ const Translations = {
         numberOfResponses_1: "%{count} response to this post",
         numberOfReactions: "%{count} reactions",
         numberOfReactions_1: "%{count} reaction",
-        showOriginal: "Don't translate",
+        showOriginal: "Show original",
         startDiscussion: "Start a new thread",
         translate: "Translate",
         goToIdea: "Access the thread",

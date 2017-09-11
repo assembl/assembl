@@ -174,6 +174,7 @@ class Post extends React.PureComponent {
               </h3>
               {originalBodyLocale
                 ? <PostTranslate
+                  id={id}
                   showOriginal={this.state.showOriginal}
                   originalBodyLocale={originalBodyLocale}
                   toggle={() => {

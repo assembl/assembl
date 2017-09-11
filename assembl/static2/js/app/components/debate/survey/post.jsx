@@ -89,6 +89,7 @@ class Post extends React.Component {
           <PostCreator name={post.creator.name} />
           {originalBodyLocale
             ? <PostTranslate
+              id={post.id}
               showOriginal={this.state.showOriginal}
               originalBodyLocale={originalBodyLocale}
               toggle={() => {
