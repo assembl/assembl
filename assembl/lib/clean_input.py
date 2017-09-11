@@ -46,6 +46,9 @@ _html_parser = HTMLParser()
 
 
 def unescape(text):
+    if text is None:
+        return None
+
     return _html_parser.unescape(text)
 
 
