@@ -1,6 +1,8 @@
 // @flow
 import React from 'react';
 import { Translate, I18n } from 'react-redux-i18n';
+import SwitchButton from 'react-switch-button';
+import 'react-switch-button/dist/react-switch-button.css';
 
 const PostTranslate = ({
   originalBodyLocale,
@@ -12,14 +14,17 @@ const PostTranslate = ({
   toggle: Function
 }) => {
   return (
-    <p>
+    <div>
       {!showOriginal
         ? <Translate value="debate.thread.messageTranslatedFrom" language={I18n.t(`language.${originalBodyLocale}`)} />
         : null}
-      <button onClick={toggle}>
-        {showOriginal ? <Translate value="debate.thread.translate" /> : <Translate value="debate.thread.showOriginal" />}
-      </button>
-    </p>
+      <SwitchButton
+        onChange={toggle}
+        defaultChecked={showOriginal}
+        // labelRight={showOriginal ? I18n.t('debate.thread.translate') : I18n.t('debate.thread.showOriginal')}
+        labelRight={I18n.t('debate.thread.showOriginal')}
+      />
+    </div>
   );
 };
 
