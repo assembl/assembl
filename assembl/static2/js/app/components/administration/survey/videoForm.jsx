@@ -59,7 +59,6 @@ const VideoForm = ({
               type="rich-text"
               label={descriptionTopPh}
               value={descriptionTop}
-              labelAlwaysVisible
               onChange={updateDescriptionTop}
             />
             <FormControlWithLabel
@@ -68,7 +67,6 @@ const VideoForm = ({
               type="rich-text"
               label={descriptionBottomPh}
               value={descriptionBottom}
-              labelAlwaysVisible
               onChange={updateDescriptionBottom}
             />
             <FormControlWithLabel
@@ -77,7 +75,6 @@ const VideoForm = ({
               type="rich-text"
               label={quotePh}
               value={descriptionSide}
-              labelAlwaysVisible
               onChange={updateDescriptionSide}
             />
             <FormControlWithLabel

@@ -63,19 +63,32 @@ class FormControlWithLabel extends React.Component {
     );
   };
 
+  valueIsEmpty = () => {
+    const { type, value } = this.props;
+    if (type === 'rich-text') {
+      const allText = value.blocks
+        .map((b) => {
+          return b.text;
+        })
+        .reduce((a, b) => {
+          return a + b;
+        }, '');
+      return value === null || allText.length === 0;
+    }
+
+    return value.length === 0;
+  };
+
   render() {
-    const { id, label, value, labelAlwaysVisible } = this.props;
+    const { id, label, labelAlwaysVisible } = this.props;
+    const displayLabel = labelAlwaysVisible || !this.valueIsEmpty();
     return (
       <FormGroup validationState={this.state.validationState}>
-        {labelAlwaysVisible
+        {displayLabel
           ? <ControlLabel htmlFor={id}>
             {label}
           </ControlLabel>
-          : value
-            ? <ControlLabel htmlFor={id}>
-              {label}
-            </ControlLabel>
-            : null}
+          : null}
         {this.renderFormControl()}
         {this.state.errorMessage
           ? <HelpBlock>
@@ -88,6 +101,7 @@ class FormControlWithLabel extends React.Component {
 }
 
 FormControlWithLabel.defaultProps = {
+  labelAlwaysVisible: false,
   type: 'text',
   value: undefined
 };
