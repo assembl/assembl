@@ -923,7 +923,7 @@ def test_phase1_export(proposals_with_sentiments, discussion, test_app):
     csv_file.write(response.app_iter[0])
     csv_file.seek(0)
     assert response.status_code == 200
-    result = csv.reader(csv_file, dialect='excel')
+    result = csv.reader(csv_file, dialect='excel', delimiter=';')
     result = list(result)
 
     header = result[0]

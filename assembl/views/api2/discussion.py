@@ -1580,7 +1580,7 @@ def phase1_csv_export(request):
     # include BOM for Excel to open the file in UTF-8 properly
     output.write(u'\ufeff'.encode('utf-8'))
     writer = csv.DictWriter(
-        output, dialect='excel', fieldnames=fieldnames)
+        output, dialect='excel', delimiter=';', fieldnames=fieldnames)
     writer.writeheader()
     thematics = get_thematics(discussion_id, 'survey')
     for thematic in thematics:
@@ -1591,7 +1591,7 @@ def phase1_csv_export(request):
             row[QUESTION_TITLE] = resolve_langstring(question.title, language)
             posts = get_question_posts(question)
             for post in posts:
-                row[POST_BODY] = resolve_langstring(post.get_body(), None)
+                row[POST_BODY] = resolve_langstring(post.get_body_as_text(), None)
                 row[POST_CREATOR_NAME] = post.creator.name
                 row[POST_CREATOR_EMAIL] = post.creator.preferred_email
                 row[POST_CREATION_DATE] = format_date(post.creation_date)
