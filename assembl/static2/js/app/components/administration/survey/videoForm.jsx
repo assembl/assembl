@@ -105,7 +105,7 @@ const getEntryValueForLocale = (entries, locale, defaultValue = null) => {
 
 export const mapStateToProps = ({ admin: { thematicsById } }, { thematicId, selectedLocale }) => {
   const video = thematicsById.getIn([thematicId, 'video']);
-  const hasVideo = video !== null;
+  const hasVideo = video && video !== null;
   let descriptionTop;
   let descriptionBottom;
   let descriptionSide;
