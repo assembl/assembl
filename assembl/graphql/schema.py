@@ -534,11 +534,6 @@ class Idea(SecureObjectType, SQLAlchemyObjectType):
     def resolve_announcement_body(self, args, context, info):
         if self.announcement:
             return self.announcement.body
-        parents = self.get_parents()
-        if parents:
-            parent = parents[0]
-            if parent and parent.announcement and parent.announcement.should_propagate_down:
-                return resolve_announcement_body(parent, args, context, info)
 
     def resolve_description_entries(self, args, context, info):
         return resolve_langstring_entries(self, 'description')
