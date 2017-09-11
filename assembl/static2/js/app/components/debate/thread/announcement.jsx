@@ -4,7 +4,7 @@ import { Col, Tooltip } from 'react-bootstrap';
 
 import StatisticsDoughnut from '../common/statisticsDoughnut';
 import { sentimentDefinitionsObject } from './sentimentDefinitions';
-import Video from '../survey/video';
+import Video from './video';
 import { PublicationStates } from '../../../constants';
 
 const createTooltip = (sentiment, count) => {
@@ -41,12 +41,19 @@ const createDoughnutElements = (sentimentCounts) => {
 };
 
 const dirtySplitHack = (announcementBody) => {
+  // To allow edit from V1 announcement, add !split!https://video.url!split!
   const split = announcementBody.split('!split!');
-  return {
-    topDesc: `${split[0]}</p>`,
-    botDesc: `<p>${split[2]}`,
-    videoURL: split[1]
-  };
+  return split.length >= 3
+    ? {
+      descriptionTop: `${split[0]}</p>`,
+      descriptionBottom: `<p>${split[2]}`,
+      htmlCode: split[1]
+    }
+    : {
+      descriptionTop: announcementBody,
+      descriptionBottom: null,
+      htmlCode: null
+    };
 };
 
 class Announcement extends React.Component {
@@ -54,8 +61,7 @@ class Announcement extends React.Component {
     const { ideaWithPostsData: { idea }, announcementBody } = this.props;
     const { numContributors, numPosts, posts } = idea;
     const sentimentsCount = getSentimentsCount(posts);
-    const { topDesc, botDesc, videoURL } = dirtySplitHack(announcementBody);
-    console.log('topDesc', topDesc, 'botDesc', botDesc, 'videoURLqs', videoURL);
+    const videoContent = dirtySplitHack(announcementBody);
     return (
       <div className="announcement">
         <div className="announcement-title">
@@ -65,7 +71,7 @@ class Announcement extends React.Component {
           </h3>
         </div>
         <Col xs={12} sm={8} className="announcement-video col-sm-push-4">
-          <Video descriptionTop={topDesc} descriptionBottom={botDesc} htmlCode={videoURL} />
+          <Video {...videoContent} />
         </Col>
         <Col xs={12} sm={4} className="col-sm-pull-8">
           <div className="announcement-statistics">

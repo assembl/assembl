@@ -76,6 +76,7 @@ class Idea extends React.Component {
         <Header title={idea.title} longTitle={idea.longTitle} imgUrl={idea.imgUrl} identifier="thread" />
         <section className="post-section">
           {!ideaWithPostsData.loading &&
+            idea.announcementBody &&
             <Grid fluid className="background-grey">
               <div className="max-container">
                 <div className="content-section">
