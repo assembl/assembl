@@ -1,5 +1,6 @@
 import React from 'react';
-import { graphql } from 'react-apollo';
+import { connect } from 'react-redux';
+import { compose, graphql } from 'react-apollo';
 import { Row, Col, FormGroup, Button } from 'react-bootstrap';
 import { I18n, Translate } from 'react-redux-i18n';
 
@@ -8,6 +9,7 @@ import { convertRawContentStateToHTML, rawContentStateIsEmpty } from '../../../u
 import { displayAlert, promptForLoginOr } from '../../../utils/utilityManager';
 import { TextInputWithRemainingChars } from '../../common/textInputWithRemainingChars';
 import RichTextEditor from '../../common/richTextEditor';
+import { getContentLocale } from '../../../reducers/rootReducer';
 
 export const TEXT_INPUT_MAX_LENGTH = 140;
 export const TEXT_AREA_MAX_LENGTH = 3000;
@@ -36,12 +38,13 @@ class TopPostForm extends React.Component {
   };
 
   createTopPost = () => {
-    const { ideaId, mutate, refetchIdea } = this.props;
+    const { contentLocale, ideaId, mutate, refetchIdea } = this.props;
     const { body, subject } = this.state;
     this.setState({ submitting: true });
     const bodyIsEmpty = !body || rawContentStateIsEmpty(body);
     if (subject && !bodyIsEmpty) {
       const variables = {
+        contentLocale: contentLocale,
         ideaId: ideaId,
         subject: subject,
         body: convertRawContentStateToHTML(body)
@@ -137,4 +140,10 @@ class TopPostForm extends React.Component {
   }
 }
 
-export default graphql(createPostMutation)(TopPostForm);
+const mapStateToProps = (state) => {
+  return {
+    contentLocale: getContentLocale(state)
+  };
+};
+
+export default compose(connect(mapStateToProps), graphql(createPostMutation))(TopPostForm);

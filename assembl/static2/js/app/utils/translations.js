@@ -1,6 +1,11 @@
 /* eslint max-len: "off", quotes: ["error", "double"] */
 const Translations = {
   fr: {
+    language: {
+      en: "anglais",
+      fr: "français",
+      ja: "japonais"
+    },
     "Number of contributions": "Nombre de messages",
     "Number of users": "Nombre de contributeurs",
     cancel: "Annuler",
@@ -197,8 +202,9 @@ const Translations = {
         endPhase: "La phase %{closedPhaseName} est terminée."
       },
       thread: {
-        postDeletedByAdmin: "Ce message a été supprimé par l'administrateur du débat. ",
-        postDeletedByUser: "Ce message a été supprimé par son auteur. ",
+        messageTranslatedFrom: "Ce message a été traduit du texte %{language}.",
+        postDeletedByAdmin: "Ce message a été supprimé par l'administrateur du débat.",
+        postDeletedByUser: "Ce message a été supprimé par son auteur.",
         postEdited: "modifié",
         postSuccess: "Merci pour votre participation. Votre message a bien été envoyé !",
         fillSubject: "Veuillez écrire un titre",
@@ -210,9 +216,11 @@ const Translations = {
         numberOfResponses: "%{count} réponses à ce post",
         numberOfResponses_0: "Aucune réponse à ce post",
         numberOfResponses_1: "%{count} réponse à ce post",
+        numberOfReactions: "%{count} réactions",
+        numberOfReactions_1: "%{count} réaction",
+        showOriginal: "Afficher dans sa langue originale",
         startDiscussion: "Je démarre une discussion",
-        numberOfReactions: "%{count} reactions",
-        numberOfReactions_1: "%{count} reaction",
+        translate: "Traduire",
         goToIdea: "Accéder à la discussion",
         seeSubIdeas: "Voir les %{count} sous-thèmes",
         seeSubIdeas_1: "Voir le sous-thème"
@@ -288,6 +296,11 @@ const Translations = {
     }
   },
   en: {
+    language: {
+      en: "English",
+      fr: "French",
+      ja: "Japanese"
+    },
     cancel: "Annuler",
     redirectToV1:
       "You will be redirected to the %{phaseName} phase in a few seconds. Assembl is being improved, please excuse us for the interface change. If nothing happens, click on the button.",
@@ -482,6 +495,7 @@ const Translations = {
         endPhase: "The %{closedPhaseName} phase is closed."
       },
       thread: {
+        messageTranslatedFrom: "This message has been translated from %{language}.",
         postDeletedByAdmin: "This message has been deleted by the community manager.",
         postDeletedByUser: "This message has been deleted by the author.",
         postEdited: "edited",
@@ -495,9 +509,11 @@ const Translations = {
         numberOfResponses: "%{count} responses to this post",
         numberOfResponses_0: "No response to this post",
         numberOfResponses_1: "%{count} response to this post",
+        numberOfReactions: "%{count} reactions",
+        numberOfReactions_1: "%{count} reaction",
+        showOriginal: "Don't translate",
         startDiscussion: "Start a new thread",
-        numberOfReactions: "%{count} réactions",
-        numberOfReactions_1: "%{count} réaction",
+        translate: "Translate",
         goToIdea: "Access the thread",
         seeSubIdeas: "See %{count} sub-thematics",
         seeSubIdeas_1: "See sub-thematic"

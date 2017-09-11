@@ -31,7 +31,8 @@ from assembl.models.action import (
     SentimentOfPost,
     LikeSentimentOfPost, DisagreeSentimentOfPost,
     DontUnderstandSentimentOfPost, MoreInfoSentimentOfPost)
-from assembl.models.auth import LanguagePreferenceCollection
+from assembl.models.auth import (
+    LanguagePreferenceCollection, LanguagePreferenceCollectionWithDefault)
 from .types import SQLAlchemyInterface, SQLAlchemyUnion
 
 _ = TranslationStringFactory('assembl')
@@ -210,7 +211,7 @@ def update_langstring_from_input_entries(obj, attr, entries):
 
 
 class LangStringEntryFields(graphene.AbstractType):
-    value = graphene.String(required=True)
+    value = graphene.String(required=False)
     locale_code = graphene.String(required=True)
 
 
@@ -331,26 +332,26 @@ class PostInterface(SQLAlchemyInterface):
         if request.authenticated_userid == Everyone:
             # anonymous cannot trigger translations
             return
-        lpc = LanguagePreferenceCollection.getCurrent(request)
+        if locale:
+            lpc = LanguagePreferenceCollectionWithDefault(locale)
+        else:
+            lpc = LanguagePreferenceCollection.getCurrent(request)
         for ls in (post.body, post.subject):
             source_locale = ls.first_original().locale_code
-            if locale:
-                target_locale = locale
-            else:
-                pref = lpc.find_locale(source_locale)
-                target_locale = pref.translate_to_locale
-                if not target_locale:
-                    continue
-                target_locale = target_locale.code
+            pref = lpc.find_locale(source_locale)
+            target_locale = pref.translate_to_locale
+            if not target_locale:
+                continue
+            target_locale = target_locale.code
             if not ls.closest_entry(target_locale):
                 post.maybe_translate(lpc)
 
     def resolve_subject_entries(self, args, context, info):
-        lp = LanguagePreferenceCollection.getCurrent()
-        lang = lp.default_locale_code()
+        # Use self.subject and not self.get_subject() because we still
+        # want the subject even when the post is deleted.
         PostInterface._maybe_translate(self, args.get('lang'), context)
         subject = resolve_best_langstring_entries(
-            self.get_subject(), args.get('lang'))
+            self.subject, args.get('lang'))
         return subject
 
     def resolve_body_entries(self, args, context, info):
@@ -1353,6 +1354,8 @@ class UpdatePost(graphene.Mutation):
             post.modification_date = datetime.utcnow()
             post.body_mime_type = u'text/html'
             post.db.flush()
+            post.db.expire(post.subject, ["entries"])
+            post.db.expire(post.body, ["entries"])
 
         return UpdatePost(post=post)
 
