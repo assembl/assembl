@@ -45,25 +45,35 @@
     position: relative;
     z-index: 10;
 
+    .wyntk-box {
+      top: 18%;
+      height: 73%;
+      width: 350px;
+
+      .wyntk-title {
+        text-transform: uppercase;
+        margin-top: 10%;
+        margin-bottom: 1%;
+        margin-left: 1%;
+        font-family: "latoBold"
+      }
+
+      .wyntk-text {
+        height: 76%;
+        overflow-y: scroll;
+        overflow-x: hidden;
+        margin-top: 5%;
+        margin-left: 1%;
+        line-height: 2;
+        font-size: 12px;
+      }
+    }
+
     .header-content {
       margin: $margin-section 0 0;
       position: relative;
       text-align: center;
       z-index: 2;
-
-      .wyntk-box {
-        top: -30px;
-        height: 100%;
-        .wyntk-title {
-          text-transform: uppercase;
-        }
-        .wyntk-text {
-          overflow-y: scroll;
-          overflow-x: hidden;
-          color: rgba($first-color, 0.7);
-          height: 72%;
-        }
-      }
 
       .max-text-width {
         margin: 0 auto;

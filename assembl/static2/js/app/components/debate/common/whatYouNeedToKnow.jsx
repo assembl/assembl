@@ -4,7 +4,7 @@ import { Translate } from 'react-redux-i18n';
 export default ({ longTitle }) => {
   return (
     <div className="insert-box wyntk-box">
-      <h3 className="dark-title-3 wyntk-title">
+      <h3 className="dark-title-4 wyntk-title">
         <Translate value="debate.whatYouNeedToKnow" />
       </h3>
       <div className="box-hyphen" />

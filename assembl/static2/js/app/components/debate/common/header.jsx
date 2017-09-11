@@ -23,7 +23,6 @@ class Header extends React.Component {
               <h6 className="light-title-6">
                 <Translate value="debate.survey.endPhase" closedPhaseName={closedPhaseName} />
               </h6>}
-            {longTitle && <WhatYouNeedToKnow longTitle={longTitle} />}
           </div>
         </Grid>
         <Grid fluid>
@@ -34,6 +33,7 @@ class Header extends React.Component {
             <div className="header-bkg-mask">&nbsp;</div>
           </Row>
         </Grid>
+        {longTitle && <WhatYouNeedToKnow longTitle={longTitle} />}
       </section>
     );
   }

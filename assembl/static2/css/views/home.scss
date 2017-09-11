@@ -331,6 +331,10 @@
 
 @media screen and (min-width: 1100px) {
   .header-section {
+    .max-container > .header-content {
+      max-width: 70%;
+      text-align: left;
+    }
     .insert-box {
       position: absolute;
       right: 0;
