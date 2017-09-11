@@ -8,12 +8,14 @@ export default ({ longTitle }) => {
         <Translate value="debate.whatYouNeedToKnow" />
       </h3>
       <div className="box-hyphen" />
-      <p
-        className="wyntk-text"
-        dangerouslySetInnerHTML={{
-          __html: longTitle // TODO: we need to cleanse longTitle before setting HTML content into the <p> tag
-        }}
-      />
+      <div className="wyntk-text-container">
+        <p
+          className="wyntk-text"
+          dangerouslySetInnerHTML={{
+            __html: longTitle // TODO: we need to cleanse longTitle before setting HTML content into the <p> tag
+          }}
+        />
+      </div>
     </div>
   );
 };

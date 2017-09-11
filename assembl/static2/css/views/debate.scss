@@ -41,7 +41,6 @@
   .header-section {
     background-color: $first-color;
     min-height: 380px;
-    overflow: hidden;
     position: relative;
     z-index: 10;
 
@@ -49,23 +48,30 @@
       top: 18%;
       height: 73%;
       width: 350px;
+      padding-bottom: 30px;
 
       .wyntk-title {
         text-transform: uppercase;
         margin-top: 10%;
-        margin-bottom: 1%;
         margin-left: 1%;
         font-family: "latoBold"
       }
 
-      .wyntk-text {
+      .box-hyphen {
+        margin-bottom: 15px;
+      }
+
+      .wyntk-text-container {
+        overflow-y: auto;
         height: 76%;
-        overflow-y: scroll;
-        overflow-x: hidden;
-        margin-top: 5%;
-        margin-left: 1%;
-        line-height: 2;
-        font-size: 12px;
+        .wyntk-text {
+          overflow-y: scroll;
+          overflow-x: hidden;
+          margin-left: 4px;
+          line-height: 2;
+          font-size: 12px;
+          padding-right: 10px;
+        }
       }
     }
 
