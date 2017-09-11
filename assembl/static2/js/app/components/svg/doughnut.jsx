@@ -28,7 +28,7 @@ const cy = 70;
 const r = 50;
 
 const getColor = (element) => {
-  return 'color' in element ? element.color : 'grey';
+  return 'color' in element ? element.color : 'lightgrey';
 };
 
 const simpleCircle = (element) => {
@@ -83,7 +83,9 @@ const Doughnut = ({ elements, strokeWidth }) => {
     return total + element.count;
   }, 0);
   return totalCount === 0
-    ? false
+    ? <svg className="doughnut" viewBox="0 0 140 140">
+      {simpleCircle({ count: 0 }, strokeWidth)}
+    </svg>
     : <svg className="doughnut" viewBox="0 0 140 140">
       {filteredElements.length === 1
         ? simpleCircle(filteredElements[0], strokeWidth)
