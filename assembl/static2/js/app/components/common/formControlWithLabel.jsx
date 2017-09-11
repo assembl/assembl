@@ -66,6 +66,10 @@ class FormControlWithLabel extends React.Component {
   valueIsEmpty = () => {
     const { type, value } = this.props;
     if (type === 'rich-text') {
+      if (value === null) {
+        return true;
+      }
+
       const allText = value.blocks
         .map((b) => {
           return b.text;
@@ -73,7 +77,7 @@ class FormControlWithLabel extends React.Component {
         .reduce((a, b) => {
           return a + b;
         }, '');
-      return value === null || allText.length === 0;
+      return allText.length === 0;
     }
 
     return value.length === 0;
