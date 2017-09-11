@@ -141,8 +141,8 @@ def resolve_best_langstring_entries(langstring, target_locale=None):
         if entry:
             entries.append(entry)
             if entry.is_machine_translated:
-                entry = langstring.closest_entry(entry.locale.machine_translated_from)
-                assert entry
+                entry = langstring.closest_entry(entry.locale.machine_translated_from, filter_errors=False)
+                assert entry, "closest original entry not found"
                 entries.append(entry)
         else:
             entries.append(langstring.first_original())
@@ -352,20 +352,13 @@ class PostInterface(SQLAlchemyInterface):
     def resolve_subject_entries(self, args, context, info):
         # Use self.subject and not self.get_subject() because we still
         # want the subject even when the post is deleted.
-        try:
-            PostInterface._maybe_translate(self, args.get('lang'), context)
-        except Exception:
-            log.exception('Error in Post.resolve_subject_entries _maybe_translate')
+        PostInterface._maybe_translate(self, args.get('lang'), context)
         subject = resolve_best_langstring_entries(
             self.subject, args.get('lang'))
         return subject
 
     def resolve_body_entries(self, args, context, info):
-        try:
-            PostInterface._maybe_translate(self, args.get('lang'), context)
-        except Exception:
-            log.exception('Error in Post.resolve_body_entries _maybe_translate')
-
+        PostInterface._maybe_translate(self, args.get('lang'), context)
         body = resolve_best_langstring_entries(
             self.get_body(), args.get('lang'))
         return body

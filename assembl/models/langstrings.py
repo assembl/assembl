@@ -763,12 +763,15 @@ class LangString(Base):
             entries.extend(self.non_mt_entries())
         return entries
 
-    def closest_entry(self, target_locale):
+    def closest_entry(self, target_locale, filter_errors=True):
         def common_len(e):
             return Locale.compatible(
                 target_locale,
                 Locale.extract_base_locale(e.locale_code))
-        entries = [(common_len(e), e) for e in self.entries if not e.error_code]
+        if filter_errors:
+            entries = [(common_len(e), e) for e in self.entries if not e.error_code]
+        else:
+            entries = [(common_len(e), e) for e in self.entries]
         if entries:
             entries.sort(reverse=True)
             if entries[0][0]:
