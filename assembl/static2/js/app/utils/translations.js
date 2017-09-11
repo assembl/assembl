@@ -124,7 +124,8 @@ const Translations = {
       existingUsername: "Le nom d’utilisateur que vous avez renseigné existe déjà",
       existingEmail: "L’e-mail que vous avez renseigné existe déjà",
       emailNotFound: "L’e-mail que vous avez renseigné n’a pas été trouvé. Veuillez réessayer.",
-      incorrectPasswordLogin: "Le mot de passe que vous avez entré ne correspond pas avec l’utilisateur saisi. Veuillez réessayer.",
+      incorrectPasswordLogin:
+        "Le mot de passe que vous avez entré ne correspond pas avec l’utilisateur saisi. Veuillez réessayer.",
       newPassword: "Nouveau mot de passe",
       newPassword2: "Ré-entrez le nouveau mot de passe"
     },
@@ -273,8 +274,8 @@ const Translations = {
       ph: {
         title: "*Titre",
         quote: "Citation",
-        descriptionTop: "Commentaires ci-dessus vidéo",
-        descriptionBottom: "Commentaires ci-dessous vidéo",
+        descriptionTop: "Texte au-dessus de la vidéo",
+        descriptionBottom: "Texte en-dessous de la vidéo",
         videoLink: "*Lien vidéo"
       },
       surveyExport: {

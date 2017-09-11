@@ -1,7 +1,28 @@
 .video-form {
   .rich-text-editor {
     padding: 5px;
-    background-color: $first-color-light;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+
+    .DraftEditor-root {
+      max-height: 180px;
+      overflow-y: scroll;
+      font-size: $font-size-xs;
+      letter-spacing: 0;
+    }
+
+    .editor-toolbar {
+      background-color: #ccc;
+      margin: -5px;
+      .btn {
+        background-color: #ccc;
+
+        &:first-child, &:last-child, &:focus, &:active {
+          border-radius: 0px;
+          outline: none;
+        }
+      }
+    }
   }
 }
 

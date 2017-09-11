@@ -12,7 +12,7 @@ const QuestionsTitle = ({ titleEntries, qIndex, remove, selectedLocale, updateTi
     return entry.localeCode === selectedLocale;
   });
   const title = titleEntry ? titleEntry.value : '';
-  const label = `${I18n.t('administration.question_label')} ${qIndex + 1}`;
+  const label = `${I18n.t('administration.question_label')} ${qIndex + 1} ${selectedLocale.toUpperCase()}`;
   return (
     <div className="question-section">
       <FormControlWithLabel
