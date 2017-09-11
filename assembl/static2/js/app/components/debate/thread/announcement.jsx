@@ -40,28 +40,32 @@ const createDoughnutElements = (sentimentCounts) => {
   });
 };
 
+const dirtySplitHack = (announcementBody) => {
+  const split = announcementBody.split('!split!');
+  return {
+    topDesc: `${split[0]}</p>`,
+    botDesc: `<p>${split[2]}`,
+    videoURL: split[1]
+  };
+};
+
 class Announcement extends React.Component {
   render = () => {
-    const { ideaWithPostsData: { idea }, topDescription } = this.props;
+    const { ideaWithPostsData: { idea }, announcementBody } = this.props;
     const { numContributors, numPosts, posts } = idea;
     const sentimentsCount = getSentimentsCount(posts);
-    const split = topDescription.split('!split!');
-    const topD = `${split[0]}</p>`;
-    const botD = `<p>${split[2]}`;
-    const videoURL = split[1];
-    console.log('topD', topD);
-    console.log('botD', botD);
-    console.log('videoD', videoURL);
+    const { topDesc, botDesc, videoURL } = dirtySplitHack(announcementBody);
+    console.log('topDesc', topDesc, 'botDesc', botDesc, 'videoURLqs', videoURL);
     return (
       <div className="announcement">
         <div className="announcement-title">
           <div className="title-hyphen">&nbsp;</div>
-          <h3 className="dark-title-1">
+          <h3 className="announcement-title-text dark-title-1">
             <Translate value="debate.thread.announcement" />
           </h3>
         </div>
         <Col xs={12} sm={8} className="announcement-video col-sm-push-4">
-          <Video descriptionTop={topD} descriptionBottom={botD} htmlCode={videoURL} />
+          <Video descriptionTop={topDesc} descriptionBottom={botDesc} htmlCode={videoURL} />
         </Col>
         <Col xs={12} sm={4} className="col-sm-pull-8">
           <div className="announcement-statistics">

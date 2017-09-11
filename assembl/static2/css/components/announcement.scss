@@ -1,27 +1,35 @@
 .announcement {
-  text-align: right;
-
-  @media (max-width: 767px) {
-    text-align: center;
-  }
+  text-align: center;
 
   .announcement-title {
+    .announcement-title-text {
+      margin-top: 0.5em;
+    }
     text-align: left;
   }
 
   .announcement-statistics {
     display: inline-block;
     text-align: center;
+    margin-top: 1.5em;
+    margin-bottom: 3em;
+    position: relative;
+    left: 1em;
+    @media (max-width: 767px) {
+      margin-top: 0.1em;
+      left: 0;
+    }
 
     .announcement-doughnut {
-      width: 150px;
-      height: 150px;
+      width: 145px;
+      height: 145px;
 
       .superpose-label {
-        top: calc(50% - 1.7em);
+        top: calc(50% - 1.8em);
+        line-height: normal;
 
         .doughnut-label-count {
-          font-size: $font-size-m;
+          font-size: $font-size-l;
         }
 
         .doughnut-label-text {
@@ -59,8 +67,15 @@
         display: none;
       }
 
+      .video-description-bottom {
+        margin-top: 1em;
+      }
+
       .content-section {
-        padding-top: 1.5em;
+        padding-top: 0;
+        @media (max-width: 767px) {
+          padding-top: 1.5em;
+        }
         padding-bottom: 1.5em;
       }
     }
