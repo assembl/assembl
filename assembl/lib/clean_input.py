@@ -1,5 +1,6 @@
 from lxml import html
 from lxml.html.clean import Cleaner
+from six.moves.html_parser import HTMLParser
 
 VALID_TAGS = ['a',
               'b',
@@ -39,6 +40,13 @@ VALID_ATTRIBUTES = ['href',  # For hyperlinks
                     'colspan', 'headers', 'abbr',
                     'scope', 'sorted'  # For tables
                     ]
+
+
+_html_parser = HTMLParser()
+
+
+def unescape(text):
+    return _html_parser.unescape(text)
 
 
 def _make_cleaner(tags):
@@ -150,4 +158,4 @@ def sanitize_text(text):
     """Clean a HTML string, keeping only the text."""
     if '<' in text:
         return html.fromstring(text).text_content()
-    return text
+    return unescape(text)
