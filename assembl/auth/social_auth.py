@@ -154,6 +154,10 @@ def auto_subscribe(backend, social, user, *args, **kwargs):
         return {"discussion": discussion}
 
 
+def print_details(backend, details, *args, **kwargs):
+    print details, args, kwargs
+
+
 class AssemblStrategy(PyramidStrategy):
 
     def request_is_secure(self):
@@ -200,6 +204,9 @@ class AssemblStrategy(PyramidStrategy):
 
     def get_pipeline(self):
         return (
+            # Optional step: print details so we see what's going on
+            # 'assembl.auth.social_auth.print_details',
+
             # Get the information we can about the user and return it in a simple
             # format to create the user instance later. On some cases the details are
             # already part of the auth response from the provider, but sometimes this
