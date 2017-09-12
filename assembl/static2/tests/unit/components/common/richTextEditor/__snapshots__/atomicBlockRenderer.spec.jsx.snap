@@ -1,12 +1,14 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`AtomicBlockRenderer component should render an image block 1`] = `
-<figure>
+<div
+  data-blockType="atomic"
+>
   <img
     alt=""
     src="http://www.example.com/foobar.jpg"
     title="Foobar"
     width="60%"
   />
-</figure>
+</div>
 `;

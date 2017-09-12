@@ -63,6 +63,129 @@ const rcs = {
 };
 
 describe('attachmentsPlugin', () => {
+  describe('blockToHTML function', () => {
+    const { blockToHTML } = plugin;
+    it('should return null for non atomic block', () => {
+      const block = {
+        type: 'unstyled'
+      };
+      const result = blockToHTML(block);
+      expect(result).toBeNull();
+    });
+
+    it('should return null for non atomic block', () => {
+      const block = {
+        type: 'atomic'
+      };
+      const result = blockToHTML(block);
+      const expected = {
+        start: '<div data-blockType="atomic">',
+        end: '</div>'
+      };
+      expect(result).toEqual(expected);
+    });
+  });
+
+  describe('entityToHTML function', () => {
+    const { entityToHTML } = plugin;
+    it('should return originalText for other entities', () => {
+      const entity = {
+        type: 'foobar'
+      };
+      const result = entityToHTML(entity, 'My original text');
+      expect(result).toEqual('My original text');
+    });
+
+    it('should return an img tag for images', () => {
+      const entity = {
+        data: {
+          externalUrl: 'http://www.example.com/foobar.png',
+          id: 'foobar',
+          mimeType: 'image/png',
+          title: 'Foobar'
+        },
+        type: 'document'
+      };
+      const result = entityToHTML(entity, 'My original text');
+      expect(result).toEqual(
+        '<img src="http://www.example.com/foobar.png" alt="" title="Foobar" width="60%" ' +
+          'data-id="foobar" data-mimeType="image/png" />'
+      );
+    });
+
+    it('should return an empty div for documents (pdf, doc, ...)', () => {
+      const entity = {
+        data: {
+          externalUrl: 'http://www.example.com/document/1122/data',
+          id: 'foobar',
+          mimeType: 'application/pdf',
+          title: 'Foobar'
+        },
+        type: 'document'
+      };
+      const result = entityToHTML(entity, 'My original text');
+      expect(result).toEqual(
+        '<div data-id="foobar" data-mimeType="application/pdf" data-externalUrl="http://www.example.com/document/1122/data" />'
+      );
+    });
+  });
+
+  describe('htmlToBlock function', () => {
+    const { htmlToBlock } = plugin;
+    it('should return atomic block type if the node is an img tag', () => {
+      const nodeName = 'img';
+      const node = {};
+      const lastList = null;
+      const inBlock = 'unstyled';
+      const result = htmlToBlock(nodeName, node, lastList, inBlock);
+      const expected = 'atomic';
+      expect(result).toEqual(expected);
+    });
+
+    it('should return atomic block type if the node is an atomic block', () => {
+      const nodeName = 'div';
+      const node = {
+        dataset: {
+          blockType: 'atomic'
+        },
+        firstChild: {
+          dataset: {
+            id: 'foobar',
+            mimeType: 'image/png'
+          },
+          nodename: 'img'
+        }
+      };
+      const lastList = null;
+      const inBlock = 'atomic';
+      const result = htmlToBlock(nodeName, node, lastList, inBlock);
+      const expected = 'atomic';
+      expect(result).toEqual(expected);
+    });
+  });
+
+  describe('htmlToEntity function', () => {
+    const { htmlToEntity } = plugin;
+    it('should return from HTML', () => {
+      const nodeName = 'div';
+      const node = {
+        dataset: {
+          blockType: 'atomic'
+        },
+        firstChild: {
+          dataset: {
+            id: 'foobar',
+            mimeType: 'image/png'
+          },
+          nodename: 'img'
+        }
+      };
+      const result = htmlToEntity(nodeName, node);
+      const expected = '1';
+      expect(result).toEqual(expected);
+    });
+  });
+
   describe('getAttachments function', () => {
     const { getAttachments } = plugin;
     it('should return the list of all attachments ids', () => {

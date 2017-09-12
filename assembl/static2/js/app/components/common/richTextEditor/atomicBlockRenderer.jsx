@@ -1,18 +1,24 @@
+// @flow
 import React from 'react';
+import { ContentState } from 'draft-js';
+import type { ContentBlock } from 'draft-js';
 
-const AtomicBlockRenderer = ({ block, contentState }) => {
+const AtomicBlockRenderer = ({ block, contentState }: { block: ContentBlock, contentState: ContentState }) => {
   const entityKey = block.getEntityAt(0);
   const entity = contentState.getEntity(entityKey);
   const data = entity.getData();
   const type = entity.getType();
   if (type === 'document') {
+    let innerContent = <span className={`attachment-${data.id}`} />;
     if (data.mimeType.startsWith('image')) {
-      return (
-        <figure>
-          <img src={data.externalUrl} alt="" title={data.title} width="60%" />
-        </figure>
-      );
+      innerContent = <img src={data.externalUrl} alt="" title={data.title} width="60%" />;
     }
+
+    return (
+      <div data-blockType="atomic">
+        {innerContent}
+      </div>
+    );
   }
 
   return <div />;

@@ -1,48 +1,64 @@
 // @flow
 /* draft-js plugin for attachment management */
 import { convertFromRaw, convertToRaw, Entity, Modifier, RawContentState, SelectionState } from 'draft-js';
+import type { ContentBlock } from 'draft-js';
 import type { Document } from '../attachments';
 
 const ENTITY_TYPE = 'document';
 const BLOCK_TYPE = 'atomic';
 
-type BlockType = { type: string };
 type NodeType = Object;
 
 const plugin = {
-  blockToHTML: (block: BlockType): { start: string, end: string } | null => {
+  blockToHTML: (block: ContentBlock): { start: string, end: string } | null => {
     const type = block.type;
     if (type === 'atomic') {
-      return { start: '<figure>', end: '</figure>' };
+      return { start: '<div data-blockType="atomic">', end: '</div>' };
     }
 
     return null;
   },
   entityToHTML: (entity: { data: Document }, originalText: string): string => {
     if (entity.type === ENTITY_TYPE) {
-      const { externalUrl, id, mimeType, title } = entity.data;
-      if (mimeType && mimeType.startsWith('image')) {
-        return `<img src="${externalUrl}" alt="" title="${title}" width="60%" data-id="${id}" />`;
+      const { externalUrl, id, title } = entity.data;
+      const mimeType = entity.data.mimeType ? entity.data.mimeType : '';
+      if (mimeType.startsWith('image')) {
+        return `<img src="${externalUrl}" alt="" title="${title}" width="60%" data-id="${id}" data-mimeType="${mimeType}" />`;
       }
+
+      return `<div data-id="${id}" data-mimeType="${mimeType}" data-externalUrl="${externalUrl}" />`;
     }
 
     return originalText;
   },
   htmlToBlock: (nodeName: string, node: NodeType, lastList: *, inBlock: string): void | string => {
-    if ((nodeName === 'figure' && node.firstChild.nodeName === 'IMG') || (nodeName === 'img' && inBlock !== BLOCK_TYPE)) {
+    const isAtomicBlock = nodeName === 'div' && node.dataset.blockType === BLOCK_TYPE;
+    if (isAtomicBlock || (nodeName === 'img' && inBlock !== BLOCK_TYPE)) {
       return BLOCK_TYPE;
     }
 
     return undefined;
   },
   htmlToEntity: (nodeName: string, node: NodeType): Entity | void => {
-    if ((nodeName === 'figure' && node.firstChild.nodeName === 'IMG') || nodeName === 'img') {
+    let defaultMimeType;
+    let externalUrl;
+    const isAtomicBlock = nodeName === 'div' && node.dataset && node.dataset.blockType === BLOCK_TYPE;
+    const isImage = (isAtomicBlock && node.firstChild.nodeName === 'IMG') || nodeName === 'img';
+    if (isImage) {
+      defaultMimeType = 'image/*';
+      externalUrl = node.src;
+    } else if (isAtomicBlock) {
+      defaultMimeType = 'application/*';
+      externalUrl = node.dataset.externalUrl;
+    }
+
+    if (isAtomicBlock || isImage) {
       return Entity.create(ENTITY_TYPE, 'IMMUTABLE', {
-        externalUrl: node.src,
+        externalUrl: externalUrl,
         id: node.dataset.id,
-        title: node.title,
+        title: node.title || '',
         type: 'document',
-        mimeType: 'image/type'
+        mimeType: node.dataset.mimeType || defaultMimeType
       });
     }
 
