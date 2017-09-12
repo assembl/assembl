@@ -19,7 +19,10 @@ class Main extends React.Component {
   componentWillMount() {
     const { debateData } = this.props.debate;
     const currentPhaseIdentifier = getCurrentPhaseIdentifier(debateData.timeline);
-    const isRedirectionToV1 = currentPhaseIdentifier !== 'survey';
+    const currentPhase = debateData.timeline.filter((phase) => {
+      return phase.identifier === currentPhaseIdentifier;
+    });
+    const isRedirectionToV1 = currentPhase[0].interface_v1;
     this.props.addRedirectionToV1(isRedirectionToV1);
   }
   componentDidMount() {

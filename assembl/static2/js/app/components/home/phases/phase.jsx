@@ -14,6 +14,10 @@ class Phase extends React.Component {
   displayPhase() {
     const { identifier, startDate, endDate, title } = this.props;
     const { debateData } = this.props.debate;
+    const phase = debateData.timeline.filter((p) => {
+      return p.identifier === identifier;
+    });
+    const isRedirectionToV1 = phase[0].interface_v1;
     const { locale } = this.props.i18n;
     const slug = { slug: debateData.slug };
     const params = { slug: debateData.slug, phase: identifier };
@@ -36,7 +40,7 @@ class Phase extends React.Component {
         displayModal(null, body, true, null, null, true);
       }
       if (phaseStatus === 'inProgress' || phaseStatus === 'completed') {
-        if (identifier === 'survey') {
+        if (!isRedirectionToV1) {
           browserHistory.push(get('debate', params));
         } else {
           const body = <Translate value="redirectToV1" phaseName={phaseName} />;
@@ -47,7 +51,7 @@ class Phase extends React.Component {
           }, 6000);
         }
       }
-    } else if (identifier === 'survey') {
+    } else if (!isRedirectionToV1) {
       browserHistory.push(get('debate', params));
     } else {
       window.location = get('oldDebate', slug);

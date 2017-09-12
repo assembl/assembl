@@ -15,6 +15,10 @@ class TimelineSegment extends React.Component {
     const { locale } = this.props.i18n;
     const { phaseIdentifier, title, startDate, endDate } = this.props;
     const { debateData } = this.props.debate;
+    const phase = debateData.timeline.filter((p) => {
+      return p.identifier === phaseIdentifier;
+    });
+    const isRedirectionToV1 = phase[0].interface_v1;
     const slug = { slug: debateData.slug };
     const params = { slug: debateData.slug, phase: phaseIdentifier };
     let phaseName = '';
@@ -36,7 +40,7 @@ class TimelineSegment extends React.Component {
         displayModal(null, body, true, null, null, true);
       }
       if (phaseStatus === 'inProgress' || phaseStatus === 'completed') {
-        if (phaseIdentifier === 'survey') {
+        if (!isRedirectionToV1) {
           browserHistory.push(get('debate', params));
         } else {
           const body = <Translate value="redirectToV1" phaseName={phaseName} />;
@@ -47,7 +51,7 @@ class TimelineSegment extends React.Component {
           }, 6000);
         }
       }
-    } else if (phaseIdentifier === 'survey') {
+    } else if (!isRedirectionToV1) {
       browserHistory.push(get('debate', params));
     } else {
       window.location = get('oldDebate', slug);
