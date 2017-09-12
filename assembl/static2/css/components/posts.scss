@@ -1,7 +1,6 @@
 .translate {
   font-size: $font-size-xs;
   font-family: $font-family6;
-  padding: 20px 0 0;
 }
 .proposals {
   .box {
@@ -27,7 +26,9 @@
       color: $first-color;
     }
   }
-
+  .translate {
+    padding: 20px 0 0 75px;
+  }
   .body {
     font-family: $font-family4;
     line-height: 1.6em;
@@ -124,7 +125,9 @@ $deleted-post-border: 1px solid $grey1 !default;
             display: none;
         }
     }
-
+    .translate {
+      padding: 20px 0 0;
+    }
     .box {
       border-bottom: $navbar-border;
       border-left: $border-theme;
@@ -292,10 +295,6 @@ $deleted-post-border: 1px solid $grey1 !default;
       padding: 20px 50px 0 73px;
     }
 
-    .translate {
-      padding: 0 0 0 73px;
-    }
-
     .sentiments {
       margin: 25px 50px 10px 73px;
     }
@@ -324,6 +323,10 @@ $deleted-post-border: 1px solid $grey1 !default;
       .user {
         padding: 30px 20px 0;
       }
+    }
+
+    .translate {
+      padding: 20px 0 0 54px;
     }
 
     .stat-sentiment {
