@@ -157,9 +157,27 @@ export const thematicsHaveChanged = (state = false, action) => {
   }
 };
 
+export const languagePreferences = (state = [], action) => {
+  switch (action.type) {
+    case 'ADD_LANGUAGE_PREFERENCE':
+      //Language preferences can be added in different components
+      const hasLocale = state.find((locale) => {return locale === action.locale});
+      if (!hasLocale) { return state.push(action.locale); }
+      else return state;
+    default:
+    case 'REMOVE_LANGUAGE_PREFERENCE':
+      return state.filter((locale) => {
+        return locale !== action.locale
+      });
+    default:
+      return state;
+  }
+};
+
 export default combineReducers({
   selectedLocale: selectedLocale,
   thematicsHaveChanged: thematicsHaveChanged,
   thematicsInOrder: thematicsInOrder,
-  thematicsById: thematicsById
+  thematicsById: thematicsById,
+  discussionLanguagePreferences: languagePreferences
 });

@@ -6,10 +6,30 @@ import { Checkbox } from 'react-bootstrap';
 
 import SectionTitle from '../sectionTitle';
 import withLoadingIndicator from '../../common/withLoadingIndicator';
+import { addLanguagePreferences, removeLanguagePreference } from '../../../actions/adminActions';
 import getAllPreferenceLanguage from '../../../graphql/AllLanguagePreferences.graphql';
 
 
 class LanguageSection extends React.Component {
+
+  constructor(props) {
+    super(props);
+    const {i18n, selectedLocale, data } = props;
+
+    const allLangs = {};
+    data.defaultPreferences.languages.forEach((lang) => {
+      allLangs[lang.locale] = {selected: false, name: lang.name};
+    });
+    data.discussionPreferences.languages.forEach((lang) => {
+      allLangs[lang.locale] = {selected: true, name: lang.name};
+    });
+
+    this.state = {
+      localeState: allLangs,
+    };
+
+    allLangs
+  }
 
   componentWillReceiveProps(nextProps){
     const currentLocale = this.props.i18n.locale;
@@ -20,18 +40,15 @@ class LanguageSection extends React.Component {
     }
   }
 
+  toggleLocale(locale){
+    const localeState = this.state.localeState[locale];
+    const newState = {...localeState, selected: !localeState.selected};
+    this.setState((prevState, props) => {
+      return prevState.localeState[locale] = newState;
+    })
+  }
+
   render() {
-    const {i18n, selectedLocale, data } = this.props;
-
-    const allLangs = {};
-    data.defaultPreferences.languages.forEach((lang) => {
-      allLangs[lang.locale] = {state: false, name: lang.name};
-    });
-    data.discussionPreferences.languages.forEach((lang) => {
-      allLangs[lang.locale] = {state: true, name: lang.name};
-    });
-
-    console.log(allLangs);
     return (
       <div className="admin-box">
         <SectionTitle i18n={i18n} phase="discussion" tabId="0" annotation={I18n.t('administration.annotation')} />
@@ -41,9 +58,10 @@ class LanguageSection extends React.Component {
           </div>
           <form className='language-list'>
             {Object.keys(allLangs).map((locale) => {
+              const localeData = this.state.localeState[locale];
               return (
-                <Checkbox checked={allLangs[locale].state} >
-                  {allLangs[locale].name}
+                <Checkbox checked={localeData.selected } key={locale} >
+                  {localeData.name}
                 </Checkbox>
               );
             })}
@@ -66,6 +84,12 @@ const mapStateToProps = ({ admin: { thematicsById, thematicsInOrder, selectedLoc
 
 const mapDispatchToProps = (dispatch) => {
   return {
+    addLocaleToStore: (locale) => {
+      dispatch(addLanguagePreferences(locale));
+    },
+    removeLocaleFromStore: (locale) => {
+      dispatch(removeLanguagePreference(locale));
+    }
   };
 };
 
