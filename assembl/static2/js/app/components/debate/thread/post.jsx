@@ -156,6 +156,8 @@ class Post extends React.PureComponent {
       this.answerTextarea = el;
     };
 
+    console.log('modifiedSubject value:', modifiedSubject);
+
     return (
       <div className="posts" id={id}>
         <div className="box">
@@ -169,9 +171,6 @@ class Post extends React.PureComponent {
                   locale={lang}
                   modified={modificationDate !== null}
                 />}
-              <h3 className="dark-title-3">
-                {modifiedSubject}
-              </h3>
               {originalBodyLocale
                 ? <PostTranslate
                   id={id}
@@ -184,6 +183,10 @@ class Post extends React.PureComponent {
                   }}
                 />
                 : null}
+              <h3 className="dark-title-3">
+                {modifiedSubject}
+              </h3>
+
               <div
                 className={`body ${bodyMimeType === 'text/plain' ? 'pre-wrap' : ''}`}
                 dangerouslySetInnerHTML={{ __html: body }}

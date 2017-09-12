@@ -17,17 +17,18 @@ const PostTranslate = ({
 }) => {
   return (
     <div className="translate">
-      {!showOriginal
-        ? <p>
-          <Translate value="debate.thread.messageTranslatedFrom" language={I18n.t(`language.${originalBodyLocale}`)} />
-        </p>
-        : null}
+      <p>
+        <Translate
+          value={!showOriginal ? 'debate.thread.messageTranslatedFrom' : 'debate.thread.messageOriginallyIn'}
+          language={I18n.t(`language.${originalBodyLocale}`)}
+        />
+      </p>
       <SwitchButton
         name={`switch-${id}`}
         onChange={toggle}
         defaultChecked={showOriginal}
         // labelRight={showOriginal ? I18n.t('debate.thread.translate') : I18n.t('debate.thread.showOriginal')}
-        labelRight={I18n.t('debate.thread.showOriginal')}
+        labelRight={!showOriginal ? I18n.t('debate.thread.showOriginal') : I18n.t('debate.thread.translate')}
       />
     </div>
   );
