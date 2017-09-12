@@ -4,7 +4,7 @@ import DontUnderstand from '../../svg/dontUnderstand';
 import MoreInfo from '../../svg/moreInfo';
 import { likeTooltip, disagreeTooltip, dontUnderstandTooltip, moreInfoTooltip } from '../../common/tooltips';
 
-export default [
+const sentimentDefinitions = [
   {
     type: 'LIKE',
     camelType: 'like',
@@ -34,3 +34,10 @@ export default [
     SvgComponent: MoreInfo
   }
 ];
+
+export default sentimentDefinitions;
+
+export const sentimentDefinitionsObject = sentimentDefinitions.reduce((result, sentiment) => {
+  Object.assign(result, { [sentiment.camelType]: sentiment });
+  return result;
+}, {});

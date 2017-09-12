@@ -68,6 +68,15 @@ Frontend class reference
    :maxdepth: 3
 
    jsdoc/index
+   
+   
+Consultation Notes
+------------------
+
+.. toctree::
+  :maxdepth: 1
+  
+  consultant_notes
 
 Indices and tables
 ==================

@@ -224,7 +224,8 @@ const Translations = {
         translate: "Traduire",
         goToIdea: "Accéder à la discussion",
         seeSubIdeas: "Voir les %{count} sous-thèmes",
-        seeSubIdeas_1: "Voir le sous-thème"
+        seeSubIdeas_1: "Voir le sous-thème",
+        announcement: "Consigne"
       },
       themes: "Thèmes",
       notStarted: "La phase %{phaseName} n'a pas encore commencé. Merci de revenir à partir du ",
@@ -517,7 +518,8 @@ const Translations = {
         translate: "Translate",
         goToIdea: "Access the thread",
         seeSubIdeas: "See %{count} sub-thematics",
-        seeSubIdeas_1: "See sub-thematic"
+        seeSubIdeas_1: "See sub-thematic",
+        announcement: "Announcement"
       },
       themes: "Themes",
       notStarted: "The %{phaseName} phase has not started. Please come back from ",

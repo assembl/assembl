@@ -1,0 +1,82 @@
+.announcement {
+  text-align: center;
+
+  .announcement-title {
+    .announcement-title-text {
+      margin-top: 0.5em;
+    }
+    text-align: left;
+  }
+
+  .announcement-statistics {
+    display: inline-block;
+    text-align: center;
+    margin-top: 1.5em;
+    margin-bottom: 3em;
+    position: relative;
+    left: 1em;
+
+    .announcement-doughnut {
+      width: 145px;
+      height: 145px;
+
+      .superpose-label {
+        top: calc(50% - 2em);
+        line-height: normal;
+
+        .doughnut-label-count {
+          font-size: $font-size-l;
+        }
+
+        .doughnut-label-text {
+          font-family: latoRegular;
+          font-size: $font-size-xs;
+          letter-spacing: 0.08em;
+        }
+      }
+    }
+
+    .announcement-numbers {
+      font-size: 12px;
+      margin-bottom: 15%;
+      color: $first-color;
+
+      span::before {
+        font-size: 14px;
+      }
+    }
+  }
+
+  .announcement-video {
+
+    .video-section {
+
+      div {
+        background-color: $grey0;
+      }
+
+      .video-title-section {
+        display: none;
+      }
+
+      .video-description-bottom {
+        margin-top: 1em;
+      }
+
+      .content-section {
+        padding-top: 0;
+        padding-bottom: 1.5em;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .announcement > .announcement-statistics {
+    margin-top: 0.1em;
+    left: 0;
+  }
+  .announcement-video > .video-section > .content-section {
+    padding-top: 1.5em;
+  }
+}

@@ -14,6 +14,7 @@ import Tree from '../components/common/tree';
 import Loader from '../components/common/loader';
 import Permissions, { connectedUserCan } from '../utils/permissions';
 import { getConnectedUserId } from '../utils/globalFunctions';
+import Announcement from './../components/debate/thread/announcement';
 import TopPostForm from '../components/debate/thread/topPostForm';
 import { getContentLocale } from '../reducers/rootReducer';
 
@@ -74,6 +75,15 @@ class Idea extends React.Component {
       <div className="idea">
         <Header title={idea.title} longTitle={idea.longTitle} imgUrl={idea.imgUrl} identifier="thread" />
         <section className="post-section">
+          {!ideaWithPostsData.loading &&
+            idea.announcementBody &&
+            <Grid fluid className="background-grey">
+              <div className="max-container">
+                <div className="content-section">
+                  <Announcement ideaWithPostsData={ideaWithPostsData} announcementBody={idea.announcementBody} />
+                </div>
+              </div>
+            </Grid>}
           {!isUserConnected || connectedUserCan(Permissions.ADD_POST)
             ? <Grid fluid className="background-color">
               <div className="max-container">

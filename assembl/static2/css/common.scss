@@ -223,12 +223,6 @@ input.placeholder, textarea.placeholder {
   clear: both;
 }
 
-.bottom {
-  bottom: 0;
-  position: fixed;
-  width: 100%;
-}
-
 .relative {
   position: relative;
 }
@@ -256,6 +250,10 @@ input.placeholder, textarea.placeholder {
   .content-section {
     padding: $margin-section-xs 0;
   }
+}
+
+strong {
+  font-family: $font-family3;
 }
 
 #pDebug {

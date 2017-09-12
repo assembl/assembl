@@ -7,6 +7,12 @@ mutation createPost($contentLocale: String!, $ideaId: ID!, $subject: String, $bo
       ... on Post {
         parentId
         creationDate
+        sentimentCounts {
+          like
+          disagree
+          dontUnderstand
+          moreInfo
+        }
       }
     }
   }
