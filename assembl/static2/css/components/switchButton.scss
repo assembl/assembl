@@ -1,0 +1,201 @@
+//Taken from https://github.com/gfazioli/react-switch-button/tree/master/less
+
+// Radius
+@mixin rsbc-border-radius( $radius ){
+  -webkit-border-radius : $radius;
+  -moz-border-radius    : $radius;
+  border-radius         : $radius;
+}
+
+// Transitions
+@mixin rsbc-transition(  $transition ){
+  -webkit-transition : $transition;
+  -moz-transition    : $transition;
+  -o-transition      : $transition;
+  transition         : $transition;
+}
+
+// Box sizing
+@mixin rsbc-box-sizing($type: border-box){
+  -webkit-box-sizing : $type;
+  -moz-box-sizing    : $type;
+  box-sizing         : $type;
+}
+
+// User select
+@mixin rsbc-user-select($value){
+  -webkit-user-select : $value;
+  -moz-user-select    : $value;
+  -ms-user-select     : $value;
+  user-select         : $value;
+}
+
+
+//React Switch Button flat-round style.
+$rsbc-transtion-delay : 0.4s;
+$rsbc-theme-flat-color-on : #579fcb;
+$rsbc-theme-flat-color-on-border : darken($rsbc-theme-flat-color-on, 10%);
+$rsbc-theme-flat-color-off : #aaa;
+$rsbc-theme-flat-color-off-border : darken($rsbc-theme-flat-color-off, 10%);
+$rsbc-theme-flat-color-disabled : #eee;
+$rsbc-theme-flat-color-disabled-border : darken($rsbc-theme-flat-color-disabled, 10%);
+
+
+
+// Main Switch Button container
+.rsbc-switch-button
+{
+  position       : relative;
+  line-height    : 100%;
+  display        : inline-block;
+  vertical-align : middle;
+  margin         : 0;
+  @include rsbc-box-sizing(border-box);
+
+  label {
+    cursor: pointer;
+  }
+
+  &.disabled {
+    label {
+      cursor: not-allowed;
+    }
+  }
+
+  // Hide the default input checkbox
+  input[type="checkbox"]
+  {
+    position    : absolute;
+    margin-left : -9999px;
+    visibility  : hidden;
+  }
+
+  // Default left label
+  > label:first-child
+  {
+    display    : inline-block;
+    margin     : 0 6px 0 0px;
+  }
+
+  // Right label
+  label + label
+  {
+    margin-left : 6px;
+  }
+
+  input[type="checkbox"] + label
+  {
+    display  : inline-block;
+    position : relative;
+    margin   : 0;
+    outline  : none;
+    @include rsbc-user-select(none);
+    @include rsbc-box-sizing(border-box);
+  }
+
+
+  // Flat-Round style
+
+
+  // Theme
+  &.rsbc-switch-button-flat-round input[type="checkbox"] + label
+  {
+    padding          : 2px;
+    width            : 48px;
+    height           : 24px;
+    vertical-align   : middle;
+    background-color : $rsbc-theme-flat-color-off;
+    @include rsbc-border-radius(60px);
+    @include rsbc-transition(background $rsbc-transtion-delay);
+  }
+
+  &.rsbc-switch-button-flat-round.disabled input[type="checkbox"] + label
+  {
+    background-color : $rsbc-theme-flat-color-disabled;
+  }
+
+  &.rsbc-switch-button-flat-round:hover input[type="checkbox"] + label
+  {
+    background-color : $rsbc-theme-flat-color-on;
+  }
+
+  &.rsbc-switch-button-flat-round.disabled:hover input[type="checkbox"] + label
+  {
+    background-color : $rsbc-theme-flat-color-disabled;
+  }
+
+  &.rsbc-switch-button-flat-round input[type="checkbox"] + label:before,
+  &.rsbc-switch-button-flat-round input[type="checkbox"] + label:after
+  {
+    display  : inline-block;
+    position : absolute;
+    content  : "";
+  }
+
+  // inner background
+  &.rsbc-switch-button-flat-round input[type="checkbox"] + label:before
+  {
+    top              : 2px;
+    left             : 2px;
+    bottom           : 2px;
+    right            : 2px;
+    background-color : #fff;
+    @include rsbc-border-radius(60px);
+    @include rsbc-transition(background $rsbc-transtion-delay);
+  }
+
+  &.rsbc-switch-button-flat-round input[type="checkbox"] + label:after
+  {
+    top              : 4px;
+    left             : 4px;
+    bottom           : 4px;
+    width            : 16px;
+    background-color : $rsbc-theme-flat-color-off-border;
+    @include rsbc-border-radius(52px);
+    @include rsbc-transition(margin $rsbc-transtion-delay);
+    @include rsbc-transition(background $rsbc-transtion-delay);
+  }
+
+  &.rsbc-switch-button-flat-round.disabled input[type="checkbox"] + label:after
+  {
+    background-color : $rsbc-theme-flat-color-disabled-border;
+  }
+
+  &.rsbc-switch-button-flat-round:hover input[type="checkbox"]:checked + label
+  {
+    background-color : $rsbc-theme-flat-color-off;
+  }
+
+  &.rsbc-switch-button-flat-round input[type="checkbox"]:checked + label
+  {
+    background-color : $rsbc-theme-flat-color-on;
+  }
+
+  &.rsbc-switch-button-flat-round.disabled input[type="checkbox"]:checked + label
+  {
+    background-color : $rsbc-theme-flat-color-disabled;
+  }
+
+  &.rsbc-switch-button-flat-round input[type="checkbox"]:checked + label:after
+  {
+    margin-left      : 24px;
+    background-color : $rsbc-theme-flat-color-on-border;
+  }
+
+  &.rsbc-switch-button-flat-round.disabled input[type="checkbox"]:checked + label:after
+  {
+    margin-left      : 24px;
+    background-color : $rsbc-theme-flat-color-disabled-border;
+  }
+
+  &.rsbc-switch-button.rsbc-switch-button-flat-round {
+    &.rsbc-mode-select {
+      input[type="checkbox"] + label:after,
+      &:hover input[type="checkbox"]:checked + label,
+      input[type="checkbox"] + label {
+        background-color : $rsbc-theme-flat-color-on !important;
+      }
+    }
+  }
+
+}
