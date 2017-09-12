@@ -4,7 +4,7 @@ import { Grid, Row, Col } from 'react-bootstrap';
 
 class Video extends React.Component {
   render() {
-    const { title, descriptionTop, descriptionBottom, descriptionSide, htmlCode } = this.props;
+    const { title, descriptionTop, descriptionBottom, htmlCode } = this.props;
     return (
       <section className="video-section relative">
         <Grid fluid className="background-light">
@@ -18,40 +18,24 @@ class Video extends React.Component {
             <div className="content-section">
               {descriptionTop &&
                 <Row>
-                  <Col xs={12} sm={descriptionSide ? 6 : 8} smOffset={descriptionSide ? 4 : 2}>
-                    <div
-                      className="video-description-layer video-description-top"
-                      dangerouslySetInnerHTML={{ __html: descriptionTop }}
-                    />
-                  </Col>
+                  <div
+                    className="video-description-layer video-description-top"
+                    dangerouslySetInnerHTML={{ __html: descriptionTop }}
+                  />
                 </Row>}
               <Row>
-                {descriptionSide &&
-                  <Col xs={12} sm={3} smOffset={1}>
-                    <div className="video-description">
-                      <div>
-                        <span className="assembl-icon-pepite color2">&nbsp;</span>
-                      </div>
-                      <div className="description-txt" dangerouslySetInnerHTML={{ __html: descriptionSide }} />
-                      <div className="box-hyphen left">&nbsp;</div>
-                    </div>
-                  </Col>}
                 {htmlCode &&
-                  <Col xs={12} sm={descriptionSide ? 6 : 8} smOffset={descriptionSide ? 0 : 2}>
-                    <div className="video-container" id="video-vid">
-                      <iframe src={htmlCode} frameBorder="0" width="560" height="315" title="video" />
-                    </div>
-                  </Col>}
+                  <div className="video-container" id="video-vid">
+                    <iframe src={htmlCode} frameBorder="0" width="560" height="315" title="video" />
+                  </div>}
               </Row>
-              <Row>
-                {descriptionBottom &&
-                  <Col xs={12} sm={descriptionSide ? 6 : 8} smOffset={descriptionSide ? 4 : 2}>
-                    <div
-                      className="video-description-layer video-description-bottom"
-                      dangerouslySetInnerHTML={{ __html: descriptionBottom }}
-                    />
-                  </Col>}
-              </Row>
+              {descriptionBottom &&
+                <Row>
+                  <div
+                    className="video-description-layer video-description-bottom"
+                    dangerouslySetInnerHTML={{ __html: descriptionBottom }}
+                  />
+                </Row>}
             </div>
           </div>
         </Grid>
