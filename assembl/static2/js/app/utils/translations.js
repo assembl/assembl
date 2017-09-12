@@ -304,7 +304,7 @@ const Translations = {
       en: "English",
       fr: "French",
       ja: "Japanese",
-      de: "deutsch"
+      de: "german"
     },
     cancel: "Annuler",
     redirectToV1:
