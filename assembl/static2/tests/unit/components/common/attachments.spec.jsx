@@ -10,7 +10,8 @@ describe('Attachments component', () => {
         id: 'foo',
         document: {
           title: 'Foo',
-          externalUrl: 'http://www.example.com/foo'
+          externalUrl: 'http://www.example.com/foo.pdf',
+          mimeType: 'application/pdf'
         }
       },
       {

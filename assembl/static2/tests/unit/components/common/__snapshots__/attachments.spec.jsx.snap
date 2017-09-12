@@ -16,9 +16,11 @@ exports[`Attachments component should render the list of attachments 1`] = `
       Foo
     </span>
     <a
-      href="http://www.example.com/foo"
+      download="Foo"
+      href="http://www.example.com/foo.pdf"
       rel="noopener noreferrer"
       target="_blank"
+      type="application/pdf"
     >
       <span
         className={undefined}
@@ -40,9 +42,11 @@ exports[`Attachments component should render the list of attachments 1`] = `
       Bar.jpg
     </span>
     <a
+      download="Bar.jpg"
       href="http://www.example.com/bar.jpg"
       rel="noopener noreferrer"
       target="_blank"
+      type="image/jpeg"
     >
       <span
         className={undefined}

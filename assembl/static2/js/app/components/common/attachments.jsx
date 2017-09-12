@@ -18,11 +18,13 @@ type AttachmentsProps = {
   attachments: [Attachment]
 };
 
+const DEFAULT_FILENAME = 'file';
+
 const Attachments = ({ attachments }: AttachmentsProps) => {
   return (
     <div className="attachments">
       {attachments.map((attachment) => {
-        const { externalUrl, title } = attachment.document;
+        const { externalUrl, mimeType, title } = attachment.document;
         return (
           <div className="attachment" key={attachment.id}>
             <span className="assembl-icon-synthesis" />
@@ -32,7 +34,7 @@ const Attachments = ({ attachments }: AttachmentsProps) => {
             {/* <span className="mimeType">
               {attachment.mimeType}
             </span> */}
-            <a href={externalUrl} target="_blank" rel="noopener noreferrer">
+            <a download={title || DEFAULT_FILENAME} href={externalUrl} type={mimeType} target="_blank" rel="noopener noreferrer">
               <Translate value="common.attachments.download" />
             </a>
           </div>
