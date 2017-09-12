@@ -204,6 +204,7 @@ const Translations = {
       },
       thread: {
         messageTranslatedFrom: "Ce message a été traduit du texte %{language}.",
+        messageOriginallyIn: "Ce message a été rédigé en %{language}.",
         postDeletedByAdmin: "Ce message a été supprimé par l'administrateur du débat.",
         postDeletedByUser: "Ce message a été supprimé par son auteur.",
         postEdited: "modifié",
@@ -498,6 +499,7 @@ const Translations = {
       },
       thread: {
         messageTranslatedFrom: "This message has been translated from %{language}.",
+        messageOriginallyIn: "This message has been written in %{language}",
         postDeletedByAdmin: "This message has been deleted by the community manager.",
         postDeletedByUser: "This message has been deleted by the author.",
         postEdited: "edited",
