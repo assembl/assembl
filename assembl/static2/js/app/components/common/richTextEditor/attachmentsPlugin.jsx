@@ -26,7 +26,7 @@ const plugin = {
         return `<img src="${externalUrl}" alt="" title="${title}" width="60%" data-id="${id}" data-mimeType="${mimeType}" />`;
       }
 
-      return `<div data-id="${id}" data-mimeType="${mimeType}" data-externalUrl="${externalUrl}" />`;
+      return `<div data-id="${id}" data-mimeType="${mimeType}" data-title="${title}" data-externalUrl="${externalUrl}" />`;
     }
 
     return originalText;
@@ -42,21 +42,24 @@ const plugin = {
   htmlToEntity: (nodeName: string, node: NodeType): Entity | void => {
     let defaultMimeType;
     let externalUrl;
+    let title;
     const isAtomicBlock = nodeName === 'div' && node.dataset && node.dataset.blockType === BLOCK_TYPE;
     const isImage = (isAtomicBlock && node.firstChild.nodeName === 'IMG') || nodeName === 'img';
     if (isImage) {
       defaultMimeType = 'image/*';
       externalUrl = node.src;
+      title = node.title;
     } else if (isAtomicBlock) {
       defaultMimeType = 'application/*';
       externalUrl = node.dataset.externalUrl;
+      title = node.dataset.title;
     }
 
     if (isAtomicBlock || isImage) {
       return Entity.create(ENTITY_TYPE, 'IMMUTABLE', {
         externalUrl: externalUrl,
         id: node.dataset.id,
-        title: node.title || '',
+        title: title || '',
         type: 'document',
         mimeType: node.dataset.mimeType || defaultMimeType
       });

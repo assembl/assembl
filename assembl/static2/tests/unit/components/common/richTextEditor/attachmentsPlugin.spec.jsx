@@ -125,7 +125,8 @@ describe('attachmentsPlugin', () => {
       };
       const result = entityToHTML(entity, 'My original text');
       expect(result).toEqual(
-        '<div data-id="foobar" data-mimeType="application/pdf" data-externalUrl="http://www.example.com/document/1122/data" />'
+        '<div data-id="foobar" data-mimeType="application/pdf" data-title="Foobar" ' +
+          'data-externalUrl="http://www.example.com/document/1122/data" />'
       );
     });
   });
