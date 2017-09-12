@@ -256,7 +256,7 @@ def test_app_no_login_real_policy(request, test_app_no_perm):
     with transaction.manager:
         session = get_session_maker()
         from ...lib.migration import bootstrap_db_data
-        bootstrap_db_data(session)
+        bootstrap_db_data(session, False)
 
     return test_app_no_perm
 
