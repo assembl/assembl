@@ -8,14 +8,18 @@ describe('EditAttachments component', () => {
     const attachments = [
       {
         id: 'foo',
-        title: 'Foo',
-        externalUrl: 'http://www.example.com/foo'
+        document: {
+          title: 'Foo',
+          externalUrl: 'http://www.example.com/foo'
+        }
       },
       {
         id: 'bar',
-        title: 'Bar.jpg',
-        externalUrl: 'http://www.example.com/bar.jpg',
-        mimeType: 'image/jpeg'
+        document: {
+          title: 'Bar.jpg',
+          externalUrl: 'http://www.example.com/bar.jpg',
+          mimeType: 'image/jpeg'
+        }
       }
     ];
     const onDeleteSpy = jest.fn(() => {});
