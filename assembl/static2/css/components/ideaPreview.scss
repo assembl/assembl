@@ -6,6 +6,9 @@
         top: 0;
         width: calc(100% - 40px);
     }
+    .content-box {
+      cursor: default;
+    }
     .access-discussion {
         position: absolute;
         top: calc(50% - 20px);
@@ -26,6 +29,7 @@
         }
     }
     .see-sub-ideas {
+        cursor: pointer;
         color: $white;
         text-transform: uppercase;
         font-size: $font-size-xxs;
@@ -84,6 +88,9 @@
         position: absolute;
         top: 150px;
         width: calc(100% - 40px);
+    }
+    .content-box {
+      cursor: pointer;
     }
 }
 
