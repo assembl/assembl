@@ -8,7 +8,7 @@ let globalList;
 
 const cache = new CellMeasurerCache({
   defaultHeight: 500,
-  minHeight: 355,
+  minHeight: 185,
   fixedWidth: true
 });
 
