@@ -489,9 +489,9 @@ class GoogleTranslationService(DummyGoogleTranslationService):
     @staticmethod
     def unescape_string(text, is_html):
         if is_html:
-            return unescape_text(text)
+            return GoogleTranslationService.unescape_html(text)
         else:
-            return unescape_html(text)
+            return GoogleTranslationService.unescape_text(text)
 
     @property
     def known_locales(self):
