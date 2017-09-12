@@ -1,6 +1,16 @@
 .idea {
     position: relative;
 
+    .header-section {
+      .header-content {
+        max-width: 70%;
+        width: auto;
+        margin-left: 0;
+        margin-right: auto;
+        text-align: left;
+      }
+    }
+
     .subject-prefix {
       color: $first-color-opacity-70;
       font-family: 'LatoHairline';
