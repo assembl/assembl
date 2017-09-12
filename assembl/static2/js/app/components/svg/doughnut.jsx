@@ -3,14 +3,14 @@ import { OverlayTrigger } from 'react-bootstrap';
 
 import { calculatePercentage } from '../../utils/globalFunctions';
 
-function polarToCartesian(centerX, centerY, radius, angleInDegrees) {
+const polarToCartesian = (centerX, centerY, radius, angleInDegrees) => {
   const angleInRadians = (angleInDegrees - 90) * Math.PI / 180.0;
 
   return {
     x: centerX + radius * Math.cos(angleInRadians),
     y: centerY + radius * Math.sin(angleInRadians)
   };
-}
+};
 
 const describeArc = (x, y, radius, startAngle, endAngle) => {
   const start = polarToCartesian(x, y, radius, endAngle);
@@ -23,15 +23,11 @@ const describeArc = (x, y, radius, startAngle, endAngle) => {
   return d;
 };
 
-const cx = 70;
-const cy = 70;
-const r = 50;
-
 const getColor = (element) => {
   return 'color' in element ? element.color : 'lightgrey';
 };
 
-const simpleCircle = (element) => {
+const simpleCircle = (cx, cy, r, element) => {
   return 'Tooltip' in element
     ? <OverlayTrigger container={this} overlay={element.Tooltip} placement="bottom">
       <circle className="circle" cx={cx} cy={cy} r={r} stroke={getColor(element)} />
@@ -40,19 +36,19 @@ const simpleCircle = (element) => {
 };
 
 const placementFromAngle = (angle) => {
-  const firstQuartant = 360 - 45;
-  const secondQuartant = 45;
-  const thirdQuartant = secondQuartant + 90;
-  const fourthQuartant = thirdQuartant + 90;
+  const topQuadrantStart = 360 - 45;
+  const rightQuadrantStart = 45;
+  const bottomQuadrantStart = rightQuadrantStart + 90;
+  const leftQuadrantStart = bottomQuadrantStart + 90;
 
-  if ((angle >= firstQuartant && angle < 360) || (angle >= 0 && angle < secondQuartant)) return 'top';
-  if (angle >= secondQuartant && angle < thirdQuartant) return 'right';
-  if (angle >= thirdQuartant && angle < fourthQuartant) return 'bottom';
-  if (angle >= fourthQuartant && angle < firstQuartant) return 'left';
+  if ((angle >= topQuadrantStart && angle < 360) || (angle >= 0 && angle < rightQuadrantStart)) return 'top';
+  if (angle >= rightQuadrantStart && angle < bottomQuadrantStart) return 'right';
+  if (angle >= bottomQuadrantStart && angle < leftQuadrantStart) return 'bottom';
+  if (angle >= leftQuadrantStart && angle < topQuadrantStart) return 'left';
   return 'right';
 };
 
-const circlePaths = (elements, totalCount) => {
+const circlePaths = (cx, cy, r, elements, totalCount) => {
   let nextStartAngle = 0;
   return elements.map((element, index) => {
     const normalizedSize = calculatePercentage(element.count, totalCount) / 100;
@@ -75,21 +71,29 @@ const circlePaths = (elements, totalCount) => {
   });
 };
 
-const Doughnut = ({ elements, strokeWidth }) => {
+const doughnutConstants = {
+  cx: 70,
+  cy: 70,
+  r: 50
+};
+
+const Doughnut = ({ elements }) => {
   const filteredElements = elements.filter(({ count }) => {
     return count > 0;
   });
   const totalCount = filteredElements.reduce((total, element) => {
     return total + element.count;
   }, 0);
+  const { cx, cy, r } = doughnutConstants;
+  const viewBox = `0 0 ${cx * 2} ${cy * 2}`;
   return totalCount === 0
-    ? <svg className="doughnut" viewBox="0 0 140 140">
-      {simpleCircle({ count: 0 }, strokeWidth)}
+    ? <svg className="doughnut" viewBox={viewBox}>
+      {simpleCircle(cx, cy, r, { count: 0 })}
     </svg>
-    : <svg className="doughnut" viewBox="0 0 140 140">
+    : <svg className="doughnut" viewBox={viewBox}>
       {filteredElements.length === 1
-        ? simpleCircle(filteredElements[0], strokeWidth)
-        : circlePaths(filteredElements, totalCount, strokeWidth)}
+        ? simpleCircle(cx, cy, r, filteredElements[0])
+        : circlePaths(cx, cy, r, filteredElements, totalCount)}
     </svg>;
 };
 
