@@ -58,6 +58,7 @@ class NavBar extends React.Component {
             </div>
             <div className="navbar-icons right">
               {connectedUserId &&
+                debateData.helpUrl &&
                 <Link to={`${debateData.helpUrl}`} target="_blank">
                   <span className="assembl-icon-faq grey">&nbsp;</span>
                 </Link>}
