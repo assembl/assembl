@@ -89,7 +89,7 @@ def main(global_config, **settings):
     with transaction.manager:
         session = get_session_maker()
         from .lib.migration import bootstrap_db_data
-        bootstrap_db_data(session, False)
+        bootstrap_db_data(session)
 
     config.add_static_view('static', 'static', cache_max_age=3600)
     config.add_static_view('static2', 'static2', cache_max_age=3600)
