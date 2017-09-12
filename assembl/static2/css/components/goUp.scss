@@ -13,9 +13,9 @@
     a {
         text-align: left;
         border-radius: 50%;
-        padding: .6em 0 0 .6em;
-        width: 3em;
-        height: 3em;
+        padding: 8px 0 0 7px;
+        width: 33px;
+        height: 33px;
         background-color: $first-color-light;
         display: inline-block;
         cursor: pointer;
@@ -25,7 +25,7 @@
         }
 
         .assembl-icon-up-open::before {
-            font-size: .8em;
+            font-size: 9px;
         }
     }
 }
