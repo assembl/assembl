@@ -155,9 +155,6 @@ class Post extends React.PureComponent {
     const answerTextareaRef = (el) => {
       this.answerTextarea = el;
     };
-
-    console.log('modifiedSubject value:', modifiedSubject);
-
     return (
       <div className="posts" id={id}>
         <div className="box">
