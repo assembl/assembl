@@ -538,6 +538,7 @@ class GoogleTranslationService(DummyGoogleTranslationService):
             raise HttpError(401, '{"error":"Please define server_api_key"}')
         r = self.client.translations().list(
             q=text,
+            format="html" if is_html else "text",
             target=self.asKnownLocale(target),
             source=self.asKnownLocale(source) if source else None).execute()
         if source is None:
