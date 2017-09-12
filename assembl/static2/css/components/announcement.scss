@@ -15,10 +15,6 @@
     margin-bottom: 3em;
     position: relative;
     left: 1em;
-    @media (max-width: 767px) {
-      margin-top: 0.1em;
-      left: 0;
-    }
 
     .announcement-doughnut {
       width: 145px;
@@ -73,11 +69,18 @@
 
       .content-section {
         padding-top: 0;
-        @media (max-width: 767px) {
-          padding-top: 1.5em;
-        }
         padding-bottom: 1.5em;
       }
     }
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .announcement > .announcement-statistics {
+    margin-top: 0.1em;
+    left: 0;
+  }
+  .announcement-video > .video-section > .content-section {
+    padding-top: 1.5em;
   }
 }
