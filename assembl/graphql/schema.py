@@ -569,20 +569,21 @@ class Idea(SecureObjectType, SQLAlchemyObjectType):
 
         # do only one sql query to calculate sentiment_counts
         # instead of doing one query for each post
-        sentiment_counts = discussion.db.query(
-                models.Post.id, models.SentimentOfPost.type, count(models.SentimentOfPost.id)
-            ).join(models.SentimentOfPost
-            ).filter(models.Post.id.in_(query.with_entities(models.Post.id).subquery()),
-                     models.SentimentOfPost.tombstone_condition()
-            ).group_by(models.Post.id, models.SentimentOfPost.type)
-        sentiment_counts_by_post_id = defaultdict(dict)
-        for (post_id, sentiment_type, sentiment_count) in sentiment_counts:
-            sentiment_counts_by_post_id[post_id][
-                sentiment_type[SentimentOfPost.TYPE_PREFIX_LEN:]
-            ] = sentiment_count
-        # set sentiment_counts_by_post_id on the request to use it
-        # in Post's resolve_sentiment_counts
-        context.sentiment_counts_by_post_id = sentiment_counts_by_post_id
+        if 'sentimentCounts' in str(info.field_asts[0]):
+            sentiment_counts = discussion.db.query(
+                    models.Post.id, models.SentimentOfPost.type, count(models.SentimentOfPost.id)
+                ).join(models.SentimentOfPost
+                ).filter(models.Post.id.in_(query.with_entities(models.Post.id).subquery()),
+                         models.SentimentOfPost.tombstone_condition()
+                ).group_by(models.Post.id, models.SentimentOfPost.type)
+            sentiment_counts_by_post_id = defaultdict(dict)
+            for (post_id, sentiment_type, sentiment_count) in sentiment_counts:
+                sentiment_counts_by_post_id[post_id][
+                    sentiment_type[SentimentOfPost.TYPE_PREFIX_LEN:]
+                ] = sentiment_count
+            # set sentiment_counts_by_post_id on the request to use it
+            # in Post's resolve_sentiment_counts
+            context.sentiment_counts_by_post_id = sentiment_counts_by_post_id
 
         # pagination is done after that, no need to do it ourself
         return query
