@@ -45,29 +45,32 @@
     z-index: 10;
 
     .wyntk-box {
-      top: 18%;
-      height: 73%;
+      top: 90px;
+      height: 350px;
       width: 350px;
-      padding-bottom: 30px;
+      padding: 30px;
+      padding-right: 0;
+      z-index: 3;
 
       .wyntk-title {
         text-transform: uppercase;
-        margin-top: 10%;
-        margin-left: 1%;
+        margin: 0;
+        padding: 0;
         font-family: "latoBold"
       }
 
       .box-hyphen {
-        margin-bottom: 15px;
+        margin-top: 12px;
+        margin-bottom: 23px;
       }
 
       .wyntk-text-container {
-        overflow-y: auto;
-        height: 76%;
+        overflow-y: scroll;
+        padding-right: 10px;
+        margin-right: 10px;
+        height: 234px;
+
         .wyntk-text {
-          overflow-y: scroll;
-          overflow-x: hidden;
-          margin-left: 4px;
           line-height: 2;
           font-size: 12px;
           padding-right: 10px;
