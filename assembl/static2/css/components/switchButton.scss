@@ -33,11 +33,11 @@
 
 //React Switch Button flat-round style.
 $rsbc-transtion-delay : 0.4s;
-$rsbc-theme-flat-color-on : #579fcb;
+$rsbc-theme-flat-color-on : $white;
 $rsbc-theme-flat-color-on-border : darken($rsbc-theme-flat-color-on, 10%);
-$rsbc-theme-flat-color-off : #aaa;
+$rsbc-theme-flat-color-off : $white;
 $rsbc-theme-flat-color-off-border : darken($rsbc-theme-flat-color-off, 10%);
-$rsbc-theme-flat-color-disabled : #eee;
+$rsbc-theme-flat-color-disabled : $white;
 $rsbc-theme-flat-color-disabled-border : darken($rsbc-theme-flat-color-disabled, 10%);
 
 
@@ -139,7 +139,7 @@ $rsbc-theme-flat-color-disabled-border : darken($rsbc-theme-flat-color-disabled,
     left             : 2px;
     bottom           : 2px;
     right            : 2px;
-    background-color : #fff;
+    background-color : $second-color;
     @include rsbc-border-radius(60px);
     @include rsbc-transition(background $rsbc-transtion-delay);
   }
