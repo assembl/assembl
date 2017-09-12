@@ -6,7 +6,7 @@ import { Checkbox } from 'react-bootstrap';
 
 import SectionTitle from '../sectionTitle';
 import withLoadingIndicator from '../../common/withLoadingIndicator';
-import { addLanguagePreferences, removeLanguagePreference } from '../../../actions/adminActions';
+import { addLanguagePreference, removeLanguagePreference } from '../../../actions/adminActions';
 import getAllPreferenceLanguage from '../../../graphql/AllLanguagePreferences.graphql';
 
 
@@ -41,26 +41,32 @@ class LanguageSection extends React.Component {
   }
 
   toggleLocale(locale){
-    const localeState = this.state.localeState[locale];
-    const newState = {...localeState, selected: !localeState.selected};
-    this.setState((prevState, props) => {
-      return prevState.localeState[locale] = newState;
-    })
+    const transientState = this.state.localeState[locale];
+    const newState = {};
+    newState[locale] = transientState;
+    // this.setState(newState);
+    if (newState[locale].selected) { this.props.addLocaleToStore(locale); }
+    else { this.props.removeLocaleFromStore(locale); }
   }
 
   render() {
     return (
       <div className="admin-box">
-        <SectionTitle i18n={i18n} phase="discussion" tabId="0" annotation={I18n.t('administration.annotation')} />
+        <SectionTitle i18n={this.props.i18n} phase="discussion" tabId="0" annotation={I18n.t('administration.annotation')} />
         <div className="admin-content">
           <div>
             <Translate value='administration.languageChoice' />
           </div>
           <form className='language-list'>
-            {Object.keys(allLangs).map((locale) => {
+            {Object.keys(this.state.localeState).map((locale) => {
               const localeData = this.state.localeState[locale];
               return (
-                <Checkbox checked={localeData.selected } key={locale} >
+                <Checkbox
+                  checked={localeData.selected }
+                  key={locale}
+                  value={locale}
+                  onChange={(e) => this.toggleLocale(e.target.value)}
+                >
                   {localeData.name}
                 </Checkbox>
               );
@@ -85,7 +91,7 @@ const mapStateToProps = ({ admin: { thematicsById, thematicsInOrder, selectedLoc
 const mapDispatchToProps = (dispatch) => {
   return {
     addLocaleToStore: (locale) => {
-      dispatch(addLanguagePreferences(locale));
+      dispatch(addLanguagePreference(locale));
     },
     removeLocaleFromStore: (locale) => {
       dispatch(removeLanguagePreference(locale));
