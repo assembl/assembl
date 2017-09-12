@@ -72,11 +72,16 @@
 }
 
 @media screen and (max-width: 767px) {
-  .announcement > .announcement-statistics {
-    margin-top: 0.1em;
-    left: 0;
-  }
-  .announcement-video > .video-section > .content-section {
-    padding-top: 1.5em;
+  .announcement {
+    .announcement-title {
+      margin-bottom: 30px;
+    }
+    .announcement-statistics {
+      margin-top: 0px;
+      left: 0;
+    }
+    .announcement-video > .video-section > .content-section {
+      padding-top: 1.5em;
+    }
   }
 }
