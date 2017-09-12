@@ -1,6 +1,6 @@
 import React from 'react';
 import { I18n } from 'react-redux-i18n';
-import { Grid, Row, Col } from 'react-bootstrap';
+import { Grid, Row } from 'react-bootstrap';
 
 class Video extends React.Component {
   render() {
