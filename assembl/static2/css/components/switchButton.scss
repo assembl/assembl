@@ -54,6 +54,14 @@ $rsbc-theme-flat-color-disabled-border : darken($rsbc-theme-flat-color-disabled,
 
   label {
     cursor: pointer;
+
+    &:after {
+      background-color: $white!important;
+      width: 14px!important;
+      height: 14px!important;
+      top: 5px!important;
+      left:5px!important;
+    }
   }
 
   &.disabled {

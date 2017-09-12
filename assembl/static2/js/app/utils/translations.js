@@ -4,7 +4,8 @@ const Translations = {
     language: {
       en: "anglais",
       fr: "français",
-      ja: "japonais"
+      ja: "japonais",
+      de: "allemand"
     },
     "Number of contributions": "Nombre de messages",
     "Number of users": "Nombre de contributeurs",
@@ -302,7 +303,8 @@ const Translations = {
     language: {
       en: "English",
       fr: "French",
-      ja: "Japanese"
+      ja: "Japanese",
+      de: "deutsch"
     },
     cancel: "Annuler",
     redirectToV1:
