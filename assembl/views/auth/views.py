@@ -527,9 +527,8 @@ def assembl_login_complete_view(request):
             # logging in as a different user
             # Could I be combining account?
             forget(request)
-        else:
-            # re-logging in? Why?
-            return HTTPFound(location=next_view)
+        # Otherwise, maybe re-login on a different discussion.
+        # Fall through to maybe_autosubsribe.
     if not user.check_password(password):
         error_message = localizer.translate(_("Invalid user and password"))
         user.login_failures += 1
