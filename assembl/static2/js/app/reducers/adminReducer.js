@@ -157,18 +157,28 @@ export const thematicsHaveChanged = (state = false, action) => {
   }
 };
 
-export const languagePreferences = (state = [], action) => {
+const hasLocale = (l, arr) => {
+  const i = arr.findIndex((a) => {
+    return a === l;
+  });
+  return i >= 0;
+};
+
+export const languagePreferences = (state = List(), action) => {
+  
   switch (action.type) {
     case 'ADD_LANGUAGE_PREFERENCE':
       //Language preferences can be added in different components
-      const hasLocale = state.find((locale) => {return locale === action.locale});
-      if (!hasLocale) { return state.push(action.locale); }
+      if (!hasLocale(action.locale, state)) {
+        return state.push(action.locale);
+      }
       else return state;
-    default:
     case 'REMOVE_LANGUAGE_PREFERENCE':
-      return state.filter((locale) => {
-        return locale !== action.locale
-      });
+      if (hasLocale(action.locale, state)) {
+        const i = state.findIndex((a) => { return a === action.locale; })
+        return state.delete(i);
+      }
+      else return state;
     default:
       return state;
   }
