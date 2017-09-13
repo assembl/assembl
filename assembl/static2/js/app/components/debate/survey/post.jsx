@@ -16,7 +16,7 @@ import { likeTooltip, disagreeTooltip } from '../../common/tooltips';
 import { sentimentDefinitionsObject } from '../thread/sentimentDefinitions';
 import StatisticsDoughnut from '../common/statisticsDoughnut';
 import PostTranslate from '../common/postTranslate';
-import { SMALL_SCREEN_WIDTH, MEDIUM_SCREEN_WIDTH } from '../../../constants';
+import { EXTRA_SMALL_SCREEN_WIDTH } from '../../../constants';
 
 class Post extends React.Component {
   constructor(props) {
@@ -147,7 +147,7 @@ class Post extends React.Component {
           </div>
         </div>
         <div className="statistic">
-          {this.state.screenWidth < 600 &&
+          {this.state.screenWidth < EXTRA_SMALL_SCREEN_WIDTH &&
             <div className="sentiments">
               <OverlayTrigger placement="top" overlay={likeTooltip}>
                 <div
