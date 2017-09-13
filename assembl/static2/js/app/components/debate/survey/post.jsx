@@ -16,15 +16,31 @@ import { likeTooltip, disagreeTooltip } from '../../common/tooltips';
 import { sentimentDefinitionsObject } from '../thread/sentimentDefinitions';
 import StatisticsDoughnut from '../common/statisticsDoughnut';
 import PostTranslate from '../common/postTranslate';
+import { SMALL_SCREEN_WIDTH, MEDIUM_SCREEN_WIDTH } from '../../../constants';
 
 class Post extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      showOriginal: false
+      showOriginal: false,
+      screenWidth: window.innerWidth
     };
     this.handleSentiment = this.handleSentiment.bind(this);
+    this.updateDimensions = this.updateDimensions.bind(this);
   }
+  componentDidMount() {
+    window.addEventListener('resize', this.updateDimensions);
+  }
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.updateDimensions);
+  }
+  updateDimensions() {
+    const screenWidth = window.innerWidth;
+    this.setState({
+      screenWidth: screenWidth
+    });
+  }
+
   handleSentiment(event, type) {
     const { post } = this.props;
     const isUserConnected = getConnectedUserId() !== null;
@@ -131,6 +147,29 @@ class Post extends React.Component {
           </div>
         </div>
         <div className="statistic">
+          {this.state.screenWidth < 600 &&
+            <div className="sentiments">
+              <OverlayTrigger placement="top" overlay={likeTooltip}>
+                <div
+                  className={post.mySentiment === 'LIKE' ? 'sentiment sentiment-active' : 'sentiment'}
+                  onClick={(event) => {
+                    this.handleSentiment(event, 'LIKE');
+                  }}
+                >
+                  <Like size={25} />
+                </div>
+              </OverlayTrigger>
+              <OverlayTrigger placement="top" overlay={disagreeTooltip}>
+                <div
+                  className={post.mySentiment === 'DISAGREE' ? 'sentiment sentiment-active' : 'sentiment'}
+                  onClick={(event) => {
+                    this.handleSentiment(event, 'DISAGREE');
+                  }}
+                >
+                  <Disagree size={25} />
+                </div>
+              </OverlayTrigger>
+            </div>}
           <StatisticsDoughnut
             elements={[
               { color: sentimentDefinitionsObject.like.color, count: post.sentimentCounts.like },

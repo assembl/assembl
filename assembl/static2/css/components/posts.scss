@@ -283,8 +283,9 @@ $deleted-post-border: 1px solid $grey1 !default;
       width: 20%;
 
       .statistics-doughnut {
-        width: 55%;
-        height: 70%;
+        height: 100px;
+        margin-top: 30px;
+        margin-bottom: 30px;
         .circle {
           stroke-width: 14px;
         }
@@ -307,14 +308,55 @@ $deleted-post-border: 1px solid $grey1 !default;
 
 @media screen and (max-width: 599px) {
   .proposals {
-    .statistic {
-      float: right;
-      height: 0;
-      margin: -95px 0 0;
+    .content {
+      .sentiments {
+        margin: 25px 20px 10px 25px;
+
+        div {
+          display: none;
+        }
+      }
     }
 
-    .doughnut {
-      transform: scale(0.45);
+    .statistic {
+      text-align: right;
+      margin-bottom: 10px;
+
+      .sentiments {
+        border-top: 0;
+        padding: 0;
+        padding-top: 12px;
+        margin-left: 10px;
+        float: left;
+        .sentiment {
+          margin-left: 25px;
+          vertical-align: middle;
+          svg {
+            vertical-align: middle;
+          }
+        }
+      }
+
+      .statistics-doughnut {
+        height: 50px;
+        width: 50px;
+        margin-right: 10px;
+        vertical-align: middle;
+        .circle {
+          stroke-width: 20px;
+        }
+        .superpose-label {
+          display: none;
+        }
+      }
+
+      .stat-sentiment {
+        margin: 0;
+        margin-right: 10px;
+        padding: 0;
+        vertical-align: middle;
+        display: inline-block;
+      }
     }
 
     .content {
@@ -327,12 +369,6 @@ $deleted-post-border: 1px solid $grey1 !default;
 
     .translate {
       padding: 20px 0 0 54px;
-    }
-
-    .stat-sentiment {
-      display: inline-block;
-      float: inherit;
-      margin: 50px 10px 0 -40px;
     }
 
     .statistics-container {
@@ -353,10 +389,6 @@ $deleted-post-border: 1px solid $grey1 !default;
 
     .body {
       padding: 20px 20px 0 25px;
-    }
-
-    .sentiments {
-      margin: 25px 20px 10px 25px;
     }
 
     .min-sentiment {
