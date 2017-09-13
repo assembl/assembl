@@ -1,5 +1,4 @@
 from pyramid.view import view_config
-from pyramid.security import authenticated_userid
 from pyramid.httpexceptions import (
     HTTPUnauthorized, HTTPError, HTTPBadRequest)
 from dateutil.parser import parse
@@ -10,7 +9,7 @@ from assembl.auth import (
     P_EXPORT_EXTERNAL_SOURCE,
     Everyone)
 from assembl.models import ContentSource
-from assembl.auth.util import get_permissions
+from assembl.auth.util import get_permissions, effective_userid
 from ..traversal import InstanceContext
 from . import JSON_HEADER
 from assembl.tasks.source_reader import wake
@@ -42,7 +41,7 @@ def fetch_posts(request):
 
     if force_restart or reimport or upper_bound or lower_bound or reprocess:
         # Only discussion admins
-        user_id = authenticated_userid(request) or Everyone
+        user_id = effective_userid(request) or Everyone
         permissions = get_permissions(
             user_id, ctx.get_discussion_id())
         if P_ADMIN_DISC not in permissions:

@@ -12,7 +12,7 @@ from assembl.models import Discussion
 from assembl.auth.util import discussions_with_access
 
 from ...auth import P_READ, P_ADMIN_DISC, P_SYSADMIN
-from ...auth.util import get_permissions
+from ...auth.util import get_permissions, effective_userid
 
 
 discussion = Service(
@@ -67,7 +67,7 @@ def get_discussion(request):
     is_etalab_request = request.matched_route.name == 'etalab_discussion'
     view_def = request.GET.get(
         'view', 'etalab' if is_etalab_request else 'default')
-    user_id = authenticated_userid(request) or Everyone
+    user_id = effective_userid(request) or Everyone
     permissions = get_permissions(user_id, discussion_id)
 
     if not discussion:

@@ -18,7 +18,7 @@ from pyramid.httpexceptions import HTTPNotFound
 from abc import ABCMeta, abstractmethod
 
 from assembl.auth import P_READ, R_SYSADMIN
-from assembl.auth.util import get_permissions
+from assembl.auth.util import get_permissions, effective_userid
 from assembl.lib.sqla import *
 from assembl.lib.decl_enums import DeclEnumType
 
@@ -923,7 +923,7 @@ class UserNsDictCollection(AbstractCollectionDefinition):
         from assembl.models.user_key_values import UserNsDict
         request = get_current_request()
         if request is not None:
-            user_id = request.authenticated_userid
+            user_id = effective_userid(request)
             if user_id is None:
                 raise HTTPUnauthorized()
         else:

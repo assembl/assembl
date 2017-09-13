@@ -1,14 +1,14 @@
 from pyramid.view import view_config
 from pyramid.httpexceptions import (HTTPBadRequest, HTTPNotFound)
 from pyramid.response import Response
-from pyramid.security import authenticated_userid, Everyone
+from pyramid.security import Everyone
 from pyramid.settings import asbool
 import simplejson as json
 
 from assembl.auth import (P_READ, P_EDIT_SYNTHESIS, CrudPermissions)
 from assembl.models import (
     Discussion, Idea, SubGraphIdeaAssociation, Synthesis)
-from assembl.auth.util import get_permissions
+from assembl.auth.util import get_permissions, effective_userid
 from ..traversal import InstanceContext, CollectionContext
 from . import check_permissions
 
@@ -25,7 +25,7 @@ def discussion_notifications(request):
              accept="application/json")
 def get_syntheses(request, default_view='default'):
     ctx = request.context
-    user_id = authenticated_userid(request) or Everyone
+    user_id = effective_userid(request) or Everyone
     permissions = get_permissions(
         user_id, ctx.get_discussion_id())
     check_permissions(ctx, user_id, permissions, CrudPermissions.READ)

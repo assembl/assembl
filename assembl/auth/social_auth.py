@@ -23,7 +23,9 @@ from social.backends.utils import load_backends
 
 from assembl.models import (
     User, Preferences, AbstractAgentAccount, IdentityProvider)
-from .util import discussion_from_request, maybe_auto_subscribe
+from .util import (
+    discussion_from_request, maybe_auto_subscribe, effective_userid,
+    get_user)
 
 
 log = logging.getLogger('assembl')
@@ -33,18 +35,8 @@ def login_user(backend, user, user_social_auth):
 
 
 def login_required(request):
-    logged_in = authenticated_userid(request)
+    logged_in = effective_userid(request)
     return logged_in is None
-
-
-def get_user(request):
-    user_id = authenticated_userid(request)
-    if user_id:
-        user = User.default_db.query(
-            User).filter(User.id == user_id).first()
-    else:
-        user = None
-    return user
 
 
 @subscriber(BeforeRender)

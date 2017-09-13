@@ -134,6 +134,7 @@ def locale_negotiator(request):
         from pyramid.security import authenticated_userid
         from assembl.auth.util import discussion_from_request
         from assembl.models import get_session_maker
+        # Use user's locale even if he needs to login
         user_id = authenticated_userid(request)
         if user_id:
             prefs = get_preferred_languages(get_session_maker()(), user_id)

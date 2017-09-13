@@ -3,10 +3,9 @@ from datetime import datetime
 from pyramid.view import view_config
 from pyramid.response import Response
 from pyramid.httpexceptions import HTTPUnauthorized, HTTPBadRequest
-from pyramid.security import authenticated_userid
 
 from assembl.auth import P_READ, P_MODERATE, P_DELETE_POST, P_DELETE_MY_POST
-from assembl.auth.util import get_permissions
+from assembl.auth.util import get_permissions, effective_userid
 from assembl.models import Content, Post, SynthesisPost, User, Extract
 from assembl.models.post import PublicationStates
 from ..traversal import InstanceContext, CollectionContext
@@ -46,7 +45,7 @@ def delete_post_instance(request):
     # - user who is the author of the Post instance and who has the P_DELETE_MY_POST permission in this discussion
     # - user who has the P_DELETE_POST permission in this discussion
     ctx = request.context
-    user_id = authenticated_userid(request) or Everyone
+    user_id = effective_userid(request) or Everyone
     permissions = get_permissions(
         user_id, ctx.get_discussion_id())
     instance = ctx._instance
@@ -103,7 +102,7 @@ def has_moderation(fields):
 
 def raise_if_cannot_moderate(request):
     ctx = request.context
-    user_id = authenticated_userid(request)
+    user_id = effective_userid(request)
     if not user_id:
         raise HTTPUnauthorized()
     permissions = get_permissions(
@@ -124,7 +123,7 @@ def post_put_json(request):
         raise_if_cannot_moderate(request)
         json_data['moderated_on'] = datetime.utcnow().isoformat()+"Z"
         json_data['moderator'] = User.uri_generic(
-            authenticated_userid(request))
+            effective_userid(request))
     # TODO: apply guess_languages
     return instance_put_json(request, json_data)
 
@@ -142,7 +141,7 @@ def post_put(request):
         form_data = dict(form_data)
         form_data['moderated_on'] = datetime.utcnow().isoformat()+"Z"
         form_data['moderator'] = User.uri_generic(
-            authenticated_userid(request))
+            effective_userid(request))
     # TODO: apply guess_languages
     return instance_put_form(request, form_data)
 

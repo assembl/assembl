@@ -554,6 +554,21 @@ class Preferences(MutableMapping, Base, NamedClassMixin):
             "default": True
         },
 
+        # Does the Idea panel automatically open when an idea is clicked? (and close when a special section is clicked)
+        {
+            "id": "shared_login",
+            "name": _("Login is shared with other discussions"),
+            "value_type": "bool",
+            # "scalar_values": {value: "label"},
+            "description": _(
+                "If you're logged into another discussion, do you need to log in again to be considered logged in here?"),
+            "allow_user_override": P_READ,
+            "modification_permission": P_ADMIN_DISC,
+            # "frontend_validator_function": func_name...?,
+            # "backend_validator_function": func_name...?,
+            "default": False
+        },
+
         # What are (ordered) identifiers of columns in multi-column views?
         {
             "id": "default_column_identifiers",

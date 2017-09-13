@@ -3,7 +3,7 @@ import json
 
 from cornice import Service
 
-from pyramid.security import authenticated_userid, Everyone
+from pyramid.security import Everyone
 from pyramid.httpexceptions import (
     HTTPNotFound, HTTPBadRequest, HTTPForbidden, HTTPServerError, HTTPNoContent)
 from sqlalchemy import Unicode
@@ -15,7 +15,9 @@ from assembl.auth import (P_READ, P_ADD_EXTRACT, P_EDIT_EXTRACT, P_EDIT_MY_EXTRA
 from assembl.models import (
     get_database_id, Extract, TextFragmentIdentifier,
     Discussion, AnnotatorSource, Post, Webpage, Idea)
-from assembl.auth.util import (get_permissions, user_has_permission)
+from assembl.auth.util import (
+    get_permissions, user_has_permission, effective_userid, filter_userid,
+    discussion_from_request)
 from assembl.lib.web_token import decode_token
 from assembl.lib import sqla
 
@@ -57,7 +59,7 @@ def get_extract(request):
     extract = Extract.get_instance(extract_id)
     view_def = request.GET.get('view') or 'default'
     discussion_id = int(request.matchdict['discussion_id'])
-    user_id = authenticated_userid(request) or Everyone
+    user_id = effective_userid(request) or Everyone
     permissions = get_permissions(user_id, discussion_id)
 
     if extract is None:
@@ -99,7 +101,7 @@ def get_extracts(request):
     ids = request.GET.getall('ids')
 
     return _get_extracts_real(
-        discussion, view_def, ids, authenticated_userid(request))
+        discussion, view_def, ids, effective_userid(request))
 
 
 @extracts.post()
@@ -108,8 +110,9 @@ def post_extract(request):
     Create a new extract.
     """
     extract_data = json.loads(request.body)
-    discussion_id = int(request.matchdict['discussion_id'])
-    user_id = authenticated_userid(request)
+    discussion = discussion_from_request(request)
+    discussion_id = discussion.id if discussion else None
+    user_id = effective_userid(request)
     if not user_id:
         # Straight from annotator
         token = request.headers.get('X-Annotator-Auth-Token')
@@ -118,6 +121,7 @@ def post_extract(request):
                 token, request.registry.settings['session.secret'])
             if token:
                 user_id = token['userId']
+                user_id = filter_userid(user_id, discussion)
     user_id = user_id or Everyone
     if not user_has_permission(discussion_id, user_id, P_ADD_EXTRACT):
         #TODO: maparent:  restore this code once it works:
@@ -166,7 +170,7 @@ def post_extract(request):
     idea_id = extract_data.get('idIdea', None)
     if idea_id:
         idea = Idea.get_instance(idea_id)
-        if(idea.discussion.id != discussion_id):
+        if(idea.discussion != discussion):
             raise HTTPBadRequest(
                 "Extract from discussion %s cannot be associated with an idea from a different discussion." % extract.get_discussion_id())
     else:
@@ -176,7 +180,7 @@ def post_extract(request):
     new_extract = Extract(
         creator_id=user_id,
         owner_id=user_id,
-        discussion_id=discussion_id,
+        discussion=discussion,
         body=extract_body,
         idea=idea,
         important=important,
@@ -204,8 +208,9 @@ def put_extract(request):
     Updating an Extract
     """
     extract_id = request.matchdict['id']
-    user_id = authenticated_userid(request)
-    discussion_id = int(request.matchdict['discussion_id'])
+    user_id = effective_userid(request)
+    discussion = discussion_from_request(request)
+    discussion_id = discussion.id if discussion else None
 
     if not user_id:
         # Straight from annotator
@@ -215,6 +220,7 @@ def put_extract(request):
                 token, request.registry.settings['session.secret'])
             if token:
                 user_id = token['userId']
+                user_id = filter_userid(user_id, discussion)
     user_id = user_id or Everyone
 
     updated_extract_data = json.loads(request.body)
@@ -248,8 +254,9 @@ def put_extract(request):
 
 @extract.delete(permission=P_READ)
 def delete_extract(request):
-    user_id = authenticated_userid(request)
-    discussion_id = int(request.matchdict['discussion_id'])
+    user_id = effective_userid(request)
+    discussion = discussion_from_request(request)
+    discussion_id = discussion.id if discussion else None
 
     if not user_id:
         # Straight from annotator
@@ -259,6 +266,7 @@ def delete_extract(request):
                 token, request.registry.settings['session.secret'])
             if token:
                 user_id = token['userId']
+                user_id = filter_userid(user_id, discussion)
     user_id = user_id or Everyone
 
     extract_id = request.matchdict['id']
@@ -282,7 +290,7 @@ def do_search_extracts(request):
     uri = request.GET['uri']
     view_def = request.GET.get('view') or 'default'
     discussion_id = int(request.matchdict['discussion_id'])
-    user_id = authenticated_userid(request) or Everyone
+    user_id = effective_userid(request) or Everyone
     permissions = get_permissions(user_id, discussion_id)
 
     if not uri:

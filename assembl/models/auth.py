@@ -1682,6 +1682,7 @@ class LanguagePreferenceCollection(object):
             req = get_current_request()
         assert req
         if getattr(req, "lang_prefs", 0) is 0:
+            # lang. prefs remain effective even without shared login
             user_id = req.authenticated_userid
             if user_id and user_id != Everyone:
                 try:

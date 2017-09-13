@@ -1,7 +1,7 @@
 from simplejson import dumps
 
 from pyramid.view import view_config
-from pyramid.security import authenticated_userid, Everyone
+from pyramid.security import Everyone
 from pyramid.response import Response
 from pyramid.httpexceptions import (
     HTTPOk, HTTPUnauthorized, HTTPBadRequest)
@@ -11,7 +11,7 @@ from assembl.auth import (
 from assembl.models import (
     NotificationSubscription, Notification, Discussion)
 from assembl.auth import CrudPermissions
-from assembl.auth.util import get_permissions
+from assembl.auth.util import get_permissions, effective_userid
 from ..traversal import CollectionContext, InstanceContext, ClassContext
 from . import (
     JSON_HEADER, instance_put_json, collection_view, check_permissions,
@@ -40,7 +40,7 @@ def view_notification_subscription_collection(request):
              ctx_collection_class=NotificationSubscription)
 def notif_collection_add_json(request):
     ctx = request.context
-    user_id = authenticated_userid(request) or Everyone
+    user_id = effective_userid(request) or Everyone
     permissions = get_permissions(
         user_id, ctx.get_discussion_id())
     check_permissions(ctx, user_id, permissions, CrudPermissions.CREATE)

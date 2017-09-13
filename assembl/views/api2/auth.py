@@ -24,7 +24,8 @@ from assembl.models import (
     UserLanguagePreference, EmailAccount, AgentStatusInDiscussion, Username)
 from assembl.auth.password import (
     verify_password_change_token, get_data_token_time, Validity)
-from assembl.auth.util import get_permissions, discussion_from_request
+from assembl.auth.util import (
+    get_permissions, discussion_from_request, effective_userid)
 from ..traversal import (CollectionContext, InstanceContext, ClassContext)
 from ..errors import ErrorTypes
 from .. import JSONError
@@ -581,7 +582,7 @@ def interesting_ideas(request):
     from .discussion import get_analytics_alerts
     ctx = request.context
     target = request.context._instance
-    user_id = authenticated_userid(request) or Everyone
+    user_id = effective_userid(request) or Everyone
     discussion_id = ctx.get_discussion_id()
     permissions = get_permissions(
         user_id, discussion_id)

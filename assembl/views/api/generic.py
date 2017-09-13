@@ -1,11 +1,11 @@
 """Cornice API for content"""
 from pyramid.httpexceptions import HTTPNotFound
-from pyramid.security import authenticated_userid, Everyone
+from pyramid.security import Everyone
 from cornice import Service
 
 import assembl.models
 from assembl.auth import P_READ
-from assembl.auth.util import get_permissions
+from assembl.auth.util import get_permissions, effective_userid
 from assembl.view_def import get_view_def
 from assembl.views.api import API_DISCUSSION_PREFIX
 
@@ -32,7 +32,7 @@ def get_object(request):
     if not get_view_def(view):
         raise HTTPNotFound("View '%s' not found." % view)
     discussion_id = int(request.matchdict['discussion_id'])
-    user_id = authenticated_userid(request) or Everyone
+    user_id = effective_userid(request) or Everyone
     permissions = get_permissions(user_id, discussion_id)
 
     return obj.generic_json(view, user_id, permissions)

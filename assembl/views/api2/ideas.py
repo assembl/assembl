@@ -1,11 +1,11 @@
 from pyramid.view import view_config
 from pyramid.httpexceptions import (
     HTTPUnauthorized)
-from pyramid.security import authenticated_userid, Everyone
+from pyramid.security import Everyone
 
 from ..traversal import (InstanceContext)
 from assembl.auth import (CrudPermissions, P_EDIT_IDEA)
-from assembl.auth.util import get_permissions
+from assembl.auth.util import get_permissions, effective_userid
 from assembl.models import (Idea)
 
 
@@ -13,7 +13,7 @@ from assembl.models import (Idea)
              ctx_instance_class=Idea, permission=P_EDIT_IDEA)
 def instance_del(request):
     ctx = request.context
-    user_id = authenticated_userid(request) or Everyone
+    user_id = effective_userid(request) or Everyone
     permissions = get_permissions(
         user_id, ctx.get_discussion_id())
     idea = ctx._instance

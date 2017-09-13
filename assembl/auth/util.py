@@ -21,8 +21,29 @@ from ..models.auth import (
     EmailAccount)
 
 
+def effective_userid(request):
+    user_id = authenticated_userid(request)
+    if not user_id:
+        return None
+    discussion = discussion_from_request(request)
+    if not discussion:
+        # So a logged in user can still see more discussions, eg.
+        return user_id
+    return filter_userid(user_id, discussion)
+
+
+def filter_userid(user_id, discussion):
+    shared_login = discussion.preferences['shared_login']
+    if shared_login:
+        return user_id
+    roles = get_roles(user_id, discussion.id)
+    if roles:
+        return user_id
+    # no roles, consider the user as not logged in
+
+
 def get_user(request):
-    logged_in = authenticated_userid(request)
+    logged_in = effective_userid(request)
     if logged_in:
         return User.get(logged_in)
 
@@ -87,15 +108,16 @@ def get_permissions(user_id, discussion_id):
 def discussion_from_request(request):
     from ..models import Discussion
     from assembl.views.traversal import TraversalContext
-    if request.matchdict:
-        if 'discussion_id' in request.matchdict:
-            discussion_id = int(request.matchdict['discussion_id'])
+    matchdict = getattr(request, 'matchdict', None)
+    if matchdict:
+        if 'discussion_id' in matchdict:
+            discussion_id = int(matchdict['discussion_id'])
             discussion = Discussion.get_instance(discussion_id)
             if not discussion:
                 raise HTTPNotFound("No discussion ID %d" % (discussion_id,))
             return discussion
-        elif 'discussion_slug' in request.matchdict:
-            slug = request.matchdict['discussion_slug']
+        elif 'discussion_slug' in matchdict:
+            slug = matchdict['discussion_slug']
             session = get_session_maker()()
             discussion = session.query(Discussion).filter_by(
                 slug=slug).first()
@@ -107,8 +129,9 @@ def discussion_from_request(request):
         discussion_id = request.context.get_discussion_id()
         if discussion_id:
             return Discussion.get(discussion_id)
-    if request.session.get("discussion", None):
-        slug = request.session["discussion"]
+    req_session = getattr(request, 'session', {})
+    slug = req_session.get("discussion", None)
+    if slug:
         session = get_session_maker()()
         discussion = session.query(Discussion).filter_by(
             slug=slug).first()
@@ -130,7 +153,7 @@ def get_current_user_id():
     r = get_current_request()
     # CAN ONLY BE CALLED IF THERE IS A CURRENT REQUEST.
     assert r
-    return authenticated_userid(r)
+    return effective_userid(r)
 
 
 class UpgradingSessionAuthenticationPolicy(SessionAuthenticationPolicy):

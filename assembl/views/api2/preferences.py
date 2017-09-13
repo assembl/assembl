@@ -2,12 +2,11 @@ from simplejson import dumps, loads
 
 from pyramid.view import view_config
 from pyramid.httpexceptions import (HTTPNotFound, HTTPBadRequest)
-from pyramid.security import authenticated_userid
 from pyramid.response import Response
 
 from assembl.auth import (
     P_READ, IF_OWNED, Everyone, CrudPermissions)
-from assembl.auth.util import get_permissions
+from assembl.auth.util import get_permissions, effective_userid
 from assembl.semantic.virtuoso_mapping import get_virtuoso
 from assembl.models import (
     User, Discussion, TombstonableMixin)
@@ -31,7 +30,7 @@ def patch_dict(request):
     if not isinstance(request.json, dict):
         raise HTTPBadRequest()
     ctx = request.context
-    user_id = authenticated_userid(request) or Everyone
+    user_id = effective_userid(request) or Everyone
     permissions = get_permissions(
         user_id, ctx.get_discussion_id())
 
@@ -65,7 +64,7 @@ def put_value(request):
     ctx = request.context
     value = request.json
     preferences = ctx.collection
-    user_id = authenticated_userid(request) or Everyone
+    user_id = effective_userid(request) or Everyone
     permissions = get_permissions(
         user_id, ctx.get_discussion_id())
     try:
@@ -84,7 +83,7 @@ def put_value(request):
 def del_value(request):
     ctx = request.context
     preferences = ctx.collection
-    user_id = authenticated_userid(request) or Everyone
+    user_id = effective_userid(request) or Everyone
     permissions = get_permissions(
         user_id, ctx.get_discussion_id())
     try:

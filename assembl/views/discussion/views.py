@@ -17,7 +17,7 @@ from ...lib.utils import path_qs
 from ...lib.sqla import get_named_object
 from ...lib.frontend_urls import FrontendUrls
 from ...auth import P_READ, P_ADD_EXTRACT, P_ADMIN_DISC
-from ...auth.util import user_has_permission
+from ...auth.util import user_has_permission, effective_userid
 from ...models import (
     Discussion,
     User,
@@ -70,7 +70,7 @@ def get_styleguide_components():
 @view_config(route_name='home', request_method='GET', http_cache=60)
 def home_view(request):
     """The main view on a discussion"""
-    user_id = request.authenticated_userid or Everyone
+    user_id = effective_userid(request) or Everyone
     context = get_default_context(request)
     discussion = context["discussion"]
     canRead = user_has_permission(discussion.id, user_id, P_READ)
@@ -208,7 +208,7 @@ def react_view(request, required_permission=P_READ):
         if bare_route in ("register", "login"):
             forget(request)
     old_context = base_default_context(request)
-    user_id = request.authenticated_userid or Everyone
+    user_id = effective_userid(request) or Everyone
     discussion = old_context["discussion"] or None
     get_route = old_context["get_route"]
     (theme_name, theme_relative_path) = get_theme_info(discussion, frontend_version=2)
@@ -282,8 +282,8 @@ def react_view(request, required_permission=P_READ):
                                     extra_path=extra_path,
                                     _query=query)
             return HTTPTemporaryRedirect(url)
-        if user_id != Everyone:
-            user = User.get(user_id)
+        if effective_user_id != Everyone:
+            user = User.get(effective_user_id)
             if user:
                 user.is_visiting_discussion(discussion.id)
     else:

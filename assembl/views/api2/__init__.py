@@ -55,7 +55,7 @@ from ..traversal import (
     InstanceContext, CollectionContext, ClassContext, Api2Context)
 from assembl.auth import (
     P_READ, P_SYSADMIN, IF_OWNED, CrudPermissions)
-from assembl.auth.util import get_permissions
+from assembl.auth.util import get_permissions, effective_userid
 from assembl.semantic.virtuoso_mapping import get_virtuoso
 from assembl.models import (
     User, Discussion, TombstonableMixin)
@@ -123,7 +123,7 @@ def instance_view_jsonld(request):
     from assembl.semantic.virtuoso_mapping import AssemblQuadStorageManager
     from rdflib import URIRef, ConjunctiveGraph
     ctx = request.context
-    user_id = authenticated_userid(request) or Everyone
+    user_id = effective_userid(request) or Everyone
     permissions = get_permissions(
         user_id, ctx.get_discussion_id())
     instance = ctx._instance
@@ -151,7 +151,7 @@ def instance_view_jsonld(request):
              request_method='GET', accept="application/json")
 def instance_view(request):
     ctx = request.context
-    user_id = authenticated_userid(request) or Everyone
+    user_id = effective_userid(request) or Everyone
     permissions = get_permissions(
         user_id, ctx.get_discussion_id())
     instance = ctx._instance
@@ -166,7 +166,7 @@ def instance_view(request):
              request_method='GET')
 def collection_view(request, default_view='default'):
     ctx = request.context
-    user_id = authenticated_userid(request) or Everyone
+    user_id = effective_userid(request) or Everyone
     permissions = get_permissions(
         user_id, ctx.get_discussion_id())
     check = check_permissions(ctx, user_id, permissions, CrudPermissions.READ)
@@ -186,7 +186,7 @@ def collection_view(request, default_view='default'):
 
 def collection_add(request, args):
     ctx = request.context
-    user_id = authenticated_userid(request) or Everyone
+    user_id = effective_userid(request) or Everyone
     permissions = get_permissions(
         user_id, ctx.get_discussion_id())
     check_permissions(ctx, user_id, permissions, CrudPermissions.CREATE)
@@ -231,7 +231,7 @@ def instance_post(request):
 def instance_put_json(request, json_data=None):
     json_data = json_data or request.json_body
     ctx = request.context
-    user_id = authenticated_userid(request) or Everyone
+    user_id = effective_userid(request) or Everyone
     permissions = get_permissions(
         user_id, ctx.get_discussion_id())
     instance = ctx._instance
@@ -305,7 +305,7 @@ def update_from_form(instance, form_data=None):
 def instance_put_form(request, form_data=None):
     form_data = form_data or request.params
     ctx = request.context
-    user_id = authenticated_userid(request) or Everyone
+    user_id = effective_userid(request) or Everyone
     permissions = get_permissions(user_id, ctx.get_discussion_id())
     instance = ctx._instance
     if not instance.user_can(user_id, CrudPermissions.UPDATE, permissions):
@@ -315,14 +315,13 @@ def instance_put_form(request, form_data=None):
     if view == 'id_only':
         return [instance.uri()]
     else:
-        user_id = authenticated_userid(request) or Everyone
         return instance.generic_json(view, user_id, permissions)
 
 
 @view_config(context=InstanceContext, request_method='DELETE', renderer='json')
 def instance_del(request):
     ctx = request.context
-    user_id = authenticated_userid(request) or Everyone
+    user_id = effective_userid(request) or Everyone
     permissions = get_permissions(
         user_id, ctx.get_discussion_id())
     instance = ctx._instance
@@ -351,7 +350,7 @@ def show_class_names(request):
 @view_config(context=ClassContext, request_method='POST', header=FORM_HEADER)
 def class_add(request):
     ctx = request.context
-    user_id = authenticated_userid(request) or Everyone
+    user_id = effective_userid(request) or Everyone
     permissions = get_permissions(
         user_id, ctx.get_discussion_id())
     check_permissions(ctx, user_id, permissions, CrudPermissions.CREATE)
@@ -383,7 +382,7 @@ def class_add(request):
 def collection_add_json(request, json=None):
     ctx = request.context
     json = request.json_body if json is None else json
-    user_id = authenticated_userid(request) or Everyone
+    user_id = effective_userid(request) or Everyone
     permissions = get_permissions(
         user_id, ctx.get_discussion_id())
     cls = ctx.get_collection_class(json.get('@type', None))

@@ -45,7 +45,7 @@ from assembl.auth.password import (
     password_change_token, Validity, get_data_token_time)
 from assembl.auth.util import (
     discussion_from_request, roles_with_permissions, maybe_auto_subscribe,
-    get_permissions)
+    get_permissions, effective_userid)
 from ...lib import config
 from assembl.lib.sqla_types import EmailString
 from assembl.lib.utils import normalize_email_name, get_global_base_url
@@ -261,7 +261,7 @@ def assembl_profile(request):
     localizer = request.localizer
     profile = get_profile(request)
     id_type = request.matchdict.get('type').strip()
-    logged_in = authenticated_userid(request)
+    logged_in = effective_userid(request)
     save = request.method == 'POST'
     # if some other user
     if not profile or not logged_in or logged_in != profile.id:

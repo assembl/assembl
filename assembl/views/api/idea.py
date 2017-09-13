@@ -4,7 +4,7 @@ from collections import defaultdict
 import simplejson as json
 from cornice import Service
 from pyramid.httpexceptions import HTTPNotFound, HTTPBadRequest, HTTPNoContent
-from pyramid.security import authenticated_userid, Everyone
+from pyramid.security import Everyone
 from sqlalchemy import and_
 from sqlalchemy.orm import (joinedload_all, undefer)
 
@@ -13,7 +13,7 @@ from assembl.models import (
     get_database_id, Idea, RootIdea, IdeaLink, Discussion,
     Extract, SubGraphIdeaAssociation)
 from assembl.auth import (P_READ, P_ADD_IDEA, P_EDIT_IDEA)
-from assembl.auth.util import get_permissions
+from assembl.auth.util import get_permissions, effective_userid
 
 ideas = Service(name='ideas', path=API_DISCUSSION_PREFIX + '/ideas',
                 description="The ideas collection",
@@ -61,7 +61,7 @@ def get_idea(request):
     idea = Idea.get_instance(idea_id)
     view_def = request.GET.get('view')
     discussion_id = int(request.matchdict['discussion_id'])
-    user_id = authenticated_userid(request) or Everyone
+    user_id = effective_userid(request) or Everyone
     permissions = get_permissions(user_id, discussion_id)
 
     if not idea:
@@ -136,7 +136,7 @@ def _get_ideas_real(discussion, view_def=None, ids=None, user_id=None):
 
 @ideas.get(permission=P_READ)
 def get_ideas(request):
-    user_id = authenticated_userid(request) or Everyone
+    user_id = effective_userid(request) or Everyone
     discussion_id = int(request.matchdict['discussion_id'])
     discussion = Discussion.get(int(discussion_id))
     if not discussion:
@@ -253,7 +253,7 @@ def get_idea_extracts(request):
     idea = Idea.get_instance(idea_id)
     view_def = request.GET.get('view') or 'default'
     discussion_id = int(request.matchdict['discussion_id'])
-    user_id = authenticated_userid(request) or Everyone
+    user_id = effective_userid(request) or Everyone
     permissions = get_permissions(user_id, discussion_id)
 
     if not idea:

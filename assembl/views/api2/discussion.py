@@ -54,7 +54,8 @@ from assembl.auth import (
     P_READ, P_READ_PUBLIC_CIF, P_ADMIN_DISC, P_DISC_STATS, P_SYSADMIN,
     R_ADMINISTRATOR)
 from assembl.auth.password import verify_data_token, data_token, Validity
-from assembl.auth.util import get_permissions
+from assembl.auth.util import (
+    get_permissions, effective_userid, filter_userid, discussion_from_request)
 from assembl.graphql.schema import resolve_langstring
 from assembl.models import (Discussion, Permission)
 from assembl.models.auth import create_default_permissions
@@ -110,8 +111,8 @@ def userprivate_jsonld(discussion_id):
 def read_user_token(request):
     salt = None
     user_id = authenticated_userid(request) or Everyone
-    discussion_id = request.context.get_discussion_id()
-    permissions = get_permissions(user_id, discussion_id)
+    discussion = discussion_from_request(request)
+    permissions = get_permissions(user_id, discussion.id if discussion else None)
     if P_READ in permissions:
         permissions.append(P_READ_PUBLIC_CIF)
 
@@ -132,16 +133,17 @@ def read_user_token(request):
                     Permission.id.in_(req_permissions)).all()]
         except (ValueError, IndexError):
             raise HTTPBadRequest("Invalid token")
-        if discussion_id is not None and t_discussion_id != discussion_id:
+        if discussion is not None and t_discussion_id != discussion.id:
             raise HTTPUnauthorized("Token for another discussion")
         if user_id == Everyone:
-            permissions = get_permissions(t_user_id, discussion_id)
+            permissions = get_permissions(t_user_id, discussion.id)
             if P_READ in permissions:
                 permissions.append(P_READ_PUBLIC_CIF)
         elif t_user_id != user_id:
             raise HTTPUnauthorized("Token for another user")
         user_id = t_user_id
         permissions = set(permissions).intersection(set(req_permissions))
+    user_id = filter_userid(user_id, discussion)
     return user_id, permissions, salt
 
 
@@ -324,7 +326,7 @@ def get_time_series_timing(request):
 def get_time_series_analytics(request):
     start, end, interval = get_time_series_timing(request)
     discussion = request.context._instance
-    user_id = authenticated_userid(request) or Everyone
+    user_id = effective_userid(request) or Everyone
     format = get_format(request)
     results = []
 
@@ -906,7 +908,7 @@ def get_analytics_alerts(discussion, user_id, types, all_users=False):
              permission=P_DISC_STATS)
 def get_activity_alerts(request):
     discussion = request.context._instance
-    user_id = authenticated_userid(request) or Everyone
+    user_id = effective_userid(request) or Everyone
     result = get_analytics_alerts(
         discussion, user_id,
         ["lurking_user", "inactive_user", "user_gone_inactive"],
@@ -919,7 +921,7 @@ def get_activity_alerts(request):
              permission=P_DISC_STATS)
 def get_interest_alerts(request):
     discussion = request.context._instance
-    user_id = authenticated_userid(request) or Everyone
+    user_id = effective_userid(request) or Everyone
     result = get_analytics_alerts(
         discussion, user_id,
         ["interesting_to_me"],
@@ -951,7 +953,7 @@ def show_optics_cluster(request):
     suggestions = request.GET.get("suggestions", True)
     discussion = request.context._instance
     output = StringIO()
-    user_id = authenticated_userid(request) or Everyone
+    user_id = effective_userid(request) or Everyone
     from assembl.nlp.clusters import (
         OpticsSemanticsAnalysis, OpticsSemanticsAnalysisWithSuggestions)
     if asbool(suggestions):
@@ -975,7 +977,7 @@ def show_optics_cluster(request):
              permission=P_READ)
 def show_suggestions_test(request):
     discussion = request.context._instance
-    user_id = authenticated_userid(request)
+    user_id = effective_userid(request)
     if not user_id:
         from urllib import quote
         return HTTPFound(location="/login?next="+quote(request.path))
@@ -1021,7 +1023,7 @@ def post_discussion(request):
     from assembl.models import EmailAccount, User, LocalUserRole, Role, AbstractAgentAccount
     ctx = request.context
     json = request.json_body
-    user_id = authenticated_userid(request) or Everyone
+    user_id = effective_userid(request) or Everyone
     permissions = get_permissions(user_id, None)
     is_etalab_request = (request.matched_route and request.matched_route.name == 'etalab_discussions')
     if is_etalab_request:
@@ -1099,7 +1101,7 @@ def get_participant_time_series_analytics(request):
     data_descriptors = request.GET.getall("data")
     with_email = request.GET.get("email", None)
     discussion = request.context._instance
-    user_id = authenticated_userid(request) or Everyone
+    user_id = effective_userid(request) or Everyone
     permissions = get_permissions(user_id, discussion.id)
     if with_email is None:
         with_email = P_ADMIN_DISC in permissions
