@@ -528,7 +528,7 @@ const Translations = {
       },
       themes: "Themes",
       notStarted: "The %{phaseName} phase has not started. Please come back from ",
-      isCompleted: "This phase is complete. You can no longer vote.",
+      isCompleted: "This phase is closed. You can no longer vote.",
       edit: {
         title: "I edit my message",
         subject: "Body",
