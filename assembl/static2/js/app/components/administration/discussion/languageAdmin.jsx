@@ -1,4 +1,5 @@
 import React from 'react';
+import { fromJS, List, Map } from 'immutable';
 import { I18n, Translate } from 'react-redux-i18n';
 import { compose, graphql } from 'react-apollo';
 import { connect } from 'react-redux';
@@ -14,38 +15,62 @@ class LanguageSection extends React.Component {
 
   constructor(props) {
     super(props);
-    const {i18n, selectedLocale, data } = props;
+    const {i18n, discussionLanguagePreferences, data } = props;
 
     const allLangs = {};
     data.defaultPreferences.languages.forEach((lang) => {
       allLangs[lang.locale] = {selected: false, name: lang.name};
     });
-    data.discussionPreferences.languages.forEach((lang) => {
-      allLangs[lang.locale] = {selected: true, name: lang.name};
+  ``
+    discussionLanguagePreferences.forEach((locale) => {
+      const prevState = allLangs[locale];
+      allLangs[locale] = {...prevState, selected: true };
     });
 
     this.state = {
       localeState: allLangs,
     };
-
-    allLangs
   }
 
   componentWillReceiveProps(nextProps){
+    //Manage the change in interface locale, causing language names to change
     const currentLocale = this.props.i18n.locale;
     const nextLocale = nextProps.i18n.locale;
     if (currentLocale !== nextLocale) {
       //Refresh cache with new information, as the translated names are returned from backend
       this.props.data.refetch({variables: {inLocale: nextLocale }});
     }
+
+    //Manage toggling of states
+    const totalLocaleList = List(Object.keys(this.state.localeState));
+    const currentSelectedLocaleList = totalLocaleList
+      .filter((locale) => {
+        return this.state.localeState[locale].selected;
+      })
+      .sort();
+    const newLocalePreferences = nextProps.discussionLanguagePreferences.sort();
+    if (!currentSelectedLocaleList.equals(newLocalePreferences)) {
+      console.log(newLocalePreferences.toJS());
+      const newState = { ...this.state.localeState };
+      Object.entries(newState).forEach(([locale, state]) => {
+        const condition = newLocalePreferences.includes(locale);
+        console.log(condition);
+        if (newLocalePreferences.includes(locale)) {
+          state.selected = true;
+        }
+        else {
+          state.selected = false;
+        }
+      });
+      this.setState({localeState: newState});
+    }
+
   }
 
   toggleLocale(locale){
     const transientState = this.state.localeState[locale];
-    const newState = {};
-    newState[locale] = transientState;
-    // this.setState(newState);
-    if (newState[locale].selected) { this.props.addLocaleToStore(locale); }
+    const newState = {...transientState, selected: !transientState.selected};
+    if (newState.selected) { this.props.addLocaleToStore(locale); }
     else { this.props.removeLocaleFromStore(locale); }
   }
 
@@ -78,13 +103,10 @@ class LanguageSection extends React.Component {
   }  
 }
 
-const mapStateToProps = ({ admin: { thematicsById, thematicsInOrder, selectedLocale }, i18n }) => {
+const mapStateToProps = ({ admin: { discussionLanguagePreferences }, i18n }) => {
   return {
-    thematics: thematicsInOrder.filter((id) => {
-      return !thematicsById.getIn([id, 'toDelete']);
-    }),
     i18n: i18n,
-    selectedLocale: selectedLocale
+    discussionLanguagePreferences: discussionLanguagePreferences
   };
 };
 
