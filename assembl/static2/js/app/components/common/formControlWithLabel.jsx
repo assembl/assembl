@@ -65,11 +65,11 @@ class FormControlWithLabel extends React.Component {
 
   valueIsEmpty = () => {
     const { type, value } = this.props;
-    if (type === 'rich-text') {
-      if (value === null) {
-        return true;
-      }
+    if (!value) {
+      return true;
+    }
 
+    if (type === 'rich-text') {
       const allText = value.blocks
         .map((b) => {
           return b.text;
