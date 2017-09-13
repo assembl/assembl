@@ -5,10 +5,4 @@ query AllLanguagePreferences($inLocale: String!) {
 	      name(inLocale: $inLocale)
 	    }
 	}
-	discussionPreferences {
-	    languages {
-	      locale
-	      name(inLocale: $inLocale)
-	    }
-	} 
 }

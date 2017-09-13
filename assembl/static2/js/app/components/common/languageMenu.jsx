@@ -4,10 +4,11 @@ import { setLocale } from 'react-redux-i18n';
 import { compose, graphql } from 'react-apollo';
 import { NavDropdown, MenuItem } from 'react-bootstrap';
 import { getAvailableLocales } from '../../utils/globalFunctions';
+import { addLanguagePreference } from '../../actions/adminActions';
 import withLoadingIndicator from './withLoadingIndicator';
 import getDiscussionPreferenceLanguage from '../../graphql/DiscussionPreferenceLanguage.graphql';
 
-const LanguageMenu = ({ i18n, size, changeLanguage, data }) => {
+const LanguageMenu = ({ i18n, size, changeLanguage, addLanguageToStore, data }) => {
 
   const _doChangeLanguage = (key) => {
     localStorage.setItem('locale', key);
@@ -18,20 +19,24 @@ const LanguageMenu = ({ i18n, size, changeLanguage, data }) => {
   const prefs = data.discussionPreferences.languages;
 
   let prefObject = {};
-  prefs.forEach((p) => { prefObject[p.locale] = p });
+  prefs.forEach((p) => {
+    prefObject[p.locale] = p;
+    addLanguageToStore(p.locale);
+  });
+
   const availableLocales = getAvailableLocales(locale, prefObject);
   return (
     <ul className={`dropdown-${size} uppercase`}>
       <NavDropdown pullRight title={locale} id="nav-dropdown">
-        {availableLocales.map((loc) => {
+        {availableLocales.map((locale) => {
           return (
             <MenuItem
               onClick={() => {
-                _doChangeLanguage(loc);
+                _doChangeLanguage(locale);
               }}
-              key={loc}
+              key={locale}
             >
-              {loc}
+              {locale}
             </MenuItem>
           );
         })}
@@ -50,6 +55,9 @@ const mapDispatchToProps = (dispatch) => {
   return {
     changeLanguage: (locale) => {
       dispatch(setLocale(locale));
+    },
+    addLanguageToStore: (locale) => {
+      dispatch(addLanguagePreference(locale));
     }
   };
 };
