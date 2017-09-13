@@ -1825,10 +1825,9 @@ class DeletePostAttachment(graphene.Mutation):
 
 class UpdateDiscussionPreference(graphene.Mutation):
     class Input:
-        # Add more inputs as needed
         languages = graphene.List(graphene.String, required=True)
 
-    preference = graphene.Field(lambda: DiscussionPreference)
+    preferences = graphene.Field(lambda: DiscussionPreference)
 
     @staticmethod
     def mutate(root, args, context, info):
@@ -1842,17 +1841,17 @@ class UpdateDiscussionPreference(graphene.Mutation):
         allowed = cls.user_can_cls(user_id, CrudPermissions.CREATE, permissions)
         if not allowed or (allowed == IF_OWNED and user_id == Everyone):
             raise HTTPUnauthorized()
-
         prefs_to_save = args.get('languages')
         if not prefs_to_save:
             raise Exception("Must pass at least one preference to be saved")
 
         discussion.discussion_locales = prefs_to_save
         discussion.db.flush()
+
         discussion_pref = DiscussionPreference(
-            languages=[LocalePreference(locale=x) for x in
-                       discussion.discussion_locales])
-        return UpdateDiscussionPreference(preference=discussion_pref)
+            languages=[LocalePreference(locale=x) for
+                       x in discussion.discussion_locales])
+        return UpdateDiscussionPreference(preferences=discussion_pref)
 
 
 class Mutations(graphene.ObjectType):
