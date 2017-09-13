@@ -10,7 +10,7 @@ class Header extends React.Component {
     const { title, imgUrl, identifier, longTitle } = this.props;
     const { debateData } = this.props.debate;
     const { locale } = this.props.i18n;
-    const isPhaseCompleted = getIfPhaseCompletedByIdentifier(debateData.timeline, 'survey');
+    const isPhaseCompleted = getIfPhaseCompletedByIdentifier(debateData.timeline, identifier);
     const closedPhaseName = getPhaseName(debateData.timeline, identifier, locale).toLowerCase();
     return (
       <section className="header-section">
