@@ -13,24 +13,25 @@
     text-align: center;
     margin-top: 1.5em;
     margin-bottom: 3em;
+    margin-right: -4em;
     position: relative;
     left: 1em;
 
     .announcement-doughnut {
-      width: 145px;
-      height: 145px;
+      width: 125px;
+      height: 125px;
 
       .superpose-label {
-        top: calc(50% - 2em);
+        top: calc(50% - 1.5em);
         line-height: normal;
 
         .doughnut-label-count {
-          font-size: $font-size-l;
+          font-size: $font-size-m;
         }
 
         .doughnut-label-text {
           font-family: latoRegular;
-          font-size: $font-size-xs;
+          font-size: $font-size-xxs;
           letter-spacing: 0.08em;
         }
       }
