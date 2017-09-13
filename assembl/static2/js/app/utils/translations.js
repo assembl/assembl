@@ -531,7 +531,7 @@ const Translations = {
       isCompleted: "This phase is closed. You can no longer vote.",
       edit: {
         title: "I edit my message",
-        subject: "Body",
+        subject: "Subject",
         body: "Comment"
       }
     },
