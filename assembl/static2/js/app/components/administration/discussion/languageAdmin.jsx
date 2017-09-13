@@ -41,7 +41,7 @@ class LanguageSection extends React.Component {
       this.props.data.refetch({variables: {inLocale: nextLocale }});
     }
 
-    //Manage toggling of states
+    //Manage toggling of checkbox states from the store
     const totalLocaleList = List(Object.keys(this.state.localeState));
     const currentSelectedLocaleList = totalLocaleList
       .filter((locale) => {
@@ -49,22 +49,16 @@ class LanguageSection extends React.Component {
       })
       .sort();
     const newLocalePreferences = nextProps.discussionLanguagePreferences.sort();
+    //Only update the state if there is a change in language preferences
     if (!currentSelectedLocaleList.equals(newLocalePreferences)) {
-      console.log(newLocalePreferences.toJS());
       const newState = { ...this.state.localeState };
       Object.entries(newState).forEach(([locale, state]) => {
         const condition = newLocalePreferences.includes(locale);
-        console.log(condition);
-        if (newLocalePreferences.includes(locale)) {
-          state.selected = true;
-        }
-        else {
-          state.selected = false;
-        }
+        if (newLocalePreferences.includes(locale)) { state.selected = true; }
+        else { state.selected = false; }
       });
       this.setState({localeState: newState});
     }
-
   }
 
   toggleLocale(locale){
