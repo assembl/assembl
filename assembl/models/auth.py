@@ -712,6 +712,14 @@ class User(AgentProfile):
             return self.preferred_email
         return super(User, self).get_preferred_email()
 
+    def get_login_id(self):
+        username = self.username_p
+        if username:
+            return username
+        account = self.get_preferred_email_account()
+        if account and account.verified:
+            return account.email
+
     def merge(self, other_user):
         """Merge another user on this one, because they are the same entity.
 

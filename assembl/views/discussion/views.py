@@ -208,12 +208,17 @@ def react_view(request, required_permission=P_READ):
         if bare_route in ("register", "login"):
             forget(request)
     old_context = base_default_context(request)
-    user_id = effective_userid(request) or Everyone
+    user_id = request.authenticated_userid
+    user_login_id = None
+    if user_id is not None:
+        user_login_id = User.get(user_id).get_login_id()
+    effective_user_id = effective_userid(request) or Everyone
     discussion = old_context["discussion"] or None
     get_route = old_context["get_route"]
     (theme_name, theme_relative_path) = get_theme_info(discussion, frontend_version=2)
     node_env = os.getenv('NODE_ENV', 'production')
     common_context = {
+        "user_login_id": user_login_id,
         "theme_name": theme_name,
         "theme_relative_path": theme_relative_path,
         "REACT_URL": old_context['REACT_URL'],
@@ -223,10 +228,11 @@ def react_view(request, required_permission=P_READ):
     }
 
     if discussion:
-        canRead = user_has_permission(discussion.id, user_id, required_permission)
+        canRead = user_has_permission(discussion.id, effective_user_id,
+                                      required_permission)
         canUseReact = (is_login_route(bare_route) or
                        discussion.preferences['landing_page'])
-        if not canRead and user_id == Everyone:
+        if not canRead and effective_user_id == Everyone:
             # User isn't logged-in and discussion isn't public:
             # Maybe we're already in a login/register page etc.
             if is_login_route(bare_route):

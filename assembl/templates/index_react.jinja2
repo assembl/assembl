@@ -29,6 +29,9 @@
             <input type='hidden' name='user-id' id='user-id' value='{{ user.id }}' />
             <input type='hidden' name='user-displayname' id='user-displayname' value='{{ user.display_name() }}' />
         {% endif %}
+        {% if user_login_id %}
+            <input type='hidden' name='user-login-id' id='user-login-id' value='{{ user_login_id }}' />
+        {% endif %}
         {% if error %}
             <div class='hidden' id='errorMessage'>{{ error }}</div>
         {% endif %}
