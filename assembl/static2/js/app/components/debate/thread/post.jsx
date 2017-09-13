@@ -35,8 +35,8 @@ const getFullLevelString = (fullLevel) => {
 // We only have french and english for en, fr, ja for now.
 
 class Post extends React.PureComponent {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       showAnswerForm: false,
       mode: 'view',
@@ -144,6 +144,7 @@ class Post extends React.PureComponent {
               subject={originalSubject}
               refetchIdea={refetchIdea}
               goBackToViewMode={this.goBackToViewMode}
+              readOnly={!!this.props.parentId}
             />
           </div>
         </div>

@@ -6,6 +6,7 @@ export const TextInputWithRemainingChars = ({
   alwaysDisplayLabel = false,
   value,
   label,
+  readOnly,
   maxLength,
   handleTxtChange,
   handleInputFocus
@@ -18,14 +19,18 @@ export const TextInputWithRemainingChars = ({
           {label}
         </div>
         : null}
-      <FormControl
-        type="text"
-        placeholder={label}
-        maxLength={maxLength}
-        value={value}
-        onFocus={handleInputFocus || null}
-        onChange={handleTxtChange}
-      />
+      {readOnly
+        ? <span>
+          {value}
+        </span>
+        : <FormControl
+          type="text"
+          placeholder={label}
+          maxLength={maxLength}
+          value={value}
+          onFocus={handleInputFocus || null}
+          onChange={handleTxtChange}
+        />}
       <div className="annotation margin-xs">
         <Translate value="debate.remaining_x_characters" nbCharacters={remainingChars < 10000 ? remainingChars : maxLength} />
       </div>

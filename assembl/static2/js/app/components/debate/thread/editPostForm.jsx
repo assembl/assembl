@@ -20,6 +20,7 @@ type EditPostFormProps = {
   body: string,
   id: string,
   subject: string,
+  readOnly: boolean,
   goBackToViewMode: Function,
   mutate: Function
 };
@@ -107,6 +108,7 @@ class EditPostForm extends React.PureComponent<void, EditPostFormProps, EditPost
               value={this.state.subject}
               handleTxtChange={this.updateSubject}
               maxLength={TEXT_INPUT_MAX_LENGTH}
+              readOnly={this.props.readOnly}
             />
             <FormGroup>
               <div className="form-label">
