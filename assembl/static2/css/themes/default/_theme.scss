@@ -20,12 +20,11 @@
   Variables in this section should only be used within this current theme file. NEVER refer to these color variables in other SCSS files.
 */
 
-$green: #8DC4B3;
-$yellow: #f0ab2b;
-$cyan: #0095b2;
-$cyan-light: #d1eef6;
-$opacity-cyan: rgba(0, 140, 166, .5);
-$min-opacity-cyan: rgba(0, 140, 166, .1);
+$theme-local-blue: #192882;
+$theme-local-cyan: #00aaff;
+$theme-local-blue-light: #dbdeef;
+$theme-local-blue-opacity: rgba(25, 40, 130, 0.5);
+$theme-local-blue-opacity-min: rgba(25, 40, 130, 0.1);
 
 
 /*
@@ -33,9 +32,8 @@ $min-opacity-cyan: rgba(0, 140, 166, .1);
   You can redefine here any of the default theme variables. Theme variables are used in the entire SCSS infrastructure. Theme variables which are not redefined by a theme will keep their default value, which is defined in css/themes/default/_theme.scss and in css/variables.scss.
 */
 
-$first-color: $cyan;
-$first-color-light: $cyan-light;
-$second-color: $green;
-$third-color: $cyan;
-$opacity-color: $opacity-cyan;
-$min-opacity-color: $min-opacity-cyan;
+$first-color: $theme-local-blue;
+$first-color-light: $theme-local-blue-light;
+$second-color: $theme-local-cyan;
+$opacity-color: $theme-local-blue-opacity;
+$min-opacity-color: $theme-local-blue-opacity-min;

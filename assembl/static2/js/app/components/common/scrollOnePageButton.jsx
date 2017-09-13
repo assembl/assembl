@@ -1,14 +1,14 @@
 import React from 'react';
 
 const scrollOnePageDown = () => {
-  window.scrollBy(0, window.innerHeight);
+  window.scrollTo({ top: window.innerHeight, left: 0, behavior: 'smooth' });
 };
 
 const ScrollOnePageButton = ({ hidden }) => {
-  const scrollOnePageTopPosition = window.innerHeight - 50;
+  const scrollOnePageTopPosition = window.innerHeight - 35;
   return (
     <a
-      className={`scroll-one-page ${hidden ? 'hidden' : ''}`}
+      className={`scroll-one-page ${hidden || window.innerHeight > 880 ? 'hidden' : ''}`}
       onClick={scrollOnePageDown}
       style={{ top: scrollOnePageTopPosition }}
     >

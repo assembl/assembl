@@ -4,25 +4,26 @@
   cursor: pointer;
   z-index: 99;
   left: 50%;
-  margin-left: -50px;
+  margin-left: -34px;
 
   span {
-    border-radius: 50px 50px 0 0;
-    height: 50px;
-    width: 100px;
+    border-radius: 40px 40px 0 0;
+    height: 40px;
+    width: 80px;
     display: block;
-    background-color: $grey2;
+    background-color: $second-color;
     color: $white;
     text-align: center;
 
-    &:hover {
-        background-color: $grey3;
-    }
-
     .icon {
-      padding-top: 20px;
+      padding-top: 12px;
       padding-right: 1em;
       margin-bottom: 2px;
+
+      &:before {
+        font-size: 16px;
+        margin: 0 0 0 8px;
+      }
     }
   }
 }
