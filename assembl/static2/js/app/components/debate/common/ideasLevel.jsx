@@ -5,6 +5,7 @@ import IdeaPreview from './ideaPreview';
 import { get as getRoute } from '../../../utils/routeMap';
 import { getDiscussionSlug } from '../../../utils/globalFunctions';
 import VisibilityComponent from '../../common/visibilityComponent';
+import truncate from 'lodash/truncate';
 import {
   APP_CONTAINER_MAX_WIDTH,
   NB_IDEA_PREVIEW_TO_SHOW,
@@ -183,6 +184,18 @@ class IdeasLevel extends React.Component {
     const slug = getDiscussionSlug();
     const isRightLimitReached = this.isRightLimitReached();
     const isArrowVisible = this.getSliderWidth() > sliderContainerWidth;
+    const stringMaxLength = (level) => {
+      switch (level) {
+      case 1:
+        return 50;
+      case 2:
+        return 40;
+      case 3:
+        return 30;
+      default:
+        return 20;
+      }
+    };
     return (
       <div className="slider-container relative" style={nbLevel > 1 ? { width: `${sliderContainerWidth}px` } : {}}>
         <VisibilityComponent isVisible={isArrowVisible && nbLevel > 1 && sliderCount > 0} classname="slider-arrow-container">
@@ -220,7 +233,11 @@ class IdeasLevel extends React.Component {
                     numContributors={idea.numContributors}
                     numChildren={idea.numChildren}
                     link={`${getRoute('debate', { slug: slug, phase: identifier })}${getRoute('theme', { themeId: idea.id })}`}
-                    title={idea.title}
+                    title={truncate(idea.title, {
+                      length: stringMaxLength(ideaLevel),
+                      separator: ' ',
+                      omission: ' ...'
+                    })}
                     description={idea.description}
                     setSelectedIdeas={setSelectedIdeas}
                     ideaId={idea.id}
