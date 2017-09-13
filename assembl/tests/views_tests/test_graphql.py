@@ -1453,3 +1453,27 @@ query { defaultPreferences { languages { locale, name(inLocale:"fr") } } }""", c
             ]
         }
     }
+
+
+def test_mutation_language_preference(graphql_request,
+                                      discussion_with_lang_prefs):
+    res = schema.execute(u"""
+mutation myMutation($languages: [String]!) {
+    updateDiscussionPreference($languages) {
+        languages {
+            locale
+        }
+    }
+}
+""", context_value=graphql_request,
+        variable_values={
+            "languages": ["ja, de"]
+            })
+    import pdb; pdb.set_trace()
+    assert json.loads(json.dumps(res.data)) == {
+        u'updateDiscussionPreference': {
+            u'languages': [
+                {u'locale': u'ja'},
+                {u'locale': u'de'}
+            ]
+    }}

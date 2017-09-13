@@ -1823,11 +1823,10 @@ class DeletePostAttachment(graphene.Mutation):
         return DeletePostAttachment(post=post)
 
 
-class AddDiscussionPreference(graphene.Mutation):
+class UpdateDiscussionPreference(graphene.Mutation):
     class Input:
         # Add more inputs as needed
-        discussion_id = graphene.ID(required=True)
-        language_preferences = graphene.List(graphene.String)
+        languages = graphene.List(graphene.String, required=True)
 
     preference = graphene.Field(lambda: DiscussionPreference)
 
@@ -1844,7 +1843,16 @@ class AddDiscussionPreference(graphene.Mutation):
         if not allowed or (allowed == IF_OWNED and user_id == Everyone):
             raise HTTPUnauthorized()
 
-        # TODO Add logic for creating or updating a discussion preferences
+        prefs_to_save = args.get('languages')
+        if not prefs_to_save:
+            raise Exception("Must pass at least one preference to be saved")
+
+        discussion.discussion_locales = prefs_to_save
+        discussion.db.flush()
+        discussion_pref = DiscussionPreference(
+            languages=[LocalePreference(locale=x) for x in
+                       discussion.discussion_locales])
+        return UpdateDiscussionPreference(preference=discussion_pref)
 
 
 class Mutations(graphene.ObjectType):
@@ -1861,7 +1869,7 @@ class Mutations(graphene.ObjectType):
     add_post_attachment = AddPostAttachment.Field()
     upload_document = UploadDocument.Field()
     delete_post_attachment = DeletePostAttachment.Field()
-    add_discussion_preference = AddDiscussionPreference.Field()
+    update_discussion_preference = UpdateDiscussionPreference.Field()
 
 
 Schema = graphene.Schema(query=Query, mutation=Mutations)
