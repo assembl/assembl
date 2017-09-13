@@ -231,6 +231,7 @@ const Translations = {
       },
       themes: "Thèmes",
       notStarted: "La phase %{phaseName} n'a pas encore commencé. Merci de revenir à partir du ",
+      isCompleted: "Cette phase est terminée. Vous ne pouvez plus voter.",
       edit: {
         title: "Je modifie mon message",
         subject: "Titre",
@@ -527,6 +528,7 @@ const Translations = {
       },
       themes: "Themes",
       notStarted: "The %{phaseName} phase has not started. Please come back from ",
+      isCompleted: "This phase is complete. You can no longer vote.",
       edit: {
         title: "I edit my message",
         subject: "Body",

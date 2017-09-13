@@ -9,7 +9,7 @@ import { getIfPhaseCompletedByIdentifier } from '../../../utils/timeline';
 import PostCreator from './postCreator';
 import Like from '../../svg/like';
 import Disagree from '../../svg/disagree';
-import { inviteUserToLogin, displayAlert } from '../../../utils/utilityManager';
+import { inviteUserToLogin, displayAlert, displayModal } from '../../../utils/utilityManager';
 import addSentimentMutation from '../../../graphql/mutations/addSentiment.graphql';
 import deleteSentimentMutation from '../../../graphql/mutations/deleteSentiment.graphql';
 import { likeTooltip, disagreeTooltip } from '../../common/tooltips';
@@ -39,6 +39,13 @@ class Post extends React.Component {
         } else {
           this.handleAddSentiment(target, type);
         }
+      } else {
+        const body = (
+          <div>
+            <Translate value="debate.isCompleted" />
+          </div>
+        );
+        displayModal(null, body, true, null, null, true);
       }
     } else {
       inviteUserToLogin();
