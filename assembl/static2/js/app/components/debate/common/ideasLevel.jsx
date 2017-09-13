@@ -1,11 +1,12 @@
 import React from 'react';
 import { Row, Col } from 'react-bootstrap';
+import truncate from 'lodash/truncate';
 import classNames from 'classnames';
 import IdeaPreview from './ideaPreview';
 import { get as getRoute } from '../../../utils/routeMap';
 import { getDiscussionSlug } from '../../../utils/globalFunctions';
 import VisibilityComponent from '../../common/visibilityComponent';
-import truncate from 'lodash/truncate';
+
 import {
   APP_CONTAINER_MAX_WIDTH,
   NB_IDEA_PREVIEW_TO_SHOW,
@@ -187,13 +188,13 @@ class IdeasLevel extends React.Component {
     const stringMaxLength = (level) => {
       switch (level) {
       case 1:
-        return 50;
+        return 80;
       case 2:
-        return 40;
+        return 50;
       case 3:
         return 30;
       default:
-        return 20;
+        return 30;
       }
     };
     return (
@@ -236,7 +237,7 @@ class IdeasLevel extends React.Component {
                     title={truncate(idea.title, {
                       length: stringMaxLength(ideaLevel),
                       separator: ' ',
-                      omission: ' ...'
+                      omission: '...'
                     })}
                     description={idea.description}
                     setSelectedIdeas={setSelectedIdeas}
