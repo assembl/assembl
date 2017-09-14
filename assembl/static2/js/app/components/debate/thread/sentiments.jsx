@@ -86,10 +86,10 @@ const Sentiment = ({ sentimentCounts, mySentiment, sentiment, client, screenWidt
 export default ({ sentimentCounts, mySentiment, screenWidth, client, postId }) => {
   return (
     <div className="add-sentiment">
-      {sentimentDefinitions.map((sentiment, index) => {
+      {sentimentDefinitions.map((sentiment) => {
         return (
           <Sentiment
-            key={index}
+            key={sentiment.type}
             sentimentCounts={sentimentCounts}
             mySentiment={mySentiment}
             sentiment={sentiment}
