@@ -35,7 +35,7 @@ class Post extends React.Component {
         const target = event.currentTarget;
         const isMySentiment = post.mySentiment === type;
         if (isMySentiment) {
-          this.handleDeleteSentiment(target, type);
+          this.handleDeleteSentiment(target);
         } else {
           this.handleAddSentiment(target, type);
         }
@@ -62,9 +62,11 @@ class Post extends React.Component {
             post: {
               id: id,
               sentimentCounts: {
-                like: type === 'LIKE' ? sentimentCounts.like + 1 : sentimentCounts.like - (mySentiment === type ? 1 : 0),
+                like: type === 'LIKE' ? sentimentCounts.like + 1 : sentimentCounts.like - (mySentiment === 'LIKE' ? 1 : 0),
                 disagree:
-                  type === 'DISAGREE' ? sentimentCounts.disagree + 1 : sentimentCounts.disagree - (mySentiment === type ? 1 : 0),
+                  type === 'DISAGREE'
+                    ? sentimentCounts.disagree + 1
+                    : sentimentCounts.disagree - (mySentiment === 'DISAGREE' ? 1 : 0),
                 dontUnderstand: 0,
                 moreInfo: 0,
                 __typename: 'SentimentCounts'
@@ -84,7 +86,7 @@ class Post extends React.Component {
         displayAlert('danger', `${error}`);
       });
   }
-  handleDeleteSentiment(target, type) {
+  handleDeleteSentiment(target) {
     const { refetchTheme } = this.props;
     const { id, sentimentCounts, mySentiment } = this.props.post;
     this.props
@@ -95,8 +97,8 @@ class Post extends React.Component {
             post: {
               id: id,
               sentimentCounts: {
-                like: sentimentCounts.like - (mySentiment === type ? 1 : 0),
-                disagree: sentimentCounts.disagree - (mySentiment === type ? 1 : 0),
+                like: sentimentCounts.like - (mySentiment === 'LIKE' ? 1 : 0),
+                disagree: sentimentCounts.disagree - (mySentiment === 'DISAGREE' ? 1 : 0),
                 dontUnderstand: 0,
                 moreInfo: 0,
                 __typename: 'SentimentCounts'

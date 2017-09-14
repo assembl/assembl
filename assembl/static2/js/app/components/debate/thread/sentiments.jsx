@@ -51,19 +51,19 @@ const Sentiment = ({ sentimentCounts, mySentiment, sentiment, client, screenWidt
                           like:
                               sentiment.camelType === 'like'
                                 ? sentimentCounts.like + 1
-                                : sentimentCounts.like - (mySentiment === sentiment.type ? 1 : 0),
+                                : sentimentCounts.like - (mySentiment === 'LIKE' ? 1 : 0),
                           disagree:
                               sentiment.camelType === 'disagree'
                                 ? sentimentCounts.disagree + 1
-                                : sentimentCounts.disagree - (mySentiment === sentiment.type ? 1 : 0),
+                                : sentimentCounts.disagree - (mySentiment === 'DISAGREE' ? 1 : 0),
                           dontUnderstand:
                               sentiment.camelType === 'dontUnderstand'
                                 ? sentimentCounts.dontUnderstand + 1
-                                : sentimentCounts.dontUnderstand - (mySentiment === sentiment.type ? 1 : 0),
+                                : sentimentCounts.dontUnderstand - (mySentiment === 'DONT_UNDERSTAND' ? 1 : 0),
                           moreInfo:
                               sentiment.camelType === 'moreInfo'
                                 ? sentimentCounts.moreInfo + 1
-                                : sentimentCounts.moreInfo - (mySentiment === sentiment.type ? 1 : 0),
+                                : sentimentCounts.moreInfo - (mySentiment === 'MORE_INFO' ? 1 : 0),
                           __typename: 'SentimentCounts'
                         },
                         mySentiment: sentiment.type,
