@@ -304,11 +304,7 @@ def browser(request):
     browser = Browser('chrome', headless=True)
 
     def fin():
-        import signal
         print "finalizer browser"
-        # Kill process so it does not linger
-        # https://github.com/seleniumhq/selenium/issues/767
-        browser.driver.service.process.send_signal(signal.SIGTERM)
         browser.quit()
     request.addfinalizer(fin)
 
