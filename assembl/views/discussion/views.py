@@ -189,6 +189,12 @@ def is_login_route(route_name):
         "do_password_change")
 
 
+def is_join_route(request):
+    # TODO: Get a real shared route system for react.
+    return (request.matched_route.name == 'general_react_page' and
+            request.matchdict['extra_path'] == ('join',))
+
+
 def admin_react_view(request):
     """
     Checks that user is logged in and is admin of discussion
@@ -208,18 +214,15 @@ def react_view(request, required_permission=P_READ):
         if bare_route in ("register", "login"):
             forget(request)
     old_context = base_default_context(request)
-    user_id = request.authenticated_userid
-    user_login_id = None
-    if user_id is not None:
-        user_login_id = User.get(user_id).get_login_id()
-    effective_user_id = effective_userid(request) or Everyone
-    discussion = old_context["discussion"] or None
+    discussion = old_context.get("discussion", None)
+    user = old_context.get("user", None)
+    user_id = user.id if user else Everyone
+    loggedin_userid = old_context['loggedin_userid']
     get_route = old_context["get_route"]
     (theme_name, theme_relative_path) = get_theme_info(discussion, frontend_version=2)
     node_env = os.getenv('NODE_ENV', 'production')
     first_visit_to_discussion = False
     common_context = {
-        "user_login_id": user_login_id,
         "theme_name": theme_name,
         "theme_relative_path": theme_relative_path,
         "REACT_URL": old_context['REACT_URL'],
@@ -229,14 +232,19 @@ def react_view(request, required_permission=P_READ):
     }
 
     if discussion:
-        canRead = user_has_permission(discussion.id, effective_user_id,
-                                      required_permission)
+        canRead = user_has_permission(discussion.id, user_id, required_permission)
         canUseReact = (is_login_route(bare_route) or
                        discussion.preferences['landing_page'])
-        if not canRead and effective_user_id == Everyone:
+        if not canRead and user_id == Everyone:
             # User isn't logged-in and discussion isn't public:
             # Maybe we're already in a login/register page etc.
-            if is_login_route(bare_route):
+            if loggedin_userid and not is_join_route(request):
+                # logged in, does not belong to discusion: join page
+                redirect_url = request.route_path("general_react_page",
+                                                  discussion_slug=discussion.slug,
+                                                  extra_path="join")
+                return HTTPTemporaryRedirect(redirect_url)
+            if is_login_route(bare_route) or is_join_route(request):
                 context = get_login_context(request)
                 context.update(common_context)
                 return context
@@ -289,8 +297,8 @@ def react_view(request, required_permission=P_READ):
                                     extra_path=extra_path,
                                     _query=query)
             return HTTPTemporaryRedirect(url)
-        if effective_user_id != Everyone:
-            user = User.get(effective_user_id)
+        if user_id != Everyone:
+            user = User.get(user_id)
             if user:
                 first_visit_to_discussion = user.is_visiting_discussion(discussion.id)
     else:

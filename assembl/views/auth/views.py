@@ -543,7 +543,17 @@ def assembl_login_complete_view(request):
     request.response.headerlist.extend(headers)
     discussion = discussion_from_request(request)
     if discussion:
-        maybe_auto_subscribe(user, discussion)
+        # New behaviour: join page for first visit to discussion
+        if (discussion.subscribe_to_notifications_on_signup and
+                discussion.preferences['landing_page'] and
+                not discussion.preferences['shared_login'] and
+                not user.get_status_in_discussion(discussion.id)):
+            redirect_url = request.route_path("general_react_page",
+                                                  discussion_slug=discussion.slug,
+                                                  extra_path="join")
+            return HTTPFound(redirect_url)
+        else:
+            maybe_auto_subscribe(user, discussion)
     return HTTPFound(location=next_view)
 
 

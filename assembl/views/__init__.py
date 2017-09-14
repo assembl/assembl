@@ -28,6 +28,7 @@ from ..lib.locale import (
 from ..lib.utils import get_global_base_url
 from ..lib.raven_client import capture_exception
 from ..auth import R_PARTICIPANT
+from ..auth.util import filter_userid
 from ..models.auth import (
     UserLanguagePreference,
     LanguagePreferenceOrder,
@@ -316,6 +317,7 @@ def get_default_context(request, **kwargs):
         application_url=application_url,
         get_route=get_route,
         user=user,
+        loggedin_userid=request.authenticated_userid,
         templates=get_template_views(),
         discussion=discussion or {},  # Templates won't load without a discussion object
         preferences=discussion.preferences if discussion else {},
