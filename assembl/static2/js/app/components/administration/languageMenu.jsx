@@ -11,31 +11,20 @@ import Ja from '../svg/flags/ja';
 
 // TO DO get it dynamically
 const Flag = ({ locale }) => {
-
-  const localeOnly = locale ? locale.split("_")[0] : null ;
-  if (localeOnly) {
-    const name = capitalize(localeOnly);
-    const el = React.createElement(name, {}, null);
+  switch (locale) {
+  case 'en':
+    return <En />;
+  case 'fr':
+    return <Fr />;
+  case 'ja':
+    return <Ja />;
+  default:
     return (
-      <span>{el}</span>
+      <span>
+        {locale}
+      </span>
     );
   }
-  return (<span></span>); //Best approach?
-
-  // switch (locale) {
-  // case 'en':
-  //   return <En />;
-  // case 'fr':
-  //   return <Fr />;
-  // case 'ja':
-  //   return <Ja />;
-  // default:
-  //   return (
-  //     <span>
-  //       {locale}
-  //     </span>
-  //   );
-  // }
 };
 
 const LanguageMenu = ({ changeLocale, selectedLocale, translations, visibility }) => {
