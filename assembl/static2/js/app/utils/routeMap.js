@@ -31,6 +31,7 @@ const routes = {
   debate: '${slug}/debate/${phase}',
   community: '${slug}/community',
   terms: '${slug}/terms',
+  join: '${slug}/join',
   theme: 'theme/${themeId}',
   administration: '${slug}/administration',
   unauthorizedAdministration: '${slug}/unauthorizedAdministration',

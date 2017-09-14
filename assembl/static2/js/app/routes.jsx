@@ -26,6 +26,7 @@ import SurveyAdmin from './pages/surveyAdmin';
 import ThreadAdmin from './pages/threadAdmin';
 import TwoColumnsAdmin from './pages/twoColumnsAdmin';
 import TokenVoteAdmin from './pages/tokenVoteAdmin';
+import JoinDiscussion from './pages/joinDiscussion';
 import { routeForRouter } from './utils/routeMap';
 
 const DebateHome = (props) => {
@@ -95,6 +96,7 @@ export default [
         <Route path={routeForRouter('synthesis')} component={Synthesis} />
         <Route path={routeForRouter('community')} component={Community} />
         <Route path={routeForRouter('terms')} component={Terms} />
+        <Route path={routeForRouter('join')} component={JoinDiscussion} />
         <Route path={routeForRouter('debate', false, { phase: ':phase' })} component={DebateHome}>
           <Route path={routeForRouter('theme', false, { themeId: ':themeId' })} component={DebateChild} />
         </Route>
