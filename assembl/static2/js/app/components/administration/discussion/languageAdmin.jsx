@@ -7,7 +7,7 @@ import { Checkbox } from 'react-bootstrap';
 
 import SectionTitle from '../sectionTitle';
 import withLoadingIndicator from '../../common/withLoadingIndicator';
-import { addLanguagePreference, removeLanguagePreference } from '../../../actions/adminActions';
+import { addLanguagePreference, removeLanguagePreference, languagePreferencesHasChanged } from '../../../actions/adminActions';
 import getAllPreferenceLanguage from '../../../graphql/AllLanguagePreferences.graphql';
 
 
@@ -21,7 +21,7 @@ class LanguageSection extends React.Component {
     data.defaultPreferences.languages.forEach((lang) => {
       allLangs[lang.locale] = {selected: false, name: lang.name};
     });
-  ``
+
     discussionLanguagePreferences.forEach((locale) => {
       const prevState = allLangs[locale];
       allLangs[locale] = {...prevState, selected: true };
@@ -61,7 +61,8 @@ class LanguageSection extends React.Component {
     }
   }
 
-  toggleLocale(locale){
+  toggleLocale(locale) {
+    this.props.signalLocaleChanged(true);
     const transientState = this.state.localeState[locale];
     const newState = {...transientState, selected: !transientState.selected};
     if (newState.selected) { this.props.addLocaleToStore(locale); }
@@ -111,6 +112,9 @@ const mapDispatchToProps = (dispatch) => {
     },
     removeLocaleFromStore: (locale) => {
       dispatch(removeLanguagePreference(locale));
+    },
+    signalLocaleChanged: () => {
+      dispatch(languagePreferencesHasChanged)
     }
   };
 };
