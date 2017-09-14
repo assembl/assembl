@@ -44,7 +44,8 @@ VALID_ATTRIBUTES = ['href',  # For hyperlinks
                     'alt',  # For accessiblity
                     'colspan', 'headers', 'abbr',
 
-                    'title', 'src', 'width', 'data-id', 'data-mimeType', 'data-blockType',
+                    'title', 'src', 'width', 'data-id', 'data-mimetype',
+                    'data-blocktype', 'data-externalurl', 'data-title',
 
                     'scope', 'sorted'  # For tables
                     ]

@@ -35,7 +35,7 @@ const rcs = {
       key: '99bis',
       text: ' ',
       type: 'atomic',
-      entityRanges: [{ offset: 0, length: 1, key: 3 }],
+      entityRanges: [{ offset: 0, length: 1, key: 1 }],
       inlineStyleRanges: []
     },
     {
@@ -52,12 +52,12 @@ const rcs = {
     0: {
       type: 'document',
       mutability: 'IMMUTABLE',
-      data: { id: '1234' }
+      data: { id: '1234', title: 'Foobar', mimeType: 'application/pdf' }
     },
-    3: {
+    1: {
       type: 'document',
       mutability: 'IMMUTABLE',
-      data: { id: '1236', externalUrl: 'http://www.example.com' }
+      data: { id: '1236', externalUrl: 'http://www.example.com/foo.png', mimeType: 'image/png' }
     }
   }
 };
@@ -79,7 +79,7 @@ describe('attachmentsPlugin', () => {
       };
       const result = blockToHTML(block);
       const expected = {
-        start: '<div data-blockType="atomic">',
+        start: '<div data-blocktype="atomic">',
         end: '</div>'
       };
       expect(result).toEqual(expected);
@@ -109,7 +109,7 @@ describe('attachmentsPlugin', () => {
       const result = entityToHTML(entity, 'My original text');
       expect(result).toEqual(
         '<img src="http://www.example.com/foobar.png" alt="" title="Foobar" width="60%" ' +
-          'data-id="foobar" data-mimeType="image/png" />'
+          'data-id="foobar" data-mimetype="image/png" />'
       );
     });
 
@@ -125,8 +125,8 @@ describe('attachmentsPlugin', () => {
       };
       const result = entityToHTML(entity, 'My original text');
       expect(result).toEqual(
-        '<div data-id="foobar" data-mimeType="application/pdf" data-title="Foobar" ' +
-          'data-externalUrl="http://www.example.com/document/1122/data" />'
+        '<div data-id="foobar" data-mimetype="application/pdf" data-title="Foobar" ' +
+          'data-externalurl="http://www.example.com/document/1122/data" />'
       );
     });
   });
@@ -147,7 +147,7 @@ describe('attachmentsPlugin', () => {
       const nodeName = 'div';
       const node = {
         dataset: {
-          blockType: 'atomic'
+          blocktype: 'atomic'
         },
         firstChild: {
           dataset: {
@@ -171,7 +171,7 @@ describe('attachmentsPlugin', () => {
       const nodeName = 'div';
       const node = {
         dataset: {
-          blockType: 'atomic'
+          blocktype: 'atomic'
         },
         firstChild: {
           dataset: {
@@ -252,7 +252,7 @@ describe('attachmentsPlugin', () => {
           0: {
             type: 'document',
             mutability: 'IMMUTABLE',
-            data: { id: '1234' }
+            data: { id: '1234', title: 'Foobar', mimeType: 'application/pdf' }
           }
         }
       };

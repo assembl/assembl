@@ -13,7 +13,7 @@ const plugin = {
   blockToHTML: (block: ContentBlock): { start: string, end: string } | null => {
     const type = block.type;
     if (type === 'atomic') {
-      return { start: '<div data-blockType="atomic">', end: '</div>' };
+      return { start: '<div data-blocktype="atomic">', end: '</div>' };
     }
 
     return null;
@@ -23,16 +23,16 @@ const plugin = {
       const { externalUrl, id, title } = entity.data;
       const mimeType = entity.data.mimeType ? entity.data.mimeType : '';
       if (mimeType.startsWith('image')) {
-        return `<img src="${externalUrl}" alt="" title="${title}" width="60%" data-id="${id}" data-mimeType="${mimeType}" />`;
+        return `<img src="${externalUrl}" alt="" title="${title}" width="60%" data-id="${id}" data-mimetype="${mimeType}" />`;
       }
 
-      return `<div data-id="${id}" data-mimeType="${mimeType}" data-title="${title}" data-externalUrl="${externalUrl}" />`;
+      return `<div data-id="${id}" data-mimetype="${mimeType}" data-title="${title}" data-externalurl="${externalUrl}" />`;
     }
 
     return originalText;
   },
   htmlToBlock: (nodeName: string, node: NodeType, lastList: *, inBlock: string): void | string => {
-    const isAtomicBlock = nodeName === 'div' && node.dataset.blockType === BLOCK_TYPE;
+    const isAtomicBlock = nodeName === 'div' && node.dataset.blocktype === BLOCK_TYPE;
     if (isAtomicBlock || (nodeName === 'img' && inBlock !== BLOCK_TYPE)) {
       return BLOCK_TYPE;
     }
