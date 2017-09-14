@@ -124,6 +124,12 @@ class Post extends React.PureComponent {
         {subject.replace('Re: ', '')}
       </span>
     );
+    const modifiedOriginalSubject = (
+      <span>
+        {getFullLevelString(fullLevel)}
+        {originalSubject.replace('Re: ', '')}
+      </span>
+    );
     if (publicationState in DeletedPublicationStates) {
       return (
         <DeletedPost
@@ -145,6 +151,7 @@ class Post extends React.PureComponent {
               refetchIdea={refetchIdea}
               goBackToViewMode={this.goBackToViewMode}
               readOnly={!!this.props.parentId}
+              modifiedOriginalSubject={modifiedOriginalSubject}
             />
           </div>
         </div>

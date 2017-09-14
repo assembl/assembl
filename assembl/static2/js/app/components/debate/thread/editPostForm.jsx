@@ -21,6 +21,7 @@ type EditPostFormProps = {
   id: string,
   subject: string,
   readOnly: boolean,
+  modifiedOriginalSubject: string,
   goBackToViewMode: Function,
   mutate: Function
 };
@@ -102,14 +103,20 @@ class EditPostForm extends React.PureComponent<void, EditPostFormProps, EditPost
         </Col>
         <Col xs={12} md={12}>
           <div className="answer-form-inner">
-            <TextInputWithRemainingChars
-              alwaysDisplayLabel
-              label={I18n.t('debate.edit.subject')}
-              value={this.state.subject}
-              handleTxtChange={this.updateSubject}
-              maxLength={TEXT_INPUT_MAX_LENGTH}
-              readOnly={this.props.readOnly}
-            />
+            {this.props.readOnly
+              ? <div>
+                <h3 className="dark-title-3">
+                  {this.props.modifiedOriginalSubject}
+                </h3>
+                <div className="margin-m" />
+              </div>
+              : <TextInputWithRemainingChars
+                alwaysDisplayLabel
+                label={I18n.t('debate.edit.subject')}
+                value={this.state.subject}
+                handleTxtChange={this.updateSubject}
+                maxLength={TEXT_INPUT_MAX_LENGTH}
+              />}
             <FormGroup>
               <div className="form-label">
                 <Translate value="debate.edit.body" />

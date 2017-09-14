@@ -6,7 +6,6 @@ export const TextInputWithRemainingChars = ({
   alwaysDisplayLabel = false,
   value,
   label,
-  readOnly,
   maxLength,
   handleTxtChange,
   handleInputFocus
@@ -15,27 +14,21 @@ export const TextInputWithRemainingChars = ({
   return (
     <div>
       {alwaysDisplayLabel || value
-        ? <div className={readOnly ? 'hidden' : 'form-label'}>
+        ? <div className="form-label">
           {label}
         </div>
         : null}
-      {readOnly
-        ? <h3 className="dark-title-3">
-          {value}
-        </h3>
-        : <FormControl
-          type="text"
-          placeholder={label}
-          maxLength={maxLength}
-          value={value}
-          onFocus={handleInputFocus || null}
-          onChange={handleTxtChange}
-        />}
-      {!readOnly
-        ? <div className="annotation margin-xs">
-          <Translate value="debate.remaining_x_characters" nbCharacters={remainingChars < 10000 ? remainingChars : maxLength} />
-        </div>
-        : <div className="margin-m" />}
+      <FormControl
+        type="text"
+        placeholder={label}
+        maxLength={maxLength}
+        value={value}
+        onFocus={handleInputFocus || null}
+        onChange={handleTxtChange}
+      />
+      <div className="annotation margin-xs">
+        <Translate value="debate.remaining_x_characters" nbCharacters={remainingChars < 10000 ? remainingChars : maxLength} />
+      </div>
     </div>
   );
 };
