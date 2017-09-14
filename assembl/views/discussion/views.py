@@ -282,10 +282,6 @@ def react_view(request, required_permission=P_READ):
                                     extra_path=extra_path,
                                     _query=query)
             return HTTPTemporaryRedirect(url)
-        if user_id != Everyone:
-            user = User.get(user_id)
-            if user:
-                user.is_visiting_discussion(discussion.id)
     else:
         context = get_login_context(request)
         context.update(common_context)
