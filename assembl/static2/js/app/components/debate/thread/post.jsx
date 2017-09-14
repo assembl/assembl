@@ -200,8 +200,8 @@ class Post extends React.PureComponent {
 
               <Attachments attachments={attachments} />
 
-              {indirectIdeaContentLinks.length ? (
-                <div className="link-idea">
+              {indirectIdeaContentLinks.length
+                ? <div className="link-idea">
                   <div className="label">
                     <Translate value="debate.thread.linkIdea" />
                   </div>
