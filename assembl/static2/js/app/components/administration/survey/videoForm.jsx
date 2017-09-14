@@ -87,6 +87,9 @@ const VideoForm = ({
                 return updateHtmlCode(e.target.value);
               }}
             />
+            <div className="admin-help">
+              <Translate value="administration.survey.videoHelp" />
+            </div>
             <div className="separator" />
           </div>
           : null}

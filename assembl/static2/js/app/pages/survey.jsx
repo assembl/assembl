@@ -58,7 +58,7 @@ class Survey extends React.Component {
     const { thematic: { imgUrl, questions, title, video } } = this.props.data;
     const { debateData } = this.props.debate;
     const isPhaseCompleted = getIfPhaseCompletedByIdentifier(debateData.timeline, 'survey');
-    const isValidVideo = video && video.htmlCode.includes('embed');
+    const isValidVideo = video && (video.htmlCode.includes('embed') || video.htmlCode.includes('player.vimeo.com'));
     return (
       <div className="survey">
         <div className="relative">
