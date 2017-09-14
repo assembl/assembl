@@ -79,7 +79,7 @@ describe('attachmentsPlugin', () => {
       };
       const result = blockToHTML(block);
       const expected = {
-        start: '<div data-blocktype="atomic">',
+        start: '<div class="atomic-block" data-blocktype="atomic">',
         end: '</div>'
       };
       expect(result).toEqual(expected);
@@ -119,14 +119,14 @@ describe('attachmentsPlugin', () => {
           externalUrl: 'http://www.example.com/document/1122/data',
           id: 'foobar',
           mimeType: 'application/pdf',
-          title: 'Foobar'
+          title: 'foobar.pdf'
         },
         type: 'document'
       };
       const result = entityToHTML(entity, 'My original text');
       expect(result).toEqual(
-        '<div data-id="foobar" data-mimetype="application/pdf" data-title="Foobar" ' +
-          'data-externalurl="http://www.example.com/document/1122/data" />'
+        '<span class="attachment-document" data-id="foobar" data-mimetype="application/pdf" data-title="foobar.pdf" ' +
+          'data-externalurl="http://www.example.com/document/1122/data">pdf</span>'
       );
     });
   });

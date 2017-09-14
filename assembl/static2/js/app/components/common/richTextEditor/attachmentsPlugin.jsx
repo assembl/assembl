@@ -13,7 +13,7 @@ const plugin = {
   blockToHTML: (block: ContentBlock): { start: string, end: string } | null => {
     const type = block.type;
     if (type === 'atomic') {
-      return { start: '<div data-blocktype="atomic">', end: '</div>' };
+      return { start: '<div class="atomic-block" data-blocktype="atomic">', end: '</div>' };
     }
 
     return null;
@@ -26,7 +26,11 @@ const plugin = {
         return `<img src="${externalUrl}" alt="" title="${title}" width="60%" data-id="${id}" data-mimetype="${mimeType}" />`;
       }
 
-      return `<div data-id="${id}" data-mimetype="${mimeType}" data-title="${title}" data-externalurl="${externalUrl}" />`;
+      const extension = title.split('.')[1];
+      return (
+        `<span class="attachment-document" data-id="${id}" data-mimetype="${mimeType}"` +
+        ` data-title="${title}" data-externalurl="${externalUrl}">${extension}</span>`
+      );
     }
 
     return originalText;

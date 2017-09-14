@@ -2,6 +2,7 @@
 
 exports[`AtomicBlockRenderer component should render an image block 1`] = `
 <div
+  className="atomic-block"
   data-blockType="atomic"
 >
   <img

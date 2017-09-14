@@ -110,3 +110,12 @@
     display: none;
   }
 }
+
+.atomic-block {
+  .attachment-document {
+    border: solid 1px;
+    margin: 3px;
+    padding: 3px;
+    font-family: $font-family3;
+  }
+}

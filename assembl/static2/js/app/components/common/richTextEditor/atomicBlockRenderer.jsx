@@ -12,10 +12,16 @@ const AtomicBlockRenderer = ({ block, contentState }: { block: ContentBlock, con
     let innerContent = <span className={`attachment-${data.id}`} />;
     if (data.mimeType.startsWith('image')) {
       innerContent = <img src={data.externalUrl} alt="" title={data.title} width="60%" />;
+    } else {
+      innerContent = (
+        <span className="attachment-document">
+          {data.title.split('.')[1]}
+        </span>
+      );
     }
 
     return (
-      <div data-blockType="atomic">
+      <div className="atomic-block" data-blockType="atomic">
         {innerContent}
       </div>
     );

@@ -17,11 +17,6 @@ VALID_TAGS = ['a',
               # We do not allow img tags, either the reference is a local
               # file (which we don't support yet), our we could link to a
               # bunch of outside scripts.
-
-              'img',
-              'figure',
-              'div',
-
               'li',
               'ol',
               'p',
@@ -38,16 +33,20 @@ VALID_TAGS = ['a',
               'ul',
               'br',
               'hr',
+              # we need these for draft-js richtexteditor:
+              'img',
+              'div',
+              'span',
               ]
 
 VALID_ATTRIBUTES = ['href',  # For hyperlinks
                     'alt',  # For accessiblity
                     'colspan', 'headers', 'abbr',
-
+                    'scope', 'sorted'  # For tables
+                    # we need these for draft-js richtexteditor:
                     'title', 'src', 'width', 'data-id', 'data-mimetype',
                     'data-blocktype', 'data-externalurl', 'data-title',
-
-                    'scope', 'sorted'  # For tables
+                    'class'
                     ]
 
 
