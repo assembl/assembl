@@ -9,8 +9,8 @@ fragment Post on Post {
   bodyEntries(lang: $contentLocale) {
     value
     localeCode
-    translatedFromLocaleCode
-    supposedUnderstood
+    # translatedFromLocaleCode
+    # supposedUnderstood
   }
   mySentiment
   indirectIdeaContentLinks {
