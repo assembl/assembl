@@ -87,17 +87,23 @@ class PostActions extends React.Component {
               <span className="assembl-icon-share color" />
             </OverlayTrigger>
           </div>
-          <Sentiments mySentiment={mySentiment} screenWidth={this.state.screenWidth} client={client} postId={postId} />
+          <Sentiments
+            sentimentCounts={sentimentCounts}
+            mySentiment={mySentiment}
+            screenWidth={this.state.screenWidth}
+            client={client}
+            postId={postId}
+          />
           {this.state.screenWidth >= MEDIUM_SCREEN_WIDTH ? null : overflowMenu}
         </div>
         {totalSentimentsCount > 0 &&
           <OverlayTrigger overlay={getSentimentStats(totalSentimentsCount, sentimentCounts, mySentiment)} placement="right">
             <div className="sentiments-count margin-m">
               <div>
-                {sentimentDefinitions.reduce((result, sentiment, index) => {
+                {sentimentDefinitions.reduce((result, sentiment) => {
                   if (sentimentCounts[sentiment.camelType] > 0) {
                     result.push(
-                      <div className="min-sentiment" key={index} style={{ left: `${(count += 1 * 6)}px` }}>
+                      <div className="min-sentiment" key={sentiment.type} style={{ left: `${(count += 1 * 6)}px` }}>
                         <sentiment.SvgComponent size={15} />
                       </div>
                     );

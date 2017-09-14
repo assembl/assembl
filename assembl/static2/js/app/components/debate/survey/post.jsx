@@ -35,7 +35,7 @@ class Post extends React.Component {
         const target = event.currentTarget;
         const isMySentiment = post.mySentiment === type;
         if (isMySentiment) {
-          this.handleDeleteSentiment(target);
+          this.handleDeleteSentiment(target, type);
         } else {
           this.handleAddSentiment(target, type);
         }
@@ -53,8 +53,29 @@ class Post extends React.Component {
   }
   handleAddSentiment(target, type) {
     const { refetchTheme } = this.props;
+    const { id, sentimentCounts, mySentiment } = this.props.post;
     this.props
-      .addSentiment({ variables: { postId: this.props.post.id, type: type } })
+      .addSentiment({
+        variables: { postId: id, type: type },
+        optimisticResponse: {
+          addSentiment: {
+            post: {
+              id: id,
+              sentimentCounts: {
+                like: type === 'LIKE' ? sentimentCounts.like + 1 : sentimentCounts.like - (mySentiment === type ? 1 : 0),
+                disagree:
+                  type === 'DISAGREE' ? sentimentCounts.disagree + 1 : sentimentCounts.disagree - (mySentiment === type ? 1 : 0),
+                dontUnderstand: 0,
+                moreInfo: 0,
+                __typename: 'SentimentCounts'
+              },
+              mySentiment: type,
+              __typename: 'Post'
+            },
+            __typename: 'AddSentiment'
+          }
+        }
+      })
       .then(() => {
         refetchTheme();
         target.setAttribute('class', 'sentiment sentiment-active');
@@ -63,10 +84,30 @@ class Post extends React.Component {
         displayAlert('danger', `${error}`);
       });
   }
-  handleDeleteSentiment(target) {
+  handleDeleteSentiment(target, type) {
     const { refetchTheme } = this.props;
+    const { id, sentimentCounts, mySentiment } = this.props.post;
     this.props
-      .deleteSentiment({ variables: { postId: this.props.post.id } })
+      .deleteSentiment({
+        variables: { postId: id },
+        optimisticResponse: {
+          deleteSentiment: {
+            post: {
+              id: id,
+              sentimentCounts: {
+                like: sentimentCounts.like - (mySentiment === type ? 1 : 0),
+                disagree: sentimentCounts.disagree - (mySentiment === type ? 1 : 0),
+                dontUnderstand: 0,
+                moreInfo: 0,
+                __typename: 'SentimentCounts'
+              },
+              mySentiment: null,
+              __typename: 'Post'
+            },
+            __typename: 'DeleteSentiment'
+          }
+        }
+      })
       .then(() => {
         refetchTheme();
         target.setAttribute('class', 'sentiment');

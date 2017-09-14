@@ -12,6 +12,12 @@ fragment Post on Post {
     # translatedFromLocaleCode
     # supposedUnderstood
   }
+  sentimentCounts {
+    like
+    disagree
+    dontUnderstand
+    moreInfo
+  }
   mySentiment
   indirectIdeaContentLinks {
     idea {

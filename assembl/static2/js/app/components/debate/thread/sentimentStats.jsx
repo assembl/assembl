@@ -6,10 +6,10 @@ import sentimentDefinitions from './sentimentDefinitions';
 const getSentimentDetails = (totalSentimentsCount, sentimentCounts, mySentiment) => {
   return (
     <Popover id="sentiment-count-popover" className="sentiments-popover">
-      {sentimentDefinitions.map((sentiment, index) => {
+      {sentimentDefinitions.map((sentiment) => {
         const rectCounts = Math.round(sentimentCounts[sentiment.camelType] * 10 / totalSentimentsCount);
         return (
-          <div className="gauge" key={index}>
+          <div className="gauge" key={sentiment.type}>
             <div>
               <div className={sentiment.type === mySentiment ? 'sentiment sentiment-active' : 'sentiment'}>
                 <sentiment.SvgComponent size={20} />
