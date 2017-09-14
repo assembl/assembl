@@ -148,7 +148,7 @@ SPARQLWrapper==1.7.6
 sphinxcontrib-httpdomain==1.5.0
 sphinxcontrib-zopeext==0.2.1
 Sphinx==1.4.4
--e git+https://github.com/cobrateam/splinter.git#egg=splinter
+splinter==0.7.6
 SQLAlchemy==1.0.13
 -e git+https://github.com/conversence/sqlalchemy-rdfbridge.git#egg=sqlalchemy-rdfbridge
 sqlalchemy-schemadisplay==1.3
