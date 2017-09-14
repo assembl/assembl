@@ -271,9 +271,9 @@ const Translations = {
       survey: {
         0: "Renseigner les thématiques",
         1: "Renseigner les questions",
-        2: "Exporter les données",
-        videoHelp: "*Liens autorisés : \"https://www.youtube.com/embed/[videoId]\" ou \"https://player.vimeo.com/video/[videoId]?\""
+        2: "Exporter les données"
       },
+      videoHelp: "*Liens autorisés : \"https://www.youtube.com/embed/[videoId]\" ou \"https://player.vimeo.com/video/[videoId]?\"",
       annotation: "Module à renseigner obligatoirement. Les champs * sont requis.",
       themeNum: "Thématique %{index}",
       ph: {
@@ -569,9 +569,9 @@ const Translations = {
       survey: {
         0: "Set themes",
         1: "Set questions",
-        2: "Export data",
-        videoHelp: "*Authorized links: \"https://www.youtube.com/embed/[videoId]\" ou \"https://player.vimeo.com/video/[videoId]?\""
+        2: "Export data"
       },
+      videoHelp: "*Authorized links: \"https://www.youtube.com/embed/[videoId]\" ou \"https://player.vimeo.com/video/[videoId]?\"",
       annotation: "Module to be completed. * Fields are required.",
       themeNum: "Theme %{index}",
       ph: {

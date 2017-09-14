@@ -88,7 +88,7 @@ const VideoForm = ({
               }}
             />
             <div className="admin-help">
-              <Translate value="administration.survey.videoHelp" />
+              <Translate value="administration.videoHelp" />
             </div>
             <div className="separator" />
           </div>
