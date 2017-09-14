@@ -158,7 +158,7 @@ class Post extends React.Component {
             <div className="sentiment-label">
               <Translate value="debate.survey.react" />
             </div>
-            <OverlayTrigger placement="top" overlay={likeTooltip}>
+            <OverlayTrigger placement="top" overlay={likeTooltip} key={`like-${post.mySentiment}`}>
               <div
                 className={post.mySentiment === 'LIKE' ? 'sentiment sentiment-active' : 'sentiment'}
                 onClick={(event) => {
@@ -168,7 +168,7 @@ class Post extends React.Component {
                 <Like size={25} />
               </div>
             </OverlayTrigger>
-            <OverlayTrigger placement="top" overlay={disagreeTooltip}>
+            <OverlayTrigger placement="top" overlay={disagreeTooltip} key={`disagree-${post.mySentiment}`}>
               <div
                 className={post.mySentiment === 'DISAGREE' ? 'sentiment sentiment-active' : 'sentiment'}
                 onClick={(event) => {
