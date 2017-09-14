@@ -66,15 +66,17 @@ export default class RichTextEditor extends React.Component<Object, RichTextEdit
   }
 
   onBlur = () => {
-    this.setState(
-      {
-        editorHasFocus: false
-      },
-      () => {
-        const rawContentState = convertToRaw(this.state.editorState.getCurrentContent());
-        this.props.updateContentState(rawContentState);
-      }
-    );
+    if (!this.props.preventOnBlur) {
+      this.setState(
+        {
+          editorHasFocus: false
+        },
+        () => {
+          const rawContentState = convertToRaw(this.state.editorState.getCurrentContent());
+          this.props.updateContentState(rawContentState);
+        }
+      );
+    }
   };
 
   onChange = (newEditorState: EditorState): void => {

@@ -46,7 +46,7 @@ class AnswerForm extends React.PureComponent {
     this.setState({ submitting: true });
     const bodyIsEmpty = !body || rawContentStateIsEmpty(body);
     if (!bodyIsEmpty) {
-      const attachments = attachmentsPlugin.getAttachments(body);
+      const attachments = attachmentsPlugin.getAttachmentsDocumentIds(body);
       const variables = {
         contentLocale: contentLocale,
         ideaId: ideaId,

@@ -2,7 +2,7 @@
 /* draft-js plugin for attachment management */
 import { convertFromRaw, convertToRaw, Entity, Modifier, RawContentState, SelectionState } from 'draft-js';
 import type { ContentBlock } from 'draft-js';
-import type { Document } from '../attachments';
+import type { Attachment, Document } from '../attachments';
 
 const ENTITY_TYPE = 'document';
 const BLOCK_TYPE = 'atomic';
@@ -44,46 +44,84 @@ const plugin = {
     return undefined;
   },
   htmlToEntity: (nodeName: string, node: NodeType): Entity | void => {
-    let defaultMimeType;
-    let externalUrl;
-    let title;
-    const isAtomicBlock = nodeName === 'div' && node.dataset && node.dataset.blockType === BLOCK_TYPE;
-    const isImage = (isAtomicBlock && node.firstChild.nodeName === 'IMG') || nodeName === 'img';
-    if (isImage) {
-      defaultMimeType = 'image/*';
-      externalUrl = node.src;
-      title = node.title;
-    } else if (isAtomicBlock) {
-      defaultMimeType = 'application/*';
-      externalUrl = node.dataset.externalUrl;
-      title = node.dataset.title;
+    const defaultImageMimeType = 'image/*';
+    const isLegacyImage = nodeName === 'img';
+    if (isLegacyImage) {
+      return Entity.create(ENTITY_TYPE, 'IMMUTABLE', {
+        externalUrl: node.src,
+        id: node.dataset.id,
+        title: node.title || '',
+        type: 'document',
+        mimeType: node.dataset.mimetype || defaultImageMimeType
+      });
     }
 
-    if (isAtomicBlock || isImage) {
+    const isAtomicBlock = nodeName === 'div' && node.dataset && node.dataset.blocktype === BLOCK_TYPE;
+    const isImage = isAtomicBlock && node.firstChild && node.firstChild.nodeName === 'IMG';
+    if (isImage) {
       return Entity.create(ENTITY_TYPE, 'IMMUTABLE', {
-        externalUrl: externalUrl,
-        id: node.dataset.id,
-        title: title || '',
+        externalUrl: node.firstChild.src,
+        id: node.firstChild.dataset.id,
+        title: node.firstChild.title || '',
         type: 'document',
-        mimeType: node.dataset.mimeType || defaultMimeType
+        mimeType: node.firstChild.dataset.mimetype || defaultImageMimeType
+      });
+    } else if (isAtomicBlock) {
+      const defaultMimeType = 'application/*';
+      return Entity.create(ENTITY_TYPE, 'IMMUTABLE', {
+        externalUrl: node.firstChild.dataset.externalurl,
+        id: node.firstChild.dataset.id,
+        title: node.firstChild.dataset.title || '',
+        type: 'document',
+        mimeType: node.firstChild.dataset.mimetype || defaultMimeType
       });
     }
 
     return undefined;
   },
-  getAttachments: (rawContentState: RawContentState): Array<String> => {
+
+  getAttachments: (rawContentState: RawContentState): Array<Attachment> => {
+    if (!rawContentState) {
+      return [];
+    }
+
     const contentState = convertFromRaw(rawContentState);
     const attachments = [];
     contentState.getBlockMap().forEach((block) => {
-      block.findEntityRanges((entityRange) => {
-        const entityKey = entityRange.entity;
-        if (entityKey) {
-          const entity = contentState.getEntity(entityKey);
-          if (entity && entity.data.id) {
-            attachments.push(entity.data.id);
+      if (block.type === 'atomic') {
+        block.findEntityRanges((entityRange) => {
+          const entityKey = entityRange.entity;
+          if (entityKey) {
+            const entity = contentState.getEntity(entityKey);
+            if (entity && entity.data.id) {
+              const attachment = {
+                entityKey: entityKey,
+                document: entity.data
+              };
+              attachments.push(attachment);
+            }
           }
-        }
-      });
+        });
+      }
+    });
+
+    return attachments;
+  },
+  getAttachmentsDocumentIds: (rawContentState: RawContentState): Array<String> => {
+    const contentState = convertFromRaw(rawContentState);
+    const attachments = [];
+    contentState.getBlockMap().forEach((block) => {
+      if (block.type === 'atomic') {
+        block.findEntityRanges((entityRange) => {
+          const entityKey = entityRange.entity;
+          if (entityKey) {
+            const entity = contentState.getEntity(entityKey);
+            if (entity && entity.data.id) {
+              attachments.push(entity.data.id);
+            }
+          }
+        });
+      }
     });
     return attachments;
   },

@@ -10,12 +10,13 @@ export type Document = {
 };
 
 export type Attachment = {
-  id: string,
+  entityKey: string,
+  id?: string,
   document: Document
 };
 
 type AttachmentsProps = {
-  attachments: [Attachment]
+  attachments: Array<Attachment>
 };
 
 const DEFAULT_FILENAME = 'file';

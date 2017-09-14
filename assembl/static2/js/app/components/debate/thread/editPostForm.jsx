@@ -12,7 +12,6 @@ import { displayAlert, inviteUserToLogin } from '../../../utils/utilityManager';
 import { getConnectedUserId } from '../../../utils/globalFunctions';
 import { convertToRawContentState, convertRawContentStateToHTML, rawContentStateIsEmpty } from '../../../utils/draftjs';
 import EditAttachments from '../../common/editAttachments';
-import type { Attachment } from '../../common/attachments';
 import RichTextEditor from '../../common/richTextEditor';
 import attachmentsPlugin from '../../common/richTextEditor/attachmentsPlugin';
 import { TextInputWithRemainingChars } from '../../common/textInputWithRemainingChars';
@@ -21,9 +20,7 @@ import { getContentLocale } from '../../../reducers/rootReducer';
 
 type EditPostFormProps = {
   contentLocale: string,
-  attachments: [Attachment],
   body: string,
-  deletePostAttachment: Function,
   id: string,
   subject: string,
   readOnly: boolean,
@@ -36,7 +33,8 @@ type EditPostFormProps = {
 
 type EditPostFormState = {
   subject: string,
-  body: RawContentState
+  body: RawContentState,
+  deletingAttachment: boolean
 };
 
 class EditPostForm extends React.PureComponent<void, EditPostFormProps, EditPostFormState> {
@@ -49,6 +47,7 @@ class EditPostForm extends React.PureComponent<void, EditPostFormProps, EditPost
     const body = props.body || '';
     this.state = {
       body: convertToRawContentState(body),
+      deletingAttachment: false,
       subject: subject
     };
   }
@@ -79,7 +78,7 @@ class EditPostForm extends React.PureComponent<void, EditPostFormProps, EditPost
     const subjectIsEmpty = this.state.subject.length === 0;
     const bodyIsEmpty = rawContentStateIsEmpty(body);
     if (!subjectIsEmpty && !bodyIsEmpty) {
-      const attachments = attachmentsPlugin.getAttachments(body);
+      const attachments = attachmentsPlugin.getAttachmentsDocumentIds(body);
       const variables = {
         contentLocale: this.props.contentLocale,
         postId: this.props.id,
@@ -113,21 +112,35 @@ class EditPostForm extends React.PureComponent<void, EditPostFormProps, EditPost
     }
   };
 
-  deleteAttachment = (attachmentId) => {
-    const variables = {
-      attachmentId: attachmentId,
-      postId: this.props.id
-    };
-    this.setState({
-      body: attachmentsPlugin.removeAttachment(this.state.body, attachmentId)
-    });
-    this.props.deletePostAttachment({ variables: variables }).then(() => {
-      this.props.refetchIdea();
-    });
+  deleteAttachment = (documentId) => {
+    // TODO: keep the list of deleted attachments
+    this.setState(
+      {
+        deletingAttachment: true
+      },
+      () => {
+        const newBody = attachmentsPlugin.removeAttachment(this.state.body, documentId);
+        // const attachmentsToDelete = [...this.state.attachmentsToDelete, documentId];
+        this.setState({
+          body: newBody
+          // attachmentsToDelete: attachmentsToDelete
+        });
+      }
+    );
+    // const variables = {
+    //   attachmentId: attachmentId,
+    //   postId: this.props.id
+    // };
+    // this.setState({
+    //   body: attachmentsPlugin.removeAttachment(this.state.body, attachmentId)
+    // });
+    // this.props.deletePostAttachment({ variables: variables }).then(() => {
+    //   this.props.refetchIdea();
+    // });
   };
 
   render() {
-    const { attachments } = this.props;
+    const attachments = attachmentsPlugin.getAttachments(this.state.body);
     return (
       <Row>
         <Col xs={12} md={12}>
@@ -156,6 +169,7 @@ class EditPostForm extends React.PureComponent<void, EditPostFormProps, EditPost
                 <Translate value="debate.edit.body" />
               </div>
               <RichTextEditor
+                preventOnBlur={this.state.deletingAttachment}
                 rawContentState={this.state.body}
                 placeholder={I18n.t('debate.edit.body')}
                 updateContentState={this.updateBody}
@@ -163,7 +177,13 @@ class EditPostForm extends React.PureComponent<void, EditPostFormProps, EditPost
                 withAttachmentButton
               />
 
-              <EditAttachments attachments={attachments} onDelete={this.deleteAttachment} />
+              <EditAttachments
+                attachments={attachments}
+                onDelete={this.deleteAttachment}
+                afterDelete={() => {
+                  return this.setState({ deletingAttachment: false });
+                }}
+              />
 
               <div className="button-container">
                 <Button className="button-cancel button-dark btn btn-default left" onClick={this.handleCancel}>

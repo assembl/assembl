@@ -7,15 +7,17 @@ describe('EditAttachments component', () => {
   it('should render the list of attachments with delete buttons', () => {
     const attachments = [
       {
-        id: 'foo',
+        entityKey: '1',
         document: {
+          id: 'foo',
           title: 'Foo',
           externalUrl: 'http://www.example.com/foo'
         }
       },
       {
-        id: 'bar',
+        entityKey: '2',
         document: {
+          id: 'bar',
           title: 'Bar.jpg',
           externalUrl: 'http://www.example.com/bar.jpg',
           mimeType: 'image/jpeg'

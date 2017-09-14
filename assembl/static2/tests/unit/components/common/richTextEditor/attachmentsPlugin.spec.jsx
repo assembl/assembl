@@ -191,6 +191,18 @@ describe('attachmentsPlugin', () => {
     const { getAttachments } = plugin;
     it('should return the list of all attachments ids', () => {
       const result = getAttachments(rcs);
+      const expected = [
+        { entityKey: '2', document: { id: '1234', title: 'Foobar', mimeType: 'application/pdf' } },
+        { entityKey: '3', document: { id: '1236', externalUrl: 'http://www.example.com/foo.png', mimeType: 'image/png' } }
+      ];
+      expect(result).toEqual(expected);
+    });
+  });
+
+  describe('getAttachmentsDocumentIds function', () => {
+    const { getAttachmentsDocumentIds } = plugin;
+    it('should return the list of all attachments ids', () => {
+      const result = getAttachmentsDocumentIds(rcs);
       const expected = ['1234', '1236'];
       expect(result).toEqual(expected);
     });

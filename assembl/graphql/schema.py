@@ -1449,6 +1449,7 @@ class UpdatePost(graphene.Mutation):
         post_id = args.get('post_id')
         post_id = int(Node.from_global_id(post_id)[1])
         post = models.Post.get(post_id)
+        cls = models.Post
 
         permissions = get_permissions(user_id, discussion_id)
         allowed = post.user_can(user_id, CrudPermissions.UPDATE, permissions)
@@ -1497,6 +1498,19 @@ class UpdatePost(graphene.Mutation):
                             title=document.title,
                             attachmentPurpose="EMBED_ATTACHMENT"
                         )
+
+                # delete attachments that has been removed
+                documents_to_delete = set(original_attachments_doc_ids) - set(attachments)
+                for document_id in documents_to_delete:
+                    with cls.default_db.no_autoflush:
+                        document = models.Document.get(document_id)
+                        post_attachment = post.db.query(
+                            models.PostAttachment
+                        ).filter_by(
+                            discussion_id=discussion_id, post_id=post_id, document_id=document_id
+                            ).first()
+                        post.db.delete(document)
+                        post.attachments.remove(post_attachment)
 
         if changed:
             post.modification_date = datetime.utcnow()
