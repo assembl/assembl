@@ -20,6 +20,7 @@
             <input type="hidden" name="assemblVersion" id="assemblVersion" value="{{ assembl_version }}" />
             <input type="hidden" name="discussion-id" id="discussion-id" value="{{ discussion.id }}" />
             <input type="hidden" name="discussion-slug" id="discussion-slug" value="{{ discussion.slug }}" />
+            <input type="hidden" name="first-visit" id="first-visit" value="{{ first_visit_to_discussion }}" />
             <script type="application/json" id="permissions-json">{{ discussion.get_user_permissions_preload(userId) |safe }}</script>
         {% endif %}
         {% if providers_json %}
@@ -29,8 +30,8 @@
             <input type='hidden' name='user-id' id='user-id' value='{{ user.id }}' />
             <input type='hidden' name='user-displayname' id='user-displayname' value='{{ user.display_name() }}' />
         {% endif %}
-        {% if user_login_id %}
-            <input type='hidden' name='user-login-id' id='user-login-id' value='{{ user_login_id }}' />
+        {% if loggedin_userid %}
+            <input type='hidden' name='user-login-id' id='user-login-id' value='{{ loggedin_userid }}' />
         {% endif %}
         {% if error %}
             <div class='hidden' id='errorMessage'>{{ error }}</div>

@@ -217,6 +217,7 @@ def react_view(request, required_permission=P_READ):
     get_route = old_context["get_route"]
     (theme_name, theme_relative_path) = get_theme_info(discussion, frontend_version=2)
     node_env = os.getenv('NODE_ENV', 'production')
+    first_visit_to_discussion = False
     common_context = {
         "user_login_id": user_login_id,
         "theme_name": theme_name,
@@ -291,7 +292,7 @@ def react_view(request, required_permission=P_READ):
         if effective_user_id != Everyone:
             user = User.get(effective_user_id)
             if user:
-                user.is_visiting_discussion(discussion.id)
+                first_visit_to_discussion = user.is_visiting_discussion(discussion.id)
     else:
         context = get_login_context(request)
         context.update(common_context)
@@ -300,8 +301,10 @@ def react_view(request, required_permission=P_READ):
     context = dict(
         request=old_context['request'],
         discussion=discussion,
+        first_visit_to_discussion = first_visit_to_discussion,
         user=old_context['user'],
         error=old_context.get('error', None),
+        loggedin_userid=loggedin_userid,
         messages=old_context.get('messages', None),
         providers_json=old_context.get('providers_json', None),
         get_route=get_route,

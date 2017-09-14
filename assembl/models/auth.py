@@ -297,9 +297,11 @@ class AgentProfile(Base):
             return self.get_status_in_discussion(discussion.id)
 
     def is_visiting_discussion(self, discussion_id):
+        """This user is visiting this discussion. Update last_visit.
+        returns whether this is the first visit"""
         from assembl.models.discussion import Discussion
         d = Discussion.get(discussion_id)
-        self.update_agent_status_last_visit(d)
+        return self.update_agent_status_last_visit(d)
 
     @classmethod
     def special_quad_patterns(cls, alias_maker, discussion_id):
@@ -860,6 +862,7 @@ class User(AgentProfile):
         agent_status.last_visit = _now
         if not agent_status.first_visit:
             agent_status.first_visit = _now
+        return agent_status.first_visit == agent_status.last_visit
 
     def update_agent_status_subscribe(self, discussion):
         # Set the AgentStatusInDiscussion
