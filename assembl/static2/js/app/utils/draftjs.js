@@ -58,7 +58,12 @@ export const convertEntriesToHTML = convertEntries(convertRawContentStateToHTML)
 
 export function rawContentStateIsEmpty(rawContentState: RawContentState): boolean {
   const contentState = convertFromRaw(rawContentState);
-  if (contentState.getPlainText().length === 0) {
+  const containAtomicBlock = (blockMap) => {
+    return blockMap.some((b) => {
+      return b.type === 'atomic';
+    });
+  };
+  if (contentState.getPlainText().length === 0 && !containAtomicBlock(contentState.getBlockMap())) {
     return true;
   }
 
