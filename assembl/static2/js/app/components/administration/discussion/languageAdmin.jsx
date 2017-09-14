@@ -32,6 +32,11 @@ class LanguageSection extends React.Component {
     };
   }
 
+  componentWillMount() {
+    //Hide the admin language menu
+    this.props.toggleLanguageMenu(false);
+  }
+
   componentWillReceiveProps(nextProps){
     //Manage the change in interface locale, causing language names to change
     const currentLocale = this.props.i18n.locale;

@@ -61,20 +61,27 @@ const DebateChild = (props) => {
 };
 
 const AdminChild = (props) => {
-  switch (props.params.phase) {
-  case 'discussion':
-    return <DiscussionAdmin section={props.location.query.section} />
-  case 'survey':
-    return <SurveyAdmin thematicId={props.location.query.thematic} section={props.location.query.section} />;
-  case 'thread':
-    return <ThreadAdmin />;
-  case 'twoColumns':
-    return <TwoColumnsAdmin />;
-  case 'tokenVote':
-    return <TokenVoteAdmin />;
-  default:
-    return <ThreadAdmin />;
+
+  const _doAdminChild = (props) => {
+    switch (props.params.phase) {
+    case 'discussion':
+      return <DiscussionAdmin section={props.location.query.section} />
+    case 'survey':
+      return <SurveyAdmin thematicId={props.location.query.thematic} section={props.location.query.section} />;
+    case 'thread':
+      return <ThreadAdmin />;
+    case 'twoColumns':
+      return <TwoColumnsAdmin />;
+    case 'tokenVote':
+      return <TokenVoteAdmin />;
+    default:
+      return <ThreadAdmin />;
+    }
   }
+
+  const child = _doAdminChild(props);
+  const withProps = React.cloneElement(child, {...props}, null);
+  return withProps;
 };
 
 export default [

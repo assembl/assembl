@@ -23,6 +23,10 @@ class QuestionSection extends React.Component {
     }
   }
 
+  componentWillMount() {
+    this.props.toggleLanguageMenu(true);
+  }
+
   render() {
     const { i18n, selectedLocale, thematics } = this.props;
     const selectedThematicId = this.state.selectedThematicId;

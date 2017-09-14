@@ -11,6 +11,7 @@ import Menu from '../components/administration/menu';
 import LanguageMenu from '../components/administration/languageMenu';
 import SaveButton from '../components/administration/saveButton';
 import ThematicsQuery from '../graphql/ThematicsQuery.graphql';
+import getDiscussionPreferenceLanguage from '../graphql/DiscussionPreferenceLanguage.graphql';
 import { convertEntriesToRawContentState } from '../utils/draftjs';
 
 export function convertVideoDescriptions(thematics) {
@@ -38,9 +39,13 @@ export function convertVideoDescriptions(thematics) {
 }
 
 class Administration extends React.Component {
-  constructor() {
-    super();
-    this.putThematicsInStore.bind(this);
+  constructor(props) {
+    super(props);
+    this.putThematicsInStore = this.putThematicsInStore.bind(this);
+    this.toggleLanguageMenu = this.toggleLanguageMenu.bind(this);
+    this.state = {
+      showLanguageMenu: true
+    };
   }
 
   componentDidMount() {
@@ -54,6 +59,12 @@ class Administration extends React.Component {
     }
   }
 
+  toggleLanguageMenu(state) {
+    this.setState({
+      showLanguageMenu: state
+    });
+  }
+
   putThematicsInStore(data) {
     // filter with the same query to remove stuff like __typename from the structure
     const filteredThematics = filter(ThematicsQuery, data);
@@ -65,6 +76,12 @@ class Administration extends React.Component {
     const { children, data, debate, i18n, params } = this.props;
     const { phase } = params;
     const { timeline } = this.props.debate.debateData;
+    const childrenWithProps = React.Children.map(children, (child) => {
+      return React.cloneElement(child, {
+        toggleLanguageMenu: this.toggleLanguageMenu
+      });
+    });
+
     return (
       <div className="administration">
         <div className="save-bar">
@@ -73,7 +90,10 @@ class Administration extends React.Component {
               <Row>
                 <Col xs={12} md={3} />
                 <Col xs={12} md={8}>
-                  <SaveButton refetchThematics={data.refetch} />
+                  <SaveButton
+                    refetchThematics={data.refetch}
+                    languagePreferences={data.discussionLanguagePreferences}
+                  />
                 </Col>
                 <Col xs={12} md={1} />
               </Row>
@@ -94,10 +114,10 @@ class Administration extends React.Component {
                     <Translate value="administration.noTimeline" />
                   </div>
                   : null}
-                {children}
+                {childrenWithProps}
               </Col>
               <Col xs={12} md={1}>
-                <LanguageMenu />
+                <LanguageMenu visibility={this.state.showLanguageMenu}/>
               </Col>
             </Row>
           </Grid>
@@ -127,5 +147,12 @@ export default compose(
   graphql(ThematicsQuery, {
     options: { variables: { identifier: 'survey' } }
   }),
+  // graphql(getDiscussionPreferenceLanguage, {
+  //   options: (props) => {
+  //     variables: {
+  //       inLocale: props.i18n.locale
+  //     }
+  //   }
+  // }),
   withLoadingIndicator()
 )(Administration);
