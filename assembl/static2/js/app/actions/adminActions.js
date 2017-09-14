@@ -95,8 +95,12 @@ export const updateVideoTitle = (id, locale, value) => {
 
 export const addLanguagePreference = (locale) => {
   return { locale: locale, selected: true, type: 'ADD_LANGUAGE_PREFERENCE' };
-}
+};
 
 export const removeLanguagePreference = (locale) => {
   return { locale: locale, selected: false, type: 'REMOVE_LANGUAGE_PREFERENCE' };
-}
+};
+
+export const languagePreferencesHasChanged = (state) => {
+  return { state: state, type: 'LANGUAGE_PREFERENCE_HAS_CHANGED' };
+};

@@ -165,7 +165,6 @@ const hasLocale = (l, arr) => {
 };
 
 export const languagePreferences = (state = List(), action) => {
-  
   switch (action.type) {
     case 'ADD_LANGUAGE_PREFERENCE':
       //Language preferences can be added in different components
@@ -184,10 +183,21 @@ export const languagePreferences = (state = List(), action) => {
   }
 };
 
+export const discussionLanguagePreferencesHasChanged = (state = false, action) => {
+  switch (action.type) {
+    case 'LANGUAGE_PREFERENCE_HAS_CHANGED':
+      return action.state;
+    default:
+      return state;
+  }
+};
+
+
 export default combineReducers({
   selectedLocale: selectedLocale,
   thematicsHaveChanged: thematicsHaveChanged,
   thematicsInOrder: thematicsInOrder,
   thematicsById: thematicsById,
-  discussionLanguagePreferences: languagePreferences
+  discussionLanguagePreferences: languagePreferences,
+  discussionLanguagePreferencesHasChanged: discussionLanguagePreferencesHasChanged 
 });
