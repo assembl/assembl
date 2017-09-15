@@ -45,7 +45,8 @@ const plugin = {
   },
   htmlToEntity: (nodeName: string, node: NodeType, createEntity: Function): Entity | void => {
     const defaultImageMimeType = 'image/*';
-    const isLegacyImage = nodeName === 'img';
+    const isLegacyImage =
+      nodeName === 'img' && (node.parentNode && node.parentNode.dataset && node.parentNode.dataset.blocktype !== BLOCK_TYPE);
     if (isLegacyImage) {
       return createEntity(ENTITY_TYPE, 'IMMUTABLE', {
         externalUrl: node.src,
