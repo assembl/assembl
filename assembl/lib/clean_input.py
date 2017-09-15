@@ -42,7 +42,7 @@ VALID_TAGS = ['a',
 VALID_ATTRIBUTES = ['href',  # For hyperlinks
                     'alt',  # For accessiblity
                     'colspan', 'headers', 'abbr',
-                    'scope', 'sorted'  # For tables
+                    'scope', 'sorted',  # For tables
                     # we need these for draft-js richtexteditor:
                     'title', 'src', 'width', 'data-id', 'data-mimetype',
                     'data-blocktype', 'data-externalurl', 'data-title',
