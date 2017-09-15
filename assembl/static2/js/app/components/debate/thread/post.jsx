@@ -43,7 +43,8 @@ class Post extends React.PureComponent {
     this.state = {
       showAnswerForm: false,
       mode: 'view',
-      showOriginal: false
+      showOriginal: false,
+      contentLocale: undefined
     };
   }
 
@@ -91,6 +92,10 @@ class Post extends React.PureComponent {
 
   goBackToViewMode = () => {
     this.setState({ mode: 'view' }, this.props.measureTreeHeight);
+  };
+
+  updateLocalContentLocale = (value) => {
+    return this.setState({ contentLocale: value });
   };
 
   getBodyAndSubject = () => {
@@ -253,6 +258,8 @@ class Post extends React.PureComponent {
                       return { showOriginal: !state.showOriginal };
                     });
                   }}
+                  localContentLocale={this.state.localContentLocale}
+                  updateLocalContentLocale={this.updateLocalContentLocale}
                 />
                 : null}
               <h3 className="dark-title-3">

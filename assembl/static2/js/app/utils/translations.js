@@ -214,6 +214,11 @@ const Translations = {
       thread: {
         messageTranslatedFrom: "Ce message a été traduit du texte %{language}.",
         messageOriginallyIn: "Ce message a été rédigé en %{language}.",
+        translateAllMessagesIn: "Je souhaite traduire tous les messages rédigés en %{language}.",
+        translateOnlyThisMessage: "Je souhaite traduire ce message.",
+        chooseLanguagePh: "Veuillez choisir la langue",
+        translateCancel: "Annuler",
+        translateSubmit: "Valider",
         postDeletedByAdmin: "Ce message a été supprimé par l'administrateur du débat.",
         postDeletedByUser: "Ce message a été supprimé par son auteur.",
         postEdited: "modifié",
@@ -527,6 +532,11 @@ const Translations = {
       thread: {
         messageTranslatedFrom: "This message has been translated from %{language}.",
         messageOriginallyIn: "This message has been written in %{language}",
+        translateAllMessagesIn: "Translate all messages posted in %{language}.",
+        translateOnlyThisMessage: "Translate only this message.",
+        chooseLanguagePh: "Please choose the language",
+        translateCancel: "Cancel",
+        translateSubmit: "Validate",
         postDeletedByAdmin: "This message has been deleted by the community manager.",
         postDeletedByUser: "This message has been deleted by the author.",
         postEdited: "edited",
