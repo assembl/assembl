@@ -43,11 +43,11 @@ const plugin = {
 
     return undefined;
   },
-  htmlToEntity: (nodeName: string, node: NodeType): Entity | void => {
+  htmlToEntity: (nodeName: string, node: NodeType, createEntity: Function): Entity | void => {
     const defaultImageMimeType = 'image/*';
     const isLegacyImage = nodeName === 'img';
     if (isLegacyImage) {
-      return Entity.create(ENTITY_TYPE, 'IMMUTABLE', {
+      return createEntity(ENTITY_TYPE, 'IMMUTABLE', {
         externalUrl: node.src,
         id: node.dataset.id,
         title: node.title || '',
@@ -59,7 +59,7 @@ const plugin = {
     const isAtomicBlock = nodeName === 'div' && node.dataset && node.dataset.blocktype === BLOCK_TYPE;
     const isImage = isAtomicBlock && node.firstChild && node.firstChild.nodeName === 'IMG';
     if (isImage) {
-      return Entity.create(ENTITY_TYPE, 'IMMUTABLE', {
+      return createEntity(ENTITY_TYPE, 'IMMUTABLE', {
         externalUrl: node.firstChild.src,
         id: node.firstChild.dataset.id,
         title: node.firstChild.title || '',
@@ -68,7 +68,7 @@ const plugin = {
       });
     } else if (isAtomicBlock) {
       const defaultMimeType = 'application/*';
-      return Entity.create(ENTITY_TYPE, 'IMMUTABLE', {
+      return createEntity(ENTITY_TYPE, 'IMMUTABLE', {
         externalUrl: node.firstChild.dataset.externalurl,
         id: node.firstChild.dataset.id,
         title: node.firstChild.dataset.title || '',

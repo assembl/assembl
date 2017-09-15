@@ -71,7 +71,7 @@
     "babel-runtime": "^6.26.0",
     "bootstrap": "^3.3.7",
     "classnames": "^2.2.5",
-    "draft-convert": "^1.4.8",
+    "draft-convert": "^2",
     "draft-js": "^0.10.1",
     "graphql": "^0.10.5",
     "graphql-anywhere": "^3.1.0",
