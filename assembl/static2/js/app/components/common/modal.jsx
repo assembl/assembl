@@ -6,6 +6,7 @@ class AssemblModal extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      content: null,
       showModal: false
     };
     this.close = this.close.bind(this);
@@ -32,7 +33,15 @@ class AssemblModal extends React.Component {
     window.location = this.url;
   }
   render() {
-    const { title, body, footer, footerTxt, button } = this.state;
+    const { content, title, body, footer, footerTxt, button } = this.state;
+    if (content) {
+      return (
+        <Modal show={this.state.showModal} onHide={this.close}>
+          {content}
+        </Modal>
+      );
+    }
+
     return (
       <Modal show={this.state.showModal} onHide={this.close}>
         <Modal.Header closeButton>
