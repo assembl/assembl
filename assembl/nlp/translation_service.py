@@ -518,8 +518,8 @@ class GoogleTranslationService(DummyGoogleTranslationService):
             return Locale.UNDEFINED, {Locale.UNDEFINED: 1}
         if not self.client or self.strlen_nourl(text) >= SECURE_IDENTIFICATION_LIMIT:
             # Save money by avoiding the identification step when the text is long enough.
-            return super(GoogleTranslationService, (self).identify(
-                text, expected_locales, constrain_locale_threshold))
+            return super(GoogleTranslationService, self).identify(
+                text, expected_locales, constrain_locale_threshold)
         r = self.client.detections().list(q=text).execute()
         r = r[u"detections"][0]
         # small correction for expected languages, as this service is deemed reliable.
