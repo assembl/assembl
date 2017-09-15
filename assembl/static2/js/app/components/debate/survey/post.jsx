@@ -52,7 +52,6 @@ class Post extends React.Component {
     }
   }
   handleAddSentiment(target, type) {
-    const { refetchTheme } = this.props;
     const { id, sentimentCounts, mySentiment } = this.props.post;
     this.props
       .addSentiment({
@@ -78,16 +77,11 @@ class Post extends React.Component {
           }
         }
       })
-      .then(() => {
-        refetchTheme();
-        target.setAttribute('class', 'sentiment sentiment-active');
-      })
       .catch((error) => {
         displayAlert('danger', `${error}`);
       });
   }
-  handleDeleteSentiment(target) {
-    const { refetchTheme } = this.props;
+  handleDeleteSentiment() {
     const { id, sentimentCounts, mySentiment } = this.props.post;
     this.props
       .deleteSentiment({
@@ -109,10 +103,6 @@ class Post extends React.Component {
             __typename: 'DeleteSentiment'
           }
         }
-      })
-      .then(() => {
-        refetchTheme();
-        target.setAttribute('class', 'sentiment');
       })
       .catch((error) => {
         displayAlert('danger', `${error}`);
@@ -158,7 +148,7 @@ class Post extends React.Component {
             <div className="sentiment-label">
               <Translate value="debate.survey.react" />
             </div>
-            <OverlayTrigger placement="top" overlay={likeTooltip} key={`like-${post.mySentiment}`}>
+            <OverlayTrigger placement="top" overlay={likeTooltip}>
               <div
                 className={post.mySentiment === 'LIKE' ? 'sentiment sentiment-active' : 'sentiment'}
                 onClick={(event) => {
@@ -168,7 +158,7 @@ class Post extends React.Component {
                 <Like size={25} />
               </div>
             </OverlayTrigger>
-            <OverlayTrigger placement="top" overlay={disagreeTooltip} key={`disagree-${post.mySentiment}`}>
+            <OverlayTrigger placement="top" overlay={disagreeTooltip}>
               <div
                 className={post.mySentiment === 'DISAGREE' ? 'sentiment sentiment-active' : 'sentiment'}
                 onClick={(event) => {
