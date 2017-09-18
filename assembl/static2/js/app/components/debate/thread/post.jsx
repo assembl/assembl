@@ -64,7 +64,6 @@ class Post extends React.PureComponent {
       window.scrollTo({ top: txtareaOffset - this.answerTextarea.clientHeight, left: 0, behavior: 'smooth' });
     }, 200);
   };
-
   hideAnswerForm = () => {
     this.setState({ showAnswerForm: false }, this.props.measureTreeHeight);
   };

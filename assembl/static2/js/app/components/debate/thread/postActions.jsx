@@ -4,6 +4,7 @@ import { Translate } from 'react-redux-i18n';
 import { OverlayTrigger } from 'react-bootstrap';
 import { MEDIUM_SCREEN_WIDTH } from '../../../constants';
 import { answerTooltip, shareTooltip } from '../../common/tooltips';
+import { Link } from 'react-router';
 
 import getOverflowMenuForPost from './overflowMenu';
 import { getConnectedUserId } from '../../../utils/globalFunctions';
@@ -12,6 +13,8 @@ import Permissions, { connectedUserCan } from '../../../utils/permissions';
 import Sentiments from './sentiments';
 import getSentimentStats from './sentimentStats';
 import sentimentDefinitions from './sentimentDefinitions';
+import { displayModal, closeModal } from '../../../utils/utilityManager';
+import { get } from '../../../utils/routeMap';
 
 class PostActions extends React.Component {
   constructor(props) {
@@ -55,6 +58,17 @@ class PostActions extends React.Component {
       (connectedUserId === String(creatorUserId) && connectedUserCan(Permissions.DELETE_MY_POST)) ||
       connectedUserCan(Permissions.DELETE_POST);
     const userCanEditThisMessage = connectedUserId === String(creatorUserId) && connectedUserCan(Permissions.EDIT_MY_POST);
+    const confirmModal = (post) => {
+      const title = 'Share this post';
+      // Hardcode url for testing
+      const url = `${get('debate', { slug: 'ai-consultation', phase: 'thread' })}${get('theme', {
+        themeId: 'SWRlYTo2Mzg='
+      })}/#UG9zdDoyMDc5`;
+      const body = <input type="text" value={url} />;
+      const footer = false;
+      const footerTxt = null;
+      return displayModal(title, body, footer, footerTxt);
+    };
     let overflowMenu = null;
     if (userCanDeleteThisMessage || userCanEditThisMessage) {
       overflowMenu = (
@@ -82,7 +96,12 @@ class PostActions extends React.Component {
               <span className="assembl-icon-back-arrow color" />
             </OverlayTrigger>
           </div>
-          <div className="post-action">
+          <div
+            className="post-action"
+            onClick={() => {
+              return confirmModal(postId);
+            }}
+          >
             <OverlayTrigger placement={this.state.screenWidth >= MEDIUM_SCREEN_WIDTH ? 'right' : 'top'} overlay={shareTooltip}>
               <span className="assembl-icon-share color" />
             </OverlayTrigger>
