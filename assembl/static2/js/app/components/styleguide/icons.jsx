@@ -117,8 +117,8 @@ class Icons extends React.Component {
               <MoreInfo size={25} />
             </div>
           </div>
-          <div>
-            <Doughnut like={123} disagree={12} />
+          <div style={{width: 100}}>
+            <Doughnut elements={[{color: 'green', count: 123}, {color: 'red', count: 12}]} />
           </div>
           <div>
             <Pointer />
@@ -187,7 +187,9 @@ class Icons extends React.Component {
           </pre>
           <pre>
             import Doughnut from './components/svg/Doughnut'
-            <div>&lt;Doughnut like=&#123;123&#125; disagree=&#123;12&#125; /&gt;</div>
+            <div>&lt;div style=&#x7b;&#x7b;width: 100}}&gt;</div>
+              <div style={{paddingLeft:`${20}px`}}>&lt;Doughnut elements=&#x7b;[&#x7b;color: 'green', count: 123}, &#x7b;color: 'red', count: 12}]} /&gt;</div>
+            <div>&lt;/div&gt;</div>
           </pre>
           <pre>
             <div>&lt;Link to="http://www.facebook.com" target="_blank"&gt;</div>
