@@ -36,12 +36,14 @@ class PostTranslate extends React.Component<void, PostTranslateProps, PostTransl
   openModal = () => {
     const { originalBodyLocale, updateGlobalContentLocale, updateLocalContentLocale } = this.props;
     const setIsTranslatedThen = (callback) => {
-      return () => {
+      return (value) => {
         this.setState(
           {
             isTranslated: true
           },
-          callback
+          () => {
+            return callback(value);
+          }
         );
       };
     };
