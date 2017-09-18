@@ -1605,7 +1605,7 @@ def phase1_csv_export(request):
 
                 for sentiment in post.sentiments:
                     row[SENTIMENT_ACTOR_NAME] = sentiment.actor.name
-                    row[SENTIMENT_ACTOR_EMAIL] = sentiment.actor.preferred_email
+                    row[SENTIMENT_ACTOR_EMAIL] = sentiment.actor.get_preferred_email()
                     row[SENTIMENT_CREATION_DATE] = format_date(
                         sentiment.creation_date)
                     writer.writerow(convert_to_utf8(row))
