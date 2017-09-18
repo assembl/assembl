@@ -1,6 +1,7 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import { Translate } from 'react-redux-i18n';
-import { compose, graphql } from 'react-apollo';
+import { compose, graphql, withApollo } from 'react-apollo';
 import { Row, Col } from 'react-bootstrap';
 
 import { getDomElementOffset, hashLinkScroll } from '../../../utils/globalFunctions';
@@ -13,6 +14,7 @@ import EditPostForm from './editPostForm';
 import DeletedPost from './deletedPost';
 import PostQuery from '../../../graphql/PostQuery.graphql';
 import withLoadingIndicator from '../../../components/common/withLoadingIndicator';
+import withContentLocale from '../../../components/common/withContentLocale';
 import { DeletedPublicationStates, PublicationStates } from '../../../constants';
 import Nuggets from './nuggets';
 
@@ -43,8 +45,7 @@ class Post extends React.PureComponent {
     this.state = {
       showAnswerForm: false,
       mode: 'view',
-      showOriginal: false,
-      contentLocale: undefined
+      showOriginal: false
     };
   }
 
@@ -92,10 +93,6 @@ class Post extends React.PureComponent {
 
   goBackToViewMode = () => {
     this.setState({ mode: 'view' }, this.props.measureTreeHeight);
-  };
-
-  updateLocalContentLocale = (value) => {
-    return this.setState({ contentLocale: value });
   };
 
   getBodyAndSubject = () => {
@@ -156,7 +153,9 @@ class Post extends React.PureComponent {
       routerParams,
       debateData,
       nuggetsManager,
-      rowIndex
+      rowIndex,
+      localContentLocale,
+      updateLocalContentLocale
     } = this.props;
     // creationDate is retrieved by IdeaWithPosts query, not PostQuery
 
@@ -258,8 +257,8 @@ class Post extends React.PureComponent {
                       return { showOriginal: !state.showOriginal };
                     });
                   }}
-                  localContentLocale={this.state.localContentLocale}
-                  updateLocalContentLocale={this.updateLocalContentLocale}
+                  localContentLocale={localContentLocale}
+                  updateLocalContentLocale={updateLocalContentLocale}
                 />
                 : null}
               <h3 className="dark-title-3">
@@ -324,4 +323,8 @@ class Post extends React.PureComponent {
   }
 }
 
-export default compose(graphql(PostQuery), withLoadingIndicator())(Post);
+const mapStateToProps = (state) => {
+  return { globalContentLocale: state.contentLocale };
+};
+
+export default compose(connect(mapStateToProps), withContentLocale, graphql(PostQuery), withLoadingIndicator(), withApollo)(Post);
