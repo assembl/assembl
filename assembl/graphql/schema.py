@@ -429,6 +429,7 @@ class PostInterface(SQLAlchemyInterface):
     body_mime_type = graphene.String(required=True)
     publication_state = graphene.Field(type=PublicationStates)
     attachments = graphene.List(PostAttachment)
+    original_locale = graphene.String()
 
     def resolve_subject(self, args, context, info):
         # Use self.subject and not self.get_subject() because we still
@@ -530,6 +531,13 @@ class PostInterface(SQLAlchemyInterface):
 
     def resolve_publication_state(self, args, context, info):
         return self.publication_state.name
+
+    def resolve_original_locale(self, args, context, info):
+        entry = self.body.first_original()
+        if entry:
+            return entry.locale_code
+
+        return u''
 
 
 class Post(SecureObjectType, SQLAlchemyObjectType):
