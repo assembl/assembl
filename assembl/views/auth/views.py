@@ -45,7 +45,7 @@ from assembl.auth.password import (
     password_change_token, Validity, get_data_token_time)
 from assembl.auth.util import (
     discussion_from_request, roles_with_permissions, maybe_auto_subscribe,
-    get_permissions, effective_userid)
+    get_permissions, effective_userid, get_roles)
 from ...lib import config
 from assembl.lib.sqla_types import EmailString
 from assembl.lib.utils import normalize_email_name, get_global_base_url
@@ -547,10 +547,9 @@ def assembl_login_complete_view(request):
         if (discussion.subscribe_to_notifications_on_signup and
                 discussion.preferences['landing_page'] and
                 not discussion.preferences['shared_login'] and
-                not user.get_status_in_discussion(discussion.id)):
-            redirect_url = request.route_path("general_react_page",
-                                                  discussion_slug=discussion.slug,
-                                                  extra_path="join")
+                not get_roles(user.id, discussion.id)):
+            redirect_url = request.route_path(
+                "join", discussion_slug=discussion.slug)
             return HTTPFound(redirect_url)
         else:
             maybe_auto_subscribe(user, discussion)
