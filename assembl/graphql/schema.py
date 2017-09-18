@@ -1432,8 +1432,15 @@ class UpdatePost(graphene.Mutation):
         original_subject_entry = post.subject.first_original()
         # subject is not required, be careful to not remove it if not specified
         if subject and subject != original_subject_entry.value:
-            post.subject.add_value(subject, original_subject_entry.locale_code)
             changed = True
+            post.subject.add_value(subject, original_subject_entry.locale_code)
+            # Edit subject for all descendants
+            children = post.children[:]
+            new_subject = u'Re: ' + restrip_pat.sub('', subject).strip()
+            while children:
+                child = children.pop()
+                children.extend(child.children)
+                child.subject.add_value(new_subject, original_subject_entry.locale_code)
 
         original_body_entry = post.body.first_original()
         if body != original_body_entry.value:

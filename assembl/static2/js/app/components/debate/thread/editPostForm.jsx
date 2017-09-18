@@ -1,6 +1,6 @@
 // @flow
 import React from 'react';
-import { compose, graphql } from 'react-apollo';
+import { compose, graphql, withApollo } from 'react-apollo';
 import { connect } from 'react-redux';
 import { Row, Col, FormGroup, Button } from 'react-bootstrap';
 import { Translate, I18n } from 'react-redux-i18n';
@@ -23,7 +23,8 @@ type EditPostFormProps = {
   readOnly: boolean,
   modifiedOriginalSubject: string,
   goBackToViewMode: Function,
-  mutate: Function
+  mutate: Function,
+  client: Object
 };
 
 type EditPostFormState = {
@@ -77,11 +78,19 @@ class EditPostForm extends React.PureComponent<void, EditPostFormProps, EditPost
         body: convertRawContentStateToHTML(this.state.body)
       };
       displayAlert('success', I18n.t('loading.wait'));
+      const oldSubject = this.props.subject;
       this.props
         .mutate({ variables: variables })
         .then(() => {
           displayAlert('success', I18n.t('debate.thread.postSuccess'));
           this.props.goBackToViewMode();
+          if (oldSubject !== this.state.subject) {
+            // If we edited the subject, we need to reload all descendants posts,
+            // we do this by calling resetStore which will refetch all mounted queries.
+            // Descendants are actually a subset of mounted queries, so we overfetch here.
+            // This is fine, editing a subject should be a rare action.
+            this.props.client.resetStore();
+          }
         })
         .catch((error) => {
           displayAlert('danger', error);
@@ -149,4 +158,4 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default compose(connect(mapStateToProps), graphql(updatePostMutation))(EditPostForm);
+export default compose(connect(mapStateToProps), graphql(updatePostMutation), withApollo)(EditPostForm);
