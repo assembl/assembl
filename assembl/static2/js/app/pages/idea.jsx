@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { Translate } from 'react-redux-i18n';
 import { compose, graphql } from 'react-apollo';
 import { Grid } from 'react-bootstrap';
+import { Link } from 'react-router';
 
 import Header from '../components/debate/common/header';
 import IdeaQuery from '../graphql/IdeaQuery.graphql';
@@ -17,6 +18,7 @@ import { getConnectedUserId } from '../utils/globalFunctions';
 import Announcement from './../components/debate/thread/announcement';
 import TopPostForm from '../components/debate/thread/topPostForm';
 import { getContentLocale } from '../reducers/rootReducer';
+import { get } from '../utils/routeMap';
 
 export const transformPosts = (edges, additionnalProps = {}) => {
   const postsByParent = {};
@@ -75,6 +77,13 @@ class Idea extends React.Component {
       <div className="idea">
         <Header title={idea.title} longTitle={idea.longTitle} imgUrl={idea.imgUrl} identifier="thread" />
         <section className="post-section">
+          <Link
+            to={`${get('debate', { slug: 'ai-consultation', phase: 'thread' })}${get('theme', {
+              themeId: idea.id
+            })}/#UG9zdDoyMDc5`}
+          >
+            LIEN TEST{' '}
+          </Link>
           {!ideaWithPostsData.loading &&
             idea.announcementBody &&
             <Grid fluid className="background-grey">
