@@ -116,8 +116,8 @@ class ChooseContentLocaleForm extends React.Component<*, ChooseContentLocaleForm
               </option>
               {availableLanguages.map((lang) => {
                 return (
-                  <option value={lang.locale}>
-                    {lang.name}
+                  <option key={`locale-${lang.localeCode}`} value={lang.localeCode}>
+                    {lang.label}
                   </option>
                 );
               })}
