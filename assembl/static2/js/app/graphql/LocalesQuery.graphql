@@ -1,5 +1,5 @@
-query {
-  locales(lang: "fr") {
+query LocalesQuery($lang: String!) {
+  locales(lang: $lang) {
     localeCode
     label
   }

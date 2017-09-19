@@ -11,6 +11,7 @@ import { setContentLocale } from '../../../actions/contentLocaleActions';
 
 type PostTranslateProps = {
   id: string,
+  lang: string,
   originalBodyLocale: string,
   showOriginal: boolean,
   toggle: Function,
@@ -34,7 +35,7 @@ class PostTranslate extends React.Component<void, PostTranslateProps, PostTransl
   }
 
   openModal = () => {
-    const { originalBodyLocale, updateGlobalContentLocale, updateLocalContentLocale } = this.props;
+    const { lang, originalBodyLocale, updateGlobalContentLocale, updateLocalContentLocale } = this.props;
     const setIsTranslatedThen = (callback) => {
       return (value) => {
         this.setState(
@@ -49,6 +50,7 @@ class PostTranslate extends React.Component<void, PostTranslateProps, PostTransl
     };
     const content = (
       <ChooseContentLocaleForm
+        lang={lang}
         originalLocale={originalBodyLocale}
         updateGlobalContentLocale={setIsTranslatedThen(updateGlobalContentLocale)}
         updateLocalContentLocale={setIsTranslatedThen(updateLocalContentLocale)}
@@ -83,6 +85,12 @@ class PostTranslate extends React.Component<void, PostTranslateProps, PostTransl
   }
 }
 
+const mapStateToProps = (state) => {
+  return {
+    lang: state.i18n.locale
+  };
+};
+
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     updateGlobalContentLocale: (value) => {
@@ -91,4 +99,4 @@ const mapDispatchToProps = (dispatch, ownProps) => {
   };
 };
 
-export default connect(null, mapDispatchToProps)(PostTranslate);
+export default connect(mapStateToProps, mapDispatchToProps)(PostTranslate);
