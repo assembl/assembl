@@ -2,6 +2,13 @@
   font-size: $font-size-xs;
   font-family: $font-family6;
 }
+
+.choose-content-locale-form {
+  .modal-body {
+    text-align: left !important;
+  }
+}
+
 .proposals {
   .box {
     border-bottom: $navbar-border;

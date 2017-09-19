@@ -75,7 +75,7 @@ class ChooseContentLocaleForm extends React.Component<*, ChooseContentLocaleForm
       return lang.localeCode !== originalLocale;
     });
     return (
-      <div>
+      <div className="choose-content-locale-form">
         <Modal.Header closeButton />
         <Modal.Body>
           <FormGroup>
