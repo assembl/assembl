@@ -5,6 +5,7 @@ import { Grid, Row, Col } from 'react-bootstrap';
 class Video extends React.Component {
   render() {
     const { title, descriptionTop, descriptionBottom, descriptionSide, htmlCode } = this.props;
+    const validDescriptionSide = !!(descriptionSide && descriptionSide !== '<p></p>');
     return (
       <section className="video-section relative">
         <Grid fluid className="background-light">
@@ -18,7 +19,7 @@ class Video extends React.Component {
             <div className="content-section">
               {descriptionTop &&
                 <Row>
-                  <Col xs={12} sm={descriptionSide ? 6 : 8} smOffset={descriptionSide ? 4 : 2}>
+                  <Col xs={12} sm={validDescriptionSide ? 6 : 8} smOffset={validDescriptionSide ? 4 : 2}>
                     <div
                       className="video-description-layer video-description-top"
                       dangerouslySetInnerHTML={{ __html: descriptionTop }}
@@ -26,7 +27,7 @@ class Video extends React.Component {
                   </Col>
                 </Row>}
               <Row>
-                {descriptionSide &&
+                {validDescriptionSide &&
                   <Col xs={12} sm={3} smOffset={1}>
                     <div className="video-description">
                       <div>
@@ -37,7 +38,7 @@ class Video extends React.Component {
                     </div>
                   </Col>}
                 {htmlCode &&
-                  <Col xs={12} sm={descriptionSide ? 6 : 8} smOffset={descriptionSide ? 0 : 2}>
+                  <Col xs={12} sm={validDescriptionSide ? 6 : 8} smOffset={validDescriptionSide ? 0 : 2}>
                     <div className="video-container" id="video-vid">
                       <iframe src={htmlCode} frameBorder="0" width="560" height="315" title="video" />
                     </div>
@@ -45,7 +46,7 @@ class Video extends React.Component {
               </Row>
               <Row>
                 {descriptionBottom &&
-                  <Col xs={12} sm={descriptionSide ? 6 : 8} smOffset={descriptionSide ? 4 : 2}>
+                  <Col xs={12} sm={validDescriptionSide ? 6 : 8} smOffset={validDescriptionSide ? 4 : 2}>
                     <div
                       className="video-description-layer video-description-bottom"
                       dangerouslySetInnerHTML={{ __html: descriptionBottom }}
