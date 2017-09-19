@@ -112,7 +112,7 @@ class ChooseContentLocaleForm extends React.Component<*, ChooseContentLocaleForm
               value={selectedLocale}
             >
               <option value="select">
-                <Translate value="debate.thread.chooseLanguagePh" />
+                {I18n.t('debate.thread.chooseLanguagePh')}
               </option>
               {availableLanguages.map((lang) => {
                 return (
