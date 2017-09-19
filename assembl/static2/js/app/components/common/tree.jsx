@@ -33,6 +33,9 @@ function overscanIndicesGetter({ cellCount, overscanCellsCount, stopIndex }) {
 
 const delayedRecomputeRowHeights = [null, null]; // [timeoutId, minRowIndex from which to recompute row heights]
 
+const rowHeightRecomputed = document.createEvent('Event'); // we can't use 'new Event()' because ie
+rowHeightRecomputed.initEvent('rowHeightRecomputed', false, false);
+
 const resizeTreeHeight = (rowIndex, delay = 0) => {
   // This function will be called by each post rendered, so we delay the
   // recomputation until no post are rendered in 200ms to avoid unnecessary lag.
@@ -45,6 +48,7 @@ const resizeTreeHeight = (rowIndex, delay = 0) => {
     delayedRecomputeRowHeights[0] = setTimeout(() => {
       if (globalList) {
         globalList.recomputeRowHeights(delayedRecomputeRowHeights[1]);
+        document.dispatchEvent(rowHeightRecomputed);
         // recompute height only for rows (top post) starting at rowIndex
       }
       delayedRecomputeRowHeights[0] = null;
@@ -247,6 +251,7 @@ class Tree extends React.Component {
               onResize={() => {
                 cache.clearAll();
                 globalList.recomputeRowHeights();
+                document.dispatchEvent(rowHeightRecomputed);
               }}
             >
               {({ width }) => {
