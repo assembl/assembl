@@ -60,6 +60,7 @@ class SwitchButton extends React.Component<Object, Props, any> {
     }
 
     const props = {
+      defaultChecked: this.props.defaultChecked,
       disabled: this.props.disabled,
       onChange: this.props.onChange,
       name: this.props.name,
