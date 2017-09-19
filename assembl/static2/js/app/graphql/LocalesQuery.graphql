@@ -1,0 +1,6 @@
+query {
+  locales(lang: "fr") {
+    localeCode
+    label
+  }
+}
