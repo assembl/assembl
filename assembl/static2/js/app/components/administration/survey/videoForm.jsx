@@ -79,7 +79,6 @@ const VideoForm = ({
             />
             <FormControlWithLabel
               id="video-link"
-              required
               type="text"
               label={videoLinkPh}
               value={htmlCode}

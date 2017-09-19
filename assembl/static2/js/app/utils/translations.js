@@ -281,7 +281,7 @@ const Translations = {
         quote: "Citation",
         descriptionTop: "Texte au-dessus de la vidéo",
         descriptionBottom: "Texte en-dessous de la vidéo",
-        videoLink: "*Lien vidéo"
+        videoLink: "Lien vidéo"
       },
       surveyExport: {
         title: "Exporter les données du débat",
@@ -579,7 +579,7 @@ const Translations = {
         quote: "Quote",
         descriptionTop: "Comments above video",
         descriptionBottom: "Comments below video",
-        videoLink: "*Video link"
+        videoLink: "Video link"
       },
       surveyExport: {
         title: "Export the debate data",
