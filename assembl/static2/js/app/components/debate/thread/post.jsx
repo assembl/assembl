@@ -106,14 +106,12 @@ class Post extends React.PureComponent {
       // first entry is the translated version, example localeCode "fr-x-mtfrom-en"
       // second entry is the original, example localeCode "en"
       body = this.state.showOriginal ? bodyEntries[1].value : bodyEntries[0].value;
-      originalBodyLocale = bodyEntries[1].localeCode;
       originalBody = bodyEntries[1].value;
     } else {
       // translation is not enabled or the message is already in the desired locale
       body = bodyEntries[0].value;
       originalBody = bodyEntries[0].value;
     }
-
     if (subjectEntries.length > 1) {
       subject = this.state.showOriginal ? subjectEntries[1].value : subjectEntries[0].value;
       originalSubject = subjectEntries[1].value;
@@ -121,6 +119,7 @@ class Post extends React.PureComponent {
       subject = subjectEntries[0].value;
       originalSubject = subjectEntries[0].value;
     }
+
     return {
       body: body,
       subject: subject,
@@ -155,11 +154,12 @@ class Post extends React.PureComponent {
       nuggetsManager,
       rowIndex,
       localContentLocale,
-      updateLocalContentLocale
+      updateLocalContentLocale,
+      originalLocale
     } = this.props;
     // creationDate is retrieved by IdeaWithPosts query, not PostQuery
 
-    const { body, subject, originalBody, originalBodyLocale, originalSubject } = this.getBodyAndSubject();
+    const { body, subject, originalBody, originalSubject } = this.getBodyAndSubject();
 
     // This hack should be removed when the TDI's admin section will be done.
     // We need it to have several langString in the idea's title
@@ -247,12 +247,12 @@ class Post extends React.PureComponent {
                   locale={lang}
                   modified={modificationDate !== null}
                 />}
-              {originalBodyLocale
+              {originalLocale
                 ? <PostTranslate
                   id={id}
                   lang={lang}
                   showOriginal={this.state.showOriginal}
-                  originalBodyLocale={originalBodyLocale}
+                  originalBodyLocale={originalLocale}
                   toggle={() => {
                     return this.setState((state) => {
                       return { showOriginal: !state.showOriginal };
