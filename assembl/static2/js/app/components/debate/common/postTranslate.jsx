@@ -85,12 +85,6 @@ class PostTranslate extends React.Component<void, PostTranslateProps, PostTransl
   }
 }
 
-const mapStateToProps = (state) => {
-  return {
-    lang: state.i18n.locale
-  };
-};
-
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     updateGlobalContentLocale: (value) => {
@@ -99,4 +93,4 @@ const mapDispatchToProps = (dispatch, ownProps) => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(PostTranslate);
+export default connect(null, mapDispatchToProps)(PostTranslate);
