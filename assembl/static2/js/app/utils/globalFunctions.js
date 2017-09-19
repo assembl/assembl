@@ -48,12 +48,23 @@ export const getDiscussionSlug = () => {
 };
 
 // cache userId to avoid accessing the dom at each permission check
-let userId;
+// This is the effective user id, depends on being a participant
+let effectiveUserId;
 export const getConnectedUserId = () => {
-  if (userId === undefined) {
-    userId = document.getElementById('user-id') ? document.getElementById('user-id').value : null;
+  if (effectiveUserId === undefined) {
+    effectiveUserId = document.getElementById('user-id') ? document.getElementById('user-id').value : null;
   }
-  return userId;
+  return effectiveUserId;
+};
+
+// cache userId to avoid accessing the dom at each permission check
+// This tells the user id even of a non-participant
+let userLoggedInId;
+export const getLoggedInUserId = () => {
+  if (userLoggedInId === undefined) {
+    userLoggedInId = document.getElementById('user-login-id') ? document.getElementById('user-login-id').value : null;
+  }
+  return userLoggedInId;
 };
 
 export const getConnectedUserName = () => {
