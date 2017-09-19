@@ -1,19 +1,17 @@
 import React from 'react';
 import { withApollo } from 'react-apollo';
-import { Translate } from 'react-redux-i18n';
+import { Translate, I18n } from 'react-redux-i18n';
 import { OverlayTrigger } from 'react-bootstrap';
 import { MEDIUM_SCREEN_WIDTH } from '../../../constants';
 import { answerTooltip, shareTooltip } from '../../common/tooltips';
-import { Link } from 'react-router';
 
 import getOverflowMenuForPost from './overflowMenu';
 import { getConnectedUserId } from '../../../utils/globalFunctions';
-import { promptForLoginOr } from '../../../utils/utilityManager';
+import { promptForLoginOr, displayModal } from '../../../utils/utilityManager';
 import Permissions, { connectedUserCan } from '../../../utils/permissions';
 import Sentiments from './sentiments';
 import getSentimentStats from './sentimentStats';
 import sentimentDefinitions from './sentimentDefinitions';
-import { displayModal, closeModal } from '../../../utils/utilityManager';
 import { get } from '../../../utils/routeMap';
 
 class PostActions extends React.Component {
@@ -72,7 +70,8 @@ class PostActions extends React.Component {
       })}/#${postId}`;
       const social = debateData.useSocialMedia;
       const src = `/static/widget/share/index.html?u=${encodeURI(url)}&t=${encodeURI(title)}&s=${encodeURI(social)}`;
-      const body = <iframe src={src} width="100%" height="200" frameBorder="0" />;
+      const iframeTitle = I18n.t('Social buttons to share the post');
+      const body = <iframe src={src} width="100%" height="200" frameBorder="0" title={iframeTitle} />;
       const footer = false;
       const footerTxt = null;
       return displayModal(title, body, footer, footerTxt);

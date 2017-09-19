@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import { Translate } from 'react-redux-i18n';
 import { compose, graphql } from 'react-apollo';
 import { Grid } from 'react-bootstrap';
-import { Link } from 'react-router';
 
 import Header from '../components/debate/common/header';
 import IdeaQuery from '../graphql/IdeaQuery.graphql';
@@ -18,7 +17,6 @@ import { getConnectedUserId } from '../utils/globalFunctions';
 import Announcement from './../components/debate/thread/announcement';
 import TopPostForm from '../components/debate/thread/topPostForm';
 import { getContentLocale } from '../reducers/rootReducer';
-import { get } from '../utils/routeMap';
 
 export const transformPosts = (edges, additionnalProps = {}) => {
   const postsByParent = {};

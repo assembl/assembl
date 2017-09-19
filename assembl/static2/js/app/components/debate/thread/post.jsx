@@ -255,7 +255,7 @@ class Post extends React.PureComponent {
                 numChildren={numChildren}
                 routerParams={routerParams}
                 debateData={debateData}
-                postSubject={subject}
+                postSubject={subject.replace('Re: ', '')}
               />
             </Col>
           </Row>
