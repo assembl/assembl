@@ -47,7 +47,10 @@ class PostActions extends React.Component {
       mySentiment,
       handleAnswerClick,
       handleEditClick,
-      numChildren
+      numChildren,
+      routerParams,
+      postSubject,
+      debateData
     } = this.props;
     let count = 0;
     const totalSentimentsCount = sentimentCounts
@@ -58,13 +61,18 @@ class PostActions extends React.Component {
       (connectedUserId === String(creatorUserId) && connectedUserCan(Permissions.DELETE_MY_POST)) ||
       connectedUserCan(Permissions.DELETE_POST);
     const userCanEditThisMessage = connectedUserId === String(creatorUserId) && connectedUserCan(Permissions.EDIT_MY_POST);
-    const confirmModal = (post) => {
-      const title = 'Share this post';
-      // Hardcode url for testing
-      const url = `${get('debate', { slug: 'ai-consultation', phase: 'thread' })}${get('theme', {
-        themeId: 'SWRlYTo2Mzg='
-      })}/#UG9zdDoyMDc5`;
-      const body = <input type="text" value={url} />;
+    const { slug, phase, themeId } = routerParams;
+    const confirmModal = () => {
+      const title = postSubject;
+      const url = `https://assembl-civic.bluenove.com${get('debate', {
+        slug: slug,
+        phase: phase
+      })}${get('theme', {
+        themeId: themeId
+      })}/#${postId}`;
+      const social = debateData.useSocialMedia;
+      const src = `/static/widget/share/index.html?u=${encodeURI(url)}&t=${encodeURI(title)}&s=${encodeURI(social)}`;
+      const body = <iframe src={src} width="100%" height="200" frameBorder="0" />;
       const footer = false;
       const footerTxt = null;
       return displayModal(title, body, footer, footerTxt);

@@ -57,7 +57,7 @@ const noRowsRenderer = () => {
 
 class Idea extends React.Component {
   render() {
-    const { contentLocale, lang, ideaData, ideaWithPostsData } = this.props;
+    const { contentLocale, lang, ideaData, ideaWithPostsData, routerParams, debateData } = this.props;
     const refetchIdea = ideaWithPostsData.refetch;
     if (ideaData.loading) {
       return (
@@ -70,20 +70,18 @@ class Idea extends React.Component {
     const { idea } = ideaData;
     const topPosts =
       !ideaWithPostsData.loading &&
-      transformPosts(ideaWithPostsData.idea.posts.edges, { refetchIdea: refetchIdea, ideaId: idea.id });
+      transformPosts(ideaWithPostsData.idea.posts.edges, {
+        refetchIdea: refetchIdea,
+        ideaId: idea.id,
+        routerParams: routerParams,
+        debateData: debateData
+      });
 
     const isUserConnected = getConnectedUserId();
     return (
       <div className="idea">
         <Header title={idea.title} longTitle={idea.longTitle} imgUrl={idea.imgUrl} identifier="thread" />
         <section className="post-section">
-          <Link
-            to={`${get('debate', { slug: 'ai-consultation', phase: 'thread' })}${get('theme', {
-              themeId: idea.id
-            })}/#UG9zdDoyMDc5`}
-          >
-            LIEN TEST{' '}
-          </Link>
           {!ideaWithPostsData.loading &&
             idea.announcementBody &&
             <Grid fluid className="background-grey">
@@ -129,7 +127,8 @@ class Idea extends React.Component {
 const mapStateToProps = (state) => {
   return {
     lang: state.i18n.locale,
-    contentLocale: getContentLocale(state)
+    contentLocale: getContentLocale(state),
+    debateData: state.debate.debateData
   };
 };
 

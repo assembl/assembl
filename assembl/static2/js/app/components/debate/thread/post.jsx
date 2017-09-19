@@ -85,13 +85,22 @@ class Post extends React.PureComponent {
       indirectIdeaContentLinks,
       creator,
       modificationDate,
-      sentimentCounts,
       mySentiment,
       publicationState,
       attachments,
       extracts
     } = this.props.data.post;
-    const { lang, ideaId, refetchIdea, creationDate, fullLevel, numChildren } = this.props;
+    const {
+      lang,
+      ideaId,
+      refetchIdea,
+      creationDate,
+      fullLevel,
+      numChildren,
+      sentimentCounts,
+      routerParams,
+      debateData
+    } = this.props;
     // creationDate is retrieved by IdeaWithPosts query, not PostQuery
     let body;
     let subject;
@@ -244,6 +253,9 @@ class Post extends React.PureComponent {
                 sentimentCounts={sentimentCounts}
                 mySentiment={mySentiment}
                 numChildren={numChildren}
+                routerParams={routerParams}
+                debateData={debateData}
+                postSubject={subject}
               />
             </Col>
           </Row>
