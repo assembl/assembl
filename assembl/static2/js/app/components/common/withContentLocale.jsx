@@ -32,7 +32,6 @@ const withContentLocale = (WrappedComponent) => {
 
     render() {
       const contentLocale = this.getContentLocale();
-      console.log('pass ', contentLocale);
       return (
         <WrappedComponent
           {...this.props}
