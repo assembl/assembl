@@ -69,17 +69,19 @@ class PostTranslate extends React.Component<void, PostTranslateProps, PostTransl
             language={I18n.t(`language.${originalBodyLocale}`)}
           />
         </p>
-
-        {this.state.isTranslated
-          ? <SwitchButton
-            name={`switch-${id}`}
-            onChange={toggle}
-            defaultChecked={showOriginal}
-            labelRight={I18n.t('debate.thread.showOriginal')}
-          />
-          : <Button onClick={this.openModal}>
-            <Translate value="debate.thread.translate" />
-          </Button>}
+        <SwitchButton
+          name={`switch-${id}`}
+          onChange={toggle}
+          defaultChecked={showOriginal}
+          labelRight={I18n.t('debate.thread.showOriginal')}
+        />
+        {!this.state.isTranslated
+          ? <div className="translate-button">
+            <Button onClick={this.openModal}>
+              <Translate value="debate.thread.translate" />
+            </Button>
+          </div>
+          : null}
       </div>
     );
   }
