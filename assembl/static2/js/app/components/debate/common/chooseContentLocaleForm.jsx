@@ -83,7 +83,7 @@ class ChooseContentLocaleForm extends React.Component<*, ChooseContentLocaleForm
               checked={scope === 'global'}
               title={translateAllLabel}
               value="global"
-              onClick={() => {
+              onChange={() => {
                 return this.updateScope('global');
               }}
             >
@@ -93,7 +93,7 @@ class ChooseContentLocaleForm extends React.Component<*, ChooseContentLocaleForm
               checked={scope === 'local'}
               title={translateOneLabel}
               value="local"
-              onClick={() => {
+              onChange={() => {
                 return this.updateScope('local');
               }}
             >
