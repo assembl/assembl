@@ -82,7 +82,7 @@ class Idea extends React.Component {
   };
 
   render() {
-    const { lang, ideaData, ideaWithPostsData, routerParams, debateData } = this.props;
+    const { globalContentLocale, lang, ideaData, ideaWithPostsData, routerParams, debateData } = this.props;
     const refetchIdea = ideaWithPostsData.refetch;
     if (ideaData.loading) {
       return (
@@ -132,6 +132,7 @@ class Idea extends React.Component {
                 {ideaWithPostsData.loading
                   ? <Loader />
                   : <Tree
+                    globalContentLocale={globalContentLocale}
                     lang={lang}
                     data={topPosts}
                     initialRowIndex={this.getInitialRowIndex(topPosts, ideaWithPostsData.idea.posts.edges)}
@@ -152,8 +153,9 @@ class Idea extends React.Component {
 
 const mapStateToProps = (state) => {
   return {
-    lang: state.i18n.locale,
-    debateData: state.debate.debateData
+    debateData: state.debate.debateData,
+    globalContentLocale: state.contentLocale,
+    lang: state.i18n.locale
   };
 };
 

@@ -110,6 +110,7 @@ class Child extends React.PureComponent {
   render() {
     const {
       id,
+      globalContentLocale,
       hidden,
       lang,
       children,
@@ -154,6 +155,7 @@ class Child extends React.PureComponent {
                 hidden={!expanded}
                 key={idx}
                 {...child}
+                globalContentLocale={globalContentLocale}
                 lang={lang}
                 rowIndex={rowIndex}
                 level={level + 1}
@@ -191,7 +193,15 @@ Child.defaultProps = {
 };
 
 const cellRenderer = ({ index, key, parent, style }) => {
-  const { lang, data, InnerComponent, InnerComponentFolded, SeparatorComponent, nuggetsManager } = parent.props;
+  const {
+    globalContentLocale,
+    lang,
+    data,
+    InnerComponent,
+    InnerComponentFolded,
+    SeparatorComponent,
+    nuggetsManager
+  } = parent.props;
   const childData = data[index];
   return (
     <CellMeasurer cache={cache} columnIndex={0} key={key} parent={parent} rowIndex={index}>
@@ -199,6 +209,7 @@ const cellRenderer = ({ index, key, parent, style }) => {
         {index > 0 ? <SeparatorComponent /> : null}
         <Child
           {...childData}
+          globalContentLocale={globalContentLocale}
           lang={lang}
           rowIndex={index}
           InnerComponent={InnerComponent}
@@ -250,6 +261,7 @@ class Tree extends React.Component {
 
   render() {
     const {
+      globalContentLocale,
       lang,
       data,
       InnerComponent, // component that will be rendered in the child
@@ -273,6 +285,7 @@ class Tree extends React.Component {
                 return (
                   <List
                     key={data.length}
+                    globalContentLocale={globalContentLocale}
                     height={height}
                     isScrolling={isScrolling}
                     onScroll={onChildScroll}

@@ -1,5 +1,4 @@
 import React from 'react';
-import { connect } from 'react-redux';
 import { Translate } from 'react-redux-i18n';
 import { compose, graphql } from 'react-apollo';
 import { Row, Col } from 'react-bootstrap';
@@ -328,8 +327,4 @@ class Post extends React.PureComponent {
   }
 }
 
-const mapStateToProps = (state) => {
-  return { globalContentLocale: state.contentLocale };
-};
-
-export default compose(connect(mapStateToProps), withContentLocale, graphql(PostQuery), withLoadingIndicator())(Post);
+export default compose(withContentLocale, graphql(PostQuery), withLoadingIndicator())(Post);
