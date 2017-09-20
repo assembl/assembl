@@ -27,14 +27,14 @@ const Flag = ({ locale }) => {
   }
 };
 
-const LanguageMenu = ({ changeLocale, selectedLocale, translations, visibility }) => {
+const LanguageMenu = ({ changeLocale, selectedLocale, discussionPreferences, visibility }) => {
   if (visibility) {
     return (
       <div className="relative">
         <div className="language-menu">
           <OverlayTrigger placement="top" overlay={languageTooltip}>
             <div>
-              {Object.keys(translations).map((key, index) => {
+              {discussionPreferences.map((key, index) => {
                 return (
                   <div
                     onClick={() => {
@@ -62,7 +62,8 @@ const LanguageMenu = ({ changeLocale, selectedLocale, translations, visibility }
 const mapStateToProps = (state) => {
   return {
     translations: state.i18n.translations,
-    selectedLocale: state.admin.selectedLocale
+    selectedLocale: state.admin.selectedLocale,
+    discussionPreferences: state.admin.discussionLanguagePreferences
   };
 };
 

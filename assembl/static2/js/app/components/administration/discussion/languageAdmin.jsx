@@ -118,8 +118,8 @@ const mapDispatchToProps = (dispatch) => {
     removeLocaleFromStore: (locale) => {
       dispatch(removeLanguagePreference(locale));
     },
-    signalLocaleChanged: () => {
-      dispatch(languagePreferencesHasChanged)
+    signalLocaleChanged: (state) => {
+      dispatch(languagePreferencesHasChanged(state))
     }
   };
 };
