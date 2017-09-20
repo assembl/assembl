@@ -601,7 +601,9 @@ const Translations = {
       discussion: {
         0: 'Languages of the Discussion'
       },
-      languageChoice: 'Sélection des langue a affichier',
+      languageChoice: 'Select desired languages below',
+      annotation: 'Module to be completed. * Fields are required.',
+      themeNum: 'Theme %{index}',
       ph: {
         title: "*Title",
         quote: "Quote",
