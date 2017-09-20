@@ -32,9 +32,6 @@ const Attachments = ({ attachments }: AttachmentsProps) => {
             <span className="title">
               {title || externalUrl}
             </span>
-            {/* <span className="mimeType">
-              {attachment.mimeType}
-            </span> */}
             <a download={title || DEFAULT_FILENAME} href={externalUrl} type={mimeType} target="_blank" rel="noopener noreferrer">
               <Translate value="common.attachments.download" />
             </a>
