@@ -9,7 +9,7 @@ const AtomicBlockRenderer = ({ block, contentState }: { block: ContentBlock, con
   const data = entity.getData();
   const type = entity.getType();
   if (type === 'document') {
-    let innerContent = <span className={`attachment-${data.id}`} />;
+    let innerContent;
     if (data.mimeType.startsWith('image')) {
       innerContent = <img src={data.externalUrl} alt="" title={data.title} width="60%" />;
     } else {
