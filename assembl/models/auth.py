@@ -33,7 +33,7 @@ from sqlalchemy.orm import (
 from sqlalchemy.types import Text
 from sqlalchemy.orm.attributes import NO_VALUE
 from sqlalchemy.sql.functions import count
-from pyramid.security import Everyone, Authenticated
+from pyramid.security import Everyone, Authenticated, authenticated_userid
 from rdflib import URIRef
 from sqla_rdfbridge.mapping import PatternIriClass
 import transaction
@@ -1694,7 +1694,7 @@ class LanguagePreferenceCollection(object):
         assert req
         if getattr(req, "lang_prefs", 0) is 0:
             # lang. prefs remain effective even without shared login
-            user_id = req.authenticated_userid
+            user_id = authenticated_userid(req)
             if user_id and user_id != Everyone:
                 try:
                     req.lang_prefs = UserLanguagePreferenceCollection(user_id)

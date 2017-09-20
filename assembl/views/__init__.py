@@ -317,7 +317,7 @@ def get_default_context(request, **kwargs):
         application_url=application_url,
         get_route=get_route,
         user=user,
-        loggedin_userid=request.authenticated_userid,
+        loggedin_userid=authenticated_userid(request),
         templates=get_template_views(),
         discussion=discussion or {},  # Templates won't load without a discussion object
         preferences=discussion.preferences if discussion else {},

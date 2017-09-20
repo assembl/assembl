@@ -7,7 +7,7 @@ import pkg_resources
 from pyramid.view import view_config
 from pyramid.response import Response
 from pyramid.renderers import render_to_response
-from pyramid.security import Everyone, forget
+from pyramid.security import Everyone, forget, authenticated_userid
 from pyramid.httpexceptions import (
     HTTPNotFound, HTTPSeeOther, HTTPMovedPermanently, HTTPUnauthorized,
     HTTPClientError)
@@ -396,7 +396,7 @@ def purl_post(request):
 
 @view_config(route_name='join', request_method='GET', renderer='assembl:templates/join.jinja2')
 def join_discussion(request):
-    user_id = request.authenticated_userid
+    user_id = authenticated_userid(request)
     if not user_id:
         return HTTPSeeOther(request.route_url(
             'contextual_react_login', **request.matchdict))
@@ -425,7 +425,7 @@ def join_discussion(request):
 
 @view_config(route_name='join', request_method='POST')
 def do_join_discussion(request):
-    user_id = request.authenticated_userid
+    user_id = authenticated_userid(request)
     if not user_id:
         return HTTPUnauthorized()
     discussion = discussion_from_request(request)
