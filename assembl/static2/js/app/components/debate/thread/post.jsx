@@ -143,6 +143,7 @@ class Post extends React.PureComponent {
       extracts
     } = this.props.data.post;
     const {
+      contentLocale,
       lang,
       ideaId,
       refetchIdea,
@@ -251,7 +252,7 @@ class Post extends React.PureComponent {
                 ? <PostTranslate
                   id={id}
                   lang={lang}
-                  showOriginal={this.state.showOriginal}
+                  showOriginal={this.state.showOriginal || contentLocale === originalLocale}
                   originalBodyLocale={originalLocale}
                   toggle={() => {
                     return this.setState((state) => {
