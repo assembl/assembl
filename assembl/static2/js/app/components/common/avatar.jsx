@@ -1,8 +1,8 @@
 import React from 'react';
-import { customBrowserHistory } from '../../index';
 import { Translate } from 'react-redux-i18n';
 import { Link } from 'react-router';
 import { NavDropdown, MenuItem } from 'react-bootstrap';
+import { customBrowserHistory } from '../../index';
 import { getContextual, get } from '../../utils/routeMap';
 import { getConnectedUserName, getConnectedUserId, getDiscussionSlug, getLoggedInUserId } from '../../utils/globalFunctions';
 

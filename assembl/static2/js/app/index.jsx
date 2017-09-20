@@ -25,17 +25,15 @@ const history = browserHistory;
 
 const store = createAppStore();
 
-let customBrowserHistory;
 const isPiwikEnabled = get(window, ['globalAnalytics', 'piwik', 'isActive'], false);
+let piwik;
 if (isPiwikEnabled) {
-  const piwik = PiwikReactRouter({
+  piwik = PiwikReactRouter({
     alreadyInitialized: true,
     enableLinkTracking: false // this option has already been activated in the piwik tracking script present in the DOM
   });
-  customBrowserHistory = piwik.connectToHistory(history);
-} else {
-  customBrowserHistory = history;
 }
+export const customBrowserHistory = isPiwikEnabled ? piwik.connectToHistory(history) : history;
 
 ReactDOM.render(
   <AppContainer>
