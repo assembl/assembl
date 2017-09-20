@@ -62,7 +62,7 @@ class PostActions extends React.Component {
     const { slug, phase, themeId } = routerParams;
     const confirmModal = () => {
       const title = postSubject;
-      const url = `https://assembl-civic.bluenove.com${get('debate', {
+      const url = `${window.location.protocol}//${window.location.host}${get('debate', {
         slug: slug,
         phase: phase
       })}${get('theme', {
