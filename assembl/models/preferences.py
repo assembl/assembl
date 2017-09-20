@@ -554,7 +554,8 @@ class Preferences(MutableMapping, Base, NamedClassMixin):
             "default": True
         },
 
-        # Does the Idea panel automatically open when an idea is clicked? (and close when a special section is clicked)
+        # Will this discussion accept a user that logged in from another discussion, or consider that user
+        # not-logged-in until they log in on this discussion specifically?
         {
             "id": "shared_login",
             "name": _("Login is shared with other discussions"),
