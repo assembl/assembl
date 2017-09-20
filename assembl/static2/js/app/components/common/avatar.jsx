@@ -1,5 +1,5 @@
 import React from 'react';
-import { browserHistory } from 'react-router';
+import { customBrowserHistory } from '../../index';
 import { Translate } from 'react-redux-i18n';
 import { Link } from 'react-router';
 import { NavDropdown, MenuItem } from 'react-bootstrap';
@@ -27,7 +27,7 @@ class ProfileIcon extends React.Component {
   }
   redirectToJoin() {
     const slug = { slug: getDiscussionSlug() };
-    browserHistory.push(get('join', slug));
+    customBrowserHistory.push(get('join', slug));
   }
   render() {
     const slug = { slug: getDiscussionSlug() };
