@@ -160,8 +160,27 @@ def listdir(path):
 
 
 @task
+def update_vendor_config():
+    """Update the repository of the currently used config file"""
+    config_file_dir = dirname(env.rcfile)
+    here = dirname(__file__)
+    if config_file_dir.startswith(here):
+        config_file_dir = config_file_dir[len(here)+1:]
+    while config_file_dir:
+        if os.path.exists(os.path.join(config_file_dir, '.git')):
+            break
+        config_file_dir = dirname(config_file_dir)
+    if config_file_dir:
+        # Only a subdir of the current directory
+        from os import system
+        # Run locally
+        system("cd %s ; git pull" % config_file_dir)
+
+
+@task
 def create_local_ini():
     """Replace the local.ini file with one composed from the current .rc file"""
+    execute(update_vendor_config)
     random_ini_path = os.path.join(env.projectpath, env.random_file)
     local_ini_path = os.path.join(env.projectpath, env.ini_file)
     if exists(local_ini_path):
