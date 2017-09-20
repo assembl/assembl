@@ -940,7 +940,7 @@ def test_phase1_export(proposals_with_sentiments, discussion, test_app):
     assert first_row[POST_DISAGREE_COUNT] == b'0'
     assert first_row[POST_CREATOR_NAME] == b'Mr. Administrator'
     assert first_row[POST_CREATOR_EMAIL] == b''
-    date = datetime.today().strftime('%d/%m/%Y')
+    date = datetime.utcnow().strftime('%d/%m/%Y')
     assert first_row[POST_CREATION_DATE].startswith(date)
     assert first_row[SENTIMENT_ACTOR_NAME] == b''
     assert first_row[SENTIMENT_ACTOR_EMAIL] == b''
