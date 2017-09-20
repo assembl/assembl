@@ -12,7 +12,6 @@ import { convertRawContentStateToHTML, rawContentStateIsEmpty } from '../../../u
 import { displayAlert, promptForLoginOr } from '../../../utils/utilityManager';
 import { TextInputWithRemainingChars } from '../../common/textInputWithRemainingChars';
 import RichTextEditor from '../../common/richTextEditor';
-import { getContentLocale } from '../../../reducers/rootReducer';
 import attachmentsPlugin from '../../common/richTextEditor/attachmentsPlugin';
 
 export const TEXT_INPUT_MAX_LENGTH = 140;
@@ -174,7 +173,7 @@ class TopPostForm extends React.Component<*, TopPostFormProps, TopPostFormState>
 
 const mapStateToProps = (state) => {
   return {
-    contentLocale: getContentLocale(state)
+    contentLocale: state.i18n.locale
   };
 };
 

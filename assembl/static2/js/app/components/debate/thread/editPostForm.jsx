@@ -17,7 +17,6 @@ import attachmentsPlugin from '../../common/richTextEditor/attachmentsPlugin';
 import type { UploadNewAttachmentsPromiseResult } from '../../common/richTextEditor/attachmentsPlugin';
 import { TextInputWithRemainingChars } from '../../common/textInputWithRemainingChars';
 import { TEXT_INPUT_MAX_LENGTH, TEXT_AREA_MAX_LENGTH } from './topPostForm';
-import { getContentLocale } from '../../../reducers/rootReducer';
 
 type EditPostFormProps = {
   contentLocale: string,
@@ -170,7 +169,7 @@ class EditPostForm extends React.PureComponent<void, EditPostFormProps, EditPost
 
 const mapStateToProps = (state) => {
   return {
-    contentLocale: getContentLocale(state)
+    contentLocale: state.i18n.locale
   };
 };
 
