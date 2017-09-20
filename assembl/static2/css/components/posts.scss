@@ -260,7 +260,7 @@ $deleted-post-border: 1px solid $grey1 !default;
 
       .badges {
         line-height: 26px;
-        font-family: 'LatoLight';
+        font-family: $font-family4;
 
         .nugget-img {
           text-align: center;
@@ -277,7 +277,7 @@ $deleted-post-border: 1px solid $grey1 !default;
         .nugget {
 
           .nugget-txt {
-            font-style: italic;
+            font-family: $font-family6;
             color: $first-color;
             margin-bottom: 25px;
           }
