@@ -77,7 +77,6 @@ class Nuggets extends React.Component {
         id={`extracts-${thisCompleteLevel.join('-')}`}
         ref={(node) => {
           this.node = node;
-          return this.node;
         }}
         className="extracts"
       >
