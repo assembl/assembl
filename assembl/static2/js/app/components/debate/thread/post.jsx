@@ -15,6 +15,7 @@ import PostQuery from '../../../graphql/PostQuery.graphql';
 import withLoadingIndicator from '../../../components/common/withLoadingIndicator';
 import { DeletedPublicationStates, PublicationStates } from '../../../constants';
 import Nuggets from './nuggets';
+import { hashLinkScroll } from '../../../routes';
 
 export const PostFolded = ({ nbPosts }) => {
   return <Translate value="debate.thread.foldedPostLink" count={nbPosts} />;
@@ -48,6 +49,20 @@ class Post extends React.PureComponent {
 
   componentDidMount() {
     this.props.measureTreeHeight(400);
+    // If we have a hash in url and the post id match it, scroll to it.
+    const postId = this.props.data.post.id;
+    const { hash } = window.location;
+    if (hash !== '') {
+      const id = hash.replace('#', '');
+      if (id === postId) {
+        // Wait an extra 1s to be sure that all previous posts are loaded
+        // and measureTreeHeight finished.
+        // May not be enough for a post far far away in the page.
+        // We should rescroll to this post if previous posts are loaded after
+        // this post, but it's really more complex to do...
+        setTimeout(hashLinkScroll, 1000);
+      }
+    }
   }
 
   componentDidUpdate(prevProps) {
