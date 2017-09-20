@@ -1511,6 +1511,7 @@ class UpdatePost(graphene.Mutation):
                             ).first()
                         post.db.delete(document)
                         post.attachments.remove(post_attachment)
+                        post.db.flush()
 
         if changed:
             post.modification_date = datetime.utcnow()
