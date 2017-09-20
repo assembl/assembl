@@ -5,10 +5,13 @@ import { Button } from 'react-bootstrap';
 import { Translate, I18n } from 'react-redux-i18n';
 
 import { displayAlert } from '../../utils/utilityManager';
+import { convertEntriesToHTML } from '../../utils/draftjs';
+import { languagePreferencesHasChanged } from '../../actions/adminActions';
 import createThematicMutation from '../../graphql/mutations/createThematic.graphql';
 import deleteThematicMutation from '../../graphql/mutations/deleteThematic.graphql';
 import updateThematicMutation from '../../graphql/mutations/updateThematic.graphql';
-import { convertEntriesToHTML } from '../../utils/draftjs';
+import updateDiscussionPreference from '../../graphql/mutations/updateDiscussionPreference.graphql';
+import getDiscussionPreferenceLanguage from '../../graphql/DiscussionPreferenceLanguage.graphql';
 
 const runSerial = (tasks) => {
   let result = Promise.resolve();
@@ -40,57 +43,90 @@ const createVariablesForMutation = (thematic) => {
   };
 };
 
-const SaveButton = ({ createThematic, deleteThematic, enabled, refetchThematics, thematics, updateThematic }) => {
+const SaveButton = ({ i18n, createThematic, deleteThematic, enabled, refetchThematics, thematics, updateThematic, client, updateDiscussionPreference, preferences, languagePreferenceHasChanged, resetLanguagePreferenceChanged}) => {
   const saveAction = () => {
     displayAlert('success', `${I18n.t('loading.wait')}...`);
     const promisesArray = [];
-    thematics.forEach((thematic) => {
-      if (thematic.isNew && !thematic.toDelete) {
-        // create thematic
-        const payload = {
-          variables: createVariablesForMutation(thematic)
-        };
-        const p1 = () => {
-          return createThematic(payload);
-        };
-        promisesArray.push(p1);
-      } else if (thematic.toDelete && !thematic.isNew) {
-        // delete thematic
-        const payload = {
-          variables: {
-            thematicId: thematic.id
-          }
-        };
-        const p3 = () => {
-          return deleteThematic(payload);
-        };
-        promisesArray.push(p3);
-      } else {
-        // update thematic
-        const variables = createVariablesForMutation(thematic);
-        variables.id = thematic.id;
-        const payload = {
-          variables: variables
-        };
-        const p2 = () => {
-          return updateThematic(payload);
-        };
-        promisesArray.push(p2);
-      }
-    });
+    //Compare the redux state change to the saved data in apollo
 
-    runSerial(promisesArray)
-      .then(() => {
-        refetchThematics();
-        displayAlert('success', I18n.t('administration.successThemeCreation'));
-      })
-      .catch((error) => {
-        displayAlert('danger', `${error}`, false, 30000);
+    if (languagePreferenceHasChanged) {
+      //Save and update the apolloStore
+      const payload = {
+        variables: {
+          languages: preferences
+        },
+        update: (storeProxy, { data: { updateDiscussionPreference: { preferences: { languages } } } }) => {
+          //Update the apollo cache
+          const query = storeProxy.readQuery({
+            query: getDiscussionPreferenceLanguage,
+            variables: { inLocale: i18n.locale }
+          });
+          const newData = {...query};
+          newData.discussionPreferences.languages = languages; 
+          storeProxy.writeQuery({
+            query: getDiscussionPreferenceLanguage,
+            variables: { inLocale: i18n.locale },
+            data: newData
+          })
+        }
+      }
+      updateDiscussionPreference(payload);
+      resetLanguagePreferenceChanged();
+    }
+
+    if (enabled) {
+      thematics.forEach((thematic) => {
+        if (thematic.isNew && !thematic.toDelete) {
+          // create thematic
+          const payload = {
+            variables: createVariablesForMutation(thematic)
+          };
+          const p1 = () => {
+            return createThematic(payload);
+          };
+          promisesArray.push(p1);
+        } else if (thematic.toDelete && !thematic.isNew) {
+          // delete thematic
+          const payload = {
+            variables: {
+              thematicId: thematic.id
+            }
+          };
+          const p3 = () => {
+            return deleteThematic(payload);
+          };
+          promisesArray.push(p3);
+        } else {
+          // update thematic
+          const variables = createVariablesForMutation(thematic);
+          variables.id = thematic.id;
+          const payload = {
+            variables: variables
+          };
+          const p2 = () => {
+            return updateThematic(payload);
+          };
+          promisesArray.push(p2);
+        }
       });
+
+      runSerial(promisesArray)
+        .then(() => {
+          refetchThematics();
+          displayAlert('success', I18n.t('administration.successThemeCreation'));
+        })
+        .catch((error) => {
+          displayAlert('danger', `${error}`, false, 30000);
+        });
+    }
   };
 
   return (
-    <Button className="button-submit button-dark right" disabled={!enabled} onClick={saveAction}>
+    <Button
+      className="button-submit button-dark right"
+      disabled={!(enabled || languagePreferenceHasChanged)}
+      onClick={saveAction}
+    >
       <Translate value="administration.saveThemes" />
     </Button>
   );
@@ -105,16 +141,28 @@ const SaveButtonWithMutations = compose(
   }),
   graphql(deleteThematicMutation, {
     name: 'deleteThematic'
+  }),
+  graphql(updateDiscussionPreference, {
+    name: 'updateDiscussionPreference'
   })
 )(SaveButton);
 
-const mapStateToProps = ({ admin: { thematicsById, thematicsHaveChanged, thematicsInOrder } }) => {
+const mapStateToProps = ({ i18n, admin: { thematicsById, thematicsHaveChanged, thematicsInOrder, discussionLanguagePreferences, discussionLanguagePreferencesHasChanged } }) => {
   return {
     enabled: thematicsHaveChanged,
     thematics: thematicsInOrder.toArray().map((id) => {
       return thematicsById.get(id).toJS();
-    })
+    }),
+    preferences: discussionLanguagePreferences,
+    i18n: i18n,
+    languagePreferenceHasChanged: discussionLanguagePreferencesHasChanged
   };
 };
 
-export default compose(connect(mapStateToProps), withApollo)(SaveButtonWithMutations);
+const mapDispatchToProps = (dispatch) => {
+  return {
+    resetLanguagePreferenceChanged: () => {dispatch(languagePreferencesHasChanged(false))}
+  }
+}
+
+export default compose(connect(mapStateToProps, mapDispatchToProps), withApollo)(SaveButtonWithMutations);

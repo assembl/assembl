@@ -90,10 +90,7 @@ class Administration extends React.Component {
               <Row>
                 <Col xs={12} md={3} />
                 <Col xs={12} md={8}>
-                  <SaveButton
-                    refetchThematics={data.refetch}
-                    languagePreferences={data.discussionLanguagePreferences}
-                  />
+                  <SaveButton refetchThematics={data.refetch} />
                 </Col>
                 <Col xs={12} md={1} />
               </Row>
@@ -147,12 +144,5 @@ export default compose(
   graphql(ThematicsQuery, {
     options: { variables: { identifier: 'survey' } }
   }),
-  // graphql(getDiscussionPreferenceLanguage, {
-  //   options: (props) => {
-  //     variables: {
-  //       inLocale: props.i18n.locale
-  //     }
-  //   }
-  // }),
   withLoadingIndicator()
 )(Administration);
