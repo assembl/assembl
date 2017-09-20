@@ -78,7 +78,7 @@ class LanguageSection extends React.Component {
     return (
       <div className="admin-box">
         <SectionTitle i18n={this.props.i18n} phase="discussion" tabId="0" annotation={I18n.t('administration.annotation')} />
-        <div className="admin-content">
+        <div className="admin-language-content">
           <div>
             <Translate value='administration.languageChoice' />
           </div>
