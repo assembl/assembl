@@ -12,7 +12,7 @@ import { setContentLocale } from '../../../actions/contentLocaleActions';
 type PostTranslateProps = {
   id: string,
   lang: string,
-  originalBodyLocale: string,
+  originalLocale: string,
   showOriginal: boolean,
   toggle: Function,
   updateLocalContentLocale: Function,
@@ -35,7 +35,7 @@ class PostTranslate extends React.Component<void, PostTranslateProps, PostTransl
   }
 
   openModal = () => {
-    const { lang, originalBodyLocale, updateGlobalContentLocale, updateLocalContentLocale } = this.props;
+    const { lang, originalLocale, updateGlobalContentLocale, updateLocalContentLocale } = this.props;
     const setIsTranslatedThen = (callback) => {
       return (value) => {
         this.setState(
@@ -51,7 +51,7 @@ class PostTranslate extends React.Component<void, PostTranslateProps, PostTransl
     const content = (
       <ChooseContentLocaleForm
         lang={lang}
-        originalLocale={originalBodyLocale}
+        originalLocale={originalLocale}
         updateGlobalContentLocale={setIsTranslatedThen(updateGlobalContentLocale)}
         updateLocalContentLocale={setIsTranslatedThen(updateLocalContentLocale)}
       />
@@ -60,13 +60,13 @@ class PostTranslate extends React.Component<void, PostTranslateProps, PostTransl
   };
 
   render() {
-    const { id, originalBodyLocale, showOriginal, toggle } = this.props;
+    const { id, originalLocale, showOriginal, toggle } = this.props;
     return (
       <div className="translate">
         <p>
           <Translate
             value={!showOriginal ? 'debate.thread.messageTranslatedFrom' : 'debate.thread.messageOriginallyIn'}
-            language={I18n.t(`language.${originalBodyLocale}`)}
+            language={I18n.t(`language.${originalLocale}`)}
           />
         </p>
         <SwitchButton
@@ -90,7 +90,7 @@ class PostTranslate extends React.Component<void, PostTranslateProps, PostTransl
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     updateGlobalContentLocale: (value) => {
-      return dispatch(setContentLocale(ownProps.originalBodyLocale, value));
+      return dispatch(setContentLocale(ownProps.originalLocale, value));
     }
   };
 };

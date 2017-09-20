@@ -159,7 +159,7 @@ class Post extends React.Component {
               id={post.id}
               lang={lang}
               showOriginal={this.state.showOriginal || contentLocale === originalLocale}
-              originalBodyLocale={originalLocale}
+              originalLocale={originalLocale}
               toggle={() => {
                 return this.setState((state) => {
                   return { showOriginal: !state.showOriginal };

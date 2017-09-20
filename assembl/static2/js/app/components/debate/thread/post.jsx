@@ -256,7 +256,7 @@ class Post extends React.PureComponent {
                   id={id}
                   lang={lang}
                   showOriginal={this.state.showOriginal || contentLocale === originalLocale}
-                  originalBodyLocale={originalLocale}
+                  originalLocale={originalLocale}
                   toggle={() => {
                     return this.setState((state) => {
                       return { showOriginal: !state.showOriginal };
