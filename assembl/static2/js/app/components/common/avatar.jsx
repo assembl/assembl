@@ -34,8 +34,8 @@ class ProfileIcon extends React.Component {
     const connectedUserId = getConnectedUserId();
     const connectedUserName = getConnectedUserName();
     const alreadyLoggedIn = !!getLoggedInUserId();
-    const loginOrJoinUrl = ( alreadyLoggedIn )? get('join', slug) : getContextual('login', slug);
-    const onClickRedirect = ( alreadyLoggedIn )? this.redirectToJoin : null;
+    const loginOrJoinUrl = alreadyLoggedIn ? get('join', slug) : getContextual('login', slug);
+    const onClickRedirect = alreadyLoggedIn ? this.redirectToJoin : null;
     const dropdownUser = (
       <div className="inline">
         <span className="assembl-icon-profil grey">&nbsp;</span>
