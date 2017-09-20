@@ -2,11 +2,13 @@
 import React from 'react';
 import { Translate, I18n } from 'react-redux-i18n';
 import { convertFromRaw, convertToRaw, Editor, EditorState, RawContentState } from 'draft-js';
+
 import classNames from 'classnames';
 import punycode from 'punycode';
 
+import AtomicBlockRenderer from './atomicBlockRenderer';
 import Toolbar from './toolbar';
-import type ButtonConfigType from './toolbarButton';
+import type { ButtonConfigType } from './buttonConfigType';
 
 type RichTextEditorProps = {
   rawContentState: RawContentState,
@@ -15,7 +17,8 @@ type RichTextEditorProps = {
   placeholder: string,
   textareaRef: Function,
   toolbarPosition: string,
-  updateContentState: Function
+  updateContentState: Function,
+  withAttachmentButton: boolean
 };
 
 type RichTextEditorState = {
@@ -23,7 +26,18 @@ type RichTextEditorState = {
   editorHasFocus: boolean
 };
 
-export default class RichTextEditor extends React.PureComponent<Object, RichTextEditorProps, RichTextEditorState> {
+function customBlockRenderer(block) {
+  if (block.getType() === 'atomic') {
+    return {
+      component: AtomicBlockRenderer,
+      editable: false
+    };
+  }
+
+  return null;
+}
+
+export default class RichTextEditor extends React.Component<Object, RichTextEditorProps, RichTextEditorState> {
   editor: HTMLDivElement;
   props: RichTextEditorProps;
   state: RichTextEditorState;
@@ -32,7 +46,8 @@ export default class RichTextEditor extends React.PureComponent<Object, RichText
   static defaultProps = {
     handleInputFocus: null,
     maxLength: 0,
-    toolbarPosition: 'top'
+    toolbarPosition: 'top',
+    withAttachmentButton: false
   };
 
   constructor(props: RichTextEditorProps): void {
@@ -51,15 +66,17 @@ export default class RichTextEditor extends React.PureComponent<Object, RichText
   }
 
   onBlur = () => {
-    this.setState(
-      {
-        editorHasFocus: false
-      },
-      () => {
-        const rawContentState = convertToRaw(this.state.editorState.getCurrentContent());
-        this.props.updateContentState(rawContentState);
-      }
-    );
+    if (!this.props.preventOnBlur) {
+      this.setState(
+        {
+          editorHasFocus: false
+        },
+        () => {
+          const rawContentState = convertToRaw(this.state.editorState.getCurrentContent());
+          this.props.updateContentState(rawContentState);
+        }
+      );
+    }
   };
 
   onChange = (newEditorState: EditorState): void => {
@@ -145,22 +162,28 @@ export default class RichTextEditor extends React.PureComponent<Object, RichText
     );
   };
 
+  renderToolbar = () => {
+    return (
+      <Toolbar
+        buttonsConfig={this.getToolbarButtons()}
+        editorState={this.state.editorState}
+        focusEditor={this.focusEditor}
+        onChange={this.onChange}
+        withAttachmentButton={this.props.withAttachmentButton}
+      />
+    );
+  };
+
   render() {
     const { maxLength, placeholder, textareaRef, toolbarPosition } = this.props;
-    const editorState = this.state.editorState;
+    const { editorState } = this.state;
     const divClassName = classNames('rich-text-editor', { hidePlaceholder: this.shouldHidePlaceholder() });
     return (
       <div className={divClassName} ref={textareaRef}>
-        {toolbarPosition === 'top'
-          ? <Toolbar
-            buttonsConfig={this.getToolbarButtons()}
-            editorState={editorState}
-            focusEditor={this.focusEditor}
-            onChange={this.onChange}
-          />
-          : null}
+        {toolbarPosition === 'top' ? this.renderToolbar() : null}
         <div onClick={this.focusEditor}>
           <Editor
+            blockRendererFn={customBlockRenderer}
             editorState={editorState}
             onBlur={this.onBlur}
             onChange={this.onChange}
@@ -173,14 +196,7 @@ export default class RichTextEditor extends React.PureComponent<Object, RichText
           />
         </div>
         {maxLength ? this.renderRemainingChars() : null}
-        {toolbarPosition === 'bottom'
-          ? <Toolbar
-            buttonsConfig={this.getToolbarButtons()}
-            editorState={editorState}
-            focusEditor={this.focusEditor}
-            onChange={this.onChange}
-          />
-          : null}
+        {toolbarPosition === 'bottom' ? this.renderToolbar() : null}
       </div>
     );
   }

@@ -1265,3 +1265,161 @@ mutation myMutation($postId: ID!, $subject: String, $body: String!) {
                 u'subject': u'Manger des choux à la crème',
                 u'body': u"the modified proposal...",
     }}}
+
+
+def test_mutation_upload_document(graphql_request, idea_in_thread_phase):
+    import os
+    from io import BytesIO
+
+    class FieldStorage(object):
+        file = BytesIO(os.urandom(16))
+        filename = u'path/to/image.png'
+        type = 'image/png'
+
+    graphql_request.POST['variables.file'] = FieldStorage()
+    res = schema.execute(u"""
+mutation uploadDocument($file: String!) {
+    uploadDocument(
+        file: $file,
+    ) {
+        document {
+            ... on Document {
+                id
+                externalUrl
+            }
+        }
+    }
+}
+""", context_value=graphql_request,
+        variable_values={
+            "file": "variables.file"
+            })
+    assert json.loads(json.dumps(res.data)) == {
+        u'uploadDocument': {
+            u'document': {
+                u'id': u'1',
+                u'externalUrl': u'http://localhost:6543/data/Discussion/1/documents/1/data',
+            }
+        }
+    }
+
+
+def test_mutation_add_post_attachment(graphql_request, idea_in_thread_phase, top_post_in_thread_phase):
+    import os
+    from io import BytesIO
+
+    class FieldStorage(object):
+        file = BytesIO(os.urandom(16))
+        filename = u'path/to/image.png'
+        type = 'image/png'
+
+    graphql_request.POST['variables.attachment'] = FieldStorage()
+    res = schema.execute(u"""
+mutation addPostAttachment($postId: ID!, $file: String!) {
+    addPostAttachment(
+        postId: $postId,
+        file: $file,
+    ) {
+        post {
+            ... on Post {
+                attachments {
+                    id
+                    title
+                    externalUrl
+                    mimeType
+                }
+            }
+        }
+    }
+}
+""", context_value=graphql_request,
+        variable_values={
+            "postId": top_post_in_thread_phase,
+            "file": "variables.attachment"
+            })
+    assert json.loads(json.dumps(res.data)) == {
+        u'addPostAttachment': {
+            u'post': {
+                u'attachments': [
+                    {
+                        u'externalUrl': u'http://localhost:6543/data/Discussion/1/documents/1/data',
+                        u'id': u'1',
+                        u'mimeType': u'image/png',
+                        u'title': u'image.png'
+                    }
+                ]
+            }
+        }
+    }
+
+
+def test_mutation_delete_post_attachment(graphql_request, idea_in_thread_phase, top_post_in_thread_phase):
+    # TODO: create a top_post_in_thread_phase_with_attachment fixture?
+    idea_id = idea_in_thread_phase
+    in_reply_to_post_id = top_post_in_thread_phase
+    import os
+    from io import BytesIO
+
+    class FieldStorage(object):
+        file = BytesIO(os.urandom(16))
+        filename = u'path/to/image.png'
+        type = 'image/png'
+
+    graphql_request.POST['variables.attachment'] = FieldStorage()
+    res = schema.execute(u"""
+mutation addPostAttachment($postId: ID!, $file: String!) {
+    addPostAttachment(
+        postId: $postId,
+        file: $file,
+    ) {
+        post {
+            ... on Post {
+                attachments {
+                    id
+                    title
+                    externalUrl
+                    mimeType
+                }
+            }
+        }
+    }
+}
+""", context_value=graphql_request,
+        variable_values={
+            "postId": top_post_in_thread_phase,
+            "file": "variables.attachment"
+            })
+    assert res.errors == []
+    document_id = res.data['addPostAttachment']['post']['attachments'][-1]['id']
+
+    res = schema.execute(u"""
+mutation deletePostAttachment($postId: ID!, $documentId: Int!) {
+    deletePostAttachment(
+        postId: $postId,
+        documentId: $documentId,
+    ) {
+        post {
+            ... on Post {
+                attachments {
+                    id
+                    title
+                    externalUrl
+                    mimeType
+                }
+            }
+        }
+    }
+}
+""", context_value=graphql_request,
+    variable_values={
+        "documentId": document_id,
+        "postId": top_post_in_thread_phase,
+        })
+
+    assert json.loads(json.dumps(res.data)) == {
+        u'deletePostAttachment': {
+            u'post': {
+                u'attachments': []
+            }
+        }
+    }

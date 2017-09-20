@@ -2032,9 +2032,9 @@ domain-browser@^1.1.1:
   version "1.1.7"
   resolved "https://registry.yarnpkg.com/domain-browser/-/domain-browser-1.1.7.tgz#867aa4b093faa05f1de08c06f4d7b21fdf8698bc"
 
-draft-convert@^1.4.8:
-  version "1.4.9"
-  resolved "https://registry.yarnpkg.com/draft-convert/-/draft-convert-1.4.9.tgz#12eb52cabaebb977a954a6ac9348177f4f4224d2"
+draft-convert@^2:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/draft-convert/-/draft-convert-2.0.0.tgz#e7afbc8054bfb2f53464e6dd47e50125403879d8"
   dependencies:
     immutable "~3.7.4"
     invariant "^2.2.1"

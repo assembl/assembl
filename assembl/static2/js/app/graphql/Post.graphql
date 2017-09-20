@@ -37,4 +37,13 @@ fragment Post on Post {
     id
     body
   }
+  attachments {
+    id
+    document {
+      id
+      title
+      externalUrl
+      mimeType
+    }
+  }
 }

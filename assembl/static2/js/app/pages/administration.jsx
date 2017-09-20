@@ -1,4 +1,5 @@
 import React from 'react';
+import { Translate } from 'react-redux-i18n';
 import { compose, graphql } from 'react-apollo';
 import { filter } from 'graphql-anywhere';
 import { Grid, Row, Col } from 'react-bootstrap';
@@ -61,8 +62,9 @@ class Administration extends React.Component {
   }
 
   render() {
-    const { children, data, params } = this.props;
+    const { children, data, debate, i18n, params } = this.props;
     const { phase } = params;
+    const { timeline } = this.props.debate.debateData;
     return (
       <div className="administration">
         <div className="save-bar">
@@ -83,10 +85,15 @@ class Administration extends React.Component {
             <Row>
               <Col xs={12} md={3}>
                 <div className="admin-menu-container">
-                  <Menu requestedPhase={phase} />
+                  <Menu debate={debate} i18n={i18n} requestedPhase={phase} />
                 </div>
               </Col>
               <Col xs={12} md={8}>
+                {!timeline
+                  ? <div>
+                    <Translate value="administration.noTimeline" />
+                  </div>
+                  : null}
                 {children}
               </Col>
               <Col xs={12} md={1}>
@@ -100,6 +107,13 @@ class Administration extends React.Component {
   }
 }
 
+const mapStateToProps = (state) => {
+  return {
+    debate: state.debate,
+    i18n: state.i18n
+  };
+};
+
 const mapDispatchToProps = (dispatch) => {
   return {
     updateThematics: (thematics) => {
@@ -109,7 +123,7 @@ const mapDispatchToProps = (dispatch) => {
 };
 
 export default compose(
-  connect(null, mapDispatchToProps),
+  connect(mapStateToProps, mapDispatchToProps),
   graphql(ThematicsQuery, {
     options: { variables: { identifier: 'survey' } }
   }),

@@ -1,5 +1,4 @@
 import React from 'react';
-import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import { Translate } from 'react-redux-i18n';
 import { get } from '../../utils/routeMap';
@@ -23,26 +22,27 @@ class Menu extends React.Component {
             <Translate value="administration.landingpage" />
           </Link>
         </li>
-        {timeline.map((phase, phaseIndex) => {
-          return (
-            <li className="menu-item" key={phaseIndex}>
-              <Link
-                to={`${get('administration', slug)}${get('adminPhase', { ...slug, phase: phase.identifier })}`}
-                activeClassName="active"
-              >
-                {phase.title.entries.map((entry, index) => {
-                  if (entry['@language'] === locale) {
-                    return (
-                      <span key={index}>
-                        <Translate value="administration.menu.phase" count={phaseIndex + 1} description={entry.value} />
-                      </span>
-                    );
-                  }
+        {timeline
+          ? timeline.map((phase, phaseIndex) => {
+            return (
+              <li className="menu-item" key={phaseIndex}>
+                <Link
+                  to={`${get('administration', slug)}${get('adminPhase', { ...slug, phase: phase.identifier })}`}
+                  activeClassName="active"
+                >
+                  {phase.title.entries.map((entry, index) => {
+                    if (entry['@language'] === locale) {
+                      return (
+                        <span key={index}>
+                          <Translate value="administration.menu.phase" count={phaseIndex + 1} description={entry.value} />
+                        </span>
+                      );
+                    }
 
-                  return null;
-                })}
-              </Link>
-              {translations[locale].administration[phase.identifier] &&
+                    return null;
+                  })}
+                </Link>
+                {translations[locale].administration[phase.identifier] &&
                 <ul className={phase.identifier === requestedPhase ? 'shown admin-menu2' : 'hidden admin-menu2'}>
                   {Object.keys(translations[locale].administration[phase.identifier]).map((index) => {
                     const section = translations[locale].administration[phase.identifier][index];
@@ -61,19 +61,13 @@ class Menu extends React.Component {
                     );
                   })}
                 </ul>}
-            </li>
-          );
-        })}
+              </li>
+            );
+          })
+          : null}
       </ul>
     );
   }
 }
 
-const mapStateToProps = (state) => {
-  return {
-    debate: state.debate,
-    i18n: state.i18n
-  };
-};
-
-export default connect(mapStateToProps)(Menu);
+export default Menu;

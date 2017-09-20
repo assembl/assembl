@@ -4,6 +4,7 @@ import { compose, graphql } from 'react-apollo';
 import { Row, Col } from 'react-bootstrap';
 
 import { getDomElementOffset } from '../../../utils/globalFunctions';
+import Attachments from '../../common/attachments';
 import ProfileLine from '../../common/profileLine';
 import PostTranslate from '../common/postTranslate';
 import PostActions from './postActions';
@@ -91,7 +92,8 @@ class Post extends React.PureComponent {
       modificationDate,
       sentimentCounts,
       mySentiment,
-      publicationState
+      publicationState,
+      attachments
     } = this.props.data.post;
     const { lang, ideaId, refetchIdea, creationDate, fullLevel, numChildren } = this.props;
     // creationDate is retrieved by IdeaWithPosts query, not PostQuery
@@ -146,6 +148,7 @@ class Post extends React.PureComponent {
         <div className="posts">
           <div className="answer-form" id={id}>
             <EditPostForm
+              attachments={attachments}
               id={id}
               body={originalBody}
               subject={originalSubject}
@@ -190,11 +193,13 @@ class Post extends React.PureComponent {
               <h3 className="dark-title-3">
                 {modifiedSubject}
               </h3>
-
               <div
                 className={`body ${bodyMimeType === 'text/plain' ? 'pre-wrap' : ''}`}
                 dangerouslySetInnerHTML={{ __html: body }}
               />
+
+              <Attachments attachments={attachments} />
+
               {indirectIdeaContentLinks.length
                 ? <div className="link-idea">
                   <div className="label">

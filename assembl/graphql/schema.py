@@ -352,6 +352,23 @@ class IdeaContentLink(graphene.ObjectType):
             return models.AgentProfile.get(self.creator_id)
 
 
+class Document(SecureObjectType, SQLAlchemyObjectType):
+    class Meta:
+        model = models.Document
+        only_fields = ('id', 'title', 'mime_type')
+
+    external_url = graphene.String()
+
+
+class PostAttachment(SecureObjectType, SQLAlchemyObjectType):
+    class Meta:
+        model = models.PostAttachment
+        only_fields = ('id',)
+
+    document = graphene.Field(Document)
+
+
+
 class PostInterface(SQLAlchemyInterface):
     class Meta:
         model = models.Post
@@ -372,6 +389,7 @@ class PostInterface(SQLAlchemyInterface):
     parent_id = graphene.ID()
     body_mime_type = graphene.String(required=True)
     publication_state = graphene.Field(type=PublicationStates)
+    attachments = graphene.List(PostAttachment)
 
     def resolve_subject(self, args, context, info):
         # Use self.subject and not self.get_subject() because we still
@@ -473,6 +491,7 @@ class PostInterface(SQLAlchemyInterface):
 
     def resolve_publication_state(self, args, context, info):
         return self.publication_state.name
+
 
 
 class Post(SecureObjectType, SQLAlchemyObjectType):
@@ -1298,6 +1317,7 @@ class CreatePost(graphene.Mutation):
         body = graphene.String(required=True)
         idea_id = graphene.ID(required=True)
         parent_id = graphene.ID() # A Post (except proposals in survey phase) can reply to another post. See related code in views/api/post.py
+        attachments = graphene.List(graphene.String)
 
     post = graphene.Field(lambda: Post)
 
@@ -1393,6 +1413,20 @@ class CreatePost(graphene.Mutation):
             db.flush()
             new_post.db.expire(new_post, ['idea_content_links_above_post'])
 
+            attachments = args.get('attachments', [])
+            for document_id in attachments:
+                document = models.Document.get(document_id)
+                attachment = models.PostAttachment(
+                    document=document,
+                    discussion=discussion,
+                    creator_id=context.authenticated_userid,
+                    post=new_post,
+                    title=document.title,
+                    attachmentPurpose="EMBED_ATTACHMENT"
+                )
+
+            db.flush()
+
         return CreatePost(post=new_post)
 
 
@@ -1401,6 +1435,7 @@ class UpdatePost(graphene.Mutation):
         post_id = graphene.ID(required=True)
         subject = graphene.String()
         body = graphene.String(required=True)
+        attachments = graphene.List(graphene.String)
 
     post = graphene.Field(lambda: Post)
 
@@ -1414,6 +1449,7 @@ class UpdatePost(graphene.Mutation):
         post_id = args.get('post_id')
         post_id = int(Node.from_global_id(post_id)[1])
         post = models.Post.get(post_id)
+        cls = models.Post
 
         permissions = get_permissions(user_id, discussion_id)
         allowed = post.user_can(user_id, CrudPermissions.UPDATE, permissions)
@@ -1446,6 +1482,36 @@ class UpdatePost(graphene.Mutation):
         if body != original_body_entry.value:
             post.body.add_value(body, original_body_entry.locale_code)
             changed = True
+
+            original_attachments = post.attachments
+            if original_attachments:
+                original_attachments_doc_ids = [str(a.document_id) for a in original_attachments]
+                attachments = args.get('attachments', [])
+                for document_id in attachments:
+                    if document_id not in original_attachments_doc_ids:
+                        document = models.Document.get(document_id)
+                        models.PostAttachment(
+                            document=document,
+                            discussion=discussion,
+                            creator_id=context.authenticated_userid,
+                            post=post,
+                            title=document.title,
+                            attachmentPurpose="EMBED_ATTACHMENT"
+                        )
+
+                # delete attachments that has been removed
+                documents_to_delete = set(original_attachments_doc_ids) - set(attachments)
+                for document_id in documents_to_delete:
+                    with cls.default_db.no_autoflush:
+                        document = models.Document.get(document_id)
+                        post_attachment = post.db.query(
+                            models.PostAttachment
+                        ).filter_by(
+                            discussion_id=discussion_id, post_id=post_id, document_id=document_id
+                            ).first()
+                        post.db.delete(document)
+                        post.attachments.remove(post_attachment)
+                        post.db.flush()
 
         if changed:
             post.modification_date = datetime.utcnow()
@@ -1594,6 +1660,127 @@ class DeleteSentiment(graphene.Mutation):
         return DeleteSentiment(post=post)
 
 
+class UploadDocument(graphene.Mutation):
+    class Input:
+        file = graphene.String(
+            required=True
+        )
+
+    document = graphene.Field(lambda: Document)
+
+    @staticmethod
+    def mutate(root, args, context, info):
+        discussion_id = context.matchdict['discussion_id']
+        discussion = models.Discussion.get(discussion_id)
+
+        user_id = context.authenticated_userid or Everyone
+        cls = models.Document
+        permissions = get_permissions(user_id, discussion_id)
+        allowed = cls.user_can_cls(user_id, CrudPermissions.CREATE, permissions)
+        if not allowed or (allowed == IF_OWNED and user_id == Everyone):
+            raise HTTPUnauthorized()
+
+        uploaded_file = args.get('file')
+        if uploaded_file is not None:
+            filename = os.path.basename(context.POST[uploaded_file].filename)
+            mime_type = context.POST[uploaded_file].type
+            uploaded_file = context.POST[uploaded_file].file
+            uploaded_file.seek(0)
+            data = uploaded_file.read()
+            document = models.File(
+                discussion=discussion,
+                mime_type=mime_type,
+                title=filename,
+                data=data)
+            document.db.flush()
+
+        return UploadDocument(document=document)
+
+
+class AddPostAttachment(graphene.Mutation):
+    class Input:
+        post_id = graphene.ID(required=True)
+        file = graphene.String(
+            required=True
+        )
+
+    post = graphene.Field(lambda: Post)
+
+    @staticmethod
+    def mutate(root, args, context, info):
+        discussion_id = context.matchdict['discussion_id']
+        discussion = models.Discussion.get(discussion_id)
+
+        user_id = context.authenticated_userid or Everyone
+
+        post_id = args.get('post_id')
+        post_id = int(Node.from_global_id(post_id)[1])
+        post = models.Post.get(post_id)
+
+        cls = models.PostAttachment
+        permissions = get_permissions(user_id, discussion_id)
+        allowed = cls.user_can_cls(user_id, CrudPermissions.CREATE, permissions)
+        if not allowed:
+            raise HTTPUnauthorized()
+
+        # add uploaded file as an attachment to the post
+        attachment = args.get('file')
+        if attachment is not None:
+            filename = os.path.basename(context.POST[attachment].filename)
+            mime_type = context.POST[attachment].type
+            uploaded_file = context.POST[attachment].file
+            uploaded_file.seek(0)
+            data = uploaded_file.read()
+            document = models.File(
+                discussion=discussion,
+                mime_type=mime_type,
+                title=filename,
+                data=data)
+
+            attachment = models.PostAttachment(
+                document=document,
+                discussion=discussion,
+                creator_id=context.authenticated_userid,
+                post=post,
+                title=filename,
+                attachmentPurpose="EMBED_ATTACHMENT"
+            )
+            post.db.flush()
+
+        return AddPostAttachment(post=post)
+
+
+class DeletePostAttachment(graphene.Mutation):
+    class Input:
+        post_id = graphene.ID(required=True)
+        attachment_id = graphene.Int(required=True)
+
+    post = graphene.Field(lambda: Post)
+
+    @staticmethod
+    def mutate(root, args, context, info):
+        discussion_id = context.matchdict['discussion_id']
+        user_id = context.authenticated_userid or Everyone
+        post_id = args.get('post_id')
+        post_id = int(Node.from_global_id(post_id)[1])
+        post = models.Post.get(post_id)
+        permissions = get_permissions(user_id, discussion_id)
+        post_attachment_id = args.get('attachment_id')
+        post_attachment = models.PostAttachment.get(post_attachment_id)
+        allowed = post_attachment.user_can(user_id, CrudPermissions.DELETE, permissions)
+        if not allowed:
+            raise HTTPUnauthorized()
+
+        cls = models.Post
+        with cls.default_db.no_autoflush:
+            post.db.delete(post_attachment.document)
+            post.attachments.remove(post_attachment)
+
+        post.db.flush()
+
+        return DeletePostAttachment(post=post)
+
+
 class Mutations(graphene.ObjectType):
     create_thematic = CreateThematic.Field()
     update_thematic = UpdateThematic.Field()
@@ -1605,6 +1792,9 @@ class Mutations(graphene.ObjectType):
     undelete_post = UndeletePost.Field()
     add_sentiment = AddSentiment.Field()
     delete_sentiment = DeleteSentiment.Field()
+    add_post_attachment = AddPostAttachment.Field()
+    upload_document = UploadDocument.Field()
+    delete_post_attachment = DeletePostAttachment.Field()
 
 
 Schema = graphene.Schema(query=Query, mutation=Mutations)

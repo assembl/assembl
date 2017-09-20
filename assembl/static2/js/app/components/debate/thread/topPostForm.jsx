@@ -10,6 +10,7 @@ import { displayAlert, promptForLoginOr } from '../../../utils/utilityManager';
 import { TextInputWithRemainingChars } from '../../common/textInputWithRemainingChars';
 import RichTextEditor from '../../common/richTextEditor';
 import { getContentLocale } from '../../../reducers/rootReducer';
+import attachmentsPlugin from '../../common/richTextEditor/attachmentsPlugin';
 
 export const TEXT_INPUT_MAX_LENGTH = 140;
 export const TEXT_AREA_MAX_LENGTH = 3000;
@@ -43,11 +44,13 @@ class TopPostForm extends React.Component {
     this.setState({ submitting: true });
     const bodyIsEmpty = !body || rawContentStateIsEmpty(body);
     if (subject && !bodyIsEmpty) {
+      const attachments = attachmentsPlugin.getAttachmentsDocumentIds(body);
       const variables = {
         contentLocale: contentLocale,
         ideaId: ideaId,
         subject: subject,
-        body: convertRawContentStateToHTML(body)
+        body: convertRawContentStateToHTML(body),
+        attachments: attachments
       };
       displayAlert('success', I18n.t('loading.wait'));
       mutate({ variables: variables })
@@ -111,26 +114,29 @@ class TopPostForm extends React.Component {
                 handleTxtChange={this.handleSubjectChange}
                 handleInputFocus={this.handleInputFocus}
               />
-              <div className={this.state.isActive ? 'margin-m' : 'hidden'}>
-                <RichTextEditor
-                  rawContentState={this.state.body}
-                  handleInputFocus={this.handleInputFocus}
-                  maxLength={TEXT_AREA_MAX_LENGTH}
-                  placeholder={I18n.t('debate.insert')}
-                  updateContentState={this.updateBody}
-                />
-                <Button className="button-cancel button-dark btn btn-default left margin-l" onClick={this.resetForm}>
-                  <Translate value="cancel" />
-                </Button>
-                <Button
-                  className="button-submit button-dark btn btn-default right margin-l"
-                  onClick={this.createTopPost}
-                  style={{ marginBottom: '30px' }}
-                  disabled={this.state.submitting}
-                >
-                  <Translate value="debate.post" />
-                </Button>
-              </div>
+              {this.state.isActive
+                ? <div className="margin-m">
+                  <RichTextEditor
+                    rawContentState={this.state.body}
+                    handleInputFocus={this.handleInputFocus}
+                    maxLength={TEXT_AREA_MAX_LENGTH}
+                    placeholder={I18n.t('debate.insert')}
+                    updateContentState={this.updateBody}
+                    withAttachmentButton
+                  />
+                  <Button className="button-cancel button-dark btn btn-default left margin-l" onClick={this.resetForm}>
+                    <Translate value="cancel" />
+                  </Button>
+                  <Button
+                    className="button-submit button-dark btn btn-default right margin-l"
+                    onClick={this.createTopPost}
+                    style={{ marginBottom: '30px' }}
+                    disabled={this.state.submitting}
+                  >
+                    <Translate value="debate.post" />
+                  </Button>
+                </div>
+                : null}
             </FormGroup>
           </div>
         </Col>

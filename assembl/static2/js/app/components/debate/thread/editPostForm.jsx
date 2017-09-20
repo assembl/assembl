@@ -6,11 +6,14 @@ import { Row, Col, FormGroup, Button } from 'react-bootstrap';
 import { Translate, I18n } from 'react-redux-i18n';
 import { RawContentState } from 'draft-js';
 
+import deletePostAttachmentMutation from '../../../graphql/mutations/deletePostAttachment.graphql';
 import updatePostMutation from '../../../graphql/mutations/updatePost.graphql';
 import { displayAlert, inviteUserToLogin } from '../../../utils/utilityManager';
 import { getConnectedUserId } from '../../../utils/globalFunctions';
 import { convertToRawContentState, convertRawContentStateToHTML, rawContentStateIsEmpty } from '../../../utils/draftjs';
+import EditAttachments from '../../common/editAttachments';
 import RichTextEditor from '../../common/richTextEditor';
+import attachmentsPlugin from '../../common/richTextEditor/attachmentsPlugin';
 import { TextInputWithRemainingChars } from '../../common/textInputWithRemainingChars';
 import { TEXT_INPUT_MAX_LENGTH, TEXT_AREA_MAX_LENGTH } from './topPostForm';
 import { getContentLocale } from '../../../reducers/rootReducer';
@@ -23,13 +26,15 @@ type EditPostFormProps = {
   readOnly: boolean,
   modifiedOriginalSubject: string,
   goBackToViewMode: Function,
-  mutate: Function,
-  client: Object
+  client: Object,
+  refetchIdea: Function,
+  updatePost: Function
 };
 
 type EditPostFormState = {
   subject: string,
-  body: RawContentState
+  body: RawContentState,
+  deletingAttachment: boolean
 };
 
 class EditPostForm extends React.PureComponent<void, EditPostFormProps, EditPostFormState> {
@@ -42,6 +47,7 @@ class EditPostForm extends React.PureComponent<void, EditPostFormProps, EditPost
     const body = props.body || '';
     this.state = {
       body: convertToRawContentState(body),
+      deletingAttachment: false,
       subject: subject
     };
   }
@@ -68,20 +74,24 @@ class EditPostForm extends React.PureComponent<void, EditPostFormProps, EditPost
   };
 
   handleSubmit = (): void => {
+    const { body } = this.state;
     const subjectIsEmpty = this.state.subject.length === 0;
-    const bodyIsEmpty = rawContentStateIsEmpty(this.state.body);
+    const bodyIsEmpty = rawContentStateIsEmpty(body);
     if (!subjectIsEmpty && !bodyIsEmpty) {
+      const attachments = attachmentsPlugin.getAttachmentsDocumentIds(body);
       const variables = {
         contentLocale: this.props.contentLocale,
         postId: this.props.id,
         subject: this.state.subject,
-        body: convertRawContentStateToHTML(this.state.body)
+        body: convertRawContentStateToHTML(body),
+        attachments: attachments
       };
       displayAlert('success', I18n.t('loading.wait'));
       const oldSubject = this.props.subject;
       this.props
-        .mutate({ variables: variables })
+        .updatePost({ variables: variables })
         .then(() => {
+          this.props.refetchIdea();
           displayAlert('success', I18n.t('debate.thread.postSuccess'));
           this.props.goBackToViewMode();
           if (oldSubject !== this.state.subject) {
@@ -102,7 +112,22 @@ class EditPostForm extends React.PureComponent<void, EditPostFormProps, EditPost
     }
   };
 
+  deleteAttachment = (documentId) => {
+    this.setState(
+      {
+        deletingAttachment: true
+      },
+      () => {
+        const newBody = attachmentsPlugin.removeAttachment(this.state.body, documentId);
+        this.setState({
+          body: newBody
+        });
+      }
+    );
+  };
+
   render() {
+    const attachments = attachmentsPlugin.getAttachments(this.state.body);
     return (
       <Row>
         <Col xs={12} md={12}>
@@ -131,11 +156,22 @@ class EditPostForm extends React.PureComponent<void, EditPostFormProps, EditPost
                 <Translate value="debate.edit.body" />
               </div>
               <RichTextEditor
+                preventOnBlur={this.state.deletingAttachment}
                 rawContentState={this.state.body}
                 placeholder={I18n.t('debate.edit.body')}
                 updateContentState={this.updateBody}
                 maxLength={TEXT_AREA_MAX_LENGTH}
+                withAttachmentButton
               />
+
+              <EditAttachments
+                attachments={attachments}
+                onDelete={this.deleteAttachment}
+                afterDelete={() => {
+                  return this.setState({ deletingAttachment: false });
+                }}
+              />
+
               <div className="button-container">
                 <Button className="button-cancel button-dark btn btn-default left" onClick={this.handleCancel}>
                   <Translate value="cancel" />
@@ -158,4 +194,9 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default compose(connect(mapStateToProps), graphql(updatePostMutation), withApollo)(EditPostForm);
+export default compose(
+  connect(mapStateToProps),
+  graphql(deletePostAttachmentMutation, { name: 'deletePostAttachment' }),
+  graphql(updatePostMutation, { name: 'updatePost' }),
+  withApollo
+)(EditPostForm);

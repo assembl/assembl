@@ -1,0 +1,60 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Attachments component should render the list of attachments 1`] = `
+<div
+  className="attachments"
+>
+  <div
+    className="attachment"
+  >
+    <span
+      className="assembl-icon-synthesis"
+    />
+    <span
+      className="title"
+    >
+      Foo
+    </span>
+    <a
+      download="Foo"
+      href="http://www.example.com/foo.pdf"
+      rel="noopener noreferrer"
+      target="_blank"
+      type="application/pdf"
+    >
+      <span
+        className={undefined}
+        style={undefined}
+      >
+        Download
+      </span>
+    </a>
+  </div>
+  <div
+    className="attachment"
+  >
+    <span
+      className="assembl-icon-synthesis"
+    />
+    <span
+      className="title"
+    >
+      Bar.jpg
+    </span>
+    <a
+      download="Bar.jpg"
+      href="http://www.example.com/bar.jpg"
+      rel="noopener noreferrer"
+      target="_blank"
+      type="image/jpeg"
+    >
+      <span
+        className={undefined}
+        style={undefined}
+      >
+        Download
+      </span>
+    </a>
+  </div>
+</div>
+`;

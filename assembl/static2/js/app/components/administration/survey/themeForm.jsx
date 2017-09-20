@@ -5,7 +5,7 @@ import { Button, FormGroup, OverlayTrigger } from 'react-bootstrap';
 
 import { deleteThematic, updateThematicImgUrl, updateThematicTitle } from '../../../actions/adminActions';
 import FormControlWithLabel from '../../common/formControlWithLabel';
-import ImageUploader from '../../common/imageUploader';
+import FileUploader from '../../common/fileUploader';
 import { deleteThematicTooltip } from '../../common/tooltips';
 
 export const DumbThemeCreationForm = ({
@@ -40,7 +40,7 @@ export const DumbThemeCreationForm = ({
       </div>
       <FormControlWithLabel label={ph} onChange={handleTitleChange} required type="text" value={title} />
       <FormGroup>
-        <ImageUploader imgUrl={imgUrl} handleImageChange={handleImageChange} />
+        <FileUploader fileOrUrl={imgUrl} handleChange={handleImageChange} />
       </FormGroup>
       <div className="pointer right">
         <OverlayTrigger placement="top" overlay={deleteThematicTooltip}>

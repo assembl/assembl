@@ -159,7 +159,15 @@ const Translations = {
       title: "synthèse"
     },
     common: {
+      attachFileForm: {
+        label: "Insérer une pièce jointe",
+        submit: "Valider"
+      },
+      attachments: {
+        download: "Télécharger"
+      },
       editor: {
+        attachment: "Joindre un fichier",
         bold: "Gras",
         italic: "Italique",
         bulletList: "Liste de puces"
@@ -268,6 +276,7 @@ const Translations = {
       menu: {
         phase: "Phase %{count} - %{description}"
       },
+      noTimeline: "Aucune timeline n'a été configurée pour ce débat.",
       survey: {
         0: "Renseigner les thématiques",
         1: "Renseigner les questions",
@@ -457,7 +466,15 @@ const Translations = {
       panelTitle: "Welcome to Assembl community page"
     },
     common: {
+      attachFileForm: {
+        label: "Add a attachment",
+        submit: "Submit"
+      },
+      attachments: {
+        download: "Download"
+      },
       editor: {
+        attachment: "Add a file",
         bold: "Bold",
         italic: "Italic",
         bulletList: "Bullet list"
@@ -566,6 +583,7 @@ const Translations = {
       menu: {
         phase: "Phase %{count} - %{description}"
       },
+      noTimeline: "No timeline has been configured yet",
       survey: {
         0: "Set themes",
         1: "Set questions",

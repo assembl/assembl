@@ -35,28 +35,49 @@
 .rich-text-editor {
   font-family: $font-family;
 
-  .editor-toolbar {
+  .insertion-box {
+    .assembl-icon-cancel {
+      float: right;
+    }
 
-    .btn {
-      font-size: 10px;
-      border: 0;
-      border-radius: 0;
-
-      span {
-        &:before {
-          font-size: $font-size-s;
-        }
+    .attach-file {
+      label {
+        margin-bottom: 20px;
       }
     }
 
-    .btn:first-child {
-      border-top-left-radius: 20px;
-      border-bottom-left-radius: 20px;
-    }
+    min-height: 200px;
+    position: absolute;
+    width: 100%;
+    margin-top: 10px;
+    z-index: 1000;
+  }
 
-    .btn:last-child {
-      border-top-right-radius: 20px;
-      border-bottom-right-radius: 20px;
+  .editor-toolbar {
+    .btn-group {
+      margin-right: 5px;
+
+      .btn {
+        font-size: 10px;
+        border: 0;
+        border-radius: 0;
+
+        span {
+          &:before {
+            font-size: $font-size-s;
+          }
+        }
+      }
+
+      .btn:first-child {
+        border-top-left-radius: 20px;
+        border-bottom-left-radius: 20px;
+      }
+
+      .btn:last-child {
+        border-top-right-radius: 20px;
+        border-bottom-right-radius: 20px;
+      }
     }
 
   }
@@ -78,6 +99,8 @@
 
   .public-DraftEditor-content {
     min-height: 12em;
+    max-height: 200px;
+    overflow: auto;
   }
 
 }
@@ -85,5 +108,14 @@
 .rich-text-editor.hidePlaceholder {
   .public-DraftEditorPlaceholder-inner {
     display: none;
+  }
+}
+
+.atomic-block {
+  .attachment-document {
+    border: solid 1px;
+    margin: 3px;
+    padding: 3px;
+    font-family: $font-family3;
   }
 }
