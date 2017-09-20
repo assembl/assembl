@@ -150,11 +150,13 @@ class Post extends React.Component {
       body = bodyEntries[0].value;
     }
 
+    const specialLocaleCodes = ['und', 'zxx']; // locale codes that can not be translated
+    const showPostTranslate = originalLocale && specialLocaleCodes.indexOf(originalLocale) === -1;
     return (
       <div className={postIndex < 3 || moreProposals ? 'shown box' : 'hidden box'}>
         <div className="content">
           <PostCreator name={post.creator.name} />
-          {originalLocale
+          {showPostTranslate
             ? <PostTranslate
               id={post.id}
               lang={lang}
