@@ -67,7 +67,7 @@ if (module.hot) {
     ReactDOM.render(
       <AppContainer>
         <ApolloProvider store={store} client={client}>
-          <Router history={customBrowserHistory} routes={NewRoutes} />
+          <Router history={customBrowserHistory} routes={NewRoutes} onUpdate={hashLinkScroll} />
         </ApolloProvider>
       </AppContainer>,
       document.getElementById('root')
