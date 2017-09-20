@@ -12,11 +12,14 @@ import Disagree from '../../svg/disagree';
 import { inviteUserToLogin, displayAlert, displayModal } from '../../../utils/utilityManager';
 import addSentimentMutation from '../../../graphql/mutations/addSentiment.graphql';
 import deleteSentimentMutation from '../../../graphql/mutations/deleteSentiment.graphql';
+import PostQuery from '../../../graphql/PostQuery.graphql';
 import { likeTooltip, disagreeTooltip } from '../../common/tooltips';
 import { sentimentDefinitionsObject } from '../thread/sentimentDefinitions';
 import StatisticsDoughnut from '../common/statisticsDoughnut';
 import PostTranslate from '../common/postTranslate';
 import { EXTRA_SMALL_SCREEN_WIDTH } from '../../../constants';
+import withContentLocale from '../../common/withContentLocale';
+import withLoadingIndicator from '../../common/withLoadingIndicator';
 
 class Post extends React.Component {
   constructor(props) {
@@ -125,16 +128,23 @@ class Post extends React.Component {
       });
   }
   render() {
-    const { postIndex, moreProposals, post } = this.props;
+    const { post } = this.props.data;
+    const {
+      contentLocale,
+      lang,
+      localContentLocale,
+      moreProposals,
+      originalLocale,
+      postIndex,
+      updateLocalContentLocale
+    } = this.props;
     const { bodyEntries } = post;
 
     let body;
-    let originalBodyLocale;
     if (bodyEntries.length > 1) {
       // first entry is the translated version, example localeCode "fr-x-mtfrom-en"
       // second entry is the original, example localeCode "en"
       body = this.state.showOriginal ? bodyEntries[1].value : bodyEntries[0].value;
-      originalBodyLocale = bodyEntries[1].localeCode;
     } else {
       // translation is not enabled or the message is already in the desired locale
       body = bodyEntries[0].value;
@@ -144,16 +154,19 @@ class Post extends React.Component {
       <div className={postIndex < 3 || moreProposals ? 'shown box' : 'hidden box'}>
         <div className="content">
           <PostCreator name={post.creator.name} />
-          {originalBodyLocale
+          {originalLocale
             ? <PostTranslate
               id={post.id}
-              showOriginal={this.state.showOriginal}
-              originalBodyLocale={originalBodyLocale}
+              lang={lang}
+              showOriginal={this.state.showOriginal || contentLocale === originalLocale}
+              originalBodyLocale={originalLocale}
               toggle={() => {
                 return this.setState((state) => {
                   return { showOriginal: !state.showOriginal };
                 });
               }}
+              localContentLocale={localContentLocale}
+              updateLocalContentLocale={updateLocalContentLocale}
             />
             : null}
           <div
@@ -240,19 +253,23 @@ Post.propTypes = {
   deleteSentiment: PropTypes.func.isRequired
 };
 
-const PostWithMutations = compose(
+const mapStateToProps = (state) => {
+  return {
+    debate: state.debate,
+    globalContentLocale: state.contentLocale,
+    lang: state.i18n.locale
+  };
+};
+
+export default compose(
+  connect(mapStateToProps),
+  withContentLocale,
+  graphql(PostQuery),
   graphql(addSentimentMutation, {
     name: 'addSentiment'
   }),
   graphql(deleteSentimentMutation, {
     name: 'deleteSentiment'
-  })
+  }),
+  withLoadingIndicator()
 )(Post);
-
-const mapStateToProps = (state) => {
-  return {
-    debate: state.debate
-  };
-};
-
-export default connect(mapStateToProps)(PostWithMutations);
