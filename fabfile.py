@@ -1388,10 +1388,14 @@ def database_create():
 @task
 def rotate_database_dumps(dry_run=False):
     """Rotate database backups for real"""
-    from executor.contexts import LocalContext, RemoteContext, ExternalCommand
-    from rotate_backups import RotateBackups, Location
-    import rotate_backups
-    import coloredlogs
+    try:
+        from executor.contexts import LocalContext, RemoteContext, ExternalCommand
+        from rotate_backups import RotateBackups, Location
+        import rotate_backups
+        import coloredlogs
+    except ImportError:
+        print(red("This fab command should be run within the venv."))
+        return
     rotate_backups.TIMESTAMP_PATTERN = re.compile(
         r'(?P<year>\d{4})(?P<month>\d{2})(?P<day>\d{2})')
     coloredlogs.increase_verbosity()
