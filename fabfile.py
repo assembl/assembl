@@ -1385,6 +1385,38 @@ def database_create():
     else:
         print(green("Database exists and user can connect"))
 
+@task
+def rotate_database_dumps(dry_run=False):
+    """Rotate database backups for real"""
+    from executor.contexts import LocalContext, RemoteContext, ExternalCommand
+    from rotate_backups import RotateBackups, Location
+    import rotate_backups
+    import coloredlogs
+    rotate_backups.TIMESTAMP_PATTERN = re.compile(
+        r'(?P<year>\d{4})(?P<month>\d{2})(?P<day>\d{2})')
+    coloredlogs.increase_verbosity()
+    rotation_scheme = {
+        # same as doc/borg_backup_script/assembl_borg_backup.sh
+        'daily':7, 'weekly':4, 'monthly':6,
+        # Plus yearly for good conscience
+        'yearly': 'always'
+    }
+    dir = env.dbdumps_dir
+    if env.host_string == 'localhost':
+        ctx = LocalContext()
+        dir = os.path.realpath(dir)
+    else:
+        ctx = RemoteContext(ssh_alias=env.host_string, ssh_user=env.user)
+    location = Location(context=ctx, directory=dir)
+    backup = RotateBackups(rotation_scheme, include_list=['db_*.sql.pgdump', 'db_*.bp'], dry_run=dry_run)
+    backup.rotate_backups(location, False)
+
+
+@task
+def rotate_database_dumps_dry_run():
+    """Rotate database backups dry run"""
+    rotate_database_dumps(True)
+
 
 @task
 def database_dump():
@@ -1410,6 +1442,7 @@ def database_dump():
     # Make symlink to latest
     with cd(env.dbdumps_dir):
         run('ln -sf %s %s' % (absolute_path, remote_db_path()))
+    # TODO: Maybe do a rotation?
 
 
 @task
