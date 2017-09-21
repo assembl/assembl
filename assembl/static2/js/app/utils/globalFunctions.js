@@ -133,23 +133,6 @@ export const getDomElementOffset = (el) => {
   return { top: rect.top + scrollTop, left: rect.left + scrollLeft };
 };
 
-export const setDomElementOffset = (el, offset) => {
-  // inspired from jquery.setOffset
-  const curOffset = getDomElementOffset(el);
-  const curCSS = window.getComputedStyle(el);
-
-  if ('top' in offset) {
-    const curTop = parseFloat(curCSS.top) || 0;
-    // eslint-disable-next-line no-param-reassign
-    el.style.top = `${offset.top - curOffset.top + curTop}px`;
-  }
-  if ('left' in offset) {
-    const curLeft = parseFloat(curCSS.left) || 0;
-    // eslint-disable-next-line no-param-reassign
-    el.style.left = `${offset.left - curOffset.left + curLeft}px`;
-  }
-};
-
 export const computeDomElementOffset = (ref, offset) => {
   // inspired from jquery.setOffset
   const curOffset = getDomElementOffset(ref);
