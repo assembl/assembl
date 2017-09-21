@@ -47,11 +47,13 @@ class Nuggets extends React.Component {
   }
 
   componentDidMount() {
-    document.addEventListener('rowHeightRecomputed', this.updateTop);
+    if ('node' in this) {
+      document.addEventListener('rowHeightRecomputed', this.updateTop);
+    }
   }
 
   componentWillUnmount() {
-    document.removeEventListener('rowHeightRecomputed', this.updateTop);
+    if ('node' in this) document.removeEventListener('rowHeightRecomputed', this.updateTop);
   }
 
   updateTop() {
@@ -74,7 +76,7 @@ class Nuggets extends React.Component {
   render() {
     const { extracts, fullLevel, rowIndex } = this.props;
     const style = this.state.top === null ? {} : { top: this.state.top };
-    return extracts.length > 0
+    return Array.isArray(extracts) && extracts.length > 0
       ? <div
         id={`extracts-${Nuggets.completeLevel(rowIndex, fullLevel).join('-')}`}
         ref={(node) => {
@@ -101,7 +103,7 @@ class Nuggets extends React.Component {
           </div>
         </div>
       </div>
-      : <div />;
+      : null;
   }
 }
 

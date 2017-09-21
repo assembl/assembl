@@ -164,9 +164,7 @@ class Post extends React.PureComponent {
     };
     return (
       <div className="posts" id={id}>
-        {Array.isArray(extracts) &&
-          extracts.length > 0 &&
-          <Nuggets extracts={extracts} fullLevel={fullLevel} rowIndex={rowIndex} postId={id} />}
+        <Nuggets extracts={extracts} postId={id} />
         <div className="box">
           <Row className="post-row">
             <Col xs={12} md={11} className="post-left">
