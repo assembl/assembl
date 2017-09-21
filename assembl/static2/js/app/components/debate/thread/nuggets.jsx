@@ -1,7 +1,7 @@
 import React from 'react';
 import range from 'lodash/range';
 
-import { getDomElementOffset, setDomElementOffset } from '../../../utils/globalFunctions';
+import { getDomElementOffset, computeDomElementOffset } from '../../../utils/globalFunctions';
 
 class Nuggets extends React.Component {
   static get SPACER_SIZE() {
@@ -43,35 +43,43 @@ class Nuggets extends React.Component {
       }, null);
   }
 
-  componentDidMount() {
-    this.callForceUpdate = this.callForceUpdate.bind(this);
-    document.addEventListener('rowHeightRecomputed', this.callForceUpdate);
+  constructor(props) {
+    super(props);
+    this.state = {
+      top: null
+    };
+    this.updateTop = this.updateTop.bind(this);
   }
 
-  componentDidUpdate() {
-    const { fullLevel, rowIndex, postId } = this.props;
-    const extracts = [].slice.call(document.getElementsByClassName('extracts'));
-    const prevExtract = Nuggets.previousExtract(Nuggets.completeLevel(rowIndex, fullLevel), extracts);
-    if (prevExtract !== null) {
-      const newTop = getDomElementOffset(prevExtract).top + prevExtract.getBoundingClientRect().height + Nuggets.SPACER_SIZE;
-      const postTop = getDomElementOffset(document.getElementById(postId)).top;
-      setDomElementOffset(this.node, { top: Math.max(postTop, newTop) });
-    }
+  componentDidMount() {
+    document.addEventListener('rowHeightRecomputed', this.updateTop);
   }
 
   componentWillUnmount() {
-    document.removeEventListener('rowHeightRecomputed', this.callForceUpdate);
+    document.removeEventListener('rowHeightRecomputed', this.updateTop);
   }
 
-  callForceUpdate() {
-    // This is to prevent the event from passing arguments to forceUpdate, raising an error.
-    // I did not use an arrow function because we need to pass the function to removeEventListener
-    this.forceUpdate();
+  updateTop() {
+    this.setState({ top: `${this.computeNewTop()}px` });
+  }
+
+  computeNewTop() {
+    const { fullLevel, rowIndex, postId } = this.props;
+    const extracts = [].slice.call(document.getElementsByClassName('extracts'));
+    const prevExtract = Nuggets.previousExtract(Nuggets.completeLevel(rowIndex, fullLevel), extracts);
+    const postDOM = document.getElementById(postId);
+    const postTop = getDomElementOffset(postDOM).top;
+    if (prevExtract !== null) {
+      const newTop = getDomElementOffset(prevExtract).top + prevExtract.getBoundingClientRect().height + Nuggets.SPACER_SIZE;
+      return computeDomElementOffset(this.node, { top: Math.max(postTop, newTop) }).top;
+    }
+    return computeDomElementOffset(this.node, { top: postTop }).top;
   }
 
   render() {
     const { extracts, fullLevel, rowIndex } = this.props;
     const thisCompleteLevel = fullLevel ? [rowIndex, ...fullLevel] : [rowIndex];
+    const style = this.state.top === null ? {} : { top: this.state.top };
     return extracts.length > 0
       ? <div
         id={`extracts-${thisCompleteLevel.join('-')}`}
@@ -79,6 +87,7 @@ class Nuggets extends React.Component {
           this.node = node;
         }}
         className="extracts"
+        style={style}
       >
         <div className="badges">
           <div className="nugget-img">
