@@ -11,7 +11,6 @@ import Menu from '../components/administration/menu';
 import LanguageMenu from '../components/administration/languageMenu';
 import SaveButton from '../components/administration/saveButton';
 import ThematicsQuery from '../graphql/ThematicsQuery.graphql';
-import getDiscussionPreferenceLanguage from '../graphql/DiscussionPreferenceLanguage.graphql';
 import { convertEntriesToRawContentState } from '../utils/draftjs';
 
 export function convertVideoDescriptions(thematics) {
@@ -114,7 +113,7 @@ class Administration extends React.Component {
                 {childrenWithProps}
               </Col>
               <Col xs={12} md={1}>
-                <LanguageMenu visibility={this.state.showLanguageMenu}/>
+                <LanguageMenu visibility={this.state.showLanguageMenu} />
               </Col>
             </Row>
           </Grid>

@@ -10,7 +10,7 @@ import { languagePreferencesHasChanged } from '../../actions/adminActions';
 import createThematicMutation from '../../graphql/mutations/createThematic.graphql';
 import deleteThematicMutation from '../../graphql/mutations/deleteThematic.graphql';
 import updateThematicMutation from '../../graphql/mutations/updateThematic.graphql';
-import updateDiscussionPreference from '../../graphql/mutations/updateDiscussionPreference.graphql';
+import updateDiscussionPreferenceQuery from '../../graphql/mutations/updateDiscussionPreference.graphql';
 import getDiscussionPreferenceLanguage from '../../graphql/DiscussionPreferenceLanguage.graphql';
 
 const runSerial = (tasks) => {
@@ -43,33 +43,44 @@ const createVariablesForMutation = (thematic) => {
   };
 };
 
-const SaveButton = ({ i18n, createThematic, deleteThematic, enabled, refetchThematics, thematics, updateThematic, client, updateDiscussionPreference, preferences, languagePreferenceHasChanged, resetLanguagePreferenceChanged}) => {
+const SaveButton = ({
+  i18n,
+  createThematic,
+  deleteThematic,
+  enabled,
+  refetchThematics,
+  thematics,
+  updateThematic,
+  updateDiscussionPreference,
+  preferences,
+  languagePreferenceHasChanged,
+  resetLanguagePreferenceChanged }) => {
   const saveAction = () => {
     displayAlert('success', `${I18n.t('loading.wait')}...`);
     const promisesArray = [];
-    //Compare the redux state change to the saved data in apollo
+    // Compare the redux state change to the saved data in apollo
 
     if (languagePreferenceHasChanged) {
-      //Save and update the apolloStore
+      // Save and update the apolloStore
       const payload = {
         variables: {
           languages: preferences
         },
         update: (storeProxy, { data: { updateDiscussionPreference: { preferences: { languages } } } }) => {
-          //Update the apollo cache
+          // Update the apollo cache
           const query = storeProxy.readQuery({
             query: getDiscussionPreferenceLanguage,
             variables: { inLocale: i18n.locale }
           });
-          const newData = {...query};
-          newData.discussionPreferences.languages = languages; 
+          const newData = { ...query };
+          newData.discussionPreferences.languages = languages;
           storeProxy.writeQuery({
             query: getDiscussionPreferenceLanguage,
             variables: { inLocale: i18n.locale },
             data: newData
-          })
+          });
         }
-      }
+      };
       updateDiscussionPreference(payload);
       resetLanguagePreferenceChanged();
     }
@@ -142,12 +153,21 @@ const SaveButtonWithMutations = compose(
   graphql(deleteThematicMutation, {
     name: 'deleteThematic'
   }),
-  graphql(updateDiscussionPreference, {
+  graphql(updateDiscussionPreferenceQuery, {
     name: 'updateDiscussionPreference'
   })
 )(SaveButton);
 
-const mapStateToProps = ({ i18n, admin: { thematicsById, thematicsHaveChanged, thematicsInOrder, discussionLanguagePreferences, discussionLanguagePreferencesHasChanged } }) => {
+const mapStateToProps = ({
+  i18n,
+  admin: {
+    thematicsById,
+    thematicsHaveChanged,
+    thematicsInOrder,
+    discussionLanguagePreferences,
+    discussionLanguagePreferencesHasChanged
+  }
+}) => {
   return {
     enabled: thematicsHaveChanged,
     thematics: thematicsInOrder.toArray().map((id) => {
@@ -161,8 +181,8 @@ const mapStateToProps = ({ i18n, admin: { thematicsById, thematicsHaveChanged, t
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    resetLanguagePreferenceChanged: () => {dispatch(languagePreferencesHasChanged(false))}
-  }
-}
+    resetLanguagePreferenceChanged: () => { dispatch(languagePreferencesHasChanged(false)); }
+  };
+};
 
 export default compose(connect(mapStateToProps, mapDispatchToProps), withApollo)(SaveButtonWithMutations);

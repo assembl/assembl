@@ -263,19 +263,19 @@ const Translations = {
       panelTitle: "Conditions Générales d'Utilisations"
     },
     administration: {
-      addThematic: 'Ajouter une thématique',
-      addQuestion: 'Ajouter une question',
-      deleteThematic: 'Supprimer la thématique',
-      deleteQuestion: 'Supprimer la question',
-      changeLanguage: 'Renseigner une autre langue',
-      question_label: 'Question',
-      videoModule: 'Option module vidéo',
-      thematic: 'Thématique',
-      edition: 'Éditer la discussion',
-      landingpage: 'Landing page',
+      addThematic: "Ajouter une thématique",
+      addQuestion: "Ajouter une question",
+      deleteThematic: "Supprimer la thématique",
+      deleteQuestion: "Supprimer la question",
+      changeLanguage: "Renseigner une autre langue",
+      question_label: "Question",
+      videoModule: "Option module vidéo",
+      thematic: "Thématique",
+      edition: "Éditer la discussion",
+      landingpage: "Landing page",
       menu: {
-        phase: 'Phase %{count} - %{description}',
-        language: 'Editer la langue du débat'
+        phase: "Phase %{count} - %{description}",
+        language: "Editer la langue du débat"
       },
       noTimeline: "Aucune timeline n'a été configurée pour ce débat.",
       survey: {
@@ -287,9 +287,9 @@ const Translations = {
       annotation: "Module à renseigner obligatoirement. Les champs * sont requis.",
       themeNum: "Thématique %{index}",
       discussion: {
-        0: 'Langues utilisées'
+        0: "Langues utilisées"
       },
-      languageChoice: 'Sélection des langue a affichier',
+      languageChoice: "Sélection des langue a affichier",
       ph: {
         title: "*Titre",
         quote: "Citation",
@@ -575,19 +575,19 @@ const Translations = {
       panelTitle: "Terms and Conditions"
     },
     administration: {
-      addThematic: 'Add a theme',
-      addQuestion: 'Add a question',
-      deleteThematic: 'Delete the theme',
-      deleteQuestion: 'Delete the question',
-      changeLanguage: 'Set another language',
-      question_label: 'Question',
-      videoModule: 'Video module',
-      thematic: 'Theme',
-      edition: 'Edit the Discussion',
-      landingpage: 'Landing page',
+      addThematic: "Add a theme",
+      addQuestion: "Add a question",
+      deleteThematic: "Delete the theme",
+      deleteQuestion: "Delete the question",
+      changeLanguage: "Set another language",
+      question_label: "Question",
+      videoModule: "Video module",
+      thematic: "Theme",
+      edition: "Edit the Discussion",
+      landingpage: "Landing page",
       menu: {
-        phase: 'Phase %{count} - %{description}',
-        language: 'Discussion Language'
+        phase: "Phase %{count} - %{description}",
+        language: "Discussion Language"
       },
       noTimeline: "No timeline has been configured yet",
       survey: {
@@ -599,11 +599,9 @@ const Translations = {
       annotation: "Module to be completed. * Fields are required.",
       themeNum: "Theme %{index}",
       discussion: {
-        0: 'Languages of the Discussion'
+        0: "Languages of the Discussion"
       },
-      languageChoice: 'Select desired languages below',
-      annotation: 'Module to be completed. * Fields are required.',
-      themeNum: 'Theme %{index}',
+      languageChoice: "Select desired languages below",
       ph: {
         title: "*Title",
         quote: "Quote",

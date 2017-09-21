@@ -63,7 +63,7 @@ const DebateChild = (props) => {
 const AdminChild = (props) => {
   switch (props.params.phase) {
   case 'discussion':
-    return <DiscussionAdmin {...props} section={props.location.query.section} />
+    return <DiscussionAdmin {...props} section={props.location.query.section} />;
   case 'survey':
     return <SurveyAdmin {...props} thematicId={props.location.query.thematic} section={props.location.query.section} />;
   case 'thread':

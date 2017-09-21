@@ -1,9 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { OverlayTrigger } from 'react-bootstrap';
-import { languageTooltip } from '../common/tooltips';
-import capitalize from 'lodash/capitalize';
 
+import { languageTooltip } from '../common/tooltips';
 import { updateSelectedLocale } from '../../actions/adminActions';
 import En from '../svg/flags/en';
 import Fr from '../svg/flags/fr';
@@ -54,9 +53,8 @@ const LanguageMenu = ({ changeLocale, selectedLocale, discussionPreferences, vis
       </div>
     );
   }
-  else {
-    return (<span></span>)
-  }
+
+  return (<span />);
 };
 
 const mapStateToProps = (state) => {

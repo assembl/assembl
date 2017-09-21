@@ -9,16 +9,15 @@ import withLoadingIndicator from './withLoadingIndicator';
 import getDiscussionPreferenceLanguage from '../../graphql/DiscussionPreferenceLanguage.graphql';
 
 const LanguageMenu = ({ i18n, size, changeLanguage, addLanguageToStore, data }) => {
-
-  const _doChangeLanguage = (key) => {
+  const doChangeLanguage = (key) => {
     localStorage.setItem('locale', key);
     changeLanguage(key);
   };
 
-  const { locale, translations } = i18n;
+  const { locale } = i18n;
   const prefs = data.discussionPreferences.languages;
 
-  let prefObject = {};
+  const prefObject = {};
   prefs.forEach((p) => {
     prefObject[p.locale] = p;
     addLanguageToStore(p.locale);
@@ -28,22 +27,22 @@ const LanguageMenu = ({ i18n, size, changeLanguage, addLanguageToStore, data }) 
   return (
     <ul className={`dropdown-${size} uppercase`}>
       <NavDropdown pullRight title={locale} id="nav-dropdown">
-        {availableLocales.map((locale) => {
+        {availableLocales.map((availableLocale) => {
           return (
             <MenuItem
               onClick={() => {
-                _doChangeLanguage(locale);
+                doChangeLanguage(availableLocale);
               }}
-              key={locale}
+              key={availableLocale}
             >
-              {locale}
+              {availableLocale}
             </MenuItem>
           );
         })}
       </NavDropdown>
     </ul>
   );
-}
+};
 
 const mapStateToProps = (state) => {
   return {
@@ -65,10 +64,12 @@ const mapDispatchToProps = (dispatch) => {
 export default compose(
   connect(mapStateToProps, mapDispatchToProps),
   graphql(getDiscussionPreferenceLanguage, {
-    options: (props) => ({
-      variables: {
-        inLocale: props.i18n.locale
-      }
-    })
+    options: (props) => {
+      return {
+        variables: {
+          inLocale: props.i18n.locale
+        }
+      };
+    }
   }),
   withLoadingIndicator())(LanguageMenu);
