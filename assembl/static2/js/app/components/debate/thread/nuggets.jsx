@@ -4,11 +4,6 @@ import range from 'lodash/range';
 import { getDomElementOffset, computeDomElementOffset } from '../../../utils/globalFunctions';
 
 class Nuggets extends React.Component {
-  static get SPACER_SIZE() {
-    // Vertical space between overflowing extracts in px
-    return 100;
-  }
-
   static completeLevelFromId(id) {
     return id.split('-').slice(1).map((ident) => {
       return Number(ident);
@@ -110,5 +105,8 @@ class Nuggets extends React.Component {
       : <div />;
   }
 }
+
+// Vertical space between overflowing extracts in px
+Nuggets.SPACER_SIZE = 100;
 
 export default Nuggets;
