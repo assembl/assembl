@@ -149,3 +149,16 @@ export const setDomElementOffset = (el, offset) => {
     el.style.left = `${offset.left - curOffset.left + curLeft}px`;
   }
 };
+
+export const computeDomElementOffset = (ref, offset) => {
+  // inspired from jquery.setOffset
+  const curOffset = getDomElementOffset(ref);
+  const curCSS = window.getComputedStyle(ref);
+  const curTop = parseFloat(curCSS.top) || 0;
+  const curLeft = parseFloat(curCSS.left) || 0;
+  const result = { top: curTop, left: curLeft };
+
+  if ('top' in offset) result.top = offset.top - curOffset.top + curTop;
+  if ('left' in offset) result.left = offset.left - curOffset.left + curLeft;
+  return result;
+};
