@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { AutoSizer, CellMeasurer, CellMeasurerCache, List, WindowScroller } from 'react-virtualized';
-import { getDomElementOffset } from '../../utils/globalFunctions';
+import { getDomElementOffset, createEvent } from '../../utils/globalFunctions';
 
 let globalList;
 
@@ -33,8 +33,7 @@ function overscanIndicesGetter({ cellCount, overscanCellsCount, stopIndex }) {
 
 const delayedRecomputeRowHeights = [null, null]; // [timeoutId, minRowIndex from which to recompute row heights]
 
-const rowHeightRecomputed = document.createEvent('Event'); // we can't use 'new Event()' because ie
-rowHeightRecomputed.initEvent('rowHeightRecomputed', false, false);
+const rowHeightRecomputed = createEvent('rowHeightRecomputed');
 
 const resizeTreeHeight = (rowIndex, delay = 0) => {
   // This function will be called by each post rendered, so we delay the
