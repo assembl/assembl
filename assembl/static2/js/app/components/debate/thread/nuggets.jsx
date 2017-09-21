@@ -73,11 +73,10 @@ class Nuggets extends React.Component {
 
   render() {
     const { extracts, fullLevel, rowIndex } = this.props;
-    const thisCompleteLevel = fullLevel ? [rowIndex, ...fullLevel] : [rowIndex];
     const style = this.state.top === null ? {} : { top: this.state.top };
     return extracts.length > 0
       ? <div
-        id={`extracts-${thisCompleteLevel.join('-')}`}
+        id={`extracts-${Nuggets.completeLevel(rowIndex, fullLevel).join('-')}`}
         ref={(node) => {
           this.node = node;
         }}
