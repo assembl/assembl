@@ -1,41 +1,54 @@
 import React from 'react';
-import range from 'lodash/range';
 
 import { getDomElementOffset, computeDomElementOffset } from '../../../utils/globalFunctions';
 
 class Nuggets extends React.Component {
-  static completeLevelFromId(id) {
-    return id.split('-').slice(1).map((ident) => {
-      return Number(ident);
-    });
+  static nodeExtracts(node) {
+    let result = node.getElementsByClassName('posts')[0];
+    if (result) result = result.getElementsByClassName('extracts')[0];
+    if (!result) result = null;
+    return result;
   }
 
-  static completeLevel(rowIndex, fullLevel) {
-    return fullLevel ? [rowIndex, ...fullLevel] : [rowIndex];
+  static getChildsByClassName(node, className) {
+    return Array.from(node.children).reduce((result, child) => {
+      if (child.classList.contains(className)) result.push(child);
+      return result;
+    }, []);
   }
 
-  static completeLevelGreater(a, b) {
-    return range(Math.min(a.length, b.length)).reduce((result, index) => {
-      if (result !== null) return result;
-      if (a[index] === b[index] && (a.length === index + 1 || b.length === index + 1)) return a.length > b.length;
-      return a[index] !== b[index] ? a[index] > b[index] : result;
-    }, null);
+  static bottomMostExtractFromNode(node) {
+    const childs = Nuggets.getChildsByClassName(node, 'level');
+    let childExtract = null;
+    if (childs.length > 0) {
+      childs.reverse().some((child) => {
+        childExtract = Nuggets.bottomMostExtractFromNode(child);
+        return childExtract !== null;
+      });
+    }
+    return childExtract || Nuggets.nodeExtracts(node);
   }
 
-  static previousExtract(completeLevel, otherExtracts) {
-    return !otherExtracts || !otherExtracts.length
-      ? null
-      : otherExtracts.reduce((prevExtract, extract) => {
-        const currentCompleteLevel = prevExtract ? Nuggets.completeLevelFromId(prevExtract.getAttribute('id')) : null;
-        const otherCompleteLevel = Nuggets.completeLevelFromId(extract.getAttribute('id'));
-        if (
-          Nuggets.completeLevelGreater(completeLevel, otherCompleteLevel) &&
-            (prevExtract === null || Nuggets.completeLevelGreater(otherCompleteLevel, currentCompleteLevel))
-        ) {
-          return extract;
-        }
-        return prevExtract;
-      }, null);
+  static previousSibling(node) {
+    let result = null;
+    if (node.classList.contains('level-0')) {
+      const baseLevelPrevSib = node.parentNode.previousSibling;
+      if (baseLevelPrevSib) result = baseLevelPrevSib.getElementsByClassName('level-0')[0];
+      else result = null;
+    } else result = node.previousSibling;
+    return result;
+  }
+
+  static previousExtractFromNode(node, ignored) {
+    if (!node.classList.contains('level')) return null;
+    let prevSibling = Nuggets.previousSibling(node);
+    while (prevSibling && prevSibling.classList.contains('level')) {
+      const bottomMostExtract = Nuggets.bottomMostExtractFromNode(prevSibling);
+      if (bottomMostExtract !== null) return bottomMostExtract;
+      prevSibling = Nuggets.previousSibling(prevSibling);
+    }
+    const extracts = Nuggets.nodeExtracts(node.parentNode);
+    return extracts && extracts !== ignored ? extracts : Nuggets.previousExtractFromNode(node.parentNode);
   }
 
   constructor(props) {
@@ -48,6 +61,7 @@ class Nuggets extends React.Component {
 
   componentDidMount() {
     if ('node' in this) {
+      this.updateTop();
       document.addEventListener('rowHeightRecomputed', this.updateTop);
     }
   }
@@ -56,15 +70,21 @@ class Nuggets extends React.Component {
     if ('node' in this) document.removeEventListener('rowHeightRecomputed', this.updateTop);
   }
 
+  previousExtract() {
+    const post = this.node.parentNode;
+    const postParent = post.parentNode;
+    let result = Nuggets.previousExtractFromNode(postParent, this.node);
+    if (result === this.node) result = null;
+    return result;
+  }
+
   updateTop() {
     this.setState({ top: `${this.computeNewTop()}px` });
   }
 
   computeNewTop() {
-    const { fullLevel, rowIndex, postId } = this.props;
-    const extracts = [].slice.call(document.getElementsByClassName('extracts'));
-    const prevExtract = Nuggets.previousExtract(Nuggets.completeLevel(rowIndex, fullLevel), extracts);
-    const postDOM = document.getElementById(postId);
+    const prevExtract = this.previousExtract();
+    const postDOM = document.getElementById(this.props.postId);
     const postTop = getDomElementOffset(postDOM).top;
     if (prevExtract !== null) {
       const newTop = getDomElementOffset(prevExtract).top + prevExtract.getBoundingClientRect().height + Nuggets.SPACER_SIZE;
@@ -74,11 +94,10 @@ class Nuggets extends React.Component {
   }
 
   render() {
-    const { extracts, fullLevel, rowIndex } = this.props;
+    const { extracts } = this.props;
     const style = this.state.top === null ? {} : { top: this.state.top };
     return Array.isArray(extracts) && extracts.length > 0
       ? <div
-        id={`extracts-${Nuggets.completeLevel(rowIndex, fullLevel).join('-')}`}
         ref={(node) => {
           this.node = node;
         }}
