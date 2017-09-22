@@ -429,6 +429,7 @@ class PostInterface(SQLAlchemyInterface):
     def _maybe_translate(post, locale, request):
         if request.authenticated_userid == Everyone:
             # anonymous cannot trigger translations
+            # But still use authenticated language prefs
             return
         if locale:
             lpc = LanguagePreferenceCollectionWithDefault(locale)
@@ -1460,7 +1461,7 @@ class CreatePost(graphene.Mutation):
                 attachment = models.PostAttachment(
                     document=document,
                     discussion=discussion,
-                    creator_id=context.authenticated_userid,
+                    creator_id=user_id,
                     post=new_post,
                     title=document.title,
                     attachmentPurpose="EMBED_ATTACHMENT"
@@ -1534,7 +1535,7 @@ class UpdatePost(graphene.Mutation):
                         models.PostAttachment(
                             document=document,
                             discussion=discussion,
-                            creator_id=context.authenticated_userid,
+                            creator_id=user_id,
                             post=post,
                             title=document.title,
                             attachmentPurpose="EMBED_ATTACHMENT"
@@ -1714,7 +1715,7 @@ class UploadDocument(graphene.Mutation):
         discussion_id = context.matchdict['discussion_id']
         discussion = models.Discussion.get(discussion_id)
 
-        user_id = context.authenticated_userid or Everyone
+        user_id = effective_userid(context) or Everyone
         cls = models.Document
         permissions = get_permissions(user_id, discussion_id)
         allowed = cls.user_can_cls(user_id, CrudPermissions.CREATE, permissions)
@@ -1752,7 +1753,7 @@ class AddPostAttachment(graphene.Mutation):
         discussion_id = context.matchdict['discussion_id']
         discussion = models.Discussion.get(discussion_id)
 
-        user_id = context.authenticated_userid or Everyone
+        user_id = effective_userid(context) or Everyone
 
         post_id = args.get('post_id')
         post_id = int(Node.from_global_id(post_id)[1])
@@ -1781,7 +1782,7 @@ class AddPostAttachment(graphene.Mutation):
             attachment = models.PostAttachment(
                 document=document,
                 discussion=discussion,
-                creator_id=context.authenticated_userid,
+                creator_id=user_id,
                 post=post,
                 title=filename,
                 attachmentPurpose="EMBED_ATTACHMENT"
@@ -1801,7 +1802,7 @@ class DeletePostAttachment(graphene.Mutation):
     @staticmethod
     def mutate(root, args, context, info):
         discussion_id = context.matchdict['discussion_id']
-        user_id = context.authenticated_userid or Everyone
+        user_id = effective_userid(context) or Everyone
         post_id = args.get('post_id')
         post_id = int(Node.from_global_id(post_id)[1])
         post = models.Post.get(post_id)
@@ -1833,7 +1834,7 @@ class UpdateDiscussionPreferences(graphene.Mutation):
         cls = models.Preferences
         discussion_id = context.matchdict['discussion_id']
 
-        user_id = context.authenticated_userid or Everyone
+        user_id = effective_userid(context) or Everyone
         discussion = models.Discussion.get(discussion_id)
 
         permissions = get_permissions(user_id, discussion_id)
