@@ -128,7 +128,7 @@
         box-shadow: none;
         font-family: $font-family4;
         font-size: $font-size-s;
-        height: 250px;
+        height: 160px;
         letter-spacing: 1px;
         padding: 20px;
       }
@@ -394,12 +394,6 @@
 
   .question-title {
     margin: $margin-section 0 $margin-section-xs;
-  }
-}
-
-@media screen and (max-height: 900px) {
-  .question-title {
-    margin: $margin-section 0 10px;
   }
 }
 
