@@ -12,12 +12,19 @@ class Header extends React.Component {
     const { locale } = this.props.i18n;
     const isPhaseCompleted = getIfPhaseCompletedByIdentifier(debateData.timeline, identifier);
     const closedPhaseName = getPhaseName(debateData.timeline, identifier, locale).toLowerCase();
+    const titlesArray = title.split('#!');
+    let localizedTitle = '';
+    titlesArray.forEach((t) => {
+      if (t.split('$!')[1] === locale) {
+        localizedTitle = t.split('$!')[0];
+      }
+    });
     return (
       <section className="header-section">
         <Grid fluid className="max-container">
           <div className="header-content">
             <h1 className="light-title-1">
-              {title}
+              {localizedTitle}
             </h1>
             {isPhaseCompleted &&
               <h6 className="light-title-6">
