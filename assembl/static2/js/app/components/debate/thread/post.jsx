@@ -92,7 +92,7 @@ class Post extends React.PureComponent {
       attachments,
       extracts
     } = this.props.data.post;
-    const { lang, ideaId, refetchIdea, creationDate, fullLevel, numChildren, rowIndex } = this.props;
+    const { lang, ideaId, refetchIdea, creationDate, fullLevel, numChildren } = this.props;
     // creationDate is retrieved by IdeaWithPosts query, not PostQuery
     let body;
     let subject;
