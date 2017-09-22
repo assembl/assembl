@@ -95,7 +95,7 @@ class Nuggets extends React.Component {
 
   render() {
     const { extracts } = this.props;
-    const style = this.state.top === null ? {} : { top: this.state.top };
+    const style = this.state.top === null ? { display: 'none' } : { top: this.state.top };
     return Array.isArray(extracts) && extracts.length > 0
       ? <div
         ref={(node) => {
