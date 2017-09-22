@@ -6,8 +6,7 @@ class Nuggets extends React.Component {
   static nodeExtracts(node) {
     let result = Nuggets.getChildsByClassName(node, 'posts')[0];
     if (result) result = Nuggets.getChildsByClassName(result, 'extracts')[0];
-    if (!result) result = null;
-    return result;
+    return result || null;
   }
 
   static getChildsByClassName(node, className) {
@@ -30,13 +29,11 @@ class Nuggets extends React.Component {
   }
 
   static previousSibling(node) {
-    let result = null;
     if (node.classList.contains('level-0')) {
       const baseLevelPrevSib = node.parentNode.previousSibling;
-      if (baseLevelPrevSib) result = Nuggets.getChildsByClassName(baseLevelPrevSib, 'level-0')[0];
-      else result = null;
-    } else result = node.previousSibling;
-    return result;
+      return baseLevelPrevSib ? Nuggets.getChildsByClassName(baseLevelPrevSib, 'level-0')[0] : null;
+    }
+    return node.previousSibling;
   }
 
   static previousBottomMostExtract(node) {
