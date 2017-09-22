@@ -4,8 +4,8 @@ import { getDomElementOffset, computeDomElementOffset } from '../../../utils/glo
 
 class Nuggets extends React.Component {
   static nodeExtracts(node) {
-    let result = node.getElementsByClassName('posts')[0];
-    if (result) result = result.getElementsByClassName('extracts')[0];
+    let result = Nuggets.getChildsByClassName(node, 'posts')[0];
+    if (result) result = Nuggets.getChildsByClassName(result, 'extracts')[0];
     if (!result) result = null;
     return result;
   }
@@ -33,7 +33,7 @@ class Nuggets extends React.Component {
     let result = null;
     if (node.classList.contains('level-0')) {
       const baseLevelPrevSib = node.parentNode.previousSibling;
-      if (baseLevelPrevSib) result = baseLevelPrevSib.getElementsByClassName('level-0')[0];
+      if (baseLevelPrevSib) result = Nuggets.getChildsByClassName(baseLevelPrevSib, 'level-0')[0];
       else result = null;
     } else result = node.previousSibling;
     return result;
