@@ -250,6 +250,44 @@ $deleted-post-border: 1px solid $grey1 !default;
             margin: 3px 0 8px;
         }
     }
+
+    .extracts {
+      position: absolute;
+      left: 2vw;
+      max-width: 230px;
+      width: 14vw;
+      line-height: 30px;
+
+      .badges {
+        line-height: 26px;
+        font-family: $font-family4;
+
+        .nugget-img {
+          text-align: center;
+          margin-bottom: 25px;
+
+          span {
+            display: inline-block;
+          }
+          span::before {
+            font-size: 50px;
+          }
+        }
+
+        .nugget {
+
+          .nugget-txt {
+            font-family: $font-family6;
+            color: $first-color;
+            margin-bottom: 25px;
+          }
+
+          .box-hyphen {
+            border-top-width: 3px;
+          }
+        }
+      }
+  }
 }
 
 @media screen and (min-width: 600px) {
@@ -475,6 +513,10 @@ $deleted-post-border: 1px solid $grey1 !default;
             .assembl-icon-back-arrow {
                 padding: 0;
             }
+        }
+
+        .extracts {
+          display: none;
         }
     }
 }

@@ -14,6 +14,7 @@ import DeletedPost from './deletedPost';
 import PostQuery from '../../../graphql/PostQuery.graphql';
 import withLoadingIndicator from '../../../components/common/withLoadingIndicator';
 import { DeletedPublicationStates, PublicationStates } from '../../../constants';
+import Nuggets from './nuggets';
 
 export const PostFolded = ({ nbPosts }) => {
   return <Translate value="debate.thread.foldedPostLink" count={nbPosts} />;
@@ -53,11 +54,6 @@ class Post extends React.PureComponent {
     if (this.props.lang !== prevProps.lang || this.props.data.post.publicationState !== prevProps.data.post.publicationState) {
       this.props.measureTreeHeight(200);
     }
-    // Object.keys(nextProps).forEach((key) => {
-    //   if (nextProps[key] !== this.props[key]) {
-    //     console.log('prop changed', key);
-    //   }
-    // });
   }
 
   handleAnswerClick = () => {
@@ -93,7 +89,8 @@ class Post extends React.PureComponent {
       sentimentCounts,
       mySentiment,
       publicationState,
-      attachments
+      attachments,
+      extracts
     } = this.props.data.post;
     const { lang, ideaId, refetchIdea, creationDate, fullLevel, numChildren } = this.props;
     // creationDate is retrieved by IdeaWithPosts query, not PostQuery
@@ -167,6 +164,7 @@ class Post extends React.PureComponent {
     };
     return (
       <div className="posts" id={id}>
+        <Nuggets extracts={extracts} postId={id} />
         <div className="box">
           <Row className="post-row">
             <Col xs={12} md={11} className="post-left">

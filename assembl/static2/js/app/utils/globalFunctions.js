@@ -132,3 +132,23 @@ export const getDomElementOffset = (el) => {
   const scrollLeft = window.pageXOffset || document.documentElement.scrollLeft || document.body.scrollLeft || 0;
   return { top: rect.top + scrollTop, left: rect.left + scrollLeft };
 };
+
+export const computeDomElementOffset = (ref, offset) => {
+  // inspired from jquery.setOffset
+  const curOffset = getDomElementOffset(ref);
+  const curCSS = window.getComputedStyle(ref);
+  const curTop = parseFloat(curCSS.top) || 0;
+  const curLeft = parseFloat(curCSS.left) || 0;
+  const result = { top: curTop, left: curLeft };
+
+  if ('top' in offset) result.top = offset.top - curOffset.top + curTop;
+  if ('left' in offset) result.left = offset.left - curOffset.left + curLeft;
+  return result;
+};
+
+export const createEvent = (typeArg, eventInit = { bubbles: false, cancelable: false }) => {
+  // inspired from https://developer.mozilla.org/en-US/docs/Web/API/Event/Event
+  const event = document.createEvent('Event'); // we can't use 'new Event()' because ie
+  event.initEvent(typeArg, eventInit.bubbles, eventInit.cancelable);
+  return event;
+};
