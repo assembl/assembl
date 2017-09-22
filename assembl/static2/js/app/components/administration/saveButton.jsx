@@ -47,7 +47,7 @@ const SaveButton = ({
   i18n,
   createThematic,
   deleteThematic,
-  enabled,
+  thematicsHaveChanged,
   refetchThematics,
   thematics,
   updateThematic,
@@ -85,7 +85,7 @@ const SaveButton = ({
       resetLanguagePreferenceChanged();
     }
 
-    if (enabled) {
+    if (thematicsHaveChanged) {
       thematics.forEach((thematic) => {
         if (thematic.isNew && !thematic.toDelete) {
           // create thematic
@@ -135,7 +135,7 @@ const SaveButton = ({
   return (
     <Button
       className="button-submit button-dark right"
-      disabled={!(enabled || languagePreferenceHasChanged)}
+      disabled={!(thematicsHaveChanged || languagePreferenceHasChanged)}
       onClick={saveAction}
     >
       <Translate value="administration.saveThemes" />
@@ -169,7 +169,7 @@ const mapStateToProps = ({
   }
 }) => {
   return {
-    enabled: thematicsHaveChanged,
+    thematicsHaveChanged: thematicsHaveChanged,
     thematics: thematicsInOrder.toArray().map((id) => {
       return thematicsById.get(id).toJS();
     }),
