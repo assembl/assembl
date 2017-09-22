@@ -397,6 +397,12 @@
   }
 }
 
+@media screen and (max-height: 900px) {
+  .question-title {
+    margin: $margin-section 0 10px;
+  }
+}
+
 @media screen and (max-width: 767px) {
   .video-section {
     .video-title-section {
