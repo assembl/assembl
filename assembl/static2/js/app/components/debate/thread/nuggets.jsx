@@ -39,16 +39,21 @@ class Nuggets extends React.Component {
     return result;
   }
 
-  static previousExtractFromNode(node, ignored) {
-    if (!node.classList.contains('level')) return null;
+  static previousBottomMostExtract(node) {
     let prevSibling = Nuggets.previousSibling(node);
     while (prevSibling && prevSibling.classList.contains('level')) {
       const bottomMostExtract = Nuggets.bottomMostExtractFromNode(prevSibling);
       if (bottomMostExtract !== null) return bottomMostExtract;
       prevSibling = Nuggets.previousSibling(prevSibling);
     }
-    const extracts = Nuggets.nodeExtracts(node.parentNode);
-    return extracts && extracts !== ignored ? extracts : Nuggets.previousExtractFromNode(node.parentNode);
+    return null;
+  }
+
+  static previousExtractFromNode(node) {
+    if (!node.classList.contains('level')) return null;
+    const extracts = Nuggets.previousBottomMostExtract(node);
+    if (extracts !== null) return extracts;
+    return Nuggets.nodeExtracts(node.parentNode) || Nuggets.previousExtractFromNode(node.parentNode);
   }
 
   constructor(props) {
@@ -72,10 +77,10 @@ class Nuggets extends React.Component {
 
   previousExtract() {
     const post = this.node.parentNode;
-    const postParent = post.parentNode;
-    let result = Nuggets.previousExtractFromNode(postParent, this.node);
-    if (result === this.node) result = null;
-    return result;
+    const node = post.parentNode;
+    const extracts = Nuggets.previousBottomMostExtract(node);
+    if (extracts !== null) return extracts;
+    return Nuggets.previousExtractFromNode(post.parentNode);
   }
 
   updateTop() {
