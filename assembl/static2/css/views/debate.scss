@@ -178,6 +178,39 @@
     }
   }
 
+  .media-section {
+    z-index: 100;
+
+    .content-section {
+      padding: 80px 0;
+    }
+
+    .media-description-layer {
+      text-align: justify;
+      font-family: $font-family4;
+      font-size: 14px;
+      line-height: 28px;
+    }
+
+    .media-description-top {
+        margin-bottom: 40px;
+    }
+
+    .media-description-bottom {
+        margin-top: 40px;
+    }
+
+    .media-container {
+      margin: 0;
+    }
+
+    .assembl-icon-pepite {
+      &:before {
+        font-size: 60px;
+      }
+    }
+  }
+
   .navigation-section {
     width: 100%;
     z-index: 0;

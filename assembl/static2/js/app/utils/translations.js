@@ -290,6 +290,8 @@ const Translations = {
         2: "Exporter les données"
       },
       videoHelp: "*Liens autorisés : \"https://www.youtube.com/embed/[videoId]\" ou \"https://player.vimeo.com/video/[videoId]?\"",
+      mediaHelp:
+        "*Liens vidéo autorisés : \"https://www.youtube.com/embed/[videoId]\" ou \"https://player.vimeo.com/video/[videoId]?\"",
       annotation: "Module à renseigner obligatoirement. Les champs * sont requis.",
       themeNum: "Thématique %{index}",
       discussion: {
@@ -301,7 +303,8 @@ const Translations = {
         quote: "Citation",
         descriptionTop: "Texte au-dessus de la vidéo",
         descriptionBottom: "Texte en-dessous de la vidéo",
-        videoLink: "Lien vidéo"
+        videoLink: "Lien vidéo",
+        mediaLink: "Lien vidéo ou photo"
       },
       surveyExport: {
         title: "Exporter les données du débat",
@@ -609,6 +612,8 @@ const Translations = {
         2: "Export data"
       },
       videoHelp: "*Authorized links: \"https://www.youtube.com/embed/[videoId]\" ou \"https://player.vimeo.com/video/[videoId]?\"",
+      mediaHelp:
+        "*Authorized video links: \"https://www.youtube.com/embed/[videoId]\" or \"https://player.vimeo.com/video/[videoId]?\"*Authorized picture links: \"https://framapic.org/[imageId].jpg\"",
       annotation: "Module to be completed. * Fields are required.",
       themeNum: "Theme %{index}",
       discussion: {
@@ -620,7 +625,8 @@ const Translations = {
         quote: "Quote",
         descriptionTop: "Comments above video",
         descriptionBottom: "Comments below video",
-        videoLink: "Video link"
+        videoLink: "Video link",
+        mediaLink: "Video or picture link"
       },
       surveyExport: {
         title: "Export the debate data",
