@@ -611,7 +611,7 @@ const Translations = {
         1: "Set questions",
         2: "Export data"
       },
-      videoHelp: "*Authorized links: \"https://www.youtube.com/embed/[videoId]\" ou \"https://player.vimeo.com/video/[videoId]?\"",
+      videoHelp: "*Authorized links: \"https://www.youtube.com/embed/[videoId]\" or \"https://player.vimeo.com/video/[videoId]?\"",
       mediaHelp:
         "*Authorized video links: \"https://www.youtube.com/embed/[videoId]\" or \"https://player.vimeo.com/video/[videoId]?\"*Authorized picture links: \"https://framapic.org/[imageId].jpg\"",
       annotation: "Module to be completed. * Fields are required.",
