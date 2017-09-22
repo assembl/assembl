@@ -48,19 +48,19 @@
     }
   }
 
-  .announcement-video {
+  .announcement-media {
 
-    .video-section {
+    .media-section {
 
       div {
         background-color: $grey0;
       }
 
-      .video-title-section {
+      .media-title-section {
         display: none;
       }
 
-      .video-description-bottom {
+      .media-description-bottom {
         margin-top: 1em;
       }
 
@@ -81,7 +81,7 @@
       margin-top: 0px;
       left: 0;
     }
-    .announcement-video > .video-section > .content-section {
+    .announcement-media > .media-section > .content-section {
       padding-top: 1.5em;
     }
   }
