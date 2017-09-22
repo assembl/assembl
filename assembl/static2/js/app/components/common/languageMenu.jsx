@@ -17,13 +17,13 @@ const LanguageMenu = ({ i18n, size, changeLanguage, addLanguageToStore, data }) 
   const { locale } = i18n;
   const prefs = data.discussionPreferences.languages;
 
-  const prefObject = {};
+  const preferencesMapByLocale = {};
   prefs.forEach((p) => {
-    prefObject[p.locale] = p;
+    preferencesMapByLocale[p.locale] = p;
     addLanguageToStore(p.locale);
   });
 
-  const availableLocales = getAvailableLocales(locale, prefObject);
+  const availableLocales = getAvailableLocales(locale, preferencesMapByLocale);
   return (
     <ul className={`dropdown-${size} uppercase`}>
       <NavDropdown pullRight title={locale} id="nav-dropdown">
