@@ -326,6 +326,29 @@ class Extract(SecureObjectType, SQLAlchemyObjectType):
         interfaces = (Node, )
         only_fields = ('id', 'body', 'important')
 
+class LocalePreference(graphene.ObjectType):
+    locale = graphene.String()
+    name = graphene.String(in_locale=graphene.String(required=True))
+
+    def resolve_name(self, args, context, info):
+        in_locale = args.get('in_locale') or None
+        locale_model = models.Locale.get_or_create(in_locale)
+
+        name = models.LocaleLabel.names_of_locales_in_locale([self.locale],
+                                                             locale_model)
+        if not name:
+            # If the locale label does not exist, fallback on English
+            locale_model = models.Locale.get_or_create('en')
+            name = models.LocaleLabel.names_of_locales_in_locale([self.locale],
+                                                                 locale_model)
+            return name['en']
+
+        return name[self.locale]
+
+
+class DiscussionPreferences(graphene.ObjectType):
+    languages = graphene.List(LocalePreference)
+
 
 class IdeaContentLink(graphene.ObjectType):
     idea_id = graphene.Int()
@@ -827,6 +850,8 @@ class Query(graphene.ObjectType):
     ideas = graphene.List(Idea)
     thematics = graphene.List(Thematic, identifier=graphene.String(required=True))
     num_participants = graphene.Int()
+    discussion_preferences = graphene.Field(DiscussionPreferences)
+    default_preferences = graphene.Field(DiscussionPreferences)
 
     def resolve_root_idea(self, args, context, info):
         discussion_id = context.matchdict['discussion_id']
@@ -865,6 +890,21 @@ class Query(graphene.ObjectType):
         discussion = models.Discussion.get(discussion_id)
         return discussion.get_participants_query(
             ids_only=True, include_readers=True).count()
+
+    def resolve_discussion_preferences(self, args, context, info):
+        discussion_id = context.matchdict['discussion_id']
+        discussion = models.Discussion.get(discussion_id)
+        prefs = discussion.settings_json
+        locales = prefs.get('preferred_locales', [])
+        return DiscussionPreferences(
+            languages=[LocalePreference(locale=x) for x in locales])
+
+    def resolve_default_preferences(self, args, context, info):
+        default = models.Preferences.get_default_preferences()
+        preferred_locales = default['preferred_locales'] or []
+        return DiscussionPreferences(
+            languages=[LocalePreference(locale=x) for x in preferred_locales])
+
 
 
 class VideoInput(graphene.InputObjectType):
@@ -1781,6 +1821,37 @@ class DeletePostAttachment(graphene.Mutation):
         return DeletePostAttachment(post=post)
 
 
+class UpdateDiscussionPreferences(graphene.Mutation):
+    class Input:
+        languages = graphene.List(graphene.String, required=True)
+
+    preferences = graphene.Field(lambda: DiscussionPreferences)
+
+    @staticmethod
+    def mutate(root, args, context, info):
+        cls = models.Preferences
+        discussion_id = context.matchdict['discussion_id']
+
+        user_id = context.authenticated_userid or Everyone
+        discussion = models.Discussion.get(discussion_id)
+
+        permissions = get_permissions(user_id, discussion_id)
+        allowed = cls.user_can_cls(user_id, CrudPermissions.CREATE, permissions)
+        if not allowed or (allowed == IF_OWNED and user_id == Everyone):
+            raise HTTPUnauthorized()
+        prefs_to_save = args.get('languages')
+        if not prefs_to_save:
+            raise Exception("Must pass at least one preference to be saved")
+
+        discussion.discussion_locales = prefs_to_save
+        discussion.db.flush()
+
+        discussion_pref = DiscussionPreferences(
+            languages=[LocalePreference(locale=x) for
+                       x in discussion.discussion_locales])
+        return UpdateDiscussionPreferences(preferences=discussion_pref)
+
+
 class Mutations(graphene.ObjectType):
     create_thematic = CreateThematic.Field()
     update_thematic = UpdateThematic.Field()
@@ -1795,6 +1866,7 @@ class Mutations(graphene.ObjectType):
     add_post_attachment = AddPostAttachment.Field()
     upload_document = UploadDocument.Field()
     delete_post_attachment = DeletePostAttachment.Field()
+    update_discussion_preferences = UpdateDiscussionPreferences.Field()
 
 
 Schema = graphene.Schema(query=Query, mutation=Mutations)

@@ -24,6 +24,7 @@ import Administration from './pages/administration';
 import UnauthorizedAdministration from './pages/unauthorizedAdministration';
 import SurveyAdmin from './pages/surveyAdmin';
 import ThreadAdmin from './pages/threadAdmin';
+import DiscussionAdmin from './pages/discussionAdmin';
 import TwoColumnsAdmin from './pages/twoColumnsAdmin';
 import TokenVoteAdmin from './pages/tokenVoteAdmin';
 import JoinDiscussion from './pages/joinDiscussion';
@@ -61,8 +62,10 @@ const DebateChild = (props) => {
 
 const AdminChild = (props) => {
   switch (props.params.phase) {
+  case 'discussion':
+    return <DiscussionAdmin {...props} section={props.location.query.section} />;
   case 'survey':
-    return <SurveyAdmin thematicId={props.location.query.thematic} section={props.location.query.section} />;
+    return <SurveyAdmin {...props} thematicId={props.location.query.thematic} section={props.location.query.section} />;
   case 'thread':
     return <ThreadAdmin />;
   case 'twoColumns':

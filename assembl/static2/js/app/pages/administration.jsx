@@ -38,9 +38,13 @@ export function convertVideoDescriptions(thematics) {
 }
 
 class Administration extends React.Component {
-  constructor() {
-    super();
-    this.putThematicsInStore.bind(this);
+  constructor(props) {
+    super(props);
+    this.putThematicsInStore = this.putThematicsInStore.bind(this);
+    this.toggleLanguageMenu = this.toggleLanguageMenu.bind(this);
+    this.state = {
+      showLanguageMenu: true
+    };
   }
 
   componentDidMount() {
@@ -54,6 +58,12 @@ class Administration extends React.Component {
     }
   }
 
+  toggleLanguageMenu(state) {
+    this.setState({
+      showLanguageMenu: state
+    });
+  }
+
   putThematicsInStore(data) {
     // filter with the same query to remove stuff like __typename from the structure
     const filteredThematics = filter(ThematicsQuery, data);
@@ -65,6 +75,12 @@ class Administration extends React.Component {
     const { children, data, debate, i18n, params } = this.props;
     const { phase } = params;
     const { timeline } = this.props.debate.debateData;
+    const childrenWithProps = React.Children.map(children, (child) => {
+      return React.cloneElement(child, {
+        toggleLanguageMenu: this.toggleLanguageMenu
+      });
+    });
+
     return (
       <div className="administration">
         <div className="save-bar">
@@ -94,10 +110,10 @@ class Administration extends React.Component {
                     <Translate value="administration.noTimeline" />
                   </div>
                   : null}
-                {children}
+                {childrenWithProps}
               </Col>
               <Col xs={12} md={1}>
-                <LanguageMenu />
+                <LanguageMenu visibility={this.state.showLanguageMenu} />
               </Col>
             </Row>
           </Grid>

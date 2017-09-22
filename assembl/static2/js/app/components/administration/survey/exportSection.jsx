@@ -6,7 +6,8 @@ import { Link } from 'react-router';
 import { getDiscussionId } from '../../../utils/globalFunctions';
 import SectionTitle from '../sectionTitle';
 
-const ExportSection = ({ i18n }) => {
+const ExportSection = ({ i18n, toggleLanguageMenu }) => {
+  toggleLanguageMenu(true);
   const debateId = getDiscussionId();
   return (
     <div className="admin-box">

@@ -1423,3 +1423,79 @@ mutation deletePostAttachment($postId: ID!, $documentId: Int!) {
             }
         }
     }
+
+
+def test_query_discussion_preferences(graphql_request,
+                                      discussion_with_lang_prefs):
+    res = schema.execute(u"""
+query { discussionPreferences { languages { locale, name(inLocale:"fr") } } } """, context_value=graphql_request)
+    assert json.loads(json.dumps(res.data)) == {
+        u'discussionPreferences': {
+            u'languages':
+                [
+                    {u'locale': u'en', u'name': u'anglais'},
+                    {u'locale': u'fr', u'name': u'français'},
+                    {u'locale': u'ja', u'name': u'japonais'},
+                ]
+        }
+    }
+
+
+def test_query_default_discussion_preferences(graphql_request,
+                                              discussion_with_lang_prefs):
+    res = schema.execute(u"""
+query { defaultPreferences { languages { locale, name(inLocale:"fr") } } }""", context_value=graphql_request)
+    assert json.loads(json.dumps(res.data)) == {
+        u'defaultPreferences': {
+            u'languages': [
+                {u'locale': u'fr', u'name': u'français'},
+                {u'locale': u'en', u'name': u'anglais'}
+            ]
+        }
+    }
+
+
+def test_mutation_update_language_preference(graphql_request,
+                                             discussion_with_lang_prefs):
+    res = schema.execute(u"""
+mutation myMutation($languages: [String]!) {
+    updateDiscussionPreferences(languages: $languages) {
+        preferences {
+            languages {
+                locale
+            }
+        }
+    }
+}
+""", context_value=graphql_request,
+        variable_values={
+            "languages": ["ja", "de"]
+            })
+    assert json.loads(json.dumps(res.data)) == {
+        u'updateDiscussionPreferences': {
+            u'preferences': {
+                u'languages': [
+                    {u'locale': u'ja'},
+                    {u'locale': u'de'}
+                ]
+            }
+    }}
+
+
+def test_mutation_update_language_preference_empty_list(
+    graphql_request, discussion_with_lang_prefs):
+    res = schema.execute(u"""
+mutation myMutation($languages: [String]!) {
+    updateDiscussionPreferences(languages: $languages) {
+        preferences {
+            languages {
+                locale
+            }
+        }
+    }
+}
+""", context_value=graphql_request,
+        variable_values={
+            "languages": []
+            })
+    assert res.errors is not None

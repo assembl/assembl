@@ -15,6 +15,10 @@ class QuestionSection extends React.Component {
     };
   }
 
+  componentWillMount() {
+    this.props.toggleLanguageMenu(true);
+  }
+
   componentWillReceiveProps(nextProps) {
     if (!this.state.selectedThematicId) {
       this.setState({

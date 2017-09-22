@@ -1,38 +1,48 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { setLocale } from 'react-redux-i18n';
+import { compose, graphql } from 'react-apollo';
 import { NavDropdown, MenuItem } from 'react-bootstrap';
 import { getAvailableLocales } from '../../utils/globalFunctions';
+import { addLanguagePreference } from '../../actions/adminActions';
+import withLoadingIndicator from './withLoadingIndicator';
+import getDiscussionPreferenceLanguage from '../../graphql/DiscussionPreferenceLanguage.graphql';
 
-class LanguageMenu extends React.Component {
-  changeLanguage(key) {
+const LanguageMenu = ({ i18n, size, changeLanguage, addLanguageToStore, data }) => {
+  const doChangeLanguage = (key) => {
     localStorage.setItem('locale', key);
-    this.props.changeLanguage(key);
-  }
-  render() {
-    const { locale, translations } = this.props.i18n;
-    const { size } = this.props;
-    const availableLocales = getAvailableLocales(locale, translations);
-    return (
-      <ul className={`dropdown-${size} uppercase`}>
-        <NavDropdown pullRight title={locale} id="nav-dropdown">
-          {availableLocales.map((loc) => {
-            return (
-              <MenuItem
-                onClick={() => {
-                  this.changeLanguage(loc);
-                }}
-                key={loc}
-              >
-                {loc}
-              </MenuItem>
-            );
-          })}
-        </NavDropdown>
-      </ul>
-    );
-  }
-}
+    changeLanguage(key);
+  };
+
+  const { locale } = i18n;
+  const prefs = data.discussionPreferences.languages;
+
+  const preferencesMapByLocale = {};
+  prefs.forEach((p) => {
+    preferencesMapByLocale[p.locale] = p;
+    addLanguageToStore(p.locale);
+  });
+
+  const availableLocales = getAvailableLocales(locale, preferencesMapByLocale);
+  return (
+    <ul className={`dropdown-${size} uppercase`}>
+      <NavDropdown pullRight title={locale} id="nav-dropdown">
+        {availableLocales.map((availableLocale) => {
+          return (
+            <MenuItem
+              onClick={() => {
+                doChangeLanguage(availableLocale);
+              }}
+              key={availableLocale}
+            >
+              {availableLocale}
+            </MenuItem>
+          );
+        })}
+      </NavDropdown>
+    </ul>
+  );
+};
 
 const mapStateToProps = (state) => {
   return {
@@ -44,7 +54,22 @@ const mapDispatchToProps = (dispatch) => {
   return {
     changeLanguage: (locale) => {
       dispatch(setLocale(locale));
+    },
+    addLanguageToStore: (locale) => {
+      dispatch(addLanguagePreference(locale));
     }
   };
 };
-export default connect(mapStateToProps, mapDispatchToProps)(LanguageMenu);
+
+export default compose(
+  connect(mapStateToProps, mapDispatchToProps),
+  graphql(getDiscussionPreferenceLanguage, {
+    options: (props) => {
+      return {
+        variables: {
+          inLocale: props.i18n.locale
+        }
+      };
+    }
+  }),
+  withLoadingIndicator())(LanguageMenu);

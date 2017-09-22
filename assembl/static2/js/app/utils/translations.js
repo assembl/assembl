@@ -271,10 +271,11 @@ const Translations = {
       question_label: "Question",
       videoModule: "Option module vidéo",
       thematic: "Thématique",
-      edition: "Discussion",
+      edition: "Éditer la discussion",
       landingpage: "Landing page",
       menu: {
-        phase: "Phase %{count} - %{description}"
+        phase: "Phase %{count} - %{description}",
+        language: "Editer la langue du débat"
       },
       noTimeline: "Aucune timeline n'a été configurée pour ce débat.",
       survey: {
@@ -285,6 +286,10 @@ const Translations = {
       videoHelp: "*Liens autorisés : \"https://www.youtube.com/embed/[videoId]\" ou \"https://player.vimeo.com/video/[videoId]?\"",
       annotation: "Module à renseigner obligatoirement. Les champs * sont requis.",
       themeNum: "Thématique %{index}",
+      discussion: {
+        0: "Langues utilisées"
+      },
+      languageChoice: "Sélection des langue a affichier",
       ph: {
         title: "*Titre",
         quote: "Citation",
@@ -578,10 +583,11 @@ const Translations = {
       question_label: "Question",
       videoModule: "Video module",
       thematic: "Theme",
-      edition: "Discussion",
+      edition: "Edit the Discussion",
       landingpage: "Landing page",
       menu: {
-        phase: "Phase %{count} - %{description}"
+        phase: "Phase %{count} - %{description}",
+        language: "Discussion Language"
       },
       noTimeline: "No timeline has been configured yet",
       survey: {
@@ -592,6 +598,10 @@ const Translations = {
       videoHelp: "*Authorized links: \"https://www.youtube.com/embed/[videoId]\" ou \"https://player.vimeo.com/video/[videoId]?\"",
       annotation: "Module to be completed. * Fields are required.",
       themeNum: "Theme %{index}",
+      discussion: {
+        0: "Languages of the Discussion"
+      },
+      languageChoice: "Select desired languages below",
       ph: {
         title: "*Title",
         quote: "Quote",

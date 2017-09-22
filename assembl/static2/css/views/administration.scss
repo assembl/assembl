@@ -65,6 +65,17 @@
       text-align: center;
     }
 
+    .admin-language-content {
+      padding: 30px 30% 80px;
+      text-align: left;
+
+      .language-list {
+        padding-top: 20px;
+        color: $grey2;
+      }
+
+    }
+
     .annotation {
       margin: 0 40px 20px;
     }

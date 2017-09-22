@@ -8,7 +8,8 @@ import ThemeForm from './themeForm';
 import { createNewThematic } from '../../../actions/adminActions';
 import { addThematicTooltip } from '../../common/tooltips';
 
-const ThemeSection = ({ addThematic, i18n, selectedLocale, thematics }) => {
+const ThemeSection = ({ addThematic, i18n, selectedLocale, thematics, toggleLanguageMenu }) => {
+  toggleLanguageMenu(true);
   return (
     <div className="admin-box">
       <SectionTitle i18n={i18n} phase="survey" tabId="0" annotation={I18n.t('administration.annotation')} />
