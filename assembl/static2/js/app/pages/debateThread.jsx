@@ -10,9 +10,25 @@ import Timeline from '../components/debate/navigation/timeline';
 import withLoadingIndicator from '../components/common/withLoadingIndicator';
 import AllIdeasQuery from '../graphql/AllIdeasQuery.graphql';
 
-const DebateThread = ({ identifier, data, params, children, slug }) => {
+const DebateThread = ({ identifier, data, params, children, slug, lang }) => {
   const rootIdeaId = 'rootIdea' in data && 'id' in data.rootIdea ? data.rootIdea.id : null;
-  const thematics = 'ideas' in data ? data.ideas : null;
+  const thematicsWithLocales = 'ideas' in data ? data.ideas : null;
+  // This hack should be removed when the TDI's admin section will be done.
+  // We need it to have several langString in the idea's title
+  const thematics = [];
+  let titlesArray = [];
+  thematicsWithLocales.forEach((thematic) => {
+    if (thematic.title) {
+      titlesArray = thematic.title.split('#!');
+      titlesArray.forEach((title) => {
+        const titleLocale = title.split('$!')[1];
+        if (titleLocale === lang) {
+          thematics.push({ ...thematic, title: title.split('$!')[0] });
+        }
+      });
+    }
+  });
+  // End of the hack
   const isParentRoute = !params.themeId || false;
   const themeId = params.themeId || null;
   const childrenElm = React.Children.map(children, (child) => {
