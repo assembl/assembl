@@ -2,8 +2,6 @@ import React from 'react';
 import { I18n } from 'react-redux-i18n';
 import { Grid, Row, Col } from 'react-bootstrap';
 
-const supportedImageExtensions = ['.jpg', '.jpeg', '.bmp', '.png'];
-
 const isValidDescription = (description) => {
   return !!(description && description !== '<p></p>');
 };
@@ -14,9 +12,6 @@ class Media extends React.Component {
     const validDescriptionSide = isValidDescription(descriptionSide);
     const validDescriptionTop = isValidDescription(descriptionTop);
     const validDescriptionBottom = isValidDescription(descriptionBottom);
-    const isImage = supportedImageExtensions.some((extension) => {
-      return htmlCode.endsWith(extension);
-    });
     return title || validDescriptionTop || validDescriptionSide || htmlCode || validDescriptionBottom
       ? <section className="media-section relative">
         <Grid fluid className="background-light">
@@ -53,9 +48,7 @@ class Media extends React.Component {
                 {htmlCode &&
                 <Col xs={12} sm={validDescriptionSide ? 6 : 8} smOffset={validDescriptionSide ? 0 : 2}>
                   <div className="media-container">
-                    {isImage
-                      ? <img src={htmlCode} alt="media" preserveAspectRatio />
-                      : <iframe src={htmlCode} frameBorder="0" width="560" height="315" title="media" />}
+                    <object data={htmlCode} aria-label="media" />
                   </div>
                 </Col>}
               </Row>}
