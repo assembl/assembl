@@ -1,5 +1,5 @@
 mutation updateDiscussionPreference($languages: [String]!) {
-	updateDiscussionPreference(languages: $languages) {
+	updateDiscussionPreferences(languages: $languages) {
 		preferences {
 			languages {
 				locale

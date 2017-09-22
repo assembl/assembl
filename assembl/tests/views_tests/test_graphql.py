@@ -1459,7 +1459,7 @@ def test_mutation_update_language_preference(graphql_request,
                                              discussion_with_lang_prefs):
     res = schema.execute(u"""
 mutation myMutation($languages: [String]!) {
-    updateDiscussionPreference(languages: $languages) {
+    updateDiscussionPreferences(languages: $languages) {
         preferences {
             languages {
                 locale
@@ -1472,7 +1472,7 @@ mutation myMutation($languages: [String]!) {
             "languages": ["ja", "de"]
             })
     assert json.loads(json.dumps(res.data)) == {
-        u'updateDiscussionPreference': {
+        u'updateDiscussionPreferences': {
             u'preferences': {
                 u'languages': [
                     {u'locale': u'ja'},
@@ -1486,7 +1486,7 @@ def test_mutation_update_language_preference_empty_list(
     graphql_request, discussion_with_lang_prefs):
     res = schema.execute(u"""
 mutation myMutation($languages: [String]!) {
-    updateDiscussionPreference(languages: $languages) {
+    updateDiscussionPreferences(languages: $languages) {
         preferences {
             languages {
                 locale

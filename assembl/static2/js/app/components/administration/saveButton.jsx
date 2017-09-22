@@ -66,7 +66,7 @@ const SaveButton = ({
         variables: {
           languages: preferences
         },
-        update: (storeProxy, { data: { updateDiscussionPreference: { preferences: { languages } } } }) => {
+        update: (storeProxy, { data: { updateDiscussionPreferences: { preferences: { languages } } } }) => {
           // Update the apollo cache
           const query = storeProxy.readQuery({
             query: getDiscussionPreferenceLanguage,
