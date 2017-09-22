@@ -38,7 +38,7 @@ const VideoForm = ({
       <div className="margin-xl">
         <FormGroup>
           <Checkbox checked={hasVideo} onChange={toggle}>
-            <Translate value="administration.videoModule" />
+            <Translate value="administration.announcementModule" />
           </Checkbox>
         </FormGroup>
         {hasVideo
