@@ -46,6 +46,7 @@ class Home extends React.Component {
         {debateData.timeline && debateData.timeline.length > 1 && <Phases />}
         {debateData.video && <Video />}
         {debateData.twitter && <Twitter />}
+        <Contact />
         {debateData.chatbot && <Chatbot chatbot={debateData.chatbot} locale={locale} />}
         {debateData.partners && <Partners />}
       </div>
