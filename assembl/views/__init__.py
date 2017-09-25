@@ -13,7 +13,7 @@ import simplejson as json
 from pyramid.view import view_config
 from pyramid.response import Response
 from pyramid.httpexceptions import (
-    HTTPException, HTTPInternalServerError, HTTPMovedPermanently,
+    HTTPException, HTTPInternalServerError, HTTPMovedPermanently, HTTPError,
     HTTPBadRequest, HTTPFound, HTTPTemporaryRedirect as HTTPTemporaryRedirectP)
 from pyramid.i18n import TranslationStringFactory
 from pyramid.security import authenticated_userid, Everyone
@@ -418,7 +418,7 @@ def get_template_views():
     return views
 
 
-class JSONError(HTTPException):
+class JSONError(HTTPError):
 
     def __init__(self, detail=None, error_type=None,
                  code=HTTPBadRequest.code, headers=None, comment=None,
@@ -443,6 +443,12 @@ class JSONError(HTTPException):
 
     def __nonzero__(self):
         return bool(self.errors)
+
+
+@view_config(context=HTTPError, renderer='assembl:templates/includes/404.jinja2')
+def not_found(context, request):
+    request.response.status = context.status_code
+    return {"message": context.message, "code": context.status_code}
 
 
 @view_config(context=JSONError, renderer='json')
