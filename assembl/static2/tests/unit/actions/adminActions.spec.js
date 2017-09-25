@@ -120,47 +120,47 @@ describe('Admin actions', () => {
     });
   });
 
-  describe('toggleVideo action', () => {
-    const { toggleVideo } = actions;
-    it('should return a TOGGLE_VIDEO action type', () => {
-      const actual = toggleVideo('my-thematic-id');
-      const expected = { id: 'my-thematic-id', type: 'TOGGLE_VIDEO' };
+  describe('toggleMedia action', () => {
+    const { toggleMedia } = actions;
+    it('should return a TOGGLE_MEDIA action type', () => {
+      const actual = toggleMedia('my-thematic-id');
+      const expected = { id: 'my-thematic-id', type: 'TOGGLE_MEDIA' };
       expect(actual).toEqual(expected);
     });
   });
 
-  describe('updateVideoHtmlCode action', () => {
-    const { updateVideoHtmlCode } = actions;
-    it('should return a UPDATE_VIDEO_HTML_CODE action type', () => {
-      const actual = updateVideoHtmlCode('my-thematic-id', 'foobar');
-      const expected = { id: 'my-thematic-id', value: 'foobar', type: 'UPDATE_VIDEO_HTML_CODE' };
+  describe('updateMediaHtmlCode action', () => {
+    const { updateMediaHtmlCode } = actions;
+    it('should return a UPDATE_MEDIA_HTML_CODE action type', () => {
+      const actual = updateMediaHtmlCode('my-thematic-id', 'foobar');
+      const expected = { id: 'my-thematic-id', value: 'foobar', type: 'UPDATE_MEDIA_HTML_CODE' };
       expect(actual).toEqual(expected);
     });
   });
 
-  describe('updateVideoDescriptionTop action', () => {
-    const { updateVideoDescriptionTop } = actions;
-    it('should return a UPDATE_VIDEO_DESCRIPTION_TOP action type', () => {
-      const actual = updateVideoDescriptionTop('my-thematic-id', 'en', 'foobar');
-      const expected = { id: 'my-thematic-id', locale: 'en', value: 'foobar', type: 'UPDATE_VIDEO_DESCRIPTION_TOP' };
+  describe('updateMediaDescriptionTop action', () => {
+    const { updateMediaDescriptionTop } = actions;
+    it('should return a UPDATE_MEDIA_DESCRIPTION_TOP action type', () => {
+      const actual = updateMediaDescriptionTop('my-thematic-id', 'en', 'foobar');
+      const expected = { id: 'my-thematic-id', locale: 'en', value: 'foobar', type: 'UPDATE_MEDIA_DESCRIPTION_TOP' };
       expect(actual).toEqual(expected);
     });
   });
 
-  describe('updateVideoDescriptionBottom action', () => {
-    const { updateVideoDescriptionBottom } = actions;
-    it('should return a UPDATE_VIDEO_DESCRIPTION_BOTTOM action type', () => {
-      const actual = updateVideoDescriptionBottom('my-thematic-id', 'en', 'foobar');
-      const expected = { id: 'my-thematic-id', locale: 'en', value: 'foobar', type: 'UPDATE_VIDEO_DESCRIPTION_BOTTOM' };
+  describe('updateMediaDescriptionBottom action', () => {
+    const { updateMediaDescriptionBottom } = actions;
+    it('should return a UPDATE_MEDIA_DESCRIPTION_BOTTOM action type', () => {
+      const actual = updateMediaDescriptionBottom('my-thematic-id', 'en', 'foobar');
+      const expected = { id: 'my-thematic-id', locale: 'en', value: 'foobar', type: 'UPDATE_MEDIA_DESCRIPTION_BOTTOM' };
       expect(actual).toEqual(expected);
     });
   });
 
-  describe('updateVideoTitle action', () => {
-    const { updateVideoTitle } = actions;
-    it('should return a UPDATE_VIDEO_TITLE action type', () => {
-      const actual = updateVideoTitle('my-thematic-id', 'en', 'foobar');
-      const expected = { id: 'my-thematic-id', locale: 'en', value: 'foobar', type: 'UPDATE_VIDEO_TITLE' };
+  describe('updateMediaTitle action', () => {
+    const { updateMediaTitle } = actions;
+    it('should return a UPDATE_MEDIA_TITLE action type', () => {
+      const actual = updateMediaTitle('my-thematic-id', 'en', 'foobar');
+      const expected = { id: 'my-thematic-id', locale: 'en', value: 'foobar', type: 'UPDATE_MEDIA_TITLE' };
       expect(actual).toEqual(expected);
     });
   });

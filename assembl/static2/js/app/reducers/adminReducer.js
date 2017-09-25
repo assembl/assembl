@@ -57,7 +57,7 @@ export const thematicsById = (state = Map(), action) => {
       isNew: true,
       questions: List(),
       titleEntries: List(),
-      video: null
+      media: null
     });
     return state.set(action.id, emptyThematic.set('id', action.id));
   }
@@ -103,9 +103,9 @@ export const thematicsById = (state = Map(), action) => {
     });
     return fromJS(newState);
   }
-  case 'TOGGLE_VIDEO':
-    return state.updateIn([action.id, 'video'], (video) => {
-      if (video) {
+  case 'TOGGLE_MEDIA':
+    return state.updateIn([action.id, 'media'], (media) => {
+      if (media) {
         return null;
       }
       return fromJS({
@@ -116,19 +116,19 @@ export const thematicsById = (state = Map(), action) => {
         titleEntries: []
       });
     });
-  case 'UPDATE_VIDEO_DESCRIPTION_TOP':
-    return state.updateIn([action.id, 'video', 'descriptionEntriesTop'], updateInEntries(action.locale, fromJS(action.value)));
-  case 'UPDATE_VIDEO_DESCRIPTION_BOTTOM':
+  case 'UPDATE_MEDIA_DESCRIPTION_TOP':
+    return state.updateIn([action.id, 'media', 'descriptionEntriesTop'], updateInEntries(action.locale, fromJS(action.value)));
+  case 'UPDATE_MEDIA_DESCRIPTION_BOTTOM':
     return state.updateIn(
-      [action.id, 'video', 'descriptionEntriesBottom'],
+      [action.id, 'media', 'descriptionEntriesBottom'],
       updateInEntries(action.locale, fromJS(action.value))
     );
-  case 'UPDATE_VIDEO_DESCRIPTION_SIDE':
-    return state.updateIn([action.id, 'video', 'descriptionEntriesSide'], updateInEntries(action.locale, fromJS(action.value)));
-  case 'UPDATE_VIDEO_HTML_CODE':
-    return state.setIn([action.id, 'video', 'htmlCode'], action.value);
-  case 'UPDATE_VIDEO_TITLE':
-    return state.updateIn([action.id, 'video', 'titleEntries'], updateInEntries(action.locale, action.value));
+  case 'UPDATE_MEDIA_DESCRIPTION_SIDE':
+    return state.updateIn([action.id, 'media', 'descriptionEntriesSide'], updateInEntries(action.locale, fromJS(action.value)));
+  case 'UPDATE_MEDIA_HTML_CODE':
+    return state.setIn([action.id, 'media', 'htmlCode'], action.value);
+  case 'UPDATE_MEDIA_TITLE':
+    return state.updateIn([action.id, 'media', 'titleEntries'], updateInEntries(action.locale, action.value));
   default:
     return state;
   }
@@ -145,12 +145,12 @@ export const thematicsHaveChanged = (state = false, action) => {
   case 'UPDATE_QUESTION_TITLE':
   case 'UPDATE_THEMATIC_IMG_URL':
   case 'UPDATE_THEMATIC_TITLE':
-  case 'TOGGLE_VIDEO':
-  case 'UPDATE_VIDEO_DESCRIPTION_TOP':
-  case 'UPDATE_VIDEO_DESCRIPTION_BOTTOM':
-  case 'UPDATE_VIDEO_DESCRIPTION_SIDE':
-  case 'UPDATE_VIDEO_HTML_CODE':
-  case 'UPDATE_VIDEO_TITLE':
+  case 'TOGGLE_MEDIA':
+  case 'UPDATE_MEDIA_DESCRIPTION_TOP':
+  case 'UPDATE_MEDIA_DESCRIPTION_BOTTOM':
+  case 'UPDATE_MEDIA_DESCRIPTION_SIDE':
+  case 'UPDATE_MEDIA_HTML_CODE':
+  case 'UPDATE_MEDIA_TITLE':
     return true;
   default:
     return state;
@@ -174,7 +174,9 @@ export const languagePreferences = (state = List(), action) => {
     return state;
   case 'REMOVE_LANGUAGE_PREFERENCE':
     if (hasLocale(action.locale, state)) {
-      const i = state.findIndex((a) => { return a === action.locale; });
+      const i = state.findIndex((a) => {
+        return a === action.locale;
+      });
       return state.delete(i);
     }
     return state;
@@ -191,7 +193,6 @@ export const discussionLanguagePreferencesHasChanged = (state = false, action) =
     return state;
   }
 };
-
 
 export default combineReducers({
   selectedLocale: selectedLocale,
