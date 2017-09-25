@@ -145,39 +145,6 @@
     }
   }
 
-  .video-section {
-    z-index: 100;
-
-    .content-section {
-      padding: 80px 0;
-    }
-
-    .video-description-layer {
-      text-align: justify;
-      font-family: $font-family4;
-      font-size: 14px;
-      line-height: 28px;
-    }
-
-    .video-description-top {
-        margin-bottom: 40px;
-    }
-
-    .video-description-bottom {
-        margin-top: 40px;
-    }
-
-    .video-container {
-      margin: 0;
-    }
-
-    .assembl-icon-pepite {
-      &:before {
-        font-size: 60px;
-      }
-    }
-  }
-
   .media-section {
     z-index: 100;
 
@@ -368,6 +335,7 @@
 }
 
 @media screen and (max-width: 600px) {
+
   .debate {
     .survey {
       .alert {
@@ -394,36 +362,6 @@
 }
 
 @media screen and (min-width: 768px) {
-  .video-section {
-    .video-title-section {
-      margin: $margin-section 0 0;
-      text-align: left;
-
-      .dark-title-1 {
-        padding: 15px 0 0;
-        width: calc(100% - 75px);
-      }
-    }
-
-    .video-description {
-      color: $first-color;
-      font-family: $font-family7;
-      font-size: $font-size-sm;
-      line-height: 30px;
-      margin: 0 auto;
-      text-align: center;
-      width: 200px;
-
-      .description-txt {
-        margin: 40px 0;
-        text-align: left;
-      }
-
-      .box-hyphen {
-        height: 4px;
-      }
-    }
-  }
 
   .media-section {
     .media-title-section {
@@ -466,33 +404,6 @@
 (max-width: 767px),
 (-webkit-min-device-pixel-ratio: 2),
 (min-resolution: 192dpi) {
-  .video-section {
-    .video-title-section {
-      margin: $margin-section-xs 0 0;
-
-      .dark-title-1 {
-        display: block;
-        font-size: $font-size-l;
-        line-height: $font-size-l + 10px;
-        margin: 10px 0 0 32px;
-        width: calc(100% - 30px);
-      }
-    }
-
-    .assembl-icon-pepite {
-      display: none;
-    }
-
-    .video-description {
-      color: $grey2;
-      margin: 0 32px 60px 32px;
-    }
-
-    .box-hyphen {
-      display: none;
-    }
-
-  }
 
   .media-section {
     .media-title-section {
