@@ -2,6 +2,7 @@
 import React from 'react';
 
 type Props = {
+  checked: boolean,
   id: string,
   name: string,
   title: string,
@@ -23,7 +24,6 @@ class SwitchButton extends React.Component<Object, Props, any> {
     label: '',
     labelRight: '',
     disabled: false,
-    defaultChecked: false,
     theme: 'rsbc-switch-button-flat-round',
     mode: 'switch',
     onChange: () => {}
@@ -60,6 +60,7 @@ class SwitchButton extends React.Component<Object, Props, any> {
     }
 
     const props = {
+      checked: this.props.checked,
       defaultChecked: this.props.defaultChecked,
       disabled: this.props.disabled,
       onChange: this.props.onChange,
