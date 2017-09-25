@@ -303,7 +303,6 @@ const Translations = {
         quote: "Citation",
         descriptionTop: "Texte au-dessus de la vidéo",
         descriptionBottom: "Texte en-dessous de la vidéo",
-        videoLink: "Lien vidéo",
         mediaLink: "Lien média en ligne (vidéo, image, etc..)",
         orAttachPicture: "Ou téléchargez une image depuis votre ordinateur"
       },
@@ -625,7 +624,6 @@ const Translations = {
         quote: "Quote",
         descriptionTop: "Comments above video",
         descriptionBottom: "Comments below video",
-        videoLink: "Video link",
         mediaLink: "Online media link (video, picture, etc..)",
         orAttachPicture: "Or upload an image from your computer"
       },
