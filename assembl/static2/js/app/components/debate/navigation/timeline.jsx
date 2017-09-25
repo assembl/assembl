@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { isCurrentPhase, getBarWidth } from '../../../utils/timeline';
+import { isCurrentPhase, getBarWidth, isStepCompleted } from '../../../utils/timeline';
 import TimelineSegment from './timelineSegment';
 
 class Timeline extends React.Component {
@@ -25,6 +25,7 @@ class Timeline extends React.Component {
                 phaseIdentifier={phase.identifier}
                 startDate={phase.start}
                 endDate={phase.end}
+                isStepCompleted={isStepCompleted(phase)}
               />
             );
           })}
