@@ -423,6 +423,19 @@ def join_discussion(request):
     return data
 
 
+@view_config(route_name='test_join', request_method='GET', renderer='assembl:templates/join.jinja2')
+def join_discussion2(request):
+    data = get_default_context(request)
+    discussion = discussion_from_request(request)
+    ut = discussion.get_participant_template()[0]
+    localizer = request.localizer
+    notifications = [localizer.translate(n.get_human_readable_description())
+                     for n in ut.notification_subscriptions
+                     if n.status == NotificationSubscriptionStatus.ACTIVE]
+    data['notifications'] = notifications
+    return data
+
+
 @view_config(route_name='join', request_method='POST')
 def do_join_discussion(request):
     user_id = authenticated_userid(request)
@@ -458,6 +471,7 @@ def includeme(config):
     config.add_route('new_home', '/{discussion_slug}/home')
     config.add_route('bare_slug', '/{discussion_slug}')
     config.add_route('auto_bare_slug', '/{discussion_slug}/')
+    config.add_route('test_join', '/{discussion_slug}/test_join')
     config.add_route('join', '/{discussion_slug}/join')
     config.add_route('admin_react_page', '/{discussion_slug}/administration*extra_path')
     config.add_route('purl_posts', '/debate/{discussion_slug}/posts/*remainder')
