@@ -22,8 +22,12 @@ const DebateThread = ({ identifier, data, params, children, slug, lang }) => {
       titlesArray = thematic.title.split('#!');
       titlesArray.forEach((title) => {
         const titleLocale = title.split('$!')[1];
-        if (titleLocale === lang) {
-          thematics.push({ ...thematic, title: title.split('$!')[0] });
+        if (titleLocale) {
+          if (titleLocale.trim() === lang) {
+            thematics.push({ ...thematic, title: title.split('$!')[0] });
+          }
+        } else {
+          thematics.push({ ...thematic });
         }
       });
     }

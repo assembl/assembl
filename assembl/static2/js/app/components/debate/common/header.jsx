@@ -12,13 +12,21 @@ class Header extends React.Component {
     const { locale } = this.props.i18n;
     const isPhaseCompleted = getIfPhaseCompletedByIdentifier(debateData.timeline, identifier);
     const closedPhaseName = getPhaseName(debateData.timeline, identifier, locale).toLowerCase();
+    // This hack should be removed when the TDI's admin section will be done.
+    // We need it to have several langString in the idea's title
     const titlesArray = title.split('#!');
     let localizedTitle = '';
     titlesArray.forEach((t) => {
-      if (t.split('$!')[1] === locale) {
-        localizedTitle = t.split('$!')[0];
+      const titleLocale = t.split('$!')[1];
+      if (titleLocale) {
+        if (titleLocale.trim() === locale) {
+          localizedTitle = t.split('$!')[0];
+        }
+      } else {
+        localizedTitle = title;
       }
     });
+    // End of the hack
     return (
       <section className="header-section">
         <Grid fluid className="max-container">
