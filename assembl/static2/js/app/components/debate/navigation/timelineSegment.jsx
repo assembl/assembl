@@ -11,6 +11,7 @@ class TimelineSegment extends React.Component {
     super(props);
     this.displayPhase = this.displayPhase.bind(this);
   }
+
   displayPhase() {
     const { locale } = this.props.i18n;
     const { phaseIdentifier, title, startDate, endDate } = this.props;
@@ -63,7 +64,7 @@ class TimelineSegment extends React.Component {
       if (isCurrentPhase) {
         return 'txt-active-bold';
       } else if (isStepCompleted) {
-        return 'txt-active';
+        return 'txt-active-light';
       }
       return 'txt-not-active';
     };
