@@ -1,6 +1,5 @@
 {% extends 'base.jinja2' %}
-{% block page_title%}Assembl{% endblock%}
-
+{% block page_title%}{{gettext("Join Discussion - %s")| format(discussion.slug)}}{% endblock%}
 {% block main_css %}
   {# Override the main CSS. #}
   {% if NODE_ENV != 'development' %}
@@ -9,33 +8,21 @@
   {% endif %}
 {% endblock %}
 
-{% block body %}
-    <body>
-        {% if user %}
-          {% set userId = user.id %}
-        {% else %}
-          {% set userId = 'system.Everyone' %}
-        {% endif %}
-        {% if discussion %}
-            <input type="hidden" name="assemblVersion" id="assemblVersion" value="{{ assembl_version }}" />
-            <input type="hidden" name="discussion-id" id="discussion-id" value="{{ discussion.id }}" />
-            <input type="hidden" name="discussion-slug" id="discussion-slug" value="{{ discussion.slug }}" />
-            <input type="hidden" name="first-visit" id="first-visit" value="{{ first_visit_to_discussion }}" />
-            <script type="application/json" id="permissions-json">{{ discussion.get_user_permissions_preload(userId) |safe }}</script>
-        {% endif %}
-        {% if user %}
-            <input type='hidden' name='user-id' id='user-id' value='{{ user.id }}' />
-            <input type='hidden' name='user-displayname' id='user-displayname' value='{{ user.display_name() }}' />
-        {% endif %}
-        {% if loggedin_userid %}
-            <input type='hidden' name='user-login-id' id='user-login-id' value='{{ loggedin_userid }}' />
-        {% endif %}
-        <div id='root'></div>
-        {% block main_js %}
-            <script src='{{REACT_URL}}/build/bundle.js'></script>
-            {% if NODE_ENV == 'development' %}
-                <script src="{{REACT_URL}}/build/theme_{{theme_name}}_web.js"></script>
-            {% endif %}
-        {% endblock %}
-    </body>
-{% endblock%}
+{% block main_js %}
+    {% include 'analytics_common.jinja2' %}
+    <div class="join-discussion">
+      <h1>{{gettext('Join the discussion')}}</h1>
+      <p>{{gettext("This is you first visit to the discussion '%s'.")| format(discussion.topic)}}</p>
+      {% if notifications %}
+         <p>{{gettext('By entering, you agree to receive the following notifications:')}}</p>
+         <ul>
+             {% for notification in notifications %}
+             <li>{{ notification }}</li>
+             {% endfor %}
+         </ul>
+      {% endif %}
+      <form method="POST">
+         <input type="submit" value="{{gettext('join')}}" />
+      </form>
+    </div>
+{% endblock %}
