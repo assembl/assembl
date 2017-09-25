@@ -105,7 +105,7 @@ class MediaForm extends React.Component {
                 }}
               />
               <div className="admin-help">
-                <Translate value="administration.mediaHelp" />
+                <Translate value="administration.videoHelp" />
               </div>
               <Translate value="administration.ph.orAttachPicture" />
               <FileUploader handleChange={this.onFileChange} fileOrUrl={isLocalURL ? htmlCode : ''} />
