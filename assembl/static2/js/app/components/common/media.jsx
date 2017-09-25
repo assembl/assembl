@@ -6,9 +6,41 @@ const isValidDescription = (description) => {
   return !!(description && description !== '<p></p>');
 };
 
+const createHTMLTag = (contentType, url) => {
+  return (
+    (contentType && { image: <img src={url} alt="media" /> }[contentType.split('/')[0]]) ||
+    <object data={url} aria-label="media" />
+  );
+};
+
+const fetchContentType = (url) => {
+  return fetch(url, {
+    method: 'HEAD'
+  }).then(
+    (response) => {
+      return response.headers.get('Content-Type');
+    },
+    () => {
+      return null;
+    }
+  );
+};
+
 class Media extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { contentType: null };
+  }
+  componentWillMount() {
+    fetchContentType(this.props.htmlCode).then(this.setContentType);
+  }
+  setContentType = (contentType) => {
+    this.setState({ contentType: contentType });
+  };
   render() {
     const { title, descriptionTop, descriptionBottom, descriptionSide, htmlCode, noTitle } = this.props;
+    const { contentType } = this.state;
+    const mediaTag = createHTMLTag(contentType, htmlCode);
     const validDescriptionSide = isValidDescription(descriptionSide);
     const validDescriptionTop = isValidDescription(descriptionTop);
     const validDescriptionBottom = isValidDescription(descriptionBottom);
@@ -48,7 +80,7 @@ class Media extends React.Component {
                 {htmlCode &&
                 <Col xs={12} sm={validDescriptionSide ? 6 : 8} smOffset={validDescriptionSide ? 0 : 2}>
                   <div className="media-container">
-                    <object data={htmlCode} aria-label="media" />
+                    {mediaTag}
                   </div>
                 </Col>}
               </Row>}
