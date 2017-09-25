@@ -1,47 +1,55 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { setLocale } from 'react-redux-i18n';
-import { compose, graphql } from 'react-apollo';
+import { compose, graphql, withApollo } from 'react-apollo';
 import { NavDropdown, MenuItem } from 'react-bootstrap';
 import { getAvailableLocales } from '../../utils/globalFunctions';
 import { addLanguagePreference } from '../../actions/adminActions';
 import withLoadingIndicator from './withLoadingIndicator';
 import getDiscussionPreferenceLanguage from '../../graphql/DiscussionPreferenceLanguage.graphql';
 
-const LanguageMenu = ({ i18n, size, changeLanguage, addLanguageToStore, data }) => {
+const LanguageMenu = ({ i18n, size, changeLanguage, addLanguageToStore, client }) => {
   const doChangeLanguage = (key) => {
     localStorage.setItem('locale', key);
     changeLanguage(key);
   };
 
   const { locale } = i18n;
-  const prefs = data.discussionPreferences.languages;
+
+  const dataFromStore = client.readQuery({
+    query: getDiscussionPreferenceLanguage,
+    variables: { inLocale: locale }
+  });
+
+  const prefs = dataFromStore.discussionPreferences.languages;
 
   const preferencesMapByLocale = {};
   prefs.forEach((p) => {
     preferencesMapByLocale[p.locale] = p;
     addLanguageToStore(p.locale);
   });
-
   const availableLocales = getAvailableLocales(locale, preferencesMapByLocale);
-  return (
-    <ul className={`dropdown-${size} uppercase`}>
-      <NavDropdown pullRight title={locale} id="nav-dropdown">
-        {availableLocales.map((availableLocale) => {
-          return (
-            <MenuItem
-              onClick={() => {
-                doChangeLanguage(availableLocale);
-              }}
-              key={availableLocale}
-            >
-              {availableLocale}
-            </MenuItem>
-          );
-        })}
-      </NavDropdown>
-    </ul>
-  );
+  if (availableLocales.length > 0) {
+    return (
+      <ul className={`dropdown-${size} uppercase`}>
+        <NavDropdown pullRight title={locale} id="nav-dropdown">
+          {availableLocales.map((availableLocale) => {
+            return (
+              <MenuItem
+                onClick={() => {
+                  doChangeLanguage(availableLocale);
+                }}
+                key={availableLocale}
+              >
+                {availableLocale}
+              </MenuItem>
+            );
+          })}
+        </NavDropdown>
+      </ul>
+    );
+  }
+  return null;
 };
 
 const mapStateToProps = (state) => {
@@ -72,4 +80,6 @@ export default compose(
       };
     }
   }),
-  withLoadingIndicator())(LanguageMenu);
+  withLoadingIndicator(),
+  withApollo
+)(LanguageMenu);
