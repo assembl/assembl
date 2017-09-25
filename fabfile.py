@@ -184,8 +184,7 @@ def create_local_ini():
     random_ini_path = os.path.join(env.projectpath, env.random_file)
     local_ini_path = os.path.join(env.projectpath, env.ini_file)
     if exists(local_ini_path):
-        run('cp %s %s.%d' % (
-            local_ini_path, local_ini_path, int(time())))
+        run('cp %s %s.bak' % (local_ini_path, local_ini_path))
 
     if env.host_string == 'localhost':
         # The easy case: create a local.ini locally.
