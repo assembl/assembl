@@ -1,5 +1,9 @@
 import React from 'react';
 
-export const Join = () => {
-  return <div>Join the discussion</div>;
-};
+class Terms extends React.Component {
+  render() {
+    return <p>Join the discussion</p>;
+  }
+}
+
+export default Terms;
