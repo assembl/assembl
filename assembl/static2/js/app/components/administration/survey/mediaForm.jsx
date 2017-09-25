@@ -1,10 +1,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Translate, I18n } from 'react-redux-i18n';
-import { FormGroup, Checkbox } from 'react-bootstrap';
+import { FormGroup, Checkbox, Button } from 'react-bootstrap';
 import { graphql, compose } from 'react-apollo';
 
-import AttachFileForm from '../../common/attachFileForm';
+import FileUploader from '../../common/fileUploader';
 import uploadDocumentMutation from '../../../graphql/mutations/uploadDocument.graphql';
 
 import {
@@ -17,17 +17,18 @@ import {
 } from '../../../actions/adminActions';
 import FormControlWithLabel from '../../common/formControlWithLabel';
 
+const relativeURL = (uRL) => {
+  return uRL.match(/^https?:\/\/.*?(\/.*)$/)[1];
+};
+
 class MediaForm extends React.Component {
-  constructor(props) {
-    super(props);
-    this.onFileSubmit = this.onFileSubmit.bind(this);
-  }
-  onFileSubmit(file) {
+  onFileChange = (file) => {
     const { uploadDocument, updateHtmlCode } = this.props;
     uploadDocument({ variables: { file: file } }).then((res) => {
-      updateHtmlCode(res.data.uploadDocument.document.externalUrl);
+      const { externalUrl } = res.data.uploadDocument.document;
+      updateHtmlCode(relativeURL(externalUrl));
     });
-  }
+  };
   render() {
     const {
       descriptionTop,
@@ -49,6 +50,7 @@ class MediaForm extends React.Component {
     const descriptionTopPh = `${I18n.t('administration.ph.descriptionTop')} ${selectedLocale.toUpperCase()}`;
     const descriptionBottomPh = `${I18n.t('administration.ph.descriptionBottom')} ${selectedLocale.toUpperCase()}`;
     const mediaLinkPh = `${I18n.t('administration.ph.mediaLink')} ${selectedLocale.toUpperCase()}`;
+    const isLocalURL = htmlCode[0] === '/';
     return (
       <div className="form-container">
         <div className="margin-xl">
@@ -105,7 +107,21 @@ class MediaForm extends React.Component {
               <div className="admin-help">
                 <Translate value="administration.mediaHelp" />
               </div>
-              <AttachFileForm onSubmit={this.onFileSubmit} />
+              <Translate value="administration.ph.orAttachPicture" />
+              <FileUploader handleChange={this.onFileChange} fileOrUrl={isLocalURL ? htmlCode : ''} />
+              {htmlCode &&
+                  isLocalURL &&
+                  <div className="right">
+                    <Button
+                      onClick={() => {
+                        fetch(htmlCode.slice(0, -5), { method: 'DELETE' }).then(() => {
+                          this.props.updateHtmlCode('');
+                        });
+                      }}
+                    >
+                      <span className="assembl-icon-delete grey" />
+                    </Button>
+                  </div>}
               <div className="separator" />
             </div>
             : null}
