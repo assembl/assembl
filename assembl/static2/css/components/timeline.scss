@@ -1,6 +1,6 @@
 .timeline {
   height: 56px;
-  
+
   .bar {
     background-color: $first-color;
     bottom: 0;
@@ -117,6 +117,13 @@
   .txt-active {
     .timeline-link {
       color: $first-color;
+    }
+  }
+
+  .txt-active-bold {
+    .timeline-link {
+      color: $first-color;
+      font-family: $font-family3
     }
   }
 

@@ -58,7 +58,15 @@ class TimelineSegment extends React.Component {
     }
   }
   render() {
-    const { index, barWidth, identifier, isCurrentPhase, isStepCompleted, phaseIdentifier, title, locale } = this.props;
+    const { index, barWidth, isCurrentPhase, isStepCompleted, title, locale } = this.props;
+    const timelineClass = () => {
+      if (isCurrentPhase) {
+        return 'txt-active-bold';
+      } else if (isStepCompleted) {
+        return 'txt-active';
+      }
+      return 'txt-not-active';
+    };
     return (
       <div className="minimized-timeline" style={{ marginLeft: `${index * 100}px` }}>
         {title.entries
@@ -67,11 +75,7 @@ class TimelineSegment extends React.Component {
           })
           .map((entry, index2) => {
             return (
-              <div
-                onClick={this.displayPhase}
-                className={identifier === phaseIdentifier ? 'timeline-title txt-active' : 'timeline-title txt-not-active'}
-                key={index2}
-              >
+              <div onClick={this.displayPhase} className={`timeline-title ${timelineClass()}`} key={index2}>
                 <div className="timeline-link">
                   {entry.value}
                 </div>
