@@ -1,11 +1,11 @@
 // @flow
 import React from 'react';
 import { connect } from 'react-redux';
-import { Button } from 'react-bootstrap';
 import { Translate, I18n } from 'react-redux-i18n';
 
 import SwitchButton from '../../common/switchButton';
 import { displayCustomModal } from '../../../utils/utilityManager';
+import CancelTranslationForm from './cancelTranslationForm';
 import ChooseContentLocaleForm from './chooseContentLocaleForm';
 import { setContentLocale } from '../../../actions/contentLocaleActions';
 
@@ -13,8 +13,7 @@ type PostTranslateProps = {
   id: string,
   lang: string,
   originalLocale: string,
-  showOriginal: boolean,
-  toggle: Function,
+  translate: boolean,
   updateLocalContentLocale: Function,
   updateGlobalContentLocale: Function
 };
@@ -35,53 +34,49 @@ class PostTranslate extends React.Component<void, PostTranslateProps, PostTransl
   }
 
   openModal = () => {
-    const { lang, originalLocale, updateGlobalContentLocale, updateLocalContentLocale } = this.props;
-    const setIsTranslatedThen = (callback) => {
-      return (value) => {
-        this.setState(
-          {
-            isTranslated: true
-          },
-          () => {
-            return callback(value);
-          }
-        );
-      };
-    };
-    const content = (
-      <ChooseContentLocaleForm
-        lang={lang}
-        originalLocale={originalLocale}
-        updateGlobalContentLocale={setIsTranslatedThen(updateGlobalContentLocale)}
-        updateLocalContentLocale={setIsTranslatedThen(updateLocalContentLocale)}
-      />
-    );
+    const { lang, originalLocale, translate, updateGlobalContentLocale, updateLocalContentLocale } = this.props;
+    let content;
+    if (!translate) {
+      content = (
+        <ChooseContentLocaleForm
+          lang={lang}
+          originalLocale={originalLocale}
+          translate={translate}
+          updateGlobalContentLocale={updateGlobalContentLocale}
+          updateLocalContentLocale={updateLocalContentLocale}
+        />
+      );
+    } else {
+      content = (
+        <CancelTranslationForm
+          lang={lang}
+          originalLocale={originalLocale}
+          translate={translate}
+          updateGlobalContentLocale={updateGlobalContentLocale}
+          updateLocalContentLocale={updateLocalContentLocale}
+        />
+      );
+    }
+
     return displayCustomModal(content);
   };
 
   render() {
-    const { id, originalLocale, showOriginal, toggle } = this.props;
+    const { id, originalLocale, translate } = this.props;
     return (
       <div className="translate">
         <p>
           <Translate
-            value={!showOriginal ? 'debate.thread.messageTranslatedFrom' : 'debate.thread.messageOriginallyIn'}
+            value={translate ? 'debate.thread.messageTranslatedFrom' : 'debate.thread.messageOriginallyIn'}
             language={I18n.t(`language.${originalLocale}`)}
           />
         </p>
         <SwitchButton
           name={`switch-${id}`}
-          onChange={toggle}
-          defaultChecked={showOriginal}
-          labelRight={I18n.t('debate.thread.showOriginal')}
+          onChange={this.openModal}
+          checked={translate}
+          labelRight={I18n.t('debate.thread.translate')}
         />
-        {!this.state.isTranslated
-          ? <div className="translate-button">
-            <Button onClick={this.openModal}>
-              <Translate value="debate.thread.translate" />
-            </Button>
-          </div>
-          : null}
       </div>
     );
   }

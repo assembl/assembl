@@ -25,7 +25,6 @@ class Post extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      showOriginal: false,
       screenWidth: window.innerWidth
     };
     this.handleSentiment = this.handleSentiment.bind(this);
@@ -139,12 +138,13 @@ class Post extends React.Component {
       updateLocalContentLocale
     } = this.props;
     const { bodyEntries } = post;
+    const translate = contentLocale !== originalLocale;
 
     let body;
     if (bodyEntries.length > 1) {
       // first entry is the translated version, example localeCode "fr-x-mtfrom-en"
       // second entry is the original, example localeCode "en"
-      body = this.state.showOriginal ? bodyEntries[1].value : bodyEntries[0].value;
+      body = translate ? bodyEntries[0].value : bodyEntries[1].value;
     } else {
       // translation is not enabled or the message is already in the desired locale
       body = bodyEntries[0].value;
@@ -160,14 +160,8 @@ class Post extends React.Component {
             ? <PostTranslate
               id={post.id}
               lang={lang}
-              showOriginal={this.state.showOriginal || contentLocale === originalLocale}
+              translate={translate}
               originalLocale={originalLocale}
-              toggle={() => {
-                return this.setState((state) => {
-                  return { showOriginal: !state.showOriginal };
-                });
-              }}
-              localContentLocale={localContentLocale}
               updateLocalContentLocale={updateLocalContentLocale}
             />
             : null}

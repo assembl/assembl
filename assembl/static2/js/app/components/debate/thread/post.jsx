@@ -43,8 +43,7 @@ class Post extends React.PureComponent {
     super(props);
     this.state = {
       showAnswerForm: false,
-      mode: 'view',
-      showOriginal: false
+      mode: 'view'
     };
   }
 
@@ -94,17 +93,17 @@ class Post extends React.PureComponent {
     this.setState({ mode: 'view' }, this.props.measureTreeHeight);
   };
 
-  getBodyAndSubject = () => {
+  getBodyAndSubject = (translate) => {
     const { subjectEntries, bodyEntries } = this.props.data.post;
+
     let body;
     let subject;
     let originalBody;
-    let originalBodyLocale;
     let originalSubject;
     if (bodyEntries.length > 1) {
       // first entry is the translated version, example localeCode "fr-x-mtfrom-en"
       // second entry is the original, example localeCode "en"
-      body = this.state.showOriginal ? bodyEntries[1].value : bodyEntries[0].value;
+      body = translate ? bodyEntries[0].value : bodyEntries[1].value;
       originalBody = bodyEntries[1].value;
     } else {
       // translation is not enabled or the message is already in the desired locale
@@ -112,7 +111,7 @@ class Post extends React.PureComponent {
       originalBody = bodyEntries[0].value;
     }
     if (subjectEntries.length > 1) {
-      subject = this.state.showOriginal ? subjectEntries[1].value : subjectEntries[0].value;
+      subject = translate ? subjectEntries[0].value : subjectEntries[1].value;
       originalSubject = subjectEntries[1].value;
     } else {
       subject = subjectEntries[0].value;
@@ -123,7 +122,6 @@ class Post extends React.PureComponent {
       body: body,
       subject: subject,
       originalBody: originalBody,
-      originalBodyLocale: originalBodyLocale,
       originalSubject: originalSubject
     };
   };
@@ -153,13 +151,13 @@ class Post extends React.PureComponent {
       debateData,
       nuggetsManager,
       rowIndex,
-      localContentLocale,
       updateLocalContentLocale,
       originalLocale
     } = this.props;
     // creationDate is retrieved by IdeaWithPosts query, not PostQuery
 
-    const { body, subject, originalBody, originalSubject } = this.getBodyAndSubject();
+    const translate = contentLocale !== originalLocale;
+    const { body, subject, originalBody, originalSubject } = this.getBodyAndSubject(translate);
 
     // This hack should be removed when the TDI's admin section will be done.
     // We need it to have several langString in the idea's title
@@ -254,14 +252,8 @@ class Post extends React.PureComponent {
                 ? <PostTranslate
                   id={id}
                   lang={lang}
-                  showOriginal={this.state.showOriginal || contentLocale === originalLocale}
                   originalLocale={originalLocale}
-                  toggle={() => {
-                    return this.setState((state) => {
-                      return { showOriginal: !state.showOriginal };
-                    });
-                  }}
-                  localContentLocale={localContentLocale}
+                  translate={translate}
                   updateLocalContentLocale={updateLocalContentLocale}
                 />
                 : null}

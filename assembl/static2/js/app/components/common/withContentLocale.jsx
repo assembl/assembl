@@ -26,8 +26,8 @@ const withContentLocale = (WrappedComponent) => {
         return globalContentLocale.get(originalLocale);
       }
 
-      // no translation is asked, get the content with the site language
-      return this.props.lang;
+      // no translation is asked, get the content with its original locale
+      return originalLocale;
     };
 
     render() {
