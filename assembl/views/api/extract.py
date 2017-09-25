@@ -1,8 +1,7 @@
 """Cornice API for extracts"""
-import json
 
+import simplejson as json
 from cornice import Service
-
 from pyramid.security import authenticated_userid, Everyone
 from pyramid.httpexceptions import (
     HTTPNotFound, HTTPBadRequest, HTTPForbidden, HTTPServerError, HTTPNoContent)
@@ -158,8 +157,7 @@ def post_extract(request):
                 cast(AnnotatorSource.name, Unicode) == 'Annotator').first()
             if not source:
                 source = AnnotatorSource(
-                    name='Annotator', discussion_id=discussion_id,
-                    type='source')
+                    name='Annotator', discussion_id=discussion_id)
             content = Webpage(url=uri, discussion_id=discussion_id)
     extract_body = extract_data.get('quote', '')
 
