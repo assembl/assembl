@@ -304,7 +304,8 @@ const Translations = {
       },
       step_x_total: "Section %{num} sur %{total}",
       saveThemes: "Sauvegarder",
-      successThemeCreation: "Les thématiques ont été enregistrées avec succès !"
+      successThemeCreation: "Les thématiques ont été enregistrées avec succès !",
+      successLanguagePreference: "Les langues du débat ont été enregistrées avec succès !"
     },
     unauthorizedAdministration: {
       unauthorizedMessage: "Vous n'êtes pas autorisé à accéder à l'administration. Veuillez contacter l'administrateur du site.",
@@ -616,7 +617,8 @@ const Translations = {
       },
       step_x_total: "Section %{num} on %{total}",
       saveThemes: "Save",
-      successThemeCreation: "Themes have been saved with success!"
+      successThemeCreation: "Themes have been saved with success!",
+      successLanguagePreference: "Discussion language preferences have been saved with success!"
     },
     unauthorizedAdministration: {
       unauthorizedMessage:

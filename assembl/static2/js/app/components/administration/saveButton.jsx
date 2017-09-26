@@ -78,6 +78,7 @@ const SaveButton = ({
           },
           fetchPolicy: 'network-only'
         });
+        displayAlert('success', I18n.t('administration.successLanguagePreference'));
       });
       resetLanguagePreferenceChanged();
     }
