@@ -131,8 +131,8 @@ class EditPostForm extends React.PureComponent<void, EditPostFormProps, EditPost
     return (
       <Row>
         <Col xs={12} md={12}>
-          <div className="color">
-            <span className="assembl-icon-back-arrow" />&nbsp;<Translate value="debate.edit.title" />
+          <div className="color margin-left-9">
+            <span className="assembl-icon-edit" />&nbsp;<Translate value="debate.edit.title" className="sm-title" />
           </div>
         </Col>
         <Col xs={12} md={12}>
@@ -152,7 +152,7 @@ class EditPostForm extends React.PureComponent<void, EditPostFormProps, EditPost
                 maxLength={TEXT_INPUT_MAX_LENGTH}
               />}
             <FormGroup>
-              <div className="form-label">
+              <div className="form-label form-label-body">
                 <Translate value="debate.edit.body" />
               </div>
               <RichTextEditor
