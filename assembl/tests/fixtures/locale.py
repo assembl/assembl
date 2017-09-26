@@ -20,12 +20,18 @@ def en_ca_locale(request, test_session, locale_cache):
 
     from assembl.models.langstrings import Locale
 
+    # Delete the locale at fixture tearDown only if it was created
+    # in this fixture.
+    # This is to keep locale names, that is created in Locale.populate_db
+    # from the db_default_data fixture.
+    delete_locale = Locale.locale_collection.get('en_CA', None) is None
     locale = Locale.get_or_create("en_CA", test_session)
 
     def fin():
         test_session.delete(locale)
 
-    request.addfinalizer(fin)
+    if delete_locale:
+        request.addfinalizer(fin)
     return locale
 
 
@@ -34,12 +40,15 @@ def en_locale(request, test_session, locale_cache):
     """English (en) locale fixture"""
 
     from assembl.models.langstrings import Locale
+
+    delete_locale = Locale.locale_collection.get('en', None) is None
     locale = Locale.get_or_create("en", test_session)
 
     def fin():
         test_session.delete(locale)
 
-    request.addfinalizer(fin)
+    if delete_locale:
+        request.addfinalizer(fin)
     return locale
 
 
@@ -48,12 +57,14 @@ def fr_locale(request, test_session, locale_cache):
     """French (fr) locale fixture"""
 
     from assembl.models.langstrings import Locale
+    delete_locale = Locale.locale_collection.get('fr', None) is None
     locale = Locale.get_or_create("fr", test_session)
 
     def fin():
         test_session.delete(locale)
 
-    request.addfinalizer(fin)
+    if delete_locale:
+        request.addfinalizer(fin)
     return locale
 
 
@@ -62,12 +73,15 @@ def it_locale(request, test_session, locale_cache):
     """Italian (it) locale fixture"""
 
     from assembl.models.langstrings import Locale
+
+    delete_locale = Locale.locale_collection.get('it', None) is None
     locale = Locale.get_or_create("it", test_session)
 
     def fin():
         test_session.delete(locale)
 
-    request.addfinalizer(fin)
+    if delete_locale:
+        request.addfinalizer(fin)
     return locale
 
 
@@ -77,12 +91,14 @@ def de_locale(request, test_session, locale_cache):
 
     from assembl.models.langstrings import Locale
 
+    delete_locale = Locale.locale_collection.get('de', None) is None
     locale = Locale.get_or_create("de", test_session)
 
     def fin():
         test_session.delete(locale)
 
-    request.addfinalizer(fin)
+    if delete_locale:
+        request.addfinalizer(fin)
     return locale
 
 
@@ -92,12 +108,14 @@ def tr_locale(request, test_session, locale_cache):
 
     from assembl.models.langstrings import Locale
 
+    delete_locale = Locale.locale_collection.get('tr', None) is None
     locale = Locale.get_or_create("tr", test_session)
 
     def fin():
         test_session.delete(locale)
 
-    request.addfinalizer(fin)
+    if delete_locale:
+        request.addfinalizer(fin)
     return locale
 
 

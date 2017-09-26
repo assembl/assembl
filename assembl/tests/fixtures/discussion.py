@@ -72,7 +72,14 @@ def discussion2(request, test_session):
 @pytest.fixture(scope="function")
 def discussion_with_lang_prefs(request, test_session, discussion):
     """An empty Discussion fixture with locale preferences"""
-    with test_session.no_autoflush:
-        discussion.discussion_locales = ['en', 'fr', 'ja']
+    discussion.discussion_locales = ['en', 'fr', 'ja']
     test_session.flush()
+
+    def fin():
+        print "finalizer discussion_with_lang_prefs"
+        # put back config that is in discussion fixture
+        discussion.discussion_locales = ['en', 'fr', 'de']
+        test_session.flush()
+
+    request.addfinalizer(fin)
     return discussion
