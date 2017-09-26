@@ -1,7 +1,7 @@
 // @flow
 import React from 'react';
 import { Translate, I18n } from 'react-redux-i18n';
-import { convertFromRaw, convertToRaw, Editor, EditorState, RawContentState } from 'draft-js';
+import { convertFromRaw, convertToRaw, Editor, EditorState, RawContentState, RichUtils } from 'draft-js';
 
 import classNames from 'classnames';
 import punycode from 'punycode';
@@ -162,6 +162,17 @@ export default class RichTextEditor extends React.Component<Object, RichTextEdit
     );
   };
 
+  handleReturn = (e): string => {
+    // Pressing shift-enter keys creates a new line (<br/>) instead of an new paragraph (<p>)
+    // See https://github.com/HubSpot/draft-convert/issues/83
+    const { editorState } = this.state;
+    if (e.shiftKey) {
+      this.setState({ editorState: RichUtils.insertSoftNewline(editorState) });
+      return 'handled';
+    }
+    return 'not-handled';
+  };
+
   renderToolbar = () => {
     return (
       <Toolbar
@@ -192,6 +203,7 @@ export default class RichTextEditor extends React.Component<Object, RichTextEdit
             ref={(e) => {
               this.editor = e;
             }}
+            handleReturn={this.handleReturn}
             spellCheck
           />
         </div>
