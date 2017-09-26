@@ -68,12 +68,15 @@ class LanguageSection extends React.Component {
   }
 
   toggleLocale(locale) {
+    const currentLocale = this.props.i18n.locale;
     this.props.signalLocaleChanged(true);
     const transientState = this.state.localeState[locale];
     const newState = { ...transientState, selected: !transientState.selected };
     if (newState.selected) {
+      console.log('add');
       this.props.addLocaleToStore(locale);
-    } else {
+    } else if (currentLocale !== locale) {
+      console.log('remove');
       this.props.removeLocaleFromStore(locale);
     }
   }
@@ -96,10 +99,7 @@ class LanguageSection extends React.Component {
                   key={locale}
                   value={locale}
                   onChange={(e) => {
-                    if (currentLocale !== locale) {
-                      return this.toggleLocale(e.target.value);
-                    }
-                    return this.toggleLocale(currentLocale);
+                    return this.toggleLocale(e.target.value);
                   }}
                 >
                   {localeData.name}
