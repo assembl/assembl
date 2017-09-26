@@ -54,7 +54,7 @@ const LanguageMenu = ({ changeLocale, selectedLocale, discussionPreferences, vis
     );
   }
 
-  return (<span />);
+  return <span />;
 };
 
 const mapStateToProps = (state) => {
