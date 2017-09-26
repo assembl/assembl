@@ -1306,56 +1306,8 @@ mutation uploadDocument($file: String!) {
 #    }
 
 
-def xtest_mutation_add_post_attachment(graphql_request, idea_in_thread_phase, top_post_in_thread_phase):
-    import os
-    from io import BytesIO
-
-    class FieldStorage(object):
-        file = BytesIO(os.urandom(16))
-        filename = u'path/to/image.png'
-        type = 'image/png'
-
-    graphql_request.POST['variables.attachment'] = FieldStorage()
-    res = schema.execute(u"""
-mutation addPostAttachment($postId: ID!, $file: String!) {
-    addPostAttachment(
-        postId: $postId,
-        file: $file,
-    ) {
-        post {
-            ... on Post {
-                attachments {
-                    id
-                    title
-                    externalUrl
-                    mimeType
-                }
-            }
-        }
-    }
-}
-""", context_value=graphql_request,
-        variable_values={
-            "postId": top_post_in_thread_phase,
-            "file": "variables.attachment"
-            })
-    assert json.loads(json.dumps(res.data)) == {
-        u'addPostAttachment': {
-            u'post': {
-                u'attachments': [
-                    {
-                        u'externalUrl': u'http://localhost:6543/data/Discussion/1/documents/1/data',
-                        u'id': u'1',
-                        u'mimeType': u'image/png',
-                        u'title': u'image.png'
-                    }
-                ]
-            }
-        }
-    }
-
-
-def xtest_mutation_delete_post_attachment(graphql_request, idea_in_thread_phase, top_post_in_thread_phase):
+def test_mutation_delete_post_attachment(graphql_request, idea_in_thread_phase, top_post_in_thread_phase):
+    # TODO: write a test fixture that returns a post attachment id and remove AddPostAttachmentMutation everywhere
     idea_id = idea_in_thread_phase
     in_reply_to_post_id = top_post_in_thread_phase
     import os
@@ -1377,9 +1329,6 @@ mutation addPostAttachment($postId: ID!, $file: String!) {
             ... on Post {
                 attachments {
                     id
-                    title
-                    externalUrl
-                    mimeType
                 }
             }
         }
@@ -1391,21 +1340,23 @@ mutation addPostAttachment($postId: ID!, $file: String!) {
             "file": "variables.attachment"
             })
     assert res.errors == []
-    document_id = res.data['addPostAttachment']['post']['attachments'][-1]['id']
+    attachment_id = res.data['addPostAttachment']['post']['attachments'][-1]['id']
 
     res = schema.execute(u"""
-mutation deletePostAttachment($postId: ID!, $documentId: Int!) {
+mutation deletePostAttachment($postId: ID!, $attachmentId: Int!) {
     deletePostAttachment(
         postId: $postId,
-        documentId: $documentId,
+        attachmentId: $attachmentId,
     ) {
         post {
             ... on Post {
                 attachments {
-                    id
-                    title
-                    externalUrl
-                    mimeType
+                    document {
+                        id
+                        title
+                        externalUrl
+                        mimeType
+                    }
                 }
             }
         }
@@ -1413,7 +1364,7 @@ mutation deletePostAttachment($postId: ID!, $documentId: Int!) {
 }
 """, context_value=graphql_request,
     variable_values={
-        "documentId": document_id,
+        "attachmentId": attachment_id,
         "postId": top_post_in_thread_phase,
         })
 
