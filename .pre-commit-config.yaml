@@ -1,0 +1,27 @@
+- repo: local
+  hooks:
+#  - id: pytest
+#    name: pytest
+#    entry: ./venv/bin/py.test -s assembl -vv
+#    language: system
+#    types: [python]
+  - id: eslint
+    name: eslint
+    entry: bash -c "cd assembl/static2/; npm run eslint"
+    language: system
+    files: ".*/static2/.*js.$"
+  - id: flow
+    name: flow
+    entry: bash -c "cd assembl/static2/; npm run flow"
+    language: system
+    files: ".*/static2/.*js.$"
+  - id: jest
+    name: js tests
+    entry: bash -c "cd assembl/static2/; npm test"
+    language: system
+    files: ".*/static2/.*js.$"
+  - id: prettier
+    name: prettier (If this fails, please git add prettier changes and commit again.)
+    entry: bash -c "cd assembl/static2/; npm run format|grep -qv success"
+    language: system
+    files: ".*/static2/.*js.$"
