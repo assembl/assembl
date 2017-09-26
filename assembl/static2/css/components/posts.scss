@@ -163,7 +163,7 @@ $deleted-post-border: 1px solid $grey1 !default;
             color: $grey2;
             font-size: $font-size-xs;
             padding: 0 0 0 10px;
-            font-family: 'LatoLight'
+            font-family: $font-family4;
         }
     }
 
@@ -183,7 +183,7 @@ $deleted-post-border: 1px solid $grey1 !default;
         .label {
             color: $grey2;
             font-size: $font-size-xs;
-            font-family: 'LatoLight'
+            font-family: $font-family4;
         }
 
         .badges {
@@ -191,7 +191,7 @@ $deleted-post-border: 1px solid $grey1 !default;
 
             .badge {
               display: inline;
-                background-color: #e5e5e5;
+                background-color: $grey7;
                 color: $grey3;
                 text-align: left;
                 white-space: normal;
