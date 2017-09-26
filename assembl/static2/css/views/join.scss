@@ -1,7 +1,6 @@
 .join-discussion {
-  background-color: $white;
   text-align: center;
-  margin: auto;
+  margin: 10% 25%;
   font-family: $font-family;
   display: block;
 
@@ -12,15 +11,25 @@
   .condition-list {
     margin-top: 15px;
     font-family: $font-family6;
+    list-style-position: inside;
+
+    li {
+      margin-top: 10px;
+    }
   }
 
   input {
-    background-color: $first-color;
+    margin-top: 20px;
+    background-color: $first-color-light;
     border: none;
     cursor: pointer;
     text-decoration: none;
     width: 300px;
     height: 70px;
     border-radius: 15px;
+
+    &:hover {
+      background-color: 
+    }
   }
 }

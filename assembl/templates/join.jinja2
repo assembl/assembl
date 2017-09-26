@@ -15,14 +15,14 @@
       <p>{{gettext("This is you first visit to the discussion '%s'.")| format(discussion.topic)}}</p>
       {% if notifications %}
          <p>{{gettext('By entering, you agree to receive the following notifications:')}}</p>
-         <ul>
+         <ul class="condition-list">
              {% for notification in notifications %}
              <li>{{ notification }}</li>
              {% endfor %}
          </ul>
       {% endif %}
       <form method="POST">
-         <input type="submit" value="{{gettext('join')}}" />
+         <input type="submit" value="{{gettext('Join')}}" />
       </form>
     </div>
 {% endblock %}
