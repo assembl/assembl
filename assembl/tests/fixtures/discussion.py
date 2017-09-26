@@ -34,7 +34,6 @@ def discussion(request, test_session, default_preferences):
             ut.delete()
         test_session.delete(preferences)
         test_session.delete(discussion)
-        test_session.execute("ALTER SEQUENCE discussion_id_seq RESTART;")
         test_session.flush()
     request.addfinalizer(fin)
     return d
@@ -65,7 +64,6 @@ def discussion2(request, test_session):
         d.preferences = None
         test_session.delete(preferences)
         test_session.delete(d)
-        test_session.execute("ALTER SEQUENCE discussion_id_seq RESTART;")
         test_session.flush()
     request.addfinalizer(fin)
     return d
