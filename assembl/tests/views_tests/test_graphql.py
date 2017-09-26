@@ -1306,7 +1306,7 @@ mutation uploadDocument($file: String!) {
 #    }
 
 
-def test_mutation_add_post_attachment(graphql_request, idea_in_thread_phase, top_post_in_thread_phase):
+def xtest_mutation_add_post_attachment(graphql_request, idea_in_thread_phase, top_post_in_thread_phase):
     import os
     from io import BytesIO
 
@@ -1355,7 +1355,7 @@ mutation addPostAttachment($postId: ID!, $file: String!) {
     }
 
 
-def test_mutation_delete_post_attachment(graphql_request, idea_in_thread_phase, top_post_in_thread_phase):
+def xtest_mutation_delete_post_attachment(graphql_request, idea_in_thread_phase, top_post_in_thread_phase):
     idea_id = idea_in_thread_phase
     in_reply_to_post_id = top_post_in_thread_phase
     import os
