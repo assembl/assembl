@@ -289,7 +289,7 @@ const Translations = {
       discussion: {
         0: "Langues utilisées"
       },
-      languageChoice: "Sélection des langue a affichier",
+      languageChoice: "Sélection des langues du débat",
       ph: {
         title: "*Titre",
         quote: "Citation",
