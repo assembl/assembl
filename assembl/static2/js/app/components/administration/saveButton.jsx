@@ -44,7 +44,8 @@ const createVariablesForMutation = (thematic) => {
 };
 
 const SaveButton = ({
-  data,
+  i18n,
+  client,
   createThematic,
   deleteThematic,
   thematicsHaveChanged,
@@ -68,8 +69,15 @@ const SaveButton = ({
           languages: preferences
         }
       };
+      // updateDiscussionPreference(payload);
       updateDiscussionPreference(payload).then(() => {
-        data.refetch();
+        client.query({
+          query: getDiscussionPreferenceLanguage,
+          variables: {
+            inLocale: i18n.locale
+          },
+          fetchPolicy: 'network-only'
+        });
       });
       resetLanguagePreferenceChanged();
     }
@@ -176,16 +184,4 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default compose(
-  connect(mapStateToProps, mapDispatchToProps),
-  graphql(getDiscussionPreferenceLanguage, {
-    options: (props) => {
-      return {
-        variables: {
-          inLocale: props.i18n.locale
-        }
-      };
-    }
-  }),
-  withApollo
-)(SaveButtonWithMutations);
+export default compose(connect(mapStateToProps, mapDispatchToProps), withApollo)(SaveButtonWithMutations);
