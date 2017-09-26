@@ -250,6 +250,7 @@ class Post extends React.PureComponent {
                 />}
               {showPostTranslate
                 ? <PostTranslate
+                  contentLocale={contentLocale}
                   id={id}
                   lang={lang}
                   originalLocale={originalLocale}

@@ -158,6 +158,7 @@ class Post extends React.Component {
           <PostCreator name={post.creator.name} />
           {showPostTranslate
             ? <PostTranslate
+              contentLocale={contentLocale}
               id={post.id}
               lang={lang}
               translate={translate}

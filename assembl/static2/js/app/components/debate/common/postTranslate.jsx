@@ -4,12 +4,14 @@ import { connect } from 'react-redux';
 import { Translate, I18n } from 'react-redux-i18n';
 
 import SwitchButton from '../../common/switchButton';
+import { getConnectedUserId } from '../../../utils/globalFunctions';
 import { displayCustomModal } from '../../../utils/utilityManager';
 import CancelTranslationForm from './cancelTranslationForm';
 import ChooseContentLocaleForm from './chooseContentLocaleForm';
 import { setContentLocale } from '../../../actions/contentLocaleActions';
 
 type PostTranslateProps = {
+  contentLocale: string,
   id: string,
   lang: string,
   originalLocale: string,
@@ -32,6 +34,20 @@ class PostTranslate extends React.Component<void, PostTranslateProps, PostTransl
       isTranslated: false
     };
   }
+
+  handleSubmit = () => {
+    const { contentLocale, lang, updateLocalContentLocale } = this.props;
+    const userIsConnected = getConnectedUserId();
+    if (!userIsConnected) {
+      if (contentLocale && contentLocale !== lang) {
+        updateLocalContentLocale(lang);
+      } else {
+        updateLocalContentLocale(undefined);
+      }
+    } else {
+      this.openModal();
+    }
+  };
 
   openModal = () => {
     const { lang, originalLocale, translate, updateGlobalContentLocale, updateLocalContentLocale } = this.props;
@@ -73,7 +89,7 @@ class PostTranslate extends React.Component<void, PostTranslateProps, PostTransl
         </p>
         <SwitchButton
           name={`switch-${id}`}
-          onChange={this.openModal}
+          onChange={this.handleSubmit}
           checked={translate}
           labelRight={I18n.t('debate.thread.translate')}
         />
