@@ -6,7 +6,6 @@ import Objectives from '../components/home/objectives';
 import Phases from '../components/home/phases';
 import Video from '../components/home/video';
 import Twitter from '../components/home/twitter';
-import Contact from '../components/home/contact';
 import Chatbot from '../components/home/chatbot';
 import Partners from '../components/home/partners';
 import ScrollOnePageButton from '../components/common/scrollOnePageButton';
