@@ -341,7 +341,6 @@ class LocalePreference(graphene.ObjectType):
             locale_model = models.Locale.get_or_create('en')
             name = models.LocaleLabel.names_of_locales_in_locale([self.locale],
                                                                  locale_model)
-            return name['en']
 
         return name[self.locale]
 
