@@ -6,7 +6,7 @@ import { Translate, I18n } from 'react-redux-i18n';
 
 import { displayAlert } from '../../utils/utilityManager';
 import { convertEntriesToHTML } from '../../utils/draftjs';
-import { languagePreferencesHasChanged } from '../../actions/adminActions';
+import { languagePreferencesHasChanged, updateSelectedLocale } from '../../actions/adminActions';
 import createThematicMutation from '../../graphql/mutations/createThematic.graphql';
 import deleteThematicMutation from '../../graphql/mutations/deleteThematic.graphql';
 import updateThematicMutation from '../../graphql/mutations/updateThematic.graphql';
@@ -55,7 +55,8 @@ const SaveButton = ({
   updateDiscussionPreference,
   preferences,
   languagePreferenceHasChanged,
-  resetLanguagePreferenceChanged
+  resetLanguagePreferenceChanged,
+  changeLocale
 }) => {
   const saveAction = () => {
     displayAlert('success', `${I18n.t('loading.wait')}...`);
@@ -79,6 +80,7 @@ const SaveButton = ({
           fetchPolicy: 'network-only'
         });
         displayAlert('success', I18n.t('administration.successLanguagePreference'));
+        changeLocale(i18n.locale);
       });
       resetLanguagePreferenceChanged();
     }
@@ -181,6 +183,9 @@ const mapDispatchToProps = (dispatch) => {
   return {
     resetLanguagePreferenceChanged: () => {
       dispatch(languagePreferencesHasChanged(false));
+    },
+    changeLocale: (newLocale) => {
+      dispatch(updateSelectedLocale(newLocale));
     }
   };
 };
