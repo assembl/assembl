@@ -433,6 +433,7 @@ def join_discussion2(request):
                      for n in ut.notification_subscriptions
                      if n.status == NotificationSubscriptionStatus.ACTIVE]
     data['notifications'] = notifications
+    data['testing_view'] = True
     return data
 
 

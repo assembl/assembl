@@ -21,7 +21,11 @@
              {% endfor %}
          </ul>
       {% endif %}
-      <form method="POST">
+      <form method="POST"
+        {% if not testing_view %}
+          action="{{get_route('join')}}"
+        {% endif %}
+      >
          <input type="submit" value="{{gettext('Join')}}" />
       </form>
     </div>
