@@ -235,11 +235,11 @@
         "show_help_in_debate_section": true
     },
     "Idea": {
-        "longTitle": "long_title",
-        "shortTitle": "short_title",
+        "longTitle": "synthesis_title",
+        "shortTitle": "title",
+        "definition": "description",
         "creationDate": "creation_date",
         "discussion": false,
-        "definition": true,
         "original_uri": false,
         "is_tombstone": false,
         "numChildIdea": false,

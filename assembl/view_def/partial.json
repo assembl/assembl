@@ -127,9 +127,9 @@
         "topic": true
     },
     "Idea": {
-        "longTitle": "long_title",
-        "shortTitle": "short_title",
-        "definition": true,
+        "longTitle": "synthesis_title:extended",
+        "shortTitle": "title:extended",
+        "definition": "description:extended",
         "is_tombstone": true,
         "original_uri": true,
         "creationDate": "creation_date",

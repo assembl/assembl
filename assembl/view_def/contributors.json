@@ -23,9 +23,9 @@
         "verified": true
     },
     "Idea": {
-        "longTitle": "long_title",
-        "shortTitle": "short_title",
-        "definition": true,
+        "longTitle": "synthesis_title:extended",
+        "shortTitle": "title:extended",
+        "definition": "description:extended",
         "creationDate": "creation_date",
         "order": "&get_order_from_first_parent",
         "discussion": false,
