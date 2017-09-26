@@ -44,7 +44,7 @@ const createVariablesForMutation = (thematic) => {
 };
 
 const SaveButton = ({
-  i18n,
+  data,
   createThematic,
   deleteThematic,
   thematicsHaveChanged,
@@ -54,7 +54,8 @@ const SaveButton = ({
   updateDiscussionPreference,
   preferences,
   languagePreferenceHasChanged,
-  resetLanguagePreferenceChanged }) => {
+  resetLanguagePreferenceChanged
+}) => {
   const saveAction = () => {
     displayAlert('success', `${I18n.t('loading.wait')}...`);
     const promisesArray = [];
@@ -65,23 +66,11 @@ const SaveButton = ({
       const payload = {
         variables: {
           languages: preferences
-        },
-        update: (storeProxy, { data: { updateDiscussionPreferences: { preferences: { languages } } } }) => {
-          // Update the apollo cache
-          const query = storeProxy.readQuery({
-            query: getDiscussionPreferenceLanguage,
-            variables: { inLocale: i18n.locale }
-          });
-          const newData = { ...query };
-          newData.discussionPreferences.languages = languages;
-          storeProxy.writeQuery({
-            query: getDiscussionPreferenceLanguage,
-            variables: { inLocale: i18n.locale },
-            data: newData
-          });
         }
       };
-      updateDiscussionPreference(payload);
+      updateDiscussionPreference(payload).then(() => {
+        data.refetch();
+      });
       resetLanguagePreferenceChanged();
     }
 
@@ -181,8 +170,22 @@ const mapStateToProps = ({
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    resetLanguagePreferenceChanged: () => { dispatch(languagePreferencesHasChanged(false)); }
+    resetLanguagePreferenceChanged: () => {
+      dispatch(languagePreferencesHasChanged(false));
+    }
   };
 };
 
-export default compose(connect(mapStateToProps, mapDispatchToProps), withApollo)(SaveButtonWithMutations);
+export default compose(
+  connect(mapStateToProps, mapDispatchToProps),
+  graphql(getDiscussionPreferenceLanguage, {
+    options: (props) => {
+      return {
+        variables: {
+          inLocale: props.i18n.locale
+        }
+      };
+    }
+  }),
+  withApollo
+)(SaveButtonWithMutations);
