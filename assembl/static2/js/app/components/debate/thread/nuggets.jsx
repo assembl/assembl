@@ -3,7 +3,7 @@ import React from 'react';
 import { getDomElementOffset, computeDomElementOffset } from '../../../utils/globalFunctions';
 
 class Nuggets extends React.Component {
-  static nodeExtracts(node) {
+  static levelNodeExtracts(node) {
     let result = Nuggets.getChildsByClassName(node, 'posts')[0];
     if (result) result = Nuggets.getChildsByClassName(result, 'extracts')[0];
     return result || null;
@@ -16,49 +16,76 @@ class Nuggets extends React.Component {
     }, []);
   }
 
-  static bottomMostExtractFromNode(node) {
-    const childs = Nuggets.getChildsByClassName(node, 'level');
-    let childExtract = null;
-    if (childs.length > 0) {
-      childs.reverse().some((child) => {
-        childExtract = Nuggets.bottomMostExtractFromNode(child);
-        return childExtract !== null;
-      });
-    }
-    return childExtract || Nuggets.nodeExtracts(node);
-  }
-
   static previousSibling(node) {
+    if (!node.classList.contains('level')) throw new Error('previousSibling called on a non .level node', node);
     if (node.classList.contains('level-0')) {
       const baseLevelPrevSib = node.parentNode.previousSibling;
       return baseLevelPrevSib ? Nuggets.getChildsByClassName(baseLevelPrevSib, 'level-0')[0] : null;
     }
-    return node.previousSibling;
-  }
-
-  static previousBottomMostExtract(node) {
-    let prevSibling = Nuggets.previousSibling(node);
-    while (prevSibling && prevSibling.classList.contains('level')) {
-      const bottomMostExtract = Nuggets.bottomMostExtractFromNode(prevSibling);
-      if (bottomMostExtract !== null) return bottomMostExtract;
-      prevSibling = Nuggets.previousSibling(prevSibling);
+    let iterator = node;
+    while (iterator.previousSibling !== null) {
+      if (iterator.previousSibling.classList.contains('level')) return iterator.previousSibling;
+      iterator = iterator.previousSibling;
     }
     return null;
   }
 
-  static previousExtractFromNode(node) {
-    if (!node.classList.contains('level')) return null;
-    const extracts = Nuggets.previousBottomMostExtract(node);
-    if (extracts !== null) return extracts;
-    return Nuggets.nodeExtracts(node.parentNode) || Nuggets.previousExtractFromNode(node.parentNode);
+  static topToStyle(top) {
+    switch (top) {
+    case undefined:
+      return { display: 'none' };
+    case null:
+      return {};
+    default:
+      return { top: top };
+    }
+  }
+
+  static levelNodeBottomMostExtract(node) {
+    if (!node.classList.contains('level')) throw new Error('levelNodeBottomMostExtract called on a non .level node', node);
+    const children = Nuggets.getChildsByClassName(node, 'level');
+    if (children.length > 0) {
+      let bottomExtracts = null;
+      children.reverse().some((childLevelNode) => {
+        const childExtracts = Nuggets.levelNodeBottomMostExtract(childLevelNode);
+        if (childExtracts !== null) {
+          bottomExtracts = childExtracts;
+          return true;
+        }
+        return false;
+      });
+      if (bottomExtracts !== null) return bottomExtracts;
+    }
+    return Nuggets.levelNodeExtracts(node);
+  }
+
+  static levelNodeParent(node) {
+    if (!node.classList.contains('level')) throw new Error('levelNodeParent called on a non .level node', node);
+    if (node.classList.contains('level-0')) return null;
+    if (!node.parentNode.classList.contains('level')) throw new Error('parent is not a .level node', node);
+    return node.parentNode;
+  }
+
+  static previousExtractImpl(levelNode) {
+    if (!levelNode.classList.contains('level')) throw new Error('previousExtractImpl called on a non .level node', levelNode);
+    const previousSibling = Nuggets.previousSibling(levelNode);
+    if (previousSibling === null) {
+      const parentLevelNode = Nuggets.levelNodeParent(levelNode);
+      if (parentLevelNode === null) return null;
+      const parentExtracts = Nuggets.levelNodeExtracts(parentLevelNode);
+      if (parentExtracts !== null) return parentExtracts;
+      return Nuggets.previousExtractImpl(parentLevelNode);
+    }
+    const previousBottomMostExtract = Nuggets.levelNodeBottomMostExtract(previousSibling);
+    if (previousBottomMostExtract !== null) return previousBottomMostExtract;
+    return Nuggets.previousExtractImpl(previousSibling);
   }
 
   constructor(props) {
     super(props);
     this.state = {
-      top: null
+      top: undefined
     };
-    this.updateTop = this.updateTop.bind(this);
   }
 
   componentDidMount() {
@@ -74,15 +101,13 @@ class Nuggets extends React.Component {
 
   previousExtract() {
     const post = this.node.parentNode;
-    const node = post.parentNode;
-    const extracts = Nuggets.previousBottomMostExtract(node);
-    if (extracts !== null) return extracts;
-    return Nuggets.previousExtractFromNode(post.parentNode);
+    const currentLevel = post.parentNode;
+    return Nuggets.previousExtractImpl(currentLevel);
   }
 
-  updateTop() {
-    this.setState({ top: `${this.computeNewTop()}px` });
-  }
+  updateTop = () => {
+    this.setState({ top: this.computeNewTop() });
+  };
 
   computeNewTop() {
     const prevExtract = this.previousExtract();
@@ -90,21 +115,22 @@ class Nuggets extends React.Component {
     const postTop = getDomElementOffset(postDOM).top;
     if (prevExtract !== null) {
       const newTop = getDomElementOffset(prevExtract).top + prevExtract.getBoundingClientRect().height + Nuggets.SPACER_SIZE;
-      return computeDomElementOffset(this.node, { top: Math.max(postTop, newTop) }).top;
+      if (newTop > postTop) return computeDomElementOffset(this.node, { top: newTop }).top;
     }
-    return computeDomElementOffset(this.node, { top: postTop }).top;
+    return null;
   }
 
   render() {
     const { extracts } = this.props;
-    const style = this.state.top === null ? { display: 'none' } : { top: this.state.top };
+    const { top } = this.state;
+
     return Array.isArray(extracts) && extracts.length > 0
       ? <div
         ref={(node) => {
           this.node = node;
         }}
         className="extracts"
-        style={style}
+        style={Nuggets.topToStyle(top)}
       >
         <div className="badges">
           <div className="nugget-img">
