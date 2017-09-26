@@ -73,10 +73,8 @@ class LanguageSection extends React.Component {
     const transientState = this.state.localeState[locale];
     const newState = { ...transientState, selected: !transientState.selected };
     if (newState.selected) {
-      console.log('add');
       this.props.addLocaleToStore(locale);
     } else if (currentLocale !== locale) {
-      console.log('remove');
       this.props.removeLocaleFromStore(locale);
     }
   }
