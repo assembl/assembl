@@ -10,7 +10,6 @@ import withLoadingIndicator from '../../common/withLoadingIndicator';
 import { addLanguagePreference, removeLanguagePreference, languagePreferencesHasChanged } from '../../../actions/adminActions';
 import getAllPreferenceLanguage from '../../../graphql/AllLanguagePreferences.graphql';
 
-
 class LanguageSection extends React.Component {
   constructor(props) {
     super(props);
@@ -57,8 +56,12 @@ class LanguageSection extends React.Component {
     if (!currentSelectedLocaleList.equals(newLocalePreferences)) {
       const newState = { ...this.state.localeState };
       Object.entries(newState).forEach(([locale, state]) => {
-        // eslint-disable-next-line
-        if (newLocalePreferences.includes(locale)) { state.selected = true; } else { state.selected = false; }
+        const selectedState = state;
+        if (newLocalePreferences.includes(locale)) {
+          selectedState.selected = true;
+        } else {
+          selectedState.selected = false;
+        }
       });
       this.setState({ localeState: newState });
     }
@@ -68,10 +71,15 @@ class LanguageSection extends React.Component {
     this.props.signalLocaleChanged(true);
     const transientState = this.state.localeState[locale];
     const newState = { ...transientState, selected: !transientState.selected };
-    if (newState.selected) { this.props.addLocaleToStore(locale); } else { this.props.removeLocaleFromStore(locale); }
+    if (newState.selected) {
+      this.props.addLocaleToStore(locale);
+    } else {
+      this.props.removeLocaleFromStore(locale);
+    }
   }
 
   render() {
+    const currentLocale = this.props.i18n.locale;
     return (
       <div className="admin-box">
         <SectionTitle i18n={this.props.i18n} phase="discussion" tabId="0" annotation={I18n.t('administration.annotation')} />
@@ -84,10 +92,15 @@ class LanguageSection extends React.Component {
               const localeData = this.state.localeState[locale];
               return (
                 <Checkbox
-                  checked={localeData.selected}
+                  checked={currentLocale === locale ? true : localeData.selected}
                   key={locale}
                   value={locale}
-                  onChange={(e) => { return this.toggleLocale(e.target.value); }}
+                  onChange={(e) => {
+                    if (currentLocale !== locale) {
+                      return this.toggleLocale(e.target.value);
+                    }
+                    return this.toggleLocale(currentLocale);
+                  }}
                 >
                   {localeData.name}
                 </Checkbox>
@@ -132,4 +145,5 @@ export default compose(
       };
     }
   }),
-  withLoadingIndicator())(LanguageSection);
+  withLoadingIndicator()
+)(LanguageSection);
