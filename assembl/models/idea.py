@@ -150,13 +150,9 @@ class Idea(HistoryMixin, DiscussionBoundBase):
     rdf_type = Column(
         String(60), nullable=False, server_default='idea:GenericIdeaNode')
 
-    long_title = Column(
-        UnicodeText,
-        info={'rdf': QuadMapPatternS(None, DCTERMS.alternative)})
-    short_title = Column(
-        UnicodeText,
-        info={'rdf': QuadMapPatternS(None, DCTERMS.title)})
     title_id = Column(
+        Integer(), ForeignKey(LangString.id))
+    synthesis_title_id = Column(
         Integer(), ForeignKey(LangString.id))
     description_id = Column(
         Integer(), ForeignKey(LangString.id))
@@ -166,19 +162,42 @@ class Idea(HistoryMixin, DiscussionBoundBase):
         primaryjoin=title_id == LangString.id,
         backref=backref("idea_from_title", lazy="dynamic"),
         cascade="all, delete-orphan")
+    synthesis_title = relationship(
+        LangString,
+        lazy="joined", single_parent=True,
+        primaryjoin=synthesis_title_id == LangString.id,
+        backref=backref("idea_from_synthesis_title", lazy="dynamic"),
+        cascade="all, delete-orphan")
     description = relationship(
         LangString,
         lazy="joined", single_parent=True,
         primaryjoin=description_id == LangString.id,
         backref=backref("idea_from_description", lazy="dynamic"),
         cascade="all, delete-orphan")
-    definition = Column(
-        UnicodeText,
-        info={'rdf': QuadMapPatternS(None, DCTERMS.description)})
     hidden = Column(Boolean, server_default='0')
     last_modified = Column(Timestamp)
     # TODO: Make this autoupdate on change. see
     # http://stackoverflow.com/questions/1035980/update-timestamp-when-row-is-updated-in-postgresql
+
+    # temporary placeholders
+    @property
+    def definition(self):
+        if self.description_id:
+            return self.description.first_original().value
+        return ""
+
+    @property
+    def long_title(self):
+        if self.synthesis_title_id:
+            return self.synthesis_title.first_original().value
+        return ""
+
+    @property
+    def short_title(self):
+        if self.title_id:
+            return self.title.first_original().value
+        return ""
+
 
     messages_in_parent = Column(Boolean, default=True, server_default='true',
         doc="are messages in this idea also part of the parent idea?")
@@ -308,12 +327,16 @@ class Idea(HistoryMixin, DiscussionBoundBase):
     def copy(self, tombstone=None, **kwargs):
         kwargs.update(
             tombstone=tombstone,
-            long_title=self.long_title,
-            short_title=self.short_title,
-            definition=self.definition,
             hidden=self.hidden,
             creation_date=self.creation_date,
             discussion=self.discussion)
+        if self.title:
+            kwargs['title'] = self.title.clone()
+        if self.synthesis_title:
+            kwargs['synthesis_title'] = self.synthesis_title.clone()
+        if self.description:
+            kwargs['description'] = self.description.clone()
+
         return super(Idea, self).copy(**kwargs)
 
     @classmethod
@@ -1037,7 +1060,7 @@ class Idea(HistoryMixin, DiscussionBoundBase):
         P_ADMIN_DISC)
 
 LangString.setup_ownership_load_event(Idea,
-    ['title', 'description'])
+    ['title', 'description', 'synthesis_title'])
 
 
 class RootIdea(Idea):
