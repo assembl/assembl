@@ -1,0 +1,26 @@
+.join-discussion {
+  background-color: $white;
+  text-align: center;
+  margin: auto;
+  font-family: $font-family;
+  display: block;
+
+  h1 {
+    font-size: $font-size-l;
+  }
+
+  .condition-list {
+    margin-top: 15px;
+    font-family: $font-family6;
+  }
+
+  input {
+    background-color: $first-color;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    width: 300px;
+    height: 70px;
+    border-radius: 15px;
+  }
+}
