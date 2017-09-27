@@ -1,6 +1,6 @@
 .timeline {
-  height: 56px;
-  
+  height: $navbar-height;
+
   .bar {
     background-color: $first-color;
     bottom: 0;
@@ -114,9 +114,22 @@
     }
   }
 
-  .txt-active {
+  .txt-active-light {
     .timeline-link {
       color: $first-color;
+      font-family: $font-family4;
+      &:hover {
+        font-family: $font-family;
+      }
+    }
+
+
+  }
+
+  .txt-active-bold {
+    .timeline-link {
+      color: $first-color;
+      font-family: $font-family3;
     }
   }
 
