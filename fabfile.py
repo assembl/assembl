@@ -970,14 +970,19 @@ def update_npm_requirements(force_reinstall=False):
         else:
             venvcmd('npm update', chdir=False)
 
+    if env.mac:
+        yarn_path = '/usr/local/bin/yarn'
+    else:
+        yarn_path = '/usr/bin/yarn'
+
     static2_path = get_new_node_base_path()
     with cd(static2_path):
-        if exists('/usr/bin/yarn'):
+        if exists(yarn_path):
             if force_reinstall:
                 print('Removing node_modules directory...')
                 rmtree(os.path.join(static2_path, 'node_modules'))
 
-            venvcmd('/usr/bin/yarn', chdir=False)
+            venvcmd(yarn_path, chdir=False)
         else:
             if force_reinstall:
                 venvcmd('reinstall', chdir=False)
