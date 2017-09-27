@@ -73,13 +73,6 @@ def discussion2(request, test_session):
 def discussion_with_lang_prefs(request, test_session, discussion):
     """An empty Discussion fixture with locale preferences"""
     discussion.discussion_locales = ['en', 'fr', 'ja']
-    test_session.flush()
+    test_session.commit()
 
-    def fin():
-        print "finalizer discussion_with_lang_prefs"
-        # put back config that is in discussion fixture
-        discussion.discussion_locales = ['en', 'fr', 'de']
-        test_session.flush()
-
-    request.addfinalizer(fin)
     return discussion
