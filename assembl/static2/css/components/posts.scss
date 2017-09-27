@@ -172,6 +172,11 @@ $deleted-post-border: 1px solid $grey1 !default;
         line-height: 1.6em;
         padding: 20px 0;
         word-wrap: break-word;
+
+        p {
+            margin: 0;
+            min-height: 1em; /* so that empty paragraphs (created by multiple line returns) still have height */
+        }
     }
 
     .link-idea {
