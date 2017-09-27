@@ -26,6 +26,14 @@
   }
 }
 
+.sm-title {
+  font-size: $font-size-sm;
+}
+
+.margin-left-9 {
+  margin-left: 9px;
+}
+
 .top-post-form {
   .editor-toolbar {
     margin-bottom: 5px;
@@ -34,6 +42,7 @@
 
 .rich-text-editor {
   font-family: $font-family;
+  margin-top: 16px;
 
   .insertion-box {
     .assembl-icon-cancel {
@@ -54,6 +63,8 @@
   }
 
   .editor-toolbar {
+    display: flex;
+    justify-content: flex-end;
     .btn-group {
       margin-right: 5px;
 

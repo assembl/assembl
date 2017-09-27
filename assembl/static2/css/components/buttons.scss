@@ -44,7 +44,7 @@
 
 .button-submit {
   @extend .button-generic;
-  padding: 10px 50px;
+  padding: 11px 24px;
 
   &:active {
     box-shadow: none;
@@ -58,7 +58,7 @@
 
 .button-cancel {
   @extend .button-generic;
-  padding: 10px 50px;
+  padding: 11px 24px;
 }
 
 .button-light {
@@ -90,6 +90,3 @@
     outline: none;
   }
 }
-
-
-
