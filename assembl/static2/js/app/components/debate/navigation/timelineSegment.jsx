@@ -66,7 +66,6 @@ class TimelineSegment extends React.Component {
       'txt-active-light': isStepCompleted,
       'txt-not-active': !isCurrentPhase && !isStepCompleted
     });
-    console.log(isCurrentPhase);
 
     return (
       <div className="minimized-timeline" style={{ marginLeft: `${index * 100}px` }}>
