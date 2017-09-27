@@ -2,6 +2,7 @@ import React from 'react';
 import { browserHistory } from 'react-router';
 import { Translate, Localize, I18n } from 'react-redux-i18n';
 import { connect } from 'react-redux';
+import classNames from 'classnames';
 import { get } from '../../../utils/routeMap';
 import { displayModal } from '../../../utils/utilityManager';
 import { getPhaseStatus, isSeveralIdentifiers } from '../../../utils/timeline';
@@ -60,14 +61,13 @@ class TimelineSegment extends React.Component {
   }
   render() {
     const { index, barWidth, isCurrentPhase, isStepCompleted, title, locale } = this.props;
-    const timelineClass = () => {
-      if (isCurrentPhase) {
-        return 'txt-active-bold';
-      } else if (isStepCompleted) {
-        return 'txt-active-light';
-      }
-      return 'txt-not-active';
-    };
+    const timelineClass = classNames('timeline-title', {
+      'txt-active-bold': isCurrentPhase,
+      'txt-active-light': isStepCompleted,
+      'txt-not-active': !isCurrentPhase && !isStepCompleted
+    });
+    console.log(isCurrentPhase);
+
     return (
       <div className="minimized-timeline" style={{ marginLeft: `${index * 100}px` }}>
         {title.entries
@@ -76,7 +76,7 @@ class TimelineSegment extends React.Component {
           })
           .map((entry, index2) => {
             return (
-              <div onClick={this.displayPhase} className={`timeline-title ${timelineClass()}`} key={index2}>
+              <div onClick={this.displayPhase} className={timelineClass} key={index2}>
                 <div className="timeline-link">
                   {entry.value}
                 </div>
