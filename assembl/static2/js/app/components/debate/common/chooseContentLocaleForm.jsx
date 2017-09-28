@@ -37,7 +37,7 @@ class ChooseContentLocaleForm extends React.Component<*, ChooseContentLocaleForm
     super();
     this.state = {
       scope: 'local',
-      selectedLocale: ''
+      selectedLocale: 'select'
     };
   }
 
@@ -128,7 +128,12 @@ class ChooseContentLocaleForm extends React.Component<*, ChooseContentLocaleForm
           <Button key="translate-cancel" onClick={closeModal} className="button-cancel button-dark">
             <Translate value="debate.thread.translateCancel" />
           </Button>,
-          <Button key="translate-submit" onClick={this.handleSubmit} className="button-submit button-dark">
+          <Button
+            key="translate-submit"
+            disabled={selectedLocale === 'select'}
+            onClick={this.handleSubmit}
+            className="button-submit button-dark"
+          >
             <Translate value="debate.thread.translateSubmit" />
           </Button>
         </Modal.Footer>
