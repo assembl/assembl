@@ -13,7 +13,6 @@ import EditPostForm from './editPostForm';
 import DeletedPost from './deletedPost';
 import PostQuery from '../../../graphql/PostQuery.graphql';
 import withLoadingIndicator from '../../../components/common/withLoadingIndicator';
-import withContentLocale from '../../../components/common/withContentLocale';
 import { DeletedPublicationStates, PublicationStates } from '../../../constants';
 import Nuggets from './nuggets';
 
@@ -151,7 +150,6 @@ class Post extends React.PureComponent {
       debateData,
       nuggetsManager,
       rowIndex,
-      updateLocalContentLocale,
       originalLocale
     } = this.props;
     // creationDate is retrieved by IdeaWithPosts query, not PostQuery
@@ -255,7 +253,6 @@ class Post extends React.PureComponent {
                   lang={lang}
                   originalLocale={originalLocale}
                   translate={translate}
-                  updateLocalContentLocale={updateLocalContentLocale}
                 />
                 : null}
               <h3 className="dark-title-3">
@@ -320,4 +317,4 @@ class Post extends React.PureComponent {
   }
 }
 
-export default compose(withContentLocale, graphql(PostQuery), withLoadingIndicator())(Post);
+export default compose(graphql(PostQuery), withLoadingIndicator())(Post);

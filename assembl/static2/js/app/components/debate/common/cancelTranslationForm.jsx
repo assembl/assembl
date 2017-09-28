@@ -7,8 +7,8 @@ import { closeModal } from '../../../utils/utilityManager';
 
 type CancelTranslationFormProps = {
   originalLocale: string,
-  updateGlobalContentLocale: Function,
-  updateLocalContentLocale: Function
+  updateById: (value: string) => void,
+  updateByOriginalLocale: (value: string) => void
 };
 
 type Scope = 'local' | 'global';
@@ -35,12 +35,12 @@ class CancelTranslationForm extends React.Component<*, CancelTranslationFormProp
   };
 
   handleSubmit = () => {
-    const { originalLocale, updateGlobalContentLocale, updateLocalContentLocale } = this.props;
+    const { originalLocale, updateById, updateByOriginalLocale } = this.props;
     const { scope } = this.state;
     if (scope === 'local') {
-      updateLocalContentLocale(originalLocale);
+      updateById(originalLocale);
     } else if (scope === 'global') {
-      updateGlobalContentLocale(originalLocale);
+      updateByOriginalLocale(originalLocale);
     }
     closeModal();
   };

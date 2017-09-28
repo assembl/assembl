@@ -109,14 +109,15 @@ class Child extends React.PureComponent {
 
   render() {
     const {
-      id,
-      globalContentLocale,
+      contentLocaleMapping,
       hidden,
+      id,
       lang,
       children,
       InnerComponent,
       InnerComponentFolded,
       level,
+      originalLocale,
       rowIndex, // the index of the row (i.e. level 0 item) in the List
       SeparatorComponent,
       fullLevel,
@@ -140,7 +141,12 @@ class Child extends React.PureComponent {
     };
     const numChildren = children ? children.length : 0;
     const expanded = this.state.expanded;
-    const forwardProps = { ...this.props, numChildren: numChildren };
+    const contentLocale = contentLocaleMapping.getIn([id, 'contentLocale'], originalLocale);
+    const forwardProps = {
+      contentLocale: contentLocale,
+      ...this.props,
+      numChildren: numChildren
+    };
     delete forwardProps.children;
     return (
       <div className={cssClasses()} id={id}>
@@ -153,9 +159,9 @@ class Child extends React.PureComponent {
             return (
               <Child
                 hidden={!expanded}
-                key={idx}
+                key={child.id}
                 {...child}
-                globalContentLocale={globalContentLocale}
+                contentLocaleMapping={contentLocaleMapping}
                 lang={lang}
                 rowIndex={rowIndex}
                 level={level + 1}
@@ -231,7 +237,7 @@ class Tree extends React.Component {
 
   cellRenderer = ({ index, key, parent, style }) => {
     const {
-      globalContentLocale,
+      contentLocaleMapping,
       lang,
       data,
       InnerComponent, // component that will be rendered in the child
@@ -246,7 +252,7 @@ class Tree extends React.Component {
           {index > 0 ? <SeparatorComponent /> : null}
           <Child
             {...childData}
-            globalContentLocale={globalContentLocale}
+            contentLocaleMapping={contentLocaleMapping}
             key={childData.id}
             lang={lang}
             rowIndex={index}
@@ -261,7 +267,7 @@ class Tree extends React.Component {
   };
 
   render() {
-    const { globalContentLocale, data, noRowsRenderer } = this.props;
+    const { contentLocaleMapping, data, noRowsRenderer } = this.props;
     return (
       <WindowScroller>
         {({ height, isScrolling, onChildScroll, scrollTop }) => {
@@ -278,7 +284,7 @@ class Tree extends React.Component {
                 return (
                   <List
                     key={data.length}
-                    globalContentLocale={globalContentLocale}
+                    contentLocaleMapping={contentLocaleMapping}
                     height={height}
                     isScrolling={isScrolling}
                     onScroll={onChildScroll}

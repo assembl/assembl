@@ -5,6 +5,8 @@ import { compose, graphql } from 'react-apollo';
 import { browserHistory } from 'react-router';
 import { Translate } from 'react-redux-i18n';
 import { Grid, Button } from 'react-bootstrap';
+
+import { updateContentLocale } from '../actions/contentLocaleActions';
 import withLoadingIndicator from '../components/common/withLoadingIndicator';
 import Video from '../components/debate/survey/video';
 import Header from '../components/debate/common/header';
@@ -26,14 +28,46 @@ class Survey extends React.Component {
     this.getIfProposals = this.getIfProposals.bind(this);
     this.scrollToQuestion = this.scrollToQuestion.bind(this);
   }
+
+  componentWillMount() {
+    this.updateContentLocaleMappingFromProps(this.props);
+  }
+
   componentDidMount() {
     this.unlisten = browserHistory.listen(() => {
       this.setState({ moreProposals: false });
     });
   }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.data.thematic !== this.props.data.thematic) {
+      this.updateContentLocaleMappingFromProps(nextProps);
+    }
+  }
+
   componentWillUnmount() {
     this.unlisten();
   }
+
+  updateContentLocaleMappingFromProps(props) {
+    const { data, updateContentLocaleMapping } = props;
+    if (!data.loading) {
+      const contentLocaleMappingData = {};
+      const questions = data.thematic.questions;
+      questions.forEach((question) => {
+        question.posts.edges.forEach((edge) => {
+          const post = edge.node;
+          contentLocaleMappingData[post.id] = {
+            contentLocale: post.originalLocale,
+            originalLocale: post.originalLocale
+          };
+        });
+      });
+
+      updateContentLocaleMapping(contentLocaleMappingData);
+    }
+  }
+
   getIfProposals(questions) {
     this.questions = questions;
     if (!this.questions) return false;
@@ -154,4 +188,16 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default compose(connect(mapStateToProps), graphql(ThematicQuery), withLoadingIndicator({ color: 'black' }))(Survey);
+const mapDispatchToProps = (dispatch) => {
+  return {
+    updateContentLocaleMapping: (data) => {
+      return dispatch(updateContentLocale(data));
+    }
+  };
+};
+
+export default compose(
+  connect(mapStateToProps, mapDispatchToProps),
+  graphql(ThematicQuery),
+  withLoadingIndicator({ color: 'black' })
+)(Survey);

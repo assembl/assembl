@@ -3,12 +3,12 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Translate, I18n } from 'react-redux-i18n';
 
+import { updateContentLocaleById, updateContentLocaleByOriginalLocale } from '../../../actions/contentLocaleActions';
 import SwitchButton from '../../common/switchButton';
 import { getConnectedUserId } from '../../../utils/globalFunctions';
 import { displayCustomModal } from '../../../utils/utilityManager';
 import CancelTranslationForm from './cancelTranslationForm';
 import ChooseContentLocaleForm from './chooseContentLocaleForm';
-import { setContentLocale } from '../../../actions/contentLocaleActions';
 
 type PostTranslateProps = {
   contentLocale: string,
@@ -16,8 +16,8 @@ type PostTranslateProps = {
   lang: string,
   originalLocale: string,
   translate: boolean,
-  updateLocalContentLocale: Function,
-  updateGlobalContentLocale: Function
+  updateById: (value: string) => void,
+  updateByOriginalLocale: (value: string) => void
 };
 
 type PostTranslateState = {
@@ -36,13 +36,13 @@ class PostTranslate extends React.Component<void, PostTranslateProps, PostTransl
   }
 
   handleSubmit = () => {
-    const { contentLocale, lang, updateLocalContentLocale } = this.props;
+    const { contentLocale, lang, originalLocale, updateById } = this.props;
     const userIsConnected = getConnectedUserId();
     if (!userIsConnected) {
       if (contentLocale && contentLocale !== lang) {
-        updateLocalContentLocale(lang);
+        updateById(lang);
       } else {
-        updateLocalContentLocale(undefined);
+        updateById(originalLocale);
       }
     } else {
       this.openModal();
@@ -50,16 +50,17 @@ class PostTranslate extends React.Component<void, PostTranslateProps, PostTransl
   };
 
   openModal = () => {
-    const { lang, originalLocale, translate, updateGlobalContentLocale, updateLocalContentLocale } = this.props;
+    const { id, lang, originalLocale, translate, updateById, updateByOriginalLocale } = this.props;
     let content;
     if (!translate) {
       content = (
         <ChooseContentLocaleForm
+          id={id}
           lang={lang}
           originalLocale={originalLocale}
           translate={translate}
-          updateGlobalContentLocale={updateGlobalContentLocale}
-          updateLocalContentLocale={updateLocalContentLocale}
+          updateById={updateById}
+          updateByOriginalLocale={updateByOriginalLocale}
         />
       );
     } else {
@@ -68,8 +69,8 @@ class PostTranslate extends React.Component<void, PostTranslateProps, PostTransl
           lang={lang}
           originalLocale={originalLocale}
           translate={translate}
-          updateGlobalContentLocale={updateGlobalContentLocale}
-          updateLocalContentLocale={updateLocalContentLocale}
+          updateById={updateById}
+          updateByOriginalLocale={updateByOriginalLocale}
         />
       );
     }
@@ -100,8 +101,11 @@ class PostTranslate extends React.Component<void, PostTranslateProps, PostTransl
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
-    updateGlobalContentLocale: (value) => {
-      return dispatch(setContentLocale(ownProps.originalLocale, value));
+    updateById: (value) => {
+      return dispatch(updateContentLocaleById(ownProps.id, value));
+    },
+    updateByOriginalLocale: (value) => {
+      return dispatch(updateContentLocaleByOriginalLocale(ownProps.originalLocale, value));
     }
   };
 };

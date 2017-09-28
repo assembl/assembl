@@ -18,7 +18,6 @@ import { sentimentDefinitionsObject } from '../thread/sentimentDefinitions';
 import StatisticsDoughnut from '../common/statisticsDoughnut';
 import PostTranslate from '../common/postTranslate';
 import { EXTRA_SMALL_SCREEN_WIDTH } from '../../../constants';
-import withContentLocale from '../../common/withContentLocale';
 import withLoadingIndicator from '../../common/withLoadingIndicator';
 
 class Post extends React.Component {
@@ -128,15 +127,7 @@ class Post extends React.Component {
   }
   render() {
     const { post } = this.props.data;
-    const {
-      contentLocale,
-      lang,
-      localContentLocale,
-      moreProposals,
-      originalLocale,
-      postIndex,
-      updateLocalContentLocale
-    } = this.props;
+    const { contentLocale, lang, moreProposals, originalLocale, postIndex, updateLocalContentLocale } = this.props;
     const { bodyEntries } = post;
     const translate = contentLocale !== originalLocale;
 
@@ -250,17 +241,16 @@ Post.propTypes = {
   deleteSentiment: PropTypes.func.isRequired
 };
 
-const mapStateToProps = (state) => {
+const mapStateToProps = (state, { id }) => {
   return {
     debate: state.debate,
-    globalContentLocale: state.contentLocale,
+    contentLocale: state.contentLocale.getIn([id, 'contentLocale']),
     lang: state.i18n.locale
   };
 };
 
 export default compose(
   connect(mapStateToProps),
-  withContentLocale,
   graphql(PostQuery),
   graphql(addSentimentMutation, {
     name: 'addSentiment'
