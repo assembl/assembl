@@ -192,36 +192,6 @@ Child.defaultProps = {
   hidden: false
 };
 
-const cellRenderer = ({ index, key, parent, style }) => {
-  const {
-    globalContentLocale,
-    lang,
-    data,
-    InnerComponent,
-    InnerComponentFolded,
-    SeparatorComponent,
-    nuggetsManager
-  } = parent.props;
-  const childData = data[index];
-  return (
-    <CellMeasurer cache={cache} columnIndex={0} key={key} parent={parent} rowIndex={index}>
-      <div style={style}>
-        {index > 0 ? <SeparatorComponent /> : null}
-        <Child
-          {...childData}
-          globalContentLocale={globalContentLocale}
-          lang={lang}
-          rowIndex={index}
-          InnerComponent={InnerComponent}
-          InnerComponentFolded={InnerComponentFolded}
-          SeparatorComponent={SeparatorComponent}
-          nuggetsManager={nuggetsManager}
-        />
-      </div>
-    </CellMeasurer>
-  );
-};
-
 class Tree extends React.Component {
   constructor(props) {
     super(props);
@@ -259,16 +229,39 @@ class Tree extends React.Component {
     document.removeEventListener('rowHeightRecomputed', this.nuggetsManager.update);
   }
 
-  render() {
+  cellRenderer = ({ index, key, parent, style }) => {
     const {
       globalContentLocale,
       lang,
       data,
       InnerComponent, // component that will be rendered in the child
       InnerComponentFolded, // component that will be used to render the children when folded
-      noRowsRenderer,
-      SeparatorComponent // separator component between first level children
+      SeparatorComponent, // separator component between first level children
+      nuggetsManager
     } = this.props;
+    const childData = data[index];
+    return (
+      <CellMeasurer cache={cache} columnIndex={0} key={key} parent={parent} rowIndex={index}>
+        <div style={style}>
+          {index > 0 ? <SeparatorComponent /> : null}
+          <Child
+            {...childData}
+            globalContentLocale={globalContentLocale}
+            key={childData.id}
+            lang={lang}
+            rowIndex={index}
+            InnerComponent={InnerComponent}
+            InnerComponentFolded={InnerComponentFolded}
+            SeparatorComponent={SeparatorComponent}
+            nuggetsManager={nuggetsManager}
+          />
+        </div>
+      </CellMeasurer>
+    );
+  };
+
+  render() {
+    const { globalContentLocale, data, noRowsRenderer } = this.props;
     return (
       <WindowScroller>
         {({ height, isScrolling, onChildScroll, scrollTop }) => {
@@ -293,10 +286,6 @@ class Tree extends React.Component {
                     autoHeight
                     rowHeight={cache.rowHeight}
                     deferredMeasurementCache={cache}
-                    lang={lang}
-                    data={data}
-                    InnerComponent={InnerComponent}
-                    InnerComponentFolded={InnerComponentFolded}
                     noRowsRenderer={noRowsRenderer}
                     ref={function (ref) {
                       globalList = ref;
@@ -304,8 +293,7 @@ class Tree extends React.Component {
                     rowCount={data.length}
                     overscanIndicesGetter={overscanIndicesGetter}
                     overscanRowCount={1}
-                    rowRenderer={cellRenderer}
-                    SeparatorComponent={SeparatorComponent}
+                    rowRenderer={this.cellRenderer}
                     width={width}
                     className="tree-list"
                     nuggetsManager={this.nuggetsManager}
