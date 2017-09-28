@@ -71,8 +71,8 @@
           }
 
           ~ .rotate-hyphen {
-              margin: 0px 10px -10px 10px;
-              transform: rotate(-90deg);
+              margin: 0 0 0 -10px;
+              transform: rotate(90deg);
           }
         }
     }
