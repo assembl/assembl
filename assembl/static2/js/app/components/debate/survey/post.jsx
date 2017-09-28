@@ -141,22 +141,18 @@ class Post extends React.Component {
       body = bodyEntries[0].value;
     }
 
-    const specialLocaleCodes = ['und', 'zxx']; // locale codes that can not be translated
-    const showPostTranslate = originalLocale && specialLocaleCodes.indexOf(originalLocale) === -1;
     return (
       <div className={postIndex < 3 || moreProposals ? 'shown box' : 'hidden box'}>
         <div className="content">
           <PostCreator name={post.creator.name} />
-          {showPostTranslate
-            ? <PostTranslate
-              contentLocale={contentLocale}
-              id={post.id}
-              lang={lang}
-              translate={translate}
-              originalLocale={originalLocale}
-              updateLocalContentLocale={updateLocalContentLocale}
-            />
-            : null}
+          <PostTranslate
+            contentLocale={contentLocale}
+            id={post.id}
+            lang={lang}
+            translate={translate}
+            originalLocale={originalLocale}
+            updateLocalContentLocale={updateLocalContentLocale}
+          />
           <div
             className={`body ${post.bodyMimeType === 'text/plain' ? 'pre-wrap' : ''}`}
             dangerouslySetInnerHTML={{ __html: body }}

@@ -230,8 +230,6 @@ class Post extends React.PureComponent {
       this.answerTextarea = el;
     };
 
-    const specialLocaleCodes = ['und', 'zxx']; // locale codes that can not be translated
-    const showPostTranslate = originalLocale && specialLocaleCodes.indexOf(originalLocale) === -1;
     return (
       <div className="posts" id={id}>
         <Nuggets extracts={extracts} postId={id} nuggetsManager={nuggetsManager} completeLevel={completeLevelArray.join('-')} />
@@ -246,15 +244,13 @@ class Post extends React.PureComponent {
                   locale={lang}
                   modified={modificationDate !== null}
                 />}
-              {showPostTranslate
-                ? <PostTranslate
-                  contentLocale={contentLocale}
-                  id={id}
-                  lang={lang}
-                  originalLocale={originalLocale}
-                  translate={translate}
-                />
-                : null}
+              <PostTranslate
+                contentLocale={contentLocale}
+                id={id}
+                lang={lang}
+                originalLocale={originalLocale}
+                translate={translate}
+              />
               <h3 className="dark-title-3">
                 {modifiedSubject}
               </h3>
