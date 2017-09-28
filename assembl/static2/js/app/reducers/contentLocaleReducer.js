@@ -9,6 +9,14 @@ import {
   UPDATE_CONTENT_LOCALE_BY_ORIGINAL_LOCALE
 } from '../actions/actionTypes';
 
+export function defaultContentLocaleMapping(state: Map = Map(), action: ReduxAction<Action>): Map {
+  if (action.type === UPDATE_CONTENT_LOCALE_BY_ORIGINAL_LOCALE) {
+    return state.set(action.originalLocale, action.value);
+  }
+
+  return state;
+}
+
 export default function contentLocale(state: Map = Map(), action: ReduxAction<Action>): Map {
   switch (action.type) {
   case UPDATE_CONTENT_LOCALE:

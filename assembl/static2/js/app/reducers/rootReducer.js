@@ -7,11 +7,12 @@ import Synthesis from './synthesisReducer';
 import Auth from './authenticationReducer';
 import Phase from './phaseReducer';
 import Admin from './adminReducer';
-import contentLocale from './contentLocaleReducer';
+import contentLocale, { defaultContentLocaleMapping } from './contentLocaleReducer';
 
 export default combineReducers({
   i18n: i18nReducer,
   contentLocale: contentLocale,
+  defaultContentLocaleMapping: defaultContentLocaleMapping,
   context: Context,
   debate: Debate,
   partners: Partners,

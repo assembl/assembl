@@ -1,6 +1,37 @@
 import { Map } from 'immutable';
 
-import contentLocale from '../../../js/app/reducers/contentLocaleReducer';
+import contentLocale, { defaultContentLocaleMapping } from '../../../js/app/reducers/contentLocaleReducer';
+
+describe('defaultContentLocaleMapping reducer', () => {
+  it('should return initial state', () => {
+    expect(defaultContentLocaleMapping(undefined, {})).toEqual(Map());
+  });
+
+  it('should return the state by default', () => {
+    const stateBefore = Map({
+      en: 'fr',
+      fr: 'de'
+    });
+    expect(defaultContentLocaleMapping(stateBefore, {})).toEqual(stateBefore);
+  });
+
+  it('should handle UPDATE_CONTENT_LOCALE_BY_ORIGINAL_LOCALE action type', () => {
+    const stateBefore = Map({
+      en: 'fr',
+      fr: 'de'
+    });
+    const stateAfter = Map({
+      en: 'fr',
+      fr: 'en'
+    });
+    const action = {
+      type: 'UPDATE_CONTENT_LOCALE_BY_ORIGINAL_LOCALE',
+      originalLocale: 'fr',
+      value: 'en'
+    };
+    expect(defaultContentLocaleMapping(stateBefore, action)).toEqual(stateAfter);
+  });
+});
 
 describe('contentLocale reducer', () => {
   it('should return initial state', () => {

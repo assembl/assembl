@@ -50,16 +50,18 @@ class Survey extends React.Component {
   }
 
   updateContentLocaleMappingFromProps(props) {
-    const { data, updateContentLocaleMapping } = props;
+    const { data, defaultContentLocaleMapping, updateContentLocaleMapping } = props;
     if (!data.loading) {
       const contentLocaleMappingData = {};
       const questions = data.thematic.questions;
       questions.forEach((question) => {
         question.posts.edges.forEach((edge) => {
           const post = edge.node;
-          contentLocaleMappingData[post.id] = {
-            contentLocale: post.originalLocale,
-            originalLocale: post.originalLocale
+          const { id, originalLocale } = post;
+          const contentLocale = defaultContentLocaleMapping.get(originalLocale, originalLocale);
+          contentLocaleMappingData[id] = {
+            contentLocale: contentLocale,
+            originalLocale: originalLocale
           };
         });
       });
@@ -184,6 +186,7 @@ Survey.propTypes = {
 const mapStateToProps = (state) => {
   return {
     debate: state.debate,
+    defaultContentLocaleMapping: state.defaultContentLocaleMapping,
     lang: state.i18n.locale
   };
 };

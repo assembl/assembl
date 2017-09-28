@@ -61,14 +61,16 @@ class Idea extends React.Component {
   }
 
   updateContentLocaleMappingFromProps(props) {
-    const { ideaWithPostsData, updateContentLocaleMapping } = props;
+    const { defaultContentLocaleMapping, ideaWithPostsData, updateContentLocaleMapping } = props;
     if (!ideaWithPostsData.loading) {
       const postsEdges = ideaWithPostsData.idea.posts.edges;
       const contentLocaleMappingData = {};
       postsEdges.forEach((edge) => {
         const post = edge.node;
-        contentLocaleMappingData[post.id] = {
-          contentLocale: post.originalLocale,
+        const { id, originalLocale } = post;
+        const contentLocale = defaultContentLocaleMapping.get(originalLocale, originalLocale);
+        contentLocaleMappingData[id] = {
+          contentLocale: contentLocale,
           originalLocale: post.originalLocale
         };
       });
@@ -179,6 +181,7 @@ const mapStateToProps = (state) => {
   return {
     contentLocaleMapping: state.contentLocale,
     debateData: state.debate.debateData,
+    defaultContentLocaleMapping: state.defaultContentLocaleMapping,
     lang: state.i18n.locale
   };
 };
