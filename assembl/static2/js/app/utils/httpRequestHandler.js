@@ -67,3 +67,16 @@ export const xmlHttpRequest = (obj) => {
     xhr.send(payload);
   });
 };
+
+export const fetchContentType = (url) => {
+  return fetch(url, {
+    method: 'HEAD'
+  }).then(
+    (response) => {
+      return response.headers.get('Content-Type');
+    },
+    () => {
+      return null;
+    }
+  );
+};

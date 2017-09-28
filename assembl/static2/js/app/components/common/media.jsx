@@ -2,6 +2,8 @@ import React from 'react';
 import { I18n } from 'react-redux-i18n';
 import { Grid, Row, Col } from 'react-bootstrap';
 
+import { fetchContentType } from '../../utils/httpRequestHandler';
+
 const isValidDescription = (description) => {
   return !!(description && description !== '<p></p>');
 };
@@ -10,19 +12,6 @@ const createHTMLTag = (contentType, url) => {
   return (
     (contentType && { image: <img src={url} alt="media" /> }[contentType.split('/')[0]]) ||
     <object data={url} aria-label="media" />
-  );
-};
-
-const fetchContentType = (url) => {
-  return fetch(url, {
-    method: 'HEAD'
-  }).then(
-    (response) => {
-      return response.headers.get('Content-Type');
-    },
-    () => {
-      return null;
-    }
   );
 };
 
