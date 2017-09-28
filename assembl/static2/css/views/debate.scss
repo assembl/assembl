@@ -149,13 +149,13 @@
     z-index: 100;
 
     .content-section {
-      padding: 80px 0;
+      padding: $margin-section-xs 0;
     }
 
     .media-description-layer {
       text-align: justify;
       font-family: $font-family4;
-      font-size: 14px;
+      font-size: $font-size-s;
       line-height: 28px;
     }
 
