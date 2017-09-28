@@ -162,7 +162,7 @@ export default class RichTextEditor extends React.Component<Object, RichTextEdit
     );
   };
 
-  handleReturn = (e): string => {
+  handleReturn = (e: Event): string => {
     // Pressing shift-enter keys creates a new line (<br/>) instead of an new paragraph (<p>)
     // See https://github.com/HubSpot/draft-convert/issues/83
     // For example, this enables to create line returns inside a list item.
