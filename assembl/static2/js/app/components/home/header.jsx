@@ -67,7 +67,7 @@ class Header extends React.Component {
                     />
                   </div>}
               </h4>
-              <Button onClick={this.displayPhase} className="button-submit button-light margin-xl">
+              <Button onClick={this.displayPhase} className="button-submit button-light margin-l">
                 <Translate value="home.accessButton" />
               </Button>
             </div>

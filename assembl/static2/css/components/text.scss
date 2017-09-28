@@ -148,22 +148,28 @@
   font-size: $font-size-xxs;
 }
 
-.text-column {
+.text-column-2 {
   column-count: 2;
   column-gap: 30px;
   font-family: $font-family4;
   font-size: $font-size-s;
   line-height: 30px;
+  margin: 8px 0 0;
+}
+
+.text-column-3 {
+  column-count: 3;
+  column-gap: 30px;
+  font-family: $font-family4;
+  font-size: $font-size-s;
+  line-height: 30px;
+  margin: 8px 0 0;
 }
 
 .ellipsis {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-}
-
-.top-column {
-  height: 60px;
 }
 
 .annotation {
@@ -173,14 +179,8 @@
     font-size: $font-size-xs;
 }
 
-@media screen and (max-width: 991px) {
-  .top-column {
-    display: none;
-  }
-}
-
 @media screen and (max-width: 620px) {
-  .text-column {
+  .text-column-2, .text-column-3 {
     column-count: 1;
   }
 }
@@ -231,7 +231,7 @@
     margin: 10px 5px 0;
   }
 
-  .text-column {
+  .text-column-2, .text-column-3 {
     margin: 0 5px;
   }
 }

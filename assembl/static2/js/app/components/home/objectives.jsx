@@ -53,9 +53,19 @@ class Objectives extends React.Component {
             <div className="content-section">
               <div className="content-margin">
                 <Row>
-                  <Col xs={12} sm={12} md={6} className="objectives">
-                    <div className="text-column">
-                      <div className="top-column">&nbsp;</div>
+                  <Col
+                    xs={12}
+                    sm={12}
+                    md={debateData.objectives.images.img1Url && debateData.objectives.images.img2Url ? 6 : 9}
+                    className="objectives"
+                  >
+                    <div
+                      className={
+                        debateData.objectives.images.img1Url && debateData.objectives.images.img2Url
+                          ? 'text-column-2'
+                          : 'text-column-3'
+                      }
+                    >
                       <span>
                         {debateData.objectives.descriptionEntries[locale]}
                       </span>

@@ -40,12 +40,13 @@
 
   .header-section {
     background-color: $first-color;
-    min-height: 380px;
+    height: 500px;
     position: relative;
     z-index: 10;
+    margin-top: $navbar-height * 2;
 
     .wyntk-box {
-      top: calc(50% - 145px);
+      top: calc(50% - 175px);
       height: 350px;
       width: 350px;
       padding: 30px;

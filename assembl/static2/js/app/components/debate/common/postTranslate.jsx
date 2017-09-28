@@ -26,7 +26,7 @@ const PostTranslate = ({
         name={`switch-${id}`}
         onChange={toggle}
         defaultChecked={showOriginal}
-        labelRight={I18n.t('debate.thread.showOriginal')}
+        labelRight={showOriginal ? I18n.t('debate.thread.translate') : I18n.t('debate.thread.showOriginal')}
       />
     </div>
   );

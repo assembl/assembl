@@ -113,7 +113,7 @@ $deleted-post-border: 1px solid $grey1 !default;
     .post-left {
         padding: 35px;
         .dark-title-3 {
-          line-height: 1.4
+          line-height: 1.6
         }
     }
 
@@ -170,7 +170,7 @@ $deleted-post-border: 1px solid $grey1 !default;
     .body {
         font-family: $font-family4;
         line-height: 1.6em;
-        padding: 20px 0;
+        padding: 20px 0 40px;
         word-wrap: break-word;
 
         p {
@@ -201,6 +201,7 @@ $deleted-post-border: 1px solid $grey1 !default;
                 text-align: left;
                 white-space: normal;
                 word-wrap: break-word;
+                font-family: $font-family4;
             }
         }
     }

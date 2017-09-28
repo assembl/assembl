@@ -52,6 +52,7 @@
     min-height: 380px;
     overflow: hidden;
     position: relative;
+    max-height: 505px;
 
     .header-content {
       position: relative;
@@ -59,13 +60,13 @@
       z-index: 2;
 
       .max-text-width {
-        margin: 0 auto;
-        max-width: 500px;
+        margin: -5px auto 0;
+        max-width: 600px;
       }
 
       .header-logo {
         filter: brightness(0) invert(1);
-        max-height: 140px;
+        max-height: 110px;
         padding: 10px;
         width: auto;
       }
@@ -207,20 +208,6 @@
       background-size: cover;
       height: 480px;
       margin: 20px 0 0;
-    }
-
-    .objectives {
-      &:nth-child(1) {
-        margin: 0;
-      }
-
-      &:nth-child(2) {
-        margin: 40px 0 0;
-      }
-
-      &:nth-child(3) {
-        margin: 0;
-      }
     }
   }
 
@@ -427,22 +414,6 @@
     }
   }
 
-  .objectives-section {
-    .objectives {
-      &:nth-child(1) {
-        margin: 0;
-      }
-
-      &:nth-child(2) {
-        margin: 0;
-      }
-
-      &:nth-child(3) {
-        margin: 0;
-      }
-    }
-  }
-
   .phases-section {
     .phase {
       &:nth-child(1) {
@@ -485,7 +456,7 @@
 @media screen and (min-width: 768px) {
   .header-section {
     .header-content {
-      padding: 100px 40px 150px;
+      padding: 75px 40px 150px;
     }
 
     .statistic {

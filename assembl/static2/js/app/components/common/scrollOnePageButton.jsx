@@ -8,7 +8,7 @@ const ScrollOnePageButton = ({ hidden }) => {
   const scrollOnePageTopPosition = window.innerHeight - 35;
   return (
     <a
-      className={`scroll-one-page ${hidden || window.innerHeight > 880 ? 'hidden' : ''}`}
+      className={`scroll-one-page ${hidden || window.innerHeight > 690 ? 'hidden' : ''}`}
       onClick={scrollOnePageDown}
       style={{ top: scrollOnePageTopPosition }}
     >

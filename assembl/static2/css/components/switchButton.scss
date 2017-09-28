@@ -33,7 +33,7 @@
 
 //React Switch Button flat-round style.
 $rsbc-transtion-delay : 0.4s;
-$rsbc-theme-flat-color-on : $second-color;
+$rsbc-theme-flat-color-on : $grey2;
 $rsbc-theme-flat-color-on-border : darken($rsbc-theme-flat-color-on, 10%);
 $rsbc-theme-flat-color-off : $grey2;
 $rsbc-theme-flat-color-off-border : darken($rsbc-theme-flat-color-off, 10%);
@@ -49,11 +49,12 @@ $rsbc-theme-flat-color-disabled-border : darken($rsbc-theme-flat-color-disabled,
   line-height    : 100%;
   display        : inline-block;
   vertical-align : middle;
-  margin         : 0;
+  margin         : -7px 0 0;
   @include rsbc-box-sizing(border-box);
 
   label {
     cursor: pointer;
+    font-weight: normal!important;
   }
 
   &.disabled {
@@ -100,9 +101,9 @@ $rsbc-theme-flat-color-disabled-border : darken($rsbc-theme-flat-color-disabled,
   // Theme
   &.rsbc-switch-button-flat-round input[type="checkbox"] + label
   {
-    padding          : 2px;
-    width            : 48px;
-    height           : 24px;
+    padding          : 1px;
+    width            : 36px;
+    height           : 20px;
     vertical-align   : middle;
     background-color : $rsbc-theme-flat-color-off;
     @include rsbc-border-radius(60px);
@@ -135,10 +136,10 @@ $rsbc-theme-flat-color-disabled-border : darken($rsbc-theme-flat-color-disabled,
   // inner background
   &.rsbc-switch-button-flat-round input[type="checkbox"] + label:before
   {
-    top              : 2px;
-    left             : 2px;
-    bottom           : 2px;
-    right            : 2px;
+    top              : 1px;
+    left             : 1px;
+    bottom           : 1px;
+    right            : 1px;
     background-color : $white;
     @include rsbc-border-radius(60px);
     @include rsbc-transition(background $rsbc-transtion-delay);
@@ -149,7 +150,8 @@ $rsbc-theme-flat-color-disabled-border : darken($rsbc-theme-flat-color-disabled,
     top              : 4px;
     left             : 4px;
     bottom           : 4px;
-    width            : 16px;
+    width            : 12px;
+    margin-left      : 16px;
     background-color : $rsbc-theme-flat-color-off-border;
     @include rsbc-border-radius(52px);
     @include rsbc-transition(margin $rsbc-transtion-delay);
@@ -178,7 +180,7 @@ $rsbc-theme-flat-color-disabled-border : darken($rsbc-theme-flat-color-disabled,
 
   &.rsbc-switch-button-flat-round input[type="checkbox"]:checked + label:after
   {
-    margin-left      : 24px;
+    margin-left      : 0;
     background-color : $rsbc-theme-flat-color-on-border;
   }
 
