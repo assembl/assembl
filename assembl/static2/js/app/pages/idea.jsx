@@ -54,6 +54,33 @@ const noRowsRenderer = () => {
 };
 
 class Idea extends React.Component {
+  topPostsToLoad = (topPosts, edges) => {
+    const { hash } = window.location;
+    if (hash !== '') {
+      const id = hash.replace('#', '');
+      const post = edges.filter((edge) => {
+        return edge.node.id === id;
+      });
+      if (post.length === 0) {
+        return null;
+      }
+      let topPostId = post[0].node.parentId;
+      if (!topPostId) {
+        topPostId = post[0].node.id;
+      }
+      const index = topPosts
+        .map((value) => {
+          return value.id;
+        })
+        .indexOf(topPostId);
+      if (index > -1) {
+        return index;
+      }
+      return null;
+    }
+    return null;
+  };
+
   render() {
     const { contentLocale, lang, ideaData, ideaWithPostsData, routerParams, debateData } = this.props;
     const refetchIdea = ideaWithPostsData.refetch;
@@ -107,6 +134,7 @@ class Idea extends React.Component {
                     contentLocale={contentLocale}
                     lang={lang}
                     data={topPosts}
+                    initialRow={this.topPostsToLoad(topPosts, ideaWithPostsData.idea.posts.edges)}
                     InnerComponent={Post}
                     InnerComponentFolded={PostFolded}
                     noRowsRenderer={noRowsRenderer}

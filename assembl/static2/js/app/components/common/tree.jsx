@@ -215,6 +215,10 @@ class Tree extends React.Component {
     // or to avoid recreating all dom nodes if we go back to the same idea.
     cache.clearAll();
     prevStopIndex = 0;
+
+    if (this.props.initialRow !== null) {
+      globalList.scrollToRow(this.props.initialRow);
+    }
   }
 
   componentWillReceiveProps(nextProps) {

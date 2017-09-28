@@ -57,9 +57,6 @@ class Post extends React.PureComponent {
       if (id === postId) {
         // Wait an extra 1s to be sure that all previous posts are loaded
         // and measureTreeHeight finished.
-        // May not be enough for a post far far away in the page.
-        // We should rescroll to this post if previous posts are loaded after
-        // this post, but it's really more complex to do...
         setTimeout(hashLinkScroll, 1000);
       }
     }
