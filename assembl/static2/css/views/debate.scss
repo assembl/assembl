@@ -397,7 +397,10 @@
   }
 }
 
-@media screen and (max-width: 767px) {
+@media screen and
+(max-width: 767px),
+(-webkit-min-device-pixel-ratio: 2),
+(min-resolution: 192dpi) {
   .video-section {
     .video-title-section {
       margin: $margin-section-xs 0 0;
