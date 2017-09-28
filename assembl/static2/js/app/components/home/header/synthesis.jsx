@@ -18,7 +18,7 @@ class Synthesis extends React.Component {
           <a
             href={
               connectedUserId
-                ? `${get('oldDebate', slug)}/posts/${synthesis.lastPublishedSynthesis.published_in_post}`
+                ? `${get('oldDebate', slug)}/posts/${encodeURIComponent(synthesis.lastPublishedSynthesis.published_in_post)}`
                 : `${getContextual('login', slug)}?next=${next}`
             }
           >
