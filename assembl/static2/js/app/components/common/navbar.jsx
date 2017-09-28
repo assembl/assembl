@@ -1,7 +1,8 @@
 import React from 'react';
-import { browserHistory, Link } from 'react-router';
+import { Link } from 'react-router';
 import { connect } from 'react-redux';
 import { Grid, Navbar } from 'react-bootstrap';
+import { customBrowserHistory } from '../../index'; 
 import Avatar from './avatar';
 import LanguageMenu from './languageMenu';
 import NavigationMenu from './navigationMenu';
@@ -17,7 +18,7 @@ class NavBar extends React.Component {
     this.displayMenu = this.displayMenu.bind(this);
   }
   componentWillMount() {
-    this.unlisten = browserHistory.listen(() => {
+    this.unlisten = customBrowserHistory.listen(() => {
       this.setState({ isMenuHidden: true });
     });
   }

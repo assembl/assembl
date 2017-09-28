@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { browserHistory } from 'react-router';
 import { Translate, Localize, I18n } from 'react-redux-i18n';
+import { customBrowserHistory } from 'react-router';
 import { get } from '../../../utils/routeMap';
 import { getPhaseStatus, isSeveralIdentifiers } from '../../../utils/timeline';
 import { displayModal } from '../../../utils/utilityManager';
@@ -41,7 +41,7 @@ class Phase extends React.Component {
       }
       if (phaseStatus === 'inProgress' || phaseStatus === 'completed') {
         if (!isRedirectionToV1) {
-          browserHistory.push(get('debate', params));
+          customBrowserHistory.push(get('debate', params));
         } else {
           const body = <Translate value="redirectToV1" phaseName={phaseName} />;
           const button = { link: get('oldDebate', slug), label: I18n.t('home.accessButton'), internalLink: false };
@@ -52,7 +52,7 @@ class Phase extends React.Component {
         }
       }
     } else if (!isRedirectionToV1) {
-      browserHistory.push(get('debate', params));
+      customBrowserHistory.push(get('debate', params));
     } else {
       window.location = get('oldDebate', slug);
     }

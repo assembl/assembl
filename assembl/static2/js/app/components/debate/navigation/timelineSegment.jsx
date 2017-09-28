@@ -1,7 +1,7 @@
 import React from 'react';
-import { browserHistory } from 'react-router';
 import { Translate, Localize, I18n } from 'react-redux-i18n';
 import { connect } from 'react-redux';
+import { customBrowserHistory } from 'react-router';
 import { get } from '../../../utils/routeMap';
 import { displayModal } from '../../../utils/utilityManager';
 import { getPhaseStatus, isSeveralIdentifiers } from '../../../utils/timeline';
@@ -41,7 +41,7 @@ class TimelineSegment extends React.Component {
       }
       if (phaseStatus === 'inProgress' || phaseStatus === 'completed') {
         if (!isRedirectionToV1) {
-          browserHistory.push(get('debate', params));
+          customBrowserHistory.push(get('debate', params));
         } else {
           const body = <Translate value="redirectToV1" phaseName={phaseName} />;
           const button = { link: get('oldDebate', slug), label: I18n.t('home.accessButton'), internalLink: false };
@@ -52,7 +52,7 @@ class TimelineSegment extends React.Component {
         }
       }
     } else if (!isRedirectionToV1) {
-      browserHistory.push(get('debate', params));
+      customBrowserHistory.push(get('debate', params));
     } else {
       window.location = get('oldDebate', slug);
     }

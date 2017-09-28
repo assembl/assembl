@@ -1,5 +1,5 @@
 import React from 'react';
-import { browserHistory } from 'react-router';
+import { customBrowserHistory } from '../../index';
 import { Translate, I18n } from 'react-redux-i18n';
 import { connect } from 'react-redux';
 import { Grid, Row, Button } from 'react-bootstrap';
@@ -36,7 +36,7 @@ class Header extends React.Component {
         window.location = get('oldDebate', slug);
       }
     } else {
-      browserHistory.push(get('debate', { ...slug, phase: currentPhaseIdentifier }));
+      customBrowserHistory.push(get('debate', { ...slug, phase: currentPhaseIdentifier }));
     }
   }
   render() {

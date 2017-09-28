@@ -1,5 +1,5 @@
 import React from 'react';
-import { browserHistory } from 'react-router';
+import { customBrowserHistory } from '../../index';
 import { Translate } from 'react-redux-i18n';
 import { Col } from 'react-bootstrap';
 import { getDiscussionSlug, calculatePercentage } from '../../utils/globalFunctions';
@@ -24,7 +24,7 @@ class Navbar extends React.Component {
   goToSection(stepNb) {
     const slug = { slug: getDiscussionSlug() };
     const { phaseIdentifier } = this.props;
-    browserHistory.push(
+    customBrowserHistory.push(
       `${get('administration', slug)}${get('adminPhase', { ...slug, phase: phaseIdentifier })}?section=${stepNb}`
     );
     this.setState({

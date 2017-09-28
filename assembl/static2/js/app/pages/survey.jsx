@@ -2,9 +2,9 @@ import React from 'react';
 import { PropTypes } from 'prop-types';
 import { connect } from 'react-redux';
 import { compose, graphql } from 'react-apollo';
-import { browserHistory } from 'react-router';
 import { Translate } from 'react-redux-i18n';
 import { Grid, Button } from 'react-bootstrap';
+import { customBrowserHistory } from '../index';
 import withLoadingIndicator from '../components/common/withLoadingIndicator';
 import Video from '../components/debate/survey/video';
 import Header from '../components/debate/common/header';
@@ -27,7 +27,7 @@ class Survey extends React.Component {
     this.scrollToQuestion = this.scrollToQuestion.bind(this);
   }
   componentWillMount() {
-    this.unlisten = browserHistory.listen(() => {
+    this.unlisten = customBrowserHistory.listen(() => {
       this.setState({ moreProposals: false });
     });
   }

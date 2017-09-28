@@ -1,8 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Translate, I18n } from 'react-redux-i18n';
-import { browserHistory } from 'react-router';
 import { Grid, Row, Col, Button } from 'react-bootstrap';
+import { customBrowserHistory } from '../../index';
 import { get } from '../../utils/routeMap';
 import { getDiscussionSlug } from '../../utils/globalFunctions';
 import { displayModal } from '../../utils/utilityManager';
@@ -34,7 +34,7 @@ class Objectives extends React.Component {
         window.location = get('oldDebate', slug);
       }
     } else {
-      browserHistory.push(get('debate', { ...slug, phase: currentPhaseIdentifier }));
+      customBrowserHistory.push(get('debate', { ...slug, phase: currentPhaseIdentifier }));
     }
   }
   render() {
