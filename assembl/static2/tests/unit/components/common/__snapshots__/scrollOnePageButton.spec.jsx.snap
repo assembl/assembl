@@ -2,7 +2,7 @@
 
 exports[`ScrollOnePageButton component should render a button to scroll one page down 1`] = `
 <a
-  className="scroll-one-page "
+  className="scroll-one-page hidden"
   onClick={[Function]}
   style={
     Object {
