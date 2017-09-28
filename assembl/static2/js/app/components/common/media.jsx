@@ -29,7 +29,6 @@ class Media extends React.Component {
   render() {
     const { title, descriptionTop, descriptionBottom, descriptionSide, htmlCode, noTitle } = this.props;
     const { contentType } = this.state;
-    const mediaTag = createHTMLTag(contentType, htmlCode);
     const validDescriptionSide = isValidDescription(descriptionSide);
     const validDescriptionTop = isValidDescription(descriptionTop);
     const validDescriptionBottom = isValidDescription(descriptionBottom);
@@ -69,7 +68,7 @@ class Media extends React.Component {
                 {htmlCode &&
                 <Col xs={12} sm={validDescriptionSide ? 6 : 8} smOffset={validDescriptionSide ? 0 : 2}>
                   <div className="media-container">
-                    {mediaTag}
+                    {createHTMLTag(contentType, htmlCode)}
                   </div>
                 </Col>}
               </Row>}
