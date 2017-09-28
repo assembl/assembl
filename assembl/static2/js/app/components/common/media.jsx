@@ -36,7 +36,8 @@ class Media extends React.Component {
     const validDescriptionSide = isValidDescription(descriptionSide);
     const validDescriptionTop = isValidDescription(descriptionTop);
     const validDescriptionBottom = isValidDescription(descriptionBottom);
-    return title || validDescriptionTop || validDescriptionSide || htmlCode || validDescriptionBottom
+    const validMedia = htmlCode && contentType !== null;
+    return !noTitle || validDescriptionTop || validDescriptionSide || validMedia || validDescriptionBottom
       ? <section className="media-section relative">
         <Grid fluid className="background-light">
           <div className="max-container">
@@ -69,7 +70,7 @@ class Media extends React.Component {
                     <div className="box-hyphen left">&nbsp;</div>
                   </div>
                 </Col>}
-                {htmlCode &&
+                {validMedia &&
                 <Col xs={12} sm={validDescriptionSide ? 6 : 8} smOffset={validDescriptionSide ? 0 : 2}>
                   <div className="media-container">
                     {createHTMLTag(contentType, htmlCode)}
