@@ -9,9 +9,13 @@ const isValidDescription = (description) => {
 };
 
 const createHTMLTag = (contentType, url) => {
+  // undefined content types (ex 'application') will fall through to <object />
   return (
-    (contentType && { image: <img src={url} alt="media" /> }[contentType.split('/')[0]]) ||
-    <object data={url} aria-label="media" />
+    (contentType &&
+      {
+        image: <img src={url} alt="media" />
+      }[contentType.split('/')[0]]) ||
+      <object data={url} aria-label="media" />
   );
 };
 
