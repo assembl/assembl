@@ -117,6 +117,24 @@ class Post extends React.PureComponent {
       subject = subjectEntries[0].value;
       originalSubject = subjectEntries[0].value;
     }
+    // This hack should be removed when the TDI's admin section will be done.
+    // We need it to have several langString in the idea's title
+    const ideaContentLinks = [];
+    let titlesArray = [];
+    indirectIdeaContentLinks.forEach((link) => {
+      titlesArray = link.idea.title.split('#!');
+      titlesArray.forEach((title) => {
+        const titleLocale = title.split('$!')[1];
+        if (titleLocale) {
+          if (titleLocale.trim() === lang) {
+            ideaContentLinks.push(title.split('$!')[0]);
+          }
+        } else {
+          ideaContentLinks.push(link.idea.title);
+        }
+      });
+    });
+    // End of the hack
 
     const modifiedSubject = (
       <span>
@@ -198,16 +216,16 @@ class Post extends React.PureComponent {
 
               <Attachments attachments={attachments} />
 
-              {indirectIdeaContentLinks.length
+              {ideaContentLinks.length
                 ? <div className="link-idea">
                   <div className="label">
                     <Translate value="debate.thread.linkIdea" />
                   </div>
                   <div className="badges">
-                    {indirectIdeaContentLinks.map((link) => {
+                    {ideaContentLinks.map((title, index) => {
                       return (
-                        <span className="badge" key={link.idea.id}>
-                          {link.idea.title}
+                        <span className="badge" key={index}>
+                          {title}
                         </span>
                       );
                     })}
