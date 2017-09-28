@@ -17,8 +17,8 @@ type RichTextEditorProps = {
   placeholder: string,
   textareaRef: Function,
   toolbarPosition: string,
-  updateContentState: Function,
-  withAttachmentButton: boolean
+  updateContentState: Function
+  // withAttachmentButton: boolean
 };
 
 type RichTextEditorState = {
@@ -46,8 +46,8 @@ export default class RichTextEditor extends React.Component<Object, RichTextEdit
   static defaultProps = {
     handleInputFocus: null,
     maxLength: 0,
-    toolbarPosition: 'top',
-    withAttachmentButton: false
+    toolbarPosition: 'top'
+    // withAttachmentButton: false
   };
 
   constructor(props: RichTextEditorProps): void {
@@ -175,13 +175,15 @@ export default class RichTextEditor extends React.Component<Object, RichTextEdit
   };
 
   renderToolbar = () => {
+    const withAttachmentButton = false;
+    // to re-enable attachments, replace with: this.props.withAttachmentButton
     return (
       <Toolbar
         buttonsConfig={this.getToolbarButtons()}
         editorState={this.state.editorState}
         focusEditor={this.focusEditor}
         onChange={this.onChange}
-        withAttachmentButton={this.props.withAttachmentButton}
+        withAttachmentButton={withAttachmentButton}
       />
     );
   };
