@@ -54,7 +54,7 @@ const noRowsRenderer = () => {
 };
 
 class Idea extends React.Component {
-  topPostsToLoad = (topPosts, edges) => {
+  getInitialRowIndex = (topPosts, edges) => {
     const { hash } = window.location;
     if (hash !== '') {
       const id = hash.replace('#', '');
@@ -134,7 +134,7 @@ class Idea extends React.Component {
                     contentLocale={contentLocale}
                     lang={lang}
                     data={topPosts}
-                    initialRow={this.topPostsToLoad(topPosts, ideaWithPostsData.idea.posts.edges)}
+                    initialRowIndex={this.getInitialRowIndex(topPosts, ideaWithPostsData.idea.posts.edges)}
                     InnerComponent={Post}
                     InnerComponentFolded={PostFolded}
                     noRowsRenderer={noRowsRenderer}

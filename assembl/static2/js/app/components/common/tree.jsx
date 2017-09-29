@@ -216,8 +216,8 @@ class Tree extends React.Component {
     cache.clearAll();
     prevStopIndex = 0;
 
-    if (this.props.initialRow !== null) {
-      globalList.scrollToRow(this.props.initialRow);
+    if (this.props.initialRowIndex !== null) {
+      globalList.scrollToRow(this.props.initialRowIndex);
     }
   }
 
