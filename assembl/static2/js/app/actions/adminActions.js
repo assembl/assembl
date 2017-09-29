@@ -69,27 +69,27 @@ export const removeQuestion = (thematicId, index) => {
   };
 };
 
-export const toggleMedia = (id) => {
+export const toggleVideo = (id) => {
   return { id: id, type: 'TOGGLE_VIDEO' };
 };
 
-export const updateMediaHtmlCode = (id, value) => {
+export const updateVideoHtmlCode = (id, value) => {
   return { id: id, value: value, type: 'UPDATE_VIDEO_HTML_CODE' };
 };
 
-export const updateMediaDescriptionTop = (id, locale, value) => {
+export const updateVideoDescriptionTop = (id, locale, value) => {
   return { id: id, locale: locale, value: value, type: 'UPDATE_VIDEO_DESCRIPTION_TOP' };
 };
 
-export const updateMediaDescriptionBottom = (id, locale, value) => {
+export const updateVideoDescriptionBottom = (id, locale, value) => {
   return { id: id, locale: locale, value: value, type: 'UPDATE_VIDEO_DESCRIPTION_BOTTOM' };
 };
 
-export const updateMediaDescriptionSide = (id, locale, value) => {
+export const updateVideoDescriptionSide = (id, locale, value) => {
   return { id: id, locale: locale, value: value, type: 'UPDATE_VIDEO_DESCRIPTION_SIDE' };
 };
 
-export const updateMediaTitle = (id, locale, value) => {
+export const updateVideoTitle = (id, locale, value) => {
   return { id: id, locale: locale, value: value, type: 'UPDATE_VIDEO_TITLE' };
 };
 
