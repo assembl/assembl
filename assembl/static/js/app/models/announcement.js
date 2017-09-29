@@ -8,6 +8,7 @@ var $ = require('jquery'),
     Base = require('./base.js'),
     i18n = require('../utils/i18n.js'),
     Ctx = require('../common/context.js'),
+    LangString = require('./langstring.js'),
     Types = require('../utils/types.js');
 /**
  * Annoucement model
@@ -22,9 +23,9 @@ var AnnouncementModel = Base.Model.extend({
    */
   defaults: {
     "creator": undefined,
-    "last_updated_by": undefined, 
-    "title": undefined,
-    "body": undefined,
+    "last_updated_by": undefined,
+    "title": null,
+    "body": null,
     "idObjectAttachedTo": undefined,
     //Only for idea announcements
     "should_propagate_down": undefined
@@ -44,6 +45,21 @@ var AnnouncementModel = Base.Model.extend({
     this.on("invalid", function(model, error) {
       console.log(model.id + " " + error);
     });
+  },
+
+  /**
+   * Returns the attributes hash to be set on the model
+   * @function app.models.announcement.AnnouncementModel.parse
+   */
+  parse: function(resp, options) {
+    var that = this;
+    if (resp.title !== undefined) {
+      resp.title = new LangString.Model(resp.title, {parse: true});
+    }
+    if (resp.body !== undefined) {
+      resp.body = new LangString.Model(resp.body, {parse: true});
+    }
+    return Base.Model.prototype.parse.apply(this, arguments);
   },
   /** 
    * Returns an error message if one of those attributes (idObjectAttachedTo, last_updated_by, creator) is missing

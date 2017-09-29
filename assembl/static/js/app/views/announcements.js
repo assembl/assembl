@@ -7,14 +7,16 @@
 var Marionette = require('../shims/marionette.js'),
     _ = require('underscore'),
     $ = require('jquery'),
+    Promise = require('bluebird'),
     i18n = require('../utils/i18n.js'),
     Assembl = require('../app.js'),
     Ctx = require('../common/context.js'),
+    CollectionManager = require('../common/collectionManager.js'),
     Types = require('../utils/types.js'),
     Announcement = require('../models/announcement.js'),
     AgentViews = require('./agent.js'),
-    EditableField = require('./reusableDataFields/editableField.js'),
-    CKEditorField = require('./reusableDataFields/ckeditorField.js'),
+    EditableLSField = require('./reusableDataFields/editableLSField.js'),
+    CKEditorLSField = require('./reusableDataFields/ckeditorLSField.js'),
     TrueFalseField = require('./reusableDataFields/trueFalseField.js');
 
 /** 
@@ -81,23 +83,39 @@ var AnnouncementMessageView = AbstractAnnouncementView.extend({
   },
 
   serializeData: function() {
+    if (this.template == '#tmpl-loader') {
+      return {}
+    }
     var retval = this.model.toJSON();
     retval.creator = this.creator;
     retval.ctx = Ctx;
     retval.hide_creator = this.hideCreator;
+    if (this.template != '#tmpl-loader') {
+      if (retval.body) {
+        retval.body = retval.body.bestValue(this.translationData);
+      }
+      if (retval.title) {
+        retval.title = retval.title.bestValue(this.translationData);
+      }
+    }
     return retval;
   },
 
   initialize: function(options) {
-    var that = this;
+    var that = this,
+        collectionManager = new CollectionManager();
     this.hideCreator = options.hide_creator;
     this.creator = undefined;
-    this.model.getCreatorPromise().then(function(creator) {
-      if(!that.isViewDestroyed()) {
-        that.creator = creator;
-        that.template = '#tmpl-announcementMessage';
-        that.render();
-      }
+    Promise.join(
+      this.model.getCreatorPromise(),
+      collectionManager.getUserLanguagePreferencesPromise(Ctx),
+      function(creator, ulp) {
+        if(!that.isViewDestroyed()) {
+          that.translationData = ulp;
+          that.creator = creator;
+          that.template = '#tmpl-announcementMessage';
+          that.render();
+        }
     });
   },
 
@@ -126,27 +144,44 @@ var AnnouncementEditableView = AbstractAnnouncementView.extend({
     AbstractAnnouncementView.apply(this, arguments);
   },
 
-  template: '#tmpl-announcementEditable',
+  template: '#tmpl-loader',
 
   className: 'announcementEditable',
-  
+
   events:_.extend({}, AbstractAnnouncementView.prototype.events, {
     'click .js_announcement_delete': 'onDeleteButtonClick' //Dynamically rendered, do NOT use @ui
   }),
-  
+
+  initialize: function(options) {
+    var that = this,
+        collectionManager = new CollectionManager();
+    collectionManager.getUserLanguagePreferencesPromise(Ctx).then(function(ulp) {
+        if(!that.isViewDestroyed()) {
+          that.translationData = ulp;
+          that.template = '#tmpl-announcementEditable';
+          that.render();
+        }
+    });
+  },
+
   onRender: function() {
+    if (this.template == '#tmpl-loader') {
+      return;
+    }
     AbstractAnnouncementView.prototype.onRender.call(this);
 
-    var titleView = new EditableField({
+    var titleView = new EditableLSField({
       'model': this.model,
       'modelProp': 'title',
+      translationData: this.translationData,
       'placeholder': i18n.gettext('Please give a title of this announcement...')
     });
     this.region_title.show(titleView);
 
-    var bodyView = new CKEditorField({
+    var bodyView = new CKEditorLSField({
       'model': this.model,
       'modelProp': 'body',
+      translationData: this.translationData,
       'placeholder': i18n.gettext('Please write the content of this announcement here...')
     });
     this.region_body.show(bodyView);
