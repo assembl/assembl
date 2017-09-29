@@ -159,6 +159,7 @@ class File(Document):
                 'document.id', ondelete='CASCADE',
                 onupdate='CASCADE'), primary_key=True)
 
+    # Should we defer this?
     data = Column(LargeBinary, nullable=False)
 
     @Document.external_url.getter

@@ -23,7 +23,7 @@ from sqlalchemy import (
     inspect,
 )
 from sqlalchemy.orm import (
-    relationship, join, subqueryload_all, backref, with_polymorphic)
+    relationship, join, subqueryload, joinedload, backref, with_polymorphic)
 from sqlalchemy.exc import InvalidRequestError
 from sqlalchemy.sql.expression import literal, distinct
 
@@ -228,8 +228,36 @@ class Discussion(DiscussionBoundBase, NamedClassMixin):
     def get_discussion_conditions(cls, discussion_id, alias_maker=None):
         return (cls.id == discussion_id,)
 
-    def get_next_synthesis(self):
-        return self.next_synthesis
+    def get_next_synthesis_id(self):
+        from .idea_graph_view import Synthesis
+        from .post import SynthesisPost
+        return self.db.query(Synthesis.id).outerjoin(
+            SynthesisPost).filter(
+            Synthesis.discussion_id == self.id,
+            SynthesisPost.id == None).first()
+
+    def get_next_synthesis(self, full_data=True):
+        from .idea_graph_view import Synthesis
+        id = self.get_next_synthesis_id()
+        query = self.db.query(Synthesis).filter_by(id=id)
+        if full_data:
+            query = query.options(
+                subqueryload('idea_assocs').joinedload('idea').joinedload('title').subqueryload('entries'),
+                subqueryload('idea_assocs').joinedload('idea').joinedload('synthesis_title').subqueryload('entries'),
+                subqueryload('idea_assocs').joinedload('idea').joinedload('description').subqueryload('entries'),
+                subqueryload('idea_assocs').joinedload('idea').subqueryload('widget_links'),
+                subqueryload('idea_assocs').joinedload('idea').subqueryload('attachments').joinedload('document'),
+                subqueryload('idea_assocs').joinedload('idea').subqueryload('message_columns'),
+                subqueryload('idea_assocs').joinedload('idea').joinedload('source_links'),
+                subqueryload('idealink_assocs').joinedload('idea_link'),
+                subqueryload(Synthesis.published_in_post)
+            )
+        else:
+            query = query.options(
+                subqueryload('idea_assocs'),
+                subqueryload('idealink_assocs'),
+            )
+        return query.first()
 
     syntheses = relationship('Synthesis')
 
@@ -244,8 +272,19 @@ class Discussion(DiscussionBoundBase, NamedClassMixin):
         return self.db.query(Synthesis).filter(
             Synthesis.discussion_id == self.id and
             Synthesis.published_in_post != None
-        ).order_by(Synthesis.published_in_post.creation_date.desc()
-                   ).first()
+        ).options(
+            subqueryload('idea_assocs').joinedload('idea').joinedload('title').subqueryload('entries'),
+            subqueryload('idea_assocs').joinedload('idea').joinedload('synthesis_title').subqueryload('entries'),
+            subqueryload('idea_assocs').joinedload('idea').joinedload('description').subqueryload('entries'),
+            subqueryload('idea_assocs').joinedload('idea').subqueryload('widget_links'),
+            subqueryload('idea_assocs').joinedload('idea').subqueryload('attachments').joinedload('document'),
+            subqueryload('idea_assocs').joinedload('idea').subqueryload('message_columns'),
+            subqueryload('idea_assocs').joinedload('idea').joinedload('source_links'),
+            subqueryload('idealink_assocs').joinedload('idea_link'),
+            subqueryload(Synthesis.published_in_post)
+        ).order_by(
+            Synthesis.published_in_post.creation_date.desc()
+        ).first()
 
     # returns a list of published and non-deleted syntheses, as well as the draft of the not yet published synthesis
     def get_all_syntheses_query(self, include_unpublished=True, include_tombstones=False):
@@ -259,14 +298,16 @@ class Discussion(DiscussionBoundBase, NamedClassMixin):
         return self.db.query(
             Synthesis).outerjoin(SynthesisPost
             ).options(
-            subqueryload_all(
-            'idea_assocs.idea'),
-            subqueryload_all(
-            'idealink_assocs.idea_link'),
-            subqueryload_all(
-            Synthesis.published_in_post)).filter(
-            Synthesis.discussion_id == self.id,
-            condition)
+                subqueryload('idea_assocs').joinedload('idea').joinedload('title').subqueryload('entries'),
+                subqueryload('idea_assocs').joinedload('idea').joinedload('synthesis_title').subqueryload('entries'),
+                subqueryload('idea_assocs').joinedload('idea').joinedload('description').subqueryload('entries'),
+                subqueryload('idea_assocs').joinedload('idea').subqueryload('widget_links'),
+                subqueryload('idea_assocs').joinedload('idea').subqueryload('attachments').joinedload('document'),
+                subqueryload('idea_assocs').joinedload('idea').subqueryload('message_columns'),
+                subqueryload('idea_assocs').joinedload('idea').joinedload('source_links'),
+                subqueryload('idealink_assocs').joinedload('idea_link'),
+                subqueryload(Synthesis.published_in_post)
+            ).filter(Synthesis.discussion_id == self.id, condition)
 
     def get_permissions_by_role(self):
         roleperms = self.db.query(Role.name, Permission.name).select_from(
