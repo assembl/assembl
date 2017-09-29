@@ -13,6 +13,9 @@ class Media extends React.Component {
     const validDescriptionTop = isValidDescription(descriptionTop);
     const validDescriptionBottom = isValidDescription(descriptionBottom);
     const validMedia = !!htmlCode;
+    const totalSize = 12;
+    const leftSize = 3;
+    const rightSize = totalSize - leftSize;
     return !noTitle || validDescriptionTop || validDescriptionSide || validMedia || validDescriptionBottom
       ? <section className="media-section relative">
         <Grid fluid className="background-light">
@@ -27,7 +30,11 @@ class Media extends React.Component {
             <div className="content-section">
               {validDescriptionTop &&
               <Row>
-                <Col xs={12} sm={validDescriptionSide ? 6 : 8} smOffset={validDescriptionSide ? 4 : 2}>
+                <Col
+                  xs={totalSize}
+                  sm={validDescriptionSide ? rightSize : totalSize}
+                  smOffset={validDescriptionSide ? leftSize : 0}
+                >
                   <div
                     className="media-description-layer media-description-top"
                     dangerouslySetInnerHTML={{ __html: descriptionTop }}
@@ -37,7 +44,7 @@ class Media extends React.Component {
               {(validDescriptionSide || validMedia) &&
               <Row>
                 {validDescriptionSide &&
-                <Col xs={12} sm={3} smOffset={1}>
+                <Col xs={totalSize} sm={leftSize}>
                   <div className="media-description">
                     <div>
                       <span className="assembl-icon-pepite color2">&nbsp;</span>
@@ -47,7 +54,7 @@ class Media extends React.Component {
                   </div>
                 </Col>}
                 {validMedia &&
-                <Col xs={12} sm={validDescriptionSide ? 6 : 8} smOffset={validDescriptionSide ? 0 : 2}>
+                <Col xs={totalSize} sm={validDescriptionSide ? rightSize : totalSize}>
                   <div className="media-container">
                     <object data={htmlCode} aria-label="media" />
                   </div>
@@ -55,7 +62,11 @@ class Media extends React.Component {
               </Row>}
               {validDescriptionBottom &&
               <Row>
-                <Col xs={12} sm={validDescriptionSide ? 6 : 8} smOffset={validDescriptionSide ? 4 : 2}>
+                <Col
+                  xs={totalSize}
+                  sm={validDescriptionSide ? rightSize : totalSize}
+                  smOffset={validDescriptionSide ? leftSize : 0}
+                >
                   <div
                     className="media-description-layer media-description-bottom"
                     dangerouslySetInnerHTML={{ __html: descriptionBottom }}
