@@ -58,21 +58,19 @@ class Idea extends React.Component {
     const { hash } = window.location;
     if (hash !== '') {
       const id = hash.replace('#', '');
-      const post = edges.filter((edge) => {
+      const post = edges.find((edge) => {
         return edge.node.id === id;
       });
-      if (post.length === 0) {
+      if (!post) {
         return null;
       }
-      let topPostId = post[0].node.parentId;
+      let topPostId = post.node.parentId;
       if (!topPostId) {
-        topPostId = post[0].node.id;
+        topPostId = post.node.id;
       }
-      const index = topPosts
-        .map((value) => {
-          return value.id;
-        })
-        .indexOf(topPostId);
+      const index = topPosts.findIndex((value) => {
+        return value.id === topPostId;
+      });
       if (index > -1) {
         return index;
       }
