@@ -108,6 +108,7 @@ class Child extends React.PureComponent {
 
   render() {
     const {
+      id,
       hidden,
       contentLocale,
       lang,
@@ -139,7 +140,7 @@ class Child extends React.PureComponent {
     const forwardProps = { ...this.props, numChildren: numChildren };
     delete forwardProps.children;
     return (
-      <div className={cssClasses()}>
+      <div className={cssClasses()} id={id}>
         <InnerComponent {...forwardProps} measureTreeHeight={this.resizeTreeHeight} />
         {numChildren > 0 ? this.renderToggleLink(expanded, level < 4) : null}
         {numChildren > 0
@@ -214,6 +215,10 @@ class Tree extends React.Component {
     // or to avoid recreating all dom nodes if we go back to the same idea.
     cache.clearAll();
     prevStopIndex = 0;
+
+    if (this.props.initialRowIndex !== null) {
+      globalList.scrollToRow(this.props.initialRowIndex);
+    }
   }
 
   componentWillReceiveProps(nextProps) {

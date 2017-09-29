@@ -9,7 +9,7 @@ import get from 'lodash/get';
 import 'bootstrap/dist/css/bootstrap.css';
 import createAppStore from './store';
 import client from './client';
-import Routes from './routes';
+import Routes, { hashLinkScroll } from './routes';
 
 require('smoothscroll-polyfill').polyfill();
 
@@ -40,7 +40,7 @@ if (isPiwikEnabled) {
 ReactDOM.render(
   <AppContainer>
     <ApolloProvider store={store} client={client}>
-      <Router history={customBrowserHistory} routes={Routes} />
+      <Router history={customBrowserHistory} routes={Routes} onUpdate={hashLinkScroll} />
     </ApolloProvider>
   </AppContainer>,
   document.getElementById('root')
@@ -53,7 +53,7 @@ if (module.hot) {
     ReactDOM.render(
       <AppContainer>
         <ApolloProvider store={store} client={client}>
-          <Router history={customBrowserHistory} routes={NewRoutes} />
+          <Router history={customBrowserHistory} routes={NewRoutes} onUpdate={hashLinkScroll} />
         </ApolloProvider>
       </AppContainer>,
       document.getElementById('root')

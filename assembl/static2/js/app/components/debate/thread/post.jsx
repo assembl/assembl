@@ -15,6 +15,7 @@ import PostQuery from '../../../graphql/PostQuery.graphql';
 import withLoadingIndicator from '../../../components/common/withLoadingIndicator';
 import { DeletedPublicationStates, PublicationStates } from '../../../constants';
 import Nuggets from './nuggets';
+import { hashLinkScroll } from '../../../routes';
 
 export const PostFolded = ({ nbPosts }) => {
   return <Translate value="debate.thread.foldedPostLink" count={nbPosts} />;
@@ -48,6 +49,17 @@ class Post extends React.PureComponent {
 
   componentDidMount() {
     this.props.measureTreeHeight(400);
+    // If we have a hash in url and the post id match it, scroll to it.
+    const postId = this.props.data.post.id;
+    const { hash } = window.location;
+    if (hash !== '') {
+      const id = hash.replace('#', '');
+      if (id === postId) {
+        // Wait an extra 1s to be sure that all previous posts are loaded
+        // and measureTreeHeight finished.
+        setTimeout(hashLinkScroll, 1000);
+      }
+    }
   }
 
   componentDidUpdate(prevProps) {
@@ -64,7 +76,6 @@ class Post extends React.PureComponent {
       window.scrollTo({ top: txtareaOffset - this.answerTextarea.clientHeight, left: 0, behavior: 'smooth' });
     }, 200);
   };
-
   hideAnswerForm = () => {
     this.setState({ showAnswerForm: false }, this.props.measureTreeHeight);
   };
@@ -86,13 +97,22 @@ class Post extends React.PureComponent {
       indirectIdeaContentLinks,
       creator,
       modificationDate,
-      sentimentCounts,
       mySentiment,
       publicationState,
       attachments,
       extracts
     } = this.props.data.post;
-    const { lang, ideaId, refetchIdea, creationDate, fullLevel, numChildren } = this.props;
+    const {
+      lang,
+      ideaId,
+      refetchIdea,
+      creationDate,
+      fullLevel,
+      numChildren,
+      sentimentCounts,
+      routerParams,
+      debateData
+    } = this.props;
     // creationDate is retrieved by IdeaWithPosts query, not PostQuery
     let body;
     let subject;
@@ -245,6 +265,9 @@ class Post extends React.PureComponent {
                 sentimentCounts={sentimentCounts}
                 mySentiment={mySentiment}
                 numChildren={numChildren}
+                routerParams={routerParams}
+                debateData={debateData}
+                postSubject={subject.replace('Re: ', '')}
               />
             </Col>
           </Row>

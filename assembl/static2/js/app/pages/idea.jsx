@@ -54,8 +54,36 @@ const noRowsRenderer = () => {
 };
 
 class Idea extends React.Component {
+  getInitialRowIndex = (topPosts, edges) => {
+    const { hash } = window.location;
+    if (hash !== '') {
+      const id = hash.replace('#', '');
+      const allPosts = {};
+      edges.forEach((e) => {
+        allPosts[e.node.id] = e.node;
+      });
+      let post = allPosts[id];
+      if (!post) {
+        return null;
+      }
+
+      while (post.parentId) {
+        post = allPosts[post.parentId];
+      }
+      const topPostId = post.id;
+      const index = topPosts.findIndex((value) => {
+        return value.id === topPostId;
+      });
+      if (index > -1) {
+        return index;
+      }
+      return null;
+    }
+    return null;
+  };
+
   render() {
-    const { contentLocale, lang, ideaData, ideaWithPostsData } = this.props;
+    const { contentLocale, lang, ideaData, ideaWithPostsData, routerParams, debateData } = this.props;
     const refetchIdea = ideaWithPostsData.refetch;
     if (ideaData.loading) {
       return (
@@ -68,7 +96,12 @@ class Idea extends React.Component {
     const { idea } = ideaData;
     const topPosts =
       !ideaWithPostsData.loading &&
-      transformPosts(ideaWithPostsData.idea.posts.edges, { refetchIdea: refetchIdea, ideaId: idea.id });
+      transformPosts(ideaWithPostsData.idea.posts.edges, {
+        refetchIdea: refetchIdea,
+        ideaId: idea.id,
+        routerParams: routerParams,
+        debateData: debateData
+      });
 
     const isUserConnected = getConnectedUserId();
     return (
@@ -102,6 +135,7 @@ class Idea extends React.Component {
                     contentLocale={contentLocale}
                     lang={lang}
                     data={topPosts}
+                    initialRowIndex={this.getInitialRowIndex(topPosts, ideaWithPostsData.idea.posts.edges)}
                     InnerComponent={Post}
                     InnerComponentFolded={PostFolded}
                     noRowsRenderer={noRowsRenderer}
@@ -120,7 +154,8 @@ class Idea extends React.Component {
 const mapStateToProps = (state) => {
   return {
     lang: state.i18n.locale,
-    contentLocale: getContentLocale(state)
+    contentLocale: getContentLocale(state),
+    debateData: state.debate.debateData
   };
 };
 

@@ -1,10 +1,9 @@
 import { xmlHttpRequest } from '../utils/httpRequestHandler';
 import { getSortedArrayByKey } from '../utils/globalFunctions';
 
-export const buildDebateData = (debateData, prefs, timeline) => {
-  const headerBackgroundUrl = prefs.extra_json && prefs.extra_json.headerBackgroundUrl
-    ? prefs.extra_json.headerBackgroundUrl
-    : null;
+export const buildDebateData = (debateData, prefs, timeline, socialShare) => {
+  const headerBackgroundUrl =
+    prefs.extra_json && prefs.extra_json.headerBackgroundUrl ? prefs.extra_json.headerBackgroundUrl : null;
   const headerLogoUrl = prefs.extra_json && prefs.extra_json.headerLogoUrl ? prefs.extra_json.headerLogoUrl : null;
   const topic = prefs.extra_json && prefs.extra_json.topic ? prefs.extra_json.topic : null;
   const introduction = prefs.extra_json && prefs.extra_json.introduction ? prefs.extra_json.introduction : null;
@@ -32,21 +31,25 @@ export const buildDebateData = (debateData, prefs, timeline) => {
     socialMedias: socialMedias,
     twitter: twitter,
     chatbot: chatbot,
-    partners: partners
+    partners: partners,
+    useSocialMedia: socialShare
   };
 };
 
 export const getDebateData = (debateId) => {
-  const url1 = `/data/Discussion/${debateId}`;
-  const url2 = `/data/Discussion/${debateId}/preferences`;
-  const url3 = `/data/Discussion/${debateId}/timeline_events/`;
-  const request1 = xmlHttpRequest({ method: 'GET', url: url1 });
-  const request2 = xmlHttpRequest({ method: 'GET', url: url2 });
-  const request3 = xmlHttpRequest({ method: 'GET', url: url3 });
-  return Promise.all([request1, request2, request3]).then((results) => {
+  const dataUrl = `/data/Discussion/${debateId}`;
+  const prefsUrl = `/data/Discussion/${debateId}/preferences`;
+  const timelineUrl = `/data/Discussion/${debateId}/timeline_events/`;
+  const socialShareUrl = `/data/Discussion/${debateId}/settings/social_sharing`;
+  const dataRequest = xmlHttpRequest({ method: 'GET', url: dataUrl });
+  const prefsRequest = xmlHttpRequest({ method: 'GET', url: prefsUrl });
+  const timelineRequest = xmlHttpRequest({ method: 'GET', url: timelineUrl });
+  const socialShareRequest = xmlHttpRequest({ method: 'GET', url: socialShareUrl });
+  return Promise.all([dataRequest, prefsRequest, timelineRequest, socialShareRequest]).then((results) => {
     const data = results[0];
     const prefs = results[1];
     const timeline = results[2];
-    return buildDebateData(data, prefs[0], timeline);
+    const socialShare = results[3];
+    return buildDebateData(data, prefs[0], timeline, socialShare);
   });
 };

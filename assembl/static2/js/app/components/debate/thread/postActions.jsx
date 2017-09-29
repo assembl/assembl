@@ -1,17 +1,18 @@
 import React from 'react';
 import { withApollo } from 'react-apollo';
-import { Translate } from 'react-redux-i18n';
+import { Translate, I18n } from 'react-redux-i18n';
 import { OverlayTrigger } from 'react-bootstrap';
 import { MEDIUM_SCREEN_WIDTH } from '../../../constants';
 import { answerTooltip, shareTooltip } from '../../common/tooltips';
 
 import getOverflowMenuForPost from './overflowMenu';
 import { getConnectedUserId } from '../../../utils/globalFunctions';
-import { promptForLoginOr } from '../../../utils/utilityManager';
+import { promptForLoginOr, displayModal } from '../../../utils/utilityManager';
 import Permissions, { connectedUserCan } from '../../../utils/permissions';
 import Sentiments from './sentiments';
 import getSentimentStats from './sentimentStats';
 import sentimentDefinitions from './sentimentDefinitions';
+import { get } from '../../../utils/routeMap';
 
 class PostActions extends React.Component {
   constructor(props) {
@@ -44,7 +45,10 @@ class PostActions extends React.Component {
       mySentiment,
       handleAnswerClick,
       handleEditClick,
-      numChildren
+      numChildren,
+      routerParams,
+      postSubject,
+      debateData
     } = this.props;
     let count = 0;
     const totalSentimentsCount = sentimentCounts
@@ -55,6 +59,23 @@ class PostActions extends React.Component {
       (connectedUserId === String(creatorUserId) && connectedUserCan(Permissions.DELETE_MY_POST)) ||
       connectedUserCan(Permissions.DELETE_POST);
     const userCanEditThisMessage = connectedUserId === String(creatorUserId) && connectedUserCan(Permissions.EDIT_MY_POST);
+    const { slug, phase, themeId } = routerParams;
+    const confirmModal = () => {
+      const title = postSubject;
+      const url = `${window.location.protocol}//${window.location.host}${get('debate', {
+        slug: slug,
+        phase: phase
+      })}${get('theme', {
+        themeId: themeId
+      })}/#${postId}`;
+      const social = debateData.useSocialMedia;
+      const src = `/static/widget/share/index.html?u=${encodeURI(url)}&t=${encodeURI(title)}&s=${encodeURI(social)}`;
+      const iframeTitle = I18n.t('Social buttons to share the post');
+      const body = <iframe src={src} width="100%" height="200" frameBorder="0" title={iframeTitle} />;
+      const footer = false;
+      const footerTxt = null;
+      return displayModal(title, body, footer, footerTxt);
+    };
     let overflowMenu = null;
     if (userCanDeleteThisMessage || userCanEditThisMessage) {
       overflowMenu = (
@@ -82,7 +103,12 @@ class PostActions extends React.Component {
               <span className="assembl-icon-back-arrow color" />
             </OverlayTrigger>
           </div>
-          <div className="post-action">
+          <div
+            className="post-action"
+            onClick={() => {
+              return confirmModal(postId);
+            }}
+          >
             <OverlayTrigger placement={this.state.screenWidth >= MEDIUM_SCREEN_WIDTH ? 'right' : 'top'} overlay={shareTooltip}>
               <span className="assembl-icon-share color" />
             </OverlayTrigger>
