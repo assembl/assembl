@@ -3,8 +3,10 @@ import { I18n } from 'react-redux-i18n';
 import deepen from './deepen';
 import Translations from './translations';
 import ja from '../../../translations/ja.json';
+import zhCN from '../../../translations/zh_CN.json';
 
 Translations.ja = deepen(ja);
+Translations.zh_CN = deepen(zhCN);
 
 const fallbackLocale = 'en';
 const myHandleMissingTranslation = function (key, replacements) {
