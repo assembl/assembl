@@ -70,27 +70,27 @@ export const removeQuestion = (thematicId, index) => {
 };
 
 export const toggleMedia = (id) => {
-  return { id: id, type: 'TOGGLE_MEDIA' };
+  return { id: id, type: 'TOGGLE_VIDEO' };
 };
 
 export const updateMediaHtmlCode = (id, value) => {
-  return { id: id, value: value, type: 'UPDATE_MEDIA_HTML_CODE' };
+  return { id: id, value: value, type: 'UPDATE_VIDEO_HTML_CODE' };
 };
 
 export const updateMediaDescriptionTop = (id, locale, value) => {
-  return { id: id, locale: locale, value: value, type: 'UPDATE_MEDIA_DESCRIPTION_TOP' };
+  return { id: id, locale: locale, value: value, type: 'UPDATE_VIDEO_DESCRIPTION_TOP' };
 };
 
 export const updateMediaDescriptionBottom = (id, locale, value) => {
-  return { id: id, locale: locale, value: value, type: 'UPDATE_MEDIA_DESCRIPTION_BOTTOM' };
+  return { id: id, locale: locale, value: value, type: 'UPDATE_VIDEO_DESCRIPTION_BOTTOM' };
 };
 
 export const updateMediaDescriptionSide = (id, locale, value) => {
-  return { id: id, locale: locale, value: value, type: 'UPDATE_MEDIA_DESCRIPTION_SIDE' };
+  return { id: id, locale: locale, value: value, type: 'UPDATE_VIDEO_DESCRIPTION_SIDE' };
 };
 
 export const updateMediaTitle = (id, locale, value) => {
-  return { id: id, locale: locale, value: value, type: 'UPDATE_MEDIA_TITLE' };
+  return { id: id, locale: locale, value: value, type: 'UPDATE_VIDEO_TITLE' };
 };
 
 export const addLanguagePreference = (locale) => {

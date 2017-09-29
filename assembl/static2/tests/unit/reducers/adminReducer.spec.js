@@ -131,7 +131,7 @@ describe('Admin reducers', () => {
           imgUrl: null,
           questions: [],
           titleEntries: [],
-          media: null
+          video: null
         }
       };
       const newState = thematicsById(oldState, action);
@@ -263,15 +263,15 @@ describe('Admin reducers', () => {
 
     it('should handle UPDATE_THEMATICS action type');
 
-    it('should handle TOGGLE_MEDIA action type', () => {
+    it('should handle TOGGLE_VIDEO action type', () => {
       const action = {
         id: '1',
         value: 'foobar',
-        type: 'TOGGLE_MEDIA'
+        type: 'TOGGLE_VIDEO'
       };
       const oldState = fromJS({
         1: {
-          media: {
+          video: {
             descriptionEntriesTop: [],
             descriptionEntriesBottom: [],
             descriptionEntriesSide: [],
@@ -282,7 +282,7 @@ describe('Admin reducers', () => {
       });
       const expected = fromJS({
         1: {
-          media: null
+          video: null
         }
       });
       const newState = thematicsById(oldState, action);
@@ -290,7 +290,7 @@ describe('Admin reducers', () => {
 
       const reducedTwiceExpected = fromJS({
         1: {
-          media: {
+          video: {
             descriptionEntriesTop: [],
             descriptionEntriesBottom: [],
             descriptionEntriesSide: [],
@@ -303,15 +303,15 @@ describe('Admin reducers', () => {
       expect(reducedTwiceState).toEqual(reducedTwiceExpected);
     });
 
-    it('should handle UPDATE_MEDIA_HTML_CODE action type', () => {
+    it('should handle UPDATE_VIDEO_HTML_CODE action type', () => {
       const action = {
         id: '1',
         value: 'new code',
-        type: 'UPDATE_MEDIA_HTML_CODE'
+        type: 'UPDATE_VIDEO_HTML_CODE'
       };
       const oldState = fromJS({
         1: {
-          media: {
+          video: {
             descriptionEntriesTop: [],
             descriptionEntriesBottom: [],
             descriptionEntriesSide: [],
@@ -322,7 +322,7 @@ describe('Admin reducers', () => {
       });
       const expected = fromJS({
         1: {
-          media: {
+          video: {
             descriptionEntriesTop: [],
             descriptionEntriesBottom: [],
             descriptionEntriesSide: [],
@@ -335,16 +335,16 @@ describe('Admin reducers', () => {
       expect(newState).toEqual(expected);
     });
 
-    it('should handle UPDATE_MEDIA_DESCRIPTION_TOP action type', () => {
+    it('should handle UPDATE_VIDEO_DESCRIPTION_TOP action type', () => {
       const action = {
         id: '1',
         locale: 'en',
         value: 'My new top description',
-        type: 'UPDATE_MEDIA_DESCRIPTION_TOP'
+        type: 'UPDATE_VIDEO_DESCRIPTION_TOP'
       };
       const oldState = fromJS({
         1: {
-          media: {
+          video: {
             descriptionEntriesTop: [],
             descriptionEntriesBottom: [],
             descriptionEntriesSide: [],
@@ -355,7 +355,7 @@ describe('Admin reducers', () => {
       });
       const expected = fromJS({
         1: {
-          media: {
+          video: {
             descriptionEntriesTop: [
               {
                 localeCode: 'en',
@@ -373,16 +373,16 @@ describe('Admin reducers', () => {
       expect(newState).toEqual(expected);
     });
 
-    it('should handle UPDATE_MEDIA_DESCRIPTION_BOTTOM action type', () => {
+    it('should handle UPDATE_VIDEO_DESCRIPTION_BOTTOM action type', () => {
       const action = {
         id: '1',
         locale: 'en',
         value: 'My new bottom description',
-        type: 'UPDATE_MEDIA_DESCRIPTION_BOTTOM'
+        type: 'UPDATE_VIDEO_DESCRIPTION_BOTTOM'
       };
       const oldState = fromJS({
         1: {
-          media: {
+          video: {
             descriptionEntriesTop: [],
             descriptionEntriesBottom: [],
             descriptionEntriesSide: [],
@@ -393,7 +393,7 @@ describe('Admin reducers', () => {
       });
       const expected = fromJS({
         1: {
-          media: {
+          video: {
             descriptionEntriesTop: [],
             descriptionEntriesBottom: [
               {
@@ -411,27 +411,27 @@ describe('Admin reducers', () => {
       expect(newState).toEqual(expected);
     });
 
-    it('should handle UPDATE_MEDIA_TITLE action type', () => {
+    it('should handle UPDATE_VIDEO_TITLE action type', () => {
       const action = {
         id: '1',
         locale: 'en',
         value: 'My better title',
-        type: 'UPDATE_MEDIA_TITLE'
+        type: 'UPDATE_VIDEO_TITLE'
       };
       const oldState = fromJS({
         1: {
-          media: {
+          video: {
             descriptionEntriesTop: [],
             descriptionEntriesBottom: [],
             descriptionEntriesSide: [],
             htmlCode: '',
-            titleEntries: [{ localeCode: 'fr', value: 'Ma vidéo' }, { localeCode: 'en', value: 'My media' }]
+            titleEntries: [{ localeCode: 'fr', value: 'Ma vidéo' }, { localeCode: 'en', value: 'My video' }]
           }
         }
       });
       const expected = fromJS({
         1: {
-          media: {
+          video: {
             descriptionEntriesTop: [],
             descriptionEntriesBottom: [],
             descriptionEntriesSide: [],
