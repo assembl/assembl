@@ -67,7 +67,7 @@ class PostActions extends React.Component {
         phase: phase
       })}${get('theme', {
         themeId: themeId
-      })}/#${postId}?source=share`;
+      })}/#${postId}`;
       const social = debateData.useSocialMedia;
       const src = `/static/widget/share/index.html?u=${encodeURI(url)}&t=${encodeURI(title)}&s=${encodeURI(social)}`;
       const iframeTitle = I18n.t('Social buttons to share the post');
