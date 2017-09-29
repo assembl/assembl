@@ -11,8 +11,11 @@ type ToolbarButtonProps = {
 
 const ToolbarButton = ({ icon, isActive, label, onToggle }: ToolbarButtonProps) => {
   const className = isActive ? 'active' : '';
+  const onMouseDown = (e: Event) => {
+    e.preventDefault();
+  };
   return (
-    <Button className={className} onClick={onToggle} title={label}>
+    <Button className={className} onMouseDown={onMouseDown} onClick={onToggle} title={label}>
       <span className={`assembl-icon-${icon}`} />
     </Button>
   );

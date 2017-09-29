@@ -11,6 +11,7 @@ exports[`Toolbar component should render a toolbar 1`] = `
       className="btn btn-default"
       disabled={false}
       onClick={[Function]}
+      onMouseDown={[Function]}
       title="Bold"
       type="button"
     >
@@ -26,6 +27,7 @@ exports[`Toolbar component should render a toolbar 1`] = `
       className="btn btn-default"
       disabled={false}
       onClick={[Function]}
+      onMouseDown={[Function]}
       title="Attachment"
       type="button"
     >
@@ -48,6 +50,7 @@ exports[`Toolbar component should render a toolbar without the "Attach a file" b
       className="btn btn-default"
       disabled={false}
       onClick={[Function]}
+      onMouseDown={[Function]}
       title="Bold"
       type="button"
     >
