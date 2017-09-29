@@ -181,7 +181,7 @@ const Translations = {
     debate: {
       answer: "Je réponds :",
       toAnswer: "Répondre",
-      share: "Partager",
+      share: "Partager ce message",
       subject: "Ecrivez le titre",
       insert: "Ecrivez votre message",
       post: "Poster",
@@ -494,7 +494,7 @@ const Translations = {
     debate: {
       answer: "I answer:",
       toAnswer: "Answer",
-      share: "Share",
+      share: "Share this message",
       subject: "Write the title",
       insert: "Post a comment",
       post: "Post",
