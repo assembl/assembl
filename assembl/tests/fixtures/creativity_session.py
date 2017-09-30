@@ -43,7 +43,7 @@ def creativity_session_widget_new_idea(
                                 IdeaProposalPost, LangString)
     i = Idea(
         discussion=discussion,
-        short_title=u"generated idea")
+        title=LangString.create(u"generated idea", 'en'))
     test_session.add(i)
     l_1_wi = IdeaLink(source=subidea_1, target=i)
     test_session.add(l_1_wi)

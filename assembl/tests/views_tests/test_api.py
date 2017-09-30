@@ -10,7 +10,7 @@ from urllib import unquote
 from urllib import urlencode, quote_plus
 
 from assembl.models import (
-    Idea, Post, Email, User
+    Idea, Post, Email, User, LangString
 )
 
 
@@ -123,8 +123,8 @@ def test_get_ideas(discussion, test_app, test_session, test_webrequest):
     num_ideas = len(ideas)
 
     idea = Idea(
-        long_title='This is a long test',
-        short_title='This is a test',
+        synthesis_title=LangString.create('This is a long test', 'en'),
+        title=LangString.create('This is a test', 'en'),
         discussion=discussion
     )
     test_session.add(idea)
@@ -520,6 +520,7 @@ def test_api_get_posts_from_idea(
     check_number_of_posts(subidea_1_1_1, 0,
                           "Num posts on leaf idea should still be zero")
     check_total_and_orphans(3, 2)
+    test_session.flush()
 
 
 def test_mailbox_import_jacklayton(discussion, test_app, jack_layton_mailbox):

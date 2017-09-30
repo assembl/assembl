@@ -5,8 +5,9 @@ import pytest
 def criterion_1(request, discussion, subidea_1, test_session):
     """An Idea fixture with IdeaLink to subidea_1"""
 
-    from assembl.models import Idea, IdeaLink
-    i = Idea(short_title=u"cost", discussion=discussion)
+    from assembl.models import Idea, IdeaLink, LangString
+    i = Idea(title=LangString.create(u"cost", 'en'),
+             discussion=discussion)
     test_session.add(i)
     l_1_11 = IdeaLink(source=subidea_1, target=i)
     test_session.add(l_1_11)
@@ -25,8 +26,9 @@ def criterion_1(request, discussion, subidea_1, test_session):
 def criterion_2(request, discussion, subidea_1, test_session):
     """An Idea fixture with IdeaLink to subidea_1"""
 
-    from assembl.models import Idea, IdeaLink
-    i = Idea(short_title=u"quality", discussion=discussion)
+    from assembl.models import Idea, IdeaLink, LangString
+    i = Idea(title=LangString.create(u"quality", 'en'),
+             discussion=discussion)
     test_session.add(i)
     l_1_11 = IdeaLink(source=subidea_1, target=i)
     test_session.add(l_1_11)
@@ -45,8 +47,9 @@ def criterion_2(request, discussion, subidea_1, test_session):
 def criterion_3(request, discussion, subidea_1, test_session):
     """An Idea fixture with IdeaLink to subidea_1"""
 
-    from assembl.models import Idea, IdeaLink
-    i = Idea(short_title=u"time", discussion=discussion)
+    from assembl.models import Idea, IdeaLink, LangString
+    i = Idea(title=LangString.create(u"time", 'en'),
+             discussion=discussion)
     test_session.add(i)
     l_1_11 = IdeaLink(source=subidea_1, target=i)
     test_session.add(l_1_11)
