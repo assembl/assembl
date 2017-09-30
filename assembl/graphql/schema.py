@@ -567,12 +567,12 @@ class Idea(SecureObjectType, SQLAlchemyObjectType):
     class Meta:
         model = models.Idea
         interfaces = (Node, IdeaInterface)
-        only_fields = ('id', 'short_title', )
+        only_fields = ('id', )
 
     title = graphene.String(lang=graphene.String())
     title_entries = graphene.List(LangStringEntry)
-    long_title = graphene.String(lang=graphene.String())  # This is the "What you need to know"
-    description = graphene.String(lang=graphene.String())
+    synthesis_title = graphene.String(lang=graphene.String())  # This is the "What you need to know"
+    description = graphene.String(lang=graphene.String()) # This should have been "What you need to know"
     announcement_body = graphene.String(lang=graphene.String())
     description_entries = graphene.List(LangStringEntry)
     children = graphene.List(lambda: Idea)
@@ -606,13 +606,7 @@ class Idea(SecureObjectType, SQLAlchemyObjectType):
         return type(root) == cls._meta.model or type(root) == models.RootIdea
 
     def resolve_title(self, args, context, info):
-        title = resolve_langstring(self.title, args.get('lang'))
-        # If the idea was created from the old api or v1 interface, we don't
-        # have title, return short_title.
-        if title is None:
-            return self.short_title
-
-        return title
+        return resolve_langstring(self.title, args.get('lang'))
 
     def resolve_title_entries(self, args, context, info):
         return resolve_langstring_entries(self, 'title')
@@ -935,7 +929,6 @@ def create_root_thematic(discussion, identifier):
     short_title = u'Phase {}'.format(identifier)
     root_thematic = models.Thematic(
         discussion_id=discussion.id,
-        short_title=short_title,
         title=langstring_from_input_entries(
             [{'locale_code': 'en', 'value': short_title}]),
         identifier=identifier,
@@ -1000,12 +993,9 @@ class CreateIdea(graphene.Mutation):
             if not parent_idea_id:
                 parent_idea = discussion.root_idea
 
-            # take the first entry and set it for short_title
-            short_title = title_entries[0]['value']
             saobj = cls(
                 discussion_id=discussion_id,
                 title=title_langstring,
-                short_title=short_title,
                 **kwargs)
             db = saobj.db
             db.add(saobj)
@@ -1130,12 +1120,9 @@ class CreateThematic(graphene.Mutation):
             if root_thematic is None:
                 root_thematic = create_root_thematic(discussion, identifier)
 
-            # take the first entry and set it for short_title
-            short_title = title_entries[0]['value']
             saobj = cls(
                 discussion_id=discussion_id,
                 title=title_langstring,
-                short_title=short_title,
                 identifier=identifier,
                 **kwargs)
             db = saobj.db
@@ -1242,10 +1229,6 @@ class UpdateThematic(graphene.Mutation):
                     thematic, 'video_description_side',
                     video.get('description_entries_side', []))
                 kwargs['video_html_code'] = video.get('html_code', None)
-
-            # take the first entry and set it for short_title
-            if title_entries is not None:
-                kwargs['short_title'] = title_entries[0]['value']
 
             if args.get('identifier') is not None:
                 kwargs['identifier'] = args.get('identifier')
@@ -1409,8 +1392,7 @@ class CreatePost(graphene.Mutation):
                     subject = original_subject.value
                 elif in_reply_to_idea:
                     # TODO: some ideas have extra langstring titles
-                    subject = (in_reply_to_idea.short_title
-                               if in_reply_to_idea.short_title else '')
+                    subject = (in_reply_to_idea.title.first_original())
                     locale = discussion.main_locale
                 else:
                     subject = discussion.topic if discussion.topic else ''

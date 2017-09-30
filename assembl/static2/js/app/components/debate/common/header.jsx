@@ -7,7 +7,7 @@ import WhatYouNeedToKnow from './whatYouNeedToKnow';
 
 class Header extends React.Component {
   render() {
-    const { title, imgUrl, identifier, longTitle } = this.props;
+    const { title, imgUrl, identifier, synthesisTitle } = this.props;
     const { debateData } = this.props.debate;
     const { locale } = this.props.i18n;
     const isPhaseCompleted = getIfPhaseCompletedByIdentifier(debateData.timeline, identifier);
@@ -48,7 +48,7 @@ class Header extends React.Component {
             <div className="header-bkg-mask">&nbsp;</div>
           </Row>
         </Grid>
-        {longTitle && <WhatYouNeedToKnow longTitle={longTitle} />}
+        {synthesisTitle && <WhatYouNeedToKnow synthesisTitle={synthesisTitle} />}
       </section>
     );
   }

@@ -106,7 +106,7 @@ class Idea extends React.Component {
     const isUserConnected = getConnectedUserId();
     return (
       <div className="idea">
-        <Header title={idea.title} longTitle={idea.longTitle} imgUrl={idea.imgUrl} identifier="thread" />
+        <Header title={idea.title} synthesisTitle={idea.synthesisTitle} imgUrl={idea.imgUrl} identifier="thread" />
         <section className="post-section">
           {!ideaWithPostsData.loading &&
             idea.announcementBody &&
