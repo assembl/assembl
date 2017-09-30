@@ -287,10 +287,11 @@ class PostPathLocalCollection(object):
                 include_ids.extend(exclude_ids)
                 exclude_ids = None
             if len(includes):
+                ancestry_regex = '^(%s)' % ('|'.join(
+                    path.post_path for path in includes))
                 condition = or_(
                     post.id.in_(include_ids),
-                    *[post.ancestry.like(path.post_path + "%")
-                      for path in includes])
+                    post.ancestry.op('~', 0, True)(ancestry_regex))
             if level == 0:
                 q = q2.filter(condition)
             else:
@@ -303,9 +304,9 @@ class PostPathLocalCollection(object):
             condition = None
             post, q2 = base_query()
             if len(excludes):
-                condition = or_(
-                    *[post.ancestry.like(path.post_path + "%")
-                      for path in excludes])
+                ancestry_regex = '^(%s)' % ('|'.join(
+                    path.post_path for path in excludes))
+                condition = post.ancestry.op('~', 0, True)(ancestry_regex)
                 if exclude_ids:
                     condition = post.id.in_(exclude_ids) | condition
                 q = except_(q, q2.filter(condition), use_labels=True)
