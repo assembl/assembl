@@ -550,7 +550,8 @@ class LangString(Base):
         def set_owner_object(target, value, old_value, initiator):
             if old_value is not None:
                 old_value.owner_object = None
-            value.owner_object = target
+            if value is not None:
+                value.owner_object = target
         for reln in relns:
             cls._owning_relns.append((owner_class, reln))
             event.listen(getattr(owner_class, reln), "set", set_owner_object, propagate=True)
