@@ -454,6 +454,7 @@ class Synthesis(ExplicitSubGraphView):
         """ Publication is the end of a synthesis's lifecycle.
         It creates and returns a frozen copy of its state
         using tombstones for ideas and links."""
+        now = datetime.utcnow()
         frozen_synthesis = self.copy()
         self.db.add(frozen_synthesis)
         self.db.flush()
@@ -480,18 +481,18 @@ class Synthesis(ExplicitSubGraphView):
             for parent in idea.parents:
                 add_ancestors_between(parent)
         for link in links:
-            new_link = link.copy(tombstone=True)
+            new_link = link.copy(tombstone=now)
             frozen_synthesis.idea_links.append(new_link)
             if link.source_id in relevant_idea_ids:
                 if link.source_id not in idea_copies:
-                    new_idea = link.source_ts.copy(tombstone=True)
+                    new_idea = link.source_ts.copy(tombstone=now)
                     idea_copies[link.source_id] = new_idea
                     if link.source_id in synthesis_idea_ids:
                         frozen_synthesis.ideas.append(new_idea)
                 new_link.source_ts = idea_copies[link.source_id]
             if link.target_id in relevant_idea_ids:
                 if link.target_id not in idea_copies:
-                    new_idea = link.target_ts.copy(tombstone=True)
+                    new_idea = link.target_ts.copy(tombstone=now)
                     idea_copies[link.target_id] = new_idea
                     if link.target_id in synthesis_idea_ids:
                         frozen_synthesis.ideas.append(new_idea)

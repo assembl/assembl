@@ -825,10 +825,12 @@ class LangString(Base):
         if inspect(self).persistent:
             self.db.expire(self, ["entries"])
 
-    def clone(self, db=None):
+    def clone(self, db=None, tombstone=None):
+        if tombstone is True:
+            tombstone = datetime.utcnow()
         clone = self.__class__()
         for e in self.entries:
-            e = e.clone(clone, db=db)
+            e = e.clone(clone, db=db, tombstone=tombstone)
         if db:
             db.add(clone)
         return clone
@@ -893,11 +895,15 @@ class LangStringEntry(TombstonableMixin, Base):
     # tombstone_date = Column(DateTime) implicit from Tombstonable mixin
     value = Column(UnicodeText)  # not searchable in virtuoso
 
-    def clone(self, langstring, db=None):
+    def clone(self, langstring, db=None, tombstone=None):
+        if tombstone is True:
+            tombstone = datetime.utcnow()
         clone = self.__class__(
             langstring=langstring,
             locale_id=self.locale_id,
             value=self.value,
+            tombstone_date = self.tombstone_date or (
+                tombstone if tombstone else None),
             locale_identification_data=self.locale_identification_data,
             locale_confirmed = self.locale_confirmed,
             error_code=self.error_code,

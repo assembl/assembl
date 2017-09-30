@@ -178,10 +178,11 @@ class HistoryMixin(TombstonableMixin):
     def copy(self, tombstone=None, **kwargs):
         """Clone object, optionally as tombstone
         reuse base_id. Redefine in subclasses to define arguments"""
+        if tombstone is True or self.tombstone_date is not None:
+            tombstone = datetime.utcnow()
         retval = self.__class__(
             base_id=self.base_id,
-            tombstone_date=self.tombstone_date or (
-                datetime.utcnow() if tombstone else None),
+            tombstone_date=tombstone,
             **kwargs
         )
         self.db.add(retval)

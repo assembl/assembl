@@ -325,17 +325,19 @@ class Idea(HistoryMixin, DiscussionBoundBase):
         return inherited
 
     def copy(self, tombstone=None, **kwargs):
+        if tombstone is True:
+            tombstone = datetime.utcnow()
         kwargs.update(
             tombstone=tombstone,
             hidden=self.hidden,
             creation_date=self.creation_date,
-            discussion=self.discussion)
-        if self.title:
-            kwargs['title'] = self.title.clone()
-        if self.synthesis_title:
-            kwargs['synthesis_title'] = self.synthesis_title.clone()
-        if self.description:
-            kwargs['description'] = self.description.clone()
+            discussion=self.discussion,
+            title=self.title.clone(
+                tombstone=tombstone) if self.title else None,
+            synthesis_title=self.synthesis_title.clone(
+                tombstone=tombstone) if self.synthesis_title else None,
+            description=self.description.clone(
+                tombstone=tombstone) if self.description else None)
 
         return super(Idea, self).copy(**kwargs)
 
