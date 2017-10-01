@@ -228,14 +228,17 @@ _.extend(FilterPostIsInContextOfIdea.prototype, {
     },
     
     getFilterIndividualValueDescriptionStringPromise: function(individualFilterValue) {
-      return collectionManager.getAllIdeasCollectionPromise().then(function(allIdeasCollection) {
-        var idea = allIdeasCollection.get(individualFilterValue);
-        if (!idea) {
-          throw new Error('Idea ' + individualFilterValue + ' not found');
-        }
+      return Promise.join(
+          collectionManager.getAllIdeasCollectionPromise(),
+          collectionManager.getUserLanguagePreferencesPromise(Ctx),
+          function(allIdeasCollection, translationData) {
+            var idea = allIdeasCollection.get(individualFilterValue);
+            if (!idea) {
+              throw new Error('Idea ' + individualFilterValue + ' not found');
+            }
 
-        return '"' + idea.get('shortTitle') + '"';
-      })
+            return '"' + idea.getShortTitlSafe(translationData) + '"';
+          });
     },
     getFilterDescriptionStringPromise: function(individualValuesButtonsPromises) {
       return Promise.all(individualValuesButtonsPromises).then(function(individualValuesButtons) {
@@ -270,12 +273,14 @@ _.extend(FilterPostIsDescendentOfPost.prototype, {
         if (!post) {
           throw new Error('Post ' + individualFilterValue + ' not found');
         }
+        var subject = post.get('subject'),
+            subjectText = subject ? subject.bestValue(ulp.getTranslationData()) : '';
 
         if (post.get('@type') === "SynthesisPost") {
-          return i18n.sprintf(i18n.gettext('synthesis "%s"'), post.get('subject').bestValue(ulp.getTranslationData()));
+          return i18n.sprintf(i18n.gettext('synthesis "%s"'), subjectText);
         }
         else {
-          return i18n.sprintf(i18n.gettext('message "%s"'), post.get('subject').bestValue(ulp.getTranslationData()));
+          return i18n.sprintf(i18n.gettext('message "%s"'), subjectText);
         }
       });
     },
@@ -312,12 +317,14 @@ _.extend(FilterPostIsDescendentOrAncestorOfPost.prototype, {
         if (!post) {
           throw new Error('Post ' + individualFilterValue + ' not found');
         }
+        var subject = post.get('subject'),
+            subjectText = subject ? subject.bestValue(ulp.getTranslationData()) : '';
 
         if (post.get('@type') === "SynthesisPost") {
-          return i18n.sprintf(i18n.gettext('synthesis "%s"'), post.get('subject').bestValue(ulp.getTranslationData()));
+          return i18n.sprintf(i18n.gettext('synthesis "%s"'), subjectText);
         }
         else {
-          return i18n.sprintf(i18n.gettext('message "%s"'), post.get('subject').bestValue(ulp.getTranslationData()));
+          return i18n.sprintf(i18n.gettext('message "%s"'), subjectText);
         }
       });
     },

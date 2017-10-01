@@ -9,6 +9,7 @@ var _ = require('underscore'),
     Ctx = require('../common/context.js'),
     i18n = require('../utils/i18n.js'),
     Types = require('../utils/types.js'),
+    LangString = require('./langstring.js'),
     Attachment = require('./attachments.js'),
     IdeaMessageColumn = require('./ideaMessageColumn.js'),
     Permissions = require('../utils/permissions.js');
@@ -54,6 +55,15 @@ var IdeaModel = Base.Model.extend({
   parse: function(resp, options) {
     var that = this;
     this.adjust_num_read_posts(resp);
+    if (resp.shortTitle !== undefined) {
+      resp.shortTitle = new LangString.Model(resp.shortTitle, {parse: true});
+    }
+    if (resp.longTitle !== undefined) {
+      resp.longTitle = new LangString.Model(resp.longTitle, {parse: true});
+    }
+    if (resp.definition !== undefined) {
+      resp.definition = new LangString.Model(resp.definition, {parse: true});
+    }
     if (resp.attachments !== undefined){
       resp.attachments = new Attachment.ValidationAttachmentCollection(resp.attachments, {
         parse: true,
@@ -85,9 +95,9 @@ var IdeaModel = Base.Model.extend({
    * @type {Object}
    */
   defaults: {
-    shortTitle: '',
-    longTitle: '',
-    definition: '',
+    shortTitle: null,
+    longTitle: null,
+    definition: null,
     numChildIdea: 0,
     num_posts: 0,
     num_read_posts: 0,
@@ -115,70 +125,100 @@ var IdeaModel = Base.Model.extend({
    * @returns {string}
    * @function app.models.idea.IdeaModel.getDefinitionDisplayText
    */
-  getDefinitionDisplayText: function() {
+  getDefinitionDisplayText: function(langPrefs) {
     if (this.get('root') === true) {
       return i18n.gettext('The root idea will not be in the synthesis');
     }
-
-    if (Ctx.stripHtml(this.get('definition'))) {
-      return this.get('definition');
+    var valText, val = this.get('definition');
+    if (val) {
+      valText = val.bestValue(langPrefs);
+      if (valText && Ctx.stripHtml(valText)) {
+        return valText;
+      }
     }
-    else if (Ctx.stripHtml(this.get('longTitle'))) {
-      return this.get('longTitle');
+    val = this.get('longTitle');
+    if (val) {
+      valText = val.bestValue(langPrefs);
+      if (valText && Ctx.stripHtml(valText)) {
+        return valText;
+      }
     }
-    else {
-      if (Ctx.getCurrentUser().can(Permissions.EDIT_IDEA))
-          return i18n.gettext('Add a description of this idea');
-      else
-          return "";
-    }
+    if (Ctx.getCurrentUser().can(Permissions.EDIT_IDEA))
+        return i18n.gettext('Add a description of this idea');
+    else
+        return "";
   },
   /**
    * Returns the display text for a idea synthesis expression. Will return the first non-empty from: longTitle, shortTitle, i18n.gettext('Add and expression for the next synthesis')
    * @returns {string}
    * @function app.models.idea.IdeaModel.getLongTitleDisplayText
    */
-  getLongTitleDisplayText: function() {
-      if (this.get('root') === true) {
-        return i18n.gettext('The root idea will never be in the synthesis');
+  getLongTitleDisplayText: function(langPrefs) {
+    if (this.get('root') === true) {
+      return i18n.gettext('The root idea will never be in the synthesis');
+    }
+    var valText, val = this.get('longTitle');
+    if (val) {
+      valText = val.bestValue(langPrefs);
+      if (valText && Ctx.stripHtml(valText)) {
+        return valText;
       }
-
-      if (Ctx.stripHtml(this.get('longTitle'))) {
-        return this.get('longTitle');
+    }
+    val = this.get('shortTitle');
+    if (val) {
+      valText = val.bestValue(langPrefs);
+      if (valText && Ctx.stripHtml(valText)) {
+        return valText;
       }
-      else if (Ctx.stripHtml(this.get('shortTitle'))) {
-        return this.get('shortTitle');
+    }
+    val = this.get('definition');
+    if (val) {
+      valText = val.bestValue(langPrefs);
+      if (valText && Ctx.stripHtml(valText)) {
+        return valText;
       }
-      else if (Ctx.stripHtml(this.get('definition'))) {
-        return this.get('definition');
-      }
-      else {
-        return i18n.gettext('You can add an expression for the next synthesis');
-      }
-    },
+    }
+    return i18n.gettext('You can add an expression for the next synthesis');
+  },
 
   /**
    * HTML Striping if necessary is the responsability of the caller.
    * @returns {string} The short Title to be displayed
    * @function app.models.idea.IdeaModel.getShortTitleDisplayText
    */
-  getShortTitleDisplayText: function() {
+  getShortTitleDisplayText: function(langPrefs) {
     if (this.isRootIdea()) {
       return i18n.gettext('All posts');
     }
-    else if (Ctx.stripHtml(this.get('shortTitle'))) {
-      return this.get('shortTitle');
+    var valText, val = this.get('shortTitle');
+    if (val) {
+      valText = val.bestValue(langPrefs);
+      if (valText && Ctx.stripHtml(valText)) {
+        return valText;
+      }
     }
-    else if (Ctx.stripHtml(this.get('longTitle'))) {
-      return this.get('longTitle');
+    val = this.get('longTitle');
+    if (val) {
+      valText = val.bestValue(langPrefs);
+      if (valText && Ctx.stripHtml(valText)) {
+        return valText;
+      }
     }
-    else if (Ctx.stripHtml(this.get('definition'))) {
-      return this.get('definition');
+    val = this.get('definition');
+    if (val) {
+      valText = val.bestValue(langPrefs);
+      if (valText && Ctx.stripHtml(valText)) {
+        return valText;
+      }
     }
-    else {
-      return i18n.gettext('New idea');
-    }
+    return i18n.gettext('New idea');
   },
+
+  getShortTitlSafe: function(langPrefs) {
+    var ls = this.get('shortTitle');
+    return ls ? (ls.bestValue(langPrefs) || '') : '';
+  },
+
   /**
    * Returns true if the current idea is the root idea
    * @returns {boolean}

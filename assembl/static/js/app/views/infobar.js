@@ -9,6 +9,7 @@ var Marionette = require('../shims/marionette.js'),
     CookiesManager = require("../utils/cookiesManager.js"),
     Widget = require('../models/widget.js'),
     Ctx = require('../common/context.js'),
+    CollectionManager = require('../common/collectionManager.js'),
     $ = require('jquery');
 
 var CookieInfobarItemView = Marionette.LayoutView.extend({
@@ -71,7 +72,7 @@ var WidgetInfobarItemView = Marionette.LayoutView.extend({
   constructor: function InfobarItem() {
     Marionette.LayoutView.apply(this, arguments);
   },
-  template: '#tmpl-infobar',
+  template: '#tmpl-loader',
   className: 'content-infobar',
   ui: {
     button: ".btn"
@@ -81,6 +82,15 @@ var WidgetInfobarItemView = Marionette.LayoutView.extend({
     'click .js_closeInfobar': 'closeInfobar',
     'click .js_openSession': 'openSession',
     'click .js_openTargetInModal': 'openTargetInModal'
+  },
+  initialize: function() {
+    var that = this,
+        collectionManager = new CollectionManager();
+    collectionManager.getUserLanguagePreferencesPromise(Ctx).then(function (ulp) {
+      that.translationData = ulp;
+      that.template = '#tmpl-infobar';
+      that.render();
+    });
   },
   onButtonClick: function(evt) {
     if ( evt && _.isFunction(evt.preventDefault) ){
@@ -100,9 +110,12 @@ var WidgetInfobarItemView = Marionette.LayoutView.extend({
     return false;
   },
   serializeModel: function(model) {
+    if (this.template == '#tmpl-loader') {
+      return {}
+    }
     return {
       model: model,
-      message: model.getDescriptionText(Widget.Model.prototype.INFO_BAR),
+      message: model.getDescriptionText(Widget.Model.prototype.INFO_BAR, undefined, this.translationData),
       call_to_action_msg: model.getLinkText(Widget.Model.prototype.INFO_BAR),
       share_link: model.getShareUrl(Widget.Model.prototype.INFO_BAR),
       widget_endpoint: model.getUrl(Widget.Model.prototype.INFO_BAR),

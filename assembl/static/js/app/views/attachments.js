@@ -430,14 +430,14 @@ var AttachmentEditUploadView = Marionette.LayoutView.extend({
     this.target = options.target || TARGET.MESSAGE;
     this.limits = options.limits;
     //For internal use only. NEVER save this collection to the server!
+    if (!this.collection) {
+      throw new Error("Cannot instantiate a DocumentEditUploadView without a collection!");
+    }
+
     this.failedCollection = new Attachments.Collection([],{
       objectAttachedToModel: this.collection.objectAttachedToModel,
       failed: true //Add the flag, so that attachment does not try to validate the collection
     });
-
-    if (!this.collection) {
-      throw new Error("Cannot instantiate a DocumentEditUploadView without a collection!");
-    }
 
     var that = this;
     var createAttachmentEditableCollectionView = function(parent, collection){

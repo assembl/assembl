@@ -428,7 +428,7 @@ var MessageList = BaseMessageList.extend({
 
   showTopPostBox: function(options) {
     this.newTopicView = new MessageSendView(options);
-    this.topPostRegion.show(this.newTopicView);
+    this.getRegion('topPostRegion').show(this.newTopicView);
   },
 
 

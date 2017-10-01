@@ -14,7 +14,7 @@ var Marionette = require('../shims/marionette.js'),
   CollectionManager = require('../common/collectionManager.js'),
   Types = require('../utils/types.js'),
   BreadCrumbView = require('./breadcrumb.js'),
-  CKEditorField = require('./reusableDataFields/ckeditorField.js'),
+  CKEditorLSField = require('./reusableDataFields/ckeditorLSField.js'),
   IdeaModel = require('../models/idea.js'),
   i18n = require('../utils/i18n.js'),
   Ctx = require('../common/context.js'),
@@ -827,7 +827,7 @@ var TokenVoteItemView = Marionette.LayoutView.extend({
 
   serializeData: function(){
     return {
-      "ideaTitle": (this.childIndex+1) + ". " + this.model.getShortTitleDisplayText()
+      "ideaTitle": (this.childIndex+1) + ". " + this.model.getShortTitleDisplayText(this.userLanguagePreferences)
     }
   },
   onRender: function(){
@@ -866,15 +866,17 @@ var TokenVoteItemView = Marionette.LayoutView.extend({
   onShow: function(){
     this.renderCKEditorDescription();
   },
-  
+
   renderCKEditorDescription: function() {
-    if (!Ctx.stripHtml(this.model.get('definition')).length){
+    var defn = this.model.get('definition');
+    if (!defn || defn.isEmptyStripped(this.userLanguagePreferences)) {
       return;
     }
 
-    var description = new CKEditorField({
+    var description = new CKEditorLSField({
       model: this.model,
       modelProp: 'definition',
+      translationData: this.userLanguagePreferences,
       showPlaceholderOnEditIfEmpty: false,
       canEdit: false,
       readMoreAfterHeightPx: 39 // should match the min-heght of .idea-description .  Currently this is  2*$baseLineHeightFontMultiplier*$baseFontSize (2 lines)
@@ -1013,11 +1015,12 @@ var TokenVoteResultView = Marionette.LayoutView.extend({
     return elem.css('background-color');
   },
 
-  serializeData: function(){
+  serializeData: function() {
+    var defn = this.model.get('objectConnectedTo').get('definition');
     return {
-      ideaTitle: this.model.get('objectConnectedTo').getShortTitleDisplayText(),
+      ideaTitle: this.model.get('objectConnectedTo').getShortTitleDisplayText(this.userLanguagePreferences),
       categoryResult: this.results,
-      showDescriptionButton: !!this.model.get('objectConnectedTo').get('definition').length,
+      showDescriptionButton: defn && !defn.isEmptyStripped(this.userLanguagePreferences),
       descriptionButton: this.descriptionButton
     };
   },
@@ -1086,11 +1089,12 @@ var TokenVoteResultView = Marionette.LayoutView.extend({
 
     else {
       this.shownDescription = true;
-      var descriptionButtonText = i18n.gettext("Hide Description");
+      var descriptionButtonText = i18n.gettext("Hide Description"),
+          defn = this.model.get('objectConnectedTo').get('definition');
       icon.removeClass('icon-arrowdown');
       icon.addClass('icon-arrowup');
       this.ui.descriptionButton.text(descriptionButtonText);
-      this.ui.descriptionRegion.html(this.model.get('objectConnectedTo').get('definition'));
+      this.ui.descriptionRegion.html(defn ? defn.bestValue(this.userLanguagePreferences) : '');
     }
   }
 

@@ -10,7 +10,7 @@ var Marionette = require('../shims/marionette.js'),
     Ctx = require('../common/context.js'),
     i18n = require('../utils/i18n.js'),
     Permissions = require('../utils/permissions.js'),
-    CKEditorField = require('./reusableDataFields/ckeditorField.js'),
+    CKEditorLSField = require('./reusableDataFields/ckeditorLSField.js'),
     MessageSendView = require('./messageSend.js'),
     MessagesInProgress = require('../objects/messagesInProgress.js'),
     CollectionManager = require('../common/collectionManager.js'),
@@ -93,13 +93,17 @@ var IdeaInSynthesisView = Marionette.LayoutView.extend({
         }
       }
       // idea is either a tombstone or from a different collection; get the original
-      Promise.resolve(collectionManager.getAllIdeasCollectionPromise()).then(function(allIdeasCollection) {
+      Promise.join(
+          collectionManager.getAllIdeasCollectionPromise(),
+          collectionManager.getUserLanguagePreferencesPromise(Ctx),
+          function(allIdeasCollection, translationData) {
         if (!that.isViewDestroyed()) {
           var idea = that.model,
           original_idea = undefined;
+          that.translationData = translationData;
           if (that.synthesis.get('is_next_synthesis')) {
             original_idea = allIdeasCollection.get(that.model.id);
-          } 
+          }
           else {
             original_idea = allIdeasCollection.get(that.model.get('original_uri'));
           }
@@ -140,20 +144,21 @@ var IdeaInSynthesisView = Marionette.LayoutView.extend({
       //As all ideas in a previously posted synthesis are tombstoned, the original idea is 
       //gathered from the original_uri attribute and view is re-rendered. Therefore, the 
       //original idea is expected to be the one that contants the num_posts field.
-      var numMessages;
+      var numMessages,
+          longTitle = this.model.get('longTitle');
       if(this.original_idea) {
         numMessages = this.original_idea.get('num_posts');
       }
       if (!numMessages) {
         numMessages = 0;
       }
-      
+
       return {
         id: this.model.getId(),
         editing: this.editing,
-        longTitle: this.model.getLongTitleDisplayText(),
+        longTitle: this.model.getLongTitleDisplayText(this.translationData),
         authors: _.uniq(this.authors),
-        subject: this.model.get('longTitle'),
+        subject: longTitle ? longTitle.bestValue(this.translationData) : '',
         canEdit: this.canEdit(),
         isPrimaryNavigationPanel: this.getPanel().isPrimaryNavigationPanel(),
         ctxNumMessages: i18n.sprintf(i18n.ngettext(
@@ -194,10 +199,11 @@ var IdeaInSynthesisView = Marionette.LayoutView.extend({
    * renders the ckEditor if there is one editable field
    */
   renderCKEditorIdea: function() {
-    var model = this.model.getLongTitleDisplayText();
+    var model = this.model.getLongTitleDisplayText(this.translationData);
 
-    var ideaSynthesis = new CKEditorField({
+    var ideaSynthesis = new CKEditorLSField({
       model: this.model,
+      translationData: this.translationData,
       modelProp: 'longTitle',
       placeholder: model,
       showPlaceholderOnEditIfEmpty: true,
@@ -230,7 +236,8 @@ var IdeaInSynthesisView = Marionette.LayoutView.extend({
         'cancel_button_label': null,
         'send_button_label': i18n.gettext('Send your reply'),
         'subject_label': null,
-        'default_subject': 'Re: ' + Ctx.stripHtml(this.original_idea.getLongTitleDisplayText()).substring(0, 50),
+        'default_subject': 'Re: ' + Ctx.stripHtml(
+          this.original_idea.getLongTitleDisplayText(this.translationData)).substring(0, 50),
         'mandatory_body_missing_msg': i18n.gettext('You did not type a response yet...'),
         'mandatory_subject_missing_msg': null,
         'msg_in_progress_body': partialMessage['body'],

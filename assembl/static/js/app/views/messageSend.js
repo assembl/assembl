@@ -78,11 +78,17 @@ var messageSendView = Marionette.LayoutView.extend({
     Marionette.LayoutView.apply(this, arguments);
   },
 
-  template: '#tmpl-messageSend',
+  template: '#tmpl-loader',
   className: 'messageSend',
   initialize: function(options) {
     //console.log("options given to the constructor of messageSend: ", options);
     this.options = options;
+    var that = this, collectionManager = new CollectionManager();
+    collectionManager.getUserLanguagePreferencesPromise(Ctx).then(function (ulp) {
+      that.translationData = ulp;
+      that.template = '#tmpl-messageSend';
+      that.render();
+    });
     this.sendInProgress = false;
     this.initialBody = (this.options.body_help_message !== undefined) ?
         this.options.body_help_message : i18n.gettext('Type your message here...');
@@ -98,7 +104,7 @@ var messageSendView = Marionette.LayoutView.extend({
     }
     this.messageList = options.messageList;
     this.msg_in_progress_ctx = options.msg_in_progress_ctx;
-    
+
     if (options.reply_message_model) {
       this.reply_message_model = options.reply_message_model;
     }
@@ -157,6 +163,9 @@ var messageSendView = Marionette.LayoutView.extend({
   },
 
   serializeData: function() {
+    if (this.template == '#tmpl-loader') {
+      return {};
+    }
     var show_cancel_button = ('show_cancel_button' in this.options) ? this.options.show_cancel_button : false;
     var reply_idea = ('reply_idea' in this.options) ? this.options.reply_idea : null;
     var reply_message_id = ('reply_message_id' in this.options) ? this.options.reply_message_id : null;
@@ -184,6 +193,7 @@ var messageSendView = Marionette.LayoutView.extend({
       msg_in_progress_body: this.options.msg_in_progress_body,
       msg_in_progress_title: this.options.msg_in_progress_title,
       reply_idea: reply_idea,
+      reply_idea_title: reply_idea.getShortTitleDisplayText(this.translationData),
       show_cancel_button: show_cancel_button,
       reply_message_id: reply_message_id,
       show_target_context_with_choice: show_target_context_with_choice,
@@ -227,6 +237,13 @@ var messageSendView = Marionette.LayoutView.extend({
 
   onShow: function() {
     //console.log("messageSend onShow() this.documentsView:", this.documentsView);
+    if (this.template === '#tmpl-loader') {
+      var that = this;
+      setTimeout(function() {
+        that.onShow();
+      }, 500);
+      return;
+    }
 
     // TODO: the attachments and uploadButton regions should either always appear in the template (which is now the case) or be in a subview (which would be better, because in one case they are not used at all)
     var canPost = Ctx.getCurrentUser().can(Permissions.ADD_POST);

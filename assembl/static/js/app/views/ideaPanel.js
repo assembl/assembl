@@ -7,8 +7,8 @@
 var Assembl = require('../app.js'),
     Ctx = require('../common/context.js'),
     i18n = require('../utils/i18n.js'),
-    EditableField = require('./reusableDataFields/editableField.js'),
-    CKEditorField = require('./reusableDataFields/ckeditorField.js'),
+    EditableLSField = require('./reusableDataFields/editableLSField.js'),
+    CKEditorLSField = require('./reusableDataFields/ckeditorLSField.js'),
     Permissions = require('../utils/permissions.js'),
     PanelSpecTypes = require('../utils/panelSpecTypes.js'),
     MessagesInProgress = require('../objects/messagesInProgress.js'),
@@ -100,13 +100,16 @@ var IdeaPanel = AssemblPanel.extend({
 
         setTimeout(function(){ that.checkContentHeight(); }, timeToVisibleImage);
       });
-
-      if (this.model) {
-        //This is a silly hack to go through setIdeaModel properly - benoitg
-        var model = this.model;
-        this.model = null;
-        this.setIdeaModel(model);
-      }
+      this.translationDataPromise = collectionManager.getUserLanguagePreferencesPromise(Ctx);
+      // wait for translation data to display
+      var model = this.model;
+      this.model = null;
+      this.translationDataPromise.then(function(translationData) {
+        that.translationData = translationData;
+        if (model) {
+          that.setIdeaModel(model);
+        }
+      });
     }
   },
   ui: {
@@ -324,7 +327,7 @@ var IdeaPanel = AssemblPanel.extend({
       share_link_url = Ctx.appendExtraURLParams("/static/widget/share/index.html",
         [
           {'u': Ctx.getAbsoluteURLFromRelativeURL(direct_link_relative_url) },
-          {'t': this.model.get('shortTitle')},
+          {'t': this.model.getShortTitlSafe(this.translationData)},
           {'s': Ctx.getPreferences().social_sharing }
         ]
       );
@@ -333,6 +336,7 @@ var IdeaPanel = AssemblPanel.extend({
     return {
       idea: this.model,
       subIdeas: subIdeas,
+      translationData: this.translationData,
       canEdit: canEdit,
       i18n: i18n,
       getExtractsLabel: this.getExtractsLabel,
@@ -397,7 +401,8 @@ var IdeaPanel = AssemblPanel.extend({
         Widget.Model.prototype.IDEA_PANEL_ACCESS_CTX,
         that.model).then(function(subset) {
           that.widgetsInteractionRegion.show(
-            new WidgetButtons.WidgetButtonListView({collection: subset}));
+            new WidgetButtons.WidgetButtonListView({
+              collection: subset, translationData: that.translationData, }));
           if(subset.length > 0) {
             that.ui.widgetsSection.removeClass("hidden");
           }
@@ -514,9 +519,10 @@ var IdeaPanel = AssemblPanel.extend({
         modelId = this.model.id,
         partialMessage = MessagesInProgress.getMessage(modelId);
 
-    var shortTitleField = new EditableField({
+    var shortTitleField = new EditableLSField({
       'model': this.model,
       'modelProp': 'shortTitle',
+      'translationData': this.translationData,
       'class': 'panel-editablearea text-bold',
       'data-tooltip': i18n.gettext('Short expression (only a few words) of the idea in the table of ideas.'),
       'placeholder': i18n.gettext('New idea'),
@@ -988,18 +994,19 @@ var IdeaPanel = AssemblPanel.extend({
   renderCKEditorDescription: function() {
     var that = this;
 
-    var model = this.model.getDefinitionDisplayText();
+    var model = this.model.getDefinitionDisplayText(this.translationData);
 
     if (!model.length) return;
 
-    var description = new CKEditorField({
-      'model': this.model,
-      'modelProp': 'definition',
-      'placeholder': i18n.gettext('You may want to describe this idea for users here...'),
-      'showPlaceholderOnEditIfEmpty': false,
-      'canEdit': Ctx.getCurrentUser().can(Permissions.EDIT_IDEA),
+    var description = new CKEditorLSField({
+      model: this.model,
+      modelProp: 'definition',
+      translationData: this.translationData,
+      placeholder: i18n.gettext('You may want to describe this idea for users here...'),
+      showPlaceholderOnEditIfEmpty: false,
+      canEdit: Ctx.getCurrentUser().can(Permissions.EDIT_IDEA),
       autosave: true,
-      'openInModal': true
+      openInModal: true
     });
 
     this.regionDescription.show(description);
@@ -1020,15 +1027,16 @@ var IdeaPanel = AssemblPanel.extend({
   renderCKEditorLongTitle: function() {
     var that = this;
 
-    var model = this.model.getLongTitleDisplayText();
+    var model = this.model.getLongTitleDisplayText(this.translationData);
     if (!model.length) return;
 
-    var ckeditor = new CKEditorField({
-      'model': this.model,
-      'modelProp': 'longTitle',
-      'canEdit': Ctx.getCurrentUser().can(Permissions.EDIT_SYNTHESIS),
+    var ckeditor = new CKEditorLSField({
+      model: this.model,
+      modelProp: 'longTitle',
+      translationData: this.translationData,
+      canEdit: Ctx.getCurrentUser().can(Permissions.EDIT_SYNTHESIS),
       autosave: true,
-      'openInModal': true
+      openInModal: true
     });
 
     this.regionLongTitle.show(ckeditor);

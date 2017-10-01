@@ -178,24 +178,22 @@ var TranslationView = Marionette.LayoutView.extend({
                 if (!that.isViewDestroyed()){
                     var translationData = that.messageView.translationData || preferences.getTranslationData();
                     that.langCache = that.messageView.langCache; //For reference
-                    var bestSuggestedTranslation = that.message.get('body').best(translationData),
-                        original = that.message.get("body").original(),
+                    var body = that.message.get('body') || LangString.Model.empty,
+                        bestSuggestedTranslation = body.best(translationData),
+                        original = body.original(),
                         originalLocale = original.getLocaleValue(),
                         translatedFromLocale = bestSuggestedTranslation.getTranslatedFromLocale(),
                         translatedTo = bestSuggestedTranslation.getBaseLocale(),
                         prefsForLocale = translationData.getPreferenceForLocale(originalLocale),
                         preferredTarget = prefsForLocale ? prefsForLocale.get("translate_to_name") : Ctx.getLocale();
                     if ( !(translatedFromLocale) ){
-                        // Get the original's locale and name
-                        var original = that.message.get("body").original();
-
                         translatedFromLocale = translatedTo;
                     }
                     that.originalLocale = originalLocale;
                     that.translatedTo = translatedTo;
                     that.translatedFrom = translatedFromLocale;
                     that.preferredTarget = preferredTarget;
-                    that.languagePreferences = preferences; //Should be sorted already
+                    that.languagePreferences = preferences;  // Should be sorted already
                     that.template = '#tmpl-message_translation_question';
                     that.render();
                 }

@@ -193,7 +193,17 @@ var LangStringEntry = Base.Model.extend({
       value: func(this.get("value")),
       "@language": this.get("@language")
     });
-  }
+  },
+
+  isEmptyStripped: function () {
+    var value = this.get("value");
+    if (!value) {
+      return false;
+    }
+    value = Ctx.stripHtml(value);
+    return !!value;
+  },
+
 });
 /**
  * Lang string entry collection
@@ -400,6 +410,32 @@ var LangString = Base.Model.extend({
     return this.bestOf(this.get("entries").models, langPrefs, false, true).get("value");
   },
   /**
+   * Find the langstringEntry for a given language
+   * @function app.models.langstrings.LangString.forLanguage
+   */
+  forLanguage: function(lang) {
+    return this.get("entries").models.find(function (lse) {
+      return lse.get("@language") == lang;
+    });
+  },
+  /**
+   * Find the langstringEntry for the current interface, irrespective of user prefs
+   * @function app.models.langstrings.LangString.forInterface
+   */
+  forInterface: function() {
+    return this.forLanguage(Ctx.getLocale());
+  },
+
+  /**
+   * Find the langstringEntry for the current interface, irrespective of user prefs
+   * @function app.models.langstrings.LangString.forInterface
+   */
+  forInterfaceValue: function() {
+    var lse = this.forInterface();
+    return lse? lse.get('value') : null;
+  },
+
+  /**
    * @function app.models.langstrings.LangString.originalValue
    */
   originalValue: function() {
@@ -437,6 +473,12 @@ var LangString = Base.Model.extend({
       entries: new LangStringEntryCollection(newEntries)
     });
   },
+
+  isEmptyStripped: function(langPrefs) {
+    var best = this.best(langPrefs);
+    return !best || best.isEmptyStripped();
+  },
+
   /**
    * Class method (call on prototype)
    * Initialize a langstring from a {locale: string} dictionary
@@ -460,11 +502,15 @@ var LangString = Base.Model.extend({
 
 });
 
+LangStringEntry.empty = new LangStringEntry({
+  value: '',
+  '@language': 'zxx',
+});
+
 LangString.empty = new LangString({
-        entries: new LangStringEntryCollection([
-            new LangStringEntry({
-                "value": "",
-                "@language": "zxx"})])});
+  entries: new LangStringEntryCollection([LangStringEntry.empty]),
+});
+
 /**
  * Lang string collection
  * @class app.models.langstring.LangStringCollection

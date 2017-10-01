@@ -134,7 +134,7 @@ var WidgetModel = Base.Model.extend({
     return "";
   },
 
-  getDescriptionText: function(context, idea) {
+  getDescriptionText: function(context, idea, translationData) {
     return "";
   },
 
@@ -317,7 +317,7 @@ var VotingWidgetModel = WidgetModel.extend({
     return true;
   },
 
-  getDescriptionText: function(context, idea) {
+  getDescriptionText: function(context, idea, translationData) {
     var locale = Ctx.getLocale(),
         currentUser = Ctx.getCurrentUser(),
         activityState = this.get("activity_state"),
@@ -332,7 +332,7 @@ var VotingWidgetModel = WidgetModel.extend({
       case this.INFO_BAR:
         var message = i18n.gettext("A voting session has started.");
         if (endDate) {
-          message += " " + this.getDescriptionText(this.UNTIL_TEXT, idea);
+          message += " " + this.getDescriptionText(this.UNTIL_TEXT, idea, translationData);
         }
         if(!currentUser.can(Permissions.VOTE)) {
           // TODO: get the current discussion synchronously.
@@ -344,18 +344,18 @@ var VotingWidgetModel = WidgetModel.extend({
         switch (link + "_" + activityState) {
           case "VotedIdeaWidgetLink_active":
           case "VotableIdeaWidgetLink_active":
-            return i18n.sprintf(i18n.gettext("The option “%s” is being considered in a vote"), idea.get('shortTitle'));
+            return i18n.sprintf(i18n.gettext("The option “%s” is being considered in a vote"), idea.getShortTitleSafe(translationData));
           case "VotedIdeaWidgetLink_ended":
           case "VotableIdeaWidgetLink_ended":
-            return i18n.sprintf(i18n.gettext("The option “%s” was considered in a vote"), idea.get('shortTitle'));
+            return i18n.sprintf(i18n.gettext("The option “%s” was considered in a vote"), idea.getShortTitleSafe(translationData));
           case "BaseIdeaWidgetLink_active":
             return i18n.gettext("A voting session is ongoing on this issue");
           case "BaseIdeaWidgetLink_ended":
             return i18n.gettext("A voting session has happened on this issue");
           case "VotingCriterionWidgetLink_active":
-            return i18n.sprintf(i18n.gettext("“%s” is being used as a criterion in a vote"), idea.get('shortTitle'));
+            return i18n.sprintf(i18n.gettext("“%s” is being used as a criterion in a vote"), idea.getShortTitleSafe(translationData));
           case "VotingCriterionWidgetLink_ended":
-            return i18n.sprintf(i18n.gettext("“%s” was used as a criterion in a vote"), idea.get('shortTitle'));
+            return i18n.sprintf(i18n.gettext("“%s” was used as a criterion in a vote"), idea.getShortTitleSafe(translationData));
         }
         break;
       case this.UNTIL_TEXT:
@@ -1057,7 +1057,7 @@ var CreativitySessionWidgetModel = WidgetModel.extend({
     return "";
   },
 
-  getDescriptionText: function(context, idea) {
+  getDescriptionText: function(context, idea, translationData) {
     var locale = Ctx.getLocale(),
         activityState = this.get("activity_state"),
         endDate = this.get("end_date");
@@ -1071,7 +1071,7 @@ var CreativitySessionWidgetModel = WidgetModel.extend({
       case this.INFO_BAR:
         var message = i18n.gettext("A creativity session is ongoing.");
         if (endDate) {
-          message += " " + this.getDescriptionText(this.UNTIL_TEXT, idea);
+          message += " " + this.getDescriptionText(this.UNTIL_TEXT, idea, translationData);
         }
         return message;
       case this.IDEA_PANEL_ACCESS_CTX:

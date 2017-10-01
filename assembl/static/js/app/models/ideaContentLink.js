@@ -234,8 +234,10 @@ var Collection = Base.Collection.extend({
      */
     getIdeaNamesPromise: function(){
         var that = this;
-        return this.collectionManager.getAllIdeasCollectionPromise()
-            .then(function(ideas){
+        return Promise.join(
+            this.collectionManager.getAllIdeasCollectionPromise(),
+            this.collectionManager.getUserLanguagePreferencesPromise(Ctx),
+            function(ideas, userPrefs) {
                 var usableIdeaContentLinks = that.filter(function(icl) {
                     if (icl){
                         return icl.get('idIdea') !== null;
@@ -251,7 +253,7 @@ var Collection = Base.Collection.extend({
                         throw new Error("Idea " + idIdea + " on " + ideaContentLink.id + 
                                         " is NOT part of the ideas collection!");
                     }
-                    return ideaModel.getShortTitleDisplayText();
+                    return ideaModel.getShortTitleDisplayText(userPrefs);
                 });
                 //A cache of the name, and sort order of the name of the idea
                 var cache = {};

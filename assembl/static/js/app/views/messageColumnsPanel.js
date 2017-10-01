@@ -144,7 +144,7 @@ var MessageColumnsPanel = AssemblPanel.extend({
       return;
     }
     // first approximation
-    // this.ui.ideaColumnHeader.html(idea.get("shortTitle"));
+    // this.ui.ideaColumnHeader.html(idea.get("shortTitle")......);
     this.announcementPromise.then(function(announcement) {
       if (that.isViewDestroyed() || announcement === undefined) {
         return;

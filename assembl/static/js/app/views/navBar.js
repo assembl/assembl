@@ -61,7 +61,8 @@ var navBarLeft = Marionette.LayoutView.extend({
       var collectionManager = new CollectionManager();
       Promise.join(collectionManager.getAllIdeasCollectionPromise(),
           collectionManager.getAllWidgetsPromise(),
-        function(allIdeasCollection, widgets) {
+          collectionManager.getUserLanguagePreferencesPromise(Ctx),
+        function(allIdeasCollection, widgets, ulp) {
         if(!that.isViewDestroyed()) {
           var rootIdea = allIdeasCollection.getRootIdea();
           if (rootIdea) {
@@ -76,6 +77,7 @@ var navBarLeft = Marionette.LayoutView.extend({
             var creation = new WidgetLinks.WidgetLinkListView({
               collection: Widget.globalWidgetClassCollection,
               context: Widget.Model.prototype.DISCUSSION_MENU_CREATE_CTX,
+              translationData: ulp,
               idea: rootIdea
             });
             that.widgetMenuCreation.show(creation);

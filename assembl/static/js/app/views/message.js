@@ -475,28 +475,26 @@ var MessageView = Marionette.LayoutView.extend({
    * @returns langstring
    */
   generateSafeBody: function() {
-    var body;
+    var body = this.model.get('body') || LangString.Model.empty;
 
-    if(this.model.get('bodyMimeType') === "text/html") {
-      //We assume that that HTML has been sanitized by the backend.
-      body = this.model.get('body');
-    }
-    else {
-      //Get rid of all tags, to avoid any layout problem
-      body = this.model.get('body').applyFunction(Ctx.stripHtml);
+    if (this.model.get('bodyMimeType') !== 'text/html') {
+      // We assume that that HTML has been sanitized by the backend.
+      // Otherwise get rid of all tags, to avoid any layout problem
+      body = body.applyFunction(Ctx.stripHtml);
     }
     return body;
   },
 
   /**
-   * @returns langstring
+   * @returns string
    */
   generateSafeOriginalBody: function() {
-    var body = this.model.get('body').originalValue();
+    var body = this.model.get('body') || LangString.Model.empty,
+        bodyText = body.originalValue();
     if(this.model.get('bodyMimeType') !== "text/html") {
-        body = Ctx.stripHtml(body);
+        bodyText = Ctx.stripHtml(bodyText);
     }
-    return body;
+    return bodyText;
   },
 
   processContent: function() {

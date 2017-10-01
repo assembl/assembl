@@ -60,9 +60,9 @@ var WidgetButtonView = Marionette.ItemView.extend({
     return {
       link: this.model.getUrl(this.options.context, this.options.idea.getId()),
       button_text: this.model.getLinkText(this.options.context, this.options.idea),
-      description: this.model.getDescriptionText(this.options.context, this.options.idea),
+      description: this.model.getDescriptionText(this.options.context, this.options.idea, this.options.translationData),
       classes: this.model.getCssClasses(this.options.context, this.options.idea),
-      until_text: this.model.getDescriptionText(this.model.UNTIL_TEXT, this.options.idea),
+      until_text: this.model.getDescriptionText(this.model.UNTIL_TEXT, this.options.idea, this.options.translationData),
       canSeeResults: Ctx.getCurrentUser().can(Permissions.ADMIN_DISCUSSION)
     };
   }
@@ -78,7 +78,8 @@ var WidgetButtonListView = Marionette.CollectionView.extend({
   initialize: function(options) {
     this.childViewOptions = {
       context: options.context || options.collection.context,
-      idea: options.idea || options.collection.idea
+      idea: options.idea || options.collection.idea,
+      translationData: options.translationData,
     };
     if (this.childViewOptions.context === undefined) {
       console.error("Undefined context in WidgetButtonListView");
