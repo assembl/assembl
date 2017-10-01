@@ -573,7 +573,7 @@ class Idea(SecureObjectType, SQLAlchemyObjectType):
     title_entries = graphene.List(LangStringEntry)
     long_title = graphene.String(lang=graphene.String())  # This is the "What you need to know"
     description = graphene.String(lang=graphene.String())
-    announcement_body = graphene.String()
+    announcement_body = graphene.String(lang=graphene.String())
     description_entries = graphene.List(LangStringEntry)
     children = graphene.List(lambda: Idea)
     parent_id = graphene.ID()
@@ -625,7 +625,7 @@ class Idea(SecureObjectType, SQLAlchemyObjectType):
 
     def resolve_announcement_body(self, args, context, info):
         if self.announcement:
-            return self.announcement.body
+            return resolve_langstring(self.announcement, args.get('lang'))
 
     def resolve_description_entries(self, args, context, info):
         return resolve_langstring_entries(self, 'description')

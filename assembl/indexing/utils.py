@@ -57,8 +57,8 @@ def get_data(content):
             data[attr] = getattr(content, attr)
 
         if content.announcement:
-            data['title'] = content.announcement.title
-            data['body'] = content.announcement.body
+            data['title'] = content.announcement.title_
+            data['body'] = content.announcement.body_
 
         return get_uid(content), data
 
