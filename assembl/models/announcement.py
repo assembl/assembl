@@ -23,6 +23,7 @@ from ..semantic.virtuoso_mapping import QuadMapPatternS
 from ..semantic.namespaces import DCTERMS
 from . import DiscussionBoundBase
 from .idea import Idea
+from .langstrings import LangString
 from .auth import (
     AgentProfile, CrudPermissions, P_READ, P_ADMIN_DISC, P_ADD_POST,
     P_EDIT_POST, P_ADD_IDEA, P_EDIT_IDEA)
@@ -70,11 +71,32 @@ class Announcement(DiscussionBoundBase):
         AgentProfile,
         foreign_keys=[last_updated_by_id], backref="announcements_updated")
 
-    title = Column(CoerceUnicode(1024), server_default="",
-        info={'rdf': QuadMapPatternS(None, DCTERMS.title)})
+    title_id = Column(
+        Integer(), ForeignKey(LangString.id))
+    body_id = Column(
+        Integer(), ForeignKey(LangString.id))
+    title = relationship(
+        LangString,
+        lazy="joined", single_parent=True,
+        primaryjoin=title_id == LangString.id,
+        backref=backref("announcement_from_title", lazy="dynamic"),
+        cascade="all, delete-orphan")
+    body = relationship(
+        LangString,
+        lazy="joined", single_parent=True,
+        primaryjoin=body_id == LangString.id,
+        backref=backref("announcement_from_body", lazy="dynamic"),
+        cascade="all, delete-orphan")
 
-    body = Column(
-        UnicodeText)
+    # temporary
+    @property
+    def title_(self):
+        return self.title.first_original().value if self.title else ''
+
+    # temporary
+    @property
+    def body_(self):
+        return self.body.first_original().value if self.body else ''
 
     __mapper_args__ = {
         'polymorphic_identity': 'announce',
@@ -88,6 +110,10 @@ class Announcement(DiscussionBoundBase):
     @classmethod
     def get_discussion_conditions(cls, discussion_id, alias_maker=None):
         return (cls.discussion_id == discussion_id,)
+
+
+LangString.setup_ownership_load_event(
+    Announcement, ['title', 'body'])
 
 
 class IdeaAnnouncement(Announcement):

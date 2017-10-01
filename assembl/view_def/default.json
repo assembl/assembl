@@ -677,8 +677,8 @@
         "modification_date": true,
         "creator": true,
         "last_updated_by": true,
-        "title": true,
-        "body": true
+        "title": ":extended",
+        "body": ":extended"
     },
     "IdeaAnnouncement": {
         "@extends": "Announcement",
