@@ -396,6 +396,19 @@ class Idea(HistoryMixin, DiscussionBoundBase):
         else:
             return self.db.query(Idea).filter(Idea.id.in_(query)).all()
 
+    def get_applicable_announcement(self):
+        from .announcement import IdeaAnnouncement
+        if self.announcement:
+            return self.announcement
+        aq = self.get_ancestors_query(self.id)
+        announcements = self.db.query(IdeaAnnouncement
+            ).filter(IdeaAnnouncement.idea_id.in_(aq),
+                     IdeaAnnouncement.should_propagate_down==True
+            ).all()
+        # assume order is preserved from aq...
+        if announcements:
+            return announcements[-1]
+
     @classmethod
     def get_descendants_query(
             cls, root_idea_id=bindparam('root_idea_id', type_=Integer),
