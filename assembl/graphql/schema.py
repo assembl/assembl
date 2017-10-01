@@ -571,8 +571,10 @@ class Idea(SecureObjectType, SQLAlchemyObjectType):
 
     title = graphene.String(lang=graphene.String())
     title_entries = graphene.List(LangStringEntry)
+    # TODO: Look into seperating synthesis_title from 'What you need to know',
+    # they mean different things
     synthesis_title = graphene.String(lang=graphene.String())  # This is the "What you need to know"
-    description = graphene.String(lang=graphene.String()) # This should have been "What you need to know"
+    description = graphene.String(lang=graphene.String())
     announcement_body = graphene.String(lang=graphene.String())
     description_entries = graphene.List(LangStringEntry)
     children = graphene.List(lambda: Idea)
@@ -607,6 +609,9 @@ class Idea(SecureObjectType, SQLAlchemyObjectType):
 
     def resolve_title(self, args, context, info):
         return resolve_langstring(self.title, args.get('lang'))
+
+    def resolve_synthesis_title(self, args, context, info):
+        return resolve_langstring(self.synthesis_title, args.get('lang'))
 
     def resolve_title_entries(self, args, context, info):
         return resolve_langstring_entries(self, 'title')
