@@ -999,6 +999,7 @@ class BaseOps(object):
                     if instance is not None:
                         aliases[target_id] = instance
         if instance is not None:
+            # NOTE: Here we could tombstone the instance if tombstonable.
             instance._do_update_from_json(
                 json, parse_def, aliases, context, permissions,
                 user_id, DuplicateHandling.USE_ORIGINAL, jsonld)
@@ -1345,13 +1346,21 @@ class BaseOps(object):
                         # Try the brutal approach
                         setattr(self, accessor_name, instances)
                     else:
+                        from ..lib.history_mixin import TombstonableMixin
                         current_instances = getattr(self, accessor_name)
                         missing = set(instances) - set(current_instances)
+                        if missing:
+                            # Maybe tombstones
+                            missing = filter(lambda a: not isinstance(a, TombstonableMixin) or not a.is_tombstone, missing)
                         assert not missing, "what's wrong with back_populates?"
                         extra = set(current_instances) - set(instances)
                         if extra:
-                            assert len(accessor.remote_side) == 1
-                            remote = next(iter(accessor.remote_side))
+                            remote_columns = list(accessor.remote_side)
+                            if len(accessor.remote_side) > 1:
+                                if issubclass(accessor.mapper.class_, TombstonableMixin):
+                                    remote_columns = filter(lambda c: c.name != 'tombstone_date', remote_columns)
+                            assert len(remote_columns) == 1
+                            remote = remote_columns[0]
                             if remote.nullable:
                                 # TODO: check update permissions on that object.
                                 for inst in missing:
@@ -1364,7 +1373,10 @@ class BaseOps(object):
                                         raise HTTPUnauthorized(
                                             "Cannot delete object %s", inst.uri())
                                     else:
-                                        self.db.delete(inst)
+                                        if isinstance(inst, TombstonableMixin):
+                                            inst.is_tombstone = True
+                                        else:
+                                            self.db.delete(inst)
                 elif isinstance(accessor, property):
                     setattr(self, accessor_name, instances)
                 elif isinstance(accessor, Column):
