@@ -22,7 +22,7 @@ type ChooseContentLocaleFormProps = {
   updateByOriginalLocale: (value: string) => void
 };
 
-type Scope = 'local' | 'global';
+type Scope = 'local' | 'global' | null;
 
 type ChooseContentLocaleFormState = {
   scope: Scope,
@@ -36,7 +36,7 @@ class ChooseContentLocaleForm extends React.Component<*, ChooseContentLocaleForm
   constructor() {
     super();
     this.state = {
-      scope: 'local',
+      scope: null,
       selectedLocale: 'select'
     };
   }
@@ -130,7 +130,7 @@ class ChooseContentLocaleForm extends React.Component<*, ChooseContentLocaleForm
           </Button>,
           <Button
             key="translate-submit"
-            disabled={selectedLocale === 'select'}
+            disabled={selectedLocale === 'select' || !scope}
             onClick={this.handleSubmit}
             className="button-submit button-dark"
           >
