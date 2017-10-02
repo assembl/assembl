@@ -1,5 +1,6 @@
 from copy import deepcopy
 
+from . import index_languages
 
 BOOL = {
     'index': True,
@@ -26,6 +27,15 @@ TEXT = {
     'type': 'text',
 }
 
+
+def add_index_languages(props, names):
+    langs = index_languages()
+    langs.add('other')
+    for name in names:
+        for lang in langs:
+            props["_".join((name, lang))] = TEXT
+
+
 COMMON_POST = {
     '_parent': {
         'type': 'user'
@@ -45,21 +55,13 @@ COMMON_POST = {
 }
 
 _POST_MAPPING = deepcopy(COMMON_POST)
-_POST_MAPPING['properties'].update({
-    'body_fr': TEXT,
-    'subject_fr': TEXT,
-    'body_und': TEXT,
-    'subject_und': TEXT,
-    'body_en': TEXT,
-    'subject_en': TEXT,
-})
+
 
 _SYNTHESIS_MAPPING = deepcopy(COMMON_POST)
 _SYNTHESIS_MAPPING['properties'].update({
     'subject': TEXT,
     'introduction': TEXT,
     'conclusion': TEXT,
-    'ideas': TEXT,
 })
 
 _USER_MAPPING = {
@@ -76,11 +78,6 @@ _IDEA_MAPPING = {
         'discussion_id': LONG,
         'creation_date': DATE,
         'id': LONG,
-        'short_title': TEXT,
-        'long_title': TEXT,
-        'definition': TEXT,
-        'title': TEXT,  # announce
-        'body': TEXT,  # announce
     }
 }
 
@@ -140,3 +137,11 @@ def get_index_settings(config):
 def get_mapping(doc_type):
     """Return the mapping for a given doc type."""
     return MAPPINGS.get(doc_type, None)
+
+
+def includeme(config):
+    add_index_languages(_POST_MAPPING['properties'], ['body', 'subject'])
+    add_index_languages(_SYNTHESIS_MAPPING['properties'], ['ideas'])
+    add_index_languages(_IDEA_MAPPING['properties'], [
+        'title', 'synthesis_title', 'description', 'announcement_title',
+        'announcement_body'])

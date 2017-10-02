@@ -104,10 +104,16 @@ def ensure_locale_has_country(locale):
     return locale
 
 
+_special_cases = {
+    'zh': 'zh_Hans_CN',  # assume mainland by default
+    'zh_CN': 'zh_Hans_CN',
+    'zh_TW': 'zh_Hant_TW',
+}
+
+
 def strip_country(locale):
     # assuming a posix locale
-    if locale == "zh":
-        return "zh_Hans"
+    locale = _special_cases.get(locale, locale)
     if '_' in locale:
         locale = locale.split("_")
         if len(locale[-1]) == 2:

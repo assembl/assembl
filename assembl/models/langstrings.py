@@ -951,6 +951,10 @@ class LangStringEntry(TombstonableMixin, Base):
             self.locale = Locale.get_or_create(locale_code)
 
     @property
+    def base_locale(self):
+        return Locale.extract_base_locale(self.locale_code)
+
+    @property
     def locale_identification_data_json(self):
         return json.loads(self.locale_identification_data)\
             if self.locale_identification_data else {}
