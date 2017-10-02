@@ -326,6 +326,7 @@ class Extract(SecureObjectType, SQLAlchemyObjectType):
         interfaces = (Node, )
         only_fields = ('id', 'body', 'important')
 
+
 class LocalePreference(graphene.ObjectType):
     locale = graphene.String()
     name = graphene.String(in_locale=graphene.String(required=True))
@@ -515,7 +516,6 @@ class PostInterface(SQLAlchemyInterface):
         return self.publication_state.name
 
 
-
 class Post(SecureObjectType, SQLAlchemyObjectType):
     class Meta:
         model = models.Post
@@ -563,6 +563,22 @@ class IdeaInterface(graphene.Interface):
         return self.get_order_from_first_parent()
 
 
+class IdeaAnnoucement(SecureObjectType, SQLAlchemyObjectType):
+    class Meta:
+        model = models.IdeaAnnouncement
+        interfaces = (Node,)
+        only_fields = ('id',)
+
+    title = graphene.String(lang=graphene.String())
+    body = graphene.String(lang=graphene.String())
+
+    def resolve_title(self, args, context, info):
+        return resolve_langstring(self.title, args.get('lang'))
+
+    def resolve_body(self, args, context, info):
+        return resolve_langstring(self.body, args.get('lang'))
+
+
 class Idea(SecureObjectType, SQLAlchemyObjectType):
     class Meta:
         model = models.Idea
@@ -575,12 +591,12 @@ class Idea(SecureObjectType, SQLAlchemyObjectType):
     # they mean different things
     synthesis_title = graphene.String(lang=graphene.String())  # This is the "What you need to know"
     description = graphene.String(lang=graphene.String())
-    announcement_body = graphene.String(lang=graphene.String())
     description_entries = graphene.List(LangStringEntry)
     children = graphene.List(lambda: Idea)
     parent_id = graphene.ID()
     posts = SQLAlchemyConnectionField(PostConnection)
     contributors = graphene.List(AgentProfile)
+    announcement = graphene.Field(lambda: IdeaAnnoucement)
 
     @classmethod
     def is_type_of(cls, root, context, info):
@@ -621,10 +637,6 @@ class Idea(SecureObjectType, SQLAlchemyObjectType):
         if not description:
             description = self.get_definition_preview()
         return description
-
-    def resolve_announcement_body(self, args, context, info):
-        if self.announcement:
-            return resolve_langstring(self.announcement, args.get('lang'))
 
     def resolve_description_entries(self, args, context, info):
         return resolve_langstring_entries(self, 'description')

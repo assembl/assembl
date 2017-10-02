@@ -190,3 +190,56 @@ query Post($id: ID!) {
                  u'important': True},
                 ]
     }}
+
+
+def test_announcement_on_idea(graphql_request, announcement_en_fr):
+    from graphene.relay import Node
+    idea_id = announcement_en_fr.idea.id
+    node_id = Node.to_global_id('Idea', idea_id)
+    res = schema.execute(u"""
+query Idea($id: ID!, $lang: String!){
+    idea: node(id: $id) {
+        ... on Idea {
+            announcement {
+                title(lang: $lang)
+                body(lang: $lang)
+            }
+        }
+    }
+}""", context_value=graphql_request, variable_values={
+        "id": node_id,
+        "lang": "en"
+    })
+    assert json.loads(json.dumps(res.data)) == {
+        u'idea': {
+            u'announcement': {
+                u'title': u"Announce title in English",
+                u'body': u"Announce body in English"
+            }
+        }
+    }
+
+
+def test_no_announcement_on_ideas(graphql_request, idea_with_en_fr):
+    from graphene.relay import Node
+    idea_id = idea_with_en_fr.id
+    node_id = Node.to_global_id('Idea', idea_id)
+    res = schema.execute(u"""
+query Idea($id: ID!, $lang: String!){
+    idea: node(id: $id) {
+        ... on Idea {
+            announcement {
+                title(lang: $lang)
+                body(lang: $lang)
+            }
+        }
+    }
+}""", context_value=graphql_request, variable_values={
+        "id": node_id,
+        "lang": "en"
+    })
+    assert json.loads(json.dumps(res.data)) == {
+        u'idea': {
+            u'announcement': None
+        }
+    }
