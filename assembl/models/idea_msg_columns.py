@@ -42,6 +42,8 @@ class IdeaMessageColumn(DiscussionBoundBase):
              ":py:attr:`assembl.models.generic.Content.message_classifier`"))
     header = Column(UnicodeText,
         doc="Text which will be shown above the column")
+    # header_id = Column(Integer, ForeignKey(LangString.id),
+    #     doc="Text which will be shown above the column")
     previous_column_id = Column(
         Integer, ForeignKey(id, ondelete='SET NULL'),
         nullable=True, unique=True,
@@ -57,8 +59,15 @@ class IdeaMessageColumn(DiscussionBoundBase):
         backref=backref("next_column", uselist=False))
     name = relationship(LangString,
         lazy="joined", single_parent=True,
+        primaryjoin=name_id == LangString.id,
         backref=backref("name_of_idea_message_column", lazy="dynamic"),
         cascade="all, delete-orphan")
+
+    # header = relationship(LangString,
+    #     lazy="joined", single_parent=True,
+    #     primaryjoin=header_id == LangString.id,
+    #     backref=backref("name_of_idea_message_column", lazy="dynamic"),
+    #     cascade="all, delete-orphan")
 
     def get_discussion_id(self):
         idea = self.idea or Idea.get(self.idea_id)
