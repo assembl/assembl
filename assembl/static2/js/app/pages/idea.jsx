@@ -109,11 +109,12 @@ class Idea extends React.Component {
         <Header title={idea.title} synthesisTitle={idea.synthesisTitle} imgUrl={idea.imgUrl} identifier="thread" />
         <section className="post-section">
           {!ideaWithPostsData.loading &&
-            idea.announcementBody &&
+            idea.announcement &&
+            idea.announcement.body &&
             <Grid fluid className="background-grey">
               <div className="max-container">
                 <div className="content-section">
-                  <Announcement ideaWithPostsData={ideaWithPostsData} announcementBody={idea.announcementBody} />
+                  <Announcement ideaWithPostsData={ideaWithPostsData} announcementContent={idea.announcement} />
                 </div>
               </div>
             </Grid>}

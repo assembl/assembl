@@ -40,9 +40,10 @@ const createDoughnutElements = (sentimentCounts) => {
   });
 };
 
-const dirtySplitHack = (announcementBody) => {
+const dirtySplitHack = (announcementContent) => {
+  const body = announcementContent.body;
   // To allow edit from V1 announcement, add !split!https://video.url!split!
-  const split = announcementBody.split('!split!');
+  const split = body.split('!split!');
   return split.length >= 3
     ? {
       descriptionTop: `${split[0]}</p>`,
@@ -50,7 +51,7 @@ const dirtySplitHack = (announcementBody) => {
       htmlCode: split[1]
     }
     : {
-      descriptionTop: announcementBody,
+      descriptionTop: body,
       descriptionBottom: null,
       htmlCode: null
     };
@@ -58,10 +59,10 @@ const dirtySplitHack = (announcementBody) => {
 
 class Announcement extends React.Component {
   render = () => {
-    const { ideaWithPostsData: { idea }, announcementBody } = this.props;
+    const { ideaWithPostsData: { idea }, announcementContent } = this.props;
     const { numContributors, numPosts, posts } = idea;
     const sentimentsCount = getSentimentsCount(posts);
-    const videoContent = dirtySplitHack(announcementBody);
+    const videoContent = dirtySplitHack(announcementContent);
     return (
       <div className="announcement">
         <div className="announcement-title">
