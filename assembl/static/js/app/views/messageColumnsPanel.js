@@ -25,7 +25,7 @@ var Backbone = require('backbone'),
     PanelSpecTypes = require('../utils/panelSpecTypes.js'),
     scrollUtils = require('../utils/scrollUtils.js'),
     AssemblPanel = require('./assemblPanel.js'),
-    CKEditorField = require('./reusableDataFields/ckeditorField.js'),
+    CKEditorLSField = require('./reusableDataFields/ckeditorLSField.js'),
     BaseMessageListMixin = require('./baseMessageList.js'),
     CollectionManager = require('../common/collectionManager.js'),
     Widget = require('../models/widget.js'),
@@ -329,7 +329,12 @@ var MessageColumnView = BaseMessageColumnView.extend({
   processIsEnded: function() {
     // heuristic: process is ended if header has content.
     var header = this.model.get('header');
-    return header != undefined && header.length > 0;
+    if (!header) {
+      return false;
+    }
+    return header.get('entries').any(function(entry) {
+      return !entry.isEmptyStripped();
+    });
   },
 
   onRender: function() {
@@ -338,11 +343,12 @@ var MessageColumnView = BaseMessageColumnView.extend({
     }
     BaseMessageColumnView.prototype.onRender.apply(this, arguments);
     var that = this,
+        header = this.model.get('header'),
         canEdit = Ctx.getCurrentUser().can(Permissions.ADMIN_DISCUSSION),
         renderId = _.clone(this._renderId);
 
     if (this.processIsEnded() || canEdit) {
-      this.messageColumnDescription.show(new CKEditorField({
+      this.messageColumnDescription.show(new CKEditorLSField({
         model: this.model,
         modelProp: 'header',
         canEdit: canEdit,
@@ -382,7 +388,7 @@ var MessageColumnView = BaseMessageColumnView.extend({
       });
       var colWidth = (100 / that.collection.length) + '%';
       $('.subpanel-body').css({'width':colWidth, 'float':'left'});
-      if(that.model.get('header').length > 0){
+      if(!header || header.isEmptyStripped(translationData)){
         $('.js_messageColumnDescription').addClass('message-column-description');
       }else{
         $('.js_messageColumnDescription').removeClass('message-column-description');
