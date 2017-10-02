@@ -80,13 +80,10 @@ class PostTranslate extends React.Component<void, PostTranslateProps, PostTransl
 
   render() {
     const { id, lang, originalLocale, translate } = this.props;
-    const userIsConnected = getConnectedUserId();
-    if (!userIsConnected) {
-      const specialLocaleCodes = ['und', 'zxx']; // locale codes that can not be translated
-      const showPostTranslate = originalLocale !== lang && specialLocaleCodes.indexOf(originalLocale) === -1;
-      if (!showPostTranslate) {
-        return null;
-      }
+    const specialLocaleCodes = ['und', 'zxx']; // locale codes that can not be translated
+    const showPostTranslate = originalLocale !== lang && specialLocaleCodes.indexOf(originalLocale) === -1;
+    if (!showPostTranslate) {
+      return null;
     }
     return (
       <div className="translate">
