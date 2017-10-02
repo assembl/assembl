@@ -26,8 +26,9 @@ const getFullLevelString = (fullLevel) => {
     fullLevel &&
     <span className="subject-prefix">
       {`Rep. ${fullLevel
+        .split('-')
         .map((level) => {
-          return `${level + 1}`;
+          return `${Number(level) + 1}`;
         })
         .join('.')}: `}
     </span>

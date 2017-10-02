@@ -117,7 +117,8 @@ class Child extends React.PureComponent {
       InnerComponentFolded,
       level,
       rowIndex, // the index of the row (i.e. level 0 item) in the List
-      SeparatorComponent
+      SeparatorComponent,
+      fullLevel
     } = this.props;
     const cssClasses = () => {
       let cls = `level level-${level}`;
@@ -145,8 +146,9 @@ class Child extends React.PureComponent {
         {numChildren > 0 ? this.renderToggleLink(expanded, level < 4) : null}
         {numChildren > 0
           ? children.map((child, idx) => {
-            const fullLevelNew = 'fullLevel' in this.props ? [...this.props.fullLevel] : [];
-            fullLevelNew[level] = idx;
+            const fullLevelArray = 'fullLevel' in this.props ? fullLevel.split('-') : [];
+            console.log(fullLevel, fullLevelArray);
+            fullLevelArray[level] = idx;
             return (
               <Child
                 hidden={!expanded}
@@ -159,7 +161,7 @@ class Child extends React.PureComponent {
                 InnerComponent={InnerComponent}
                 InnerComponentFolded={InnerComponentFolded}
                 SeparatorComponent={SeparatorComponent}
-                fullLevel={fullLevelNew}
+                fullLevel={fullLevelArray.join('-')}
               />
             );
           })
