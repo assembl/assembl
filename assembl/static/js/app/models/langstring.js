@@ -201,7 +201,7 @@ var LangStringEntry = Base.Model.extend({
       return false;
     }
     value = Ctx.stripHtml(value);
-    return !!value;
+    return !value;
   },
 
 });
