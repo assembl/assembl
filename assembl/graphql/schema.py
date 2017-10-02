@@ -697,6 +697,9 @@ class Idea(SecureObjectType, SQLAlchemyObjectType):
         contributors = [models.AgentProfile.get(cid) for cid in contributor_ids]
         return contributors
 
+    def resolve_announcement(self, args, context, info):
+        return self.get_applicable_announcement()
+
 
 class Question(SecureObjectType, SQLAlchemyObjectType):
     class Meta:
