@@ -87,15 +87,21 @@ class Announcement extends React.Component {
               <StatisticsDoughnut elements={doughnutsElements} />
             </div>
             {isTwoColumns
-              ? <div className="announcement-numbers-twoCol" style={{ fontSize: 20 }}>
+              ? <div
+                className="announcement-numbers-twoCol"
+                style={{ fontSize: 18, width: 130, textAlign: 'left', paddingLeft: 25 }}
+              >
                 <div style={{ color: '#50D593' }}>
-                  {positiveNegativeCount[0].count} Pour
+                  {positiveNegativeCount[0].count} <span style={{ fontSize: 12, paddingLeft: 0 }}>Pour</span>
                 </div>
                 <div style={{ color: '#F75959' }}>
-                  {positiveNegativeCount[1].count} Contre
+                  {positiveNegativeCount[1].count} <span style={{ fontSize: 12, paddingLeft: 0 }}>Contre</span>
                 </div>
                 <div style={{ color: '#00B6FF' }}>
-                  {positiveNegativeCount[2].count} Alternatives
+                  {positiveNegativeCount[2].count} <span style={{ fontSize: 12, paddingLeft: 0 }}>Alternatives</span>
+                </div>
+                <div style={{ color: '#5C0FD9' }}>
+                    20 <span className="assembl-icon-profil" />
                 </div>
               </div>
               : <div className="announcement-numbers">
