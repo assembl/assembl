@@ -31,6 +31,7 @@ mutation myFirstMutation {
     idea_id = res.data['createIdea']['idea']['id']
     return idea_id
 
+
 @pytest.fixture(scope="function")
 def top_post_in_thread_phase(graphql_request, idea_in_thread_phase):
     from assembl.graphql.schema import Schema as schema

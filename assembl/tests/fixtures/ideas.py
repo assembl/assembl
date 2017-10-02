@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import pytest
 
 
@@ -5,6 +6,92 @@ import pytest
 def root_idea(request, discussion, test_session):
     """A root Idea fixture"""
     return discussion.root_idea
+
+
+@pytest.fixture(scope="function")
+def idea_with_en_fr(request, discussion, en_locale,
+                    fr_locale, test_session):
+    from assembl.models import Idea, LangString, LangStringEntry
+
+    title = LangString.create(u'Title in english', 'en')
+    title.add_entry(LangStringEntry(
+                    locale=fr_locale,
+                    value=u'Titre en français',
+                    locale_confirmed=True))
+
+    synthesis_title = LangString.create(u'What you need to know', 'en')
+    synthesis_title.add_entry(LangStringEntry(
+                              locale=fr_locale,
+                              value=u'A retnir',
+                              locale_confirmed=True))
+
+    description = LangString.create(u'Idea description', 'en')
+    description.add_entry(LangStringEntry(
+                          locale=fr_locale,
+                          value=u'Un Description',
+                          locale_confirmed=True))
+
+    idea = Idea(title=title,
+                discussion=discussion,
+                description=description,
+                synthesis_title=synthesis_title)
+
+    test_session.add(title)
+    test_session.add(synthesis_title)
+    test_session.add(description)
+    test_session.add(idea)
+    test_session.flush()
+
+    def fin():
+        print "finalizer idea_with_en_fr"
+        test_session.delete(idea)
+        test_session.delete(title)
+        test_session.delete(synthesis_title)
+        test_session.delete(description)
+        test_session.flush()
+
+    request.addfinalizer(fin)
+    return idea
+
+
+@pytest.fixture(scope="function")
+def announcement_en_fr(request, discussion, en_locale,
+                       fr_locale, admin_user, idea_with_en_fr,
+                       test_session):
+    from assembl.models import LangString, LangStringEntry, IdeaAnnouncement
+    title = LangString.create(u'Announce title in English', 'en')
+    title.add_entry(LangStringEntry(
+                    locale=fr_locale,
+                    value=u"Titre d'announce en français",
+                    locale_confirmed=True))
+
+    body = LangString.create(u'Announce body in English', 'en')
+    body.add_entry(LangStringEntry(
+                   locale=fr_locale,
+                   value=u"Corps d'announce en français",
+                   locale_confirmed=True))
+
+    announce = IdeaAnnouncement(creator=admin_user,
+                                last_updated_by=admin_user,
+                                title=title,
+                                body=body,
+                                discussion=discussion,
+                                idea=idea_with_en_fr)
+
+    test_session.add(title)
+    test_session.add(body)
+    test_session.add(announce)
+    test_session.flush()
+
+    def fin():
+        print "finalizer announcement_en_fr"
+        test_session.delete(title)
+        test_session.delete(body)
+        test_session.delete(announce)
+        test_session.flush()
+
+    request.addfinalizer(fin)
+    return announce
 
 
 @pytest.fixture(scope="function")
