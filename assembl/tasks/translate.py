@@ -108,7 +108,7 @@ def translate_content(
                         Locale.extract_base_locale(
                             entry.locale_code)): entry
                        for entry in entries.values()}
-            entries.discard(None)
+            entries.pop(None, None)
             originals = ls.non_mt_entries()
             # pick randomly. TODO: Recency order?
             for original in originals:
