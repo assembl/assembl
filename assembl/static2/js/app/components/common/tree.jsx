@@ -147,7 +147,6 @@ class Child extends React.PureComponent {
         {numChildren > 0
           ? children.map((child, idx) => {
             const fullLevelArray = 'fullLevel' in this.props ? fullLevel.split('-') : [];
-            console.log(fullLevel, fullLevelArray);
             fullLevelArray[level] = idx;
             return (
               <Child
