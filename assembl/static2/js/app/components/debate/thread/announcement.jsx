@@ -73,10 +73,10 @@ class Announcement extends React.Component {
             <Translate value="debate.thread.announcement" />
           </h3>
         </div>
-        <Col xs={12} sm={8} className="announcement-media col-sm-push-4">
+        <Col xs={12} md={8} className="announcement-media col-md-push-4">
           <Media {...mediaContent} />
         </Col>
-        <Col xs={12} sm={4} className="col-sm-pull-8">
+        <Col xs={12} md={4} className="col-md-pull-8">
           <div className="announcement-statistics">
             <div className="announcement-doughnut">
               <StatisticsDoughnut elements={createDoughnutElements(sentimentsCount)} />
