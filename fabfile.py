@@ -1012,6 +1012,7 @@ def install_assembl_server_deps():
     Will install most assembl components on a single server, except db
     """
     execute(install_yarn)
+    execute(upgrade_yarn_crontab)
     execute(install_assembl_deps)
 
 
@@ -1750,6 +1751,19 @@ def install_yarn():
     else:
         run('brew install yarn')
 
+
+@task
+def upgrade_yarn_crontab():
+    """Automate the look up for a new version of yarn and update it"""
+    def set_crontab(cmd):
+        return "echo '0 2 * * 1 %s' | uniq | crontab" % (cmd)
+
+    if env.mac:
+        cmd = "brew upgrade yarn"
+        run(set_crontab(cmd))
+    else:
+        cmd = "apt-get install --only-upgrade yarn"
+        sudo(set_crontab(cmd))
 
 @task
 def install_elasticsearch():
