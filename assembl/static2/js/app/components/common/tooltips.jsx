@@ -44,6 +44,12 @@ export const shareTooltip = (
   </Tooltip>
 );
 
+export const shareFacebookTooltip = (
+  <Tooltip id="shareFacebookTooltip">
+    <Translate value="debate.shareSocial" />
+  </Tooltip>
+);
+
 export const likeTooltip = (
   <Tooltip id="likeTooltip">
     <Translate value="debate.like" />
