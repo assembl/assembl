@@ -139,9 +139,9 @@ def _get_ideas_real(discussion, view_def=None, ids=None, user_id=None):
         subqueryload(Idea.attachments).joinedload("document"),
         subqueryload(Idea.widget_links),
         subqueryload(Idea.message_columns),
-        joinedload(Idea.title).subqueryload("entries"),
-        joinedload(Idea.synthesis_title).subqueryload("entries"),
-        joinedload(Idea.description).subqueryload("entries"),
+        joinedload(Idea.title).joinedload("entries"),
+        joinedload(Idea.synthesis_title).joinedload("entries"),
+        joinedload(Idea.description).joinedload("entries"),
         undefer(Idea.num_children))
 
     permissions = get_permissions(user_id, discussion.id)

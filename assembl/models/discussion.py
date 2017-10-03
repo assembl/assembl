@@ -242,9 +242,9 @@ class Discussion(DiscussionBoundBase, NamedClassMixin):
         query = self.db.query(Synthesis).filter_by(id=id)
         if full_data:
             query = query.options(
-                subqueryload('idea_assocs').joinedload('idea').joinedload('title').subqueryload('entries'),
-                subqueryload('idea_assocs').joinedload('idea').joinedload('synthesis_title').subqueryload('entries'),
-                subqueryload('idea_assocs').joinedload('idea').joinedload('description').subqueryload('entries'),
+                subqueryload('idea_assocs').joinedload('idea').joinedload('title').joinedload('entries'),
+                subqueryload('idea_assocs').joinedload('idea').joinedload('synthesis_title').joinedload('entries'),
+                subqueryload('idea_assocs').joinedload('idea').joinedload('description').joinedload('entries'),
                 subqueryload('idea_assocs').joinedload('idea').subqueryload('widget_links'),
                 subqueryload('idea_assocs').joinedload('idea').subqueryload('attachments').joinedload('document'),
                 subqueryload('idea_assocs').joinedload('idea').subqueryload('message_columns'),
