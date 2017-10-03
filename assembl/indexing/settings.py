@@ -28,12 +28,48 @@ TEXT = {
 }
 
 
+known_analyzers = {
+    'ar': "arabic",
+    'hy': "armenian",
+    'eu': "basque",
+    'bg': "bulgarian",
+    'ca': "catalan",
+    'cs': "czech",
+    'nl': "dutch",
+    'en': "english",
+    'fi': "finnish",
+    'fr': "french",
+    'gl': "galician",
+    'de': "german",
+    'hi': "hindi",
+    'hu': "hungarian",
+    'id': "indonesian",
+    'ga': "irish",
+    'it': "italian",
+    'lv': "latvian",
+    'lt': "lithuanian",
+    'no': "norwegian",
+    'pt': "portuguese",
+    'ro': "romanian",
+    'ru': "russian",
+    'ku': "sorani",
+    'es': "spanish",
+    'sv': "swedish",
+    'tr': "turkish",
+}
+
+
 def add_index_languages(props, names):
     langs = index_languages()
     langs.add('other')
     for name in names:
         for lang in langs:
-            props["_".join((name, lang))] = TEXT
+            analyzer = known_analyzers.get(lang, 'default')
+            props["_".join((name, lang))] = {
+                'analyzer': analyzer,
+                'index': True,
+                'type': 'text',
+            }
 
 
 COMMON_POST = {
