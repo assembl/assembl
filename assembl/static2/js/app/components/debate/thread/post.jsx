@@ -186,7 +186,6 @@ class Post extends React.PureComponent {
         <div className="posts">
           <div className="answer-form" id={id}>
             <EditPostForm
-              attachments={attachments}
               id={id}
               body={originalBody}
               subject={originalSubject}
