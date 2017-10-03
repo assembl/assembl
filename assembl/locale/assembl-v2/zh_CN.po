@@ -241,7 +241,7 @@ msgstr "欢迎来到Assembl社区页面"
 #. MMMM Do, YYYY
 #: messages.json
 msgid "date.format"
-msgstr "MMMM 做, YYYY"
+msgstr "MMMM Do, YYYY"
 
 #. [date.format2]
 #. defaultMessage is:
