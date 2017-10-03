@@ -1,5 +1,4 @@
 import React from 'react';
-import { PropTypes } from 'prop-types';
 import { connect } from 'react-redux';
 import { compose, graphql } from 'react-apollo';
 import { Row, Col, FormGroup, Button } from 'react-bootstrap';
@@ -120,10 +119,6 @@ class AnswerForm extends React.PureComponent {
     );
   }
 }
-
-AnswerForm.propTypes = {
-  createPost: PropTypes.func.isRequired
-};
 
 const mapStateToProps = (state) => {
   return {
