@@ -26,7 +26,7 @@ const AtomicBlockRenderer = ({ block, contentState }: { block: ContentBlock, con
     } else {
       innerContent = (
         <span className="attachment-document">
-          {data.title.split('.')[1]}
+          {title.split('.')[1] || '?'}
         </span>
       );
     }
