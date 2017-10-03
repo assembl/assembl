@@ -1,5 +1,4 @@
 language: python
 sudo: enabled
 install:
- - sudo apt-add-repository ppa:chris-lea/uwsgi
- - sudo apt-get install nginx uwsgi uwsgi-plugin-python
+ - sudo apt-get install fabric git openssh-server
