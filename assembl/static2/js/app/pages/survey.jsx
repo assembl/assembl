@@ -14,6 +14,7 @@ import Proposals from '../components/debate/survey/proposals';
 import { getIfPhaseCompletedByIdentifier } from '../utils/timeline';
 import ThematicQuery from '../graphql/ThematicQuery.graphql';
 import { getContentLocale } from '../reducers/rootReducer';
+import { displayAlert } from '../utils/utilityManager';
 
 class Survey extends React.Component {
   constructor(props) {
@@ -55,6 +56,10 @@ class Survey extends React.Component {
     });
   }
   render() {
+    if (this.props.data.error) {
+      displayAlert('danger', 'An error occured, please reload the page');
+      return null;
+    }
     const { thematic: { imgUrl, questions, title, video } } = this.props.data;
     const { debateData } = this.props.debate;
     const isPhaseCompleted = getIfPhaseCompletedByIdentifier(debateData.timeline, 'survey');
