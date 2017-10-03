@@ -64,6 +64,11 @@ class Post extends React.PureComponent {
   }
 
   componentDidUpdate(prevProps) {
+    const { body } = this.getBodyAndSubject();
+    if (body.indexOf('<img src')) {
+      this.props.measureTreeHeight(200);
+    }
+
     if (this.props.lang !== prevProps.lang || this.props.data.post.publicationState !== prevProps.data.post.publicationState) {
       this.props.measureTreeHeight(200);
     }
@@ -89,11 +94,44 @@ class Post extends React.PureComponent {
     this.setState({ mode: 'view' }, this.props.measureTreeHeight);
   };
 
+  getBodyAndSubject = () => {
+    const { subjectEntries, bodyEntries } = this.props.data.post;
+    let body;
+    let subject;
+    let originalBody;
+    let originalBodyLocale;
+    let originalSubject;
+    if (bodyEntries.length > 1) {
+      // first entry is the translated version, example localeCode "fr-x-mtfrom-en"
+      // second entry is the original, example localeCode "en"
+      body = this.state.showOriginal ? bodyEntries[1].value : bodyEntries[0].value;
+      originalBodyLocale = bodyEntries[1].localeCode;
+      originalBody = bodyEntries[1].value;
+    } else {
+      // translation is not enabled or the message is already in the desired locale
+      body = bodyEntries[0].value;
+      originalBody = bodyEntries[0].value;
+    }
+
+    if (subjectEntries.length > 1) {
+      subject = this.state.showOriginal ? subjectEntries[1].value : subjectEntries[0].value;
+      originalSubject = subjectEntries[1].value;
+    } else {
+      subject = subjectEntries[0].value;
+      originalSubject = subjectEntries[0].value;
+    }
+    return {
+      body: body,
+      subject: subject,
+      originalBody: originalBody,
+      originalBodyLocale: originalBodyLocale,
+      originalSubject: originalSubject
+    };
+  };
+
   render() {
     const {
       id,
-      subjectEntries,
-      bodyEntries,
       bodyMimeType,
       indirectIdeaContentLinks,
       creator,
@@ -117,29 +155,9 @@ class Post extends React.PureComponent {
       rowIndex
     } = this.props;
     // creationDate is retrieved by IdeaWithPosts query, not PostQuery
-    let body;
-    let subject;
-    let originalBodyLocale;
-    let originalBody;
-    let originalSubject;
-    if (bodyEntries.length > 1) {
-      // first entry is the translated version, example localeCode "fr-x-mtfrom-en"
-      // second entry is the original, example localeCode "en"
-      body = this.state.showOriginal ? bodyEntries[1].value : bodyEntries[0].value;
-      originalBodyLocale = bodyEntries[1].localeCode;
-      originalBody = bodyEntries[1].value;
-    } else {
-      // translation is not enabled or the message is already in the desired locale
-      body = bodyEntries[0].value;
-      originalBody = bodyEntries[0].value;
-    }
-    if (subjectEntries.length > 1) {
-      subject = this.state.showOriginal ? subjectEntries[1].value : subjectEntries[0].value;
-      originalSubject = subjectEntries[1].value;
-    } else {
-      subject = subjectEntries[0].value;
-      originalSubject = subjectEntries[0].value;
-    }
+
+    const { body, subject, originalBody, originalBodyLocale, originalSubject } = this.getBodyAndSubject();
+
     // This hack should be removed when the TDI's admin section will be done.
     // We need it to have several langString in the idea's title
     const ideaContentLinks = [];
@@ -171,6 +189,7 @@ class Post extends React.PureComponent {
         {originalSubject && originalSubject.replace('Re: ', '')}
       </span>
     );
+
     if (publicationState in DeletedPublicationStates) {
       return (
         <DeletedPost

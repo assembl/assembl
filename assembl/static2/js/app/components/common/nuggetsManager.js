@@ -27,7 +27,7 @@ class NuggetsManager {
   remove(nuggets: Nuggets) {
     const index = this.nuggetsList.indexOf(nuggets);
     if (indexNotFound(index)) {
-      throw new Error(`Tried to remove nuggets ${nuggets} that are not managed by this NuggetsManager ${this}`);
+      throw new Error(`Tried to remove nuggets ${nuggets} that are not managed by this NuggetsManager`);
     }
     delete this.nuggetsList[index];
   }
