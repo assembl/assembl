@@ -39,8 +39,13 @@ $warning-alert-text: $orange2;
 $app-max-width: 1400px;
 $navbar-height: 60px;
 $navbar-line-height: 64px;
+
+$margin-section-xxl: 240px;
+$margin-section-xl: 200px;
+$margin-section-l: 160px;
 $margin-section: 90px;
 $margin-section-xs: 80px;
+$margin-section-xxs: 57.4px;
 
 $fonts-dir: '/static2/fonts';
 $img-dir: '/static2/img';
@@ -134,3 +139,6 @@ $large-hyphen-width: 75px;
 
 $tree-indentation: 40px;
 $post-space: 80px;
+
+$screen-sm-max: 768px;
+$screen-sm-min: 767px;

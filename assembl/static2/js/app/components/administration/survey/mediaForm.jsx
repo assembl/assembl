@@ -8,12 +8,12 @@ import FileUploader from '../../common/fileUploader';
 import uploadDocumentMutation from '../../../graphql/mutations/uploadDocument.graphql';
 
 import {
-  toggleMedia,
-  updateMediaHtmlCode,
-  updateMediaDescriptionTop,
-  updateMediaDescriptionBottom,
-  updateMediaDescriptionSide,
-  updateMediaTitle
+  toggleVideo,
+  updateVideoHtmlCode,
+  updateVideoDescriptionTop,
+  updateVideoDescriptionBottom,
+  updateVideoDescriptionSide,
+  updateVideoTitle
 } from '../../../actions/adminActions';
 import FormControlWithLabel from '../../common/formControlWithLabel';
 
@@ -167,22 +167,22 @@ export const mapStateToProps = ({ admin: { thematicsById } }, { thematicId, sele
 export const mapDispatchToProps = (dispatch, { selectedLocale, thematicId }) => {
   return {
     toggle: () => {
-      return dispatch(toggleMedia(thematicId));
+      return dispatch(toggleVideo(thematicId));
     },
     updateHtmlCode: (value) => {
-      return dispatch(updateMediaHtmlCode(thematicId, value));
+      return dispatch(updateVideoHtmlCode(thematicId, value));
     },
     updateDescriptionTop: (value) => {
-      return dispatch(updateMediaDescriptionTop(thematicId, selectedLocale, value));
+      return dispatch(updateVideoDescriptionTop(thematicId, selectedLocale, value));
     },
     updateDescriptionBottom: (value) => {
-      return dispatch(updateMediaDescriptionBottom(thematicId, selectedLocale, value));
+      return dispatch(updateVideoDescriptionBottom(thematicId, selectedLocale, value));
     },
     updateDescriptionSide: (value) => {
-      return dispatch(updateMediaDescriptionSide(thematicId, selectedLocale, value));
+      return dispatch(updateVideoDescriptionSide(thematicId, selectedLocale, value));
     },
     updateTitle: (value) => {
-      return dispatch(updateMediaTitle(thematicId, selectedLocale, value));
+      return dispatch(updateVideoTitle(thematicId, selectedLocale, value));
     }
   };
 };

@@ -1,9 +1,13 @@
 .announcement {
   text-align: center;
+  margin-left: 4.5%;
+  margin-right: 4.5%;
+  padding-right: 20%;
+  padding-bottom: 72px;
 
   .announcement-title {
     .announcement-title-text {
-      margin-top: 0.5em;
+      margin-top: 11px;
     }
     text-align: left;
   }
@@ -11,15 +15,18 @@
   .announcement-statistics {
     display: inline-block;
     text-align: center;
-    margin-top: 1.5em;
+    margin-top: 37.33px;
     margin-bottom: 3em;
-    margin-right: -4em;
     position: relative;
-    left: 1em;
+    left: 7%;
 
     .announcement-doughnut {
-      width: 125px;
-      height: 125px;
+      width: 140px;
+      height: 140px;
+
+      .circle {
+        stroke-width: 17px;
+      }
 
       .superpose-label {
         top: calc(50% - 1.5em);
@@ -41,48 +48,95 @@
       font-size: 12px;
       margin-bottom: 15%;
       color: $first-color;
+	    line-height: 26px;
+      margin-top: 10px;
 
       span::before {
-        font-size: 14px;
+        font-size: 17px;
       }
     }
   }
 
-  .announcement-media {
+  .media-section {
+    padding-top: 11px;
 
-    .media-section {
+    .container-fluid {
+      margin-left: 0;
+      margin-right: 0;
+      padding-left: 0;
+      padding-right: 0;
 
-      div {
-        background-color: $grey0;
-      }
+      .col-sm-12 {
+        padding-left: 0;
+        padding-right: 0;
 
-      .media-title-section {
-        display: none;
-      }
+        .media-right {
+          padding-left: 0;
+        }
 
-      .media-description-bottom {
-        margin-top: 1em;
-      }
-
-      .content-section {
-        padding-top: 0;
-        padding-bottom: 1.5em;
+        .media-description-top {
+          margin-bottom: 50px;
+        }
+        .media-description-bottom {
+          margin-top: 50px;
+        }
       }
     }
   }
 }
 
-@media screen and (max-width: 767px) {
+@media screen and (max-width: 991px) {
   .announcement {
+    margin-left: 0;
+    padding-right: 0;
+    margin-right: 0;
+
     .announcement-title {
-      margin-bottom: 30px;
+      margin-bottom: 29px;
+
+      .announcement-title-text {
+        margin-top: 23px;
+        font-size: 26px;
+        font-weight: 300;
+        letter-spacing: 1px;
+        line-height: 36px;
+        display: block;
+        margin-left: 31px;
+      }
+
+      .title-hyphen {
+        position: relative;
+        left: -17px;
+      }
     }
     .announcement-statistics {
       margin-top: 0px;
       left: 0;
     }
-    .announcement-media > .media-section > .content-section {
-      padding-top: 1.5em;
+    .announcement-media {
+      padding-left: 0;
+      padding-right: 0;
+
+      .media-section {
+        padding-top: 0;
+        padding-bottom: 25px;
+
+        .media-description-layer {
+          margin-left: 17.5px;
+          margin-right: 17.5px;
+        }
+
+        .media-right {
+
+          .media-description-top {
+            margin-bottom: 23px;
+          }
+
+          .media-description-bottom {
+            margin-top: 23px;
+          }
+        }
+      }
     }
   }
 }

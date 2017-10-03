@@ -106,6 +106,7 @@
       height: 100%;
       position: absolute;
       top: 0;
+      left: 0;
       width: 100%;
     }
     .header-bkg-mask {
@@ -113,6 +114,7 @@
         height: 100%;
         position: absolute;
         top: 0;
+        left: 0;
         width: 100%;
     }
   }
@@ -141,39 +143,6 @@
       .dark-title-1 {
         padding: 15px 0 0;
         width: calc(100% - 75px);
-      }
-    }
-  }
-
-  .media-section {
-    z-index: 100;
-
-    .content-section {
-      padding: $margin-section-xs 0;
-    }
-
-    .media-description-layer {
-      text-align: justify;
-      font-family: $font-family4;
-      font-size: $font-size-s;
-      line-height: 28px;
-    }
-
-    .media-description-top {
-        margin-bottom: 40px;
-    }
-
-    .media-description-bottom {
-        margin-top: 40px;
-    }
-
-    .media-container {
-      margin: 0;
-    }
-
-    .assembl-icon-pepite {
-      &:before {
-        font-size: 60px;
       }
     }
   }
@@ -363,40 +332,27 @@
 
 @media screen and (min-width: 768px) {
 
-  .media-section {
-    .media-title-section {
-      margin: $margin-section 0 0;
-      text-align: left;
-
-      .dark-title-1 {
-        padding: 15px 0 0;
-        width: calc(100% - 75px);
-      }
-    }
-
-    .media-description {
-      color: $first-color;
-      font-family: $font-family7;
-      font-size: $font-size-sm;
-      line-height: 30px;
-      margin: 0 auto;
-      text-align: center;
-      width: 200px;
-
-      .description-txt {
-        margin: 40px 0;
-        text-align: left;
-      }
-
-      .box-hyphen {
-        height: 4px;
-      }
-    }
-
-  }
-
   .question-title {
     margin: $margin-section 0 $margin-section-xs;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .question-title {
+    margin: $margin-section 0 $margin-section-xs;
+  }
+}
+
+@media screen and (max-width: 991px) {
+  .idea {
+    .container-fluid {
+      padding-left: 0;
+      padding-right: 0;
+
+      .content-section {
+        padding-top: 50px;
+      }
+    }
   }
 }
 
@@ -405,42 +361,19 @@
 (-webkit-min-device-pixel-ratio: 2),
 (min-resolution: 192dpi) {
 
-  .media-section {
-    .media-title-section {
-      margin: $margin-section-xs 0 0;
-
-      .dark-title-1 {
-        display: block;
-        font-size: $font-size-l;
-        line-height: $font-size-l + 10px;
-        margin: 10px 0 0 32px;
-        width: calc(100% - 30px);
-      }
-    }
-
-    .assembl-icon-pepite {
-      display: none;
-    }
-
-    .video-description {
-      color: $grey2;
-      margin: 0 32px 60px 32px;
-    }
-
-    .box-hyphen {
-      display: none;
-    }
-
-  }
-
   .question-title {
     margin: $margin-section-xs 0 $margin-section-xs / 2;
 
+    .title-hyphen {
+      position: relative;
+      left: -30px;
+    }
+
     .dark-title-1 {
       display: block;
-      font-size: $font-size-l;
-      line-height: 36px;
-      margin: 0 0 0 32px;
+      font-size: 20px;
+      line-height: 33px;
+      margin: 0 0 0 15px;
       width: calc(100% - 30px);
     }
   }
