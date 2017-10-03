@@ -136,7 +136,7 @@ class Idea extends React.Component {
           {!ideaWithPostsData.loading &&
             idea.announcement &&
             idea.announcement.body &&
-            <Grid fluid className="background-grey">
+            <Grid fluid className="background-light">
               <div className="max-container">
                 <div className="content-section">
                   <Announcement ideaWithPostsData={ideaWithPostsData} announcementContent={idea.announcement} />
