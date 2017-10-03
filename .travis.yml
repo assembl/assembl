@@ -1,4 +1,12 @@
 language: python
 sudo: enabled
-install:
- - sudo apt-get install fabric git openssh-server
+before_install:
+ - sudo apt-get -qq update
+ - sudo apt-get install -y fabric git openssh-server
+ - fab -c configs/develop.rc install_single_server
+ - fab -c configs/develop.rc bootstrap_from_checkout
+install: true
+before_script:
+ - source venv/bin/activate
+ - supervisord
+script: true
