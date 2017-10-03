@@ -1777,7 +1777,7 @@ def install_elasticsearch():
     sha1_filename, headers = urlretrieve('https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-{version}.tar.gz.sha1'.format(version=ELASTICSEARCH_VERSION))
     with open(tar_filename, 'rb') as tar_file:
         with open(sha1_filename, 'rb') as sha1_file:
-            if sha1(tar_file.read()).hexdigest() != sha1_file.read():
+            if sha1(tar_file.read()).hexdigest() != sha1_file.read().strip():
                 print(red("sha1sum of elasticsearch tarball doesn't match, exiting"))
                 sys.exit(1)
 
@@ -1798,7 +1798,8 @@ def upgrade_elasticsearch():
     extract_path = normpath(
         join(env.projectpath, 'var', 'elasticsearch'))
     supervisor_process_stop('elasticsearch')
-    rmtree(extract_path)
+    if exists(extract_path):
+        rmtree(extract_path)
     execute(install_elasticsearch)
     supervisor_process_start('elasticsearch')
 
