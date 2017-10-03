@@ -199,7 +199,7 @@
     "IdeaMessageColumn": {
         "idea": true,
         "message_classifier": true,
-        "header": true,
+        "header": ":extended",
         "name": ":extended",
         "color": true,
         "previous_column": true
