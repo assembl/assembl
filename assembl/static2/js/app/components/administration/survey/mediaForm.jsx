@@ -45,11 +45,12 @@ class MediaForm extends React.Component {
       updateTitle,
       updateHtmlCode
     } = this.props;
-    const titlePh = `${I18n.t('administration.ph.title')} ${selectedLocale.toUpperCase()}`;
-    const quotePh = `${I18n.t('administration.ph.quote')} ${selectedLocale.toUpperCase()}`;
-    const descriptionTopPh = `${I18n.t('administration.ph.descriptionTop')} ${selectedLocale.toUpperCase()}`;
-    const descriptionBottomPh = `${I18n.t('administration.ph.descriptionBottom')} ${selectedLocale.toUpperCase()}`;
-    const mediaLinkPh = `${I18n.t('administration.ph.mediaLink')} ${selectedLocale.toUpperCase()}`;
+    const upperCaseLocale = selectedLocale.toUpperCase();
+    const titlePh = `${I18n.t('administration.ph.title')} ${upperCaseLocale}`;
+    const quotePh = `${I18n.t('administration.ph.quote')} ${upperCaseLocale}`;
+    const descriptionTopPh = `${I18n.t('administration.ph.descriptionTop')} ${upperCaseLocale}`;
+    const descriptionBottomPh = `${I18n.t('administration.ph.descriptionBottom')} ${upperCaseLocale}`;
+    const mediaLinkPh = `${I18n.t('administration.ph.mediaLink')} ${upperCaseLocale}`;
     const isLocalURL = htmlCode[0] === '/';
     return (
       <div className="form-container">
