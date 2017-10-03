@@ -6,6 +6,7 @@ import { Row, Col, FormGroup, Button } from 'react-bootstrap';
 import { Translate, I18n } from 'react-redux-i18n';
 
 import createPostMutation from '../../../graphql/mutations/createPost.graphql';
+import uploadDocumentMutation from '../../../graphql/mutations/uploadDocument.graphql';
 import { displayAlert, inviteUserToLogin } from '../../../utils/utilityManager';
 import { getConnectedUserId } from '../../../utils/globalFunctions';
 import { convertRawContentStateToHTML, rawContentStateIsEmpty } from '../../../utils/draftjs';
@@ -41,31 +42,38 @@ class AnswerForm extends React.PureComponent {
   };
 
   handleSubmit = () => {
-    const { mutate, contentLocale, parentId, ideaId, refetchIdea, hideAnswerForm } = this.props;
+    const { createPost, contentLocale, parentId, ideaId, refetchIdea, hideAnswerForm, uploadDocument } = this.props;
     const { body } = this.state;
     this.setState({ submitting: true });
     const bodyIsEmpty = !body || rawContentStateIsEmpty(body);
     if (!bodyIsEmpty) {
-      const attachments = attachmentsPlugin.getAttachmentsDocumentIds(body);
-      const variables = {
-        contentLocale: contentLocale,
-        ideaId: ideaId,
-        parentId: parentId,
-        body: convertRawContentStateToHTML(body),
-        attachments: attachments
-      };
-      displayAlert('success', I18n.t('loading.wait'));
-      mutate({ variables: variables })
-        .then(() => {
-          refetchIdea().then(() => {
-            hideAnswerForm();
+      // first we upload the new documents
+      const uploadDocumentsPromise = attachmentsPlugin.uploadNewAttachments(body, uploadDocument);
+      uploadDocumentsPromise.then((result) => {
+        if (!result.contentState) {
+          return;
+        }
+
+        const variables = {
+          contentLocale: contentLocale,
+          ideaId: ideaId,
+          parentId: parentId,
+          body: convertRawContentStateToHTML(result.contentState),
+          attachments: result.documentIds
+        };
+        displayAlert('success', I18n.t('loading.wait'));
+        createPost({ variables: variables })
+          .then(() => {
+            refetchIdea().then(() => {
+              hideAnswerForm();
+            });
+            displayAlert('success', I18n.t('debate.thread.postSuccess'));
+          })
+          .catch((error) => {
+            displayAlert('danger', error);
+            this.setState({ submitting: false });
           });
-          displayAlert('success', I18n.t('debate.thread.postSuccess'));
-        })
-        .catch((error) => {
-          displayAlert('danger', error);
-          this.setState({ submitting: false });
-        });
+      });
     } else {
       displayAlert('warning', I18n.t('debate.thread.fillBody'));
       this.setState({ submitting: false });
@@ -114,7 +122,7 @@ class AnswerForm extends React.PureComponent {
 }
 
 AnswerForm.propTypes = {
-  mutate: PropTypes.func.isRequired
+  createPost: PropTypes.func.isRequired
 };
 
 const mapStateToProps = (state) => {
@@ -123,4 +131,8 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default compose(connect(mapStateToProps), graphql(createPostMutation))(AnswerForm);
+export default compose(
+  connect(mapStateToProps),
+  graphql(createPostMutation, { name: 'createPost' }),
+  graphql(uploadDocumentMutation, { name: 'uploadDocument' })
+)(AnswerForm);

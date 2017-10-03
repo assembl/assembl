@@ -19,6 +19,7 @@ type ToolbarProps = {
 };
 
 type ToolbarState = {
+  attachedFiles: Array<File>,
   showAttachFileForm: boolean
 };
 
@@ -31,6 +32,7 @@ class Toolbar extends React.Component<void, ToolbarProps, ToolbarState> {
   constructor() {
     super();
     this.state = {
+      attachedFiles: [],
       showAttachFileForm: false
     };
   }
@@ -95,26 +97,41 @@ class Toolbar extends React.Component<void, ToolbarProps, ToolbarState> {
     });
   };
 
-  addBlock = (data) => {
-    const { editorState, onChange } = this.props;
-    const contentState = editorState.getCurrentContent();
-    const contentStateWithEntity = contentState.createEntity('document', 'IMMUTABLE', data);
-    const entityKey = contentStateWithEntity.getLastCreatedEntityKey();
-    // we need to use a non empty string for the third param of insertAtomicBlock method
-    const newEditorState = AtomicBlockUtils.insertAtomicBlock(editorState, entityKey, ' ');
-    onChange(newEditorState);
+  addBlock = (file) => {
+    // read the file, create entity and block in EditorState
+    const reader = new FileReader();
+    reader.addEventListener(
+      'load',
+      () => {
+        const data = {
+          file: file,
+          externalUrl: reader.result
+        };
+        const { editorState, onChange } = this.props;
+        const contentState = editorState.getCurrentContent();
+        const contentStateWithEntity = contentState.createEntity('document', 'IMMUTABLE', data);
+        const entityKey = contentStateWithEntity.getLastCreatedEntityKey();
+        // we need to use a non empty string for the third param of insertAtomicBlock method
+        const newEditorState = AtomicBlockUtils.insertAtomicBlock(editorState, entityKey, ' ');
+        onChange(newEditorState);
+      },
+      false
+    );
+    reader.readAsDataURL(file);
   };
 
   onAttachFileFormSubmit = (file) => {
-    const variables = {
-      file: file
-    };
-    this.props.uploadDocument({ variables: variables }).then((res) => {
-      this.addBlock(res.data.uploadDocument.document);
-      this.setState({
-        showAttachFileForm: false
-      });
-    });
+    this.setState(
+      {
+        attachedFiles: [...this.state.attachedFiles, file]
+      },
+      () => {
+        if (file) {
+          this.addBlock(file);
+          this.setState({ showAttachFileForm: false });
+        }
+      }
+    );
   };
 
   render() {

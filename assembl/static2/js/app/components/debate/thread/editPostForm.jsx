@@ -7,6 +7,7 @@ import { Translate, I18n } from 'react-redux-i18n';
 import { RawContentState } from 'draft-js';
 
 import deletePostAttachmentMutation from '../../../graphql/mutations/deletePostAttachment.graphql';
+import uploadDocumentMutation from '../../../graphql/mutations/uploadDocument.graphql';
 import updatePostMutation from '../../../graphql/mutations/updatePost.graphql';
 import { displayAlert, inviteUserToLogin } from '../../../utils/utilityManager';
 import { getConnectedUserId } from '../../../utils/globalFunctions';
@@ -14,6 +15,7 @@ import { convertToRawContentState, convertRawContentStateToHTML, rawContentState
 import EditAttachments from '../../common/editAttachments';
 import RichTextEditor from '../../common/richTextEditor';
 import attachmentsPlugin from '../../common/richTextEditor/attachmentsPlugin';
+import type { UploadNewAttachmentsPromiseResult } from '../../common/richTextEditor/attachmentsPlugin';
 import { TextInputWithRemainingChars } from '../../common/textInputWithRemainingChars';
 import { TEXT_INPUT_MAX_LENGTH, TEXT_AREA_MAX_LENGTH } from './topPostForm';
 import { getContentLocale } from '../../../reducers/rootReducer';
@@ -28,6 +30,7 @@ type EditPostFormProps = {
   goBackToViewMode: Function,
   client: Object,
   refetchIdea: Function,
+  uploadDocument: Function,
   updatePost: Function
 };
 
@@ -74,37 +77,44 @@ class EditPostForm extends React.PureComponent<void, EditPostFormProps, EditPost
   };
 
   handleSubmit = (): void => {
+    const { uploadDocument, updatePost } = this.props;
     const { body } = this.state;
     const subjectIsEmpty = this.state.subject.length === 0;
     const bodyIsEmpty = rawContentStateIsEmpty(body);
     if (!subjectIsEmpty && !bodyIsEmpty) {
-      const attachments = attachmentsPlugin.getAttachmentsDocumentIds(body);
-      const variables = {
-        contentLocale: this.props.contentLocale,
-        postId: this.props.id,
-        subject: this.state.subject,
-        body: convertRawContentStateToHTML(body),
-        attachments: attachments
-      };
-      displayAlert('success', I18n.t('loading.wait'));
-      const oldSubject = this.props.subject;
-      this.props
-        .updatePost({ variables: variables })
-        .then(() => {
-          this.props.refetchIdea();
-          displayAlert('success', I18n.t('debate.thread.postSuccess'));
-          this.props.goBackToViewMode();
-          if (oldSubject !== this.state.subject) {
-            // If we edited the subject, we need to reload all descendants posts,
-            // we do this by calling resetStore which will refetch all mounted queries.
-            // Descendants are actually a subset of mounted queries, so we overfetch here.
-            // This is fine, editing a subject should be a rare action.
-            this.props.client.resetStore();
-          }
-        })
-        .catch((error) => {
-          displayAlert('danger', error);
-        });
+      // first we upload the new documents
+      const uploadDocumentsPromise = attachmentsPlugin.uploadNewAttachments(body, uploadDocument);
+      uploadDocumentsPromise.then((result: UploadNewAttachmentsPromiseResult) => {
+        if (!result.contentState) {
+          return;
+        }
+
+        const variables = {
+          contentLocale: this.props.contentLocale,
+          postId: this.props.id,
+          subject: this.state.subject,
+          body: convertRawContentStateToHTML(result.contentState),
+          attachments: result.documentIds
+        };
+        displayAlert('success', I18n.t('loading.wait'));
+        const oldSubject = this.props.subject;
+        updatePost({ variables: variables })
+          .then(() => {
+            this.props.refetchIdea();
+            displayAlert('success', I18n.t('debate.thread.postSuccess'));
+            this.props.goBackToViewMode();
+            if (oldSubject !== this.state.subject) {
+              // If we edited the subject, we need to reload all descendants posts,
+              // we do this by calling resetStore which will refetch all mounted queries.
+              // Descendants are actually a subset of mounted queries, so we overfetch here.
+              // This is fine, editing a subject should be a rare action.
+              this.props.client.resetStore();
+            }
+          })
+          .catch((error) => {
+            displayAlert('danger', error);
+          });
+      });
     } else if (subjectIsEmpty) {
       displayAlert('warning', I18n.t('debate.thread.fillSubject'));
     } else if (bodyIsEmpty) {
@@ -193,6 +203,7 @@ const mapStateToProps = (state) => {
 
 export default compose(
   connect(mapStateToProps),
+  graphql(uploadDocumentMutation, { name: 'uploadDocument' }),
   graphql(deletePostAttachmentMutation, { name: 'deletePostAttachment' }),
   graphql(updatePostMutation, { name: 'updatePost' }),
   withApollo

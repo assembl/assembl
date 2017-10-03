@@ -4,9 +4,10 @@ import { Translate } from 'react-redux-i18n';
 
 export type Document = {
   id: string,
-  title: string,
+  title?: string,
   externalUrl: string,
-  mimeType?: string
+  mimeType?: string,
+  file?: File
 };
 
 export type Attachment = {

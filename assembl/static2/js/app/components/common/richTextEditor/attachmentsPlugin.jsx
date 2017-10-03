@@ -20,8 +20,9 @@ const plugin = {
   },
   entityToHTML: (entity: { data: Document }, originalText: string): string => {
     if (entity.type === ENTITY_TYPE) {
-      const { externalUrl, id, title } = entity.data;
+      const { externalUrl, id } = entity.data;
       const mimeType = entity.data.mimeType ? entity.data.mimeType : '';
+      const title = entity.data.title ? entity.data.title : '';
       if (mimeType.startsWith('image')) {
         return `<img src="${externalUrl}" alt="" title="${title}" width="60%" data-id="${id}" data-mimetype="${mimeType}" />`;
       }
@@ -155,7 +156,78 @@ const plugin = {
     }
 
     return rawContentState;
+  },
+
+  uploadNewAttachments: (rawContentState: RawContentState, uploadDocument: Function): Promise<*> => {
+    if (!rawContentState) {
+      return new Promise((resolve) => {
+        resolve({ contentState: null, documentIds: [] });
+      });
+    }
+
+    const documentIds = [];
+    let contentState = convertFromRaw(rawContentState);
+    const entities = [];
+    contentState.getBlockMap().forEach((block) => {
+      if (block.type === 'atomic') {
+        block.findEntityRanges((entityRange) => {
+          const entityKey = entityRange.entity;
+          if (entityKey) {
+            const entity = contentState.getEntity(entityKey);
+            if (entity) {
+              entities.push({
+                entityKey: entityKey,
+                entity: entity
+              });
+            }
+          }
+        });
+      }
+    });
+
+    let uploadDocumentsPromise = Promise.resolve();
+    entities.forEach((entityInfo) => {
+      const { entity, entityKey } = entityInfo;
+      if (entity.data.file) {
+        // this is a new document, add a promise to create it and modify its entity
+        const variables = {
+          file: entity.data.file
+        };
+        uploadDocumentsPromise = uploadDocumentsPromise.then(() => {
+          return uploadDocument({ variables: variables }).then((res) => {
+            if (res && res.data) {
+              const doc = res.data.uploadDocument.document;
+              documentIds.push(doc.id);
+              // update entity
+              const { externalUrl, id, mimeType, title } = doc;
+              contentState = contentState.replaceEntityData(entityKey, {
+                id: id,
+                externalUrl: externalUrl,
+                title: title,
+                mimeType: mimeType
+              });
+            }
+          });
+        });
+      } else {
+        documentIds.push(entity.data.id);
+      }
+    });
+
+    return uploadDocumentsPromise.then(() => {
+      return new Promise((resolve) => {
+        resolve({
+          contentState: convertToRaw(contentState),
+          documentIds: documentIds
+        });
+      });
+    });
   }
+};
+
+export type UploadNewAttachmentsPromiseResult = {
+  contentState: RawContentState,
+  documentIds: Array<string>
 };
 
 export default plugin;

@@ -10,8 +10,19 @@ const AtomicBlockRenderer = ({ block, contentState }: { block: ContentBlock, con
   const type = entity.getType();
   if (type === 'document') {
     let innerContent;
-    if (data.mimeType.startsWith('image')) {
-      innerContent = <img src={data.externalUrl} alt="" title={data.title} width="60%" />;
+    let mimeType;
+    let title;
+    if (data.file) {
+      // document was just created via editor and not uploaded to the server yet
+      mimeType = data.file.type;
+      title = data.file.name;
+    } else {
+      mimeType = data.mimeType;
+      title = data.title;
+    }
+
+    if (mimeType.startsWith('image')) {
+      innerContent = <img src={data.externalUrl} alt="" title={title} width="60%" />;
     } else {
       innerContent = (
         <span className="attachment-document">

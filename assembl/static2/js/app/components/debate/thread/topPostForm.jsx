@@ -5,6 +5,7 @@ import { Row, Col, FormGroup, Button } from 'react-bootstrap';
 import { I18n, Translate } from 'react-redux-i18n';
 
 import createPostMutation from '../../../graphql/mutations/createPost.graphql';
+import uploadDocumentMutation from '../../../graphql/mutations/uploadDocument.graphql';
 import { convertRawContentStateToHTML, rawContentStateIsEmpty } from '../../../utils/draftjs';
 import { displayAlert, promptForLoginOr } from '../../../utils/utilityManager';
 import { TextInputWithRemainingChars } from '../../common/textInputWithRemainingChars';
@@ -39,31 +40,36 @@ class TopPostForm extends React.Component {
   };
 
   createTopPost = () => {
-    const { contentLocale, ideaId, mutate, refetchIdea } = this.props;
+    const { contentLocale, createPost, ideaId, refetchIdea, uploadDocument } = this.props;
     const { body, subject } = this.state;
     this.setState({ submitting: true });
     const bodyIsEmpty = !body || rawContentStateIsEmpty(body);
     if (subject && !bodyIsEmpty) {
-      const attachments = attachmentsPlugin.getAttachmentsDocumentIds(body);
-      const variables = {
-        contentLocale: contentLocale,
-        ideaId: ideaId,
-        subject: subject,
-        body: convertRawContentStateToHTML(body),
-        attachments: attachments
-      };
-      displayAlert('success', I18n.t('loading.wait'));
-      mutate({ variables: variables })
-        .then(() => {
-          refetchIdea();
-          displayAlert('success', I18n.t('debate.thread.postSuccess'));
-          this.resetForm();
-          this.setState({ submitting: false });
-        })
-        .catch((error) => {
-          displayAlert('danger', error);
-          this.setState({ submitting: false });
-        });
+      // first, we upload each attachment
+      const uploadDocumentsPromise = attachmentsPlugin.uploadNewAttachments(body, uploadDocument);
+      uploadDocumentsPromise.then((result) => {
+        const variables = {
+          contentLocale: contentLocale,
+          ideaId: ideaId,
+          subject: subject,
+          // use the updated content state with new entities
+          body: convertRawContentStateToHTML(result.contentState),
+          attachments: result.documentIds
+        };
+        displayAlert('success', I18n.t('loading.wait'));
+
+        createPost({ variables: variables })
+          .then(() => {
+            refetchIdea();
+            displayAlert('success', I18n.t('debate.thread.postSuccess'));
+            this.resetForm();
+            this.setState({ submitting: false });
+          })
+          .catch((error) => {
+            displayAlert('danger', error);
+            this.setState({ submitting: false });
+          });
+      });
     } else if (!subject) {
       displayAlert('warning', I18n.t('debate.thread.fillSubject'));
       this.setState({ submitting: false });
@@ -152,4 +158,8 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default compose(connect(mapStateToProps), graphql(createPostMutation))(TopPostForm);
+export default compose(
+  connect(mapStateToProps),
+  graphql(createPostMutation, { name: 'createPost' }),
+  graphql(uploadDocumentMutation, { name: 'uploadDocument' })
+)(TopPostForm);
