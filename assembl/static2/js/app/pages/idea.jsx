@@ -163,5 +163,9 @@ const mapStateToProps = (state) => {
 export default compose(
   connect(mapStateToProps),
   graphql(IdeaWithPostsQuery, { name: 'ideaWithPostsData' }),
-  graphql(IdeaQuery, { name: 'ideaData' })
+  graphql(IdeaQuery, { name: 'ideaData', options: { notifyOnNetworkStatusChange: true } })
+  // ideaData.loading stays to true when switching interface language (IdeaQuery is using lang variable)
+  // This is an issue in apollo-client, adding notifyOnNetworkStatusChange: true is a workaround,
+  // downgrading to apollo-client 1.8.1 should works too.
+  // See https://github.com/apollographql/apollo-client/issues/1186#issuecomment-327161526
 )(Idea);
