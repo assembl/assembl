@@ -1541,20 +1541,22 @@ class UpdatePost(graphene.Mutation):
             changed = True
 
             original_attachments = post.attachments
+            original_attachments_doc_ids = []
             if original_attachments:
                 original_attachments_doc_ids = [str(a.document_id) for a in original_attachments]
-                attachments = args.get('attachments', [])
-                for document_id in attachments:
-                    if document_id not in original_attachments_doc_ids:
-                        document = models.Document.get(document_id)
-                        models.PostAttachment(
-                            document=document,
-                            discussion=discussion,
-                            creator_id=context.authenticated_userid,
-                            post=post,
-                            title=document.title,
-                            attachmentPurpose="EMBED_ATTACHMENT"
-                        )
+
+            attachments = args.get('attachments', [])
+            for document_id in attachments:
+                if document_id not in original_attachments_doc_ids:
+                    document = models.Document.get(document_id)
+                    models.PostAttachment(
+                        document=document,
+                        discussion=discussion,
+                        creator_id=context.authenticated_userid,
+                        post=post,
+                        title=document.title,
+                        attachmentPurpose="EMBED_ATTACHMENT"
+                    )
 
                 # delete attachments that has been removed
                 documents_to_delete = set(original_attachments_doc_ids) - set(attachments)
