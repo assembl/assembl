@@ -131,8 +131,8 @@
         .media-description {
           display: block;
           margin-top: $margin-section-xxxs;
-          margin-left: $margin-section-tiny;
-          margin-right: $margin-section-tiny;
+          margin-left: auto;
+          margin-right: auto;
           width: calc(100% - ($margin-section-tiny * 2));
         }
       }
