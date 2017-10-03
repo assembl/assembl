@@ -31,7 +31,7 @@ from fabric.api import (
 from fabric.colors import yellow, cyan, red, green
 
 
-ELASTICSEARCH_VERSION = '5.2.2'
+ELASTICSEARCH_VERSION = '5.6.2'
 DEFAULT_SECTION = "DEFAULT"
 
 
