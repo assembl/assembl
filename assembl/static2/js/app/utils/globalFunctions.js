@@ -26,6 +26,9 @@ export const getTranslations = () => {
 };
 
 export const getLocale = (browserLanguage) => {
+  if (browserLanguage.slice(0, 2) === 'zh') {
+    return 'zh_CN';
+  }
   let locale = browserLanguage.split('-')[0].toLowerCase();
   if (!Translations[locale]) locale = 'en';
   return locale;
