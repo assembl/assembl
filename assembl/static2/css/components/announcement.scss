@@ -3,7 +3,7 @@
   margin-left: 4.5%;
   margin-right: 4.5%;
   padding-right: 20%;
-  padding-bottom: 72px;
+  padding-bottom: $margin-section-xxs;
 
   .announcement-title {
     .announcement-title-text {
@@ -85,23 +85,23 @@
   }
 }
 
-@media screen and (max-width: 991px) {
+@media screen and (max-width: $screen-sm-max) {
   .announcement {
     margin-left: 0;
     padding-right: 0;
     margin-right: 0;
 
     .announcement-title {
-      margin-bottom: 29px;
+      margin-bottom: $margin-section-tiny;
 
       .announcement-title-text {
         margin-top: 23px;
-        font-size: 26px;
+        font-size: $font-size-l;
         font-weight: 300;
         letter-spacing: 1px;
         line-height: 36px;
         display: block;
-        margin-left: 31px;
+        margin-left: $margin-section-tiny;
       }
 
       .title-hyphen {
