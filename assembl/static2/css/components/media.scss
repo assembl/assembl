@@ -74,7 +74,7 @@
   }
 }
 
-@media screen and (max-width: 991px) {
+@media screen and (max-width: $screen-sm-max) {
   .media-section {
     padding-top: $margin-section-xxs;
     padding-bottom: $margin-section-xxs;
