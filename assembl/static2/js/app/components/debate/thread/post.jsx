@@ -157,7 +157,7 @@ class Post extends React.PureComponent {
     const modifiedOriginalSubject = (
       <span>
         {getFullLevelString(fullLevel)}
-        {originalSubject.replace('Re: ', '')}
+        {originalSubject && originalSubject.replace('Re: ', '')}
       </span>
     );
     if (publicationState in DeletedPublicationStates) {
