@@ -33,7 +33,7 @@ class AssemblModal extends React.Component {
     window.location = this.url;
   }
   render() {
-    const { content, title, body, footer, footerTxt, button } = this.state;
+    const { content, title, body, footer, footerTxt, button, bsSize } = this.state;
     if (content) {
       return (
         <Modal show={this.state.showModal} onHide={this.close}>
@@ -43,7 +43,7 @@ class AssemblModal extends React.Component {
     }
 
     return (
-      <Modal show={this.state.showModal} onHide={this.close}>
+      <Modal bsSize={bsSize || null} show={this.state.showModal} onHide={this.close}>
         <Modal.Header closeButton>
           {title &&
             <Modal.Title>

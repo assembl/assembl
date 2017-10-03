@@ -36,8 +36,7 @@ export const displayAlert = (style, msg, topPosition = false, time = 4000) => {
     });
   }, time);
 };
-
-export const displayModal = (title, body, footer, footerTxt, button = null, showModal = true) => {
+export const displayModal = (title, body, footer, footerTxt, button = null, showModal = true, bsSize = null) => {
   /*
     title:String => the text in the header of the modal
     body:String => the text in the body of the modal
@@ -55,7 +54,8 @@ export const displayModal = (title, body, footer, footerTxt, button = null, show
     footer: footer,
     footerTxt: footerTxt,
     button: button,
-    showModal: showModal
+    showModal: showModal,
+    bsSize: bsSize
   });
 };
 
