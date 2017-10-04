@@ -1,6 +1,6 @@
 import React from 'react';
 
-class frFlag extends React.Component {
+class FrFlag extends React.Component {
   render() {
     return (
       <svg width="20px" height="20px" x="0px" y="0px" viewBox="0 0 512 512" style={{ enableBackground: 'new 0 0 512 512' }}>
@@ -18,4 +18,4 @@ class frFlag extends React.Component {
   }
 }
 
-export default frFlag;
+export default FrFlag;

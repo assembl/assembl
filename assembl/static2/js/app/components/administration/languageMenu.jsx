@@ -7,6 +7,8 @@ import { updateSelectedLocale } from '../../actions/adminActions';
 import En from '../svg/flags/en';
 import Fr from '../svg/flags/fr';
 import Ja from '../svg/flags/ja';
+import ZhCN from '../svg/flags/zh_CN';
+import Ru from '../svg/flags/ru';
 
 // TO DO get it dynamically
 const Flag = ({ locale }) => {
@@ -17,6 +19,10 @@ const Flag = ({ locale }) => {
     return <Fr />;
   case 'ja':
     return <Ja />;
+  case 'ru':
+    return <Ru />;
+  case 'zh_Hans':
+    return <ZhCN />;
   default:
     return (
       <span>

@@ -1,6 +1,6 @@
 import React from 'react';
 
-class enFlag extends React.Component {
+class EnFlag extends React.Component {
   render() {
     return (
       <svg width="20px" height="20px" x="0px" y="0px" viewBox="0 0 512 512" style={{ enableBackground: 'new 0 0 512 512' }}>
@@ -73,4 +73,4 @@ class enFlag extends React.Component {
   }
 }
 
-export default enFlag;
+export default EnFlag;

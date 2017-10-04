@@ -1,6 +1,6 @@
 import React from 'react';
 
-class jpFlag extends React.Component {
+class JaFlag extends React.Component {
   render() {
     return (
       <svg width="20px" height="20px" x="0px" y="0px" viewBox="0 0 512 512">
@@ -18,4 +18,4 @@ class jpFlag extends React.Component {
   }
 }
 
-export default jpFlag;
+export default JaFlag;
