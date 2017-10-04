@@ -316,7 +316,7 @@ class Preferences(MutableMapping, Base, NamedClassMixin):
         keys = self.preference_data_key_list
         return [data[key] for key in keys]
 
-    crud_permissions = CrudPermissions(P_SYSADMIN)
+    crud_permissions = CrudPermissions(create=P_SYSADMIN, update=P_ADMIN_DISC)
 
     # This defines the allowed properties and their data format
     # Each preference metadata has the following format:

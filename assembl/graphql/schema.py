@@ -1854,7 +1854,7 @@ class UpdateDiscussionPreferences(graphene.Mutation):
         discussion = models.Discussion.get(discussion_id)
 
         permissions = get_permissions(user_id, discussion_id)
-        allowed = cls.user_can_cls(user_id, CrudPermissions.CREATE, permissions)
+        allowed = cls.user_can_cls(user_id, CrudPermissions.UPDATE, permissions)
         if not allowed or (allowed == IF_OWNED and user_id == Everyone):
             raise HTTPUnauthorized()
         prefs_to_save = args.get('languages')
