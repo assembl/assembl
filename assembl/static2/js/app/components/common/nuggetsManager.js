@@ -30,8 +30,8 @@ class NuggetsManager {
   }
   sort() {
     this.nuggetsList.sort((a, b) => {
-      const aLevel = a.props.completeLevel;
-      const bLevel = b.props.completeLevel;
+      const aLevel = a.props.completeLevel.split('-');
+      const bLevel = b.props.completeLevel.split('-');
       return aLevel.some((aLevelValue, index) => {
         if (index >= bLevel.length) return true;
         return aLevelValue > bLevel[index];

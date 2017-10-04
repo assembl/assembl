@@ -209,16 +209,14 @@ class Post extends React.PureComponent {
           extracts={extracts}
           postId={id}
           nuggetsManager={nuggetsManager}
-          completeLevel={
-            fullLevel
-              ? [
-                rowIndex,
-                ...fullLevel.split('-').map((string) => {
-                  return Number(string);
-                })
-              ]
-              : [rowIndex]
-          }
+          completeLevel={(fullLevel
+            ? [
+              rowIndex,
+              ...fullLevel.split('-').map((string) => {
+                return Number(string);
+              })
+            ]
+            : [rowIndex]).join('-')}
         />
         <div className="box">
           <Row className="post-row">
