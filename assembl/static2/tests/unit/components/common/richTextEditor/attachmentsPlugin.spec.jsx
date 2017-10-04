@@ -86,7 +86,7 @@ describe('attachmentsPlugin', () => {
       expect(result).toBeUndefined();
     });
 
-    it('should return null for non atomic block', () => {
+    it('should return start and end tags for atomic block', () => {
       const block = {
         type: 'atomic'
       };
