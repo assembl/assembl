@@ -1,8 +1,7 @@
 import React from 'react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { ShareButtons, generateShareIcon } from 'react-share';
-// import { OverlayTrigger } from 'react-bootstrap';
-// import { shareFacebookTooltip } from './tooltips';
+import { I18n } from 'react-redux-i18n';
 
 const {
   FacebookShareButton,
@@ -87,7 +86,7 @@ export default class SocialShare extends React.Component {
           }}
         >
           <button className="btn btn-default btn-copy">
-            {this.state.copied ? 'Link copied' : 'Copy link to Clipboard'}
+            {this.state.copied ? I18n.t('debate.linkCopied') : I18n.t('debate.copyLink')}
           </button>
         </CopyToClipboard>
       </div>
