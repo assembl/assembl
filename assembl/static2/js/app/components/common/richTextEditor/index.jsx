@@ -190,7 +190,14 @@ export default class RichTextEditor extends React.Component<Object, RichTextEdit
     const divClassName = classNames('rich-text-editor', { hidePlaceholder: this.shouldHidePlaceholder() });
     return (
       <div className={divClassName} ref={textareaRef}>
-        {toolbarPosition === 'top' ? this.renderToolbar() : null}
+        <div className="editor-header">
+          {this.state.editorState.getCurrentContent().hasText()
+            ? <div className="editor-label form-label">
+              {placeholder}
+            </div>
+            : null}
+          {toolbarPosition === 'top' ? this.renderToolbar() : null}
+        </div>
         <div onClick={this.focusEditor}>
           <Editor
             blockRendererFn={customBlockRenderer}

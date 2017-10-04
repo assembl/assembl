@@ -152,9 +152,6 @@ class EditPostForm extends React.PureComponent<void, EditPostFormProps, EditPost
                 maxLength={TEXT_INPUT_MAX_LENGTH}
               />}
             <FormGroup>
-              <div className="form-label form-label-body">
-                <Translate value="debate.edit.body" />
-              </div>
               <RichTextEditor
                 preventOnBlur={this.state.deletingAttachment}
                 rawContentState={this.state.body}

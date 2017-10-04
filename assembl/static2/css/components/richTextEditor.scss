@@ -62,6 +62,18 @@
     z-index: 1000;
   }
 
+  .editor-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .editor-label {
+    display: flex;
+    justify-content: flex-start;
+
+  }
+
   .editor-toolbar {
     display: flex;
     justify-content: flex-end;

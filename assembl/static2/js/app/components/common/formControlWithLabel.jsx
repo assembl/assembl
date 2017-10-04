@@ -64,29 +64,9 @@ class FormControlWithLabel extends React.Component {
     );
   };
 
-  valueIsEmpty = () => {
-    const { type, value } = this.props;
-    if (!value) {
-      return true;
-    }
-
-    if (type === 'rich-text') {
-      const allText = value.blocks
-        .map((b) => {
-          return b.text;
-        })
-        .reduce((a, b) => {
-          return a + b;
-        }, '');
-      return allText.length === 0;
-    }
-
-    return value.length === 0;
-  };
-
   render() {
-    const { id, label, labelAlwaysVisible } = this.props;
-    const displayLabel = labelAlwaysVisible || !this.valueIsEmpty();
+    const { id, label, labelAlwaysVisible, type, value } = this.props;
+    const displayLabel = labelAlwaysVisible || type !== 'rich-text' ? value : false;
     return (
       <FormGroup validationState={this.state.validationState}>
         {displayLabel
