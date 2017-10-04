@@ -1385,9 +1385,9 @@ query { discussionPreferences { languages { locale, name(inLocale:"fr"), nativeN
         u'discussionPreferences': {
             u'languages':
                 [
-                    {u'locale': u'en', u'name': u'anglais', 'nativeName': 'English'},
-                    {u'locale': u'fr', u'name': u'français', 'nativeName': 'français'},
-                    {u'locale': u'ja', u'name': u'japonais', 'nativeName': '日本語 (にほんご)'},
+                    {u'locale': u'en', u'name': u'anglais', u'nativeName': u'English'},
+                    {u'locale': u'fr', u'name': u'français', u'nativeName': u'français'},
+                    {u'locale': u'ja', u'name': u'japonais', u'nativeName': u'日本語 (にほんご)'},
                 ]
         }
     }
