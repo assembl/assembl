@@ -3,7 +3,6 @@ import { Translate } from 'react-redux-i18n';
 import { compose, graphql } from 'react-apollo';
 import { Row, Col } from 'react-bootstrap';
 
-import { getDomElementOffset } from '../../../utils/globalFunctions';
 import Attachments from '../../common/attachments';
 import ProfileLine from '../../common/profileLine';
 import PostTranslate from '../common/postTranslate';
@@ -12,87 +11,18 @@ import AnswerForm from './answerForm';
 import EditPostForm from './editPostForm';
 import DeletedPost from './deletedPost';
 import PostQuery from '../../../graphql/PostQuery.graphql';
-import withLoadingIndicator from '../../../components/common/withLoadingIndicator';
 import { DeletedPublicationStates, PublicationStates } from '../../../constants';
+import withLoadingIndicator from '../../../components/common/withLoadingIndicator';
 import Nuggets from './nuggets';
-import { hashLinkScroll } from '../../../routes';
-
-export const PostFolded = ({ nbPosts }) => {
-  return <Translate value="debate.thread.foldedPostLink" count={nbPosts} />;
-};
-
-const getFullLevelString = (fullLevel) => {
-  return (
-    fullLevel &&
-    <span className="subject-prefix">
-      {`Rep. ${fullLevel
-        .split('-')
-        .map((level) => {
-          return `${Number(level) + 1}`;
-        })
-        .join('.')}: `}
-    </span>
-  );
-};
+import { EmptyPost } from './post';
 
 // TODO we need a graphql query to retrieve all languages with native translation, see Python langstrings.LocaleLabel
 // We only have french and english for en, fr, ja for now.
 
-class ColumnsPost extends React.PureComponent {
-  constructor(props) {
-    super(props);
-    this.state = {
-      showAnswerForm: false,
-      mode: 'view',
-      showOriginal: false
-    };
-  }
-
-  componentDidMount() {
-    this.props.measureTreeHeight(400);
-    // If we have a hash in url and the post id match it, scroll to it.
-    const postId = this.props.data.post.id;
-    const { hash } = window.location;
-    if (hash !== '') {
-      const id = hash.replace('#', '');
-      if (id === postId) {
-        // Wait an extra 1s to be sure that all previous posts are loaded
-        // and measureTreeHeight finished.
-        setTimeout(hashLinkScroll, 1000);
-      }
-    }
-  }
-
-  componentDidUpdate(prevProps) {
-    if (this.props.lang !== prevProps.lang || this.props.data.post.publicationState !== prevProps.data.post.publicationState) {
-      this.props.measureTreeHeight(200);
-    }
-  }
-
-  handleAnswerClick = () => {
-    this.setState({ showAnswerForm: true }, this.props.measureTreeHeight);
-    setTimeout(() => {
-      if (!this.answerTextarea) return;
-      const txtareaOffset = getDomElementOffset(this.answerTextarea).top;
-      window.scrollTo({ top: txtareaOffset - this.answerTextarea.clientHeight, left: 0, behavior: 'smooth' });
-    }, 200);
-  };
-  hideAnswerForm = () => {
-    this.setState({ showAnswerForm: false }, this.props.measureTreeHeight);
-  };
-
-  handleEditClick = () => {
-    this.setState({ mode: 'edit' }, this.props.measureTreeHeight);
-  };
-
-  goBackToViewMode = () => {
-    this.setState({ mode: 'view' }, this.props.measureTreeHeight);
-  };
-
+class ColumnsPost extends EmptyPost {
   render() {
     const {
       id,
-      subjectEntries,
       bodyEntries,
       bodyMimeType,
       indirectIdeaContentLinks,
@@ -105,7 +35,7 @@ class ColumnsPost extends React.PureComponent {
       extracts
     } = this.props.data.post;
 
-    const { lang, ideaId, refetchIdea, creationDate, fullLevel, numChildren, routerParams, debateData } = this.props;
+    const { lang, ideaId, refetchIdea, creationDate, numChildren, routerParams, debateData } = this.props;
 
     // Fake nColumns props
     const columnColor = 'green';
@@ -113,10 +43,8 @@ class ColumnsPost extends React.PureComponent {
 
     // creationDate is retrieved by IdeaWithPosts query, not PostQuery
     let body;
-    let subject;
     let originalBodyLocale;
     let originalBody;
-    let originalSubject;
     if (bodyEntries.length > 1) {
       // first entry is the translated version, example localeCode "fr-x-mtfrom-en"
       // second entry is the original, example localeCode "en"
@@ -127,13 +55,6 @@ class ColumnsPost extends React.PureComponent {
       // translation is not enabled or the message is already in the desired locale
       body = bodyEntries[0].value;
       originalBody = bodyEntries[0].value;
-    }
-    if (subjectEntries.length > 1) {
-      subject = this.state.showOriginal ? subjectEntries[1].value : subjectEntries[0].value;
-      originalSubject = subjectEntries[1].value;
-    } else {
-      subject = subjectEntries[0].value;
-      originalSubject = subjectEntries[0].value;
     }
     // This hack should be removed when the TDI's admin section will be done.
     // We need it to have several langString in the idea's title
@@ -154,26 +75,8 @@ class ColumnsPost extends React.PureComponent {
     });
     // End of the hack
 
-    const modifiedSubject = (
-      <span>
-        {getFullLevelString(fullLevel)}
-        {subject.replace('Re: ', '')}
-      </span>
-    );
-    const modifiedOriginalSubject = (
-      <span>
-        {getFullLevelString(fullLevel)}
-        {originalSubject && originalSubject.replace('Re: ', '')}
-      </span>
-    );
     if (publicationState in DeletedPublicationStates) {
-      return (
-        <DeletedPost
-          id={id}
-          subject={modifiedSubject}
-          deletedBy={publicationState === PublicationStates.DELETED_BY_USER ? 'user' : 'admin'}
-        />
-      );
+      return <DeletedPost id={id} deletedBy={publicationState === PublicationStates.DELETED_BY_USER ? 'user' : 'admin'} />;
     }
 
     if (this.state.mode === 'edit') {
@@ -184,11 +87,9 @@ class ColumnsPost extends React.PureComponent {
               attachments={attachments}
               id={id}
               body={originalBody}
-              subject={originalSubject}
               refetchIdea={refetchIdea}
               goBackToViewMode={this.goBackToViewMode}
               readOnly={!!this.props.parentId}
-              modifiedOriginalSubject={modifiedOriginalSubject}
             />
           </div>
         </div>
@@ -227,9 +128,6 @@ class ColumnsPost extends React.PureComponent {
                   }}
                 />
                 : null}
-              <h3 className="dark-title-3">
-                {modifiedSubject}
-              </h3>
               <div
                 className={`body ${bodyMimeType === 'text/plain' ? 'pre-wrap' : ''}`}
                 dangerouslySetInnerHTML={{ __html: body }}
@@ -267,7 +165,6 @@ class ColumnsPost extends React.PureComponent {
                 numChildren={numChildren}
                 routerParams={routerParams}
                 debateData={debateData}
-                postSubject={subject.replace('Re: ', '')}
               />
             </Col>
           </Row>

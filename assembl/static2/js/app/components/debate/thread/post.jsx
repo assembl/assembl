@@ -38,7 +38,7 @@ const getSubjectPrefixString = (fullLevel) => {
 // TODO we need a graphql query to retrieve all languages with native translation, see Python langstrings.LocaleLabel
 // We only have french and english for en, fr, ja for now.
 
-class Post extends React.PureComponent {
+export class EmptyPost extends React.PureComponent {
   constructor(props) {
     super(props);
     this.state = {
@@ -318,4 +318,4 @@ class Post extends React.PureComponent {
   }
 }
 
-export default compose(graphql(PostQuery), withLoadingIndicator())(Post);
+export default compose(graphql(PostQuery), withLoadingIndicator())(EmptyPost);
