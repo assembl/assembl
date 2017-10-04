@@ -36,12 +36,12 @@ class LanguageMenu extends React.Component {
       if (p.locale === 'zh_Hans') {
         preferencesMapByLocale.zh_CN = { ...p };
         preferencesMapByLocale.zh_CN.name = p.name.split(' (')[0]; // shorten the name for chinese
-        preferencesMapByLocale.zh_CN.nativeName = p.nativeName.split(' (')[0]; // shorten the name for chinese
+        preferencesMapByLocale.zh_CN.nativeName = p.nativeName.split(' (')[0];
         preferencesMapByLocale.zh_CN.locale = 'zh_CN';
       } else {
         preferencesMapByLocale[p.locale] = { ...p };
         preferencesMapByLocale[p.locale].name = p.name.split(' (')[0]; // shorten the name for japanese, not need for hiragana
-        preferencesMapByLocale[p.locale].nativeName = p.nativeName.split(' (')[0]; // shorten the name for japanese, not need for hiragana
+        preferencesMapByLocale[p.locale].nativeName = p.nativeName.split(' (')[0];
       }
       // Big side effect, addLanguageToStore needs to be called here for the languages in the admininistration page
       // to be selected... if we remove that line, we can remove the state, componentWillMount, componentWillReceiveProps
