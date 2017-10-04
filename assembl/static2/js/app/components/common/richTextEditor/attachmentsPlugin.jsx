@@ -10,13 +10,13 @@ const BLOCK_TYPE = 'atomic';
 type NodeType = Object;
 
 const plugin = {
-  blockToHTML: (block: ContentBlock): { start: string, end: string } | null => {
+  blockToHTML: (block: ContentBlock): { start: string, end: string } | void => {
     const type = block.type;
     if (type === 'atomic') {
       return { start: '<div class="atomic-block" data-blocktype="atomic">', end: '</div>' };
     }
 
-    return null;
+    return undefined;
   },
   entityToHTML: (entity: { data: Document }, originalText: string): string => {
     if (entity.type === ENTITY_TYPE) {

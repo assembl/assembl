@@ -78,12 +78,12 @@ const rcs = {
 describe('attachmentsPlugin', () => {
   describe('blockToHTML function', () => {
     const { blockToHTML } = plugin;
-    it('should return null for non atomic block', () => {
+    it('should return undefined for non atomic block', () => {
       const block = {
         type: 'unstyled'
       };
       const result = blockToHTML(block);
-      expect(result).toBeNull();
+      expect(result).toBeUndefined();
     });
 
     it('should return null for non atomic block', () => {
