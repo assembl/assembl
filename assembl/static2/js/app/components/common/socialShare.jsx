@@ -1,7 +1,8 @@
 import React from 'react';
+import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { ShareButtons, generateShareIcon } from 'react-share';
-import { OverlayTrigger } from 'react-bootstrap';
-import { shareFacebookTooltip } from './tooltips';
+// import { OverlayTrigger } from 'react-bootstrap';
+// import { shareFacebookTooltip } from './tooltips';
 
 const {
   FacebookShareButton,
@@ -21,41 +22,74 @@ const WhatsappIcon = generateShareIcon('whatsapp');
 const TelegramIcon = generateShareIcon('telegram');
 
 export default class SocialShare extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      copied: false
+    };
+  }
   render() {
     const { url, onClose, social } = this.props;
     return (
-      <div className="share-container">
-        <div className="share-link-container">
-          <input value={url} style={{ width: 300 }} />
-        </div>
-        <div className="social-share-buttons-container" style={{ paddingTop: 20 }}>
-          {social &&
-            <div>
-              <OverlayTrigger placement="right" overlay={shareFacebookTooltip}>
-                <FacebookShareButton url={url} onShareWindowClose={onClose} className="social-share-button">
-                  <FacebookIcon size={32} round />
-                </FacebookShareButton>
-              </OverlayTrigger>
-              <GooglePlusShareButton url={url} onShareWindowClose={onClose} className="social-share-button">
+      <div className="share-buttons-container">
+        {social
+          ? <div className="social-share-buttons-container">
+            <div className="social-share-button">
+              <EmailShareButton url={url} onShareWindowClose={onClose}>
+                <EmailIcon size={32} round />
+              </EmailShareButton>
+            </div>
+            <div className="social-share-button">
+              <FacebookShareButton url={url} onShareWindowClose={onClose}>
+                <FacebookIcon size={32} round />
+              </FacebookShareButton>
+            </div>
+            <div className="social-share-button">
+              <GooglePlusShareButton url={url} onShareWindowClose={onClose}>
                 <GooglePlusIcon size={32} round />
               </GooglePlusShareButton>
-              <LinkedinShareButton url={url} onShareWindowClose={onClose} className="social-share-button">
+            </div>
+
+            <div className="social-share-button">
+              <LinkedinShareButton url={url} onShareWindowClose={onClose}>
                 <LinkedinIcon size={32} round />
               </LinkedinShareButton>
-              <TwitterShareButton url={url} onShareWindowClose={onClose} className="social-share-button">
+            </div>
+
+            <div className="social-share-button">
+              <TwitterShareButton url={url} onShareWindowClose={onClose}>
                 <TwitterIcon size={32} round />
               </TwitterShareButton>
-              <WhatsappShareButton url={url} onShareWindowClose={onClose} className="social-share-button">
+            </div>
+
+            <div className="social-share-button">
+              <WhatsappShareButton url={url} onShareWindowClose={onClose}>
                 <WhatsappIcon size={32} round />
               </WhatsappShareButton>
-              <TelegramShareButton url={url} onShareWindowClose={onClose} className="social-share-button">
+            </div>
+            <div className="social-share-button">
+              <TelegramShareButton url={url} onShareWindowClose={onClose}>
                 <TelegramIcon size={32} round />
               </TelegramShareButton>
-            </div>}
-          <EmailShareButton url={url} onShareWindowClose={onClose} className="social-share-button">
-            <EmailIcon size={32} round />
-          </EmailShareButton>
-        </div>
+            </div>
+          </div>
+          : <div className="social-share-buttons-container">
+            <div className="social-share-button">
+              <EmailShareButton url={url} onShareWindowClose={onClose}>
+                <EmailIcon size={32} round />
+              </EmailShareButton>
+            </div>
+          </div>}
+        <CopyToClipboard
+          text={url}
+          onCopy={() => {
+            return this.setState({ copied: true });
+          }}
+        >
+          <button className="btn btn-default btn-copy">
+            {this.state.copied ? 'Link copied' : 'Copy link to Clipboard'}
+          </button>
+        </CopyToClipboard>
       </div>
     );
   }

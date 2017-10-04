@@ -1,4 +1,29 @@
 .social-share-button {
   display: inline-block;
-  padding : 0 15px;
+  padding: 0 15px;
+}
+
+.share-buttons-container {
+  padding-top: 10px;
+  padding-bottom: 15px;
+}
+
+.social-share-buttons-container {
+  padding-bottom: 20px;
+}
+
+*:focus {
+  outline: none;
+}
+
+.modal-title {
+  text-align: center;
+}
+
+.btn-copy:focus {
+  outline: none;
+}
+
+.modal-header {
+  padding-top: 25px;
 }
