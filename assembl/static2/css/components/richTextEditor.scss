@@ -1,5 +1,5 @@
 .video-form {
-  .rich-text-editor {
+  .rich-text-editor .DraftEditor-editorContainer {
     padding: 5px;
     border: 1px solid #ccc;
     border-radius: 4px;
@@ -115,9 +115,13 @@
   .DraftEditor-root {
     padding: 5px 0;
   }
-  .DraftEditor-editorContainer, .public-DraftEditorPlaceholder-root {
+  .DraftEditor-editorContainer {
     padding: 5px;
     background-color: $white;
+  }
+
+  .public-DraftEditorPlaceholder-root {
+    padding: 5px;
   }
 
   .public-DraftEditor-content {
