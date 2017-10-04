@@ -38,7 +38,7 @@ class ColumnsPost extends EmptyPost {
     const { lang, ideaId, refetchIdea, creationDate, numChildren, routerParams, debateData } = this.props;
 
     // Fake nColumns props
-    const columnColor = 'green';
+    const columnColor = '#50D593';
     const columnText = 'En faveur de l\'Inclusive City Bond';
 
     // creationDate is retrieved by IdeaWithPosts query, not PostQuery
