@@ -1752,6 +1752,14 @@ def install_yarn():
         run('brew install yarn')
 
 
+def which_shell():
+    resp = run("echo $SHELL")
+    if 'fish' in resp:
+        return 'fish'
+    if 'bash' in resp:
+        return 'bash'
+
+
 @task
 def upgrade_yarn_crontab():
     """Automate the look up for a new version of yarn and update it"""
@@ -1759,11 +1767,15 @@ def upgrade_yarn_crontab():
         return "echo '0 2 * * 1 %s' | uniq | crontab" % (cmd)
 
     if env.mac:
-        cmd = "brew upgrade yarn"
+        if which_shell() is 'fish':
+            cmd = "brew update; and brew upgrade yarn"
+        else:
+            cmd = "brew update && brew upgrade yarn"
         run(set_crontab(cmd))
     else:
-        cmd = "apt-get install --only-upgrade yarn"
+        cmd = "apt-get update && apt-get install --only-upgrade yarn"
         sudo(set_crontab(cmd))
+
 
 @task
 def install_elasticsearch():
