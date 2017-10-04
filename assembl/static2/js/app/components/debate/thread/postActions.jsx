@@ -48,7 +48,6 @@ class PostActions extends React.Component {
       handleEditClick,
       numChildren,
       routerParams,
-      postSubject,
       debateData
     } = this.props;
 
@@ -63,7 +62,7 @@ class PostActions extends React.Component {
     const userCanEditThisMessage = connectedUserId === String(creatorUserId) && connectedUserCan(Permissions.EDIT_MY_POST);
     const { slug, phase, themeId } = routerParams;
     const confirmModal = () => {
-      const title = postSubject;
+      const title = <Translate value="debate.share" />;
       const url = `${window.location.protocol}//${window.location.host}${get('debate', {
         slug: slug,
         phase: phase
