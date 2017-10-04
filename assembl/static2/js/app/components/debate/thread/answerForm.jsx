@@ -1,8 +1,10 @@
+// @flow
 import React from 'react';
 import { connect } from 'react-redux';
 import { compose, graphql } from 'react-apollo';
 import { Row, Col, FormGroup, Button } from 'react-bootstrap';
 import { Translate, I18n } from 'react-redux-i18n';
+import type { RawContentState } from 'draft-js';
 
 import createPostMutation from '../../../graphql/mutations/createPost.graphql';
 import uploadDocumentMutation from '../../../graphql/mutations/uploadDocument.graphql';
@@ -14,7 +16,27 @@ import attachmentsPlugin from '../../common/richTextEditor/attachmentsPlugin';
 import { TEXT_AREA_MAX_LENGTH } from './topPostForm';
 import { getContentLocale } from '../../../reducers/rootReducer';
 
-class AnswerForm extends React.PureComponent {
+type AnswerFormState = {
+  body: null | RawContentState,
+  submitting: boolean
+};
+
+type AnswerFormProps = {
+  contentLocale: string,
+  createPost: Function,
+  hideAnswerForm: Function,
+  hideAnswerForm: Function,
+  ideaId: string,
+  parentId: string,
+  refetchIdea: Function,
+  textareaRef: HTMLDivElement,
+  uploadDocument: Function
+};
+
+class AnswerForm extends React.PureComponent<*, AnswerFormProps, AnswerFormState> {
+  props: AnswerFormProps;
+  state: AnswerFormState;
+
   constructor() {
     super();
     this.state = {
