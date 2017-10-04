@@ -2,13 +2,14 @@
 import React from 'react';
 import { Translate, I18n } from 'react-redux-i18n';
 import { convertFromRaw, convertToRaw, Editor, EditorState, RawContentState, RichUtils } from 'draft-js';
-
 import classNames from 'classnames';
 import punycode from 'punycode';
 
 import AtomicBlockRenderer from './atomicBlockRenderer';
 import Toolbar from './toolbar';
 import type { ButtonConfigType } from './buttonConfigType';
+import EditAttachments from '../editAttachments';
+import attachmentsPlugin from './attachmentsPlugin';
 
 type RichTextEditorProps = {
   rawContentState: RawContentState,
@@ -61,18 +62,19 @@ export default class RichTextEditor extends React.Component<Object, RichTextEdit
     };
   }
 
+  getCurrentRawContentState = () => {
+    return convertToRaw(this.state.editorState.getCurrentContent());
+  };
+
   onBlur = () => {
-    if (!this.props.preventOnBlur) {
-      this.setState(
-        {
-          editorHasFocus: false
-        },
-        () => {
-          const rawContentState = convertToRaw(this.state.editorState.getCurrentContent());
-          this.props.updateContentState(rawContentState);
-        }
-      );
-    }
+    this.setState(
+      {
+        editorHasFocus: false
+      },
+      () => {
+        this.props.updateContentState(this.getCurrentRawContentState());
+      }
+    );
   };
 
   onChange = (newEditorState: EditorState): void => {
@@ -170,6 +172,19 @@ export default class RichTextEditor extends React.Component<Object, RichTextEdit
     return 'not-handled';
   };
 
+  deleteAttachment = (documentId: string): void => {
+    const contentState = this.state.editorState.getCurrentContent();
+    const newContentState = attachmentsPlugin.removeAttachment(contentState, documentId);
+    this.setState(
+      {
+        editorState: EditorState.createWithContent(newContentState)
+      },
+      () => {
+        this.props.updateContentState(convertToRaw(newContentState));
+      }
+    );
+  };
+
   renderToolbar = () => {
     const withAttachmentButton = this.props.withAttachmentButton;
     return (
@@ -187,6 +202,7 @@ export default class RichTextEditor extends React.Component<Object, RichTextEdit
     const { maxLength, placeholder, textareaRef, toolbarPosition } = this.props;
     const { editorState } = this.state;
     const divClassName = classNames('rich-text-editor', { hidePlaceholder: this.shouldHidePlaceholder() });
+    const attachments = attachmentsPlugin.getAttachments(this.getCurrentRawContentState());
     return (
       <div className={divClassName} ref={textareaRef}>
         <div className="editor-header">
@@ -214,6 +230,8 @@ export default class RichTextEditor extends React.Component<Object, RichTextEdit
         </div>
         {maxLength ? this.renderRemainingChars() : null}
         {toolbarPosition === 'bottom' ? this.renderToolbar() : null}
+
+        <EditAttachments attachments={attachments} onDelete={this.deleteAttachment} />
       </div>
     );
   }

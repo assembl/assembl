@@ -1,4 +1,4 @@
-import { ContentState, Entity } from 'draft-js';
+import { convertFromRaw, convertToRaw, ContentState, Entity } from 'draft-js';
 
 import plugin from '../../../../../js/app/components/common/richTextEditor/attachmentsPlugin';
 
@@ -225,7 +225,8 @@ describe('attachmentsPlugin', () => {
   describe('removeAttachment function', () => {
     const { removeAttachment } = plugin;
     it('should remove the block and entity related to the given documentId', () => {
-      const result = removeAttachment(rcs, '1236');
+      const cs = convertFromRaw(rcs);
+      const result = convertToRaw(removeAttachment(cs, '1236'));
       const expected = {
         blocks: [
           {

@@ -1,7 +1,7 @@
 // @flow
 /* draft-js plugin for attachment management */
 import { convertFromRaw, convertToRaw, Entity, Modifier, RawContentState, SelectionState } from 'draft-js';
-import type { ContentBlock } from 'draft-js';
+import type { ContentBlock, ContentState } from 'draft-js';
 import type { Attachment, Document } from '../attachments';
 
 const ENTITY_TYPE = 'document';
@@ -95,10 +95,20 @@ const plugin = {
           const entityKey = entityRange.entity;
           if (entityKey) {
             const entity = contentState.getEntity(entityKey);
-            if (entity && entity.data.id) {
+            if ((entity && entity.data.id) || entity.data.file) {
+              let doc;
+              if (entity.data.file) {
+                doc = {
+                  id: entity.data.file.name,
+                  externalUrl: '',
+                  title: entity.data.file.name
+                };
+              } else {
+                doc = entity.data;
+              }
               const attachment = {
                 entityKey: entityKey,
-                document: entity.data
+                document: doc
               };
               attachments.push(attachment);
             }
@@ -127,16 +137,18 @@ const plugin = {
     });
     return attachments;
   },
-  removeAttachment: (rawContentState: RawContentState, documentId: string): RawContentState => {
-    let contentState = convertFromRaw(rawContentState);
+  removeAttachment: (contentState: ContentState, documentId: string): ContentState => {
     let targetBlock = null;
     contentState.getBlockMap().forEach((block) => {
       block.findEntityRanges((entityRange) => {
         const entityKey = entityRange.entity;
         if (entityKey) {
           const entity = contentState.getEntity(entityKey);
-          if (entity && entity.data.id && entity.data.id === documentId) {
-            targetBlock = block;
+          if (entity) {
+            const entityDocId = entity.data.id ? entity.data.id : entity.data.file.name;
+            if (entityDocId === documentId) {
+              targetBlock = block;
+            }
           }
         }
       });
@@ -150,12 +162,12 @@ const plugin = {
         focusOffset: 1
       });
 
-      contentState = Modifier.removeRange(contentState, targetRange, 'backward');
-      contentState = Modifier.setBlockType(contentState, targetRange, 'unstyled');
-      return convertToRaw(contentState);
+      let newContentState = Modifier.removeRange(contentState, targetRange, 'backward');
+      newContentState = Modifier.setBlockType(newContentState, targetRange, 'unstyled');
+      return newContentState;
     }
 
-    return rawContentState;
+    return contentState;
   },
 
   uploadNewAttachments: (rawContentState: RawContentState, uploadDocument: Function): Promise<*> => {

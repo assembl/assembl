@@ -4,12 +4,11 @@ import React from 'react';
 import type { Attachment } from './attachments';
 
 type EditAttachmentsProps = {
-  afterDelete: Function,
   attachments: Array<Attachment>,
   onDelete: Function
 };
 
-const EditAttachments = ({ attachments, onDelete, afterDelete }: EditAttachmentsProps) => {
+const EditAttachments = ({ attachments, onDelete }: EditAttachmentsProps) => {
   return (
     <div className="attachments">
       {attachments.map((attachment) => {
@@ -22,10 +21,9 @@ const EditAttachments = ({ attachments, onDelete, afterDelete }: EditAttachments
             </a>
             <span
               className="assembl-icon-delete"
-              onMouseDown={() => {
+              onClick={() => {
                 return onDelete(attachment.document.id);
               }}
-              onMouseUp={afterDelete}
             />
           </div>
         );

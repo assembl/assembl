@@ -12,7 +12,6 @@ import updatePostMutation from '../../../graphql/mutations/updatePost.graphql';
 import { displayAlert, inviteUserToLogin } from '../../../utils/utilityManager';
 import { getConnectedUserId } from '../../../utils/globalFunctions';
 import { convertToRawContentState, convertRawContentStateToHTML, rawContentStateIsEmpty } from '../../../utils/draftjs';
-import EditAttachments from '../../common/editAttachments';
 import RichTextEditor from '../../common/richTextEditor';
 import attachmentsPlugin from '../../common/richTextEditor/attachmentsPlugin';
 import type { UploadNewAttachmentsPromiseResult } from '../../common/richTextEditor/attachmentsPlugin';
@@ -36,8 +35,7 @@ type EditPostFormProps = {
 
 type EditPostFormState = {
   subject: string,
-  body: RawContentState,
-  deletingAttachment: boolean
+  body: RawContentState
 };
 
 class EditPostForm extends React.PureComponent<void, EditPostFormProps, EditPostFormState> {
@@ -50,7 +48,6 @@ class EditPostForm extends React.PureComponent<void, EditPostFormProps, EditPost
     const body = props.body || '';
     this.state = {
       body: convertToRawContentState(body),
-      deletingAttachment: false,
       subject: subject
     };
   }
@@ -122,22 +119,7 @@ class EditPostForm extends React.PureComponent<void, EditPostFormProps, EditPost
     }
   };
 
-  deleteAttachment = (documentId) => {
-    this.setState(
-      {
-        deletingAttachment: true
-      },
-      () => {
-        const newBody = attachmentsPlugin.removeAttachment(this.state.body, documentId);
-        this.setState({
-          body: newBody
-        });
-      }
-    );
-  };
-
   render() {
-    const attachments = attachmentsPlugin.getAttachments(this.state.body);
     return (
       <Row>
         <Col xs={12} md={12}>
@@ -163,20 +145,11 @@ class EditPostForm extends React.PureComponent<void, EditPostFormProps, EditPost
               />}
             <FormGroup>
               <RichTextEditor
-                preventOnBlur={this.state.deletingAttachment}
                 rawContentState={this.state.body}
                 placeholder={I18n.t('debate.edit.body')}
                 updateContentState={this.updateBody}
                 maxLength={TEXT_AREA_MAX_LENGTH}
                 withAttachmentButton
-              />
-
-              <EditAttachments
-                attachments={attachments}
-                onDelete={this.deleteAttachment}
-                afterDelete={() => {
-                  return this.setState({ deletingAttachment: false });
-                }}
               />
 
               <div className="button-container">
