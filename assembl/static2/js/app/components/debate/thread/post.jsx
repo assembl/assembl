@@ -3,7 +3,7 @@ import { Translate } from 'react-redux-i18n';
 import { compose, graphql } from 'react-apollo';
 import { Row, Col } from 'react-bootstrap';
 
-import { getDomElementOffset, hashLinkScroll } from '../../../utils/globalFunctions';
+import { getDomElementOffset } from '../../../utils/globalFunctions';
 import Attachments from '../../common/attachments';
 import ProfileLine from '../../common/profileLine';
 import PostTranslate from '../common/postTranslate';
@@ -15,6 +15,7 @@ import PostQuery from '../../../graphql/PostQuery.graphql';
 import withLoadingIndicator from '../../../components/common/withLoadingIndicator';
 import { DeletedPublicationStates, PublicationStates } from '../../../constants';
 import Nuggets from './nuggets';
+import hashLinkScroll from '../../../utils/hashLinkScroll';
 
 export const PostFolded = ({ nbPosts }) => {
   return <Translate value="debate.thread.foldedPostLink" count={nbPosts} />;
