@@ -20,9 +20,9 @@ from assembl.lib.clean_input import sanitize_text
 
 
 def upgrade(pyramid_env):
-    # with context.begin_transaction():
-    #     op.add_column('idea_message_column', sa.Column('header_id',
-    #                   sa.Integer(), sa.ForeignKey('langstring.id')))
+    with context.begin_transaction():
+        op.add_column('idea_message_column', sa.Column('header_id',
+                      sa.Integer(), sa.ForeignKey('langstring.id')))
 
     # Do stuff with the app's models here.
     from assembl import models as m
