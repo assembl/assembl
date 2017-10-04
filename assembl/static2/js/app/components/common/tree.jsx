@@ -3,6 +3,7 @@
 import React from 'react';
 import { AutoSizer, CellMeasurer, CellMeasurerCache, List, WindowScroller } from 'react-virtualized';
 import { getDomElementOffset, createEvent } from '../../utils/globalFunctions';
+import NuggetsManager from './nuggetsManager';
 
 let globalList;
 
@@ -118,7 +119,8 @@ class Child extends React.PureComponent {
       level,
       rowIndex, // the index of the row (i.e. level 0 item) in the List
       SeparatorComponent,
-      fullLevel
+      fullLevel,
+      nuggetsManager
     } = this.props;
     const cssClasses = () => {
       let cls = `level level-${level}`;
@@ -161,6 +163,7 @@ class Child extends React.PureComponent {
                 InnerComponentFolded={InnerComponentFolded}
                 SeparatorComponent={SeparatorComponent}
                 fullLevel={fullLevelArray.join('-')}
+                nuggetsManager={nuggetsManager}
               />
             );
           })
@@ -190,7 +193,7 @@ Child.defaultProps = {
 };
 
 const cellRenderer = ({ index, key, parent, style }) => {
-  const { contentLocale, lang, data, InnerComponent, InnerComponentFolded, SeparatorComponent } = parent.props;
+  const { contentLocale, lang, data, InnerComponent, InnerComponentFolded, SeparatorComponent, nuggetsManager } = parent.props;
   const childData = data[index];
   return (
     <CellMeasurer cache={cache} columnIndex={0} key={key} parent={parent} rowIndex={index}>
@@ -204,6 +207,7 @@ const cellRenderer = ({ index, key, parent, style }) => {
           InnerComponent={InnerComponent}
           InnerComponentFolded={InnerComponentFolded}
           SeparatorComponent={SeparatorComponent}
+          nuggetsManager={nuggetsManager}
         />
       </div>
     </CellMeasurer>
@@ -211,12 +215,18 @@ const cellRenderer = ({ index, key, parent, style }) => {
 };
 
 class Tree extends React.Component {
+  constructor(props) {
+    super(props);
+    this.nuggetsManager = new NuggetsManager();
+  }
+
   componentDidMount() {
     // Reset the global prevStopIndex to not overfetch posts when changing idea
     // or to avoid recreating all dom nodes if we go back to the same idea.
     cache.clearAll();
     prevStopIndex = 0;
 
+    document.addEventListener('rowHeightRecomputed', this.nuggetsManager.update);
     if (this.props.initialRowIndex !== null) {
       globalList.scrollToRow(this.props.initialRowIndex);
     }
@@ -235,6 +245,10 @@ class Tree extends React.Component {
       // and will be recreated when scrolling, losing the previous expand/collapse local state.
       prevStopIndex = 0;
     }
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener('rowHeightRecomputed', this.nuggetsManager.update);
   }
 
   render() {
@@ -286,6 +300,7 @@ class Tree extends React.Component {
                     SeparatorComponent={SeparatorComponent}
                     width={width}
                     className="tree-list"
+                    nuggetsManager={this.nuggetsManager}
                   />
                 );
               }}

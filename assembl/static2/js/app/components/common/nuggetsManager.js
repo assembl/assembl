@@ -1,25 +1,29 @@
 // @flow
 
+import Nuggets from '../debate/thread/nuggets';
+
 const invalidIndex = (index) => {
   return index === -1;
 };
 
 class NuggetsManager {
+  nuggetsList: Array<Nuggets>;
   constructor() {
     this.nuggetsList = [];
   }
-  add(nuggets) {
+  add(nuggets: Nuggets) {
     this.nuggetsList.push(nuggets);
     this.sort();
+    this.update();
   }
-  update() {
+  update = () => {
     let previous = null;
     this.nuggetsList.forEach((nuggets) => {
       nuggets.updateTop(previous);
       previous = nuggets;
     });
-  }
-  remove(nuggets) {
+  };
+  remove(nuggets: Nuggets) {
     const index = this.nuggetsList.indexOf(nuggets);
     if (invalidIndex(index)) throw new Error('Tried to remove nuggets that are not managed by this NuggetsManager');
     delete this.nuggetsList[index];

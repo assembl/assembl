@@ -104,7 +104,18 @@ class Post extends React.PureComponent {
       attachments,
       extracts
     } = this.props.data.post;
-    const { lang, ideaId, refetchIdea, creationDate, fullLevel, numChildren, routerParams, debateData } = this.props;
+    const {
+      lang,
+      ideaId,
+      refetchIdea,
+      creationDate,
+      fullLevel,
+      numChildren,
+      routerParams,
+      debateData,
+      nuggetsManager,
+      rowIndex
+    } = this.props;
     // creationDate is retrieved by IdeaWithPosts query, not PostQuery
     let body;
     let subject;
@@ -194,7 +205,21 @@ class Post extends React.PureComponent {
     };
     return (
       <div className="posts" id={id}>
-        <Nuggets extracts={extracts} postId={id} />
+        <Nuggets
+          extracts={extracts}
+          postId={id}
+          nuggetsManager={nuggetsManager}
+          completeLevel={
+            fullLevel
+              ? [
+                rowIndex,
+                ...fullLevel.split('-').map((string) => {
+                  return Number(string);
+                })
+              ]
+              : [rowIndex]
+          }
+        />
         <div className="box">
           <Row className="post-row">
             <Col xs={12} md={11} className="post-left">
