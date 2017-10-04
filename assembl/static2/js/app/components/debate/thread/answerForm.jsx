@@ -16,21 +16,20 @@ import attachmentsPlugin from '../../common/richTextEditor/attachmentsPlugin';
 import { TEXT_AREA_MAX_LENGTH } from './topPostForm';
 import { getContentLocale } from '../../../reducers/rootReducer';
 
-type AnswerFormState = {
-  body: null | RawContentState,
-  submitting: boolean
-};
-
 type AnswerFormProps = {
   contentLocale: string,
   createPost: Function,
-  hideAnswerForm: Function,
   hideAnswerForm: Function,
   ideaId: string,
   parentId: string,
   refetchIdea: Function,
   textareaRef: HTMLDivElement,
   uploadDocument: Function
+};
+
+type AnswerFormState = {
+  body: null | RawContentState,
+  submitting: boolean
 };
 
 class AnswerForm extends React.PureComponent<*, AnswerFormProps, AnswerFormState> {
