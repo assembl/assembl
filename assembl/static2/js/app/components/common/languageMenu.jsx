@@ -36,10 +36,12 @@ class LanguageMenu extends React.Component {
       if (p.locale === 'zh_Hans') {
         preferencesMapByLocale.zh_CN = { ...p };
         preferencesMapByLocale.zh_CN.name = p.name.split(' (')[0]; // shorten the name for chinese
+        preferencesMapByLocale.zh_CN.nativeName = p.nativeName.split(' (')[0]; // shorten the name for chinese
         preferencesMapByLocale.zh_CN.locale = 'zh_CN';
       } else {
         preferencesMapByLocale[p.locale] = { ...p };
         preferencesMapByLocale[p.locale].name = p.name.split(' (')[0]; // shorten the name for japanese, not need for hiragana
+        preferencesMapByLocale[p.locale].nativeName = p.nativeName.split(' (')[0]; // shorten the name for japanese, not need for hiragana
       }
       // Big side effect, addLanguageToStore needs to be called here for the languages in the admininistration page
       // to be selected... if we remove that line, we can remove the state, componentWillMount, componentWillReceiveProps
@@ -52,7 +54,7 @@ class LanguageMenu extends React.Component {
 
   getLocaleLabel = (locale) => {
     const info = this.state.preferencesMapByLocale[locale];
-    return info ? info.name : locale;
+    return info ? info.nativeName : locale;
   };
 
   render() {
@@ -60,7 +62,10 @@ class LanguageMenu extends React.Component {
     if (this.state.availableLocales.length > 0) {
       return (
         <ul className={`dropdown-${size} uppercase`}>
-          <NavDropdown pullRight title={this.getLocaleLabel(i18n.locale)} id="nav-dropdown">
+          <NavDropdown pullRight title={i18n.locale.split('_')[0]} id="nav-dropdown">
+            <MenuItem key={i18n.locale} className="active">
+              {this.getLocaleLabel(i18n.locale)}
+            </MenuItem>
             {this.state.availableLocales.map((availableLocale) => {
               return (
                 <MenuItem

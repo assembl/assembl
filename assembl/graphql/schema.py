@@ -330,6 +330,7 @@ class Extract(SecureObjectType, SQLAlchemyObjectType):
 class LocalePreference(graphene.ObjectType):
     locale = graphene.String()
     name = graphene.String(in_locale=graphene.String(required=True))
+    native_name = graphene.String()
 
     def resolve_name(self, args, context, info):
         in_locale = args.get('in_locale') or None
@@ -344,6 +345,22 @@ class LocalePreference(graphene.ObjectType):
                                                                  locale_model)
 
         return name[self.locale]
+
+    def resolve_native_name(self, args, context, info):
+        locale = self.locale
+        if locale == 'zh_Hans':  # we have the native name only for zh
+            locale = 'zh'
+
+        locale_model = models.Locale.get_or_create(locale)
+        name = models.LocaleLabel.names_of_locales_in_locale([locale],
+                                                             locale_model)
+        if not name:
+            # If the locale label does not exist, fallback on English
+            locale_model = models.Locale.get_or_create('en')
+            name = models.LocaleLabel.names_of_locales_in_locale([locale],
+                                                                 locale_model)
+
+        return name[locale]
 
 
 class DiscussionPreferences(graphene.ObjectType):

@@ -26,6 +26,12 @@
   .dropdown-menu {
     min-width: 60px;
 
+    li.active a {
+      background-color: $first-color;
+      color: $white;
+      cursor: default;
+    }
+
     a {
       color: $first-color;
       font-size: $font-size-xs;
