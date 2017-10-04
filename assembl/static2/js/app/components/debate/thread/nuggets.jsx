@@ -34,7 +34,6 @@ class Nuggets extends React.Component {
   };
 
   computeNewTop(previousNuggets) {
-    // const prevExtract = this.previousExtract();
     const prevExtract = previousNuggets ? previousNuggets.node : null;
     const postDOM = document.getElementById(this.props.postId);
     const postTop = getDomElementOffset(postDOM).top;
