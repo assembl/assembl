@@ -1,8 +1,10 @@
+// @flow
 import React from 'react';
 import { connect } from 'react-redux';
 import { compose, graphql } from 'react-apollo';
 import { Row, Col, FormGroup, Button } from 'react-bootstrap';
 import { I18n, Translate } from 'react-redux-i18n';
+import type { RawContentState } from 'draft-js';
 
 import createPostMutation from '../../../graphql/mutations/createPost.graphql';
 import uploadDocumentMutation from '../../../graphql/mutations/uploadDocument.graphql';
@@ -16,7 +18,25 @@ import attachmentsPlugin from '../../common/richTextEditor/attachmentsPlugin';
 export const TEXT_INPUT_MAX_LENGTH = 140;
 export const TEXT_AREA_MAX_LENGTH = 3000;
 
-class TopPostForm extends React.Component {
+type TopPostFormProps = {
+  contentLocale: string,
+  createPost: Function,
+  ideaId: string,
+  refetchIdea: Function,
+  uploadDocument: Function
+};
+
+type TopPostFormState = {
+  body: null | RawContentState,
+  isActive: boolean,
+  subject: string,
+  submitting: boolean
+};
+
+class TopPostForm extends React.Component<*, TopPostFormProps, TopPostFormState> {
+  props: TopPostFormProps;
+  state: TopPostFormState;
+
   constructor() {
     super();
     this.state = {
