@@ -162,8 +162,21 @@ const plugin = {
         focusOffset: 1
       });
 
-      let newContentState = Modifier.removeRange(contentState, targetRange, 'backward');
-      newContentState = Modifier.setBlockType(newContentState, targetRange, 'unstyled');
+      let newContentState = Modifier.applyEntity(contentState, targetRange, null);
+      const nextBlock = newContentState.getBlockAfter(targetBlock.key);
+      const previousBlock = newContentState.getBlockBefore(targetBlock.key);
+      newContentState = newContentState.set('blockMap', newContentState.get('blockMap').delete(targetBlock.key));
+
+      // also remove next block if it is empty and unstyled
+      if (nextBlock.getType() === 'unstyled' && !nextBlock.getLength()) {
+        newContentState = newContentState.set('blockMap', newContentState.get('blockMap').delete(nextBlock.getKey()));
+      }
+
+      // if the previous block is not the last block, remove it too
+      if (newContentState.getBlocksAsArray().length > 1 && previousBlock.getType() === 'unstyled' && !previousBlock.getLength()) {
+        newContentState = newContentState.set('blockMap', newContentState.get('blockMap').delete(previousBlock.getKey()));
+      }
+
       return newContentState;
     }
 

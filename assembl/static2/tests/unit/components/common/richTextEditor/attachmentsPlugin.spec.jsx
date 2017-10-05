@@ -246,33 +246,6 @@ describe('attachmentsPlugin', () => {
             type: 'atomic',
             entityRanges: [{ offset: 0, length: 1, key: 0 }],
             inlineStyleRanges: []
-          },
-          {
-            data: {},
-            depth: 0,
-            key: '39pxu',
-            text: '',
-            type: 'unstyled',
-            entityRanges: [],
-            inlineStyleRanges: []
-          },
-          {
-            data: {},
-            depth: 0,
-            key: '99bis',
-            text: '',
-            type: 'unstyled',
-            entityRanges: [],
-            inlineStyleRanges: []
-          },
-          {
-            data: {},
-            depth: 0,
-            key: '55ter',
-            text: '',
-            type: 'unstyled',
-            entityRanges: [],
-            inlineStyleRanges: []
           }
         ],
         entityMap: {
