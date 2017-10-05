@@ -1,5 +1,7 @@
 // @flow
 
+import range from 'lodash/range';
+
 import Nuggets from '../debate/thread/nuggets';
 
 const indexNotFound = (index) => {
@@ -33,10 +35,14 @@ class NuggetsManager {
     this.nuggetsList.sort((a, b) => {
       const aLevel = a.props.completeLevel.split('-');
       const bLevel = b.props.completeLevel.split('-');
-      return aLevel.some((aLevelValue, index) => {
-        if (index >= bLevel.length) return true;
-        return aLevelValue > bLevel[index];
-      });
+      const maxIndex = Math.max(aLevel.length, bLevel.length);
+      return range(maxIndex).reduce((diff, index) => {
+        if (diff !== 0) return diff;
+        // the two next lines convert for ex. a=[29,0] > b=[29,0,0] to a=[29,0,-1] > b=[29,0,0]
+        const aValue = index < aLevel.length ? aLevel[index] : -1;
+        const bValue = index < bLevel.length ? bLevel[index] : -1;
+        return aValue - bValue;
+      }, 0);
     });
   }
 }
