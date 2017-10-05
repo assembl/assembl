@@ -21,7 +21,7 @@ export const PostFolded = ({ nbPosts }) => {
   return <Translate value="debate.thread.foldedPostLink" count={nbPosts} />;
 };
 
-const getFullLevelString = (fullLevel) => {
+const getSubjectPrefixString = (fullLevel) => {
   return (
     fullLevel &&
     <span className="subject-prefix">
@@ -161,13 +161,13 @@ class Post extends React.PureComponent {
 
     const modifiedSubject = (
       <span>
-        {getFullLevelString(fullLevel)}
+        {getSubjectPrefixString(fullLevel)}
         {subject.replace('Re: ', '')}
       </span>
     );
     const modifiedOriginalSubject = (
       <span>
-        {getFullLevelString(fullLevel)}
+        {getSubjectPrefixString(fullLevel)}
         {originalSubject && originalSubject.replace('Re: ', '')}
       </span>
     );
@@ -200,24 +200,21 @@ class Post extends React.PureComponent {
       );
     }
 
+    const completeLevelArray = fullLevel
+      ? [
+        rowIndex,
+        ...fullLevel.split('-').map((string) => {
+          return Number(string);
+        })
+      ]
+      : [rowIndex];
+
     const answerTextareaRef = (el) => {
       this.answerTextarea = el;
     };
     return (
       <div className="posts" id={id}>
-        <Nuggets
-          extracts={extracts}
-          postId={id}
-          nuggetsManager={nuggetsManager}
-          completeLevel={(fullLevel
-            ? [
-              rowIndex,
-              ...fullLevel.split('-').map((string) => {
-                return Number(string);
-              })
-            ]
-            : [rowIndex]).join('-')}
-        />
+        <Nuggets extracts={extracts} postId={id} nuggetsManager={nuggetsManager} completeLevel={completeLevelArray.join('-')} />
         <div className="box">
           <Row className="post-row">
             <Col xs={12} md={11} className="post-left">

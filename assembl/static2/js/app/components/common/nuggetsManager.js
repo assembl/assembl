@@ -2,7 +2,7 @@
 
 import Nuggets from '../debate/thread/nuggets';
 
-const invalidIndex = (index) => {
+const indexNotFound = (index) => {
   return index === -1;
 };
 
@@ -24,7 +24,9 @@ class NuggetsManager {
   };
   remove(nuggets: Nuggets) {
     const index = this.nuggetsList.indexOf(nuggets);
-    if (invalidIndex(index)) throw new Error('Tried to remove nuggets that are not managed by this NuggetsManager');
+    if (indexNotFound(index)) {
+      throw new Error(`Tried to remove nuggets ${nuggets} that are not managed by this NuggetsManager ${this}`);
+    }
     delete this.nuggetsList[index];
   }
   sort() {
