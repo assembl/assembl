@@ -12,13 +12,31 @@ const {
   WhatsappShareButton,
   TelegramShareButton
 } = ShareButtons;
-const FacebookIcon = generateShareIcon('facebook');
-const GooglePlusIcon = generateShareIcon('google');
-const LinkedinIcon = generateShareIcon('linkedin');
-const TwitterIcon = generateShareIcon('twitter');
-const EmailIcon = generateShareIcon('email');
-const WhatsappIcon = generateShareIcon('whatsapp');
-const TelegramIcon = generateShareIcon('telegram');
+
+const icons = {};
+
+['facebook', 'google', 'linkedin', 'twitter', 'email', 'whatsapp', 'telegram'].forEach((service) => {
+  icons[service] = generateShareIcon(service);
+});
+
+const FacebookIcon = icons.facebook;
+const GooglePlusIcon = icons.google;
+const LinkedinIcon = icons.linkedin;
+const TwitterIcon = icons.twitter;
+const EmailIcon = icons.email;
+const WhatsappIcon = icons.whatsapp;
+const TelegramIcon = icons.telegram;
+
+const SuperShareButton = ({ Component, Icon, url, onClose, ...props }) => {
+  const data = { url: url, onShareWindowClose: onClose };
+  return (
+    <div className="social-share-button">
+      <Component {...data} {...props}>
+        <Icon size={32} round />
+      </Component>
+    </div>
+  );
+};
 
 export default class SocialShare extends React.Component {
   constructor(props) {
@@ -29,54 +47,30 @@ export default class SocialShare extends React.Component {
   }
   render() {
     const { url, onClose, social } = this.props;
+    const SocialNetworks = [
+      { Component: EmailShareButton, Icon: EmailIcon },
+      { Component: FacebookShareButton, Icon: FacebookIcon },
+      { Component: GooglePlusShareButton, Icon: GooglePlusIcon },
+      { Component: LinkedinShareButton, Icon: LinkedinIcon },
+      { Component: TwitterShareButton, Icon: TwitterIcon },
+      { Component: WhatsappShareButton, Icon: WhatsappIcon },
+      {
+        Component: TelegramShareButton,
+        Icon: TelegramIcon
+      }
+    ].map(({ Component, Icon }, index) => {
+      return <SuperShareButton Component={Component} Icon={Icon} url={url} onClose={onClose} key={index} />;
+    });
+
     return (
       <div className="share-buttons-container">
         {social
           ? <div className="social-share-buttons-container">
-            <div className="social-share-button">
-              <EmailShareButton url={url} onShareWindowClose={onClose}>
-                <EmailIcon size={32} round />
-              </EmailShareButton>
-            </div>
-            <div className="social-share-button">
-              <FacebookShareButton url={url} onShareWindowClose={onClose}>
-                <FacebookIcon size={32} round />
-              </FacebookShareButton>
-            </div>
-            <div className="social-share-button">
-              <GooglePlusShareButton url={url} onShareWindowClose={onClose}>
-                <GooglePlusIcon size={32} round />
-              </GooglePlusShareButton>
-            </div>
-
-            <div className="social-share-button">
-              <LinkedinShareButton url={url} onShareWindowClose={onClose}>
-                <LinkedinIcon size={32} round />
-              </LinkedinShareButton>
-            </div>
-
-            <div className="social-share-button">
-              <TwitterShareButton url={url} onShareWindowClose={onClose}>
-                <TwitterIcon size={32} round />
-              </TwitterShareButton>
-            </div>
-
-            <div className="social-share-button">
-              <WhatsappShareButton url={url} onShareWindowClose={onClose}>
-                <WhatsappIcon size={32} round />
-              </WhatsappShareButton>
-            </div>
-            <div className="social-share-button">
-              <TelegramShareButton url={url} onShareWindowClose={onClose}>
-                <TelegramIcon size={32} round />
-              </TelegramShareButton>
-            </div>
+            {SocialNetworks}
           </div>
           : <div className="social-share-buttons-container">
             <div className="social-share-button">
-              <EmailShareButton url={url} onShareWindowClose={onClose}>
-                <EmailIcon size={32} round />
-              </EmailShareButton>
+              <SuperShareButton Component={EmailShareButton} Icon={EmailIcon} url={url} onClose={onClose} />
             </div>
           </div>}
         <CopyToClipboard
