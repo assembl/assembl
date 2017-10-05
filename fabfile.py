@@ -31,6 +31,7 @@ from fabric.api import (
 from fabric.colors import yellow, cyan, red, green
 
 
+# Please update the elasticsearch version in docker/docker-compose.yml.jinja2 too!
 ELASTICSEARCH_VERSION = '5.6.2'
 DEFAULT_SECTION = "DEFAULT"
 
