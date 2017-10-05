@@ -15,7 +15,7 @@
   .announcement-statistics {
     display: inline-block;
     text-align: center;
-    margin-top: 37.33px;
+    margin-top: $margin-section-xxxxs;
     margin-bottom: 3em;
     position: relative;
     left: 7%;
@@ -37,7 +37,7 @@
         }
 
         .doughnut-label-text {
-          font-family: latoRegular;
+          font-family: $font-family;
           font-size: $font-size-xxs;
           letter-spacing: 0.08em;
         }
@@ -122,8 +122,8 @@
         padding-bottom: 25px;
 
         .media-description-layer {
-          margin-left: 17.5px;
-          margin-right: 17.5px;
+          margin-left: 17px;
+          margin-right: 17px;
         }
 
         .media-right {
