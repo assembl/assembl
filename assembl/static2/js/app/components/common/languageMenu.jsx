@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { setLocale } from 'react-redux-i18n';
 import { compose, graphql } from 'react-apollo';
 import { NavDropdown, MenuItem } from 'react-bootstrap';
-import { getAvailableLocales } from '../../utils/globalFunctions';
+import { getAvailableLocales } from '../../utils/i18n';
 import { addLanguagePreference } from '../../actions/adminActions';
 import withLoadingIndicator from './withLoadingIndicator';
 import getDiscussionPreferenceLanguage from '../../graphql/DiscussionPreferenceLanguage.graphql';

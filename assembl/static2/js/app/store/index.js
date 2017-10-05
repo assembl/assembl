@@ -4,7 +4,7 @@ import { updateSelectedLocale } from '../actions/adminActions';
 import configureStore from './configureStore';
 import middlewares from './middlewares';
 import rootReducer from '../reducers/rootReducer';
-import { getLocale, getTranslations } from '../utils/globalFunctions';
+import { getLocale, getTranslations } from '../utils/i18n';
 
 export default function createAppStore(initialState) {
   const store = configureStore(initialState, rootReducer, middlewares);

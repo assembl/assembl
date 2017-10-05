@@ -5,7 +5,8 @@ import { createStore, applyMiddleware } from 'redux';
 import Thunk from 'redux-thunk';
 import { loadTranslations, setLocale, syncTranslationWithStore } from 'react-redux-i18n';
 import RootReducer from './reducers/rootReducer';
-import { getLocale, getTranslations, getDiscussionId, getConnectedUserId } from './utils/globalFunctions';
+import { getDiscussionId, getConnectedUserId } from './utils/globalFunctions';
+import { getLocale, getTranslations } from './utils/i18n';
 import { connectedUserIsExpert } from './utils/permissions';
 
 import { SearchComponent } from './components/search.jsx?v=1'; // eslint-disable-line
