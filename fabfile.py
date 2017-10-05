@@ -1051,7 +1051,7 @@ def generate_certificate():
     hostname = env.public_hostname
     if not exists('/etc/letsencrypt/live/%s/fullchain.pem' % (hostname)):
         sudo("certbot certonly --webroot -w /var/www/html -d " + hostname)
-    sudo("echo '12 3 * * 3 letsencrypt renew' | uniq | crontab")
+    sudo("crontab -l; echo '12 3 * * 3 letsencrypt renew' | uniq | crontab")
 
 
 # # Server packages
@@ -1752,26 +1752,17 @@ def install_yarn():
         run('brew install yarn')
 
 
-def which_shell():
-    resp = run("echo $SHELL")
-    if 'fish' in resp:
-        return 'fish'
-    if 'bash' in resp:
-        return 'bash'
-
-
 @task
 def upgrade_yarn_crontab():
     """Automate the look up for a new version of yarn and update it"""
     def set_crontab(cmd):
-        return "echo '0 2 * * 1 %s' | uniq | crontab" % (cmd)
+        statement = "echo '0 2 * * 1 %s'" % (cmd)
+        run("crontab -l; echo '%s' | uniq | crontab" % statement)
 
     if env.mac:
-        if which_shell() is 'fish':
-            cmd = "brew update; and brew upgrade yarn"
-        else:
-            cmd = "brew update && brew upgrade yarn"
+        cmd = "brew update && brew upgrade yarn"
         run(set_crontab(cmd))
+
     else:
         cmd = "apt-get update && apt-get install --only-upgrade yarn"
         sudo(set_crontab(cmd))
