@@ -112,3 +112,10 @@ export const createEvent = (typeArg, eventInit = { bubbles: false, cancelable: f
   event.initEvent(typeArg, eventInit.bubbles, eventInit.cancelable);
   return event;
 };
+
+/*
+  Get basename from a unix or windows path
+*/
+export const getBasename = (path) => {
+  return path.split('\\').pop().split('/').pop();
+};

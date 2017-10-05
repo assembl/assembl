@@ -1,4 +1,4 @@
-import { getNumberOfDays, calculatePercentage } from '../../../js/app/utils/globalFunctions';
+import { getNumberOfDays, calculatePercentage, getBasename } from '../../../js/app/utils/globalFunctions';
 
 describe('This test concern GlobalFunctions Class', () => {
   it('Should return the number of days between 2 dates', () => {
@@ -55,5 +55,19 @@ describe('This test concern GlobalFunctions Class', () => {
       return percentage;
     });
     expect(result).toEqual(expectedResult);
+  });
+});
+
+describe('getBasename function', () => {
+  it('should return the basename of a windows style path', () => {
+    const path = 'C:\\Documents\\foobar.jpg';
+    const expected = 'foobar.jpg';
+    expect(getBasename(path)).toEqual(expected);
+  });
+
+  it('should return the basename of a linux style path', () => {
+    const path = '/home/johndoe/Documents/foobar.jpg';
+    const expected = 'foobar.jpg';
+    expect(getBasename(path)).toEqual(expected);
   });
 });

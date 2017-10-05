@@ -6,6 +6,7 @@ import { I18n } from 'react-redux-i18n';
 
 import uploadDocumentMutation from '../../../graphql/mutations/uploadDocument.graphql';
 import AttachFileForm from '../../common/attachFileForm';
+import { getBasename } from '../../../utils/globalFunctions';
 import type { ButtonConfigType } from './buttonConfigType';
 import ToolbarButton from './toolbarButton';
 
@@ -104,8 +105,10 @@ class Toolbar extends React.Component<void, ToolbarProps, ToolbarState> {
       'load',
       () => {
         const data = {
+          externalUrl: reader.result,
           file: file,
-          externalUrl: reader.result
+          mimeType: file.type,
+          title: getBasename(file.name)
         };
         const { editorState, onChange } = this.props;
         const contentState = editorState.getCurrentContent();
