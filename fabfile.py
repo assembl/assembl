@@ -1052,7 +1052,8 @@ def generate_certificate():
     hostname = env.public_hostname
     if not exists('/etc/letsencrypt/live/%s/fullchain.pem' % (hostname)):
         sudo("certbot certonly --webroot -w /var/www/html -d " + hostname)
-    sudo("crontab -l; echo '12 3 * * 3 letsencrypt renew' | uniq | crontab")
+    cron_command = '12 3 * * 3 letsencrypt renew'
+    sudo(create_add_to_crontab_command(cron_command))
 
 
 # # Server packages
@@ -1753,20 +1754,24 @@ def install_yarn():
         run('brew install yarn')
 
 
+def create_add_to_crontab_command(crontab_line):
+    """Generates a shell command that makes sure that a cron won't be added several times (thanks to sort and uniq). This makes sure adding it several times is idempotent."""
+    return ("(crontab -l 2>/dev/null; echo '%s') | sort | uniq | crontab -" % crontab_line)
+
+
 @task
 def upgrade_yarn_crontab():
     """Automate the look up for a new version of yarn and update it"""
-    def set_crontab(cmd):
-        statement = "echo '0 2 * * 1 %s'" % (cmd)
-        run("crontab -l; echo '%s' | uniq | crontab" % statement)
-
+    statement_base = "0 2 * * 1 %s"
     if env.mac:
         cmd = "brew update && brew upgrade yarn"
-        run(set_crontab(cmd))
+        statement = statement_base % cmd
+        run(create_add_to_crontab_command(statement))
 
     else:
         cmd = "apt-get update && apt-get install --only-upgrade yarn"
-        sudo(set_crontab(cmd))
+        statement = statement_base % cmd
+        sudo(create_add_to_crontab_command(statement))
 
 
 @task
