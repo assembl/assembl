@@ -1459,3 +1459,39 @@ mutation myMutation($languages: [String]!) {
             "languages": []
             })
     assert res.errors is not None
+
+
+def test_query_post_message_classifier(graphql_request,
+                                       root_post_1_with_positive_message_classifier):
+    post_id = to_global_id('Post',
+                           root_post_1_with_positive_message_classifier.id)
+    res = schema.execute(u"""query {
+        node(id:"%s") {
+            ... on Post {
+                messageClassifier
+            }
+        }
+    }""" % (post_id), context_value=graphql_request)
+    assert json.loads(json.dumps(res.data)) == {
+        u"node": {
+            u"messageClassifier": u'positive'
+        }
+    }
+
+
+def test_query_post_no_message_classifier(graphql_request,
+                                          idea_message_column_positive,
+                                          root_post_1):
+    post_id = to_global_id('Post', root_post_1.id)
+    res = schema.execute(u"""query {
+        node(id:"%s") {
+            ... on Post {
+                messageClassifier
+            }
+        }
+    }""" % (post_id), context_value=graphql_request)
+    assert json.loads(json.dumps(res.data)) == {
+        u"node": {
+            u"messageClassifier": None
+        }
+    }

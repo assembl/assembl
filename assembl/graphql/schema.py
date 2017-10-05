@@ -413,7 +413,7 @@ class PostAttachment(SecureObjectType, SQLAlchemyObjectType):
 class PostInterface(SQLAlchemyInterface):
     class Meta:
         model = models.Post
-        only_fields = ('creator', )
+        only_fields = ('creator', 'message_classifier')
         # Don't add id in only_fields in an interface or the the id of Post
         # will be just the primary key, not the base64 type:id
 
@@ -546,7 +546,7 @@ class Post(SecureObjectType, SQLAlchemyObjectType):
     class Meta:
         model = models.Post
         interfaces = (Node, PostInterface)
-        only_fields = ('id', )  # inherits fields from Post interface only
+        only_fields = ('id', 'message_classifier')  # inherits fields from Post interface only
 
 
 class PostConnection(graphene.Connection):
