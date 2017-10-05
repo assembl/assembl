@@ -12,16 +12,28 @@
   padding-bottom: 20px;
 }
 
-*:focus {
+.modal-content
+  div:focus {
   outline: none;
+  border: none;
 }
 
 .modal-title {
   text-align: center;
 }
 
-.btn-copy:focus {
-  outline: none;
+@media screen and (min-width: 700px) {
+  .btn-copy {
+    min-width: 500px;
+  }
+}
+
+.btn-copy {
+  white-space: normal;
+  width: 60%;
+  &:focus {
+    outline: none;
+  }
 }
 
 .modal-header {
