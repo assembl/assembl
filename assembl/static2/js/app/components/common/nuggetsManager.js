@@ -17,11 +17,10 @@ class NuggetsManager {
     this.update();
   }
   update = () => {
-    let previous = null;
-    this.nuggetsList.forEach((nuggets) => {
+    this.nuggetsList.reduce((previous, nuggets) => {
       nuggets.updateTop(previous);
-      previous = nuggets;
-    });
+      return nuggets;
+    }, null);
   };
   remove(nuggets: Nuggets) {
     const index = this.nuggetsList.indexOf(nuggets);
