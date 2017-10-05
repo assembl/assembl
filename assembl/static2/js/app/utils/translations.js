@@ -272,7 +272,7 @@ const Translations = {
       videoModule: "Option module vidéo",
       thematic: "Thématique",
       edition: "Éditer la discussion",
-      landingpage: "Landing page",
+      landingpage: "Page d'accueil",
       menu: {
         phase: "Phase %{count} - %{description}",
         language: "Editer la langue du débat"
