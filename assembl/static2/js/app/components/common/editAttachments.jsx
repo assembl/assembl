@@ -21,7 +21,7 @@ const EditAttachments = ({ attachments, onDelete }: EditAttachmentsProps) => {
             </a>
             <span
               className="assembl-icon-delete"
-              onClick={() => {
+              onMouseDown={() => {
                 return onDelete(attachment.document.id);
               }}
             />

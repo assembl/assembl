@@ -19,7 +19,7 @@ exports[`EditAttachments component should render the list of attachments with de
     </a>
     <span
       className="assembl-icon-delete"
-      onClick={[Function]}
+      onMouseDown={[Function]}
     />
   </div>
   <div
@@ -37,7 +37,7 @@ exports[`EditAttachments component should render the list of attachments with de
     </a>
     <span
       className="assembl-icon-delete"
-      onClick={[Function]}
+      onMouseDown={[Function]}
     />
   </div>
 </div>
