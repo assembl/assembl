@@ -28,6 +28,32 @@ def root_post_1(request, participant1_user, discussion, test_session):
 
 
 @pytest.fixture(scope="function")
+def root_post_1_with_positive_message_classifier(request, participant1_user,
+                                                 idea_message_column_positive,
+                                                 discussion, test_session):
+    """
+    From participant1_user
+    """
+    from assembl.models import Post, LangString
+    p = Post(
+        discussion=discussion, creator=participant1_user,
+        subject=LangString.create(u"a root post"),
+        body=LangString.create(u"post body"), moderator=None,
+        creation_date=datetime(year=2000, month=1, day=1),
+        type="post", message_id="msg1@example.com",
+        message_classifier=idea_message_column_positive.message_classifier)
+    test_session.add(p)
+    test_session.flush()
+
+    def fin():
+        print "finalizer root_post_1"
+        test_session.delete(p)
+        test_session.flush()
+    request.addfinalizer(fin)
+    return p
+
+
+@pytest.fixture(scope="function")
 def discussion2_root_post_1(request, participant1_user, discussion2, test_session):
     """
     From participant1_user
