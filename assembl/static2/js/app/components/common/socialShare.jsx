@@ -13,20 +13,6 @@ const {
   TelegramShareButton
 } = ShareButtons;
 
-const icons = {};
-
-['facebook', 'google', 'linkedin', 'twitter', 'email', 'whatsapp', 'telegram'].forEach((service) => {
-  icons[service] = generateShareIcon(service);
-});
-
-const FacebookIcon = icons.facebook;
-const GooglePlusIcon = icons.google;
-const LinkedinIcon = icons.linkedin;
-const TwitterIcon = icons.twitter;
-const EmailIcon = icons.email;
-const WhatsappIcon = icons.whatsapp;
-const TelegramIcon = icons.telegram;
-
 const SuperShareButton = ({ Component, Icon, url, onClose, ...props }) => {
   const data = { url: url, onShareWindowClose: onClose };
   return (
@@ -48,18 +34,20 @@ export default class SocialShare extends React.Component {
   render() {
     const { url, onClose, social } = this.props;
     const SocialNetworks = [
-      { Component: EmailShareButton, Icon: EmailIcon },
-      { Component: FacebookShareButton, Icon: FacebookIcon },
-      { Component: GooglePlusShareButton, Icon: GooglePlusIcon },
-      { Component: LinkedinShareButton, Icon: LinkedinIcon },
-      { Component: TwitterShareButton, Icon: TwitterIcon },
-      { Component: WhatsappShareButton, Icon: WhatsappIcon },
+      { Component: EmailShareButton, iconName: 'email' },
+      { Component: FacebookShareButton, iconName: 'facebook' },
+      { Component: GooglePlusShareButton, iconName: 'google' },
+      { Component: LinkedinShareButton, iconName: 'linkedin' },
+      { Component: TwitterShareButton, iconName: 'twitter' },
+      { Component: WhatsappShareButton, iconName: 'whatsapp' },
       {
         Component: TelegramShareButton,
-        Icon: TelegramIcon
+        iconName: 'telegram'
       }
-    ].map(({ Component, Icon }, index) => {
-      return <SuperShareButton Component={Component} Icon={Icon} url={url} onClose={onClose} key={index} />;
+    ].map(({ Component, iconName }, index) => {
+      return (
+        <SuperShareButton Component={Component} Icon={generateShareIcon(iconName)} url={url} onClose={onClose} key={index} />
+      );
     });
 
     return (
@@ -70,7 +58,7 @@ export default class SocialShare extends React.Component {
           </div>
           : <div className="social-share-buttons-container">
             <div className="social-share-button">
-              <SuperShareButton Component={EmailShareButton} Icon={EmailIcon} url={url} onClose={onClose} />
+              <SuperShareButton Component={EmailShareButton} Icon={generateShareIcon('email')} url={url} onClose={onClose} />
             </div>
           </div>}
         <CopyToClipboard
