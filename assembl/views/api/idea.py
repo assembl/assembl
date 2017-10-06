@@ -42,6 +42,8 @@ def create_idea(request):
     discussion_id = int(request.matchdict['discussion_id'])
     session = Discussion.default_db
     discussion = session.query(Discussion).get(int(discussion_id))
+    user_id = authenticated_userid(request)
+    permissions = get_permissions(user_id, discussion.id)
     idea_data = json.loads(request.body)
     kwargs = {
         "discussion": discussion
@@ -53,8 +55,8 @@ def create_idea(request):
             if ls_data is None:
                 continue
             assert isinstance(ls_data, dict)
-            user_id = authenticated_userid(request)
-            current = LangString.create_from_json(ls_data, user_id)
+            current = LangString.create_from_json(
+                ls_data, user_id, permissions=permissions)
             kwargs[attr_name] = current
 
     new_idea = Idea(**kwargs)
@@ -176,6 +178,8 @@ def save_idea(request):
     In case the ``parentId`` is changed, handle all
     ``IdeaLink`` changes and send relevant ideas on the socket."""
     discussion_id = int(request.matchdict['discussion_id'])
+    user_id = authenticated_userid(request)
+    permissions = get_permissions(user_id, discussion_id)
     idea_id = request.matchdict['id']
     idea_data = json.loads(request.body)
     #Idea.default_db.execute('set transaction isolation level read committed')
@@ -207,18 +211,17 @@ def save_idea(request):
         if key in idea_data:
             current = getattr(idea, attr_name)
             ls_data = idea_data[key]
-            user_id = authenticated_userid(request)
             # TODO: handle legacy string instance?
             assert isinstance(ls_data, (dict, NoneType))
             if current:
                 if ls_data:
                     current.update_from_json(
-                        ls_data, user_id)
+                        ls_data, user_id, permissions=permissions)
                 else:
                     current.delete()
             elif ls_data:
                 current = LangString.create_from_json(
-                    ls_data, user_id)
+                    ls_data, user_id, permissions=permissions)
                 setattr(idea, attr_name, current)
 
     if 'parentId' in idea_data and idea_data['parentId'] is not None:
