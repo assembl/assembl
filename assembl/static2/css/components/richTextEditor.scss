@@ -55,11 +55,19 @@
       }
     }
 
-    min-height: 200px;
+    min-height: 201px;
     position: absolute;
+    left: 0px;
+    top: 110px;
     width: 100%;
     margin-top: 10px;
-    z-index: 1000;
+    z-index: 2;
+  }
+
+  @media screen and (max-width: 767px) {
+    .insertion-box {
+      top: 129px;
+    }
   }
 
   .editor-header {
