@@ -9,7 +9,8 @@ import get from 'lodash/get';
 import 'bootstrap/dist/css/bootstrap.css';
 import createAppStore from './store';
 import client from './client';
-import Routes, { hashLinkScroll } from './routes';
+import Routes from './routes';
+import { hashLinkScroll } from './utils/globalFunctions';
 
 require('smoothscroll-polyfill').polyfill();
 
