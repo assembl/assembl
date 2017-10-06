@@ -247,7 +247,6 @@
 
   .start-discussion {
       display: inline-block;
-      max-width: 150px;
       padding: 2px 0 0 10px;
   }
 
@@ -255,7 +254,14 @@
       display: inline-block;
       height: 40px;
       padding: 3px 0 0 0;
-      vertical-align: bottom;
+  }
+
+  .start-discussion.onecolumn {
+    max-width: 150px;
+  }
+
+  .start-discussion-icon.onecolumn {
+    vertical-align: bottom;
   }
 
   input {

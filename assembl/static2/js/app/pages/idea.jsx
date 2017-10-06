@@ -15,7 +15,7 @@ import Loader from '../components/common/loader';
 import Permissions, { connectedUserCan } from '../utils/permissions';
 import { getConnectedUserId } from '../utils/globalFunctions';
 import Announcement from './../components/debate/thread/announcement';
-import TopPostForm from '../components/debate/thread/topPostForm';
+import TopPostFormContainer from '../components/debate/thread/topPostFormContainer';
 import { getContentLocale } from '../reducers/rootReducer';
 
 export const transformPosts = (edges, additionnalProps = {}) => {
@@ -119,13 +119,7 @@ class Idea extends React.Component {
               </div>
             </Grid>}
           {!isUserConnected || connectedUserCan(Permissions.ADD_POST)
-            ? <Grid fluid className="background-color">
-              <div className="max-container">
-                <div className="top-post-form">
-                  <TopPostForm ideaId={idea.id} refetchIdea={refetchIdea} />
-                </div>
-              </div>
-            </Grid>
+            ? <TopPostFormContainer idea={idea} refetchIdea={refetchIdea} />
             : null}
           <Grid fluid className="background-grey">
             <div className="max-container">
