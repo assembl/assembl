@@ -7,6 +7,7 @@ import LanguageMenu from './languageMenu';
 import NavigationMenu from './navigationMenu';
 import { get } from '../../utils/routeMap';
 import { getConnectedUserId } from '../../utils/globalFunctions';
+import Search from '../search';
 
 class NavBar extends React.Component {
   constructor(props) {
@@ -55,6 +56,9 @@ class NavBar extends React.Component {
             </div>
             <div className="nav-menu left">
               <NavigationMenu />
+            </div>
+            <div id="search">
+              <Search />
             </div>
             <div className="navbar-icons right">
               {connectedUserId &&
