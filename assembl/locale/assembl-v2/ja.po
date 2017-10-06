@@ -1225,7 +1225,7 @@ msgstr "から"
 #. To
 #: messages.json
 msgid "search.datefilter.to"
-msgstr "に"
+msgstr "まで"
 
 #. [search.disagree]
 #. defaultMessage is:
