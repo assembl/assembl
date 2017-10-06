@@ -147,9 +147,9 @@ class Widget(DiscussionBoundBase):
         state.state_json = user_state
 
     def update_from_json(self, json, user_id=None, context=None, jsonld=None,
-                         parse_def_name='default_reverse'):
+                         permissions=None, parse_def_name='default_reverse'):
         modified = super(Widget, self).update_from_json(
-            json, user_id, context, jsonld, parse_def_name)
+            json, user_id, context, jsonld, permissions, parse_def_name)
 
         if user_id and user_id != Everyone and 'user_state' in json:
             modified.set_user_state(json['user_state'], user_id)
