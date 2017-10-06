@@ -37,13 +37,6 @@ import {
 import get from 'lodash/get';
 import truncate from 'lodash/truncate';
 
-// Keep the style import here. The reason why it's not in main.scss is because
-// we create a searchv1 bundle that includes only the Search component and its
-// local styles for v1. There is an additional searchv1.scss file that overrides
-// some styles for v1
-
-import '../../../css/views/search.scss';
-
 import DateRangeFilter from './search/DateRangeFilter';
 import FilteredSortingSelector from './search/SortingSelector';
 import ProfileLine from './common/profileLine';
@@ -127,8 +120,15 @@ const PublishedInfo = (props) => {
   );
 };
 
+const TYPE_TO_ICON = {
+  user: 'profil',
+  post: 'discussion',
+  idea: 'idea',
+  synthesis: 'synthesis'
+};
+
 const ImageType = (props) => {
-  return <img className={props.className} src={`/static2/img/icon-${props.type}.svg`} alt="" />;
+  return <span className={`${props.className} assembl-icon-${TYPE_TO_ICON[props.type]}`} />;
 };
 
 const getFieldAnyLang = (source, prop, locale) => {

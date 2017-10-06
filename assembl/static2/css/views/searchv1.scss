@@ -1,18 +1,10 @@
-// @import "../../../static/css/themes/default/_theme.scss";
 @import '../variables';
 @import '../components/assembl-glyph';
 
-.inline {
-    display: inline;
-}
+$first-color: $purple;
+$first-color-light: #d6c3f6;
 
-.profileLine {
-    display: inline;
-}
-
-.profileLine .user {
-    vertical-align: middle;
-}
+@import './search';
 
 .date-filter {
     label {
@@ -23,9 +15,15 @@
     }
 }
 
-// .sk-hits-list-hit {
-//     border-bottom: 1px solid $theme_btn_primary_bg_color;
-// }
+
+.sk-layout {
+  &__top-bar {
+    padding:5px 0 0 0;
+  }
+  &__body {
+    top:40px;
+  }
+}
 
 @media screen and (max-width: 1023px) {
     .joinDiscussion, #search {
