@@ -99,7 +99,7 @@
     "redux": "^3.7.2",
     "redux-thunk": "^2.1.0",
     "reselect": "^3.0.1",
-    "searchkit": "1.0.0-7",
+    "searchkit": "2.2.1-0",
     "smoothscroll-polyfill": "^0.3.6",
     "url-join": "^2.0.0"
   },
