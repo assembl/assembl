@@ -9,19 +9,19 @@
     name: eslint
     entry: bash -c "cd assembl/static2/; npm run eslint"
     language: system
-    files: ".*/static2/.*js.$"
+    files: ".*/static2/.*jsx?$"
   - id: flow
     name: flow
     entry: bash -c "cd assembl/static2/; npm run flow"
     language: system
-    files: ".*/static2/.*js.$"
+    files: ".*/static2/.*jsx?$"
   - id: jest
     name: js tests
     entry: bash -c "cd assembl/static2/; npm test"
     language: system
-    files: ".*/static2/.*js.$"
+    files: ".*/static2/.*jsx?$"
   - id: prettier
     name: prettier (If this fails, please git add prettier changes and commit again.)
     entry: bash -c "./assembl/static2/node_modules/.bin/prettier-eslint --write `git diff --name-only --cached -- '*.js?'` 2>&1 |grep -qv success"
     language: system
-    files: ".*/static2/.*js.$"
+    files: ".*/static2/.*jsx?$"
