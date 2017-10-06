@@ -309,7 +309,8 @@ def get_default_context(request, **kwargs):
     if admin_email is None or admin_email is '':
         raise HTTPInternalServerError(explanation="Assembl MUST have an admin_email configured in order to operate.")
 
-    (theme_name, theme_relative_path)=get_theme_info(discussion)
+    theme_name, theme_relative_path = get_theme_info(discussion)
+    node_env = os.getenv('NODE_ENV', 'production')
     return dict(
         kwargs,
         request=request,
@@ -326,6 +327,7 @@ def get_default_context(request, **kwargs):
         fb_locale=fb_locale,
         social_settings=social_settings,
         show_locale_country=show_locale_country,
+        NODE_ENV=node_env,
         theme_name=theme_name,
         theme_relative_path=theme_relative_path,
         minified_js=config.get('minified_js') or False,

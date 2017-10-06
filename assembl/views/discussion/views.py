@@ -211,7 +211,7 @@ def react_view(request, required_permission=P_READ):
     user_id = request.authenticated_userid or Everyone
     discussion = old_context["discussion"] or None
     get_route = old_context["get_route"]
-    (theme_name, theme_relative_path) = get_theme_info(discussion, frontend_version=2)
+    theme_name, theme_relative_path = get_theme_info(discussion, frontend_version=2)
     node_env = os.getenv('NODE_ENV', 'production')
     common_context = {
         "theme_name": theme_name,
