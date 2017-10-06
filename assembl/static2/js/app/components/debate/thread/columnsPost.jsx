@@ -1,5 +1,4 @@
 import React from 'react';
-import { Translate } from 'react-redux-i18n';
 import { compose, graphql } from 'react-apollo';
 import { Row, Col } from 'react-bootstrap';
 
@@ -7,13 +6,11 @@ import Attachments from '../../common/attachments';
 import ProfileLine from '../../common/profileLine';
 import PostTranslate from '../common/postTranslate';
 import PostActions from './postActions';
-import AnswerForm from './answerForm';
 import EditPostForm from './editPostForm';
 import DeletedPost from './deletedPost';
 import PostQuery from '../../../graphql/PostQuery.graphql';
 import { DeletedPublicationStates, PublicationStates } from '../../../constants';
 import withLoadingIndicator from '../../../components/common/withLoadingIndicator';
-import Nuggets from './nuggets';
 import { EmptyPost } from './post';
 
 // TODO we need a graphql query to retrieve all languages with native translation, see Python langstrings.LocaleLabel
@@ -25,17 +22,15 @@ class ColumnsPost extends EmptyPost {
       id,
       bodyEntries,
       bodyMimeType,
-      indirectIdeaContentLinks,
       creator,
       modificationDate,
       sentimentCounts,
       mySentiment,
       publicationState,
-      attachments,
-      extracts
+      attachments
     } = this.props.data.post;
 
-    const { lang, ideaId, refetchIdea, creationDate, numChildren, routerParams, debateData } = this.props;
+    const { lang, refetchIdea, creationDate, numChildren, routerParams, debateData } = this.props;
 
     // Fake nColumns props
     const columnColor = '#50D593';
@@ -56,24 +51,6 @@ class ColumnsPost extends EmptyPost {
       body = bodyEntries[0].value;
       originalBody = bodyEntries[0].value;
     }
-    // This hack should be removed when the TDI's admin section will be done.
-    // We need it to have several langString in the idea's title
-    const ideaContentLinks = [];
-    let titlesArray = [];
-    indirectIdeaContentLinks.forEach((link) => {
-      titlesArray = link.idea.title.split('#!');
-      titlesArray.forEach((title) => {
-        const titleLocale = title.split('$!')[1];
-        if (titleLocale) {
-          if (titleLocale.trim() === lang) {
-            ideaContentLinks.push(title.split('$!')[0]);
-          }
-        } else {
-          ideaContentLinks.push(link.idea.title);
-        }
-      });
-    });
-    // End of the hack
 
     if (publicationState in DeletedPublicationStates) {
       return <DeletedPost id={id} deletedBy={publicationState === PublicationStates.DELETED_BY_USER ? 'user' : 'admin'} />;
@@ -81,7 +58,7 @@ class ColumnsPost extends EmptyPost {
 
     if (this.state.mode === 'edit') {
       return (
-        <div className="posts">
+        <div className="posts column-post">
           <div className="answer-form" id={id}>
             <EditPostForm
               attachments={attachments}
@@ -95,13 +72,8 @@ class ColumnsPost extends EmptyPost {
         </div>
       );
     }
-
-    const answerTextareaRef = (el) => {
-      this.answerTextarea = el;
-    };
     return (
-      <div className="posts" id={id}>
-        <Nuggets extracts={extracts} postId={id} />
+      <div className="posts column-post" id={id}>
         <div className="box" style={{ borderLeftColor: columnColor }}>
           <Row className="post-row">
             <Col xs={12} md={11} className="post-left">
@@ -134,26 +106,6 @@ class ColumnsPost extends EmptyPost {
               />
 
               <Attachments attachments={attachments} />
-
-              {ideaContentLinks.length
-                ? <div className="link-idea">
-                  <div className="label">
-                    <Translate value="debate.thread.linkIdea" />
-                  </div>
-                  <div className="badges">
-                    {ideaContentLinks.map((title, index) => {
-                      return (
-                        <span className="badge" key={index}>
-                          {title}
-                        </span>
-                      );
-                    })}
-                  </div>
-                </div>
-                : null}
-              <div className="answers annotation">
-                <Translate value="debate.thread.numberOfResponses" count={numChildren} />
-              </div>
             </Col>
             <Col xs={12} md={1} className="post-right">
               <PostActions
@@ -169,17 +121,6 @@ class ColumnsPost extends EmptyPost {
             </Col>
           </Row>
         </div>
-        {this.state.showAnswerForm
-          ? <div className="answer-form">
-            <AnswerForm
-              parentId={id}
-              ideaId={ideaId}
-              refetchIdea={refetchIdea}
-              textareaRef={answerTextareaRef}
-              hideAnswerForm={this.hideAnswerForm}
-            />
-          </div>
-          : null}
       </div>
     );
   }
