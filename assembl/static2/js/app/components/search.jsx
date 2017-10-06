@@ -51,6 +51,7 @@ import { getConnectedUserId, getDebateId, getLocale } from '../reducers/contextR
 import { connectedUserIsExpert } from '../utils/permissions';
 
 const FRAGMENT_SIZE = 400;
+const elasticsearchLangIndexes = document.getElementById('elasticsearchLangIndexes').value.split(' ');
 
 const truncateText = (text) => {
   return truncate(text, { length: FRAGMENT_SIZE, separator: ' ', omission: ' [...]' });
@@ -130,27 +131,54 @@ const ImageType = (props) => {
   return <img className={props.className} src={`/static2/img/icon-${props.type}.svg`} alt="" />;
 };
 
+const getFieldAnyLang = (source, prop, locale) => {
+  let result;
+  if (!source) {
+    // Why does this happen?
+    return result;
+  }
+  if (source[`${prop}_${locale}`]) {
+    return source[`${prop}_${locale}`];
+  }
+  elasticsearchLangIndexes.forEach((lang) => {
+    if (result === undefined) {
+      const key = `${prop}_${lang}`;
+      if (source[key]) {
+        result = source[key];
+      }
+    }
+  });
+  if (result) {
+    return result;
+  }
+  if (source[`${prop}_other`]) {
+    return source[`${prop}_other`];
+  }
+  return result;
+};
+
+const highlightedLSOrTruncatedLS = (hit, field, locale) => {
+  let text = getFieldAnyLang(hit.highlight, field, locale);
+  if (text) {
+    if (Array.isArray(text)) {
+      // take the first highlight fragment
+      text = text[0];
+    }
+    return text;
+  }
+
+  text = getFieldAnyLang(hit._source, field, locale);
+  if (text) {
+    return truncateText(text);
+  }
+  return '';
+};
+
 const DumbPostHit = (props) => {
   const locale = props.locale;
   const source = props.result._source;
-  const mtfromSuffix = locale === 'fr' ? 'en' : 'fr';
-  let subject = get(
-    props.result,
-    `highlight.subject_${locale}`,
-    get(props.result, `highlight.subject_${locale}-x-mtfrom-${mtfromSuffix}`, get(props.result, 'highlight.subject_und'))
-  );
-  if (!subject) {
-    subject = get(source, `subject_${locale}`, get(source, `subject_${locale}-x-mtfrom-${mtfromSuffix}`, source.subject_und));
-  }
-  let body = get(
-    props.result,
-    `highlight.body_${locale}`,
-    get(props.result, `highlight.body_${locale}-x-mtfrom-${mtfromSuffix}`, get(props.result, 'highlight.body_und'))
-  );
-  if (!body) {
-    body = get(source, `body_${locale}`, get(source, `body_${locale}-x-mtfrom-${mtfromSuffix}`, source.body_und));
-    body = truncateText(body);
-  }
+  const subject = highlightedLSOrTruncatedLS(props.result, 'subject', locale);
+  const body = highlightedLSOrTruncatedLS(props.result, 'body', locale);
   return (
     <div className={props.bemBlocks.item().mix(props.bemBlocks.container('item'))}>
       <ImageType type={props.result._type} className={props.bemBlocks.item('imgtype')} />
@@ -192,9 +220,10 @@ const PostHit = connect((state) => {
   return { locale: getLocale(state) };
 })(DumbPostHit);
 
-const SynthesisHit = (props) => {
+const DumbSynthesisHit = (props) => {
+  const locale = props.locale;
   const source = props.result._source;
-  const ideas = get(props.result, 'highlight.ideas');
+  const ideas = highlightedLSOrTruncatedLS(props.result, 'ideas', locale);
   return (
     <div className={props.bemBlocks.item().mix(props.bemBlocks.container('item'))}>
       <ImageType type={props.result._type} className={props.bemBlocks.item('imgtype')} />
@@ -225,6 +254,10 @@ const SynthesisHit = (props) => {
   );
 };
 
+const SynthesisHit = connect((state) => {
+  return { locale: getLocale(state) };
+})(DumbSynthesisHit);
+
 const UserHit = (props) => {
   const source = props.result._source;
   const url = getUrl(props.result);
@@ -252,12 +285,15 @@ const UserHit = (props) => {
   );
 };
 
-const IdeaHit = (props) => {
+const DumbIdeaHit = (props) => {
+  const locale = props.locale;
   const source = props.result._source;
-  const shortTitle = highlightedTextOrTruncatedText(props.result, 'short_title');
-  const definition = highlightedTextOrTruncatedText(props.result, 'definition');
-  const announceTitle = highlightedTextOrTruncatedText(props.result, 'title');
-  const announceBody = highlightedTextOrTruncatedText(props.result, 'body');
+  const shortTitle = highlightedLSOrTruncatedLS(props.result, 'title', locale);
+  const definition = highlightedLSOrTruncatedLS(props.result, 'description', locale);
+  // long title missing?
+  const announceTitle = highlightedLSOrTruncatedLS(props.result, 'announcement_title', locale);
+  const announceBody = highlightedLSOrTruncatedLS(props.result, 'announcement_body', locale);
+
   return (
     <div className={props.bemBlocks.item().mix(props.bemBlocks.container('item'))}>
       <ImageType type={props.result._type} className={props.bemBlocks.item('imgtype')} />
@@ -298,6 +334,10 @@ const IdeaHit = (props) => {
   );
 };
 
+const IdeaHit = connect((state) => {
+  return { locale: getLocale(state) };
+})(DumbIdeaHit);
+
 const HitItem = (props) => {
   switch (props.result._type) {
   case 'synthesis':
@@ -320,27 +360,34 @@ const NoPanel = (props) => {
   );
 };
 
-const queryFields = [
-  'title', // idea announcement
-  'body', // idea announcement
-  'short_title', // idea
-  'definition', // idea
-  'name', // user
-  'subject', // synthesis
-  'introduction', // synthesis
-  'conclusion', // synthesis
-  'ideas', // synthesis
-  'subject_und', // post
-  'subject_fr', // post
-  'subject_fr-x-mtfrom-en', // post
-  'subject_en-x-mtfrom-fr', // post
-  'subject_en', // post
-  'body_und', // post
-  'body_fr', // post
-  'body_fr-x-mtfrom-en', // post
-  'body_en-x-mtfrom-fr', // post
-  'body_en' // post
-];
+const calcQueryFields = () => {
+  const base = [
+    'name', // user
+    'subject', // synthesis
+    'introduction', // synthesis
+    'conclusion' // synthesis
+  ];
+  const lsFields = [
+    'announcement_title', // idea announcement
+    'announcement_body', // idea announcement
+    'title', // idea
+    'description', // idea
+    'synthesis_title', // idea
+    'ideas', // synthesis
+    'subject', // post
+    'body' // post
+  ];
+  const langs = elasticsearchLangIndexes.slice();
+  langs.push('other');
+  langs.forEach((lang) => {
+    lsFields.forEach((field) => {
+      base.push(`${field}_${lang}`);
+    });
+  });
+  return base;
+};
+
+const queryFields = calcQueryFields();
 
 // default is fragment_size 100 and number_of_fragments 5,see
 // https://www.elastic.co/guide/en/elasticsearch/reference/current/search-request-highlighting.html#_highlighted_fragments

@@ -16,6 +16,7 @@
         {% else %}
           {% set userId = 'system.Everyone' %}
         {% endif %}
+        <input type="hidden" name="elasticsearchLangIndexes" id="elasticsearchLangIndexes" value="{{ elasticsearch_lang_indexes }}" />
         {% if discussion %}
             <input type="hidden" name="assemblVersion" id="assemblVersion" value="{{ assembl_version }}" />
             <input type="hidden" name="discussion-id" id="discussion-id" value="{{ discussion.id }}" />

@@ -1,9 +1,13 @@
 import os
+from collections import defaultdict
 
 from assembl.lib import config
+from assembl.lib.locale import strip_country
 from elasticsearch.client import Elasticsearch
 
 from assembl.indexing.settings import get_index_settings, MAPPINGS
+from . import index_languages
+
 
 _es = None
 
@@ -46,19 +50,46 @@ def delete_index(index_name):
     return es.indices.delete(index_name, ignore=[400, 404])
 
 
+def populate_from_langstring(ls, data, dataPropName):
+    langs = index_languages()
+    if ls:
+        others = []
+        for entry in ls.entries:
+            if not entry.value:
+                continue
+            locale_code = strip_country(entry.base_locale)
+            if locale_code in langs:
+                dataPropNameL = "_".join((dataPropName, locale_code))
+                data[dataPropNameL] = entry.value
+            else:
+                others.append(entry.value)
+        if others:
+            dataPropNameL = dataPropName + "_other"
+            data[dataPropNameL] = ' '.join(others)
+
+
+def populate_from_langstring_prop(content, data, propName, dataPropName=None):
+    ls = getattr(content, propName, None)
+    if ls:
+        populate_from_langstring(ls, data, dataPropName or propName)
+
+
 def get_data(content):
     """Return uid, dict of fields we want to index,
     return None if we don't index."""
-    from assembl.models import Idea, Post, SynthesisPost, AgentProfile
+    from assembl.models import Idea, Post, SynthesisPost, AgentProfile, LangString
     if isinstance(content, Idea):
         data = {}
-        for attr in ('creation_date', 'id', 'short_title', 'long_title',
-                     'definition', 'discussion_id'):
+        for attr in ('creation_date', 'id', 'discussion_id'):
             data[attr] = getattr(content, attr)
+        populate_from_langstring_prop(content, data, 'title')
+        populate_from_langstring_prop(content, data, 'synthesis_title')
+        populate_from_langstring_prop(content, data, 'description')
 
-        if content.announcement:
-            data['title'] = content.announcement.title_
-            data['body'] = content.announcement.body_
+        announcement = content.get_applicable_announcement()
+        if announcement:
+            populate_from_langstring_prop(announcement, data, 'title', 'announcement_title')
+            populate_from_langstring_prop(announcement, data, 'body', 'announcement_body')
 
         return get_uid(content), data
 
@@ -107,14 +138,20 @@ def get_data(content):
             data['subject'] = content.publishes_synthesis.subject
             data['introduction'] = content.publishes_synthesis.introduction
             data['conclusion'] = content.publishes_synthesis.conclusion
-            data['ideas'] = [idea.long_title or ''
-                             for idea in content.publishes_synthesis.ideas]
+            long_titles = [idea.synthesis_title for idea in content.publishes_synthesis.ideas
+                           if idea.synthesis_title]
+            long_titles_c = defaultdict(list)
+            for ls in long_titles:
+                for e in ls.entries:
+                    if e.value:
+                        long_titles_c[strip_country(e.base_locale)].append(e.value)
+            ls = LangString()
+            for locale, values in long_titles_c.iteritems():
+                ls.add_value(' '.join(values), locale)
+            populate_from_langstring(ls, data, 'ideas')
         else:
-            for entry in content.body.entries:
-                data['body_' + entry.locale_code] = entry.value
-
-            for entry in content.subject.entries:
-                data['subject_' + entry.locale_code] = entry.value
+            populate_from_langstring_prop(content, data, 'body')
+            populate_from_langstring_prop(content, data, 'subject')
 
         return get_uid(content), data
 

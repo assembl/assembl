@@ -334,6 +334,7 @@ def get_default_context(request, **kwargs):
         help_url=help_url,
         socket_url=socket_url,
         REACT_URL=react_url,
+        elasticsearch_lang_indexes=config.get('elasticsearch_lang_indexes', 'en fr'),
         first_login_after_auto_subscribe_to_notifications=first_login_after_auto_subscribe_to_notifications,
         raven_url=config.get('raven_url') or '',
         activate_tour=str(config.get('activate_tour') or False).lower(),
