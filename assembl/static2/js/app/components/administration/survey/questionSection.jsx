@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { I18n } from 'react-redux-i18n';
 import { Row, Col } from 'react-bootstrap';
 
-import VideoForm from './videoForm';
+import MediaForm from './mediaForm';
 import QuestionsForm from './questionsForm';
 import SectionTitle from '../sectionTitle';
 
@@ -54,8 +54,8 @@ class QuestionSection extends React.Component {
           </Row>
           {selectedThematicId &&
             <Row>
-              <VideoForm
-                key={`video-form-${selectedThematicId}-${selectedLocale}`}
+              <MediaForm
+                key={`media-form-${selectedThematicId}-${selectedLocale}`}
                 thematicId={selectedThematicId}
                 selectedLocale={selectedLocale}
               />

@@ -8,7 +8,7 @@ import { Grid, Button } from 'react-bootstrap';
 
 import { updateContentLocale } from '../actions/contentLocaleActions';
 import withLoadingIndicator from '../components/common/withLoadingIndicator';
-import Video from '../components/debate/survey/video';
+import Media from '../components/common/media';
 import Header from '../components/debate/common/header';
 import Question from '../components/debate/survey/question';
 import Navigation from '../components/debate/survey/navigation';
@@ -95,23 +95,14 @@ class Survey extends React.Component {
       displayAlert('danger', 'An error occured, please reload the page');
       return null;
     }
-    const { thematic: { imgUrl, questions, title, video } } = this.props.data;
+    const { thematic: { imgUrl, questions, title, video: media } } = this.props.data;
     const { debateData } = this.props.debate;
     const isPhaseCompleted = getIfPhaseCompletedByIdentifier(debateData.timeline, 'survey');
-    const isValidVideo = !!video;
     return (
       <div className="survey">
         <div className="relative">
           <Header title={title} imgUrl={imgUrl} identifier="survey" />
-          {isValidVideo
-            ? <Video
-              title={video.title}
-              descriptionTop={video.descriptionTop}
-              descriptionBottom={video.descriptionBottom}
-              descriptionSide={video.descriptionSide}
-              htmlCode={video.htmlCode}
-            />
-            : null}
+          <Media {...media} />
           <div className="questions">
             {questions &&
               questions.map((question, index) => {

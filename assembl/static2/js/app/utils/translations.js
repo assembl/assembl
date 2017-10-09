@@ -11,6 +11,7 @@ const Translations = {
     "Number of users": "Nombre de contributeurs",
     cancel: "Annuler",
     validate: "Valider",
+    delete: "Supprimer",
     redirectToV1:
       "Vous allez être redirigé vers la phase %{phaseName} dans quelques secondes. Assembl est en cours d'amélioration, veuillez nous excuser pour le changement d'interface. Si rien ne se produit, cliquez sur le bouton ci-dessous.",
     search: {
@@ -275,7 +276,7 @@ const Translations = {
       deleteQuestion: "Supprimer la question",
       changeLanguage: "Renseigner une autre langue",
       question_label: "Question",
-      videoModule: "Option module vidéo",
+      announcementModule: "Option module consigne",
       thematic: "Thématique",
       edition: "Éditer la discussion",
       landingpage: "Page d'accueil",
@@ -289,7 +290,8 @@ const Translations = {
         1: "Renseigner les questions",
         2: "Exporter les données"
       },
-      videoHelp: "*Liens autorisés : \"https://www.youtube.com/embed/[videoId]\" ou \"https://player.vimeo.com/video/[videoId]?\"",
+      videoHelp:
+        "*Liens vidéo autorisés : \"https://www.youtube.com/embed/[videoId]\" ou \"https://player.vimeo.com/video/[videoId]?\"",
       annotation: "Module à renseigner obligatoirement. Les champs * sont requis.",
       themeNum: "Thématique %{index}",
       discussion: {
@@ -301,7 +303,8 @@ const Translations = {
         quote: "Citation",
         descriptionTop: "Texte au-dessus de la vidéo",
         descriptionBottom: "Texte en-dessous de la vidéo",
-        videoLink: "Lien vidéo"
+        mediaLink: "Lien média en ligne (vidéo, image, etc..)",
+        orAttachPicture: "Ou téléchargez une image depuis votre ordinateur"
       },
       surveyExport: {
         title: "Exporter les données du débat",
@@ -594,7 +597,7 @@ const Translations = {
       deleteQuestion: "Delete the question",
       changeLanguage: "Set another language",
       question_label: "Question",
-      videoModule: "Video module",
+      announcementModule: "Announcement module",
       thematic: "Theme",
       edition: "Edit the Discussion",
       landingpage: "Landing page",
@@ -608,7 +611,8 @@ const Translations = {
         1: "Set questions",
         2: "Export data"
       },
-      videoHelp: "*Authorized links: \"https://www.youtube.com/embed/[videoId]\" ou \"https://player.vimeo.com/video/[videoId]?\"",
+      videoHelp:
+        "*Authorized video links: \"https://www.youtube.com/embed/[videoId]\" or \"https://player.vimeo.com/video/[videoId]?\"",
       annotation: "Module to be completed. * Fields are required.",
       themeNum: "Theme %{index}",
       discussion: {
@@ -620,7 +624,8 @@ const Translations = {
         quote: "Quote",
         descriptionTop: "Comments above video",
         descriptionBottom: "Comments below video",
-        videoLink: "Video link"
+        mediaLink: "Online media link (video, picture, etc..)",
+        orAttachPicture: "Or upload an image from your computer"
       },
       surveyExport: {
         title: "Export the debate data",

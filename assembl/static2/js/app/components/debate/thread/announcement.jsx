@@ -4,7 +4,7 @@ import { Col, Tooltip } from 'react-bootstrap';
 
 import StatisticsDoughnut from '../common/statisticsDoughnut';
 import { sentimentDefinitionsObject } from './sentimentDefinitions';
-import Video from './video';
+import Media from '../../common/media';
 import { PublicationStates } from '../../../constants';
 
 const createTooltip = (sentiment, count) => {
@@ -48,12 +48,14 @@ const dirtySplitHack = (announcementContent) => {
     ? {
       descriptionTop: `${split[0]}</p>`,
       descriptionBottom: `<p>${split[2]}`,
-      htmlCode: split[1]
+      htmlCode: split[1],
+      noTitle: true
     }
     : {
       descriptionTop: body,
       descriptionBottom: null,
-      htmlCode: null
+      htmlCode: null,
+      noTitle: true
     };
 };
 
@@ -62,7 +64,7 @@ class Announcement extends React.Component {
     const { ideaWithPostsData: { idea }, announcementContent } = this.props;
     const { numContributors, numPosts, posts } = idea;
     const sentimentsCount = getSentimentsCount(posts);
-    const videoContent = dirtySplitHack(announcementContent);
+    const mediaContent = dirtySplitHack(announcementContent);
     return (
       <div className="announcement">
         <div className="announcement-title">
@@ -71,10 +73,10 @@ class Announcement extends React.Component {
             <Translate value="debate.thread.announcement" />
           </h3>
         </div>
-        <Col xs={12} sm={8} className="announcement-video col-sm-push-4">
-          <Video {...videoContent} />
+        <Col xs={12} md={8} className="announcement-media col-md-push-4">
+          <Media {...mediaContent} />
         </Col>
-        <Col xs={12} sm={4} className="col-sm-pull-8">
+        <Col xs={12} md={4} className="col-md-pull-8">
           <div className="announcement-statistics">
             <div className="announcement-doughnut">
               <StatisticsDoughnut elements={createDoughnutElements(sentimentsCount)} />
