@@ -3,7 +3,7 @@ import React from 'react';
 import { Button, FormGroup, Modal, Radio } from 'react-bootstrap';
 import { Translate, I18n } from 'react-redux-i18n';
 
-import { closeModal } from '../../../utils/utilityManager';
+import { closeModal } from '../../../../utils/utilityManager';
 
 type CancelTranslationFormProps = {
   originalLocale: string,

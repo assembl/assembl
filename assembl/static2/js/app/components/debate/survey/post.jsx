@@ -16,7 +16,7 @@ import PostQuery from '../../../graphql/PostQuery.graphql';
 import { likeTooltip, disagreeTooltip } from '../../common/tooltips';
 import { sentimentDefinitionsObject } from '../thread/sentimentDefinitions';
 import StatisticsDoughnut from '../common/statisticsDoughnut';
-import PostTranslate from '../common/postTranslate';
+import PostTranslate from '../common/translations/postTranslate';
 import { EXTRA_SMALL_SCREEN_WIDTH } from '../../../constants';
 import withLoadingIndicator from '../../common/withLoadingIndicator';
 

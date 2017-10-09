@@ -6,7 +6,7 @@ import { Row, Col } from 'react-bootstrap';
 import { getDomElementOffset, hashLinkScroll } from '../../../utils/globalFunctions';
 import Attachments from '../../common/attachments';
 import ProfileLine from '../../common/profileLine';
-import PostTranslate from '../common/postTranslate';
+import PostTranslate from '../common/translations/postTranslate';
 import PostActions from './postActions';
 import AnswerForm from './answerForm';
 import EditPostForm from './editPostForm';

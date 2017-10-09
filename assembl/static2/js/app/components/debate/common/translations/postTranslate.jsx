@@ -3,10 +3,10 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Translate, I18n } from 'react-redux-i18n';
 
-import { updateContentLocaleById, updateContentLocaleByOriginalLocale } from '../../../actions/contentLocaleActions';
-import SwitchButton from '../../common/switchButton';
-import { getConnectedUserId } from '../../../utils/globalFunctions';
-import { displayCustomModal } from '../../../utils/utilityManager';
+import { updateContentLocaleById, updateContentLocaleByOriginalLocale } from '../../../../actions/contentLocaleActions';
+import SwitchButton from '../../../common/switchButton';
+import { getConnectedUserId } from '../../../../utils/globalFunctions';
+import { displayCustomModal } from '../../../../utils/utilityManager';
 import CancelTranslationForm from './cancelTranslationForm';
 import ChooseContentLocaleForm from './chooseContentLocaleForm';
 

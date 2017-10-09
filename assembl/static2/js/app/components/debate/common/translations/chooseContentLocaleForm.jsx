@@ -4,9 +4,9 @@ import { Button, FormControl, FormGroup, Modal, Radio } from 'react-bootstrap';
 import { Translate, I18n } from 'react-redux-i18n';
 import { compose, graphql } from 'react-apollo';
 
-import { closeModal } from '../../../utils/utilityManager';
-import LocalesQuery from '../../../graphql/LocalesQuery.graphql';
-import withLoadingIndicator from '../../common/withLoadingIndicator';
+import { closeModal } from '../../../../utils/utilityManager';
+import LocalesQuery from '../../../../graphql/LocalesQuery.graphql';
+import withLoadingIndicator from '../../../common/withLoadingIndicator';
 
 type Locale = {
   label: string,
