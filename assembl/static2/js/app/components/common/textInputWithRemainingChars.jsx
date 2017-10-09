@@ -14,7 +14,7 @@ export const TextInputWithRemainingChars = ({
   return (
     <div>
       {alwaysDisplayLabel || value
-        ? <div className="form-label">
+        ? <div className="form-label input-title-label">
           {label}
         </div>
         : null}

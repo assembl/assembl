@@ -212,6 +212,7 @@ export default class RichTextEditor extends React.Component<Object, RichTextEdit
             </div>
             : null}
           {toolbarPosition === 'top' ? this.renderToolbar() : null}
+          <div className="clear" />
         </div>
         <div onClick={this.focusEditor}>
           <Editor

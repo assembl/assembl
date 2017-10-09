@@ -281,6 +281,10 @@
           box-shadow: 0 0 0 50px $input-txt-bkg-color inset;
       }
   }
+
+  .input-title-label {
+    padding-bottom: 8px;
+  }
 }
 
 @media screen and (min-width: 601px) {
