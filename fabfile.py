@@ -112,7 +112,7 @@ def sanitize_env():
         env.mac = False
     env.projectpath = env.get('projectpath', dirname(__file__))
     if not env.get('venvpath', None):
-        if is_local:
+        if running_locally():
             # Trust VIRTUAL_ENV, important for Jenkins case.
             env.venvpath = getenv('VIRTUAL_ENV', None)
         if not env.get('venvpath', None):
