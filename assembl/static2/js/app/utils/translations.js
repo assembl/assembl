@@ -330,7 +330,7 @@ const Translations = {
       de: "german"
     },
     cancel: "Cancel",
-    submit: "Validate",
+    validate: "Validate",
     redirectToV1:
       "You will be redirected to the %{phaseName} phase in a few seconds. Assembl is being improved, please excuse us for the interface change. If nothing happens, click on the button.",
     search: {
