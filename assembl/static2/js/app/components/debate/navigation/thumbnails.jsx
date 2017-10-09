@@ -22,7 +22,7 @@ class Thumbnails extends React.Component {
                     <Link to={`${get('debate', { slug: slug, phase: identifier })}${get('theme', { themeId: thematic.id })}`}>
                       <div
                         className={themeId === thematic.id ? 'thumb-img active' : 'thumb-img'}
-                        style={{ backgroundImage: `url(${thematic.imgUrl})` }}
+                        style={thematic.imgUrl ? { backgroundImage: `url(${thematic.imgUrl})` } : null}
                       />
                       <div className="color-box">&nbsp;</div>
                       <div className="thumb-title">

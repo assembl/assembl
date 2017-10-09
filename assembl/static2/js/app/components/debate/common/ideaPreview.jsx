@@ -24,7 +24,7 @@ const IdeaPreview = ({
           : `illustration-box idea-preview idea-preview-level-${ideaLevel}`
       }
     >
-      <div className="image-box" style={{ backgroundImage: `url(${imgUrl})` }} />
+      <div className="image-box" style={imgUrl ? { backgroundImage: `url(${imgUrl})` } : null} />
       <div className="content-box" to={link}>
         <h3 className="light-title-3 center">
           {title}
