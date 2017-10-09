@@ -8,7 +8,7 @@ from random import sample as random_sample
 
 from sqlalchemy import desc, inspect
 from sqlalchemy.orm.exc import NoResultFound
-from sqlalchemy.orm import joinedload_all, undefer
+from sqlalchemy.orm import joinedload, subqueryload, undefer
 from sqlalchemy.sql.functions import count
 import graphene
 from graphene.pyutils.enum import Enum as PyEnum
@@ -30,6 +30,7 @@ from assembl.auth import P_DELETE_POST, P_DELETE_MY_POST
 from assembl.auth.util import get_permissions
 from assembl.lib.sqla_types import EmailString
 from assembl.lib.clean_input import sanitize_text, sanitize_html
+from assembl.lib.locale import strip_country
 from assembl import models
 from assembl.models.action import (
     SentimentOfPost,
@@ -37,6 +38,7 @@ from assembl.models.action import (
     DontUnderstandSentimentOfPost, MoreInfoSentimentOfPost)
 from assembl.models.auth import (
     LanguagePreferenceCollection, LanguagePreferenceCollectionWithDefault)
+from assembl.nlp.translation_service import DummyGoogleTranslationService
 from .types import SQLAlchemyInterface, SQLAlchemyUnion
 
 _ = TranslationStringFactory('assembl')
@@ -429,6 +431,7 @@ class PostInterface(SQLAlchemyInterface):
     body_mime_type = graphene.String(required=True)
     publication_state = graphene.Field(type=PublicationStates)
     attachments = graphene.List(PostAttachment)
+    original_locale = graphene.String()
 
     def resolve_subject(self, args, context, info):
         # Use self.subject and not self.get_subject() because we still
@@ -530,6 +533,13 @@ class PostInterface(SQLAlchemyInterface):
 
     def resolve_publication_state(self, args, context, info):
         return self.publication_state.name
+
+    def resolve_original_locale(self, args, context, info):
+        entry = self.body.first_original()
+        if entry:
+            return entry.locale_code
+
+        return u''
 
 
 class Post(SecureObjectType, SQLAlchemyObjectType):
@@ -678,7 +688,7 @@ class Idea(SecureObjectType, SQLAlchemyObjectType):
             related, Post.id == related.c.post_id
             ).order_by(desc(Post.creation_date), Post.id
             ).options(
-                joinedload_all(Post.creator),
+                joinedload(Post.creator),
                 undefer(Post.idea_content_links_above_post)
             )
         if len(discussion.discussion_locales) > 1:
@@ -767,7 +777,7 @@ class Question(SecureObjectType, SQLAlchemyObjectType):
                 post_ids, min(len(post_ids), limit))
             query = Post.query.filter(Post.id.in_(random_posts_ids)
                 ).options(
-                    joinedload_all(Post.creator),
+                    joinedload(Post.creator),
                 )
             if len(discussion.discussion_locales) > 1:
                 query = query.options(
@@ -786,7 +796,7 @@ class Question(SecureObjectType, SQLAlchemyObjectType):
                 ).filter(Post.publication_state == models.PublicationStates.PUBLISHED
                 ).order_by(desc(Post.creation_date), Post.id
                 ).options(
-                    joinedload_all(Post.creator),
+                    joinedload(Post.creator),
                 )
             if len(discussion.discussion_locales) > 1:
                 query = query.options(
@@ -873,6 +883,11 @@ class IdeaUnion(SQLAlchemyUnion):
             return Idea
 
 
+class Locale(graphene.ObjectType):
+    locale_code = graphene.String(required=True)
+    label = graphene.String(required=True)
+
+
 class Query(graphene.ObjectType):
     node = Node.Field()
     root_idea = graphene.Field(IdeaUnion, identifier=graphene.String())
@@ -881,6 +896,7 @@ class Query(graphene.ObjectType):
     num_participants = graphene.Int()
     discussion_preferences = graphene.Field(DiscussionPreferences)
     default_preferences = graphene.Field(DiscussionPreferences)
+    locales = graphene.List(Locale, lang=graphene.String(required=True))
 
     def resolve_root_idea(self, args, context, info):
         discussion_id = context.matchdict['discussion_id']
@@ -901,7 +917,17 @@ class Query(graphene.ObjectType):
         descendants_query = model.get_descendants_query(
             root_idea_id, inclusive=True)
         query = query.filter(model.id.in_(descendants_query)
-            ).filter(model.hidden == False).filter(model.sqla_type.in_(('idea', 'root_idea'))).order_by(model.id)
+            ).filter(
+                model.hidden == False,
+                model.sqla_type.in_(('idea', 'root_idea'))
+            ).options(
+                joinedload(models.Idea.source_links),
+                subqueryload(models.Idea.attachments).joinedload("document"),
+#                subqueryload(models.Idea.message_columns),
+                joinedload(models.Idea.title).joinedload("entries"),
+#                joinedload(models.Idea.synthesis_title).joinedload("entries"),
+                joinedload(models.Idea.description).joinedload("entries"),
+            ).order_by(model.id)
         return query
 
     def resolve_thematics(self, args, context, info):
@@ -934,6 +960,15 @@ class Query(graphene.ObjectType):
         return DiscussionPreferences(
             languages=[LocalePreference(locale=x) for x in preferred_locales])
 
+    def resolve_locales(self, args, context, info):
+        locales = DummyGoogleTranslationService.target_localesC()
+        target_locale = strip_country(models.Locale.get_or_create(args.get('lang')))
+        labels = models.LocaleLabel.names_of_locales_in_locale(
+            [strip_country(DummyGoogleTranslationService.asPosixLocale(loc)) for loc in locales],
+            target_locale)
+        return [Locale(locale_code=locale_code, label=label)
+                for locale_code, label in sorted(labels.items(),
+                                                 key=lambda entry: entry[1])]
 
 
 class VideoInput(graphene.InputObjectType):

@@ -36,7 +36,7 @@ export const displayAlert = (style, msg, topPosition = false, time = 4000) => {
     });
   }, time);
 };
-export const displayModal = (title, body, footer, footerTxt, button = null, showModal = true) => {
+export const displayModal = (title, body, footer, footerTxt, button = null, showModal = true, bsSize = null) => {
   /*
     title:String => the text in the header of the modal
     body:String => the text in the body of the modal
@@ -54,6 +54,16 @@ export const displayModal = (title, body, footer, footerTxt, button = null, show
     footer: footer,
     footerTxt: footerTxt,
     button: button,
+    showModal: showModal,
+    bsSize: bsSize
+  });
+};
+
+export const displayCustomModal = (content, showModal = true) => {
+  /* display a modal with given content. You have to handle Modal.* components in your content */
+  document.activeElement.blur();
+  modalManager.component.setState({
+    content: content,
     showModal: showModal
   });
 };

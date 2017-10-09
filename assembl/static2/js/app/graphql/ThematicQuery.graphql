@@ -1,6 +1,4 @@
-#import "./AgentProfileInfo.graphql"
-
-query ThematicQuery($contentLocale: String!, $lang: String!, $id: ID!) {
+query ThematicQuery($lang: String!, $id: ID!) {
   thematic: node(id: $id) {
     ... on Thematic {
       title(lang: $lang)
@@ -22,20 +20,7 @@ query ThematicQuery($contentLocale: String!, $lang: String!, $id: ID!) {
               node {
                 ... on Post {
                   id
-                  bodyEntries(lang: $contentLocale) {
-                    value
-                    localeCode
-                  }
-                  mySentiment
-                  parentId
-                  bodyMimeType
-                  creator {
-                    ...AgentProfileInfo
-                  }
-                  sentimentCounts {
-                    like
-                    disagree
-                  }
+                  originalLocale
                 }
               }
             }

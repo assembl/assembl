@@ -1,7 +1,17 @@
 .translate {
   font-size: $font-size-xs;
   font-family: $font-family6;
+  .translate-button {
+    margin: 5px;
+  }
 }
+
+.choose-content-locale-form {
+  .modal-content .modal-body {
+    text-align: left;
+  }
+}
+
 .proposals {
   .box {
     border-bottom: $navbar-border;

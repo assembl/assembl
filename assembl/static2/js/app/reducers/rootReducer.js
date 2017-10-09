@@ -7,9 +7,12 @@ import Synthesis from './synthesisReducer';
 import Auth from './authenticationReducer';
 import Phase from './phaseReducer';
 import Admin from './adminReducer';
+import contentLocale, { defaultContentLocaleMapping } from './contentLocaleReducer';
 
 export default combineReducers({
   i18n: i18nReducer,
+  contentLocale: contentLocale,
+  defaultContentLocaleMapping: defaultContentLocaleMapping,
   context: Context,
   debate: Debate,
   partners: Partners,
@@ -18,8 +21,3 @@ export default combineReducers({
   phase: Phase,
   admin: Admin
 });
-
-// TODO use a proper key in redux store and create redux actions to set it
-export const getContentLocale = (state) => {
-  return state.i18n.locale;
-};

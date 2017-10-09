@@ -1,0 +1,6 @@
+query LocalesQuery($lang: String!) {
+  locales(lang: $lang) {
+    localeCode
+    label
+  }
+}

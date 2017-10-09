@@ -14,7 +14,6 @@ import { convertRawContentStateToHTML, rawContentStateIsEmpty } from '../../../u
 import RichTextEditor from '../../common/richTextEditor';
 import attachmentsPlugin from '../../common/richTextEditor/attachmentsPlugin';
 import { TEXT_AREA_MAX_LENGTH } from './topPostForm';
-import { getContentLocale } from '../../../reducers/rootReducer';
 
 type AnswerFormProps = {
   contentLocale: string,
@@ -143,7 +142,7 @@ class AnswerForm extends React.PureComponent<*, AnswerFormProps, AnswerFormState
 
 const mapStateToProps = (state) => {
   return {
-    contentLocale: getContentLocale(state)
+    contentLocale: state.i18n.locale
   };
 };
 

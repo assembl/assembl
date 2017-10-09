@@ -39,8 +39,18 @@ $warning-alert-text: $orange2;
 $app-max-width: 1400px;
 $navbar-height: 60px;
 $navbar-line-height: 64px;
+
+$margin-section-xxl: 240px;
+$margin-section-xl: 200px;
+$margin-section-l: 160px;
+$margin-section-ml: 140px;
+$margin-section-m: 120px;
 $margin-section: 90px;
 $margin-section-xs: 80px;
+$margin-section-xxs: 70px;
+$margin-section-xxxs: 60px;
+$margin-section-xxxxs: 50px;
+$margin-section-tiny: 30px;
 
 $fonts-dir: '/static2/fonts';
 $img-dir: '/static2/img';
@@ -134,3 +144,44 @@ $large-hyphen-width: 75px;
 
 $tree-indentation: 40px;
 $post-space: 80px;
+
+// Bootstrap screen sizes https://getbootstrap.com/docs/3.3/css/
+
+$screen-xxs-max: 480px;
+
+$screen-xs-max: 767px;
+
+$screen-sm-min: 768px;
+$screen-sm-max: 991px;
+
+$screen-md-min: 992px;
+$screen-md-max: 1199px;
+
+$screen-lg-min: 1200px;
+
+// Proper media-queries examples https://stackoverflow.com/questions/18424798/twitter-bootstrap-3-how-to-use-media-queries
+
+/* Large desktops and laptops */
+@media (min-width: $screen-lg-min) {
+
+}
+
+/* Landscape tablets and medium desktops */
+@media (min-width: $screen-md-min) and (max-width: $screen-md-max) {
+
+}
+
+/* Portrait tablets and small desktops */
+@media (min-width: $screen-sm-min) and (max-width: $screen-sm-max) {
+
+}
+
+/* Landscape phones and portrait tablets */
+@media (max-width: $screen-xs-max) {
+
+}
+
+/* Portrait phones and smaller */
+@media (max-width: $screen-xxs-max) {
+
+}

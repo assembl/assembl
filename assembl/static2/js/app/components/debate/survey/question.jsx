@@ -9,7 +9,6 @@ import { getIfPhaseCompletedByIdentifier } from '../../../utils/timeline';
 import { inviteUserToLogin, displayAlert } from '../../../utils/utilityManager';
 import createPostMutation from '../../../graphql/mutations/createPost.graphql';
 import { SMALL_SCREEN_WIDTH } from '../../../constants';
-import { getContentLocale } from '../../../reducers/rootReducer';
 
 class Question extends React.Component {
   constructor(props) {
@@ -167,7 +166,7 @@ const QuestionWithMutation = graphql(createPostMutation)(Question);
 const mapStateToProps = (state) => {
   return {
     debate: state.debate,
-    contentLocale: getContentLocale(state)
+    contentLocale: state.i18n.locale
   };
 };
 

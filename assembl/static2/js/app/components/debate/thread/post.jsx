@@ -6,7 +6,7 @@ import { Row, Col } from 'react-bootstrap';
 import { getDomElementOffset, hashLinkScroll } from '../../../utils/globalFunctions';
 import Attachments from '../../common/attachments';
 import ProfileLine from '../../common/profileLine';
-import PostTranslate from '../common/postTranslate';
+import PostTranslate from '../common/translations/postTranslate';
 import PostActions from './postActions';
 import AnswerForm from './answerForm';
 import EditPostForm from './editPostForm';
@@ -42,8 +42,7 @@ class Post extends React.PureComponent {
     super(props);
     this.state = {
       showAnswerForm: false,
-      mode: 'view',
-      showOriginal: false
+      mode: 'view'
     };
   }
 
@@ -93,37 +92,35 @@ class Post extends React.PureComponent {
     this.setState({ mode: 'view' }, this.props.measureTreeHeight);
   };
 
-  getBodyAndSubject = () => {
+  getBodyAndSubject = (translate) => {
     const { subjectEntries, bodyEntries } = this.props.data.post;
+
     let body;
     let subject;
     let originalBody;
-    let originalBodyLocale;
     let originalSubject;
     if (bodyEntries.length > 1) {
       // first entry is the translated version, example localeCode "fr-x-mtfrom-en"
       // second entry is the original, example localeCode "en"
-      body = this.state.showOriginal ? bodyEntries[1].value : bodyEntries[0].value;
-      originalBodyLocale = bodyEntries[1].localeCode;
+      body = translate ? bodyEntries[0].value : bodyEntries[1].value;
       originalBody = bodyEntries[1].value;
     } else {
       // translation is not enabled or the message is already in the desired locale
       body = bodyEntries[0].value;
       originalBody = bodyEntries[0].value;
     }
-
     if (subjectEntries.length > 1) {
-      subject = this.state.showOriginal ? subjectEntries[1].value : subjectEntries[0].value;
+      subject = translate ? subjectEntries[0].value : subjectEntries[1].value;
       originalSubject = subjectEntries[1].value;
     } else {
       subject = subjectEntries[0].value;
       originalSubject = subjectEntries[0].value;
     }
+
     return {
       body: body,
       subject: subject,
       originalBody: originalBody,
-      originalBodyLocale: originalBodyLocale,
       originalSubject: originalSubject
     };
   };
@@ -142,6 +139,7 @@ class Post extends React.PureComponent {
       extracts
     } = this.props.data.post;
     const {
+      contentLocale,
       lang,
       ideaId,
       refetchIdea,
@@ -151,11 +149,13 @@ class Post extends React.PureComponent {
       routerParams,
       debateData,
       nuggetsManager,
-      rowIndex
+      rowIndex,
+      originalLocale
     } = this.props;
     // creationDate is retrieved by IdeaWithPosts query, not PostQuery
 
-    const { body, subject, originalBody, originalBodyLocale, originalSubject } = this.getBodyAndSubject();
+    const translate = contentLocale !== originalLocale;
+    const { body, subject, originalBody, originalSubject } = this.getBodyAndSubject(translate);
 
     // This hack should be removed when the TDI's admin section will be done.
     // We need it to have several langString in the idea's title
@@ -229,6 +229,7 @@ class Post extends React.PureComponent {
     const answerTextareaRef = (el) => {
       this.answerTextarea = el;
     };
+
     return (
       <div className="posts" id={id}>
         <Nuggets extracts={extracts} postId={id} nuggetsManager={nuggetsManager} completeLevel={completeLevelArray.join('-')} />
@@ -243,18 +244,13 @@ class Post extends React.PureComponent {
                   locale={lang}
                   modified={modificationDate !== null}
                 />}
-              {originalBodyLocale
-                ? <PostTranslate
-                  id={id}
-                  showOriginal={this.state.showOriginal}
-                  originalBodyLocale={originalBodyLocale}
-                  toggle={() => {
-                    return this.setState((state) => {
-                      return { showOriginal: !state.showOriginal };
-                    });
-                  }}
-                />
-                : null}
+              <PostTranslate
+                contentLocale={contentLocale}
+                id={id}
+                lang={lang}
+                originalLocale={originalLocale}
+                translate={translate}
+              />
               <h3 className="dark-title-3">
                 {modifiedSubject}
               </h3>

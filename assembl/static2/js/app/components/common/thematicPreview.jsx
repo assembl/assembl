@@ -5,13 +5,9 @@ import Statistic from './statistic';
 class ThematicPreview extends React.Component {
   render() {
     const { imgUrl, link, title, description, numPosts, numContributors } = this.props;
-    const imageBoxStyle = {};
-    if (imgUrl) {
-      imageBoxStyle.backgroundImage = `url(${imgUrl})`;
-    }
     return (
       <div className="illustration-box idea-preview idea-preview-level-0">
-        <div className="image-box" style={{ backgroundImage: `url(${imgUrl})` }} />
+        <div className="image-box" style={imgUrl ? { backgroundImage: `url(${imgUrl})` } : null} />
         <Link className="content-box" to={link}>
           <h3 className="light-title-3 center">
             {title}

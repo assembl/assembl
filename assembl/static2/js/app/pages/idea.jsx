@@ -4,6 +4,7 @@ import { Translate } from 'react-redux-i18n';
 import { compose, graphql } from 'react-apollo';
 import { Grid } from 'react-bootstrap';
 
+import { updateContentLocale } from '../actions/contentLocaleActions';
 import Header from '../components/debate/common/header';
 import IdeaQuery from '../graphql/IdeaQuery.graphql';
 import IdeaWithPostsQuery from '../graphql/IdeaWithPostsQuery.graphql';
@@ -16,7 +17,6 @@ import Permissions, { connectedUserCan } from '../utils/permissions';
 import { getConnectedUserId } from '../utils/globalFunctions';
 import Announcement from './../components/debate/thread/announcement';
 import TopPostFormContainer from '../components/debate/thread/topPostFormContainer';
-import { getContentLocale } from '../reducers/rootReducer';
 
 export const transformPosts = (edges, additionnalProps = {}) => {
   const postsByParent = {};
@@ -54,6 +54,31 @@ const noRowsRenderer = () => {
 };
 
 class Idea extends React.Component {
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.ideaWithPostsData.idea !== this.props.ideaWithPostsData.idea) {
+      this.updateContentLocaleMappingFromProps(nextProps);
+    }
+  }
+
+  updateContentLocaleMappingFromProps(props) {
+    const { defaultContentLocaleMapping, ideaWithPostsData, updateContentLocaleMapping } = props;
+    if (!ideaWithPostsData.loading) {
+      const postsEdges = ideaWithPostsData.idea.posts.edges;
+      const contentLocaleMappingData = {};
+      postsEdges.forEach((edge) => {
+        const post = edge.node;
+        const { id, originalLocale } = post;
+        const contentLocale = defaultContentLocaleMapping.get(originalLocale, originalLocale);
+        contentLocaleMappingData[id] = {
+          contentLocale: contentLocale,
+          originalLocale: post.originalLocale
+        };
+      });
+
+      updateContentLocaleMapping(contentLocaleMappingData);
+    }
+  }
+
   getInitialRowIndex = (topPosts, edges) => {
     const { hash } = window.location;
     if (hash !== '') {
@@ -83,7 +108,7 @@ class Idea extends React.Component {
   };
 
   render() {
-    const { contentLocale, lang, ideaData, ideaWithPostsData, routerParams, debateData } = this.props;
+    const { contentLocaleMapping, lang, ideaData, ideaWithPostsData, routerParams, debateData } = this.props;
     const refetchIdea = ideaWithPostsData.refetch;
     if (ideaData.loading) {
       return (
@@ -111,7 +136,7 @@ class Idea extends React.Component {
           {!ideaWithPostsData.loading &&
             idea.announcement &&
             idea.announcement.body &&
-            <Grid fluid className="background-grey">
+            <Grid fluid className="background-light">
               <div className="max-container">
                 <div className="content-section">
                   <Announcement ideaWithPostsData={ideaWithPostsData} announcementContent={idea.announcement} />
@@ -127,7 +152,7 @@ class Idea extends React.Component {
                 {ideaWithPostsData.loading
                   ? <Loader />
                   : <Tree
-                    contentLocale={contentLocale}
+                    contentLocaleMapping={contentLocaleMapping}
                     lang={lang}
                     data={topPosts}
                     initialRowIndex={this.getInitialRowIndex(topPosts, ideaWithPostsData.idea.posts.edges)}
@@ -148,14 +173,23 @@ class Idea extends React.Component {
 
 const mapStateToProps = (state) => {
   return {
-    lang: state.i18n.locale,
-    contentLocale: getContentLocale(state),
-    debateData: state.debate.debateData
+    contentLocaleMapping: state.contentLocale,
+    debateData: state.debate.debateData,
+    defaultContentLocaleMapping: state.defaultContentLocaleMapping,
+    lang: state.i18n.locale
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    updateContentLocaleMapping: (info) => {
+      return dispatch(updateContentLocale(info));
+    }
   };
 };
 
 export default compose(
-  connect(mapStateToProps),
+  connect(mapStateToProps, mapDispatchToProps),
   graphql(IdeaWithPostsQuery, { name: 'ideaWithPostsData' }),
   graphql(IdeaQuery, { name: 'ideaData', options: { notifyOnNetworkStatusChange: true } })
   // ideaData.loading stays to true when switching interface language (IdeaQuery is using lang variable)

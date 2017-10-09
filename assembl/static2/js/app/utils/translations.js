@@ -10,6 +10,8 @@ const Translations = {
     "Number of contributions": "Nombre de messages",
     "Number of users": "Nombre de contributeurs",
     cancel: "Annuler",
+    validate: "Valider",
+    delete: "Supprimer",
     redirectToV1:
       "Vous allez être redirigé vers la phase %{phaseName} dans quelques secondes. Assembl est en cours d'amélioration, veuillez nous excuser pour le changement d'interface. Si rien ne se produit, cliquez sur le bouton ci-dessous.",
     search: {
@@ -214,6 +216,11 @@ const Translations = {
       thread: {
         messageTranslatedFrom: "Ce message a été traduit du texte %{language}.",
         messageOriginallyIn: "Ce message a été rédigé en %{language}.",
+        translateAllMessagesIn: "Je souhaite traduire tous les messages rédigés en %{language}.",
+        translateOnlyThisMessage: "Je souhaite traduire ce message.",
+        untranslateOnlyThisMessage: "Je souhaite afficher uniquement ce message dans sa langue originale",
+        untranslateAllMessagesIn: "Je souhaite afficher tous les messages rédigés en %{language} dans leur langue originale.",
+        chooseLanguagePh: "Veuillez choisir la langue",
         postDeletedByAdmin: "Ce message a été supprimé par l'administrateur du débat.",
         postDeletedByUser: "Ce message a été supprimé par son auteur.",
         postEdited: "modifié",
@@ -269,7 +276,7 @@ const Translations = {
       deleteQuestion: "Supprimer la question",
       changeLanguage: "Renseigner une autre langue",
       question_label: "Question",
-      videoModule: "Option module vidéo",
+      announcementModule: "Option module consigne",
       thematic: "Thématique",
       edition: "Éditer la discussion",
       landingpage: "Page d'accueil",
@@ -283,7 +290,8 @@ const Translations = {
         1: "Renseigner les questions",
         2: "Exporter les données"
       },
-      videoHelp: "*Liens autorisés : \"https://www.youtube.com/embed/[videoId]\" ou \"https://player.vimeo.com/video/[videoId]?\"",
+      videoHelp:
+        "*Liens vidéo autorisés : \"https://www.youtube.com/embed/[videoId]\" ou \"https://player.vimeo.com/video/[videoId]?\"",
       annotation: "Module à renseigner obligatoirement. Les champs * sont requis.",
       themeNum: "Thématique %{index}",
       discussion: {
@@ -295,7 +303,8 @@ const Translations = {
         quote: "Citation",
         descriptionTop: "Texte au-dessus de la vidéo",
         descriptionBottom: "Texte en-dessous de la vidéo",
-        videoLink: "Lien vidéo"
+        mediaLink: "Lien média en ligne (vidéo, image, etc..)",
+        orAttachPicture: "Ou téléchargez une image depuis votre ordinateur"
       },
       surveyExport: {
         title: "Exporter les données du débat",
@@ -323,7 +332,8 @@ const Translations = {
       ja: "Japanese",
       de: "german"
     },
-    cancel: "Annuler",
+    cancel: "Cancel",
+    validate: "Validate",
     redirectToV1:
       "You will be redirected to the %{phaseName} phase in a few seconds. Assembl is being improved, please excuse us for the interface change. If nothing happens, click on the button.",
     search: {
@@ -527,6 +537,11 @@ const Translations = {
       thread: {
         messageTranslatedFrom: "This message has been translated from %{language}.",
         messageOriginallyIn: "This message has been written in %{language}",
+        translateAllMessagesIn: "Translate all messages posted in %{language}.",
+        untranslateAllMessagesIn: "I don't want to translate all messages in %{language}.",
+        translateOnlyThisMessage: "Translate only this message.",
+        untranslateOnlyThisMessage: "I don't want to translate only this message",
+        chooseLanguagePh: "Please choose the language",
         postDeletedByAdmin: "This message has been deleted by the community manager.",
         postDeletedByUser: "This message has been deleted by the author.",
         postEdited: "edited",
@@ -582,7 +597,7 @@ const Translations = {
       deleteQuestion: "Delete the question",
       changeLanguage: "Set another language",
       question_label: "Question",
-      videoModule: "Video module",
+      announcementModule: "Announcement module",
       thematic: "Theme",
       edition: "Edit the Discussion",
       landingpage: "Landing page",
@@ -596,7 +611,8 @@ const Translations = {
         1: "Set questions",
         2: "Export data"
       },
-      videoHelp: "*Authorized links: \"https://www.youtube.com/embed/[videoId]\" ou \"https://player.vimeo.com/video/[videoId]?\"",
+      videoHelp:
+        "*Authorized video links: \"https://www.youtube.com/embed/[videoId]\" or \"https://player.vimeo.com/video/[videoId]?\"",
       annotation: "Module to be completed. * Fields are required.",
       themeNum: "Theme %{index}",
       discussion: {
@@ -608,7 +624,8 @@ const Translations = {
         quote: "Quote",
         descriptionTop: "Comments above video",
         descriptionBottom: "Comments below video",
-        videoLink: "Video link"
+        mediaLink: "Online media link (video, picture, etc..)",
+        orAttachPicture: "Or upload an image from your computer"
       },
       surveyExport: {
         title: "Export the debate data",

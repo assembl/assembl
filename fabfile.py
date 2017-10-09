@@ -36,6 +36,12 @@ ELASTICSEARCH_VERSION = '5.6.2'
 DEFAULT_SECTION = "DEFAULT"
 
 
+def running_locally(hosts = None):
+    hosts = hosts or env.hosts
+    # TODO: Add the result of `hostname` to the list. Cache.
+    return set(env.hosts) - set(['localhost', '127.0.0.1']) == set()
+
+
 def combine_rc(rc_filename, overlay=None):
     """Take a rc filename, load it as fabric would.
 
@@ -50,7 +56,7 @@ def combine_rc(rc_filename, overlay=None):
         # Use project-path-relative names to that effect.
         if fname.startswith('~/'):
             path = dirname(__file__)
-            if env.host_string != 'localhost':
+            if not running_locally([env.host_string]):
                 path = env.get('projectpath', path)
             fname = join(path, fname[2:])
         else:
@@ -98,8 +104,7 @@ def sanitize_env():
     if not env.get('host_string', None):
         env.host_string = env.hosts[0]
     #Are we on localhost
-    is_local = set(env.hosts) - set(['localhost', '127.0.0.1']) == set()
-    if is_local:
+    if running_locally():
         #WARNING:  This code will run locally, NOT on the remote server,
         # so it's only valid if we are connecting to localhost
         env.mac = system().startswith('Darwin')
@@ -107,7 +112,7 @@ def sanitize_env():
         env.mac = False
     env.projectpath = env.get('projectpath', dirname(__file__))
     if not env.get('venvpath', None):
-        if is_local:
+        if running_locally():
             # Trust VIRTUAL_ENV, important for Jenkins case.
             env.venvpath = getenv('VIRTUAL_ENV', None)
         if not env.get('venvpath', None):
@@ -181,13 +186,14 @@ def update_vendor_config():
 @task
 def create_local_ini():
     """Replace the local.ini file with one composed from the current .rc file"""
-    execute(update_vendor_config)
+    if not running_locally():
+        execute(update_vendor_config)
     random_ini_path = os.path.join(env.projectpath, env.random_file)
     local_ini_path = os.path.join(env.projectpath, env.ini_file)
     if exists(local_ini_path):
         run('cp %s %s.bak' % (local_ini_path, local_ini_path))
 
-    if env.host_string == 'localhost':
+    if running_locally([env.host_string]):
         # The easy case: create a local.ini locally.
         venvcmd("python2 assembl/scripts/ini_files.py compose -o %s %s" % (
             env.ini_file, env.rcfile))
@@ -1214,7 +1220,7 @@ def set_file_permissions():
 @task
 def start_edit_fontello_fonts():
     """Prepare to edit the fontello fonts in Fontello."""
-    assert env.hosts == ['localhost'], "Meant to be run locally"
+    assert running_locally()
     import requests
     font_dir = join(
         env.projectpath, 'assembl', 'static', 'css', 'fonts')
@@ -1227,7 +1233,7 @@ def start_edit_fontello_fonts():
     fid = r.text
     with open(id_file, 'w') as f:
         f.write(fid)
-    if (env.host_string == 'localhost'):
+    if running_locally([env.host_string]):
         import webbrowser
         webbrowser.open('http://fontello.com/' + fid)
 
@@ -1237,7 +1243,7 @@ def compile_fontello_fonts():
     """Compile the fontello fonts once you have edited them in Fontello. Run start_edit_fontello_fonts first."""
     from zipfile import ZipFile
     from StringIO import StringIO
-    assert env.hosts == ['localhost'], "Meant to be run locally"
+    assert running_locally()
     import requests
     font_dir = join(
         env.projectpath, 'assembl', 'static', 'css', 'fonts')
@@ -1274,7 +1280,7 @@ def check_and_create_database_user(host=None, user=None, password=None):
     if checkUser.failed:
         print(yellow("User does not exist, let's try to create it. (The error above is not problematic if the next command which is going to be run now will be successful. This next command tries to create the missing Postgres user.)"))
         db_user = system_db_user()
-        if host in ("localhost", "127.0.0.1") and db_user:
+        if running_locally([host]) and db_user:
             db_password_string = ''
             sudo_user = db_user
         else:
@@ -1416,7 +1422,7 @@ def rotate_database_dumps(dry_run=False):
         'yearly': 'always'
     }
     dir = env.dbdumps_dir
-    if env.host_string == 'localhost':
+    if running_locally([env.host_string]):
         ctx = LocalContext()
         dir = os.path.realpath(dir)
     else:
@@ -1934,7 +1940,7 @@ def install_postfix():
     assert not env.mac
     # take mail host from mail.host
     external_smtp_host = env.smtp_host
-    if external_smtp_host in ('localhost', '127.0.0.1'):
+    if running_locally([external_smtp_host]):
         external_smtp_host = None
     sudo("debconf-set-selections <<< 'postfix postfix/mailname string %s'" % (env.host_string,))
     if external_smtp_host:

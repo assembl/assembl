@@ -63,7 +63,7 @@ class Phase extends React.Component {
     const stepNumber = index + 1;
     return (
       <div className="illustration-box">
-        <div className="image-box" style={{ backgroundImage: `url(${imgUrl})` }} />
+        <div className="image-box" style={imgUrl ? { backgroundImage: `url(${imgUrl})` } : null} />
         <div onClick={this.displayPhase} className="content-box">
           <h1 className="light-title-1">
             {stepNumber}

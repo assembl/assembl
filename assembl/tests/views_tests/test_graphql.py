@@ -8,6 +8,13 @@ from assembl.graphql.schema import Schema as schema
 from assembl.graphql.schema import create_root_thematic
 
 
+def test_get_locales(graphql_request):
+    res = schema.execute(u'query { locales(lang:"fr") { localeCode, label } }', context_value=graphql_request)
+    assert len(res.data['locales']) == 104
+    assert res.data['locales'][-1]['localeCode'] == u'zu'
+    assert res.data['locales'][-1]['label'] == u'zoulou'
+
+
 def test_get_thematics_noresult(graphql_request):
     res = schema.execute(u'query { thematics(identifier:"survey") { id, title, description, numPosts, numContributors, questions { title }, video {title, descriptionTop, descriptionBottom, htmlCode} } }', context_value=graphql_request)
     assert json.loads(json.dumps(res.data)) == {u'thematics': []}
