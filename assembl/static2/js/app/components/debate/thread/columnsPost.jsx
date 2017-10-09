@@ -4,7 +4,7 @@ import { Row, Col } from 'react-bootstrap';
 
 import Attachments from '../../common/attachments';
 import ProfileLine from '../../common/profileLine';
-import PostTranslate from '../common/postTranslate';
+import PostTranslate from '../common/translations/postTranslate';
 import PostActions from './postActions';
 import EditPostForm from './editPostForm';
 import DeletedPost from './deletedPost';
