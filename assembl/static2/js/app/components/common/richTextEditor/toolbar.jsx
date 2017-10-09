@@ -9,6 +9,7 @@ import AttachFileForm from '../../common/attachFileForm';
 import { getBasename } from '../../../utils/globalFunctions';
 import type { ButtonConfigType } from './buttonConfigType';
 import ToolbarButton from './toolbarButton';
+import { displayModal, closeModal } from '../../../utils/utilityManager';
 
 type ToolbarProps = {
   buttonsConfig: [ButtonConfigType],
@@ -20,8 +21,7 @@ type ToolbarProps = {
 };
 
 type ToolbarState = {
-  attachedFiles: Array<File>,
-  showAttachFileForm: boolean
+  attachedFiles: Array<File>
 };
 
 class Toolbar extends React.Component<void, ToolbarProps, ToolbarState> {
@@ -33,16 +33,9 @@ class Toolbar extends React.Component<void, ToolbarProps, ToolbarState> {
   constructor() {
     super();
     this.state = {
-      attachedFiles: [],
-      showAttachFileForm: false
+      attachedFiles: []
     };
   }
-
-  closeInsertionBox = (): void => {
-    this.setState({
-      showAttachFileForm: false
-    });
-  };
 
   getCurrentBlockType(): DraftBlockType {
     const { editorState } = this.props;
@@ -63,11 +56,9 @@ class Toolbar extends React.Component<void, ToolbarProps, ToolbarState> {
   }
 
   renderButton = (config: ButtonConfigType): React.Element<*> => {
-    let isActive;
     let onToggle;
     switch (config.type) {
     case 'style': {
-      isActive = this.currentStyle.contains(config.style);
       onToggle = () => {
         if (config.style) {
           return this.toggleInlineStyle(config.style);
@@ -78,24 +69,16 @@ class Toolbar extends React.Component<void, ToolbarProps, ToolbarState> {
       break;
     }
     case 'block-type': {
-      isActive = config.style === this.currentBlockType;
       onToggle = () => {
         return this.toggleBlockType(config.style);
       };
       break;
     }
     default:
-      isActive = false;
       onToggle = () => {};
     }
 
-    return <ToolbarButton key={`button-${config.id}`} {...config} isActive={isActive} onToggle={onToggle} />;
-  };
-
-  toggleAttachFileForm = () => {
-    this.setState({
-      showAttachFileForm: !this.state.showAttachFileForm
-    });
+    return <ToolbarButton key={`button-${config.id}`} {...config} onToggle={onToggle} />;
   };
 
   addBlock = (file) => {
@@ -131,7 +114,7 @@ class Toolbar extends React.Component<void, ToolbarProps, ToolbarState> {
       () => {
         if (file) {
           this.addBlock(file);
-          this.setState({ showAttachFileForm: false });
+          closeModal();
         }
       }
     );
@@ -139,9 +122,21 @@ class Toolbar extends React.Component<void, ToolbarProps, ToolbarState> {
 
   render() {
     const { buttonsConfig, withAttachmentButton } = this.props;
-    const { showAttachFileForm } = this.state;
     this.currentStyle = this.props.editorState.getCurrentInlineStyle();
     this.currentBlockType = this.getCurrentBlockType();
+
+    const confirmModal = () => {
+      const title = null;
+      const body = (
+        <div className="insertion-box box">
+          <AttachFileForm onSubmit={this.onAttachFileFormSubmit} />
+        </div>
+      );
+      const footer = false;
+      const footerTxt = null;
+      return displayModal(title, body, footer, footerTxt);
+    };
+
     return (
       <div className="editor-toolbar">
         <div className="btn-group">
@@ -157,16 +152,10 @@ class Toolbar extends React.Component<void, ToolbarProps, ToolbarState> {
               id="attachment"
               icon="text-attachment"
               label={I18n.t('common.editor.attachment')}
-              isActive={this.state.showAttachFileForm}
-              onToggle={this.toggleAttachFileForm}
+              onToggle={() => {
+                return confirmModal();
+              }}
             />
-          </div>
-          : null}
-
-        {showAttachFileForm
-          ? <div className="insertion-box box">
-            <span className="assembl-icon-cancel" onClick={this.closeInsertionBox} />
-            <AttachFileForm onSubmit={this.onAttachFileFormSubmit} />
           </div>
           : null}
       </div>

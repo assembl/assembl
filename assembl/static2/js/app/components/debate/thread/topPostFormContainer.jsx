@@ -4,20 +4,20 @@ import { Grid, Row, Col } from 'react-bootstrap';
 import { Translate } from 'react-redux-i18n';
 import TopPostForm from './topPostForm';
 
-// const mockMessageColumns = [];
+const mockMessageColumns = [];
 
-const mockMessageColumns = [
-  {
-    color: '#e2f8e5',
-    identifier: 'positive',
-    name: 'Ajouter votre point de vue en faveur du thème'
-  },
-  {
-    color: '#f9ebeb',
-    identifier: 'negative',
-    name: 'Ajouter votre point de vue en défaveur du thème'
-  }
-];
+// const mockMessageColumns = [
+//   {
+//     color: '#e2f8e5',
+//     identifier: 'positive',
+//     name: 'Ajouter votre point de vue en faveur du thème'
+//   },
+//   {
+//     color: '#f9ebeb',
+//     identifier: 'negative',
+//     name: 'Ajouter votre point de vue en défaveur du thème'
+//   }
+// ];
 
 class topPostFormContainer extends React.Component {
   getColumnsNumber() {
