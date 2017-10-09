@@ -10,6 +10,7 @@ const Translations = {
     "Number of contributions": "Nombre de messages",
     "Number of users": "Nombre de contributeurs",
     cancel: "Annuler",
+    validate: "Valider",
     redirectToV1:
       "Vous allez être redirigé vers la phase %{phaseName} dans quelques secondes. Assembl est en cours d'amélioration, veuillez nous excuser pour le changement d'interface. Si rien ne se produit, cliquez sur le bouton ci-dessous.",
     search: {
@@ -219,8 +220,6 @@ const Translations = {
         untranslateOnlyThisMessage: "Je souhaite afficher uniquement ce message dans sa langue originale",
         untranslateAllMessagesIn: "Je souhaite afficher tous les messages rédigés en %{language} dans leur langue originale.",
         chooseLanguagePh: "Veuillez choisir la langue",
-        translateCancel: "Annuler",
-        translateSubmit: "Valider",
         postDeletedByAdmin: "Ce message a été supprimé par l'administrateur du débat.",
         postDeletedByUser: "Ce message a été supprimé par son auteur.",
         postEdited: "modifié",
@@ -330,7 +329,8 @@ const Translations = {
       ja: "Japanese",
       de: "german"
     },
-    cancel: "Annuler",
+    cancel: "Cancel",
+    submit: "Validate",
     redirectToV1:
       "You will be redirected to the %{phaseName} phase in a few seconds. Assembl is being improved, please excuse us for the interface change. If nothing happens, click on the button.",
     search: {
@@ -539,8 +539,6 @@ const Translations = {
         translateOnlyThisMessage: "Translate only this message.",
         untranslateOnlyThisMessage: "I don't want to translate only this message",
         chooseLanguagePh: "Please choose the language",
-        translateCancel: "Cancel",
-        translateSubmit: "Validate",
         postDeletedByAdmin: "This message has been deleted by the community manager.",
         postDeletedByUser: "This message has been deleted by the author.",
         postEdited: "edited",

@@ -82,10 +82,10 @@ class CancelTranslationForm extends React.Component<*, CancelTranslationFormProp
         </Modal.Body>
         <Modal.Footer>
           <Button key="translate-cancel" onClick={closeModal} className="button-cancel button-dark">
-            <Translate value="debate.thread.translateCancel" />
+            <Translate value="cancel" />
           </Button>,
           <Button key="translate-submit" onClick={this.handleSubmit} className="button-submit button-dark">
-            <Translate value="debate.thread.translateSubmit" />
+            <Translate value="validate" />
           </Button>
         </Modal.Footer>
       </div>
