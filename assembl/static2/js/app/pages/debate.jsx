@@ -47,7 +47,8 @@ class Debate extends React.Component {
         <div>
           <section className="timeline-section" id="timeline">
             <div className="max-container">
-              {!isParentRoute &&
+              {thematics &&
+                !isParentRoute &&
                 <div className="burger-menu grey" onMouseOver={this.showThumbnails} onClick={this.displayThumbnails}>
                   <div className="assembl-icon-thumb" />
                   <div className="burger-menu-label">
@@ -58,7 +59,8 @@ class Debate extends React.Component {
             </div>
           </section>
           {thematics && isParentRoute && <Themes thematics={thematics} identifier={identifier} />}
-          {!isParentRoute &&
+          {thematics &&
+            !isParentRoute &&
             <section className="debate-section">
               <div className={this.state.isThumbnailsHidden ? 'hiddenThumb' : 'shown'} onMouseLeave={this.hideThumbnails}>
                 <Thumbnails showNavigation={!isParentRoute} thematics={thematics} identifier={identifier} themeId={themeId} />
