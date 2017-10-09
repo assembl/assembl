@@ -136,7 +136,7 @@ class ChooseContentLocaleForm extends React.Component<*, ChooseContentLocaleForm
             onClick={this.handleSubmit}
             className="button-submit button-dark"
           >
-            <Translate value="debate.thread.translateSubmit" />
+            <Translate value="validate" />
           </Button>
         </Modal.Footer>
       </div>
