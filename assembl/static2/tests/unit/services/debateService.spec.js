@@ -92,8 +92,8 @@ const mockPreferences = {
 const mockTimeline = [
   {
     end: '2017-07-29T22:00:00Z',
-    description: {},
-    title: {},
+    description: { entries: [] },
+    title: { entries: [] },
     discussion: '',
     previous_event: '',
     start: '2017-07-15T22:00:00Z',
@@ -106,8 +106,8 @@ const mockTimeline = [
   },
   {
     end: '2017-08-29T22:00:00Z',
-    description: {},
-    title: {},
+    description: { entries: [] },
+    title: { entries: [] },
     discussion: '',
     previous_event: '',
     start: '2017-07-30T22:00:00Z',
@@ -120,8 +120,8 @@ const mockTimeline = [
   },
   {
     end: '2017-06-19T22:00:00Z',
-    description: {},
-    title: {},
+    description: { entries: [] },
+    title: { entries: [] },
     discussion: '',
     previous_event: '',
     start: '2017-05-31T22:00:00Z',
@@ -134,8 +134,8 @@ const mockTimeline = [
   },
   {
     end: '2017-07-14T22:00:00Z',
-    description: {},
-    title: {},
+    description: { entries: [] },
+    title: { entries: [] },
     discussion: '',
     previous_event: '',
     start: '2017-06-20T22:00:00Z',
@@ -151,8 +151,8 @@ const mockTimeline = [
 const expectedTimeline = [
   {
     end: '2017-06-19T22:00:00Z',
-    description: {},
-    title: {},
+    description: { entries: [] },
+    title: { entries: [] },
     discussion: '',
     previous_event: '',
     start: '2017-05-31T22:00:00Z',
@@ -165,8 +165,8 @@ const expectedTimeline = [
   },
   {
     end: '2017-07-14T22:00:00Z',
-    description: {},
-    title: {},
+    description: { entries: [] },
+    title: { entries: [] },
     discussion: '',
     previous_event: '',
     start: '2017-06-20T22:00:00Z',
@@ -179,8 +179,8 @@ const expectedTimeline = [
   },
   {
     end: '2017-07-29T22:00:00Z',
-    description: {},
-    title: {},
+    description: { entries: [] },
+    title: { entries: [] },
     discussion: '',
     previous_event: '',
     start: '2017-07-15T22:00:00Z',
@@ -193,8 +193,8 @@ const expectedTimeline = [
   },
   {
     end: '2017-08-29T22:00:00Z',
-    description: {},
-    title: {},
+    description: { entries: [] },
+    title: { entries: [] },
     discussion: '',
     previous_event: '',
     start: '2017-07-30T22:00:00Z',

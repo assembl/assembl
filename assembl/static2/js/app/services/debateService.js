@@ -15,6 +15,20 @@ export const buildDebateData = (debateData, prefs, timeline, socialShare) => {
   const partners = prefs.extra_json && prefs.extra_json.partners ? prefs.extra_json.partners : null;
   const socialMedias = prefs.extra_json && prefs.extra_json.socialMedias ? prefs.extra_json.socialMedias : null;
   const sortedTimeline = timeline.length > 0 ? getSortedArrayByKey(timeline, 'start') : null;
+  if (sortedTimeline) {
+    sortedTimeline.forEach((phase) => {
+      phase.description.entries.forEach((entry) => {
+        if (entry['@language'] === 'zh_Hans') {
+          entry['@language'] = 'zh_CN'; // eslint-disable-line
+        }
+      });
+      phase.title.entries.forEach((entry) => {
+        if (entry['@language'] === 'zh_Hans') {
+          entry['@language'] = 'zh_CN'; // eslint-disable-line
+        }
+      });
+    });
+  }
   return {
     slug: debateData.slug,
     logo: debateData.logo,
