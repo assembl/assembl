@@ -35,7 +35,7 @@ class topPostFormContainer extends React.Component {
   }
   render() {
     const { idea, refetchIdea } = this.props;
-    const ideaOnColumns = this.getColumnsNumber();
+    const ideaOnColumns = this.getMessageColumns();
     return (
       <Grid fluid className={mockMessageColumns.length > 0 ? '' : 'background-color'}>
         <div className="max-container">
