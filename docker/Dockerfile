@@ -15,7 +15,9 @@ RUN     apt-get update && apt-get install -y \
             net-tools \
             monit \
             uwsgi \
+            lsb-release \
             curl \
+            cron \
             uwsgi-plugin-python
 RUN         useradd -m -U -G www-data assembl_user && \
             ssh-keygen -P '' -f ~/.ssh/id_rsa && cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys && \
