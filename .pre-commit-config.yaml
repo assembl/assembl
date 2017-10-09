@@ -22,6 +22,6 @@
     files: ".*/static2/.*jsx?$"
   - id: prettier
     name: prettier (If this fails, please git add prettier changes and commit again.)
-    entry: bash -c "./assembl/static2/node_modules/.bin/prettier-eslint --write `git diff --name-only --cached -- '*.js?'` 2>&1 |grep -qv success"
+    entry: bash -c "./assembl/static2/node_modules/.bin/prettier-eslint --write `git diff --name-only --cached -- '*.js*'` 2>&1 |grep -qv success"
     language: system
     files: ".*/static2/.*jsx?$"
