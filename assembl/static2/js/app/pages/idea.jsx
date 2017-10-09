@@ -17,6 +17,28 @@ import Permissions, { connectedUserCan } from '../utils/permissions';
 import { getConnectedUserId } from '../utils/globalFunctions';
 import Announcement from './../components/debate/thread/announcement';
 import TopPostFormContainer from '../components/debate/thread/topPostFormContainer';
+import TwoColumnsView from '../components/debate/twoColumns/twoColumnsView';
+
+// MOCK
+
+const ideaOnTwoColumns = true;
+
+const addMessageClassifier = (posts) => {
+  const postsArray = [];
+  posts.forEach((post, index) => {
+    const nodeWithClassifier = (id) => {
+      return { ...post.node, messageClassifier: id };
+    };
+    if (index % 2 === 0) {
+      postsArray.push({ node: nodeWithClassifier('positive') });
+    } else {
+      postsArray.push({ node: nodeWithClassifier('negative') });
+    }
+  });
+  return postsArray;
+};
+
+// END OF THE MOCK
 
 export const transformPosts = (edges, additionnalProps = {}) => {
   const postsByParent = {};
@@ -129,6 +151,7 @@ class Idea extends React.Component {
       });
 
     const isUserConnected = getConnectedUserId();
+
     return (
       <div className="idea">
         <Header title={idea.title} synthesisTitle={idea.synthesisTitle} imgUrl={idea.imgUrl} identifier="thread" />
@@ -149,9 +172,10 @@ class Idea extends React.Component {
           <Grid fluid className="background-grey">
             <div className="max-container">
               <div className="content-section">
-                {ideaWithPostsData.loading
-                  ? <Loader />
-                  : <Tree
+                {ideaWithPostsData.loading && <Loader />}
+                {ideaWithPostsData.idea &&
+                  !ideaOnTwoColumns &&
+                  <Tree
                     contentLocaleMapping={contentLocaleMapping}
                     lang={lang}
                     data={topPosts}
@@ -161,6 +185,9 @@ class Idea extends React.Component {
                     noRowsRenderer={noRowsRenderer}
                     SeparatorComponent={InfiniteSeparator}
                   />}
+                {ideaWithPostsData.idea &&
+                  ideaOnTwoColumns &&
+                  <TwoColumnsView posts={addMessageClassifier(ideaWithPostsData.idea.posts.edges)} />}
               </div>
             </div>
           </Grid>

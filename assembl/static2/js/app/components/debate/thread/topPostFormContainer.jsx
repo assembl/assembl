@@ -3,6 +3,8 @@ import { Grid, Row, Col } from 'react-bootstrap';
 import { Translate } from 'react-redux-i18n';
 import TopPostForm from './topPostForm';
 
+// MOCK
+
 // const mockMessageColumns = [];
 
 const mockMessageColumns = [
@@ -12,16 +14,13 @@ const mockMessageColumns = [
     name: 'Ajouter votre point de vue en faveur du thème'
   },
   {
-    color: '#ccc',
-    identifier: 'negative',
-    name: 'Ajouter votre point de vue en défaveur du thème'
-  },
-  {
     color: '#f9ebeb',
     identifier: 'negative',
     name: 'Ajouter votre point de vue en défaveur du thème'
   }
 ];
+
+// END OF THE MOCK
 
 class topPostFormContainer extends React.Component {
   getMessageColumns() {
