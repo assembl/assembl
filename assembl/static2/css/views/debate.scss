@@ -248,20 +248,19 @@
   .start-discussion {
       display: inline-block;
       padding: 2px 0 0 10px;
+      max-width: 150px;
   }
 
   .start-discussion-icon {
       display: inline-block;
       height: 40px;
       padding: 3px 0 0 0;
+      vertical-align: bottom;
   }
 
-  .start-discussion.onecolumn {
-    max-width: 150px;
-  }
-
-  .start-discussion-icon.onecolumn {
-    vertical-align: bottom;
+  .start-discussion-2 {
+    max-width: 80%;
+    vertical-align: top;
   }
 
   input {
