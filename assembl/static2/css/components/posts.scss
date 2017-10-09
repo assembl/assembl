@@ -545,3 +545,20 @@ $deleted-post-border: 1px solid $grey1 !default;
         }
     }
 }
+
+.column-post {
+  .box {
+    border: none;
+  }
+  .answer-form {
+    border-top: none;
+  }
+
+  .column-hint {
+    font-family: $font-family4;
+    font-size: $font-size-m;
+    letter-spacing: 1px;
+    line-height: 30px;
+    padding-top: 20px;
+  }
+}

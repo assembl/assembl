@@ -43,30 +43,31 @@ class Debate extends React.Component {
     });
     return (
       <div className="debate">
-        {loading && <Loader color="black" />}
-        {thematics &&
-          <div>
-            <section className="timeline-section" id="timeline">
-              <div className="max-container">
-                {!isParentRoute &&
-                  <div className="burger-menu grey" onMouseOver={this.showThumbnails} onClick={this.displayThumbnails}>
-                    <div className="assembl-icon-thumb" />
-                    <div className="burger-menu-label">
-                      <Translate value="debate.themes" />
-                    </div>
-                  </div>}
-                <Timeline showNavigation={!isParentRoute} identifier={identifier} />
+        {loading && isParentRoute && <Loader color="black" />}
+        <div>
+          <section className="timeline-section" id="timeline">
+            <div className="max-container">
+              {thematics &&
+                !isParentRoute &&
+                <div className="burger-menu grey" onMouseOver={this.showThumbnails} onClick={this.displayThumbnails}>
+                  <div className="assembl-icon-thumb" />
+                  <div className="burger-menu-label">
+                    <Translate value="debate.themes" />
+                  </div>
+                </div>}
+              <Timeline showNavigation={!isParentRoute} identifier={identifier} />
+            </div>
+          </section>
+          {thematics && isParentRoute && <Themes thematics={thematics} identifier={identifier} />}
+          {thematics &&
+            !isParentRoute &&
+            <section className="debate-section">
+              <div className={this.state.isThumbnailsHidden ? 'hiddenThumb' : 'shown'} onMouseLeave={this.hideThumbnails}>
+                <Thumbnails showNavigation={!isParentRoute} thematics={thematics} identifier={identifier} themeId={themeId} />
               </div>
-            </section>
-            {isParentRoute && <Themes thematics={thematics} identifier={identifier} />}
-            {!isParentRoute &&
-              <section className="debate-section">
-                <div className={this.state.isThumbnailsHidden ? 'hiddenThumb' : 'shown'} onMouseLeave={this.hideThumbnails}>
-                  <Thumbnails showNavigation={!isParentRoute} thematics={thematics} identifier={identifier} themeId={themeId} />
-                </div>
-                {children}
-              </section>}
-          </div>}
+              {children}
+            </section>}
+        </div>
       </div>
     );
   }

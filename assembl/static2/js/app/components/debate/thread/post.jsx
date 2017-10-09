@@ -3,7 +3,7 @@ import { Translate } from 'react-redux-i18n';
 import { compose, graphql } from 'react-apollo';
 import { Row, Col } from 'react-bootstrap';
 
-import { getDomElementOffset, hashLinkScroll } from '../../../utils/globalFunctions';
+import { getDomElementOffset } from '../../../utils/globalFunctions';
 import Attachments from '../../common/attachments';
 import ProfileLine from '../../common/profileLine';
 import PostTranslate from '../common/translations/postTranslate';
@@ -15,6 +15,7 @@ import PostQuery from '../../../graphql/PostQuery.graphql';
 import withLoadingIndicator from '../../../components/common/withLoadingIndicator';
 import { DeletedPublicationStates, PublicationStates } from '../../../constants';
 import Nuggets from './nuggets';
+import hashLinkScroll from '../../../utils/hashLinkScroll';
 
 export const PostFolded = ({ nbPosts }) => {
   return <Translate value="debate.thread.foldedPostLink" count={nbPosts} />;
@@ -37,7 +38,7 @@ const getSubjectPrefixString = (fullLevel) => {
 // TODO we need a graphql query to retrieve all languages with native translation, see Python langstrings.LocaleLabel
 // We only have french and english for en, fr, ja for now.
 
-class Post extends React.PureComponent {
+export class EmptyPost extends React.PureComponent {
   constructor(props) {
     super(props);
     this.state = {
@@ -313,4 +314,4 @@ class Post extends React.PureComponent {
   }
 }
 
-export default compose(graphql(PostQuery), withLoadingIndicator())(Post);
+export default compose(graphql(PostQuery), withLoadingIndicator())(EmptyPost);

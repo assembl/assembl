@@ -98,11 +98,12 @@ class PostActions extends React.Component {
     return (
       <div>
         <div className="post-icons">
-          <div className="post-action" onClick={promptForLoginOr(handleAnswerClick)}>
-            <OverlayTrigger placement={this.state.screenWidth >= MEDIUM_SCREEN_WIDTH ? 'right' : 'top'} overlay={answerTooltip}>
-              <span className="assembl-icon-back-arrow color" />
-            </OverlayTrigger>
-          </div>
+          {handleAnswerClick &&
+            <div className="post-action" onClick={promptForLoginOr(handleAnswerClick)}>
+              <OverlayTrigger placement={this.state.screenWidth >= MEDIUM_SCREEN_WIDTH ? 'right' : 'top'} overlay={answerTooltip}>
+                <span className="assembl-icon-back-arrow color" />
+              </OverlayTrigger>
+            </div>}
           <div
             className="post-action"
             onClick={() => {

@@ -201,7 +201,7 @@ Child.defaultProps = {
 class Tree extends React.Component {
   constructor(props) {
     super(props);
-    this.nuggetsManager = new NuggetsManager();
+    this.state = { nuggetsManager: new NuggetsManager() };
   }
 
   componentDidMount() {
@@ -210,7 +210,7 @@ class Tree extends React.Component {
     cache.clearAll();
     prevStopIndex = 0;
 
-    document.addEventListener('rowHeightRecomputed', this.nuggetsManager.update);
+    document.addEventListener('rowHeightRecomputed', this.state.nuggetsManager.update);
     if (this.props.initialRowIndex !== null) {
       globalList.scrollToRow(this.props.initialRowIndex);
     }
@@ -232,7 +232,7 @@ class Tree extends React.Component {
   }
 
   componentWillUnmount() {
-    document.removeEventListener('rowHeightRecomputed', this.nuggetsManager.update);
+    document.removeEventListener('rowHeightRecomputed', this.state.nuggetsManager.update);
   }
 
   cellRenderer = ({ index, key, parent, style }) => {
@@ -242,8 +242,7 @@ class Tree extends React.Component {
       data,
       InnerComponent, // component that will be rendered in the child
       InnerComponentFolded, // component that will be used to render the children when folded
-      SeparatorComponent, // separator component between first level children
-      nuggetsManager
+      SeparatorComponent // separator component between first level children
     } = this.props;
     const childData = data[index];
     return (
@@ -259,7 +258,7 @@ class Tree extends React.Component {
             InnerComponent={InnerComponent}
             InnerComponentFolded={InnerComponentFolded}
             SeparatorComponent={SeparatorComponent}
-            nuggetsManager={nuggetsManager}
+            nuggetsManager={this.state.nuggetsManager}
           />
         </div>
       </CellMeasurer>
@@ -302,7 +301,6 @@ class Tree extends React.Component {
                     rowRenderer={this.cellRenderer}
                     width={width}
                     className="tree-list"
-                    nuggetsManager={this.nuggetsManager}
                   />
                 );
               }}

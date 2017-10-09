@@ -75,7 +75,7 @@ class EditPostForm extends React.PureComponent<void, EditPostFormProps, EditPost
   handleSubmit = (): void => {
     const { uploadDocument, updatePost } = this.props;
     const { body } = this.state;
-    const subjectIsEmpty = this.state.subject.length === 0;
+    const subjectIsEmpty = this.state.subject && this.state.subject.length === 0;
     const bodyIsEmpty = rawContentStateIsEmpty(body);
     if (!subjectIsEmpty && !bodyIsEmpty) {
       // first we upload the new documents
@@ -88,7 +88,7 @@ class EditPostForm extends React.PureComponent<void, EditPostFormProps, EditPost
         const variables = {
           contentLocale: this.props.contentLocale,
           postId: this.props.id,
-          subject: this.state.subject,
+          subject: this.state.subject || '',
           body: convertRawContentStateToHTML(result.contentState),
           attachments: result.documentIds
         };
@@ -128,20 +128,21 @@ class EditPostForm extends React.PureComponent<void, EditPostFormProps, EditPost
         </Col>
         <Col xs={12} md={12}>
           <div className="answer-form-inner">
-            {this.props.readOnly
-              ? <div>
-                <h3 className="dark-title-3">
-                  {this.props.modifiedOriginalSubject}
-                </h3>
-                <div className="margin-m" />
-              </div>
-              : <TextInputWithRemainingChars
-                alwaysDisplayLabel
-                label={I18n.t('debate.edit.subject')}
-                value={this.state.subject}
-                handleTxtChange={this.updateSubject}
-                maxLength={TEXT_INPUT_MAX_LENGTH}
-              />}
+            {this.state.subject &&
+              (this.props.readOnly
+                ? <div>
+                  <h3 className="dark-title-3">
+                    {this.props.modifiedOriginalSubject}
+                  </h3>
+                  <div className="margin-m" />
+                </div>
+                : <TextInputWithRemainingChars
+                  alwaysDisplayLabel
+                  label={I18n.t('debate.edit.subject')}
+                  value={this.state.subject}
+                  handleTxtChange={this.updateSubject}
+                  maxLength={TEXT_INPUT_MAX_LENGTH}
+                />)}
             <FormGroup>
               <RichTextEditor
                 rawContentState={this.state.body}
