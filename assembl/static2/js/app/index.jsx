@@ -10,7 +10,7 @@ import 'bootstrap/dist/css/bootstrap.css';
 import createAppStore from './store';
 import client from './client';
 import Routes from './routes';
-import { hashLinkScroll } from './utils/globalFunctions';
+import hashLinkScroll from './utils/hashLinkScroll';
 
 require('smoothscroll-polyfill').polyfill();
 

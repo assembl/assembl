@@ -9,7 +9,8 @@ import Header from '../components/debate/common/header';
 import IdeaQuery from '../graphql/IdeaQuery.graphql';
 import IdeaWithPostsQuery from '../graphql/IdeaWithPostsQuery.graphql';
 import InfiniteSeparator from '../components/common/infiniteSeparator';
-import Post, { PostFolded } from '../components/debate/thread/post';
+import { PostFolded } from '../components/debate/thread/post';
+import ColumnsPost from '../components/debate/thread/columnsPost';
 import GoUp from '../components/common/goUp';
 import Tree from '../components/common/tree';
 import Loader from '../components/common/loader';
@@ -162,7 +163,7 @@ class Idea extends React.Component {
                     lang={lang}
                     data={topPosts}
                     initialRowIndex={this.getInitialRowIndex(topPosts, ideaWithPostsData.idea.posts.edges)}
-                    InnerComponent={Post}
+                    InnerComponent={ColumnsPost}
                     InnerComponentFolded={PostFolded}
                     noRowsRenderer={noRowsRenderer}
                     SeparatorComponent={InfiniteSeparator}
