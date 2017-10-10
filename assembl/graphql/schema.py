@@ -605,6 +605,40 @@ class IdeaAnnoucement(SecureObjectType, SQLAlchemyObjectType):
         return resolve_langstring(self.body, args.get('lang'))
 
 
+class IdeaMessageColumn(SecureObjectType, SQLAlchemyObjectType):
+    class Meta:
+        model = models.IdeaMessageColumn
+        interfaces = (Node,)
+        only_fields = ('id', 'message_classifier', 'color')
+
+    index = graphene.Int()
+    idea = graphene.Field(lambda: Idea)
+    name = graphene.String(lang=graphene.String())
+    header = graphene.String(lang=graphene.String())
+
+    def resolve_idea(self, args, context, info):
+        if self.idea:
+            return self.idea
+
+    def resolve_name(self, args, context, info):
+        return resolve_langstring(self.name, args.get('lang'))
+
+    def resolve_header(self, args, context, info):
+        return resolve_langstring(self.header, args.get('lang'))
+
+    def chase_the_chain(self, count=0):
+        if not self.previous_column_id:
+            return count
+        else:
+            return self.chase_the_chain(self.previous_column, count + 1)
+
+    def get_total_count(self):
+        db = models.IdeaMessageColumn.default_db
+        return db.query(models.IdeaMessageColumn.id).filter(
+            models.IdeaMessageColumn.message_classifier == self.message_classifier,
+            models.IdeaMessageColumn.idea_id == self.idea_id).count()
+
+
 class Idea(SecureObjectType, SQLAlchemyObjectType):
     class Meta:
         model = models.Idea
@@ -623,6 +657,7 @@ class Idea(SecureObjectType, SQLAlchemyObjectType):
     posts = SQLAlchemyConnectionField(PostConnection)
     contributors = graphene.List(AgentProfile)
     announcement = graphene.Field(lambda: IdeaAnnoucement)
+    message_columns = graphene.List(lambda: IdeaMessageColumn)
 
     @classmethod
     def is_type_of(cls, root, context, info):
@@ -725,6 +760,9 @@ class Idea(SecureObjectType, SQLAlchemyObjectType):
 
     def resolve_announcement(self, args, context, info):
         return self.get_applicable_announcement()
+
+    def resolve_message_columns(self, args, context, info):
+        return self.message_columns
 
 
 class Question(SecureObjectType, SQLAlchemyObjectType):
@@ -892,11 +930,15 @@ class Query(graphene.ObjectType):
     node = Node.Field()
     root_idea = graphene.Field(IdeaUnion, identifier=graphene.String())
     ideas = graphene.List(Idea)
-    thematics = graphene.List(Thematic, identifier=graphene.String(required=True))
+    thematics = graphene.List(Thematic,
+                              identifier=graphene.String(required=True))
     num_participants = graphene.Int()
     discussion_preferences = graphene.Field(DiscussionPreferences)
     default_preferences = graphene.Field(DiscussionPreferences)
     locales = graphene.List(Locale, lang=graphene.String(required=True))
+    idea_columns = graphene.List(IdeaMessageColumn,
+                                 id=graphene.ID(required=True))
+
 
     def resolve_root_idea(self, args, context, info):
         discussion_id = context.matchdict['discussion_id']
@@ -969,6 +1011,15 @@ class Query(graphene.ObjectType):
         return [Locale(locale_code=locale_code, label=label)
                 for locale_code, label in sorted(labels.items(),
                                                  key=lambda entry: entry[1])]
+
+    def resolve_idea_columns(self, args, context, info):
+        idea_id = Node.from_global_id(args.get('id'))[1]
+        db = models.IdeaMessageColumn.default_db
+        query = db.query(models.IdeaMessageColumn).filter(
+            models.IdeaMessageColumn.idea_id == idea_id).\
+            order_by(models.IdeaMessageColumn.id)
+
+        return query
 
 
 class VideoInput(graphene.InputObjectType):

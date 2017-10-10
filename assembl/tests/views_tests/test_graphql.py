@@ -1495,3 +1495,22 @@ def test_query_post_no_message_classifier(graphql_request,
             u"messageClassifier": None
         }
     }
+
+
+def test_query_message_classifiers_on_idea(graphql_request,
+                                           idea_message_column_negative):
+    idea_id = to_global_id("IdeaMessageColumn",
+                           idea_message_column_negative.idea_id)
+
+    res = schema.execute(u"""
+query {
+    ideaColumns(id:"%s") {
+        messageClassifier
+    }
+}""" % (idea_id), context_value=graphql_request)
+    assert json.loads(json.dumps(res.data)) == {
+        u'ideaColumns': [
+            {u'messageClassifier': u'negative'},
+            {u'messageClassifier': u'positive'}
+        ]
+    }
