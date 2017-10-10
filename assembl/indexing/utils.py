@@ -120,6 +120,9 @@ def get_data(content):
                      'creator_id', 'sentiment_counts'):
             data[attr] = getattr(content, attr)
 
+        data['idea_id'] = [link.idea_id
+            for link in content.indirect_idea_content_links_without_cache()
+            if link.__class__.__name__ == 'IdeaRelatedPostLink']
         data['sentiment_tags'] = [key for key in data['sentiment_counts']
                                   if data['sentiment_counts'][key] > 0]
         like = data['sentiment_counts']['like']

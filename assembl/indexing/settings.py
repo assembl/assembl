@@ -81,6 +81,7 @@ COMMON_POST = {
         'creation_date': DATE,
         'id': LONG,
         'parent_id': {'type': 'long', 'null_value': 0},
+        'idea_id': LONG,
         'creator_id': LONG,
         'parent_creator_id': LONG,
     #    'publishes_synthesis_id': KEYWORD,
