@@ -77,6 +77,70 @@ def discussion2_root_post_1(request, participant1_user, discussion2, test_sessio
 
 
 @pytest.fixture(scope="function")
+def root_post_en_under_positive_column_of_idea(
+        request, test_session, discussion, admin_user,
+        idea_message_column_positive):
+    from assembl.models import Post, LangString, IdeaRelatedPostLink
+    idea = idea_message_column_positive.idea
+    p = Post(
+        discussion=discussion, creator=admin_user,
+        subject=LangString.create(u"A simple positive subject"),
+        body=LangString.create(u"A simple positive body"),
+        type='post', message_id="msg2@example3.com",
+        message_classifier=idea_message_column_positive.message_classifier)
+
+    idc = IdeaRelatedPostLink(
+        idea=idea,
+        creator=admin_user,
+        content=p)
+
+    test_session.add(p)
+    test_session.add(idc)
+    test_session.flush()
+
+    def fin():
+        print "finalizer root_post_en_under_positive_column_of_idea"
+        test_session.delete(p)
+        test_session.delete(idc)
+        test_session.flush()
+
+    request.addfinalizer(fin)
+    return p
+
+
+@pytest.fixture(scope="function")
+def root_post_en_under_negative_column_of_idea(
+        request, test_session, discussion, admin_user,
+        idea_message_column_negative):
+    from assembl.models import Post, LangString, IdeaRelatedPostLink
+    idea = idea_message_column_negative.idea
+    p = Post(
+        discussion=discussion, creator=admin_user,
+        subject=LangString.create(u"A simple negative subject"),
+        body=LangString.create(u"A simple negative body"),
+        type='post', message_id="msg3@example3.com",
+        message_classifier=idea_message_column_negative.message_classifier)
+
+    idc = IdeaRelatedPostLink(
+        idea=idea,
+        creator=admin_user,
+        content=p)
+
+    test_session.add(p)
+    test_session.add(idc)
+    test_session.flush()
+
+    def fin():
+        print "finalizer root_post_en_under_positive_column_of_idea"
+        test_session.delete(p)
+        test_session.delete(idc)
+        test_session.flush()
+
+    request.addfinalizer(fin)
+    return p
+
+
+@pytest.fixture(scope="function")
 def synthesis_post_1(request, participant1_user, discussion, test_session,
                      synthesis_1):
     """A Syntehsis Post fixture"""

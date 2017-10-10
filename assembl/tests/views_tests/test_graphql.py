@@ -1497,20 +1497,51 @@ def test_query_post_no_message_classifier(graphql_request,
     }
 
 
-def test_query_message_classifiers_on_idea(graphql_request,
-                                           idea_message_column_negative):
-    idea_id = to_global_id("IdeaMessageColumn",
-                           idea_message_column_negative.idea_id)
+def test_query_number_of_posts_on_column(
+        graphql_request, idea_message_column_positive,
+        root_post_en_under_positive_column_of_idea):
 
+    idea_id = to_global_id('Idea', idea_message_column_positive.idea_id)
     res = schema.execute(u"""
 query {
-    ideaColumns(id:"%s") {
-        messageClassifier
+    idea: node(id:"%s") {
+        ... on Idea {
+            id
+            messageColumns {
+                messageClassifier
+                numPosts
+            }
+        }
     }
 }""" % (idea_id), context_value=graphql_request)
-    assert json.loads(json.dumps(res.data)) == {
-        u'ideaColumns': [
-            {u'messageClassifier': u'positive'},
-            {u'messageClassifier': u'negative'}
-        ]
+    res_data = json.loads(json.dumps(res.data))
+    assert res_data[u'idea'][u'messageColumns'][0][u'numPosts'] == 1
+
+
+def test_query_number_of_posts_on_multiple_columns(
+        graphql_request,
+        idea_message_column_positive,
+        idea_message_column_negative,
+        root_post_en_under_positive_column_of_idea,
+        root_post_en_under_negative_column_of_idea):
+
+    idea_id = to_global_id('Idea', idea_message_column_positive.idea_id)
+    res = schema.execute(u"""
+query {
+    idea: node(id:"%s") {
+        ... on Idea {
+            id
+            messageColumns {
+                messageClassifier
+                numPosts
+            }
+        }
     }
+}""" % (idea_id), context_value=graphql_request)
+    res_data = json.loads(json.dumps(res.data))
+    columns = res_data[u'idea'][u'messageColumns']
+    assert len(columns) == 2
+    positive = filter(lambda c: c[u"messageClassifier"] == idea_message_column_positive.message_classifier, columns)[0]
+    negative = filter(lambda c: c[u"messageClassifier"] == idea_message_column_negative.message_classifier, columns)[0]
+    assert positive[u"numPosts"] == 1
+    assert negative[u"numPosts"] == 1
