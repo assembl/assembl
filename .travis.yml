@@ -4,10 +4,24 @@ dist: trusty
 before_install:
  - sudo apt-get -qq update
  - sudo apt-get install -y fabric git openssh-server
- - sudo add-apt-repository ppa:webupd8team/java -y
- - sudo apt-get install -y oracle-java8-installer
- - sudo apt-get install -y oracle-java8-set-default
- - fab -c configs/develop.rc install_single_server
+ - sudo apt-get install -y postgresql
+ - sudo /etc/init.d/postgresql start
+ - sudo apt-get install apt-transport-https
+ - echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee -a /etc/apt/sources.list.d/yarn.list
+ - sudo curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
+ - sudo apt-get -qq update
+ - sudo apt-get install yarn
+ - sudo apt-get install -y python-virtualenv python-pip python-psycopg2
+ - sudo apt-get install -y python-requests python-jinja2 git
+ - sudo apt-get install -y build-essential python-dev pandoc
+ - sudo apt-get install -y automake bison flex gperf gawk
+ - sudo apt-get install -y graphviz pkg-config gfortran
+ - sudo apt-get install -y chromium-chromedriver
+ - sudo apt-get install -y libpq-dev libmemcached-dev libzmq3-dev libxslt1-dev libffi-dev libhiredis-dev libxml2-dev libssl-dev libreadline-dev liblapack-dev libatlas-dev libblas-dev libgraphviz-dev libxmlsec1-dev
+ - sudo apt-get install -y redis-server
+ - sudo /etc/init.d/redis-server start
+ - sudo apt-get install -y memcached
+ - sudo /etc/init.d/memcached start
  - fab -c configs/develop.rc bootstrap_from_checkout
 install: true
 before_script:
