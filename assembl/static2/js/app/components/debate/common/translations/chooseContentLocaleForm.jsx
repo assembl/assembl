@@ -127,14 +127,14 @@ class ChooseContentLocaleForm extends React.Component<*, ChooseContentLocaleForm
             : null}
         </Modal.Body>
         <Modal.Footer>
-          <Button key="translate-cancel" onClick={closeModal} className="button-cancel button-dark">
+          <Button key="translate-cancel" onClick={closeModal} className="button-cancel button-dark left">
             <Translate value="cancel" />
           </Button>
           <Button
             key="translate-submit"
             disabled={selectedLocale === 'select' || !scope}
             onClick={this.handleSubmit}
-            className="button-submit button-dark"
+            className="button-submit button-dark right"
           >
             <Translate value="validate" />
           </Button>
