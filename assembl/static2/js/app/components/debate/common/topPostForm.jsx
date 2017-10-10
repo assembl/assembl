@@ -60,7 +60,8 @@ class TopPostForm extends React.Component<*, TopPostFormProps, TopPostFormState>
   };
 
   createTopPost = () => {
-    const { contentLocale, createPost, ideaId, refetchIdea, uploadDocument } = this.props;
+    const { contentLocale, createPost, ideaId, refetchIdea, uploadDocument, messageClassifier } = this.props;
+    console.log('messageClassifier', messageClassifier);
     const { body, subject } = this.state;
     this.setState({ submitting: true });
     const bodyIsEmpty = !body || rawContentStateIsEmpty(body);
@@ -71,7 +72,7 @@ class TopPostForm extends React.Component<*, TopPostFormProps, TopPostFormState>
         const variables = {
           contentLocale: contentLocale,
           ideaId: ideaId,
-          subject: subject,
+          subject: subject || 'subject',
           // use the updated content state with new entities
           body: convertRawContentStateToHTML(result.contentState),
           attachments: result.documentIds

@@ -10,12 +10,12 @@ import TopPostForm from './topPostForm';
 const mockMessageColumns = [
   {
     color: '#e2f8e5',
-    identifier: 'positive',
+    messageClassifier: 'positive',
     name: 'Ajouter votre point de vue en faveur du thème'
   },
   {
     color: '#f9ebeb',
-    identifier: 'negative',
+    messageClassifier: 'negative',
     name: 'Ajouter votre point de vue en défaveur du thème'
   }
 ];
@@ -39,14 +39,14 @@ class topPostFormContainer extends React.Component {
       <Grid fluid className={mockMessageColumns.length > 0 ? '' : 'background-color'}>
         <div className="max-container">
           <Row>
-            <div className="columns-view">
+            <div className={mockMessageColumns.length > 0 ? 'columns-view' : ''}>
               {ideaOnColumns.map((column, index) => {
                 return (
                   <Col
                     xs={12}
                     md={12 / ideaOnColumns.length}
                     style={{ backgroundColor: column.color }}
-                    key={`${column.identifier}-${index}`}
+                    key={`${column.messageClassifier}-${index}`}
                   >
                     <div className="top-post-form">
                       <Row>
@@ -88,7 +88,12 @@ class topPostFormContainer extends React.Component {
                           mdOffset={mockMessageColumns.length > 0 ? 1 : 0}
                           className="no-padding"
                         >
-                          <TopPostForm ideaId={idea.id} refetchIdea={refetchIdea} ideaOnColumn={mockMessageColumns.length > 0} />
+                          <TopPostForm
+                            ideaId={idea.id}
+                            refetchIdea={refetchIdea}
+                            ideaOnColumn={mockMessageColumns.length > 0}
+                            messageClassifier={column.messageClassifier}
+                          />
                         </Col>
                       </Row>
                     </div>

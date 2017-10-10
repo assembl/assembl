@@ -10,15 +10,15 @@ import IdeaQuery from '../graphql/IdeaQuery.graphql';
 import IdeaWithPostsQuery from '../graphql/IdeaWithPostsQuery.graphql';
 import InfiniteSeparator from '../components/common/infiniteSeparator';
 import Post, { PostFolded } from '../components/debate/thread/post';
-import ColumnsPost from '../components/debate/columnsView/columnsPost';
+import ColumnsPost from '../components/debate/multiColumns/columnsPost';
 import GoUp from '../components/common/goUp';
 import Tree from '../components/common/tree';
 import Loader from '../components/common/loader';
 import Permissions, { connectedUserCan } from '../utils/permissions';
 import { getConnectedUserId } from '../utils/globalFunctions';
-import Announcement from './../components/debate/thread/announcement';
-import TopPostFormContainer from '../components/debate/thread/topPostFormContainer';
-import ColumnsView from '../components/debate/columnsView/columnsView';
+import Announcement from './../components/debate/common/announcement';
+import TopPostFormContainer from '../components/debate/common/topPostFormContainer';
+import ColumnsView from '../components/debate/multiColumns/columnsView';
 
 // MOCK
 

@@ -7,10 +7,10 @@ import { getDomElementOffset } from '../../../utils/globalFunctions';
 import Attachments from '../../common/attachments';
 import ProfileLine from '../../common/profileLine';
 import PostTranslate from '../common/translations/postTranslate';
-import PostActions from './postActions';
+import PostActions from '../common/postActions';
 import AnswerForm from './answerForm';
-import EditPostForm from './editPostForm';
-import DeletedPost from './deletedPost';
+import EditPostForm from '../common/editPostForm';
+import DeletedPost from '../common/deletedPost';
 import PostQuery from '../../../graphql/PostQuery.graphql';
 import withLoadingIndicator from '../../../components/common/withLoadingIndicator';
 import { DeletedPublicationStates, PublicationStates } from '../../../constants';
@@ -64,7 +64,7 @@ export class EmptyPost extends React.PureComponent {
 
   componentDidUpdate(prevProps) {
     const { body } = this.getBodyAndSubject();
-    if (body.indexOf('<img src')) {
+    if (body && body.indexOf('<img src')) {
       this.props.measureTreeHeight(200);
     }
 

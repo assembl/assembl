@@ -14,7 +14,7 @@ import addSentimentMutation from '../../../graphql/mutations/addSentiment.graphq
 import deleteSentimentMutation from '../../../graphql/mutations/deleteSentiment.graphql';
 import PostQuery from '../../../graphql/PostQuery.graphql';
 import { likeTooltip, disagreeTooltip } from '../../common/tooltips';
-import { sentimentDefinitionsObject } from '../thread/sentimentDefinitions';
+import { sentimentDefinitionsObject } from '../common/sentimentDefinitions';
 import StatisticsDoughnut from '../common/statisticsDoughnut';
 import PostTranslate from '../common/translations/postTranslate';
 import { EXTRA_SMALL_SCREEN_WIDTH } from '../../../constants';

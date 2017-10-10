@@ -241,12 +241,18 @@
     }
 
     .top-post-form {
-      height: 450px;
       max-height: 450px;
     }
     .DraftEditor-editorContainer {
       height: 180px;
       max-height: 180px;
+      overflow-y: scroll;
+    }
+    .public-DraftEditor-content {
+      overflow: hidden;
+    }
+    .attachments {
+      float: left;
     }
   }
 
