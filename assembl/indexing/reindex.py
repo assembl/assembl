@@ -1,5 +1,6 @@
 import logging
 from sqlalchemy.orm import with_polymorphic
+from sqlalchemy.orm import joinedload
 
 from assembl.lib import config
 from assembl.indexing.changes import get_changes
@@ -40,7 +41,13 @@ def get_indexable_contents(session):
 
     query = session.query(Idea
         ).filter(Idea.tombstone_condition()
-        ).filter(Idea.hidden==False)
+        ).filter(Idea.hidden==False
+        ).options(
+            joinedload(Idea.title).joinedload("entries"),
+            joinedload(Idea.synthesis_title).joinedload("entries"),
+            joinedload(Idea.description).joinedload("entries")
+        )
+
     for idea in query:
         yield idea
 
@@ -53,7 +60,11 @@ def get_indexable_contents(session):
         ).filter(AllPost.tombstone_condition()
         ).filter(AllPost.hidden==False
         ).filter(AllPost.publication_state == PublicationStates.PUBLISHED
-        ).filter(AllPost.type != 'proposition_post')
+        ).filter(AllPost.type != 'proposition_post'
+        ).options(
+            joinedload(AllPost.subject).joinedload("entries"),
+            joinedload(AllPost.body).joinedload("entries")
+        )
     for post in query:
         yield post
 
