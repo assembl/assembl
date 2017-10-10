@@ -45,57 +45,59 @@ class topPostFormContainer extends React.Component {
                   <Col
                     xs={12}
                     md={12 / ideaOnColumns.length}
-                    style={{ backgroundColor: column.color }}
                     key={`${column.messageClassifier}-${index}`}
+                    style={{ display: 'flex', justifyContent: 'center' }}
                   >
-                    <div className="top-post-form">
-                      <Row>
-                        <Col
-                          xs={12}
-                          sm={mockMessageColumns.length > 0 ? 10 : 3}
-                          md={mockMessageColumns.length > 0 ? 10 : 2}
-                          smOffset={mockMessageColumns.length > 0 ? 1 : 1}
-                          mdOffset={mockMessageColumns.length > 0 ? 1 : 2}
-                          className="no-padding"
-                        >
-                          <div className="start-discussion-container">
-                            <div
-                              className={
-                                mockMessageColumns.length > 0
-                                  ? 'start-discussion-icon start-discussion-icon-2'
-                                  : 'start-discussion-icon'
-                              }
-                            >
-                              <span className="assembl-icon-discussion color" />
+                    <div className="top-post-form" style={{ backgroundColor: column.color }}>
+                      <div>
+                        <Row>
+                          <Col
+                            xs={12}
+                            sm={mockMessageColumns.length > 0 ? 10 : 3}
+                            md={mockMessageColumns.length > 0 ? 10 : 2}
+                            smOffset={mockMessageColumns.length > 0 ? 1 : 1}
+                            mdOffset={mockMessageColumns.length > 0 ? 1 : 2}
+                            className="no-padding"
+                          >
+                            <div className="start-discussion-container">
+                              <div
+                                className={
+                                  mockMessageColumns.length > 0
+                                    ? 'start-discussion-icon start-discussion-icon-2'
+                                    : 'start-discussion-icon'
+                                }
+                              >
+                                <span className="assembl-icon-discussion color" />
+                              </div>
+                              <div
+                                className={
+                                  mockMessageColumns.length > 0 ? 'start-discussion start-discussion-2' : 'start-discussion'
+                                }
+                              >
+                                <h3 className="dark-title-3 no-margin">
+                                  {mockMessageColumns.length > 0
+                                    ? column.name
+                                    : <Translate value="debate.thread.startDiscussion" />}
+                                </h3>
+                              </div>
                             </div>
-                            <div
-                              className={
-                                mockMessageColumns.length > 0 ? 'start-discussion start-discussion-2' : 'start-discussion'
-                              }
-                            >
-                              <h3 className="dark-title-3 no-margin">
-                                {mockMessageColumns.length > 0
-                                  ? column.name
-                                  : <Translate value="debate.thread.startDiscussion" />}
-                              </h3>
-                            </div>
-                          </div>
-                        </Col>
-                        <Col
-                          xs={12}
-                          sm={mockMessageColumns.length > 0 ? 10 : 7}
-                          md={mockMessageColumns.length > 0 ? 10 : 6}
-                          mdOffset={mockMessageColumns.length > 0 ? 1 : 0}
-                          className="no-padding"
-                        >
-                          <TopPostForm
-                            ideaId={idea.id}
-                            refetchIdea={refetchIdea}
-                            ideaOnColumn={mockMessageColumns.length > 0}
-                            messageClassifier={column.messageClassifier}
-                          />
-                        </Col>
-                      </Row>
+                          </Col>
+                          <Col
+                            xs={12}
+                            sm={mockMessageColumns.length > 0 ? 10 : 7}
+                            md={mockMessageColumns.length > 0 ? 10 : 6}
+                            mdOffset={mockMessageColumns.length > 0 ? 1 : 0}
+                            className="no-padding"
+                          >
+                            <TopPostForm
+                              ideaId={idea.id}
+                              refetchIdea={refetchIdea}
+                              ideaOnColumn={mockMessageColumns.length > 0}
+                              messageClassifier={column.messageClassifier}
+                            />
+                          </Col>
+                        </Row>
+                      </div>
                     </div>
                   </Col>
                 );

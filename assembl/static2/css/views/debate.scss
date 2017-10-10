@@ -233,6 +233,8 @@
   }
 
   .columns-view {
+    margin-top: -20px;
+
     .infinite-separator {
       border: none;
       span {
@@ -242,6 +244,12 @@
 
     .top-post-form {
       max-height: 450px;
+      width: 600px;
+      margin: $margin-section-m 0 0;
+
+      .dark-title-3 {
+        line-height: 25px;
+      }
     }
     .DraftEditor-editorContainer {
       height: 180px;

@@ -145,7 +145,11 @@ class TopPostForm extends React.Component<*, TopPostFormProps, TopPostFormState>
                 </Button>
                 : null}
               <Button
-                className="button-submit button-dark btn btn-default right margin-l"
+                className={
+                  !this.props.ideaOnColumn
+                    ? 'button-submit button-dark btn btn-default right margin-l'
+                    : 'button-submit button-dark btn btn-default right margin-m'
+                }
                 onClick={this.createTopPost}
                 style={{ marginBottom: '30px' }}
                 disabled={this.state.submitting}
