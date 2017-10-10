@@ -54,7 +54,7 @@
       label {
         position: absolute;
         left: 50%;
-        top: 8%;
+        top: 14%;
         transform: translate(-50%);
         font-size: $font-size-sm;
       }
@@ -63,7 +63,7 @@
     .btn-default {
       position: absolute;
       left: 50%;
-      top: 30%;
+      top: 35%;
       transform: translate(-50%);
     }
 
@@ -78,12 +78,12 @@
       position: absolute;
       height: 15%;
       left: 50%;
-      top: 48%;
+      top: 50%;
       transform: translate(-50%);
-      font-size: $font-size-xs;
+      font-size: $font-size-xxs;
     }
 
-    min-height: 200px;
+    min-height: 250px;
     position: absolute;
     left: 50%;
     transform: translate(-50%);
