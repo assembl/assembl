@@ -30,11 +30,7 @@ class ColumnsPost extends EmptyPost {
       attachments
     } = this.props.data.post;
 
-    const { lang, refetchIdea, creationDate, numChildren, routerParams, debateData } = this.props;
-
-    // Fake nColumns props
-    const columnColor = '#50D593';
-    const columnText = 'En faveur de l\'Inclusive City Bond';
+    const { lang, refetchIdea, creationDate, numChildren, routerParams, debateData, colColor, colName } = this.props;
 
     // creationDate is retrieved by IdeaWithPosts query, not PostQuery
     let body;
@@ -74,7 +70,7 @@ class ColumnsPost extends EmptyPost {
     }
     return (
       <div className="posts column-post" id={id}>
-        <div className="box" style={{ borderLeftColor: columnColor }}>
+        <div className="box" style={{ borderLeftColor: colColor }}>
           <Row className="post-row">
             <Col xs={12} md={11} className="post-left">
               {creator &&
@@ -85,8 +81,8 @@ class ColumnsPost extends EmptyPost {
                   locale={lang}
                   modified={modificationDate !== null}
                 />}
-              <div className="column-hint" style={{ color: columnColor }}>
-                {columnText}
+              <div className="column-hint" style={{ color: colColor }}>
+                {colName}
               </div>
               {originalBodyLocale
                 ? <PostTranslate

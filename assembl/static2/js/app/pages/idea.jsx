@@ -20,30 +20,17 @@ import Announcement from './../components/debate/common/announcement';
 import TopPostFormContainer from '../components/debate/common/topPostFormContainer';
 import ColumnsView from '../components/debate/multiColumns/columnsView';
 
-// MOCK
-
-const ideaOnTwoColumns = true;
-
-const addMessageClassifier = (posts) => {
-  const postsArray = [];
-  posts.forEach((post, index) => {
-    if (index % 2 === 0) {
-      postsArray.push({ ...post, messageClassifier: 'positive' });
-    } else if (index % 3 === 0) {
-      postsArray.push({ ...post, messageClassifier: 'neutral' });
-    } else {
-      postsArray.push({ ...post, messageClassifier: 'negative' });
-    }
-  });
-  return postsArray;
-};
-
-// END OF THE MOCK
-
-export const transformPosts = (edges, additionnalProps = {}) => {
+export const transformPosts = (edges, messageColumns, additionnalProps = {}) => {
   const postsByParent = {};
+  const messageColumn = { colColor: null, colName: null };
   edges.forEach((e) => {
-    const p = { ...e.node, ...additionnalProps };
+    messageColumns.forEach((col) => {
+      if (col.messageClassifier === e.node.messageClassifier) {
+        messageColumn.colColor = col.color;
+        messageColumn.colName = col.name;
+      }
+    });
+    const p = { ...e.node, ...additionnalProps, ...messageColumn };
     const items = postsByParent[p.parentId] || [];
     postsByParent[p.parentId] = items;
     items.push(p);
@@ -141,9 +128,10 @@ class Idea extends React.Component {
     }
 
     const { idea } = ideaData;
+
     const topPosts =
       !ideaWithPostsData.loading &&
-      transformPosts(ideaWithPostsData.idea.posts.edges, {
+      transformPosts(ideaWithPostsData.idea.posts.edges, ideaWithPostsData.idea.messageColumns, {
         refetchIdea: refetchIdea,
         ideaId: idea.id,
         routerParams: routerParams,
@@ -166,15 +154,19 @@ class Idea extends React.Component {
                 </div>
               </div>
             </Grid>}
-          {!isUserConnected || connectedUserCan(Permissions.ADD_POST)
-            ? <TopPostFormContainer idea={idea} refetchIdea={refetchIdea} />
+          {(!isUserConnected || connectedUserCan(Permissions.ADD_POST)) && ideaWithPostsData.idea
+            ? <TopPostFormContainer
+              idea={idea.id}
+              refetchIdea={refetchIdea}
+              messageColumns={ideaWithPostsData.idea.messageColumns}
+            />
             : null}
           <Grid fluid className="background-grey">
             <div className="max-container">
               <div className="content-section">
                 {ideaWithPostsData.loading && <Loader />}
                 {ideaWithPostsData.idea &&
-                  !ideaOnTwoColumns &&
+                  !ideaWithPostsData.idea.messageColumns.length > 0 &&
                   <Tree
                     contentLocaleMapping={contentLocaleMapping}
                     lang={lang}
@@ -186,11 +178,12 @@ class Idea extends React.Component {
                     SeparatorComponent={InfiniteSeparator}
                   />}
                 {ideaWithPostsData.idea &&
-                  ideaOnTwoColumns &&
+                  ideaWithPostsData.idea.messageColumns.length > 0 &&
                   <ColumnsView
+                    messageColumns={ideaWithPostsData.idea.messageColumns}
                     contentLocaleMapping={contentLocaleMapping}
                     lang={lang}
-                    data={addMessageClassifier(topPosts)}
+                    posts={topPosts}
                     initialRowIndex={this.getInitialRowIndex(topPosts, ideaWithPostsData.idea.posts.edges)}
                     InnerComponent={ColumnsPost}
                     InnerComponentFolded={PostFolded}

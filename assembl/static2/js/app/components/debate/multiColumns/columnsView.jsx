@@ -3,17 +3,18 @@ import { Grid, Row, Col } from 'react-bootstrap';
 import Tree from '../../common/tree';
 
 class ColumnsView extends React.Component {
-  orderPostsByMessageClassifier(posts) {
+  orderPostsByMessageClassifier() {
+    const { messageColumns, posts } = this.props;
     const columnsArray = {};
     let keyName = '';
-    posts.forEach((post) => {
-      keyName = post.messageClassifier;
+    messageColumns.forEach((col) => {
+      keyName = col.messageClassifier;
       columnsArray[keyName] = [];
-    });
-
-    posts.forEach((post) => {
-      keyName = post.messageClassifier;
-      columnsArray[keyName].push({ ...post });
+      posts.forEach((post) => {
+        if (post.messageClassifier === keyName) {
+          columnsArray[keyName].push({ ...post });
+        }
+      });
     });
 
     return columnsArray;
@@ -22,14 +23,13 @@ class ColumnsView extends React.Component {
     const {
       contentLocaleMapping,
       lang,
-      data,
       initialRowIndex,
       InnerComponent,
       InnerComponentFolded,
       noRowsRenderer,
       SeparatorComponent
     } = this.props;
-    const columnsArray = this.orderPostsByMessageClassifier(data);
+    const columnsArray = this.orderPostsByMessageClassifier();
     return (
       <Grid fluid className="background-grey no-padding">
         <div className="max-container">
