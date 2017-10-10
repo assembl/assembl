@@ -43,6 +43,7 @@
 .rich-text-editor {
   font-family: $font-family;
   margin-top: 16px;
+  position: relative;
 
   .insertion-box {
     .assembl-icon-cancel {
@@ -51,23 +52,47 @@
 
     .attach-file {
       label {
-        margin-bottom: 20px;
+        position: absolute;
+        left: 50%;
+        top: 8%;
+        transform: translate(-50%);
+        font-size: $font-size-sm;
       }
     }
 
-    min-height: 201px;
-    position: absolute;
-    left: 0px;
-    top: 110px;
-    width: 100%;
-    margin-top: 10px;
-    z-index: 2;
-  }
-
-  @media screen and (max-width: 767px) {
-    .insertion-box {
-      top: 129px;
+    .btn-default {
+      position: absolute;
+      left: 50%;
+      top: 30%;
+      transform: translate(-50%);
     }
+
+    .button-submit {
+      position: absolute;
+      left: 50%;
+      top: 70%;
+      transform: translate(-50%);
+    }
+
+    .preview-title {
+      position: absolute;
+      height: 15%;
+      left: 50%;
+      top: 48%;
+      transform: translate(-50%);
+      font-size: $font-size-xs;
+    }
+
+    min-height: 200px;
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%);
+    bottom: 0;
+    width: 80%;
+    z-index: 1040;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-radius: 5px;
+    box-shadow: 1px 1px 1px 0px #656565;
   }
 
   .editor-header {
