@@ -4,8 +4,8 @@ dist: trusty
 before_install:
  - sudo apt-get -qq update
  - sudo apt-get install -y fabric git openssh-server
- - sudo apt-get install -y postgresql
- - sudo /etc/init.d/postgresql start
+ #- sudo apt-get install -y postgresql
+ - sudo /etc/init.d/postgresql restart
  - sudo apt-get install apt-transport-https
  - echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee -a /etc/apt/sources.list.d/yarn.list
  - sudo curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
