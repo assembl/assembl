@@ -546,7 +546,7 @@ class Post(SecureObjectType, SQLAlchemyObjectType):
     class Meta:
         model = models.Post
         interfaces = (Node, PostInterface)
-        only_fields = ('id', 'message_classifier')  # inherits fields from Post interface only
+        only_fields = ('id',)  # inherits fields from Post interface only
 
 
 class PostConnection(graphene.Connection):
@@ -615,6 +615,7 @@ class IdeaMessageColumn(SecureObjectType, SQLAlchemyObjectType):
     idea = graphene.Field(lambda: Idea)
     name = graphene.String(lang=graphene.String())
     header = graphene.String(lang=graphene.String())
+    num_posts = graphene.Int()
 
     def resolve_idea(self, args, context, info):
         if self.idea:
@@ -626,11 +627,11 @@ class IdeaMessageColumn(SecureObjectType, SQLAlchemyObjectType):
     def resolve_header(self, args, context, info):
         return resolve_langstring(self.header, args.get('lang'))
 
-    def get_total_count(self):
-        db = models.IdeaMessageColumn.default_db
-        return db.query(models.IdeaMessageColumn.id).filter(
-            models.IdeaMessageColumn.message_classifier == self.message_classifier,
-            models.IdeaMessageColumn.idea_id == self.idea_id).count()
+    def resolve_num_posts(self, args, context, info):
+        related = self.idea.get_related_posts_query(
+            partial=True, include_deleted=None)
+        return models.Post.query.join(related, models.Post.id == related.c.post_id).\
+            filter(models.Content.message_classifier == self.message_classifier).count()
 
     def resolve_index(self, args, context, info):
         count = self.get_positional_index()
@@ -758,9 +759,6 @@ class Idea(SecureObjectType, SQLAlchemyObjectType):
 
     def resolve_announcement(self, args, context, info):
         return self.get_applicable_announcement()
-
-    def resolve_message_columns(self, args, context, info):
-        return self.message_columns
 
 
 class Question(SecureObjectType, SQLAlchemyObjectType):
@@ -934,8 +932,6 @@ class Query(graphene.ObjectType):
     discussion_preferences = graphene.Field(DiscussionPreferences)
     default_preferences = graphene.Field(DiscussionPreferences)
     locales = graphene.List(Locale, lang=graphene.String(required=True))
-    idea_columns = graphene.List(IdeaMessageColumn,
-                                 id=graphene.ID(required=True))
 
 
     def resolve_root_idea(self, args, context, info):
@@ -1009,15 +1005,6 @@ class Query(graphene.ObjectType):
         return [Locale(locale_code=locale_code, label=label)
                 for locale_code, label in sorted(labels.items(),
                                                  key=lambda entry: entry[1])]
-
-    def resolve_idea_columns(self, args, context, info):
-        idea_id = Node.from_global_id(args.get('id'))[1]
-        db = models.IdeaMessageColumn.default_db
-        query = db.query(models.IdeaMessageColumn).filter(
-            models.IdeaMessageColumn.idea_id == idea_id).\
-            order_by(models.IdeaMessageColumn.id)
-
-        return query
 
 
 class VideoInput(graphene.InputObjectType):
