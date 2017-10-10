@@ -10,6 +10,7 @@ import IdeaQuery from '../graphql/IdeaQuery.graphql';
 import IdeaWithPostsQuery from '../graphql/IdeaWithPostsQuery.graphql';
 import InfiniteSeparator from '../components/common/infiniteSeparator';
 import Post, { PostFolded } from '../components/debate/thread/post';
+import ColumnsPost from '../components/debate/columnsView/columnsPost';
 import GoUp from '../components/common/goUp';
 import Tree from '../components/common/tree';
 import Loader from '../components/common/loader';
@@ -17,7 +18,7 @@ import Permissions, { connectedUserCan } from '../utils/permissions';
 import { getConnectedUserId } from '../utils/globalFunctions';
 import Announcement from './../components/debate/thread/announcement';
 import TopPostFormContainer from '../components/debate/thread/topPostFormContainer';
-import TwoColumnsView from '../components/debate/twoColumns/twoColumnsView';
+import ColumnsView from '../components/debate/columnsView/columnsView';
 
 // MOCK
 
@@ -26,13 +27,10 @@ const ideaOnTwoColumns = true;
 const addMessageClassifier = (posts) => {
   const postsArray = [];
   posts.forEach((post, index) => {
-    const nodeWithClassifier = (id) => {
-      return { ...post.node, messageClassifier: id };
-    };
     if (index % 2 === 0) {
-      postsArray.push({ node: nodeWithClassifier('positive') });
+      postsArray.push({ ...post, messageClassifier: 'positive' });
     } else {
-      postsArray.push({ node: nodeWithClassifier('negative') });
+      postsArray.push({ ...post, messageClassifier: 'negative' });
     }
   });
   return postsArray;
@@ -187,7 +185,16 @@ class Idea extends React.Component {
                   />}
                 {ideaWithPostsData.idea &&
                   ideaOnTwoColumns &&
-                  <TwoColumnsView posts={addMessageClassifier(ideaWithPostsData.idea.posts.edges)} />}
+                  <ColumnsView
+                    contentLocaleMapping={contentLocaleMapping}
+                    lang={lang}
+                    data={addMessageClassifier(topPosts)}
+                    initialRowIndex={this.getInitialRowIndex(topPosts, ideaWithPostsData.idea.posts.edges)}
+                    InnerComponent={ColumnsPost}
+                    InnerComponentFolded={PostFolded}
+                    noRowsRenderer={noRowsRenderer}
+                    SeparatorComponent={InfiniteSeparator}
+                  />}
               </div>
             </div>
           </Grid>

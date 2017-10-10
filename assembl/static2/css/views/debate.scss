@@ -232,6 +232,24 @@
     vertical-align: top;
   }
 
+  .columns-view {
+    .infinite-separator {
+      border: none;
+      span {
+        display: none;
+      }
+    }
+
+    .top-post-form {
+      height: 450px;
+      max-height: 450px;
+    }
+    .DraftEditor-editorContainer {
+      height: 180px;
+      max-height: 180px;
+    }
+  }
+
   input {
       &[type='text'] {
           border: none;

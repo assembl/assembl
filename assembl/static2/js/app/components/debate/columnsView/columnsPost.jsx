@@ -5,13 +5,13 @@ import { Row, Col } from 'react-bootstrap';
 import Attachments from '../../common/attachments';
 import ProfileLine from '../../common/profileLine';
 import PostTranslate from '../common/translations/postTranslate';
-import PostActions from './postActions';
-import EditPostForm from './editPostForm';
-import DeletedPost from './deletedPost';
+import PostActions from '../thread/postActions';
+import EditPostForm from '../thread/editPostForm';
+import DeletedPost from '../thread/deletedPost';
 import PostQuery from '../../../graphql/PostQuery.graphql';
 import { DeletedPublicationStates, PublicationStates } from '../../../constants';
 import withLoadingIndicator from '../../../components/common/withLoadingIndicator';
-import { EmptyPost } from './post';
+import { EmptyPost } from '../thread/post';
 
 // TODO we need a graphql query to retrieve all languages with native translation, see Python langstrings.LocaleLabel
 // We only have french and english for en, fr, ja for now.
