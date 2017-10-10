@@ -91,19 +91,33 @@ if (__resourceQuery) {
   };
   // }
 } else {
-  Link = require('react-router').Link; // eslint-disable-line
+  // Link = require('react-router').Link; // eslint-disable-line
+  Link = (props) => {
+    return <a href={props.to} dangerouslySetInnerHTML={props.dangerouslySetInnerHTML} />;
+  };
+  const slug = document.getElementById('discussion-slug').value;
   getUrl = (hit) => {
     const id = hit._source.id;
+    let ideaBase64id;
+    let postBase64id;
+    let ideaId;
     switch (hit._type) {
     case 'synthesis':
-      return `posts/${id}`;
+      return undefined;
     case 'user':
-      return `profile/${id}`;
+      return undefined;
     case 'idea':
-      return `ideas/${id}`;
+      ideaBase64id = btoa(`Idea:${id}`);
+      return `/${slug}/debate/thread/theme/${ideaBase64id}`;
     default:
       // post
-      return `posts/${id}`;
+      ideaId = hit._source.idea_id.length > 0 ? hit._source.idea_id[0] : null;
+      if (!ideaId) {
+        return undefined;
+      }
+      ideaBase64id = btoa(`Idea:${ideaId}`);
+      postBase64id = btoa(`Post:${id}`);
+      return `/${slug}/debate/thread/theme/${ideaBase64id}/#${postBase64id}`;
     }
   };
 }
