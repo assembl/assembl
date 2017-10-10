@@ -79,9 +79,11 @@ class PostTranslate extends React.Component<void, PostTranslateProps, PostTransl
   };
 
   render() {
-    const { id, lang, originalLocale, translate } = this.props;
+    const { contentLocale, id, lang, originalLocale, translate } = this.props;
     const specialLocaleCodes = ['und', 'zxx']; // locale codes that can not be translated (unrecognized locales)
-    const showPostTranslate = originalLocale !== lang && specialLocaleCodes.indexOf(originalLocale) === -1;
+    // we need to display the component if the content was originaly in the language of the site but was previously translated:
+    const isInInterfaceLanguage = originalLocale === lang && originalLocale === contentLocale;
+    const showPostTranslate = !isInInterfaceLanguage && specialLocaleCodes.indexOf(originalLocale) === -1;
     if (!showPostTranslate) {
       return null;
     }
