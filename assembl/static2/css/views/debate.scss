@@ -237,6 +237,7 @@
 
     .infinite-separator {
       border: none;
+      margin: 40px auto;
       span {
         display: none;
       }
@@ -244,7 +245,7 @@
 
     .top-post-form {
       max-height: 450px;
-      width: 600px;
+      max-width: 600px;
       margin: $margin-section-m 0 0;
 
       .dark-title-3 {

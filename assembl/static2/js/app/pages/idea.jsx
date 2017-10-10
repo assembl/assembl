@@ -29,6 +29,8 @@ const addMessageClassifier = (posts) => {
   posts.forEach((post, index) => {
     if (index % 2 === 0) {
       postsArray.push({ ...post, messageClassifier: 'positive' });
+    } else if (index % 3 === 0) {
+      postsArray.push({ ...post, messageClassifier: 'neutral' });
     } else {
       postsArray.push({ ...post, messageClassifier: 'negative' });
     }

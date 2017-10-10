@@ -31,7 +31,7 @@ class ColumnsView extends React.Component {
     } = this.props;
     const columnsArray = this.orderPostsByMessageClassifier(data);
     return (
-      <Grid fluid className="background-grey">
+      <Grid fluid className="background-grey no-padding">
         <div className="max-container">
           <div className="columns-view">
             <Row>
