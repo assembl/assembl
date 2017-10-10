@@ -1,8 +1,12 @@
 language: python
-sudo: enabled
+sudo: required
+dist: trusty
 before_install:
  - sudo apt-get -qq update
  - sudo apt-get install -y fabric git openssh-server
+ - sudo add-apt-repository ppa:webupd8team/java -y
+ - sudo apt-get install -y oracle-java8-installer
+ - sudo apt-get install -y oracle-java8-set-default
  - fab -c configs/develop.rc install_single_server
  - fab -c configs/develop.rc bootstrap_from_checkout
 install: true
