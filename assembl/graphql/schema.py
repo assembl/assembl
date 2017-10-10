@@ -626,17 +626,15 @@ class IdeaMessageColumn(SecureObjectType, SQLAlchemyObjectType):
     def resolve_header(self, args, context, info):
         return resolve_langstring(self.header, args.get('lang'))
 
-    def chase_the_chain(self, count=0):
-        if not self.previous_column_id:
-            return count
-        else:
-            return self.chase_the_chain(self.previous_column, count + 1)
-
     def get_total_count(self):
         db = models.IdeaMessageColumn.default_db
         return db.query(models.IdeaMessageColumn.id).filter(
             models.IdeaMessageColumn.message_classifier == self.message_classifier,
             models.IdeaMessageColumn.idea_id == self.idea_id).count()
+
+    def resolve_index(self, args, context, info):
+        count = self.get_positional_index()
+        return count
 
 
 class Idea(SecureObjectType, SQLAlchemyObjectType):
