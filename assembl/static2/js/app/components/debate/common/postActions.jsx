@@ -122,8 +122,8 @@ class PostActions extends React.Component {
           />
           {this.state.screenWidth >= MEDIUM_SCREEN_WIDTH ? null : overflowMenu}
         </div>
-        {totalSentimentsCount > 0 &&
-          <OverlayTrigger overlay={getSentimentStats(totalSentimentsCount, sentimentCounts, mySentiment)} placement="right">
+        {totalSentimentsCount > 0
+          ? <OverlayTrigger overlay={getSentimentStats(totalSentimentsCount, sentimentCounts, mySentiment)} placement="right">
             <div className="sentiments-count margin-m">
               <div>
                 {sentimentDefinitions.reduce((result, sentiment) => {
@@ -143,7 +143,8 @@ class PostActions extends React.Component {
                   : <Translate value="debate.thread.numberOfReactions" count={totalSentimentsCount} />}
               </div>
             </div>
-          </OverlayTrigger>}
+          </OverlayTrigger>
+          : <div className="empty-sentiments-count" />}
         {this.state.screenWidth >= MEDIUM_SCREEN_WIDTH ? overflowMenu : null}
         <div className="answers annotation">
           <Translate value="debate.thread.numberOfResponses" count={numChildren ? numChildren.length : 0} />

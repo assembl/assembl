@@ -2,6 +2,7 @@ import React from 'react';
 import { Grid, Row, Col } from 'react-bootstrap';
 import { Translate } from 'react-redux-i18n';
 import TopPostForm from './topPostForm';
+import { hexToRgb } from '../../../utils/globalFunctions';
 
 class topPostFormContainer extends React.Component {
   getMessageColumns() {
@@ -30,7 +31,7 @@ class topPostFormContainer extends React.Component {
                     key={`${column.messageClassifier}-${index}`}
                     style={{ display: 'flex', justifyContent: 'center' }}
                   >
-                    <div className="top-post-form" style={{ backgroundColor: column.color }}>
+                    <div className="top-post-form" style={{ backgroundColor: `rgba(${hexToRgb(column.color)},0.2)` }}>
                       <Row>
                         <Col
                           xs={12}

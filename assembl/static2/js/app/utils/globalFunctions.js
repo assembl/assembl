@@ -136,3 +136,13 @@ export const hashLinkScroll = () => {
     }, 0);
   }
 };
+
+export const hexToRgb = (c) => {
+  const hex = c.replace(/[^0-9A-F]/gi, '');
+  const bigint = parseInt(hex, 16);
+  const r = (bigint >> 16) & 255; // eslint-disable-line
+  const g = (bigint >> 8) & 255; // eslint-disable-line
+  const b = bigint & 255; // eslint-disable-line
+
+  return [r, g, b].join();
+};
