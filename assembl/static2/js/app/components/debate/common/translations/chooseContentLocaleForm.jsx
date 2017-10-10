@@ -79,26 +79,30 @@ class ChooseContentLocaleForm extends React.Component<*, ChooseContentLocaleForm
         <Modal.Header closeButton />
         <Modal.Body>
           <FormGroup>
-            <Radio
-              checked={scope === 'global'}
-              title={translateAllLabel}
-              value="global"
-              onChange={() => {
-                return this.updateScope('global');
-              }}
-            >
-              {translateAllLabel}
-            </Radio>
-            <Radio
-              checked={scope === 'local'}
-              title={translateOneLabel}
-              value="local"
-              onChange={() => {
-                return this.updateScope('local');
-              }}
-            >
-              {translateOneLabel}
-            </Radio>
+            <FormGroup>
+              <Radio
+                checked={scope === 'global'}
+                title={translateAllLabel}
+                value="global"
+                onChange={() => {
+                  return this.updateScope('global');
+                }}
+              >
+                {translateAllLabel}
+              </Radio>
+            </FormGroup>
+            <FormGroup>
+              <Radio
+                checked={scope === 'local'}
+                title={translateOneLabel}
+                value="local"
+                onChange={() => {
+                  return this.updateScope('local');
+                }}
+              >
+                {translateOneLabel}
+              </Radio>
+            </FormGroup>
           </FormGroup>
           {scope
             ? <FormGroup>

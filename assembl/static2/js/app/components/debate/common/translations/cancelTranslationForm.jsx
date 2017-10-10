@@ -58,26 +58,30 @@ class CancelTranslationForm extends React.Component<*, CancelTranslationFormProp
         <Modal.Header closeButton />
         <Modal.Body>
           <FormGroup>
-            <Radio
-              checked={scope === 'global'}
-              title={untranslateAllLabel}
-              value="global"
-              onChange={() => {
-                return this.updateScope('global');
-              }}
-            >
-              {untranslateAllLabel}
-            </Radio>
-            <Radio
-              checked={scope === 'local'}
-              title={untranslateOneLabel}
-              value="local"
-              onChange={() => {
-                return this.updateScope('local');
-              }}
-            >
-              {untranslateOneLabel}
-            </Radio>
+            <FormGroup>
+              <Radio
+                checked={scope === 'global'}
+                title={untranslateAllLabel}
+                value="global"
+                onChange={() => {
+                  return this.updateScope('global');
+                }}
+              >
+                {untranslateAllLabel}
+              </Radio>
+            </FormGroup>
+            <FormGroup>
+              <Radio
+                checked={scope === 'local'}
+                title={untranslateOneLabel}
+                value="local"
+                onChange={() => {
+                  return this.updateScope('local');
+                }}
+              >
+                {untranslateOneLabel}
+              </Radio>
+            </FormGroup>
           </FormGroup>
         </Modal.Body>
         <Modal.Footer>
