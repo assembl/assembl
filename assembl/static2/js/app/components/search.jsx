@@ -402,7 +402,7 @@ export class SearchComponent extends React.Component {
   constructor(props) {
     super(props);
     const host = '/';
-    this.searchkit = new SearchkitManager(host, { searchOnLoad: false });
+    this.searchkit = new SearchkitManager(host, { searchOnLoad: false, useHistory: false });
     this.searchkit.setQueryProcessor((plainQueryObject) => {
       // rewrite the query to filter on the current discussion
       const modifiedQuery = plainQueryObject;
