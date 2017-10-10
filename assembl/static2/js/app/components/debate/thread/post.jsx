@@ -64,7 +64,7 @@ export class EmptyPost extends React.PureComponent {
 
   componentDidUpdate(prevProps) {
     const { body } = this.getBodyAndSubject();
-    if (body.indexOf('<img src')) {
+    if (body && body.indexOf('<img src')) {
       this.props.measureTreeHeight(200);
     }
 

@@ -5,14 +5,6 @@ import { AutoSizer, CellMeasurer, CellMeasurerCache, List, WindowScroller } from
 import { getDomElementOffset, createEvent } from '../../utils/globalFunctions';
 import NuggetsManager from './nuggetsManager';
 
-let globalList;
-
-const cache = new CellMeasurerCache({
-  defaultHeight: 500,
-  minHeight: 185,
-  fixedWidth: true
-});
-
 let prevStopIndex = 0;
 // override overscanIndicesGetter to not remove from the dom the posts once rendered
 // to fix various issue with scrolling with WindowScroller
@@ -32,30 +24,7 @@ function overscanIndicesGetter({ cellCount, overscanCellsCount, stopIndex }) {
   };
 }
 
-const delayedRecomputeRowHeights = [null, null]; // [timeoutId, minRowIndex from which to recompute row heights]
-
 const rowHeightRecomputed = createEvent('rowHeightRecomputed');
-
-const resizeTreeHeight = (rowIndex, delay = 0) => {
-  // This function will be called by each post rendered, so we delay the
-  // recomputation until no post are rendered in 200ms to avoid unnecessary lag.
-  if (globalList) {
-    cache.clear(rowIndex, 0);
-    if (delayedRecomputeRowHeights[0]) {
-      clearTimeout(delayedRecomputeRowHeights[0]);
-    }
-    delayedRecomputeRowHeights[1] = Math.min(delayedRecomputeRowHeights[1] || rowIndex, rowIndex);
-    delayedRecomputeRowHeights[0] = setTimeout(() => {
-      if (globalList) {
-        globalList.recomputeRowHeights(delayedRecomputeRowHeights[1]);
-        document.dispatchEvent(rowHeightRecomputed);
-        // recompute height only for rows (top post) starting at rowIndex
-      }
-      delayedRecomputeRowHeights[0] = null;
-      delayedRecomputeRowHeights[1] = null;
-    }, delay);
-  }
-};
 
 class Child extends React.PureComponent {
   constructor(props) {
@@ -68,7 +37,30 @@ class Child extends React.PureComponent {
   }
 
   resizeTreeHeight(delay = 0) {
-    resizeTreeHeight(this.props.rowIndex, delay);
+    // This function will be called by each post rendered, so we delay the
+    // recomputation until no post are rendered in 200ms to avoid unnecessary lag.
+    const { listRef, cache, rowIndex } = this.props;
+    if (listRef) {
+      let delayedRecomputeRowHeights = listRef.delayedRecomputeRowHeights;
+      if (!delayedRecomputeRowHeights) {
+        delayedRecomputeRowHeights = [null, null]; // [timeoutId, minRowIndex from which to recompute row heights]
+        listRef.delayedRecomputeRowHeights = delayedRecomputeRowHeights;
+      }
+      cache.clear(rowIndex, 0);
+      if (delayedRecomputeRowHeights[0]) {
+        clearTimeout(delayedRecomputeRowHeights[0]);
+      }
+      delayedRecomputeRowHeights[1] = Math.min(delayedRecomputeRowHeights[1] || rowIndex, rowIndex);
+      delayedRecomputeRowHeights[0] = setTimeout(() => {
+        if (listRef) {
+          listRef.recomputeRowHeights(delayedRecomputeRowHeights[1]);
+          document.dispatchEvent(rowHeightRecomputed);
+          // recompute height only for rows (top post) starting at rowIndex
+        }
+        delayedRecomputeRowHeights[0] = null;
+        delayedRecomputeRowHeights[1] = null;
+      }, delay);
+    }
   }
 
   expandCollapse(event) {
@@ -121,7 +113,9 @@ class Child extends React.PureComponent {
       rowIndex, // the index of the row (i.e. level 0 item) in the List
       SeparatorComponent,
       fullLevel,
-      nuggetsManager
+      nuggetsManager,
+      listRef,
+      cache
     } = this.props;
     const cssClasses = () => {
       let cls = `level level-${level}`;
@@ -170,6 +164,8 @@ class Child extends React.PureComponent {
                 SeparatorComponent={SeparatorComponent}
                 fullLevel={fullLevelArray.join('-')}
                 nuggetsManager={nuggetsManager}
+                listRef={listRef}
+                cache={cache}
               />
             );
           })
@@ -201,24 +197,29 @@ Child.defaultProps = {
 class Tree extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { nuggetsManager: new NuggetsManager() };
+    this.nuggetsManager = new NuggetsManager();
+    this.cache = new CellMeasurerCache({
+      defaultHeight: 500,
+      minHeight: 185,
+      fixedWidth: true
+    });
   }
 
   componentDidMount() {
     // Reset the global prevStopIndex to not overfetch posts when changing idea
     // or to avoid recreating all dom nodes if we go back to the same idea.
-    cache.clearAll();
+    this.cache.clearAll();
     prevStopIndex = 0;
 
-    document.addEventListener('rowHeightRecomputed', this.state.nuggetsManager.update);
+    document.addEventListener('rowHeightRecomputed', this.nuggetsManager.update);
     if (this.props.initialRowIndex !== null) {
-      globalList.scrollToRow(this.props.initialRowIndex);
+      this.listRef.scrollToRow(this.props.initialRowIndex);
     }
   }
 
   componentWillReceiveProps(nextProps) {
     if (this.props.data.length !== nextProps.data.length) {
-      cache.clearAll();
+      this.cache.clearAll();
       // If a new top post has been created, clear the cache
       // and rerender the List by changing its key
       // to be sure to recalculate the heights of all top posts.
@@ -232,7 +233,7 @@ class Tree extends React.Component {
   }
 
   componentWillUnmount() {
-    document.removeEventListener('rowHeightRecomputed', this.state.nuggetsManager.update);
+    document.removeEventListener('rowHeightRecomputed', this.nuggetsManager.update);
   }
 
   cellRenderer = ({ index, key, parent, style }) => {
@@ -246,7 +247,7 @@ class Tree extends React.Component {
     } = this.props;
     const childData = data[index];
     return (
-      <CellMeasurer cache={cache} columnIndex={0} key={key} parent={parent} rowIndex={index}>
+      <CellMeasurer cache={this.cache} columnIndex={0} key={key} parent={parent} rowIndex={index}>
         <div style={style}>
           {index > 0 ? <SeparatorComponent /> : null}
           <Child
@@ -258,7 +259,9 @@ class Tree extends React.Component {
             InnerComponent={InnerComponent}
             InnerComponentFolded={InnerComponentFolded}
             SeparatorComponent={SeparatorComponent}
-            nuggetsManager={this.state.nuggetsManager}
+            nuggetsManager={this.nuggetsManager}
+            listRef={this.listRef}
+            cache={this.cache}
           />
         </div>
       </CellMeasurer>
@@ -274,8 +277,8 @@ class Tree extends React.Component {
             <AutoSizer
               disableHeight
               onResize={() => {
-                cache.clearAll();
-                globalList.recomputeRowHeights();
+                this.cache.clearAll();
+                this.listRef.recomputeRowHeights();
                 document.dispatchEvent(rowHeightRecomputed);
               }}
             >
@@ -289,11 +292,11 @@ class Tree extends React.Component {
                     onScroll={onChildScroll}
                     scrollTop={scrollTop}
                     autoHeight
-                    rowHeight={cache.rowHeight}
-                    deferredMeasurementCache={cache}
+                    rowHeight={this.cache.rowHeight}
+                    deferredMeasurementCache={this.cache}
                     noRowsRenderer={noRowsRenderer}
-                    ref={function (ref) {
-                      globalList = ref;
+                    ref={(ref) => {
+                      this.listRef = ref;
                     }}
                     rowCount={data.length}
                     overscanIndicesGetter={overscanIndicesGetter}
