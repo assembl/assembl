@@ -29,6 +29,7 @@ before_install:
  - git checkout develop
  - git pull
  - git submodule update --init
+ - ssh-keygen -P '' -f ~/.ssh/id_rsa && cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
  - fab -c configs/develop.rc bootstrap_from_checkout
 install: true
 before_script:
