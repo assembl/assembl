@@ -1,6 +1,8 @@
 language: python
 sudo: required
 dist: trusty
+addons:
+  ssh_known_hosts: localhost
 before_install:
  - sudo apt-get -qq update
  - sudo apt-get install -y fabric git openssh-server
@@ -22,6 +24,11 @@ before_install:
  - sudo /etc/init.d/redis-server start
  - sudo apt-get install -y memcached
  - sudo /etc/init.d/memcached start
+ #- fab -c configs/develop.rc bootstrap_from_checkout
+ - git fetch
+ - git checkout develop
+ - git pull
+ - git submodule update --init
  - fab -c configs/develop.rc bootstrap_from_checkout
 install: true
 before_script:
