@@ -89,7 +89,7 @@ def reindex_content(content, action='update'):
         changes.index_content(content)
     elif isinstance(content, AgentStatusInDiscussion):
         reindex_content(content.agent_profile)
-    elif isinstance(content, Idea):
+    elif type(content) == Idea:  # only index Idea, not Thematic or Question
         if (not content.hidden and content.tombstone_date is None):
             changes.index_content(content)
         else:

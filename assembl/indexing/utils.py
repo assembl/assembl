@@ -78,7 +78,7 @@ def get_data(content):
     """Return uid, dict of fields we want to index,
     return None if we don't index."""
     from assembl.models import Idea, Post, SynthesisPost, AgentProfile, LangString
-    if isinstance(content, Idea):
+    if type(content) == Idea:  # only index Idea, not Thematic or Question
         data = {}
         for attr in ('creation_date', 'id', 'discussion_id'):
             data[attr] = getattr(content, attr)
@@ -111,6 +111,10 @@ def get_data(content):
         return get_uid(content), data
 
     elif isinstance(content, Post):
+        # don't index proposition posts
+        if content.type == 'proposition_post':
+            return None, None
+
         data = {}
         data['_parent'] = 'user:{}'.format(content.creator_id)
         if content.parent_id is not None:
