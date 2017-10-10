@@ -1510,7 +1510,7 @@ query {
 }""" % (idea_id), context_value=graphql_request)
     assert json.loads(json.dumps(res.data)) == {
         u'ideaColumns': [
-            {u'messageClassifier': u'negative'},
-            {u'messageClassifier': u'positive'}
+            {u'messageClassifier': u'positive'},
+            {u'messageClassifier': u'negative'}
         ]
     }
