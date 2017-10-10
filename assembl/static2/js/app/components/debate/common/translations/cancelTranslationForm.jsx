@@ -58,33 +58,37 @@ class CancelTranslationForm extends React.Component<*, CancelTranslationFormProp
         <Modal.Header closeButton />
         <Modal.Body>
           <FormGroup>
-            <Radio
-              checked={scope === 'global'}
-              title={untranslateAllLabel}
-              value="global"
-              onChange={() => {
-                return this.updateScope('global');
-              }}
-            >
-              {untranslateAllLabel}
-            </Radio>
-            <Radio
-              checked={scope === 'local'}
-              title={untranslateOneLabel}
-              value="local"
-              onChange={() => {
-                return this.updateScope('local');
-              }}
-            >
-              {untranslateOneLabel}
-            </Radio>
+            <FormGroup>
+              <Radio
+                checked={scope === 'global'}
+                title={untranslateAllLabel}
+                value="global"
+                onChange={() => {
+                  return this.updateScope('global');
+                }}
+              >
+                {untranslateAllLabel}
+              </Radio>
+            </FormGroup>
+            <FormGroup>
+              <Radio
+                checked={scope === 'local'}
+                title={untranslateOneLabel}
+                value="local"
+                onChange={() => {
+                  return this.updateScope('local');
+                }}
+              >
+                {untranslateOneLabel}
+              </Radio>
+            </FormGroup>
           </FormGroup>
         </Modal.Body>
         <Modal.Footer>
-          <Button key="translate-cancel" onClick={closeModal} className="button-cancel button-dark">
+          <Button key="translate-cancel" onClick={closeModal} className="button-cancel button-dark left">
             <Translate value="cancel" />
-          </Button>,
-          <Button key="translate-submit" onClick={this.handleSubmit} className="button-submit button-dark">
+          </Button>
+          <Button key="translate-submit" onClick={this.handleSubmit} className="button-submit button-dark right">
             <Translate value="validate" />
           </Button>
         </Modal.Footer>

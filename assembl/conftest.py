@@ -21,6 +21,7 @@ from assembl.tests.fixtures.posts import *
 from assembl.tests.fixtures.preferences import *
 from assembl.tests.fixtures.user import *
 from assembl.tests.fixtures.user_language_preference import *
+from assembl.tests.fixtures.idea_message_columns import *
 
 
 engine = None

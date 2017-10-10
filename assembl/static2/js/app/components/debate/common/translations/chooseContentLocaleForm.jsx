@@ -79,26 +79,30 @@ class ChooseContentLocaleForm extends React.Component<*, ChooseContentLocaleForm
         <Modal.Header closeButton />
         <Modal.Body>
           <FormGroup>
-            <Radio
-              checked={scope === 'global'}
-              title={translateAllLabel}
-              value="global"
-              onChange={() => {
-                return this.updateScope('global');
-              }}
-            >
-              {translateAllLabel}
-            </Radio>
-            <Radio
-              checked={scope === 'local'}
-              title={translateOneLabel}
-              value="local"
-              onChange={() => {
-                return this.updateScope('local');
-              }}
-            >
-              {translateOneLabel}
-            </Radio>
+            <FormGroup>
+              <Radio
+                checked={scope === 'global'}
+                title={translateAllLabel}
+                value="global"
+                onChange={() => {
+                  return this.updateScope('global');
+                }}
+              >
+                {translateAllLabel}
+              </Radio>
+            </FormGroup>
+            <FormGroup>
+              <Radio
+                checked={scope === 'local'}
+                title={translateOneLabel}
+                value="local"
+                onChange={() => {
+                  return this.updateScope('local');
+                }}
+              >
+                {translateOneLabel}
+              </Radio>
+            </FormGroup>
           </FormGroup>
           {scope
             ? <FormGroup>
@@ -127,14 +131,14 @@ class ChooseContentLocaleForm extends React.Component<*, ChooseContentLocaleForm
             : null}
         </Modal.Body>
         <Modal.Footer>
-          <Button key="translate-cancel" onClick={closeModal} className="button-cancel button-dark">
+          <Button key="translate-cancel" onClick={closeModal} className="button-cancel button-dark left">
             <Translate value="cancel" />
-          </Button>,
+          </Button>
           <Button
             key="translate-submit"
             disabled={selectedLocale === 'select' || !scope}
             onClick={this.handleSubmit}
-            className="button-submit button-dark"
+            className="button-submit button-dark right"
           >
             <Translate value="validate" />
           </Button>

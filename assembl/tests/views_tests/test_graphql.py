@@ -1459,3 +1459,89 @@ mutation myMutation($languages: [String]!) {
             "languages": []
             })
     assert res.errors is not None
+
+
+def test_query_post_message_classifier(graphql_request,
+                                       root_post_1_with_positive_message_classifier):
+    post_id = to_global_id('Post',
+                           root_post_1_with_positive_message_classifier.id)
+    res = schema.execute(u"""query {
+        node(id:"%s") {
+            ... on Post {
+                messageClassifier
+            }
+        }
+    }""" % (post_id), context_value=graphql_request)
+    assert json.loads(json.dumps(res.data)) == {
+        u"node": {
+            u"messageClassifier": u'positive'
+        }
+    }
+
+
+def test_query_post_no_message_classifier(graphql_request,
+                                          idea_message_column_positive,
+                                          root_post_1):
+    post_id = to_global_id('Post', root_post_1.id)
+    res = schema.execute(u"""query {
+        node(id:"%s") {
+            ... on Post {
+                messageClassifier
+            }
+        }
+    }""" % (post_id), context_value=graphql_request)
+    assert json.loads(json.dumps(res.data)) == {
+        u"node": {
+            u"messageClassifier": None
+        }
+    }
+
+
+def test_query_number_of_posts_on_column(
+        graphql_request, idea_message_column_positive,
+        root_post_en_under_positive_column_of_idea):
+
+    idea_id = to_global_id('Idea', idea_message_column_positive.idea_id)
+    res = schema.execute(u"""
+query {
+    idea: node(id:"%s") {
+        ... on Idea {
+            id
+            messageColumns {
+                messageClassifier
+                numPosts
+            }
+        }
+    }
+}""" % (idea_id), context_value=graphql_request)
+    res_data = json.loads(json.dumps(res.data))
+    assert res_data[u'idea'][u'messageColumns'][0][u'numPosts'] == 1
+
+
+def test_query_number_of_posts_on_multiple_columns(
+        graphql_request,
+        idea_message_column_positive,
+        idea_message_column_negative,
+        root_post_en_under_positive_column_of_idea,
+        root_post_en_under_negative_column_of_idea):
+
+    idea_id = to_global_id('Idea', idea_message_column_positive.idea_id)
+    res = schema.execute(u"""
+query {
+    idea: node(id:"%s") {
+        ... on Idea {
+            id
+            messageColumns {
+                messageClassifier
+                numPosts
+            }
+        }
+    }
+}""" % (idea_id), context_value=graphql_request)
+    res_data = json.loads(json.dumps(res.data))
+    columns = res_data[u'idea'][u'messageColumns']
+    assert len(columns) == 2
+    positive = filter(lambda c: c[u"messageClassifier"] == idea_message_column_positive.message_classifier, columns)[0]
+    negative = filter(lambda c: c[u"messageClassifier"] == idea_message_column_negative.message_classifier, columns)[0]
+    assert positive[u"numPosts"] == 1
+    assert negative[u"numPosts"] == 1

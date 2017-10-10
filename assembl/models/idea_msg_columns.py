@@ -71,6 +71,15 @@ class IdeaMessageColumn(DiscussionBoundBase):
         idea = self.idea or Idea.get(self.idea_id)
         return idea.get_discussion_id()
 
+    def get_positional_index(self):
+        def rec(node, count):
+            if not node.previous_column:
+                return count
+            else:
+                return rec(node.previous_column, count + 1)
+
+        return rec(self, 0)
+
     @classmethod
     def get_discussion_conditions(cls, discussion_id, alias_maker=None):
         if alias_maker is None:

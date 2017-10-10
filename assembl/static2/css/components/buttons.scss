@@ -8,7 +8,7 @@
   z-index: 0;
   transition: color 0.2s ease-in;
 
-  &:hover, &:focus, &:active, &:focus:active, &:active:hover {
+  &:hover, &:focus, &:active, &:focus:active, &:active:hover, &[disabled]:hover {
     color: invert($text-color); /* opposite of current non-hover color */
     border-color: $border-color;
     background-color: $background-color;
@@ -88,5 +88,10 @@
   &:active, &:hover, &:focus, &:visited {
     text-decoration: none;
     outline: none;
+  }
+
+  &[disabled] {
+    box-shadow: unset;
+    opacity: inherit;
   }
 }

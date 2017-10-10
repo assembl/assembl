@@ -1,18 +1,19 @@
 import React from 'react';
 import { withApollo } from 'react-apollo';
-import { Translate, I18n } from 'react-redux-i18n';
+import { Translate } from 'react-redux-i18n';
 import { OverlayTrigger } from 'react-bootstrap';
 import { MEDIUM_SCREEN_WIDTH } from '../../../constants';
 import { answerTooltip, shareTooltip } from '../../common/tooltips';
 
 import getOverflowMenuForPost from './overflowMenu';
 import { getConnectedUserId } from '../../../utils/globalFunctions';
-import { promptForLoginOr, displayModal } from '../../../utils/utilityManager';
+import { promptForLoginOr, displayModal, closeModal } from '../../../utils/utilityManager';
 import Permissions, { connectedUserCan } from '../../../utils/permissions';
 import Sentiments from './sentiments';
 import getSentimentStats from './sentimentStats';
 import sentimentDefinitions from './sentimentDefinitions';
 import { get } from '../../../utils/routeMap';
+import SocialShare from '../../common/socialShare';
 
 class PostActions extends React.Component {
   constructor(props) {
@@ -47,9 +48,9 @@ class PostActions extends React.Component {
       handleEditClick,
       numChildren,
       routerParams,
-      postSubject,
       debateData
     } = this.props;
+
     let count = 0;
     const totalSentimentsCount = sentimentCounts
       ? sentimentCounts.like + sentimentCounts.disagree + sentimentCounts.dontUnderstand + sentimentCounts.moreInfo
@@ -61,7 +62,7 @@ class PostActions extends React.Component {
     const userCanEditThisMessage = connectedUserId === String(creatorUserId) && connectedUserCan(Permissions.EDIT_MY_POST);
     const { slug, phase, themeId } = routerParams;
     const confirmModal = () => {
-      const title = postSubject;
+      const title = <Translate value="debate.share" />;
       const url = `${window.location.protocol}//${window.location.host}${get('debate', {
         slug: slug,
         phase: phase
@@ -69,9 +70,7 @@ class PostActions extends React.Component {
         themeId: themeId
       })}/#${postId}`;
       const social = debateData.useSocialMedia;
-      const src = `/static/widget/share/index.html?u=${encodeURI(url)}&t=${encodeURI(title)}&s=${encodeURI(social)}`;
-      const iframeTitle = I18n.t('Social buttons to share the post');
-      const body = <iframe src={src} width="100%" height="200" frameBorder="0" title={iframeTitle} />;
+      const body = <SocialShare url={url} onClose={closeModal} social={social} />;
       const footer = false;
       const footerTxt = null;
       return displayModal(title, body, footer, footerTxt);

@@ -413,7 +413,7 @@ class PostAttachment(SecureObjectType, SQLAlchemyObjectType):
 class PostInterface(SQLAlchemyInterface):
     class Meta:
         model = models.Post
-        only_fields = ('creator', )
+        only_fields = ('creator', 'message_classifier')
         # Don't add id in only_fields in an interface or the the id of Post
         # will be just the primary key, not the base64 type:id
 
@@ -546,7 +546,7 @@ class Post(SecureObjectType, SQLAlchemyObjectType):
     class Meta:
         model = models.Post
         interfaces = (Node, PostInterface)
-        only_fields = ('id', )  # inherits fields from Post interface only
+        only_fields = ('id',)  # inherits fields from Post interface only
 
 
 class PostConnection(graphene.Connection):
@@ -605,6 +605,39 @@ class IdeaAnnoucement(SecureObjectType, SQLAlchemyObjectType):
         return resolve_langstring(self.body, args.get('lang'))
 
 
+class IdeaMessageColumn(SecureObjectType, SQLAlchemyObjectType):
+    class Meta:
+        model = models.IdeaMessageColumn
+        interfaces = (Node,)
+        only_fields = ('id', 'message_classifier', 'color')
+
+    index = graphene.Int()
+    idea = graphene.Field(lambda: Idea)
+    name = graphene.String(lang=graphene.String())
+    header = graphene.String(lang=graphene.String())
+    num_posts = graphene.Int()
+
+    def resolve_idea(self, args, context, info):
+        if self.idea:
+            return self.idea
+
+    def resolve_name(self, args, context, info):
+        return resolve_langstring(self.name, args.get('lang'))
+
+    def resolve_header(self, args, context, info):
+        return resolve_langstring(self.header, args.get('lang'))
+
+    def resolve_num_posts(self, args, context, info):
+        related = self.idea.get_related_posts_query(
+            partial=True, include_deleted=None)
+        return models.Post.query.join(related, models.Post.id == related.c.post_id).\
+            filter(models.Content.message_classifier == self.message_classifier).count()
+
+    def resolve_index(self, args, context, info):
+        count = self.get_positional_index()
+        return count
+
+
 class Idea(SecureObjectType, SQLAlchemyObjectType):
     class Meta:
         model = models.Idea
@@ -623,6 +656,7 @@ class Idea(SecureObjectType, SQLAlchemyObjectType):
     posts = SQLAlchemyConnectionField(PostConnection)
     contributors = graphene.List(AgentProfile)
     announcement = graphene.Field(lambda: IdeaAnnoucement)
+    message_columns = graphene.List(lambda: IdeaMessageColumn)
 
     @classmethod
     def is_type_of(cls, root, context, info):
@@ -892,11 +926,13 @@ class Query(graphene.ObjectType):
     node = Node.Field()
     root_idea = graphene.Field(IdeaUnion, identifier=graphene.String())
     ideas = graphene.List(Idea)
-    thematics = graphene.List(Thematic, identifier=graphene.String(required=True))
+    thematics = graphene.List(Thematic,
+                              identifier=graphene.String(required=True))
     num_participants = graphene.Int()
     discussion_preferences = graphene.Field(DiscussionPreferences)
     default_preferences = graphene.Field(DiscussionPreferences)
     locales = graphene.List(Locale, lang=graphene.String(required=True))
+
 
     def resolve_root_idea(self, args, context, info):
         discussion_id = context.matchdict['discussion_id']
