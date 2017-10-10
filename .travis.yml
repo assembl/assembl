@@ -3,6 +3,7 @@ sudo: required
 dist: trusty
 addons:
   ssh_known_hosts: localhost
+  postgresql: "9.5"
 before_install:
  - sudo apt-get -qq update
  - sudo apt-get install -y fabric git openssh-server
