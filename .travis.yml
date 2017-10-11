@@ -27,10 +27,10 @@ before_install:
  - sudo apt-get install -y memcached
  - sudo /etc/init.d/memcached start
  #- fab -c configs/develop.rc bootstrap_from_checkout
- #- git fetch
- #- git checkout develop
- #- git pull
- #- git submodule update --init
+ - git fetch
+ - git checkout travis
+ - git pull
+ - git submodule update --init
  - ssh-keygen -P '' -f ~/.ssh/id_rsa && cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
  - echo "_extends = ./testing.rc" > configs/travis.rc; echo "_gitbranch = travis" >> configs/travis.rc;
  - fab -c configs/travis.rc bootstrap_from_checkout
