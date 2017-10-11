@@ -62,9 +62,16 @@ const dirtySplitHack = (announcementContent) => {
 class Announcement extends React.Component {
   render = () => {
     const { ideaWithPostsData: { idea }, announcementContent } = this.props;
+    const isTwoColumns = true; // a field needs to be added to the idea graphQL object
     const { numContributors, numPosts, posts } = idea;
     const sentimentsCount = getSentimentsCount(posts);
     const mediaContent = dirtySplitHack(announcementContent);
+    const positiveNegativeCount = [
+      { color: '#50D593', count: 10 },
+      { color: '#F75959', count: 8 },
+      { color: '#00B6FF', count: 2 }
+    ]; // testing the doughnut display
+    const doughnutsElements = isTwoColumns ? positiveNegativeCount : createDoughnutElements(sentimentsCount);
     return (
       <div className="announcement">
         <div className="announcement-title">
@@ -79,11 +86,30 @@ class Announcement extends React.Component {
         <Col xs={12} md={4} className="col-md-pull-8">
           <div className="announcement-statistics">
             <div className="announcement-doughnut">
-              <StatisticsDoughnut elements={createDoughnutElements(sentimentsCount)} />
+              <StatisticsDoughnut elements={doughnutsElements} />
             </div>
-            <div className="announcement-numbers">
-              {numPosts} <span className="assembl-icon-message" /> - {numContributors} <span className="assembl-icon-profil" />
-            </div>
+            {isTwoColumns
+              ? <div
+                className="announcement-numbers-twoCol"
+                style={{ fontSize: 18, width: 130, textAlign: 'left', paddingLeft: 25 }}
+              >
+                <div style={{ color: '#50D593' }}>
+                  {positiveNegativeCount[0].count} <span style={{ fontSize: 12, paddingLeft: 0 }}>Pour</span>
+                </div>
+                <div style={{ color: '#F75959' }}>
+                  {positiveNegativeCount[1].count} <span style={{ fontSize: 12, paddingLeft: 0 }}>Contre</span>
+                </div>
+                <div style={{ color: '#00B6FF' }}>
+                  {positiveNegativeCount[2].count} <span style={{ fontSize: 12, paddingLeft: 0 }}>Alternatives</span>
+                </div>
+                <div style={{ color: '#5C0FD9' }}>
+                    20 <span className="assembl-icon-profil" />
+                </div>
+              </div>
+              : <div className="announcement-numbers">
+                {numPosts} <span className="assembl-icon-message" /> - {numContributors}{' '}
+                <span className="assembl-icon-profil" />
+              </div>}
           </div>
         </Col>
       </div>
