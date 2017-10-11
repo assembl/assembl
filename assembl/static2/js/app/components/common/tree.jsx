@@ -40,19 +40,20 @@ class Child extends React.PureComponent {
     // This function will be called by each post rendered, so we delay the
     // recomputation until no post are rendered in 200ms to avoid unnecessary lag.
     const { listRef, cache, rowIndex } = this.props;
+    cache.clear(rowIndex, 0);
     if (listRef) {
       let delayedRecomputeRowHeights = listRef.delayedRecomputeRowHeights;
       if (!delayedRecomputeRowHeights) {
         delayedRecomputeRowHeights = [null, null]; // [timeoutId, minRowIndex from which to recompute row heights]
         listRef.delayedRecomputeRowHeights = delayedRecomputeRowHeights;
       }
-      cache.clear(rowIndex, 0);
       if (delayedRecomputeRowHeights[0]) {
         clearTimeout(delayedRecomputeRowHeights[0]);
       }
       delayedRecomputeRowHeights[1] = Math.min(delayedRecomputeRowHeights[1] || rowIndex, rowIndex);
       delayedRecomputeRowHeights[0] = setTimeout(() => {
-        if (listRef) {
+        // if listRef.Grid is null, it means it has been unmounted, so we are now on a new List
+        if (listRef.Grid) {
           listRef.recomputeRowHeights(delayedRecomputeRowHeights[1]);
           document.dispatchEvent(rowHeightRecomputed);
           // recompute height only for rows (top post) starting at rowIndex
