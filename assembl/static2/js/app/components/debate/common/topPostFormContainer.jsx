@@ -1,10 +1,25 @@
 import React from 'react';
 import { Grid, Row, Col } from 'react-bootstrap';
 import { Translate } from 'react-redux-i18n';
+import classNames from 'classnames';
 import TopPostForm from './topPostForm';
 import { hexToRgb } from '../../../utils/globalFunctions';
+import { MIN_WIDTH_COLUMN } from '../../../constants';
 
 class topPostFormContainer extends React.Component {
+  isColumnViewInline() {
+    const { messageColumns } = this.props;
+    const screenWidth = window.innerWidth;
+    const columnSize = screenWidth / messageColumns.length;
+    if (columnSize < MIN_WIDTH_COLUMN) {
+      return true;
+    }
+    return false;
+  }
+  getClassNames() {
+    const { messageColumns } = this.props;
+    return classNames({ 'columns-view': messageColumns.length > 0 }, { 'columns-view-inline': this.isColumnViewInline() });
+  }
   getMessageColumns() {
     const { messageColumns } = this.props;
     let ideaOnColumns = [];
@@ -22,14 +37,15 @@ class topPostFormContainer extends React.Component {
       <Grid fluid className={messageColumns.length > 0 ? '' : 'background-color'}>
         <div className="max-container">
           <Row>
-            <div className={messageColumns.length > 0 ? 'columns-view' : ''}>
+            <div className={this.getClassNames()}>
               {ideaOnColumns.map((column, index) => {
                 return (
                   <Col
                     xs={12}
                     md={12 / ideaOnColumns.length}
                     key={`${column.messageClassifier}-${index}`}
-                    style={{ display: 'flex', justifyContent: 'center' }}
+                    className={messageColumns.length > 0 ? 'top-post-form-inline' : ''}
+                    style={this.isColumnViewInline() ? { width: MIN_WIDTH_COLUMN } : {}}
                   >
                     <div className="top-post-form" style={{ backgroundColor: `rgba(${hexToRgb(column.color)},0.2)` }}>
                       <Row>

@@ -232,13 +232,18 @@
     vertical-align: top;
   }
 
+  .columns-view-inline {
+    display: flex;
+    float: left;
+  }
+
+  .top-post-form-inline {
+    display: flex;
+    justify-content: center;
+  }
+
   .columns-view {
     margin-top: -20px;
-
-    .columns-view-inline {
-      display: flex;
-      float: left;
-    }
 
     .infinite-separator {
       border: none;
