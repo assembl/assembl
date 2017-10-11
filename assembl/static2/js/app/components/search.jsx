@@ -407,10 +407,10 @@ const queryFields = calcQueryFields();
 // https://www.elastic.co/guide/en/elasticsearch/reference/current/search-request-highlighting.html#_highlighted_fragments
 const customHighlight = {
   fields: {
-    body: { fragment_size: FRAGMENT_SIZE, number_of_fragments: 1 }
+    body_other: { fragment_size: FRAGMENT_SIZE, number_of_fragments: 1 }
   }
 };
-// setting it for body field seems to apply the setting to all queryFields
+// setting it for body_other field seems to apply the setting to all queryFields
 
 export class SearchComponent extends React.Component {
   constructor(props) {
