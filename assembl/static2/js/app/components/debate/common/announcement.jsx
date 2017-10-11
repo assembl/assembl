@@ -60,18 +60,29 @@ const dirtySplitHack = (announcementContent) => {
 };
 
 class Announcement extends React.Component {
+  getColumnInfos(messageColumns, posts) {
+    const columnsArray = [];
+    messageColumns.forEach((col) => {
+      const keyName = col.messageClassifier;
+      let count = 0;
+      posts.forEach((post) => {
+        if (post.node.messageClassifier === keyName) {
+          count += 1;
+        }
+      });
+      columnsArray.push({ count: count, color: col.color, name: col.name });
+    });
+
+    return columnsArray;
+  }
   render = () => {
     const { ideaWithPostsData: { idea }, announcementContent } = this.props;
-    const isTwoColumns = true; // a field needs to be added to the idea graphQL object
+    const isTwoColumns = idea.messageColumns.length > 0;
     const { numContributors, numPosts, posts } = idea;
     const sentimentsCount = getSentimentsCount(posts);
     const mediaContent = dirtySplitHack(announcementContent);
-    const positiveNegativeCount = [
-      { color: '#50D593', count: 10 },
-      { color: '#F75959', count: 8 },
-      { color: '#00B6FF', count: 2 }
-    ]; // testing the doughnut display
-    const doughnutsElements = isTwoColumns ? positiveNegativeCount : createDoughnutElements(sentimentsCount);
+    const columnInfos = this.getColumnInfos(idea.messageColumns, posts.edges);
+    const doughnutsElements = isTwoColumns ? columnInfos : createDoughnutElements(sentimentsCount);
     return (
       <div className="announcement">
         <div className="announcement-title">
@@ -93,17 +104,15 @@ class Announcement extends React.Component {
                 className="announcement-numbers-twoCol"
                 style={{ fontSize: 18, width: 130, textAlign: 'left', paddingLeft: 25 }}
               >
-                <div style={{ color: '#50D593' }}>
-                  {positiveNegativeCount[0].count} <span style={{ fontSize: 12, paddingLeft: 0 }}>Pour</span>
-                </div>
-                <div style={{ color: '#F75959' }}>
-                  {positiveNegativeCount[1].count} <span style={{ fontSize: 12, paddingLeft: 0 }}>Contre</span>
-                </div>
-                <div style={{ color: '#00B6FF' }}>
-                  {positiveNegativeCount[2].count} <span style={{ fontSize: 12, paddingLeft: 0 }}>Alternatives</span>
-                </div>
+                {columnInfos.map((col, index) => {
+                  return (
+                    <div style={{ color: col.color }} key={`col-${index}`}>
+                      {col.count} <span style={{ fontSize: 12, paddingLeft: 0 }}>{col.name}</span>
+                    </div>
+                  );
+                })}
                 <div style={{ color: '#5C0FD9' }}>
-                    20 <span className="assembl-icon-profil" />
+                  {numContributors} <span className="assembl-icon-profil" />
                 </div>
               </div>
               : <div className="announcement-numbers">
