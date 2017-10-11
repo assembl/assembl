@@ -485,7 +485,7 @@ const Translations = {
     },
     common: {
       attachFileForm: {
-        label: "Add a attachment",
+        label: "Add an attachment",
         submit: "Submit"
       },
       attachments: {

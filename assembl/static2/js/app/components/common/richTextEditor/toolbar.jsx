@@ -164,9 +164,12 @@ class Toolbar extends React.Component<void, ToolbarProps, ToolbarState> {
           : null}
 
         {showAttachFileForm
-          ? <div className="insertion-box box">
-            <span className="assembl-icon-cancel" onClick={this.closeInsertionBox} />
-            <AttachFileForm onSubmit={this.onAttachFileFormSubmit} />
+          ? <div>
+            <div className="modal-backdrop fade in" />
+            <div className="insertion-box box">
+              <span className="assembl-icon-cancel" onClick={this.closeInsertionBox} />
+              <AttachFileForm onSubmit={this.onAttachFileFormSubmit} />
+            </div>
           </div>
           : null}
       </div>

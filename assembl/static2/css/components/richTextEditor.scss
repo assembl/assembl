@@ -43,23 +43,58 @@
 .rich-text-editor {
   font-family: $font-family;
   margin-top: 16px;
+  position: relative;
 
   .insertion-box {
     .assembl-icon-cancel {
       float: right;
+      cursor: pointer;
     }
 
     .attach-file {
       label {
-        margin-bottom: 20px;
+        position: absolute;
+        left: 50%;
+        top: 14%;
+        transform: translate(-50%);
+        font-size: $font-size-sm;
       }
     }
 
-    min-height: 200px;
+    .btn-default {
+      position: absolute;
+      left: 50%;
+      top: 35%;
+      transform: translate(-50%);
+    }
+
+    .button-submit {
+      position: absolute;
+      left: 50%;
+      top: 70%;
+      transform: translate(-50%);
+    }
+
+    .preview-title {
+      position: absolute;
+      width: 60%;
+      text-align: center;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%);
+      font-size: $font-size-xxs;
+    }
+
+    min-height: 250px;
     position: absolute;
-    width: 100%;
-    margin-top: 10px;
-    z-index: 1000;
+    left: 50%;
+    transform: translate(-50%);
+    bottom: 0;
+    width: 80%;
+    z-index: 1040;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-radius: 5px;
+    box-shadow: 1px 1px 1px 0px #656565;
   }
 
   .editor-header {
