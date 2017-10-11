@@ -138,6 +138,7 @@ export const hashLinkScroll = () => {
 };
 
 export const hexToRgb = (c) => {
+  if (!c) return;
   const hex = c.replace(/[^0-9A-F]/gi, '');
   const bigint = parseInt(hex, 16);
   const r = (bigint >> 16) & 255; // eslint-disable-line

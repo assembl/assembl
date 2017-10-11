@@ -6,6 +6,7 @@ export const IDEA_PREVIEW_MAX_WIDTH = 350;
 // export const IDEA_PREVIEW_MIN_WIDTH = 280;
 export const NB_IDEA_PREVIEW_TO_SHOW = 4;
 export const APP_CONTAINER_PADDING = 15;
+export const MIN_WIDTH_COLUMN = 400;
 
 export const PublicationStates = {
   DRAFT: 'DRAFT',

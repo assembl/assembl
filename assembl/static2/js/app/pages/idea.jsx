@@ -156,7 +156,7 @@ class Idea extends React.Component {
             </Grid>}
           {(!isUserConnected || connectedUserCan(Permissions.ADD_POST)) && ideaWithPostsData.idea
             ? <TopPostFormContainer
-              idea={idea.id}
+              ideaId={idea.id}
               refetchIdea={refetchIdea}
               messageColumns={ideaWithPostsData.idea.messageColumns}
             />

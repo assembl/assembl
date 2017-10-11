@@ -61,7 +61,7 @@ class TopPostForm extends React.Component<*, TopPostFormProps, TopPostFormState>
 
   createTopPost = () => {
     const { contentLocale, createPost, ideaId, refetchIdea, uploadDocument, messageClassifier } = this.props;
-    console.log('messageClassifier', messageClassifier);
+    console.log(messageClassifier);
     const { body, subject } = this.state;
     this.setState({ submitting: true });
     const bodyIsEmpty = !body || rawContentStateIsEmpty(body);
