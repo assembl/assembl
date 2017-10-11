@@ -32,7 +32,8 @@ before_install:
  #- git pull
  #- git submodule update --init
  - ssh-keygen -P '' -f ~/.ssh/id_rsa && cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
- - fab -c configs/develop.rc bootstrap_from_checkout
+ - echo "_extends = ./testing.rc" > configs/travis.rc; echo "_gitbranch = travis" >> configs/travis.rc;
+ - fab -c configs/travis.rc bootstrap_from_checkout
 install: true
 before_script:
  - source venv/bin/activate
