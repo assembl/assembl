@@ -3,6 +3,7 @@ from collections import defaultdict
 
 from assembl.lib import config
 from assembl.lib.locale import strip_country
+from assembl.lib.clean_input import unescape
 from elasticsearch.client import Elasticsearch
 
 from assembl.indexing.settings import get_index_settings, MAPPINGS
@@ -62,9 +63,12 @@ def populate_from_langstring(ls, data, dataPropName):
                 locale_code = 'zh_CN'
             if locale_code in langs:
                 dataPropNameL = "_".join((dataPropName, locale_code))
-                data[dataPropNameL] = entry.value
+                # Japanese for example is stored in db with a html entity for
+                # each character.
+                # unescape to transform html entities back to characters
+                data[dataPropNameL] = unescape(entry.value)
             else:
-                others.append(entry.value)
+                others.append(unescape(entry.value))
         if others:
             dataPropNameL = dataPropName + "_other"
             data[dataPropNameL] = ' '.join(others)
