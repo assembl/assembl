@@ -35,6 +35,7 @@ before_install:
  - git checkout travis
  - git pull
  - git submodule update --init
+ - ls -lha /home/travis/build/assembl/assembl/assembl/scripts/pypsql.py
  - fab -c configs/travis.rc update_pip_requirements
  - fab -c configs/travis.rc bootstrap_from_checkout
 install: true
