@@ -1818,6 +1818,9 @@ def install_elasticsearch():
         move(join(extract_path, 'elasticsearch-{version}'.format(version=ELASTICSEARCH_VERSION)), extract_path+'.tmp')
         rmtree(extract_path)
         move(extract_path+'.tmp', extract_path)
+        run(env.projectpath + '/var/elasticsearch/bin/elasticsearch-plugin install https://artifacts.elastic.co/downloads/elasticsearch-plugins/analysis-smartcn/analysis-smartcn-{version}.zip'.format(version=ELASTICSEARCH_VERSION))
+        run(env.projectpath + '/var/elasticsearch/bin/elasticsearch-plugin install https://artifacts.elastic.co/downloads/elasticsearch-plugins/analysis-kuromoji/analysis-kuromoji-{version}.zip'.format(version=ELASTICSEARCH_VERSION))
+
 
 @task
 def upgrade_elasticsearch():

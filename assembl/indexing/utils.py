@@ -58,6 +58,8 @@ def populate_from_langstring(ls, data, dataPropName):
             if not entry.value:
                 continue
             locale_code = strip_country(entry.base_locale)
+            if locale_code == 'zh_Hans':
+                locale_code = 'zh_CN'
             if locale_code in langs:
                 dataPropNameL = "_".join((dataPropName, locale_code))
                 data[dataPropNameL] = entry.value
