@@ -67,6 +67,8 @@ known_analyzers = {
 # curl 'http://localhost:9200/assembl/_search?pretty' --data-binary '{"query": {"bool": {"must": [{"match": {"body_ja": "プラットフォーム" }}]}}}'
 # To test an analyzer:
 # curl 'http://localhost:9200/assembl/_analyze?pretty' --data-binary '{"analyzer": "japanese", "text": "この集合知のプラットフォームを用いて主要なアイデア や提案を統合することで、人工知能の国際的なガバナンスのための解決策と実行可能な政策ツールを提供します。"}'
+# To verify the mapping:
+# curl http://localhost:9200/assembl/_mapping?pretty
 
 
 def add_index_languages(props, names):
