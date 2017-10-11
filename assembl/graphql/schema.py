@@ -1447,6 +1447,7 @@ class CreatePost(graphene.Mutation):
         idea_id = graphene.ID(required=True)
         parent_id = graphene.ID() # A Post (except proposals in survey phase) can reply to another post. See related code in views/api/post.py
         attachments = graphene.List(graphene.String)
+        message_classifier = graphene.String()
 
     post = graphene.Field(lambda: Post)
 
@@ -1481,6 +1482,7 @@ class CreatePost(graphene.Mutation):
         with cls.default_db.no_autoflush:
             subject = args.get('subject')
             body = args.get('body')
+            classifier = args.get('message_classifier', None)
             body = sanitize_html(body)
             body_langstring = models.LangString.create(body)
             if subject:
@@ -1520,7 +1522,8 @@ class CreatePost(graphene.Mutation):
                 subject=subject_langstring,
                 body=body_langstring,
                 creator_id=user_id,
-                body_mime_type=u'text/html'
+                body_mime_type=u'text/html',
+                message_classifier=classifier
             )
             new_post.guess_languages()
             db = new_post.db

@@ -751,6 +751,54 @@ mutation myFirstMutation {
     }}}
 
 
+def test_mutation_create_post_on_column(graphql_request,
+                                        test_session,
+                                        idea_message_column_positive):
+    idea_id = to_global_id('Idea', idea_message_column_positive.idea_id)
+    classifier = idea_message_column_positive.message_classifier
+    res = schema.execute(u"""
+mutation myFirstMutation {
+    createPost(
+        ideaId:"%s",
+        subject:"Proposition 1",
+        body:"une proposition...",
+        messageClassifier:"%s"
+    ) {
+        post {
+            ... on Post {
+                subject
+                body
+                bodyEntries { localeCode value }
+                creator { name }
+                bodyMimeType
+                publicationState
+                messageClassifier
+            }
+        }
+    }
+}
+""" % (idea_id, classifier), context_value=graphql_request)
+
+    # Must remove the ICL before test completes in order to avoid db constraint
+    # on idea fixture removal
+    icl = test_session.query(models.IdeaRelatedPostLink).\
+        filter_by(idea_id=idea_message_column_positive.idea_id).first()
+    test_session.delete(icl)
+    test_session.flush()
+
+    assert json.loads(json.dumps(res.data)) == {
+        u'createPost': {
+            u'post': {
+                u'subject': u'Proposition 1',
+                u'body': u"une proposition...",
+                u'bodyEntries': [{u'value': u"une proposition...", u'localeCode': u'fr'}],
+                u'creator': {u'name': u'Mr. Administrator'},
+                u'bodyMimeType': u'text/html',
+                u'publicationState': u'PUBLISHED',
+                u'messageClassifier': classifier
+    }}}
+
+
 def test_mutation_delete_post(graphql_request, top_post_in_thread_phase):
     res = schema.execute(u"""
 mutation myMutation($postId: ID!) {
