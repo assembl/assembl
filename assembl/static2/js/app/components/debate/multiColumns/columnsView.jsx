@@ -56,6 +56,9 @@ class ColumnsView extends React.Component {
       SeparatorComponent
     } = this.props;
     const columnsArray = this.orderPostsByMessageClassifier();
+    const noSynthesis = messageColumns.every((col) => {
+      return col.header.length < 1;
+    });
     return (
       <Grid fluid className="background-grey no-padding">
         <div className="max-container">
@@ -63,7 +66,7 @@ class ColumnsView extends React.Component {
             <Row className={this.isColumnViewInline() ? 'columns-view-inline' : ''}>
               {Object.keys(columnsArray).map((classifier, index) => {
                 const synthesisTitle = this.getSynthesisTitle(classifier);
-                const synthesisBody = messageColumns[index].header;
+                const synthesisBody = messageColumns[index].header || I18n.t('synthesis.noSynthesisYet');
                 const hyphenStyle = { borderTopColor: messageColumns[index].color };
                 return (
                   <Col
@@ -72,7 +75,7 @@ class ColumnsView extends React.Component {
                     key={`col-${classifier}`}
                     style={this.isColumnViewInline() ? { width: `${MIN_WIDTH_COLUMN}px` } : {}}
                   >
-                    {synthesisBody
+                    {!noSynthesis
                       ? <div className="box">
                         <Row className="post-row">
                           <div className="posts column-post">

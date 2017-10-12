@@ -161,7 +161,8 @@ const Translations = {
       title: "synthèse",
       titlePositive: "Synthèse des arguments en faveur du thème %{ideaTitle}",
       titleNegative: "Synthèse des arguments en défaveur du thème %{ideaTitle}",
-      titleAlternative: "Synthèse des arguments alternatifs du thème %{ideaTitle}"
+      titleAlternative: "Synthèse des arguments alternatifs du thème %{ideaTitle}",
+      noSynthesisYet: "La synthèse est en cours de rédaction"
     },
     common: {
       attachFileForm: {
@@ -507,7 +508,8 @@ const Translations = {
       title: "synthesis",
       titlePositive: "Synthesis of the arguments in favor of theme %{ideaTitle}",
       titleNegative: "Synthesis of the arguments not in favor of theme %{ideaTitle}",
-      titleAlternative: "Synthesis of the alternative arguments for theme %{ideaTitle}"
+      titleAlternative: "Synthesis of the alternative arguments for theme %{ideaTitle}",
+      noSynthesisYet: "The synthesis is currently being written"
     },
     debate: {
       answer: "I answer:",
