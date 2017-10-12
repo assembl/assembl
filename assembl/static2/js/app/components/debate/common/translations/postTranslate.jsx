@@ -1,10 +1,13 @@
 // @flow
 import React from 'react';
+import { compose, graphql } from 'react-apollo';
 import { connect } from 'react-redux';
 import { Translate, I18n } from 'react-redux-i18n';
 
 import { updateContentLocaleById, updateContentLocaleByOriginalLocale } from '../../../../actions/contentLocaleActions';
+import LocalesQuery from '../../../../graphql/LocalesQuery.graphql';
 import SwitchButton from '../../../common/switchButton';
+import withLoadingIndicator from '../../../common/withLoadingIndicator';
 import { getConnectedUserId } from '../../../../utils/globalFunctions';
 import { displayCustomModal } from '../../../../utils/utilityManager';
 import CancelTranslationForm from './cancelTranslationForm';
@@ -12,6 +15,7 @@ import ChooseContentLocaleForm from './chooseContentLocaleForm';
 
 type PostTranslateProps = {
   contentLocale: string,
+  data: Object,
   id: string,
   lang: string,
   originalLocale: string,
@@ -27,12 +31,32 @@ type PostTranslateState = {
 class PostTranslate extends React.Component<void, PostTranslateProps, PostTranslateState> {
   props: PostTranslateProps;
   state: PostTranslateState;
+  originalLocaleLabel: '';
 
   constructor() {
     super();
     this.state = {
       isTranslated: false
     };
+  }
+
+  componentWillMount() {
+    this.updateOriginalLocaleLabel();
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.lang !== this.props.lang) {
+      this.updateOriginalLocaleLabel();
+    }
+  }
+
+  updateOriginalLocaleLabel() {
+    const originalLocaleInfo = this.props.data.locales.find((locale) => {
+      return locale.localeCode === this.props.originalLocale;
+    });
+    if (originalLocaleInfo) {
+      this.originalLocaleLabel = originalLocaleInfo.label;
+    }
   }
 
   handleSubmit = () => {
@@ -50,14 +74,16 @@ class PostTranslate extends React.Component<void, PostTranslateProps, PostTransl
   };
 
   openModal = () => {
-    const { id, lang, originalLocale, translate, updateById, updateByOriginalLocale } = this.props;
+    const { data, id, lang, originalLocale, translate, updateById, updateByOriginalLocale } = this.props;
     let content;
     if (!translate) {
       content = (
         <ChooseContentLocaleForm
+          allLocales={data.locales}
           id={id}
           lang={lang}
           originalLocale={originalLocale}
+          originalLocaleLabel={this.originalLocaleLabel}
           translate={translate}
           updateById={updateById}
           updateByOriginalLocale={updateByOriginalLocale}
@@ -94,7 +120,7 @@ class PostTranslate extends React.Component<void, PostTranslateProps, PostTransl
           ? <p>
             <Translate
               value={translate ? 'debate.thread.messageTranslatedFrom' : 'debate.thread.messageOriginallyIn'}
-              language={I18n.t(`language.${originalLocale}`)}
+              language={this.originalLocaleLabel}
             />
           </p>
           : null}
@@ -120,4 +146,4 @@ const mapDispatchToProps = (dispatch, ownProps) => {
   };
 };
 
-export default connect(null, mapDispatchToProps)(PostTranslate);
+export default compose(graphql(LocalesQuery), connect(null, mapDispatchToProps), withLoadingIndicator())(PostTranslate);

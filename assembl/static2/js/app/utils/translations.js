@@ -1,12 +1,6 @@
 /* eslint max-len: "off", quotes: ["error", "double"] */
 const Translations = {
   fr: {
-    language: {
-      en: "anglais",
-      fr: "français",
-      ja: "japonais",
-      de: "allemand"
-    },
     "Number of contributions": "Nombre de messages",
     "Number of users": "Nombre de contributeurs",
     cancel: "Annuler",
@@ -328,12 +322,6 @@ const Translations = {
     }
   },
   en: {
-    language: {
-      en: "English",
-      fr: "French",
-      ja: "Japanese",
-      de: "german"
-    },
     cancel: "Cancel",
     validate: "Validate",
     redirectToV1:
