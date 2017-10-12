@@ -131,7 +131,7 @@ const Translations = {
     },
     home: {
       accessButton: "J'accède au débat",
-      sentiments: "réactions",
+      sentiments: "votes",
       contribution: "contributions",
       participant: "participants",
       visit: "visites",
@@ -451,7 +451,7 @@ const Translations = {
       accessButton: "Access the debate",
       contribution: "contributions",
       participant: "participants",
-      sentiments: "reactions",
+      sentiments: "votes",
       visit: "visits",
       viewedPages: "Viewed pages",
       partners: "Partners",
