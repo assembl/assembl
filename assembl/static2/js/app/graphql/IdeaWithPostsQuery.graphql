@@ -10,6 +10,7 @@ query IdeaWithPosts($id: ID!, $lang: String) {
         index
         name(lang: $lang)
         numPosts
+        header(lang: $lang)
       }
       posts {
         edges {

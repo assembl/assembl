@@ -40,8 +40,8 @@ class Header extends React.Component {
     }
   }
   render() {
+    const { synthesis } = this.props;
     const { debateData } = this.props.debate;
-    const { synthesis } = this.props.synthesis;
     const { locale } = this.props.i18n;
     return (
       <section className="home-section header-section">
@@ -71,7 +71,7 @@ class Header extends React.Component {
                 <Translate value="home.accessButton" />
               </Button>
             </div>
-            {synthesis && Object.keys(synthesis.lastPublishedSynthesis).length > 0 && <Synthesis />}
+            {synthesis ? <Synthesis synthesis={synthesis} /> : null}
           </div>
         </Grid>
         <Grid fluid>

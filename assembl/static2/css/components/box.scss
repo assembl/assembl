@@ -98,3 +98,12 @@
       transition: all 0.2s ease-in;
     }
 }
+
+.column-synthesis {
+  .insert-box {
+    height: 300px;
+    overflow: auto;
+    overflow-x: hidden;
+    margin-bottom: 40px;
+  }
+}
