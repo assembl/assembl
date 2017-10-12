@@ -73,12 +73,26 @@ class ColumnsView extends React.Component {
                     style={this.isColumnViewInline() ? { width: `${MIN_WIDTH_COLUMN}px` } : {}}
                   >
                     {synthesisBody
-                      ? <BoxWithHyphen
-                        additionalContainerClassNames="column-synthesis"
-                        title={synthesisTitle}
-                        body={synthesisBody}
-                        hyphenStyle={hyphenStyle}
-                      />
+                      ? <div className="box">
+                        <Row className="post-row">
+                          <div className="posts column-post">
+                            <Col xs={12} md={11} className="post-left">
+                              <BoxWithHyphen
+                                additionalContainerClassNames="column-synthesis"
+                                title={synthesisTitle}
+                                body={synthesisBody}
+                                hyphenStyle={hyphenStyle}
+                              />
+                            </Col>
+                            <Col xs={12} md={1} className="post-right">
+                              <div className="post-icons">
+                                <span className="assembl-icon-share color" />
+                              </div>
+                              <div className="clear">&nbsp;</div>
+                            </Col>
+                          </div>
+                        </Row>
+                      </div>
                       : null}
 
                     <Tree
