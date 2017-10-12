@@ -61,7 +61,7 @@ class PostActions extends React.Component {
       connectedUserCan(Permissions.DELETE_POST);
     const userCanEditThisMessage = connectedUserId === String(creatorUserId) && connectedUserCan(Permissions.EDIT_MY_POST);
     const { slug, phase, themeId } = routerParams;
-    const confirmModal = () => {
+    const openSharePostModal = () => {
       const title = <Translate value="debate.share" />;
       const url = `${window.location.protocol}//${window.location.host}${get('debate', {
         slug: slug,
@@ -106,7 +106,7 @@ class PostActions extends React.Component {
           <div
             className="post-action"
             onClick={() => {
-              return confirmModal(postId);
+              return openSharePostModal(postId);
             }}
           >
             <OverlayTrigger placement={this.state.screenWidth >= MEDIUM_SCREEN_WIDTH ? 'right' : 'top'} overlay={shareTooltip}>
