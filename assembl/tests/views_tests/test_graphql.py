@@ -245,7 +245,7 @@ mutation myFirstMutation {
 
 
 def test_mutation_create_thematic_multilang_explicit_fr_fallback_to_en(graphql_request, user_language_preference_fr_cookie):
-    # If we ask for French but don't have this translation, instead of returning null, fallback to best_lang behavior
+    # If we ask for French but don't have this translation, instead of returning null, fallback to english
     res = schema.execute(u"""
 mutation myFirstMutation {
     createThematic(titleEntries:[
@@ -265,6 +265,27 @@ mutation myFirstMutation {
                 u'identifier': u'survey'
     }}}
 
+def test_mutation_create_thematic_multilang_explicit_fr_fallback_to_en_with_italian_cookie(graphql_request, user_language_preference_it_cookie):
+    # If we ask for French but don't have this translation, instead of returning null, fallback to english
+    res = schema.execute(u"""
+mutation myFirstMutation {
+    createThematic(titleEntries:[
+        {value:"Understanding the dynamics and issues", localeCode:"en"}
+        {value:"Italian...", localeCode:"it"}
+    ], identifier:"survey") {
+        thematic {
+            title(lang:"fr"),
+            identifier
+        }
+    }
+}
+""", context_value=graphql_request)
+    assert json.loads(json.dumps(res.data)) == {
+        u'createThematic': {
+            u'thematic': {
+                u'title': u'Understanding the dynamics and issues',
+                u'identifier': u'survey'
+    }}}
 
 
 
