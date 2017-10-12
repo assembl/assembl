@@ -51,7 +51,12 @@ input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
 input.placeholder, textarea.placeholder {
   font-family: $font-family6;
 }
-
+.overflow-x {
+  overflow-x: scroll;
+}
+.overflow-x::-webkit-scrollbar {
+  display: block;
+}
 .pre-wrap {
   white-space: pre-wrap;
 }

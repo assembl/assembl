@@ -145,5 +145,5 @@ export const hexToRgb = (c) => {
   const g = (bigint >> 8) & 255; // eslint-disable-line
   const b = bigint & 255; // eslint-disable-line
 
-  return [r, g, b].join();
+  return [r, g, b].join(); // eslint-disable-line
 };

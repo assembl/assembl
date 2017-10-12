@@ -60,17 +60,10 @@ const dirtySplitHack = (announcementContent) => {
 };
 
 class Announcement extends React.Component {
-  getColumnInfos(messageColumns, posts) {
+  getColumnInfos(messageColumns) {
     const columnsArray = [];
     messageColumns.forEach((col) => {
-      const keyName = col.messageClassifier;
-      let count = 0;
-      posts.forEach((post) => {
-        if (post.node.messageClassifier === keyName) {
-          count += 1;
-        }
-      });
-      columnsArray.push({ count: count, color: col.color, name: col.name });
+      columnsArray.push({ count: col.numPosts, color: col.color, name: col.name });
     });
 
     return columnsArray;
@@ -81,7 +74,7 @@ class Announcement extends React.Component {
     const { numContributors, numPosts, posts } = idea;
     const sentimentsCount = getSentimentsCount(posts);
     const mediaContent = dirtySplitHack(announcementContent);
-    const columnInfos = this.getColumnInfos(idea.messageColumns, posts.edges);
+    const columnInfos = this.getColumnInfos(idea.messageColumns);
     const doughnutsElements = isTwoColumns ? columnInfos : createDoughnutElements(sentimentsCount);
     return (
       <div className="announcement">

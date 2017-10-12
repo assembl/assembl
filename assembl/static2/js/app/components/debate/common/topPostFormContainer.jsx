@@ -6,19 +6,10 @@ import TopPostForm from './topPostForm';
 import { hexToRgb } from '../../../utils/globalFunctions';
 import { MIN_WIDTH_COLUMN } from '../../../constants';
 
-class topPostFormContainer extends React.Component {
-  isColumnViewInline() {
-    const { messageColumns } = this.props;
-    const screenWidth = window.innerWidth;
-    const columnSize = screenWidth / messageColumns.length;
-    if (columnSize < MIN_WIDTH_COLUMN) {
-      return true;
-    }
-    return false;
-  }
+class TopPostFormContainer extends React.Component {
   getClassNames() {
-    const { messageColumns } = this.props;
-    return classNames({ 'columns-view': messageColumns.length > 0 }, { 'columns-view-inline': this.isColumnViewInline() });
+    const { messageColumns, isColumnViewInline } = this.props;
+    return classNames({ 'columns-view': messageColumns.length > 0 }, { 'columns-view-inline': isColumnViewInline });
   }
   getMessageColumns() {
     const { messageColumns } = this.props;
@@ -31,7 +22,7 @@ class topPostFormContainer extends React.Component {
     return ideaOnColumns;
   }
   render() {
-    const { ideaId, refetchIdea, messageColumns } = this.props;
+    const { ideaId, refetchIdea, messageColumns, isColumnViewInline } = this.props;
     const ideaOnColumns = this.getMessageColumns();
     return (
       <Grid fluid className={messageColumns.length > 0 ? '' : 'background-color'}>
@@ -45,7 +36,7 @@ class topPostFormContainer extends React.Component {
                     md={12 / ideaOnColumns.length}
                     key={`${column.messageClassifier}-${index}`}
                     className={messageColumns.length > 0 ? 'top-post-form-inline' : ''}
-                    style={this.isColumnViewInline() ? { width: MIN_WIDTH_COLUMN } : {}}
+                    style={isColumnViewInline ? { width: MIN_WIDTH_COLUMN } : {}}
                   >
                     <div className="top-post-form" style={{ backgroundColor: `rgba(${hexToRgb(column.color)},0.2)` }}>
                       <Row>
@@ -103,4 +94,4 @@ class topPostFormContainer extends React.Component {
   }
 }
 
-export default topPostFormContainer;
+export default TopPostFormContainer;

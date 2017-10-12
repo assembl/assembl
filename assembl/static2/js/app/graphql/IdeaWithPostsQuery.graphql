@@ -9,6 +9,7 @@ query IdeaWithPosts($id: ID!, $lang: String) {
         color
         index
         name(lang: $lang)
+        numPosts
       }
       posts {
         edges {

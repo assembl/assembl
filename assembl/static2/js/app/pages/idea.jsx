@@ -19,18 +19,18 @@ import { getConnectedUserId } from '../utils/globalFunctions';
 import Announcement from './../components/debate/common/announcement';
 import TopPostFormContainer from '../components/debate/common/topPostFormContainer';
 import ColumnsView from '../components/debate/multiColumns/columnsView';
+import { MIN_WIDTH_COLUMN } from '../constants';
 
 export const transformPosts = (edges, messageColumns, additionnalProps = {}) => {
   const postsByParent = {};
-  const messageColumn = { colColor: null, colName: null };
+
+  const columns = { null: { colColor: null, colName: null } };
+  messageColumns.forEach((col) => {
+    columns[col.messageClassifier] = { colColor: col.color, colName: col.name };
+  });
+
   edges.forEach((e) => {
-    messageColumns.forEach((col) => {
-      if (col.messageClassifier === e.node.messageClassifier) {
-        messageColumn.colColor = col.color;
-        messageColumn.colName = col.name;
-      }
-    });
-    const p = { ...e.node, ...additionnalProps, ...messageColumn };
+    const p = { ...e.node, ...additionnalProps, ...columns[e.node.messageClassifier] };
     const items = postsByParent[p.parentId] || [];
     postsByParent[p.parentId] = items;
     items.push(p);
@@ -116,6 +116,16 @@ class Idea extends React.Component {
     return null;
   };
 
+  isColumnViewInline() {
+    const { messageColumns } = this.props.ideaWithPostsData.idea;
+    const screenWidth = window.innerWidth;
+    const columnSize = screenWidth / messageColumns.length;
+    if (columnSize < MIN_WIDTH_COLUMN) {
+      return true;
+    }
+    return false;
+  }
+
   render() {
     const { contentLocaleMapping, lang, ideaData, ideaWithPostsData, routerParams, debateData } = this.props;
     const refetchIdea = ideaWithPostsData.refetch;
@@ -154,45 +164,49 @@ class Idea extends React.Component {
                 </div>
               </div>
             </Grid>}
-          {(!isUserConnected || connectedUserCan(Permissions.ADD_POST)) && ideaWithPostsData.idea
-            ? <TopPostFormContainer
-              ideaId={idea.id}
-              refetchIdea={refetchIdea}
-              messageColumns={ideaWithPostsData.idea.messageColumns}
-            />
-            : null}
-          <Grid fluid className="background-grey">
-            <div className="max-container">
-              <div className="content-section">
-                {ideaWithPostsData.loading && <Loader />}
-                {ideaWithPostsData.idea &&
-                  !ideaWithPostsData.idea.messageColumns.length > 0 &&
-                  <Tree
-                    contentLocaleMapping={contentLocaleMapping}
-                    lang={lang}
-                    data={topPosts}
-                    initialRowIndex={this.getInitialRowIndex(topPosts, ideaWithPostsData.idea.posts.edges)}
-                    InnerComponent={Post}
-                    InnerComponentFolded={PostFolded}
-                    noRowsRenderer={noRowsRenderer}
-                    SeparatorComponent={InfiniteSeparator}
-                  />}
-                {ideaWithPostsData.idea &&
-                  ideaWithPostsData.idea.messageColumns.length > 0 &&
-                  <ColumnsView
-                    messageColumns={ideaWithPostsData.idea.messageColumns}
-                    contentLocaleMapping={contentLocaleMapping}
-                    lang={lang}
-                    posts={topPosts}
-                    initialRowIndex={this.getInitialRowIndex(topPosts, ideaWithPostsData.idea.posts.edges)}
-                    InnerComponent={ColumnsPost}
-                    InnerComponentFolded={PostFolded}
-                    noRowsRenderer={noRowsRenderer}
-                    SeparatorComponent={InfiniteSeparator}
-                  />}
+          <div className="overflow-x">
+            {(!isUserConnected || connectedUserCan(Permissions.ADD_POST)) && ideaWithPostsData.idea
+              ? <TopPostFormContainer
+                ideaId={idea.id}
+                refetchIdea={refetchIdea}
+                messageColumns={ideaWithPostsData.idea.messageColumns}
+                isColumnViewInline={this.isColumnViewInline()}
+              />
+              : null}
+            <Grid fluid className="background-grey">
+              <div className="max-container">
+                <div className="content-section">
+                  {ideaWithPostsData.loading && <Loader />}
+                  {ideaWithPostsData.idea &&
+                    !ideaWithPostsData.idea.messageColumns.length > 0 &&
+                    <Tree
+                      contentLocaleMapping={contentLocaleMapping}
+                      lang={lang}
+                      data={topPosts}
+                      initialRowIndex={this.getInitialRowIndex(topPosts, ideaWithPostsData.idea.posts.edges)}
+                      InnerComponent={Post}
+                      InnerComponentFolded={PostFolded}
+                      noRowsRenderer={noRowsRenderer}
+                      SeparatorComponent={InfiniteSeparator}
+                    />}
+                  {ideaWithPostsData.idea &&
+                    ideaWithPostsData.idea.messageColumns.length > 0 &&
+                    <ColumnsView
+                      messageColumns={ideaWithPostsData.idea.messageColumns}
+                      contentLocaleMapping={contentLocaleMapping}
+                      lang={lang}
+                      posts={topPosts}
+                      initialRowIndex={this.getInitialRowIndex(topPosts, ideaWithPostsData.idea.posts.edges)}
+                      InnerComponent={ColumnsPost}
+                      InnerComponentFolded={PostFolded}
+                      noRowsRenderer={noRowsRenderer}
+                      SeparatorComponent={InfiniteSeparator}
+                      isColumnViewInline={this.isColumnViewInline()}
+                    />}
+                </div>
               </div>
-            </div>
-          </Grid>
+            </Grid>
+          </div>
         </section>
         <GoUp />
       </div>
