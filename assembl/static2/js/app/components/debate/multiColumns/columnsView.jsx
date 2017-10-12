@@ -69,7 +69,7 @@ class ColumnsView extends React.Component {
                   <Col
                     xs={12}
                     md={12 / Object.keys(columnsArray).length}
-                    key={`col-${index}`}
+                    key={`col-${classifier}`}
                     style={this.isColumnViewInline() ? { width: `${MIN_WIDTH_COLUMN}px` } : {}}
                   >
                     {synthesisBody
