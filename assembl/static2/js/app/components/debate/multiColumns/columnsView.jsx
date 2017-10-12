@@ -76,7 +76,7 @@ class ColumnsView extends React.Component {
                     style={this.isColumnViewInline() ? { width: `${MIN_WIDTH_COLUMN}px` } : {}}
                   >
                     {!noSynthesis
-                      ? <div className="box">
+                      ? <div id={`synthesis-${classifier}`} className="box">
                         <Row className="post-row">
                           <div className="posts column-post">
                             <Col xs={12} md={11} className="post-left">
