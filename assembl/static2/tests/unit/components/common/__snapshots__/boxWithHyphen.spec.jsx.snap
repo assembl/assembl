@@ -1,5 +1,59 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`BoxWithHyphen component should not render a link that wraps the box if href is empty 1`] = `
+<div
+  className="foobar box-with-hyphen"
+>
+  <div
+    className="insert-box"
+  >
+    <h3
+      className="dark-title-4 ellipsis"
+    >
+      <div>
+        Synthesis
+      </div>
+      <div
+        className="ellipsis margin-xs"
+      >
+        Foobar
+      </div>
+    </h3>
+    <div
+      className="box-hyphen"
+      style={
+        Object {
+          "borderColorTop": "red",
+        }
+      }
+    >
+       
+    </div>
+    <div
+      className="date"
+    >
+      <span
+        className={undefined}
+        style={undefined}
+      >
+        For5pmt2
+      </span>
+    </div>
+    <div
+      className="insert-content margin-s"
+    >
+      <p
+        dangerouslySetInnerHTML={
+          Object {
+            "__html": "Lorem ipsum dolor sit amet",
+          }
+        }
+      />
+    </div>
+  </div>
+</div>
+`;
+
 exports[`BoxWithHyphen component should render a box with hyphen with its data 1`] = `
 <div
   className="foobar box-with-hyphen"
