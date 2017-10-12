@@ -160,7 +160,7 @@ const Translations = {
     synthesis: {
       title: "synthèse",
       titlePositive: "Synthèse des arguments en faveur du thème %{ideaTitle}",
-      titleNegative: "Synthèse des arguments en faveur du thème %{ideaTitle}",
+      titleNegative: "Synthèse des arguments en défaveur du thème %{ideaTitle}",
       titleAlternative: "Synthèse des arguments alternatifs du thème %{ideaTitle}"
     },
     common: {
