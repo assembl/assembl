@@ -72,7 +72,15 @@ class ColumnsView extends React.Component {
                     key={`col-${index}`}
                     style={this.isColumnViewInline() ? { width: `${MIN_WIDTH_COLUMN}px` } : {}}
                   >
-                    <BoxWithHyphen title={synthesisTitle} body={synthesisBody} hyphenStyle={hyphenStyle} />
+                    {synthesisBody
+                      ? <BoxWithHyphen
+                        additionalContainerClassNames="column-synthesis"
+                        title={synthesisTitle}
+                        body={synthesisBody}
+                        hyphenStyle={hyphenStyle}
+                      />
+                      : null}
+
                     <Tree
                       contentLocaleMapping={contentLocaleMapping}
                       lang={lang}
