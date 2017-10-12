@@ -33,7 +33,7 @@ class ColumnsView extends React.Component {
     return columnsArray;
   }
 
-  getSynthesisTitle = (name) => {
+  getSynthesisTitle = (classifier) => {
     const { ideaTitle } = this.props;
     const mapping = {
       positive: I18n.t('synthesis.titlePositive', { ideaTitle: ideaTitle }),
@@ -41,7 +41,7 @@ class ColumnsView extends React.Component {
       alternative: I18n.t('synthesis.titleAlternative', { ideaTitle: ideaTitle })
     };
 
-    return mapping[name];
+    return mapping[classifier];
   };
 
   render() {
