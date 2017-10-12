@@ -7,11 +7,14 @@ describe('BoxWithHyphen component', () => {
   it('should render a box with hyphen with its data', () => {
     const props = {
       additionalContainerClassNames: 'foobar',
-      subject: 'Foobar',
-      title: 'Synthesis',
       body: 'Lorem ipsum dolor sit amet',
       date: '2017-01-01T21:05:25.085948Z',
-      href: 'http://www.example.com/foobar'
+      href: 'http://www.example.com/foobar',
+      hyphenStyle: {
+        borderColorTop: 'red'
+      },
+      subject: 'Foobar',
+      title: 'Synthesis'
     };
     const component = renderer.create(<BoxWithHyphen {...props} />);
     const tree = component.toJSON();

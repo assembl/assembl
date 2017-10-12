@@ -180,6 +180,7 @@ class Idea extends React.Component {
                 {ideaWithPostsData.idea &&
                   ideaWithPostsData.idea.messageColumns.length > 0 &&
                   <ColumnsView
+                    ideaTitle={idea.title}
                     messageColumns={ideaWithPostsData.idea.messageColumns}
                     contentLocaleMapping={contentLocaleMapping}
                     lang={lang}

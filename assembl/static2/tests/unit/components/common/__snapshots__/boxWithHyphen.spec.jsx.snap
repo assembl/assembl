@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports['BoxWithHyphen component should render a box with hyphen with its data 1'] = `
+exports[`BoxWithHyphen component should render a box with hyphen with its data 1`] = `
 <div
   className="foobar box-with-hyphen"
 >
@@ -24,6 +24,11 @@ exports['BoxWithHyphen component should render a box with hyphen with its data 1
       </h3>
       <div
         className="box-hyphen"
+        style={
+          Object {
+            "borderColorTop": "red",
+          }
+        }
       >
          
       </div>

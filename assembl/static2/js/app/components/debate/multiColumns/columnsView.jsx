@@ -1,5 +1,8 @@
 import React from 'react';
 import { Grid, Row, Col } from 'react-bootstrap';
+import { I18n } from 'react-redux-i18n';
+
+import BoxWithHyphen from '../../common/boxWithHyphen';
 import Tree from '../../common/tree';
 import { MIN_WIDTH_COLUMN } from '../../../constants';
 
@@ -29,10 +32,23 @@ class ColumnsView extends React.Component {
 
     return columnsArray;
   }
+
+  getSynthesisTitle = (name) => {
+    const { ideaTitle } = this.props;
+    const mapping = {
+      positive: I18n.t('synthesis.titlePositive', { ideaTitle: ideaTitle }),
+      negative: I18n.t('synthesis.titleNegative', { ideaTitle: ideaTitle }),
+      alternative: I18n.t('synthesis.titleAlternative', { ideaTitle: ideaTitle })
+    };
+
+    return mapping[name];
+  };
+
   render() {
     const {
       contentLocaleMapping,
       lang,
+      messageColumns,
       initialRowIndex,
       InnerComponent,
       InnerComponentFolded,
@@ -46,6 +62,9 @@ class ColumnsView extends React.Component {
           <div className="columns-view">
             <Row className={this.isColumnViewInline() ? 'columns-view-inline' : ''}>
               {Object.keys(columnsArray).map((classifier, index) => {
+                const synthesisTitle = this.getSynthesisTitle(classifier);
+                const synthesisBody = messageColumns[index].header;
+                const hyphenStyle = { borderTopColor: messageColumns[index].color };
                 return (
                   <Col
                     xs={12}
@@ -53,6 +72,7 @@ class ColumnsView extends React.Component {
                     key={`col-${index}`}
                     style={this.isColumnViewInline() ? { width: `${MIN_WIDTH_COLUMN}px` } : {}}
                   >
+                    <BoxWithHyphen title={synthesisTitle} body={synthesisBody} hyphenStyle={hyphenStyle} />
                     <Tree
                       contentLocaleMapping={contentLocaleMapping}
                       lang={lang}

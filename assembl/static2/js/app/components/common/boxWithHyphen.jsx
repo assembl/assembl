@@ -8,11 +8,12 @@ type BoxWithHyphenProps = {
   body: string,
   date: string, // TODO:  date iso format type checking
   href: string,
+  hyphenStyle: Object,
   subject: string,
   title: string
 };
 
-const BoxWithHyphen = ({ additionalContainerClassNames, body, date, href, subject, title }: BoxWithHyphenProps) => {
+const BoxWithHyphen = ({ additionalContainerClassNames, body, date, href, hyphenStyle, subject, title }: BoxWithHyphenProps) => {
   const containerClassNames = classnames([additionalContainerClassNames, 'box-with-hyphen']);
   return (
     <div className={containerClassNames}>
@@ -26,7 +27,9 @@ const BoxWithHyphen = ({ additionalContainerClassNames, body, date, href, subjec
               {subject}
             </div>
           </h3>
-          <div className="box-hyphen">&nbsp;</div>
+          <div className="box-hyphen" style={hyphenStyle}>
+            &nbsp;
+          </div>
           <div className="date">
             {date ? <Localize value={date} dateFormat="date.format2" /> : null}
           </div>
@@ -42,7 +45,8 @@ const BoxWithHyphen = ({ additionalContainerClassNames, body, date, href, subjec
 BoxWithHyphen.defaultProps = {
   additionalContainerClassNames: '',
   date: '',
-  href: ''
+  href: '',
+  hyphenStyle: {}
 };
 
 export default BoxWithHyphen;
