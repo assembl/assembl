@@ -1762,7 +1762,7 @@ def install_yarn():
 
 def create_add_to_crontab_command(crontab_line):
     """Generates a shell command that makes sure that a cron won't be added several times (thanks to sort and uniq). This makes sure adding it several times is idempotent."""
-    return ("(crontab -l 2>/dev/null; echo '%s') | sort | uniq | crontab -" % crontab_line)
+    return ("(crontab -l | grep -Fv '{cron}'; echo '{cron}') | crontab -".format(cron=crontab_line)
 
 
 @task
