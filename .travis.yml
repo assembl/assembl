@@ -28,11 +28,11 @@ before_install:
  - sudo apt-get install -y memcached
  - sudo /etc/init.d/memcached start
  - ssh-keygen -P '' -f ~/.ssh/id_rsa && cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
- - echo "_extends = ./testing.rc" > configs/travis.rc; echo "_gitbranch = travis" >> configs/travis.rc;
+ - echo "_extends = ./testing.rc" > configs/travis.rc; echo "_gitbranch = $TRAVIS_BRANCH" >> configs/travis.rc;
  - git fetch --unshallow
  - git config remote.origin.fetch "+refs/heads/*:refs/remotes/origin/*"; git fetch origin
- - git fetch origin travis
- - git checkout travis
+ - git fetch origin $TRAVIS_BRANCH
+ - git checkout $TRAVIS_BRANCH
  - git pull
  - git submodule update --init
 install:
