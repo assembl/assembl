@@ -11,8 +11,7 @@ class FileUploader extends React.Component {
     super(props);
     this.state = {
       fileName: '',
-      fileSrc: undefined,
-      fileType: ''
+      fileSrc: undefined
     };
     this.handleChangePreview = this.handleChangePreview.bind(this);
     this.handleUploadButtonClick = this.handleUploadButtonClick.bind(this);
