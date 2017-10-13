@@ -10,8 +10,9 @@ class FileUploader extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      filename: '',
-      fileSrc: undefined
+      fileName: '',
+      fileSrc: undefined,
+      fileType: ''
     };
     this.handleChangePreview = this.handleChangePreview.bind(this);
     this.handleUploadButtonClick = this.handleUploadButtonClick.bind(this);
@@ -35,7 +36,7 @@ class FileUploader extends React.Component {
   handleChangePreview() {
     const file = this.fileInput.files[0];
     this.setState({
-      filename: file.name || ''
+      fileName: file.name || ''
     });
     this.props.handleChange(file);
   }
@@ -50,7 +51,7 @@ class FileUploader extends React.Component {
         'load',
         () => {
           this.setState({
-            filename: file.name || '',
+            fileName: file.name || '',
             fileSrc: reader.result
           });
         },
@@ -65,6 +66,9 @@ class FileUploader extends React.Component {
   }
 
   render() {
+    const fileSrc = this.state.fileSrc;
+    const fileIsImage = this.props.isImage;
+    const urlIsImage = fileSrc && fileSrc.includes('png' || 'jpeg' || 'jpg' || 'gif');
     return (
       <div>
         <Button onClick={this.handleUploadButtonClick}>
@@ -73,17 +77,18 @@ class FileUploader extends React.Component {
         {this.props.withPreview
           ? <div className={this.state.fileSrc ? 'preview' : 'hidden'}>
             <img
-              src={this.state.fileSrc}
+              src={fileSrc}
               ref={(p) => {
                 this.preview = p;
               }}
-              alt="preview"
+              alt={fileIsImage || urlIsImage ? 'preview' : ''}
             />
           </div>
           : null}
-        <div className="preview-title">
-          {this.state.filename}
-        </div>
+        {!fileIsImage &&
+          <div className="preview-title">
+            {this.state.fileName}
+          </div>}
         <input
           type="file"
           onChange={this.handleChangePreview}
