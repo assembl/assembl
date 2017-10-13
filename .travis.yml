@@ -16,11 +16,13 @@ cache:
     - assembl/static/widget/vote/bower_components
     - assembl/static2/node_modules
 before_install:
+ # The following line is needed, otherwise the set_file_permissions fab command yells error "Operation not permitted"
  - sudo usermod -a -G www-data $USER
+ # The following line produces warning "uses weak digest algorithm"
  - sudo apt-get -qq update
  - sudo apt-get install -y fabric git openssh-server
  #- sudo apt-get install -y postgresql
- - sudo /etc/init.d/postgresql restart
+ #- sudo /etc/init.d/postgresql restart
  - sudo apt-get install apt-transport-https
  - echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee -a /etc/apt/sources.list.d/yarn.list
  - sudo curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
@@ -47,13 +49,15 @@ before_install:
  - git submodule update --init
 install:
  - fab -c configs/travis.rc update_pip_requirements
- #- fab -c configs/travis.rc set_file_permissions
+ # The set_file_permissions fabric command needs to be encapsulated into this sudo su command, because in before_install we have added $USER in www-data group but have not logged out and logged in again for changes to take effect in this terminal
  - sudo -E su $USER -c 'fab -c configs/travis.rc set_file_permissions'
- # TODO: fix fabfile's check_and_create_database_user command
+ # TODO: fix fabfile's check_and_create_database_user command which produces an error when run by travis. For now we instead run the following command
  - python2 $PWD/assembl/scripts/pypsql.py -u postgres -n localhost  "CREATE USER assembl_test WITH CREATEDB ENCRYPTED PASSWORD 'assembl_test'; COMMIT;"
+ # The following command runs lots of sub-commands. It takes approximately 18 min
  - fab -c configs/travis.rc bootstrap_from_checkout
 before_script:
   - source $VIRTUAL_ENV/bin/activate
+  # In jenkins, we were running the following commented steps at each build, in order to correctly update the already existing instance of Assembl (it was not built from zero each time). So should we do this for travis if we use more travis caching?
   #- supervisord
   #- supervisorctl shutdown
   #- fab -c configs/travis.rc database_delete
