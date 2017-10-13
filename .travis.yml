@@ -4,7 +4,7 @@ dist: trusty
 addons:
   ssh_known_hosts: localhost
   postgresql: "9.5"
-#cache: pip
+cache: pip
 before_install:
  - sudo usermod -a -G www-data $USER
  - sudo apt-get -qq update
@@ -42,7 +42,8 @@ install:
  # TODO: fix fabfile's check_and_create_database_user command
  - python2 $PWD/assembl/scripts/pypsql.py -u postgres -n localhost  "CREATE USER assembl_test WITH CREATEDB ENCRYPTED PASSWORD 'assembl_test'; COMMIT;"
  - fab -c configs/travis.rc bootstrap_from_checkout
-before_script:
- - source venv/bin/activate
- - supervisord
+#before_script:
+# - source venv/bin/activate
+# - supervisord
+before_script: true
 script: true
