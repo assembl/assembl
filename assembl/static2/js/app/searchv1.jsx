@@ -10,6 +10,11 @@ import { getLocale, getTranslations } from './utils/i18n';
 import { connectedUserIsExpert } from './utils/permissions';
 
 import { SearchComponent } from './components/search.jsx?v=1'; // eslint-disable-line
+
+// Keep the style import here. The reason why it's not in main.scss is because
+// we create a searchv1 bundle that includes only the Search component and its
+// local styles for v1. There is an additional searchv1.scss file that overrides
+// some styles for v1
 import '../../css/views/searchv1.scss';
 /*
 searchv1.js is included in assembl/templates/index.jinja2

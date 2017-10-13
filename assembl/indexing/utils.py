@@ -3,6 +3,7 @@ from collections import defaultdict
 
 from assembl.lib import config
 from assembl.lib.locale import strip_country
+from assembl.lib.clean_input import unescape
 from elasticsearch.client import Elasticsearch
 
 from assembl.indexing.settings import get_index_settings, MAPPINGS
@@ -58,11 +59,16 @@ def populate_from_langstring(ls, data, dataPropName):
             if not entry.value:
                 continue
             locale_code = strip_country(entry.base_locale)
+            if locale_code == 'zh_Hans':
+                locale_code = 'zh_CN'
             if locale_code in langs:
                 dataPropNameL = "_".join((dataPropName, locale_code))
-                data[dataPropNameL] = entry.value
+                # Japanese for example is stored in db with a html entity for
+                # each character.
+                # unescape to transform html entities back to characters
+                data[dataPropNameL] = unescape(entry.value)
             else:
-                others.append(entry.value)
+                others.append(unescape(entry.value))
         if others:
             dataPropNameL = dataPropName + "_other"
             data[dataPropNameL] = ' '.join(others)
@@ -78,7 +84,7 @@ def get_data(content):
     """Return uid, dict of fields we want to index,
     return None if we don't index."""
     from assembl.models import Idea, Post, SynthesisPost, AgentProfile, LangString
-    if isinstance(content, Idea):
+    if type(content) == Idea:  # only index Idea, not Thematic or Question
         data = {}
         for attr in ('creation_date', 'id', 'discussion_id'):
             data[attr] = getattr(content, attr)
@@ -111,6 +117,10 @@ def get_data(content):
         return get_uid(content), data
 
     elif isinstance(content, Post):
+        # don't index proposition posts
+        if content.type == 'proposition_post':
+            return None, None
+
         data = {}
         data['_parent'] = 'user:{}'.format(content.creator_id)
         if content.parent_id is not None:
@@ -120,6 +130,9 @@ def get_data(content):
                      'creator_id', 'sentiment_counts'):
             data[attr] = getattr(content, attr)
 
+        data['idea_id'] = [link.idea_id
+            for link in content.indirect_idea_content_links_without_cache()
+            if link.__class__.__name__ == 'IdeaRelatedPostLink']
         data['sentiment_tags'] = [key for key in data['sentiment_counts']
                                   if data['sentiment_counts'][key] > 0]
         like = data['sentiment_counts']['like']

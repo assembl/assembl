@@ -1,12 +1,6 @@
 /* eslint max-len: "off", quotes: ["error", "double"] */
 const Translations = {
   fr: {
-    language: {
-      en: "anglais",
-      fr: "français",
-      ja: "japonais",
-      de: "allemand"
-    },
     "Number of contributions": "Nombre de messages",
     "Number of users": "Nombre de contributeurs",
     cancel: "Annuler",
@@ -48,8 +42,7 @@ const Translations = {
       by: "par",
       search_come_from_what_you_need_to_know: "Recherche effectuée dans la section \"à retenir\" de cette discussion",
       search_come_from_announcement: "Recherche effectuée dans la section \"consigne\" de cette discussion",
-      expand_search: "Afficher la recherche",
-      collapse_search: "Cacher la recherche",
+      collapse_search: "Fermer la recherche",
       Categories: "Catégories",
       All: "Tout",
       post: "Messages",
@@ -137,6 +130,7 @@ const Translations = {
     },
     home: {
       accessButton: "J'accède au débat",
+      sentiments: "votes",
       contribution: "contributions",
       participant: "participants",
       visit: "visites",
@@ -342,12 +336,6 @@ const Translations = {
     }
   },
   en: {
-    language: {
-      en: "English",
-      fr: "French",
-      ja: "Japanese",
-      de: "german"
-    },
     cancel: "Cancel",
     validate: "Validate",
     redirectToV1:
@@ -386,8 +374,7 @@ const Translations = {
       published_on: "Published on",
       member_since: "Member since",
       by: "by",
-      expand_search: "Show search",
-      collapse_search: "Hide search",
+      collapse_search: "Close search",
       Categories: "Categories",
       All: "All",
       post: "Messages",
@@ -476,6 +463,7 @@ const Translations = {
       accessButton: "Access the debate",
       contribution: "contributions",
       participant: "participants",
+      sentiments: "votes",
       visit: "visits",
       viewedPages: "Viewed pages",
       partners: "Partners",

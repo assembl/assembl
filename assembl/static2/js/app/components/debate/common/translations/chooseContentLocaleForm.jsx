@@ -2,11 +2,8 @@
 import React from 'react';
 import { Button, FormControl, FormGroup, Modal, Radio } from 'react-bootstrap';
 import { Translate, I18n } from 'react-redux-i18n';
-import { compose, graphql } from 'react-apollo';
 
 import { closeModal } from '../../../../utils/utilityManager';
-import LocalesQuery from '../../../../graphql/LocalesQuery.graphql';
-import withLoadingIndicator from '../../../common/withLoadingIndicator';
 
 type Locale = {
   label: string,
@@ -14,10 +11,9 @@ type Locale = {
 };
 
 type ChooseContentLocaleFormProps = {
-  data: {
-    locales: Array<Locale>
-  },
+  allLocales: Array<Locale>,
   originalLocale: string,
+  originalLocaleLabel: string,
   updateById: (value: string) => void,
   updateByOriginalLocale: (value: string) => void
 };
@@ -65,13 +61,13 @@ class ChooseContentLocaleForm extends React.Component<*, ChooseContentLocaleForm
   };
 
   render() {
-    const { originalLocale } = this.props;
+    const { allLocales, originalLocale, originalLocaleLabel } = this.props;
     const { scope, selectedLocale } = this.state;
     const translateAllLabel = I18n.t('debate.thread.translateAllMessagesIn', {
-      language: I18n.t(`language.${originalLocale}`)
+      language: originalLocaleLabel
     });
     const translateOneLabel = I18n.t('debate.thread.translateOnlyThisMessage');
-    const availableLanguages = this.props.data.locales.filter((lang) => {
+    const availableLanguages = allLocales.filter((lang) => {
       return lang.localeCode !== originalLocale;
     });
     return (
@@ -148,4 +144,4 @@ class ChooseContentLocaleForm extends React.Component<*, ChooseContentLocaleForm
   }
 }
 
-export default compose(graphql(LocalesQuery), withLoadingIndicator())(ChooseContentLocaleForm);
+export default ChooseContentLocaleForm;
