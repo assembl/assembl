@@ -38,7 +38,7 @@ DEFAULT_SECTION = "DEFAULT"
 
 def running_locally(hosts = None):
     hosts = hosts or env.hosts
-    return set(env.hosts) - set(['localhost', '127.0.0.1', env.hostname]) == set()
+    return set(env.hosts) - set(['localhost', '127.0.0.1']) == set()
 
 
 def combine_rc(rc_filename, overlay=None):
@@ -83,6 +83,7 @@ def as_bool(b):
 
 def sanitize_env():
     """Ensure boolean and list env variables are such"""
+    # If the remote system is a mac you SHOULD set mac=true in your .rc file
     for name in (
             "uses_memcache", "uses_uwsgi", "uses_apache",
             "uses_global_supervisor", "uses_apache",
@@ -103,15 +104,6 @@ def sanitize_env():
     if not env.get('host_string', None):
         env.host_string = env.hosts[0]
 
-    if not 'hostname' in env:
-        env.hostname = run('hostname');
-    #Are we on localhost
-    if running_locally():
-        #WARNING:  This code will run locally, NOT on the remote server,
-        # so it's only valid if we are connecting to localhost
-        env.mac = system().startswith('Darwin')
-    else:
-        env.mac = False
     env.projectpath = env.get('projectpath', dirname(__file__))
     if not env.get('venvpath', None):
         if running_locally():
