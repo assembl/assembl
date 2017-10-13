@@ -103,7 +103,8 @@ def sanitize_env():
     if not env.get('host_string', None):
         env.host_string = env.hosts[0]
 
-    env.hostname = run('hostname');
+    if not env.hostname:
+        env.hostname = run('hostname');
     #Are we on localhost
     if running_locally():
         #WARNING:  This code will run locally, NOT on the remote server,
