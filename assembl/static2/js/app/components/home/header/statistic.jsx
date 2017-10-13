@@ -43,7 +43,7 @@ class Statistic extends React.Component {
   render() {
     const { rootIdea, numParticipants, totalSentiments } = this.props.data;
     const elementsProps = [
-      { iconName: 'profil', count: totalSentiments, translateValue: 'home.sentiments' },
+      { iconName: 'sentiment-neutral', count: totalSentiments, translateValue: 'home.sentiments' },
       { iconName: 'profil', count: numParticipants, translateValue: 'home.participant' }
     ];
     if (rootIdea) {
