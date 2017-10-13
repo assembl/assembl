@@ -1513,7 +1513,7 @@ class CreatePost(graphene.Mutation):
                     subject = original_subject.value
                 elif in_reply_to_idea:
                     # TODO: some ideas have extra langstring titles
-                    subject = (in_reply_to_idea.title.first_original())
+                    subject = (in_reply_to_idea.title.first_original().value)
                     locale = discussion.main_locale
                 else:
                     subject = discussion.topic if discussion.topic else ''
