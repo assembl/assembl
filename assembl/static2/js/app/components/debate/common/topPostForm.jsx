@@ -23,7 +23,8 @@ type TopPostFormProps = {
   ideaId: string,
   refetchIdea: Function,
   uploadDocument: Function,
-  ideaOnColumn: boolean
+  ideaOnColumn: boolean,
+  messageClassifier: string
 };
 
 type TopPostFormState = {
@@ -60,7 +61,7 @@ class TopPostForm extends React.Component<*, TopPostFormProps, TopPostFormState>
   };
 
   createTopPost = () => {
-    const { contentLocale, createPost, ideaId, refetchIdea, uploadDocument } = this.props;
+    const { contentLocale, createPost, ideaId, refetchIdea, uploadDocument, messageClassifier } = this.props;
     const { body, subject } = this.state;
     this.setState({ submitting: true });
     const bodyIsEmpty = !body || rawContentStateIsEmpty(body);
@@ -72,6 +73,7 @@ class TopPostForm extends React.Component<*, TopPostFormProps, TopPostFormState>
           contentLocale: contentLocale,
           ideaId: ideaId,
           subject: subject || 'subject',
+          messageClassifier: messageClassifier || null,
           // use the updated content state with new entities
           body: convertRawContentStateToHTML(result.contentState),
           attachments: result.documentIds

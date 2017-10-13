@@ -125,9 +125,18 @@ class Idea extends React.Component {
     }
     return false;
   }
-
+  getTopPosts() {
+    const { ideaWithPostsData, routerParams, debateData } = this.props;
+    const topPosts = transformPosts(ideaWithPostsData.idea.posts.edges, ideaWithPostsData.idea.messageColumns, {
+      refetchIdea: ideaWithPostsData.refetch,
+      ideaId: ideaWithPostsData.idea.id,
+      routerParams: routerParams,
+      debateData: debateData
+    });
+    return topPosts;
+  }
   render() {
-    const { contentLocaleMapping, lang, ideaData, ideaWithPostsData, routerParams, debateData } = this.props;
+    const { contentLocaleMapping, lang, ideaData, ideaWithPostsData } = this.props;
     const refetchIdea = ideaWithPostsData.refetch;
     if (ideaData.loading) {
       return (
@@ -138,15 +147,6 @@ class Idea extends React.Component {
     }
 
     const { idea } = ideaData;
-
-    const topPosts =
-      !ideaWithPostsData.loading &&
-      transformPosts(ideaWithPostsData.idea.posts.edges, ideaWithPostsData.idea.messageColumns, {
-        refetchIdea: refetchIdea,
-        ideaId: idea.id,
-        routerParams: routerParams,
-        debateData: debateData
-      });
 
     const isUserConnected = getConnectedUserId();
 
@@ -182,8 +182,8 @@ class Idea extends React.Component {
                     <Tree
                       contentLocaleMapping={contentLocaleMapping}
                       lang={lang}
-                      data={topPosts}
-                      initialRowIndex={this.getInitialRowIndex(topPosts, ideaWithPostsData.idea.posts.edges)}
+                      data={this.getTopPosts()}
+                      initialRowIndex={this.getInitialRowIndex(this.getTopPosts(), ideaWithPostsData.idea.posts.edges)}
                       InnerComponent={Post}
                       InnerComponentFolded={PostFolded}
                       noRowsRenderer={noRowsRenderer}
@@ -195,13 +195,14 @@ class Idea extends React.Component {
                       messageColumns={ideaWithPostsData.idea.messageColumns}
                       contentLocaleMapping={contentLocaleMapping}
                       lang={lang}
-                      posts={topPosts}
-                      initialRowIndex={this.getInitialRowIndex(topPosts, ideaWithPostsData.idea.posts.edges)}
+                      posts={this.getTopPosts()}
+                      initialRowIndex={this.getInitialRowIndex(this.getTopPosts(), ideaWithPostsData.idea.posts.edges)}
                       InnerComponent={ColumnsPost}
                       InnerComponentFolded={PostFolded}
                       noRowsRenderer={noRowsRenderer}
                       SeparatorComponent={InfiniteSeparator}
                       isColumnViewInline={this.isColumnViewInline()}
+                      ideaTitle={idea.title}
                     />}
                 </div>
               </div>

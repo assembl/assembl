@@ -227,61 +227,6 @@
       vertical-align: bottom;
   }
 
-  .start-discussion-2 {
-    max-width: 80%;
-    vertical-align: top;
-  }
-
-  .columns-view-inline {
-    display: flex;
-    float: left;
-  }
-
-  .top-post-form-inline {
-    display: flex;
-    justify-content: center;
-  }
-
-  .columns-view {
-    margin-top: -20px;
-
-    .infinite-separator {
-      border: none;
-      margin: 40px auto;
-      span {
-        display: none;
-      }
-    }
-    .empty-sentiments-count {
-      height: 35px;
-    }
-    .top-post-form {
-      max-height: 450px;
-      max-width: 600px;
-      width: 100%;
-      margin: $margin-section-m 0 0;
-
-      .dark-title-3 {
-        line-height: 25px;
-      }
-    }
-    .level {
-      width: 100%;
-      min-width: 400px;
-    }
-    .DraftEditor-editorContainer {
-      height: 180px;
-      max-height: 180px;
-      overflow-y: scroll;
-    }
-    .public-DraftEditor-content {
-      overflow: hidden;
-    }
-    .attachments {
-      float: left;
-    }
-  }
-
   input {
       &[type='text'] {
           border: none;

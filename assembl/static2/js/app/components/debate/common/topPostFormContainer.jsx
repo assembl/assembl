@@ -35,7 +35,6 @@ class TopPostFormContainer extends React.Component {
                     xs={12}
                     md={12 / ideaOnColumns.length}
                     key={`${column.messageClassifier}-${index}`}
-                    className={messageColumns.length > 0 ? 'top-post-form-inline' : ''}
                     style={isColumnViewInline ? { width: MIN_WIDTH_COLUMN } : {}}
                   >
                     <div className="top-post-form" style={{ backgroundColor: `rgba(${hexToRgb(column.color)},0.2)` }}>
@@ -49,13 +48,7 @@ class TopPostFormContainer extends React.Component {
                           className="no-padding"
                         >
                           <div className="start-discussion-container">
-                            <div
-                              className={
-                                messageColumns.length > 0
-                                  ? 'start-discussion-icon start-discussion-icon-2'
-                                  : 'start-discussion-icon'
-                              }
-                            >
+                            <div className="start-discussion-icon">
                               <span className="assembl-icon-discussion color" />
                             </div>
                             <div

@@ -24,15 +24,15 @@ class ColumnsView extends React.Component {
     return columnsArray;
   }
 
-  getSynthesisTitle = (classifier) => {
+  getSynthesisTitle = (classifier, colName) => {
     const { ideaTitle } = this.props;
     const mapping = {
-      positive: I18n.t('synthesis.titlePositive', { ideaTitle: ideaTitle }),
-      negative: I18n.t('synthesis.titleNegative', { ideaTitle: ideaTitle }),
-      alternative: I18n.t('synthesis.titleAlternative', { ideaTitle: ideaTitle })
+      positive: I18n.t('multiColumns.synthesis.positiveTitle', { ideaTitle: ideaTitle }),
+      negative: I18n.t('multiColumns.synthesis.negativeTitle', { ideaTitle: ideaTitle }),
+      alternative: I18n.t('multiColumns.synthesis.alternativeTitle', { ideaTitle: ideaTitle })
     };
 
-    return mapping[classifier];
+    return mapping[classifier] || I18n.t('multiColumns.synthesis.colName', { colName: colName });
   };
 
   render() {
@@ -49,16 +49,17 @@ class ColumnsView extends React.Component {
     } = this.props;
     const columnsArray = this.orderPostsByMessageClassifier();
     const noSynthesis = messageColumns.every((col) => {
-      return col.header && col.header.length > 1;
+      return col.header && col.header.length < 1;
     });
+
     return (
       <Grid fluid className="background-grey no-padding">
         <div className="max-container">
           <div className="columns-view">
             <Row className={isColumnViewInline ? 'columns-view-inline' : ''}>
               {Object.keys(columnsArray).map((classifier, index) => {
-                const synthesisTitle = this.getSynthesisTitle(classifier);
-                const synthesisBody = messageColumns[index].header || I18n.t('synthesis.noSynthesisYet');
+                const synthesisTitle = this.getSynthesisTitle(classifier, messageColumns[index].name);
+                const synthesisBody = messageColumns[index].header || I18n.t('multiColumns.synthesis.noSynthesisYet');
                 const hyphenStyle = { borderTopColor: messageColumns[index].color };
                 return (
                   <Col
@@ -68,8 +69,8 @@ class ColumnsView extends React.Component {
                     style={isColumnViewInline ? { width: `${MIN_WIDTH_COLUMN}px` } : {}}
                   >
                     {!noSynthesis
-                      ? <div id={`synthesis-${classifier}`} className="box">
-                        <Row className="post-row">
+                      ? <div id={`synthesis-${classifier}`} className="box synthesis">
+                        <Row className="no-margin">
                           <div className="posts column-post">
                             <Col xs={12} md={11} className="post-left">
                               <BoxWithHyphen

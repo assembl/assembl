@@ -1,5 +1,5 @@
 import React from 'react';
-import { Translate } from 'react-redux-i18n';
+import { Translate, I18n } from 'react-redux-i18n';
 import { Col, Tooltip } from 'react-bootstrap';
 
 import StatisticsDoughnut from '../common/statisticsDoughnut';
@@ -61,9 +61,14 @@ const dirtySplitHack = (announcementContent) => {
 
 class Announcement extends React.Component {
   getColumnInfos(messageColumns) {
+    const mapping = {
+      positive: I18n.t('multiColumns.announcement.positiveTitle'),
+      negative: I18n.t('multiColumns.announcement.negativeTitle'),
+      alternative: I18n.t('multiColumns.announcement.alternativeTitle')
+    };
     const columnsArray = [];
     messageColumns.forEach((col) => {
-      columnsArray.push({ count: col.numPosts, color: col.color, name: col.name });
+      columnsArray.push({ count: col.numPosts, color: col.color, name: mapping[col.messageClassifier] || col.name });
     });
 
     return columnsArray;
