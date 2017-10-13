@@ -27,7 +27,6 @@ before_install:
  - sudo /etc/init.d/redis-server start
  - sudo apt-get install -y memcached
  - sudo /etc/init.d/memcached start
- #- fab -c configs/develop.rc bootstrap_from_checkout
  - ssh-keygen -P '' -f ~/.ssh/id_rsa && cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
  - echo "_extends = ./testing.rc" > configs/travis.rc; echo "_gitbranch = travis" >> configs/travis.rc;
  - git fetch --unshallow
@@ -36,12 +35,13 @@ before_install:
  - git checkout travis
  - git pull
  - git submodule update --init
- - ls -lha /home/travis/build/assembl/assembl/assembl/scripts/pypsql.py
+install:
  - fab -c configs/travis.rc update_pip_requirements
  #- fab -c configs/travis.rc set_file_permissions
  - sudo -E su $USER -c 'fab -c configs/travis.rc set_file_permissions'
+ # TODO: fix fabfile's check_and_create_database_user command
+ - python2 $PWD/assembl/scripts/pypsql.py -u postgres -n localhost  "CREATE USER assembl_test WITH CREATEDB ENCRYPTED PASSWORD 'assembl_test'; COMMIT;"
  - fab -c configs/travis.rc bootstrap_from_checkout
-install: true
 before_script:
  - source venv/bin/activate
  - supervisord
