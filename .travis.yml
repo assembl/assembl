@@ -4,7 +4,17 @@ dist: trusty
 addons:
   ssh_known_hosts: localhost
   postgresql: "9.5"
-cache: pip
+cache:
+  pip: true
+  directories:
+    - assembl/static/js/node_modules
+    - assembl/static/widget/card/bower_components
+    - assembl/static/widget/creativity/bower_components
+    - assembl/static/widget/session/bower_components
+    - assembl/static/widget/share/bower_components
+    - assembl/static/widget/video/bower_components
+    - assembl/static/widget/vote/bower_components
+    - assembl/static2/node_modules
 before_install:
  - sudo usermod -a -G www-data $USER
  - sudo apt-get -qq update
