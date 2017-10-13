@@ -937,7 +937,16 @@ class Query(graphene.ObjectType):
     discussion_preferences = graphene.Field(DiscussionPreferences)
     default_preferences = graphene.Field(DiscussionPreferences)
     locales = graphene.List(Locale, lang=graphene.String(required=True))
+    total_sentiments = graphene.Int()
 
+    def resolve_total_sentiments(self, args, context, info):
+        discussion_id = context.matchdict['discussion_id']
+        discussion = models.Discussion.get(discussion_id)
+        return discussion.db.query(models.SentimentOfPost
+            ).filter(
+                models.SentimentOfPost.discussion.has(id=discussion_id),
+                models.SentimentOfPost.tombstone_condition()
+            ).count()
 
     def resolve_root_idea(self, args, context, info):
         discussion_id = context.matchdict['discussion_id']

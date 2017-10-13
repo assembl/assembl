@@ -7,5 +7,6 @@ query RootIdeaStats($identifier: String) {
       numPosts
     }
   }
+  totalSentiments
   numParticipants
 }

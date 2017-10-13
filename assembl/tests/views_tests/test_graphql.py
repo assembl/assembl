@@ -1566,3 +1566,12 @@ query {
     negative = filter(lambda c: c[u"messageClassifier"] == idea_message_column_negative.message_classifier, columns)[0]
     assert positive[u"numPosts"] == 1
     assert negative[u"numPosts"] == 1
+
+def test_query_discussion_sentiments_count(
+        graphql_request):
+    res = schema.execute(u"""query {
+        totalSentiments
+    }""", context_value=graphql_request)
+    res_data = json.loads(json.dumps(res.data))
+    count = res_data[u"totalSentiments"]
+    assert count == 0
