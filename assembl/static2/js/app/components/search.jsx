@@ -37,13 +37,6 @@ import {
 import get from 'lodash/get';
 import truncate from 'lodash/truncate';
 
-// Keep the style import here. The reason why it's not in main.scss is because
-// we create a searchv1 bundle that includes only the Search component and its
-// local styles for v1. There is an additional searchv1.scss file that overrides
-// some styles for v1
-
-import '../../../css/views/search.scss';
-
 import DateRangeFilter from './search/DateRangeFilter';
 import FilteredSortingSelector from './search/SortingSelector';
 import ProfileLine from './common/profileLine';
@@ -98,19 +91,33 @@ if (__resourceQuery) {
   };
   // }
 } else {
-  Link = require('react-router').Link; // eslint-disable-line
+  // Link = require('react-router').Link; // eslint-disable-line
+  Link = (props) => {
+    return <a href={props.to} dangerouslySetInnerHTML={props.dangerouslySetInnerHTML} />;
+  };
+  const slug = document.getElementById('discussion-slug').value;
   getUrl = (hit) => {
     const id = hit._source.id;
+    let ideaBase64id;
+    let postBase64id;
+    let ideaId;
     switch (hit._type) {
     case 'synthesis':
-      return `posts/${id}`;
+      return undefined;
     case 'user':
-      return `profile/${id}`;
+      return undefined;
     case 'idea':
-      return `ideas/${id}`;
+      ideaBase64id = btoa(`Idea:${id}`);
+      return `/${slug}/debate/thread/theme/${ideaBase64id}`;
     default:
       // post
-      return `posts/${id}`;
+      ideaId = hit._source.idea_id.length > 0 ? hit._source.idea_id[0] : null;
+      if (!ideaId) {
+        return undefined;
+      }
+      ideaBase64id = btoa(`Idea:${ideaId}`);
+      postBase64id = btoa(`Post:${id}`);
+      return `/${slug}/debate/thread/theme/${ideaBase64id}/#${postBase64id}`;
     }
   };
 }
@@ -127,8 +134,15 @@ const PublishedInfo = (props) => {
   );
 };
 
+const TYPE_TO_ICON = {
+  user: 'profil',
+  post: 'discussion',
+  idea: 'idea',
+  synthesis: 'synthesis'
+};
+
 const ImageType = (props) => {
-  return <img className={props.className} src={`/static2/img/icon-${props.type}.svg`} alt="" />;
+  return <span className={`${props.className} assembl-icon-${TYPE_TO_ICON[props.type]}`} />;
 };
 
 const getFieldAnyLang = (source, prop, locale) => {
@@ -393,16 +407,16 @@ const queryFields = calcQueryFields();
 // https://www.elastic.co/guide/en/elasticsearch/reference/current/search-request-highlighting.html#_highlighted_fragments
 const customHighlight = {
   fields: {
-    body: { fragment_size: FRAGMENT_SIZE, number_of_fragments: 1 }
+    body_other: { fragment_size: FRAGMENT_SIZE, number_of_fragments: 1 }
   }
 };
-// setting it for body field seems to apply the setting to all queryFields
+// setting it for body_other field seems to apply the setting to all queryFields
 
 export class SearchComponent extends React.Component {
   constructor(props) {
     super(props);
     const host = '/';
-    this.searchkit = new SearchkitManager(host, { searchOnLoad: false });
+    this.searchkit = new SearchkitManager(host, { searchOnLoad: false, useHistory: false });
     this.searchkit.setQueryProcessor((plainQueryObject) => {
       // rewrite the query to filter on the current discussion
       const modifiedQuery = plainQueryObject;
@@ -533,20 +547,15 @@ export class SearchComponent extends React.Component {
       <SearchkitProvider searchkit={this.searchkit}>
         <Layout size="l">
           <TopBar>
-            <SearchBox autofocus={false} searchOnChange searchThrottleTime={500} queryFields={queryFields} />
-            <button
-              className="btn btn-default btn-sm"
-              id="search-expand"
-              onClick={() => {
-                this.setState({ show: !this.state.show }, () => {
-                  if (this.state.show && !this.searchkit.hasHits()) {
-                    this.searchkit.reloadSearch();
-                  }
-                });
+            <SearchBox
+              autofocus={false}
+              searchOnChange
+              searchThrottleTime={500}
+              queryFields={queryFields}
+              ref={(el) => {
+                this.searchbox = el;
               }}
-            >
-              {this.state.show ? <Translate value="search.collapse_search" /> : <Translate value="search.expand_search" />}
-            </button>
+            />
           </TopBar>
           <LayoutBody className={!this.state.show ? 'hidden' : null}>
             <SideBar>
@@ -641,6 +650,18 @@ export class SearchComponent extends React.Component {
             </SideBar>
             <LayoutResults>
               <ActionBar>
+                <button
+                  className="btn btn-default btn-sm right"
+                  id="search-expand"
+                  onClick={() => {
+                    this.setState({ show: false }, () => {
+                      this.searchbox.accessor.setQueryString(null);
+                      this.searchbox.forceUpdate();
+                    });
+                  }}
+                >
+                  <Translate value="search.collapse_search" />
+                </button>
                 <ActionBarRow>
                   <HitsStats />
                 </ActionBarRow>

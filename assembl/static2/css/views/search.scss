@@ -1,4 +1,3 @@
-@import "../variables.scss";
 @import "../../node_modules/searchkit/theming/vars.scss";
 
 // The class names starting with sk- comes mainly from the searchkit library.
@@ -6,10 +5,10 @@
 // search-box component and layout.
 
 // @import "../../node_modules/searchkit/theming/components.scss";
-$sk-active-bg-color: $purple;
-$sk-action-text-color: $purple;
-$sk-selector-active-background: $purple;
-$highlightColor: #d6c3f6;
+$sk-active-bg-color: $first-color;
+$sk-action-text-color: $first-color;
+$sk-selector-active-background: $first-color;
+$highlightColor: $first-color-light;
 
 @import "../../node_modules/searchkit/theming/components/arrows.scss";
 @import "../../node_modules/searchkit/theming/components/actions.scss";
@@ -51,7 +50,6 @@ $highlightColor: #d6c3f6;
 
 @import "../../node_modules/searchkit/theming/components/panel.scss";
 
-
 .emoticonValue {
     display: inline-block;
     width: 20px;
@@ -61,7 +59,6 @@ $highlightColor: #d6c3f6;
     border-radius: 50%;
     background-color: $highlightColor;
 }
-
 
 .sk-tag-filter {
     display: inline-block;
@@ -78,6 +75,17 @@ $highlightColor: #d6c3f6;
         margin-left: 1ex;
         margin-top: -1em;
     }
+    .inline {
+      display: inline;
+    }
+
+    .profileLine {
+      display: inline;
+    }
+
+    .profileLine .user {
+      vertical-align: middle;
+    }
 }
 
 .date-filter input {
@@ -92,7 +100,7 @@ $highlightColor: #d6c3f6;
 
   &__top-bar {
     height:40px;
-    padding:5px 0 0 0;
+    margin-top: -3px;
     z-index:100;
     position: relative;
     button {
@@ -104,7 +112,7 @@ $highlightColor: #d6c3f6;
     position: absolute;
     z-index: 99;
     margin: 0 auto 0;
-    top:40px;
+    top: 60px;
     left:0;
     width: 100%;
     background-color: #ffffff;
@@ -294,7 +302,7 @@ $marginLeft: $imgtypeWidth + 2*$imgtypeMargin;
 
 .sk-hits-list-hit {
   padding-bottom: 1em;
-  border-bottom: 1px solid $purple;
+  border-bottom: 1px solid $first-color;
   clear: both;
   min-height: 9em;
   position: relative;
@@ -312,7 +320,7 @@ $marginLeft: $imgtypeWidth + 2*$imgtypeMargin;
   }
 
   &__info {
-      color: $purple;
+      color: $first-color;
       margin-left: $marginLeft;
       position: absolute;
       bottom: 1em;
@@ -324,10 +332,13 @@ $marginLeft: $imgtypeWidth + 2*$imgtypeMargin;
   }
 
   &__imgtype {
-    width: $imgtypeWidth;
-    height: 50px;
     float: left;
     margin: $imgtypeMargin;
+    &:before {
+      color: $first-color;
+      font-size: $imgtypeWidth;
+      margin: 0;
+    }
   }
 }
 
@@ -348,5 +359,12 @@ $marginLeft: $imgtypeWidth + 2*$imgtypeMargin;
         &__body{
             z-index: 0;
         }
+    }
+}
+
+
+@media screen and (max-width: 1023px) {
+    #search {
+        display: none;
     }
 }

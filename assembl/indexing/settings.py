@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from copy import deepcopy
 
 from . import index_languages
@@ -28,35 +29,46 @@ TEXT = {
 }
 
 
+# Don't use default language analyzer, it doesn't have the html_strip filter
 known_analyzers = {
-    'ar': "arabic",
-    'hy': "armenian",
-    'eu': "basque",
-    'bg': "bulgarian",
-    'ca': "catalan",
-    'cs': "czech",
-    'nl': "dutch",
-    'en': "english",
-    'fi': "finnish",
-    'fr': "french",
-    'gl': "galician",
-    'de': "german",
-    'hi': "hindi",
-    'hu': "hungarian",
-    'id': "indonesian",
-    'ga': "irish",
-    'it': "italian",
-    'lv': "latvian",
-    'lt': "lithuanian",
-    'no': "norwegian",
-    'pt': "portuguese",
-    'ro': "romanian",
-    'ru': "russian",
-    'ku': "sorani",
-    'es': "spanish",
-    'sv': "swedish",
-    'tr': "turkish",
+#    'ar': "arabic",
+#    'hy': "armenian",
+#    'eu': "basque",
+#    'bg': "bulgarian",
+#    'ca': "catalan",
+#    'cs': "czech",
+#    'nl': "dutch",
+#    'en': "english",
+#    'fi': "finnish",
+#    'fr': "french",
+#    'gl': "galician",
+#    'de': "german",
+#    'hi': "hindi",
+#    'hu': "hungarian",
+#    'id': "indonesian",
+#    'ga': "irish",
+#    'it': "italian",
+#    'lv': "latvian",
+#    'lt': "lithuanian",
+#    'no': "norwegian",
+#    'pt': "portuguese",
+#    'ro': "romanian",
+#    'ru': "russian",
+#    'ku': "sorani",
+#    'es': "spanish",
+#    'sv': "swedish",
+#    'tr': "turkish",
+    'ja': "japanese",
+    'zh_CN': "chinese",
 }
+
+# You can test the search like this:
+# curl 'http://localhost:9200/assembl/_search?pretty' --data-binary '{"query": {"bool": {"must": [{"match": {"body_fr": "Nourbakhsh" }}]}}}'
+# curl 'http://localhost:9200/assembl/_search?pretty' --data-binary '{"query": {"bool": {"must": [{"match": {"body_ja": "プラットフォーム" }}]}}}'
+# To test an analyzer:
+# curl 'http://localhost:9200/assembl/_analyze?pretty' --data-binary '{"analyzer": "japanese", "text": "この集合知のプラットフォームを用いて主要なアイデア や提案を統合することで、人工知能の国際的なガバナンスのための解決策と実行可能な政策ツールを提供します。"}'
+# To verify the mapping:
+# curl http://localhost:9200/assembl/_mapping?pretty
 
 
 def add_index_languages(props, names):
@@ -81,6 +93,7 @@ COMMON_POST = {
         'creation_date': DATE,
         'id': LONG,
         'parent_id': {'type': 'long', 'null_value': 0},
+        'idea_id': LONG,
         'creator_id': LONG,
         'parent_creator_id': LONG,
     #    'publishes_synthesis_id': KEYWORD,
@@ -163,6 +176,20 @@ def get_index_settings(config):
                                          "lowercase",
                                          "word_delimiter"
                                      ]
+                                   },
+                                   "japanese": {
+                                     "type": "custom",
+                                     "char_filter": [
+                                       "html_strip",
+                                     ],
+                                     "tokenizer": "kuromoji_tokenizer",
+                                   },
+                                   "chinese": {
+                                     "type": "custom",
+                                     "char_filter": [
+                                       "html_strip",
+                                     ],
+                                     "tokenizer": "smartcn_tokenizer",
                                    }
                                  }
                                }
