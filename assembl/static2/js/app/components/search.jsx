@@ -547,20 +547,15 @@ export class SearchComponent extends React.Component {
       <SearchkitProvider searchkit={this.searchkit}>
         <Layout size="l">
           <TopBar>
-            <SearchBox autofocus={false} searchOnChange searchThrottleTime={500} queryFields={queryFields} />
-            <button
-              className="btn btn-default btn-sm"
-              id="search-expand"
-              onClick={() => {
-                this.setState({ show: !this.state.show }, () => {
-                  if (this.state.show && !this.searchkit.hasHits()) {
-                    this.searchkit.reloadSearch();
-                  }
-                });
+            <SearchBox
+              autofocus={false}
+              searchOnChange
+              searchThrottleTime={500}
+              queryFields={queryFields}
+              ref={(el) => {
+                this.searchbox = el;
               }}
-            >
-              {this.state.show ? <Translate value="search.collapse_search" /> : <Translate value="search.expand_search" />}
-            </button>
+            />
           </TopBar>
           <LayoutBody className={!this.state.show ? 'hidden' : null}>
             <SideBar>
@@ -655,6 +650,18 @@ export class SearchComponent extends React.Component {
             </SideBar>
             <LayoutResults>
               <ActionBar>
+                <button
+                  className="btn btn-default btn-sm right"
+                  id="search-expand"
+                  onClick={() => {
+                    this.setState({ show: false }, () => {
+                      this.searchbox.accessor.setQueryString(null);
+                      this.searchbox.forceUpdate();
+                    });
+                  }}
+                >
+                  <Translate value="search.collapse_search" />
+                </button>
                 <ActionBarRow>
                   <HitsStats />
                 </ActionBarRow>

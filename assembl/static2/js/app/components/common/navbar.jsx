@@ -57,10 +57,10 @@ class NavBar extends React.Component {
             <div className="nav-menu left">
               <NavigationMenu />
             </div>
-            <div id="search">
-              <Search />
-            </div>
             <div className="navbar-icons right">
+              <div id="search" className="left">
+                <Search />
+              </div>
               {connectedUserId &&
                 debateData.helpUrl &&
                 <Link to={`${debateData.helpUrl}`} target="_blank">

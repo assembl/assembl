@@ -100,7 +100,7 @@ $highlightColor: $first-color-light;
 
   &__top-bar {
     height:40px;
-    padding:15px 0 0 0;
+    margin-top: -3px;
     z-index:100;
     position: relative;
     button {
