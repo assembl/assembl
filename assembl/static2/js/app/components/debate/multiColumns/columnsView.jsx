@@ -49,7 +49,7 @@ class ColumnsView extends React.Component {
     } = this.props;
     const columnsArray = this.orderPostsByMessageClassifier();
     const noSynthesis = messageColumns.every((col) => {
-      return col.header.length < 1;
+      return col.header && col.header.length > 1;
     });
     return (
       <Grid fluid className="background-grey no-padding">
