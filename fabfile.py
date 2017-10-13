@@ -38,8 +38,7 @@ DEFAULT_SECTION = "DEFAULT"
 
 def running_locally(hosts = None):
     hosts = hosts or env.hosts
-    # TODO: Add the result of `hostname` to the list. Cache.
-    return set(env.hosts) - set(['localhost', '127.0.0.1']) == set()
+    return set(env.hosts) - set(['localhost', '127.0.0.1', env.hostname]) == set()
 
 
 def combine_rc(rc_filename, overlay=None):
@@ -103,6 +102,9 @@ def sanitize_env():
     # nor env.host_string are set properly. Revisit with Fabric2.
     if not env.get('host_string', None):
         env.host_string = env.hosts[0]
+
+    if not env.hostname:
+        env.hostname = run('hostname');
     #Are we on localhost
     if running_locally():
         #WARNING:  This code will run locally, NOT on the remote server,
