@@ -72,7 +72,7 @@ class TopPostForm extends React.Component<*, TopPostFormProps, TopPostFormState>
         const variables = {
           contentLocale: contentLocale,
           ideaId: ideaId,
-          subject: subject || 'subject',
+          subject: subject || null,
           messageClassifier: messageClassifier || null,
           // use the updated content state with new entities
           body: convertRawContentStateToHTML(result.contentState),
