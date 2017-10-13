@@ -6,6 +6,7 @@ addons:
   postgresql: "9.5"
 #cache: pip
 before_install:
+ - sudo usermod -a -G www-data $USER
  - sudo apt-get -qq update
  - sudo apt-get install -y fabric git openssh-server
  #- sudo apt-get install -y postgresql
@@ -37,7 +38,8 @@ before_install:
  - git submodule update --init
  - ls -lha /home/travis/build/assembl/assembl/assembl/scripts/pypsql.py
  - fab -c configs/travis.rc update_pip_requirements
- - fab -c configs/travis.rc set_file_permissions
+ #- fab -c configs/travis.rc set_file_permissions
+ - sudo -E su $USER -c 'fab -c configs/travis.rc set_file_permissions'
  - fab -c configs/travis.rc bootstrap_from_checkout
 install: true
 before_script:
