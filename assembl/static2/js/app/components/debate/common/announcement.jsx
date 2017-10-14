@@ -1,3 +1,4 @@
+// @flow
 import React from 'react';
 import { Translate, I18n } from 'react-redux-i18n';
 import { Col, Tooltip } from 'react-bootstrap';
@@ -60,7 +61,8 @@ const dirtySplitHack = (announcementContent) => {
 };
 
 class Announcement extends React.Component {
-  getColumnInfos(messageColumns) {
+  getColumnInfos() {
+    const { messageColumns } = this.props.ideaWithPostsData.idea;
     const mapping = {
       positive: I18n.t('multiColumns.announcement.positiveTitle'),
       negative: I18n.t('multiColumns.announcement.negativeTitle'),
@@ -79,7 +81,7 @@ class Announcement extends React.Component {
     const { numContributors, numPosts, posts } = idea;
     const sentimentsCount = getSentimentsCount(posts);
     const mediaContent = dirtySplitHack(announcementContent);
-    const columnInfos = this.getColumnInfos(idea.messageColumns);
+    const columnInfos = this.getColumnInfos();
     const doughnutsElements = isTwoColumns ? columnInfos : createDoughnutElements(sentimentsCount);
     return (
       <div className="announcement">
@@ -98,18 +100,15 @@ class Announcement extends React.Component {
               <StatisticsDoughnut elements={doughnutsElements} />
             </div>
             {isTwoColumns
-              ? <div
-                className="announcement-numbers-twoCol"
-                style={{ fontSize: 18, width: 130, textAlign: 'left', paddingLeft: 25 }}
-              >
+              ? <div className="announcement-numbers-twoCol">
                 {columnInfos.map((col, index) => {
                   return (
                     <div style={{ color: col.color }} key={`col-${index}`}>
-                      {col.count} <span style={{ fontSize: 12, paddingLeft: 0 }}>{col.name}</span>
+                      {col.count} <span className="col-annoucement-count">{col.name}</span>
                     </div>
                   );
                 })}
-                <div style={{ color: '#5C0FD9' }}>
+                <div className="color">
                   {numContributors} <span className="assembl-icon-profil" />
                 </div>
               </div>
