@@ -1548,7 +1548,10 @@ def convert_to_utf8(rowdict):
 def phase1_csv_export(request):
     """CSV export for phase 1."""
     has_lang = 'lang' in request.GET
-    language = request.GET['lang'] or u'fr'
+    if has_lang:
+        language = request.GET['lang']
+    else:
+        language = u'fr'
     discussion_id = request.context.get_discussion_id()
     THEMATIC_NAME = u"Nom de la thématique"
     QUESTION_ID = u"Numéro de la question"
