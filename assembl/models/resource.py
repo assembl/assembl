@@ -100,6 +100,12 @@ class Resource(HistoryMixin, DiscussionBoundBase):
     def get_discussion_conditions(cls, discussion_id, alias_maker=None):
         return (cls.discussion_id == discussion_id,)
 
+    __mapper_args__ = {
+        'polymorphic_identity': 'resource',
+        'polymorphic_on': type,
+        'with_polymorphic': '*'
+    }
+
     crud_permissions = CrudPermissions(
         P_MANAGE_RESOURCE, P_READ, P_MANAGE_RESOURCE, P_MANAGE_RESOURCE,
         P_MANAGE_RESOURCE, P_MANAGE_RESOURCE)
