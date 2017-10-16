@@ -311,6 +311,8 @@ from .announcement import (
     IdeaAnnouncement,
 )
 
+from .resource import Resource
+
 
 def includeme(config):
     config.include('.langstrings')
