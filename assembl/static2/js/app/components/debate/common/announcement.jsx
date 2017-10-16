@@ -1,12 +1,13 @@
 // @flow
 import React from 'react';
-import { Translate, I18n } from 'react-redux-i18n';
+import { Translate } from 'react-redux-i18n';
 import { Col, Tooltip } from 'react-bootstrap';
 
 import StatisticsDoughnut from '../common/statisticsDoughnut';
 import { sentimentDefinitionsObject } from './sentimentDefinitions';
 import Media from '../../common/media';
 import { PublicationStates } from '../../../constants';
+import { multiColumnMapping } from '../../../utils/mapping';
 
 const createTooltip = (sentiment, count) => {
   return (
@@ -63,11 +64,7 @@ const dirtySplitHack = (announcementContent) => {
 class Announcement extends React.Component {
   getColumnInfos() {
     const { messageColumns } = this.props.ideaWithPostsData.idea;
-    const mapping = {
-      positive: I18n.t('multiColumns.announcement.positiveTitle'),
-      negative: I18n.t('multiColumns.announcement.negativeTitle'),
-      alternative: I18n.t('multiColumns.announcement.alternativeTitle')
-    };
+    const mapping = multiColumnMapping().announcement;
     const columnsArray = [];
     messageColumns.forEach((col) => {
       columnsArray.push({ count: col.numPosts, color: col.color, name: mapping[col.messageClassifier] || col.name });
@@ -77,12 +74,12 @@ class Announcement extends React.Component {
   }
   render = () => {
     const { ideaWithPostsData: { idea }, announcementContent } = this.props;
-    const isTwoColumns = idea.messageColumns.length > 0;
+    const isMultiColumns = idea.messageColumns && idea.messageColumns.length > 0;
     const { numContributors, numPosts, posts } = idea;
     const sentimentsCount = getSentimentsCount(posts);
     const mediaContent = dirtySplitHack(announcementContent);
     const columnInfos = this.getColumnInfos();
-    const doughnutsElements = isTwoColumns ? columnInfos : createDoughnutElements(sentimentsCount);
+    const doughnutsElements = isMultiColumns ? columnInfos : createDoughnutElements(sentimentsCount);
     return (
       <div className="announcement">
         <div className="announcement-title">
@@ -99,12 +96,12 @@ class Announcement extends React.Component {
             <div className="announcement-doughnut">
               <StatisticsDoughnut elements={doughnutsElements} />
             </div>
-            {isTwoColumns
-              ? <div className="announcement-numbers-twoCol">
+            {isMultiColumns
+              ? <div className="announcement-numbers-multicol">
                 {columnInfos.map((col, index) => {
                   return (
                     <div style={{ color: col.color }} key={`col-${index}`}>
-                      {col.count} <span className="col-annoucement-count">{col.name}</span>
+                      {col.count} <span className="col-announcement-count">{col.name}</span>
                     </div>
                   );
                 })}

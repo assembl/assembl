@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { compose, graphql } from 'react-apollo';
 import { FormGroup, Button } from 'react-bootstrap';
 import { I18n, Translate } from 'react-redux-i18n';
+import classNames from 'classnames';
 import type { RawContentState } from 'draft-js';
 
 import createPostMutation from '../../../graphql/mutations/createPost.graphql';
@@ -117,6 +118,11 @@ class TopPostForm extends React.Component<*, TopPostFormProps, TopPostFormState>
     });
   };
 
+  getClassNames() {
+    const { ideaOnColumn } = this.props;
+    return classNames(['button-submit', 'button-dark', 'btn', 'btn-default', 'right', !ideaOnColumn ? 'margin-l' : 'margin-m']);
+  }
+
   render() {
     return (
       <div className="form-container">
@@ -146,11 +152,7 @@ class TopPostForm extends React.Component<*, TopPostFormProps, TopPostFormState>
                 </Button>
                 : null}
               <Button
-                className={
-                  !this.props.ideaOnColumn
-                    ? 'button-submit button-dark btn btn-default right margin-l'
-                    : 'button-submit button-dark btn btn-default right margin-m'
-                }
+                className={this.getClassNames()}
                 onClick={this.createTopPost}
                 style={{ marginBottom: '30px' }}
                 disabled={this.state.submitting}

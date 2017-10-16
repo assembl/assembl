@@ -31,12 +31,12 @@ class TopPostFormContainer extends React.Component {
         <div className="max-container">
           <Row>
             <div className={this.getClassNames()}>
-              {columnsInfos.map((column) => {
+              {columnsInfos.map((column, index) => {
                 return (
                   <Col
                     xs={12}
                     md={12 / columnsInfos.length}
-                    key={column.messageClassifier || 'form-container'}
+                    key={`col-container-${index}`}
                     style={isColumnViewInline ? { width: MIN_WIDTH_COLUMN } : {}}
                   >
                     <div
@@ -57,7 +57,9 @@ class TopPostFormContainer extends React.Component {
                               <span className="assembl-icon-discussion color" />
                             </div>
                             <div
-                              className={messageColumns.length > 1 ? 'start-discussion start-discussion-2' : 'start-discussion'}
+                              className={
+                                messageColumns.length > 1 ? 'start-discussion start-discussion-multicol' : 'start-discussion'
+                              }
                             >
                               <h3 className="dark-title-3 no-margin">
                                 {messageColumns.length > 1 ? column.name : <Translate value="debate.thread.startDiscussion" />}

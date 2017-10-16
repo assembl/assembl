@@ -5,6 +5,7 @@ import { I18n } from 'react-redux-i18n';
 import BoxWithHyphen from '../../common/boxWithHyphen';
 import Tree from '../../common/tree';
 import { MIN_WIDTH_COLUMN } from '../../../constants';
+import { multiColumnMapping } from '../../../utils/mapping';
 
 class ColumnsView extends React.Component {
   orderPostsByMessageClassifier() {
@@ -16,7 +17,7 @@ class ColumnsView extends React.Component {
       columnsArray[keyName] = [];
       posts.forEach((post) => {
         if (post.messageClassifier === keyName) {
-          columnsArray[keyName].push({ ...post });
+          columnsArray[keyName].push(post);
         }
       });
     });
@@ -26,11 +27,7 @@ class ColumnsView extends React.Component {
 
   getSynthesisTitle = (classifier, colName) => {
     const { ideaTitle } = this.props;
-    const mapping = {
-      positive: I18n.t('multiColumns.synthesis.positiveTitle', { ideaTitle: ideaTitle }),
-      negative: I18n.t('multiColumns.synthesis.negativeTitle', { ideaTitle: ideaTitle }),
-      alternative: I18n.t('multiColumns.synthesis.alternativeTitle', { ideaTitle: ideaTitle })
-    };
+    const mapping = multiColumnMapping(ideaTitle).columnsView;
 
     return mapping[classifier] || I18n.t('multiColumns.synthesis.colName', { colName: colName });
   };

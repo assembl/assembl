@@ -13,7 +13,7 @@ import Debate from './pages/debate';
 import DebateThread from './pages/debateThread';
 import Survey from './pages/survey';
 import Idea from './pages/idea';
-import TwoColumns from './pages/twoColumns';
+import MultiColumns from './pages/multiColumns';
 import TokenVote from './pages/tokenVote';
 import Community from './pages/community';
 import Profile from './pages/profile';
@@ -25,7 +25,7 @@ import UnauthorizedAdministration from './pages/unauthorizedAdministration';
 import SurveyAdmin from './pages/surveyAdmin';
 import ThreadAdmin from './pages/threadAdmin';
 import DiscussionAdmin from './pages/discussionAdmin';
-import TwoColumnsAdmin from './pages/twoColumnsAdmin';
+import MultiColumnsAdmin from './pages/multiColumnsAdmin';
 import TokenVoteAdmin from './pages/tokenVoteAdmin';
 import JoinDiscussion from './pages/joinDiscussion';
 import { routeForRouter } from './utils/routeMap';
@@ -36,7 +36,7 @@ const DebateHome = (props) => {
     return <Debate {...props} />;
   case 'thread':
     return <DebateThread {...props} />;
-  case 'twoColumns':
+  case 'multiColumns':
     return <Debate {...props} />;
   case 'tokenVote':
     return <Debate {...props} />;
@@ -51,8 +51,8 @@ const DebateChild = (props) => {
     return <Survey id={props.id} identifier={props.identifier} />;
   case 'thread':
     return <Idea id={props.id} identifier={props.identifier} routerParams={props.params} />;
-  case 'twoColumns':
-    return <TwoColumns id={props.id} identifier={props.identifier} />;
+  case 'multiColumns':
+    return <MultiColumns id={props.id} identifier={props.identifier} />;
   case 'tokenVote':
     return <TokenVote id={props.id} identifier={props.identifier} />;
   default:
@@ -68,8 +68,8 @@ const AdminChild = (props) => {
     return <SurveyAdmin {...props} thematicId={props.location.query.thematic} section={props.location.query.section} />;
   case 'thread':
     return <ThreadAdmin />;
-  case 'twoColumns':
-    return <TwoColumnsAdmin />;
+  case 'multiColumns':
+    return <MultiColumnsAdmin />;
   case 'tokenVote':
     return <TokenVoteAdmin />;
   default:
