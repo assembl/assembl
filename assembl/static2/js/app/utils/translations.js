@@ -191,7 +191,8 @@ const Translations = {
     debate: {
       answer: "Je réponds :",
       toAnswer: "Répondre",
-      share: "Partager ce message",
+      sharePost: "Partager ce message",
+      shareSynthesis: "Partager cette synthèse",
       copyLink: "Copier le lien dans le presse-papier",
       linkCopied: "Lien copié",
       subject: "Ecrivez le titre",
@@ -522,7 +523,8 @@ const Translations = {
     debate: {
       answer: "I answer:",
       toAnswer: "Answer",
-      share: "Share this message",
+      sharePost: "Share this message",
+      shareSynthesis: "Share this synthesis",
       copyLink: "Copy the link to the clipboard",
       linkCopied: "Link copied",
       subject: "Write the title",

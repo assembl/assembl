@@ -38,9 +38,15 @@ export const answerTooltip = (
   </Tooltip>
 );
 
-export const shareTooltip = (
-  <Tooltip id="shareTooltip">
-    <Translate value="debate.share" />
+export const sharePostTooltip = (
+  <Tooltip id="sharePostTooltip">
+    <Translate value="debate.sharePost" />
+  </Tooltip>
+);
+
+export const shareSynthesisTooltip = (
+  <Tooltip id="shareSynthesisTooltip">
+    <Translate value="debate.shareSynthesis" />
   </Tooltip>
 );
 
