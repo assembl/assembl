@@ -18,33 +18,13 @@ cache:
 before_install:
  # The following line is needed, otherwise the set_file_permissions fab command yells error "Operation not permitted"
  - sudo usermod -a -G www-data $USER
- # The following line produces warning "uses weak digest algorithm"
- - sudo apt-get -qq update
  - sudo apt-get install -y fabric git openssh-server
- - sudo apt-get install apt-transport-https
- - echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee -a /etc/apt/sources.list.d/yarn.list
- - sudo curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
- - sudo apt-get -qq update
- - sudo apt-get install yarn
- - sudo apt-get install -y python-virtualenv python-pip python-psycopg2
- - sudo apt-get install -y python-requests python-jinja2 git
- - sudo apt-get install -y build-essential python-dev pandoc
- - sudo apt-get install -y automake bison flex gperf gawk
- - sudo apt-get install -y graphviz pkg-config gfortran
- - sudo apt-get install -y chromium-chromedriver
- - sudo apt-get install -y libpq-dev libmemcached-dev libzmq3-dev libxslt1-dev libffi-dev libhiredis-dev libxml2-dev libssl-dev libreadline-dev liblapack-dev libatlas-dev libblas-dev libgraphviz-dev libxmlsec1-dev
- - sudo apt-get install -y redis-server
- - sudo /etc/init.d/redis-server start
- - sudo apt-get install -y memcached
- - sudo /etc/init.d/memcached start
  - ssh-keygen -P '' -f ~/.ssh/id_rsa && cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
  - echo "_extends = ./testing.rc" > configs/travis.rc; echo "_gitbranch = $TRAVIS_COMMIT" >> configs/travis.rc;
- - git fetch --unshallow
- - git config remote.origin.fetch "+refs/heads/*:refs/remotes/origin/*"; git fetch origin
- - git fetch origin $TRAVIS_COMMIT
- - git checkout $TRAVIS_COMMIT
- - git pull
- - git submodule update --init
+ # The following line produces warning "uses weak digest algorithm" during its `apt-get update`
+ - fab -c configs/travis.rc install_assembl_server_deps
+ - fab -c configs/travis.rc install_redis
+ - fab -c configs/travis.rc install_memcached
 install:
  - fab -c configs/travis.rc update_pip_requirements
  # The set_file_permissions fabric command needs to be encapsulated into this sudo su command, because in before_install we have added $USER in www-data group but have not logged out and logged in again for changes to take effect in this terminal
