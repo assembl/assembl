@@ -67,7 +67,7 @@ class FileUploader extends React.Component {
   render() {
     const fileSrc = this.state.fileSrc;
     const fileIsImage = this.props.isImage;
-    const urlIsImage = fileSrc && fileSrc.includes('png' || 'jpeg' || 'jpg' || 'gif');
+    const urlIsImage = fileSrc && fileSrc.endsWith('png' || 'jpeg' || 'jpg' || 'gif');
     const isImage = fileIsImage || urlIsImage;
     return (
       <div>
