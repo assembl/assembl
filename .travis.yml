@@ -31,7 +31,7 @@ install:
  # TODO: fix fabfile's check_and_create_database_user command which produces an error when run by travis. For now we instead run the following command
  - pip install psycopg2
  - python2 $PWD/assembl/scripts/pypsql.py -u postgres -n localhost  "CREATE USER assembl_test WITH CREATEDB ENCRYPTED PASSWORD 'assembl_test'; COMMIT;"
- # The following command runs lots of sub-commands. It takes approximately 18 min
+ # The following command runs lots of sub-commands. After the following line has completed, approximately 10min have elapsed from the very beginning of the build
  - fab -c configs/travis.rc bootstrap_from_checkout
 before_script:
   - source $VIRTUAL_ENV/bin/activate
