@@ -299,11 +299,10 @@ const Translations = {
       },
       surveyExport: {
         annotation: "Vous pouvez exporter l'ensemble des données du débat en cliquant simplement sur le bouton Exporter",
-        chooseExportLanguage: "Langue des messages après export",
         link: "Exporter",
-        noExportLanguage: "Ne pas traduire les messages avant export",
+        noExportLanguage: "Conserver les messages dans leurs langues d'origine",
         title: "Exporter les données du débat",
-        willBeTranslatedIn: "Les messages seront traduit en %{language}"
+        translateTheMessagesIn: "Traduire l'ensemble des messages en"
       },
       step_x_total: "Section %{num} sur %{total}",
       saveThemes: "Sauvegarder",
@@ -615,11 +614,10 @@ const Translations = {
       },
       surveyExport: {
         annotation: "You can export all the debate data by clicking on the Export button",
-        chooseExportLanguage: "Export messages to language",
         link: "Export",
-        noExportLanguage: "Do not translate the messages before export",
+        noExportLanguage: "Keep the messages in their original languages",
         title: "Export the debate data",
-        willBeTranslatedIn: "The messages will be translated in %{language}"
+        translateTheMessagesIn: "Translate the messages in"
       },
       step_x_total: "Section %{num} on %{total}",
       saveThemes: "Save",
