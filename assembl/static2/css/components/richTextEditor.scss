@@ -129,21 +129,13 @@
     }
   }
 
-  .editor-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-
   .editor-label {
-    display: flex;
-    justify-content: flex-start;
-
+    float: left;
+    padding-top: 12px;
   }
 
   .editor-toolbar {
-    display: flex;
-    justify-content: flex-end;
+    float:right;
     .btn-group {
       margin-right: 5px;
 
@@ -176,7 +168,6 @@
     color: $grey2;
     font-family: $font-family6;
     position: absolute;
-    margin-left: 10px;
   }
 
   .DraftEditor-root {

@@ -10,8 +10,9 @@ class SynthesisContainer extends React.Component {
     const discussionId = getDiscussionId();
     this.props.fetchSynthesis(discussionId);
   }
+
   render() {
-    const { synthesis } = this.props.synthesis;
+    const { synthesis } = this.props;
     return (
       <section className="home-section synthesis-section">
         <Grid fluid className="background-light">
@@ -19,7 +20,7 @@ class SynthesisContainer extends React.Component {
             <div style={{ margin: '20px 0' }}>
               <Row>
                 <Col md={12}>
-                  {synthesis && Object.keys(synthesis.lastPublishedSynthesis).length > 0 && <Synthesis />}
+                  {synthesis ? <Synthesis synthesis={synthesis} /> : null}
                 </Col>
               </Row>
             </div>

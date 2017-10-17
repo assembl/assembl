@@ -13,7 +13,7 @@ import { getConnectedUserId } from '../../../utils/globalFunctions';
 import { convertRawContentStateToHTML, rawContentStateIsEmpty } from '../../../utils/draftjs';
 import RichTextEditor from '../../common/richTextEditor';
 import attachmentsPlugin from '../../common/richTextEditor/attachmentsPlugin';
-import { TEXT_AREA_MAX_LENGTH } from './topPostForm';
+import { TEXT_AREA_MAX_LENGTH } from '../common/topPostForm';
 
 type AnswerFormProps = {
   contentLocale: string,

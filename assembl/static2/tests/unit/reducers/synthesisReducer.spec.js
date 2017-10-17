@@ -7,21 +7,32 @@ describe('Return synthesis state changes', () => {
         type: 'FETCH_SYNTHESIS'
       })
     ).toEqual({
-      synthesis: null,
-      synthesisLoading: true,
-      synthesisError: null
+      lastPublishedSynthesis: null,
+      loading: true,
+      error: null
     });
   });
   it('Should handle RESOLVED_FETCH_SYNTHESIS', () => {
+    const lastPublishedSynthesis = {
+      creation_date: 'thedate',
+      introduction: 'Lorem ipsum dolor sit amet',
+      published_in_post: 'post/foobar',
+      subject: 'The subject'
+    };
     expect(
       SynthesisReducer([], {
         type: 'RESOLVED_FETCH_SYNTHESIS',
-        synthesis: { data: 'data' }
+        synthesis: { lastPublishedSynthesis: lastPublishedSynthesis }
       })
     ).toEqual({
-      synthesis: { data: 'data' },
-      synthesisLoading: false,
-      synthesisError: null
+      lastPublishedSynthesis: {
+        creationDate: 'thedate',
+        introduction: 'Lorem ipsum dolor sit amet',
+        publishedInPost: 'post/foobar',
+        subject: 'The subject'
+      },
+      loading: false,
+      error: null
     });
   });
   it('Should handle FAILED_FETCH_SYNTHESIS', () => {
@@ -31,9 +42,9 @@ describe('Return synthesis state changes', () => {
         synthesisError: 'Forbidden'
       })
     ).toEqual({
-      synthesis: null,
-      synthesisLoading: false,
-      synthesisError: 'Forbidden'
+      lastPublishedSynthesis: null,
+      loading: false,
+      error: 'Forbidden'
     });
   });
 });

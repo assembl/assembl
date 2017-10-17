@@ -151,6 +151,20 @@ const Translations = {
       from_start_to_end: "du %{start} au %{end}",
       chatbot: "Chat avec %{chatbotName}"
     },
+    multiColumns: {
+      announcement: {
+        positiveTitle: "Pour",
+        negativeTitle: "Contre",
+        alternativeTitle: "Alternatif"
+      },
+      synthesis: {
+        positiveTitle: "Synthèse des arguments en faveur du thème %{ideaTitle}",
+        negativeTitle: "Synthèse des arguments en défaveur du thème %{ideaTitle}",
+        alternativeTitle: "Synthèse des arguments alternatifs du thème %{ideaTitle}",
+        colName: "Synthèse : %{colName}",
+        noSynthesisYet: "La synthèse est en cours de rédaction"
+      }
+    },
     synthesis: {
       title: "synthèse"
     },
@@ -487,6 +501,20 @@ const Translations = {
       },
       uploadButton: "Choose a file to upload",
       goUp: "Back to top"
+    },
+    multiColumns: {
+      announcement: {
+        positiveTitle: "For",
+        negativeTitle: "Against",
+        alternativeTitle: "Alternative"
+      },
+      synthesis: {
+        positiveTitle: "Synthesis of the arguments for the theme %{ideaTitle}",
+        negativeTitle: "Synthesis of the arguments against the theme %{ideaTitle}",
+        alternativeTitle: "Synthesis of the alternative arguments of the theme %{ideaTitle}",
+        colName: "Synthesis: %{colName}",
+        noSynthesisYet: "The synthesis is currently being written"
+      }
     },
     synthesis: {
       title: "synthesis"

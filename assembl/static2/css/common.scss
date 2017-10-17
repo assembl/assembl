@@ -51,7 +51,9 @@ input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
 input.placeholder, textarea.placeholder {
   font-family: $font-family6;
 }
-
+.overflow-x {
+  overflow-x: scroll;
+}
 .pre-wrap {
   white-space: pre-wrap;
 }
@@ -234,7 +236,7 @@ input.placeholder, textarea.placeholder {
     color: $grey3;
     font-family: $font-family;
     font-size: $font-size-xs;
-    padding: 0 0 3px 22px;
+    padding: 0 0 0 5px;
 }
 
 .form-label-body {

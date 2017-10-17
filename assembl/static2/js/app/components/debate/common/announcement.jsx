@@ -1,3 +1,4 @@
+// @flow
 import React from 'react';
 import { Translate } from 'react-redux-i18n';
 import { Col, Tooltip } from 'react-bootstrap';
@@ -6,6 +7,7 @@ import StatisticsDoughnut from '../common/statisticsDoughnut';
 import { sentimentDefinitionsObject } from './sentimentDefinitions';
 import Media from '../../common/media';
 import { PublicationStates } from '../../../constants';
+import { multiColumnMapping } from '../../../utils/mapping';
 
 const createTooltip = (sentiment, count) => {
   return (
@@ -60,11 +62,24 @@ const dirtySplitHack = (announcementContent) => {
 };
 
 class Announcement extends React.Component {
+  getColumnInfos() {
+    const { messageColumns } = this.props.ideaWithPostsData.idea;
+    const mapping = multiColumnMapping().announcement;
+    const columnsArray = [];
+    messageColumns.forEach((col) => {
+      columnsArray.push({ count: col.numPosts, color: col.color, name: mapping[col.messageClassifier] || col.name });
+    });
+
+    return columnsArray;
+  }
   render = () => {
     const { ideaWithPostsData: { idea }, announcementContent } = this.props;
+    const isMultiColumns = idea.messageColumns && idea.messageColumns.length > 0;
     const { numContributors, numPosts, posts } = idea;
     const sentimentsCount = getSentimentsCount(posts);
     const mediaContent = dirtySplitHack(announcementContent);
+    const columnInfos = this.getColumnInfos();
+    const doughnutsElements = isMultiColumns ? columnInfos : createDoughnutElements(sentimentsCount);
     return (
       <div className="announcement">
         <div className="announcement-title">
@@ -79,11 +94,25 @@ class Announcement extends React.Component {
         <Col xs={12} md={4} className="col-md-pull-8">
           <div className="announcement-statistics">
             <div className="announcement-doughnut">
-              <StatisticsDoughnut elements={createDoughnutElements(sentimentsCount)} />
+              <StatisticsDoughnut elements={doughnutsElements} />
             </div>
-            <div className="announcement-numbers">
-              {numPosts} <span className="assembl-icon-message" /> - {numContributors} <span className="assembl-icon-profil" />
-            </div>
+            {isMultiColumns
+              ? <div className="announcement-numbers-multicol">
+                {columnInfos.map((col, index) => {
+                  return (
+                    <div style={{ color: col.color }} key={`col-${index}`}>
+                      {col.count} <span className="col-announcement-count">{col.name}</span>
+                    </div>
+                  );
+                })}
+                <div className="color">
+                  {numContributors} <span className="assembl-icon-profil" />
+                </div>
+              </div>
+              : <div className="announcement-numbers">
+                {numPosts} <span className="assembl-icon-message" /> - {numContributors}{' '}
+                <span className="assembl-icon-profil" />
+              </div>}
           </div>
         </Col>
       </div>

@@ -216,8 +216,8 @@
 
   .start-discussion {
       display: inline-block;
-      max-width: 150px;
       padding: 2px 0 0 10px;
+      max-width: 150px;
   }
 
   .start-discussion-icon {
@@ -243,6 +243,10 @@
       &:focus {
           box-shadow: 0 0 0 50px $input-txt-bkg-color inset;
       }
+  }
+
+  .input-title-label {
+    padding-bottom: 8px;
   }
 }
 
