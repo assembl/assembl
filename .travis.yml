@@ -21,8 +21,6 @@ before_install:
  # The following line produces warning "uses weak digest algorithm"
  - sudo apt-get -qq update
  - sudo apt-get install -y fabric git openssh-server
- #- sudo apt-get install -y postgresql
- #- sudo /etc/init.d/postgresql restart
  - sudo apt-get install apt-transport-https
  - echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee -a /etc/apt/sources.list.d/yarn.list
  - sudo curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
@@ -40,11 +38,11 @@ before_install:
  - sudo apt-get install -y memcached
  - sudo /etc/init.d/memcached start
  - ssh-keygen -P '' -f ~/.ssh/id_rsa && cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
- - echo "_extends = ./testing.rc" > configs/travis.rc; echo "_gitbranch = $TRAVIS_BRANCH" >> configs/travis.rc;
+ - echo "_extends = ./testing.rc" > configs/travis.rc; echo "_gitbranch = $TRAVIS_COMMIT" >> configs/travis.rc;
  - git fetch --unshallow
  - git config remote.origin.fetch "+refs/heads/*:refs/remotes/origin/*"; git fetch origin
- - git fetch origin $TRAVIS_BRANCH
- - git checkout $TRAVIS_BRANCH
+ - git fetch origin $TRAVIS_COMMIT
+ - git checkout $TRAVIS_COMMIT
  - git pull
  - git submodule update --init
 install:
