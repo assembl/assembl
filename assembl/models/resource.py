@@ -9,7 +9,6 @@ from sqlalchemy.orm import relationship, backref
 
 from .auth import CrudPermissions, P_MANAGE_RESOURCE, P_READ
 from . import DiscussionBoundBase, HistoryMixin
-from .attachment import Document
 from .langstrings import LangString
 
 
@@ -19,12 +18,6 @@ class Resource(HistoryMixin, DiscussionBoundBase):
 
     __tablename__ = "resource"
     type = Column(String(60), nullable=False)
-
-    id = Column(Integer, ForeignKey(
-        'content.id',
-        ondelete='CASCADE',
-        onupdate='CASCADE'
-    ), primary_key=True)
 
     discussion_id = Column(
         Integer,
@@ -61,37 +54,6 @@ class Resource(HistoryMixin, DiscussionBoundBase):
         cascade="all, delete-orphan")
 
     embed_code = Column(UnicodeText)
-
-    document_id = Column(
-        Integer,
-        ForeignKey(
-            'document.id',
-            ondelete='CASCADE',
-            onupdate='CASCADE',
-        ),
-        nullable=False)
-
-    document = relationship(
-        Document,
-        backref=backref(
-            'document'),
-    )
-
-
-    image = Column(
-        Integer,
-        ForeignKey(
-            'image.id',
-            ondelete='CASCADE',
-            onupdate='CASCADE',
-        ),
-        nullable=False)
-
-    image = relationship(
-        Document,
-        backref=backref(
-            'image'),
-    )
 
     def get_discussion_id(self):
         return self.discussion_id or self.discussion.id
