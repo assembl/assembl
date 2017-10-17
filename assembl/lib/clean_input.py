@@ -167,6 +167,6 @@ def sanitize_html(html_value, valid_tags=VALID_TAGS,
 
 def sanitize_text(text):
     """Clean a HTML string, keeping only the text."""
-    if '<' in text:
+    if text is not None and '<' in text:
         return html.fromstring(text).text_content()
     return unescape(text)
