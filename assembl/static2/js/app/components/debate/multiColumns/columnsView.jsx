@@ -1,13 +1,22 @@
 import React from 'react';
-import { Grid, Row, Col } from 'react-bootstrap';
-import { I18n } from 'react-redux-i18n';
+import { Grid, Row, Col, OverlayTrigger } from 'react-bootstrap';
+import { I18n, Translate } from 'react-redux-i18n';
+import { shareSynthesisTooltip } from '../../common/tooltips';
 
 import BoxWithHyphen from '../../common/boxWithHyphen';
 import Tree from '../../common/tree';
 import { MIN_WIDTH_COLUMN } from '../../../constants';
 import { multiColumnMapping } from '../../../utils/mapping';
+import { displayModal, closeModal } from '../../../utils/utilityManager';
+import SocialShare from '../../common/socialShare';
+import { get } from '../../../utils/routeMap';
+import hashLinkScroll from '../../../utils/hashLinkScroll';
 
 class ColumnsView extends React.Component {
+  componentDidMount() {
+    hashLinkScroll();
+  }
+
   orderPostsByMessageClassifier() {
     const { messageColumns, posts } = this.props;
     const columnsArray = {};
@@ -42,7 +51,9 @@ class ColumnsView extends React.Component {
       InnerComponentFolded,
       noRowsRenderer,
       SeparatorComponent,
-      isColumnViewInline
+      isColumnViewInline,
+      routerParams,
+      debateData
     } = this.props;
     const columnsArray = this.orderPostsByMessageClassifier();
     let countSynthesis = 0;
@@ -53,6 +64,22 @@ class ColumnsView extends React.Component {
       return countSynthesis >= 1;
     });
 
+    const { slug, phase, themeId } = routerParams;
+    const openShareSynthesisModal = (id) => {
+      const title = <Translate value="debate.shareSynthesis" />;
+      const url = `${window.location.protocol}//${window.location.host}${get('debate', {
+        slug: slug,
+        phase: phase
+      })}${get('theme', {
+        themeId: themeId
+      })}/#${id}`; // testing the url
+      const social = debateData.useSocialMedia; // has to be defined for a synthesis ?;
+      const body = <SocialShare url={url} onClose={closeModal} social={social} />;
+      const footer = false;
+      const footerTxt = null;
+      return displayModal(title, body, footer, footerTxt);
+    };
+
     return (
       <Grid fluid className="background-grey no-padding">
         <div className="max-container">
@@ -60,6 +87,7 @@ class ColumnsView extends React.Component {
             <Row className={isColumnViewInline ? 'columns-view-inline' : ''}>
               {Object.keys(columnsArray).map((classifier, index) => {
                 const synthesisTitle = this.getSynthesisTitle(classifier, messageColumns[index].name);
+                const synthesisId = `synthesis-${classifier}`;
                 const synthesisBody = messageColumns[index].header || I18n.t('multiColumns.synthesis.noSynthesisYet');
                 const hyphenStyle = { borderTopColor: messageColumns[index].color };
                 return (
@@ -70,7 +98,7 @@ class ColumnsView extends React.Component {
                     style={isColumnViewInline ? { width: `${MIN_WIDTH_COLUMN}px` } : {}}
                   >
                     {isSynthesis
-                      ? <div id={`synthesis-${classifier}`} className="box synthesis">
+                      ? <div id={synthesisId} className="box synthesis">
                         <Row className="no-margin">
                           <div className="posts column-post">
                             <Col xs={12} md={11} className="post-left">
@@ -83,7 +111,16 @@ class ColumnsView extends React.Component {
                             </Col>
                             <Col xs={12} md={1} className="post-right">
                               <div className="post-icons">
-                                <span className="assembl-icon-share color" />
+                                <div
+                                  className="post-action"
+                                  onClick={() => {
+                                    return openShareSynthesisModal(synthesisId);
+                                  }}
+                                >
+                                  <OverlayTrigger overlay={shareSynthesisTooltip}>
+                                    <span className="assembl-icon-share color" />
+                                  </OverlayTrigger>
+                                </div>
                               </div>
                               <div className="clear">&nbsp;</div>
                             </Col>

@@ -3,7 +3,7 @@ import { withApollo } from 'react-apollo';
 import { Translate } from 'react-redux-i18n';
 import { OverlayTrigger } from 'react-bootstrap';
 import { MEDIUM_SCREEN_WIDTH } from '../../../constants';
-import { answerTooltip, shareTooltip } from '../../common/tooltips';
+import { answerTooltip, sharePostTooltip } from '../../common/tooltips';
 
 import getOverflowMenuForPost from './overflowMenu';
 import { getConnectedUserId } from '../../../utils/globalFunctions';
@@ -62,7 +62,7 @@ class PostActions extends React.Component {
     const userCanEditThisMessage = connectedUserId === String(creatorUserId) && connectedUserCan(Permissions.EDIT_MY_POST);
     const { slug, phase, themeId } = routerParams;
     const openSharePostModal = () => {
-      const title = <Translate value="debate.share" />;
+      const title = <Translate value="debate.sharePost" />;
       const url = `${window.location.protocol}//${window.location.host}${get('debate', {
         slug: slug,
         phase: phase
@@ -109,7 +109,10 @@ class PostActions extends React.Component {
               return openSharePostModal(postId);
             }}
           >
-            <OverlayTrigger placement={this.state.screenWidth >= MEDIUM_SCREEN_WIDTH ? 'right' : 'top'} overlay={shareTooltip}>
+            <OverlayTrigger
+              placement={this.state.screenWidth >= MEDIUM_SCREEN_WIDTH ? 'right' : 'top'}
+              overlay={sharePostTooltip}
+            >
               <span className="assembl-icon-share color" />
             </OverlayTrigger>
           </div>
