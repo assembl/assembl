@@ -902,7 +902,7 @@ def test_add_timeline_event(test_app, discussion):
     assert phase1_data['@type'] == 'DiscussionPhase'
 
 
-def test_phase1_export(proposals_with_sentiments, discussion, test_app):
+class TestPhase1Export(object):
 
     THEMATIC_NAME = 0
     QUESTION_ID = 1
@@ -917,37 +917,64 @@ def test_phase1_export(proposals_with_sentiments, discussion, test_app):
     SENTIMENT_ACTOR_EMAIL = 10
     SENTIMENT_CREATION_DATE = 11
 
-    response = test_app.get(
-        '/data/Discussion/{}/phase1_csv_export'.format(discussion.id))
-    csv_file = BytesIO()
-    csv_file.write(response.app_iter[0])
-    csv_file.seek(0)
-    assert response.status_code == 200
-    result = csv.reader(csv_file, dialect='excel', delimiter=';')
-    result = list(result)
+    def _get(self, app, discussion_id, lang=None):
+        base_req = '/data/Discussion/{}/phase1_csv_export'.format(discussion_id)
+        req = base_req
+        if lang:
+            req = base_req + '?lang=%s' % lang
+        return app.get(req)
 
-    header = result[0]
-    assert header[QUESTION_ID] == b'Numéro de la question'
-    assert header[SENTIMENT_ACTOR_NAME] == b"Nom du votant"
+    def get_result(self, *args, **kwargs):
+        resp = self._get(*args, **kwargs)
+        csv_file = BytesIO()
+        csv_file.write(resp.app_iter[0])
+        csv_file.seek(0)
+        assert resp.status_code == 200
+        result = csv.reader(csv_file, dialect='excel', delimiter=';')
+        return list(result)
 
-    first_row = result[1]
-    assert first_row[THEMATIC_NAME] == b'Comprendre les dynamiques et les enjeux'
-    assert first_row[QUESTION_TITLE] == b"Comment qualifiez-vous l'emergence "\
-                                        b"de l'Intelligence Artificielle "\
-                                        b"dans notre société ?"
-    assert first_row[POST_BODY] == b'une proposition 14'
-    assert first_row[POST_LIKE_COUNT] == b'0'
-    assert first_row[POST_DISAGREE_COUNT] == b'0'
-    assert first_row[POST_CREATOR_NAME] == b'Mr. Administrator'
-    assert first_row[POST_CREATOR_EMAIL] == b''
-    date = datetime.utcnow().strftime('%d/%m/%Y')
-    assert first_row[POST_CREATION_DATE].startswith(date)
-    assert first_row[SENTIMENT_ACTOR_NAME] == b''
-    assert first_row[SENTIMENT_ACTOR_EMAIL] == b''
-    assert first_row[SENTIMENT_CREATION_DATE] == b''
+    def test_phase1_export(self, proposals_with_sentiments, discussion,
+                           test_app):
+        result = self.get_result(test_app, discussion.id)
 
-    last_row = result[-1]
-    assert last_row[THEMATIC_NAME] == b'Comprendre les dynamiques et les enjeux'
-    assert last_row[POST_LIKE_COUNT] == b'1'
-    assert last_row[POST_DISAGREE_COUNT] == b'0'
-    assert last_row[SENTIMENT_ACTOR_NAME] == b'Mr. Administrator'
+        header = result[0]
+        assert header[TestPhase1Export.QUESTION_ID] == b'Numéro de la question'
+        assert header[TestPhase1Export.SENTIMENT_ACTOR_NAME] == b"Nom du votant"
+
+        first_row = result[1]
+        assert first_row[TestPhase1Export.THEMATIC_NAME] == b'Comprendre les dynamiques et les enjeux'
+        assert first_row[TestPhase1Export.QUESTION_TITLE] == b"Comment qualifiez-vous l'emergence "\
+                                            b"de l'Intelligence Artificielle "\
+                                            b"dans notre société ?"
+        assert first_row[TestPhase1Export.POST_BODY] == b'une proposition 14'
+        assert first_row[TestPhase1Export.POST_LIKE_COUNT] == b'0'
+        assert first_row[TestPhase1Export.POST_DISAGREE_COUNT] == b'0'
+        assert first_row[TestPhase1Export.POST_CREATOR_NAME] == b'Mr. Administrator'
+        assert first_row[TestPhase1Export.POST_CREATOR_EMAIL] == b''
+        date = datetime.utcnow().strftime('%d/%m/%Y')
+        assert first_row[TestPhase1Export.POST_CREATION_DATE].startswith(date)
+        assert first_row[TestPhase1Export.SENTIMENT_ACTOR_NAME] == b''
+        assert first_row[TestPhase1Export.SENTIMENT_ACTOR_EMAIL] == b''
+        assert first_row[TestPhase1Export.SENTIMENT_CREATION_DATE] == b''
+
+        last_row = result[-1]
+        assert last_row[TestPhase1Export.THEMATIC_NAME] == b'Comprendre les dynamiques et les enjeux'
+        assert last_row[TestPhase1Export.POST_LIKE_COUNT] == b'1'
+        assert last_row[TestPhase1Export.POST_DISAGREE_COUNT] == b'0'
+        assert last_row[TestPhase1Export.SENTIMENT_ACTOR_NAME] == b'Mr. Administrator'
+
+    def test_phase1_export_en(self, proposals_en_fr, discussion, test_app,
+                              en_locale):
+        lang = en_locale.root_locale
+        result = self.get_result(test_app, discussion.id, lang=lang)
+
+        first_row = result[1]
+        assert first_row[TestPhase1Export.POST_BODY] == b'English Proposition 14'
+
+    def test_phase1_export_fr(self, proposals_en_fr, discussion, test_app,
+                              fr_locale):
+        lang = fr_locale.root_locale
+        result = self.get_result(test_app, discussion.id, lang=lang)
+
+        first_row = result[1]
+        assert first_row[TestPhase1Export.POST_BODY] == b'French Proposition 14'
