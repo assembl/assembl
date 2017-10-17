@@ -95,8 +95,8 @@ class EditPostForm extends React.PureComponent<void, EditPostFormProps, EditPost
         displayAlert('success', I18n.t('loading.wait'));
         const oldSubject = this.props.subject;
         updatePost({ variables: variables })
-          .then(() => {
-            this.props.refetchIdea();
+          .then(async () => {
+            await this.props.refetchIdea();
             displayAlert('success', I18n.t('debate.thread.postSuccess'));
             this.props.goBackToViewMode();
             if (oldSubject !== this.state.subject) {
