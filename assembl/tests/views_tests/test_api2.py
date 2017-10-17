@@ -933,7 +933,7 @@ class TestPhase1Export(object):
         result = csv.reader(csv_file, dialect='excel', delimiter=';')
         return list(result)
 
-    def test_phase1_export(self, proposals_with_sentiments, discussion,
+    def test_base(self, proposals_with_sentiments, discussion,
                            test_app):
         result = self.get_result(test_app, discussion.id)
 
@@ -963,7 +963,7 @@ class TestPhase1Export(object):
         assert last_row[TestPhase1Export.POST_DISAGREE_COUNT] == b'0'
         assert last_row[TestPhase1Export.SENTIMENT_ACTOR_NAME] == b'Mr. Administrator'
 
-    def test_phase1_export_en(self, proposals_en_fr, discussion, test_app,
+    def test_en(self, proposals_en_fr, discussion, test_app,
                               en_locale):
         lang = en_locale.root_locale
         result = self.get_result(test_app, discussion.id, lang=lang)
@@ -971,10 +971,18 @@ class TestPhase1Export(object):
         first_row = result[1]
         assert first_row[TestPhase1Export.POST_BODY] == b'English Proposition 14'
 
-    def test_phase1_export_fr(self, proposals_en_fr, discussion, test_app,
+    def test_fr(self, proposals_en_fr, discussion, test_app,
                               fr_locale):
         lang = fr_locale.root_locale
         result = self.get_result(test_app, discussion.id, lang=lang)
 
         first_row = result[1]
+        assert first_row[TestPhase1Export.POST_BODY] == b'French Proposition 14'
+
+    def test_bad_locale(self, proposals_en_fr, discussion, test_app):
+        lang = "super_bad_locale"
+        result = self.get_result(test_app, discussion.id, lang=lang)
+
+        first_row = result[1]
+        # By default, fr will be returned if the language input is bad
         assert first_row[TestPhase1Export.POST_BODY] == b'French Proposition 14'
