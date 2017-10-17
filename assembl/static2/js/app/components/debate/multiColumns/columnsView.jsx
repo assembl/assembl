@@ -45,8 +45,12 @@ class ColumnsView extends React.Component {
       isColumnViewInline
     } = this.props;
     const columnsArray = this.orderPostsByMessageClassifier();
-    const noSynthesis = messageColumns.every((col) => {
-      return col.header && col.header.length < 1;
+    let countSynthesis = 0;
+    const isSynthesis = messageColumns.every((col) => {
+      if (col.header) {
+        countSynthesis += 1;
+      }
+      return countSynthesis >= 1;
     });
 
     return (
@@ -65,7 +69,7 @@ class ColumnsView extends React.Component {
                     key={`col-${classifier}`}
                     style={isColumnViewInline ? { width: `${MIN_WIDTH_COLUMN}px` } : {}}
                   >
-                    {!noSynthesis
+                    {isSynthesis
                       ? <div id={`synthesis-${classifier}`} className="box synthesis">
                         <Row className="no-margin">
                           <div className="posts column-post">

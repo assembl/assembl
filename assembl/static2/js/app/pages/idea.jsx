@@ -120,7 +120,7 @@ class Idea extends React.Component {
     const { messageColumns } = this.props.ideaWithPostsData.idea;
     const screenWidth = window.innerWidth;
     const columnSize = screenWidth / messageColumns.length;
-    if (columnSize < MIN_WIDTH_COLUMN) {
+    if (columnSize < MIN_WIDTH_COLUMN || messageColumns.length > 4) {
       return true;
     }
     return false;
