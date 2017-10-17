@@ -10,6 +10,7 @@ from .tests.utils import log
 from assembl.tests.fixtures.base import *
 from assembl.tests.fixtures.auth import *
 from assembl.tests.fixtures.discussion import *
+from assembl.tests.fixtures.documents import *
 from assembl.tests.fixtures.creativity_session import *
 from assembl.tests.fixtures.graphql import *
 from assembl.tests.fixtures.idea_content_links import *
@@ -19,6 +20,7 @@ from assembl.tests.fixtures.locale import *
 from assembl.tests.fixtures.mailbox import *
 from assembl.tests.fixtures.posts import *
 from assembl.tests.fixtures.preferences import *
+from assembl.tests.fixtures.resources import *
 from assembl.tests.fixtures.user import *
 from assembl.tests.fixtures.user_language_preference import *
 from assembl.tests.fixtures.idea_message_columns import *
