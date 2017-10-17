@@ -7,7 +7,7 @@ import { Translate, I18n } from 'react-redux-i18n';
 import { updateContentLocaleById, updateContentLocaleByOriginalLocale } from '../../../../actions/contentLocaleActions';
 import LocalesQuery from '../../../../graphql/LocalesQuery.graphql';
 import SwitchButton from '../../../common/switchButton';
-import withLoadingIndicator from '../../../common/withLoadingIndicator';
+import withoutLoadingIndicator from '../../../common/withoutLoadingIndicator';
 import { getConnectedUserId } from '../../../../utils/globalFunctions';
 import { displayCustomModal } from '../../../../utils/utilityManager';
 import CancelTranslationForm from './cancelTranslationForm';
@@ -157,5 +157,5 @@ export default compose(
     }
   }),
   connect(null, mapDispatchToProps),
-  withLoadingIndicator()
+  withoutLoadingIndicator()
 )(PostTranslate);
