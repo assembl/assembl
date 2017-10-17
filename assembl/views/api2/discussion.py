@@ -1547,9 +1547,13 @@ def convert_to_utf8(rowdict):
              name="phase1_csv_export")
 def phase1_csv_export(request):
     """CSV export for phase 1."""
+    from assembl.models import Locale
     has_lang = 'lang' in request.GET
     if has_lang:
         language = request.GET['lang']
+        exists = Locale.get_id_of(language, create=False)
+        if not exists:
+            language = u'fr'
     else:
         language = u'fr'
     discussion_id = request.context.get_discussion_id()
