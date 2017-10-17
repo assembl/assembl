@@ -1547,7 +1547,15 @@ def convert_to_utf8(rowdict):
              name="phase1_csv_export")
 def phase1_csv_export(request):
     """CSV export for phase 1."""
-    language = 'fr'
+    from assembl.models import Locale
+    has_lang = 'lang' in request.GET
+    if has_lang:
+        language = request.GET['lang']
+        exists = Locale.get_id_of(language, create=False)
+        if not exists:
+            language = u'fr'
+    else:
+        language = u'fr'
     discussion_id = request.context.get_discussion_id()
     THEMATIC_NAME = u"Nom de la thématique"
     QUESTION_ID = u"Numéro de la question"
@@ -1591,7 +1599,12 @@ def phase1_csv_export(request):
             row[QUESTION_TITLE] = resolve_langstring(question.title, language)
             posts = get_question_posts(question)
             for post in posts:
-                row[POST_BODY] = resolve_langstring(post.get_body_as_text(), None)
+                if has_lang:
+                    row[POST_BODY] = resolve_langstring(
+                        post.get_body_as_text(), language)
+                else:
+                    row[POST_BODY] = resolve_langstring(
+                        post.get_body_as_text(), None)
                 row[POST_CREATOR_NAME] = post.creator.name
                 row[POST_CREATOR_EMAIL] = post.creator.preferred_email
                 row[POST_CREATION_DATE] = format_date(post.creation_date)

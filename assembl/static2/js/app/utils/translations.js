@@ -317,9 +317,11 @@ const Translations = {
         orAttachPicture: "Ou téléchargez une image depuis votre ordinateur"
       },
       surveyExport: {
-        title: "Exporter les données du débat",
         annotation: "Vous pouvez exporter l'ensemble des données du débat en cliquant simplement sur le bouton Exporter",
-        link: "Exporter"
+        link: "Exporter",
+        noExportLanguage: "Conserver les messages dans leurs langues d'origine",
+        title: "Exporter les données du débat",
+        translateTheMessagesIn: "Traduire l'ensemble des messages en"
       },
       step_x_total: "Section %{num} sur %{total}",
       saveThemes: "Sauvegarder",
@@ -648,9 +650,11 @@ const Translations = {
         orAttachPicture: "Or upload an image from your computer"
       },
       surveyExport: {
-        title: "Export the debate data",
         annotation: "You can export all the debate data by clicking on the Export button",
-        link: "Export"
+        link: "Export",
+        noExportLanguage: "Keep the messages in their original languages",
+        title: "Export the debate data",
+        translateTheMessagesIn: "Translate the messages in"
       },
       step_x_total: "Section %{num} on %{total}",
       saveThemes: "Save",

@@ -209,6 +209,56 @@ mutation myFirstMutation {
     return post_id
 
 
+def create_proposal_en_fr_x(request, session, discussion, creator_id,
+                            idea_id, num):
+    from assembl.models import (
+        PropositionPost,
+        IdeaRelatedPostLink,
+        Locale,
+        LangString,
+        LangStringEntry)
+
+    en_locale = Locale.get_or_create('en')
+    fr_locale = Locale.get_or_create('fr')
+    mt_locale = Locale.create_mt_locale(en_locale, fr_locale, db=session)
+
+    body = LangString.create(u"English Proposition %d" % num, 'en')
+    body.add_entry(LangStringEntry(
+                   locale=mt_locale,
+                   value=u'French Proposition %d' % num,
+                   locale_confirmed=True))
+
+    post = PropositionPost(
+        discussion=discussion,
+        creator_id=creator_id,
+        subject=None,
+        body=body,
+        body_mime_type=u'text/html',
+        message_id="post_%d@assembl.com" % num
+    )
+
+    icl = IdeaRelatedPostLink(
+        idea_id=idea_id,
+        content=post,
+        discussion=discussion,
+        creator_id=creator_id
+    )
+
+    session.add(post)
+    session.add(icl)
+    session.flush()
+
+    def fin():
+        session.delete(icl)
+        session.delete(post)
+        session.delete(mt_locale)
+        session.flush()
+
+    request.addfinalizer(fin)
+    return post
+
+
+
 def create_proposal_x(graphql_request, first_question_id, idx):
     from assembl.graphql.schema import Schema as schema
     res = schema.execute(u"""
@@ -238,6 +288,25 @@ def proposals(graphql_request, thematic_and_question):
         proposal_id = create_proposal_x(graphql_request, first_question_id, idx)
         proposals.append(proposal_id)
 
+    return proposals
+
+
+@pytest.fixture(scope="function")
+def proposals_en_fr(request, test_session, graphql_request,
+                    thematic_and_question):
+    from assembl.models import Discussion
+    from graphene.relay import Node
+    thematic_id, first_question_id = thematic_and_question
+    question_id = Node.from_global_id(first_question_id)[1]
+    discussion_id = graphql_request.matchdict['discussion_id']
+    discussion = test_session.query(Discussion).filter_by(
+        id=discussion_id).first()
+    creator_id = graphql_request.authenticated_userid
+    proposals = []
+    for idx in range(15):
+        proposal = create_proposal_en_fr_x(request, test_session, discussion,
+                                           creator_id, question_id, idx)
+        proposals.append(proposal)
     return proposals
 
 

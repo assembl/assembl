@@ -159,17 +159,17 @@ def resolve_langstring(langstring, locale_code):
     if not entries:
         return None
 
-    if locale_code:
-        closest = langstring.closest_entry(locale_code)
-        if closest:
-            return closest.value
+    try:
+        if locale_code:
+            closest = langstring.closest_entry(locale_code)
+            if closest:
+                return closest.value
+        return langstring.best_lang(
+            LanguagePreferenceCollection.getCurrent(), False).value
 
-        english = langstring.closest_entry('en')
-        if english:
-            return english.value
-
-    return langstring.best_lang(
-        LanguagePreferenceCollection.getCurrent(), False).value
+    except:
+        # Anything that goes wrong with clean_input, return the original
+        return langstring.first_original()
 
 
 def resolve_langstring_entries(obj, attr):

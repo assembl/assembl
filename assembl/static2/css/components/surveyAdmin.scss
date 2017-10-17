@@ -1,0 +1,16 @@
+.survey-admin {
+
+  .admin-content{
+    text-align: center;
+
+    .form-group {
+      text-align: left;
+      display: inline-block;
+
+      .export-language-dropdown {
+        margin-top: 20px;
+        position: absolute;
+      }
+    }
+  }
+}
