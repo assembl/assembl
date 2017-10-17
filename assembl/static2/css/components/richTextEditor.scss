@@ -46,6 +46,22 @@
   position: relative;
 
   .insertion-box {
+
+    min-height: 200px;
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%);
+    bottom: 0;
+    width: 80%;
+    z-index: 1040;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-radius: 5px;
+    box-shadow: 1px 1px 1px 0px #656565;
+
+    .with-image-preview {
+      min-height: 350px;
+    }
+
     .assembl-icon-cancel {
       float: right;
       cursor: pointer;
@@ -55,28 +71,51 @@
       label {
         position: absolute;
         left: 50%;
-        top: 14%;
+        top: 11%;
         transform: translate(-50%);
         font-size: $font-size-sm;
+      }
+    }
+
+    .with-preview {
+      min-height: 320px;
+
+      .btn-default {
+        top: 21%;
+      }
+
+      .preview img {
+        top: 35%;
+        max-height: 42%;
+      }
+
+      .button-submit {
+        top: 87%;
       }
     }
 
     .btn-default {
       position: absolute;
       left: 50%;
-      top: 35%;
+      top: 27%;
       transform: translate(-50%);
     }
 
     .button-submit {
       position: absolute;
       left: 50%;
-      top: 70%;
-      transform: translate(-50%);
+      top: 80%;
+      transform: translate(-50%, -50%);
     }
 
+
     .preview img {
-      width: 50%;
+      max-width: 60%;
+      max-height: 35%;
+      position: absolute;
+      top: 40%;
+      left: 50%;
+      transform: translate(-50%);
     }
 
     .preview-title {
@@ -88,17 +127,6 @@
       transform: translate(-50%);
       font-size: $font-size-xxs;
     }
-
-    min-height: 250px;
-    position: absolute;
-    left: 50%;
-    transform: translate(-50%);
-    bottom: 0;
-    width: 80%;
-    z-index: 1040;
-    border: 1px solid rgba(0, 0, 0, 0.2);
-    border-radius: 5px;
-    box-shadow: 1px 1px 1px 0px #656565;
   }
 
   .editor-header {

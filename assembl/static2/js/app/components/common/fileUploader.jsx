@@ -10,7 +10,7 @@ class FileUploader extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      filename: '',
+      fileName: '',
       fileSrc: undefined
     };
     this.handleChangePreview = this.handleChangePreview.bind(this);
@@ -35,7 +35,7 @@ class FileUploader extends React.Component {
   handleChangePreview() {
     const file = this.fileInput.files[0];
     this.setState({
-      filename: file.name || ''
+      fileName: file.name || ''
     });
     this.props.handleChange(file);
   }
@@ -50,7 +50,7 @@ class FileUploader extends React.Component {
         'load',
         () => {
           this.setState({
-            filename: file.name || '',
+            fileName: file.name || '',
             fileSrc: reader.result
           });
         },
@@ -65,15 +65,19 @@ class FileUploader extends React.Component {
   }
 
   render() {
+    const fileSrc = this.state.fileSrc;
+    const fileIsImage = this.props.isImage;
+    const urlIsImage = fileSrc && fileSrc.endsWith('png' || 'jpeg' || 'jpg' || 'gif');
+    const isImage = fileIsImage || urlIsImage;
     return (
       <div>
         <Button onClick={this.handleUploadButtonClick}>
           <Translate value="common.uploadButton" />
         </Button>
-        {this.props.withPreview
-          ? <div className={this.state.fileSrc ? 'preview' : 'hidden'}>
+        {this.props.withPreview && isImage
+          ? <div className={fileSrc ? 'preview' : 'hidden'}>
             <img
-              src={this.state.fileSrc}
+              src={fileSrc}
               ref={(p) => {
                 this.preview = p;
               }}
@@ -81,9 +85,10 @@ class FileUploader extends React.Component {
             />
           </div>
           : null}
-        <div className="preview-title">
-          {this.state.filename}
-        </div>
+        {!isImage &&
+          <div className="preview-title">
+            {this.state.fileName}
+          </div>}
         <input
           type="file"
           onChange={this.handleChangePreview}
