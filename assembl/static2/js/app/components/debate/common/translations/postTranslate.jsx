@@ -149,4 +149,13 @@ const mapDispatchToProps = (dispatch, ownProps) => {
   };
 };
 
-export default compose(graphql(LocalesQuery), connect(null, mapDispatchToProps), withLoadingIndicator())(PostTranslate);
+export default compose(
+  graphql(LocalesQuery, {
+    // $FlowFixMe (flow, eslint (and even prettier!) are kind of conflicting here)
+    options: () => {
+      return { notifyOnNetworkStatusChange: true };
+    }
+  }),
+  connect(null, mapDispatchToProps),
+  withLoadingIndicator()
+)(PostTranslate);
