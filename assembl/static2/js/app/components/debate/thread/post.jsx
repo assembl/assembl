@@ -90,6 +90,7 @@ export class EmptyPost extends React.PureComponent {
   };
 
   goBackToViewMode = () => {
+    this.props.data.refetch();
     this.setState({ mode: 'view' }, this.props.measureTreeHeight);
   };
 
