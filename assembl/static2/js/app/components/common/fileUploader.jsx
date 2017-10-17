@@ -68,23 +68,24 @@ class FileUploader extends React.Component {
     const fileSrc = this.state.fileSrc;
     const fileIsImage = this.props.isImage;
     const urlIsImage = fileSrc && fileSrc.includes('png' || 'jpeg' || 'jpg' || 'gif');
+    const isImage = fileIsImage || urlIsImage;
     return (
       <div>
         <Button onClick={this.handleUploadButtonClick}>
           <Translate value="common.uploadButton" />
         </Button>
-        {this.props.withPreview
-          ? <div className={this.state.fileSrc ? 'preview' : 'hidden'}>
+        {this.props.withPreview && isImage
+          ? <div className={fileSrc ? 'preview' : 'hidden'}>
             <img
               src={fileSrc}
               ref={(p) => {
                 this.preview = p;
               }}
-              alt={fileIsImage || urlIsImage ? 'preview' : ''}
+              alt="preview"
             />
           </div>
           : null}
-        {!fileIsImage &&
+        {!isImage &&
           <div className="preview-title">
             {this.state.fileName}
           </div>}
