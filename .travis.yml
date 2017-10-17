@@ -26,10 +26,10 @@ before_install:
  - fab -c configs/travis.rc install_redis
  - fab -c configs/travis.rc install_memcached
 install:
- - fab -c configs/travis.rc update_pip_requirements
  # The set_file_permissions fabric command needs to be encapsulated into this sudo su command, because in before_install we have added $USER in www-data group but have not logged out and logged in again for changes to take effect in this terminal
  - sudo -E su $USER -c 'fab -c configs/travis.rc set_file_permissions'
  # TODO: fix fabfile's check_and_create_database_user command which produces an error when run by travis. For now we instead run the following command
+ - pip install psycopg2
  - python2 $PWD/assembl/scripts/pypsql.py -u postgres -n localhost  "CREATE USER assembl_test WITH CREATEDB ENCRYPTED PASSWORD 'assembl_test'; COMMIT;"
  # The following command runs lots of sub-commands. It takes approximately 18 min
  - fab -c configs/travis.rc bootstrap_from_checkout
@@ -48,4 +48,3 @@ script:
   # fab -c configs/travis.rc build_doc
   - py.test --cov assembl --cov-report term --cov-report html --junit-xml junit.xml assembl
   - cd assembl/static2; npm test; npm run eslint; cd ..
-  - supervisorctl shutdown
