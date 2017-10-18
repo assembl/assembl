@@ -4,7 +4,7 @@ class ResourceBlock extends React.Component {
   render() {
     const { title, bodyText, imgUrl, index } = this.props;
     const isImgRight = index % 2 === 0;
-    const float = isImgRight ? 'right padding-left' : 'left padding-right';
+    const float = isImgRight ? 'right margin-case-left' : 'left margin-case-right';
     return (
       <div className="resource-block">
         <div className="title-section">
@@ -18,6 +18,11 @@ class ResourceBlock extends React.Component {
           <div className="resource-text">
             {bodyText}
             {bodyText}
+            <div className="resource-download-link">
+              <a href="http://www.google.fr" target="_blank" rel="noopener noreferrer">
+                Download the report
+              </a>
+            </div>
           </div>
           <div className="clear" />
         </div>
