@@ -22,7 +22,7 @@ fragment Post on Post {
   indirectIdeaContentLinks {
     idea {
       id
-      title
+      title(lang: $contentLocale)
     }
   }
   creator {
