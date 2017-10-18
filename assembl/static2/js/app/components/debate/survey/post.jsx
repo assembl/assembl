@@ -43,7 +43,7 @@ class Post extends React.Component {
   }
 
   handleSentiment(event, type) {
-    const { post } = this.props;
+    const { post } = this.props.data;
     const isUserConnected = getConnectedUserId() !== null;
     if (isUserConnected) {
       const { debateData } = this.props.debate;
@@ -69,7 +69,7 @@ class Post extends React.Component {
     }
   }
   handleAddSentiment(target, type) {
-    const { id, sentimentCounts, mySentiment } = this.props.post;
+    const { id, sentimentCounts, mySentiment } = this.props.data.post;
     this.props
       .addSentiment({
         variables: { postId: id, type: type },
@@ -99,7 +99,7 @@ class Post extends React.Component {
       });
   }
   handleDeleteSentiment() {
-    const { id, sentimentCounts, mySentiment } = this.props.post;
+    const { id, sentimentCounts, mySentiment } = this.props.data.post;
     this.props
       .deleteSentiment({
         variables: { postId: id },
