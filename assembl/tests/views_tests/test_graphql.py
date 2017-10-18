@@ -1631,3 +1631,13 @@ def test_query_discussion_sentiments_count(
     res_data = json.loads(json.dumps(res.data))
     count = res_data[u"totalSentiments"]
     assert count == 0
+
+def test_query_resources(discussion, resource, resource_with_image_and_doc, graphql_request):
+    query = u"""
+query { resources {
+    id
+    title
+} }"""
+    res = schema.execute(query, context_value=graphql_request)
+    assert res.data['resources'][0]['title'] == u'a resource'
+    assert res.data['resources'][1]['title'] == u'another resource'

@@ -954,6 +954,19 @@ class Locale(graphene.ObjectType):
     label = graphene.String(required=True)
 
 
+class Resource(SecureObjectType, SQLAlchemyObjectType):
+    class Meta:
+        model = models.Resource
+        interfaces = (Node, )
+        only_fields = ('id', 'identifier')
+
+    title = graphene.String(lang=graphene.String())
+
+    def resolve_title(self, args, context, info):
+        title = resolve_langstring(self.title, args.get('lang'))
+        return title
+
+
 class Query(graphene.ObjectType):
     node = Node.Field()
     root_idea = graphene.Field(IdeaUnion, identifier=graphene.String())
@@ -965,6 +978,14 @@ class Query(graphene.ObjectType):
     default_preferences = graphene.Field(DiscussionPreferences)
     locales = graphene.List(Locale, lang=graphene.String(required=True))
     total_sentiments = graphene.Int()
+    resources = graphene.List(Resource)
+
+    def resolve_resources(self, args, context, info):
+        model = models.Resource
+        query = get_query(model, context)
+        discussion_id = context.matchdict['discussion_id']
+        discussion = models.Discussion.get(discussion_id)
+        return query.filter(model.discussion == discussion)
 
     def resolve_total_sentiments(self, args, context, info):
         discussion_id = context.matchdict['discussion_id']
