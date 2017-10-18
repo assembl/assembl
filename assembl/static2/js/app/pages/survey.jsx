@@ -10,7 +10,7 @@ import type { Map } from 'immutable';
 import { updateContentLocale } from '../actions/contentLocaleActions';
 import withLoadingIndicator from '../components/common/withLoadingIndicator';
 import Media from '../components/common/media';
-import Header from '../components/debate/common/header';
+import Header from '../components/common/header';
 import Question from '../components/debate/survey/question';
 import Navigation from '../components/debate/survey/navigation';
 import Proposals from '../components/debate/survey/proposals';
