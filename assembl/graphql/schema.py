@@ -961,10 +961,16 @@ class Resource(SecureObjectType, SQLAlchemyObjectType):
         only_fields = ('id', 'identifier')
 
     title = graphene.String(lang=graphene.String())
+    text = graphene.String(lang=graphene.String())
+    embed_code = graphene.String()
 
     def resolve_title(self, args, context, info):
         title = resolve_langstring(self.title, args.get('lang'))
         return title
+
+    def resolve_text(self, args, context, info):
+        text = resolve_langstring(self.text, args.get('lang'))
+        return text
 
 
 class Query(graphene.ObjectType):

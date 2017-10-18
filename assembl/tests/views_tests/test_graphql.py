@@ -1636,8 +1636,12 @@ def test_query_resources(discussion, resource, resource_with_image_and_doc, grap
     query = u"""
 query { resources {
     id
-    title
+    title(lang:"en")
+    text(lang:"en")
+    embedCode
 } }"""
     res = schema.execute(query, context_value=graphql_request)
     assert res.data['resources'][0]['title'] == u'a resource'
     assert res.data['resources'][1]['title'] == u'another resource'
+    assert res.data['resources'][0]['text'] == u'Lorem ipsum dolor sit amet'
+    assert res.data['resources'][0]['embedCode'] == u'<iframe ...>'

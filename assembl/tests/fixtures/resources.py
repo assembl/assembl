@@ -7,8 +7,8 @@ def resource(request, discussion, test_session):
     from assembl.models import Resource, LangString
     resource = Resource(
         discussion=discussion,
-        title=LangString.create(u"a resource"),
-        text=LangString.create(u"Lorem ipsum dolor sit amet"),
+        title=LangString.create(u"a resource", "en"),
+        text=LangString.create(u"Lorem ipsum dolor sit amet", "en"),
         embed_code=u"<iframe ...>"
     )
 
@@ -30,8 +30,8 @@ def resource_with_image_and_doc(request, discussion, moderator_user, simple_file
     from assembl.models.attachment import ResourceAttachment
     resource = Resource(
         discussion=discussion,
-        title=LangString.create(u"another resource"),
-        text=LangString.create(u"Lorem ipsum dolor sit amet"),
+        title=LangString.create(u"another resource", "en"),
+        text=LangString.create(u"Lorem ipsum dolor sit amet", "en"),
         embed_code=u""
     )
     resource_image = ResourceAttachment(
