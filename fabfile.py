@@ -24,7 +24,7 @@ from tempfile import NamedTemporaryFile
 import re
 
 from fabric.operations import (
-    put, get, local, sudo, run, require)
+    local, put, get, local, sudo, run, require)
 from fabric.contrib.files import (exists, is_link, append)
 from fabric.api import (
     abort, cd, env, execute, hide, prefix, settings, task as fab_task)
@@ -1791,9 +1791,14 @@ def install_elasticsearch():
         else:
             print(red("Unknown distribution"))
 
+    tmp_local_extract_path = join(local('pwd'), 'estmp')
+    local('mkdir -p %s' % tmp_local_extract_path)
+
+    elasticsearch_exists = False
     extract_path = normpath(
         join(env.projectpath, 'var', 'elasticsearch'))
     if exists(extract_path):
+        elasticsearch_exists = True
         print("elasticsearch already installed")
 
     tar_filename, headers = urlretrieve('https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-{version}.tar.gz'.format(version=ELASTICSEARCH_VERSION))
@@ -1806,14 +1811,32 @@ def install_elasticsearch():
 
         tar_file.seek(0)
         with tarfile.open(mode='r:gz', fileobj=tar_file) as tar:
-            tar.extractall(path=extract_path)
+            tar.extractall(path=tmp_local_extract_path)
 
         # rename var/elasticsearch/elasticsearch-5.2.0 to var/elasticsearch
-        move(join(extract_path, 'elasticsearch-{version}'.format(version=ELASTICSEARCH_VERSION)), extract_path+'.tmp')
-        rmtree(extract_path)
-        move(extract_path+'.tmp', extract_path)
+        move(join(tmp_local_extract_path, 'elasticsearch-{version}'.format(version=ELASTICSEARCH_VERSION)),
+             join(tmp_local_extract_path, 'elasticsearch'))
+        if elasticsearch_exists:
+            run('rm -rf %s' % extract_path)
+        store_path = join(env.projectpath, 'var')
+        result = put(join(tmp_local_extract_path, 'elasticsearch'), store_path)
+
+        # Make elasticsearch and plugin in /bin executable
+        sudo('chown -R {user}:{group} {path}'.format(
+            user=env.user, group=env.user,
+            path=extract_path))
+        sudo('chmod ug+x {elasticsearch} {elasticsearch_plugin}'.format(
+            elasticsearch=join(extract_path, 'bin/elasticsearch'),
+            elasticsearch_plugin=join(extract_path, 'bin/elasticsearch-plugin')
+        ))
         run(env.projectpath + '/var/elasticsearch/bin/elasticsearch-plugin install https://artifacts.elastic.co/downloads/elasticsearch-plugins/analysis-smartcn/analysis-smartcn-{version}.zip'.format(version=ELASTICSEARCH_VERSION))
         run(env.projectpath + '/var/elasticsearch/bin/elasticsearch-plugin install https://artifacts.elastic.co/downloads/elasticsearch-plugins/analysis-kuromoji/analysis-kuromoji-{version}.zip'.format(version=ELASTICSEARCH_VERSION))
+        rmtree(tmp_local_extract_path)
+
+        if result.succeeded:
+            print(green("Successfully installed elasticsearch"))
+        else:
+            print(red("Failed to properly install elasticsearch. Try again."))
 
 
 @task
@@ -1825,7 +1848,7 @@ def upgrade_elasticsearch():
         join(env.projectpath, 'var', 'elasticsearch'))
     supervisor_process_stop('elasticsearch')
     if exists(extract_path):
-        rmtree(extract_path)
+        run("rm -rf %s" % extract_path)
     execute(install_elasticsearch)
     supervisor_process_start('elasticsearch')
 
