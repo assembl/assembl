@@ -52,7 +52,7 @@ class ExportSection extends React.Component {
     const exportLocale = this.state.exportLocale || languages[0].locale;
     const exportLink = `/data/Discussion/${debateId}/phase1_csv_export${translate ? `?lang=${exportLocale}` : ''}`;
     return (
-      <div className="admin-box">
+      <div className="admin-box survey-admin-export-section">
         <SectionTitle i18n={i18n} phase="survey" tabId="2" annotation={I18n.t('administration.surveyExport.annotation')} />
         <div className="admin-content">
           <FormGroup>
