@@ -27,6 +27,10 @@ const Attachments = ({ attachments }: AttachmentsProps) => {
     <div className="attachments">
       {attachments.map((attachment) => {
         const { externalUrl, mimeType, title } = attachment.document;
+        if (mimeType && mimeType.startsWith('image/')) {
+          return null;
+        }
+
         return (
           <div className="attachment" key={attachment.id}>
             <span className="assembl-icon-synthesis" />
