@@ -90,7 +90,6 @@ export class EmptyPost extends React.PureComponent {
   };
 
   goBackToViewMode = () => {
-    this.props.data.refetch();
     this.setState({ mode: 'view' }, this.props.measureTreeHeight);
   };
 
@@ -213,6 +212,7 @@ export class EmptyPost extends React.PureComponent {
               goBackToViewMode={this.goBackToViewMode}
               readOnly={!!this.props.parentId}
               modifiedOriginalSubject={modifiedOriginalSubject}
+              originalLocale={originalLocale}
             />
           </div>
         </div>

@@ -1,7 +1,6 @@
 // @flow
 import React from 'react';
 import { compose, graphql, withApollo } from 'react-apollo';
-import { connect } from 'react-redux';
 import { Row, Col, FormGroup, Button } from 'react-bootstrap';
 import { Translate, I18n } from 'react-redux-i18n';
 import { RawContentState } from 'draft-js';
@@ -19,7 +18,7 @@ import { TextInputWithRemainingChars } from '../../common/textInputWithRemaining
 import { TEXT_INPUT_MAX_LENGTH, TEXT_AREA_MAX_LENGTH } from './topPostForm';
 
 type EditPostFormProps = {
-  contentLocale: string,
+  originalLocale: string,
   body: string,
   id: string,
   subject: string,
@@ -86,7 +85,7 @@ class EditPostForm extends React.PureComponent<void, EditPostFormProps, EditPost
         }
 
         const variables = {
-          contentLocale: this.props.contentLocale,
+          contentLocale: this.props.originalLocale,
           postId: this.props.id,
           subject: this.state.subject || '',
           body: convertRawContentStateToHTML(result.contentState),
@@ -168,14 +167,7 @@ class EditPostForm extends React.PureComponent<void, EditPostFormProps, EditPost
   }
 }
 
-const mapStateToProps = (state) => {
-  return {
-    contentLocale: state.i18n.locale
-  };
-};
-
 export default compose(
-  connect(mapStateToProps),
   graphql(uploadDocumentMutation, { name: 'uploadDocument' }),
   graphql(deletePostAttachmentMutation, { name: 'deletePostAttachment' }),
   graphql(updatePostMutation, { name: 'updatePost' }),
