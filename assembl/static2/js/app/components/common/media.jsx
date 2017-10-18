@@ -47,7 +47,7 @@ class Media extends React.Component {
     const component = isLocal
       ? <Image responsive src={content} />
       : (<ResponsiveEmbed a16by9>
-        <embed src={content} />
+        <iframe title="media" src={content} />
       </ResponsiveEmbed>);
     return (
       <div className="media-container">
