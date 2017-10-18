@@ -297,7 +297,11 @@ class Tree extends React.Component {
                     deferredMeasurementCache={this.cache}
                     noRowsRenderer={noRowsRenderer}
                     ref={(ref) => {
-                      this.listRef = ref;
+                      // Add a guard because the List component's ref is recalculated many times onScroll
+                      // Causing other components that have listRef as prop to re-render 4x-6x times.
+                      if (!this.listRef) {
+                        this.listRef = ref;
+                      }
                     }}
                     rowCount={data.length}
                     overscanIndicesGetter={overscanIndicesGetter}
