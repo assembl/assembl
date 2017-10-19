@@ -3,6 +3,8 @@ import React from 'react';
 import { ContentState } from 'draft-js';
 import type { ContentBlock } from 'draft-js';
 
+import DocumentExtensionIcon from '../documentExtensionIcon';
+
 const AtomicBlockRenderer = ({ block, contentState }: { block: ContentBlock, contentState: ContentState }) => {
   const entityKey = block.getEntityAt(0);
   const entity = contentState.getEntity(entityKey);
@@ -14,11 +16,7 @@ const AtomicBlockRenderer = ({ block, contentState }: { block: ContentBlock, con
     if (mimeType.startsWith('image')) {
       innerContent = <img src={data.externalUrl} alt="" title={title} width="60%" />;
     } else {
-      innerContent = (
-        <span className="attachment-document">
-          {title.split('.')[1] || '?'}
-        </span>
-      );
+      innerContent = <DocumentExtensionIcon filename={title} />;
     }
 
     return (

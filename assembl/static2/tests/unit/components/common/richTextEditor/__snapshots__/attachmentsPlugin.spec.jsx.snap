@@ -1,0 +1,5 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`attachmentsPlugin entityToHTML function should return an img tag for images 1`] = `"<img src=\\"http://www.example.com/foobar.png\\" alt=\\"\\" title=\\"Foobar\\" width=\\"60%\\" data-id=\\"foobar\\" data-mimetype=\\"image/png\\" data-entitytype=\\"image\\" />"`;
+
+exports[`attachmentsPlugin entityToHTML function should return the icon for documents (pdf, doc, ...) 1`] = `"<img alt=\\"pdf\\" src=\\"/static2/img/icons/black/pdf.svg\\" width=\\"30px\\" data-id=\\"foobar\\" data-mimetype=\\"application/pdf\\" data-title=\\"foobar.pdf\\" data-externalurl=\\"http://www.example.com/document/1122/data\\" data-entitytype=\\"document\\" />"`;

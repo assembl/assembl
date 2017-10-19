@@ -120,13 +120,10 @@ describe('attachmentsPlugin', () => {
         type: 'document'
       };
       const result = entityToHTML(entity, 'My original text');
-      expect(result).toEqual(
-        '<img src="http://www.example.com/foobar.png" alt="" title="Foobar" width="60%" ' +
-          'data-id="foobar" data-mimetype="image/png" />'
-      );
+      expect(result).toMatchSnapshot();
     });
 
-    it('should return an empty div for documents (pdf, doc, ...)', () => {
+    it('should return the icon for documents (pdf, doc, ...)', () => {
       const entity = {
         data: {
           externalUrl: 'http://www.example.com/document/1122/data',
@@ -137,10 +134,7 @@ describe('attachmentsPlugin', () => {
         type: 'document'
       };
       const result = entityToHTML(entity, 'My original text');
-      expect(result).toEqual(
-        '<span class="attachment-document" data-id="foobar" data-mimetype="application/pdf" data-title="foobar.pdf" ' +
-          'data-externalurl="http://www.example.com/document/1122/data">pdf</span>'
-      );
+      expect(result).toMatchSnapshot();
     });
   });
 

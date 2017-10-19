@@ -3,6 +3,7 @@
 import { convertFromRaw, convertToRaw, Entity, Modifier, RawContentState, SelectionState } from 'draft-js';
 import type { ContentBlock, ContentState } from 'draft-js';
 import type { Attachment, Document } from '../attachments';
+import { getExtension, getIconPath } from '../documentExtensionIcon';
 
 const ENTITY_TYPE = 'document';
 const BLOCK_TYPE = 'atomic';
@@ -24,13 +25,14 @@ const plugin = {
       const mimeType = entity.data.mimeType ? entity.data.mimeType : '';
       const title = entity.data.title ? entity.data.title : '';
       if (mimeType.startsWith('image')) {
-        return `<img src="${externalUrl}" alt="" title="${title}" width="60%" data-id="${id}" data-mimetype="${mimeType}" />`;
+        return `<img src="${externalUrl}" alt="" title="${title}" width="60%" data-id="${id}" data-mimetype="${mimeType}" data-entitytype="image" />`;
       }
 
-      const extension = title.split('.')[1];
+      const extension = getExtension(title);
+      const iconPath = getIconPath(extension);
       return (
-        `<span class="attachment-document" data-id="${id}" data-mimetype="${mimeType}"` +
-        ` data-title="${title}" data-externalurl="${externalUrl}">${extension}</span>`
+        `<img alt="${extension}" src="${iconPath}" width="30px" data-id="${id}" data-mimetype="${mimeType}"` +
+        ` data-title="${title}" data-externalurl="${externalUrl}" data-entitytype="document" />`
       );
     }
 
@@ -59,7 +61,7 @@ const plugin = {
     }
 
     const isAtomicBlock = nodeName === 'div' && node.dataset && node.dataset.blocktype === BLOCK_TYPE;
-    const isImage = isAtomicBlock && node.firstChild && node.firstChild.nodeName === 'IMG';
+    const isImage = isAtomicBlock && node.firstChild && node.firstChild.dataset.entitytype === 'image';
     if (isImage) {
       return createEntity(ENTITY_TYPE, 'IMMUTABLE', {
         externalUrl: node.firstChild.src,

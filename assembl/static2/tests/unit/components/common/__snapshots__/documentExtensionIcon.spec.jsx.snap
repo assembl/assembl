@@ -1,0 +1,9 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`DocumentExtensionIcon component should render an icon depending on the extension of the file 1`] = `
+<img
+  alt="doc"
+  src="/static2/img/icons/black/doc.svg"
+  width="30px"
+/>
+`;
