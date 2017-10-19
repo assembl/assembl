@@ -5,25 +5,6 @@ import { AutoSizer, CellMeasurer, CellMeasurerCache, List, WindowScroller } from
 import { getDomElementOffset, createEvent } from '../../utils/globalFunctions';
 import NuggetsManager from './nuggetsManager';
 
-let prevStopIndex = 0;
-// override overscanIndicesGetter to not remove from the dom the posts once rendered
-// to fix various issue with scrolling with WindowScroller
-function overscanIndicesGetter({ cellCount, overscanCellsCount, stopIndex }) {
-  let overscanStopIndex;
-  if (cellCount === 1) {
-    // overscanIndicesGetter is called for columns, not rows
-    // use default implementation
-    overscanStopIndex = Math.min(cellCount - 1, stopIndex + overscanCellsCount);
-  } else {
-    prevStopIndex = Math.max(prevStopIndex, stopIndex);
-    overscanStopIndex = Math.min(cellCount - 1, prevStopIndex + overscanCellsCount);
-  }
-  return {
-    overscanStartIndex: 0,
-    overscanStopIndex: overscanStopIndex
-  };
-}
-
 const rowHeightRecomputed = createEvent('rowHeightRecomputed');
 
 class Child extends React.PureComponent {
@@ -39,7 +20,7 @@ class Child extends React.PureComponent {
   resizeTreeHeight(delay = 0) {
     // This function will be called by each post rendered, so we delay the
     // recomputation until no post are rendered in 200ms to avoid unnecessary lag.
-    const { listRef, cache, rowIndex } = this.props;
+    const { listRef, cache, rowIndex, rootRef } = this.props;
     cache.clear(rowIndex, 0);
     if (listRef) {
       let delayedRecomputeRowHeights = listRef.delayedRecomputeRowHeights;
@@ -55,7 +36,7 @@ class Child extends React.PureComponent {
         // if listRef.Grid is null, it means it has been unmounted, so we are now on a new List
         if (listRef.Grid) {
           listRef.recomputeRowHeights(delayedRecomputeRowHeights[1]);
-          document.dispatchEvent(rowHeightRecomputed);
+          if (rootRef) rootRef.dispatchEvent(rowHeightRecomputed);
           // recompute height only for rows (top post) starting at rowIndex
         }
         delayedRecomputeRowHeights[0] = null;
@@ -144,7 +125,13 @@ class Child extends React.PureComponent {
     };
     delete forwardProps.children;
     return (
-      <div className={cssClasses()} id={id}>
+      <div
+        className={cssClasses()}
+        id={id}
+        ref={(el) => {
+          if (!this.rootRef) this.rootRef = el;
+        }}
+      >
         <InnerComponent {...forwardProps} measureTreeHeight={this.resizeTreeHeight} />
         {numChildren > 0 ? this.renderToggleLink(expanded, level < 4) : null}
         {numChildren > 0
@@ -166,6 +153,7 @@ class Child extends React.PureComponent {
                 fullLevel={fullLevelArray.join('-')}
                 nuggetsManager={nuggetsManager}
                 listRef={listRef}
+                rootRef={this.rootRef}
                 cache={cache}
               />
             );
@@ -199,6 +187,7 @@ class Tree extends React.Component {
   constructor(props) {
     super(props);
     this.nuggetsManager = new NuggetsManager();
+    this.prevStopIndex = 0;
     this.cache = new CellMeasurerCache({
       defaultHeight: 500,
       minHeight: 185,
@@ -210,9 +199,9 @@ class Tree extends React.Component {
     // Reset the global prevStopIndex to not overfetch posts when changing idea
     // or to avoid recreating all dom nodes if we go back to the same idea.
     this.cache.clearAll();
-    prevStopIndex = 0;
+    this.prevStopIndex = 0;
 
-    document.addEventListener('rowHeightRecomputed', this.nuggetsManager.update);
+    if (this.rootRef) this.rootRef.addEventListener('rowHeightRecomputed', this.nuggetsManager.update);
     if (this.props.initialRowIndex !== null) {
       this.listRef.scrollToRow(this.props.initialRowIndex);
     }
@@ -229,13 +218,31 @@ class Tree extends React.Component {
       // doesnt take into account our hack in overscanIndicesGetter.
       // This means that the posts after the 10th post are removed from the dom
       // and will be recreated when scrolling, losing the previous expand/collapse local state.
-      prevStopIndex = 0;
+      this.prevStopIndex = 0;
     }
   }
 
   componentWillUnmount() {
-    document.removeEventListener('rowHeightRecomputed', this.nuggetsManager.update);
+    if (this.rootRef) this.rootRef.removeEventListener('rowHeightRecomputed', this.nuggetsManager.update);
   }
+
+  // override overscanIndicesGetter to not remove from the dom the posts once rendered
+  // to fix various issue with scrolling with WindowScroller
+  overscanIndicesGetter = ({ cellCount, overscanCellsCount, stopIndex }) => {
+    let overscanStopIndex;
+    if (cellCount === 1) {
+      // overscanIndicesGetter is called for columns, not rows
+      // use default implementation
+      overscanStopIndex = Math.min(cellCount - 1, stopIndex + overscanCellsCount);
+    } else {
+      this.prevStopIndex = Math.max(this.prevStopIndex, stopIndex);
+      overscanStopIndex = Math.min(cellCount - 1, this.prevStopIndex + overscanCellsCount);
+    }
+    return {
+      overscanStartIndex: 0,
+      overscanStopIndex: overscanStopIndex
+    };
+  };
 
   cellRenderer = ({ index, key, parent, style }) => {
     const {
@@ -246,6 +253,7 @@ class Tree extends React.Component {
       InnerComponentFolded, // component that will be used to render the children when folded
       SeparatorComponent // separator component between first level children
     } = this.props;
+
     const childData = data[index];
     return (
       <CellMeasurer cache={this.cache} columnIndex={0} key={key} parent={parent} rowIndex={index}>
@@ -280,13 +288,12 @@ class Tree extends React.Component {
               onResize={() => {
                 this.cache.clearAll();
                 this.listRef.recomputeRowHeights();
-                document.dispatchEvent(rowHeightRecomputed);
+                if (this.rootRef) this.rootRef.dispatchEvent(rowHeightRecomputed);
               }}
             >
               {({ width }) => {
                 return (
                   <List
-                    key={data.length}
                     contentLocaleMapping={contentLocaleMapping}
                     height={height}
                     isScrolling={isScrolling}
@@ -304,7 +311,7 @@ class Tree extends React.Component {
                       }
                     }}
                     rowCount={data.length}
-                    overscanIndicesGetter={overscanIndicesGetter}
+                    overscanIndicesGetter={this.overscanIndicesGetter}
                     overscanRowCount={1}
                     rowRenderer={this.cellRenderer}
                     width={width}
