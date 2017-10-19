@@ -31,12 +31,12 @@ class TopPostFormContainer extends React.Component {
         <div className="max-container">
           <Row>
             <div className={this.getClassNames()}>
-              {columnsInfos.map((column, index) => {
+              {columnsInfos.map((column) => {
                 return (
                   <Col
                     xs={12}
                     md={12 / columnsInfos.length}
-                    key={`col-container-${index}`}
+                    key={column.messageClassifier}
                     style={isColumnViewInline ? { width: MIN_WIDTH_COLUMN } : {}}
                   >
                     <div
