@@ -20,7 +20,6 @@ class ColumnsPost extends EmptyPost {
   render() {
     const {
       id,
-      bodyEntries,
       bodyMimeType,
       creator,
       modificationDate,
@@ -29,24 +28,20 @@ class ColumnsPost extends EmptyPost {
       publicationState,
       attachments
     } = this.props.data.post;
-
-    const { lang, refetchIdea, creationDate, numChildren, routerParams, debateData, colColor, colName } = this.props;
-
-    // creationDate is retrieved by IdeaWithPosts query, not PostQuery
-    let body;
-    let originalBodyLocale;
-    let originalBody;
-    if (bodyEntries.length > 1) {
-      // first entry is the translated version, example localeCode "fr-x-mtfrom-en"
-      // second entry is the original, example localeCode "en"
-      body = this.state.showOriginal ? bodyEntries[1].value : bodyEntries[0].value;
-      originalBodyLocale = bodyEntries[1].localeCode;
-      originalBody = bodyEntries[1].value;
-    } else {
-      // translation is not enabled or the message is already in the desired locale
-      body = bodyEntries[0].value;
-      originalBody = bodyEntries[0].value;
-    }
+    const {
+      originalLocale,
+      contentLocale,
+      lang,
+      refetchIdea,
+      creationDate,
+      numChildren,
+      routerParams,
+      debateData,
+      colColor,
+      colName
+    } = this.props;
+    const translate = contentLocale !== originalLocale;
+    const { body, originalBody } = this.getBodyAndSubject(translate);
 
     if (publicationState in DeletedPublicationStates) {
       return <DeletedPost id={id} deletedBy={publicationState === PublicationStates.DELETED_BY_USER ? 'user' : 'admin'} />;
@@ -84,23 +79,17 @@ class ColumnsPost extends EmptyPost {
               <div className="column-hint" style={{ color: colColor }}>
                 {colName}
               </div>
-              {originalBodyLocale
-                ? <PostTranslate
-                  id={id}
-                  showOriginal={this.state.showOriginal}
-                  originalBodyLocale={originalBodyLocale}
-                  toggle={() => {
-                    return this.setState((state) => {
-                      return { showOriginal: !state.showOriginal };
-                    });
-                  }}
-                />
-                : null}
+              <PostTranslate
+                contentLocale={contentLocale}
+                id={id}
+                lang={lang}
+                originalLocale={originalLocale}
+                translate={translate}
+              />
               <div
                 className={`body ${bodyMimeType === 'text/plain' ? 'pre-wrap' : ''}`}
                 dangerouslySetInnerHTML={{ __html: body }}
               />
-
               <Attachments attachments={attachments} />
             </Col>
             <Col xs={12} md={1} className="post-right">
