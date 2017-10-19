@@ -1,8 +1,9 @@
 import React from 'react';
+import { ResponsiveEmbed } from 'react-bootstrap';
 
 class ResourceBlock extends React.Component {
   render() {
-    const { title, bodyText, imgUrl, index } = this.props;
+    const { title, bodyText, imgUrl, index, videoUrl } = this.props;
     const isImgRight = index % 2 === 0;
     const float = isImgRight ? 'right margin-case-left' : 'left margin-case-right';
     return (
@@ -14,7 +15,11 @@ class ResourceBlock extends React.Component {
           </h1>
         </div>
         <div className="resource-body">
-          <img src={imgUrl} alt="resource" className={float} />
+          {imgUrl && <img src={imgUrl} alt="resource" className={float} />}
+          {videoUrl &&
+            <ResponsiveEmbed>
+              <embed src={videoUrl} />
+            </ResponsiveEmbed>}
           <div className="resource-text">
             {bodyText}
             {bodyText}
