@@ -41,21 +41,21 @@ class PostTranslate extends React.Component<void, PostTranslateProps, PostTransl
   }
 
   componentWillMount() {
-    this.updateOriginalLocaleLabel();
+    this.updateOriginalLocaleLabel(this.props);
   }
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.lang !== this.props.lang) {
-      this.updateOriginalLocaleLabel();
+      this.updateOriginalLocaleLabel(nextProps);
     }
   }
 
-  updateOriginalLocaleLabel() {
+  updateOriginalLocaleLabel(props: PostTranslateProps) {
     // TODO: i'm aware that it is costly to use .find for each post. The improvement
     // I imagine is to use redux to store the locales as a mapping but the main obstacle
     // is to find which component should do the graphql query to update the redux store
-    const originalLocaleInfo = this.props.data.locales.find((locale) => {
-      return locale.localeCode === this.props.originalLocale;
+    const originalLocaleInfo = props.data.locales.find((locale) => {
+      return locale.localeCode === props.originalLocale;
     });
     if (originalLocaleInfo) {
       this.originalLocaleLabel = originalLocaleInfo.label;
