@@ -62,6 +62,12 @@ export default class RichTextEditor extends React.Component<Object, RichTextEdit
     };
   }
 
+  componentWillReceiveProps(nextProps: RichTextEditorProps) {
+    if (this.props.rawContentState !== null && nextProps.rawContentState === null) {
+      this.setState({ editorState: EditorState.createEmpty() });
+    }
+  }
+
   getCurrentRawContentState = () => {
     return convertToRaw(this.state.editorState.getCurrentContent());
   };
