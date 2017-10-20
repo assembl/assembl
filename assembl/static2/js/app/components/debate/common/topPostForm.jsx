@@ -10,7 +10,8 @@ import type { RawContentState } from 'draft-js';
 import createPostMutation from '../../../graphql/mutations/createPost.graphql';
 import uploadDocumentMutation from '../../../graphql/mutations/uploadDocument.graphql';
 import { convertRawContentStateToHTML, rawContentStateIsEmpty } from '../../../utils/draftjs';
-import { displayAlert, promptForLoginOr } from '../../../utils/utilityManager';
+import { displayAlert, inviteUserToLogin, promptForLoginOr } from '../../../utils/utilityManager';
+import { getConnectedUserId } from '../../../utils/globalFunctions';
 import { TextInputWithRemainingChars } from '../../common/textInputWithRemainingChars';
 import RichTextEditor from '../../common/richTextEditor';
 import attachmentsPlugin from '../../common/richTextEditor/attachmentsPlugin';
@@ -102,9 +103,24 @@ class TopPostForm extends React.Component<*, TopPostFormProps, TopPostFormState>
     }
   };
 
-  handleInputFocus = promptForLoginOr(() => {
+  handleInputFocusOneColumn = promptForLoginOr(() => {
     return this.displayForm(true);
   });
+
+  handleInputFocusXColumns = () => {
+    const isUserConnected = getConnectedUserId();
+    if (!isUserConnected) {
+      inviteUserToLogin();
+    }
+  };
+
+  handleInputFocus = () => {
+    if (this.props.ideaOnColumn) {
+      this.handleInputFocusXColumns();
+    } else {
+      this.handleInputFocusOneColumn();
+    }
+  };
 
   updateBody = (newValue) => {
     this.setState({

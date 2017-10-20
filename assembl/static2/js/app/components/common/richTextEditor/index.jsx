@@ -89,13 +89,14 @@ export default class RichTextEditor extends React.Component<Object, RichTextEdit
     });
   };
 
-  handleEditorFocus = (): Function => {
+  handleEditorFocus = (): void => {
     const { handleInputFocus } = this.props;
-    this.setState({
-      editorHasFocus: true
-    });
-
-    return handleInputFocus;
+    this.setState(
+      {
+        editorHasFocus: true
+      },
+      handleInputFocus
+    );
   };
 
   getToolbarButtons(): Array<ButtonConfigType> {
