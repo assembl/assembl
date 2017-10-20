@@ -63,7 +63,7 @@ class TopPostForm extends React.Component<*, TopPostFormProps, TopPostFormState>
   };
 
   createTopPost = () => {
-    const { contentLocale, createPost, ideaId, refetchIdea, uploadDocument, messageClassifier } = this.props;
+    const { contentLocale, createPost, ideaId, refetchIdea, uploadDocument, messageClassifier, ideaOnColumn } = this.props;
     const { body, subject } = this.state;
     this.setState({ submitting: true });
     const bodyIsEmpty = !body || rawContentStateIsEmpty(body);
@@ -94,7 +94,7 @@ class TopPostForm extends React.Component<*, TopPostFormProps, TopPostFormState>
             this.setState({ submitting: false });
           });
       });
-    } else if (!subject) {
+    } else if (!subject && !ideaOnColumn) {
       displayAlert('warning', I18n.t('debate.thread.fillSubject'));
       this.setState({ submitting: false });
     } else if (bodyIsEmpty) {
