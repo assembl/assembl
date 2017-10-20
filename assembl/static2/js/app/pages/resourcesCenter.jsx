@@ -9,6 +9,7 @@ class ResourcesCenter extends React.Component {
     const resourceTitle = 'Economie - Rapport sur la réforme du Lorem ipsum et la chute des capitaux.';
     const resourceImgUrl = 'http://img.bfmtv.com/c/1256/708/6fe/831e6b4c6f0fb3ff26b8123515740.jpg';
     const resourceVideoUrl = 'https://player.vimeo.com/video/32975166';
+    const resourceSlidesUrl = 'http://www.slideshare.net/slideshow/embed_code/key/27D5UNrUvyDJjC';
     const bodyText =
       'Definitions abound and generally overlap by pointing to ‘agents’ (programs running on computer systems) able to learn, adapt and deploy themselves successfully in dynamic and uncertain environments. Intelligence in that sense intersects with autonomy, adaptability through the ability to learn from a dynamic environment. The ambiguity which has and still surrounds the notion of \'Artificial Intelligence\' calls for a little exercise in pedagogy over its definition, boundaries and dynamics.Definitions abound and generally overlap by pointing to ‘agents’... ';
 
@@ -17,10 +18,8 @@ class ResourcesCenter extends React.Component {
         <Header title={headerTitle} imgUrl={headerImgUrl} />
         <section>
           <ResourceBlock title={resourceTitle} imgUrl={resourceImgUrl} bodyText={bodyText} isDownload index={2} />
-          <ResourceBlock title={resourceTitle} videoUrl={resourceVideoUrl} bodyText={bodyText} isDownload index={3} />
-          <ResourceBlock title={resourceTitle} imgUrl={resourceImgUrl} bodyText={bodyText} index={4} />
-          <ResourceBlock title={resourceTitle} imgUrl={resourceImgUrl} bodyText={bodyText} index={5} />
-          <ResourceBlock title={resourceTitle} videoUrl={resourceVideoUrl} bodyText={bodyText} isDownload index={6} />
+          <ResourceBlock title={resourceTitle} embedContent={resourceVideoUrl} bodyText={bodyText} index={3} />
+          <ResourceBlock title={resourceTitle} embedContent={resourceSlidesUrl} bodyText={bodyText} isDownload index={4} />
         </section>
       </div>
     );

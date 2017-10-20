@@ -2,9 +2,10 @@ import React from 'react';
 
 class ResourceBlock extends React.Component {
   render() {
-    const { title, bodyText, imgUrl, index, videoUrl, isDownload } = this.props;
+    const { title, bodyText, imgUrl, index, isDownload, embedContent } = this.props;
     const isImgRight = index % 2 === 0;
     const float = isImgRight ? 'right margin-case-left' : 'left margin-case-right';
+
     return (
       <div className="resource-block">
         <div className="title-section">
@@ -15,9 +16,9 @@ class ResourceBlock extends React.Component {
         </div>
         <div className="resource-body">
           {imgUrl && <img src={imgUrl} alt="resource" className={float} />}
-          {videoUrl &&
+          {embedContent &&
             <div className={float}>
-              <iframe title="resource-video" src={videoUrl} height={350} width={500} />
+              <iframe title="resource-video" src={embedContent} height={350} width={500} />
             </div>}
           <div className="resource-text">
             {bodyText}
