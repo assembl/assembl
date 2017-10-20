@@ -7,13 +7,11 @@ import { answerTooltip, sharePostTooltip } from '../../common/tooltips';
 
 import getOverflowMenuForPost from './overflowMenu';
 import { getConnectedUserId } from '../../../utils/globalFunctions';
-import { promptForLoginOr, displayModal, closeModal } from '../../../utils/utilityManager';
+import { promptForLoginOr, openShareModal } from '../../../utils/utilityManager';
 import Permissions, { connectedUserCan } from '../../../utils/permissions';
 import Sentiments from './sentiments';
 import getSentimentStats from './sentimentStats';
 import sentimentDefinitions from './sentimentDefinitions';
-import { get } from '../../../utils/routeMap';
-import SocialShare from '../../common/socialShare';
 
 class PostActions extends React.Component {
   constructor(props) {
@@ -60,21 +58,8 @@ class PostActions extends React.Component {
       (connectedUserId === String(creatorUserId) && connectedUserCan(Permissions.DELETE_MY_POST)) ||
       connectedUserCan(Permissions.DELETE_POST);
     const userCanEditThisMessage = connectedUserId === String(creatorUserId) && connectedUserCan(Permissions.EDIT_MY_POST);
-    const { slug, phase, themeId } = routerParams;
-    const openSharePostModal = () => {
-      const title = <Translate value="debate.sharePost" />;
-      const url = `${window.location.protocol}//${window.location.host}${get('debate', {
-        slug: slug,
-        phase: phase
-      })}${get('theme', {
-        themeId: themeId
-      })}/#${postId}`;
-      const social = debateData.useSocialMedia;
-      const body = <SocialShare url={url} onClose={closeModal} social={social} />;
-      const footer = false;
-      const footerTxt = null;
-      return displayModal(title, body, footer, footerTxt);
-    };
+    const modalTitle = <Translate value="debate.sharePost" />;
+    const useSocial = debateData.useSocialMedia;
     let overflowMenu = null;
     if (userCanDeleteThisMessage || userCanEditThisMessage) {
       overflowMenu = (
@@ -106,7 +91,7 @@ class PostActions extends React.Component {
           <div
             className="post-action"
             onClick={() => {
-              return openSharePostModal(postId);
+              return openShareModal(modalTitle, routerParams, postId, useSocial, false, null);
             }}
           >
             <OverlayTrigger

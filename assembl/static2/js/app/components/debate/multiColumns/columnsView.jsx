@@ -7,9 +7,7 @@ import BoxWithHyphen from '../../common/boxWithHyphen';
 import Tree from '../../common/tree';
 import { MIN_WIDTH_COLUMN } from '../../../constants';
 import { multiColumnMapping } from '../../../utils/mapping';
-import { displayModal, closeModal } from '../../../utils/utilityManager';
-import SocialShare from '../../common/socialShare';
-import { get } from '../../../utils/routeMap';
+import { openShareModal } from '../../../utils/utilityManager';
 import hashLinkScroll from '../../../utils/hashLinkScroll';
 
 class ColumnsView extends React.Component {
@@ -64,21 +62,9 @@ class ColumnsView extends React.Component {
       return countSynthesis >= 1;
     });
 
-    const { slug, phase, themeId } = routerParams;
-    const openShareSynthesisModal = (id) => {
-      const title = <Translate value="debate.shareSynthesis" />;
-      const url = `${window.location.protocol}//${window.location.host}${get('debate', {
-        slug: slug,
-        phase: phase
-      })}${get('theme', {
-        themeId: themeId
-      })}/#${id}`; // testing the url
-      const social = debateData.useSocialMedia; // has to be defined for a synthesis ?;
-      const body = <SocialShare url={url} onClose={closeModal} social={social} />;
-      const footer = false;
-      const footerTxt = null;
-      return displayModal(title, body, footer, footerTxt);
-    };
+    const modalTitle = <Translate value="debate.shareSynthesis" />;
+
+    const useSocial = debateData.useSocialMedia;
 
     return (
       <Grid fluid className="background-grey no-padding">
@@ -114,7 +100,7 @@ class ColumnsView extends React.Component {
                                 <div
                                   className="post-action"
                                   onClick={() => {
-                                    return openShareSynthesisModal(synthesisId);
+                                    return openShareModal(modalTitle, routerParams, synthesisId, useSocial, false, null);
                                   }}
                                 >
                                   <OverlayTrigger overlay={shareSynthesisTooltip}>

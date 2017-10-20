@@ -1,7 +1,8 @@
+import React from 'react';
 import { I18n } from 'react-redux-i18n';
-import { getCurrentView, getContextual } from '../utils/routeMap';
+import { getCurrentView, getContextual, get } from '../utils/routeMap';
 import { getConnectedUserId, getDiscussionSlug } from '../utils/globalFunctions';
-
+import SocialShare from '../components/common/socialShare';
 /*
   Singleton object that will contain the AlertManager, ModalManager which will
   be used to show/hide/manipulate the alert/modal system
@@ -36,6 +37,7 @@ export const displayAlert = (style, msg, topPosition = false, time = 4000) => {
     });
   }, time);
 };
+
 export const displayModal = (title, body, footer, footerTxt, button = null, showModal = true, bsSize = null) => {
   /*
     title:String => the text in the header of the modal
@@ -70,6 +72,21 @@ export const displayCustomModal = (content, showModal = true) => {
 
 export const closeModal = () => {
   modalManager.component.setState({ showModal: false });
+};
+
+export const openShareModal = (title, routerParams, elementId, social, isFooter, footer) => {
+  const modalTitle = title;
+  const { slug, phase, themeId } = routerParams;
+  const url = `${window.location.protocol}//${window.location.host}${get('debate', {
+    slug: slug,
+    phase: phase
+  })}${get('theme', {
+    themeId: themeId
+  })}/#${elementId}`;
+  const modalBody = <SocialShare url={url} onClose={closeModal} social={social} />;
+  const isModalFooter = isFooter;
+  const modalFooter = footer;
+  return displayModal(modalTitle, modalBody, isModalFooter, modalFooter);
 };
 
 export const inviteUserToLogin = () => {
