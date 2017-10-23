@@ -25,14 +25,14 @@ const plugin = {
       const mimeType = entity.data.mimeType ? entity.data.mimeType : '';
       const title = entity.data.title ? entity.data.title : '';
       if (mimeType.startsWith('image')) {
-        return `<img src="${externalUrl}" alt="" title="${title}" width="60%" data-id="${id}" data-mimetype="${mimeType}" data-entitytype="image" />`;
+        return `<img src="${externalUrl}" alt="" title="${title}" width="60%" data-id="${id}" data-mimetype="${mimeType}" />`;
       }
 
       const extension = getExtension(title);
       const iconPath = getIconPath(extension);
       return (
         `<img alt="${extension}" src="${iconPath}" width="30px" data-id="${id}" data-mimetype="${mimeType}"` +
-        ` data-title="${title}" data-externalurl="${externalUrl}" data-entitytype="document" />`
+        ` data-title="${title}" data-externalurl="${externalUrl}" />`
       );
     }
 
@@ -61,7 +61,11 @@ const plugin = {
     }
 
     const isAtomicBlock = nodeName === 'div' && node.dataset && node.dataset.blocktype === BLOCK_TYPE;
-    const isImage = isAtomicBlock && node.firstChild && node.firstChild.dataset.entitytype === 'image';
+    const isImage =
+      isAtomicBlock &&
+      node.firstChild &&
+      node.firstChild.dataset.mimetype &&
+      node.firstChild.dataset.mimetype.startsWith('image');
     if (isImage) {
       return createEntity(ENTITY_TYPE, 'IMMUTABLE', {
         externalUrl: node.firstChild.src,
