@@ -102,3 +102,6 @@ CountablePublicationStates[PublicationStates.SUBMITTED_IN_EDIT_GRACE_PERIOD] = P
 CountablePublicationStates[PublicationStates.PUBLISHED] = PublicationStates.PUBLISHED;
 CountablePublicationStates[PublicationStates.MODERATED_TEXT_ON_DEMAND] = PublicationStates.MODERATED_TEXT_ON_DEMAND;
 CountablePublicationStates[PublicationStates.MODERATED_TEXT_NEVER_AVAILABLE] = PublicationStates.MODERATED_TEXT_NEVER_AVAILABLE;
+
+// This is to be consistent with Pyramid's check for a locale in the request
+export const LOCALE = '_LOCALE_';
