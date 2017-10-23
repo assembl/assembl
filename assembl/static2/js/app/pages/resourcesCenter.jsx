@@ -4,22 +4,50 @@ import ResourceBlock from '../components/resourcesCenter/resourceBlock';
 
 class ResourcesCenter extends React.Component {
   render() {
-    const headerTitle = 'Centre de ressources en ligne';
-    const headerImgUrl = 'http://i.f1g.fr/media/figaro/800x_crop/2015/06/24/XVMc0167212-19a9-11e5-8467-f08c778c772f-805x453.jpg';
-    const resourceTitle = 'Economie - Rapport sur la réforme du Lorem ipsum et la chute des capitaux.';
-    const resourceImgUrl = 'http://img.bfmtv.com/c/1256/708/6fe/831e6b4c6f0fb3ff26b8123515740.jpg';
-    const resourceVideoUrl = 'https://player.vimeo.com/video/32975166';
-    const resourceSlidesUrl = 'http://www.slideshare.net/slideshow/embed_code/key/27D5UNrUvyDJjC';
-    const bodyText =
-      'Definitions abound and generally overlap by pointing to ‘agents’ (programs running on computer systems) able to learn, adapt and deploy themselves successfully in dynamic and uncertain environments. Intelligence in that sense intersects with autonomy, adaptability through the ability to learn from a dynamic environment. The ambiguity which has and still surrounds the notion of \'Artificial Intelligence\' calls for a little exercise in pedagogy over its definition, boundaries and dynamics.Definitions abound and generally overlap by pointing to ‘agents’... ';
+    const resourcesCenterProps = {
+      headerTitle: 'Centre de ressources en ligne',
+      headerImage: 'http://i.f1g.fr/media/figaro/800x_crop/2015/06/24/XVMc0167212-19a9-11e5-8467-f08c778c772f-805x453.jpg',
+      resources: [
+        {
+          title: 'Economie - Rapport très intéressant',
+          description:
+            'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.',
+          media: {
+            type: 'image',
+            url: 'http://img.bfmtv.com/c/1256/708/6fe/831e6b4c6f0fb3ff26b8123515740.jpg'
+          },
+          document: 'https://www.google.fr'
+        },
+        {
+          title: 'Economie - Vidéo tout à fait fascinantet',
+          description:
+            'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.',
+          media: {
+            type: 'embed',
+            url: 'https://player.vimeo.com/video/32975166'
+          },
+          document: undefined
+        },
+        {
+          title: 'Economie - Des slides éblouissantes',
+          description:
+            'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.',
+          media: {
+            type: 'embed',
+            url: 'http://www.slideshare.net/slideshow/embed_code/key/27D5UNrUvyDJjC'
+          },
+          document: undefined
+        }
+      ]
+    };
 
     return (
       <div className="resources-center">
-        <Header title={headerTitle} imgUrl={headerImgUrl} />
+        <Header title={resourcesCenterProps.headerTitle} imgUrl={resourcesCenterProps.headerImage} />
         <section>
-          <ResourceBlock title={resourceTitle} imgUrl={resourceImgUrl} bodyText={bodyText} isDownload index={2} />
-          <ResourceBlock title={resourceTitle} embedContent={resourceVideoUrl} bodyText={bodyText} index={3} />
-          <ResourceBlock title={resourceTitle} embedContent={resourceSlidesUrl} bodyText={bodyText} isDownload index={4} />
+          {resourcesCenterProps.resources.map((resource, index) => {
+            return <ResourceBlock resource={resource} index={index} key={index} />;
+          })}
         </section>
       </div>
     );

@@ -2,7 +2,7 @@ import React from 'react';
 
 class ResourceBlock extends React.Component {
   render() {
-    const { title, bodyText, imgUrl, index, isDownload, embedContent } = this.props;
+    const { index, resource } = this.props;
     const isImgRight = index % 2 === 0;
     const float = isImgRight ? 'right margin-case-left' : 'left margin-case-right';
 
@@ -11,20 +11,20 @@ class ResourceBlock extends React.Component {
         <div className="title-section">
           <div className="title-hyphen" />
           <h1 className="dark-title-1">
-            {title}
+            {resource.title}
           </h1>
         </div>
         <div className="resource-body">
-          {imgUrl && <img src={imgUrl} alt="resource" className={float} />}
-          {embedContent &&
+          {resource.media.type === 'image' && <img src={resource.media.url} alt="resource" className={float} />}
+          {resource.media.type === 'embed' &&
             <div className={float}>
-              <iframe title="resource-video" src={embedContent} height={350} width={500} />
+              <iframe title="resource-video" src={resource.media.url} height={350} width={500} />
             </div>}
           <div className="resource-text">
-            {bodyText}
-            {isDownload &&
+            {resource.description}
+            {resource.document &&
               <div className="resource-download-link">
-                <a href="http://www.google.fr" target="_blank" rel="noopener noreferrer">
+                <a href={resource.document} target="_blank" rel="noopener noreferrer">
                   Download the report
                 </a>
               </div>}
