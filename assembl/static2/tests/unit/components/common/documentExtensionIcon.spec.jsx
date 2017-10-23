@@ -10,6 +10,12 @@ describe('getExtension function', () => {
     expect(actual).toEqual(expected);
   });
 
+  it('should return the extension from filename with multiple consecutive dots', () => {
+    const actual = getExtension('foo..jpg');
+    const expected = 'jpg';
+    expect(actual).toEqual(expected);
+  });
+
   it('should return unknown if filename has no dot', () => {
     const actual = getExtension('foobar');
     const expected = 'unknown';
