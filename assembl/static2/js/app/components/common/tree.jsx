@@ -2,10 +2,8 @@
 
 import React from 'react';
 import { AutoSizer, CellMeasurer, CellMeasurerCache, List, WindowScroller } from 'react-virtualized';
-import { getDomElementOffset, createEvent } from '../../utils/globalFunctions';
+import { getDomElementOffset } from '../../utils/globalFunctions';
 import NuggetsManager from './nuggetsManager';
-
-const rowHeightRecomputed = createEvent('rowHeightRecomputed');
 
 class Child extends React.PureComponent {
   constructor(props) {
@@ -20,7 +18,7 @@ class Child extends React.PureComponent {
   resizeTreeHeight(delay = 0) {
     // This function will be called by each post rendered, so we delay the
     // recomputation until no post are rendered in 200ms to avoid unnecessary lag.
-    const { listRef, cache, rowIndex, rootRef } = this.props;
+    const { listRef, cache, rowIndex, nuggetsManager } = this.props;
     cache.clear(rowIndex, 0);
     if (listRef) {
       let delayedRecomputeRowHeights = listRef.delayedRecomputeRowHeights;
@@ -36,7 +34,7 @@ class Child extends React.PureComponent {
         // if listRef.Grid is null, it means it has been unmounted, so we are now on a new List
         if (listRef.Grid) {
           listRef.recomputeRowHeights(delayedRecomputeRowHeights[1]);
-          if (rootRef) rootRef.dispatchEvent(rowHeightRecomputed);
+          nuggetsManager.update();
           // recompute height only for rows (top post) starting at rowIndex
         }
         delayedRecomputeRowHeights[0] = null;
@@ -125,13 +123,7 @@ class Child extends React.PureComponent {
     };
     delete forwardProps.children;
     return (
-      <div
-        className={cssClasses()}
-        id={id}
-        ref={(el) => {
-          if (!this.rootRef) this.rootRef = el;
-        }}
-      >
+      <div className={cssClasses()} id={id}>
         <InnerComponent {...forwardProps} measureTreeHeight={this.resizeTreeHeight} />
         {numChildren > 0 ? this.renderToggleLink(expanded, level < 4) : null}
         {numChildren > 0
@@ -153,7 +145,6 @@ class Child extends React.PureComponent {
                 fullLevel={fullLevelArray.join('-')}
                 nuggetsManager={nuggetsManager}
                 listRef={listRef}
-                rootRef={this.rootRef}
                 cache={cache}
               />
             );
@@ -201,7 +192,6 @@ class Tree extends React.Component {
     this.cache.clearAll();
     this.prevStopIndex = 0;
 
-    if (this.rootRef) this.rootRef.addEventListener('rowHeightRecomputed', this.nuggetsManager.update);
     if (this.props.initialRowIndex !== null) {
       this.listRef.scrollToRow(this.props.initialRowIndex);
     }
@@ -220,10 +210,6 @@ class Tree extends React.Component {
       // and will be recreated when scrolling, losing the previous expand/collapse local state.
       this.prevStopIndex = 0;
     }
-  }
-
-  componentWillUnmount() {
-    if (this.rootRef) this.rootRef.removeEventListener('rowHeightRecomputed', this.nuggetsManager.update);
   }
 
   // override overscanIndicesGetter to not remove from the dom the posts once rendered
@@ -288,7 +274,7 @@ class Tree extends React.Component {
               onResize={() => {
                 this.cache.clearAll();
                 this.listRef.recomputeRowHeights();
-                if (this.rootRef) this.rootRef.dispatchEvent(rowHeightRecomputed);
+                this.nuggetsManager.update();
               }}
             >
               {({ width }) => {
