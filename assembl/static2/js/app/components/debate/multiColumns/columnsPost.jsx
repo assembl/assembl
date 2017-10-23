@@ -58,6 +58,7 @@ class ColumnsPost extends EmptyPost {
               refetchIdea={refetchIdea}
               goBackToViewMode={this.goBackToViewMode}
               readOnly={!!this.props.parentId}
+              originalLocale={originalLocale}
             />
           </div>
         </div>
