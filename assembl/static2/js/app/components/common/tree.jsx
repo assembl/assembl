@@ -264,7 +264,7 @@ class Tree extends React.Component {
   };
 
   render() {
-    const { contentLocaleMapping, data, noRowsRenderer } = this.props;
+    const { contentLocaleMapping, data, lang, noRowsRenderer } = this.props;
     return (
       <WindowScroller>
         {({ height, isScrolling, onChildScroll, scrollTop }) => {
@@ -282,6 +282,7 @@ class Tree extends React.Component {
                   <List
                     contentLocaleMapping={contentLocaleMapping}
                     height={height}
+                    lang={lang}
                     isScrolling={isScrolling}
                     onScroll={onChildScroll}
                     scrollTop={scrollTop}
