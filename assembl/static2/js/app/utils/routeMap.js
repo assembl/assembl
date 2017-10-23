@@ -35,7 +35,8 @@ const routes = {
   theme: 'theme/${themeId}',
   administration: '${slug}/administration',
   unauthorizedAdministration: '${slug}/unauthorizedAdministration',
-  adminPhase: '${phase}'
+  adminPhase: '${phase}',
+  post: '${slug}/debate/${phase}/theme/${themeId}/#${element}'
 };
 const convertToContextualName = (name) => {
   const base = 'ctx';

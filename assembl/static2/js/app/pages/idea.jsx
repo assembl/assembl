@@ -136,7 +136,7 @@ class Idea extends React.Component {
     return topPosts;
   }
   render() {
-    const { contentLocaleMapping, lang, ideaData, ideaWithPostsData } = this.props;
+    const { contentLocaleMapping, lang, ideaData, ideaWithPostsData, routerParams, debateData } = this.props;
     const refetchIdea = ideaWithPostsData.refetch;
     if (ideaData.loading) {
       return (
@@ -203,6 +203,8 @@ class Idea extends React.Component {
                       SeparatorComponent={InfiniteSeparator}
                       isColumnViewInline={this.isColumnViewInline()}
                       ideaTitle={idea.title}
+                      routerParams={routerParams}
+                      debateData={debateData}
                     />}
                 </div>
               </div>
