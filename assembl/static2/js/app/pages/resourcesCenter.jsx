@@ -21,7 +21,7 @@ export class ResourcesCenter extends React.Component {
               type: 'image',
               url: 'http://img.bfmtv.com/c/1256/708/6fe/831e6b4c6f0fb3ff26b8123515740.jpg'
             },
-            document: 'https://www.google.fr'
+            doc: 'https://www.google.fr'
           },
           {
             title: 'Economie - Vidéo tout à fait fascinantet',
@@ -31,7 +31,7 @@ export class ResourcesCenter extends React.Component {
               type: 'embed',
               url: 'https://player.vimeo.com/video/32975166'
             },
-            document: undefined
+            doc: undefined
           },
           {
             title: 'Economie - Des slides éblouissantes',
@@ -41,18 +41,21 @@ export class ResourcesCenter extends React.Component {
               type: 'embed',
               url: 'http://www.slideshare.net/slideshow/embed_code/key/27D5UNrUvyDJjC'
             },
-            document: undefined
+            doc: undefined
           }
         ]
       };
     }
 
+    const { headerTitle, headerImage, resources } = resourcesCenterProps;
+
     return (
       <div className="resources-center">
-        <Header title={resourcesCenterProps.headerTitle} imgUrl={resourcesCenterProps.headerImage} />
+        <Header title={headerTitle} imgUrl={headerImage} />
         <section>
-          {resourcesCenterProps.resources.map((resource, index) => {
-            return <ResourceBlock resource={resource} index={index} key={index} />;
+          {resources.map((resource, index) => {
+            const { title, description, media, doc } = resource;
+            return <ResourceBlock title={title} description={description} media={media} doc={doc} index={index} key={index} />;
           })}
         </section>
       </div>
