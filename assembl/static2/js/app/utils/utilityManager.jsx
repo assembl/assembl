@@ -1,6 +1,6 @@
 import React from 'react';
 import { I18n } from 'react-redux-i18n';
-import { getCurrentView, getContextual, get } from '../utils/routeMap';
+import { getCurrentView, getContextual, getFullPath } from '../utils/routeMap';
 import { getConnectedUserId, getDiscussionSlug } from '../utils/globalFunctions';
 import SocialShare from '../components/common/socialShare';
 /*
@@ -77,12 +77,7 @@ export const closeModal = () => {
 export const openShareModal = (options) => {
   const { title, routerParams, elementId, social, isFooter, footer } = options;
   const { slug, phase, themeId } = routerParams;
-  const url = `${window.location.protocol}//${window.location.host}${get('debate', {
-    slug: slug,
-    phase: phase
-  })}${get('theme', {
-    themeId: themeId
-  })}/#${elementId}`;
+  const url = getFullPath('post', { slug: slug, phase: phase, themeId: themeId, element: elementId });
   const modalBody = <SocialShare url={url} onClose={closeModal} social={social} />;
   return displayModal(title, modalBody, isFooter, footer);
 };
