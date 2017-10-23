@@ -1,6 +1,20 @@
+// @flow
 import React from 'react';
 
-const ResourceBlock = (props) => {
+export type Media = {
+  type: string,
+  url: string
+};
+
+export type ResourceBlockProps = {
+  title: string,
+  description: string,
+  media: Media,
+  doc: string,
+  index: number
+};
+
+const ResourceBlock = (props: ResourceBlockProps) => {
   const { index, title, description, media, doc } = props;
   const { type, url } = media;
   const isImgRight = index % 2 === 0;
