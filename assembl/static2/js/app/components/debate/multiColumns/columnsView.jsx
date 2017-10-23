@@ -100,7 +100,12 @@ class ColumnsView extends React.Component {
                                 <div
                                   className="post-action"
                                   onClick={() => {
-                                    return openShareModal(modalTitle, routerParams, synthesisId, useSocial, false, null);
+                                    return openShareModal({
+                                      title: modalTitle,
+                                      routerParams: routerParams,
+                                      elementId: synthesisId,
+                                      social: useSocial
+                                    });
                                   }}
                                 >
                                   <OverlayTrigger overlay={shareSynthesisTooltip}>

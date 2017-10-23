@@ -74,8 +74,8 @@ export const closeModal = () => {
   modalManager.component.setState({ showModal: false });
 };
 
-export const openShareModal = (title, routerParams, elementId, social, isFooter, footer) => {
-  const modalTitle = title;
+export const openShareModal = (options) => {
+  const { title, routerParams, elementId, social, isFooter, footer } = options;
   const { slug, phase, themeId } = routerParams;
   const url = `${window.location.protocol}//${window.location.host}${get('debate', {
     slug: slug,
@@ -84,9 +84,7 @@ export const openShareModal = (title, routerParams, elementId, social, isFooter,
     themeId: themeId
   })}/#${elementId}`;
   const modalBody = <SocialShare url={url} onClose={closeModal} social={social} />;
-  const isModalFooter = isFooter;
-  const modalFooter = footer;
-  return displayModal(modalTitle, modalBody, isModalFooter, modalFooter);
+  return displayModal(title, modalBody, isFooter, footer);
 };
 
 export const inviteUserToLogin = () => {

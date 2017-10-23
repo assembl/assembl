@@ -91,7 +91,12 @@ class PostActions extends React.Component {
           <div
             className="post-action"
             onClick={() => {
-              return openShareModal(modalTitle, routerParams, postId, useSocial, false, null);
+              return openShareModal({
+                title: modalTitle,
+                routerParams: routerParams,
+                elementId: postId,
+                social: useSocial
+              });
             }}
           >
             <OverlayTrigger
