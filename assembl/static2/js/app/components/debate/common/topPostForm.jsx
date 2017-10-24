@@ -67,6 +67,8 @@ class TopPostForm extends React.Component<*, TopPostFormProps, TopPostFormState>
     this.setState({ submitting: true });
     const bodyIsEmpty = !body || rawContentStateIsEmpty(body);
     if ((subject || this.props.ideaOnColumn) && !bodyIsEmpty) {
+      displayAlert('success', I18n.t('loading.wait'));
+
       // first, we upload each attachment
       const uploadDocumentsPromise = attachmentsPlugin.uploadNewAttachments(body, uploadDocument);
       uploadDocumentsPromise.then((result) => {
@@ -79,7 +81,6 @@ class TopPostForm extends React.Component<*, TopPostFormProps, TopPostFormState>
           body: convertRawContentStateToHTML(result.contentState),
           attachments: result.documentIds
         };
-        displayAlert('success', I18n.t('loading.wait'));
 
         createPost({ variables: variables })
           .then(() => {
