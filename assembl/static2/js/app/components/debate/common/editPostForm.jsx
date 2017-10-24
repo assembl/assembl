@@ -26,7 +26,6 @@ type EditPostFormProps = {
   modifiedOriginalSubject: string,
   goBackToViewMode: Function,
   client: Object,
-  refetchIdea: Function,
   uploadDocument: Function,
   updatePost: Function
 };
@@ -94,16 +93,18 @@ class EditPostForm extends React.PureComponent<void, EditPostFormProps, EditPost
         displayAlert('success', I18n.t('loading.wait'));
         const oldSubject = this.props.subject;
         updatePost({ variables: variables })
-          .then(async () => {
-            await this.props.refetchIdea();
+          .then(() => {
             displayAlert('success', I18n.t('debate.thread.postSuccess'));
             this.props.goBackToViewMode();
             if (oldSubject !== this.state.subject) {
               // If we edited the subject, we need to reload all descendants posts,
-              // we do this by calling resetStore which will refetch all mounted queries.
-              // Descendants are actually a subset of mounted queries, so we overfetch here.
+              // we do this by refetch all Post queries.
+              // Descendants are actually a subset of Post queries, so we overfetch here.
               // This is fine, editing a subject should be a rare action.
-              this.props.client.resetStore();
+              const queryManager = this.props.client.queryManager;
+              queryManager.queryIdsByName.Post.forEach((queryId) => {
+                queryManager.observableQueries[queryId].observableQuery.refetch();
+              });
             }
           })
           .catch((error) => {

@@ -90,6 +90,7 @@ class ColumnsPost extends EmptyPost {
               <div
                 className={`body ${bodyMimeType === 'text/plain' ? 'pre-wrap' : ''}`}
                 dangerouslySetInnerHTML={{ __html: body }}
+                ref={this.recomputeTreeHeightOnImagesLoad}
               />
               <Attachments attachments={attachments} />
             </Col>

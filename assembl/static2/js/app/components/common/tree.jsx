@@ -232,8 +232,6 @@ class Tree extends React.Component {
 
   cellRenderer = ({ index, key, parent, style }) => {
     const {
-      contentLocaleMapping,
-      lang,
       data,
       InnerComponent, // component that will be rendered in the child
       InnerComponentFolded, // component that will be used to render the children when folded
@@ -247,9 +245,9 @@ class Tree extends React.Component {
           {index > 0 ? <SeparatorComponent /> : null}
           <Child
             {...childData}
-            contentLocaleMapping={contentLocaleMapping}
+            contentLocaleMapping={parent.props.contentLocaleMapping}
             key={childData.id}
-            lang={lang}
+            lang={parent.props.lang}
             rowIndex={index}
             InnerComponent={InnerComponent}
             InnerComponentFolded={InnerComponentFolded}
@@ -264,7 +262,7 @@ class Tree extends React.Component {
   };
 
   render() {
-    const { contentLocaleMapping, data, noRowsRenderer } = this.props;
+    const { contentLocaleMapping, data, lang, noRowsRenderer } = this.props;
     return (
       <WindowScroller>
         {({ height, isScrolling, onChildScroll, scrollTop }) => {
@@ -282,6 +280,8 @@ class Tree extends React.Component {
                   <List
                     contentLocaleMapping={contentLocaleMapping}
                     height={height}
+                    // pass lang to the List component to ensure that the rows are rendered again if we change the site language
+                    lang={lang}
                     isScrolling={isScrolling}
                     onScroll={onChildScroll}
                     scrollTop={scrollTop}

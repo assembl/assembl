@@ -3,17 +3,15 @@ import { withApollo } from 'react-apollo';
 import { Translate } from 'react-redux-i18n';
 import { OverlayTrigger } from 'react-bootstrap';
 import { MEDIUM_SCREEN_WIDTH } from '../../../constants';
-import { answerTooltip, shareTooltip } from '../../common/tooltips';
+import { answerTooltip, sharePostTooltip } from '../../common/tooltips';
 
 import getOverflowMenuForPost from './overflowMenu';
 import { getConnectedUserId } from '../../../utils/globalFunctions';
-import { promptForLoginOr, displayModal, closeModal } from '../../../utils/utilityManager';
+import { promptForLoginOr, openShareModal } from '../../../utils/utilityManager';
 import Permissions, { connectedUserCan } from '../../../utils/permissions';
 import Sentiments from './sentiments';
 import getSentimentStats from './sentimentStats';
 import sentimentDefinitions from './sentimentDefinitions';
-import { get } from '../../../utils/routeMap';
-import SocialShare from '../../common/socialShare';
 
 class PostActions extends React.Component {
   constructor(props) {
@@ -60,21 +58,8 @@ class PostActions extends React.Component {
       (connectedUserId === String(creatorUserId) && connectedUserCan(Permissions.DELETE_MY_POST)) ||
       connectedUserCan(Permissions.DELETE_POST);
     const userCanEditThisMessage = connectedUserId === String(creatorUserId) && connectedUserCan(Permissions.EDIT_MY_POST);
-    const { slug, phase, themeId } = routerParams;
-    const openSharePostModal = () => {
-      const title = <Translate value="debate.share" />;
-      const url = `${window.location.protocol}//${window.location.host}${get('debate', {
-        slug: slug,
-        phase: phase
-      })}${get('theme', {
-        themeId: themeId
-      })}/#${postId}`;
-      const social = debateData.useSocialMedia;
-      const body = <SocialShare url={url} onClose={closeModal} social={social} />;
-      const footer = false;
-      const footerTxt = null;
-      return displayModal(title, body, footer, footerTxt);
-    };
+    const modalTitle = <Translate value="debate.sharePost" />;
+    const useSocial = debateData.useSocialMedia;
     let overflowMenu = null;
     const tooltipPlacement = this.state.screenWidth >= MEDIUM_SCREEN_WIDTH ? 'left' : 'top';
     if (userCanDeleteThisMessage || userCanEditThisMessage) {
@@ -107,10 +92,16 @@ class PostActions extends React.Component {
           <div
             className="post-action"
             onClick={() => {
-              return openSharePostModal(postId);
+              return openShareModal({
+                title: modalTitle,
+                routerParams: routerParams,
+                elementId: postId,
+                social: useSocial
+              });
             }}
           >
             <OverlayTrigger placement={tooltipPlacement} overlay={shareTooltip}>
+
               <span className="assembl-icon-share color" />
             </OverlayTrigger>
           </div>

@@ -81,6 +81,7 @@ export class EmptyPost extends React.PureComponent {
       window.scrollTo({ top: txtareaOffset - this.answerTextarea.clientHeight, left: 0, behavior: 'smooth' });
     }, 200);
   };
+
   hideAnswerForm = () => {
     this.setState({ showAnswerForm: false }, this.props.measureTreeHeight);
   };
@@ -124,6 +125,18 @@ export class EmptyPost extends React.PureComponent {
       originalBody: originalBody,
       originalSubject: originalSubject
     };
+  };
+
+  recomputeTreeHeightOnImagesLoad = (el) => {
+    // recompute the tree height after images are loaded
+    if (el) {
+      const images = el.getElementsByTagName('img');
+      Array.from(images).forEach((img) => {
+        return img.addEventListener('load', () => {
+          this.props.measureTreeHeight(400);
+        });
+      });
+    }
   };
 
   render() {
@@ -244,6 +257,7 @@ export class EmptyPost extends React.PureComponent {
               <div
                 className={`body ${bodyMimeType === 'text/plain' ? 'pre-wrap' : ''}`}
                 dangerouslySetInnerHTML={{ __html: body }}
+                ref={this.recomputeTreeHeightOnImagesLoad}
               />
 
               <Attachments attachments={attachments} />
