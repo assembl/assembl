@@ -44,9 +44,10 @@ class AttachFileForm extends React.Component<*, AttachFileFormProps, AttachFileF
 
     return (
       <div className={isImage ? 'attach-file with-preview' : 'attach-file'}>
-        <label htmlFor="attachment">
+        <div htmlFor="attachment" className="attachment-label">
           <Translate value="common.attachFileForm.label" />
-        </label>
+        </div>
+
         <FileUploader handleChange={this.handleFileChange} fileOrUrl={this.state.file} withPreview />
         <Button className="button-submit button-dark btn btn-default" onClick={this.handleSubmit}>
           <Translate value="common.attachFileForm.submit" />

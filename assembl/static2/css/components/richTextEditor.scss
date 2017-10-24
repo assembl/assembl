@@ -69,14 +69,18 @@
     }
 
     .attach-file {
-      label {
-        position: absolute;
-        left: 50%;
-        top: 11%;
-        transform: translate(-50%);
-        font-size: $font-size-s;
+
+      .attachment-label {
+        min-width: 150px;
+          span {
+            position: absolute;
+            left: 50%;
+            top: 11%;
+            transform: translate(-50%);
+            font-size: $font-size-s;
+          }
+        }
       }
-    }
 
     .with-preview {
       min-height: 320px;
