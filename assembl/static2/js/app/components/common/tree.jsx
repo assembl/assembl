@@ -282,6 +282,7 @@ class Tree extends React.Component {
                   <List
                     contentLocaleMapping={contentLocaleMapping}
                     height={height}
+                    // pass lang to the List component to ensure that the rows are rendered again if we change the site language
                     lang={lang}
                     isScrolling={isScrolling}
                     onScroll={onChildScroll}
