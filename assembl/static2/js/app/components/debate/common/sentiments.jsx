@@ -1,15 +1,14 @@
 import React from 'react';
 import { OverlayTrigger } from 'react-bootstrap';
-import { MEDIUM_SCREEN_WIDTH } from '../../../constants';
 import addSentimentMutation from '../../../graphql/mutations/addSentiment.graphql';
 import deleteSentimentMutation from '../../../graphql/mutations/deleteSentiment.graphql';
 import { getConnectedUserId } from '../../../utils/globalFunctions';
 import { inviteUserToLogin } from '../../../utils/utilityManager';
 import sentimentDefinitions from './sentimentDefinitions';
 
-const Sentiment = ({ sentimentCounts, mySentiment, sentiment, client, screenWidth, isSelected, postId }) => {
+const Sentiment = ({ sentimentCounts, mySentiment, sentiment, client, isSelected, postId, placement }) => {
   return (
-    <OverlayTrigger placement={screenWidth >= MEDIUM_SCREEN_WIDTH ? 'right' : 'top'} overlay={sentiment.tooltip}>
+    <OverlayTrigger placement={placement} overlay={sentiment.tooltip}>
       <div
         className={isSelected ? 'sentiment sentiment-active' : 'sentiment'}
         onClick={() => {
@@ -83,7 +82,7 @@ const Sentiment = ({ sentimentCounts, mySentiment, sentiment, client, screenWidt
   );
 };
 
-export default ({ sentimentCounts, mySentiment, screenWidth, client, postId }) => {
+export default ({ sentimentCounts, mySentiment, client, postId, placement }) => {
   return (
     <div className="add-sentiment">
       {sentimentDefinitions.map((sentiment) => {
@@ -94,9 +93,9 @@ export default ({ sentimentCounts, mySentiment, screenWidth, client, postId }) =
             mySentiment={mySentiment}
             sentiment={sentiment}
             isSelected={mySentiment === sentiment.type}
-            screenWidth={screenWidth}
             postId={postId}
             client={client}
+            placement={placement}
           />
         );
       })}

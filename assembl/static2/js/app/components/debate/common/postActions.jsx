@@ -76,13 +76,14 @@ class PostActions extends React.Component {
       return displayModal(title, body, footer, footerTxt);
     };
     let overflowMenu = null;
+    const tooltipPlacement = this.state.screenWidth >= MEDIUM_SCREEN_WIDTH ? 'left' : 'top';
     if (userCanDeleteThisMessage || userCanEditThisMessage) {
       overflowMenu = (
         <div className="overflow-action">
           <OverlayTrigger
             trigger="click"
             rootClose
-            placement={this.state.screenWidth >= MEDIUM_SCREEN_WIDTH ? 'right' : 'top'}
+            placement={tooltipPlacement}
             overlay={getOverflowMenuForPost(postId, userCanDeleteThisMessage, userCanEditThisMessage, client, handleEditClick)}
           >
             <div>
@@ -99,7 +100,7 @@ class PostActions extends React.Component {
         <div className="post-icons">
           {handleAnswerClick &&
             <div className="post-action" onClick={promptForLoginOr(handleAnswerClick)}>
-              <OverlayTrigger placement={this.state.screenWidth >= MEDIUM_SCREEN_WIDTH ? 'right' : 'top'} overlay={answerTooltip}>
+              <OverlayTrigger placement={tooltipPlacement} overlay={answerTooltip}>
                 <span className="assembl-icon-back-arrow color" />
               </OverlayTrigger>
             </div>}
@@ -109,21 +110,24 @@ class PostActions extends React.Component {
               return openSharePostModal(postId);
             }}
           >
-            <OverlayTrigger placement={this.state.screenWidth >= MEDIUM_SCREEN_WIDTH ? 'right' : 'top'} overlay={shareTooltip}>
+            <OverlayTrigger placement={tooltipPlacement} overlay={shareTooltip}>
               <span className="assembl-icon-share color" />
             </OverlayTrigger>
           </div>
           <Sentiments
             sentimentCounts={sentimentCounts}
             mySentiment={mySentiment}
-            screenWidth={this.state.screenWidth}
+            placement={tooltipPlacement}
             client={client}
             postId={postId}
           />
           {this.state.screenWidth >= MEDIUM_SCREEN_WIDTH ? null : overflowMenu}
         </div>
         {totalSentimentsCount > 0
-          ? <OverlayTrigger overlay={getSentimentStats(totalSentimentsCount, sentimentCounts, mySentiment)} placement="right">
+          ? <OverlayTrigger
+            overlay={getSentimentStats(totalSentimentsCount, sentimentCounts, mySentiment)}
+            placement={tooltipPlacement}
+          >
             <div className="sentiments-count margin-m">
               <div>
                 {sentimentDefinitions.reduce((result, sentiment) => {
