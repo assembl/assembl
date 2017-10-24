@@ -34,7 +34,7 @@ from assembl.graphql.section import (CreateSection, DeleteSection, Section,
                                      UpdateSection)
 from assembl.graphql.sentiment import AddSentiment, DeleteSentiment
 from assembl.graphql.synthesis import Synthesis
-from assembl.graphql.user import UpdateUser
+from assembl.graphql.user import UpdateUser, AgentProfile
 from assembl.graphql.votes import AddTokenVote, DeleteTokenVote, AddGaugeVote, DeleteGaugeVote
 from assembl.graphql.vote_session import (
     VoteSession, UpdateVoteSession, CreateTokenVoteSpecification,
@@ -42,7 +42,8 @@ from assembl.graphql.vote_session import (
     CreateNumberGaugeVoteSpecification, UpdateNumberGaugeVoteSpecification,
     UpdateTokenVoteSpecification, DeleteVoteSpecification,
     CreateProposal, UpdateProposal, DeleteProposal
-    )
+)
+from assembl.graphql.user_language_preference import UserLanguagePreference
 from assembl.graphql.utils import get_fields, get_root_thematic_for_phase
 from assembl.lib.locale import strip_country
 from assembl.lib.sqla_types import EmailString
@@ -92,6 +93,8 @@ class Query(graphene.ObjectType):
     discussion = graphene.Field(Discussion)
     landing_page_module_types = graphene.List(LandingPageModuleType)
     landing_page_modules = graphene.List(LandingPageModule)
+    language_preferences = graphene.List(
+        UserLanguagePreference, user_id=graphene.String(required=True))
 
     def resolve_resources(self, args, context, info):
         model = models.Resource
@@ -302,6 +305,15 @@ class Query(graphene.ObjectType):
             modules.append(module)
 
         return sorted(modules, key=attrgetter('order'))
+
+    def resolve_language_preferences(self, args, context, info):
+        user_id = Node.from_global_id(args.get('user_id'))[1]
+        user = models.User.get(user_id)
+        prefs = user.language_preference
+        return [UserLanguagePreference(
+            user=AgentProfile(user_id=p.user_id),
+            locale=Locale(locale_code=p.locale.base_locale),
+            source=p.source_of_evidence) for p in prefs]
 
 
 class Mutations(graphene.ObjectType):
