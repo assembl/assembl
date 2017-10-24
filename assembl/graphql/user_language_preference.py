@@ -21,5 +21,5 @@ class UserLanguagePreference(SecureObjectType, SQLAlchemyObjectType):
     user = graphene.Field(AgentProfile)
     locale = graphene.Field(lambda: Locale)
     translation_locale = graphene.Field(lambda: Locale)
-    preferred_order = graphene.Int()
+    order = graphene.Int()
     source = graphene.Field(PreferenceSourceEnum)
