@@ -22,13 +22,22 @@ const relativeURL = (uRL) => {
 };
 
 class MediaForm extends React.Component {
+  constructor() {
+    super();
+    this.state = {
+      mediaMimeType: ''
+    };
+  }
+
   onFileChange = (file) => {
     const { uploadDocument, updateHtmlCode } = this.props;
     uploadDocument({ variables: { file: file } }).then((res) => {
-      const { externalUrl } = res.data.uploadDocument.document;
+      const { externalUrl, mimeType } = res.data.uploadDocument.document;
       updateHtmlCode(relativeURL(externalUrl));
+      this.setState({ mediaMimeType: mimeType });
     });
   };
+
   render() {
     const {
       descriptionTop,
@@ -109,7 +118,11 @@ class MediaForm extends React.Component {
                 <Translate value="administration.videoHelp" />
               </div>
               <Translate value="administration.ph.orAttachPicture" />
-              <FileUploader handleChange={this.onFileChange} fileOrUrl={isLocalURL ? htmlCode : ''} />
+              <FileUploader
+                handleChange={this.onFileChange}
+                fileOrUrl={isLocalURL ? htmlCode : ''}
+                mimeType={this.state.mediaMimeType}
+              />
               {htmlCode &&
                   isLocalURL &&
                   <div className="right">
