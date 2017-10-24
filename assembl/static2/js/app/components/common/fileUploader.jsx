@@ -2,8 +2,15 @@ import React from 'react';
 import { Translate } from 'react-redux-i18n';
 import { Button } from 'react-bootstrap';
 
+/*
+  File uploader
+
+  when this component receives an url and that we want to render the preview of this image,
+  we need to give it a mimeType prop that starts with 'image/'
+*/
 class FileUploader extends React.Component {
   static defaultProps = {
+    mimeType: '',
     withPreview: true
   };
 
@@ -65,16 +72,17 @@ class FileUploader extends React.Component {
   }
 
   render() {
+    const { mimeType, withPreview } = this.props;
     const fileSrc = this.state.fileSrc;
     const fileIsImage = fileSrc && fileSrc.startsWith('data:image/');
-    const urlIsImage = fileSrc && fileSrc.endsWith('png' || 'jpeg' || 'jpg' || 'gif');
-    const isImage = fileIsImage || urlIsImage;
+    const mimeTypeIsImage = mimeType.startsWith('image/');
+    const isImage = fileIsImage || mimeTypeIsImage;
     return (
       <div>
         <Button onClick={this.handleUploadButtonClick}>
           <Translate value="common.uploadButton" />
         </Button>
-        {this.props.withPreview && isImage
+        {withPreview && isImage
           ? <div className={fileSrc ? 'preview' : 'hidden'}>
             <img
               src={fileSrc}
