@@ -26,7 +26,6 @@ type EditPostFormProps = {
   modifiedOriginalSubject: string,
   goBackToViewMode: Function,
   client: Object,
-  refetchIdea: Function,
   uploadDocument: Function,
   updatePost: Function
 };
@@ -94,8 +93,7 @@ class EditPostForm extends React.PureComponent<void, EditPostFormProps, EditPost
         displayAlert('success', I18n.t('loading.wait'));
         const oldSubject = this.props.subject;
         updatePost({ variables: variables })
-          .then(async () => {
-            await this.props.refetchIdea();
+          .then(() => {
             displayAlert('success', I18n.t('debate.thread.postSuccess'));
             this.props.goBackToViewMode();
             if (oldSubject !== this.state.subject) {
