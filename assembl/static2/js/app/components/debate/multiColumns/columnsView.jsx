@@ -2,8 +2,7 @@ import React from 'react';
 import TabbedColumns from './tabbedColumns';
 import MultiColumns from './multiColumns';
 import hashLinkScroll from '../../../utils/hashLinkScroll';
-
-const MAX_COLUMN_WIDTH = 380;
+import { MIN_WIDTH_COLUMN } from '../../../constants';
 
 const screenWidth = () => {
   return window.innerWidth;
@@ -29,7 +28,7 @@ export default class ColumnsView extends React.Component {
     });
   };
   shouldShowTabs = (columnsCount) => {
-    return columnsCount * MAX_COLUMN_WIDTH > this.state.screenWidth;
+    return columnsCount * MIN_WIDTH_COLUMN > this.state.screenWidth;
   };
   render = () => {
     const { messageColumns: columns } = this.props;
