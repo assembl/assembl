@@ -15,8 +15,8 @@ from pyramid.response import Response
 from pyramid.httpexceptions import (
     HTTPException, HTTPInternalServerError, HTTPMovedPermanently, HTTPError,
     HTTPBadRequest, HTTPFound, HTTPTemporaryRedirect as HTTPTemporaryRedirectP)
-from pyramid.i18n import TranslationStringFactory
-from pyramid.security import Everyone
+from pyramid.i18n import (TranslationStringFactory, negotiate_locale_name)
+from pyramid.security import authenticated_userid, Everyone
 from pyramid.settings import asbool, aslist
 from social_core.exceptions import AuthMissingParameter
 
@@ -537,7 +537,7 @@ def get_locale_from_request(request, session=None, user=None):
                            LanguagePreferenceOrder.Cookie)
         else:
             # uses my locale negotiator
-            locale = request.locale_name
+            locale = negotiate_locale_name(request)
             process_locale(locale, user, session,
                            LanguagePreferenceOrder.OS_Default)
     else:
