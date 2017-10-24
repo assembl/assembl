@@ -3,7 +3,7 @@ import { I18n } from 'react-redux-i18n';
 
 import { multiColumnMapping } from '../../../utils/mapping';
 import PostColumn from './postColumn';
-import { hexColorToRgba } from '../../../utils/color';
+import { hexToRgb } from '../../../utils/globalFunctions';
 import { COLUMN_OPACITY_GAIN } from '../../../constants';
 import { orderPostsByMessageClassifier, getSynthesisTitle } from './utils';
 
@@ -47,7 +47,9 @@ export default class TabbedColumns extends React.Component {
       return (
         <div key={classifier} className={`${isActive ? 'active ' : ''}button-container`} style={style}>
           <button
-            style={{ backgroundColor: isActive ? hexColorToRgba(messageColumn.color, COLUMN_OPACITY_GAIN) : inactiveTabColor }}
+            style={{
+              backgroundColor: isActive ? `rgba(${hexToRgb(messageColumn.color)},${COLUMN_OPACITY_GAIN})` : inactiveTabColor
+            }}
             onClick={(event) => {
               event.preventDefault();
               return this.setState({ activeKey: classifier });

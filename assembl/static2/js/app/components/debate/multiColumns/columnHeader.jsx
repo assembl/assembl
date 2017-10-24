@@ -2,7 +2,7 @@ import React from 'react';
 import BoxWithHyphen from '../../common/boxWithHyphen';
 import TopPostForm from '../common/topPostForm';
 import { multiColumnMapping } from '../../../utils/mapping';
-import { hexColorToRgba } from '../../../utils/color';
+import { hexToRgb } from '../../../utils/globalFunctions';
 import { COLUMN_OPACITY_GAIN } from '../../../constants';
 
 const Synthesis = ({ classifier, synthesisTitle, synthesisBody, hyphenStyle }) => {
@@ -25,7 +25,8 @@ export default ({ synthesis, ideaId, ideaTitle, refetchIdea }) => {
       {false && <Synthesis {...synthesis} />}
       <div
         style={{
-          backgroundColor: synthesis.hyphenStyle && hexColorToRgba(synthesis.hyphenStyle.borderTopColor, COLUMN_OPACITY_GAIN)
+          backgroundColor:
+            synthesis.hyphenStyle && `rgba(${hexToRgb(synthesis.hyphenStyle.borderTopColor)},${COLUMN_OPACITY_GAIN})`
         }}
       >
         <div className="start-discussion-container">
