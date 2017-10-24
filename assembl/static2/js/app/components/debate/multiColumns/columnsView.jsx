@@ -1,6 +1,7 @@
 import React from 'react';
 import TabbedColumns from './tabbedColumns';
 import MultiColumns from './multiColumns';
+import hashLinkScroll from '../../../utils/hashLinkScroll';
 
 const MAX_COLUMN_WIDTH = 380;
 
@@ -16,6 +17,7 @@ export default class ColumnsView extends React.Component {
     };
   }
   componentDidMount() {
+    hashLinkScroll();
     window.addEventListener('resize', this.updateDimensions);
   }
   componentWillUnmount() {
