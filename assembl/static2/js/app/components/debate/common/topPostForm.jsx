@@ -10,6 +10,7 @@ import type { RawContentState } from 'draft-js';
 import createPostMutation from '../../../graphql/mutations/createPost.graphql';
 import uploadDocumentMutation from '../../../graphql/mutations/uploadDocument.graphql';
 import { convertRawContentStateToHTML, rawContentStateIsEmpty } from '../../../utils/draftjs';
+import { getDomElementOffset } from '../../../utils/globalFunctions';
 import { displayAlert, promptForLoginOr } from '../../../utils/utilityManager';
 import { TextInputWithRemainingChars } from '../../common/textInputWithRemainingChars';
 import RichTextEditor from '../../common/richTextEditor';
@@ -38,6 +39,7 @@ type TopPostFormState = {
 class TopPostForm extends React.Component<*, TopPostFormProps, TopPostFormState> {
   props: TopPostFormProps;
   state: TopPostFormState;
+  formContainer: HTMLDivElement | void;
 
   constructor() {
     super();
@@ -49,10 +51,18 @@ class TopPostForm extends React.Component<*, TopPostFormProps, TopPostFormState>
     };
   }
 
-  displayForm = (isActive) => {
-    this.setState({
-      isActive: isActive
-    });
+  displayForm = (isActive: boolean): void => {
+    this.setState(
+      {
+        isActive: isActive
+      },
+      () => {
+        if (this.formContainer) {
+          const elmOffset = getDomElementOffset(this.formContainer).top - 125;
+          window.scroll({ top: elmOffset, left: 0, behavior: 'smooth' });
+        }
+      }
+    );
   };
 
   resetForm = () => {
@@ -124,9 +134,13 @@ class TopPostForm extends React.Component<*, TopPostFormProps, TopPostFormState>
     return classNames(['button-submit', 'button-dark', 'btn', 'btn-default', 'right', !ideaOnColumn ? 'margin-l' : 'margin-m']);
   }
 
+  setFormContainerRef = (el: HTMLDivElement): void => {
+    this.formContainer = el;
+  };
+
   render() {
     return (
-      <div className="form-container">
+      <div className="form-container" ref={this.setFormContainerRef}>
         <FormGroup>
           {!this.props.ideaOnColumn
             ? <TextInputWithRemainingChars
