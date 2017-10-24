@@ -8,18 +8,12 @@ import { updateContentLocale } from '../actions/contentLocaleActions';
 import Header from '../components/debate/common/header';
 import IdeaQuery from '../graphql/IdeaQuery.graphql';
 import IdeaWithPostsQuery from '../graphql/IdeaWithPostsQuery.graphql';
-import InfiniteSeparator from '../components/common/infiniteSeparator';
-import Post, { PostFolded } from '../components/debate/thread/post';
-import ColumnsPost from '../components/debate/multiColumns/columnsPost';
 import GoUp from '../components/common/goUp';
-import Tree from '../components/common/tree';
 import Loader from '../components/common/loader';
-import Permissions, { connectedUserCan } from '../utils/permissions';
 import { getConnectedUserId } from '../utils/globalFunctions';
 import Announcement from './../components/debate/common/announcement';
-import TopPostFormContainer from '../components/debate/common/topPostFormContainer';
 import ColumnsView from '../components/debate/multiColumns/columnsView';
-import { MIN_WIDTH_COLUMN } from '../constants';
+import ThreadView from '../components/debate/thread/threadView';
 
 export const transformPosts = (edges, messageColumns, additionnalProps = {}) => {
   const postsByParent = {};
@@ -63,6 +57,10 @@ const noRowsRenderer = () => {
 };
 
 class Idea extends React.Component {
+  constructor(props) {
+    super(props);
+    this.getTopPosts = this.getTopPosts.bind(this);
+  }
   componentWillReceiveProps(nextProps) {
     if (nextProps.ideaWithPostsData.idea !== this.props.ideaWithPostsData.idea) {
       this.updateContentLocaleMappingFromProps(nextProps);
@@ -115,18 +113,9 @@ class Idea extends React.Component {
     }
     return null;
   };
-
-  isColumnViewInline() {
-    const { messageColumns } = this.props.ideaWithPostsData.idea;
-    const screenWidth = window.innerWidth;
-    const columnSize = screenWidth / messageColumns.length;
-    if (columnSize < MIN_WIDTH_COLUMN || messageColumns.length > 4) {
-      return true;
-    }
-    return false;
-  }
   getTopPosts() {
     const { ideaWithPostsData, routerParams, debateData } = this.props;
+    if (!ideaWithPostsData.idea) return [];
     const topPosts = transformPosts(ideaWithPostsData.idea.posts.edges, ideaWithPostsData.idea.messageColumns, {
       refetchIdea: ideaWithPostsData.refetch,
       ideaId: ideaWithPostsData.idea.id,
@@ -136,7 +125,7 @@ class Idea extends React.Component {
     return topPosts;
   }
   render() {
-    const { contentLocaleMapping, lang, ideaData, ideaWithPostsData, routerParams, debateData } = this.props;
+    const { contentLocaleMapping, lang, ideaData, ideaWithPostsData } = this.props;
     const refetchIdea = ideaWithPostsData.refetch;
     if (ideaData.loading) {
       return (
@@ -145,11 +134,25 @@ class Idea extends React.Component {
         </div>
       );
     }
-
     const { idea } = ideaData;
-
-    const isUserConnected = getConnectedUserId();
-
+    const isMultiColumn = ideaWithPostsData.loading ? undefined : ideaWithPostsData.idea.messageColumns.length > 0;
+    const messageColumns = ideaWithPostsData.loading ? undefined : ideaWithPostsData.idea.messageColumns;
+    const childProps = {
+      idea: idea,
+      ideaWithPostsData: ideaWithPostsData,
+      isUserConnected: getConnectedUserId(),
+      contentLocaleMapping: contentLocaleMapping,
+      refetchIdea: refetchIdea,
+      lang: lang,
+      noRowsRenderer: noRowsRenderer,
+      messageColumns: messageColumns,
+      getTopPosts: this.getTopPosts,
+      posts: this.getTopPosts(),
+      initialRowIndex: ideaWithPostsData.loading
+        ? undefined
+        : this.getInitialRowIndex(this.getTopPosts(), ideaWithPostsData.idea.posts.edges)
+    };
+    const view = isMultiColumn ? <ColumnsView {...childProps} /> : <ThreadView {...childProps} />;
     return (
       <div className="idea">
         <Header title={idea.title} synthesisTitle={idea.synthesisTitle} imgUrl={idea.imgUrl} identifier="thread" />
@@ -164,51 +167,8 @@ class Idea extends React.Component {
                 </div>
               </div>
             </Grid>}
-          <div className="overflow-x">
-            {(!isUserConnected || connectedUserCan(Permissions.ADD_POST)) && ideaWithPostsData.idea
-              ? <TopPostFormContainer
-                ideaId={idea.id}
-                refetchIdea={refetchIdea}
-                messageColumns={ideaWithPostsData.idea.messageColumns}
-                isColumnViewInline={this.isColumnViewInline()}
-              />
-              : null}
-            <Grid fluid className="background-grey">
-              <div className="max-container">
-                <div className="content-section">
-                  {ideaWithPostsData.loading && <Loader />}
-                  {ideaWithPostsData.idea &&
-                    !ideaWithPostsData.idea.messageColumns.length > 0 &&
-                    <Tree
-                      contentLocaleMapping={contentLocaleMapping}
-                      lang={lang}
-                      data={this.getTopPosts()}
-                      initialRowIndex={this.getInitialRowIndex(this.getTopPosts(), ideaWithPostsData.idea.posts.edges)}
-                      InnerComponent={Post}
-                      InnerComponentFolded={PostFolded}
-                      noRowsRenderer={noRowsRenderer}
-                      SeparatorComponent={InfiniteSeparator}
-                    />}
-                  {ideaWithPostsData.idea &&
-                    ideaWithPostsData.idea.messageColumns.length > 0 &&
-                    <ColumnsView
-                      messageColumns={ideaWithPostsData.idea.messageColumns}
-                      contentLocaleMapping={contentLocaleMapping}
-                      lang={lang}
-                      posts={this.getTopPosts()}
-                      initialRowIndex={this.getInitialRowIndex(this.getTopPosts(), ideaWithPostsData.idea.posts.edges)}
-                      InnerComponent={ColumnsPost}
-                      InnerComponentFolded={PostFolded}
-                      noRowsRenderer={noRowsRenderer}
-                      SeparatorComponent={InfiniteSeparator}
-                      isColumnViewInline={this.isColumnViewInline()}
-                      ideaTitle={idea.title}
-                      routerParams={routerParams}
-                      debateData={debateData}
-                    />}
-                </div>
-              </div>
-            </Grid>
+          <div className="max-container">
+            {ideaWithPostsData.loading ? <Loader /> : view}
           </div>
         </section>
         <GoUp />
