@@ -165,14 +165,14 @@ def resolve_langstring(langstring, locale_code):
             if closest:
                 return closest.value
 
-        english = langstring.closest_entry('en')
-        if english:
-            return english.value
+            english = langstring.closest_entry('en')
+            if english:
+                return english.value
 
         return langstring.best_lang(
             LanguagePreferenceCollection.getCurrent(), False).value
 
-    except:
+    except Exception:
         # Anything that goes wrong with clean_input, return the original
         return langstring.first_original()
 
