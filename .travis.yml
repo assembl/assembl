@@ -48,3 +48,5 @@ script:
   # fab -c configs/travis.rc build_doc
   - py.test --cov assembl --cov-report term --cov-report html --junit-xml junit.xml assembl
   - cd assembl/static2; npm test; npm run eslint; npm run flow
+notifications:
+  slack: bluenove:gxso5MQCL78dGfCaTSjX42i5
