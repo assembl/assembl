@@ -9,11 +9,11 @@ import { MIN_WIDTH_COLUMN } from '../../../constants';
 
 class TopPostFormContainer extends React.Component {
   getClassNames() {
-    const { messageColumns, isColumnViewInline } = this.props;
+    const { messageColumns = [], isColumnViewInline } = this.props;
     return classNames({ 'columns-view': messageColumns.length > 1 }, { 'columns-view-inline': isColumnViewInline });
   }
   getColumnsInfos() {
-    const { messageColumns } = this.props;
+    const { messageColumns = [] } = this.props;
     let columnsInfos = [];
     if (messageColumns.length > 1) {
       columnsInfos = messageColumns;
@@ -24,7 +24,7 @@ class TopPostFormContainer extends React.Component {
     return columnsInfos;
   }
   render() {
-    const { ideaId, refetchIdea, messageColumns, isColumnViewInline } = this.props;
+    const { ideaId, refetchIdea, messageColumns = [], isColumnViewInline } = this.props;
     const columnsInfos = this.getColumnsInfos();
     return (
       <Grid fluid className={messageColumns.length > 1 ? '' : 'background-color'}>
