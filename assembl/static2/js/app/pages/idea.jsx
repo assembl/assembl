@@ -158,7 +158,6 @@ class Idea extends React.Component {
         <section className="post-section">
           {!ideaWithPostsData.loading &&
             idea.announcement &&
-            idea.announcement.body &&
             <Grid fluid className="background-light">
               <div className="max-container">
                 <div className="content-section">

@@ -77,7 +77,7 @@ class Announcement extends React.Component {
     const isMultiColumns = idea.messageColumns && idea.messageColumns.length > 0;
     const { numContributors, numPosts, posts } = idea;
     const sentimentsCount = getSentimentsCount(posts);
-    const mediaContent = dirtySplitHack(announcementContent);
+    const mediaContent = announcementContent.body && dirtySplitHack(announcementContent);
     const columnInfos = this.getColumnInfos();
     const doughnutsElements = isMultiColumns ? columnInfos : createDoughnutElements(sentimentsCount);
     return (
@@ -89,7 +89,7 @@ class Announcement extends React.Component {
           </h3>
         </div>
         <Col xs={12} md={8} className="announcement-media col-md-push-4">
-          <Media {...mediaContent} />
+          {mediaContent && <Media {...mediaContent} />}
         </Col>
         <Col xs={12} md={4} className="col-md-pull-8">
           <div className="announcement-statistics">
