@@ -1,12 +1,16 @@
 $column-half-gutter: 15px;
 $post-max-width: 600px;
 $header-margin: 30px;
+$synthesis-padding: 15px;
 
 .column-view {
   .synthesis {
     border: none;
-    padding: 15px;
+    padding: $synthesis-padding;
     margin-bottom: 20px;
+    max-width: calc(#{$post-max-width} + 2 * #{$synthesis-padding});
+    margin-left: auto;
+    margin-right: auto;
   }
   .column-tree {
     margin-bottom: 90px;
