@@ -42,16 +42,18 @@ export default ({
       <ColumnHeader color={color} classifier={classifier} ideaId={ideaId} refetchIdea={refetchIdea} ideaTitle={ideaTitle} />
       {synthesisProps && <Synthesis {...synthesisProps} />}
       <div className="column-tree">
-        <Tree
-          contentLocaleMapping={contentLocaleMapping}
-          lang={lang}
-          data={data || []}
-          initialRowIndex={initialRowIndex}
-          noRowsRenderer={noRowsRenderer}
-          InnerComponent={ColumnsPost}
-          InnerComponentFolded={PostFolded}
-          SeparatorComponent={Separator}
-        />
+        {data.length > 0
+          ? <Tree
+            contentLocaleMapping={contentLocaleMapping}
+            lang={lang}
+            data={data || []}
+            initialRowIndex={initialRowIndex}
+            noRowsRenderer={noRowsRenderer}
+            InnerComponent={ColumnsPost}
+            InnerComponentFolded={PostFolded}
+            SeparatorComponent={Separator}
+          />
+          : noRowsRenderer()}
       </div>
     </div>
   );
