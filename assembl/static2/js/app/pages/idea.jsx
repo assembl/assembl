@@ -146,7 +146,6 @@ class Idea extends React.Component {
       lang: lang,
       noRowsRenderer: noRowsRenderer,
       messageColumns: messageColumns,
-      getTopPosts: this.getTopPosts,
       posts: this.getTopPosts(),
       initialRowIndex: ideaWithPostsData.loading
         ? undefined

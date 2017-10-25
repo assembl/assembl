@@ -9,16 +9,7 @@ import InfiniteSeparator from '../../../components/common/infiniteSeparator';
 
 class ThreadView extends React.Component {
   render() {
-    const {
-      isUserConnected,
-      idea,
-      contentLocaleMapping,
-      refetchIdea,
-      lang,
-      noRowsRenderer,
-      getTopPosts,
-      initialRowIndex
-    } = this.props;
+    const { isUserConnected, idea, contentLocaleMapping, refetchIdea, lang, noRowsRenderer, posts, initialRowIndex } = this.props;
     return (
       <div className="overflow-x">
         {!isUserConnected || connectedUserCan(Permissions.ADD_POST)
@@ -30,7 +21,7 @@ class ThreadView extends React.Component {
               <Tree
                 contentLocaleMapping={contentLocaleMapping}
                 lang={lang}
-                data={getTopPosts()}
+                data={posts}
                 initialRowIndex={initialRowIndex}
                 InnerComponent={Post}
                 InnerComponentFolded={PostFolded}
