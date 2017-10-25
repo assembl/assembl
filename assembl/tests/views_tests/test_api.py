@@ -138,6 +138,41 @@ def test_get_ideas(discussion, test_app, test_session, test_webrequest):
     assert len(ideas) == num_ideas + 1
 
 
+def test_edit_idea_title(test_app, test_session, discussion, discussion_admin_user, subidea_1):
+    """As a discussion admin, I can edit the title of an idea (I don't get an Unauthorized error for editing langstring properties of an idea)"""
+
+    # Step 1: Send a PUT API call to modify idea's title, and check that response is 200 and not Unauthorized or 404
+
+    # Here we re-create the same input LangString format that the frontend sends to our API.
+    # We don't have a LangString method that outputs this data structure yet (the ones we have need a owner_object)
+    modified_idea_title = "Couvrir la lune de miroirs"
+    modified_idea_title_langstring = {
+        "@type": "LangString",
+        "entries": [
+            {
+                "@type": "LangStringEntry",
+                "@language": "fr",
+                "value": modified_idea_title
+            }
+        ]
+    }
+
+    payload = { 'shortTitle': modified_idea_title_langstring }
+    base_idea_url = get_url(discussion, 'ideas')
+    idea_url = base_idea_url + '/' + str(subidea_1.id)
+    response = test_app.put_json(idea_url, payload)
+    response_data = json.loads(response.body)
+    assert response.status_code == 200
+    assert response_data['ok'] == True
+
+    # Step 2: Send a GET API call to check that idea's title has really been updated
+
+    response2 = test_app.get(idea_url)
+    assert response2.status_code == 200
+    response2_data = json.loads(response2.body)
+    assert modified_idea_title in json.dumps(response2_data)
+
+
 def disabledtest_next_synthesis_idea_management(
         discussion, test_app, test_session,
         root_idea, subidea_1, subidea_1_1, subidea_1_1_1):

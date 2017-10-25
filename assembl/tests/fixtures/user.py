@@ -44,3 +44,30 @@ def participant2_user(request, test_session):
         test_session.flush()
     request.addfinalizer(fin)
     return u
+
+@pytest.fixture(scope="function")
+def discussion_admin_user(request, test_app, test_session, discussion):
+    """A User fixture with R_ADMINISTRATOR role in a discussion"""
+    from datetime import datetime
+    from assembl.auth import R_ADMINISTRATOR
+    from assembl.models import User
+    from assembl.models.auth import Role, LocalUserRole
+
+    u = User(name=u"Maximilien de Robespierre", type="user")
+    test_session.add(u)
+    
+    asid = u.create_agent_status_in_discussion(discussion)
+    asid.last_visit = datetime.utcnow()
+    role = Role.get_role(R_ADMINISTRATOR, test_session)
+    test_session.add(
+        LocalUserRole(user=u, discussion=discussion, role=role))
+    test_session.flush()
+
+    def fin():
+        print "finalizer discussion_admin_user"
+        test_session.delete(u)
+        test_session.flush()
+    request.addfinalizer(fin)
+
+    return u
+
