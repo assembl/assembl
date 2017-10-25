@@ -143,8 +143,8 @@ def test_edit_idea_title(test_app, test_session, discussion, discussion_admin_us
 
     # Step 1: Send a PUT API call to modify idea's title, and check that response is 200 and not Unauthorized or 404
 
-    # Method LangString.generic_json() has not been implemented yet. When it will be done, we would be able to just use: 
-    # modified_idea_title = LangString.create('Couvrir la lune de miroirs', 'fr')
+    # Here we re-create the same input LangString format that the frontend sends to our API.
+    # We don't have a LangString method that outputs this data structure yet (the ones we have need a owner_object)
     modified_idea_title = "Couvrir la lune de miroirs"
     modified_idea_title_langstring = {
         "@type": "LangString",
@@ -159,7 +159,7 @@ def test_edit_idea_title(test_app, test_session, discussion, discussion_admin_us
 
     payload = { 'shortTitle': modified_idea_title_langstring }
     base_idea_url = get_url(discussion, 'ideas')
-    idea_url = base_idea_url + '/' + str(subidea_1.id) + '?view=extended'
+    idea_url = base_idea_url + '/' + str(subidea_1.id)
     response = test_app.put_json(idea_url, payload)
     response_data = json.loads(response.body)
     assert response.status_code == 200
