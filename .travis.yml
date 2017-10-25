@@ -1,0 +1,50 @@
+language: python
+sudo: required
+dist: trusty
+addons:
+  ssh_known_hosts: localhost
+  postgresql: "9.5"
+cache:
+  pip: true
+  directories:
+    - assembl/static/js/node_modules
+    - assembl/static/widget/card/bower_components
+    - assembl/static/widget/creativity/bower_components
+    - assembl/static/widget/session/bower_components
+    - assembl/static/widget/share/bower_components
+    - assembl/static/widget/video/bower_components
+    - assembl/static/widget/vote/bower_components
+    - assembl/static2/node_modules
+before_install:
+ # The following line is needed, otherwise the set_file_permissions fab command yells error "Operation not permitted"
+ - sudo usermod -a -G www-data $USER
+ - sudo apt-get install -y fabric git openssh-server
+ - ssh-keygen -P '' -f ~/.ssh/id_rsa && cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
+ - echo "_extends = ./testing.rc" > configs/travis.rc; echo "_gitbranch = $TRAVIS_COMMIT" >> configs/travis.rc;
+ # The following line produces warning "uses weak digest algorithm" during its `apt-get update`
+ - fab -c configs/travis.rc install_assembl_server_deps
+ - fab -c configs/travis.rc install_redis
+ - fab -c configs/travis.rc install_memcached
+install:
+ # The set_file_permissions fabric command needs to be encapsulated into this sudo su command, because in before_install we have added $USER in www-data group but have not logged out and logged in again for changes to take effect in this terminal
+ - sudo -E su $USER -c 'fab -c configs/travis.rc set_file_permissions'
+ # TODO: fix fabfile's check_and_create_database_user command which produces an error when run by travis. For now we instead run the following command
+ - pip install psycopg2
+ - python2 $PWD/assembl/scripts/pypsql.py -u postgres -n localhost  "CREATE USER assembl_test WITH CREATEDB ENCRYPTED PASSWORD 'assembl_test'; COMMIT;"
+ # The following command runs lots of sub-commands. After the following line has completed, approximately 10min have elapsed from the very beginning of the build
+ - fab -c configs/travis.rc bootstrap_from_checkout
+before_script:
+  - source $VIRTUAL_ENV/bin/activate
+  # In jenkins, we were running the following commented steps at each build, in order to correctly update the already existing instance of Assembl (it was not built from zero each time). So should we do this for travis if we use more travis caching?
+  #- supervisord
+  #- supervisorctl shutdown
+  #- fab -c configs/travis.rc database_delete
+  #- fab -c configs/travis.rc app_update_dependencies
+  #- fab -c configs/travis.rc app_compile_nodbupdate
+  - fab -c configs/travis.rc database_create
+  - assembl-db-manage testing.ini bootstrap
+script:
+  # TODO: fix error (production.ini: Bad value substitution)
+  # fab -c configs/travis.rc build_doc
+  - py.test --cov assembl --cov-report term --cov-report html --junit-xml junit.xml assembl
+  - cd assembl/static2; npm test; npm run eslint; npm run flow
