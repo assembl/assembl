@@ -157,12 +157,22 @@ const Translations = {
         negativeTitle: "Contre",
         alternativeTitle: "Alternatif"
       },
+      createTopPost: {
+        positiveTitle: "Ajoutez votre point de vue en faveur du thème « %{ideaTitle} »",
+        negativeTitle: "Ajoutez votre point de vue en défaveur du thème « %{ideaTitle} »",
+        alternativeTitle: "Ajoutez votre point de vue alternatif sur le thème « %{ideaTitle} »"
+      },
       synthesis: {
-        positiveTitle: "Synthèse des arguments en faveur du thème %{ideaTitle}",
-        negativeTitle: "Synthèse des arguments en défaveur du thème %{ideaTitle}",
-        alternativeTitle: "Synthèse des arguments alternatifs du thème %{ideaTitle}",
+        positiveTitle: "Synthèse des arguments en faveur du thème « %{ideaTitle} »",
+        negativeTitle: "Synthèse des arguments en défaveur du thème « %{ideaTitle} »",
+        alternativeTitle: "Synthèse des arguments alternatifs du thème « %{ideaTitle} »",
         colName: "Synthèse : %{colName}",
         noSynthesisYet: "La synthèse est en cours de rédaction"
+      },
+      tab: {
+        positiveTitle: "En faveur",
+        negativeTitle: "En défaveur",
+        alternativeTitle: "Alternative"
       }
     },
     synthesis: {
@@ -517,6 +527,16 @@ const Translations = {
         alternativeTitle: "Synthesis of the alternative arguments of the theme %{ideaTitle}",
         colName: "Synthesis: %{colName}",
         noSynthesisYet: "The synthesis is currently being written"
+      },
+      createTopPost: {
+        positiveTitle: "Add your point of view for the theme %{ideaTitle}",
+        negativeTitle: "Add your point of view against the theme %{ideaTitle}",
+        alternativeTitle: "Add your alternative point of view on the theme %{ideaTitle}"
+      },
+      tab: {
+        positiveTitle: "For",
+        negativeTitle: "Against",
+        alternativeTitle: "Alternative"
       }
     },
     synthesis: {
