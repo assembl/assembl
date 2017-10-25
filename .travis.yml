@@ -47,4 +47,4 @@ script:
   # TODO: fix error (production.ini: Bad value substitution)
   # fab -c configs/travis.rc build_doc
   - py.test --cov assembl --cov-report term --cov-report html --junit-xml junit.xml assembl
-  - cd assembl/static2; npm test; npm run eslint; cd ..
+  - cd assembl/static2; npm test; npm run eslint; npm run flow
