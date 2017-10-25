@@ -24,7 +24,8 @@ export default class TabbedColumns extends React.Component {
       initialRowIndex,
       noRowsRenderer,
       idea,
-      refetchIdea
+      refetchIdea,
+      showSynthesis
     } = this.props;
     const activeKey = this.state && 'activeKey' in this.state ? this.state.activeKey : messageColumns[0].messageClassifier;
     const columnsArray = orderPostsByMessageClassifier(messageColumns, posts);
@@ -33,7 +34,7 @@ export default class TabbedColumns extends React.Component {
         return messageColumn.messageClassifier === activeKey;
       })
     );
-    const synthesis = {
+    const synthesis = showSynthesis && {
       classifier: activeKey,
       synthesisTitle: getSynthesisTitle(activeKey, messageColumns[index].name, idea.title),
       synthesisBody: messageColumns[index].header || I18n.t('multiColumns.synthesis.noSynthesisYet'),
@@ -69,6 +70,8 @@ export default class TabbedColumns extends React.Component {
           <PostColumn
             synthesis={synthesis}
             width={width}
+            color={messageColumns[index].color}
+            classifier={activeKey}
             contentLocaleMapping={contentLocaleMapping}
             lang={lang}
             data={columnsArray[activeKey]}

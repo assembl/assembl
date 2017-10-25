@@ -13,13 +13,14 @@ export default ({
   contentLocaleMapping,
   initialRowIndex,
   noRowsRenderer,
-  refetchIdea
+  refetchIdea,
+  showSynthesis
 }) => {
   const columnsArray = orderPostsByMessageClassifier(messageColumns, posts);
   return (
     <div className="multi-column-container">
       {Object.keys(columnsArray).map((classifier, index) => {
-        const synthesis = {
+        const synthesis = showSynthesis && {
           classifier: classifier,
           synthesisTitle: getSynthesisTitle(classifier, messageColumns[index].name, idea.title),
           synthesisBody: messageColumns[index].header || I18n.t('multiColumns.synthesis.noSynthesisYet'),
@@ -32,6 +33,8 @@ export default ({
             width={width}
             contentLocaleMapping={contentLocaleMapping}
             lang={lang}
+            color={messageColumns[index].color}
+            classifier={classifier}
             data={columnsArray[classifier]}
             initialRowIndex={initialRowIndex}
             noRowsRenderer={noRowsRenderer}

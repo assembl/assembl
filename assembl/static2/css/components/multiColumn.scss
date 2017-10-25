@@ -3,6 +3,11 @@ $post-max-width: 600px;
 $header-margin: 30px;
 
 .column-view {
+  .synthesis {
+    border: none;
+    padding: 15px;
+    margin-bottom: 20px;
+  }
   &:first-child {
     .column-header {
       margin-left: 0;

@@ -4,12 +4,28 @@ import Tree from '../../common/tree';
 import ColumnHeader from './columnHeader';
 import ColumnsPost from '../../../components/debate/multiColumns/columnsPost';
 import { PostFolded } from '../../../components/debate/thread/post';
+import BoxWithHyphen from '../../common/boxWithHyphen';
 
 const Separator = () => {
   return <div style={{ height: '25px' }} />;
 };
 
+const Synthesis = ({ classifier, synthesisTitle, synthesisBody, hyphenStyle }) => {
+  return (
+    <div id={`synthesis-${classifier}`} className="box synthesis background-grey">
+      <BoxWithHyphen
+        additionalContainerClassNames="column-synthesis"
+        title={synthesisTitle}
+        body={synthesisBody}
+        hyphenStyle={hyphenStyle}
+      />
+    </div>
+  );
+};
+
 export default ({
+  color,
+  classifier,
   synthesis,
   width,
   data,
@@ -23,7 +39,8 @@ export default ({
 }) => {
   return (
     <div className="column-view" style={{ width: width }}>
-      <ColumnHeader synthesis={synthesis} ideaId={ideaId} refetchIdea={refetchIdea} ideaTitle={ideaTitle} />
+      <ColumnHeader color={color} classifier={classifier} ideaId={ideaId} refetchIdea={refetchIdea} ideaTitle={ideaTitle} />
+      {synthesis && <Synthesis {...synthesis} />}
       <div className="column-tree">
         <Tree
           contentLocaleMapping={contentLocaleMapping}
