@@ -1630,9 +1630,13 @@ def test_query_discussion_sentiments_count(
 def test_total_number_of_contributions(graphql_request, thematic_and_question,
                                        proposals):
     res = schema.execute("""query {
-        numberOfContributions
+        rootIdea {
+            ... on IdeaInterface {
+                numPosts
+            }
+        }
     }""", context_value=graphql_request)
-    assert res.data['numberOfContributions'] == 15
+    assert res.data['rootIdea']['numPosts'] == 15
 
 
 def test_total_number_of_contributions_multi_phases(graphql_request,
@@ -1640,6 +1644,10 @@ def test_total_number_of_contributions_multi_phases(graphql_request,
                                                     proposals, post_1_on_idea):
 
     res = schema.execute("""query {
-        numberOfContributions
+        rootIdea {
+            ... on IdeaInterface {
+                numPosts
+            }
+        }
     }""", context_value=graphql_request)
-    assert res.data['numberOfContributions'] == 16
+    assert res.data['rootIdea']['numPosts'] == 16

@@ -585,11 +585,6 @@ class IdeaInterface(graphene.Interface):
     order = graphene.Float()
 
     def resolve_num_posts(self, args, context, info):
-        if isinstance(self, models.RootIdea):
-            # we need this special case to not count posts from root thematic
-            return self.num_posts - sum([child.num_posts
-                for child in self.get_children() if child.hidden])
-
         return self.num_posts
 
     def resolve_img_url(self, args, context, info):
@@ -948,7 +943,6 @@ class Query(graphene.ObjectType):
     default_preferences = graphene.Field(DiscussionPreferences)
     locales = graphene.List(Locale, lang=graphene.String(required=True))
     total_sentiments = graphene.Int()
-    number_of_contributions = graphene.Int()
 
     def resolve_total_sentiments(self, args, context, info):
         discussion_id = context.matchdict['discussion_id']
@@ -1030,16 +1024,6 @@ class Query(graphene.ObjectType):
         return [Locale(locale_code=locale_code, label=label)
                 for locale_code, label in sorted(labels.items(),
                                                  key=lambda entry: entry[1])]
-
-    def resolve_number_of_contributions(self, args, context, info):
-        # To get all contributions, take all posts under the root idea
-        # regardless of phase
-        discussion_id = context.matchdict['discussion_id']
-        db = models.Discussion.default_db
-        root_idea = db.query(models.RootIdea).filter_by(
-            discussion_id=discussion_id).first()
-
-        return root_idea.num_posts
 
 
 class VideoInput(graphene.InputObjectType):
