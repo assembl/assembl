@@ -2,6 +2,7 @@ query ThematicQuery($lang: String!, $id: ID!) {
   thematic: node(id: $id) {
     ... on Thematic {
       title(lang: $lang)
+      imgMimetype
       imgUrl
       id
       video(lang: $lang) {

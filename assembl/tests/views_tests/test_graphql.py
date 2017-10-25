@@ -314,6 +314,7 @@ mutation myFirstMutation($img:String) {
             title(lang:"fr"),
             identifier,
             imgUrl
+            imgMimetype
         }
     }
 }
@@ -333,6 +334,7 @@ mutation myFirstMutation($img:String) {
 #    }}}
 #    just assert we have the ends correct:
     assert res.data['createThematic']['thematic']['imgUrl'].endswith('/documents/1/data')
+    assert res.data['createThematic']['thematic']['imgMimetype'] == 'image/png'
     thematic_id = res.data['createThematic']['thematic']['id']
 
     # and update it to change the image

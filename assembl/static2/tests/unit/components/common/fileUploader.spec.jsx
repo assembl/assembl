@@ -7,7 +7,7 @@ describe('FileUploader component', () => {
   it('should render a file uploader for an image file', () => {
     const handleChangeSpy = jest.fn(() => {});
     const component = renderer.create(
-      <FileUploader fileOrUrl="http://www.example.com/foobar.png" handleChange={handleChangeSpy} />
+      <FileUploader fileOrUrl="http://www.example.com/foobar.png" handleChange={handleChangeSpy} mimeType="image/png" />
     );
     const tree = component.toJSON();
     expect(tree).toMatchSnapshot();

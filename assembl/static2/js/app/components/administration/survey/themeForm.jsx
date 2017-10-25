@@ -9,6 +9,7 @@ import FileUploader from '../../common/fileUploader';
 import { deleteThematicTooltip } from '../../common/tooltips';
 
 export const DumbThemeCreationForm = ({
+  imgMimetype,
   imgUrl,
   index,
   markAsToDelete,
@@ -40,7 +41,7 @@ export const DumbThemeCreationForm = ({
       </div>
       <FormControlWithLabel label={ph} onChange={handleTitleChange} required type="text" value={title} />
       <FormGroup>
-        <FileUploader fileOrUrl={imgUrl} handleChange={handleImageChange} />
+        <FileUploader fileOrUrl={imgUrl} handleChange={handleImageChange} mimeType={imgMimetype} />
       </FormGroup>
       <div className="pointer right">
         <OverlayTrigger placement="top" overlay={deleteThematicTooltip}>
@@ -64,6 +65,7 @@ const mapStateToProps = ({ admin: { thematicsById } }, { id, selectedLocale }) =
     return entry.get('localeCode') === selectedLocale;
   });
   return {
+    imgMimetype: thematic.get('imgMimetype', ''),
     imgUrl: thematic.get('imgUrl', ''),
     title: titleEntry ? titleEntry.get('value', '') : '',
     toDelete: thematic.get('toDelete', false)
