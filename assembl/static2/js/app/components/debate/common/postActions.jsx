@@ -48,7 +48,6 @@ class PostActions extends React.Component {
       routerParams,
       debateData
     } = this.props;
-
     let count = 0;
     const totalSentimentsCount = sentimentCounts
       ? sentimentCounts.like + sentimentCounts.disagree + sentimentCounts.dontUnderstand + sentimentCounts.moreInfo
@@ -100,8 +99,7 @@ class PostActions extends React.Component {
               });
             }}
           >
-            <OverlayTrigger placement={tooltipPlacement} overlay={shareTooltip}>
-
+            <OverlayTrigger placement={tooltipPlacement} overlay={sharePostTooltip}>
               <span className="assembl-icon-share color" />
             </OverlayTrigger>
           </div>
