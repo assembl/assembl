@@ -41,7 +41,7 @@ class Statistic extends React.Component {
     });
   };
   render() {
-    const { rootIdea, numParticipants, totalSentiments } = this.props.data;
+    const { rootIdea, numParticipants, totalSentiments, numberOfContributions } = this.props.data;
     const elementsProps = [
       { iconName: 'sentiment-neutral', count: totalSentiments, translateValue: 'home.sentiments' },
       { iconName: 'profil', count: numParticipants, translateValue: 'home.participant' }
@@ -49,7 +49,7 @@ class Statistic extends React.Component {
     if (rootIdea) {
       elementsProps.push({
         iconName: 'message',
-        count: rootIdea.numPosts,
+        count: numberOfContributions,
         translateValue: 'home.contribution'
       });
     }

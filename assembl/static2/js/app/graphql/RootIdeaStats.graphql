@@ -3,10 +3,8 @@ query RootIdeaStats($identifier: String) {
     ... on Node {
       id
     }
-    ... on IdeaInterface {
-      numPosts
-    }
   }
   totalSentiments
   numParticipants
+  numberOfContributions
 }
