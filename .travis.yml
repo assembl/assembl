@@ -43,10 +43,14 @@ before_script:
   #- fab -c configs/travis.rc app_compile_nodbupdate
   - fab -c configs/travis.rc database_create
   - assembl-db-manage testing.ini bootstrap
+env:
+  - TO_TEST=BACKEND
+  - TO_TEST=FRONTEND
 script:
-  # TODO: fix error (production.ini: Bad value substitution)
-  # fab -c configs/travis.rc build_doc
-  - py.test --cov assembl --cov-report term --cov-report html --junit-xml junit.xml assembl
-  - cd assembl/static2; npm test; npm run eslint; npm run flow
+  - if [ "$TO_TEST" = "BACKEND" ]; then py.test --cov assembl --cov-report term --cov-report html --junit-xml junit.xml assembl; fi
+  - cd assembl/static2
+  - if [ "$TO_TEST" = "FRONTEND" ]; then npm test; fi
+  - if [ "$TO_TEST" = "FRONTEND" ]; then npm run eslint; fi
+  - if [ "$TO_TEST" = "FRONTEND" ]; then npm run flow; fi
 notifications:
   slack: bluenove:gxso5MQCL78dGfCaTSjX42i5
