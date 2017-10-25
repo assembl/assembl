@@ -34,7 +34,7 @@ export default class ColumnsView extends React.Component {
     const { messageColumns: columns } = this.props;
     if (!Array.isArray(columns)) return null;
     return (
-      <div>
+      <div className="max-container">
         {this.shouldShowTabs(columns.length)
           ? <TabbedColumns {...this.props} />
           : <MultiColumns {...this.props} width={`${100 / columns.length}%`} />}

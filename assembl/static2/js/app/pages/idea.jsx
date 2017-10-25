@@ -167,9 +167,7 @@ class Idea extends React.Component {
                 </div>
               </div>
             </Grid>}
-          <div className="max-container">
-            {ideaWithPostsData.loading ? <Loader /> : view}
-          </div>
+          {ideaWithPostsData.loading ? <Loader /> : view}
         </section>
         <GoUp />
       </div>
