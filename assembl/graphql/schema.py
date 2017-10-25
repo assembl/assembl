@@ -1626,7 +1626,7 @@ class UpdatePost(graphene.Mutation):
             while children:
                 child = children.pop()
                 children.extend(child.children)
-                child.subject.add_value(new_subject, original_subject_entry.locale_code)
+                child.subject.add_value(new_subject, child.subject.first_original().locale_code)
 
         original_body_entry = post.body.first_original()
         if body != original_body_entry.value:
