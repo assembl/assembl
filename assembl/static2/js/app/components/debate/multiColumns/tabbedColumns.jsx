@@ -41,47 +41,43 @@ export default class TabbedColumns extends React.Component {
     };
     const style = { width: `${100 / messageColumns.length}%` };
     const inactiveTabColor = 'lightgrey';
-    const buttons = messageColumns.map((messageColumn) => {
-      const classifier = messageColumn.messageClassifier;
-      const isActive = classifier === activeKey;
-      return (
-        <div key={classifier} className={`${isActive ? 'active ' : ''}button-container`} style={style}>
-          <button
-            style={{
-              backgroundColor: isActive ? `rgba(${hexToRgb(messageColumn.color)},${COLUMN_OPACITY_GAIN})` : inactiveTabColor
-            }}
-            onClick={(event) => {
-              event.preventDefault();
-              return this.setState({ activeKey: classifier });
-            }}
-            disabled={isActive}
-          >
-            {getTabTitle(classifier, messageColumn.name, idea.title)}
-          </button>
-        </div>
-      );
-    });
-    const view = (
-      <PostColumn
-        synthesis={synthesis}
-        width={width}
-        contentLocaleMapping={contentLocaleMapping}
-        lang={lang}
-        data={columnsArray[activeKey]}
-        initialRowIndex={initialRowIndex}
-        noRowsRenderer={noRowsRenderer}
-        ideaId={idea.id}
-        refetchIdea={refetchIdea}
-        ideaTitle={idea.title}
-      />
-    );
     return (
       <div className="tab-selector">
         <div className="tab-selector-buttons">
-          {buttons}
+          {messageColumns.map((messageColumn) => {
+            const classifier = messageColumn.messageClassifier;
+            const isActive = classifier === activeKey;
+            return (
+              <div key={classifier} className={`${isActive ? 'active ' : ''}button-container`} style={style}>
+                <button
+                  style={{
+                    backgroundColor: isActive ? `rgba(${hexToRgb(messageColumn.color)},${COLUMN_OPACITY_GAIN})` : inactiveTabColor
+                  }}
+                  onClick={(event) => {
+                    event.preventDefault();
+                    return this.setState({ activeKey: classifier });
+                  }}
+                  disabled={isActive}
+                >
+                  {getTabTitle(classifier, messageColumn.name, idea.title)}
+                </button>
+              </div>
+            );
+          })}
         </div>
         <div className="tab-content">
-          {view}
+          <PostColumn
+            synthesis={synthesis}
+            width={width}
+            contentLocaleMapping={contentLocaleMapping}
+            lang={lang}
+            data={columnsArray[activeKey]}
+            initialRowIndex={initialRowIndex}
+            noRowsRenderer={noRowsRenderer}
+            ideaId={idea.id}
+            refetchIdea={refetchIdea}
+            ideaTitle={idea.title}
+          />
         </div>
       </div>
     );
