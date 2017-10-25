@@ -322,7 +322,7 @@ const Translations = {
         link: "Exporter",
         noExportLanguage: "Conserver les messages dans leurs langues d'origine",
         title: "Exporter les données du débat",
-        translateTheMessagesIn: "Traduire l'ensemble des messages en"
+        translateTheMessagesIn: "Traduire l'ensemble des messages en:"
       },
       step_x_total: "Section %{num} sur %{total}",
       saveThemes: "Sauvegarder",
@@ -656,7 +656,7 @@ const Translations = {
         link: "Export",
         noExportLanguage: "Keep the messages in their original languages",
         title: "Export the debate data",
-        translateTheMessagesIn: "Translate the messages in"
+        translateTheMessagesIn: "Translate the messages in:"
       },
       step_x_total: "Section %{num} on %{total}",
       saveThemes: "Save",
