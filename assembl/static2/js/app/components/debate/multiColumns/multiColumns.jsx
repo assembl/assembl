@@ -20,7 +20,7 @@ export default ({
   return (
     <div className="multi-column-container">
       {Object.keys(columnsArray).map((classifier, index) => {
-        const synthesis = showSynthesis && {
+        const synthesisProps = showSynthesis && {
           classifier: classifier,
           synthesisTitle: getSynthesisTitle(classifier, messageColumns[index].name, idea.title),
           synthesisBody: messageColumns[index].header || I18n.t('multiColumns.synthesis.noSynthesisYet'),
@@ -29,7 +29,7 @@ export default ({
         return (
           <PostColumn
             key={classifier}
-            synthesis={synthesis}
+            synthesisProps={synthesisProps}
             width={width}
             contentLocaleMapping={contentLocaleMapping}
             lang={lang}

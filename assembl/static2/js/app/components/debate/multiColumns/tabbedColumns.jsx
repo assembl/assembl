@@ -34,7 +34,7 @@ export default class TabbedColumns extends React.Component {
         return messageColumn.messageClassifier === activeKey;
       })
     );
-    const synthesis = showSynthesis && {
+    const synthesisProps = showSynthesis && {
       classifier: activeKey,
       synthesisTitle: getSynthesisTitle(activeKey, messageColumns[index].name, idea.title),
       synthesisBody: messageColumns[index].header || I18n.t('multiColumns.synthesis.noSynthesisYet'),
@@ -68,7 +68,7 @@ export default class TabbedColumns extends React.Component {
         </div>
         <div className="tab-content">
           <PostColumn
-            synthesis={synthesis}
+            synthesisProps={synthesisProps}
             width={width}
             color={messageColumns[index].color}
             classifier={activeKey}

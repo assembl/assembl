@@ -26,7 +26,7 @@ const Synthesis = ({ classifier, synthesisTitle, synthesisBody, hyphenStyle }) =
 export default ({
   color,
   classifier,
-  synthesis,
+  synthesisProps,
   width,
   data,
   contentLocaleMapping,
@@ -40,7 +40,7 @@ export default ({
   return (
     <div className="column-view" style={{ width: width }}>
       <ColumnHeader color={color} classifier={classifier} ideaId={ideaId} refetchIdea={refetchIdea} ideaTitle={ideaTitle} />
-      {synthesis && <Synthesis {...synthesis} />}
+      {synthesisProps && <Synthesis {...synthesisProps} />}
       <div className="column-tree">
         <Tree
           contentLocaleMapping={contentLocaleMapping}
