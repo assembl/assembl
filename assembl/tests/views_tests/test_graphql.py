@@ -1660,3 +1660,41 @@ query { resources {
     assert res.data['resources'][1]['doc']['externalUrl'] == "http://localhost:6543/data/Discussion/1/documents/2/data"
     # this is the title of the File object, not the title of the ResourceAttachment object
     assert res.data['resources'][1]['doc']['title'] == "mydocument.pdf"
+
+
+def test_mutation_create_resource_no_permission(graphql_request):
+    graphql_request.authenticated_userid = None
+    res = schema.execute(u"""
+mutation createResource {
+    createResource(titleEntries:[{value:"Peu importe", localeCode:"fr"}]) {
+        resource {
+            title
+        }
+    }
+}
+""", context_value=graphql_request)
+    assert json.loads(json.dumps(res.data)) == { u'createResource': None }
+
+
+def test_mutation_create_resource(graphql_request):
+    title_entries = u'[{value:"Première ressource", localeCode:"fr"},{value:"First resource", localeCode:"en"}]'
+    text_entries = u'[{value:"Lorem ipsum dolor sit amet, consectetur adipisicing elit.", localeCode:"fr"},{value:"Foobar", localeCode:"en"}]'
+    embed_code = u'iframe foobar'
+    res = schema.execute(u"""
+mutation createResource {
+    createResource(titleEntries:%s,textEntries:%s,embedCode:"%s") {
+        resource {
+            title(lang:"fr")
+            text(lang:"fr")
+            embedCode
+        }
+    }
+}
+""" % (title_entries, text_entries, embed_code), context_value=graphql_request)
+    result = res.data
+    assert result is not None
+    assert result['createResource'] is not None
+    resource = result['createResource']['resource']
+    assert resource['title'] == u'Première ressource'
+    assert resource['text'] == u'Lorem ipsum dolor sit amet, consectetur adipisicing elit.'
+    assert resource['embedCode'] == u'iframe foobar'

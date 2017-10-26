@@ -2035,6 +2035,55 @@ class UpdateDiscussionPreferences(graphene.Mutation):
         return UpdateDiscussionPreferences(preferences=discussion_pref)
 
 
+class CreateResource(graphene.Mutation):
+    class Input:
+        # Careful, having required=True on a graphene.List only means
+        # it can't be None, having an empty [] is perfectly valid.
+        title_entries = graphene.List(LangStringEntryInput, required=True)
+        text_entries = graphene.List(LangStringEntryInput)
+        embed_code = graphene.String()
+
+    resource = graphene.Field(lambda: Resource)
+
+    @staticmethod
+    def mutate(root, args, context, info):
+        cls = models.Resource
+        discussion_id = context.matchdict['discussion_id']
+        discussion = models.Discussion.get(discussion_id)
+        user_id = context.authenticated_userid or Everyone
+
+        permissions = get_permissions(user_id, discussion_id)
+        allowed = cls.user_can_cls(user_id, CrudPermissions.CREATE, permissions)
+        if not allowed or (allowed == IF_OWNED and user_id == Everyone):
+            raise HTTPUnauthorized()
+
+        with cls.default_db.no_autoflush:
+            title_entries = args.get('title_entries')
+            if len(title_entries) == 0:
+                raise Exception('Resource titleEntries needs at least one entry')
+                # Better to have this message than
+                # 'NoneType' object has no attribute 'owner_object'
+                # when creating the saobj below if title=None
+
+            title_langstring = langstring_from_input_entries(title_entries)
+            text_langstring = langstring_from_input_entries(
+                args.get('text_entries'))
+            kwargs = {}
+            if text_langstring is not None:
+                kwargs['text'] = text_langstring
+
+            kwargs['embed_code'] = args.get('embed_code')
+            saobj = cls(
+                discussion_id=discussion_id,
+                title=title_langstring,
+                **kwargs)
+            db = saobj.db
+            db.add(saobj)
+            db.flush()
+
+        return CreateResource(resource=saobj)
+
+
 class Mutations(graphene.ObjectType):
     create_thematic = CreateThematic.Field()
     update_thematic = UpdateThematic.Field()
@@ -2050,6 +2099,7 @@ class Mutations(graphene.ObjectType):
     upload_document = UploadDocument.Field()
     delete_post_attachment = DeletePostAttachment.Field()
     update_discussion_preferences = UpdateDiscussionPreferences.Field()
+    create_resource = CreateResource.Field()
 
 
 Schema = graphene.Schema(query=Query, mutation=Mutations)
