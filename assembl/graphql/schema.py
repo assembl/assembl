@@ -2042,6 +2042,8 @@ class CreateResource(graphene.Mutation):
         title_entries = graphene.List(LangStringEntryInput, required=True)
         text_entries = graphene.List(LangStringEntryInput)
         embed_code = graphene.String()
+        image = graphene.String()
+        doc = graphene.String()
 
     resource = graphene.Field(lambda: Resource)
 
@@ -2079,6 +2081,50 @@ class CreateResource(graphene.Mutation):
                 **kwargs)
             db = saobj.db
             db.add(saobj)
+
+            image = args.get('image')
+            if image is not None:
+                filename = os.path.basename(context.POST[image].filename)
+                mime_type = context.POST[image].type
+                uploaded_file = context.POST[image].file
+                uploaded_file.seek(0)
+                data = uploaded_file.read()
+                document = models.File(
+                    discussion=discussion,
+                    mime_type=mime_type,
+                    title=filename,
+                    data=data)
+                image_attachment = models.ResourceAttachment(
+                    document=document,
+                    resource=saobj,
+                    discussion=discussion,
+                    creator_id=context.authenticated_userid,
+                    title=filename,
+                    attachmentPurpose="IMAGE"
+                )
+
+            doc = args.get('doc')
+            if doc is not None:
+                filename = os.path.basename(context.POST[doc].filename)
+                mime_type = context.POST[doc].type
+                uploaded_file = context.POST[doc].file
+                uploaded_file.seek(0)
+                data = uploaded_file.read()
+                document = models.File(
+                    discussion=discussion,
+                    mime_type=mime_type,
+                    title=filename,
+                    data=data)
+                doc_attachment = models.ResourceAttachment(
+                    document=document,
+                    resource=saobj,
+                    discussion=discussion,
+                    creator_id=context.authenticated_userid,
+                    title=filename,
+                    attachmentPurpose="DOCUMENT"
+                )
+
+
             db.flush()
 
         return CreateResource(resource=saobj)

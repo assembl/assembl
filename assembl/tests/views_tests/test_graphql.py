@@ -1680,17 +1680,43 @@ def test_mutation_create_resource(graphql_request):
     title_entries = u'[{value:"Première ressource", localeCode:"fr"},{value:"First resource", localeCode:"en"}]'
     text_entries = u'[{value:"Lorem ipsum dolor sit amet, consectetur adipisicing elit.", localeCode:"fr"},{value:"Foobar", localeCode:"en"}]'
     embed_code = u'iframe foobar'
+
+    import os
+    from io import BytesIO
+
+    class FieldStorage(object):
+        file = BytesIO(os.urandom(16))
+
+        def __init__(self, filename, type):
+            self.filename = filename
+            self.type = type
+
+    graphql_request.POST['variables.img'] = FieldStorage(
+        u'path/to/img.png', 'image/png')
+    graphql_request.POST['variables.doc'] = FieldStorage(
+        u'path/to/mydoc.pdf', 'application/pdf')
+
     res = schema.execute(u"""
-mutation createResource {
-    createResource(titleEntries:%s,textEntries:%s,embedCode:"%s") {
+mutation createResource($img:String,$doc:String) {
+    createResource(
+        titleEntries:%s,textEntries:%s,embedCode:"%s",image:$img,doc:$doc
+    ) {
         resource {
             title(lang:"fr")
             text(lang:"fr")
             embedCode
+            image {
+                externalUrl
+                title
+            }
+            doc {
+                externalUrl
+                title
+            }
         }
     }
 }
-""" % (title_entries, text_entries, embed_code), context_value=graphql_request)
+""" % (title_entries, text_entries, embed_code), context_value=graphql_request, variable_values={"img": u"variables.img", "doc": u"variables.doc"})
     result = res.data
     assert result is not None
     assert result['createResource'] is not None
@@ -1698,3 +1724,9 @@ mutation createResource {
     assert resource['title'] == u'Première ressource'
     assert resource['text'] == u'Lorem ipsum dolor sit amet, consectetur adipisicing elit.'
     assert resource['embedCode'] == u'iframe foobar'
+
+    assert resource['image']['externalUrl'].endswith('/documents/1/data')
+    assert resource['image']['title'] == 'img.png'
+
+    assert resource['doc']['externalUrl'].endswith('/documents/2/data')
+    assert resource['doc']['title'] == 'mydoc.pdf'
