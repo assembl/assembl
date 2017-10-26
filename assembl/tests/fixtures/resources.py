@@ -25,7 +25,7 @@ def resource(request, discussion, test_session):
 
 
 @pytest.fixture(scope="function")
-def resource_with_image_and_doc(request, discussion, moderator_user, simple_file, test_session):
+def resource_with_image_and_doc(request, discussion, moderator_user, simple_file, simple_file2, test_session):
     from assembl.models import Resource, LangString
     from assembl.models.attachment import ResourceAttachment
     resource = Resource(
@@ -45,7 +45,7 @@ def resource_with_image_and_doc(request, discussion, moderator_user, simple_file
 
     resource_doc = ResourceAttachment(
         discussion=discussion,
-        document=simple_file,
+        document=simple_file2,
         resource=resource,
         title=u"Resource document",
         creator=moderator_user,
