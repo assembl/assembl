@@ -963,6 +963,7 @@ class Resource(SecureObjectType, SQLAlchemyObjectType):
     title = graphene.String(lang=graphene.String())
     text = graphene.String(lang=graphene.String())
     embed_code = graphene.String()
+    image = graphene.Field(Document)
 
     def resolve_title(self, args, context, info):
         title = resolve_langstring(self.title, args.get('lang'))
@@ -971,6 +972,11 @@ class Resource(SecureObjectType, SQLAlchemyObjectType):
     def resolve_text(self, args, context, info):
         text = resolve_langstring(self.text, args.get('lang'))
         return text
+
+    def resolve_image(self, args, context, info):
+        for attachment in self.attachments:
+            if attachment.attachmentPurpose == 'IMAGE':
+                return attachment.document
 
 
 class Query(graphene.ObjectType):

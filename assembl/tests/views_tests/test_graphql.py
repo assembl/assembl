@@ -1639,9 +1639,15 @@ query { resources {
     title(lang:"en")
     text(lang:"en")
     embedCode
+    image {
+        externalUrl
+    }
 } }"""
     res = schema.execute(query, context_value=graphql_request)
     assert res.data['resources'][0]['title'] == u'a resource'
     assert res.data['resources'][1]['title'] == u'another resource'
     assert res.data['resources'][0]['text'] == u'Lorem ipsum dolor sit amet'
     assert res.data['resources'][0]['embedCode'] == u'<iframe ...>'
+
+    assert res.data['resources'][0]['image'] == None
+    assert res.data['resources'][1]['image']['externalUrl'] == "http://localhost:6543/data/Discussion/1/documents/1/data"
