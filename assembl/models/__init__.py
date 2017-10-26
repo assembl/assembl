@@ -303,7 +303,8 @@ from .attachment import (
     File,
     Attachment,
     PostAttachment,
-    IdeaAttachment
+    IdeaAttachment,
+    ResourceAttachment
 )
 
 from .announcement import (
