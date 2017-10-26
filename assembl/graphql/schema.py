@@ -580,20 +580,15 @@ class IdeaInterface(graphene.Interface):
     num_posts = graphene.Int()
     num_contributors = graphene.Int()
     num_children = graphene.Int(identifier=graphene.String())
-    img_url = graphene.String()
-    img_mimetype = graphene.String()
+    img = graphene.Field(Document)
     order = graphene.Float()
 
     def resolve_num_posts(self, args, context, info):
         return self.num_posts
 
-    def resolve_img_url(self, args, context, info):
+    def resolve_img(self, args, context, info):
         if self.attachments:
-            return self.attachments[0].external_url
-
-    def resolve_img_mimetype(self, args, context, info):
-        if self.attachments:
-            return self.attachments[0].document.mime_type
+            return self.attachments[0].document
 
     def resolve_order(self, args, context, info):
         return self.get_order_from_first_parent()

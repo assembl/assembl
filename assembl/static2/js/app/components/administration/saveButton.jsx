@@ -34,9 +34,9 @@ const createVariablesForMutation = (thematic) => {
   return {
     identifier: 'survey',
     titleEntries: thematic.titleEntries,
-    // If imgUrl is an object, it means it's a File.
+    // If thematic.img.externalUrl is an object, it means it's a File.
     // We need to send image: null if we didn't change the image.
-    image: typeof thematic.imgUrl === 'object' ? thematic.imgUrl : null,
+    image: typeof thematic.img.externalUrl === 'object' ? thematic.img.externalUrl : null,
     // if video is null, pass {} to remove all video fields on server side
     video: thematic.video === null ? {} : convertVideoDescriptionsToHTML(thematic.video),
     questions: thematic.questions

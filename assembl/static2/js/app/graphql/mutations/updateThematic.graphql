@@ -16,7 +16,9 @@ mutation updateThematic(
   ) {
     thematic {
       title
-      imgUrl
+      img {
+        externalUrl
+      }
       video {
         title
         descriptionTop

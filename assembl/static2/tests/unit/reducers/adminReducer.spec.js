@@ -128,7 +128,9 @@ describe('Admin reducers', () => {
           id: '-278290',
           isNew: true,
           toDelete: false,
-          imgUrl: null,
+          img: {
+            externalUrl: ''
+          },
           questions: [],
           titleEntries: [],
           video: null
@@ -167,6 +169,26 @@ describe('Admin reducers', () => {
               titleEntries: [{ localeCode: 'en', value: 'How?' }, { localeCode: 'fr', value: 'Comment?' }]
             }
           ]
+        }
+      });
+      const newState = thematicsById(oldState, action);
+      expect(newState).toEqual(expected);
+    });
+
+    it('should handle UPDATE_THEMATIC_IMG_URL action type', () => {
+      const action = { id: '1', value: 'http://example.com/toto.png', type: 'UPDATE_THEMATIC_IMG_URL' };
+      const oldState = fromJS({
+        1: {
+          img: {
+            externalUrl: ''
+          }
+        }
+      });
+      const expected = fromJS({
+        1: {
+          img: {
+            externalUrl: 'http://example.com/toto.png'
+          }
         }
       });
       const newState = thematicsById(oldState, action);

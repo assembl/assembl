@@ -268,7 +268,7 @@ class IdeasLevel extends React.Component {
                   style={nbLevel > 1 ? { width: ideaPreviewWidth } : {}}
                 >
                   <IdeaPreview
-                    imgUrl={idea.imgUrl}
+                    imgUrl={idea.img ? idea.img.externalUrl : ''}
                     numPosts={idea.numPosts}
                     numContributors={idea.numContributors}
                     numChildren={idea.numChildren}

@@ -203,7 +203,9 @@ query Idea($lang: String!, $id: ID!) {
       title(lang: $lang)
       synthesisTitle(lang: $lang)
       description(lang: $lang)
-      imgUrl
+      img {
+        externalUrl
+      }
     }
   }
 }
@@ -216,8 +218,9 @@ query Idea($lang: String!, $id: ID!) {
             u'title': u'Understanding the dynamics and issues',
             u'synthesisTitle': u'What you need to know',
             u'description': u'',
-            u'imgUrl': None
-    }}
+            u"img": None
+        }
+    }
 
 
 def test_extracts_on_post(admin_user, graphql_request, discussion, top_post_in_thread_phase):

@@ -313,8 +313,10 @@ mutation myFirstMutation($img:String) {
             id,
             title(lang:"fr"),
             identifier,
-            imgUrl
-            imgMimetype
+            img {
+                externalUrl
+                mimeType
+            }
         }
     }
 }
@@ -333,8 +335,8 @@ mutation myFirstMutation($img:String) {
 #                u'imgUrl': u'http://localhost:6543/data/Discussion/8/documents/1/data'
 #    }}}
 #    just assert we have the ends correct:
-    assert res.data['createThematic']['thematic']['imgUrl'].endswith('/documents/1/data')
-    assert res.data['createThematic']['thematic']['imgMimetype'] == 'image/png'
+    assert res.data['createThematic']['thematic']['img']['externalUrl'].endswith('/documents/1/data')
+    assert res.data['createThematic']['thematic']['img']['mimeType'] == 'image/png'
     thematic_id = res.data['createThematic']['thematic']['id']
 
     # and update it to change the image
@@ -359,13 +361,17 @@ mutation myFirstMutation($img:String, $thematicId:ID!) {
         thematic {
             title(lang:"fr"),
             identifier,
-            imgUrl
+            img {
+                externalUrl
+                mimeType
+            }
         }
     }
 }
 """, context_value=graphql_request, variable_values={"thematicId": thematic_id,
                                                      "img": u"variables.img"})
-    assert res.data['updateThematic']['thematic']['imgUrl'].endswith('/documents/2/data')
+    assert res.data['updateThematic']['thematic']['img']['externalUrl'].endswith('/documents/2/data')
+    assert res.data['updateThematic']['thematic']['img']['mimeType'] == 'image/png'
 
 
 def test_mutation_create_thematic_multilang_explicit_en(graphql_request):

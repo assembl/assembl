@@ -42,7 +42,7 @@ class Themes extends React.Component {
                   return (
                     <Col xs={12} sm={6} md={3} className={this.getColClassNames(index)} key={index}>
                       <ThematicPreview
-                        imgUrl={thematic.imgUrl}
+                        imgUrl={thematic.img ? thematic.img.externalUrl : ''}
                         numPosts={thematic.numPosts}
                         numContributors={thematic.numContributors}
                         link={`${get('debate', { slug: slug, phase: identifier })}${get('theme', { themeId: thematic.id })}`}

@@ -41,7 +41,7 @@ class Themes extends React.Component {
                         key={index}
                       >
                         <ThematicPreview
-                          imgUrl={idea.imgUrl}
+                          imgUrl={idea.img ? idea.img.externalUrl : ''}
                           numPosts={idea.nbPosts}
                           numContributors={idea.nbContributors}
                           link={
