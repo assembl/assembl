@@ -174,7 +174,9 @@ export const languagePreferences = (state = List(), action) => {
     return state;
   case 'REMOVE_LANGUAGE_PREFERENCE':
     if (hasLocale(action.locale, state)) {
-      const i = state.findIndex((a) => { return a === action.locale; });
+      const i = state.findIndex((a) => {
+        return a === action.locale;
+      });
       return state.delete(i);
     }
     return state;
@@ -191,7 +193,6 @@ export const discussionLanguagePreferencesHasChanged = (state = false, action) =
     return state;
   }
 };
-
 
 export default combineReducers({
   selectedLocale: selectedLocale,
