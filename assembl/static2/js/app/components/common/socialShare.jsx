@@ -34,7 +34,6 @@ export default class SocialShare extends React.Component {
   render() {
     const { url, onClose, social } = this.props;
     const SocialNetworks = [
-      { Component: EmailShareButton, iconName: 'email' },
       { Component: FacebookShareButton, iconName: 'facebook' },
       { Component: GooglePlusShareButton, iconName: 'google' },
       { Component: LinkedinShareButton, iconName: 'linkedin' },
