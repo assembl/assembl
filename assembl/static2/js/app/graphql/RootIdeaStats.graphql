@@ -1,5 +1,5 @@
-query RootIdeaStats($identifier: String) {
-  rootIdea(identifier: $identifier) {
+query {
+  rootIdea {
     ... on Node {
       id
     }

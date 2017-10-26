@@ -1,11 +1,9 @@
 // @flow
 import React from 'react';
 import { compose, graphql } from 'react-apollo';
-import { connect } from 'react-redux';
 import { Translate } from 'react-redux-i18n';
 import RootIdeaStats from '../../../graphql/RootIdeaStats.graphql';
 import withLoadingIndicator from '../../../components/common/withLoadingIndicator';
-import { getCurrentPhaseIdentifier } from '../../../utils/timeline';
 
 const indexIsLast = (index, array) => {
   return index === array.length - 1;
@@ -63,14 +61,4 @@ class Statistic extends React.Component {
   }
 }
 
-const mapStateToProps = (state) => {
-  return {
-    identifier: getCurrentPhaseIdentifier(state.debate.debateData.timeline) // used as variable in RootIdeaStats query
-  };
-};
-
-export default compose(
-  connect(mapStateToProps),
-  graphql(RootIdeaStats),
-  withLoadingIndicator({ textHidden: true, color: 'white' })
-)(Statistic);
+export default compose(graphql(RootIdeaStats), withLoadingIndicator({ textHidden: true, color: 'white' }))(Statistic);
