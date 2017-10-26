@@ -2130,6 +2130,30 @@ class CreateResource(graphene.Mutation):
         return CreateResource(resource=saobj)
 
 
+class DeleteResource(graphene.Mutation):
+    class Input:
+        resource_id = graphene.ID(required=True)
+
+    success = graphene.Boolean()
+
+    @staticmethod
+    def mutate(root, args, context, info):
+        discussion_id = context.matchdict['discussion_id']
+        user_id = context.authenticated_userid or Everyone
+
+        resource_id = args.get('resource_id')
+        resource = models.Resource.get(resource_id)
+
+        permissions = get_permissions(user_id, discussion_id)
+        allowed = resource.user_can(user_id, CrudPermissions.DELETE, permissions)
+        if not allowed:
+            raise HTTPUnauthorized()
+
+        resource.is_tombstone = True
+        resource.db.flush()
+        return DeleteResource(success=True)
+
+
 class Mutations(graphene.ObjectType):
     create_thematic = CreateThematic.Field()
     update_thematic = UpdateThematic.Field()
@@ -2146,6 +2170,7 @@ class Mutations(graphene.ObjectType):
     delete_post_attachment = DeletePostAttachment.Field()
     update_discussion_preferences = UpdateDiscussionPreferences.Field()
     create_resource = CreateResource.Field()
+    delete_resource = DeleteResource.Field()
 
 
 Schema = graphene.Schema(query=Query, mutation=Mutations)

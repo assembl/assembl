@@ -1730,3 +1730,19 @@ mutation createResource($img:String,$doc:String) {
 
     assert resource['doc']['externalUrl'].endswith('/documents/2/data')
     assert resource['doc']['title'] == 'mydoc.pdf'
+
+
+def test_delete_resource(graphql_request, resource):
+    resource_id = resource.id
+    res = schema.execute(u"""
+mutation deleteResource {
+    deleteResource(
+        resourceId:"%s",
+    ) {
+        success
+    }
+}
+""" % resource_id, context_value=graphql_request)
+    assert res.data['deleteResource']['success'] is True
+    res = schema.execute(u'query { resources { id } }', context_value=graphql_request)
+    assert json.loads(json.dumps(res.data)) == {u'resources': []}
