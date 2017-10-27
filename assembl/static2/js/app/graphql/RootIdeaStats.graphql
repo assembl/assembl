@@ -3,7 +3,6 @@ query {
     ... on Node {
       id
     }
-
     ... on IdeaInterface {
       numPosts
     }

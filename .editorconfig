@@ -29,6 +29,11 @@ indent_style = space
 indent_size = 2
 insert_final_newline = false
 
+; graphql
+[*.graphql]
+indent_style = space
+indent_size = 2
+
 ; Css
 [*.scss]
 indent_style = space
