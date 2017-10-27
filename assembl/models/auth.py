@@ -1732,58 +1732,55 @@ class UserLanguagePreferenceCollection(LanguagePreferenceCollection):
     def __init__(self, user_id):
         user = User.get(user_id)
         user_prefs = user.language_preference
-        if not user_prefs:
-            self.user_prefs = None
-            self.default_pref = None
-        else:
-            user_prefs.sort(reverse=True)
-            prefs_by_locale = {
-                user_pref.locale_code: user_pref
-                for user_pref in user_prefs
-            }
-            user_prefs.reverse()
-            prefs_with_trans = [up for up in user_prefs if up.translate_to]
-            prefs_without_trans = [
-                up for up in user_prefs if not up.translate_to]
-            prefs_without_trans_by_loc = {
-                up.locale_code: up for up in prefs_without_trans}
-            # First look for translation targets
-            for (loc, pref) in prefs_by_locale.items():
-                for n, l in enumerate(Locale.decompose_locale(loc)):
-                    if n == 0:
-                        continue
-                    if l in prefs_by_locale:
-                        break
-                    prefs_by_locale[l] = pref
-            for pref in prefs_with_trans:
-                for l in Locale.decompose_locale(pref.translate_to_code):
-                    if l in prefs_without_trans_by_loc:
-                        break
-                    locale = Locale.get_or_create(l)
-                    new_pref = UserLanguagePreference(
-                        locale=locale, locale_id=locale.id,
-                        source_of_evidence=
-                            LanguagePreferenceOrder.DeducedFromTranslation.value,
-                        preferred_order=pref.preferred_order)
-                    prefs_without_trans.append(new_pref)
-                    prefs_without_trans_by_loc[l] = new_pref
-                    if l not in prefs_by_locale:
-                        prefs_by_locale[l] = new_pref
-            default_pref = None
-            if prefs_with_trans:
-                prefs_with_trans.sort()
-                target_lang_code = prefs_with_trans[0].translate_to_code
-                default_pref = prefs_without_trans_by_loc.get(
-                    target_lang_code, None)
-            if not default_pref:
-                # using the untranslated locales, if any.
-                prefs_without_trans.sort()
-                # TODO: Or use discussion locales otherwise?
-                # As it stands, the cookie is the fallback.
-                default_pref = (
-                    prefs_without_trans[0] if prefs_without_trans else None)
-            self.user_prefs = prefs_by_locale
-            self.default_pref = default_pref
+        assert user_prefs
+        user_prefs.sort(reverse=True)
+        prefs_by_locale = {
+            user_pref.locale_code: user_pref
+            for user_pref in user_prefs
+        }
+        user_prefs.reverse()
+        prefs_with_trans = [up for up in user_prefs if up.translate_to]
+        prefs_without_trans = [
+            up for up in user_prefs if not up.translate_to]
+        prefs_without_trans_by_loc = {
+            up.locale_code: up for up in prefs_without_trans}
+        # First look for translation targets
+        for (loc, pref) in prefs_by_locale.items():
+            for n, l in enumerate(Locale.decompose_locale(loc)):
+                if n == 0:
+                    continue
+                if l in prefs_by_locale:
+                    break
+                prefs_by_locale[l] = pref
+        for pref in prefs_with_trans:
+            for l in Locale.decompose_locale(pref.translate_to_code):
+                if l in prefs_without_trans_by_loc:
+                    break
+                locale = Locale.get_or_create(l)
+                new_pref = UserLanguagePreference(
+                    locale=locale, locale_id=locale.id,
+                    source_of_evidence=
+                        LanguagePreferenceOrder.DeducedFromTranslation.value,
+                    preferred_order=pref.preferred_order)
+                prefs_without_trans.append(new_pref)
+                prefs_without_trans_by_loc[l] = new_pref
+                if l not in prefs_by_locale:
+                    prefs_by_locale[l] = new_pref
+        default_pref = None
+        if prefs_with_trans:
+            prefs_with_trans.sort()
+            target_lang_code = prefs_with_trans[0].translate_to_code
+            default_pref = prefs_without_trans_by_loc.get(
+                target_lang_code, None)
+        if not default_pref:
+            # using the untranslated locales, if any.
+            prefs_without_trans.sort()
+            # TODO: Or use discussion locales otherwise?
+            # As it stands, the cookie is the fallback.
+            default_pref = (
+                prefs_without_trans[0] if prefs_without_trans else None)
+        self.user_prefs = prefs_by_locale
+        self.default_pref = default_pref
 
     def default_locale_code(self):
         return self.default_pref.locale.code
