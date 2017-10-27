@@ -1625,29 +1625,3 @@ def test_query_discussion_sentiments_count(
     res_data = json.loads(json.dumps(res.data))
     count = res_data[u"totalSentiments"]
     assert count == 0
-
-
-def test_total_number_of_contributions(graphql_request, thematic_and_question,
-                                       proposals):
-    res = schema.execute("""query {
-        rootIdea {
-            ... on IdeaInterface {
-                numPosts
-            }
-        }
-    }""", context_value=graphql_request)
-    assert res.data['rootIdea']['numPosts'] == 15
-
-
-def test_total_number_of_contributions_multi_phases(graphql_request,
-                                                    thematic_and_question,
-                                                    proposals, post_1_on_idea):
-
-    res = schema.execute("""query {
-        rootIdea {
-            ... on IdeaInterface {
-                numPosts
-            }
-        }
-    }""", context_value=graphql_request)
-    assert res.data['rootIdea']['numPosts'] == 16

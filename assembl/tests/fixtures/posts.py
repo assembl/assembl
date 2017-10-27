@@ -12,7 +12,7 @@ def root_post_1(request, participant1_user, discussion, test_session):
     from assembl.models import Post, LangString
     p = Post(
         discussion=discussion, creator=participant1_user,
-        subject=LangString.create(u"a root post", "en"),
+        subject=LangString.create(u"a root post"),
         body=LangString.create(u"post body"), moderator=None,
         creation_date=datetime(year=2000, month=1, day=1),
         type="post", message_id="msg1@example.com")
@@ -25,27 +25,6 @@ def root_post_1(request, participant1_user, discussion, test_session):
         test_session.flush()
     request.addfinalizer(fin)
     return p
-
-
-@pytest.fixture(scope="function")
-def post_1_on_idea(request, participant1_user, discussion,
-                   test_session, idea_with_en_fr, root_post_1):
-    from assembl.models import IdeaRelatedPostLink
-
-    idc = IdeaRelatedPostLink(
-        idea=idea_with_en_fr,
-        creator=participant1_user,
-        content=root_post_1)
-
-    test_session.add(idc)
-    test_session.flush()
-
-    def fin():
-        print "finalizer root_post_1"
-        test_session.delete(idc)
-        test_session.flush()
-    request.addfinalizer(fin)
-    return idc
 
 
 @pytest.fixture(scope="function")
