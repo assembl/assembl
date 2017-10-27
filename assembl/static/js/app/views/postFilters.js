@@ -237,7 +237,7 @@ _.extend(FilterPostIsInContextOfIdea.prototype, {
               throw new Error('Idea ' + individualFilterValue + ' not found');
             }
 
-            return '"' + idea.getShortTitlSafe(translationData) + '"';
+            return '"' + idea.getShortTitleSafe(translationData) + '"';
           });
     },
     getFilterDescriptionStringPromise: function(individualValuesButtonsPromises) {

@@ -359,7 +359,7 @@ var IdeaInIdeaListView = Marionette.LayoutView.extend({
       ev.originalEvent.dataTransfer.effectAllowed = 'move';
       ev.originalEvent.dataTransfer.dropEffect = 'move';
 
-      Ctx.showDragbox(ev, this.model.getShortTitlSafe(this.translationData));
+      Ctx.showDragbox(ev, this.model.getShortTitleSafe(this.translationData));
       Ctx.draggedIdea = this.model;
     }
   },

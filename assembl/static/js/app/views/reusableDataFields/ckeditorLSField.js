@@ -95,7 +95,7 @@ var CkeditorLSFieldInModal = CKEditorField.modalClass.extend({
     // Probably used for other objects like announcements.
     // REVISIT. Probably use a substring of getTextValue.
     return {
-      modal_title: this.model.getShortTitlSafe(this.translationData),
+      modal_title: this.model.getShortTitleSafe(this.translationData),
     };
   },
   onRender: function(){

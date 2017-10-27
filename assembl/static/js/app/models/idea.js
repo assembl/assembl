@@ -214,7 +214,7 @@ var IdeaModel = Base.Model.extend({
     return i18n.gettext('New idea');
   },
 
-  getShortTitlSafe: function(langPrefs) {
+  getShortTitleSafe: function(langPrefs) {
     var ls = this.get('shortTitle');
     return ls ? (ls.bestValue(langPrefs) || '') : '';
   },
