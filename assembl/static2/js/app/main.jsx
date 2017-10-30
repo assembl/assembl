@@ -27,7 +27,7 @@ class Main extends React.Component {
       const currentPhase = debateData.timeline.filter((phase) => {
         return phase.identifier === currentPhaseIdentifier;
       });
-      isRedirectionToV1 = currentPhase[0].interface_v1;
+      isRedirectionToV1 = currentPhase[0] && currentPhase[0].interface_v1;
     }
     this.props.addRedirectionToV1(isRedirectionToV1);
   }
