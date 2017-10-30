@@ -19,6 +19,7 @@ def test_graphql_get_all_ideas(graphql_request,
                     titleEntries { value, localeCode }
                     numPosts
                     numContributors
+                    numChildren
                     parentId
                     order
                     posts(first:10) {
@@ -33,6 +34,7 @@ def test_graphql_get_all_ideas(graphql_request,
     third_idea = res.data['ideas'][3]
     assert root_idea['parentId'] is None
     assert root_idea['order'] is None
+    assert root_idea['numChildren'] == 1
     assert first_idea['title'] == u'Favor economic growth'
     assert first_idea['parentId'] == root_idea['id']
     assert first_idea['order'] == 0.0
