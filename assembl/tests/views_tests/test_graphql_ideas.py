@@ -12,7 +12,7 @@ def test_graphql_get_all_ideas(graphql_request,
                                subidea_1_1_1):
     res = schema.execute(
         u"""query {
-            ideas {
+            ideas(identifier:"thread") {
                 ... on Idea {
                     id
                     title
