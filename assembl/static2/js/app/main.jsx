@@ -31,9 +31,6 @@ class Main extends React.Component {
     }
     this.props.addRedirectionToV1(isRedirectionToV1);
   }
-  componentDidMount() {
-    window.addEventListener('scroll', this.displayHeader);
-  }
   componentWillReceiveProps(nextProps) {
     const location = nextProps.location.pathname;
     const { debateData } = this.props.debate;
@@ -45,9 +42,6 @@ class Main extends React.Component {
     });
 
     window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
-  }
-  componentWillUnmount() {
-    window.removeEventListener('scroll', this.displayHeader);
   }
   render() {
     const that = this;
