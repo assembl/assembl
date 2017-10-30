@@ -2,6 +2,7 @@ import React from 'react';
 import { browserHistory, Link } from 'react-router';
 import { connect } from 'react-redux';
 import { Grid, Navbar } from 'react-bootstrap';
+import { getCurrentPhaseIdentifier } from '../../utils/timeline';
 import Avatar from './avatar';
 import LanguageMenu from './languageMenu';
 import NavigationMenu from './navigationMenu';
@@ -34,6 +35,7 @@ class NavBar extends React.Component {
   }
   render() {
     const { debateData } = this.props.debate;
+    const currentPhaseIdentifier = getCurrentPhaseIdentifier(debateData.timeline);
     const slug = { slug: debateData.slug };
     const connectedUserId = getConnectedUserId();
     const { isHidden } = this.props;
@@ -58,9 +60,11 @@ class NavBar extends React.Component {
               <NavigationMenu />
             </div>
             <div className="navbar-icons right">
-              <div id="search" className="left">
-                <Search />
-              </div>
+              {currentPhaseIdentifier === 'thread'
+                ? <div id="search" className="left">
+                  <Search />
+                </div>
+                : null}
               {connectedUserId &&
                 debateData.helpUrl &&
                 <Link to={`${debateData.helpUrl}`} target="_blank">
