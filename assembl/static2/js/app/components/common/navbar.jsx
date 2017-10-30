@@ -60,7 +60,7 @@ class NavBar extends React.Component {
               <NavigationMenu />
             </div>
             <div className="navbar-icons right">
-              {currentPhaseIdentifier === 'thread'
+              {currentPhaseIdentifier !== 'survey'
                 ? <div id="search" className="left">
                   <Search />
                 </div>
