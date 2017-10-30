@@ -15,7 +15,7 @@ const Synthesis = ({ classifier, synthesisTitle, synthesisBody, hyphenStyle }) =
     <div id={`synthesis-${classifier}`} className="box synthesis background-grey">
       <BoxWithHyphen
         additionalContainerClassNames="column-synthesis"
-        title={synthesisTitle}
+        subject={synthesisTitle}
         body={synthesisBody}
         hyphenStyle={hyphenStyle}
       />

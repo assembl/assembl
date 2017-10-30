@@ -2,6 +2,7 @@ $column-half-gutter: 15px;
 $post-max-width: 600px;
 $header-margin: 30px;
 $synthesis-padding: 15px;
+$column-synthesis-height: 300px;
 
 .column-view {
   .synthesis {
@@ -156,6 +157,16 @@ $synthesis-padding: 15px;
         margin-left: $column-half-gutter;
         margin-right: $column-half-gutter;
       }
+    }
+  }
+}
+
+.column-synthesis {
+  .insert-box {
+    height: $column-synthesis-height;
+    .insert-content {
+      overflow-y: scroll;
+      height: calc(#{$column-synthesis-height} - 140px);
     }
   }
 }
