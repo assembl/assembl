@@ -935,7 +935,7 @@ class Locale(graphene.ObjectType):
 class Query(graphene.ObjectType):
     node = Node.Field()
     root_idea = graphene.Field(IdeaUnion, identifier=graphene.String())
-    ideas = graphene.List(Idea)
+    ideas = graphene.List(Idea, identifier=graphene.String(required=True))
     thematics = graphene.List(Thematic,
                               identifier=graphene.String(required=True))
     num_participants = graphene.Int()
@@ -983,6 +983,10 @@ class Query(graphene.ObjectType):
 #                joinedload(models.Idea.synthesis_title).joinedload("entries"),
                 joinedload(models.Idea.description).joinedload("entries"),
             ).order_by(model.id)
+        if args.get('identifier') == 'multiColumns':
+            # filter out ideas that don't have columns
+            query = query.join(models.Idea.message_columns)
+
         return query
 
     def resolve_thematics(self, args, context, info):

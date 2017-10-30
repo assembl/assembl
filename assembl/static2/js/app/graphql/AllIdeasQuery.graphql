@@ -1,5 +1,5 @@
-query AllIdeasQuery($lang: String!) {
-  ideas {
+query AllIdeasQuery($lang: String!, $identifier: String!) {
+  ideas(identifier: $identifier) {
     ... on Idea {
       id
       title(lang: $lang)
