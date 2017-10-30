@@ -58,6 +58,7 @@ export default ({
             InnerComponent={ColumnsPost}
             InnerComponentFolded={PostFolded}
             SeparatorComponent={Separator}
+            identifier={identifier}
           />
           : noRowsRenderer()}
       </div>

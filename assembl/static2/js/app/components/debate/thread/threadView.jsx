@@ -39,6 +39,7 @@ class ThreadView extends React.Component {
                 InnerComponentFolded={PostFolded}
                 noRowsRenderer={noRowsRenderer}
                 SeparatorComponent={InfiniteSeparator}
+                identifier={identifier}
               />
             </div>
           </div>

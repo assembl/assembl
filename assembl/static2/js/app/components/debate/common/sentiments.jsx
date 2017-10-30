@@ -1,12 +1,13 @@
 import React from 'react';
 import { OverlayTrigger } from 'react-bootstrap';
+import { Translate } from 'react-redux-i18n';
 import addSentimentMutation from '../../../graphql/mutations/addSentiment.graphql';
 import deleteSentimentMutation from '../../../graphql/mutations/deleteSentiment.graphql';
 import { getConnectedUserId } from '../../../utils/globalFunctions';
-import { inviteUserToLogin } from '../../../utils/utilityManager';
+import { inviteUserToLogin, displayModal } from '../../../utils/utilityManager';
 import sentimentDefinitions from './sentimentDefinitions';
 
-const Sentiment = ({ sentimentCounts, mySentiment, sentiment, client, isSelected, postId, placement }) => {
+const Sentiment = ({ sentimentCounts, mySentiment, sentiment, client, isSelected, postId, placement, isPhaseCompleted }) => {
   return (
     <OverlayTrigger placement={placement} overlay={sentiment.tooltip}>
       <div
@@ -15,6 +16,13 @@ const Sentiment = ({ sentimentCounts, mySentiment, sentiment, client, isSelected
           const isUserConnected = getConnectedUserId();
           if (!isUserConnected) {
             inviteUserToLogin();
+          } else if (isPhaseCompleted) {
+            const body = (
+              <div>
+                <Translate value="debate.isCompleted" />
+              </div>
+            );
+            displayModal(null, body, true, null, null, true);
           } else {
             client.mutate(
               isSelected
@@ -82,7 +90,7 @@ const Sentiment = ({ sentimentCounts, mySentiment, sentiment, client, isSelected
   );
 };
 
-export default ({ sentimentCounts, mySentiment, client, postId, placement }) => {
+export default ({ sentimentCounts, mySentiment, client, postId, placement, isPhaseCompleted }) => {
   return (
     <div className="add-sentiment">
       {sentimentDefinitions.map((sentiment) => {
@@ -96,6 +104,7 @@ export default ({ sentimentCounts, mySentiment, client, postId, placement }) => 
             postId={postId}
             client={client}
             placement={placement}
+            isPhaseCompleted={isPhaseCompleted}
           />
         );
       })}

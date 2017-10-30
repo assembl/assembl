@@ -164,10 +164,10 @@ export class EmptyPost extends React.PureComponent {
       debateData,
       nuggetsManager,
       rowIndex,
-      originalLocale
+      originalLocale,
+      identifier
     } = this.props;
     // creationDate is retrieved by IdeaWithPosts query, not PostQuery
-
     const translate = contentLocale !== originalLocale;
     const { body, subject, originalBody, originalSubject } = this.getBodyAndSubject(translate);
 
@@ -294,6 +294,7 @@ export class EmptyPost extends React.PureComponent {
                 routerParams={routerParams}
                 debateData={debateData}
                 postSubject={subject.replace('Re: ', '')}
+                identifier={identifier}
               />
             </Col>
           </Row>

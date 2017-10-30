@@ -38,7 +38,8 @@ class ColumnsPost extends EmptyPost {
       routerParams,
       debateData,
       colColor,
-      colName
+      colName,
+      identifier
     } = this.props;
     const translate = contentLocale !== originalLocale;
     const { body, originalBody } = this.getBodyAndSubject(translate);
@@ -104,6 +105,7 @@ class ColumnsPost extends EmptyPost {
                 numChildren={numChildren}
                 routerParams={routerParams}
                 debateData={debateData}
+                identifier={identifier}
               />
             </Col>
           </Row>
