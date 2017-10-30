@@ -1656,8 +1656,8 @@ query { resources {
     assert res.data['resources'][0]['doc'] == None
     assert res.data['resources'][0]['image'] == None
 
-    assert res.data['resources'][1]['image']['externalUrl'] == "http://localhost:6543/data/Discussion/1/documents/1/data"
-    assert res.data['resources'][1]['doc']['externalUrl'] == "http://localhost:6543/data/Discussion/1/documents/2/data"
+    assert '/documents/' in res.data['resources'][1]['image']['externalUrl']
+    assert '/documents/' in res.data['resources'][1]['doc']['externalUrl']
     # this is the title of the File object, not the title of the ResourceAttachment object
     assert res.data['resources'][1]['doc']['title'] == "mydocument.pdf"
 
@@ -1725,10 +1725,10 @@ mutation createResource($img:String,$doc:String) {
     assert resource['text'] == u'Lorem ipsum dolor sit amet, consectetur adipisicing elit.'
     assert resource['embedCode'] == u'iframe foobar'
 
-    assert resource['image']['externalUrl'].endswith('/documents/1/data')
+    assert '/documents/' in resource['image']['externalUrl']
     assert resource['image']['title'] == 'img.png'
 
-    assert resource['doc']['externalUrl'].endswith('/documents/2/data')
+    assert '/documents/' in resource['doc']['externalUrl']
     assert resource['doc']['title'] == 'mydoc.pdf'
 
 
