@@ -370,7 +370,7 @@ mutation myFirstMutation($img:String, $thematicId:ID!) {
 }
 """, context_value=graphql_request, variable_values={"thematicId": thematic_id,
                                                      "img": u"variables.img"})
-    assert res.data['updateThematic']['thematic']['img']['externalUrl'].endswith('/documents/2/data')
+    assert '/documents/' in res.data['updateThematic']['thematic']['img']['externalUrl']
     assert res.data['updateThematic']['thematic']['img']['mimeType'] == 'image/png'
 
 
