@@ -190,6 +190,9 @@ $highlightColor: $first-color-light;
 .sk-item-list-option__count {
     color: #777;
 }
+.sk-item-list-option input.sk-item-list-option__checkbox {
+  margin: 3px 4px 0 0;
+}
 
 .sk-search-box {
   form {
