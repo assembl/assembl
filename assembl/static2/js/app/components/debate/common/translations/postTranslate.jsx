@@ -97,6 +97,7 @@ class PostTranslate extends React.Component<void, PostTranslateProps, PostTransl
         <CancelTranslationForm
           lang={lang}
           originalLocale={originalLocale}
+          originalLocaleLabel={this.originalLocaleLabel}
           translate={translate}
           updateById={updateById}
           updateByOriginalLocale={updateByOriginalLocale}

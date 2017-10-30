@@ -7,6 +7,7 @@ import { closeModal } from '../../../../utils/utilityManager';
 
 type CancelTranslationFormProps = {
   originalLocale: string,
+  originalLocaleLabel: string,
   updateById: (value: string) => void,
   updateByOriginalLocale: (value: string) => void
 };
@@ -46,10 +47,10 @@ class CancelTranslationForm extends React.Component<*, CancelTranslationFormProp
   };
 
   render() {
-    const { originalLocale } = this.props;
+    const { originalLocaleLabel } = this.props;
     const { scope } = this.state;
     const untranslateAllLabel = I18n.t('debate.thread.untranslateAllMessagesIn', {
-      language: I18n.t(`language.${originalLocale}`)
+      language: originalLocaleLabel
     });
     const untranslateOneLabel = I18n.t('debate.thread.untranslateOnlyThisMessage');
 
