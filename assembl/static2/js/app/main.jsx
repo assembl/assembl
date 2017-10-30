@@ -1,3 +1,5 @@
+// @flow
+
 import React from 'react';
 import { connect } from 'react-redux';
 import { getCurrentPhaseIdentifier } from './utils/timeline';
@@ -6,6 +8,7 @@ import Navbar from './components/common/navbar';
 import Footer from './components/common/footer';
 
 class Main extends React.Component {
+  state: { identifier: string, location: Location };
   constructor(props) {
     super(props);
     const { debateData } = this.props.debate;
