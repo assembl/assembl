@@ -125,27 +125,31 @@ def process_notification(notification):
             NotificationDeliveryStateType.DELIVERY_IN_PROGRESS
         email_was_sent(recipient)
     except UnverifiedEmailException as e:
-        sys.stderr.write("Not sending to unverified email: "+repr(e))
+        sys.stderr.write("Not sending to unverified email: " + repr(e))
         notification.delivery_state = \
             NotificationDeliveryStateType.DELIVERY_TEMPORARY_FAILURE
     except MissingEmailException as e:
         notification.delivery_state = \
             NotificationDeliveryStateType.DELIVERY_TEMPORARY_FAILURE
-        sys.stderr.write("Missing email! :"+repr(e))
+        sys.stderr.write("Missing email!: " + repr(e))
     except (smtplib.SMTPConnectError,
             socket.timeout, socket.error,
             smtplib.SMTPHeloError) as e:
-        sys.stderr.write("Temporary failure: "+repr(e))
+        sys.stderr.write("Temporary failure: " + repr(e))
         notification.delivery_state = \
             NotificationDeliveryStateType.DELIVERY_TEMPORARY_FAILURE
     except smtplib.SMTPRecipientsRefused as e:
         notification.delivery_state = \
             NotificationDeliveryStateType.DELIVERY_FAILURE
-        sys.stderr.write("Recepients refused: "+repr(e))
+        sys.stderr.write("Recepients refused: " + repr(e))
     except smtplib.SMTPSenderRefused as e:
         notification.delivery_state = \
             NotificationDeliveryStateType.DELIVERY_TEMPORARY_FAILURE
-        sys.stderr.write("Invalid configuration! :"+repr(e))
+        sys.stderr.write("Invalid configuration!: " + repr(e))
+    except Exception as e:
+        notification.delivery_state = \
+            NotificationDeliveryStateType.DELIVERY_TEMPORARY_FAILURE
+        sys.stderr.write("Unkown Exception!: " + repr(e))
 
     mark_changed()
     sys.stderr.write(
