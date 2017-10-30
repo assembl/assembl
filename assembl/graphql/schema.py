@@ -6,7 +6,7 @@ import pytz
 import os.path
 from random import sample as random_sample
 
-from sqlalchemy import desc, inspect
+from sqlalchemy import desc, distinct, func, inspect, join, select
 from sqlalchemy.orm.exc import NoResultFound
 from sqlalchemy.orm import joinedload, subqueryload, undefer
 from sqlalchemy.sql.functions import count
@@ -598,6 +598,24 @@ class IdeaInterface(graphene.Interface):
     def resolve_order(self, args, context, info):
         return self.get_order_from_first_parent()
 
+    def resolve_num_children(self, args, context, info):
+        if getattr(context, 'phase', '') == 'multiColumns':
+            _it = models.Idea.__table__
+            _ilt = models.IdeaLink.__table__
+            _imct = models.IdeaMessageColumn.__table__
+            _target_it = models.Idea.__table__.alias()
+            j = join(_ilt, _it, _ilt.c.source_id == _it.c.id
+                ).join(_target_it, _ilt.c.target_id == _target_it.c.id
+                ).join(_imct, _target_it.c.id == _imct.c.idea_id)
+            num = select([func.count(distinct(_ilt.c.id))]).select_from(j).where(
+            (_ilt.c.tombstone_date == None)
+            & (_it.c.tombstone_date == None)
+            & (_it.c.id == self.id)
+            ).correlate_except(_ilt)
+            return self.db.execute(num).fetchone()[0]
+
+        return self.num_children
+
 
 class IdeaAnnoucement(SecureObjectType, SQLAlchemyObjectType):
     class Meta:
@@ -985,6 +1003,7 @@ class Query(graphene.ObjectType):
             ).order_by(model.id)
         if args.get('identifier') == 'multiColumns':
             # filter out ideas that don't have columns
+            context.phase = 'multiColumns'
             query = query.join(models.Idea.message_columns)
 
         return query
