@@ -20,7 +20,7 @@ before_install:
  - sudo usermod -a -G www-data $USER
  - sudo apt-get install -y fabric git openssh-server
  - ssh-keygen -P '' -f ~/.ssh/id_rsa && cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
- - echo "_extends = ./testing.rc" > configs/travis.rc; echo "_gitbranch = $TRAVIS_COMMIT" >> configs/travis.rc;
+ - echo -e "_extends = ./testing.rc\n_gitbranch = $TRAVIS_COMMIT\nlogger_sqlalchemy__level = WARN" > configs/travis.rc
  # The following line produces warning "uses weak digest algorithm" during its `apt-get update`
  - fab -c configs/travis.rc install_assembl_server_deps
  - fab -c configs/travis.rc install_redis
