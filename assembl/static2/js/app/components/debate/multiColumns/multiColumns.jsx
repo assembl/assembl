@@ -14,7 +14,9 @@ export default ({
   initialRowIndex,
   noRowsRenderer,
   refetchIdea,
-  showSynthesis
+  showSynthesis,
+  identifier,
+  debateData
 }) => {
   const columnsArray = orderPostsByMessageClassifier(messageColumns, posts);
   return (
@@ -41,6 +43,8 @@ export default ({
             ideaId={idea.id}
             refetchIdea={refetchIdea}
             ideaTitle={idea.title}
+            identifier={identifier}
+            debateData={debateData}
           />
         );
       })}
