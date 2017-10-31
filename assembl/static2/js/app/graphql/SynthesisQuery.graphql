@@ -1,0 +1,18 @@
+query SynthesisQuery($id: ID!, $lang: String) {
+  synthesis: node(id: $id) {
+    ... on Synthesis {
+      id
+      subject(lang: $lang)
+      introduction(lang: $lang)
+      conclusion(lang: $lang)
+      imgUrl
+      ideas {
+        ... on Idea {
+          numPosts
+          numContributors
+          imgUrl
+        }
+      }
+    }
+  }
+}

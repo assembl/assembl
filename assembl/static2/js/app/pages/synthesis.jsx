@@ -1,14 +1,25 @@
 import React from 'react';
-import { Translate } from 'react-redux-i18n';
 import { Grid, Col } from 'react-bootstrap';
+import { connect } from 'react-redux';
+import { compose, graphql } from 'react-apollo';
 
-class Synthesis extends React.Component {
+import Loader from '../components/common/loader';
+import SynthesisQuery from '../graphql/SynthesisQuery.graphql';
+
+export class DumbSynthesis extends React.Component {
   render() {
+    const { data } = this.props;
+    if (data.loading) {
+      return <Loader color="black" />;
+    }
+    const { synthesis } = data;
     return (
       <Grid fluid>
         <div className="max-container">
           <Col xs={12} sm={12}>
-            <Translate value="synthesis.panelTitle" />
+            <div>
+              {synthesis.subject}
+            </div>
           </Col>
         </div>
       </Grid>
@@ -16,4 +27,19 @@ class Synthesis extends React.Component {
   }
 }
 
-export default Synthesis;
+const mapStateToProps = (state) => {
+  return {
+    lang: state.i18n.locale
+  };
+};
+
+export default compose(
+  connect(mapStateToProps),
+  graphql(SynthesisQuery, {
+    options: (props) => {
+      return {
+        variables: { id: props.params.synthesisId }
+      };
+    }
+  })
+)(DumbSynthesis);

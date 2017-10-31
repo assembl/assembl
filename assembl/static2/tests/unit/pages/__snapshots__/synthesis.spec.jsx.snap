@@ -1,0 +1,19 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Syntheses component should match Syntheses snapshot 1`] = `
+<div
+  className="container-fluid"
+>
+  <div
+    className="max-container"
+  >
+    <div
+      className="col-sm-12 col-xs-12"
+    >
+      <div>
+        Foo
+      </div>
+    </div>
+  </div>
+</div>
+`;

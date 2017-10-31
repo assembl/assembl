@@ -1,0 +1,82 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Syntheses component should match Syntheses snapshot 1`] = `
+<div
+  className="thumbnails-nav no-padding container-fluid"
+>
+  <div
+    className="thumbnails-container"
+  >
+    <div
+      className="max-container"
+    >
+      <div
+        className="thumbnails"
+      >
+        <div
+          className="thumb-img-container"
+        >
+          <a
+            onClick={[Function]}
+            style={Object {}}
+          >
+            <div
+              className="thumb-img active"
+              style={
+                Object {
+                  "backgroundImage": "url(http://foo.com/bar)",
+                }
+              }
+            />
+            <div
+              className="color-box"
+            >
+               
+            </div>
+            <div
+              className="thumb-title"
+            >
+              <div
+                className="thumb-title-inner"
+              >
+                Foo
+              </div>
+            </div>
+          </a>
+        </div>
+        <div
+          className="thumb-img-container"
+        >
+          <a
+            onClick={[Function]}
+            style={Object {}}
+          >
+            <div
+              className="thumb-img active"
+              style={
+                Object {
+                  "backgroundImage": "url(http://foo.com/bar)",
+                }
+              }
+            />
+            <div
+              className="color-box"
+            >
+               
+            </div>
+            <div
+              className="thumb-title"
+            >
+              <div
+                className="thumb-title-inner"
+              >
+                Bar
+              </div>
+            </div>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
