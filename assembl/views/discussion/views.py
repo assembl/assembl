@@ -286,6 +286,7 @@ def react_view(request, required_permission=P_READ):
         if user_id != Everyone:
             user = User.get(user_id)
             if user:
+                get_locale_from_request(request)
                 user.is_visiting_discussion(discussion.id)
     else:
         context = get_login_context(request)
