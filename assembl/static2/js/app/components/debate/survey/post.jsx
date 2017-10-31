@@ -19,6 +19,7 @@ import StatisticsDoughnut from '../common/statisticsDoughnut';
 import PostTranslate from '../common/translations/postTranslate';
 import { EXTRA_SMALL_SCREEN_WIDTH } from '../../../constants';
 import withLoadingIndicator from '../../common/withLoadingIndicator';
+import { transformLinksInHtml } from '../../../utils/linkify';
 
 class Post extends React.Component {
   constructor(props) {
@@ -155,7 +156,7 @@ class Post extends React.Component {
           />
           <div
             className={`body ${post.bodyMimeType === 'text/plain' ? 'pre-wrap' : ''}`}
-            dangerouslySetInnerHTML={{ __html: body }}
+            dangerouslySetInnerHTML={{ __html: transformLinksInHtml(body) }}
           />
           <div className="sentiments">
             <div className="sentiment-label">
