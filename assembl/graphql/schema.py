@@ -996,6 +996,7 @@ class Query(graphene.ObjectType):
     default_preferences = graphene.Field(DiscussionPreferences)
     locales = graphene.List(Locale, lang=graphene.String(required=True))
     total_sentiments = graphene.Int()
+    has_syntheses = graphene.Boolean()
 
     def resolve_total_sentiments(self, args, context, info):
         discussion_id = context.matchdict['discussion_id']
@@ -1058,6 +1059,12 @@ class Query(graphene.ObjectType):
         discussion_id = context.matchdict['discussion_id']
         discussion = models.Discussion.get(discussion_id)
         return discussion.get_all_syntheses_query()
+
+    def resolve_has_syntheses(self, args, context, info):
+        identifier = args.get('identifier', None)
+        discussion_id = context.matchdict['discussion_id']
+        discussion = models.Discussion.get(discussion_id)
+        return True if discussion.get_all_syntheses_query() else False
 
     def resolve_num_participants(self, args, context, info):
         discussion_id = context.matchdict['discussion_id']
