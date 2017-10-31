@@ -153,10 +153,8 @@ class Idea extends React.Component {
     const childProps = {
       identifier: identifier,
       debateData: debateData,
-      idea: {
-        id: id,
-        title: title
-      },
+      ideaId: id,
+      ideaTitle: title,
       ideaWithPostsData: ideaWithPostsData,
       isUserConnected: getConnectedUserId(),
       contentLocaleMapping: contentLocaleMapping,
