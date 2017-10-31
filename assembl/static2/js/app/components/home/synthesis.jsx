@@ -14,19 +14,23 @@ class SynthesisContainer extends React.Component {
   render() {
     const { synthesis } = this.props;
     return (
-      <section className="home-section synthesis-section">
-        <Grid fluid className="background-light">
-          <div className="max-container">
-            <div style={{ margin: '20px 0' }}>
-              <Row>
-                <Col md={12}>
-                  {synthesis ? <Synthesis synthesis={synthesis} /> : null}
-                </Col>
-              </Row>
-            </div>
-          </div>
-        </Grid>
-      </section>
+      <div>
+        {synthesis && synthesis.publishedSynthesis && synthesis.publishedSynthesis.length > 0
+          ? <section className="home-section synthesis-section">
+            <Grid fluid className="background-light">
+              <div className="max-container">
+                <div style={{ margin: '20px 0' }}>
+                  <Row>
+                    <Col md={12}>
+                      {synthesis ? <Synthesis synthesis={synthesis} /> : null}
+                    </Col>
+                  </Row>
+                </div>
+              </div>
+            </Grid>
+          </section>
+          : null}
+      </div>
     );
   }
 }

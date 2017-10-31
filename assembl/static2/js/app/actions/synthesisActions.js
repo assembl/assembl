@@ -26,9 +26,7 @@ export const fetchSynthesis = (debateId) => {
     dispatch(loadingSynthesis());
     return getSynthesis(debateId)
       .then((synthesis) => {
-        if (synthesis.publishedSynthesis.length !== 0) {
-          dispatch(resolvedFetchSynthesis(synthesis));
-        }
+        dispatch(resolvedFetchSynthesis(synthesis));
       })
       .catch((error) => {
         dispatch(failedFetchSynthesis(error));
