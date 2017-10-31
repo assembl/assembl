@@ -1003,7 +1003,8 @@ class Query(graphene.ObjectType):
                 joinedload(models.Idea.description).joinedload("entries"),
             ).order_by(model.id)
         if args.get('identifier') == 'multiColumns':
-            # filter out ideas that don't have columns
+            # Filter out ideas that don't have columns.
+            # This filter out the root idea too.
             query = query.join(models.Idea.message_columns)
 
         return query
