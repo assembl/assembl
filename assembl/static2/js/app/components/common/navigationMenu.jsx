@@ -89,6 +89,9 @@ class NavigationMenu extends React.Component {
           <Link className="navbar-menu-item" activeClassName="active" to={get('community', { slug: debateData.slug })}>
             <Translate value="navbar.community" />
           </Link>}
+        <Link className="navbar-menu-item" activeClassName="active" to={get('syntheses', { slug: debateData.slug })}>
+          <Translate value="navbar.syntheses" />
+        </Link>
       </div>
     );
   }

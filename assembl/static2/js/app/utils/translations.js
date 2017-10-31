@@ -81,7 +81,8 @@ const Translations = {
       connection: "Connexion",
       profile: "Profil",
       logout: "Se déconnecter",
-      administration: "Administration"
+      administration: "Administration",
+      syntheses: "Synthèses"
     },
     footer: {
       terms: "Conditions Générales d'Utilisation",
@@ -427,7 +428,8 @@ const Translations = {
       connection: "Login",
       profile: "Profile",
       logout: "Logout",
-      administration: "Administration"
+      administration: "Administration",
+      syntheses: "Syntheses"
     },
     footer: {
       terms: "Terms and Conditions",

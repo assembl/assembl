@@ -8,6 +8,7 @@ import Signup from './pages/signup';
 import ChangePassword from './pages/changePassword';
 import RequestPasswordChange from './pages/requestPasswordChange';
 import Home from './pages/home';
+import Syntheses from './pages/syntheses';
 import Synthesis from './pages/synthesis';
 import Debate from './pages/debate';
 import DebateThread from './pages/debateThread';
@@ -95,7 +96,8 @@ export default [
         <Route path={routeForRouter('home')} component={Home} />
         <Route path={routeForRouter('homeBare')} component={Home} />
         <Route path={routeForRouter('profile', false, { userId: ':userId' })} component={Profile} />
-        <Route path={routeForRouter('synthesis')} component={Synthesis} />
+        <Route path={routeForRouter('syntheses')} component={Syntheses} />
+        <Route path={routeForRouter('synthesis', false, { synthesisId: ':synthesisId' })} component={Synthesis} />
         <Route path={routeForRouter('community')} component={Community} />
         <Route path={routeForRouter('terms')} component={Terms} />
         <Route path={routeForRouter('join')} component={JoinDiscussion} />
