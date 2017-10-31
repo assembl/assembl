@@ -3,6 +3,7 @@ query SynthesesQuery($lang: String!) {
     ... on Synthesis {
       id
       subject(lang: $lang)
+      creationDate
       imgUrl
     }
   }

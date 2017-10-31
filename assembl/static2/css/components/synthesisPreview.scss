@@ -1,0 +1,19 @@
+.synthesis-preview {
+    height: 500px;
+    .title-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        height: 50%;
+        justify-content: space-evenly;
+        position: absolute;
+        top: 150px;
+        width: calc(100% - 40px);
+    }
+    .light-title-4{
+        color: $second-color
+    }
+    .content-box {
+      cursor: pointer;
+    }
+}

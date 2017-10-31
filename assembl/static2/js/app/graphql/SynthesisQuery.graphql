@@ -5,6 +5,7 @@ query SynthesisQuery($id: ID!, $lang: String) {
       subject(lang: $lang)
       introduction(lang: $lang)
       conclusion(lang: $lang)
+      creationDate
       imgUrl
       ideas {
         ... on Idea {

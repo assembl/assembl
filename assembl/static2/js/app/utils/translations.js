@@ -221,6 +221,7 @@ const Translations = {
       confirmDeletionButtonDelete: "Supprimer",
       confirmDeletionButtonCancel: "Annuler",
       whatYouNeedToKnow: "À retenir",
+      syntheses: "Synthèses du débat",
       survey: {
         themesTitle: "Choisissez une thématique !",
         txtAreaPh: "Ecrivez votre proposition",
@@ -567,6 +568,7 @@ const Translations = {
       confirmDeletionButtonDelete: "Delete",
       confirmDeletionButtonCancel: "Cancel",
       whatYouNeedToKnow: "What you need to know",
+      syntheses: "Syntheses of the debate",
       survey: {
         themesTitle: "Choose a theme!",
         txtAreaPh: "Write your point of view",

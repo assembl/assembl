@@ -2,81 +2,158 @@
 
 exports[`Syntheses component should match Syntheses snapshot 1`] = `
 <div
-  className="thumbnails-nav no-padding container-fluid"
+  className="debate"
 >
-  <div
-    className="thumbnails-container"
+  <section
+    className="themes-section"
   >
     <div
-      className="max-container"
+      className="background-grey container-fluid"
     >
       <div
-        className="thumbnails"
+        className="max-container"
       >
         <div
-          className="thumb-img-container"
+          className="title-section"
         >
-          <a
-            onClick={[Function]}
-            style={Object {}}
+          <div
+            className="title-hyphen"
           >
-            <div
-              className="thumb-img active"
-              style={
-                Object {
-                  "backgroundImage": "url(http://foo.com/bar)",
-                }
-              }
-            />
-            <div
-              className="color-box"
+             
+          </div>
+          <h1
+            className="dark-title-1"
+          >
+            <span
+              className={undefined}
+              style={undefined}
             >
-               
-            </div>
-            <div
-              className="thumb-title"
-            >
-              <div
-                className="thumb-title-inner"
-              >
-                Foo
-              </div>
-            </div>
-          </a>
+              Syntheses
+            </span>
+          </h1>
         </div>
         <div
-          className="thumb-img-container"
+          className="content-section"
         >
-          <a
-            onClick={[Function]}
-            style={Object {}}
+          <div
+            className="no-margin row"
           >
             <div
-              className="thumb-img active"
-              style={
-                Object {
-                  "backgroundImage": "url(http://foo.com/bar)",
-                }
-              }
-            />
-            <div
-              className="color-box"
-            >
-               
-            </div>
-            <div
-              className="thumb-title"
+              className="theme clear theme-first-row-0 col-md-3 col-sm-6 col-xs-12"
             >
               <div
-                className="thumb-title-inner"
+                className="illustration-box synthesis-preview"
               >
-                Bar
+                <div
+                  className="image-box"
+                  style={
+                    Object {
+                      "backgroundImage": "url(http://foo.com/bar)",
+                    }
+                  }
+                />
+                <a
+                  className="content-box"
+                  onClick={[Function]}
+                  style={Object {}}
+                >
+                  <div
+                    className="title-container center"
+                  >
+                    <h3
+                      className="light-title-3"
+                    >
+                      Foo
+                    </h3>
+                    <h4
+                      className="light-title-4"
+                    >
+                      <span
+                        className={undefined}
+                        style={undefined}
+                      >
+                        For39pmt2
+                      </span>
+                    </h4>
+                  </div>
+                </a>
+                <div
+                  className="color-box"
+                >
+                   
+                </div>
+                <div
+                  className="box-hyphen"
+                >
+                   
+                </div>
+                <div
+                  className="box-hyphen rotate-hyphen"
+                >
+                   
+                </div>
               </div>
             </div>
-          </a>
+            <div
+              className="theme theme-first-row-1 col-md-3 col-sm-6 col-xs-12"
+            >
+              <div
+                className="illustration-box synthesis-preview"
+              >
+                <div
+                  className="image-box"
+                  style={
+                    Object {
+                      "backgroundImage": "url(http://foo.com/bar)",
+                    }
+                  }
+                />
+                <a
+                  className="content-box"
+                  onClick={[Function]}
+                  style={Object {}}
+                >
+                  <div
+                    className="title-container center"
+                  >
+                    <h3
+                      className="light-title-3"
+                    >
+                      Bar
+                    </h3>
+                    <h4
+                      className="light-title-4"
+                    >
+                      <span
+                        className={undefined}
+                        style={undefined}
+                      >
+                        For39pmt2
+                      </span>
+                    </h4>
+                  </div>
+                </a>
+                <div
+                  className="color-box"
+                >
+                   
+                </div>
+                <div
+                  className="box-hyphen"
+                >
+                   
+                </div>
+                <div
+                  className="box-hyphen rotate-hyphen"
+                >
+                   
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
-  </div>
+  </section>
 </div>
 `;
