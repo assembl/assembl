@@ -7,14 +7,14 @@ import { Localize } from 'react-redux-i18n';
 
 import { get } from '../utils/routeMap';
 import { CLASS_NAME_GENERATOR } from '../utils/cardList';
-import Loader from '../components/common/loader';
 import Section from '../components/common/section';
 import Card from '../components/common/card';
 import CardList from '../components/common/cardList';
 import SynthesesQuery from '../graphql/SynthesesQuery.graphql';
+import withLoadingIndicator from '../components/common/withLoadingIndicator';
 
 type SynthesesProps = {
-  data: Object,
+  syntheses: Array<Object>,
   slug: string
 };
 
@@ -22,11 +22,7 @@ export class DumbSyntheses extends React.Component<void, SynthesesProps, void> {
   props: SynthesesProps;
 
   render() {
-    const { data, slug } = this.props;
-    if (data.loading) {
-      return <Loader color="black" />;
-    }
-    const { syntheses } = data;
+    const { syntheses, slug } = this.props;
     if (syntheses.length === 1) {
       const firstSynthesis = syntheses[0];
       browserHistory.push(`${get('synthesis', { synthesisId: firstSynthesis.id, slug: slug })}`);
@@ -68,4 +64,15 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default compose(connect(mapStateToProps), graphql(SynthesesQuery))(DumbSyntheses);
+export default compose(
+  connect(mapStateToProps),
+  graphql(SynthesesQuery, {
+    props: ({ data }) => {
+      return {
+        data: { loading: data.loading },
+        syntheses: data.syntheses || []
+      };
+    }
+  }),
+  withLoadingIndicator()
+)(DumbSyntheses);

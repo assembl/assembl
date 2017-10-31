@@ -4,16 +4,12 @@ import { Grid, Col } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { compose, graphql } from 'react-apollo';
 
-import Loader from '../components/common/loader';
 import SynthesisQuery from '../graphql/SynthesisQuery.graphql';
+import withLoadingIndicator from '../components/common/withLoadingIndicator';
 
 export class DumbSynthesis extends React.Component {
   render() {
-    const { data } = this.props;
-    if (data.loading) {
-      return <Loader color="black" />;
-    }
-    const { synthesis } = data;
+    const { synthesis } = this.props;
     return (
       <Grid fluid>
         <div className="max-container">
@@ -41,6 +37,13 @@ export default compose(
       return {
         variables: { id: props.params.synthesisId }
       };
+    },
+    props: ({ data }) => {
+      return {
+        data: { loading: data.loading },
+        synthesis: data.synthesis
+      };
     }
-  })
+  }),
+  withLoadingIndicator()
 )(DumbSynthesis);
