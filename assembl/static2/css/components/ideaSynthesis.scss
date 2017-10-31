@@ -1,0 +1,92 @@
+$vertical-margin: 50px;
+$stats-padding: 20px;
+$doughnut-size: 60px;
+$doughnut-girth: 22px;
+$margin: 10px;
+$small-margin: 5px;
+
+.idea-synthesis {
+  .synthesis-image-stats-container {
+    position: relative;
+    margin-top: $vertical-margin;
+    margin-bottom: $vertical-margin;
+    .synthesis-image {
+      width: 100%;
+    }
+    .synthesis-stats {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      background-color: white;
+      padding: $stats-padding;
+      padding-bottom: $margin;
+      padding-right: $margin;
+      .counters {
+        display: inline-block;
+        margin-bottom: $margin;
+        .counter-with-icon {
+          color: $first-color;
+          font-family: $font-family4;
+          font-size: 12px;
+          line-height: 26px;
+          display: block;
+          text-align: right;
+        }
+      }
+    }
+  }
+  .title-under-hyphen-container {
+    .title-under-hyphen-text {
+      text-align: center;
+    }
+  }
+  .synthesis-body {
+    text-align: center;
+    margin-bottom: $vertical-margin;
+  }
+  .statistics-doughnut {
+    width: auto;
+    display: block;
+    margin-bottom: $margin;
+    .statistics {
+      display: flex;
+      align-items: center;
+      text-align: left;
+      .doughnut-container {
+        display: table-cell;
+        width: $doughnut-size;
+        .doughnut {
+          vertical-align: middle;
+          circle,path {
+            stroke-width: $doughnut-girth;
+          }
+        }
+        margin-right: $margin;
+      }
+      .after {
+        display: inline;
+        .doughnut-label-count {
+          color: $first-color;
+          font-family: $font-family4;
+          font-size: 12px;
+          line-height: 26px;
+          display: inline;
+        }
+        .doughnut-label-text {
+          color: $first-color;
+          font-family: $font-family4;
+          font-size: 12px;
+          line-height: 26px;
+          display: inline;
+        }
+      }
+    }
+  }
+  .idea-link {
+    color: $first-color;
+    font-family: $font-family4;
+    font-size: 12px;
+    line-height: 26px;
+    display: block;
+  }
+}

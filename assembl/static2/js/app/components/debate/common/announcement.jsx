@@ -8,6 +8,7 @@ import { sentimentDefinitionsObject } from './sentimentDefinitions';
 import Media from '../../common/media';
 import { PublicationStates } from '../../../constants';
 import { multiColumnMapping } from '../../../utils/mapping';
+import PostsAndContributorsCount from '../../common/postsAndContributorsCount';
 
 const createTooltip = (sentiment, count) => {
   return (
@@ -110,8 +111,11 @@ class Announcement extends React.Component {
                 </div>
               </div>
               : <div className="announcement-numbers">
-                {numPosts} <span className="assembl-icon-message" /> - {numContributors}{' '}
-                <span className="assembl-icon-profil" />
+                <PostsAndContributorsCount
+                  className="announcement-numbers"
+                  numContributors={numContributors}
+                  numPosts={numPosts}
+                />
               </div>}
           </div>
         </Col>

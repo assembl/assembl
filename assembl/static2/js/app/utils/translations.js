@@ -177,7 +177,8 @@ const Translations = {
       }
     },
     synthesis: {
-      title: "synthèse"
+      title: "synthèse",
+      seeConversation: "Voir la conversation"
     },
     common: {
       attachFileForm: {
@@ -544,7 +545,8 @@ const Translations = {
       }
     },
     synthesis: {
-      title: "synthesis"
+      title: "synthesis",
+      seeConversation: "See the conversation"
     },
     debate: {
       answer: "I answer:",

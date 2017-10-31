@@ -1,11 +1,12 @@
 // @flow
 import React from 'react';
-import { Grid, Col } from 'react-bootstrap';
+import { Translate } from 'react-redux-i18n';
 import { connect } from 'react-redux';
 import { compose, graphql } from 'react-apollo';
 
 import SynthesisQuery from '../graphql/SynthesisQuery.graphql';
 import withLoadingIndicator from '../components/common/withLoadingIndicator';
+import IdeaSynthesis from '../components/synthesis/IdeaSynthesis';
 
 type SynthesisProps = {
   synthesis: Object
@@ -13,19 +14,13 @@ type SynthesisProps = {
 
 export class DumbSynthesis extends React.Component<void, SynthesisProps, void> {
   props: SynthesisProps;
-
   render() {
     const { synthesis } = this.props;
     return (
-      <Grid fluid>
-        <div className="max-container">
-          <Col xs={12} sm={12}>
-            <div>
-              {synthesis.subject}
-            </div>
-          </Col>
-        </div>
-      </Grid>
+      <div className="max-container">
+        <Translate value="synthesis.title" />
+        <IdeaSynthesis {...synthesis} />
+      </div>
     );
   }
 }
