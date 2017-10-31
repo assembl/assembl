@@ -2,7 +2,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { compose, graphql } from 'react-apollo';
-import { Link } from 'react-router';
+import { Link, browserHistory } from 'react-router';
 import { Localize } from 'react-redux-i18n';
 
 import { get } from '../utils/routeMap';
@@ -27,6 +27,10 @@ export class DumbSyntheses extends React.Component<void, SynthesesProps, void> {
       return <Loader color="black" />;
     }
     const { syntheses } = data;
+    if (syntheses.length === 1) {
+      const firstSynthesis = syntheses[0];
+      browserHistory.push(`${get('synthesis', { synthesisId: firstSynthesis.id, slug: slug })}`);
+    }
     return (
       <div className="debate">
         <Section title="debate.syntheses">
