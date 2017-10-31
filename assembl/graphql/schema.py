@@ -579,7 +579,7 @@ class Video(graphene.ObjectType):
 class IdeaInterface(graphene.Interface):
     num_posts = graphene.Int()
     num_contributors = graphene.Int()
-    num_children = graphene.Int()
+    num_children = graphene.Int(identifier=graphene.String())
     img_url = graphene.String()
     img_mimetype = graphene.String()
     order = graphene.Float()
@@ -599,7 +599,8 @@ class IdeaInterface(graphene.Interface):
         return self.get_order_from_first_parent()
 
     def resolve_num_children(self, args, context, info):
-        if getattr(context, 'phase', '') == 'multiColumns':
+        phase = args.get('identifier', '')
+        if phase == 'multiColumns':
             _it = models.Idea.__table__
             _ilt = models.IdeaLink.__table__
             _imct = models.IdeaMessageColumn.__table__
@@ -1003,7 +1004,6 @@ class Query(graphene.ObjectType):
             ).order_by(model.id)
         if args.get('identifier') == 'multiColumns':
             # filter out ideas that don't have columns
-            context.phase = 'multiColumns'
             query = query.join(models.Idea.message_columns)
 
         return query
