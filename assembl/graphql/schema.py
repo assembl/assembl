@@ -1054,13 +1054,11 @@ class Query(graphene.ObjectType):
         return root_thematic.get_children()
 
     def resolve_syntheses(self, args, context, info):
-        identifier = args.get('identifier', None)
         discussion_id = context.matchdict['discussion_id']
         discussion = models.Discussion.get(discussion_id)
         return discussion.get_all_syntheses_query()
 
     def resolve_has_syntheses(self, args, context, info):
-        identifier = args.get('identifier', None)
         discussion_id = context.matchdict['discussion_id']
         discussion = models.Discussion.get(discussion_id)
         return True if discussion.get_all_syntheses_query() else False
