@@ -133,7 +133,7 @@ class Survey extends React.Component<*, SurveyProps, SurveyState> {
   };
 
   render() {
-    if (this.props.hasError) {
+    if (this.props.hasErrors) {
       displayAlert('danger', 'An error occured, please reload the page');
       return null;
     }
