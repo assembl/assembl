@@ -12,12 +12,14 @@ describe('Syntheses component', () => {
           {
             id: 'fooId',
             subject: 'Foo',
-            imgUrl: 'http://foo.com/bar'
+            imgUrl: 'http://foo.com/bar',
+            creationDate: '2017-02-10T09:15:20.707854+00:00'
           },
           {
             id: 'barId',
             subject: 'Bar',
-            imgUrl: 'http://foo.com/bar'
+            imgUrl: 'http://foo.com/bar',
+            creationDate: '2017-02-10T09:15:20.707854+00:00'
           }
         ]
       },
