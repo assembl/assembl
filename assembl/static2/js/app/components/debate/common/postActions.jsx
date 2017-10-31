@@ -7,11 +7,12 @@ import { answerTooltip, sharePostTooltip } from '../../common/tooltips';
 
 import getOverflowMenuForPost from './overflowMenu';
 import { getConnectedUserId } from '../../../utils/globalFunctions';
-import { promptForLoginOr, openShareModal } from '../../../utils/utilityManager';
+import { promptForLoginOr, openShareModal, displayModal } from '../../../utils/utilityManager';
 import Permissions, { connectedUserCan } from '../../../utils/permissions';
 import Sentiments from './sentiments';
 import getSentimentStats from './sentimentStats';
 import sentimentDefinitions from './sentimentDefinitions';
+import { getIfPhaseCompletedByIdentifier } from '../../../utils/timeline';
 
 class PostActions extends React.Component {
   constructor(props) {
@@ -21,6 +22,7 @@ class PostActions extends React.Component {
       screenWidth: screenWidth
     };
     this.updateDimensions = this.updateDimensions.bind(this);
+    this.displayPhaseCompletedModal = this.displayPhaseCompletedModal.bind(this);
   }
   componentDidMount() {
     window.addEventListener('resize', this.updateDimensions);
@@ -34,7 +36,14 @@ class PostActions extends React.Component {
       screenWidth: screenWidth
     });
   }
-
+  displayPhaseCompletedModal() {
+    const body = (
+      <div>
+        <Translate value="debate.noAnswer" />
+      </div>
+    );
+    displayModal(null, body, true, null, null, true);
+  }
   render() {
     const {
       client,
@@ -46,7 +55,8 @@ class PostActions extends React.Component {
       handleEditClick,
       numChildren,
       routerParams,
-      debateData
+      debateData,
+      identifier
     } = this.props;
     let count = 0;
     const totalSentimentsCount = sentimentCounts
@@ -61,6 +71,7 @@ class PostActions extends React.Component {
     const useSocial = debateData.useSocialMedia;
     let overflowMenu = null;
     const tooltipPlacement = this.state.screenWidth >= MEDIUM_SCREEN_WIDTH ? 'left' : 'top';
+    const isPhaseCompleted = getIfPhaseCompletedByIdentifier(debateData.timeline, identifier);
     if (userCanDeleteThisMessage || userCanEditThisMessage) {
       overflowMenu = (
         <div className="overflow-action">
@@ -83,7 +94,10 @@ class PostActions extends React.Component {
       <div>
         <div className="post-icons">
           {handleAnswerClick &&
-            <div className="post-action" onClick={promptForLoginOr(handleAnswerClick)}>
+            <div
+              className="post-action"
+              onClick={isPhaseCompleted ? this.displayPhaseCompletedModal : promptForLoginOr(handleAnswerClick)}
+            >
               <OverlayTrigger placement={tooltipPlacement} overlay={answerTooltip}>
                 <span className="assembl-icon-back-arrow color" />
               </OverlayTrigger>
@@ -109,6 +123,7 @@ class PostActions extends React.Component {
             placement={tooltipPlacement}
             client={client}
             postId={postId}
+            isPhaseCompleted={isPhaseCompleted}
           />
           {this.state.screenWidth >= MEDIUM_SCREEN_WIDTH ? null : overflowMenu}
         </div>

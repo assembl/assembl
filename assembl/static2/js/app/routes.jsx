@@ -13,7 +13,6 @@ import Debate from './pages/debate';
 import DebateThread from './pages/debateThread';
 import Survey from './pages/survey';
 import Idea from './pages/idea';
-import MultiColumns from './pages/multiColumns';
 import TokenVote from './pages/tokenVote';
 import Community from './pages/community';
 import Profile from './pages/profile';
@@ -37,7 +36,7 @@ const DebateHome = (props) => {
   case 'thread':
     return <DebateThread {...props} />;
   case 'multiColumns':
-    return <Debate {...props} />;
+    return <DebateThread {...props} />;
   case 'tokenVote':
     return <Debate {...props} />;
   default:
@@ -52,7 +51,7 @@ const DebateChild = (props) => {
   case 'thread':
     return <Idea id={props.id} identifier={props.identifier} routerParams={props.params} />;
   case 'multiColumns':
-    return <MultiColumns id={props.id} identifier={props.identifier} />;
+    return <Idea id={props.id} identifier={props.identifier} />;
   case 'tokenVote':
     return <TokenVote id={props.id} identifier={props.identifier} />;
   default:

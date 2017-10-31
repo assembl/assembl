@@ -25,7 +25,9 @@ export default class TabbedColumns extends React.Component {
       noRowsRenderer,
       idea,
       refetchIdea,
-      showSynthesis
+      showSynthesis,
+      identifier,
+      debateData
     } = this.props;
     const activeKey = this.state && 'activeKey' in this.state ? this.state.activeKey : messageColumns[0].messageClassifier;
     const columnsArray = orderPostsByMessageClassifier(messageColumns, posts);
@@ -80,6 +82,8 @@ export default class TabbedColumns extends React.Component {
             ideaId={idea.id}
             refetchIdea={refetchIdea}
             ideaTitle={idea.title}
+            identifier={identifier}
+            debateData={debateData}
           />
         </div>
       </div>

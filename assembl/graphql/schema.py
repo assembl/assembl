@@ -6,7 +6,7 @@ import pytz
 import os.path
 from random import sample as random_sample
 
-from sqlalchemy import desc, inspect
+from sqlalchemy import desc, distinct, func, inspect, join, select
 from sqlalchemy.orm.exc import NoResultFound
 from sqlalchemy.orm import joinedload, subqueryload, undefer
 from sqlalchemy.sql.functions import count
@@ -579,7 +579,7 @@ class Video(graphene.ObjectType):
 class IdeaInterface(graphene.Interface):
     num_posts = graphene.Int()
     num_contributors = graphene.Int()
-    num_children = graphene.Int()
+    num_children = graphene.Int(identifier=graphene.String())
     img_url = graphene.String()
     img_mimetype = graphene.String()
     order = graphene.Float()
@@ -597,6 +597,25 @@ class IdeaInterface(graphene.Interface):
 
     def resolve_order(self, args, context, info):
         return self.get_order_from_first_parent()
+
+    def resolve_num_children(self, args, context, info):
+        phase = args.get('identifier', '')
+        if phase == 'multiColumns':
+            _it = models.Idea.__table__
+            _ilt = models.IdeaLink.__table__
+            _imct = models.IdeaMessageColumn.__table__
+            _target_it = models.Idea.__table__.alias()
+            j = join(_ilt, _it, _ilt.c.source_id == _it.c.id
+                ).join(_target_it, _ilt.c.target_id == _target_it.c.id
+                ).join(_imct, _target_it.c.id == _imct.c.idea_id)
+            num = select([func.count(distinct(_ilt.c.id))]).select_from(j).where(
+            (_ilt.c.tombstone_date == None)
+            & (_it.c.tombstone_date == None)
+            & (_it.c.id == self.id)
+            ).correlate_except(_ilt)
+            return self.db.execute(num).fetchone()[0]
+
+        return self.num_children
 
 
 class IdeaAnnoucement(SecureObjectType, SQLAlchemyObjectType):
@@ -935,7 +954,7 @@ class Locale(graphene.ObjectType):
 class Query(graphene.ObjectType):
     node = Node.Field()
     root_idea = graphene.Field(IdeaUnion, identifier=graphene.String())
-    ideas = graphene.List(Idea)
+    ideas = graphene.List(Idea, identifier=graphene.String(required=True))
     thematics = graphene.List(Thematic,
                               identifier=graphene.String(required=True))
     num_participants = graphene.Int()
@@ -983,6 +1002,10 @@ class Query(graphene.ObjectType):
 #                joinedload(models.Idea.synthesis_title).joinedload("entries"),
                 joinedload(models.Idea.description).joinedload("entries"),
             ).order_by(model.id)
+        if args.get('identifier') == 'multiColumns':
+            # filter out ideas that don't have columns
+            query = query.join(models.Idea.message_columns)
+
         return query
 
     def resolve_thematics(self, args, context, info):

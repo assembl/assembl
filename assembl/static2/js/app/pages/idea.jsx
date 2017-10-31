@@ -125,7 +125,7 @@ class Idea extends React.Component {
     return topPosts;
   }
   render() {
-    const { contentLocaleMapping, lang, ideaData, ideaWithPostsData } = this.props;
+    const { contentLocaleMapping, lang, ideaData, ideaWithPostsData, identifier, debateData } = this.props;
     const refetchIdea = ideaWithPostsData.refetch;
     if (ideaData.loading) {
       return (
@@ -139,6 +139,8 @@ class Idea extends React.Component {
     const messageColumns = ideaWithPostsData.loading ? undefined : ideaWithPostsData.idea.messageColumns;
     const childProps = {
       idea: idea,
+      identifier: identifier,
+      debateData: debateData,
       ideaWithPostsData: ideaWithPostsData,
       isUserConnected: getConnectedUserId(),
       contentLocaleMapping: contentLocaleMapping,
@@ -154,7 +156,7 @@ class Idea extends React.Component {
     const view = isMultiColumn ? <ColumnsView {...childProps} /> : <ThreadView {...childProps} />;
     return (
       <div className="idea">
-        <Header title={idea.title} synthesisTitle={idea.synthesisTitle} imgUrl={idea.imgUrl} identifier="thread" />
+        <Header title={idea.title} synthesisTitle={idea.synthesisTitle} imgUrl={idea.imgUrl} identifier={identifier} />
         <section className="post-section">
           {!ideaWithPostsData.loading &&
             idea.announcement &&

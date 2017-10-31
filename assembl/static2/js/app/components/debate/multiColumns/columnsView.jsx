@@ -31,7 +31,7 @@ export default class ColumnsView extends React.Component {
     return columnsCount * MIN_WIDTH_COLUMN > Math.min(this.state.screenWidth, APP_CONTAINER_MAX_WIDTH);
   };
   render = () => {
-    const { messageColumns: columns } = this.props;
+    const { messageColumns: columns, identifier, debateData } = this.props;
     if (!Array.isArray(columns)) return null;
     const showSynthesis = columns.some((column) => {
       return !!column.header;
@@ -39,8 +39,14 @@ export default class ColumnsView extends React.Component {
     return (
       <div className="max-container">
         {this.shouldShowTabs(columns.length)
-          ? <TabbedColumns {...this.props} showSynthesis={showSynthesis} />
-          : <MultiColumns {...this.props} width={`${100 / columns.length}%`} showSynthesis={showSynthesis} />}
+          ? <TabbedColumns {...this.props} showSynthesis={showSynthesis} identifier={identifier} debateData={debateData} />
+          : <MultiColumns
+            {...this.props}
+            width={`${100 / columns.length}%`}
+            showSynthesis={showSynthesis}
+            identifier={identifier}
+            debateData={debateData}
+          />}
       </div>
     );
   };

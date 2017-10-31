@@ -5,6 +5,7 @@ import ColumnHeader from './columnHeader';
 import ColumnsPost from '../../../components/debate/multiColumns/columnsPost';
 import { PostFolded } from '../../../components/debate/thread/post';
 import BoxWithHyphen from '../../common/boxWithHyphen';
+import { getIfPhaseCompletedByIdentifier } from '../../../utils/timeline';
 
 const Separator = () => {
   return <div style={{ height: '25px' }} />;
@@ -35,11 +36,16 @@ export default ({
   noRowsRenderer,
   ideaId,
   refetchIdea,
-  ideaTitle
+  ideaTitle,
+  identifier,
+  debateData
 }) => {
+  const isPhaseCompleted = getIfPhaseCompletedByIdentifier(debateData.timeline, identifier);
   return (
     <div className="column-view" style={{ width: width }}>
-      <ColumnHeader color={color} classifier={classifier} ideaId={ideaId} refetchIdea={refetchIdea} ideaTitle={ideaTitle} />
+      {!isPhaseCompleted
+        ? <ColumnHeader color={color} classifier={classifier} ideaId={ideaId} refetchIdea={refetchIdea} ideaTitle={ideaTitle} />
+        : null}
       {synthesisProps && <Synthesis {...synthesisProps} />}
       <div className="column-tree">
         {data.length > 0
@@ -52,6 +58,7 @@ export default ({
             InnerComponent={ColumnsPost}
             InnerComponentFolded={PostFolded}
             SeparatorComponent={Separator}
+            identifier={identifier}
           />
           : noRowsRenderer()}
       </div>
