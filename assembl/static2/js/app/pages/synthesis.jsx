@@ -9,17 +9,19 @@ import withLoadingIndicator from '../components/common/withLoadingIndicator';
 import IdeaSynthesis from '../components/synthesis/IdeaSynthesis';
 
 type SynthesisProps = {
-  synthesis: Object
+  synthesis: Object,
+  routeParams: Object
 };
 
 export class DumbSynthesis extends React.Component<void, SynthesisProps, void> {
   props: SynthesisProps;
+
   render() {
-    const { synthesis } = this.props;
+    const { synthesis, routeParams } = this.props;
     return (
       <div className="max-container">
         <Translate value="synthesis.title" />
-        <IdeaSynthesis {...synthesis} />
+        {synthesis.ideas && <IdeaSynthesis {...synthesis.ideas[0] || {}} slug={routeParams.slug} />}
       </div>
     );
   }

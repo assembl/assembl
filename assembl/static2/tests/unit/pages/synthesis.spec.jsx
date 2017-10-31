@@ -1,7 +1,7 @@
 import React from 'react';
 import renderer from 'react-test-renderer';
 
-import { DumbSynthesis } from '../../../js/app/pages/synthesis';
+import { Synthesis } from '../../../js/app/pages/synthesis';
 
 describe('Syntheses component', () => {
   it('should match Syntheses snapshot', () => {
@@ -12,7 +12,7 @@ describe('Syntheses component', () => {
         imgUrl: 'http://foo.com/bar'
       }
     };
-    const rendered = renderer.create(<DumbSynthesis {...props} />).toJSON();
+    const rendered = renderer.create(<Synthesis {...props} />).toJSON();
     expect(rendered).toMatchSnapshot();
   });
 });

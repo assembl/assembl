@@ -9,9 +9,28 @@ query SynthesisQuery($id: ID!, $lang: String) {
       imgUrl
       ideas {
         ... on Idea {
+          id
           numPosts
           numContributors
           imgUrl
+          title(lang: $lang)
+          synthesisTitle(lang: $lang)
+          phaseIdentifier
+          posts {
+            edges {
+              node {
+                ... on Post {
+                  sentimentCounts {
+                    like
+                    disagree
+                    dontUnderstand
+                    moreInfo
+                  }
+                  publicationState
+                }
+              }
+            }
+          }
         }
       }
     }

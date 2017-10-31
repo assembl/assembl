@@ -23,6 +23,7 @@ $small-margin: 5px;
       padding-right: $margin;
       .counters {
         display: inline-block;
+        margin-left: $small-margin;
         margin-bottom: $margin;
         .counter-with-icon {
           color: $first-color;
