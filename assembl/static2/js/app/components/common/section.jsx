@@ -3,7 +3,14 @@ import React from 'react';
 import { Translate } from 'react-redux-i18n';
 import { Grid } from 'react-bootstrap';
 
-class Section extends React.Component {
+type SectionProps = {
+  title: string,
+  children: Array<*>
+};
+
+class Section extends React.Component<void, SectionProps, void> {
+  props: SectionProps;
+
   render() {
     const { title, children } = this.props;
     return (

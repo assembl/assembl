@@ -2,7 +2,16 @@
 import React from 'react';
 import { Row, Col } from 'react-bootstrap';
 
-class CardList extends React.Component {
+type CardListProps = {
+  data: Array<Object>,
+  itemClassName: string,
+  classNameGenerator: Function,
+  CardItem: Function | ReactClass<*>
+};
+
+class CardList extends React.Component<void, CardListProps, void> {
+  props: CardListProps;
+
   render() {
     const { data, CardItem, itemClassName, classNameGenerator } = this.props;
     return (

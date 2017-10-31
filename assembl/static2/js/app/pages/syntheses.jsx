@@ -13,7 +13,14 @@ import Card from '../components/common/card';
 import CardList from '../components/common/cardList';
 import SynthesesQuery from '../graphql/SynthesesQuery.graphql';
 
-export class DumbSyntheses extends React.Component {
+type SynthesesProps = {
+  data: Object,
+  slug: string
+};
+
+export class DumbSyntheses extends React.Component<void, SynthesesProps, void> {
+  props: SynthesesProps;
+
   render() {
     const { data, slug } = this.props;
     if (data.loading) {
