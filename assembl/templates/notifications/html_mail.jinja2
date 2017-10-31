@@ -28,6 +28,7 @@ assembl_css
     </style>
   </head>
   <body>
+    <!-- notification: {{ notification.id }} -->
   <table class="body">
     <tr>
       <td class="center" align="center" valign="top">
@@ -88,6 +89,7 @@ assembl_css
                                 <li>
                                   {{ gettext(applicableSubscription.get_human_readable_description()) }}
                                   <a href="{{ frontendUrls.getUserNotificationSubscriptionUnsubscribeUrl(applicableSubscription) }}">{{ gettext('Unsubscribe') }}</a>
+                                  <!-- subscription: {{ applicableSubscription.id }} -->
                                 </li>
                               {% endfor %}
                             </ul>
