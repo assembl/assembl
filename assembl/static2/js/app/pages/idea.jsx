@@ -136,7 +136,17 @@ class Idea extends React.Component {
     }
     const { idea } = ideaData;
     const isMultiColumn = ideaWithPostsData.loading ? undefined : ideaWithPostsData.idea.messageColumns.length > 0;
-    const messageColumns = ideaWithPostsData.loading ? undefined : ideaWithPostsData.idea.messageColumns;
+    const messageColumns = ideaWithPostsData.loading
+      ? undefined
+      : [...ideaWithPostsData.idea.messageColumns].sort((a, b) => {
+        if (a.index < b.index) {
+          return -1;
+        }
+        if (a.index > b.index) {
+          return 1;
+        }
+        return 0;
+      });
     const childProps = {
       idea: idea,
       identifier: identifier,
