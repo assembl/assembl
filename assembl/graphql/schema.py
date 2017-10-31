@@ -591,6 +591,7 @@ class Synthesis(SecureObjectType, SQLAlchemyObjectType):
     ideas = graphene.List(lambda: IdeaUnion)
     img_url = graphene.String()
     img_mimetype = graphene.String()
+    creation_date = DateTime()
 
     def resolve_ideas(self, args, context, info):
         return self.get_ideas()
