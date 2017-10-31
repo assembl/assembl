@@ -576,6 +576,38 @@ class Video(graphene.ObjectType):
     description_entries_side = graphene.List(LangStringEntry)
 
 
+class Synthesis(SecureObjectType, SQLAlchemyObjectType):
+    class Meta:
+        model = models.Synthesis
+        interfaces = (Node, )
+        only_fields = ('id', )
+
+    subject = graphene.String(lang=graphene.String())
+    subject_entries = graphene.List(LangStringEntry)
+    introduction = graphene.String(lang=graphene.String())
+    introduction_entries = graphene.List(LangStringEntry)
+    conclusion = graphene.String(lang=graphene.String())
+    conclusion_entries = graphene.List(LangStringEntry)
+    ideas = graphene.List(lambda: IdeaUnion)
+    img_url = graphene.String()
+    img_mimetype = graphene.String()
+
+    def resolve_ideas(self, args, context, info):
+        return self.get_ideas()
+    
+    def resolve_img_url(self, args, context, info):
+        ideas = self.get_ideas()
+        first_ida = ideas[0] if ideas else None
+        if getattr(first_ida, 'attachments', None):
+            return first_ida.attachments[0].external_url
+
+    def resolve_img_mimetype(self, args, context, info):
+        ideas = self.get_ideas()
+        first_ida = ideas[0] if ideas else None
+        if getattr(first_ida, 'attachments', None):
+            return first_ida.attachments[0].document.mime_type
+
+
 class IdeaInterface(graphene.Interface):
     num_posts = graphene.Int()
     num_contributors = graphene.Int()
@@ -957,6 +989,7 @@ class Query(graphene.ObjectType):
     ideas = graphene.List(Idea, identifier=graphene.String(required=True))
     thematics = graphene.List(Thematic,
                               identifier=graphene.String(required=True))
+    syntheses = graphene.List(Synthesis)
     num_participants = graphene.Int()
     discussion_preferences = graphene.Field(DiscussionPreferences)
     default_preferences = graphene.Field(DiscussionPreferences)
@@ -1018,6 +1051,12 @@ class Query(graphene.ObjectType):
             return []
 
         return root_thematic.get_children()
+
+    def resolve_syntheses(self, args, context, info):
+        identifier = args.get('identifier', None)
+        discussion_id = context.matchdict['discussion_id']
+        discussion = models.Discussion.get(discussion_id)
+        return discussion.get_all_syntheses_query()
 
     def resolve_num_participants(self, args, context, info):
         discussion_id = context.matchdict['discussion_id']
