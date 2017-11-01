@@ -5,7 +5,6 @@ from assembl.graphql.schema import Schema as schema
 
 def test_graphql_get_syntheses(graphql_request,
                                user_language_preference_en_cookie,
-                               synthesis_post_1,
                                synthesis_in_syntheses):
     assert len(synthesis_in_syntheses.data['syntheses']) == 2
     synthesis1 = synthesis_in_syntheses.data['syntheses'][0]
@@ -45,3 +44,16 @@ def test_graphql_get_synthesis(graphql_request,
     synthesis = res.data['synthesis']
     assert synthesis['subject'] is None
     assert len(synthesis['ideas']) == 0
+
+
+def test_graphql_has_syntheses(graphql_request,
+                               user_language_preference_en_cookie,
+                               synthesis_post_1):
+    res = schema.execute(
+        u"""query HasSynthesesQuery {
+              hasSyntheses
+            }
+        """,
+        context_value=graphql_request
+    )
+    assert res.data['hasSyntheses']

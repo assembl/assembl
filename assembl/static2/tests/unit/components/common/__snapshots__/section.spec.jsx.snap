@@ -1,0 +1,42 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Section component should match Section snapshot 1`] = `
+<section
+  className="themes-section"
+>
+  <div
+    className="background-grey container-fluid"
+  >
+    <div
+      className="max-container"
+    >
+      <div
+        className="title-section"
+      >
+        <div
+          className="title-hyphen"
+        >
+           
+        </div>
+        <h1
+          className="dark-title-1"
+        >
+          <span
+            className={undefined}
+            style={undefined}
+          >
+            Foo Bar
+          </span>
+        </h1>
+      </div>
+      <div
+        className="content-section"
+      >
+        <div>
+          Section content
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+`;
