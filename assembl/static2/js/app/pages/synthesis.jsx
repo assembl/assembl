@@ -7,7 +7,13 @@ import { compose, graphql } from 'react-apollo';
 import SynthesisQuery from '../graphql/SynthesisQuery.graphql';
 import withLoadingIndicator from '../components/common/withLoadingIndicator';
 
-export class DumbSynthesis extends React.Component {
+type SynthesisProps = {
+  synthesis: Object
+};
+
+export class DumbSynthesis extends React.Component<void, SynthesisProps, void> {
+  props: SynthesisProps;
+
   render() {
     const { synthesis } = this.props;
     return (
@@ -39,8 +45,10 @@ export default compose(
       };
     },
     props: ({ data }) => {
+      if (data.loading) {
+        return { dataLoading: true };
+      }
       return {
-        data: { loading: data.loading },
         synthesis: data.synthesis
       };
     }
