@@ -23,7 +23,7 @@ class CardList extends React.Component<void, CardListProps, void> {
               sm={6}
               md={3}
               className={classNameGenerator ? classNameGenerator(itemClassName, index) : itemClassName}
-              key={index}
+              key={cardData.id || index}
             >
               <CardItem {...cardData} index={index} />
             </Col>
