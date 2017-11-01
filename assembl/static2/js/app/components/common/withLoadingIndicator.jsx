@@ -8,7 +8,8 @@ import Loader from './loader';
 const withLoadingIndicator = (loaderProps = {}) => {
   return (WrappedComponent) => {
     return (props) => {
-      if (props.data.loading) {
+      const loading = props.data ? props.data.loading : props.dataLoading;
+      if (loading) {
         return <Loader {...loaderProps} />;
       }
       return <WrappedComponent {...props} />;
