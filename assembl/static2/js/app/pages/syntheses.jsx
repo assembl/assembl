@@ -28,31 +28,29 @@ export class DumbSyntheses extends React.Component<void, SynthesesProps, void> {
       browserHistory.push(`${get('synthesis', { synthesisId: firstSynthesis.id, slug: slug })}`);
     }
     return (
-      <div className="debate">
-        <Section title="debate.syntheses">
-          <CardList
-            data={syntheses}
-            classNameGenerator={CLASS_NAME_GENERATOR.default}
-            itemClassName="theme"
-            CardItem={(itemData) => {
-              return (
-                <Card imgUrl={itemData.imgUrl} className="synthesis-preview">
-                  <Link className="content-box" to={`${get('synthesis', { synthesisId: itemData.id, slug: slug })}`}>
-                    <div className="title-container center">
-                      <h3 className="light-title-3">
-                        {itemData.subject}
-                      </h3>
-                      <h4 className="light-title-4">
-                        <Localize value={itemData.creationDate} dateFormat="date.format2" />
-                      </h4>
-                    </div>
-                  </Link>
-                </Card>
-              );
-            }}
-          />
-        </Section>
-      </div>
+      <Section title="debate.syntheses">
+        <CardList
+          data={syntheses}
+          classNameGenerator={CLASS_NAME_GENERATOR.default}
+          itemClassName="theme"
+          CardItem={(itemData) => {
+            return (
+              <Card imgUrl={itemData.imgUrl} className="synthesis-preview">
+                <Link className="content-box" to={`${get('synthesis', { synthesisId: itemData.id, slug: slug })}`}>
+                  <div className="title-container center">
+                    <h3 className="light-title-3">
+                      {itemData.subject}
+                    </h3>
+                    <h4 className="light-title-4">
+                      <Localize value={itemData.creationDate} dateFormat="date.format2" />
+                    </h4>
+                  </div>
+                </Link>
+              </Card>
+            );
+          }}
+        />
+      </Section>
     );
   }
 }
@@ -68,8 +66,10 @@ export default compose(
   connect(mapStateToProps),
   graphql(SynthesesQuery, {
     props: ({ data }) => {
+      if (data.loading) {
+        return { dataLoading: true };
+      }
       return {
-        data: { loading: data.loading },
         syntheses: data.syntheses || []
       };
     }
