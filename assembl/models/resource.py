@@ -8,16 +8,18 @@ from sqlalchemy import (
 from sqlalchemy.orm import relationship, backref
 
 from .auth import CrudPermissions, P_MANAGE_RESOURCE, P_READ
-from . import DiscussionBoundBase, HistoryMixin
+from . import DiscussionBoundBase
 from .langstrings import LangString
 
 
-class Resource(HistoryMixin, DiscussionBoundBase):
+class Resource(DiscussionBoundBase):
 
     """Resource for resources center."""
 
     __tablename__ = "resource"
     type = Column(String(60), nullable=False)
+
+    id = Column(Integer, primary_key=True)
 
     discussion_id = Column(
         Integer,

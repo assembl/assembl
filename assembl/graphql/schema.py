@@ -1003,7 +1003,7 @@ class Query(graphene.ObjectType):
         query = get_query(model, context)
         discussion_id = context.matchdict['discussion_id']
         discussion = models.Discussion.get(discussion_id)
-        return query.filter(model.discussion == discussion).filter(model.tombstone_date == None)
+        return query.filter(model.discussion == discussion)
 
     def resolve_total_sentiments(self, args, context, info):
         discussion_id = context.matchdict['discussion_id']
@@ -2149,7 +2149,7 @@ class DeleteResource(graphene.Mutation):
         if not allowed:
             raise HTTPUnauthorized()
 
-        resource.is_tombstone = True
+        resource.db.delete(resource)
         resource.db.flush()
         return DeleteResource(success=True)
 
