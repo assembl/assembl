@@ -19,7 +19,7 @@ $small-margin: 5px;
       position: absolute;
       bottom: 0;
       right: 0;
-      background-color: white;
+      background-color: $grey0;
       padding: $stats-padding;
       padding-bottom: $margin;
       padding-right: $margin;
@@ -44,7 +44,8 @@ $small-margin: 5px;
     }
   }
   .synthesis-body {
-    text-align: center;
+    text-align: justify;
+    line-height: 1.8;
     margin-bottom: $vertical-margin;
   }
   .statistics-doughnut {
