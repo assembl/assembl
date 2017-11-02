@@ -5,7 +5,7 @@ import { compose, graphql } from 'react-apollo';
 import { Grid } from 'react-bootstrap';
 
 import { updateContentLocale } from '../actions/contentLocaleActions';
-import Header from '../components/debate/common/header';
+import Header from '../components/common/header';
 import IdeaQuery from '../graphql/IdeaQuery.graphql';
 import IdeaWithPostsQuery from '../graphql/IdeaWithPostsQuery.graphql';
 import GoUp from '../components/common/goUp';
