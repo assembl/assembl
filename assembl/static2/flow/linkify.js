@@ -1,4 +1,4 @@
 // @flow
-declare module 'flow' {
+declare module 'linkify' {
   declare module.exports: any;
 }
