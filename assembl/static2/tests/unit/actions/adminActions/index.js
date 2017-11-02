@@ -1,4 +1,4 @@
-import * as actions from '../../../js/app/actions/adminActions';
+import * as actions from '../../../../js/app/actions/adminActions';
 
 describe('Admin actions', () => {
   describe('updateSelectedLocale action', () => {

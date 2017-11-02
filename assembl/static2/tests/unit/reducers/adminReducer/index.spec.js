@@ -1,6 +1,6 @@
 import { fromJS, List, Map } from 'immutable';
 
-import * as reducers from '../../../js/app/reducers/adminReducer';
+import * as reducers from '../../../../js/app/reducers/adminReducer';
 
 describe('Admin reducers', () => {
   describe('selectedLocale reducer', () => {

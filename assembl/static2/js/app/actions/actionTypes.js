@@ -4,6 +4,7 @@ export const UPDATE_CONTENT_LOCALE_BY_ID: 'UPDATE_CONTENT_LOCALE_BY_ID' = 'UPDAT
 export const UPDATE_CONTENT_LOCALE_BY_ORIGINAL_LOCALE: 'UPDATE_CONTENT_LOCALE_BY_ORIGINAL_LOCALE' =
   'UPDATE_CONTENT_LOCALE_BY_ORIGINAL_LOCALE';
 export const UPDATE_CONTENT_LOCALE: 'UPDATE_CONTENT_LOCALE' = 'UPDATE_CONTENT_LOCALE';
+export const CREATE_RESOURCE: 'CREATE_RESOURCE' = 'CREATE_RESOURCE';
 
 export type UpdateContentLocaleById = {
   type: typeof UPDATE_CONTENT_LOCALE_BY_ID,
@@ -31,10 +32,16 @@ export type UpdateContentLocale = {
   data: ContentLocaleMapping
 };
 
+export type CreateResource = {
+  type: typeof CREATE_RESOURCE
+};
+
 type BasicAction = {
   type: string
 };
 
 // TODO: create type for all possible action types
 
-export type Action = UpdateContentLocaleById | UpdateContentLocaleByOriginalLocale | BasicAction;
+type ResourcesCenterActions = CreateResource;
+
+export type Action = UpdateContentLocaleById | UpdateContentLocaleByOriginalLocale | ResourcesCenterActions | BasicAction;

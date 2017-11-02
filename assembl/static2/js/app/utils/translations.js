@@ -329,6 +329,7 @@ const Translations = {
         orAttachPicture: "Ou téléchargez une image depuis votre ordinateur"
       },
       resourcesCenter: {
+        createResource: "Ajouter un média",
         menuTitle: "Éditer le centre de ressources",
         title: "Centre de ressources"
       },
@@ -678,6 +679,7 @@ const Translations = {
         orAttachPicture: "Or upload an image from your computer"
       },
       resourcesCenter: {
+        createResource: "Add a media",
         menuTitle: "Edit the resources center",
         title: "Resources center"
       },

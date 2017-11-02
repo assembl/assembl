@@ -1,6 +1,8 @@
 import { fromJS, List, Map } from 'immutable';
 import { combineReducers } from 'redux';
 
+import resourcesCenter from './resourcesCenter';
+
 const updateInEntries = (locale, value) => {
   return (entries) => {
     const entryIndex = entries.findIndex((entry) => {
@@ -202,5 +204,6 @@ export default combineReducers({
   thematicsInOrder: thematicsInOrder,
   thematicsById: thematicsById,
   discussionLanguagePreferences: languagePreferences,
-  discussionLanguagePreferencesHasChanged: discussionLanguagePreferencesHasChanged
+  discussionLanguagePreferencesHasChanged: discussionLanguagePreferencesHasChanged,
+  resourcesCenter: resourcesCenter
 });
