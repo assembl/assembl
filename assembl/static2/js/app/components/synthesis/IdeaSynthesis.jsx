@@ -43,11 +43,11 @@ const createDoughnutElements = (sentimentCounts) => {
 
 const TitleUnderHyphen = ({ value }) => {
   return (
-    <div className="title-under-hyphen-container">
+    <div className="title-section">
       <div className="title-hyphen">&nbsp;</div>
-      <h3 className="title-under-hyphen-text">
+      <h1 className="dark-title-1">
         {value}
-      </h3>
+      </h1>
     </div>
   );
 };
@@ -79,8 +79,7 @@ const SynthesisStats = ({ numContributors, numPosts, ideaLink, posts }) => {
 
 const ImageWithSynthesisStats = ({ imgUrl, numContributors, numPosts, ideaLink, posts }) => {
   return (
-    <div className="synthesis-image-stats-container">
-      <Image className="synthesis-image" responsive src={imgUrl} />
+    <div className="synthesis-image-stats-container" style={{ backgroundImage: `url(${imgUrl})` }}>
       <SynthesisStats numContributors={numContributors} numPosts={numPosts} ideaLink={ideaLink} posts={posts} />
     </div>
   );

@@ -1,8 +1,9 @@
 // @flow
 import React from 'react';
-import { Translate } from 'react-redux-i18n';
 import { connect } from 'react-redux';
 import { compose, graphql } from 'react-apollo';
+import Header from '../components/common/header';
+import Section from '../components/common/section';
 
 import SynthesisQuery from '../graphql/SynthesisQuery.graphql';
 import withLoadingIndicator from '../components/common/withLoadingIndicator';
@@ -18,10 +19,25 @@ export class DumbSynthesis extends React.Component<void, SynthesisProps, void> {
 
   render() {
     const { synthesis, routeParams } = this.props;
+    const { introduction, conclusion, ideas, subject } = synthesis;
+
     return (
       <div className="max-container">
-        <Translate value="synthesis.title" />
-        {synthesis.ideas && <IdeaSynthesis {...synthesis.ideas[0] || {}} slug={routeParams.slug} />}
+        <Header title={subject} imgUrl={ideas[ideas.length - 1].imgUrl} isSynthesesHeader />
+        {introduction &&
+          <Section title="Introduction">
+            {introduction}
+          </Section>}
+
+        {ideas &&
+          ideas.map((idea) => {
+            return <IdeaSynthesis {...idea} slug={routeParams.slug} key={idea.id} />;
+          })}
+
+        {conclusion &&
+          <Section title="Conclusion">
+            {conclusion}
+          </Section>}
       </div>
     );
   }
