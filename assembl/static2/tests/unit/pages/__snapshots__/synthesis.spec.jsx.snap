@@ -4,128 +4,25 @@ exports[`Synthesis component should match Synthesis snapshot 1`] = `
 <div
   className="max-container"
 >
-  <span
-    className={undefined}
-    style={undefined}
-  >
-    Title
-  </span>
-  <div
-    className="idea-synthesis"
-  >
-    <div
-      className="title-under-hyphen-container"
-    >
-      <div
-        className="title-hyphen"
-      >
-         
-      </div>
-      <h3
-        className="title-under-hyphen-text"
-      >
-        Bar
-      </h3>
-    </div>
-    <div
-      className="synthesis-image-stats-container"
-    >
-      <img
-        className="synthesis-image img-responsive"
-        src="http://foo.com/bar"
-      />
-      <div
-        className="synthesis-stats"
-      >
-        <div
-          className="statistics-doughnut"
-        >
-          <div
-            className="statistics"
-          >
-            <div
-              className="doughnut-container "
-            >
-              <svg
-                className="doughnut"
-                viewBox="0 0 140 140"
-              >
-                <circle
-                  className="circle"
-                  cx={70}
-                  cy={70}
-                  r={50}
-                  stroke="lightgrey"
-                />
-              </svg>
-            </div>
-            <div
-              className="superpose-label after"
-            >
-              <div
-                className="doughnut-label-count"
-              >
-                0
-              </div>
-               
-              <div
-                className="doughnut-label-text"
-              >
-                <span
-                  className={undefined}
-                  style={undefined}
-                >
-                  Reactions
-                </span>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div
-          className="counters "
-        >
-          <span
-            className="counter-with-icon"
-          >
-            0
-             
-            <span
-              className="assembl-icon-message"
-            />
-          </span>
-          <span
-            className="counter-with-icon"
-          >
-            0
-             
-            <span
-              className="assembl-icon-profil"
-            />
-          </span>
-        </div>
-        <a
-          className="idea-link"
-          onClick={[Function]}
-          style={Object {}}
-        >
-          &gt; 
-          <span
-            className={undefined}
-            style={undefined}
-          >
-            See Conversation
-          </span>
-        </a>
-      </div>
-    </div>
-    <p
-      className="synthesis-body"
-      dangerouslySetInnerHTML={
-        Object {
-          "__html": "Foo",
-        }
+  <Connect(Header)
+    imgUrl="http://foo.com/bar"
+    isSynthesesHeader={true}
+    title="Foo"
+  />
+  <Unknown
+    id="barId"
+    imgUrl="http://foo.com/bar"
+    numContributors={0}
+    numPosts={0}
+    phaseIdentifier="paseId"
+    posts={
+      Object {
+        "edges": Array [],
       }
-    />
-  </div>
+    }
+    slug="slugId"
+    synthesisTitle="Foo"
+    title="Bar"
+  />
 </div>
 `;

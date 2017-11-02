@@ -13,21 +13,23 @@ exports[`Syntheses component should match Syntheses snapshot 1`] = `
       <div
         className="title-section"
       >
-        <div
-          className="title-hyphen"
-        >
-           
-        </div>
-        <h1
-          className="dark-title-1"
-        >
-          <span
-            className={undefined}
-            style={undefined}
+        <div>
+          <div
+            className="title-hyphen"
           >
-            Syntheses
-          </span>
-        </h1>
+             
+          </div>
+          <h1
+            className="section-title section-title1 dark-title-1"
+          >
+            <span
+              className={undefined}
+              style={undefined}
+            >
+              Syntheses
+            </span>
+          </h1>
+        </div>
       </div>
       <div
         className="content-section"

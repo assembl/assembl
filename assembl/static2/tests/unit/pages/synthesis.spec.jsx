@@ -1,5 +1,5 @@
 import React from 'react';
-import renderer from 'react-test-renderer';
+import ShallowRenderer from 'react-test-renderer/shallow';
 
 import { DumbSynthesis } from '../../../js/app/pages/synthesis';
 
@@ -25,7 +25,9 @@ describe('Synthesis component', () => {
         ]
       }
     };
-    const rendered = renderer.create(<DumbSynthesis {...props} />).toJSON();
+    const renderer = new ShallowRenderer();
+    renderer.render(<DumbSynthesis {...props} />);
+    const rendered = renderer.getRenderOutput();
     expect(rendered).toMatchSnapshot();
   });
 });
