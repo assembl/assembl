@@ -46,7 +46,7 @@ class ExportSection extends React.Component {
     this.setState({ translate: shouldTranslate });
   };
   render() {
-    const { i18n, data: { discussionPreferences: { languages } } } = this.props;
+    const { data: { discussionPreferences: { languages } } } = this.props;
     const { translate } = this.state;
     const debateId = getDiscussionId();
     if (!debateId) return null;
@@ -54,7 +54,7 @@ class ExportSection extends React.Component {
     const exportLink = `/data/Discussion/${debateId}/phase1_csv_export${translate ? `?lang=${exportLocale}` : ''}`;
     return (
       <div className="admin-box survey-admin-export-section">
-        <SectionTitle i18n={i18n} phase="survey" tabId="2" annotation={I18n.t('administration.surveyExport.annotation')} />
+        <SectionTitle title={I18n.t('administration.survey.2')} annotation={I18n.t('administration.surveyExport.annotation')} />
         <div className="admin-content">
           <FormGroup>
             <Radio
