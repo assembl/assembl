@@ -13,21 +13,105 @@ exports[`Section component should match Section snapshot 1`] = `
       <div
         className="title-section"
       >
-        <div
-          className="title-hyphen"
-        >
-           
+        <div>
+          <div
+            className="title-hyphen"
+          >
+             
+          </div>
+          <h1
+            className="section-title section-title1 dark-title-1"
+          >
+            <span
+              className={undefined}
+              style={undefined}
+            >
+              Foo Bar
+            </span>
+          </h1>
         </div>
-        <h1
-          className="dark-title-1"
+      </div>
+      <div
+        className="content-section"
+      >
+        <div>
+          Section content
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+`;
+
+exports[`Section component should match Section with 1 parent snapshot 1`] = `
+<section
+  className="themes-section"
+>
+  <div
+    className="background-grey container-fluid"
+  >
+    <div
+      className="max-container"
+    >
+      <div
+        className="title-section"
+      >
+        <h2
+          className="section-title section-title2 dark-title-1"
         >
+          <span
+            className="section-title-index"
+          >
+            1.2.
+          </span>
           <span
             className={undefined}
             style={undefined}
           >
             Foo Bar
           </span>
-        </h1>
+        </h2>
+      </div>
+      <div
+        className="content-section"
+      >
+        <div>
+          Section content
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+`;
+
+exports[`Section component should match Section with 2 parents snapshot 1`] = `
+<section
+  className="themes-section"
+>
+  <div
+    className="background-grey container-fluid"
+  >
+    <div
+      className="max-container"
+    >
+      <div
+        className="title-section"
+      >
+        <h3
+          className="section-title section-title3 dark-title-1"
+        >
+          <span
+            className="section-title-index"
+          >
+            b.
+          </span>
+          <span
+            className={undefined}
+            style={undefined}
+          >
+            Foo Bar
+          </span>
+        </h3>
       </div>
       <div
         className="content-section"

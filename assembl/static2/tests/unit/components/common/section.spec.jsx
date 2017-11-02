@@ -14,4 +14,26 @@ describe('Section component', () => {
       .toJSON();
     expect(rendered).toMatchSnapshot();
   });
+
+  it('should match Section with 1 parent snapshot', () => {
+    const rendered = renderer
+      .create(
+        <Section title="FooBar" parents={[1]} index={2} displayIndex>
+          <div>Section content</div>
+        </Section>
+      )
+      .toJSON();
+    expect(rendered).toMatchSnapshot();
+  });
+
+  it('should match Section with 2 parents snapshot', () => {
+    const rendered = renderer
+      .create(
+        <Section title="FooBar" parents={[1, 2]} index={2} displayIndex>
+          <div>Section content</div>
+        </Section>
+      )
+      .toJSON();
+    expect(rendered).toMatchSnapshot();
+  });
 });
