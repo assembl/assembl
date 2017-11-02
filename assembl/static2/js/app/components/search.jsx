@@ -69,6 +69,8 @@ const slugElement = document.getElementById('discussion-slug');
 const slug = slugElement ? slugElement.value : '';
 let Link;
 let getUrl;
+const slugEl = document.getElementById('discussion-slug');
+const slug = slugEl ? slugEl.value : '';
 if (__resourceQuery) {
   // v1
   // const querystring = require('querystring');
