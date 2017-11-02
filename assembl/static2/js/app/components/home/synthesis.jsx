@@ -15,14 +15,14 @@ class SynthesisContainer extends React.Component {
     const { synthesis } = this.props;
     return (
       <div>
-        {synthesis && synthesis.publishedSynthesis && synthesis.publishedSynthesis.length > 0
+        {synthesis
           ? <section className="home-section synthesis-section">
             <Grid fluid className="background-light">
               <div className="max-container">
                 <div style={{ margin: '20px 0' }}>
                   <Row>
                     <Col md={12}>
-                      {synthesis ? <Synthesis synthesis={synthesis} /> : null}
+                      <Synthesis synthesis={synthesis} />
                     </Col>
                   </Row>
                 </div>

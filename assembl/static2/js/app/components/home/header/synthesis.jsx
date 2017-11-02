@@ -8,7 +8,7 @@ import { getCurrentView, get, getContextual } from '../../../utils/routeMap';
 class Synthesis extends React.Component {
   render() {
     const { error, lastPublishedSynthesis, loading } = this.props.synthesis;
-    if (!loading && !error && lastPublishedSynthesis) {
+    if (!loading && !error && lastPublishedSynthesis.introduction) {
       const { subject, introduction, publishedInPost, creationDate } = lastPublishedSynthesis;
       const title = I18n.t('synthesis.title');
       const slug = { slug: getDiscussionSlug() };

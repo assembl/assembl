@@ -6,11 +6,10 @@ const getSynthesisByStatus = (synthesis) => {
   const draftSynthesis = [];
   let lastPublishedSynthesis = {};
   const sortedSynthesis = getSortedArrayByKey(synthesis, 'creation_date').reverse();
-  sortedSynthesis.map((item, index) => {
+  sortedSynthesis.forEach((item, index) => {
     if (!item.is_next_synthesis) publishedSynthesis.push(item);
     else draftSynthesis.push(item);
     if (index < 1) lastPublishedSynthesis = item;
-    return item;
   });
   return [publishedSynthesis, draftSynthesis, lastPublishedSynthesis];
 };
