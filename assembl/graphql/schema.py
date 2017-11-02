@@ -2154,6 +2154,114 @@ class DeleteResource(graphene.Mutation):
         return DeleteResource(success=True)
 
 
+class UpdateResource(graphene.Mutation):
+    class Input:
+        id = graphene.ID(required=True)
+        title_entries = graphene.List(LangStringEntryInput)
+        text_entries = graphene.List(LangStringEntryInput)
+        embed_code = graphene.String()
+        image = graphene.String()
+        doc = graphene.String()
+
+    resource = graphene.Field(lambda: Resource)
+
+    @staticmethod
+    def mutate(root, args, context, info):
+        cls = models.Resource
+        discussion_id = context.matchdict['discussion_id']
+        discussion = models.Discussion.get(discussion_id)
+        user_id = context.authenticated_userid or Everyone
+
+        resource_id = args.get('id')
+        resource = cls.get(resource_id)
+
+        permissions = get_permissions(user_id, discussion_id)
+        allowed = resource.user_can(user_id, CrudPermissions.UPDATE, permissions)
+        if not allowed:
+            raise HTTPUnauthorized()
+
+        with cls.default_db.no_autoflush:
+            title_entries = args.get('title_entries')
+            if title_entries is not None and len(title_entries) == 0:
+                raise Exception('Resource titleEntries needs at least one entry')
+                # Better to have this message than
+                # 'NoneType' object has no attribute 'owner_object'
+                # when creating the saobj below if title=None
+
+            update_langstring_from_input_entries(resource, 'title', title_entries)
+            update_langstring_from_input_entries(resource, 'text', args.get('text_entries'))
+            kwargs = {}
+            kwargs['embed_code'] = args.get('embed_code', None)
+            for attr, value in kwargs.items():
+                setattr(resource, attr, value)
+
+            db = resource.db
+
+            # add uploaded image as an attachment to the resource
+            image = args.get('image')
+            if image is not None:
+                filename = os.path.basename(context.POST[image].filename)
+                mime_type = context.POST[image].type
+                uploaded_file = context.POST[image].file
+                uploaded_file.seek(0)
+                data = uploaded_file.read()
+                document = models.File(
+                    discussion=discussion,
+                    mime_type=mime_type,
+                    title=filename,
+                    data=data)
+                # if there is already an IMAGE, remove it with the
+                # associated document
+                images = [att for att in resource.attachments if att.attachmentPurpose == 'IMAGE']
+                if images:
+                    image = images[0]
+                    db.delete(image.document)
+                    resource.attachments.remove(image)
+
+                attachment = models.ResourceAttachment(
+                    document=document,
+                    discussion=discussion,
+                    resource=resource,
+                    creator_id=context.authenticated_userid,
+                    title=filename,
+                    attachmentPurpose="IMAGE"
+                )
+
+        # add uploaded doc as an attachment to the resource
+        doc = args.get('doc')
+        if doc is not None:
+            filename = os.path.basename(context.POST[doc].filename)
+            mime_type = context.POST[doc].type
+            uploaded_file = context.POST[doc].file
+            uploaded_file.seek(0)
+            data = uploaded_file.read()
+            document = models.File(
+                discussion=discussion,
+                mime_type=mime_type,
+                title=filename,
+                data=data)
+            # if there is already a DOCUMENT, remove it with the
+            # associated document
+            docs = [att for att in resource.attachments if att.attachmentPurpose == 'DOCUMENT']
+            if docs:
+                doc = docs[0]
+                db.delete(doc.document)
+                resource.attachments.remove(doc)
+
+            attachment = models.ResourceAttachment(
+                document=document,
+                discussion=discussion,
+                resource=resource,
+                creator_id=context.authenticated_userid,
+                title=filename,
+                attachmentPurpose="DOCUMENT"
+            )
+
+            db.flush()
+
+        return UpdateResource(resource=resource)
+
+
 class Mutations(graphene.ObjectType):
     create_thematic = CreateThematic.Field()
     update_thematic = UpdateThematic.Field()
@@ -2171,6 +2279,7 @@ class Mutations(graphene.ObjectType):
     update_discussion_preferences = UpdateDiscussionPreferences.Field()
     create_resource = CreateResource.Field()
     delete_resource = DeleteResource.Field()
+    update_resource = UpdateResource.Field()
 
 
 Schema = graphene.Schema(query=Query, mutation=Mutations)

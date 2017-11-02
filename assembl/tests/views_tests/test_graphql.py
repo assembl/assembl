@@ -1746,3 +1746,68 @@ mutation deleteResource {
     assert res.data['deleteResource']['success'] is True
     res = schema.execute(u'query { resources { id } }', context_value=graphql_request)
     assert json.loads(json.dumps(res.data)) == {u'resources': []}
+
+
+def test_update_resource(graphql_request, resource_with_image_and_doc):
+    resource = resource_with_image_and_doc
+
+    import os
+    from io import BytesIO
+
+    class FieldStorage(object):
+        file = BytesIO(os.urandom(16))
+
+        def __init__(self, filename, type):
+            self.filename = filename
+            self.type = type
+
+    graphql_request.POST['variables.img'] = FieldStorage(
+        u'path/to/new-img.png', 'image/png')
+    graphql_request.POST['variables.doc'] = FieldStorage(
+        u'path/to/new-doc.pdf', 'application/pdf')
+
+    res = schema.execute(u"""
+mutation updateResource($img:String,$doc:String) {
+    updateResource(
+        id: "%s",
+        titleEntries:[
+            {value:"My resource", localeCode:"en"},
+            {value:"Ma ressource", localeCode:"fr"}
+        ],
+        textEntries:[
+            {value:"Text in english", localeCode:"en"},
+            {value:"Texte en français", localeCode:"fr"}
+        ],
+        embedCode:"nothing",
+        image:$img,
+        doc:$doc
+    ) {
+        resource {
+            title(lang:"fr")
+            text(lang:"fr")
+            embedCode
+            image {
+                externalUrl
+                title
+            }
+            doc {
+                externalUrl
+                title
+            }
+        }
+    }
+}
+""" % (resource.id), context_value=graphql_request, variable_values={"img": u"variables.img", "doc": u"variables.doc"})
+    assert res.data is not None
+    assert res.data['updateResource'] is not None
+    assert res.data['updateResource']['resource'] is not None
+    resource = res.data['updateResource']['resource']
+    assert resource[u'title'] == u'Ma ressource'
+    assert resource[u'text'] == u'Texte en français'
+    assert resource[u'embedCode'] == u'nothing'
+
+    assert '/documents/' in resource['image']['externalUrl']
+    assert resource['image']['title'] == 'new-img.png'
+
+    assert '/documents/' in resource['doc']['externalUrl']
+    assert resource['doc']['title'] == 'new-doc.pdf'

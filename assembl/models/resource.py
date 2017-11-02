@@ -71,3 +71,6 @@ class Resource(HistoryMixin, DiscussionBoundBase):
     crud_permissions = CrudPermissions(
         P_MANAGE_RESOURCE, P_READ, P_MANAGE_RESOURCE, P_MANAGE_RESOURCE,
         P_MANAGE_RESOURCE, P_MANAGE_RESOURCE)
+
+
+LangString.setup_ownership_load_event(Resource, ['title', 'text'])
