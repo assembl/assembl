@@ -1,5 +1,5 @@
 import React from 'react';
-import { Image, Tooltip } from 'react-bootstrap';
+import { Tooltip } from 'react-bootstrap';
 import { Translate } from 'react-redux-i18n';
 import { Link } from 'react-router';
 
