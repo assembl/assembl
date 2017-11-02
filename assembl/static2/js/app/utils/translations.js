@@ -328,6 +328,10 @@ const Translations = {
         mediaLink: "Lien média en ligne (vidéo, image, etc..)",
         orAttachPicture: "Ou téléchargez une image depuis votre ordinateur"
       },
+      resourcesCenter: {
+        menuTitle: "Éditer le centre de ressources",
+        title: "Centre de ressources"
+      },
       surveyExport: {
         annotation: "Vous pouvez exporter l'ensemble des données du débat en cliquant simplement sur le bouton Exporter",
         link: "Exporter",
@@ -672,6 +676,10 @@ const Translations = {
         descriptionBottom: "Comments below video",
         mediaLink: "Online media link (video, picture, etc..)",
         orAttachPicture: "Or upload an image from your computer"
+      },
+      resourcesCenter: {
+        menuTitle: "Edit the resources center",
+        title: "Resources center"
       },
       surveyExport: {
         annotation: "You can export all the debate data by clicking on the Export button",

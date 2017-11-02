@@ -21,6 +21,7 @@ import NotFound from './pages/notFound';
 import Terms from './pages/terms';
 import Administration from './pages/administration';
 import UnauthorizedAdministration from './pages/unauthorizedAdministration';
+import ResourcesCenterAdmin from './pages/resourcesCenterAdmin';
 import SurveyAdmin from './pages/surveyAdmin';
 import ThreadAdmin from './pages/threadAdmin';
 import DiscussionAdmin from './pages/discussionAdmin';
@@ -72,6 +73,8 @@ const AdminChild = (props) => {
     return <MultiColumnsAdmin />;
   case 'tokenVote':
     return <TokenVoteAdmin />;
+  case 'resourcesCenter':
+    return <ResourcesCenterAdmin />;
   default:
     return <ThreadAdmin />;
   }
