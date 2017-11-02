@@ -1,7 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import Header from '../components/home/header';
-import Synthesis from '../components/home/synthesis';
 import Objectives from '../components/home/objectives';
 import Phases from '../components/home/phases';
 import Video from '../components/home/video';
@@ -40,7 +39,6 @@ class Home extends React.Component {
       <div className="home">
         <Header />
         <ScrollOnePageButton hidden={this.state.scrollOnePageButtonHidden} />
-        <Synthesis />
         {debateData.objectives && <Objectives />}
         {debateData.timeline && debateData.timeline.length > 1 && <Phases />}
         {debateData.video && <Video />}

@@ -4,7 +4,6 @@ import { Translate, I18n } from 'react-redux-i18n';
 import { connect } from 'react-redux';
 import { Grid, Row, Button } from 'react-bootstrap';
 import Statistic from './header/statistic';
-import Synthesis from './header/synthesis';
 import { get } from '../../utils/routeMap';
 import { getPhaseName, getCurrentPhaseIdentifier, isSeveralIdentifiers } from '../../utils/timeline';
 import { getDiscussionSlug } from '../../utils/globalFunctions';
@@ -40,7 +39,6 @@ class Header extends React.Component {
     }
   }
   render() {
-    const { synthesis } = this.props;
     const { debateData } = this.props.debate;
     const { locale } = this.props.i18n;
     return (
@@ -71,7 +69,6 @@ class Header extends React.Component {
                 <Translate value="home.accessButton" />
               </Button>
             </div>
-            {synthesis ? <Synthesis synthesis={synthesis} /> : null}
           </div>
         </Grid>
         <Grid fluid>
@@ -90,7 +87,6 @@ class Header extends React.Component {
 const mapStateToProps = (state) => {
   return {
     debate: state.debate,
-    synthesis: state.synthesis,
     phase: state.phase,
     i18n: state.i18n
   };
