@@ -6,14 +6,10 @@ from assembl.graphql.schema import Schema as schema
 def test_graphql_get_syntheses(graphql_request,
                                user_language_preference_en_cookie,
                                synthesis_in_syntheses):
-    assert len(synthesis_in_syntheses.data['syntheses']) == 2
-    synthesis1 = synthesis_in_syntheses.data['syntheses'][0]
-    synthesis2 = synthesis_in_syntheses.data['syntheses'][1]
-    assert synthesis1['subject'] is None
-    assert len(synthesis1['ideas']) == 0
-
-    assert synthesis2['subject'] is None
-    assert len(synthesis2['ideas']) == 2
+    assert len(synthesis_in_syntheses.data['syntheses']) == 1
+    synthesis = synthesis_in_syntheses.data['syntheses'][0]
+    assert synthesis['subject'] is None
+    assert len(synthesis['ideas']) == 2
 
 
 def test_graphql_get_synthesis(graphql_request,
@@ -43,7 +39,7 @@ def test_graphql_get_synthesis(graphql_request,
     assert len(res.data) == 1
     synthesis = res.data['synthesis']
     assert synthesis['subject'] is None
-    assert len(synthesis['ideas']) == 0
+    assert len(synthesis['ideas']) == 2
 
 
 def test_graphql_has_syntheses(graphql_request,

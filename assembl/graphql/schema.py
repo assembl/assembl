@@ -1060,12 +1060,12 @@ class Query(graphene.ObjectType):
     def resolve_syntheses(self, args, context, info):
         discussion_id = context.matchdict['discussion_id']
         discussion = models.Discussion.get(discussion_id)
-        return discussion.get_all_syntheses_query()
+        return discussion.get_all_syntheses_query(include_unpublished=False)
 
     def resolve_has_syntheses(self, args, context, info):
         discussion_id = context.matchdict['discussion_id']
         discussion = models.Discussion.get(discussion_id)
-        return True if discussion.get_all_syntheses_query() else False
+        return True if discussion.get_all_syntheses_query(include_unpublished=False) else False
 
     def resolve_num_participants(self, args, context, info):
         discussion_id = context.matchdict['discussion_id']
