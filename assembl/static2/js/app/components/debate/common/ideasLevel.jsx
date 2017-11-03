@@ -29,11 +29,11 @@ class IdeasLevel extends React.Component {
       ideaPreviewWidth: 0,
       sliderMarginTop: -500
     };
-    this.getDimensions = this.getDimensions.bind(this);
+    this.setDimensions = this.setDimensions.bind(this);
     this.updateDimensions = this.updateDimensions.bind(this);
   }
   componentWillMount() {
-    this.getDimensions();
+    this.setDimensions();
     this.runBottomTransition(0, 1000);
   }
   componentDidMount() {
@@ -56,7 +56,7 @@ class IdeasLevel extends React.Component {
   componentWillUnmount() {
     window.removeEventListener('resize', this.updateDimensions);
   }
-  getDimensions() {
+  setDimensions() {
     if (window.innerWidth > APP_CONTAINER_MAX_WIDTH) {
       this.setState({
         sliderContainerWidth: APP_CONTAINER_MAX_WIDTH + this.getRightOverflowValue(),
@@ -78,11 +78,13 @@ class IdeasLevel extends React.Component {
     }
   }
   updateDimensions() {
-    this.setState({
-      sliderCount: 0,
-      sliderLeftPosition: 0
-    });
-    this.getDimensions();
+    this.setState(
+      {
+        sliderCount: 0,
+        sliderLeftPosition: 0
+      },
+      this.setDimensions()
+    );
   }
   getColClassNames(index) {
     const { ideaLevel } = this.props;
