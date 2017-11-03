@@ -18,24 +18,16 @@ export function transformLinksInHtml(html: string): string {
     .find(html)
     .map((link: LinkifyLink) => {
       const url = link.href;
-      // youtu.be
-      const dotBeRe = /(https?:\/\/\w*\.?youtu.be\/(.*?))([\s<,;].*)/;
-      let result = url.match(dotBeRe);
-      if (!result) {
-        // youtube.com
-        const dotComRe = /(https?:\/\/\w*\.?youtube\.com\/watch\?v=(.*?))([\s<,;].*)/;
-        result = url.match(dotComRe);
-      }
+      const re = /(?:youtube\.com\/(?:[^/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?/ ]{11})/i;
+      const result = url.match(re);
 
       if (result) {
-        const videoUrl = result[1];
-        const videoId = result[2];
-        const rest = result[3];
+        const videoId = result[1];
         const embedUrl = `https://www.youtube.com/embed/${videoId}`;
         const embeddedIFrame = `<div><iframe title="" src="${embedUrl}" frameborder="0" allowfullscreen></iframe></div>`;
         return {
           origin: url,
-          dest: videoUrl + embeddedIFrame + rest
+          dest: url + embeddedIFrame
         };
       }
 
