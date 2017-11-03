@@ -57,7 +57,7 @@ exports[`Section component should match Section with 1 parent snapshot 1`] = `
         className="title-section"
       >
         <h2
-          className="section-title section-title2 dark-title-1"
+          className="section-title section-title-2 dark-title-1"
         >
           <span
             className="section-title-index"
@@ -98,7 +98,7 @@ exports[`Section component should match Section with 2 parents snapshot 1`] = `
         className="title-section"
       >
         <h3
-          className="section-title section-title3 dark-title-1"
+          className="section-title section-title-3 dark-title-1"
         >
           <span
             className="section-title-index"

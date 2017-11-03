@@ -8,7 +8,7 @@ type SectionProps = {
   title: string,
   index: number,
   displayIndex: boolean,
-  idexGenerator: Function,
+  indexGenerator: Function,
   parents: Array<number>,
   children: Array<*>
 };
@@ -31,7 +31,7 @@ const level1 = (title, index) => {
 
 const level2 = (title, index) => {
   return (
-    <h2 className="section-title section-title2 dark-title-1">
+    <h2 className="section-title section-title-2 dark-title-1">
       {index
         ? <span className="section-title-index">
           {index}
@@ -44,7 +44,7 @@ const level2 = (title, index) => {
 
 const level3 = (title, index) => {
   return (
-    <h3 className="section-title section-title3 dark-title-1">
+    <h3 className="section-title section-title-3 dark-title-1">
       {index
         ? <span className="section-title-index">
           {index}
@@ -57,7 +57,7 @@ const level3 = (title, index) => {
 
 const levelN = (title, index) => {
   return (
-    <h3 className="section-title section-title3 dark-title-1">
+    <h3 className="section-title section-title-3 dark-title-1">
       {index
         ? <span className="section-title-index">
           {index}
@@ -76,18 +76,21 @@ class Section extends React.Component<Object, SectionProps, void> {
   static defaultProps = {
     index: 1,
     displayIndex: false,
-    idexGenerator: SECTION_INDEX_GENERATOR.alphanumericOr,
+    indexGenerator: SECTION_INDEX_GENERATOR.alphanumericOr,
     parents: []
   };
 
-  getTitle = () => {
-    const { title, index, parents, idexGenerator, displayIndex } = this.props;
-    let titleRederer = LEVELS[parents.length];
-    titleRederer = !titleRederer ? levelN : titleRederer;
+  getIndexes = () => {
+    const { index, parents } = this.props;
     const indexes = parents.slice();
     indexes.push(index);
-    const titleIndex = displayIndex ? idexGenerator(indexes) : null;
-    return titleRederer(title, titleIndex);
+    return indexes;
+  };
+
+  getTitle = () => {
+    const { title, parents, indexGenerator, displayIndex } = this.props;
+    const titleRenderer = LEVELS[parents.length] || levelN;
+    return titleRenderer(title, displayIndex && indexGenerator(this.getIndexes()));
   };
 
   render() {
