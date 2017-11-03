@@ -7,11 +7,48 @@ import Section from '../components/common/section';
 
 import SynthesisQuery from '../graphql/SynthesisQuery.graphql';
 import withLoadingIndicator from '../components/common/withLoadingIndicator';
-import IdeaSynthesis from '../components/synthesis/IdeaSynthesis';
+import IdeaSynthesisTree from '../components/synthesis/IdeaSynthesis';
 
 type SynthesisProps = {
   synthesis: Object,
   routeParams: Object
+};
+
+const findIdeaParent = (idea, ideas) => {
+  return ideas.find((otherIdea) => {
+    return idea.parentId === otherIdea.id;
+  });
+};
+
+const findIdeaRootParent = (idea, ideas) => {
+  let rootParent;
+  let potentialParent = idea;
+  do {
+    rootParent = potentialParent;
+    potentialParent = findIdeaParent(rootParent, ideas);
+  } while (potentialParent !== undefined);
+  return rootParent;
+};
+
+const constructIdeasTreeChild = (idea, ideas) => {
+  const childs = ideas.filter((potentialChild) => {
+    return potentialChild.parentId === idea.id;
+  });
+  return childs.map((child) => {
+    return {
+      ...child,
+      subIdeas: constructIdeasTreeChild(child, ideas)
+    };
+  });
+};
+
+const constructIdeasTree = (ideas) => {
+  const rootParents = ideas.filter((idea) => {
+    return findIdeaRootParent(idea, ideas) === idea;
+  });
+  return rootParents.map((parentIdea) => {
+    return { ...parentIdea, subIdeas: constructIdeasTreeChild(parentIdea, ideas) };
+  });
 };
 
 export class DumbSynthesis extends React.Component<void, SynthesisProps, void> {
@@ -20,7 +57,7 @@ export class DumbSynthesis extends React.Component<void, SynthesisProps, void> {
   render() {
     const { synthesis, routeParams } = this.props;
     const { introduction, conclusion, ideas, subject } = synthesis;
-
+    const ideasTree = constructIdeasTree(ideas);
     return (
       <div className="max-container">
         <Header title={subject} imgUrl={synthesis.imgUrl} isSynthesesHeader />
@@ -30,8 +67,8 @@ export class DumbSynthesis extends React.Component<void, SynthesisProps, void> {
           </Section>}
 
         {ideas &&
-          ideas.map((idea) => {
-            return <IdeaSynthesis {...idea} slug={routeParams.slug} key={idea.id} />;
+          ideasTree.map((idea) => {
+            return <IdeaSynthesisTree {...idea} slug={routeParams.slug} key={idea.id} />;
           })}
 
         {conclusion &&

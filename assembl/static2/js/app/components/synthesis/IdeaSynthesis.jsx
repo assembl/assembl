@@ -85,7 +85,7 @@ const ImageWithSynthesisStats = ({ imgUrl, numContributors, numPosts, ideaLink, 
   );
 };
 
-export default (props) => {
+const IdeaSynthesis = (props) => {
   const { title, imgUrl, synthesisTitle, numContributors, numPosts, id, posts, phaseIdentifier, slug } = props;
   return (
     <div className="idea-synthesis">
@@ -101,3 +101,17 @@ export default (props) => {
     </div>
   );
 };
+
+const IdeaSynthesisTree = (props) => {
+  const { subIdeas, slug } = props;
+  return (
+    <div>
+      <IdeaSynthesis {...props} />
+      {subIdeas.map((idea) => {
+        return <IdeaSynthesisTree {...idea} slug={slug} key={idea.id} />;
+      })}
+    </div>
+  );
+};
+
+export default IdeaSynthesisTree;

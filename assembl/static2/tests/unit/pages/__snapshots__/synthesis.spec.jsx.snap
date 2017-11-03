@@ -21,6 +21,7 @@ exports[`Synthesis component should match Synthesis snapshot 1`] = `
       }
     }
     slug="slugId"
+    subIdeas={Array []}
     synthesisTitle="Foo"
     title="Bar"
   />
