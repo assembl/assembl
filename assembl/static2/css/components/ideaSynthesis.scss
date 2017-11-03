@@ -23,6 +23,7 @@ $small-margin: 5px;
       padding: $stats-padding;
       padding-bottom: $margin;
       padding-right: $margin;
+      border-radius: 3px 0 0 0;
       .counters {
         display: inline-block;
         margin-left: $small-margin;

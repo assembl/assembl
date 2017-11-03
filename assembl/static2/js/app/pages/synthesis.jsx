@@ -26,7 +26,7 @@ export class DumbSynthesis extends React.Component<void, SynthesisProps, void> {
         <Header title={subject} imgUrl={ideas[ideas.length - 1].imgUrl} isSynthesesHeader />
         {introduction &&
           <Section title="Introduction">
-            {introduction}
+            <div dangerouslySetInnerHTML={{ __html: introduction }} />
           </Section>}
 
         {ideas &&
@@ -36,7 +36,7 @@ export class DumbSynthesis extends React.Component<void, SynthesisProps, void> {
 
         {conclusion &&
           <Section title="Conclusion">
-            {conclusion}
+            <div dangerouslySetInnerHTML={{ __html: conclusion }} />
           </Section>}
       </div>
     );
