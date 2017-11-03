@@ -23,7 +23,7 @@ export class DumbSynthesis extends React.Component<void, SynthesisProps, void> {
 
     return (
       <div className="max-container">
-        <Header title={subject} imgUrl={ideas[ideas.length - 1].imgUrl} isSynthesesHeader />
+        <Header title={subject} imgUrl={synthesis.imgUrl} isSynthesesHeader />
         {introduction &&
           <Section title="Introduction">
             <div dangerouslySetInnerHTML={{ __html: introduction }} />

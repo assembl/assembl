@@ -5,7 +5,7 @@ exports[`Synthesis component should match Synthesis snapshot 1`] = `
   className="max-container"
 >
   <Connect(Header)
-    imgUrl="http://foo.com/bar"
+    imgUrl="http://foo.com/foo"
     isSynthesesHeader={true}
     title="Foo"
   />
