@@ -19,6 +19,16 @@ const alphanumeric = (indexes: Array<number>): string => {
   return alphanumericIndexes.join(SEPARATOR) + SEPARATOR;
 };
 
+/**
+ * input: indexes an array of numbers. The order of each parent section
+  including the order of the section itself
+ * return: a string representing the index of a section
+
+ * ex1 (numeric idex): indexes = [1, 1] => '1.1.' here we have LEN_NUMERIC items,
+  we generate the indexes as it is.
+ * ex2 (alphabetic index): indexes = [1, 1, 1] => 'a.' here we ignore the LEN_NUMERIC first items
+  and we replace others by chars because indexes.length > LEN_NUMERIC
+ */
 const alphanumericOr = (indexes: Array<number>): string => {
   const isAlpha = indexes.length > LEN_NUMERIC;
   if (isAlpha) {
