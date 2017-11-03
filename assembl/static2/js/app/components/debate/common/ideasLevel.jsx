@@ -11,7 +11,8 @@ import {
   APP_CONTAINER_MAX_WIDTH,
   NB_IDEA_PREVIEW_TO_SHOW,
   APP_CONTAINER_PADDING,
-  IDEA_PREVIEW_MAX_WIDTH
+  IDEA_PREVIEW_MAX_WIDTH,
+  IDEA_PREVIEW_MIN_WIDTH
 } from '../../../constants';
 
 const xsCol = 12;
@@ -28,22 +29,15 @@ class IdeasLevel extends React.Component {
       ideaPreviewWidth: 0,
       sliderMarginTop: -500
     };
+    this.getDimensions = this.getDimensions.bind(this);
+    this.updateDimensions = this.updateDimensions.bind(this);
   }
   componentWillMount() {
-    if (window.innerWidth > APP_CONTAINER_MAX_WIDTH) {
-      this.setState({
-        sliderContainerWidth: APP_CONTAINER_MAX_WIDTH + this.getRightOverflowValue(),
-        ideaPreviewWidth: APP_CONTAINER_MAX_WIDTH / NB_IDEA_PREVIEW_TO_SHOW
-      });
-    } else {
-      this.setState({
-        sliderContainerWidth: window.innerWidth - APP_CONTAINER_PADDING * 2,
-        ideaPreviewWidth: (window.innerWidth - APP_CONTAINER_PADDING) / (NB_IDEA_PREVIEW_TO_SHOW + 0.5)
-      });
-    }
+    this.getDimensions();
     this.runBottomTransition(0, 1000);
   }
   componentDidMount() {
+    window.addEventListener('resize', this.updateDimensions);
     this.runFirstTransition();
   }
   componentWillReceiveProps(nextProps) {
@@ -58,6 +52,37 @@ class IdeasLevel extends React.Component {
         this.moveToSelectedIdea(selectedIdeaIndex);
       }, 500);
     }
+  }
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.updateDimensions);
+  }
+  getDimensions() {
+    if (window.innerWidth > APP_CONTAINER_MAX_WIDTH) {
+      this.setState({
+        sliderContainerWidth: APP_CONTAINER_MAX_WIDTH + this.getRightOverflowValue(),
+        ideaPreviewWidth: APP_CONTAINER_MAX_WIDTH / NB_IDEA_PREVIEW_TO_SHOW
+      });
+    } else {
+      const ideaPreviewWidth = (window.innerWidth - APP_CONTAINER_PADDING) / (NB_IDEA_PREVIEW_TO_SHOW + 0.5);
+      if (ideaPreviewWidth <= IDEA_PREVIEW_MIN_WIDTH) {
+        this.setState({
+          sliderContainerWidth: window.innerWidth - APP_CONTAINER_PADDING * 2,
+          ideaPreviewWidth: IDEA_PREVIEW_MIN_WIDTH
+        });
+      } else {
+        this.setState({
+          sliderContainerWidth: window.innerWidth - APP_CONTAINER_PADDING * 2,
+          ideaPreviewWidth: ideaPreviewWidth
+        });
+      }
+    }
+  }
+  updateDimensions() {
+    this.setState({
+      sliderCount: 0,
+      sliderLeftPosition: 0
+    });
+    this.getDimensions();
   }
   getColClassNames(index) {
     const { ideaLevel } = this.props;
@@ -74,11 +99,19 @@ class IdeasLevel extends React.Component {
   getRightOverflowValue() {
     const { sliderContainerWidth, ideaPreviewWidth } = this.state;
     let rightOverflowValue = 0;
-    if (window.innerWidth > APP_CONTAINER_MAX_WIDTH) {
+    // If the screen width is bigger than the app container
+    const isLargeScreen = window.innerWidth > APP_CONTAINER_MAX_WIDTH;
+    // if the screen width is not large enough to display the NB_IDEA_PREVIEW_TO_SHOW
+    const isSmallScreen = window.innerWidth - APP_CONTAINER_PADDING * 2 <= ideaPreviewWidth * NB_IDEA_PREVIEW_TO_SHOW;
+    if (isLargeScreen) {
       rightOverflowValue = (window.innerWidth - APP_CONTAINER_MAX_WIDTH) / 2;
       if (rightOverflowValue > IDEA_PREVIEW_MAX_WIDTH / 2) {
         rightOverflowValue = IDEA_PREVIEW_MAX_WIDTH / 2;
       }
+    } else if (isSmallScreen) {
+      const DisplayedThumbsCount = (window.innerWidth - APP_CONTAINER_PADDING * 2) / IDEA_PREVIEW_MIN_WIDTH;
+      const ratio = DisplayedThumbsCount - Math.trunc(DisplayedThumbsCount);
+      rightOverflowValue = IDEA_PREVIEW_MIN_WIDTH * ratio;
     } else {
       rightOverflowValue = sliderContainerWidth - ideaPreviewWidth * NB_IDEA_PREVIEW_TO_SHOW;
     }
@@ -96,7 +129,7 @@ class IdeasLevel extends React.Component {
   getLastMovingValue() {
     const { ideas } = this.props;
     const { ideaPreviewWidth } = this.state;
-    if (ideas.length === NB_IDEA_PREVIEW_TO_SHOW + 1) {
+    if (ideas.length <= NB_IDEA_PREVIEW_TO_SHOW + 1) {
       return ideaPreviewWidth - this.getRightOverflowValue();
     }
     return ideaPreviewWidth - this.getRightOverflowValue() / 2;
