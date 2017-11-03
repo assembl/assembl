@@ -720,6 +720,7 @@ class Idea(SecureObjectType, SQLAlchemyObjectType):
     announcement = graphene.Field(lambda: IdeaAnnoucement)
     message_columns = graphene.List(lambda: IdeaMessageColumn)
     phase_identifier = graphene.String()
+    ancestors = graphene.List(graphene.ID)
 
     @classmethod
     def is_type_of(cls, root, context, info):
@@ -777,6 +778,10 @@ class Idea(SecureObjectType, SQLAlchemyObjectType):
             return None
 
         return Node.to_global_id('Idea', parents[0].id)
+
+    def resolve_ancestors(self, args, context, info):
+        return [Node.to_global_id('Idea', id)
+                for id in self.get_all_ancestors(id_only=True)]
 
     def resolve_posts(self, args, context, info):
         discussion_id = context.matchdict['discussion_id']
