@@ -10,10 +10,13 @@ exports[`Synthesis component should match Synthesis snapshot 1`] = `
     title="Foo"
   />
   <Unknown
+    ancestors={Array []}
     id="barId"
     imgUrl="http://foo.com/bar"
+    index={1}
     numContributors={0}
     numPosts={0}
+    parents={Array []}
     phaseIdentifier="paseId"
     posts={
       Object {

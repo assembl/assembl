@@ -7,6 +7,8 @@ import StatisticsDoughnut from '../debate/common/statisticsDoughnut';
 import PostsAndContributorsCount from '../common/postsAndContributorsCount';
 import { sentimentDefinitionsObject } from '../debate/common/sentimentDefinitions';
 import { PublicationStates } from '../../constants';
+import Section from '../common/section';
+import { getTree, getChildren } from '../../utils/tree';
 
 const createTooltip = (sentiment, count) => {
   return (
@@ -39,17 +41,6 @@ const createDoughnutElements = (sentimentCounts) => {
       Tooltip: createTooltip(sentimentCounts[key], sentimentCounts[key].count)
     };
   });
-};
-
-const TitleUnderHyphen = ({ value }) => {
-  return (
-    <div className="title-section">
-      <div className="title-hyphen">&nbsp;</div>
-      <h1 className="dark-title-1">
-        {value}
-      </h1>
-    </div>
-  );
 };
 
 const SynthesisBody = ({ value }) => {
@@ -86,10 +77,9 @@ const ImageWithSynthesisStats = ({ imgUrl, numContributors, numPosts, ideaLink, 
 };
 
 const IdeaSynthesis = (props) => {
-  const { title, imgUrl, synthesisTitle, numContributors, numPosts, id, posts, phaseIdentifier, slug } = props;
+  const { imgUrl, synthesisTitle, numContributors, numPosts, id, posts, phaseIdentifier, slug } = props;
   return (
     <div className="idea-synthesis">
-      <TitleUnderHyphen value={title} />
       <ImageWithSynthesisStats
         imgUrl={imgUrl}
         numContributors={numContributors}
@@ -103,14 +93,26 @@ const IdeaSynthesis = (props) => {
 };
 
 const IdeaSynthesisTree = (props) => {
-  const { subIdeas, slug } = props;
+  const { title, slug, subIdeas, index, parents } = props;
+  const { roots, children } = getTree(subIdeas);
+  const newParents = parents.slice();
+  newParents.push(index);
   return (
-    <div>
+    <Section displayIndex title={title} index={index} parents={parents}>
       <IdeaSynthesis {...props} />
-      {subIdeas.map((idea) => {
-        return <IdeaSynthesisTree {...idea} slug={slug} key={idea.id} />;
+      {roots.map((rootIdea, subIndex) => {
+        return (
+          <IdeaSynthesisTree
+            key={rootIdea.id}
+            {...rootIdea}
+            index={subIndex + 1}
+            parents={newParents}
+            subIdeas={getChildren(rootIdea, children)}
+            slug={slug}
+          />
+        );
       })}
-    </div>
+    </Section>
   );
 };
 

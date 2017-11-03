@@ -11,6 +11,7 @@ query SynthesisQuery($id: ID!, $lang: String) {
         ... on Idea {
           id
           parentId
+          ancestors
           numPosts
           numContributors
           imgUrl

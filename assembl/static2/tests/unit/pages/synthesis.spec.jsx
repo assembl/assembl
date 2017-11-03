@@ -20,7 +20,8 @@ describe('Synthesis component', () => {
             numContributors: 0,
             numPosts: 0,
             posts: { edges: [] },
-            phaseIdentifier: 'paseId'
+            phaseIdentifier: 'paseId',
+            ancestors: []
           }
         ]
       }
