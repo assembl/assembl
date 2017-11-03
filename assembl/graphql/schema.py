@@ -598,15 +598,15 @@ class Synthesis(SecureObjectType, SQLAlchemyObjectType):
 
     def resolve_img_url(self, args, context, info):
         ideas = self.get_ideas()
-        first_idea = ideas[0] if ideas else None
-        if getattr(first_idea, 'attachments', None):
-            return first_idea.attachments[0].external_url
+        last_idea = ideas[-1] if ideas else None
+        if getattr(last_idea, 'attachments', None):
+            return last_idea.attachments[0].external_url
 
     def resolve_img_mimetype(self, args, context, info):
         ideas = self.get_ideas()
-        first_idea = ideas[0] if ideas else None
-        if getattr(first_idea, 'attachments', None):
-            return first_idea.attachments[0].document.mime_type
+        last_idea = ideas[-1] if ideas else None
+        if getattr(last_idea, 'attachments', None):
+            return last_idea.attachments[0].document.mime_type
 
 
 class IdeaInterface(graphene.Interface):
