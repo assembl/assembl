@@ -8,7 +8,7 @@ import Section from '../components/common/section';
 import SynthesisQuery from '../graphql/SynthesisQuery.graphql';
 import withLoadingIndicator from '../components/common/withLoadingIndicator';
 import IdeaSynthesisTree from '../components/synthesis/IdeaSynthesis';
-import { getTree, getChildren } from '../utils/tree';
+import { getPartialTree, getChildren } from '../utils/tree';
 
 type SynthesisProps = {
   synthesis: Object,
@@ -21,7 +21,7 @@ export class DumbSynthesis extends React.Component<void, SynthesisProps, void> {
   render() {
     const { synthesis, routeParams } = this.props;
     const { introduction, conclusion, ideas, subject } = synthesis;
-    const { roots, children } = getTree(ideas);
+    const { roots, children } = getPartialTree(ideas);
     return (
       <div className="max-container">
         <Header title={subject} imgUrl={synthesis.imgUrl} isSynthesesHeader />

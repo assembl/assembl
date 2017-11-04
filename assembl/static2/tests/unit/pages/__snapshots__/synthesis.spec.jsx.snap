@@ -9,7 +9,7 @@ exports[`Synthesis component should match Synthesis snapshot 1`] = `
     isSynthesesHeader={true}
     title="Foo"
   />
-  <Unknown
+  <IdeaSynthesisTree
     ancestors={Array []}
     id="barId"
     imgUrl="http://foo.com/bar"

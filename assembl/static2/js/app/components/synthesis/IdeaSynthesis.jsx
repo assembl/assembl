@@ -8,7 +8,7 @@ import PostsAndContributorsCount from '../common/postsAndContributorsCount';
 import { sentimentDefinitionsObject } from '../debate/common/sentimentDefinitions';
 import { PublicationStates } from '../../constants';
 import Section from '../common/section';
-import { getTree, getChildren } from '../../utils/tree';
+import { getPartialTree, getChildren } from '../../utils/tree';
 
 const createTooltip = (sentiment, count) => {
   return (
@@ -94,7 +94,7 @@ const IdeaSynthesis = (props) => {
 
 const IdeaSynthesisTree = (props) => {
   const { title, slug, subIdeas, index, parents } = props;
-  const { roots, children } = getTree(subIdeas);
+  const { roots, children } = getPartialTree(subIdeas);
   const newParents = parents.slice();
   newParents.push(index);
   return (
