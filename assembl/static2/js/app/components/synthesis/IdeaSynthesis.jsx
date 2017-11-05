@@ -6,11 +6,11 @@ import StatisticsDoughnut from '../debate/common/statisticsDoughnut';
 import PostsAndContributorsCount from '../common/postsAndContributorsCount';
 import { getSentimentsCount, createDoughnutElements } from '../debate/common/announcement';
 
-const SynthesisBody = ({ level, value, Addon }) => {
+const SynthesisBody = ({ level, value, stats }) => {
   return (
     <div className="synthesis-body" style={{ columnCount: level > 2 ? 2 : 'auto' }}>
       <p dangerouslySetInnerHTML={{ __html: value }} />
-      {Addon ? <Addon /> : null}
+      {stats}
     </div>
   );
 };
@@ -63,17 +63,7 @@ const IdeaSynthesis = (props) => {
   return (
     <div className={`${'idea-synthesis idea-synthesis-level-'}${level}`}>
       <SynthesisImage level={level} title={title} imgUrl={imgUrl} stats={stats} />
-      <SynthesisBody
-        value={synthesisTitle}
-        level={level}
-        Addon={
-          level >= 3
-            ? () => {
-              return stats;
-            }
-            : null
-        }
-      />
+      <SynthesisBody value={synthesisTitle} level={level} stats={level >= 3 ? stats : null} />
     </div>
   );
 };
