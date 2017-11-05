@@ -10,7 +10,6 @@ query SynthesisQuery($id: ID!, $lang: String) {
       ideas {
         ... on Idea {
           id
-          parentId
           ancestors
           numPosts
           numContributors

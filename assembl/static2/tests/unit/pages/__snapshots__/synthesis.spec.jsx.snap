@@ -9,24 +9,33 @@ exports[`Synthesis component should match Synthesis snapshot 1`] = `
     isSynthesesHeader={true}
     title="Foo"
   />
-  <Unknown
-    ancestors={Array []}
-    id="barId"
-    imgUrl="http://foo.com/bar"
-    index={1}
-    numContributors={0}
-    numPosts={0}
-    parents={Array []}
-    phaseIdentifier="paseId"
-    posts={
-      Object {
-        "edges": Array [],
+  <Col
+    bsClass="col"
+    componentClass="div"
+    md={10}
+    xsOffset={2}
+  >
+    <Unknown
+      index={1}
+      parents={Array []}
+      rootIdea={
+        Object {
+          "ancestors": Array [],
+          "id": "barId",
+          "imgUrl": "http://foo.com/bar",
+          "numContributors": 0,
+          "numPosts": 0,
+          "phaseIdentifier": "paseId",
+          "posts": Object {
+            "edges": Array [],
+          },
+          "synthesisTitle": "Foo",
+          "title": "Bar",
+        }
       }
-    }
-    slug="slugId"
-    subIdeas={Array []}
-    synthesisTitle="Foo"
-    title="Bar"
-  />
+      slug="slugId"
+      subIdeas={Array []}
+    />
+  </Col>
 </div>
 `;

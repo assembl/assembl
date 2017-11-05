@@ -2,12 +2,13 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { compose, graphql } from 'react-apollo';
+import { Col } from 'react-bootstrap';
+
 import Header from '../components/common/header';
 import Section from '../components/common/section';
-
 import SynthesisQuery from '../graphql/SynthesisQuery.graphql';
 import withLoadingIndicator from '../components/common/withLoadingIndicator';
-import IdeaSynthesisTree from '../components/synthesis/IdeaSynthesis';
+import IdeaSynthesisTree from '../components/synthesis/IdeaSynthesisTree';
 import { getPartialTree, getChildren } from '../utils/tree';
 
 type SynthesisProps = {
@@ -29,20 +30,20 @@ export class DumbSynthesis extends React.Component<void, SynthesisProps, void> {
           <Section title="introduction">
             <div dangerouslySetInnerHTML={{ __html: introduction }} />
           </Section>}
-
-        {roots.map((rootIdea, index) => {
-          return (
-            <IdeaSynthesisTree
-              key={rootIdea.id}
-              {...rootIdea}
-              index={index + 1}
-              parents={[]}
-              subIdeas={getChildren(rootIdea, children)}
-              slug={routeParams.slug}
-            />
-          );
-        })}
-
+        <Col md={10} xsOffset={2}>
+          {roots.map((rootIdea, index) => {
+            return (
+              <IdeaSynthesisTree
+                key={rootIdea.id}
+                rootIdea={rootIdea}
+                index={index + 1}
+                parents={[]}
+                subIdeas={getChildren(rootIdea, children)}
+                slug={routeParams.slug}
+              />
+            );
+          })}
+        </Col>
         {conclusion &&
           <Section title="conclusion">
             <div dangerouslySetInnerHTML={{ __html: conclusion }} />

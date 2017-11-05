@@ -10,7 +10,7 @@ import { PublicationStates } from '../../../constants';
 import { multiColumnMapping } from '../../../utils/mapping';
 import PostsAndContributorsCount from '../../common/postsAndContributorsCount';
 
-const createTooltip = (sentiment, count) => {
+export const createTooltip = (sentiment: Object, count: number) => {
   return (
     <Tooltip id={`${sentiment.camelType}Tooltip`} className="no-arrow-tooltip">
       {count} <Translate value={`debate.${sentiment.camelType}`} />
@@ -18,7 +18,7 @@ const createTooltip = (sentiment, count) => {
   );
 };
 
-const getSentimentsCount = (posts) => {
+export const getSentimentsCount = (posts: Object) => {
   const counters = { ...sentimentDefinitionsObject };
   Object.keys(counters).forEach((key) => {
     counters[key].count = 0;
@@ -33,7 +33,7 @@ const getSentimentsCount = (posts) => {
   return counters;
 };
 
-const createDoughnutElements = (sentimentCounts) => {
+export const createDoughnutElements = (sentimentCounts: Object) => {
   return Object.keys(sentimentCounts).map((key) => {
     return {
       color: sentimentCounts[key].color,
