@@ -10,7 +10,8 @@ type SectionProps = {
   displayIndex: boolean,
   indexGenerator: Function,
   parents: Array<number>,
-  children: Array<*>
+  children: Array<*>,
+  className: string
 };
 
 const level1 = (title, index) => {
@@ -77,7 +78,8 @@ class Section extends React.Component<Object, SectionProps, void> {
     index: 1,
     displayIndex: false,
     indexGenerator: SECTION_INDEX_GENERATOR.alphanumericOr,
-    parents: []
+    parents: [],
+    className: 'themes-section'
   };
 
   getIndexes = () => {
@@ -94,15 +96,16 @@ class Section extends React.Component<Object, SectionProps, void> {
   };
 
   render() {
+    const { className, children } = this.props;
     return (
-      <section className="themes-section">
+      <section className={className}>
         <Grid fluid className="background-grey">
           <div className="max-container">
             <div className="title-section">
               {this.getTitle()}
             </div>
             <div className="content-section">
-              {this.props.children}
+              {children}
             </div>
           </div>
         </Grid>
