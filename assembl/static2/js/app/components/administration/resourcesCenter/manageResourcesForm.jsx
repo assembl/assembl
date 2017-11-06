@@ -19,7 +19,12 @@ const ManageResourcesForm = ({ createResource, resources }) => {
         return <EditResourceForm key={resource.get('id')} {...resource.toJS()} />;
       })}
       <OverlayTrigger placement="top" overlay={createResourceTooltip}>
-        <div onClick={createResource} className="plus margin-l">
+        <div
+          onClick={() => {
+            return createResource(resources.size + 1);
+          }}
+          className="plus margin-l"
+        >
           +
         </div>
       </OverlayTrigger>
@@ -42,9 +47,9 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    createResource: () => {
+    createResource: (nextOrder) => {
       const newId = Math.round(Math.random() * -1000000).toString();
-      return dispatch(actions.createResource(newId));
+      return dispatch(actions.createResource(newId, nextOrder));
     }
   };
 };

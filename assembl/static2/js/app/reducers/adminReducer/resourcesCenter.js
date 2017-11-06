@@ -22,7 +22,7 @@ const defaultResource = Map({
 export const resourcesById = (state = Map(), action) => {
   switch (action.type) {
   case CREATE_RESOURCE:
-    return state.set(action.id, defaultResource.set('id', action.id));
+    return state.set(action.id, defaultResource.set('id', action.id).set('order', action.order));
   default:
     return state;
   }

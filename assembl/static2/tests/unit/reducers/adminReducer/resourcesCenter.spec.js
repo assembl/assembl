@@ -20,6 +20,7 @@ describe('resourcesCenter admin reducers', () => {
     it('should handle CREATE_RESOURCE action type', () => {
       const action = {
         id: '-3344789',
+        order: 3,
         type: CREATE_RESOURCE
       };
       const oldState = List(['0', '1']);
@@ -45,6 +46,7 @@ describe('resourcesCenter admin reducers', () => {
     it('should handle CREATE_RESOURCE action type', () => {
       const action = {
         id: '-3344789',
+        order: 3,
         type: 'CREATE_RESOURCE'
       };
       const oldState = fromJS({
@@ -68,7 +70,8 @@ describe('resourcesCenter admin reducers', () => {
           toDelete: false,
           titleEntries: [],
           textEntries: [],
-          embedCode: ''
+          embedCode: '',
+          order: 3
         }
       };
       const newState = resourcesById(oldState, action);

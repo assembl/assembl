@@ -331,7 +331,11 @@ const Translations = {
       resourcesCenter: {
         createResource: "Ajouter un média",
         menuTitle: "Éditer le centre de ressources",
-        title: "Centre de ressources"
+        title: "Centre de ressources",
+        editResourceFormTitle: "Média %{num}",
+        textLabel: "Texte",
+        titleLabel: "Titre",
+        embedCodeLabel: "Vidéo/Slides"
       },
       surveyExport: {
         annotation: "Vous pouvez exporter l'ensemble des données du débat en cliquant simplement sur le bouton Exporter",
@@ -681,7 +685,11 @@ const Translations = {
       resourcesCenter: {
         createResource: "Add a media",
         menuTitle: "Edit the resources center",
-        title: "Resources center"
+        title: "Resources center",
+        editResourceFormTitle: "Edit resource number %{num}",
+        textLabel: "Text",
+        titleLabel: "Title",
+        embedCodeLabel: "Video/Slides"
       },
       surveyExport: {
         annotation: "You can export all the debate data by clicking on the Export button",
