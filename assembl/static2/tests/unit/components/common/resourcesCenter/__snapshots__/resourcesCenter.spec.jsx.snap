@@ -9,7 +9,7 @@ exports[`ResourcesCenter component should render the list of resources 1`] = `
     title="Centre de ressources en ligne"
   />
   <section>
-    <ResourceBlock
+    <Unknown
       description="Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur."
       doc="https://www.google.fr"
       index={0}
@@ -21,7 +21,7 @@ exports[`ResourcesCenter component should render the list of resources 1`] = `
       }
       title="Economie - Rapport très intéressant"
     />
-    <ResourceBlock
+    <Unknown
       description="Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur."
       doc={undefined}
       index={1}
@@ -33,7 +33,7 @@ exports[`ResourcesCenter component should render the list of resources 1`] = `
       }
       title="Economie - Vidéo tout à fait fascinantet"
     />
-    <ResourceBlock
+    <Unknown
       description="Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur."
       doc={undefined}
       index={2}
