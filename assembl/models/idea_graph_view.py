@@ -540,7 +540,7 @@ class Synthesis(ExplicitSubGraphView):
     def __repr__(self):
         r = super(Synthesis, self).__repr__()
         subject = self.subject or ""
-        return r[:-1] + subject.first_original().value.encode("ascii", "ignore") + ">"
+        return r[:-1] + (subject.first_original().value.encode("ascii", "ignore") if subject else "") + ">"
 
     crud_permissions = CrudPermissions(P_EDIT_SYNTHESIS)
 
