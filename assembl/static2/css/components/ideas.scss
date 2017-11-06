@@ -87,6 +87,12 @@
       display: flex;
       float: left;
   }
+  .mobile-tdi {
+    overflow-x: scroll;
+    .slider-arrow {
+        display: none;
+    }
+  }
 }
 
 @media screen and (max-width: 991px) {
@@ -95,52 +101,4 @@
           margin: 2px 0 0;
       }
     }
-}
-
-/* iPhone Portrait */
-@media screen and (max-device-width: 480px) and (orientation:portrait) {
-  .themes-section {
-    .slider-container {
-      overflow-x: scroll;
-      .slider-arrow {
-          display: none;
-      }
-    }
-  }
-}
-
-/* iPhone Landscape */
-@media screen and (max-device-width: 480px) and (orientation:landscape) {
-  .themes-section {
-    .slider-container {
-      overflow-x: scroll;
-      .slider-arrow {
-          display: none;
-      }
-    }
-  }
-}
-
-/* iPad Portrait */
-@media screen and (min-device-width: 481px) and (max-device-width: 1024px) and (orientation:portrait) {
-  .themes-section {
-    .slider-container {
-      overflow-x: scroll;
-      .slider-arrow {
-          display: none;
-      }
-    }
-  }
-}
-
-/* iPad Landscape */
-@media screen and (min-device-width: 481px) and (max-device-width: 1024px) and (orientation:landscape) {
-  .themes-section {
-    .slider-container {
-      overflow-x: scroll;
-      .slider-arrow {
-          display: none;
-      }
-    }
-  }
 }

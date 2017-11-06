@@ -4,7 +4,7 @@ import truncate from 'lodash/truncate';
 import classNames from 'classnames';
 import IdeaPreview from './ideaPreview';
 import { get as getRoute } from '../../../utils/routeMap';
-import { getDiscussionSlug } from '../../../utils/globalFunctions';
+import { getDiscussionSlug, isMobile } from '../../../utils/globalFunctions';
 import VisibilityComponent from '../../common/visibilityComponent';
 
 import {
@@ -232,8 +232,12 @@ class IdeasLevel extends React.Component {
         return 30;
       }
     };
+    const isTouchScreenDevice = isMobile.any();
     return (
-      <div className="slider-container relative" style={nbLevel > 1 ? { width: `${sliderContainerWidth}px` } : {}}>
+      <div
+        className={isTouchScreenDevice ? 'mobile-tdi slider-container relative' : 'slider-container relative'}
+        style={nbLevel > 1 ? { width: `${sliderContainerWidth}px` } : {}}
+      >
         <VisibilityComponent isVisible={isArrowVisible && nbLevel > 1 && sliderCount > 0} classname="slider-arrow-container">
           <div
             className="slider-arrow slider-arrow-left"
