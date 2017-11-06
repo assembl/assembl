@@ -64,19 +64,12 @@ server {
   }
 
   location /static {
-      #Do NOT put something like "expires modified +1h;" here, it WILL cause problems when deploying a new version.
-      #Nor will it help your performance after the first hour...
       autoindex off;
-
+      # This match static2 too, bundle.js is served directly by nginx, the request doesn't go through uwsgi.
+      # ETag and Last-Modified headers are set by nginx, but we need Cache-Control max-age
+      # so the browser check back for changes with If-Modified-Since or If-None-Match header after 1h
+      add_header Cache-Control "public, max-age=3600";
       alias /opt/assembl_static/static;
-  }
-
-  location /static2 {
-      #Do NOT put something like "expires modified +1h;" here, it WILL cause problems when deploying a new version.
-      #Nor will it help your performance after the first hour...
-      autoindex off;
-
-      alias /opt/assembl_static/static2;
   }
 
   location / {
