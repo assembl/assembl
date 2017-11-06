@@ -791,8 +791,10 @@ def update_node(force_reinstall=False):
     match = node_version_cmd_regex.match(node_version_cmd_result)
     if not match or force_reinstall:
         print(cyan('Upgrading node'))
-        #Because otherwise node may be busy
+        # Stop gulp and webpack because otherwise node may be busy
         supervisor_process_stop('dev:gulp')
+        supervisor_process_stop('dev:webpack')
+        venvcmd("rm -f venv/bin/npm")  # remove the symlink first otherwise next command raises OSError: [Errno 17] File exists
         venvcmd("nodeenv --node=6.11.5 --npm=3.10.10 --python-virtualenv assembl/static/js")
         with cd(get_node_base_path()):
             venvcmd("npm install reinstall -g", chdir=False)
