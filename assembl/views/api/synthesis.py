@@ -69,6 +69,7 @@ def save_synthesis(request):
 
     synthesis_data = json.loads(request.body)
 
+    # TODO this is now langstrings, adapt it like we did for idea
     synthesis.subject = synthesis_data.get('subject')
     synthesis.introduction = synthesis_data.get('introduction')
     synthesis.conclusion = synthesis_data.get('conclusion')

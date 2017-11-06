@@ -298,6 +298,9 @@ class Discussion(DiscussionBoundBase, NamedClassMixin):
         return self.db.query(
             Synthesis).outerjoin(SynthesisPost
             ).options(
+                subqueryload('subject').subqueryload('entries'),
+                subqueryload('introduction').subqueryload('entries'),
+                subqueryload('conclusion').subqueryload('entries'),
                 subqueryload('idea_assocs').joinedload('idea').joinedload('title').subqueryload('entries'),
                 subqueryload('idea_assocs').joinedload('idea').joinedload('synthesis_title').subqueryload('entries'),
                 subqueryload('idea_assocs').joinedload('idea').joinedload('description').subqueryload('entries'),

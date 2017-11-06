@@ -593,6 +593,24 @@ class Synthesis(SecureObjectType, SQLAlchemyObjectType):
     img_mimetype = graphene.String()
     creation_date = DateTime()
 
+    def resolve_subject(self, args, context, info):
+        return resolve_langstring(self.subject, args.get('lang'))
+
+    def resolve_subject_entries(self, args, context, info):
+        return resolve_langstring_entries(self, 'subject')
+
+    def resolve_introduction(self, args, context, info):
+        return resolve_langstring(self.introduction, args.get('lang'))
+
+    def resolve_introduction_entries(self, args, context, info):
+        return resolve_langstring_entries(self, 'introduction')
+
+    def resolve_conclusion(self, args, context, info):
+        return resolve_langstring(self.conclusion, args.get('lang'))
+
+    def resolve_conclusion_entries(self, args, context, info):
+        return resolve_langstring_entries(self, 'conclusion')
+
     def resolve_ideas(self, args, context, info):
         return self.get_ideas()
 
