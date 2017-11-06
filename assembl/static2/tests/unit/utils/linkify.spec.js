@@ -39,4 +39,23 @@ describe('transformLinksInHtml function', () => {
       '<div><iframe title="" src="https://www.youtube.com/embed/lnhB-y_WJSk" frameborder="0" allowfullscreen=""></iframe></div>';
     expect(actual).toEqual(expected);
   });
+
+  /* TODO: fix this use case */
+  it.skip('should handle multiple youtube urls separated by paragraphs', () => {
+    const input = '<p>https://www.youtube.com/watch?v=EfJ_pMWpNyM</p><p>…p>https://www.youtube.com/watch?v=n4gmjJ_aPHU</p>';
+    const actual = transformLinksInHtml(input);
+    const expected =
+      '<p><a href="https://www.youtube.com/watch?v=EfJ_pMWpNyM" class="linkified" ' +
+      'target="_blank">https://www.youtube.com/watch?v=EfJ_pMWpNyM</a></p>' +
+      '<div><iframe title="" src="https://www.youtube.com/embed/EfJ_pMWpNyM" ' +
+      'frameborder="0" allowfullscreen=""></iframe></div>' +
+      '<p>…p><a href="https://www.youtube.com/watch?v=n4gmjJ_aPHU" class="linkified" ' +
+      'target="_blank">https://www.youtube.com/watch?v=n4gmjJ_aPHU</a></p>' +
+      '<div><iframe title="" src="https://www.youtube.com/watch?v=n4gmjJ_aPHU" ' +
+      'frameborder="0" allowfullscreen=""></iframe></div>';
+    /*
+      "<p><a href=\"https://www.youtube.com/watch?v=EfJ_pMWpNyM\" class=\"linkified\" target=\"_blank\">https://www.youtube.com/watch?v=EfJ_pMWpNyM</a></p><p>…p><a href=\"https://www.youtube.com/watch?v=n4gmjJ_aPHU\" class=\"linkified\" target=\"_blank\">https://www.youtube.com/watch?v=n4gmjJ_aPHU</a></p><div><iframe title=\"\" src=\"https://www.youtube.com/embed/www.youtube\" frameborder=\"0\" allowfullscreen=\"\"></iframe></div>"
+    */
+    expect(actual).toEqual(expected);
+  });
 });

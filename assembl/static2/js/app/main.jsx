@@ -1,3 +1,5 @@
+// @flow
+
 import React from 'react';
 import { connect } from 'react-redux';
 import { getCurrentPhaseIdentifier } from './utils/timeline';
@@ -6,6 +8,7 @@ import Navbar from './components/common/navbar';
 import Footer from './components/common/footer';
 
 class Main extends React.Component {
+  state: { identifier: string, location: Location };
   constructor(props) {
     super(props);
     const { debateData } = this.props.debate;
@@ -27,12 +30,9 @@ class Main extends React.Component {
       const currentPhase = debateData.timeline.filter((phase) => {
         return phase.identifier === currentPhaseIdentifier;
       });
-      isRedirectionToV1 = currentPhase[0].interface_v1;
+      isRedirectionToV1 = currentPhase[0] && currentPhase[0].interface_v1;
     }
     this.props.addRedirectionToV1(isRedirectionToV1);
-  }
-  componentDidMount() {
-    window.addEventListener('scroll', this.displayHeader);
   }
   componentWillReceiveProps(nextProps) {
     const location = nextProps.location.pathname;
@@ -45,9 +45,6 @@ class Main extends React.Component {
     });
 
     window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
-  }
-  componentWillUnmount() {
-    window.removeEventListener('scroll', this.displayHeader);
   }
   render() {
     const that = this;
