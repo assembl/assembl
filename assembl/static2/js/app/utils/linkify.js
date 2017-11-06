@@ -14,8 +14,10 @@ type LinkifyLink = {
 };
 
 export function transformLinksInHtml(html: string): string {
+  // first, we add spaces before </p> to help linkify
+  const htmlForLinkify = html.replace(/<\/p>/gi, ' </p>');
   const linksToReplace: Array<LinkToReplace> = linkify
-    .find(html)
+    .find(htmlForLinkify)
     .map((link: LinkifyLink) => {
       const url = link.href;
       const re = /(?:youtube\.com\/(?:[^/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?/ ]{11})/i;
@@ -26,7 +28,7 @@ export function transformLinksInHtml(html: string): string {
         const embedUrl = `https://www.youtube.com/embed/${videoId}`;
         const embeddedIFrame = `<div><iframe title="" src="${embedUrl}" frameborder="0" allowfullscreen></iframe></div>`;
         return {
-          origin: url,
+          origin: new RegExp(url.replace(/[-/\\^$*+?.()|[\]{}]/gm, '\\$&'), 'g'),
           dest: url + embeddedIFrame
         };
       }
@@ -40,7 +42,7 @@ export function transformLinksInHtml(html: string): string {
 
   let transformedHtml = html;
   linksToReplace.forEach((linkToReplace: LinkToReplace) => {
-    transformedHtml = html.replace(linkToReplace.origin, linkToReplace.dest);
+    transformedHtml = transformedHtml.replace(linkToReplace.origin, linkToReplace.dest);
   });
 
   return linkifyHtml(transformedHtml);
