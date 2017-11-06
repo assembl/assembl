@@ -12,11 +12,11 @@ export const createResourceTooltip = (
   </Tooltip>
 );
 
-const ManageResourcesForm = ({ createResource, resources }) => {
+const ManageResourcesForm = ({ createResource, resources, selectedLocale }) => {
   return (
     <div>
-      {resources.map((resource) => {
-        return <EditResourceForm key={resource.get('id')} {...resource.toJS()} />;
+      {resources.map((id) => {
+        return <EditResourceForm key={id} id={id} locale={selectedLocale} />;
       })}
       <OverlayTrigger placement="top" overlay={createResourceTooltip}>
         <div
@@ -35,13 +35,10 @@ const ManageResourcesForm = ({ createResource, resources }) => {
 const mapStateToProps = (state) => {
   const { resourcesInOrder, resourcesById } = state.admin.resourcesCenter;
   return {
-    resources: resourcesInOrder
-      .filter((id) => {
-        return !resourcesById.get(id).get('toDelete');
-      })
-      .map((id) => {
-        return resourcesById.get(id);
-      })
+    resources: resourcesInOrder.filter((id) => {
+      return !resourcesById.get(id).get('toDelete');
+    }),
+    selectedLocale: state.admin.selectedLocale
   };
 };
 

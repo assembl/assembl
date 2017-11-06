@@ -1,5 +1,31 @@
-import { CREATE_RESOURCE } from '../actionTypes';
+import { CREATE_RESOURCE, UPDATE_RESOURCE_EMBED_CODE, UPDATE_RESOURCE_TEXT, UPDATE_RESOURCE_TITLE } from '../actionTypes';
 
 export const createResource = (id, order) => {
   return { id: id, order: order, type: CREATE_RESOURCE };
+};
+
+export const updateResourceEmbedCode = (id, value) => {
+  return {
+    id: id,
+    value: value,
+    type: UPDATE_RESOURCE_EMBED_CODE
+  };
+};
+
+export const updateResourceText = (id, locale, value) => {
+  return {
+    id: id,
+    locale: locale,
+    value: value,
+    type: UPDATE_RESOURCE_TEXT
+  };
+};
+
+export const updateResourceTitle = (id, locale, value) => {
+  return {
+    id: id,
+    locale: locale,
+    value: value,
+    type: UPDATE_RESOURCE_TITLE
+  };
 };

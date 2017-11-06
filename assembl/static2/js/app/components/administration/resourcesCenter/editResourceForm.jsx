@@ -1,23 +1,36 @@
 // @flow
 import classnames from 'classnames';
 import React from 'react';
+import { connect } from 'react-redux';
 import { I18n, Translate } from 'react-redux-i18n';
 
-// import { updateResourceText, updateResourceTitle } from '../../../actions/adminActions';
+import { updateResourceEmbedCode, updateResourceText, updateResourceTitle } from '../../../actions/adminActions/resourcesCenter';
 import FormControlWithLabel from '../../common/formControlWithLabel';
+import { getEntryValueForLocale } from '../../../utils/i18n';
 
 type EditResourceFormProps = {
   embedCode: string,
+  handleEmbedCodeChange: Function,
+  handleTextChange: Function,
+  handleTitleChange: Function,
   id: string,
+  locale: string,
   order: number,
   text: string,
   title: string
 };
 
-const EditResourceForm = ({ embedCode, id, order, text, title }: EditResourceFormProps) => {
-  const handleTitleChange = () => {};
-  const handleTextChange = () => {};
-  const handleEmbedCodeChange = () => {};
+const EditResourceForm = ({
+  embedCode,
+  handleEmbedCodeChange,
+  handleTextChange,
+  handleTitleChange,
+  id,
+  locale,
+  order,
+  text,
+  title
+}: EditResourceFormProps) => {
   const divClassname = classnames('form-container', `edit-${id}`);
   const textLabel = I18n.t('administration.resourcesCenter.textLabel');
   const titleLabel = I18n.t('administration.resourcesCenter.titleLabel');
@@ -28,7 +41,14 @@ const EditResourceForm = ({ embedCode, id, order, text, title }: EditResourceFor
         <Translate value="administration.resourcesCenter.editResourceFormTitle" num={order} />
       </div>
       <FormControlWithLabel label={titleLabel} onChange={handleTitleChange} required type="text" value={title} />
-      <FormControlWithLabel label={textLabel} onChange={handleTextChange} required type="rich-text" value={text} />
+      <FormControlWithLabel
+        key={`text-${locale}`}
+        label={textLabel}
+        onChange={handleTextChange}
+        required
+        type="rich-text"
+        value={text}
+      />
       <FormControlWithLabel
         componentClass="textarea"
         label={embedCodeLabel}
@@ -42,4 +62,28 @@ const EditResourceForm = ({ embedCode, id, order, text, title }: EditResourceFor
   );
 };
 
-export default EditResourceForm;
+const mapStateToProps = (state, { id, locale }) => {
+  const resource = state.admin.resourcesCenter.resourcesById.get(id);
+  return {
+    embedCode: resource.get('embedCode'),
+    order: resource.get('order'),
+    text: getEntryValueForLocale(resource.get('textEntries'), locale, ''),
+    title: getEntryValueForLocale(resource.get('titleEntries'), locale, '')
+  };
+};
+
+const mapDispatchToProps = (dispatch, { id, locale }) => {
+  return {
+    handleEmbedCodeChange: (e) => {
+      return dispatch(updateResourceEmbedCode(id, e.target.value));
+    },
+    handleTextChange: (value) => {
+      return dispatch(updateResourceText(id, locale, value));
+    },
+    handleTitleChange: (e) => {
+      return dispatch(updateResourceTitle(id, locale, e.target.value));
+    }
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(EditResourceForm);

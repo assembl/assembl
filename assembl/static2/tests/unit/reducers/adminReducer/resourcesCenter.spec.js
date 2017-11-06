@@ -1,6 +1,11 @@
 import { fromJS, List, Map } from 'immutable';
 
-import { CREATE_RESOURCE } from '../../../../js/app/actions/actionTypes';
+import {
+  CREATE_RESOURCE,
+  UPDATE_RESOURCE_EMBED_CODE,
+  UPDATE_RESOURCE_TEXT,
+  UPDATE_RESOURCE_TITLE
+} from '../../../../js/app/actions/actionTypes';
 import * as reducers from '../../../../js/app/reducers/adminReducer/resourcesCenter';
 
 describe('resourcesCenter admin reducers', () => {
@@ -76,6 +81,104 @@ describe('resourcesCenter admin reducers', () => {
       };
       const newState = resourcesById(oldState, action);
       expect(newState.toJS()).toEqual(expected);
+    });
+
+    it('should handle UPDATE_RESOURCE_EMBED_CODE action type', () => {
+      const oldState = fromJS({
+        '-3344789': {
+          id: '-3344789',
+          isNew: true,
+          toDelete: false,
+          titleEntries: [],
+          textEntries: [],
+          embedCode: '<iframe ... />',
+          order: 3
+        }
+      });
+      const expected = {
+        '-3344789': {
+          id: '-3344789',
+          isNew: true,
+          toDelete: false,
+          titleEntries: [],
+          textEntries: [],
+          embedCode: '<iframe src="http://www.example.com/greatslides" />',
+          order: 3
+        }
+      };
+      const action = {
+        id: '-3344789',
+        value: '<iframe src="http://www.example.com/greatslides" />',
+        type: UPDATE_RESOURCE_EMBED_CODE
+      };
+      const actual = resourcesById(oldState, action);
+      expect(actual.toJS()).toEqual(expected);
+    });
+
+    it('should handle UPDATE_RESOURCE_TEXT action type', () => {
+      const oldState = fromJS({
+        '-3344789': {
+          id: '-3344789',
+          isNew: true,
+          toDelete: false,
+          titleEntries: [],
+          textEntries: [{ localeCode: 'fr', value: 'texte en français' }, { localeCode: 'en', value: 'text in english' }],
+          embedCode: '',
+          order: 3
+        }
+      });
+      const expected = {
+        '-3344789': {
+          id: '-3344789',
+          isNew: true,
+          toDelete: false,
+          titleEntries: [],
+          textEntries: [{ localeCode: 'fr', value: 'nouvelle valeur' }, { localeCode: 'en', value: 'text in english' }],
+          embedCode: '',
+          order: 3
+        }
+      };
+      const action = {
+        id: '-3344789',
+        locale: 'fr',
+        value: 'nouvelle valeur',
+        type: UPDATE_RESOURCE_TEXT
+      };
+      const actual = resourcesById(oldState, action);
+      expect(actual.toJS()).toEqual(expected);
+    });
+
+    it('should handle UPDATE_RESOURCE_TITLE action type', () => {
+      const oldState = fromJS({
+        '-3344789': {
+          id: '-3344789',
+          isNew: true,
+          toDelete: false,
+          titleEntries: [{ localeCode: 'fr', value: 'en français' }, { localeCode: 'en', value: 'in english' }],
+          textEntries: [],
+          embedCode: '',
+          order: 3
+        }
+      });
+      const expected = {
+        '-3344789': {
+          id: '-3344789',
+          isNew: true,
+          toDelete: false,
+          titleEntries: [{ localeCode: 'fr', value: 'nouvelle valeur' }, { localeCode: 'en', value: 'in english' }],
+          textEntries: [],
+          embedCode: '',
+          order: 3
+        }
+      };
+      const action = {
+        id: '-3344789',
+        locale: 'fr',
+        value: 'nouvelle valeur',
+        type: UPDATE_RESOURCE_TITLE
+      };
+      const actual = resourcesById(oldState, action);
+      expect(actual.toJS()).toEqual(expected);
     });
   });
 });

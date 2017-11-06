@@ -1,7 +1,13 @@
 import { combineReducers } from 'redux';
 import { List, Map } from 'immutable';
 
-import { CREATE_RESOURCE } from '../../actions/actionTypes';
+import {
+  CREATE_RESOURCE,
+  UPDATE_RESOURCE_EMBED_CODE,
+  UPDATE_RESOURCE_TEXT,
+  UPDATE_RESOURCE_TITLE
+} from '../../actions/actionTypes';
+import { updateInLangstringEntries } from '../../utils/i18n';
 
 export const resourcesInOrder = (state = List(), action) => {
   switch (action.type) {
@@ -23,6 +29,12 @@ export const resourcesById = (state = Map(), action) => {
   switch (action.type) {
   case CREATE_RESOURCE:
     return state.set(action.id, defaultResource.set('id', action.id).set('order', action.order));
+  case UPDATE_RESOURCE_EMBED_CODE:
+    return state.setIn([action.id, 'embedCode'], action.value);
+  case UPDATE_RESOURCE_TEXT:
+    return state.updateIn([action.id, 'textEntries'], updateInLangstringEntries(action.locale, action.value));
+  case UPDATE_RESOURCE_TITLE:
+    return state.updateIn([action.id, 'titleEntries'], updateInLangstringEntries(action.locale, action.value));
   default:
     return state;
   }

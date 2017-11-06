@@ -5,6 +5,9 @@ export const UPDATE_CONTENT_LOCALE_BY_ORIGINAL_LOCALE: 'UPDATE_CONTENT_LOCALE_BY
   'UPDATE_CONTENT_LOCALE_BY_ORIGINAL_LOCALE';
 export const UPDATE_CONTENT_LOCALE: 'UPDATE_CONTENT_LOCALE' = 'UPDATE_CONTENT_LOCALE';
 export const CREATE_RESOURCE: 'CREATE_RESOURCE' = 'CREATE_RESOURCE';
+export const UPDATE_RESOURCE_EMBED_CODE: 'UPDATE_RESOURCE_EMBED_CODE' = 'UPDATE_RESOURCE_EMBED_CODE';
+export const UPDATE_RESOURCE_TEXT: 'UPDATE_RESOURCE_TEXT' = 'UPDATE_RESOURCE_TEXT';
+export const UPDATE_RESOURCE_TITLE: 'UPDATE_RESOURCE_TITLE' = 'UPDATE_RESOURCE_TITLE';
 
 export type UpdateContentLocaleById = {
   type: typeof UPDATE_CONTENT_LOCALE_BY_ID,
@@ -38,12 +41,32 @@ export type CreateResource = {
   type: typeof CREATE_RESOURCE
 };
 
+export type updateResourceEmbedCode = {
+  id: string,
+  value: string,
+  type: typeof UPDATE_RESOURCE_EMBED_CODE
+};
+
+export type UpdateResourceText = {
+  id: string,
+  locale: string,
+  value: string,
+  type: typeof UPDATE_RESOURCE_TEXT
+};
+
+export type UpdateResourceTitle = {
+  id: string,
+  locale: string,
+  value: string,
+  type: typeof UPDATE_RESOURCE_TITLE
+};
+
 type BasicAction = {
   type: string
 };
 
 // TODO: create type for all possible action types
 
-type ResourcesCenterActions = CreateResource;
+type ResourcesCenterActions = CreateResource | updateResourceEmbedCode | UpdateResourceText | UpdateResourceTitle;
 
 export type Action = UpdateContentLocaleById | UpdateContentLocaleByOriginalLocale | ResourcesCenterActions | BasicAction;
