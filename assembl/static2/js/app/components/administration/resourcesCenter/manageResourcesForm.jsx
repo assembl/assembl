@@ -30,9 +30,13 @@ const ManageResourcesForm = ({ createResource, resources }) => {
 const mapStateToProps = (state) => {
   const { resourcesInOrder, resourcesById } = state.admin.resourcesCenter;
   return {
-    resources: resourcesInOrder.map((id) => {
-      return resourcesById.get(id);
-    })
+    resources: resourcesInOrder
+      .filter((id) => {
+        return !resourcesById.get(id).get('toDelete');
+      })
+      .map((id) => {
+        return resourcesById.get(id);
+      })
   };
 };
 
