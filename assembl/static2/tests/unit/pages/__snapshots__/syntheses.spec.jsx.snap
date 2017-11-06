@@ -22,12 +22,7 @@ exports[`Syntheses component should match Syntheses snapshot 1`] = `
           <h1
             className="section-title section-title1 dark-title-1"
           >
-            <span
-              className={undefined}
-              style={undefined}
-            >
-              Syntheses
-            </span>
+            debate.syntheses
           </h1>
         </div>
       </div>

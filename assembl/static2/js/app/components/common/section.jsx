@@ -11,10 +11,11 @@ type SectionProps = {
   indexGenerator: Function,
   parents: Array<number>,
   children: Array<*>,
-  className: string
+  className: string,
+  translate: boolean
 };
 
-const level1 = (title, index) => {
+const level1 = (title, index, translate) => {
   return (
     <div>
       <div className="title-hyphen">&nbsp;</div>
@@ -24,13 +25,13 @@ const level1 = (title, index) => {
             {index}
           </span>
           : null}
-        <Translate value={title} />
+        {translate ? <Translate value={title} /> : title}
       </h1>
     </div>
   );
 };
 
-const level2 = (title, index) => {
+const level2 = (title, index, translate) => {
   return (
     <h2 className="section-title section-title-2 dark-title-1">
       {index
@@ -38,12 +39,12 @@ const level2 = (title, index) => {
           {index}
         </span>
         : null}
-      <Translate value={title} />
+      {translate ? <Translate value={title} /> : title}
     </h2>
   );
 };
 
-const level3 = (title, index) => {
+const level3 = (title, index, translate) => {
   return (
     <h3 className="section-title section-title-3 dark-title-1">
       {index
@@ -51,12 +52,12 @@ const level3 = (title, index) => {
           {index}
         </span>
         : null}
-      <Translate value={title} />
+      {translate ? <Translate value={title} /> : title}
     </h3>
   );
 };
 
-const levelN = (title, index) => {
+const levelN = (title, index, translate) => {
   return (
     <h3 className="section-title section-title-3 dark-title-1">
       {index
@@ -64,7 +65,7 @@ const levelN = (title, index) => {
           {index}
         </span>
         : null}
-      <Translate value={title} />
+      {translate ? <Translate value={title} /> : title}
     </h3>
   );
 };
@@ -79,7 +80,8 @@ class Section extends React.Component<Object, SectionProps, void> {
     displayIndex: false,
     indexGenerator: SECTION_INDEX_GENERATOR.alphanumericOr,
     parents: [],
-    className: 'themes-section'
+    className: 'themes-section',
+    translate: false
   };
 
   getIndexes = () => {
@@ -90,9 +92,9 @@ class Section extends React.Component<Object, SectionProps, void> {
   };
 
   getTitle = () => {
-    const { title, parents, indexGenerator, displayIndex } = this.props;
+    const { title, parents, indexGenerator, displayIndex, translate } = this.props;
     const titleRenderer = LEVELS[parents.length] || levelN;
-    return titleRenderer(title, displayIndex && indexGenerator(this.getIndexes()));
+    return titleRenderer(title, displayIndex && indexGenerator(this.getIndexes()), translate);
   };
 
   render() {

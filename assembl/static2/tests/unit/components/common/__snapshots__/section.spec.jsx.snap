@@ -22,12 +22,7 @@ exports[`Section component should match Section snapshot 1`] = `
           <h1
             className="section-title section-title1 dark-title-1"
           >
-            <span
-              className={undefined}
-              style={undefined}
-            >
-              Foo Bar
-            </span>
+            FooBar
           </h1>
         </div>
       </div>
@@ -64,12 +59,7 @@ exports[`Section component should match Section with 1 parent snapshot 1`] = `
           >
             1.2.
           </span>
-          <span
-            className={undefined}
-            style={undefined}
-          >
-            Foo Bar
-          </span>
+          FooBar
         </h2>
       </div>
       <div
@@ -105,12 +95,7 @@ exports[`Section component should match Section with 2 parents snapshot 1`] = `
           >
             b.
           </span>
-          <span
-            className={undefined}
-            style={undefined}
-          >
-            Foo Bar
-          </span>
+          FooBar
         </h3>
       </div>
       <div
