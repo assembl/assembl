@@ -6,6 +6,7 @@ import { graphql, compose } from 'react-apollo';
 
 import FileUploader from '../../common/fileUploader';
 import uploadDocumentMutation from '../../../graphql/mutations/uploadDocument.graphql';
+import { getEntryValueForLocale } from '../../../utils/i18n';
 
 import {
   toggleVideo,
@@ -144,14 +145,6 @@ class MediaForm extends React.Component {
     );
   }
 }
-
-const getEntryValueForLocale = (entries, locale, defaultValue = null) => {
-  const entry = entries.find((e) => {
-    return e.get('localeCode') === locale;
-  });
-
-  return entry ? entry.get('value') : defaultValue;
-};
 
 export const mapStateToProps = ({ admin: { thematicsById } }, { thematicId, selectedLocale }) => {
   const media = thematicsById.getIn([thematicId, 'video']);
