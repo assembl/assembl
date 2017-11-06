@@ -785,7 +785,7 @@ def update_node(force_reinstall=False):
     """
     Install node and npm to a known-good version
     """
-    node_version_cmd_regex = re.compile('^v6\.1\.0')
+    node_version_cmd_regex = re.compile('^v6\.11\.5')
     with settings(warn_only=True), hide('running', 'stdout'):
         node_version_cmd_result = venvcmd("node --version")
     match = node_version_cmd_regex.match(node_version_cmd_result)
@@ -793,7 +793,7 @@ def update_node(force_reinstall=False):
         print(cyan('Upgrading node'))
         #Because otherwise node may be busy
         supervisor_process_stop('dev:gulp')
-        venvcmd("nodeenv --node=6.1.0 --npm=3.8.6 --python-virtualenv assembl/static/js")
+        venvcmd("nodeenv --node=6.11.5 --npm=3.10.10 --python-virtualenv assembl/static/js")
         with cd(get_node_base_path()):
             venvcmd("npm install reinstall -g", chdir=False)
         with cd(get_new_node_base_path()):
