@@ -36,4 +36,15 @@ describe('Section component', () => {
       .toJSON();
     expect(rendered).toMatchSnapshot();
   });
+
+  it('should match Section with translate prop', () => {
+    const rendered = renderer
+      .create(
+        <Section title="FooBar" displayIndex translate>
+          <div>Section content</div>
+        </Section>
+      )
+      .toJSON();
+    expect(rendered).toMatchSnapshot();
+  });
 });

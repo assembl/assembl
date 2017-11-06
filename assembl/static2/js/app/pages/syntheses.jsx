@@ -28,7 +28,7 @@ export class DumbSyntheses extends React.Component<void, SynthesesProps, void> {
       browserHistory.push(`${get('synthesis', { synthesisId: firstSynthesis.id, slug: slug })}`);
     }
     return (
-      <Section title="debate.syntheses">
+      <Section title="debate.syntheses" translate>
         <CardList
           data={syntheses}
           classNameGenerator={CLASS_NAME_GENERATOR.default}

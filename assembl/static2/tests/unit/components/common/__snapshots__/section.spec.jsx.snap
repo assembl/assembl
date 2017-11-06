@@ -109,3 +109,51 @@ exports[`Section component should match Section with 2 parents snapshot 1`] = `
   </div>
 </section>
 `;
+
+exports[`Section component should match Section with translate prop 1`] = `
+<section
+  className="themes-section"
+>
+  <div
+    className="background-grey container-fluid"
+  >
+    <div
+      className="max-container"
+    >
+      <div
+        className="title-section"
+      >
+        <div>
+          <div
+            className="title-hyphen"
+          >
+             
+          </div>
+          <h1
+            className="section-title section-title1 dark-title-1"
+          >
+            <span
+              className="section-title-index"
+            >
+              1.
+            </span>
+            <span
+              className={undefined}
+              style={undefined}
+            >
+              Foo Bar
+            </span>
+          </h1>
+        </div>
+      </div>
+      <div
+        className="content-section"
+      >
+        <div>
+          Section content
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+`;

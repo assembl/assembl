@@ -27,7 +27,7 @@ export class DumbSynthesis extends React.Component<void, SynthesisProps, void> {
       <div className="max-container">
         <Header title={subject} imgUrl={synthesis.imgUrl} isSynthesesHeader />
         {introduction &&
-          <Section title="introduction">
+          <Section title="introduction" translate>
             <div dangerouslySetInnerHTML={{ __html: introduction }} />
           </Section>}
         <Col md={10} xsOffset={2}>
@@ -45,7 +45,7 @@ export class DumbSynthesis extends React.Component<void, SynthesisProps, void> {
           })}
         </Col>
         {conclusion &&
-          <Section title="conclusion">
+          <Section title="conclusion" translate>
             <div dangerouslySetInnerHTML={{ __html: conclusion }} />
           </Section>}
       </div>
