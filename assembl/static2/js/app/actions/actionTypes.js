@@ -41,7 +41,7 @@ export type CreateResource = {
   type: typeof CREATE_RESOURCE
 };
 
-export type updateResourceEmbedCode = {
+export type UpdateResourceEmbedCode = {
   id: string,
   value: string,
   type: typeof UPDATE_RESOURCE_EMBED_CODE
@@ -67,6 +67,6 @@ type BasicAction = {
 
 // TODO: create type for all possible action types
 
-type ResourcesCenterActions = CreateResource | updateResourceEmbedCode | UpdateResourceText | UpdateResourceTitle;
+type ResourcesCenterActions = CreateResource | UpdateResourceEmbedCode | UpdateResourceText | UpdateResourceTitle;
 
 export type Action = UpdateContentLocaleById | UpdateContentLocaleByOriginalLocale | ResourcesCenterActions | BasicAction;
