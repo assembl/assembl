@@ -52,7 +52,7 @@ describe('resourcesCenter admin reducers', () => {
       const action = {
         id: '-3344789',
         order: 3,
-        type: 'CREATE_RESOURCE'
+        type: CREATE_RESOURCE
       };
       const oldState = fromJS({
         0: {
