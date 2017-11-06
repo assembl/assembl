@@ -20,13 +20,15 @@ type SynthesesProps = {
 
 export class DumbSyntheses extends React.Component<void, SynthesesProps, void> {
   props: SynthesesProps;
-
-  render() {
+  componentDidMount() {
     const { syntheses, slug } = this.props;
     if (syntheses.length === 1) {
       const firstSynthesis = syntheses[0];
       browserHistory.push(`${get('synthesis', { synthesisId: firstSynthesis.id, slug: slug })}`);
     }
+  }
+  render() {
+    const { syntheses, slug } = this.props;
     return (
       <Section title="debate.syntheses" translate>
         <CardList

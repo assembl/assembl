@@ -15,7 +15,7 @@ exports[`Synthesis component should match Synthesis snapshot 1`] = `
     md={10}
     xsOffset={2}
   >
-    <Unknown
+    <IdeaSynthesisTree
       index={1}
       parents={Array []}
       rootIdea={
