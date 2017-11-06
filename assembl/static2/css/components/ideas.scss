@@ -87,6 +87,12 @@
       display: flex;
       float: left;
   }
+  .mobile-tdi {
+    overflow-x: scroll;
+    .slider-arrow {
+        display: none;
+    }
+  }
 }
 
 @media screen and (max-width: 991px) {
