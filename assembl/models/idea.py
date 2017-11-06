@@ -379,7 +379,7 @@ class Idea(HistoryMixin, DiscussionBoundBase):
             select_exp = select([with_parents.c.source_id.label('id')]
                 ).select_from(with_parents)
         if inclusive:
-            if isinstance(target_id, int):
+            if isinstance(target_id, (int, long)):
                 target_id = literal_column(str(target_id), Integer)
             elif isinstance(target_id, list):
                 raise NotImplemented()
