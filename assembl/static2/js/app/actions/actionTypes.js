@@ -33,6 +33,8 @@ export type UpdateContentLocale = {
 };
 
 export type CreateResource = {
+  id: string,
+  order: number,
   type: typeof CREATE_RESOURCE
 };
 
