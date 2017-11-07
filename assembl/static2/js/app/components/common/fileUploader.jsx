@@ -11,6 +11,7 @@ import { Button } from 'react-bootstrap';
 class FileUploader extends React.Component {
   static defaultProps = {
     mimeType: '',
+    name: 'file-uploader',
     withPreview: true
   };
 
@@ -72,7 +73,7 @@ class FileUploader extends React.Component {
   }
 
   render() {
-    const { mimeType, withPreview } = this.props;
+    const { mimeType, name, withPreview } = this.props;
     const fileSrc = this.state.fileSrc;
     const fileIsImage = fileSrc && fileSrc.startsWith('data:image/');
     const mimeTypeIsImage = mimeType && mimeType.startsWith('image/');
@@ -98,6 +99,7 @@ class FileUploader extends React.Component {
             {this.state.fileName}
           </div>}
         <input
+          name={name}
           type="file"
           onChange={this.handleChangePreview}
           className="hidden"

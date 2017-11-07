@@ -2,6 +2,7 @@ import {
   CREATE_RESOURCE,
   DELETE_RESOURCE,
   UPDATE_RESOURCE_EMBED_CODE,
+  UPDATE_RESOURCE_IMAGE,
   UPDATE_RESOURCE_TEXT,
   UPDATE_RESOURCE_TITLE
 } from '../actionTypes';
@@ -19,6 +20,14 @@ export const updateResourceEmbedCode = (id, value) => {
     id: id,
     value: value,
     type: UPDATE_RESOURCE_EMBED_CODE
+  };
+};
+
+export const updateResourceImage = (id, value) => {
+  return {
+    id: id,
+    value: value,
+    type: UPDATE_RESOURCE_IMAGE
   };
 };
 

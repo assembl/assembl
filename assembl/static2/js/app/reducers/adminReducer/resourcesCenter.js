@@ -5,6 +5,7 @@ import {
   CREATE_RESOURCE,
   DELETE_RESOURCE,
   UPDATE_RESOURCE_EMBED_CODE,
+  UPDATE_RESOURCE_IMAGE,
   UPDATE_RESOURCE_TEXT,
   UPDATE_RESOURCE_TITLE
 } from '../../actions/actionTypes';
@@ -22,6 +23,10 @@ export const resourcesInOrder = (state = List(), action) => {
 const defaultResource = Map({
   toDelete: false,
   isNew: true,
+  img: Map({
+    externalUrl: '',
+    mimeType: ''
+  }),
   titleEntries: List(),
   textEntries: List(),
   embedCode: ''
@@ -34,6 +39,10 @@ export const resourcesById = (state = Map(), action) => {
     return state.setIn([action.id, 'toDelete'], true);
   case UPDATE_RESOURCE_EMBED_CODE:
     return state.setIn([action.id, 'embedCode'], action.value);
+  case UPDATE_RESOURCE_IMAGE:
+    return state
+      .setIn([action.id, 'img', 'externalUrl'], action.value)
+      .setIn([action.id, 'img', 'mimeType'], action.value.type);
   case UPDATE_RESOURCE_TEXT:
     return state.updateIn([action.id, 'textEntries'], updateInLangstringEntries(action.locale, action.value));
   case UPDATE_RESOURCE_TITLE:

@@ -3,6 +3,7 @@ import {
   CREATE_RESOURCE,
   DELETE_RESOURCE,
   UPDATE_RESOURCE_EMBED_CODE,
+  UPDATE_RESOURCE_IMAGE,
   UPDATE_RESOURCE_TEXT,
   UPDATE_RESOURCE_TITLE
 } from '../../../../js/app/actions/actionTypes';
@@ -34,6 +35,19 @@ describe('resourcesCenter admin actions', () => {
         id: '123',
         value: 'new value',
         type: UPDATE_RESOURCE_EMBED_CODE
+      };
+      expect(actual).toEqual(expected);
+    });
+  });
+
+  describe('updateResourceImage action', () => {
+    const { updateResourceImage } = actions;
+    it('should return a UPDATE_RESOURCE_IMAGE action type', () => {
+      const actual = updateResourceImage('123', { name: 'foo.jpg', type: 'image/jpeg' });
+      const expected = {
+        id: '123',
+        value: { name: 'foo.jpg', type: 'image/jpeg' },
+        type: UPDATE_RESOURCE_IMAGE
       };
       expect(actual).toEqual(expected);
     });

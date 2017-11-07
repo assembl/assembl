@@ -336,7 +336,8 @@ const Translations = {
         textLabel: "Texte",
         titleLabel: "Titre",
         embedCodeLabel: "Vidéo/Slides",
-        deleteResource: "Supprimer la ressource"
+        deleteResource: "Supprimer la ressource",
+        imageLabel: "Image"
       },
       surveyExport: {
         annotation: "Vous pouvez exporter l'ensemble des données du débat en cliquant simplement sur le bouton Exporter",
@@ -691,7 +692,8 @@ const Translations = {
         textLabel: "Text",
         titleLabel: "Title",
         embedCodeLabel: "Video/Slides",
-        deleteResource: "Delete the resource"
+        deleteResource: "Delete the resource",
+        imageLabel: "Image"
       },
       surveyExport: {
         annotation: "You can export all the debate data by clicking on the Export button",

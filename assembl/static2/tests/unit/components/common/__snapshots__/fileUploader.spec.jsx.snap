@@ -25,6 +25,7 @@ exports[`FileUploader component should render a file uploader for an image file 
   </div>
   <input
     className="hidden"
+    name="file-uploader"
     onChange={[Function]}
     type="file"
   />
@@ -53,6 +54,7 @@ exports[`FileUploader component should render a file uploader with the filename 
   </div>
   <input
     className="hidden"
+    name="file-uploader"
     onChange={[Function]}
     type="file"
   />
@@ -81,6 +83,7 @@ exports[`FileUploader component should render a file uploader without preview 1`
   </div>
   <input
     className="hidden"
+    name="file-uploader"
     onChange={[Function]}
     type="file"
   />

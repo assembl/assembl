@@ -4,6 +4,7 @@ import {
   CREATE_RESOURCE,
   DELETE_RESOURCE,
   UPDATE_RESOURCE_EMBED_CODE,
+  UPDATE_RESOURCE_IMAGE,
   UPDATE_RESOURCE_TEXT,
   UPDATE_RESOURCE_TITLE
 } from '../../../../js/app/actions/actionTypes';
@@ -63,25 +64,29 @@ describe('resourcesCenter admin reducers', () => {
           id: '1'
         }
       });
-      const expected = {
-        0: {
+      const expected = Map({
+        0: Map({
           id: '0'
-        },
-        1: {
+        }),
+        1: Map({
           id: '1'
-        },
-        '-3344789': {
-          id: '-3344789',
-          isNew: true,
+        }),
+        '-3344789': Map({
           toDelete: false,
-          titleEntries: [],
-          textEntries: [],
+          isNew: true,
+          img: Map({
+            externalUrl: '',
+            mimeType: ''
+          }),
+          titleEntries: List(),
+          textEntries: List(),
           embedCode: '',
+          id: '-3344789',
           order: 3
-        }
-      };
+        })
+      });
       const newState = resourcesById(oldState, action);
-      expect(newState.toJS()).toEqual(expected);
+      expect(newState).toEqual(expected);
     });
 
     it('should handle DELETE_RESOURCE action type', () => {
@@ -151,6 +156,47 @@ describe('resourcesCenter admin reducers', () => {
       };
       const actual = resourcesById(oldState, action);
       expect(actual.toJS()).toEqual(expected);
+    });
+
+    it('should handle UPDATE_RESOURCE_IMAGE action type', () => {
+      const oldState = fromJS({
+        '-3344789': {
+          id: '-3344789',
+          isNew: true,
+          toDelete: false,
+          img: Map({
+            externalUrl: '',
+            mimeType: ''
+          }),
+          titleEntries: [],
+          textEntries: [],
+          embedCode: '<iframe ... />',
+          order: 3
+        }
+      });
+      const file = new File([''], 'foo.jpg', { type: 'image/jpeg' });
+      const expected = Map({
+        '-3344789': Map({
+          id: '-3344789',
+          isNew: true,
+          toDelete: false,
+          img: Map({
+            externalUrl: file,
+            mimeType: 'image/jpeg'
+          }),
+          titleEntries: List(),
+          textEntries: List(),
+          embedCode: '<iframe ... />',
+          order: 3
+        })
+      });
+      const action = {
+        id: '-3344789',
+        value: file,
+        type: UPDATE_RESOURCE_IMAGE
+      };
+      const actual = resourcesById(oldState, action);
+      expect(actual).toEqual(expected);
     });
 
     it('should handle UPDATE_RESOURCE_TEXT action type', () => {
