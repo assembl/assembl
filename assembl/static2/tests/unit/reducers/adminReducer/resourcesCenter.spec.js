@@ -215,10 +215,10 @@ describe('resourcesCenter admin reducers', () => {
           id: '-3344789',
           isNew: true,
           toDelete: false,
-          img: Map({
+          img: {
             externalUrl: '',
             mimeType: ''
-          }),
+          },
           titleEntries: [],
           textEntries: [],
           embedCode: '<iframe ... />',
@@ -226,28 +226,28 @@ describe('resourcesCenter admin reducers', () => {
         }
       });
       const file = new File([''], 'foo.jpg', { type: 'image/jpeg' });
-      const expected = Map({
-        '-3344789': Map({
+      const expected = {
+        '-3344789': {
           id: '-3344789',
           isNew: true,
           toDelete: false,
-          img: Map({
+          img: {
             externalUrl: file,
             mimeType: 'image/jpeg'
-          }),
-          titleEntries: List(),
-          textEntries: List(),
+          },
+          titleEntries: [],
+          textEntries: [],
           embedCode: '<iframe ... />',
           order: 3
-        })
-      });
+        }
+      };
       const action = {
         id: '-3344789',
         value: file,
         type: UPDATE_RESOURCE_IMAGE
       };
       const actual = resourcesById(oldState, action);
-      expect(actual).toEqual(expected);
+      expect(actual.toJS()).toEqual(expected);
     });
 
     it('should handle UPDATE_RESOURCE_TEXT action type', () => {
