@@ -13,7 +13,9 @@ query SynthesisQuery($id: ID!, $lang: String) {
           ancestors
           numPosts
           numContributors
-          imgUrl
+          img {
+            externalUrl
+          }
           title(lang: $lang)
           synthesisTitle(lang: $lang)
           posts {
