@@ -70,8 +70,15 @@ export const thematicsById = (state = Map(), action) => {
 
       return titleEntries.setIn([titleEntryIndex, 'value'], action.value);
     });
-  case 'UPDATE_THEMATIC_IMG_URL':
-    return state.setIn([action.id, 'img', 'externalUrl'], action.value);
+  case 'UPDATE_THEMATIC_IMG_URL': {
+    if (state.getIn([action.id, 'img'])) {
+      return state
+        .setIn([action.id, 'img', 'externalUrl'], action.value)
+        .setIn([action.id, 'img', 'mimeType'], action.value.type);
+    }
+
+    return state.setIn([action.id, 'img'], Map({ mimeType: action.value.type, externalUrl: action.value }));
+  }
   case 'UPDATE_THEMATIC_TITLE': {
     return state.updateIn([action.id, 'titleEntries'], updateInLangstringEntries(action.locale, action.value));
   }
