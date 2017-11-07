@@ -726,7 +726,6 @@ class Idea(SecureObjectType, SQLAlchemyObjectType):
     contributors = graphene.List(AgentProfile)
     announcement = graphene.Field(lambda: IdeaAnnoucement)
     message_columns = graphene.List(lambda: IdeaMessageColumn)
-    phase_identifier = graphene.String()
     ancestors = graphene.List(graphene.ID)
 
     @classmethod
