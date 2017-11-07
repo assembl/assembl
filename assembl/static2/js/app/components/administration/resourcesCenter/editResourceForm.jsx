@@ -7,6 +7,7 @@ import { Button, FormGroup, OverlayTrigger, Tooltip } from 'react-bootstrap';
 
 import {
   deleteResource,
+  updateResourceDocument,
   updateResourceEmbedCode,
   updateResourceImage,
   updateResourceText,
@@ -17,7 +18,9 @@ import FormControlWithLabel from '../../common/formControlWithLabel';
 import { getEntryValueForLocale } from '../../../utils/i18n';
 
 type EditResourceFormProps = {
+  documentUrl: string | File,
   embedCode: string,
+  handleDocumentChange: Function,
   handleEmbedCodeChange: Function,
   handleImageChange: Function,
   handleTextChange: Function,
@@ -39,7 +42,9 @@ const deleteResourceTooltip = (
 );
 
 const EditResourceForm = ({
+  documentUrl,
   embedCode,
+  handleDocumentChange,
   handleEmbedCodeChange,
   handleImageChange,
   handleTextChange,
@@ -58,6 +63,7 @@ const EditResourceForm = ({
   const titleLabel = I18n.t('administration.resourcesCenter.titleLabel');
   const embedCodeLabel = I18n.t('administration.resourcesCenter.embedCodeLabel');
   const imageFieldName = `image-${id}`;
+  const documentFieldName = `document-${id}`;
   return (
     <div className={divClassname}>
       <div className="title">
@@ -86,6 +92,12 @@ const EditResourceForm = ({
         </label>
         <FileUploader name={imageFieldName} fileOrUrl={imgUrl} handleChange={handleImageChange} mimeType={imgMimeType} />
       </FormGroup>
+      <FormGroup>
+        <label htmlFor={documentFieldName}>
+          <Translate value="administration.resourcesCenter.documentLabel" />
+        </label>
+        <FileUploader name={documentFieldName} fileOrUrl={documentUrl} handleChange={handleDocumentChange} withPreview={false} />
+      </FormGroup>
       <div className="pointer right">
         <OverlayTrigger placement="top" overlay={deleteResourceTooltip}>
           <Button onClick={markAsToDelete}>
@@ -101,6 +113,7 @@ const EditResourceForm = ({
 const mapStateToProps = (state, { id, locale }) => {
   const resource = state.admin.resourcesCenter.resourcesById.get(id);
   return {
+    documentUrl: resource.getIn(['doc', 'externalUrl']),
     embedCode: resource.get('embedCode'),
     imgMimeType: resource.getIn(['img', 'mimeType']),
     imgUrl: resource.getIn(['img', 'externalUrl']),
@@ -112,6 +125,9 @@ const mapStateToProps = (state, { id, locale }) => {
 
 const mapDispatchToProps = (dispatch, { id, locale }) => {
   return {
+    handleDocumentChange: (value) => {
+      return dispatch(updateResourceDocument(id, value));
+    },
     handleEmbedCodeChange: (e) => {
       return dispatch(updateResourceEmbedCode(id, e.target.value));
     },

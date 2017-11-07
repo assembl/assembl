@@ -2,6 +2,7 @@ import * as actions from '../../../../js/app/actions/adminActions/resourcesCente
 import {
   CREATE_RESOURCE,
   DELETE_RESOURCE,
+  UPDATE_RESOURCE_DOCUMENT,
   UPDATE_RESOURCE_EMBED_CODE,
   UPDATE_RESOURCE_IMAGE,
   UPDATE_RESOURCE_TEXT,
@@ -23,6 +24,19 @@ describe('resourcesCenter admin actions', () => {
     it('should return a DELETE_RESOURCE action type', () => {
       const actual = deleteResource('-3344789');
       const expected = { id: '-3344789', type: DELETE_RESOURCE };
+      expect(actual).toEqual(expected);
+    });
+  });
+
+  describe('updateResourceDocument action', () => {
+    const { updateResourceDocument } = actions;
+    it('should return a UPDATE_RESOURCE_DOCUMENT action type', () => {
+      const actual = updateResourceDocument('123', 'new value');
+      const expected = {
+        id: '123',
+        value: 'new value',
+        type: UPDATE_RESOURCE_DOCUMENT
+      };
       expect(actual).toEqual(expected);
     });
   });

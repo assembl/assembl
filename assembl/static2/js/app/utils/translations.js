@@ -337,6 +337,7 @@ const Translations = {
         titleLabel: "Titre",
         embedCodeLabel: "Vidéo/Slides",
         deleteResource: "Supprimer la ressource",
+        documentLabel: "Document",
         imageLabel: "Image"
       },
       surveyExport: {
@@ -693,6 +694,7 @@ const Translations = {
         titleLabel: "Title",
         embedCodeLabel: "Video/Slides",
         deleteResource: "Delete the resource",
+        documentLabel: "Document",
         imageLabel: "Image"
       },
       surveyExport: {

@@ -4,6 +4,7 @@ import { List, Map } from 'immutable';
 import {
   CREATE_RESOURCE,
   DELETE_RESOURCE,
+  UPDATE_RESOURCE_DOCUMENT,
   UPDATE_RESOURCE_EMBED_CODE,
   UPDATE_RESOURCE_IMAGE,
   UPDATE_RESOURCE_TEXT,
@@ -23,6 +24,9 @@ export const resourcesInOrder = (state = List(), action) => {
 const defaultResource = Map({
   toDelete: false,
   isNew: true,
+  doc: Map({
+    externalUrl: ''
+  }),
   img: Map({
     externalUrl: '',
     mimeType: ''
@@ -37,6 +41,8 @@ export const resourcesById = (state = Map(), action) => {
     return state.set(action.id, defaultResource.set('id', action.id).set('order', action.order));
   case DELETE_RESOURCE:
     return state.setIn([action.id, 'toDelete'], true);
+  case UPDATE_RESOURCE_DOCUMENT:
+    return state.setIn([action.id, 'doc', 'externalUrl'], action.value);
   case UPDATE_RESOURCE_EMBED_CODE:
     return state.setIn([action.id, 'embedCode'], action.value);
   case UPDATE_RESOURCE_IMAGE:

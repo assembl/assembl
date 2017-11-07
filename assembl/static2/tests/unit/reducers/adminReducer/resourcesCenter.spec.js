@@ -3,6 +3,7 @@ import { fromJS, List, Map } from 'immutable';
 import {
   CREATE_RESOURCE,
   DELETE_RESOURCE,
+  UPDATE_RESOURCE_DOCUMENT,
   UPDATE_RESOURCE_EMBED_CODE,
   UPDATE_RESOURCE_IMAGE,
   UPDATE_RESOURCE_TEXT,
@@ -74,6 +75,9 @@ describe('resourcesCenter admin reducers', () => {
         '-3344789': Map({
           toDelete: false,
           isNew: true,
+          doc: Map({
+            externalUrl: ''
+          }),
           img: Map({
             externalUrl: '',
             mimeType: ''
@@ -124,6 +128,53 @@ describe('resourcesCenter admin reducers', () => {
       };
       const newState = resourcesById(oldState, action);
       expect(newState.toJS()).toEqual(expected);
+    });
+
+    it('should handle UPDATE_RESOURCE_DOCUMENT action type', () => {
+      const oldState = fromJS({
+        '-3344789': {
+          id: '-3344789',
+          isNew: true,
+          toDelete: false,
+          doc: {
+            externalUrl: ''
+          },
+          img: {
+            externalUrl: '',
+            mimeType: ''
+          },
+          titleEntries: [],
+          textEntries: [],
+          embedCode: '<iframe ... />',
+          order: 3
+        }
+      });
+      const file = new File([''], 'foo.pdf', { type: 'application/pdf' });
+      const expected = {
+        '-3344789': {
+          id: '-3344789',
+          isNew: true,
+          toDelete: false,
+          doc: {
+            externalUrl: file
+          },
+          img: {
+            externalUrl: '',
+            mimeType: ''
+          },
+          titleEntries: [],
+          textEntries: [],
+          embedCode: '<iframe ... />',
+          order: 3
+        }
+      };
+      const action = {
+        id: '-3344789',
+        value: file,
+        type: UPDATE_RESOURCE_DOCUMENT
+      };
+      const actual = resourcesById(oldState, action);
+      expect(actual.toJS()).toEqual(expected);
     });
 
     it('should handle UPDATE_RESOURCE_EMBED_CODE action type', () => {

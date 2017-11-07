@@ -6,6 +6,7 @@ export const UPDATE_CONTENT_LOCALE_BY_ORIGINAL_LOCALE: 'UPDATE_CONTENT_LOCALE_BY
 export const UPDATE_CONTENT_LOCALE: 'UPDATE_CONTENT_LOCALE' = 'UPDATE_CONTENT_LOCALE';
 export const CREATE_RESOURCE: 'CREATE_RESOURCE' = 'CREATE_RESOURCE';
 export const DELETE_RESOURCE: 'DELETE_RESOURCE' = 'DELETE_RESOURCE';
+export const UPDATE_RESOURCE_DOCUMENT: 'UPDATE_RESOURCE_DOCUMENT' = 'UPDATE_RESOURCE_DOCUMENT';
 export const UPDATE_RESOURCE_EMBED_CODE: 'UPDATE_RESOURCE_EMBED_CODE' = 'UPDATE_RESOURCE_EMBED_CODE';
 export const UPDATE_RESOURCE_IMAGE: 'UPDATE_RESOURCE_IMAGE' = 'UPDATE_RESOURCE_IMAGE';
 export const UPDATE_RESOURCE_TEXT: 'UPDATE_RESOURCE_TEXT' = 'UPDATE_RESOURCE_TEXT';
@@ -48,6 +49,12 @@ export type DeleteResource = {
   type: typeof DELETE_RESOURCE
 };
 
+export type UpdateResourceDocument = {
+  id: string,
+  value: string,
+  type: typeof UPDATE_RESOURCE_DOCUMENT
+};
+
 export type UpdateResourceEmbedCode = {
   id: string,
   value: string,
@@ -83,6 +90,7 @@ type BasicAction = {
 type ResourcesCenterActions =
   | CreateResource
   | DeleteResource
+  | UpdateResourceDocument
   | UpdateResourceEmbedCode
   | UpdateResourceImage
   | UpdateResourceText
