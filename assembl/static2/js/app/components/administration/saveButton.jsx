@@ -21,6 +21,45 @@ const runSerial = (tasks) => {
   return result;
 };
 
+const getMutationsPromises = (params) => {
+  const { items, variablesCreator, deleteVariablesCreator, createMutation, deleteMutation, updateMutation } = params;
+  const promises = [];
+  items.forEach((item) => {
+    if (item.isNew && !item.toDelete) {
+      // create item
+      const payload = {
+        variables: variablesCreator(item)
+      };
+      const p1 = () => {
+        return createMutation(payload);
+      };
+      promises.push(p1);
+    } else if (item.toDelete && !item.isNew) {
+      // delete item
+      const payload = {
+        variables: deleteVariablesCreator(item)
+      };
+      const p3 = () => {
+        return deleteMutation(payload);
+      };
+      promises.push(p3);
+    } else {
+      // update item
+      const variables = variablesCreator(item);
+      variables.id = item.id;
+      const payload = {
+        variables: variables
+      };
+      const p2 = () => {
+        return updateMutation(payload);
+      };
+      promises.push(p2);
+    }
+  });
+
+  return promises;
+};
+
 function convertVideoDescriptionsToHTML(video) {
   return {
     ...video,
@@ -30,16 +69,23 @@ function convertVideoDescriptionsToHTML(video) {
   };
 }
 
-const createVariablesForMutation = (thematic) => {
+/* Create variables for createThematic and updateThematic mutations */
+const createVariablesForThematicMutation = (thematic) => {
   return {
     identifier: 'survey',
     titleEntries: thematic.titleEntries,
     // If thematic.img.externalUrl is an object, it means it's a File.
     // We need to send image: null if we didn't change the image.
-    image: typeof thematic.img.externalUrl === 'object' ? thematic.img.externalUrl : null,
+    image: thematic.img && typeof thematic.img.externalUrl === 'object' ? thematic.img.externalUrl : null,
     // if video is null, pass {} to remove all video fields on server side
     video: thematic.video === null ? {} : convertVideoDescriptionsToHTML(thematic.video),
     questions: thematic.questions
+  };
+};
+
+const createVariablesForDeleteThematicMutation = (thematic) => {
+  return {
+    thematicId: thematic.id
   };
 };
 
@@ -60,8 +106,6 @@ const SaveButton = ({
 }) => {
   const saveAction = () => {
     displayAlert('success', `${I18n.t('loading.wait')}...`);
-    const promisesArray = [];
-
     if (languagePreferenceHasChanged) {
       // Save and update the apolloStore
       const payload = {
@@ -85,42 +129,16 @@ const SaveButton = ({
     }
 
     if (thematicsHaveChanged) {
-      thematics.forEach((thematic) => {
-        if (thematic.isNew && !thematic.toDelete) {
-          // create thematic
-          const payload = {
-            variables: createVariablesForMutation(thematic)
-          };
-          const p1 = () => {
-            return createThematic(payload);
-          };
-          promisesArray.push(p1);
-        } else if (thematic.toDelete && !thematic.isNew) {
-          // delete thematic
-          const payload = {
-            variables: {
-              thematicId: thematic.id
-            }
-          };
-          const p3 = () => {
-            return deleteThematic(payload);
-          };
-          promisesArray.push(p3);
-        } else {
-          // update thematic
-          const variables = createVariablesForMutation(thematic);
-          variables.id = thematic.id;
-          const payload = {
-            variables: variables
-          };
-          const p2 = () => {
-            return updateThematic(payload);
-          };
-          promisesArray.push(p2);
-        }
+      const mutationsPromises = getMutationsPromises({
+        items: thematics,
+        variablesCreator: createVariablesForThematicMutation,
+        deleteVariablesCreator: createVariablesForDeleteThematicMutation,
+        createMutation: createThematic,
+        deleteMutation: deleteThematic,
+        updateMutation: updateThematic
       });
 
-      runSerial(promisesArray)
+      runSerial(mutationsPromises)
         .then(() => {
           refetchThematics();
           displayAlert('success', I18n.t('administration.successThemeCreation'));
