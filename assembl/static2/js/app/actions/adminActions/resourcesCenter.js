@@ -1,7 +1,17 @@
-import { CREATE_RESOURCE, UPDATE_RESOURCE_EMBED_CODE, UPDATE_RESOURCE_TEXT, UPDATE_RESOURCE_TITLE } from '../actionTypes';
+import {
+  CREATE_RESOURCE,
+  DELETE_RESOURCE,
+  UPDATE_RESOURCE_EMBED_CODE,
+  UPDATE_RESOURCE_TEXT,
+  UPDATE_RESOURCE_TITLE
+} from '../actionTypes';
 
 export const createResource = (id, order) => {
   return { id: id, order: order, type: CREATE_RESOURCE };
+};
+
+export const deleteResource = (id) => {
+  return { id: id, type: DELETE_RESOURCE };
 };
 
 export const updateResourceEmbedCode = (id, value) => {

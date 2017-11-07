@@ -2,6 +2,7 @@ import { fromJS, List, Map } from 'immutable';
 
 import {
   CREATE_RESOURCE,
+  DELETE_RESOURCE,
   UPDATE_RESOURCE_EMBED_CODE,
   UPDATE_RESOURCE_TEXT,
   UPDATE_RESOURCE_TITLE
@@ -77,6 +78,43 @@ describe('resourcesCenter admin reducers', () => {
           textEntries: [],
           embedCode: '',
           order: 3
+        }
+      };
+      const newState = resourcesById(oldState, action);
+      expect(newState.toJS()).toEqual(expected);
+    });
+
+    it('should handle DELETE_RESOURCE action type', () => {
+      const action = {
+        id: '333',
+        type: DELETE_RESOURCE
+      };
+      const oldState = fromJS({
+        '000': {
+          id: '000',
+          toDelete: true
+        },
+        111: {
+          id: '111',
+          toDelete: false
+        },
+        333: {
+          id: '333',
+          toDelete: false
+        }
+      });
+      const expected = {
+        '000': {
+          id: '000',
+          toDelete: true
+        },
+        111: {
+          id: '111',
+          toDelete: false
+        },
+        333: {
+          id: '333',
+          toDelete: true
         }
       };
       const newState = resourcesById(oldState, action);

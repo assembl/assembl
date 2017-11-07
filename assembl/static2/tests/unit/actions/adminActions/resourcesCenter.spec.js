@@ -1,6 +1,7 @@
 import * as actions from '../../../../js/app/actions/adminActions/resourcesCenter';
 import {
   CREATE_RESOURCE,
+  DELETE_RESOURCE,
   UPDATE_RESOURCE_EMBED_CODE,
   UPDATE_RESOURCE_TEXT,
   UPDATE_RESOURCE_TITLE
@@ -12,6 +13,15 @@ describe('resourcesCenter admin actions', () => {
     it('should return a CREATE_RESOURCE action type', () => {
       const actual = createResource('-3344789', 1);
       const expected = { id: '-3344789', order: 1, type: CREATE_RESOURCE };
+      expect(actual).toEqual(expected);
+    });
+  });
+
+  describe('deleteResource action', () => {
+    const { deleteResource } = actions;
+    it('should return a DELETE_RESOURCE action type', () => {
+      const actual = deleteResource('-3344789');
+      const expected = { id: '-3344789', type: DELETE_RESOURCE };
       expect(actual).toEqual(expected);
     });
   });

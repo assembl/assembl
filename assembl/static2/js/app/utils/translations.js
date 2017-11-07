@@ -335,7 +335,8 @@ const Translations = {
         editResourceFormTitle: "Média %{num}",
         textLabel: "Texte",
         titleLabel: "Titre",
-        embedCodeLabel: "Vidéo/Slides"
+        embedCodeLabel: "Vidéo/Slides",
+        deleteResource: "Supprimer la ressource"
       },
       surveyExport: {
         annotation: "Vous pouvez exporter l'ensemble des données du débat en cliquant simplement sur le bouton Exporter",
@@ -689,7 +690,8 @@ const Translations = {
         editResourceFormTitle: "Edit resource number %{num}",
         textLabel: "Text",
         titleLabel: "Title",
-        embedCodeLabel: "Video/Slides"
+        embedCodeLabel: "Video/Slides",
+        deleteResource: "Delete the resource"
       },
       surveyExport: {
         annotation: "You can export all the debate data by clicking on the Export button",

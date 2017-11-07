@@ -3,8 +3,14 @@ import classnames from 'classnames';
 import React from 'react';
 import { connect } from 'react-redux';
 import { I18n, Translate } from 'react-redux-i18n';
+import { Button, OverlayTrigger, Tooltip } from 'react-bootstrap';
 
-import { updateResourceEmbedCode, updateResourceText, updateResourceTitle } from '../../../actions/adminActions/resourcesCenter';
+import {
+  deleteResource,
+  updateResourceEmbedCode,
+  updateResourceText,
+  updateResourceTitle
+} from '../../../actions/adminActions/resourcesCenter';
 import FormControlWithLabel from '../../common/formControlWithLabel';
 import { getEntryValueForLocale } from '../../../utils/i18n';
 
@@ -15,10 +21,17 @@ type EditResourceFormProps = {
   handleTitleChange: Function,
   id: string,
   locale: string,
+  markAsToDelete: Function,
   order: number,
   text: string,
   title: string
 };
+
+const deleteResourceTooltip = (
+  <Tooltip id="deleteResourceTooltip">
+    <Translate value="administration.resourcesCenter.deleteResource" />
+  </Tooltip>
+);
 
 const EditResourceForm = ({
   embedCode,
@@ -27,6 +40,7 @@ const EditResourceForm = ({
   handleTitleChange,
   id,
   locale,
+  markAsToDelete,
   order,
   text,
   title
@@ -57,6 +71,13 @@ const EditResourceForm = ({
         type="text"
         value={embedCode}
       />
+      <div className="pointer right">
+        <OverlayTrigger placement="top" overlay={deleteResourceTooltip}>
+          <Button onClick={markAsToDelete}>
+            <span className="assembl-icon-delete grey" />
+          </Button>
+        </OverlayTrigger>
+      </div>
       <div className="separator" />
     </div>
   );
@@ -82,6 +103,9 @@ const mapDispatchToProps = (dispatch, { id, locale }) => {
     },
     handleTitleChange: (e) => {
       return dispatch(updateResourceTitle(id, locale, e.target.value));
+    },
+    markAsToDelete: () => {
+      return dispatch(deleteResource(id));
     }
   };
 };
