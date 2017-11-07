@@ -119,6 +119,8 @@ def downgrade(pyramid_env):
             }
             db.execute(statement, params=params)
 
+        mark_changed()
+
     with context.begin_transaction():
         op.drop_column('synthesis', 'subject_id')
         op.drop_column('synthesis', 'introduction_id')
