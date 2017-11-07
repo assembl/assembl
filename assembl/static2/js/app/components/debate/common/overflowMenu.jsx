@@ -1,9 +1,9 @@
 import React from 'react';
-import { Button, OverlayTrigger, Popover } from 'react-bootstrap';
+import { Button, Popover } from 'react-bootstrap';
 import { Translate } from 'react-redux-i18n';
 import { Link } from 'react-router';
-
 import { editMessageTooltip, deleteMessageTooltip } from '../../common/tooltips';
+import ResponsiveOverlayTrigger from '../../common/responsiveOverlayTrigger';
 import { displayModal, closeModal } from '../../../utils/utilityManager';
 import deletePostMutation from '../../../graphql/mutations/deletePost.graphql';
 
@@ -30,27 +30,29 @@ const confirmModal = (postId, client) => {
 };
 
 const getOverflowMenuForPost = (postId, userCanDeleteThisMessage, userCanEditThisMessage, client, handleEditClick) => {
+  const deleteButton = (
+    <Link
+      className="overflow-menu-action"
+      onClick={() => {
+        return confirmModal(postId, client);
+      }}
+    >
+      <span className="assembl-icon-delete" />
+    </Link>
+  );
+  const editButton = (
+    <Link className="overflow-menu-action" onClick={handleEditClick}>
+      <span className="assembl-icon-edit" />
+    </Link>
+  );
   const overflowMenu = (
     <Popover id="edit-delete-actions" className="overflow-menu">
       <div className="overflow-menu-container">
         {userCanDeleteThisMessage
-          ? <OverlayTrigger placement="right" overlay={deleteMessageTooltip}>
-            <Link
-              className="overflow-menu-action"
-              onClick={() => {
-                return confirmModal(postId, client);
-              }}
-            >
-              <span className="assembl-icon-delete" />
-            </Link>
-          </OverlayTrigger>
+          ? <ResponsiveOverlayTrigger placement="right" tooltip={deleteMessageTooltip} component={deleteButton} />
           : null}
         {userCanEditThisMessage
-          ? <OverlayTrigger placement="right" overlay={editMessageTooltip}>
-            <Link className="overflow-menu-action" onClick={handleEditClick}>
-              <span className="assembl-icon-edit" />
-            </Link>
-          </OverlayTrigger>
+          ? <ResponsiveOverlayTrigger placement="right" tooltip={editMessageTooltip} component={editButton} />
           : null}
       </div>
     </Popover>
