@@ -61,7 +61,6 @@ const SaveButton = ({
   const saveAction = () => {
     displayAlert('success', `${I18n.t('loading.wait')}...`);
     const promisesArray = [];
-    // Compare the redux state change to the saved data in apollo
 
     if (languagePreferenceHasChanged) {
       // Save and update the apolloStore
