@@ -43,7 +43,6 @@
     height: 500px;
     position: relative;
     z-index: 10;
-    margin-top: $navbar-height * 2;
 
     .wyntk-box {
       top: calc(50% - 175px);
@@ -379,6 +378,22 @@
       line-height: 33px;
       margin: 0 0 0 15px;
       width: calc(100% - 30px);
+    }
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .debate {
+    .header-section {
+      margin-top: $navbar-height;
+    }
+  }
+}
+
+@media screen and (min-width: 768px) {
+  .debate {
+    .header-section {
+      margin-top: $navbar-height * 2;
     }
   }
 }

@@ -13,6 +13,9 @@
 }
 
 .proposals {
+  .custom-overlay {
+    display: inline-block;
+  }
   .box {
     border-bottom: $navbar-border;
     border-left: $border-theme;
@@ -466,6 +469,9 @@ $deleted-post-border: 1px solid $grey1 !default;
 
 @media screen and (max-width: 992px) {
     .posts {
+        .custom-overlay {
+          display: inline-block;
+        }
         .post-right {
             background: none;
 

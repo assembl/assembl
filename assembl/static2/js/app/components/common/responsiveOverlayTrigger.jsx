@@ -5,7 +5,7 @@ import { isMobile } from '../../utils/globalFunctions';
 const ResponsiveOverlayTrigger = ({ component, placement, tooltip }) => {
   const isTouchScreenDevice = isMobile.any();
   return (
-    <div>
+    <div className="custom-overlay">
       {isTouchScreenDevice
         ? component
         : <OverlayTrigger placement={placement} overlay={tooltip}>
