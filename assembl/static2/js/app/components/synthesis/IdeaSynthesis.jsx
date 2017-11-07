@@ -57,7 +57,9 @@ const SynthesisImage = ({ level, title, imgUrl, stats }) => {
 
 const IdeaSynthesis = (props) => {
   const { idea, level, slug } = props;
-  const { id, title, imgUrl, synthesisTitle, numContributors, numPosts, posts, phaseIdentifier } = idea;
+  const { id, title, imgUrl, synthesisTitle, numContributors, numPosts, posts } = idea;
+  const phaseIdentifier = 'thread'; // TODO: Proper phase identification
+  // For now, syntheses can only have ideas from the "thread" phase.
   const link = `/${slug}/debate/${phaseIdentifier}/theme/${id}`;
   const stats = <SynthesisStats numContributors={numContributors} numPosts={numPosts} ideaLink={link} posts={posts} />;
   return (

@@ -16,7 +16,6 @@ query SynthesisQuery($id: ID!, $lang: String) {
           imgUrl
           title(lang: $lang)
           synthesisTitle(lang: $lang)
-          phaseIdentifier
           posts {
             edges {
               node {

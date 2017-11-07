@@ -766,9 +766,6 @@ class Idea(SecureObjectType, SQLAlchemyObjectType):
     def resolve_synthesis_title(self, args, context, info):
         return resolve_langstring(self.synthesis_title, args.get('lang'))
 
-    def resolve_phase_identifier(self, args, context, info):
-        return "thread"
-
     def resolve_title_entries(self, args, context, info):
         return resolve_langstring_entries(self, 'title')
 
