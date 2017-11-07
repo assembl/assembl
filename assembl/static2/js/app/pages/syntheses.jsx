@@ -69,7 +69,7 @@ export default compose(
   graphql(SynthesesQuery, {
     props: ({ data }) => {
       if (data.loading) {
-        return { dataLoading: true };
+        return { loading: true };
       }
       return {
         syntheses: data.syntheses || []

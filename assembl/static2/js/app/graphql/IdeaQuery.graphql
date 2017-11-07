@@ -5,7 +5,9 @@ query Idea($lang: String!, $id: ID!) {
       title(lang: $lang)
       synthesisTitle(lang: $lang)
       description(lang: $lang)
-      imgUrl
+      img {
+        externalUrl
+      }
       announcement {
         title(lang: $lang)
         body(lang: $lang)

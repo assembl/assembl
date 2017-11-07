@@ -8,7 +8,9 @@ query RootIdeasQuery($lang: String!) {
           description(lang: $lang)
           numPosts
           numContributors
-          imgUrl
+          img {
+            externalUrl
+          }
         }
       }
     }

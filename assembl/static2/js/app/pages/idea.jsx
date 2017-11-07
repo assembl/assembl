@@ -61,6 +61,7 @@ class Idea extends React.Component {
     super(props);
     this.getTopPosts = this.getTopPosts.bind(this);
   }
+
   componentWillReceiveProps(nextProps) {
     if (nextProps.ideaWithPostsData.idea !== this.props.ideaWithPostsData.idea) {
       this.updateContentLocaleMappingFromProps(nextProps);
@@ -113,6 +114,7 @@ class Idea extends React.Component {
     }
     return null;
   };
+
   getTopPosts() {
     const { ideaWithPostsData, routerParams, debateData } = this.props;
     if (!ideaWithPostsData.idea) return [];
@@ -124,17 +126,18 @@ class Idea extends React.Component {
     });
     return topPosts;
   }
+
   render() {
-    const { contentLocaleMapping, lang, ideaData, ideaWithPostsData, identifier, debateData } = this.props;
+    const { contentLocaleMapping, debateData, lang, ideaLoading, ideaWithPostsData, identifier } = this.props;
     const refetchIdea = ideaWithPostsData.refetch;
-    if (ideaData.loading) {
+    if (ideaLoading) {
       return (
         <div className="idea">
           <Loader />
         </div>
       );
     }
-    const { idea } = ideaData;
+    const { announcement, id, headerImgUrl, synthesisTitle, title } = this.props;
     const isMultiColumn = ideaWithPostsData.loading ? undefined : ideaWithPostsData.idea.messageColumns.length > 0;
     const messageColumns = ideaWithPostsData.loading
       ? undefined
@@ -148,9 +151,10 @@ class Idea extends React.Component {
         return 0;
       });
     const childProps = {
-      idea: idea,
       identifier: identifier,
       debateData: debateData,
+      ideaId: id,
+      ideaTitle: title,
       ideaWithPostsData: ideaWithPostsData,
       isUserConnected: getConnectedUserId(),
       contentLocaleMapping: contentLocaleMapping,
@@ -166,14 +170,14 @@ class Idea extends React.Component {
     const view = isMultiColumn ? <ColumnsView {...childProps} /> : <ThreadView {...childProps} />;
     return (
       <div className="idea">
-        <Header title={idea.title} synthesisTitle={idea.synthesisTitle} imgUrl={idea.imgUrl} identifier={identifier} />
+        <Header title={title} synthesisTitle={synthesisTitle} imgUrl={headerImgUrl} identifier={identifier} />
         <section className="post-section">
           {!ideaWithPostsData.loading &&
-            idea.announcement &&
+            announcement &&
             <Grid fluid className="background-light">
               <div className="max-container">
                 <div className="content-section">
-                  <Announcement ideaWithPostsData={ideaWithPostsData} announcementContent={idea.announcement} />
+                  <Announcement ideaWithPostsData={ideaWithPostsData} announcementContent={announcement} />
                 </div>
               </div>
             </Grid>}
@@ -205,9 +209,31 @@ const mapDispatchToProps = (dispatch) => {
 export default compose(
   connect(mapStateToProps, mapDispatchToProps),
   graphql(IdeaWithPostsQuery, { name: 'ideaWithPostsData' }),
-  graphql(IdeaQuery, { name: 'ideaData', options: { notifyOnNetworkStatusChange: true } })
-  // ideaData.loading stays to true when switching interface language (IdeaQuery is using lang variable)
-  // This is an issue in apollo-client, adding notifyOnNetworkStatusChange: true is a workaround,
-  // downgrading to apollo-client 1.8.1 should works too.
-  // See https://github.com/apollographql/apollo-client/issues/1186#issuecomment-327161526
+  graphql(IdeaQuery, {
+    options: { notifyOnNetworkStatusChange: true },
+    // ideaData.loading stays to true when switching interface language (IdeaQuery is using lang variable)
+    // This is an issue in apollo-client, adding notifyOnNetworkStatusChange: true is a workaround,
+    // downgrading to apollo-client 1.8.1 should works too.
+    // See https://github.com/apollographql/apollo-client/issues/1186#issuecomment-327161526
+    props: ({ data }) => {
+      if (data.loading) {
+        return {
+          ideaLoading: true
+        };
+      }
+      if (data.error) {
+        return {
+          ideaHasErrors: true
+        };
+      }
+
+      return {
+        announcement: data.idea.announcement,
+        id: data.idea.id,
+        title: data.idea.title,
+        synthesisTitle: data.idea.synthesisTitle,
+        headerImgUrl: data.idea.img ? data.idea.img.externalUrl : ''
+      };
+    }
+  })
 )(Idea);

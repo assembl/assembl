@@ -5,8 +5,10 @@ query ThematicsQuery($identifier: String!) {
       localeCode
       value
     }
-    imgMimetype
-    imgUrl
+    img {
+      externalUrl
+      mimeType
+    }
     video {
       titleEntries {
         localeCode

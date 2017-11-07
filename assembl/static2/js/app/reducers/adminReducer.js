@@ -53,7 +53,9 @@ export const thematicsById = (state = Map(), action) => {
   case 'CREATE_NEW_THEMATIC': {
     const emptyThematic = Map({
       toDelete: false,
-      imgUrl: null,
+      img: Map({
+        externalUrl: ''
+      }),
       isNew: true,
       questions: List(),
       titleEntries: List(),
@@ -80,7 +82,7 @@ export const thematicsById = (state = Map(), action) => {
       return titleEntries.setIn([titleEntryIndex, 'value'], action.value);
     });
   case 'UPDATE_THEMATIC_IMG_URL':
-    return state.setIn([action.id, 'imgUrl'], action.value);
+    return state.setIn([action.id, 'img', 'externalUrl'], action.value);
   case 'UPDATE_THEMATIC_TITLE': {
     const entries = state.getIn([action.id, 'titleEntries']);
     const index = entries.findIndex((e) => {
@@ -174,7 +176,9 @@ export const languagePreferences = (state = List(), action) => {
     return state;
   case 'REMOVE_LANGUAGE_PREFERENCE':
     if (hasLocale(action.locale, state)) {
-      const i = state.findIndex((a) => { return a === action.locale; });
+      const i = state.findIndex((a) => {
+        return a === action.locale;
+      });
       return state.delete(i);
     }
     return state;
@@ -191,7 +195,6 @@ export const discussionLanguagePreferencesHasChanged = (state = false, action) =
     return state;
   }
 };
-
 
 export default combineReducers({
   selectedLocale: selectedLocale,

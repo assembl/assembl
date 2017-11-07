@@ -8,7 +8,10 @@ mutation createThematic(
   createThematic(identifier: $identifier, image: $image, titleEntries: $titleEntries, questions: $questions, video: $video) {
     thematic {
       title
-      imgUrl
+      img {
+        externalUrl
+        mimeType
+      }
       video {
         title
         descriptionTop

@@ -1,10 +1,11 @@
+// @flow
 import React from 'react';
-import { PropTypes } from 'prop-types';
 import { connect } from 'react-redux';
 import { compose, graphql } from 'react-apollo';
 import { browserHistory } from 'react-router';
 import { Translate } from 'react-redux-i18n';
 import { Grid, Button } from 'react-bootstrap';
+import type { Map } from 'immutable';
 
 import { updateContentLocale } from '../actions/contentLocaleActions';
 import withLoadingIndicator from '../components/common/withLoadingIndicator';
@@ -17,16 +18,58 @@ import { getIfPhaseCompletedByIdentifier } from '../utils/timeline';
 import ThematicQuery from '../graphql/ThematicQuery.graphql';
 import { displayAlert } from '../utils/utilityManager';
 
-class Survey extends React.Component {
+type PostNode = {
+  node: {
+    id: string,
+    originalLocale: string
+  }
+};
+
+type QuestionType = {
+  id: string,
+  posts: {
+    edges: Array<PostNode>
+  },
+  title: string
+};
+
+type SurveyProps = {
+  debate: {
+    debateData: {
+      timeline: string
+    }
+  },
+  defaultContentLocaleMapping: Map,
+  hasErrors: boolean,
+  imgUrl: string,
+  loading: boolean,
+  media: Object, // TODO: we should add a type for media/video and use it everywhere
+  questions: Array<QuestionType>,
+  refetchThematic: Function,
+  title: string,
+  updateContentLocaleMapping: Function
+};
+
+type SurveyState = {
+  isScroll: boolean,
+  moreProposals: boolean,
+  questionIndex: number | null,
+  showModal: boolean
+};
+
+class Survey extends React.Component<*, SurveyProps, SurveyState> {
+  props: SurveyProps;
+  state: SurveyState;
+  unlisten: Function;
+
   constructor(props) {
     super(props);
     this.state = {
+      isScroll: false,
       moreProposals: false,
-      showModal: false
+      showModal: false,
+      questionIndex: null
     };
-    this.showMoreProposals = this.showMoreProposals.bind(this);
-    this.getIfProposals = this.getIfProposals.bind(this);
-    this.scrollToQuestion = this.scrollToQuestion.bind(this);
   }
 
   componentWillMount() {
@@ -40,7 +83,7 @@ class Survey extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.data.thematic !== this.props.data.thematic) {
+    if (nextProps.questions !== this.props.questions) {
       this.updateContentLocaleMappingFromProps(nextProps);
     }
   }
@@ -50,52 +93,51 @@ class Survey extends React.Component {
   }
 
   updateContentLocaleMappingFromProps(props) {
-    const { data, defaultContentLocaleMapping, updateContentLocaleMapping } = props;
-    if (!data.loading) {
-      const contentLocaleMappingData = {};
-      const questions = data.thematic.questions;
-      questions.forEach((question) => {
-        question.posts.edges.forEach((edge) => {
-          const post = edge.node;
-          const { id, originalLocale } = post;
-          const contentLocale = defaultContentLocaleMapping.get(originalLocale, originalLocale);
-          contentLocaleMappingData[id] = {
-            contentLocale: contentLocale,
-            originalLocale: originalLocale
-          };
-        });
+    const { defaultContentLocaleMapping, updateContentLocaleMapping, questions } = props;
+    const contentLocaleMappingData = {};
+    questions.forEach((question) => {
+      question.posts.edges.forEach((edge) => {
+        const post = edge.node;
+        const { id, originalLocale } = post;
+        const contentLocale = defaultContentLocaleMapping.get(originalLocale, originalLocale);
+        contentLocaleMappingData[id] = {
+          contentLocale: contentLocale,
+          originalLocale: originalLocale
+        };
       });
+    });
 
-      updateContentLocaleMapping(contentLocaleMappingData);
-    }
+    updateContentLocaleMapping(contentLocaleMappingData);
   }
 
-  getIfProposals(questions) {
-    this.questions = questions;
-    if (!this.questions) return false;
+  getIfProposals = (questions) => {
+    if (!questions) return false;
     let isProposals = false;
-    this.questions.forEach((question) => {
+    questions.forEach((question) => {
       if (question.posts.edges.length > 0) isProposals = true;
     });
     return isProposals;
-  }
-  showMoreProposals() {
+  };
+
+  showMoreProposals = () => {
     this.setState({
       moreProposals: true
     });
-  }
-  scrollToQuestion(isScroll, questionIndex) {
+  };
+
+  scrollToQuestion = (isScroll, questionIndex) => {
     this.setState({
       isScroll: isScroll,
       questionIndex: questionIndex
     });
-  }
+  };
+
   render() {
-    if (this.props.data.error) {
+    if (this.props.hasErrors) {
       displayAlert('danger', 'An error occured, please reload the page');
       return null;
     }
-    const { thematic: { imgUrl, questions, title, video: media } } = this.props.data;
+    const { imgUrl, media, questions, refetchThematic, title } = this.props;
     const { debateData } = this.props.debate;
     const isPhaseCompleted = getIfPhaseCompletedByIdentifier(debateData.timeline, 'survey');
     return (
@@ -113,7 +155,7 @@ class Survey extends React.Component {
                     key={index}
                     questionId={question.id}
                     scrollToQuestion={this.scrollToQuestion}
-                    refetchTheme={this.props.data.refetch}
+                    refetchTheme={refetchThematic}
                   />
                 );
               })}
@@ -145,7 +187,7 @@ class Survey extends React.Component {
                             moreProposals={this.state.moreProposals}
                             questionIndex={index + 1}
                             key={index}
-                            refetchTheme={this.props.data.refetch}
+                            refetchTheme={refetchThematic}
                           />
                         );
                       })}
@@ -166,14 +208,6 @@ class Survey extends React.Component {
   }
 }
 
-Survey.propTypes = {
-  data: PropTypes.shape({
-    loading: PropTypes.bool.isRequired,
-    error: PropTypes.object,
-    thematic: PropTypes.Array
-  }).isRequired
-};
-
 const mapStateToProps = (state) => {
   return {
     debate: state.debate,
@@ -192,6 +226,32 @@ const mapDispatchToProps = (dispatch) => {
 
 export default compose(
   connect(mapStateToProps, mapDispatchToProps),
-  graphql(ThematicQuery),
+  graphql(ThematicQuery, {
+    props: ({ data }) => {
+      if (data.loading) {
+        return {
+          loading: true
+        };
+      }
+
+      if (data.error) {
+        return {
+          hasErrors: true
+        };
+      }
+
+      const { thematic: { img, questions, refetch, title, video: media } } = data;
+
+      return {
+        hasErrors: false,
+        imgUrl: img.externalUrl,
+        loading: false,
+        media: media,
+        questions: questions,
+        refetchThematic: refetch,
+        title: title
+      };
+    }
+  }),
   withLoadingIndicator({ color: 'black' })
 )(Survey);

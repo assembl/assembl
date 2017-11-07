@@ -7,7 +7,9 @@ query DebateThematicsQuery($lang: String!, $identifier: String!) {
       description(lang: $lang)
       numPosts
       numContributors
-      imgUrl
+      img {
+        externalUrl
+      }
     }
   }
 }

@@ -69,7 +69,7 @@ export default compose(
     },
     props: ({ data }) => {
       if (data.loading) {
-        return { dataLoading: true };
+        return { loading: true };
       }
       return {
         synthesis: data.synthesis
