@@ -14,6 +14,9 @@ from alembic import context, op
 import sqlalchemy as sa
 import transaction
 from sqlalchemy.orm import (joinedload, subqueryload)
+from sqlalchemy.sql import text
+from bs4 import UnicodeDammit
+from assembl.lib.sqla import mark_changed
 
 
 from assembl.lib import config
@@ -87,4 +90,36 @@ def upgrade(pyramid_env):
 
 def downgrade(pyramid_env):
     with context.begin_transaction():
-        pass
+        op.add_column('synthesis', sa.Column('subject', sa.UnicodeText))
+        op.add_column('synthesis', sa.Column('introduction', sa.UnicodeText))
+        op.add_column('synthesis', sa.Column('conclusion', sa.UnicodeText))
+
+    with transaction.manager:
+        from assembl import models as m
+        db = m.get_session_maker()()
+        syntheses = db.query(m.Synthesis).all()
+        for s in syntheses:
+            subject = s.subject.first_original().value if s.subject else u""
+            introduction = s.introduction.first_original().value \
+                if s.introduction else u""
+            conclusion = s.conclusion.first_original().value \
+                if s.conclusion else u""
+
+            statement = text(u"""UPDATE synthesis
+                SET subject=:subject,
+                introduction=:introduction,
+                conclusion=:conclusion
+                WHERE synthesis.id=:id;""")
+
+            params = {
+                'subject': subject,
+                'introduction': introduction,
+                'conclusion': conclusion,
+                'id': s.id
+            }
+            db.execute(statement, params=params)
+
+    with context.begin_transaction():
+        op.drop_column('synthesis', 'subject_id')
+        op.drop_column('synthesis', 'introduction_id')
+        op.drop_column('synthesis', 'conclusion_id')
