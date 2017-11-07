@@ -24,7 +24,7 @@ type EditResourceFormProps = {
   handleTitleChange: Function,
   id: string,
   imgMimeType: string,
-  imgUrl: string,
+  imgUrl: string | File,
   locale: string,
   markAsToDelete: Function,
   order: number,
