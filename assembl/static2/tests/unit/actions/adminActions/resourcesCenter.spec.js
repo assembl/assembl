@@ -38,6 +38,7 @@ describe('resourcesCenter admin actions', () => {
       expect(actual).toEqual(expected);
     });
   });
+
   describe('updateResourceText action', () => {
     const { updateResourceText } = actions;
     it('should return a UPDATE_RESOURCE_TEXT action type', () => {
@@ -51,6 +52,7 @@ describe('resourcesCenter admin actions', () => {
       expect(actual).toEqual(expected);
     });
   });
+
   describe('updateResourceTitle action', () => {
     const { updateResourceTitle } = actions;
     it('should return a UPDATE_RESOURCE_TITLE action type', () => {
