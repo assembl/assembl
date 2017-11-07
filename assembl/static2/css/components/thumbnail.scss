@@ -27,7 +27,6 @@
   .thumb-img {
     background-size: cover;
     display: inline-block;
-    position: absolute;
     z-index: 10;
 
     &:hover {
@@ -45,7 +44,6 @@
     font-size: $font-size-xs;
     height: 80px;
     margin: 0 0 0 90px;
-    position: absolute;
     width: 180px;
 
     .thumb-title-inner {
@@ -84,18 +82,20 @@
 
   .thumbnails-nav {
     .thumbnails-container {
-      padding: 0 15px; 
+      padding: 0 15px;
     }
 
     .thumb-title {
-      display: inline-block;
+      margin-right: 10px;
     }
 
     .thumb-img-container {
+      position:relative;
       width: 320px;
     }
 
     .thumb-img {
+      position: absolute;
       height: 50px;
       margin: 15px 0;
       width: 80px;
