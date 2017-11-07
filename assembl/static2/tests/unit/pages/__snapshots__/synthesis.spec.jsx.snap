@@ -22,7 +22,9 @@ exports[`Synthesis component should match Synthesis snapshot 1`] = `
         Object {
           "ancestors": Array [],
           "id": "barId",
-          "imgUrl": "http://foo.com/bar",
+          "img": Object {
+            "externalUrl": "http://foo.com/bar",
+          },
           "numContributors": 0,
           "numPosts": 0,
           "phaseIdentifier": "paseId",

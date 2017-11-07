@@ -589,8 +589,7 @@ class Synthesis(SecureObjectType, SQLAlchemyObjectType):
     conclusion = graphene.String(lang=graphene.String())
     conclusion_entries = graphene.List(LangStringEntry)
     ideas = graphene.List(lambda: IdeaUnion)
-    img_url = graphene.String()
-    img_mimetype = graphene.String()
+    img = graphene.Field(Document)
     creation_date = DateTime()
 
     def resolve_subject(self, args, context, info):
@@ -614,17 +613,12 @@ class Synthesis(SecureObjectType, SQLAlchemyObjectType):
     def resolve_ideas(self, args, context, info):
         return self.get_ideas()
 
-    def resolve_img_url(self, args, context, info):
+    def resolve_img(self, args, context, info):
         ideas = self.get_ideas()
         last_idea = ideas[-1] if ideas else None
-        if getattr(last_idea, 'attachments', None):
-            return last_idea.attachments[0].external_url
+        if last_idea.attachments:
+            return last_idea.attachments[0].document
 
-    def resolve_img_mimetype(self, args, context, info):
-        ideas = self.get_ideas()
-        last_idea = ideas[-1] if ideas else None
-        if getattr(last_idea, 'attachments', None):
-            return last_idea.attachments[0].document.mime_type
 
 
 class IdeaInterface(graphene.Interface):

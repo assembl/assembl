@@ -25,7 +25,7 @@ export class DumbSynthesis extends React.Component<void, SynthesisProps, void> {
     const { roots, children } = getPartialTree(ideas);
     return (
       <div className="max-container">
-        <Header title={subject} imgUrl={synthesis.imgUrl} isSynthesesHeader />
+        <Header title={subject} imgUrl={synthesis.img ? synthesis.img.externalUrl : ''} isSynthesesHeader />
         {introduction &&
           <Section title="introduction" translate>
             <div dangerouslySetInnerHTML={{ __html: introduction }} />

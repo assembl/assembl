@@ -4,7 +4,9 @@ query SynthesesQuery($lang: String!) {
       id
       subject(lang: $lang)
       creationDate
-      imgUrl
+      img {
+        externalUrl
+      }
     }
   }
 }

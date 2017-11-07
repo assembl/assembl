@@ -10,12 +10,12 @@ describe('Synthesis component', () => {
       synthesis: {
         id: 'fooId',
         subject: 'Foo',
-        imgUrl: 'http://foo.com/foo',
+        img: { externalUrl: 'http://foo.com/foo' },
         ideas: [
           {
             id: 'barId',
             title: 'Bar',
-            imgUrl: 'http://foo.com/bar',
+            img: { externalUrl: 'http://foo.com/bar' },
             synthesisTitle: 'Foo',
             numContributors: 0,
             numPosts: 0,

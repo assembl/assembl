@@ -24,7 +24,7 @@ def test_graphql_get_synthesis(graphql_request,
                 subject(lang: $lang)
                 ideas {
                   ... on Idea {
-                    imgUrl
+                    img { externalUrl }
                   }
                 }
               }

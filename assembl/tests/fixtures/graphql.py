@@ -345,7 +345,7 @@ def synthesis_in_syntheses(graphql_request, synthesis_post_1):
                   subject(lang: $lang)
                   ideas {
                     ... on Idea {
-                      imgUrl
+                      img { externalUrl }
                     }
                   }
                 }
@@ -355,4 +355,5 @@ def synthesis_in_syntheses(graphql_request, synthesis_post_1):
         variable_values={
             "lang": "en"
         })
+    assert res.data
     return res

@@ -37,7 +37,7 @@ export class DumbSyntheses extends React.Component<void, SynthesesProps, void> {
           itemClassName="theme"
           CardItem={(itemData) => {
             return (
-              <Card imgUrl={itemData.imgUrl} className="synthesis-preview">
+              <Card imgUrl={itemData.img ? itemData.img.externalUrl : ''} className="synthesis-preview">
                 <Link className="content-box" to={`${get('synthesis', { synthesisId: itemData.id, slug: slug })}`}>
                   <div className="title-container center">
                     <h3 className="light-title-3">
