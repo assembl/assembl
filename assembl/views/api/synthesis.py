@@ -8,7 +8,7 @@ from cornice import Service
 from . import API_DISCUSSION_PREFIX
 from assembl.auth import P_READ, P_EDIT_SYNTHESIS
 from assembl.auth.util import get_permissions
-from assembl.models import Discussion, Synthesis
+from assembl.models import Discussion, Synthesis, LangString
 
 syntheses = Service(name='syntheses',
     path=API_DISCUSSION_PREFIX + '/explicit_subgraphs/synthesis',
