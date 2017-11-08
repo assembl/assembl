@@ -958,10 +958,12 @@ class Resource(SecureObjectType, SQLAlchemyObjectType):
     class Meta:
         model = models.Resource
         interfaces = (Node, )
-        only_fields = ('id', 'identifier')
+        only_fields = ('id', )
 
     title = graphene.String(lang=graphene.String())
     text = graphene.String(lang=graphene.String())
+    title_entries = graphene.List(LangStringEntry)
+    text_entries = graphene.List(LangStringEntry)
     embed_code = graphene.String()
     image = graphene.Field(Document)
     doc = graphene.Field(Document)
@@ -970,9 +972,15 @@ class Resource(SecureObjectType, SQLAlchemyObjectType):
         title = resolve_langstring(self.title, args.get('lang'))
         return title
 
+    def resolve_title_entries(self, args, context, info):
+        return resolve_langstring_entries(self, 'title')
+
     def resolve_text(self, args, context, info):
         text = resolve_langstring(self.text, args.get('lang'))
         return text
+
+    def resolve_text_entries(self, args, context, info):
+        return resolve_langstring_entries(self, 'text')
 
     def resolve_image(self, args, context, info):
         for attachment in self.attachments:
