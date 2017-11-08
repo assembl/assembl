@@ -1,59 +1,52 @@
-import {
-  CREATE_RESOURCE,
-  DELETE_RESOURCE,
-  UPDATE_RESOURCE_DOCUMENT,
-  UPDATE_RESOURCE_EMBED_CODE,
-  UPDATE_RESOURCE_IMAGE,
-  UPDATE_RESOURCE_TEXT,
-  UPDATE_RESOURCE_TITLE
-} from '../actionTypes';
+// @flow
+import * as actionTypes from '../actionTypes';
 
-export const createResource = (id, order) => {
-  return { id: id, order: order, type: CREATE_RESOURCE };
+export const createResource = (id: string, order: number): actionTypes.CreateResource => {
+  return { id: id, order: order, type: actionTypes.CREATE_RESOURCE };
 };
 
-export const deleteResource = (id) => {
-  return { id: id, type: DELETE_RESOURCE };
+export const deleteResource = (id: string): actionTypes.DeleteResource => {
+  return { id: id, type: actionTypes.DELETE_RESOURCE };
 };
 
-export const updateResourceDocument = (id, value) => {
+export const updateResourceDocument = (id: string, value: string): actionTypes.UpdateResourceDocument => {
   return {
     id: id,
     value: value,
-    type: UPDATE_RESOURCE_DOCUMENT
+    type: actionTypes.UPDATE_RESOURCE_DOCUMENT
   };
 };
 
-export const updateResourceEmbedCode = (id, value) => {
+export const updateResourceEmbedCode = (id: string, value: string): actionTypes.UpdateResourceEmbedCode => {
   return {
     id: id,
     value: value,
-    type: UPDATE_RESOURCE_EMBED_CODE
+    type: actionTypes.UPDATE_RESOURCE_EMBED_CODE
   };
 };
 
-export const updateResourceImage = (id, value) => {
+export const updateResourceImage = (id: string, value: string): actionTypes.UpdateResourceImage => {
   return {
     id: id,
     value: value,
-    type: UPDATE_RESOURCE_IMAGE
+    type: actionTypes.UPDATE_RESOURCE_IMAGE
   };
 };
 
-export const updateResourceText = (id, locale, value) => {
+export const updateResourceText = (id: string, locale: string, value: string): actionTypes.UpdateResourceText => {
   return {
     id: id,
     locale: locale,
     value: value,
-    type: UPDATE_RESOURCE_TEXT
+    type: actionTypes.UPDATE_RESOURCE_TEXT
   };
 };
 
-export const updateResourceTitle = (id, locale, value) => {
+export const updateResourceTitle = (id: string, locale: string, value: string): actionTypes.UpdateResourceTitle => {
   return {
     id: id,
     locale: locale,
     value: value,
-    type: UPDATE_RESOURCE_TITLE
+    type: actionTypes.UPDATE_RESOURCE_TITLE
   };
 };
