@@ -241,7 +241,6 @@ var SynthesisPanel = AssemblPanel.extend({
             canEdit: canEdit,
             autosave: true,
             hideButton: true,
-            // openInModal: true
           });
           that.getRegion("introduction").show(introductionField);
 

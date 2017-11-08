@@ -5,10 +5,12 @@
  */
 
 var Ctx = require('../common/context.js'),
+    LangString = require('../models/langstring.js'),
     MessageView = require('./message.js'),
     Synthesis = require('../models/synthesis.js'),
     SynthesisPanel = require('./synthesisPanel.js'),
-    CollectionManager = require('../common/collectionManager.js');
+    CollectionManager = require('../common/collectionManager.js'),
+    Promise = require('bluebird');
 
 /**
  * @class app.views.synthesisMessage.MessageView
@@ -38,8 +40,8 @@ var SynthesisMessageView = MessageView.extend({
    * @type {}
    */
   transformDataBeforeRender: function(data) {
-    data['subject'] = '';
-    data['body'] = '';
+    data['subject'] = new LangString.Model.Empty()
+    data['body'] = new LangString.Model.Empty();
     if (this.viewStyle == this.availableMessageViewStyles.PREVIEW) {
       data['bodyFormat'] = "text/plain";
     }
@@ -53,21 +55,27 @@ var SynthesisMessageView = MessageView.extend({
   postRender: function() {
       var that = this,
           body,
+          subject,
+          introduction,
           collectionManager = new CollectionManager();
 
-      collectionManager.getAllSynthesisCollectionPromise()
-        .then(function(allSynthesisCollection) {
+      Promise.join(
+        collectionManager.getAllSynthesisCollectionPromise(),
+        collectionManager.getUserLanguagePreferencesPromise(Ctx),
+        function(allSynthesisCollection, translationData) {
           var synthesis = allSynthesisCollection.get(that.synthesisId);
           if (!synthesis) {
             throw Error("BUG: Could not get synthesis after post. Maybe too early.")
           }
 
-          that.$('.message-subject').html(synthesis.get('subject'));
+          subject = synthesis.get('subject').bestValue(translationData);
+          that.$('.message-subject').html(subject);
           if (that.viewStyle == that.availableMessageViewStyles.PREVIEW) {
             //Strip HTML from preview
             //bodyFormat = "text/plain";
 
-            body = MessageView.prototype.generateBodyPreview(synthesis.get('introduction'));
+            introduction = synthesis.get('introduction').bestValue(translationData);
+            body = MessageView.prototype.generateBodyPreview(introduction);
             that.$('.message-body > p').empty().html(body);
           }
           else {
