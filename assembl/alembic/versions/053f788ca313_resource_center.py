@@ -22,6 +22,13 @@ def upgrade(pyramid_env):
         op.create_table(
             'resource',
             sa.Column('id', sa.Integer, primary_key=True),
+            sa.Column('type', sa.String(60), nullable=False),
+            sa.Column('discussion_id',
+                sa.Integer,
+                sa.ForeignKey(
+                  'discussion.id',
+                   ondelete="CASCADE",
+                   onupdate="CASCADE"), nullable=False, index=False),
             sa.Column("title_id", sa.Integer, sa.ForeignKey("langstring.id")),
             sa.Column("text_id", sa.Integer, sa.ForeignKey("langstring.id")),
             sa.Column('embed_code', sa.Text()),
