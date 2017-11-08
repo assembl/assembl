@@ -1,0 +1,22 @@
+query ResourcesQuery {
+  resources {
+    id
+    titleEntries {
+      localeCode
+      value
+    }
+    textEntries {
+      localeCode
+      value
+    }
+    embedCode
+    doc {
+      externalUrl
+      title
+    }
+    image {
+      externalUrl
+      mimeType
+    }
+  }
+}

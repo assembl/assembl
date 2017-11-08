@@ -11,6 +11,7 @@ export const UPDATE_RESOURCE_EMBED_CODE: 'UPDATE_RESOURCE_EMBED_CODE' = 'UPDATE_
 export const UPDATE_RESOURCE_IMAGE: 'UPDATE_RESOURCE_IMAGE' = 'UPDATE_RESOURCE_IMAGE';
 export const UPDATE_RESOURCE_TEXT: 'UPDATE_RESOURCE_TEXT' = 'UPDATE_RESOURCE_TEXT';
 export const UPDATE_RESOURCE_TITLE: 'UPDATE_RESOURCE_TITLE' = 'UPDATE_RESOURCE_TITLE';
+export const UPDATE_RESOURCES: 'UPDATE_RESOURCES' = 'UPDATE_RESOURCES';
 
 export type UpdateContentLocaleById = {
   type: typeof UPDATE_CONTENT_LOCALE_BY_ID,
@@ -81,6 +82,17 @@ export type UpdateResourceTitle = {
   type: typeof UPDATE_RESOURCE_TITLE
 };
 
+export type ResourceInfo = {
+  id: string
+};
+
+export type ResourcesArray = Array<ResourceInfo>;
+
+export type UpdateResources = {
+  resources: ResourcesArray,
+  type: typeof UPDATE_RESOURCES
+};
+
 type BasicAction = {
   type: string
 };
@@ -94,6 +106,7 @@ type ResourcesCenterActions =
   | UpdateResourceEmbedCode
   | UpdateResourceImage
   | UpdateResourceText
-  | UpdateResourceTitle;
+  | UpdateResourceTitle
+  | UpdateResources;
 
 export type Action = UpdateContentLocaleById | UpdateContentLocaleByOriginalLocale | ResourcesCenterActions | BasicAction;

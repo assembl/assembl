@@ -1,7 +1,7 @@
 // @flow
 import { combineReducers } from 'redux';
 import type ReduxAction from 'redux';
-import { List, Map } from 'immutable';
+import { fromJS, List, Map } from 'immutable';
 
 import {
   type Action,
@@ -11,7 +11,8 @@ import {
   UPDATE_RESOURCE_EMBED_CODE,
   UPDATE_RESOURCE_IMAGE,
   UPDATE_RESOURCE_TEXT,
-  UPDATE_RESOURCE_TITLE
+  UPDATE_RESOURCE_TITLE,
+  UPDATE_RESOURCES
 } from '../../actions/actionTypes';
 import { updateInLangstringEntries } from '../../utils/i18n';
 
@@ -19,6 +20,12 @@ export const resourcesInOrder = (state: List<number> = List(), action: ReduxActi
   switch (action.type) {
   case CREATE_RESOURCE:
     return state.push(action.id);
+  case UPDATE_RESOURCES:
+    return List(
+      action.resources.map((r) => {
+        return r.id;
+      })
+    );
   default:
     return state;
   }
@@ -43,16 +50,18 @@ export const resourcesInOrder = (state: List<number> = List(), action: ReduxActi
 //   textEntries: List<LangString>,
 //   embedCode: string
 // };
+const defaultResourceDoc = Map({
+  externalUrl: ''
+});
+const defaultResourceImage = Map({
+  externalUrl: '',
+  mimeType: ''
+});
 const defaultResource = Map({
   toDelete: false,
   isNew: true,
-  doc: Map({
-    externalUrl: ''
-  }),
-  img: Map({
-    externalUrl: '',
-    mimeType: ''
-  }),
+  doc: defaultResourceDoc,
+  img: defaultResourceImage,
   titleEntries: List(),
   textEntries: List(),
   embedCode: ''
@@ -72,9 +81,29 @@ export const resourcesById = (state: Map<string, Map> = Map(), action: ReduxActi
       .setIn([action.id, 'img', 'externalUrl'], action.value)
       .setIn([action.id, 'img', 'mimeType'], action.value.type);
   case UPDATE_RESOURCE_TEXT:
-    return state.updateIn([action.id, 'textEntries'], updateInLangstringEntries(action.locale, action.value));
+    return state.updateIn([action.id, 'textEntries'], updateInLangstringEntries(action.locale, fromJS(action.value)));
   case UPDATE_RESOURCE_TITLE:
     return state.updateIn([action.id, 'titleEntries'], updateInLangstringEntries(action.locale, action.value));
+  case UPDATE_RESOURCES: {
+    let newState = Map();
+    action.resources.forEach((resource, idx) => {
+      const resourceInfo = Map({
+        toDelete: false,
+        isNew: false,
+        order: idx + 1,
+        doc: resource.doc ? fromJS(resource.doc) : defaultResourceDoc,
+        id: resource.id,
+        img: resource.image ? fromJS(resource.image) : defaultResourceImage,
+        titleEntries: fromJS(resource.titleEntries),
+        textEntries: fromJS(resource.textEntries),
+        embedCode: resource.embedCode
+      });
+
+      newState = newState.set(resource.id, resourceInfo);
+    });
+
+    return newState;
+  }
   default:
     return state;
   }

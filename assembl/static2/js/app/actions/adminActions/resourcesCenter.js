@@ -50,3 +50,10 @@ export const updateResourceTitle = (id: string, locale: string, value: string): 
     type: actionTypes.UPDATE_RESOURCE_TITLE
   };
 };
+
+export const updateResources = (resources: actionTypes.ResourcesArray): actionTypes.UpdateResources => {
+  return {
+    resources: resources,
+    type: actionTypes.UPDATE_RESOURCES
+  };
+};

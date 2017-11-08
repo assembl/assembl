@@ -112,13 +112,14 @@ const EditResourceForm = ({
 
 const mapStateToProps = (state, { id, locale }) => {
   const resource = state.admin.resourcesCenter.resourcesById.get(id);
+  const text = getEntryValueForLocale(resource.get('textEntries'), locale);
   return {
     documentUrl: resource.getIn(['doc', 'externalUrl']),
     embedCode: resource.get('embedCode'),
     imgMimeType: resource.getIn(['img', 'mimeType']),
     imgUrl: resource.getIn(['img', 'externalUrl']),
     order: resource.get('order'),
-    text: getEntryValueForLocale(resource.get('textEntries'), locale, ''),
+    text: text ? text.toJS() : null,
     title: getEntryValueForLocale(resource.get('titleEntries'), locale, '')
   };
 };

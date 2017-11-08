@@ -4,13 +4,16 @@ import { compose, graphql } from 'react-apollo';
 import { filter } from 'graphql-anywhere';
 import { Grid, Row, Col } from 'react-bootstrap';
 import { connect } from 'react-redux';
+import { List } from 'immutable';
 
 import { updateThematics } from '../actions/adminActions';
+import { updateResources } from '../actions/adminActions/resourcesCenter';
 import withLoadingIndicator from '../components/common/withLoadingIndicator';
 import Menu from '../components/administration/menu';
 import LanguageMenu from '../components/administration/languageMenu';
 import SaveButton from '../components/administration/saveButton';
 import ThematicsQuery from '../graphql/ThematicsQuery.graphql';
+import ResourcesQuery from '../graphql/ResourcesQuery.graphql';
 import { convertEntriesToRawContentState } from '../utils/draftjs';
 
 export function convertVideoDescriptions(thematics) {
@@ -48,6 +51,7 @@ class Administration extends React.Component {
   }
 
   componentDidMount() {
+    this.putResourcesInStore(this.props.resources);
     this.putThematicsInStore(this.props.data);
   }
 
@@ -55,6 +59,10 @@ class Administration extends React.Component {
     // update thematics in store after a mutation has been executed
     if (nextProps.data.thematics !== this.props.data.thematics) {
       this.putThematicsInStore(nextProps.data);
+    }
+
+    if (nextProps.resources !== this.props.resources) {
+      this.putResourcesInStore(nextProps.resources);
     }
   }
 
@@ -71,8 +79,19 @@ class Administration extends React.Component {
     this.props.updateThematics(thematics);
   }
 
+  putResourcesInStore(resources) {
+    const filteredResources = filter(ResourcesQuery, { resources: resources });
+    const resourcesForStore = filteredResources.resources.map((resource) => {
+      return {
+        ...resource,
+        textEntries: resource.textEntries ? convertEntriesToRawContentState(resource.textEntries) : null
+      };
+    });
+    this.props.updateResources(resourcesForStore);
+  }
+
   render() {
-    const { children, data, debate, i18n, params } = this.props;
+    const { children, data, debate, i18n, params, refetchResources } = this.props;
     const { phase } = params;
     const { timeline } = this.props.debate.debateData;
     const childrenWithProps = React.Children.map(children, (child) => {
@@ -89,7 +108,7 @@ class Administration extends React.Component {
               <Row>
                 <Col xs={12} md={3} />
                 <Col xs={12} md={8}>
-                  <SaveButton refetchThematics={data.refetch} />
+                  <SaveButton refetchThematics={data.refetch} refetchResources={refetchResources} />
                 </Col>
                 <Col xs={12} md={1} />
               </Row>
@@ -132,6 +151,9 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
+    updateResources: (resources) => {
+      return dispatch(updateResources(resources));
+    },
     updateThematics: (thematics) => {
       return dispatch(updateThematics(thematics));
     }
@@ -142,6 +164,25 @@ export default compose(
   connect(mapStateToProps, mapDispatchToProps),
   graphql(ThematicsQuery, {
     options: { variables: { identifier: 'survey' } }
+  }),
+  graphql(ResourcesQuery, {
+    props: ({ data }) => {
+      if (data.loading) {
+        return {
+          loading: true
+        };
+      }
+      if (data.error) {
+        return {
+          hasErrors: true
+        };
+      }
+
+      return {
+        refetchResources: data.refetch,
+        resources: data.resources
+      };
+    }
   }),
   withLoadingIndicator()
 )(Administration);
