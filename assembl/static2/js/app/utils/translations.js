@@ -338,7 +338,8 @@ const Translations = {
         embedCodeLabel: "Vidéo/Slides",
         deleteResource: "Supprimer la ressource",
         documentLabel: "Document",
-        imageLabel: "Image"
+        imageLabel: "Image",
+        successSave: "Les ressources ont été enregistrées avec succès !"
       },
       surveyExport: {
         annotation: "Vous pouvez exporter l'ensemble des données du débat en cliquant simplement sur le bouton Exporter",
@@ -349,7 +350,7 @@ const Translations = {
       },
       step_x_total: "Section %{num} sur %{total}",
       saveThemes: "Sauvegarder",
-      successThemeCreation: "Les thématiques ont été enregistrées avec succès !",
+      eation: "Les thématiques ont été enregistrées avec succès !",
       successLanguagePreference: "Les langues du débat ont été enregistrées avec succès !"
     },
     unauthorizedAdministration: {
@@ -695,7 +696,8 @@ const Translations = {
         embedCodeLabel: "Video/Slides",
         deleteResource: "Delete the resource",
         documentLabel: "Document",
-        imageLabel: "Image"
+        imageLabel: "Image",
+        successSave: "Resources have been saved with success!"
       },
       surveyExport: {
         annotation: "You can export all the debate data by clicking on the Export button",

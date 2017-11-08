@@ -16,6 +16,23 @@ import {
 } from '../../actions/actionTypes';
 import { updateInLangstringEntries } from '../../utils/i18n';
 
+export const resourcesHaveChanged = (state: boolean = false, action: ReduxAction<Action>) => {
+  switch (action.type) {
+  case CREATE_RESOURCE:
+  case DELETE_RESOURCE:
+  case UPDATE_RESOURCE_DOCUMENT:
+  case UPDATE_RESOURCE_EMBED_CODE:
+  case UPDATE_RESOURCE_IMAGE:
+  case UPDATE_RESOURCE_TEXT:
+  case UPDATE_RESOURCE_TITLE:
+    return true;
+  case UPDATE_RESOURCES:
+    return false;
+  default:
+    return state;
+  }
+};
+
 export const resourcesInOrder = (state: List<number> = List(), action: ReduxAction<Action>) => {
   switch (action.type) {
   case CREATE_RESOURCE:
@@ -110,6 +127,7 @@ export const resourcesById = (state: Map<string, Map> = Map(), action: ReduxActi
 };
 
 export default combineReducers({
+  resourcesHaveChanged: resourcesHaveChanged,
   resourcesInOrder: resourcesInOrder,
   resourcesById: resourcesById
 });

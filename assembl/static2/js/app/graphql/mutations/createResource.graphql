@@ -1,0 +1,22 @@
+mutation createResource(
+  $doc: String
+  $embedCode: String
+  $image: String
+  $textEntries: [LangStringEntryInput]
+  $titleEntries: [LangStringEntryInput]!
+) {
+  createResource(doc: $doc, image: $image, titleEntries: $titleEntries, textEntries: $textEntries, embedCode: $embedCode) {
+    resource {
+      doc {
+        externalUrl
+      }
+      embedCode
+      image {
+        externalUrl
+        mimeType
+      }
+      text
+      title
+    }
+  }
+}

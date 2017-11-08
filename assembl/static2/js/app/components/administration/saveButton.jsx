@@ -10,6 +10,9 @@ import { languagePreferencesHasChanged, updateSelectedLocale } from '../../actio
 import createThematicMutation from '../../graphql/mutations/createThematic.graphql';
 import deleteThematicMutation from '../../graphql/mutations/deleteThematic.graphql';
 import updateThematicMutation from '../../graphql/mutations/updateThematic.graphql';
+import createResourceMutation from '../../graphql/mutations/createResource.graphql';
+import updateResourceMutation from '../../graphql/mutations/updateResource.graphql';
+import deleteResourceMutation from '../../graphql/mutations/deleteResource.graphql';
 import updateDiscussionPreferenceQuery from '../../graphql/mutations/updateDiscussionPreference.graphql';
 import getDiscussionPreferenceLanguage from '../../graphql/DiscussionPreferenceLanguage.graphql';
 
@@ -89,6 +92,20 @@ const createVariablesForDeleteThematicMutation = (thematic) => {
   };
 };
 
+const createVariablesForResourceMutation = (resource) => {
+  return {
+    doc: resource.doc && typeof resource.doc.externalUrl === 'object' ? resource.doc.externalUrl : null,
+    embedCode: resource.embedCode,
+    image: resource.img && typeof resource.img.externalUrl === 'object' ? resource.img.externalUrl : null,
+    textEntries: convertEntriesToHTML(resource.textEntries),
+    titleEntries: resource.titleEntries
+  };
+};
+
+const createVariablesForDeleteResourceMutation = (resource) => {
+  return { resourceId: resource.id };
+};
+
 const SaveButton = ({
   i18n,
   client,
@@ -102,7 +119,13 @@ const SaveButton = ({
   preferences,
   languagePreferenceHasChanged,
   resetLanguagePreferenceChanged,
-  changeLocale
+  changeLocale,
+  resourcesHaveChanged,
+  resources,
+  createResource,
+  deleteResource,
+  updateResource,
+  refetchResources
 }) => {
   const saveAction = () => {
     displayAlert('success', `${I18n.t('loading.wait')}...`);
@@ -147,12 +170,32 @@ const SaveButton = ({
           displayAlert('danger', `${error}`, false, 30000);
         });
     }
+
+    if (resourcesHaveChanged) {
+      const mutationsPromises = getMutationsPromises({
+        items: resources,
+        variablesCreator: createVariablesForResourceMutation,
+        deleteVariablesCreator: createVariablesForDeleteResourceMutation,
+        createMutation: createResource,
+        deleteMutation: deleteResource,
+        updateMutation: updateResource
+      });
+
+      runSerial(mutationsPromises)
+        .then(() => {
+          refetchResources();
+          displayAlert('success', I18n.t('administration.resourcesCenter.successSave'));
+        })
+        .catch((error) => {
+          displayAlert('danger', `${error}`, false, 30000);
+        });
+    }
   };
 
   return (
     <Button
       className="button-submit button-dark right"
-      disabled={!(thematicsHaveChanged || languagePreferenceHasChanged)}
+      disabled={!(thematicsHaveChanged || languagePreferenceHasChanged || resourcesHaveChanged)}
       onClick={saveAction}
     >
       <Translate value="administration.saveThemes" />
@@ -172,12 +215,22 @@ const SaveButtonWithMutations = compose(
   }),
   graphql(updateDiscussionPreferenceQuery, {
     name: 'updateDiscussionPreference'
+  }),
+  graphql(createResourceMutation, {
+    name: 'createResource'
+  }),
+  graphql(updateResourceMutation, {
+    name: 'updateResource'
+  }),
+  graphql(deleteResourceMutation, {
+    name: 'deleteResource'
   })
 )(SaveButton);
 
 const mapStateToProps = ({
   i18n,
   admin: {
+    resourcesCenter,
     thematicsById,
     thematicsHaveChanged,
     thematicsInOrder,
@@ -185,7 +238,12 @@ const mapStateToProps = ({
     discussionLanguagePreferencesHasChanged
   }
 }) => {
+  const { resourcesById, resourcesHaveChanged, resourcesInOrder } = resourcesCenter;
   return {
+    resourcesHaveChanged: resourcesHaveChanged,
+    resources: resourcesInOrder.map((id) => {
+      return resourcesById.get(id).toJS();
+    }),
     thematicsHaveChanged: thematicsHaveChanged,
     thematics: thematicsInOrder.toArray().map((id) => {
       return thematicsById.get(id).toJS();
