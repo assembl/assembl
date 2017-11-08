@@ -1,10 +1,20 @@
+// @flow
+
 import React from 'react';
 
 import Section from '../common/section';
 import { getPartialTree, getChildren } from '../../utils/tree';
 import IdeaSynthesis from './IdeaSynthesis';
 
-const IdeaSynthesisTree = (props) => {
+import type { SynthesisIdea } from './IdeaSynthesis';
+
+const IdeaSynthesisTree = (props: {
+  rootIdea: SynthesisIdea,
+  slug: string,
+  subIdeas: Array<SynthesisIdea>,
+  index: number,
+  parents: Array<number>
+}) => {
   const { rootIdea, slug, subIdeas, index, parents } = props;
   const { roots, children } = getPartialTree(subIdeas);
   const newParents = parents.slice();

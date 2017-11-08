@@ -1,3 +1,5 @@
+// @flow
+
 import React from 'react';
 import { Translate } from 'react-redux-i18n';
 import { Link } from 'react-router';
@@ -5,6 +7,21 @@ import { Link } from 'react-router';
 import StatisticsDoughnut from '../debate/common/statisticsDoughnut';
 import PostsAndContributorsCount from '../common/postsAndContributorsCount';
 import { getSentimentsCount, createDoughnutElements } from '../debate/common/announcement';
+
+export type SynthesisIdea = {
+  id: string,
+  title: string,
+  img: {
+    externalUrl: string
+  },
+  synthesisTitle: string,
+  numContributors: number,
+  numPosts: number,
+  posts: {
+    edges: Array<Object>
+  },
+  ancestors: Array<string>
+};
 
 const SynthesisBody = ({ level, value, stats }) => {
   return (
@@ -55,11 +72,12 @@ const SynthesisImage = ({ level, title, imgUrl, stats }) => {
   return null;
 };
 
-const IdeaSynthesis = (props) => {
+const IdeaSynthesis = (props: { idea: SynthesisIdea, level: number, slug: string }) => {
   const { idea, level, slug } = props;
   const { id, title, img, synthesisTitle, numContributors, numPosts, posts } = idea;
   const phaseIdentifier = 'thread'; // TODO: Proper phase identification
   // For now, syntheses can only have ideas from the "thread" phase.
+
   const imgUrl = img && img.externalUrl;
   const link = `/${slug}/debate/${phaseIdentifier}/theme/${id}`;
   const stats = <SynthesisStats numContributors={numContributors} numPosts={numPosts} ideaLink={link} posts={posts} />;
