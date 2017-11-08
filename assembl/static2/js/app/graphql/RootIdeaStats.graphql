@@ -1,4 +1,4 @@
-query {
+query RootIdeaStats {
   rootIdea {
     ... on Node {
       id
