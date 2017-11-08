@@ -4,7 +4,6 @@ import { compose, graphql } from 'react-apollo';
 import { filter } from 'graphql-anywhere';
 import { Grid, Row, Col } from 'react-bootstrap';
 import { connect } from 'react-redux';
-import { List } from 'immutable';
 
 import { updateThematics } from '../actions/adminActions';
 import { updateResources } from '../actions/adminActions/resourcesCenter';

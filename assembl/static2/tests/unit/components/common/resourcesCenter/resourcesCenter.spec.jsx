@@ -12,7 +12,10 @@ describe('ResourcesCenter component', () => {
         {
           title: 'Economie - Rapport très intéressant',
           description:
-            'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.',
+            'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor ' +
+            'incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud ' +
+            'exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure ' +
+            'dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.',
           media: {
             type: 'image',
             url: 'http://img.bfmtv.com/c/1256/708/6fe/831e6b4c6f0fb3ff26b8123515740.jpg'
@@ -22,7 +25,10 @@ describe('ResourcesCenter component', () => {
         {
           title: 'Economie - Vidéo tout à fait fascinantet',
           description:
-            'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.',
+            'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor ' +
+            'incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud ' +
+            'exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure ' +
+            'dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.',
           media: {
             type: 'embed',
             url: 'https://player.vimeo.com/video/32975166'
@@ -32,7 +38,10 @@ describe('ResourcesCenter component', () => {
         {
           title: 'Economie - Des slides éblouissantes',
           description:
-            'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.',
+            'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor ' +
+            'incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud ' +
+            'exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure ' +
+            'dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.',
           media: {
             type: 'embed',
             url: 'http://www.slideshare.net/slideshow/embed_code/key/27D5UNrUvyDJjC'
