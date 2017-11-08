@@ -7,6 +7,7 @@
 var Base = require('./base.js'),
     Ctx = require('../common/context.js'),
     Idea = require("./idea.js"),
+    LangString = require('./langstring.js'),
     i18n = require('../utils/i18n.js');
 
 
@@ -62,12 +63,40 @@ var SynthesisModel = Base.Model.extend({
    * Default values
    * @type {Object}
    */
-  defaults: {
-    subject: i18n.gettext('Add a title'),
-    introduction: i18n.gettext('Add an introduction'),
-    conclusion: i18n.gettext('Add a conclusion'),
-    ideas: [],
-    published_in_post: null
+
+  createDefaultLS: function(string) {
+    var ls = new LangString.Model(),
+        options = {},
+        locale = Ctx.getLocale()
+    options[locale] = string;
+    ls.initFromDict(options);
+    return ls;
+  },
+
+  defaults: function() {
+    return {
+      subject: this.createDefaultLS(i18n.gettext('Add a title')),
+      introduction: this.createDefaultLS(i18n.gettext('Add an introduction')),
+      conclusion: this.createDefaultLS(i18n.gettext('Add a conclusion')),
+      ideas: [],
+      published_in_post: null
+    }
+  },
+
+  /**
+   * @function app.models.synthesis.SynthesisModel.parse
+   */
+  parse: function(resp, options) {
+    if (resp.introduction !== undefined) {
+      resp.introduction = new LangString.Model(resp.introduction, {parse: true});
+    }
+    if (resp.subject !== undefined) {
+      resp.subject = new LangString.Model(resp.subject, {parse: true});
+    }
+    if (resp.conclusion !== undefined) {
+      resp.conclusion = new LangString.Model(resp.conclusion, {parse: true});
+    }
+    return Base.Model.prototype.parse.apply(this, arguments);
   },
 
   validate: function(attrs, options) {
