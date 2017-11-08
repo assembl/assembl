@@ -1,15 +1,25 @@
-.social-share-button {
-  display: inline-block;
-  padding: 0 15px;
-}
-
 .share-buttons-container {
   padding-top: 10px;
   padding-bottom: 15px;
-}
-
-.social-share-buttons-container {
-  padding-bottom: 20px;
+  .btn-copy {
+    white-space: normal;
+    width: 60%;
+    &:focus {
+      outline: none;
+    }
+  }
+  @media screen and (max-width: 700px) {
+    .btn-copy {
+      width: 100%;
+    }
+  }
+  .social-share-buttons-container {
+    padding-bottom: 20px;
+    .social-share-button {
+      display: inline-block;
+      padding: 0 15px;
+    }
+  }
 }
 
 .modal-content
@@ -22,17 +32,9 @@
   text-align: center;
 }
 
-@media screen and (min-width: 700px) {
+@media screen and (min-width: 701px) {
   .btn-copy {
     min-width: 300px;
-  }
-}
-
-.btn-copy {
-  white-space: normal;
-  width: 60%;
-  &:focus {
-    outline: none;
   }
 }
 
