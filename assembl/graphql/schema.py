@@ -1073,7 +1073,10 @@ class Query(graphene.ObjectType):
     def resolve_has_syntheses(self, args, context, info):
         discussion_id = context.matchdict['discussion_id']
         discussion = models.Discussion.get(discussion_id)
-        return True if discussion.get_all_syntheses_query(include_unpublished=False) else False
+        query = discussion.get_all_syntheses_query(include_unpublished=False)
+        count = query.filter(
+            models.Synthesis.is_next_synthesis != True).count()
+        return True if count else False
 
     def resolve_num_participants(self, args, context, info):
         discussion_id = context.matchdict['discussion_id']
