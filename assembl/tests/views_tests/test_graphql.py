@@ -1632,6 +1632,15 @@ def test_query_discussion_sentiments_count(
     count = res_data[u"totalSentiments"]
     assert count == 0
 
+
+def test_query_has_resources_center(discussion, resource, resource_with_image_and_doc, graphql_request):
+    query = u"""
+query { hasResourcesCenter }
+"""
+    res = schema.execute(query, context_value=graphql_request)
+    assert res.data['hasResourcesCenter'] is True
+
+
 def test_query_resources(discussion, resource, resource_with_image_and_doc, graphql_request):
     query = u"""
 query { resources {

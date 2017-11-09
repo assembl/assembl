@@ -1005,6 +1005,7 @@ class Query(graphene.ObjectType):
     locales = graphene.List(Locale, lang=graphene.String(required=True))
     total_sentiments = graphene.Int()
     resources = graphene.List(Resource)
+    has_resources_center = graphene.Boolean()
 
     def resolve_resources(self, args, context, info):
         model = models.Resource
@@ -1012,6 +1013,14 @@ class Query(graphene.ObjectType):
         discussion_id = context.matchdict['discussion_id']
         discussion = models.Discussion.get(discussion_id)
         return query.filter(model.discussion == discussion)
+
+    def resolve_has_resources_center(self, args, context, info):
+        model = models.Resource
+        query = get_query(model, context)
+        discussion_id = context.matchdict['discussion_id']
+        discussion = models.Discussion.get(discussion_id)
+        resources_count = query.filter(model.discussion == discussion).count()
+        return bool(resources_count)
 
     def resolve_total_sentiments(self, args, context, info):
         discussion_id = context.matchdict['discussion_id']
