@@ -2003,11 +2003,15 @@ class Mutations(graphene.ObjectType):
 Schema = graphene.Schema(query=Query, mutation=Mutations)
 
 
-def generate_schema_json():
+def generate_schema_json_from_schema(schema, output='/tmp/schema.json'):
     import json
-    schema_dict = Schema.introspect()
-    with open('/tmp/schema.json', 'w') as outfile:
+    schema_dict = schema.introspect()
+    with open(output, 'w') as outfile:
         json.dump(schema_dict, outfile, indent=2)
+
+
+def generate_schema_json():
+    generate_schema_json_from_schema(Schema)
 
 
 '''
