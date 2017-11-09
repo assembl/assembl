@@ -1,4 +1,5 @@
 import React from 'react';
+import { isMobile } from '../../utils/globalFunctions';
 
 const scrollOnePageDown = () => {
   window.scrollTo({ top: window.innerHeight, left: 0, behavior: 'smooth' });
@@ -6,9 +7,10 @@ const scrollOnePageDown = () => {
 
 const ScrollOnePageButton = ({ hidden }) => {
   const scrollOnePageTopPosition = window.innerHeight - 35;
+  const isTouchScreen = isMobile.any();
   return (
     <a
-      className={`scroll-one-page ${hidden || window.innerHeight > 690 ? 'hidden' : ''}`}
+      className={`scroll-one-page ${hidden || window.innerHeight > 750 || isTouchScreen ? 'hidden' : ''}`}
       onClick={scrollOnePageDown}
       style={{ top: scrollOnePageTopPosition }}
     >

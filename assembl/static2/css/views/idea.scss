@@ -3,7 +3,6 @@
 
     .header-section {
       .header-content {
-        max-width: 70%;
         width: auto;
         margin-left: 0;
         margin-right: auto;
@@ -177,6 +176,32 @@
             padding-right: 0;
         }
     }
+}
+
+@media screen and (min-width: 1100px) {
+  .idea {
+    .header-content {
+      max-width: 70%;
+    }
+  }
+}
+
+@media screen and (max-width: 1099px) {
+  .idea {
+    .header-content {
+      padding-left: 40px;
+      padding-right: 40px;
+      max-width: 100%;
+    }
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .idea {
+    .header-content {
+      padding-top: $margin-section;
+    }
+  }
 }
 
 @media screen and (max-width: 600px) {
