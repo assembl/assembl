@@ -5,7 +5,7 @@ import ResourcesQuery from '../graphql/ResourcesQuery.graphql';
 import withLoadingIndicator from '../components/common/withLoadingIndicator';
 import ResourcesCenter from '../components/resourcesCenter/resourcesCenter';
 
-const ResourcesCenterWithMock = ({ data, debate }) => {
+const ResourcesCenterContainer = ({ data, debate }) => {
   return <ResourcesCenter {...data} headerBackgroundUrl={debate.debateData.headerBackgroundUrl} />;
 };
 
@@ -16,4 +16,4 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default compose(connect(mapStateToProps), graphql(ResourcesQuery), withLoadingIndicator())(ResourcesCenterWithMock);
+export default compose(connect(mapStateToProps), graphql(ResourcesQuery), withLoadingIndicator())(ResourcesCenterContainer);
