@@ -18,6 +18,7 @@ import FormControlWithLabel from '../../common/formControlWithLabel';
 import { getEntryValueForLocale } from '../../../utils/i18n';
 
 type EditResourceFormProps = {
+  documentFilename: string,
   documentUrl: string | File,
   embedCode: string,
   handleDocumentChange: Function,
@@ -42,6 +43,7 @@ const deleteResourceTooltip = (
 );
 
 const EditResourceForm = ({
+  documentFilename,
   documentUrl,
   embedCode,
   handleDocumentChange,
@@ -96,7 +98,13 @@ const EditResourceForm = ({
         <label htmlFor={documentFieldName}>
           <Translate value="administration.resourcesCenter.documentLabel" />
         </label>
-        <FileUploader name={documentFieldName} fileOrUrl={documentUrl} handleChange={handleDocumentChange} withPreview={false} />
+        <FileUploader
+          name={documentFieldName}
+          filename={documentFilename}
+          fileOrUrl={documentUrl}
+          handleChange={handleDocumentChange}
+          withPreview={false}
+        />
       </FormGroup>
       <div className="pointer right">
         <OverlayTrigger placement="top" overlay={deleteResourceTooltip}>
@@ -114,6 +122,7 @@ const mapStateToProps = (state, { id, locale }) => {
   const resource = state.admin.resourcesCenter.resourcesById.get(id);
   const text = getEntryValueForLocale(resource.get('textEntries'), locale);
   return {
+    documentFilename: resource.getIn(['doc', 'title']),
     documentUrl: resource.getIn(['doc', 'externalUrl']),
     embedCode: resource.get('embedCode'),
     imgMimeType: resource.getIn(['img', 'mimeType']),
