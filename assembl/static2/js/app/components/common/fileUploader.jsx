@@ -58,10 +58,12 @@ class FileUploader extends React.Component<Object, FileUploaderProps, FileUpload
 
   handleChangePreview = () => {
     const file = this.fileInput.files[0];
-    this.setState({
-      fileName: file.name || ''
-    });
-    this.props.handleChange(file);
+    if (file) {
+      this.setState({
+        fileName: file.name || ''
+      });
+      this.props.handleChange(file);
+    }
   };
 
   updateInfo = (fileOrUrl: File | string) => {
