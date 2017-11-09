@@ -568,5 +568,10 @@ class SynthesisHtmlizationVisitor(IdeaVisitor):
             return self.result
 
     def as_html(self):
+        synthesis = self.graph_view
+        subject = synthesis.subject.best_lang().value
+        introduction = synthesis.introduction.best_lang().value
+        conclusion = synthesis.conclusion.best_lang().value
         return self.synthesis_template.render(
-            synthesis=self.graph_view, content=self.result)
+            content=self.result, introduction=introduction,
+            subject=subject, conclusion=conclusion)
