@@ -1039,15 +1039,13 @@ class Query(graphene.ObjectType):
         model = models.Resource
         query = get_query(model, context)
         discussion_id = context.matchdict['discussion_id']
-        discussion = models.Discussion.get(discussion_id)
-        return query.filter(model.discussion == discussion)
+        return query.filter(model.discussion_id == discussion_id)
 
     def resolve_has_resources_center(self, args, context, info):
         model = models.Resource
         query = get_query(model, context)
         discussion_id = context.matchdict['discussion_id']
-        discussion = models.Discussion.get(discussion_id)
-        resources_count = query.filter(model.discussion == discussion).count()
+        resources_count = query.filter(model.discussion_id == discussion_id).count()
         return bool(resources_count)
 
     def resolve_total_sentiments(self, args, context, info):
