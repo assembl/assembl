@@ -5,7 +5,6 @@ import { Row, Col, FormGroup, Button } from 'react-bootstrap';
 import { Translate, I18n } from 'react-redux-i18n';
 import { RawContentState } from 'draft-js';
 
-import deletePostAttachmentMutation from '../../../graphql/mutations/deletePostAttachment.graphql';
 import uploadDocumentMutation from '../../../graphql/mutations/uploadDocument.graphql';
 import updatePostMutation from '../../../graphql/mutations/updatePost.graphql';
 import { displayAlert, inviteUserToLogin } from '../../../utils/utilityManager';
@@ -170,7 +169,6 @@ class EditPostForm extends React.PureComponent<void, EditPostFormProps, EditPost
 
 export default compose(
   graphql(uploadDocumentMutation, { name: 'uploadDocument' }),
-  graphql(deletePostAttachmentMutation, { name: 'deletePostAttachment' }),
   graphql(updatePostMutation, { name: 'updatePost' }),
   withApollo
 )(EditPostForm);
