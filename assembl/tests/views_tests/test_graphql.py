@@ -1733,7 +1733,7 @@ mutation createResource($img:String,$doc:String) {
 
 
 def test_delete_resource(graphql_request, resource):
-    resource_id = resource.id
+    resource_id = to_global_id('Resource', resource.id)
     res = schema.execute(u"""
 mutation deleteResource {
     deleteResource(
@@ -1750,6 +1750,7 @@ mutation deleteResource {
 
 def test_update_resource(graphql_request, resource_with_image_and_doc):
     resource = resource_with_image_and_doc
+    resource_id = to_global_id('Resource', resource.id)
 
     import os
     from io import BytesIO
@@ -1797,7 +1798,7 @@ mutation updateResource($img:String,$doc:String) {
         }
     }
 }
-""" % (resource.id), context_value=graphql_request, variable_values={"img": u"variables.img", "doc": u"variables.doc"})
+""" % (resource_id), context_value=graphql_request, variable_values={"img": u"variables.img", "doc": u"variables.doc"})
     assert res.data is not None
     assert res.data['updateResource'] is not None
     assert res.data['updateResource']['resource'] is not None
