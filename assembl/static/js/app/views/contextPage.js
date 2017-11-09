@@ -75,6 +75,7 @@ var Synthesis = Marionette.ItemView.extend({
       var that = this;
 
       this.model = new Backbone.Model();
+      this.translationData = options.translationData;
 
       //WRITEME:  Add a listenTo on allSynthesisCollection to get an updated synthesis
       var synthesisMessage = options.allMessageStructureCollection.getLastSynthesisPost();
@@ -103,6 +104,7 @@ var Synthesis = Marionette.ItemView.extend({
   serializeData: function() {
     return {
       synthesis: this.model,
+      introduction: this.model.get('introduction').bestValue(this.translationData),
       ctx: Ctx
     }
   },
@@ -288,8 +290,9 @@ var ContextPage = Marionette.LayoutView.extend({
         collectionManager.getAllPartnerOrganizationCollectionPromise(),
         collectionManager.getAllMessageStructureCollectionPromise(),
         collectionManager.getAllSynthesisCollectionPromise(),
+        collectionManager.getUserLanguagePreferencesPromise(Ctx),
 
-            function(DiscussionModel, AllPartner, allMessageStructureCollection, allSynthesisCollection) {
+            function(DiscussionModel, AllPartner, allMessageStructureCollection, allSynthesisCollection, translationData) {
               try { if (!that.isViewDestroyed() ){
                 var partnerInstigator =  AllPartner.find(function(partner) {
                   return partner.get('is_initiator');
@@ -329,7 +332,8 @@ var ContextPage = Marionette.LayoutView.extend({
 
                 var synthesis = new Synthesis({
                   allMessageStructureCollection: allMessageStructureCollection,
-                  allSynthesisCollection: allSynthesisCollection
+                  allSynthesisCollection: allSynthesisCollection,
+                  translationData: translationData
                 });
                 that.getRegion('synthesis').show(synthesis);
 
