@@ -19,6 +19,10 @@ from assembl.lib import config
 
 def upgrade(pyramid_env):
     with context.begin_transaction():
+        op.add_column(
+            'discussion', sa.Column('resources_center_title_id',
+            sa.Integer(), sa.ForeignKey('langstring.id')))
+
         op.create_table(
             'resource',
             sa.Column('id', sa.Integer, primary_key=True),
@@ -71,3 +75,4 @@ def downgrade(pyramid_env):
     with context.begin_transaction():
         op.drop_table('resource')
         op.drop_table('resource_attachment')
+        op.drop_column('discussion', 'resources_center_title_id')
