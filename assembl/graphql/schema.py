@@ -421,6 +421,33 @@ class PostAttachment(SecureObjectType, SQLAlchemyObjectType):
     document = graphene.Field(Document)
 
 
+class ResourcesCenter(SecureObjectType, SQLAlchemyObjectType):
+    class Meta:
+        model = models.Discussion
+        only_fields = ('id', )
+
+    title = graphene.String(lang=graphene.String())
+    title_entries = graphene.List(LangStringEntry)
+    header_image = graphene.Field(Document)
+
+    def resolve_title(self, args, context, info):
+        discussion_id = context.matchdict['discussion_id']
+        discussion = models.Discussion.get(discussion_id)
+        return resolve_langstring(discussion.resources_center_title, args.get('lang'))
+
+    def resolve_title_entries(self, args, context, info):
+        discussion_id = context.matchdict['discussion_id']
+        discussion = models.Discussion.get(discussion_id)
+        return resolve_langstring_entries(discussion, 'resources_center_title')
+
+    def resolve_header_image(self, args, context, info):
+        discussion_id = context.matchdict['discussion_id']
+        discussion = models.Discussion.get(discussion_id)
+        for attachment in discussion.attachments:
+            if attachment.attachmentPurpose == 'RESOURCE_CENTER_HEADER_IMAGE':
+                return attachment.document
+
+
 class PostInterface(SQLAlchemyInterface):
     class Meta:
         model = models.Post
@@ -1005,6 +1032,7 @@ class Query(graphene.ObjectType):
     locales = graphene.List(Locale, lang=graphene.String(required=True))
     total_sentiments = graphene.Int()
     resources = graphene.List(Resource)
+    resources_center = graphene.Field(lambda: ResourcesCenter)
     has_resources_center = graphene.Boolean()
 
     def resolve_resources(self, args, context, info):
@@ -1112,6 +1140,11 @@ class Query(graphene.ObjectType):
         return [Locale(locale_code=locale_code, label=label)
                 for locale_code, label in sorted(labels.items(),
                                                  key=lambda entry: entry[1])]
+
+    def resolve_resources_center(self, args, context, info):
+        discussion_id = context.matchdict['discussion_id']
+        discussion = models.Discussion.get(discussion_id)
+        return ResourcesCenter()
 
 
 class VideoInput(graphene.InputObjectType):

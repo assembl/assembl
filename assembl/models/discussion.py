@@ -43,6 +43,7 @@ from .auth import (
     UserTemplate)
 from .preferences import Preferences
 from ..semantic.namespaces import (CATALYST, ASSEMBL, DCTERMS)
+from .langstrings import LangString
 
 resolver = DottedNameResolver(__package__)
 import logging
@@ -85,6 +86,16 @@ class Discussion(DiscussionBoundBase, NamedClassMixin):
     preferences = relationship(Preferences, backref=backref(
         'discussion'), cascade="all, delete-orphan", single_parent=True)
     creator = relationship('User', backref="discussions_created")
+
+    # resources center
+    resources_center_title_id = Column(
+        Integer(), ForeignKey(LangString.id))
+    resources_center_title = relationship(
+        LangString,
+        lazy="joined", single_parent=True,
+        primaryjoin=resources_center_title_id == LangString.id,
+        backref=backref("discussion_from_resources_center_title", lazy="dynamic"),
+        cascade="all, delete-orphan")
 
     @classmethod
     def get_naming_column_name(cls):
@@ -964,3 +975,4 @@ def slugify_topic_if_slug_is_empty(discussion, topic, oldvalue, initiator):
 
 
 event.listen(Discussion.topic, 'set', slugify_topic_if_slug_is_empty)
+LangString.setup_ownership_load_event(Discussion, ['resources_center_title'])

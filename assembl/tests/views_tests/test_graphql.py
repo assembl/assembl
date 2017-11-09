@@ -1821,3 +1821,43 @@ mutation updateResource($img:String,$doc:String) {
 
     assert '/documents/' in resource['doc']['externalUrl']
     assert resource['doc']['title'] == 'new-doc.pdf'
+
+
+def test_query_discussion_resources_center_fields(
+        discussion, graphql_request, test_session, simple_file, moderator_user):
+
+    from assembl.models.attachment import DiscussionAttachment
+    header_image = DiscussionAttachment(
+        discussion=discussion,
+        document=simple_file,
+        title=u"Resource center header image",
+        creator=moderator_user,
+        attachmentPurpose='RESOURCE_CENTER_HEADER_IMAGE'
+    )
+
+    discussion.resources_center_title = models.LangString.create(
+        u"Resources center", "en")
+    discussion.db.flush()
+
+    res = schema.execute(u"""query {
+        resourcesCenter {
+            title(lang:"en")
+            titleEntries {
+                localeCode
+                value
+            }
+            headerImage {
+                externalUrl
+                mimeType
+            }
+        }
+    }""", context_value=graphql_request)
+    res_data = json.loads(json.dumps(res.data))
+    assert res_data['resourcesCenter']['title'] == u'Resources center'
+    assert res_data['resourcesCenter']['titleEntries'][0]['localeCode'] == u'en'
+    assert res_data['resourcesCenter']['titleEntries'][0]['value'] == u'Resources center'
+    assert res_data['resourcesCenter']['headerImage']['mimeType'] == u'image/png'
+    assert '/documents/' in res_data['resourcesCenter']['headerImage']['externalUrl']
+
+    discussion.db.delete(header_image)
+    discussion.db.flush()
