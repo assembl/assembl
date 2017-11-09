@@ -28,7 +28,7 @@ import DiscussionAdmin from './pages/discussionAdmin';
 import MultiColumnsAdmin from './pages/multiColumnsAdmin';
 import TokenVoteAdmin from './pages/tokenVoteAdmin';
 import JoinDiscussion from './pages/joinDiscussion';
-import ResourcesCenterWithMock from './pages/resourcesCenterWithMock';
+import ResourcesCenter from './pages/resourcesCenter';
 import { routeForRouter } from './utils/routeMap';
 
 const DebateHome = (props) => {
@@ -100,7 +100,7 @@ export default [
         <Route path={routeForRouter('homeBare')} component={Home} />
         <Route path={routeForRouter('profile', false, { userId: ':userId' })} component={Profile} />
         <Route path={routeForRouter('synthesis')} component={Synthesis} />
-        <Route path={routeForRouter('resourcesCenter')} component={ResourcesCenterWithMock} />
+        <Route path={routeForRouter('resourcesCenter')} component={ResourcesCenter} />
         <Route path={routeForRouter('community')} component={Community} />
         <Route path={routeForRouter('terms')} component={Terms} />
         <Route path={routeForRouter('join')} component={JoinDiscussion} />

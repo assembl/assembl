@@ -1,5 +1,6 @@
 // @flow
 import React from 'react';
+import { I18n } from 'react-redux-i18n';
 import Header from '../common/header';
 import ResourceBlock from './resourceBlock';
 
@@ -10,25 +11,28 @@ export type Media = {
 
 export type Resource = {
   title: string,
-  description: string,
-  media: Media,
-  doc: string
+  text: string,
+  image: Object,
+  embedCode: string,
+  doc: Object
 };
 
 type ResourcesCenterProps = {
-  headerTitle: string,
-  headerImage: string,
-  resources: Array<Resource>
+  resources: Array<Resource>,
+  headerBackgroundUrl: string
 };
 
-const ResourcesCenter = ({ headerTitle, headerImage, resources }: ResourcesCenterProps) => {
+const ResourcesCenter = ({ resources, headerBackgroundUrl }: ResourcesCenterProps) => {
+  const headerTitle = I18n.t('resourcesCenter.headerTitle');
   return (
     <div className="resources-center">
-      <Header title={headerTitle} imgUrl={headerImage} />
+      <Header title={headerTitle} imgUrl={headerBackgroundUrl} />
       <section>
         {resources.map((resource, index) => {
-          const { title, description, media, doc } = resource;
-          return <ResourceBlock title={title} description={description} media={media} doc={doc} index={index} key={index} />;
+          const { title, text, embedCode, image, doc } = resource;
+          return (
+            <ResourceBlock title={title} text={text} embedCode={embedCode} image={image} doc={doc} index={index} key={index} />
+          );
         })}
       </section>
     </div>

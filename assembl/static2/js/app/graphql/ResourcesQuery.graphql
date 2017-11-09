@@ -1,6 +1,8 @@
-query ResourcesQuery {
+query ResourcesQuery($lang: String) {
   resources {
     id
+    title(lang: $lang)
+    text(lang: $lang)
     titleEntries {
       localeCode
       value
@@ -13,6 +15,7 @@ query ResourcesQuery {
     doc {
       externalUrl
       title
+      mimeType
     }
     image {
       externalUrl

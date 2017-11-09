@@ -74,6 +74,9 @@ const Translations = {
       "Reactive participants": "Participants réactifs",
       "Learning participants": "Participants apprenants"
     },
+    resourcesCenter: {
+      headerTitle: "Centre de ressources en ligne"
+    },
     navbar: {
       home: "accueil",
       debate: "débat",
@@ -432,6 +435,9 @@ const Translations = {
       "Creative participants": "Creative participants",
       "Reactive participants": "Reactive participants",
       "Learning participants": "Learning participants"
+    },
+    resourcesCenter: {
+      headerTitle: "Online resources center"
     },
     navbar: {
       home: "home",

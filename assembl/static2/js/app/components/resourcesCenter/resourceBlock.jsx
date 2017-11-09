@@ -8,15 +8,15 @@ export type Media = {
 
 export type ResourceBlockProps = {
   title: string,
-  description: string,
-  media: Media,
-  doc: string,
+  text: string,
+  image: Object,
+  doc: Object,
+  embedCode: string,
   index: number
 };
 
 const ResourceBlock = (props: ResourceBlockProps) => {
-  const { index, title, description, media, doc } = props;
-  const { type, url } = media;
+  const { index, title, text, embedCode, image, doc } = props;
   const isImgRight = index % 2 === 0;
   const float = isImgRight ? 'right margin-case-left' : 'left margin-case-right';
 
@@ -29,16 +29,16 @@ const ResourceBlock = (props: ResourceBlockProps) => {
         </h1>
       </div>
       <div className="resource-body">
-        {type === 'image' && <img src={url} alt="resource" className={float} />}
-        {type === 'embed' &&
+        {image && <img src={image.externalUrl} alt="resource" className={float} />}
+        {embedCode &&
           <div className={float}>
-            <iframe title="resource-video" src={url} height={350} width={500} />
+            <iframe title="resource-video" src={embedCode} height={350} width={500} />
           </div>}
         <div className="resource-text">
-          {description}
+          {text}
           {doc &&
             <div className="resource-download-link">
-              <a href={doc} target="_blank" rel="noopener noreferrer">
+              <a href={doc.externalUrl} target="_blank" rel="noopener noreferrer">
                 Download the report
               </a>
             </div>}

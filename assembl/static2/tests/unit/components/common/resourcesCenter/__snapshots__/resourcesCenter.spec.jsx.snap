@@ -5,44 +5,32 @@ exports[`ResourcesCenter component should render the list of resources 1`] = `
   className="resources-center"
 >
   <Connect(Header)
-    imgUrl="http://i.f1g.fr/media/figaro/800x_crop/2015/06/24/XVMc0167212-19a9-11e5-8467-f08c778c772f-805x453.jpg"
-    title="Centre de ressources en ligne"
+    imgUrl={undefined}
+    title="Header Title"
   />
   <section>
     <ResourceBlock
-      description="Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur."
       doc="https://www.google.fr"
+      embedCode={undefined}
+      image={undefined}
       index={0}
-      media={
-        Object {
-          "type": "image",
-          "url": "http://img.bfmtv.com/c/1256/708/6fe/831e6b4c6f0fb3ff26b8123515740.jpg",
-        }
-      }
+      text={undefined}
       title="Economie - Rapport très intéressant"
     />
     <ResourceBlock
-      description="Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur."
       doc={undefined}
+      embedCode={undefined}
+      image={undefined}
       index={1}
-      media={
-        Object {
-          "type": "embed",
-          "url": "https://player.vimeo.com/video/32975166",
-        }
-      }
+      text={undefined}
       title="Economie - Vidéo tout à fait fascinantet"
     />
     <ResourceBlock
-      description="Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur."
       doc={undefined}
+      embedCode={undefined}
+      image={undefined}
       index={2}
-      media={
-        Object {
-          "type": "embed",
-          "url": "http://www.slideshare.net/slideshow/embed_code/key/27D5UNrUvyDJjC",
-        }
-      }
+      text={undefined}
       title="Economie - Des slides éblouissantes"
     />
   </section>
