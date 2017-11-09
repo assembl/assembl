@@ -584,6 +584,13 @@ class IdeaInterface(graphene.Interface):
     order = graphene.Float()
 
     def resolve_num_posts(self, args, context, info):
+        if isinstance(self, models.RootIdea):
+            # If this is RootIdea, do the sum of all children to be sure
+            # we use the same counters that we see on each idea which are
+            # based on countable states.
+            # Don't use RootIdea.num_posts that give much higher count.
+            return sum([child.num_posts for child in self.get_children()])
+
         return self.num_posts
 
     def resolve_img(self, args, context, info):
@@ -653,7 +660,7 @@ class IdeaMessageColumn(SecureObjectType, SQLAlchemyObjectType):
 
     def resolve_num_posts(self, args, context, info):
         related = self.idea.get_related_posts_query(
-            partial=True, include_deleted=None)
+            partial=True, include_deleted=False)
         return models.Post.query.join(related, models.Post.id == related.c.post_id).\
             filter(models.Content.message_classifier == self.message_classifier).count()
 
@@ -961,11 +968,15 @@ class Query(graphene.ObjectType):
     def resolve_total_sentiments(self, args, context, info):
         discussion_id = context.matchdict['discussion_id']
         discussion = models.Discussion.get(discussion_id)
-        return discussion.db.query(models.SentimentOfPost
+        query = discussion.db.query(models.SentimentOfPost
             ).filter(
-                models.SentimentOfPost.discussion.has(id=discussion_id),
-                models.SentimentOfPost.tombstone_condition()
-            ).count()
+                models.SentimentOfPost.tombstone_condition(),
+                models.Content.tombstone_condition(),
+                models.Post.id == models.Content.id,
+                models.Post.publication_state == models.PublicationStates.PUBLISHED,
+                *SentimentOfPost.get_discussion_conditions(discussion_id)
+            )
+        return query.count()
 
     def resolve_root_idea(self, args, context, info):
         discussion_id = context.matchdict['discussion_id']
