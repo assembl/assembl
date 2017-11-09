@@ -961,11 +961,13 @@ class Query(graphene.ObjectType):
     def resolve_total_sentiments(self, args, context, info):
         discussion_id = context.matchdict['discussion_id']
         discussion = models.Discussion.get(discussion_id)
-        return discussion.db.query(models.SentimentOfPost
+        query = discussion.db.query(models.SentimentOfPost
             ).filter(
-                models.SentimentOfPost.discussion.has(id=discussion_id),
-                models.SentimentOfPost.tombstone_condition()
-            ).count()
+                models.SentimentOfPost.tombstone_condition(),
+                models.Content.tombstone_date == None,
+                *SentimentOfPost.get_discussion_conditions(discussion_id)
+            )
+        return query.count()
 
     def resolve_root_idea(self, args, context, info):
         discussion_id = context.matchdict['discussion_id']
