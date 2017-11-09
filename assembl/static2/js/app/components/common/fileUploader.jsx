@@ -4,6 +4,7 @@ import { Translate } from 'react-redux-i18n';
 import { Button } from 'react-bootstrap';
 
 type FileUploaderProps = {
+  filename: string,
   fileOrUrl: File | string,
   mimeType: string,
   name: string,
@@ -29,6 +30,7 @@ class FileUploader extends React.Component<Object, FileUploaderProps, FileUpload
   preview: HTMLImageElement;
 
   static defaultProps = {
+    filename: '',
     mimeType: '',
     name: 'file-uploader',
     withPreview: true
@@ -37,18 +39,18 @@ class FileUploader extends React.Component<Object, FileUploaderProps, FileUpload
   constructor(props: FileUploaderProps) {
     super(props);
     this.state = {
-      fileName: '',
+      fileName: props.filename,
       fileSrc: undefined
     };
   }
 
   componentDidMount() {
-    this.updateInfo(this.props.fileOrUrl);
+    this.updateInfo(this.props);
   }
 
   componentWillReceiveProps(nextProps: FileUploaderProps) {
     if (this.props.fileOrUrl !== nextProps.fileOrUrl) {
-      this.updateInfo(nextProps.fileOrUrl);
+      this.updateInfo(nextProps);
     }
   }
 
@@ -66,7 +68,7 @@ class FileUploader extends React.Component<Object, FileUploaderProps, FileUpload
     }
   };
 
-  updateInfo = (fileOrUrl: File | string) => {
+  updateInfo = ({ filename, fileOrUrl }: FileUploaderProps) => {
     // warning: here fileOrUrl can be an url or a File object
     // update file src and name if fileOrUrl is a File
     if (fileOrUrl && fileOrUrl instanceof File) {
@@ -76,7 +78,7 @@ class FileUploader extends React.Component<Object, FileUploaderProps, FileUpload
         'load',
         () => {
           this.setState({
-            fileName: file.name || '',
+            fileName: file.name || filename,
             fileSrc: reader.result
           });
         },
@@ -86,7 +88,7 @@ class FileUploader extends React.Component<Object, FileUploaderProps, FileUpload
         reader.readAsDataURL(fileOrUrl);
       }
     } else if (typeof fileOrUrl === 'string') {
-      this.setState({ fileSrc: fileOrUrl });
+      this.setState({ fileName: filename, fileSrc: fileOrUrl });
     }
   };
 

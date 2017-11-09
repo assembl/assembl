@@ -32,7 +32,7 @@ exports[`FileUploader component should render a file uploader for an image file 
 </div>
 `;
 
-exports[`FileUploader component should render a file uploader with the filename if the file is not an image 1`] = `
+exports[`FileUploader component should render a file uploader with the filename if the file is not an image (fileOrUrl is a File object) 1`] = `
 <div>
   <button
     className="btn btn-default"
@@ -51,6 +51,35 @@ exports[`FileUploader component should render a file uploader with the filename 
     className="preview-title"
   >
     
+  </div>
+  <input
+    className="hidden"
+    name="file-uploader"
+    onChange={[Function]}
+    type="file"
+  />
+</div>
+`;
+
+exports[`FileUploader component should render a file uploader with the filename if the file is not an image (fileOrUrl is an url) 1`] = `
+<div>
+  <button
+    className="btn btn-default"
+    disabled={false}
+    onClick={[Function]}
+    type="button"
+  >
+    <span
+      className={undefined}
+      style={undefined}
+    >
+      Upload Button
+    </span>
+  </button>
+  <div
+    className="preview-title"
+  >
+    myfile.pdf
   </div>
   <input
     className="hidden"
