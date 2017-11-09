@@ -653,7 +653,7 @@ class IdeaMessageColumn(SecureObjectType, SQLAlchemyObjectType):
 
     def resolve_num_posts(self, args, context, info):
         related = self.idea.get_related_posts_query(
-            partial=True, include_deleted=None)
+            partial=True, include_deleted=False)
         return models.Post.query.join(related, models.Post.id == related.c.post_id).\
             filter(models.Content.message_classifier == self.message_classifier).count()
 
