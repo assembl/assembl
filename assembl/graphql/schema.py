@@ -971,7 +971,9 @@ class Query(graphene.ObjectType):
         query = discussion.db.query(models.SentimentOfPost
             ).filter(
                 models.SentimentOfPost.tombstone_condition(),
-                models.Content.tombstone_date == None,
+                models.Content.tombstone_condition(),
+                models.Post.id == models.Content.id,
+                models.Post.publication_state == models.PublicationStates.PUBLISHED,
                 *SentimentOfPost.get_discussion_conditions(discussion_id)
             )
         return query.count()
