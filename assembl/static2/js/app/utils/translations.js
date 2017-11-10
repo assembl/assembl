@@ -80,6 +80,7 @@ const Translations = {
     navbar: {
       home: "accueil",
       debate: "débat",
+      resourcesCenter: "Centre de ressources",
       community: "communauté",
       connection: "Connexion",
       profile: "Profil",
@@ -443,6 +444,7 @@ const Translations = {
       home: "home",
       debate: "debate",
       community: "community",
+      resourcesCenter: "Resources Center",
       connection: "Login",
       profile: "Profile",
       logout: "Logout",
