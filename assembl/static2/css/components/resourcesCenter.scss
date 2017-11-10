@@ -7,32 +7,15 @@
   .media-right .media-left {
     margin: 0 auto;
   }
-  @media screen and (min-width: 769px) {
-    .media-right {
-      float: right;
-    }
-    .media-left {
-      float: left;
-    }
 
-    .resource-body {
-      margin: 0 75px;
-    }
 
-    .margin-case-right {
-      margin: 12px 50px 30px 0px;
-    }
-    .margin-case-left {
-      margin: 12px 15px 30px 50px;
-    }
+  .title-section {
+    padding-bottom: 50px;
   }
-    .title-section {
-      padding-bottom: 50px;
-    }
 
     .resource-body {
       .resource-img {
-        max-height: 300px;
+        max-height: 500px;
       }
       .resource-video-container {
         .resource-video {
@@ -41,19 +24,52 @@
           .resource-iframe {
             width: 100%;
             height: 100%;
-          }
+        }
       }
 
       }
-      @media screen and (max-width: 768px) {
+
+      @media screen and (min-width: 1000px) {
+        .media-right {
+          float: right;
+        }
+        .media-left {
+          float: left;
+        }
+
+        .resource-body {
+          margin: 0 75px;
+        }
+
+        .margin-case-right {
+          margin: 12px 50px 30px 0px;
+        }
+        .margin-case-left {
+          margin: 12px 15px 30px 50px;
+        }
+      }
+      @media screen and (max-width: 999px) {
         .resource-video-container {
           display: flex;
           justify-content: center;
+          padding-bottom: 50px;
         }
         .resource-img-container {
           width: 100%;
           display: flex;
           justify-content: center;
+          padding-bottom: 50px;
+          .resource-img {
+            max-height: 500px;
+          }
+        }
+      }
+
+      @media screen and (max-width: 768px) {
+        .resource-img {
+          width: 100%;
+          height: auto;
+          max-width: 500px;
         }
       }
 
