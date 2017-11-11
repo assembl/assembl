@@ -64,20 +64,11 @@ var SynthesisModel = Base.Model.extend({
    * @type {Object}
    */
 
-  createDefaultLS: function(string) {
-    var ls = new LangString.Model(),
-        options = {},
-        locale = Ctx.getLocale()
-    options[locale] = string;
-    ls.initFromDict(options);
-    return ls;
-  },
-
   defaults: function() {
     return {
-      subject: this.createDefaultLS(i18n.gettext('Add a title')),
-      introduction: this.createDefaultLS(i18n.gettext('Add an introduction')),
-      conclusion: this.createDefaultLS(i18n.gettext('Add a conclusion')),
+      subject: '',
+      introduction: '',
+      conclusion: '',
       ideas: [],
       published_in_post: null
     }

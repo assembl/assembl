@@ -503,6 +503,9 @@ var LangString = Base.Model.extend({
 });
 
 
+// NOTE: Using the empty langstring has unforseen consequences
+// Ensure that the empty created langstring is in fact following the
+// Structure shown in LangString.empty.
 LangStringEntry.makeEmpty = function() {
   return new LangStringEntry({
     value: '',
