@@ -75,7 +75,8 @@ const Translations = {
       "Learning participants": "Participants apprenants"
     },
     resourcesCenter: {
-      headerTitle: "Centre de ressources en ligne"
+      headerTitle: "Centre de ressources en ligne",
+      download: "Télécharger le document"
     },
     navbar: {
       home: "accueil",
@@ -438,7 +439,8 @@ const Translations = {
       "Learning participants": "Learning participants"
     },
     resourcesCenter: {
-      headerTitle: "Online resources center"
+      headerTitle: "Online resources center",
+      download: "Download the document"
     },
     navbar: {
       home: "home",

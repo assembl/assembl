@@ -2,6 +2,7 @@
 import React from 'react';
 import classnames from 'classnames';
 import { Grid } from 'react-bootstrap';
+import { Translate } from 'react-redux-i18n';
 
 export type Media = {
   type: string,
@@ -51,7 +52,7 @@ const ResourceBlock = (props: ResourceBlockProps) => {
             {doc &&
               <div className="resource-download-link">
                 <a href={doc.externalUrl} target="_blank" rel="noopener noreferrer">
-                  Download the report
+                  <Translate value="resourcesCenter.download" />
                 </a>
               </div>}
           </div>
