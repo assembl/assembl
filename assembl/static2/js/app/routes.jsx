@@ -51,7 +51,7 @@ const DebateChild = (props) => {
   case 'thread':
     return <Idea id={props.id} identifier={props.identifier} routerParams={props.params} />;
   case 'multiColumns':
-    return <Idea id={props.id} identifier={props.identifier} />;
+    return <Idea id={props.id} identifier={props.identifier} routerParams={props.params} />;
   case 'tokenVote':
     return <TokenVote id={props.id} identifier={props.identifier} />;
   default:
