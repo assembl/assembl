@@ -355,7 +355,7 @@ const Translations = {
       },
       step_x_total: "Section %{num} sur %{total}",
       saveThemes: "Sauvegarder",
-      eation: "Les thématiques ont été enregistrées avec succès !",
+      successThemeCreation: "Les thématiques ont été enregistrées avec succès !",
       successLanguagePreference: "Les langues du débat ont été enregistrées avec succès !"
     },
     unauthorizedAdministration: {
