@@ -76,7 +76,7 @@ def discussion_admin_user(request, test_app, test_session, discussion):
 @pytest.fixture(scope="function")
 def moderator_user(request, test_session, discussion):
 
-    """A User fixture with R_PARTICIPANT role"""
+    """A User fixture with R_MODERATOR role"""
 
     from assembl.models import User, UserRole, Role, EmailAccount
     u = User(
