@@ -3,7 +3,6 @@ import { PropTypes } from 'prop-types';
 import { connect } from 'react-redux';
 import { compose, graphql } from 'react-apollo';
 import { Translate } from 'react-redux-i18n';
-import { OverlayTrigger } from 'react-bootstrap';
 import { getConnectedUserId } from '../../../utils/globalFunctions';
 import { getIfPhaseCompletedByIdentifier } from '../../../utils/timeline';
 import PostCreator from './postCreator';
@@ -19,6 +18,7 @@ import StatisticsDoughnut from '../common/statisticsDoughnut';
 import PostTranslate from '../common/translations/postTranslate';
 import { EXTRA_SMALL_SCREEN_WIDTH } from '../../../constants';
 import withLoadingIndicator from '../../common/withLoadingIndicator';
+import ResponsiveOverlayTrigger from '../../common/responsiveOverlayTrigger';
 import { transformLinksInHtml } from '../../../utils/linkify';
 
 class Post extends React.Component {
@@ -141,7 +141,26 @@ class Post extends React.Component {
       // translation is not enabled or the message is already in the desired locale
       body = bodyEntries[0].value;
     }
-
+    const likeComponent = (
+      <div
+        className={post.mySentiment === 'LIKE' ? 'sentiment sentiment-active' : 'sentiment'}
+        onClick={(event) => {
+          this.handleSentiment(event, 'LIKE');
+        }}
+      >
+        <Like size={25} />
+      </div>
+    );
+    const disagreeComponent = (
+      <div
+        className={post.mySentiment === 'DISAGREE' ? 'sentiment sentiment-active' : 'sentiment'}
+        onClick={(event) => {
+          this.handleSentiment(event, 'DISAGREE');
+        }}
+      >
+        <Disagree size={25} />
+      </div>
+    );
     return (
       <div className={postIndex < 3 || moreProposals ? 'shown box' : 'hidden box'}>
         <div className="content">
@@ -162,51 +181,15 @@ class Post extends React.Component {
             <div className="sentiment-label">
               <Translate value="debate.survey.react" />
             </div>
-            <OverlayTrigger placement="top" overlay={likeTooltip}>
-              <div
-                className={post.mySentiment === 'LIKE' ? 'sentiment sentiment-active' : 'sentiment'}
-                onClick={(event) => {
-                  this.handleSentiment(event, 'LIKE');
-                }}
-              >
-                <Like size={25} />
-              </div>
-            </OverlayTrigger>
-            <OverlayTrigger placement="top" overlay={disagreeTooltip}>
-              <div
-                className={post.mySentiment === 'DISAGREE' ? 'sentiment sentiment-active' : 'sentiment'}
-                onClick={(event) => {
-                  this.handleSentiment(event, 'DISAGREE');
-                }}
-              >
-                <Disagree size={25} />
-              </div>
-            </OverlayTrigger>
+            <ResponsiveOverlayTrigger placement="top" tooltip={likeTooltip} component={likeComponent} />
+            <ResponsiveOverlayTrigger placement="top" tooltip={disagreeTooltip} component={disagreeComponent} />
           </div>
         </div>
         <div className="statistic">
           {this.state.screenWidth < EXTRA_SMALL_SCREEN_WIDTH &&
             <div className="sentiments">
-              <OverlayTrigger placement="top" overlay={likeTooltip}>
-                <div
-                  className={post.mySentiment === 'LIKE' ? 'sentiment sentiment-active' : 'sentiment'}
-                  onClick={(event) => {
-                    this.handleSentiment(event, 'LIKE');
-                  }}
-                >
-                  <Like size={25} />
-                </div>
-              </OverlayTrigger>
-              <OverlayTrigger placement="top" overlay={disagreeTooltip}>
-                <div
-                  className={post.mySentiment === 'DISAGREE' ? 'sentiment sentiment-active' : 'sentiment'}
-                  onClick={(event) => {
-                    this.handleSentiment(event, 'DISAGREE');
-                  }}
-                >
-                  <Disagree size={25} />
-                </div>
-              </OverlayTrigger>
+              <ResponsiveOverlayTrigger placement="top" tooltip={likeTooltip} component={likeComponent} />
+              <ResponsiveOverlayTrigger placement="top" tooltip={disagreeTooltip} component={disagreeComponent} />
             </div>}
           <StatisticsDoughnut
             elements={[

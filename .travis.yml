@@ -20,7 +20,7 @@ before_install:
  - sudo usermod -a -G www-data $USER
  - sudo apt-get install -y fabric git openssh-server
  - ssh-keygen -P '' -f ~/.ssh/id_rsa && cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
- - echo -e "_extends = ./testing.rc\n_gitbranch = $TRAVIS_COMMIT\nlogger_sqlalchemy__level = WARN" > configs/travis.rc
+ - echo -e "_extends = ./testing.rc\n_gitbranch = $TRAVIS_COMMIT\nsqlalchemy.echo = False" > configs/travis.rc
  # The following line produces warning "uses weak digest algorithm" during its `apt-get update`
  - fab -c configs/travis.rc install_assembl_server_deps
  - fab -c configs/travis.rc install_redis
@@ -33,16 +33,16 @@ install:
  - python2 $PWD/assembl/scripts/pypsql.py -u postgres -n localhost  "CREATE USER assembl_test WITH CREATEDB ENCRYPTED PASSWORD 'assembl_test'; COMMIT;"
  # The following command runs lots of sub-commands. After the following line has completed, approximately 10min have elapsed from the very beginning of the build
  - fab -c configs/travis.rc bootstrap_from_checkout
-before_script:
-  - source $VIRTUAL_ENV/bin/activate
+#before_script:
+  #- source $VIRTUAL_ENV/bin/activate
   # In jenkins, we were running the following commented steps at each build, in order to correctly update the already existing instance of Assembl (it was not built from zero each time). So should we do this for travis if we use more travis caching?
   #- supervisord
   #- supervisorctl shutdown
   #- fab -c configs/travis.rc database_delete
   #- fab -c configs/travis.rc app_update_dependencies
   #- fab -c configs/travis.rc app_compile_nodbupdate
-  - fab -c configs/travis.rc database_create
-  - assembl-db-manage testing.ini bootstrap
+  #- fab -c configs/travis.rc database_create
+  #- assembl-db-manage testing.ini bootstrap
 env:
   - TO_TEST=BACKEND
   - TO_TEST=FRONTEND

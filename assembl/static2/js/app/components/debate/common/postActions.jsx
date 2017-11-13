@@ -6,6 +6,7 @@ import { MEDIUM_SCREEN_WIDTH } from '../../../constants';
 import { answerTooltip, sharePostTooltip } from '../../common/tooltips';
 
 import getOverflowMenuForPost from './overflowMenu';
+import ResponsiveOverlayTrigger from '../../common/responsiveOverlayTrigger';
 import { getConnectedUserId } from '../../../utils/globalFunctions';
 import { promptForLoginOr, openShareModal, displayModal } from '../../../utils/utilityManager';
 import Permissions, { connectedUserCan } from '../../../utils/permissions';
@@ -90,6 +91,8 @@ class PostActions extends React.Component {
         </div>
       );
     }
+    const answerIcon = <span className="assembl-icon-back-arrow color" />;
+    const shareIcon = <span className="assembl-icon-share color" />;
     return (
       <div>
         <div className="post-icons">
@@ -98,9 +101,7 @@ class PostActions extends React.Component {
               className="post-action"
               onClick={isPhaseCompleted ? this.displayPhaseCompletedModal : promptForLoginOr(handleAnswerClick)}
             >
-              <OverlayTrigger placement={tooltipPlacement} overlay={answerTooltip}>
-                <span className="assembl-icon-back-arrow color" />
-              </OverlayTrigger>
+              <ResponsiveOverlayTrigger placement={tooltipPlacement} tooltip={answerTooltip} component={answerIcon} />
             </div>}
           <div
             className="post-action"
@@ -113,9 +114,7 @@ class PostActions extends React.Component {
               });
             }}
           >
-            <OverlayTrigger placement={tooltipPlacement} overlay={sharePostTooltip}>
-              <span className="assembl-icon-share color" />
-            </OverlayTrigger>
+            <ResponsiveOverlayTrigger placement={tooltipPlacement} tooltip={sharePostTooltip} component={shareIcon} />
           </div>
           <Sentiments
             sentimentCounts={sentimentCounts}

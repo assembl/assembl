@@ -6,7 +6,7 @@ import { Col, Tooltip } from 'react-bootstrap';
 import StatisticsDoughnut from '../common/statisticsDoughnut';
 import { sentimentDefinitionsObject } from './sentimentDefinitions';
 import Media from '../../common/media';
-import { PublicationStates } from '../../../constants';
+import { CountablePublicationStates } from '../../../constants';
 import { multiColumnMapping } from '../../../utils/mapping';
 import PostsAndContributorsCount from '../../common/postsAndContributorsCount';
 
@@ -24,7 +24,7 @@ export const getSentimentsCount = (posts: Object) => {
     counters[key].count = 0;
   });
   posts.edges.forEach(({ node: { sentimentCounts, publicationState } }) => {
-    if (publicationState === PublicationStates.PUBLISHED) {
+    if (CountablePublicationStates.indexOf(publicationState) > -1) {
       Object.keys(counters).forEach((key) => {
         counters[key].count += sentimentCounts[key];
       });

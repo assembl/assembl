@@ -7,13 +7,13 @@
 var Marionette = require('../shims/marionette.js'),
   $ = require('jquery'),
   _ = require('underscore'),
-  Assembl = require('../app.js'),
   Ctx = require('../common/context.js'),
   CollectionManager = require('../common/collectionManager.js'),
   Types = require('../utils/types.js'),
   BreadCrumbView = require('./breadcrumb.js'),
   IdeaModel = require('../models/idea.js'),
   i18n = require('../utils/i18n.js'),
+  Promise = require('bluebird'),
   openIdeaInModal = require('./modals/ideaInModal.js'),
   Analytics = require('../internal_modules/analytics/dispatcher.js');
 
@@ -54,36 +54,34 @@ var IdeaClassificationView = Marionette.LayoutView.extend({
     this._groupContent = options.groupContent;
     this.messageView = options.messageView;
     this.canRender = false;
+    var collectionManager = new CollectionManager();
     var that = this;
 
-    this.model.getPostCreatorModelPromise()
-      .then(function(postCreator){
+    Promise.join(
+      this.model.getPostCreatorModelPromise(),
+      that.model.getLinkCreatorModelPromise(),
+      that.model.getIdeaModelPromise(),
+      collectionManager.getUserLanguagePreferencesPromise(Ctx),
+      function(postCreator, linkCreator, idea, langPrefs) {
         that.postCreator = postCreator;
-        return that.model.getLinkCreatorModelPromise()
-      })
-      .then(function(user){
-        that.user = user;
-        return that.model.getIdeaModelPromise();
-      })
-      .then(function(idea){
+        that.user = linkCreator;
         that.idea = idea;
+        that.langPrefs = langPrefs;
         var ideaAncestry = that.idea.getAncestry();
         that.ideaAncestry = that.createIdeaNameCollection(ideaAncestry);
-        return idea.collection.collectionManager.getAllExtractsCollectionPromise();
-      })
-      .then(function(extracts){
-
-        if (_.isEmpty(extracts)) {
-          that.extract = null;
-        }
-        else {
-          //An extract IS an IdeaContentLink type
-          that.extract = extracts.get(that.model.get("@id"));
-        }
-        that.canRender = true;
-        that.onEndInitialization();
-      })
-      .error(function(e){
+        return idea.collection.collectionManager.getAllExtractsCollectionPromise(
+        ).then(function(extracts){
+          if (_.isEmpty(extracts)) {
+            that.extract = null;
+          }
+          else {
+            //An extract IS an IdeaContentLink type
+            that.extract = extracts.get(that.model.get("@id"));
+          }
+          that.canRender = true;
+          that.onEndInitialization();
+        });
+      }).error(function(e){
         console.error(e.statusText);
         //Render yourself in an ErrorView.
         //THIS IS HACKY
@@ -107,9 +105,10 @@ var IdeaClassificationView = Marionette.LayoutView.extend({
     The function used by the template to render itself, given it's model
     @returns Function  The function that will be returned with parameter for model
    */
-  serializerFunc: function(){
-    return function(model){
-      return model ? model.getShortTitleDisplayText() : "";
+  serializerFunc: function() {
+    var langPrefs = this.langPrefs;
+    return function(model) {
+      return model ? model.getShortTitleDisplayText(langPrefs) : "";
     };
   },
 
@@ -122,7 +121,7 @@ var IdeaClassificationView = Marionette.LayoutView.extend({
 
       var IdeaBreadcrumbView = new BreadCrumbView.BreadcrumbCollectionView({
         collection: this.ideaAncestry,
-        serializerFunc: this.serializerFunc()
+        serializerFunc: this.serializerFunc(),
       });
 
       this.breadcrumb.show(IdeaBreadcrumbView);
@@ -160,7 +159,7 @@ var IdeaClassificationView = Marionette.LayoutView.extend({
 
     var panel = this.messageView.messageListView;
     Ctx.clearModal();
-    openIdeaInModal(panel, this.idea, true);
+    openIdeaInModal(panel, this.idea, true, this.langPrefs);
   }
 
 });

@@ -44,7 +44,8 @@ import { getConnectedUserId, getDebateId, getLocale } from '../reducers/contextR
 import { connectedUserIsExpert } from '../utils/permissions';
 
 const FRAGMENT_SIZE = 400;
-const elasticsearchLangIndexes = document.getElementById('elasticsearchLangIndexes').value.split(' ');
+const elasticsearchLangIndexesElement = document.getElementById('elasticsearchLangIndexes');
+const elasticsearchLangIndexes = elasticsearchLangIndexesElement ? elasticsearchLangIndexesElement.value.split(' ') : [];
 
 const truncateText = (text) => {
   return truncate(text, { length: FRAGMENT_SIZE, separator: ' ', omission: ' [...]' });
@@ -64,6 +65,8 @@ const highlightedTextOrTruncatedText = (hit, field) => {
   return text;
 };
 
+const slugElement = document.getElementById('discussion-slug');
+const slug = slugElement ? slugElement.value : '';
 let Link;
 let getUrl;
 if (__resourceQuery) {
@@ -75,7 +78,6 @@ if (__resourceQuery) {
     return <a href={props.to} dangerouslySetInnerHTML={props.dangerouslySetInnerHTML} />;
   };
   getUrl = (hit) => {
-    const slug = document.getElementById('discussion-slug').value;
     const id = hit._source.id;
     switch (hit._type) {
     case 'synthesis':
@@ -95,7 +97,6 @@ if (__resourceQuery) {
   Link = (props) => {
     return <a href={props.to} dangerouslySetInnerHTML={props.dangerouslySetInnerHTML} />;
   };
-  const slug = document.getElementById('discussion-slug').value;
   getUrl = (hit) => {
     const id = hit._source.id;
     let ideaBase64id;

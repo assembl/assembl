@@ -32,6 +32,7 @@ from assembl.lib.sqla_types import EmailString
 from assembl.lib.clean_input import sanitize_text, sanitize_html
 from assembl.lib.locale import strip_country
 from assembl import models
+from assembl.models.post import countable_publication_states
 from assembl.models.action import (
     SentimentOfPost,
     LikeSentimentOfPost, DisagreeSentimentOfPost,
@@ -629,6 +630,13 @@ class IdeaInterface(graphene.Interface):
     order = graphene.Float()
 
     def resolve_num_posts(self, args, context, info):
+        if isinstance(self, models.RootIdea):
+            # If this is RootIdea, do the sum of all children to be sure
+            # we use the same counters that we see on each idea which are
+            # based on countable states.
+            # Don't use RootIdea.num_posts that give much higher count.
+            return sum([child.num_posts for child in self.get_children()])
+
         return self.num_posts
 
     def resolve_img(self, args, context, info):
@@ -698,7 +706,7 @@ class IdeaMessageColumn(SecureObjectType, SQLAlchemyObjectType):
 
     def resolve_num_posts(self, args, context, info):
         related = self.idea.get_related_posts_query(
-            partial=True, include_deleted=None)
+            partial=True, include_deleted=False)
         return models.Post.query.join(related, models.Post.id == related.c.post_id).\
             filter(models.Content.message_classifier == self.message_classifier).count()
 
@@ -1013,11 +1021,15 @@ class Query(graphene.ObjectType):
     def resolve_total_sentiments(self, args, context, info):
         discussion_id = context.matchdict['discussion_id']
         discussion = models.Discussion.get(discussion_id)
-        return discussion.db.query(models.SentimentOfPost
+        query = discussion.db.query(models.SentimentOfPost
             ).filter(
-                models.SentimentOfPost.discussion.has(id=discussion_id),
-                models.SentimentOfPost.tombstone_condition()
-            ).count()
+                models.SentimentOfPost.tombstone_condition(),
+                models.Content.tombstone_condition(),
+                models.Post.id == models.Content.id,
+                models.Post.publication_state.in_(countable_publication_states),
+                *SentimentOfPost.get_discussion_conditions(discussion_id)
+            )
+        return query.count()
 
     def resolve_root_idea(self, args, context, info):
         discussion_id = context.matchdict['discussion_id']
@@ -2067,11 +2079,15 @@ class Mutations(graphene.ObjectType):
 Schema = graphene.Schema(query=Query, mutation=Mutations)
 
 
-def print_schema_json(schema):
+def generate_schema_json_from_schema(schema, output='/tmp/schema.json'):
     import json
     schema_dict = schema.introspect()
-    with open('/tmp/schema.json', 'w') as outfile:
-        json.dump(schema_dict, outfile)
+    with open(output, 'w') as outfile:
+        json.dump(schema_dict, outfile, indent=2)
+
+
+def generate_schema_json():
+    generate_schema_json_from_schema(Schema)
 
 
 '''

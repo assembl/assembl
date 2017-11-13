@@ -131,7 +131,16 @@ class TopPostForm extends React.Component<*, TopPostFormProps, TopPostFormState>
 
   getClassNames() {
     const { ideaOnColumn } = this.props;
-    return classNames(['button-submit', 'button-dark', 'btn', 'btn-default', 'right', !ideaOnColumn ? 'margin-l' : 'margin-m']);
+    const { submitting } = this.state;
+    return classNames([
+      'button-submit',
+      'button-dark',
+      'btn',
+      'btn-default',
+      'right',
+      !ideaOnColumn ? 'margin-l' : 'margin-m',
+      submitting && 'cursor-wait'
+    ]);
   }
 
   setFormContainerRef = (el: HTMLDivElement): void => {

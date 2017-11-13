@@ -16,9 +16,11 @@
   }
 
   .modal-footer {
+    display: flex;
+    justify-content: space-between;
+    padding-bottom: 50px;
     border: 0px;
     outline: none;
-    padding: 15px 50px 50px 50px;
     text-align: center;
   }
 }

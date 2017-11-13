@@ -4,7 +4,7 @@
  * @module app.views.modals.ideaInModal
  */
 
-function navigateToIdea(panel, idea, forcePopup){
+function navigateToIdea(panel, idea, forcePopup, langPrefs){
 
     var i18n = require('../../utils/i18n.js'),
         panelSpec = require('../../models/panelSpec.js'),
@@ -38,7 +38,7 @@ function navigateToIdea(panel, idea, forcePopup){
         throw new Error("Unable to set currentIdea on modal Group");
       }
 
-      var idea_title = Ctx.stripHtml(idea.getShortTitleDisplayText());
+      var idea_title = Ctx.stripHtml(idea.getShortTitleDisplayText(langPrefs));
 
       //console.log("idea_title: ", idea_title);
       var modal_title_template = i18n.gettext("Exploring idea \"%s\"");

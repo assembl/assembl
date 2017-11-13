@@ -52,7 +52,6 @@
     min-height: 380px;
     overflow: hidden;
     position: relative;
-    max-height: 505px;
 
     .header-content {
       position: relative;
@@ -275,10 +274,6 @@
       margin: 0;
       padding: 75px 0 0;
     }
-
-    .tweet-section {
-      padding: 45px 75px 65px;
-    }
   }
 
   .partners-section {
@@ -487,6 +482,14 @@
   .header-section {
     .header-content {
       padding: 75px 40px 150px;
+    }
+  }
+}
+
+@media screen and (min-width: 421px) {
+  .twitter-section {
+    .tweet-section {
+      padding: 45px 75px 65px;
     }
   }
 }

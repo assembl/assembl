@@ -5,6 +5,7 @@ import { compose, graphql } from 'react-apollo';
 import { Row, Col, FormGroup, Button } from 'react-bootstrap';
 import { Translate, I18n } from 'react-redux-i18n';
 import type { RawContentState } from 'draft-js';
+import classNames from 'classnames';
 
 import createPostMutation from '../../../graphql/mutations/createPost.graphql';
 import uploadDocumentMutation from '../../../graphql/mutations/uploadDocument.graphql';
@@ -99,6 +100,11 @@ class AnswerForm extends React.PureComponent<*, AnswerFormProps, AnswerFormState
     }
   };
 
+  getClassNames() {
+    const { submitting } = this.state;
+    return classNames(['button-submit', 'button-dark', 'btn', 'btn-default', 'right', submitting && 'cursor-wait']);
+  }
+
   render() {
     const { textareaRef } = this.props;
     return (
@@ -124,11 +130,7 @@ class AnswerForm extends React.PureComponent<*, AnswerFormProps, AnswerFormState
                 <Button className="button-cancel button-dark btn btn-default left" onClick={this.handleCancel}>
                   <Translate value="cancel" />
                 </Button>
-                <Button
-                  className="button-submit button-dark btn btn-default right"
-                  onClick={this.handleSubmit}
-                  disabled={this.state.submitting}
-                >
+                <Button className={this.getClassNames()} onClick={this.handleSubmit} disabled={this.state.submitting}>
                   <Translate value="debate.post" />
                 </Button>
               </div>

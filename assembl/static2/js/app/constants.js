@@ -10,6 +10,7 @@ export const APP_CONTAINER_PADDING = 15;
 export const MIN_WIDTH_COLUMN = 400;
 export const COLUMN_OPACITY_GAIN = 0.5;
 
+// Those states lists need to be kept in sync with models/post.py
 export const PublicationStates = {
   DRAFT: 'DRAFT',
   SUBMITTED_IN_EDIT_GRACE_PERIOD: 'SUBMITTED_IN_EDIT_GRACE_PERIOD',
@@ -32,3 +33,9 @@ ModeratedPublicationStates[PublicationStates.MODERATED_TEXT_ON_DEMAND] = Publica
 export const DeletedPublicationStates = {};
 DeletedPublicationStates[PublicationStates.DELETED_BY_USER] = PublicationStates.DELETED_BY_USER;
 DeletedPublicationStates[PublicationStates.DELETED_BY_ADMIN] = PublicationStates.DELETED_BY_ADMIN;
+
+export const CountablePublicationStates = {};
+CountablePublicationStates[PublicationStates.SUBMITTED_IN_EDIT_GRACE_PERIOD] = PublicationStates.SUBMITTED_IN_EDIT_GRACE_PERIOD;
+CountablePublicationStates[PublicationStates.PUBLISHED] = PublicationStates.PUBLISHED;
+CountablePublicationStates[PublicationStates.MODERATED_TEXT_ON_DEMAND] = PublicationStates.MODERATED_TEXT_ON_DEMAND;
+CountablePublicationStates[PublicationStates.MODERATED_TEXT_NEVER_AVAILABLE] = PublicationStates.MODERATED_TEXT_NEVER_AVAILABLE;

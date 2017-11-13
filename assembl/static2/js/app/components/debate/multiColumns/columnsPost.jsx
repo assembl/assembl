@@ -12,9 +12,7 @@ import PostQuery from '../../../graphql/PostQuery.graphql';
 import { DeletedPublicationStates, PublicationStates } from '../../../constants';
 import withLoadingIndicator from '../../../components/common/withLoadingIndicator';
 import { EmptyPost } from '../thread/post';
-
-// TODO we need a graphql query to retrieve all languages with native translation, see Python langstrings.LocaleLabel
-// We only have french and english for en, fr, ja for now.
+import { transformLinksInHtml } from '../../../utils/linkify';
 
 class ColumnsPost extends EmptyPost {
   render() {
@@ -90,7 +88,7 @@ class ColumnsPost extends EmptyPost {
               />
               <div
                 className={`body ${bodyMimeType === 'text/plain' ? 'pre-wrap' : ''}`}
-                dangerouslySetInnerHTML={{ __html: body }}
+                dangerouslySetInnerHTML={{ __html: transformLinksInHtml(body) }}
                 ref={this.recomputeTreeHeightOnImagesLoad}
               />
               <Attachments attachments={attachments} />

@@ -1823,13 +1823,18 @@ def install_elasticsearch():
         store_path = join(env.projectpath, 'var')
         result = put(join(tmp_local_extract_path, 'elasticsearch'), store_path)
 
-        # Make elasticsearch and plugin in /bin executable
+        # ensure that the folder being scp'ed to belongs to the user/group
         sudo('chown -R {user}:{group} {path}'.format(
             user=env.user, group=env.user,
             path=extract_path))
-        sudo('chmod ug+x {elasticsearch} {elasticsearch_plugin}'.format(
-            elasticsearch=join(extract_path, 'bin/elasticsearch'),
-            elasticsearch_plugin=join(extract_path, 'bin/elasticsearch-plugin')
+
+        # Make elasticsearch and plugin in /bin executable
+        sudo('chmod ug+x {es} {esp} {in_sh} {sysd} {log}'.format(
+            es=join(extract_path, 'bin/elasticsearch'),
+            esp=join(extract_path, 'bin/elasticsearch-plugin'),
+            in_sh=join(extract_path, 'bin/elasticsearch.in.sh'),
+            sysd=join(extract_path, 'bin/elasticsearch-systemd-pre-exec'),
+            log=join(extract_path, 'bin/elasticsearch-translog'),
         ))
         run(env.projectpath + '/var/elasticsearch/bin/elasticsearch-plugin install https://artifacts.elastic.co/downloads/elasticsearch-plugins/analysis-smartcn/analysis-smartcn-{version}.zip'.format(version=ELASTICSEARCH_VERSION))
         run(env.projectpath + '/var/elasticsearch/bin/elasticsearch-plugin install https://artifacts.elastic.co/downloads/elasticsearch-plugins/analysis-kuromoji/analysis-kuromoji-{version}.zip'.format(version=ELASTICSEARCH_VERSION))
@@ -1850,7 +1855,10 @@ def upgrade_elasticsearch():
         join(env.projectpath, 'var', 'elasticsearch'))
     supervisor_process_stop('elasticsearch')
     if exists(extract_path):
-        run("rm -rf %s" % extract_path)
+        # Must force write permission in the folder to be able to delete
+        # it as non-root user with sudo access
+        sudo("chmod -R 777 %s" % extract_path)
+        sudo("rm -rf %s" % extract_path)
     execute(install_elasticsearch)
     supervisor_process_start('elasticsearch')
 
