@@ -40,6 +40,7 @@ const ResourceBlock = (props: ResourceBlockProps) => {
               <img src={image.externalUrl} alt="resource" className={imgClassNames} />
             </div>}
           {embedCode &&
+            !image &&
             <div className="resource-video-container">
               <div className={videoClassNames}>
                 <iframe title="resource-video" src={embedCode} className="resource-iframe" />
