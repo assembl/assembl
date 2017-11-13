@@ -364,7 +364,7 @@ def extract_saml_info(rc_info):
     """Extract SAML variables from the state"""
     saml_info = {k[5:]: v for (k, v) in rc_info.iteritems()
                  if k.startswith('saml_')}
-    saml_info['cn'] = rc_info['public_hostname']
+    saml_info['domain'] = rc_info['public_hostname']
     return saml_info
 
 
