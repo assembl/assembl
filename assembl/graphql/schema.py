@@ -32,6 +32,7 @@ from assembl.lib.sqla_types import EmailString
 from assembl.lib.clean_input import sanitize_text, sanitize_html
 from assembl.lib.locale import strip_country
 from assembl import models
+from assembl.models.post import countable_publication_states
 from assembl.models.action import (
     SentimentOfPost,
     LikeSentimentOfPost, DisagreeSentimentOfPost,
@@ -973,7 +974,7 @@ class Query(graphene.ObjectType):
                 models.SentimentOfPost.tombstone_condition(),
                 models.Content.tombstone_condition(),
                 models.Post.id == models.Content.id,
-                models.Post.publication_state == models.PublicationStates.PUBLISHED,
+                models.Post.publication_state.in_(countable_publication_states),
                 *SentimentOfPost.get_discussion_conditions(discussion_id)
             )
         return query.count()

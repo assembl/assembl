@@ -16,6 +16,7 @@ var _ = require('underscore'),
     Attachment = require('./attachments.js');
 
 
+// Those states lists need to be kept in sync with models/post.py
 var PublicationStates = {
   DRAFT: "DRAFT",
   SUBMITTED_IN_EDIT_GRACE_PERIOD: "SUBMITTED_IN_EDIT_GRACE_PERIOD",
