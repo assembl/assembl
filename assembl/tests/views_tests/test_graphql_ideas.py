@@ -41,10 +41,10 @@ def test_graphql_get_all_ideas(graphql_request,
         variable_values={"identifier": u"thread", "lang": u"en"})
     assert res.data['rootIdea']['id'] is not None
     assert len(res.data['ideas']) == 4
-    root_idea = res.data['ideas'][0]
-    first_idea = res.data['ideas'][1]
-    second_idea = res.data['ideas'][2]
-    third_idea = res.data['ideas'][3]
+    first_idea = res.data['ideas'][0]
+    second_idea = res.data['ideas'][1]
+    third_idea = res.data['ideas'][2]
+    root_idea = res.data['ideas'][3]
     assert root_idea['parentId'] is None
     assert root_idea['id'] == res.data['rootIdea']['id']
     assert root_idea['order'] is None

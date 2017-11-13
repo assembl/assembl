@@ -997,7 +997,9 @@ class Query(graphene.ObjectType):
         root_idea_id = discussion.root_idea.id
         descendants_query = model.get_descendants_query(
             root_idea_id, inclusive=True)
-        query = query.filter(model.id.in_(descendants_query)
+        query = query.outerjoin(
+                models.IdeaLink, models.IdeaLink.target_id == models.Idea.id
+            ).filter(model.id.in_(descendants_query)
             ).filter(
                 model.hidden == False,
                 model.sqla_type.in_(('idea', 'root_idea'))
@@ -1008,7 +1010,7 @@ class Query(graphene.ObjectType):
                 joinedload(models.Idea.title).joinedload("entries"),
 #                joinedload(models.Idea.synthesis_title).joinedload("entries"),
                 joinedload(models.Idea.description).joinedload("entries"),
-            ).order_by(model.id)
+            ).order_by(models.IdeaLink.order, models.Idea.creation_date)
         if args.get('identifier') == 'multiColumns':
             # Filter out ideas that don't have columns.
             # This filter out the root idea too.
