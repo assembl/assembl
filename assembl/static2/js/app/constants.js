@@ -10,6 +10,7 @@ export const APP_CONTAINER_PADDING = 15;
 export const MIN_WIDTH_COLUMN = 400;
 export const COLUMN_OPACITY_GAIN = 0.5;
 
+// Those states lists need to be kept in sync with models/post.py
 export const PublicationStates = {
   DRAFT: 'DRAFT',
   SUBMITTED_IN_EDIT_GRACE_PERIOD: 'SUBMITTED_IN_EDIT_GRACE_PERIOD',
