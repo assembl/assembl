@@ -400,7 +400,11 @@ var LangString = Base.Model.extend({
    * @function app.models.langstrings.LangString.bestValue
    */
   bestValue: function(langPrefs) {
-    return this.best(langPrefs).get("value");
+    var bestLangString = this.best(langPrefs);
+    if (!bestLangString){
+      throw new Error("Malformed langstring: it seems empty but shouldn't.");
+    }
+    return bestLangString.get("value");
   },
   /**
    * Determines the best value, favouring interface over user prefs.
