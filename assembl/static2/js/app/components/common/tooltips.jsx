@@ -1,3 +1,5 @@
+// @flow
+
 import React from 'react';
 import { Tooltip } from 'react-bootstrap';
 import { Translate } from 'react-redux-i18n';

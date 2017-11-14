@@ -1,6 +1,9 @@
+// @flow
+
 import React from 'react';
 
 class DontUnderstand extends React.Component {
+  props: { size: number };
   render() {
     const { size } = this.props;
     return (
