@@ -92,15 +92,22 @@ var IdeaInSynthesisView = Marionette.LayoutView.extend({
           that.render();
         }
       }
+
+      Promise.join(collectionManager.getUserLanguagePreferencesPromise(Ctx),
+        function(translationData){
+          console.log("received translationData! translationData:", translationData);
+          that.translationData = translationData;
+          that.render();
+        }
+      );
+
       // idea is either a tombstone or from a different collection; get the original
       Promise.join(
           collectionManager.getAllIdeasCollectionPromise(),
-          collectionManager.getUserLanguagePreferencesPromise(Ctx),
-          function(allIdeasCollection, translationData) {
+          function(allIdeasCollection) {
         if (!that.isViewDestroyed()) {
           var idea = that.model,
           original_idea = undefined;
-          that.translationData = translationData;
           if (that.synthesis.get('is_next_synthesis')) {
             original_idea = allIdeasCollection.get(that.model.id);
           }
@@ -196,6 +203,10 @@ var IdeaInSynthesisView = Marionette.LayoutView.extend({
    * renders the ckEditor if there is one editable field
    */
   renderCKEditorIdea: function() {
+    if (!this.translationData){
+      return;
+    }
+
     var model = this.model.getLongTitleDisplayText(this.translationData);
 
     var ideaSynthesis = new CKEditorLSField({
@@ -215,6 +226,7 @@ var IdeaInSynthesisView = Marionette.LayoutView.extend({
   /**
    * renders the reply interface
    */
+  /* This method has been commented out because "Currently disabled, but will be revived at some point"
   renderReplyView: function() {
       var that = this,
       partialCtx = "synthesis-idea-" + this.model.getId(),
@@ -245,6 +257,7 @@ var IdeaInSynthesisView = Marionette.LayoutView.extend({
 
       this.$('.synthesisIdea-replybox').html(replyView.render().el);
     },
+  */
 
   /**
    *  Focus on the reply box, and open it if closed
