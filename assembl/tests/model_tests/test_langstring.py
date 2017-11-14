@@ -643,3 +643,28 @@ def test_identify_ambiguous_body_in_post_by_import(
         first_original().locale_code == 'fr'
     assert post_body_locale_determined_by_import.subject.\
         first_original().locale_code == 'fr'
+
+def test_clone_langstring_has_same_content_as_original(
+        en_langstring, test_session):
+    from datetime import datetime
+
+    tombstone = datetime.utcnow()
+    boba_fett = en_langstring.clone(tombstone=tombstone)
+    test_session.flush() # so that boba_fett receives ids
+
+    en_langstring_entry_original = en_langstring.first_original()
+    boba_fett_entry_original = boba_fett.first_original()
+
+    assert en_langstring
+    assert en_langstring.id
+    assert boba_fett
+    assert boba_fett.id
+    assert boba_fett.id != en_langstring.id
+    assert en_langstring_entry_original
+    assert en_langstring_entry_original.id
+    assert boba_fett_entry_original
+    assert boba_fett_entry_original.id
+    assert boba_fett_entry_original.id != en_langstring_entry_original.id
+    assert boba_fett_entry_original.locale.id == en_langstring_entry_original.locale.id
+    assert boba_fett_entry_original.value == en_langstring_entry_original.value
+
