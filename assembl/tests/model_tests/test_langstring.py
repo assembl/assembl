@@ -668,3 +668,8 @@ def test_clone_langstring_has_same_content_as_original(
     assert boba_fett_entry_original.locale.id == en_langstring_entry_original.locale.id
     assert boba_fett_entry_original.value == en_langstring_entry_original.value
 
+    for entry in boba_fett.entries:
+        test_session.delete(entry)
+    test_session.delete(boba_fett)
+    test_session.flush()
+
