@@ -95,7 +95,6 @@ var IdeaInSynthesisView = Marionette.LayoutView.extend({
 
       Promise.join(collectionManager.getUserLanguagePreferencesPromise(Ctx),
         function(translationData){
-          console.log("received translationData! translationData:", translationData);
           that.translationData = translationData;
           that.render();
         }

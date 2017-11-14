@@ -404,7 +404,7 @@ var LangString = Base.Model.extend({
     if (!bestLangString){
       throw new Error("Malformed langstring: it seems empty but shouldn't.");
     }
-    return bestLangString.get("value"); //
+    return bestLangString.get("value");
   },
   /**
    * Determines the best value, favouring interface over user prefs.
