@@ -17,6 +17,7 @@ import Proposals from '../components/debate/survey/proposals';
 import { getIfPhaseCompletedByIdentifier } from '../utils/timeline';
 import ThematicQuery from '../graphql/ThematicQuery.graphql';
 import { displayAlert } from '../utils/utilityManager';
+import type { Timeline } from '../utils/timeline';
 
 type PostNode = {
   node: {
@@ -36,7 +37,7 @@ type QuestionType = {
 type SurveyProps = {
   debate: {
     debateData: {
-      timeline: string
+      timeline: Timeline
     }
   },
   defaultContentLocaleMapping: Map,
