@@ -1002,7 +1002,7 @@ class Query(graphene.ObjectType):
             ).filter(model.id.in_(descendants_query)
             ).filter(
                 model.hidden == False,
-                model.sqla_type.in_(('idea', 'root_idea'))
+                model.sqla_type == 'idea'
             ).options(
                 joinedload(models.Idea.source_links),
                 subqueryload(models.Idea.attachments).joinedload("document"),
@@ -1013,7 +1013,6 @@ class Query(graphene.ObjectType):
             ).order_by(models.IdeaLink.order, models.Idea.creation_date)
         if args.get('identifier') == 'multiColumns':
             # Filter out ideas that don't have columns.
-            # This filter out the root idea too.
             query = query.join(models.Idea.message_columns)
 
         return query

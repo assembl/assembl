@@ -39,16 +39,12 @@ def test_graphql_get_all_ideas(graphql_request,
         }
         """, context_value=graphql_request,
         variable_values={"identifier": u"thread", "lang": u"en"})
-    assert res.data['rootIdea']['id'] is not None
-    assert len(res.data['ideas']) == 4
+    root_idea = res.data['rootIdea']
+    assert root_idea['id'] is not None
+    assert len(res.data['ideas']) == 3
     first_idea = res.data['ideas'][0]
     second_idea = res.data['ideas'][1]
     third_idea = res.data['ideas'][2]
-    root_idea = res.data['ideas'][3]
-    assert root_idea['parentId'] is None
-    assert root_idea['id'] == res.data['rootIdea']['id']
-    assert root_idea['order'] is None
-    assert root_idea['numChildren'] == 1
     assert first_idea['title'] == u'Favor economic growth'
     assert first_idea['parentId'] == root_idea['id']
     assert first_idea['order'] == 0.0
@@ -100,11 +96,12 @@ def test_graphql_get_all_ideas_multiColumns_phase(graphql_request,
         }
         """, context_value=graphql_request,
         variable_values={"identifier": u"multiColumns", "lang": u"en"})
-    assert res.data['rootIdea']['id'] is not None
+    root_idea = res.data['rootIdea']
+    assert root_idea['id'] is not None
     assert len(res.data['ideas']) == 1
     first_idea = res.data['ideas'][0]
     assert first_idea['title'] == u'Favor economic growth'
-    assert first_idea['parentId'] == res.data['rootIdea']['id']
+    assert first_idea['parentId'] == root_idea['id']
     assert first_idea['order'] == 0.0
     assert first_idea['numChildren'] == 0
     assert len(res.errors) == 0
