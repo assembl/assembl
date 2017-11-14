@@ -23,7 +23,7 @@ const getSentimentsCount = (posts) => {
     counters[key].count = 0;
   });
   posts.edges.forEach(({ node: { sentimentCounts, publicationState } }) => {
-    if (CountablePublicationStates.indexOf(publicationState) > -1) {
+    if (Object.keys(CountablePublicationStates).indexOf(publicationState) > -1) {
       Object.keys(counters).forEach((key) => {
         counters[key].count += sentimentCounts[key];
       });
