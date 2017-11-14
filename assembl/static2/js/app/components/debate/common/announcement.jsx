@@ -5,12 +5,13 @@ import { Col, Tooltip } from 'react-bootstrap';
 
 import StatisticsDoughnut from '../common/statisticsDoughnut';
 import { sentimentDefinitionsObject } from './sentimentDefinitions';
+import type { SentimentDefinition } from './sentimentDefinitions';
 import Media from '../../common/media';
 import { CountablePublicationStates } from '../../../constants';
 import { multiColumnMapping } from '../../../utils/mapping';
 import PostsAndContributorsCount from '../../common/postsAndContributorsCount';
 
-export const createTooltip = (sentiment: Object, count: number) => {
+export const createTooltip = (sentiment: SentimentDefinition, count: number) => {
   return (
     <Tooltip id={`${sentiment.camelType}Tooltip`} className="no-arrow-tooltip">
       {count} <Translate value={`debate.${sentiment.camelType}`} />
@@ -18,22 +19,37 @@ export const createTooltip = (sentiment: Object, count: number) => {
   );
 };
 
-export const getSentimentsCount = (posts: Object) => {
-  const counters = { ...sentimentDefinitionsObject };
+type SentimentsCounts = {
+  [string]: {
+    ...SentimentDefinition,
+    count: number
+  }
+};
+
+type Posts = {
+  edges: Array<{ node: { sentimentCounts: { [string]: number }, publicationState: string } }>
+};
+
+export const getSentimentsCount = (posts: Posts) => {
+  const counters: SentimentsCounts = { ...sentimentDefinitionsObject };
   Object.keys(counters).forEach((key) => {
     counters[key].count = 0;
   });
-  posts.edges.forEach(({ node: { sentimentCounts, publicationState } }) => {
-    if (CountablePublicationStates.indexOf(publicationState) > -1) {
-      Object.keys(counters).forEach((key) => {
-        counters[key].count += sentimentCounts[key];
-      });
-    }
-  });
-  return counters;
+
+  return posts.edges
+    .filter(({ node: { publicationState } }) => {
+      return Object.keys(CountablePublicationStates).indexOf(publicationState) > -1;
+    })
+    .reduce((result, { node: { sentimentCounts } }) => {
+      return Object.keys(result).reduce((naziLinter, key) => {
+        const postCounts = naziLinter;
+        postCounts[key].count += sentimentCounts[key];
+        return postCounts;
+      }, result);
+    }, counters);
 };
 
-export const createDoughnutElements = (sentimentCounts: Object) => {
+export const createDoughnutElements = (sentimentCounts: SentimentsCounts) => {
   return Object.keys(sentimentCounts).map((key) => {
     return {
       color: sentimentCounts[key].color,
