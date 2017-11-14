@@ -7,15 +7,17 @@
     background-color: $white;
     border-bottom: $navbar-border;
     border-top: $navbar-border;
-    height: $navbar-height;
-    padding: 13px 0 0;
+    padding: 13px 0 13px 0;
     position: fixed;
     width: 100%;
     z-index: 200;
     top: $navbar-height;
 
     .timeline-container {
-      margin: 0 0 0 100px;
+      margin: 0 100px;
+      max-width: 500px;
+      height: auto;
+      display: flex;
     }
 
     .burger-menu {

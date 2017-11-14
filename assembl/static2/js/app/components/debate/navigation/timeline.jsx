@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { isCurrentPhase, getBarWidth, isStepCompleted } from '../../../utils/timeline';
+import { isCurrentPhase, getBarPercent, isStepCompleted } from '../../../utils/timeline';
 import TimelineSegment from './timelineSegment';
 
 class Timeline extends React.Component {
@@ -18,7 +18,7 @@ class Timeline extends React.Component {
                 locale={locale}
                 index={index}
                 key={index}
-                barWidth={getBarWidth(debateData.timeline[index])}
+                barPercent={getBarPercent(debateData.timeline[index])}
                 isCurrentPhase={isCurrentPhase(debateData.timeline[index])}
                 showNavigation={showNavigation}
                 identifier={identifier}
