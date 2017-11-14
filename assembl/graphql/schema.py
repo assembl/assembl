@@ -670,6 +670,7 @@ class IdeaMessageColumn(SecureObjectType, SQLAlchemyObjectType):
     index = graphene.Int()
     idea = graphene.Field(lambda: Idea)
     name = graphene.String(lang=graphene.String())
+    title = graphene.String(lang=graphene.String())
     header = graphene.String(lang=graphene.String())
     num_posts = graphene.Int()
 
@@ -679,6 +680,9 @@ class IdeaMessageColumn(SecureObjectType, SQLAlchemyObjectType):
 
     def resolve_name(self, args, context, info):
         return resolve_langstring(self.name, args.get('lang'))
+
+    def resolve_title(self, args, context, info):
+        return resolve_langstring(self.title, args.get('lang'))
 
     def resolve_header(self, args, context, info):
         return resolve_langstring(self.header, args.get('lang'))
