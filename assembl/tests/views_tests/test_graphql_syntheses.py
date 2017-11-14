@@ -26,8 +26,10 @@ def test_graphql_get_synthesis(graphql_request,
                   ... on Idea {
                     id
                     live {
-                      id
-                      img { externalUrl }
+                      ... on Idea {
+                        id
+                        img { externalUrl }
+                      }
                     }
                   }
                 }
