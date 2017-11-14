@@ -84,7 +84,7 @@
       top: 9px;
       left: 12px;
 
-      .timeline-bar-1 {
+      .timeline-bar-background {
         background-color: $grey5;
         height: 6px;
         position: absolute;
@@ -93,7 +93,7 @@
         display: inline-block;
       }
 
-      .timeline-bar-2 {
+      .timeline-bar-filler {
         background-color: $first-color;
         height: 6px;
         position: absolute;
@@ -124,7 +124,7 @@
         .timeline-number {
           background-color: $first-color;
         }
-        .timeline-bar-1 {
+        .timeline-bar-background {
           background-color: $first-color;
         }
       }
