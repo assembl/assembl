@@ -66,9 +66,9 @@ var SynthesisModel = Base.Model.extend({
 
   defaults: function() {
     return {
-      subject: '',
-      introduction: '',
-      conclusion: '',
+      subject: null,
+      introduction: null,
+      conclusion: null,
       ideas: [],
       published_in_post: null
     }
@@ -78,14 +78,16 @@ var SynthesisModel = Base.Model.extend({
    * @function app.models.synthesis.SynthesisModel.parse
    */
   parse: function(resp, options) {
-    if (resp.introduction !== undefined) {
-      resp.introduction = new LangString.Model(resp.introduction, {parse: true});
-    }
-    if (resp.subject !== undefined) {
-      resp.subject = new LangString.Model(resp.subject, {parse: true});
-    }
-    if (resp.conclusion !== undefined) {
-      resp.conclusion = new LangString.Model(resp.conclusion, {parse: true});
+    if (resp.ok !== true) {
+      if (resp.introduction != null) {
+        resp.introduction = new LangString.Model(resp.introduction, {parse: true});
+      }
+      if (resp.subject != null) {
+        resp.subject = new LangString.Model(resp.subject, {parse: true});
+      }
+      if (resp.conclusion != null) {
+        resp.conclusion = new LangString.Model(resp.conclusion, {parse: true});
+      }
     }
     return Base.Model.prototype.parse.apply(this, arguments);
   },
