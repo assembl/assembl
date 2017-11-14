@@ -64,7 +64,7 @@ export default compose(
   graphql(SynthesisQuery, {
     options: (props) => {
       return {
-        variables: { id: props.params.synthesisId }
+        variables: { id: props.params.synthesisId, lang: props.lang }
       };
     },
     props: ({ data }) => {
