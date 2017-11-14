@@ -829,10 +829,11 @@ class LangString(Base):
         if tombstone is True:
             tombstone = datetime.utcnow()
         clone = self.__class__()
+        db = db or clone.db
         for e in self.entries:
             e = e.clone(clone, db=db, tombstone=tombstone)
-        if db:
-            db.add(clone)
+            db.add(e)
+        db.add(clone)
         return clone
 
     # Those permissions are for an ownerless object. Accept Create before ownership.
