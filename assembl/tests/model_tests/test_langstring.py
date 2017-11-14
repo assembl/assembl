@@ -671,5 +671,5 @@ def test_clone_langstring_has_same_content_as_original(
     for entry in boba_fett.entries:
         test_session.delete(entry)
     test_session.delete(boba_fett)
-    test_session.flush()
+    test_session.commit()
 
