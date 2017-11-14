@@ -155,10 +155,7 @@ var IdeaInSynthesisView = Marionette.LayoutView.extend({
 
       return {
         id: this.model.getId(),
-        editing: this.editing,
-        longTitle: this.model.getLongTitleDisplayText(this.translationData),
         authors: _.uniq(this.authors),
-        subject: longTitle ? longTitle.bestValue(this.translationData) : '',
         canEdit: this.canEdit(),
         isPrimaryNavigationPanel: this.getPanel().isPrimaryNavigationPanel(),
         ctxNumMessages: i18n.sprintf(i18n.ngettext(
