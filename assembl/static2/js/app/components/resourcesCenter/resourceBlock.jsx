@@ -21,7 +21,7 @@ export type ResourceBlockProps = {
 const ResourceBlock = (props: ResourceBlockProps) => {
   const { index, title, text, embedCode, image, doc } = props;
   const isEven = index % 2 === 0;
-  const float = isEven ? 'media-right margin-case-left' : 'media-left margin-case-right';
+  const float = isEven ? 'rsc-media-right margin-case-left' : 'rsc-media-left margin-case-right';
   const videoClassNames = classnames([float, 'resource-video']);
   const imgClassNames = classnames([float, 'resource-img']);
   const resourceBlockClassNames = isEven ? 'background-grey' : 'background-light';

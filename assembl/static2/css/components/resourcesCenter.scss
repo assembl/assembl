@@ -4,7 +4,7 @@
     margin-bottom: 80px;
   }
 
-  .media-right .media-left {
+  .rsc-media-right .rsc-media-left {
     margin: 0 auto;
   }
 
@@ -30,10 +30,10 @@
       }
 
       @media screen and (min-width: 1000px) {
-        .media-right {
+        .rsc-media-right {
           float: right;
         }
-        .media-left {
+        .rsc-media-left {
           float: left;
         }
 
@@ -50,31 +50,23 @@
       }
       @media screen and (max-width: 999px) {
         .resource-video-container {
+          width: 100%;
+          padding-bottom: 50px;
           display: flex;
           justify-content: center;
-          padding-bottom: 50px;
         }
         .resource-img-container {
           width: 100%;
-          display: flex;
-          justify-content: center;
           padding-bottom: 50px;
           .resource-img {
             max-height: 500px;
+            margin: 0 auto;
+            width: 100%;
           }
         }
       }
 
-      @media screen and (max-width: 768px) {
-        .resource-img {
-          width: 100%;
-          height: auto;
-          max-width: 500px;
-        }
-      }
-
       .resource-text {
-        max-width: 1200px;
         text-align: justify;
         font-size: $font-size-sm;
         line-height: 2;
@@ -82,6 +74,11 @@
         .resource-download-link {
           font-size: $font-size-m;
           margin-top: 20px;
+        }
+      }
+      @media screen and (max-width: $app-max-width) {
+        .resource-text {
+          padding: 0 10px;
         }
       }
     }
