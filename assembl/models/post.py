@@ -47,6 +47,9 @@ class PostVisitor(object):
     def visit_post(self, post):
         pass
 
+# Those states lists need to be kept in sync with frontend code
+# static/js/app/models/message.js
+# static2/js/app/constants.js
 
 class PublicationStates(DeclEnum):
     DRAFT = "DRAFT", ""

@@ -2,14 +2,23 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
-import { getCurrentPhaseIdentifier } from './utils/timeline';
+
+import { getCurrentPhaseIdentifier, type Timeline } from './utils/timeline';
 import { addRedirectionToV1 } from './actions/phaseActions';
 import Navbar from './components/common/navbar';
 import Footer from './components/common/footer';
 
+type Debate = { debateData: { timeline: Timeline } };
+
 class Main extends React.Component {
-  state: { identifier: string, location: Location };
-  constructor(props) {
+  state: { identifier: string, location: string };
+  constructor(props: {
+    debate: Debate,
+    params: { phase: string },
+    location: { query: { phase: string }, pathname: string },
+    addRedirectionToV1: boolean => {},
+    children: React.Children
+  }) {
     super(props);
     const { debateData } = this.props.debate;
     const paramsIdentifier = this.props.params.phase || getCurrentPhaseIdentifier(debateData.timeline);
@@ -65,7 +74,7 @@ class Main extends React.Component {
   }
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = (state: { debate: Debate }) => {
   return {
     debate: state.debate
   };
@@ -73,7 +82,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    addRedirectionToV1: (discussionId) => {
+    addRedirectionToV1: (discussionId: string) => {
       dispatch(addRedirectionToV1(discussionId));
     }
   };

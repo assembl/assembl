@@ -49,6 +49,7 @@ class ExportSection extends React.Component {
     const { i18n, data: { discussionPreferences: { languages } } } = this.props;
     const { translate } = this.state;
     const debateId = getDiscussionId();
+    if (!debateId) return null;
     const exportLocale = this.state.exportLocale || languages[0].locale;
     const exportLink = `/data/Discussion/${debateId}/phase1_csv_export${translate ? `?lang=${exportLocale}` : ''}`;
     return (

@@ -1,6 +1,17 @@
+// @flow
+
 import { isDateExpired, getNumberOfDays, calculatePercentage } from './globalFunctions';
 
-export const getCurrentPhaseIdentifier = (_timeline) => {
+type Phase = {
+  identifier: string,
+  interface_v1: boolean,
+  start: string,
+  end: string,
+  title: { entries: Array<{ [string]: string }> }
+};
+export type Timeline = Array<Phase>;
+
+export const getCurrentPhaseIdentifier = (_timeline: Timeline) => {
   let timeline = _timeline;
   if (!timeline) {
     timeline = [];
@@ -17,7 +28,7 @@ export const getCurrentPhaseIdentifier = (_timeline) => {
   return identifier || 'thread';
 };
 
-export const isPhaseStarted = (_timeline, _identifier) => {
+export const isPhaseStarted = (_timeline: Timeline, _identifier: string) => {
   let timeline = _timeline;
   const identifier = _identifier;
   if (!timeline) {
@@ -35,7 +46,7 @@ export const isPhaseStarted = (_timeline, _identifier) => {
 };
 
 let key = '';
-export const isSeveralIdentifiers = (_timeline) => {
+export const isSeveralIdentifiers = (_timeline: Timeline) => {
   let timeline = _timeline;
   if (!timeline) {
     timeline = [];
@@ -50,7 +61,7 @@ export const isSeveralIdentifiers = (_timeline) => {
   return isSeveral;
 };
 
-export const getPhaseStatus = (_startDate, _endDate) => {
+export const getPhaseStatus = (_startDate: string, _endDate: string) => {
   const startDate = new Date(_startDate);
   const endDate = new Date(_endDate);
   const currentDate = new Date();
@@ -67,7 +78,7 @@ export const getPhaseStatus = (_startDate, _endDate) => {
   return phaseStatus;
 };
 
-export const getStartDatePhase = (_timeline, _identifier) => {
+export const getStartDatePhase = (_timeline: Timeline, _identifier: string) => {
   let timeline = _timeline;
   if (!timeline) {
     timeline = [];
@@ -82,7 +93,7 @@ export const getStartDatePhase = (_timeline, _identifier) => {
   return startDatePhase;
 };
 
-export const isCurrentPhase = (_phase) => {
+export const isCurrentPhase = (_phase: Phase) => {
   const phase = _phase;
   const currentDate = new Date();
   const startDate = new Date(phase.start);
@@ -91,7 +102,7 @@ export const isCurrentPhase = (_phase) => {
   return currentPhase;
 };
 
-export const getPhaseName = (_timeline, _identifier, _locale) => {
+export const getPhaseName = (_timeline: Timeline, _identifier: string, _locale: string) => {
   let timeline = _timeline;
   if (!timeline) {
     timeline = [];
@@ -111,14 +122,14 @@ export const getPhaseName = (_timeline, _identifier, _locale) => {
   return phaseName;
 };
 
-export const isStepCompleted = (_phase) => {
+export const isStepCompleted = (_phase: Phase) => {
   const phase = _phase;
   const currentDate = new Date();
   const endDate = new Date(phase.end);
   return isDateExpired(currentDate, endDate);
 };
 
-export const getIfPhaseCompletedByIdentifier = (_timeline, _identifier) => {
+export const getIfPhaseCompletedByIdentifier = (_timeline: Timeline, _identifier: string) => {
   let timeline = _timeline;
   if (!timeline) {
     timeline = [];
@@ -133,7 +144,7 @@ export const getIfPhaseCompletedByIdentifier = (_timeline, _identifier) => {
   return isPhaseCompleted;
 };
 
-export const getBarPercent = (_phase) => {
+export const getBarPercent = (_phase: Phase) => {
   const phase = _phase;
   const currentDate = new Date();
   const endDate = new Date(phase.end);
