@@ -616,7 +616,7 @@ class Synthesis(SecureObjectType, SQLAlchemyObjectType):
 
     def resolve_img(self, args, context, info):
         ideas = self.get_ideas()
-        last_idea = ideas[-1] if ideas else None
+        last_idea = ideas[-1].live if ideas else None
         if last_idea.attachments:
             return last_idea.attachments[0].document
 
@@ -628,6 +628,7 @@ class IdeaInterface(graphene.Interface):
     num_children = graphene.Int(identifier=graphene.String())
     img = graphene.Field(Document)
     order = graphene.Float()
+    live = graphene.Field(lambda: IdeaUnion)
 
     def resolve_num_posts(self, args, context, info):
         if isinstance(self, models.RootIdea):

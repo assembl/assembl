@@ -13,24 +13,29 @@ query SynthesisQuery($id: ID!, $lang: String) {
         ... on Idea {
           id
           ancestors
-          numPosts
-          numContributors
-          img {
-            externalUrl
-          }
           title(lang: $lang)
           synthesisTitle(lang: $lang)
-          posts {
-            edges {
-              node {
-                ... on Post {
-                  sentimentCounts {
-                    like
-                    disagree
-                    dontUnderstand
-                    moreInfo
+          live {
+            ... on Idea {
+              id
+              numPosts
+              numContributors
+              img {
+                externalUrl
+              }
+              posts {
+                edges {
+                  node {
+                    ... on Post {
+                      sentimentCounts {
+                        like
+                        disagree
+                        dontUnderstand
+                        moreInfo
+                      }
+                      publicationState
+                    }
                   }
-                  publicationState
                 }
               }
             }

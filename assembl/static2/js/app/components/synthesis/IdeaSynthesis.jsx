@@ -10,17 +10,20 @@ import { getSentimentsCount, createDoughnutElements } from '../debate/common/ann
 
 export type SynthesisIdea = {
   id: string,
+  ancestors: Array<string>,
   title: string,
-  img: {
-    externalUrl: string
-  },
   synthesisTitle: string,
-  numContributors: number,
-  numPosts: number,
-  posts: {
-    edges: Array<Object>
-  },
-  ancestors: Array<string>
+  live: {
+    id: string,
+    img: {
+      externalUrl: string
+    },
+    numContributors: number,
+    numPosts: number,
+    posts: {
+      edges: Array<Object>
+    }
+  }
 };
 
 const SynthesisBody = ({ level, value, stats }) => {
@@ -56,7 +59,7 @@ const SynthesisStats = ({ numContributors, numPosts, ideaLink, posts }) => {
 const SynthesisImage = ({ level, title, imgUrl, stats }) => {
   if (level === 1) {
     return (
-      <div className="synthesis-image-container" style={{ backgroundImage: `url(${imgUrl})` }}>
+      <div className="synthesis-image-container" style={imgUrl && { backgroundImage: `url(${imgUrl})` }}>
         {stats}
       </div>
     );
@@ -64,7 +67,7 @@ const SynthesisImage = ({ level, title, imgUrl, stats }) => {
   if (level === 2) {
     return (
       <div>
-        <img alt={title} className="synthesis-image-container" src={imgUrl} />
+        {imgUrl ? <img alt={title} className="synthesis-image-container" src={imgUrl} /> : null}
         {stats}
       </div>
     );
@@ -74,7 +77,8 @@ const SynthesisImage = ({ level, title, imgUrl, stats }) => {
 
 const IdeaSynthesis = (props: { idea: SynthesisIdea, level: number, slug: string }) => {
   const { idea, level, slug } = props;
-  const { id, title, img, synthesisTitle, numContributors, numPosts, posts } = idea;
+  const { title, synthesisTitle } = idea;
+  const { id, img, numContributors, numPosts, posts } = idea.live;
   const phaseIdentifier = 'thread'; // TODO: Proper phase identification
   // For now, syntheses can only have ideas from the "thread" phase.
 
