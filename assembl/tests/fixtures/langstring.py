@@ -489,3 +489,20 @@ def ambiguous_langstring(request, test_session, undefined_locale):
 
     request.addfinalizer(fin)
     return ls
+
+@pytest.fixture
+def en_langstring(request, test_session, undefined_locale):
+    from assembl.models.langstrings import LangString
+
+    ls = LangString.create("The quick brown fox jumps over the lazy dog.", "en")
+    test_session.add(ls)
+    test_session.flush()
+
+    def fin():
+        for entry in ls.entries:
+            test_session.delete(entry)
+        test_session.delete(ls)
+        test_session.flush()
+
+    request.addfinalizer(fin)
+    return ls
