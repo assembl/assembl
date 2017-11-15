@@ -66,7 +66,7 @@ class IdeaGraphView(DiscussionBoundBase):
         'with_polymorphic': '*'
     }
 
-    def copy(self):
+    def copy(self, db=None):
         retval = self.__class__()
         retval.discussion = self.discussion
         return retval
@@ -254,8 +254,8 @@ class ExplicitSubGraphView(IdeaGraphView):
         'polymorphic_identity': 'explicit_sub_graph_view',
     }
 
-    def copy(self):
-        retval = IdeaGraphView.copy(self)
+    def copy(self, db=None):
+        retval = IdeaGraphView.copy(self, db=db)
         # retval.ideas = self.ideas
         return retval
 
@@ -465,11 +465,11 @@ class Synthesis(ExplicitSubGraphView):
         'polymorphic_identity': 'synthesis',
     }
 
-    def copy(self):
-        retval = ExplicitSubGraphView.copy(self)
-        retval.subject = self.subject.clone()
-        retval.introduction = self.introduction.clone()
-        retval.conclusion = self.conclusion.clone()
+    def copy(self, db=None):
+        retval = ExplicitSubGraphView.copy(self, db=db)
+        retval.subject = self.subject.clone(db=db)
+        retval.introduction = self.introduction.clone(db=db)
+        retval.conclusion = self.conclusion.clone(db=db)
         return retval
 
     def publish(self):

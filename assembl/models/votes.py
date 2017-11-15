@@ -773,7 +773,7 @@ class AbstractIdeaVote(HistoryMixin, DiscussionBoundBase):
     def value(self):
         pass
 
-    def copy(self, tombstone=None, **kwargs):
+    def copy(self, tombstone=None, db=None, **kwargs):
         kwargs.update(
             tombstone=tombstone,
             widget=self.widget,
@@ -783,7 +783,7 @@ class AbstractIdeaVote(HistoryMixin, DiscussionBoundBase):
             criterion=self.criterion,
             vote_date=self.vote_date,
         )
-        return super(AbstractIdeaVote, self).copy(**kwargs)
+        return super(AbstractIdeaVote, self).copy(db=db, **kwargs)
 
     def is_valid(self):
         return self.vote_spec.is_valid_vote(self)
@@ -829,12 +829,12 @@ class LickertIdeaVote(AbstractIdeaVote):
     def value(self):
         return self.vote_value
 
-    def copy(self, tombstone=None, **kwargs):
+    def copy(self, tombstone=None, db=None, **kwargs):
         kwargs.update(
             tombstone=tombstone,
             vote_value=self.vote_value
         )
-        return super(LickertIdeaVote, self).copy(**kwargs)
+        return super(LickertIdeaVote, self).copy(db=db, **kwargs)
 
     @value.setter
     def value(self, val):
@@ -904,12 +904,12 @@ class BinaryIdeaVote(AbstractIdeaVote):
     def value(self, val):
         self.vote_value = asbool(val)
 
-    def copy(self, tombstone=None, **kwargs):
+    def copy(self, tombstone=None, db=None, **kwargs):
         kwargs.update(
             tombstone=tombstone,
             vote_value=self.vote_value
         )
-        return super(BinaryIdeaVote, self).copy(**kwargs)
+        return super(BinaryIdeaVote, self).copy(db=db, **kwargs)
 
 
 class TokenIdeaVote(AbstractIdeaVote):
@@ -951,12 +951,12 @@ class TokenIdeaVote(AbstractIdeaVote):
         # TODO: make sure that total <= category total_number
         self.vote_value = val
 
-    def copy(self, tombstone=None, **kwargs):
+    def copy(self, tombstone=None, db=None, **kwargs):
         kwargs.update(
             tombstone=tombstone,
             vote_value=self.vote_value
         )
-        return super(TokenIdeaVote, self).copy(**kwargs)
+        return super(TokenIdeaVote, self).copy(db=db, **kwargs)
 
     def unique_query(self):
         query, _ = super(TokenIdeaVote, self).unique_query()

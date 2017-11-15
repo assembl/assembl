@@ -832,7 +832,6 @@ class LangString(Base):
         db = db or clone.db
         for e in self.entries:
             e = e.clone(clone, db=db, tombstone=tombstone)
-            db.add(e)
         db.add(clone)
         return clone
 
@@ -909,8 +908,8 @@ class LangStringEntry(TombstonableMixin, Base):
             locale_confirmed = self.locale_confirmed,
             error_code=self.error_code,
             error_count=self.error_count)
-        if db:
-            db.add(clone)
+        db = db or self.db
+        db.add(clone)
         return clone
 
     def __repr__(self):
