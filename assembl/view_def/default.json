@@ -345,6 +345,7 @@
         "idea": true,
         "message_classifier": true,
         "header": ":extended",
+        "title": ":extended",
         "name": ":extended",
         "color": true,
         "previous_column": true

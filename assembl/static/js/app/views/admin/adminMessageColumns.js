@@ -69,11 +69,14 @@ var AdminMessageColumnsPanel = Marionette.LayoutView.extend({
 
     for (var i in column_identifiers) {
       var column, identifier = column_identifiers[i],
+          title = new LangString.Model(),
           name = new LangString.Model();
+      title.initFromDict(column_names[identifier]);
       name.initFromDict(column_names[identifier]);
       column = new IdeaMessageColumn.Model({
         idea: currentIdea.id,
         message_classifier: identifier,
+        title: title,
         name: name,
         color: colors[identifier],
       });
@@ -174,6 +177,7 @@ var MessageColumnView = Marionette.LayoutView.extend({
   template: '#tmpl-adminMessageColumn',
   ui: {
     columnId: '.js_column_id',
+    columnTitle: '.js_column_title',
     columnName: '.js_column_name',
     columnColor: '.js_column_color',
     columnUp: '.js_column_up',
@@ -181,6 +185,7 @@ var MessageColumnView = Marionette.LayoutView.extend({
     columnDelete: '.js_column_delete',
   },
   regions: {
+    columnTitle: '@ui.columnTitle',
     columnName: '@ui.columnName',
   },
   events: {
@@ -200,7 +205,14 @@ var MessageColumnView = Marionette.LayoutView.extend({
       collsize: this.model.collection.length,
     };
   },
-  onRender: function() {
+  onRender: function() {    
+    this.showChildView(
+      "columnTitle",
+      new SimpleLangStringEditPanel({
+        model: this.model.get('title'),
+        owner_relative_url: this.model.url() + '/title',
+      }));
+    
     this.showChildView(
       "columnName",
       new SimpleLangStringEditPanel({
