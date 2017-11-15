@@ -1081,7 +1081,7 @@ class Query(graphene.ObjectType):
     def resolve_syntheses(self, args, context, info):
         discussion_id = context.matchdict['discussion_id']
         discussion = models.Discussion.get(discussion_id)
-        return discussion.get_all_syntheses_query(include_unpublished=False)
+        return discussion.get_all_syntheses_query(include_unpublished=False).order_by(desc(models.Synthesis.creation_date))
 
     def resolve_has_syntheses(self, args, context, info):
         discussion_id = context.matchdict['discussion_id']
