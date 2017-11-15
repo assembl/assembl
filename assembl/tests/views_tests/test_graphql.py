@@ -1832,7 +1832,7 @@ def test_query_discussion_resources_center_fields(
         document=simple_file,
         title=u"Resource center header image",
         creator=moderator_user,
-        attachmentPurpose='RESOURCE_CENTER_HEADER_IMAGE'
+        attachmentPurpose='RESOURCES_CENTER_HEADER_IMAGE'
     )
 
     discussion.resources_center_title = models.LangString.create(
@@ -1861,3 +1861,54 @@ def test_query_discussion_resources_center_fields(
 
     discussion.db.delete(header_image)
     discussion.db.flush()
+
+
+def test_update_resources_center(graphql_request, discussion):
+    import os
+    from io import BytesIO
+
+    class FieldStorage(object):
+        file = BytesIO(os.urandom(16))
+
+        def __init__(self, filename, type):
+            self.filename = filename
+            self.type = type
+
+    graphql_request.POST['variables.headerImage'] = FieldStorage(
+        u'path/to/new-img.png', 'image/png')
+
+    res = schema.execute(u"""
+mutation updateResourcesCenter($headerImage:String) {
+    updateResourcesCenter(
+        titleEntries:[
+            {value:"My great resources center", localeCode:"en"},
+            {value:"Mon super centre de ressources", localeCode:"fr"}
+        ],
+        headerImage:$headerImage,
+    ) {
+        resourcesCenter {
+            titleEntries {
+                localeCode
+                value
+            }
+            headerImage {
+                externalUrl
+                title
+            }
+        }
+    }
+}
+""", context_value=graphql_request, variable_values={"headerImage": u"variables.headerImage"})
+    assert res.data is not None
+
+    assert res.data['updateResourcesCenter'] is not None
+    assert res.data['updateResourcesCenter']['resourcesCenter'] is not None
+
+    resources_center = res.data['updateResourcesCenter']['resourcesCenter']
+    assert resources_center['titleEntries'][0]['localeCode'] == 'en'
+    assert resources_center['titleEntries'][0]['value'] == 'My great resources center'
+    assert resources_center['titleEntries'][1]['localeCode'] == 'fr'
+    assert resources_center['titleEntries'][1]['value'] == 'Mon super centre de ressources'
+    assert resources_center['headerImage'] is not None
+    assert '/documents/' in resources_center['headerImage']['externalUrl']
+    assert resources_center['headerImage']['title'] == 'new-img.png'

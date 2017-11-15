@@ -441,7 +441,7 @@ class ResourcesCenter(graphene.ObjectType):
         discussion_id = context.matchdict['discussion_id']
         discussion = models.Discussion.get(discussion_id)
         for attachment in discussion.attachments:
-            if attachment.attachmentPurpose == 'RESOURCE_CENTER_HEADER_IMAGE':
+            if attachment.attachmentPurpose == 'RESOURCES_CENTER_HEADER_IMAGE':
                 return attachment.document
 
 
@@ -2307,6 +2307,70 @@ class UpdateResource(graphene.Mutation):
         return UpdateResource(resource=resource)
 
 
+class UpdateResourcesCenter(graphene.Mutation):
+    class Input:
+        title_entries = graphene.List(LangStringEntryInput)
+        header_image = graphene.String()
+
+    resources_center = graphene.Field(lambda: ResourcesCenter)
+
+    @staticmethod
+    def mutate(root, args, context, info):
+        cls = models.Discussion
+        discussion_id = context.matchdict['discussion_id']
+        discussion = models.Discussion.get(discussion_id)
+        user_id = context.authenticated_userid or Everyone
+
+        permissions = get_permissions(user_id, discussion_id)
+        allowed = discussion.user_can(user_id, CrudPermissions.UPDATE, permissions)
+        if not allowed:
+            raise HTTPUnauthorized()
+
+        with cls.default_db.no_autoflush:
+            db = discussion.db
+            title_entries = args.get('title_entries')
+            if title_entries is not None and len(title_entries) == 0:
+                raise Exception('Resources center title entries needs at least one entry')
+                # Better to have this message than
+                # 'NoneType' object has no attribute 'owner_object'
+                # when creating the saobj below if title=None
+
+            update_langstring_from_input_entries(discussion, 'resources_center_title', title_entries)
+
+            # add uploaded image as an attachment to the discussion
+            image = args.get('header_image')
+            if image is not None:
+                filename = os.path.basename(context.POST[image].filename)
+                mime_type = context.POST[image].type
+                uploaded_file = context.POST[image].file
+                uploaded_file.seek(0)
+                data = uploaded_file.read()
+                document = models.File(
+                    discussion=discussion,
+                    mime_type=mime_type,
+                    title=filename,
+                    data=data)
+                # if there is already an IMAGE, remove it with the
+                # associated document
+                header_images = [att for att in discussion.attachments if att.attachmentPurpose == 'RESOURCES_CENTER_HEADER_IMAGE']
+                if header_images:
+                    image = header_images[0]
+                    db.delete(image.document)
+                    discussion.remove(image)
+
+                attachment = models.DiscussionAttachment(
+                    document=document,
+                    discussion=discussion,
+                    creator_id=context.authenticated_userid,
+                    title=filename,
+                    attachmentPurpose="RESOURCES_CENTER_HEADER_IMAGE"
+                )
+
+        db.flush()
+        resources_center = ResourcesCenter()
+        return UpdateResourcesCenter(resources_center=resources_center)
+
+
 class Mutations(graphene.ObjectType):
     create_thematic = CreateThematic.Field()
     update_thematic = UpdateThematic.Field()
@@ -2325,6 +2389,7 @@ class Mutations(graphene.ObjectType):
     create_resource = CreateResource.Field()
     delete_resource = DeleteResource.Field()
     update_resource = UpdateResource.Field()
+    update_resources_center = UpdateResourcesCenter.Field()
 
 
 Schema = graphene.Schema(query=Query, mutation=Mutations)
