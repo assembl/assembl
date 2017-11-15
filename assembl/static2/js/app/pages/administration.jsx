@@ -220,7 +220,7 @@ export default compose(
       }
       if (data.error) {
         return {
-          resourcesHasErrors: true
+          resourcesCenterHasErrors: true
         };
       }
 
