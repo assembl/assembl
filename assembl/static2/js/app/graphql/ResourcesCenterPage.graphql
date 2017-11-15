@@ -1,0 +1,12 @@
+query ResourcesCenterPage {
+  resourcesCenter {
+    titleEntries {
+      localeCode
+      value
+    }
+    headerImage {
+      externalUrl
+      mimeType
+    }
+  }
+}

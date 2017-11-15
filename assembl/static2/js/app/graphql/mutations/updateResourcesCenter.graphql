@@ -1,0 +1,14 @@
+mutation UpdateResourcesCenter($headerImage: String, $titleEntries: [LangStringEntryInput]!) {
+  updateResourcesCenter(titleEntries: $titleEntries, headerImage: $headerImage) {
+    resourcesCenter {
+      titleEntries {
+        localeCode
+        value
+      }
+      headerImage {
+        externalUrl
+        title
+      }
+    }
+  }
+}

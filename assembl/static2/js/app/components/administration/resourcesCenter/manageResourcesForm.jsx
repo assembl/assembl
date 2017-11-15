@@ -37,8 +37,7 @@ const mapStateToProps = (state) => {
   return {
     resources: resourcesInOrder.filter((id) => {
       return !resourcesById.get(id).get('toDelete');
-    }),
-    selectedLocale: state.admin.selectedLocale
+    })
   };
 };
 

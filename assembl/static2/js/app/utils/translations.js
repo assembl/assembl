@@ -344,7 +344,9 @@ const Translations = {
         deleteResource: "Supprimer la ressource",
         documentLabel: "Document",
         imageLabel: "Image",
-        successSave: "Les ressources ont été enregistrées avec succès !"
+        successSave: "Les ressources ont été enregistrées avec succès !",
+        pageTitleLabel: "Titre de la page",
+        headerImageLabel: "Image de fond du bandeau"
       },
       surveyExport: {
         annotation: "Vous pouvez exporter l'ensemble des données du débat en cliquant simplement sur le bouton Exporter",
@@ -707,7 +709,9 @@ const Translations = {
         deleteResource: "Delete the resource",
         documentLabel: "Document",
         imageLabel: "Image",
-        successSave: "Resources have been saved with success!"
+        successSave: "Resources have been saved with success!",
+        pageTitleLabel: "Page title",
+        headerImageLabel: "Header image"
       },
       surveyExport: {
         annotation: "You can export all the debate data by clicking on the Export button",

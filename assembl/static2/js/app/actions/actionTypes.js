@@ -12,6 +12,9 @@ export const UPDATE_RESOURCE_IMAGE: 'UPDATE_RESOURCE_IMAGE' = 'UPDATE_RESOURCE_I
 export const UPDATE_RESOURCE_TEXT: 'UPDATE_RESOURCE_TEXT' = 'UPDATE_RESOURCE_TEXT';
 export const UPDATE_RESOURCE_TITLE: 'UPDATE_RESOURCE_TITLE' = 'UPDATE_RESOURCE_TITLE';
 export const UPDATE_RESOURCES: 'UPDATE_RESOURCES' = 'UPDATE_RESOURCES';
+export const UPDATE_RC_PAGE_TITLE: 'UPDATE_RC_PAGE_TITLE' = 'UPDATE_RC_PAGE_TITLE';
+export const UPDATE_RC_HEADER_IMAGE: 'UPDATE_RC_HEADER_IMAGE' = 'UPDATE_RC_HEADER_IMAGE';
+export const UPDATE_RC_PAGE: 'UPDATE_RC_PAGE' = 'UPDATE_RC_PAGE';
 
 export type UpdateContentLocaleById = {
   type: typeof UPDATE_CONTENT_LOCALE_BY_ID,
@@ -37,6 +40,22 @@ export type ContentLocaleMapping = {
 export type UpdateContentLocale = {
   type: typeof UPDATE_CONTENT_LOCALE,
   data: ContentLocaleMapping
+};
+
+export type UpdateRCPageTitle = {
+  locale: string,
+  value: string,
+  type: typeof UPDATE_RC_PAGE_TITLE
+};
+
+export type UpdateResourcesCenterHeaderImage = {
+  value: File,
+  type: typeof UPDATE_RC_HEADER_IMAGE
+};
+
+export type UpdateResourcesCenterPage = {
+  headerImage: File | null,
+  titleEntries: Array<any> // TODO: use type automatically created from flow
 };
 
 export type CreateResource = {
@@ -100,6 +119,9 @@ type BasicAction = {
 // TODO: create type for all possible action types
 
 type ResourcesCenterActions =
+  | UpdateRCPageTitle
+  | UpdateResourcesCenterHeaderImage
+  | UpdateResourcesCenterPage
   | CreateResource
   | DeleteResource
   | UpdateResourceDocument

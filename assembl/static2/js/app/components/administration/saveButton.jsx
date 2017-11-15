@@ -13,6 +13,7 @@ import updateThematicMutation from '../../graphql/mutations/updateThematic.graph
 import createResourceMutation from '../../graphql/mutations/createResource.graphql';
 import updateResourceMutation from '../../graphql/mutations/updateResource.graphql';
 import deleteResourceMutation from '../../graphql/mutations/deleteResource.graphql';
+import updateResourcesCenterMutation from '../../graphql/mutations/updateResourcesCenter.graphql';
 import updateDiscussionPreferenceQuery from '../../graphql/mutations/updateDiscussionPreference.graphql';
 import getDiscussionPreferenceLanguage from '../../graphql/DiscussionPreferenceLanguage.graphql';
 
@@ -125,7 +126,10 @@ const SaveButton = ({
   createResource,
   deleteResource,
   updateResource,
-  refetchResources
+  refetchResources,
+  resourcesCenterPage,
+  updateResourcesCenter,
+  refetchResourcesCenter
 }) => {
   const saveAction = () => {
     displayAlert('success', `${I18n.t('loading.wait')}...`);
@@ -171,6 +175,25 @@ const SaveButton = ({
         });
     }
 
+    if (resourcesCenterPage.get('hasChanged')) {
+      const pageHeaderImage = resourcesCenterPage.get('headerImage').toJS();
+      const headerImage = typeof pageHeaderImage.externalUrl === 'object' ? pageHeaderImage.externalUrl : null;
+      const payload = {
+        variables: {
+          headerImage: headerImage,
+          titleEntries: resourcesCenterPage.get('titleEntries').toJS()
+        }
+      };
+      updateResourcesCenter(payload)
+        .then(() => {
+          refetchResourcesCenter();
+          displayAlert('success', I18n.t('administration.resourcesCenter.successSave'));
+        })
+        .catch((error) => {
+          displayAlert('danger', `${error}`, false, 30000);
+        });
+    }
+
     if (resourcesHaveChanged) {
       const mutationsPromises = getMutationsPromises({
         items: resources,
@@ -192,12 +215,14 @@ const SaveButton = ({
     }
   };
 
+  const disabled = !(
+    thematicsHaveChanged ||
+    languagePreferenceHasChanged ||
+    resourcesHaveChanged ||
+    resourcesCenterPage.get('hasChanged')
+  );
   return (
-    <Button
-      className="button-submit button-dark right"
-      disabled={!(thematicsHaveChanged || languagePreferenceHasChanged || resourcesHaveChanged)}
-      onClick={saveAction}
-    >
+    <Button className="button-submit button-dark right" disabled={disabled} onClick={saveAction}>
       <Translate value="administration.saveThemes" />
     </Button>
   );
@@ -224,6 +249,9 @@ const SaveButtonWithMutations = compose(
   }),
   graphql(deleteResourceMutation, {
     name: 'deleteResource'
+  }),
+  graphql(updateResourcesCenterMutation, {
+    name: 'updateResourcesCenter'
   })
 )(SaveButton);
 
@@ -238,8 +266,9 @@ const mapStateToProps = ({
     discussionLanguagePreferencesHasChanged
   }
 }) => {
-  const { resourcesById, resourcesHaveChanged, resourcesInOrder } = resourcesCenter;
+  const { page, resourcesById, resourcesHaveChanged, resourcesInOrder } = resourcesCenter;
   return {
+    resourcesCenterPage: page,
     resourcesHaveChanged: resourcesHaveChanged,
     resources: resourcesInOrder.map((id) => {
       return resourcesById.get(id).toJS();

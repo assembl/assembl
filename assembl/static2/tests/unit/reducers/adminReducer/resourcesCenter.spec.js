@@ -7,11 +7,94 @@ import {
   UPDATE_RESOURCE_EMBED_CODE,
   UPDATE_RESOURCE_IMAGE,
   UPDATE_RESOURCE_TEXT,
-  UPDATE_RESOURCE_TITLE
+  UPDATE_RESOURCE_TITLE,
+  UPDATE_RC_PAGE_TITLE,
+  UPDATE_RC_HEADER_IMAGE
 } from '../../../../js/app/actions/actionTypes';
 import * as reducers from '../../../../js/app/reducers/adminReducer/resourcesCenter';
 
 describe('resourcesCenter admin reducers', () => {
+  describe('page reducer', () => {
+    const { page } = reducers;
+    it('it should return the initial state', () => {
+      const action = {};
+      expect(page(undefined, action)).toEqual(
+        Map({
+          hasChanged: false,
+          titleEntries: List(),
+          headerImage: Map({ externalUrl: '', mimeType: '', title: '' })
+        })
+      );
+    });
+
+    it('should return the current state for other actions', () => {
+      const action = { type: 'FOOBAR' };
+      const oldState = Map({
+        hasChanged: false,
+        titleEntries: List.of({ locale: 'en', value: 'Resources center' }),
+        headerImage: Map({
+          externalUrl: '',
+          mimeType: '',
+          title: ''
+        })
+      });
+      expect(page(oldState, action)).toEqual(oldState);
+    });
+
+    it('should handle UPDATE_RC_PAGE_TITLE action type', () => {
+      const oldState = fromJS({
+        hasChanged: false,
+        titleEntries: [{ localeCode: 'fr', value: 'en français' }, { localeCode: 'en', value: 'in english' }],
+        headerImage: {
+          externalUrl: '',
+          mimeType: '',
+          title: ''
+        }
+      });
+      const expected = fromJS({
+        hasChanged: true,
+        titleEntries: [{ localeCode: 'fr', value: 'Centre de ressources' }, { localeCode: 'en', value: 'in english' }],
+        headerImage: {
+          externalUrl: '',
+          mimeType: '',
+          title: ''
+        }
+      });
+      const action = {
+        locale: 'fr',
+        value: 'Centre de ressources',
+        type: UPDATE_RC_PAGE_TITLE
+      };
+      expect(page(oldState, action)).toEqual(expected);
+    });
+
+    it('should handle UPDATE_RC_HEADER_IMAGE action type', () => {
+      const oldState = fromJS({
+        hasChanged: false,
+        headerImage: {
+          externalUrl: '',
+          mimeType: ''
+        },
+        titleEntries: []
+      });
+      const file = new File([''], 'foo.jpg', { type: 'image/jpeg' });
+      const expected = {
+        hasChanged: true,
+        headerImage: {
+          externalUrl: file,
+          mimeType: 'image/jpeg'
+        },
+        titleEntries: []
+      };
+      const action = {
+        value: file,
+        type: UPDATE_RC_HEADER_IMAGE
+      };
+      const actual = page(oldState, action);
+      expect(actual.toJS()).toEqual(expected);
+    });
+  });
+
   describe('resourcesInOrder reducer', () => {
     const { resourcesInOrder } = reducers;
     it('should return the initial state', () => {
@@ -47,7 +130,7 @@ describe('resourcesCenter admin reducers', () => {
 
     it('should return the current state for other actions', () => {
       const action = { type: 'FOOBAR' };
-      const oldState = Map({ 1: { id: '1', titleEntries: [] } });
+      const oldState = Map({ 1: { id: '1', titleEntries: List() } });
       expect(resourcesById(oldState, action)).toEqual(oldState);
     });
 

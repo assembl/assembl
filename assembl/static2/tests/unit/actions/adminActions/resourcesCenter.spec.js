@@ -6,7 +6,9 @@ import {
   UPDATE_RESOURCE_EMBED_CODE,
   UPDATE_RESOURCE_IMAGE,
   UPDATE_RESOURCE_TEXT,
-  UPDATE_RESOURCE_TITLE
+  UPDATE_RESOURCE_TITLE,
+  UPDATE_RC_PAGE_TITLE,
+  UPDATE_RC_HEADER_IMAGE
 } from '../../../../js/app/actions/actionTypes';
 
 describe('resourcesCenter admin actions', () => {
@@ -90,6 +92,31 @@ describe('resourcesCenter admin actions', () => {
         locale: 'en',
         value: 'new value',
         type: UPDATE_RESOURCE_TITLE
+      };
+      expect(actual).toEqual(expected);
+    });
+  });
+
+  describe('updateResourcesCenterPageTitle action', () => {
+    const { updateResourcesCenterPageTitle } = actions;
+    it('should return a UPDATE_RC_PAGE_TITLE action type', () => {
+      const actual = updateResourcesCenterPageTitle('en', 'New value');
+      const expected = {
+        locale: 'en',
+        value: 'New value',
+        type: UPDATE_RC_PAGE_TITLE
+      };
+      expect(actual).toEqual(expected);
+    });
+  });
+
+  describe('updateResourcesCenterHeaderImage action', () => {
+    const { updateResourcesCenterHeaderImage } = actions;
+    it('should return a UPDATE_RESOURCE_IMAGE action type', () => {
+      const actual = updateResourcesCenterHeaderImage({ name: 'foo.jpg', type: 'image/jpeg' });
+      const expected = {
+        value: { name: 'foo.jpg', type: 'image/jpeg' },
+        type: UPDATE_RC_HEADER_IMAGE
       };
       expect(actual).toEqual(expected);
     });

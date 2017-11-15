@@ -12,9 +12,49 @@ import {
   UPDATE_RESOURCE_IMAGE,
   UPDATE_RESOURCE_TEXT,
   UPDATE_RESOURCE_TITLE,
-  UPDATE_RESOURCES
+  UPDATE_RESOURCES,
+  UPDATE_RC_PAGE_TITLE,
+  UPDATE_RC_HEADER_IMAGE,
+  UPDATE_RC_PAGE
 } from '../../actions/actionTypes';
 import { updateInLangstringEntries } from '../../utils/i18n';
+
+const initialPage = Map({
+  hasChanged: false,
+  titleEntries: List(),
+  headerImage: Map({
+    externalUrl: '',
+    mimeType: '',
+    title: ''
+  })
+});
+export const page = (state: Map = initialPage, action: ReduxAction<Action>) => {
+  switch (action.type) {
+  case UPDATE_RC_PAGE_TITLE:
+    return state.update('titleEntries', updateInLangstringEntries(action.locale, fromJS(action.value))).set('hasChanged', true);
+  case UPDATE_RC_HEADER_IMAGE:
+    return state
+      .setIn(['headerImage', 'externalUrl'], action.value)
+      .setIn(['headerImage', 'mimeType'], action.value.type)
+      .set('hasChanged', true);
+  case UPDATE_RC_PAGE: {
+    let newState = state;
+    if (action.headerImage) {
+      newState = newState
+        .setIn(['headerImage', 'externalUrl'], action.headerImage.externalUrl)
+        .setIn(['headerImage', 'mimeType'], action.headerImage.mimeType);
+    }
+
+    if (action.titleEntries) {
+      newState = newState.set('titleEntries', fromJS(action.titleEntries));
+    }
+
+    return newState.set('hasChanged', false);
+  }
+  default:
+    return state;
+  }
+};
 
 export const resourcesHaveChanged = (state: boolean = false, action: ReduxAction<Action>) => {
   switch (action.type) {
@@ -127,6 +167,7 @@ export const resourcesById = (state: Map<string, Map> = Map(), action: ReduxActi
 };
 
 export default combineReducers({
+  page: page,
   resourcesHaveChanged: resourcesHaveChanged,
   resourcesInOrder: resourcesInOrder,
   resourcesById: resourcesById

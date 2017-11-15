@@ -1,0 +1,71 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`DumbPageForm component should render a form to update the resources center page title and header 1`] = `
+<div>
+  <div
+    className="form-group"
+  >
+    <label
+      className="control-label"
+      htmlFor={undefined}
+    >
+      Missing translation: administration.resourcesCenter.pageTitleLabel
+    </label>
+    <input
+      className="form-control"
+      id={undefined}
+      onBlur={[Function]}
+      onChange={[Function]}
+      placeholder="Missing translation: administration.resourcesCenter.pageTitleLabel"
+      type="text"
+      value="Centre de ressources"
+    />
+  </div>
+  <div
+    className="form-group"
+  >
+    <label
+      htmlFor="header-image"
+    >
+      <span
+        className={undefined}
+        style={undefined}
+      >
+        Missing translation: administration.resourcesCenter.headerImageLabel
+      </span>
+    </label>
+    <div>
+      <button
+        className="btn btn-default"
+        disabled={false}
+        onClick={[Function]}
+        type="button"
+      >
+        <span
+          className={undefined}
+          style={undefined}
+        >
+          Missing translation: common.uploadButton
+        </span>
+      </button>
+      <div
+        className="preview"
+      >
+        <img
+          alt="preview"
+          src="http://www.example.com/documents/myimage/data"
+        />
+      </div>
+      <input
+        className="hidden"
+        name="header-image"
+        onChange={[Function]}
+        type="file"
+      />
+    </div>
+  </div>
+  <div
+    className="separator"
+  />
+</div>
+`;

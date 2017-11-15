@@ -57,3 +57,29 @@ export const updateResources = (resources: actionTypes.ResourcesArray): actionTy
     type: actionTypes.UPDATE_RESOURCES
   };
 };
+
+export const updateResourcesCenterPageTitle = (locale: string, value: string): actionTypes.UpdateRCPageTitle => {
+  return {
+    locale: locale,
+    value: value,
+    type: actionTypes.UPDATE_RC_PAGE_TITLE
+  };
+};
+
+export const updateResourcesCenterHeaderImage = (value: File): actionTypes.UpdateResourcesCenterHeaderImage => {
+  return {
+    value: value,
+    type: actionTypes.UPDATE_RC_HEADER_IMAGE
+  };
+};
+
+export const updateResourcesCenterPage = (
+  titleEntries: Array<any>,
+  headerImage: File | null
+): actionTypes.UpdateResourcesCenterPage => {
+  return {
+    headerImage: headerImage,
+    titleEntries: titleEntries,
+    type: actionTypes.UPDATE_RC_PAGE
+  };
+};
