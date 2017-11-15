@@ -4,9 +4,11 @@ import deepen from './deepen';
 import Translations from './translations';
 import ja from '../../../translations/ja.json';
 import zhCN from '../../../translations/zh_CN.json';
+import ru from '../../../translations/ru.json';
 
 Translations.ja = deepen(ja);
 Translations.zh_CN = deepen(zhCN);
+Translations.ru = deepen(ru);
 
 const fallbackLocale = 'en';
 const myHandleMissingTranslation = function (key, replacements) {
