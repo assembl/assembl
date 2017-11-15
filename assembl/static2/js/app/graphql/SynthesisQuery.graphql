@@ -13,13 +13,13 @@ query SynthesisQuery($id: ID!, $lang: String) {
         ... on Idea {
           id
           ancestors
+          title(lang: $lang)
+          synthesisTitle(lang: $lang)
           live {
             ... on Idea {
               id
               numPosts
               numContributors
-              title(lang: $lang)
-              synthesisTitle(lang: $lang)
               img {
                 externalUrl
               }

@@ -20,7 +20,7 @@ const IdeaSynthesisTree = (props: {
   const newParents = parents.slice();
   newParents.push(index);
   return (
-    <Section displayIndex title={rootIdea.live.title} index={index} parents={parents} className="idea-synthesis-section">
+    <Section displayIndex title={rootIdea.title} index={index} parents={parents} className="idea-synthesis-section">
       <IdeaSynthesis level={parents.length + 1} idea={rootIdea} slug={slug} />
       {roots.map((idea, subIndex) => {
         return (

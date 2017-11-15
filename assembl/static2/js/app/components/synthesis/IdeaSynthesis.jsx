@@ -11,6 +11,8 @@ import { getSentimentsCount, createDoughnutElements } from '../debate/common/ann
 export type SynthesisIdea = {
   id: string,
   ancestors: Array<string>,
+  title: string,
+  synthesisTitle: string,
   live: {
     id: string,
     img: {
@@ -18,8 +20,6 @@ export type SynthesisIdea = {
     },
     numContributors: number,
     numPosts: number,
-    title: string,
-    synthesisTitle: string,
     posts: {
       edges: Array<Object>
     }
@@ -77,7 +77,8 @@ const SynthesisImage = ({ level, title, imgUrl, stats }) => {
 
 const IdeaSynthesis = (props: { idea: SynthesisIdea, level: number, slug: string }) => {
   const { idea, level, slug } = props;
-  const { id, img, numContributors, numPosts, posts, title, synthesisTitle } = idea.live;
+  const { title, synthesisTitle } = idea;
+  const { id, img, numContributors, numPosts, posts } = idea.live;
   const phaseIdentifier = 'thread'; // TODO: Proper phase identification
   // For now, syntheses can only have ideas from the "thread" phase.
 
