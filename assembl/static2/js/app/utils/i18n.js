@@ -51,16 +51,25 @@ export const getAvailableLocales = (locale, translations) => {
 };
 
 /*
-  Returns an updater function (see immutable-js) that updates the value of the
-  entry with given locale by the given value
+  @function updateInLangstringEntries
+  @param {string} locale - the locale of the langstring entry that we want to edit
+  @param {string} value - the value that will be set
 
-  example:
+  @example
+    // will change the french value by 'foobar' in titleEntries
+    const state = Map({
+      titleEntries: [
+        {localeCode: 'fr', value: 'Mon titre'},
+        {localeCode: 'en', value: 'My title'}
+      ]
+    })
     state.update(
-      titleEntries,
+      'titleEntries',
       updateInLangstringEntries('fr', 'foobar')
     );
 
-  will change the french value by 'foobar' in titleEntries
+    @returns {function} Updater function (see immutable-js) that updates the value of the
+    entry with given locale by the given value
 */
 export const updateInLangstringEntries = (locale, value) => {
   return (entries) => {
