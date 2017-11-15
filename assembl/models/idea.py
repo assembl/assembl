@@ -332,12 +332,9 @@ class Idea(HistoryMixin, DiscussionBoundBase):
             hidden=self.hidden,
             creation_date=self.creation_date,
             discussion=self.discussion,
-            title=self.title.clone(
-                tombstone=tombstone) if self.title else None,
-            synthesis_title=self.synthesis_title.clone(
-                tombstone=tombstone) if self.synthesis_title else None,
-            description=self.description.clone(
-                tombstone=tombstone) if self.description else None)
+            title=self.title.clone(db=db) if self.title else None,
+            synthesis_title=self.synthesis_title.clone(db=db) if self.synthesis_title else None,
+            description=self.description.clone(db=db) if self.description else None)
 
         return super(Idea, self).copy(**kwargs)
 
