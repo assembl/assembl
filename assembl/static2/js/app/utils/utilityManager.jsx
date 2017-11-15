@@ -57,7 +57,8 @@ export const displayModal = (title, body, footer, footerTxt, button = null, show
     footerTxt: footerTxt,
     button: button,
     showModal: showModal,
-    bsSize: bsSize
+    bsSize: bsSize,
+    content: undefined
   });
 };
 
