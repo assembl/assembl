@@ -30,14 +30,7 @@ const DumbPageForm = ({
   const headerImageFieldName = 'header-image';
   return (
     <div>
-      <FormControlWithLabel
-        key={selectedLocale}
-        label={titleLabel}
-        onChange={handlePageTitleChange}
-        required
-        type="text"
-        value={title}
-      />
+      <FormControlWithLabel key={selectedLocale} label={titleLabel} onChange={handlePageTitleChange} type="text" value={title} />
       <FormGroup>
         <label htmlFor={headerImageFieldName}>
           <Translate value="administration.resourcesCenter.headerImageLabel" />

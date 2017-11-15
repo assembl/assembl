@@ -1,6 +1,5 @@
 // @flow
 import React from 'react';
-import { I18n } from 'react-redux-i18n';
 import Header from '../common/header';
 import ResourceBlock from './resourceBlock';
 
@@ -18,12 +17,12 @@ export type Resource = {
 };
 
 type ResourcesCenterProps = {
+  headerTitle: string,
   resources: Array<Resource>,
   headerBackgroundUrl: string
 };
 
-const ResourcesCenter = ({ resources, headerBackgroundUrl }: ResourcesCenterProps) => {
-  const headerTitle = I18n.t('resourcesCenter.headerTitle');
+const ResourcesCenter = ({ resources, headerBackgroundUrl, headerTitle }: ResourcesCenterProps) => {
   return (
     <div className="resources-center">
       <Header title={headerTitle} imgUrl={headerBackgroundUrl} />
