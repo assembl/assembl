@@ -1,9 +1,23 @@
+// @flow
+
 import React from 'react';
 import TopPostForm from '../common/topPostForm';
 import { hexToRgb } from '../../../utils/globalFunctions';
 import { COLUMN_OPACITY_GAIN } from '../../../constants';
 
-const ColumnHeader = ({ color, classifier, title, ideaId, refetchIdea }) => {
+const ColumnHeader = ({
+  color,
+  classifier,
+  title,
+  ideaId,
+  refetchIdea
+}: {
+  color: string,
+  classifier: string,
+  title: string,
+  ideaId: string,
+  refetchIdea: Function
+}) => {
   return (
     <div className="column-header">
       <div

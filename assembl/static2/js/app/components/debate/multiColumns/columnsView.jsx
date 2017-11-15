@@ -1,15 +1,43 @@
+// @flow
 import React from 'react';
 import TabbedColumns from './tabbedColumns';
 import MultiColumns from './multiColumns';
 import hashLinkScroll from '../../../utils/hashLinkScroll';
 import { MIN_WIDTH_COLUMN, APP_CONTAINER_MAX_WIDTH } from '../../../constants';
+import { type Timeline } from '../../../utils/timeline';
 
-const screenWidth = () => {
+type MessageColumn = {
+  messageClassifier: string,
+  color: string,
+  index: number,
+  name: string,
+  title: string,
+  numPosts: number,
+  header: ?string
+};
+
+type MessageColumns = Array<MessageColumn>;
+
+type Props = {
+  messageColumns: MessageColumns,
+  identifier: string,
+  debateData: { timeline: Timeline }
+};
+
+type State = {
+  screenWidth: number
+};
+
+const screenWidth = (): number => {
   return window.innerWidth;
 };
 
-export default class ColumnsView extends React.Component {
-  constructor(props) {
+export default class ColumnsView extends React.Component<*, Props, State> {
+  props: Props;
+  state: State;
+  updateDimensions: Function;
+
+  constructor(props: Props) {
     super(props);
     this.state = {
       screenWidth: screenWidth()
@@ -27,7 +55,7 @@ export default class ColumnsView extends React.Component {
       screenWidth: screenWidth()
     });
   };
-  shouldShowTabs = (columnsCount) => {
+  shouldShowTabs = (columnsCount: number): boolean => {
     return columnsCount * MIN_WIDTH_COLUMN > Math.min(this.state.screenWidth, APP_CONTAINER_MAX_WIDTH);
   };
   render = () => {
