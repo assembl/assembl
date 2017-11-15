@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import ResourcesQuery from '../graphql/ResourcesQuery.graphql';
 import ResourcesCenterPageQuery from '../graphql/ResourcesCenterPage.graphql';
 import withLoadingIndicator from '../components/common/withLoadingIndicator';
-import ResourcesCenter from '../components/resourcesCenter/resourcesCenter';
+import ResourcesCenter from '../components/resourcesCenter';
 
 const ResourcesCenterContainer = ({ data, resourcesCenterHeaderUrl, resourcesCenterTitle }) => {
   return <ResourcesCenter {...data} headerBackgroundUrl={resourcesCenterHeaderUrl} headerTitle={resourcesCenterTitle} />;
