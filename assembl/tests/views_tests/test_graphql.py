@@ -1777,9 +1777,9 @@ def test_update_resource(graphql_request, resource_with_image_and_doc):
         u'path/to/new-doc.pdf', 'application/pdf')
 
     res = schema.execute(u"""
-mutation updateResource($img:String,$doc:String) {
+mutation updateResource($resourceId:ID!,$img:String,$doc:String) {
     updateResource(
-        id: "%s",
+        id:$resourceId,
         titleEntries:[
             {value:"My resource", localeCode:"en"},
             {value:"Ma ressource", localeCode:"fr"}
@@ -1807,7 +1807,7 @@ mutation updateResource($img:String,$doc:String) {
         }
     }
 }
-""" % (resource_id), context_value=graphql_request, variable_values={"img": u"variables.img", "doc": u"variables.doc"})
+""", context_value=graphql_request, variable_values={"img": u"variables.img", "doc": u"variables.doc", "resourceId": resource_id})
     assert res.data is not None
     assert res.data['updateResource'] is not None
     assert res.data['updateResource']['resource'] is not None
