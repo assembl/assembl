@@ -137,9 +137,8 @@ def drop_tables(app_settings, session):
             log.debug("Dropping table: %s" % row)
             session.execute("drop table \"%s\"" % row)
         mark_changed()
-    except:
-        raise Exception('Error dropping tables: %s' % (
-            sys.exc_info()[1]))
+    except Exception as e:
+        raise Exception('Error dropping tables: %s' % e)
 
 
 def base_fixture_dirname():
