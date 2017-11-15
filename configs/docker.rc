@@ -22,6 +22,9 @@ supervisor__autostart_uwsgi = true
 supervisor__autostart_elasticsearch_server = false
 uwsgi__socket = 0.0.0.0:9000
 uwsgi__processes = 3
+# this means that the exposed nginx is secure (https) even
+# if an inner nginx is not
+secure_proxy = true
 
 # Override what follows in your specific docker.rc file
 

@@ -23,7 +23,7 @@ from social.backends.utils import load_backends
 from assembl.models import (
     User, Preferences, AbstractAgentAccount, IdentityProvider)
 from .util import discussion_from_request, maybe_auto_subscribe
-
+from ..lib import config
 
 log = logging.getLogger('assembl')
 
@@ -160,7 +160,7 @@ def print_details(backend, details, *args, **kwargs):
 class AssemblStrategy(PyramidStrategy):
 
     def request_is_secure(self):
-        return self.request.scheme == 'https'
+        return self.request.scheme == 'https' or config.get('secure_proxy')
 
     def request_path(self):
         return self.request.path
@@ -200,6 +200,12 @@ class AssemblStrategy(PyramidStrategy):
     # def partial_from_session(self, session):
     #     from social.pipeline.utils import partial_from_session
     #     return partial_from_session(self, session)
+
+    def build_absolute_uri(self, path=None):
+        path = super(AssemblStrategy, self).build_absolute_uri(path)
+        if self.request_is_secure() and path.startswith('http:'):
+            path = 'https' + path[4:]
+        return path
 
     def get_pipeline(self):
         return (
