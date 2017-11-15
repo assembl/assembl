@@ -1,3 +1,4 @@
+// @flow
 import React from 'react';
 
 import Tree from '../../common/tree';
@@ -5,13 +6,23 @@ import ColumnHeader from './columnHeader';
 import ColumnsPost from '../../../components/debate/multiColumns/columnsPost';
 import { PostFolded } from '../../../components/debate/thread/post';
 import BoxWithHyphen from '../../common/boxWithHyphen';
-import { getIfPhaseCompletedByIdentifier } from '../../../utils/timeline';
+import { getIfPhaseCompletedByIdentifier, type Timeline } from '../../../utils/timeline';
 
 const Separator = () => {
   return <div style={{ height: '25px' }} />;
 };
 
-const Synthesis = ({ classifier, synthesisTitle, synthesisBody, hyphenStyle }) => {
+const Synthesis = ({
+  classifier,
+  synthesisTitle,
+  synthesisBody,
+  hyphenStyle
+}: {
+  classifier: string,
+  synthesisTitle: string,
+  synthesisBody: string,
+  hyphenStyle: Object
+}) => {
   return (
     <div id={`synthesis-${classifier}`} className="box synthesis background-grey">
       <BoxWithHyphen
@@ -39,6 +50,21 @@ const PostColumn = ({
   refetchIdea,
   identifier,
   debateData
+}: {
+  color: string,
+  classifier: string,
+  title: string,
+  synthesisProps: Object,
+  width: number,
+  data: Array<Post>,
+  contentLocaleMapping: Object,
+  lang: string,
+  initialRowIndex: number,
+  noRowsRenderer: Function,
+  ideaId: string,
+  refetchIdea: Function,
+  identifier: string,
+  debateData: { timeline: Timeline }
 }) => {
   const isPhaseCompleted = getIfPhaseCompletedByIdentifier(debateData.timeline, identifier);
   return (

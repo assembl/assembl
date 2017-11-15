@@ -45,18 +45,21 @@ const Box = ({ body, date, hyphenStyle, subject, title }: BoxProps) => {
   );
 };
 
-const BoxWithHyphen = ({ additionalContainerClassNames, href, ...otherProps }: BoxWithHyphenProps) => {
-  const containerClassNames = classnames([additionalContainerClassNames, 'box-with-hyphen']);
-  return (
-    <div className={containerClassNames}>
-      {href.length > 1
-        ? <a href={href}>
-          <Box {...otherProps} />
-        </a>
-        : <Box {...otherProps} />}
-    </div>
-  );
-};
+class BoxWithHyphen extends React.Component<*, BoxWithHyphenProps, *> {
+  render() {
+    const { additionalContainerClassNames, href, ...otherProps } = this.props;
+    const containerClassNames = classnames([additionalContainerClassNames, 'box-with-hyphen']);
+    return (
+      <div className={containerClassNames}>
+        {href.length > 1
+          ? <a href={href}>
+            <Box {...otherProps} />
+          </a>
+          : <Box {...otherProps} />}
+      </div>
+    );
+  }
+}
 
 BoxWithHyphen.defaultProps = {
   additionalContainerClassNames: '',

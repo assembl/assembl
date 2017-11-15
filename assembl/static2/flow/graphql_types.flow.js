@@ -154,14 +154,15 @@ export type IdeaWithPostsQuery = {|
         numPosts: ?number,
         numContributors: ?number,
         messageColumns: ?Array<?{|
-          // Identifier for the column, will match :py:attr:`assembl.models.generic.Content.message_classifier`
-          messageClassifier: string,
           // A CSS color that will be used to theme the column.
           color: ?string,
+          header: ?string,
           index: ?number,
+          // Identifier for the column, will match :py:attr:`assembl.models.generic.Content.message_classifier`
+          messageClassifier: string,
           name: ?string,
           numPosts: ?number,
-          header: ?string
+          title: ?string
         |}>,
         posts: ?{|
           edges: Array<?{|
@@ -692,6 +693,18 @@ export type AgentProfileInfoFragment = {|
   id: string,
   userId: number,
   name: ?string
+|};
+
+export type IdeaMessageColumnFragment = {|
+  // A CSS color that will be used to theme the column.
+  color: ?string,
+  header: ?string,
+  index: ?number,
+  // Identifier for the column, will match :py:attr:`assembl.models.generic.Content.message_classifier`
+  messageClassifier: string,
+  name: ?string,
+  numPosts: ?number,
+  title: ?string
 |};
 
 export type PostFragment = {|

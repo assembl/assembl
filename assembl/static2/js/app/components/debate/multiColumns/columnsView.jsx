@@ -6,20 +6,8 @@ import hashLinkScroll from '../../../utils/hashLinkScroll';
 import { MIN_WIDTH_COLUMN, APP_CONTAINER_MAX_WIDTH } from '../../../constants';
 import { type Timeline } from '../../../utils/timeline';
 
-type MessageColumn = {
-  messageClassifier: string,
-  color: string,
-  index: number,
-  name: string,
-  title: string,
-  numPosts: number,
-  header: ?string
-};
-
-type MessageColumns = Array<MessageColumn>;
-
 type Props = {
-  messageColumns: MessageColumns,
+  messageColumns: IdeaMessageColumns,
   identifier: string,
   debateData: { timeline: Timeline }
 };
