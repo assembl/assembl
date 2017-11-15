@@ -154,7 +154,6 @@ class Idea extends React.Component {
       identifier: identifier,
       debateData: debateData,
       ideaId: id,
-      ideaTitle: title,
       ideaWithPostsData: ideaWithPostsData,
       isUserConnected: getConnectedUserId(),
       contentLocaleMapping: contentLocaleMapping,

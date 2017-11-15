@@ -5,12 +5,13 @@ query IdeaWithPosts($id: ID!, $lang: String) {
       numPosts
       numContributors
       messageColumns {
-        messageClassifier
         color
+        header(lang: $lang)
         index
+        messageClassifier
         name(lang: $lang)
         numPosts
-        header(lang: $lang)
+        title(lang: $lang)
       }
       posts {
         edges {

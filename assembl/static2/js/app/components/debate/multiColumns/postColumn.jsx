@@ -24,9 +24,10 @@ const Synthesis = ({ classifier, synthesisTitle, synthesisBody, hyphenStyle }) =
   );
 };
 
-export default ({
+const PostColumn = ({
   color,
   classifier,
+  title,
   synthesisProps,
   width,
   data,
@@ -36,7 +37,6 @@ export default ({
   noRowsRenderer,
   ideaId,
   refetchIdea,
-  ideaTitle,
   identifier,
   debateData
 }) => {
@@ -44,7 +44,7 @@ export default ({
   return (
     <div className="column-view" style={{ width: width }}>
       {!isPhaseCompleted
-        ? <ColumnHeader color={color} classifier={classifier} ideaId={ideaId} refetchIdea={refetchIdea} ideaTitle={ideaTitle} />
+        ? <ColumnHeader color={color} classifier={classifier} title={title} ideaId={ideaId} refetchIdea={refetchIdea} />
         : null}
       {synthesisProps && <Synthesis {...synthesisProps} />}
       <div className="column-tree">
@@ -65,3 +65,5 @@ export default ({
     </div>
   );
 };
+
+export default PostColumn;

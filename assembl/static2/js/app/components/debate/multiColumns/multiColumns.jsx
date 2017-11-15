@@ -2,13 +2,12 @@ import React from 'react';
 import { I18n } from 'react-redux-i18n';
 
 import PostColumn from './postColumn';
-import { orderPostsByMessageClassifier, getSynthesisTitle } from './utils';
+import { orderPostsByMessageClassifier } from './utils';
 
-export default ({
+const MultiColumns = ({
   messageColumns,
   posts,
   ideaId,
-  ideaTitle,
   width,
   lang,
   contentLocaleMapping,
@@ -23,11 +22,12 @@ export default ({
   return (
     <div className="multi-column-container">
       {Object.keys(columnsArray).map((classifier, index) => {
+        const col = messageColumns[index];
         const synthesisProps = showSynthesis && {
           classifier: classifier,
-          synthesisTitle: getSynthesisTitle(classifier, messageColumns[index].name, ideaTitle),
-          synthesisBody: messageColumns[index].header || I18n.t('multiColumns.synthesis.noSynthesisYet'),
-          hyphenStyle: { borderTopColor: messageColumns[index].color }
+          synthesisTitle: col.title,
+          synthesisBody: col.header || I18n.t('multiColumns.synthesis.noSynthesisYet'),
+          hyphenStyle: { borderTopColor: col.color }
         };
         return (
           <PostColumn
@@ -36,14 +36,14 @@ export default ({
             width={width}
             contentLocaleMapping={contentLocaleMapping}
             lang={lang}
-            color={messageColumns[index].color}
+            color={col.color}
             classifier={classifier}
+            title={col.title}
             data={columnsArray[classifier]}
             initialRowIndex={initialRowIndex}
             noRowsRenderer={noRowsRenderer}
             ideaId={ideaId}
             refetchIdea={refetchIdea}
-            ideaTitle={ideaTitle}
             identifier={identifier}
             debateData={debateData}
           />
@@ -52,3 +52,5 @@ export default ({
     </div>
   );
 };
+
+export default MultiColumns;

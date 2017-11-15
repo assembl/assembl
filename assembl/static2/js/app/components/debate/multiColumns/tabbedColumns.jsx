@@ -1,17 +1,10 @@
 import React from 'react';
 import { I18n } from 'react-redux-i18n';
 
-import { multiColumnMapping } from '../../../utils/mapping';
 import PostColumn from './postColumn';
 import { hexToRgb } from '../../../utils/globalFunctions';
 import { COLUMN_OPACITY_GAIN } from '../../../constants';
-import { orderPostsByMessageClassifier, getSynthesisTitle } from './utils';
-
-const getTabTitle = (classifier, colName, ideaTitle) => {
-  const mapping = multiColumnMapping(ideaTitle).tab;
-
-  return mapping[classifier] || colName;
-};
+import { orderPostsByMessageClassifier } from './utils';
 
 export default class TabbedColumns extends React.Component {
   render() {
@@ -24,7 +17,6 @@ export default class TabbedColumns extends React.Component {
       initialRowIndex,
       noRowsRenderer,
       ideaId,
-      ideaTitle,
       refetchIdea,
       showSynthesis,
       identifier,
@@ -37,11 +29,12 @@ export default class TabbedColumns extends React.Component {
         return messageColumn.messageClassifier === activeKey;
       })
     );
+    const col = messageColumns[index];
     const synthesisProps = showSynthesis && {
       classifier: activeKey,
-      synthesisTitle: getSynthesisTitle(activeKey, messageColumns[index].name, ideaTitle),
-      synthesisBody: messageColumns[index].header || I18n.t('multiColumns.synthesis.noSynthesisYet'),
-      hyphenStyle: { borderTopColor: messageColumns[index].color }
+      synthesisTitle: col.title,
+      synthesisBody: col.header || I18n.t('multiColumns.synthesis.noSynthesisYet'),
+      hyphenStyle: { borderTopColor: col.color }
     };
     const style = { width: `${100 / messageColumns.length}%` };
     const inactiveTabColor = 'lightgrey';
@@ -63,7 +56,7 @@ export default class TabbedColumns extends React.Component {
                   }}
                   disabled={isActive}
                 >
-                  {getTabTitle(classifier, messageColumn.name, ideaTitle)}
+                  {messageColumn.name}
                 </button>
               </div>
             );
@@ -73,8 +66,9 @@ export default class TabbedColumns extends React.Component {
           <PostColumn
             synthesisProps={synthesisProps}
             width={width}
-            color={messageColumns[index].color}
+            color={col.color}
             classifier={activeKey}
+            title={col.title}
             contentLocaleMapping={contentLocaleMapping}
             lang={lang}
             data={columnsArray[activeKey]}
@@ -82,7 +76,6 @@ export default class TabbedColumns extends React.Component {
             noRowsRenderer={noRowsRenderer}
             ideaId={ideaId}
             refetchIdea={refetchIdea}
-            ideaTitle={ideaTitle}
             identifier={identifier}
             debateData={debateData}
           />
