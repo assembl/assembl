@@ -36,7 +36,6 @@ def upgrade(pyramid_env):
             sa.Column("title_id", sa.Integer, sa.ForeignKey("langstring.id")),
             sa.Column("text_id", sa.Integer, sa.ForeignKey("langstring.id")),
             sa.Column('embed_code', sa.Text()),
-            sa.Column('tombstone_date', sa.DateTime, server_default=None),
             sa.schema.UniqueConstraint("title_id", "text_id", "tombstone_date")
         )
         op.create_table(
