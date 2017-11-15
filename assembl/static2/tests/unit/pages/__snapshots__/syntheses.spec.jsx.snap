@@ -155,3 +155,56 @@ exports[`Syntheses component should match Syntheses snapshot 1`] = `
   </div>
 </section>
 `;
+
+exports[`Syntheses component should match empty Syntheses snapshot 1`] = `
+<section
+  className="themes-section"
+>
+  <div
+    className="background-grey container-fluid"
+  >
+    <div
+      className="max-container"
+    >
+      <div
+        className="title-section"
+      >
+        <div>
+          <div
+            className="title-hyphen"
+          >
+             
+          </div>
+          <h1
+            className="section-title section-title1 dark-title-1"
+          >
+            <span
+              className={undefined}
+              style={undefined}
+            >
+              Syntheses
+            </span>
+          </h1>
+        </div>
+      </div>
+      <div
+        className="content-section"
+      >
+        <h2
+          className="dark-title-2 margin-left-xxl"
+        >
+          <span
+            className={undefined}
+            style={undefined}
+          >
+            No Synthesis Yet
+          </span>
+        </h2>
+        <div
+          className="no-margin row"
+        />
+      </div>
+    </div>
+  </div>
+</section>
+`;

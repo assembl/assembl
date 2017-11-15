@@ -180,7 +180,8 @@ const Translations = {
     },
     synthesis: {
       title: "synthèse",
-      seeConversation: "Voir la conversation"
+      seeConversation: "Voir la conversation",
+      noSynthesisYet: "Il n'y a pas encore de synthèse disponible pour ce débat."
     },
     common: {
       attachFileForm: {
@@ -550,7 +551,8 @@ const Translations = {
     },
     synthesis: {
       title: "synthesis",
-      seeConversation: "See the conversation"
+      seeConversation: "See the conversation",
+      noSynthesisYet: "There is no synthesis available for this debate yet."
     },
     debate: {
       answer: "I answer:",

@@ -3,7 +3,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { compose, graphql } from 'react-apollo';
 import { Link, browserHistory } from 'react-router';
-import { Localize } from 'react-redux-i18n';
+import { Localize, Translate } from 'react-redux-i18n';
 
 import { get } from '../utils/routeMap';
 import { CLASS_NAME_GENERATOR } from '../utils/cardList';
@@ -11,11 +11,14 @@ import Section from '../components/common/section';
 import Card from '../components/common/card';
 import CardList from '../components/common/cardList';
 import SynthesesQuery from '../graphql/SynthesesQuery.graphql';
+import HasSynthesesQuery from '../graphql/HasSynthesesQuery.graphql';
+
 import withLoadingIndicator from '../components/common/withLoadingIndicator';
 
 type SynthesesProps = {
   syntheses: Array<Object>,
-  slug: string
+  slug: string,
+  hasSyntheses: boolean
 };
 
 export class DumbSyntheses extends React.Component<void, SynthesesProps, void> {
@@ -28,9 +31,13 @@ export class DumbSyntheses extends React.Component<void, SynthesesProps, void> {
     }
   }
   render() {
-    const { syntheses, slug } = this.props;
+    const { syntheses, slug, hasSyntheses } = this.props;
     return (
       <Section title="debate.syntheses" translate>
+        {!hasSyntheses &&
+          <h2 className="dark-title-2 margin-left-xxl">
+            <Translate value="synthesis.noSynthesisYet" />
+          </h2>}
         <CardList
           data={syntheses}
           classNameGenerator={CLASS_NAME_GENERATOR.default}
@@ -73,6 +80,13 @@ export default compose(
       }
       return {
         syntheses: data.syntheses || []
+      };
+    }
+  }),
+  graphql(HasSynthesesQuery, {
+    props: ({ data }) => {
+      return {
+        hasSyntheses: data.hasSyntheses
       };
     }
   }),

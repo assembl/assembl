@@ -6,6 +6,7 @@ import { DumbSyntheses } from '../../../js/app/pages/syntheses';
 describe('Syntheses component', () => {
   it('should match Syntheses snapshot', () => {
     const props = {
+      hasSyntheses: true,
       syntheses: [
         {
           id: 'fooId',
@@ -22,6 +23,11 @@ describe('Syntheses component', () => {
       ],
       slug: 'fooslug'
     };
+    const rendered = renderer.create(<DumbSyntheses {...props} />).toJSON();
+    expect(rendered).toMatchSnapshot();
+  });
+  it('should match empty Syntheses snapshot', () => {
+    const props = { hasSyntheses: false, syntheses: [] };
     const rendered = renderer.create(<DumbSyntheses {...props} />).toJSON();
     expect(rendered).toMatchSnapshot();
   });

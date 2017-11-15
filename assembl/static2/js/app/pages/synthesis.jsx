@@ -30,7 +30,7 @@ export class DumbSynthesis extends React.Component<void, SynthesisProps, void> {
           <Section title="introduction" translate>
             <div dangerouslySetInnerHTML={{ __html: introduction }} />
           </Section>}
-        <Col md={10} xsOffset={2}>
+        <Col>
           {roots.map((rootIdea, index) => {
             return (
               <IdeaSynthesisTree
