@@ -288,21 +288,17 @@ def includeme(config):
     settings['trusted_login_providers'] = aslist(settings.get('trusted_login_providers', ''))
     if not any(settings['login_providers']):
         log.warning('no login providers configured, double check '
-                         'your ini file and add a few')
+                    'your ini file and add a few')
+    for k, v in settings.iteritems():
+        if k.startswith("SOCIAL_AUTH_"):
+            if k.endswith("_SCOPE"):
+                settings[k] = aslist(v)
+            elif v.lstrip().startswith('{'):
+                settings[k] = json.loads(v)
     for name in ('SOCIAL_AUTH_AUTHENTICATION_BACKENDS',
                  'SOCIAL_AUTH_USER_FIELDS',
                  'SOCIAL_AUTH_PROTECTED_USER_FIELDS',
                  'SOCIAL_AUTH_FIELDS_STORED_IN_SESSION'):
         settings[name] = aslist(settings.get(name, ''))
-    for name in ('SOCIAL_AUTH_SAML_ORG_INFO',
-                 'SOCIAL_AUTH_SAML_TECHNICAL_CONTACT',
-                 'SOCIAL_AUTH_SAML_SUPPORT_CONTACT',
-                 'SOCIAL_AUTH_SAML_ENABLED_IDPS'):
-        val = settings.get(name, '')
-        if val:
-            settings[name] = json.loads(val)
-    for k in settings.iterkeys():
-        if k.endswith("_SCOPE") and k.startswith("SOCIAL_AUTH_"):
-            settings[k] = aslist(settings.get(k, ''))
     config.add_request_method(
         'assembl.auth.social_auth.get_user', 'user', reify=True)
