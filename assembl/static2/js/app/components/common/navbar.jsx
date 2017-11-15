@@ -38,7 +38,7 @@ class NavBar extends React.Component {
     const currentPhaseIdentifier = getCurrentPhaseIdentifier(debateData.timeline);
     const slug = { slug: debateData.slug };
     const connectedUserId = getConnectedUserId();
-    const { isHidden } = this.props;
+    const { isHidden, hasSyntheses } = this.props;
     return (
       <Grid fluid className={isHidden ? 'hiddenNavbar' : 'shown'}>
         <Navbar fixedTop fluid>
@@ -57,7 +57,7 @@ class NavBar extends React.Component {
               </Link>
             </div>
             <div className="nav-menu left">
-              <NavigationMenu />
+              <NavigationMenu hasSyntheses={hasSyntheses} />
             </div>
             <div className="navbar-icons right">
               {currentPhaseIdentifier !== 'survey'

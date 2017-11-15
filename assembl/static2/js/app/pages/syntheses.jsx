@@ -11,7 +11,6 @@ import Section from '../components/common/section';
 import Card from '../components/common/card';
 import CardList from '../components/common/cardList';
 import SynthesesQuery from '../graphql/SynthesesQuery.graphql';
-import HasSynthesesQuery from '../graphql/HasSynthesesQuery.graphql';
 
 import withLoadingIndicator from '../components/common/withLoadingIndicator';
 
@@ -80,13 +79,6 @@ export default compose(
       }
       return {
         syntheses: data.syntheses || []
-      };
-    }
-  }),
-  graphql(HasSynthesesQuery, {
-    props: ({ data }) => {
-      return {
-        hasSyntheses: data.hasSyntheses
       };
     }
   }),
