@@ -36,7 +36,7 @@ def upgrade(pyramid_env):
             sa.Column("title_id", sa.Integer, sa.ForeignKey("langstring.id")),
             sa.Column("text_id", sa.Integer, sa.ForeignKey("langstring.id")),
             sa.Column('embed_code', sa.Text()),
-            sa.schema.UniqueConstraint("title_id", "text_id", "tombstone_date")
+            sa.schema.UniqueConstraint("title_id", "text_id")
         )
         op.create_table(
             'resource_attachment',
