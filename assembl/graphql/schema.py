@@ -8,7 +8,7 @@ from random import sample as random_sample
 
 from sqlalchemy import desc, distinct, func, inspect, join, select
 from sqlalchemy.orm.exc import NoResultFound
-from sqlalchemy.orm import joinedload, subqueryload, undefer
+from sqlalchemy.orm import contains_eager, joinedload, subqueryload, undefer
 from sqlalchemy.sql.functions import count
 import graphene
 from graphene.pyutils.enum import Enum as PyEnum
@@ -1082,13 +1082,13 @@ class Query(graphene.ObjectType):
         descendants_query = model.get_descendants_query(
             root_idea_id, inclusive=True)
         query = query.outerjoin(
-                models.IdeaLink, models.IdeaLink.target_id == models.Idea.id
+                models.Idea.source_links
             ).filter(model.id.in_(descendants_query)
             ).filter(
                 model.hidden == False,
                 model.sqla_type == 'idea'
             ).options(
-                joinedload(models.Idea.source_links),
+                contains_eager(models.Idea.source_links),
                 subqueryload(models.Idea.attachments).joinedload("document"),
 #                subqueryload(models.Idea.message_columns),
                 joinedload(models.Idea.title).joinedload("entries"),
