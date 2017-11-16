@@ -106,6 +106,7 @@ export default [
         <Route path={routeForRouter('community')} component={Community} />
         <Route path={routeForRouter('terms')} component={Terms} />
         <Route path={routeForRouter('join')} component={JoinDiscussion} />
+        <Route path={routeForRouter('rootDebate')} />
         <Route path={routeForRouter('debate', false, { phase: ':phase' })} component={DebateHome}>
           <Route path={routeForRouter('theme', false, { themeId: ':themeId' })} component={DebateChild} />
         </Route>
