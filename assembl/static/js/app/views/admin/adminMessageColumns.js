@@ -123,7 +123,7 @@ var AdminMessageColumnsPanel = Marionette.LayoutView.extend({
     name.initFromDict(names);
     column = new IdeaMessageColumn.Model({
       idea: idea.id,
-      message_classifier: "",
+      message_classifier: Date.now().toString(36), // generate an identifier so there is no unicity conflicts when user keeps it blank and clicks several times on the Add button
       title: title,
       name: name,
       previous_column: lastColumnId,
