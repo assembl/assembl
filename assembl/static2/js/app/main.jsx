@@ -2,13 +2,11 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
-import { compose, graphql } from 'react-apollo';
 
 import { getCurrentPhaseIdentifier, type Timeline } from './utils/timeline';
 import { addRedirectionToV1 } from './actions/phaseActions';
 import Navbar from './components/common/navbar';
 import Footer from './components/common/footer';
-import HasSynthesesQuery from './graphql/HasSynthesesQuery.graphql';
 
 type Debate = { debateData: { timeline: Timeline } };
 
@@ -19,8 +17,7 @@ class Main extends React.Component {
     params: { phase: string },
     location: { query: { phase: string }, pathname: string },
     addRedirectionToV1: boolean => {},
-    children: React.Children,
-    hasSyntheses: boolean
+    children: React.Children
   }) {
     super(props);
     const { debateData } = this.props.debate;
@@ -31,7 +28,6 @@ class Main extends React.Component {
       location: this.props.location.pathname
     };
   }
-
   componentWillMount() {
     const { debateData } = this.props.debate;
     const currentPhaseIdentifier = getCurrentPhaseIdentifier(debateData.timeline);
@@ -60,17 +56,15 @@ class Main extends React.Component {
     window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
   }
   render() {
-    const { hasSyntheses } = this.props;
     const that = this;
     const children = React.Children.map(this.props.children, (child) => {
       return React.cloneElement(child, {
-        identifier: that.state.identifier,
-        hasSyntheses: hasSyntheses
+        identifier: that.state.identifier
       });
     });
     return (
       <div className="main">
-        <Navbar location={this.state.location} hasSyntheses={hasSyntheses} />
+        <Navbar location={this.state.location} />
         <div className="app-content">
           {children}
         </div>
@@ -94,13 +88,4 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default compose(
-  connect(mapStateToProps, mapDispatchToProps),
-  graphql(HasSynthesesQuery, {
-    props: ({ data }) => {
-      return {
-        hasSyntheses: data.hasSyntheses
-      };
-    }
-  })
-)(Main);
+export default connect(mapStateToProps, mapDispatchToProps)(Main);
