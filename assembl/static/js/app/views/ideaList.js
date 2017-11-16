@@ -497,7 +497,6 @@ var IdeaList = AssemblPanel.extend({
 
         //view_data["highlight_if_newer_than"] = creation_dates[index];
         highlight_if_newer_than = creation_dates[index];
-        console.log("we are going to highlight ideas which have been created after: ", highlight_if_newer_than);
       }
     }
     ideas.each(function(idea){
