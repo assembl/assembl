@@ -109,6 +109,7 @@ var AdminMessageColumnsPanel = Marionette.LayoutView.extend({
         columnCollection = idea.get('message_columns'),
         lastColumnId,
         column,
+        title = new LangString.Model(),
         name = new LangString.Model(),
         names = {},
         preferences = Ctx.getPreferences();
@@ -118,10 +119,12 @@ var AdminMessageColumnsPanel = Marionette.LayoutView.extend({
     _.map(preferences.preferred_locales, function(loc) {
       names[loc] = '';
     });
+    title.initFromDict(names);
     name.initFromDict(names);
     column = new IdeaMessageColumn.Model({
       idea: idea.id,
       message_classifier: "",
+      title: title,
       name: name,
       previous_column: lastColumnId,
     });
