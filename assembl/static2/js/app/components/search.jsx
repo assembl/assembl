@@ -78,7 +78,6 @@ if (__resourceQuery) {
     return <a href={props.to} dangerouslySetInnerHTML={props.dangerouslySetInnerHTML} />;
   };
   getUrl = (hit) => {
-    const slug = document.getElementById('discussion-slug').value;
     const id = hit._source.id;
     switch (hit._type) {
     case 'synthesis':
@@ -98,7 +97,6 @@ if (__resourceQuery) {
   Link = (props) => {
     return <a href={props.to} dangerouslySetInnerHTML={props.dangerouslySetInnerHTML} />;
   };
-  const slug = document.getElementById('discussion-slug').value;
   getUrl = (hit) => {
     const id = hit._source.id;
     let ideaBase64id;
