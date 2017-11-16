@@ -113,6 +113,88 @@ def test_graphql_get_all_ideas_multiColumns_phase(graphql_request,
     assert len(res.errors) == 0
 
 
+def test_graphql_get_all_ideas_with_modified_order(graphql_request,
+                               user_language_preference_en_cookie,
+                               subidea_1_1_1_1_1, subidea_1_1_1_1_2):
+    res = schema.execute(
+        u"""query AllIdeasQuery($lang: String!, $identifier: String!) {
+            ideas(identifier: $identifier) {
+              ... on Idea {
+                id
+                title(lang: $lang)
+                titleEntries { value, localeCode }
+                numPosts
+                numContributors
+                numChildren(identifier: $identifier)
+                parentId
+                order
+                posts(first:10) {
+                  edges {
+                    node {
+                      ... on Post { subject body }
+                    }
+                  }
+                }
+              }
+            }
+            rootIdea {
+              ... on Idea {
+                id
+              }
+            }
+        }
+        """, context_value=graphql_request,
+        variable_values={"identifier": u"thread", "lang": u"en"})
+    assert [idea['title'] for idea in res.data['ideas']] == [
+        u'Favor economic growth',
+        u'Lower taxes',
+        u'Lower government revenue',
+        u'Austerity yields contraction',
+        u'Job loss',
+        u'Environmental program cuts'
+    ]
+
+    subidea_1_1_1_1_2.source_links[0].order = 1.0
+    subidea_1_1_1_1_1.source_links[0].order = 2.0
+    res = schema.execute(
+        u"""query AllIdeasQuery($lang: String!, $identifier: String!) {
+            ideas(identifier: $identifier) {
+              ... on Idea {
+                id
+                title(lang: $lang)
+                titleEntries { value, localeCode }
+                numPosts
+                numContributors
+                numChildren(identifier: $identifier)
+                parentId
+                order
+                posts(first:10) {
+                  edges {
+                    node {
+                      ... on Post { subject body }
+                    }
+                  }
+                }
+              }
+            }
+            rootIdea {
+              ... on Idea {
+                id
+              }
+            }
+        }
+        """, context_value=graphql_request,
+        variable_values={"identifier": u"thread", "lang": u"en"})
+    assert [idea['title'] for idea in res.data['ideas']] == [
+        u'Favor economic growth',
+        u'Lower taxes',
+        u'Lower government revenue',
+        u'Austerity yields contraction',
+        u'Environmental program cuts',
+        u'Job loss',
+    ]
+
+
 def test_graphql_get_direct_ideas_from_root_idea(graphql_request, subidea_1_1_1):
     res = schema.execute(
         u"""query {
