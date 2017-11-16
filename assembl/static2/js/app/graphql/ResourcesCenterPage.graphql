@@ -1,0 +1,13 @@
+query ResourcesCenterPage($lang: String) {
+  resourcesCenter {
+    title(lang: $lang)
+    titleEntries {
+      localeCode
+      value
+    }
+    headerImage {
+      externalUrl
+      mimeType
+    }
+  }
+}

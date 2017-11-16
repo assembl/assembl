@@ -335,7 +335,7 @@ mutation myFirstMutation($img:String) {
 #                u'imgUrl': u'http://localhost:6543/data/Discussion/8/documents/1/data'
 #    }}}
 #    just assert we have the ends correct:
-    assert res.data['createThematic']['thematic']['img']['externalUrl'].endswith('/documents/1/data')
+    assert '/documents/' in res.data['createThematic']['thematic']['img']['externalUrl']
     assert res.data['createThematic']['thematic']['img']['mimeType'] == 'image/png'
     thematic_id = res.data['createThematic']['thematic']['id']
 
@@ -370,7 +370,7 @@ mutation myFirstMutation($img:String, $thematicId:ID!) {
 }
 """, context_value=graphql_request, variable_values={"thematicId": thematic_id,
                                                      "img": u"variables.img"})
-    assert res.data['updateThematic']['thematic']['img']['externalUrl'].endswith('/documents/2/data')
+    assert '/documents/' in res.data['updateThematic']['thematic']['img']['externalUrl']
     assert res.data['updateThematic']['thematic']['img']['mimeType'] == 'image/png'
 
 
@@ -1631,3 +1631,284 @@ def test_query_discussion_sentiments_count(
     res_data = json.loads(json.dumps(res.data))
     count = res_data[u"totalSentiments"]
     assert count == 0
+
+
+def test_query_has_resources_center(discussion, resource, resource_with_image_and_doc, graphql_request):
+    query = u"""
+query { hasResourcesCenter }
+"""
+    res = schema.execute(query, context_value=graphql_request)
+    assert res.data['hasResourcesCenter'] is True
+
+
+def test_query_resources(discussion, resource, resource_with_image_and_doc, graphql_request):
+    query = u"""
+query { resources {
+    id
+    title(lang:"en")
+    text(lang:"en")
+    embedCode
+    doc {
+        externalUrl
+        title
+    }
+    image {
+        externalUrl
+    }
+} }"""
+    res = schema.execute(query, context_value=graphql_request)
+    assert res.data['resources'][0]['title'] == u'a resource'
+    assert res.data['resources'][1]['title'] == u'another resource'
+    assert res.data['resources'][0]['text'] == u'Lorem ipsum dolor sit amet'
+    assert res.data['resources'][0]['embedCode'] == u'<iframe ...>'
+
+    assert res.data['resources'][0]['doc'] == None
+    assert res.data['resources'][0]['image'] == None
+
+    assert '/documents/' in res.data['resources'][1]['image']['externalUrl']
+    assert '/documents/' in res.data['resources'][1]['doc']['externalUrl']
+    # this is the title of the File object, not the title of the ResourceAttachment object
+    assert res.data['resources'][1]['doc']['title'] == "mydocument.pdf"
+
+
+def test_mutation_create_resource_no_permission(graphql_request):
+    graphql_request.authenticated_userid = None
+    res = schema.execute(u"""
+mutation createResource {
+    createResource(titleEntries:[{value:"Peu importe", localeCode:"fr"}]) {
+        resource {
+            title
+        }
+    }
+}
+""", context_value=graphql_request)
+    assert json.loads(json.dumps(res.data)) == { u'createResource': None }
+
+
+def test_mutation_create_resource(graphql_request):
+    title_entries = u'[{value:"Première ressource", localeCode:"fr"},{value:"First resource", localeCode:"en"}]'
+    text_entries = u'[{value:"Lorem ipsum dolor sit amet, consectetur adipisicing elit.", localeCode:"fr"},{value:"Foobar", localeCode:"en"}]'
+    embed_code = u'iframe foobar'
+
+    import os
+    from io import BytesIO
+
+    class FieldStorage(object):
+        file = BytesIO(os.urandom(16))
+
+        def __init__(self, filename, type):
+            self.filename = filename
+            self.type = type
+
+    graphql_request.POST['variables.img'] = FieldStorage(
+        u'path/to/img.png', 'image/png')
+    graphql_request.POST['variables.doc'] = FieldStorage(
+        u'path/to/mydoc.pdf', 'application/pdf')
+
+    res = schema.execute(u"""
+mutation createResource($img:String,$doc:String) {
+    createResource(
+        titleEntries:%s,textEntries:%s,embedCode:"%s",image:$img,doc:$doc
+    ) {
+        resource {
+            title(lang:"fr")
+            text(lang:"fr")
+            embedCode
+            image {
+                externalUrl
+                title
+            }
+            doc {
+                externalUrl
+                title
+            }
+        }
+    }
+}
+""" % (title_entries, text_entries, embed_code), context_value=graphql_request, variable_values={"img": u"variables.img", "doc": u"variables.doc"})
+    result = res.data
+    assert result is not None
+    assert result['createResource'] is not None
+    resource = result['createResource']['resource']
+    assert resource['title'] == u'Première ressource'
+    assert resource['text'] == u'Lorem ipsum dolor sit amet, consectetur adipisicing elit.'
+    assert resource['embedCode'] == u'iframe foobar'
+
+    assert '/documents/' in resource['image']['externalUrl']
+    assert resource['image']['title'] == 'img.png'
+
+    assert '/documents/' in resource['doc']['externalUrl']
+    assert resource['doc']['title'] == 'mydoc.pdf'
+
+
+def test_delete_resource(graphql_request, resource):
+    resource_id = to_global_id('Resource', resource.id)
+    res = schema.execute(u"""
+mutation deleteResource {
+    deleteResource(
+        resourceId:"%s",
+    ) {
+        success
+    }
+}
+""" % resource_id, context_value=graphql_request)
+    assert res.data['deleteResource']['success'] is True
+    res = schema.execute(u'query { resources { id } }', context_value=graphql_request)
+    assert json.loads(json.dumps(res.data)) == {u'resources': []}
+
+
+def test_update_resource(graphql_request, resource_with_image_and_doc):
+    resource = resource_with_image_and_doc
+    resource_id = to_global_id('Resource', resource.id)
+
+    import os
+    from io import BytesIO
+
+    class FieldStorage(object):
+        file = BytesIO(os.urandom(16))
+
+        def __init__(self, filename, type):
+            self.filename = filename
+            self.type = type
+
+    graphql_request.POST['variables.img'] = FieldStorage(
+        u'path/to/new-img.png', 'image/png')
+    graphql_request.POST['variables.doc'] = FieldStorage(
+        u'path/to/new-doc.pdf', 'application/pdf')
+
+    res = schema.execute(u"""
+mutation updateResource($resourceId:ID!,$img:String,$doc:String) {
+    updateResource(
+        id:$resourceId,
+        titleEntries:[
+            {value:"My resource", localeCode:"en"},
+            {value:"Ma ressource", localeCode:"fr"}
+        ],
+        textEntries:[
+            {value:"Text in english", localeCode:"en"},
+            {value:"Texte en français", localeCode:"fr"}
+        ],
+        embedCode:"nothing",
+        image:$img,
+        doc:$doc
+    ) {
+        resource {
+            title(lang:"fr")
+            text(lang:"fr")
+            embedCode
+            image {
+                externalUrl
+                title
+            }
+            doc {
+                externalUrl
+                title
+            }
+        }
+    }
+}
+""", context_value=graphql_request, variable_values={"img": u"variables.img", "doc": u"variables.doc", "resourceId": resource_id})
+    assert res.data is not None
+    assert res.data['updateResource'] is not None
+    assert res.data['updateResource']['resource'] is not None
+    resource = res.data['updateResource']['resource']
+    assert resource[u'title'] == u'Ma ressource'
+    assert resource[u'text'] == u'Texte en français'
+    assert resource[u'embedCode'] == u'nothing'
+
+    assert '/documents/' in resource['image']['externalUrl']
+    assert resource['image']['title'] == 'new-img.png'
+
+    assert '/documents/' in resource['doc']['externalUrl']
+    assert resource['doc']['title'] == 'new-doc.pdf'
+
+
+def test_query_discussion_resources_center_fields(
+        discussion, graphql_request, test_session, simple_file, moderator_user):
+
+    from assembl.models.attachment import DiscussionAttachment
+    header_image = DiscussionAttachment(
+        discussion=discussion,
+        document=simple_file,
+        title=u"Resource center header image",
+        creator=moderator_user,
+        attachmentPurpose='RESOURCES_CENTER_HEADER_IMAGE'
+    )
+
+    discussion.resources_center_title = models.LangString.create(
+        u"Resources center", "en")
+    discussion.db.flush()
+
+    res = schema.execute(u"""query {
+        resourcesCenter {
+            title(lang:"en")
+            titleEntries {
+                localeCode
+                value
+            }
+            headerImage {
+                externalUrl
+                mimeType
+            }
+        }
+    }""", context_value=graphql_request)
+    res_data = json.loads(json.dumps(res.data))
+    assert res_data['resourcesCenter']['title'] == u'Resources center'
+    assert res_data['resourcesCenter']['titleEntries'][0]['localeCode'] == u'en'
+    assert res_data['resourcesCenter']['titleEntries'][0]['value'] == u'Resources center'
+    assert res_data['resourcesCenter']['headerImage']['mimeType'] == u'image/png'
+    assert '/documents/' in res_data['resourcesCenter']['headerImage']['externalUrl']
+
+    discussion.db.delete(header_image)
+    discussion.db.flush()
+
+
+def test_update_resources_center(graphql_request, discussion):
+    import os
+    from io import BytesIO
+
+    class FieldStorage(object):
+        file = BytesIO(os.urandom(16))
+
+        def __init__(self, filename, type):
+            self.filename = filename
+            self.type = type
+
+    graphql_request.POST['variables.headerImage'] = FieldStorage(
+        u'path/to/new-img.png', 'image/png')
+
+    res = schema.execute(u"""
+mutation updateResourcesCenter($headerImage:String) {
+    updateResourcesCenter(
+        titleEntries:[
+            {value:"My great resources center", localeCode:"en"},
+            {value:"Mon super centre de ressources", localeCode:"fr"}
+        ],
+        headerImage:$headerImage,
+    ) {
+        resourcesCenter {
+            titleEntries {
+                localeCode
+                value
+            }
+            headerImage {
+                externalUrl
+                title
+            }
+        }
+    }
+}
+""", context_value=graphql_request, variable_values={"headerImage": u"variables.headerImage"})
+    assert res.data is not None
+
+    assert res.data['updateResourcesCenter'] is not None
+    assert res.data['updateResourcesCenter']['resourcesCenter'] is not None
+
+    resources_center = res.data['updateResourcesCenter']['resourcesCenter']
+    assert resources_center['titleEntries'][0]['localeCode'] == 'en'
+    assert resources_center['titleEntries'][0]['value'] == 'My great resources center'
+    assert resources_center['titleEntries'][1]['localeCode'] == 'fr'
+    assert resources_center['titleEntries'][1]['value'] == 'Mon super centre de ressources'
+    assert resources_center['headerImage'] is not None
+    assert '/documents/' in resources_center['headerImage']['externalUrl']
+    assert resources_center['headerImage']['title'] == 'new-img.png'

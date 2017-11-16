@@ -31,6 +31,11 @@ class Menu extends React.Component {
             <Translate value="administration.landingpage" />
           </Link>
         </li>
+        <li className="menu-item">
+          <Link to={`${get('administration', slug)}/resourcesCenter`} activeClassName="active">
+            <Translate value="administration.resourcesCenter.menuTitle" />
+          </Link>
+        </li>
         {timeline
           ? timeline.map((phase, phaseIndex) => {
             return (

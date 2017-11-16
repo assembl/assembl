@@ -1,6 +1,6 @@
 import { fromJS, List, Map } from 'immutable';
 
-import * as reducers from '../../../js/app/reducers/adminReducer';
+import * as reducers from '../../../../js/app/reducers/adminReducer';
 
 describe('Admin reducers', () => {
   describe('selectedLocale reducer', () => {
@@ -176,7 +176,8 @@ describe('Admin reducers', () => {
     });
 
     it('should handle UPDATE_THEMATIC_IMG_URL action type', () => {
-      const action = { id: '1', value: 'http://example.com/toto.png', type: 'UPDATE_THEMATIC_IMG_URL' };
+      const file = new File([''], 'toto.png', { type: 'image/png' });
+      const action = { id: '1', value: file, type: 'UPDATE_THEMATIC_IMG_URL' };
       const oldState = fromJS({
         1: {
           img: {
@@ -184,15 +185,36 @@ describe('Admin reducers', () => {
           }
         }
       });
-      const expected = fromJS({
+      const expected = {
         1: {
           img: {
-            externalUrl: 'http://example.com/toto.png'
+            externalUrl: file,
+            mimeType: 'image/png'
           }
         }
-      });
+      };
       const newState = thematicsById(oldState, action);
-      expect(newState).toEqual(expected);
+      expect(newState.toJS()).toEqual(expected);
+    });
+
+    it('should handle UPDATE_THEMATIC_IMG_URL action type when img is null', () => {
+      const file = new File([''], 'toto.png', { type: 'image/png' });
+      const action = { id: '1', value: file, type: 'UPDATE_THEMATIC_IMG_URL' };
+      const oldState = fromJS({
+        1: {
+          img: null
+        }
+      });
+      const expected = {
+        1: {
+          img: {
+            mimeType: 'image/png',
+            externalUrl: file
+          }
+        }
+      };
+      const newState = thematicsById(oldState, action);
+      expect(newState.toJS()).toEqual(expected);
     });
 
     it('should handle UPDATE_QUESTION_TITLE action type', () => {

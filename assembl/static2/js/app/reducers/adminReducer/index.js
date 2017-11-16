@@ -1,19 +1,8 @@
 import { fromJS, List, Map } from 'immutable';
 import { combineReducers } from 'redux';
 
-const updateInEntries = (locale, value) => {
-  return (entries) => {
-    const entryIndex = entries.findIndex((entry) => {
-      return entry.get('localeCode') === locale;
-    });
-
-    if (entryIndex === -1) {
-      return entries.push(Map({ localeCode: locale, value: value }));
-    }
-
-    return entries.setIn([entryIndex, 'value'], value);
-  };
-};
+import resourcesCenter from './resourcesCenter';
+import { updateInLangstringEntries } from '../../utils/i18n';
 
 export const selectedLocale = (state = 'fr', action) => {
   switch (action.type) {
@@ -81,20 +70,17 @@ export const thematicsById = (state = Map(), action) => {
 
       return titleEntries.setIn([titleEntryIndex, 'value'], action.value);
     });
-  case 'UPDATE_THEMATIC_IMG_URL':
-    return state.setIn([action.id, 'img', 'externalUrl'], action.value);
-  case 'UPDATE_THEMATIC_TITLE': {
-    const entries = state.getIn([action.id, 'titleEntries']);
-    const index = entries.findIndex((e) => {
-      return e.get('localeCode') === action.locale;
-    });
-
-    if (index === -1) {
-      const newEntries = entries.push(Map({ localeCode: action.locale, value: action.value }));
-      return state.setIn([action.id, 'titleEntries'], newEntries);
+  case 'UPDATE_THEMATIC_IMG_URL': {
+    if (state.getIn([action.id, 'img'])) {
+      return state
+        .setIn([action.id, 'img', 'externalUrl'], action.value)
+        .setIn([action.id, 'img', 'mimeType'], action.value.type);
     }
 
-    return state.setIn([action.id, 'titleEntries', index, 'value'], action.value);
+    return state.setIn([action.id, 'img'], Map({ mimeType: action.value.type, externalUrl: action.value }));
+  }
+  case 'UPDATE_THEMATIC_TITLE': {
+    return state.updateIn([action.id, 'titleEntries'], updateInLangstringEntries(action.locale, action.value));
   }
   case 'UPDATE_THEMATICS': {
     const newState = {};
@@ -119,18 +105,24 @@ export const thematicsById = (state = Map(), action) => {
       });
     });
   case 'UPDATE_VIDEO_DESCRIPTION_TOP':
-    return state.updateIn([action.id, 'video', 'descriptionEntriesTop'], updateInEntries(action.locale, fromJS(action.value)));
+    return state.updateIn(
+      [action.id, 'video', 'descriptionEntriesTop'],
+      updateInLangstringEntries(action.locale, fromJS(action.value))
+    );
   case 'UPDATE_VIDEO_DESCRIPTION_BOTTOM':
     return state.updateIn(
       [action.id, 'video', 'descriptionEntriesBottom'],
-      updateInEntries(action.locale, fromJS(action.value))
+      updateInLangstringEntries(action.locale, fromJS(action.value))
     );
   case 'UPDATE_VIDEO_DESCRIPTION_SIDE':
-    return state.updateIn([action.id, 'video', 'descriptionEntriesSide'], updateInEntries(action.locale, fromJS(action.value)));
+    return state.updateIn(
+      [action.id, 'video', 'descriptionEntriesSide'],
+      updateInLangstringEntries(action.locale, fromJS(action.value))
+    );
   case 'UPDATE_VIDEO_HTML_CODE':
     return state.setIn([action.id, 'video', 'htmlCode'], action.value);
   case 'UPDATE_VIDEO_TITLE':
-    return state.updateIn([action.id, 'video', 'titleEntries'], updateInEntries(action.locale, action.value));
+    return state.updateIn([action.id, 'video', 'titleEntries'], updateInLangstringEntries(action.locale, action.value));
   default:
     return state;
   }
@@ -202,5 +194,6 @@ export default combineReducers({
   thematicsInOrder: thematicsInOrder,
   thematicsById: thematicsById,
   discussionLanguagePreferences: languagePreferences,
-  discussionLanguagePreferencesHasChanged: discussionLanguagePreferencesHasChanged
+  discussionLanguagePreferencesHasChanged: discussionLanguagePreferencesHasChanged,
+  resourcesCenter: resourcesCenter
 });

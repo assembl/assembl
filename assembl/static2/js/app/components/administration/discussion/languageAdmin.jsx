@@ -83,7 +83,7 @@ class LanguageSection extends React.Component {
     const currentLocale = this.props.i18n.locale;
     return (
       <div className="admin-box">
-        <SectionTitle i18n={this.props.i18n} phase="discussion" tabId="0" annotation={I18n.t('administration.annotation')} />
+        <SectionTitle title={I18n.t('administration.discussion.0')} annotation={I18n.t('administration.annotation')} />
         <div className="admin-language-content">
           <div>
             <Translate value="administration.languageChoice" />

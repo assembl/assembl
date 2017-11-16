@@ -1,0 +1,30 @@
+mutation updateResource(
+  $doc: String
+  $id: ID!
+  $image: String
+  $titleEntries: [LangStringEntryInput]!
+  $textEntries: [LangStringEntryInput]
+  $embedCode: String
+) {
+  updateResource(
+    doc: $doc
+    id: $id
+    image: $image
+    titleEntries: $titleEntries
+    textEntries: $textEntries
+    embedCode: $embedCode
+  ) {
+    resource {
+      doc {
+        externalUrl
+      }
+      embedCode
+      image {
+        externalUrl
+        mimeType
+      }
+      text
+      title
+    }
+  }
+}

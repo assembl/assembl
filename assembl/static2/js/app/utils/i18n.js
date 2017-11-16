@@ -1,4 +1,5 @@
 import { I18n } from 'react-redux-i18n';
+import { Map } from 'immutable';
 
 import deepen from './deepen';
 import Translations from './translations';
@@ -47,4 +48,47 @@ export const getAvailableLocales = (locale, translations) => {
     return locArray;
   });
   return locArray;
+};
+
+/*
+  @function updateInLangstringEntries
+  @param {string} locale - the locale of the langstring entry that we want to edit
+  @param {string} value - the value that will be set
+
+  @example
+    // will change the french value by 'foobar' in titleEntries
+    const state = Map({
+      titleEntries: [
+        {localeCode: 'fr', value: 'Mon titre'},
+        {localeCode: 'en', value: 'My title'}
+      ]
+    })
+    state.update(
+      'titleEntries',
+      updateInLangstringEntries('fr', 'foobar')
+    );
+
+    @returns {function} Updater function (see immutable-js) that updates the value of the
+    entry with given locale by the given value
+*/
+export const updateInLangstringEntries = (locale, value) => {
+  return (entries) => {
+    const entryIndex = entries.findIndex((entry) => {
+      return entry.get('localeCode') === locale;
+    });
+
+    if (entryIndex === -1) {
+      return entries.push(Map({ localeCode: locale, value: value }));
+    }
+
+    return entries.setIn([entryIndex, 'value'], value);
+  };
+};
+
+export const getEntryValueForLocale = (entries, locale, defaultValue = null) => {
+  const entry = entries.find((e) => {
+    return e.get('localeCode') === locale;
+  });
+
+  return entry ? entry.get('value') : defaultValue;
 };

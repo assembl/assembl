@@ -299,17 +299,21 @@ from .facebook_integration import (
 )
 
 from .attachment import (
+    DiscussionAttachment,
     Document,
     File,
     Attachment,
     PostAttachment,
-    IdeaAttachment
+    IdeaAttachment,
+    ResourceAttachment
 )
 
 from .announcement import (
     Announcement,
     IdeaAnnouncement,
 )
+
+from .resource import Resource
 
 
 def includeme(config):

@@ -1,0 +1,80 @@
+.header-section {
+  background-color: $first-color;
+  height: 500px;
+  position: relative;
+  z-index: 10;
+  margin-top: $navbar-height * 2;
+
+  .wyntk-box {
+    top: calc(50% - 175px);
+    height: 350px;
+    width: 350px;
+    padding: 30px;
+    padding-right: 0;
+    z-index: 3;
+
+    .wyntk-title {
+      text-transform: uppercase;
+      margin: 0;
+      padding: 0;
+      font-family: $font-family3;
+    }
+
+    .box-hyphen {
+      margin-top: 12px;
+      margin-bottom: 23px;
+    }
+
+    .wyntk-text-container {
+      overflow-y: scroll;
+      padding-right: 10px;
+      margin-right: 10px;
+      height: 234px;
+
+      .wyntk-text {
+        line-height: 2;
+        font-size: 12px;
+        padding-right: 10px;
+      }
+    }
+  }
+
+  .header-content {
+    margin: $margin-section 0 0;
+    position: relative;
+    text-align: center;
+    z-index: 2;
+
+    .max-text-width {
+      margin: 0 auto;
+      max-width: 500px;
+    }
+
+    a {
+      color: $white;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+
+  .header-bkg {
+    background-position: left;
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+  }
+  .header-bkg-mask {
+      background-color: $opacity-color;
+      height: 100%;
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+  }
+}

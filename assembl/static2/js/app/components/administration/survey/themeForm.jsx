@@ -7,6 +7,7 @@ import { deleteThematic, updateThematicImgUrl, updateThematicTitle } from '../..
 import FormControlWithLabel from '../../common/formControlWithLabel';
 import FileUploader from '../../common/fileUploader';
 import { deleteThematicTooltip } from '../../common/tooltips';
+import { getEntryValueForLocale } from '../../../utils/i18n';
 
 export const DumbThemeCreationForm = ({
   imgMimeType,
@@ -61,13 +62,10 @@ DumbThemeCreationForm.defaultProps = {
 
 const mapStateToProps = ({ admin: { thematicsById } }, { id, selectedLocale }) => {
   const thematic = thematicsById.get(id);
-  const titleEntry = thematic.get('titleEntries').find((entry) => {
-    return entry.get('localeCode') === selectedLocale;
-  });
   return {
     imgMimeType: thematic.getIn(['img', 'mimeType']),
     imgUrl: thematic.getIn(['img', 'externalUrl']),
-    title: titleEntry ? titleEntry.get('value', '') : '',
+    title: getEntryValueForLocale(thematic.get('titleEntries'), selectedLocale, ''),
     toDelete: thematic.get('toDelete', false)
   };
 };

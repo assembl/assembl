@@ -6,11 +6,14 @@ import { Grid, Row, Col } from 'react-bootstrap';
 import { connect } from 'react-redux';
 
 import { updateThematics } from '../actions/adminActions';
+import { updateResources, updateResourcesCenterPage } from '../actions/adminActions/resourcesCenter';
 import withLoadingIndicator from '../components/common/withLoadingIndicator';
 import Menu from '../components/administration/menu';
 import LanguageMenu from '../components/administration/languageMenu';
 import SaveButton from '../components/administration/saveButton';
 import ThematicsQuery from '../graphql/ThematicsQuery.graphql';
+import ResourcesQuery from '../graphql/ResourcesQuery.graphql';
+import ResourcesCenterPage from '../graphql/ResourcesCenterPage.graphql';
 import { convertEntriesToRawContentState } from '../utils/draftjs';
 
 export function convertVideoDescriptions(thematics) {
@@ -40,6 +43,7 @@ export function convertVideoDescriptions(thematics) {
 class Administration extends React.Component {
   constructor(props) {
     super(props);
+    this.putResourcesCenterInStore = this.putResourcesCenterInStore.bind(this);
     this.putThematicsInStore = this.putThematicsInStore.bind(this);
     this.toggleLanguageMenu = this.toggleLanguageMenu.bind(this);
     this.state = {
@@ -48,6 +52,8 @@ class Administration extends React.Component {
   }
 
   componentDidMount() {
+    this.putResourcesCenterInStore(this.props.resourcesCenter);
+    this.putResourcesInStore(this.props.resources);
     this.putThematicsInStore(this.props.data);
   }
 
@@ -56,6 +62,12 @@ class Administration extends React.Component {
     if (nextProps.data.thematics !== this.props.data.thematics) {
       this.putThematicsInStore(nextProps.data);
     }
+
+    if (nextProps.resources !== this.props.resources) {
+      this.putResourcesInStore(nextProps.resources);
+    }
+
+    this.putResourcesCenterInStore(nextProps.resourcesCenter);
   }
 
   toggleLanguageMenu(state) {
@@ -71,8 +83,24 @@ class Administration extends React.Component {
     this.props.updateThematics(thematics);
   }
 
+  putResourcesInStore(resources) {
+    const filteredResources = filter(ResourcesQuery, { resources: resources });
+    const resourcesForStore = filteredResources.resources.map((resource) => {
+      return {
+        ...resource,
+        textEntries: resource.textEntries ? convertEntriesToRawContentState(resource.textEntries) : null
+      };
+    });
+    this.props.updateResources(resourcesForStore);
+  }
+
+  putResourcesCenterInStore(resourcesCenter) {
+    const filteredResourcesCenter = filter(ResourcesCenterPage, { resourcesCenter: resourcesCenter });
+    this.props.updateResourcesCenterPage(filteredResourcesCenter.resourcesCenter);
+  }
+
   render() {
-    const { children, data, debate, i18n, params } = this.props;
+    const { children, data, debate, i18n, params, refetchResources, refetchResourcesCenter } = this.props;
     const { phase } = params;
     const { timeline } = this.props.debate.debateData;
     const childrenWithProps = React.Children.map(children, (child) => {
@@ -89,7 +117,11 @@ class Administration extends React.Component {
               <Row>
                 <Col xs={12} md={3} />
                 <Col xs={12} md={8}>
-                  <SaveButton refetchThematics={data.refetch} />
+                  <SaveButton
+                    refetchThematics={data.refetch}
+                    refetchResources={refetchResources}
+                    refetchResourcesCenter={refetchResourcesCenter}
+                  />
                 </Col>
                 <Col xs={12} md={1} />
               </Row>
@@ -132,9 +164,24 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
+    updateResources: (resources) => {
+      return dispatch(updateResources(resources));
+    },
     updateThematics: (thematics) => {
       return dispatch(updateThematics(thematics));
+    },
+    updateResourcesCenterPage: ({ titleEntries, headerImage }) => {
+      dispatch(updateResourcesCenterPage(titleEntries, headerImage));
     }
+  };
+};
+
+const mergeLoadingAndHasErrors = (WrappedComponent) => {
+  return (props) => {
+    const { data, resourcesHasErrors, resourcesCenterHasErrors, resourcesLoading, resourcesCenterLoading } = props;
+    const hasErrors = resourcesHasErrors || resourcesCenterHasErrors || (data && data.error);
+    const loading = resourcesLoading || resourcesCenterLoading || (data && data.loading);
+    return <WrappedComponent {...props} hasErrors={hasErrors} loading={loading} />;
   };
 };
 
@@ -143,5 +190,52 @@ export default compose(
   graphql(ThematicsQuery, {
     options: { variables: { identifier: 'survey' } }
   }),
+  graphql(ResourcesQuery, {
+    props: ({ data }) => {
+      if (data.loading) {
+        return {
+          resourcesLoading: true
+        };
+      }
+      if (data.error) {
+        return {
+          resourcesHasErrors: true
+        };
+      }
+
+      return {
+        resourcesLoading: data.loading,
+        resourcesHasErrors: data.error,
+        refetchResources: data.refetch,
+        resources: data.resources
+      };
+    }
+  }),
+  graphql(ResourcesCenterPage, {
+    props: ({ data }) => {
+      if (data.loading) {
+        return {
+          resourcesCenterLoading: true
+        };
+      }
+      if (data.error) {
+        return {
+          resourcesCenterHasErrors: true
+        };
+      }
+
+      const { headerImage, titleEntries } = data.resourcesCenter;
+      return {
+        resourcesCenterLoading: data.loading,
+        resourcesCenterHasErrors: data.error,
+        refetchResourcesCenter: data.refetch,
+        resourcesCenter: {
+          headerImage: headerImage,
+          titleEntries: titleEntries
+        }
+      };
+    }
+  }),
+  mergeLoadingAndHasErrors,
   withLoadingIndicator()
 )(Administration);

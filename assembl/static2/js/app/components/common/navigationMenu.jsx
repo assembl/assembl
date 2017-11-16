@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { compose, graphql } from 'react-apollo';
 import { Translate, I18n } from 'react-redux-i18n';
 import { Link } from 'react-router';
 
@@ -8,6 +9,7 @@ import { get } from '../../utils/routeMap';
 import { displayModal } from '../../utils/utilityManager';
 import { getDiscussionSlug } from '../../utils/globalFunctions';
 import { getCurrentPhaseIdentifier, getPhaseName, isSeveralIdentifiers } from '../../utils/timeline';
+import ResourcesCenter from '../../graphql/ResourcesCenter.graphql';
 
 class NavigationMenu extends React.Component {
   constructor(props) {
@@ -54,6 +56,7 @@ class NavigationMenu extends React.Component {
   render() {
     const { debateData } = this.props.debate;
     const { isAdmin } = this.props;
+    const hasResourcesCenter = this.props.data.hasResourcesCenter;
     const slug = { slug: getDiscussionSlug() };
     const currentPhaseIdentifier = getCurrentPhaseIdentifier(debateData.timeline);
     return (
@@ -85,6 +88,14 @@ class NavigationMenu extends React.Component {
           >
             <Translate value="navbar.administration" />
           </Link>}
+        {hasResourcesCenter &&
+          <Link
+            to={get('resourcesCenter', { slug: debateData.slug })}
+            className="navbar-menu-item pointer"
+            activeClassName="active"
+          >
+            <Translate value="navbar.resourcesCenter" />
+          </Link>}
         {false &&
           <Link className="navbar-menu-item" activeClassName="active" to={get('community', { slug: debateData.slug })}>
             <Translate value="navbar.community" />
@@ -103,4 +114,4 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps)(NavigationMenu);
+export default compose(connect(mapStateToProps), graphql(ResourcesCenter))(NavigationMenu);

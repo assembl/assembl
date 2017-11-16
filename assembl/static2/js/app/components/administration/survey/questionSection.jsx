@@ -28,11 +28,11 @@ class QuestionSection extends React.Component {
   }
 
   render() {
-    const { i18n, selectedLocale, thematics } = this.props;
+    const { selectedLocale, thematics } = this.props;
     const selectedThematicId = this.state.selectedThematicId;
     return (
       <div className="admin-box">
-        <SectionTitle i18n={i18n} phase="survey" tabId="1" annotation={I18n.t('administration.annotation')} />
+        <SectionTitle title={I18n.t('administration.survey.1')} annotation={I18n.t('administration.annotation')} />
         <div className="admin-content">
           <Row>
             {thematics.map((thematicId, index) => {
@@ -71,14 +71,13 @@ class QuestionSection extends React.Component {
   }
 }
 
-const mapStateToProps = ({ admin: { thematicsById, thematicsInOrder, selectedLocale }, i18n }) => {
+const mapStateToProps = ({ admin: { thematicsById, thematicsInOrder, selectedLocale } }) => {
   return {
     thematics: thematicsInOrder
       .filter((id) => {
         return !thematicsById.getIn([id, 'toDelete']);
       })
       .toArray(),
-    i18n: i18n,
     selectedLocale: selectedLocale
   };
 };
