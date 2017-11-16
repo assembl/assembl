@@ -138,7 +138,7 @@ class Idea extends React.Component {
       );
     }
     const { announcement, id, headerImgUrl, synthesisTitle, title } = this.props;
-    const isMultiColumn = ideaWithPostsData.loading ? undefined : ideaWithPostsData.idea.messageColumns.length > 0;
+    const isMultiColumn = ideaWithPostsData.loading ? undefined : ideaWithPostsData.idea.messageViewOverride === 'messageColumns';
     const messageColumns = ideaWithPostsData.loading
       ? undefined
       : [...ideaWithPostsData.idea.messageColumns].sort((a, b) => {

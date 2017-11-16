@@ -607,6 +607,7 @@ class IdeaInterface(graphene.Interface):
     num_children = graphene.Int(identifier=graphene.String())
     img = graphene.Field(Document)
     order = graphene.Float()
+    message_view_override = graphene.String()
 
     def resolve_num_posts(self, args, context, info):
         if isinstance(self, models.RootIdea):
@@ -1096,7 +1097,7 @@ class Query(graphene.ObjectType):
             ).order_by(models.IdeaLink.order, models.Idea.creation_date)
         if args.get('identifier') == 'multiColumns':
             # Filter out ideas that don't have columns.
-            query = query.join(models.Idea.message_columns)
+            query = query.filter(models.Idea.message_view_override == 'messageColumns')
 
         return query
 

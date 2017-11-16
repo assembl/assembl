@@ -17,6 +17,7 @@ def test_graphql_get_all_ideas(graphql_request,
                 id
                 title(lang: $lang)
                 titleEntries { value, localeCode }
+                messageViewOverride
                 numPosts
                 numContributors
                 numChildren(identifier: $identifier)
@@ -49,6 +50,7 @@ def test_graphql_get_all_ideas(graphql_request,
     assert first_idea['parentId'] == root_idea['id']
     assert first_idea['order'] == 0.0
     assert first_idea['numChildren'] == 1
+    assert first_idea['messageViewOverride'] is None
     assert second_idea['title'] == u'Lower taxes'
     assert second_idea['parentId'] == first_idea['id']
     assert second_idea['order'] == 0.0
@@ -62,11 +64,13 @@ def test_graphql_get_all_ideas(graphql_request,
 
 def test_graphql_get_all_ideas_multiColumns_phase(graphql_request,
                                user_language_preference_en_cookie,
+                               subidea_1,
                                subidea_1_1_1,
                                idea_message_column_positive,
                                idea_message_column_negative):
+    subidea_1.message_view_override = 'messageColumns'
     # idea_message_column_positive/negative fixtures add columns on subidea_1
-    # the ideas query should return only subidea_1 (root idea is filtered out too)
+    # the ideas query should return only subidea_1
     res = schema.execute(
         u"""query AllIdeasQuery($lang: String!, $identifier: String!) {
             ideas(identifier: $identifier) {
@@ -74,6 +78,7 @@ def test_graphql_get_all_ideas_multiColumns_phase(graphql_request,
                 id
                 title(lang: $lang)
                 titleEntries { value, localeCode }
+                messageViewOverride
                 numPosts
                 numContributors
                 numChildren(identifier: $identifier)
@@ -104,6 +109,7 @@ def test_graphql_get_all_ideas_multiColumns_phase(graphql_request,
     assert first_idea['parentId'] == root_idea['id']
     assert first_idea['order'] == 0.0
     assert first_idea['numChildren'] == 0
+    assert first_idea['messageViewOverride'] == 'messageColumns'
     assert len(res.errors) == 0
 
 
