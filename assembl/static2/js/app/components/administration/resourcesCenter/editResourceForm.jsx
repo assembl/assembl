@@ -3,7 +3,7 @@ import classnames from 'classnames';
 import React from 'react';
 import { connect } from 'react-redux';
 import { I18n, Translate } from 'react-redux-i18n';
-import { Button, FormGroup, OverlayTrigger, Tooltip } from 'react-bootstrap';
+import { Button, FormGroup, OverlayTrigger } from 'react-bootstrap';
 
 import {
   deleteResource,
@@ -15,6 +15,7 @@ import {
 } from '../../../actions/adminActions/resourcesCenter';
 import FileUploader from '../../common/fileUploader';
 import FormControlWithLabel from '../../common/formControlWithLabel';
+import { deleteResourceTooltip } from '../../common/tooltips';
 import { getEntryValueForLocale } from '../../../utils/i18n';
 
 type EditResourceFormProps = {
@@ -35,12 +36,6 @@ type EditResourceFormProps = {
   text: string,
   title: string
 };
-
-const deleteResourceTooltip = (
-  <Tooltip id="deleteResourceTooltip">
-    <Translate value="administration.resourcesCenter.deleteResource" />
-  </Tooltip>
-);
 
 const EditResourceForm = ({
   documentFilename,

@@ -1,16 +1,10 @@
 import React from 'react';
-import { OverlayTrigger, Tooltip } from 'react-bootstrap';
+import { OverlayTrigger } from 'react-bootstrap';
 import { connect } from 'react-redux';
-import { Translate } from 'react-redux-i18n';
 
 import * as actions from '../../../actions/adminActions/resourcesCenter';
+import { createResourceTooltip } from '../../common/tooltips';
 import EditResourceForm from './editResourceForm';
-
-export const createResourceTooltip = (
-  <Tooltip id="createResourceTooltip">
-    <Translate value="administration.resourcesCenter.createResource" />
-  </Tooltip>
-);
 
 const ManageResourcesForm = ({ createResource, resources, selectedLocale }) => {
   return (

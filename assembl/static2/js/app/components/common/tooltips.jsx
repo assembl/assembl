@@ -85,3 +85,15 @@ export const editMessageTooltip = (
     <Translate value="debate.editMessage" />
   </Tooltip>
 );
+
+export const createResourceTooltip = (
+  <Tooltip id="createResourceTooltip">
+    <Translate value="administration.resourcesCenter.createResource" />
+  </Tooltip>
+);
+
+export const deleteResourceTooltip = (
+  <Tooltip id="deleteResourceTooltip">
+    <Translate value="administration.resourcesCenter.deleteResource" />
+  </Tooltip>
+);
