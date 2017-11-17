@@ -32,7 +32,7 @@ export default class TabbedColumns extends React.Component {
     const col = messageColumns[index];
     const synthesisProps = showSynthesis && {
       classifier: activeKey,
-      synthesisTitle: col.title,
+      synthesisTitle: I18n.t('multiColumns.synthesis.title', { colName: col.name }),
       synthesisBody: col.header || I18n.t('multiColumns.synthesis.noSynthesisYet'),
       hyphenStyle: { borderTopColor: col.color }
     };

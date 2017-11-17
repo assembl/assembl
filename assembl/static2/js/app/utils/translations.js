@@ -158,7 +158,8 @@ const Translations = {
     },
     multiColumns: {
       synthesis: {
-        noSynthesisYet: "La synthèse est en cours de rédaction"
+        noSynthesisYet: "La synthèse est en cours de rédaction",
+        title: "Synthèse : %{colName}"
       }
     },
     synthesis: {
@@ -524,7 +525,8 @@ const Translations = {
     },
     multiColumns: {
       synthesis: {
-        noSynthesisYet: "The synthesis is currently being written"
+        noSynthesisYet: "The synthesis is currently being written",
+        title: "Synthesis: %{colName}"
       }
     },
     synthesis: {
