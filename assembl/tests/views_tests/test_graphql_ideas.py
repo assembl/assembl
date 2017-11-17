@@ -69,6 +69,7 @@ def test_graphql_get_all_ideas_multiColumns_phase(graphql_request,
                                idea_message_column_positive,
                                idea_message_column_negative):
     subidea_1.message_view_override = 'messageColumns'
+    subidea_1.db.flush()
     # idea_message_column_positive/negative fixtures add columns on subidea_1
     # the ideas query should return only subidea_1
     res = schema.execute(
@@ -111,6 +112,9 @@ def test_graphql_get_all_ideas_multiColumns_phase(graphql_request,
     assert first_idea['numChildren'] == 0
     assert first_idea['messageViewOverride'] == 'messageColumns'
     assert len(res.errors) == 0
+    # revert the changes for tests isolation
+    subidea_1.message_view_override = None
+    subidea_1.db.flush()
 
 
 def test_graphql_get_all_ideas_with_modified_order(graphql_request,
@@ -150,12 +154,13 @@ def test_graphql_get_all_ideas_with_modified_order(graphql_request,
         u'Lower taxes',
         u'Lower government revenue',
         u'Austerity yields contraction',
-        u'Job loss',
-        u'Environmental program cuts'
+        u'Job loss',  # subidea_1_1_1_1_1
+        u'Environmental program cuts'  # subidea_1_1_1_1_2
     ]
 
     subidea_1_1_1_1_2.source_links[0].order = 1.0
     subidea_1_1_1_1_1.source_links[0].order = 2.0
+    subidea_1_1_1_1_1.db.flush()
     res = schema.execute(
         u"""query AllIdeasQuery($lang: String!, $identifier: String!) {
             ideas(identifier: $identifier) {
@@ -190,9 +195,13 @@ def test_graphql_get_all_ideas_with_modified_order(graphql_request,
         u'Lower taxes',
         u'Lower government revenue',
         u'Austerity yields contraction',
-        u'Environmental program cuts',
-        u'Job loss',
+        u'Environmental program cuts',  # subidea_1_1_1_1_2
+        u'Job loss',  # subidea_1_1_1_1_1
     ]
+    # revert the changes for tests isolation
+    subidea_1_1_1_1_2.source_links[0].order = 0.0
+    subidea_1_1_1_1_1.source_links[0].order = 0.0
+    subidea_1_1_1_1_1.db.flush()
 
 
 def test_graphql_get_direct_ideas_from_root_idea(graphql_request, subidea_1_1_1):
