@@ -7,7 +7,7 @@ from cornice import Service
 from pyramid.httpexceptions import HTTPNotFound, HTTPBadRequest, HTTPNoContent
 from pyramid.security import authenticated_userid, Everyone
 from sqlalchemy import and_
-from sqlalchemy.orm import (joinedload, subqueryload, undefer)
+from sqlalchemy.orm import contains_eager, joinedload, subqueryload, undefer
 
 from assembl.views.api import API_DISCUSSION_PREFIX
 from assembl.models import (
@@ -122,11 +122,7 @@ def _get_ideas_real(discussion, view_def=None, ids=None, user_id=None):
                  SubGraphIdeaAssociation.idea_id==Idea.id)
         )
 
-    ideas = ideas.outerjoin(IdeaLink,
-                    and_(IdeaLink.target_id==Idea.id)
-        )
-    # ideas = ideas.outerjoin(Attachment).outerjoin(Document)
-
+    ideas = ideas.outerjoin(Idea.source_links)
     ideas = ideas.order_by(IdeaLink.order, Idea.creation_date)
 
     if ids:
@@ -135,7 +131,7 @@ def _get_ideas_real(discussion, view_def=None, ids=None, user_id=None):
     # remove tombstones
     ideas = ideas.filter(and_(*Idea.base_conditions()))
     ideas = ideas.options(
-        joinedload(Idea.source_links),
+        contains_eager(Idea.source_links),
         subqueryload(Idea.attachments).joinedload("document"),
         subqueryload(Idea.widget_links),
         subqueryload(Idea.message_columns),

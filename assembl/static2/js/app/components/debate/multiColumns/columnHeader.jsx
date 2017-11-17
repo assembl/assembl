@@ -1,11 +1,23 @@
+// @flow
+
 import React from 'react';
 import TopPostForm from '../common/topPostForm';
-import { multiColumnMapping } from '../../../utils/mapping';
 import { hexToRgb } from '../../../utils/globalFunctions';
 import { COLUMN_OPACITY_GAIN } from '../../../constants';
 
-export default ({ color, classifier, ideaId, ideaTitle, refetchIdea }) => {
-  const mapping = multiColumnMapping(ideaTitle).createTopPost;
+const ColumnHeader = ({
+  color,
+  classifier,
+  title,
+  ideaId,
+  refetchIdea
+}: {
+  color: string,
+  classifier: string,
+  title: string,
+  ideaId: string,
+  refetchIdea: Function
+}) => {
   return (
     <div className="column-header">
       <div
@@ -19,7 +31,7 @@ export default ({ color, classifier, ideaId, ideaTitle, refetchIdea }) => {
           </div>
           <div className={'start-discussion start-discussion-multicol'}>
             <h3 className="dark-title-3 no-margin">
-              {mapping[classifier]}
+              {title}
             </h3>
           </div>
           <div className="clear" />
@@ -30,3 +42,5 @@ export default ({ color, classifier, ideaId, ideaTitle, refetchIdea }) => {
     </div>
   );
 };
+
+export default ColumnHeader;

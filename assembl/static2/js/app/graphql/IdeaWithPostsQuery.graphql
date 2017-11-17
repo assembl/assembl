@@ -1,3 +1,5 @@
+#import "./IdeaMessageColumn.graphql"
+
 query IdeaWithPosts($id: ID!, $lang: String) {
   idea: node(id: $id) {
     ... on Idea {
@@ -5,13 +7,9 @@ query IdeaWithPosts($id: ID!, $lang: String) {
       numPosts
       numContributors
       messageColumns {
-        messageClassifier
-        color
-        index
-        name(lang: $lang)
-        numPosts
-        header(lang: $lang)
+        ...IdeaMessageColumn
       }
+      messageViewOverride
       posts {
         edges {
           node {

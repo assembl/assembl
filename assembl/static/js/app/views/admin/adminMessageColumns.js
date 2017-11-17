@@ -69,11 +69,14 @@ var AdminMessageColumnsPanel = Marionette.LayoutView.extend({
 
     for (var i in column_identifiers) {
       var column, identifier = column_identifiers[i],
+          title = new LangString.Model(),
           name = new LangString.Model();
+      title.initFromDict(column_names[identifier]);
       name.initFromDict(column_names[identifier]);
       column = new IdeaMessageColumn.Model({
         idea: currentIdea.id,
         message_classifier: identifier,
+        title: title,
         name: name,
         color: colors[identifier],
       });
@@ -106,6 +109,7 @@ var AdminMessageColumnsPanel = Marionette.LayoutView.extend({
         columnCollection = idea.get('message_columns'),
         lastColumnId,
         column,
+        title = new LangString.Model(),
         name = new LangString.Model(),
         names = {},
         preferences = Ctx.getPreferences();
@@ -115,10 +119,12 @@ var AdminMessageColumnsPanel = Marionette.LayoutView.extend({
     _.map(preferences.preferred_locales, function(loc) {
       names[loc] = '';
     });
+    title.initFromDict(names);
     name.initFromDict(names);
     column = new IdeaMessageColumn.Model({
       idea: idea.id,
-      message_classifier: "",
+      message_classifier: Date.now().toString(36), // generate an identifier so there is no unicity conflicts when user keeps it blank and clicks several times on the Add button
+      title: title,
       name: name,
       previous_column: lastColumnId,
     });
@@ -174,6 +180,7 @@ var MessageColumnView = Marionette.LayoutView.extend({
   template: '#tmpl-adminMessageColumn',
   ui: {
     columnId: '.js_column_id',
+    columnTitle: '.js_column_title',
     columnName: '.js_column_name',
     columnColor: '.js_column_color',
     columnUp: '.js_column_up',
@@ -181,6 +188,7 @@ var MessageColumnView = Marionette.LayoutView.extend({
     columnDelete: '.js_column_delete',
   },
   regions: {
+    columnTitle: '@ui.columnTitle',
     columnName: '@ui.columnName',
   },
   events: {
@@ -200,7 +208,14 @@ var MessageColumnView = Marionette.LayoutView.extend({
       collsize: this.model.collection.length,
     };
   },
-  onRender: function() {
+  onRender: function() {    
+    this.showChildView(
+      "columnTitle",
+      new SimpleLangStringEditPanel({
+        model: this.model.get('title'),
+        owner_relative_url: this.model.url() + '/title',
+      }));
+    
     this.showChildView(
       "columnName",
       new SimpleLangStringEditPanel({

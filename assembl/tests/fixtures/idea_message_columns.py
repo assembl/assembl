@@ -9,6 +9,7 @@ def idea_message_column_positive(request, subidea_1, test_session):
                                message_classifier='positive',
                                header=LangString.create('This is a positive header', 'en'),
                                name=LangString.create('Say my name', 'en'),
+                               title=LangString.create('Add your point of view in favor of the theme', 'en'),
                                color="green")
 
     test_session.add(column)
@@ -31,6 +32,7 @@ def idea_message_column_negative(request, subidea_1,
                                message_classifier='negative',
                                header=LangString.create('This is a negative header', 'en'),
                                name=LangString.create('My other name', 'en'),
+                               title=LangString.create('Add your point of view against the theme', 'en'),
                                color="red",
                                previous_column=idea_message_column_positive)
 

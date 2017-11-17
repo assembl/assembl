@@ -1,0 +1,9 @@
+fragment IdeaMessageColumn on IdeaMessageColumn {
+  color
+  header(lang: $lang)
+  index
+  messageClassifier
+  name(lang: $lang)
+  numPosts
+  title(lang: $lang)
+}

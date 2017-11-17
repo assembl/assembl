@@ -36,7 +36,6 @@ class ColumnsPost extends EmptyPost {
       routerParams,
       debateData,
       colColor,
-      colName,
       identifier
     } = this.props;
     const translate = contentLocale !== originalLocale;
@@ -76,9 +75,6 @@ class ColumnsPost extends EmptyPost {
                   locale={lang}
                   modified={modificationDate !== null}
                 />}
-              <div className="column-hint" style={{ color: colColor }}>
-                {colName}
-              </div>
               <PostTranslate
                 contentLocale={contentLocale}
                 id={id}

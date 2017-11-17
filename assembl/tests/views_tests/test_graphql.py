@@ -1580,17 +1580,22 @@ def test_query_number_of_posts_on_column(
 
     idea_id = to_global_id('Idea', idea_message_column_positive.idea_id)
     res = schema.execute(u"""
-query {
-    idea: node(id:"%s") {
-        ... on Idea {
-            id
-            messageColumns {
-                messageClassifier
-                numPosts
-            }
-        }
+query ColumnsQuery($id: ID!, $lang: String!) {
+  idea: node(id: $id) {
+    ... on Idea {
+      id
+      messageColumns {
+        color
+        header(lang: $lang)
+        index
+        messageClassifier
+        name(lang: $lang)
+        numPosts
+        title(lang: $lang)
+      }
     }
-}""" % (idea_id), context_value=graphql_request)
+  }
+}""", context_value=graphql_request, variable_values={'id': idea_id, 'lang': 'en'})
     res_data = json.loads(json.dumps(res.data))
     assert res_data[u'idea'][u'messageColumns'][0][u'numPosts'] == 1
 
@@ -1604,24 +1609,45 @@ def test_query_number_of_posts_on_multiple_columns(
 
     idea_id = to_global_id('Idea', idea_message_column_positive.idea_id)
     res = schema.execute(u"""
-query {
-    idea: node(id:"%s") {
-        ... on Idea {
-            id
-            messageColumns {
-                messageClassifier
-                numPosts
-            }
-        }
+query ColumnsQuery($id: ID!, $lang: String!) {
+  idea: node(id: $id) {
+    ... on Idea {
+      id
+      messageColumns {
+        color
+        header(lang: $lang)
+        index
+        messageClassifier
+        name(lang: $lang)
+        numPosts
+        title(lang: $lang)
+      }
     }
-}""" % (idea_id), context_value=graphql_request)
+  }
+}""", context_value=graphql_request, variable_values={'id': idea_id, 'lang': 'en'})
     res_data = json.loads(json.dumps(res.data))
     columns = res_data[u'idea'][u'messageColumns']
     assert len(columns) == 2
     positive = filter(lambda c: c[u"messageClassifier"] == idea_message_column_positive.message_classifier, columns)[0]
     negative = filter(lambda c: c[u"messageClassifier"] == idea_message_column_negative.message_classifier, columns)[0]
-    assert positive[u"numPosts"] == 1
-    assert negative[u"numPosts"] == 1
+    assert positive == {
+        u'color': u'green',
+        u'header': u'This is a positive header',
+        u'index': 0,
+        u'messageClassifier': u'positive',
+        u'name': u'Say my name',
+        u'numPosts': 1,
+        u'title': u'Add your point of view in favor of the theme'
+    }
+    assert negative == {
+        u'color': u'red',
+        u'header': u'This is a negative header',
+        u'index': 1,
+        u'messageClassifier': u'negative',
+        u'name': u'My other name',
+        u'numPosts': 1,
+        u'title': u'Add your point of view against the theme'
+    }
 
 def test_query_discussion_sentiments_count(
         graphql_request):

@@ -8,7 +8,7 @@ from random import sample as random_sample
 
 from sqlalchemy import desc, distinct, func, inspect, join, select
 from sqlalchemy.orm.exc import NoResultFound
-from sqlalchemy.orm import joinedload, subqueryload, undefer
+from sqlalchemy.orm import contains_eager, joinedload, subqueryload, undefer
 from sqlalchemy.sql.functions import count
 import graphene
 from graphene.pyutils.enum import Enum as PyEnum
@@ -607,6 +607,7 @@ class IdeaInterface(graphene.Interface):
     num_children = graphene.Int(identifier=graphene.String())
     img = graphene.Field(Document)
     order = graphene.Float()
+    message_view_override = graphene.String()
 
     def resolve_num_posts(self, args, context, info):
         if isinstance(self, models.RootIdea):
@@ -670,6 +671,7 @@ class IdeaMessageColumn(SecureObjectType, SQLAlchemyObjectType):
     index = graphene.Int()
     idea = graphene.Field(lambda: Idea)
     name = graphene.String(lang=graphene.String())
+    title = graphene.String(lang=graphene.String())
     header = graphene.String(lang=graphene.String())
     num_posts = graphene.Int()
 
@@ -679,6 +681,9 @@ class IdeaMessageColumn(SecureObjectType, SQLAlchemyObjectType):
 
     def resolve_name(self, args, context, info):
         return resolve_langstring(self.name, args.get('lang'))
+
+    def resolve_title(self, args, context, info):
+        return resolve_langstring(self.title, args.get('lang'))
 
     def resolve_header(self, args, context, info):
         return resolve_langstring(self.header, args.get('lang'))
@@ -1077,13 +1082,13 @@ class Query(graphene.ObjectType):
         descendants_query = model.get_descendants_query(
             root_idea_id, inclusive=True)
         query = query.outerjoin(
-                models.IdeaLink, models.IdeaLink.target_id == models.Idea.id
+                models.Idea.source_links
             ).filter(model.id.in_(descendants_query)
             ).filter(
                 model.hidden == False,
                 model.sqla_type == 'idea'
             ).options(
-                joinedload(models.Idea.source_links),
+                contains_eager(models.Idea.source_links),
                 subqueryload(models.Idea.attachments).joinedload("document"),
 #                subqueryload(models.Idea.message_columns),
                 joinedload(models.Idea.title).joinedload("entries"),
@@ -1092,7 +1097,7 @@ class Query(graphene.ObjectType):
             ).order_by(models.IdeaLink.order, models.Idea.creation_date)
         if args.get('identifier') == 'multiColumns':
             # Filter out ideas that don't have columns.
-            query = query.join(models.Idea.message_columns)
+            query = query.filter(models.Idea.message_view_override == 'messageColumns')
 
         return query
 
