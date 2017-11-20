@@ -1,14 +1,14 @@
 """langstring on synthesis
 
 Revision ID: ca1c445a2e24
-Revises: 025d088eb45a
+Revises: e49dbe903bcd
 Create Date: 2017-11-06 09:23:09.384341
 
 """
 
 # revision identifiers, used by Alembic.
 revision = 'ca1c445a2e24'
-down_revision = '025d088eb45a'
+down_revision = 'e49dbe903bcd'
 
 from alembic import context, op
 import sqlalchemy as sa
