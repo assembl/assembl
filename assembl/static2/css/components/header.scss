@@ -40,7 +40,6 @@
   }
 
   .header-content {
-    margin: $margin-section 0 0;
     position: relative;
     text-align: center;
     z-index: 2;
@@ -56,6 +55,12 @@
       &:hover {
         text-decoration: underline;
       }
+    }
+  }
+
+  @media screen and (min-width: 500px) {
+    .header-content {
+      margin: $margin-section 0 0;
     }
   }
 
