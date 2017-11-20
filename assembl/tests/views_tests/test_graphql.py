@@ -1938,3 +1938,38 @@ query { sections {
     assert res.data['sections'][0]['url'] == u''
     assert res.data['sections'][0]['sectionType'] == SectionTypesEnum.HOMEPAGE.value
     assert res.data['sections'][0]['order'] == 0.0
+
+
+def test_mutation_create_section(sections, graphql_request):
+    from assembl.models.section import SectionTypesEnum
+    title_entries = [
+        {u"value": u"Section personnalisée", u"localeCode": u"fr"},
+        {u"value": u"Custom section", u"localeCode": u"en"}
+    ]
+    variables = {
+        "titleEntries": title_entries,
+        "url": u"http://www.example.com",
+        "order": 5.0
+    }
+    res = schema.execute(u"""
+mutation createSection($titleEntries:[LangStringEntryInput!]!,$url:String,$order:Float) {
+    createSection(
+        titleEntries:$titleEntries,url:$url,order:$order
+    ) {
+        section {
+            title(lang:"fr")
+            url
+            sectionType
+            order
+        }
+    }
+}
+""", context_value=graphql_request, variable_values=variables)
+    result = res.data
+    assert result is not None
+    assert result['createSection'] is not None
+    section = result['createSection']['section']
+    assert section['title'] == u'Section personnalisée'
+    assert section['url'] == u"http://www.example.com"
+    assert section['sectionType'] == SectionTypesEnum.CUSTOM.value
+    assert section['order'] == 5.0

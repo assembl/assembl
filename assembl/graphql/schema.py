@@ -33,6 +33,7 @@ from assembl.lib.clean_input import sanitize_text, sanitize_html
 from assembl.lib.locale import strip_country
 from assembl import models
 from assembl.models.post import countable_publication_states
+from assembl.models.section import SectionTypesEnum
 from assembl.models.action import (
     SentimentOfPost,
     LikeSentimentOfPost, DisagreeSentimentOfPost,
@@ -305,6 +306,8 @@ SentimentTypes = graphene.Enum.from_enum(sentiments_enum)
 publication_states_enum = PyEnum('PublicationStates',
     [(k, k) for k in models.PublicationStates.values()])
 PublicationStates = graphene.Enum.from_enum(publication_states_enum)
+
+SectionTypes = graphene.Enum.from_enum(SectionTypesEnum)
 
 
 class AgentProfile(SecureObjectType, SQLAlchemyObjectType):
@@ -2397,6 +2400,53 @@ class UpdateResourcesCenter(graphene.Mutation):
         return UpdateResourcesCenter(resources_center=resources_center)
 
 
+class CreateSection(graphene.Mutation):
+    class Input:
+        title_entries = graphene.List(LangStringEntryInput, required=True)
+        section_type = graphene.Argument(SectionTypes)
+        url = graphene.String()
+        order = graphene.Float()
+
+    section = graphene.Field(lambda: Section)
+
+    @staticmethod
+    def mutate(root, args, context, info):
+        cls = models.Section
+        discussion_id = context.matchdict['discussion_id']
+        discussion = models.Discussion.get(discussion_id)
+        user_id = context.authenticated_userid or Everyone
+
+        permissions = get_permissions(user_id, discussion_id)
+        allowed = cls.user_can_cls(
+            user_id, CrudPermissions.CREATE, permissions)
+        if not allowed or (allowed == IF_OWNED and user_id == Everyone):
+            raise HTTPUnauthorized()
+
+        with cls.default_db.no_autoflush as db:
+            title_entries = args.get('title_entries')
+            if len(title_entries) == 0:
+                raise Exception(
+                    'Resource titleEntries needs at least one entry')
+                # Better to have this message than
+                # 'NoneType' object has no attribute 'owner_object'
+                # when creating the saobj below if title=None
+
+            title_langstring = langstring_from_input_entries(title_entries)
+
+            kwargs = {}
+            kwargs['section_type'] = args.get('section_type', 'CUSTOM')
+            kwargs['url'] = args.get('url')
+            kwargs['order'] = args.get('order')
+            saobj = cls(
+                discussion_id=discussion_id,
+                title=title_langstring,
+                **kwargs)
+            db.add(saobj)
+            db.flush()
+
+        return CreateSection(section=saobj)
+
+
 class Mutations(graphene.ObjectType):
     create_thematic = CreateThematic.Field()
     update_thematic = UpdateThematic.Field()
@@ -2416,6 +2466,7 @@ class Mutations(graphene.ObjectType):
     delete_resource = DeleteResource.Field()
     update_resource = UpdateResource.Field()
     update_resources_center = UpdateResourcesCenter.Field()
+    create_section = CreateSection.Field()
 
 
 Schema = graphene.Schema(query=Query, mutation=Mutations)
