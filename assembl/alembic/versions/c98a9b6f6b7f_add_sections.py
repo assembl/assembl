@@ -49,9 +49,47 @@ def upgrade(pyramid_env):
             sa.schema.UniqueConstraint('title_id')
         )
 
-        # TODO: insert default data
+        # insert default sections
+        with m.Section.default_db.no_autoflush as db:
+            discussions = db.query(m.Discussion.id).all()
+            for discussion_id in discussions:
+                homepage_section = m.Section(
+                    discussion_id=discussion_id,
+                    title=m.LangString.create(u'Home', 'en'),
+                    url=u'',
+                    section_type=u'HOMEPAGE',
+                    order=0.0
+                )
+                db.add(homepage_section)
+                debate_section = m.Section(
+                    discussion_id=discussion_id,
+                    title=m.LangString.create(u'Debate', 'en'),
+                    url=u'',
+                    section_type=u'DEBATE',
+                    order=1.0
+                )
+                db.add(debate_section)
+                syntheses_section = m.Section(
+                    discussion_id=discussion_id,
+                    title=m.LangString.create(u'Syntheses', 'en'),
+                    url=u'',
+                    section_type=u'SYNTHESES',
+                    order=2.0
+                )
+                db.add(syntheses_section)
+                resources_center_section = m.Section(
+                    discussion_id=discussion_id,
+                    title=m.LangString.create(u'Resources center', 'en'),
+                    url=u'',
+                    section_type=u'RESOURCES_CENTER',
+                    order=3.0
+                )
+                db.add(resources_center_section)
+
+                db.flush()
 
 
 def downgrade(pyramid_env):
     with context.begin_transaction():
         op.drop_table('section')
+        sa.Enum(name='section_types').drop(op.get_bind(), checkfirst=False)
