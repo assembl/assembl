@@ -1017,6 +1017,25 @@ class Resource(SecureObjectType, SQLAlchemyObjectType):
                 return attachment.document
 
 
+class Section(SecureObjectType, SQLAlchemyObjectType):
+
+    class Meta:
+        model = models.Section
+        interfaces = (Node, )
+        only_fields = ('id', 'section_type', 'order')
+
+    title = graphene.String(lang=graphene.String())
+    title_entries = graphene.List(LangStringEntry)
+    url = graphene.String()
+
+    def resolve_title(self, args, context, info):
+        title = resolve_langstring(self.title, args.get('lang'))
+        return title
+
+    def resolve_title_entries(self, args, context, info):
+        return resolve_langstring_entries(self, 'title')
+
+
 class Query(graphene.ObjectType):
     node = Node.Field()
     root_idea = graphene.Field(IdeaUnion, identifier=graphene.String())
@@ -1031,6 +1050,7 @@ class Query(graphene.ObjectType):
     resources = graphene.List(Resource)
     resources_center = graphene.Field(lambda: ResourcesCenter)
     has_resources_center = graphene.Boolean()
+    sections = graphene.List(Section)
 
     def resolve_resources(self, args, context, info):
         model = models.Resource
@@ -1138,6 +1158,12 @@ class Query(graphene.ObjectType):
 
     def resolve_resources_center(self, args, context, info):
         return ResourcesCenter()
+
+    def resolve_sections(self, args, context, info):
+        model = models.Section
+        query = get_query(model, context)
+        discussion_id = context.matchdict['discussion_id']
+        return query.filter(model.discussion_id == discussion_id)
 
 
 class VideoInput(graphene.InputObjectType):

@@ -1912,3 +1912,26 @@ mutation updateResourcesCenter($headerImage:String) {
     assert resources_center['headerImage'] is not None
     assert '/documents/' in resources_center['headerImage']['externalUrl']
     assert resources_center['headerImage']['title'] == 'new-img.png'
+
+
+def test_query_sections(discussion, graphql_request, sections):
+    query = u"""
+query { sections {
+    id
+    title(lang:"en")
+    titleEntries {
+        localeCode
+        value
+    }
+    url
+    sectionType
+    order
+} }"""
+    res = schema.execute(query, context_value=graphql_request)
+    assert len(res.data['sections']) == 4
+    assert res.data['sections'][0]['title'] == u'Home'
+    assert res.data['sections'][0]['titleEntries']['localeCode'] == u'en'
+    assert res.data['sections'][0]['titleEntries']['value'] == u'Home'
+    assert res.data['sections'][0]['url'] == u''
+    assert res.data['sections'][0]['sectionType'] == u'HOMEPAGE'
+    assert res.data['sections'][0]['order'] == 0.0
