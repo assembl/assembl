@@ -1932,8 +1932,8 @@ query { sections {
     res = schema.execute(query, context_value=graphql_request)
     assert len(res.data['sections']) == 4
     assert res.data['sections'][0]['title'] == u'Home'
-    assert res.data['sections'][0]['titleEntries']['localeCode'] == u'en'
-    assert res.data['sections'][0]['titleEntries']['value'] == u'Home'
+    assert res.data['sections'][0]['titleEntries'][0]['localeCode'] == u'en'
+    assert res.data['sections'][0]['titleEntries'][0]['value'] == u'Home'
     assert res.data['sections'][0]['url'] == u''
     assert res.data['sections'][0]['sectionType'] == u'HOMEPAGE'
     assert res.data['sections'][0]['order'] == 0.0
