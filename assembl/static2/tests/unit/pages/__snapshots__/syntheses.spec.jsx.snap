@@ -200,9 +200,6 @@ exports[`Syntheses component should match empty Syntheses snapshot 1`] = `
             No Synthesis Yet
           </span>
         </h2>
-        <div
-          className="no-margin row"
-        />
       </div>
     </div>
   </div>
