@@ -279,12 +279,18 @@ var LangString = Base.Model.extend({
     return Ctx.getApiV2Url("LangString") + "/" + this.getNumericId();
   },
 
+  urlRoot: Ctx.getApiV2Url("LangString"),
+
   /**
    * @function app.models.langstrings.LangString.initialize
    */
   initialize: function(attributes, options) {
     if (attributes && attributes.entries !== undefined) {
       attributes.entries.langstring = this;
+      this.set("entries", attributes.entries);
+    }
+    else {
+      this.set("entries", new LangStringEntryCollection([], {langstring: this}));
     }
   },
   /**
@@ -304,7 +310,7 @@ var LangString = Base.Model.extend({
       return originals[0];
     }
     else if (originals.length > 1) {
-      return this.bestOf(originals);
+      return this.bestOf(originals); // FIXME: bestOf() requires a langPrefs parameter
     }
     else { // if ( originals.length == 0 ) {
       if ( this.get("entries").models.length ){
@@ -325,7 +331,7 @@ var LangString = Base.Model.extend({
      4. if none, look at available translations and repeat.
      Logic is painful, but most of the time (single original) will be trivial in practice.
    * @param  {LangStringEntry.Collection}       available
-   * @param  {LanguagePreference.Collection}    langPrefs
+   * @param  {LanguagePreference.Collection}    langPrefs (this parameter is required)
    * @param  {boolean}                          filter_errors   Used to supress errors
    * @param  {boolean}                          for_interface   To be used in interface, prefer discussion to user.
    * @returns {LangStringEntry}
@@ -400,7 +406,11 @@ var LangString = Base.Model.extend({
    * @function app.models.langstrings.LangString.bestValue
    */
   bestValue: function(langPrefs) {
-    return this.best(langPrefs).get("value");
+    var bestLangString = this.best(langPrefs);
+    if (!bestLangString){
+      throw new Error("Malformed langstring: it seems empty but shouldn't.");
+    }
+    return bestLangString.get("value");
   },
   /**
    * Determines the best value, favouring interface over user prefs.
@@ -498,6 +508,14 @@ var LangString = Base.Model.extend({
         }));
       });
     }
+  },
+
+  toDict: function(){
+    var dict = {};
+    this.get("entries").forEach(function(entry){
+      dict[entry.getLocaleValue()] = entry.value();
+    });
+    return dict;
   },
 
 });

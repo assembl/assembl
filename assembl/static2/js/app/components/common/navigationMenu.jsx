@@ -10,6 +10,7 @@ import { displayModal } from '../../utils/utilityManager';
 import { getDiscussionSlug } from '../../utils/globalFunctions';
 import { getCurrentPhaseIdentifier, getPhaseName, isSeveralIdentifiers } from '../../utils/timeline';
 import HasSynthesesQuery from '../../graphql/HasSynthesesQuery.graphql';
+import ResourcesCenter from '../../graphql/ResourcesCenter.graphql';
 
 class NavigationMenu extends React.Component {
   constructor(props) {
@@ -56,6 +57,7 @@ class NavigationMenu extends React.Component {
   render() {
     const { data, debate: { debateData } } = this.props;
     const { isAdmin } = this.props;
+    const hasResourcesCenter = this.props.data.hasResourcesCenter;
     const slug = { slug: getDiscussionSlug() };
     const currentPhaseIdentifier = getCurrentPhaseIdentifier(debateData.timeline);
     return (
@@ -87,6 +89,14 @@ class NavigationMenu extends React.Component {
           >
             <Translate value="navbar.administration" />
           </Link>}
+        {hasResourcesCenter &&
+          <Link
+            to={get('resourcesCenter', { slug: debateData.slug })}
+            className="navbar-menu-item pointer"
+            activeClassName="active"
+          >
+            <Translate value="navbar.resourcesCenter" />
+          </Link>}
         {false &&
           <Link className="navbar-menu-item" activeClassName="active" to={get('community', { slug: debateData.slug })}>
             <Translate value="navbar.community" />
@@ -110,4 +120,4 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default compose(connect(mapStateToProps), graphql(HasSynthesesQuery))(NavigationMenu);
+export default compose(connect(mapStateToProps), graphql(HasSynthesesQuery), graphql(ResourcesCenter))(NavigationMenu);

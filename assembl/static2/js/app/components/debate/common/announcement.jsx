@@ -8,7 +8,6 @@ import { sentimentDefinitionsObject } from './sentimentDefinitions';
 import type { SentimentDefinition } from './sentimentDefinitions';
 import Media from '../../common/media';
 import { CountablePublicationStates } from '../../../constants';
-import { multiColumnMapping } from '../../../utils/mapping';
 import PostsAndContributorsCount from '../../common/postsAndContributorsCount';
 
 export const createTooltip = (sentiment: SentimentDefinition, count: number) => {
@@ -81,12 +80,9 @@ const dirtySplitHack = (announcementContent) => {
 class Announcement extends React.Component {
   getColumnInfos() {
     const { messageColumns } = this.props.ideaWithPostsData.idea;
-    const mapping = multiColumnMapping().announcement;
-    const columnsArray = [];
-    messageColumns.forEach((col) => {
-      columnsArray.push({ count: col.numPosts, color: col.color, name: mapping[col.messageClassifier] || col.name });
+    const columnsArray = messageColumns.map((col) => {
+      return { count: col.numPosts, color: col.color, name: col.name };
     });
-
     return columnsArray;
   }
   render = () => {

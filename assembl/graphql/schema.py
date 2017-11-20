@@ -8,7 +8,7 @@ from random import sample as random_sample
 
 from sqlalchemy import desc, distinct, func, inspect, join, select
 from sqlalchemy.orm.exc import NoResultFound
-from sqlalchemy.orm import joinedload, subqueryload, undefer
+from sqlalchemy.orm import contains_eager, joinedload, subqueryload, undefer
 from sqlalchemy.sql.functions import count
 import graphene
 from graphene.pyutils.enum import Enum as PyEnum
@@ -421,6 +421,30 @@ class PostAttachment(SecureObjectType, SQLAlchemyObjectType):
     document = graphene.Field(Document)
 
 
+class ResourcesCenter(graphene.ObjectType):
+
+    title = graphene.String(lang=graphene.String())
+    title_entries = graphene.List(LangStringEntry)
+    header_image = graphene.Field(Document)
+
+    def resolve_title(self, args, context, info):
+        discussion_id = context.matchdict['discussion_id']
+        discussion = models.Discussion.get(discussion_id)
+        return resolve_langstring(discussion.resources_center_title, args.get('lang'))
+
+    def resolve_title_entries(self, args, context, info):
+        discussion_id = context.matchdict['discussion_id']
+        discussion = models.Discussion.get(discussion_id)
+        return resolve_langstring_entries(discussion, 'resources_center_title')
+
+    def resolve_header_image(self, args, context, info):
+        discussion_id = context.matchdict['discussion_id']
+        discussion = models.Discussion.get(discussion_id)
+        for attachment in discussion.attachments:
+            if attachment.attachmentPurpose == 'RESOURCES_CENTER_HEADER_IMAGE':
+                return attachment.document
+
+
 class PostInterface(SQLAlchemyInterface):
     class Meta:
         model = models.Post
@@ -629,6 +653,7 @@ class IdeaInterface(graphene.Interface):
     img = graphene.Field(Document)
     order = graphene.Float()
     live = graphene.Field(lambda: IdeaUnion)
+    message_view_override = graphene.String()
 
     def resolve_num_posts(self, args, context, info):
         if isinstance(self, models.RootIdea):
@@ -652,15 +677,14 @@ class IdeaInterface(graphene.Interface):
         if phase == 'multiColumns':
             _it = models.Idea.__table__
             _ilt = models.IdeaLink.__table__
-            _imct = models.IdeaMessageColumn.__table__
             _target_it = models.Idea.__table__.alias()
             j = join(_ilt, _it, _ilt.c.source_id == _it.c.id
-                ).join(_target_it, _ilt.c.target_id == _target_it.c.id
-                ).join(_imct, _target_it.c.id == _imct.c.idea_id)
-            num = select([func.count(distinct(_ilt.c.id))]).select_from(j).where(
+                ).join(_target_it, _ilt.c.target_id == _target_it.c.id)
+            num = select([func.count(_ilt.c.id)]).select_from(j).where(
             (_ilt.c.tombstone_date == None)
             & (_it.c.tombstone_date == None)
             & (_it.c.id == self.id)
+            & (_target_it.c.message_view_override == 'messageColumns')
             ).correlate_except(_ilt)
             return self.db.execute(num).fetchone()[0]
 
@@ -692,6 +716,7 @@ class IdeaMessageColumn(SecureObjectType, SQLAlchemyObjectType):
     index = graphene.Int()
     idea = graphene.Field(lambda: Idea)
     name = graphene.String(lang=graphene.String())
+    title = graphene.String(lang=graphene.String())
     header = graphene.String(lang=graphene.String())
     num_posts = graphene.Int()
 
@@ -701,6 +726,9 @@ class IdeaMessageColumn(SecureObjectType, SQLAlchemyObjectType):
 
     def resolve_name(self, args, context, info):
         return resolve_langstring(self.name, args.get('lang'))
+
+    def resolve_title(self, args, context, info):
+        return resolve_langstring(self.title, args.get('lang'))
 
     def resolve_header(self, args, context, info):
         return resolve_langstring(self.header, args.get('lang'))
@@ -1005,6 +1033,45 @@ class Locale(graphene.ObjectType):
     label = graphene.String(required=True)
 
 
+class Resource(SecureObjectType, SQLAlchemyObjectType):
+    class Meta:
+        model = models.Resource
+        interfaces = (Node, )
+        only_fields = ('id', )
+
+    title = graphene.String(lang=graphene.String())
+    text = graphene.String(lang=graphene.String())
+    title_entries = graphene.List(LangStringEntry)
+    text_entries = graphene.List(LangStringEntry)
+    embed_code = graphene.String()
+    image = graphene.Field(Document)
+    doc = graphene.Field(Document)
+
+    def resolve_title(self, args, context, info):
+        title = resolve_langstring(self.title, args.get('lang'))
+        return title
+
+    def resolve_title_entries(self, args, context, info):
+        return resolve_langstring_entries(self, 'title')
+
+    def resolve_text(self, args, context, info):
+        text = resolve_langstring(self.text, args.get('lang'))
+        return text
+
+    def resolve_text_entries(self, args, context, info):
+        return resolve_langstring_entries(self, 'text')
+
+    def resolve_image(self, args, context, info):
+        for attachment in self.attachments:
+            if attachment.attachmentPurpose == 'IMAGE':
+                return attachment.document
+
+    def resolve_doc(self, args, context, info):
+        for attachment in self.attachments:
+            if attachment.attachmentPurpose == 'DOCUMENT':
+                return attachment.document
+
+
 class Query(graphene.ObjectType):
     node = Node.Field()
     root_idea = graphene.Field(IdeaUnion, identifier=graphene.String())
@@ -1018,6 +1085,22 @@ class Query(graphene.ObjectType):
     locales = graphene.List(Locale, lang=graphene.String(required=True))
     total_sentiments = graphene.Int()
     has_syntheses = graphene.Boolean()
+    resources = graphene.List(Resource)
+    resources_center = graphene.Field(lambda: ResourcesCenter)
+    has_resources_center = graphene.Boolean()
+
+    def resolve_resources(self, args, context, info):
+        model = models.Resource
+        query = get_query(model, context)
+        discussion_id = context.matchdict['discussion_id']
+        return query.filter(model.discussion_id == discussion_id)
+
+    def resolve_has_resources_center(self, args, context, info):
+        model = models.Resource
+        query = get_query(model, context)
+        discussion_id = context.matchdict['discussion_id']
+        resources_count = query.filter(model.discussion_id == discussion_id).count()
+        return bool(resources_count)
 
     def resolve_total_sentiments(self, args, context, info):
         discussion_id = context.matchdict['discussion_id']
@@ -1050,21 +1133,23 @@ class Query(graphene.ObjectType):
         root_idea_id = discussion.root_idea.id
         descendants_query = model.get_descendants_query(
             root_idea_id, inclusive=True)
-        query = query.filter(model.id.in_(descendants_query)
+        query = query.outerjoin(
+                models.Idea.source_links
+            ).filter(model.id.in_(descendants_query)
             ).filter(
                 model.hidden == False,
-                model.sqla_type.in_(('idea', 'root_idea'))
+                model.sqla_type == 'idea'
             ).options(
-                joinedload(models.Idea.source_links),
+                contains_eager(models.Idea.source_links),
                 subqueryload(models.Idea.attachments).joinedload("document"),
 #                subqueryload(models.Idea.message_columns),
                 joinedload(models.Idea.title).joinedload("entries"),
 #                joinedload(models.Idea.synthesis_title).joinedload("entries"),
                 joinedload(models.Idea.description).joinedload("entries"),
-            ).order_by(model.id)
+            ).order_by(models.IdeaLink.order, models.Idea.creation_date)
         if args.get('identifier') == 'multiColumns':
-            # filter out ideas that don't have columns
-            query = query.join(models.Idea.message_columns)
+            # Filter out ideas that don't have columns.
+            query = query.filter(models.Idea.message_view_override == 'messageColumns')
 
         return query
 
@@ -1120,6 +1205,9 @@ class Query(graphene.ObjectType):
         return [Locale(locale_code=locale_code, label=label)
                 for locale_code, label in sorted(labels.items(),
                                                  key=lambda entry: entry[1])]
+
+    def resolve_resources_center(self, args, context, info):
+        return ResourcesCenter()
 
 
 class VideoInput(graphene.InputObjectType):
@@ -2060,6 +2148,299 @@ class UpdateDiscussionPreferences(graphene.Mutation):
         return UpdateDiscussionPreferences(preferences=discussion_pref)
 
 
+class CreateResource(graphene.Mutation):
+    class Input:
+        # Careful, having required=True on a graphene.List only means
+        # it can't be None, having an empty [] is perfectly valid.
+        title_entries = graphene.List(LangStringEntryInput, required=True)
+        text_entries = graphene.List(LangStringEntryInput)
+        embed_code = graphene.String()
+        image = graphene.String()
+        doc = graphene.String()
+
+    resource = graphene.Field(lambda: Resource)
+
+    @staticmethod
+    def mutate(root, args, context, info):
+        cls = models.Resource
+        discussion_id = context.matchdict['discussion_id']
+        discussion = models.Discussion.get(discussion_id)
+        user_id = context.authenticated_userid or Everyone
+
+        permissions = get_permissions(user_id, discussion_id)
+        allowed = cls.user_can_cls(user_id, CrudPermissions.CREATE, permissions)
+        if not allowed or (allowed == IF_OWNED and user_id == Everyone):
+            raise HTTPUnauthorized()
+
+        with cls.default_db.no_autoflush:
+            title_entries = args.get('title_entries')
+            if len(title_entries) == 0:
+                raise Exception('Resource titleEntries needs at least one entry')
+                # Better to have this message than
+                # 'NoneType' object has no attribute 'owner_object'
+                # when creating the saobj below if title=None
+
+            title_langstring = langstring_from_input_entries(title_entries)
+            text_langstring = langstring_from_input_entries(
+                args.get('text_entries'))
+            kwargs = {}
+            if text_langstring is not None:
+                kwargs['text'] = text_langstring
+
+            kwargs['embed_code'] = args.get('embed_code')
+            saobj = cls(
+                discussion_id=discussion_id,
+                title=title_langstring,
+                **kwargs)
+            db = saobj.db
+            db.add(saobj)
+
+            image = args.get('image')
+            if image is not None:
+                filename = os.path.basename(context.POST[image].filename)
+                mime_type = context.POST[image].type
+                uploaded_file = context.POST[image].file
+                uploaded_file.seek(0)
+                data = uploaded_file.read()
+                document = models.File(
+                    discussion=discussion,
+                    mime_type=mime_type,
+                    title=filename,
+                    data=data)
+                image_attachment = models.ResourceAttachment(
+                    document=document,
+                    resource=saobj,
+                    discussion=discussion,
+                    creator_id=context.authenticated_userid,
+                    title=filename,
+                    attachmentPurpose="IMAGE"
+                )
+
+            doc = args.get('doc')
+            if doc is not None:
+                filename = os.path.basename(context.POST[doc].filename)
+                mime_type = context.POST[doc].type
+                uploaded_file = context.POST[doc].file
+                uploaded_file.seek(0)
+                data = uploaded_file.read()
+                document = models.File(
+                    discussion=discussion,
+                    mime_type=mime_type,
+                    title=filename,
+                    data=data)
+                doc_attachment = models.ResourceAttachment(
+                    document=document,
+                    resource=saobj,
+                    discussion=discussion,
+                    creator_id=context.authenticated_userid,
+                    title=filename,
+                    attachmentPurpose="DOCUMENT"
+                )
+
+
+            db.flush()
+
+        return CreateResource(resource=saobj)
+
+
+class DeleteResource(graphene.Mutation):
+    class Input:
+        resource_id = graphene.ID(required=True)
+
+    success = graphene.Boolean()
+
+    @staticmethod
+    def mutate(root, args, context, info):
+        discussion_id = context.matchdict['discussion_id']
+        user_id = context.authenticated_userid or Everyone
+
+        resource_id = args.get('resource_id')
+        resource_id = int(Node.from_global_id(resource_id)[1])
+        resource = models.Resource.get(resource_id)
+
+        permissions = get_permissions(user_id, discussion_id)
+        allowed = resource.user_can(user_id, CrudPermissions.DELETE, permissions)
+        if not allowed:
+            raise HTTPUnauthorized()
+
+        resource.db.delete(resource)
+        resource.db.flush()
+        return DeleteResource(success=True)
+
+
+class UpdateResource(graphene.Mutation):
+    class Input:
+        id = graphene.ID(required=True)
+        title_entries = graphene.List(LangStringEntryInput)
+        text_entries = graphene.List(LangStringEntryInput)
+        embed_code = graphene.String()
+        image = graphene.String()
+        doc = graphene.String()
+
+    resource = graphene.Field(lambda: Resource)
+
+    @staticmethod
+    def mutate(root, args, context, info):
+        cls = models.Resource
+        discussion_id = context.matchdict['discussion_id']
+        discussion = models.Discussion.get(discussion_id)
+        user_id = context.authenticated_userid or Everyone
+
+        resource_id = args.get('id')
+        resource_id = int(Node.from_global_id(resource_id)[1])
+        resource = cls.get(resource_id)
+
+        permissions = get_permissions(user_id, discussion_id)
+        allowed = resource.user_can(user_id, CrudPermissions.UPDATE, permissions)
+        if not allowed:
+            raise HTTPUnauthorized()
+
+        with cls.default_db.no_autoflush:
+            title_entries = args.get('title_entries')
+            if title_entries is not None and len(title_entries) == 0:
+                raise Exception('Resource titleEntries needs at least one entry')
+                # Better to have this message than
+                # 'NoneType' object has no attribute 'owner_object'
+                # when creating the saobj below if title=None
+
+            update_langstring_from_input_entries(resource, 'title', title_entries)
+            update_langstring_from_input_entries(resource, 'text', args.get('text_entries'))
+            kwargs = {}
+            kwargs['embed_code'] = args.get('embed_code', None)
+            for attr, value in kwargs.items():
+                setattr(resource, attr, value)
+
+            db = resource.db
+
+            # add uploaded image as an attachment to the resource
+            image = args.get('image')
+            if image is not None:
+                filename = os.path.basename(context.POST[image].filename)
+                mime_type = context.POST[image].type
+                uploaded_file = context.POST[image].file
+                uploaded_file.seek(0)
+                data = uploaded_file.read()
+                document = models.File(
+                    discussion=discussion,
+                    mime_type=mime_type,
+                    title=filename,
+                    data=data)
+                # if there is already an IMAGE, remove it with the
+                # associated document
+                images = [att for att in resource.attachments if att.attachmentPurpose == 'IMAGE']
+                if images:
+                    image = images[0]
+                    db.delete(image.document)
+                    resource.attachments.remove(image)
+
+                attachment = models.ResourceAttachment(
+                    document=document,
+                    discussion=discussion,
+                    resource=resource,
+                    creator_id=context.authenticated_userid,
+                    title=filename,
+                    attachmentPurpose="IMAGE"
+                )
+
+        # add uploaded doc as an attachment to the resource
+        doc = args.get('doc')
+        if doc is not None:
+            filename = os.path.basename(context.POST[doc].filename)
+            mime_type = context.POST[doc].type
+            uploaded_file = context.POST[doc].file
+            uploaded_file.seek(0)
+            data = uploaded_file.read()
+            document = models.File(
+                discussion=discussion,
+                mime_type=mime_type,
+                title=filename,
+                data=data)
+            # if there is already a DOCUMENT, remove it with the
+            # associated document
+            docs = [att for att in resource.attachments if att.attachmentPurpose == 'DOCUMENT']
+            if docs:
+                doc = docs[0]
+                db.delete(doc.document)
+                resource.attachments.remove(doc)
+
+            attachment = models.ResourceAttachment(
+                document=document,
+                discussion=discussion,
+                resource=resource,
+                creator_id=context.authenticated_userid,
+                title=filename,
+                attachmentPurpose="DOCUMENT"
+            )
+
+            db.flush()
+
+        return UpdateResource(resource=resource)
+
+
+class UpdateResourcesCenter(graphene.Mutation):
+    class Input:
+        title_entries = graphene.List(LangStringEntryInput)
+        header_image = graphene.String()
+
+    resources_center = graphene.Field(lambda: ResourcesCenter)
+
+    @staticmethod
+    def mutate(root, args, context, info):
+        cls = models.Discussion
+        discussion_id = context.matchdict['discussion_id']
+        discussion = models.Discussion.get(discussion_id)
+        user_id = context.authenticated_userid or Everyone
+
+        permissions = get_permissions(user_id, discussion_id)
+        allowed = discussion.user_can(user_id, CrudPermissions.UPDATE, permissions)
+        if not allowed:
+            raise HTTPUnauthorized()
+
+        with cls.default_db.no_autoflush:
+            db = discussion.db
+            title_entries = args.get('title_entries')
+            if title_entries is not None and len(title_entries) == 0:
+                raise Exception('Resources center title entries needs at least one entry')
+                # Better to have this message than
+                # 'NoneType' object has no attribute 'owner_object'
+                # when creating the saobj below if title=None
+
+            update_langstring_from_input_entries(discussion, 'resources_center_title', title_entries)
+
+            # add uploaded image as an attachment to the discussion
+            image = args.get('header_image')
+            if image is not None:
+                filename = os.path.basename(context.POST[image].filename)
+                mime_type = context.POST[image].type
+                uploaded_file = context.POST[image].file
+                uploaded_file.seek(0)
+                data = uploaded_file.read()
+                document = models.File(
+                    discussion=discussion,
+                    mime_type=mime_type,
+                    title=filename,
+                    data=data)
+                # if there is already an IMAGE, remove it with the
+                # associated document
+                header_images = [att for att in discussion.attachments if att.attachmentPurpose == 'RESOURCES_CENTER_HEADER_IMAGE']
+                if header_images:
+                    image = header_images[0]
+                    db.delete(image.document)
+                    discussion.remove(image)
+
+                attachment = models.DiscussionAttachment(
+                    document=document,
+                    discussion=discussion,
+                    creator_id=context.authenticated_userid,
+                    title=filename,
+                    attachmentPurpose="RESOURCES_CENTER_HEADER_IMAGE"
+                )
+
+        db.flush()
+        resources_center = ResourcesCenter()
+        return UpdateResourcesCenter(resources_center=resources_center)
+
+
 class Mutations(graphene.ObjectType):
     create_thematic = CreateThematic.Field()
     update_thematic = UpdateThematic.Field()
@@ -2075,6 +2456,10 @@ class Mutations(graphene.ObjectType):
     upload_document = UploadDocument.Field()
     delete_post_attachment = DeletePostAttachment.Field()
     update_discussion_preferences = UpdateDiscussionPreferences.Field()
+    create_resource = CreateResource.Field()
+    delete_resource = DeleteResource.Field()
+    update_resource = UpdateResource.Field()
+    update_resources_center = UpdateResourcesCenter.Field()
 
 
 Schema = graphene.Schema(query=Query, mutation=Mutations)

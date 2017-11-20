@@ -1,6 +1,21 @@
+// @flow
 import React from 'react';
 import { Translate } from 'react-redux-i18n';
 import { Button } from 'react-bootstrap';
+
+type FileUploaderProps = {
+  filename: string,
+  fileOrUrl: File | string,
+  mimeType: string,
+  name: string,
+  handleChange: Function,
+  withPreview: boolean
+};
+
+type FileUploaderState = {
+  fileName: string,
+  fileSrc?: string | ArrayBuffer
+};
 
 /*
   File uploader
@@ -8,56 +23,62 @@ import { Button } from 'react-bootstrap';
   when this component receives an url and that we want to render the preview of this image,
   we need to give it a mimeType prop that starts with 'image/'
 */
-class FileUploader extends React.Component {
+class FileUploader extends React.Component<Object, FileUploaderProps, FileUploaderState> {
+  props: FileUploaderProps;
+  state: FileUploaderState;
+  fileInput: HTMLInputElement;
+  preview: HTMLImageElement;
+
   static defaultProps = {
+    filename: '',
     mimeType: '',
+    name: 'file-uploader',
     withPreview: true
   };
 
-  constructor(props) {
+  constructor(props: FileUploaderProps) {
     super(props);
     this.state = {
-      fileName: '',
+      fileName: props.filename,
       fileSrc: undefined
     };
-    this.handleChangePreview = this.handleChangePreview.bind(this);
-    this.handleUploadButtonClick = this.handleUploadButtonClick.bind(this);
-    this.updateInfo = this.updateInfo.bind(this);
   }
 
   componentDidMount() {
-    this.updateInfo(this.props.fileOrUrl);
+    this.updateInfo(this.props);
   }
 
-  componentWillReceiveProps(nextProps) {
+  componentWillReceiveProps(nextProps: FileUploaderProps) {
     if (this.props.fileOrUrl !== nextProps.fileOrUrl) {
-      this.updateInfo(nextProps.fileOrUrl);
+      this.updateInfo(nextProps);
     }
   }
 
-  handleUploadButtonClick() {
+  handleUploadButtonClick = () => {
     this.fileInput.click();
-  }
+  };
 
-  handleChangePreview() {
+  handleChangePreview = () => {
     const file = this.fileInput.files[0];
-    this.setState({
-      fileName: file.name || ''
-    });
-    this.props.handleChange(file);
-  }
+    if (file) {
+      this.setState({
+        fileName: file.name || ''
+      });
+      this.props.handleChange(file);
+    }
+  };
 
-  updateInfo(fileOrUrl) {
+  updateInfo = ({ filename, fileOrUrl }: FileUploaderProps) => {
     // warning: here fileOrUrl can be an url or a File object
     // update file src and name if fileOrUrl is a File
-    if (fileOrUrl && Object.getPrototypeOf(fileOrUrl) === File.prototype) {
+    if (fileOrUrl && fileOrUrl instanceof File) {
       const file = fileOrUrl;
       const reader = new FileReader();
       reader.addEventListener(
         'load',
         () => {
           this.setState({
-            fileName: file.name || '',
+            fileName: file.name || filename,
             fileSrc: reader.result
           });
         },
@@ -66,16 +87,16 @@ class FileUploader extends React.Component {
       if (file) {
         reader.readAsDataURL(fileOrUrl);
       }
-    } else {
-      this.setState({ fileSrc: fileOrUrl });
+    } else if (typeof fileOrUrl === 'string') {
+      this.setState({ fileName: filename, fileSrc: fileOrUrl });
     }
-  }
+  };
 
   render() {
-    const { mimeType, withPreview } = this.props;
+    const { mimeType, name, withPreview } = this.props;
     const fileSrc = this.state.fileSrc;
-    const fileIsImage = fileSrc && fileSrc.startsWith('data:image/');
-    const mimeTypeIsImage = mimeType && mimeType.startsWith('image/');
+    const fileIsImage = fileSrc && fileSrc instanceof String && fileSrc.startsWith('data:image/');
+    const mimeTypeIsImage = mimeType.startsWith('image/');
     const isImage = fileIsImage || mimeTypeIsImage;
     return (
       <div>
@@ -98,6 +119,7 @@ class FileUploader extends React.Component {
             {this.state.fileName}
           </div>}
         <input
+          name={name}
           type="file"
           onChange={this.handleChangePreview}
           className="hidden"

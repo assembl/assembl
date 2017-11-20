@@ -66,6 +66,7 @@ assembl/static/css/*.css
 /assembl/static/widget/*/bower_components/
 /assembl/static/widget/*/assembl/static/js/bower
 /assembl/static/js/build
+npm-debug.log
 
 # static2
 /assembl/static2/node_modules/

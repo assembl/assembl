@@ -14,10 +14,10 @@ class ThemeSection extends React.Component {
     toggleLanguageMenu(true);
   }
   render() {
-    const { addThematic, i18n, selectedLocale, thematics } = this.props;
+    const { addThematic, selectedLocale, thematics } = this.props;
     return (
       <div className="admin-box">
-        <SectionTitle i18n={i18n} phase="survey" tabId="0" annotation={I18n.t('administration.annotation')} />
+        <SectionTitle title={I18n.t('administration.survey.0')} annotation={I18n.t('administration.annotation')} />
         <div className="admin-content">
           <form>
             {thematics.map((id, idx) => {
@@ -35,12 +35,11 @@ class ThemeSection extends React.Component {
   }
 }
 
-const mapStateToProps = ({ admin: { thematicsById, thematicsInOrder, selectedLocale }, i18n }) => {
+const mapStateToProps = ({ admin: { thematicsById, thematicsInOrder, selectedLocale } }) => {
   return {
     thematics: thematicsInOrder.filter((id) => {
       return !thematicsById.getIn([id, 'toDelete']);
     }),
-    i18n: i18n,
     selectedLocale: selectedLocale
   };
 };

@@ -38,6 +38,12 @@
 }
 
 .minimized-timeline {
+  height: 100%;
+  position: relative;
+  flex-grow: 1;
+  flex-basis: 0;
+  display: flex;
+  flex-direction: column-reverse;
 
   .active {
     background-color: $first-color;
@@ -50,12 +56,13 @@
   .timeline-number {
     border: 2px solid $white;
     border-radius: 18px;
+    display: inline-block;
     color: $white;
     font-size: $font-size-xxxs;
     height: 18px;
     line-height: 14px;
     padding: 0 0 0 1px;
-    position: absolute;
+    position: relative;
     text-align: center;
     width: 18px;
     z-index: 2;
@@ -66,32 +73,45 @@
       }
     }
   }
+  .timeline-graph {
+    position: relative;
 
-  .timeline-bar-1 {
-    background-color: $grey5;
-    height: 6px;
-    margin: 6px 0 0 11px;
-    position: absolute;
-    width: 100px;
-    z-index: 0;
-  }
+    .timeline-bars {
+      display: inline-block;
+      width: calc(100% - 10px);
+      height: auto;
+      position: absolute;
+      top: 9px;
+      left: 12px;
 
-  .timeline-bar-2 {
-    background-color: $first-color;
-    height: 6px;
-    margin: 6px 0 0 11px;
-    position: absolute;
-    z-index: 1;
+      .timeline-bar-background {
+        background-color: $grey5;
+        height: 6px;
+        position: absolute;
+        width: 100%;
+        z-index: 0;
+        display: inline-block;
+      }
+
+      .timeline-bar-filler {
+        background-color: $first-color;
+        height: 6px;
+        position: absolute;
+        z-index: 1;
+        display: inline-block;
+      }
+    }
   }
 
   .timeline-title {
     cursor: pointer;
     font-size: 10px;
     padding: 0 0 0 15px;
-    position: absolute;
     text-align: center;
     top: 28px;
-    width: 100px;
+    .timeline-link {
+      height: 100%;
+    }
   }
 
   .txt-not-active {
@@ -100,14 +120,14 @@
     }
 
     &:hover {
-      ~ .timeline-number {
-        background-color: $first-color;
+      ~ .timeline-graph {
+        .timeline-number {
+          background-color: $first-color;
+        }
+        .timeline-bar-background {
+          background-color: $first-color;
+        }
       }
-
-      ~ .timeline-bar-1 {
-        background-color: $first-color;
-      }
-
       .timeline-link {
         color: $first-color;
       }

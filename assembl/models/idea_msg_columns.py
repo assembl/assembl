@@ -48,6 +48,8 @@ class IdeaMessageColumn(DiscussionBoundBase):
         doc="Allows ordering columns as a linked list")
     name_id = Column(Integer, ForeignKey(LangString.id), nullable=False,
         doc="The name of the column as a langstr")
+    title_id = Column(Integer, ForeignKey(LangString.id), nullable=True,
+        doc="The title of the column as a langstr")
     color = Column(String(20),
         doc="A CSS color that will be used to theme the column.")
 
@@ -59,6 +61,11 @@ class IdeaMessageColumn(DiscussionBoundBase):
         lazy="joined", single_parent=True,
         primaryjoin=name_id == LangString.id,
         backref=backref("name_of_idea_message_column", lazy="dynamic"),
+        cascade="all, delete-orphan")
+    title = relationship(LangString,
+        lazy="joined", single_parent=True,
+        primaryjoin=title_id == LangString.id,
+        backref=backref("title_of_idea_message_column", lazy="dynamic"),
         cascade="all, delete-orphan")
 
     header = relationship(LangString,
@@ -123,4 +130,4 @@ class IdeaMessageColumn(DiscussionBoundBase):
             cls.ensure_ordering_for_idea(idea)
 
 
-LangString.setup_ownership_load_event(IdeaMessageColumn, ['name', 'header'])
+LangString.setup_ownership_load_event(IdeaMessageColumn, ['name', 'title', 'header'])

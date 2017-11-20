@@ -22,12 +22,14 @@ import NotFound from './pages/notFound';
 import Terms from './pages/terms';
 import Administration from './pages/administration';
 import UnauthorizedAdministration from './pages/unauthorizedAdministration';
+import ResourcesCenterAdmin from './pages/resourcesCenterAdmin';
 import SurveyAdmin from './pages/surveyAdmin';
 import ThreadAdmin from './pages/threadAdmin';
 import DiscussionAdmin from './pages/discussionAdmin';
 import MultiColumnsAdmin from './pages/multiColumnsAdmin';
 import TokenVoteAdmin from './pages/tokenVoteAdmin';
 import JoinDiscussion from './pages/joinDiscussion';
+import ResourcesCenter from './pages/resourcesCenter';
 import { routeForRouter } from './utils/routeMap';
 
 const DebateHome = (props) => {
@@ -72,6 +74,8 @@ const AdminChild = (props) => {
     return <MultiColumnsAdmin />;
   case 'tokenVote':
     return <TokenVoteAdmin />;
+  case 'resourcesCenter':
+    return <ResourcesCenterAdmin />;
   default:
     return <ThreadAdmin />;
   }
@@ -98,6 +102,7 @@ export default [
         <Route path={routeForRouter('profile', false, { userId: ':userId' })} component={Profile} />
         <Route path={routeForRouter('syntheses')} component={Syntheses} />
         <Route path={routeForRouter('synthesis', false, { synthesisId: ':synthesisId' })} component={Synthesis} />
+        <Route path={routeForRouter('resourcesCenter')} component={ResourcesCenter} />
         <Route path={routeForRouter('community')} component={Community} />
         <Route path={routeForRouter('terms')} component={Terms} />
         <Route path={routeForRouter('join')} component={JoinDiscussion} />

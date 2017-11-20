@@ -30,7 +30,7 @@ export const getConnectedUserId = () => {
 };
 
 export const getConnectedUserName = () => {
-  return getInputValue('discussion-slug');
+  return getInputValue('user-displayname');
 };
 
 // cache permissions to avoid accessing the dom at each permission check

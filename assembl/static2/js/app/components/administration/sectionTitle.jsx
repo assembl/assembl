@@ -1,11 +1,16 @@
+// @flow
 import React from 'react';
 
-const SectionTitle = ({ i18n, phase, tabId, annotation }) => {
-  const { locale, translations } = i18n;
+type SectionTitleProps = {
+  title: string,
+  annotation: string
+};
+
+const SectionTitle = ({ title, annotation }: SectionTitleProps) => {
   return (
     <div>
       <h3 className="dark-title-3">
-        {translations[locale].administration[phase][tabId]}
+        {title}
       </h3>
       <div className="box-hyphen" />
       <div className="annotation">

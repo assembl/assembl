@@ -26,9 +26,10 @@ from ..semantic.namespaces import DCTERMS
 from . import DiscussionBoundBase
 from .post import Post
 from .idea import Idea
+from .resource import Resource
 from .auth import (
     AgentProfile, CrudPermissions, P_READ, P_ADMIN_DISC, P_ADD_POST,
-    P_EDIT_POST, P_ADD_IDEA, P_EDIT_IDEA)
+    P_EDIT_POST, P_ADD_IDEA, P_EDIT_IDEA, P_MANAGE_RESOURCE)
 
 
 class Document(DiscussionBoundBase):
@@ -335,3 +336,38 @@ class IdeaAttachment(Attachment):
     crud_permissions = CrudPermissions(
         P_ADD_IDEA, P_READ, P_EDIT_IDEA, P_ADMIN_DISC, P_ADMIN_DISC,
         P_ADMIN_DISC)
+
+
+class ResourceAttachment(Attachment):
+
+    __tablename__ = "resource_attachment"
+
+    id = Column(Integer, ForeignKey(
+        'attachment.id',
+        ondelete='CASCADE',
+        onupdate='CASCADE'
+    ), primary_key=True)
+
+    resource_id = Column(Integer, ForeignKey(
+        'resource.id',
+        ondelete='CASCADE',
+        onupdate='CASCADE',
+        ),
+        nullable=False,
+        index=True)
+
+    resource = relationship(
+        Resource,
+        backref=backref(
+            'attachments',
+            cascade="all, delete-orphan"),
+    )
+    __mapper_args__ = {
+        'polymorphic_identity': 'resource_attachment',
+        'with_polymorphic': '*'
+    }
+
+    # Same crud permissions as a idea
+    crud_permissions = CrudPermissions(
+        P_MANAGE_RESOURCE, P_READ, P_MANAGE_RESOURCE, P_MANAGE_RESOURCE,
+        P_MANAGE_RESOURCE, P_MANAGE_RESOURCE)

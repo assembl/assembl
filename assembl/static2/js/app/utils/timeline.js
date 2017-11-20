@@ -144,7 +144,7 @@ export const getIfPhaseCompletedByIdentifier = (_timeline: Timeline, _identifier
   return isPhaseCompleted;
 };
 
-export const getBarWidth = (_phase: Phase) => {
+export const getBarPercent = (_phase: Phase) => {
   const phase = _phase;
   const currentDate = new Date();
   const endDate = new Date(phase.end);

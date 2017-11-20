@@ -168,6 +168,7 @@ var messageSendView = Marionette.LayoutView.extend({
     }
     var show_cancel_button = ('show_cancel_button' in this.options) ? this.options.show_cancel_button : false;
     var reply_idea = ('reply_idea' in this.options) ? this.options.reply_idea : null;
+    var reply_idea_title = reply_idea ? reply_idea.getShortTitleDisplayText(this.translationData) : null;
     var reply_message_id = ('reply_message_id' in this.options) ? this.options.reply_message_id : null;
     var show_target_context_with_choice = ('show_target_context_with_choice' in this.options) ? this.options.show_target_context_with_choice : null;
     var message_send_title = this.options.message_send_title;
@@ -188,16 +189,14 @@ var messageSendView = Marionette.LayoutView.extend({
       allow_setting_subject: this.options.allow_setting_subject || this.options.allow_setting_subject,
       cancel_button_label: this.options.cancel_button_label ? this.options.cancel_button_label : i18n.gettext('Cancel'),
       send_button_label: this.options.send_button_label ? this.options.send_button_label : i18n.gettext('Send'),
-      subject_label: this.options.subject_label ? this.options.subject_label : i18n.gettext('Subject:'),
       canPost: canPost,
       msg_in_progress_body: this.options.msg_in_progress_body,
       msg_in_progress_title: this.options.msg_in_progress_title,
       reply_idea: reply_idea,
-      reply_idea_title: reply_idea.getShortTitleDisplayText(this.translationData),
+      reply_idea_title: reply_idea_title,
       show_cancel_button: show_cancel_button,
       reply_message_id: reply_message_id,
-      show_target_context_with_choice: show_target_context_with_choice,
-      enable_button: this.options.enable_button
+      show_target_context_with_choice: show_target_context_with_choice
     }
   },
 

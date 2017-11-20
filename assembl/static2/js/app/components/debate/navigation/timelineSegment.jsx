@@ -60,15 +60,14 @@ class TimelineSegment extends React.Component {
     }
   }
   render() {
-    const { index, barWidth, isCurrentPhase, isStepCompleted, title, locale } = this.props;
+    const { index, barPercent, isCurrentPhase, isStepCompleted, title, locale } = this.props;
     const timelineClass = classNames('timeline-title', {
       'txt-active-bold': isCurrentPhase,
       'txt-active-light': isStepCompleted,
       'txt-not-active': !isCurrentPhase && !isStepCompleted
     });
-
     return (
-      <div className="minimized-timeline" style={{ marginLeft: `${index * 100}px` }}>
+      <div className="minimized-timeline">
         {title.entries
           .filter((entry) => {
             return locale === entry['@language'];
@@ -82,17 +81,22 @@ class TimelineSegment extends React.Component {
               </div>
             );
           })}
-        <div className={isStepCompleted || isCurrentPhase ? 'timeline-number active' : 'timeline-number not-active'}>
-          {isStepCompleted
-            ? <span className="assembl-icon-checked white" />
-            : <span>
-              {index + 1}
-            </span>}
+        <div className="timeline-graph">
+          <div className={isStepCompleted || isCurrentPhase ? 'timeline-number active' : 'timeline-number not-active'}>
+            {isStepCompleted
+              ? <span className="assembl-icon-checked white" />
+              : <span>
+                {index + 1}
+              </span>}
+          </div>
+          <div className="timeline-bars">
+            {barPercent > 0 &&
+              <div className="timeline-bar-filler" style={{ width: `${barPercent}%` }}>
+                &nbsp;
+              </div>}
+            <div className="timeline-bar-background">&nbsp;</div>
+          </div>
         </div>
-        <div className="timeline-bar-2" style={{ width: `${barWidth}px` }}>
-          &nbsp;
-        </div>
-        <div className="timeline-bar-1">&nbsp;</div>
       </div>
     );
   }

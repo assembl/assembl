@@ -832,6 +832,7 @@ class LangString(Base):
         db = db or clone.db
         for e in self.entries:
             e = e.clone(clone, db=db, tombstone=tombstone)
+            db.add(e)
         db.add(clone)
         return clone
 

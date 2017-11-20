@@ -157,28 +157,28 @@ msgstr "确定问题"
 #. Export data
 #: messages.json
 msgid "administration.survey.2"
-msgstr "导入数据"
+msgstr "导出数据"
 
 #. [administration.surveyExport.annotation]
 #. defaultMessage is:
 #. You can export all the debate data by clicking on the Export button
 #: messages.json
 msgid "administration.surveyExport.annotation"
-msgstr "你可以点击导入键来导入所有的讨论数据"
+msgstr "你可以点击导出键来导入所有的讨论数据"
 
 #. [administration.surveyExport.link]
 #. defaultMessage is:
 #. Export
 #: messages.json
 msgid "administration.surveyExport.link"
-msgstr "导入"
+msgstr "导出"
 
 #. [administration.surveyExport.title]
 #. defaultMessage is:
 #. Export the debate data
 #: messages.json
 msgid "administration.surveyExport.title"
-msgstr "导入讨论数据"
+msgstr "导出讨论数据"
 
 #. [administration.thematic]
 #. defaultMessage is:
@@ -633,7 +633,7 @@ msgstr "正在进行的讨论的主题"
 #. The timeline of the debate in %{count} phases
 #: messages.json
 msgid "home.timelineTitle"
-msgstr "讨论的时间线正在 %{count}阶段"
+msgstr "讨论的时间线有 %{count}阶段"
 
 #. [home.topContributor]
 #. defaultMessage is:

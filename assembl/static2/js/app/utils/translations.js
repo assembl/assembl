@@ -76,9 +76,14 @@ const Translations = {
       "Reactive participants": "Participants réactifs",
       "Learning participants": "Participants apprenants"
     },
+    resourcesCenter: {
+      defaultHeaderTitle: "Centre de ressources en ligne",
+      download: "Télécharger le document"
+    },
     navbar: {
       home: "accueil",
       debate: "débat",
+      resourcesCenter: "Ressources",
       community: "communauté",
       connection: "Connexion",
       profile: "Profil",
@@ -155,27 +160,9 @@ const Translations = {
       chatbot: "Chat avec %{chatbotName}"
     },
     multiColumns: {
-      announcement: {
-        positiveTitle: "Pour",
-        negativeTitle: "Contre",
-        alternativeTitle: "Alternatif"
-      },
-      createTopPost: {
-        positiveTitle: "Ajoutez votre point de vue en faveur du thème « %{ideaTitle} »",
-        negativeTitle: "Ajoutez votre point de vue en défaveur du thème « %{ideaTitle} »",
-        alternativeTitle: "Ajoutez votre point de vue alternatif sur le thème « %{ideaTitle} »"
-      },
       synthesis: {
-        positiveTitle: "Synthèse des arguments en faveur du thème « %{ideaTitle} »",
-        negativeTitle: "Synthèse des arguments en défaveur du thème « %{ideaTitle} »",
-        alternativeTitle: "Synthèse des arguments alternatifs du thème « %{ideaTitle} »",
-        colName: "Synthèse : %{colName}",
-        noSynthesisYet: "La synthèse est en cours de rédaction"
-      },
-      tab: {
-        positiveTitle: "En faveur",
-        negativeTitle: "En défaveur",
-        alternativeTitle: "Alternative"
+        noSynthesisYet: "La synthèse est en cours de rédaction",
+        title: "Synthèse : %{colName}"
       }
     },
     synthesis: {
@@ -334,6 +321,21 @@ const Translations = {
         mediaLink: "Lien média en ligne (vidéo, image, etc..)",
         orAttachPicture: "Ou téléchargez une image depuis votre ordinateur"
       },
+      resourcesCenter: {
+        createResource: "Ajouter un média",
+        menuTitle: "Éditer le centre de ressources",
+        title: "Centre de ressources",
+        editResourceFormTitle: "Média %{num}",
+        textLabel: "Texte",
+        titleLabel: "Titre",
+        embedCodeLabel: "Vidéo/Slides",
+        deleteResource: "Supprimer la ressource",
+        documentLabel: "Document",
+        imageLabel: "Image",
+        successSave: "Les ressources ont été enregistrées avec succès !",
+        pageTitleLabel: "Titre de la page",
+        headerImageLabel: "Image de fond du bandeau"
+      },
       surveyExport: {
         annotation: "Vous pouvez exporter l'ensemble des données du débat en cliquant simplement sur le bouton Exporter",
         link: "Exporter",
@@ -428,10 +430,15 @@ const Translations = {
       "Reactive participants": "Reactive participants",
       "Learning participants": "Learning participants"
     },
+    resourcesCenter: {
+      defaultHeaderTitle: "Online resources center",
+      download: "Download the document"
+    },
     navbar: {
       home: "home",
       debate: "debate",
       community: "community",
+      resourcesCenter: "Resources",
       connection: "Login",
       profile: "Profile",
       logout: "Logout",
@@ -526,27 +533,9 @@ const Translations = {
       goUp: "Back to top"
     },
     multiColumns: {
-      announcement: {
-        positiveTitle: "For",
-        negativeTitle: "Against",
-        alternativeTitle: "Alternative"
-      },
       synthesis: {
-        positiveTitle: "Synthesis of the arguments for the theme %{ideaTitle}",
-        negativeTitle: "Synthesis of the arguments against the theme %{ideaTitle}",
-        alternativeTitle: "Synthesis of the alternative arguments of the theme %{ideaTitle}",
-        colName: "Synthesis: %{colName}",
-        noSynthesisYet: "The synthesis is currently being written"
-      },
-      createTopPost: {
-        positiveTitle: "Add your point of view for the theme %{ideaTitle}",
-        negativeTitle: "Add your point of view against the theme %{ideaTitle}",
-        alternativeTitle: "Add your alternative point of view on the theme %{ideaTitle}"
-      },
-      tab: {
-        positiveTitle: "For",
-        negativeTitle: "Against",
-        alternativeTitle: "Alternative"
+        noSynthesisYet: "The synthesis is currently being written",
+        title: "Synthesis: %{colName}"
       }
     },
     synthesis: {
@@ -684,6 +673,21 @@ const Translations = {
         descriptionBottom: "Comments below video",
         mediaLink: "Online media link (video, picture, etc..)",
         orAttachPicture: "Or upload an image from your computer"
+      },
+      resourcesCenter: {
+        createResource: "Add a media",
+        menuTitle: "Edit the resources center",
+        title: "Resources center",
+        editResourceFormTitle: "Edit resource number %{num}",
+        textLabel: "Text",
+        titleLabel: "Title",
+        embedCodeLabel: "Video/Slides",
+        deleteResource: "Delete the resource",
+        documentLabel: "Document",
+        imageLabel: "Image",
+        successSave: "Resources have been saved with success!",
+        pageTitleLabel: "Page title",
+        headerImageLabel: "Header image"
       },
       surveyExport: {
         annotation: "You can export all the debate data by clicking on the Export button",

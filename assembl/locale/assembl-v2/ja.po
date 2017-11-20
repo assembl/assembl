@@ -10,7 +10,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.0.3\n"
+"X-Generator: Poedit 2.0.4\n"
 
 #. [administration.addQuestion]
 #. defaultMessage is:
@@ -31,7 +31,7 @@ msgstr "テーマを追加する"
 #. Module to be completed. * Fields are required.
 #: messages.json
 msgid "administration.annotation"
-msgstr "完成されるモジュール。 *フィールドは必須です。"
+msgstr "完成されるモジュール。 *フィールドは必須です"
 
 #. [administration.changeLanguage]
 #. defaultMessage is:
@@ -79,7 +79,6 @@ msgstr "段階 %{count} - %{description}"
 #. defaultMessage is:
 #. Comments below video
 #: messages.json
-#, fuzzy
 msgid "administration.ph.descriptionBottom"
 msgstr "討論"
 
@@ -87,7 +86,6 @@ msgstr "討論"
 #. defaultMessage is:
 #. Comments above video
 #: messages.json
-#, fuzzy
 msgid "administration.ph.descriptionTop"
 msgstr "討論"
 
@@ -117,14 +115,14 @@ msgstr "*ビデオリンク"
 #. Question
 #: messages.json
 msgid "administration.question_label"
-msgstr "質問"
+msgstr "質問ラベル"
 
 #. [administration.saveThemes]
 #. defaultMessage is:
 #. Save
 #: messages.json
 msgid "administration.saveThemes"
-msgstr "保存"
+msgstr "テーマを保存"
 
 #. [administration.step_x_total]
 #. defaultMessage is:
@@ -138,7 +136,7 @@ msgstr "セクション%{num}の%{total}"
 #. Themes have been saved with success!
 #: messages.json
 msgid "administration.successThemeCreation"
-msgstr "テーマは保存されました！"
+msgstr "テーマは作成されました"
 
 #. [administration.survey.0]
 #. defaultMessage is:
@@ -217,7 +215,7 @@ msgstr "キャンセル"
 #. Welcome to Assembl forgot password page
 #: messages.json
 msgid "changePassword.panelTitle"
-msgstr "Assemblパスワード忘れのページへようこそ"
+msgstr "Assemblのパスワードをお忘れの方へ"
 
 #. [common.goUp]
 #. defaultMessage is:
@@ -238,7 +236,7 @@ msgstr "アップロードするファイルを選択する"
 #. Welcome to Assembl community page
 #: messages.json
 msgid "community.panelTitle"
-msgstr "Assemblコミュニティページへようこそ"
+msgstr "Assemblのコミュニティページへようこそ"
 
 #. [date.format]
 #. defaultMessage is:
@@ -258,9 +256,8 @@ msgstr "LL"
 #. defaultMessage is:
 #. I answer:
 #: messages.json
-#, fuzzy
 msgid "debate.answer"
-msgstr "いいね！"
+msgstr "答え"
 
 #. [debate.disagree]
 #. defaultMessage is:
@@ -273,32 +270,29 @@ msgstr "同意しない"
 #. defaultMessage is:
 #. Did not get it
 #: messages.json
-#, fuzzy
 msgid "debate.dontUnderstand"
-msgstr "もう少し詳しく"
+msgstr "詳細を教えてください"
 
 #. [debate.insert]
 #. defaultMessage is:
 #. Post a comment
 #: messages.json
-#, fuzzy
 msgid "debate.insert"
-msgstr "いいね！"
+msgstr "挿入する"
 
 #. [debate.like]
 #. defaultMessage is:
 #. Like
 #: messages.json
 msgid "debate.like"
-msgstr "いいね！"
+msgstr "いいね"
 
 #. [debate.moreInfo]
 #. defaultMessage is:
 #. More info please
 #: messages.json
-#, fuzzy
 msgid "debate.moreInfo"
-msgstr "もっと知りたいですか？"
+msgstr "もっと知りたいですか"
 
 #. [debate.notStarted]
 #. defaultMessage is:
@@ -313,15 +307,13 @@ msgstr ""
 #. defaultMessage is:
 #. Post
 #: messages.json
-#, fuzzy
 msgid "debate.post"
-msgstr "テーマ"
+msgstr "投稿する"
 
 #. [debate.remaining_x_characters]
 #. defaultMessage is:
 #. You have %{nbCharacters} characters left
 #: messages.json
-#, fuzzy
 msgid "debate.remaining_x_characters"
 msgstr "残り%{nbCharacters}文字"
 
@@ -329,24 +321,22 @@ msgstr "残り%{nbCharacters}文字"
 #. defaultMessage is:
 #. Share
 #: messages.json
-#, fuzzy
 msgid "debate.share"
-msgstr "同意しない"
+msgstr "共有する"
 
 #. [debate.subject]
 #. defaultMessage is:
 #. Write the title
 #: messages.json
-#, fuzzy
 msgid "debate.subject"
-msgstr "反応："
+msgstr "議題"
 
 #. [debate.survey.endPhase]
 #. defaultMessage is:
 #. The %{closedPhaseName} phase is closed.
 #: messages.json
 msgid "debate.survey.endPhase"
-msgstr "%{closedPhaseName}フェーズは終了しました。"
+msgstr "%{closedPhaseName}フェーズは終了しました"
 
 #. [debate.survey.moreProposals]
 #. defaultMessage is:
@@ -439,7 +429,6 @@ msgstr "テーマ"
 #. defaultMessage is:
 #. Please, write a comment
 #: messages.json
-#, fuzzy
 msgid "debate.thread.fillBody"
 msgstr ""
 "コメントと投票を行うには、ログインする必要があります。"
@@ -462,17 +451,15 @@ msgstr ""
 #. defaultMessage is:
 #. Show 1 response
 #: messages.json
-#, fuzzy
 msgid "debate.thread.foldedPostLink_1"
-msgstr "いいね！"
+msgstr "組み込まれたリンク"
 
 #. [debate.thread.linkIdea]
 #. defaultMessage is:
 #. This post is related to the following themes:
 #: messages.json
-#, fuzzy
 msgid "debate.thread.linkIdea"
-msgstr "いいね！"
+msgstr "アイディアをリンクする"
 
 #. [debate.thread.noPostsInThread]
 #. defaultMessage is:
@@ -506,7 +493,6 @@ msgstr ""
 #. defaultMessage is:
 #. Thanks for your participation. Your comment has been sent!
 #: messages.json
-#, fuzzy
 msgid "debate.thread.postSuccess"
 msgstr ""
 "ありがとうございます。あなたのコメントは送信されました！"
@@ -515,17 +501,15 @@ msgstr ""
 #. defaultMessage is:
 #. Start a new thread
 #: messages.json
-#, fuzzy
 msgid "debate.thread.startDiscussion"
-msgstr "最近の議論"
+msgstr "議論を開始する"
 
 #. [debate.toAnswer]
 #. defaultMessage is:
 #. Answer
 #: messages.json
-#, fuzzy
 msgid "debate.toAnswer"
-msgstr "テーマ"
+msgstr "答える"
 
 #. [error.reason]
 #. defaultMessage is:
@@ -644,8 +628,7 @@ msgstr "最近の議論"
 #. Find your most controversial and highly acclaimed discussions on the front page
 #: messages.json
 msgid "home.themesSubtitle"
-msgstr ""
-"フロントページで一番様々な意見が寄せられた議論を探す"
+msgstr "進行中の副題"
 
 #. [home.themesTitle]
 #. defaultMessage is:
@@ -725,7 +708,7 @@ msgstr ""
 #. Do you already have an account?
 #: messages.json
 msgid "login.alreadyAccount"
-msgstr "すでにアカウントを持っていますか？"
+msgstr "すでにアカウントをお持ちですか？"
 
 #. [login.changePassword]
 #. defaultMessage is:
@@ -762,7 +745,7 @@ msgstr ""
 #. The email you have entered already exists
 #: messages.json
 msgid "login.existingEmail"
-msgstr "入力したメールは既に存在します"
+msgstr "入力したメールアドレスは既に存在します"
 
 #. [login.existingUsername]
 #. defaultMessage is:
@@ -806,7 +789,7 @@ msgstr ""
 #. The email you have entered is invalid
 #: messages.json
 msgid "login.invalidEmail"
-msgstr "あなたが入力したメールは無効です"
+msgstr "あなたが入力したメールアドレスは無効です"
 
 #. [login.login]
 #. defaultMessage is:
@@ -819,7 +802,6 @@ msgstr "ログイン"
 #. defaultMessage is:
 #. You have to be connected to participate.
 #: messages.json
-#, fuzzy
 msgid "login.loginModalBody"
 msgstr "ログイン"
 
@@ -827,7 +809,6 @@ msgstr "ログイン"
 #. defaultMessage is:
 #. Please connect
 #: messages.json
-#, fuzzy
 msgid "login.loginModalFooter"
 msgstr "ログイン"
 
@@ -836,7 +817,7 @@ msgstr "ログイン"
 #. Care to use social media?
 #: messages.json
 msgid "login.loginWithSocialMedia"
-msgstr "ソーシャルメディアを使用しますか？"
+msgstr "ソーシャルメディアからログインしますか？"
 
 #. [login.newPassword]
 #. defaultMessage is:
@@ -857,7 +838,7 @@ msgstr "新しいパスワードを再入力してください"
 #. No account yet?
 #: messages.json
 msgid "login.noAccount"
-msgstr "アカウントはまだありませんか？"
+msgstr "アカウントをまだお持ちでないですか？"
 
 #. [login.password]
 #. defaultMessage is:
@@ -1018,7 +999,7 @@ msgstr "Assemblのプロフィールページへようこそ"
 msgid "redirectToV1"
 msgstr ""
 "%{phaseName}フェーズにリダイレクトされます\n"
-"数秒でアセンブリーは改善されつつあり、\n"
+"数秒でリダイレクトされます。\n"
 "インタフェースの変更についてお許しください。もし\n"
 "何も起こらない場合は、ボタンをクリックしてください。"
 
@@ -1176,7 +1157,7 @@ msgstr "投稿されたメッセージが少ない参加者"
 #. Participants having the most posted messages
 #: messages.json
 msgid "search.Participants having the most posted messages"
-msgstr "最も投稿されたメッセージを持つ参加者"
+msgstr "最もメッセージを投稿した参加者"
 
 #. [search.Participants pleased by their peers]
 #. defaultMessage is:
@@ -1239,7 +1220,7 @@ msgstr "同意しない"
 #. Did not get it
 #: messages.json
 msgid "search.dont_understand"
-msgstr "もう少し詳しく"
+msgstr "詳細を教えてください"
 
 #. [search.expand_search]
 #. defaultMessage is:
@@ -1281,7 +1262,7 @@ msgstr "{hitCount}個の結果が見つかりました"
 #. Ideas
 #: messages.json
 msgid "search.idea"
-msgstr "テーマ"
+msgstr "アイディア"
 
 #. [search.like]
 #. defaultMessage is:

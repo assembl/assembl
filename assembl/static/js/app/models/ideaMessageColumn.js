@@ -29,12 +29,16 @@ var IdeaMessageColumnModel = Base.Model.extend({
   defaults: {
     'idea': null,
     'message_classifier': '',
+    'title': null,
     'name': null,
     'header': null,
     'color': null,
     'previous_column': null,
   },
   parse: function(rawModel) {
+    if (rawModel.title !== undefined) {
+      rawModel.title = new LangString.Model(rawModel.title, {parse: true});
+    }
     if (rawModel.name !== undefined) {
       rawModel.name = new LangString.Model(rawModel.name, {parse: true});
     }

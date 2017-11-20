@@ -17,7 +17,7 @@
       text-transform: uppercase;
       margin: 0;
       padding: 0;
-      font-family: "latoBold"
+      font-family: $font-family3;
     }
 
     .box-hyphen {
@@ -28,7 +28,7 @@
     .wyntk-text-container {
       overflow-y: scroll;
       padding-right: 10px;
-    margin-right: 10px;
+      margin-right: 10px;
       height: 234px;
 
       .wyntk-text {

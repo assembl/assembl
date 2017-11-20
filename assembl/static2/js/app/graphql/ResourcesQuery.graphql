@@ -1,0 +1,25 @@
+query ResourcesQuery($lang: String) {
+  resources {
+    id
+    title(lang: $lang)
+    text(lang: $lang)
+    titleEntries {
+      localeCode
+      value
+    }
+    textEntries {
+      localeCode
+      value
+    }
+    embedCode
+    doc {
+      externalUrl
+      title
+      mimeType
+    }
+    image {
+      externalUrl
+      mimeType
+    }
+  }
+}

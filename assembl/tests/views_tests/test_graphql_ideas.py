@@ -17,6 +17,7 @@ def test_graphql_get_all_ideas(graphql_request,
                 id
                 title(lang: $lang)
                 titleEntries { value, localeCode }
+                messageViewOverride
                 numPosts
                 numContributors
                 numChildren(identifier: $identifier)
@@ -39,20 +40,17 @@ def test_graphql_get_all_ideas(graphql_request,
         }
         """, context_value=graphql_request,
         variable_values={"identifier": u"thread", "lang": u"en"})
-    assert res.data['rootIdea']['id'] is not None
-    assert len(res.data['ideas']) == 4
-    root_idea = res.data['ideas'][0]
-    first_idea = res.data['ideas'][1]
-    second_idea = res.data['ideas'][2]
-    third_idea = res.data['ideas'][3]
-    assert root_idea['parentId'] is None
-    assert root_idea['id'] == res.data['rootIdea']['id']
-    assert root_idea['order'] is None
-    assert root_idea['numChildren'] == 1
+    root_idea = res.data['rootIdea']
+    assert root_idea['id'] is not None
+    assert len(res.data['ideas']) == 3
+    first_idea = res.data['ideas'][0]
+    second_idea = res.data['ideas'][1]
+    third_idea = res.data['ideas'][2]
     assert first_idea['title'] == u'Favor economic growth'
     assert first_idea['parentId'] == root_idea['id']
     assert first_idea['order'] == 0.0
     assert first_idea['numChildren'] == 1
+    assert first_idea['messageViewOverride'] is None
     assert second_idea['title'] == u'Lower taxes'
     assert second_idea['parentId'] == first_idea['id']
     assert second_idea['order'] == 0.0
@@ -66,11 +64,64 @@ def test_graphql_get_all_ideas(graphql_request,
 
 def test_graphql_get_all_ideas_multiColumns_phase(graphql_request,
                                user_language_preference_en_cookie,
+                               subidea_1,
                                subidea_1_1_1,
                                idea_message_column_positive,
-                               idea_message_column_negative):
+                               idea_message_column_negative,
+                               idea_message_column_positive_on_subidea_1_1):
+    subidea_1.message_view_override = 'messageColumns'
+    subidea_1.db.flush()
     # idea_message_column_positive/negative fixtures add columns on subidea_1
-    # the ideas query should return only subidea_1 (root idea is filtered out too)
+    # the ideas query should return only subidea_1
+    # We have a column on subidea_1_1, but messageColumns is not enabled on it.
+    res = schema.execute(
+        u"""query AllIdeasQuery($lang: String!, $identifier: String!) {
+            ideas(identifier: $identifier) {
+              ... on Idea {
+                id
+                title(lang: $lang)
+                titleEntries { value, localeCode }
+                messageViewOverride
+                numPosts
+                numContributors
+                numChildren(identifier: $identifier)
+                parentId
+                order
+                posts(first:10) {
+                  edges {
+                    node {
+                      ... on Post { subject body }
+                    }
+                  }
+                }
+              }
+            }
+            rootIdea {
+              ... on Idea {
+                id
+              }
+            }
+        }
+        """, context_value=graphql_request,
+        variable_values={"identifier": u"multiColumns", "lang": u"en"})
+    root_idea = res.data['rootIdea']
+    assert root_idea['id'] is not None
+    assert len(res.data['ideas']) == 1
+    first_idea = res.data['ideas'][0]
+    assert first_idea['title'] == u'Favor economic growth'
+    assert first_idea['parentId'] == root_idea['id']
+    assert first_idea['order'] == 0.0
+    assert first_idea['numChildren'] == 0
+    assert first_idea['messageViewOverride'] == 'messageColumns'
+    assert len(res.errors) == 0
+    # revert the changes for tests isolation
+    subidea_1.message_view_override = None
+    subidea_1.db.flush()
+
+
+def test_graphql_get_all_ideas_with_modified_order(graphql_request,
+                               user_language_preference_en_cookie,
+                               subidea_1_1_1_1_1, subidea_1_1_1_1_2):
     res = schema.execute(
         u"""query AllIdeasQuery($lang: String!, $identifier: String!) {
             ideas(identifier: $identifier) {
@@ -99,15 +150,60 @@ def test_graphql_get_all_ideas_multiColumns_phase(graphql_request,
             }
         }
         """, context_value=graphql_request,
-        variable_values={"identifier": u"multiColumns", "lang": u"en"})
-    assert res.data['rootIdea']['id'] is not None
-    assert len(res.data['ideas']) == 1
-    first_idea = res.data['ideas'][0]
-    assert first_idea['title'] == u'Favor economic growth'
-    assert first_idea['parentId'] == res.data['rootIdea']['id']
-    assert first_idea['order'] == 0.0
-    assert first_idea['numChildren'] == 0
-    assert len(res.errors) == 0
+        variable_values={"identifier": u"thread", "lang": u"en"})
+    assert [idea['title'] for idea in res.data['ideas']] == [
+        u'Favor economic growth',
+        u'Lower taxes',
+        u'Lower government revenue',
+        u'Austerity yields contraction',
+        u'Job loss',  # subidea_1_1_1_1_1
+        u'Environmental program cuts'  # subidea_1_1_1_1_2
+    ]
+
+    subidea_1_1_1_1_2.source_links[0].order = 1.0
+    subidea_1_1_1_1_1.source_links[0].order = 2.0
+    subidea_1_1_1_1_1.db.flush()
+    res = schema.execute(
+        u"""query AllIdeasQuery($lang: String!, $identifier: String!) {
+            ideas(identifier: $identifier) {
+              ... on Idea {
+                id
+                title(lang: $lang)
+                titleEntries { value, localeCode }
+                numPosts
+                numContributors
+                numChildren(identifier: $identifier)
+                parentId
+                order
+                posts(first:10) {
+                  edges {
+                    node {
+                      ... on Post { subject body }
+                    }
+                  }
+                }
+              }
+            }
+            rootIdea {
+              ... on Idea {
+                id
+              }
+            }
+        }
+        """, context_value=graphql_request,
+        variable_values={"identifier": u"thread", "lang": u"en"})
+    assert [idea['title'] for idea in res.data['ideas']] == [
+        u'Favor economic growth',
+        u'Lower taxes',
+        u'Lower government revenue',
+        u'Austerity yields contraction',
+        u'Environmental program cuts',  # subidea_1_1_1_1_2
+        u'Job loss',  # subidea_1_1_1_1_1
+    ]
+    # revert the changes for tests isolation
+    subidea_1_1_1_1_2.source_links[0].order = 0.0
+    subidea_1_1_1_1_1.source_links[0].order = 0.0
+    subidea_1_1_1_1_1.db.flush()
 
 
 def test_graphql_get_direct_ideas_from_root_idea(graphql_request, subidea_1_1_1):
