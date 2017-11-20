@@ -631,15 +631,14 @@ class IdeaInterface(graphene.Interface):
         if phase == 'multiColumns':
             _it = models.Idea.__table__
             _ilt = models.IdeaLink.__table__
-            _imct = models.IdeaMessageColumn.__table__
             _target_it = models.Idea.__table__.alias()
             j = join(_ilt, _it, _ilt.c.source_id == _it.c.id
-                ).join(_target_it, _ilt.c.target_id == _target_it.c.id
-                ).join(_imct, _target_it.c.id == _imct.c.idea_id)
-            num = select([func.count(distinct(_ilt.c.id))]).select_from(j).where(
+                ).join(_target_it, _ilt.c.target_id == _target_it.c.id)
+            num = select([func.count(_ilt.c.id)]).select_from(j).where(
             (_ilt.c.tombstone_date == None)
             & (_it.c.tombstone_date == None)
             & (_it.c.id == self.id)
+            & (_target_it.c.message_view_override == 'messageColumns')
             ).correlate_except(_ilt)
             return self.db.execute(num).fetchone()[0]
 

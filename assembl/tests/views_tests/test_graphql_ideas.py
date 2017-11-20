@@ -67,11 +67,13 @@ def test_graphql_get_all_ideas_multiColumns_phase(graphql_request,
                                subidea_1,
                                subidea_1_1_1,
                                idea_message_column_positive,
-                               idea_message_column_negative):
+                               idea_message_column_negative,
+                               idea_message_column_positive_on_subidea_1_1):
     subidea_1.message_view_override = 'messageColumns'
     subidea_1.db.flush()
     # idea_message_column_positive/negative fixtures add columns on subidea_1
     # the ideas query should return only subidea_1
+    # We have a column on subidea_1_1, but messageColumns is not enabled on it.
     res = schema.execute(
         u"""query AllIdeasQuery($lang: String!, $identifier: String!) {
             ideas(identifier: $identifier) {
