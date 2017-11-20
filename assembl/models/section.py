@@ -1,3 +1,4 @@
+import enum
 from sqlalchemy import (
     Column,
     Enum,
@@ -12,6 +13,15 @@ from .auth import CrudPermissions, P_READ, P_ADMIN_DISC
 from . import DiscussionBoundBase
 from .langstrings import LangString
 from ..lib.sqla_types import URLString
+
+
+class SectionTypesEnum(enum.Enum):
+
+    HOMEPAGE = 'HOMEPAGE'
+    DEBATE = 'DEBATE'
+    SYNTHESES = 'SYNTHESES'
+    RESOURCES_CENTER = 'RESOURCES_CENTER'
+    CUSTOM = 'CUSTOM'
 
 
 class Section(DiscussionBoundBase):
@@ -50,13 +60,8 @@ class Section(DiscussionBoundBase):
 
     url = Column(URLString)
 
-    section_type = Column(Enum(
-        'HOMEPAGE',
-        'DEBATE',
-        'SYNTHESES',
-        'RESOURCES_CENTER',
-        'CUSTOM',
-        name='section_types'))
+    section_type = Column(
+        Enum(SectionTypesEnum, name='section_types'), nullable=False, server_default=SectionTypesEnum.CUSTOM.value)
 
     order = Column(
         Float, nullable=False, default=0.0)

@@ -1917,6 +1917,7 @@ mutation updateResourcesCenter($headerImage:String) {
 
 
 def test_query_sections(discussion, graphql_request, sections):
+    from assembl.models.section import SectionTypesEnum
     query = u"""
 query { sections {
     id
@@ -1935,5 +1936,5 @@ query { sections {
     assert res.data['sections'][0]['titleEntries'][0]['localeCode'] == u'en'
     assert res.data['sections'][0]['titleEntries'][0]['value'] == u'Home'
     assert res.data['sections'][0]['url'] == u''
-    assert res.data['sections'][0]['sectionType'] == u'HOMEPAGE'
+    assert res.data['sections'][0]['sectionType'] == SectionTypesEnum.HOMEPAGE.value
     assert res.data['sections'][0]['order'] == 0.0

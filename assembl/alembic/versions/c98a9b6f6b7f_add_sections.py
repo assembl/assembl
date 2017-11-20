@@ -24,8 +24,11 @@ def upgrade(pyramid_env):
 
     # Do stuff with the app's models here.
     from assembl import models as m
+    from assembl.models.section import SectionTypesEnum
+
     db = m.get_session_maker()()
     with transaction.manager:
+        section_types = [t.value for t in SectionTypesEnum.__members__.values()]
         op.create_table(
             'section',
             sa.Column('id', sa.Integer, primary_key=True),
@@ -39,13 +42,12 @@ def upgrade(pyramid_env):
             sa.Column('title_id', sa.Integer, sa.ForeignKey('langstring.id')),
             sa.Column('url', URLString(1024)),
             sa.Column('order', sa.Float, default=0.0),
-            sa.Column('section_type', sa.Enum(
-                'HOMEPAGE',
-                'DEBATE',
-                'SYNTHESES',
-                'RESOURCES_CENTER',
-                'CUSTOM',
-                name='section_types')),
+            sa.Column(
+                'section_type',
+                sa.Enum(*section_types, name='section_types'),
+                nullable=False,
+                default=SectionTypesEnum.CUSTOM.value,
+                server_default=SectionTypesEnum.CUSTOM.value),
             sa.schema.UniqueConstraint('title_id')
         )
 
@@ -57,7 +59,7 @@ def upgrade(pyramid_env):
                     discussion_id=discussion_id,
                     title=m.LangString.create(u'Home', 'en'),
                     url=u'',
-                    section_type=u'HOMEPAGE',
+                    section_type=SectionTypesEnum.HOMEPAGE.value,
                     order=0.0
                 )
                 db.add(homepage_section)
@@ -65,7 +67,7 @@ def upgrade(pyramid_env):
                     discussion_id=discussion_id,
                     title=m.LangString.create(u'Debate', 'en'),
                     url=u'',
-                    section_type=u'DEBATE',
+                    section_type=SectionTypesEnum.DEBATE.value,
                     order=1.0
                 )
                 db.add(debate_section)
@@ -73,7 +75,7 @@ def upgrade(pyramid_env):
                     discussion_id=discussion_id,
                     title=m.LangString.create(u'Syntheses', 'en'),
                     url=u'',
-                    section_type=u'SYNTHESES',
+                    section_type=SectionTypesEnum.SYNTHESES.value,
                     order=2.0
                 )
                 db.add(syntheses_section)
@@ -81,7 +83,7 @@ def upgrade(pyramid_env):
                     discussion_id=discussion_id,
                     title=m.LangString.create(u'Resources center', 'en'),
                     url=u'',
-                    section_type=u'RESOURCES_CENTER',
+                    section_type=SectionTypesEnum.RESOURCES_CENTER.value,
                     order=3.0
                 )
                 db.add(resources_center_section)

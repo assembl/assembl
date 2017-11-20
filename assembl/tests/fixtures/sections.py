@@ -6,6 +6,7 @@ import pytest
 def sections(request, discussion, test_session):
     """Create default sections."""
     from assembl.models import Section, LangString
+    from assembl.models.section import SectionTypesEnum
     discussion_id = discussion.id
 
     sections = []
@@ -13,7 +14,7 @@ def sections(request, discussion, test_session):
         discussion_id=discussion_id,
         title=LangString.create(u'Home', 'en'),
         url=u'',
-        section_type=u'HOMEPAGE',
+        section_type=SectionTypesEnum.HOMEPAGE.value,
         order=0.0
     )
     sections.append(homepage_section)
@@ -21,7 +22,7 @@ def sections(request, discussion, test_session):
         discussion_id=discussion_id,
         title=LangString.create(u'Debate', 'en'),
         url=u'',
-        section_type=u'DEBATE',
+        section_type=SectionTypesEnum.DEBATE.value,
         order=1.0
     )
     sections.append(debate_section)
@@ -29,7 +30,7 @@ def sections(request, discussion, test_session):
         discussion_id=discussion_id,
         title=LangString.create(u'Syntheses', 'en'),
         url=u'',
-        section_type=u'SYNTHESES',
+        section_type=SectionTypesEnum.SYNTHESES.value,
         order=2.0
     )
     sections.append(syntheses_section)
@@ -37,7 +38,7 @@ def sections(request, discussion, test_session):
         discussion_id=discussion_id,
         title=LangString.create(u'Resources center', 'en'),
         url=u'',
-        section_type=u'RESOURCES_CENTER',
+        section_type=SectionTypesEnum.RESOURCES_CENTER.value,
         order=3.0
     )
     sections.append(resources_center_section)
