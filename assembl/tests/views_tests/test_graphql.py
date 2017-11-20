@@ -16,7 +16,8 @@ def test_get_locales(graphql_request):
 
 
 def test_get_thematics_noresult(graphql_request):
-    res = schema.execute(u'query { thematics(identifier:"survey") { id, title, description, numPosts, numContributors, questions { title }, video {title, descriptionTop, descriptionBottom, htmlCode} } }', context_value=graphql_request)
+    res = schema.execute(
+        u'query { thematics(identifier:"survey") { id, title, description, numPosts, numContributors, questions { title }, video {title, descriptionTop, descriptionBottom, htmlCode} } }', context_value=graphql_request)
     assert json.loads(json.dumps(res.data)) == {u'thematics': []}
 
 
@@ -33,7 +34,8 @@ def test_get_thematics_no_video(discussion, graphql_request, test_session):
     test_session.commit()
     thematic_gid = to_global_id('Thematic', thematic.id)
 
-    res = schema.execute(u'query { thematics(identifier:"survey") { id, title, description, numPosts, numContributors, questions { title }, video {title, descriptionTop, descriptionBottom, descriptionSide, htmlCode} } }', context_value=graphql_request)
+    res = schema.execute(
+        u'query { thematics(identifier:"survey") { id, title, description, numPosts, numContributors, questions { title }, video {title, descriptionTop, descriptionBottom, descriptionSide, htmlCode} } }', context_value=graphql_request)
     assert json.loads(json.dumps(res.data)) == {
         u'thematics': [{u'description': None,
                         u'id': thematic_gid,
