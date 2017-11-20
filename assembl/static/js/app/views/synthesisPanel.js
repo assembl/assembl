@@ -258,9 +258,9 @@ var SynthesisPanel = AssemblPanel.extend({
         }
         else {
           // TODO: Use regions here.
-          that.$('.synthesisPanel-title').html(that.model.get('subject'));
-          that.$('.synthesisPanel-introduction').html(that.model.get('introduction'));
-          that.$('.synthesisPanel-conclusion').html(that.model.get('conclusion'));
+          that.$('.synthesisPanel-title').html(that.model.get('subject').bestValue(that.translationData));
+          that.$('.synthesisPanel-introduction').html(that.model.get('introduction').bestValue(that.translationData));
+          that.$('.synthesisPanel-conclusion').html(that.model.get('conclusion').bestValue(that.translationData));
         }
         
         Ctx.initTooltips(that.$el);
