@@ -310,7 +310,7 @@ const Translations = {
       menu: {
         phase: "Phase %{count} - %{description}",
         language: "Editer la langue du débat",
-        sectionsNames: "Editer les rubriques du débat"
+        sections: "Editer les rubriques du débat"
       },
       noTimeline: "Aucune timeline n'a été configurée pour ce débat.",
       survey: {
@@ -676,7 +676,7 @@ const Translations = {
       menu: {
         phase: "Phase %{count} - %{description}",
         language: "Discussion Language",
-        sectionsNames: "Edit Debate Sections"
+        sections: "Edit Debate Sections"
       },
       noTimeline: "No timeline has been configured yet",
       survey: {
