@@ -7,7 +7,7 @@ type NodeType = {
 
 type TreeType<T> = {
   roots: Array<T>,
-  children: Array<T>
+  descendants: Array<T>
 };
 
 /**
@@ -25,7 +25,7 @@ export function getChildren<T: NodeType>(rootNode: T, nodes: Array<T>): Array<T>
 /**
  * @param {T: NodeType} The type of the nodes
  * @param {Array<T>} An array of nodes.
- * @returns {{roots: Array<T>, children: Array<T>}} Returns the partial tree composed of all the root nodes and their children.
+ * @returns {{roots: Array<T>, descendants: Array<T>}} Returns the partial tree composed of all the root nodes and their children.
  */
 export function getPartialTree<T: NodeType>(nodes: Array<T>): TreeType<T> {
   let ids = nodes.map((node) => {
@@ -39,11 +39,11 @@ export function getPartialTree<T: NodeType>(nodes: Array<T>): TreeType<T> {
   ids = roots.map((node) => {
     return node.id;
   });
-  const children = nodes.filter((node) => {
+  const descendants = nodes.filter((node) => {
     return !ids.includes(node.id);
   });
   return {
     roots: roots,
-    children: children
+    descendants: descendants
   };
 }

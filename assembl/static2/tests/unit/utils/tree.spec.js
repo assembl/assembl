@@ -15,11 +15,11 @@ describe('Tree', () => {
       const nodes = [{ id: 'foo', ancestors: [] }, { id: 'bar', ancestors: ['foo'] }, { id: 'tar', ancestors: ['bar'] }];
       const tree = getPartialTree(nodes);
       const roots = tree.roots;
-      const children = tree.children;
+      const descendants = tree.descendants;
       expect(roots.length).toEqual(1);
       expect(roots[0].id).toEqual('foo');
-      expect(children.length).toEqual(2);
-      const ids = children.map((c) => {
+      expect(descendants.length).toEqual(2);
+      const ids = descendants.map((c) => {
         return c.id;
       });
       const expected = ['bar', 'tar'];

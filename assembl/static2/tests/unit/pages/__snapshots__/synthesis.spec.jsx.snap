@@ -2,40 +2,53 @@
 
 exports[`Synthesis component should match Synthesis snapshot 1`] = `
 <div
-  className="max-container"
+  className="background-light"
 >
   <Connect(Header)
     imgUrl="http://foo.com/foo"
     isSynthesesHeader={true}
     title="Foo"
   />
-  <Col
-    bsClass="col"
-    componentClass="div"
-  >
-    <IdeaSynthesisTree
-      index={1}
-      parents={Array []}
-      rootIdea={
-        Object {
-          "ancestors": Array [],
-          "id": "barId",
-          "img": Object {
-            "externalUrl": "http://foo.com/bar",
-          },
-          "numContributors": 0,
-          "numPosts": 0,
-          "phaseIdentifier": "paseId",
-          "posts": Object {
-            "edges": Array [],
-          },
-          "synthesisTitle": "Foo",
-          "title": "Bar",
-        }
-      }
-      slug="slugId"
-      subIdeas={Array []}
-    />
-  </Col>
+  <div>
+    <Row
+      bsClass="row"
+      className="background-grey synthesis-tree"
+      componentClass="div"
+    >
+      <Col
+        bsClass="col"
+        componentClass="div"
+        md={7}
+        mdOffset={3}
+        sm={10}
+        smOffset={1}
+      >
+        <IdeaSynthesisTree
+          hasSiblings={false}
+          index={1}
+          parents={Array []}
+          rootIdea={
+            Object {
+              "ancestors": Array [],
+              "id": "barId",
+              "img": Object {
+                "externalUrl": "http://foo.com/bar",
+              },
+              "numContributors": 0,
+              "numPosts": 0,
+              "phaseIdentifier": "paseId",
+              "posts": Object {
+                "edges": Array [],
+              },
+              "synthesisTitle": "Foo",
+              "title": "Bar",
+            }
+          }
+          slug="slugId"
+          subIdeas={Array []}
+        />
+      </Col>
+    </Row>
+  </div>
 </div>
 `;

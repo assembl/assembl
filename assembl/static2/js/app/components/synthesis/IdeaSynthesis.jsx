@@ -26,9 +26,9 @@ export type SynthesisIdea = {
   }
 };
 
-const SynthesisBody = ({ level, value, stats }) => {
+const SynthesisBody = ({ level, hasSiblings, value, stats }) => {
   return (
-    <div className="synthesis-body" style={{ columnCount: level > 2 ? 2 : 'auto' }}>
+    <div className="synthesis-body" style={{ columnCount: !hasSiblings && level > 2 ? 2 : 'auto' }}>
       <p dangerouslySetInnerHTML={{ __html: value }} />
       {stats}
     </div>
@@ -56,7 +56,7 @@ const SynthesisStats = ({ numContributors, numPosts, ideaLink, posts }) => {
   );
 };
 
-const SynthesisImage = ({ level, title, imgUrl, stats }) => {
+const SynthesisImage = ({ level, imgUrl, stats }) => {
   if (level === 1) {
     return (
       <div className="synthesis-image-container" style={imgUrl && { backgroundImage: `url(${imgUrl})` }}>
@@ -67,7 +67,9 @@ const SynthesisImage = ({ level, title, imgUrl, stats }) => {
   if (level === 2) {
     return (
       <div>
-        {imgUrl ? <img alt={title} className="synthesis-image-container" src={imgUrl} /> : null}
+        <div className="image-container">
+          <div className="synthesis-image-container" style={imgUrl && { backgroundImage: `url(${imgUrl})` }} />
+        </div>
         {stats}
       </div>
     );
@@ -75,9 +77,8 @@ const SynthesisImage = ({ level, title, imgUrl, stats }) => {
   return null;
 };
 
-const IdeaSynthesis = (props: { idea: SynthesisIdea, level: number, slug: string }) => {
-  const { idea, level, slug } = props;
-  const { title, synthesisTitle } = idea;
+const IdeaSynthesis = (props: { idea: SynthesisIdea, hasSiblings: boolean, level: number, slug: string }) => {
+  const { idea, hasSiblings, level, slug } = props;
   const { id, img, numContributors, numPosts, posts } = idea.live;
   const phaseIdentifier = 'thread'; // TODO: Proper phase identification
   // For now, syntheses can only have ideas from the "thread" phase.
@@ -87,8 +88,8 @@ const IdeaSynthesis = (props: { idea: SynthesisIdea, level: number, slug: string
   const stats = <SynthesisStats numContributors={numContributors} numPosts={numPosts} ideaLink={link} posts={posts} />;
   return (
     <div className={`${'idea-synthesis idea-synthesis-level-'}${level}`}>
-      <SynthesisImage level={level} title={title} imgUrl={imgUrl} stats={stats} />
-      <SynthesisBody value={synthesisTitle} level={level} stats={level >= 3 ? stats : null} />
+      <SynthesisImage level={level} imgUrl={imgUrl} stats={stats} />
+      <SynthesisBody value={idea.synthesisTitle} hasSiblings={hasSiblings} level={level} stats={level >= 3 ? stats : null} />
     </div>
   );
 };

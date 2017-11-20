@@ -101,7 +101,7 @@ class Section extends React.Component<Object, SectionProps, void> {
     const { className, children } = this.props;
     return (
       <section className={className}>
-        <Grid fluid className="background-grey">
+        <Grid fluid>
           <div className="max-container">
             <div className="title-section">
               {this.getTitle()}

@@ -55,6 +55,7 @@ $small-margin: 5px;
     text-align: justify;
     line-height: 1.8;
     margin-bottom: $vertical-margin;
+    column-gap: 20px;
   }
   .statistics-doughnut {
     width: auto;
@@ -101,6 +102,12 @@ $small-margin: 5px;
     line-height: 26px;
     display: block;
   }
+
+  @media screen and (max-width: 570px) {
+    .synthesis-body {
+      column-count: auto !important;
+    }
+  }
 }
 
 .idea-synthesis.idea-synthesis-level-2{
@@ -110,14 +117,23 @@ $small-margin: 5px;
     width: 50%;
     margin: 0px;
   }
+  .image-container{
+    float: left;
+    width: 50%;
+    padding: 15px 15px 0px 0;
+  }
   .synthesis-image-container,
   .synthesis-stats{
-    padding: 20px;
     padding-left: 0px;
     margin: 0px;
   }
+  .synthesis-stats{
+    padding: 20px;
+  }
   .synthesis-image-container{
     padding-bottom: 0px;
+    width: 100%;
   }
+
 
 }
