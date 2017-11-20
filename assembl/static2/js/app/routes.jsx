@@ -22,6 +22,7 @@ import Terms from './pages/terms';
 import Administration from './pages/administration';
 import UnauthorizedAdministration from './pages/unauthorizedAdministration';
 import ResourcesCenterAdmin from './pages/resourcesCenterAdmin';
+import SectionsNamesAdmin from './pages/sectionsNamesAdmin';
 import SurveyAdmin from './pages/surveyAdmin';
 import ThreadAdmin from './pages/threadAdmin';
 import DiscussionAdmin from './pages/discussionAdmin';
@@ -75,6 +76,8 @@ const AdminChild = (props) => {
     return <TokenVoteAdmin />;
   case 'resourcesCenter':
     return <ResourcesCenterAdmin />;
+  case 'sectionsNames':
+    return <SectionsNamesAdmin />;
   default:
     return <ThreadAdmin />;
   }

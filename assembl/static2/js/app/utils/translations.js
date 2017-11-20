@@ -309,7 +309,8 @@ const Translations = {
       landingpage: "Page d'accueil",
       menu: {
         phase: "Phase %{count} - %{description}",
-        language: "Editer la langue du débat"
+        language: "Editer la langue du débat",
+        sectionsNames: "Editer les rubriques du débat"
       },
       noTimeline: "Aucune timeline n'a été configurée pour ce débat.",
       survey: {
@@ -674,7 +675,8 @@ const Translations = {
       landingpage: "Landing page",
       menu: {
         phase: "Phase %{count} - %{description}",
-        language: "Discussion Language"
+        language: "Discussion Language",
+        sectionsNames: "Edit Debate Sections"
       },
       noTimeline: "No timeline has been configured yet",
       survey: {
