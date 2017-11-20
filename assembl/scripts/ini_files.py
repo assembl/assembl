@@ -247,7 +247,8 @@ def populate_random(random_file, random_templates=None, saml_info=None):
     Do not change existing values"""
     from base64 import b64encode
     from os import urandom
-    from assembl.auth.make_saml import make_saml_key, make_saml_cert
+    from assembl.auth.make_saml import (
+        make_saml_key, make_saml_cert, cleanup_x509_text)
     base = Parser()
     assert random_templates, "Please give one or more templates"
     for template in random_templates:
@@ -268,6 +269,7 @@ def populate_random(random_file, random_templates=None, saml_info=None):
                 prefix = keyu[:-12]
                 if value == "{saml_key}":
                     saml_key_text, saml_key = make_saml_key()
+                    saml_key_text = cleanup_x509_text(saml_key_text)
                     base.set(section, key, saml_key_text)
                     saml_keys[prefix] = saml_key
                     changed = True
@@ -291,6 +293,7 @@ def populate_random(random_file, random_templates=None, saml_info=None):
                 # If key is not there, it IS a mismatch and and error.
                 saml_key = saml_keys[prefix]
                 saml_cert_text, _ = make_saml_cert(saml_key, **saml_info)
+                saml_cert_text = cleanup_x509_text(saml_cert_text)
                 base.set(section, key, saml_cert_text)
                 changed = True
     if changed:
