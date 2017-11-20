@@ -307,6 +307,7 @@ const Translations = {
       thematic: "Thématique",
       edition: "Éditer la discussion",
       landingpage: "Page d'accueil",
+      sectionsTitle: "Renseigner les sections",
       menu: {
         phase: "Phase %{count} - %{description}",
         language: "Editer la langue du débat",
@@ -317,6 +318,17 @@ const Translations = {
         0: "Renseigner les thématiques",
         1: "Renseigner les questions",
         2: "Exporter les données"
+      },
+      sections: {
+        addSection: "Ajouter une section",
+        homepage: "Accueil",
+        debate: "Débat",
+        resources_center: "Centre de ressources",
+        syntheses: "Synthèses",
+        custom: "Rubrique supplémentaire",
+        externalPage: "Utiliser une page externe",
+        titlePh: "Titre",
+        urlPh: "URL"
       },
       videoHelp:
         "*Liens vidéo autorisés : \"https://www.youtube.com/embed/[videoId]\" ou \"https://player.vimeo.com/video/[videoId]?\"",
@@ -673,6 +685,7 @@ const Translations = {
       thematic: "Theme",
       edition: "Edit the Discussion",
       landingpage: "Landing page",
+      sectionsTitle: "Set sections",
       menu: {
         phase: "Phase %{count} - %{description}",
         language: "Discussion Language",
@@ -683,6 +696,17 @@ const Translations = {
         0: "Set themes",
         1: "Set questions",
         2: "Export data"
+      },
+      sections: {
+        addSection: "Add a section",
+        homepage: "Home page",
+        debate: "Debate page",
+        resources_center: "Resources center",
+        syntheses: "Syntheses",
+        custom: "Added section",
+        externalPage: "Use external page",
+        titlePh: "Title",
+        urlPh: "URL"
       },
       videoHelp:
         "*Authorized video links: \"https://www.youtube.com/embed/[videoId]\" or \"https://player.vimeo.com/video/[videoId]?\"",
