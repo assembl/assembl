@@ -52,5 +52,6 @@ script:
   - if [ "$TO_TEST" = "FRONTEND" ]; then npm test; fi
   - if [ "$TO_TEST" = "FRONTEND" ]; then npm run eslint; fi
   - if [ "$TO_TEST" = "FRONTEND" ]; then npm run flow; fi
+  - if [ "$TO_TEST" = "FRONTEND" ]; then npm run stylelint; fi
 notifications:
   slack: bluenove:gxso5MQCL78dGfCaTSjX42i5

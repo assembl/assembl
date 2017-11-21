@@ -3,6 +3,7 @@
 <PROJECT_ROOT>/node_modules/draft-js/lib/getTextContentFromFiles.js.flow
 <PROJECT_ROOT>/node_modules/config-chain
 <PROJECT_ROOT>/node_modules/npm/node_modules/config-chain
+<PROJECT_ROOT>/node_modules/stylelint
 
 [include]
 
