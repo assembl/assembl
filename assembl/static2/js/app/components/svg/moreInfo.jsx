@@ -1,3 +1,5 @@
+// @flow
+
 import React from 'react';
 
 class MoreInfo extends React.Component {

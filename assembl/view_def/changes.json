@@ -217,9 +217,9 @@
     },
     "Synthesis": {
         "@extends": "ExplicitSubGraphView",
-        "subject": true,
-        "introduction": true,
-        "conclusion": true,
+        "subject": ":extended",
+        "introduction": ":extended",
+        "conclusion": ":extended",
         "is_next_synthesis": true,
         "published_in_post": true,
         "ideas": [":partial"],

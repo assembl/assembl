@@ -102,7 +102,7 @@ var LanguagePreferenceCollection = Base.Collection.extend({
         && !lp.get("translate_to_name")) {
         return 0;
       }
-      return lp.get("source_of_evidence") + (lp.get("preferred_order") / 100.0);
+      return 1 + lp.get("source_of_evidence") + (lp.get("preferred_order") / 100.0);
     },
   /**
    * Comparator sorts in ascending order, but explicit goes last.

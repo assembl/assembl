@@ -520,14 +520,27 @@ var LangString = Base.Model.extend({
 
 });
 
-LangStringEntry.empty = new LangStringEntry({
-  value: '',
-  '@language': 'zxx',
-});
 
+// NOTE: Using the empty langstring has unforseen consequences
+// Ensure that the empty created langstring is in fact following the
+// Structure shown in LangString.empty.
+LangStringEntry.makeEmpty = function() {
+  return new LangStringEntry({
+    value: '',
+    '@language': 'zxx',
+  });
+};
+
+LangStringEntry.empty = LangStringEntry.makeEmpty();
 LangString.empty = new LangString({
   entries: new LangStringEntryCollection([LangStringEntry.empty]),
 });
+
+LangString.Empty = function() {
+  var lse = LangStringEntry.makeEmpty(),
+      collection = new LangStringEntryCollection([lse]);
+  return new LangString({entries: collection});
+};
 
 /**
  * Lang string collection

@@ -53,31 +53,33 @@ var IdeaModel = Base.Model.extend({
    * @function app.models.idea.IdeaModel.parse
    */
   parse: function(resp, options) {
-    var that = this;
-    this.adjust_num_read_posts(resp);
-    if (resp.shortTitle !== undefined) {
-      resp.shortTitle = new LangString.Model(resp.shortTitle, {parse: true});
-    }
-    if (resp.longTitle !== undefined) {
-      resp.longTitle = new LangString.Model(resp.longTitle, {parse: true});
-    }
-    if (resp.definition !== undefined) {
-      resp.definition = new LangString.Model(resp.definition, {parse: true});
-    }
-    if (resp.attachments !== undefined){
-      resp.attachments = new Attachment.ValidationAttachmentCollection(resp.attachments, {
-        parse: true,
-        objectAttachedToModel: that,
-        limits: {
-          count: 1,
-          type: 'image',
-        }});
-    }
-    if (resp.message_columns !== undefined) {
-      resp.message_columns = new IdeaMessageColumn.Collection(resp.message_columns, {
-        parse: true,
-        targetIdea: that,
-      });
+    if (resp.ok !== true) {
+      var that = this;
+      this.adjust_num_read_posts(resp);
+      if (resp.shortTitle != undefined) {
+        resp.shortTitle = new LangString.Model(resp.shortTitle, {parse: true});
+      }
+      if (resp.longTitle != undefined) {
+        resp.longTitle = new LangString.Model(resp.longTitle, {parse: true});
+      }
+      if (resp.definition != undefined) {
+        resp.definition = new LangString.Model(resp.definition, {parse: true});
+      }
+      if (resp.attachments != undefined){
+        resp.attachments = new Attachment.ValidationAttachmentCollection(resp.attachments, {
+          parse: true,
+          objectAttachedToModel: that,
+          limits: {
+            count: 1,
+            type: 'image',
+          }});
+      }
+      if (resp.message_columns != undefined) {
+        resp.message_columns = new IdeaMessageColumn.Collection(resp.message_columns, {
+          parse: true,
+          targetIdea: that,
+        });
+      }
     }
     return Base.Model.prototype.parse.apply(this, arguments);
   },
