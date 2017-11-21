@@ -38,8 +38,7 @@ $small-margin: 5px;
     background-repeat: no-repeat;
     background-position: center;
     position: relative;
-    margin-top: $vertical-margin;
-    margin-bottom: $vertical-margin;
+    margin-bottom: 10px;
     .synthesis-stats {
       position: absolute;
       bottom: 0;
@@ -120,7 +119,7 @@ $small-margin: 5px;
   .image-container{
     float: left;
     width: 50%;
-    padding: 15px 15px 0px 0;
+    padding: 0 15px 15px 0;
   }
   .synthesis-image-container,
   .synthesis-stats{

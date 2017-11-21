@@ -9,7 +9,11 @@ exports[`Synthesis component should match Synthesis snapshot 1`] = `
     isSynthesesHeader={true}
     title="Foo"
   />
-  <div>
+  <Grid
+    bsClass="container"
+    componentClass="div"
+    fluid={true}
+  >
     <Row
       bsClass="row"
       className="background-grey synthesis-tree"
@@ -49,6 +53,6 @@ exports[`Synthesis component should match Synthesis snapshot 1`] = `
         />
       </Col>
     </Row>
-  </div>
+  </Grid>
 </div>
 `;

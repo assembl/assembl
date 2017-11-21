@@ -1,21 +1,13 @@
 // @flow
 
 import React from 'react';
-import { Col } from 'react-bootstrap';
+import { Col, Row } from 'react-bootstrap';
 
 import Section from '../common/section';
 import { getPartialTree, getChildren } from '../../utils/tree';
 import IdeaSynthesis from './IdeaSynthesis';
 
 import type { SynthesisIdea } from './IdeaSynthesis';
-
-const ColContainer = (children) => {
-  return (
-    <Col sm={6} xs={12}>
-      {children}
-    </Col>
-  );
-};
 
 const IdeaSynthesisTree = (props: {
   rootIdea: SynthesisIdea,
@@ -31,13 +23,11 @@ const IdeaSynthesisTree = (props: {
   const newParents = parents.slice();
   newParents.push(index);
   const level = parents.length + 1;
-  const content = (
-    <Section displayIndex title={rootIdea.title} index={index} parents={parents} className="idea-synthesis-section">
-      <IdeaSynthesis hasSiblings={hasSiblings} level={level} idea={rootIdea} slug={slug} />
-      {roots.map((idea, subIndex) => {
-        return (
+  const tree = roots.map((idea, subIndex) => {
+    return (
+      <Row key={idea.id}>
+        <Col sm={level === 3 && hasSiblings ? 6 : 12} xs={12}>
           <IdeaSynthesisTree
-            key={idea.id}
             hasSiblings={rootsHasSiblings}
             rootIdea={idea}
             index={subIndex + 1}
@@ -45,12 +35,16 @@ const IdeaSynthesisTree = (props: {
             subIdeas={getChildren(idea, descendants)}
             slug={slug}
           />
-        );
-      })}
+        </Col>
+      </Row>
+    );
+  });
+  return (
+    <Section displayIndex title={rootIdea.title} index={index} parents={parents} className="idea-synthesis-section">
+      <IdeaSynthesis hasSiblings={hasSiblings} level={level} idea={rootIdea} slug={slug} />
+      {tree}
     </Section>
   );
-  const container = level === 3 && hasSiblings ? ColContainer : null;
-  return container ? container(content) : content;
 };
 
 export default IdeaSynthesisTree;

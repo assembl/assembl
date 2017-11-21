@@ -1,7 +1,6 @@
 // @flow
 import React from 'react';
 import { Translate } from 'react-redux-i18n';
-import { Grid } from 'react-bootstrap';
 import { SECTION_INDEX_GENERATOR } from '../../utils/section';
 
 type SectionProps = {
@@ -101,16 +100,14 @@ class Section extends React.Component<Object, SectionProps, void> {
     const { className, children } = this.props;
     return (
       <section className={className}>
-        <Grid fluid>
-          <div className="max-container">
-            <div className="title-section">
-              {this.getTitle()}
-            </div>
-            <div className="content-section">
-              {children}
-            </div>
+        <div className="max-container">
+          <div className="title-section">
+            {this.getTitle()}
           </div>
-        </Grid>
+          <div className="content-section">
+            {children}
+          </div>
+        </div>
       </section>
     );
   }

@@ -2,7 +2,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { compose, graphql } from 'react-apollo';
-import { Col, Row } from 'react-bootstrap';
+import { Col, Grid, Row } from 'react-bootstrap';
 
 import Header from '../components/common/header';
 import Section from '../components/common/section';
@@ -27,7 +27,7 @@ export class DumbSynthesis extends React.Component<void, SynthesisProps, void> {
     return (
       <div className="background-light">
         <Header title={subject} imgUrl={synthesis.img ? synthesis.img.externalUrl : ''} isSynthesesHeader />
-        <div>
+        <Grid fluid>
           {introduction &&
             <Section title="introduction" translate className="synthesis-block">
               <Row>
@@ -61,7 +61,7 @@ export class DumbSynthesis extends React.Component<void, SynthesisProps, void> {
                 </Col>
               </Row>
             </Section>}
-        </div>
+        </Grid>
       </div>
     );
   }

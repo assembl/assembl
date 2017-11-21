@@ -5,33 +5,29 @@ exports[`Section component should match Section snapshot 1`] = `
   className="themes-section"
 >
   <div
-    className="container-fluid"
+    className="max-container"
   >
     <div
-      className="max-container"
+      className="title-section"
     >
-      <div
-        className="title-section"
-      >
-        <div>
-          <div
-            className="title-hyphen"
-          >
-             
-          </div>
-          <h1
-            className="section-title section-title1 dark-title-1"
-          >
-            FooBar
-          </h1>
+      <div>
+        <div
+          className="title-hyphen"
+        >
+           
         </div>
+        <h1
+          className="section-title section-title1 dark-title-1"
+        >
+          FooBar
+        </h1>
       </div>
-      <div
-        className="content-section"
-      >
-        <div>
-          Section content
-        </div>
+    </div>
+    <div
+      className="content-section"
+    >
+      <div>
+        Section content
       </div>
     </div>
   </div>
@@ -43,31 +39,27 @@ exports[`Section component should match Section with 1 parent snapshot 1`] = `
   className="themes-section"
 >
   <div
-    className="container-fluid"
+    className="max-container"
   >
     <div
-      className="max-container"
+      className="title-section"
     >
-      <div
-        className="title-section"
+      <h2
+        className="section-title section-title-2 dark-title-1"
       >
-        <h2
-          className="section-title section-title-2 dark-title-1"
+        <span
+          className="section-title-index"
         >
-          <span
-            className="section-title-index"
-          >
-            1.2.
-          </span>
-          FooBar
-        </h2>
-      </div>
-      <div
-        className="content-section"
-      >
-        <div>
-          Section content
-        </div>
+          1.2.
+        </span>
+        FooBar
+      </h2>
+    </div>
+    <div
+      className="content-section"
+    >
+      <div>
+        Section content
       </div>
     </div>
   </div>
@@ -79,31 +71,27 @@ exports[`Section component should match Section with 2 parents snapshot 1`] = `
   className="themes-section"
 >
   <div
-    className="container-fluid"
+    className="max-container"
   >
     <div
-      className="max-container"
+      className="title-section"
     >
-      <div
-        className="title-section"
+      <h3
+        className="section-title section-title-3 dark-title-1"
       >
-        <h3
-          className="section-title section-title-3 dark-title-1"
+        <span
+          className="section-title-index"
         >
-          <span
-            className="section-title-index"
-          >
-            b.
-          </span>
-          FooBar
-        </h3>
-      </div>
-      <div
-        className="content-section"
-      >
-        <div>
-          Section content
-        </div>
+          b.
+        </span>
+        FooBar
+      </h3>
+    </div>
+    <div
+      className="content-section"
+    >
+      <div>
+        Section content
       </div>
     </div>
   </div>
@@ -115,43 +103,39 @@ exports[`Section component should match Section with translate prop 1`] = `
   className="themes-section"
 >
   <div
-    className="container-fluid"
+    className="max-container"
   >
     <div
-      className="max-container"
+      className="title-section"
     >
-      <div
-        className="title-section"
-      >
-        <div>
-          <div
-            className="title-hyphen"
-          >
-             
-          </div>
-          <h1
-            className="section-title section-title1 dark-title-1"
-          >
-            <span
-              className="section-title-index"
-            >
-              1.
-            </span>
-            <span
-              className={undefined}
-              style={undefined}
-            >
-              Foo Bar
-            </span>
-          </h1>
+      <div>
+        <div
+          className="title-hyphen"
+        >
+           
         </div>
+        <h1
+          className="section-title section-title1 dark-title-1"
+        >
+          <span
+            className="section-title-index"
+          >
+            1.
+          </span>
+          <span
+            className={undefined}
+            style={undefined}
+          >
+            Foo Bar
+          </span>
+        </h1>
       </div>
-      <div
-        className="content-section"
-      >
-        <div>
-          Section content
-        </div>
+    </div>
+    <div
+      className="content-section"
+    >
+      <div>
+        Section content
       </div>
     </div>
   </div>

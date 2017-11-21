@@ -5,148 +5,144 @@ exports[`Syntheses component should match Syntheses snapshot 1`] = `
   className="themes-section"
 >
   <div
-    className="container-fluid"
+    className="max-container"
   >
     <div
-      className="max-container"
+      className="title-section"
+    >
+      <div>
+        <div
+          className="title-hyphen"
+        >
+           
+        </div>
+        <h1
+          className="section-title section-title1 dark-title-1"
+        >
+          <span
+            className={undefined}
+            style={undefined}
+          >
+            Syntheses
+          </span>
+        </h1>
+      </div>
+    </div>
+    <div
+      className="content-section"
     >
       <div
-        className="title-section"
-      >
-        <div>
-          <div
-            className="title-hyphen"
-          >
-             
-          </div>
-          <h1
-            className="section-title section-title1 dark-title-1"
-          >
-            <span
-              className={undefined}
-              style={undefined}
-            >
-              Syntheses
-            </span>
-          </h1>
-        </div>
-      </div>
-      <div
-        className="content-section"
+        className="no-margin row"
       >
         <div
-          className="no-margin row"
+          className="theme clear theme-first-row-0 col-md-3 col-sm-6 col-xs-12"
         >
           <div
-            className="theme clear theme-first-row-0 col-md-3 col-sm-6 col-xs-12"
+            className="illustration-box synthesis-preview"
           >
             <div
-              className="illustration-box synthesis-preview"
+              className="image-box"
+              style={
+                Object {
+                  "backgroundImage": "url(http://foo.com/bar)",
+                }
+              }
+            />
+            <a
+              className="content-box"
+              onClick={[Function]}
+              style={Object {}}
             >
               <div
-                className="image-box"
-                style={
-                  Object {
-                    "backgroundImage": "url(http://foo.com/bar)",
-                  }
-                }
-              />
-              <a
-                className="content-box"
-                onClick={[Function]}
-                style={Object {}}
+                className="title-container center"
               >
-                <div
-                  className="title-container center"
+                <h3
+                  className="light-title-3"
                 >
-                  <h3
-                    className="light-title-3"
+                  Foo
+                </h3>
+                <h4
+                  className="light-title-4"
+                >
+                  <span
+                    className={undefined}
+                    style={undefined}
                   >
-                    Foo
-                  </h3>
-                  <h4
-                    className="light-title-4"
-                  >
-                    <span
-                      className={undefined}
-                      style={undefined}
-                    >
-                      For15amt2
-                    </span>
-                  </h4>
-                </div>
-              </a>
-              <div
-                className="color-box"
-              >
-                 
+                    For15amt2
+                  </span>
+                </h4>
               </div>
-              <div
-                className="box-hyphen"
-              >
-                 
-              </div>
-              <div
-                className="box-hyphen rotate-hyphen"
-              >
-                 
-              </div>
+            </a>
+            <div
+              className="color-box"
+            >
+               
+            </div>
+            <div
+              className="box-hyphen"
+            >
+               
+            </div>
+            <div
+              className="box-hyphen rotate-hyphen"
+            >
+               
             </div>
           </div>
+        </div>
+        <div
+          className="theme theme-first-row-1 col-md-3 col-sm-6 col-xs-12"
+        >
           <div
-            className="theme theme-first-row-1 col-md-3 col-sm-6 col-xs-12"
+            className="illustration-box synthesis-preview"
           >
             <div
-              className="illustration-box synthesis-preview"
+              className="image-box"
+              style={
+                Object {
+                  "backgroundImage": "url(http://foo.com/bar)",
+                }
+              }
+            />
+            <a
+              className="content-box"
+              onClick={[Function]}
+              style={Object {}}
             >
               <div
-                className="image-box"
-                style={
-                  Object {
-                    "backgroundImage": "url(http://foo.com/bar)",
-                  }
-                }
-              />
-              <a
-                className="content-box"
-                onClick={[Function]}
-                style={Object {}}
+                className="title-container center"
               >
-                <div
-                  className="title-container center"
+                <h3
+                  className="light-title-3"
                 >
-                  <h3
-                    className="light-title-3"
+                  Bar
+                </h3>
+                <h4
+                  className="light-title-4"
+                >
+                  <span
+                    className={undefined}
+                    style={undefined}
                   >
-                    Bar
-                  </h3>
-                  <h4
-                    className="light-title-4"
-                  >
-                    <span
-                      className={undefined}
-                      style={undefined}
-                    >
-                      For15amt2
-                    </span>
-                  </h4>
-                </div>
-              </a>
-              <div
-                className="color-box"
-              >
-                 
+                    For15amt2
+                  </span>
+                </h4>
               </div>
-              <div
-                className="box-hyphen"
-              >
-                 
-              </div>
-              <div
-                className="box-hyphen rotate-hyphen"
-              >
-                 
-              </div>
+            </a>
+            <div
+              className="color-box"
+            >
+               
+            </div>
+            <div
+              className="box-hyphen"
+            >
+               
+            </div>
+            <div
+              className="box-hyphen rotate-hyphen"
+            >
+               
             </div>
           </div>
         </div>
@@ -161,46 +157,42 @@ exports[`Syntheses component should match empty Syntheses snapshot 1`] = `
   className="themes-section"
 >
   <div
-    className="container-fluid"
+    className="max-container"
   >
     <div
-      className="max-container"
+      className="title-section"
     >
-      <div
-        className="title-section"
-      >
-        <div>
-          <div
-            className="title-hyphen"
-          >
-             
-          </div>
-          <h1
-            className="section-title section-title1 dark-title-1"
-          >
-            <span
-              className={undefined}
-              style={undefined}
-            >
-              Syntheses
-            </span>
-          </h1>
+      <div>
+        <div
+          className="title-hyphen"
+        >
+           
         </div>
-      </div>
-      <div
-        className="content-section"
-      >
-        <h2
-          className="dark-title-2 margin-left-xxl"
+        <h1
+          className="section-title section-title1 dark-title-1"
         >
           <span
             className={undefined}
             style={undefined}
           >
-            No Synthesis Yet
+            Syntheses
           </span>
-        </h2>
+        </h1>
       </div>
+    </div>
+    <div
+      className="content-section"
+    >
+      <h2
+        className="dark-title-2 margin-left-xxl"
+      >
+        <span
+          className={undefined}
+          style={undefined}
+        >
+          No Synthesis Yet
+        </span>
+      </h2>
     </div>
   </div>
 </section>
