@@ -46,9 +46,7 @@ class Objectives extends React.Component {
           <div className="max-container">
             <div className="title-section">
               <div className="title-hyphen">&nbsp;</div>
-              <h1 className="dark-title-1">
-                {debateData.objectives.titleEntries[locale]}
-              </h1>
+              <h1 className="dark-title-1">{debateData.objectives.titleEntries[locale]}</h1>
             </div>
             <div className="content-section">
               <div className="content-margin">
@@ -66,28 +64,29 @@ class Objectives extends React.Component {
                           : 'text-column-3'
                       }
                     >
-                      <span>
-                        {debateData.objectives.descriptionEntries[locale]}
-                      </span>
+                      <span>{debateData.objectives.descriptionEntries[locale]}</span>
                     </div>
                   </Col>
-                  {debateData.objectives.images &&
+                  {debateData.objectives.images && (
                     <div>
-                      {debateData.objectives.images.img1Url &&
+                      {debateData.objectives.images.img1Url && (
                         <Col xs={12} sm={6} md={3} className="objectives">
                           <div
                             className="objectives-img"
                             style={{ backgroundImage: `url(${debateData.objectives.images.img1Url})` }}
                           />
-                        </Col>}
-                      {debateData.objectives.images.img2Url &&
+                        </Col>
+                      )}
+                      {debateData.objectives.images.img2Url && (
                         <Col xs={12} sm={6} md={3} className="objectives">
                           <div
                             className="objectives-img"
                             style={{ backgroundImage: `url(${debateData.objectives.images.img2Url})` }}
                           />
-                        </Col>}
-                    </div>}
+                        </Col>
+                      )}
+                    </div>
+                  )}
                 </Row>
               </div>
               <div className="center inline full-size margin-xxl">

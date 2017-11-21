@@ -47,7 +47,10 @@ class Toolbar extends React.Component<void, ToolbarProps, ToolbarState> {
   getCurrentBlockType(): DraftBlockType {
     const { editorState } = this.props;
     const selection = editorState.getSelection();
-    return editorState.getCurrentContent().getBlockForKey(selection.getStartKey()).getType();
+    return editorState
+      .getCurrentContent()
+      .getBlockForKey(selection.getStartKey())
+      .getType();
   }
 
   toggleBlockType(blockType: DraftBlockType): void {
@@ -150,8 +153,8 @@ class Toolbar extends React.Component<void, ToolbarProps, ToolbarState> {
           })}
         </div>
 
-        {withAttachmentButton
-          ? <div className="btn-group">
+        {withAttachmentButton ? (
+          <div className="btn-group">
             <ToolbarButton
               key="button-attachment"
               id="attachment"
@@ -161,17 +164,17 @@ class Toolbar extends React.Component<void, ToolbarProps, ToolbarState> {
               onToggle={this.toggleAttachFileForm}
             />
           </div>
-          : null}
+        ) : null}
 
-        {showAttachFileForm
-          ? <div>
+        {showAttachFileForm ? (
+          <div>
             <div className="modal-backdrop fade in" />
             <div className="insertion-box box">
               <span className="assembl-icon-cancel" onClick={this.closeInsertionBox} />
               <AttachFileForm onSubmit={this.onAttachFileFormSubmit} />
             </div>
           </div>
-          : null}
+        ) : null}
       </div>
     );
   }

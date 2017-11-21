@@ -54,15 +54,17 @@ export default class ColumnsView extends React.Component<*, Props, State> {
     });
     return (
       <div className="max-container">
-        {this.shouldShowTabs(columns.length)
-          ? <TabbedColumns {...this.props} showSynthesis={showSynthesis} identifier={identifier} debateData={debateData} />
-          : <MultiColumns
+        {this.shouldShowTabs(columns.length) ? (
+          <TabbedColumns {...this.props} showSynthesis={showSynthesis} identifier={identifier} debateData={debateData} />
+        ) : (
+          <MultiColumns
             {...this.props}
             width={`${100 / columns.length}%`}
             showSynthesis={showSynthesis}
             identifier={identifier}
             debateData={debateData}
-          />}
+          />
+        )}
       </div>
     );
   };

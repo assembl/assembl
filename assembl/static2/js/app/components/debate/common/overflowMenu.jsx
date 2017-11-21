@@ -48,12 +48,12 @@ const getOverflowMenuForPost = (postId, userCanDeleteThisMessage, userCanEditThi
   const overflowMenu = (
     <Popover id="edit-delete-actions" className="overflow-menu">
       <div className="overflow-menu-container">
-        {userCanDeleteThisMessage
-          ? <ResponsiveOverlayTrigger placement="right" tooltip={deleteMessageTooltip} component={deleteButton} />
-          : null}
-        {userCanEditThisMessage
-          ? <ResponsiveOverlayTrigger placement="right" tooltip={editMessageTooltip} component={editButton} />
-          : null}
+        {userCanDeleteThisMessage ? (
+          <ResponsiveOverlayTrigger placement="right" tooltip={deleteMessageTooltip} component={deleteButton} />
+        ) : null}
+        {userCanEditThisMessage ? (
+          <ResponsiveOverlayTrigger placement="right" tooltip={editMessageTooltip} component={editButton} />
+        ) : null}
       </div>
     </Popover>
   );

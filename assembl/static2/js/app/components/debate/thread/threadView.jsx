@@ -24,9 +24,9 @@ class ThreadView extends React.Component {
     const isPhaseCompleted = getIfPhaseCompletedByIdentifier(debateData.timeline, identifier);
     return (
       <div className="overflow-x">
-        {(!isUserConnected || connectedUserCan(Permissions.ADD_POST)) && !isPhaseCompleted
-          ? <TopPostFormContainer ideaId={ideaId} refetchIdea={refetchIdea} />
-          : null}
+        {(!isUserConnected || connectedUserCan(Permissions.ADD_POST)) && !isPhaseCompleted ? (
+          <TopPostFormContainer ideaId={ideaId} refetchIdea={refetchIdea} />
+        ) : null}
         <Grid fluid className="background-grey">
           <div className="max-container background-grey">
             <div className="content-section">

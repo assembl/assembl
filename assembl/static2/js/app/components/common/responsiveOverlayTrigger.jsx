@@ -6,11 +6,13 @@ const ResponsiveOverlayTrigger = ({ component, placement, tooltip }) => {
   const isTouchScreenDevice = isMobile.any();
   return (
     <div className="custom-overlay">
-      {isTouchScreenDevice
-        ? component
-        : <OverlayTrigger placement={placement} overlay={tooltip}>
+      {isTouchScreenDevice ? (
+        component
+      ) : (
+        <OverlayTrigger placement={placement} overlay={tooltip}>
           {component}
-        </OverlayTrigger>}
+        </OverlayTrigger>
+      )}
     </div>
   );
 };

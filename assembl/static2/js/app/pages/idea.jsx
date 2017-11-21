@@ -172,14 +172,15 @@ class Idea extends React.Component {
         <Header title={title} synthesisTitle={synthesisTitle} imgUrl={headerImgUrl} identifier={identifier} />
         <section className="post-section">
           {!ideaWithPostsData.loading &&
-            announcement &&
-            <Grid fluid className="background-light">
-              <div className="max-container">
-                <div className="content-section">
-                  <Announcement ideaWithPostsData={ideaWithPostsData} announcementContent={announcement} />
+            announcement && (
+              <Grid fluid className="background-light">
+                <div className="max-container">
+                  <div className="content-section">
+                    <Announcement ideaWithPostsData={ideaWithPostsData} announcementContent={announcement} />
+                  </div>
                 </div>
-              </div>
-            </Grid>}
+              </Grid>
+            )}
           {ideaWithPostsData.loading ? <Loader /> : view}
         </section>
         <GoUp />

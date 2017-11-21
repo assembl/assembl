@@ -69,13 +69,13 @@ const PostColumn = ({
   const isPhaseCompleted = getIfPhaseCompletedByIdentifier(debateData.timeline, identifier);
   return (
     <div className="column-view" style={{ width: width }}>
-      {!isPhaseCompleted
-        ? <ColumnHeader color={color} classifier={classifier} title={title} ideaId={ideaId} refetchIdea={refetchIdea} />
-        : null}
+      {!isPhaseCompleted ? (
+        <ColumnHeader color={color} classifier={classifier} title={title} ideaId={ideaId} refetchIdea={refetchIdea} />
+      ) : null}
       {synthesisProps && <Synthesis {...synthesisProps} />}
       <div className="column-tree">
-        {data.length > 0
-          ? <Tree
+        {data.length > 0 ? (
+          <Tree
             contentLocaleMapping={contentLocaleMapping}
             lang={lang}
             data={data || []}
@@ -86,7 +86,9 @@ const PostColumn = ({
             SeparatorComponent={Separator}
             identifier={identifier}
           />
-          : noRowsRenderer()}
+        ) : (
+          noRowsRenderer()
+        )}
       </div>
     </div>
   );

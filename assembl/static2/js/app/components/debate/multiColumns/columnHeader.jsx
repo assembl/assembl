@@ -30,9 +30,7 @@ const ColumnHeader = ({
             <span className="assembl-icon-discussion color" />
           </div>
           <div className={'start-discussion start-discussion-multicol'}>
-            <h3 className="dark-title-3 no-margin">
-              {title}
-            </h3>
+            <h3 className="dark-title-3 no-margin">{title}</h3>
           </div>
           <div className="clear" />
         </div>

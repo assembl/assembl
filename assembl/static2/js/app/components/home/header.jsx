@@ -47,23 +47,18 @@ class Header extends React.Component {
           <div className="header-content">
             {debateData.headerLogoUrl ? <img className="header-logo" src={debateData.headerLogoUrl} alt="logo" /> : null}
             <div className="max-text-width">
-              {debateData.topic &&
-                <h1 className="light-title-1">
-                  {debateData.topic.titleEntries[locale]}
-                </h1>}
+              {debateData.topic && <h1 className="light-title-1">{debateData.topic.titleEntries[locale]}</h1>}
               <h4 className="light-title-4 uppercase margin-m">
-                {debateData.introduction &&
-                  <span>
-                    {debateData.introduction.titleEntries[locale]}
-                  </span>}
-                {debateData.dates &&
+                {debateData.introduction && <span>{debateData.introduction.titleEntries[locale]}</span>}
+                {debateData.dates && (
                   <div>
                     <Translate
                       value="home.from_start_to_end"
                       start={I18n.l(debateData.dates.startDate, { dateFormat: 'date.format' })}
                       end={I18n.l(debateData.dates.endDate, { dateFormat: 'date.format' })}
                     />
-                  </div>}
+                  </div>
+                )}
               </h4>
               <Button onClick={this.displayPhase} className="button-submit button-light margin-l">
                 <Translate value="home.accessButton" />

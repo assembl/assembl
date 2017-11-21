@@ -109,8 +109,8 @@ class Announcement extends React.Component {
             <div className="announcement-doughnut">
               <StatisticsDoughnut elements={doughnutsElements} />
             </div>
-            {isMultiColumns
-              ? <div className="announcement-numbers-multicol">
+            {isMultiColumns ? (
+              <div className="announcement-numbers-multicol">
                 {columnInfos.map((col, index) => {
                   return (
                     <div style={{ color: col.color }} key={`col-${index}`}>
@@ -122,13 +122,15 @@ class Announcement extends React.Component {
                   {numContributors} <span className="assembl-icon-profil" />
                 </div>
               </div>
-              : <div className="announcement-numbers">
+            ) : (
+              <div className="announcement-numbers">
                 <PostsAndContributorsCount
                   className="announcement-numbers"
                   numContributors={numContributors}
                   numPosts={numPosts}
                 />
-              </div>}
+              </div>
+            )}
           </div>
         </Col>
       </div>

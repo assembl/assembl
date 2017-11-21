@@ -61,49 +61,53 @@ class NavigationMenu extends React.Component {
     const currentPhaseIdentifier = getCurrentPhaseIdentifier(debateData.timeline);
     return (
       <div>
-        {this.state.phaseContext === 'modal'
-          ? <Link onClick={this.displayModal} className="navbar-menu-item pointer">
+        {this.state.phaseContext === 'modal' ? (
+          <Link onClick={this.displayModal} className="navbar-menu-item pointer">
             <Translate value="navbar.debate" />
           </Link>
-          : null}
-        {this.state.phaseContext === 'old'
-          ? <a className="navbar-menu-item pointer" href={get('oldDebate', slug)}>
+        ) : null}
+        {this.state.phaseContext === 'old' ? (
+          <a className="navbar-menu-item pointer" href={get('oldDebate', slug)}>
             <Translate value="navbar.debate" />
           </a>
-          : null}
-        {this.state.phaseContext === 'new'
-          ? <Link
+        ) : null}
+        {this.state.phaseContext === 'new' ? (
+          <Link
             to={get('debate', { ...slug, phase: currentPhaseIdentifier })}
             className="navbar-menu-item pointer"
             activeClassName="active"
           >
             <Translate value="navbar.debate" />
           </Link>
-          : null}
-        {isAdmin &&
+        ) : null}
+        {isAdmin && (
           <Link
             to={get('administration', { slug: debateData.slug })}
             className="navbar-menu-item pointer"
             activeClassName="active"
           >
             <Translate value="navbar.administration" />
-          </Link>}
-        {hasResourcesCenter &&
+          </Link>
+        )}
+        {hasResourcesCenter && (
           <Link
             to={get('resourcesCenter', { slug: debateData.slug })}
             className="navbar-menu-item pointer"
             activeClassName="active"
           >
             <Translate value="navbar.resourcesCenter" />
-          </Link>}
-        {false &&
+          </Link>
+        )}
+        {false && (
           <Link className="navbar-menu-item" activeClassName="active" to={get('community', { slug: debateData.slug })}>
             <Translate value="navbar.community" />
-          </Link>}
-        {hasSyntheses &&
+          </Link>
+        )}
+        {hasSyntheses && (
           <Link className="navbar-menu-item" activeClassName="active" to={get('syntheses', { slug: debateData.slug })}>
             <Translate value="navbar.syntheses" />
-          </Link>}
+          </Link>
+        )}
       </div>
     );
   }

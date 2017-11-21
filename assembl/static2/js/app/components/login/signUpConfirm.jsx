@@ -16,12 +16,13 @@ class SignUpConfirm extends React.Component {
             <FormGroup>
               <Translate value="login.accountCreatedMsg" />
             </FormGroup>
-            {false &&
+            {false && (
               <FormGroup>
                 <Button type="submit" name="resend" value={I18n.t('login.resend')} className="margin-m button-submit button-dark">
                   <Translate value="login.resend" />
                 </Button>
-              </FormGroup>}
+              </FormGroup>
+            )}
           </form>
         </div>
       </div>

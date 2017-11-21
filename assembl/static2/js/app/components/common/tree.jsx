@@ -152,8 +152,8 @@ class Child extends React.PureComponent {
             );
           })
           : null}
-        {numChildren > 0 && !expanded
-          ? <div
+        {numChildren > 0 && !expanded ? (
+          <div
             className="postfolded-container"
             onClick={(event) => {
               if (expanded) {
@@ -166,7 +166,7 @@ class Child extends React.PureComponent {
               <InnerComponentFolded nbPosts={numChildren} />
             </div>
           </div>
-          : null}
+        ) : null}
       </div>
     );
   }

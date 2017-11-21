@@ -151,17 +151,17 @@ class TopPostForm extends React.Component<*, TopPostFormProps, TopPostFormState>
     return (
       <div className="form-container" ref={this.setFormContainerRef}>
         <FormGroup>
-          {!this.props.ideaOnColumn
-            ? <TextInputWithRemainingChars
+          {!this.props.ideaOnColumn ? (
+            <TextInputWithRemainingChars
               value={this.state.subject}
               label={I18n.t('debate.subject')}
               maxLength={TEXT_INPUT_MAX_LENGTH}
               handleTxtChange={this.handleSubjectChange}
               handleInputFocus={this.handleInputFocus}
             />
-            : null}
-          {this.state.isActive || this.props.ideaOnColumn
-            ? <div className="margin-m">
+          ) : null}
+          {this.state.isActive || this.props.ideaOnColumn ? (
+            <div className="margin-m">
               <RichTextEditor
                 rawContentState={this.state.body}
                 handleInputFocus={this.handleInputFocus}
@@ -170,11 +170,11 @@ class TopPostForm extends React.Component<*, TopPostFormProps, TopPostFormState>
                 updateContentState={this.updateBody}
                 withAttachmentButton
               />
-              {!this.props.ideaOnColumn
-                ? <Button className="button-cancel button-dark btn btn-default left margin-l" onClick={this.resetForm}>
+              {!this.props.ideaOnColumn ? (
+                <Button className="button-cancel button-dark btn btn-default left margin-l" onClick={this.resetForm}>
                   <Translate value="cancel" />
                 </Button>
-                : null}
+              ) : null}
               <Button
                 className={this.getClassNames()}
                 onClick={this.createTopPost}
@@ -184,7 +184,7 @@ class TopPostForm extends React.Component<*, TopPostFormProps, TopPostFormState>
                 <Translate value="debate.post" />
               </Button>
             </div>
-            : null}
+          ) : null}
         </FormGroup>
       </div>
     );

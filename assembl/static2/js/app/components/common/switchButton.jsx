@@ -40,19 +40,11 @@ class SwitchButton extends React.Component<Object, Props, any> {
     }
 
     if (this.props.label !== '') {
-      label = (
-        <label htmlFor={id}>
-          {this.props.label}
-        </label>
-      );
+      label = <label htmlFor={id}>{this.props.label}</label>;
     }
 
     if (this.props.labelRight !== '') {
-      labelRight = (
-        <label htmlFor={id}>
-          {this.props.labelRight}
-        </label>
-      );
+      labelRight = <label htmlFor={id}>{this.props.labelRight}</label>;
     }
 
     if (['switch', 'select'].indexOf(mode) < -1) {
