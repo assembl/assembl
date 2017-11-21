@@ -28,16 +28,16 @@ const SectionForm = ({ i18n }) => {
                 : I18n.t('administration.sections.custom')}
             </div>
             <FormControlWithLabel label={titlePh} onChange={handleTitleChange} type="text" value={section.title} />
-            {section.type === 'HOMEPAGE'
-              ? <FormGroup>
+            {section.type === 'HOMEPAGE' ? (
+              <FormGroup>
                 <Checkbox checked={section.url} onChange={handleCheckboxChange}>
                   <Translate value="administration.sections.externalPage" />
                 </Checkbox>
               </FormGroup>
-              : null}
-            {(section.type === 'HOMEPAGE' && section.url) || section.type === 'CUSTOM'
-              ? <FormControlWithLabel label={urlPh} onChange={handleUrlChange} type="text" value={section.url} />
-              : null}
+            ) : null}
+            {(section.type === 'HOMEPAGE' && section.url) || section.type === 'CUSTOM' ? (
+              <FormControlWithLabel label={urlPh} onChange={handleUrlChange} type="text" value={section.url} />
+            ) : null}
             <div className="separator" />
           </div>
         );
