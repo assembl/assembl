@@ -14,6 +14,7 @@ import SaveButton from '../components/administration/saveButton';
 import ThematicsQuery from '../graphql/ThematicsQuery.graphql';
 import ResourcesQuery from '../graphql/ResourcesQuery.graphql';
 import ResourcesCenterPage from '../graphql/ResourcesCenterPage.graphql';
+import TabsConditionQuery from '../graphql/TabsConditionQuery.graphql';
 import { convertEntriesToRawContentState } from '../utils/draftjs';
 
 export function convertVideoDescriptions(thematics) {
@@ -100,7 +101,7 @@ class Administration extends React.Component {
   }
 
   render() {
-    const { children, data, debate, i18n, params, refetchResources, refetchResourcesCenter } = this.props;
+    const { children, data, debate, i18n, params, refetchResources, refetchResourcesCenter, refetchTabsConditions } = this.props;
     const { phase } = params;
     const { timeline } = this.props.debate.debateData;
     const childrenWithProps = React.Children.map(children, (child) => {
@@ -118,6 +119,7 @@ class Administration extends React.Component {
                 <Col xs={12} md={3} />
                 <Col xs={12} md={8}>
                   <SaveButton
+                    refetchTabsConditions={refetchTabsConditions}
                     refetchThematics={data.refetch}
                     refetchResources={refetchResources}
                     refetchResourcesCenter={refetchResourcesCenter}
@@ -178,9 +180,17 @@ const mapDispatchToProps = (dispatch) => {
 
 const mergeLoadingAndHasErrors = (WrappedComponent) => {
   return (props) => {
-    const { data, resourcesHasErrors, resourcesCenterHasErrors, resourcesLoading, resourcesCenterLoading } = props;
-    const hasErrors = resourcesHasErrors || resourcesCenterHasErrors || (data && data.error);
-    const loading = resourcesLoading || resourcesCenterLoading || (data && data.loading);
+    const {
+      data,
+      resourcesHasErrors,
+      resourcesCenterHasErrors,
+      resourcesLoading,
+      resourcesCenterLoading,
+      tabsConditionsLoading,
+      tabsConditionsHasErrors
+    } = props;
+    const hasErrors = resourcesHasErrors || resourcesCenterHasErrors || tabsConditionsLoading || (data && data.error);
+    const loading = resourcesLoading || resourcesCenterLoading || tabsConditionsHasErrors || (data && data.loading);
     return <WrappedComponent {...props} hasErrors={hasErrors} loading={loading} />;
   };
 };
@@ -189,6 +199,25 @@ export default compose(
   connect(mapStateToProps, mapDispatchToProps),
   graphql(ThematicsQuery, {
     options: { variables: { identifier: 'survey' } }
+  }),
+  graphql(TabsConditionQuery, {
+    // pass refetchTabsConditions to re-render navigation menu if there is a change in resources
+    props: ({ data }) => {
+      if (data.loading) {
+        return {
+          tabsConditionsLoading: true
+        };
+      }
+      if (data.error) {
+        return {
+          tabsConditionsHasErrors: true
+        };
+      }
+
+      return {
+        refetchTabsConditions: data.refetch
+      };
+    }
   }),
   graphql(ResourcesQuery, {
     props: ({ data }) => {

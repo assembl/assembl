@@ -129,7 +129,8 @@ const SaveButton = ({
   refetchResources,
   resourcesCenterPage,
   updateResourcesCenter,
-  refetchResourcesCenter
+  refetchResourcesCenter,
+  refetchTabsConditions
 }) => {
   const saveAction = () => {
     displayAlert('success', `${I18n.t('loading.wait')}...`);
@@ -206,6 +207,7 @@ const SaveButton = ({
 
       runSerial(mutationsPromises)
         .then(() => {
+          refetchTabsConditions();
           refetchResources();
           displayAlert('success', I18n.t('administration.resourcesCenter.successSave'));
         })
