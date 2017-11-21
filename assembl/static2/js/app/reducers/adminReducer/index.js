@@ -2,6 +2,7 @@ import { fromJS, List, Map } from 'immutable';
 import { combineReducers } from 'redux';
 
 import resourcesCenter from './resourcesCenter';
+import sections from './adminSections';
 import { updateInLangstringEntries } from '../../utils/i18n';
 
 export const selectedLocale = (state = 'fr', action) => {
@@ -195,5 +196,6 @@ export default combineReducers({
   thematicsById: thematicsById,
   discussionLanguagePreferences: languagePreferences,
   discussionLanguagePreferencesHasChanged: discussionLanguagePreferencesHasChanged,
-  resourcesCenter: resourcesCenter
+  resourcesCenter: resourcesCenter,
+  sections: sections
 });

@@ -15,6 +15,7 @@ export const UPDATE_RESOURCES: 'UPDATE_RESOURCES' = 'UPDATE_RESOURCES';
 export const UPDATE_RC_PAGE_TITLE: 'UPDATE_RC_PAGE_TITLE' = 'UPDATE_RC_PAGE_TITLE';
 export const UPDATE_RC_HEADER_IMAGE: 'UPDATE_RC_HEADER_IMAGE' = 'UPDATE_RC_HEADER_IMAGE';
 export const UPDATE_RC_PAGE: 'UPDATE_RC_PAGE' = 'UPDATE_RC_PAGE';
+export const UPDATE_SECTIONS: 'UPDATE_SECTIONS' = 'UPDATE_SECTIONS';
 
 export type UpdateContentLocaleById = {
   type: typeof UPDATE_CONTENT_LOCALE_BY_ID,
@@ -110,6 +111,17 @@ export type ResourcesArray = Array<ResourceInfo>;
 export type UpdateResources = {
   resources: ResourcesArray,
   type: typeof UPDATE_RESOURCES
+};
+
+export type SectionInfo = {
+  id: string
+};
+
+export type SectionsArray = Array<SectionInfo>;
+
+export type UpdateSections = {
+  sections: SectionsArray,
+  type: typeof UPDATE_SECTIONS
 };
 
 type BasicAction = {

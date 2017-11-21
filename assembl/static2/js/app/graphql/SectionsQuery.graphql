@@ -1,0 +1,12 @@
+query SectionsQuery {
+  sections {
+    id
+    sectionType
+    order
+    titleEntries {
+      value
+      localeCode
+    }
+    url
+  }
+}

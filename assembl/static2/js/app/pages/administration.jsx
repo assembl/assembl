@@ -7,6 +7,7 @@ import { connect } from 'react-redux';
 
 import { updateThematics } from '../actions/adminActions';
 import { updateResources, updateResourcesCenterPage } from '../actions/adminActions/resourcesCenter';
+import { updateSections } from '../actions/adminActions/adminSections';
 import withLoadingIndicator from '../components/common/withLoadingIndicator';
 import Menu from '../components/administration/menu';
 import LanguageMenu from '../components/administration/languageMenu';
@@ -14,6 +15,7 @@ import SaveButton from '../components/administration/saveButton';
 import ThematicsQuery from '../graphql/ThematicsQuery.graphql';
 import ResourcesQuery from '../graphql/ResourcesQuery.graphql';
 import ResourcesCenterPage from '../graphql/ResourcesCenterPage.graphql';
+import SectionsQuery from '../graphql/SectionsQuery.graphql';
 import { convertEntriesToRawContentState } from '../utils/draftjs';
 
 export function convertVideoDescriptions(thematics) {
@@ -55,6 +57,7 @@ class Administration extends React.Component {
     this.putResourcesCenterInStore(this.props.resourcesCenter);
     this.putResourcesInStore(this.props.resources);
     this.putThematicsInStore(this.props.data);
+    this.putSectionsInStore(this.props.sections);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -65,6 +68,10 @@ class Administration extends React.Component {
 
     if (nextProps.resources !== this.props.resources) {
       this.putResourcesInStore(nextProps.resources);
+    }
+
+    if (nextProps.sections !== this.props.sections) {
+      this.putSectionsInStore(nextProps.sections);
     }
 
     this.putResourcesCenterInStore(nextProps.resourcesCenter);
@@ -97,6 +104,11 @@ class Administration extends React.Component {
   putResourcesCenterInStore(resourcesCenter) {
     const filteredResourcesCenter = filter(ResourcesCenterPage, { resourcesCenter: resourcesCenter });
     this.props.updateResourcesCenterPage(filteredResourcesCenter.resourcesCenter);
+  }
+
+  putSectionsInStore(sections) {
+    const filteredSections = filter(SectionsQuery, { sections: sections });
+    this.props.updateSections(filteredSections.sections);
   }
 
   render() {
@@ -167,6 +179,9 @@ const mapDispatchToProps = (dispatch) => {
     updateResources: (resources) => {
       return dispatch(updateResources(resources));
     },
+    updateSections: (sections) => {
+      return dispatch(updateSections(sections));
+    },
     updateThematics: (thematics) => {
       return dispatch(updateThematics(thematics));
     },
@@ -233,6 +248,14 @@ export default compose(
           headerImage: headerImage,
           titleEntries: titleEntries
         }
+      };
+    }
+  }),
+  graphql(SectionsQuery, {
+    props: ({ data }) => {
+      return {
+        refetchSections: data.refetch,
+        sections: data.sections
       };
     }
   }),

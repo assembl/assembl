@@ -35,7 +35,7 @@ const sections = [
     // order: 2
   },
   {
-    id: '5',
+    id: '6',
     title: 'My other custom section',
     url: 'http://www.example.com/2',
     type: 'CUSTOM'
