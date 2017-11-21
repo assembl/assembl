@@ -52,7 +52,7 @@ class QuestionSection extends React.Component {
               );
             })}
           </Row>
-          {selectedThematicId &&
+          {selectedThematicId && (
             <Row>
               <MediaForm
                 key={`media-form-${selectedThematicId}-${selectedLocale}`}
@@ -64,7 +64,8 @@ class QuestionSection extends React.Component {
                 thematicId={selectedThematicId}
                 selectedLocale={selectedLocale}
               />
-            </Row>}
+            </Row>
+          )}
         </div>
       </div>
     );

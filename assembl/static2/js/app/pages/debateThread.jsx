@@ -26,24 +26,21 @@ const DebateThread = ({ identifier, data, params, children, slug }) => {
       <div>
         <section className="timeline-section" id="timeline">
           <div className="max-container">
-            {!isParentRoute &&
+            {!isParentRoute && (
               <Link className="burger-menu grey" to={get('debate', { slug: slug, phase: identifier })}>
                 <div className="assembl-icon-thumb" />
                 <div className="burger-menu-label">
                   <Translate value="debate.themes" />
                 </div>
-              </Link>}
+              </Link>
+            )}
             <Timeline showNavigation={!isParentRoute} identifier={identifier} />
           </div>
         </section>
         {!loading &&
           ideas &&
-          isParentRoute &&
-          <Ideas ideas={ideas} rootIdeaId={rootIdea.id} identifier={identifier} key={identifier} />}
-        {!isParentRoute &&
-          <section className="debate-section">
-            {childrenElm}
-          </section>}
+          isParentRoute && <Ideas ideas={ideas} rootIdeaId={rootIdea.id} identifier={identifier} key={identifier} />}
+        {!isParentRoute && <section className="debate-section">{childrenElm}</section>}
       </div>
     </div>
   );

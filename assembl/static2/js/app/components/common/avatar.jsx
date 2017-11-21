@@ -31,30 +31,30 @@ class ProfileIcon extends React.Component {
     const dropdownUser = (
       <div className="inline">
         <span className="assembl-icon-profil grey">&nbsp;</span>
-        <span className="username">
-          {connectedUserName}
-        </span>
+        <span className="username">{connectedUserName}</span>
       </div>
     );
     return (
       <div className="right avatar">
-        {!connectedUserId &&
+        {!connectedUserId && (
           <Link to={`${getContextual('login', slug)}?next=${this.state.next}`}>
             <div className="connection">
               <Translate value="navbar.connection" />
             </div>
-          </Link>}
+          </Link>
+        )}
         {connectedUserId &&
-          connectedUserName &&
-          <div>
-            <ul className="dropdown-xs">
-              <NavDropdown pullRight title={dropdownUser} id="user-dropdown">
-                <MenuItem href={`${getContextual('oldLogout', slug)}?next=${get('home', slug)}`}>
-                  <Translate value="navbar.logout" />
-                </MenuItem>
-              </NavDropdown>
-            </ul>
-          </div>}
+          connectedUserName && (
+            <div>
+              <ul className="dropdown-xs">
+                <NavDropdown pullRight title={dropdownUser} id="user-dropdown">
+                  <MenuItem href={`${getContextual('oldLogout', slug)}?next=${get('home', slug)}`}>
+                    <Translate value="navbar.logout" />
+                  </MenuItem>
+                </NavDropdown>
+              </ul>
+            </div>
+          )}
       </div>
     );
   }

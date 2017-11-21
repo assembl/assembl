@@ -15,8 +15,8 @@ class SynthesisContainer extends React.Component {
     const { synthesis } = this.props;
     return (
       <div>
-        {synthesis
-          ? <section className="home-section synthesis-section">
+        {synthesis ? (
+          <section className="home-section synthesis-section">
             <Grid fluid className="background-light">
               <div className="max-container">
                 <div style={{ margin: '20px 0' }}>
@@ -29,7 +29,7 @@ class SynthesisContainer extends React.Component {
               </div>
             </Grid>
           </section>
-          : null}
+        ) : null}
       </div>
     );
   }

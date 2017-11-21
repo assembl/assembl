@@ -6,18 +6,12 @@ class Profile extends React.Component {
     const { title, nbUsers, nbPosts } = this.props.idea;
     return (
       <div className="idea-link">
-        <Link className="idea-link-title">
-          {title}
-        </Link>
+        <Link className="idea-link-title">{title}</Link>
         <div className="stats">
-          <div className="inline">
-            {nbPosts}
-          </div>
+          <div className="inline">{nbPosts}</div>
           <span className="assembl-icon-profil white">&nbsp;</span>
           <div className="inline padding">-</div>
-          <div className="inline">
-            {nbUsers}
-          </div>
+          <div className="inline">{nbUsers}</div>
           <span className="assembl-icon-message white">&nbsp;</span>
         </div>
       </div>

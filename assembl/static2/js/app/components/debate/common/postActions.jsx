@@ -83,9 +83,11 @@ class PostActions extends React.Component {
             overlay={getOverflowMenuForPost(postId, userCanDeleteThisMessage, userCanEditThisMessage, client, handleEditClick)}
           >
             <div>
-              {this.state.screenWidth >= MEDIUM_SCREEN_WIDTH
-                ? <span className="assembl-icon-ellipsis-vert">&nbsp;</span>
-                : <span className="assembl-icon-ellipsis">&nbsp;</span>}
+              {this.state.screenWidth >= MEDIUM_SCREEN_WIDTH ? (
+                <span className="assembl-icon-ellipsis-vert">&nbsp;</span>
+              ) : (
+                <span className="assembl-icon-ellipsis">&nbsp;</span>
+              )}
             </div>
           </OverlayTrigger>
         </div>
@@ -96,13 +98,14 @@ class PostActions extends React.Component {
     return (
       <div>
         <div className="post-icons">
-          {handleAnswerClick &&
+          {handleAnswerClick && (
             <div
               className="post-action"
               onClick={isPhaseCompleted ? this.displayPhaseCompletedModal : promptForLoginOr(handleAnswerClick)}
             >
               <ResponsiveOverlayTrigger placement={tooltipPlacement} tooltip={answerTooltip} component={answerIcon} />
-            </div>}
+            </div>
+          )}
           <div
             className="post-action"
             onClick={() => {
@@ -126,8 +129,8 @@ class PostActions extends React.Component {
           />
           {this.state.screenWidth >= MEDIUM_SCREEN_WIDTH ? null : overflowMenu}
         </div>
-        {totalSentimentsCount > 0
-          ? <OverlayTrigger
+        {totalSentimentsCount > 0 ? (
+          <OverlayTrigger
             overlay={getSentimentStats(totalSentimentsCount, sentimentCounts, mySentiment)}
             placement={tooltipPlacement}
           >
@@ -145,13 +148,17 @@ class PostActions extends React.Component {
                 }, [])}
               </div>
               <div className="txt">
-                {this.state.screenWidth >= MEDIUM_SCREEN_WIDTH
-                  ? totalSentimentsCount
-                  : <Translate value="debate.thread.numberOfReactions" count={totalSentimentsCount} />}
+                {this.state.screenWidth >= MEDIUM_SCREEN_WIDTH ? (
+                  totalSentimentsCount
+                ) : (
+                  <Translate value="debate.thread.numberOfReactions" count={totalSentimentsCount} />
+                )}
               </div>
             </div>
           </OverlayTrigger>
-          : <div className="empty-sentiments-count" />}
+        ) : (
+          <div className="empty-sentiments-count" />
+        )}
         {this.state.screenWidth >= MEDIUM_SCREEN_WIDTH ? overflowMenu : null}
         <div className="answers annotation">
           <Translate value="debate.thread.numberOfResponses" count={numChildren ? numChildren.length : 0} />

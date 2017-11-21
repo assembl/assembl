@@ -13,11 +13,7 @@ export const TextInputWithRemainingChars = ({
   const remainingChars = maxLength - value.length;
   return (
     <div>
-      {alwaysDisplayLabel || value
-        ? <div className="form-label input-title-label">
-          {label}
-        </div>
-        : null}
+      {alwaysDisplayLabel || value ? <div className="form-label input-title-label">{label}</div> : null}
       <FormControl
         type="text"
         placeholder={label}

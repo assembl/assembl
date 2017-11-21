@@ -28,14 +28,15 @@ export class DumbSynthesis extends React.Component<void, SynthesisProps, void> {
       <div className="background-light">
         <Header title={subject} imgUrl={synthesis.img ? synthesis.img.externalUrl : ''} isSynthesesHeader />
         <Grid fluid>
-          {introduction &&
+          {introduction && (
             <Section title="introduction" translate className="synthesis-block">
               <Row>
                 <Col mdOffset={3} md={8} smOffset={1} sm={10}>
                   <div dangerouslySetInnerHTML={{ __html: introduction }} />
                 </Col>
               </Row>
-            </Section>}
+            </Section>
+          )}
           <Row className="background-grey synthesis-tree">
             <Col mdOffset={3} md={7} smOffset={1} sm={10}>
               {roots.map((rootIdea, index) => {
@@ -53,14 +54,15 @@ export class DumbSynthesis extends React.Component<void, SynthesisProps, void> {
               })}
             </Col>
           </Row>
-          {conclusion &&
+          {conclusion && (
             <Section title="conclusion" translate className="synthesis-block">
               <Row>
                 <Col mdOffset={3} md={8} smOffset={1} sm={10}>
                   <div dangerouslySetInnerHTML={{ __html: conclusion }} />
                 </Col>
               </Row>
-            </Section>}
+            </Section>
+          )}
         </Grid>
       </div>
     );

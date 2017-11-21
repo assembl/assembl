@@ -186,11 +186,12 @@ class Post extends React.Component {
           </div>
         </div>
         <div className="statistic">
-          {this.state.screenWidth < EXTRA_SMALL_SCREEN_WIDTH &&
+          {this.state.screenWidth < EXTRA_SMALL_SCREEN_WIDTH && (
             <div className="sentiments">
               <ResponsiveOverlayTrigger placement="top" tooltip={likeTooltip} component={likeComponent} />
               <ResponsiveOverlayTrigger placement="top" tooltip={disagreeTooltip} component={disagreeComponent} />
-            </div>}
+            </div>
+          )}
           <StatisticsDoughnut
             elements={[
               { color: sentimentDefinitionsObject.like.color, count: post.sentimentCounts.like },

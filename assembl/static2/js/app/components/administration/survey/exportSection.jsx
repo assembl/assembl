@@ -72,12 +72,13 @@ class ExportSection extends React.Component {
               }}
             >
               <Translate value="administration.surveyExport.translateTheMessagesIn" />
-              {translate &&
+              {translate && (
                 <ExportSection.ExportLanguageDropDown
                   languages={languages}
                   onSelect={this.selectExportLocale}
                   activeKey={exportLocale}
-                />}
+                />
+              )}
             </Radio>
           </FormGroup>
           <br />

@@ -36,18 +36,20 @@ class Video extends React.Component {
             <div className="content-section">
               <div className="content-margin">
                 <Row>
-                  {debateData.video.descriptionEntriesTop &&
+                  {debateData.video.descriptionEntriesTop && (
                     <Col xs={12} md={6} className={this.state.isTextHigher ? 'col-bottom' : ''}>
                       <div className="text" id="video-txt">
                         {debateData.video.descriptionEntriesTop[locale]}
                       </div>
-                    </Col>}
-                  {debateData.video.videoUrl &&
+                    </Col>
+                  )}
+                  {debateData.video.videoUrl && (
                     <Col xs={12} md={6} className={this.state.isTextHigher ? 'col-bottom' : ''}>
                       <div className="video-container" id="video-vid">
                         <iframe src={debateData.video.videoUrl} frameBorder="0" width="560" height="315" title="video" />
                       </div>
-                    </Col>}
+                    </Col>
+                  )}
                 </Row>
               </div>
             </div>

@@ -140,7 +140,12 @@ export default class RichTextEditor extends React.Component<Object, RichTextEdit
     // don't display placeholder if user changes the block type (to bullet list) before to type anything
     const contentState = this.state.editorState.getCurrentContent();
     if (!contentState.hasText()) {
-      if (contentState.getBlockMap().first().getType() !== 'unstyled') {
+      if (
+        contentState
+          .getBlockMap()
+          .first()
+          .getType() !== 'unstyled'
+      ) {
         return true;
       }
     }
@@ -213,11 +218,9 @@ export default class RichTextEditor extends React.Component<Object, RichTextEdit
     return (
       <div className={divClassName} ref={textareaRef}>
         <div className="editor-header">
-          {this.state.editorState.getCurrentContent().hasText()
-            ? <div className="editor-label form-label">
-              {placeholder}
-            </div>
-            : null}
+          {this.state.editorState.getCurrentContent().hasText() ? (
+            <div className="editor-label form-label">{placeholder}</div>
+          ) : null}
           {toolbarPosition === 'top' ? this.renderToolbar() : null}
           <div className="clear" />
         </div>

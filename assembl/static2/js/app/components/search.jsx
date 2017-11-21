@@ -204,21 +204,13 @@ const DumbPostHit = (props) => {
         <p dangerouslySetInnerHTML={{ __html: body }} />
         <div>
           <div title={I18n.t('search.like')} className="emoticon LikeSentimentOfPost" />
-          <div className="emoticonValue">
-            {source.sentiment_counts.like}
-          </div>
+          <div className="emoticonValue">{source.sentiment_counts.like}</div>
           <div title={I18n.t('search.disagree')} className="emoticon DisagreeSentimentOfPost" />
-          <div className="emoticonValue">
-            {source.sentiment_counts.disagree}
-          </div>
+          <div className="emoticonValue">{source.sentiment_counts.disagree}</div>
           <div title={I18n.t('search.dont_understand')} className="emoticon DontUnderstandSentimentOfPost" />
-          <div className="emoticonValue">
-            {source.sentiment_counts.dont_understand}
-          </div>
+          <div className="emoticonValue">{source.sentiment_counts.dont_understand}</div>
           <div title={I18n.t('search.more_info')} className="emoticon MoreInfoSentimentOfPost" />
-          <div className="emoticonValue">
-            {source.sentiment_counts.more_info}
-          </div>
+          <div className="emoticonValue">{source.sentiment_counts.more_info}</div>
         </div>
       </div>
       <PublishedInfo
@@ -281,20 +273,22 @@ const UserHit = (props) => {
     <div className={props.bemBlocks.item().mix(props.bemBlocks.container('item'))}>
       <ImageType type={props.result._type} className={props.bemBlocks.item('imgtype')} />
       <div className={props.bemBlocks.item('title')}>
-        {url
-          ? <Link to={getUrl(props.result)} dangerouslySetInnerHTML={{ __html: fullname }} />
-          : <p dangerouslySetInnerHTML={{ __html: fullname }} />}
+        {url ? (
+          <Link to={getUrl(props.result)} dangerouslySetInnerHTML={{ __html: fullname }} />
+        ) : (
+          <p dangerouslySetInnerHTML={{ __html: fullname }} />
+        )}
       </div>
       <div className={props.bemBlocks.item('info')}>
         {source.num_posts}
         <span className={props.bemBlocks.item('assembl-icon-message')}>
           <span className="assembl-icon-message" title="Number of contributions" />
         </span>
-        {source.creation_date
-          ? <span>
+        {source.creation_date ? (
+          <span>
             <Translate value="search.member_since" /> <Localize value={source.creation_date} dateFormat="date.format" />
           </span>
-          : null}
+        ) : null}
       </div>
     </div>
   );
@@ -316,24 +310,25 @@ const DumbIdeaHit = (props) => {
         <Link to={getUrl(props.result)} dangerouslySetInnerHTML={{ __html: shortTitle }} />
       </div>
       <div className={props.bemBlocks.item('content')}>
-        {definition
-          ? <div>
+        {definition ? (
+          <div>
             <p dangerouslySetInnerHTML={{ __html: definition }} />
-            {get(props.result, 'highlight.definition') &&
-            <p>
-              <Translate value="search.search_come_from_what_you_need_to_know" />
-            </p>}
+            {get(props.result, 'highlight.definition') && (
+              <p>
+                <Translate value="search.search_come_from_what_you_need_to_know" />
+              </p>
+            )}
           </div>
-          : null}
-        {get(props.result, 'highlight.title') || get(props.result, 'highlight.body')
-          ? <div>
+        ) : null}
+        {get(props.result, 'highlight.title') || get(props.result, 'highlight.body') ? (
+          <div>
             <p dangerouslySetInnerHTML={{ __html: announceTitle }} />
             <p dangerouslySetInnerHTML={{ __html: announceBody }} />
             <p>
               <Translate value="search.search_come_from_announcement" />
             </p>
           </div>
-          : null}
+        ) : null}
       </div>
       <div className={props.bemBlocks.item('info')}>
         {source.num_posts}
@@ -368,11 +363,7 @@ const HitItem = (props) => {
 };
 
 const NoPanel = (props) => {
-  return (
-    <div>
-      {props.children}
-    </div>
-  );
+  return <div>{props.children}</div>;
 };
 
 const calcQueryFields = () => {
@@ -571,8 +562,8 @@ export class SearchComponent extends React.Component {
                   id="sentiment_tags"
                   title={I18n.t('search.Messages')}
                 />
-                {connectedUserId
-                  ? <div className="sk-panel">
+                {connectedUserId ? (
+                  <div className="sk-panel">
                     <CheckboxFilter
                       containerComponent={NoPanel}
                       id="mymessages"
@@ -588,10 +579,10 @@ export class SearchComponent extends React.Component {
                       filter={TermQuery('parent_creator_id', connectedUserId)}
                     />
                   </div>
-                  : null}
+                ) : null}
               </Panel>
-              {isExpert
-                ? <Panel title={I18n.t('search.Participants')} className={usersSelected ? null : 'hidden'}>
+              {isExpert ? (
+                <Panel title={I18n.t('search.Participants')} className={usersSelected ? null : 'hidden'}>
                   <CheckboxFilter
                     containerComponent={NoPanel}
                     id="creative-participants"
@@ -635,7 +626,7 @@ export class SearchComponent extends React.Component {
                     )}
                   />
                 </Panel>
-                : null}
+              ) : null}
               <TagFilterConfig id="creator_id" title="Participant" field="creator_id" />
               <Panel title={I18n.t('search.Sort')}>
                 <FilteredSortingSelector options={sorts} filterPrefix={selectedCategory} listComponent={CheckboxItemList} />

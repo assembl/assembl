@@ -100,8 +100,8 @@ class ChooseContentLocaleForm extends React.Component<*, ChooseContentLocaleForm
               </Radio>
             </FormGroup>
           </FormGroup>
-          {scope
-            ? <FormGroup>
+          {scope ? (
+            <FormGroup>
               <FormControl
                 componentClass="select"
                 placeholder="select"
@@ -112,9 +112,7 @@ class ChooseContentLocaleForm extends React.Component<*, ChooseContentLocaleForm
                 }}
                 value={selectedLocale}
               >
-                <option value="select">
-                  {I18n.t('debate.thread.chooseLanguagePh')}
-                </option>
+                <option value="select">{I18n.t('debate.thread.chooseLanguagePh')}</option>
                 {availableLanguages.map((lang) => {
                   return (
                     <option key={`locale-${lang.localeCode}`} value={lang.localeCode}>
@@ -124,7 +122,7 @@ class ChooseContentLocaleForm extends React.Component<*, ChooseContentLocaleForm
                 })}
               </FormControl>
             </FormGroup>
-            : null}
+          ) : null}
         </Modal.Body>
         <Modal.Footer>
           <Button key="translate-cancel" onClick={closeModal} className="button-cancel button-dark left">

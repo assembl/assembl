@@ -48,25 +48,27 @@ class Debate extends React.Component {
           <section className="timeline-section" id="timeline">
             <div className="max-container">
               {thematics &&
-                !isParentRoute &&
-                <div className="burger-menu grey" onMouseOver={this.showThumbnails} onClick={this.displayThumbnails}>
-                  <div className="assembl-icon-thumb" />
-                  <div className="burger-menu-label">
-                    <Translate value="debate.themes" />
+                !isParentRoute && (
+                  <div className="burger-menu grey" onMouseOver={this.showThumbnails} onClick={this.displayThumbnails}>
+                    <div className="assembl-icon-thumb" />
+                    <div className="burger-menu-label">
+                      <Translate value="debate.themes" />
+                    </div>
                   </div>
-                </div>}
+                )}
               <Timeline showNavigation={!isParentRoute} identifier={identifier} />
             </div>
           </section>
           {thematics && isParentRoute && <Themes thematics={thematics} identifier={identifier} />}
           {thematics &&
-            !isParentRoute &&
-            <section className="debate-section">
-              <div className={this.state.isThumbnailsHidden ? 'hiddenThumb' : 'shown'} onMouseLeave={this.hideThumbnails}>
-                <Thumbnails showNavigation={!isParentRoute} thematics={thematics} identifier={identifier} themeId={themeId} />
-              </div>
-              {children}
-            </section>}
+            !isParentRoute && (
+              <section className="debate-section">
+                <div className={this.state.isThumbnailsHidden ? 'hiddenThumb' : 'shown'} onMouseLeave={this.hideThumbnails}>
+                  <Thumbnails showNavigation={!isParentRoute} thematics={thematics} identifier={identifier} themeId={themeId} />
+                </div>
+                {children}
+              </section>
+            )}
         </div>
       </div>
     );

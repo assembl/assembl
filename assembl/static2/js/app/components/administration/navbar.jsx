@@ -48,7 +48,7 @@ class Navbar extends React.Component {
         </Col>
         <Col xs={6} md={6}>
           <div className="arrow-container">
-            {this.state.currentStep < this.state.totalSteps &&
+            {this.state.currentStep < this.state.totalSteps && (
               <div
                 onClick={() => {
                   this.goToSection(this.state.currentStep + 1);
@@ -56,8 +56,9 @@ class Navbar extends React.Component {
                 className="arrow right"
               >
                 <span className="assembl-icon-up-open" />
-              </div>}
-            {this.state.currentStep > 1 &&
+              </div>
+            )}
+            {this.state.currentStep > 1 && (
               <div
                 onClick={() => {
                   this.goToSection(this.state.currentStep - 1);
@@ -65,7 +66,8 @@ class Navbar extends React.Component {
                 className="arrow right"
               >
                 <span className="assembl-icon-down-open" />
-              </div>}
+              </div>
+            )}
           </div>
         </Col>
       </div>

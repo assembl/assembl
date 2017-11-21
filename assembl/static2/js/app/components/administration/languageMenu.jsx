@@ -24,11 +24,7 @@ const Flag = ({ locale }) => {
   case 'zh_Hans':
     return <ZhCN />;
   default:
-    return (
-      <span>
-        {locale}
-      </span>
-    );
+    return <span>{locale}</span>;
   }
 };
 

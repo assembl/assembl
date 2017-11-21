@@ -9,9 +9,7 @@ const Chatbot = ({ chatbot, locale }) => {
       <Grid fluid>
         <div className="max-container center">
           <div className="margin-xl">
-            <h1 className="dark-title-1 center">
-              {chatbot.titleEntries[locale]}
-            </h1>
+            <h1 className="dark-title-1 center">{chatbot.titleEntries[locale]}</h1>
           </div>
           <div className="center" style={{ margin: '60px 0' }}>
             <Row>

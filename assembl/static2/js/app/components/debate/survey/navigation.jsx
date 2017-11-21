@@ -158,7 +158,7 @@ class Navigation extends React.Component {
                   >
                     <span className="assembl-icon-down-open" />
                   </div>
-                  {this.state.currentQuestionNumber > 1 &&
+                  {this.state.currentQuestionNumber > 1 && (
                     <div
                       className="arrow right"
                       onClick={() => {
@@ -166,7 +166,8 @@ class Navigation extends React.Component {
                       }}
                     >
                       <span className="assembl-icon-up-open" />
-                    </div>}
+                    </div>
+                  )}
                 </Col>
               </Col>
             </div>

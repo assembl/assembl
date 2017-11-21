@@ -9,13 +9,9 @@ type SectionTitleProps = {
 const SectionTitle = ({ title, annotation }: SectionTitleProps) => {
   return (
     <div>
-      <h3 className="dark-title-3">
-        {title}
-      </h3>
+      <h3 className="dark-title-3">{title}</h3>
       <div className="box-hyphen" />
-      <div className="annotation">
-        {annotation}
-      </div>
+      <div className="annotation">{annotation}</div>
     </div>
   );
 };

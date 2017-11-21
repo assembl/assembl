@@ -60,16 +60,17 @@ class NavBar extends React.Component {
               <NavigationMenu />
             </div>
             <div className="navbar-icons right">
-              {currentPhaseIdentifier !== 'survey'
-                ? <div id="search" className="left">
+              {currentPhaseIdentifier !== 'survey' ? (
+                <div id="search" className="left">
                   <Search />
                 </div>
-                : null}
+              ) : null}
               {connectedUserId &&
-                debateData.helpUrl &&
-                <Link to={`${debateData.helpUrl}`} target="_blank">
-                  <span className="assembl-icon-faq grey">&nbsp;</span>
-                </Link>}
+                debateData.helpUrl && (
+                  <Link to={`${debateData.helpUrl}`} target="_blank">
+                    <span className="assembl-icon-faq grey">&nbsp;</span>
+                  </Link>
+                )}
               <div className="navbar-language right">
                 <LanguageMenu size="xs" />
               </div>

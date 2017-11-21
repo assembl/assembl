@@ -120,14 +120,14 @@ class PostTranslate extends React.Component<void, PostTranslateProps, PostTransl
     const displayPostLanguage = translate || originalLocale !== lang;
     return (
       <div className="translate">
-        {displayPostLanguage
-          ? <p>
+        {displayPostLanguage ? (
+          <p>
             <Translate
               value={translate ? 'debate.thread.messageTranslatedFrom' : 'debate.thread.messageOriginallyIn'}
               language={this.originalLocaleLabel}
             />
           </p>
-          : null}
+        ) : null}
         <SwitchButton
           name={`switch-${id}`}
           onChange={this.handleSubmit}

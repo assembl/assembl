@@ -8,9 +8,7 @@ class PostCreator extends React.Component {
       <div className="inline">
         <div className="user">
           <span className="assembl-icon-profil grey">&nbsp;</span>
-          <span className="username">
-            {name}
-          </span>
+          <span className="username">{name}</span>
         </div>
       </div>
     );

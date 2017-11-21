@@ -24,7 +24,7 @@ class Proposals extends React.Component {
             />
           </div>
         </h3>
-        {posts.length > 0 &&
+        {posts.length > 0 && (
           <div className={this.state.hideProposals ? 'hidden' : 'shown'}>
             {posts.map((post, index) => {
               return (
@@ -38,11 +38,13 @@ class Proposals extends React.Component {
                 />
               );
             })}
-          </div>}
-        {posts.length === 0 &&
+          </div>
+        )}
+        {posts.length === 0 && (
           <div className="no-proposals">
             <Translate value="debate.survey.noProposals" />
-          </div>}
+          </div>
+        )}
       </div>
     );
   }

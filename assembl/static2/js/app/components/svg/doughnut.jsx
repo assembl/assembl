@@ -28,11 +28,13 @@ const getColor = (element) => {
 };
 
 const simpleCircle = (cx, cy, r, element) => {
-  return 'Tooltip' in element
-    ? <OverlayTrigger container={this} overlay={element.Tooltip} placement="bottom">
+  return 'Tooltip' in element ? (
+    <OverlayTrigger container={this} overlay={element.Tooltip} placement="bottom">
       <circle className="circle" cx={cx} cy={cy} r={r} stroke={getColor(element)} />
     </OverlayTrigger>
-    : <circle className="circle" cx={cx} cy={cy} r={r} stroke={getColor(element)} />;
+  ) : (
+    <circle className="circle" cx={cx} cy={cy} r={r} stroke={getColor(element)} />
+  );
 };
 
 const placementFromAngle = (angle) => {
@@ -57,17 +59,13 @@ const circlePaths = (cx, cy, r, elements, totalCount) => {
     nextStartAngle = endAngle;
     const color = getColor(element);
     const middleAngle = startAngle + (endAngle - startAngle) / 2;
-    return 'Tooltip' in element
-      ? <OverlayTrigger key={index} container={this} overlay={element.Tooltip} placement={placementFromAngle(middleAngle)}>
+    return 'Tooltip' in element ? (
+      <OverlayTrigger key={index} container={this} overlay={element.Tooltip} placement={placementFromAngle(middleAngle)}>
         <path d={describeArc(cx, cy, r, startAngle, endAngle)} stroke={color} fill="transparent" className="circle" />
       </OverlayTrigger>
-      : <path
-        key={index}
-        d={describeArc(cx, cy, r, startAngle, endAngle)}
-        stroke={color}
-        fill="transparent"
-        className="circle"
-      />;
+    ) : (
+      <path key={index} d={describeArc(cx, cy, r, startAngle, endAngle)} stroke={color} fill="transparent" className="circle" />
+    );
   });
 };
 
@@ -86,15 +84,17 @@ const Doughnut = ({ elements }) => {
   }, 0);
   const { cx, cy, r } = doughnutConstants;
   const viewBox = `0 0 ${cx * 2} ${cy * 2}`;
-  return totalCount === 0
-    ? <svg className="doughnut" viewBox={viewBox}>
+  return totalCount === 0 ? (
+    <svg className="doughnut" viewBox={viewBox}>
       {simpleCircle(cx, cy, r, { count: 0 })}
     </svg>
-    : <svg className="doughnut" viewBox={viewBox}>
+  ) : (
+    <svg className="doughnut" viewBox={viewBox}>
       {filteredElements.length === 1
         ? simpleCircle(cx, cy, r, filteredElements[0])
         : circlePaths(cx, cy, r, filteredElements, totalCount)}
-    </svg>;
+    </svg>
+  );
 };
 
 export default Doughnut;

@@ -51,15 +51,15 @@ export default class SocialShare extends React.Component {
 
     return (
       <div className="share-buttons-container">
-        {social
-          ? <div className="social-share-buttons-container">
-            {SocialNetworks}
-          </div>
-          : <div className="social-share-buttons-container">
+        {social ? (
+          <div className="social-share-buttons-container">{SocialNetworks}</div>
+        ) : (
+          <div className="social-share-buttons-container">
             <div className="social-share-button">
               <SuperShareButton Component={EmailShareButton} Icon={generateShareIcon('email')} url={url} onClose={onClose} />
             </div>
-          </div>}
+          </div>
+        )}
         <CopyToClipboard
           text={url}
           onCopy={() => {
