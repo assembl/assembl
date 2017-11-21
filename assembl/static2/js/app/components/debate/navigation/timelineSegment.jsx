@@ -75,25 +75,20 @@ class TimelineSegment extends React.Component {
           .map((entry, index2) => {
             return (
               <div onClick={this.displayPhase} className={timelineClass} key={index2}>
-                <div className="timeline-link">
-                  {entry.value}
-                </div>
+                <div className="timeline-link">{entry.value}</div>
               </div>
             );
           })}
         <div className="timeline-graph">
           <div className={isStepCompleted || isCurrentPhase ? 'timeline-number active' : 'timeline-number not-active'}>
-            {isStepCompleted
-              ? <span className="assembl-icon-checked white" />
-              : <span>
-                {index + 1}
-              </span>}
+            {isStepCompleted ? <span className="assembl-icon-checked white" /> : <span>{index + 1}</span>}
           </div>
           <div className="timeline-bars">
-            {barPercent > 0 &&
+            {barPercent > 0 && (
               <div className="timeline-bar-filler" style={{ width: `${barPercent}%` }}>
                 &nbsp;
-              </div>}
+              </div>
+            )}
             <div className="timeline-bar-background">&nbsp;</div>
           </div>
         </div>

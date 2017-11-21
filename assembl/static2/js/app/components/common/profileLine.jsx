@@ -21,19 +21,20 @@ const ProfileLine = (props) => {
         />
       </div>
       <div className="user">
-        <div className="creator">
-          {userName}
-        </div>
-        {creationDate &&
+        <div className="creator">{userName}</div>
+        {creationDate && (
           <div className="date">
-            {moment(creationDate).locale(locale).fromNow()}
-            {modified
-              ? <span>
+            {moment(creationDate)
+              .locale(locale)
+              .fromNow()}
+            {modified ? (
+              <span>
                 {' - '}
                 <Translate value="debate.thread.postEdited" />
               </span>
-              : null}
-          </div>}
+            ) : null}
+          </div>
+        )}
       </div>
     </div>
   );

@@ -161,13 +161,14 @@ class Survey extends React.Component<*, SurveyProps, SurveyState> {
                 );
               })}
           </div>
-          {questions &&
+          {questions && (
             <Navigation
               questionsLength={questions.length}
               questionIndex={this.state.questionIndex}
               isScroll={this.state.isScroll}
               scrollToQuestion={this.scrollToQuestion}
-            />}
+            />
+          )}
           <div className="proposals">
             <section className={isPhaseCompleted ? 'shown' : 'proposals-section'} id="proposals">
               <Grid fluid className="background-light">
@@ -193,10 +194,11 @@ class Survey extends React.Component<*, SurveyProps, SurveyState> {
                         );
                       })}
                     {!this.state.moreProposals &&
-                      this.getIfProposals(questions) &&
-                      <Button className="button-submit button-dark" onClick={this.showMoreProposals}>
-                        <Translate value="debate.survey.moreProposals" />
-                      </Button>}
+                      this.getIfProposals(questions) && (
+                        <Button className="button-submit button-dark" onClick={this.showMoreProposals}>
+                          <Translate value="debate.survey.moreProposals" />
+                        </Button>
+                      )}
                   </div>
                   <div className="margin-xl">&nbsp;</div>
                 </div>

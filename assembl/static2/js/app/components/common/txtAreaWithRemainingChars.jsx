@@ -15,11 +15,7 @@ export const TxtAreaWithRemainingChars = ({
 }) => {
   return (
     <div>
-      {value
-        ? <div className="form-label">
-          {label}
-        </div>
-        : null}
+      {value ? <div className="form-label">{label}</div> : null}
       <FormControl
         className="txt-area"
         componentClass="textarea"

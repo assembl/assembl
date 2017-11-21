@@ -35,7 +35,10 @@ const QuestionsForm = ({ addQuestion, selectedLocale, thematicId, questions }) =
 export const mapStateToProps = ({ admin: { thematicsById, thematicsInOrder } }, { thematicId }) => {
   return {
     thematics: thematicsInOrder,
-    questions: thematicsById.get(thematicId).get('questions').toJS()
+    questions: thematicsById
+      .get(thematicId)
+      .get('questions')
+      .toJS()
   };
 };
 

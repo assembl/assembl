@@ -70,8 +70,8 @@ class MediaForm extends React.Component {
               <Translate value="administration.announcementModule" />
             </Checkbox>
           </FormGroup>
-          {hasMedia
-            ? <div className="media-form">
+          {hasMedia ? (
+            <div className="media-form">
               <FormControlWithLabel
                 id="media-title"
                 label={titlePh}
@@ -125,7 +125,7 @@ class MediaForm extends React.Component {
                 mimeType={this.state.mediaMimeType}
               />
               {htmlCode &&
-                  isLocalURL &&
+                isLocalURL && (
                   <div className="right">
                     <Button
                       onClick={() => {
@@ -136,10 +136,11 @@ class MediaForm extends React.Component {
                     >
                       <span className="assembl-icon-delete grey" />
                     </Button>
-                  </div>}
+                  </div>
+                )}
               <div className="separator" />
             </div>
-            : null}
+          ) : null}
         </div>
       </div>
     );

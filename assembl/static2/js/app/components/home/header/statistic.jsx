@@ -21,9 +21,7 @@ class Statistic extends React.Component {
         <div className="stat-box">
           <div className={`stat-icon assembl-icon-${iconName} white`}>&nbsp;</div>
           <div className="stat">
-            <div className="stat-nb">
-              {count}&nbsp;
-            </div>
+            <div className="stat-nb">{count}&nbsp;</div>
             <div className="stat-nb">
               <Translate value={translateValue} />
             </div>
@@ -53,9 +51,7 @@ class Statistic extends React.Component {
     }
     return (
       <div className="statistic">
-        <div className="intermediary-container">
-          {Statistic.mapElementsPropsToComponents(elementsProps)}
-        </div>
+        <div className="intermediary-container">{Statistic.mapElementsPropsToComponents(elementsProps)}</div>
       </div>
     );
   }

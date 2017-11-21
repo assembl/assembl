@@ -137,11 +137,11 @@ class Administration extends React.Component {
                 </div>
               </Col>
               <Col xs={12} md={8}>
-                {!timeline
-                  ? <div>
+                {!timeline ? (
+                  <div>
                     <Translate value="administration.noTimeline" />
                   </div>
-                  : null}
+                ) : null}
                 {childrenWithProps}
               </Col>
               <Col xs={12} md={1}>

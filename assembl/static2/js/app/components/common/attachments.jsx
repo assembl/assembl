@@ -34,9 +34,7 @@ const Attachments = ({ attachments }: AttachmentsProps) => {
         return (
           <div className="attachment" key={attachment.id}>
             <span className="assembl-icon-synthesis" />
-            <span className="title">
-              {title || externalUrl}
-            </span>
+            <span className="title">{title || externalUrl}</span>
             <a download={title || DEFAULT_FILENAME} href={externalUrl} type={mimeType} target="_blank" rel="noopener noreferrer">
               <Translate value="common.attachments.download" />
             </a>

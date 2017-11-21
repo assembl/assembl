@@ -44,40 +44,35 @@ class AssemblModal extends React.Component {
 
     return (
       <Modal bsSize={bsSize || null} show={this.state.showModal} onHide={this.close}>
-        <Modal.Header closeButton>
-          {title &&
-            <Modal.Title>
-              {title}
-            </Modal.Title>}
-        </Modal.Header>
-        {body &&
+        <Modal.Header closeButton>{title && <Modal.Title>{title}</Modal.Title>}</Modal.Header>
+        {body && (
           <Modal.Body>
-            <div>
-              {body}
-            </div>
-          </Modal.Body>}
-        {footer &&
+            <div>{body}</div>
+          </Modal.Body>
+        )}
+        {footer && (
           <Modal.Footer>
-            {footerTxt &&
+            {footerTxt && <div>{footerTxt}</div>}
+            {button && (
               <div>
-                {footerTxt}
-              </div>}
-            {button &&
-              <div>
-                {button.internalLink
-                  ? <Link to={button.link} className="button-link button-dark">
+                {button.internalLink ? (
+                  <Link to={button.link} className="button-link button-dark">
                     {button.label}
                   </Link>
-                  : <Button
+                ) : (
+                  <Button
                     onClick={() => {
                       this.goToUrl(button.link);
                     }}
                     className="button-submit button-dark"
                   >
                     {button.label}
-                  </Button>}
-              </div>}
-          </Modal.Footer>}
+                  </Button>
+                )}
+              </div>
+            )}
+          </Modal.Footer>
+        )}
       </Modal>
     );
   }

@@ -16,9 +16,7 @@ const DeletedPost = ({ id, subject, deletedBy }: DeletedPostProps): React.Elemen
       <div className="box">
         <Row className="post-row">
           <Col xs={12} md={12} className="post-left">
-            <h3 className="dark-title-3">
-              {subject}
-            </h3>
+            <h3 className="dark-title-3">{subject}</h3>
             <div className="body">
               <Translate value={deletedBy === 'user' ? 'debate.thread.postDeletedByUser' : 'debate.thread.postDeletedByAdmin'} />
             </div>

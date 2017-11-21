@@ -14,11 +14,7 @@ describe('CardList component', () => {
           classNameGenerator={CLASS_NAME_GENERATOR.default}
           itemClassName="classFoo"
           CardItem={(itemData) => {
-            return (
-              <div>
-                {itemData.title}
-              </div>
-            );
+            return <div>{itemData.title}</div>;
           }}
         />
       )

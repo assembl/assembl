@@ -65,32 +65,24 @@ class Phase extends React.Component {
       <div className="illustration-box">
         <div className="image-box" style={imgUrl ? { backgroundImage: `url(${imgUrl})` } : null} />
         <div onClick={this.displayPhase} className="content-box">
-          <h1 className="light-title-1">
-            {stepNumber}
-          </h1>
-          {title &&
+          <h1 className="light-title-1">{stepNumber}</h1>
+          {title && (
             <h3 className="light-title-3">
               {title.entries.map((entry, index2) => {
-                return (
-                  <span key={index2}>
-                    {locale === entry['@language'] ? entry.value : ''}
-                  </span>
-                );
+                return <span key={index2}>{locale === entry['@language'] ? entry.value : ''}</span>;
               })}
-            </h3>}
+            </h3>
+          )}
           <h4 className="light-title-4">
             <Localize value={startDate} dateFormat="date.format2" />
           </h4>
-          {description &&
+          {description && (
             <div className="description-box">
               {description.entries.map((entry, index3) => {
-                return (
-                  <span key={index3}>
-                    {locale === entry['@language'] ? entry.value : ''}
-                  </span>
-                );
+                return <span key={index3}>{locale === entry['@language'] ? entry.value : ''}</span>;
               })}
-            </div>}
+            </div>
+          )}
         </div>
         <div className="color-box">&nbsp;</div>
         <div className="box-hyphen">&nbsp;</div>

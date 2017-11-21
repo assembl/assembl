@@ -48,8 +48,8 @@ class Nuggets extends React.Component {
     const { extracts } = this.props;
     const { top } = this.state;
 
-    return Array.isArray(extracts) && extracts.length > 0
-      ? <div
+    return Array.isArray(extracts) && extracts.length > 0 ? (
+      <div
         ref={(node) => {
           this.node = node;
         }}
@@ -64,9 +64,7 @@ class Nuggets extends React.Component {
             {extracts.map((extract) => {
               return (
                 <div key={extract.id} className="nugget">
-                  <div className="nugget-txt">
-                    {extract.body}
-                  </div>
+                  <div className="nugget-txt">{extract.body}</div>
                   <div className="box-hyphen" />
                 </div>
               );
@@ -74,7 +72,7 @@ class Nuggets extends React.Component {
           </div>
         </div>
       </div>
-      : null;
+    ) : null;
   }
 }
 

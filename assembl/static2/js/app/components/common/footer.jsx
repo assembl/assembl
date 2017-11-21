@@ -11,7 +11,7 @@ class Footer extends React.Component {
       <Grid fluid className="background-dark relative" id="footer">
         <div className="max-container">
           <div className={debateData.socialMedias ? 'footer' : 'footer margin-xl'}>
-            {debateData.socialMedias &&
+            {debateData.socialMedias && (
               <div>
                 <p>
                   <Translate value="footer.socialMedias" />
@@ -25,13 +25,15 @@ class Footer extends React.Component {
                     );
                   })}
                 </div>
-              </div>}
-            {debateData.termsOfUseUrl &&
+              </div>
+            )}
+            {debateData.termsOfUseUrl && (
               <div className="terms">
                 <Link to={debateData.termsOfUseUrl} target="_blank">
                   <Translate value="footer.terms" />
                 </Link>
-              </div>}
+              </div>
+            )}
             <div className="copyright">
               ©{' '}
               <Link to="http://assembl.bluenove.com/" target="_blank">
@@ -42,11 +44,7 @@ class Footer extends React.Component {
                 bluenove
               </Link>
             </div>
-            {assemblVersion
-              ? <div className="assembl-version">
-                  v{assemblVersion}
-              </div>
-              : null}
+            {assemblVersion ? <div className="assembl-version">v{assemblVersion}</div> : null}
           </div>
         </div>
       </Grid>

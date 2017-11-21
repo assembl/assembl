@@ -69,17 +69,9 @@ class FormControlWithLabel extends React.Component {
     const displayLabel = labelAlwaysVisible || type !== 'rich-text' ? value : false;
     return (
       <FormGroup validationState={this.state.validationState}>
-        {displayLabel
-          ? <ControlLabel htmlFor={id}>
-            {label}
-          </ControlLabel>
-          : null}
+        {displayLabel ? <ControlLabel htmlFor={id}>{label}</ControlLabel> : null}
         {this.renderFormControl()}
-        {this.state.errorMessage
-          ? <HelpBlock>
-            {this.state.errorMessage}
-          </HelpBlock>
-          : null}
+        {this.state.errorMessage ? <HelpBlock>{this.state.errorMessage}</HelpBlock> : null}
       </FormGroup>
     );
   }

@@ -103,8 +103,8 @@ class FileUploader extends React.Component<Object, FileUploaderProps, FileUpload
         <Button onClick={this.handleUploadButtonClick}>
           <Translate value="common.uploadButton" />
         </Button>
-        {withPreview && isImage
-          ? <div className={fileSrc ? 'preview' : 'hidden'}>
+        {withPreview && isImage ? (
+          <div className={fileSrc ? 'preview' : 'hidden'}>
             <img
               src={fileSrc}
               ref={(p) => {
@@ -113,11 +113,8 @@ class FileUploader extends React.Component<Object, FileUploaderProps, FileUpload
               alt="preview"
             />
           </div>
-          : null}
-        {!isImage &&
-          <div className="preview-title">
-            {this.state.fileName}
-          </div>}
+        ) : null}
+        {!isImage && <div className="preview-title">{this.state.fileName}</div>}
         <input
           name={name}
           type="file"

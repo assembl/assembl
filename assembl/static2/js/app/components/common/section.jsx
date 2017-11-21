@@ -19,11 +19,7 @@ const level1 = (title, index, translate) => {
     <div>
       <div className="title-hyphen">&nbsp;</div>
       <h1 className="section-title section-title1 dark-title-1">
-        {index
-          ? <span className="section-title-index">
-            {index}
-          </span>
-          : null}
+        {index ? <span className="section-title-index">{index}</span> : null}
         {translate ? <Translate value={title} /> : title}
       </h1>
     </div>
@@ -33,11 +29,7 @@ const level1 = (title, index, translate) => {
 const level2 = (title, index, translate) => {
   return (
     <h2 className="section-title section-title-2 dark-title-1">
-      {index
-        ? <span className="section-title-index">
-          {index}
-        </span>
-        : null}
+      {index ? <span className="section-title-index">{index}</span> : null}
       {translate ? <Translate value={title} /> : title}
     </h2>
   );
@@ -46,11 +38,7 @@ const level2 = (title, index, translate) => {
 const level3 = (title, index, translate) => {
   return (
     <h3 className="section-title section-title-3 dark-title-1">
-      {index
-        ? <span className="section-title-index">
-          {index}
-        </span>
-        : null}
+      {index ? <span className="section-title-index">{index}</span> : null}
       {translate ? <Translate value={title} /> : title}
     </h3>
   );
@@ -59,11 +47,7 @@ const level3 = (title, index, translate) => {
 const levelN = (title, index, translate) => {
   return (
     <h3 className="section-title section-title-3 dark-title-1">
-      {index
-        ? <span className="section-title-index">
-          {index}
-        </span>
-        : null}
+      {index ? <span className="section-title-index">{index}</span> : null}
       {translate ? <Translate value={title} /> : title}
     </h3>
   );
@@ -101,12 +85,8 @@ class Section extends React.Component<Object, SectionProps, void> {
     return (
       <section className={className}>
         <div className="max-container">
-          <div className="title-section">
-            {this.getTitle()}
-          </div>
-          <div className="content-section">
-            {children}
-          </div>
+          <div className="title-section">{this.getTitle()}</div>
+          <div className="content-section">{children}</div>
         </div>
       </section>
     );

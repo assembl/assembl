@@ -26,17 +26,15 @@ const IdeaPreview = ({
     >
       <div className="image-box" style={imgUrl ? { backgroundImage: `url(${imgUrl})` } : null} />
       <div className="content-box" to={link}>
-        <h3 className="light-title-3 center">
-          {title}
-        </h3>
+        <h3 className="light-title-3 center">{title}</h3>
         <div className="access-discussion">
           <div className="see-discussion">
             <Link to={link}>
               <Translate value="debate.thread.goToIdea" />
             </Link>
           </div>
-          {numChildren
-            ? <div>
+          {numChildren ? (
+            <div>
               <div>/</div>
               <div
                 className="see-sub-ideas"
@@ -52,7 +50,9 @@ const IdeaPreview = ({
                 <Translate value="debate.thread.seeSubIdeas" count={numChildren} />
               </div>
             </div>
-            : <div />}
+          ) : (
+            <div />
+          )}
         </div>
         <div className="selected-idea-arrow">
           <span className="assembl-icon-down-open" />

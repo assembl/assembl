@@ -128,20 +128,20 @@ class EditPostForm extends React.PureComponent<void, EditPostFormProps, EditPost
         <Col xs={12} md={12}>
           <div className="answer-form-inner">
             {this.state.subject &&
-              (this.props.readOnly
-                ? <div>
-                  <h3 className="dark-title-3">
-                    {this.props.modifiedOriginalSubject}
-                  </h3>
+              (this.props.readOnly ? (
+                <div>
+                  <h3 className="dark-title-3">{this.props.modifiedOriginalSubject}</h3>
                   <div className="margin-m" />
                 </div>
-                : <TextInputWithRemainingChars
+              ) : (
+                <TextInputWithRemainingChars
                   alwaysDisplayLabel
                   label={I18n.t('debate.edit.subject')}
                   value={this.state.subject}
                   handleTxtChange={this.updateSubject}
                   maxLength={TEXT_INPUT_MAX_LENGTH}
-                />)}
+                />
+              ))}
             <FormGroup>
               <RichTextEditor
                 rawContentState={this.state.body}

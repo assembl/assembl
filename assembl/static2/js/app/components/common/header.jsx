@@ -19,13 +19,12 @@ class Header extends React.Component {
       <section className="header-section">
         <Grid fluid className="max-container">
           <div className="header-content">
-            <h1 className={titleClassNames}>
-              {title}
-            </h1>
-            {isPhaseCompleted &&
+            <h1 className={titleClassNames}>{title}</h1>
+            {isPhaseCompleted && (
               <h6 className="light-title-6">
                 <Translate value="debate.survey.endPhase" closedPhaseName={closedPhaseName} />
-              </h6>}
+              </h6>
+            )}
           </div>
         </Grid>
         <Grid fluid>

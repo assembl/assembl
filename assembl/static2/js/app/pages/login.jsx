@@ -26,21 +26,22 @@ class Login extends React.Component {
     return (
       <Grid fluid className="login-grid">
         <Col xs={12} sm={hasSocialMedias ? 9 : 6} lg={hasSocialMedias ? 7 : 4} className="login-container col-centered">
-          <div className="box-title">
-            {I18n.t('login.login')}
-          </div>
+          <div className="box-title">{I18n.t('login.login')}</div>
           <div className="box">
-            {hasSocialMedias &&
+            {hasSocialMedias && (
               <div>
                 <Col xs={12} md={5}>
-                  {slug
-                    ? <SocialMedia providers={providers} next={next} slug={slug} />
-                    : <SocialMedia providers={providers} next={next} />}
+                  {slug ? (
+                    <SocialMedia providers={providers} next={next} slug={slug} />
+                  ) : (
+                    <SocialMedia providers={providers} next={next} />
+                  )}
                 </Col>
                 <Col xs={12} md={1}>
                   &nbsp;
                 </Col>
-              </div>}
+              </div>
+            )}
             <Col xs={12} md={hasSocialMedias ? 6 : 12}>
               {slug ? <AsLogin next={next} slug={slug} /> : <AsLogin next={next} />}
             </Col>

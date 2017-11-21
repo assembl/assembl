@@ -4,11 +4,18 @@ import { Translate } from 'react-redux-i18n';
 import { get } from '../../utils/routeMap';
 
 const convertNameToCssClass = (name) => {
-  return name.toLowerCase().split(/\s+/).filter(Boolean).join('_');
+  return name
+    .toLowerCase()
+    .split(/\s+/)
+    .filter(Boolean)
+    .join('_');
 };
 
 const reverseString = (s) => {
-  return s.split('').reverse().join('');
+  return s
+    .split('')
+    .reverse()
+    .join('');
 };
 
 export class SocialMedia extends React.Component {

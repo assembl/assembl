@@ -67,14 +67,15 @@ class ColumnsPost extends EmptyPost {
         <div className="box" style={{ borderLeftColor: colColor }}>
           <Row className="post-row">
             <Col xs={12} md={11} className="post-left">
-              {creator &&
+              {creator && (
                 <ProfileLine
                   userId={creator.userId}
                   userName={creator.name}
                   creationDate={creationDate}
                   locale={lang}
                   modified={modificationDate !== null}
-                />}
+                />
+              )}
               <PostTranslate
                 contentLocale={contentLocale}
                 id={id}

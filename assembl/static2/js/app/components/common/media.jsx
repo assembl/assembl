@@ -13,9 +13,7 @@ class Media extends React.Component {
     return (
       <div className="media-title-section">
         <div className="title-hyphen">&nbsp;</div>
-        <h1 className="dark-title-1">
-          {value || I18n.t('debate.survey.titleVideo')}
-        </h1>
+        <h1 className="dark-title-1">{value || I18n.t('debate.survey.titleVideo')}</h1>
       </div>
     );
   };
@@ -44,24 +42,20 @@ class Media extends React.Component {
 
   static Content = ({ content }) => {
     const isLocal = content[0] === '/';
-    const component = isLocal
-      ? <Image responsive src={content} />
-      : (<ResponsiveEmbed a16by9>
+    const component = isLocal ? (
+      <Image responsive src={content} />
+    ) : (
+      <ResponsiveEmbed a16by9>
         <iframe title="media" src={content} />
-      </ResponsiveEmbed>);
+      </ResponsiveEmbed>
+    );
     return (
       <div className="media-container">
-        {isLocal
-          ? <Button
-            onClick={Media.ImageModal(
-              <div className="media-container">
-                {component}
-              </div>
-            )}
-          >
-            {component}
-          </Button>
-          : component}
+        {isLocal ? (
+          <Button onClick={Media.ImageModal(<div className="media-container">{component}</div>)}>{component}</Button>
+        ) : (
+          component
+        )}
       </div>
     );
   };
@@ -83,29 +77,32 @@ class Media extends React.Component {
     const totalSize = 12;
     const leftSize = 4;
     const rightSize = totalSize - leftSize;
-    return !noTitle || something
-      ? <section className="media-section background-light">
+    return !noTitle || something ? (
+      <section className="media-section background-light">
         <div className="max-container">
           {!noTitle && <Media.Title value={title} />}
-          {something &&
-          <Grid fluid>
-            {somethingOnLeft &&
-            <Col sm={totalSize} md={somethingOnRight ? leftSize : totalSize}>
-              {validDescriptionSide && <Media.SideDescription content={descriptionSide} />}
-            </Col>}
-            {somethingOnRight &&
-            <Col sm={totalSize} md={somethingOnLeft ? rightSize : totalSize}>
-              <div className="media-right">
-                {validDescriptionTop && <Media.TopDescription content={descriptionTop} />}
-                {validMedia && <Media.Content content={htmlCode} />}
-                {validDescriptionSide && <Media.SideDescription content={descriptionSide} />}
-                {validDescriptionBottom && <Media.BottomDescription content={descriptionBottom} />}
-              </div>
-            </Col>}
-          </Grid>}
+          {something && (
+            <Grid fluid>
+              {somethingOnLeft && (
+                <Col sm={totalSize} md={somethingOnRight ? leftSize : totalSize}>
+                  {validDescriptionSide && <Media.SideDescription content={descriptionSide} />}
+                </Col>
+              )}
+              {somethingOnRight && (
+                <Col sm={totalSize} md={somethingOnLeft ? rightSize : totalSize}>
+                  <div className="media-right">
+                    {validDescriptionTop && <Media.TopDescription content={descriptionTop} />}
+                    {validMedia && <Media.Content content={htmlCode} />}
+                    {validDescriptionSide && <Media.SideDescription content={descriptionSide} />}
+                    {validDescriptionBottom && <Media.BottomDescription content={descriptionBottom} />}
+                  </div>
+                </Col>
+              )}
+            </Grid>
+          )}
         </div>
       </section>
-      : null;
+    ) : null;
   }
 }
 

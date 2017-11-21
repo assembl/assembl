@@ -118,9 +118,7 @@ class Question extends React.Component {
           <div className="max-container">
             <div className="question-title">
               <div className="title-hyphen">&nbsp;</div>
-              <h1 className="dark-title-1">
-                {`${index}/ ${title}`}
-              </h1>
+              <h1 className="dark-title-1">{`${index}/ ${title}`}</h1>
             </div>
             <Col xs={12} md={9} className="col-centered">
               <FormGroup className="no-margin">
@@ -145,10 +143,11 @@ class Question extends React.Component {
               <div className="annotation margin-s">
                 <Translate value="debate.remaining_x_characters" nbCharacters={this.state.remainingChars} />
               </div>
-              {this.state.showSubmitButton &&
+              {this.state.showSubmitButton && (
                 <Button onClick={this.createPost} className="button-submit button-dark right margin-l clear">
                   <Translate value="debate.survey.submit" />
-                </Button>}
+                </Button>
+              )}
             </Col>
           </div>
         </Grid>
