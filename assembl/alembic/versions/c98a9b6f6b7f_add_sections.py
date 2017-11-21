@@ -1,14 +1,14 @@
 """add_sections
 
 Revision ID: c98a9b6f6b7f
-Revises: 053f788ca313
+Revises: ca1c445a2e24
 Create Date: 2017-11-17 15:10:13.609004
 
 """
 
 # revision identifiers, used by Alembic.
 revision = 'c98a9b6f6b7f'
-down_revision = '053f788ca313'
+down_revision = 'ca1c445a2e24'
 
 from alembic import context, op
 import sqlalchemy as sa
