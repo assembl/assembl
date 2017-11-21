@@ -8,7 +8,7 @@ from random import sample as random_sample
 
 from sqlalchemy import desc, distinct, func, inspect, join, select
 from sqlalchemy.orm.exc import NoResultFound
-from sqlalchemy.orm import joinedload, subqueryload, undefer
+from sqlalchemy.orm import contains_eager, joinedload, subqueryload, undefer
 from sqlalchemy.sql.functions import count
 import graphene
 from graphene.pyutils.enum import Enum as PyEnum
@@ -604,12 +604,59 @@ class Video(graphene.ObjectType):
     description_entries_side = graphene.List(LangStringEntry)
 
 
+class Synthesis(SecureObjectType, SQLAlchemyObjectType):
+    class Meta:
+        model = models.Synthesis
+        interfaces = (Node, )
+        only_fields = ('id', )
+
+    subject = graphene.String(lang=graphene.String())
+    subject_entries = graphene.List(LangStringEntry)
+    introduction = graphene.String(lang=graphene.String())
+    introduction_entries = graphene.List(LangStringEntry)
+    conclusion = graphene.String(lang=graphene.String())
+    conclusion_entries = graphene.List(LangStringEntry)
+    ideas = graphene.List(lambda: IdeaUnion)
+    img = graphene.Field(Document)
+    creation_date = DateTime()
+
+    def resolve_subject(self, args, context, info):
+        return resolve_langstring(self.subject, args.get('lang'))
+
+    def resolve_subject_entries(self, args, context, info):
+        return resolve_langstring_entries(self, 'subject')
+
+    def resolve_introduction(self, args, context, info):
+        return resolve_langstring(self.introduction, args.get('lang'))
+
+    def resolve_introduction_entries(self, args, context, info):
+        return resolve_langstring_entries(self, 'introduction')
+
+    def resolve_conclusion(self, args, context, info):
+        return resolve_langstring(self.conclusion, args.get('lang'))
+
+    def resolve_conclusion_entries(self, args, context, info):
+        return resolve_langstring_entries(self, 'conclusion')
+
+    def resolve_ideas(self, args, context, info):
+        return self.get_ideas()
+
+    def resolve_img(self, args, context, info):
+        ideas = self.get_ideas()
+        last_idea = ideas[-1].live if ideas else None
+        if last_idea.attachments:
+            return last_idea.attachments[0].document
+
+
+
 class IdeaInterface(graphene.Interface):
     num_posts = graphene.Int()
     num_contributors = graphene.Int()
     num_children = graphene.Int(identifier=graphene.String())
     img = graphene.Field(Document)
     order = graphene.Float()
+    live = graphene.Field(lambda: IdeaUnion)
+    message_view_override = graphene.String()
 
     def resolve_num_posts(self, args, context, info):
         if isinstance(self, models.RootIdea):
@@ -633,15 +680,14 @@ class IdeaInterface(graphene.Interface):
         if phase == 'multiColumns':
             _it = models.Idea.__table__
             _ilt = models.IdeaLink.__table__
-            _imct = models.IdeaMessageColumn.__table__
             _target_it = models.Idea.__table__.alias()
             j = join(_ilt, _it, _ilt.c.source_id == _it.c.id
-                ).join(_target_it, _ilt.c.target_id == _target_it.c.id
-                ).join(_imct, _target_it.c.id == _imct.c.idea_id)
-            num = select([func.count(distinct(_ilt.c.id))]).select_from(j).where(
+                ).join(_target_it, _ilt.c.target_id == _target_it.c.id)
+            num = select([func.count(_ilt.c.id)]).select_from(j).where(
             (_ilt.c.tombstone_date == None)
             & (_it.c.tombstone_date == None)
             & (_it.c.id == self.id)
+            & (_target_it.c.message_view_override == 'messageColumns')
             ).correlate_except(_ilt)
             return self.db.execute(num).fetchone()[0]
 
@@ -673,6 +719,7 @@ class IdeaMessageColumn(SecureObjectType, SQLAlchemyObjectType):
     index = graphene.Int()
     idea = graphene.Field(lambda: Idea)
     name = graphene.String(lang=graphene.String())
+    title = graphene.String(lang=graphene.String())
     header = graphene.String(lang=graphene.String())
     num_posts = graphene.Int()
 
@@ -682,6 +729,9 @@ class IdeaMessageColumn(SecureObjectType, SQLAlchemyObjectType):
 
     def resolve_name(self, args, context, info):
         return resolve_langstring(self.name, args.get('lang'))
+
+    def resolve_title(self, args, context, info):
+        return resolve_langstring(self.title, args.get('lang'))
 
     def resolve_header(self, args, context, info):
         return resolve_langstring(self.header, args.get('lang'))
@@ -716,6 +766,7 @@ class Idea(SecureObjectType, SQLAlchemyObjectType):
     contributors = graphene.List(AgentProfile)
     announcement = graphene.Field(lambda: IdeaAnnoucement)
     message_columns = graphene.List(lambda: IdeaMessageColumn)
+    ancestors = graphene.List(graphene.ID)
 
     @classmethod
     def is_type_of(cls, root, context, info):
@@ -770,6 +821,10 @@ class Idea(SecureObjectType, SQLAlchemyObjectType):
             return None
 
         return Node.to_global_id('Idea', parents[0].id)
+
+    def resolve_ancestors(self, args, context, info):
+        return [Node.to_global_id('Idea', id)
+                for id in self.get_all_ancestors(id_only=True)]
 
     def resolve_posts(self, args, context, info):
         discussion_id = context.matchdict['discussion_id']
@@ -1045,11 +1100,13 @@ class Query(graphene.ObjectType):
     ideas = graphene.List(Idea, identifier=graphene.String(required=True))
     thematics = graphene.List(Thematic,
                               identifier=graphene.String(required=True))
+    syntheses = graphene.List(Synthesis)
     num_participants = graphene.Int()
     discussion_preferences = graphene.Field(DiscussionPreferences)
     default_preferences = graphene.Field(DiscussionPreferences)
     locales = graphene.List(Locale, lang=graphene.String(required=True))
     total_sentiments = graphene.Int()
+    has_syntheses = graphene.Boolean()
     resources = graphene.List(Resource)
     resources_center = graphene.Field(lambda: ResourcesCenter)
     has_resources_center = graphene.Boolean()
@@ -1100,13 +1157,13 @@ class Query(graphene.ObjectType):
         descendants_query = model.get_descendants_query(
             root_idea_id, inclusive=True)
         query = query.outerjoin(
-                models.IdeaLink, models.IdeaLink.target_id == models.Idea.id
+                models.Idea.source_links
             ).filter(model.id.in_(descendants_query)
             ).filter(
                 model.hidden == False,
                 model.sqla_type == 'idea'
             ).options(
-                joinedload(models.Idea.source_links),
+                contains_eager(models.Idea.source_links),
                 subqueryload(models.Idea.attachments).joinedload("document"),
 #                subqueryload(models.Idea.message_columns),
                 joinedload(models.Idea.title).joinedload("entries"),
@@ -1115,7 +1172,7 @@ class Query(graphene.ObjectType):
             ).order_by(models.IdeaLink.order, models.Idea.creation_date)
         if args.get('identifier') == 'multiColumns':
             # Filter out ideas that don't have columns.
-            query = query.join(models.Idea.message_columns)
+            query = query.filter(models.Idea.message_view_override == 'messageColumns')
 
         return query
 
@@ -1128,6 +1185,19 @@ class Query(graphene.ObjectType):
             return []
 
         return root_thematic.get_children()
+
+    def resolve_syntheses(self, args, context, info):
+        discussion_id = context.matchdict['discussion_id']
+        discussion = models.Discussion.get(discussion_id)
+        return discussion.get_all_syntheses_query(include_unpublished=False).order_by(desc(models.Synthesis.creation_date))
+
+    def resolve_has_syntheses(self, args, context, info):
+        discussion_id = context.matchdict['discussion_id']
+        discussion = models.Discussion.get(discussion_id)
+        query = discussion.get_all_syntheses_query(include_unpublished=False)
+        count = query.filter(
+            models.Synthesis.is_next_synthesis != True).count()
+        return True if count else False
 
     def resolve_num_participants(self, args, context, info):
         discussion_id = context.matchdict['discussion_id']

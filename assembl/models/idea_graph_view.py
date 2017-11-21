@@ -21,6 +21,7 @@ import lxml.html as htmlt
 
 from . import DiscussionBoundBase
 from .discussion import Discussion
+from .langstrings import LangString
 from ..semantic.virtuoso_mapping import QuadMapPatternS
 from ..auth import (
     CrudPermissions, P_ADMIN_DISC, P_EDIT_SYNTHESIS)
@@ -65,7 +66,7 @@ class IdeaGraphView(DiscussionBoundBase):
         'with_polymorphic': '*'
     }
 
-    def copy(self):
+    def copy(self, db=None):
         retval = self.__class__()
         retval.discussion = self.discussion
         return retval
@@ -253,8 +254,8 @@ class ExplicitSubGraphView(IdeaGraphView):
         'polymorphic_identity': 'explicit_sub_graph_view',
     }
 
-    def copy(self):
-        retval = IdeaGraphView.copy(self)
+    def copy(self, db=None):
+        retval = IdeaGraphView.copy(self, db=db)
         # retval.ideas = self.ideas
         return retval
 
@@ -435,19 +436,40 @@ class Synthesis(ExplicitSubGraphView):
         onupdate='CASCADE'
     ), primary_key=True)
 
-    subject = Column(UnicodeText)
-    introduction = Column(UnicodeText)
-    conclusion = Column(UnicodeText)
+    subject_id = Column(
+        Integer(), ForeignKey(LangString.id))
+    introduction_id = Column(
+        Integer(), ForeignKey(LangString.id))
+    conclusion_id = Column(
+        Integer(), ForeignKey(LangString.id))
+    subject = relationship(
+        LangString,
+        lazy="subquery", single_parent=True,
+        primaryjoin=subject_id == LangString.id,
+        backref=backref("synthesis_from_subject", lazy="dynamic"),
+        cascade="all, delete-orphan")
+    introduction = relationship(
+        LangString,
+        lazy="subquery", single_parent=True,
+        primaryjoin=introduction_id == LangString.id,
+        backref=backref("synthesis_from_introduction", lazy="dynamic"),
+        cascade="all, delete-orphan")
+    conclusion = relationship(
+        LangString,
+        lazy="subquery", single_parent=True,
+        primaryjoin=conclusion_id == LangString.id,
+        backref=backref("synthesis_from_conclusion", lazy="dynamic"),
+        cascade="all, delete-orphan")
 
     __mapper_args__ = {
         'polymorphic_identity': 'synthesis',
     }
 
-    def copy(self):
-        retval = ExplicitSubGraphView.copy(self)
-        retval.subject = self.subject
-        retval.introduction = self.introduction
-        retval.conclusion = self.conclusion
+    def copy(self, db=None):
+        retval = ExplicitSubGraphView.copy(self, db=db)
+        retval.subject = self.subject.clone(db=db)
+        retval.introduction = self.introduction.clone(db=db)
+        retval.conclusion = self.conclusion.clone(db=db)
         return retval
 
     def publish(self):
@@ -518,9 +540,12 @@ class Synthesis(ExplicitSubGraphView):
     def __repr__(self):
         r = super(Synthesis, self).__repr__()
         subject = self.subject or ""
-        return r[:-1] + subject.encode("ascii", "ignore") + ">"
+        return r[:-1] + (subject.first_original().value.encode("ascii", "ignore") if subject else "") + ">"
 
     crud_permissions = CrudPermissions(P_EDIT_SYNTHESIS)
+
+LangString.setup_ownership_load_event(
+    Synthesis, ['subject', 'introduction', 'conclusion'])
 
 
 class SynthesisHtmlizationVisitor(IdeaVisitor):
@@ -543,5 +568,10 @@ class SynthesisHtmlizationVisitor(IdeaVisitor):
             return self.result
 
     def as_html(self):
+        synthesis = self.graph_view
+        subject = synthesis.subject.best_lang().value
+        introduction = synthesis.introduction.best_lang().value
+        conclusion = synthesis.conclusion.best_lang().value
         return self.synthesis_template.render(
-            synthesis=self.graph_view, content=self.result)
+            content=self.result, introduction=introduction,
+            subject=subject, conclusion=conclusion)

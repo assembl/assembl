@@ -99,12 +99,14 @@ var MessageColumnsPanel = AssemblPanel.extend({
     }
   },
   setAnnoucementBackground: function(){
+    if (this.attachmentCollection){
       var attachmentModel = this.attachmentCollection.getSingleAttachment();
       if (attachmentModel){
         this.announcementImgBackgroundLink = attachmentModel.get('external_url');
       }else{
         this.announcementImgBackgroundLink = null;
       }
+    }
   },
   setCurrentIdea: function(idea) {
     if (this.isViewDestroyed()) {

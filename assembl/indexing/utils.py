@@ -148,9 +148,12 @@ def get_data(content):
 #        data['publishes_synthesis_id'] = getattr(
 #            content, 'publishes_synthesis_id', None)
         if isinstance(content, SynthesisPost):
-            data['subject'] = content.publishes_synthesis.subject
-            data['introduction'] = content.publishes_synthesis.introduction
-            data['conclusion'] = content.publishes_synthesis.conclusion
+            populate_from_langstring_prop(content.publishes_synthesis,
+                                          data, 'subject')
+            populate_from_langstring_prop(content.publishes_synthesis,
+                                          data, 'introduction')
+            populate_from_langstring_prop(content.publishes_synthesis,
+                                          data, 'conclusion')
             long_titles = [idea.synthesis_title for idea in content.publishes_synthesis.ideas
                            if idea.synthesis_title]
             long_titles_c = defaultdict(list)

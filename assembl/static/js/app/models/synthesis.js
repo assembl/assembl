@@ -7,6 +7,7 @@
 var Base = require('./base.js'),
     Ctx = require('../common/context.js'),
     Idea = require("./idea.js"),
+    LangString = require('./langstring.js'),
     i18n = require('../utils/i18n.js');
 
 
@@ -62,12 +63,33 @@ var SynthesisModel = Base.Model.extend({
    * Default values
    * @type {Object}
    */
-  defaults: {
-    subject: i18n.gettext('Add a title'),
-    introduction: i18n.gettext('Add an introduction'),
-    conclusion: i18n.gettext('Add a conclusion'),
-    ideas: [],
-    published_in_post: null
+
+  defaults: function() {
+    return {
+      subject: null,
+      introduction: null,
+      conclusion: null,
+      ideas: [],
+      published_in_post: null
+    }
+  },
+
+  /**
+   * @function app.models.synthesis.SynthesisModel.parse
+   */
+  parse: function(resp, options) {
+    if (resp.ok !== true) {
+      if (resp.introduction != null) {
+        resp.introduction = new LangString.Model(resp.introduction, {parse: true});
+      }
+      if (resp.subject != null) {
+        resp.subject = new LangString.Model(resp.subject, {parse: true});
+      }
+      if (resp.conclusion != null) {
+        resp.conclusion = new LangString.Model(resp.conclusion, {parse: true});
+      }
+    }
+    return Base.Model.prototype.parse.apply(this, arguments);
   },
 
   validate: function(attrs, options) {

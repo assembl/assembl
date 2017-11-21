@@ -324,7 +324,7 @@ class Idea(HistoryMixin, DiscussionBoundBase):
         })
         return inherited
 
-    def copy(self, tombstone=None, **kwargs):
+    def copy(self, tombstone=None, db=None, **kwargs):
         if tombstone is True:
             tombstone = datetime.utcnow()
         kwargs.update(
@@ -332,19 +332,16 @@ class Idea(HistoryMixin, DiscussionBoundBase):
             hidden=self.hidden,
             creation_date=self.creation_date,
             discussion=self.discussion,
-            title=self.title.clone(
-                tombstone=tombstone) if self.title else None,
-            synthesis_title=self.synthesis_title.clone(
-                tombstone=tombstone) if self.synthesis_title else None,
-            description=self.description.clone(
-                tombstone=tombstone) if self.description else None)
+            title=self.title.clone(db=db) if self.title else None,
+            synthesis_title=self.synthesis_title.clone(db=db) if self.synthesis_title else None,
+            description=self.description.clone(db=db) if self.description else None)
 
-        return super(Idea, self).copy(**kwargs)
+        return super(Idea, self).copy(db=db, **kwargs)
 
     @classmethod
     def get_ancestors_query(
             cls, target_id=bindparam('root_id', type_=Integer),
-            inclusive=True):
+            inclusive=True, tombstone_date=None):
         if cls.using_virtuoso:
             if isinstance(target_id, list):
                 raise NotImplemented()
@@ -365,7 +362,7 @@ class Idea(HistoryMixin, DiscussionBoundBase):
                 ).select_from(
                     IdeaLink
                 ).where(
-                    (IdeaLink.tombstone_date == None) &
+                    (IdeaLink.tombstone_date == tombstone_date) &
                     (root_condition)
                 ).cte(recursive=True)
             target_alias = aliased(link)
@@ -374,7 +371,7 @@ class Idea(HistoryMixin, DiscussionBoundBase):
             parents = select(
                     [sources_alias.source_id, sources_alias.target_id]
                 ).select_from(sources_alias).where(parent_link
-                    & (sources_alias.tombstone_date == None))
+                    & (sources_alias.tombstone_date == tombstone_date))
             with_parents = link.union(parents)
             select_exp = select([with_parents.c.source_id.label('id')]
                 ).select_from(with_parents)
@@ -390,7 +387,8 @@ class Idea(HistoryMixin, DiscussionBoundBase):
         return select_exp.alias()
 
     def get_all_ancestors(self, id_only=False):
-        query = self.get_ancestors_query(self.id)
+        query = self.get_ancestors_query(
+            self.id, tombstone_date=self.tombstone_date)
         if id_only:
             return list((id for (id,) in self.db.query(query)))
         else:
@@ -1256,13 +1254,13 @@ class IdeaLink(HistoryMixin, DiscussionBoundBase):
                 name=QUADNAMES.class_IdeaLink_class),
         ]
 
-    def copy(self, tombstone=None, **kwargs):
+    def copy(self, tombstone=None, db=None, **kwargs):
         kwargs.update(
             tombstone=tombstone,
             order=self.order,
             source_id=self.source_id,
             target_id=self.target_id)
-        return super(IdeaLink, self).copy(**kwargs)
+        return super(IdeaLink, self).copy(db=db, **kwargs)
 
     def get_discussion_id(self):
         source = self.source_ts or Idea.get(self.source_id)

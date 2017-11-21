@@ -1,0 +1,138 @@
+$vertical-margin: 50px;
+$stats-padding: 20px;
+$doughnut-size: 60px;
+$doughnut-girth: 22px;
+$margin: 10px;
+$small-margin: 5px;
+
+.idea-synthesis {
+  overflow: auto;
+  .synthesis-stats {
+    background-color: $grey0;
+    padding: $stats-padding;
+    padding-bottom: $margin;
+    padding-right: $margin;
+    border-radius: 3px 0 0 0;
+    display: inline-block;
+    .counters {
+      display: inline-block;
+      margin-left: $small-margin;
+      margin-bottom: $margin;
+      .counter-with-icon {
+        color: $first-color;
+        font-family: $font-family4;
+        font-size: 12px;
+        line-height: 26px;
+        display: block;
+        text-align: right;
+      }
+    }
+  }
+  img.synthesis-image-container{
+      height: auto !important;
+  }
+  .synthesis-image-container {
+    background-size: cover;
+    width: 100%;
+    height: 500px;
+    background-repeat: no-repeat;
+    background-position: center;
+    position: relative;
+    margin-bottom: 10px;
+    .synthesis-stats {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+    }
+  }
+  .title-under-hyphen-container {
+    .title-under-hyphen-text {
+      text-align: center;
+    }
+  }
+  .synthesis-body {
+    text-align: justify;
+    line-height: 1.8;
+    margin-bottom: $vertical-margin;
+    column-gap: 20px;
+  }
+  .statistics-doughnut {
+    width: auto;
+    display: block;
+    margin-bottom: $margin;
+    .statistics {
+      display: flex;
+      align-items: center;
+      text-align: left;
+      .doughnut-container {
+        display: table-cell;
+        width: $doughnut-size;
+        .doughnut {
+          vertical-align: middle;
+          circle,path {
+            stroke-width: $doughnut-girth;
+          }
+        }
+        margin-right: $margin;
+      }
+      .after {
+        display: inline;
+        .doughnut-label-count {
+          color: $first-color;
+          font-family: $font-family4;
+          font-size: 12px;
+          line-height: 26px;
+          display: inline;
+        }
+        .doughnut-label-text {
+          color: $first-color;
+          font-family: $font-family4;
+          font-size: 12px;
+          line-height: 26px;
+          display: inline;
+        }
+      }
+    }
+  }
+  .idea-link {
+    color: $first-color;
+    font-family: $font-family4;
+    font-size: 12px;
+    line-height: 26px;
+    display: block;
+  }
+
+  @media screen and (max-width: 570px) {
+    .synthesis-body {
+      column-count: auto !important;
+    }
+  }
+}
+
+.idea-synthesis.idea-synthesis-level-2{
+  .synthesis-image-container,
+  .synthesis-stats {
+    float: left;
+    width: 50%;
+    margin: 0px;
+  }
+  .image-container{
+    float: left;
+    width: 50%;
+    padding: 0 15px 15px 0;
+  }
+  .synthesis-image-container,
+  .synthesis-stats{
+    padding-left: 0px;
+    margin: 0px;
+  }
+  .synthesis-stats{
+    padding: 20px;
+  }
+  .synthesis-image-container{
+    padding-bottom: 0px;
+    width: 100%;
+  }
+
+
+}

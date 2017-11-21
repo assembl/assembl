@@ -1,0 +1,12 @@
+query SynthesesQuery($lang: String!) {
+  syntheses {
+    ... on Synthesis {
+      id
+      subject(lang: $lang)
+      creationDate
+      img {
+        externalUrl
+      }
+    }
+  }
+}

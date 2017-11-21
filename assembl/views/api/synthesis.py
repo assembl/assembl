@@ -8,7 +8,7 @@ from cornice import Service
 from . import API_DISCUSSION_PREFIX
 from assembl.auth import P_READ, P_EDIT_SYNTHESIS
 from assembl.auth.util import get_permissions
-from assembl.models import Discussion, Synthesis
+from assembl.models import Discussion, Synthesis, LangString
 
 syntheses = Service(name='syntheses',
     path=API_DISCUSSION_PREFIX + '/explicit_subgraphs/synthesis',
@@ -54,12 +54,13 @@ def get_synthesis(request):
     return synthesis.generic_json(view_def, user_id, permissions)
 
 
+
 # Update
 @synthesis.put(permission=P_EDIT_SYNTHESIS)
 def save_synthesis(request):
     synthesis_id = request.matchdict['id']
+    discussion_id = int(request.matchdict['discussion_id'])
     if synthesis_id == 'next_synthesis':
-        discussion_id = int(request.matchdict['discussion_id'])
         discussion = Discussion.get_instance(discussion_id)
         synthesis = discussion.get_next_synthesis()
     else:
@@ -68,10 +69,18 @@ def save_synthesis(request):
         raise HTTPBadRequest("Synthesis with id '%s' not found." % synthesis_id)
 
     synthesis_data = json.loads(request.body)
+    user_id = authenticated_userid(request)
+    permissions = get_permissions(user_id, discussion_id)
 
-    synthesis.subject = synthesis_data.get('subject')
-    synthesis.introduction = synthesis_data.get('introduction')
-    synthesis.conclusion = synthesis_data.get('conclusion')
+    for key in ('subject', 'introduction', 'conclusion'):
+        if key in synthesis_data:
+            ls_data = synthesis_data[key]
+            if ls_data is None:
+                continue
+            assert isinstance(ls_data, dict)
+            current = LangString.create_from_json(
+                ls_data, user_id, permissions=permissions)
+            setattr(synthesis, key, current)
 
     Synthesis.default_db.add(synthesis)
     Synthesis.default_db.flush()

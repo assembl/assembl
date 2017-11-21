@@ -29,12 +29,15 @@
 @import 'components/video';
 @import 'components/media';
 @import 'components/ideaPreview';
+@import 'components/ideaSynthesis';
 @import 'components/ideas';
+@import 'components/synthesisPreview';
 @import 'components/switchButton';
 @import 'components/socialShare';
 @import 'components/surveyAdmin';
 @import 'components/resourcesCenter';
 @import 'components/header';
+@import 'components/section';
 @import 'views/administration';
 @import 'views/unauthorizedAdministration';
 @import 'views/debate';
@@ -43,6 +46,7 @@
 @import 'views/idea';
 @import 'views/columnsView';
 @import 'views/search';
+@import 'views/synthesis';
 @import 'bootstrap-overrides';
 @import 'common';
 

@@ -1,7 +1,6 @@
-import { I18n } from 'react-redux-i18n';
-import { multiColumnMapping } from '../../../utils/mapping';
+// @flow
 
-export const orderPostsByMessageClassifier = (messageColumns, posts) => {
+export const orderPostsByMessageClassifier = (messageColumns: IdeaMessageColumns, posts: Array<Post>) => {
   return messageColumns.reduce((naziLinter, col) => {
     const keyName = col.messageClassifier;
     const columnsMap = naziLinter;
@@ -10,9 +9,4 @@ export const orderPostsByMessageClassifier = (messageColumns, posts) => {
     });
     return columnsMap;
   }, {});
-};
-
-export const getSynthesisTitle = (classifier, colName, ideaTitle) => {
-  const mapping = multiColumnMapping(ideaTitle).columnsView;
-  return mapping[classifier] || I18n.t('multiColumns.synthesis.colName', { colName: colName });
 };

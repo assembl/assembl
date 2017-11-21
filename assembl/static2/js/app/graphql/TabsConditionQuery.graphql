@@ -1,0 +1,4 @@
+query TabsCondition {
+  hasResourcesCenter
+  hasSyntheses
+}

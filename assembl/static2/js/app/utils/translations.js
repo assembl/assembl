@@ -6,6 +6,8 @@ const Translations = {
     cancel: "Annuler",
     validate: "Valider",
     delete: "Supprimer",
+    introduction: "Introduction",
+    conclusion: "Conclusion",
     redirectToV1:
       "Vous allez être redirigé vers la phase %{phaseName} dans quelques secondes. Assembl est en cours d'amélioration, veuillez nous excuser pour le changement d'interface. Si rien ne se produit, cliquez sur le bouton ci-dessous.",
     search: {
@@ -86,7 +88,8 @@ const Translations = {
       connection: "Connexion",
       profile: "Profil",
       logout: "Se déconnecter",
-      administration: "Administration"
+      administration: "Administration",
+      syntheses: "Synthèses"
     },
     footer: {
       terms: "Conditions Générales d'Utilisation",
@@ -157,31 +160,15 @@ const Translations = {
       chatbot: "Chat avec %{chatbotName}"
     },
     multiColumns: {
-      announcement: {
-        positiveTitle: "Pour",
-        negativeTitle: "Contre",
-        alternativeTitle: "Alternatif"
-      },
-      createTopPost: {
-        positiveTitle: "Ajoutez votre point de vue en faveur du thème « %{ideaTitle} »",
-        negativeTitle: "Ajoutez votre point de vue en défaveur du thème « %{ideaTitle} »",
-        alternativeTitle: "Ajoutez votre point de vue alternatif sur le thème « %{ideaTitle} »"
-      },
       synthesis: {
-        positiveTitle: "Synthèse des arguments en faveur du thème « %{ideaTitle} »",
-        negativeTitle: "Synthèse des arguments en défaveur du thème « %{ideaTitle} »",
-        alternativeTitle: "Synthèse des arguments alternatifs du thème « %{ideaTitle} »",
-        colName: "Synthèse : %{colName}",
-        noSynthesisYet: "La synthèse est en cours de rédaction"
-      },
-      tab: {
-        positiveTitle: "En faveur",
-        negativeTitle: "En défaveur",
-        alternativeTitle: "Alternative"
+        noSynthesisYet: "La synthèse est en cours de rédaction",
+        title: "Synthèse : %{colName}"
       }
     },
     synthesis: {
-      title: "synthèse"
+      title: "synthèse",
+      seeConversation: "Voir la conversation",
+      noSynthesisYet: "Il n'y a pas encore de synthèse disponible pour ce débat."
     },
     common: {
       attachFileForm: {
@@ -225,6 +212,7 @@ const Translations = {
       confirmDeletionButtonDelete: "Supprimer",
       confirmDeletionButtonCancel: "Annuler",
       whatYouNeedToKnow: "À retenir",
+      syntheses: "Synthèses du débat",
       survey: {
         themesTitle: "Choisissez une thématique !",
         txtAreaPh: "Ecrivez votre proposition",
@@ -385,6 +373,8 @@ const Translations = {
   en: {
     cancel: "Cancel",
     validate: "Validate",
+    introduction: "Introduction",
+    conclusion: "Conclusion",
     redirectToV1:
       "You will be redirected to the %{phaseName} phase in a few seconds. Assembl is being improved, please excuse us for the interface change. If nothing happens, click on the button.",
     search: {
@@ -465,7 +455,8 @@ const Translations = {
       connection: "Login",
       profile: "Profile",
       logout: "Logout",
-      administration: "Administration"
+      administration: "Administration",
+      syntheses: "Syntheses"
     },
     footer: {
       terms: "Terms and Conditions",
@@ -555,31 +546,15 @@ const Translations = {
       goUp: "Back to top"
     },
     multiColumns: {
-      announcement: {
-        positiveTitle: "For",
-        negativeTitle: "Against",
-        alternativeTitle: "Alternative"
-      },
       synthesis: {
-        positiveTitle: "Synthesis of the arguments for the theme %{ideaTitle}",
-        negativeTitle: "Synthesis of the arguments against the theme %{ideaTitle}",
-        alternativeTitle: "Synthesis of the alternative arguments of the theme %{ideaTitle}",
-        colName: "Synthesis: %{colName}",
-        noSynthesisYet: "The synthesis is currently being written"
-      },
-      createTopPost: {
-        positiveTitle: "Add your point of view for the theme %{ideaTitle}",
-        negativeTitle: "Add your point of view against the theme %{ideaTitle}",
-        alternativeTitle: "Add your alternative point of view on the theme %{ideaTitle}"
-      },
-      tab: {
-        positiveTitle: "For",
-        negativeTitle: "Against",
-        alternativeTitle: "Alternative"
+        noSynthesisYet: "The synthesis is currently being written",
+        title: "Synthesis: %{colName}"
       }
     },
     synthesis: {
-      title: "synthesis"
+      title: "synthesis",
+      seeConversation: "See the conversation",
+      noSynthesisYet: "There is no synthesis available for this debate yet."
     },
     debate: {
       answer: "I answer:",
@@ -603,6 +578,7 @@ const Translations = {
       confirmDeletionButtonDelete: "Delete",
       confirmDeletionButtonCancel: "Cancel",
       whatYouNeedToKnow: "What you need to know",
+      syntheses: "Syntheses of the debate",
       survey: {
         themesTitle: "Choose a theme!",
         txtAreaPh: "Write your point of view",

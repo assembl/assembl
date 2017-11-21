@@ -1,3 +1,5 @@
+// @flow
+
 import Like from '../../svg/like';
 import Disagree from '../../svg/disagree';
 import DontUnderstand from '../../svg/dontUnderstand';
@@ -35,9 +37,17 @@ const sentimentDefinitions = [
   }
 ];
 
+const firstSentimentDefinition = sentimentDefinitions[0];
+
+export type SentimentDefinition = typeof firstSentimentDefinition;
+
+type SentimentDefinitionsObject = {
+  [string]: SentimentDefinition
+};
+
 export default sentimentDefinitions;
 
-export const sentimentDefinitionsObject = sentimentDefinitions.reduce((result, sentiment) => {
+export const sentimentDefinitionsObject: SentimentDefinitionsObject = sentimentDefinitions.reduce((result, sentiment) => {
   Object.assign(result, { [sentiment.camelType]: sentiment });
   return result;
 }, {});

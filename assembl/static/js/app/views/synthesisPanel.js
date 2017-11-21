@@ -21,8 +21,8 @@ var ObjectTreeRenderVisitor = require('./visitors/objectTreeRenderVisitor.js'),
     PanelSpecTypes = require('../utils/panelSpecTypes.js'),
     AssemblPanel = require('./assemblPanel.js'),
     i18n = require('../utils/i18n.js'),
-    EditableField = require('./reusableDataFields/editableField.js'),
-    CKEditorField = require('./reusableDataFields/ckeditorField.js'),
+    EditableLSField = require('./reusableDataFields/editableLSField.js'),
+    CKEditorLSField = require('./reusableDataFields/ckeditorLSField.js'),
     CollectionManager = require('../common/collectionManager.js'),
     Promise = require('bluebird');
 
@@ -56,11 +56,12 @@ var SynthesisPanel = AssemblPanel.extend({
     // that publishes this synthesis
     this.messageListView = obj.messageListView;
     this.synthesisIdeaRoots = new Idea.Collection();
-
+    this.focusSubject = false;
     Promise.join(collectionManager.getAllSynthesisCollectionPromise(),
                 collectionManager.getAllIdeasCollectionPromise(),
                 collectionManager.getAllIdeaLinksCollectionPromise(),
-            function(synthesisCollection, allIdeasCollection, allIdeaLinksCollection) {
+                collectionManager.getUserLanguagePreferencesPromise(Ctx),
+            function(synthesisCollection, allIdeasCollection, allIdeaLinksCollection, translationData) {
               if (!that.isViewDestroyed()) {
                 that.ideas = allIdeasCollection;
                 var rootIdea = allIdeasCollection.getRootIdea(),
@@ -75,6 +76,8 @@ var SynthesisPanel = AssemblPanel.extend({
                 }
                 that.synthesisIdeas = that.model.getIdeasCollection();
                 that.synthesisIdeas.collectionManager = collectionManager;
+                that.translationData = translationData;
+                that.focusSubject = true;
 
                 that.listenTo(allIdeaLinksCollection, 'reset change:source change:target change:order remove add destroy', function() {
                   //console.log("RE_RENDER FROM CHANGE ON allIdeaLinksCollection");
@@ -216,27 +219,38 @@ var SynthesisPanel = AssemblPanel.extend({
         ideasRegion.show(synthesisIdeaRootsView);
         body.get(0).scrollTop = y;
         if (canEdit && !synthesis_is_published) {
-          var titleField = new EditableField({
-            model: that.model,
-            modelProp: 'subject'
+          var titleField = new EditableLSField({
+            'model': that.model,
+            'modelProp': 'subject',
+            'translationData': that.translationData,
+            'class': 'panel-editablearea text-bold',
+            'data-tooltip': i18n.gettext('A short title for the synthesis'),
+            'placeholder': i18n.gettext('New Synthesis'),
+            'canEdit': canEdit,
+            'focus': that.focusSubject
           });
+
           that.getRegion("title").show(titleField);
 
-          var introductionField = new CKEditorField({
+          var introductionField = new CKEditorLSField({
             model: that.model,
             modelProp: 'introduction',
+            translationData: that.translationData,
             placeholder: i18n.gettext("You can add an introduction to your synthesis here..."),
             showPlaceholderOnEditIfEmpty: true,
+            canEdit: canEdit,
             autosave: true,
-            hideButton: true
+            hideButton: true,
           });
           that.getRegion("introduction").show(introductionField);
 
-          var conclusionField = new CKEditorField({
+          var conclusionField = new CKEditorLSField({
             model: that.model,
             modelProp: 'conclusion',
+            translationData: that.translationData,
             placeholder: i18n.gettext("You can add a conclusion to your synthesis here..."),
             showPlaceholderOnEditIfEmpty: true,
+            canEdit: canEdit,
             autosave: true,
             hideButton: true
           });
@@ -244,9 +258,9 @@ var SynthesisPanel = AssemblPanel.extend({
         }
         else {
           // TODO: Use regions here.
-          that.$('.synthesisPanel-title').html(that.model.get('subject'));
-          that.$('.synthesisPanel-introduction').html(that.model.get('introduction'));
-          that.$('.synthesisPanel-conclusion').html(that.model.get('conclusion'));
+          that.$('.synthesisPanel-title').html(that.model.get('subject').bestValue(that.translationData));
+          that.$('.synthesisPanel-introduction').html(that.model.get('introduction').bestValue(that.translationData));
+          that.$('.synthesisPanel-conclusion').html(that.model.get('conclusion').bestValue(that.translationData));
         }
         
         Ctx.initTooltips(that.$el);
