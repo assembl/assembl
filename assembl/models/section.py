@@ -24,6 +24,9 @@ class SectionTypesEnum(enum.Enum):
     CUSTOM = 'CUSTOM'
 
 
+section_types = [t.value for t in SectionTypesEnum.__members__.values()]
+
+
 class Section(DiscussionBoundBase):
 
     """Assembl configurable sections."""
@@ -61,7 +64,11 @@ class Section(DiscussionBoundBase):
     url = Column(URLString)
 
     section_type = Column(
-        Enum(SectionTypesEnum, name='section_types'), nullable=False, server_default=SectionTypesEnum.CUSTOM.value)
+        Enum(section_types, name='section_types'),
+        nullable=False,
+        default=SectionTypesEnum.CUSTOM.value,
+        server_default=SectionTypesEnum.CUSTOM.value
+    )
 
     order = Column(
         Float, nullable=False, default=0.0)
