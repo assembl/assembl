@@ -31,7 +31,7 @@
     "no-mixed-operators": 0,
     "no-console": 2,
     "func-names": ["warn", "never"],
-    "arrow-body-style": ["error", "always"],
+    "arrow-body-style": ["error", "as-needed"],
     "comma-dangle": ["warn", "never"],
     "indent": ["warn", 2],
     "eol-last": ["error", "never"],
