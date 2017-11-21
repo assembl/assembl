@@ -1,5 +1,5 @@
 html {
-    font-size: 12px;  // the base for the rem unit (used in react-datepicker)
+  font-size: 12px;  // the base for the rem unit (used in react-datepicker)
 }
 
 body {
@@ -23,37 +23,42 @@ a {
 }
 
 input {
-    &[type='text'] {
-        box-shadow: 0 0 0 50px $input-txt-bkg-color inset;
+  &[type='text'] {
+    box-shadow: 0 0 0 50px $input-txt-bkg-color inset;
 
-        &:focus {
-            box-shadow: 0 0 0 50px $input-txt-bkg-color inset;
-        }
+    &:focus {
+      box-shadow: 0 0 0 50px $input-txt-bkg-color inset;
     }
+  }
 
-    &[type='password'] {
-        box-shadow: 0 0 0 50px $input-txt-bkg-color inset;
+  &[type='password'] {
+    box-shadow: 0 0 0 50px $input-txt-bkg-color inset;
 
-        &:focus {
-            box-shadow: 0 0 0 50px $input-txt-bkg-color inset;
-        }
+    &:focus {
+      box-shadow: 0 0 0 50px $input-txt-bkg-color inset;
     }
+  }
 }
 
-input:-moz-placeholder, textarea:-moz-placeholder {
+input:-moz-placeholder,
+textarea:-moz-placeholder {
   font-family: $font-family6;
 }
 
-input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
+input::-webkit-input-placeholder,
+textarea::-webkit-input-placeholder {
   font-family: $font-family6;
 }
 
-input.placeholder, textarea.placeholder {
+input.placeholder,
+textarea.placeholder {
   font-family: $font-family6;
 }
+
 .overflow-x {
   overflow-x: scroll;
 }
+
 .pre-wrap {
   white-space: pre-wrap;
 }
@@ -73,6 +78,7 @@ input.placeholder, textarea.placeholder {
 .color {
   color: $first-color;
 }
+
 .color2 {
   color: $second-color;
 }
@@ -237,15 +243,15 @@ input.placeholder, textarea.placeholder {
 }
 
 .form-label {
-    color: $grey3;
-    font-family: $font-family;
-    font-size: $font-size-xs;
-    padding: 0 0 0 5px;
+  color: $grey3;
+  font-family: $font-family;
+  font-size: $font-size-xs;
+  padding: 0 0 0 5px;
 }
 
 .form-label-body {
   position: absolute;
-  top: 131px
+  top: 131px;
 }
 
 @media screen and (min-width: 992px) {
@@ -271,5 +277,5 @@ strong {
 }
 
 .cursor-wait {
-  cursor: wait!important;
+  cursor: wait !important;
 }

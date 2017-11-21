@@ -11,21 +11,21 @@ $grey7: #e5e5e5;
 $orange: #ffd58f;
 $orange2: #ff6a00;
 $red: #f75959;
-$green: #8DC4B3;
+$green: #8dc4b3;
 $lightgreen: #93e79d;
-$blue: #7490CA;
+$blue: #7490ca;
 $purple: #5404d7;
 $purple-light: #e7e6f5;
 $yellow: #f0ab2b;
 $cyan: #0095b2;
 $cyan-light: #d1eef6;
 $opacity-blue: rgba(53, 66, 105, 0.5);
-$min-opacity-blue: rgba(53, 66, 105, .1);
+$min-opacity-blue: rgba(53, 66, 105, 0.1);
 
-$opacity-purple: rgba(84, 4, 215, .5);
-$opacity-cyan: rgba(0, 140, 166, .5);
-$min-opacity-cyan: rgba(0, 140, 166, .1);
-$linear-gradient: linear-gradient( 90deg, $grey6, $white );
+$opacity-purple: rgba(84, 4, 215, 0.5);
+$opacity-cyan: rgba(0, 140, 166, 0.5);
+$min-opacity-cyan: rgba(0, 140, 166, 0.1);
+$linear-gradient: linear-gradient(90deg, $grey6, $white);
 
 $first-color: $cyan;
 $first-color-light: $cyan-light;
@@ -162,26 +162,26 @@ $screen-lg-min: 1200px;
 // Proper media-queries examples https://stackoverflow.com/questions/18424798/twitter-bootstrap-3-how-to-use-media-queries
 
 /* Large desktops and laptops */
-@media (min-width: $screen-lg-min) {
-
-}
+// @media (min-width: $screen-lg-min) {
+//
+// }
 
 /* Landscape tablets and medium desktops */
-@media (min-width: $screen-md-min) and (max-width: $screen-md-max) {
-
-}
+// @media (min-width: $screen-md-min) and (max-width: $screen-md-max) {
+//
+// }
 
 /* Portrait tablets and small desktops */
-@media (min-width: $screen-sm-min) and (max-width: $screen-sm-max) {
-
-}
+// @media (min-width: $screen-sm-min) and (max-width: $screen-sm-max) {
+//
+// }
 
 /* Landscape phones and portrait tablets */
-@media (max-width: $screen-xs-max) {
-
-}
+// @media (max-width: $screen-xs-max) {
+//
+// }
 
 /* Portrait phones and smaller */
-@media (max-width: $screen-xxs-max) {
-
-}
+// @media (max-width: $screen-xxs-max) {
+//
+// }
