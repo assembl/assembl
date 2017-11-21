@@ -14,7 +14,6 @@ def piwik_UsersManager_userExists(piwik_url, piwik_api_token, userLogin):
         raise requests.ConnectionError()
 
     content = result.json()
-    # print "piwik_UsersManager_userExists", content
     if not content:
         raise requests.ConnectionError()
 
@@ -34,7 +33,6 @@ def piwik_UsersManager_getUserByEmail(piwik_url, piwik_api_token, userEmail):
         raise requests.ConnectionError()
 
     content = result.json() # returns something like [{"login":"aaa","email":"aaa@aaa.com"}] or {"result":"error","message":"L'utilisateur 'aaa@aaa.com' est inexistant."}
-    # print "piwik_UsersManager_getUserByEmail", content
     if not content:
         raise requests.ConnectionError()
 
@@ -63,7 +61,6 @@ def piwik_UsersManager_addUser(piwik_url, piwik_api_token, userLogin, password, 
         raise requests.ConnectionError()
 
     content = result.json()
-    # print "piwik_UsersManager_addUser", content
     if not content:
         raise requests.ConnectionError()
 
@@ -84,7 +81,6 @@ def piwik_SitesManager_getSitesIdFromSiteUrl(piwik_url, piwik_api_token, url):
     if result.status_code != 200:
         raise requests.ConnectionError()
     content = result.json() # Content should be either an empty array, or an array like [{"idsite":"44"}]
-    # print "piwik_SitesManager_getSitesIdFromSiteUrl", content
     if not isinstance(content, list):
         raise requests.ConnectionError()
 
@@ -139,7 +135,6 @@ def piwik_SitesManager_addSite(piwik_url, piwik_api_token, siteName, urls, ecomm
         raise requests.ConnectionError()
 
     content = result.json() # Content should be something like {"value": 47}
-    # print "piwik_SitesManager_addSite", content
 
     if not content:
         raise requests.ConnectionError()
@@ -164,7 +159,6 @@ def piwik_UsersManager_setUserAccess(piwik_url, piwik_api_token, userLogin, acce
     if result.status_code != 200:
         raise requests.ConnectionError()
     content = result.json() # Content should be either an empty array, or an array like [{"idsite":"44"}]
-    # print "piwik_UsersManager_setUserAccess", content
 
     if not content:
         raise requests.ConnectionError()
@@ -187,7 +181,6 @@ def piwik_UsersManager_hasSuperUserAccess(piwik_url, piwik_api_token, userLogin)
     if result.status_code != 200:
         raise requests.ConnectionError()
     content = result.json() # Content should be like {"value": true}
-    # print "piwik_UsersManager_hasSuperUserAccess", content
 
     if not content:
         raise requests.ConnectionError()
@@ -195,3 +188,51 @@ def piwik_UsersManager_hasSuperUserAccess(piwik_url, piwik_api_token, userLogin)
     return asbool(content.get("value", False))
 
 
+def piwik_VisitsSummary_getSumVisitsLength(piwik_url, piwik_api_token, idSite, period, date):
+    params = {
+        "module": "API",
+        "format": "JSON",
+        "token_auth": piwik_api_token
+    }
+    params["method"] = "VisitsSummary.getSumVisitsLength"
+    params["idSite"] = idSite
+    params["period"] = period
+    params["date"] = date
+
+    result = requests.get(piwik_url, params=params, timeout=15)
+
+    if result.status_code != 200:
+        raise requests.ConnectionError()
+    content = result.json() # content should be like {"value": 15}
+
+    if not content:
+        raise requests.ConnectionError()
+
+    if not "value" in content:
+        raise requests.ConnectionError()
+    return content['value']
+
+
+def piwik_Actions_get(piwik_url, piwik_api_token, idSite, period, date):
+    params = {
+        "module": "API",
+        "format": "JSON",
+        "token_auth": piwik_api_token
+    }
+    params["method"] = "Actions.get"
+    params["idSite"] = idSite
+    params["period"] = period
+    params["date"] = date
+
+    result = requests.get(piwik_url, params=params, timeout=15)
+
+    if result.status_code != 200:
+        raise requests.ConnectionError()
+    content = result.json() # content should be like {"nb_pageviews": 15, "nb_uniq_pageviews": 10} and other fields
+
+    if not content:
+        raise requests.ConnectionError()
+
+    if not "nb_pageviews" in content:
+        raise requests.ConnectionError()
+    return content

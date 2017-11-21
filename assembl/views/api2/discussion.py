@@ -294,19 +294,30 @@ def get_format(request, stats_formats=default_stats_formats):
     return format
 
 
-def get_time_series_timing(request):
+def get_time_series_timing(request, force_bounds=False):
     start = request.GET.get("start", None)
     end = request.GET.get("end", None)
     interval = request.GET.get("interval", None)
     try:
         if start:
             start = parse_datetime(start)
+            if force_bounds and start:
+                discussion = request.context._instance
+                discussion_lower_bound = discussion.creation_date
+                if start < discussion_lower_bound:
+                    start = discussion_lower_bound
         else:
             discussion = request.context._instance
             start = discussion.creation_date
             # TODO: Round down at day/week/month according to interval
         if end:
             end = parse_datetime(end)
+            if force_bounds and end:
+                if end < start:
+                    end = start
+                discussion_upper_bound = datetime.now()
+                if end > discussion_upper_bound:
+                    end = discussion_upper_bound
         else:
             end = datetime.now()
         if interval:
@@ -1089,6 +1100,52 @@ class defaultdict_of_dict(defaultdict):
     def __init__(self):
         super(defaultdict_of_dict, self).__init__(dict)
 
+
+@view_config(context=InstanceContext, name="visits_time_series_analytics",
+             ctx_instance_class=Discussion, request_method='GET',
+             permission=P_READ, renderer='json') # TODO: What permission should this require? Do all debate initiators want this data to be accessible?
+def get_visits_time_series_analytics(request):
+    """
+    Fetches visits analytics from bound piwik site.
+    Optional parameters `start` and `end` are dates like "2017-11-21" (default dates are from discussion creation date to today as default).
+    """
+    from assembl.lib.piwik import (
+        piwik_VisitsSummary_getSumVisitsLength,
+        piwik_Actions_get
+    )
+
+    start, end, interval = get_time_series_timing(request, force_bounds=True)
+    discussion = request.context._instance
+    piwik_id_site = discussion.web_analytics_piwik_id_site
+    if not piwik_id_site:
+        raise HTTPBadRequest(explanation="This discussion is not bound to a piwik site")
+
+    config = get_config()
+    piwik_url = config.get(
+        'web_analytics_piwik_url')
+    piwik_api_token = config.get(
+        'web_analytics_piwik_api_token')
+    missing_variables = []
+    if not piwik_url:
+        missing_variables.append("piwik_url")
+    if not piwik_api_token:
+        missing_variables.append("piwik_api_token")
+    if len(missing_variables):
+        raise HTTPBadRequest(explanation="This Assembl server is not bound to a Piwik server. Missing configuration variables: " + ", ".join(missing_variables))
+
+    def date_to_piwik_date(date):
+        return date.strftime('%Y-%m-%d')
+
+    period = "range"
+    date = ",".join([date_to_piwik_date(start), date_to_piwik_date(end)])
+    # For debates with lots of visitors we will probably want to cache this, using redis for example.
+    sum_visits_length = piwik_VisitsSummary_getSumVisitsLength(piwik_url, piwik_api_token, piwik_id_site, period, date)
+    actions = piwik_Actions_get(piwik_url, piwik_api_token, piwik_id_site, period, date)
+    return {
+        "sum_visits_length": sum_visits_length,
+        "nb_uniq_pageviews": actions["nb_uniq_pageviews"],
+        "nb_pageviews": actions["nb_pageviews"],
+    }
 
 
 @view_config(context=InstanceContext, name="participant_time_series_analytics",
