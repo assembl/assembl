@@ -2027,3 +2027,40 @@ mutation deleteSection($id:ID!) {
     assert result is not None
     assert result['deleteSection'] is not None
     assert result['deleteSection']['success'] is False
+
+
+def test_mutation_update_section(graphql_request, sections):
+    section_id = to_global_id('section', sections[-1].id)
+    title_entries = [
+        {u"value": u"Reddit", u"localeCode": u"fr"},
+        {u"value": u"Reddit", u"localeCode": u"en"}
+    ]
+    variables = {
+        'id': section_id,
+        'titleEntries': title_entries,
+        'order': 3.5,
+        'url': 'http://www.reddit.com'
+    }
+    res = schema.execute(u"""
+mutation updateSection($id:ID!,$titleEntries:[LangStringEntryInput],$order:Float,$url:String) {
+    updateSection(
+        id:$id,
+        titleEntries:$titleEntries,
+        url:$url,
+        order:$order,
+    ) {
+        section {
+            title(lang:"fr")
+            url
+            order
+        }
+    }
+}
+""", context_value=graphql_request, variable_values=variables)
+    assert res.data is not None
+    assert res.data['updateSection'] is not None
+    assert res.data['updateSection']['section'] is not None
+    section = res.data['updateSection']['section']
+    assert section[u'title'] == u'Reddit'
+    assert section[u'url'] == u'http://www.reddit.com'
+    assert section[u'order'] == 3.5

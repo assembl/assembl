@@ -2475,6 +2475,55 @@ class DeleteSection(graphene.Mutation):
         return DeleteSection(success=True)
 
 
+class UpdateSection(graphene.Mutation):
+    class Input:
+        id = graphene.ID(required=True)
+        title_entries = graphene.List(LangStringEntryInput)
+        url = graphene.String()
+        order = graphene.Float()
+
+    section = graphene.Field(lambda: Section)
+
+    @staticmethod
+    def mutate(root, args, context, info):
+        cls = models.Section
+        discussion_id = context.matchdict['discussion_id']
+        discussion = models.Discussion.get(discussion_id)
+        user_id = context.authenticated_userid or Everyone
+
+        section_id = args.get('id')
+        section_id = int(Node.from_global_id(section_id)[1])
+        section = cls.get(section_id)
+
+        permissions = get_permissions(user_id, discussion_id)
+        allowed = section.user_can(
+            user_id, CrudPermissions.UPDATE, permissions)
+        if not allowed:
+            raise HTTPUnauthorized()
+
+        with cls.default_db.no_autoflush as db:
+            title_entries = args.get('title_entries')
+            if title_entries is not None and len(title_entries) == 0:
+                raise Exception(
+                    'section titleEntries needs at least one entry')
+                # Better to have this message than
+                # 'NoneType' object has no attribute 'owner_object'
+                # when creating the saobj below if title=None
+
+            update_langstring_from_input_entries(
+                section, 'title', title_entries)
+
+            kwargs = {}
+            kwargs['url'] = args.get('url', None)
+            kwargs['order'] = args.get('order', None)
+            for attr, value in kwargs.items():
+                setattr(section, attr, value)
+
+            db.flush()
+
+        return UpdateSection(section=section)
+
+
 class Mutations(graphene.ObjectType):
     create_thematic = CreateThematic.Field()
     update_thematic = UpdateThematic.Field()
@@ -2496,6 +2545,7 @@ class Mutations(graphene.ObjectType):
     update_resources_center = UpdateResourcesCenter.Field()
     create_section = CreateSection.Field()
     delete_section = DeleteSection.Field()
+    update_section = UpdateSection.Field()
 
 
 Schema = graphene.Schema(query=Query, mutation=Mutations)
