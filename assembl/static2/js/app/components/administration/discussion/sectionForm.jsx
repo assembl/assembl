@@ -19,9 +19,9 @@ const SectionForm = ({ i18n }) => {
 
   return (
     <div className="form-container">
-      {sectionsMock.map((section, index) => {
+      {sectionsMock.map((section) => {
         return (
-          <div key={`section-${index}`}>
+          <div key={section.id}>
             <div className="title">
               {translations[locale].administration.sections[section.type.toLowerCase()]
                 ? translations[locale].administration.sections[section.type.toLowerCase()]
