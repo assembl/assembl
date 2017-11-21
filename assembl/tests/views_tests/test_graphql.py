@@ -1931,7 +1931,7 @@ query { sections {
     order
 } }"""
     res = schema.execute(query, context_value=graphql_request)
-    assert len(res.data['sections']) == 4
+    assert len(res.data['sections']) == 5
     assert res.data['sections'][0]['title'] == u'Home'
     assert res.data['sections'][0]['titleEntries'][0]['localeCode'] == u'en'
     assert res.data['sections'][0]['titleEntries'][0]['value'] == u'Home'
@@ -1939,6 +1939,10 @@ query { sections {
     assert res.data['sections'][0]['sectionType'] == SectionTypesEnum.HOMEPAGE.value
     assert res.data['sections'][0]['order'] == 0.0
 
+    assert res.data['sections'][-1]['url'] == u'http://www.gnu.org'
+    assert res.data['sections'][-1]['sectionType'] == SectionTypesEnum.CUSTOM.value
+    assert res.data['sections'][-1]['order'] == 4.0
+    assert res.data['sections'][-1]['title'] == u'GNU is not Unix'
 
 def test_mutation_create_section(sections, graphql_request):
     from assembl.models.section import SectionTypesEnum
@@ -1973,3 +1977,53 @@ mutation createSection($titleEntries:[LangStringEntryInput!]!,$url:String,$order
     assert section['url'] == u"http://www.example.com"
     assert section['sectionType'] == SectionTypesEnum.CUSTOM.value
     assert section['order'] == 5.0
+
+
+def test_mutation_delete_section(sections, graphql_request):
+    custom_section_id = to_global_id('Section', sections[-1].id)
+    variables = {
+        'id': custom_section_id
+    }
+    res = schema.execute(u"""
+mutation deleteSection($id:ID!) {
+    deleteSection(
+        sectionId:$id
+    ) {
+        success
+    }
+}
+""", context_value=graphql_request, variable_values=variables)
+    result = res.data
+    assert result is not None
+    assert result['deleteSection'] is not None
+    assert result['deleteSection']['success']
+
+    query = u"""
+query { sections {
+    id
+} }"""
+    res = schema.execute(query, context_value=graphql_request)
+    result = res.data
+    assert result is not None
+    assert len(result['sections']) == 4
+
+
+def test_mutation_delete_section_fails_for_non_custom_sections(sections, graphql_request):
+    # raise error if we try to delete anything but CUSTOM type
+    non_custom_section_id = to_global_id('Section', sections[1].id)
+    variables = {
+        'id': non_custom_section_id
+    }
+    res = schema.execute(u"""
+mutation deleteSection($id:ID!) {
+    deleteSection(
+        sectionId:$id
+    ) {
+        success
+    }
+}
+""", context_value=graphql_request, variable_values=variables)
+    result = res.data
+    assert result is not None
+    assert result['deleteSection'] is not None
+    assert result['deleteSection']['success'] is False

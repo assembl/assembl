@@ -43,6 +43,16 @@ def sections(request, discussion, test_session):
     )
     sections.append(resources_center_section)
 
+    # also add a custom section
+    custom_section = Section(
+        discussion_id=discussion_id,
+        title=LangString.create(u'GNU is not Unix', 'en'),
+        url=u'http://www.gnu.org',
+        section_type=SectionTypesEnum.CUSTOM.value,
+        order=4.0
+    )
+    sections.append(custom_section)
+
     for section in sections:
         test_session.add(section)
     test_session.flush()

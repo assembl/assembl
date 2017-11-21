@@ -2447,6 +2447,34 @@ class CreateSection(graphene.Mutation):
         return CreateSection(section=saobj)
 
 
+class DeleteSection(graphene.Mutation):
+    class Input:
+        section_id = graphene.ID(required=True)
+
+    success = graphene.Boolean()
+
+    @staticmethod
+    def mutate(root, args, context, info):
+        discussion_id = context.matchdict['discussion_id']
+        user_id = context.authenticated_userid or Everyone
+
+        section_id = args.get('section_id')
+        section_id = int(Node.from_global_id(section_id)[1])
+        section = models.Section.get(section_id)
+        if section.section_type != SectionTypesEnum.CUSTOM.value:
+            return DeleteSection(success=False)
+
+        permissions = get_permissions(user_id, discussion_id)
+        allowed = section.user_can(
+            user_id, CrudPermissions.DELETE, permissions)
+        if not allowed:
+            raise HTTPUnauthorized()
+
+        section.db.delete(section)
+        section.db.flush()
+        return DeleteSection(success=True)
+
+
 class Mutations(graphene.ObjectType):
     create_thematic = CreateThematic.Field()
     update_thematic = UpdateThematic.Field()
@@ -2467,6 +2495,7 @@ class Mutations(graphene.ObjectType):
     update_resource = UpdateResource.Field()
     update_resources_center = UpdateResourcesCenter.Field()
     create_section = CreateSection.Field()
+    delete_section = DeleteSection.Field()
 
 
 Schema = graphene.Schema(query=Query, mutation=Mutations)
