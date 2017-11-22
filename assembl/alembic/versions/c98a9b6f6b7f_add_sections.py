@@ -30,17 +30,18 @@ def upgrade(pyramid_env):
 
     db = m.get_session_maker()()
     with transaction.manager:
-        section_types = [t.value for t in SectionTypesEnum.__members__.values()]
+        section_types = [
+            t.value for t in SectionTypesEnum.__members__.values()]
         op.create_table(
             'section',
             sa.Column('id', sa.Integer, primary_key=True),
             sa.Column('type', sa.String(60), nullable=False),
             sa.Column('discussion_id',
-                sa.Integer,
-                sa.ForeignKey(
-                  'discussion.id',
-                   ondelete="CASCADE",
-                   onupdate="CASCADE"), nullable=False, index=False),
+                      sa.Integer,
+                      sa.ForeignKey(
+                          'discussion.id',
+                          ondelete="CASCADE",
+                          onupdate="CASCADE"), nullable=False, index=False),
             sa.Column('title_id', sa.Integer, sa.ForeignKey('langstring.id')),
             sa.Column('url', URLString(1024)),
             sa.Column('order', sa.Float, default=0.0),
@@ -100,6 +101,17 @@ def upgrade(pyramid_env):
                     order=3.0
                 )
                 db.add(resources_center_section)
+
+                langstring = m.LangString.create(u'Administration', 'en')
+                langstring.add_value(u'Administration', 'fr')
+                administration_section = m.Section(
+                    discussion_id=discussion_id,
+                    title=langstring,
+                    url=u'',
+                    section_type=SectionTypesEnum.ADMINISTRATION.value,
+                    order=99.0
+                )
+                db.add(administration_section)
 
                 db.flush()
 

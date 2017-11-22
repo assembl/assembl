@@ -43,6 +43,15 @@ def sections(request, discussion, test_session):
     )
     sections.append(resources_center_section)
 
+    administration_section = Section(
+        discussion_id=discussion_id,
+        title=LangString.create(u'Administration', 'en'),
+        url=u'',
+        section_type=SectionTypesEnum.ADMINISTRATION.value,
+        order=99.0
+    )
+    sections.append(administration_section)
+
     # also add a custom section
     custom_section = Section(
         discussion_id=discussion_id,

@@ -1957,7 +1957,7 @@ query { sections {
     order
 } }"""
     res = schema.execute(query, context_value=graphql_request)
-    assert len(res.data['sections']) == 5
+    assert len(res.data['sections']) == 6
     assert res.data['sections'][0]['title'] == u'Home'
     assert res.data['sections'][0]['titleEntries'][0]['localeCode'] == u'en'
     assert res.data['sections'][0]['titleEntries'][0]['value'] == u'Home'
@@ -2031,7 +2031,7 @@ query { sections {
     res = schema.execute(query, context_value=graphql_request)
     result = res.data
     assert result is not None
-    assert len(result['sections']) == 4
+    assert len(result['sections']) == 5
 
 
 def test_mutation_delete_section_fails_for_non_custom_sections(sections, graphql_request):

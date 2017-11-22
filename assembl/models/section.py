@@ -22,6 +22,7 @@ class SectionTypesEnum(enum.Enum):
     SYNTHESES = 'SYNTHESES'
     RESOURCES_CENTER = 'RESOURCES_CENTER'
     CUSTOM = 'CUSTOM'
+    ADMINISTRATION = 'ADMINISTRATION'
 
 
 section_types = [t.value for t in SectionTypesEnum.__members__.values()]
