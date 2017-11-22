@@ -5,8 +5,10 @@ import { Translate, I18n } from 'react-redux-i18n';
 import { FormGroup, Checkbox } from 'react-bootstrap';
 import { getEntryValueForLocale } from '../../../utils/i18n';
 import FormControlWithLabel from '../../common/formControlWithLabel';
+import { updateSectionTitle } from '../../../actions/adminActions/adminSections';
 
 type EditSectionFormProps = {
+  handleTitleChange: Function,
   i18n: Object,
   locale: string,
   url: string,
@@ -14,13 +16,10 @@ type EditSectionFormProps = {
   title: string
 };
 
-const EditSectionForm = ({ i18n, locale, url, type, title }: EditSectionFormProps) => {
-  // TODO use order
+const EditSectionForm = ({ i18n, locale, url, type, title, handleTitleChange }: EditSectionFormProps) => {
   const { translations } = i18n;
   const titlePh = I18n.t('administration.sections.titlePh');
   const urlPh = I18n.t('administration.sections.urlPh');
-
-  const handleTitleChange = () => {};
 
   const handleCheckboxChange = () => {};
 
@@ -62,4 +61,12 @@ const mapStateToProps = (state, { id, locale }) => {
   };
 };
 
-export default connect(mapStateToProps)(EditSectionForm);
+const mapDispatchToProps = (dispatch, { id, locale }) => {
+  return {
+    handleTitleChange: (e) => {
+      return dispatch(updateSectionTitle(id, locale, e.target.value));
+    }
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(EditSectionForm);

@@ -16,6 +16,7 @@ export const UPDATE_RC_PAGE_TITLE: 'UPDATE_RC_PAGE_TITLE' = 'UPDATE_RC_PAGE_TITL
 export const UPDATE_RC_HEADER_IMAGE: 'UPDATE_RC_HEADER_IMAGE' = 'UPDATE_RC_HEADER_IMAGE';
 export const UPDATE_RC_PAGE: 'UPDATE_RC_PAGE' = 'UPDATE_RC_PAGE';
 export const UPDATE_SECTIONS: 'UPDATE_SECTIONS' = 'UPDATE_SECTIONS';
+export const UPDATE_SECTION_TITLE: 'UPDATE_SECTION_TITLE' = 'UPDATE_SECTION_TITLE';
 
 export type UpdateContentLocaleById = {
   type: typeof UPDATE_CONTENT_LOCALE_BY_ID,
@@ -122,6 +123,13 @@ export type SectionsArray = Array<SectionInfo>;
 export type UpdateSections = {
   sections: SectionsArray,
   type: typeof UPDATE_SECTIONS
+};
+
+export type UpdateSectionTitle = {
+  id: string,
+  locale: string,
+  value: string,
+  type: typeof UPDATE_SECTION_TITLE
 };
 
 type BasicAction = {
