@@ -16,3 +16,15 @@ export const updateSectionTitle = (id: string, locale: string, value: string): a
     type: actionTypes.UPDATE_SECTION_TITLE
   };
 };
+
+export const updateSectionUrl = (id: string, value: string): actionTypes.UpdateSectionUrl => {
+  return {
+    id: id,
+    value: value,
+    type: actionTypes.UPDATE_SECTION_URL
+  };
+};
+
+export const toggleExternalPage = (id: string): actionTypes.ToggleExternalPage => {
+  return { id: id, type: actionTypes.TOGGLE_EXTERNAL_PAGE };
+};

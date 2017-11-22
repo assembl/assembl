@@ -17,6 +17,8 @@ export const UPDATE_RC_HEADER_IMAGE: 'UPDATE_RC_HEADER_IMAGE' = 'UPDATE_RC_HEADE
 export const UPDATE_RC_PAGE: 'UPDATE_RC_PAGE' = 'UPDATE_RC_PAGE';
 export const UPDATE_SECTIONS: 'UPDATE_SECTIONS' = 'UPDATE_SECTIONS';
 export const UPDATE_SECTION_TITLE: 'UPDATE_SECTION_TITLE' = 'UPDATE_SECTION_TITLE';
+export const UPDATE_SECTION_URL: 'UPDATE_SECTION_URL' = 'UPDATE_SECTION_URL';
+export const TOGGLE_EXTERNAL_PAGE: 'TOGGLE_EXTERNAL_PAGE' = 'TOGGLE_EXTERNAL_PAGE';
 
 export type UpdateContentLocaleById = {
   type: typeof UPDATE_CONTENT_LOCALE_BY_ID,
@@ -130,6 +132,17 @@ export type UpdateSectionTitle = {
   locale: string,
   value: string,
   type: typeof UPDATE_SECTION_TITLE
+};
+
+export type UpdateSectionUrl = {
+  id: string,
+  value: string,
+  type: typeof UPDATE_SECTION_URL
+};
+
+export type ToggleExternalPage = {
+  id: string,
+  type: typeof TOGGLE_EXTERNAL_PAGE
 };
 
 type BasicAction = {

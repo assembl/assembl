@@ -5,10 +5,12 @@ import { Translate, I18n } from 'react-redux-i18n';
 import { FormGroup, Checkbox } from 'react-bootstrap';
 import { getEntryValueForLocale } from '../../../utils/i18n';
 import FormControlWithLabel from '../../common/formControlWithLabel';
-import { updateSectionTitle } from '../../../actions/adminActions/adminSections';
+import { updateSectionTitle, updateSectionUrl, toggleExternalPage } from '../../../actions/adminActions/adminSections';
 
 type EditSectionFormProps = {
   handleTitleChange: Function,
+  handleUrlChange: Function,
+  handleCheckboxChange: Function,
   i18n: Object,
   locale: string,
   url: string,
@@ -16,15 +18,20 @@ type EditSectionFormProps = {
   title: string
 };
 
-const EditSectionForm = ({ i18n, locale, url, type, title, handleTitleChange }: EditSectionFormProps) => {
+const EditSectionForm = ({
+  i18n,
+  locale,
+  url,
+  type,
+  title,
+  handleTitleChange,
+  handleCheckboxChange,
+  handleUrlChange
+}: EditSectionFormProps) => {
   const { translations } = i18n;
   const titlePh = I18n.t('administration.sections.titlePh');
   const urlPh = I18n.t('administration.sections.urlPh');
-
-  const handleCheckboxChange = () => {};
-
-  const handleUrlChange = () => {};
-
+  const hasUrl = url !== null;
   return (
     <div className="form-container">
       <div>
@@ -36,7 +43,7 @@ const EditSectionForm = ({ i18n, locale, url, type, title, handleTitleChange }: 
         <FormControlWithLabel label={titlePh} onChange={handleTitleChange} type="text" value={title} />
         {type === 'HOMEPAGE' ? (
           <FormGroup>
-            <Checkbox checked={url} onChange={handleCheckboxChange}>
+            <Checkbox checked={hasUrl} onChange={handleCheckboxChange}>
               <Translate value="administration.sections.externalPage" />
             </Checkbox>
           </FormGroup>
@@ -65,6 +72,12 @@ const mapDispatchToProps = (dispatch, { id, locale }) => {
   return {
     handleTitleChange: (e) => {
       return dispatch(updateSectionTitle(id, locale, e.target.value));
+    },
+    handleUrlChange: (e) => {
+      return dispatch(updateSectionUrl(id, e.target.value));
+    },
+    handleCheckboxChange: () => {
+      return dispatch(toggleExternalPage(id));
     }
   };
 };
