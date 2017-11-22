@@ -64,7 +64,7 @@ class Section(DiscussionBoundBase):
     url = Column(URLString)
 
     section_type = Column(
-        Enum(section_types, name='section_types'),
+        Enum(*section_types, name='section_types'),
         nullable=False,
         default=SectionTypesEnum.CUSTOM.value,
         server_default=SectionTypesEnum.CUSTOM.value
