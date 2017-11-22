@@ -142,6 +142,10 @@ def associate_user(backend, uid, user=None, social=None, details=None,
         associate_user as psa_associate_user
     results = psa_associate_user(
         backend, uid, user, social, *args, **kwargs)
+    # User has logged in with this account
+    social = results.get('social', social)
+    if social:
+        social.successful_login()
     # Delete old email accounts
     email = (details or {}).get('email', None)
     if email and results and results['new_association']:
@@ -175,7 +179,7 @@ def auto_subscribe(backend, social, user, *args, **kwargs):
                 discussion = Discussion.default_db.query(
                     Discussion).filter_by(slug=slug).first()
     if discussion:
-        user.last_login = datetime.utcnow()
+        user.successful_login(True)
         maybe_auto_subscribe(user, discussion)
         return {"discussion": discussion}
 

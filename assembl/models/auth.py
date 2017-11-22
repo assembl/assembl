@@ -1,5 +1,5 @@
 """All classes relative to users and their online identities."""
-from datetime import datetime
+from datetime import datetime, timedelta
 from itertools import chain, permutations
 import urllib
 import hashlib
@@ -356,6 +356,55 @@ class AgentProfile(Base):
             return prefs[0]
         return Locale.locale_collection_byid[prefs[0].locale_id]
 
+    def successful_login(self, social=False):
+        "A successful email login"
+        self.last_login = datetime.utcnow()
+        if not social:
+            self.last_assembl_login = self.last_login
+
+    def assembl_login_expiry(self):
+        duration = config.get('login_expiry_email', None)
+        if duration is None:
+            # default to no expiry
+            duration = config.get('login_expiry_default', 0)
+        if not duration:
+            return None
+        last_login = self.last_assembl_login
+        if not last_login:
+            return datetime.utcnow() - timedelta(seconds=1)
+        return last_login + timedelta(float(duration))
+
+    def login_expiry(self, discussion):
+        accounts = [a for a in self.social_accounts if a.verified]
+        autologin = None
+        if discussion:
+            autologin = discussion.preferences['authorization_server_backend']
+        from ..auth.util import user_has_permission
+        if autologin and not user_has_permission(
+                discussion.id, self.id, P_OVERRIDE_SOCIAL_AUTOLOGIN):
+            # the discussion restricts access to this specific
+            # social identity provider. The override permission
+            # bypasses that, mostly for external moderators.
+            autologin_accs_expiry = [
+                a.login_expiry() for a in accounts
+                if a.provider_with_idp == autologin]
+            if len(autologin_accs_expiry):
+                if None in autologin_accs_expiry:
+                    return None
+                return max(autologin_accs_expiry)
+            return datetime.utcnow() - timedelta(seconds=1)
+        expiries = [a.login_expiry() for a in accounts]
+        expiries.append(self.assembl_login_expiry())
+        if None in expiries:
+            return None
+        return max(expiries)
+
+    def login_expired(self, discussion):
+        expiry = self.login_expiry(discussion)
+        if expiry is None:
+            return False
+        return expiry < datetime.utcnow()
+
 
 class AbstractAgentAccount(Base):
     """An abstract class for online accounts that identify AgentsProfiles
@@ -643,10 +692,12 @@ class User(AgentProfile):
     password = deferred(Column(Binary(115)))
     timezone = Column(Time(True))
     last_login = Column(DateTime)
+    last_assembl_login = Column(DateTime)
     login_failures = Column(Integer, default=0)
     creation_date = Column(DateTime, nullable=False, default=datetime.utcnow,
         info={'rdf': QuadMapPatternS(
             None, DCTERMS.created, sections=(PRIVATE_USER_SECTION,))})
+    social_accounts = relationship('SocialAuthAccount')
 
     def __init__(self, **kwargs):
         if kwargs.get('password', None) is not None:

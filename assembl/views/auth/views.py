@@ -445,7 +445,7 @@ def assembl_register_view(request):
             print "email token:", request.route_url(
                 'user_confirm_email', token=email_token(email_account))
         headers = remember(request, user.id)
-        user.last_login = datetime.utcnow()
+        user.successful_login()
         request.response.headerlist.extend(headers)
         if discussion:
             maybe_auto_subscribe(user, discussion)
@@ -542,7 +542,7 @@ def assembl_login_complete_view(request):
         return HTTPFound(location=maybe_contextual_route(
             request, route_name,
             _query=query))
-    user.last_login = datetime.utcnow()
+    user.successful_login()
     headers = remember(request, user.id)
     request.response.headerlist.extend(headers)
     discussion = discussion_from_request(request)
@@ -696,7 +696,7 @@ def user_confirm_email(request):
     assert isinstance(user, User)  # accounts should not get here. OK to fail.
     headers = remember(request, user.id)
     request.response.headerlist.extend(headers)
-    user.last_login = datetime.utcnow()
+    user.successful_login()
     username = user.username.username if user.username else None
     next_view = handle_next_view(request, False)
 
@@ -721,7 +721,7 @@ def user_confirm_email(request):
         account.verified = True
         user.verified = True
         # do not use inferred discussion for auto_subscribe
-        user.last_login = datetime.utcnow()
+        user.successful_login()
         if discussion and maybe_auto_subscribe(user, discussion):
             message = localizer.translate(_(
                 "Your email address %s has been confirmed, "
@@ -1046,7 +1046,7 @@ def finish_password_change(request):
         error = localizer.translate(_('The passwords are not identical'))
     elif p1:
         user.password_p = p1
-        user.last_login = datetime.utcnow()
+        user.successful_login()
         headers = remember(request, user.id)
         request.response.headerlist.extend(headers)
         if discussion:

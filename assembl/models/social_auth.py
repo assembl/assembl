@@ -5,6 +5,7 @@
 import logging
 import six
 import re
+from datetime import datetime, timedelta
 
 import transaction
 from sqlalchemy import (
@@ -130,6 +131,18 @@ class SocialAuthAccount(
     extra_data = Column(MutableDict.as_mutable(JSONType))
     picture_url = Column(URLString)
     user = relationship(AgentProfile, backref='identity_accounts')
+    last_checked = Column(DateTime)
+
+    def successful_login(self):
+        self.last_checked = datetime.utcnow()
+
+    def login_expiry(self):
+        if self.last_checked is None:
+            return datetime.utcnow() - timedelta(seconds=1)
+        expiry = self.login_duration()
+        if not expiry:
+            return None
+        return self.last_checked + timedelta(expiry)
 
     @property
     def provider(self):
@@ -421,6 +434,29 @@ class SocialAuthAccount(
             log.error("account needs username or email" +
                       social_account)
             raise RuntimeError("account needs username or uid")
+
+    def login_duration(self):
+        data = self.extra_data
+        intrinsic = None
+        if 'expires' in data:
+            intrinsic = data['expires']
+        elif 'expires_in' in data:
+            intrinsic = data['expires_in']
+        provider = self.provider_with_idp
+        provider = '_'.join(provider.split(':'))
+        config_t = config.get('login_expiry_' + provider, None)
+        if config_t is None and '_' in provider:
+            config_t = config.get(
+                'login_expiry_' + provider.split('_')[0], None)
+        if config_t is None:
+            config_t = config.get('login_expiry_default', None)
+        if intrinsic is not None:
+            # convert to days
+            intrinsic /= 864000.0
+            if config_t is not None:
+                # take minimum of intrinsic or config.
+                intrinsic = min(config_t, intrinsic)
+        return float(intrinsic or config_t or 0)
 
     # temporary shims
     @property
