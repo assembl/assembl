@@ -818,6 +818,7 @@ var TokenVoteItemView = Marionette.LayoutView.extend({
   initialize: function(options){
     this.childIndex = options.childIndex;
     this.parent = options.parent;
+    this.userLanguagePreferences = options.userLanguagePreferences;
   },
 
   regions: {
@@ -891,11 +892,15 @@ var TokenVoteCollectionView = Marionette.CompositeView.extend({
   childView: TokenVoteItemView,
   template: '#tmpl-tokenVoteCollection',
   childViewContainer: "tbody",
+  initialize: function(options) {
+    this.options = options;
+  },
   childViewOptions: function(model, index){
     var that = this;
     return {
       childIndex: index,
-      parent: that
+      parent: that,
+      userLanguagePreferences: that.getOption('userLanguagePreferences')
     };
   },
   templateHelpers: function(){
@@ -1523,6 +1528,7 @@ var TokenVoteSessionModal = Backbone.Modal.extend({
         tokenCategories: that.tokenCategories,
         myVotesCollection: that.myVotesCollection,
         tokenSize: tokenSize,
+        userLanguagePreferences: userLanguagePreferences,
         viewComparator: function(idea){
           return _.findIndex(permutation, function(idea2){return idea2.id == idea.id;});
         }
