@@ -1,8 +1,8 @@
 "use strict";
 
 voteApp.controller('adminCreateFromIdeaCtl',
-  ['$scope', '$http', '$routeParams', '$log', '$location', '$translate', 'globalConfig', 'configTestingService', 'configService', 'AssemblToolsService',
-  function($scope, $http, $routeParams, $log, $location, $translate, globalConfig, configTestingService, configService, AssemblToolsService) {
+  ['$scope', '$http', '$routeParams', '$log', '$location', '$translate', 'globalConfig', 'configTestingService', 'configService', 'AssemblToolsService', 'LangStringService',
+  function($scope, $http, $routeParams, $log, $location, $translate, globalConfig, configTestingService, configService, AssemblToolsService, LangStringService) {
 
     $scope.current_step = 1;
     $scope.url_parameter_idea = null; // the URL of the idea given in URL parameter, which will be associated to the widget instance
@@ -47,6 +47,7 @@ voteApp.controller('adminCreateFromIdeaCtl',
     }).success(function(data, status, headers) {
       console.log(data);
       $scope.idea = data;
+      $scope.idea.translatedTitle = LangStringService.bestStringForLang($scope.idea.shortTitle, $scope.current_lang);
       $scope.discussion_uri = data.discussion;
 
       $http({
