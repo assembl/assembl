@@ -63,7 +63,6 @@ def upgrade(pyramid_env):
                 homepage_section = m.Section(
                     discussion_id=discussion_id,
                     title=langstring,
-                    url=u'',
                     section_type=SectionTypesEnum.HOMEPAGE.value,
                     order=0.0
                 )
@@ -74,7 +73,6 @@ def upgrade(pyramid_env):
                 debate_section = m.Section(
                     discussion_id=discussion_id,
                     title=langstring,
-                    url=u'',
                     section_type=SectionTypesEnum.DEBATE.value,
                     order=1.0
                 )
@@ -85,7 +83,6 @@ def upgrade(pyramid_env):
                 syntheses_section = m.Section(
                     discussion_id=discussion_id,
                     title=langstring,
-                    url=u'',
                     section_type=SectionTypesEnum.SYNTHESES.value,
                     order=2.0
                 )
@@ -96,7 +93,6 @@ def upgrade(pyramid_env):
                 resources_center_section = m.Section(
                     discussion_id=discussion_id,
                     title=langstring,
-                    url=u'',
                     section_type=SectionTypesEnum.RESOURCES_CENTER.value,
                     order=3.0
                 )
@@ -107,7 +103,6 @@ def upgrade(pyramid_env):
                 administration_section = m.Section(
                     discussion_id=discussion_id,
                     title=langstring,
-                    url=u'',
                     section_type=SectionTypesEnum.ADMINISTRATION.value,
                     order=99.0
                 )

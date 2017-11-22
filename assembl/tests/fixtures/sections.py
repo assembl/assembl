@@ -13,7 +13,6 @@ def sections(request, discussion, test_session):
     homepage_section = Section(
         discussion_id=discussion_id,
         title=LangString.create(u'Home', 'en'),
-        url=u'',
         section_type=SectionTypesEnum.HOMEPAGE.value,
         order=0.0
     )
@@ -21,7 +20,6 @@ def sections(request, discussion, test_session):
     debate_section = Section(
         discussion_id=discussion_id,
         title=LangString.create(u'Debate', 'en'),
-        url=u'',
         section_type=SectionTypesEnum.DEBATE.value,
         order=1.0
     )
@@ -29,7 +27,6 @@ def sections(request, discussion, test_session):
     syntheses_section = Section(
         discussion_id=discussion_id,
         title=LangString.create(u'Syntheses', 'en'),
-        url=u'',
         section_type=SectionTypesEnum.SYNTHESES.value,
         order=2.0
     )
@@ -37,7 +34,6 @@ def sections(request, discussion, test_session):
     resources_center_section = Section(
         discussion_id=discussion_id,
         title=LangString.create(u'Resources center', 'en'),
-        url=u'',
         section_type=SectionTypesEnum.RESOURCES_CENTER.value,
         order=3.0
     )
@@ -46,7 +42,6 @@ def sections(request, discussion, test_session):
     administration_section = Section(
         discussion_id=discussion_id,
         title=LangString.create(u'Administration', 'en'),
-        url=u'',
         section_type=SectionTypesEnum.ADMINISTRATION.value,
         order=99.0
     )

@@ -1961,7 +1961,7 @@ query { sections {
     assert res.data['sections'][0]['title'] == u'Home'
     assert res.data['sections'][0]['titleEntries'][0]['localeCode'] == u'en'
     assert res.data['sections'][0]['titleEntries'][0]['value'] == u'Home'
-    assert res.data['sections'][0]['url'] == u''
+    assert res.data['sections'][0]['url'] is None
     assert res.data['sections'][0]['sectionType'] == SectionTypesEnum.HOMEPAGE.value
     assert res.data['sections'][0]['order'] == 0.0
 
