@@ -234,7 +234,6 @@ var RemainingCategoryTokensView = Marionette.ItemView.extend({
     this.userLanguagePreferences = options.userLanguagePreferences;
   },
   onRender: function(){
-    console.log("RemainingCategoryTokensView::onRender()");
     var that = this;
     var categoryContainer = this.$el;
     categoryContainer.empty();
@@ -315,7 +314,6 @@ var RemainingTokenCategoriesCollectionView = Marionette.CollectionView.extend({
   template: false,
   childView: RemainingCategoryTokensView,
   initialize: function(options) {
-    console.log("RemainingTokenCategoriesCollectionView::initialize()");
     this.myVotesCollection = options.myVotesCollection;
     this.tokenSize = options.tokenSize;
     this.userLanguagePreferences = options.userLanguagePreferences;
@@ -948,7 +946,7 @@ var TokenVoteResultView = Marionette.LayoutView.extend({
     this.sumTokens = options.sumTokens;
     this.maxPercent = options.maxPercent;
     this.voteSpecification = options.voteSpecification;
-    this.languagePreferences = options.languagePreferences;
+    this.userLanguagePreferences = options.userLanguagePreferences;
     this.maxPixels = 100;
     this.shownDescription = false;
     this.descriptionButton = i18n.gettext("See Description");
@@ -994,7 +992,7 @@ var TokenVoteResultView = Marionette.LayoutView.extend({
     var categoryModel = this.model.get('objectDescription').find(function(cat){
       return cat.get('typename') === catName;
     });
-    return categoryModel.get('name').bestWithErrors(this.languagePreferences, false).entry.value();
+    return categoryModel.get('name').bestWithErrors(this.userLanguagePreferences, false).entry.value();
   },
 
   _calculate: function(){
@@ -1021,12 +1019,13 @@ var TokenVoteResultView = Marionette.LayoutView.extend({
   },
 
   serializeData: function() {
-    var defn = this.model.get('objectConnectedTo').get('definition');
+    var that = this;
+    var defn = that.model.get('objectConnectedTo').get('definition');
     return {
-      ideaTitle: this.model.get('objectConnectedTo').getShortTitleDisplayText(this.userLanguagePreferences),
-      categoryResult: this.results,
-      showDescriptionButton: defn && !defn.isEmptyStripped(this.userLanguagePreferences),
-      descriptionButton: this.descriptionButton
+      ideaTitle: that.model.get('objectConnectedTo').getShortTitleDisplayText(that.userLanguagePreferences),
+      categoryResult: that.results,
+      showDescriptionButton: defn && !defn.isEmptyStripped(that.userLanguagePreferences),
+      descriptionButton: that.descriptionButton
     };
   },
 
@@ -1133,7 +1132,7 @@ var TokenVoteResultCollectionView = Marionette.CompositeView.extend({
     this.maxPercent = options.maxPercent;
     this.voteResults = options.voteResults;
     this.voteSpecification = options.voteSpecification;
-    this.languagePreferences = options.languagePreferences;
+    this.userLanguagePreferences = options.userLanguagePreferences;
     this.sortAscending = _.map(this.categoryIndex, function() {return false;});
     this.voteResults.sortSpecName = this.categoryIndex[this.sortOnCategoryNum];
     this.voteResults.sort();
@@ -1182,12 +1181,13 @@ var TokenVoteResultCollectionView = Marionette.CompositeView.extend({
   },
 
   childViewOptions: function(){
+    var that = this;
     return {
-      categoryIndex: this.categoryIndex,
-      sumTokens: this.sumTokens,
-      maxPercent: this.maxPercent,
-      voteSpecification: this.voteSpecification,
-      languagePreferences: this.languagePreferences
+      categoryIndex: that.categoryIndex,
+      sumTokens: that.sumTokens,
+      maxPercent: that.maxPercent,
+      voteSpecification: that.voteSpecification,
+      userLanguagePreferences: that.userLanguagePreferences
     };
   },
 
@@ -1264,7 +1264,7 @@ var TokenResultView = Marionette.LayoutView.extend({
         //Add ONLY the subset of votable_ideas!!!
         return cm.getUserLanguagePreferencesPromise(Ctx)
       .then(function(preferences){
-        that.languagePreferences = preferences;
+        that.userLanguagePreferences = preferences;
       }).then(function(){
         that.voteResults = new Widget.VoteResultCollection({widgetModel: that.model, parse: true});
         return that.voteResults.fetch();
@@ -1293,7 +1293,7 @@ var TokenResultView = Marionette.LayoutView.extend({
           voteResults: that.voteResults,
           reorderOnSort: true, //disable re-rendering child views on sort
           voteSpecification: that.tokenSpecs,
-          languagePreferences: that.languagePreferences
+          userLanguagePreferences: that.userLanguagePreferences
         });
         if (!that.isViewDestroyed()){
           that.isReady = true;
