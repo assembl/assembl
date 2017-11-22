@@ -1,3 +1,4 @@
+# -*- coding=utf-8 -*-
 """add_sections
 
 Revision ID: c98a9b6f6b7f
@@ -17,6 +18,7 @@ import transaction
 
 from assembl.lib import config
 from assembl.lib.sqla_types import URLString
+
 
 def upgrade(pyramid_env):
     with context.begin_transaction():
