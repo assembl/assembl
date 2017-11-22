@@ -55,33 +55,44 @@ def upgrade(pyramid_env):
         with m.Section.default_db.no_autoflush as db:
             discussions = db.query(m.Discussion.id).all()
             for discussion_id in discussions:
+                langstring = m.LangString.create(u'Home', 'en')
+                langstring.add_value(u'Accueil', 'fr')
                 homepage_section = m.Section(
                     discussion_id=discussion_id,
-                    title=m.LangString.create(u'Home', 'en'),
+                    title=langstring,
                     url=u'',
                     section_type=SectionTypesEnum.HOMEPAGE.value,
                     order=0.0
                 )
                 db.add(homepage_section)
+
+                langstring = m.LangString.create(u'Debate', 'en')
+                langstring.add_value(u'Débat', 'fr')
                 debate_section = m.Section(
                     discussion_id=discussion_id,
-                    title=m.LangString.create(u'Debate', 'en'),
+                    title=langstring,
                     url=u'',
                     section_type=SectionTypesEnum.DEBATE.value,
                     order=1.0
                 )
                 db.add(debate_section)
+
+                langstring = m.LangString.create(u'Syntheses', 'en')
+                langstring.add_value(u'Synthèses', 'fr')
                 syntheses_section = m.Section(
                     discussion_id=discussion_id,
-                    title=m.LangString.create(u'Syntheses', 'en'),
+                    title=langstring,
                     url=u'',
                     section_type=SectionTypesEnum.SYNTHESES.value,
                     order=2.0
                 )
                 db.add(syntheses_section)
+
+                langstring = m.LangString.create(u'Resources center', 'en')
+                langstring.add_value(u'Ressources', 'fr')
                 resources_center_section = m.Section(
                     discussion_id=discussion_id,
-                    title=m.LangString.create(u'Resources center', 'en'),
+                    title=langstring,
                     url=u'',
                     section_type=SectionTypesEnum.RESOURCES_CENTER.value,
                     order=3.0
