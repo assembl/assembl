@@ -19,6 +19,7 @@ export const UPDATE_SECTIONS: 'UPDATE_SECTIONS' = 'UPDATE_SECTIONS';
 export const UPDATE_SECTION_TITLE: 'UPDATE_SECTION_TITLE' = 'UPDATE_SECTION_TITLE';
 export const UPDATE_SECTION_URL: 'UPDATE_SECTION_URL' = 'UPDATE_SECTION_URL';
 export const TOGGLE_EXTERNAL_PAGE: 'TOGGLE_EXTERNAL_PAGE' = 'TOGGLE_EXTERNAL_PAGE';
+export const CREATE_SECTION: 'CREATE_SECTION' = 'CREATE_SECTION';
 
 export type UpdateContentLocaleById = {
   type: typeof UPDATE_CONTENT_LOCALE_BY_ID,
@@ -143,6 +144,12 @@ export type UpdateSectionUrl = {
 export type ToggleExternalPage = {
   id: string,
   type: typeof TOGGLE_EXTERNAL_PAGE
+};
+
+export type CreateSection = {
+  id: string,
+  order: number,
+  type: typeof CREATE_SECTION
 };
 
 type BasicAction = {

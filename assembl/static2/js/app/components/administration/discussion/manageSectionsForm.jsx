@@ -6,8 +6,9 @@ import { OverlayTrigger } from 'react-bootstrap';
 import SectionTitle from '../sectionTitle';
 import EditSectionForm from './editSectionForm';
 import { addSectionTooltip } from '../../common/tooltips';
+import * as actions from '../../../actions/adminActions/adminSections';
 
-const ManageSectionsForm = ({ sections, selectedLocale }) => {
+const ManageSectionsForm = ({ sections, selectedLocale, createSection }) => {
   return (
     <div className="admin-box">
       <SectionTitle title={I18n.t('administration.sectionsTitle')} annotation={I18n.t('administration.annotation')} />
@@ -17,7 +18,14 @@ const ManageSectionsForm = ({ sections, selectedLocale }) => {
             return <EditSectionForm key={id} id={id} locale={selectedLocale} />;
           })}
           <OverlayTrigger placement="top" overlay={addSectionTooltip}>
-            <div className="plus margin-l">+</div>
+            <div
+              onClick={() => {
+                return createSection(sections.size + 1);
+              }}
+              className="plus margin-l"
+            >
+              +
+            </div>
           </OverlayTrigger>
         </form>
       </div>
@@ -35,4 +43,13 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps)(ManageSectionsForm);
+const mapDispatchToProps = (dispatch) => {
+  return {
+    createSection: (nextOrder) => {
+      const newId = Math.round(Math.random() * -1000000).toString();
+      return dispatch(actions.createSection(newId, nextOrder));
+    }
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(ManageSectionsForm);

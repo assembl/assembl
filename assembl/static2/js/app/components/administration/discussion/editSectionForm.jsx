@@ -48,7 +48,7 @@ const EditSectionForm = ({
             </Checkbox>
           </FormGroup>
         ) : null}
-        {(type === 'HOMEPAGE' && url) || type === 'CUSTOM' ? (
+        {(type === 'HOMEPAGE' && hasUrl) || type === 'CUSTOM' ? (
           <FormControlWithLabel label={urlPh} onChange={handleUrlChange} type="text" value={url} />
         ) : null}
         <div className="separator" />

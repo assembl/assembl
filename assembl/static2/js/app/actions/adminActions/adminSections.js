@@ -28,3 +28,7 @@ export const updateSectionUrl = (id: string, value: string): actionTypes.UpdateS
 export const toggleExternalPage = (id: string): actionTypes.ToggleExternalPage => {
   return { id: id, type: actionTypes.TOGGLE_EXTERNAL_PAGE };
 };
+
+export const createSection = (id: string, order: number): actionTypes.CreateSection => {
+  return { id: id, order: order, type: actionTypes.CREATE_SECTION };
+};

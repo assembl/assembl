@@ -7,12 +7,14 @@ import {
   UPDATE_SECTIONS,
   UPDATE_SECTION_TITLE,
   UPDATE_SECTION_URL,
-  TOGGLE_EXTERNAL_PAGE
+  TOGGLE_EXTERNAL_PAGE,
+  CREATE_SECTION
 } from '../../actions/actionTypes';
 import { updateInLangstringEntries } from '../../utils/i18n';
 
 export const sectionsHaveChanged = (state: boolean = false, action: ReduxAction<Action>) => {
   switch (action.type) {
+  case CREATE_SECTION:
   case UPDATE_SECTION_URL:
   case TOGGLE_EXTERNAL_PAGE:
   case UPDATE_SECTION_TITLE:
@@ -26,6 +28,8 @@ export const sectionsHaveChanged = (state: boolean = false, action: ReduxAction<
 
 export const sectionsInOrder = (state: List<number> = List(), action: ReduxAction<Action>) => {
   switch (action.type) {
+  case CREATE_SECTION:
+    return state.push(action.id);
   case UPDATE_SECTIONS:
     return List(
       action.sections.map((s) => {
@@ -37,16 +41,26 @@ export const sectionsInOrder = (state: List<number> = List(), action: ReduxActio
   }
 };
 
+const defaultResource = Map({
+  toDelete: false,
+  isNew: true,
+  titleEntries: List(),
+  url: '',
+  type: 'CUSTOM'
+});
+
 export const sectionsById = (state: Map<string, Map> = Map(), action: ReduxAction<Action>) => {
   switch (action.type) {
+  case CREATE_SECTION:
+    return state.set(action.id, defaultResource.set('id', action.id).set('order', action.order));
   case UPDATE_SECTION_URL:
     return state.setIn([action.id, 'url'], action.value);
   case TOGGLE_EXTERNAL_PAGE:
     return state.updateIn([action.id, 'url'], (url) => {
-      if (url) {
+      if (url !== null) {
         return null;
       }
-      return fromJS({ url: '' });
+      return '';
     });
   case UPDATE_SECTION_TITLE:
     return state.updateIn([action.id, 'titleEntries'], updateInLangstringEntries(action.locale, action.value));
