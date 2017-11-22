@@ -1,6 +1,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { browserHistory } from 'react-router';
+import { get } from './utils/routeMap';
 import { getDiscussionId, getConnectedUserId, getConnectedUserName } from './utils/globalFunctions';
+import { getCurrentPhaseIdentifier } from './utils/timeline';
 import { fetchDebateData } from './actions/debateActions';
 import { addContext } from './actions/contextActions';
 import Loader from './components/common/loader';
@@ -14,6 +17,13 @@ class App extends React.Component {
     const connectedUserName = getConnectedUserName();
     this.props.fetchDebateData(debateId);
     this.props.addContext(this.props.route.path, debateId, connectedUserId, connectedUserName);
+  }
+  componentDidUpdate() {
+    const { debate, location, params } = this.props;
+    if (!params.phase && !debate.debateLoading && location.pathname.indexOf('debate') > -1) {
+      const currentPhaseIdentifier = getCurrentPhaseIdentifier(debate.debateData.timeline);
+      browserHistory.push(get('debate', { slug: params.slug, phase: currentPhaseIdentifier }));
+    }
   }
   render() {
     const { debateData, debateLoading, debateError } = this.props.debate;
