@@ -49,6 +49,19 @@ models.Base.query = models.Base.default_db.query_property()
 log = logging.getLogger('assembl')
 
 
+def abort_transaction_on_exception(fn):
+    "Decorator that abort the transaction when an exception is raised in a graphql mutation."
+    def decorator(*args, **kwargs):
+        try:
+            return fn(*args, **kwargs)
+        except Exception as e:
+            import transaction
+            transaction.abort()
+            raise
+
+    return decorator
+
+
 class DateTime(Scalar):
     '''DateTime in ISO 8601 format'''
 
@@ -1262,6 +1275,7 @@ class CreateIdea(graphene.Mutation):
     idea = graphene.Field(lambda: Idea)
 
     @staticmethod
+    @abort_transaction_on_exception
     def mutate(root, args, context, info):
         cls = models.Idea
         discussion_id = context.matchdict['discussion_id']
@@ -1366,6 +1380,7 @@ class CreateThematic(graphene.Mutation):
     thematic = graphene.Field(lambda: Thematic)
 
     @staticmethod
+    @abort_transaction_on_exception
     def mutate(root, args, context, info):
         cls = models.Thematic
         discussion_id = context.matchdict['discussion_id']
@@ -1497,6 +1512,7 @@ class UpdateThematic(graphene.Mutation):
     thematic = graphene.Field(lambda: Thematic)
 
     @staticmethod
+    @abort_transaction_on_exception
     def mutate(root, args, context, info):
         cls = models.Thematic
         discussion_id = context.matchdict['discussion_id']
@@ -1625,6 +1641,7 @@ class DeleteThematic(graphene.Mutation):
     success = graphene.Boolean()
 
     @staticmethod
+    @abort_transaction_on_exception
     def mutate(root, args, context, info):
         discussion_id = context.matchdict['discussion_id']
         user_id = context.authenticated_userid or Everyone
@@ -1655,6 +1672,7 @@ class CreatePost(graphene.Mutation):
     post = graphene.Field(lambda: Post)
 
     @staticmethod
+    @abort_transaction_on_exception
     def mutate(root, args, context, info):
         discussion_id = context.matchdict['discussion_id']
 
@@ -1774,6 +1792,7 @@ class UpdatePost(graphene.Mutation):
     post = graphene.Field(lambda: Post)
 
     @staticmethod
+    @abort_transaction_on_exception
     def mutate(root, args, context, info):
         discussion_id = context.matchdict['discussion_id']
 
@@ -1866,6 +1885,7 @@ class DeletePost(graphene.Mutation):
     post = graphene.Field(lambda: Post)
 
     @staticmethod
+    @abort_transaction_on_exception
     def mutate(root, args, context, info):
         discussion_id = context.matchdict['discussion_id']
 
@@ -1904,6 +1924,7 @@ class UndeletePost(graphene.Mutation):
     post = graphene.Field(lambda: Post)
 
     @staticmethod
+    @abort_transaction_on_exception
     def mutate(root, args, context, info):
         discussion_id = context.matchdict['discussion_id']
 
@@ -1935,6 +1956,7 @@ class AddSentiment(graphene.Mutation):
     post = graphene.Field(lambda: Post)
 
     @staticmethod
+    @abort_transaction_on_exception
     def mutate(root, args, context, info):
         discussion_id = context.matchdict['discussion_id']
         discussion = models.Discussion.get(discussion_id)
@@ -1978,6 +2000,7 @@ class DeleteSentiment(graphene.Mutation):
     post = graphene.Field(lambda: Post)
 
     @staticmethod
+    @abort_transaction_on_exception
     def mutate(root, args, context, info):
         discussion_id = context.matchdict['discussion_id']
         user_id = context.authenticated_userid or Everyone
@@ -2005,6 +2028,7 @@ class UploadDocument(graphene.Mutation):
     document = graphene.Field(lambda: Document)
 
     @staticmethod
+    @abort_transaction_on_exception
     def mutate(root, args, context, info):
         discussion_id = context.matchdict['discussion_id']
         discussion = models.Discussion.get(discussion_id)
@@ -2043,6 +2067,7 @@ class AddPostAttachment(graphene.Mutation):
     post = graphene.Field(lambda: Post)
 
     @staticmethod
+    @abort_transaction_on_exception
     def mutate(root, args, context, info):
         discussion_id = context.matchdict['discussion_id']
         discussion = models.Discussion.get(discussion_id)
@@ -2094,6 +2119,7 @@ class DeletePostAttachment(graphene.Mutation):
     post = graphene.Field(lambda: Post)
 
     @staticmethod
+    @abort_transaction_on_exception
     def mutate(root, args, context, info):
         discussion_id = context.matchdict['discussion_id']
         user_id = context.authenticated_userid or Everyone
@@ -2124,6 +2150,7 @@ class UpdateDiscussionPreferences(graphene.Mutation):
     preferences = graphene.Field(lambda: DiscussionPreferences)
 
     @staticmethod
+    @abort_transaction_on_exception
     def mutate(root, args, context, info):
         cls = models.Preferences
         discussion_id = context.matchdict['discussion_id']
@@ -2161,6 +2188,7 @@ class CreateResource(graphene.Mutation):
     resource = graphene.Field(lambda: Resource)
 
     @staticmethod
+    @abort_transaction_on_exception
     def mutate(root, args, context, info):
         cls = models.Resource
         discussion_id = context.matchdict['discussion_id']
@@ -2250,6 +2278,7 @@ class DeleteResource(graphene.Mutation):
     success = graphene.Boolean()
 
     @staticmethod
+    @abort_transaction_on_exception
     def mutate(root, args, context, info):
         discussion_id = context.matchdict['discussion_id']
         user_id = context.authenticated_userid or Everyone
@@ -2280,6 +2309,7 @@ class UpdateResource(graphene.Mutation):
     resource = graphene.Field(lambda: Resource)
 
     @staticmethod
+    @abort_transaction_on_exception
     def mutate(root, args, context, info):
         cls = models.Resource
         discussion_id = context.matchdict['discussion_id']
@@ -2385,6 +2415,7 @@ class UpdateResourcesCenter(graphene.Mutation):
     resources_center = graphene.Field(lambda: ResourcesCenter)
 
     @staticmethod
+    @abort_transaction_on_exception
     def mutate(root, args, context, info):
         cls = models.Discussion
         discussion_id = context.matchdict['discussion_id']
