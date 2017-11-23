@@ -5,7 +5,7 @@ from os import urandom
 import base64
 
 from sqlalchemy.sql.expression import and_
-from pyramid.security import Everyone, Authenticated
+from pyramid.security import (Everyone, Authenticated)
 from pyramid.httpexceptions import HTTPNotFound
 from pyisemail import is_email
 from pyramid.authentication import SessionAuthenticationPolicy
