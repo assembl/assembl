@@ -320,11 +320,10 @@ var RemainingTokenCategoriesCollectionView = Marionette.CollectionView.extend({
     this.userLanguagePreferences = options.userLanguagePreferences;
   },
   childViewOptions: function(){
-    var that = this;
     return {
-      myVotesCollection: that.myVotesCollection,
-      tokenSize: that.tokenSize,
-      userLanguagePreferences: that.userLanguagePreferences
+      myVotesCollection: this.myVotesCollection,
+      tokenSize: this.tokenSize,
+      userLanguagePreferences: this.userLanguagePreferences
     };
   }
 });
@@ -719,14 +718,13 @@ var TokenCategoryAllocationCollectionView = Marionette.CollectionView.extend({
     this.tokenSize = options.tokenSize;
   },
   childViewOptions: function(){
-    var that = this;
     return {
-      idea: that.idea,
-      myVotesCollection: that.myVotesCollection,
-      voteSpecification: that.voteSpecification,
-      collectionView: that,
-      voteItemView: that.parent,
-      tokenSize: that.tokenSize
+      idea: this.idea,
+      myVotesCollection: this.myVotesCollection,
+      voteSpecification: this.voteSpecification,
+      collectionView: this,
+      voteItemView: this.parent,
+      tokenSize: this.tokenSize
     };
   }
 });
@@ -895,18 +893,16 @@ var TokenVoteCollectionView = Marionette.CompositeView.extend({
     this.options = options;
   },
   childViewOptions: function(model, index){
-    var that = this;
     return {
       childIndex: index,
-      parent: that,
-      userLanguagePreferences: that.getOption('userLanguagePreferences')
+      parent: this,
+      userLanguagePreferences: this.getOption('userLanguagePreferences')
     };
   },
   templateHelpers: function(){
-    var that = this;
     return {
       i18n: i18n,
-      numberOfIdeas: that.collection.length
+      numberOfIdeas: this.collection.length
     };
   }
 });
@@ -1020,13 +1016,12 @@ var TokenVoteResultView = Marionette.LayoutView.extend({
   },
 
   serializeData: function() {
-    var that = this;
-    var defn = that.model.get('objectConnectedTo').get('definition');
+    var defn = this.model.get('objectConnectedTo').get('definition');
     return {
-      ideaTitle: that.model.get('objectConnectedTo').getShortTitleDisplayText(that.userLanguagePreferences),
-      categoryResult: that.results,
-      showDescriptionButton: defn && !defn.isEmptyStripped(that.userLanguagePreferences),
-      descriptionButton: that.descriptionButton
+      ideaTitle: this.model.get('objectConnectedTo').getShortTitleDisplayText(this.userLanguagePreferences),
+      categoryResult: this.results,
+      showDescriptionButton: defn && !defn.isEmptyStripped(this.userLanguagePreferences),
+      descriptionButton: this.descriptionButton
     };
   },
 
@@ -1182,13 +1177,12 @@ var TokenVoteResultCollectionView = Marionette.CompositeView.extend({
   },
 
   childViewOptions: function(){
-    var that = this;
     return {
-      categoryIndex: that.categoryIndex,
-      sumTokens: that.sumTokens,
-      maxPercent: that.maxPercent,
-      voteSpecification: that.voteSpecification,
-      userLanguagePreferences: that.userLanguagePreferences
+      categoryIndex: this.categoryIndex,
+      sumTokens: this.sumTokens,
+      maxPercent: this.maxPercent,
+      voteSpecification: this.voteSpecification,
+      userLanguagePreferences: this.userLanguagePreferences
     };
   },
 
