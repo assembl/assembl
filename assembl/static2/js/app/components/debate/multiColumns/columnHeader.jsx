@@ -34,7 +34,7 @@ const ColumnHeader = ({
           </div>
           <div className="clear" />
         </div>
-        <TopPostForm ideaId={ideaId} refetchIdea={refetchIdea} ideaOnColumn messageClassifier={classifier} />
+        <TopPostForm ideaId={ideaId} refetchIdea={refetchIdea} ideaOnColumn messageClassifier={classifier} scrollOffset={240} />
         <div className="clear" />
       </div>
     </div>
