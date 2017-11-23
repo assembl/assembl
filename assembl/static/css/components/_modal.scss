@@ -10,6 +10,8 @@
   padding: 0px 10px;
   overflow-x: auto;
   overflow-y: auto;
+  background: rgba(0, 0, 0, 1.0);
+  -webkit-transition: background-color 0.3s;
 }
 
 .popin-without-footer .popin-footer {
@@ -18,11 +20,6 @@
 
 .popin-wrapper * {
   box-sizing: border-box;
-}
-
-.popin-wrapper {
-  background: rgba(0, 0, 0, 0.75);
-  -webkit-transition: background-color 0.3s;
 }
 
 .popin, .bbm-modal {
