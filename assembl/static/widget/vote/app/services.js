@@ -275,9 +275,93 @@ voteServices.service('VoteWidgetService', ['$window', '$rootScope', '$log', '$ht
       "default": 0
     },
     {
+      "key": "question_title_lang_fr",
+      "type": "text",
+      "label": "Question title in French",
+      "default": "",
+      "adminCSSClasses": "wide"
+    },
+    {
+      "key": "question_title_lang_en",
+      "type": "text",
+      "label": "Question title in English",
+      "default": "",
+      "adminCSSClasses": "wide"
+    },
+    {
+      "key": "question_title_lang_de",
+      "type": "text",
+      "label": "Question title in German",
+      "default": "",
+      "adminCSSClasses": "wide"
+    },
+    {
+      "key": "question_title_lang_ja",
+      "type": "text",
+      "label": "Question title in Japanese",
+      "default": "",
+      "adminCSSClasses": "wide"
+    },
+    {
+      "key": "question_title_lang_cn",
+      "type": "text",
+      "label": "Question title in Chinese",
+      "default": "",
+      "adminCSSClasses": "wide"
+    },
+    {
+      "key": "question_title_lang_ru",
+      "type": "text",
+      "label": "Question title in Russian",
+      "default": "",
+      "adminCSSClasses": "wide"
+    },
+    {
       "key": "question_description",
       "type": "text",
       "label": "Question description",
+      "default": "",
+      "adminCSSClasses": "wide"
+    },
+    {
+      "key": "question_description_lang_fr",
+      "type": "text",
+      "label": "Question description in French",
+      "default": "",
+      "adminCSSClasses": "wide"
+    },
+    {
+      "key": "question_description_lang_en",
+      "type": "text",
+      "label": "Question description in English",
+      "default": "",
+      "adminCSSClasses": "wide"
+    },
+    {
+      "key": "question_description_lang_de",
+      "type": "text",
+      "label": "Question description in German",
+      "default": "",
+      "adminCSSClasses": "wide"
+    },
+    {
+      "key": "question_description_lang_ja",
+      "type": "text",
+      "label": "Question description in Japanese",
+      "default": "",
+      "adminCSSClasses": "wide"
+    },
+    {
+      "key": "question_description_lang_cn",
+      "type": "text",
+      "label": "Question description in Chinese",
+      "default": "",
+      "adminCSSClasses": "wide"
+    },
+    {
+      "key": "question_description_lang_ru",
+      "type": "text",
+      "label": "Question description in Russian",
       "default": "",
       "adminCSSClasses": "wide"
     },

@@ -16,6 +16,7 @@ var Marionette = require('../shims/marionette.js'),
   BreadCrumbView = require('./breadcrumb.js'),
   CKEditorLSField = require('./reusableDataFields/ckeditorLSField.js'),
   IdeaModel = require('../models/idea.js'),
+  LangString = require('../models/langstring.js'),
   i18n = require('../utils/i18n.js'),
   Ctx = require('../common/context.js'),
   Moment = require('moment'),
@@ -251,7 +252,7 @@ var RemainingCategoryTokensView = Marionette.ItemView.extend({
     el.addClass("description");
 
     var categoryNameLangString = category.get("name");
-    var categoryNameBestTranslation = categoryNameLangString.bestWithErrors(that.languagePreferences, false).entry.value();
+    var categoryNameBestTranslation = categoryNameLangString.bestWithErrors(that.userLanguagePreferences, false).entry.value();
     // var s = i18n.sprintf(i18n.ngettext("<span class='available-tokens-number'>%d</span> remaining %s token", "<span class='available-tokens-number'>%d</span> remaining %s tokens", data["remaining_tokens"]), data["remaining_tokens"], category.get("typename")); // TODO: use "name" field instead (LangString)
     var s = i18n.sprintf(i18n.ngettext("<span class='available-tokens-number'>%d</span> remaining %s token", "<span class='available-tokens-number'>%d</span> remaining %s tokens", data["remaining_tokens"]), data["remaining_tokens"], categoryNameBestTranslation);
     el.html(s);
@@ -1211,7 +1212,7 @@ var TokenVoteResultCollectionView = Marionette.CompositeView.extend({
         return categoryModel.get('typename') === cat;
       });
       var categoryLangString = importantCategory.get('name');
-      var best = categoryLangString.bestWithErrors(that.languagePreferences, false);
+      var best = categoryLangString.bestWithErrors(that.userLanguagePreferences, false);
       return best.entry.value()
     });
 
@@ -1285,6 +1286,18 @@ var TokenResultView = Marionette.LayoutView.extend({
         that.numVoters = stats.numVoters;
         that.totalTokensVoted = stats.categorySummary;
 
+        var settings = that.model.get("settings") || {};
+        var items = "items" in settings ? settings.items : [];
+        var question_item = items.length ? items[0] : null;
+
+        var questionTitleLangString = new LangString.Model();
+        questionTitleLangString.initFromObjectProperty(question_item, 'question_title');
+        that.questionTitle = questionTitleLangString.bestValue(that.userLanguagePreferences);
+
+        var questionDescriptionLangString = new LangString.Model();
+        questionDescriptionLangString.initFromObjectProperty(question_item, 'question_description');
+        that.questionDescription = questionDescriptionLangString.bestValue(that.userLanguagePreferences);
+
         that.tokenResultsView = new TokenVoteResultCollectionView({
           collection: that.voteResults,
           categoryIndex: that.categoryIndex,
@@ -1308,8 +1321,8 @@ var TokenResultView = Marionette.LayoutView.extend({
     var settings = this.model.get("settings") || {},
         items = "items" in settings ? settings.items : [],
         questionItem = items.length ? items[0] : null,
-        questionTitle = "question_title" in questionItem ? questionItem.question_title : "",
-        questionDescription = "question_description" in questionItem ? questionItem.question_description : "",
+        questionTitle = this.questionTitle ? this.questionTitle : "question_title" in questionItem ? questionItem.question_title : "",
+        questionDescription = this.questionDescription ? this.questionDescription : "question_description" in questionItem ? questionItem.question_description : "",
         startDate = Ctx.getNiceDate(this.model.get('start_date'), true, true, false),
         endDate = Ctx.getNiceDate(this.model.get('end_date'), true, true, false),
         statement = "",
@@ -1331,7 +1344,7 @@ var TokenResultView = Marionette.LayoutView.extend({
       //Need a list of token names and their available number
       var data = this.tokenSpecs.get('token_categories').map(function(category){
         return {
-          name: category.get('name').bestWithErrors(that.languagePreferences, false).entry.value(),
+          name: category.get('name').bestWithErrors(that.userLanguagePreferences, false).entry.value(),
           number: category.get('total_number')
         }
       });
@@ -1469,6 +1482,20 @@ var TokenVoteSessionModal = Backbone.Modal.extend({
     
     
     Promise.join(collectionManager.getUserLanguagePreferencesPromise(Ctx), collectionManager.getAllIdeasCollectionPromise(), function(userLanguagePreferences, allIdeasCollection) {
+      that.userLanguagePreferences = userLanguagePreferences;
+      var settings = that.widgetModel.get("settings") || {};
+      var items = "items" in settings ? settings.items : [];
+      var question_item = items.length ? items[0] : null;
+
+      var questionTitleLangString = new LangString.Model();
+      questionTitleLangString.initFromObjectProperty(question_item, 'question_title');
+      that.$('.question-title').text(questionTitleLangString.bestValue(that.userLanguagePreferences));
+
+      var questionDescriptionLangString = new LangString.Model();
+      questionDescriptionLangString.initFromObjectProperty(question_item, 'question_description');
+      that.$('.question-description').text(questionDescriptionLangString.bestValue(that.userLanguagePreferences));
+      
+
       var votableIdeas = that.widgetModel.get("votable_ideas"); // contains their id but not full information (because shown by server using "id_only" view)
       var votableIdeasIds = _.pluck(votableIdeas, "@id");
 
@@ -1517,7 +1544,7 @@ var TokenVoteSessionModal = Backbone.Modal.extend({
         tokenCategories: that.tokenCategories,
         myVotesCollection: that.myVotesCollection,
         tokenSize: tokenSize,
-        userLanguagePreferences: userLanguagePreferences
+        userLanguagePreferences: that.userLanguagePreferences
       });
       that.$(".available-tokens").html(tokenBagsView.render().el);
 
@@ -1528,7 +1555,7 @@ var TokenVoteSessionModal = Backbone.Modal.extend({
         tokenCategories: that.tokenCategories,
         myVotesCollection: that.myVotesCollection,
         tokenSize: tokenSize,
-        userLanguagePreferences: userLanguagePreferences,
+        userLanguagePreferences: that.userLanguagePreferences,
         viewComparator: function(idea){
           return _.findIndex(permutation, function(idea2){return idea2.id == idea.id;});
         }
@@ -1572,10 +1599,12 @@ var TokenVoteSessionModal = Backbone.Modal.extend({
     var settings = this.widgetModel.get("settings") || {};
     var items = "items" in settings ? settings.items : [];
     var question_item = items.length ? items[0] : null;
+    var question_title = "question_title" in question_item ? question_item.question_title : "";
+    var question_description = "question_description" in question_item ? question_item.question_description : "";
     return {
       popin_title: i18n.gettext("Collective votes"),
-      question_title: "question_title" in question_item ? question_item.question_title : "",
-      question_description: "question_description" in question_item ? question_item.question_description : "",
+      question_title: question_title,
+      question_description: question_description,
       available_tokens_info: i18n.gettext("Split your tokens among the ideas of your choice. By default, your vote is neutral per project."),
       save_vote: i18n.gettext("Save my votes")
     };
