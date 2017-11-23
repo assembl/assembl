@@ -2420,13 +2420,14 @@ class UpdateResourcesCenter(graphene.Mutation):
                     mime_type=mime_type,
                     title=filename,
                     data=data)
+
                 # if there is already an IMAGE, remove it with the
                 # associated document
                 header_images = [att for att in discussion.attachments if att.attachmentPurpose == 'RESOURCES_CENTER_HEADER_IMAGE']
                 if header_images:
-                    image = header_images[0]
-                    db.delete(image.document)
-                    discussion.remove(image)
+                    header_image = header_images[0]
+                    db.delete(header_image.document)
+                    discussion.attachments.remove(header_image)
 
                 attachment = models.DiscussionAttachment(
                     document=document,
