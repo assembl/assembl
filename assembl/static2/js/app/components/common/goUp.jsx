@@ -1,5 +1,6 @@
 import React from 'react';
 import { Translate } from 'react-redux-i18n';
+import { withScreenHeight } from './screenDimensions';
 
 class GoUp extends React.Component {
   constructor(props) {
@@ -18,8 +19,9 @@ class GoUp extends React.Component {
 
   displayButton() {
     const footerHeight = document.getElementById('footer').offsetHeight;
-    const threshold = document.body.scrollHeight - window.innerHeight - footerHeight;
-    if (window.pageYOffset > window.innerHeight && window.pageYOffset < threshold) {
+    const { screenHeight } = this.props;
+    const threshold = document.body.scrollHeight - screenHeight - footerHeight;
+    if (window.pageYOffset > screenHeight && window.pageYOffset < threshold) {
       // Show the button when we scrolled minimum the height of the window.
       this.setState(() => {
         return { isHidden: false, position: 'fixed' };
@@ -57,4 +59,4 @@ class GoUp extends React.Component {
   }
 }
 
-export default GoUp;
+export default withScreenHeight(GoUp);
