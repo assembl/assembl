@@ -406,6 +406,9 @@ var LangString = Base.Model.extend({
    * @function app.models.langstrings.LangString.bestValue
    */
   bestValue: function(langPrefs) {
+    if (!langPrefs){
+      return this.original().get("value");
+    }
     var bestLangString = this.best(langPrefs);
     if (!bestLangString){
       throw new Error("Malformed langstring: it seems empty but shouldn't.");
