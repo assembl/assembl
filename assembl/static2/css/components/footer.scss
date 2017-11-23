@@ -10,14 +10,14 @@
     width: 100%;
   }
 
-  .copyright, .assembl-version  {
+  .copyright, .assembl-version {
     bottom: 10px;
     font-size: $font-size-xxs;
     position: absolute;
   }
 
   .assembl-version {
-      right: 0px;
+    right: 0;
   }
 
   a {
@@ -63,6 +63,7 @@
       img {
         margin: 0 20px 100px;
       }
+
       min-height: 85px;
     }
   }

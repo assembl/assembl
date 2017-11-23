@@ -1,6 +1,7 @@
 .translate {
   font-size: $font-size-xs;
   font-family: $font-family6;
+
   .translate-button {
     margin: 5px;
   }
@@ -16,6 +17,7 @@
   .custom-overlay {
     display: inline-block;
   }
+
   .box {
     border-bottom: $navbar-border;
     border-left: $border-theme;
@@ -39,9 +41,11 @@
       color: $first-color;
     }
   }
+
   .translate {
     padding: 20px 0 0 75px;
   }
+
   .body {
     font-family: $font-family4;
     line-height: 1.6em;
@@ -104,217 +108,220 @@
 }
 
 $deleted-post-border: 1px solid $grey1 !default;
+
 .idea .level .deleted-post .box {
   border-left: $deleted-post-border;
 }
 
 .posts {
-    &.deleted-post {
-      .body {
-        font-style: italic;
-        font-family: $font-family;
-      }
-    }
-    .post-row {
-        margin-right: -20px;
-        margin-left: -20px;
-        margin-top: -15px;
-        margin-bottom: -20px;
-        overflow: hidden;
-    }
-
-    .post-left {
-        padding: 35px;
-        .dark-title-3 {
-          line-height: 1.6
-        }
-    }
-
-    .post-right {
-        background-color: $first-color-light;
-        margin-bottom: -99999px!important;
-        padding-bottom: 99999px!important;
-        padding: 20px 0;
-        text-align: center;
-
-        .answers {
-            display: none;
-        }
-    }
-    .translate {
-      padding: 20px 0 0;
-    }
-    .box {
-      border-bottom: $navbar-border;
-      border-left: $border-theme;
-      border-right: $navbar-border;
-      border-top: $navbar-border;
-      margin: 0 auto;
-      max-width: 600px;
-      position: relative;
-      text-align: left;
-
-      .label {
-          display: block;
-          white-space: normal;
-          text-align: left;
-          line-height: 20px;
-      }
-    }
-
-    .profileLine {
-        img {
-            vertical-align: text-bottom;
-        }
-
-        .creator {
-            color: $second-color;
-            padding: 0 0 0 10px;
-        }
-
-        .date {
-            color: $grey2;
-            font-size: $font-size-xs;
-            padding: 0 0 0 10px;
-            font-family: $font-family4;
-        }
-    }
-
+  &.deleted-post {
     .body {
-        font-family: $font-family4;
-        line-height: 1.6em;
-        padding: 20px 0 40px;
+      font-style: italic;
+      font-family: $font-family;
+    }
+  }
+
+  .post-row {
+    margin: -15px -20px -20px -20px;
+    overflow: hidden;
+  }
+
+  .post-left {
+    padding: 35px;
+
+    .dark-title-3 {
+      line-height: 1.6;
+    }
+  }
+
+  .post-right {
+    background-color: $first-color-light;
+    margin-bottom: -99999px !important;
+    padding: 20px 0;
+    padding-bottom: 99999px !important;
+    text-align: center;
+
+    .answers {
+      display: none;
+    }
+  }
+
+  .translate {
+    padding: 20px 0 0;
+  }
+
+  .box {
+    border-bottom: $navbar-border;
+    border-left: $border-theme;
+    border-right: $navbar-border;
+    border-top: $navbar-border;
+    margin: 0 auto;
+    max-width: 600px;
+    position: relative;
+    text-align: left;
+
+    .label {
+      display: block;
+      white-space: normal;
+      text-align: left;
+      line-height: 20px;
+    }
+  }
+
+  .profileLine {
+    img {
+      vertical-align: text-bottom;
+    }
+
+    .creator {
+      color: $second-color;
+      padding: 0 0 0 10px;
+    }
+
+    .date {
+      color: $grey2;
+      font-size: $font-size-xs;
+      padding: 0 0 0 10px;
+      font-family: $font-family4;
+    }
+  }
+
+  .body {
+    font-family: $font-family4;
+    line-height: 1.6em;
+    padding: 20px 0 40px;
+    word-wrap: break-word;
+
+    p {
+      margin: 0;
+      min-height: 1em; /* so that empty paragraphs (created by multiple line returns) still have height */
+    }
+  }
+
+  .link-idea {
+    border-bottom: $navbar-border;
+    border-top: $navbar-border;
+    margin: 0 0 15px 0;
+    padding: 20px 0;
+
+    .label {
+      color: $grey2;
+      font-size: $font-size-xs;
+      font-family: $font-family4;
+    }
+
+    .badges {
+      padding: 10px 0;
+
+      .badge {
+        display: inline;
+        background-color: $grey7;
+        color: $grey3;
+        text-align: left;
+        white-space: normal;
         word-wrap: break-word;
-
-        p {
-            margin: 0;
-            min-height: 1em; /* so that empty paragraphs (created by multiple line returns) still have height */
-        }
-    }
-
-    .link-idea {
-        border-bottom: $navbar-border;
-        border-top: $navbar-border;
-        margin: 0 0 15px 0;
-        padding: 20px 0;
-
-        .label {
-            color: $grey2;
-            font-size: $font-size-xs;
-            font-family: $font-family4;
-        }
-
-        .badges {
-            padding: 10px 0;
-
-            .badge {
-              display: inline;
-                background-color: $grey7;
-                color: $grey3;
-                text-align: left;
-                white-space: normal;
-                word-wrap: break-word;
-                font-family: $font-family4;
-            }
-        }
-    }
-
-    .post-action {
-        cursor: pointer;
-        margin: 10px 0 0;
-        transition: all .2s ease-in-out;
-
-        &:hover {
-            transform: scale(1.2);
-        }
-    }
-
-    .overflow-action {
-      cursor: pointer;
-      margin: 20px 0 0 5px;
-      color: $first-color-opacity-70;
-
-      &:hover {
-        color: $first-color;
-      }
-    }
-
-    .add-sentiment {
-        margin: 20px 0 0;
-
-        .sentiment {
-          margin-left: auto;
-          margin-right: auto;
-        }
-    }
-
-    .answer-form {
-        background-color: $first-color-light;
-        border-top: 2px solid $white;
-        padding: 40px;
-
-        .assembl-icon-back-arrow {
-            &:before {
-                font-size: $font-size-s;
-            }
-        }
-
-        .answer-form-inner {
-            margin: 13px;
-            .editor-label {
-              padding-top: 16px;
-            }
-        }
-
-        .button-container {
-            margin: 25px 0 0;
-        }
-
-        .assembl-icon-back-arrow {
-            padding-left: 10px;
-        }
-
-        .btn {
-            margin: 3px 0 8px;
-        }
-    }
-
-    .extracts {
-      position: absolute;
-      left: 2vw;
-      max-width: 230px;
-      width: 14vw;
-      line-height: 30px;
-
-      .badges {
-        line-height: 26px;
         font-family: $font-family4;
+      }
+    }
+  }
 
-        .nugget-img {
-          text-align: center;
-          margin-bottom: 25px;
+  .post-action {
+    cursor: pointer;
+    margin: 10px 0 0;
+    transition: all .2s ease-in-out;
 
-          span {
-            display: inline-block;
-          }
-          span::before {
-            font-size: 50px;
-          }
+    &:hover {
+      transform: scale(1.2);
+    }
+  }
+
+  .overflow-action {
+    cursor: pointer;
+    margin: 20px 0 0 5px;
+    color: $first-color-opacity-70;
+
+    &:hover {
+      color: $first-color;
+    }
+  }
+
+  .add-sentiment {
+    margin: 20px 0 0;
+
+    .sentiment {
+      margin-left: auto;
+      margin-right: auto;
+    }
+  }
+
+  .answer-form {
+    background-color: $first-color-light;
+    border-top: 2px solid $white;
+    padding: 40px;
+
+    .assembl-icon-back-arrow {
+      &:before {
+        font-size: $font-size-s;
+      }
+    }
+
+    .answer-form-inner {
+      margin: 13px;
+
+      .editor-label {
+        padding-top: 16px;
+      }
+    }
+
+    .button-container {
+      margin: 25px 0 0;
+    }
+
+    .assembl-icon-back-arrow {
+      padding-left: 10px;
+    }
+
+    .btn {
+      margin: 3px 0 8px;
+    }
+  }
+
+  .extracts {
+    position: absolute;
+    left: 2vw;
+    max-width: 230px;
+    width: 14vw;
+    line-height: 30px;
+
+    .badges {
+      line-height: 26px;
+      font-family: $font-family4;
+
+      .nugget-img {
+        text-align: center;
+        margin-bottom: 25px;
+
+        span {
+          display: inline-block;
         }
 
-        .nugget {
-
-          .nugget-txt {
-            font-family: $font-family6;
-            color: $first-color;
-            margin-bottom: 25px;
-          }
-
-          .box-hyphen {
-            border-top-width: 3px;
-          }
+        span::before {
+          font-size: 50px;
         }
       }
+
+      .nugget {
+        .nugget-txt {
+          font-family: $font-family6;
+          color: $first-color;
+          margin-bottom: 25px;
+        }
+
+        .box-hyphen {
+          border-top-width: 3px;
+        }
+      }
+    }
   }
 }
 
@@ -329,7 +336,7 @@ $deleted-post-border: 1px solid $grey1 !default;
     }
 
     .content {
-      float:left;
+      float: left;
       text-align: left;
       width: 80%;
 
@@ -340,7 +347,7 @@ $deleted-post-border: 1px solid $grey1 !default;
 
     .statistic {
       background-color: $first-color-light;
-      float:left;
+      float: left;
       height: 100%;
       min-width: 150px;
       padding: 0 0 0;
@@ -352,6 +359,7 @@ $deleted-post-border: 1px solid $grey1 !default;
         height: 100px;
         margin-top: 30px;
         margin-bottom: 30px;
+
         .circle {
           stroke-width: 14px;
         }
@@ -394,9 +402,11 @@ $deleted-post-border: 1px solid $grey1 !default;
         padding-top: 12px;
         margin-left: 10px;
         float: left;
+
         .sentiment {
           margin-left: 25px;
           vertical-align: middle;
+
           svg {
             vertical-align: middle;
           }
@@ -408,9 +418,11 @@ $deleted-post-border: 1px solid $grey1 !default;
         width: 50px;
         margin-right: 10px;
         vertical-align: middle;
+
         .circle {
           stroke-width: 20px;
         }
+
         .superpose-label {
           display: none;
         }
@@ -468,94 +480,99 @@ $deleted-post-border: 1px solid $grey1 !default;
 }
 
 @media screen and (max-width: 992px) {
-    .posts {
-        .custom-overlay {
-          display: inline-block;
-        }
-        .post-right {
-            background: none;
-
-            .answers {
-                float: right;
-                display: block;
-                padding: 20px 20px 0 0;
-            }
-        }
-
-        .post-left {
-            padding: 35px 35px 0;
-
-            .answers {
-                display: none;
-            }
-        }
-
-        .post-icons {
-            border-bottom: 1px solid $grey1;
-            border-top: 1px solid $grey1;
-            padding: 18px 0 10px;
-
-            .post-action, .overflow-action {
-                display: inline-block;
-                margin: 0 10px;
-            }
-
-            .add-sentiment {
-                display: inline-block;
-                margin: 0;
-
-                .sentiment {
-                    margin: 0 10px 5px 10px;
-                }
-            }
-        }
-
-        .link-idea {
-            border-bottom: none;
-            margin: 0;
-            padding: 20px 0 0;
-        }
-
-        .sentiments-count {
-          float: left;
-
-          .txt {
-              margin-left: 20px;
-              text-align: left;
-              padding: 1px 0 0 20px;
-          }
-        }
-
-        .min-sentiment {
-            padding: 1px 0 0 10px;
-        }
-
-        .answer-form {
-            padding: 25px 30px 10px 30px;
-            .button-container {
-                .btn {
-                    float: none;
-                    width: 100%;
-                }
-            }
-            .answer-form-inner {
-                margin: 13px 0 0;
-            }
-            .assembl-icon-back-arrow {
-                padding: 0;
-            }
-        }
-
-        .extracts {
-          display: none;
-        }
+  .posts {
+    .custom-overlay {
+      display: inline-block;
     }
+
+    .post-right {
+      background: none;
+
+      .answers {
+        float: right;
+        display: block;
+        padding: 20px 20px 0 0;
+      }
+    }
+
+    .post-left {
+      padding: 35px 35px 0;
+
+      .answers {
+        display: none;
+      }
+    }
+
+    .post-icons {
+      border-bottom: 1px solid $grey1;
+      border-top: 1px solid $grey1;
+      padding: 18px 0 10px;
+
+      .post-action, .overflow-action {
+        display: inline-block;
+        margin: 0 10px;
+      }
+
+      .add-sentiment {
+        display: inline-block;
+        margin: 0;
+
+        .sentiment {
+          margin: 0 10px 5px 10px;
+        }
+      }
+    }
+
+    .link-idea {
+      border-bottom: none;
+      margin: 0;
+      padding: 20px 0 0;
+    }
+
+    .sentiments-count {
+      float: left;
+
+      .txt {
+        margin-left: 20px;
+        text-align: left;
+        padding: 1px 0 0 20px;
+      }
+    }
+
+    .min-sentiment {
+      padding: 1px 0 0 10px;
+    }
+
+    .answer-form {
+      padding: 25px 30px 10px 30px;
+
+      .button-container {
+        .btn {
+          float: none;
+          width: 100%;
+        }
+      }
+
+      .answer-form-inner {
+        margin: 13px 0 0;
+      }
+
+      .assembl-icon-back-arrow {
+        padding: 0;
+      }
+    }
+
+    .extracts {
+      display: none;
+    }
+  }
 }
 
 .column-post {
   .box {
     border: none;
   }
+
   .answer-form {
     border-top: none;
   }

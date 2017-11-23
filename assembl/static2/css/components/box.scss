@@ -42,59 +42,58 @@
 }
 
 .illustration-box {
+  width: calc(100% - 2px);
 
+  .image-box {
+    background-color: $grey2;
+    background-position: top left;
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 100%;
+    position: absolute;
     width: calc(100% - 2px);
+    z-index: 0;
+  }
 
-    .image-box {
-      background-color: $grey2;
-      background-position: top left;
-      background-repeat: no-repeat;
-      background-size: cover;
-      height: 100%;
-      position: absolute;
-      width: calc(100% - 2px);
-      z-index: 0;
+  .content-box {
+    color: $white;
+    cursor: pointer;
+    height: 100%;
+    padding: 0 20px;
+    position: absolute;
+    width: calc(100% - 2px);
+    z-index: 4;
+
+    &:hover {
+      ~ .color-box {
+        background-color: $opacity-color;
+      }
+
+      ~ .rotate-hyphen {
+        margin: 0 0 0 -10px;
+        transform: rotate(90deg);
+      }
     }
+  }
 
-    .content-box {
-        color: $white;
-        cursor: pointer;
-        height: 100%;
-        padding: 0 20px;
-        position: absolute;
-        width: calc(100% - 2px);
-        z-index: 4;
+  .color-box {
+    background-color: rgba(0, 0, 0, 0.5);
+    height: 500px;
+    position: absolute;
+    width: calc(100% - 2px);
+    z-index: 1;
+  }
 
-        &:hover {
-          ~ .color-box {
-            background-color: $opacity-color;
-          }
+  .box-hyphen {
+    margin: 10px 0 0;
+    position: absolute;
+    z-index: 2;
+    top: 50%;
+  }
 
-          ~ .rotate-hyphen {
-              margin: 0 0 0 -10px;
-              transform: rotate(90deg);
-          }
-        }
-    }
-
-    .color-box {
-      background-color: rgba(0, 0, 0, 0.5);
-      height: 500px;
-      position: absolute;
-      width: calc(100% - 2px);
-      z-index: 1;
-    }
-
-    .box-hyphen {
-      margin: 10px 0 0;
-      position: absolute;
-      z-index: 2;
-      top: 50%;
-    }
-
-    .rotate-hyphen {
-      position: absolute;
-      z-index: 3;
-      transition: all 0.2s ease-in;
-    }
+  .rotate-hyphen {
+    position: absolute;
+    z-index: 3;
+    transition: all 0.2s ease-in;
+  }
 }

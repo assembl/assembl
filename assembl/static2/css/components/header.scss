@@ -74,12 +74,13 @@
     left: 0;
     width: 100%;
   }
+
   .header-bkg-mask {
-      background-color: $opacity-color;
-      height: 100%;
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
+    background-color: $opacity-color;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
   }
 }

@@ -1,20 +1,25 @@
 .share-buttons-container {
   padding-top: 10px;
   padding-bottom: 15px;
+
   .btn-copy {
     white-space: normal;
     width: 60%;
+
     &:focus {
       outline: none;
     }
   }
+
   @media screen and (max-width: 700px) {
     .btn-copy {
       width: 100%;
     }
   }
+
   .social-share-buttons-container {
     padding-bottom: 20px;
+
     .social-share-button {
       display: inline-block;
       padding: 0 15px;
@@ -22,10 +27,9 @@
   }
 }
 
-.modal-content
-  div:focus {
-    outline: none;
-    border: none;
+.modal-content div:focus {
+  outline: none;
+  border: none;
 }
 
 .modal-title {

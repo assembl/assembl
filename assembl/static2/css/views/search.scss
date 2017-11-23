@@ -16,23 +16,18 @@ $highlightColor: $first-color-light;
 
 // @import "../../node_modules/searchkit/theming/components/search-box.scss";
 @import "../../node_modules/searchkit/theming/components/search-icon.scss";
-
 @import "../../node_modules/searchkit/theming/components/hits-stats.scss";
 @import "../../node_modules/searchkit/theming/components/no-hits.scss";
-
 @import "../../node_modules/searchkit/theming/components/filter-group.scss";
-
 @import "../../node_modules/searchkit/theming/components/filter-item.scss";
 @import "../../node_modules/searchkit/theming/components/item-list.scss";
 @import "../../node_modules/searchkit/theming/components/select.scss";
 @import "../../node_modules/searchkit/theming/components/tabs.scss";
 @import "../../node_modules/searchkit/theming/components/tag-cloud.scss";
 @import "../../node_modules/searchkit/theming/components/toggle.scss";
-
 @import "../../node_modules/searchkit/theming/components/range-input.scss";
 @import "../../node_modules/searchkit/theming/components/range-histogram.scss";
 @import "../../node_modules/searchkit/theming/components/range-slider.scss";
-
 @import "../../node_modules/searchkit/theming/components/hierarchical-menu-filter.scss";
 @import "../../node_modules/searchkit/theming/components/hierarchical-refinement-filter.scss";
 @import "../../node_modules/searchkit/theming/components/input-filter.scss";
@@ -43,68 +38,70 @@ $highlightColor: $first-color-light;
 @import "../../node_modules/searchkit/theming/components/reset-filters.scss";
 @import "../../node_modules/searchkit/theming/components/menu-filter.scss";
 @import "../../node_modules/searchkit/theming/components/tag-filter.scss";
-
 @import "../../node_modules/searchkit/theming/components/pagination.scss";
-
 @import "../../node_modules/searchkit/theming/components/table.scss";
-
 @import "../../node_modules/searchkit/theming/components/panel.scss";
 
 .emoticonValue {
-    display: inline-block;
-    width: 20px;
-    height: 20px;
-    margin: 0 0 0 -14px;
-    padding:  2px 0 0 6px;
-    border-radius: 50%;
-    background-color: $highlightColor;
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  margin: 0 0 0 -14px;
+  padding: 2px 0 0 6px;
+  border-radius: 50%;
+  background-color: $highlightColor;
 }
 
 .sk-tag-filter {
-    display: inline-block;
-    &.is-active {
-        background-color: $highlightColor;
-        font-weight: bold;
-    }
-    &.is-active::after {
-        content: 'x';
-        color: red;
-        border-left: 1px solid #777;
-        padding-left: 1ex;
-        padding-right: 1ex;
-        margin-left: 1ex;
-        margin-top: -1em;
-    }
-    .inline {
-      display: inline;
-    }
+  display: inline-block;
 
-    .profileLine {
-      display: inline;
-    }
+  &.is-active {
+    background-color: $highlightColor;
+    font-weight: bold;
+  }
 
-    .profileLine .user {
-      vertical-align: middle;
-    }
+  &.is-active::after {
+    content: 'x';
+    color: red;
+    border-left: 1px solid #777;
+    padding-left: 1ex;
+    padding-right: 1ex;
+    margin-left: 1ex;
+    margin-top: -1em;
+  }
+
+  .inline {
+    display: inline;
+  }
+
+  .profileLine {
+    display: inline;
+  }
+
+  .profileLine .user {
+    vertical-align: middle;
+  }
 }
 
 .date-filter input {
-    display: inline-block;
+  display: inline-block;
 }
+
 .react-datepicker__input-container {
-    display: block !important;
+  display: block !important;
 }
 
 .sk-layout {
   float: left;
 
   &__top-bar {
-    height:40px;
+    height: 40px;
     margin-top: -3px;
-    z-index:100;
+    z-index: 100;
     position: relative;
+
     button {
-        display: inline-block;
+      display: inline-block;
     }
   }
 
@@ -113,25 +110,26 @@ $highlightColor: $first-color-light;
     z-index: 99;
     margin: 0 auto 0;
     top: 60px;
-    left:0;
+    left: 0;
     width: 100%;
-    background-color: #ffffff;
-    box-shadow: 0 0 4px rgba(0,0,0,.14),0 4px 8px rgba(0,0,0,.28);
+    background-color: #fff;
+    box-shadow: 0 0 4px rgba(0, 0, 0, .14), 0 4px 8px rgba(0, 0, 0, .28);
   }
 
   &__filters {
     background: #f4f4f4;
-    padding:15px;
-    margin:15px 0 15px 15px;
+    padding: 15px;
+    margin: 15px 0 15px 15px;
     width: 250px;
     float: left;
-    box-shadow: 0 1px 3px 0 rgba(0,0,0,0.08);
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.08);
 
     .sk-panel {
-        margin: 16px 0 0 0;
-        &.filter--type {
-            margin: 0;
-        }
+      margin: 16px 0 0 0;
+
+      &.filter--type {
+        margin: 0;
+      }
     }
 
     .sk-refinement-list,
@@ -139,36 +137,34 @@ $highlightColor: $first-color-light;
     .sk-hierarchical-menu-list,
     .sk-numeric-refinement-list,
     .sk-hierarchical-refinement-list {
-      margin-bottom:20px;
+      margin-bottom: 20px;
     }
 
     .sk-select {
-      width:100%;
+      width: 100%;
     }
 
     .sk-range-input {
-      margin-top:10px;
+      margin-top: 10px;
     }
-
   }
 
   &__results {
-    background:$sk-layout-panel-background;
-    margin:15px 15px 15px 265px;
-    box-shadow: 0 1px 3px 0 rgba(0,0,0,0.08);
-    min-height:600px;
+    background: $sk-layout-panel-background;
+    margin: 15px 15px 15px 265px;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.08);
+    min-height: 600px;
   }
-
 }
 
 .sk-action-bar {
-  margin:0 15px 15px;
+  margin: 0 15px 15px;
 
   &-row {
-    margin:0px 0 10px;
+    margin: 0 0 10px;
 
     &:last-child {
-      margin:0;
+      margin: 0;
     }
   }
 
@@ -178,26 +174,29 @@ $highlightColor: $first-color-light;
 }
 
 .sk-results-list {
-  padding:15px 0;
+  padding: 15px 0;
 }
 
 // components
 
 .sk-panel__header {
-    font-size: 16px;
+  font-size: 16px;
 }
+
 .sk-item-list-option__text,
 .sk-item-list-option__count {
-    color: #777;
+  color: #777;
 }
+
 .sk-item-list-option input.sk-item-list-option__checkbox {
   margin: 3px 4px 0 0;
 }
 
 .sk-search-box {
   form {
-    position:relative;
+    position: relative;
   }
+
   input.sk-search-box__text {
     width: 14em;
     height: 30px;
@@ -209,76 +208,82 @@ $highlightColor: $first-color-light;
   }
 
   &__icon {
-      position: absolute;
-      left: 4px;
-      top: 5px;
-      &:before {
-        content:"";
-        @include search-icon;
-        background-size: contain;
-        height: 20px;
-        width: 20px;
-        display: block;
-      }
-      opacity: 0.3;
+    position: absolute;
+    left: 4px;
+    top: 5px;
+
+    &:before {
+      content: "";
+
+      @include search-icon;
+
+      background-size: contain;
+      height: 20px;
+      width: 20px;
+      display: block;
+    }
+
+    opacity: 0.3;
   }
 
   &__action {
-    display:none;
+    display: none;
   }
 
   &__loader {
-      position: absolute;
-      right: 4px;
-      top: 4px;
-      &.is-hidden {
-        display:none;
-      }
+    position: absolute;
+    right: 4px;
+    top: 4px;
+
+    &.is-hidden {
+      display: none;
+    }
   }
 }
 
 .sk-search-box, #search-expand {
-    display: inline-block;
+  display: inline-block;
 }
+
 .sk-search-box {
-    margin-right: 10px;
+  margin-right: 10px;
 }
 
 .sk-range-filter {
   .rc-slider-handle {
     border-color: $sk-primary-theme-color;
   }
+
   .rc-slider-track {
     background-color: rgba(156, 162, 153, 0.5);
   }
 }
 
 .sk-reset-filters {
-  border:none;
-  font-size:14px;
-  margin:0;
-  padding-left:0;
+  border: none;
+  font-size: 14px;
+  margin: 0;
+  padding-left: 0;
 }
 
 .sk-pagination-navigation {
-  width:300px;
-  margin:10px auto;
+  width: 300px;
+  margin: 10px auto;
 
   &.is-numbered {
-    width:600px;
+    width: 600px;
   }
-
 }
 
 .sk-pagination-select {
   margin: 10px auto;
-  text-align:center;
+  text-align: center;
 }
 
 .sk-hits-list {
   max-height: 500px;
   overflow-y: scroll;
-  margin:0 15px 20px;
+  margin: 0 15px 20px;
 
   em {
     background: $highlightColor;
@@ -290,18 +295,18 @@ $highlightColor: $first-color-light;
   }
 
   &__no-results {
-    text-align:center;
-    margin-top:60px;
+    text-align: center;
+    margin-top: 60px;
   }
 
   &__item {
-    margin-bottom:20px;
+    margin-bottom: 20px;
   }
 }
 
 $imgtypeWidth: 50px;
 $imgtypeMargin: 30px;
-$marginLeft: $imgtypeWidth + 2*$imgtypeMargin;
+$marginLeft: $imgtypeWidth + 2 * $imgtypeMargin;
 
 .sk-hits-list-hit {
   padding-bottom: 1em;
@@ -311,32 +316,33 @@ $marginLeft: $imgtypeWidth + 2*$imgtypeMargin;
   position: relative;
 
   &__title {
-    line-height:20px;
-    margin:0 0 5px $marginLeft;
-    font-size:18px;
+    line-height: 20px;
+    margin: 0 0 5px $marginLeft;
+    font-size: 18px;
   }
 
   &__content {
-      margin-left: $marginLeft;
-      margin-bottom: 3em;
-      max-width: 800px;
+    margin-left: $marginLeft;
+    margin-bottom: 3em;
+    max-width: 800px;
   }
 
   &__info {
-      color: $first-color;
-      margin-left: $marginLeft;
-      position: absolute;
-      bottom: 1em;
+    color: $first-color;
+    margin-left: $marginLeft;
+    position: absolute;
+    bottom: 1em;
   }
 
   &__assembl-icon-message, &__assembl-icon-avatar {
-      margin-left: 5px;
-      margin-right: 15px;
+    margin-left: 5px;
+    margin-right: 15px;
   }
 
   &__imgtype {
     float: left;
     margin: $imgtypeMargin;
+
     &:before {
       color: $first-color;
       font-size: $imgtypeWidth;
@@ -347,27 +353,26 @@ $marginLeft: $imgtypeWidth + 2*$imgtypeMargin;
 
 .sk-action-bar {
   .sk-select, .sk-toggle {
-    margin-left:15px;
+    margin-left: 15px;
   }
 }
 
 .sk-layout__filters {
   .sk-select select {
-    width: 100%
+    width: 100%;
   }
 }
 
 .hidden {
-    .sk-layout {
-        &__body{
-            z-index: 0;
-        }
+  .sk-layout {
+    &__body {
+      z-index: 0;
     }
+  }
 }
 
-
 @media screen and (max-width: 1023px) {
-    #search {
-        display: none;
-    }
+  #search {
+    display: none;
+  }
 }

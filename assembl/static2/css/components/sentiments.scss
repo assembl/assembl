@@ -18,32 +18,33 @@
 }
 
 .proposals {
-    .sentiment {
-        margin: 0 0 0 15px;
-    }
+  .sentiment {
+    margin: 0 0 0 15px;
+  }
 }
 
 .posts {
-    .sentiment {
-        margin: 5px 10px;
-        height: 25px;
-        width: 30px;
-    }
+  .sentiment {
+    margin: 5px 10px;
+    height: 25px;
+    width: 30px;
+  }
 
-    .min-sentiment {
-        position: absolute;
-    }
+  .min-sentiment {
+    position: absolute;
+  }
 }
 
 .sentiments-count {
-    cursor: pointer;
-    .txt {
-        padding: 1px 0 0 20px;
-        display: block;
-        color: $first-color;
-        font-family: $font-family4;
-        font-size: $font-size-xxs;
-    }
+  cursor: pointer;
+
+  .txt {
+    padding: 1px 0 0 20px;
+    display: block;
+    color: $first-color;
+    font-family: $font-family4;
+    font-size: $font-size-xxs;
+  }
 }
 
 .gauge {
@@ -62,6 +63,7 @@
   .arrow {
     display: none;
   }
+
   background-color: $first-color-light;
   padding: 10px 0 0;
 }
