@@ -51,58 +51,54 @@ const EditSectionForm = ({
   const urlPh = I18n.t('administration.sections.urlPh');
   const hasUrl = url !== null;
   return (
-    <div>
-      {type !== 'ADMINISTRATION' ? (
-        <div className="form-container">
-          <div className="title left">
-            {translations[locale].administration.sections[type.toLowerCase()]
-              ? translations[locale].administration.sections[type.toLowerCase()]
-              : I18n.t('administration.sections.custom')}
-          </div>
-          <div className="right">
-            {type !== 'HOMEPAGE' ? (
-              <div className="inline">
-                {index < nbSections - 2 ? (
-                  <OverlayTrigger placement="top" overlay={downTooltip}>
-                    <Button onClick={handleDownClick}>
-                      <span className="assembl-icon-down-bold grey" />
-                    </Button>
-                  </OverlayTrigger>
-                ) : null}
-                {index > 1 ? (
-                  <OverlayTrigger placement="top" overlay={upTooltip}>
-                    <Button onClick={handleUpClick}>
-                      <span className="assembl-icon-up-bold grey" />
-                    </Button>
-                  </OverlayTrigger>
-                ) : null}
-              </div>
+    <div className="form-container">
+      <div className="title left">
+        {translations[locale].administration.sections[type.toLowerCase()]
+          ? translations[locale].administration.sections[type.toLowerCase()]
+          : I18n.t('administration.sections.custom')}
+      </div>
+      <div className="right">
+        {type !== 'HOMEPAGE' ? (
+          <div className="inline">
+            {index < nbSections - 1 ? (
+              <OverlayTrigger placement="top" overlay={downTooltip}>
+                <Button onClick={handleDownClick}>
+                  <span className="assembl-icon-down-bold grey" />
+                </Button>
+              </OverlayTrigger>
             ) : null}
-            {type === 'CUSTOM' ? (
-              <OverlayTrigger placement="top" overlay={deleteSectionTooltip}>
-                <Button onClick={handleDeleteClick}>
-                  <span className="assembl-icon-delete grey" />
+            {index > 1 ? (
+              <OverlayTrigger placement="top" overlay={upTooltip}>
+                <Button onClick={handleUpClick}>
+                  <span className="assembl-icon-up-bold grey" />
                 </Button>
               </OverlayTrigger>
             ) : null}
           </div>
-          <div className="clear" />
-          {type !== 'HOMEPAGE' ? (
-            <FormControlWithLabel label={titlePh} onChange={handleTitleChange} type="text" value={title} />
-          ) : null}
-          {type === 'HOMEPAGE' ? (
-            <FormGroup>
-              <Checkbox checked={hasUrl} onChange={handleCheckboxChange}>
-                <Translate value="administration.sections.externalPage" />
-              </Checkbox>
-            </FormGroup>
-          ) : null}
-          {(type === 'HOMEPAGE' && hasUrl) || type === 'CUSTOM' ? (
-            <FormControlWithLabel label={urlPh} onChange={handleUrlChange} type="text" value={url} />
-          ) : null}
-          <div className="separator" />
-        </div>
+        ) : null}
+        {type === 'CUSTOM' ? (
+          <OverlayTrigger placement="top" overlay={deleteSectionTooltip}>
+            <Button onClick={handleDeleteClick}>
+              <span className="assembl-icon-delete grey" />
+            </Button>
+          </OverlayTrigger>
+        ) : null}
+      </div>
+      <div className="clear" />
+      {type !== 'HOMEPAGE' ? (
+        <FormControlWithLabel label={titlePh} onChange={handleTitleChange} type="text" value={title} />
       ) : null}
+      {type === 'HOMEPAGE' ? (
+        <FormGroup>
+          <Checkbox checked={hasUrl} onChange={handleCheckboxChange}>
+            <Translate value="administration.sections.externalPage" />
+          </Checkbox>
+        </FormGroup>
+      ) : null}
+      {(type === 'HOMEPAGE' && hasUrl) || type === 'CUSTOM' ? (
+        <FormControlWithLabel label={urlPh} onChange={handleUrlChange} type="text" value={url} />
+      ) : null}
+      <div className="separator" />
     </div>
   );
 };
@@ -111,7 +107,6 @@ const mapStateToProps = (state, { id, locale }) => {
   const sections = state.admin.sections.sectionsById.get(id);
   return {
     i18n: state.i18n,
-    order: sections.get('order'),
     url: sections.get('url'),
     type: sections.get('type'),
     title: getEntryValueForLocale(sections.get('titleEntries'), locale, '')

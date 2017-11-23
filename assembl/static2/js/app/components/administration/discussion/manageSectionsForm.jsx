@@ -20,7 +20,7 @@ const ManageSectionsForm = ({ sections, selectedLocale, createSection }) => {
           <OverlayTrigger placement="top" overlay={addSectionTooltip}>
             <div
               onClick={() => {
-                return createSection(sections.size - 1);
+                return createSection(sections.size);
               }}
               className="plus margin-l"
             >
@@ -36,7 +36,7 @@ const ManageSectionsForm = ({ sections, selectedLocale, createSection }) => {
 const mapStateToProps = (state) => {
   const { sectionsInOrder, sectionsById } = state.admin.sections;
   const filteredSections = sectionsInOrder.filter((id) => {
-    return !sectionsById.get(id).get('toDelete');
+    return !sectionsById.get(id).get('toDelete') && sectionsById.get(id).get('type') !== 'ADMINISTRATION';
   });
   return {
     selectedLocale: state.admin.selectedLocale,
