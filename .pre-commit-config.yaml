@@ -5,6 +5,11 @@
 #    entry: ./venv/bin/py.test -s assembl -vv
 #    language: system
 #    types: [python]
+  - id: stylelint
+    name: stylelint
+    entry: bash -c "cd assembl/static2/; npm run stylelint"
+    language: system
+    files: ".*/static2/.*scss$"
   - id: eslint
     name: eslint
     entry: bash -c "cd assembl/static2/; npm run eslint"

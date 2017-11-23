@@ -1,45 +1,53 @@
 .home {
-  .home-section  {
+  .home-section {
     &:nth-child(2) {
       .container-fluid {
         background-color: $page-bkg-grey;
       }
     }
+
     &:nth-child(3) {
       .container-fluid {
         background-color: $page-bkg-light;
       }
     }
+
     &:nth-child(4) {
       .container-fluid {
         background-color: $page-bkg-grey;
       }
     }
+
     &:nth-child(5) {
       .container-fluid {
         background-color: $page-bkg-light;
       }
     }
+
     &:nth-child(6) {
       .container-fluid {
         background-color: $page-bkg-grey;
       }
     }
+
     &:nth-child(7) {
       .container-fluid {
         background-color: $page-bkg-light;
       }
     }
+
     &:nth-child(8) {
       .container-fluid {
         background-color: $page-bkg-grey;
       }
     }
+
     &:nth-child(9) {
       .container-fluid {
         background-color: $page-bkg-light;
       }
     }
+
     &:nth-child(10) {
       .container-fluid {
         background-color: $page-bkg-grey;
@@ -227,24 +235,27 @@
 
   .phases-section {
     .illustration-box {
-        height: 500px;
-        .content-box {
-            &:hover {
-                .description-box {
-                  display: block;
-                }
-            }
-            .description-box {
-              display: none;
-              font-family: $font-family4;
-              font-size: $font-size-s;
-              letter-spacing: $text-letter-spacing;
-              padding: 0 20px;
-              text-align: center;
-              margin: 200px 0 0;
-            }
+      height: 500px;
+
+      .content-box {
+        &:hover {
+          .description-box {
+            display: block;
+          }
         }
+
+        .description-box {
+          display: none;
+          font-family: $font-family4;
+          font-size: $font-size-s;
+          letter-spacing: $text-letter-spacing;
+          padding: 0 20px;
+          text-align: center;
+          margin: 200px 0 0;
+        }
+      }
     }
+
     .bar {
       &:nth-child(1) {
         margin: 80px 0 0;
@@ -356,6 +367,7 @@
       .header-content {
         padding: 60px 5px 120px;
       }
+
       .statistic {
         .intermediary-container {
           .inline {
