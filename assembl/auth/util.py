@@ -5,9 +5,10 @@ from os import urandom
 import base64
 
 from sqlalchemy.sql.expression import and_
-from pyramid.security import (Everyone, Authenticated)
+from pyramid.security import (Everyone, Authenticated, forget)
 from pyramid.httpexceptions import HTTPNotFound
 from pyisemail import is_email
+from pyramid.i18n import TranslationStringFactory
 from pyramid.authentication import SessionAuthenticationPolicy
 
 from assembl.lib.locale import _
@@ -18,6 +19,9 @@ from ..models.auth import (
     User, Role, UserRole, LocalUserRole, Permission,
     DiscussionPermission, IdentityProvider, AgentProfile,
     EmailAccount)
+
+
+_ = TranslationStringFactory('assembl')
 
 
 def get_user(request):
@@ -130,6 +134,20 @@ def get_current_user_id():
     # CAN ONLY BE CALLED IF THERE IS A CURRENT REQUEST.
     assert r
     return r.authenticated_userid
+
+
+def get_non_expired_user_id(request):
+    user_id = request.authenticated_userid
+    discussion = discussion_from_request(request)
+    if user_id:
+        user = User.get(user_id)
+        if user.login_expired(discussion):
+            forget(request)
+            localizer = request.localizer
+            request.session.flash(localizer.translate(_(
+                "Your session has expired, you need to login again")))
+            user_id = None
+    return user_id
 
 
 class UpgradingSessionAuthenticationPolicy(SessionAuthenticationPolicy):

@@ -13,7 +13,8 @@ from ...auth import (
     R_PARTICIPANT, R_SYSADMIN, R_ADMINISTRATOR, SYSTEM_ROLES,
     P_SYSADMIN, P_ADMIN_DISC, Everyone)
 from ...auth.util import (
-    add_multiple_users_csv, user_has_permission, get_permissions)
+    add_multiple_users_csv, user_has_permission, get_permissions,
+    get_non_expired_user_id)
 from ...models import (
     Discussion, DiscussionPermission, Role, Permission, UserRole,
     LocalUserRole, Preferences, User, Username, AgentProfile,
@@ -45,7 +46,7 @@ class PseudoDiscussion(object):
              permission=P_SYSADMIN)
 def base_admin_view(request):
     """The Base admin view, for frontend urls"""
-    user_id = request.authenticated_userid or Everyone
+    user_id = get_non_expired_user_id(request) or Everyone
     if user_id == Everyone:
         raise HTTPUnauthorized()
     context = get_default_context(request)
@@ -97,7 +98,7 @@ def test_simultaneous_ajax_calls(request):
         raise HTTPNotFound("Discussion with id '%d' not found." % (
             discussion_id,))
 
-    user_id = request.authenticated_userid
+    user_id = get_non_expired_user_id(request)
     assert user_id
 
     context = dict(
@@ -115,7 +116,7 @@ def test_simultaneous_ajax_calls(request):
 @view_config(route_name='discussion_admin', permission=P_SYSADMIN,
              request_method=("GET", "POST"))
 def discussion_admin(request):
-    user_id = request.authenticated_userid
+    user_id = get_non_expired_user_id(request)
 
     if not user_id:
         return HTTPFound(location='/login?next=/admin/discussions/')
@@ -183,7 +184,7 @@ def discussion_admin(request):
 def discussion_edit(request):
     discussion_id = int(request.matchdict['discussion_id'])
     discussion = Discussion.get_instance(discussion_id)
-    user_id = request.authenticated_userid
+    user_id = get_non_expired_user_id(request)
     assert user_id
     permissions = get_permissions(user_id, discussion_id)
     partners = json.dumps([p.generic_json(
@@ -230,7 +231,7 @@ def order_by_domain_and_name(user):
 @view_config(route_name='discussion_permissions', permission=P_ADMIN_DISC,
              request_method=("GET", "POST"))
 def discussion_permissions(request):
-    user_id = request.authenticated_userid
+    user_id = get_non_expired_user_id(request)
     assert user_id
     db = Discussion.default_db
     discussion_id = int(request.matchdict['discussion_id'])
@@ -404,7 +405,7 @@ def discussion_permissions(request):
 @view_config(route_name='general_permissions', permission=P_SYSADMIN,
              request_method=("GET", "POST"))
 def general_permissions(request):
-    user_id = request.authenticated_userid
+    user_id = get_non_expired_user_id(request)
     assert user_id
     db = Discussion.default_db
 

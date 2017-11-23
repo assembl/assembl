@@ -374,6 +374,12 @@ class AgentProfile(Base):
             return datetime.utcnow() - timedelta(seconds=1)
         return last_login + timedelta(float(duration))
 
+    def login_expiry_req(self):
+        """Get login expiry date. May be None.
+        Only use within request."""
+        from assembl.auth.util import get_current_discussion
+        return self.login_expiry(get_current_discussion())
+
     def login_expiry(self, discussion):
         accounts = [a for a in self.social_accounts if a.verified]
         autologin = None
