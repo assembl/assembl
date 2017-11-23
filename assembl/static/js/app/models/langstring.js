@@ -550,6 +550,10 @@ var LangString = Base.Model.extend({
     this.initFromDict(res);
   },
 
+  getEntries: function(){
+    return this.get("entries");
+  }
+
 });
 
 

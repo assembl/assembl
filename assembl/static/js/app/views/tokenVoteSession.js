@@ -1286,11 +1286,15 @@ var TokenResultView = Marionette.LayoutView.extend({
 
         var questionTitleLangString = new LangString.Model();
         questionTitleLangString.initFromObjectProperty(question_item, 'question_title');
-        that.questionTitle = questionTitleLangString.bestValue(that.userLanguagePreferences);
+        if ( questionTitleLangString.getEntries().length ){
+          that.questionTitle = questionTitleLangString.bestValue(that.userLanguagePreferences);
+        }
 
         var questionDescriptionLangString = new LangString.Model();
         questionDescriptionLangString.initFromObjectProperty(question_item, 'question_description');
-        that.questionDescription = questionDescriptionLangString.bestValue(that.userLanguagePreferences);
+        if ( questionDescriptionLangString.getEntries().length ){
+          that.questionDescription = questionDescriptionLangString.bestValue(that.userLanguagePreferences);
+        }
 
         that.tokenResultsView = new TokenVoteResultCollectionView({
           collection: that.voteResults,
@@ -1483,12 +1487,15 @@ var TokenVoteSessionModal = Backbone.Modal.extend({
 
       var questionTitleLangString = new LangString.Model();
       questionTitleLangString.initFromObjectProperty(question_item, 'question_title');
-      that.$('.question-title').text(questionTitleLangString.bestValue(that.userLanguagePreferences));
+      if ( questionTitleLangString.getEntries().length ){
+        that.$('.question-title').text(questionTitleLangString.bestValue(that.userLanguagePreferences));
+      }
 
       var questionDescriptionLangString = new LangString.Model();
       questionDescriptionLangString.initFromObjectProperty(question_item, 'question_description');
-      that.$('.question-description').text(questionDescriptionLangString.bestValue(that.userLanguagePreferences));
-      
+      if ( questionDescriptionLangString.getEntries().length ){
+        that.$('.question-description').text(questionDescriptionLangString.bestValue(that.userLanguagePreferences));
+      }
 
       var votableIdeas = that.widgetModel.get("votable_ideas"); // contains their id but not full information (because shown by server using "id_only" view)
       var votableIdeasIds = _.pluck(votableIdeas, "@id");
