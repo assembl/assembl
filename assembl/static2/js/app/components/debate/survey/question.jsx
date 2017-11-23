@@ -1,6 +1,6 @@
 import React from 'react';
 import { PropTypes } from 'prop-types';
-import { graphql } from 'react-apollo';
+import { graphql, compose } from 'react-apollo';
 import { connect } from 'react-redux';
 import { Translate, I18n } from 'react-redux-i18n';
 import { Grid, Col, FormGroup, FormControl, Button } from 'react-bootstrap';
@@ -9,6 +9,7 @@ import { getIfPhaseCompletedByIdentifier } from '../../../utils/timeline';
 import { inviteUserToLogin, displayAlert } from '../../../utils/utilityManager';
 import createPostMutation from '../../../graphql/mutations/createPost.graphql';
 import { SMALL_SCREEN_WIDTH } from '../../../constants';
+import { withScreenDimensions } from '../../common/screenDimensions';
 
 class Question extends React.Component {
   constructor(props) {
@@ -16,7 +17,6 @@ class Question extends React.Component {
     this.state = {
       showSubmitButton: false
     };
-    this.updateDimensions = this.updateDimensions.bind(this);
     this.getProposalText = this.getProposalText.bind(this);
     this.createPost = this.createPost.bind(this);
     this.redirectToLogin = this.redirectToLogin.bind(this);
@@ -26,8 +26,6 @@ class Question extends React.Component {
     this.state = {
       remainingChars: maxChars
     };
-    this.updateDimensions();
-    window.addEventListener('resize', this.updateDimensions);
   }
   componentWillReceiveProps() {
     const maxChars = this.txtarea.props.maxLength;
@@ -36,10 +34,6 @@ class Question extends React.Component {
       postBody: '',
       remainingChars: maxChars
     };
-    this.updateDimensions();
-  }
-  componentWillUnmount() {
-    window.removeEventListener('resize', this.updateDimensions);
   }
   getRemainingChars(e) {
     const maxChars = this.txtarea.props.maxLength;
@@ -66,14 +60,6 @@ class Question extends React.Component {
         showSubmitButton: false
       });
     }
-  }
-  updateDimensions() {
-    const screenHeight = window.innerHeight - document.getElementById('timeline').clientHeight;
-    const screenWidth = window.innerWidth;
-    this.setState({
-      screenHeight: screenHeight,
-      screenWidth: screenWidth
-    });
   }
   createPost() {
     const maxChars = this.txtarea.props.maxLength;
@@ -105,14 +91,15 @@ class Question extends React.Component {
     }
   }
   render() {
-    const { index, title } = this.props;
+    const { index, title, screenWidth, screenHeight } = this.props;
+    const height = screenHeight - document.getElementById('timeline').clientHeight;
     const { debateData } = this.props.debate;
     const isPhaseCompleted = getIfPhaseCompletedByIdentifier(debateData.timeline, 'survey');
     return (
       <section
         className={isPhaseCompleted ? 'hidden' : 'questions-section'}
         id={`q${index}`}
-        style={this.state.screenWidth >= SMALL_SCREEN_WIDTH ? { height: this.state.screenHeight } : { height: '100%' }}
+        style={screenWidth >= SMALL_SCREEN_WIDTH ? { height: height } : { height: '100%' }}
       >
         <Grid fluid className="background-grey">
           <div className="max-container">
@@ -160,8 +147,6 @@ Question.propTypes = {
   mutate: PropTypes.func.isRequired
 };
 
-const QuestionWithMutation = graphql(createPostMutation)(Question);
-
 const mapStateToProps = (state) => {
   return {
     debate: state.debate,
@@ -169,4 +154,4 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps)(QuestionWithMutation);
+export default compose(graphql(createPostMutation), connect(mapStateToProps), withScreenDimensions)(Question);
