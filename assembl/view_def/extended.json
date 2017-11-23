@@ -34,6 +34,7 @@
         "@extends": "AgentProfile",
         "creation_date": true,
         "last_login": true,
+        "login_expiry": "&login_expiry_req",
         "login_failures": false,
         "password": false,
         "verified": true,
