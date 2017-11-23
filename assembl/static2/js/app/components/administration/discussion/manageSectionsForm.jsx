@@ -14,8 +14,8 @@ const ManageSectionsForm = ({ sections, selectedLocale, createSection }) => {
       <SectionTitle title={I18n.t('administration.sectionsTitle')} annotation={I18n.t('administration.annotation')} />
       <div className="admin-content">
         <form>
-          {sections.map((id) => {
-            return <EditSectionForm key={id} id={id} locale={selectedLocale} nbSections={sections.size} />;
+          {sections.map((id, index) => {
+            return <EditSectionForm key={id} id={id} index={index} locale={selectedLocale} nbSections={sections.size} />;
           })}
           <OverlayTrigger placement="top" overlay={addSectionTooltip}>
             <div

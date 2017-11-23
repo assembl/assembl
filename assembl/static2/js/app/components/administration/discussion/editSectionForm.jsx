@@ -16,19 +16,19 @@ import {
 } from '../../../actions/adminActions/adminSections';
 
 type EditSectionFormProps = {
-  handleTitleChange: Function,
-  handleUrlChange: Function,
-  handleCheckboxChange: Function,
-  handleDeleteClick: Function,
-  handleDownClick: Function,
-  handleUpClick: Function,
   i18n: Object,
   locale: string,
   url: string,
   type: string,
   title: string,
-  order: number,
-  nbSections: number
+  nbSections: number,
+  index: number,
+  handleTitleChange: Function,
+  handleUrlChange: Function,
+  handleCheckboxChange: Function,
+  handleDeleteClick: Function,
+  handleDownClick: Function,
+  handleUpClick: Function
 };
 
 const EditSectionForm = ({
@@ -37,8 +37,8 @@ const EditSectionForm = ({
   url,
   type,
   title,
-  order,
   nbSections,
+  index,
   handleTitleChange,
   handleCheckboxChange,
   handleUrlChange,
@@ -62,14 +62,14 @@ const EditSectionForm = ({
           <div className="right">
             {type !== 'HOMEPAGE' ? (
               <div className="inline">
-                {order < nbSections - 2 ? (
+                {index < nbSections - 2 ? (
                   <OverlayTrigger placement="top" overlay={downTooltip}>
                     <Button onClick={handleDownClick}>
                       <span className="assembl-icon-down-bold grey" />
                     </Button>
                   </OverlayTrigger>
                 ) : null}
-                {order > 1 ? (
+                {index > 1 ? (
                   <OverlayTrigger placement="top" overlay={upTooltip}>
                     <Button onClick={handleUpClick}>
                       <span className="assembl-icon-up-bold grey" />
