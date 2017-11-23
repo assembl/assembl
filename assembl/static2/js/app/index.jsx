@@ -38,26 +38,23 @@ if (isPiwikEnabled) {
   customBrowserHistory = history;
 }
 
-ReactDOM.render(
-  <AppContainer>
-    <ApolloProvider store={store} client={client}>
-      <Router history={customBrowserHistory} routes={Routes} onUpdate={hashLinkScroll} />
-    </ApolloProvider>
-  </AppContainer>,
-  document.getElementById('root')
-);
+const renderAssembl = (routes) => {
+  ReactDOM.render(
+    <AppContainer>
+      <ApolloProvider store={store} client={client}>
+        <Router history={customBrowserHistory} routes={routes} onUpdate={hashLinkScroll} />
+      </ApolloProvider>
+    </AppContainer>,
+    document.getElementById('root')
+  );
+};
+
+renderAssembl(Routes);
 
 // Hot Module Replacement API
 if (module.hot) {
   module.hot.accept('./routes', () => {
     const NewRoutes = require('./routes').default; // eslint-disable-line
-    ReactDOM.render(
-      <AppContainer>
-        <ApolloProvider store={store} client={client}>
-          <Router history={customBrowserHistory} routes={NewRoutes} onUpdate={hashLinkScroll} />
-        </ApolloProvider>
-      </AppContainer>,
-      document.getElementById('root')
-    );
+    renderAssembl(NewRoutes);
   });
 }
