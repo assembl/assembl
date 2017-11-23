@@ -5,7 +5,7 @@ from graphql_relay.node.node import to_global_id
 
 from assembl import models
 from assembl.graphql.schema import Schema as schema
-from assembl.graphql.schema import create_root_thematic
+from assembl.graphql.utils import create_root_thematic
 
 
 def test_get_locales(graphql_request):
