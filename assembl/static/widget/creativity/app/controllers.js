@@ -219,9 +219,10 @@ creativityApp.controller('adminConfigureInstanceSetAssociatedIdeasCtl',
   }]);
 
 creativityApp.controller('adminCreateFromIdeaCtl',
-    ['$scope', '$http', '$routeParams', '$log', '$location', 'globalConfig', 'configTestingService', 'configService', 'Discussion', 'AssemblToolsService',
-        function($scope, $http, $routeParams, $log, $location, globalConfig, configTestingService, configService, Discussion, AssemblToolsService) {
+    ['$scope', '$http', '$routeParams', '$log', '$location', '$translate', 'globalConfig', 'configTestingService', 'configService', 'Discussion', 'AssemblToolsService', 'LangStringService',
+        function($scope, $http, $routeParams, $log, $location, $translate, globalConfig, configTestingService, configService, Discussion, AssemblToolsService, LangStringService) {
 
+          $scope.current_lang = $translate.use();
           $scope.current_step = 1;
           $scope.url_parameter_idea = null; // the URL of the idea given in URL parameter, which will be associated to the widget instance
           $scope.discussion_uri = null; // "local:Discussion/1"
@@ -246,6 +247,7 @@ creativityApp.controller('adminCreateFromIdeaCtl',
             }).success(function(data, status, headers) {
               //console.log(data);
               $scope.idea = data;
+              $scope.idea.translatedTitle = LangStringService.bestStringForLang($scope.idea.shortTitle, $scope.current_lang);
               $scope.discussion_uri = data.discussion;
 
               $http({

@@ -13,6 +13,55 @@ creativityServices.service('AssemblToolsService', ['$window', '$rootScope', '$lo
   };
 }]);
 
+creativityServices.service('LangStringService', ['$window', '$rootScope', '$log', function($window, $rootScope, $log) {
+  this.isMachineTranslation = function(langString) {
+    return langString["@language"].indexOf("-x-mtfrom-") > 0;
+  };
+
+  // returns the LangStringEntry (of this `langString` LangString) that is the most adapted to language `lang`
+  this.bestForLang = function(langString, lang){
+    var that = this;
+    var defaultLangStringEntry = {
+      "value": "",
+      "@language": "zxx"
+    };
+    if (!langString || !("entries" in langString)){
+      return defaultLangStringEntry;
+    }
+    var originals = langString.entries.filter(function(e) {return !that.isMachineTranslation(e);});
+    if ( originals.length === 1 ){
+      return originals[0];
+    }
+    else if (originals.length > 1) {
+      var best = null;
+      originals.forEach(function(entry){
+        if (entry["@language"] == lang){
+          best = entry;
+        }
+      });
+      if (best){
+        return best;
+      }
+      return originals[0];
+    }
+    else { // if ( originals.length == 0 ) {
+      if ( langString.entries.length ){
+        return langString.entries[0];
+      }
+      return defaultLangStringEntry;
+    }
+  };
+
+  this.bestStringForLang = function(langString, lang){
+    if ( typeof langString === 'string' ){
+      return langString;
+    }
+    else { // if ( typeof langString === 'object' ){
+      return this.bestForLang(langString, lang).value;
+    }
+  };
+}]);
+
 creativityServices.service('WidgetService', ['$window', '$rootScope', '$log', '$http', function($window, $rootScope, $log, $http) {
 
   this.putJson = function(endpoint, post_data, result_holder) {

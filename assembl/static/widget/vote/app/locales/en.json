@@ -83,7 +83,7 @@
     "configureIt": "Configure it",
     "adminCreateFromIdeaTitle": "Create a vote widget",
     "adminCreateFromIdeaWidgetTypeQuestion": "Which type of Vote widget would you like to create?",
-    "adminCreateFromIdeaDescriptionWithIdea": "You are about to create an instance of the Creativity widget, and to associate it with the idea",
+    "adminCreateFromIdeaDescriptionWithIdea": "You are about to create an instance of the Vote widget, and to associate it with the idea",
     "widgetCreationEndpoint": "widget creation endpoint:",
     "widgetType": "widget type:",
     "associatedIdea": "associated idea:",

@@ -1,9 +1,10 @@
 "use strict";
 
 voteApp.controller('adminConfigureInstanceSetVotableIdeasCtl',
-  ['$scope', '$http', '$routeParams', '$log', '$location', 'globalConfig', 'configTestingService', 'configService', 'AssemblToolsService', 'VoteWidgetService', 
-  function($scope, $http, $routeParams, $log, $location, globalConfig, configTestingService, configService, AssemblToolsService, VoteWidgetService) {
+  ['$scope', '$http', '$routeParams', '$log', '$location', '$translate', 'globalConfig', 'configTestingService', 'configService', 'AssemblToolsService', 'LangStringService', 'VoteWidgetService', 
+  function($scope, $http, $routeParams, $log, $location, $translate, globalConfig, configTestingService, configService, AssemblToolsService, LangStringService, VoteWidgetService) {
 
+    $scope.current_lang = $translate.use();
     $scope.current_step = 1;
     $scope.current_substep = 1;
 
@@ -80,13 +81,19 @@ voteApp.controller('adminConfigureInstanceSetVotableIdeasCtl',
       console.log(data);
       $scope.current_substep = 2;
       $scope.ideas = data;
+      if ( $scope.ideas && $scope.ideas.length ){
+        angular.forEach($scope.ideas, function(idea){
+          idea.translatedTitle = LangStringService.bestStringForLang(idea.shortTitle, $scope.current_lang);
+        });
+      }
     });
   };
 
-    $scope.associateVotableIdeas = function(ideas, result_holder) {
+  $scope.associateVotableIdeas = function(ideas, result_holder) {
     console.log("associateVotableIdeas()");
     var post_data = ideas; // maybe we should send only an array of @id fields instead of the whole ideas
     var endpoint = $scope.votable_ideas_endpoint;
     VoteWidgetService.putJson(endpoint, post_data, result_holder);
   };
-  }]);
+  }
+]);
