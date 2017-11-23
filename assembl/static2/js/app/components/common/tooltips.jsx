@@ -10,6 +10,24 @@ export const addSectionTooltip = (
   </Tooltip>
 );
 
+export const deleteSectionTooltip = (
+  <Tooltip id="deleteSectionTooltip">
+    <Translate value="administration.sections.deleteSection" />
+  </Tooltip>
+);
+
+export const upTooltip = (
+  <Tooltip id="upTooltip">
+    <Translate value="administration.up" />
+  </Tooltip>
+);
+
+export const downTooltip = (
+  <Tooltip id="downTooltip">
+    <Translate value="administration.down" />
+  </Tooltip>
+);
+
 export const addThematicTooltip = (
   <Tooltip id="addThematicTooltip">
     <Translate value="administration.addThematic" />

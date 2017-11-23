@@ -296,6 +296,8 @@ const Translations = {
       edition: "Éditer la discussion",
       landingpage: "Page d'accueil",
       sectionsTitle: "Renseigner les sections",
+      up: "Remonter",
+      down: "Descendre",
       menu: {
         phase: "Phase %{count} - %{description}",
         language: "Editer la langue du débat",
@@ -309,6 +311,7 @@ const Translations = {
       },
       sections: {
         addSection: "Ajouter une section",
+        deleteSection: "Supprimer une section",
         homepage: "Accueil",
         debate: "Débat",
         resources_center: "Centre de ressources",
@@ -663,6 +666,8 @@ const Translations = {
       edition: "Edit the Discussion",
       landingpage: "Landing page",
       sectionsTitle: "Set sections",
+      up: "Up",
+      down: "Down",
       menu: {
         phase: "Phase %{count} - %{description}",
         language: "Discussion Language",
@@ -676,6 +681,7 @@ const Translations = {
       },
       sections: {
         addSection: "Add a section",
+        deleteSection: "Delete a section",
         homepage: "Home page",
         debate: "Debate page",
         resources_center: "Resources center",

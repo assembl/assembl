@@ -32,3 +32,15 @@ export const toggleExternalPage = (id: string): actionTypes.ToggleExternalPage =
 export const createSection = (id: string, order: number): actionTypes.CreateSection => {
   return { id: id, order: order, type: actionTypes.CREATE_SECTION };
 };
+
+export const deleteSection = (id: string): actionTypes.DeleteSection => {
+  return { id: id, type: actionTypes.DELETE_SECTION };
+};
+
+export const upSection = (id: string): actionTypes.UpSection => {
+  return { id: id, type: actionTypes.UP_SECTION };
+};
+
+export const downSection = (id: string): actionTypes.DownSection => {
+  return { id: id, type: actionTypes.DOWN_SECTION };
+};

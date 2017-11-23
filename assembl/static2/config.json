@@ -583,6 +583,18 @@
       ]
     },
     {
+      "uid": "8c8f768607b8fc4c92c0f85b488e87e8",
+      "css": "up-bold",
+      "code": 59406,
+      "src": "entypo"
+    },
+    {
+      "uid": "78944e4652d6f9b8b506eaef331308cd",
+      "css": "down-bold",
+      "code": 59408,
+      "src": "entypo"
+    },
+    {
       "uid": "8042c2d234f549346b152cfcf45b16c5",
       "css": "facebook",
       "code": 59397,

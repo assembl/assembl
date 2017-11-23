@@ -15,12 +15,12 @@ const ManageSectionsForm = ({ sections, selectedLocale, createSection }) => {
       <div className="admin-content">
         <form>
           {sections.map((id) => {
-            return <EditSectionForm key={id} id={id} locale={selectedLocale} />;
+            return <EditSectionForm key={id} id={id} locale={selectedLocale} nbSections={sections.size} />;
           })}
           <OverlayTrigger placement="top" overlay={addSectionTooltip}>
             <div
               onClick={() => {
-                return createSection(sections.size + 1);
+                return createSection(sections.size - 1);
               }}
               className="plus margin-l"
             >
@@ -35,10 +35,15 @@ const ManageSectionsForm = ({ sections, selectedLocale, createSection }) => {
 
 const mapStateToProps = (state) => {
   const { sectionsInOrder, sectionsById } = state.admin.sections;
+  const filteredSections = sectionsInOrder.filter((id) => {
+    return !sectionsById.get(id).get('toDelete');
+  });
   return {
     selectedLocale: state.admin.selectedLocale,
-    sections: sectionsInOrder.filter((id) => {
-      return !sectionsById.get(id).get('toDelete');
+    sections: filteredSections.sort((a, b) => {
+      const aOrder = sectionsById.get(a).get('order');
+      const bOrder = sectionsById.get(b).get('order');
+      return aOrder - bOrder;
     })
   };
 };
