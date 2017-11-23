@@ -11,6 +11,7 @@ import createAppStore from './store';
 import client from './client';
 import Routes from './routes';
 import hashLinkScroll from './utils/hashLinkScroll';
+import { ScreenDimensionsProvider } from './components/common/screenDimensions';
 
 require('smoothscroll-polyfill').polyfill();
 
@@ -42,7 +43,9 @@ const renderAssembl = (routes) => {
   ReactDOM.render(
     <AppContainer>
       <ApolloProvider store={store} client={client}>
-        <Router history={customBrowserHistory} routes={routes} onUpdate={hashLinkScroll} />
+        <ScreenDimensionsProvider>
+          <Router history={customBrowserHistory} routes={routes} onUpdate={hashLinkScroll} />
+        </ScreenDimensionsProvider>
       </ApolloProvider>
     </AppContainer>,
     document.getElementById('root')
