@@ -59,7 +59,7 @@ def test_graphql_get_all_ideas(graphql_request,
     assert third_idea['parentId'] == second_idea['id']
     assert third_idea['order'] == 0.0
     assert third_idea['numChildren'] == 0
-    assert len(res.errors) == 0
+    assert res.errors is None
 
 
 def test_graphql_get_all_ideas_multiColumns_phase(graphql_request,
@@ -113,7 +113,7 @@ def test_graphql_get_all_ideas_multiColumns_phase(graphql_request,
     assert first_idea['order'] == 0.0
     assert first_idea['numChildren'] == 0
     assert first_idea['messageViewOverride'] == 'messageColumns'
-    assert len(res.errors) == 0
+    assert res.errors is None
     # revert the changes for tests isolation
     subidea_1.message_view_override = None
     subidea_1.db.flush()
