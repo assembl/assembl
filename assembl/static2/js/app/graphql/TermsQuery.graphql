@@ -1,0 +1,6 @@
+query Terms($lang: String) {
+  terms {
+    title(lang: $lang)
+    text
+  }
+}
