@@ -635,7 +635,7 @@ const Translations = {
       panelTitle: "Sorry, this page doesn't exist"
     },
     terms: {
-      panelTitle: "Terms and Conditions"
+      panelTitle: "Terms & Conditions"
     },
     administration: {
       addThematic: "Add a theme",

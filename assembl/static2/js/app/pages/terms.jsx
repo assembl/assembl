@@ -1,5 +1,5 @@
 import React from 'react';
-import { I18n, Translate } from 'react-redux-i18n';
+import { I18n } from 'react-redux-i18n';
 import { connect } from 'react-redux';
 import { Grid } from 'react-bootstrap';
 import Header from '../components/common/header';
@@ -13,16 +13,10 @@ class Terms extends React.Component {
       <div className="terms-and-conditions">
         <Header title={I18n.t('terms.panelTitle')} imgUrl={debateData.headerBackgroundUrl} />
         <Grid fluid>
-          <div className="max-container">
-            <div className="title-section">
-              <div className="title-hyphen" />
-              <h1 className="dark-title-1">
-                <Translate value="terms.panelTitle" />
-              </h1>
-              <div className="page-body">
-                <div className="ellipsis-content justify">
-                  {termsAndConditions}
-                </div>
+          <div className="max-container margin-xxl">
+            <div className="page-body">
+              <div className="ellipsis-content justify">
+                {termsAndConditions}
               </div>
             </div>
           </div>
