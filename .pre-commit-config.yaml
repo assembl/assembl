@@ -37,6 +37,6 @@
     files: ".*/static2/.*graphql$"
   - id: flake8
     name: flake8
-    entry: flake8
+    entry: bash -c "PATH=./venv/bin/:$PATH flake8"
     language: system
     files: "assembl/graphql/.*.py"
