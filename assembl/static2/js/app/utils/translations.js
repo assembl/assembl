@@ -93,6 +93,7 @@ const Translations = {
     },
     footer: {
       terms: "Conditions Générales d'Utilisation",
+      legalNotices: "Mention Légales",
       socialMedias: "Suivez-nous sur"
     },
     login: {
@@ -450,6 +451,7 @@ const Translations = {
     },
     footer: {
       terms: "Terms and Conditions",
+      legalNotices: "Legal Notices",
       socialMedias: "Follow us"
     },
     login: {
