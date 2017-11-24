@@ -23,6 +23,7 @@ type EditSectionFormProps = {
   title: string,
   nbSections: number,
   index: number,
+  order: number,
   handleTitleChange: Function,
   handleUrlChange: Function,
   handleCheckboxChange: Function,
@@ -39,6 +40,7 @@ const EditSectionForm = ({
   title,
   nbSections,
   index,
+  order,
   handleTitleChange,
   handleCheckboxChange,
   handleUrlChange,
@@ -53,6 +55,7 @@ const EditSectionForm = ({
   return (
     <div className="form-container">
       <div className="title left">
+        {`${order}. `}
         {translations[locale].administration.sections[type.toLowerCase()]
           ? translations[locale].administration.sections[type.toLowerCase()]
           : I18n.t('administration.sections.custom')}
@@ -109,6 +112,7 @@ const mapStateToProps = (state, { id, locale }) => {
     i18n: state.i18n,
     url: sections.get('url'),
     type: sections.get('type'),
+    order: sections.get('order'),
     title: getEntryValueForLocale(sections.get('titleEntries'), locale, '')
   };
 };

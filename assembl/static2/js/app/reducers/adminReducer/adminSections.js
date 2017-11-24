@@ -60,8 +60,9 @@ export const sectionsById = (state: Map<string, Map> = Map(), action: ReduxActio
   switch (action.type) {
   case CREATE_SECTION:
     return state.set(action.id, defaultResource.set('id', action.id).set('order', action.order));
-  case DELETE_SECTION:
+  case DELETE_SECTION: {
     return state.setIn([action.id, 'toDelete'], true);
+  }
   case UPDATE_SECTION_URL:
     return state.setIn([action.id, 'url'], action.value);
   case UP_SECTION: {
