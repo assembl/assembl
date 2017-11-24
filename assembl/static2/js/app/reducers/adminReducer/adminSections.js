@@ -65,14 +65,12 @@ export const sectionsById = (state: Map<string, Map> = Map(), action: ReduxActio
   case UPDATE_SECTION_URL:
     return state.setIn([action.id, 'url'], action.value);
   case UP_SECTION: {
-    const currentSectionOrder = state.getIn([action.id, 'order']);
-    let previousSectionId = '';
-    state.forEach((section) => {
-      const sectionOrder = section.get('order');
-      if (sectionOrder === currentSectionOrder - 1) {
-        previousSectionId = section.get('id');
-      }
-    });
+    const previousSectionId = state
+      .filter((section) => {
+        return section.get('order') === state.getIn([action.id, 'order']) - 1;
+      })
+      .keySeq()
+      .first();
     return state
       .updateIn([previousSectionId, 'order'], (order) => {
         return order + 1;
@@ -82,14 +80,12 @@ export const sectionsById = (state: Map<string, Map> = Map(), action: ReduxActio
       });
   }
   case DOWN_SECTION: {
-    const currentSectionOrder = state.getIn([action.id, 'order']);
-    let nextSectionId = '';
-    state.forEach((section) => {
-      const sectionOrder = section.get('order');
-      if (sectionOrder === currentSectionOrder + 1) {
-        nextSectionId = section.get('id');
-      }
-    });
+    const nextSectionId = state
+      .filter((section) => {
+        return section.get('order') === state.getIn([action.id, 'order']) + 1;
+      })
+      .keySeq()
+      .first();
     return state
       .updateIn([nextSectionId, 'order'], (order) => {
         return order - 1;
