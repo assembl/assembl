@@ -5,14 +5,12 @@ import Header from './header';
 
 const LargeTextParagraph = ({ debateData, headerTitle, text }) => {
   return (
-    <div className="terms-and-conditions">
+    <div className="large-text-paragraph">
       <Header title={headerTitle} imgUrl={debateData.headerBackgroundUrl} />
       <Grid fluid>
         <div className="max-container margin-xxl">
           <div className="page-body">
-            <div className="ellipsis-content justify">
-              {text}
-            </div>
+            <div className="ellipsis-content justify">{text}</div>
           </div>
         </div>
       </Grid>
