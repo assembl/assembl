@@ -46,7 +46,7 @@ def resolve_langstring_entries(obj, attr):
             LangStringEntry(
                 locale_code=entry.locale.base_locale,
                 error_code=entry.error_code,
-                translated_from_locale_code=entry.locale.machine_translated_from,
+                translated_from_locale_code=entry.locale.machine_translated_from,  # noqa: E501
                 value=entry.value or '',
             )
         )
@@ -80,7 +80,7 @@ def resolve_best_langstring_entries(langstring, target_locale=None):
             LangStringEntry(
                 locale_code=entry.locale.base_locale,
                 error_code=entry.error_code,
-                translated_from_locale_code=entry.locale.machine_translated_from,
+                translated_from_locale_code=entry.locale.machine_translated_from,  # noqa: E501
                 supposed_understood=not lp.find_locale(
                     entry.locale.base_locale).translate_to_locale,
                 value=entry.value or '',
