@@ -1,6 +1,6 @@
 query LegalNoticesQuery($lang: String) {
   legalNotices {
     title(lang: $lang)
-    text
+    text(lang: $lang)
   }
 }

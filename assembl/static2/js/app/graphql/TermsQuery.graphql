@@ -1,6 +1,6 @@
-query Terms($lang: String) {
+query TermsOfUse($lang: String) {
   terms {
     title(lang: $lang)
-    text
+    text(lang: $lang)
   }
 }
