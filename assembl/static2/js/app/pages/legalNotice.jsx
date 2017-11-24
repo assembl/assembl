@@ -1,8 +1,8 @@
 import { graphql } from 'react-apollo';
 import LargeTextParagraph from '../components/common/largeTextParagraph';
-import LegalNoticesQuery from '../graphql/LegalNoticesQuery.graphql';
+import LegalNoticeQuery from '../graphql/LegalNoticesQuery.graphql';
 
-export default graphql(LegalNoticesQuery, {
+export default graphql(LegalNoticeQuery, {
   props: ({ data }) => {
     return {
       text: data.text,

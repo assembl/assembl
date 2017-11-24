@@ -7,12 +7,12 @@ import { connect } from 'react-redux';
 class Footer extends React.Component {
   render() {
     const { assemblVersion, debateData } = this.props;
-    const { socialMedias, termsOfUseUrl, legalNoticesUrl } = debateData;
+    const { socialMedias, termsOfUseUrl, legalNoticeUrl } = debateData;
     return (
       <Grid fluid className="background-dark relative" id="footer">
         <div className="max-container">
           <div className={socialMedias ? 'footer' : 'footer margin-xl'}>
-            {socialMedias && (
+            {socialMedias &&
               <div>
                 <p>
                   <Translate value="footer.socialMedias" />
@@ -26,35 +26,36 @@ class Footer extends React.Component {
                     );
                   })}
                 </div>
-              </div>
-            )}
-            <div className="lower-footer-elements">
-              <div className="copyright">
-                ©{' '}
-                <Link to="http://assembl.bluenove.com/" target="_blank">
-                  Assembl
-                </Link>{' '}
-                powered by{' '}
-                <Link to="http://bluenove.com/" target="_blank">
-                  bluenove
-                </Link>
-              </div>
-              {termsOfUseUrl && (
-                <div className="terms">
+              </div>}
+            <div className="copyright">
+              ©{' '}
+              <Link to="http://assembl.bluenove.com/" target="_blank">
+                Assembl
+              </Link>{' '}
+              powered by{' '}
+              <Link to="http://bluenove.com/" target="_blank">
+                bluenove
+              </Link>
+            </div>
+            <div className="terms">
+              {termsOfUseUrl &&
+                <div className="terms-of-use">
                   <Link to={termsOfUseUrl} target="_blank">
                     <Translate value="footer.terms" />
                   </Link>
-                </div>
-              )}
-              {legalNoticesUrl && (
-                <div className="terms">
-                  <Link to={legalNoticesUrl} target="_blank">
+                </div>}
+              {termsOfUseUrl && legalNoticeUrl && <span style={{ padding: '0 5px' }}>-</span>}
+              {legalNoticeUrl &&
+                <div className="legal-notices">
+                  <Link to={legalNoticeUrl} target="_blank">
                     <Translate value="footer.legalNotices" />
                   </Link>
-                </div>
-              )}
-              {assemblVersion ? <div className="assembl-version">v{assemblVersion}</div> : null}
+                </div>}
             </div>
+            {assemblVersion &&
+              <div className="assembl-version">
+                v{assemblVersion}
+              </div>}
           </div>
         </div>
       </Grid>

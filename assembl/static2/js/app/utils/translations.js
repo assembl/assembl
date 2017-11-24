@@ -92,8 +92,8 @@ const Translations = {
       syntheses: "Synthèses"
     },
     footer: {
-      terms: "Conditions Générales d'Utilisation",
-      legalNotices: "Mention Légales",
+      terms: "CGU",
+      legalNotices: "Mentions Légales",
       socialMedias: "Suivez-nous sur"
     },
     login: {
@@ -450,8 +450,8 @@ const Translations = {
       syntheses: "Syntheses"
     },
     footer: {
-      terms: "Terms and Conditions",
-      legalNotices: "Legal Notices",
+      terms: "Terms & Conditions",
+      legalNotices: "Legal Notice",
       socialMedias: "Follow us"
     },
     login: {
@@ -643,7 +643,7 @@ const Translations = {
       panelTitle: "Terms & Conditions"
     },
     legalNotices: {
-      panelTitle: "Legal Notices"
+      panelTitle: "Legal Notice"
     },
     administration: {
       addThematic: "Add a theme",

@@ -8,6 +8,8 @@
   .terms {
     position: absolute;
     width: 100%;
+    display: flex;
+    justify-content: center;
   }
 
   .copyright, .assembl-version {
