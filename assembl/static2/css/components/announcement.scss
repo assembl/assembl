@@ -9,6 +9,7 @@
     .announcement-title-text {
       margin-top: 11px;
     }
+
     text-align: left;
   }
 
@@ -48,7 +49,7 @@
       font-size: 12px;
       margin-bottom: 15%;
       color: $first-color;
-	    line-height: 26px;
+      line-height: 26px;
       margin-top: 10px;
 
       span::before {
@@ -77,6 +78,7 @@
         .media-description-top {
           margin-bottom: $margin-section-xxxxs;
         }
+
         .media-description-bottom {
           margin-top: $margin-section-xxxxs;
         }
@@ -109,10 +111,12 @@
         left: -17px;
       }
     }
+
     .announcement-statistics {
-      margin-top: 0px;
+      margin-top: 0;
       left: 0;
     }
+
     .announcement-media {
       padding-left: 0;
       padding-right: 0;
@@ -127,7 +131,6 @@
         }
 
         .media-right {
-
           .media-description-top {
             margin-bottom: 23px;
           }

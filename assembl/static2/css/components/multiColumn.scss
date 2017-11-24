@@ -13,19 +13,23 @@ $column-synthesis-height: 300px;
     margin-left: auto;
     margin-right: auto;
   }
+
   .column-tree {
     margin-bottom: 90px;
   }
+
   &:first-child {
     .column-header {
       margin-left: 0;
     }
   }
+
   &:last-child {
     .column-header {
       margin-right: 0;
     }
   }
+
   &:only-child {
     .column-header {
       margin-left: 0;
@@ -38,19 +42,23 @@ $column-synthesis-height: 300px;
   margin-bottom: 20px;
   margin-left: 2px;
   margin-right: 2px;
+
   .form-container {
     padding-left: 10px;
     padding-right: 10px;
+
     .form-group {
       .margin-m {
         margin: 0;
         max-width: $post-max-width;
         margin-left: auto;
         margin-right: auto;
+
         .rich-text-editor {
           max-width: $post-max-width;
           padding-top: 5px;
           margin: 0;
+
           .editor-label {
             padding-top: 5px;
           }
@@ -71,8 +79,11 @@ $column-synthesis-height: 300px;
     padding-bottom: 25px;
     padding-left: 10px;
     height: 120px;
+
     .start-discussion {
       max-width: 80%;
+      padding: 0 0 0 10px;
+
       .dark-title-3 {
         font-family: $font-family;
         letter-spacing: 1px;
@@ -80,22 +91,23 @@ $column-synthesis-height: 300px;
         font-size: $font-size-sm;
       }
     }
-    .start-discussion-icon {
-      padding-top: 0;
-    }
   }
 }
 
 .tab-selector > .tab-selector-buttons {
   display: flex;
+
   .button-container {
     padding: 0 1px;
+
     &:first-child {
       padding-left: 0;
     }
+
     &:last-child {
       padding-right: 0;
     }
+
     button {
       border: 0;
       width: 100%;
@@ -105,6 +117,7 @@ $column-synthesis-height: 300px;
       padding-top: 10px;
       padding-bottom: 10px;
       height: 100%;
+
       &:disabled {
         font-family: $font-family3;
       }
@@ -115,17 +128,20 @@ $column-synthesis-height: 300px;
 .multi-column-container {
   display: flex;
   justify-content: center;
+
   .column-header {
     .box.synthesis {
       padding-left: $column-half-gutter;
       padding-right: $column-half-gutter;
     }
+
     .form-container {
       max-width: $post-max-width;
       margin-left: auto;
       margin-right: auto;
     }
   }
+
   .column-tree {
     padding-left: $column-half-gutter;
     padding-right: $column-half-gutter;
@@ -143,16 +159,19 @@ $column-synthesis-height: 300px;
       margin-left: $column-half-gutter;
       margin-right: $column-half-gutter;
     }
+
     &:first-child {
       .column-header {
         margin-left: $column-half-gutter;
       }
     }
+
     &:last-child {
       .column-header {
         margin-right: $column-half-gutter;
       }
     }
+
     &:only-child {
       .column-header {
         margin-left: $column-half-gutter;
@@ -165,6 +184,7 @@ $column-synthesis-height: 300px;
 .column-synthesis {
   .insert-box {
     height: $column-synthesis-height;
+
     .insert-content {
       overflow-y: scroll;
       height: calc(#{$column-synthesis-height} - 140px);

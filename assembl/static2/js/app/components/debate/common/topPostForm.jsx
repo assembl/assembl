@@ -26,7 +26,8 @@ type TopPostFormProps = {
   refetchIdea: Function,
   uploadDocument: Function,
   ideaOnColumn: boolean,
-  messageClassifier: string
+  messageClassifier: string,
+  scrollOffset: number
 };
 
 type TopPostFormState = {
@@ -40,6 +41,10 @@ class TopPostForm extends React.Component<*, TopPostFormProps, TopPostFormState>
   props: TopPostFormProps;
   state: TopPostFormState;
   formContainer: HTMLDivElement | void;
+
+  static defaultProps = {
+    scrollOffset: 125
+  };
 
   constructor() {
     super();
@@ -58,7 +63,7 @@ class TopPostForm extends React.Component<*, TopPostFormProps, TopPostFormState>
       },
       () => {
         if (this.formContainer) {
-          const elmOffset = getDomElementOffset(this.formContainer).top - 125;
+          const elmOffset = getDomElementOffset(this.formContainer).top - this.props.scrollOffset;
           window.scroll({ top: elmOffset, left: 0, behavior: 'smooth' });
         }
       }

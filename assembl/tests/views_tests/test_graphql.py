@@ -5,7 +5,7 @@ from graphql_relay.node.node import to_global_id
 
 from assembl import models
 from assembl.graphql.schema import Schema as schema
-from assembl.graphql.schema import create_root_thematic
+from assembl.graphql.utils import create_root_thematic
 
 
 def test_get_locales(graphql_request):
@@ -1425,7 +1425,7 @@ mutation addPostAttachment($postId: ID!, $file: String!) {
             "postId": top_post_in_thread_phase,
             "file": "variables.attachment"
             })
-    assert res.errors == []
+    assert res.errors is None
     attachment_id = res.data['addPostAttachment']['post']['attachments'][-1]['id']
 
     res = schema.execute(u"""

@@ -7,22 +7,23 @@ $first-color-light: #d6c3f6;
 @import './search';
 
 .date-filter {
-    label {
-        font-weight: bold;
-    }
-    input {
-        border: 1px solid #ccc;
-    }
-}
+  label {
+    font-weight: bold;
+  }
 
+  input {
+    border: 1px solid #ccc;
+  }
+}
 
 .sk-layout {
   &__top-bar {
-    padding:5px 0 0 0;
-    margin-top: 0px;
+    padding: 5px 0 0 0;
+    margin-top: 0;
   }
+
   &__body {
-    top:40px;
+    top: 40px;
   }
 }
 
@@ -31,7 +32,7 @@ $first-color-light: #d6c3f6;
 }
 
 @media screen and (max-width: 1023px) {
-    .joinDiscussion, #search {
-        display: none;
-    }
+  .joinDiscussion, #search {
+    display: none;
+  }
 }

@@ -73,6 +73,7 @@
       }
     }
   }
+
   .timeline-graph {
     position: relative;
 
@@ -109,6 +110,7 @@
     padding: 0 0 0 15px;
     text-align: center;
     top: 28px;
+
     .timeline-link {
       height: 100%;
     }
@@ -124,10 +126,12 @@
         .timeline-number {
           background-color: $first-color;
         }
+
         .timeline-bar-background {
           background-color: $first-color;
         }
       }
+
       .timeline-link {
         color: $first-color;
       }
@@ -138,12 +142,11 @@
     .timeline-link {
       color: $first-color;
       font-family: $font-family4;
+
       &:hover {
         font-family: $font-family;
       }
     }
-
-
   }
 
   .txt-active-bold {

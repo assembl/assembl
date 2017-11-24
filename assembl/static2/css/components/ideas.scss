@@ -1,104 +1,121 @@
 .themes-section {
   margin: 120px 0 0;
+
   .slider-container {
-      width: 100%;
-      overflow: hidden;
-      margin: 0 0 40px 0;
-      .slider {
-          position: relative;
-      }
-      .slider-arrow-container {
-          display: none;
-      }
-      .slider-arrow {
-          cursor: pointer;
-          background-color: rgba(255, 255, 255, 0.5);
-          position: absolute;
-          top: calc(50% - 36px);
-          z-index: 10;
-          height: 100px;
-          padding: 20px 10px 0;
-      }
-      .slider-arrow-left {
-          .assembl-icon-down-open {
-              display: block;
-              transform: rotate(90deg);
-              &:before {
-                  font-size: 30px;
-              }
-          }
-      }
-      .slider-arrow-right {
-          right: 0;
-          .assembl-icon-up-open {
-              display: block;
-              transform: rotate(90deg);
-              &:before {
-                  font-size: 30px;
-              }
-          }
-      }
-      &:hover {
-        .slider-arrow-container {
-            display: block;
+    width: 100%;
+    overflow: hidden;
+    margin: 0 0 40px 0;
+
+    .slider {
+      position: relative;
+    }
+
+    .slider-arrow-container {
+      display: none;
+    }
+
+    .slider-arrow {
+      cursor: pointer;
+      background-color: rgba(255, 255, 255, 0.5);
+      position: absolute;
+      top: calc(50% - 36px);
+      z-index: 10;
+      height: 100px;
+      padding: 20px 10px 0;
+    }
+
+    .slider-arrow-left {
+      .assembl-icon-down-open {
+        display: block;
+        transform: rotate(90deg);
+
+        &:before {
+          font-size: 30px;
         }
       }
+    }
+
+    .slider-arrow-right {
+      right: 0;
+
+      .assembl-icon-up-open {
+        display: block;
+        transform: rotate(90deg);
+
+        &:before {
+          font-size: 30px;
+        }
+      }
+    }
+
+    &:hover {
+      .slider-arrow-container {
+        display: block;
+      }
+    }
   }
+
   .theme-first-row-0 {
-      margin-top: 80px;
-
+    margin-top: 80px;
   }
+
   .theme-first-row-1 {
-      margin-top: 0;
-
+    margin-top: 0;
   }
+
   .theme-first-row-2 {
-      margin-top: 80px;
-
+    margin-top: 80px;
   }
+
   .theme-first-row-3 {
-      margin-top: 40px;
-
+    margin-top: 40px;
   }
+
   .theme-0 {
-      margin-top: 2px;
-
+    margin-top: 2px;
   }
+
   .theme-1 {
-      margin-top: -78px;
+    margin-top: -78px;
+  }
 
-  }
   .theme-2 {
-      margin-top: 2px;
+    margin-top: 2px;
   }
+
   .theme-3 {
-      margin-top: -38px;
+    margin-top: -38px;
   }
+
   .theme-inline {
-      min-width: 280px;
-      max-width: 350px;
-      margin-top: 0;
+    min-width: 280px;
+    max-width: 350px;
+    margin-top: 0;
   }
+
   .theme {
-      padding: 0;
-      transition: all .5s ease-out;
+    padding: 0;
+    transition: all .5s ease-out;
   }
+
   .row-inline {
-      display: flex;
-      float: left;
+    display: flex;
+    float: left;
   }
+
   .mobile-tdi {
     overflow-x: scroll;
+
     .slider-arrow {
-        display: none;
+      display: none;
     }
   }
 }
 
 @media screen and (max-width: 991px) {
-    .themes-section {
-      .theme {
-          margin: 2px 0 0;
-      }
+  .themes-section {
+    .theme {
+      margin: 2px 0 0;
     }
+  }
 }

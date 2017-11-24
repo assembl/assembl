@@ -406,6 +406,9 @@ var LangString = Base.Model.extend({
    * @function app.models.langstrings.LangString.bestValue
    */
   bestValue: function(langPrefs) {
+    if (!langPrefs){
+      return this.original().get("value");
+    }
     var bestLangString = this.best(langPrefs);
     if (!bestLangString){
       throw new Error("Malformed langstring: it seems empty but shouldn't.");
@@ -517,6 +520,42 @@ var LangString = Base.Model.extend({
     });
     return dict;
   },
+
+  /**
+   * Example: ls.initFromObjectProperty({"title": "aaa", "title_lang_fr": "bbb", "title_lang_en": "ccc", "noop": "ddd"}, "title")
+   */
+  initFromObjectProperty: function(item, propertyName, extension){
+    if (!propertyName){
+      propertyName = '';
+    }
+    if (!extension){
+      extension = '';
+    }
+    if (propertyName && !extension){
+      extension = '_lang_';
+    }
+    var len = (propertyName+extension).length;
+    var properties = _.filter(Object.keys(item), function(property){
+      return property.startsWith(propertyName+extension);
+    });
+    var res = {};
+    if (properties.length){
+      properties.forEach(function(property){
+        var key = property.substr(len);
+        res[key] = item[property];
+      });
+    }
+    else if (propertyName in item){
+      res = {
+        'zxx': item[propertyName]
+      };
+    }
+    this.initFromDict(res);
+  },
+
+  getEntries: function(){
+    return this.get("entries");
+  }
 
 });
 

@@ -51,7 +51,7 @@ const ResourceBlock = (props: ResourceBlockProps) => {
             <p dangerouslySetInnerHTML={{ __html: text }} />
             {doc && (
               <div className="resource-download-link">
-                <a href={doc.externalUrl} target="_blank" rel="noopener noreferrer">
+                <a href={doc.externalUrl}>
                   <Translate value="resourcesCenter.download" />
                 </a>
               </div>

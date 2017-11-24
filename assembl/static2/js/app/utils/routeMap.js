@@ -30,6 +30,7 @@ const routes = {
   syntheses: '${slug}/syntheses',
   synthesis: '${slug}/syntheses/${synthesisId}',
   debate: '${slug}/debate/${phase}',
+  rootDebate: '${slug}/debate',
   community: '${slug}/community',
   terms: '${slug}/terms',
   join: '${slug}/join',

@@ -1,0 +1,10 @@
+{
+  "extends": "stylelint-config-standard",
+  "rules": {
+    "shorthand-property-no-redundant-values": null,
+    "at-rule-no-unknown": null,
+    "selector-pseudo-element-colon-notation": null,
+    "selector-list-comma-newline-after": null,
+    "number-leading-zero": null
+  }
+}

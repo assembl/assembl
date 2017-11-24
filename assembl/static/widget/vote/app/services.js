@@ -62,6 +62,55 @@ voteServices.service('AssemblToolsService', ['$window', '$rootScope', '$log', fu
   };
 }]);
 
+voteServices.service('LangStringService', ['$window', '$rootScope', '$log', function($window, $rootScope, $log) {
+  this.isMachineTranslation = function(langString) {
+    return langString["@language"].indexOf("-x-mtfrom-") > 0;
+  };
+
+  // returns the LangStringEntry (of this `langString` LangString) that is the most adapted to language `lang`
+  this.bestForLang = function(langString, lang){
+    var that = this;
+    var defaultLangStringEntry = {
+      "value": "",
+      "@language": "zxx"
+    };
+    if (!langString || !("entries" in langString)){
+      return defaultLangStringEntry;
+    }
+    var originals = langString.entries.filter(function(e) {return !that.isMachineTranslation(e);});
+    if ( originals.length === 1 ){
+      return originals[0];
+    }
+    else if (originals.length > 1) {
+      var best = null;
+      originals.forEach(function(entry){
+        if (entry["@language"] == lang){
+          best = entry;
+        }
+      });
+      if (best){
+        return best;
+      }
+      return originals[0];
+    }
+    else { // if ( originals.length == 0 ) {
+      if ( langString.entries.length ){
+        return langString.entries[0];
+      }
+      return defaultLangStringEntry;
+    }
+  };
+
+  this.bestStringForLang = function(langString, lang){
+    if ( typeof langString === 'string' ){
+      return langString;
+    }
+    else { // if ( typeof langString === 'object' ){
+      return this.bestForLang(langString, lang).value;
+    }
+  };
+}]);
+
 voteServices.service('VoteWidgetService', ['$window', '$rootScope', '$log', '$http', function($window, $rootScope, $log, $http) {
 
   this.mandatory_settings_fields = [];
@@ -226,9 +275,93 @@ voteServices.service('VoteWidgetService', ['$window', '$rootScope', '$log', '$ht
       "default": 0
     },
     {
+      "key": "question_title_lang_fr",
+      "type": "text",
+      "label": "Question title in French",
+      "default": "",
+      "adminCSSClasses": "wide"
+    },
+    {
+      "key": "question_title_lang_en",
+      "type": "text",
+      "label": "Question title in English",
+      "default": "",
+      "adminCSSClasses": "wide"
+    },
+    {
+      "key": "question_title_lang_de",
+      "type": "text",
+      "label": "Question title in German",
+      "default": "",
+      "adminCSSClasses": "wide"
+    },
+    {
+      "key": "question_title_lang_ja",
+      "type": "text",
+      "label": "Question title in Japanese",
+      "default": "",
+      "adminCSSClasses": "wide"
+    },
+    {
+      "key": "question_title_lang_cn",
+      "type": "text",
+      "label": "Question title in Chinese",
+      "default": "",
+      "adminCSSClasses": "wide"
+    },
+    {
+      "key": "question_title_lang_ru",
+      "type": "text",
+      "label": "Question title in Russian",
+      "default": "",
+      "adminCSSClasses": "wide"
+    },
+    {
       "key": "question_description",
       "type": "text",
       "label": "Question description",
+      "default": "",
+      "adminCSSClasses": "wide"
+    },
+    {
+      "key": "question_description_lang_fr",
+      "type": "text",
+      "label": "Question description in French",
+      "default": "",
+      "adminCSSClasses": "wide"
+    },
+    {
+      "key": "question_description_lang_en",
+      "type": "text",
+      "label": "Question description in English",
+      "default": "",
+      "adminCSSClasses": "wide"
+    },
+    {
+      "key": "question_description_lang_de",
+      "type": "text",
+      "label": "Question description in German",
+      "default": "",
+      "adminCSSClasses": "wide"
+    },
+    {
+      "key": "question_description_lang_ja",
+      "type": "text",
+      "label": "Question description in Japanese",
+      "default": "",
+      "adminCSSClasses": "wide"
+    },
+    {
+      "key": "question_description_lang_cn",
+      "type": "text",
+      "label": "Question description in Chinese",
+      "default": "",
+      "adminCSSClasses": "wide"
+    },
+    {
+      "key": "question_description_lang_ru",
+      "type": "text",
+      "label": "Question description in Russian",
       "default": "",
       "adminCSSClasses": "wide"
     },

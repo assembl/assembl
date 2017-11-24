@@ -73,7 +73,6 @@
         padding-top: 20px;
         color: $grey2;
       }
-
     }
 
     .annotation {
@@ -137,9 +136,7 @@
   }
 
   .separator {
-    border-bottom-width: $btn-dark-border-width;
-    border-bottom-style: $btn-dark-border-style;
-    border-bottom-color: $btn-dark-border-color;
+    border-bottom: $btn-dark-border-width $btn-dark-border-style $btn-dark-border-color;
     clear: both;
     margin: 0 0 50px;
     padding: 40px 0 15px;
@@ -182,6 +179,7 @@
 
   .arrow-container {
     padding: 0 40px 0 0;
+
     .arrow {
       background-color: $white;
       border-radius: 26px;
@@ -220,7 +218,7 @@
     height: $navbar-height;
     padding: 10px 0;
     position: fixed;
-    top:$navbar-height;
+    top: $navbar-height;
     width: 100%;
     z-index: 100;
   }
