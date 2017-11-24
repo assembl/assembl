@@ -1,17 +1,17 @@
 import React from 'react';
 import { graphql } from 'react-apollo';
 import LargeTextParagraph from '../components/common/largeTextParagraph';
-import TermsQuery from '../graphql/LegalNoticesQuery.graphql';
+import LegalNoticesQuery from '../graphql/LegalNoticesQuery.graphql';
 
-const Terms = ({ text, title }) => {
+const LegalNotices = ({ text, title }) => {
   return <LargeTextParagraph headerTitle={title} text={text} />;
 };
 
-export default graphql(TermsQuery, {
+export default graphql(LegalNoticesQuery, {
   props: ({ data }) => {
     return {
       text: data.text,
       title: data.title
     };
   }
-})(Terms);
+})(LegalNotices);

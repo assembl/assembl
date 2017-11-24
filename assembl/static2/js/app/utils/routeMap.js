@@ -33,6 +33,7 @@ const routes = {
   rootDebate: '${slug}/debate',
   community: '${slug}/community',
   terms: '${slug}/terms',
+  legalNotices: '${slug}/legal-notices',
   join: '${slug}/join',
   theme: 'theme/${themeId}',
   administration: '${slug}/administration',

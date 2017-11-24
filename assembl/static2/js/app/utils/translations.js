@@ -284,6 +284,9 @@ const Translations = {
     terms: {
       panelTitle: "Conditions Générales d'Utilisations"
     },
+    legalNotices: {
+      panelTitle: "Mentions Légales"
+    },
     administration: {
       addThematic: "Ajouter une thématique",
       addQuestion: "Ajouter une question",
@@ -636,6 +639,9 @@ const Translations = {
     },
     terms: {
       panelTitle: "Terms & Conditions"
+    },
+    legalNotices: {
+      panelTitle: "Legal Notices"
     },
     administration: {
       addThematic: "Add a theme",

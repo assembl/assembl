@@ -20,6 +20,7 @@ import Profile from './pages/profile';
 import Styleguide from './pages/styleguide';
 import NotFound from './pages/notFound';
 import Terms from './pages/terms';
+import LegalNotices from './pages/legalNotices';
 import Administration from './pages/administration';
 import UnauthorizedAdministration from './pages/unauthorizedAdministration';
 import ResourcesCenterAdmin from './pages/resourcesCenterAdmin';
@@ -103,8 +104,9 @@ export default [
         <Route path={routeForRouter('syntheses')} component={Syntheses} />
         <Route path={routeForRouter('synthesis', false, { synthesisId: ':synthesisId' })} component={Synthesis} />
         <Route path={routeForRouter('resourcesCenter')} component={ResourcesCenter} />
-        <Route path={routeForRouter('community')} component={Community} />
+        <Route path={routeForRouter('legalNotices')} component={LegalNotices} />
         <Route path={routeForRouter('terms')} component={Terms} />
+        <Route path={routeForRouter('community')} component={Community} />
         <Route path={routeForRouter('join')} component={JoinDiscussion} />
         <Route path={routeForRouter('rootDebate')} />
         <Route path={routeForRouter('debate', false, { phase: ':phase' })} component={DebateHome}>
