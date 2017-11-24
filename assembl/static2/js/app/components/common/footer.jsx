@@ -7,17 +7,18 @@ import { connect } from 'react-redux';
 class Footer extends React.Component {
   render() {
     const { assemblVersion, debateData } = this.props;
+    const { socialMedias, termsOfUseUrl } = debateData;
     return (
       <Grid fluid className="background-dark relative" id="footer">
         <div className="max-container">
-          <div className={debateData.socialMedias ? 'footer' : 'footer margin-xl'}>
-            {debateData.socialMedias && (
+          <div className={socialMedias ? 'footer' : 'footer margin-xl'}>
+            {socialMedias &&
               <div>
                 <p>
                   <Translate value="footer.socialMedias" />
                 </p>
                 <div className="social-medias">
-                  {debateData.socialMedias.map((sMedia, index) => {
+                  {socialMedias.map((sMedia, index) => {
                     return (
                       <Link to={sMedia.url} target="_blank" key={index}>
                         <i className={`assembl-icon-${sMedia.name}-circle`} />
@@ -25,15 +26,13 @@ class Footer extends React.Component {
                     );
                   })}
                 </div>
-              </div>
-            )}
-            {debateData.termsOfUseUrl && (
+              </div>}
+            {termsOfUseUrl &&
               <div className="terms">
-                <Link to={debateData.termsOfUseUrl} target="_blank">
+                <Link to={termsOfUseUrl} target="_blank">
                   <Translate value="footer.terms" />
                 </Link>
-              </div>
-            )}
+              </div>}
             <div className="copyright">
               ©{' '}
               <Link to="http://assembl.bluenove.com/" target="_blank">
@@ -44,7 +43,11 @@ class Footer extends React.Component {
                 bluenove
               </Link>
             </div>
-            {assemblVersion ? <div className="assembl-version">v{assemblVersion}</div> : null}
+            {assemblVersion
+              ? <div className="assembl-version">
+                  v{assemblVersion}
+              </div>
+              : null}
           </div>
         </div>
       </Grid>

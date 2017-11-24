@@ -35,7 +35,7 @@ const ResourceBlock = (props: ResourceBlockProps) => {
             {title}
           </h1>
         </div>
-        <div className="resource-body">
+        <div className="page-body">
           {image &&
             <div className="resource-img-container">
               <img src={image.externalUrl} alt="resource" className={imgClassNames} />
