@@ -10,7 +10,6 @@ from hashlib import sha1
 from platform import system
 from shutil import rmtree
 from shutil import move
-import tarfile
 from time import sleep, strftime, time
 from urllib import urlretrieve
 from ConfigParser import ConfigParser, SafeConfigParser, NoOptionError
@@ -126,6 +125,7 @@ def sanitize_env():
     env.dbdumps_dir = env.get('dbdumps_dir', join(
         env.projectpath, '%s_dumps' % env.get("projectname", 'assembl')))
     env.ini_file = env.get('ini_file', 'local.ini')
+    env.group = env.get('group', env.user)
 
 
 def load_rcfile_config():
@@ -1796,51 +1796,44 @@ def install_elasticsearch():
     if not env.mac:
         release_info = run("lsb_release -i")
         if "Debian" in release_info or "Ubuntu" in release_info:
-            # change now
-            sudo("sysctl -w vm.max_map_count=262144")
-            # persist the change
-            append('/etc/sysctl.d/vm.max_map_count.conf',
-                   'vm.max_map_count=262144', True)
+            if not exists('/etc/sysctl.d/vm.max_map_count.conf'):
+                # change now
+                sudo("sysctl -w vm.max_map_count=262144")
+                # persist the change
+                append('/etc/sysctl.d/vm.max_map_count.conf',
+                       'vm.max_map_count=262144', True)
         else:
             print(red("Unknown distribution"))
 
-    tmp_local_extract_path = join(local('pwd'), 'estmp')
-    local('mkdir -p %s' % tmp_local_extract_path)
-
-    elasticsearch_exists = False
-    extract_path = normpath(
-        join(env.projectpath, 'var', 'elasticsearch'))
+    base_extract_path = normpath(
+        join(env.projectpath, 'var'))
+    extract_path = join(base_extract_path, 'elasticsearch')
     if exists(extract_path):
-        elasticsearch_exists = True
         print("elasticsearch already installed")
+        run('rm -rf %s' % extract_path)
 
-    tar_filename, headers = urlretrieve('https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-{version}.tar.gz'.format(version=ELASTICSEARCH_VERSION))
-    sha1_filename, headers = urlretrieve('https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-{version}.tar.gz.sha1'.format(version=ELASTICSEARCH_VERSION))
-    with open(tar_filename, 'rb') as tar_file:
-        with open(sha1_filename, 'rb') as sha1_file:
-            if sha1(tar_file.read()).hexdigest() != sha1_file.read().strip():
-                print(red("sha1sum of elasticsearch tarball doesn't match, exiting"))
-                sys.exit(1)
-
-        tar_file.seek(0)
-        with tarfile.open(mode='r:gz', fileobj=tar_file) as tar:
-            tar.extractall(path=tmp_local_extract_path)
-
-        # rename var/elasticsearch/elasticsearch-5.2.0 to var/elasticsearch
-        move(join(tmp_local_extract_path, 'elasticsearch-{version}'.format(version=ELASTICSEARCH_VERSION)),
-             join(tmp_local_extract_path, 'elasticsearch'))
-        if elasticsearch_exists:
-            run('rm -rf %s' % extract_path)
-        store_path = join(env.projectpath, 'var')
-        result = put(join(tmp_local_extract_path, 'elasticsearch'), store_path)
+    base_filename = 'elasticsearch-{version}'.format(version=ELASTICSEARCH_VERSION)
+    tar_filename = base_filename + '.tar.gz'
+    sha1_filename = tar_filename + '.sha1'
+    with cd(base_extract_path):
+        if not exists(tar_filename):
+            run('curl -o {fname} https://artifacts.elastic.co/downloads/elasticsearch/{fname}'.format(fname=tar_filename))
+        sha1_expected = run('curl https://artifacts.elastic.co/downloads/elasticsearch/' + sha1_filename)
+        sha1_effective = run('openssl sha1 ' + tar_filename)
+        if ' ' in sha1_effective:
+            sha1_effective = sha1_effective.split(' ')[-1]
+        assert sha1_effective == sha1_expected, "sha1sum of elasticsearch tarball doesn't match, exiting"
+        run('tar zxf ' + tar_filename)
+        run('rm ' + tar_filename)
+        run('mv %s elasticsearch' % base_filename)
 
         # ensure that the folder being scp'ed to belongs to the user/group
-        sudo('chown -R {user}:{group} {path}'.format(
-            user=env.user, group=env.user,
+        run('chown -R {user}:{group} {path}'.format(
+            user=env.user, group=env.group,
             path=extract_path))
 
         # Make elasticsearch and plugin in /bin executable
-        sudo('chmod ug+x {es} {esp} {in_sh} {sysd} {log}'.format(
+        run('chmod ug+x {es} {esp} {in_sh} {sysd} {log}'.format(
             es=join(extract_path, 'bin/elasticsearch'),
             esp=join(extract_path, 'bin/elasticsearch-plugin'),
             in_sh=join(extract_path, 'bin/elasticsearch.in.sh'),
@@ -1849,12 +1842,8 @@ def install_elasticsearch():
         ))
         run(env.projectpath + '/var/elasticsearch/bin/elasticsearch-plugin install https://artifacts.elastic.co/downloads/elasticsearch-plugins/analysis-smartcn/analysis-smartcn-{version}.zip'.format(version=ELASTICSEARCH_VERSION))
         run(env.projectpath + '/var/elasticsearch/bin/elasticsearch-plugin install https://artifacts.elastic.co/downloads/elasticsearch-plugins/analysis-kuromoji/analysis-kuromoji-{version}.zip'.format(version=ELASTICSEARCH_VERSION))
-        rmtree(tmp_local_extract_path)
 
-        if result.succeeded:
-            print(green("Successfully installed elasticsearch"))
-        else:
-            print(red("Failed to properly install elasticsearch. Try again."))
+        print(green("Successfully installed elasticsearch"))
 
 
 @task
