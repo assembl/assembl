@@ -11,7 +11,7 @@ import * as actions from '../../../actions/adminActions/adminSections';
 const ManageSectionsForm = ({ sections, selectedLocale, createSection }) => {
   return (
     <div className="admin-box">
-      <SectionTitle title={I18n.t('administration.sectionsTitle')} annotation={I18n.t('administration.annotation')} />
+      <SectionTitle title={I18n.t('administration.sections.sectionsTitle')} annotation={I18n.t('administration.annotation')} />
       <div className="admin-content">
         <form>
           {sections.map((id, index) => {

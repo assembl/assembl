@@ -251,7 +251,7 @@ const SaveButton = ({
       runSerial(mutationsPromises)
         .then(() => {
           refetchSections();
-          displayAlert('success', 'bravo');
+          displayAlert('success', I18n.t('administration.sections.successSave'));
         })
         .catch((error) => {
           displayAlert('danger', `${error}`, false, 30000);

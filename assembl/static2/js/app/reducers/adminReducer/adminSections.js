@@ -67,32 +67,16 @@ export const sectionsById = (state: Map<string, Map> = Map(), action: ReduxActio
       return aOrder - bOrder;
     });
     const idToDelete = state.getIn([action.id, 'id']);
-    let newState = Map();
+    let newState = sections;
     let count = -1;
     sections.forEach((s) => {
       if (s.get('id') !== idToDelete && s.get('type') !== 'ADMINISTRATION' && !s.get('toDelete')) {
         count += 1;
-        const sectionInfo = Map({
-          toDelete: false,
-          isNew: s.get('isNew'),
-          order: count,
-          id: s.get('id'),
-          titleEntries: s.get('titleEntries'),
-          url: s.get('url'),
-          type: s.get('type')
-        });
-        newState = newState.set(s.get('id'), sectionInfo);
+        newState = newState.setIn([s.get('id'), 'order'], count);
       } else {
-        const sectionInfo = Map({
-          toDelete: s.get('type') !== 'ADMINISTRATION',
-          isNew: s.get('isNew'),
-          order: sections.length,
-          id: s.get('id'),
-          titleEntries: s.get('titleEntries'),
-          url: s.get('url'),
-          type: s.get('type')
-        });
-        newState = newState.set(s.get('id'), sectionInfo);
+        newState = newState
+          .setIn([s.get('id'), 'order'], sections.size)
+          .setIn([s.get('id'), 'toDelete'], s.get('type') !== 'ADMINISTRATION');
       }
     });
 

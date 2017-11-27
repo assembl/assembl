@@ -295,7 +295,6 @@ const Translations = {
       thematic: "Thématique",
       edition: "Éditer la discussion",
       landingpage: "Page d'accueil",
-      sectionsTitle: "Renseigner les sections",
       up: "Remonter",
       down: "Descendre",
       menu: {
@@ -310,17 +309,15 @@ const Translations = {
         2: "Exporter les données"
       },
       sections: {
-        addSection: "Ajouter une section",
-        deleteSection: "Supprimer une section",
+        addSection: "Ajouter une rubrique",
+        deleteSection: "Supprimer la rubrique",
         homepage: "Accueil",
-        debate: "Débat",
-        resources_center: "Centre de ressources",
-        syntheses: "Synthèses",
-        administration: "Administration",
         custom: "Rubrique supplémentaire",
         externalPage: "Utiliser une page externe",
         titlePh: "Titre",
-        urlPh: "URL"
+        urlPh: "URL",
+        successSave: "Les rubriques ont été modifiées avec succès",
+        sectionsTitle: "Renseigner les rubriques"
       },
       videoHelp:
         "*Liens vidéo autorisés : \"https://www.youtube.com/embed/[videoId]\" ou \"https://player.vimeo.com/video/[videoId]?\"",
@@ -665,7 +662,6 @@ const Translations = {
       thematic: "Theme",
       edition: "Edit the Discussion",
       landingpage: "Landing page",
-      sectionsTitle: "Set sections",
       up: "Up",
       down: "Down",
       menu: {
@@ -681,16 +677,14 @@ const Translations = {
       },
       sections: {
         addSection: "Add a section",
-        deleteSection: "Delete a section",
-        homepage: "Home page",
-        debate: "Debate page",
+        deleteSection: "Delete the section",
         resources_center: "Resources center",
-        syntheses: "Syntheses",
-        administration: "Administration",
         custom: "Added section",
         externalPage: "Use external page",
         titlePh: "Title",
-        urlPh: "URL"
+        urlPh: "URL",
+        successSave: "Sections are modified with success",
+        sectionsTitle: "Set sections"
       },
       videoHelp:
         "*Authorized video links: \"https://www.youtube.com/embed/[videoId]\" or \"https://player.vimeo.com/video/[videoId]?\"",

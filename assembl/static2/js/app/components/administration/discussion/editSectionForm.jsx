@@ -50,7 +50,7 @@ const EditSectionForm = ({
   return (
     <div className="form-container">
       <div className="title left">
-        {`${order}. `}
+        {`${order + 1}. `}
         {title || I18n.t('administration.sections.custom')}
       </div>
       <div className="right">
@@ -58,14 +58,14 @@ const EditSectionForm = ({
           <div className="inline">
             {index < nbSections - 1 ? (
               <OverlayTrigger placement="top" overlay={downTooltip}>
-                <Button onClick={handleDownClick}>
+                <Button onClick={handleDownClick} className="admin-icons">
                   <span className="assembl-icon-down-bold grey" />
                 </Button>
               </OverlayTrigger>
             ) : null}
             {index > 1 ? (
               <OverlayTrigger placement="top" overlay={upTooltip}>
-                <Button onClick={handleUpClick}>
+                <Button onClick={handleUpClick} className="admin-icons">
                   <span className="assembl-icon-up-bold grey" />
                 </Button>
               </OverlayTrigger>
@@ -74,7 +74,7 @@ const EditSectionForm = ({
         ) : null}
         {type === 'CUSTOM' ? (
           <OverlayTrigger placement="top" overlay={deleteSectionTooltip}>
-            <Button onClick={handleDeleteClick}>
+            <Button onClick={handleDeleteClick} className="admin-icons">
               <span className="assembl-icon-delete grey" />
             </Button>
           </OverlayTrigger>
