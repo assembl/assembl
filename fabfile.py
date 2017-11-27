@@ -30,6 +30,17 @@ from fabric.api import (
     abort, cd, env, execute, hide, prefix, settings, task as fab_task)
 from fabric.colors import yellow, cyan, red, green
 
+#import logging
+#import paramiko
+
+#logger = logging.getLogger("paramiko")
+#project_path = os.path.abspath('.')
+#log_filename = os.path.join(project_path, 'paramiko.log')
+#ch = logging.FileHandler(filename=log_filename)
+#ch.setFormatter(logging.Formatter('%(asctime)s %(message)s'))
+#logger.addHandler(ch)
+#logger.setLevel(logging.DEBUG)
+
 
 # Please update the elasticsearch version in docker/docker-compose.yml.jinja2 too!
 ELASTICSEARCH_VERSION = '5.6.2'
