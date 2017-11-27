@@ -503,7 +503,7 @@ const Translations = {
       longerThread: "Longer thread",
       topContributor: "Top contributor",
       recentDiscussion: "Recent discussion",
-      objectivesTitle: "What is the objective ?",
+      objectivesTitle: "What is the objective?",
       timelineTitle: "The timeline in %{count} phases",
       video: "Video of the debate",
       twitterTitle: "Tweet",
