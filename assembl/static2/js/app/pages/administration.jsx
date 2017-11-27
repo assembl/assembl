@@ -113,7 +113,17 @@ class Administration extends React.Component {
   }
 
   render() {
-    const { children, data, debate, i18n, params, refetchResources, refetchResourcesCenter, refetchTabsConditions } = this.props;
+    const {
+      children,
+      data,
+      debate,
+      i18n,
+      params,
+      refetchResources,
+      refetchResourcesCenter,
+      refetchTabsConditions,
+      refetchSections
+    } = this.props;
     const { phase } = params;
     const { timeline } = this.props.debate.debateData;
     const childrenWithProps = React.Children.map(children, (child) => {
@@ -134,6 +144,7 @@ class Administration extends React.Component {
                     refetchTabsConditions={refetchTabsConditions}
                     refetchThematics={data.refetch}
                     refetchResources={refetchResources}
+                    refetchSections={refetchSections}
                     refetchResourcesCenter={refetchResourcesCenter}
                   />
                 </Col>

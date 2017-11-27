@@ -16,8 +16,6 @@ import {
 } from '../../../actions/adminActions/adminSections';
 
 type EditSectionFormProps = {
-  i18n: Object,
-  locale: string,
   url: string,
   type: string,
   title: string,
@@ -33,8 +31,6 @@ type EditSectionFormProps = {
 };
 
 const EditSectionForm = ({
-  i18n,
-  locale,
   url,
   type,
   title,
@@ -48,7 +44,6 @@ const EditSectionForm = ({
   handleDownClick,
   handleUpClick
 }: EditSectionFormProps) => {
-  const { translations } = i18n;
   const titlePh = I18n.t('administration.sections.titlePh');
   const urlPh = I18n.t('administration.sections.urlPh');
   const hasUrl = url !== null;
@@ -56,9 +51,7 @@ const EditSectionForm = ({
     <div className="form-container">
       <div className="title left">
         {`${order}. `}
-        {translations[locale].administration.sections[type.toLowerCase()]
-          ? translations[locale].administration.sections[type.toLowerCase()]
-          : I18n.t('administration.sections.custom')}
+        {title || I18n.t('administration.sections.custom')}
       </div>
       <div className="right">
         {type !== 'HOMEPAGE' ? (
@@ -109,7 +102,6 @@ const EditSectionForm = ({
 const mapStateToProps = (state, { id, locale }) => {
   const sections = state.admin.sections.sectionsById.get(id);
   return {
-    i18n: state.i18n,
     url: sections.get('url'),
     type: sections.get('type'),
     order: sections.get('order'),

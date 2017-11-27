@@ -13,6 +13,9 @@ import updateThematicMutation from '../../graphql/mutations/updateThematic.graph
 import createResourceMutation from '../../graphql/mutations/createResource.graphql';
 import updateResourceMutation from '../../graphql/mutations/updateResource.graphql';
 import deleteResourceMutation from '../../graphql/mutations/deleteResource.graphql';
+import createSectionMutation from '../../graphql/mutations/createSection.graphql';
+import updateSectionMutation from '../../graphql/mutations/updateSection.graphql';
+import deleteSectionMutation from '../../graphql/mutations/deleteSection.graphql';
 import updateResourcesCenterMutation from '../../graphql/mutations/updateResourcesCenter.graphql';
 import updateDiscussionPreferenceQuery from '../../graphql/mutations/updateDiscussionPreference.graphql';
 import getDiscussionPreferenceLanguage from '../../graphql/DiscussionPreferenceLanguage.graphql';
@@ -107,6 +110,19 @@ const createVariablesForDeleteResourceMutation = (resource) => {
   return { resourceId: resource.id };
 };
 
+const createVariablesForSectionMutation = (section) => {
+  return {
+    type: section.type,
+    url: section.url,
+    order: section.order,
+    titleEntries: section.titleEntries
+  };
+};
+
+const createVariablesForDeleteSectionMutation = (section) => {
+  return { sectionId: section.id };
+};
+
 const SaveButton = ({
   i18n,
   client,
@@ -130,7 +146,13 @@ const SaveButton = ({
   resourcesCenterPage,
   updateResourcesCenter,
   refetchResourcesCenter,
-  refetchTabsConditions
+  refetchTabsConditions,
+  sections,
+  sectionsHaveChanged,
+  refetchSections,
+  createSection,
+  updateSection,
+  deleteSection
 }) => {
   const saveAction = () => {
     displayAlert('success', `${I18n.t('loading.wait')}...`);
@@ -215,12 +237,33 @@ const SaveButton = ({
           displayAlert('danger', `${error}`, false, 30000);
         });
     }
+
+    if (sectionsHaveChanged) {
+      const mutationsPromises = getMutationsPromises({
+        items: sections,
+        variablesCreator: createVariablesForSectionMutation,
+        deleteVariablesCreator: createVariablesForDeleteSectionMutation,
+        createMutation: createSection,
+        updateMutation: updateSection,
+        deleteMutation: deleteSection
+      });
+
+      runSerial(mutationsPromises)
+        .then(() => {
+          refetchSections();
+          displayAlert('success', 'bravo');
+        })
+        .catch((error) => {
+          displayAlert('danger', `${error}`, false, 30000);
+        });
+    }
   };
 
   const disabled = !(
     thematicsHaveChanged ||
     languagePreferenceHasChanged ||
     resourcesHaveChanged ||
+    sectionsHaveChanged ||
     resourcesCenterPage.get('hasChanged')
   );
   return (
@@ -254,12 +297,22 @@ const SaveButtonWithMutations = compose(
   }),
   graphql(updateResourcesCenterMutation, {
     name: 'updateResourcesCenter'
+  }),
+  graphql(createSectionMutation, {
+    name: 'createSection'
+  }),
+  graphql(updateSectionMutation, {
+    name: 'updateSection'
+  }),
+  graphql(deleteSectionMutation, {
+    name: 'deleteSection'
   })
 )(SaveButton);
 
 const mapStateToProps = ({
   i18n,
   admin: {
+    sections,
     resourcesCenter,
     thematicsById,
     thematicsHaveChanged,
@@ -269,6 +322,7 @@ const mapStateToProps = ({
   }
 }) => {
   const { page, resourcesById, resourcesHaveChanged, resourcesInOrder } = resourcesCenter;
+  const { sectionsById, sectionsHaveChanged, sectionsInOrder } = sections;
   return {
     resourcesCenterPage: page,
     resourcesHaveChanged: resourcesHaveChanged,
@@ -281,7 +335,11 @@ const mapStateToProps = ({
     }),
     preferences: discussionLanguagePreferences,
     i18n: i18n,
-    languagePreferenceHasChanged: discussionLanguagePreferencesHasChanged
+    languagePreferenceHasChanged: discussionLanguagePreferencesHasChanged,
+    sectionsHaveChanged: sectionsHaveChanged,
+    sections: sectionsInOrder.map((id) => {
+      return sectionsById.get(id).toJS();
+    })
   };
 };
 

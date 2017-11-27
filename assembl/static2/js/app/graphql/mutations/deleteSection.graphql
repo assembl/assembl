@@ -1,0 +1,5 @@
+mutation deleteSection($sectionId: ID!) {
+  deleteSection(sectionId: $sectionId) {
+    success
+  }
+}

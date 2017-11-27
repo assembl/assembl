@@ -39,10 +39,7 @@ export const sectionsInOrder = (state: List<number> = List(), action: ReduxActio
   case UPDATE_SECTIONS: {
     return List(
       action.sections.map((s) => {
-        if (s.sectionType !== 'ADMINISTRATION') {
-          return s.id;
-        }
-        return null;
+        return s.id;
       })
     );
   }
@@ -52,6 +49,7 @@ export const sectionsInOrder = (state: List<number> = List(), action: ReduxActio
 };
 
 const defaultResource = Map({
+  toDelete: false,
   isNew: true,
   titleEntries: List(),
   url: '',
@@ -72,11 +70,23 @@ export const sectionsById = (state: Map<string, Map> = Map(), action: ReduxActio
     let newState = Map();
     let count = -1;
     sections.forEach((s) => {
-      if (s.get('id') !== idToDelete && s.get('type') !== 'ADMINISTRATION') {
+      if (s.get('id') !== idToDelete && s.get('type') !== 'ADMINISTRATION' && !s.get('toDelete')) {
         count += 1;
         const sectionInfo = Map({
-          isNew: false,
+          toDelete: false,
+          isNew: s.get('isNew'),
           order: count,
+          id: s.get('id'),
+          titleEntries: s.get('titleEntries'),
+          url: s.get('url'),
+          type: s.get('type')
+        });
+        newState = newState.set(s.get('id'), sectionInfo);
+      } else {
+        const sectionInfo = Map({
+          toDelete: s.get('type') !== 'ADMINISTRATION',
+          isNew: s.get('isNew'),
+          order: sections.length,
           id: s.get('id'),
           titleEntries: s.get('titleEntries'),
           url: s.get('url'),
