@@ -1947,7 +1947,7 @@ def test_query_sections(discussion, graphql_request, sections):
     query = u"""
 query { sections {
     id
-    title(lang:"en")
+    title(lang: "en")
     titleEntries {
         localeCode
         value
@@ -1970,6 +1970,7 @@ query { sections {
     assert res.data['sections'][-1]['order'] == 4.0
     assert res.data['sections'][-1]['title'] == u'GNU is not Unix'
 
+
 def test_mutation_create_section(sections, graphql_request):
     from assembl.models.section import SectionTypesEnum
     title_entries = [
@@ -1982,12 +1983,12 @@ def test_mutation_create_section(sections, graphql_request):
         "order": 5.0
     }
     res = schema.execute(u"""
-mutation createSection($titleEntries:[LangStringEntryInput!]!,$url:String,$order:Float) {
+mutation createSection($titleEntries: [LangStringEntryInput!]!, $url:String, $order:Float) {
     createSection(
-        titleEntries:$titleEntries,url:$url,order:$order
+        titleEntries: $titleEntries, url: $url, order: $order
     ) {
         section {
-            title(lang:"fr")
+            title(lang: "fr")
             url
             sectionType
             order
@@ -2011,7 +2012,7 @@ def test_mutation_delete_section(sections, graphql_request):
         'id': custom_section_id
     }
     res = schema.execute(u"""
-mutation deleteSection($id:ID!) {
+mutation deleteSection($id: ID!) {
     deleteSection(
         sectionId:$id
     ) {
@@ -2040,7 +2041,7 @@ def test_mutation_delete_section_fails_for_non_custom_sections(sections, graphql
         'id': non_custom_section_id
     }
     res = schema.execute(u"""
-mutation deleteSection($id:ID!) {
+mutation deleteSection($id: ID!) {
     deleteSection(
         sectionId:$id
     ) {
@@ -2067,12 +2068,12 @@ def test_mutation_update_section(graphql_request, sections):
         'url': 'http://www.reddit.com'
     }
     res = schema.execute(u"""
-mutation updateSection($id:ID!,$titleEntries:[LangStringEntryInput],$order:Float,$url:String) {
+mutation updateSection($id:ID!, $titleEntries: [LangStringEntryInput], $order: Float, $url: String) {
     updateSection(
-        id:$id,
-        titleEntries:$titleEntries,
-        url:$url,
-        order:$order,
+        id: $id,
+        titleEntries: $titleEntries,
+        url: $url,
+        order: $order,
     ) {
         section {
             title(lang:"fr")
