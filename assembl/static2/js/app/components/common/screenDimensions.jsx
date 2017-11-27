@@ -44,7 +44,7 @@ type StatelessFunctionalComponent<Props> = {
   contextTypes?: any
 };
 
-type ComponentType<Props> = StatelessFunctionalComponent<Props> | Class<React.Component<Props, any>>;
+type ComponentType<Props> = StatelessFunctionalComponent<Props> | Class<React.Component<Props, any, any>>;
 
 type AnyComponent = ComponentType<any>;
 
