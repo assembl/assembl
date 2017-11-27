@@ -91,4 +91,5 @@ class Section(DiscussionBoundBase):
     crud_permissions = CrudPermissions(
         P_ADMIN_DISC, P_READ, P_ADMIN_DISC, P_ADMIN_DISC)
 
-LangString.setup_ownership_load_event(Section, ['title',])
+
+LangString.setup_ownership_load_event(Section, ['title'])
