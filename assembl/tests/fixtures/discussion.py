@@ -5,7 +5,7 @@ from sqlalchemy import inspect
 @pytest.fixture(scope="function")
 def discussion(request, test_session, default_preferences):
     """An empty Discussion fixture with default preferences"""
-    from assembl.models import Discussion
+    from assembl.models import Discussion, LangString
     with test_session.no_autoflush:
         d = Discussion(
             topic=u"Jack Layton", slug="jacklayton2",
@@ -13,6 +13,13 @@ def discussion(request, test_session, default_preferences):
             creator=None,
             session=test_session)
         d.discussion_locales = ['en', 'fr', 'de']
+        d.legal_notice = LangString.create(
+            u"We need to input the optical HDD sensor!", "en")
+        tac = LangString.create(
+            u"You can't quantify the driver without quantifying the 1080p JSON protocol!", "en")
+        tac.add_value(
+            u"Vous ne pouvez pas mesurer le driver sans mesurer le protocole JSON en 1080p", u"fr")
+        d.terms_and_conditions = tac
         test_session.add(d)
     test_session.flush()
 

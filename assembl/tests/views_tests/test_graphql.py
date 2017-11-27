@@ -1938,3 +1938,47 @@ mutation updateResourcesCenter($headerImage:String) {
     assert resources_center['headerImage'] is not None
     assert '/documents/' in resources_center['headerImage']['externalUrl']
     assert resources_center['headerImage']['title'] == 'new-img.png'
+
+
+def test_query_legal_notice(discussion, graphql_request, test_session):
+    res = schema.execute(u"""query {
+        legalNotice(lang:"en")
+    }""", context_value=graphql_request)
+    res_data = json.loads(json.dumps(res.data))
+    assert res_data['legalNotice'] is not None
+    assert res_data['legalNotice'] == u'We need to input the optical HDD sensor!'
+
+
+def test_query_terms_and_conditions(discussion, graphql_request, test_session):
+    res = schema.execute(u"""query {
+        termsAndConditions(lang:"en")
+    }""", context_value=graphql_request)
+    res_data = json.loads(json.dumps(res.data))
+    assert res_data['termsAndConditions'] is not None
+    assert res_data['termsAndConditions'] == u"You can't quantify the driver without quantifying the 1080p JSON protocol!"
+
+
+def test_query_legal_notice_and_terms(discussion, graphql_request, test_session):
+    res = schema.execute(u"""query {
+        legalNoticeAndTerms {
+            legalNoticeEntries {
+                localeCode
+                value
+            }
+            termsAndConditionsEntries {
+                localeCode
+                value
+            }
+        }
+    }""", context_value=graphql_request)
+    res_data = json.loads(json.dumps(res.data))
+    assert res_data['legalNoticeAndTerms'] is not None
+    legal_notice_en = res_data['legalNoticeAndTerms']['legalNoticeEntries'][0]
+    tac_en = res_data['legalNoticeAndTerms']['termsAndConditionsEntries'][0]
+    tac_fr = res_data['legalNoticeAndTerms']['termsAndConditionsEntries'][1]
+    assert legal_notice_en['value'] == u"We need to input the optical HDD sensor!"
+    assert legal_notice_en['localeCode'] == u"en"
+    assert tac_en['value'] == u"You can't quantify the driver without quantifying the 1080p JSON protocol!"
+    assert tac_en['localeCode'] == u"en"
+    assert tac_fr['value'] == u"Vous ne pouvez pas mesurer le driver sans mesurer le protocole JSON en 1080p"
+    assert tac_fr['localeCode'] == u"fr"

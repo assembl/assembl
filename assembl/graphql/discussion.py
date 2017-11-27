@@ -80,6 +80,22 @@ class ResourcesCenter(graphene.ObjectType):
                 return attachment.document
 
 
+class LegalNoticeAndTerms(graphene.ObjectType):
+
+    legal_notice_entries = graphene.List(LangStringEntry)
+    terms_and_conditions_entries = graphene.List(LangStringEntry)
+
+    def resolve_legal_notice_entries(self, args, context, info):
+        discussion_id = context.matchdict['discussion_id']
+        discussion = models.Discussion.get(discussion_id)
+        return resolve_langstring_entries(discussion, 'legal_notice')
+
+    def resolve_terms_and_conditions_entries(self, args, context, info):
+        discussion_id = context.matchdict['discussion_id']
+        discussion = models.Discussion.get(discussion_id)
+        return resolve_langstring_entries(discussion, 'terms_and_conditions')
+
+
 class UpdateResourcesCenter(graphene.Mutation):
     class Input:
         title_entries = graphene.List(LangStringEntryInput)

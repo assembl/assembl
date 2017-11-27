@@ -18,10 +18,12 @@ from assembl.nlp.translation_service import DummyGoogleTranslationService
 
 from .document import UploadDocument
 from .discussion import (DiscussionPreferences, LocalePreference,
-                         ResourcesCenter, UpdateDiscussionPreferences,
+                         ResourcesCenter, LegalNoticeAndTerms,
+                         UpdateDiscussionPreferences,
                          UpdateResourcesCenter)
 from .idea import (CreateIdea, CreateThematic, DeleteThematic, Idea, IdeaUnion,
                    Thematic, UpdateThematic)
+from .langstring import resolve_langstring
 from .locale import Locale
 from .post import (
     CreatePost, DeletePost, UndeletePost, UpdatePost,
@@ -63,6 +65,10 @@ class Query(graphene.ObjectType):
     resources = graphene.List(Resource)
     resources_center = graphene.Field(lambda: ResourcesCenter)
     has_resources_center = graphene.Boolean()
+
+    legal_notice = graphene.String(lang=graphene.String())
+    terms_and_conditions = graphene.String(lang=graphene.String())
+    legal_notice_and_terms = graphene.Field(lambda: LegalNoticeAndTerms)
 
     def resolve_resources(self, args, context, info):
         model = models.Resource
@@ -188,6 +194,22 @@ class Query(graphene.ObjectType):
 
     def resolve_resources_center(self, args, context, info):
         return ResourcesCenter()
+
+    def resolve_legal_notice(self, args, context, info):
+        """Legal notice value in given locale."""
+        discussion_id = context.matchdict['discussion_id']
+        discussion = models.Discussion.get(discussion_id)
+        return resolve_langstring(discussion.legal_notice, args.get('lang'))
+
+    def resolve_terms_and_conditions(self, args, context, info):
+        """Terms and conditions value in given locale."""
+        discussion_id = context.matchdict['discussion_id']
+        discussion = models.Discussion.get(discussion_id)
+        return resolve_langstring(discussion.terms_and_conditions, args.get('lang'))
+
+    def resolve_legal_notice_and_terms(self, args, context, info):
+        """Legal notice and terms and conditions entries (e.g. for admin form)."""
+        return LegalNoticeAndTerms()
 
 
 class Mutations(graphene.ObjectType):
