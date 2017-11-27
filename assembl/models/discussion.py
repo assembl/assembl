@@ -80,7 +80,8 @@ class Discussion(DiscussionBoundBase, NamedClassMixin):
         LangString,
         lazy="joined", single_parent=True,
         primaryjoin=resources_center_title_id == LangString.id,
-        backref=backref("discussion_from_resources_center_title", lazy="dynamic"),
+        backref=backref(
+            "discussion_from_resources_center_title", lazy="dynamic"),
         cascade="all, delete-orphan")
 
     @classmethod
@@ -95,8 +96,8 @@ class Discussion(DiscussionBoundBase, NamedClassMixin):
         for source in self.sources:
             if isinstance(source, AbstractMailbox):
                 return source
-        raise ValueError("No source of type AbstractMailbox found to serve as admin source")
-
+        raise ValueError(
+            "No source of type AbstractMailbox found to serve as admin source")
 
     def check_url_or_none(self, url):
         if url == '':
@@ -166,7 +167,7 @@ class Discussion(DiscussionBoundBase, NamedClassMixin):
 
         # TODO: Validate slug
         kwargs['preferences'] = preferences = Preferences(
-            name='discussion_'+kwargs.get('slug', str(id(self))),
+            name='discussion_' + kwargs.get('slug', str(id(self))),
             cascade_preferences=Preferences.get_default_preferences(session))
         session.add(preferences)
         session.flush()
@@ -239,13 +240,20 @@ class Discussion(DiscussionBoundBase, NamedClassMixin):
         query = self.db.query(Synthesis).filter_by(id=id)
         if full_data:
             query = query.options(
-                subqueryload('idea_assocs').joinedload('idea').joinedload('title').joinedload('entries'),
-                subqueryload('idea_assocs').joinedload('idea').joinedload('synthesis_title').joinedload('entries'),
-                subqueryload('idea_assocs').joinedload('idea').joinedload('description').joinedload('entries'),
-                subqueryload('idea_assocs').joinedload('idea').subqueryload('widget_links'),
-                subqueryload('idea_assocs').joinedload('idea').subqueryload('attachments').joinedload('document'),
-                subqueryload('idea_assocs').joinedload('idea').subqueryload('message_columns'),
-                subqueryload('idea_assocs').joinedload('idea').joinedload('source_links'),
+                subqueryload('idea_assocs').joinedload(
+                    'idea').joinedload('title').joinedload('entries'),
+                subqueryload('idea_assocs').joinedload('idea').joinedload(
+                    'synthesis_title').joinedload('entries'),
+                subqueryload('idea_assocs').joinedload('idea').joinedload(
+                    'description').joinedload('entries'),
+                subqueryload('idea_assocs').joinedload(
+                    'idea').subqueryload('widget_links'),
+                subqueryload('idea_assocs').joinedload('idea').subqueryload(
+                    'attachments').joinedload('document'),
+                subqueryload('idea_assocs').joinedload(
+                    'idea').subqueryload('message_columns'),
+                subqueryload('idea_assocs').joinedload(
+                    'idea').joinedload('source_links'),
                 subqueryload('idealink_assocs').joinedload('idea_link'),
                 subqueryload(Synthesis.published_in_post)
             )
@@ -259,10 +267,10 @@ class Discussion(DiscussionBoundBase, NamedClassMixin):
     syntheses = relationship('Synthesis')
 
     next_synthesis = relationship('Synthesis',
-        uselist=False, secondary="outerjoin(Synthesis, SynthesisPost)",
-        primaryjoin="Discussion.id == Synthesis.discussion_id",
-        secondaryjoin='SynthesisPost.id == None',
-        viewonly=True)
+                                  uselist=False, secondary="outerjoin(Synthesis, SynthesisPost)",
+                                  primaryjoin="Discussion.id == Synthesis.discussion_id",
+                                  secondaryjoin='SynthesisPost.id == None',
+                                  viewonly=True)
 
     def get_last_published_synthesis(self):
         from .idea_graph_view import Synthesis
@@ -270,13 +278,20 @@ class Discussion(DiscussionBoundBase, NamedClassMixin):
             Synthesis.discussion_id == self.id and
             Synthesis.published_in_post != None
         ).options(
-            subqueryload('idea_assocs').joinedload('idea').joinedload('title').subqueryload('entries'),
-            subqueryload('idea_assocs').joinedload('idea').joinedload('synthesis_title').subqueryload('entries'),
-            subqueryload('idea_assocs').joinedload('idea').joinedload('description').subqueryload('entries'),
-            subqueryload('idea_assocs').joinedload('idea').subqueryload('widget_links'),
-            subqueryload('idea_assocs').joinedload('idea').subqueryload('attachments').joinedload('document'),
-            subqueryload('idea_assocs').joinedload('idea').subqueryload('message_columns'),
-            subqueryload('idea_assocs').joinedload('idea').joinedload('source_links'),
+            subqueryload('idea_assocs').joinedload(
+                'idea').joinedload('title').subqueryload('entries'),
+            subqueryload('idea_assocs').joinedload('idea').joinedload(
+                'synthesis_title').subqueryload('entries'),
+            subqueryload('idea_assocs').joinedload('idea').joinedload(
+                'description').subqueryload('entries'),
+            subqueryload('idea_assocs').joinedload(
+                'idea').subqueryload('widget_links'),
+            subqueryload('idea_assocs').joinedload('idea').subqueryload(
+                'attachments').joinedload('document'),
+            subqueryload('idea_assocs').joinedload(
+                'idea').subqueryload('message_columns'),
+            subqueryload('idea_assocs').joinedload(
+                'idea').joinedload('source_links'),
             subqueryload('idealink_assocs').joinedload('idea_link'),
             subqueryload(Synthesis.published_in_post)
         ).order_by(
@@ -294,20 +309,27 @@ class Discussion(DiscussionBoundBase, NamedClassMixin):
             condition = condition | (SynthesisPost.id == None)
         return self.db.query(
             Synthesis).outerjoin(SynthesisPost
-            ).options(
+                                 ).options(
                 subqueryload('subject').subqueryload('entries'),
                 subqueryload('introduction').subqueryload('entries'),
                 subqueryload('conclusion').subqueryload('entries'),
-                subqueryload('idea_assocs').joinedload('idea').joinedload('title').subqueryload('entries'),
-                subqueryload('idea_assocs').joinedload('idea').joinedload('synthesis_title').subqueryload('entries'),
-                subqueryload('idea_assocs').joinedload('idea').joinedload('description').subqueryload('entries'),
-                subqueryload('idea_assocs').joinedload('idea').subqueryload('widget_links'),
-                subqueryload('idea_assocs').joinedload('idea').subqueryload('attachments').joinedload('document'),
-                subqueryload('idea_assocs').joinedload('idea').subqueryload('message_columns'),
-                subqueryload('idea_assocs').joinedload('idea').joinedload('source_links'),
+                subqueryload('idea_assocs').joinedload(
+                    'idea').joinedload('title').subqueryload('entries'),
+                subqueryload('idea_assocs').joinedload('idea').joinedload(
+                    'synthesis_title').subqueryload('entries'),
+                subqueryload('idea_assocs').joinedload('idea').joinedload(
+                    'description').subqueryload('entries'),
+                subqueryload('idea_assocs').joinedload(
+                    'idea').subqueryload('widget_links'),
+                subqueryload('idea_assocs').joinedload('idea').subqueryload(
+                    'attachments').joinedload('document'),
+                subqueryload('idea_assocs').joinedload(
+                    'idea').subqueryload('message_columns'),
+                subqueryload('idea_assocs').joinedload(
+                    'idea').joinedload('source_links'),
                 subqueryload('idealink_assocs').joinedload('idea_link'),
                 subqueryload(Synthesis.published_in_post)
-            ).filter(Synthesis.discussion_id == self.id, condition)
+        ).filter(Synthesis.discussion_id == self.id, condition)
 
     def get_permissions_by_role(self):
         roleperms = self.db.query(Role.name, Permission.name).select_from(
@@ -331,7 +353,7 @@ class Discussion(DiscussionBoundBase, NamedClassMixin):
             UserRole, Role, DiscussionPermission, Permission).filter(
                 DiscussionPermission.discussion_id == self.id and
                 Permission.name == P_READ
-            ).union(self.db.query(User).join(
+        ).union(self.db.query(User).join(
                 LocalUserRole, Role, DiscussionPermission, Permission).filter(
                     DiscussionPermission.discussion_id == self.id and
                     LocalUserRole.discussion_id == self.id and
@@ -471,7 +493,8 @@ class Discussion(DiscussionBoundBase, NamedClassMixin):
             role = self.db.query(Role).filter_by(name=role_name).one()
             template = UserTemplate(for_role=role, discussion=self)
             self.db.add(template)
-            subs, changed = template.get_notification_subscriptions_and_changed(on_thread)
+            subs, changed = template.get_notification_subscriptions_and_changed(
+                on_thread)
             self.db.flush()
         return template, changed
 
@@ -490,12 +513,13 @@ class Discussion(DiscussionBoundBase, NamedClassMixin):
             changed |= changed2
             for subscription in template_subscriptions:
                 if subscription.status == NotificationSubscriptionStatus.ACTIVE:
-                    roles_subscribed[subscription.__class__].append(template.role_id)
+                    roles_subscribed[subscription.__class__].append(
+                        template.role_id)
         if force or changed:
             needed_classes = UserTemplate.get_applicable_notification_subscriptions_classes()
             for notif_cls in needed_classes:
-                self.reset_notification_subscriptions_for(notif_cls, roles_subscribed[notif_cls])
-
+                self.reset_notification_subscriptions_for(
+                    notif_cls, roles_subscribed[notif_cls])
 
     def reset_notification_subscriptions_for(self, notif_cls, roles_subscribed):
         from .notification import (
@@ -504,41 +528,41 @@ class Discussion(DiscussionBoundBase, NamedClassMixin):
         from .auth import AgentStatusInDiscussion
         # Make most subscriptions inactive (simpler than deciding which ones should be)
         default_ns = self.db.query(notif_cls.id
-            ).join(User, notif_cls.user_id == User.id
-            ).join(LocalUserRole, LocalUserRole.user_id == User.id
-            ).join(AgentStatusInDiscussion,
-                   AgentStatusInDiscussion.profile_id == User.id
-            ).filter(
-                LocalUserRole.discussion_id == self.id,
-                AgentStatusInDiscussion.discussion_id == self.id,
-                AgentStatusInDiscussion.last_visit != None,
-                notif_cls.discussion_id == self.id,
-                notif_cls.creation_origin == NotificationCreationOrigin.DISCUSSION_DEFAULT)
+                                   ).join(User, notif_cls.user_id == User.id
+                                          ).join(LocalUserRole, LocalUserRole.user_id == User.id
+                                                 ).join(AgentStatusInDiscussion,
+                                                        AgentStatusInDiscussion.profile_id == User.id
+                                                        ).filter(
+            LocalUserRole.discussion_id == self.id,
+            AgentStatusInDiscussion.discussion_id == self.id,
+            AgentStatusInDiscussion.last_visit != None,
+            notif_cls.discussion_id == self.id,
+            notif_cls.creation_origin == NotificationCreationOrigin.DISCUSSION_DEFAULT)
         deactivated = default_ns.filter(
             notif_cls.status == NotificationSubscriptionStatus.ACTIVE)
         if roles_subscribed:
             # Make some subscriptions active (back)
             activated = default_ns.filter(
-                    LocalUserRole.role_id.in_(roles_subscribed),
-                    notif_cls.status == NotificationSubscriptionStatus.INACTIVE_DFT)
+                LocalUserRole.role_id.in_(roles_subscribed),
+                notif_cls.status == NotificationSubscriptionStatus.INACTIVE_DFT)
             self.db.query(notif_cls
-                ).filter(notif_cls.id.in_(activated.subquery())
-                ).update(
-                    {"status": NotificationSubscriptionStatus.ACTIVE,
-                     "last_status_change_date": datetime.utcnow()},
-                    synchronize_session=False)
+                          ).filter(notif_cls.id.in_(activated.subquery())
+                                   ).update(
+                {"status": NotificationSubscriptionStatus.ACTIVE,
+                 "last_status_change_date": datetime.utcnow()},
+                synchronize_session=False)
             # Materialize missing subscriptions
             missing_subscriptions_query = self.db.query(User.id
-                ).join(LocalUserRole, LocalUserRole.user_id == User.id
-                ).join(AgentStatusInDiscussion,
-                       AgentStatusInDiscussion.profile_id == User.id
-                ).outerjoin(notif_cls, (notif_cls.user_id == User.id) & (
-                                        notif_cls.discussion_id == self.id)
-                ).filter(LocalUserRole.discussion_id == self.id,
-                         AgentStatusInDiscussion.discussion_id == self.id,
-                         AgentStatusInDiscussion.last_visit != None,
-                         LocalUserRole.role_id.in_(roles_subscribed),
-                         notif_cls.id == None).distinct()
+                                                        ).join(LocalUserRole, LocalUserRole.user_id == User.id
+                                                               ).join(AgentStatusInDiscussion,
+                                                                      AgentStatusInDiscussion.profile_id == User.id
+                                                                      ).outerjoin(notif_cls, (notif_cls.user_id == User.id) & (
+                                                                          notif_cls.discussion_id == self.id)
+            ).filter(LocalUserRole.discussion_id == self.id,
+                     AgentStatusInDiscussion.discussion_id == self.id,
+                     AgentStatusInDiscussion.last_visit != None,
+                     LocalUserRole.role_id.in_(roles_subscribed),
+                     notif_cls.id == None).distinct()
 
             def missing_subscriptions_gen():
                 return [
@@ -556,11 +580,11 @@ class Discussion(DiscussionBoundBase, NamedClassMixin):
                 default_ns.filter(
                     LocalUserRole.role_id.in_(roles_subscribed)))
         self.db.query(notif_cls
-            ).filter(notif_cls.id.in_(deactivated.subquery())
-            ).update(
-                {"status": NotificationSubscriptionStatus.INACTIVE_DFT,
-                 "last_status_change_date": datetime.utcnow()},
-                synchronize_session=False)
+                      ).filter(notif_cls.id.in_(deactivated.subquery())
+                               ).update(
+            {"status": NotificationSubscriptionStatus.INACTIVE_DFT,
+             "last_status_change_date": datetime.utcnow()},
+            synchronize_session=False)
 
         # Should we send them to the socket? We do not at this point.
         # changed = deactivated_ids + activated_ids
@@ -576,7 +600,8 @@ class Discussion(DiscussionBoundBase, NamedClassMixin):
         # be added to the database (Discussion is not created).
         known_callbacks = reg.getUtilitiesFor(IDiscussionCreationCallback)
         if callbacks is not None:
-            known_callbacks = {k: v for (k, v) in known_callbacks.iteritems() if k in callbacks}
+            known_callbacks = {
+                k: v for (k, v) in known_callbacks.iteritems() if k in callbacks}
         for name, callback in known_callbacks:
             callback.discussionCreated(self)
 
@@ -672,7 +697,8 @@ class Discussion(DiscussionBoundBase, NamedClassMixin):
                             data = kwargs.get('sink_data', None)
                             if is_sink:
                                 if not data:
-                                    raise ValueError("User must pass sink data")
+                                    raise ValueError(
+                                        "User must pass sink data")
                                 post_id = data.get('post_id', None)
                                 fb_post_id = data.get('facebook_post_id', None)
                                 source = instance
@@ -685,11 +711,12 @@ class Discussion(DiscussionBoundBase, NamedClassMixin):
                                         post_object = Content.\
                                             get_instance(post_id)
                                         cs = ContentSourceIDs(source=source,
-                                            post=post_object,
-                                            message_id_in_source=fb_post_id)
+                                                              post=post_object,
+                                                              message_id_in_source=fb_post_id)
                                         assocs.append(cs)
                                     except:
-                                        raise ValueError("Failed on content sink transaction")
+                                        raise ValueError(
+                                            "Failed on content sink transaction")
 
         return {'all_users': AllUsersCollection(cls),
                 'active_widgets': ActiveWidgetsCollection(cls),
@@ -701,17 +728,17 @@ class Discussion(DiscussionBoundBase, NamedClassMixin):
         User, viewonly=True, secondary=LocalUserRole.__table__,
         primaryjoin="LocalUserRole.discussion_id == Discussion.id",
         secondaryjoin=((LocalUserRole.user_id == User.id)
-            & (LocalUserRole.requested == False)),
+                       & (LocalUserRole.requested == False)),
         backref="involved_in_discussion")
 
-    #The list of praticipants actually subscribed to the discussion
+    # The list of praticipants actually subscribed to the discussion
     simple_participants = relationship(
         User, viewonly=True,
         secondary=join(LocalUserRole, Role,
-            ((LocalUserRole.role_id == Role.id) & (Role.name == R_PARTICIPANT))),
+                       ((LocalUserRole.role_id == Role.id) & (Role.name == R_PARTICIPANT))),
         primaryjoin="LocalUserRole.discussion_id == Discussion.id",
         secondaryjoin=((LocalUserRole.user_id == User.id)
-            & (LocalUserRole.requested == False)),
+                       & (LocalUserRole.requested == False)),
         backref="participant_in_discussion")
 
     def current_discussion_phase(self):
@@ -753,8 +780,8 @@ class Discussion(DiscussionBoundBase, NamedClassMixin):
             queries.append(db.query(literal(current_user).label('user_id')))
         if include_readers:
             queries.append(db.query(ViewPost.actor_id.label('user_id')).join(
-                Content, Content.id==ViewPost.post_id).filter(
-                Content.discussion_id==self.id))
+                Content, Content.id == ViewPost.post_id).filter(
+                Content.discussion_id == self.id))
         query = queries[0].union(*queries[1:]).distinct()
         if ids_only:
             return query
@@ -787,7 +814,7 @@ class Discussion(DiscussionBoundBase, NamedClassMixin):
         from .auth import AgentProfile
         query = self.db.query(
             func.count(Post.id), Post.creator_id).filter(
-                Post.discussion_id==self.id,
+                Post.discussion_id == self.id,
                 Post.tombstone_condition())
         if start_date:
             query = query.filter(Post.creation_date >= start_date)
@@ -840,13 +867,13 @@ class Discussion(DiscussionBoundBase, NamedClassMixin):
         ideas = self.db.query(Idea).filter_by(
             tombstone_date=None, discussion_id=self.id).all()
         links = self.db.query(IdeaLink).filter_by(
-            tombstone_date=None).join(Idea, IdeaLink.source_id==Idea.id).filter(
-            Idea.discussion_id==self.id).all()
+            tombstone_date=None).join(Idea, IdeaLink.source_id == Idea.id).filter(
+            Idea.discussion_id == self.id).all()
         G = pygraphviz.AGraph()
-        G.graph_attr['overlap']='prism'
-        G.node_attr['penwidth']=0
-        G.node_attr['shape']='rect'
-        G.node_attr['style']='filled'
+        G.graph_attr['overlap'] = 'prism'
+        G.node_attr['penwidth'] = 0
+        G.node_attr['shape'] = 'rect'
+        G.node_attr['style'] = 'filled'
         G.node_attr['fillcolor'] = '#efefef'
         start_time = min((idea.creation_date for idea in ideas))
         end_time = max((idea.last_modified for idea in ideas))
@@ -866,16 +893,18 @@ class Discussion(DiscussionBoundBase, NamedClassMixin):
                 G.add_node(idea.id, label="", style="invis")
             else:
                 level = node_level(idea.id)
-                age = (end_time - idea.last_modified).total_seconds() / (end_time - start_time).total_seconds()
+                age = (end_time - idea.last_modified).total_seconds() / \
+                    (end_time - start_time).total_seconds()
                 print idea.id, start_time, idea.last_modified, end_time
-                print (end_time - idea.last_modified).total_seconds(), (end_time - start_time).total_seconds()
-                #empirical
-                color = hsv(180-(135.0 * age), 0.15, 0.85)
+                print (end_time - idea.last_modified).total_seconds(), (end_time -
+                                                                        start_time).total_seconds()
+                # empirical
+                color = hsv(180 - (135.0 * age), 0.15, 0.85)
                 G.add_node(idea.id,
-                    label=idea.short_title or "",
-                    fontsize = 18 - (1.5 * level),
-                    height=(20-(1.5*level))/72.0,
-                    fillcolor="#%s" % color.hex)
+                           label=idea.short_title or "",
+                           fontsize=18 - (1.5 * level),
+                           height=(20 - (1.5 * level)) / 72.0,
+                           fillcolor="#%s" % color.hex)
         for link in links:
             if link.source_id == root_id:
                 G.add_edge(link.source_id, link.target_id, style="invis")
@@ -912,7 +941,7 @@ class Discussion(DiscussionBoundBase, NamedClassMixin):
 
     def translation_service(self):
         service_class = (self.translation_service_class or
-            "assembl.nlp.translation_service.LanguageIdentificationService")
+                         "assembl.nlp.translation_service.LanguageIdentificationService")
         service = self._discussion_services.get(self.id, None)
         if service and full_class_name(service) != service_class:
             service = None
