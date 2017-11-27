@@ -8,7 +8,13 @@ import EditSectionForm from './editSectionForm';
 import { addSectionTooltip } from '../../common/tooltips';
 import * as actions from '../../../actions/adminActions/adminSections';
 
-const ManageSectionsForm = ({ sections, selectedLocale, createSection }) => {
+type ManageSectionFormProps = {
+  sections: Object,
+  selectedLocale: string,
+  createSection: Function
+};
+
+const ManageSectionsForm = ({ sections, selectedLocale, createSection }: ManageSectionFormProps) => {
   return (
     <div className="admin-box">
       <SectionTitle title={I18n.t('administration.sections.sectionsTitle')} annotation={I18n.t('administration.annotation')} />
