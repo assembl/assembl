@@ -44,7 +44,7 @@ def upgrade(pyramid_env):
                           onupdate="CASCADE"), nullable=False, index=False),
             sa.Column('title_id', sa.Integer, sa.ForeignKey('langstring.id')),
             sa.Column('url', URLString(1024)),
-            sa.Column('order', sa.Float, default=0.0),
+            sa.Column('order', sa.Float, default=0.0, nullable=False),
             sa.Column(
                 'section_type',
                 sa.Enum(*section_types, name='section_types'),
