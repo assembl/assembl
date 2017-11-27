@@ -20,7 +20,7 @@ class App extends React.Component {
   }
   componentDidUpdate() {
     const { debate, location, params } = this.props;
-    if (!params.phase && !debate.debateLoading && location.pathname.indexOf('debate') > -1) {
+    if (!params.phase && !debate.debateLoading && location.pathname.split('/').indexOf('debate') > -1) {
       const currentPhaseIdentifier = getCurrentPhaseIdentifier(debate.debateData.timeline);
       browserHistory.push(get('debate', { slug: params.slug, phase: currentPhaseIdentifier }));
     }
