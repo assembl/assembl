@@ -82,6 +82,7 @@ $column-synthesis-height: 300px;
 
     .start-discussion {
       max-width: 80%;
+      padding: 0 0 0 10px;
 
       .dark-title-3 {
         font-family: $font-family;
@@ -89,10 +90,6 @@ $column-synthesis-height: 300px;
         line-height: 27px;
         font-size: $font-size-sm;
       }
-    }
-
-    .start-discussion-icon {
-      padding-top: 0;
     }
   }
 }

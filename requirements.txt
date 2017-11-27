@@ -47,9 +47,9 @@ future==0.15.2
 -e git+https://github.com/maparent/fuxi.git#egg=fuxi
 gensim==0.12.3
 google-api-python-client==1.5.1
-graphql-core==1.0.1
+graphql-core==1.1.0
 graphene-sqlalchemy==1.1.1
-graphene==1.2
+graphene==1.4.1
 -e git+https://github.com/ecreall/graphql-wsgi.git@e0e2746e71e6bc3c49b028132364aeb4d960dfed#egg=graphql-wsgi
 greenlet==0.4.10
 hiredis==0.2.0

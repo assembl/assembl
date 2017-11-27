@@ -35,3 +35,8 @@
     entry: bash -c "./assembl/static2/node_modules/.bin/prettier --print-width 130 -l `git diff --name-only --diff-filter=d --cached -- '*.graphql'`; RES=$?; ./assembl/static2/node_modules/.bin/prettier --print-width 130 --write `git diff --name-only --cached -- '*.graphql'` > /dev/null; exit $RES"
     language: system
     files: ".*/static2/.*graphql$"
+  - id: flake8
+    name: flake8
+    entry: bash -c "PATH=./venv/bin/:$PATH flake8 `git diff --name-only --diff-filter=d --cached -- '*.py'|grep assembl/graphql`"
+    language: system
+    files: "assembl/graphql/.*.py"

@@ -567,7 +567,7 @@ def update_pip_requirements(force_reinstall=False):
         cmd = "%(venvpath)s/bin/pip install -r %(projectpath)s/requirements.txt" % env
         run("yes w | %s" % cmd)
         if env.wsginame == 'dev.wsgi':
-            venvcmd("pip install pre-commit")
+            venvcmd("pip install pre-commit flake8")
             venvcmd("pre-commit install")
 
 

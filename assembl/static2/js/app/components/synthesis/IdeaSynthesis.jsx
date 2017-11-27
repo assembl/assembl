@@ -15,6 +15,7 @@ export type SynthesisIdea = {
   synthesisTitle: string,
   live: {
     id: string,
+    order: number,
     img: {
       externalUrl: string
     },

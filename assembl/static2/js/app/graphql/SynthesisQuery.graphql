@@ -18,6 +18,7 @@ query SynthesisQuery($id: ID!, $lang: String) {
           live {
             ... on Idea {
               id
+              order
               numPosts
               numContributors
               img {
