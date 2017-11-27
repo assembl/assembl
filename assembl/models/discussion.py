@@ -6,6 +6,7 @@ from datetime import datetime
 from itertools import chain, groupby
 
 import simplejson as json
+from pyramid.httpexceptions import HTTPUnauthorized
 from pyramid.path import DottedNameResolver
 from pyramid.security import ALL_PERMISSIONS, Allow
 from pyramid.threadlocal import get_current_registry
