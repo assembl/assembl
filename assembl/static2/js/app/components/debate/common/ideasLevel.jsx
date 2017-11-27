@@ -6,6 +6,7 @@ import IdeaPreview from './ideaPreview';
 import { get as getRoute } from '../../../utils/routeMap';
 import { getDiscussionSlug, isMobile } from '../../../utils/globalFunctions';
 import VisibilityComponent from '../../common/visibilityComponent';
+import { withScreenWidth } from '../../common/screenDimensions';
 
 import {
   APP_CONTAINER_MAX_WIDTH,
@@ -22,6 +23,7 @@ const mdCol = 3;
 class IdeasLevel extends React.Component {
   constructor(props) {
     super(props);
+    this.timeouts = [];
     this.state = {
       sliderCount: 0,
       sliderLeftPosition: 0,
@@ -29,18 +31,18 @@ class IdeasLevel extends React.Component {
       ideaPreviewWidth: 0,
       sliderMarginTop: -500
     };
-    this.setDimensions = this.setDimensions.bind(this);
-    this.updateDimensions = this.updateDimensions.bind(this);
   }
+
   componentWillMount() {
     this.setDimensions();
     this.runBottomTransition(0, 1000);
   }
+
   componentDidMount() {
-    window.addEventListener('resize', this.updateDimensions);
     this.runFirstTransition();
   }
   componentWillReceiveProps(nextProps) {
+    if (nextProps.screenWidth !== this.props.screenWidth) this.updateDimensions();
     const { ideaLevel, nbLevel, selectedIdeaIndex } = nextProps;
     const shouldSliderBeInitialize = ideaLevel < nbLevel;
     const isSliderInitialized = this.props.nbLevel <= 1;
@@ -48,44 +50,49 @@ class IdeasLevel extends React.Component {
       this.setState({ sliderCount: 0, sliderLeftPosition: 0, sliderMarginTop: -500 });
       this.runBottomTransition(0, 700);
     } else if (isSliderInitialized) {
-      setTimeout(() => {
+      this.setTimeout(() => {
         this.moveToSelectedIdea(selectedIdeaIndex);
       }, 500);
     }
   }
   componentWillUnmount() {
-    window.removeEventListener('resize', this.updateDimensions);
+    this.timeouts.forEach(clearTimeout);
+    this.timeouts = [];
   }
-  setDimensions() {
-    if (window.innerWidth > APP_CONTAINER_MAX_WIDTH) {
+  setTimeout = (func, duration) => {
+    this.timeouts.push(setTimeout(func, duration));
+  };
+  setDimensions = () => {
+    const { screenWidth } = this.props;
+    if (screenWidth > APP_CONTAINER_MAX_WIDTH) {
       this.setState({
         sliderContainerWidth: APP_CONTAINER_MAX_WIDTH + this.getRightOverflowValue(),
         ideaPreviewWidth: APP_CONTAINER_MAX_WIDTH / NB_IDEA_PREVIEW_TO_SHOW
       });
     } else {
-      const ideaPreviewWidth = (window.innerWidth - APP_CONTAINER_PADDING) / (NB_IDEA_PREVIEW_TO_SHOW + 0.5);
+      const ideaPreviewWidth = (screenWidth - APP_CONTAINER_PADDING) / (NB_IDEA_PREVIEW_TO_SHOW + 0.5);
       if (ideaPreviewWidth <= IDEA_PREVIEW_MIN_WIDTH) {
         this.setState({
-          sliderContainerWidth: window.innerWidth - APP_CONTAINER_PADDING * 2,
+          sliderContainerWidth: screenWidth - APP_CONTAINER_PADDING * 2,
           ideaPreviewWidth: IDEA_PREVIEW_MIN_WIDTH
         });
       } else {
         this.setState({
-          sliderContainerWidth: window.innerWidth - APP_CONTAINER_PADDING * 2,
+          sliderContainerWidth: screenWidth - APP_CONTAINER_PADDING * 2,
           ideaPreviewWidth: ideaPreviewWidth
         });
       }
     }
-  }
-  updateDimensions() {
+  };
+  updateDimensions = () => {
     this.setState(
       {
         sliderCount: 0,
         sliderLeftPosition: 0
       },
-      this.setDimensions()
+      this.setDimensions
     );
-  }
+  };
   getColClassNames(index) {
     const { ideaLevel } = this.props;
     const isFirsStepActif = ideaLevel <= 1;
@@ -99,19 +106,20 @@ class IdeasLevel extends React.Component {
     );
   }
   getRightOverflowValue() {
+    const { screenWidth } = this.props;
     const { sliderContainerWidth, ideaPreviewWidth } = this.state;
     let rightOverflowValue = 0;
     // If the screen width is bigger than the app container
-    const isLargeScreen = window.innerWidth > APP_CONTAINER_MAX_WIDTH;
+    const isLargeScreen = screenWidth > APP_CONTAINER_MAX_WIDTH;
     // if the screen width is not large enough to display the NB_IDEA_PREVIEW_TO_SHOW
-    const isSmallScreen = window.innerWidth - APP_CONTAINER_PADDING * 2 <= ideaPreviewWidth * NB_IDEA_PREVIEW_TO_SHOW;
+    const isSmallScreen = screenWidth - APP_CONTAINER_PADDING * 2 <= ideaPreviewWidth * NB_IDEA_PREVIEW_TO_SHOW;
     if (isLargeScreen) {
-      rightOverflowValue = (window.innerWidth - APP_CONTAINER_MAX_WIDTH) / 2;
+      rightOverflowValue = (screenWidth - APP_CONTAINER_MAX_WIDTH) / 2;
       if (rightOverflowValue > IDEA_PREVIEW_MAX_WIDTH / 2) {
         rightOverflowValue = IDEA_PREVIEW_MAX_WIDTH / 2;
       }
     } else if (isSmallScreen) {
-      const DisplayedThumbsCount = (window.innerWidth - APP_CONTAINER_PADDING * 2) / IDEA_PREVIEW_MIN_WIDTH;
+      const DisplayedThumbsCount = (screenWidth - APP_CONTAINER_PADDING * 2) / IDEA_PREVIEW_MIN_WIDTH;
       const ratio = DisplayedThumbsCount - Math.trunc(DisplayedThumbsCount);
       rightOverflowValue = IDEA_PREVIEW_MIN_WIDTH * ratio;
     } else {
@@ -160,7 +168,7 @@ class IdeasLevel extends React.Component {
     const { nbLevel } = this.props;
     const themes = document.getElementById('row-1').getElementsByClassName('theme');
     if (nbLevel > 1) {
-      setTimeout(() => {
+      this.setTimeout(() => {
         for (let i = 0; i < themes.length; i += 1) {
           themes[i].className = `theme theme-inline col-md-${mdCol} col-sm-${smCol} col-xs-${xsCol}`;
         }
@@ -168,7 +176,7 @@ class IdeasLevel extends React.Component {
     }
   }
   runBottomTransition(sliderMarginTop, duration) {
-    setTimeout(() => {
+    this.setTimeout(() => {
       this.setState({ sliderMarginTop: sliderMarginTop });
     }, duration);
   }
@@ -305,4 +313,4 @@ class IdeasLevel extends React.Component {
   }
 }
 
-export default IdeasLevel;
+export default withScreenWidth(IdeasLevel);
