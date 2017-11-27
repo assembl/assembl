@@ -1,52 +1,38 @@
 """Definition of the discussion class."""
-from itertools import groupby, chain
+import logging
 import traceback
-from datetime import datetime
 from collections import defaultdict
+from datetime import datetime
+from itertools import chain, groupby
 
 import simplejson as json
-from pyramid.security import Allow, ALL_PERMISSIONS
-from pyramid.settings import asbool
 from pyramid.path import DottedNameResolver
+from pyramid.security import ALL_PERMISSIONS, Allow
 from pyramid.threadlocal import get_current_registry
-from sqlalchemy import (
-    Column,
-    Integer,
-    UnicodeText,
-    DateTime,
-    Text,
-    String,
-    Boolean,
-    event,
-    ForeignKey,
-    func,
-    inspect,
-)
-from sqlalchemy.orm import (
-    relationship, join, subqueryload, joinedload, backref, with_polymorphic)
-from sqlalchemy.exc import InvalidRequestError
-from sqlalchemy.sql.expression import literal, distinct
+from sqlalchemy import (Boolean, Column, DateTime, ForeignKey, Integer,
+                        UnicodeText, event, func)
+from sqlalchemy.orm import (backref, join, relationship, subqueryload,
+                            with_polymorphic)
+from sqlalchemy.sql.expression import distinct, literal
 
 from assembl.lib import config
-from assembl.lib.utils import slugify, get_global_base_url, full_class_name
-from ..lib.sqla_types import URLString, CoerceUnicode
-from ..lib.sqla import CrudOperation
-from ..lib.locale import strip_country
-from ..lib.discussion_creation import IDiscussionCreationCallback
+from assembl.lib.utils import full_class_name, get_global_base_url, slugify
+
 from . import DiscussionBoundBase, NamedClassMixin
+from ..auth import (P_ADMIN_DISC, P_READ, P_SYSADMIN, R_PARTICIPANT,
+                    R_SYSADMIN, Authenticated, CrudPermissions, Everyone)
+from ..lib.discussion_creation import IDiscussionCreationCallback
+from ..lib.locale import strip_country
+from ..lib.sqla_types import CoerceUnicode, URLString
+from ..semantic.namespaces import ASSEMBL, CATALYST, DCTERMS
 from ..semantic.virtuoso_mapping import QuadMapPatternS
-from ..auth import (
-    P_READ, R_SYSADMIN, P_ADMIN_DISC, R_PARTICIPANT, P_SYSADMIN,
-    CrudPermissions, Authenticated, Everyone)
-from .auth import (
-    DiscussionPermission, Role, Permission, User, UserRole, LocalUserRole,
-    UserTemplate)
-from .preferences import Preferences
-from ..semantic.namespaces import (CATALYST, ASSEMBL, DCTERMS)
+from .auth import (DiscussionPermission, LocalUserRole, Permission, Role, User,
+                   UserRole, UserTemplate)
 from .langstrings import LangString
+from .preferences import Preferences
+
 
 resolver = DottedNameResolver(__package__)
-import logging
 log = logging.getLogger('assembl')
 
 
