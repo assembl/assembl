@@ -156,11 +156,11 @@ class Discussion(DiscussionBoundBase, NamedClassMixin):
         for source in self.sources:
             # refresh after calling
             source = self.db.merge(source)
-            assert source != None
+            assert source is not None
             assert source.id
             try:
                 source.import_content(only_new=only_new)
-            except:
+            except Exception:
                 traceback.print_exc()
 
     def __init__(self, session=None, *args, **kwargs):
@@ -233,7 +233,7 @@ class Discussion(DiscussionBoundBase, NamedClassMixin):
         return self.db.query(Synthesis.id).outerjoin(
             SynthesisPost).filter(
             Synthesis.discussion_id == self.id,
-            SynthesisPost.id == None).first()
+            SynthesisPost.id == None).first()  # noqa: E711
 
     def get_next_synthesis(self, full_data=True):
         from .idea_graph_view import Synthesis
@@ -277,7 +277,7 @@ class Discussion(DiscussionBoundBase, NamedClassMixin):
         from .idea_graph_view import Synthesis
         return self.db.query(Synthesis).filter(
             Synthesis.discussion_id == self.id and
-            Synthesis.published_in_post != None
+            Synthesis.published_in_post != None  # noqa: E711
         ).options(
             subqueryload('idea_assocs').joinedload(
                 'idea').joinedload('title').subqueryload('entries'),
@@ -307,7 +307,7 @@ class Discussion(DiscussionBoundBase, NamedClassMixin):
         if not include_tombstones:
             condition = condition & SynthesisPost.tombstone_condition()
         if include_unpublished:
-            condition = condition | (SynthesisPost.id == None)
+            condition = condition | (SynthesisPost.id == None)  # noqa: E711
         return self.db.query(
             Synthesis).outerjoin(SynthesisPost
                                  ).options(
@@ -489,8 +489,6 @@ class Discussion(DiscussionBoundBase, NamedClassMixin):
         if autocreate and not template:
             # There is a template user per discussion.  If it doesn't exist yet
             # create it.
-            from .notification import (
-                NotificationCreationOrigin, NotificationSubscriptionFollowSyntheses)
             role = self.db.query(Role).filter_by(name=role_name).one()
             template = UserTemplate(for_role=role, discussion=self)
             self.db.add(template)
@@ -505,8 +503,7 @@ class Discussion(DiscussionBoundBase, NamedClassMixin):
 
     def reset_notification_subscriptions_from_defaults(self, force=True):
         """Reset all notification subscriptions for this discussion"""
-        from .notification import (
-            NotificationSubscription, NotificationSubscriptionStatus, NotificationCreationOrigin)
+        from .notification import NotificationSubscriptionStatus
         template, changed = self.get_participant_template()
         roles_subscribed = defaultdict(list)
         for template in self.user_templates:
@@ -536,7 +533,7 @@ class Discussion(DiscussionBoundBase, NamedClassMixin):
                                                         ).filter(
             LocalUserRole.discussion_id == self.id,
             AgentStatusInDiscussion.discussion_id == self.id,
-            AgentStatusInDiscussion.last_visit != None,
+            AgentStatusInDiscussion.last_visit != None,  # noqa: E711
             notif_cls.discussion_id == self.id,
             notif_cls.creation_origin == NotificationCreationOrigin.DISCUSSION_DEFAULT)
         deactivated = default_ns.filter(
@@ -553,17 +550,17 @@ class Discussion(DiscussionBoundBase, NamedClassMixin):
                  "last_status_change_date": datetime.utcnow()},
                 synchronize_session=False)
             # Materialize missing subscriptions
-            missing_subscriptions_query = self.db.query(User.id
-                                                        ).join(LocalUserRole, LocalUserRole.user_id == User.id
-                                                               ).join(AgentStatusInDiscussion,
-                                                                      AgentStatusInDiscussion.profile_id == User.id
-                                                                      ).outerjoin(notif_cls, (notif_cls.user_id == User.id) & (
-                                                                          notif_cls.discussion_id == self.id)
-            ).filter(LocalUserRole.discussion_id == self.id,
-                     AgentStatusInDiscussion.discussion_id == self.id,
-                     AgentStatusInDiscussion.last_visit != None,
-                     LocalUserRole.role_id.in_(roles_subscribed),
-                     notif_cls.id == None).distinct()
+            missing_subscriptions_query = self.db.query(
+                User.id).join(
+                    LocalUserRole, LocalUserRole.user_id == User.id
+                ).join(AgentStatusInDiscussion, AgentStatusInDiscussion.profile_id == User.id
+                ).outerjoin(notif_cls, (notif_cls.user_id == User.id) & (notif_cls.discussion_id == self.id)
+            ).filter(
+                LocalUserRole.discussion_id == self.id,
+                AgentStatusInDiscussion.discussion_id == self.id,
+                AgentStatusInDiscussion.last_visit != None,  # noqa: E711
+                LocalUserRole.role_id.in_(roles_subscribed),
+                notif_cls.id == None).distinct()
 
             def missing_subscriptions_gen():
                 return [
@@ -715,7 +712,7 @@ class Discussion(DiscussionBoundBase, NamedClassMixin):
                                                               post=post_object,
                                                               message_id_in_source=fb_post_id)
                                         assocs.append(cs)
-                                    except:
+                                    except Exception:
                                         raise ValueError(
                                             "Failed on content sink transaction")
 
@@ -729,7 +726,7 @@ class Discussion(DiscussionBoundBase, NamedClassMixin):
         User, viewonly=True, secondary=LocalUserRole.__table__,
         primaryjoin="LocalUserRole.discussion_id == Discussion.id",
         secondaryjoin=((LocalUserRole.user_id == User.id)
-                       & (LocalUserRole.requested == False)),
+                       & (LocalUserRole.requested == False)),  # noqa: E712
         backref="involved_in_discussion")
 
     # The list of praticipants actually subscribed to the discussion
@@ -739,7 +736,7 @@ class Discussion(DiscussionBoundBase, NamedClassMixin):
                        ((LocalUserRole.role_id == Role.id) & (Role.name == R_PARTICIPANT))),
         primaryjoin="LocalUserRole.discussion_id == Discussion.id",
         secondaryjoin=((LocalUserRole.user_id == User.id)
-                       & (LocalUserRole.requested == False)),
+                       & (LocalUserRole.requested == False)),  # noqa: E712
         backref="participant_in_discussion")
 
     def current_discussion_phase(self):
