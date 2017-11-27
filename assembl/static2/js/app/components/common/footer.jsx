@@ -12,7 +12,7 @@ class Footer extends React.Component {
       <Grid fluid className="background-dark relative" id="footer">
         <div className="max-container">
           <div className={socialMedias ? 'footer' : 'footer margin-xl'}>
-            {socialMedias &&
+            {socialMedias && (
               <div>
                 <p>
                   <Translate value="footer.socialMedias" />
@@ -26,7 +26,8 @@ class Footer extends React.Component {
                     );
                   })}
                 </div>
-              </div>}
+              </div>
+            )}
             <div className="copyright">
               ©{' '}
               <Link to="http://assembl.bluenove.com/" target="_blank">
@@ -38,24 +39,23 @@ class Footer extends React.Component {
               </Link>
             </div>
             <div className="terms">
-              {termsOfUseUrl &&
+              {termsOfUseUrl && (
                 <div className="terms-of-use">
                   <Link to={termsOfUseUrl} target="_blank">
                     <Translate value="footer.terms" />
                   </Link>
-                </div>}
-              {termsOfUseUrl && legalNoticeUrl && <span style={{ padding: '0 5px' }}>-</span>}
-              {legalNoticeUrl &&
+                </div>
+              )}
+              {termsOfUseUrl && legalNoticeUrl && <span className="small-hyphen-padding"> &mdash; </span>}
+              {legalNoticeUrl && (
                 <div className="legal-notices">
                   <Link to={legalNoticeUrl} target="_blank">
                     <Translate value="footer.legalNotices" />
                   </Link>
-                </div>}
+                </div>
+              )}
             </div>
-            {assemblVersion &&
-              <div className="assembl-version">
-                v{assemblVersion}
-              </div>}
+            {assemblVersion && <div className="assembl-version">v{assemblVersion}</div>}
           </div>
         </div>
       </Grid>

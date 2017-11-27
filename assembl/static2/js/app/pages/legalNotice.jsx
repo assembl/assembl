@@ -1,5 +1,5 @@
 import { graphql } from 'react-apollo';
-import LargeTextParagraph from '../components/common/largeTextParagraph';
+import TextWithHeaderPage from '../components/common/textWithHeaderPage';
 import LegalNoticeQuery from '../graphql/LegalNoticesQuery.graphql';
 
 export default graphql(LegalNoticeQuery, {
@@ -9,4 +9,4 @@ export default graphql(LegalNoticeQuery, {
       title: data.title
     };
   }
-})(LargeTextParagraph);
+})(TextWithHeaderPage);
