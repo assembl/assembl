@@ -2035,7 +2035,6 @@ query { sections {
 
 
 def test_mutation_delete_section_fails_for_non_custom_sections(sections, graphql_request):
-    # raise error if we try to delete anything but CUSTOM type
     non_custom_section_id = to_global_id('Section', sections[1].id)
     variables = {
         'id': non_custom_section_id
