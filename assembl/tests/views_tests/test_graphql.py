@@ -1982,3 +1982,47 @@ def test_query_legal_notice_and_terms(discussion, graphql_request, test_session)
     assert tac_en['localeCode'] == u"en"
     assert tac_fr['value'] == u"Vous ne pouvez pas mesurer le driver sans mesurer le protocole JSON en 1080p"
     assert tac_fr['localeCode'] == u"fr"
+
+
+def test_update_legal_notice_and_terms(graphql_request, discussion):
+    res = schema.execute(u"""
+mutation updateLegalNoticeAndTerms {
+    updateLegalNoticeAndTerms(
+        legalNoticeEntries:[
+            {
+                value: "Use the digital JBOD panel, then you can override the solid state microchip!",
+                localeCode: "en"
+            }
+        ],
+        termsEntries:[
+            {
+                value: "If we reboot the driver, we can get to the AGP protocol through the virtual HTTP bus!",
+                localeCode: "en"
+            }
+        ]
+    ) {
+        legalNoticeAndTerms {
+            legalNoticeEntries {
+                localeCode
+                value
+            }
+            termsAndConditionsEntries {
+                localeCode
+                value
+            }
+        }
+    }
+}
+""", context_value=graphql_request)
+    assert res.data is not None
+
+    assert res.data['updateLegalNoticeAndTerms'] is not None
+    assert res.data['updateLegalNoticeAndTerms']['legalNoticeAndTerms'] is not None
+
+    legal_notice_and_terms = res.data['updateLegalNoticeAndTerms']['legalNoticeAndTerms']
+    legal_notice_en = legal_notice_and_terms['legalNoticeEntries'][0]
+    tac_en = legal_notice_and_terms['termsAndConditionsEntries'][0]
+    assert legal_notice_en['localeCode'] == 'en'
+    assert legal_notice_en['value'] == u"Use the digital JBOD panel, then you can override the solid state microchip!"
+    assert tac_en['localeCode'] == 'en'
+    assert tac_en['value'] == u"If we reboot the driver, we can get to the AGP protocol through the virtual HTTP bus!"

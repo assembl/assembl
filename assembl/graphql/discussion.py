@@ -199,3 +199,52 @@ class UpdateDiscussionPreferences(graphene.Mutation):
             languages=[LocalePreference(locale=x) for
                        x in discussion.discussion_locales])
         return UpdateDiscussionPreferences(preferences=discussion_pref)
+
+
+class UpdateLegalNoticeAndTerms(graphene.Mutation):
+    class Input:
+        legal_notice_entries = graphene.List(LangStringEntryInput)
+        terms_entries = graphene.List(LangStringEntryInput)
+
+    legal_notice_and_terms = graphene.Field(lambda: LegalNoticeAndTerms)
+
+    @staticmethod
+    @abort_transaction_on_exception
+    def mutate(root, args, context, info):
+        cls = models.Discussion
+        discussion_id = context.matchdict['discussion_id']
+        discussion = models.Discussion.get(discussion_id)
+        user_id = context.authenticated_userid or Everyone
+
+        permissions = get_permissions(user_id, discussion_id)
+        allowed = discussion.user_can(
+            user_id, CrudPermissions.UPDATE, permissions)
+        if not allowed:
+            raise HTTPUnauthorized()
+
+        with cls.default_db.no_autoflush as db:
+            legal_notice_entries = args.get('legal_notice_entries')
+            if legal_notice_entries is not None and len(legal_notice_entries) == 0:
+                raise Exception(
+                    'Legal notice entries needs at least one entry')
+                # Better to have this message than
+                # 'NoneType' object has no attribute 'owner_object'
+                # when creating the saobj below if title=None
+
+            update_langstring_from_input_entries(
+                discussion, 'legal_notice', legal_notice_entries)
+
+            terms_entries = args.get('terms_entries')
+            if terms_entries is not None and len(terms_entries) == 0:
+                raise Exception(
+                    'Terms and conditions entries needs at least one entry')
+                # Better to have this message than
+                # 'NoneType' object has no attribute 'owner_object'
+                # when creating the saobj below if title=None
+
+            update_langstring_from_input_entries(
+                discussion, 'terms_and_conditions', terms_entries)
+
+        db.flush()
+        legal_notice_and_terms = LegalNoticeAndTerms()
+        return UpdateLegalNoticeAndTerms(legal_notice_and_terms=legal_notice_and_terms)

@@ -20,7 +20,7 @@ from .document import UploadDocument
 from .discussion import (DiscussionPreferences, LocalePreference,
                          ResourcesCenter, LegalNoticeAndTerms,
                          UpdateDiscussionPreferences,
-                         UpdateResourcesCenter)
+                         UpdateResourcesCenter, UpdateLegalNoticeAndTerms)
 from .idea import (CreateIdea, CreateThematic, DeleteThematic, Idea, IdeaUnion,
                    Thematic, UpdateThematic)
 from .langstring import resolve_langstring
@@ -232,6 +232,7 @@ class Mutations(graphene.ObjectType):
     delete_resource = DeleteResource.Field()
     update_resource = UpdateResource.Field()
     update_resources_center = UpdateResourcesCenter.Field()
+    update_legal_notice_and_terms = UpdateLegalNoticeAndTerms.Field()
 
 
 Schema = graphene.Schema(query=Query, mutation=Mutations)
