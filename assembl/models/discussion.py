@@ -85,6 +85,16 @@ class Discussion(DiscussionBoundBase, NamedClassMixin):
             "discussion_from_resources_center_title", lazy="dynamic"),
         cascade="all, delete-orphan")
 
+    terms_and_conditions_id = Column(Integer(), ForeignKey(LangString.id))
+    terms_and_conditions = relationship(
+        LangString, lazy="joined", single_parent=True, primaryjoin=terms_and_conditions_id == LangString.id,
+        backref=backref("discussion_from_terms_and_conditions", lazy="dynamic"), cascade="all, delete-orphan")
+
+    legal_notice_id = Column(Integer(), ForeignKey(LangString.id))
+    legal_notice = relationship(
+        LangString, lazy="joined", single_parent=True, primaryjoin=legal_notice_id == LangString.id,
+        backref=backref("discussion_from_legal_notice", lazy="dynamic"), cascade="all, delete-orphan")
+
     @classmethod
     def get_naming_column_name(cls):
         return "slug"
