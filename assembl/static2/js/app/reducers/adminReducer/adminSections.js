@@ -39,7 +39,10 @@ export const sectionsInOrder = (state: List<number> = List(), action: ReduxActio
   case UPDATE_SECTIONS: {
     return List(
       action.sections.map((s) => {
-        return s.id;
+        if (s.sectionType !== 'ADMINISTRATION') {
+          return s.id;
+        }
+        return null;
       })
     );
   }
@@ -49,7 +52,6 @@ export const sectionsInOrder = (state: List<number> = List(), action: ReduxActio
 };
 
 const defaultResource = Map({
-  toDelete: false,
   isNew: true,
   titleEntries: List(),
   url: '',
@@ -61,7 +63,30 @@ export const sectionsById = (state: Map<string, Map> = Map(), action: ReduxActio
   case CREATE_SECTION:
     return state.set(action.id, defaultResource.set('id', action.id).set('order', action.order));
   case DELETE_SECTION: {
-    return state.setIn([action.id, 'toDelete'], true);
+    const sections = state.sort((a, b) => {
+      const aOrder = a.get('order');
+      const bOrder = b.get('order');
+      return aOrder - bOrder;
+    });
+    const idToDelete = state.getIn([action.id, 'id']);
+    let newState = Map();
+    let count = -1;
+    sections.forEach((s) => {
+      if (s.get('id') !== idToDelete && s.get('type') !== 'ADMINISTRATION') {
+        count += 1;
+        const sectionInfo = Map({
+          isNew: false,
+          order: count,
+          id: s.get('id'),
+          titleEntries: s.get('titleEntries'),
+          url: s.get('url'),
+          type: s.get('type')
+        });
+        newState = newState.set(s.get('id'), sectionInfo);
+      }
+    });
+
+    return newState;
   }
   case UPDATE_SECTION_URL:
     return state.setIn([action.id, 'url'], action.value);
@@ -108,7 +133,6 @@ export const sectionsById = (state: Map<string, Map> = Map(), action: ReduxActio
     let newState = Map();
     action.sections.forEach((section) => {
       const sectionInfo = Map({
-        toDelete: false,
         isNew: false,
         order: section.order,
         id: section.id,
