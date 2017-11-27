@@ -74,7 +74,7 @@ class CreateSection(graphene.Mutation):
             kwargs = {}
             kwargs['section_type'] = args.get('section_type', 'CUSTOM')
             kwargs['url'] = args.get('url')
-            kwargs['order'] = args.get('order')
+            kwargs['order'] = args.get('order', 10.0)
             saobj = cls(
                 discussion_id=discussion_id,
                 title=title_langstring,
@@ -151,7 +151,7 @@ class UpdateSection(graphene.Mutation):
 
             kwargs = {}
             kwargs['url'] = args.get('url', None)
-            kwargs['order'] = args.get('order', None)
+            kwargs['order'] = args.get('order', 10.0)
             for attr, value in kwargs.items():
                 setattr(section, attr, value)
 
