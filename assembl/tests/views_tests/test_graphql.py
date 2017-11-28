@@ -9,14 +9,16 @@ from assembl.graphql.utils import create_root_thematic
 
 
 def test_get_locales(graphql_request):
-    res = schema.execute(u'query { locales(lang:"fr") { localeCode, label } }', context_value=graphql_request)
+    res = schema.execute(
+        u'query { locales(lang: "fr") { localeCode, label } }', context_value=graphql_request)
     assert len(res.data['locales']) == 104
     assert res.data['locales'][-1]['localeCode'] == u'zu'
     assert res.data['locales'][-1]['label'] == u'zoulou'
 
 
 def test_get_thematics_noresult(graphql_request):
-    res = schema.execute(u'query { thematics(identifier:"survey") { id, title, description, numPosts, numContributors, questions { title }, video {title, descriptionTop, descriptionBottom, htmlCode} } }', context_value=graphql_request)
+    res = schema.execute(
+        u'query { thematics(identifier: "survey") { id, title, description, numPosts, numContributors, questions { title }, video {title, descriptionTop, descriptionBottom, htmlCode} } }', context_value=graphql_request)
     assert json.loads(json.dumps(res.data)) == {u'thematics': []}
 
 
@@ -33,7 +35,8 @@ def test_get_thematics_no_video(discussion, graphql_request, test_session):
     test_session.commit()
     thematic_gid = to_global_id('Thematic', thematic.id)
 
-    res = schema.execute(u'query { thematics(identifier:"survey") { id, title, description, numPosts, numContributors, questions { title }, video {title, descriptionTop, descriptionBottom, descriptionSide, htmlCode} } }', context_value=graphql_request)
+    res = schema.execute(
+        u'query { thematics(identifier: "survey") { id, title, description, numPosts, numContributors, questions { title }, video {title, descriptionTop, descriptionBottom, descriptionSide, htmlCode} } }', context_value=graphql_request)
     assert json.loads(json.dumps(res.data)) == {
         u'thematics': [{u'description': None,
                         u'id': thematic_gid,
@@ -75,7 +78,8 @@ def test_get_thematics_with_video(discussion, graphql_request, test_session):
     test_session.commit()
     thematic_gid = to_global_id('Thematic', thematic.id)
 
-    res = schema.execute(u'query { thematics(identifier:"survey") { id, title, description, numPosts, numContributors, questions { title }, video {title, descriptionTop, descriptionBottom, descriptionSide, htmlCode} } }', context_value=graphql_request)
+    res = schema.execute(
+        u'query { thematics(identifier: "survey") { id, title, description, numPosts, numContributors, questions { title }, video {title, descriptionTop, descriptionBottom, descriptionSide, htmlCode} } }', context_value=graphql_request)
     assert json.loads(json.dumps(res.data)) == {
         u'thematics': [{u'description': None,
                         u'id': thematic_gid,
@@ -94,30 +98,38 @@ def test_get_thematics_with_video(discussion, graphql_request, test_session):
 def test_mutation_create_thematic_with_video(graphql_request):
     res = schema.execute(u"""
 mutation myFirstMutation {
-    createThematic(titleEntries:[
-        {value:"Comprendre les dynamiques et les enjeux", localeCode:"fr"},
-        {value:"Understanding the dynamics and issues", localeCode:"en"}
+    createThematic(titleEntries: [
+        {value: "Comprendre les dynamiques et les enjeux", localeCode: "fr"},
+        {value: "Understanding the dynamics and issues", localeCode: "en"}
         ],
         video: {
             titleEntries:[
-                {value:"Laurent Alexandre, chirurgien et expert en intelligence artificielle nous livre ses prédictions pour le 21e siècle.",
-                 localeCode:"fr"},
+                {
+                    value: "Laurent Alexandre, chirurgien et expert en intelligence artificielle nous livre ses prédictions pour le 21e siècle.",
+                    localeCode:"fr"
+                },
             ]
-            descriptionEntriesTop:[
-                {value:"Personne ne veut d'un monde où on pourrait manipuler nos cerveaux et où les états pourraient les bidouiller",
-                 localeCode:"fr"},
+            descriptionEntriesTop: [
+                {
+                    value: "Personne ne veut d'un monde où on pourrait manipuler nos cerveaux et où les états pourraient les bidouiller",
+                    localeCode: "fr"
+                },
             ],
-            descriptionEntriesBottom:[
-                {value:"Calise de tabarnak",
-                 localeCode:"fr"},
+            descriptionEntriesBottom: [
+                {
+                    value:"Calise de tabarnak",
+                    localeCode:"fr"
+                },
             ],
-            descriptionEntriesSide:[
-                {value:"Putain",
-                 localeCode:"fr"},
+            descriptionEntriesSide: [
+                {
+                    value:"Putain",
+                    localeCode:"fr"
+                },
             ],
-            htmlCode:"<object>....</object>"
+            htmlCode: "<object>....</object>"
         },
-        identifier:"survey") {
+        identifier: "survey") {
         thematic {
             title,
             identifier
@@ -174,16 +186,16 @@ mutation myFirstMutation {
                            }],
                            u'htmlCode': u"<object>....</object>",
                            }
-    }}}
+            }}}
 
 
 def test_mutation_create_thematic_multilang_implicit_en(graphql_request, user_language_preference_en_cookie):
     res = schema.execute(u"""
 mutation myFirstMutation {
-    createThematic(titleEntries:[
-        {value:"Comprendre les dynamiques et les enjeux", localeCode:"fr"},
-        {value:"Understanding the dynamics and issues", localeCode:"en"}
-    ], identifier:"survey") {
+    createThematic(titleEntries: [
+        {value: "Comprendre les dynamiques et les enjeux", localeCode: "fr"},
+        {value: "Understanding the dynamics and issues", localeCode: "en"}
+    ], identifier: "survey") {
         thematic {
             title,
             identifier
@@ -196,17 +208,17 @@ mutation myFirstMutation {
             u'thematic': {
                 u'title': u'Understanding the dynamics and issues',
                 u'identifier': u'survey'
-    }}}
+            }}}
 
 
 def test_mutation_create_thematic_multilang_implicit_fr(graphql_request, user_language_preference_fr_cookie):
     # adding en then fr on purpose, to really test that it looks at user preferences, not just the first original title
     res = schema.execute(u"""
 mutation myFirstMutation {
-    createThematic(titleEntries:[
-        {value:"Understanding the dynamics and issues", localeCode:"en"}
-        {value:"Comprendre les dynamiques et les enjeux", localeCode:"fr"},
-    ], identifier:"survey") {
+    createThematic(titleEntries: [
+        {value: "Understanding the dynamics and issues", localeCode: "en"}
+        {value: "Comprendre les dynamiques et les enjeux", localeCode: "fr"},
+    ], identifier: "survey") {
         thematic {
             title,
             identifier
@@ -219,18 +231,18 @@ mutation myFirstMutation {
             u'thematic': {
                 u'title': u'Comprendre les dynamiques et les enjeux',
                 u'identifier': u'survey'
-    }}}
+            }}}
 
 
 def test_mutation_create_thematic_multilang_explicit_fr(graphql_request):
     res = schema.execute(u"""
 mutation myFirstMutation {
-    createThematic(titleEntries:[
-        {value:"Comprendre les dynamiques et les enjeux", localeCode:"fr"},
-        {value:"Understanding the dynamics and issues", localeCode:"en"}
-    ], identifier:"survey") {
+    createThematic(titleEntries: [
+        {value: "Comprendre les dynamiques et les enjeux", localeCode: "fr"},
+        {value: "Understanding the dynamics and issues", localeCode: "en"}
+    ], identifier: "survey") {
         thematic {
-            title(lang:"fr"),
+            title(lang: "fr"),
             identifier
         }
     }
@@ -241,18 +253,18 @@ mutation myFirstMutation {
             u'thematic': {
                 u'title': u'Comprendre les dynamiques et les enjeux',
                 u'identifier': u'survey'
-    }}}
+            }}}
 
 
 def test_mutation_create_thematic_multilang_explicit_fr_fallback_to_en(graphql_request, user_language_preference_fr_cookie):
     # If we ask for French but don't have this translation, instead of returning null, fallback to english
     res = schema.execute(u"""
 mutation myFirstMutation {
-    createThematic(titleEntries:[
-        {value:"Understanding the dynamics and issues", localeCode:"en"}
-    ], identifier:"survey") {
+    createThematic(titleEntries: [
+        {value: "Understanding the dynamics and issues", localeCode: "en"}
+    ], identifier: "survey") {
         thematic {
-            title(lang:"fr"),
+            title(lang: "fr"),
             identifier
         }
     }
@@ -263,7 +275,8 @@ mutation myFirstMutation {
             u'thematic': {
                 u'title': u'Understanding the dynamics and issues',
                 u'identifier': u'survey'
-    }}}
+            }}}
+
 
 def test_mutation_create_thematic_multilang_explicit_fr_fallback_to_en_with_italian_cookie(graphql_request, user_language_preference_it_cookie):
     # If we ask for French but don't have this translation, instead of returning null, fallback to english
@@ -285,8 +298,7 @@ mutation myFirstMutation {
             u'thematic': {
                 u'title': u'Understanding the dynamics and issues',
                 u'identifier': u'survey'
-    }}}
-
+            }}}
 
 
 def test_mutation_create_thematic_upload_file(graphql_request):
@@ -393,7 +405,7 @@ mutation myFirstMutation {
             u'thematic': {
                 u'title': u'Understanding the dynamics and issues',
                 u'identifier': 'survey'
-    }}}
+            }}}
 
 
 def test_mutation_create_raise_if_no_title_entries(graphql_request):
@@ -425,7 +437,7 @@ mutation myFirstMutation {
     }
 }
 """, context_value=graphql_request)
-    assert json.loads(json.dumps(res.data)) == { u'createThematic': None }
+    assert json.loads(json.dumps(res.data)) == {u'createThematic': None}
 
 
 def test_mutation_create_thematic_with_questions(graphql_request):
@@ -467,7 +479,7 @@ mutation myFirstMutation {
                     {u'title': u"Seconde question ?"},
                     {u'title': u"Troisième question ?"}
                 ]
-    }}}
+            }}}
 
 
 def test_delete_thematic(graphql_request, thematic_and_question):
@@ -482,7 +494,8 @@ mutation myFirstMutation {
 }
 """ % thematic_id, context_value=graphql_request)
     assert True == res.data['deleteThematic']['success']
-    res = schema.execute(u'query { thematics(identifier:"survey") { id, title, description, numPosts, numContributors, questions { title }, video {title, descriptionTop, descriptionBottom, htmlCode} } }', context_value=graphql_request)
+    res = schema.execute(
+        u'query { thematics(identifier:"survey") { id, title, description, numPosts, numContributors, questions { title }, video {title, descriptionTop, descriptionBottom, htmlCode} } }', context_value=graphql_request)
     assert json.loads(json.dumps(res.data)) == {u'thematics': []}
 
 
@@ -497,8 +510,8 @@ def test_get_thematic_via_node_query(graphql_request, thematic_and_question):
         }
     }""" % thematic_id, context_value=graphql_request)
     assert json.loads(json.dumps(res.data)) == {
-            u'node': {u"__typename": u"Thematic",
-                      u"title": u"Understanding the dynamics and issues"}}
+        u'node': {u"__typename": u"Thematic",
+                  u"title": u"Understanding the dynamics and issues"}}
 
 
 def test_get_question_via_node_query(graphql_request, thematic_and_question):
@@ -512,8 +525,8 @@ def test_get_question_via_node_query(graphql_request, thematic_and_question):
         }
     }""" % first_question_id, context_value=graphql_request)
     assert json.loads(json.dumps(res.data)) == {
-            u'node': {u"__typename": u"Question",
-                      u"title": u"Comment qualifiez-vous l'emergence de l'Intelligence Artificielle dans notre société ?"}}
+        u'node': {u"__typename": u"Question",
+                  u"title": u"Comment qualifiez-vous l'emergence de l'Intelligence Artificielle dans notre société ?"}}
 
 
 def test_get_proposition_post_via_node_query(graphql_request, proposition_id):
@@ -526,8 +539,8 @@ def test_get_proposition_post_via_node_query(graphql_request, proposition_id):
         }
     }""" % proposition_id, context_value=graphql_request)
     assert json.loads(json.dumps(res.data)) == {
-            u'node': {u"__typename": u"Post",
-                      u"body": u"une proposition..."}}
+        u'node': {u"__typename": u"Post",
+                  u"body": u"une proposition..."}}
 
 
 def test_update_thematic(graphql_request, thematic_and_question):
@@ -561,8 +574,10 @@ mutation secondMutation {
         u'updateThematic': {
             u'thematic': {
                 u'titleEntries': [
-                    {u'value': u"nderstanding the dynamics and issues", u'localeCode': u"en"},
-                    {u'value': u"omprendre les dynamiques et les enjeux", u'localeCode': u"fr"}
+                    {u'value': u"nderstanding the dynamics and issues",
+                        u'localeCode': u"en"},
+                    {u'value': u"omprendre les dynamiques et les enjeux",
+                        u'localeCode': u"fr"}
                 ],
                 u'identifier': u'urvey',
                 u'questions': [
@@ -570,7 +585,7 @@ mutation secondMutation {
                         {u'value': u"omment qualifiez-vous l'emergence de l'Intelligence Artificielle dans notre société ?", u'localeCode': u"fr"}
                     ]},
                 ]
-    }}}
+            }}}
 
 
 def test_update_thematic_delete_question(graphql_request, thematic_and_question):
@@ -599,13 +614,15 @@ mutation secondMutation {
         u'updateThematic': {
             u'thematic': {
                 u'titleEntries': [
-                    {u'value': u"Understanding the dynamics and issues", u'localeCode': u"en"},
-                    {u'value': u"Comprendre les dynamiques et les enjeux", u'localeCode': u"fr"}
+                    {u'value': u"Understanding the dynamics and issues",
+                        u'localeCode': u"en"},
+                    {u'value': u"Comprendre les dynamiques et les enjeux",
+                        u'localeCode': u"fr"}
                 ],
                 u'identifier': u'survey',
                 u'questions': [
                 ]
-    }}}
+            }}}
 
 
 def test_update_thematic_delete_video(graphql_request, thematic_with_video_and_question):
@@ -655,8 +672,10 @@ mutation myMutation($thematicId:ID!) {
         u'updateThematic': {
             u'thematic': {
                 u'titleEntries': [
-                    {u'value': u"Understanding the dynamics and issues", u'localeCode': u"en"},
-                    {u'value': u"Comprendre les dynamiques et les enjeux", u'localeCode': u"fr"}
+                    {u'value': u"Understanding the dynamics and issues",
+                        u'localeCode': u"en"},
+                    {u'value': u"Comprendre les dynamiques et les enjeux",
+                        u'localeCode': u"fr"}
                 ],
                 u'identifier': u'survey',
                 u'questions': [
@@ -665,7 +684,7 @@ mutation myMutation($thematicId:ID!) {
                     ]},
                 ],
                 u'video': None
-    }}}
+            }}}
 
 
 def test_update_thematic_add_question(graphql_request, thematic_and_question):
@@ -702,19 +721,22 @@ mutation secondMutation {
         u'updateThematic': {
             u'thematic': {
                 u'titleEntries': [
-                    {u'value': u"Understanding the dynamics and issues", u'localeCode': u"en"},
-                    {u'value': u"Comprendre les dynamiques et les enjeux", u'localeCode': u"fr"}
+                    {u'value': u"Understanding the dynamics and issues",
+                        u'localeCode': u"en"},
+                    {u'value': u"Comprendre les dynamiques et les enjeux",
+                        u'localeCode': u"fr"}
                 ],
                 u'identifier': u'survey',
                 u'questions': [
                     {u'titleEntries': [
-                        {u'value': u"Seconde question mais en premier !", u'localeCode': u"fr"}
+                        {u'value': u"Seconde question mais en premier !",
+                            u'localeCode': u"fr"}
                     ]},
                     {u'titleEntries': [
                         {u'value': u"Comment qualifiez-vous l'emergence de l'Intelligence Artificielle dans notre société ?", u'localeCode': u"fr"}
                     ]},
                 ]
-    }}}
+            }}}
 
 
 def test_mutation_create_post(graphql_request, thematic_and_question):
@@ -748,7 +770,7 @@ mutation myFirstMutation {
                 u'creator': {u'name': u'Mr. Administrator'},
                 u'bodyMimeType': u'text/html',
                 u'publicationState': u'PUBLISHED'
-    }}}
+            }}}
 
 
 def test_mutation_create_post_without_subject(graphql_request, thematic_and_question):
@@ -777,7 +799,7 @@ mutation myFirstMutation {
                 u'body': u"une proposition...",
                 u'creator': {u'name': u'Mr. Administrator'},
                 u'mySentiment': None
-    }}}
+            }}}
 
 
 def test_mutation_create_post_on_column(graphql_request,
@@ -825,7 +847,7 @@ mutation myFirstMutation {
                 u'bodyMimeType': u'text/html',
                 u'publicationState': u'PUBLISHED',
                 u'messageClassifier': classifier
-    }}}
+            }}}
 
 
 def test_mutation_delete_post(graphql_request, top_post_in_thread_phase):
@@ -852,7 +874,7 @@ mutation myMutation($postId: ID!) {
                 u'parentId': None,
                 u'creator': {u'name': u'Mr. Administrator'},
                 u'publicationState': 'DELETED_BY_USER'
-    }}}
+            }}}
 
 
 def test_mutation_undelete_post(graphql_request, top_post_in_thread_phase):
@@ -879,7 +901,7 @@ mutation myMutation($postId: ID!) {
                 u'parentId': None,
                 u'creator': {u'name': u'Mr. Administrator'},
                 u'publicationState': 'DELETED_BY_USER'
-    }}}
+            }}}
     res = schema.execute(u"""
 mutation myMutation($postId: ID!) {
     undeletePost(postId: $postId) {
@@ -903,7 +925,7 @@ mutation myMutation($postId: ID!) {
                 u'parentId': None,
                 u'creator': {u'name': u'Mr. Administrator'},
                 u'publicationState': 'PUBLISHED'
-    }}}
+            }}}
 
 
 def test_mutation_add_sentiment(graphql_request, proposition_id):
@@ -929,8 +951,8 @@ mutation myFirstMutation {
         u'addSentiment': {
             u'post': {
                 u'sentimentCounts': {
-                   u'like': 1,
-                   u'disagree': 0,
+                    u'like': 1,
+                    u'disagree': 0,
                 },
                 u'mySentiment': u"LIKE"
             }
@@ -970,8 +992,8 @@ mutation myFirstMutation {
         u'addSentiment': {
             u'post': {
                 u'sentimentCounts': {
-                   u'like': 0,
-                   u'disagree': 1,
+                    u'like': 0,
+                    u'disagree': 1,
                 },
                 u'mySentiment': u"DISAGREE"
             }
@@ -1024,8 +1046,8 @@ def test_mutation_delete_sentiment(graphql_request, proposition_id):
     res = schema.execute(u"""
 mutation myFirstMutation {
     addSentiment(
-        postId:"%s",
-        type:LIKE
+        postId: "%s",
+        type: LIKE
     ) {
       post {
         ... on Post {
@@ -1042,7 +1064,7 @@ mutation myFirstMutation {
     res = schema.execute(u"""
 mutation myFirstMutation {
     deleteSentiment(
-        postId:"%s",
+        postId: "%s",
     ) {
       post {
         ... on Post {
@@ -1068,9 +1090,9 @@ mutation myFirstMutation {
         }
     }
 
-def test_mutation_create_top_post(graphql_request, idea_in_thread_phase, top_post_in_thread_phase):
+
+def test_mutation_create_top_post(graphql_request, idea_in_thread_phase):
     idea_id = idea_in_thread_phase
-    in_reply_to_post_id = top_post_in_thread_phase
     res = schema.execute(u"""
 mutation createPost($ideaId: ID!, $subject: String, $body: String!, $parentId: ID) {
   createPost(ideaId: $ideaId, subject: $subject, body: $body, parentId: $parentId) {
@@ -1098,8 +1120,9 @@ mutation createPost($ideaId: ID!, $subject: String, $body: String!, $parentId: I
                 u'body': u"une proposition...",
                 u'parentId': None,
                 u'creator': {u'name': u'Mr. Administrator'},
-                u'indirectIdeaContentLinks': [{u'idea': { u'id': idea_in_thread_phase }}]
-    }}}
+                u'indirectIdeaContentLinks': [{u'idea': {u'id': idea_in_thread_phase}}]
+            }}}
+
 
 def test_mutation_create_reply_post(graphql_request, idea_in_thread_phase, top_post_in_thread_phase):
     idea_id = idea_in_thread_phase
@@ -1131,8 +1154,8 @@ mutation createPost($ideaId: ID!, $subject: String, $body: String!, $parentId: I
                 u'body': u"une proposition...",
                 u'parentId': in_reply_to_post_id,
                 u'creator': {u'name': u'Mr. Administrator'},
-                u'indirectIdeaContentLinks': [{u'idea': { u'id': idea_in_thread_phase }}]
-    }}}
+                u'indirectIdeaContentLinks': [{u'idea': {u'id': idea_in_thread_phase}}]
+            }}}
 
 
 def test_mutation_create_reply_post_no_subject(graphql_request, idea_in_thread_phase, top_post_in_thread_phase):
@@ -1141,9 +1164,9 @@ def test_mutation_create_reply_post_no_subject(graphql_request, idea_in_thread_p
     res = schema.execute(u"""
 mutation myFirstMutation {
     createPost(
-        ideaId:"%s",
-        parentId:"%s",
-        body:"une proposition..."
+        ideaId: "%s",
+        parentId: "%s",
+        body: "une proposition..."
     ) {
         post {
             ... on Post {
@@ -1163,39 +1186,40 @@ mutation myFirstMutation {
                 u'body': u"une proposition...",
                 u'parentId': in_reply_to_post_id,
                 u'creator': {u'name': u'Mr. Administrator'}
-    }}}
+            }}}
 
 
 def test_get_proposals(graphql_request, thematic_and_question, proposals):
     thematic_id, first_question_id = thematic_and_question
     res = schema.execute(u"""query {
-        node(id:"%s") {
+        node(id: "%s") {
             ... on Question {
                 title,
-                posts(first:10) {
+                posts(first: 10) {
                     edges {
                         node {
                         ... on Post { body } } } } } } }""" % first_question_id, context_value=graphql_request)
     assert json.loads(json.dumps(res.data)) == {
-            u'node': {
-                u"title": u"Comment qualifiez-vous l'emergence de l'Intelligence Artificielle dans notre soci\xe9t\xe9 ?",
-                u"posts":
-                    {u'edges': [{u'node': {u'body': u'une proposition 14'}},
-                                {u'node': {u'body': u'une proposition 13'}},
-                                {u'node': {u'body': u'une proposition 12'}},
-                                {u'node': {u'body': u'une proposition 11'}},
-                                {u'node': {u'body': u'une proposition 10'}},
-                                {u'node': {u'body': u'une proposition 9'}},
-                                {u'node': {u'body': u'une proposition 8'}},
-                                {u'node': {u'body': u'une proposition 7'}},
-                                {u'node': {u'body': u'une proposition 6'}},
-                                {u'node': {u'body': u'une proposition 5'}}]},
-                }}
+        u'node': {
+            u"title": u"Comment qualifiez-vous l'emergence de l'Intelligence Artificielle dans notre soci\xe9t\xe9 ?",
+            u"posts":
+            {u'edges': [{u'node': {u'body': u'une proposition 14'}},
+                        {u'node': {u'body': u'une proposition 13'}},
+                        {u'node': {u'body': u'une proposition 12'}},
+                        {u'node': {u'body': u'une proposition 11'}},
+                        {u'node': {u'body': u'une proposition 10'}},
+                        {u'node': {u'body': u'une proposition 9'}},
+                        {u'node': {u'body': u'une proposition 8'}},
+                        {u'node': {u'body': u'une proposition 7'}},
+                        {u'node': {u'body': u'une proposition 6'}},
+                        {u'node': {u'body': u'une proposition 5'}}]},
+        }}
+
 
 def test_get_thematics_order(graphql_request, thematic_with_video_and_question, second_thematic_with_questions):
 
     res = schema.execute(
-        u'query { thematics(identifier:"survey") { title, order } }',
+        u'query { thematics(identifier: "survey") { title, order } }',
         context_value=graphql_request)
     assert json.loads(json.dumps(res.data)) == {
         u'thematics': [
@@ -1204,13 +1228,14 @@ def test_get_thematics_order(graphql_request, thematic_with_video_and_question, 
         ]
     }
 
+
 def test_thematics_change_order(graphql_request, thematic_with_video_and_question, second_thematic_with_questions):
     thematic_id, _ = thematic_with_video_and_question
     res = schema.execute(u"""
 mutation myMutation($thematicId:ID!, $order:Float!) {
     updateThematic(
-        id:$thematicId,
-        order:$order
+        id: $thematicId,
+        order: $order
     ) {
         thematic {
             order
@@ -1230,14 +1255,15 @@ mutation myMutation($thematicId:ID!, $order:Float!) {
         ]
     }
 
-def test_insert_thematic_between_two_thematics(graphql_request, thematic_with_video_and_question, second_thematic_with_questions):
+
+def test_insert_thematic_between_two_thematics(graphql_request, thematic_with_video_and_question):
     res = schema.execute(u"""
 mutation myMutation {
     createThematic(
-        titleEntries:[
-            {value:"AI for the common good", localeCode:"en"}
+        titleEntries: [
+            {value: "AI for the common good", localeCode: "en"}
         ],
-        identifier:"survey",
+        identifier: "survey",
         order: 1.5
     ) {
         thematic {
@@ -1258,9 +1284,8 @@ mutation myMutation {
         ]
     }
 
-def test_mutation_update_post(graphql_request, idea_in_thread_phase, top_post_in_thread_phase):
-    idea_id = idea_in_thread_phase
-    in_reply_to_post_id = top_post_in_thread_phase
+
+def test_mutation_update_post(graphql_request, top_post_in_thread_phase):
     res = schema.execute(u"""
 mutation myMutation($postId: ID!, $subject: String, $body: String!) {
     updatePost(
@@ -1277,21 +1302,20 @@ mutation myMutation($postId: ID!, $subject: String, $body: String!) {
     }
 }
 """, context_value=graphql_request,
-        variable_values={
-            "postId": top_post_in_thread_phase,
-            "subject": u"modified proposal",
-            "body": u"the modified proposal..."
-            })
+                         variable_values={
+                             "postId": top_post_in_thread_phase,
+                             "subject": u"modified proposal",
+                             "body": u"the modified proposal..."
+                         })
     assert json.loads(json.dumps(res.data)) == {
         u'updatePost': {
             u'post': {
                 u'subject': u'modified proposal',
                 u'body': u"the modified proposal...",
-    }}}
+            }}}
 
-def test_mutation_update_post_with_subject_null(graphql_request, idea_in_thread_phase, top_post_in_thread_phase):
-    idea_id = idea_in_thread_phase
-    in_reply_to_post_id = top_post_in_thread_phase
+
+def test_mutation_update_post_with_subject_null(graphql_request, top_post_in_thread_phase):
     res = schema.execute(u"""
 mutation myMutation($postId: ID!, $subject: String, $body: String!) {
     updatePost(
@@ -1308,20 +1332,19 @@ mutation myMutation($postId: ID!, $subject: String, $body: String!) {
     }
 }
 """, context_value=graphql_request,
-        variable_values={
-            "postId": top_post_in_thread_phase,
-            "body": u"the modified proposal..."
-            })
+                         variable_values={
+                             "postId": top_post_in_thread_phase,
+                             "body": u"the modified proposal..."
+                         })
     assert json.loads(json.dumps(res.data)) == {
         u'updatePost': {
             u'post': {
                 u'subject': u'Manger des choux à la crème',
                 u'body': u"the modified proposal...",
-    }}}
+            }}}
+
 
 def test_mutation_update_post_with_subject_empty_string(graphql_request, idea_in_thread_phase, top_post_in_thread_phase):
-    idea_id = idea_in_thread_phase
-    in_reply_to_post_id = top_post_in_thread_phase
     res = schema.execute(u"""
 mutation myMutation($postId: ID!, $subject: String, $body: String!) {
     updatePost(
@@ -1338,17 +1361,17 @@ mutation myMutation($postId: ID!, $subject: String, $body: String!) {
     }
 }
 """, context_value=graphql_request,
-        variable_values={
-            "postId": top_post_in_thread_phase,
-            "subject": u"",
-            "body": u"the modified proposal..."
-            })
+                         variable_values={
+                             "postId": top_post_in_thread_phase,
+                             "subject": u"",
+                             "body": u"the modified proposal..."
+                         })
     assert json.loads(json.dumps(res.data)) == {
         u'updatePost': {
             u'post': {
                 u'subject': u'Manger des choux à la crème',
                 u'body': u"the modified proposal...",
-    }}}
+            }}}
 
 
 def test_mutation_upload_document(graphql_request, idea_in_thread_phase):
@@ -1375,11 +1398,12 @@ mutation uploadDocument($file: String!) {
     }
 }
 """, context_value=graphql_request,
-        variable_values={
-            "file": "variables.file"
-            })
+                         variable_values={
+                             "file": "variables.file"
+                         })
     assert res.data['uploadDocument']['document']['id'] is not None
-    assert res.data['uploadDocument']['document']['externalUrl'].endswith('/data')
+    assert res.data['uploadDocument']['document']['externalUrl'].endswith(
+        '/data')
 #    assert json.loads(json.dumps(res.data)) == {
 #        u'uploadDocument': {
 #            u'document': {
@@ -1392,8 +1416,6 @@ mutation uploadDocument($file: String!) {
 
 def test_mutation_delete_post_attachment(graphql_request, idea_in_thread_phase, top_post_in_thread_phase):
     # TODO: write a test fixture that returns a post attachment id and remove AddPostAttachmentMutation everywhere
-    idea_id = idea_in_thread_phase
-    in_reply_to_post_id = top_post_in_thread_phase
     import os
     from io import BytesIO
 
@@ -1419,10 +1441,10 @@ mutation addPostAttachment($postId: ID!, $file: String!) {
     }
 }
 """, context_value=graphql_request,
-        variable_values={
-            "postId": top_post_in_thread_phase,
-            "file": "variables.attachment"
-            })
+                         variable_values={
+                             "postId": top_post_in_thread_phase,
+                             "file": "variables.attachment"
+                         })
     assert res.errors is None
     attachment_id = res.data['addPostAttachment']['post']['attachments'][-1]['id']
 
@@ -1447,10 +1469,10 @@ mutation deletePostAttachment($postId: ID!, $attachmentId: Int!) {
     }
 }
 """, context_value=graphql_request,
-    variable_values={
-        "attachmentId": attachment_id,
-        "postId": top_post_in_thread_phase,
-        })
+                         variable_values={
+                             "attachmentId": attachment_id,
+                             "postId": top_post_in_thread_phase,
+                         })
 
     assert json.loads(json.dumps(res.data)) == {
         u'deletePostAttachment': {
@@ -1469,9 +1491,12 @@ query { discussionPreferences { languages { locale, name(inLocale:"fr"), nativeN
         u'discussionPreferences': {
             u'languages':
                 [
-                    {u'locale': u'en', u'name': u'anglais', u'nativeName': u'English'},
-                    {u'locale': u'fr', u'name': u'français', u'nativeName': u'français'},
-                    {u'locale': u'ja', u'name': u'japonais', u'nativeName': u'日本語 (にほんご)'},
+                    {u'locale': u'en', u'name': u'anglais',
+                        u'nativeName': u'English'},
+                    {u'locale': u'fr', u'name': u'français',
+                        u'nativeName': u'français'},
+                    {u'locale': u'ja', u'name': u'japonais',
+                        u'nativeName': u'日本語 (にほんご)'},
                 ]
         }
     }
@@ -1481,7 +1506,7 @@ query { discussionPreferences { languages { locale, name(inLocale:"fr"), nativeN
 def test_query_default_discussion_preferences(graphql_request,
                                               discussion_with_lang_prefs):
     res = schema.execute(u"""
-query { defaultPreferences { languages { locale, name(inLocale:"fr") } } }""", context_value=graphql_request)
+query { defaultPreferences { languages { locale, name(inLocale: "fr") } } }""", context_value=graphql_request)
     assert json.loads(json.dumps(res.data)) == {
         u'defaultPreferences': {
             u'languages': [
@@ -1505,9 +1530,9 @@ mutation myMutation($languages: [String]!) {
     }
 }
 """, context_value=graphql_request,
-        variable_values={
-            "languages": ["ja", "de"]
-            })
+                         variable_values={
+                             "languages": ["ja", "de"]
+                         })
     assert json.loads(json.dumps(res.data)) == {
         u'updateDiscussionPreferences': {
             u'preferences': {
@@ -1516,11 +1541,11 @@ mutation myMutation($languages: [String]!) {
                     {u'locale': u'de'}
                 ]
             }
-    }}
+        }}
 
 
 def test_mutation_update_language_preference_empty_list(
-    graphql_request, discussion_with_lang_prefs):
+        graphql_request, discussion_with_lang_prefs):
     res = schema.execute(u"""
 mutation myMutation($languages: [String]!) {
     updateDiscussionPreferences(languages: $languages) {
@@ -1532,9 +1557,9 @@ mutation myMutation($languages: [String]!) {
     }
 }
 """, context_value=graphql_request,
-        variable_values={
-            "languages": []
-            })
+                         variable_values={
+                             "languages": []
+                         })
     assert res.errors is not None
 
 
@@ -1543,7 +1568,7 @@ def test_query_post_message_classifier(graphql_request,
     post_id = to_global_id('Post',
                            root_post_1_with_positive_message_classifier.id)
     res = schema.execute(u"""query {
-        node(id:"%s") {
+        node(id: "%s") {
             ... on Post {
                 messageClassifier
             }
@@ -1628,8 +1653,10 @@ query ColumnsQuery($id: ID!, $lang: String!) {
     res_data = json.loads(json.dumps(res.data))
     columns = res_data[u'idea'][u'messageColumns']
     assert len(columns) == 2
-    positive = filter(lambda c: c[u"messageClassifier"] == idea_message_column_positive.message_classifier, columns)[0]
-    negative = filter(lambda c: c[u"messageClassifier"] == idea_message_column_negative.message_classifier, columns)[0]
+    positive = filter(lambda c: c[u"messageClassifier"] ==
+                      idea_message_column_positive.message_classifier, columns)[0]
+    negative = filter(lambda c: c[u"messageClassifier"] ==
+                      idea_message_column_negative.message_classifier, columns)[0]
     assert positive == {
         u'color': u'green',
         u'header': u'This is a positive header',
@@ -1648,6 +1675,7 @@ query ColumnsQuery($id: ID!, $lang: String!) {
         u'numPosts': 1,
         u'title': u'Add your point of view against the theme'
     }
+
 
 def test_query_discussion_sentiments_count(
         graphql_request):
@@ -1671,8 +1699,8 @@ def test_query_resources(discussion, resource, resource_with_image_and_doc, grap
     query = u"""
 query { resources {
     id
-    title(lang:"en")
-    text(lang:"en")
+    title(lang: "en")
+    text(lang: "en")
     embedCode
     doc {
         externalUrl
@@ -1701,14 +1729,14 @@ def test_mutation_create_resource_no_permission(graphql_request):
     graphql_request.authenticated_userid = None
     res = schema.execute(u"""
 mutation createResource {
-    createResource(titleEntries:[{value:"Peu importe", localeCode:"fr"}]) {
+    createResource(titleEntries: [{value: "Peu importe", localeCode: "fr"}]) {
         resource {
             title
         }
     }
 }
 """, context_value=graphql_request)
-    assert json.loads(json.dumps(res.data)) == { u'createResource': None }
+    assert json.loads(json.dumps(res.data)) == {u'createResource': None}
 
 
 def test_mutation_create_resource(graphql_request):
@@ -1732,13 +1760,13 @@ def test_mutation_create_resource(graphql_request):
         u'path/to/mydoc.pdf', 'application/pdf')
 
     res = schema.execute(u"""
-mutation createResource($img:String,$doc:String) {
+mutation createResource($img: String, $doc: String) {
     createResource(
-        titleEntries:%s,textEntries:%s,embedCode:"%s",image:$img,doc:$doc
+        titleEntries: %s,textEntries: %s,embedCode: "%s",image: $img,doc: $doc
     ) {
         resource {
-            title(lang:"fr")
-            text(lang:"fr")
+            title(lang: "fr")
+            text(lang: "fr")
             embedCode
             image {
                 externalUrl
@@ -1772,14 +1800,15 @@ def test_delete_resource(graphql_request, resource):
     res = schema.execute(u"""
 mutation deleteResource {
     deleteResource(
-        resourceId:"%s",
+        resourceId: "%s",
     ) {
         success
     }
 }
 """ % resource_id, context_value=graphql_request)
     assert res.data['deleteResource']['success'] is True
-    res = schema.execute(u'query { resources { id } }', context_value=graphql_request)
+    res = schema.execute(
+        u'query { resources { id } }', context_value=graphql_request)
     assert json.loads(json.dumps(res.data)) == {u'resources': []}
 
 
@@ -1803,24 +1832,24 @@ def test_update_resource(graphql_request, resource_with_image_and_doc):
         u'path/to/new-doc.pdf', 'application/pdf')
 
     res = schema.execute(u"""
-mutation updateResource($resourceId:ID!,$img:String,$doc:String) {
+mutation updateResource($resourceId: ID!, $img: String, $doc: String) {
     updateResource(
-        id:$resourceId,
-        titleEntries:[
-            {value:"My resource", localeCode:"en"},
-            {value:"Ma ressource", localeCode:"fr"}
+        id: $resourceId,
+        titleEntries: [
+            {value: "My resource", localeCode: "en"},
+            {value: "Ma ressource", localeCode: "fr"}
         ],
-        textEntries:[
-            {value:"Text in english", localeCode:"en"},
-            {value:"Texte en français", localeCode:"fr"}
+        textEntries: [
+            {value: "Text in english", localeCode: "en"},
+            {value: "Texte en français", localeCode: "fr"}
         ],
-        embedCode:"nothing",
-        image:$img,
-        doc:$doc
+        embedCode: "nothing",
+        image :$img,
+        doc: $doc
     ) {
         resource {
-            title(lang:"fr")
-            text(lang:"fr")
+            title(lang: "fr")
+            text(lang: "fr")
             embedCode
             image {
                 externalUrl
@@ -1906,11 +1935,11 @@ def test_update_resources_center(graphql_request, discussion):
     res = schema.execute(u"""
 mutation updateResourcesCenter($headerImage:String) {
     updateResourcesCenter(
-        titleEntries:[
-            {value:"My great resources center", localeCode:"en"},
-            {value:"Mon super centre de ressources", localeCode:"fr"}
+        titleEntries: [
+            {value: "My great resources center", localeCode: "en"},
+            {value: "Mon super centre de ressources", localeCode: "fr"}
         ],
-        headerImage:$headerImage,
+        headerImage: $headerImage,
     ) {
         resourcesCenter {
             titleEntries {
@@ -1942,7 +1971,7 @@ mutation updateResourcesCenter($headerImage:String) {
 
 def test_query_legal_notice(discussion, graphql_request, test_session):
     res = schema.execute(u"""query {
-        legalNotice(lang:"en")
+        legalNotice(lang: "en")
     }""", context_value=graphql_request)
     res_data = json.loads(json.dumps(res.data))
     assert res_data['legalNotice'] is not None
@@ -1951,7 +1980,7 @@ def test_query_legal_notice(discussion, graphql_request, test_session):
 
 def test_query_terms_and_conditions(discussion, graphql_request, test_session):
     res = schema.execute(u"""query {
-        termsAndConditions(lang:"en")
+        termsAndConditions(lang: "en")
     }""", context_value=graphql_request)
     res_data = json.loads(json.dumps(res.data))
     assert res_data['termsAndConditions'] is not None
@@ -1988,13 +2017,13 @@ def test_update_legal_notice_and_terms(graphql_request, discussion):
     res = schema.execute(u"""
 mutation updateLegalNoticeAndTerms {
     updateLegalNoticeAndTerms(
-        legalNoticeEntries:[
+        legalNoticeEntries: [
             {
                 value: "Use the digital JBOD panel, then you can override the solid state microchip!",
                 localeCode: "en"
             }
         ],
-        termsEntries:[
+        termsEntries: [
             {
                 value: "If we reboot the driver, we can get to the AGP protocol through the virtual HTTP bus!",
                 localeCode: "en"
