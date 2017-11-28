@@ -52,6 +52,11 @@ from assembl.models.post import countable_publication_states
 from assembl.nlp.translation_service import DummyGoogleTranslationService
 from assembl.graphql.permissions_helpers import require_instance_permission
 from assembl.auth import CrudPermissions
+from assembl.graphql.user_language_preference import (
+    UserLanguagePreference,
+    CreateUserLanguagePreference,
+    UpdateUserLanguagePreference
+)
 
 convert_sqlalchemy_type.register(EmailString)(convert_column_to_string)
 models.Base.query = models.Base.default_db.query_property()
@@ -93,7 +98,7 @@ class Query(graphene.ObjectType):
     discussion = graphene.Field(Discussion)
     landing_page_module_types = graphene.List(LandingPageModuleType)
     landing_page_modules = graphene.List(LandingPageModule)
-    language_preferences = graphene.List(
+    user_language_preferences = graphene.List(
         UserLanguagePreference, user_id=graphene.String(required=True))
 
     def resolve_resources(self, args, context, info):
@@ -306,18 +311,19 @@ class Query(graphene.ObjectType):
 
         return sorted(modules, key=attrgetter('order'))
 
-    def resolve_language_preferences(self, args, context, info):
+    def resolve_user_language_preferences(self, args, context, info):
         user_id = Node.from_global_id(args.get('user_id'))[1]
         user = models.User.get(user_id)
         prefs = user.language_preference
-        prefs.sort(key=lambda ulp: (ulp.preferred_order, ulp.source_of_evidence))
+        prefs.sort(key=lambda ulp: (ulp.preferred_order,
+                                    ulp.source_of_evidence))
         ulps = [UserLanguagePreference(
             user=AgentProfile(user_id=p.user_id),
             locale=Locale(locale_code=p.locale.base_locale),
             source=p.source_of_evidence,
-            translation_locale=p.translate_to_locale.base_locale if p.translate_to_locale is not None
-                else None,
-            order=p.preferred_order) for p in prefs]
+            translation_locale=p.translate_to_locale.base_locale if
+                p.translate_to_locale is not None else None,
+                order=p.preferred_order) for p in prefs]
         return ulps
 
 
@@ -366,6 +372,8 @@ class Mutations(graphene.ObjectType):
     add_post_extract = AddPostExtract.Field()
     update_extract = UpdateExtract.Field()
     delete_extract = DeleteExtract.Field()
+    create_user_language_preference = CreateUserLanguagePreference.Field()
+    update_user_language_preference = UpdateUserLanguagePreference.Field()
 
 
 Schema = graphene.Schema(query=Query, mutation=Mutations)
