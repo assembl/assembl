@@ -1971,20 +1971,26 @@ mutation updateResourcesCenter($headerImage:String) {
 
 def test_query_legal_notice(discussion, graphql_request, test_session):
     res = schema.execute(u"""query {
-        legalNotice(lang: "en")
+        legalNoticeAndTerms {
+            legalNotice(lang: "en")
+        }
     }""", context_value=graphql_request)
     assert res.errors is None
     res_data = json.loads(json.dumps(res.data))
-    assert res_data['legalNotice'] == u'We need to input the optical HDD sensor!'
+    legal_notice = res_data['legalNoticeAndTerms']['legalNotice']
+    assert legal_notice == u'We need to input the optical HDD sensor!'
 
 
 def test_query_terms_and_conditions(discussion, graphql_request, test_session):
     res = schema.execute(u"""query {
-        termsAndConditions(lang: "en")
+        legalNoticeAndTerms {
+            termsAndConditions(lang: "en")
+        }
     }""", context_value=graphql_request)
     assert res.errors is None
     res_data = json.loads(json.dumps(res.data))
-    assert res_data['termsAndConditions'] == u"You can't quantify the driver without quantifying the 1080p JSON protocol!"
+    tac = res_data['legalNoticeAndTerms']['termsAndConditions']
+    assert tac == u"You can't quantify the driver without quantifying the 1080p JSON protocol!"
 
 
 def test_query_legal_notice_and_terms(discussion, graphql_request, test_session):

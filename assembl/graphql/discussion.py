@@ -82,8 +82,22 @@ class ResourcesCenter(graphene.ObjectType):
 
 class LegalNoticeAndTerms(graphene.ObjectType):
 
+    legal_notice = graphene.String(lang=graphene.String())
+    terms_and_conditions = graphene.String(lang=graphene.String())
     legal_notice_entries = graphene.List(LangStringEntry)
     terms_and_conditions_entries = graphene.List(LangStringEntry)
+
+    def resolve_legal_notice(self, args, context, info):
+        """Legal notice value in given locale."""
+        discussion_id = context.matchdict['discussion_id']
+        discussion = models.Discussion.get(discussion_id)
+        return resolve_langstring(discussion.legal_notice, args.get('lang'))
+
+    def resolve_terms_and_conditions(self, args, context, info):
+        """Terms and conditions value in given locale."""
+        discussion_id = context.matchdict['discussion_id']
+        discussion = models.Discussion.get(discussion_id)
+        return resolve_langstring(discussion.terms_and_conditions, args.get('lang'))
 
     def resolve_legal_notice_entries(self, args, context, info):
         discussion_id = context.matchdict['discussion_id']
