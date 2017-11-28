@@ -108,10 +108,13 @@
 
         .inline {
           text-align: center;
+          display: table-cell;
 
           .stat-box {
             display: inline-block;
             text-align: left;
+            padding: 0 6px;
+            vertical-align: middle;
           }
         }
 
@@ -120,12 +123,13 @@
         }
 
         .stat-icon {
-          float: left;
-          padding: 7px 0 0;
+          padding: 0 6px 0 0;
+          display: table-cell;
+          vertical-align: middle;
         }
 
         .stat {
-          display: inline-block;
+          display: table-cell;
           font-family: $font-family2;
           margin: 2px 0 0 2px;
           text-align: left;

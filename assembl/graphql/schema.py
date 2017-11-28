@@ -19,7 +19,7 @@ from assembl.nlp.translation_service import DummyGoogleTranslationService
 from .document import UploadDocument
 from .discussion import (DiscussionPreferences, LocalePreference,
                          ResourcesCenter, UpdateDiscussionPreferences,
-                         UpdateResourcesCenter)
+                         UpdateResourcesCenter, VisitsAnalytics)
 from .idea import (CreateIdea, CreateThematic, DeleteThematic, Idea, IdeaUnion,
                    Thematic, UpdateThematic)
 from .locale import Locale
@@ -63,6 +63,7 @@ class Query(graphene.ObjectType):
     resources = graphene.List(Resource)
     resources_center = graphene.Field(lambda: ResourcesCenter)
     has_resources_center = graphene.Boolean()
+    visits_analytics = graphene.Field(lambda: VisitsAnalytics)
 
     def resolve_resources(self, args, context, info):
         model = models.Resource
@@ -188,6 +189,9 @@ class Query(graphene.ObjectType):
 
     def resolve_resources_center(self, args, context, info):
         return ResourcesCenter()
+
+    def resolve_visits_analytics(self, args, context, info):
+        return VisitsAnalytics()
 
 
 class Mutations(graphene.ObjectType):

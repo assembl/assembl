@@ -1,7 +1,7 @@
 import os.path
 
 import graphene
-from pyramid.httpexceptions import HTTPUnauthorized
+from pyramid.httpexceptions import HTTPUnauthorized, HTTPBadRequest
 from pyramid.security import Everyone
 
 from assembl import models
@@ -183,3 +183,30 @@ class UpdateDiscussionPreferences(graphene.Mutation):
             languages=[LocalePreference(locale=x) for
                        x in discussion.discussion_locales])
         return UpdateDiscussionPreferences(preferences=discussion_pref)
+
+
+class VisitsAnalytics(graphene.ObjectType):
+
+    sum_visits_length = graphene.Int()
+    nb_pageviews = graphene.Int()
+    nb_uniq_pageviews = graphene.Int()
+
+    def query_analytics_single_metric(self, args, context, info, single_metric):
+        discussion_id = context.matchdict['discussion_id']
+        discussion = models.Discussion.get(discussion_id)
+        start = args.get('start_date') or None
+        end = args.get('end_date') or None
+        try:
+            data = discussion.get_visits_time_series_analytics(start, end, [single_metric])
+            return data[single_metric]
+        except ValueError as e:
+            raise HTTPBadRequest(explanation=e)
+
+    def resolve_sum_visits_length(self, args, context, info):
+        return self.query_analytics_single_metric(args, context, info, "sum_visits_length")
+
+    def resolve_nb_pageviews(self, args, context, info):
+        return self.query_analytics_single_metric(args, context, info, "nb_pageviews")
+
+    def resolve_nb_uniq_pageviews(self, args, context, info):
+        return self.query_analytics_single_metric(args, context, info, "nb_uniq_pageviews")

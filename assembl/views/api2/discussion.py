@@ -1109,43 +1109,15 @@ def get_visits_time_series_analytics(request):
     Fetches visits analytics from bound piwik site.
     Optional parameters `start` and `end` are dates like "2017-11-21" (default dates are from discussion creation date to today as default).
     """
-    from assembl.lib.piwik import (
-        piwik_VisitsSummary_getSumVisitsLength,
-        piwik_Actions_get
-    )
 
-    start, end, interval = get_time_series_timing(request, force_bounds=True)
+    start = request.GET.get("start", None)
+    end = request.GET.get("end", None)
     discussion = request.context._instance
-    piwik_id_site = discussion.web_analytics_piwik_id_site
-    if not piwik_id_site:
-        raise HTTPBadRequest(explanation="This discussion is not bound to a piwik site")
-
-    config = get_config()
-    piwik_url = config.get(
-        'web_analytics_piwik_url')
-    piwik_api_token = config.get(
-        'web_analytics_piwik_api_token')
-    missing_variables = []
-    if not piwik_url:
-        missing_variables.append("piwik_url")
-    if not piwik_api_token:
-        missing_variables.append("piwik_api_token")
-    if len(missing_variables):
-        raise HTTPBadRequest(explanation="This Assembl server is not bound to a Piwik server. Missing configuration variables: " + ", ".join(missing_variables))
-
-    def date_to_piwik_date(date):
-        return date.strftime('%Y-%m-%d')
-
-    period = "range"
-    date = ",".join([date_to_piwik_date(start), date_to_piwik_date(end)])
-    # For debates with lots of visitors we will probably want to cache this, using redis for example.
-    sum_visits_length = piwik_VisitsSummary_getSumVisitsLength(piwik_url, piwik_api_token, piwik_id_site, period, date)
-    actions = piwik_Actions_get(piwik_url, piwik_api_token, piwik_id_site, period, date)
-    return {
-        "sum_visits_length": sum_visits_length,
-        "nb_uniq_pageviews": actions["nb_uniq_pageviews"],
-        "nb_pageviews": actions["nb_pageviews"],
-    }
+    try:
+        data = discussion.get_visits_time_series_analytics(start, end)
+        return data
+    except ValueError as e:
+        raise HTTPBadRequest(explanation=e)
 
 
 @view_config(context=InstanceContext, name="participant_time_series_analytics",
