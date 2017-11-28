@@ -30,6 +30,7 @@ export const buildDebateData = (debateData, prefs, timeline, socialShare) => {
     });
   }
   return {
+    translationEnabled: !!debateData.translation_service_class,
     slug: debateData.slug,
     logo: debateData.logo,
     topic: topic,

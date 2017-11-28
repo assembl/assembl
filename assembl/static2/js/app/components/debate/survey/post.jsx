@@ -129,6 +129,7 @@ class Post extends React.Component {
   render() {
     const { post } = this.props.data;
     const { contentLocale, lang, moreProposals, originalLocale, postIndex, updateLocalContentLocale } = this.props;
+    const { debateData } = this.props.debate;
     const { bodyEntries } = post;
     const translate = contentLocale !== originalLocale;
 
@@ -165,14 +166,16 @@ class Post extends React.Component {
       <div className={postIndex < 3 || moreProposals ? 'shown box' : 'hidden box'}>
         <div className="content">
           <PostCreator name={post.creator.name} />
-          <PostTranslate
-            contentLocale={contentLocale}
-            id={post.id}
-            lang={lang}
-            translate={translate}
-            originalLocale={originalLocale}
-            updateLocalContentLocale={updateLocalContentLocale}
-          />
+          {debateData.translationEnabled ? (
+            <PostTranslate
+              contentLocale={contentLocale}
+              id={post.id}
+              lang={lang}
+              translate={translate}
+              originalLocale={originalLocale}
+              updateLocalContentLocale={updateLocalContentLocale}
+            />
+          ) : null}
           <div
             className={`body ${post.bodyMimeType === 'text/plain' ? 'pre-wrap' : ''}`}
             dangerouslySetInnerHTML={{ __html: transformLinksInHtml(body) }}

@@ -2,6 +2,7 @@ import { buildDebateData } from '../../../js/app/services/debateService';
 import { getSortedArrayByKey } from '../../../js/app/utils/globalFunctions';
 
 const mockDiscussion = {
+  translation_service_class: 'assembl.nlp.translation_service.GoogleTranslationService',
   help_url: 'help.fr',
   logo: 'logo.jpg',
   slug: 'sandbox'
@@ -210,6 +211,7 @@ const expectedTimeline = [
 describe('This test concern debate Service', () => {
   it('Should return the model built from API response', () => {
     const expectedResult = {
+      translationEnabled: true,
       slug: 'sandbox',
       logo: 'logo.jpg',
       topic: {
@@ -294,5 +296,11 @@ describe('This test concern debate Service', () => {
     };
     const result = buildDebateData(mockDiscussion, mockPreferences, getSortedArrayByKey(mockTimeline));
     expect(result).toEqual(expectedResult);
+  });
+
+  it('translationEnabled should be false', () => {
+    const modifiedMockDiscussion = { ...mockDiscussion, translation_service_class: '' };
+    const result = buildDebateData(modifiedMockDiscussion, mockPreferences, getSortedArrayByKey(mockTimeline));
+    expect(result.translationEnabled).toEqual(false);
   });
 });
