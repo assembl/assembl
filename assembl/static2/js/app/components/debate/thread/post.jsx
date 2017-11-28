@@ -55,7 +55,7 @@ export class EmptyPost extends React.PureComponent {
     const postId = this.props.data.post.id;
     const { hash } = window.location;
     if (hash !== '') {
-      const id = hash.replace('#', '');
+      const id = hash.replace('#', '').split('?')[0];
       if (id === postId) {
         // Wait an extra 1s to be sure that all previous posts are loaded
         // and measureTreeHeight finished.
