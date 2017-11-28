@@ -76,13 +76,15 @@ class ColumnsPost extends EmptyPost {
                   modified={modificationDate !== null}
                 />
               )}
-              <PostTranslate
-                contentLocale={contentLocale}
-                id={id}
-                lang={lang}
-                originalLocale={originalLocale}
-                translate={translate}
-              />
+              {debateData.translationEnabled ? (
+                <PostTranslate
+                  contentLocale={contentLocale}
+                  id={id}
+                  lang={lang}
+                  originalLocale={originalLocale}
+                  translate={translate}
+                />
+              ) : null}
               <div
                 className={`body ${bodyMimeType === 'text/plain' ? 'pre-wrap' : ''}`}
                 dangerouslySetInnerHTML={{ __html: transformLinksInHtml(body) }}
