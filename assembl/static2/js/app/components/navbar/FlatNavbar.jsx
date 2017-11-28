@@ -1,8 +1,8 @@
 import React from 'react';
 
 import Logo from './Logo';
-import NavigationMenu from '../common/navigationMenu';
-import LanguageMenu from '../common/languageMenu';
+import NavigationMenu from './navigationMenu';
+import LanguageMenu from './languageMenu';
 import UserMenu from './UserMenu';
 
 const refWidthUpdate = (setWidth) => {
@@ -27,7 +27,7 @@ export default class FlatNavbar extends React.PureComponent {
           })}
         >
           <Logo slug={slug} src={logoSrc} />
-          <NavigationMenu elements={elements} className="nav-menu" />
+          <NavigationMenu elements={elements} />
         </div>
         <div
           className="right-part"

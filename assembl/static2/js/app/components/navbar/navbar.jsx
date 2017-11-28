@@ -7,11 +7,11 @@ import { I18n, Translate } from 'react-redux-i18n';
 
 import { getCurrentPhaseIdentifier, isSeveralIdentifiers, getPhaseName } from '../../utils/timeline';
 import { get } from '../../utils/routeMap';
-import { withScreenWidth } from './screenDimensions';
+import { withScreenWidth } from '../common/screenDimensions';
 import { connectedUserIsAdmin } from '../../utils/permissions';
 import SectionsQuery from '../../graphql/SectionsQuery.graphql';
-import FlatNavbar from '../navbar/FlatNavbar';
-import BurgerNavbar from '../navbar/BurgerNavbar';
+import FlatNavbar from './FlatNavbar';
+import BurgerNavbar from './BurgerNavbar';
 import { APP_CONTAINER_MAX_WIDTH, APP_CONTAINER_PADDING } from '../../constants';
 import { displayModal } from '../../utils/utilityManager';
 import { getDiscussionSlug } from '../../utils/globalFunctions';

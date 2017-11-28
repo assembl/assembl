@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 
 import { getCurrentPhaseIdentifier, type Timeline } from './utils/timeline';
 import { addRedirectionToV1 } from './actions/phaseActions';
-import Navbar from './components/common/navbar';
+import Navbar from './components/navbar/navbar';
 import Footer from './components/common/footer';
 
 type Debate = { debateData: { timeline: Timeline } };

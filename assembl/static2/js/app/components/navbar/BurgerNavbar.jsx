@@ -2,8 +2,8 @@ import React from 'react';
 import { browserHistory } from 'react-router';
 
 import Logo from './Logo';
-import NavigationMenu from '../common/navigationMenu';
-import LanguageMenu from '../common/languageMenu';
+import NavigationMenu from './navigationMenu';
+import LanguageMenu from './languageMenu';
 import UserMenu from './UserMenu';
 
 export default class BurgerNavbar extends React.PureComponent {
