@@ -1,6 +1,9 @@
 """Defines the existing frontend routes so the Pyramid router can pass them along."""
+import datetime
 from urlparse import urljoin, urlparse
 import urllib
+
+from graphene.relay import Node
 
 from ..models import Discussion
 
@@ -18,6 +21,43 @@ SOURCE_DISCRIMINANTS = {
 ATTACHMENT_PURPOSES = {
     'EMBED_ATTACHMENT': 'EMBED_ATTACHMENT'
 }
+
+
+# This is the same logic as in getCurrentPhaseIdentifier in v2 frontend.
+def get_current_phase_identifier(timeline):
+    """Return the current phase identifier, thread identifier if no timeline.
+    """
+    if not timeline:
+        timeline = []
+
+    current_date = datetime.datetime.utcnow()
+    identifier = u''
+    for phase in timeline:
+        start_date = phase.start
+        end_date = phase.end
+        if (current_date > start_date) and (current_date < end_date):
+            identifier = phase.identifier
+
+    return identifier or u'thread'
+
+
+def current_phase_use_v1_interface(timeline):
+    """Return True if the current phase use the v1 interface.
+    """
+
+    # If no timeline configured, we use v1 interface.
+    if not timeline:
+        return True
+
+    current_date = datetime.datetime.utcnow()
+    for phase in timeline:
+        start_date = phase.start
+        end_date = phase.end
+        if (current_date > start_date) and (current_date < end_date):
+            return phase.interface_v1
+
+    # If current_date isn't contained in any phase, assume v2 interface.
+    return False
 
 
 class FrontendUrls(object):
@@ -152,7 +192,38 @@ class FrontendUrls(object):
         return '/posts/' + urllib.quote(post.uri(), '')
 
     def get_post_url(self, post):
-        return self.get_discussion_url() + self.get_relative_post_url(post)
+        if current_phase_use_v1_interface(self.discussion.timeline_events):
+            return self.get_discussion_url() + self.get_relative_post_url(post)
+        else:
+            first_idea = None
+            ideas = [link.idea
+                for link in post.indirect_idea_content_links_without_cache()
+                if link.__class__.__name__ == 'IdeaRelatedPostLink']
+            if ideas:
+                first_idea = ideas[0]
+            else:
+                # orphan post, redirect to home
+                from pyramid.threadlocal import get_current_request
+                request = get_current_request()
+                return request.route_url(
+                    'new_home', discussion_slug=self.discussion.slug)
+
+            if first_idea is not None and first_idea.__class__.__name__ == 'Question':
+                thematic = post.get_closest_thematic()
+                return '{base}/{slug}/debate/survey/theme/{thematic}'.format(**{
+                    'base': self.discussion.get_base_url(),
+                    'slug': self.discussion.slug,
+                    'thematic': thematic.graphene_id()
+                    })
+
+            return '{base}/{slug}/debate/{phase}/theme/{idea}/#{post}'.format(**{
+                'base': self.discussion.get_base_url(),
+                'slug': self.discussion.slug,
+                'phase': get_current_phase_identifier(
+                    self.discussion.timeline_events),
+                'idea': Node.to_global_id('Idea', first_idea.id),
+                'post': Node.to_global_id('Post', post.id)
+                })
 
     def get_relative_idea_url(self, idea):
         return '/idea/' + urllib.quote(idea.original_uri, '')
