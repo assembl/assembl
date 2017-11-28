@@ -1973,8 +1973,8 @@ def test_query_legal_notice(discussion, graphql_request, test_session):
     res = schema.execute(u"""query {
         legalNotice(lang: "en")
     }""", context_value=graphql_request)
+    assert res.errors is None
     res_data = json.loads(json.dumps(res.data))
-    assert res_data['legalNotice'] is not None
     assert res_data['legalNotice'] == u'We need to input the optical HDD sensor!'
 
 
@@ -1982,8 +1982,8 @@ def test_query_terms_and_conditions(discussion, graphql_request, test_session):
     res = schema.execute(u"""query {
         termsAndConditions(lang: "en")
     }""", context_value=graphql_request)
+    assert res.errors is None
     res_data = json.loads(json.dumps(res.data))
-    assert res_data['termsAndConditions'] is not None
     assert res_data['termsAndConditions'] == u"You can't quantify the driver without quantifying the 1080p JSON protocol!"
 
 
@@ -2000,8 +2000,8 @@ def test_query_legal_notice_and_terms(discussion, graphql_request, test_session)
             }
         }
     }""", context_value=graphql_request)
+    assert res.errors is None
     res_data = json.loads(json.dumps(res.data))
-    assert res_data['legalNoticeAndTerms'] is not None
     legal_notice_en = res_data['legalNoticeAndTerms']['legalNoticeEntries'][0]
     tac_en = res_data['legalNoticeAndTerms']['termsAndConditionsEntries'][0]
     tac_fr = res_data['legalNoticeAndTerms']['termsAndConditionsEntries'][1]
@@ -2043,7 +2043,7 @@ mutation updateLegalNoticeAndTerms {
     }
 }
 """, context_value=graphql_request)
-    assert res.data is not None
+    assert res.errors is None
 
     assert res.data['updateLegalNoticeAndTerms'] is not None
     assert res.data['updateLegalNoticeAndTerms']['legalNoticeAndTerms'] is not None
