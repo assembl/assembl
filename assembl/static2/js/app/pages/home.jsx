@@ -7,7 +7,7 @@ import Video from '../components/home/video';
 import Twitter from '../components/home/twitter';
 import Chatbot from '../components/home/chatbot';
 import Partners from '../components/home/partners';
-import ScrollOnePageButton from '../components/common/scrollOnePageButton';
+import ScrollOnePageButtonWithScreenHeight from '../components/common/scrollOnePageButton';
 
 class Home extends React.Component {
   constructor() {
@@ -38,7 +38,7 @@ class Home extends React.Component {
     return (
       <div className="home">
         <Header />
-        <ScrollOnePageButton hidden={this.state.scrollOnePageButtonHidden} />
+        <ScrollOnePageButtonWithScreenHeight hidden={this.state.scrollOnePageButtonHidden} />
         {debateData.objectives && <Objectives />}
         {debateData.timeline && debateData.timeline.length > 1 && <Phases />}
         {debateData.video && <Video />}
