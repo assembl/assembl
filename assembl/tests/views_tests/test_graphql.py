@@ -1256,7 +1256,7 @@ mutation myMutation($thematicId:ID!, $order:Float!) {
     }
 
 
-def test_insert_thematic_between_two_thematics(graphql_request, thematic_with_video_and_question):
+def test_insert_thematic_between_two_thematics(graphql_request, thematic_with_video_and_question, second_thematic_with_questions):
     res = schema.execute(u"""
 mutation myMutation {
     createThematic(
