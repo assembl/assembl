@@ -73,10 +73,8 @@ export const sectionsById = (state: Map<string, Map> = Map(), action: ReduxActio
       if (s.get('id') !== idToDelete && s.get('type') !== 'ADMINISTRATION' && !s.get('toDelete')) {
         count += 1;
         newState = newState.setIn([s.get('id'), 'order'], count);
-      } else {
-        newState = newState
-          .setIn([s.get('id'), 'order'], sections.size)
-          .setIn([s.get('id'), 'toDelete'], s.get('type') !== 'ADMINISTRATION');
+      } else if (s.get('type') !== 'ADMINISTRATION') {
+        newState = newState.setIn([s.get('id'), 'order'], sections.size).setIn([s.get('id'), 'toDelete'], true);
       }
     });
 
