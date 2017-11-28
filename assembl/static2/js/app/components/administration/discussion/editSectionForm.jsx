@@ -21,7 +21,6 @@ type EditSectionFormProps = {
   title: string,
   nbSections: number,
   index: number,
-  order: number,
   handleTitleChange: Function,
   handleUrlChange: Function,
   handleCheckboxChange: Function,
@@ -36,7 +35,6 @@ const EditSectionForm = ({
   title,
   nbSections,
   index,
-  order,
   handleTitleChange,
   handleCheckboxChange,
   handleUrlChange,
@@ -50,7 +48,7 @@ const EditSectionForm = ({
   return (
     <div className="form-container">
       <div className="title left">
-        {`${order + 1}. `}
+        {`${index + 1}. `}
         {title || I18n.t('administration.sections.custom')}
       </div>
       <div className="right">

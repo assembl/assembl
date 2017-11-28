@@ -37,11 +37,34 @@ export const sectionsInOrder = (state: List<number> = List(), action: ReduxActio
   case CREATE_SECTION:
     return state.push(action.id);
   case UPDATE_SECTIONS: {
+    const sections = action.sections.sort((a, b) => {
+      const aOrder = a.order;
+      const bOrder = b.order;
+      return aOrder - bOrder;
+    });
     return List(
-      action.sections.map((s) => {
+      sections.map((s) => {
         return s.id;
       })
     );
+  }
+  case UP_SECTION: {
+    const idIndex = state.findIndex((item) => {
+      return item === action.id;
+    });
+    const previousId = state.get(idIndex - 1);
+    const newState = state.set(idIndex, previousId);
+    const newState2 = newState.set(idIndex - 1, action.id);
+    return newState2;
+  }
+  case DOWN_SECTION: {
+    const idIndex = state.findIndex((item) => {
+      return item === action.id;
+    });
+    const nextId = state.get(idIndex + 1);
+    const newState = state.set(idIndex, nextId);
+    const newState2 = newState.set(idIndex + 1, action.id);
+    return newState2;
   }
   default:
     return state;
@@ -60,58 +83,10 @@ export const sectionsById = (state: Map<string, Map> = Map(), action: ReduxActio
   switch (action.type) {
   case CREATE_SECTION:
     return state.set(action.id, defaultResource.set('id', action.id).set('order', action.order));
-  case DELETE_SECTION: {
-    const sections = state.sort((a, b) => {
-      const aOrder = a.get('order');
-      const bOrder = b.get('order');
-      return aOrder - bOrder;
-    });
-    const idToDelete = state.getIn([action.id, 'id']);
-    let newState = sections;
-    let count = -1;
-    sections.forEach((s) => {
-      if (s.get('id') !== idToDelete && s.get('type') !== 'ADMINISTRATION' && !s.get('toDelete')) {
-        count += 1;
-        newState = newState.setIn([s.get('id'), 'order'], count);
-      } else if (s.get('type') !== 'ADMINISTRATION') {
-        newState = newState.setIn([s.get('id'), 'order'], sections.size).setIn([s.get('id'), 'toDelete'], true);
-      }
-    });
-
-    return newState;
-  }
+  case DELETE_SECTION:
+    return state.setIn([action.id, 'toDelete'], true);
   case UPDATE_SECTION_URL:
     return state.setIn([action.id, 'url'], action.value);
-  case UP_SECTION: {
-    const previousSectionId = state
-      .filter((section) => {
-        return section.get('order') === state.getIn([action.id, 'order']) - 1;
-      })
-      .keySeq()
-      .first();
-    return state
-      .updateIn([previousSectionId, 'order'], (order) => {
-        return order + 1;
-      })
-      .updateIn([action.id, 'order'], (order) => {
-        return order - 1;
-      });
-  }
-  case DOWN_SECTION: {
-    const nextSectionId = state
-      .filter((section) => {
-        return section.get('order') === state.getIn([action.id, 'order']) + 1;
-      })
-      .keySeq()
-      .first();
-    return state
-      .updateIn([nextSectionId, 'order'], (order) => {
-        return order - 1;
-      })
-      .updateIn([action.id, 'order'], (order) => {
-        return order + 1;
-      });
-  }
   case TOGGLE_EXTERNAL_PAGE:
     return state.updateIn([action.id, 'url'], (url) => {
       if (url !== null) {

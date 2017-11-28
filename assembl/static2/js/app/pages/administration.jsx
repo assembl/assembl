@@ -108,7 +108,11 @@ class Administration extends React.Component {
   }
 
   putSectionsInStore(sections) {
-    const filteredSections = filter(SectionsQuery, { sections: sections });
+    const filteredSections = filter(SectionsQuery, {
+      sections: sections.filter((section) => {
+        return section.sectionType !== 'ADMINISTRATION';
+      })
+    });
     this.props.updateSections(filteredSections.sections);
   }
 
