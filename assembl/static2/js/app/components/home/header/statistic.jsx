@@ -60,14 +60,14 @@ class Statistic extends React.Component {
         const formatValue = I18n.t('duration.format');
         const readableDuration = momentDuration.format(formatValue);
         elementsProps.push({
-          iconName: 'sentiment-neutral', // TODO: use the right icon
+          iconName: 'timer',
           metricValue: readableDuration,
           metricNameTranslateKey: 'home.sumVisitsLength'
         });
       }
       if ('nbPageviews' in visitsAnalytics && visitsAnalytics.nbPageviews > 0) {
         elementsProps.push({
-          iconName: 'sentiment-neutral', // TODO: use the right icon
+          iconName: 'double-page',
           metricValue: visitsAnalytics.nbPageviews,
           metricNameTranslateKey: 'home.pageViews'
         });

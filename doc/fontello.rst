@@ -1,7 +1,9 @@
 Updating Fonts and Icons in Assembl
 ===================================
 
-There are currently (as of 06/28/2017) two methods in using fontello in order to update icons and fonts
+If you want to use in Assembl an icon that exists on the Fontello_ website but that is not part of Assembl's current collection of Fontello icons, then follow these instructions. On the other hand, if you want to use in Assembl a new icon that is not part of the Fontello_ website and that you have as an image file (PNG, JPG, SVG, etc), then you can either also follow these instructions, or just add it in the `assembl/static2/img/icons` (or `assembl/static/img/icon` for Assembl v1 UI) folder and use it in your code.
+
+There are currently (as of 06/28/2017) two methods in using Fontello in order to update icons and fonts
 in Assembl.
 
 
@@ -21,6 +23,8 @@ Assembl Version 2
 
 To add icons to Fontello_, visit the website first. Create the environment that Assembl currently has on the platform
 by uploading the :download:`assembl/static2/config.json` file.
+
+If you want to add an icon that is not part of the Fontello_ website and that you have as an image file (PNG, JPG, SVG, etc), then drag and drop it from your computer file explorer to the Fontello_ page.
 
 After updating icons on Fontello, re-download the icons and update the following:
 
