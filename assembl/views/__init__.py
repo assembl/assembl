@@ -20,15 +20,15 @@ from pyramid.security import authenticated_userid, Everyone
 from pyramid.settings import asbool, aslist
 from social.exceptions import AuthMissingParameter
 
-from ..lib.json import json_renderer_factory
-from ..lib import config
-from ..lib.frontend_urls import FrontendUrls
-from ..lib.locale import (
+from assembl.lib.json import json_renderer_factory
+from assembl.lib import config
+from assembl.lib.frontend_urls import FrontendUrls
+from assembl.lib.locale import (
     get_language, get_country, to_posix_string, strip_country)
-from ..lib.utils import get_global_base_url
-from ..lib.raven_client import capture_exception
-from ..auth import R_PARTICIPANT
-from ..models.auth import (
+from assembl.lib.utils import get_global_base_url
+from assembl.lib.raven_client import capture_exception
+from assembl.auth import R_PARTICIPANT
+from assembl.models.auth import (
     UserLanguagePreference,
     LanguagePreferenceOrder,
     User,
