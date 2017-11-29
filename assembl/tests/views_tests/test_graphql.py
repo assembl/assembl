@@ -2029,7 +2029,7 @@ mutation updateLegalNoticeAndTerms {
                 localeCode: "en"
             }
         ],
-        termsEntries: [
+        termsAndConditionsEntries: [
             {
                 value: "If we reboot the driver, we can get to the AGP protocol through the virtual HTTP bus!",
                 localeCode: "en"

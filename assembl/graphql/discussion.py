@@ -218,7 +218,7 @@ class UpdateDiscussionPreferences(graphene.Mutation):
 class UpdateLegalNoticeAndTerms(graphene.Mutation):
     class Input:
         legal_notice_entries = graphene.List(LangStringEntryInput)
-        terms_entries = graphene.List(LangStringEntryInput)
+        terms_and_conditions_entries = graphene.List(LangStringEntryInput)
 
     legal_notice_and_terms = graphene.Field(lambda: LegalNoticeAndTerms)
 
@@ -248,8 +248,9 @@ class UpdateLegalNoticeAndTerms(graphene.Mutation):
             update_langstring_from_input_entries(
                 discussion, 'legal_notice', legal_notice_entries)
 
-            terms_entries = args.get('terms_entries')
-            if terms_entries is not None and len(terms_entries) == 0:
+            terms_and_conditions_entries = args.get(
+                'terms_and_conditions_entries')
+            if terms_and_conditions_entries is not None and len(terms_and_conditions_entries) == 0:
                 raise Exception(
                     'Terms and conditions entries needs at least one entry')
                 # Better to have this message than
@@ -257,7 +258,7 @@ class UpdateLegalNoticeAndTerms(graphene.Mutation):
                 # when creating the saobj below if title=None
 
             update_langstring_from_input_entries(
-                discussion, 'terms_and_conditions', terms_entries)
+                discussion, 'terms_and_conditions', terms_and_conditions_entries)
 
         db.flush()
         legal_notice_and_terms = LegalNoticeAndTerms()
