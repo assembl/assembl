@@ -22,7 +22,16 @@ export class DumbSynthesis extends React.Component<void, SynthesisProps, void> {
   render() {
     const { synthesis, routeParams } = this.props;
     const { introduction, conclusion, ideas, subject } = synthesis;
-    const { roots, descendants } = getPartialTree(ideas);
+    const sortedIdeas = [...ideas].sort((a, b) => {
+      if (a.live.order < b.live.order) {
+        return -1;
+      }
+      if (a.live.order > b.live.order) {
+        return 1;
+      }
+      return 0;
+    });
+    const { roots, descendants } = getPartialTree(sortedIdeas);
     const hasSiblings = roots.length > 1;
     return (
       <div className="background-light">

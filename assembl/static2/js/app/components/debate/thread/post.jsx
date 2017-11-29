@@ -247,13 +247,15 @@ export class EmptyPost extends React.PureComponent {
                   modified={modificationDate !== null}
                 />
               )}
-              <PostTranslate
-                contentLocale={contentLocale}
-                id={id}
-                lang={lang}
-                originalLocale={originalLocale}
-                translate={translate}
-              />
+              {debateData.translationEnabled ? (
+                <PostTranslate
+                  contentLocale={contentLocale}
+                  id={id}
+                  lang={lang}
+                  originalLocale={originalLocale}
+                  translate={translate}
+                />
+              ) : null}
               <h3 className="dark-title-3">{modifiedSubject}</h3>
               <div
                 className={`body ${bodyMimeType === 'text/plain' ? 'pre-wrap' : ''}`}
