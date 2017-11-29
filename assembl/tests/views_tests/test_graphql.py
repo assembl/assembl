@@ -1938,3 +1938,19 @@ mutation updateResourcesCenter($headerImage:String) {
     assert resources_center['headerImage'] is not None
     assert '/documents/' in resources_center['headerImage']['externalUrl']
     assert resources_center['headerImage']['title'] == 'new-img.png'
+
+def test_query_visits_analytics(discussion, graphql_request):
+    query = u"""
+query GetVisitsAnalytics {
+  visitsAnalytics {
+    sumVisitsLength
+    nbPageviews
+    nbUniqPageviews
+  }
+}
+"""
+    res = schema.execute(query, context_value=graphql_request)
+    assert res.data['visitsAnalytics'] is not None
+    assert res.data['visitsAnalytics']['sumVisitsLength'] == None
+    assert res.data['visitsAnalytics']['nbPageviews'] == None
+    assert res.data['visitsAnalytics']['nbUniqPageviews'] == None
