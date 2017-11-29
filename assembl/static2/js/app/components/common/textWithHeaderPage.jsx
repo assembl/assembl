@@ -1,8 +1,16 @@
+// @flow
 import React from 'react';
 import { connect } from 'react-redux';
 import Header from './header';
 
-const TextWithHeaderPage = ({ debateData, headerTitle, text }) => {
+export type TextWithHeaderPageProps = {
+  headerTitle: string,
+  text: string,
+  debateData: Object
+};
+
+const DumbTextWithHeaderPage = (props: TextWithHeaderPageProps) => {
+  const { headerTitle, text, debateData } = props;
   return (
     <div className="text-with-header">
       <Header title={headerTitle} imgUrl={debateData.headerBackgroundUrl} />
@@ -26,4 +34,6 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps)(TextWithHeaderPage);
+export { DumbTextWithHeaderPage };
+
+export default connect(mapStateToProps)(DumbTextWithHeaderPage);
