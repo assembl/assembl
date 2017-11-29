@@ -665,7 +665,8 @@ const Translations = {
       landingpage: "Landing page",
       menu: {
         phase: "Phase %{count} - %{description}",
-        language: "Discussion Language"
+        language: "Discussion Language",
+        legalNoticeAndTerms: "T&C and Legal Notice"
       },
       noTimeline: "No timeline has been configured yet",
       survey: {
@@ -678,7 +679,8 @@ const Translations = {
       annotation: "Module to be completed. * Fields are required.",
       themeNum: "Theme %{index}",
       discussion: {
-        0: "Languages of the Discussion"
+        0: "Languages of the Discussion",
+        3: "Terms & Conditions and Legal Notice"
       },
       languageChoice: "Select desired languages below",
       ph: {
@@ -714,7 +716,12 @@ const Translations = {
       step_x_total: "Section %{num} on %{total}",
       saveThemes: "Save",
       successThemeCreation: "Themes have been saved with success!",
-      successLanguagePreference: "Discussion language preferences have been saved with success!"
+      successLanguagePreference: "Discussion language preferences have been saved with success!",
+      legalNoticeAndTerms: {
+        legalNoticeLabel: "Legal notice",
+        termsAndConditionsLabel: "Terms and conditions",
+        successSave: "The T&C and legal notice have been saved with success!"
+      }
     },
     unauthorizedAdministration: {
       unauthorizedMessage:
