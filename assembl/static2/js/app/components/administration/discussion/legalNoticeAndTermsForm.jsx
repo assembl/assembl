@@ -18,7 +18,7 @@ type LegalNoticeAndTermsFormProps = {
   updateTermsAndConditions: Function
 };
 
-export const LegalNoticeAndTermsForm = ({
+export const DumbLegalNoticeAndTermsForm = ({
   locale,
   legalNotice,
   termsAndConditions,
@@ -78,4 +78,4 @@ const mapDispatchToProps = (dispatch: Function, { locale }: LegalNoticeAndTermsF
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(LegalNoticeAndTermsForm);
+export default connect(mapStateToProps, mapDispatchToProps)(DumbLegalNoticeAndTermsForm);

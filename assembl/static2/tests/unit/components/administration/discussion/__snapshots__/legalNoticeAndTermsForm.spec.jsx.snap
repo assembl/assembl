@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`LegalNoticeAndTermsForm component should render a form to edit legal notice and terms and conditions 1`] = `
+exports[`LegalNoticeAndTermsForm dumb component should render a form to edit legal notice and terms and conditions 1`] = `
 <div
   className="admin-box"
 >
