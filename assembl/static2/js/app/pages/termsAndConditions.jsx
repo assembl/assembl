@@ -20,7 +20,14 @@ const withData = graphql(TermsAndConditions, {
       };
     }
 
+    if (data.error) {
+      return {
+        hasError: true
+      };
+    }
+
     return {
+      hasError: data.error,
       loading: data.loading,
       text: data.legalNoticeAndTerms.termsAndConditions || '',
       headerTitle: I18n.t('termsAndConditions.headerTitle')
