@@ -8,7 +8,12 @@ const TextWithHeaderPage = ({ debateData, headerTitle, text }) => {
       <Header title={headerTitle} imgUrl={debateData.headerBackgroundUrl} />
       <div className="max-container margin-xxl">
         <div className="page-body">
-          <div className="ellipsis-content justify">{text}</div>
+          <div
+            className="ellipsis-content justify"
+            dangerouslySetInnerHTML={{
+              __html: text
+            }}
+          />
         </div>
       </div>
     </div>
