@@ -1,10 +1,17 @@
 Updating Fonts and Icons in Assembl
 ===================================
 
-If you want to use in Assembl an icon that exists on the Fontello_ website but that is not part of Assembl's current collection of Fontello icons, then follow these instructions. On the other hand, if you want to use in Assembl a new icon that is not part of the Fontello_ website and that you have as an image file (PNG, JPG, SVG, etc), then you can either also follow these instructions, or just add it in the `assembl/static2/img/icons` (or `assembl/static/img/icon` for Assembl v1 UI) folder and use it in your code.
+The point of Fontello_ is to create font files from a list of icons, so that we can show an icon on a page by showing a special character of this font, using CSS rules. Fontello_ provides presets of icons that we can pick, to compose our custom font. We can also import our own SVG files into Fontello_ so that they are converted into a font character of our custom font.
+
+So there are two use cases:
+
+* If you want to use in Assembl an icon that exists on the Fontello_ website but that is not part of Assembl's current collection of Fontello icons, then follow the instructions below to add an existing Fontello icon to our custom font.
+* On the other hand, if you want to use in Assembl a new icon that is not part of the Fontello_ website and that you have as an image file:
+  * If your icon image is a vector image file (SVG format), and does not need any special formatting, like most icons, then you SHOULD import it into our Fontello_ custom font.
+  * If your icon image can only be a raster image (JPG, PNG formats) because of color constraints, then you can just add it in the `assembl/static2/img/icons` (or `assembl/static/img/icon` for Assembl v1 UI) folder and use it in your code. 
 
 There are currently (as of 06/28/2017) two methods in using Fontello in order to update icons and fonts
-in Assembl.
+in Assembl, depending on which version of Assembl's UI you want the icon to appear in.
 
 
 Assembl Version 1
