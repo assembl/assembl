@@ -19,7 +19,7 @@ import Community from './pages/community';
 import Profile from './pages/profile';
 import Styleguide from './pages/styleguide';
 import NotFound from './pages/notFound';
-import TermsOfUse from './pages/termsOfUse';
+import TermsAndConditions from './pages/termsAndConditions';
 import LegalNotice from './pages/legalNotice';
 import Administration from './pages/administration';
 import UnauthorizedAdministration from './pages/unauthorizedAdministration';
@@ -105,7 +105,7 @@ export default [
         <Route path={routeForRouter('synthesis', false, { synthesisId: ':synthesisId' })} component={Synthesis} />
         <Route path={routeForRouter('resourcesCenter')} component={ResourcesCenter} />
         <Route path={routeForRouter('legalNotice')} component={LegalNotice} />
-        <Route path={routeForRouter('terms')} component={TermsOfUse} />
+        <Route path={routeForRouter('terms')} component={TermsAndConditions} />
         <Route path={routeForRouter('community')} component={Community} />
         <Route path={routeForRouter('join')} component={JoinDiscussion} />
         <Route path={routeForRouter('rootDebate')} />

@@ -1,6 +1,0 @@
-query TermsOfUseQuery($lang: String) {
-  termsOfUse {
-    title(lang: $lang)
-    text(lang: $lang)
-  }
-}

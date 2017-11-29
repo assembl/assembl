@@ -282,11 +282,11 @@ const Translations = {
     notFound: {
       panelTitle: "Désolé, cette page n'existe pas"
     },
-    terms: {
-      panelTitle: "Conditions Générales d'Utilisations"
+    termsAndConditions: {
+      headerTitle: "Conditions Générales d'Utilisation"
     },
-    legalNotices: {
-      panelTitle: "Mentions Légales"
+    legalNotice: {
+      headerTitle: "Mentions Légales"
     },
     administration: {
       addThematic: "Ajouter une thématique",
@@ -646,11 +646,11 @@ const Translations = {
     notFound: {
       panelTitle: "Sorry, this page doesn't exist"
     },
-    terms: {
-      panelTitle: "Terms & Conditions"
+    termsAndConditions: {
+      headerTitle: "Terms & Conditions"
     },
-    legalNotices: {
-      panelTitle: "Legal Notice"
+    legalNotice: {
+      headerTitle: "Legal Notice"
     },
     administration: {
       addThematic: "Add a theme",
