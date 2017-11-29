@@ -14,6 +14,7 @@ import createResourceMutation from '../../graphql/mutations/createResource.graph
 import updateResourceMutation from '../../graphql/mutations/updateResource.graphql';
 import deleteResourceMutation from '../../graphql/mutations/deleteResource.graphql';
 import updateResourcesCenterMutation from '../../graphql/mutations/updateResourcesCenter.graphql';
+import updateLegalNoticeAndTermsMutation from '../../graphql/mutations/updateLegalNoticeAndTerms.graphql';
 import updateDiscussionPreferenceQuery from '../../graphql/mutations/updateDiscussionPreference.graphql';
 import getDiscussionPreferenceLanguage from '../../graphql/DiscussionPreferenceLanguage.graphql';
 
@@ -123,14 +124,17 @@ const SaveButton = ({
   changeLocale,
   resourcesHaveChanged,
   resources,
+  legalNoticeAndTerms,
   createResource,
   deleteResource,
   updateResource,
   refetchResources,
   resourcesCenterPage,
   updateResourcesCenter,
+  updateLegalNoticeAndTerms,
   refetchResourcesCenter,
-  refetchTabsConditions
+  refetchTabsConditions,
+  refetchLegalNoticeAndTerms
 }) => {
   const saveAction = () => {
     displayAlert('success', `${I18n.t('loading.wait')}...`);
@@ -215,13 +219,33 @@ const SaveButton = ({
           displayAlert('danger', `${error}`, false, 30000);
         });
     }
+
+    if (legalNoticeAndTerms.get('hasChanged')) {
+      const legalNoticeEntries = legalNoticeAndTerms.get('legalNoticeEntries').toJS();
+      const termsAndConditionsEntries = legalNoticeAndTerms.get('termsAndConditionsEntries').toJS();
+      const payload = {
+        variables: {
+          legalNoticeEntries: convertEntriesToHTML(legalNoticeEntries),
+          termsAndConditionsEntries: convertEntriesToHTML(termsAndConditionsEntries)
+        }
+      };
+      updateLegalNoticeAndTerms(payload)
+        .then(() => {
+          refetchLegalNoticeAndTerms();
+          displayAlert('success', I18n.t('administration.legalNoticeAndTerms.successSave'));
+        })
+        .catch((error) => {
+          displayAlert('danger', `${error}`, false, 30000);
+        });
+    }
   };
 
   const disabled = !(
     thematicsHaveChanged ||
     languagePreferenceHasChanged ||
     resourcesHaveChanged ||
-    resourcesCenterPage.get('hasChanged')
+    resourcesCenterPage.get('hasChanged') ||
+    legalNoticeAndTerms.get('hasChanged')
   );
   return (
     <Button className="button-submit button-dark right" disabled={disabled} onClick={saveAction}>
@@ -254,6 +278,9 @@ const SaveButtonWithMutations = compose(
   }),
   graphql(updateResourcesCenterMutation, {
     name: 'updateResourcesCenter'
+  }),
+  graphql(updateLegalNoticeAndTermsMutation, {
+    name: 'updateLegalNoticeAndTerms'
   })
 )(SaveButton);
 
@@ -265,7 +292,8 @@ const mapStateToProps = ({
     thematicsHaveChanged,
     thematicsInOrder,
     discussionLanguagePreferences,
-    discussionLanguagePreferencesHasChanged
+    discussionLanguagePreferencesHasChanged,
+    legalNoticeAndTerms
   }
 }) => {
   const { page, resourcesById, resourcesHaveChanged, resourcesInOrder } = resourcesCenter;
@@ -281,7 +309,8 @@ const mapStateToProps = ({
     }),
     preferences: discussionLanguagePreferences,
     i18n: i18n,
-    languagePreferenceHasChanged: discussionLanguagePreferencesHasChanged
+    languagePreferenceHasChanged: discussionLanguagePreferencesHasChanged,
+    legalNoticeAndTerms: legalNoticeAndTerms
   };
 };
 

@@ -7,6 +7,7 @@ import { connect } from 'react-redux';
 
 import { updateThematics } from '../actions/adminActions';
 import { updateResources, updateResourcesCenterPage } from '../actions/adminActions/resourcesCenter';
+import { updateLegalNoticeAndTerms } from '../actions/adminActions/legalNoticeAndTerms';
 import withLoadingIndicator from '../components/common/withLoadingIndicator';
 import Menu from '../components/administration/menu';
 import LanguageMenu from '../components/administration/languageMenu';
@@ -15,6 +16,7 @@ import ThematicsQuery from '../graphql/ThematicsQuery.graphql';
 import ResourcesQuery from '../graphql/ResourcesQuery.graphql';
 import ResourcesCenterPage from '../graphql/ResourcesCenterPage.graphql';
 import TabsConditionQuery from '../graphql/TabsConditionQuery.graphql';
+import LegalNoticeAndTermsQuery from '../graphql/LegalNoticeAndTerms.graphql';
 import { convertEntriesToRawContentState } from '../utils/draftjs';
 
 export function convertVideoDescriptions(thematics) {
@@ -47,6 +49,7 @@ class Administration extends React.Component {
     this.putResourcesCenterInStore = this.putResourcesCenterInStore.bind(this);
     this.putThematicsInStore = this.putThematicsInStore.bind(this);
     this.toggleLanguageMenu = this.toggleLanguageMenu.bind(this);
+    this.putLegalNoticeAndTermsInStore = this.putLegalNoticeAndTermsInStore.bind(this);
     this.state = {
       showLanguageMenu: true
     };
@@ -56,6 +59,7 @@ class Administration extends React.Component {
     this.putResourcesCenterInStore(this.props.resourcesCenter);
     this.putResourcesInStore(this.props.resources);
     this.putThematicsInStore(this.props.data);
+    this.putLegalNoticeAndTermsInStore(this.props.legalNoticeAndTerms);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -100,8 +104,30 @@ class Administration extends React.Component {
     this.props.updateResourcesCenterPage(filteredResourcesCenter.resourcesCenter);
   }
 
+  putLegalNoticeAndTermsInStore(legalNoticeAndTerms) {
+    const filtered = filter(LegalNoticeAndTermsQuery, { legalNoticeAndTerms: legalNoticeAndTerms });
+    const lnat = filtered.legalNoticeAndTerms;
+    const convertedLegalNoticeAndTerms = {
+      legalNoticeEntries: lnat.legalNoticeEntries ? convertEntriesToRawContentState(lnat.legalNoticeEntries) : null,
+      termsAndConditionsEntries: lnat.termsAndConditionsEntries
+        ? convertEntriesToRawContentState(lnat.termsAndConditionsEntries)
+        : null
+    };
+    this.props.updateLegalNoticeAndTerms(convertedLegalNoticeAndTerms);
+  }
+
   render() {
-    const { children, data, debate, i18n, params, refetchResources, refetchResourcesCenter, refetchTabsConditions } = this.props;
+    const {
+      children,
+      data,
+      debate,
+      i18n,
+      params,
+      refetchResources,
+      refetchResourcesCenter,
+      refetchTabsConditions,
+      refetchLegalNoticeAndTerms
+    } = this.props;
     const { phase } = params;
     const { timeline } = this.props.debate.debateData;
     const childrenWithProps = React.Children.map(children, (child) => {
@@ -123,6 +149,7 @@ class Administration extends React.Component {
                     refetchThematics={data.refetch}
                     refetchResources={refetchResources}
                     refetchResourcesCenter={refetchResourcesCenter}
+                    refetchLegalNoticeAndTerms={refetchLegalNoticeAndTerms}
                   />
                 </Col>
                 <Col xs={12} md={1} />
@@ -174,6 +201,9 @@ const mapDispatchToProps = (dispatch) => {
     },
     updateResourcesCenterPage: ({ titleEntries, headerImage }) => {
       dispatch(updateResourcesCenterPage(titleEntries, headerImage));
+    },
+    updateLegalNoticeAndTerms: (legalNoticeAndTerms) => {
+      return dispatch(updateLegalNoticeAndTerms(legalNoticeAndTerms));
     }
   };
 };
@@ -187,10 +217,23 @@ const mergeLoadingAndHasErrors = (WrappedComponent) => {
       resourcesLoading,
       resourcesCenterLoading,
       tabsConditionsLoading,
-      tabsConditionsHasErrors
+      tabsConditionsHasErrors,
+      legalNoticeAndTermsLoading,
+      legalNoticeAndTermsHasErrors
     } = props;
-    const hasErrors = resourcesHasErrors || resourcesCenterHasErrors || tabsConditionsLoading || (data && data.error);
-    const loading = resourcesLoading || resourcesCenterLoading || tabsConditionsHasErrors || (data && data.loading);
+    const hasErrors =
+      resourcesHasErrors ||
+      resourcesCenterHasErrors ||
+      tabsConditionsLoading ||
+      legalNoticeAndTermsHasErrors ||
+      (data && data.error);
+    const loading =
+      resourcesLoading ||
+      resourcesCenterLoading ||
+      tabsConditionsHasErrors ||
+      legalNoticeAndTermsLoading ||
+      (data && data.loading);
+
     return <WrappedComponent {...props} hasErrors={hasErrors} loading={loading} />;
   };
 };
@@ -262,6 +305,27 @@ export default compose(
           headerImage: headerImage,
           titleEntries: titleEntries
         }
+      };
+    }
+  }),
+  graphql(LegalNoticeAndTermsQuery, {
+    props: ({ data }) => {
+      if (data.loading) {
+        return {
+          legalNoticeAndTermsLoading: true
+        };
+      }
+      if (data.error) {
+        return {
+          legalNoticeAndTermsHasErrors: true
+        };
+      }
+
+      return {
+        legalNoticeAndTermsLoading: data.loading,
+        legalNoticeAndTermsHasErrors: data.error,
+        refetchLegalNoticeAndTerms: data.refetch,
+        legalNoticeAndTerms: data.legalNoticeAndTerms
       };
     }
   }),

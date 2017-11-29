@@ -1,0 +1,12 @@
+query LegalNoticeAndTerms {
+  legalNoticeAndTerms {
+    legalNoticeEntries {
+      localeCode
+      value
+    }
+    termsAndConditionsEntries {
+      localeCode
+      value
+    }
+  }
+}

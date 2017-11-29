@@ -301,7 +301,8 @@ const Translations = {
       landingpage: "Page d'accueil",
       menu: {
         phase: "Phase %{count} - %{description}",
-        language: "Editer la langue du débat"
+        language: "Editer la langue du débat",
+        legalNoticeAndTerms: "CGU & mentions légales"
       },
       noTimeline: "Aucune timeline n'a été configurée pour ce débat.",
       survey: {
@@ -314,7 +315,8 @@ const Translations = {
       annotation: "Module à renseigner obligatoirement. Les champs * sont requis.",
       themeNum: "Thématique %{index}",
       discussion: {
-        0: "Langues utilisées"
+        0: "Langues utilisées",
+        3: "Conditions générales d'utilisation & mentions légales"
       },
       languageChoice: "Sélection des langues du débat",
       ph: {
@@ -350,7 +352,12 @@ const Translations = {
       step_x_total: "Section %{num} sur %{total}",
       saveThemes: "Sauvegarder",
       successThemeCreation: "Les thématiques ont été enregistrées avec succès !",
-      successLanguagePreference: "Les langues du débat ont été enregistrées avec succès !"
+      successLanguagePreference: "Les langues du débat ont été enregistrées avec succès !",
+      legalNoticeAndTerms: {
+        legalNoticeLabel: "Mentions légales",
+        termsAndConditionsLabel: "Conditions générales d'utilisation",
+        successSave: "Les CGU et mentions légales ont été enregistrées avec succès !"
+      }
     },
     unauthorizedAdministration: {
       unauthorizedMessage: "Vous n'êtes pas autorisé à accéder à l'administration. Veuillez contacter l'administrateur du site.",
