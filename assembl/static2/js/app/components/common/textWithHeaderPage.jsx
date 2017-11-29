@@ -4,7 +4,7 @@ import Header from './header';
 
 const TextWithHeaderPage = ({ debateData, headerTitle, text }) => {
   return (
-    <div className="large-text-paragraph">
+    <div className="text-with-header">
       <Header title={headerTitle} imgUrl={debateData.headerBackgroundUrl} />
       <div className="max-container margin-xxl">
         <div className="page-body">
