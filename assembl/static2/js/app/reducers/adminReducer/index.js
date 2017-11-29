@@ -4,6 +4,8 @@ import { combineReducers } from 'redux';
 import type ReduxAction from 'redux';
 
 import { type Action } from '../../actions/actionTypes';
+import legalNoticeAndTerms from './legalNoticeAndTerms';
+import type { LegalNoticeAndTermsReducer } from './legalNoticeAndTerms';
 import resourcesCenter from './resourcesCenter';
 import { updateInLangstringEntries } from '../../utils/i18n';
 
@@ -212,7 +214,8 @@ export type AdminReducer = {
   thematicsById: ThematicsByIdReducer,
   discussionLanguagePreferences: LanguagePreferencesReducer,
   discussionLanguagePreferencesHasChanged: DiscussionLanguagePreferencesHasChangedReducer,
-  resourcesCenter: ResourcesCenterReducer
+  resourcesCenter: ResourcesCenterReducer,
+  legalNoticeAndTerms: LegalNoticeAndTermsReducer
 };
 
 const reducers: AdminReducer = {
@@ -222,7 +225,8 @@ const reducers: AdminReducer = {
   thematicsById: thematicsById,
   discussionLanguagePreferences: languagePreferences,
   discussionLanguagePreferencesHasChanged: discussionLanguagePreferencesHasChanged,
-  resourcesCenter: resourcesCenter
+  resourcesCenter: resourcesCenter,
+  legalNoticeAndTerms: legalNoticeAndTerms
 };
 
 export default combineReducers(reducers);
