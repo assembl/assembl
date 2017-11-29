@@ -29,7 +29,7 @@ type EditSectionFormProps = {
   handleUpClick: Function
 };
 
-const EditSectionForm = ({
+const DumbEditSectionForm = ({
   url,
   type,
   title,
@@ -130,4 +130,6 @@ const mapDispatchToProps = (dispatch, { id, locale }) => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(EditSectionForm);
+export { DumbEditSectionForm };
+
+export default connect(mapStateToProps, mapDispatchToProps)(DumbEditSectionForm);

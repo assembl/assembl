@@ -1,0 +1,67 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`DumbEditSectionForm component should render a form to edit a section of Assembl 1`] = `
+<div
+  className="form-container"
+>
+  <div
+    className="title left"
+  >
+    1. 
+    Accueil
+  </div>
+  <div
+    className="right"
+  />
+  <div
+    className="clear"
+  />
+  <div
+    className="form-group"
+  >
+    <div
+      className="checkbox"
+      style={undefined}
+    >
+      <label
+        title=""
+      >
+        <input
+          checked={true}
+          disabled={false}
+          onChange={[Function]}
+          type="checkbox"
+        />
+        <span
+          className={undefined}
+          style={undefined}
+        >
+          Missing translation: administration.sections.externalPage
+        </span>
+      </label>
+    </div>
+  </div>
+  <div
+    className="form-group"
+  >
+    <label
+      className="control-label"
+      htmlFor={undefined}
+    >
+      Missing translation: administration.sections.urlPh
+    </label>
+    <input
+      className="form-control"
+      id={undefined}
+      onBlur={[Function]}
+      onChange={[Function]}
+      placeholder="Missing translation: administration.sections.urlPh"
+      type="text"
+      value="www.google.fr"
+    />
+  </div>
+  <div
+    className="separator"
+  />
+</div>
+`;
