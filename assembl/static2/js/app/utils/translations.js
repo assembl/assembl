@@ -93,7 +93,7 @@ const Translations = {
     },
     footer: {
       terms: "CGU",
-      legalNotices: "Mentions Légales",
+      legalNotice: "Mentions Légales",
       socialMedias: "Suivez-nous sur"
     },
     login: {
@@ -458,7 +458,7 @@ const Translations = {
     },
     footer: {
       terms: "Terms & Conditions",
-      legalNotices: "Legal Notice",
+      legalNotice: "Legal Notice",
       socialMedias: "Follow us"
     },
     login: {
