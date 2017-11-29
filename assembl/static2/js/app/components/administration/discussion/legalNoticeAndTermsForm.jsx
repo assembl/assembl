@@ -11,10 +11,20 @@ import type { RootReducer } from '../../../reducers/rootReducer';
 import { getEntryValueForLocale } from '../../../utils/i18n';
 
 type LegalNoticeAndTermsFormProps = {
-  locale: string
+  locale: string,
+  legalNotice: string,
+  termsAndConditions: string,
+  updateLegalNotice: Function,
+  updateTermsAndConditions: Function
 };
 
-const LegalNoticeAndTermsForm = ({ locale, legalNotice, termsAndConditions, updateLegalNotice, updateTermsAndConditions }) => {
+export const LegalNoticeAndTermsForm = ({
+  locale,
+  legalNotice,
+  termsAndConditions,
+  updateLegalNotice,
+  updateTermsAndConditions
+}: LegalNoticeAndTermsFormProps) => {
   const legalNoticeLabel = I18n.t('administration.legalNoticeAndTerms.legalNoticeLabel');
   const tacLabel = I18n.t('administration.legalNoticeAndTerms.termsAndConditionsLabel');
   return (
@@ -52,8 +62,8 @@ const mapStateToProps = (state: RootReducer, { locale }: LegalNoticeAndTermsForm
   const legalNotice = getEntryValueForLocale(legalNoticeAndTerms.get('legalNoticeEntries'), locale);
   const termsAndConditions = getEntryValueForLocale(legalNoticeAndTerms.get('termsAndConditionsEntries'), locale);
   return {
-    legalNotice: legalNotice ? legalNotice.toJS() : null,
-    termsAndConditions: termsAndConditions ? termsAndConditions.toJS() : null
+    legalNotice: legalNotice ? legalNotice.toJS() : '',
+    termsAndConditions: termsAndConditions ? termsAndConditions.toJS() : ''
   };
 };
 
