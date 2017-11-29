@@ -279,7 +279,7 @@ const Translations = {
       email: "Email",
       save: "Enregistrer",
       password: "Mot de passe",
-      changePassword: "Modifier"
+      modify: "Modifier"
     },
     loading: {
       wait: "Veuillez patienter"
@@ -655,7 +655,7 @@ const Translations = {
       email: "Email",
       save: "Save",
       password: "Password*",
-      changePassword: "Change"
+      changePassword: "Modify"
     },
     loading: {
       wait: "Please wait..."

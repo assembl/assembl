@@ -26,10 +26,26 @@
     background-size: cover;
     background-repeat: no-repeat;
     border-radius: 80px;
-    margin-bottom: 30px;
+    display: inline-block;
   }
 
   .button-submit {
     width: 150px;
+  }
+
+  .dark-title-4 {
+    margin-top: 25px;
+  }
+
+  .modify {
+    font-size: $font-size-xxs;
+    font-family: $font-family7;
+    display: inline-block;
+    margin-left: -5px;
+    letter-spacing: 1px;
+  }
+
+  .assembl-icon-edit {
+    margin-left: -10px;
   }
 }
