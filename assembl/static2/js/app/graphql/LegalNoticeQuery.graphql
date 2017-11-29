@@ -1,0 +1,9 @@
+query LegalNoticeQuery($lang: String) {
+  legalNoticeAndTerms {
+    legalNotice(lang: $lang)
+    legalNoticeEntries {
+      value
+      localeCode
+    }
+  }
+}

@@ -1,6 +1,0 @@
-query LegalNoticesQuery($lang: String) {
-  legalNotices {
-    title(lang: $lang)
-    text(lang: $lang)
-  }
-}
