@@ -1,9 +1,11 @@
 """Defines the existing frontend routes so the Pyramid router can pass them along."""
 import datetime
-from urlparse import urljoin, urlparse
 import urllib
-
+import re
+import simplejson as json
+from urlparse import urljoin, urlparse
 from graphene.relay import Node
+from os.path import dirname, join, exists
 
 from ..models import Discussion
 
@@ -21,6 +23,27 @@ SOURCE_DISCRIMINANTS = {
 ATTACHMENT_PURPOSES = {
     'EMBED_ATTACHMENT': 'EMBED_ATTACHMENT'
 }
+
+
+frontend_routes = None
+
+
+def get_frontend_urls():
+    """Get all V2 routes from source of truth"""
+
+    current = dirname(__file__)
+    route_path = join(current, '..', 'static2/routes.json')
+    if not exists(route_path):
+        raise IOError("Route path could not be found")
+    with open(route_path) as paths:
+        routes = json.loads(paths.read())
+
+    # The routes string templates are in ECMAScript 6 format
+    # Must convert to Python string template format
+    py_routes = {}
+    for (name, route) in routes.iteritems():
+        py_routes[name] = re.sub(r'\${', '{', route)
+    return py_routes
 
 
 # This is the same logic as in getCurrentPhaseIdentifier in v2 frontend.
@@ -233,6 +256,14 @@ class FrontendUrls(object):
 
     def get_discussion_edition_url(self):
         return self.get_discussion_url() + '/edition'
+
+    def get_frontend_url(self, route_name, **params):
+        global frontend_routes
+        if not frontend_routes:
+            frontend_routes = get_frontend_urls()
+        if route_name not in frontend_routes:
+            return None
+        return "/" + frontend_routes[route_name].format(**params)
 
     def append_query_string(self, url, **kwargs):
         if not url:
