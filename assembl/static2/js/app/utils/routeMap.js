@@ -4,7 +4,6 @@ import { capitalize } from './globalFunctions';
 /*
   A global map of routes managed by React front-end.
 */
-/* eslint no-template-curly-in-string: "off" */
 
 const routes = require('../../../routes.json');
 

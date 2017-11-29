@@ -271,7 +271,15 @@ const Translations = {
       }
     },
     profile: {
-      panelTitle: "Bienvenue dans la page profil d'Assembl"
+      panelTitle: "Votre compte",
+      personalInfos: "Informations personnelles",
+      userName: "Nom d'utilisateur",
+      firstname: "Prénom",
+      lastname: "Nom",
+      email: "Email",
+      save: "Enregistrer",
+      password: "Mot de passe",
+      changePassword: "Modifier"
     },
     loading: {
       wait: "Veuillez patienter"
@@ -639,7 +647,15 @@ const Translations = {
       }
     },
     profile: {
-      panelTitle: "Welcome to Assembl profile page"
+      panelTitle: "Your account",
+      personalInfos: "Personal informations",
+      userName: "User name",
+      firstname: "First name",
+      lastname: "Last name",
+      email: "Email",
+      save: "Save",
+      password: "Password*",
+      changePassword: "Change"
     },
     loading: {
       wait: "Please wait..."

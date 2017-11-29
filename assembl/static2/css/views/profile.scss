@@ -1,0 +1,35 @@
+.profile {
+  input[type='text'] {
+    border: none;
+    border-radius: 0;
+  }
+
+  .profile-form {
+    width: 360px;
+    margin: 35px 0 0 100px;
+
+    .control-label {
+      font-size: $font-size-xxs;
+      text-align: left;
+      width: 100%;
+    }
+  }
+
+  .border-left {
+    border-left-color: $grey5;
+    padding-left: 6%;
+  }
+
+  .profile-image {
+    width: 80px;
+    height: 80px;
+    background-size: cover;
+    background-repeat: no-repeat;
+    border-radius: 80px;
+    margin-bottom: 30px;
+  }
+
+  .button-submit {
+    width: 150px;
+  }
+}
