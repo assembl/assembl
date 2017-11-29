@@ -1,7 +1,7 @@
 import os.path
 
 import graphene
-from pyramid.httpexceptions import HTTPUnauthorized, HTTPBadRequest
+from pyramid.httpexceptions import HTTPUnauthorized
 from pyramid.security import Everyone
 
 from assembl import models
@@ -199,8 +199,8 @@ class VisitsAnalytics(graphene.ObjectType):
         try:
             data = discussion.get_visits_time_series_analytics(start, end, [single_metric])
             return data[single_metric]
-        except ValueError as e:
-            raise HTTPBadRequest(explanation=e)
+        except ValueError:
+            return None
 
     def resolve_sum_visits_length(self, args, context, info):
         return self.query_analytics_single_metric(args, context, info, "sum_visits_length")
