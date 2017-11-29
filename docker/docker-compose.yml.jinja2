@@ -14,7 +14,7 @@ services:
       context: ..
       dockerfile: elasticsearch.Dockerfile
       args:
-        version: {{ docker_elasticsearch_version }}
+        version: {{ elasticsearch_version }}
     networks:
       - my_net
     environment:
