@@ -1,12 +1,38 @@
-import { graphql } from 'react-apollo';
-import TextWithHeaderPage from '../components/common/textWithHeaderPage';
-import LegalNoticeQuery from '../graphql/LegalNoticesQuery.graphql';
+import { compose, graphql } from 'react-apollo';
+import { connect } from 'react-redux';
+import { I18n } from 'react-redux-i18n';
 
-export default graphql(LegalNoticeQuery, {
+import TextWithHeaderPage from '../components/common/textWithHeaderPage';
+import withLoadingIndicator from '../components/common/withLoadingIndicator';
+import LegalNotice from '../graphql/LegalNotice.graphql';
+
+const mapStateToProps = (state) => {
+  return {
+    lang: state.i18n.locale
+  };
+};
+
+const withData = graphql(LegalNotice, {
   props: ({ data }) => {
+    if (data.loading) {
+      return {
+        loading: true
+      };
+    }
+
+    if (data.error) {
+      return {
+        hasError: true
+      };
+    }
+
     return {
-      text: data.text,
-      title: data.title
+      hasError: data.error,
+      loading: data.loading,
+      text: data.legalNoticeAndTerms.legalNotice || '',
+      headerTitle: I18n.t('legalNotice.headerTitle')
     };
   }
-})(TextWithHeaderPage);
+});
+
+export default compose(connect(mapStateToProps), withData, withLoadingIndicator())(TextWithHeaderPage);
