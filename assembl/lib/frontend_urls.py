@@ -252,7 +252,7 @@ class FrontendUrls(object):
                     'element': Node.to_global_id('Post', post.id)
                 })
 
-            return "{base}/{route}".format(base=self.get_base_url(),
+            return "{base}/{route}".format(base=self.discussion.get_base_url(),
                                            route=route)
 
     def get_relative_idea_url(self, idea):
