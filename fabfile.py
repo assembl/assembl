@@ -41,8 +41,6 @@ from fabric.colors import yellow, cyan, red, green
 #logger.setLevel(logging.DEBUG)
 
 
-# Please update the elasticsearch version in docker/docker-compose.yml.jinja2 too!
-ELASTICSEARCH_VERSION = '5.6.2'
 DEFAULT_SECTION = "DEFAULT"
 
 
@@ -1790,6 +1788,7 @@ def upgrade_yarn_crontab():
 @task
 def install_elasticsearch():
     """Install elasticsearch"""
+    ELASTICSEARCH_VERSION = env.elasticsearch_version
     if getenv("IN_DOCKER"):
         return
 
