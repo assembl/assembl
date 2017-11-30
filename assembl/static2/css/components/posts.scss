@@ -165,7 +165,7 @@ $deleted-post-border: 1px solid $grey1 !default;
       display: block;
       white-space: normal;
       text-align: left;
-      line-height: 20px;
+      line-height: 12px;
     }
   }
 
@@ -203,7 +203,7 @@ $deleted-post-border: 1px solid $grey1 !default;
     border-bottom: $navbar-border;
     border-top: $navbar-border;
     margin: 0 0 15px 0;
-    padding: 20px 0;
+    padding: 10px 0;
 
     .label {
       color: $grey2;
@@ -212,7 +212,7 @@ $deleted-post-border: 1px solid $grey1 !default;
     }
 
     .badges {
-      padding: 10px 0;
+      padding: 5px 0;
 
       .badge {
         display: inline;
