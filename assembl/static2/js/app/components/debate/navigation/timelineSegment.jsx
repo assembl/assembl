@@ -61,6 +61,12 @@ class TimelineSegment extends React.Component {
   }
   render() {
     const { index, barPercent, isCurrentPhase, isStepCompleted, title, locale } = this.props;
+    let fillerWidth;
+    if (barPercent < 20) {
+      fillerWidth = 20;
+    } else {
+      fillerWidth = barPercent;
+    }
     const timelineClass = classNames('timeline-title', {
       'txt-active-bold': isCurrentPhase,
       'txt-active-light': isStepCompleted,
@@ -85,7 +91,7 @@ class TimelineSegment extends React.Component {
           </div>
           <div className="timeline-bars">
             {barPercent > 0 && (
-              <div className="timeline-bar-filler" style={{ width: `${barPercent}%` }}>
+              <div className="timeline-bar-filler" style={{ width: `${fillerWidth || 25}%` }}>
                 &nbsp;
               </div>
             )}
