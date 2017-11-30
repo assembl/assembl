@@ -26,7 +26,7 @@
     "endDate": "2017-05-31"
   },
   // Header section: background image
-  "headerBackgroundUrl": "https://framapic.org/DTDgukI0lLFg/QvUEIscjehd8.jpg",
+  "headerBackgroundUrl": "/static2/css/themes/vendor/assembl2-client-themes/direct_images/img/QvUEIscjehd8.jpg",
   // Objectives section: titles, descriptions and illustrations
   "objectives": {
     "titleEntries": {
@@ -40,8 +40,8 @@
         "Movin'On Continues takes on a collaborative approach to tackle the challenges of mobility. It aims to be the continuation of the discussions held at Movin'On. It aims to create an engaged community of tomorrow's mobility actors. The objective of this project is to collectively create tomorrow's mobility, from ambition to action. We are using collective intelligence to confront ideas and co-construct a plan to turn them into action. As Michelin, a proud sponsor of permanent and ongoing global cooperation, is constantly encouraging creativity and innovation in sustainable mobility, notably with its Think and Do Tank: Open Lab Challenge Bibendum. A collaborative ecosystem focused on the challenges of the future of mobility, it is organized around stakeholders’ communities, and places the individual citizen at the heart of its preoccupation. As such, Michelin, Open Lab and bluenove have joined forces so that you, the citizens, can co-construct the future of mobility and become active players in this process of reflection and creation, thanks to the Movin’On Continues debate, taking place online from June 12 to September, 2017."
     },
     "images": {
-      "img1Url": "https://framapic.org/ibX9g8rDKkId/fHbo8OgaSvuW.jpg",
-      "img2Url": "https://framapic.org/3FcT7TlNGrCT/popxXrnh6ELR.jpg"
+      "img1Url": "/static2/css/themes/vendor/assembl2-client-themes/direct_images/img/fHbo8OgaSvuW.jpg",
+      "img2Url": "/static2/css/themes/vendor/assembl2-client-themes/direct_images/img/popxXrnh6ELR.jpg"
     }
   },
   // Video section: URL, titles, descriptions
@@ -66,7 +66,7 @@
   },
   // Twitter section: Background image, ID of the tweet
   "twitter": {
-    "backgroundImageUrl": "https://framapic.org/3EhbBotOOBMb/PVgrOF1tbnvr.jpg",
+    "backgroundImageUrl": "/static2/css/themes/vendor/assembl2-client-themes/direct_images/img/PVgrOF1tbnvr.jpg",
     "id": "808390464667721728"
   },
   // Chatbot section: link to the chatbot tool, name of the chatbot, titles
@@ -82,52 +82,52 @@
   "partners": [
     {
       "link": "http://citiesforlife-latribune.paris/",
-      "logo": "https://framapic.org/YisQV9E8WBsM/X8VpDly6LAui.png",
+      "logo": "/static2/css/themes/vendor/assembl2-client-themes/direct_images/img/X8VpDly6LAui.png",
       "name": "Michelin"
     },
     {
       "link": "http://citiesforlife-latribune.paris/",
-      "logo": "https://framapic.org/DE2fWUB8lizu/BLedhh9Jo1Pd.png",
+      "logo": "/static2/css/themes/vendor/assembl2-client-themes/direct_images/img/BLedhh9Jo1Pd.png",
       "name": "Michelin"
     },
     {
       "link": "http://citiesforlife-latribune.paris/",
-      "logo": "https://framapic.org/y2hoEmaIFVrD/n1rAm4uzK5u6.png",
+      "logo": "/static2/css/themes/vendor/assembl2-client-themes/direct_images/img/n1rAm4uzK5u6.png",
       "name": "Michelin"
     },
     {
       "link": "http://citiesforlife-latribune.paris/",
-      "logo": "https://framapic.org/b7wc3yTNJ2LH/uPCKUpRRksJC.jpg",
+      "logo": "/static2/css/themes/vendor/assembl2-client-themes/direct_images/img/uPCKUpRRksJC.jpg",
       "name": "Michelin"
     },
     {
       "link": "http://citiesforlife-latribune.paris/",
-      "logo": "https://framapic.org/gjWcekbNKGvc/WSIrMIh6vrND.jpg",
+      "logo": "/static2/css/themes/vendor/assembl2-client-themes/direct_images/img/WSIrMIh6vrND.jpg",
       "name": "Michelin"
     },
     {
       "link": "http://citiesforlife-latribune.paris/",
-      "logo": "https://framapic.org/cOolesoiKwdG/XQScdEqzGJhR.png",
+      "logo": "/static2/css/themes/vendor/assembl2-client-themes/direct_images/img/XQScdEqzGJhR.png",
       "name": "Michelin"
     },
     {
       "link": "http://citiesforlife-latribune.paris/",
-      "logo": "https://framapic.org/3SjOYdiuCfm7/d1s5wMjD11Ie.png",
+      "logo": "/static2/css/themes/vendor/assembl2-client-themes/direct_images/img/d1s5wMjD11Ie.png",
       "name": "Michelin"
     },
     {
       "link": "http://citiesforlife-latribune.paris/",
-      "logo": "https://framapic.org/LZSd31mWolhV/yeKsQvS2sCN0.png",
+      "logo": "/static2/css/themes/vendor/assembl2-client-themes/direct_images/img/yeKsQvS2sCN0.png",
       "name": "Michelin"
     },
     {
       "link": "http://citiesforlife-latribune.paris/",
-      "logo": "https://framapic.org/0Wbh9AUc7Y3G/a8hH0EJetIxg.jpg",
+      "logo": "/static2/css/themes/vendor/assembl2-client-themes/direct_images/img/a8hH0EJetIxg.jpg",
       "name": "Michelin"
     },
     {
       "link": "http://citiesforlife-latribune.paris/",
-      "logo": "https://framapic.org/FyrAaESDdbs0/4vGwhoEqQyZK.png",
+      "logo": "/static2/css/themes/vendor/assembl2-client-themes/direct_images/img/4vGwhoEqQyZK.png",
       "name": "Michelin"
     }
   ],
