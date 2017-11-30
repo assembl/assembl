@@ -77,7 +77,7 @@ $column-synthesis-height: 300px;
     text-align: left;
     padding-top: $header-margin;
     padding-bottom: 25px;
-    padding-left: 10px;
+    padding-left: 15px;
     height: 120px;
 
     .start-discussion {
@@ -155,6 +155,8 @@ $column-synthesis-height: 300px;
 
 .multi-column-container {
   .column-view {
+    max-width: 45%;
+
     .column-header {
       margin-left: $column-half-gutter;
       margin-right: $column-half-gutter;
