@@ -61,7 +61,6 @@ module.exports = {
                 plugins: [
                   'transform-object-rest-spread',
                   'transform-class-properties',
-                  'transform-react-inline-elements',
                   ['transform-runtime', { helpers: true, polyfill: false }]
                 ],
                 presets: [["env", { "modules": false, "targets": { "ie": 11 },
