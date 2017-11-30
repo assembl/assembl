@@ -216,11 +216,15 @@ const mergeLoadingAndHasErrors = (WrappedComponent) => {
       resourcesCenterHasErrors,
       resourcesLoading,
       resourcesCenterLoading,
+      sectionsHasErrors,
+      sectionsLoading,
       tabsConditionsLoading,
       tabsConditionsHasErrors
     } = props;
-    const hasErrors = resourcesHasErrors || resourcesCenterHasErrors || tabsConditionsLoading || (data && data.error);
-    const loading = resourcesLoading || resourcesCenterLoading || tabsConditionsHasErrors || (data && data.loading);
+    const hasErrors =
+      resourcesHasErrors || resourcesCenterHasErrors || tabsConditionsLoading || sectionsHasErrors || (data && data.error);
+    const loading =
+      resourcesLoading || resourcesCenterLoading || tabsConditionsHasErrors || sectionsLoading || (data && data.loading);
     return <WrappedComponent {...props} hasErrors={hasErrors} loading={loading} />;
   };
 };
@@ -297,7 +301,19 @@ export default compose(
   }),
   graphql(SectionsQuery, {
     props: ({ data }) => {
+      if (data.loading) {
+        return {
+          sectionsLoading: true
+        };
+      }
+      if (data.error) {
+        return {
+          sectionsHasErrors: true
+        };
+      }
       return {
+        sectionsLoading: data.loading,
+        sectionsHasErrors: data.error,
         refetchSections: data.refetch,
         sections: data.sections
       };

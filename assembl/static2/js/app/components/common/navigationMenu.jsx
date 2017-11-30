@@ -9,7 +9,6 @@ import { get } from '../../utils/routeMap';
 import { displayModal } from '../../utils/utilityManager';
 import { getDiscussionSlug } from '../../utils/globalFunctions';
 import { getCurrentPhaseIdentifier, getPhaseName, isSeveralIdentifiers } from '../../utils/timeline';
-import sectionsMock from './sectionsMock';
 import TabsConditionQuery from '../../graphql/TabsConditionQuery.graphql';
 
 class NavigationMenu extends React.Component {
@@ -119,8 +118,7 @@ const mapStateToProps = (state) => {
     isAdmin: connectedUserIsAdmin(),
     debate: state.debate,
     phase: state.phase,
-    i18n: state.i18n,
-    sections: sectionsMock // TODO: will be fetched from a graphql query
+    i18n: state.i18n
   };
 };
 

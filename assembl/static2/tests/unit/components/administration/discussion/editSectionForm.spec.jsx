@@ -7,14 +7,14 @@ describe('DumbEditSectionForm component', () => {
   it('should render a form to edit a section of Assembl', () => {
     const handleTitleChangeSpy = jest.fn(() => {});
     const handleUrlChangeSpy = jest.fn(() => {});
-    const handleCheckboxChangeSpy = jest.fn(() => {});
+    const toggleExternalPageFieldSpy = jest.fn(() => {});
     const handleDeleteClickSpy = jest.fn(() => {});
     const handleDownClickSpy = jest.fn(() => {});
     const handleUpClickSpy = jest.fn(() => {});
     const props = {
       handleTitleChange: handleTitleChangeSpy,
       handleUrlChange: handleUrlChangeSpy,
-      handleCheckboxChange: handleCheckboxChangeSpy,
+      toggleExternalPageField: toggleExternalPageFieldSpy,
       handleDeleteClick: handleDeleteClickSpy,
       handleDownClick: handleDownClickSpy,
       handleUpClick: handleUpClickSpy,

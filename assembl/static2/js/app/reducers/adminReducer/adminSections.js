@@ -10,8 +10,8 @@ import {
   TOGGLE_EXTERNAL_PAGE,
   CREATE_SECTION,
   DELETE_SECTION,
-  UP_SECTION,
-  DOWN_SECTION
+  MOVE_UP_SECTION,
+  MOVE_DOWN_SECTION
 } from '../../actions/actionTypes';
 import { updateInLangstringEntries } from '../../utils/i18n';
 
@@ -21,8 +21,8 @@ export const sectionsHaveChanged = (state: boolean = false, action: ReduxAction<
   case DELETE_SECTION:
   case UPDATE_SECTION_URL:
   case TOGGLE_EXTERNAL_PAGE:
-  case UP_SECTION:
-  case DOWN_SECTION:
+  case MOVE_UP_SECTION:
+  case MOVE_DOWN_SECTION:
   case UPDATE_SECTION_TITLE:
     return true;
   case UPDATE_SECTIONS:
@@ -38,9 +38,7 @@ export const sectionsInOrder = (state: List<number> = List(), action: ReduxActio
     return state.push(action.id);
   case UPDATE_SECTIONS: {
     const sections = action.sections.sort((a, b) => {
-      const aOrder = a.order;
-      const bOrder = b.order;
-      return aOrder - bOrder;
+      return a.order - b.order;
     });
     return List(
       sections.map((s) => {
@@ -48,7 +46,7 @@ export const sectionsInOrder = (state: List<number> = List(), action: ReduxActio
       })
     );
   }
-  case UP_SECTION: {
+  case MOVE_UP_SECTION: {
     const idIndex = state.findIndex((item) => {
       return item === action.id;
     });
@@ -57,7 +55,7 @@ export const sectionsInOrder = (state: List<number> = List(), action: ReduxActio
     const newState2 = newState.set(idIndex - 1, action.id);
     return newState2;
   }
-  case DOWN_SECTION: {
+  case MOVE_DOWN_SECTION: {
     const idIndex = state.findIndex((item) => {
       return item === action.id;
     });

@@ -21,8 +21,8 @@ export const UPDATE_SECTION_URL: 'UPDATE_SECTION_URL' = 'UPDATE_SECTION_URL';
 export const TOGGLE_EXTERNAL_PAGE: 'TOGGLE_EXTERNAL_PAGE' = 'TOGGLE_EXTERNAL_PAGE';
 export const CREATE_SECTION: 'CREATE_SECTION' = 'CREATE_SECTION';
 export const DELETE_SECTION: 'DELETE_SECTION' = 'DELETE_SECTION';
-export const UP_SECTION: 'UP_SECTION' = 'UP_SECTION';
-export const DOWN_SECTION: 'DOWN_SECTION' = 'DOWN_SECTION';
+export const MOVE_UP_SECTION: 'MOVE_UP_SECTION' = 'MOVE_UP_SECTION';
+export const MOVE_DOWN_SECTION: 'MOVE_DOWN_SECTION' = 'MOVE_DOWN_SECTION';
 
 export type UpdateContentLocaleById = {
   type: typeof UPDATE_CONTENT_LOCALE_BY_ID,
@@ -162,12 +162,12 @@ export type DeleteSection = {
 
 export type UpSection = {
   id: string,
-  type: typeof UP_SECTION
+  type: typeof MOVE_UP_SECTION
 };
 
 export type DownSection = {
   id: string,
-  type: typeof DOWN_SECTION
+  type: typeof MOVE_DOWN_SECTION
 };
 
 type BasicAction = {

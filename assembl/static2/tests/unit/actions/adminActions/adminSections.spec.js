@@ -6,8 +6,8 @@ import {
   UPDATE_SECTION_URL,
   UPDATE_SECTIONS,
   TOGGLE_EXTERNAL_PAGE,
-  UP_SECTION,
-  DOWN_SECTION
+  MOVE_UP_SECTION,
+  MOVE_DOWN_SECTION
 } from '../../../../js/app/actions/actionTypes';
 
 describe('adminSections admin actions', () => {
@@ -93,25 +93,25 @@ describe('adminSections admin actions', () => {
     });
   });
 
-  describe('upSection action', () => {
-    const { upSection } = actions;
-    it('should return a UP_SECTION action type', () => {
-      const actual = upSection('1234567');
+  describe('moveSectionUp action', () => {
+    const { moveSectionUp } = actions;
+    it('should return a MOVE_UP_SECTION action type', () => {
+      const actual = moveSectionUp('1234567');
       const expected = {
         id: '1234567',
-        type: UP_SECTION
+        type: MOVE_UP_SECTION
       };
       expect(actual).toEqual(expected);
     });
   });
 
-  describe('downSection action', () => {
-    const { downSection } = actions;
-    it('should return a DOWN_SECTION action type', () => {
-      const actual = downSection('1234567');
+  describe('moveSectionDown action', () => {
+    const { moveSectionDown } = actions;
+    it('should return a MOVE_DOWN_SECTION action type', () => {
+      const actual = moveSectionDown('1234567');
       const expected = {
         id: '1234567',
-        type: DOWN_SECTION
+        type: MOVE_DOWN_SECTION
       };
       expect(actual).toEqual(expected);
     });

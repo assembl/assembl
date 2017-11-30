@@ -37,10 +37,10 @@ export const deleteSection = (id: string): actionTypes.DeleteSection => {
   return { id: id, type: actionTypes.DELETE_SECTION };
 };
 
-export const upSection = (id: string): actionTypes.UpSection => {
-  return { id: id, type: actionTypes.UP_SECTION };
+export const moveSectionUp = (id: string): actionTypes.UpSection => {
+  return { id: id, type: actionTypes.MOVE_UP_SECTION };
 };
 
-export const downSection = (id: string): actionTypes.DownSection => {
-  return { id: id, type: actionTypes.DOWN_SECTION };
+export const moveSectionDown = (id: string): actionTypes.DownSection => {
+  return { id: id, type: actionTypes.MOVE_DOWN_SECTION };
 };

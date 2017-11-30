@@ -11,8 +11,8 @@ import {
   updateSectionUrl,
   toggleExternalPage,
   deleteSection,
-  upSection,
-  downSection
+  moveSectionUp,
+  moveSectionDown
 } from '../../../actions/adminActions/adminSections';
 
 type EditSectionFormProps = {
@@ -23,7 +23,7 @@ type EditSectionFormProps = {
   index: number,
   handleTitleChange: Function,
   handleUrlChange: Function,
-  handleCheckboxChange: Function,
+  toggleExternalPageField: Function,
   handleDeleteClick: Function,
   handleDownClick: Function,
   handleUpClick: Function
@@ -36,7 +36,7 @@ const DumbEditSectionForm = ({
   nbSections,
   index,
   handleTitleChange,
-  handleCheckboxChange,
+  toggleExternalPageField,
   handleUrlChange,
   handleDeleteClick,
   handleDownClick,
@@ -84,7 +84,7 @@ const DumbEditSectionForm = ({
       ) : null}
       {type === 'HOMEPAGE' ? (
         <FormGroup>
-          <Checkbox checked={hasUrl} onChange={handleCheckboxChange}>
+          <Checkbox checked={hasUrl} onChange={toggleExternalPageField}>
             <Translate value="administration.sections.externalPage" />
           </Checkbox>
         </FormGroup>
@@ -98,12 +98,12 @@ const DumbEditSectionForm = ({
 };
 
 const mapStateToProps = (state, { id, locale }) => {
-  const sections = state.admin.sections.sectionsById.get(id);
+  const section = state.admin.sections.sectionsById.get(id);
   return {
-    url: sections.get('url'),
-    type: sections.get('type'),
-    order: sections.get('order'),
-    title: getEntryValueForLocale(sections.get('titleEntries'), locale, '')
+    url: section.get('url'),
+    type: section.get('type'),
+    order: section.get('order'),
+    title: getEntryValueForLocale(section.get('titleEntries'), locale, '')
   };
 };
 
@@ -115,17 +115,17 @@ const mapDispatchToProps = (dispatch, { id, locale }) => {
     handleUrlChange: (e) => {
       return dispatch(updateSectionUrl(id, e.target.value));
     },
-    handleCheckboxChange: () => {
+    toggleExternalPageField: () => {
       return dispatch(toggleExternalPage(id));
     },
     handleDeleteClick: () => {
       return dispatch(deleteSection(id));
     },
     handleUpClick: () => {
-      return dispatch(upSection(id));
+      return dispatch(moveSectionUp(id));
     },
     handleDownClick: () => {
-      return dispatch(downSection(id));
+      return dispatch(moveSectionDown(id));
     }
   };
 };
