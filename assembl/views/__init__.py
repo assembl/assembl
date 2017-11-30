@@ -158,19 +158,33 @@ def create_get_route(request, discussion=0):
     if discussion is 0:  # None would be a known absence, don't recalculate
         from assembl.auth.util import discussion_from_request
         discussion = discussion_from_request(request)
+    from assembl.lib.frontend_urls import FrontendUrls
+    furl = FrontendUrls(discussion)
     if discussion:
         def get_route(name, **kwargs):
             if name == "bare_slug":
-                name = "new_home" if discussion.preferences['landing_page'] else "home"
+                name = "new_home" if discussion.preferences['landing_page'] \
+                    else "home"
             try:
                 return request.route_path('contextual_' + name,
                                           discussion_slug=discussion.slug,
                                           **kwargs)
             except KeyError:
+                # If the resource is a furl_* route, check for front-end
+                # routes first then return potential V1 route
+                if 'furl_' in name:
+                    kwargs.update({'slug': discussion.slug})
+                    route_name = name.split('furl_')[1]
+                    route = furl.get_frontend_url(route_name, **kwargs)
+                    if route is not None:
+                        return route
+
                 return request.route_path(
                     name, discussion_slug=discussion.slug, **kwargs)
     else:
         def get_route(name, **kwargs):
+            # Front-end routes not under a discussion context is already
+            # back-end aware
             kwargs['discussion_slug'] = kwargs.get('discussion_slug', '')
             return request.route_path(name, **kwargs)
     return get_route
