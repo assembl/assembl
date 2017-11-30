@@ -159,8 +159,8 @@ def create_get_route(request, discussion=0):
         from assembl.auth.util import discussion_from_request
         discussion = discussion_from_request(request)
     from assembl.lib.frontend_urls import FrontendUrls
-    furl = FrontendUrls(discussion)
     if discussion:
+        furl = FrontendUrls(discussion)
         def get_route(name, **kwargs):
             if name == "bare_slug":
                 name = "new_home" if discussion.preferences['landing_page'] \
