@@ -218,6 +218,9 @@ class FrontendUrls(object):
         if current_phase_use_v1_interface(self.discussion.timeline_events):
             return self.get_discussion_url() + self.get_relative_post_url(post)
         else:
+            route = None
+            phase = get_current_phase_identifier(
+                self.discussion.timeline_events)
             first_idea = None
             ideas = [link.idea
                 for link in post.indirect_idea_content_links_without_cache()
@@ -231,22 +234,26 @@ class FrontendUrls(object):
                 return request.route_url(
                     'new_home', discussion_slug=self.discussion.slug)
 
-            if first_idea is not None and first_idea.__class__.__name__ == 'Question':
+            if first_idea is not None and first_idea.__class__.__name__ ==\
+                    'Question':
                 thematic = post.get_closest_thematic()
-                return '{base}/{slug}/debate/survey/theme/{thematic}'.format(**{
-                    'base': self.discussion.get_base_url(),
+                route = self.get_frontend_url('post', **{
                     'slug': self.discussion.slug,
-                    'thematic': thematic.graphene_id()
-                    })
-
-            return '{base}/{slug}/debate/{phase}/theme/{idea}/#{post}'.format(**{
-                'base': self.discussion.get_base_url(),
-                'slug': self.discussion.slug,
-                'phase': get_current_phase_identifier(
-                    self.discussion.timeline_events),
-                'idea': Node.to_global_id('Idea', first_idea.id),
-                'post': Node.to_global_id('Post', post.id)
+                    'phase': phase,
+                    'themeId': thematic.graphene_id(),
+                    'element': ''
                 })
+
+            if not route:
+                route = self.get_frontend_url('post', **{
+                    'slug': self.discussion.slug,
+                    'phase': phase,
+                    'themeId': Node.to_global_id('Idea', first_idea.id),
+                    'element': Node.to_global_id('Post', post.id)
+                })
+
+            return "{base}/{route}".format(base=self.get_base_url(),
+                                           route=route)
 
     def get_relative_idea_url(self, idea):
         return '/idea/' + urllib.quote(idea.original_uri, '')
