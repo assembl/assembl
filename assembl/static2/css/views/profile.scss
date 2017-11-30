@@ -1,9 +1,4 @@
 .profile {
-  input[type='text'] {
-    border: none;
-    border-radius: 0;
-  }
-
   .profile-form {
     width: 360px;
     margin: 35px 0 0 100px;
@@ -20,13 +15,12 @@
     padding-left: 6%;
   }
 
-  .profile-image {
-    width: 80px;
-    height: 80px;
-    background-size: cover;
-    background-repeat: no-repeat;
-    border-radius: 80px;
-    display: inline-block;
+  .assembl-icon-profil {
+    color: $grey5;
+
+    &:before {
+      font-size: 80px;
+    }
   }
 
   .button-submit {
@@ -34,18 +28,33 @@
   }
 
   .dark-title-4 {
-    margin-top: 25px;
+    margin-top: 28px;
   }
 
-  .modify {
-    font-size: $font-size-xxs;
-    font-family: $font-family7;
-    display: inline-block;
-    margin-left: -5px;
-    letter-spacing: 1px;
+  .help-block {
+    color: $error;
+    text-align: left;
+    font-family: $font-family6;
+    font-size: $font-size-xs;
   }
 
-  .assembl-icon-edit {
-    margin-left: -10px;
+  .has-error {
+    .form-control {
+      border: 1px solid $error !important;
+      border-radius: 0;
+      box-shadow: none;
+    }
+  }
+
+  .form-control {
+    border: $white;
+    border-radius: 0;
+    box-shadow: none;
+
+    &:focus {
+      border-radius: 0;
+      border: 1px solid $second-color !important;
+      box-shadow: none;
+    }
   }
 }

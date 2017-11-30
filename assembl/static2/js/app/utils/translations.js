@@ -274,12 +274,11 @@ const Translations = {
       panelTitle: "Votre compte",
       personalInfos: "Informations personnelles",
       userName: "Nom d'utilisateur",
-      firstname: "Prénom",
-      lastname: "Nom",
-      email: "Email",
+      fullname: "Nom complet*",
+      email: "Email*",
       save: "Enregistrer",
       password: "Mot de passe",
-      modify: "Modifier"
+      changePassword: "Modifier"
     },
     loading: {
       wait: "Veuillez patienter"
@@ -650,11 +649,10 @@ const Translations = {
       panelTitle: "Your account",
       personalInfos: "Personal informations",
       userName: "User name",
-      firstname: "First name",
-      lastname: "Last name",
-      email: "Email",
+      fullname: "Full name*",
+      email: "Email*",
       save: "Save",
-      password: "Password*",
+      password: "Password",
       changePassword: "Modify"
     },
     loading: {
