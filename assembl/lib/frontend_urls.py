@@ -36,13 +36,13 @@ def get_frontend_urls():
     if not exists(route_path):
         raise IOError("Route path could not be found")
     with open(route_path) as paths:
-        routes = json.loads(paths.read())
+        routes = json.load(paths)
 
     # The routes string templates are in ECMAScript 6 format
     # Must convert to Python string template format
     py_routes = {}
-    for (name, route) in routes.iteritems():
-        py_routes[name] = re.sub(r'\${', '{', route)
+    for name, route in routes.items():
+        py_routes[name] = route.replace('${', '{')
     return py_routes
 
 
