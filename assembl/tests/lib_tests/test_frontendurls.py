@@ -87,6 +87,27 @@ def test_get_route_react_frontend_post(discussion, test_webrequest,
     assert get_route('furl_post', **options) == expected
 
 
+def test_get_route_react_frontend_post_no_element(
+        discussion, test_webrequest, idea_with_en_fr, reply_post_1):
+    from assembl.views import create_get_route
+    get_route = create_get_route(test_webrequest, discussion)
+    idea_id = to_global_id('Idea', idea_with_en_fr.id)
+
+    options = {
+        'phase': 'thread',
+        'themeId': idea_id,
+        'element': ''
+    }
+
+    expected = "/{slug}/debate/{phase}/theme/{theme_id}/#{element}"\
+        .format(
+            slug=discussion.slug,
+            phase='thread',
+            theme_id=idea_id,
+            element=""
+        )
+    assert get_route('furl_post', **options) == expected
+
 def test_get_route_react_frontend_profile(discussion, test_webrequest,
                                           participant1_user):
     from assembl.views import create_get_route
