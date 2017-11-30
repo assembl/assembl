@@ -91,7 +91,7 @@ class TimelineSegment extends React.Component {
           </div>
           <div className="timeline-bars">
             {barPercent > 0 && (
-              <div className="timeline-bar-filler" style={{ width: `${fillerWidth || 25}%` }}>
+              <div className="timeline-bar-filler" style={{ width: `${fillerWidth}%` }}>
                 &nbsp;
               </div>
             )}
