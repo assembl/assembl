@@ -55,7 +55,7 @@ class Statistic extends React.Component {
     if (visitsAnalytics) {
       if ('sumVisitsLength' in visitsAnalytics && visitsAnalytics.sumVisitsLength > 0) {
         const totalSeconds = visitsAnalytics.sumVisitsLength;
-        const secondsAsNumber = parseInt(totalSeconds, 10); // don't forget the second param
+        const secondsAsNumber = parseInt(totalSeconds, 10); // Second param is mandatory, see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/parseInt
         const momentDuration = moment.duration(secondsAsNumber, 'seconds');
         const formatValue = I18n.t('duration.format');
         const readableDuration = momentDuration.format(formatValue);

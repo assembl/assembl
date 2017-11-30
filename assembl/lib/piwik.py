@@ -54,7 +54,7 @@ def piwik_UsersManager_addUser(piwik_url, piwik_api_token, userLogin, password, 
     params["userLogin"] = userLogin # Piwik has two different fields for login and email, but a user can have the same value as login and email
     params["password"] = password
     params["email"] = email
-    if ( alias ):
+    if alias:
         params["alias"] = alias
     result = requests.get(piwik_url, params=params, timeout=15)
     if result.status_code != 200:
@@ -98,35 +98,35 @@ def piwik_SitesManager_addSite(piwik_url, piwik_api_token, siteName, urls, ecomm
     params["method"] = "SitesManager.addSite"
     params["siteName"] = siteName
     params["urls"] = urls
-    if ( ecommerce ):
+    if ecommerce:
         params["ecommerce"] = ecommerce
-    if ( siteSearch ):
+    if siteSearch:
         params["siteSearch"] = siteSearch
-    if ( searchKeywordParameters ):
+    if searchKeywordParameters:
         params["searchKeywordParameters"] = searchKeywordParameters
-    if ( searchCategoryParameters ):
+    if searchCategoryParameters:
         params["searchCategoryParameters"] = searchCategoryParameters
-    if ( excludedIps ):
+    if excludedIps:
         params["excludedIps"] = excludedIps
-    if ( excludedQueryParameters ):
+    if excludedQueryParameters:
         params["excludedQueryParameters"] = excludedQueryParameters
-    if ( timezone ):
+    if timezone:
         params["timezone"] = timezone
-    if ( currency ):
+    if currency:
         params["currency"] = currency
-    if ( group ):
+    if group:
         params["group"] = group
-    if ( startDate ):
+    if startDate:
         params["startDate"] = startDate
-    if ( excludedUserAgents ):
+    if excludedUserAgents:
         params["excludedUserAgents"] = excludedUserAgents
-    if ( keepURLFragments ):
+    if keepURLFragments:
         params["keepURLFragments"] = keepURLFragments
-    if ( param_type ):
+    if param_type:
         params["type"] = param_type
-    if ( settings ):
+    if settings:
         params["settings"] = settings
-    if ( excludeUnknownUrls ):
+    if excludeUnknownUrls:
         params["excludeUnknownUrls"] = excludeUnknownUrls
 
     result = requests.get(piwik_url, params=params, timeout=15)
@@ -139,9 +139,7 @@ def piwik_SitesManager_addSite(piwik_url, piwik_api_token, siteName, urls, ecomm
     if not content:
         raise requests.ConnectionError()
 
-    if "value" in content:
-        return content['value']
-    return False
+    return content.get('value', False)
 
 
 def piwik_UsersManager_setUserAccess(piwik_url, piwik_api_token, userLogin, access, idSites):
@@ -163,7 +161,7 @@ def piwik_UsersManager_setUserAccess(piwik_url, piwik_api_token, userLogin, acce
     if not content:
         raise requests.ConnectionError()
 
-    user_access_is_set = ("result" in content and content["result"] == "success")
+    user_access_is_set = content.get("result", "error") == "success"
     return user_access_is_set
 
 
