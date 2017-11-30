@@ -58,6 +58,8 @@ const icons = [
   'assembl-icon-text-align-right',
   'assembl-icon-ellipsis',
   'assembl-icon-ellipsis-vert',
+  'assembl-icon-up-bold',
+  'assembl-icon-down-bold'
 ]
 
 class Icons extends React.Component {
