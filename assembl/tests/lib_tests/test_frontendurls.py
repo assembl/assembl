@@ -69,7 +69,7 @@ def test_get_route_react_frontend_post(discussion, test_webrequest,
     from assembl.views import create_get_route
     get_route = create_get_route(test_webrequest, discussion)
     idea_id = to_global_id('Idea', idea_with_en_fr.id)
-    element = to_global_id('AssemblPost', reply_post_1)
+    element = to_global_id('Post', reply_post_1)
 
     options = {
         'phase': 'thread',
