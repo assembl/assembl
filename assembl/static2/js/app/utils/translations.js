@@ -92,8 +92,8 @@ const Translations = {
       syntheses: "Synthèses"
     },
     footer: {
-      terms: "Conditions Générales d'Utilisation",
-      legalNotice: "Mentions Légales",
+      terms: "Conditions générales d'utilisation",
+      legalNotice: "Mentions légales",
       socialMedias: "Suivez-nous sur"
     },
     login: {
@@ -283,10 +283,10 @@ const Translations = {
       panelTitle: "Désolé, cette page n'existe pas"
     },
     termsAndConditions: {
-      headerTitle: "Conditions Générales d'Utilisation"
+      headerTitle: "Conditions générales d'utilisation"
     },
     legalNotice: {
-      headerTitle: "Mentions Légales"
+      headerTitle: "Mentions légales"
     },
     administration: {
       addThematic: "Ajouter une thématique",
@@ -302,7 +302,7 @@ const Translations = {
       menu: {
         phase: "Phase %{count} - %{description}",
         language: "Editer la langue du débat",
-        legalNoticeAndTerms: "CGU & Mentions Légales"
+        legalNoticeAndTerms: "CGU & Mentions légales"
       },
       noTimeline: "Aucune timeline n'a été configurée pour ce débat.",
       survey: {
@@ -355,7 +355,7 @@ const Translations = {
       successLanguagePreference: "Les langues du débat ont été enregistrées avec succès !",
       legalNoticeAndTerms: {
         legalNoticeLabel: "Mentions légales",
-        termsAndConditionsLabel: "Conditions Générales d'Utilisation",
+        termsAndConditionsLabel: "Conditions générales d'utilisation",
         successSave: "Les CGU et mentions légales ont été enregistrées avec succès !"
       }
     },
