@@ -18,22 +18,17 @@ class ResizeListener extends React.Component {
   }
 }
 
-export const ScreenDimensionsProvider = connect(
-  () => {
-    return {};
-  },
-  (dispatch) => {
-    return {
-      updateScreenDimensions: () => {
-        dispatch({
-          type: 'UPDATE_SCREEN_DIMENSIONS',
-          newWidth: window.innerWidth,
-          newHeight: window.innerHeight
-        });
-      }
-    };
-  }
-)(ResizeListener);
+export const ScreenDimensionsProvider = connect(null, (dispatch) => {
+  return {
+    updateScreenDimensions: () => {
+      dispatch({
+        type: 'UPDATE_SCREEN_DIMENSIONS',
+        newWidth: window.innerWidth,
+        newHeight: window.innerHeight
+      });
+    }
+  };
+})(ResizeListener);
 
 /* remove this block when we update flow */
 
