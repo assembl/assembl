@@ -161,7 +161,7 @@ class PostActions extends React.Component {
         )}
         {this.state.screenWidth >= MEDIUM_SCREEN_WIDTH ? overflowMenu : null}
         <div className="answers annotation">
-          <Translate value="debate.thread.numberOfResponses" count={numChildren ? numChildren.length : 0} />
+          <Translate value="debate.thread.numberOfResponses" count={numChildren || 0} />
         </div>
         <div className="clear">&nbsp;</div>
       </div>
