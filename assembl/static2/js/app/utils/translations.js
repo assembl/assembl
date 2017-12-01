@@ -92,7 +92,7 @@ const Translations = {
       syntheses: "Synthèses"
     },
     footer: {
-      terms: "CGU",
+      terms: "Conditions Générales d'Utilisation",
       legalNotice: "Mentions Légales",
       socialMedias: "Suivez-nous sur"
     },
@@ -302,7 +302,7 @@ const Translations = {
       menu: {
         phase: "Phase %{count} - %{description}",
         language: "Editer la langue du débat",
-        legalNoticeAndTerms: "CGU & mentions légales"
+        legalNoticeAndTerms: "CGU & Mentions Légales"
       },
       noTimeline: "Aucune timeline n'a été configurée pour ce débat.",
       survey: {
@@ -355,7 +355,7 @@ const Translations = {
       successLanguagePreference: "Les langues du débat ont été enregistrées avec succès !",
       legalNoticeAndTerms: {
         legalNoticeLabel: "Mentions légales",
-        termsAndConditionsLabel: "Conditions générales d'utilisation",
+        termsAndConditionsLabel: "Conditions Générales d'Utilisation",
         successSave: "Les CGU et mentions légales ont été enregistrées avec succès !"
       }
     },
