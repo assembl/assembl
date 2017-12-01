@@ -161,7 +161,21 @@ def create_get_route(request, discussion=0):
     from assembl.lib.frontend_urls import FrontendUrls
     if discussion:
         furl = FrontendUrls(discussion)
+
         def get_route(name, **kwargs):
+            # If the resource is a furl_* route, check for front-end
+            # routes first then return potential V2/V1 route
+            # NOTE: `furl_` prefix MUST be used in this context in
+            # order to avoid conflicts with Pyramid routes
+            # This would NOT be true if only the FrontendUrl route is
+            # used
+            if 'furl_' in name:
+                kwargs.update({'slug': discussion.slug})
+                route_name = name.split('furl_')[1]
+                route = furl.get_frontend_url(route_name, **kwargs)
+                if route is not None:
+                    return route
+
             if name == "bare_slug":
                 name = "new_home" if discussion.preferences['landing_page'] \
                     else "home"
@@ -170,15 +184,6 @@ def create_get_route(request, discussion=0):
                                           discussion_slug=discussion.slug,
                                           **kwargs)
             except KeyError:
-                # If the resource is a furl_* route, check for front-end
-                # routes first then return potential V1 route
-                if 'furl_' in name:
-                    kwargs.update({'slug': discussion.slug})
-                    route_name = name.split('furl_')[1]
-                    route = furl.get_frontend_url(route_name, **kwargs)
-                    if route is not None:
-                        return route
-
                 return request.route_path(
                     name, discussion_slug=discussion.slug, **kwargs)
     else:

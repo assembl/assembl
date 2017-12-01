@@ -297,6 +297,19 @@ class FrontendUrls(object):
         return self.get_discussion_url() + '/edition'
 
     def get_frontend_url(self, route_name, **params):
+        """
+        Get the route that is defined in V2 front-end interface
+
+        :param :route_name the route name defined in the front-end
+
+        Note - there is another method :py:assembl.views.create_get_route
+        which creates a global route index. In that context, to search
+        for front-end routes, `furl_` must be prefixed to the route, as
+        there exists collision between route names of front-end and Pyramid
+
+        :return the relative route path
+        :rtype: string
+        """
         global frontend_routes
         if not frontend_routes:
             frontend_routes = get_frontend_urls()
