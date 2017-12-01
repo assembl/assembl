@@ -154,4 +154,4 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default compose(graphql(createPostMutation), connect(mapStateToProps), withScreenDimensions)(Question);
+export default compose(connect(mapStateToProps), graphql(createPostMutation), withScreenDimensions)(Question);
