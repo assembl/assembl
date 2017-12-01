@@ -14,7 +14,7 @@ import FlatNavbar from './FlatNavbar';
 import BurgerNavbar from './BurgerNavbar';
 import { APP_CONTAINER_MAX_WIDTH, APP_CONTAINER_PADDING } from '../../constants';
 import { displayModal } from '../../utils/utilityManager';
-import { getDiscussionSlug } from '../../utils/globalFunctions';
+import { getDiscussionSlug, snakeToCamel } from '../../utils/globalFunctions';
 
 const filterSection = ({ sectionType }, { hasResourcesCenter, hasSyntheses }) => {
   switch (sectionType) {
@@ -41,14 +41,8 @@ const sectionKey = ({ sectionType, url }) => {
   return sectionType === 'CUSTOM' ? `${sectionType}-${url}` : sectionType;
 };
 
-const constantToCamelCase = (string) => {
-  return string.toLowerCase().replace(/_[a-z]/g, (match) => {
-    return match[1].toUpperCase();
-  });
-};
-
 const sectionSlug = (sectionType) => {
-  return constantToCamelCase(sectionType === 'HOMEPAGE' ? 'HOME' : sectionType);
+  return snakeToCamel(sectionType === 'HOMEPAGE' ? 'HOME' : sectionType);
 };
 
 const sectionURL = ({ sectionType, url }, slug, phaseIdentifier) => {
