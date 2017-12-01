@@ -1,12 +1,12 @@
 """Defines the existing frontend routes so the Pyramid router can pass them along."""
 import datetime
+import dateutil
 import urllib
 import re
 import simplejson as json
 from urlparse import urljoin, urlparse
 from graphene.relay import Node
 from os.path import dirname, join, exists
-
 from ..models import Discussion
 
 
@@ -29,7 +29,9 @@ frontend_routes = None
 
 
 def get_frontend_urls():
-    """Get all V2 routes from source of truth"""
+    """
+    Get all V2 routes from source of truth
+    """
 
     current = dirname(__file__)
     route_path = join(current, '..', 'static2/routes.json')
@@ -46,6 +48,29 @@ def get_frontend_urls():
     return py_routes
 
 
+def get_timeline_for_date(discussion, date):
+    """
+    Gets the discussion timeline object that the given date
+    lies between (inclusively)
+
+    :param discussion: A discussion object
+    :param date: A dateformatted string or datetime object
+    :return: A discussion phase
+    :rtype: assembl.models.timeline.DiscussionPhase
+    """
+    if isinstance(date, basestring):
+        date = dateutil.parser.parse(date)
+
+    phases = sorted(discussion.timeline_phases, key=lambda p: p.start)
+    actual_phase = None
+    for index, phase in enumerate(phases):
+        # Assume all dates are in utc, no tz_info however
+        if phase.start <= date < phase.end:
+            actual_phase = phase
+            break
+    return actual_phase
+
+
 # This is the same logic as in getCurrentPhaseIdentifier in v2 frontend.
 def get_current_phase_identifier(timeline):
     """Return the current phase identifier, thread identifier if no timeline.
@@ -58,7 +83,7 @@ def get_current_phase_identifier(timeline):
     for phase in timeline:
         start_date = phase.start
         end_date = phase.end
-        if (current_date > start_date) and (current_date < end_date):
+        if (current_date >= start_date) and (current_date < end_date):
             identifier = phase.identifier
 
     return identifier or u'thread'
@@ -219,8 +244,9 @@ class FrontendUrls(object):
             return self.get_discussion_url() + self.get_relative_post_url(post)
         else:
             route = None
-            phase = get_current_phase_identifier(
-                self.discussion.timeline_events)
+            phase = post.get_created_phase()
+            # The created post must be created within an associated phase
+            assert phase
             first_idea = None
             ideas = [link.idea
                 for link in post.indirect_idea_content_links_without_cache()
@@ -239,7 +265,7 @@ class FrontendUrls(object):
                 thematic = post.get_closest_thematic()
                 route = self.get_frontend_url('post', **{
                     'slug': self.discussion.slug,
-                    'phase': phase,
+                    'phase': phase.identifier,
                     'themeId': thematic.graphene_id(),
                     'element': ''
                 })
@@ -247,13 +273,12 @@ class FrontendUrls(object):
             if not route:
                 route = self.get_frontend_url('post', **{
                     'slug': self.discussion.slug,
-                    'phase': phase,
+                    'phase': phase.identifier,
                     'themeId': Node.to_global_id('Idea', first_idea.id),
                     'element': Node.to_global_id('Post', post.id)
                 })
 
-            return "{base}/{route}".format(base=self.discussion.get_base_url(),
-                                           route=route)
+            return urljoin(self.discussion.get_base_url(), route)
 
     def get_relative_idea_url(self, idea):
         return '/idea/' + urllib.quote(idea.original_uri, '')
