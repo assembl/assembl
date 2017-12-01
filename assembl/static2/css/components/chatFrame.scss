@@ -1,0 +1,63 @@
+$windowBorderRadius: 10px;
+$backgroundColor: #120D9C;
+$buttonSize: 60px;
+$textColor: white;
+$buttonMargin: 15px;
+$windowWidth: 350px;
+$windowHeight: 470px;
+
+.chatframe {
+  position: fixed;
+  right: $buttonMargin;
+  bottom: $buttonMargin;
+  z-index: 300;
+  display: flex;
+  align-items: right;
+  flex-direction: column;
+
+  .chatframe-modal {
+    width: $windowWidth;
+    box-shadow: 2px 2px 7px rgba(0, 0, 0, 0.3);
+    margin-bottom: 10px;
+    border-radius: $windowBorderRadius;
+
+    .chatframe-modal-header {
+      font-family: $font-family4;
+      height: 60px;
+      border-top-left-radius: $windowBorderRadius;
+      border-top-right-radius: $windowBorderRadius;
+      display: flex;
+      align-items: center;
+      padding: 0 15px;
+      color: $textColor;
+      background-color: $backgroundColor;
+      box-shadow: 0 5px 5px rgba(0, 0, 0, 0.1);
+      position: relative;
+      z-index: 400;
+    }
+
+    .chatframe-modal-iframe {
+      height: $windowHeight;
+      width: 100%;
+      border: 0;
+      display: block;
+      border-bottom-left-radius: $windowBorderRadius;
+      border-bottom-right-radius: $windowBorderRadius;
+    }
+  }
+
+  .chatframe-button {
+    height: $buttonSize;
+    width: $buttonSize;
+    border-radius: $buttonSize / 2;
+    background-color: $backgroundColor;
+    color: $textColor;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+}
+
+.chatframe-icon:before {
+  font-size: 32px;
+}
