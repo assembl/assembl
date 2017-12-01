@@ -1,5 +1,6 @@
 """Documents attached to other objects, whether hosted externally or internally"""
 import enum
+
 from sqlalchemy import (
     Column,
     UniqueConstraint,
@@ -8,6 +9,7 @@ from sqlalchemy import (
     DateTime,
     String,
     ForeignKey,
+    Enum,
     LargeBinary,
     event
 )
@@ -36,6 +38,12 @@ class AttachmentPurpose(enum.Enum):
     IMAGE = 'IMAGE'  # used for resources center
     PROFILE_PICTURE = 'PROFILE_PICTURE'
     RESOURCES_CENTER_HEADER_IMAGE = 'RESOURCES_CENTER_HEADER_IMAGE'
+
+
+class AntiVirusStatus(enum.Enum):
+    unchecked = "unchecked"
+    passed = "passed"
+    failed = "failed"
 
 
 class Document(DiscussionBoundBase):
@@ -167,6 +175,10 @@ class File(Document):
 
     # Should we defer this?
     data = Column(LargeBinary, nullable=False)
+    # Note: use SQLA 1.1 for a better Enum behaviour
+    av_checked = Column(Enum(*AntiVirusStatus.__members__.keys(),
+                             name="anti_virus_status"),
+                        server_default='unchecked')
 
     @Document.external_url.getter
     def external_url(self):
