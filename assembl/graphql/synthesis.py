@@ -27,6 +27,7 @@ class Synthesis(SecureObjectType, SQLAlchemyObjectType):
     ideas = graphene.List(lambda: IdeaUnion)
     img = graphene.Field(Document)
     creation_date = DateTime()
+    post = graphene.Field("assembl.graphql.post.Post")
 
     def resolve_subject(self, args, context, info):
         return resolve_langstring(self.subject, args.get('lang'))
@@ -54,3 +55,6 @@ class Synthesis(SecureObjectType, SQLAlchemyObjectType):
         last_idea = ideas[-1].live if ideas else None
         if last_idea.attachments:
             return last_idea.attachments[0].document
+
+    def resolve_post(self, args, context, info):
+        return self.published_in_post

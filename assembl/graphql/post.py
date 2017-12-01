@@ -25,6 +25,7 @@ from .sentiment import SentimentCounts, SentimentTypes
 from .types import SecureObjectType, SQLAlchemyInterface
 from .user import AgentProfile
 from .utils import DateTime, abort_transaction_on_exception
+from .synthesis import Synthesis
 
 
 _ = TranslationStringFactory('assembl')
@@ -97,6 +98,7 @@ class PostInterface(SQLAlchemyInterface):
     publication_state = graphene.Field(type=PublicationStates)
     attachments = graphene.List(PostAttachment)
     original_locale = graphene.String()
+    publishes_synthesis = graphene.Field(lambda: Synthesis)
 
     def resolve_subject(self, args, context, info):
         # Use self.subject and not self.get_subject() because we still
