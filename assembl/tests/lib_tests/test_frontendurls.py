@@ -108,6 +108,7 @@ def test_get_route_react_frontend_post_no_element(
         )
     assert get_route('furl_post', **options) == expected
 
+
 def test_get_route_react_frontend_profile(discussion, test_webrequest,
                                           participant1_user):
     from assembl.views import create_get_route
@@ -134,3 +135,30 @@ def test_get_route_v1(discussion, test_webrequest):
     get_route = create_get_route(test_webrequest, discussion)
     expected = "/debate/{slug}/user/profile".format(slug=slug)
     assert get_route('profile') == expected
+
+
+def test_get_timeline_for_date_phase2(discussion,
+                                      timeline_phase2_interface_v2):
+    from assembl.lib.frontend_urls import get_timeline_for_date
+    # Ensuring to be in phase 2
+    date = '20251231T09:00:00'
+    phase = get_timeline_for_date(discussion, date)
+    assert phase.identifier == u'thread'
+
+
+def test_get_timeline_for_date_before_start(discussion,
+                                            timeline_phase2_interface_v2):
+    from assembl.lib.frontend_urls import get_timeline_for_date
+    # Ensuring to be in phase 2
+    date = '20051231T09:00:00'
+    phase = get_timeline_for_date(discussion, date)
+    assert phase is None
+
+
+def test_get_timeline_for_date_after_end(discussion,
+                                         timeline_phase2_interface_v2):
+    from assembl.lib.frontend_urls import get_timeline_for_date
+    # Ensuring to be in phase 2
+    date = '20501231T09:00:00'
+    phase = get_timeline_for_date(discussion, date)
+    assert phase is None

@@ -369,5 +369,6 @@ def test_url_to_post_v2_proposal(discussion, proposals_en_fr,
         u'thread'
     assert current_phase_use_v1_interface(discussion.timeline_events) is False
     frontend_urls = FrontendUrls(discussion)
-    assert 'jacklayton2/debate/survey/theme/' in\
-        frontend_urls.get_post_url(proposals_en_fr[0])
+    expected = 'jacklayton2/debate/thread/theme/'
+    actual = frontend_urls.get_post_url(proposals_en_fr[0])
+    assert expected in actual
