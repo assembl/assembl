@@ -1,9 +1,0 @@
-query termsAndConditions($lang: String) {
-  legalNoticeAndTerms {
-    termsAndConditions(lang: $lang)
-    termsAndConditionsEntries {
-      value
-      localeCode
-    }
-  }
-}

@@ -4,7 +4,7 @@ import { I18n } from 'react-redux-i18n';
 
 import TextWithHeaderPage from '../components/common/textWithHeaderPage';
 import withLoadingIndicator from '../components/common/withLoadingIndicator';
-import TermsAndConditions from '../graphql/TermsAndConditions.graphql';
+import TermsAndLegalNotice from '../graphql/TermsAndLegalNotice.graphql';
 
 const mapStateToProps = (state) => {
   return {
@@ -12,7 +12,7 @@ const mapStateToProps = (state) => {
   };
 };
 
-const withData = graphql(TermsAndConditions, {
+const withData = graphql(TermsAndLegalNotice, {
   props: ({ data }) => {
     if (data.loading) {
       return {
