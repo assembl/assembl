@@ -9,6 +9,10 @@ import withLoadingIndicator from '../common/withLoadingIndicator';
 import getDiscussionPreferenceLanguage from '../../graphql/DiscussionPreferenceLanguage.graphql';
 
 class LanguageMenu extends React.Component {
+  static defaultProps = {
+    className: ''
+  };
+
   constructor(props) {
     super(props);
     this.state = { availableLocales: [], preferencesMapByLocale: {} };
@@ -61,7 +65,7 @@ class LanguageMenu extends React.Component {
     const { size, i18n, style, className } = this.props;
     if (this.state.availableLocales.length > 0) {
       return (
-        <ul className={`dropdown-${size} uppercase ${className || ''}`} style={style}>
+        <ul className={`dropdown-${size} uppercase ${className}`} style={style}>
           <NavDropdown pullRight title={i18n.locale.split('_')[0]} id="nav-dropdown">
             <MenuItem key={i18n.locale} className="active">
               {this.getLocaleLabel(i18n.locale)}
