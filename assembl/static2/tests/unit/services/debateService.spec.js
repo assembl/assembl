@@ -281,6 +281,7 @@ describe('This test concern debate Service', () => {
           en: ''
         }
       },
+      chatframe: null,
       partners: [
         {
           link: '',
