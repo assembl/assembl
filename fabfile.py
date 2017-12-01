@@ -2041,6 +2041,15 @@ def update_vendor_themes_2():
     update_vendor_themes(2)
 
 
+@task
+def update_vendor_themes_and_compile():
+    """Update vendor themes and compiles them"""
+    execute(update_vendor_themes_1)
+    execute(update_vendor_themes_2)
+    execute(compile_stylesheets) # for themes of the v1 UI
+    execute(compile_javascript) # for themes of the v2 UI
+
+
 def system_db_user():
     if env.get('postgres_db_user', None):
         return env.postgres_db_user
