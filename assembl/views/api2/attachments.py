@@ -49,7 +49,7 @@ def get_file(request):
         .encode('iso-8859-1', 'replace'))
     url_quoted_utf8_filename = url_quote(f.title.encode('utf-8'))
     return Response(
-        body=f.data,
+        body=f.safe_data(),
         content_type=str(f.mime_type),
         content_disposition=
             'attachment; filename="%s"; filename*=utf-8\'\'%s' # RFC 6266

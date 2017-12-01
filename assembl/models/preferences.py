@@ -501,6 +501,20 @@ class Preferences(MutableMapping, Base, NamedClassMixin):
             "default": True
         },
 
+        # Require virus check
+        {
+            "id": "requires_virus_check",
+            "name": _("Require anti-virus check"),
+            "value_type": "bool",
+            # "scalar_values": {value: "label"},
+            "description": _("Run an anti-virus on file attachments"),
+            "allow_user_override": None,
+            "modification_permission": P_ADMIN_DISC,
+            # "frontend_validator_function": func_name...?,
+            # "backend_validator_function": func_name...?,
+            "default": False  # for development
+        },
+
         {
             "id": "authorization_server",
             "value_type": "url",
