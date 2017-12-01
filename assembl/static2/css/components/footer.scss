@@ -5,11 +5,14 @@
   position: relative;
   text-align: center;
 
-  .terms {
-    position: absolute;
+  .footer-links {
     width: 100%;
-    display: flex;
-    justify-content: center;
+
+    .terms {
+      display: flex;
+      justify-content: center;
+      padding-bottom: 10px;
+    }
   }
 
   .copyright, .assembl-version {
@@ -36,10 +39,6 @@
 
 @media screen and (min-width: 768px) {
   .footer {
-    .terms {
-      bottom: 10px;
-    }
-
     .social-medias {
       i:before {
         font-size: 30px;
@@ -51,14 +50,8 @@
 
 @media screen and (max-width: 767px) {
   .footer {
-    .terms {
-      bottom: 25px;
-      margin: 0 0 5px;
-    }
-
     .copyright {
       font-size: $font-size-xxs;
-      width: 100%;
     }
 
     .social-medias {

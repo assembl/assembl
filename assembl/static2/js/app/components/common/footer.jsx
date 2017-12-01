@@ -34,34 +34,36 @@ class Footer extends React.Component {
                 </div>
               </div>
             )}
-            <div className="copyright">
-              ©{' '}
-              <Link to="http://assembl.bluenove.com/" target="_blank">
-                Assembl
-              </Link>{' '}
-              powered by{' '}
-              <Link to="http://bluenove.com/" target="_blank">
-                bluenove
-              </Link>
+            <div className="footer-links">
+              <div className="copyright">
+                ©{' '}
+                <Link to="http://assembl.bluenove.com/" target="_blank">
+                  Assembl
+                </Link>{' '}
+                powered by{' '}
+                <Link to="http://bluenove.com/" target="_blank">
+                  bluenove
+                </Link>
+              </div>
+              <div className="terms">
+                {termsAndConditions && (
+                  <div className="terms-of-use">
+                    <Link to={`${get('terms', slug)}`}>
+                      <Translate value="footer.terms" />
+                    </Link>
+                  </div>
+                )}
+                {termsAndConditions && legalNotice && <span className="small-hyphen-padding"> &mdash; </span>}
+                {legalNotice && (
+                  <div className="legal-notice">
+                    <Link to={`${get('legalNotice', slug)}`}>
+                      <Translate value="footer.legalNotice" />
+                    </Link>
+                  </div>
+                )}
+              </div>
+              {assemblVersion && <div className="assembl-version">v{assemblVersion}</div>}
             </div>
-            <div className="terms">
-              {termsAndConditions && (
-                <div className="terms-of-use">
-                  <Link to={`${get('terms', slug)}`}>
-                    <Translate value="footer.terms" />
-                  </Link>
-                </div>
-              )}
-              {termsAndConditions && legalNotice && <span className="small-hyphen-padding"> &mdash; </span>}
-              {legalNotice && (
-                <div className="legal-notice">
-                  <Link to={`${get('legalNotice', slug)}`}>
-                    <Translate value="footer.legalNotice" />
-                  </Link>
-                </div>
-              )}
-            </div>
-            {assemblVersion && <div className="assembl-version">v{assemblVersion}</div>}
           </div>
         </div>
       </Grid>
