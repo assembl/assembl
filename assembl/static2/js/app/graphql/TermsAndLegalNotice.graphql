@@ -1,0 +1,6 @@
+query TermsAndConditions {
+  legalNoticeAndTerms {
+    legalNotice
+    termsAndConditions
+  }
+}
