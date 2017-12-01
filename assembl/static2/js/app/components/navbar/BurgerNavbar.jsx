@@ -1,5 +1,6 @@
 import React from 'react';
 import { browserHistory } from 'react-router';
+import classNames from 'classnames';
 
 import Logo from './Logo';
 import NavigationMenu from './navigationMenu';
@@ -35,7 +36,10 @@ export default class BurgerNavbar extends React.PureComponent {
             <LanguageMenu size="xl" className="burgermenu-language center" />
           </div>
         )}
-        <span onClick={toggleMenu} className={`burgermenu-icon assembl-icon-${shouldDisplayMenu ? 'cancel' : 'menu-on'} black`} />
+        <span
+          onClick={toggleMenu}
+          className={classNames([`assembl-icon-${shouldDisplayMenu ? 'cancel' : 'menu-on'}`, 'burgermenu-icon', 'black'])}
+        />
         <Logo slug={slug} src={logoSrc} />
         <UserMenu
           helpUrl={helpUrl}
