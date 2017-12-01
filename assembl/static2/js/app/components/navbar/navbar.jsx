@@ -102,12 +102,11 @@ const mapDebateSectionToElement = (debateSection, options) => {
 };
 
 const mapSectionToElement = (section, options) => {
-  switch (section.sectionType) {
-  case 'DEBATE':
-    return mapDebateSectionToElement(section, options);
-  default:
-    return <SectionLink key={sectionKey(section)} section={section} options={options} />;
-  }
+  return section.sectionType === 'DEBATE' ? (
+    mapDebateSectionToElement(section, options)
+  ) : (
+    <SectionLink key={sectionKey(section)} section={section} options={options} />
+  );
 };
 
 const sectionMapper = (options) => {
