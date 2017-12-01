@@ -29,7 +29,7 @@ from .post import (
 from .resource import CreateResource, DeleteResource, Resource, UpdateResource
 from .sentiment import AddSentiment, DeleteSentiment
 from .synthesis import Synthesis
-from .utils import get_root_thematic_for_phase
+from .utils import get_root_thematic_for_phase, get_fields
 
 
 convert_sqlalchemy_type.register(EmailString)(convert_column_to_string)
@@ -191,7 +191,11 @@ class Query(graphene.ObjectType):
         return ResourcesCenter()
 
     def resolve_visits_analytics(self, args, context, info):
-        return VisitsAnalytics()
+        fields = get_fields(info)
+        if 'sumVisitsLength' in fields and 'nbPageviews' in fields and 'nbUniqPageviews' in fields:
+            return VisitsAnalytics.build_from_full_query(args, context, info)
+        else:
+            return VisitsAnalytics()
 
 
 class Mutations(graphene.ObjectType):

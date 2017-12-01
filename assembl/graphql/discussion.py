@@ -191,22 +191,37 @@ class VisitsAnalytics(graphene.ObjectType):
     nb_pageviews = graphene.Int()
     nb_uniq_pageviews = graphene.Int()
 
-    def query_analytics_single_metric(self, args, context, info, single_metric):
+    @classmethod
+    def query_analytics(cls, args, context, info, single_metric=None):
         discussion_id = context.matchdict['discussion_id']
         discussion = models.Discussion.get(discussion_id)
         start = args.get('start_date') or None
         end = args.get('end_date') or None
         try:
-            data = discussion.get_visits_time_series_analytics(start, end, [single_metric])
-            return data[single_metric]
+            if single_metric is not None:
+                data = discussion.get_visits_time_series_analytics(start, end, [single_metric])
+                return data[single_metric]
+            else:
+                return discussion.get_visits_time_series_analytics(start, end)
         except ValueError:
             return None
 
+    def generic_resolver(self, args, context, info, field_name):
+        val = getattr(self, field_name, None)
+        if val:
+            return val
+        return VisitsAnalytics.query_analytics(args, context, info, field_name)
+
+    @classmethod
+    def build_from_full_query(cls, args, context, info):
+        data = VisitsAnalytics.query_analytics(args, context, info)
+        return VisitsAnalytics(sum_visits_length=data['sum_visits_length'], nb_pageviews=data['nb_pageviews'], nb_uniq_pageviews=data['nb_uniq_pageviews'])
+
     def resolve_sum_visits_length(self, args, context, info):
-        return self.query_analytics_single_metric(args, context, info, "sum_visits_length")
+        return self.generic_resolver(args, context, info, "sum_visits_length")
 
     def resolve_nb_pageviews(self, args, context, info):
-        return self.query_analytics_single_metric(args, context, info, "nb_pageviews")
+        return self.generic_resolver(args, context, info, "nb_pageviews")
 
     def resolve_nb_uniq_pageviews(self, args, context, info):
-        return self.query_analytics_single_metric(args, context, info, "nb_uniq_pageviews")
+        return self.generic_resolver(args, context, info, "nb_uniq_pageviews")
