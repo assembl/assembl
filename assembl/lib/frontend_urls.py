@@ -2,9 +2,8 @@
 import datetime
 import dateutil
 import urllib
-import re
 import simplejson as json
-from urlparse import urljoin, urlparse
+from urlparse import urljoin
 from graphene.relay import Node
 from os.path import dirname, join, exists
 from ..models import Discussion
@@ -247,6 +246,14 @@ class FrontendUrls(object):
             phase = post.get_created_phase()
             # The created post must be created within an associated phase
             assert phase
+            if post.__class__.__name__ == 'SynthesisPost':
+                synthesis_id = Node.to_global_id('Post', post.id)
+                route = self.get_frontend_url('synthesis',
+                                              slug=self.discussion.slug,
+                                              synthesisId=synthesis_id)
+                return urljoin(
+                    self.discussion.get_base_url(),
+                    route)
             first_idea = None
             ideas = [link.idea
                 for link in post.indirect_idea_content_links_without_cache()

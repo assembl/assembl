@@ -151,7 +151,8 @@ def synthesis_post_1(request, participant1_user, discussion, test_session,
         subject=LangString.create(u"a synthesis post"),
         body=LangString.create(u"post body (unused, it's a synthesis...)"),
         message_id="msg1s@example.com",
-        creation_date=datetime(year=2000, month=1, day=3),
+        # Changing the date might affect tests involving phases
+        creation_date=datetime(year=2020, month=1, day=3),
         publishes_synthesis=synthesis_1)
     test_session.add(p)
     test_session.flush()

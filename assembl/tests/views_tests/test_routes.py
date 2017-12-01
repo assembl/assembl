@@ -320,6 +320,23 @@ def test_url_to_post_v1_with_timeline(discussion, root_post_1,
     assert '/debate/jacklayton2/posts/local' in frontend_urls.get_post_url(root_post_1)
 
 
+def test_url_to_synthesis_post_with_timeline(discussion, synthesis_post_1,
+                                             timeline_phase2_interface_v2):
+    from assembl.lib.frontend_urls import (
+        FrontendUrls,
+        get_current_phase_identifier,
+        current_phase_use_v1_interface
+    )
+    from graphene.relay import Node
+    frontend_urls = FrontendUrls(discussion)
+    assert get_current_phase_identifier(discussion.timeline_events) ==\
+        u'thread'
+    assert current_phase_use_v1_interface(discussion.timeline_events) is False
+    post_id = Node.to_global_id('Post', synthesis_post_1.id)
+    assert '/syntheses/{id}'.format(id=post_id)\
+        in frontend_urls.get_post_url(synthesis_post_1)
+
+
 def test_url_to_post_v1_without_timeline(discussion, root_post_1):
     from assembl.lib.frontend_urls import (
         FrontendUrls,
