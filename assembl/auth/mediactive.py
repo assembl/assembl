@@ -3,8 +3,7 @@ from urllib import urlencode
 from simplejson import loads
 from social.backends.base import BaseAuth
 
-from .encryption import MediactiveAESDecrypter
-
+from .encryption import MediactiveAESCryptor
 
 
 class Mediactive(BaseAuth):
@@ -31,7 +30,7 @@ class Mediactive(BaseAuth):
 
     def auth_complete(self, *args, **kwargs):
         """Completes login process, must return user instance."""
-        mediactiveDecrypter = MediactiveAESDecrypter(self.setting('SECRET'))
+        mediactiveDecrypter = MediactiveAESCryptor(self.setting('SECRET'))
         data = loads(mediactiveDecrypter.decrypt(self.data['data']))
         kwargs.update({'response': data, 'backend': self})
         return self.strategy.authenticate(*args, **kwargs)
