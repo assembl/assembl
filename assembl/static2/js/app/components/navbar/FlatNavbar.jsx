@@ -12,6 +12,9 @@ const refWidthUpdate = (setWidth) => {
 };
 
 export default class FlatNavbar extends React.PureComponent {
+  static defaultProps = {
+    style: {}
+  };
   updateWidth = () => {
     const { leftWidth = 0, rightWidth = 0 } = this.state;
     this.props.setWidth(leftWidth + rightWidth);
@@ -19,7 +22,7 @@ export default class FlatNavbar extends React.PureComponent {
   render = () => {
     const { elements, slug, logoSrc, connectedUserId, currentPhaseIdentifier, helpUrl, location, style } = this.props;
     return (
-      <div className="flat-navbar" style={style || {}}>
+      <div className="flat-navbar" style={style}>
         <div
           className="left-part"
           ref={refWidthUpdate((newWidth) => {
