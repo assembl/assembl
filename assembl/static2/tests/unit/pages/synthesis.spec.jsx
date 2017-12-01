@@ -7,6 +7,8 @@ describe('Synthesis component', () => {
   it('should match Synthesis snapshot', () => {
     const props = {
       routeParams: { slug: 'slugId' },
+      // TODO update this to reflect query change. Changing this
+      // for now gives cryptic node error
       synthesis: {
         id: 'fooId',
         subject: 'Foo',

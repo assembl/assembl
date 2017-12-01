@@ -1,40 +1,45 @@
 query SynthesisQuery($id: ID!, $lang: String) {
-  synthesis: node(id: $id) {
-    ... on Synthesis {
-      id
-      subject(lang: $lang)
-      introduction(lang: $lang)
-      conclusion(lang: $lang)
-      creationDate
-      img {
-        externalUrl
-      }
-      ideas {
-        ... on Idea {
+  synthesisPost: node(id: $id) {
+    id
+    ... on Post {
+      publishesSynthesis {
+        ... on Synthesis {
           id
-          ancestors
-          title(lang: $lang)
-          synthesisTitle(lang: $lang)
-          live {
+          subject(lang: $lang)
+          introduction(lang: $lang)
+          conclusion(lang: $lang)
+          creationDate
+          img {
+            externalUrl
+          }
+          ideas {
             ... on Idea {
               id
-              order
-              numPosts
-              numContributors
-              img {
-                externalUrl
-              }
-              posts {
-                edges {
-                  node {
-                    ... on Post {
-                      sentimentCounts {
-                        like
-                        disagree
-                        dontUnderstand
-                        moreInfo
+              ancestors
+              title(lang: $lang)
+              synthesisTitle(lang: $lang)
+              live {
+                ... on Idea {
+                  id
+                  order
+                  numPosts
+                  numContributors
+                  img {
+                    externalUrl
+                  }
+                  posts {
+                    edges {
+                      node {
+                        ... on Post {
+                          sentimentCounts {
+                            like
+                            disagree
+                            dontUnderstand
+                            moreInfo
+                          }
+                          publicationState
+                        }
                       }
-                      publicationState
                     }
                   }
                 }
