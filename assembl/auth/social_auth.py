@@ -16,14 +16,16 @@ import simplejson as json
 
 from social.apps.pyramid_app.utils import backends
 from social.strategies.pyramid_strategy import PyramidStrategy
+from social.apps.pyramid_app.utils import load_strategy
 from social.utils import to_setting_name, setting_name, SETTING_PREFIX
 from social.exceptions import AuthException
-from social.backends.utils import load_backends
+from social.backends.utils import load_backends, get_backend
 
 from assembl.models import (
     User, Preferences, AbstractAgentAccount, IdentityProvider)
 from .util import discussion_from_request, maybe_auto_subscribe
 from ..lib import config
+
 
 log = logging.getLogger('assembl')
 
@@ -155,6 +157,40 @@ def auto_subscribe(backend, social, user, *args, **kwargs):
 
 def print_details(backend, details, *args, **kwargs):
     print details, args, kwargs
+
+
+def maybe_social_logout(request):
+    """If the user has a an account with the default social provider,
+    and that account has a logout URL, redirect there.
+    Maybe the next argument should be carried?"""
+    discussion = discussion_from_request(request)
+    if not discussion:
+        return
+    backend_name = discussion.preferences['authorization_server_backend']
+    if not backend_name:
+        return
+    user_id = request.authenticated_userid
+    if not user_id:
+        return
+    user = User.get(user_id)
+    for account in user.accounts:
+        if getattr(account, 'provider_with_idp', None) == backend_name:
+            break
+    else:
+        return
+    # TODO: tell the account that the login has expired.
+    # Also check if already expired?
+    return config.get('SOCIAL_AUTH_%s_LOGOUT_URL' % (
+        account.provider.upper(),))
+    # Here, I thought of using the PSA disconnect.
+    # But actually the default pipeline destroys the entry!
+    #
+    # backend_cls = get_backend(
+    #     load_backends(config.get('SOCIAL_AUTH_AUTHENTICATION_BACKENDS')),
+    #     account.provider)
+    # strategy = load_strategy(request)
+    # backend = backend_cls(strategy)
+    # backend.disconnect(user=user)
 
 
 class AssemblStrategy(PyramidStrategy):

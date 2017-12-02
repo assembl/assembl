@@ -19,6 +19,7 @@ from ...lib import config
 from assembl.auth import (
     P_ADMIN_DISC, P_SELF_REGISTER, P_SELF_REGISTER_REQUEST,
     R_PARTICIPANT, P_READ, CrudPermissions)
+from assembl.auth.social_auth import maybe_social_logout
 from assembl.models import (
     User, Discussion, LocalUserRole, AbstractAgentAccount, AgentProfile,
     UserLanguagePreference, EmailAccount, AgentStatusInDiscussion, Username)
@@ -306,6 +307,7 @@ def verify_password(request):
     request_method='POST', permission=NO_PERMISSION_REQUIRED,
     name="logout", renderer='json')
 def logout(request):
+    logout_url = maybe_social_logout(request)
     forget(request)
     # Interesting question: Should I add a parameter
     # to log out of the social service?

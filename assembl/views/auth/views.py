@@ -45,6 +45,7 @@ from assembl.auth.password import (
 from assembl.auth.util import (
     discussion_from_request, roles_with_permissions, maybe_auto_subscribe,
     get_permissions)
+from assembl.auth.social_auth import maybe_social_logout
 from ...lib import config
 from assembl.lib.sqla_types import EmailString
 from assembl.lib.utils import normalize_email_name, get_global_base_url
@@ -180,7 +181,10 @@ def get_social_autologin(request, discussion=None, next_view=None):
     renderer='assembl:templates/login.jinja2',
 )
 def logout(request):
+    logout_url = maybe_social_logout(request)
     forget(request)
+    if logout_url:
+        return HTTPFound(location=logout_url)
     next_view = handle_next_view(request, True)
     return HTTPFound(location=next_view)
 
