@@ -240,7 +240,7 @@ export class EmptyPost extends React.PureComponent {
               {creator && (
                 <ProfileLine
                   userId={creator.userId}
-                  userName={creator.name}
+                  userName={creator.displayName}
                   creationDate={creationDate}
                   locale={lang}
                   modified={modificationDate !== null}
