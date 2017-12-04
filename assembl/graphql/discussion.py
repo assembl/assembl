@@ -102,12 +102,14 @@ class LegalNoticeAndTerms(graphene.ObjectType):
     def resolve_legal_notice_entries(self, args, context, info):
         discussion_id = context.matchdict['discussion_id']
         discussion = models.Discussion.get(discussion_id)
-        return resolve_langstring_entries(discussion, 'legal_notice')
+        if discussion.legal_notice:
+            return resolve_langstring_entries(discussion, 'legal_notice')
 
     def resolve_terms_and_conditions_entries(self, args, context, info):
         discussion_id = context.matchdict['discussion_id']
         discussion = models.Discussion.get(discussion_id)
-        return resolve_langstring_entries(discussion, 'terms_and_conditions')
+        if discussion.terms_and_conditions:
+            return resolve_langstring_entries(discussion, 'terms_and_conditions')
 
 
 class UpdateResourcesCenter(graphene.Mutation):
