@@ -27,7 +27,7 @@ from sqlalchemy.orm import (
 from sqlalchemy.exc import InvalidRequestError
 from sqlalchemy.sql.expression import literal, distinct
 
-from assembl.lib import config
+from assembl.lib.config import get_config
 from assembl.lib.utils import slugify, get_global_base_url, full_class_name
 from ..lib.sqla_types import URLString, CoerceUnicode
 from ..lib.sqla import CrudOperation
@@ -909,7 +909,7 @@ class Discussion(DiscussionBoundBase, NamedClassMixin):
         if locales:
             return locales
         # Use installation settings otherwise.
-        return [strip_country(l) for l in config.get_config().get(
+        return [strip_country(l) for l in get_config().get(
             'available_languages', 'fr en').split()]
 
     @discussion_locales.setter
@@ -967,6 +967,101 @@ class Discussion(DiscussionBoundBase, NamedClassMixin):
             if arg:
                 composer += "/%s" % arg
         return composer
+
+    def get_dates_in_discussion_life_bounds(self, start_date=None, end_date=None, force_bounds=False):
+        """
+        @parameter start_date: string 
+        @parameter end_date: string 
+        """
+        from datetime import datetime
+        from assembl.lib.parsedatetime import parse_datetime
+
+        start = start_date
+        end = end_date
+        discussion = self
+
+        if start:
+            start = parse_datetime(start)
+            if force_bounds and start:
+                discussion_lower_bound = discussion.creation_date
+                if start < discussion_lower_bound:
+                    start = discussion_lower_bound
+        else:
+            start = discussion.creation_date
+        if end:
+            end = parse_datetime(end)
+            if force_bounds and end:
+                if end < start:
+                    end = start
+                discussion_upper_bound = datetime.now()
+                if end > discussion_upper_bound:
+                    end = discussion_upper_bound
+        else:
+            end = datetime.now()
+        return (start, end)
+
+    def get_visits_time_series_analytics(self, start_date=None, end_date=None, only_fields=None):
+        """
+        Fetches visits analytics from bound piwik site.
+        Optional parameters `start` and `end` are dates like "2017-11-21" (default dates are from discussion creation date to today as default).
+        @parameter start_date: string 
+        @parameter end_date: string
+        """
+        from assembl.lib.piwik import (
+            piwik_VisitsSummary_getSumVisitsLength,
+            piwik_Actions_get
+        )
+
+        start, end = self.get_dates_in_discussion_life_bounds(start_date, end_date, force_bounds=True)
+        discussion = self
+        piwik_id_site = discussion.web_analytics_piwik_id_site
+        if not piwik_id_site:
+            raise ValueError("This discussion is not bound to a Piwik site")
+
+        config = get_config()
+        piwik_url = config.get(
+            'web_analytics_piwik_url')
+        piwik_api_token = config.get(
+            'web_analytics_piwik_api_token')
+        missing_variables = []
+        if not piwik_url:
+            missing_variables.append("piwik_url")
+        if not piwik_api_token:
+            missing_variables.append("piwik_api_token")
+        if len(missing_variables):
+            raise ValueError("This Assembl server is not bound to a Piwik server. Missing configuration variables: " + ", ".join(missing_variables))
+
+        def date_to_piwik_date(date):
+            return date.strftime('%Y-%m-%d')
+
+        period = "range"
+        date = ",".join([date_to_piwik_date(start), date_to_piwik_date(end)])
+
+        # For debates with lots of visitors we will probably want to cache piwik responses, using redis for example.
+        if only_fields:
+            should_query_visits_length = False
+            should_query_actions = False
+            result = {}
+            if "sum_visits_length" in only_fields:
+                should_query_visits_length = True
+            if "nb_uniq_pageviews" in only_fields or "nb_pageviews" in only_fields:
+                should_query_actions = True
+            if should_query_visits_length:
+                sum_visits_length = piwik_VisitsSummary_getSumVisitsLength(piwik_url, piwik_api_token, piwik_id_site, period, date)
+                result["sum_visits_length"] = sum_visits_length
+            if should_query_actions:
+                actions = piwik_Actions_get(piwik_url, piwik_api_token, piwik_id_site, period, date)
+                result["nb_uniq_pageviews"] = actions["nb_uniq_pageviews"]
+                result["nb_pageviews"] = actions["nb_pageviews"]
+            return result
+        else:
+            sum_visits_length = piwik_VisitsSummary_getSumVisitsLength(piwik_url, piwik_api_token, piwik_id_site, period, date)
+            actions = piwik_Actions_get(piwik_url, piwik_api_token, piwik_id_site, period, date)
+            return {
+                "sum_visits_length": sum_visits_length,
+                "nb_uniq_pageviews": actions["nb_uniq_pageviews"],
+                "nb_pageviews": actions["nb_pageviews"],
+            }
 
 
 def slugify_topic_if_slug_is_empty(discussion, topic, oldvalue, initiator):

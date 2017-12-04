@@ -142,7 +142,8 @@ const Translations = {
       contribution: "contributions",
       participant: "participants",
       visit: "visites",
-      viewedPages: "pages vues",
+      pageViews: "pages vues",
+      sumVisitsLength: "temps passé global",
       partners: "Partenaires",
       themesTitle: "Les thématiques en cours",
       themesSubtitle: "Retrouvez vos discussions à la unes, des plus polémiques au plus plébiscitées",
@@ -355,6 +356,9 @@ const Translations = {
     date: {
       format: "D MMMM YYYY",
       format2: "DD-MM-YYYY"
+    },
+    duration: {
+      format: "d [j,] h [h,] m [min]"
     }
   },
   en: {
@@ -495,7 +499,8 @@ const Translations = {
       participant: "participants",
       sentiments: "votes",
       visit: "visits",
-      viewedPages: "Viewed pages",
+      pageViews: "page views",
+      sumVisitsLength: "global time spent",
       partners: "Partners",
       themesTitle: "Ongoing themes",
       themesSubtitle: "Find your most controversial and highly acclaimed discussions on the front page",
@@ -709,6 +714,9 @@ const Translations = {
     date: {
       format: "MMMM Do, YYYY",
       format2: "YYYY-MM-DD"
+    },
+    duration: {
+      format: "d [d,] h [h,] m [min]"
     }
   }
 };
