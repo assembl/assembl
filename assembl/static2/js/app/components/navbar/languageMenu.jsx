@@ -1,3 +1,5 @@
+// @flow
+
 import React from 'react';
 import { connect } from 'react-redux';
 import { setLocale } from 'react-redux-i18n';
@@ -9,6 +11,10 @@ import withLoadingIndicator from '../common/withLoadingIndicator';
 import getDiscussionPreferenceLanguage from '../../graphql/DiscussionPreferenceLanguage.graphql';
 
 class LanguageMenu extends React.Component {
+  state: {
+    availableLocales: Array<string>,
+    preferencesMapByLocale: { [string]: { nativeName: string, name: string, locale: string } }
+  };
   static defaultProps = {
     className: ''
   };

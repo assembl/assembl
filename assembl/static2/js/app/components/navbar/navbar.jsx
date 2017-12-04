@@ -1,3 +1,5 @@
+// @flow
+
 import React from 'react';
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
@@ -68,6 +70,9 @@ const sectionMapper = (options) => {
 };
 
 class AssemblNavbar extends React.PureComponent {
+  state: {
+    flatWidth: number
+  };
   setFlatWidth = (newWidth) => {
     this.setState({ flatWidth: newWidth });
   };

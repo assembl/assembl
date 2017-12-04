@@ -1,3 +1,5 @@
+// @flow
+
 import React from 'react';
 import { browserHistory } from 'react-router';
 import classNames from 'classnames';
@@ -8,6 +10,10 @@ import LanguageMenu from './languageMenu';
 import UserMenu from './UserMenu';
 
 export default class BurgerNavbar extends React.PureComponent {
+  unlisten: () => mixed;
+  state: {
+    shouldDisplayMenu: boolean
+  };
   componentWillMount() {
     this.setState({ shouldDisplayMenu: false });
     this.unlisten = browserHistory.listen(() => {

@@ -1,3 +1,5 @@
+// @flow
+
 import React from 'react';
 
 class NavigationMenu extends React.Component {

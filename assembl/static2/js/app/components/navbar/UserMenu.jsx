@@ -1,3 +1,5 @@
+// @flow
+
 import React from 'react';
 import { Link } from 'react-router';
 
@@ -5,7 +7,13 @@ import Search from '../search';
 import Avatar from '../common/avatar';
 import { getConnectedUserId } from '../../utils/globalFunctions';
 
-const UserMenu = ({ location, currentPhaseIdentifier, helpUrl }) => {
+type Props = {
+  location: string,
+  currentPhaseIdentifier: string,
+  helpUrl: string
+};
+
+const UserMenu = ({ location, currentPhaseIdentifier, helpUrl }: Props) => {
   return (
     <div className="navbar-icons">
       {currentPhaseIdentifier !== 'survey' && (

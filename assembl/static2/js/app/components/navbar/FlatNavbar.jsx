@@ -1,3 +1,5 @@
+// @flow
+
 import React from 'react';
 
 import Logo from './Logo';
@@ -12,6 +14,10 @@ const refWidthUpdate = (setWidth) => {
 };
 
 export default class FlatNavbar extends React.PureComponent {
+  state: {
+    leftWidth: number,
+    rightWidth: number
+  };
   static defaultProps = {
     style: {}
   };
