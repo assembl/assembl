@@ -208,14 +208,19 @@ class VisitsAnalytics(graphene.ObjectType):
 
     def generic_resolver(self, args, context, info, field_name):
         val = getattr(self, field_name, None)
-        if val:
+        if val is not None:
             return val
         return VisitsAnalytics.query_analytics(args, context, info, field_name)
 
     @classmethod
     def build_from_full_query(cls, args, context, info):
         data = VisitsAnalytics.query_analytics(args, context, info)
-        return VisitsAnalytics(sum_visits_length=data['sum_visits_length'], nb_pageviews=data['nb_pageviews'], nb_uniq_pageviews=data['nb_uniq_pageviews'])
+        if not data:
+            return VisitsAnalytics(sum_visits_length=None, nb_pageviews=None, nb_uniq_pageviews=None)
+        sum_visits_length = data.get('sum_visits_length', None)
+        nb_pageviews = data.get('nb_pageviews', None)
+        nb_uniq_pageviews = data.get('nb_uniq_pageviews', None)
+        return VisitsAnalytics(sum_visits_length=sum_visits_length, nb_pageviews=nb_pageviews, nb_uniq_pageviews=nb_uniq_pageviews)
 
     def resolve_sum_visits_length(self, args, context, info):
         return self.generic_resolver(args, context, info, "sum_visits_length")
