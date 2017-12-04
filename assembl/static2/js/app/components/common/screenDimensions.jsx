@@ -14,6 +14,7 @@ class ResizeListener extends React.Component {
     window.removeEventListener('resize', this.props.updateScreenDimensions);
   }
   render() {
+    // This prevents the component from having more than one child
     return React.Children.only(this.props.children);
   }
 }
