@@ -27,9 +27,9 @@ query User($id: ID!) {
     assert res.data['user']['email'] == u'abloon@gmail.com'
 
 
-def test_graphql_get_profile_should_not_see_email(graphql_request, participant1_user, moderator_user):
+def test_graphql_get_profile_should_not_see_email(graphql_request, participant1_user, participant2_user):
     # participant2_user sould not see the email of participant1_user
-    graphql_request.authenticated_userid = moderator_user.id
+    graphql_request.authenticated_userid = participant2_user.id
     res = schema.execute(u"""
 query User($id: ID!) {
     user: node(id: $id) {
