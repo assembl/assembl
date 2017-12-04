@@ -1,5 +1,0 @@
-query LegalNotice($lang: String) {
-  legalNoticeAndTerms {
-    legalNotice(lang: $lang)
-  }
-}

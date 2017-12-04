@@ -200,18 +200,14 @@ export type IdeaWithPostsQuery = {|
     | {})
 |};
 
-export type LegalNoticeQueryVariables = {|
+export type LegalNoticeAndTermsQueryVariables = {|
   lang?: ?string
-|};
-
-export type LegalNoticeQuery = {|
-  legalNoticeAndTerms: ?{|
-    legalNotice: ?string
-  |}
 |};
 
 export type LegalNoticeAndTermsQuery = {|
   legalNoticeAndTerms: ?{|
+    legalNotice: ?string,
+    termsAndConditions: ?string,
     legalNoticeEntries: ?Array<?{|
       localeCode: string,
       value: ?string
@@ -401,6 +397,10 @@ export type SynthesesQueryQuery = {|
     creationDate: ?any,
     img: ?{|
       externalUrl: ?string
+    |},
+    post: ?{|
+      // The ID of the object.
+      id: string
     |}
   |}>
 |};
@@ -412,91 +412,104 @@ export type SynthesisQueryQueryVariables = {|
 
 export type SynthesisQueryQuery = {|
   // The ID of the object
-  synthesis: ?(
-    | {}
-    | {}
-    | {}
-    | {}
-    | {}
-    | {}
-    | {}
-    | {}
+  synthesisPost: ?(
+    | {
+        // The ID of the object.
+        id: string
+      }
     | {
         // The ID of the object.
         id: string,
-        subject: ?string,
-        introduction: ?string,
-        conclusion: ?string,
-        creationDate: ?any,
-        img: ?{|
-          externalUrl: ?string
-        |},
-        ideas: ?Array<?(
-          | {
-              // The ID of the object.
-              id: string,
-              ancestors: ?Array<?string>,
-              title: ?string,
-              synthesisTitle: ?string,
-              live: ?(
-                | {
-                    // The ID of the object.
-                    id: string,
-                    order: ?number,
-                    numPosts: ?number,
-                    numContributors: ?number,
-                    img: ?{|
-                      externalUrl: ?string
-                    |},
-                    posts: ?{|
-                      edges: Array<?{|
-                        // The item at the end of the edge
-                        node: ?{|
-                          sentimentCounts: ?{|
-                            like: ?number,
-                            disagree: ?number,
-                            dontUnderstand: ?number,
-                            moreInfo: ?number
-                          |},
-                          publicationState: ?PublicationStates
-                        |}
-                      |}>
-                    |}
-                  }
-                | {})
-            }
-          | {})>
+        publishesSynthesis: ?{|
+          // The ID of the object.
+          id: string,
+          subject: ?string,
+          introduction: ?string,
+          conclusion: ?string,
+          creationDate: ?any,
+          img: ?{|
+            externalUrl: ?string
+          |},
+          ideas: ?Array<?(
+            | {
+                // The ID of the object.
+                id: string,
+                ancestors: ?Array<?string>,
+                title: ?string,
+                synthesisTitle: ?string,
+                live: ?(
+                  | {
+                      // The ID of the object.
+                      id: string,
+                      order: ?number,
+                      numPosts: ?number,
+                      numContributors: ?number,
+                      img: ?{|
+                        externalUrl: ?string
+                      |},
+                      posts: ?{|
+                        edges: Array<?{|
+                          // The item at the end of the edge
+                          node: ?{|
+                            sentimentCounts: ?{|
+                              like: ?number,
+                              disagree: ?number,
+                              dontUnderstand: ?number,
+                              moreInfo: ?number
+                            |},
+                            publicationState: ?PublicationStates
+                          |}
+                        |}>
+                      |}
+                    }
+                  | {})
+              }
+            | {})>
+        |}
       }
-    | {})
+    | {
+        // The ID of the object.
+        id: string
+      }
+    | {
+        // The ID of the object.
+        id: string
+      }
+    | {
+        // The ID of the object.
+        id: string
+      }
+    | {
+        // The ID of the object.
+        id: string
+      }
+    | {
+        // The ID of the object.
+        id: string
+      }
+    | {
+        // The ID of the object.
+        id: string
+      }
+    | {
+        // The ID of the object.
+        id: string
+      }
+    | {
+        // The ID of the object.
+        id: string
+      })
+|};
+
+export type TabsConditionQueryVariables = {|
+  lang: string
 |};
 
 export type TabsConditionQuery = {|
   hasResourcesCenter: ?boolean,
-  hasSyntheses: ?boolean
-|};
-
-export type TermsAndConditionsQueryVariables = {|
-  lang?: ?string
-|};
-
-export type TermsAndConditionsQuery = {|
-  legalNoticeAndTerms: ?{|
-    termsAndConditions: ?string
-  |}
-|};
-
-export type termsAndConditionsQueryVariables = {|
-  lang?: ?string
-|};
-
-export type termsAndConditionsQuery = {|
-  legalNoticeAndTerms: ?{|
-    termsAndConditions: ?string,
-    termsAndConditionsEntries: ?Array<?{|
-      value: ?string,
-      localeCode: string
-    |}>
-  |}
+  hasSyntheses: ?boolean,
+  hasLegalNotice: ?boolean,
+  hasTermsAndConditions: ?boolean
 |};
 
 export type ThematicQueryQueryVariables = {|
@@ -507,6 +520,7 @@ export type ThematicQueryQueryVariables = {|
 export type ThematicQueryQuery = {|
   // The ID of the object
   thematic: ?(
+    | {}
     | {}
     | {}
     | {}
@@ -544,7 +558,6 @@ export type ThematicQueryQuery = {|
           |}
         |}>
       }
-    | {}
     | {}
     | {})
 |};

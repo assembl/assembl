@@ -1,28 +1,16 @@
 // @flow
 import { compose, graphql } from 'react-apollo';
-import type { OperationComponent, QueryProps } from 'react-apollo';
+import type { OperationComponent } from 'react-apollo';
 import { connect } from 'react-redux';
 import { I18n } from 'react-redux-i18n';
 
 import TextWithHeaderPage from '../components/common/textWithHeaderPage';
 import withLoadingIndicator from '../components/common/withLoadingIndicator';
-import LegalNoticeAndTerms from '../graphql/TermsAndLegalNotice.graphql';
-import type { RootReducer } from '../reducers/rootReducer';
+import LegalNoticeAndTerms from '../graphql/LegalNoticeAndTerms.graphql';
+import { mapStateToProps } from './legalNotice';
+import type { Props } from './legalNotice';
 
-const mapStateToProps: RootReducer => TermsAndConditionsQueryVariables = (state) => {
-  return {
-    lang: state.i18n.locale
-  };
-};
-
-type Response = {
-  text?: string,
-  headerTitle?: string
-};
-
-type Props = Response | QueryProps;
-
-const withData: OperationComponent<TermsAndConditionsQuery, TermsAndConditionsQueryVariables, Props> = graphql(
+const withData: OperationComponent<LegalNoticeAndTermsQuery, LegalNoticeAndTermsQueryVariables, Props> = graphql(
   LegalNoticeAndTerms,
   {
     props: ({ data }) => {

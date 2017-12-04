@@ -6,10 +6,10 @@ import { I18n } from 'react-redux-i18n';
 
 import TextWithHeaderPage from '../components/common/textWithHeaderPage';
 import withLoadingIndicator from '../components/common/withLoadingIndicator';
-import LegalNoticeAndTerms from '../graphql/TermsAndLegalNotice.graphql';
+import LegalNoticeAndTerms from '../graphql/LegalNoticeAndTerms.graphql';
 import type { RootReducer } from '../reducers/rootReducer';
 
-const mapStateToProps: RootReducer => LegalNoticeQueryVariables = (state) => {
+export const mapStateToProps: RootReducer => LegalNoticeAndTermsQueryVariables = (state) => {
   return {
     lang: state.i18n.locale
   };
@@ -20,17 +20,20 @@ type Response = {
   headerTitle?: string
 };
 
-type Props = Response | QueryProps;
+export type Props = Response | QueryProps;
 
-const withData: OperationComponent<LegalNoticeQuery, LegalNoticeQueryVariables, Props> = graphql(LegalNoticeAndTerms, {
-  props: ({ data }) => {
-    const text = data.legalNoticeAndTerms ? data.legalNoticeAndTerms.legalNotice : '';
-    return {
-      ...data,
-      text: text,
-      headerTitle: I18n.t('legalNotice.headerTitle')
-    };
+const withData: OperationComponent<LegalNoticeAndTermsQuery, LegalNoticeAndTermsQueryVariables, Props> = graphql(
+  LegalNoticeAndTerms,
+  {
+    props: ({ data }) => {
+      const text = data.legalNoticeAndTerms ? data.legalNoticeAndTerms.legalNotice : '';
+      return {
+        ...data,
+        text: text,
+        headerTitle: I18n.t('legalNotice.headerTitle')
+      };
+    }
   }
-});
+);
 
 export default compose(connect(mapStateToProps), withData, withLoadingIndicator())(TextWithHeaderPage);
