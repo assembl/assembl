@@ -1,6 +1,6 @@
 import React from 'react';
 import { Translate } from 'react-redux-i18n';
-import { Link } from 'react-router';
+import { Link, browserHistory } from 'react-router';
 import { NavDropdown, MenuItem } from 'react-bootstrap';
 import { getContextual, get } from '../../utils/routeMap';
 import { getConnectedUserName, getConnectedUserId, getDiscussionSlug } from '../../utils/globalFunctions';
@@ -48,6 +48,13 @@ class ProfileIcon extends React.Component {
             <div>
               <ul className="dropdown-xs">
                 <NavDropdown pullRight title={dropdownUser} id="user-dropdown">
+                  <MenuItem
+                    onClick={() => {
+                      browserHistory.push(get('profile', { ...slug, userId: connectedUserId }));
+                    }}
+                  >
+                    <Translate value="navbar.profile" />
+                  </MenuItem>
                   <MenuItem href={`${getContextual('oldLogout', slug)}?next=${get('home', slug)}`}>
                     <Translate value="navbar.logout" />
                   </MenuItem>

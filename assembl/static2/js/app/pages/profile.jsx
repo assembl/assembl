@@ -4,7 +4,8 @@ import { connect } from 'react-redux';
 import { Translate, I18n } from 'react-redux-i18n';
 import { Grid, Col, Button } from 'react-bootstrap';
 import FormControlWithLabel from '../components/common/formControlWithLabel';
-import { get } from '../utils/routeMap';
+import { get, getContextual } from '../utils/routeMap';
+import { getConnectedUserId, getDiscussionSlug } from '../utils/globalFunctions';
 
 class Profile extends React.Component {
   constructor(props) {
@@ -20,6 +21,17 @@ class Profile extends React.Component {
     this.handleEmailChange = this.handleEmailChange.bind(this);
     this.handleSaveClick = this.handleSaveClick.bind(this);
     this.handlePasswordClick = this.handlePasswordClick.bind(this);
+  }
+  componentWillMount() {
+    const connectedUserId = getConnectedUserId();
+    const { userId } = this.props.params;
+    const { pathname } = this.props.location;
+    const slug = { slug: getDiscussionSlug() };
+    if (!connectedUserId) {
+      browserHistory.push(`${getContextual('login', slug)}?next=${pathname}`);
+    } else if (connectedUserId !== userId) {
+      browserHistory.push(get('home', slug));
+    }
   }
   handleUsernameChange(e) {
     this.setState({ username: e.target.value });

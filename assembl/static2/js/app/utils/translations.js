@@ -86,7 +86,7 @@ const Translations = {
       resourcesCenter: "Ressources",
       community: "communauté",
       connection: "Connexion",
-      profile: "Profil",
+      profile: "Mon profil",
       logout: "Se déconnecter",
       administration: "Administration",
       syntheses: "Synthèses"
@@ -462,7 +462,7 @@ const Translations = {
       community: "community",
       resourcesCenter: "Resources",
       connection: "Login",
-      profile: "Profile",
+      profile: "My profile",
       logout: "Logout",
       administration: "Administration",
       syntheses: "Syntheses"
