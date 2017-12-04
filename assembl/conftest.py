@@ -24,6 +24,7 @@ from assembl.tests.fixtures.resources import *
 from assembl.tests.fixtures.user import *
 from assembl.tests.fixtures.user_language_preference import *
 from assembl.tests.fixtures.idea_message_columns import *
+from assembl.tests.fixtures.timeline import *
 
 
 engine = None

@@ -19,7 +19,8 @@ def test_route_paths(discussion, test_app, test_adminuser_webrequest):
     slug = discussion.slug
 
     assert_path(req, '/%s/home' % slug, 'new_home', discussion_slug=slug)
-    assert_path(req, '/debate/%s/login' % slug, 'contextual_login', discussion_slug=slug)
+    assert_path(req, '/debate/%s/login' % slug,
+                'contextual_login', discussion_slug=slug)
 
 
 def test_route_discussion_root(
@@ -237,7 +238,8 @@ def test_route_discussion_post(discussion, root_post_1, test_app):
     assert resp.status_int == 200
 
 
-def test_route_discussion_idea_legacy(discussion, root_post_1, subidea_1, test_app):
+def test_route_discussion_idea_legacy(discussion, root_post_1, subidea_1,
+                                      test_app):
     """/slug/idea/%id"""
     slug = discussion.slug
 
@@ -303,3 +305,87 @@ def test_route_admin_permission_edit(discussion, test_app):
     route = "/admin/permissions/discussion/%d" % (discussion_id,)
     resp = test_app.get(route)
     assert resp.status_int == 200
+
+
+def test_url_to_post_v1_with_timeline(discussion, root_post_1,
+                                      timeline_phase2_interface_v1):
+    from assembl.lib.frontend_urls import (
+        FrontendUrls,
+        get_current_phase_identifier,
+        current_phase_use_v1_interface
+    )
+    frontend_urls = FrontendUrls(discussion)
+    assert get_current_phase_identifier(discussion.timeline_events) == u'thread'
+    assert current_phase_use_v1_interface(discussion.timeline_events) is True
+    assert '/debate/jacklayton2/posts/local' in frontend_urls.get_post_url(root_post_1)
+
+
+def test_url_to_synthesis_post_with_timeline(discussion, synthesis_post_1,
+                                             timeline_phase2_interface_v2):
+    from assembl.lib.frontend_urls import (
+        FrontendUrls,
+        get_current_phase_identifier,
+        current_phase_use_v1_interface
+    )
+    from graphene.relay import Node
+    frontend_urls = FrontendUrls(discussion)
+    assert get_current_phase_identifier(discussion.timeline_events) ==\
+        u'thread'
+    assert current_phase_use_v1_interface(discussion.timeline_events) is False
+    post_id = Node.to_global_id('Post', synthesis_post_1.id)
+    assert '/syntheses/{id}'.format(id=post_id)\
+        in frontend_urls.get_post_url(synthesis_post_1)
+
+
+def test_url_to_post_v1_without_timeline(discussion, root_post_1):
+    from assembl.lib.frontend_urls import (
+        FrontendUrls,
+        get_current_phase_identifier,
+        current_phase_use_v1_interface
+    )
+    frontend_urls = FrontendUrls(discussion)
+    assert get_current_phase_identifier(discussion.timeline_events) ==\
+        u'thread'
+    assert current_phase_use_v1_interface(discussion.timeline_events) is True
+    assert '/debate/jacklayton2/posts/local' in\
+        frontend_urls.get_post_url(root_post_1)
+
+
+# this test fail because get_current_request() is returning None
+#def test_url_to_post_v2_orphan_post(discussion, root_post_1, timeline_phase2_interface_v2):
+#    assert get_current_phase_identifier(discussion.timeline_events) == u'thread'
+#    assert current_phase_use_v1_interface(discussion.timeline_events) is False
+#    frontend_urls = FrontendUrls(discussion)
+#    # orphan posts in v2 not implemented, redirect to home
+#    assert 'jacklayton2/debate/home' in frontend_urls.get_post_url(root_post_1)
+
+
+def test_url_to_post_v2(discussion, root_post_en_under_positive_column_of_idea,
+                        timeline_phase2_interface_v2):
+    from assembl.lib.frontend_urls import (
+        FrontendUrls,
+        get_current_phase_identifier,
+        current_phase_use_v1_interface
+    )
+    assert get_current_phase_identifier(discussion.timeline_events) ==\
+        u'thread'
+    assert current_phase_use_v1_interface(discussion.timeline_events) is False
+    frontend_urls = FrontendUrls(discussion)
+    assert 'jacklayton2/debate/thread/theme/' in \
+        frontend_urls.get_post_url(root_post_en_under_positive_column_of_idea)
+
+
+def test_url_to_post_v2_proposal(discussion, proposals_en_fr,
+                                 timeline_phase2_interface_v2):
+    from assembl.lib.frontend_urls import (
+        FrontendUrls,
+        get_current_phase_identifier,
+        current_phase_use_v1_interface
+    )
+    assert get_current_phase_identifier(discussion.timeline_events) ==\
+        u'thread'
+    assert current_phase_use_v1_interface(discussion.timeline_events) is False
+    frontend_urls = FrontendUrls(discussion)
+    expected = 'jacklayton2/debate/thread/theme/'
+    actual = frontend_urls.get_post_url(proposals_en_fr[0])
+    assert expected in actual

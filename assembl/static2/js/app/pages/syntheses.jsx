@@ -26,7 +26,7 @@ export class DumbSyntheses extends React.Component<void, SynthesesProps, void> {
     const { syntheses, slug } = this.props;
     if (syntheses.length === 1) {
       const firstSynthesis = syntheses[0];
-      browserHistory.push(`${get('synthesis', { synthesisId: firstSynthesis.id, slug: slug })}`);
+      browserHistory.push(`${get('synthesis', { synthesisId: firstSynthesis.post.id, slug: slug })}`);
     }
   }
   render() {
@@ -45,7 +45,7 @@ export class DumbSyntheses extends React.Component<void, SynthesesProps, void> {
             CardItem={(itemData) => {
               return (
                 <Card imgUrl={itemData.img ? itemData.img.externalUrl : ''} className="synthesis-preview">
-                  <Link className="content-box" to={`${get('synthesis', { synthesisId: itemData.id, slug: slug })}`}>
+                  <Link className="content-box" to={`${get('synthesis', { synthesisId: itemData.post.id, slug: slug })}`}>
                     <div className="title-container center">
                       <h3 className="light-title-3">{itemData.subject}</h3>
                       <h4 className="light-title-4">

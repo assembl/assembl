@@ -20,15 +20,15 @@ from pyramid.security import authenticated_userid, Everyone
 from pyramid.settings import asbool, aslist
 from social.exceptions import AuthMissingParameter
 
-from ..lib.json import json_renderer_factory
-from ..lib import config
-from ..lib.frontend_urls import FrontendUrls
-from ..lib.locale import (
+from assembl.lib.json import json_renderer_factory
+from assembl.lib import config
+from assembl.lib.frontend_urls import FrontendUrls
+from assembl.lib.locale import (
     get_language, get_country, to_posix_string, strip_country)
-from ..lib.utils import get_global_base_url
-from ..lib.raven_client import capture_exception
-from ..auth import R_PARTICIPANT
-from ..models.auth import (
+from assembl.lib.utils import get_global_base_url
+from assembl.lib.raven_client import capture_exception
+from assembl.auth import R_PARTICIPANT
+from assembl.models.auth import (
     UserLanguagePreference,
     LanguagePreferenceOrder,
     User,
@@ -158,10 +158,27 @@ def create_get_route(request, discussion=0):
     if discussion is 0:  # None would be a known absence, don't recalculate
         from assembl.auth.util import discussion_from_request
         discussion = discussion_from_request(request)
+    from assembl.lib.frontend_urls import FrontendUrls
     if discussion:
+        furl = FrontendUrls(discussion)
+
         def get_route(name, **kwargs):
+            # If the resource is a furl_* route, check for front-end
+            # routes first then return potential V2/V1 route
+            # NOTE: `furl_` prefix MUST be used in this context in
+            # order to avoid conflicts with Pyramid routes
+            # This would NOT be true if only the FrontendUrl route is
+            # used
+            if 'furl_' in name:
+                kwargs.update({'slug': discussion.slug})
+                route_name = name.split('furl_')[1]
+                route = furl.get_frontend_url(route_name, **kwargs)
+                if route is not None:
+                    return route
+
             if name == "bare_slug":
-                name = "new_home" if discussion.preferences['landing_page'] else "home"
+                name = "new_home" if discussion.preferences['landing_page'] \
+                    else "home"
             try:
                 return request.route_path('contextual_' + name,
                                           discussion_slug=discussion.slug,
@@ -171,6 +188,8 @@ def create_get_route(request, discussion=0):
                     name, discussion_slug=discussion.slug, **kwargs)
     else:
         def get_route(name, **kwargs):
+            # Front-end routes not under a discussion context is already
+            # back-end aware
             kwargs['discussion_slug'] = kwargs.get('discussion_slug', '')
             return request.route_path(name, **kwargs)
     return get_route
