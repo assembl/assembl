@@ -226,12 +226,6 @@
     .nav-menu {
       display: inline-flex;
       align-items: center;
-
-      &.active {
-        border-bottom: $border-active;
-        padding-top: 4px;
-        color: $navbar-active-text-color;
-      }
     }
 
     .navbar-home-item {
@@ -252,6 +246,12 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
+
+      &.active {
+        border-bottom: $border-active;
+        padding-top: 4px;
+        color: $navbar-active-text-color;
+      }
     }
 
     .logo-active {
