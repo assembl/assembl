@@ -123,6 +123,23 @@ $deleted-post-border: 1px solid $grey1 !default;
     }
   }
 
+  .embedded-video {
+    width: 100%;
+    height: 300px;
+  }
+
+  @media screen and (max-width: 500px) {
+    .embedded-video {
+      height: 250px;
+    }
+  }
+
+  @media screen and (max-width: 321px) {
+    .embedded-video {
+      height: 180px;
+    }
+  }
+
   .post-row {
     display: flex;
   }
