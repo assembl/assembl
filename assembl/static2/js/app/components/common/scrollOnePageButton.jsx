@@ -8,7 +8,7 @@ const scrollOnePageDown = (screenHeight) => {
   };
 };
 
-export const ScrollOnePageButton = ({ hidden, screenHeight }) => {
+export const DumbScrollOnePageButton = ({ hidden, screenHeight }) => {
   const scrollOnePageTopPosition = screenHeight - 35;
   const isTouchScreen = isMobile.any();
   return (
@@ -24,4 +24,4 @@ export const ScrollOnePageButton = ({ hidden, screenHeight }) => {
   );
 };
 
-export default withScreenHeight(ScrollOnePageButton);
+export default withScreenHeight(DumbScrollOnePageButton);
