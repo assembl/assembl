@@ -2065,17 +2065,35 @@ mutation updateLegalNoticeAndTerms {
 
 def test_has_legal_notice(graphql_request, discussion):
     res = schema.execute(u"""query {
-        hasLegalNotice
+        hasLegalNotice(lang: "en")
     }""", context_value=graphql_request)
     assert res.errors is None
     res_data = json.loads(json.dumps(res.data))
-    assert res_data['hasLegalNotice']
+    assert res_data['hasLegalNotice'] is True
+
+
+def test_has_legal_notice_false(graphql_request, discussion):
+    res = schema.execute(u"""query {
+        hasLegalNotice(lang: "de")
+    }""", context_value=graphql_request)
+    assert res.errors is None
+    res_data = json.loads(json.dumps(res.data))
+    assert res_data['hasLegalNotice'] is False
 
 
 def test_has_terms_and_conditions(graphql_request, discussion):
     res = schema.execute(u"""query {
-        hasTermsAndConditions
+        hasTermsAndConditions(lang: "en")
     }""", context_value=graphql_request)
     assert res.errors is None
     res_data = json.loads(json.dumps(res.data))
-    assert res_data['hasTermsAndConditions']
+    assert res_data['hasTermsAndConditions'] is True
+
+
+def test_has_terms_and_conditions_false(graphql_request, discussion):
+    res = schema.execute(u"""query {
+        hasTermsAndConditions(lang: "de")
+    }""", context_value=graphql_request)
+    assert res.errors is None
+    res_data = json.loads(json.dumps(res.data))
+    assert res_data['hasTermsAndConditions'] is False
