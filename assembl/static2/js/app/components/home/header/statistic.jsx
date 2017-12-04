@@ -22,7 +22,7 @@ const indexIsLast = (index, array) => {
 const StatisticElement = (props: StatisticElementProps) => {
   return (
     <div
-      className={`inline${props.isLast ? '' : ' border-right'}`}
+      className="inline"
       style={{
         width: props.width
       }}
@@ -36,6 +36,7 @@ const StatisticElement = (props: StatisticElementProps) => {
           </div>
         </div>
       </div>
+      {!props.isLast && <div className="stat-box-separator" />}
     </div>
   );
 };
@@ -43,7 +44,8 @@ const StatisticElement = (props: StatisticElementProps) => {
 class Statistic extends React.Component {
   static mapElementsPropsToComponents = (elemsProps) => {
     return elemsProps.map((elementProps, index, array) => {
-      const elementsWidth = `${100 / array.length}%`;
+      const bordersWidth = array.length > 0 ? array.length - 1 : 0;
+      const elementsWidth = bordersWidth > 0 ? `calc(${100 / array.length}% - ${bordersWidth}px)` : `${100 / array.length}%`;
       return <StatisticElement key={index} {...elementProps} width={elementsWidth} isLast={indexIsLast(index, array)} />;
     });
   };
