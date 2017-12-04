@@ -98,7 +98,7 @@ class AssemblNavbar extends React.PureComponent {
             <FlatNavbar
               {...commonProps}
               setWidth={this.setFlatWidth}
-              style={screenTooSmall && { opacity: 0, position: 'absolute', top: '-200px' }}
+              style={screenTooSmall ? { opacity: 0, position: 'absolute', top: '-200px' } : {}}
             />
           </div>
         </Navbar>
