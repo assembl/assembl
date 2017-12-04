@@ -149,7 +149,6 @@ def test_get_timeline_for_date_phase2(discussion,
 def test_get_timeline_for_date_before_start(discussion,
                                             timeline_phase2_interface_v2):
     from assembl.lib.frontend_urls import get_timeline_for_date
-    # Ensuring to be in phase 2
     date = '20051231T09:00:00'
     phase = get_timeline_for_date(discussion, date)
     assert phase is None
@@ -158,7 +157,6 @@ def test_get_timeline_for_date_before_start(discussion,
 def test_get_timeline_for_date_after_end(discussion,
                                          timeline_phase2_interface_v2):
     from assembl.lib.frontend_urls import get_timeline_for_date
-    # Ensuring to be in phase 2
     date = '20501231T09:00:00'
     phase = get_timeline_for_date(discussion, date)
     assert phase is None
