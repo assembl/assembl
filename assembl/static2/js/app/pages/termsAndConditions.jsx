@@ -1,38 +1,39 @@
+// @flow
 import { compose, graphql } from 'react-apollo';
+import type { OperationComponent, QueryProps } from 'react-apollo';
 import { connect } from 'react-redux';
 import { I18n } from 'react-redux-i18n';
 
 import TextWithHeaderPage from '../components/common/textWithHeaderPage';
 import withLoadingIndicator from '../components/common/withLoadingIndicator';
-import TermsAndLegalNotice from '../graphql/TermsAndLegalNotice.graphql';
+import LegalNoticeAndTerms from '../graphql/TermsAndLegalNotice.graphql';
+import type { RootReducer } from '../reducers/rootReducer';
 
-const mapStateToProps = (state) => {
+const mapStateToProps: RootReducer => TermsAndConditionsQueryVariables = (state) => {
   return {
     lang: state.i18n.locale
   };
 };
 
-const withData = graphql(TermsAndLegalNotice, {
-  props: ({ data }) => {
-    if (data.loading) {
+type Response = {
+  text?: string,
+  headerTitle?: string
+};
+
+type Props = Response | QueryProps;
+
+const withData: OperationComponent<TermsAndConditionsQuery, TermsAndConditionsQueryVariables, Props> = graphql(
+  LegalNoticeAndTerms,
+  {
+    props: ({ data }) => {
+      const text = data.legalNoticeAndTerms ? data.legalNoticeAndTerms.termsAndConditions : '';
       return {
-        loading: true
+        ...data,
+        text: text,
+        headerTitle: I18n.t('termsAndConditions.headerTitle')
       };
     }
-
-    if (data.error) {
-      return {
-        hasError: true
-      };
-    }
-
-    return {
-      hasError: data.error,
-      loading: data.loading,
-      text: data.legalNoticeAndTerms.termsAndConditions || '',
-      headerTitle: I18n.t('termsAndConditions.headerTitle')
-    };
   }
-});
+);
 
 export default compose(connect(mapStateToProps), withData, withLoadingIndicator())(TextWithHeaderPage);
