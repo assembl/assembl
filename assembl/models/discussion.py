@@ -1001,4 +1001,5 @@ def slugify_topic_if_slug_is_empty(discussion, topic, oldvalue, initiator):
 
 
 event.listen(Discussion.topic, 'set', slugify_topic_if_slug_is_empty)
-LangString.setup_ownership_load_event(Discussion, ['resources_center_title'])
+LangString.setup_ownership_load_event(Discussion, [
+    'resources_center_title', 'terms_and_conditions', 'legal_notice'])
