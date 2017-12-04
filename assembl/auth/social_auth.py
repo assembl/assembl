@@ -149,6 +149,17 @@ def auto_subscribe(backend, social, user, *args, **kwargs):
                 break
     request = backend.strategy.request
     discussion = discussion_from_request(request)
+    # Maybe discussion slug is in the 'next' parameter
+    if not discussion:
+        next_param = request.GET.get('next', request.POST.get('next', None))
+        if next_param:
+            next_param = next_param.strip('/').split('/')
+            if (len(next_param) == 2 and
+                    next_param[1] == 'home' or next_param[0] == 'debate'):
+                from assembl.models import Discussion
+                slug = next_param[0] if next_param[1] == 'home' else next_param[1]
+                discussion = Discussion.default_db.query(
+                    Discussion).filter_by(slug=slug).first()
     if discussion:
         user.last_login = datetime.utcnow()
         maybe_auto_subscribe(user, discussion)
