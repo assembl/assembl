@@ -8,8 +8,6 @@ const Translations = {
     delete: "Supprimer",
     introduction: "Introduction",
     conclusion: "Conclusion",
-    redirectToV1:
-      "Vous allez être redirigé vers la phase %{phaseName} dans quelques secondes. Assembl est en cours d'amélioration, veuillez nous excuser pour le changement d'interface. Si rien ne se produit, cliquez sur le bouton ci-dessous.",
     search: {
       reset: {
         clear_all: "Effacer tous les filtres"

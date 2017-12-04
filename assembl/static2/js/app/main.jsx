@@ -4,7 +4,6 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import { getCurrentPhaseIdentifier, type Timeline } from './utils/timeline';
-import { addRedirectionToV1 } from './actions/phaseActions';
 import Navbar from './components/navbar/navbar';
 import Footer from './components/common/footer';
 
@@ -16,7 +15,6 @@ class Main extends React.Component {
     debate: Debate,
     params: { phase: string },
     location: { query: { phase: string }, pathname: string },
-    addRedirectionToV1: boolean => {},
     children: React.Children
   }) {
     super(props);
@@ -27,21 +25,6 @@ class Main extends React.Component {
       identifier: queryIdentifier,
       location: this.props.location.pathname
     };
-  }
-  componentWillMount() {
-    const { debateData } = this.props.debate;
-    const currentPhaseIdentifier = getCurrentPhaseIdentifier(debateData.timeline);
-    let isRedirectionToV1;
-    if (debateData.timeline === null) {
-      // timeline is not configured
-      isRedirectionToV1 = true;
-    } else {
-      const currentPhase = debateData.timeline.filter((phase) => {
-        return phase.identifier === currentPhaseIdentifier;
-      });
-      isRedirectionToV1 = currentPhase[0] && currentPhase[0].interface_v1;
-    }
-    this.props.addRedirectionToV1(isRedirectionToV1);
   }
   componentWillReceiveProps(nextProps) {
     const location = nextProps.location.pathname;
@@ -78,12 +61,4 @@ const mapStateToProps = (state: { debate: Debate }) => {
   };
 };
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    addRedirectionToV1: (discussionId: string) => {
-      dispatch(addRedirectionToV1(discussionId));
-    }
-  };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(Main);
+export default connect(mapStateToProps)(Main);
