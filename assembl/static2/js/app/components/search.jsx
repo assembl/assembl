@@ -69,7 +69,10 @@ const slugElement = document.getElementById('discussion-slug');
 const slug = slugElement ? slugElement.value : '';
 let Link;
 let getUrl;
-if (__resourceQuery) {
+
+// __resourceQuery is set by webpack, it is empty string or '?v=1' when this file is included from the searchv1.js bundle.
+// __resourceQuery is undefined in jest tests.
+if (typeof __resourceQuery !== 'undefined' && __resourceQuery) {
   // v1
   // const querystring = require('querystring');
   // const params = querystring.parse(__resourceQuery.slice(1));
