@@ -9,4 +9,9 @@ query RootIdeaStats {
   }
   totalSentiments
   numParticipants
+  visitsAnalytics {
+    sumVisitsLength
+    nbPageviews
+    nbUniqPageviews
+  }
 }

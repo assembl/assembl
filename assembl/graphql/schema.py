@@ -19,8 +19,8 @@ from assembl.nlp.translation_service import DummyGoogleTranslationService
 from .document import UploadDocument
 from .discussion import (DiscussionPreferences, LocalePreference,
                          ResourcesCenter, LegalNoticeAndTerms,
-                         UpdateDiscussionPreferences,
-                         UpdateResourcesCenter, UpdateLegalNoticeAndTerms)
+                         UpdateDiscussionPreferences, UpdateResourcesCenter,
+                         UpdateLegalNoticeAndTerms, VisitsAnalytics)
 from .idea import (CreateIdea, CreateThematic, DeleteThematic, Idea, IdeaUnion,
                    Thematic, UpdateThematic)
 from .locale import Locale
@@ -30,7 +30,7 @@ from .post import (
 from .resource import CreateResource, DeleteResource, Resource, UpdateResource
 from .sentiment import AddSentiment, DeleteSentiment
 from .synthesis import Synthesis
-from .utils import get_root_thematic_for_phase
+from .utils import get_root_thematic_for_phase, get_fields
 
 
 convert_sqlalchemy_type.register(EmailString)(convert_column_to_string)
@@ -68,6 +68,7 @@ class Query(graphene.ObjectType):
     has_legal_notice = graphene.Boolean(lang=graphene.String(required=True))
     has_terms_and_conditions = graphene.Boolean(
         lang=graphene.String(required=True))
+    visits_analytics = graphene.Field(lambda: VisitsAnalytics)
 
     def resolve_resources(self, args, context, info):
         model = models.Resource
@@ -217,6 +218,13 @@ class Query(graphene.ObjectType):
                 return len(entry.value) > 10
 
         return False
+
+    def resolve_visits_analytics(self, args, context, info):
+        fields = get_fields(info)
+        if 'sumVisitsLength' in fields and 'nbPageviews' in fields and 'nbUniqPageviews' in fields:
+            return VisitsAnalytics.build_from_full_query(args, context, info)
+        else:
+            return VisitsAnalytics()
 
 
 class Mutations(graphene.ObjectType):

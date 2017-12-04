@@ -294,19 +294,30 @@ def get_format(request, stats_formats=default_stats_formats):
     return format
 
 
-def get_time_series_timing(request):
+def get_time_series_timing(request, force_bounds=False):
     start = request.GET.get("start", None)
     end = request.GET.get("end", None)
     interval = request.GET.get("interval", None)
     try:
         if start:
             start = parse_datetime(start)
+            if force_bounds and start:
+                discussion = request.context._instance
+                discussion_lower_bound = discussion.creation_date
+                if start < discussion_lower_bound:
+                    start = discussion_lower_bound
         else:
             discussion = request.context._instance
             start = discussion.creation_date
             # TODO: Round down at day/week/month according to interval
         if end:
             end = parse_datetime(end)
+            if force_bounds and end:
+                if end < start:
+                    end = start
+                discussion_upper_bound = datetime.now()
+                if end > discussion_upper_bound:
+                    end = discussion_upper_bound
         else:
             end = datetime.now()
         if interval:
@@ -1089,6 +1100,24 @@ class defaultdict_of_dict(defaultdict):
     def __init__(self):
         super(defaultdict_of_dict, self).__init__(dict)
 
+
+@view_config(context=InstanceContext, name="visits_time_series_analytics",
+             ctx_instance_class=Discussion, request_method='GET',
+             permission=P_READ, renderer='json') # TODO: What permission should this require? Do all debate initiators want this data to be accessible?
+def get_visits_time_series_analytics(request):
+    """
+    Fetches visits analytics from bound piwik site.
+    Optional parameters `start` and `end` are dates like "2017-11-21" (default dates are from discussion creation date to today as default).
+    """
+
+    start = request.GET.get("start", None)
+    end = request.GET.get("end", None)
+    discussion = request.context._instance
+    try:
+        data = discussion.get_visits_time_series_analytics(start, end)
+        return data
+    except ValueError as e:
+        raise HTTPBadRequest(explanation=e)
 
 
 @view_config(context=InstanceContext, name="participant_time_series_analytics",

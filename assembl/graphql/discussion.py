@@ -263,3 +263,50 @@ class UpdateLegalNoticeAndTerms(graphene.Mutation):
         db.flush()
         legal_notice_and_terms = LegalNoticeAndTerms()
         return UpdateLegalNoticeAndTerms(legal_notice_and_terms=legal_notice_and_terms)
+
+
+class VisitsAnalytics(graphene.ObjectType):
+
+    sum_visits_length = graphene.Int()
+    nb_pageviews = graphene.Int()
+    nb_uniq_pageviews = graphene.Int()
+
+    @classmethod
+    def query_analytics(cls, args, context, info, single_metric=None):
+        discussion_id = context.matchdict['discussion_id']
+        discussion = models.Discussion.get(discussion_id)
+        start = args.get('start_date') or None
+        end = args.get('end_date') or None
+        try:
+            if single_metric is not None:
+                data = discussion.get_visits_time_series_analytics(start, end, [single_metric])
+                return data[single_metric]
+            else:
+                return discussion.get_visits_time_series_analytics(start, end)
+        except ValueError:
+            return None
+
+    def generic_resolver(self, args, context, info, field_name):
+        val = getattr(self, field_name, None)
+        if val is not None:
+            return val
+        return VisitsAnalytics.query_analytics(args, context, info, field_name)
+
+    @classmethod
+    def build_from_full_query(cls, args, context, info):
+        data = VisitsAnalytics.query_analytics(args, context, info)
+        if not data:
+            return VisitsAnalytics(sum_visits_length=None, nb_pageviews=None, nb_uniq_pageviews=None)
+        sum_visits_length = data.get('sum_visits_length', None)
+        nb_pageviews = data.get('nb_pageviews', None)
+        nb_uniq_pageviews = data.get('nb_uniq_pageviews', None)
+        return VisitsAnalytics(sum_visits_length=sum_visits_length, nb_pageviews=nb_pageviews, nb_uniq_pageviews=nb_uniq_pageviews)
+
+    def resolve_sum_visits_length(self, args, context, info):
+        return self.generic_resolver(args, context, info, "sum_visits_length")
+
+    def resolve_nb_pageviews(self, args, context, info):
+        return self.generic_resolver(args, context, info, "nb_pageviews")
+
+    def resolve_nb_uniq_pageviews(self, args, context, info):
+        return self.generic_resolver(args, context, info, "nb_uniq_pageviews")

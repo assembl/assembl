@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import json
 import pytest
+import mock
 from graphql_relay.node.node import to_global_id
 
 from assembl import models
@@ -2097,3 +2098,45 @@ def test_has_terms_and_conditions_false(graphql_request, discussion):
     assert res.errors is None
     res_data = json.loads(json.dumps(res.data))
     assert res_data['hasTermsAndConditions'] is False
+
+
+def test_query_visits_analytics(discussion, graphql_request):
+    query = u"""
+query GetVisitsAnalytics {
+  visitsAnalytics {
+    sumVisitsLength
+    nbPageviews
+    nbUniqPageviews
+  }
+}
+"""
+    res = schema.execute(query, context_value=graphql_request)
+    assert res.data['visitsAnalytics'] is not None
+    assert res.data['visitsAnalytics']['sumVisitsLength'] == None
+    assert res.data['visitsAnalytics']['nbPageviews'] == None
+    assert res.data['visitsAnalytics']['nbUniqPageviews'] == None
+
+
+def test_query_visits_analytics_not_empty(discussion, graphql_request):
+    query = u"""
+query GetVisitsAnalytics {
+  visitsAnalytics {
+    sumVisitsLength
+    nbPageviews
+    nbUniqPageviews
+  }
+}
+"""
+    def mock_get_visits_time_series_analytics(self, start_date=None, end_date=None, only_fields=None):
+        res = {}
+        res["sum_visits_length"] = 150
+        res["nb_pageviews"] = 100
+        res["nb_uniq_pageviews"] = 50
+        return res
+
+    with mock.patch.object(models.Discussion, 'get_visits_time_series_analytics', mock_get_visits_time_series_analytics):
+        res = schema.execute(query, context_value=graphql_request)
+        assert res.data['visitsAnalytics'] is not None
+        assert res.data['visitsAnalytics']['sumVisitsLength'] == 150
+        assert res.data['visitsAnalytics']['nbPageviews'] == 100
+        assert res.data['visitsAnalytics']['nbUniqPageviews'] == 50
