@@ -77,7 +77,7 @@ def db_tables(request, empty_db):
 
 @pytest.fixture(scope="session")
 def base_registry(request):
-    """A Zope registry that is configured by with the testing.ini"""
+    """A Zope registry that is configured with the testing.ini"""
     from assembl.views.traversal import root_factory
     from assembl.lib.logging import includeme as configure_logging
     from pyramid.config import Configurator
@@ -119,6 +119,11 @@ def test_webrequest(request, test_app_no_perm):
     request.addfinalizer(fin)
     return req
 
+@pytest.fixture(scope="function")
+def test_dummy_web_request(request):
+    """A dummy request fixture"""
+    return testing.DummyRequest()
+
 
 @pytest.fixture(scope="module")
 def db_default_data(
@@ -144,7 +149,8 @@ def db_default_data(
 @pytest.fixture(scope="function")
 def test_session(request, db_default_data):
     """An SQLAlchemy Session Maker fixture (A DB connection session)-
-    Use this session fixture for all fixture purposes"""
+    Use this session fixture for all fixture that require database
+    access"""
 
     session = db_default_data()
 
