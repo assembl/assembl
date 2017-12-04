@@ -6,12 +6,12 @@ import { connect } from 'react-redux';
 import { graphql, compose } from 'react-apollo';
 
 import { get } from '../../utils/routeMap';
-
-import TermsAndLegalNotice from '../../graphql/TermsAndLegalNotice.graphql';
+import withoutLoadingIndicator from '../../components/common/withoutLoadingIndicator';
+import TabsConditionQuery from '../../graphql/TabsConditionQuery.graphql';
 
 class Footer extends React.Component {
   render() {
-    const { assemblVersion, debateData, legalNotice, termsAndConditions } = this.props;
+    const { assemblVersion, debateData, hasLegalNotice, hasTermsAndConditions } = this.props;
     const { socialMedias } = debateData;
     const slug = { slug: debateData.slug };
     return (
@@ -46,15 +46,15 @@ class Footer extends React.Component {
                 </Link>
               </div>
               <div className="terms">
-                {termsAndConditions && (
+                {hasTermsAndConditions && (
                   <div className="terms-of-use">
                     <Link to={`${get('terms', slug)}`}>
                       <Translate value="footer.terms" />
                     </Link>
                   </div>
                 )}
-                {termsAndConditions && legalNotice && <span className="small-hyphen-padding"> &mdash; </span>}
-                {legalNotice && (
+                {hasTermsAndConditions && hasLegalNotice && <span className="small-hyphen-padding"> &mdash; </span>}
+                {hasLegalNotice && (
                   <div className="legal-notice">
                     <Link to={`${get('legalNotice', slug)}`}>
                       <Translate value="footer.legalNotice" />
@@ -74,31 +74,17 @@ class Footer extends React.Component {
 const mapStateToProps = (state) => {
   return {
     assemblVersion: state.context.assemblVersion,
-    debateData: state.debate.debateData
+    debateData: state.debate.debateData,
+    lang: state.i18n.locale
   };
 };
 
-const withData = graphql(TermsAndLegalNotice, {
+const withData = graphql(TabsConditionQuery, {
   props: ({ data }) => {
-    if (data.loading) {
-      return {
-        loading: true
-      };
-    }
-
-    if (data.error) {
-      return {
-        hasError: true
-      };
-    }
-
     return {
-      hadError: data.error,
-      loading: data.loading,
-      legalNotice: data.legalNoticeAndTerms.legalNotice,
-      termsAndConditions: data.legalNoticeAndTerms.termsAndConditions
+      ...data
     };
   }
 });
 
-export default compose(connect(mapStateToProps), withData)(Footer);
+export default compose(connect(mapStateToProps), withData, withoutLoadingIndicator())(Footer);

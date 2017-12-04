@@ -2061,3 +2061,21 @@ mutation updateLegalNoticeAndTerms {
     assert legal_notice_en['value'] == u"Use the digital JBOD panel, then you can override the solid state microchip!"
     assert tac_en['localeCode'] == 'en'
     assert tac_en['value'] == u"If we reboot the driver, we can get to the AGP protocol through the virtual HTTP bus!"
+
+
+def test_has_legal_notice(graphql_request, discussion):
+    res = schema.execute(u"""query {
+        hasLegalNotice
+    }""", context_value=graphql_request)
+    assert res.errors is None
+    res_data = json.loads(json.dumps(res.data))
+    assert res_data['hasLegalNotice']
+
+
+def test_has_terms_and_conditions(graphql_request, discussion):
+    res = schema.execute(u"""query {
+        hasTermsAndConditions
+    }""", context_value=graphql_request)
+    assert res.errors is None
+    res_data = json.loads(json.dumps(res.data))
+    assert res_data['hasTermsAndConditions']

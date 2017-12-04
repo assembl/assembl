@@ -244,6 +244,11 @@ export default compose(
     options: { variables: { identifier: 'survey' } }
   }),
   graphql(TabsConditionQuery, {
+    options: ({ i18n }) => {
+      return {
+        variables: { lang: i18n.locale }
+      };
+    },
     // pass refetchTabsConditions to re-render navigation menu if there is a change in resources
     props: ({ data }) => {
       if (data.loading) {

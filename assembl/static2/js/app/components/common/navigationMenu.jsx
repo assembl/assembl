@@ -122,4 +122,13 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default compose(connect(mapStateToProps), graphql(TabsConditionQuery))(NavigationMenu);
+export default compose(
+  connect(mapStateToProps),
+  graphql(TabsConditionQuery, {
+    options: ({ i18n }) => {
+      return {
+        variables: { lang: i18n.locale }
+      };
+    }
+  })
+)(NavigationMenu);

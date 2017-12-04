@@ -7,7 +7,7 @@ import React from 'react';
 const withoutLoadingIndicator = () => {
   return (WrappedComponent) => {
     return (props) => {
-      if (props.data.loading) {
+      if (props.loading || (props.data && props.data.loading)) {
         return null;
       }
       return <WrappedComponent {...props} />;

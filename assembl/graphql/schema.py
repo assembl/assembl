@@ -23,6 +23,7 @@ from .discussion import (DiscussionPreferences, LocalePreference,
                          UpdateResourcesCenter, UpdateLegalNoticeAndTerms)
 from .idea import (CreateIdea, CreateThematic, DeleteThematic, Idea, IdeaUnion,
                    Thematic, UpdateThematic)
+from .langstring import resolve_langstring
 from .locale import Locale
 from .post import (
     CreatePost, DeletePost, UndeletePost, UpdatePost,
@@ -65,6 +66,9 @@ class Query(graphene.ObjectType):
     resources_center = graphene.Field(lambda: ResourcesCenter)
     has_resources_center = graphene.Boolean()
     legal_notice_and_terms = graphene.Field(lambda: LegalNoticeAndTerms)
+    has_legal_notice = graphene.Boolean(lang=graphene.String(required=True))
+    has_terms_and_conditions = graphene.Boolean(
+        lang=graphene.String(required=True))
 
     def resolve_resources(self, args, context, info):
         model = models.Resource
@@ -194,6 +198,20 @@ class Query(graphene.ObjectType):
     def resolve_legal_notice_and_terms(self, args, context, info):
         """Legal notice and terms and conditions entries (e.g. for admin form)."""
         return LegalNoticeAndTerms()
+
+    def resolve_has_legal_notice(self, args, context, info):
+        discussion_id = context.matchdict['discussion_id']
+        discussion = models.Discussion.get(discussion_id)
+        text = resolve_langstring(discussion.legal_notice, args.get('lang'))
+        # if the field is empty in the admin section, it will contain html markup (u'<p></p>')
+        return len(text) > 10
+
+    def resolve_has_terms_and_conditions(self, args, context, info):
+        discussion_id = context.matchdict['discussion_id']
+        discussion = models.Discussion.get(discussion_id)
+        text = resolve_langstring(discussion.terms_and_conditions, args.get('lang'))
+        # if the field is empty in the admin section, it will contain html markup (u'<p></p>')
+        return len(text) > 10
 
 
 class Mutations(graphene.ObjectType):
