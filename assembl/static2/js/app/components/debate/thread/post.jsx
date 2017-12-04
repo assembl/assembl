@@ -49,7 +49,7 @@ export class EmptyPost extends React.PureComponent {
   }
 
   componentDidMount() {
-    this.props.measureTreeHeight(400);
+    this.props.measureTreeHeight(480);
     // If we have a hash in url and the post id match it, scroll to it.
     const postId = this.props.data.post.id;
     const { hash } = window.location;
@@ -134,7 +134,7 @@ export class EmptyPost extends React.PureComponent {
       const images = el.getElementsByTagName('img');
       Array.from(images).forEach((img) => {
         return img.addEventListener('load', () => {
-          this.props.measureTreeHeight(400);
+          this.props.measureTreeHeight(480);
         });
       });
     }
@@ -288,7 +288,6 @@ export class EmptyPost extends React.PureComponent {
               <PostActions
                 creatorUserId={creator.userId}
                 postId={id}
-                handleAnswerClick={this.handleAnswerClick}
                 handleEditClick={this.handleEditClick}
                 sentimentCounts={sentimentCounts}
                 mySentiment={mySentiment}
@@ -301,17 +300,17 @@ export class EmptyPost extends React.PureComponent {
             </div>
           </div>
         </div>
-        {this.state.showAnswerForm ? (
-          <div className="answer-form">
-            <AnswerForm
-              parentId={id}
-              ideaId={ideaId}
-              refetchIdea={refetchIdea}
-              textareaRef={answerTextareaRef}
-              hideAnswerForm={this.hideAnswerForm}
-            />
-          </div>
-        ) : null}
+        <div className={this.state.showAnswerForm ? 'answer-form' : 'collapsed-answer-form'}>
+          <AnswerForm
+            parentId={id}
+            ideaId={ideaId}
+            refetchIdea={refetchIdea}
+            textareaRef={answerTextareaRef}
+            hideAnswerForm={this.hideAnswerForm}
+            handleAnswerClick={this.handleAnswerClick}
+            identifier={identifier}
+          />
+        </div>
       </div>
     );
   }

@@ -9,12 +9,13 @@ import classNames from 'classnames';
 
 import createPostMutation from '../../../graphql/mutations/createPost.graphql';
 import uploadDocumentMutation from '../../../graphql/mutations/uploadDocument.graphql';
-import { displayAlert, inviteUserToLogin } from '../../../utils/utilityManager';
-import { getConnectedUserId } from '../../../utils/globalFunctions';
+import { displayAlert, inviteUserToLogin, displayModal } from '../../../utils/utilityManager';
 import { convertRawContentStateToHTML, rawContentStateIsEmpty } from '../../../utils/draftjs';
 import RichTextEditor from '../../common/richTextEditor';
 import attachmentsPlugin from '../../common/richTextEditor/attachmentsPlugin';
 import { TEXT_AREA_MAX_LENGTH } from '../common/topPostForm';
+import { getIfPhaseCompletedByIdentifier } from '../../../utils/timeline';
+import { getConnectedUserId } from '../../../utils/globalFunctions';
 
 type AnswerFormProps = {
   contentLocale: string,
@@ -24,7 +25,10 @@ type AnswerFormProps = {
   parentId: string,
   refetchIdea: Function,
   textareaRef: HTMLDivElement,
-  uploadDocument: Function
+  uploadDocument: Function,
+  debateData: Object,
+  identifier: string,
+  handleAnswerClick: Function
 };
 
 type AnswerFormState = {
@@ -43,9 +47,9 @@ class AnswerForm extends React.PureComponent<*, AnswerFormProps, AnswerFormState
       submitting: false
     };
   }
-
   handleCancel = () => {
-    this.props.hideAnswerForm();
+    const { hideAnswerForm } = this.props;
+    this.setState({ body: null }, hideAnswerForm());
   };
 
   updateBody = (newValue) => {
@@ -55,9 +59,22 @@ class AnswerForm extends React.PureComponent<*, AnswerFormProps, AnswerFormState
   };
 
   handleInputFocus = () => {
-    const isUserConnected = getConnectedUserId(); // TO DO put isUserConnected in the store
-    if (!isUserConnected) {
-      inviteUserToLogin();
+    const { debateData, identifier, handleAnswerClick } = this.props;
+    const isPhaseCompleted = getIfPhaseCompletedByIdentifier(debateData.timeline, identifier);
+    if (isPhaseCompleted) {
+      const body = (
+        <div>
+          <Translate value="debate.noAnswer" />
+        </div>
+      );
+      displayModal(null, body, true, null, null, true);
+    } else {
+      const isUserConnected = getConnectedUserId(); // TO DO put isUserConnected in the store
+      if (!isUserConnected) {
+        inviteUserToLogin();
+      } else {
+        handleAnswerClick();
+      }
     }
   };
 
@@ -85,7 +102,7 @@ class AnswerForm extends React.PureComponent<*, AnswerFormProps, AnswerFormState
         createPost({ variables: variables })
           .then(() => {
             refetchIdea().then(() => {
-              hideAnswerForm();
+              this.setState({ body: null }, hideAnswerForm());
             });
             displayAlert('success', I18n.t('debate.thread.postSuccess'));
           })
@@ -110,18 +127,13 @@ class AnswerForm extends React.PureComponent<*, AnswerFormProps, AnswerFormState
     return (
       <Row>
         <Col xs={12} md={12}>
-          <div className="color">
-            <span className="assembl-icon-back-arrow" />&nbsp;<Translate value="debate.answer" />
-          </div>
-        </Col>
-        <Col xs={12} md={12}>
           <div className="answer-form-inner">
             <FormGroup>
               <RichTextEditor
                 rawContentState={this.state.body}
                 handleInputFocus={this.handleInputFocus}
                 maxLength={TEXT_AREA_MAX_LENGTH}
-                placeholder={I18n.t('debate.insert')}
+                placeholder={I18n.t('debate.toAnswer')}
                 updateContentState={this.updateBody}
                 textareaRef={textareaRef}
                 withAttachmentButton
@@ -144,7 +156,8 @@ class AnswerForm extends React.PureComponent<*, AnswerFormProps, AnswerFormState
 
 const mapStateToProps = (state) => {
   return {
-    contentLocale: state.i18n.locale
+    contentLocale: state.i18n.locale,
+    debateData: state.debate.debateData
   };
 };
 

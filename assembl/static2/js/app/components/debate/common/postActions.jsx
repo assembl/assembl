@@ -3,12 +3,12 @@ import { withApollo } from 'react-apollo';
 import { Translate } from 'react-redux-i18n';
 import { OverlayTrigger } from 'react-bootstrap';
 import { MEDIUM_SCREEN_WIDTH } from '../../../constants';
-import { answerTooltip, sharePostTooltip } from '../../common/tooltips';
+import { sharePostTooltip } from '../../common/tooltips';
 
 import getOverflowMenuForPost from './overflowMenu';
 import ResponsiveOverlayTrigger from '../../common/responsiveOverlayTrigger';
 import { getConnectedUserId } from '../../../utils/globalFunctions';
-import { promptForLoginOr, openShareModal, displayModal } from '../../../utils/utilityManager';
+import { openShareModal, displayModal } from '../../../utils/utilityManager';
 import Permissions, { connectedUserCan } from '../../../utils/permissions';
 import Sentiments from './sentiments';
 import getSentimentStats from './sentimentStats';
@@ -36,7 +36,6 @@ class PostActions extends React.Component {
       postId,
       sentimentCounts,
       mySentiment,
-      handleAnswerClick,
       handleEditClick,
       numChildren,
       routerParams,
@@ -78,19 +77,10 @@ class PostActions extends React.Component {
         </div>
       );
     }
-    const answerIcon = <span className="assembl-icon-back-arrow color" />;
     const shareIcon = <span className="assembl-icon-share color" />;
     return (
       <div className="post-actions">
         <div className="post-icons">
-          {handleAnswerClick && (
-            <div
-              className="post-action"
-              onClick={isPhaseCompleted ? this.displayPhaseCompletedModal : promptForLoginOr(handleAnswerClick)}
-            >
-              <ResponsiveOverlayTrigger placement={tooltipPlacement} tooltip={answerTooltip} component={answerIcon} />
-            </div>
-          )}
           <div
             className="post-action"
             onClick={() => {

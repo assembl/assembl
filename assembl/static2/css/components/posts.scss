@@ -296,6 +296,28 @@ $deleted-post-border: 1px solid $grey1 !default;
     }
   }
 
+  .collapsed-answer-form {
+    background-color: $first-color-light;
+    border-top: 2px solid $white;
+    padding: 0 20px;
+
+    .editor-header {
+      display: none;
+    }
+
+    .public-DraftEditor-content {
+      height: 20px;
+    }
+
+    .button-container {
+      display: none;
+    }
+
+    .annotation {
+      display: none;
+    }
+  }
+
   .extracts {
     position: absolute;
     left: 2vw;
