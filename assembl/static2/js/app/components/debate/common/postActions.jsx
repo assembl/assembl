@@ -84,7 +84,7 @@ class PostActions extends React.Component {
           >
             <div>
               {this.state.screenWidth >= MEDIUM_SCREEN_WIDTH ? (
-                <span className="assembl-icon-ellipsis-vert">&nbsp;</span>
+                <span className="assembl-icon-ellipsis-vert" />
               ) : (
                 <span className="assembl-icon-ellipsis">&nbsp;</span>
               )}
@@ -96,7 +96,7 @@ class PostActions extends React.Component {
     const answerIcon = <span className="assembl-icon-back-arrow color" />;
     const shareIcon = <span className="assembl-icon-share color" />;
     return (
-      <div>
+      <div className="post-actions">
         <div className="post-icons">
           {handleAnswerClick && (
             <div
@@ -161,7 +161,7 @@ class PostActions extends React.Component {
         )}
         {this.state.screenWidth >= MEDIUM_SCREEN_WIDTH ? overflowMenu : null}
         <div className="answers annotation">
-          <Translate value="debate.thread.numberOfResponses" count={numChildren ? numChildren.length : 0} />
+          <Translate value="debate.thread.numberOfResponses" count={numChildren || 0} />
         </div>
         <div className="clear">&nbsp;</div>
       </div>
