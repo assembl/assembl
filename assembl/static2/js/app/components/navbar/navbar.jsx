@@ -23,6 +23,7 @@ const filterSection = ({ sectionType }, { hasResourcesCenter, hasSyntheses }) =>
   case 'ADMINISTRATION':
     return connectedUserIsAdmin();
   case 'HOMEPAGE':
+    // The homepage button is the logo at the top left and it is renderered separately
     return false;
   default:
     return true;
