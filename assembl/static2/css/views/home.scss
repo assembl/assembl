@@ -388,16 +388,22 @@
       .statistic {
         .intermediary-container {
           .inline {
+            max-height: 100px;
+            overflow: hidden;
+
             .stat-box {
               text-align: center;
+              padding: 2px;
 
               .stat-icon {
                 display: block;
                 float: none;
+                padding: 2px;
               }
 
               .stat {
                 text-align: inherit;
+                word-break: break-word;
               }
             }
           }
