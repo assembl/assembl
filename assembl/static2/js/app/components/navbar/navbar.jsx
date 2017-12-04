@@ -43,8 +43,8 @@ const sectionSlug = (sectionType) => {
   return snakeToCamel(sectionType === 'HOMEPAGE' ? 'HOME' : sectionType);
 };
 
-const sectionURL = ({ sectionType, url }, { slug, phaseIdentifier }) => {
-  return url || `${get(sectionSlug(sectionType), { slug: slug, phase: phaseIdentifier })}`;
+const sectionURL = ({ sectionType, url }, options) => {
+  return url || `${get(sectionSlug(sectionType), options)}`;
 };
 
 const SectionLink = ({ section, options }) => {
@@ -81,7 +81,7 @@ class AssemblNavbar extends React.PureComponent {
     const filteredSections = sections.filter(sectionFilter(data));
     const mapOptions = {
       slug: slug,
-      currentPhaseIdentifier: getCurrentPhaseIdentifier(timeline)
+      phase: getCurrentPhaseIdentifier(timeline)
     };
     const commonProps = {
       elements: filteredSections.map(sectionMapper(mapOptions)),
