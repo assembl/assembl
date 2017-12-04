@@ -97,7 +97,7 @@ export default compose(
         return { loading: true };
       }
       return {
-        synthesis: data.synthesis
+        synthesis: data.synthesisPost.publishesSynthesis
       };
     }
   }),

@@ -1,7 +1,6 @@
 import React from 'react';
 import { Translate } from 'react-redux-i18n';
 import { compose, graphql } from 'react-apollo';
-import { Row, Col } from 'react-bootstrap';
 
 import { getDomElementOffset } from '../../../utils/globalFunctions';
 import Attachments from '../../common/attachments';
@@ -55,7 +54,7 @@ export class EmptyPost extends React.PureComponent {
     const postId = this.props.data.post.id;
     const { hash } = window.location;
     if (hash !== '') {
-      const id = hash.replace('#', '');
+      const id = hash.replace('#', '').split('?')[0];
       if (id === postId) {
         // Wait an extra 1s to be sure that all previous posts are loaded
         // and measureTreeHeight finished.
@@ -236,8 +235,8 @@ export class EmptyPost extends React.PureComponent {
       <div className="posts" id={id}>
         <Nuggets extracts={extracts} postId={id} nuggetsManager={nuggetsManager} completeLevel={completeLevelArray.join('-')} />
         <div className="box">
-          <Row className="post-row">
-            <Col xs={12} md={11} className="post-left">
+          <div className="post-row">
+            <div className="post-left">
               {creator && (
                 <ProfileLine
                   userId={creator.userId}
@@ -247,13 +246,15 @@ export class EmptyPost extends React.PureComponent {
                   modified={modificationDate !== null}
                 />
               )}
-              <PostTranslate
-                contentLocale={contentLocale}
-                id={id}
-                lang={lang}
-                originalLocale={originalLocale}
-                translate={translate}
-              />
+              {debateData.translationEnabled ? (
+                <PostTranslate
+                  contentLocale={contentLocale}
+                  id={id}
+                  lang={lang}
+                  originalLocale={originalLocale}
+                  translate={translate}
+                />
+              ) : null}
               <h3 className="dark-title-3">{modifiedSubject}</h3>
               <div
                 className={`body ${bodyMimeType === 'text/plain' ? 'pre-wrap' : ''}`}
@@ -282,8 +283,8 @@ export class EmptyPost extends React.PureComponent {
               <div className="answers annotation">
                 <Translate value="debate.thread.numberOfResponses" count={numChildren} />
               </div>
-            </Col>
-            <Col xs={12} md={1} className="post-right">
+            </div>
+            <div className="post-right">
               <PostActions
                 creatorUserId={creator.userId}
                 postId={id}
@@ -297,8 +298,8 @@ export class EmptyPost extends React.PureComponent {
                 postSubject={subject.replace('Re: ', '')}
                 identifier={identifier}
               />
-            </Col>
-          </Row>
+            </div>
+          </div>
         </div>
         {this.state.showAnswerForm ? (
           <div className="answer-form">

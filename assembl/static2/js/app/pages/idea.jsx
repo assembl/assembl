@@ -90,7 +90,7 @@ class Idea extends React.Component {
   getInitialRowIndex = (topPosts, edges) => {
     const { hash } = window.location;
     if (hash !== '') {
-      const id = hash.replace('#', '');
+      const id = hash.replace('#', '').split('?')[0];
       const allPosts = {};
       edges.forEach((e) => {
         allPosts[e.node.id] = e.node;
@@ -138,7 +138,7 @@ class Idea extends React.Component {
       );
     }
     const { announcement, id, headerImgUrl, synthesisTitle, title } = this.props;
-    const isMultiColumn = ideaWithPostsData.loading ? undefined : ideaWithPostsData.idea.messageViewOverride === 'messageColumns';
+    const isMultiColumns = ideaWithPostsData.loading ? false : ideaWithPostsData.idea.messageViewOverride === 'messageColumns';
     const messageColumns = ideaWithPostsData.loading
       ? undefined
       : [...ideaWithPostsData.idea.messageColumns].sort((a, b) => {
@@ -166,7 +166,7 @@ class Idea extends React.Component {
         ? undefined
         : this.getInitialRowIndex(this.getTopPosts(), ideaWithPostsData.idea.posts.edges)
     };
-    const view = isMultiColumn ? <ColumnsView {...childProps} /> : <ThreadView {...childProps} />;
+    const view = isMultiColumns ? <ColumnsView {...childProps} /> : <ThreadView {...childProps} />;
     return (
       <div className="idea">
         <Header title={title} synthesisTitle={synthesisTitle} imgUrl={headerImgUrl} identifier={identifier} />
@@ -176,7 +176,11 @@ class Idea extends React.Component {
               <Grid fluid className="background-light">
                 <div className="max-container">
                   <div className="content-section">
-                    <Announcement ideaWithPostsData={ideaWithPostsData} announcementContent={announcement} />
+                    <Announcement
+                      ideaWithPostsData={ideaWithPostsData}
+                      announcementContent={announcement}
+                      isMultiColumns={isMultiColumns}
+                    />
                   </div>
                 </div>
               </Grid>

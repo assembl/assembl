@@ -1,7 +1,11 @@
 """Defines the existing frontend routes so the Pyramid router can pass them along."""
-from urlparse import urljoin, urlparse
+import datetime
+import dateutil
 import urllib
-
+import simplejson as json
+from urlparse import urljoin
+from graphene.relay import Node
+from os.path import dirname, join, exists
 from ..models import Discussion
 
 
@@ -18,6 +22,89 @@ SOURCE_DISCRIMINANTS = {
 ATTACHMENT_PURPOSES = {
     'EMBED_ATTACHMENT': 'EMBED_ATTACHMENT'
 }
+
+
+frontend_routes = None
+
+
+def get_frontend_urls():
+    """
+    Get all V2 routes from source of truth
+    """
+
+    current = dirname(__file__)
+    route_path = join(current, '..', 'static2/routes.json')
+    if not exists(route_path):
+        raise IOError("Route path could not be found")
+    with open(route_path) as paths:
+        routes = json.load(paths)
+
+    # The routes string templates are in ECMAScript 6 format
+    # Must convert to Python string template format
+    py_routes = {}
+    for name, route in routes.items():
+        py_routes[name] = route.replace('${', '{')
+    return py_routes
+
+
+def get_timeline_for_date(discussion, date):
+    """
+    Gets the discussion timeline object that the given date
+    lies between (inclusively)
+
+    :param discussion: A discussion object
+    :param date: A dateformatted string or datetime object
+    :return: A discussion phase
+    :rtype: assembl.models.timeline.DiscussionPhase
+    """
+    if isinstance(date, basestring):
+        date = dateutil.parser.parse(date)
+
+    phases = sorted(discussion.timeline_phases, key=lambda p: p.start)
+    actual_phase = None
+    for index, phase in enumerate(phases):
+        # Assume all dates are in utc, no tz_info however
+        if phase.start <= date < phase.end:
+            actual_phase = phase
+            break
+    return actual_phase
+
+
+# This is the same logic as in getCurrentPhaseIdentifier in v2 frontend.
+def get_current_phase_identifier(timeline):
+    """Return the current phase identifier, thread identifier if no timeline.
+    """
+    if not timeline:
+        timeline = []
+
+    current_date = datetime.datetime.utcnow()
+    identifier = u''
+    for phase in timeline:
+        start_date = phase.start
+        end_date = phase.end
+        if (current_date >= start_date) and (current_date < end_date):
+            identifier = phase.identifier
+
+    return identifier or u'thread'
+
+
+def current_phase_use_v1_interface(timeline):
+    """Return True if the current phase use the v1 interface.
+    """
+
+    # If no timeline configured, we use v1 interface.
+    if not timeline:
+        return True
+
+    current_date = datetime.datetime.utcnow()
+    for phase in timeline:
+        start_date = phase.start
+        end_date = phase.end
+        if (current_date > start_date) and (current_date < end_date):
+            return phase.interface_v1
+
+    # If current_date isn't contained in any phase, assume v2 interface.
+    return False
 
 
 class FrontendUrls(object):
@@ -152,7 +239,53 @@ class FrontendUrls(object):
         return '/posts/' + urllib.quote(post.uri(), '')
 
     def get_post_url(self, post):
-        return self.get_discussion_url() + self.get_relative_post_url(post)
+        if current_phase_use_v1_interface(self.discussion.timeline_events):
+            return self.get_discussion_url() + self.get_relative_post_url(post)
+        else:
+            route = None
+            phase = post.get_created_phase()
+            # The created post must be created within an associated phase
+            assert phase
+            if post.__class__.__name__ == 'SynthesisPost':
+                synthesis_id = Node.to_global_id('Post', post.id)
+                route = self.get_frontend_url('synthesis',
+                                              slug=self.discussion.slug,
+                                              synthesisId=synthesis_id)
+                return urljoin(
+                    self.discussion.get_base_url(),
+                    route)
+            first_idea = None
+            ideas = [link.idea
+                for link in post.indirect_idea_content_links_without_cache()
+                if link.__class__.__name__ == 'IdeaRelatedPostLink']
+            if ideas:
+                first_idea = ideas[0]
+            else:
+                # orphan post, redirect to home
+                from pyramid.threadlocal import get_current_request
+                request = get_current_request()
+                return request.route_url(
+                    'new_home', discussion_slug=self.discussion.slug)
+
+            if first_idea is not None and first_idea.__class__.__name__ ==\
+                    'Question':
+                thematic = post.get_closest_thematic()
+                route = self.get_frontend_url('post', **{
+                    'slug': self.discussion.slug,
+                    'phase': phase.identifier,
+                    'themeId': thematic.graphene_id(),
+                    'element': ''
+                })
+
+            if not route:
+                route = self.get_frontend_url('post', **{
+                    'slug': self.discussion.slug,
+                    'phase': phase.identifier,
+                    'themeId': Node.to_global_id('Idea', first_idea.id),
+                    'element': Node.to_global_id('Post', post.id)
+                })
+
+            return urljoin(self.discussion.get_base_url(), route)
 
     def get_relative_idea_url(self, idea):
         return '/idea/' + urllib.quote(idea.original_uri, '')
@@ -162,6 +295,27 @@ class FrontendUrls(object):
 
     def get_discussion_edition_url(self):
         return self.get_discussion_url() + '/edition'
+
+    def get_frontend_url(self, route_name, **params):
+        """
+        Get the route that is defined in V2 front-end interface
+
+        :param :route_name the route name defined in the front-end
+
+        Note - there is another method :py:assembl.views.create_get_route
+        which creates a global route index. In that context, to search
+        for front-end routes, `furl_` must be prefixed to the route, as
+        there exists collision between route names of front-end and Pyramid
+
+        :return the relative route path
+        :rtype: string
+        """
+        global frontend_routes
+        if not frontend_routes:
+            frontend_routes = get_frontend_urls()
+        if route_name not in frontend_routes:
+            return None
+        return "/" + frontend_routes[route_name].format(**params)
 
     def append_query_string(self, url, **kwargs):
         if not url:

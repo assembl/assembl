@@ -21,7 +21,7 @@ export const getCurrentPhaseIdentifier = (_timeline: Timeline) => {
   timeline.forEach((phase) => {
     const startDate = new Date(phase.start);
     const endDate = new Date(phase.end);
-    if (currentDate > startDate && currentDate < endDate) {
+    if (currentDate >= startDate && currentDate < endDate) {
       identifier = phase.identifier;
     }
   });

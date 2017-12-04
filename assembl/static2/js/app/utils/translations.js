@@ -138,21 +138,21 @@ const Translations = {
       panelTitle: "Bienvenue dans la page changement de mot de passe d'Assembl"
     },
     home: {
-      accessButton: "J'accède au débat",
+      accessButton: "Je participe",
       sentiments: "votes",
       contribution: "contributions",
       participant: "participants",
       visit: "visites",
       viewedPages: "pages vues",
       partners: "Partenaires",
-      themesTitle: "Les thématiques du débat en cours",
+      themesTitle: "Les thématiques en cours",
       themesSubtitle: "Retrouvez vos discussions à la unes, des plus polémiques au plus plébiscitées",
       controversial: "Discussions polémiques",
       longerThread: "Thread le plus long",
       topContributor: "Top contributeur",
       recentDiscussion: "Discussion récente",
       objectivesTitle: "Pourquoi un tel débat ?",
-      timelineTitle: "La timeline du débat en %{count} phases",
+      timelineTitle: "La timeline en %{count} phases",
       video: "La vidéo du débat",
       twitterTitle: "Tweet",
       contact: "Besoin d'échanger au sujet de la plateforme ?",
@@ -169,7 +169,7 @@ const Translations = {
     synthesis: {
       title: "synthèse",
       seeConversation: "Voir la conversation",
-      noSynthesisYet: "Il n'y a pas encore de synthèse disponible pour ce débat."
+      noSynthesisYet: "Il n'y a pas encore de synthèse disponible."
     },
     common: {
       attachFileForm: {
@@ -213,7 +213,7 @@ const Translations = {
       confirmDeletionButtonDelete: "Supprimer",
       confirmDeletionButtonCancel: "Annuler",
       whatYouNeedToKnow: "À retenir",
-      syntheses: "Synthèses du débat",
+      syntheses: "Synthèses",
       survey: {
         themesTitle: "Choisissez une thématique !",
         txtAreaPh: "Ecrivez votre proposition",
@@ -236,7 +236,7 @@ const Translations = {
         untranslateOnlyThisMessage: "Je souhaite afficher uniquement ce message dans sa langue originale",
         untranslateAllMessagesIn: "Je souhaite afficher tous les messages rédigés en %{language} dans leur langue originale.",
         chooseLanguagePh: "Veuillez choisir la langue",
-        postDeletedByAdmin: "Ce message a été supprimé par l'administrateur du débat.",
+        postDeletedByAdmin: "Ce message a été supprimé par l'administrateur.",
         postDeletedByUser: "Ce message a été supprimé par son auteur.",
         postEdited: "modifié",
         postSuccess: "Merci pour votre participation. Votre message a bien été envoyé !",
@@ -502,21 +502,21 @@ const Translations = {
       panelTitle: "Welcome to Assembl forgot password page"
     },
     home: {
-      accessButton: "Access the debate",
+      accessButton: "I want to participate",
       contribution: "contributions",
       participant: "participants",
       sentiments: "votes",
       visit: "visits",
       viewedPages: "Viewed pages",
       partners: "Partners",
-      themesTitle: "Themes of the ongoing debate",
+      themesTitle: "Ongoing themes",
       themesSubtitle: "Find your most controversial and highly acclaimed discussions on the front page",
       controversial: "Controversial discussions",
       longerThread: "Longer thread",
       topContributor: "Top contributor",
       recentDiscussion: "Recent discussion",
-      objectivesTitle: "What is the objective of the debate?",
-      timelineTitle: "The timeline of the debate in %{count} phases",
+      objectivesTitle: "What is the objective?",
+      timelineTitle: "The timeline in %{count} phases",
       video: "Video of the debate",
       twitterTitle: "Tweet",
       contact: "Do you wish to know more about this platform?",
@@ -553,7 +553,7 @@ const Translations = {
     synthesis: {
       title: "synthesis",
       seeConversation: "See the conversation",
-      noSynthesisYet: "There is no synthesis available for this debate yet."
+      noSynthesisYet: "There is no synthesis available yet."
     },
     debate: {
       answer: "I answer:",
@@ -577,7 +577,7 @@ const Translations = {
       confirmDeletionButtonDelete: "Delete",
       confirmDeletionButtonCancel: "Cancel",
       whatYouNeedToKnow: "What you need to know",
-      syntheses: "Syntheses of the debate",
+      syntheses: "Syntheses",
       survey: {
         themesTitle: "Choose a theme!",
         txtAreaPh: "Write your point of view",

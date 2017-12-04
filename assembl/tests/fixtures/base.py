@@ -17,6 +17,7 @@ from pyramid.threadlocal import manager
 from pyramid import testing
 from pytest_localserver.http import WSGIServer
 from splinter import Browser
+import traceback
 
 import assembl
 from assembl.lib.config import get_config
@@ -148,7 +149,9 @@ def test_session(request, db_default_data):
         try:
             session.commit()
             #session.close()
-        except Exception:
+        except Exception as e:
+            traceback.print_exc()
+            # import pdb; pdb.post_mortem()
             session.rollback()
     request.addfinalizer(fin)
     return session

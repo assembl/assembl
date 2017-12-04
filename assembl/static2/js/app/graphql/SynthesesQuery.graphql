@@ -7,6 +7,9 @@ query SynthesesQuery($lang: String!) {
       img {
         externalUrl
       }
+      post {
+        id
+      }
     }
   }
 }

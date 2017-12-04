@@ -1,6 +1,5 @@
 import React from 'react';
 import { compose, graphql } from 'react-apollo';
-import { Row, Col } from 'react-bootstrap';
 
 import Attachments from '../../common/attachments';
 import ProfileLine from '../../common/profileLine';
@@ -65,8 +64,8 @@ class ColumnsPost extends EmptyPost {
     return (
       <div className="posts column-post" id={id}>
         <div className="box" style={{ borderLeftColor: colColor }}>
-          <Row className="post-row">
-            <Col xs={12} md={11} className="post-left">
+          <div className="post-row">
+            <div className="post-left">
               {creator && (
                 <ProfileLine
                   userId={creator.userId}
@@ -76,21 +75,23 @@ class ColumnsPost extends EmptyPost {
                   modified={modificationDate !== null}
                 />
               )}
-              <PostTranslate
-                contentLocale={contentLocale}
-                id={id}
-                lang={lang}
-                originalLocale={originalLocale}
-                translate={translate}
-              />
+              {debateData.translationEnabled ? (
+                <PostTranslate
+                  contentLocale={contentLocale}
+                  id={id}
+                  lang={lang}
+                  originalLocale={originalLocale}
+                  translate={translate}
+                />
+              ) : null}
               <div
                 className={`body ${bodyMimeType === 'text/plain' ? 'pre-wrap' : ''}`}
                 dangerouslySetInnerHTML={{ __html: transformLinksInHtml(body) }}
                 ref={this.recomputeTreeHeightOnImagesLoad}
               />
               <Attachments attachments={attachments} />
-            </Col>
-            <Col xs={12} md={1} className="post-right">
+            </div>
+            <div className="post-right">
               <PostActions
                 creatorUserId={creator.userId}
                 postId={id}
@@ -102,8 +103,8 @@ class ColumnsPost extends EmptyPost {
                 debateData={debateData}
                 identifier={identifier}
               />
-            </Col>
-          </Row>
+            </div>
+          </div>
         </div>
       </div>
     );

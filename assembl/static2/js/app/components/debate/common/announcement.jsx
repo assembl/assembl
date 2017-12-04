@@ -86,8 +86,7 @@ class Announcement extends React.Component {
     return columnsArray;
   }
   render = () => {
-    const { ideaWithPostsData: { idea }, announcementContent } = this.props;
-    const isMultiColumns = idea.messageColumns && idea.messageColumns.length > 0;
+    const { ideaWithPostsData: { idea }, announcementContent, isMultiColumns } = this.props;
     const { numContributors, numPosts, posts } = idea;
     const sentimentsCount = getSentimentsCount(posts);
     const mediaContent = announcementContent.body && dirtySplitHack(announcementContent);

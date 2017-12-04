@@ -1,9 +1,7 @@
 .header-section {
   background-color: $first-color;
-  height: 500px;
   position: relative;
   z-index: 10;
-  margin-top: $navbar-height * 2;
 
   .wyntk-box {
     top: calc(50% - 175px);

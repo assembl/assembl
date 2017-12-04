@@ -536,7 +536,7 @@ var LangString = Base.Model.extend({
     }
     var len = (propertyName+extension).length;
     var properties = _.filter(Object.keys(item), function(property){
-      return property.startsWith(propertyName+extension);
+      return property.indexOf(propertyName+extension) == 0;
     });
     var res = {};
     if (properties.length){
