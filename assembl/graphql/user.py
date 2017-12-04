@@ -2,10 +2,10 @@ import graphene
 from graphene.relay import Node
 from graphene_sqlalchemy import SQLAlchemyObjectType
 from pyramid.httpexceptions import HTTPUnauthorized
-from pyramid.security import Everyone
 
 from assembl import models
 from assembl.auth import CrudPermissions
+from assembl.auth import Everyone, P_SYSADMIN, P_ADMIN_DISC
 from assembl.auth.util import get_permissions
 
 from .types import SecureObjectType
@@ -38,8 +38,12 @@ class AgentProfile(SecureObjectType, SQLAlchemyObjectType):
         return self.display_name()
 
     def resolve_email(self, args, context, info):
-        # TODO check security
-        return self.get_preferred_email()
+        user_id = context.authenticated_userid or Everyone
+        discussion_id = context.matchdict['discussion_id']
+        permissions = get_permissions(user_id, discussion_id)
+        include_emails = P_ADMIN_DISC in permissions or P_SYSADMIN in permissions
+        if include_emails or self.id == user_id:
+            return self.get_preferred_email()
 
 
 class UpdateUser(graphene.Mutation):

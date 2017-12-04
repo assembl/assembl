@@ -6,6 +6,8 @@ from sqlalchemy import inspect
 def discussion(request, test_session, default_preferences):
     """An empty Discussion fixture with default preferences"""
     from assembl.models import Discussion, LangString
+    from assembl.models import Discussion
+    from assembl.models.auth import create_default_permissions
     with test_session.no_autoflush:
         d = Discussion(
             topic=u"Jack Layton", slug="jacklayton2",
@@ -21,6 +23,7 @@ def discussion(request, test_session, default_preferences):
             u"Vous ne pouvez pas mesurer le driver sans mesurer le protocole JSON en 1080p", u"fr")
         d.terms_and_conditions = tac
         test_session.add(d)
+        create_default_permissions(d)
     test_session.flush()
 
     def fin():
@@ -50,12 +53,14 @@ def discussion(request, test_session, default_preferences):
 def discussion2(request, test_session):
     """An non-empty Discussion fixture with default preferences"""
     from assembl.models import Discussion
+    from assembl.models.auth import create_default_permissions
     d = Discussion(
         topic=u"Second discussion", slug="testdiscussion2", creator=None)
     test_session.add(d)
     test_session.add(d.next_synthesis)
     test_session.add(d.root_idea)
     test_session.add(d.table_of_contents)
+    create_default_permissions(d)
     test_session.flush()
 
     def fin():
