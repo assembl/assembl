@@ -1,0 +1,64 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`DumbManageSectionsForm component should render a list of forms to edit Assembl sections 1`] = `
+<div
+  className="admin-box"
+>
+  <SectionTitle
+    annotation="Missing translation: administration.annotation"
+    title="Missing translation: administration.sections.sectionsTitle"
+  />
+  <div
+    className="admin-content"
+  >
+    <form>
+      <Connect(DumbEditSectionForm)
+        id="123"
+        index={0}
+        locale="en"
+        nbSections={undefined}
+      />
+      <Connect(DumbEditSectionForm)
+        id="456"
+        index={1}
+        locale="en"
+        nbSections={undefined}
+      />
+      <Connect(DumbEditSectionForm)
+        id="789"
+        index={2}
+        locale="en"
+        nbSections={undefined}
+      />
+      <OverlayTrigger
+        defaultOverlayShown={false}
+        overlay={
+          <Tooltip
+            bsClass="tooltip"
+            id="addSectionTooltip"
+            placement="right"
+          >
+            <Translate
+              value="administration.sections.addSection"
+            />
+          </Tooltip>
+        }
+        placement="top"
+        trigger={
+          Array [
+            "hover",
+            "focus",
+          ]
+        }
+      >
+        <div
+          className="plus margin-l"
+          onClick={[Function]}
+        >
+          +
+        </div>
+      </OverlayTrigger>
+    </form>
+  </div>
+</div>
+`;

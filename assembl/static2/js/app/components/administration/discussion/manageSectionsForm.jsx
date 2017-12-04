@@ -14,7 +14,7 @@ type ManageSectionFormProps = {
   createSection: Function
 };
 
-const ManageSectionsForm = ({ sections, selectedLocale, createSection }: ManageSectionFormProps) => {
+const DumbManageSectionsForm = ({ sections, selectedLocale, createSection }: ManageSectionFormProps) => {
   return (
     <div className="admin-box">
       <SectionTitle title={I18n.t('administration.sections.sectionsTitle')} annotation={I18n.t('administration.annotation')} />
@@ -56,4 +56,6 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(ManageSectionsForm);
+export { DumbManageSectionsForm };
+
+export default connect(mapStateToProps, mapDispatchToProps)(DumbManageSectionsForm);
