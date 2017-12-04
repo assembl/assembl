@@ -48,7 +48,7 @@ env:
   - TO_TEST=FRONTEND
 script:
   - if [ "$TO_TEST" = "BACKEND" ]; then py.test --cov assembl --cov-report term --cov-report html --junit-xml junit.xml assembl; fi
-  - if [ "$TO_TEST" = "BACKEND" ]; then flake8 --max-line-length=119 assembl/graphql/*.py; fi
+  - if [ "$TO_TEST" = "BACKEND" ]; then flake8 assembl/graphql/*.py; fi
   - cd assembl/static2
   - if [ "$TO_TEST" = "FRONTEND" ]; then npm test; fi
   - if [ "$TO_TEST" = "FRONTEND" ]; then npm run eslint; fi
