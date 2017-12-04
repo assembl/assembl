@@ -1,17 +1,22 @@
 {
-  "plugins" : [
-    "transform-object-rest-spread", "transform-class-properties",
-    ["transform-runtime", { "helpers": true, "polyfill": false }]
+  "plugins": [
+    "transform-object-rest-spread",
+    "transform-class-properties",
+    ["transform-runtime", { "helpers": true, "polyfill": false }],
+    "rewire"
   ],
-  "presets" : [["env", { "targets": { "node": 6 } }], "react", "flow"],
+  "presets": [["env", { "targets": { "node": 6 } }], "react", "flow"],
   "env": {
     "development": {
-      "plugins" : [
+      "plugins": [
         "react-hot-loader/babel",
-        ["react-transform", {"transforms": [
-          {"transform": "react-transform-render-visualizer/lib/specify"}
-        ]}]
-      ],
+        [
+          "react-transform",
+          {
+            "transforms": [{ "transform": "react-transform-render-visualizer/lib/specify" }]
+          }
+        ]
+      ]
     }
   }
 }

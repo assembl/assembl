@@ -50,30 +50,41 @@ const sectionURL = ({ sectionType, url }, options) => {
   return url || `${get(sectionSlug(sectionType), options)}`;
 };
 
-const SectionLink = ({ section, options }) => {
-  const { title } = section;
+const SectionLink = ({ title, to }: { title: string, to: string }) => {
   return (
-    <Link to={sectionURL(section, options)} className="navbar-menu-item pointer" activeClassName="active" data-text={title}>
+    <Link to={to} className="navbar-menu-item pointer" activeClassName="active" data-text={title}>
       {title}
     </Link>
   );
 };
+SectionLink.displayName = 'SectionLink';
 
-const mapSectionToElement = (section, options) => {
-  return <SectionLink key={sectionKey(section)} section={section} options={options} />;
+type MapSectionOptions = {
+  phase: string,
+  slug: string
 };
 
-const sectionMapper = (options) => {
-  return (section) => {
+type Section = {
+  sectionType: string,
+  url: string,
+  title: string
+};
+
+export const mapSectionToElement = (section: Section, options: MapSectionOptions) => {
+  return <SectionLink key={sectionKey(section)} title={section.title} to={sectionURL(section, options)} />;
+};
+
+export const sectionMapper = (options: MapSectionOptions) => {
+  return (section: Section) => {
     return mapSectionToElement(section, options);
   };
 };
 
-class AssemblNavbar extends React.PureComponent {
+export class AssemblNavbar extends React.PureComponent {
   state: {
     flatWidth: number
   };
-  setFlatWidth = (newWidth) => {
+  setFlatWidth = (newWidth: number) => {
     this.setState({ flatWidth: newWidth });
   };
   render = () => {

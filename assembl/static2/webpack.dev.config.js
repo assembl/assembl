@@ -73,7 +73,7 @@ module.exports = {
                 forceEnv: 'development',
                 plugins: [
                   'transform-object-rest-spread', 'transform-class-properties',
-                  ['transform-runtime', { helpers: true, polyfill: false }]
+                  ['transform-runtime', { helpers: true, polyfill: false }], 'rewire'
                 ],
                 presets: [["env", { "modules": false, "targets": { "ie": 11 },
                                     "debug": true, "useBuiltIns": true,
