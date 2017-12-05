@@ -17,10 +17,11 @@ from assembl.models.post import countable_publication_states
 from assembl.nlp.translation_service import DummyGoogleTranslationService
 
 from assembl.graphql.document import UploadDocument
-from assembl.graphql.discussion import (DiscussionPreferences, LocalePreference,
+from assembl.graphql.discussion import (
+    DiscussionPreferences, LocalePreference,
     ResourcesCenter, LegalNoticeAndTerms,
     UpdateDiscussionPreferences, UpdateResourcesCenter,
-    UpdateLegalNoticeAndTerms, VisitsAnalytics)
+    UpdateLegalNoticeAndTerms, VisitsAnalytics, Discussion)
 from assembl.graphql.idea import (
     CreateIdea, CreateThematic, DeleteThematic, Idea, IdeaUnion,
     Thematic, UpdateThematic)
