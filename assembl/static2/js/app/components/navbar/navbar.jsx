@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import { Navbar } from 'react-bootstrap';
 import { compose, graphql } from 'react-apollo';
 import { I18n, Translate } from 'react-redux-i18n';
+import _ from 'lodash';
 
 import { getCurrentPhaseIdentifier, isSeveralIdentifiers, getPhaseName } from '../../utils/timeline';
 import { get } from '../../utils/routeMap';
@@ -92,7 +93,7 @@ const mapDebateSectionToElement = (debateSection, options) => {
   case 'old':
     return (
       <a key={key} className="navbar-menu-item pointer" href={get('oldDebate', { slug: options.slug })} data-text={title}>
-        {title}{' '}
+        {title}
       </a>
     );
   default:
@@ -119,12 +120,6 @@ export const mapSectionToElement = (section: Section, options: MapSectionOptions
   ) : (
     <SectionLink key={sectionKey(section)} section={section} options={options} />
   );
-};
-
-export const sectionMapper = (options: MapSectionOptions) => {
-  return (section: Section) => {
-    return mapSectionToElement(section, options);
-  };
 };
 
 const phaseContext = (timeline, phase) => {
@@ -161,7 +156,7 @@ export class AssemblNavbar extends React.PureComponent {
       displayDebateModal: createDisplayModal({ debate: debate, i18n: i18n })
     };
     const commonProps = {
-      elements: filteredSections.map(sectionMapper(mapOptions)),
+      elements: filteredSections.map(_.bind(mapSectionToElement, null, _, mapOptions)),
       slug: slug,
       logoSrc: logo,
       helpUrl: helpUrl,
