@@ -2066,7 +2066,7 @@ mutation updateLegalNoticeAndTerms {
 
 def test_has_legal_notice(graphql_request, discussion):
     res = schema.execute(u"""query {
-        hasLegalNotice
+        hasLegalNotice(lang: "en")
     }""", context_value=graphql_request)
     assert res.errors is None
     res_data = json.loads(json.dumps(res.data))
@@ -2075,7 +2075,7 @@ def test_has_legal_notice(graphql_request, discussion):
 
 def test_has_terms_and_conditions(graphql_request, discussion):
     res = schema.execute(u"""query {
-        hasTermsAndConditions
+        hasTermsAndConditions(lang: "en")
     }""", context_value=graphql_request)
     assert res.errors is None
     res_data = json.loads(json.dumps(res.data))
