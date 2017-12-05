@@ -5,18 +5,5 @@
     ["transform-runtime", { "helpers": true, "polyfill": false }],
     "rewire"
   ],
-  "presets": [["env", { "targets": { "node": 6 } }], "react", "flow"],
-  "env": {
-    "development": {
-      "plugins": [
-        "react-hot-loader/babel",
-        [
-          "react-transform",
-          {
-            "transforms": [{ "transform": "react-transform-render-visualizer/lib/specify" }]
-          }
-        ]
-      ]
-    }
-  }
+  "presets": [["env", { "targets": { "node": 6 } }], "react", "flow"]
 }
