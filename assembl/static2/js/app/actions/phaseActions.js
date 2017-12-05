@@ -13,3 +13,10 @@ export const updateQueryPhaseIdentifier = (queryIdentifier: string) => {
     type: 'ADD_QUERY_PHASE_IDENTIFIER'
   };
 };
+
+export const addRedirectionToV1 = (redirectToV1: string) => {
+  return {
+    redirectToV1: redirectToV1,
+    type: 'REDIRECT_TO_V1'
+  };
+};

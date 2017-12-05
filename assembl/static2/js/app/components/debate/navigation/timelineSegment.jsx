@@ -1,6 +1,6 @@
 import React from 'react';
 import { browserHistory } from 'react-router';
-import { Translate, Localize } from 'react-redux-i18n';
+import { Translate, Localize, I18n } from 'react-redux-i18n';
 import { connect } from 'react-redux';
 import classNames from 'classnames';
 import { get } from '../../../utils/routeMap';
@@ -17,6 +17,11 @@ class TimelineSegment extends React.Component {
     const { locale } = this.props.i18n;
     const { phaseIdentifier, title, startDate, endDate } = this.props;
     const { debateData } = this.props.debate;
+    const phase = debateData.timeline.filter((p) => {
+      return p.identifier === phaseIdentifier;
+    });
+    const isRedirectionToV1 = phase[0].interface_v1;
+    const slug = { slug: debateData.slug };
     const params = { slug: debateData.slug, phase: phaseIdentifier };
     let phaseName = '';
     title.entries.forEach((entry) => {
@@ -37,10 +42,21 @@ class TimelineSegment extends React.Component {
         displayModal(null, body, true, null, null, true);
       }
       if (phaseStatus === 'inProgress' || phaseStatus === 'completed') {
-        browserHistory.push(get('debate', params));
+        if (!isRedirectionToV1) {
+          browserHistory.push(get('debate', params));
+        } else {
+          const body = <Translate value="redirectToV1" phaseName={phaseName} />;
+          const button = { link: get('oldDebate', slug), label: I18n.t('home.accessButton'), internalLink: false };
+          displayModal(null, body, true, null, button, true);
+          setTimeout(() => {
+            window.location = get('oldDebate', slug);
+          }, 6000);
+        }
       }
-    } else {
+    } else if (!isRedirectionToV1) {
       browserHistory.push(get('debate', params));
+    } else {
+      window.location = get('oldDebate', slug);
     }
   }
   render() {

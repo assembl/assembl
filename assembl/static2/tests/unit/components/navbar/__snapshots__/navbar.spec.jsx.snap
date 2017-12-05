@@ -69,7 +69,17 @@ exports[`AssemblNavbar component should render a FlatNavbar with a big screenWid
 
 exports[`mapSectionToElement function should return a SectionLink element that matches the snapshot 1`] = `
 <SectionLink
-  title="fake_title"
-  to="/fake_slug/debate/fake_phase"
+  options={
+    Object {
+      "phase": "fake_phase",
+      "slug": "fake_slug",
+    }
+  }
+  section={
+    Object {
+      "sectionType": "DEBATE",
+      "title": "fake_title",
+    }
+  }
 />
 `;

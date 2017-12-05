@@ -7,6 +7,7 @@ import {
   mapSectionToElement,
   __RewireAPI__ as NavbarRewireAPI
 } from '../../../../js/app/components/navbar/navbar';
+
 import rewireFunction from '../../../helpers/rewireFunction';
 
 describe('sectionMapper function', () => {
@@ -55,13 +56,17 @@ describe('mapSectionToElement function', () => {
 describe('AssemblNavbar component', () => {
   it('should render a FlatNavbar with a big screenWidth', () => {
     const renderer = new ShallowRenderer();
-    renderer.render(<AssemblNavbar screenWidth={2000} debate={{ debateData: { timeline: [] } }} />);
+    renderer.render(
+      <AssemblNavbar screenWidth={2000} phase={{ isRedirectionToV1: false }} debate={{ debateData: { timeline: [] } }} />
+    );
     const result = renderer.getRenderOutput();
     expect(result).toMatchSnapshot();
   });
   it('should render a BurgerNavbar and a hidden FlatNavbar with a tiny screenWidth', () => {
     const renderer = new ShallowRenderer();
-    renderer.render(<AssemblNavbar screenWidth={10} debate={{ debateData: { timeline: [] } }} />);
+    renderer.render(
+      <AssemblNavbar phase={{ isRedirectionToV1: false }} screenWidth={10} debate={{ debateData: { timeline: [] } }} />
+    );
     const result = renderer.getRenderOutput();
     expect(result).toMatchSnapshot();
   });

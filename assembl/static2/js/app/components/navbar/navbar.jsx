@@ -5,8 +5,9 @@ import { Link } from 'react-router';
 import { connect } from 'react-redux';
 import { Navbar } from 'react-bootstrap';
 import { compose, graphql } from 'react-apollo';
+import { I18n, Translate } from 'react-redux-i18n';
 
-import { getCurrentPhaseIdentifier } from '../../utils/timeline';
+import { getCurrentPhaseIdentifier, isSeveralIdentifiers, getPhaseName } from '../../utils/timeline';
 import { get } from '../../utils/routeMap';
 import { withScreenWidth } from '../common/screenDimensions';
 import { connectedUserIsAdmin } from '../../utils/permissions';
@@ -14,7 +15,8 @@ import SectionsQuery from '../../graphql/SectionsQuery.graphql';
 import FlatNavbar from './FlatNavbar';
 import BurgerNavbar from './BurgerNavbar';
 import { APP_CONTAINER_MAX_WIDTH, APP_CONTAINER_PADDING } from '../../constants';
-import { snakeToCamel } from '../../utils/globalFunctions';
+import { displayModal } from '../../utils/utilityManager';
+import { getDiscussionSlug, snakeToCamel } from '../../utils/globalFunctions';
 
 const filterSection = ({ sectionType }, { hasResourcesCenter, hasSyntheses }) => {
   switch (sectionType) {
@@ -50,17 +52,58 @@ const sectionURL = ({ sectionType, url }, options) => {
   return url || `${get(sectionSlug(sectionType), options)}`;
 };
 
-const SectionLink = ({ title, to }: { title: string, to: string }) => {
+const SectionLink = ({ section, options }) => {
+  const { title } = section;
   return (
-    <Link to={to} className="navbar-menu-item pointer" activeClassName="active" data-text={title}>
+    <Link to={sectionURL(section, options)} className="navbar-menu-item pointer" activeClassName="active" data-text={title}>
       {title}
     </Link>
   );
 };
 SectionLink.displayName = 'SectionLink';
 
+const createDisplayModal = ({ debate, i18n }) => {
+  return () => {
+    const slug = { slug: getDiscussionSlug() };
+    const { timeline } = debate.debateData;
+    const { locale } = i18n;
+    const currentPhaseIdentifier = getCurrentPhaseIdentifier(timeline);
+    const phaseName = getPhaseName(timeline, currentPhaseIdentifier, locale).toLowerCase();
+    const body = <Translate value="redirectToV1" phaseName={phaseName} />;
+    const button = { link: get('oldDebate', slug), label: I18n.t('home.accessButton'), internalLink: false };
+    displayModal(null, body, true, null, button, true);
+    setTimeout(() => {
+      window.location = get('oldDebate', slug);
+    }, 6000);
+  };
+};
+
+const mapDebateSectionToElement = (debateSection, options) => {
+  const { title } = debateSection;
+  const { phaseContext, displayDebateModal } = options;
+  const key = sectionKey(debateSection);
+  switch (phaseContext) {
+  case 'modal':
+    return (
+      <div key={key} onClick={displayDebateModal} className="navbar-menu-item pointer" data-text={title}>
+        {title}
+      </div>
+    );
+  case 'old':
+    return (
+      <a key={key} className="navbar-menu-item pointer" href={get('oldDebate', { slug: options.slug })} data-text={title}>
+        {title}{' '}
+      </a>
+    );
+  default:
+    return <SectionLink key={key} section={debateSection} options={options} />;
+  }
+};
+
 type MapSectionOptions = {
   phase: string,
+  phaseContext: string,
+  displayDebateModal: () => mixed,
   slug: string
 };
 
@@ -71,13 +114,28 @@ type Section = {
 };
 
 export const mapSectionToElement = (section: Section, options: MapSectionOptions) => {
-  return <SectionLink key={sectionKey(section)} title={section.title} to={sectionURL(section, options)} />;
+  return section.sectionType === 'DEBATE' ? (
+    mapDebateSectionToElement(section, options)
+  ) : (
+    <SectionLink key={sectionKey(section)} section={section} options={options} />
+  );
 };
 
 export const sectionMapper = (options: MapSectionOptions) => {
   return (section: Section) => {
     return mapSectionToElement(section, options);
   };
+};
+
+const phaseContext = (timeline, phase) => {
+  const isSeveralPhases = isSeveralIdentifiers(timeline);
+  if (phase.isRedirectionToV1) {
+    if (isSeveralPhases) {
+      return 'modal';
+    }
+    return 'old';
+  }
+  return 'new';
 };
 
 export class AssemblNavbar extends React.PureComponent {
@@ -88,7 +146,7 @@ export class AssemblNavbar extends React.PureComponent {
     this.setState({ flatWidth: newWidth });
   };
   render = () => {
-    const { screenWidth, debate, data, location } = this.props;
+    const { screenWidth, debate, data, location, phase, i18n } = this.props;
     const sections = (data && data.sections) || [];
     const { debateData } = debate;
     const { timeline, logo, slug, helpUrl } = debateData;
@@ -98,7 +156,9 @@ export class AssemblNavbar extends React.PureComponent {
     const filteredSections = sections.filter(sectionFilter(data));
     const mapOptions = {
       slug: slug,
-      phase: getCurrentPhaseIdentifier(timeline)
+      phase: getCurrentPhaseIdentifier(timeline),
+      phaseContext: phaseContext(timeline, phase),
+      displayDebateModal: createDisplayModal({ debate: debate, i18n: i18n })
     };
     const commonProps = {
       elements: filteredSections.map(sectionMapper(mapOptions)),
