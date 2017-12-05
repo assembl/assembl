@@ -22,7 +22,6 @@ type ProfileProps = {
   id: string,
   params: Object,
   location: Object,
-  refetchUser: Function,
   updateUser: Function
 };
 
@@ -65,7 +64,7 @@ class Profile extends React.PureComponent<*, ProfileProps, ProfileSate> {
     this.setState({ email: e.target.value });
   };
   handleSaveClick = () => {
-    const { updateUser, id, refetchUser } = this.props;
+    const { updateUser, id } = this.props;
     const { name, username } = this.state;
     const variables = {
       id: id,
@@ -74,7 +73,6 @@ class Profile extends React.PureComponent<*, ProfileProps, ProfileSate> {
     };
     updateUser({ variables: variables })
       .then(() => {
-        refetchUser();
         displayAlert('success', I18n.t('profile.saveSuccess'));
       })
       .catch((error) => {
@@ -166,8 +164,7 @@ export default compose(
       return {
         username: data.user.username,
         name: data.user.name,
-        email: data.user.email,
-        refetchUser: data.refetch
+        email: data.user.email
       };
     }
   }),
