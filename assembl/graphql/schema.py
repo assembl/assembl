@@ -202,20 +202,22 @@ class Query(graphene.ObjectType):
     def resolve_has_legal_notice(self, args, context, info):
         discussion_id = context.matchdict['discussion_id']
         discussion = models.Discussion.get(discussion_id)
-        for entry in discussion.legal_notice.entries:
-            if entry.locale.code == args.get('lang', ''):
-                # if the field is empty in the admin section, it will contain html markup (u'<p></p>')
-                return len(entry.value) > 10
+        if discussion.legal_notice:
+            for entry in discussion.legal_notice.entries:
+                if entry.locale.code == args.get('lang', ''):
+                    # if the field is empty in the admin section, it will contain html markup (u'<p></p>')
+                    return len(entry.value) > 10
 
         return False
 
     def resolve_has_terms_and_conditions(self, args, context, info):
         discussion_id = context.matchdict['discussion_id']
         discussion = models.Discussion.get(discussion_id)
-        for entry in discussion.terms_and_conditions.entries:
-            if entry.locale.code == args.get('lang', ''):
-                # if the field is empty in the admin section, it will contain html markup (u'<p></p>')
-                return len(entry.value) > 10
+        if discussion.terms_and_conditions:
+            for entry in discussion.terms_and_conditions.entries:
+                if entry.locale.code == args.get('lang', ''):
+                    # if the field is empty in the admin section, it will contain html markup (u'<p></p>')
+                    return len(entry.value) > 10
 
         return False
 
