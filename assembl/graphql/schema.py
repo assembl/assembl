@@ -23,6 +23,7 @@ from .discussion import (DiscussionPreferences, LocalePreference,
                          UpdateLegalNoticeAndTerms, VisitsAnalytics)
 from .idea import (CreateIdea, CreateThematic, DeleteThematic, Idea, IdeaUnion,
                    Thematic, UpdateThematic)
+from .langstring import resolve_langstring
 from .locale import Locale
 from .post import (
     CreatePost, DeletePost, UndeletePost, UpdatePost,
@@ -202,24 +203,16 @@ class Query(graphene.ObjectType):
     def resolve_has_legal_notice(self, args, context, info):
         discussion_id = context.matchdict['discussion_id']
         discussion = models.Discussion.get(discussion_id)
-        if discussion.legal_notice:
-            for entry in discussion.legal_notice.entries:
-                if entry.locale.code == args.get('lang', ''):
-                    # if the field is empty in the admin section, it will contain html markup (u'<p></p>')
-                    return len(entry.value) > 10
-
-        return False
+        text = resolve_langstring(discussion.legal_notice, args.get('lang'))
+        # if the field is empty in the admin section, it will contain html markup (u'<p></p>')
+        return text and len(text) > 10
 
     def resolve_has_terms_and_conditions(self, args, context, info):
         discussion_id = context.matchdict['discussion_id']
         discussion = models.Discussion.get(discussion_id)
-        if discussion.terms_and_conditions:
-            for entry in discussion.terms_and_conditions.entries:
-                if entry.locale.code == args.get('lang', ''):
-                    # if the field is empty in the admin section, it will contain html markup (u'<p></p>')
-                    return len(entry.value) > 10
-
-        return False
+        text = resolve_langstring(discussion.terms_and_conditions, args.get('lang'))
+        # if the field is empty in the admin section, it will contain html markup (u'<p></p>')
+        return text and len(text) > 10
 
     def resolve_visits_analytics(self, args, context, info):
         fields = get_fields(info)
