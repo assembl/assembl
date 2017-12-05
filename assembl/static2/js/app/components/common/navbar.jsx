@@ -1,5 +1,6 @@
 import React from 'react';
 import { browserHistory, Link } from 'react-router';
+import { compose, graphql } from 'react-apollo';
 import { connect } from 'react-redux';
 import { Grid, Navbar } from 'react-bootstrap';
 import { getCurrentPhaseIdentifier } from '../../utils/timeline';
@@ -9,6 +10,8 @@ import NavigationMenu from './navigationMenu';
 import { get } from '../../utils/routeMap';
 import { getConnectedUserId } from '../../utils/globalFunctions';
 import Search from '../search';
+import withLoadingIndicator from './withLoadingIndicator';
+import DiscussionQuery from '../../graphql/Discussion.graphql';
 
 class NavBar extends React.Component {
   constructor(props) {
@@ -35,6 +38,7 @@ class NavBar extends React.Component {
   }
   render() {
     const { debateData } = this.props.debate;
+    const { discussion: { homepageUrl } } = this.props.data;
     const currentPhaseIdentifier = getCurrentPhaseIdentifier(debateData.timeline);
     const slug = { slug: debateData.slug };
     const connectedUserId = getConnectedUserId();
@@ -52,9 +56,15 @@ class NavBar extends React.Component {
               </div>
             </div>
             <div className="navbar-logo left">
-              <Link to={`${get('home', slug)}`} activeClassName="logo-active">
-                <img src={debateData.logo} alt="logo" />
-              </Link>
+              {homepageUrl ? (
+                <a href={homepageUrl} target="_blank">
+                  <img src={debateData.logo} alt="logo" />
+                </a>
+              ) : (
+                <Link to={`${get('home', slug)}`} activeClassName="logo-active">
+                  <img src={debateData.logo} alt="logo" />
+                </Link>
+              )}
             </div>
             <div className="nav-menu left">
               <NavigationMenu />
@@ -95,4 +105,4 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps)(NavBar);
+export default compose(graphql(DiscussionQuery), withLoadingIndicator(), connect(mapStateToProps))(NavBar);
