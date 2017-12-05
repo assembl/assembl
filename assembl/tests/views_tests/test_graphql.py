@@ -2123,3 +2123,16 @@ query GetVisitsAnalytics {
         assert res.data['visitsAnalytics']['sumVisitsLength'] == 150
         assert res.data['visitsAnalytics']['nbPageviews'] == 100
         assert res.data['visitsAnalytics']['nbUniqPageviews'] == 50
+
+
+def test_query_discussion_homepage(graphql_request, discussion, test_session):
+
+    url = u"https://www.liverpoolfc.com"
+    discussion.homepage_url = url
+    test_session.commit()
+
+    query = u"""
+query { discussion { homepageUrl }  }
+"""
+    res = schema.execute(query, context_value=graphql_request)
+    assert res.data['discussion']['homepageUrl'] == url

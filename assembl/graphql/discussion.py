@@ -1,6 +1,7 @@
 import os.path
 
 import graphene
+from graphene_sqlalchemy import SQLAlchemyObjectType
 from pyramid.httpexceptions import HTTPUnauthorized
 from pyramid.security import Everyone
 
@@ -9,10 +10,24 @@ from assembl.auth import IF_OWNED, CrudPermissions
 from assembl.auth.util import get_permissions
 
 from .document import Document
+from .types import SecureObjectType
 from .langstring import (
     LangStringEntry, LangStringEntryInput, resolve_langstring,
     resolve_langstring_entries, update_langstring_from_input_entries)
 from .utils import abort_transaction_on_exception
+
+
+class Discussion(SecureObjectType, SQLAlchemyObjectType):
+    class Meta:
+        model = models.Discussion
+        only_fields = ('id',)
+
+    homepage_url = graphene.String()
+
+    def resolve_homepage_url(self, args, context, info):
+        # TODO: Remove this resolver and add URLString to
+        # the Graphene SQLA converters list
+        return self.homepage_url
 
 
 class LocalePreference(graphene.ObjectType):
