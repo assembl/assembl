@@ -11,7 +11,7 @@ import { get } from '../../utils/routeMap';
 import { getConnectedUserId } from '../../utils/globalFunctions';
 import Search from '../search';
 import withLoadingIndicator from './withLoadingIndicator';
-import DiscussionQuery from '../../graphql/Discussion.graphql';
+import TabsCondition from '../../graphql/TabsConditionQuery.graphql';
 
 class NavBar extends React.Component {
   constructor(props) {
@@ -101,8 +101,19 @@ class NavBar extends React.Component {
 
 const mapStateToProps = (state) => {
   return {
-    debate: state.debate
+    debate: state.debate,
+    lang: state.i18n.locale
   };
 };
 
-export default compose(graphql(DiscussionQuery), withLoadingIndicator(), connect(mapStateToProps))(NavBar);
+const withData = graphql(TabsCondition, {
+  options: ({ lang }) => {
+    return {
+      variables: {
+        lang: lang
+      }
+    };
+  }
+});
+
+export default compose(connect(mapStateToProps), withData, withLoadingIndicator())(NavBar);
