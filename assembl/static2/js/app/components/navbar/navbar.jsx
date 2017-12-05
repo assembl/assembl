@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import { Navbar } from 'react-bootstrap';
 import { compose, graphql } from 'react-apollo';
 import { I18n, Translate } from 'react-redux-i18n';
-import _ from 'lodash';
+import bind from 'lodash/bind';
 
 import { getCurrentPhaseIdentifier, isSeveralIdentifiers, getPhaseName } from '../../utils/timeline';
 import { get } from '../../utils/routeMap';
@@ -156,7 +156,7 @@ export class AssemblNavbar extends React.PureComponent {
       displayDebateModal: createDisplayModal({ debate: debate, i18n: i18n })
     };
     const commonProps = {
-      elements: filteredSections.map(_.bind(mapSectionToElement, null, _, mapOptions)),
+      elements: filteredSections.map(bind(mapSectionToElement, null, bind.placeholder, mapOptions)),
       slug: slug,
       logoSrc: logo,
       helpUrl: helpUrl,
