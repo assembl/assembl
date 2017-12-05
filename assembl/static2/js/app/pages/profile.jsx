@@ -1,11 +1,13 @@
 import React from 'react';
 import { browserHistory } from 'react-router';
 import { connect } from 'react-redux';
+import { compose, graphql } from 'react-apollo';
 import { Translate, I18n } from 'react-redux-i18n';
 import { Grid, Col, Button } from 'react-bootstrap';
 import FormControlWithLabel from '../components/common/formControlWithLabel';
 import { get, getContextual } from '../utils/routeMap';
-import { getConnectedUserId, getDiscussionSlug } from '../utils/globalFunctions';
+import withLoadingIndicator from '../components/common/withLoadingIndicator';
+import UserQuery from '../graphql/userQuery.graphql';
 
 class Profile extends React.Component {
   constructor(props) {
@@ -23,10 +25,9 @@ class Profile extends React.Component {
     this.handlePasswordClick = this.handlePasswordClick.bind(this);
   }
   componentWillMount() {
-    const connectedUserId = getConnectedUserId();
+    const { connectedUserId, slug } = this.props;
     const { userId } = this.props.params;
     const { pathname } = this.props.location;
-    const slug = { slug: getDiscussionSlug() };
     if (!connectedUserId) {
       browserHistory.push(`${getContextual('login', slug)}?next=${pathname}`);
     } else if (connectedUserId !== userId) {
@@ -110,17 +111,27 @@ class Profile extends React.Component {
   }
 }
 
-const mapStateToProps = () => {
-  const userMock = {
-    username: 'Paolina',
-    fullname: 'Pauline Thomas',
-    email: 'pauline.thomas@bluenove.com'
-  };
+const mapStateToProps = ({ context, debate }) => {
   return {
-    username: userMock.username,
-    fullname: userMock.fullname,
-    email: userMock.email
+    slug: debate.debateData.slug,
+    connectedUserId: context.connectedUserId,
+    id: btoa(`AgentProfile:${context.connectedUserId}`)
   };
 };
 
-export default connect(mapStateToProps)(Profile);
+export default compose(
+  connect(mapStateToProps),
+  graphql(UserQuery, {
+    props: ({ data }) => {
+      if (data.loading) {
+        return { loading: true };
+      }
+      return {
+        username: data.user.username,
+        fullname: data.user.name,
+        email: data.user.email
+      };
+    }
+  }),
+  withLoadingIndicator()
+)(Profile);
