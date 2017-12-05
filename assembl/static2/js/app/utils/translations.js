@@ -369,7 +369,7 @@ const Translations = {
       format2: "DD-MM-YYYY"
     },
     duration: {
-      format: "d [j,] h [h,] m [min]"
+      format: "h [h]"
     }
   },
   en: {
@@ -738,7 +738,7 @@ const Translations = {
       format2: "YYYY-MM-DD"
     },
     duration: {
-      format: "d [d,] h [h,] m [min]"
+      format: "h [h]"
     }
   }
 };
