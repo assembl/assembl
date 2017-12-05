@@ -1,0 +1,11 @@
+mutation UpdateUser($id: ID!, $name: String!, $username: String) {
+  updateUser(id: $id, name: $name, username: $username) {
+    user {
+      ... on AgentProfile {
+        id
+        name
+        username
+      }
+    }
+  }
+}

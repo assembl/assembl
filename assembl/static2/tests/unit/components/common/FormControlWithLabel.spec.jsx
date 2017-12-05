@@ -8,7 +8,14 @@ describe('FormControlWithLabel component', () => {
 
   it('should render a form control with label', () => {
     const component = renderer.create(
-      <FormControlWithLabel componentClass="my-class" id="my-input" label="Foobar" onChange={onChangeSpy} type="text" />
+      <FormControlWithLabel
+        componentClass="my-class"
+        id="my-input"
+        label="Foobar"
+        onChange={onChangeSpy}
+        type="text"
+        disabled={false}
+      />
     );
     const tree = component.toJSON();
     expect(tree).toMatchSnapshot();
@@ -23,6 +30,7 @@ describe('FormControlWithLabel component', () => {
         onChange={onChangeSpy}
         type="text"
         value="some-value"
+        disabled={false}
       />
     );
     const tree = component.toJSON();

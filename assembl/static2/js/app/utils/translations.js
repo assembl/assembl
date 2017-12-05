@@ -278,7 +278,8 @@ const Translations = {
       email: "Email*",
       save: "Enregistrer",
       password: "Mot de passe",
-      changePassword: "Modifier"
+      changePassword: "Modifier",
+      saveSuccess: "Votre profil a été mis à jour avec succès"
     },
     loading: {
       wait: "Veuillez patienter"
@@ -653,7 +654,8 @@ const Translations = {
       email: "Email*",
       save: "Save",
       password: "Password",
-      changePassword: "Modify"
+      changePassword: "Modify",
+      saveSuccess: "Your profile is updated"
     },
     loading: {
       wait: "Please wait..."
