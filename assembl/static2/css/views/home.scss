@@ -95,7 +95,6 @@
       bottom: 0;
       left: 0;
       margin: 0 auto;
-      padding: 6px 0;
       position: absolute;
       text-align: center;
       display: flex;
@@ -103,31 +102,30 @@
       z-index: 10;
 
       .intermediary-container {
+        padding: 5px 0;
         display: inline-block;
-        max-width: 800px;
         vertical-align: middle;
         width: 100%;
         margin: 0 auto;
 
-        .inline {
-          text-align: center;
-          display: inline-flex;
-          vertical-align: middle;
+        .stat-container {
+          padding: 0 20px;
+          display: inline-block;
+          border-right: 1px solid $white;
 
-          .stat-box {
-            display: inline-block;
-            text-align: left;
-            padding: 2px 6px;
-            vertical-align: middle;
-            margin: auto;
+          &:last-child {
+            border-right: none;
           }
 
-          .stat-box-separator {
-            display: inline-flex;
-            width: 1px;
-            border-right: $navbar-border;
-            height: 32px;
-            margin: auto 0;
+          .stat-box {
+            display: flex;
+            align-items: center;
+            vertical-align: middle;
+            margin: auto;
+
+            .stat-icon {
+              padding-top: 3px;
+            }
           }
         }
 
@@ -135,18 +133,12 @@
           margin-top: -20px;
         }
 
-        .stat-icon {
-          padding: 5px 6px 2px 0;
-          display: table-cell;
-          vertical-align: middle;
-        }
-
         .stat {
-          display: table-cell;
+          display: inline-block;
           font-family: $font-family2;
-          padding-left: 2px;
           text-align: left;
           text-transform: uppercase;
+          padding-left: 8px;
         }
 
         .stat-nb {
@@ -377,37 +369,48 @@
   }
 }
 
+@media screen and (max-width: 820px) {
+  .statistic {
+    .intermediary-container {
+      .stat-container {
+        padding: 0 15px !important;
+
+        .stat-label {
+          display: none;
+        }
+
+        .stat-box {
+          display: block !important;
+          text-align: center;
+
+          .stat-icon {
+            padding-top: 0;
+            display: block;
+            float: none;
+          }
+
+          .stat {
+            padding-left: 0;
+            display: block;
+            text-align: center;
+            word-break: break-word;
+          }
+
+          .stat-nb {
+            padding-top: 3px;
+          }
+        }
+      }
+    }
+  }
+}
+
 /* Landscape phones and portrait tablets */
 @media screen and (max-width: $screen-xs-max) {
   .home {
     .header-section {
       .header-content {
         padding: 60px 5px 120px;
-      }
-
-      .statistic {
-        .intermediary-container {
-          .inline {
-            max-height: 100px;
-            overflow: hidden;
-
-            .stat-box {
-              text-align: center;
-              padding: 2px;
-
-              .stat-icon {
-                display: block;
-                float: none;
-                padding: 2px;
-              }
-
-              .stat {
-                text-align: inherit;
-                word-break: break-word;
-              }
-            }
-          }
-        }
       }
     }
 
