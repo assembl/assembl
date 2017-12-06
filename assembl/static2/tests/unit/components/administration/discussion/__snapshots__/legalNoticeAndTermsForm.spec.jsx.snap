@@ -1,0 +1,44 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`LegalNoticeAndTermsForm dumb component should render a form to edit legal notice and terms and conditions 1`] = `
+<div
+  className="admin-box"
+>
+  <SectionTitle
+    annotation="Missing translation: administration.annotation"
+    title="Missing translation: administration.discussion.3"
+  />
+  <div
+    className="admin-content"
+  >
+    <Row
+      bsClass="row"
+      componentClass="div"
+    >
+      <div
+        className="form-container"
+      >
+        <FormControlWithLabel
+          label="Missing translation: administration.legalNoticeAndTerms.termsAndConditionsLabel*"
+          labelAlwaysVisible={false}
+          onChange={[Function]}
+          required={true}
+          type="rich-text"
+          value=""
+        />
+        <div
+          className="separator"
+        />
+        <FormControlWithLabel
+          label="Missing translation: administration.legalNoticeAndTerms.legalNoticeLabel*"
+          labelAlwaysVisible={false}
+          onChange={[Function]}
+          required={true}
+          type="rich-text"
+          value=""
+        />
+      </div>
+    </Row>
+  </div>
+</div>
+`;

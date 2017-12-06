@@ -90,7 +90,7 @@ class Idea extends React.Component {
   getInitialRowIndex = (topPosts, edges) => {
     const { hash } = window.location;
     if (hash !== '') {
-      const id = hash.replace('#', '');
+      const id = hash.replace('#', '').split('?')[0];
       const allPosts = {};
       edges.forEach((e) => {
         allPosts[e.node.id] = e.node;

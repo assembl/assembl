@@ -12,13 +12,15 @@ describe('Syntheses component', () => {
           id: 'fooId',
           subject: 'Foo',
           img: { externalUrl: 'http://foo.com/bar' },
-          creationDate: '2017-02-10T09:15:20.707854+00:00'
+          creationDate: '2017-02-10T09:15:20.707854+00:00',
+          post: { id: 'someId' }
         },
         {
           id: 'barId',
           subject: 'Bar',
           img: { externalUrl: 'http://foo.com/bar' },
-          creationDate: '2017-02-10T09:15:20.707854+00:00'
+          creationDate: '2017-02-10T09:15:20.707854+00:00',
+          post: { id: 'someId' }
         }
       ],
       slug: 'fooslug'

@@ -152,7 +152,7 @@ export const getBasename = (path: string) => {
 export const hashLinkScroll = () => {
   const { hash } = window.location;
   if (hash !== '') {
-    const id = hash.replace('#', '');
+    const id = hash.replace('#', '').split('?')[0];
     // Push onto callback queue so it runs after the DOM is updated,
     // this is required when navigating from a different page so that
     // the element is rendered on the page before trying to getElementById.

@@ -364,6 +364,10 @@ class Content(TombstonableMixin, DiscussionBoundBase):
         'with_polymorphic': '*'
     }
 
+    def get_created_phase(self):
+        from assembl.lib.frontend_urls import get_timeline_for_date
+        return get_timeline_for_date(self.discussion, self.creation_date)
+
     def get_subject(self):
         return self.subject
 

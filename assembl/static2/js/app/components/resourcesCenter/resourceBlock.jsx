@@ -33,7 +33,7 @@ const ResourceBlock = (props: ResourceBlockProps) => {
           <div className="title-hyphen" />
           <h1 className="dark-title-1">{title}</h1>
         </div>
-        <div className="resource-body">
+        <div className="page-body">
           {image && (
             <div className="resource-img-container">
               <img src={image.externalUrl} alt="resource" className={imgClassNames} />

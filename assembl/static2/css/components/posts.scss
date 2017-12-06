@@ -122,27 +122,27 @@ $deleted-post-border: 1px solid $grey1 !default;
   }
 
   .post-row {
-    margin: -15px -20px -20px -20px;
-    overflow: hidden;
+    display: flex;
   }
 
   .post-left {
-    padding: 35px;
-
-    .dark-title-3 {
-      line-height: 1.6;
-    }
+    width: 93%;
+    padding: 40px;
   }
 
   .post-right {
-    background-color: $first-color-light;
-    margin-bottom: -99999px !important;
-    padding: 20px 0;
-    padding-bottom: 99999px !important;
+    width: 7%;
+    position: relative;
     text-align: center;
+    background-color: $first-color-light;
+    min-width: 40px;
 
     .answers {
       display: none;
+    }
+
+    .post-actions {
+      width: 100%;
     }
   }
 
@@ -159,6 +159,7 @@ $deleted-post-border: 1px solid $grey1 !default;
     max-width: 600px;
     position: relative;
     text-align: left;
+    padding: 0;
 
     .label {
       display: block;
@@ -237,11 +238,20 @@ $deleted-post-border: 1px solid $grey1 !default;
 
   .overflow-action {
     cursor: pointer;
-    margin: 20px 0 0 5px;
+    margin: 20px 0 0;
     color: $first-color-opacity-70;
 
     &:hover {
       color: $first-color;
+    }
+
+    .assembl-icon-ellipsis-vert {
+      &:before {
+        margin-left: 0;
+        margin-right: 0;
+        width: 100%;
+        padding-left: 3px;
+      }
     }
   }
 
@@ -479,14 +489,32 @@ $deleted-post-border: 1px solid $grey1 !default;
   }
 }
 
+@media screen and (min-width: 993px) {
+  .posts {
+    .post-actions {
+      position: absolute;
+      bottom: 0;
+    }
+
+    .post-right {
+      min-height: 320px;
+    }
+  }
+}
+
 @media screen and (max-width: 992px) {
   .posts {
     .custom-overlay {
       display: inline-block;
     }
 
+    .post-row {
+      display: block;
+    }
+
     .post-right {
       background: none;
+      width: 100%;
 
       .answers {
         float: right;
@@ -496,29 +524,33 @@ $deleted-post-border: 1px solid $grey1 !default;
     }
 
     .post-left {
-      padding: 35px 35px 0;
+      width: 100%;
 
       .answers {
         display: none;
       }
     }
 
-    .post-icons {
-      border-bottom: 1px solid $grey1;
-      border-top: 1px solid $grey1;
-      padding: 18px 0 10px;
+    .post-actions {
+      position: relative;
 
-      .post-action, .overflow-action {
-        display: inline-block;
-        margin: 0 10px;
-      }
+      .post-icons {
+        border-bottom: 1px solid $grey1;
+        border-top: 1px solid $grey1;
+        padding: 18px 0 10px;
 
-      .add-sentiment {
-        display: inline-block;
-        margin: 0;
+        .post-action, .overflow-action {
+          display: inline-block;
+          margin: 0 10px;
+        }
 
-        .sentiment {
-          margin: 0 10px 5px 10px;
+        .add-sentiment {
+          display: inline-block;
+          margin: 0;
+
+          .sentiment {
+            margin: 0 10px 5px 10px;
+          }
         }
       }
     }

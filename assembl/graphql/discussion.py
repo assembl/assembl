@@ -1,6 +1,7 @@
 import os.path
 
 import graphene
+from graphene_sqlalchemy import SQLAlchemyObjectType
 from pyramid.httpexceptions import HTTPUnauthorized
 from pyramid.security import Everyone
 
@@ -9,10 +10,24 @@ from assembl.auth import IF_OWNED, CrudPermissions
 from assembl.auth.util import get_permissions
 
 from .document import Document
+from .types import SecureObjectType
 from .langstring import (
     LangStringEntry, LangStringEntryInput, resolve_langstring,
     resolve_langstring_entries, update_langstring_from_input_entries)
 from .utils import abort_transaction_on_exception
+
+
+class Discussion(SecureObjectType, SQLAlchemyObjectType):
+    class Meta:
+        model = models.Discussion
+        only_fields = ('id',)
+
+    homepage_url = graphene.String()
+
+    def resolve_homepage_url(self, args, context, info):
+        # TODO: Remove this resolver and add URLString to
+        # the Graphene SQLA converters list
+        return self.homepage_url
 
 
 class LocalePreference(graphene.ObjectType):
@@ -78,6 +93,42 @@ class ResourcesCenter(graphene.ObjectType):
         for attachment in discussion.attachments:
             if attachment.attachmentPurpose == 'RESOURCES_CENTER_HEADER_IMAGE':
                 return attachment.document
+
+
+class LegalNoticeAndTerms(graphene.ObjectType):
+
+    legal_notice = graphene.String(lang=graphene.String())
+    terms_and_conditions = graphene.String(lang=graphene.String())
+    legal_notice_entries = graphene.List(LangStringEntry)
+    terms_and_conditions_entries = graphene.List(LangStringEntry)
+
+    def resolve_legal_notice(self, args, context, info):
+        """Legal notice value in given locale."""
+        discussion_id = context.matchdict['discussion_id']
+        discussion = models.Discussion.get(discussion_id)
+        return resolve_langstring(discussion.legal_notice, args.get('lang'))
+
+    def resolve_terms_and_conditions(self, args, context, info):
+        """Terms and conditions value in given locale."""
+        discussion_id = context.matchdict['discussion_id']
+        discussion = models.Discussion.get(discussion_id)
+        return resolve_langstring(discussion.terms_and_conditions, args.get('lang'))
+
+    def resolve_legal_notice_entries(self, args, context, info):
+        discussion_id = context.matchdict['discussion_id']
+        discussion = models.Discussion.get(discussion_id)
+        if discussion.legal_notice:
+            return resolve_langstring_entries(discussion, 'legal_notice')
+
+        return []
+
+    def resolve_terms_and_conditions_entries(self, args, context, info):
+        discussion_id = context.matchdict['discussion_id']
+        discussion = models.Discussion.get(discussion_id)
+        if discussion.terms_and_conditions:
+            return resolve_langstring_entries(discussion, 'terms_and_conditions')
+
+        return []
 
 
 class UpdateResourcesCenter(graphene.Mutation):
@@ -183,3 +234,100 @@ class UpdateDiscussionPreferences(graphene.Mutation):
             languages=[LocalePreference(locale=x) for
                        x in discussion.discussion_locales])
         return UpdateDiscussionPreferences(preferences=discussion_pref)
+
+
+class UpdateLegalNoticeAndTerms(graphene.Mutation):
+    class Input:
+        legal_notice_entries = graphene.List(LangStringEntryInput)
+        terms_and_conditions_entries = graphene.List(LangStringEntryInput)
+
+    legal_notice_and_terms = graphene.Field(lambda: LegalNoticeAndTerms)
+
+    @staticmethod
+    @abort_transaction_on_exception
+    def mutate(root, args, context, info):
+        cls = models.Discussion
+        discussion_id = context.matchdict['discussion_id']
+        discussion = models.Discussion.get(discussion_id)
+        user_id = context.authenticated_userid or Everyone
+
+        permissions = get_permissions(user_id, discussion_id)
+        allowed = discussion.user_can(
+            user_id, CrudPermissions.UPDATE, permissions)
+        if not allowed:
+            raise HTTPUnauthorized()
+
+        with cls.default_db.no_autoflush as db:
+            legal_notice_entries = args.get('legal_notice_entries')
+            if legal_notice_entries is not None and len(legal_notice_entries) == 0:
+                raise Exception(
+                    'Legal notice entries needs at least one entry')
+                # Better to have this message than
+                # 'NoneType' object has no attribute 'owner_object'
+                # when creating the saobj below if title=None
+
+            update_langstring_from_input_entries(
+                discussion, 'legal_notice', legal_notice_entries)
+
+            terms_and_conditions_entries = args.get(
+                'terms_and_conditions_entries')
+            if terms_and_conditions_entries is not None and len(terms_and_conditions_entries) == 0:
+                raise Exception(
+                    'Terms and conditions entries needs at least one entry')
+                # Better to have this message than
+                # 'NoneType' object has no attribute 'owner_object'
+                # when creating the saobj below if title=None
+
+            update_langstring_from_input_entries(
+                discussion, 'terms_and_conditions', terms_and_conditions_entries)
+
+        db.flush()
+        legal_notice_and_terms = LegalNoticeAndTerms()
+        return UpdateLegalNoticeAndTerms(legal_notice_and_terms=legal_notice_and_terms)
+
+
+class VisitsAnalytics(graphene.ObjectType):
+
+    sum_visits_length = graphene.Int()
+    nb_pageviews = graphene.Int()
+    nb_uniq_pageviews = graphene.Int()
+
+    @classmethod
+    def query_analytics(cls, args, context, info, single_metric=None):
+        discussion_id = context.matchdict['discussion_id']
+        discussion = models.Discussion.get(discussion_id)
+        start = args.get('start_date') or None
+        end = args.get('end_date') or None
+        try:
+            if single_metric is not None:
+                data = discussion.get_visits_time_series_analytics(start, end, [single_metric])
+                return data[single_metric]
+            else:
+                return discussion.get_visits_time_series_analytics(start, end)
+        except ValueError:
+            return None
+
+    def generic_resolver(self, args, context, info, field_name):
+        val = getattr(self, field_name, None)
+        if val is not None:
+            return val
+        return VisitsAnalytics.query_analytics(args, context, info, field_name)
+
+    @classmethod
+    def build_from_full_query(cls, args, context, info):
+        data = VisitsAnalytics.query_analytics(args, context, info)
+        if not data:
+            return VisitsAnalytics(sum_visits_length=None, nb_pageviews=None, nb_uniq_pageviews=None)
+        sum_visits_length = data.get('sum_visits_length', None)
+        nb_pageviews = data.get('nb_pageviews', None)
+        nb_uniq_pageviews = data.get('nb_uniq_pageviews', None)
+        return VisitsAnalytics(sum_visits_length=sum_visits_length, nb_pageviews=nb_pageviews, nb_uniq_pageviews=nb_uniq_pageviews)
+
+    def resolve_sum_visits_length(self, args, context, info):
+        return self.generic_resolver(args, context, info, "sum_visits_length")
+
+    def resolve_nb_pageviews(self, args, context, info):
+        return self.generic_resolver(args, context, info, "nb_pageviews")
+
+    def resolve_nb_uniq_pageviews(self, args, context, info):
+        return self.generic_resolver(args, context, info, "nb_uniq_pageviews")

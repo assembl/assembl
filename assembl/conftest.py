@@ -25,6 +25,7 @@ from assembl.tests.fixtures.user import *
 from assembl.tests.fixtures.user_language_preference import *
 from assembl.tests.fixtures.idea_message_columns import *
 from assembl.tests.fixtures.sections import *
+from assembl.tests.fixtures.timeline import *
 
 
 engine = None
@@ -54,7 +55,8 @@ def pytest_configure(config):
     app_settings = get_appsettings(app_settings_file, 'assembl')
     set_config(app_settings)
     # Use an unzopish sessionmaker
-    configure_engine(app_settings, session_maker=initialize_session_maker(False))
+    configure_engine(
+        app_settings, session_maker=initialize_session_maker(False))
     from .lib.zmqlib import configure_zmq
     configure_zmq(app_settings['changes.socket'],
                   app_settings['changes.multiplex'])

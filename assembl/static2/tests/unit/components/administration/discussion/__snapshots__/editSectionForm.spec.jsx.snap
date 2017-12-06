@@ -52,6 +52,7 @@ exports[`DumbEditSectionForm component should render a form to edit a section of
     </label>
     <input
       className="form-control"
+      disabled={undefined}
       id={undefined}
       onBlur={[Function]}
       onChange={[Function]}

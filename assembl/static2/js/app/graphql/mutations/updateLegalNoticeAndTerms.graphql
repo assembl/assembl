@@ -1,0 +1,17 @@
+mutation UpdateLegalNoticeAndTerms(
+  $legalNoticeEntries: [LangStringEntryInput]!
+  $termsAndConditionsEntries: [LangStringEntryInput]!
+) {
+  updateLegalNoticeAndTerms(legalNoticeEntries: $legalNoticeEntries, termsAndConditionsEntries: $termsAndConditionsEntries) {
+    legalNoticeAndTerms {
+      legalNoticeEntries {
+        localeCode
+        value
+      }
+      termsAndConditionsEntries {
+        localeCode
+        value
+      }
+    }
+  }
+}

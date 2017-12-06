@@ -1,9 +1,12 @@
 import React from 'react';
+import { connect } from 'react-redux';
+import { compose, graphql } from 'react-apollo';
 import { Translate } from 'react-redux-i18n';
-import { Link } from 'react-router';
+import { Link, browserHistory } from 'react-router';
 import { NavDropdown, MenuItem } from 'react-bootstrap';
 import { getContextual, get } from '../../utils/routeMap';
-import { getConnectedUserName, getConnectedUserId, getDiscussionSlug } from '../../utils/globalFunctions';
+import UserQuery from '../../graphql/userQuery.graphql';
+import withLoadingIndicator from './withLoadingIndicator';
 
 class ProfileIcon extends React.Component {
   constructor(props) {
@@ -25,37 +28,67 @@ class ProfileIcon extends React.Component {
     });
   }
   render() {
-    const slug = { slug: getDiscussionSlug() };
-    const connectedUserId = getConnectedUserId();
-    const connectedUserName = getConnectedUserName();
+    const { slug, connectedUserId, displayName } = this.props;
     const dropdownUser = (
       <div className="inline">
         <span className="assembl-icon-profil grey" />
-        <span className="username">{connectedUserName}</span>
+        <span className="username">{displayName}</span>
       </div>
     );
     return (
       <div className="right avatar">
         {!connectedUserId && (
-          <Link to={`${getContextual('login', slug)}?next=${this.state.next}`}>
+          <Link to={`${getContextual('login', { slug: slug })}?next=${this.state.next}`}>
             <div className="connection">
               <Translate value="navbar.connection" />
             </div>
           </Link>
         )}
-        {connectedUserId &&
-          connectedUserName && (
+        {connectedUserId && (
+          <div>
             <ul className="dropdown-xs">
               <NavDropdown pullRight title={dropdownUser} id="user-dropdown">
-                <MenuItem href={`${getContextual('oldLogout', slug)}?next=${get('home', slug)}`}>
+                <MenuItem
+                  onClick={() => {
+                    browserHistory.push(get('profile', { slug: slug, userId: connectedUserId }));
+                  }}
+                >
+                  <Translate value="navbar.profile" />
+                </MenuItem>
+                <MenuItem href={`${getContextual('oldLogout', { slug: slug })}?next=${get('home', { slug: slug })}`}>
                   <Translate value="navbar.logout" />
                 </MenuItem>
               </NavDropdown>
             </ul>
-          )}
+          </div>
+        )}
       </div>
     );
   }
 }
 
-export default ProfileIcon;
+const mapStateToProps = ({ context, debate }) => {
+  return {
+    slug: debate.debateData.slug,
+    connectedUserId: context.connectedUserId,
+    id: btoa(`AgentProfile:${context.connectedUserId}`)
+  };
+};
+
+export default compose(
+  connect(mapStateToProps),
+  graphql(UserQuery, {
+    props: ({ data }) => {
+      if (data.loading) {
+        return { loading: true };
+      }
+      if (data.error) {
+        return { error: data.error };
+      }
+      return {
+        displayName: data.user.displayName
+      };
+    }
+  }),
+  withLoadingIndicator()
+)(ProfileIcon);

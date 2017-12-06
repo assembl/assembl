@@ -8,6 +8,7 @@ import { connect } from 'react-redux';
 import { updateThematics } from '../actions/adminActions';
 import { updateResources, updateResourcesCenterPage } from '../actions/adminActions/resourcesCenter';
 import { updateSections } from '../actions/adminActions/adminSections';
+import { updateLegalNoticeAndTerms } from '../actions/adminActions/legalNoticeAndTerms';
 import withLoadingIndicator from '../components/common/withLoadingIndicator';
 import Menu from '../components/administration/menu';
 import LanguageMenu from '../components/administration/languageMenu';
@@ -17,6 +18,7 @@ import ResourcesQuery from '../graphql/ResourcesQuery.graphql';
 import ResourcesCenterPage from '../graphql/ResourcesCenterPage.graphql';
 import SectionsQuery from '../graphql/SectionsQuery.graphql';
 import TabsConditionQuery from '../graphql/TabsConditionQuery.graphql';
+import LegalNoticeAndTermsQuery from '../graphql/LegalNoticeAndTerms.graphql';
 import { convertEntriesToRawContentState } from '../utils/draftjs';
 
 export function convertVideoDescriptions(thematics) {
@@ -49,6 +51,7 @@ class Administration extends React.Component {
     this.putResourcesCenterInStore = this.putResourcesCenterInStore.bind(this);
     this.putThematicsInStore = this.putThematicsInStore.bind(this);
     this.toggleLanguageMenu = this.toggleLanguageMenu.bind(this);
+    this.putLegalNoticeAndTermsInStore = this.putLegalNoticeAndTermsInStore.bind(this);
     this.state = {
       showLanguageMenu: true
     };
@@ -59,6 +62,7 @@ class Administration extends React.Component {
     this.putResourcesInStore(this.props.resources);
     this.putThematicsInStore(this.props.data);
     this.putSectionsInStore(this.props.sections);
+    this.putLegalNoticeAndTermsInStore(this.props.legalNoticeAndTerms);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -116,6 +120,18 @@ class Administration extends React.Component {
     this.props.updateSections(filteredSections.sections);
   }
 
+  putLegalNoticeAndTermsInStore(legalNoticeAndTerms) {
+    const filtered = filter(LegalNoticeAndTermsQuery, { legalNoticeAndTerms: legalNoticeAndTerms });
+    const lnat = filtered.legalNoticeAndTerms;
+    const convertedLegalNoticeAndTerms = {
+      legalNoticeEntries: lnat.legalNoticeEntries ? convertEntriesToRawContentState(lnat.legalNoticeEntries) : null,
+      termsAndConditionsEntries: lnat.termsAndConditionsEntries
+        ? convertEntriesToRawContentState(lnat.termsAndConditionsEntries)
+        : null
+    };
+    this.props.updateLegalNoticeAndTerms(convertedLegalNoticeAndTerms);
+  }
+
   render() {
     const {
       children,
@@ -126,7 +142,8 @@ class Administration extends React.Component {
       refetchResources,
       refetchResourcesCenter,
       refetchTabsConditions,
-      refetchSections
+      refetchSections,
+      refetchLegalNoticeAndTerms
     } = this.props;
     const { phase } = params;
     const { timeline } = this.props.debate.debateData;
@@ -150,6 +167,7 @@ class Administration extends React.Component {
                     refetchResources={refetchResources}
                     refetchSections={refetchSections}
                     refetchResourcesCenter={refetchResourcesCenter}
+                    refetchLegalNoticeAndTerms={refetchLegalNoticeAndTerms}
                   />
                 </Col>
                 <Col xs={12} md={1} />
@@ -204,6 +222,9 @@ const mapDispatchToProps = (dispatch) => {
     },
     updateResourcesCenterPage: ({ titleEntries, headerImage }) => {
       dispatch(updateResourcesCenterPage(titleEntries, headerImage));
+    },
+    updateLegalNoticeAndTerms: (legalNoticeAndTerms) => {
+      return dispatch(updateLegalNoticeAndTerms(legalNoticeAndTerms));
     }
   };
 };
@@ -219,12 +240,25 @@ const mergeLoadingAndHasErrors = (WrappedComponent) => {
       sectionsHasErrors,
       sectionsLoading,
       tabsConditionsLoading,
-      tabsConditionsHasErrors
+      tabsConditionsHasErrors,
+      legalNoticeAndTermsLoading,
+      legalNoticeAndTermsHasErrors
     } = props;
     const hasErrors =
-      resourcesHasErrors || resourcesCenterHasErrors || tabsConditionsLoading || sectionsHasErrors || (data && data.error);
+      resourcesHasErrors ||
+      resourcesCenterHasErrors ||
+      tabsConditionsHasErrors ||
+      legalNoticeAndTermsHasErrors ||
+      sectionsHasErrors ||
+      (data && data.error);
     const loading =
-      resourcesLoading || resourcesCenterLoading || tabsConditionsHasErrors || sectionsLoading || (data && data.loading);
+      resourcesLoading ||
+      resourcesCenterLoading ||
+      tabsConditionsLoading ||
+      legalNoticeAndTermsLoading ||
+      sectionsLoading ||
+      (data && data.loading);
+
     return <WrappedComponent {...props} hasErrors={hasErrors} loading={loading} />;
   };
 };
@@ -235,6 +269,11 @@ export default compose(
     options: { variables: { identifier: 'survey' } }
   }),
   graphql(TabsConditionQuery, {
+    options: ({ i18n }) => {
+      return {
+        variables: { lang: i18n.locale }
+      };
+    },
     // pass refetchTabsConditions to re-render navigation menu if there is a change in resources
     props: ({ data }) => {
       if (data.loading) {
@@ -306,16 +345,39 @@ export default compose(
           sectionsLoading: true
         };
       }
+
       if (data.error) {
         return {
           sectionsHasErrors: true
         };
       }
+
       return {
         sectionsLoading: data.loading,
         sectionsHasErrors: data.error,
         refetchSections: data.refetch,
         sections: data.sections
+      };
+    }
+  }),
+  graphql(LegalNoticeAndTermsQuery, {
+    props: ({ data }) => {
+      if (data.loading) {
+        return {
+          legalNoticeAndTermsLoading: true
+        };
+      }
+      if (data.error) {
+        return {
+          legalNoticeAndTermsHasErrors: true
+        };
+      }
+
+      return {
+        legalNoticeAndTermsLoading: data.loading,
+        legalNoticeAndTermsHasErrors: data.error,
+        refetchLegalNoticeAndTerms: data.refetch,
+        legalNoticeAndTerms: data.legalNoticeAndTerms
       };
     }
   }),

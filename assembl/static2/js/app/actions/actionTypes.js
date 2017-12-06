@@ -23,6 +23,9 @@ export const CREATE_SECTION: 'CREATE_SECTION' = 'CREATE_SECTION';
 export const DELETE_SECTION: 'DELETE_SECTION' = 'DELETE_SECTION';
 export const MOVE_UP_SECTION: 'MOVE_UP_SECTION' = 'MOVE_UP_SECTION';
 export const MOVE_DOWN_SECTION: 'MOVE_DOWN_SECTION' = 'MOVE_DOWN_SECTION';
+export const UPDATE_LEGAL_NOTICE_ENTRY: 'UPDATE_LEGAL_NOTICE_ENTRY' = 'UPDATE_LEGAL_NOTICE_ENTRY';
+export const UPDATE_TERMS_AND_CONDITIONS_ENTRY: 'UPDATE_TERMS_AND_CONDITIONS_ENTRY' = 'UPDATE_TERMS_AND_CONDITIONS_ENTRY';
+export const UPDATE_LEGAL_NOTICE_AND_TERMS: 'UPDATE_LEGAL_NOTICE_AND_TERMS' = 'UPDATE_LEGAL_NOTICE_AND_TERMS';
 
 export type UpdateContentLocaleById = {
   type: typeof UPDATE_CONTENT_LOCALE_BY_ID,
@@ -170,6 +173,24 @@ export type DownSection = {
   type: typeof MOVE_DOWN_SECTION
 };
 
+export type UpdateLegalNoticeEntry = {
+  type: typeof UPDATE_LEGAL_NOTICE_ENTRY,
+  locale: string,
+  value: string
+};
+
+export type UpdateTermsAndConditionsEntry = {
+  type: typeof UPDATE_TERMS_AND_CONDITIONS_ENTRY,
+  locale: string,
+  value: string
+};
+
+export type UpdateLegalNoticeAndTerms = {
+  legalNoticeEntries: Array<LangStringEntryInput>,
+  termsAndConditionsEntries: Array<LangStringEntryInput>,
+  type: typeof UPDATE_LEGAL_NOTICE_AND_TERMS
+};
+
 type BasicAction = {
   type: string
 };
@@ -189,4 +210,14 @@ type ResourcesCenterActions =
   | UpdateResourceTitle
   | UpdateResources;
 
-export type Action = UpdateContentLocaleById | UpdateContentLocaleByOriginalLocale | ResourcesCenterActions | BasicAction;
+type LegalNoticeAndTermsActions = UpdateLegalNoticeEntry | UpdateTermsAndConditionsEntry | UpdateLegalNoticeAndTerms;
+
+type SectionActions = CreateSection | DeleteSection | UpSection | DownSection;
+
+export type Action =
+  | UpdateContentLocaleById
+  | UpdateContentLocaleByOriginalLocale
+  | ResourcesCenterActions
+  | LegalNoticeAndTermsActions
+  | SectionActions
+  | BasicAction;

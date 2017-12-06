@@ -189,7 +189,7 @@ def is_login_route(route_name):
         "do_password_change")
 
 
-def admin_react_view(request):
+def react_admin_view(request):
     """
     Checks that user is logged in and is admin of discussion
     """
@@ -386,22 +386,22 @@ def includeme(config):
     config.add_route('new_home', '/{discussion_slug}/home')
     config.add_route('bare_slug', '/{discussion_slug}')
     config.add_route('auto_bare_slug', '/{discussion_slug}/')
-    config.add_route('admin_react_page', '/{discussion_slug}/administration*extra_path')
+    config.add_route('react_admin_page', '/{discussion_slug}/administration*extra_path')
     config.add_route('purl_posts', '/debate/{discussion_slug}/posts/*remainder')
     config.add_route('legacy_purl_posts', '/{discussion_slug}/posts/*remainder')
-    config.add_route('general_react_page', '/{discussion_slug}/*extra_path')
+    config.add_route('react_general_page', '/{discussion_slug}/*extra_path')
 
     admin_react_routes = [
-                        "admin_react_page",
-                    ]
+        "react_admin_page",
+    ]
     react_routes = [
-                        "new_home",
-                        "bare_slug",
-                        "new_styleguide",
-                        "general_react_page"
-                    ]
+        "new_home",
+        "bare_slug",
+        "new_styleguide",
+        "react_general_page"
+    ]
 
-    register_react_views(config, admin_react_routes, admin_react_view)
+    register_react_views(config, admin_react_routes, react_admin_view)
     register_react_views(config, react_routes)
 
     # Use these routes to test global views

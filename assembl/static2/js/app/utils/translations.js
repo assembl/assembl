@@ -86,13 +86,14 @@ const Translations = {
       resourcesCenter: "Ressources",
       community: "communauté",
       connection: "Connexion",
-      profile: "Profil",
+      profile: "Mon profil",
       logout: "Se déconnecter",
       administration: "Administration",
       syntheses: "Synthèses"
     },
     footer: {
-      terms: "Conditions Générales d'Utilisation",
+      terms: "Conditions générales d'utilisation",
+      legalNotice: "Mentions légales",
       socialMedias: "Suivez-nous sur"
     },
     login: {
@@ -142,7 +143,8 @@ const Translations = {
       contribution: "contributions",
       participant: "participants",
       visit: "visites",
-      viewedPages: "pages vues",
+      pageViews: "pages vues",
+      sumVisitsLength: "temps passé global",
       partners: "Partenaires",
       themesTitle: "Les thématiques en cours",
       themesSubtitle: "Retrouvez vos discussions à la unes, des plus polémiques au plus plébiscitées",
@@ -269,7 +271,15 @@ const Translations = {
       }
     },
     profile: {
-      panelTitle: "Bienvenue dans la page profil d'Assembl"
+      panelTitle: "Votre compte",
+      personalInfos: "Informations personnelles",
+      userName: "Nom d'utilisateur",
+      fullname: "Nom complet",
+      email: "Email",
+      save: "Enregistrer",
+      password: "Mot de passe",
+      changePassword: "Modifier",
+      saveSuccess: "Votre profil a été mis à jour avec succès"
     },
     loading: {
       wait: "Veuillez patienter"
@@ -281,8 +291,11 @@ const Translations = {
     notFound: {
       panelTitle: "Désolé, cette page n'existe pas"
     },
-    terms: {
-      panelTitle: "Conditions Générales d'Utilisations"
+    termsAndConditions: {
+      headerTitle: "Conditions générales d'utilisation"
+    },
+    legalNotice: {
+      headerTitle: "Mentions légales"
     },
     administration: {
       addThematic: "Ajouter une thématique",
@@ -299,8 +312,9 @@ const Translations = {
       down: "Descendre",
       menu: {
         phase: "Phase %{count} - %{description}",
-        language: "Editer la langue du débat",
-        sections: "Editer les rubriques du débat"
+        language: "Éditer la langue du débat",
+        sections: "Éditer les rubriques du débat",
+        legalNoticeAndTerms: "CGU & Mentions légales"
       },
       noTimeline: "Aucune timeline n'a été configurée pour ce débat.",
       survey: {
@@ -324,7 +338,8 @@ const Translations = {
       annotation: "Module à renseigner obligatoirement. Les champs * sont requis.",
       themeNum: "Thématique %{index}",
       discussion: {
-        0: "Langues utilisées"
+        0: "Langues utilisées",
+        3: "Conditions générales d'utilisation & mentions légales"
       },
       languageChoice: "Sélection des langues du débat",
       ph: {
@@ -360,7 +375,12 @@ const Translations = {
       step_x_total: "Section %{num} sur %{total}",
       saveThemes: "Sauvegarder",
       successThemeCreation: "Les thématiques ont été enregistrées avec succès !",
-      successLanguagePreference: "Les langues du débat ont été enregistrées avec succès !"
+      successLanguagePreference: "Les langues du débat ont été enregistrées avec succès !",
+      legalNoticeAndTerms: {
+        legalNoticeLabel: "Mentions légales",
+        termsAndConditionsLabel: "Conditions générales d'utilisation",
+        successSave: "Les CGU et mentions légales ont été enregistrées avec succès !"
+      }
     },
     unauthorizedAdministration: {
       unauthorizedMessage: "Vous n'êtes pas autorisé à accéder à l'administration. Veuillez contacter l'administrateur du site.",
@@ -369,6 +389,9 @@ const Translations = {
     date: {
       format: "D MMMM YYYY",
       format2: "DD-MM-YYYY"
+    },
+    duration: {
+      format: "h [h]"
     }
   },
   en: {
@@ -454,13 +477,14 @@ const Translations = {
       community: "community",
       resourcesCenter: "Resources",
       connection: "Login",
-      profile: "Profile",
+      profile: "My profile",
       logout: "Logout",
       administration: "Administration",
       syntheses: "Syntheses"
     },
     footer: {
-      terms: "Terms and Conditions",
+      terms: "Terms & Conditions",
+      legalNotice: "Legal Notice",
       socialMedias: "Follow us"
     },
     login: {
@@ -509,7 +533,8 @@ const Translations = {
       participant: "participants",
       sentiments: "votes",
       visit: "visits",
-      viewedPages: "Viewed pages",
+      pageViews: "page views",
+      sumVisitsLength: "global time spent",
       partners: "Partners",
       themesTitle: "Ongoing themes",
       themesSubtitle: "Find your most controversial and highly acclaimed discussions on the front page",
@@ -636,7 +661,15 @@ const Translations = {
       }
     },
     profile: {
-      panelTitle: "Welcome to Assembl profile page"
+      panelTitle: "Your account",
+      personalInfos: "Personal informations",
+      userName: "User name",
+      fullname: "Full name",
+      email: "Email",
+      save: "Save",
+      password: "Password",
+      changePassword: "Modify",
+      saveSuccess: "Your profile is updated"
     },
     loading: {
       wait: "Please wait..."
@@ -648,8 +681,11 @@ const Translations = {
     notFound: {
       panelTitle: "Sorry, this page doesn't exist"
     },
-    terms: {
-      panelTitle: "Terms and Conditions"
+    termsAndConditions: {
+      headerTitle: "Terms & Conditions"
+    },
+    legalNotice: {
+      headerTitle: "Legal Notice"
     },
     administration: {
       addThematic: "Add a theme",
@@ -667,7 +703,8 @@ const Translations = {
       menu: {
         phase: "Phase %{count} - %{description}",
         language: "Discussion Language",
-        sections: "Edit Debate Sections"
+        sections: "Edit Debate Sections",
+        legalNoticeAndTerms: "T&C and Legal Notice"
       },
       noTimeline: "No timeline has been configured yet",
       survey: {
@@ -691,7 +728,8 @@ const Translations = {
       annotation: "Module to be completed. * Fields are required.",
       themeNum: "Theme %{index}",
       discussion: {
-        0: "Languages of the Discussion"
+        0: "Languages of the Discussion",
+        3: "Terms & Conditions and Legal Notice"
       },
       languageChoice: "Select desired languages below",
       ph: {
@@ -727,7 +765,12 @@ const Translations = {
       step_x_total: "Section %{num} on %{total}",
       saveThemes: "Save",
       successThemeCreation: "Themes have been saved with success!",
-      successLanguagePreference: "Discussion language preferences have been saved with success!"
+      successLanguagePreference: "Discussion language preferences have been saved with success!",
+      legalNoticeAndTerms: {
+        legalNoticeLabel: "Legal notice",
+        termsAndConditionsLabel: "Terms and conditions",
+        successSave: "The T&C and legal notice have been saved with success!"
+      }
     },
     unauthorizedAdministration: {
       unauthorizedMessage:
@@ -737,6 +780,9 @@ const Translations = {
     date: {
       format: "MMMM Do, YYYY",
       format2: "YYYY-MM-DD"
+    },
+    duration: {
+      format: "h [h]"
     }
   }
 };

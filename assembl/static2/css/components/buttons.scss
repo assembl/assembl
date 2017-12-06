@@ -9,7 +9,7 @@
   transition: color 0.2s ease-in;
 
   &:hover, &:focus, &:active, &:focus:active, &:active:hover, &[disabled]:hover {
-    color: invert($text-color); /* opposite of current non-hover color */
+    color: #fff; /* opposite of current non-hover color */
     border-color: $border-color;
     background-color: $background-color;
     text-decoration: none;

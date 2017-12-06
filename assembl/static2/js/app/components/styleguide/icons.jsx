@@ -58,6 +58,8 @@ const icons = [
   'assembl-icon-text-align-right',
   'assembl-icon-ellipsis',
   'assembl-icon-ellipsis-vert',
+  'assembl-icon-double-page',
+  'assembl-icon-timer',
   'assembl-icon-up-bold',
   'assembl-icon-down-bold'
 ]

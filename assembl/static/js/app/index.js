@@ -25,9 +25,11 @@ if (raven_url.length) {
 ).install();
   var userContext = {id: Ctx.getCurrentUserId()}
   if (Ctx.getCurrentUserId()) {
-    var user = Ctx.getCurrentUser();
-    userContext.name = user.get('name');
-    userContext.email = user.get('preferred_email');
+    userContext.user_id = Ctx.getCurrentUserId();
+    // TODO: do we want to parametrize the old behaviour?
+    // var user = Ctx.getCurrentUser();
+    // userContext.name = user.get('name');
+    // userContext.email = user.get('preferred_email');
   }
   Raven.setUserContext(userContext);
 

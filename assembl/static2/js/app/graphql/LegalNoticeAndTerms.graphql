@@ -1,0 +1,14 @@
+query LegalNoticeAndTerms($lang: String) {
+  legalNoticeAndTerms {
+    legalNotice(lang: $lang)
+    termsAndConditions(lang: $lang)
+    legalNoticeEntries {
+      localeCode
+      value
+    }
+    termsAndConditionsEntries {
+      localeCode
+      value
+    }
+  }
+}

@@ -15,7 +15,9 @@ import {
 } from '../../actions/actionTypes';
 import { updateInLangstringEntries } from '../../utils/i18n';
 
-export const sectionsHaveChanged = (state: boolean = false, action: ReduxAction<Action>) => {
+type SectionsHaveChanged = boolean;
+type SectionsHaveChangedReducer = (SectionsHaveChanged, ReduxAction<Action>) => SectionsHaveChanged;
+export const sectionsHaveChanged: SectionsHaveChangedReducer = (state = false, action) => {
   switch (action.type) {
   case CREATE_SECTION:
   case DELETE_SECTION:
@@ -32,7 +34,9 @@ export const sectionsHaveChanged = (state: boolean = false, action: ReduxAction<
   }
 };
 
-export const sectionsInOrder = (state: List<string> = List(), action: ReduxAction<Action>) => {
+type SectionsInOrder = List<string>;
+type SectionsInOrderReducer = (SectionsInOrder, ReduxAction<Action>) => SectionsInOrder;
+export const sectionsInOrder: SectionsInOrderReducer = (state = List(), action) => {
   switch (action.type) {
   case CREATE_SECTION:
     return state.push(action.id);
@@ -70,8 +74,9 @@ const defaultResource = Map({
   url: '',
   type: 'CUSTOM'
 });
-
-export const sectionsById = (state: Map<string, Map> = Map(), action: ReduxAction<Action>) => {
+type SectionsById = Map<string, Map>;
+type SectionsByIdReducer = (SectionsById, ReduxAction<Action>) => SectionsById;
+export const sectionsById: SectionsByIdReducer = (state = Map(), action) => {
   switch (action.type) {
   case CREATE_SECTION:
     return state.set(action.id, defaultResource.set('id', action.id).set('order', action.order));
@@ -110,8 +115,15 @@ export const sectionsById = (state: Map<string, Map> = Map(), action: ReduxActio
   }
 };
 
-export default combineReducers({
+export type AdminSectionsReducers = {
+  sectionsHaveChanged: SectionsHaveChangedReducer,
+  sectionsInOrder: SectionsInOrderReducer,
+  sectionsById: SectionsByIdReducer
+};
+const reducers: AdminSectionsReducers = {
   sectionsHaveChanged: sectionsHaveChanged,
   sectionsInOrder: sectionsInOrder,
   sectionsById: sectionsById
-});
+};
+
+export default combineReducers(reducers);
