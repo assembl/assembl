@@ -40,13 +40,10 @@ const ManageSectionsForm = ({ sections, selectedLocale, createSection }: ManageS
 };
 
 const mapStateToProps = (state) => {
-  const { sectionsInOrder, sectionsById } = state.admin.sections;
-  const sections = sectionsInOrder.filter((id) => {
-    return !sectionsById.get(id).get('toDelete');
-  });
+  const { sectionsInOrder } = state.admin.sections;
   return {
     selectedLocale: state.admin.selectedLocale,
-    sections: sections
+    sections: sectionsInOrder
   };
 };
 

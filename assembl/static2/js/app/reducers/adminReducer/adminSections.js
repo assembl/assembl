@@ -36,6 +36,10 @@ export const sectionsInOrder = (state: List<string> = List(), action: ReduxActio
   switch (action.type) {
   case CREATE_SECTION:
     return state.push(action.id);
+  case DELETE_SECTION: {
+    const idx = state.indexOf(action.id);
+    return state.delete(idx);
+  }
   case UPDATE_SECTIONS: {
     const sections = action.sections.sort((a, b) => {
       return a.order - b.order;
@@ -47,22 +51,12 @@ export const sectionsInOrder = (state: List<string> = List(), action: ReduxActio
     );
   }
   case MOVE_UP_SECTION: {
-    const idIndex = state.findIndex((item) => {
-      return item === action.id;
-    });
-    const previousId = state.get(idIndex - 1);
-    const newState = state.set(idIndex, previousId);
-    const newState2 = newState.set(idIndex - 1, action.id);
-    return newState2;
+    const idx = state.indexOf(action.id);
+    return state.delete(idx).insert(idx - 1, action.id);
   }
   case MOVE_DOWN_SECTION: {
-    const idIndex = state.findIndex((item) => {
-      return item === action.id;
-    });
-    const nextId = state.get(idIndex + 1);
-    const newState = state.set(idIndex, nextId);
-    const newState2 = newState.set(idIndex + 1, action.id);
-    return newState2;
+    const idx = state.indexOf(action.id);
+    return state.delete(idx).insert(idx + 1, action.id);
   }
   default:
     return state;
