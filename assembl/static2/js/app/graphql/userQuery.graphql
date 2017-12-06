@@ -1,0 +1,11 @@
+query User($id: ID!) {
+  user: node(id: $id) {
+    ... on AgentProfile {
+      id
+      name
+      username
+      displayName
+      email
+    }
+  }
+}

@@ -13,6 +13,7 @@ exports[`DumbPageForm component should render a form to update the resources cen
     </label>
     <input
       className="form-control"
+      disabled={undefined}
       id={undefined}
       onBlur={[Function]}
       onChange={[Function]}

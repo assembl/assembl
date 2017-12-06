@@ -165,7 +165,7 @@ class Post extends React.Component {
     return (
       <div className={postIndex < 3 || moreProposals ? 'shown box' : 'hidden box'}>
         <div className="content">
-          <PostCreator name={post.creator.name} />
+          <PostCreator name={post.creator.displayName} />
           {debateData.translationEnabled ? (
             <PostTranslate
               contentLocale={contentLocale}

@@ -1,0 +1,60 @@
+.profile {
+  .profile-form {
+    width: 360px;
+    margin: 35px 0 0 100px;
+
+    .control-label {
+      font-size: $font-size-xxs;
+      text-align: left;
+      width: 100%;
+    }
+  }
+
+  .border-left {
+    border-left-color: $grey5;
+    padding-left: 6%;
+  }
+
+  .assembl-icon-profil {
+    color: $grey5;
+
+    &:before {
+      font-size: 80px;
+    }
+  }
+
+  .button-submit {
+    width: 150px;
+  }
+
+  .dark-title-4 {
+    margin-top: 28px;
+  }
+
+  .help-block {
+    color: $error;
+    text-align: left;
+    font-family: $font-family6;
+    font-size: $font-size-xs;
+  }
+
+  .has-error {
+    .form-control {
+      border: 1px solid $error !important;
+      border-radius: 0;
+      box-shadow: none;
+    }
+  }
+
+  .form-control {
+    border: $white;
+    border-radius: 0;
+    box-shadow: none;
+
+    &:focus {
+      border-radius: 0;
+      border: 1px solid $second-color !important;
+      box-shadow: none;
+    }
+  }
+}

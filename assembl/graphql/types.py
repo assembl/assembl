@@ -146,7 +146,7 @@ class SecureObjectType(object):
 
         # The user can't retrieve a content from a different discussion
         discussion_id = context.matchdict['discussion_id']
-        if result.discussion_id != discussion_id:
+        if hasattr(result, 'discussion_id') and result.discussion_id != discussion_id:
             raise HTTPUnauthorized()
 
         user_id = context.authenticated_userid or Everyone

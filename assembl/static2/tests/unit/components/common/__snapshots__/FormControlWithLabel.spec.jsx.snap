@@ -6,6 +6,7 @@ exports[`FormControlWithLabel component should render a form control with label 
 >
   <my-class
     className="form-control"
+    disabled={false}
     id="my-input"
     onBlur={[Function]}
     onChange={[Function]}
@@ -28,6 +29,7 @@ exports[`FormControlWithLabel component should render a form control with label 
   </label>
   <my-class
     className="form-control"
+    disabled={false}
     id="my-input"
     onBlur={[Function]}
     onChange={[Function]}

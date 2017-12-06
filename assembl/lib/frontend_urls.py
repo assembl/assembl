@@ -129,7 +129,7 @@ class FrontendUrls(object):
         'groupSpec': '/G/*remainder',
         # 'purl_posts': '/posts*remainder',
         'purl_idea': '/idea*remainder',
-        'purl_user': '/profile*remainder',
+        # 'purl_user': '/profile*remainder',
         'purl_widget': '/widget*remainder'
     }
     """

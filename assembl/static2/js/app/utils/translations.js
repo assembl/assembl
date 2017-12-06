@@ -86,7 +86,7 @@ const Translations = {
       resourcesCenter: "Ressources",
       community: "communauté",
       connection: "Connexion",
-      profile: "Profil",
+      profile: "Mon profil",
       logout: "Se déconnecter",
       administration: "Administration",
       syntheses: "Synthèses"
@@ -271,7 +271,15 @@ const Translations = {
       }
     },
     profile: {
-      panelTitle: "Bienvenue dans la page profil d'Assembl"
+      panelTitle: "Votre compte",
+      personalInfos: "Informations personnelles",
+      userName: "Nom d'utilisateur",
+      fullname: "Nom complet",
+      email: "Email",
+      save: "Enregistrer",
+      password: "Mot de passe",
+      changePassword: "Modifier",
+      saveSuccess: "Votre profil a été mis à jour avec succès"
     },
     loading: {
       wait: "Veuillez patienter"
@@ -455,7 +463,7 @@ const Translations = {
       community: "community",
       resourcesCenter: "Resources",
       connection: "Login",
-      profile: "Profile",
+      profile: "My profile",
       logout: "Logout",
       administration: "Administration",
       syntheses: "Syntheses"
@@ -639,7 +647,15 @@ const Translations = {
       }
     },
     profile: {
-      panelTitle: "Welcome to Assembl profile page"
+      panelTitle: "Your account",
+      personalInfos: "Personal informations",
+      userName: "User name",
+      fullname: "Full name",
+      email: "Email",
+      save: "Save",
+      password: "Password",
+      changePassword: "Modify",
+      saveSuccess: "Your profile is updated"
     },
     loading: {
       wait: "Please wait..."
