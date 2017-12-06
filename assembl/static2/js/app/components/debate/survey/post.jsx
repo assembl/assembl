@@ -20,30 +20,10 @@ import { EXTRA_SMALL_SCREEN_WIDTH } from '../../../constants';
 import withLoadingIndicator from '../../common/withLoadingIndicator';
 import ResponsiveOverlayTrigger from '../../common/responsiveOverlayTrigger';
 import { transformLinksInHtml } from '../../../utils/linkify';
+import { withScreenWidth } from '../../common/screenDimensions';
 
 class Post extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      screenWidth: window.innerWidth
-    };
-    this.handleSentiment = this.handleSentiment.bind(this);
-    this.updateDimensions = this.updateDimensions.bind(this);
-  }
-  componentDidMount() {
-    window.addEventListener('resize', this.updateDimensions);
-  }
-  componentWillUnmount() {
-    window.removeEventListener('resize', this.updateDimensions);
-  }
-  updateDimensions() {
-    const screenWidth = window.innerWidth;
-    this.setState({
-      screenWidth: screenWidth
-    });
-  }
-
-  handleSentiment(event, type) {
+  handleSentiment = (event, type) => {
     const { post } = this.props.data;
     const isUserConnected = getConnectedUserId() !== null;
     if (isUserConnected) {
@@ -68,7 +48,7 @@ class Post extends React.Component {
     } else {
       inviteUserToLogin();
     }
-  }
+  };
   handleAddSentiment(target, type) {
     const { id, sentimentCounts, mySentiment } = this.props.data.post;
     this.props
@@ -128,7 +108,7 @@ class Post extends React.Component {
   }
   render() {
     const { post } = this.props.data;
-    const { contentLocale, lang, moreProposals, originalLocale, postIndex, updateLocalContentLocale } = this.props;
+    const { contentLocale, lang, moreProposals, originalLocale, postIndex, updateLocalContentLocale, screenWidth } = this.props;
     const { debateData } = this.props.debate;
     const { bodyEntries } = post;
     const translate = contentLocale !== originalLocale;
@@ -189,7 +169,7 @@ class Post extends React.Component {
           </div>
         </div>
         <div className="statistic">
-          {this.state.screenWidth < EXTRA_SMALL_SCREEN_WIDTH && (
+          {screenWidth < EXTRA_SMALL_SCREEN_WIDTH && (
             <div className="sentiments">
               <ResponsiveOverlayTrigger placement="top" tooltip={likeTooltip} component={likeComponent} />
               <ResponsiveOverlayTrigger placement="top" tooltip={disagreeTooltip} component={disagreeComponent} />
@@ -242,5 +222,6 @@ export default compose(
   graphql(deleteSentimentMutation, {
     name: 'deleteSentiment'
   }),
-  withLoadingIndicator()
+  withLoadingIndicator(),
+  withScreenWidth
 )(Post);

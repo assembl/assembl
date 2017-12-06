@@ -8,6 +8,7 @@ import Auth from './authenticationReducer';
 import Phase from './phaseReducer';
 import Admin from './adminReducer';
 import contentLocale, { defaultContentLocaleMapping } from './contentLocaleReducer';
+import * as screenDimensions from './screenDimensionsReducers';
 
 export default combineReducers({
   i18n: i18nReducer,
@@ -19,5 +20,6 @@ export default combineReducers({
   synthesis: Synthesis,
   auth: Auth,
   phase: Phase,
-  admin: Admin
+  admin: Admin,
+  ...screenDimensions
 });

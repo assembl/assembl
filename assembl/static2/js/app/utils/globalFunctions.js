@@ -142,7 +142,11 @@ export const createEvent = (
   Get basename from a unix or windows path
 */
 export const getBasename = (path: string) => {
-  return path.split('\\').pop().split('/').pop();
+  return path
+    .split('\\')
+    .pop()
+    .split('/')
+    .pop();
 };
 
 export const hashLinkScroll = () => {
@@ -192,4 +196,11 @@ export const isMobile = {
   any: () => {
     return isMobile.android() || isMobile.blackberry() || isMobile.ios() || isMobile.opera() || isMobile.windows();
   }
+};
+
+// works for SCREAMING_SNAKE_CASE, snake_case or cRazY_SNAKE_case
+export const snakeToCamel = (string: string) => {
+  return string.toLowerCase().replace(/_[a-z]/g, (match) => {
+    return match[1].toUpperCase();
+  });
 };

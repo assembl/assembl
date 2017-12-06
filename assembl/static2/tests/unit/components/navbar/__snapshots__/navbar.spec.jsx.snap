@@ -1,0 +1,85 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`AssemblNavbar component should render a BurgerNavbar and a hidden FlatNavbar with a tiny screenWidth 1`] = `
+<div
+  className="background-light"
+>
+  <Uncontrolled(Navbar)
+    bsStyle="default"
+    fixedTop={true}
+    fluid={true}
+  >
+    <div
+      className="nav-bar max-container"
+      id="navbar"
+    >
+      <BurgerNavbar
+        elements={Array []}
+        helpUrl={undefined}
+        location={undefined}
+        logoSrc={undefined}
+        slug={undefined}
+      />
+      <FlatNavbar
+        elements={Array []}
+        helpUrl={undefined}
+        location={undefined}
+        logoSrc={undefined}
+        setWidth={[Function]}
+        slug={undefined}
+        style={
+          Object {
+            "opacity": 0,
+            "position": "absolute",
+            "top": "-200px",
+          }
+        }
+      />
+    </div>
+  </Uncontrolled(Navbar)>
+</div>
+`;
+
+exports[`AssemblNavbar component should render a FlatNavbar with a big screenWidth 1`] = `
+<div
+  className="background-light"
+>
+  <Uncontrolled(Navbar)
+    bsStyle="default"
+    fixedTop={true}
+    fluid={true}
+  >
+    <div
+      className="nav-bar max-container"
+      id="navbar"
+    >
+      <FlatNavbar
+        elements={Array []}
+        helpUrl={undefined}
+        location={undefined}
+        logoSrc={undefined}
+        setWidth={[Function]}
+        slug={undefined}
+        style={Object {}}
+      />
+    </div>
+  </Uncontrolled(Navbar)>
+</div>
+`;
+
+exports[`mapSectionToElement function should return a SectionLink element that matches the snapshot 1`] = `
+<SectionLink
+  options={
+    Object {
+      "phase": "fake_phase",
+      "slug": "fake_slug",
+    }
+  }
+  section={
+    Object {
+      "sectionType": "DEBATE",
+      "title": "fake_title",
+    }
+  }
+/>
+`;
