@@ -1,5 +1,7 @@
-import sys
 import os
+import sys
+import traceback
+
 from pyramid.scripts.pserve import PServeCommand
 
 
@@ -9,6 +11,7 @@ def main(argv=sys.argv, quiet=False):
         os.environ["NODE_ENV"] = "development"
         return command.run()
     except Exception:
+        traceback.print_exc()
         import pdb; pdb.post_mortem()
 
 
