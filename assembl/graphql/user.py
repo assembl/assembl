@@ -1,3 +1,5 @@
+import os
+
 import graphene
 from graphene.relay import Node
 from graphene_sqlalchemy import SQLAlchemyObjectType
@@ -8,6 +10,7 @@ from assembl.auth import CrudPermissions
 from assembl.auth import Everyone, P_SYSADMIN, P_ADMIN_DISC
 from assembl.auth.util import get_permissions
 
+from .document import Document
 from .types import SecureObjectType
 from .utils import abort_transaction_on_exception
 
@@ -23,6 +26,7 @@ class AgentProfile(SecureObjectType, SQLAlchemyObjectType):
     username = graphene.String()
     display_name = graphene.String()
     email = graphene.String()
+    image = graphene.Field(Document)
 
     def resolve_user_id(self, args, context, info):
         return self.id
@@ -45,12 +49,19 @@ class AgentProfile(SecureObjectType, SQLAlchemyObjectType):
         if include_emails or self.id == user_id:
             return self.get_preferred_email()
 
+    def resolve_image(self, args, context, info):
+        for attachment in self.profile_attachments:
+            if attachment.attachmentPurpose == 'PROFILE_PICTURE':
+                return attachment.document
+
 
 class UpdateUser(graphene.Mutation):
     class Input:
         id = graphene.ID(required=True)
         name = graphene.String(required=True)
         username = graphene.String()
+        # this is the identifier of the part in a multipart POST
+        image = graphene.String()
 
     user = graphene.Field(lambda: AgentProfile)
 
@@ -59,6 +70,7 @@ class UpdateUser(graphene.Mutation):
     def mutate(root, args, context, info):
         cls = models.User
         discussion_id = context.matchdict['discussion_id']
+        discussion = models.Discussion.get(discussion_id)
         user_id = context.authenticated_userid or Everyone
 
         global_id = args.get('id')
@@ -74,6 +86,39 @@ class UpdateUser(graphene.Mutation):
         with cls.default_db.no_autoflush as db:
             user.username_p = args.get('username')
             user.real_name_p = args.get('name')
+
+            # add uploaded image as an attachment to the user
+            image = args.get('image')
+            if image is not None:
+                filename = os.path.basename(context.POST[image].filename)
+                mime_type = context.POST[image].type
+                uploaded_file = context.POST[image].file
+                uploaded_file.seek(0)
+                data = uploaded_file.read()
+                document = models.File(
+                    discussion=discussion,
+                    mime_type=mime_type,
+                    title=filename,
+                    data=data)
+                # if there is already an PROFILE_PICTURE, remove it with the
+                # associated document
+                images = [
+                    att for att in user.profile_attachments
+                    if att.attachmentPurpose == 'PROFILE_PICTURE']
+                if images:
+                    image = images[0]
+                    db.delete(image.document)
+                    user.profile_attachments.remove(image)
+
+                models.AgentProfileAttachment(
+                    document=document,
+                    discussion=discussion,
+                    user=user,
+                    creator_id=context.authenticated_userid,
+                    title=filename,
+                    attachmentPurpose="PROFILE_PICTURE"
+                )
+
             db.flush()
 
         return UpdateUser(user=user)

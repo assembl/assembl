@@ -299,6 +299,7 @@ from .facebook_integration import (
 )
 
 from .attachment import (
+    AgentProfileAttachment,
     DiscussionAttachment,
     Document,
     File,
