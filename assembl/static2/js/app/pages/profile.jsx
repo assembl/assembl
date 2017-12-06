@@ -49,9 +49,9 @@ class Profile extends React.PureComponent<*, ProfileProps, ProfileSate> {
     const { userId } = this.props.params;
     const { location } = this.props;
     if (!connectedUserId) {
-      browserHistory.push(`${getContextual('login', slug)}?next=${location.pathname}`);
+      browserHistory.push(`${getContextual('login', { slug: slug })}?next=${location.pathname}`);
     } else if (connectedUserId !== userId) {
-      browserHistory.push(get('home', slug));
+      browserHistory.push(get('home', { slug: slug }));
     }
   }
   handleUsernameChange = (e) => {
@@ -80,7 +80,8 @@ class Profile extends React.PureComponent<*, ProfileProps, ProfileSate> {
       });
   };
   handlePasswordClick = () => {
-    browserHistory.push(get('ctxRequestPasswordChange'));
+    const { slug } = this.props;
+    browserHistory.push(get('ctxRequestPasswordChange', { slug: slug }));
   };
   render() {
     const { username, name, email } = this.state;
@@ -148,11 +149,12 @@ class Profile extends React.PureComponent<*, ProfileProps, ProfileSate> {
   }
 }
 
-const mapStateToProps = ({ context, debate }) => {
+const mapStateToProps = ({ context, debate }, ownProps) => {
+  const userId = ownProps.params.userId;
   return {
     slug: debate.debateData.slug,
     connectedUserId: context.connectedUserId,
-    id: btoa(`AgentProfile:${context.connectedUserId}`)
+    id: btoa(`AgentProfile:${userId}`)
   };
 };
 
@@ -162,6 +164,10 @@ export default compose(
     props: ({ data }) => {
       if (data.loading) {
         return { loading: true };
+      }
+      if (data.error) {
+        // this is needed to properly redirect to home page in case of error
+        return { error: data.error };
       }
       return {
         username: data.user.username,
