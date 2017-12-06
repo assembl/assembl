@@ -84,6 +84,8 @@ class Profile extends React.PureComponent<*, ProfileProps, ProfileSate> {
   };
   render() {
     const { username, name, email } = this.state;
+    const fullNameLabel = I18n.t('profile.fullname');
+    const emailLabel = I18n.t('profile.email');
     return (
       <div className="profile">
         <div className="content-section">
@@ -111,14 +113,14 @@ class Profile extends React.PureComponent<*, ProfileProps, ProfileSate> {
                       value={username}
                     />
                     <FormControlWithLabel
-                      label={I18n.t('profile.fullname')}
+                      label={`${fullNameLabel}*`}
                       onChange={this.handleFullnameChange}
                       type="text"
                       value={name}
                       required
                     />
                     <FormControlWithLabel
-                      label={I18n.t('profile.email')}
+                      label={`${emailLabel}*`}
                       onChange={this.handleEmailChange}
                       type="email"
                       value={email}
