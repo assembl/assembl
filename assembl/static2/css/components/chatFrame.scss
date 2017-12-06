@@ -12,7 +12,7 @@ $windowHeight: 470px;
   bottom: $buttonMargin;
   z-index: 300;
   display: flex;
-  align-items: right;
+  align-items: flex-end;
   flex-direction: column;
 
   .chatframe-modal {
