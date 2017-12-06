@@ -4496,7 +4496,7 @@ msgstr "Cet utilisateur n'existe pas"
 
 #: assembl/views/api2/auth.py:349
 msgid "This email does not exist"
-msgstr "Cette addresse e-mail ne correspond à aucun compte utilisateur"
+msgstr "Cette adresse e-mail ne correspond à aucun compte utilisateur"
 
 #: assembl/views/api2/auth.py:354
 msgid "Please give an identifier"
