@@ -30,11 +30,12 @@ from assembl.graphql.locale import Locale
 from assembl.graphql.post import (
     CreatePost, DeletePost, UndeletePost, UpdatePost,
     AddPostAttachment, DeletePostAttachment)
-from .resource import CreateResource, DeleteResource, Resource, UpdateResource
-from .sentiment import AddSentiment, DeleteSentiment
-from .synthesis import Synthesis
-from .user import UpdateUser
-from .utils import get_root_thematic_for_phase, get_fields
+from assembl.graphql.resource import (
+    CreateResource, DeleteResource, Resource, UpdateResource)
+from assembl.graphql.sentiment import AddSentiment, DeleteSentiment
+from assembl.graphql.synthesis import Synthesis
+from assembl.graphql.user import UpdateUser
+from assembl.graphql.utils import get_root_thematic_for_phase, get_fields
 
 
 convert_sqlalchemy_type.register(EmailString)(convert_column_to_string)
