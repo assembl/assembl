@@ -28,11 +28,11 @@ class ProfileIcon extends React.Component {
     });
   }
   render() {
-    const { slug, connectedUserId, username, name } = this.props;
+    const { slug, connectedUserId, displayName } = this.props;
     const dropdownUser = (
       <div className="inline">
         <span className="assembl-icon-profil grey">&nbsp;</span>
-        <span className="username">{username || name}</span>
+        <span className="username">{displayName}</span>
       </div>
     );
     return (
@@ -44,25 +44,24 @@ class ProfileIcon extends React.Component {
             </div>
           </Link>
         )}
-        {connectedUserId &&
-          (username || name) && (
-            <div>
-              <ul className="dropdown-xs">
-                <NavDropdown pullRight title={dropdownUser} id="user-dropdown">
-                  <MenuItem
-                    onClick={() => {
-                      browserHistory.push(get('profile', { ...slug, userId: connectedUserId }));
-                    }}
-                  >
-                    <Translate value="navbar.profile" />
-                  </MenuItem>
-                  <MenuItem href={`${getContextual('oldLogout', { slug: slug })}?next=${get('home', { slug: slug })}`}>
-                    <Translate value="navbar.logout" />
-                  </MenuItem>
-                </NavDropdown>
-              </ul>
-            </div>
-          )}
+        {connectedUserId && (
+          <div>
+            <ul className="dropdown-xs">
+              <NavDropdown pullRight title={dropdownUser} id="user-dropdown">
+                <MenuItem
+                  onClick={() => {
+                    browserHistory.push(get('profile', { slug: slug, userId: connectedUserId }));
+                  }}
+                >
+                  <Translate value="navbar.profile" />
+                </MenuItem>
+                <MenuItem href={`${getContextual('oldLogout', { slug: slug })}?next=${get('home', { slug: slug })}`}>
+                  <Translate value="navbar.logout" />
+                </MenuItem>
+              </NavDropdown>
+            </ul>
+          </div>
+        )}
       </div>
     );
   }
@@ -83,9 +82,11 @@ export default compose(
       if (data.loading) {
         return { loading: true };
       }
+      if (data.error) {
+        return { error: data.error };
+      }
       return {
-        username: data.user.username,
-        name: data.user.name
+        displayName: data.user.displayName
       };
     }
   }),
