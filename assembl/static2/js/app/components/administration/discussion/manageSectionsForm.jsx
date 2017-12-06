@@ -9,7 +9,7 @@ import { addSectionTooltip } from '../../common/tooltips';
 import * as actions from '../../../actions/adminActions/adminSections';
 
 type ManageSectionFormProps = {
-  sections: Object,
+  sections: Array<string>,
   selectedLocale: string,
   createSection: Function
 };
@@ -21,12 +21,12 @@ const ManageSectionsForm = ({ sections, selectedLocale, createSection }: ManageS
       <div className="admin-content">
         <form>
           {sections.map((id, index) => {
-            return <EditSectionForm key={id} id={id} index={index} locale={selectedLocale} nbSections={sections.size} />;
+            return <EditSectionForm key={id} id={id} index={index} locale={selectedLocale} nbSections={sections.length} />;
           })}
           <OverlayTrigger placement="top" overlay={addSectionTooltip}>
             <div
               onClick={() => {
-                return createSection(sections.size);
+                return createSection(sections.length);
               }}
               className="plus margin-l"
             >
