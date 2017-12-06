@@ -1,7 +1,7 @@
 // @flow
 
 import React from 'react';
-import { Link } from 'react-router';
+import { Link, browserHistory } from 'react-router';
 import { connect } from 'react-redux';
 import { Navbar } from 'react-bootstrap';
 import { compose, graphql } from 'react-apollo';
@@ -74,7 +74,7 @@ const createDisplayModal = ({ debate, i18n }) => {
     const button = { link: get('oldDebate', slug), label: I18n.t('home.accessButton'), internalLink: false };
     displayModal(null, body, true, null, button, true);
     setTimeout(() => {
-      window.location = get('oldDebate', slug);
+      browserHistory.push(get('oldDebate', slug));
     }, 6000);
   };
 };
