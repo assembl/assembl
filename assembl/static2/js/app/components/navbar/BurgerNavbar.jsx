@@ -10,7 +10,7 @@ import LanguageMenu from './languageMenu';
 import UserMenu from './UserMenu';
 
 export default class BurgerNavbar extends React.PureComponent {
-  unlisten: () => mixed;
+  unlisten: () => void;
   state: {
     shouldDisplayMenu: boolean
   };
