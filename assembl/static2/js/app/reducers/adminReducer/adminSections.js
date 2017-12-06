@@ -32,7 +32,7 @@ export const sectionsHaveChanged = (state: boolean = false, action: ReduxAction<
   }
 };
 
-export const sectionsInOrder = (state: List<number> = List(), action: ReduxAction<Action>) => {
+export const sectionsInOrder = (state: List<string> = List(), action: ReduxAction<Action>) => {
   switch (action.type) {
   case CREATE_SECTION:
     return state.push(action.id);
