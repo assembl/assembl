@@ -8,10 +8,10 @@
 : ${humanTimeColor:='grey'}
 
 : ${copier:=$(
-    if command -v xclip 2>/dev/null; then :
-    elif command -v pbcopy 2>/dev/null; then :
-    elif command -v less 2>/dev/null; then :
-    else echo cat fi
+    command -v pbcopy 2>/dev/null ||
+    command -v xclip 2>/dev/null ||
+    command -v less 2>/dev/null ||
+    echo cat
 )}
 
 echo INFO: Copier is ${copier} 1>&2
