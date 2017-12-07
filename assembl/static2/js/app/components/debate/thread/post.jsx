@@ -49,7 +49,7 @@ export class EmptyPost extends React.PureComponent {
   }
 
   componentDidMount() {
-    this.props.measureTreeHeight(480);
+    this.props.measureTreeHeight(400);
     // If we have a hash in url and the post id match it, scroll to it.
     const postId = this.props.data.post.id;
     const { hash } = window.location;
@@ -134,7 +134,7 @@ export class EmptyPost extends React.PureComponent {
       const images = el.getElementsByTagName('img');
       Array.from(images).forEach((img) => {
         return img.addEventListener('load', () => {
-          this.props.measureTreeHeight(480);
+          this.props.measureTreeHeight(400);
         });
       });
     }
