@@ -47,12 +47,14 @@ export default class BurgerNavbar extends React.PureComponent {
           className={classNames([`assembl-icon-${shouldDisplayMenu ? 'cancel' : 'menu-on'}`, 'burgermenu-icon', 'black'])}
         />
         <Logo slug={slug} src={logoSrc} url={logoLink} />
-        <UserMenu
-          helpUrl={helpUrl}
-          location={location}
-          connectedUserId={connectedUserId}
-          currentPhaseIdentifier={currentPhaseIdentifier}
-        />
+        <div className="right-part">
+          <UserMenu
+            helpUrl={helpUrl}
+            location={location}
+            connectedUserId={connectedUserId}
+            currentPhaseIdentifier={currentPhaseIdentifier}
+          />
+        </div>
       </div>
     );
   }
