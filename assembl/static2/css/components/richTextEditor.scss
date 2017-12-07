@@ -175,7 +175,7 @@
   }
 
   .DraftEditor-root {
-    padding: 5px 0;
+    padding: 5px;
   }
 
   .DraftEditor-editorContainer {
@@ -205,5 +205,9 @@
     margin: 3px;
     padding: 3px;
     font-family: $font-family3;
+  }
+
+  img {
+    width: 100%;
   }
 }

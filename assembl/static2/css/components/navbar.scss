@@ -54,8 +54,9 @@
   .navbar-menu-item {
     color: $navbar-text-color;
     font-family: $font-family2;
-    font-size: $font-size-xxs;
-    letter-spacing: 0.4px;
+    font-size: 13px;
+    letter-spacing: .8px;
+    line-height: $navbar-line-height;
     padding: 0 20px;
     text-transform: uppercase;
 

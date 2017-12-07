@@ -1,6 +1,8 @@
 .translate {
   font-size: $font-size-xs;
   font-family: $font-family6;
+  display: flex;
+  align-items: center;
 
   .translate-button {
     margin: 5px;
@@ -121,6 +123,23 @@ $deleted-post-border: 1px solid $grey1 !default;
     }
   }
 
+  .embedded-video {
+    width: 100%;
+    height: 300px;
+  }
+
+  @media screen and (max-width: 500px) {
+    .embedded-video {
+      height: 250px;
+    }
+  }
+
+  @media screen and (max-width: 321px) {
+    .embedded-video {
+      height: 180px;
+    }
+  }
+
   .post-row {
     display: flex;
   }
@@ -165,7 +184,7 @@ $deleted-post-border: 1px solid $grey1 !default;
       display: block;
       white-space: normal;
       text-align: left;
-      line-height: 20px;
+      line-height: 12px;
     }
   }
 
@@ -202,8 +221,8 @@ $deleted-post-border: 1px solid $grey1 !default;
   .link-idea {
     border-bottom: $navbar-border;
     border-top: $navbar-border;
-    margin: 0 0 15px 0;
-    padding: 20px 0;
+    margin: 0 0 5px 0;
+    padding: 5px 0;
 
     .label {
       color: $grey2;
@@ -212,7 +231,7 @@ $deleted-post-border: 1px solid $grey1 !default;
     }
 
     .badges {
-      padding: 10px 0;
+      padding: 5px 0;
 
       .badge {
         display: inline;

@@ -45,7 +45,7 @@ $rsbc-theme-flat-color-disabled-border : darken($rsbc-theme-flat-color-disabled,
   line-height: 100%;
   display: inline-block;
   vertical-align: middle;
-  margin: -7px 0 0;
+  margin: -7px 10px 0;
 
   @include rsbc-box-sizing(border-box);
 
