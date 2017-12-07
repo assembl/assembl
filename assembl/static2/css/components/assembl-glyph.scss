@@ -1,12 +1,12 @@
 @font-face {
   font-family: 'assembl-glyph';
-  src: url('#{$fonts-dir}/assembl-glyph.eot?76240933');
+  src: url('#{$fonts-dir}/assembl-glyph.eot?58467071');
   src:
-    url('#{$fonts-dir}/assembl-glyph.eot?76240933#iefix') format('embedded-opentype'),
-    url('#{$fonts-dir}/assembl-glyph.woff2?76240933') format('woff2'),
-    url('#{$fonts-dir}/assembl-glyph.woff?76240933') format('woff'),
-    url('#{$fonts-dir}/assembl-glyph.ttf?76240933') format('truetype'),
-    url('#{$fonts-dir}/assembl-glyph.svg?76240933#assembl-glyph') format('svg');
+    url('#{$fonts-dir}/assembl-glyph.eot?58467071#iefix') format('embedded-opentype'),
+    url('#{$fonts-dir}/assembl-glyph.woff2?58467071') format('woff2'),
+    url('#{$fonts-dir}/assembl-glyph.woff?58467071') format('woff'),
+    url('#{$fonts-dir}/assembl-glyph.ttf?58467071') format('truetype'),
+    url('#{$fonts-dir}/assembl-glyph.svg?58467071#assembl-glyph') format('svg');
   font-weight: normal;
   font-style: normal;
 }
@@ -19,7 +19,7 @@
 @media screen and (-webkit-min-device-pixel-ratio:0) {
   @font-face {
     font-family: 'assembl-glyph';
-    src: url('../font/assembl-glyph.svg?76240933#assembl-glyph') format('svg');
+    src: url('../font/assembl-glyph.svg?58467071#assembl-glyph') format('svg');
   }
 }
 */
@@ -28,7 +28,6 @@
   font-family: "assembl-glyph";
   font-style: normal;
   font-weight: normal;
-  font-size: 20px;
   speak: none;
   display: inline-block;
   text-decoration: inherit;
@@ -82,9 +81,10 @@
 .assembl-icon-up-bold:before { content: '\e80e'; } /* '' */
 .assembl-icon-link:before { content: '\e80f'; } /* '' */
 .assembl-icon-down-bold:before { content: '\e810'; } /* '' */
+.assembl-icon-expert:before { content: '\e811'; } /* '' */
 .assembl-icon-menu-on:before { content: '\e812'; } /* '' */
 .assembl-icon-message:before { content: '\e813'; } /* '' */
-.assembl-icon-expert:before { content: '\e814'; } /* '' */
+.assembl-icon-expert-1:before { content: '\e814'; } /* '' */
 .assembl-icon-pepite:before { content: '\e81b'; } /* '' */
 .assembl-icon-plus:before { content: '\e820'; } /* '' */
 .assembl-icon-schedule:before { content: '\e821'; } /* '' */
@@ -104,6 +104,8 @@
 .assembl-icon-text-align-left:before { content: '\e832'; } /* '' */
 .assembl-icon-text-align-right:before { content: '\e833'; } /* '' */
 .assembl-icon-back-arrow:before { content: '\e856'; } /* '' */
+.assembl-icon-double-page:before { content: '\e869'; } /* '' */
+.assembl-icon-timer:before { content: '\e86a'; } /* '' */
 .assembl-icon-sentiment-neutral:before { content: '\e86f'; } /* '' */
 .assembl-icon-thumb:before { content: '\f00a'; } /* '' */
 .assembl-icon-ellipsis:before { content: '\f141'; } /* '' */
@@ -116,6 +118,3 @@
 .assembl-icon-gplus-circled:before { content: '\f310'; } /* '' */
 .assembl-icon-linkedin:before { content: '\f318'; } /* '' */
 .assembl-icon-linkedin-circled:before { content: '\f319'; } /* '' */
-.assembl-icon-sentiment-neutral:before { content: '\e86f'; } /* '' */
-.assembl-icon-double-page:before { content: '\e869'; } /* '' */
-.assembl-icon-timer:before { content: '\e86A'; } /* '' */
