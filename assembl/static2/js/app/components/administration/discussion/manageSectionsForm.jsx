@@ -3,13 +3,15 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { I18n } from 'react-redux-i18n';
 import { OverlayTrigger } from 'react-bootstrap';
+import { List } from 'immutable';
+
 import SectionTitle from '../sectionTitle';
 import EditSectionForm from './editSectionForm';
 import { addSectionTooltip } from '../../common/tooltips';
 import * as actions from '../../../actions/adminActions/adminSections';
 
 type ManageSectionFormProps = {
-  sections: Array<string>,
+  sections: List<string>,
   selectedLocale: string,
   createSection: Function
 };
@@ -21,12 +23,12 @@ const DumbManageSectionsForm = ({ sections, selectedLocale, createSection }: Man
       <div className="admin-content">
         <form>
           {sections.map((id, index) => {
-            return <EditSectionForm key={id} id={id} index={index} locale={selectedLocale} nbSections={sections.length} />;
+            return <EditSectionForm key={id} id={id} index={index} locale={selectedLocale} nbSections={sections.size} />;
           })}
           <OverlayTrigger placement="top" overlay={addSectionTooltip}>
             <div
               onClick={() => {
-                return createSection(sections.length);
+                return createSection(sections.size);
               }}
               className="plus margin-l"
             >
