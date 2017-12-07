@@ -342,7 +342,10 @@ const mapStateToProps = ({
     languagePreferenceHasChanged: discussionLanguagePreferencesHasChanged,
     sectionsHaveChanged: sectionsHaveChanged,
     sections: sectionsById
-      .mapKeys((id, section) => section.set('order', sectionsInOrder.indexOf(id))) // fix order of sections
+      .map((section) => {
+        const id = section.get('id');
+        return section.set('order', sectionsInOrder.indexOf(id));
+      }) // fix order of sections
       .valueSeq() // convert to array of Map
       .toJS(), // convert to array of objects
     legalNoticeAndTerms: legalNoticeAndTerms
