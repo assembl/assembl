@@ -17,6 +17,7 @@ exports[`AssemblNavbar component should render a BurgerNavbar and a hidden FlatN
         elements={Array []}
         helpUrl={undefined}
         location={undefined}
+        logoLink={false}
         logoSrc={undefined}
         slug={undefined}
       />
@@ -24,6 +25,7 @@ exports[`AssemblNavbar component should render a BurgerNavbar and a hidden FlatN
         elements={Array []}
         helpUrl={undefined}
         location={undefined}
+        logoLink={false}
         logoSrc={undefined}
         setWidth={[Function]}
         slug={undefined}
@@ -57,6 +59,7 @@ exports[`AssemblNavbar component should render a FlatNavbar with a big screenWid
         elements={Array []}
         helpUrl={undefined}
         location={undefined}
+        logoLink={false}
         logoSrc={undefined}
         setWidth={[Function]}
         slug={undefined}

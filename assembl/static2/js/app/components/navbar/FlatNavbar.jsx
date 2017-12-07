@@ -26,7 +26,7 @@ export default class FlatNavbar extends React.PureComponent {
     this.props.setWidth(leftWidth + rightWidth);
   };
   render = () => {
-    const { elements, slug, logoSrc, connectedUserId, currentPhaseIdentifier, helpUrl, location, style } = this.props;
+    const { elements, slug, logoSrc, connectedUserId, currentPhaseIdentifier, helpUrl, location, style, logoLink } = this.props;
     return (
       <div className="flat-navbar" style={style}>
         <div
@@ -35,7 +35,7 @@ export default class FlatNavbar extends React.PureComponent {
             this.setState({ leftWidth: newWidth }, this.updateWidth);
           })}
         >
-          <Logo slug={slug} src={logoSrc} />
+          <Logo slug={slug} src={logoSrc} url={logoLink} />
           <NavigationMenu elements={elements} />
         </div>
         <div

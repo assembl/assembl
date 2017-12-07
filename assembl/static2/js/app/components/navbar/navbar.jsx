@@ -54,8 +54,12 @@ const sectionURL = ({ sectionType, url }, options) => {
 };
 
 const SectionLink = ({ section, options }) => {
-  const { title } = section;
-  return (
+  const { title, url, sectionType } = section;
+  return url || sectionType === 'CUSTOM' ? (
+    <a href={url} target="_blank" className="navbar-menu-item pointer">
+      {title}
+    </a>
+  ) : (
     <Link to={sectionURL(section, options)} className="navbar-menu-item pointer" activeClassName="active" data-text={title}>
       {title}
     </Link>
@@ -162,7 +166,12 @@ export class AssemblNavbar extends React.PureComponent {
       slug: slug,
       logoSrc: logo,
       helpUrl: helpUrl,
-      location: location
+      location: location,
+      logoLink:
+        sections.length > 0 &&
+        sections.find((section) => {
+          return section && section.sectionType === 'HOMEPAGE';
+        }).url
     };
     return (
       <div className="background-light">

@@ -5,14 +5,21 @@ import { Link } from 'react-router';
 
 import { get } from '../../utils/routeMap';
 
-type Props = { src: string, slug: string };
+type Props = { src: string, slug: string, url: string };
 
-const Logo = ({ src, slug }: Props) => {
+const Logo = ({ src, slug, url }: Props) => {
+  const image = <img src={src} alt="logo" />;
   return (
     <div className="navbar-logo">
-      <Link to={`${get('home', { slug: slug })}`} activeClassName="logo-active">
-        <img src={src} alt="logo" />
-      </Link>
+      {url ? (
+        <a href={url} target="_blank">
+          {image}
+        </a>
+      ) : (
+        <Link to={`${get('home', { slug: slug })}`} activeClassName="logo-active">
+          {image}
+        </Link>
+      )}
     </div>
   );
 };

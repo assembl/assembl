@@ -32,7 +32,7 @@ export default class BurgerNavbar extends React.PureComponent {
   };
   render() {
     const { state, props, toggleMenu } = this;
-    const { elements, slug, logoSrc, connectedUserId, currentPhaseIdentifier, helpUrl, location } = props;
+    const { elements, slug, logoSrc, connectedUserId, currentPhaseIdentifier, helpUrl, location, logoLink } = props;
     const { shouldDisplayMenu } = state;
     return (
       <div className="burger-navbar">
@@ -46,7 +46,7 @@ export default class BurgerNavbar extends React.PureComponent {
           onClick={toggleMenu}
           className={classNames([`assembl-icon-${shouldDisplayMenu ? 'cancel' : 'menu-on'}`, 'burgermenu-icon', 'black'])}
         />
-        <Logo slug={slug} src={logoSrc} />
+        <Logo slug={slug} src={logoSrc} url={logoLink} />
         <UserMenu
           helpUrl={helpUrl}
           location={location}
