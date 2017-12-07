@@ -1970,6 +1970,156 @@ mutation updateResourcesCenter($headerImage:String) {
     assert resources_center['headerImage']['title'] == 'new-img.png'
 
 
+def test_query_sections(discussion, graphql_request, sections):
+    from assembl.models.section import SectionTypesEnum
+    query = u"""
+query { sections {
+    id
+    title(lang: "en")
+    titleEntries {
+        localeCode
+        value
+    }
+    url
+    sectionType
+    order
+} }"""
+    res = schema.execute(query, context_value=graphql_request)
+    assert len(res.data['sections']) == 6
+    assert res.data['sections'][0]['title'] == u'Home'
+    assert res.data['sections'][0]['titleEntries'][0]['localeCode'] == u'en'
+    assert res.data['sections'][0]['titleEntries'][0]['value'] == u'Home'
+    assert res.data['sections'][0]['url'] is None
+    assert res.data['sections'][0]['sectionType'] == SectionTypesEnum.HOMEPAGE.value
+    assert res.data['sections'][0]['order'] == 0.0
+
+    assert res.data['sections'][-1]['url'] == u'http://www.gnu.org'
+    assert res.data['sections'][-1]['sectionType'] == SectionTypesEnum.CUSTOM.value
+    assert res.data['sections'][-1]['order'] == 4.0
+    assert res.data['sections'][-1]['title'] == u'GNU is not Unix'
+
+
+def test_mutation_create_section(sections, graphql_request):
+    from assembl.models.section import SectionTypesEnum
+    title_entries = [
+        {u"value": u"Section personnalisée", u"localeCode": u"fr"},
+        {u"value": u"Custom section", u"localeCode": u"en"}
+    ]
+    variables = {
+        "titleEntries": title_entries,
+        "url": u"http://www.example.com",
+        "order": 5.0
+    }
+    res = schema.execute(u"""
+mutation createSection($titleEntries: [LangStringEntryInput!]!, $url:String, $order:Float) {
+    createSection(
+        titleEntries: $titleEntries, url: $url, order: $order
+    ) {
+        section {
+            title(lang: "fr")
+            url
+            sectionType
+            order
+        }
+    }
+}
+""", context_value=graphql_request, variable_values=variables)
+    result = res.data
+    assert result is not None
+    assert result['createSection'] is not None
+    section = result['createSection']['section']
+    assert section['title'] == u'Section personnalisée'
+    assert section['url'] == u"http://www.example.com"
+    assert section['sectionType'] == SectionTypesEnum.CUSTOM.value
+    assert section['order'] == 5.0
+
+
+def test_mutation_delete_section(sections, graphql_request):
+    custom_section_id = to_global_id('Section', sections[-1].id)
+    variables = {
+        'id': custom_section_id
+    }
+    res = schema.execute(u"""
+mutation deleteSection($id: ID!) {
+    deleteSection(
+        sectionId:$id
+    ) {
+        success
+    }
+}
+""", context_value=graphql_request, variable_values=variables)
+    result = res.data
+    assert result is not None
+    assert result['deleteSection'] is not None
+    assert result['deleteSection']['success']
+
+    query = u"""
+query { sections {
+    id
+} }"""
+    res = schema.execute(query, context_value=graphql_request)
+    result = res.data
+    assert result is not None
+    assert len(result['sections']) == 5
+
+
+def test_mutation_delete_section_fails_for_non_custom_sections(sections, graphql_request):
+    non_custom_section_id = to_global_id('Section', sections[1].id)
+    variables = {
+        'id': non_custom_section_id
+    }
+    res = schema.execute(u"""
+mutation deleteSection($id: ID!) {
+    deleteSection(
+        sectionId:$id
+    ) {
+        success
+    }
+}
+""", context_value=graphql_request, variable_values=variables)
+    result = res.data
+    assert result is not None
+    assert result['deleteSection'] is not None
+    assert result['deleteSection']['success'] is False
+
+
+def test_mutation_update_section(graphql_request, sections):
+    section_id = to_global_id('section', sections[-1].id)
+    title_entries = [
+        {u"value": u"Reddit", u"localeCode": u"fr"},
+        {u"value": u"Reddit", u"localeCode": u"en"}
+    ]
+    variables = {
+        'id': section_id,
+        'titleEntries': title_entries,
+        'order': 3.5,
+        'url': 'http://www.reddit.com'
+    }
+    res = schema.execute(u"""
+mutation updateSection($id:ID!, $titleEntries: [LangStringEntryInput], $order: Float, $url: String) {
+    updateSection(
+        id: $id,
+        titleEntries: $titleEntries,
+        url: $url,
+        order: $order,
+    ) {
+        section {
+            title(lang:"fr")
+            url
+            order
+        }
+    }
+}
+""", context_value=graphql_request, variable_values=variables)
+    assert res.data is not None
+    assert res.data['updateSection'] is not None
+    assert res.data['updateSection']['section'] is not None
+    section = res.data['updateSection']['section']
+    assert section[u'title'] == u'Reddit'
+    assert section[u'url'] == u'http://www.reddit.com'
+    assert section[u'order'] == 3.5
+
+
 def test_query_legal_notice(discussion, graphql_request, test_session):
     res = schema.execute(u"""query {
         legalNoticeAndTerms {

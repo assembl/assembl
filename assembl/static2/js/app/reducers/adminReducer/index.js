@@ -7,6 +7,8 @@ import { type Action } from '../../actions/actionTypes';
 import legalNoticeAndTerms from './legalNoticeAndTerms';
 import type { LegalNoticeAndTermsReducer } from './legalNoticeAndTerms';
 import resourcesCenter from './resourcesCenter';
+import sections from './adminSections';
+import type { AdminSectionsReducers } from './adminSections';
 import { updateInLangstringEntries } from '../../utils/i18n';
 
 type SelectedLocaleState = string;
@@ -215,6 +217,7 @@ export type AdminReducer = {
   discussionLanguagePreferences: LanguagePreferencesReducer,
   discussionLanguagePreferencesHasChanged: DiscussionLanguagePreferencesHasChangedReducer,
   resourcesCenter: ResourcesCenterReducer,
+  sections: AdminSectionsReducers,
   legalNoticeAndTerms: LegalNoticeAndTermsReducer
 };
 
@@ -226,6 +229,7 @@ const reducers: AdminReducer = {
   discussionLanguagePreferences: languagePreferences,
   discussionLanguagePreferencesHasChanged: discussionLanguagePreferencesHasChanged,
   resourcesCenter: resourcesCenter,
+  sections: sections,
   legalNoticeAndTerms: legalNoticeAndTerms
 };
 

@@ -4,47 +4,14 @@ import TabbedColumns from './tabbedColumns';
 import MultiColumns from './multiColumns';
 import hashLinkScroll from '../../../utils/hashLinkScroll';
 import { MIN_WIDTH_COLUMN, APP_CONTAINER_MAX_WIDTH } from '../../../constants';
-import { type Timeline } from '../../../utils/timeline';
+import { withScreenWidth } from '../../common/screenDimensions';
 
-type Props = {
-  messageColumns: IdeaMessageColumns,
-  identifier: string,
-  debateData: { timeline: Timeline }
-};
-
-type State = {
-  screenWidth: number
-};
-
-const screenWidth = (): number => {
-  return window.innerWidth;
-};
-
-export default class ColumnsView extends React.Component<*, Props, State> {
-  props: Props;
-  state: State;
-  updateDimensions: Function;
-
-  constructor(props: Props) {
-    super(props);
-    this.state = {
-      screenWidth: screenWidth()
-    };
-  }
+class ColumnsView extends React.Component {
   componentDidMount() {
     hashLinkScroll();
-    window.addEventListener('resize', this.updateDimensions);
   }
-  componentWillUnmount() {
-    window.removeEventListener('resize', this.updateDimensions);
-  }
-  updateDimensions = () => {
-    this.setState({
-      screenWidth: screenWidth()
-    });
-  };
-  shouldShowTabs = (columnsCount: number): boolean => {
-    return columnsCount * MIN_WIDTH_COLUMN > Math.min(this.state.screenWidth, APP_CONTAINER_MAX_WIDTH);
+  shouldShowTabs = (columnsCount) => {
+    return columnsCount * MIN_WIDTH_COLUMN > Math.min(this.props.screenWidth, APP_CONTAINER_MAX_WIDTH);
   };
   render = () => {
     const { messageColumns: columns, identifier, debateData } = this.props;
@@ -69,3 +36,5 @@ export default class ColumnsView extends React.Component<*, Props, State> {
     );
   };
 }
+
+export default withScreenWidth(ColumnsView);

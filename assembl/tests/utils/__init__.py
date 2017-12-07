@@ -133,9 +133,7 @@ def drop_tables(app_settings, session):
                     app_settings.get("db_database")))
 
     try:
-        for row in get_all_tables(app_settings, session):
-            log.debug("Dropping table: %s" % row)
-            session.execute("drop table \"%s\"" % row)
+        get_metadata().drop_all(session.connection())
         mark_changed()
     except Exception as e:
         raise Exception('Error dropping tables: %s' % e)

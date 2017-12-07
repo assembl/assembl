@@ -15,6 +15,14 @@ export const UPDATE_RESOURCES: 'UPDATE_RESOURCES' = 'UPDATE_RESOURCES';
 export const UPDATE_RC_PAGE_TITLE: 'UPDATE_RC_PAGE_TITLE' = 'UPDATE_RC_PAGE_TITLE';
 export const UPDATE_RC_HEADER_IMAGE: 'UPDATE_RC_HEADER_IMAGE' = 'UPDATE_RC_HEADER_IMAGE';
 export const UPDATE_RC_PAGE: 'UPDATE_RC_PAGE' = 'UPDATE_RC_PAGE';
+export const UPDATE_SECTIONS: 'UPDATE_SECTIONS' = 'UPDATE_SECTIONS';
+export const UPDATE_SECTION_TITLE: 'UPDATE_SECTION_TITLE' = 'UPDATE_SECTION_TITLE';
+export const UPDATE_SECTION_URL: 'UPDATE_SECTION_URL' = 'UPDATE_SECTION_URL';
+export const TOGGLE_EXTERNAL_PAGE: 'TOGGLE_EXTERNAL_PAGE' = 'TOGGLE_EXTERNAL_PAGE';
+export const CREATE_SECTION: 'CREATE_SECTION' = 'CREATE_SECTION';
+export const DELETE_SECTION: 'DELETE_SECTION' = 'DELETE_SECTION';
+export const MOVE_UP_SECTION: 'MOVE_UP_SECTION' = 'MOVE_UP_SECTION';
+export const MOVE_DOWN_SECTION: 'MOVE_DOWN_SECTION' = 'MOVE_DOWN_SECTION';
 export const UPDATE_LEGAL_NOTICE_ENTRY: 'UPDATE_LEGAL_NOTICE_ENTRY' = 'UPDATE_LEGAL_NOTICE_ENTRY';
 export const UPDATE_TERMS_AND_CONDITIONS_ENTRY: 'UPDATE_TERMS_AND_CONDITIONS_ENTRY' = 'UPDATE_TERMS_AND_CONDITIONS_ENTRY';
 export const UPDATE_LEGAL_NOTICE_AND_TERMS: 'UPDATE_LEGAL_NOTICE_AND_TERMS' = 'UPDATE_LEGAL_NOTICE_AND_TERMS';
@@ -115,6 +123,56 @@ export type UpdateResources = {
   type: typeof UPDATE_RESOURCES
 };
 
+export type SectionInfo = {
+  id: string
+};
+
+export type SectionsArray = Array<SectionInfo>;
+
+export type UpdateSections = {
+  sections: SectionsArray,
+  type: typeof UPDATE_SECTIONS
+};
+
+export type UpdateSectionTitle = {
+  id: string,
+  locale: string,
+  value: string,
+  type: typeof UPDATE_SECTION_TITLE
+};
+
+export type UpdateSectionUrl = {
+  id: string,
+  value: string,
+  type: typeof UPDATE_SECTION_URL
+};
+
+export type ToggleExternalPage = {
+  id: string,
+  type: typeof TOGGLE_EXTERNAL_PAGE
+};
+
+export type CreateSection = {
+  id: string,
+  order: number,
+  type: typeof CREATE_SECTION
+};
+
+export type DeleteSection = {
+  id: string,
+  type: typeof DELETE_SECTION
+};
+
+export type UpSection = {
+  id: string,
+  type: typeof MOVE_UP_SECTION
+};
+
+export type DownSection = {
+  id: string,
+  type: typeof MOVE_DOWN_SECTION
+};
+
 export type UpdateLegalNoticeEntry = {
   type: typeof UPDATE_LEGAL_NOTICE_ENTRY,
   locale: string,
@@ -154,9 +212,12 @@ type ResourcesCenterActions =
 
 type LegalNoticeAndTermsActions = UpdateLegalNoticeEntry | UpdateTermsAndConditionsEntry | UpdateLegalNoticeAndTerms;
 
+type SectionActions = CreateSection | DeleteSection | UpSection | DownSection;
+
 export type Action =
   | UpdateContentLocaleById
   | UpdateContentLocaleByOriginalLocale
   | ResourcesCenterActions
   | LegalNoticeAndTermsActions
+  | SectionActions
   | BasicAction;

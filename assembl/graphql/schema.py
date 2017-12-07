@@ -10,32 +10,33 @@ from sqlalchemy import desc
 from sqlalchemy.orm import contains_eager, joinedload, subqueryload
 
 from assembl import models
+from assembl.graphql.discussion import (Discussion, DiscussionPreferences,
+                                        LegalNoticeAndTerms, LocalePreference,
+                                        ResourcesCenter,
+                                        UpdateDiscussionPreferences,
+                                        UpdateLegalNoticeAndTerms,
+                                        UpdateResourcesCenter, VisitsAnalytics)
+from assembl.graphql.document import UploadDocument
+from assembl.graphql.idea import (CreateIdea, CreateThematic, DeleteThematic,
+                                  Idea, IdeaUnion, Thematic, UpdateThematic)
+from assembl.graphql.langstring import resolve_langstring
+from assembl.graphql.locale import Locale
+from assembl.graphql.post import (AddPostAttachment, CreatePost, DeletePost,
+                                  DeletePostAttachment, UndeletePost,
+                                  UpdatePost)
+from assembl.graphql.resource import (CreateResource, DeleteResource, Resource,
+                                      UpdateResource)
+from assembl.graphql.section import (CreateSection, DeleteSection, Section,
+                                     UpdateSection)
+from assembl.graphql.sentiment import AddSentiment, DeleteSentiment
+from assembl.graphql.synthesis import Synthesis
+from assembl.graphql.user import UpdateUser
+from assembl.graphql.utils import get_fields, get_root_thematic_for_phase
 from assembl.lib.locale import strip_country
 from assembl.lib.sqla_types import EmailString
 from assembl.models.action import SentimentOfPost
 from assembl.models.post import countable_publication_states
 from assembl.nlp.translation_service import DummyGoogleTranslationService
-
-from assembl.graphql.document import UploadDocument
-from assembl.graphql.discussion import (
-    DiscussionPreferences, LocalePreference,
-    ResourcesCenter, LegalNoticeAndTerms,
-    UpdateDiscussionPreferences, UpdateResourcesCenter,
-    UpdateLegalNoticeAndTerms, VisitsAnalytics, Discussion)
-from assembl.graphql.idea import (
-    CreateIdea, CreateThematic, DeleteThematic, Idea, IdeaUnion,
-    Thematic, UpdateThematic)
-from assembl.graphql.langstring import resolve_langstring
-from assembl.graphql.locale import Locale
-from assembl.graphql.post import (
-    CreatePost, DeletePost, UndeletePost, UpdatePost,
-    AddPostAttachment, DeletePostAttachment)
-from assembl.graphql.resource import (
-    CreateResource, DeleteResource, Resource, UpdateResource)
-from assembl.graphql.sentiment import AddSentiment, DeleteSentiment
-from assembl.graphql.synthesis import Synthesis
-from assembl.graphql.user import UpdateUser
-from assembl.graphql.utils import get_root_thematic_for_phase, get_fields
 
 
 convert_sqlalchemy_type.register(EmailString)(convert_column_to_string)
@@ -69,6 +70,7 @@ class Query(graphene.ObjectType):
     resources = graphene.List(Resource)
     resources_center = graphene.Field(lambda: ResourcesCenter)
     has_resources_center = graphene.Boolean()
+    sections = graphene.List(Section)
     legal_notice_and_terms = graphene.Field(lambda: LegalNoticeAndTerms)
     has_legal_notice = graphene.Boolean(lang=graphene.String(required=True))
     has_terms_and_conditions = graphene.Boolean(
@@ -201,6 +203,12 @@ class Query(graphene.ObjectType):
     def resolve_resources_center(self, args, context, info):
         return ResourcesCenter()
 
+    def resolve_sections(self, args, context, info):
+        model = models.Section
+        query = get_query(model, context)
+        discussion_id = context.matchdict['discussion_id']
+        return query.filter(model.discussion_id == discussion_id)
+
     def resolve_legal_notice_and_terms(self, args, context, info):
         """Legal notice and terms and conditions entries (e.g. for admin form)."""
         return LegalNoticeAndTerms()
@@ -215,7 +223,8 @@ class Query(graphene.ObjectType):
     def resolve_has_terms_and_conditions(self, args, context, info):
         discussion_id = context.matchdict['discussion_id']
         discussion = models.Discussion.get(discussion_id)
-        text = resolve_langstring(discussion.terms_and_conditions, args.get('lang'))
+        text = resolve_langstring(
+            discussion.terms_and_conditions, args.get('lang'))
         # if the field is empty in the admin section, it will contain html markup (u'<p></p>')
         return text and len(text) > 10
 
@@ -252,6 +261,9 @@ class Mutations(graphene.ObjectType):
     delete_resource = DeleteResource.Field()
     update_resource = UpdateResource.Field()
     update_resources_center = UpdateResourcesCenter.Field()
+    create_section = CreateSection.Field()
+    delete_section = DeleteSection.Field()
+    update_section = UpdateSection.Field()
     update_legal_notice_and_terms = UpdateLegalNoticeAndTerms.Field()
     update_user = UpdateUser.Field()
 

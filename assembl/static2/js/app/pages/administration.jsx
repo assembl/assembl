@@ -7,6 +7,7 @@ import { connect } from 'react-redux';
 
 import { updateThematics } from '../actions/adminActions';
 import { updateResources, updateResourcesCenterPage } from '../actions/adminActions/resourcesCenter';
+import { updateSections } from '../actions/adminActions/adminSections';
 import { updateLegalNoticeAndTerms } from '../actions/adminActions/legalNoticeAndTerms';
 import withLoadingIndicator from '../components/common/withLoadingIndicator';
 import Menu from '../components/administration/menu';
@@ -15,6 +16,7 @@ import SaveButton from '../components/administration/saveButton';
 import ThematicsQuery from '../graphql/ThematicsQuery.graphql';
 import ResourcesQuery from '../graphql/ResourcesQuery.graphql';
 import ResourcesCenterPage from '../graphql/ResourcesCenterPage.graphql';
+import SectionsQuery from '../graphql/SectionsQuery.graphql';
 import TabsConditionQuery from '../graphql/TabsConditionQuery.graphql';
 import LegalNoticeAndTermsQuery from '../graphql/LegalNoticeAndTerms.graphql';
 import { convertEntriesToRawContentState } from '../utils/draftjs';
@@ -59,6 +61,7 @@ class Administration extends React.Component {
     this.putResourcesCenterInStore(this.props.resourcesCenter);
     this.putResourcesInStore(this.props.resources);
     this.putThematicsInStore(this.props.data);
+    this.putSectionsInStore(this.props.sections);
     this.putLegalNoticeAndTermsInStore(this.props.legalNoticeAndTerms);
   }
 
@@ -70,6 +73,10 @@ class Administration extends React.Component {
 
     if (nextProps.resources !== this.props.resources) {
       this.putResourcesInStore(nextProps.resources);
+    }
+
+    if (nextProps.sections !== this.props.sections) {
+      this.putSectionsInStore(nextProps.sections);
     }
 
     this.putResourcesCenterInStore(nextProps.resourcesCenter);
@@ -104,6 +111,15 @@ class Administration extends React.Component {
     this.props.updateResourcesCenterPage(filteredResourcesCenter.resourcesCenter);
   }
 
+  putSectionsInStore(sections) {
+    const filteredSections = filter(SectionsQuery, {
+      sections: sections.filter((section) => {
+        return section.sectionType !== 'ADMINISTRATION';
+      })
+    });
+    this.props.updateSections(filteredSections.sections);
+  }
+
   putLegalNoticeAndTermsInStore(legalNoticeAndTerms) {
     const filtered = filter(LegalNoticeAndTermsQuery, { legalNoticeAndTerms: legalNoticeAndTerms });
     const lnat = filtered.legalNoticeAndTerms;
@@ -126,6 +142,7 @@ class Administration extends React.Component {
       refetchResources,
       refetchResourcesCenter,
       refetchTabsConditions,
+      refetchSections,
       refetchLegalNoticeAndTerms
     } = this.props;
     const { phase } = params;
@@ -148,6 +165,7 @@ class Administration extends React.Component {
                     refetchTabsConditions={refetchTabsConditions}
                     refetchThematics={data.refetch}
                     refetchResources={refetchResources}
+                    refetchSections={refetchSections}
                     refetchResourcesCenter={refetchResourcesCenter}
                     refetchLegalNoticeAndTerms={refetchLegalNoticeAndTerms}
                   />
@@ -196,6 +214,9 @@ const mapDispatchToProps = (dispatch) => {
     updateResources: (resources) => {
       return dispatch(updateResources(resources));
     },
+    updateSections: (sections) => {
+      return dispatch(updateSections(sections));
+    },
     updateThematics: (thematics) => {
       return dispatch(updateThematics(thematics));
     },
@@ -216,6 +237,8 @@ const mergeLoadingAndHasErrors = (WrappedComponent) => {
       resourcesCenterHasErrors,
       resourcesLoading,
       resourcesCenterLoading,
+      sectionsHasErrors,
+      sectionsLoading,
       tabsConditionsLoading,
       tabsConditionsHasErrors,
       legalNoticeAndTermsLoading,
@@ -224,14 +247,16 @@ const mergeLoadingAndHasErrors = (WrappedComponent) => {
     const hasErrors =
       resourcesHasErrors ||
       resourcesCenterHasErrors ||
-      tabsConditionsLoading ||
+      tabsConditionsHasErrors ||
       legalNoticeAndTermsHasErrors ||
+      sectionsHasErrors ||
       (data && data.error);
     const loading =
       resourcesLoading ||
       resourcesCenterLoading ||
-      tabsConditionsHasErrors ||
+      tabsConditionsLoading ||
       legalNoticeAndTermsLoading ||
+      sectionsLoading ||
       (data && data.loading);
 
     return <WrappedComponent {...props} hasErrors={hasErrors} loading={loading} />;
@@ -310,6 +335,28 @@ export default compose(
           headerImage: headerImage,
           titleEntries: titleEntries
         }
+      };
+    }
+  }),
+  graphql(SectionsQuery, {
+    props: ({ data }) => {
+      if (data.loading) {
+        return {
+          sectionsLoading: true
+        };
+      }
+
+      if (data.error) {
+        return {
+          sectionsHasErrors: true
+        };
+      }
+
+      return {
+        sectionsLoading: data.loading,
+        sectionsHasErrors: data.error,
+        refetchSections: data.refetch,
+        sections: data.sections
       };
     }
   }),

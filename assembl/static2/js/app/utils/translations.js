@@ -308,9 +308,12 @@ const Translations = {
       thematic: "Thématique",
       edition: "Éditer la discussion",
       landingpage: "Page d'accueil",
+      up: "Remonter",
+      down: "Descendre",
       menu: {
         phase: "Phase %{count} - %{description}",
-        language: "Editer la langue du débat",
+        language: "Éditer la langue du débat",
+        sections: "Éditer les rubriques du débat",
         legalNoticeAndTerms: "CGU & Mentions légales"
       },
       noTimeline: "Aucune timeline n'a été configurée pour ce débat.",
@@ -318,6 +321,17 @@ const Translations = {
         0: "Renseigner les thématiques",
         1: "Renseigner les questions",
         2: "Exporter les données"
+      },
+      sections: {
+        addSection: "Ajouter une rubrique",
+        deleteSection: "Supprimer la rubrique",
+        homepage: "Accueil",
+        custom: "Rubrique supplémentaire",
+        externalPage: "Utiliser une page externe",
+        titlePh: "Titre",
+        urlPh: "URL",
+        successSave: "Les rubriques ont été modifiées avec succès",
+        sectionsTitle: "Renseigner les rubriques"
       },
       videoHelp:
         "*Liens vidéo autorisés : \"https://www.youtube.com/embed/[videoId]\" ou \"https://player.vimeo.com/video/[videoId]?\"",
@@ -684,9 +698,12 @@ const Translations = {
       thematic: "Theme",
       edition: "Edit the Discussion",
       landingpage: "Landing page",
+      up: "Up",
+      down: "Down",
       menu: {
         phase: "Phase %{count} - %{description}",
         language: "Discussion Language",
+        sections: "Edit Debate Sections",
         legalNoticeAndTerms: "T&C and Legal Notice"
       },
       noTimeline: "No timeline has been configured yet",
@@ -694,6 +711,17 @@ const Translations = {
         0: "Set themes",
         1: "Set questions",
         2: "Export data"
+      },
+      sections: {
+        addSection: "Add a section",
+        deleteSection: "Delete the section",
+        resources_center: "Resources center",
+        custom: "Added section",
+        externalPage: "Use external page",
+        titlePh: "Title",
+        urlPh: "URL",
+        successSave: "Sections are modified with success",
+        sectionsTitle: "Set sections"
       },
       videoHelp:
         "*Authorized video links: \"https://www.youtube.com/embed/[videoId]\" or \"https://player.vimeo.com/video/[videoId]?\"",

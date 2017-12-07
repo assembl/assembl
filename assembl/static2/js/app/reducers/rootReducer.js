@@ -10,6 +10,7 @@ import Phase from './phaseReducer';
 import Admin from './adminReducer';
 import type { AdminReducer } from './adminReducer';
 import contentLocale, { defaultContentLocaleMapping } from './contentLocaleReducer';
+import * as screenDimensions from './screenDimensionsReducers';
 
 export type RootReducer = {
   i18n: Object,
@@ -21,7 +22,8 @@ export type RootReducer = {
   synthesis: Object,
   auth: Object,
   phase: Object,
-  admin: AdminReducer
+  admin: AdminReducer,
+  screenDimensions: Object // TODO: screenDimensions type
 };
 
 const reducers: RootReducer = {
@@ -34,7 +36,8 @@ const reducers: RootReducer = {
   synthesis: Synthesis,
   auth: Auth,
   phase: Phase,
-  admin: Admin
+  admin: Admin,
+  ...screenDimensions
 };
 
 export default combineReducers(reducers);

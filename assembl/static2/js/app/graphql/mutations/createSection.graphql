@@ -1,0 +1,10 @@
+mutation createSection($sectionType: SectionTypesEnum, $url: String, $titleEntries: [LangStringEntryInput]!, $order: Float) {
+  createSection(sectionType: $sectionType, url: $url, titleEntries: $titleEntries, order: $order) {
+    section {
+      sectionType
+      url
+      title
+      order
+    }
+  }
+}

@@ -13,6 +13,9 @@ import updateThematicMutation from '../../graphql/mutations/updateThematic.graph
 import createResourceMutation from '../../graphql/mutations/createResource.graphql';
 import updateResourceMutation from '../../graphql/mutations/updateResource.graphql';
 import deleteResourceMutation from '../../graphql/mutations/deleteResource.graphql';
+import createSectionMutation from '../../graphql/mutations/createSection.graphql';
+import updateSectionMutation from '../../graphql/mutations/updateSection.graphql';
+import deleteSectionMutation from '../../graphql/mutations/deleteSection.graphql';
 import updateResourcesCenterMutation from '../../graphql/mutations/updateResourcesCenter.graphql';
 import updateLegalNoticeAndTermsMutation from '../../graphql/mutations/updateLegalNoticeAndTerms.graphql';
 import updateDiscussionPreferenceQuery from '../../graphql/mutations/updateDiscussionPreference.graphql';
@@ -29,11 +32,11 @@ const runSerial = (tasks) => {
 const getMutationsPromises = (params) => {
   const { items, variablesCreator, deleteVariablesCreator, createMutation, deleteMutation, updateMutation } = params;
   const promises = [];
-  items.forEach((item) => {
+  items.forEach((item, index) => {
     if (item.isNew && !item.toDelete) {
       // create item
       const payload = {
-        variables: variablesCreator(item)
+        variables: variablesCreator(item, index)
       };
       const p1 = () => {
         return createMutation(payload);
@@ -50,7 +53,7 @@ const getMutationsPromises = (params) => {
       promises.push(p3);
     } else {
       // update item
-      const variables = variablesCreator(item);
+      const variables = variablesCreator(item, index);
       variables.id = item.id;
       const payload = {
         variables: variables
@@ -108,6 +111,19 @@ const createVariablesForDeleteResourceMutation = (resource) => {
   return { resourceId: resource.id };
 };
 
+const createVariablesForSectionMutation = (section, index) => {
+  return {
+    type: section.type,
+    url: section.url,
+    order: index,
+    titleEntries: section.titleEntries
+  };
+};
+
+const createVariablesForDeleteSectionMutation = (section) => {
+  return { sectionId: section.id };
+};
+
 const SaveButton = ({
   i18n,
   client,
@@ -134,6 +150,12 @@ const SaveButton = ({
   updateLegalNoticeAndTerms,
   refetchResourcesCenter,
   refetchTabsConditions,
+  sections,
+  sectionsHaveChanged,
+  refetchSections,
+  createSection,
+  updateSection,
+  deleteSection,
   refetchLegalNoticeAndTerms
 }) => {
   const saveAction = () => {
@@ -220,6 +242,22 @@ const SaveButton = ({
         });
     }
 
+    if (sectionsHaveChanged) {
+      const mutationsPromises = getMutationsPromises({
+        items: sections,
+        variablesCreator: createVariablesForSectionMutation,
+        deleteVariablesCreator: createVariablesForDeleteSectionMutation,
+        createMutation: createSection,
+        updateMutation: updateSection,
+        deleteMutation: deleteSection
+      });
+
+      runSerial(mutationsPromises).then(() => {
+        refetchSections();
+        displayAlert('success', I18n.t('administration.sections.successSave'));
+      });
+    }
+
     if (legalNoticeAndTerms.get('hasChanged')) {
       const legalNoticeEntries = legalNoticeAndTerms.get('legalNoticeEntries').toJS();
       const termsAndConditionsEntries = legalNoticeAndTerms.get('termsAndConditionsEntries').toJS();
@@ -244,6 +282,7 @@ const SaveButton = ({
     thematicsHaveChanged ||
     languagePreferenceHasChanged ||
     resourcesHaveChanged ||
+    sectionsHaveChanged ||
     resourcesCenterPage.get('hasChanged') ||
     legalNoticeAndTerms.get('hasChanged')
   );
@@ -279,6 +318,15 @@ const SaveButtonWithMutations = compose(
   graphql(updateResourcesCenterMutation, {
     name: 'updateResourcesCenter'
   }),
+  graphql(createSectionMutation, {
+    name: 'createSection'
+  }),
+  graphql(updateSectionMutation, {
+    name: 'updateSection'
+  }),
+  graphql(deleteSectionMutation, {
+    name: 'deleteSection'
+  }),
   graphql(updateLegalNoticeAndTermsMutation, {
     name: 'updateLegalNoticeAndTerms'
   })
@@ -287,6 +335,7 @@ const SaveButtonWithMutations = compose(
 const mapStateToProps = ({
   i18n,
   admin: {
+    sections,
     resourcesCenter,
     thematicsById,
     thematicsHaveChanged,
@@ -297,6 +346,7 @@ const mapStateToProps = ({
   }
 }) => {
   const { page, resourcesById, resourcesHaveChanged, resourcesInOrder } = resourcesCenter;
+  const { sectionsById, sectionsHaveChanged, sectionsInOrder } = sections;
   return {
     resourcesCenterPage: page,
     resourcesHaveChanged: resourcesHaveChanged,
@@ -310,6 +360,13 @@ const mapStateToProps = ({
     preferences: discussionLanguagePreferences,
     i18n: i18n,
     languagePreferenceHasChanged: discussionLanguagePreferencesHasChanged,
+    sectionsHaveChanged: sectionsHaveChanged,
+    sections: sectionsById
+      .mapKeys((id, section) => {
+        return section.set('order', sectionsInOrder.indexOf(id));
+      }) // fix order of sections
+      .valueSeq() // convert to array of Map
+      .toJS(), // convert to array of objects
     legalNoticeAndTerms: legalNoticeAndTerms
   };
 };
