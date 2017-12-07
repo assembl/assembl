@@ -111,11 +111,11 @@ const createVariablesForDeleteResourceMutation = (resource) => {
   return { resourceId: resource.id };
 };
 
-const createVariablesForSectionMutation = (section, index) => {
+const createVariablesForSectionMutation = (section) => {
   return {
     type: section.type,
     url: section.url,
-    order: index,
+    order: section.order,
     titleEntries: section.titleEntries
   };
 };
