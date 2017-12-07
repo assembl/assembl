@@ -41,8 +41,8 @@ const sectionFilter = (options = {}) => {
   };
 };
 
-const sectionKey = ({ sectionType, url }) => {
-  return sectionType === 'CUSTOM' ? `${sectionType}-${url}` : sectionType;
+const sectionKey = ({ sectionType, id }) => {
+  return sectionType === 'CUSTOM' ? `${sectionType}-${id}` : sectionType;
 };
 
 const sectionSlug = (sectionType) => {
@@ -113,6 +113,7 @@ type MapSectionOptions = {
 };
 
 type Section = {
+  id: string,
   sectionType: string,
   url: string,
   title: string
