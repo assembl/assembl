@@ -29,7 +29,7 @@ const getColor = (element) => {
 
 const simpleCircle = (cx, cy, r, element) => {
   return 'Tooltip' in element ? (
-    <OverlayTrigger container={this} overlay={element.Tooltip} placement="bottom">
+    <OverlayTrigger overlay={element.Tooltip} placement="bottom">
       <circle className="circle" cx={cx} cy={cy} r={r} stroke={getColor(element)} />
     </OverlayTrigger>
   ) : (
@@ -60,7 +60,7 @@ const circlePaths = (cx, cy, r, elements, totalCount) => {
     const color = getColor(element);
     const middleAngle = startAngle + (endAngle - startAngle) / 2;
     return 'Tooltip' in element ? (
-      <OverlayTrigger key={index} container={this} overlay={element.Tooltip} placement={placementFromAngle(middleAngle)}>
+      <OverlayTrigger key={index} overlay={element.Tooltip} placement={placementFromAngle(middleAngle)}>
         <path d={describeArc(cx, cy, r, startAngle, endAngle)} stroke={color} fill="transparent" className="circle" />
       </OverlayTrigger>
     ) : (

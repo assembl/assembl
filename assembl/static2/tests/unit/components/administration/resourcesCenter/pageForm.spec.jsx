@@ -13,7 +13,8 @@ describe('DumbPageForm component', () => {
       headerMimeType: 'image/jpeg',
       headerUrl: 'http://www.example.com/documents/myimage/data',
       selectedLocale: 'fr',
-      title: 'Centre de ressources'
+      title: 'Centre de ressources',
+      disabled: false
     };
     const component = renderer.create(<DumbPageForm {...props} />);
     const tree = component.toJSON();

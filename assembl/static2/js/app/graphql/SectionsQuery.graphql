@@ -1,0 +1,15 @@
+query SectionsQuery {
+  hasResourcesCenter
+  hasSyntheses
+  sections {
+    id
+    sectionType
+    order
+    title
+    titleEntries {
+      value
+      localeCode
+    }
+    url
+  }
+}

@@ -86,13 +86,14 @@ const Translations = {
       resourcesCenter: "Ressources",
       community: "communauté",
       connection: "Connexion",
-      profile: "Profil",
+      profile: "Mon profil",
       logout: "Se déconnecter",
       administration: "Administration",
       syntheses: "Synthèses"
     },
     footer: {
-      terms: "Conditions Générales d'Utilisation",
+      terms: "Conditions générales d'utilisation",
+      legalNotice: "Mentions légales",
       socialMedias: "Suivez-nous sur"
     },
     login: {
@@ -103,7 +104,7 @@ const Translations = {
       password: "Mot de passe",
       email: "Email",
       login: "Se connecter",
-      forgotPwd: "Mot de passe oublié ?",
+      forgotPwd: "Réinitialiser votre mot de passe",
       noAccount: "Vous n’avez pas encore de compte ?",
       signUp: "Créer un compte",
       username: "Email ou nom d'utilisateur",
@@ -270,7 +271,15 @@ const Translations = {
       }
     },
     profile: {
-      panelTitle: "Bienvenue dans la page profil d'Assembl"
+      panelTitle: "Votre compte",
+      personalInfos: "Informations personnelles",
+      userName: "Nom d'utilisateur",
+      fullname: "Nom complet",
+      email: "Email",
+      save: "Enregistrer",
+      password: "Mot de passe",
+      changePassword: "Modifier",
+      saveSuccess: "Votre profil a été mis à jour avec succès"
     },
     loading: {
       wait: "Veuillez patienter"
@@ -282,8 +291,11 @@ const Translations = {
     notFound: {
       panelTitle: "Désolé, cette page n'existe pas"
     },
-    terms: {
-      panelTitle: "Conditions Générales d'Utilisations"
+    termsAndConditions: {
+      headerTitle: "Conditions générales d'utilisation"
+    },
+    legalNotice: {
+      headerTitle: "Mentions légales"
     },
     administration: {
       addThematic: "Ajouter une thématique",
@@ -296,9 +308,13 @@ const Translations = {
       thematic: "Thématique",
       edition: "Éditer la discussion",
       landingpage: "Page d'accueil",
+      up: "Remonter",
+      down: "Descendre",
       menu: {
         phase: "Phase %{count} - %{description}",
-        language: "Editer la langue du débat"
+        language: "Éditer la langue du débat",
+        sections: "Éditer les rubriques du débat",
+        legalNoticeAndTerms: "CGU & Mentions légales"
       },
       noTimeline: "Aucune timeline n'a été configurée pour ce débat.",
       survey: {
@@ -306,12 +322,24 @@ const Translations = {
         1: "Renseigner les questions",
         2: "Exporter les données"
       },
+      sections: {
+        addSection: "Ajouter une rubrique",
+        deleteSection: "Supprimer la rubrique",
+        homepage: "Accueil",
+        custom: "Rubrique supplémentaire",
+        externalPage: "Utiliser une page externe",
+        titlePh: "Titre",
+        urlPh: "URL",
+        successSave: "Les rubriques ont été modifiées avec succès",
+        sectionsTitle: "Renseigner les rubriques"
+      },
       videoHelp:
         "*Liens vidéo autorisés : \"https://www.youtube.com/embed/[videoId]\" ou \"https://player.vimeo.com/video/[videoId]?\"",
       annotation: "Module à renseigner obligatoirement. Les champs * sont requis.",
       themeNum: "Thématique %{index}",
       discussion: {
-        0: "Langues utilisées"
+        0: "Langues utilisées",
+        3: "Conditions générales d'utilisation & mentions légales"
       },
       languageChoice: "Sélection des langues du débat",
       ph: {
@@ -347,7 +375,12 @@ const Translations = {
       step_x_total: "Section %{num} sur %{total}",
       saveThemes: "Sauvegarder",
       successThemeCreation: "Les thématiques ont été enregistrées avec succès !",
-      successLanguagePreference: "Les langues du débat ont été enregistrées avec succès !"
+      successLanguagePreference: "Les langues du débat ont été enregistrées avec succès !",
+      legalNoticeAndTerms: {
+        legalNoticeLabel: "Mentions légales",
+        termsAndConditionsLabel: "Conditions générales d'utilisation",
+        successSave: "Les CGU et mentions légales ont été enregistrées avec succès !"
+      }
     },
     unauthorizedAdministration: {
       unauthorizedMessage: "Vous n'êtes pas autorisé à accéder à l'administration. Veuillez contacter l'administrateur du site.",
@@ -358,7 +391,7 @@ const Translations = {
       format2: "DD-MM-YYYY"
     },
     duration: {
-      format: "d [j,] h [h,] m [min]"
+      format: "h [h]"
     }
   },
   en: {
@@ -444,13 +477,14 @@ const Translations = {
       community: "community",
       resourcesCenter: "Resources",
       connection: "Login",
-      profile: "Profile",
+      profile: "My profile",
       logout: "Logout",
       administration: "Administration",
       syntheses: "Syntheses"
     },
     footer: {
-      terms: "Terms and Conditions",
+      terms: "Terms & Conditions",
+      legalNotice: "Legal Notice",
       socialMedias: "Follow us"
     },
     login: {
@@ -461,7 +495,7 @@ const Translations = {
       password: "Password",
       email: "Email",
       login: "Log in",
-      forgotPwd: "Forgot your password?",
+      forgotPwd: "Reset your password",
       noAccount: "No account yet?",
       signUp: "Sign up",
       username: "Email or user name",
@@ -627,7 +661,15 @@ const Translations = {
       }
     },
     profile: {
-      panelTitle: "Welcome to Assembl profile page"
+      panelTitle: "Your account",
+      personalInfos: "Personal informations",
+      userName: "User name",
+      fullname: "Full name",
+      email: "Email",
+      save: "Save",
+      password: "Password",
+      changePassword: "Modify",
+      saveSuccess: "Your profile is updated"
     },
     loading: {
       wait: "Please wait..."
@@ -639,8 +681,11 @@ const Translations = {
     notFound: {
       panelTitle: "Sorry, this page doesn't exist"
     },
-    terms: {
-      panelTitle: "Terms and Conditions"
+    termsAndConditions: {
+      headerTitle: "Terms & Conditions"
+    },
+    legalNotice: {
+      headerTitle: "Legal Notice"
     },
     administration: {
       addThematic: "Add a theme",
@@ -653,9 +698,13 @@ const Translations = {
       thematic: "Theme",
       edition: "Edit the Discussion",
       landingpage: "Landing page",
+      up: "Up",
+      down: "Down",
       menu: {
         phase: "Phase %{count} - %{description}",
-        language: "Discussion Language"
+        language: "Discussion Language",
+        sections: "Edit Debate Sections",
+        legalNoticeAndTerms: "T&C and Legal Notice"
       },
       noTimeline: "No timeline has been configured yet",
       survey: {
@@ -663,12 +712,24 @@ const Translations = {
         1: "Set questions",
         2: "Export data"
       },
+      sections: {
+        addSection: "Add a section",
+        deleteSection: "Delete the section",
+        resources_center: "Resources center",
+        custom: "Added section",
+        externalPage: "Use external page",
+        titlePh: "Title",
+        urlPh: "URL",
+        successSave: "Sections are modified with success",
+        sectionsTitle: "Set sections"
+      },
       videoHelp:
         "*Authorized video links: \"https://www.youtube.com/embed/[videoId]\" or \"https://player.vimeo.com/video/[videoId]?\"",
       annotation: "Module to be completed. * Fields are required.",
       themeNum: "Theme %{index}",
       discussion: {
-        0: "Languages of the Discussion"
+        0: "Languages of the Discussion",
+        3: "Terms & Conditions and Legal Notice"
       },
       languageChoice: "Select desired languages below",
       ph: {
@@ -704,7 +765,12 @@ const Translations = {
       step_x_total: "Section %{num} on %{total}",
       saveThemes: "Save",
       successThemeCreation: "Themes have been saved with success!",
-      successLanguagePreference: "Discussion language preferences have been saved with success!"
+      successLanguagePreference: "Discussion language preferences have been saved with success!",
+      legalNoticeAndTerms: {
+        legalNoticeLabel: "Legal notice",
+        termsAndConditionsLabel: "Terms and conditions",
+        successSave: "The T&C and legal notice have been saved with success!"
+      }
     },
     unauthorizedAdministration: {
       unauthorizedMessage:
@@ -716,7 +782,7 @@ const Translations = {
       format2: "YYYY-MM-DD"
     },
     duration: {
-      format: "d [d,] h [h,] m [min]"
+      format: "h [h]"
     }
   }
 };

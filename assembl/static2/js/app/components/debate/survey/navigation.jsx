@@ -5,6 +5,7 @@ import { Translate } from 'react-redux-i18n';
 import { getDomElementOffset, calculatePercentage } from '../../../utils/globalFunctions';
 import { getIfPhaseCompletedByIdentifier } from '../../../utils/timeline';
 import { SMALL_SCREEN_WIDTH } from '../../../constants';
+import { withScreenDimensions } from '../../common/screenDimensions';
 
 class Navigation extends React.Component {
   constructor(props) {
@@ -33,7 +34,7 @@ class Navigation extends React.Component {
       () => {
         this.displayNav();
         this.displayPagination();
-        if (nextProps.isScroll && nextProps.questionIndex && window.innerWidth >= SMALL_SCREEN_WIDTH) {
+        if (nextProps.isScroll && nextProps.questionIndex && this.props.screenWidth >= SMALL_SCREEN_WIDTH) {
           this.scrollToQuestion(nextProps.questionIndex);
         }
       }
@@ -67,7 +68,7 @@ class Navigation extends React.Component {
     }
     const limitToHide = getDomElementOffset(firstTextarea).top + firstTextarea.clientHeight;
     const limitToShow = limitToHide + document.getElementById('nav').clientHeight;
-    const windowOffset = window.pageYOffset + window.innerHeight;
+    const windowOffset = window.pageYOffset + this.props.screenHeight;
     const { debateData } = this.props.debate;
     const isPhaseCompleted = getIfPhaseCompletedByIdentifier(debateData.timeline, 'survey');
     if (windowOffset < limitToHide && !isPhaseCompleted) {
@@ -99,7 +100,7 @@ class Navigation extends React.Component {
     if (!questionsOffset) {
       return;
     }
-    const windowOffset = window.pageYOffset + window.innerHeight;
+    const windowOffset = window.pageYOffset + this.props.screenHeight;
     let currentQuestionNumber = 0;
     for (let i = 0; i < this.state.questionsLength; i += 1) {
       if (windowOffset > questionsOffset[i] + navbarHeight) {
@@ -184,4 +185,4 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps)(Navigation);
+export default withScreenDimensions(connect(mapStateToProps)(Navigation));

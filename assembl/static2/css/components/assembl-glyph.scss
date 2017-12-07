@@ -1,12 +1,12 @@
 @font-face {
   font-family: 'assembl-glyph';
-  src: url('#{$fonts-dir}/assembl-glyph.eot?64503041');
+  src: url('#{$fonts-dir}/assembl-glyph.eot?58467071');
   src:
-    url('#{$fonts-dir}/assembl-glyph.eot?64503041#iefix') format('embedded-opentype'),
-    url('#{$fonts-dir}/assembl-glyph.woff2?64503041') format('woff2'),
-    url('#{$fonts-dir}/assembl-glyph.woff?64503041') format('woff'),
-    url('#{$fonts-dir}/assembl-glyph.ttf?64503041') format('truetype'),
-    url('#{$fonts-dir}/assembl-glyph.svg?64503041#assembl-glyph') format('svg');
+    url('#{$fonts-dir}/assembl-glyph.eot?58467071#iefix') format('embedded-opentype'),
+    url('#{$fonts-dir}/assembl-glyph.woff2?58467071') format('woff2'),
+    url('#{$fonts-dir}/assembl-glyph.woff?58467071') format('woff'),
+    url('#{$fonts-dir}/assembl-glyph.ttf?58467071') format('truetype'),
+    url('#{$fonts-dir}/assembl-glyph.svg?58467071#assembl-glyph') format('svg');
   font-weight: normal;
   font-style: normal;
 }
@@ -19,7 +19,7 @@
 @media screen and (-webkit-min-device-pixel-ratio:0) {
   @font-face {
     font-family: 'assembl-glyph';
-    src: url('#{$fonts-dir}/assembl-glyph.svg?30877994#assembl-glyph') format('svg');
+    src: url('../font/assembl-glyph.svg?58467071#assembl-glyph') format('svg');
   }
 }
 */
@@ -27,7 +27,6 @@
 [class^="assembl-icon-"]:before, [class*=" assembl-icon-"]:before {
   font-family: "assembl-glyph";
   font-style: normal;
-  font-size: 20px;
   font-weight: normal;
   speak: none;
   display: inline-block;
@@ -39,6 +38,7 @@
   /* opacity: .8; */
 
   /* For safety - reset parent styles, that can break glyph codes */
+
   font-variant: normal;
   text-transform: none;
 
@@ -48,6 +48,7 @@
   /* Animation center compensation - margins should be symmetric */
 
   /* remove if not needed */
+
   margin-left: .2em;
 
   /* you can be more comfortable with increased icons size */
@@ -63,18 +64,6 @@
   /* text-shadow: 1px 1px 1px rgba(127, 127, 127, 0.3); */
 }
 
-.assembl-icon-google:before { content: '\f30f'; } /* '' */
-.assembl-icon-google-circle:before { content: '\f310'; } /* '' */
-
-.assembl-icon-facebook:before { content: '\f30c'; } /* '' */
-.assembl-icon-facebook-circle:before { content: '\f30d'; } /* '' */
-
-.assembl-icon-twitter:before { content: '\f309'; } /* '' */
-.assembl-icon-twitter-circle:before { content: '\f30a'; } /* '' */
-
-.assembl-icon-linkedin:before { content: '\f318'; }
-.assembl-icon-linkedin-circle:before { content: '\f319'; }
-
 .assembl-icon-add:before { content: '\e800'; } /* '' */
 .assembl-icon-catch:before { content: '\e801'; } /* '' */
 .assembl-icon-checked:before { content: '\e802'; } /* '' */
@@ -87,10 +76,15 @@
 .assembl-icon-profil:before { content: '\e809'; } /* '' */
 .assembl-icon-idea:before { content: '\e80a'; } /* '' */
 .assembl-icon-down-open:before { content: '\e80b'; } /* '' */
+.assembl-icon-plus-circled:before { content: '\e80c'; } /* '' */
+.assembl-icon-minus-circled:before { content: '\e80d'; } /* '' */
+.assembl-icon-up-bold:before { content: '\e80e'; } /* '' */
 .assembl-icon-link:before { content: '\e80f'; } /* '' */
+.assembl-icon-down-bold:before { content: '\e810'; } /* '' */
+.assembl-icon-expert:before { content: '\e811'; } /* '' */
 .assembl-icon-menu-on:before { content: '\e812'; } /* '' */
 .assembl-icon-message:before { content: '\e813'; } /* '' */
-.assembl-icon-expert:before { content: '\e814'; } /* '' */
+.assembl-icon-expert-1:before { content: '\e814'; } /* '' */
 .assembl-icon-pepite:before { content: '\e81b'; } /* '' */
 .assembl-icon-plus:before { content: '\e820'; } /* '' */
 .assembl-icon-schedule:before { content: '\e821'; } /* '' */
@@ -101,11 +95,7 @@
 .assembl-icon-synthesis:before { content: '\e826'; } /* '' */
 .assembl-icon-mindmap:before { content: '\e829'; } /* '' */
 .assembl-icon-up-open:before { content: '\e82a'; } /* '' */
-.assembl-icon-back-arrow:before { content: '\e856'; } /* '' */
-.assembl-icon-thumb:before { content: '\f00a'; } /* '' */
 .assembl-icon-symbol-assembl:before { content: '\e82c'; } /* '' */
-.assembl-icon-plus-circled:before { content: '\e80c'; } /* '' */
-.assembl-icon-minus-circled:before { content: '\e80d'; } /* '' */
 .assembl-icon-text-bold:before { content: '\e82d'; } /* '' */
 .assembl-icon-text-italics:before { content: '\e82e'; } /* '' */
 .assembl-icon-text-bullets:before { content: '\e82f'; } /* '' */
@@ -113,8 +103,18 @@
 .assembl-icon-text-attachment:before { content: '\e831'; } /* '' */
 .assembl-icon-text-align-left:before { content: '\e832'; } /* '' */
 .assembl-icon-text-align-right:before { content: '\e833'; } /* '' */
+.assembl-icon-back-arrow:before { content: '\e856'; } /* '' */
+.assembl-icon-double-page:before { content: '\e869'; } /* '' */
+.assembl-icon-timer:before { content: '\e86a'; } /* '' */
+.assembl-icon-sentiment-neutral:before { content: '\e86f'; } /* '' */
+.assembl-icon-thumb:before { content: '\f00a'; } /* '' */
 .assembl-icon-ellipsis:before { content: '\f141'; } /* '' */
 .assembl-icon-ellipsis-vert:before { content: '\f142'; } /* '' */
-.assembl-icon-sentiment-neutral:before { content: '\e86f'; } /* '' */
-.assembl-icon-double-page:before { content: '\e869'; } /* '' */
-.assembl-icon-timer:before { content: '\e86A'; } /* '' */
+.assembl-icon-twitter:before { content: '\f309'; } /* '' */
+.assembl-icon-twitter-circled:before { content: '\f30a'; } /* '' */
+.assembl-icon-facebook:before { content: '\f30c'; } /* '' */
+.assembl-icon-facebook-circled:before { content: '\f30d'; } /* '' */
+.assembl-icon-gplus-1:before { content: '\f30f'; } /* '' */
+.assembl-icon-gplus-circled:before { content: '\f310'; } /* '' */
+.assembl-icon-linkedin:before { content: '\f318'; } /* '' */
+.assembl-icon-linkedin-circled:before { content: '\f319'; } /* '' */

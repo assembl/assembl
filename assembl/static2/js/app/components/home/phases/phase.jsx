@@ -34,7 +34,7 @@ class Phase extends React.Component {
         const body = (
           <div>
             <Translate value="debate.notStarted" phaseName={phaseName} />
-            <Localize value={startDate} dateFormat="date.format" />
+            {startDate && <Localize value={startDate} dateFormat="date.format" />}
           </div>
         );
         displayModal(null, body, true, null, null, true);
@@ -73,9 +73,7 @@ class Phase extends React.Component {
               })}
             </h3>
           )}
-          <h4 className="light-title-4">
-            <Localize value={startDate} dateFormat="date.format2" />
-          </h4>
+          <h4 className="light-title-4">{startDate && <Localize value={startDate} dateFormat="date.format2" />}</h4>
           {description && (
             <div className="description-box">
               {description.entries.map((entry, index3) => {

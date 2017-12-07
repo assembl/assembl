@@ -137,6 +137,8 @@ export type IdeaQuery = {|
     | {}
     | {}
     | {}
+    | {}
+    | {}
     | {})
 |};
 
@@ -164,6 +166,7 @@ export type IdeaWithPostsQuery = {|
           numPosts: ?number,
           title: ?string
         |}>,
+        messageViewOverride: ?string,
         posts: ?{|
           edges: Array<?{|
             // The item at the end of the edge
@@ -192,7 +195,28 @@ export type IdeaWithPostsQuery = {|
     | {}
     | {}
     | {}
+    | {}
+    | {}
     | {})
+|};
+
+export type LegalNoticeAndTermsQueryVariables = {|
+  lang?: ?string
+|};
+
+export type LegalNoticeAndTermsQuery = {|
+  legalNoticeAndTerms: ?{|
+    legalNotice: ?string,
+    termsAndConditions: ?string,
+    legalNoticeEntries: ?Array<?{|
+      localeCode: string,
+      value: ?string
+    |}>,
+    termsAndConditionsEntries: ?Array<?{|
+      localeCode: string,
+      value: ?string
+    |}>
+  |}
 |};
 
 export type LocalesQueryQueryVariables = {|
@@ -269,7 +293,58 @@ export type PostQuery = {|
     | {}
     | {}
     | {}
+    | {}
+    | {}
     | {})
+|};
+
+export type ResourcesCenterPageQueryVariables = {|
+  lang?: ?string
+|};
+
+export type ResourcesCenterPageQuery = {|
+  resourcesCenter: ?{|
+    title: ?string,
+    titleEntries: ?Array<?{|
+      localeCode: string,
+      value: ?string
+    |}>,
+    headerImage: ?{|
+      externalUrl: ?string,
+      mimeType: ?string
+    |}
+  |}
+|};
+
+export type ResourcesQueryQueryVariables = {|
+  lang?: ?string
+|};
+
+export type ResourcesQueryQuery = {|
+  resources: ?Array<?{|
+    // The ID of the object.
+    id: string,
+    title: ?string,
+    text: ?string,
+    titleEntries: ?Array<?{|
+      localeCode: string,
+      value: ?string
+    |}>,
+    textEntries: ?Array<?{|
+      localeCode: string,
+      value: ?string
+    |}>,
+    embedCode: ?string,
+    doc: ?{|
+      externalUrl: ?string,
+      title: ?string,
+      mimeType: ?string
+    |},
+    image: ?{|
+      externalUrl: ?string,
+      mimeType: ?string
+    |}
+  |}>
 |};
 
 export type RootIdeaStatsQuery = {|
@@ -310,6 +385,133 @@ export type RootIdeasQueryQuery = {|
     | {})
 |};
 
+export type SynthesesQueryQueryVariables = {|
+  lang: string
+|};
+
+export type SynthesesQueryQuery = {|
+  syntheses: ?Array<?{|
+    // The ID of the object.
+    id: string,
+    subject: ?string,
+    creationDate: ?any,
+    img: ?{|
+      externalUrl: ?string
+    |},
+    post: ?{|
+      // The ID of the object.
+      id: string
+    |}
+  |}>
+|};
+
+export type SynthesisQueryQueryVariables = {|
+  id: string,
+  lang?: ?string
+|};
+
+export type SynthesisQueryQuery = {|
+  // The ID of the object
+  synthesisPost: ?(
+    | {
+        // The ID of the object.
+        id: string
+      }
+    | {
+        // The ID of the object.
+        id: string,
+        publishesSynthesis: ?{|
+          // The ID of the object.
+          id: string,
+          subject: ?string,
+          introduction: ?string,
+          conclusion: ?string,
+          creationDate: ?any,
+          img: ?{|
+            externalUrl: ?string
+          |},
+          ideas: ?Array<?(
+            | {
+                // The ID of the object.
+                id: string,
+                ancestors: ?Array<?string>,
+                title: ?string,
+                synthesisTitle: ?string,
+                live: ?(
+                  | {
+                      // The ID of the object.
+                      id: string,
+                      order: ?number,
+                      numPosts: ?number,
+                      numContributors: ?number,
+                      img: ?{|
+                        externalUrl: ?string
+                      |},
+                      posts: ?{|
+                        edges: Array<?{|
+                          // The item at the end of the edge
+                          node: ?{|
+                            sentimentCounts: ?{|
+                              like: ?number,
+                              disagree: ?number,
+                              dontUnderstand: ?number,
+                              moreInfo: ?number
+                            |},
+                            publicationState: ?PublicationStates
+                          |}
+                        |}>
+                      |}
+                    }
+                  | {})
+              }
+            | {})>
+        |}
+      }
+    | {
+        // The ID of the object.
+        id: string
+      }
+    | {
+        // The ID of the object.
+        id: string
+      }
+    | {
+        // The ID of the object.
+        id: string
+      }
+    | {
+        // The ID of the object.
+        id: string
+      }
+    | {
+        // The ID of the object.
+        id: string
+      }
+    | {
+        // The ID of the object.
+        id: string
+      }
+    | {
+        // The ID of the object.
+        id: string
+      }
+    | {
+        // The ID of the object.
+        id: string
+      })
+|};
+
+export type TabsConditionQueryVariables = {|
+  lang: string
+|};
+
+export type TabsConditionQuery = {|
+  hasResourcesCenter: ?boolean,
+  hasSyntheses: ?boolean,
+  hasLegalNotice: ?boolean,
+  hasTermsAndConditions: ?boolean
+|};
+
 export type ThematicQueryQueryVariables = {|
   lang: string,
   id: string
@@ -318,6 +520,7 @@ export type ThematicQueryQueryVariables = {|
 export type ThematicQueryQuery = {|
   // The ID of the object
   thematic: ?(
+    | {}
     | {}
     | {}
     | {}
@@ -355,6 +558,7 @@ export type ThematicQueryQuery = {|
           |}
         |}>
       }
+    | {}
     | {})
 |};
 
@@ -491,6 +695,31 @@ export type createPostMutation = {|
   |}
 |};
 
+export type createResourceMutationVariables = {|
+  doc?: ?string,
+  embedCode?: ?string,
+  image?: ?string,
+  textEntries: Array<?LangStringEntryInput>,
+  titleEntries: Array<LangStringEntryInput>
+|};
+
+export type createResourceMutation = {|
+  createResource: ?{|
+    resource: ?{|
+      doc: ?{|
+        externalUrl: ?string
+      |},
+      embedCode: ?string,
+      image: ?{|
+        externalUrl: ?string,
+        mimeType: ?string
+      |},
+      text: ?string,
+      title: ?string
+    |}
+  |}
+|};
+
 export type createThematicMutationVariables = {|
   identifier: string,
   image?: ?string,
@@ -535,6 +764,16 @@ export type deletePostMutation = {|
   |}
 |};
 
+export type deleteResourceMutationVariables = {|
+  resourceId: string
+|};
+
+export type deleteResourceMutation = {|
+  deleteResource: ?{|
+    success: ?boolean
+  |}
+|};
+
 export type deleteSentimentMutationVariables = {|
   postId: string
 |};
@@ -574,6 +813,26 @@ export type updateDiscussionPreferenceMutation = {|
     preferences: ?{|
       languages: ?Array<?{|
         locale: ?string
+      |}>
+    |}
+  |}
+|};
+
+export type UpdateLegalNoticeAndTermsMutationVariables = {|
+  legalNoticeEntries: Array<?LangStringEntryInput>,
+  termsAndConditionsEntries: Array<?LangStringEntryInput>
+|};
+
+export type UpdateLegalNoticeAndTermsMutation = {|
+  updateLegalNoticeAndTerms: ?{|
+    legalNoticeAndTerms: ?{|
+      legalNoticeEntries: ?Array<?{|
+        localeCode: string,
+        value: ?string
+      |}>,
+      termsAndConditionsEntries: ?Array<?{|
+        localeCode: string,
+        value: ?string
       |}>
     |}
   |}
@@ -637,6 +896,52 @@ export type updatePostMutation = {|
           mimeType: ?string
         |}
       |}>
+    |}
+  |}
+|};
+
+export type updateResourceMutationVariables = {|
+  doc?: ?string,
+  id: string,
+  image?: ?string,
+  titleEntries: Array<?LangStringEntryInput>,
+  textEntries?: ?Array<?LangStringEntryInput>,
+  embedCode?: ?string
+|};
+
+export type updateResourceMutation = {|
+  updateResource: ?{|
+    resource: ?{|
+      doc: ?{|
+        externalUrl: ?string
+      |},
+      embedCode: ?string,
+      image: ?{|
+        externalUrl: ?string,
+        mimeType: ?string
+      |},
+      text: ?string,
+      title: ?string
+    |}
+  |}
+|};
+
+export type UpdateResourcesCenterMutationVariables = {|
+  headerImage?: ?string,
+  titleEntries: Array<?LangStringEntryInput>
+|};
+
+export type UpdateResourcesCenterMutation = {|
+  updateResourcesCenter: ?{|
+    resourcesCenter: ?{|
+      titleEntries: ?Array<?{|
+        localeCode: string,
+        value: ?string
+      |}>,
+      headerImage: ?{|
+        externalUrl: ?string,
+        title: ?string
+      |}
     |}
   |}
 |};

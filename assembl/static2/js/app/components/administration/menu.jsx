@@ -24,6 +24,20 @@ class Menu extends React.Component {
                 </span>
               </Link>
             </li>
+            <li>
+              <Link to={`${get('administration', slug)}/discussion?section=2`} activeClassName="active">
+                <span>
+                  <Translate value="administration.menu.sections" />
+                </span>
+              </Link>
+            </li>
+            <li>
+              <Link to={`${get('administration', slug)}/discussion?section=3`} activeClassName="active">
+                <span>
+                  <Translate value="administration.menu.legalNoticeAndTerms" />
+                </span>
+              </Link>
+            </li>
           </ul>
         </li>
         <li className="menu-item">

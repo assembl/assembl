@@ -80,6 +80,25 @@
     }
   }
 
+  .admin-icons {
+    border: none;
+    width: 35px;
+
+    &:hover {
+      background-color: $white;
+      border: none;
+    }
+
+    &:focus {
+      outline: none;
+      background-color: $white;
+    }
+
+    &:active {
+      box-shadow: none;
+    }
+  }
+
   .plus {
     background-color: $first-color;
     border-radius: 20px;

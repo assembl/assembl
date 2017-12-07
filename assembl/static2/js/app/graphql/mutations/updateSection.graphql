@@ -1,0 +1,10 @@
+mutation updateSection($id: ID!, $url: String, $titleEntries: [LangStringEntryInput]!, $order: Float) {
+  updateSection(id: $id, url: $url, titleEntries: $titleEntries, order: $order) {
+    section {
+      id
+      url
+      title
+      order
+    }
+  }
+}

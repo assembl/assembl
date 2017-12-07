@@ -4,7 +4,7 @@ import { Provider } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
 import Thunk from 'redux-thunk';
 import { loadTranslations, setLocale, syncTranslationWithStore } from 'react-redux-i18n';
-import RootReducer from './reducers/rootReducer';
+import rootReducer from './reducers/rootReducer';
 import { getDiscussionId, getConnectedUserId } from './utils/globalFunctions';
 import { getLocale, getTranslations } from './utils/i18n';
 import { connectedUserIsExpert } from './utils/permissions';
@@ -24,7 +24,7 @@ assembl/static/js/app/views/navBar.js
 */
 
 const myCreateStore = () => {
-  const store = createStore(RootReducer, applyMiddleware(Thunk));
+  const store = createStore(rootReducer, applyMiddleware(Thunk));
   const assemblLocale = window.assembl_locale.split('_')[0];
   const userLocale = getLocale(assemblLocale);
   syncTranslationWithStore(store);

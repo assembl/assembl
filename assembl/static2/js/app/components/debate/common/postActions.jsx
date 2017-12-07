@@ -3,39 +3,23 @@ import { withApollo } from 'react-apollo';
 import { Translate } from 'react-redux-i18n';
 import { OverlayTrigger } from 'react-bootstrap';
 import { MEDIUM_SCREEN_WIDTH } from '../../../constants';
-import { answerTooltip, sharePostTooltip } from '../../common/tooltips';
+import { sharePostTooltip } from '../../common/tooltips';
 
 import getOverflowMenuForPost from './overflowMenu';
 import ResponsiveOverlayTrigger from '../../common/responsiveOverlayTrigger';
 import { getConnectedUserId } from '../../../utils/globalFunctions';
-import { promptForLoginOr, openShareModal, displayModal } from '../../../utils/utilityManager';
+import { openShareModal, displayModal } from '../../../utils/utilityManager';
 import Permissions, { connectedUserCan } from '../../../utils/permissions';
 import Sentiments from './sentiments';
 import getSentimentStats from './sentimentStats';
 import sentimentDefinitions from './sentimentDefinitions';
 import { getIfPhaseCompletedByIdentifier } from '../../../utils/timeline';
+import { withScreenWidth } from '../../common/screenDimensions';
 
 class PostActions extends React.Component {
   constructor(props) {
     super(props);
-    const screenWidth = window.innerWidth;
-    this.state = {
-      screenWidth: screenWidth
-    };
-    this.updateDimensions = this.updateDimensions.bind(this);
     this.displayPhaseCompletedModal = this.displayPhaseCompletedModal.bind(this);
-  }
-  componentDidMount() {
-    window.addEventListener('resize', this.updateDimensions);
-  }
-  componentWillUnmount() {
-    window.removeEventListener('resize', this.updateDimensions);
-  }
-  updateDimensions() {
-    const screenWidth = window.innerWidth;
-    this.setState({
-      screenWidth: screenWidth
-    });
   }
   displayPhaseCompletedModal() {
     const body = (
@@ -52,12 +36,12 @@ class PostActions extends React.Component {
       postId,
       sentimentCounts,
       mySentiment,
-      handleAnswerClick,
       handleEditClick,
       numChildren,
       routerParams,
       debateData,
-      identifier
+      identifier,
+      screenWidth
     } = this.props;
     let count = 0;
     const totalSentimentsCount = sentimentCounts
@@ -71,7 +55,7 @@ class PostActions extends React.Component {
     const modalTitle = <Translate value="debate.sharePost" />;
     const useSocial = debateData.useSocialMedia;
     let overflowMenu = null;
-    const tooltipPlacement = this.state.screenWidth >= MEDIUM_SCREEN_WIDTH ? 'left' : 'top';
+    const tooltipPlacement = screenWidth >= MEDIUM_SCREEN_WIDTH ? 'left' : 'top';
     const isPhaseCompleted = getIfPhaseCompletedByIdentifier(debateData.timeline, identifier);
     if (userCanDeleteThisMessage || userCanEditThisMessage) {
       overflowMenu = (
@@ -83,29 +67,20 @@ class PostActions extends React.Component {
             overlay={getOverflowMenuForPost(postId, userCanDeleteThisMessage, userCanEditThisMessage, client, handleEditClick)}
           >
             <div>
-              {this.state.screenWidth >= MEDIUM_SCREEN_WIDTH ? (
+              {screenWidth >= MEDIUM_SCREEN_WIDTH ? (
                 <span className="assembl-icon-ellipsis-vert" />
               ) : (
-                <span className="assembl-icon-ellipsis">&nbsp;</span>
+                <span className="assembl-icon-ellipsis" />
               )}
             </div>
           </OverlayTrigger>
         </div>
       );
     }
-    const answerIcon = <span className="assembl-icon-back-arrow color" />;
     const shareIcon = <span className="assembl-icon-share color" />;
     return (
       <div className="post-actions">
         <div className="post-icons">
-          {handleAnswerClick && (
-            <div
-              className="post-action"
-              onClick={isPhaseCompleted ? this.displayPhaseCompletedModal : promptForLoginOr(handleAnswerClick)}
-            >
-              <ResponsiveOverlayTrigger placement={tooltipPlacement} tooltip={answerTooltip} component={answerIcon} />
-            </div>
-          )}
           <div
             className="post-action"
             onClick={() => {
@@ -127,7 +102,7 @@ class PostActions extends React.Component {
             postId={postId}
             isPhaseCompleted={isPhaseCompleted}
           />
-          {this.state.screenWidth >= MEDIUM_SCREEN_WIDTH ? null : overflowMenu}
+          {screenWidth >= MEDIUM_SCREEN_WIDTH ? null : overflowMenu}
         </div>
         {totalSentimentsCount > 0 ? (
           <OverlayTrigger
@@ -148,7 +123,7 @@ class PostActions extends React.Component {
                 }, [])}
               </div>
               <div className="txt">
-                {this.state.screenWidth >= MEDIUM_SCREEN_WIDTH ? (
+                {screenWidth >= MEDIUM_SCREEN_WIDTH ? (
                   totalSentimentsCount
                 ) : (
                   <Translate value="debate.thread.numberOfReactions" count={totalSentimentsCount} />
@@ -159,7 +134,7 @@ class PostActions extends React.Component {
         ) : (
           <div className="empty-sentiments-count" />
         )}
-        {this.state.screenWidth >= MEDIUM_SCREEN_WIDTH ? overflowMenu : null}
+        {screenWidth >= MEDIUM_SCREEN_WIDTH ? overflowMenu : null}
         <div className="answers annotation">
           <Translate value="debate.thread.numberOfResponses" count={numChildren || 0} />
         </div>
@@ -169,4 +144,4 @@ class PostActions extends React.Component {
   }
 }
 
-export default withApollo(PostActions);
+export default withScreenWidth(withApollo(PostActions));

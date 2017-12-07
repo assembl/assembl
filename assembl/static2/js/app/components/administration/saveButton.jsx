@@ -13,7 +13,11 @@ import updateThematicMutation from '../../graphql/mutations/updateThematic.graph
 import createResourceMutation from '../../graphql/mutations/createResource.graphql';
 import updateResourceMutation from '../../graphql/mutations/updateResource.graphql';
 import deleteResourceMutation from '../../graphql/mutations/deleteResource.graphql';
+import createSectionMutation from '../../graphql/mutations/createSection.graphql';
+import updateSectionMutation from '../../graphql/mutations/updateSection.graphql';
+import deleteSectionMutation from '../../graphql/mutations/deleteSection.graphql';
 import updateResourcesCenterMutation from '../../graphql/mutations/updateResourcesCenter.graphql';
+import updateLegalNoticeAndTermsMutation from '../../graphql/mutations/updateLegalNoticeAndTerms.graphql';
 import updateDiscussionPreferenceQuery from '../../graphql/mutations/updateDiscussionPreference.graphql';
 import getDiscussionPreferenceLanguage from '../../graphql/DiscussionPreferenceLanguage.graphql';
 
@@ -28,11 +32,11 @@ const runSerial = (tasks) => {
 const getMutationsPromises = (params) => {
   const { items, variablesCreator, deleteVariablesCreator, createMutation, deleteMutation, updateMutation } = params;
   const promises = [];
-  items.forEach((item) => {
+  items.forEach((item, index) => {
     if (item.isNew && !item.toDelete) {
       // create item
       const payload = {
-        variables: variablesCreator(item)
+        variables: variablesCreator(item, index)
       };
       const p1 = () => {
         return createMutation(payload);
@@ -49,7 +53,7 @@ const getMutationsPromises = (params) => {
       promises.push(p3);
     } else {
       // update item
-      const variables = variablesCreator(item);
+      const variables = variablesCreator(item, index);
       variables.id = item.id;
       const payload = {
         variables: variables
@@ -107,6 +111,19 @@ const createVariablesForDeleteResourceMutation = (resource) => {
   return { resourceId: resource.id };
 };
 
+const createVariablesForSectionMutation = (section) => {
+  return {
+    type: section.type,
+    url: section.url,
+    order: section.order,
+    titleEntries: section.titleEntries
+  };
+};
+
+const createVariablesForDeleteSectionMutation = (section) => {
+  return { sectionId: section.id };
+};
+
 const SaveButton = ({
   i18n,
   client,
@@ -123,14 +140,23 @@ const SaveButton = ({
   changeLocale,
   resourcesHaveChanged,
   resources,
+  legalNoticeAndTerms,
   createResource,
   deleteResource,
   updateResource,
   refetchResources,
   resourcesCenterPage,
   updateResourcesCenter,
+  updateLegalNoticeAndTerms,
   refetchResourcesCenter,
-  refetchTabsConditions
+  refetchTabsConditions,
+  sections,
+  sectionsHaveChanged,
+  refetchSections,
+  createSection,
+  updateSection,
+  deleteSection,
+  refetchLegalNoticeAndTerms
 }) => {
   const saveAction = () => {
     displayAlert('success', `${I18n.t('loading.wait')}...`);
@@ -172,7 +198,7 @@ const SaveButton = ({
           displayAlert('success', I18n.t('administration.successThemeCreation'));
         })
         .catch((error) => {
-          displayAlert('danger', `${error}`, false, 30000);
+          displayAlert('danger', error, false, 30000);
         });
     }
 
@@ -215,13 +241,50 @@ const SaveButton = ({
           displayAlert('danger', `${error}`, false, 30000);
         });
     }
+
+    if (sectionsHaveChanged) {
+      const mutationsPromises = getMutationsPromises({
+        items: sections,
+        variablesCreator: createVariablesForSectionMutation,
+        deleteVariablesCreator: createVariablesForDeleteSectionMutation,
+        createMutation: createSection,
+        updateMutation: updateSection,
+        deleteMutation: deleteSection
+      });
+
+      runSerial(mutationsPromises).then(() => {
+        refetchSections();
+        displayAlert('success', I18n.t('administration.sections.successSave'));
+      });
+    }
+
+    if (legalNoticeAndTerms.get('hasChanged')) {
+      const legalNoticeEntries = legalNoticeAndTerms.get('legalNoticeEntries').toJS();
+      const termsAndConditionsEntries = legalNoticeAndTerms.get('termsAndConditionsEntries').toJS();
+      const payload = {
+        variables: {
+          legalNoticeEntries: convertEntriesToHTML(legalNoticeEntries),
+          termsAndConditionsEntries: convertEntriesToHTML(termsAndConditionsEntries)
+        }
+      };
+      updateLegalNoticeAndTerms(payload)
+        .then(() => {
+          refetchLegalNoticeAndTerms();
+          displayAlert('success', I18n.t('administration.legalNoticeAndTerms.successSave'));
+        })
+        .catch((error) => {
+          displayAlert('danger', `${error}`, false, 30000);
+        });
+    }
   };
 
   const disabled = !(
     thematicsHaveChanged ||
     languagePreferenceHasChanged ||
     resourcesHaveChanged ||
-    resourcesCenterPage.get('hasChanged')
+    sectionsHaveChanged ||
+    resourcesCenterPage.get('hasChanged') ||
+    legalNoticeAndTerms.get('hasChanged')
   );
   return (
     <Button className="button-submit button-dark right" disabled={disabled} onClick={saveAction}>
@@ -254,21 +317,36 @@ const SaveButtonWithMutations = compose(
   }),
   graphql(updateResourcesCenterMutation, {
     name: 'updateResourcesCenter'
+  }),
+  graphql(createSectionMutation, {
+    name: 'createSection'
+  }),
+  graphql(updateSectionMutation, {
+    name: 'updateSection'
+  }),
+  graphql(deleteSectionMutation, {
+    name: 'deleteSection'
+  }),
+  graphql(updateLegalNoticeAndTermsMutation, {
+    name: 'updateLegalNoticeAndTerms'
   })
 )(SaveButton);
 
 const mapStateToProps = ({
   i18n,
   admin: {
+    sections,
     resourcesCenter,
     thematicsById,
     thematicsHaveChanged,
     thematicsInOrder,
     discussionLanguagePreferences,
-    discussionLanguagePreferencesHasChanged
+    discussionLanguagePreferencesHasChanged,
+    legalNoticeAndTerms
   }
 }) => {
   const { page, resourcesById, resourcesHaveChanged, resourcesInOrder } = resourcesCenter;
+  const { sectionsById, sectionsHaveChanged, sectionsInOrder } = sections;
   return {
     resourcesCenterPage: page,
     resourcesHaveChanged: resourcesHaveChanged,
@@ -281,7 +359,15 @@ const mapStateToProps = ({
     }),
     preferences: discussionLanguagePreferences,
     i18n: i18n,
-    languagePreferenceHasChanged: discussionLanguagePreferencesHasChanged
+    languagePreferenceHasChanged: discussionLanguagePreferencesHasChanged,
+    sectionsHaveChanged: sectionsHaveChanged,
+    sections: sectionsById
+      .mapKeys((id, section) => {
+        return section.set('order', sectionsInOrder.indexOf(id));
+      }) // fix order of sections
+      .valueSeq() // convert to array of Map
+      .toJS(), // convert to array of objects
+    legalNoticeAndTerms: legalNoticeAndTerms
   };
 };
 

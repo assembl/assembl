@@ -86,6 +86,10 @@ export const updateInLangstringEntries = (locale, value) => {
 };
 
 export const getEntryValueForLocale = (entries, locale, defaultValue = null) => {
+  if (!entries) {
+    return defaultValue;
+  }
+
   const entry = entries.find((e) => {
     return e.get('localeCode') === locale;
   });

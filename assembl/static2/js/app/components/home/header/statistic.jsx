@@ -10,28 +10,17 @@ import withLoadingIndicator from '../../../components/common/withLoadingIndicato
 type StatisticElementProps = {
   iconName: string,
   metricValue: string,
-  metricNameTranslateKey: string,
-  isLast: boolean,
-  width: string
-};
-
-const indexIsLast = (index, array) => {
-  return index === array.length - 1;
+  metricNameTranslateKey: string
 };
 
 const StatisticElement = (props: StatisticElementProps) => {
   return (
-    <div
-      className={`inline${props.isLast ? '' : ' border-right'}`}
-      style={{
-        width: props.width
-      }}
-    >
+    <div className="stat-container">
       <div className="stat-box">
         <div className={`stat-icon assembl-icon-${props.iconName} white`} />
         <div className="stat">
-          <div className="stat-nb">{props.metricValue}&nbsp;</div>
-          <div className="stat-nb">
+          <div className="stat-nb">{props.metricValue}</div>
+          <div className="stat-nb stat-label">
             <Translate value={props.metricNameTranslateKey} />
           </div>
         </div>
@@ -42,9 +31,8 @@ const StatisticElement = (props: StatisticElementProps) => {
 
 class Statistic extends React.Component {
   static mapElementsPropsToComponents = (elemsProps) => {
-    return elemsProps.map((elementProps, index, array) => {
-      const elementsWidth = `${100 / array.length}%`;
-      return <StatisticElement key={index} {...elementProps} width={elementsWidth} isLast={indexIsLast(index, array)} />;
+    return elemsProps.map((elementProps, index) => {
+      return <StatisticElement key={index} {...elementProps} />;
     });
   };
   render() {

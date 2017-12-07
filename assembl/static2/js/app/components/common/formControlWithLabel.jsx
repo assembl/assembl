@@ -47,7 +47,7 @@ class FormControlWithLabel extends React.Component {
   };
 
   renderFormControl = () => {
-    const { type, value } = this.props;
+    const { type, value, disabled } = this.props;
     if (type === 'rich-text') {
       return this.renderRichTextEditor();
     }
@@ -60,6 +60,7 @@ class FormControlWithLabel extends React.Component {
         onChange={this.props.onChange}
         value={value || ''}
         onBlur={this.setValidationState}
+        disabled={disabled}
       />
     );
   };

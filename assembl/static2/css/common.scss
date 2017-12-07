@@ -137,6 +137,10 @@ input.placeholder, textarea.placeholder {
   margin-right: auto;
 }
 
+.justify {
+  text-align: justify;
+}
+
 .border-top {
   border-top: $navbar-border;
 }
@@ -275,4 +279,14 @@ strong {
 
 .cursor-wait {
   cursor: wait !important;
+}
+
+@media screen and (min-width: 1024px) {
+  .page-body {
+    margin: 0 90px 80px 90px;
+  }
+}
+
+.small-hyphen-padding {
+  padding: 0 5px;
 }

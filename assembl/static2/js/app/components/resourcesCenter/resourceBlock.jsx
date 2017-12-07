@@ -31,30 +31,31 @@ const ResourceBlock = (props: ResourceBlockProps) => {
       <div className="max-container resource-block">
         <div className="title-section">
           <div className="title-hyphen" />
-          <h1 className="dark-title-1">
-            {title}
-          </h1>
+          <h1 className="dark-title-1">{title}</h1>
         </div>
-        <div className="resource-body">
-          {image &&
+        <div className="page-body">
+          {image && (
             <div className="resource-img-container">
               <img src={image.externalUrl} alt="resource" className={imgClassNames} />
-            </div>}
+            </div>
+          )}
           {embedCode &&
-            !image &&
-            <div className="resource-video-container">
-              <div className={videoClassNames}>
-                <iframe title="resource-video" src={embedCode} className="resource-iframe" />
+            !image && (
+              <div className="resource-video-container">
+                <div className={videoClassNames}>
+                  <iframe title="resource-video" src={embedCode} className="resource-iframe" />
+                </div>
               </div>
-            </div>}
+            )}
           <div className="resource-text">
             <p dangerouslySetInnerHTML={{ __html: text }} />
-            {doc &&
+            {doc && (
               <div className="resource-download-link">
                 <a href={doc.externalUrl}>
                   <Translate value="resourcesCenter.download" />
                 </a>
-              </div>}
+              </div>
+            )}
           </div>
           <div className="clear" />
         </div>

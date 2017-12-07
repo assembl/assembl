@@ -4,6 +4,30 @@ import React from 'react';
 import { Tooltip } from 'react-bootstrap';
 import { Translate } from 'react-redux-i18n';
 
+export const addSectionTooltip = (
+  <Tooltip id="addSectionTooltip">
+    <Translate value="administration.sections.addSection" />
+  </Tooltip>
+);
+
+export const deleteSectionTooltip = (
+  <Tooltip id="deleteSectionTooltip">
+    <Translate value="administration.sections.deleteSection" />
+  </Tooltip>
+);
+
+export const upTooltip = (
+  <Tooltip id="upTooltip">
+    <Translate value="administration.up" />
+  </Tooltip>
+);
+
+export const downTooltip = (
+  <Tooltip id="downTooltip">
+    <Translate value="administration.down" />
+  </Tooltip>
+);
+
 export const addThematicTooltip = (
   <Tooltip id="addThematicTooltip">
     <Translate value="administration.addThematic" />

@@ -1,10 +1,19 @@
+// @flow
 import { fromJS, List, Map } from 'immutable';
 import { combineReducers } from 'redux';
+import type ReduxAction from 'redux';
 
+import { type Action } from '../../actions/actionTypes';
+import legalNoticeAndTerms from './legalNoticeAndTerms';
+import type { LegalNoticeAndTermsReducer } from './legalNoticeAndTerms';
 import resourcesCenter from './resourcesCenter';
+import sections from './adminSections';
+import type { AdminSectionsReducers } from './adminSections';
 import { updateInLangstringEntries } from '../../utils/i18n';
 
-export const selectedLocale = (state = 'fr', action) => {
+type SelectedLocaleState = string;
+type SelectedLocaleReducer = (SelectedLocaleState, ReduxAction<Action>) => SelectedLocaleState;
+export const selectedLocale: SelectedLocaleReducer = (state = 'fr', action) => {
   switch (action.type) {
   case 'UPDATE_SELECTED_LOCALE':
     return action.newLocale;
@@ -13,7 +22,9 @@ export const selectedLocale = (state = 'fr', action) => {
   }
 };
 
-export const thematicsInOrder = (state = List(), action) => {
+type ThematicsInOrderState = List;
+type ThematicsInOrderReducer = (ThematicsInOrderState, ReduxAction<Action>) => ThematicsInOrderState;
+export const thematicsInOrder: ThematicsInOrderReducer = (state = List(), action) => {
   switch (action.type) {
   case 'CREATE_NEW_THEMATIC':
     return state.push(action.id);
@@ -29,7 +40,9 @@ export const thematicsInOrder = (state = List(), action) => {
   }
 };
 
-export const thematicsById = (state = Map(), action) => {
+type ThematicsByIdState = Map;
+type ThematicsByIdReducer = (ThematicsByIdState, ReduxAction<Action>) => ThematicsByIdState;
+export const thematicsById: ThematicsByIdReducer = (state = Map(), action) => {
   switch (action.type) {
   case 'ADD_QUESTION_TO_THEMATIC': {
     const newQuestion = fromJS({
@@ -128,7 +141,8 @@ export const thematicsById = (state = Map(), action) => {
   }
 };
 
-export const thematicsHaveChanged = (state = false, action) => {
+type ThematicsHaveChangedReducer = (boolean, ReduxAction<Action>) => boolean;
+export const thematicsHaveChanged: ThematicsHaveChangedReducer = (state = false, action) => {
   switch (action.type) {
   case 'UPDATE_THEMATICS':
     return false;
@@ -151,14 +165,16 @@ export const thematicsHaveChanged = (state = false, action) => {
   }
 };
 
-const hasLocale = (l, arr) => {
+const hasLocale = (l: string, arr: Array<string>): boolean => {
   const i = arr.findIndex((a) => {
     return a === l;
   });
   return i >= 0;
 };
 
-export const languagePreferences = (state = List(), action) => {
+type LanguagePreferencesState = List<string>;
+type LanguagePreferencesReducer = (LanguagePreferencesState, ReduxAction<Action>) => LanguagePreferencesState;
+export const languagePreferences: LanguagePreferencesReducer = (state = List(), action) => {
   switch (action.type) {
   case 'ADD_LANGUAGE_PREFERENCE':
     // Language preferences can be added in different components
@@ -179,7 +195,11 @@ export const languagePreferences = (state = List(), action) => {
   }
 };
 
-export const discussionLanguagePreferencesHasChanged = (state = false, action) => {
+type DiscussionLanguagePreferencesHasChangedReducer = (boolean, ReduxAction<Action>) => boolean;
+export const discussionLanguagePreferencesHasChanged: DiscussionLanguagePreferencesHasChangedReducer = (
+  state = false,
+  action
+) => {
   switch (action.type) {
   case 'LANGUAGE_PREFERENCE_HAS_CHANGED':
     return action.state;
@@ -188,12 +208,29 @@ export const discussionLanguagePreferencesHasChanged = (state = false, action) =
   }
 };
 
-export default combineReducers({
+type ResourcesCenterReducer = Function; // TODO
+export type AdminReducer = {
+  selectedLocale: SelectedLocaleReducer,
+  thematicsHaveChanged: ThematicsHaveChangedReducer,
+  thematicsInOrder: ThematicsInOrderReducer,
+  thematicsById: ThematicsByIdReducer,
+  discussionLanguagePreferences: LanguagePreferencesReducer,
+  discussionLanguagePreferencesHasChanged: DiscussionLanguagePreferencesHasChangedReducer,
+  resourcesCenter: ResourcesCenterReducer,
+  sections: AdminSectionsReducers,
+  legalNoticeAndTerms: LegalNoticeAndTermsReducer
+};
+
+const reducers: AdminReducer = {
   selectedLocale: selectedLocale,
   thematicsHaveChanged: thematicsHaveChanged,
   thematicsInOrder: thematicsInOrder,
   thematicsById: thematicsById,
   discussionLanguagePreferences: languagePreferences,
   discussionLanguagePreferencesHasChanged: discussionLanguagePreferencesHasChanged,
-  resourcesCenter: resourcesCenter
-});
+  resourcesCenter: resourcesCenter,
+  sections: sections,
+  legalNoticeAndTerms: legalNoticeAndTerms
+};
+
+export default combineReducers(reducers);

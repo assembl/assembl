@@ -197,3 +197,10 @@ export const isMobile = {
     return isMobile.android() || isMobile.blackberry() || isMobile.ios() || isMobile.opera() || isMobile.windows();
   }
 };
+
+// works for SCREAMING_SNAKE_CASE, snake_case or cRazY_SNAKE_case
+export const snakeToCamel = (string: string) => {
+  return string.toLowerCase().replace(/_[a-z]/g, (match) => {
+    return match[1].toUpperCase();
+  });
+};

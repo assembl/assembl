@@ -1,6 +1,6 @@
 from pyramid.view import view_config
 from pyramid.httpexceptions import HTTPUnauthorized
-from pyramid.security import authenticated_userid, Everyone
+from pyramid.security import Everyone
 from graphql_wsgi import graphql_wsgi
 
 from assembl import models
@@ -23,7 +23,7 @@ def graphql_api(request):
     discussion_id = discussion.id
     # set discussion_id in request.matchdict which is use as context_value
     request.matchdict['discussion_id'] = discussion_id
-    user_id = authenticated_userid(request) or Everyone
+    user_id = request.authenticated_userid or Everyone
     permissions = get_permissions(user_id, discussion_id)
     if not discussion.user_can(user_id, CrudPermissions.READ, permissions):
         raise HTTPUnauthorized()

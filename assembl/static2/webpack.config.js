@@ -58,6 +58,7 @@ module.exports = {
                 // dependencies if the dependency already has a .babelrc file,
                 // we need plugins and presets here for that.
                 // A dependency is transpiled only if it's in the include below.
+                babelrc: false,
                 plugins: [
                   'transform-object-rest-spread',
                   'transform-class-properties',

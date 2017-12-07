@@ -4,6 +4,7 @@ import { Translate, I18n } from 'react-redux-i18n';
 import { convertFromRaw, convertToRaw, Editor, EditorState, RawContentState, RichUtils } from 'draft-js';
 import classNames from 'classnames';
 import punycode from 'punycode';
+import throttle from 'lodash/throttle';
 
 import AtomicBlockRenderer from './atomicBlockRenderer';
 import Toolbar from './toolbar';
@@ -84,9 +85,14 @@ export default class RichTextEditor extends React.Component<Object, RichTextEdit
   };
 
   onChange = (newEditorState: EditorState): void => {
-    this.setState({
-      editorState: newEditorState
-    });
+    this.setState(
+      {
+        editorState: newEditorState
+      },
+      throttle(() => {
+        this.props.updateContentState(this.getCurrentRawContentState());
+      }, 300)
+    );
   };
 
   handleEditorFocus = (): void => {

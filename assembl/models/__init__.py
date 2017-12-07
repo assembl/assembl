@@ -315,6 +315,8 @@ from .announcement import (
 
 from .resource import Resource
 
+from .section import Section
+
 
 def includeme(config):
     config.include('.langstrings')

@@ -60,6 +60,8 @@ const icons = [
   'assembl-icon-ellipsis-vert',
   'assembl-icon-double-page',
   'assembl-icon-timer',
+  'assembl-icon-up-bold',
+  'assembl-icon-down-bold'
 ]
 
 class Icons extends React.Component {

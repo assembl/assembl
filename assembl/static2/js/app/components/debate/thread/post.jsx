@@ -240,7 +240,7 @@ export class EmptyPost extends React.PureComponent {
               {creator && (
                 <ProfileLine
                   userId={creator.userId}
-                  userName={creator.name}
+                  userName={creator.displayName}
                   creationDate={creationDate}
                   locale={lang}
                   modified={modificationDate !== null}
@@ -288,7 +288,6 @@ export class EmptyPost extends React.PureComponent {
               <PostActions
                 creatorUserId={creator.userId}
                 postId={id}
-                handleAnswerClick={this.handleAnswerClick}
                 handleEditClick={this.handleEditClick}
                 sentimentCounts={sentimentCounts}
                 mySentiment={mySentiment}
@@ -301,17 +300,17 @@ export class EmptyPost extends React.PureComponent {
             </div>
           </div>
         </div>
-        {this.state.showAnswerForm ? (
-          <div className="answer-form">
-            <AnswerForm
-              parentId={id}
-              ideaId={ideaId}
-              refetchIdea={refetchIdea}
-              textareaRef={answerTextareaRef}
-              hideAnswerForm={this.hideAnswerForm}
-            />
-          </div>
-        ) : null}
+        <div className={this.state.showAnswerForm ? 'answer-form' : 'collapsed-answer-form'}>
+          <AnswerForm
+            parentId={id}
+            ideaId={ideaId}
+            refetchIdea={refetchIdea}
+            textareaRef={answerTextareaRef}
+            hideAnswerForm={this.hideAnswerForm}
+            handleAnswerClick={this.handleAnswerClick}
+            identifier={identifier}
+          />
+        </div>
       </div>
     );
   }

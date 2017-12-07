@@ -1,4 +1,9 @@
-query TabsCondition {
+query TabsCondition($lang: String!) {
   hasResourcesCenter
   hasSyntheses
+  hasLegalNotice(lang: $lang)
+  hasTermsAndConditions(lang: $lang)
+  discussion {
+    homepageUrl
+  }
 }
