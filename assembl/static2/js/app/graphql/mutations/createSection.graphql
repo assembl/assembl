@@ -1,6 +1,7 @@
 mutation createSection($sectionType: SectionTypesEnum, $url: String, $titleEntries: [LangStringEntryInput]!, $order: Float) {
   createSection(sectionType: $sectionType, url: $url, titleEntries: $titleEntries, order: $order) {
     section {
+      id
       sectionType
       url
       title
