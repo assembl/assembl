@@ -12,9 +12,7 @@ const convertToContextualName = (name) => {
   const workingName = capitalize(name);
   return base + workingName;
 };
-const maybePrependSlash = (pre, s) => {
-  return pre ? `/${s}` : s;
-};
+const maybePrependSlash = (pre, s) => (pre ? `/${s}` : s);
 export const get = (name, args) => {
   const newArgs = args || {};
   const pre = 'preSlash' in newArgs ? newArgs.preSlash : true;
@@ -28,9 +26,7 @@ export const get = (name, args) => {
   const a = parse(literal, newArgs);
   return a;
 };
-const basePath = () => {
-  return `${window.location.protocol}//${window.location.host}`;
-};
+const basePath = () => `${window.location.protocol}//${window.location.host}`;
 export const getFullPath = (name, args) => {
   const rel = get(name, { ...args, preSlash: false });
   return urljoin(basePath(), rel);
@@ -48,9 +44,7 @@ export const routeForRouter = (name, isCtx, args) => {
   }
   return get(name, newArgs);
 };
-export const getCurrentView = () => {
-  return window.location.pathname;
-};
+export const getCurrentView = () => window.location.pathname;
 /* Not use for the moment, but maybe later
 
 const slug = getDiscussionSlug();

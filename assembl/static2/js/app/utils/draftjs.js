@@ -31,9 +31,7 @@ export function createEmptyRawContentState(): RawContentState {
   return convertToRaw(ContentState.createFromText(''));
 }
 
-export const textToRawContentState = (text: string): RawContentState => {
-  return convertToRaw(ContentState.createFromText(text));
-};
+export const textToRawContentState = (text: string): RawContentState => convertToRaw(ContentState.createFromText(text));
 
 export function convertToRawContentState(value: string): RawContentState {
   return convertToRaw(customConvertFromHTML(value));
@@ -41,28 +39,20 @@ export function convertToRawContentState(value: string): RawContentState {
 
 export function convertEntries(converter: Function): Function {
   return function (entries: Array<Entry>): Array<Entry> {
-    return entries.map((entry) => {
-      return {
-        ...entry,
-        value: converter(entry.value)
-      };
-    });
+    return entries.map(entry => ({
+      ...entry,
+      value: converter(entry.value)
+    }));
   };
 }
 
 export const convertEntriesToRawContentState = convertEntries(convertToRawContentState);
-export const convertRawContentStateToHTML = (cs: RawContentState): string => {
-  return customConvertToHTML(convertFromRaw(cs));
-};
+export const convertRawContentStateToHTML = (cs: RawContentState): string => customConvertToHTML(convertFromRaw(cs));
 export const convertEntriesToHTML = convertEntries(convertRawContentStateToHTML);
 
 export function rawContentStateIsEmpty(rawContentState: RawContentState): boolean {
   const contentState = convertFromRaw(rawContentState);
-  const containAtomicBlock = (blockMap) => {
-    return blockMap.some((b) => {
-      return b.type === 'atomic';
-    });
-  };
+  const containAtomicBlock = blockMap => blockMap.some(b => b.type === 'atomic');
   if (contentState.getPlainText().length === 0 && !containAtomicBlock(contentState.getBlockMap())) {
     return true;
   }

@@ -107,28 +107,14 @@ const mapStateToProps = (state, { id, locale }) => {
   };
 };
 
-const mapDispatchToProps = (dispatch, { id, locale }) => {
-  return {
-    handleTitleChange: (e) => {
-      return dispatch(updateSectionTitle(id, locale, e.target.value));
-    },
-    handleUrlChange: (e) => {
-      return dispatch(updateSectionUrl(id, e.target.value));
-    },
-    toggleExternalPageField: () => {
-      return dispatch(toggleExternalPage(id));
-    },
-    handleDeleteClick: () => {
-      return dispatch(deleteSection(id));
-    },
-    handleUpClick: () => {
-      return dispatch(moveSectionUp(id));
-    },
-    handleDownClick: () => {
-      return dispatch(moveSectionDown(id));
-    }
-  };
-};
+const mapDispatchToProps = (dispatch, { id, locale }) => ({
+  handleTitleChange: e => dispatch(updateSectionTitle(id, locale, e.target.value)),
+  handleUrlChange: e => dispatch(updateSectionUrl(id, e.target.value)),
+  toggleExternalPageField: () => dispatch(toggleExternalPage(id)),
+  handleDeleteClick: () => dispatch(deleteSection(id)),
+  handleUpClick: () => dispatch(moveSectionUp(id)),
+  handleDownClick: () => dispatch(moveSectionDown(id))
+});
 
 export { DumbEditSectionForm };
 

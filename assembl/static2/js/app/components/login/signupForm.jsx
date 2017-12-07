@@ -115,18 +115,14 @@ class SignupForm extends React.Component {
   }
 }
 
-const mapStateToProps = (state) => {
-  return {
-    auth: state.auth
-  };
-};
+const mapStateToProps = state => ({
+  auth: state.auth
+});
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    signUp: (payload) => {
-      dispatch(signupAction(payload));
-    }
-  };
-};
+const mapDispatchToProps = dispatch => ({
+  signUp: (payload) => {
+    dispatch(signupAction(payload));
+  }
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(SignupForm);

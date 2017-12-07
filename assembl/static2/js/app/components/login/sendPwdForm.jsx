@@ -14,6 +14,7 @@ class SendPwdForm extends React.Component {
     this.submitHandler = this.submitHandler.bind(this);
     this.handleInput = this.handleInput.bind(this);
   }
+
   componentWillReceiveProps(nextProps) {
     const { auth } = nextProps;
     const resp = auth.passwordChangeRequest;
@@ -28,13 +29,16 @@ class SendPwdForm extends React.Component {
       displayAlert('danger', msg, true);
     }
   }
+
   handleInput(e) {
     inputHandler(this, e);
   }
+
   submitHandler(e) {
     e.preventDefault();
     this.props.sendRequest(this.state.identifier, getDiscussionSlug());
   }
+
   render() {
     return (
       <div className="login-view">
@@ -70,18 +74,12 @@ class SendPwdForm extends React.Component {
   }
 }
 
-const mapStateToProps = (state) => {
-  return {
-    auth: state.auth
-  };
-};
+const mapStateToProps = state => ({
+  auth: state.auth
+});
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    sendRequest: (id, discussionSlug) => {
-      return dispatch(requestPasswordChangeAction(id, discussionSlug));
-    }
-  };
-};
+const mapDispatchToProps = dispatch => ({
+  sendRequest: (id, discussionSlug) => dispatch(requestPasswordChangeAction(id, discussionSlug))
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(SendPwdForm);

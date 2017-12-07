@@ -61,14 +61,12 @@ class Nuggets extends React.Component {
             <span className="assembl-icon-pepite color2" />
           </div>
           <div>
-            {extracts.map((extract) => {
-              return (
-                <div key={extract.id} className="nugget">
-                  <div className="nugget-txt">{extract.body}</div>
-                  <div className="box-hyphen" />
-                </div>
-              );
-            })}
+            {extracts.map(extract => (
+              <div key={extract.id} className="nugget">
+                <div className="nugget-txt">{extract.body}</div>
+                <div className="box-hyphen" />
+              </div>
+            ))}
           </div>
         </div>
       </div>

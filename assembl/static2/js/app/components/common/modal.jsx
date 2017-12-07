@@ -13,25 +13,30 @@ class AssemblModal extends React.Component {
     this.open = this.open.bind(this);
     this.goToUrl = this.goToUrl.bind(this);
   }
+
   componentWillReceiveProps(nextProps) {
     this.setState({
       showModal: nextProps.showModal
     });
   }
+
   close() {
     this.setState({
       showModal: false
     });
   }
+
   open() {
     this.setState({
       showModal: true
     });
   }
+
   goToUrl(url) {
     this.url = url;
     window.location = this.url;
   }
+
   render() {
     const { content, title, body, footer, footerTxt, button, bsSize } = this.state;
     if (content) {

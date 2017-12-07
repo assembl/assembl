@@ -10,6 +10,7 @@ class Video extends React.Component {
       isTextHigher: false
     };
   }
+
   componentWillReceiveProps() {
     const { debateData } = this.props.debate;
     const videoTxt = document.getElementById('video-txt');
@@ -20,6 +21,7 @@ class Video extends React.Component {
       if (textHeight > videoHeight + 5) this.setState({ isTextHigher: true });
     }
   }
+
   render() {
     const { debateData } = this.props.debate;
     const { locale } = this.props.i18n;
@@ -60,11 +62,9 @@ class Video extends React.Component {
   }
 }
 
-const mapStateToProps = (state) => {
-  return {
-    debate: state.debate,
-    i18n: state.i18n
-  };
-};
+const mapStateToProps = state => ({
+  debate: state.debate,
+  i18n: state.i18n
+});
 
 export default connect(mapStateToProps)(Video);

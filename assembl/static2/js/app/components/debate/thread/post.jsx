@@ -17,24 +17,17 @@ import Nuggets from './nuggets';
 import hashLinkScroll from '../../../utils/hashLinkScroll';
 import { transformLinksInHtml } from '../../../utils/linkify';
 
-export const PostFolded = ({ nbPosts }) => {
-  return <Translate value="debate.thread.foldedPostLink" count={nbPosts} />;
-};
+export const PostFolded = ({ nbPosts }) => <Translate value="debate.thread.foldedPostLink" count={nbPosts} />;
 
-const getSubjectPrefixString = (fullLevel) => {
-  return (
-    fullLevel && (
-      <span className="subject-prefix">
-        {`Rep. ${fullLevel
-          .split('-')
-          .map((level) => {
-            return `${Number(level) + 1}`;
-          })
-          .join('.')}: `}
-      </span>
-    )
+const getSubjectPrefixString = fullLevel =>
+  fullLevel && (
+    <span className="subject-prefix">
+      {`Rep. ${fullLevel
+        .split('-')
+        .map(level => `${Number(level) + 1}`)
+        .join('.')}: `}
+    </span>
   );
-};
 
 // TODO we need a graphql query to retrieve all languages with native translation, see Python langstrings.LocaleLabel
 // We only have french and english for en, fr, ja for now.
@@ -132,11 +125,11 @@ export class EmptyPost extends React.PureComponent {
     // recompute the tree height after images are loaded
     if (el) {
       const images = el.getElementsByTagName('img');
-      Array.from(images).forEach((img) => {
-        return img.addEventListener('load', () => {
+      Array.from(images).forEach(img =>
+        img.addEventListener('load', () => {
           this.props.measureTreeHeight(400);
-        });
-      });
+        })
+      );
     }
   };
 
@@ -172,9 +165,7 @@ export class EmptyPost extends React.PureComponent {
     const translate = contentLocale !== originalLocale;
     const { body, subject, originalBody, originalSubject } = this.getBodyAndSubject(translate);
 
-    const relatedIdeasTitle = indirectIdeaContentLinks.map((link) => {
-      return link.idea.title;
-    });
+    const relatedIdeasTitle = indirectIdeaContentLinks.map(link => link.idea.title);
 
     const modifiedSubject = (
       <span>
@@ -218,14 +209,7 @@ export class EmptyPost extends React.PureComponent {
       );
     }
 
-    const completeLevelArray = fullLevel
-      ? [
-        rowIndex,
-        ...fullLevel.split('-').map((string) => {
-          return Number(string);
-        })
-      ]
-      : [rowIndex];
+    const completeLevelArray = fullLevel ? [rowIndex, ...fullLevel.split('-').map(string => Number(string))] : [rowIndex];
 
     const answerTextareaRef = (el) => {
       this.answerTextarea = el;
@@ -270,13 +254,11 @@ export class EmptyPost extends React.PureComponent {
                     <Translate value="debate.thread.linkIdea" />
                   </div>
                   <div className="badges">
-                    {relatedIdeasTitle.map((title, index) => {
-                      return (
-                        <span className="badge" key={index}>
-                          {title}
-                        </span>
-                      );
-                    })}
+                    {relatedIdeasTitle.map((title, index) => (
+                      <span className="badge" key={index}>
+                        {title}
+                      </span>
+                    ))}
                   </div>
                 </div>
               ) : null}

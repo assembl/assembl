@@ -17,9 +17,7 @@ class TimelineSegment extends React.Component {
     const { locale } = this.props.i18n;
     const { phaseIdentifier, title, startDate, endDate } = this.props;
     const { debateData } = this.props.debate;
-    const phase = debateData.timeline.filter((p) => {
-      return p.identifier === phaseIdentifier;
-    });
+    const phase = debateData.timeline.filter(p => p.identifier === phaseIdentifier);
     const isRedirectionToV1 = phase[0].interface_v1;
     const slug = { slug: debateData.slug };
     const params = { slug: debateData.slug, phase: phaseIdentifier };
@@ -59,6 +57,7 @@ class TimelineSegment extends React.Component {
       window.location = get('oldDebate', slug);
     }
   }
+
   render() {
     const { index, barPercent, isCurrentPhase, isStepCompleted, title, locale } = this.props;
     const timelineClass = classNames('timeline-title', {
@@ -68,17 +67,11 @@ class TimelineSegment extends React.Component {
     });
     return (
       <div className="minimized-timeline">
-        {title.entries
-          .filter((entry) => {
-            return locale === entry['@language'];
-          })
-          .map((entry, index2) => {
-            return (
-              <div onClick={this.displayPhase} className={timelineClass} key={index2}>
-                <div className="timeline-link">{entry.value}</div>
-              </div>
-            );
-          })}
+        {title.entries.filter(entry => locale === entry['@language']).map((entry, index2) => (
+          <div onClick={this.displayPhase} className={timelineClass} key={index2}>
+            <div className="timeline-link">{entry.value}</div>
+          </div>
+        ))}
         <div className="timeline-graph">
           <div className={isStepCompleted || isCurrentPhase ? 'timeline-number active' : 'timeline-number not-active'}>
             {isStepCompleted ? <span className="assembl-icon-checked white" /> : <span>{index + 1}</span>}
@@ -97,11 +90,9 @@ class TimelineSegment extends React.Component {
   }
 }
 
-const mapStateToProps = (state) => {
-  return {
-    i18n: state.i18n,
-    debate: state.debate
-  };
-};
+const mapStateToProps = state => ({
+  i18n: state.i18n,
+  debate: state.debate
+});
 
 export default connect(mapStateToProps)(TimelineSegment);

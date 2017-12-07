@@ -10,13 +10,11 @@ import Media from '../../common/media';
 import { CountablePublicationStates } from '../../../constants';
 import PostsAndContributorsCount from '../../common/postsAndContributorsCount';
 
-export const createTooltip = (sentiment: SentimentDefinition, count: number) => {
-  return (
-    <Tooltip id={`${sentiment.camelType}Tooltip`} className="no-arrow-tooltip">
-      {count} <Translate value={`debate.${sentiment.camelType}`} />
-    </Tooltip>
-  );
-};
+export const createTooltip = (sentiment: SentimentDefinition, count: number) => (
+  <Tooltip id={`${sentiment.camelType}Tooltip`} className="no-arrow-tooltip">
+    {count} <Translate value={`debate.${sentiment.camelType}`} />
+  </Tooltip>
+);
 
 type SentimentsCounts = {
   [string]: {
@@ -36,27 +34,24 @@ export const getSentimentsCount = (posts: Posts) => {
   });
 
   return posts.edges
-    .filter(({ node: { publicationState } }) => {
-      return Object.keys(CountablePublicationStates).indexOf(publicationState) > -1;
-    })
-    .reduce((result, { node: { sentimentCounts } }) => {
-      return Object.keys(result).reduce((naziLinter, key) => {
-        const postCounts = naziLinter;
-        postCounts[key].count += sentimentCounts[key];
-        return postCounts;
-      }, result);
-    }, counters);
+    .filter(({ node: { publicationState } }) => Object.keys(CountablePublicationStates).indexOf(publicationState) > -1)
+    .reduce(
+      (result, { node: { sentimentCounts } }) =>
+        Object.keys(result).reduce((naziLinter, key) => {
+          const postCounts = naziLinter;
+          postCounts[key].count += sentimentCounts[key];
+          return postCounts;
+        }, result),
+      counters
+    );
 };
 
-export const createDoughnutElements = (sentimentCounts: SentimentsCounts) => {
-  return Object.keys(sentimentCounts).map((key) => {
-    return {
-      color: sentimentCounts[key].color,
-      count: sentimentCounts[key].count,
-      Tooltip: createTooltip(sentimentCounts[key], sentimentCounts[key].count)
-    };
-  });
-};
+export const createDoughnutElements = (sentimentCounts: SentimentsCounts) =>
+  Object.keys(sentimentCounts).map(key => ({
+    color: sentimentCounts[key].color,
+    count: sentimentCounts[key].count,
+    Tooltip: createTooltip(sentimentCounts[key], sentimentCounts[key].count)
+  }));
 
 const dirtySplitHack = (announcementContent) => {
   const body = announcementContent.body;
@@ -80,11 +75,10 @@ const dirtySplitHack = (announcementContent) => {
 class Announcement extends React.Component {
   getColumnInfos() {
     const { messageColumns } = this.props.ideaWithPostsData.idea;
-    const columnsArray = messageColumns.map((col) => {
-      return { count: col.numPosts, color: col.color, name: col.name };
-    });
+    const columnsArray = messageColumns.map(col => ({ count: col.numPosts, color: col.color, name: col.name }));
     return columnsArray;
   }
+
   render = () => {
     const { ideaWithPostsData: { idea }, announcementContent, isMultiColumns } = this.props;
     const { numContributors, numPosts, posts } = idea;
@@ -110,13 +104,11 @@ class Announcement extends React.Component {
             </div>
             {isMultiColumns ? (
               <div className="announcement-numbers-multicol">
-                {columnInfos.map((col, index) => {
-                  return (
-                    <div style={{ color: col.color }} key={`col-${index}`}>
-                      {col.count} <span className="col-announcement-count">{col.name}</span>
-                    </div>
-                  );
-                })}
+                {columnInfos.map((col, index) => (
+                  <div style={{ color: col.color }} key={`col-${index}`}>
+                    {col.count} <span className="col-announcement-count">{col.name}</span>
+                  </div>
+                ))}
                 <div className="color">
                   {numContributors} <span className="assembl-icon-profil" />
                 </div>

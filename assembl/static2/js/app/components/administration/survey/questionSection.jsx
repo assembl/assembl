@@ -72,15 +72,9 @@ class QuestionSection extends React.Component {
   }
 }
 
-const mapStateToProps = ({ admin: { thematicsById, thematicsInOrder, selectedLocale } }) => {
-  return {
-    thematics: thematicsInOrder
-      .filter((id) => {
-        return !thematicsById.getIn([id, 'toDelete']);
-      })
-      .toArray(),
-    selectedLocale: selectedLocale
-  };
-};
+const mapStateToProps = ({ admin: { thematicsById, thematicsInOrder, selectedLocale } }) => ({
+  thematics: thematicsInOrder.filter(id => !thematicsById.getIn([id, 'toDelete'])).toArray(),
+  selectedLocale: selectedLocale
+});
 
 export default connect(mapStateToProps)(QuestionSection);

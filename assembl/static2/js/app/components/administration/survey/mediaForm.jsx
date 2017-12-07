@@ -18,9 +18,7 @@ import {
 } from '../../../actions/adminActions';
 import FormControlWithLabel from '../../common/formControlWithLabel';
 
-const relativeURL = (uRL) => {
-  return uRL.match(/^https?:\/\/.*?(\/.*)$/)[1];
-};
+const relativeURL = uRL => uRL.match(/^https?:\/\/.*?(\/.*)$/)[1];
 
 class MediaForm extends React.Component {
   constructor() {
@@ -78,9 +76,7 @@ class MediaForm extends React.Component {
                 required
                 type="text"
                 value={title}
-                onChange={(e) => {
-                  return updateTitle(e.target.value);
-                }}
+                onChange={e => updateTitle(e.target.value)}
               />
               <FormControlWithLabel
                 componentClass="textarea"
@@ -111,9 +107,7 @@ class MediaForm extends React.Component {
                 type="text"
                 label={mediaLinkPh}
                 value={htmlCode}
-                onChange={(e) => {
-                  return updateHtmlCode(e.target.value);
-                }}
+                onChange={e => updateHtmlCode(e.target.value)}
               />
               <div className="admin-help">
                 <Translate value="administration.videoHelp" />
@@ -172,28 +166,14 @@ export const mapStateToProps = ({ admin: { thematicsById } }, { thematicId, sele
   };
 };
 
-export const mapDispatchToProps = (dispatch, { selectedLocale, thematicId }) => {
-  return {
-    toggle: () => {
-      return dispatch(toggleVideo(thematicId));
-    },
-    updateHtmlCode: (value) => {
-      return dispatch(updateVideoHtmlCode(thematicId, value));
-    },
-    updateDescriptionTop: (value) => {
-      return dispatch(updateVideoDescriptionTop(thematicId, selectedLocale, value));
-    },
-    updateDescriptionBottom: (value) => {
-      return dispatch(updateVideoDescriptionBottom(thematicId, selectedLocale, value));
-    },
-    updateDescriptionSide: (value) => {
-      return dispatch(updateVideoDescriptionSide(thematicId, selectedLocale, value));
-    },
-    updateTitle: (value) => {
-      return dispatch(updateVideoTitle(thematicId, selectedLocale, value));
-    }
-  };
-};
+export const mapDispatchToProps = (dispatch, { selectedLocale, thematicId }) => ({
+  toggle: () => dispatch(toggleVideo(thematicId)),
+  updateHtmlCode: value => dispatch(updateVideoHtmlCode(thematicId, value)),
+  updateDescriptionTop: value => dispatch(updateVideoDescriptionTop(thematicId, selectedLocale, value)),
+  updateDescriptionBottom: value => dispatch(updateVideoDescriptionBottom(thematicId, selectedLocale, value)),
+  updateDescriptionSide: value => dispatch(updateVideoDescriptionSide(thematicId, selectedLocale, value)),
+  updateTitle: value => dispatch(updateVideoTitle(thematicId, selectedLocale, value))
+});
 
 export default compose(connect(mapStateToProps, mapDispatchToProps), graphql(uploadDocumentMutation, { name: 'uploadDocument' }))(
   MediaForm

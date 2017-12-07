@@ -4,26 +4,28 @@ import range from 'lodash/range';
 
 import Nuggets from '../debate/thread/nuggets';
 
-const indexNotFound = (index) => {
-  return index === -1;
-};
+const indexNotFound = index => index === -1;
 
 class NuggetsManager {
   nuggetsList: Array<Nuggets>;
+
   constructor() {
     this.nuggetsList = [];
   }
+
   add(nuggets: Nuggets) {
     this.nuggetsList.push(nuggets);
     this.sort();
     this.update();
   }
+
   update = () => {
     this.nuggetsList.reduce((previous, nuggets) => {
       nuggets.updateTop(previous);
       return nuggets;
     }, null);
   };
+
   remove(nuggets: Nuggets) {
     const index = this.nuggetsList.indexOf(nuggets);
     if (indexNotFound(index)) {
@@ -31,6 +33,7 @@ class NuggetsManager {
     }
     delete this.nuggetsList[index];
   }
+
   sort() {
     this.nuggetsList.sort((a, b) => {
       const aLevel = a.props.completeLevel.split('-');

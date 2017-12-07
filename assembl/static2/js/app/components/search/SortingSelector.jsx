@@ -19,9 +19,7 @@ class FilteredSortingSelector extends SortingSelector {
       setItems: this.setItems.bind(this),
       toggleItem: this.toggleItem.bind(this),
       disabled: disabled,
-      urlBuilder: (item) => {
-        return this.accessor.urlWithState(item.key);
-      },
+      urlBuilder: item => this.accessor.urlWithState(item.key),
       translate: this.translate
     });
   }

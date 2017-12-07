@@ -12,9 +12,7 @@ import DiscussionPreferenceLanguage from '../../../graphql/DiscussionPreferenceL
 
 class ExportSection extends React.Component {
   static ExportLanguageDropDown = ({ languages, onSelect, activeKey }) => {
-    const activeLanguage = languages.filter((language) => {
-      return language.locale === activeKey;
-    })[0];
+    const activeLanguage = languages.filter(language => language.locale === activeKey)[0];
     return (
       <FormControl
         className="export-language-dropdown"
@@ -24,27 +22,30 @@ class ExportSection extends React.Component {
         }}
         value={activeLanguage.locale}
       >
-        {languages.map((lang) => {
-          return (
-            <option key={`locale-${lang.locale}`} value={lang.locale}>
-              {lang.name}
-            </option>
-          );
-        })}
+        {languages.map(lang => (
+          <option key={`locale-${lang.locale}`} value={lang.locale}>
+            {lang.name}
+          </option>
+        ))}
       </FormControl>
     );
   };
+
   state = { exportLocale: null, translate: false };
+
   componentWillMount() {
     const { toggleLanguageMenu } = this.props;
     toggleLanguageMenu(false);
   }
+
   selectExportLocale = (locale) => {
     this.setState({ exportLocale: locale });
   };
+
   toggleTranslation = (shouldTranslate) => {
     this.setState({ translate: shouldTranslate });
   };
+
   render() {
     const { data: { discussionPreferences: { languages } } } = this.props;
     const { translate } = this.state;
@@ -91,21 +92,17 @@ class ExportSection extends React.Component {
   }
 }
 
-const mapStateToProps = ({ i18n }) => {
-  return {
-    i18n: i18n
-  };
-};
+const mapStateToProps = ({ i18n }) => ({
+  i18n: i18n
+});
 
 export default compose(
   connect(mapStateToProps),
   graphql(DiscussionPreferenceLanguage, {
-    options: ({ i18n: { locale } }) => {
-      return {
-        variables: {
-          inLocale: locale
-        }
-      };
-    }
+    options: ({ i18n: { locale } }) => ({
+      variables: {
+        inLocale: locale
+      }
+    })
   })
 )(ExportSection);

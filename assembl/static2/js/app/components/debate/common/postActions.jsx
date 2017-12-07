@@ -21,6 +21,7 @@ class PostActions extends React.Component {
     super(props);
     this.displayPhaseCompletedModal = this.displayPhaseCompletedModal.bind(this);
   }
+
   displayPhaseCompletedModal() {
     const body = (
       <div>
@@ -29,6 +30,7 @@ class PostActions extends React.Component {
     );
     displayModal(null, body, true, null, null, true);
   }
+
   render() {
     const {
       client,
@@ -83,14 +85,14 @@ class PostActions extends React.Component {
         <div className="post-icons">
           <div
             className="post-action"
-            onClick={() => {
-              return openShareModal({
+            onClick={() =>
+              openShareModal({
                 title: modalTitle,
                 routerParams: routerParams,
                 elementId: postId,
                 social: useSocial
-              });
-            }}
+              })
+            }
           >
             <ResponsiveOverlayTrigger placement={tooltipPlacement} tooltip={sharePostTooltip} component={shareIcon} />
           </div>

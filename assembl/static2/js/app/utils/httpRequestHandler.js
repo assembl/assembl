@@ -1,22 +1,18 @@
-const convertToURLEncodedString = (obj) => {
-  return Object.keys(obj)
-    .map((k) => {
-      return `${encodeURIComponent(k)}=${encodeURIComponent(obj[k])}`;
-    })
+const convertToURLEncodedString = obj =>
+  Object.keys(obj)
+    .map(k => `${encodeURIComponent(k)}=${encodeURIComponent(obj[k])}`)
     .join('&');
-};
-const getResponseContentType = (xhr) => {
+const getResponseContentType = xhr =>
   // eslint-disable-line no-unused-vars
-  return xhr.getResponseHeader('Content-Type').split(';')[0];
-};
+  xhr.getResponseHeader('Content-Type').split(';')[0];
 /*
   A global async method that returns a Promisified ajax call
   @params payload [Object] The object that will be sent
   @params isJson [Boolean] Pass a flag if the object is JSON. Default is form header.
   @retuns [Promise]
 */
-export const xmlHttpRequest = (obj) => {
-  return new Promise((resolve, reject) => {
+export const xmlHttpRequest = obj =>
+  new Promise((resolve, reject) => {
     const xhr = new XMLHttpRequest();
     const url = obj.url;
     let payload = obj.payload;
@@ -60,23 +56,13 @@ export const xmlHttpRequest = (obj) => {
         reject(resp);
       }
     };
-    xhr.onerror = () => {
+    xhr.onerror = () =>
       // Network level failure
-      return reject(xhr.statusText || xhr.responseText);
-    };
+      reject(xhr.statusText || xhr.responseText);
     xhr.send(payload);
   });
-};
 
-export const fetchContentType = (url) => {
-  return fetch(url, {
+export const fetchContentType = url =>
+  fetch(url, {
     method: 'HEAD'
-  }).then(
-    (response) => {
-      return response.headers.get('Content-Type');
-    },
-    () => {
-      return null;
-    }
-  );
-};
+  }).then(response => response.headers.get('Content-Type'), () => null);

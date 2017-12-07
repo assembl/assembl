@@ -11,25 +11,28 @@ import UserMenu from './UserMenu';
 
 export default class BurgerNavbar extends React.PureComponent {
   unlisten: () => void;
+
   state: {
     shouldDisplayMenu: boolean
   };
+
   componentWillMount() {
     this.setState({ shouldDisplayMenu: false });
     this.unlisten = browserHistory.listen(() => {
       this.setState({ shouldDisplayMenu: false });
     });
   }
+
   componentWillUnmount() {
     this.unlisten();
   }
+
   toggleMenu = () => {
-    this.setState((prevState) => {
-      return {
-        shouldDisplayMenu: !prevState.shouldDisplayMenu
-      };
-    });
+    this.setState(prevState => ({
+      shouldDisplayMenu: !prevState.shouldDisplayMenu
+    }));
   };
+
   render() {
     const { state, props, toggleMenu } = this;
     const { elements, slug, logoSrc, connectedUserId, currentPhaseIdentifier, helpUrl, location, logoLink } = props;

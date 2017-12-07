@@ -4,6 +4,7 @@ import React from 'react';
 
 class Like extends React.Component {
   props: { size: number };
+
   render() {
     const { size } = this.props;
     return (

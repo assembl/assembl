@@ -8,9 +8,7 @@ import FormControlWithLabel from '../../common/formControlWithLabel';
 import { deleteQuestionTooltip } from '../../common/tooltips';
 
 const QuestionsTitle = ({ titleEntries, qIndex, remove, selectedLocale, updateTitle }) => {
-  const titleEntry = titleEntries.find((entry) => {
-    return entry.localeCode === selectedLocale;
-  });
+  const titleEntry = titleEntries.find(entry => entry.localeCode === selectedLocale);
   const title = titleEntry ? titleEntry.value : '';
   const label = `${I18n.t('administration.question_label')} ${qIndex + 1} ${selectedLocale.toUpperCase()}`;
   return (
@@ -21,9 +19,7 @@ const QuestionsTitle = ({ titleEntries, qIndex, remove, selectedLocale, updateTi
         label={label}
         required
         value={title}
-        onChange={(e) => {
-          return updateTitle(e.target.value);
-        }}
+        onChange={e => updateTitle(e.target.value)}
       />
       <div className="pointer right margin-s">
         <OverlayTrigger placement="top" overlay={deleteQuestionTooltip}>
@@ -36,14 +32,8 @@ const QuestionsTitle = ({ titleEntries, qIndex, remove, selectedLocale, updateTi
   );
 };
 
-export const mapDispatchToProps = (dispatch, { thematicId, qIndex, selectedLocale }) => {
-  return {
-    updateTitle: (value) => {
-      return dispatch(updateQuestionTitle(thematicId, qIndex, selectedLocale, value));
-    },
-    remove: () => {
-      return dispatch(removeQuestion(thematicId, qIndex));
-    }
-  };
-};
+export const mapDispatchToProps = (dispatch, { thematicId, qIndex, selectedLocale }) => ({
+  updateTitle: value => dispatch(updateQuestionTitle(thematicId, qIndex, selectedLocale, value)),
+  remove: () => dispatch(removeQuestion(thematicId, qIndex))
+});
 export default connect(null, mapDispatchToProps)(QuestionsTitle);

@@ -31,12 +31,7 @@ const confirmModal = (postId, client) => {
 
 const getOverflowMenuForPost = (postId, userCanDeleteThisMessage, userCanEditThisMessage, client, handleEditClick) => {
   const deleteButton = (
-    <Link
-      className="overflow-menu-action"
-      onClick={() => {
-        return confirmModal(postId, client);
-      }}
-    >
+    <Link className="overflow-menu-action" onClick={() => confirmModal(postId, client)}>
       <span className="assembl-icon-delete" />
     </Link>
   );

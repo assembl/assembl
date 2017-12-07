@@ -21,12 +21,14 @@ class Question extends React.Component {
     this.createPost = this.createPost.bind(this);
     this.redirectToLogin = this.redirectToLogin.bind(this);
   }
+
   componentDidMount() {
     const maxChars = this.txtarea.props.maxLength;
     this.state = {
       remainingChars: maxChars
     };
   }
+
   componentWillReceiveProps() {
     const maxChars = this.txtarea.props.maxLength;
     this.state = {
@@ -35,6 +37,7 @@ class Question extends React.Component {
       remainingChars: maxChars
     };
   }
+
   getRemainingChars(e) {
     const maxChars = this.txtarea.props.maxLength;
     const remainingChars = maxChars - e.currentTarget.value.length;
@@ -42,12 +45,14 @@ class Question extends React.Component {
       remainingChars: remainingChars
     });
   }
+
   getProposalText(e) {
     const txtValue = e.currentTarget.value;
     this.setState({
       postBody: txtValue
     });
   }
+
   displaySubmitButton(e) {
     const nbChars = e.currentTarget.value.length;
     const minAcceptableChars = 10;
@@ -61,6 +66,7 @@ class Question extends React.Component {
       });
     }
   }
+
   createPost() {
     const maxChars = this.txtarea.props.maxLength;
     const { contentLocale, questionId, scrollToQuestion, index, refetchTheme } = this.props;
@@ -81,6 +87,7 @@ class Question extends React.Component {
         displayAlert('danger', error);
       });
   }
+
   redirectToLogin() {
     const isUserConnected = getConnectedUserId();
     const { scrollToQuestion, index } = this.props;
@@ -90,6 +97,7 @@ class Question extends React.Component {
       scrollToQuestion(true, index);
     }
   }
+
   render() {
     const { index, title, screenWidth, screenHeight } = this.props;
     const height = screenHeight - document.getElementById('timeline').clientHeight;
@@ -147,11 +155,9 @@ Question.propTypes = {
   mutate: PropTypes.func.isRequired
 };
 
-const mapStateToProps = (state) => {
-  return {
-    debate: state.debate,
-    contentLocale: state.i18n.locale
-  };
-};
+const mapStateToProps = state => ({
+  debate: state.debate,
+  contentLocale: state.i18n.locale
+});
 
 export default compose(connect(mapStateToProps), graphql(createPostMutation), withScreenDimensions)(Question);

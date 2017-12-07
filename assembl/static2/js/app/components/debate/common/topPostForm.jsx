@@ -39,7 +39,9 @@ type TopPostFormState = {
 
 class TopPostForm extends React.Component<*, TopPostFormProps, TopPostFormState> {
   props: TopPostFormProps;
+
   state: TopPostFormState;
+
   formContainer: HTMLDivElement | void;
 
   static defaultProps = {
@@ -118,9 +120,7 @@ class TopPostForm extends React.Component<*, TopPostFormProps, TopPostFormState>
     }
   };
 
-  handleInputFocus = promptForLoginOr(() => {
-    return this.displayForm(true);
-  });
+  handleInputFocus = promptForLoginOr(() => this.displayForm(true));
 
   updateBody = (newValue) => {
     this.setState({
@@ -196,11 +196,9 @@ class TopPostForm extends React.Component<*, TopPostFormProps, TopPostFormState>
   }
 }
 
-const mapStateToProps = (state) => {
-  return {
-    contentLocale: state.i18n.locale
-  };
-};
+const mapStateToProps = state => ({
+  contentLocale: state.i18n.locale
+});
 
 export default compose(
   connect(mapStateToProps),

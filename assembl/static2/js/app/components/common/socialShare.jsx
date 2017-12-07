@@ -31,6 +31,7 @@ export default class SocialShare extends React.Component {
       copied: false
     };
   }
+
   render() {
     const { url, onClose, social } = this.props;
     const SocialNetworks = [
@@ -43,11 +44,9 @@ export default class SocialShare extends React.Component {
         Component: TelegramShareButton,
         iconName: 'telegram'
       }
-    ].map(({ Component, iconName }, index) => {
-      return (
-        <SuperShareButton Component={Component} Icon={generateShareIcon(iconName)} url={url} onClose={onClose} key={index} />
-      );
-    });
+    ].map(({ Component, iconName }, index) => (
+      <SuperShareButton Component={Component} Icon={generateShareIcon(iconName)} url={url} onClose={onClose} key={index} />
+    ));
 
     return (
       <div className="share-buttons-container">
@@ -60,12 +59,7 @@ export default class SocialShare extends React.Component {
             </div>
           </div>
         )}
-        <CopyToClipboard
-          text={url}
-          onCopy={() => {
-            return this.setState({ copied: true });
-          }}
-        >
+        <CopyToClipboard text={url} onCopy={() => this.setState({ copied: true })}>
           <button className="btn btn-default btn-copy">
             {this.state.copied ? I18n.t('debate.linkCopied') : I18n.t('debate.copyLink')}
           </button>

@@ -31,30 +31,28 @@ class Themes extends React.Component {
                 </div>
                 <div className="content-section">
                   <Row className="no-margin">
-                    {ideas.latestIdeas.map((idea, index) => {
-                      return (
-                        <Col
-                          xs={12}
-                          sm={24 / ideas.latestIdeas.length}
-                          md={12 / ideas.latestIdeas.length}
-                          className="theme no-padding"
-                          key={index}
-                        >
-                          <ThematicPreview
-                            imgUrl={idea.img ? idea.img.externalUrl : ''}
-                            numPosts={idea.nbPosts}
-                            numContributors={idea.nbContributors}
-                            link={
-                              connectedUserId
-                                ? `${get('oldDebate', slug)}/idea/local:Idea/${idea.id}`
-                                : `${getContextual('login', slug)}?next=${get('home', slug)}`
-                            }
-                            title={idea.title}
-                            description={<p dangerouslySetInnerHTML={{ __html: idea.definition }} />}
-                          />
-                        </Col>
-                      );
-                    })}
+                    {ideas.latestIdeas.map((idea, index) => (
+                      <Col
+                        xs={12}
+                        sm={24 / ideas.latestIdeas.length}
+                        md={12 / ideas.latestIdeas.length}
+                        className="theme no-padding"
+                        key={index}
+                      >
+                        <ThematicPreview
+                          imgUrl={idea.img ? idea.img.externalUrl : ''}
+                          numPosts={idea.nbPosts}
+                          numContributors={idea.nbContributors}
+                          link={
+                            connectedUserId
+                              ? `${get('oldDebate', slug)}/idea/local:Idea/${idea.id}`
+                              : `${getContextual('login', slug)}?next=${get('home', slug)}`
+                          }
+                          title={idea.title}
+                          description={<p dangerouslySetInnerHTML={{ __html: idea.definition }} />}
+                        />
+                      </Col>
+                    ))}
                   </Row>
                 </div>
               </div>
@@ -65,11 +63,9 @@ class Themes extends React.Component {
   }
 }
 
-const mapStateToProps = (state) => {
-  return {
-    debate: state.debate,
-    ideas: state.ideas
-  };
-};
+const mapStateToProps = state => ({
+  debate: state.debate,
+  ideas: state.ideas
+});
 
 export default connect(mapStateToProps)(Themes);

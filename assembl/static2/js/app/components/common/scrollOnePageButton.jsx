@@ -2,10 +2,8 @@ import React from 'react';
 import { isMobile } from '../../utils/globalFunctions';
 import { withScreenHeight } from '../common/screenDimensions';
 
-const scrollOnePageDown = (screenHeight) => {
-  return () => {
-    window.scrollTo({ top: screenHeight, left: 0, behavior: 'smooth' });
-  };
+const scrollOnePageDown = screenHeight => () => {
+  window.scrollTo({ top: screenHeight, left: 0, behavior: 'smooth' });
 };
 
 export const DumbScrollOnePageButton = ({ hidden, screenHeight }) => {

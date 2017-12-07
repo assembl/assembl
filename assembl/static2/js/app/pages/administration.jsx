@@ -97,12 +97,10 @@ class Administration extends React.Component {
 
   putResourcesInStore(resources) {
     const filteredResources = filter(ResourcesQuery, { resources: resources });
-    const resourcesForStore = filteredResources.resources.map((resource) => {
-      return {
-        ...resource,
-        textEntries: resource.textEntries ? convertEntriesToRawContentState(resource.textEntries) : null
-      };
-    });
+    const resourcesForStore = filteredResources.resources.map(resource => ({
+      ...resource,
+      textEntries: resource.textEntries ? convertEntriesToRawContentState(resource.textEntries) : null
+    }));
     this.props.updateResources(resourcesForStore);
   }
 
@@ -113,9 +111,7 @@ class Administration extends React.Component {
 
   putSectionsInStore(sections) {
     const filteredSections = filter(SectionsQuery, {
-      sections: sections.filter((section) => {
-        return section.sectionType !== 'ADMINISTRATION';
-      })
+      sections: sections.filter(section => section.sectionType !== 'ADMINISTRATION')
     });
     this.props.updateSections(filteredSections.sections);
   }
@@ -147,11 +143,11 @@ class Administration extends React.Component {
     } = this.props;
     const { phase } = params;
     const { timeline } = this.props.debate.debateData;
-    const childrenWithProps = React.Children.map(children, (child) => {
-      return React.cloneElement(child, {
+    const childrenWithProps = React.Children.map(children, child =>
+      React.cloneElement(child, {
         toggleLanguageMenu: this.toggleLanguageMenu
-      });
-    });
+      })
+    );
 
     return (
       <div className="administration">
@@ -202,65 +198,51 @@ class Administration extends React.Component {
   }
 }
 
-const mapStateToProps = (state) => {
-  return {
-    debate: state.debate,
-    i18n: state.i18n
-  };
-};
+const mapStateToProps = state => ({
+  debate: state.debate,
+  i18n: state.i18n
+});
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    updateResources: (resources) => {
-      return dispatch(updateResources(resources));
-    },
-    updateSections: (sections) => {
-      return dispatch(updateSections(sections));
-    },
-    updateThematics: (thematics) => {
-      return dispatch(updateThematics(thematics));
-    },
-    updateResourcesCenterPage: ({ titleEntries, headerImage }) => {
-      dispatch(updateResourcesCenterPage(titleEntries, headerImage));
-    },
-    updateLegalNoticeAndTerms: (legalNoticeAndTerms) => {
-      return dispatch(updateLegalNoticeAndTerms(legalNoticeAndTerms));
-    }
-  };
-};
+const mapDispatchToProps = dispatch => ({
+  updateResources: resources => dispatch(updateResources(resources)),
+  updateSections: sections => dispatch(updateSections(sections)),
+  updateThematics: thematics => dispatch(updateThematics(thematics)),
+  updateResourcesCenterPage: ({ titleEntries, headerImage }) => {
+    dispatch(updateResourcesCenterPage(titleEntries, headerImage));
+  },
+  updateLegalNoticeAndTerms: legalNoticeAndTerms => dispatch(updateLegalNoticeAndTerms(legalNoticeAndTerms))
+});
 
-const mergeLoadingAndHasErrors = (WrappedComponent) => {
-  return (props) => {
-    const {
-      data,
-      resourcesHasErrors,
-      resourcesCenterHasErrors,
-      resourcesLoading,
-      resourcesCenterLoading,
-      sectionsHasErrors,
-      sectionsLoading,
-      tabsConditionsLoading,
-      tabsConditionsHasErrors,
-      legalNoticeAndTermsLoading,
-      legalNoticeAndTermsHasErrors
-    } = props;
-    const hasErrors =
-      resourcesHasErrors ||
-      resourcesCenterHasErrors ||
-      tabsConditionsHasErrors ||
-      legalNoticeAndTermsHasErrors ||
-      sectionsHasErrors ||
-      (data && data.error);
-    const loading =
-      resourcesLoading ||
-      resourcesCenterLoading ||
-      tabsConditionsLoading ||
-      legalNoticeAndTermsLoading ||
-      sectionsLoading ||
-      (data && data.loading);
+const mergeLoadingAndHasErrors = WrappedComponent => (props) => {
+  const {
+    data,
+    resourcesHasErrors,
+    resourcesCenterHasErrors,
+    resourcesLoading,
+    resourcesCenterLoading,
+    sectionsHasErrors,
+    sectionsLoading,
+    tabsConditionsLoading,
+    tabsConditionsHasErrors,
+    legalNoticeAndTermsLoading,
+    legalNoticeAndTermsHasErrors
+  } = props;
+  const hasErrors =
+    resourcesHasErrors ||
+    resourcesCenterHasErrors ||
+    tabsConditionsHasErrors ||
+    legalNoticeAndTermsHasErrors ||
+    sectionsHasErrors ||
+    (data && data.error);
+  const loading =
+    resourcesLoading ||
+    resourcesCenterLoading ||
+    tabsConditionsLoading ||
+    legalNoticeAndTermsLoading ||
+    sectionsLoading ||
+    (data && data.loading);
 
-    return <WrappedComponent {...props} hasErrors={hasErrors} loading={loading} />;
-  };
+  return <WrappedComponent {...props} hasErrors={hasErrors} loading={loading} />;
 };
 
 export default compose(
@@ -269,11 +251,9 @@ export default compose(
     options: { variables: { identifier: 'survey' } }
   }),
   graphql(TabsConditionQuery, {
-    options: ({ i18n }) => {
-      return {
-        variables: { lang: i18n.locale }
-      };
-    },
+    options: ({ i18n }) => ({
+      variables: { lang: i18n.locale }
+    }),
     // pass refetchTabsConditions to re-render navigation menu if there is a change in resources
     props: ({ data }) => {
       if (data.loading) {

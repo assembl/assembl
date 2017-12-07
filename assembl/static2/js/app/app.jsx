@@ -18,6 +18,7 @@ class App extends React.Component {
     this.props.fetchDebateData(debateId);
     this.props.addContext(this.props.route.path, debateId, connectedUserId, connectedUserName);
   }
+
   componentDidUpdate() {
     const { debate, location, params } = this.props;
     if (!params.phase && !debate.debateLoading && location.pathname.split('/').indexOf('debate') > -1) {
@@ -25,6 +26,7 @@ class App extends React.Component {
       browserHistory.push(get('debate', { slug: params.slug, phase: currentPhaseIdentifier }));
     }
   }
+
   render() {
     const { debateData, debateLoading, debateError } = this.props.debate;
     return (
@@ -37,21 +39,17 @@ class App extends React.Component {
   }
 }
 
-const mapStateToProps = (state) => {
-  return {
-    debate: state.debate
-  };
-};
+const mapStateToProps = state => ({
+  debate: state.debate
+});
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    fetchDebateData: (debateId) => {
-      dispatch(fetchDebateData(debateId));
-    },
-    addContext: (path, debateId, connectedUserId, connectedUserName) => {
-      dispatch(addContext(path, debateId, connectedUserId, connectedUserName));
-    }
-  };
-};
+const mapDispatchToProps = dispatch => ({
+  fetchDebateData: (debateId) => {
+    dispatch(fetchDebateData(debateId));
+  },
+  addContext: (path, debateId, connectedUserId, connectedUserName) => {
+    dispatch(addContext(path, debateId, connectedUserId, connectedUserName));
+  }
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);

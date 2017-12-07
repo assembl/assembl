@@ -30,15 +30,14 @@ export const transformPosts = (edges, messageColumns, additionnalProps = {}) => 
     items.push(p);
   });
 
-  const getChildren = (id) => {
-    return (postsByParent[id] || []).map((post) => {
+  const getChildren = id =>
+    (postsByParent[id] || []).map((post) => {
       const newPost = post;
       // We modify the object in place, we are sure it's already a copy from
       // the forEach edges above.
       newPost.children = getChildren(post.id);
       return newPost;
     });
-  };
 
   // postsByParent.null is the list of top posts
   return (postsByParent.null || []).map((p) => {
@@ -48,13 +47,11 @@ export const transformPosts = (edges, messageColumns, additionnalProps = {}) => 
   });
 };
 
-const noRowsRenderer = () => {
-  return (
-    <div className="center">
-      <Translate value="debate.thread.noPostsInThread" />
-    </div>
-  );
-};
+const noRowsRenderer = () => (
+  <div className="center">
+    <Translate value="debate.thread.noPostsInThread" />
+  </div>
+);
 
 class Idea extends React.Component {
   constructor(props) {
@@ -104,9 +101,7 @@ class Idea extends React.Component {
         post = allPosts[post.parentId];
       }
       const topPostId = post.id;
-      const index = topPosts.findIndex((value) => {
-        return value.id === topPostId;
-      });
+      const index = topPosts.findIndex(value => value.id === topPostId);
       if (index > -1) {
         return index;
       }
@@ -193,22 +188,16 @@ class Idea extends React.Component {
   }
 }
 
-const mapStateToProps = (state) => {
-  return {
-    contentLocaleMapping: state.contentLocale,
-    debateData: state.debate.debateData,
-    defaultContentLocaleMapping: state.defaultContentLocaleMapping,
-    lang: state.i18n.locale
-  };
-};
+const mapStateToProps = state => ({
+  contentLocaleMapping: state.contentLocale,
+  debateData: state.debate.debateData,
+  defaultContentLocaleMapping: state.defaultContentLocaleMapping,
+  lang: state.i18n.locale
+});
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    updateContentLocaleMapping: (info) => {
-      return dispatch(updateContentLocale(info));
-    }
-  };
-};
+const mapDispatchToProps = dispatch => ({
+  updateContentLocaleMapping: info => dispatch(updateContentLocale(info))
+});
 
 export default compose(
   connect(mapStateToProps, mapDispatchToProps),

@@ -24,9 +24,7 @@ export const DumbThemeCreationForm = ({
     return null;
   }
 
-  const handleTitleChange = (e) => {
-    return updateTitle(selectedLocale, e.target.value);
-  };
+  const handleTitleChange = e => updateTitle(selectedLocale, e.target.value);
 
   const handleImageChange = (file) => {
     updateImgUrl(file);
@@ -70,18 +68,16 @@ const mapStateToProps = ({ admin: { thematicsById } }, { id, selectedLocale }) =
   };
 };
 
-const mapDispatchToProps = (dispatch, { id }) => {
-  return {
-    markAsToDelete: () => {
-      dispatch(deleteThematic(id));
-    },
-    updateImgUrl: (value) => {
-      dispatch(updateThematicImgUrl(id, value));
-    },
-    updateTitle: (locale, value) => {
-      dispatch(updateThematicTitle(id, locale, value));
-    }
-  };
-};
+const mapDispatchToProps = (dispatch, { id }) => ({
+  markAsToDelete: () => {
+    dispatch(deleteThematic(id));
+  },
+  updateImgUrl: (value) => {
+    dispatch(updateThematicImgUrl(id, value));
+  },
+  updateTitle: (locale, value) => {
+    dispatch(updateThematicTitle(id, locale, value));
+  }
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(DumbThemeCreationForm);

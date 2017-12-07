@@ -49,6 +49,7 @@ class Post extends React.Component {
       inviteUserToLogin();
     }
   };
+
   handleAddSentiment(target, type) {
     const { id, sentimentCounts, mySentiment } = this.props.data.post;
     this.props
@@ -79,6 +80,7 @@ class Post extends React.Component {
         displayAlert('danger', `${error}`);
       });
   }
+
   handleDeleteSentiment() {
     const { id, sentimentCounts, mySentiment } = this.props.data.post;
     this.props
@@ -106,6 +108,7 @@ class Post extends React.Component {
         displayAlert('danger', `${error}`);
       });
   }
+
   render() {
     const { post } = this.props.data;
     const { contentLocale, lang, moreProposals, originalLocale, postIndex, updateLocalContentLocale, screenWidth } = this.props;
@@ -205,13 +208,11 @@ Post.propTypes = {
   deleteSentiment: PropTypes.func.isRequired
 };
 
-const mapStateToProps = (state, { id }) => {
-  return {
-    debate: state.debate,
-    contentLocale: state.contentLocale.getIn([id, 'contentLocale']),
-    lang: state.i18n.locale
-  };
-};
+const mapStateToProps = (state, { id }) => ({
+  debate: state.debate,
+  contentLocale: state.contentLocale.getIn([id, 'contentLocale']),
+  lang: state.i18n.locale
+});
 
 export default compose(
   connect(mapStateToProps),

@@ -5,15 +5,11 @@
 import React from 'react';
 import Loader from './loader';
 
-const withLoadingIndicator = (loaderProps = {}) => {
-  return (WrappedComponent) => {
-    return (props) => {
-      if (props.loading || (props.data && props.data.loading)) {
-        return <Loader {...loaderProps} />;
-      }
-      return <WrappedComponent {...props} />;
-    };
-  };
+const withLoadingIndicator = (loaderProps = {}) => WrappedComponent => (props) => {
+  if (props.loading || (props.data && props.data.loading)) {
+    return <Loader {...loaderProps} />;
+  }
+  return <WrappedComponent {...props} />;
 };
 
 export default withLoadingIndicator;

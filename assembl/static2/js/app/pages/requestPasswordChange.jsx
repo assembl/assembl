@@ -25,10 +25,8 @@ class RequestPasswordChange extends React.Component {
   }
 }
 
-const mapStateToProps = (state) => {
-  return {
-    auth: state.auth
-  };
-};
+const mapStateToProps = state => ({
+  auth: state.auth
+});
 
 export default connect(mapStateToProps)(RequestPasswordChange);

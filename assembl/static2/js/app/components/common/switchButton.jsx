@@ -17,6 +17,7 @@ type Props = {
 
 class SwitchButton extends React.Component<Object, Props, any> {
   static defaultProps: Object;
+
   static defaultProps = {
     id: '',
     name: 'switch-button',

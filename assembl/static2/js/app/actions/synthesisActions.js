@@ -1,28 +1,22 @@
 import { getSynthesis } from '../services/synthesisService';
 
-const loadingSynthesis = () => {
-  return {
-    type: 'FETCH_SYNTHESIS',
-    synthesis: null
-  };
-};
+const loadingSynthesis = () => ({
+  type: 'FETCH_SYNTHESIS',
+  synthesis: null
+});
 
-const resolvedFetchSynthesis = (synthesis) => {
-  return {
-    type: 'RESOLVED_FETCH_SYNTHESIS',
-    synthesis: synthesis
-  };
-};
+const resolvedFetchSynthesis = synthesis => ({
+  type: 'RESOLVED_FETCH_SYNTHESIS',
+  synthesis: synthesis
+});
 
-const failedFetchSynthesis = (error) => {
-  return {
-    type: 'FAILED_FETCH_SYNTHESIS',
-    synthesisError: error
-  };
-};
+const failedFetchSynthesis = error => ({
+  type: 'FAILED_FETCH_SYNTHESIS',
+  synthesisError: error
+});
 
-export const fetchSynthesis = (debateId) => {
-  return function (dispatch) {
+export const fetchSynthesis = debateId =>
+  function (dispatch) {
     dispatch(loadingSynthesis());
     return getSynthesis(debateId)
       .then((synthesis) => {
@@ -32,4 +26,3 @@ export const fetchSynthesis = (debateId) => {
         dispatch(failedFetchSynthesis(error));
       });
   };
-};

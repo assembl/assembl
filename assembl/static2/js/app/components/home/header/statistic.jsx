@@ -13,28 +13,24 @@ type StatisticElementProps = {
   metricNameTranslateKey: string
 };
 
-const StatisticElement = (props: StatisticElementProps) => {
-  return (
-    <div className="stat-container">
-      <div className="stat-box">
-        <div className={`stat-icon assembl-icon-${props.iconName} white`} />
-        <div className="stat">
-          <div className="stat-nb">{props.metricValue}</div>
-          <div className="stat-nb stat-label">
-            <Translate value={props.metricNameTranslateKey} />
-          </div>
+const StatisticElement = (props: StatisticElementProps) => (
+  <div className="stat-container">
+    <div className="stat-box">
+      <div className={`stat-icon assembl-icon-${props.iconName} white`} />
+      <div className="stat">
+        <div className="stat-nb">{props.metricValue}</div>
+        <div className="stat-nb stat-label">
+          <Translate value={props.metricNameTranslateKey} />
         </div>
       </div>
     </div>
-  );
-};
+  </div>
+);
 
 class Statistic extends React.Component {
-  static mapElementsPropsToComponents = (elemsProps) => {
-    return elemsProps.map((elementProps, index) => {
-      return <StatisticElement key={index} {...elementProps} />;
-    });
-  };
+  static mapElementsPropsToComponents = elemsProps =>
+    elemsProps.map((elementProps, index) => <StatisticElement key={index} {...elementProps} />);
+
   render() {
     const { rootIdea, numParticipants, totalSentiments, visitsAnalytics } = this.props.data;
     const elementsProps = [

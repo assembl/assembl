@@ -9,11 +9,9 @@ import withLoadingIndicator from '../components/common/withLoadingIndicator';
 import LegalNoticeAndTerms from '../graphql/LegalNoticeAndTerms.graphql';
 import type { RootReducer } from '../reducers/rootReducer';
 
-export const mapStateToProps: RootReducer => LegalNoticeAndTermsQueryVariables = (state) => {
-  return {
-    lang: state.i18n.locale
-  };
-};
+export const mapStateToProps: RootReducer => LegalNoticeAndTermsQueryVariables = state => ({
+  lang: state.i18n.locale
+});
 
 type Response = {
   text?: string,

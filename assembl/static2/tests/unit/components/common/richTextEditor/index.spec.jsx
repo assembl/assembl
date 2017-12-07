@@ -7,9 +7,7 @@ import RichTextEditor from '../../../../../js/app/components/common/richTextEdit
 describe('RichTextEditor component', () => {
   it.skip('should render a rich text editor', () => {
     const rawContentState = convertToRaw(ContentState.createFromText('foobar'));
-    const updateEditorStateSpy = jest.fn((newState) => {
-      return newState;
-    });
+    const updateEditorStateSpy = jest.fn(newState => newState);
     const props = {
       rawContentState: rawContentState,
       maxLength: 2000,

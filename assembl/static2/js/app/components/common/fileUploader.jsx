@@ -25,8 +25,11 @@ type FileUploaderState = {
 */
 class FileUploader extends React.Component<Object, FileUploaderProps, FileUploaderState> {
   props: FileUploaderProps;
+
   state: FileUploaderState;
+
   fileInput: HTMLInputElement;
+
   preview: HTMLImageElement;
 
   static defaultProps = {

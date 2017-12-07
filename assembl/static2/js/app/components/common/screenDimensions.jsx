@@ -10,26 +10,26 @@ class ResizeListener extends React.Component {
     updateScreenDimensions();
     window.addEventListener('resize', updateScreenDimensions);
   }
+
   componentWillUnmount() {
     window.removeEventListener('resize', this.props.updateScreenDimensions);
   }
+
   render() {
     // This prevents the component from having more than one child
     return React.Children.only(this.props.children);
   }
 }
 
-export const ScreenDimensionsProvider = connect(null, (dispatch) => {
-  return {
-    updateScreenDimensions: () => {
-      dispatch({
-        type: 'UPDATE_SCREEN_DIMENSIONS',
-        newWidth: window.innerWidth,
-        newHeight: window.innerHeight
-      });
-    }
-  };
-})(ResizeListener);
+export const ScreenDimensionsProvider = connect(null, dispatch => ({
+  updateScreenDimensions: () => {
+    dispatch({
+      type: 'UPDATE_SCREEN_DIMENSIONS',
+      newWidth: window.innerWidth,
+      newHeight: window.innerHeight
+    });
+  }
+}))(ResizeListener);
 
 /* remove this block when we update flow */
 
@@ -47,27 +47,18 @@ type AnyComponent = ComponentType<any>;
 /* end of block to be removed */
 
 // HOC
-export const withScreenWidth = (WrappedComponent: AnyComponent) => {
-  return connect(({ screenWidth }) => {
-    return {
-      screenWidth: screenWidth
-    };
-  })(WrappedComponent);
-};
+export const withScreenWidth = (WrappedComponent: AnyComponent) =>
+  connect(({ screenWidth }) => ({
+    screenWidth: screenWidth
+  }))(WrappedComponent);
 
-export const withScreenHeight = (WrappedComponent: AnyComponent) => {
-  return connect(({ screenHeight }) => {
-    return {
-      screenHeight: screenHeight
-    };
-  })(WrappedComponent);
-};
+export const withScreenHeight = (WrappedComponent: AnyComponent) =>
+  connect(({ screenHeight }) => ({
+    screenHeight: screenHeight
+  }))(WrappedComponent);
 
-export const withScreenDimensions = (WrappedComponent: AnyComponent) => {
-  return connect(({ screenWidth, screenHeight }) => {
-    return {
-      screenWidth: screenWidth,
-      screenHeight: screenHeight
-    };
-  })(WrappedComponent);
-};
+export const withScreenDimensions = (WrappedComponent: AnyComponent) =>
+  connect(({ screenWidth, screenHeight }) => ({
+    screenWidth: screenWidth,
+    screenHeight: screenHeight
+  }))(WrappedComponent);

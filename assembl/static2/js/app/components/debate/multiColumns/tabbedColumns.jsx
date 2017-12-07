@@ -24,11 +24,7 @@ export default class TabbedColumns extends React.Component {
     } = this.props;
     const activeKey = this.state && 'activeKey' in this.state ? this.state.activeKey : messageColumns[0].messageClassifier;
     const columnsArray = orderPostsByMessageClassifier(messageColumns, posts);
-    const index = messageColumns.indexOf(
-      messageColumns.find((messageColumn) => {
-        return messageColumn.messageClassifier === activeKey;
-      })
-    );
+    const index = messageColumns.indexOf(messageColumns.find(messageColumn => messageColumn.messageClassifier === activeKey));
     const col = messageColumns[index];
     const synthesisProps = showSynthesis && {
       classifier: activeKey,

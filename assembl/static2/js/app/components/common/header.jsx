@@ -41,11 +41,9 @@ class Header extends React.Component {
   }
 }
 
-const mapStateToProps = (state) => {
-  return {
-    debate: state.debate,
-    i18n: state.i18n
-  };
-};
+const mapStateToProps = state => ({
+  debate: state.debate,
+  i18n: state.i18n
+});
 
 export default connect(mapStateToProps)(Header);

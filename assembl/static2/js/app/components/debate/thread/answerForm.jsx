@@ -37,6 +37,7 @@ type AnswerFormState = {
 
 class AnswerForm extends React.PureComponent<*, AnswerFormProps, AnswerFormState> {
   props: AnswerFormProps;
+
   state: AnswerFormState;
 
   constructor() {
@@ -46,6 +47,7 @@ class AnswerForm extends React.PureComponent<*, AnswerFormProps, AnswerFormState
       submitting: false
     };
   }
+
   handleCancel = () => {
     const { hideAnswerForm } = this.props;
     this.setState({ body: null }, hideAnswerForm);
@@ -148,12 +150,10 @@ class AnswerForm extends React.PureComponent<*, AnswerFormProps, AnswerFormState
   }
 }
 
-const mapStateToProps = (state) => {
-  return {
-    contentLocale: state.i18n.locale,
-    debateData: state.debate.debateData
-  };
-};
+const mapStateToProps = state => ({
+  contentLocale: state.i18n.locale,
+  debateData: state.debate.debateData
+});
 
 export default compose(
   connect(mapStateToProps),

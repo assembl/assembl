@@ -16,19 +16,17 @@ class CardList extends React.Component<void, CardListProps, void> {
     const { data, CardItem, itemClassName, classNameGenerator } = this.props;
     return (
       <Row className="no-margin">
-        {data.map((cardData, index) => {
-          return (
-            <Col
-              xs={12}
-              sm={6}
-              md={3}
-              className={classNameGenerator ? classNameGenerator(itemClassName, index) : itemClassName}
-              key={cardData.id || index}
-            >
-              <CardItem {...cardData} index={index} />
-            </Col>
-          );
-        })}
+        {data.map((cardData, index) => (
+          <Col
+            xs={12}
+            sm={6}
+            md={3}
+            className={classNameGenerator ? classNameGenerator(itemClassName, index) : itemClassName}
+            key={cardData.id || index}
+          >
+            <CardItem {...cardData} index={index} />
+          </Col>
+        ))}
       </Row>
     );
   }

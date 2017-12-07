@@ -38,6 +38,7 @@ class SearchApp extends React.Component {
     super(props);
     this.state = { isExpert: false };
   }
+
   componentWillMount() {
     const discussionId = getDiscussionId();
     const connectedUserId = getConnectedUserId();

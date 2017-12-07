@@ -23,19 +23,13 @@ class GoUp extends React.Component {
     const threshold = document.body.scrollHeight - screenHeight - footerHeight;
     if (window.pageYOffset > screenHeight && window.pageYOffset < threshold) {
       // Show the button when we scrolled minimum the height of the window.
-      this.setState(() => {
-        return { isHidden: false, position: 'fixed' };
-      });
+      this.setState(() => ({ isHidden: false, position: 'fixed' }));
     } else if (window.pageYOffset >= threshold) {
       // At the end of the page, the button stays above the footer.
       // The container needs to have position:relative for it to work.
-      this.setState(() => {
-        return { isHidden: false, position: 'absolute' };
-      });
+      this.setState(() => ({ isHidden: false, position: 'absolute' }));
     } else {
-      this.setState(() => {
-        return { isHidden: true };
-      });
+      this.setState(() => ({ isHidden: true }));
     }
   }
 
@@ -43,11 +37,7 @@ class GoUp extends React.Component {
     return (
       <div className={`go-up ${this.state.isHidden ? 'hidden' : ''}`} style={{ position: this.state.position }}>
         <div>
-          <a
-            onClick={() => {
-              return window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
-            }}
-          >
+          <a onClick={() => window.scrollTo({ top: 0, left: 0, behavior: 'smooth' })}>
             <span className="assembl-icon-up-open">&nbsp;</span>
           </a>
         </div>

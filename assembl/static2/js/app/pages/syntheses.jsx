@@ -22,6 +22,7 @@ type SynthesesProps = {
 
 export class DumbSyntheses extends React.Component<void, SynthesesProps, void> {
   props: SynthesesProps;
+
   componentDidMount() {
     const { syntheses, slug } = this.props;
     if (syntheses.length === 1) {
@@ -29,6 +30,7 @@ export class DumbSyntheses extends React.Component<void, SynthesesProps, void> {
       browserHistory.push(`${get('synthesis', { synthesisId: firstSynthesis.post.id, slug: slug })}`);
     }
   }
+
   render() {
     const { syntheses, slug, hasSyntheses } = this.props;
     return (
@@ -42,20 +44,18 @@ export class DumbSyntheses extends React.Component<void, SynthesesProps, void> {
             data={syntheses}
             classNameGenerator={CLASS_NAME_GENERATOR.default}
             itemClassName="theme"
-            CardItem={(itemData) => {
-              return (
-                <Card imgUrl={itemData.img ? itemData.img.externalUrl : ''} className="synthesis-preview">
-                  <Link className="content-box" to={`${get('synthesis', { synthesisId: itemData.post.id, slug: slug })}`}>
-                    <div className="title-container center">
-                      <h3 className="light-title-3">{itemData.subject}</h3>
-                      <h4 className="light-title-4">
-                        <Localize value={itemData.creationDate} dateFormat="date.format2" />
-                      </h4>
-                    </div>
-                  </Link>
-                </Card>
-              );
-            }}
+            CardItem={itemData => (
+              <Card imgUrl={itemData.img ? itemData.img.externalUrl : ''} className="synthesis-preview">
+                <Link className="content-box" to={`${get('synthesis', { synthesisId: itemData.post.id, slug: slug })}`}>
+                  <div className="title-container center">
+                    <h3 className="light-title-3">{itemData.subject}</h3>
+                    <h4 className="light-title-4">
+                      <Localize value={itemData.creationDate} dateFormat="date.format2" />
+                    </h4>
+                  </div>
+                </Link>
+              </Card>
+            )}
           />
         )}
       </Section>
@@ -63,12 +63,10 @@ export class DumbSyntheses extends React.Component<void, SynthesesProps, void> {
   }
 }
 
-const mapStateToProps = (state) => {
-  return {
-    lang: state.i18n.locale,
-    slug: state.debate.debateData.slug
-  };
-};
+const mapStateToProps = state => ({
+  lang: state.i18n.locale,
+  slug: state.debate.debateData.slug
+});
 
 export default compose(
   connect(mapStateToProps),

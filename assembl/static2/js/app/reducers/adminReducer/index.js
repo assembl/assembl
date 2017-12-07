@@ -29,11 +29,7 @@ export const thematicsInOrder: ThematicsInOrderReducer = (state = List(), action
   case 'CREATE_NEW_THEMATIC':
     return state.push(action.id);
   case 'UPDATE_THEMATICS': {
-    return List(
-      action.thematics.map((t) => {
-        return t.id;
-      })
-    );
+    return List(action.thematics.map(t => t.id));
   }
   default:
     return state;
@@ -48,9 +44,7 @@ export const thematicsById: ThematicsByIdReducer = (state = Map(), action) => {
     const newQuestion = fromJS({
       titleEntries: [{ localeCode: action.locale, value: '' }]
     });
-    return state.updateIn([action.id, 'questions'], (questions) => {
-      return questions.push(newQuestion);
-    });
+    return state.updateIn([action.id, 'questions'], questions => questions.push(newQuestion));
   }
   case 'CREATE_NEW_THEMATIC': {
     const emptyThematic = Map({
@@ -68,14 +62,10 @@ export const thematicsById: ThematicsByIdReducer = (state = Map(), action) => {
   case 'DELETE_THEMATIC':
     return state.setIn([action.id, 'toDelete'], true);
   case 'REMOVE_QUESTION':
-    return state.updateIn([action.thematicId, 'questions'], (questions) => {
-      return questions.remove(action.index);
-    });
+    return state.updateIn([action.thematicId, 'questions'], questions => questions.remove(action.index));
   case 'UPDATE_QUESTION_TITLE':
     return state.updateIn([action.thematicId, 'questions', action.index, 'titleEntries'], (titleEntries) => {
-      const titleEntryIndex = titleEntries.findIndex((entry) => {
-        return entry.get('localeCode') === action.locale;
-      });
+      const titleEntryIndex = titleEntries.findIndex(entry => entry.get('localeCode') === action.locale);
 
       if (titleEntryIndex === -1) {
         return titleEntries.push(Map({ localeCode: action.locale, value: action.value }));
@@ -166,9 +156,7 @@ export const thematicsHaveChanged: ThematicsHaveChangedReducer = (state = false,
 };
 
 const hasLocale = (l: string, arr: Array<string>): boolean => {
-  const i = arr.findIndex((a) => {
-    return a === l;
-  });
+  const i = arr.findIndex(a => a === l);
   return i >= 0;
 };
 
@@ -184,9 +172,7 @@ export const languagePreferences: LanguagePreferencesReducer = (state = List(), 
     return state;
   case 'REMOVE_LANGUAGE_PREFERENCE':
     if (hasLocale(action.locale, state)) {
-      const i = state.findIndex((a) => {
-        return a === action.locale;
-      });
+      const i = state.findIndex(a => a === action.locale);
       return state.delete(i);
     }
     return state;

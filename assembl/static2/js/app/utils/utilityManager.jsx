@@ -96,13 +96,11 @@ export const inviteUserToLogin = () => {
 };
 
 /* if user is not connected, ask for login, else, execute given action */
-export const promptForLoginOr = (action) => {
-  return () => {
-    const isUserConnected = getConnectedUserId(); // TO DO put isUserConnected in the store
-    if (!isUserConnected) {
-      inviteUserToLogin();
-    } else {
-      action();
-    }
-  };
+export const promptForLoginOr = action => () => {
+  const isUserConnected = getConnectedUserId(); // TO DO put isUserConnected in the store
+  if (!isUserConnected) {
+    inviteUserToLogin();
+  } else {
+    action();
+  }
 };

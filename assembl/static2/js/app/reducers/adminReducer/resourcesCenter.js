@@ -78,11 +78,7 @@ export const resourcesInOrder = (state: List<number> = List(), action: ReduxActi
   case CREATE_RESOURCE:
     return state.push(action.id);
   case UPDATE_RESOURCES:
-    return List(
-      action.resources.map((r) => {
-        return r.id;
-      })
-    );
+    return List(action.resources.map(r => r.id));
   default:
     return state;
   }

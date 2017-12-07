@@ -14,44 +14,36 @@ type SectionProps = {
   translate: boolean
 };
 
-const level1 = (title, index, translate) => {
-  return (
-    <div>
-      <div className="title-hyphen">&nbsp;</div>
-      <h1 className="section-title section-title1 dark-title-1">
-        {index ? <span className="section-title-index">{index}</span> : null}
-        {translate ? <Translate value={title} /> : title}
-      </h1>
-    </div>
-  );
-};
-
-const level2 = (title, index, translate) => {
-  return (
-    <h2 className="section-title section-title-2 dark-title-1">
+const level1 = (title, index, translate) => (
+  <div>
+    <div className="title-hyphen">&nbsp;</div>
+    <h1 className="section-title section-title1 dark-title-1">
       {index ? <span className="section-title-index">{index}</span> : null}
       {translate ? <Translate value={title} /> : title}
-    </h2>
-  );
-};
+    </h1>
+  </div>
+);
 
-const level3 = (title, index, translate) => {
-  return (
-    <h3 className="section-title section-title-3 dark-title-1">
-      {index ? <span className="section-title-index">{index}</span> : null}
-      {translate ? <Translate value={title} /> : title}
-    </h3>
-  );
-};
+const level2 = (title, index, translate) => (
+  <h2 className="section-title section-title-2 dark-title-1">
+    {index ? <span className="section-title-index">{index}</span> : null}
+    {translate ? <Translate value={title} /> : title}
+  </h2>
+);
 
-const levelN = (title, index, translate) => {
-  return (
-    <h3 className="section-title section-title-3 dark-title-1">
-      {index ? <span className="section-title-index">{index}</span> : null}
-      {translate ? <Translate value={title} /> : title}
-    </h3>
-  );
-};
+const level3 = (title, index, translate) => (
+  <h3 className="section-title section-title-3 dark-title-1">
+    {index ? <span className="section-title-index">{index}</span> : null}
+    {translate ? <Translate value={title} /> : title}
+  </h3>
+);
+
+const levelN = (title, index, translate) => (
+  <h3 className="section-title section-title-3 dark-title-1">
+    {index ? <span className="section-title-index">{index}</span> : null}
+    {translate ? <Translate value={title} /> : title}
+  </h3>
+);
 
 const LEVELS = [level1, level2, level3];
 

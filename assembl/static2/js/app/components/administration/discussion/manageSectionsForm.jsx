@@ -16,30 +16,23 @@ type ManageSectionFormProps = {
   createSection: Function
 };
 
-const DumbManageSectionsForm = ({ sections, selectedLocale, createSection }: ManageSectionFormProps) => {
-  return (
-    <div className="admin-box">
-      <SectionTitle title={I18n.t('administration.sections.sectionsTitle')} annotation={I18n.t('administration.annotation')} />
-      <div className="admin-content">
-        <form>
-          {sections.map((id, index) => {
-            return <EditSectionForm key={id} id={id} index={index} locale={selectedLocale} nbSections={sections.size} />;
-          })}
-          <OverlayTrigger placement="top" overlay={addSectionTooltip}>
-            <div
-              onClick={() => {
-                return createSection(sections.size);
-              }}
-              className="plus margin-l"
-            >
-              +
-            </div>
-          </OverlayTrigger>
-        </form>
-      </div>
+const DumbManageSectionsForm = ({ sections, selectedLocale, createSection }: ManageSectionFormProps) => (
+  <div className="admin-box">
+    <SectionTitle title={I18n.t('administration.sections.sectionsTitle')} annotation={I18n.t('administration.annotation')} />
+    <div className="admin-content">
+      <form>
+        {sections.map((id, index) => (
+          <EditSectionForm key={id} id={id} index={index} locale={selectedLocale} nbSections={sections.size} />
+        ))}
+        <OverlayTrigger placement="top" overlay={addSectionTooltip}>
+          <div onClick={() => createSection(sections.size)} className="plus margin-l">
+            +
+          </div>
+        </OverlayTrigger>
+      </form>
     </div>
-  );
-};
+  </div>
+);
 
 const mapStateToProps = (state) => {
   const { sectionsInOrder } = state.admin.sections;
@@ -49,14 +42,12 @@ const mapStateToProps = (state) => {
   };
 };
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    createSection: (nextOrder) => {
-      const newId = Math.round(Math.random() * -1000000).toString();
-      return dispatch(actions.createSection(newId, nextOrder));
-    }
-  };
-};
+const mapDispatchToProps = dispatch => ({
+  createSection: (nextOrder) => {
+    const newId = Math.round(Math.random() * -1000000).toString();
+    return dispatch(actions.createSection(newId, nextOrder));
+  }
+});
 
 export { DumbManageSectionsForm };
 

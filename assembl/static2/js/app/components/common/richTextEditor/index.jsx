@@ -41,8 +41,11 @@ function customBlockRenderer(block) {
 
 export default class RichTextEditor extends React.Component<Object, RichTextEditorProps, RichTextEditorState> {
   editor: HTMLDivElement;
+
   props: RichTextEditorProps;
+
   state: RichTextEditorState;
+
   static defaultProps: Object;
 
   static defaultProps = {
@@ -69,9 +72,7 @@ export default class RichTextEditor extends React.Component<Object, RichTextEdit
     }
   }
 
-  getCurrentRawContentState = () => {
-    return convertToRaw(this.state.editorState.getCurrentContent());
-  };
+  getCurrentRawContentState = () => convertToRaw(this.state.editorState.getCurrentContent());
 
   onBlur = () => {
     this.setState(
@@ -133,9 +134,7 @@ export default class RichTextEditor extends React.Component<Object, RichTextEdit
 
   getCharCount(editorState: EditorState): number {
     // this code is "borrowed" from the draft-js counter plugin
-    const decodeUnicode = (str) => {
-      return punycode.ucs2.decode(str);
-    }; // func to handle unicode characters
+    const decodeUnicode = str => punycode.ucs2.decode(str); // func to handle unicode characters
     const plainText = editorState.getCurrentContent().getPlainText('');
     const regex = /(?:\r\n|\r|\n)/g; // new line, carriage return, line feed
     const cleanString = plainText.replace(regex, '').trim(); // replace above characters w/ nothing
@@ -161,9 +160,7 @@ export default class RichTextEditor extends React.Component<Object, RichTextEdit
   focusEditor = (): void => {
     // Hacky: Wait to focus the editor so we don't lose selection.
     // The toolbar actions don't work at all without this.
-    setTimeout(() => {
-      return this.editor.focus();
-    }, 50);
+    setTimeout(() => this.editor.focus(), 50);
   };
 
   renderRemainingChars = (): React.Element<*> => {

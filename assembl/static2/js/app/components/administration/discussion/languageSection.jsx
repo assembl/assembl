@@ -46,11 +46,7 @@ class LanguageSection extends React.Component {
 
     // Manage toggling of checkbox states from the store
     const totalLocaleList = List(Object.keys(this.state.localeState));
-    const currentSelectedLocaleList = totalLocaleList
-      .filter((locale) => {
-        return this.state.localeState[locale].selected;
-      })
-      .sort();
+    const currentSelectedLocaleList = totalLocaleList.filter(locale => this.state.localeState[locale].selected).sort();
     const newLocalePreferences = nextProps.discussionLanguagePreferences.sort();
     // Only update the state if there is a change in language preferences
     if (!currentSelectedLocaleList.equals(newLocalePreferences)) {
@@ -96,9 +92,7 @@ class LanguageSection extends React.Component {
                   checked={currentLocale === locale ? true : localeData.selected}
                   key={locale}
                   value={locale}
-                  onChange={(e) => {
-                    return this.toggleLocale(e.target.value);
-                  }}
+                  onChange={e => this.toggleLocale(e.target.value)}
                 >
                   {localeData.name}
                 </Checkbox>
@@ -111,37 +105,31 @@ class LanguageSection extends React.Component {
   }
 }
 
-const mapStateToProps = ({ admin: { discussionLanguagePreferences }, i18n }) => {
-  return {
-    i18n: i18n,
-    discussionLanguagePreferences: discussionLanguagePreferences
-  };
-};
+const mapStateToProps = ({ admin: { discussionLanguagePreferences }, i18n }) => ({
+  i18n: i18n,
+  discussionLanguagePreferences: discussionLanguagePreferences
+});
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    addLocaleToStore: (locale) => {
-      dispatch(addLanguagePreference(locale));
-    },
-    removeLocaleFromStore: (locale) => {
-      dispatch(removeLanguagePreference(locale));
-    },
-    signalLocaleChanged: (state) => {
-      dispatch(languagePreferencesHasChanged(state));
-    }
-  };
-};
+const mapDispatchToProps = dispatch => ({
+  addLocaleToStore: (locale) => {
+    dispatch(addLanguagePreference(locale));
+  },
+  removeLocaleFromStore: (locale) => {
+    dispatch(removeLanguagePreference(locale));
+  },
+  signalLocaleChanged: (state) => {
+    dispatch(languagePreferencesHasChanged(state));
+  }
+});
 
 export default compose(
   connect(mapStateToProps, mapDispatchToProps),
   graphql(getAllPreferenceLanguage, {
-    options: (props) => {
-      return {
-        variables: {
-          inLocale: props.i18n.locale
-        }
-      };
-    }
+    options: props => ({
+      variables: {
+        inLocale: props.i18n.locale
+      }
+    })
   }),
   withLoadingIndicator()
 )(LanguageSection);

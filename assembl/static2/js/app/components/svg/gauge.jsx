@@ -12,11 +12,9 @@ export default ({ rectCounts, color }) => {
   }
   return (
     <svg width="25" height="58">
-      {rectArray.map((hexa, index) => {
-        return (
-          <rect rx="1" height="3" width="15" y={(index + 1) * 5} x="5" strokeWidth="1.5" stroke={hexa} fill={hexa} key={index} />
-        );
-      })}
+      {rectArray.map((hexa, index) => (
+        <rect rx="1" height="3" width="15" y={(index + 1) * 5} x="5" strokeWidth="1.5" stroke={hexa} fill={hexa} key={index} />
+      ))}
     </svg>
   );
 };

@@ -27,6 +27,7 @@ type ChooseContentLocaleFormState = {
 
 class ChooseContentLocaleForm extends React.Component<*, ChooseContentLocaleFormProps, ChooseContentLocaleFormState> {
   props: ChooseContentLocaleFormProps;
+
   state: ChooseContentLocaleFormState;
 
   constructor() {
@@ -67,9 +68,7 @@ class ChooseContentLocaleForm extends React.Component<*, ChooseContentLocaleForm
       language: originalLocaleLabel
     });
     const translateOneLabel = I18n.t('debate.thread.translateOnlyThisMessage');
-    const availableLanguages = allLocales.filter((lang) => {
-      return lang.localeCode !== originalLocale;
-    });
+    const availableLanguages = allLocales.filter(lang => lang.localeCode !== originalLocale);
     return (
       <div className="choose-content-locale-form">
         <Modal.Header closeButton />
@@ -80,9 +79,7 @@ class ChooseContentLocaleForm extends React.Component<*, ChooseContentLocaleForm
                 checked={scope === 'global'}
                 title={translateAllLabel}
                 value="global"
-                onChange={() => {
-                  return this.updateScope('global');
-                }}
+                onChange={() => this.updateScope('global')}
               >
                 {translateAllLabel}
               </Radio>
@@ -92,9 +89,7 @@ class ChooseContentLocaleForm extends React.Component<*, ChooseContentLocaleForm
                 checked={scope === 'local'}
                 title={translateOneLabel}
                 value="local"
-                onChange={() => {
-                  return this.updateScope('local');
-                }}
+                onChange={() => this.updateScope('local')}
               >
                 {translateOneLabel}
               </Radio>
@@ -113,13 +108,11 @@ class ChooseContentLocaleForm extends React.Component<*, ChooseContentLocaleForm
                 value={selectedLocale}
               >
                 <option value="select">{I18n.t('debate.thread.chooseLanguagePh')}</option>
-                {availableLanguages.map((lang) => {
-                  return (
-                    <option key={`locale-${lang.localeCode}`} value={lang.localeCode}>
-                      {lang.label}
-                    </option>
-                  );
-                })}
+                {availableLanguages.map(lang => (
+                  <option key={`locale-${lang.localeCode}`} value={lang.localeCode}>
+                    {lang.label}
+                  </option>
+                ))}
               </FormControl>
             </FormGroup>
           ) : null}

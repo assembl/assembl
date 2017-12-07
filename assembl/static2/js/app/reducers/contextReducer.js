@@ -19,18 +19,10 @@ const ContextReducer = (state = initialState, action) => {
 
 export default ContextReducer;
 
-export const getConnectedUserId = (state) => {
-  return state.context.connectedUserId;
-};
+export const getConnectedUserId = state => state.context.connectedUserId;
 
-export const getDebateId = (state) => {
-  return state.context.debateId;
-};
+export const getDebateId = state => state.context.debateId;
 
-export const getLocale = (state) => {
-  return state.i18n.locale;
-};
+export const getLocale = state => state.i18n.locale;
 
-export const getConnectedUserName = (state) => {
-  return state.context.connectedUserName;
-};
+export const getConnectedUserName = state => state.context.connectedUserName;

@@ -16,18 +16,14 @@ class TopIdea extends React.Component {
         <h2 className="dark-title-2 center">
           <Translate value={translateKey} />
         </h2>
-        {topIdeas.map((idea, index) => {
-          return <IdeaLink key={index} idea={idea} />;
-        })}
+        {topIdeas.map((idea, index) => <IdeaLink key={index} idea={idea} />)}
       </div>
     );
   }
 }
 
-const mapStateToProps = (state) => {
-  return {
-    ideas: state.ideas
-  };
-};
+const mapStateToProps = state => ({
+  ideas: state.ideas
+});
 
 export default connect(mapStateToProps)(TopIdea);

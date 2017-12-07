@@ -1,28 +1,22 @@
 import { getPartners } from '../services/partnersService';
 
-const loadingPartners = () => {
-  return {
-    type: 'FETCH_PARTNERS',
-    partners: null
-  };
-};
+const loadingPartners = () => ({
+  type: 'FETCH_PARTNERS',
+  partners: null
+});
 
-const resolvedFetchPartners = (partners) => {
-  return {
-    type: 'RESOLVED_FETCH_PARTNERS',
-    partners: partners
-  };
-};
+const resolvedFetchPartners = partners => ({
+  type: 'RESOLVED_FETCH_PARTNERS',
+  partners: partners
+});
 
-const failedFetchPartners = (error) => {
-  return {
-    type: 'FAILED_FETCH_PARTNERS',
-    partnersError: error
-  };
-};
+const failedFetchPartners = error => ({
+  type: 'FAILED_FETCH_PARTNERS',
+  partnersError: error
+});
 
-export const fetchPartners = (debateId) => {
-  return function (dispatch) {
+export const fetchPartners = debateId =>
+  function (dispatch) {
     dispatch(loadingPartners());
     return getPartners(debateId)
       .then((partners) => {
@@ -32,4 +26,3 @@ export const fetchPartners = (debateId) => {
         dispatch(failedFetchPartners(error));
       });
   };
-};

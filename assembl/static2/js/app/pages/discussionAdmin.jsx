@@ -18,10 +18,8 @@ const DiscussionAdmin = (props) => {
   );
 };
 
-const mapStateToProps = (state) => {
-  return {
-    selectedLocale: state.admin.selectedLocale
-  };
-};
+const mapStateToProps = state => ({
+  selectedLocale: state.admin.selectedLocale
+});
 
 export default connect(mapStateToProps)(DiscussionAdmin);

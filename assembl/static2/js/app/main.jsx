@@ -12,6 +12,7 @@ type Debate = { debateData: { timeline: Timeline } };
 
 class Main extends React.Component {
   state: { identifier: string, location: string };
+
   constructor(props: {
     debate: Debate,
     params: { phase: string },
@@ -28,6 +29,7 @@ class Main extends React.Component {
       location: this.props.location.pathname
     };
   }
+
   componentWillMount() {
     const { debateData } = this.props.debate;
     const currentPhaseIdentifier = getCurrentPhaseIdentifier(debateData.timeline);
@@ -36,13 +38,12 @@ class Main extends React.Component {
       // timeline is not configured
       isRedirectionToV1 = true;
     } else {
-      const currentPhase = debateData.timeline.filter((phase) => {
-        return phase.identifier === currentPhaseIdentifier;
-      });
+      const currentPhase = debateData.timeline.filter(phase => phase.identifier === currentPhaseIdentifier);
       isRedirectionToV1 = currentPhase[0] && currentPhase[0].interface_v1;
     }
     this.props.addRedirectionToV1(isRedirectionToV1);
   }
+
   componentWillReceiveProps(nextProps) {
     const location = nextProps.location.pathname;
     const { debateData } = this.props.debate;
@@ -55,13 +56,14 @@ class Main extends React.Component {
 
     window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
   }
+
   render() {
     const that = this;
-    const children = React.Children.map(this.props.children, (child) => {
-      return React.cloneElement(child, {
+    const children = React.Children.map(this.props.children, child =>
+      React.cloneElement(child, {
         identifier: that.state.identifier
-      });
-    });
+      })
+    );
     return (
       <div className="main">
         <Navbar location={this.state.location} />
@@ -72,18 +74,14 @@ class Main extends React.Component {
   }
 }
 
-const mapStateToProps = (state: { debate: Debate }) => {
-  return {
-    debate: state.debate
-  };
-};
+const mapStateToProps = (state: { debate: Debate }) => ({
+  debate: state.debate
+});
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    addRedirectionToV1: (discussionId: string) => {
-      dispatch(addRedirectionToV1(discussionId));
-    }
-  };
-};
+const mapDispatchToProps = dispatch => ({
+  addRedirectionToV1: (discussionId: string) => {
+    dispatch(addRedirectionToV1(discussionId));
+  }
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(Main);

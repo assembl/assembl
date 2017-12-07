@@ -31,9 +31,7 @@ describe('AtomicBlockRenderer component', () => {
       }
     };
     const fakeBlock = {
-      getEntityAt: (offset) => {
-        return offset.toString(); // fake entity key
-      }
+      getEntityAt: offset => offset.toString() // fake entity key
     };
 
     const props = {

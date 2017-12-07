@@ -11,34 +11,30 @@ class Timeline extends React.Component {
     return (
       <div className="timeline-container">
         {debateData.timeline &&
-          debateData.timeline.map((phase, index) => {
-            return (
-              <TimelineSegment
-                title={phase.title}
-                locale={locale}
-                index={index}
-                key={index}
-                barPercent={getBarPercent(debateData.timeline[index])}
-                isCurrentPhase={isCurrentPhase(debateData.timeline[index])}
-                showNavigation={showNavigation}
-                identifier={identifier}
-                phaseIdentifier={phase.identifier}
-                startDate={phase.start}
-                endDate={phase.end}
-                isStepCompleted={isStepCompleted(phase)}
-              />
-            );
-          })}
+          debateData.timeline.map((phase, index) => (
+            <TimelineSegment
+              title={phase.title}
+              locale={locale}
+              index={index}
+              key={index}
+              barPercent={getBarPercent(debateData.timeline[index])}
+              isCurrentPhase={isCurrentPhase(debateData.timeline[index])}
+              showNavigation={showNavigation}
+              identifier={identifier}
+              phaseIdentifier={phase.identifier}
+              startDate={phase.start}
+              endDate={phase.end}
+              isStepCompleted={isStepCompleted(phase)}
+            />
+          ))}
       </div>
     );
   }
 }
 
-const mapStateToProps = (state) => {
-  return {
-    debate: state.debate,
-    i18n: state.i18n
-  };
-};
+const mapStateToProps = state => ({
+  debate: state.debate,
+  i18n: state.i18n
+});
 
 export default connect(mapStateToProps)(Timeline);

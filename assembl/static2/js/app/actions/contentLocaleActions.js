@@ -7,28 +7,22 @@ import type {
   UpdateContentLocaleByOriginalLocale
 } from './actionTypes';
 
-export const updateContentLocaleById = (id: string, value: string): UpdateContentLocaleById => {
-  return {
-    type: UPDATE_CONTENT_LOCALE_BY_ID,
-    id: id,
-    value: value
-  };
-};
+export const updateContentLocaleById = (id: string, value: string): UpdateContentLocaleById => ({
+  type: UPDATE_CONTENT_LOCALE_BY_ID,
+  id: id,
+  value: value
+});
 
 export const updateContentLocaleByOriginalLocale = (
   originalLocale: string,
   value: string
-): UpdateContentLocaleByOriginalLocale => {
-  return {
-    type: UPDATE_CONTENT_LOCALE_BY_ORIGINAL_LOCALE,
-    originalLocale: originalLocale,
-    value: value
-  };
-};
+): UpdateContentLocaleByOriginalLocale => ({
+  type: UPDATE_CONTENT_LOCALE_BY_ORIGINAL_LOCALE,
+  originalLocale: originalLocale,
+  value: value
+});
 
-export const updateContentLocale = (data: ContentLocaleMapping): UpdateContentLocale => {
-  return {
-    type: UPDATE_CONTENT_LOCALE,
-    data: data
-  };
-};
+export const updateContentLocale = (data: ContentLocaleMapping): UpdateContentLocale => ({
+  type: UPDATE_CONTENT_LOCALE,
+  data: data
+});

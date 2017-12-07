@@ -224,8 +224,8 @@ const plugin = {
         const variables = {
           file: entity.data.file
         };
-        uploadDocumentsPromise = uploadDocumentsPromise.then(() => {
-          return uploadDocument({ variables: variables }).then((res) => {
+        uploadDocumentsPromise = uploadDocumentsPromise.then(() =>
+          uploadDocument({ variables: variables }).then((res) => {
             if (res && res.data) {
               const doc = res.data.uploadDocument.document;
               documentIds.push(doc.id);
@@ -238,21 +238,22 @@ const plugin = {
                 mimeType: mimeType
               });
             }
-          });
-        });
+          })
+        );
       } else {
         documentIds.push(entity.data.id);
       }
     });
 
-    return uploadDocumentsPromise.then(() => {
-      return new Promise((resolve) => {
-        resolve({
-          contentState: convertToRaw(contentState),
-          documentIds: documentIds
-        });
-      });
-    });
+    return uploadDocumentsPromise.then(
+      () =>
+        new Promise((resolve) => {
+          resolve({
+            contentState: convertToRaw(contentState),
+            documentIds: documentIds
+          });
+        })
+    );
   }
 };
 

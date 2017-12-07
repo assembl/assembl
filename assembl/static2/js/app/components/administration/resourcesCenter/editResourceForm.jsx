@@ -128,27 +128,15 @@ const mapStateToProps = (state, { id, locale }) => {
   };
 };
 
-const mapDispatchToProps = (dispatch, { id, locale }) => {
-  return {
-    handleDocumentChange: (value) => {
-      return dispatch(updateResourceDocument(id, value));
-    },
-    handleEmbedCodeChange: (e) => {
-      return dispatch(updateResourceEmbedCode(id, e.target.value));
-    },
-    handleImageChange: (value) => {
-      dispatch(updateResourceImage(id, value));
-    },
-    handleTextChange: (value) => {
-      return dispatch(updateResourceText(id, locale, value));
-    },
-    handleTitleChange: (e) => {
-      return dispatch(updateResourceTitle(id, locale, e.target.value));
-    },
-    markAsToDelete: () => {
-      return dispatch(deleteResource(id));
-    }
-  };
-};
+const mapDispatchToProps = (dispatch, { id, locale }) => ({
+  handleDocumentChange: value => dispatch(updateResourceDocument(id, value)),
+  handleEmbedCodeChange: e => dispatch(updateResourceEmbedCode(id, e.target.value)),
+  handleImageChange: (value) => {
+    dispatch(updateResourceImage(id, value));
+  },
+  handleTextChange: value => dispatch(updateResourceText(id, locale, value)),
+  handleTitleChange: e => dispatch(updateResourceTitle(id, locale, e.target.value)),
+  markAsToDelete: () => dispatch(deleteResource(id))
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(EditResourceForm);
