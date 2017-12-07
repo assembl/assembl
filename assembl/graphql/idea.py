@@ -52,11 +52,11 @@ class IdeaInterface(graphene.Interface):
 
     def resolve_num_posts(self, args, context, info):
         if isinstance(self, models.RootIdea):
-            # If this is RootIdea, do the sum of all children to be sure
+            # If this is RootIdea, do the sum of all descendants to be sure
             # we use the same counters that we see on each idea which are
             # based on countable states.
             # Don't use RootIdea.num_posts that give much higher count.
-            return sum([child.num_posts for child in self.get_children()])
+            return sum([child.num_posts for child in self.get_all_descendants()])
 
         return self.num_posts
 
