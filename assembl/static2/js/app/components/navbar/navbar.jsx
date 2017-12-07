@@ -18,6 +18,7 @@ import BurgerNavbar from './BurgerNavbar';
 import { APP_CONTAINER_MAX_WIDTH, APP_CONTAINER_PADDING } from '../../constants';
 import { displayModal } from '../../utils/utilityManager';
 import { getDiscussionSlug, snakeToCamel } from '../../utils/globalFunctions';
+import withoutLoadingIndicator from '../common/withoutLoadingIndicator';
 
 const filterSection = ({ sectionType }, { hasResourcesCenter, hasSyntheses }) => {
   switch (sectionType) {
@@ -137,7 +138,7 @@ export class AssemblNavbar extends React.PureComponent {
 
   render = () => {
     const { screenWidth, debate, data, location, phase, i18n } = this.props;
-    const sections = (data && data.sections) || [];
+    const sections = data.sections;
     const { debateData } = debate;
     const { timeline, logo, slug, helpUrl } = debateData;
     const flatWidth = (this.state && this.state.flatWidth) || 0;
@@ -181,6 +182,13 @@ export default compose(
     phase: state.phase,
     i18n: state.i18n
   })),
-  graphql(SectionsQuery),
+  graphql(SectionsQuery, {
+    options: ({ i18n }) => ({
+      variables: {
+        lang: i18n.locale
+      }
+    })
+  }),
+  withoutLoadingIndicator(),
   withScreenWidth
 )(AssemblNavbar);

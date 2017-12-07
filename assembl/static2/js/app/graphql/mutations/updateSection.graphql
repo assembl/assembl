@@ -1,9 +1,10 @@
-mutation updateSection($id: ID!, $url: String, $titleEntries: [LangStringEntryInput]!, $order: Float) {
+mutation updateSection($id: ID!, $url: String, $titleEntries: [LangStringEntryInput]!, $order: Float, $lang: String) {
   updateSection(id: $id, url: $url, titleEntries: $titleEntries, order: $order) {
     section {
       id
       url
-      title
+      title(lang: $lang)
+      sectionType
       order
     }
   }

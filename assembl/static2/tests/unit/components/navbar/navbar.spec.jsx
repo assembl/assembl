@@ -10,19 +10,47 @@ describe('mapSectionToElement function', () => {
   });
 });
 
+const data = {
+  sections: [
+    {
+      id: 'home',
+      sectionType: 'HOMEPAGE',
+      title: 'Home',
+      url: 'http://www.homesweethome.org'
+    },
+    {
+      id: 'mysection',
+      sectionType: 'CUSTOM',
+      title: 'My section',
+      url: 'http://www.gnu.org'
+    }
+  ]
+};
+
 describe('AssemblNavbar component', () => {
   it('should render a FlatNavbar with a big screenWidth', () => {
     const renderer = new ShallowRenderer();
     renderer.render(
-      <AssemblNavbar screenWidth={2000} phase={{ isRedirectionToV1: false }} debate={{ debateData: { timeline: [] } }} />
+      <AssemblNavbar
+        screenWidth={2000}
+        phase={{ isRedirectionToV1: false }}
+        debate={{ debateData: { timeline: [] } }}
+        data={data}
+      />
     );
     const result = renderer.getRenderOutput();
     expect(result).toMatchSnapshot();
   });
+
   it('should render a BurgerNavbar and a hidden FlatNavbar with a tiny screenWidth', () => {
     const renderer = new ShallowRenderer();
     renderer.render(
-      <AssemblNavbar phase={{ isRedirectionToV1: false }} screenWidth={10} debate={{ debateData: { timeline: [] } }} />
+      <AssemblNavbar
+        phase={{ isRedirectionToV1: false }}
+        screenWidth={10}
+        debate={{ debateData: { timeline: [] } }}
+        data={data}
+      />
     );
     const result = renderer.getRenderOutput();
     expect(result).toMatchSnapshot();

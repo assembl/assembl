@@ -1,11 +1,11 @@
-query SectionsQuery {
+query SectionsQuery($lang: String) {
   hasResourcesCenter
   hasSyntheses
   sections {
     id
     sectionType
     order
-    title
+    title(lang: $lang)
     titleEntries {
       value
       localeCode

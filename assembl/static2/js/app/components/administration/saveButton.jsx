@@ -30,7 +30,7 @@ const runSerial = (tasks) => {
 };
 
 const getMutationsPromises = (params) => {
-  const { items, variablesCreator, deleteVariablesCreator, createMutation, deleteMutation, updateMutation } = params;
+  const { items, variablesCreator, deleteVariablesCreator, createMutation, deleteMutation, updateMutation, lang } = params;
   const promises = [];
   items.forEach((item, index) => {
     if (item.isNew && !item.toDelete) {
@@ -51,6 +51,7 @@ const getMutationsPromises = (params) => {
       // update item
       const variables = variablesCreator(item, index);
       variables.id = item.id;
+      variables.lang = lang;
       const payload = {
         variables: variables
       };
@@ -231,7 +232,8 @@ const SaveButton = ({
         deleteVariablesCreator: createVariablesForDeleteSectionMutation,
         createMutation: createSection,
         updateMutation: updateSection,
-        deleteMutation: deleteSection
+        deleteMutation: deleteSection,
+        lang: i18n.locale
       });
 
       runSerial(mutationsPromises).then(() => {

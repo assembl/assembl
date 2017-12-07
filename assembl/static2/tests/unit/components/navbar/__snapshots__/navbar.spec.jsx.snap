@@ -14,18 +14,60 @@ exports[`AssemblNavbar component should render a BurgerNavbar and a hidden FlatN
       id="navbar"
     >
       <BurgerNavbar
-        elements={Array []}
+        elements={
+          Array [
+            <SectionLink
+              options={
+                  Object {
+                      "displayDebateModal": [Function],
+                      "phase": "thread",
+                      "phaseContext": "new",
+                      "slug": undefined,
+                    }
+              }
+              section={
+                  Object {
+                      "id": "mysection",
+                      "sectionType": "CUSTOM",
+                      "title": "My section",
+                      "url": "http://www.gnu.org",
+                    }
+              }
+          />,
+          ]
+        }
         helpUrl={undefined}
         location={undefined}
-        logoLink={false}
+        logoLink="http://www.homesweethome.org"
         logoSrc={undefined}
         slug={undefined}
       />
       <FlatNavbar
-        elements={Array []}
+        elements={
+          Array [
+            <SectionLink
+              options={
+                  Object {
+                      "displayDebateModal": [Function],
+                      "phase": "thread",
+                      "phaseContext": "new",
+                      "slug": undefined,
+                    }
+              }
+              section={
+                  Object {
+                      "id": "mysection",
+                      "sectionType": "CUSTOM",
+                      "title": "My section",
+                      "url": "http://www.gnu.org",
+                    }
+              }
+          />,
+          ]
+        }
         helpUrl={undefined}
         location={undefined}
-        logoLink={false}
+        logoLink="http://www.homesweethome.org"
         logoSrc={undefined}
         setWidth={[Function]}
         slug={undefined}
@@ -56,10 +98,31 @@ exports[`AssemblNavbar component should render a FlatNavbar with a big screenWid
       id="navbar"
     >
       <FlatNavbar
-        elements={Array []}
+        elements={
+          Array [
+            <SectionLink
+              options={
+                  Object {
+                      "displayDebateModal": [Function],
+                      "phase": "thread",
+                      "phaseContext": "new",
+                      "slug": undefined,
+                    }
+              }
+              section={
+                  Object {
+                      "id": "mysection",
+                      "sectionType": "CUSTOM",
+                      "title": "My section",
+                      "url": "http://www.gnu.org",
+                    }
+              }
+          />,
+          ]
+        }
         helpUrl={undefined}
         location={undefined}
-        logoLink={false}
+        logoLink="http://www.homesweethome.org"
         logoSrc={undefined}
         setWidth={[Function]}
         slug={undefined}
