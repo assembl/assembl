@@ -9,13 +9,12 @@ import classNames from 'classnames';
 
 import createPostMutation from '../../../graphql/mutations/createPost.graphql';
 import uploadDocumentMutation from '../../../graphql/mutations/uploadDocument.graphql';
-import { displayAlert, inviteUserToLogin, displayModal } from '../../../utils/utilityManager';
+import { displayAlert, displayModal, promptForLoginOr } from '../../../utils/utilityManager';
 import { convertRawContentStateToHTML, rawContentStateIsEmpty } from '../../../utils/draftjs';
 import RichTextEditor from '../../common/richTextEditor';
 import attachmentsPlugin from '../../common/richTextEditor/attachmentsPlugin';
 import { TEXT_AREA_MAX_LENGTH } from '../common/topPostForm';
 import { getIfPhaseCompletedByIdentifier } from '../../../utils/timeline';
-import { getConnectedUserId } from '../../../utils/globalFunctions';
 
 type AnswerFormProps = {
   contentLocale: string,
@@ -69,12 +68,7 @@ class AnswerForm extends React.PureComponent<*, AnswerFormProps, AnswerFormState
       );
       displayModal(null, body, true, null, null, true);
     } else {
-      const isUserConnected = getConnectedUserId(); // TO DO put isUserConnected in the store
-      if (!isUserConnected) {
-        inviteUserToLogin();
-      } else {
-        handleAnswerClick();
-      }
+      promptForLoginOr(handleAnswerClick)();
     }
   };
 
