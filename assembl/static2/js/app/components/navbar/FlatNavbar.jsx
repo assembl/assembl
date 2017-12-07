@@ -23,7 +23,8 @@ export default class FlatNavbar extends React.PureComponent {
   };
   updateWidth = () => {
     const { leftWidth = 0, rightWidth = 0 } = this.state;
-    this.props.setWidth(leftWidth + rightWidth);
+    const margin = 50;
+    this.props.setWidth(leftWidth + rightWidth + margin);
   };
   render = () => {
     const { elements, slug, logoSrc, connectedUserId, currentPhaseIdentifier, helpUrl, location, style, logoLink } = this.props;
