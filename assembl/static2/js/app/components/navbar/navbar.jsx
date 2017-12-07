@@ -148,7 +148,9 @@ export class AssemblNavbar extends React.PureComponent {
     const flatWidth = (this.state && this.state.flatWidth) || 0;
     const maxAppWidth = Math.min(APP_CONTAINER_MAX_WIDTH, screenWidth) - APP_CONTAINER_PADDING * 2;
     const screenTooSmall = flatWidth > maxAppWidth;
-    const filteredSections = sections.filter(sectionFilter(data));
+    const filteredSections = sections.filter(sectionFilter(data)).sort((a, b) => {
+      return a.order - b.order;
+    });
     const mapOptions = {
       slug: slug,
       phase: getCurrentPhaseIdentifier(timeline),
