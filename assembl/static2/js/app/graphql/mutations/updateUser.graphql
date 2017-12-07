@@ -5,6 +5,7 @@ mutation UpdateUser($id: ID!, $name: String!, $username: String) {
         id
         name
         username
+        displayName
       }
     }
   }
