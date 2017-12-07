@@ -361,9 +361,12 @@ const mapStateToProps = ({
     i18n: i18n,
     languagePreferenceHasChanged: discussionLanguagePreferencesHasChanged,
     sectionsHaveChanged: sectionsHaveChanged,
-    sections: sectionsInOrder.map((id) => {
-      return sectionsById.get(id).toJS();
-    }),
+    sections: sectionsById
+      .mapKeys((id, section) => {
+        return section.set('order', sectionsInOrder.indexOf(id));
+      }) // fix order of sections
+      .valueSeq() // convert to array of Map
+      .toJS(), // convert to array of objects
     legalNoticeAndTerms: legalNoticeAndTerms
   };
 };
