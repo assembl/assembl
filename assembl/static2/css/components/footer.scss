@@ -30,17 +30,17 @@
       text-decoration: none;
     }
   }
+
+  .social-medias {
+    i:before {
+      font-size: 30px;
+      margin: 10px 20px 80px;
+    }
+  }
 }
 
 @media screen and (min-width: 768px) {
   .footer {
-    .social-medias {
-      i:before {
-        font-size: 30px;
-        margin: 10px 20px 80px;
-      }
-    }
-
     .terms {
       display: flex;
       justify-content: center;
