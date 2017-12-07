@@ -50,7 +50,7 @@ const sectionSlug = (sectionType) => {
 };
 
 const sectionURL = ({ sectionType, url }, options) => {
-  return url || `${get(sectionSlug(sectionType), options)}`;
+  return sectionType === 'CUSTOM' ? url : url || `${get(sectionSlug(sectionType), options)}`;
 };
 
 const SectionLink = ({ section, options }) => {

@@ -16,19 +16,19 @@ exports[`DumbManageSectionsForm component should render a list of forms to edit 
         id="123"
         index={0}
         locale="en"
-        nbSections={undefined}
+        nbSections={3}
       />
       <Connect(DumbEditSectionForm)
         id="456"
         index={1}
         locale="en"
-        nbSections={undefined}
+        nbSections={3}
       />
       <Connect(DumbEditSectionForm)
         id="789"
         index={2}
         locale="en"
-        nbSections={undefined}
+        nbSections={3}
       />
       <OverlayTrigger
         defaultOverlayShown={false}
