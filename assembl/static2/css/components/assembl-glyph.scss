@@ -1,12 +1,12 @@
 @font-face {
   font-family: 'assembl-glyph';
-  src: url('#{$fonts-dir}/assembl-glyph.eot?58467071');
+  src: url('#{$fonts-dir}/assembl-glyph.eot?17369490');
   src:
-    url('#{$fonts-dir}/assembl-glyph.eot?58467071#iefix') format('embedded-opentype'),
-    url('#{$fonts-dir}/assembl-glyph.woff2?58467071') format('woff2'),
-    url('#{$fonts-dir}/assembl-glyph.woff?58467071') format('woff'),
-    url('#{$fonts-dir}/assembl-glyph.ttf?58467071') format('truetype'),
-    url('#{$fonts-dir}/assembl-glyph.svg?58467071#assembl-glyph') format('svg');
+    url('#{$fonts-dir}/assembl-glyph.eot?17369490#iefix') format('embedded-opentype'),
+    url('#{$fonts-dir}/assembl-glyph.woff2?17369490') format('woff2'),
+    url('#{$fonts-dir}/assembl-glyph.woff?17369490') format('woff'),
+    url('#{$fonts-dir}/assembl-glyph.ttf?17369490') format('truetype'),
+    url('#{$fonts-dir}/assembl-glyph.svg?17369490#assembl-glyph') format('svg');
   font-weight: normal;
   font-style: normal;
 }
@@ -19,7 +19,7 @@
 @media screen and (-webkit-min-device-pixel-ratio:0) {
   @font-face {
     font-family: 'assembl-glyph';
-    src: url('../font/assembl-glyph.svg?58467071#assembl-glyph') format('svg');
+    src: url('../font/assembl-glyph.svg?17369490#assembl-glyph') format('svg');
   }
 }
 */
@@ -38,17 +38,16 @@
   /* opacity: .8; */
 
   /* For safety - reset parent styles, that can break glyph codes */
-
   font-variant: normal;
   text-transform: none;
 
   /* fix buttons height, for twitter bootstrap */
+
   line-height: 1em;
 
   /* Animation center compensation - margins should be symmetric */
 
   /* remove if not needed */
-
   margin-left: .2em;
 
   /* you can be more comfortable with increased icons size */
@@ -111,10 +110,10 @@
 .assembl-icon-ellipsis:before { content: '\f141'; } /* '' */
 .assembl-icon-ellipsis-vert:before { content: '\f142'; } /* '' */
 .assembl-icon-twitter:before { content: '\f309'; } /* '' */
-.assembl-icon-twitter-circled:before { content: '\f30a'; } /* '' */
+.assembl-icon-twitter-circle:before { content: '\f30a'; } /* '' */
 .assembl-icon-facebook:before { content: '\f30c'; } /* '' */
-.assembl-icon-facebook-circled:before { content: '\f30d'; } /* '' */
+.assembl-icon-facebook-circle:before { content: '\f30d'; } /* '' */
 .assembl-icon-gplus-1:before { content: '\f30f'; } /* '' */
-.assembl-icon-gplus-circled:before { content: '\f310'; } /* '' */
+.assembl-icon-google-circle:before { content: '\f310'; } /* '' */
 .assembl-icon-linkedin:before { content: '\f318'; } /* '' */
-.assembl-icon-linkedin-circled:before { content: '\f319'; } /* '' */
+.assembl-icon-linkedin-circle:before { content: '\f319'; } /* '' */
