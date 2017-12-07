@@ -45,22 +45,20 @@ class ProfileIcon extends React.Component {
           </Link>
         )}
         {connectedUserId && (
-          <div>
-            <ul className="dropdown-xs">
-              <NavDropdown pullRight title={dropdownUser} id="user-dropdown">
-                <MenuItem
-                  onClick={() => {
-                    browserHistory.push(get('profile', { slug: slug, userId: connectedUserId }));
-                  }}
-                >
-                  <Translate value="navbar.profile" />
-                </MenuItem>
-                <MenuItem href={`${getContextual('oldLogout', { slug: slug })}?next=${get('home', { slug: slug })}`}>
-                  <Translate value="navbar.logout" />
-                </MenuItem>
-              </NavDropdown>
-            </ul>
-          </div>
+          <ul className="dropdown-xs">
+            <NavDropdown pullRight title={dropdownUser} id="user-dropdown">
+              <MenuItem
+                onClick={() => {
+                  browserHistory.push(get('profile', { slug: slug, userId: connectedUserId }));
+                }}
+              >
+                <Translate value="navbar.profile" />
+              </MenuItem>
+              <MenuItem href={`${getContextual('oldLogout', { slug: slug })}?next=${get('home', { slug: slug })}`}>
+                <Translate value="navbar.logout" />
+              </MenuItem>
+            </NavDropdown>
+          </ul>
         )}
       </div>
     );
