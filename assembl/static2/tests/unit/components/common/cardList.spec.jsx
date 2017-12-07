@@ -13,9 +13,7 @@ describe('CardList component', () => {
           data={data}
           classNameGenerator={CLASS_NAME_GENERATOR.default}
           itemClassName="classFoo"
-          CardItem={(itemData) => {
-            return <div>{itemData.title}</div>;
-          }}
+          CardItem={itemData => <div>{itemData.title}</div>}
         />
       )
       .toJSON();

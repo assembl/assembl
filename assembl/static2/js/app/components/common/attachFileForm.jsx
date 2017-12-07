@@ -15,7 +15,9 @@ type AttachFileFormState = {
 
 class AttachFileForm extends React.Component<*, AttachFileFormProps, AttachFileFormState> {
   props: AttachFileFormProps;
+
   state: AttachFileFormState;
+
   fileInput: HTMLInputElement;
 
   constructor() {

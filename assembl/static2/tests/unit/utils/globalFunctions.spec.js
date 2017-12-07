@@ -76,9 +76,7 @@ describe('hexToRgb function', () => {
   it('should return a color\'s RGB components from the hexadecimal code', () => {
     const colors = [{ hexa: '#40A497' }, { hexa: '#A44072' }, { hexa: '#4051A4' }, { hexa: '#FDEC00' }];
     const expectedResult = [{ rgb: '64,164,151' }, { rgb: '164,64,114' }, { rgb: '64,81,164' }, { rgb: '253,236,0' }];
-    const result = colors.map((color) => {
-      return { rgb: hexToRgb(color.hexa) };
-    });
+    const result = colors.map(color => ({ rgb: hexToRgb(color.hexa) }));
     expect(result).toEqual(expectedResult);
   });
 });

@@ -3,20 +3,18 @@ import { form } from 'react-bootstrap';
 import { Translate } from 'react-redux-i18n';
 import { get } from '../../utils/routeMap';
 
-const convertNameToCssClass = (name) => {
-  return name
+const convertNameToCssClass = name =>
+  name
     .toLowerCase()
     .split(/\s+/)
     .filter(Boolean)
     .join('_');
-};
 
-const reverseString = (s) => {
-  return s
+const reverseString = s =>
+  s
     .split('')
     .reverse()
     .join('');
-};
 
 export class SocialMedia extends React.Component {
   render() {
@@ -42,9 +40,9 @@ export class SocialMedia extends React.Component {
                 <form id={reverseString(provider.name)} method="get" action={provider.login}>
                   {next ? <input type="hidden" name="next" value={`${next}`} /> : null}
                   {provider.extra &&
-                    Object.keys(provider.extra).map((k) => {
-                      return <input key={provider.name + k} type="hidden" name={k} value={provider.extra[k]} />;
-                    })}
+                    Object.keys(provider.extra).map(k => (
+                      <input key={provider.name + k} type="hidden" name={k} value={provider.extra[k]} />
+                    ))}
                   <button className={`btn btn-block btn-social btn-${providerName}`} type="submit">
                     <i className={`assembl-icon-${providerName}`} />
                     {provider.name}

@@ -28,11 +28,9 @@ const DumbTextWithHeaderPage = (props: TextWithHeaderPageProps) => {
   );
 };
 
-const mapStateToProps = (state) => {
-  return {
-    debateData: state.debate.debateData
-  };
-};
+const mapStateToProps = state => ({
+  debateData: state.debate.debateData
+});
 
 export { DumbTextWithHeaderPage };
 

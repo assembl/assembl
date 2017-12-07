@@ -13,6 +13,7 @@ class ThemeSection extends React.Component {
     const { toggleLanguageMenu } = this.props;
     toggleLanguageMenu(true);
   }
+
   render() {
     const { addThematic, selectedLocale, thematics } = this.props;
     return (
@@ -20,9 +21,7 @@ class ThemeSection extends React.Component {
         <SectionTitle title={I18n.t('administration.survey.0')} annotation={I18n.t('administration.annotation')} />
         <div className="admin-content">
           <form>
-            {thematics.map((id, idx) => {
-              return <ThemeForm key={id} id={id} index={idx} selectedLocale={selectedLocale} />;
-            })}
+            {thematics.map((id, idx) => <ThemeForm key={id} id={id} index={idx} selectedLocale={selectedLocale} />)}
             <OverlayTrigger placement="top" overlay={addThematicTooltip}>
               <div onClick={addThematic} className="plus margin-l">
                 +
@@ -35,22 +34,16 @@ class ThemeSection extends React.Component {
   }
 }
 
-const mapStateToProps = ({ admin: { thematicsById, thematicsInOrder, selectedLocale } }) => {
-  return {
-    thematics: thematicsInOrder.filter((id) => {
-      return !thematicsById.getIn([id, 'toDelete']);
-    }),
-    selectedLocale: selectedLocale
-  };
-};
+const mapStateToProps = ({ admin: { thematicsById, thematicsInOrder, selectedLocale } }) => ({
+  thematics: thematicsInOrder.filter(id => !thematicsById.getIn([id, 'toDelete'])),
+  selectedLocale: selectedLocale
+});
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    addThematic: () => {
-      const newThemeId = Math.round(Math.random() * -1000000).toString();
-      dispatch(createNewThematic(newThemeId));
-    }
-  };
-};
+const mapDispatchToProps = dispatch => ({
+  addThematic: () => {
+    const newThemeId = Math.round(Math.random() * -1000000).toString();
+    dispatch(createNewThematic(newThemeId));
+  }
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(ThemeSection);

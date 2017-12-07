@@ -22,10 +22,12 @@ class Navigation extends React.Component {
       currentQuestionNumber: 0
     };
   }
+
   componentDidMount() {
     window.addEventListener('scroll', this.displayNav);
     window.addEventListener('scroll', this.displayPagination);
   }
+
   componentWillReceiveProps(nextProps) {
     this.setState(
       {
@@ -40,10 +42,12 @@ class Navigation extends React.Component {
       }
     );
   }
+
   componentWillUnmount() {
     window.removeEventListener('scroll', this.displayNav);
     window.removeEventListener('scroll', this.displayPagination);
   }
+
   getQuestionsOffset(questionsLength) {
     const offsetArray = [];
     this.questionsLength = questionsLength;
@@ -56,6 +60,7 @@ class Navigation extends React.Component {
     }
     return offsetArray; // eslint-disable-line
   }
+
   displayNav() {
     const proposals = document.getElementById('proposals');
     if (!proposals) {
@@ -94,6 +99,7 @@ class Navigation extends React.Component {
       });
     }
   }
+
   displayPagination() {
     const navbarHeight = document.getElementById('timeline').clientHeight;
     const questionsOffset = this.getQuestionsOffset(this.state.questionsLength);
@@ -111,6 +117,7 @@ class Navigation extends React.Component {
       currentQuestionNumber: currentQuestionNumber
     });
   }
+
   scrollToQuestion(questionIndex) {
     const navbarHeight = document.getElementById('timeline').clientHeight;
     let target;
@@ -123,6 +130,7 @@ class Navigation extends React.Component {
     window.scrollTo({ top: targetOffset - 80, left: 0, behavior: 'smooth' });
     this.props.scrollToQuestion(false);
   }
+
   render() {
     const barWidth = calculatePercentage(this.state.currentQuestionNumber, this.state.questionsLength);
     return (
@@ -179,10 +187,8 @@ class Navigation extends React.Component {
   }
 }
 
-const mapStateToProps = (state) => {
-  return {
-    debate: state.debate
-  };
-};
+const mapStateToProps = state => ({
+  debate: state.debate
+});
 
 export default withScreenDimensions(connect(mapStateToProps)(Navigation));

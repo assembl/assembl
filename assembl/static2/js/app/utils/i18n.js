@@ -24,9 +24,7 @@ const myHandleMissingTranslation = function (key, replacements) {
 };
 I18n.setHandleMissingTranslation(myHandleMissingTranslation);
 
-export const getTranslations = () => {
-  return Translations;
-};
+export const getTranslations = () => Translations;
 
 export const getLocale = (browserLanguage) => {
   let locale;
@@ -71,18 +69,14 @@ export const getAvailableLocales = (locale, translations) => {
     @returns {function} Updater function (see immutable-js) that updates the value of the
     entry with given locale by the given value
 */
-export const updateInLangstringEntries = (locale, value) => {
-  return (entries) => {
-    const entryIndex = entries.findIndex((entry) => {
-      return entry.get('localeCode') === locale;
-    });
+export const updateInLangstringEntries = (locale, value) => (entries) => {
+  const entryIndex = entries.findIndex(entry => entry.get('localeCode') === locale);
 
-    if (entryIndex === -1) {
-      return entries.push(Map({ localeCode: locale, value: value }));
-    }
+  if (entryIndex === -1) {
+    return entries.push(Map({ localeCode: locale, value: value }));
+  }
 
-    return entries.setIn([entryIndex, 'value'], value);
-  };
+  return entries.setIn([entryIndex, 'value'], value);
 };
 
 export const getEntryValueForLocale = (entries, locale, defaultValue = null) => {
@@ -90,9 +84,7 @@ export const getEntryValueForLocale = (entries, locale, defaultValue = null) => 
     return defaultValue;
   }
 
-  const entry = entries.find((e) => {
-    return e.get('localeCode') === locale;
-  });
+  const entry = entries.find(e => e.get('localeCode') === locale);
 
   return entry ? entry.get('value') : defaultValue;
 };

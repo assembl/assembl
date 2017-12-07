@@ -30,7 +30,9 @@ type PostTranslateState = {
 
 class PostTranslate extends React.Component<void, PostTranslateProps, PostTranslateState> {
   props: PostTranslateProps;
+
   state: PostTranslateState;
+
   originalLocaleLabel: '';
 
   constructor() {
@@ -54,9 +56,7 @@ class PostTranslate extends React.Component<void, PostTranslateProps, PostTransl
     // TODO: i'm aware that it is costly to use .find for each post. The improvement
     // I imagine is to use redux to store the locales as a mapping but the main obstacle
     // is to find which component should do the graphql query to update the redux store
-    const originalLocaleInfo = props.data.locales.find((locale) => {
-      return locale.localeCode === props.originalLocale;
-    });
+    const originalLocaleInfo = props.data.locales.find(locale => locale.localeCode === props.originalLocale);
     if (originalLocaleInfo) {
       this.originalLocaleLabel = originalLocaleInfo.label;
     }
@@ -139,23 +139,15 @@ class PostTranslate extends React.Component<void, PostTranslateProps, PostTransl
   }
 }
 
-const mapDispatchToProps = (dispatch, ownProps) => {
-  return {
-    updateById: (value) => {
-      return dispatch(updateContentLocaleById(ownProps.id, value));
-    },
-    updateByOriginalLocale: (value) => {
-      return dispatch(updateContentLocaleByOriginalLocale(ownProps.originalLocale, value));
-    }
-  };
-};
+const mapDispatchToProps = (dispatch, ownProps) => ({
+  updateById: value => dispatch(updateContentLocaleById(ownProps.id, value)),
+  updateByOriginalLocale: value => dispatch(updateContentLocaleByOriginalLocale(ownProps.originalLocale, value))
+});
 
 export default compose(
   graphql(LocalesQuery, {
     // $FlowFixMe (flow, eslint (and even prettier!) are kind of conflicting here)
-    options: () => {
-      return { notifyOnNetworkStatusChange: true };
-    }
+    options: () => ({ notifyOnNetworkStatusChange: true })
   }),
   connect(null, mapDispatchToProps),
   withoutLoadingIndicator()

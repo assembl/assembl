@@ -24,13 +24,11 @@ class Footer extends React.Component {
                   <Translate value="footer.socialMedias" />
                 </p>
                 <div className="social-medias">
-                  {socialMedias.map((sMedia, index) => {
-                    return (
-                      <Link to={sMedia.url} target="_blank" key={index}>
-                        <i className={`assembl-icon-${sMedia.name}-circle`} />
-                      </Link>
-                    );
-                  })}
+                  {socialMedias.map((sMedia, index) => (
+                    <Link to={sMedia.url} target="_blank" key={index}>
+                      <i className={`assembl-icon-${sMedia.name}-circle`} />
+                    </Link>
+                  ))}
                 </div>
               </div>
             )}
@@ -71,20 +69,16 @@ class Footer extends React.Component {
   }
 }
 
-const mapStateToProps = (state) => {
-  return {
-    assemblVersion: state.context.assemblVersion,
-    debateData: state.debate.debateData,
-    lang: state.i18n.locale
-  };
-};
+const mapStateToProps = state => ({
+  assemblVersion: state.context.assemblVersion,
+  debateData: state.debate.debateData,
+  lang: state.i18n.locale
+});
 
 const withData = graphql(TabsConditionQuery, {
-  props: ({ data }) => {
-    return {
-      ...data
-    };
-  }
+  props: ({ data }) => ({
+    ...data
+  })
 });
 
 export default compose(connect(mapStateToProps), withData, withoutLoadingIndicator())(Footer);

@@ -26,8 +26,11 @@ type ToolbarState = {
 
 class Toolbar extends React.Component<void, ToolbarProps, ToolbarState> {
   props: ToolbarProps;
+
   state: ToolbarState;
+
   currentStyle: DraftInlineStyle;
+
   currentBlockType: DraftBlockType;
 
   constructor() {
@@ -82,9 +85,7 @@ class Toolbar extends React.Component<void, ToolbarProps, ToolbarState> {
     }
     case 'block-type': {
       isActive = config.style === this.currentBlockType;
-      onToggle = () => {
-        return this.toggleBlockType(config.style);
-      };
+      onToggle = () => this.toggleBlockType(config.style);
       break;
     }
     default:
@@ -147,11 +148,7 @@ class Toolbar extends React.Component<void, ToolbarProps, ToolbarState> {
     this.currentBlockType = this.getCurrentBlockType();
     return (
       <div className="editor-toolbar">
-        <div className="btn-group">
-          {buttonsConfig.map((buttonConfig) => {
-            return this.renderButton(buttonConfig);
-          })}
-        </div>
+        <div className="btn-group">{buttonsConfig.map(buttonConfig => this.renderButton(buttonConfig))}</div>
 
         {withAttachmentButton ? (
           <div className="btn-group">

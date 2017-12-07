@@ -89,24 +89,20 @@ const Sentiment = ({ sentimentCounts, mySentiment, sentiment, client, isSelected
   return <ResponsiveOverlayTrigger placement={placement} tooltip={sentiment.tooltip} component={sentimentComponent} />;
 };
 
-export default ({ sentimentCounts, mySentiment, client, postId, placement, isPhaseCompleted }) => {
-  return (
-    <div className="add-sentiment">
-      {sentimentDefinitions.map((sentiment) => {
-        return (
-          <Sentiment
-            key={sentiment.type}
-            sentimentCounts={sentimentCounts}
-            mySentiment={mySentiment}
-            sentiment={sentiment}
-            isSelected={mySentiment === sentiment.type}
-            postId={postId}
-            client={client}
-            placement={placement}
-            isPhaseCompleted={isPhaseCompleted}
-          />
-        );
-      })}
-    </div>
-  );
-};
+export default ({ sentimentCounts, mySentiment, client, postId, placement, isPhaseCompleted }) => (
+  <div className="add-sentiment">
+    {sentimentDefinitions.map(sentiment => (
+      <Sentiment
+        key={sentiment.type}
+        sentimentCounts={sentimentCounts}
+        mySentiment={mySentiment}
+        sentiment={sentiment}
+        isSelected={mySentiment === sentiment.type}
+        postId={postId}
+        client={client}
+        placement={placement}
+        isPhaseCompleted={isPhaseCompleted}
+      />
+    ))}
+  </div>
+);

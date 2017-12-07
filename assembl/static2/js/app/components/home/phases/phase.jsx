@@ -11,12 +11,11 @@ class Phase extends React.Component {
     super(props);
     this.displayPhase = this.displayPhase.bind(this);
   }
+
   displayPhase() {
     const { identifier, startDate, endDate, title } = this.props;
     const { debateData } = this.props.debate;
-    const phase = debateData.timeline.filter((p) => {
-      return p.identifier === identifier;
-    });
+    const phase = debateData.timeline.filter(p => p.identifier === identifier);
     const isRedirectionToV1 = phase[0].interface_v1;
     const { locale } = this.props.i18n;
     const slug = { slug: debateData.slug };
@@ -57,6 +56,7 @@ class Phase extends React.Component {
       window.location = get('oldDebate', slug);
     }
   }
+
   render() {
     const { locale } = this.props.i18n;
     const { imgUrl, startDate, title, description, index } = this.props;
@@ -68,17 +68,15 @@ class Phase extends React.Component {
           <h1 className="light-title-1">{stepNumber}</h1>
           {title && (
             <h3 className="light-title-3">
-              {title.entries.map((entry, index2) => {
-                return <span key={index2}>{locale === entry['@language'] ? entry.value : ''}</span>;
-              })}
+              {title.entries.map((entry, index2) => <span key={index2}>{locale === entry['@language'] ? entry.value : ''}</span>)}
             </h3>
           )}
           <h4 className="light-title-4">{startDate && <Localize value={startDate} dateFormat="date.format2" />}</h4>
           {description && (
             <div className="description-box">
-              {description.entries.map((entry, index3) => {
-                return <span key={index3}>{locale === entry['@language'] ? entry.value : ''}</span>;
-              })}
+              {description.entries.map((entry, index3) => (
+                <span key={index3}>{locale === entry['@language'] ? entry.value : ''}</span>
+              ))}
             </div>
           )}
         </div>
@@ -90,11 +88,9 @@ class Phase extends React.Component {
   }
 }
 
-const mapStateToProps = (state) => {
-  return {
-    i18n: state.i18n,
-    debate: state.debate
-  };
-};
+const mapStateToProps = state => ({
+  i18n: state.i18n,
+  debate: state.debate
+});
 
 export default connect(mapStateToProps)(Phase);

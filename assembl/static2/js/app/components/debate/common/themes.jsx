@@ -10,6 +10,7 @@ class Themes extends React.Component {
     super(props);
     this.getColClassNames = this.getColClassNames.bind(this);
   }
+
   getColClassNames(index) {
     this.index = index;
     let styles = 'theme';
@@ -23,6 +24,7 @@ class Themes extends React.Component {
     }
     return styles;
   }
+
   render() {
     const { thematics, identifier } = this.props;
     const slug = getDiscussionSlug();
@@ -38,20 +40,18 @@ class Themes extends React.Component {
             </div>
             <div className="content-section">
               <Row className="no-margin">
-                {thematics.map((thematic, index) => {
-                  return (
-                    <Col xs={12} sm={6} md={3} className={this.getColClassNames(index)} key={index}>
-                      <ThematicPreview
-                        imgUrl={thematic.img ? thematic.img.externalUrl : ''}
-                        numPosts={thematic.numPosts}
-                        numContributors={thematic.numContributors}
-                        link={`${get('debate', { slug: slug, phase: identifier })}${get('theme', { themeId: thematic.id })}`}
-                        title={thematic.title}
-                        description={thematic.description}
-                      />
-                    </Col>
-                  );
-                })}
+                {thematics.map((thematic, index) => (
+                  <Col xs={12} sm={6} md={3} className={this.getColClassNames(index)} key={index}>
+                    <ThematicPreview
+                      imgUrl={thematic.img ? thematic.img.externalUrl : ''}
+                      numPosts={thematic.numPosts}
+                      numContributors={thematic.numContributors}
+                      link={`${get('debate', { slug: slug, phase: identifier })}${get('theme', { themeId: thematic.id })}`}
+                      title={thematic.title}
+                      description={thematic.description}
+                    />
+                  </Col>
+                ))}
               </Row>
             </div>
           </div>

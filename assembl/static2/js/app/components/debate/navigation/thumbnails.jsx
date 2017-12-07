@@ -16,28 +16,24 @@ class Thumbnails extends React.Component {
         <div className="thumbnails-container">
           <div className="max-container">
             <div className="thumbnails">
-              {thematics.map((thematic, index) => {
-                return (
-                  <div className="thumb-img-container" key={index}>
-                    <Link to={`${get('debate', { slug: slug, phase: identifier })}${get('theme', { themeId: thematic.id })}`}>
-                      <div
-                        className={themeId === thematic.id ? 'thumb-img active' : 'thumb-img'}
-                        style={
-                          thematic.img && thematic.img.externalUrl
-                            ? { backgroundImage: `url(${thematic.img.externalUrl})` }
-                            : null
-                        }
-                      />
-                      <div className="color-box">&nbsp;</div>
-                      <div className="thumb-title">
-                        <div className={themeId === thematic.id ? 'thumb-title-inner active-title' : 'thumb-title-inner'}>
-                          {thematic.title}
-                        </div>
+              {thematics.map((thematic, index) => (
+                <div className="thumb-img-container" key={index}>
+                  <Link to={`${get('debate', { slug: slug, phase: identifier })}${get('theme', { themeId: thematic.id })}`}>
+                    <div
+                      className={themeId === thematic.id ? 'thumb-img active' : 'thumb-img'}
+                      style={
+                        thematic.img && thematic.img.externalUrl ? { backgroundImage: `url(${thematic.img.externalUrl})` } : null
+                      }
+                    />
+                    <div className="color-box">&nbsp;</div>
+                    <div className="thumb-title">
+                      <div className={themeId === thematic.id ? 'thumb-title-inner active-title' : 'thumb-title-inner'}>
+                        {thematic.title}
                       </div>
-                    </Link>
-                  </div>
-                );
-              })}
+                    </div>
+                  </Link>
+                </div>
+              ))}
             </div>
           </div>
         </div>
@@ -46,10 +42,8 @@ class Thumbnails extends React.Component {
   }
 }
 
-const mapStateToProps = (state) => {
-  return {
-    debate: state.debate
-  };
-};
+const mapStateToProps = state => ({
+  debate: state.debate
+});
 
 export default connect(mapStateToProps)(Thumbnails);

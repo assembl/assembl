@@ -38,9 +38,7 @@ export function transformLinksInHtml(html: string): string {
       return null;
     })
     // remove null values
-    .filter((link: LinkToReplace | null) => {
-      return link;
-    });
+    .filter((link: LinkToReplace | null) => link);
 
   let transformedHtml = html;
   linksToReplace.forEach((linkToReplace: LinkToReplace) => {

@@ -25,18 +25,14 @@ const myFragmentMatcher = new IntrospectionFragmentMatcher({
 // for more info about customResolvers, read
 // http://dev.apollodata.com/react/query-splitting.html
 
-const dataIdFromObject = (o) => {
-  return o.id;
-};
+const dataIdFromObject = o => o.id;
 
 const client = new ApolloClient({
   fragmentMatcher: myFragmentMatcher,
   dataIdFromObject: dataIdFromObject,
   customResolvers: {
     Query: {
-      node: (_, args) => {
-        return toIdValue(dataIdFromObject({ id: args.id }));
-      }
+      node: (_, args) => toIdValue(dataIdFromObject({ id: args.id }))
     }
   },
   networkInterface: createNetworkInterface({

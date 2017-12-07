@@ -23,22 +23,20 @@ const IdeaSynthesisTree = (props: {
   const newParents = parents.slice();
   newParents.push(index);
   const level = parents.length + 1;
-  const tree = roots.map((idea, subIndex) => {
-    return (
-      <Row key={idea.id}>
-        <Col sm={level === 3 && hasSiblings ? 6 : 12} xs={12}>
-          <IdeaSynthesisTree
-            hasSiblings={rootsHasSiblings}
-            rootIdea={idea}
-            index={subIndex + 1}
-            parents={newParents}
-            subIdeas={getChildren(idea, descendants)}
-            slug={slug}
-          />
-        </Col>
-      </Row>
-    );
-  });
+  const tree = roots.map((idea, subIndex) => (
+    <Row key={idea.id}>
+      <Col sm={level === 3 && hasSiblings ? 6 : 12} xs={12}>
+        <IdeaSynthesisTree
+          hasSiblings={rootsHasSiblings}
+          rootIdea={idea}
+          index={subIndex + 1}
+          parents={newParents}
+          subIdeas={getChildren(idea, descendants)}
+          slug={slug}
+        />
+      </Col>
+    </Row>
+  ));
   return (
     <Section displayIndex title={rootIdea.title} index={index} parents={parents} className="idea-synthesis-section">
       <IdeaSynthesis hasSiblings={hasSiblings} level={level} idea={rootIdea} slug={slug} />

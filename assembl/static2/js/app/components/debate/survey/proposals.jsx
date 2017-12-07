@@ -8,9 +8,11 @@ class Proposals extends React.Component {
     this.state = { hideProposals: false };
     this.displayProposals = this.displayProposals.bind(this);
   }
+
   displayProposals() {
     this.setState({ hideProposals: !this.state.hideProposals });
   }
+
   render() {
     const { questionIndex, title, posts, moreProposals, refetchTheme } = this.props;
     return (
@@ -26,18 +28,16 @@ class Proposals extends React.Component {
         </h3>
         {posts.length > 0 && (
           <div className={this.state.hideProposals ? 'hidden' : 'shown'}>
-            {posts.map((post, index) => {
-              return (
-                <Post
-                  refetchTheme={refetchTheme}
-                  id={post.node.id}
-                  originalLocale={post.node.originalLocale}
-                  postIndex={index}
-                  moreProposals={moreProposals}
-                  key={post.node.id}
-                />
-              );
-            })}
+            {posts.map((post, index) => (
+              <Post
+                refetchTheme={refetchTheme}
+                id={post.node.id}
+                originalLocale={post.node.originalLocale}
+                postIndex={index}
+                moreProposals={moreProposals}
+                key={post.node.id}
+              />
+            ))}
           </div>
         )}
         {posts.length === 0 && (

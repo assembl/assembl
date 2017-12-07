@@ -14,12 +14,12 @@ const DebateThread = ({ identifier, data, params, children, slug }) => {
   const { loading, ideas, rootIdea } = data;
   const isParentRoute = !params.themeId || false;
   const themeId = params.themeId || null;
-  const childrenElm = React.Children.map(children, (child) => {
-    return React.cloneElement(child, {
+  const childrenElm = React.Children.map(children, child =>
+    React.cloneElement(child, {
       id: themeId,
       identifier: identifier
-    });
-  });
+    })
+  );
   return (
     <div className="debate">
       {loading && isParentRoute && <Loader color="black" />}
@@ -54,11 +54,9 @@ DebateThread.propTypes = {
   }).isRequired
 };
 
-const mapStateToProps = (state) => {
-  return {
-    lang: state.i18n.locale,
-    slug: state.debate.debateData.slug
-  };
-};
+const mapStateToProps = state => ({
+  lang: state.i18n.locale,
+  slug: state.debate.debateData.slug
+});
 
 export default compose(connect(mapStateToProps), graphql(AllIdeasQuery))(DebateThread);

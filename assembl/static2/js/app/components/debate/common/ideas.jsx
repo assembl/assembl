@@ -11,6 +11,7 @@ class Ideas extends React.Component {
     this.getIdeaChildren = this.getIdeaChildren.bind(this);
     this.setSelectedIdeas = this.setSelectedIdeas.bind(this);
   }
+
   setSelectedIdeas(selectedIdeaId, ideaLevel, ideaIndex) {
     const nbLevel = this.state.selectedIdeasId.length;
     const ideasArray = this.state.selectedIdeasId;
@@ -28,12 +29,12 @@ class Ideas extends React.Component {
       });
     }
   }
+
   getIdeaChildren(selectedIdeaId) {
     const { ideas } = this.props;
-    return ideas.filter((idea) => {
-      return idea.parentId === selectedIdeaId;
-    });
+    return ideas.filter(idea => idea.parentId === selectedIdeaId);
   }
+
   render() {
     const { identifier } = this.props;
     return (
@@ -47,20 +48,18 @@ class Ideas extends React.Component {
               </h1>
             </div>
             <div className="content-section">
-              {this.state.selectedIdeasId.map((ideaId, index) => {
-                return (
-                  <IdeasLevel
-                    ideas={this.getIdeaChildren(ideaId)}
-                    identifier={identifier}
-                    setSelectedIdeas={this.setSelectedIdeas}
-                    nbLevel={this.state.selectedIdeasId.length}
-                    ideaLevel={index + 1}
-                    key={index}
-                    selectedIdeasId={this.state.selectedIdeasId}
-                    selectedIdeaIndex={this.state.selectedIdeaIndex}
-                  />
-                );
-              })}
+              {this.state.selectedIdeasId.map((ideaId, index) => (
+                <IdeasLevel
+                  ideas={this.getIdeaChildren(ideaId)}
+                  identifier={identifier}
+                  setSelectedIdeas={this.setSelectedIdeas}
+                  nbLevel={this.state.selectedIdeasId.length}
+                  ideaLevel={index + 1}
+                  key={index}
+                  selectedIdeasId={this.state.selectedIdeasId}
+                  selectedIdeaIndex={this.state.selectedIdeaIndex}
+                />
+              ))}
             </div>
           </div>
         </Grid>

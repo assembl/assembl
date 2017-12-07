@@ -41,6 +41,7 @@ class IdeasLevel extends React.Component {
   componentDidMount() {
     this.runFirstTransition();
   }
+
   componentWillReceiveProps(nextProps) {
     if (nextProps.screenWidth !== this.props.screenWidth) this.updateDimensions();
     const { ideaLevel, nbLevel, selectedIdeaIndex } = nextProps;
@@ -55,13 +56,16 @@ class IdeasLevel extends React.Component {
       }, 500);
     }
   }
+
   componentWillUnmount() {
     this.timeouts.forEach(clearTimeout);
     this.timeouts = [];
   }
+
   setTimeout = (func, duration) => {
     this.timeouts.push(setTimeout(func, duration));
   };
+
   setDimensions = () => {
     const { screenWidth } = this.props;
     if (screenWidth > APP_CONTAINER_MAX_WIDTH) {
@@ -84,6 +88,7 @@ class IdeasLevel extends React.Component {
       }
     }
   };
+
   updateDimensions = () => {
     this.setState(
       {
@@ -93,6 +98,7 @@ class IdeasLevel extends React.Component {
       this.setDimensions
     );
   };
+
   getColClassNames(index) {
     const { ideaLevel } = this.props;
     const isFirsStepActif = ideaLevel <= 1;
@@ -105,6 +111,7 @@ class IdeasLevel extends React.Component {
       { 'theme-inline': !isFirsStepActif }
     );
   }
+
   getRightOverflowValue() {
     const { screenWidth } = this.props;
     const { sliderContainerWidth, ideaPreviewWidth } = this.state;
@@ -127,15 +134,18 @@ class IdeasLevel extends React.Component {
     }
     return rightOverflowValue;
   }
+
   getSliderWidth() {
     const { ideas } = this.props;
     const { ideaPreviewWidth } = this.state;
     return ideas.length * ideaPreviewWidth;
   }
+
   getSliderHiddenWidth() {
     const { sliderContainerWidth } = this.state;
     return this.getSliderWidth() - sliderContainerWidth;
   }
+
   getLastMovingValue() {
     const { ideas } = this.props;
     const { ideaPreviewWidth } = this.state;
@@ -144,6 +154,7 @@ class IdeasLevel extends React.Component {
     }
     return ideaPreviewWidth - this.getRightOverflowValue() / 2;
   }
+
   moveToSelectedIdea(selectedIdeaIndex) {
     const { ideas } = this.props;
     const { sliderLeftPosition, ideaPreviewWidth } = this.state;
@@ -164,6 +175,7 @@ class IdeasLevel extends React.Component {
       this.setState({ sliderLeftPosition: left });
     }
   }
+
   runFirstTransition() {
     const { nbLevel } = this.props;
     const themes = document.getElementById('row-1').getElementsByClassName('theme');
@@ -175,19 +187,23 @@ class IdeasLevel extends React.Component {
       }, 10);
     }
   }
+
   runBottomTransition(sliderMarginTop, duration) {
     this.setTimeout(() => {
       this.setState({ sliderMarginTop: sliderMarginTop });
     }, duration);
   }
+
   isLeftLimitReached() {
     const { sliderLeftPosition } = this.state;
     return sliderLeftPosition === this.getLastMovingValue();
   }
+
   isRightLimitReached() {
     const { sliderLeftPosition } = this.state;
     return sliderLeftPosition >= this.getSliderHiddenWidth();
   }
+
   handleClickArrowLeft() {
     const { ideas } = this.props;
     const { sliderCount, sliderLeftPosition, ideaPreviewWidth } = this.state;
@@ -206,6 +222,7 @@ class IdeasLevel extends React.Component {
     this.setState({ sliderCount: count });
     this.setState({ sliderLeftPosition: left });
   }
+
   handleClickArrowRight() {
     const { ideas } = this.props;
     const { sliderCount, sliderLeftPosition, ideaPreviewWidth } = this.state;
@@ -222,6 +239,7 @@ class IdeasLevel extends React.Component {
     this.setState({ sliderCount: count });
     this.setState({ sliderLeftPosition: left });
   }
+
   render() {
     const { ideas, identifier, setSelectedIdeas, nbLevel, ideaLevel, selectedIdeasId } = this.props;
     const { sliderLeftPosition, sliderCount, sliderContainerWidth, ideaPreviewWidth, sliderMarginTop } = this.state;
@@ -265,37 +283,35 @@ class IdeasLevel extends React.Component {
           }
         >
           <Row id={`row-${ideaLevel}`} className={nbLevel > 1 ? 'no-margin row-inline' : 'no-margin'}>
-            {ideas.map((idea, index) => {
-              return (
-                <Col
-                  xs={xsCol}
-                  sm={smCol}
-                  md={mdCol}
-                  key={index}
-                  className={this.getColClassNames(index)}
-                  style={nbLevel > 1 ? { width: ideaPreviewWidth } : {}}
-                >
-                  <IdeaPreview
-                    imgUrl={idea.img ? idea.img.externalUrl : ''}
-                    numPosts={idea.numPosts}
-                    numContributors={idea.numContributors}
-                    numChildren={idea.numChildren}
-                    link={`${getRoute('debate', { slug: slug, phase: identifier })}${getRoute('theme', { themeId: idea.id })}`}
-                    title={truncate(idea.title, {
-                      length: stringMaxLength(ideaLevel),
-                      separator: ' ',
-                      omission: '...'
-                    })}
-                    description={idea.description}
-                    setSelectedIdeas={setSelectedIdeas}
-                    ideaId={idea.id}
-                    ideaLevel={ideaLevel}
-                    selectedIdeasId={selectedIdeasId}
-                    ideaIndex={index}
-                  />
-                </Col>
-              );
-            })}
+            {ideas.map((idea, index) => (
+              <Col
+                xs={xsCol}
+                sm={smCol}
+                md={mdCol}
+                key={index}
+                className={this.getColClassNames(index)}
+                style={nbLevel > 1 ? { width: ideaPreviewWidth } : {}}
+              >
+                <IdeaPreview
+                  imgUrl={idea.img ? idea.img.externalUrl : ''}
+                  numPosts={idea.numPosts}
+                  numContributors={idea.numContributors}
+                  numChildren={idea.numChildren}
+                  link={`${getRoute('debate', { slug: slug, phase: identifier })}${getRoute('theme', { themeId: idea.id })}`}
+                  title={truncate(idea.title, {
+                    length: stringMaxLength(ideaLevel),
+                    separator: ' ',
+                    omission: '...'
+                  })}
+                  description={idea.description}
+                  setSelectedIdeas={setSelectedIdeas}
+                  ideaId={idea.id}
+                  ideaLevel={ideaLevel}
+                  selectedIdeasId={selectedIdeasId}
+                  ideaIndex={index}
+                />
+              </Col>
+            ))}
           </Row>
         </div>
         <VisibilityComponent isVisible={isArrowVisible && nbLevel > 1 && !isRightLimitReached} classname="slider-arrow-container">

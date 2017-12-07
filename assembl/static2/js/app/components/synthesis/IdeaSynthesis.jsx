@@ -27,23 +27,19 @@ export type SynthesisIdea = {
   }
 };
 
-const SynthesisBody = ({ level, hasSiblings, value, stats }) => {
-  return (
-    <div className="synthesis-body" style={{ columnCount: !hasSiblings && level > 2 ? 2 : 'auto' }}>
-      <p dangerouslySetInnerHTML={{ __html: value }} />
-      {stats}
-    </div>
-  );
-};
+const SynthesisBody = ({ level, hasSiblings, value, stats }) => (
+  <div className="synthesis-body" style={{ columnCount: !hasSiblings && level > 2 ? 2 : 'auto' }}>
+    <p dangerouslySetInnerHTML={{ __html: value }} />
+    {stats}
+  </div>
+);
 
-const LinkToIdea = ({ href }) => {
-  return (
-    <Link className="idea-link" to={href}>
-      {'> '}
-      <Translate value="synthesis.seeConversation" />
-    </Link>
-  );
-};
+const LinkToIdea = ({ href }) => (
+  <Link className="idea-link" to={href}>
+    {'> '}
+    <Translate value="synthesis.seeConversation" />
+  </Link>
+);
 
 const SynthesisStats = ({ numContributors, numPosts, ideaLink, posts }) => {
   const sentimentCounts = getSentimentsCount(posts);

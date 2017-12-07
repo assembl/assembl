@@ -35,18 +35,14 @@ class SynthesisContainer extends React.Component {
   }
 }
 
-const mapStateToProps = (state) => {
-  return {
-    synthesis: state.synthesis
-  };
-};
+const mapStateToProps = state => ({
+  synthesis: state.synthesis
+});
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    fetchSynthesis: (discussionId) => {
-      dispatch(fetchSynthesis(discussionId));
-    }
-  };
-};
+const mapDispatchToProps = dispatch => ({
+  fetchSynthesis: (discussionId) => {
+    dispatch(fetchSynthesis(discussionId));
+  }
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(SynthesisContainer);

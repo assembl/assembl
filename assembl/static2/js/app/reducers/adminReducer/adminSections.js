@@ -45,14 +45,8 @@ export const sectionsInOrder: SectionsInOrderReducer = (state = List(), action) 
     return state.delete(idx);
   }
   case UPDATE_SECTIONS: {
-    const sections = action.sections.sort((a, b) => {
-      return a.order - b.order;
-    });
-    return List(
-      sections.map((s) => {
-        return s.id;
-      })
-    );
+    const sections = action.sections.sort((a, b) => a.order - b.order);
+    return List(sections.map(s => s.id));
   }
   case MOVE_UP_SECTION: {
     const idx = state.indexOf(action.id);

@@ -23,19 +23,16 @@ const describeArc = (x, y, radius, startAngle, endAngle) => {
   return d;
 };
 
-const getColor = (element) => {
-  return 'color' in element ? element.color : 'lightgrey';
-};
+const getColor = element => ('color' in element ? element.color : 'lightgrey');
 
-const simpleCircle = (cx, cy, r, element) => {
-  return 'Tooltip' in element ? (
+const simpleCircle = (cx, cy, r, element) =>
+  ('Tooltip' in element ? (
     <OverlayTrigger overlay={element.Tooltip} placement="bottom">
       <circle className="circle" cx={cx} cy={cy} r={r} stroke={getColor(element)} />
     </OverlayTrigger>
   ) : (
     <circle className="circle" cx={cx} cy={cy} r={r} stroke={getColor(element)} />
-  );
-};
+  ));
 
 const placementFromAngle = (angle) => {
   const topQuadrantStart = 360 - 45;
@@ -76,12 +73,8 @@ const doughnutConstants = {
 };
 
 const Doughnut = ({ elements }) => {
-  const filteredElements = elements.filter(({ count }) => {
-    return count > 0;
-  });
-  const totalCount = filteredElements.reduce((total, element) => {
-    return total + element.count;
-  }, 0);
+  const filteredElements = elements.filter(({ count }) => count > 0);
+  const totalCount = filteredElements.reduce((total, element) => total + element.count, 0);
   const { cx, cy, r } = doughnutConstants;
   const viewBox = `0 0 ${cx * 2} ${cy * 2}`;
   return totalCount === 0 ? (

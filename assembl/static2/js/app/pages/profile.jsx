@@ -33,6 +33,7 @@ type ProfileSate = {
 
 class Profile extends React.PureComponent<*, ProfileProps, ProfileSate> {
   props: ProfileProps;
+
   state: ProfileSate;
 
   constructor(props) {
@@ -44,6 +45,7 @@ class Profile extends React.PureComponent<*, ProfileProps, ProfileSate> {
       email: email
     };
   }
+
   componentWillMount() {
     const { connectedUserId, slug } = this.props;
     const { userId } = this.props.params;
@@ -54,15 +56,19 @@ class Profile extends React.PureComponent<*, ProfileProps, ProfileSate> {
       browserHistory.push(get('home', { slug: slug }));
     }
   }
+
   handleUsernameChange = (e) => {
     this.setState({ username: e.target.value });
   };
+
   handleFullnameChange = (e) => {
     this.setState({ name: e.target.value });
   };
+
   handleEmailChange = (e) => {
     this.setState({ email: e.target.value });
   };
+
   handleSaveClick = () => {
     const { updateUser, id } = this.props;
     const { name, username } = this.state;
@@ -79,10 +85,12 @@ class Profile extends React.PureComponent<*, ProfileProps, ProfileSate> {
         displayAlert('danger', error);
       });
   };
+
   handlePasswordClick = () => {
     const { slug } = this.props;
     browserHistory.push(get('ctxRequestPasswordChange', { slug: slug }));
   };
+
   render() {
     const { username, name, email } = this.state;
     const fullNameLabel = I18n.t('profile.fullname');

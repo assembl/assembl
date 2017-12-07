@@ -57,16 +57,10 @@ const mapStateToProps = (state, { selectedLocale }) => {
   };
 };
 
-const mapDispatchToProps = (dispatch, { selectedLocale }) => {
-  return {
-    handleHeaderImageChange: (value) => {
-      return dispatch(updateResourcesCenterHeaderImage(value));
-    },
-    handlePageTitleChange: (e) => {
-      return dispatch(updateResourcesCenterPageTitle(selectedLocale, e.target.value));
-    }
-  };
-};
+const mapDispatchToProps = (dispatch, { selectedLocale }) => ({
+  handleHeaderImageChange: value => dispatch(updateResourcesCenterHeaderImage(value)),
+  handlePageTitleChange: e => dispatch(updateResourcesCenterPageTitle(selectedLocale, e.target.value))
+});
 
 export { DumbPageForm };
 

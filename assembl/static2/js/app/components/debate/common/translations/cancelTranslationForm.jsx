@@ -20,6 +20,7 @@ type CancelTranslationFormState = {
 
 class CancelTranslationForm extends React.Component<*, CancelTranslationFormProps, CancelTranslationFormState> {
   props: CancelTranslationFormProps;
+
   state: CancelTranslationFormState;
 
   constructor() {
@@ -64,9 +65,7 @@ class CancelTranslationForm extends React.Component<*, CancelTranslationFormProp
                 checked={scope === 'global'}
                 title={untranslateAllLabel}
                 value="global"
-                onChange={() => {
-                  return this.updateScope('global');
-                }}
+                onChange={() => this.updateScope('global')}
               >
                 {untranslateAllLabel}
               </Radio>
@@ -76,9 +75,7 @@ class CancelTranslationForm extends React.Component<*, CancelTranslationFormProp
                 checked={scope === 'local'}
                 title={untranslateOneLabel}
                 value="local"
-                onChange={() => {
-                  return this.updateScope('local');
-                }}
+                onChange={() => this.updateScope('local')}
               >
                 {untranslateOneLabel}
               </Radio>

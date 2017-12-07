@@ -25,7 +25,5 @@ export const buildSynthesis = (synthesis) => {
 
 export const getSynthesis = (debateId) => {
   const fetchUrl = `/api/v1/discussion/${debateId}/explicit_subgraphs/synthesis`;
-  return xmlHttpRequest({ method: 'GET', url: fetchUrl }).then((synthesis) => {
-    return buildSynthesis(synthesis);
-  });
+  return xmlHttpRequest({ method: 'GET', url: fetchUrl }).then(synthesis => buildSynthesis(synthesis));
 };

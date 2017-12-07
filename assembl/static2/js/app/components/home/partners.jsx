@@ -19,15 +19,13 @@ class Partners extends React.Component {
             </div>
             <div className="content-section">
               <div className="content-margin">
-                {debateData.partners.map((partner, index) => {
-                  return (
-                    <div className="partner-logo" key={index}>
-                      <Link to={partner.link} target="_blank">
-                        <img src={partner.logo} alt={partner.name} />
-                      </Link>
-                    </div>
-                  );
-                })}
+                {debateData.partners.map((partner, index) => (
+                  <div className="partner-logo" key={index}>
+                    <Link to={partner.link} target="_blank">
+                      <img src={partner.logo} alt={partner.name} />
+                    </Link>
+                  </div>
+                ))}
               </div>
             </div>
           </div>
@@ -37,10 +35,8 @@ class Partners extends React.Component {
   }
 }
 
-const mapStateToProps = (state) => {
-  return {
-    debate: state.debate
-  };
-};
+const mapStateToProps = state => ({
+  debate: state.debate
+});
 
 export default connect(mapStateToProps)(Partners);

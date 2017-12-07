@@ -67,15 +67,9 @@ const mapStateToProps = (state: RootReducer, { locale }: LegalNoticeAndTermsForm
   };
 };
 
-const mapDispatchToProps = (dispatch: Function, { locale }: LegalNoticeAndTermsFormProps) => {
-  return {
-    updateLegalNotice: (value: string) => {
-      return dispatch(actions.updateLegalNoticeEntry(locale, value));
-    },
-    updateTermsAndConditions: (value: string) => {
-      return dispatch(actions.updateTermsAndConditionsEntry(locale, value));
-    }
-  };
-};
+const mapDispatchToProps = (dispatch: Function, { locale }: LegalNoticeAndTermsFormProps) => ({
+  updateLegalNotice: (value: string) => dispatch(actions.updateLegalNoticeEntry(locale, value)),
+  updateTermsAndConditions: (value: string) => dispatch(actions.updateTermsAndConditionsEntry(locale, value))
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(DumbLegalNoticeAndTermsForm);

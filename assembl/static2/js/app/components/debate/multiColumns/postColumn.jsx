@@ -8,9 +8,7 @@ import { PostFolded } from '../../../components/debate/thread/post';
 import BoxWithHyphen from '../../common/boxWithHyphen';
 import { getIfPhaseCompletedByIdentifier, type Timeline } from '../../../utils/timeline';
 
-const Separator = () => {
-  return <div style={{ height: '25px' }} />;
-};
+const Separator = () => <div style={{ height: '25px' }} />;
 
 const Synthesis = ({
   classifier,
@@ -22,18 +20,16 @@ const Synthesis = ({
   synthesisTitle: string,
   synthesisBody: string,
   hyphenStyle: Object
-}) => {
-  return (
-    <div id={`synthesis-${classifier}`} className="box synthesis background-grey">
-      <BoxWithHyphen
-        additionalContainerClassNames="column-synthesis"
-        subject={synthesisTitle}
-        body={synthesisBody}
-        hyphenStyle={hyphenStyle}
-      />
-    </div>
-  );
-};
+}) => (
+  <div id={`synthesis-${classifier}`} className="box synthesis background-grey">
+    <BoxWithHyphen
+      additionalContainerClassNames="column-synthesis"
+      subject={synthesisTitle}
+      body={synthesisBody}
+      hyphenStyle={hyphenStyle}
+    />
+  </div>
+);
 
 const PostColumn = ({
   color,

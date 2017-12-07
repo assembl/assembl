@@ -48,19 +48,17 @@ export class DumbSynthesis extends React.Component<void, SynthesisProps, void> {
           )}
           <Row className="background-grey synthesis-tree">
             <Col mdOffset={3} md={7} smOffset={1} sm={10}>
-              {roots.map((rootIdea, index) => {
-                return (
-                  <IdeaSynthesisTree
-                    hasSiblings={hasSiblings}
-                    key={rootIdea.id}
-                    rootIdea={rootIdea}
-                    index={index + 1}
-                    parents={[]}
-                    subIdeas={getChildren(rootIdea, descendants)}
-                    slug={routeParams.slug}
-                  />
-                );
-              })}
+              {roots.map((rootIdea, index) => (
+                <IdeaSynthesisTree
+                  hasSiblings={hasSiblings}
+                  key={rootIdea.id}
+                  rootIdea={rootIdea}
+                  index={index + 1}
+                  parents={[]}
+                  subIdeas={getChildren(rootIdea, descendants)}
+                  slug={routeParams.slug}
+                />
+              ))}
             </Col>
           </Row>
           {conclusion && (
@@ -78,20 +76,16 @@ export class DumbSynthesis extends React.Component<void, SynthesisProps, void> {
   }
 }
 
-const mapStateToProps = (state) => {
-  return {
-    lang: state.i18n.locale
-  };
-};
+const mapStateToProps = state => ({
+  lang: state.i18n.locale
+});
 
 export default compose(
   connect(mapStateToProps),
   graphql(SynthesisQuery, {
-    options: (props) => {
-      return {
-        variables: { id: props.params.synthesisId, lang: props.lang }
-      };
-    },
+    options: props => ({
+      variables: { id: props.params.synthesisId, lang: props.lang }
+    }),
     props: ({ data }) => {
       if (data.loading) {
         return { loading: true };

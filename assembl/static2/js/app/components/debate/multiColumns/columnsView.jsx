@@ -10,15 +10,13 @@ class ColumnsView extends React.Component {
   componentDidMount() {
     hashLinkScroll();
   }
-  shouldShowTabs = (columnsCount) => {
-    return columnsCount * MIN_WIDTH_COLUMN > Math.min(this.props.screenWidth, APP_CONTAINER_MAX_WIDTH);
-  };
+
+  shouldShowTabs = columnsCount => columnsCount * MIN_WIDTH_COLUMN > Math.min(this.props.screenWidth, APP_CONTAINER_MAX_WIDTH);
+
   render = () => {
     const { messageColumns: columns, identifier, debateData } = this.props;
     if (!Array.isArray(columns)) return null;
-    const showSynthesis = columns.some((column) => {
-      return !!column.header;
-    });
+    const showSynthesis = columns.some(column => !!column.header);
     return (
       <div className="max-container">
         {this.shouldShowTabs(columns.length) ? (

@@ -38,9 +38,7 @@ class FormControlWithLabel extends React.Component {
         rawContentState={value}
         placeholder={label}
         toolbarPosition="bottom"
-        updateContentState={(cs) => {
-          return onChange(cs);
-        }}
+        updateContentState={cs => onChange(cs)}
         withAttachmentButton={false}
       />
     );

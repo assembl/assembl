@@ -17,9 +17,7 @@ const nestedObjects2nestedMessages = (objOrString, fullkey = '') => {
   });
 };
 
-const nestedObjects2messages = (objOrString, fullkey = '') => {
-  return flattenDeep(nestedObjects2nestedMessages(objOrString, fullkey));
-};
+const nestedObjects2messages = (objOrString, fullkey = '') => flattenDeep(nestedObjects2nestedMessages(objOrString, fullkey));
 
 const messages = flattenDeep(nestedObjects2messages(englishTranslations));
 

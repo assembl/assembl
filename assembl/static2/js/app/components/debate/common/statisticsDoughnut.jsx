@@ -4,9 +4,7 @@ import { Translate } from 'react-redux-i18n';
 import Doughnut from '../../svg/doughnut';
 
 const StatisticsDoughnut = ({ elements, placement }) => {
-  const totalCount = elements.reduce((result, element) => {
-    return result + element.count;
-  }, 0);
+  const totalCount = elements.reduce((result, element) => result + element.count, 0);
   const placeAfter = placement === 'after';
   const className = placeAfter ? 'after' : 'superpose';
   return (

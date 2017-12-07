@@ -13,20 +13,24 @@ class ProfileIcon extends React.Component {
     super(props);
     this.setCurrentView = this.setCurrentView.bind(this);
   }
+
   componentWillMount() {
     this.setCurrentView();
   }
+
   componentWillReceiveProps(nextProps) {
     if (nextProps.location) {
       this.setState({ next: nextProps.location });
     }
   }
+
   setCurrentView() {
     const { location } = this.props;
     this.setState({
       next: location
     });
   }
+
   render() {
     const { slug, connectedUserId, displayName } = this.props;
     const dropdownUser = (
@@ -65,13 +69,11 @@ class ProfileIcon extends React.Component {
   }
 }
 
-const mapStateToProps = ({ context, debate }) => {
-  return {
-    slug: debate.debateData.slug,
-    connectedUserId: context.connectedUserId,
-    id: btoa(`AgentProfile:${context.connectedUserId}`)
-  };
-};
+const mapStateToProps = ({ context, debate }) => ({
+  slug: debate.debateData.slug,
+  connectedUserId: context.connectedUserId,
+  id: btoa(`AgentProfile:${context.connectedUserId}`)
+});
 
 export default compose(
   connect(mapStateToProps),

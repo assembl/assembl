@@ -35,23 +35,14 @@ const filterSection = ({ sectionType }, { hasResourcesCenter, hasSyntheses }) =>
   }
 };
 
-const sectionFilter = (options = {}) => {
-  return (section) => {
-    return filterSection(section, options);
-  };
-};
+const sectionFilter = (options = {}) => section => filterSection(section, options);
 
-const sectionKey = ({ sectionType, id }) => {
-  return sectionType === 'CUSTOM' ? `${sectionType}-${id}` : sectionType;
-};
+const sectionKey = ({ sectionType, id }) => (sectionType === 'CUSTOM' ? `${sectionType}-${id}` : sectionType);
 
-const sectionSlug = (sectionType) => {
-  return snakeToCamel(sectionType === 'HOMEPAGE' ? 'HOME' : sectionType);
-};
+const sectionSlug = sectionType => snakeToCamel(sectionType === 'HOMEPAGE' ? 'HOME' : sectionType);
 
-const sectionURL = ({ sectionType, url }, options) => {
-  return sectionType === 'CUSTOM' ? url : url || `${get(sectionSlug(sectionType), options)}`;
-};
+const sectionURL = ({ sectionType, url }, options) =>
+  (sectionType === 'CUSTOM' ? url : url || `${get(sectionSlug(sectionType), options)}`);
 
 const SectionLink = ({ section, options }) => {
   const { title, url, sectionType } = section;
@@ -67,20 +58,18 @@ const SectionLink = ({ section, options }) => {
 };
 SectionLink.displayName = 'SectionLink';
 
-const createDisplayModal = ({ debate, i18n }) => {
-  return () => {
-    const slug = { slug: getDiscussionSlug() };
-    const { timeline } = debate.debateData;
-    const { locale } = i18n;
-    const currentPhaseIdentifier = getCurrentPhaseIdentifier(timeline);
-    const phaseName = getPhaseName(timeline, currentPhaseIdentifier, locale).toLowerCase();
-    const body = <Translate value="redirectToV1" phaseName={phaseName} />;
-    const button = { link: get('oldDebate', slug), label: I18n.t('home.accessButton'), internalLink: false };
-    displayModal(null, body, true, null, button, true);
-    setTimeout(() => {
-      window.location = get('oldDebate', slug);
-    }, 6000);
-  };
+const createDisplayModal = ({ debate, i18n }) => () => {
+  const slug = { slug: getDiscussionSlug() };
+  const { timeline } = debate.debateData;
+  const { locale } = i18n;
+  const currentPhaseIdentifier = getCurrentPhaseIdentifier(timeline);
+  const phaseName = getPhaseName(timeline, currentPhaseIdentifier, locale).toLowerCase();
+  const body = <Translate value="redirectToV1" phaseName={phaseName} />;
+  const button = { link: get('oldDebate', slug), label: I18n.t('home.accessButton'), internalLink: false };
+  displayModal(null, body, true, null, button, true);
+  setTimeout(() => {
+    window.location = get('oldDebate', slug);
+  }, 6000);
 };
 
 const mapDebateSectionToElement = (debateSection, options) => {
@@ -119,13 +108,12 @@ type Section = {
   title: string
 };
 
-export const mapSectionToElement = (section: Section, options: MapSectionOptions) => {
-  return section.sectionType === 'DEBATE' ? (
+export const mapSectionToElement = (section: Section, options: MapSectionOptions) =>
+  (section.sectionType === 'DEBATE' ? (
     mapDebateSectionToElement(section, options)
   ) : (
     <SectionLink key={sectionKey(section)} section={section} options={options} />
-  );
-};
+  ));
 
 const phaseContext = (timeline, phase) => {
   const isSeveralPhases = isSeveralIdentifiers(timeline);
@@ -142,9 +130,11 @@ export class AssemblNavbar extends React.PureComponent {
   state: {
     flatWidth: number
   };
+
   setFlatWidth = (newWidth: number) => {
     this.setState({ flatWidth: newWidth });
   };
+
   render = () => {
     const { screenWidth, debate, data, location, phase, i18n } = this.props;
     const sections = (data && data.sections) || [];
@@ -153,9 +143,7 @@ export class AssemblNavbar extends React.PureComponent {
     const flatWidth = (this.state && this.state.flatWidth) || 0;
     const maxAppWidth = Math.min(APP_CONTAINER_MAX_WIDTH, screenWidth) - APP_CONTAINER_PADDING * 2;
     const screenTooSmall = flatWidth > maxAppWidth;
-    const filteredSections = sections.filter(sectionFilter(data)).sort((a, b) => {
-      return a.order - b.order;
-    });
+    const filteredSections = sections.filter(sectionFilter(data)).sort((a, b) => a.order - b.order);
     const mapOptions = {
       slug: slug,
       phase: getCurrentPhaseIdentifier(timeline),
@@ -168,11 +156,7 @@ export class AssemblNavbar extends React.PureComponent {
       logoSrc: logo,
       helpUrl: helpUrl,
       location: location,
-      logoLink:
-        sections.length > 0 &&
-        sections.find((section) => {
-          return section && section.sectionType === 'HOMEPAGE';
-        }).url
+      logoLink: sections.length > 0 && sections.find(section => section && section.sectionType === 'HOMEPAGE').url
     };
     return (
       <div className="background-light">
@@ -192,13 +176,11 @@ export class AssemblNavbar extends React.PureComponent {
 }
 
 export default compose(
-  connect((state) => {
-    return {
-      debate: state.debate,
-      phase: state.phase,
-      i18n: state.i18n
-    };
-  }),
+  connect(state => ({
+    debate: state.debate,
+    phase: state.phase,
+    i18n: state.i18n
+  })),
   graphql(SectionsQuery),
   withScreenWidth
 )(AssemblNavbar);

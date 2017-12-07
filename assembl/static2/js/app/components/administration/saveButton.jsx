@@ -38,18 +38,14 @@ const getMutationsPromises = (params) => {
       const payload = {
         variables: variablesCreator(item, index)
       };
-      const p1 = () => {
-        return createMutation(payload);
-      };
+      const p1 = () => createMutation(payload);
       promises.push(p1);
     } else if (item.toDelete && !item.isNew) {
       // delete item
       const payload = {
         variables: deleteVariablesCreator(item)
       };
-      const p3 = () => {
-        return deleteMutation(payload);
-      };
+      const p3 = () => deleteMutation(payload);
       promises.push(p3);
     } else {
       // update item
@@ -58,9 +54,7 @@ const getMutationsPromises = (params) => {
       const payload = {
         variables: variables
       };
-      const p2 = () => {
-        return updateMutation(payload);
-      };
+      const p2 = () => updateMutation(payload);
       promises.push(p2);
     }
   });
@@ -78,51 +72,39 @@ function convertVideoDescriptionsToHTML(video) {
 }
 
 /* Create variables for createThematic and updateThematic mutations */
-const createVariablesForThematicMutation = (thematic) => {
-  return {
-    identifier: 'survey',
-    titleEntries: thematic.titleEntries,
-    // If thematic.img.externalUrl is an object, it means it's a File.
-    // We need to send image: null if we didn't change the image.
-    image: thematic.img && typeof thematic.img.externalUrl === 'object' ? thematic.img.externalUrl : null,
-    // if video is null, pass {} to remove all video fields on server side
-    video: thematic.video === null ? {} : convertVideoDescriptionsToHTML(thematic.video),
-    questions: thematic.questions
-  };
-};
+const createVariablesForThematicMutation = thematic => ({
+  identifier: 'survey',
+  titleEntries: thematic.titleEntries,
+  // If thematic.img.externalUrl is an object, it means it's a File.
+  // We need to send image: null if we didn't change the image.
+  image: thematic.img && typeof thematic.img.externalUrl === 'object' ? thematic.img.externalUrl : null,
+  // if video is null, pass {} to remove all video fields on server side
+  video: thematic.video === null ? {} : convertVideoDescriptionsToHTML(thematic.video),
+  questions: thematic.questions
+});
 
-const createVariablesForDeleteThematicMutation = (thematic) => {
-  return {
-    thematicId: thematic.id
-  };
-};
+const createVariablesForDeleteThematicMutation = thematic => ({
+  thematicId: thematic.id
+});
 
-const createVariablesForResourceMutation = (resource) => {
-  return {
-    doc: resource.doc && typeof resource.doc.externalUrl === 'object' ? resource.doc.externalUrl : null,
-    embedCode: resource.embedCode,
-    image: resource.img && typeof resource.img.externalUrl === 'object' ? resource.img.externalUrl : null,
-    textEntries: convertEntriesToHTML(resource.textEntries),
-    titleEntries: resource.titleEntries
-  };
-};
+const createVariablesForResourceMutation = resource => ({
+  doc: resource.doc && typeof resource.doc.externalUrl === 'object' ? resource.doc.externalUrl : null,
+  embedCode: resource.embedCode,
+  image: resource.img && typeof resource.img.externalUrl === 'object' ? resource.img.externalUrl : null,
+  textEntries: convertEntriesToHTML(resource.textEntries),
+  titleEntries: resource.titleEntries
+});
 
-const createVariablesForDeleteResourceMutation = (resource) => {
-  return { resourceId: resource.id };
-};
+const createVariablesForDeleteResourceMutation = resource => ({ resourceId: resource.id });
 
-const createVariablesForSectionMutation = (section) => {
-  return {
-    type: section.type,
-    url: section.url,
-    order: section.order,
-    titleEntries: section.titleEntries
-  };
-};
+const createVariablesForSectionMutation = section => ({
+  type: section.type,
+  url: section.url,
+  order: section.order,
+  titleEntries: section.titleEntries
+});
 
-const createVariablesForDeleteSectionMutation = (section) => {
-  return { sectionId: section.id };
-};
+const createVariablesForDeleteSectionMutation = section => ({ sectionId: section.id });
 
 const SaveButton = ({
   i18n,
@@ -350,36 +332,28 @@ const mapStateToProps = ({
   return {
     resourcesCenterPage: page,
     resourcesHaveChanged: resourcesHaveChanged,
-    resources: resourcesInOrder.map((id) => {
-      return resourcesById.get(id).toJS();
-    }),
+    resources: resourcesInOrder.map(id => resourcesById.get(id).toJS()),
     thematicsHaveChanged: thematicsHaveChanged,
-    thematics: thematicsInOrder.toArray().map((id) => {
-      return thematicsById.get(id).toJS();
-    }),
+    thematics: thematicsInOrder.toArray().map(id => thematicsById.get(id).toJS()),
     preferences: discussionLanguagePreferences,
     i18n: i18n,
     languagePreferenceHasChanged: discussionLanguagePreferencesHasChanged,
     sectionsHaveChanged: sectionsHaveChanged,
     sections: sectionsById
-      .mapKeys((id, section) => {
-        return section.set('order', sectionsInOrder.indexOf(id));
-      }) // fix order of sections
+      .mapKeys((id, section) => section.set('order', sectionsInOrder.indexOf(id))) // fix order of sections
       .valueSeq() // convert to array of Map
       .toJS(), // convert to array of objects
     legalNoticeAndTerms: legalNoticeAndTerms
   };
 };
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    resetLanguagePreferenceChanged: () => {
-      dispatch(languagePreferencesHasChanged(false));
-    },
-    changeLocale: (newLocale) => {
-      dispatch(updateSelectedLocale(newLocale));
-    }
-  };
-};
+const mapDispatchToProps = dispatch => ({
+  resetLanguagePreferenceChanged: () => {
+    dispatch(languagePreferencesHasChanged(false));
+  },
+  changeLocale: (newLocale) => {
+    dispatch(updateSelectedLocale(newLocale));
+  }
+});
 
 export default compose(connect(mapStateToProps, mapDispatchToProps), withApollo)(SaveButtonWithMutations);

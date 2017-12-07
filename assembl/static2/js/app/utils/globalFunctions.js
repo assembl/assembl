@@ -12,13 +12,9 @@ const getScriptText = (id: string) => {
   return text;
 };
 
-export const getDiscussionId = () => {
-  return getInputValue('discussion-id');
-};
+export const getDiscussionId = () => getInputValue('discussion-id');
 
-export const getDiscussionSlug = () => {
-  return getInputValue('discussion-slug');
-};
+export const getDiscussionSlug = () => getInputValue('discussion-slug');
 
 // cache userId to avoid accessing the dom at each permission check
 let userId;
@@ -29,9 +25,7 @@ export const getConnectedUserId = () => {
   return userId;
 };
 
-export const getConnectedUserName = () => {
-  return getInputValue('user-displayname');
-};
+export const getConnectedUserName = () => getInputValue('user-displayname');
 
 // cache permissions to avoid accessing the dom at each permission check
 let permissions;
@@ -74,35 +68,26 @@ export function getSortedArrayByKey<KeyType>(arr: Array<{ [KeyType]: number }>, 
   return arr;
 }
 
-export const isDateExpired = (date1: number, date2: number) => {
-  return date1 > date2;
-};
+export const isDateExpired = (date1: number, date2: number) => date1 > date2;
 
 export const getNumberOfDays = (date1: number, date2: number) => {
   const days = (date1 - date2) / (1000 * 60 * 60 * 24);
   return Math.round(days);
 };
 
-export const calculatePercentage = (value1: number, value2: number) => {
-  return Math.round(value1 * 100 / value2 * 100) / 100;
-};
+export const calculatePercentage = (value1: number, value2: number) => Math.round(value1 * 100 / value2 * 100) / 100;
 
 /*
   Handrolled instead of using lodash
   Because lodash/capitalize lowercases everything else
 */
-export const capitalize = (s: string) => {
-  return s.charAt(0).toUpperCase() + s.slice(1);
-};
+export const capitalize = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
 
-export const getDocumentScrollTop = () => {
-  return (
-    window.pageYOffset ||
-    (document.documentElement && document.documentElement.scrollTop) ||
-    (document.body && document.body.scrollTop) ||
-    0
-  );
-};
+export const getDocumentScrollTop = () =>
+  window.pageYOffset ||
+  (document.documentElement && document.documentElement.scrollTop) ||
+  (document.body && document.body.scrollTop) ||
+  0;
 
 export const getDomElementOffset = (el: HTMLElement) => {
   const rect = el.getBoundingClientRect();
@@ -141,13 +126,12 @@ export const createEvent = (
 /*
   Get basename from a unix or windows path
 */
-export const getBasename = (path: string) => {
-  return path
+export const getBasename = (path: string) =>
+  path
     .split('\\')
     .pop()
     .split('/')
     .pop();
-};
 
 export const hashLinkScroll = () => {
   const { hash } = window.location;
@@ -178,29 +162,13 @@ export const hexToRgb = (c: string) => {
 };
 
 export const isMobile = {
-  android: () => {
-    return navigator.userAgent.match(/Android/i);
-  },
-  blackberry: () => {
-    return navigator.userAgent.match(/BlackBerry/i);
-  },
-  ios: () => {
-    return navigator.userAgent.match(/iPhone|iPad|iPod/i);
-  },
-  opera: () => {
-    return navigator.userAgent.match(/Opera Mini/i);
-  },
-  windows: () => {
-    return navigator.userAgent.match(/IEMobile/i);
-  },
-  any: () => {
-    return isMobile.android() || isMobile.blackberry() || isMobile.ios() || isMobile.opera() || isMobile.windows();
-  }
+  android: () => navigator.userAgent.match(/Android/i),
+  blackberry: () => navigator.userAgent.match(/BlackBerry/i),
+  ios: () => navigator.userAgent.match(/iPhone|iPad|iPod/i),
+  opera: () => navigator.userAgent.match(/Opera Mini/i),
+  windows: () => navigator.userAgent.match(/IEMobile/i),
+  any: () => isMobile.android() || isMobile.blackberry() || isMobile.ios() || isMobile.opera() || isMobile.windows()
 };
 
 // works for SCREAMING_SNAKE_CASE, snake_case or cRazY_SNAKE_case
-export const snakeToCamel = (string: string) => {
-  return string.toLowerCase().replace(/_[a-z]/g, (match) => {
-    return match[1].toUpperCase();
-  });
-};
+export const snakeToCamel = (string: string) => string.toLowerCase().replace(/_[a-z]/g, match => match[1].toUpperCase());

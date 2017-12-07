@@ -13,6 +13,7 @@ class Objectives extends React.Component {
     super(props);
     this.displayPhase = this.displayPhase.bind(this);
   }
+
   // This redirection should be removed when the phase 2 will be done
   displayPhase() {
     const slug = { slug: getDiscussionSlug() };
@@ -37,6 +38,7 @@ class Objectives extends React.Component {
       browserHistory.push(get('debate', { ...slug, phase: currentPhaseIdentifier }));
     }
   }
+
   render() {
     const { debateData } = this.props.debate;
     const { locale } = this.props.i18n;
@@ -102,12 +104,10 @@ class Objectives extends React.Component {
   }
 }
 
-const mapStateToProps = (state) => {
-  return {
-    debate: state.debate,
-    phase: state.phase,
-    i18n: state.i18n
-  };
-};
+const mapStateToProps = state => ({
+  debate: state.debate,
+  phase: state.phase,
+  i18n: state.i18n
+});
 
 export default connect(mapStateToProps)(Objectives);

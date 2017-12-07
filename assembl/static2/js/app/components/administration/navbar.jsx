@@ -15,12 +15,14 @@ class Navbar extends React.Component {
     };
     this.goToSection = this.goToSection.bind(this);
   }
+
   componentWillReceiveProps(nextProps) {
     this.setState({
       currentStep: nextProps.currentStep,
       totalSteps: nextProps.totalSteps
     });
   }
+
   goToSection(stepNb) {
     const slug = { slug: getDiscussionSlug() };
     const { phaseIdentifier } = this.props;
@@ -31,6 +33,7 @@ class Navbar extends React.Component {
       currentStep: stepNb
     });
   }
+
   render() {
     const barWidth = calculatePercentage(this.state.currentStep, this.state.totalSteps);
     return (

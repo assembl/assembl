@@ -19,15 +19,12 @@ class Chatbot extends React.Component {
       };
     };
   };
-  render = () => {
-    return false;
-  };
+
+  render = () => false;
 }
 
-const mapStateToProps = (state) => {
-  return {
-    args: state.debate.debateData.motionChatbot
-  };
-};
+const mapStateToProps = state => ({
+  args: state.debate.debateData.motionChatbot
+});
 
 export default connect(mapStateToProps)(Chatbot);

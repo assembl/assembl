@@ -60,7 +60,9 @@ type SurveyState = {
 
 class Survey extends React.Component<*, SurveyProps, SurveyState> {
   props: SurveyProps;
+
   state: SurveyState;
+
   unlisten: Function;
 
   constructor(props) {
@@ -148,18 +150,16 @@ class Survey extends React.Component<*, SurveyProps, SurveyState> {
           <Media {...media} />
           <div className="questions">
             {questions &&
-              questions.map((question, index) => {
-                return (
-                  <Question
-                    title={question.title}
-                    index={index + 1}
-                    key={index}
-                    questionId={question.id}
-                    scrollToQuestion={this.scrollToQuestion}
-                    refetchTheme={refetchThematic}
-                  />
-                );
-              })}
+              questions.map((question, index) => (
+                <Question
+                  title={question.title}
+                  index={index + 1}
+                  key={index}
+                  questionId={question.id}
+                  scrollToQuestion={this.scrollToQuestion}
+                  refetchTheme={refetchThematic}
+                />
+              ))}
           </div>
           {questions && (
             <Navigation
@@ -181,18 +181,16 @@ class Survey extends React.Component<*, SurveyProps, SurveyState> {
                   </div>
                   <div className="center">
                     {questions &&
-                      questions.map((question, index) => {
-                        return (
-                          <Proposals
-                            title={question.title}
-                            posts={question.posts.edges}
-                            moreProposals={this.state.moreProposals}
-                            questionIndex={index + 1}
-                            key={index}
-                            refetchTheme={refetchThematic}
-                          />
-                        );
-                      })}
+                      questions.map((question, index) => (
+                        <Proposals
+                          title={question.title}
+                          posts={question.posts.edges}
+                          moreProposals={this.state.moreProposals}
+                          questionIndex={index + 1}
+                          key={index}
+                          refetchTheme={refetchThematic}
+                        />
+                      ))}
                     {!this.state.moreProposals &&
                       this.getIfProposals(questions) && (
                         <Button className="button-submit button-dark" onClick={this.showMoreProposals}>
@@ -211,21 +209,15 @@ class Survey extends React.Component<*, SurveyProps, SurveyState> {
   }
 }
 
-const mapStateToProps = (state) => {
-  return {
-    debate: state.debate,
-    defaultContentLocaleMapping: state.defaultContentLocaleMapping,
-    lang: state.i18n.locale
-  };
-};
+const mapStateToProps = state => ({
+  debate: state.debate,
+  defaultContentLocaleMapping: state.defaultContentLocaleMapping,
+  lang: state.i18n.locale
+});
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    updateContentLocaleMapping: (data) => {
-      return dispatch(updateContentLocale(data));
-    }
-  };
-};
+const mapDispatchToProps = dispatch => ({
+  updateContentLocaleMapping: data => dispatch(updateContentLocale(data))
+});
 
 export default compose(
   connect(mapStateToProps, mapDispatchToProps),

@@ -9,9 +9,7 @@
 /* eslint no-useless-escape: off, no-new-func: off */
 
 function get(path, obj, fb = `$\{${path}}`) {
-  return path.split('.').reduce((res, key) => {
-    return res[key] || fb;
-  }, obj);
+  return path.split('.').reduce((res, key) => res[key] || fb, obj);
 }
 
 function parse(template, map, fallback) {

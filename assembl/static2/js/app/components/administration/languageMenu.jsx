@@ -35,20 +35,16 @@ const LanguageMenu = ({ changeLocale, selectedLocale, discussionPreferences, vis
         <div className="language-menu">
           <OverlayTrigger placement="top" overlay={languageTooltip}>
             <div>
-              {discussionPreferences.map((key, index) => {
-                return (
-                  <div
-                    onClick={() => {
-                      return changeLocale(key);
-                    }}
-                    id={key}
-                    className={selectedLocale === key ? 'flag-container active' : 'flag-container'}
-                    key={index}
-                  >
-                    <Flag locale={key} />
-                  </div>
-                );
-              })}
+              {discussionPreferences.map((key, index) => (
+                <div
+                  onClick={() => changeLocale(key)}
+                  id={key}
+                  className={selectedLocale === key ? 'flag-container active' : 'flag-container'}
+                  key={index}
+                >
+                  <Flag locale={key} />
+                </div>
+              ))}
             </div>
           </OverlayTrigger>
         </div>
@@ -59,20 +55,16 @@ const LanguageMenu = ({ changeLocale, selectedLocale, discussionPreferences, vis
   return <span />;
 };
 
-const mapStateToProps = (state) => {
-  return {
-    translations: state.i18n.translations,
-    selectedLocale: state.admin.selectedLocale,
-    discussionPreferences: state.admin.discussionLanguagePreferences
-  };
-};
+const mapStateToProps = state => ({
+  translations: state.i18n.translations,
+  selectedLocale: state.admin.selectedLocale,
+  discussionPreferences: state.admin.discussionLanguagePreferences
+});
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    changeLocale: (newLocale) => {
-      dispatch(updateSelectedLocale(newLocale));
-    }
-  };
-};
+const mapDispatchToProps = dispatch => ({
+  changeLocale: (newLocale) => {
+    dispatch(updateSelectedLocale(newLocale));
+  }
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(LanguageMenu);

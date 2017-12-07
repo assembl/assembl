@@ -36,6 +36,7 @@ type EditPostFormState = {
 
 class EditPostForm extends React.PureComponent<void, EditPostFormProps, EditPostFormState> {
   props: EditPostFormProps;
+
   state: EditPostFormState;
 
   constructor(props: EditPostFormProps) {

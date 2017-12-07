@@ -7,16 +7,14 @@ import ResourcesCenterPageQuery from '../graphql/ResourcesCenterPage.graphql';
 import withLoadingIndicator from '../components/common/withLoadingIndicator';
 import ResourcesCenter from '../components/resourcesCenter';
 
-const ResourcesCenterContainer = ({ data, resourcesCenterHeaderUrl, resourcesCenterTitle }) => {
-  return <ResourcesCenter {...data} headerBackgroundUrl={resourcesCenterHeaderUrl} headerTitle={resourcesCenterTitle} />;
-};
+const ResourcesCenterContainer = ({ data, resourcesCenterHeaderUrl, resourcesCenterTitle }) => (
+  <ResourcesCenter {...data} headerBackgroundUrl={resourcesCenterHeaderUrl} headerTitle={resourcesCenterTitle} />
+);
 
-const mapStateToProps = (state) => {
-  return {
-    debate: state.debate,
-    lang: state.i18n.locale
-  };
-};
+const mapStateToProps = state => ({
+  debate: state.debate,
+  lang: state.i18n.locale
+});
 
 export default compose(
   connect(mapStateToProps),

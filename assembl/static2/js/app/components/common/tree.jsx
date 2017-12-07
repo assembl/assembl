@@ -46,9 +46,7 @@ class Child extends React.PureComponent {
   expandCollapse(event) {
     event.stopPropagation();
     this.setState(
-      (state) => {
-        return { expanded: !state.expanded };
-      },
+      state => ({ expanded: !state.expanded }),
       () => {
         this.resizeTreeHeight(0);
       }
@@ -269,58 +267,52 @@ class Tree extends React.Component {
     const { contentLocaleMapping, data, lang, noRowsRenderer } = this.props;
     return (
       <WindowScroller>
-        {({ height, isScrolling, onChildScroll, scrollTop }) => {
-          return (
-            <AutoSizer
-              disableHeight
-              onResize={() => {
-                this.cache.clearAll();
-                this.listRef.recomputeRowHeights();
-                this.nuggetsManager.update();
-              }}
-            >
-              {({ width }) => {
-                return (
-                  <List
-                    contentLocaleMapping={contentLocaleMapping}
-                    height={height}
-                    // pass lang to the List component to ensure that the rows are rendered again if we change the site language
-                    lang={lang}
-                    isScrolling={isScrolling}
-                    onScroll={onChildScroll}
-                    scrollTop={scrollTop}
-                    autoHeight
-                    rowHeight={this.cache.rowHeight}
-                    deferredMeasurementCache={this.cache}
-                    noRowsRenderer={noRowsRenderer}
-                    ref={(ref) => {
-                      // Add a guard because the List component's ref is recalculated many times onScroll
-                      // Causing other components that have listRef as prop to re-render 4x-6x times.
-                      if (!this.listRef) {
-                        this.listRef = ref;
-                      }
-                    }}
-                    rowCount={data.length}
-                    overscanIndicesGetter={this.overscanIndicesGetter}
-                    overscanRowCount={1}
-                    rowRenderer={this.cellRenderer}
-                    width={width}
-                    className="tree-list"
-                  />
-                );
-              }}
-            </AutoSizer>
-          );
-        }}
+        {({ height, isScrolling, onChildScroll, scrollTop }) => (
+          <AutoSizer
+            disableHeight
+            onResize={() => {
+              this.cache.clearAll();
+              this.listRef.recomputeRowHeights();
+              this.nuggetsManager.update();
+            }}
+          >
+            {({ width }) => (
+              <List
+                contentLocaleMapping={contentLocaleMapping}
+                height={height}
+                // pass lang to the List component to ensure that the rows are rendered again if we change the site language
+                lang={lang}
+                isScrolling={isScrolling}
+                onScroll={onChildScroll}
+                scrollTop={scrollTop}
+                autoHeight
+                rowHeight={this.cache.rowHeight}
+                deferredMeasurementCache={this.cache}
+                noRowsRenderer={noRowsRenderer}
+                ref={(ref) => {
+                  // Add a guard because the List component's ref is recalculated many times onScroll
+                  // Causing other components that have listRef as prop to re-render 4x-6x times.
+                  if (!this.listRef) {
+                    this.listRef = ref;
+                  }
+                }}
+                rowCount={data.length}
+                overscanIndicesGetter={this.overscanIndicesGetter}
+                overscanRowCount={1}
+                rowRenderer={this.cellRenderer}
+                width={width}
+                className="tree-list"
+              />
+            )}
+          </AutoSizer>
+        )}
       </WindowScroller>
     );
   }
 }
 
 Tree.defaultProps = {
-  InnerComponentFolded: () => {
-    return null;
-  }
+  InnerComponentFolded: () => null
 };
 
 export default Tree;

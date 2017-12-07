@@ -7,10 +7,8 @@ import NavigationMenu from './navigationMenu';
 import LanguageMenu from './languageMenu';
 import UserMenu from './UserMenu';
 
-const refWidthUpdate = (setWidth) => {
-  return (ref) => {
-    if (ref) setWidth(ref.getBoundingClientRect().width);
-  };
+const refWidthUpdate = setWidth => (ref) => {
+  if (ref) setWidth(ref.getBoundingClientRect().width);
 };
 
 export default class FlatNavbar extends React.PureComponent {
@@ -18,14 +16,17 @@ export default class FlatNavbar extends React.PureComponent {
     leftWidth: number,
     rightWidth: number
   };
+
   static defaultProps = {
     style: {}
   };
+
   updateWidth = () => {
     const { leftWidth = 0, rightWidth = 0 } = this.state;
     const margin = 50;
     this.props.setWidth(leftWidth + rightWidth + margin);
   };
+
   render = () => {
     const { elements, slug, logoSrc, connectedUserId, currentPhaseIdentifier, helpUrl, location, style, logoLink } = this.props;
     return (

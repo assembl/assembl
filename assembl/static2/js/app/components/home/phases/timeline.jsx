@@ -33,10 +33,8 @@ class Timeline extends React.Component {
   }
 }
 
-const mapStateToProps = (state) => {
-  return {
-    debate: state.debate
-  };
-};
+const mapStateToProps = state => ({
+  debate: state.debate
+});
 
 export default connect(mapStateToProps)(Timeline);

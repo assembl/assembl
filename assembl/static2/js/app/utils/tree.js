@@ -17,9 +17,7 @@ type TreeType<T> = {
  * @returns {Array<T>} Returns the direct child nodes of the root.
  */
 export function getChildren<T: NodeType>(rootNode: T, nodes: Array<T>): Array<T> {
-  return nodes.filter((node) => {
-    return node.ancestors.includes(rootNode.id);
-  });
+  return nodes.filter(node => node.ancestors.includes(rootNode.id));
 }
 
 /**
@@ -28,20 +26,10 @@ export function getChildren<T: NodeType>(rootNode: T, nodes: Array<T>): Array<T>
  * @returns {{roots: Array<T>, descendants: Array<T>}} Returns the partial tree composed of all the root nodes and their children.
  */
 export function getPartialTree<T: NodeType>(nodes: Array<T>): TreeType<T> {
-  let ids = nodes.map((node) => {
-    return node.id;
-  });
-  const roots = nodes.filter((node) => {
-    return node.ancestors.every((a) => {
-      return !ids.includes(a);
-    });
-  });
-  ids = roots.map((node) => {
-    return node.id;
-  });
-  const descendants = nodes.filter((node) => {
-    return !ids.includes(node.id);
-  });
+  let ids = nodes.map(node => node.id);
+  const roots = nodes.filter(node => node.ancestors.every(a => !ids.includes(a)));
+  ids = roots.map(node => node.id);
+  const descendants = nodes.filter(node => !ids.includes(node.id));
   return {
     roots: roots,
     descendants: descendants

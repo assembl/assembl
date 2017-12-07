@@ -19,28 +19,32 @@ class Debate extends React.Component {
     this.hideThumbnails = this.hideThumbnails.bind(this);
     this.displayThumbnails = this.displayThumbnails.bind(this);
   }
+
   showThumbnails() {
     this.setState({ isThumbnailsHidden: false });
   }
+
   hideThumbnails() {
     setTimeout(() => {
       this.setState({ isThumbnailsHidden: true });
     }, 400);
   }
+
   displayThumbnails() {
     this.setState({ isThumbnailsHidden: !this.state.isThumbnailsHidden });
   }
+
   render() {
     const { loading, thematics } = this.props.data;
     const { identifier } = this.props;
     const isParentRoute = !this.props.params.themeId || false;
     const themeId = this.props.params.themeId || null;
-    const children = React.Children.map(this.props.children, (child) => {
-      return React.cloneElement(child, {
+    const children = React.Children.map(this.props.children, child =>
+      React.cloneElement(child, {
         id: themeId,
         identifier: identifier
-      });
-    });
+      })
+    );
     return (
       <div className="debate">
         {loading && isParentRoute && <Loader color="black" />}
@@ -85,10 +89,8 @@ Debate.propTypes = {
 
 const DebateWithData = graphql(DebateThematicsQuery)(Debate);
 
-const mapStateToProps = (state) => {
-  return {
-    lang: state.i18n.locale
-  };
-};
+const mapStateToProps = state => ({
+  lang: state.i18n.locale
+});
 
 export default connect(mapStateToProps)(DebateWithData);

@@ -19,9 +19,7 @@ describe('Tree', () => {
       expect(roots.length).toEqual(1);
       expect(roots[0].id).toEqual('foo');
       expect(descendants.length).toEqual(2);
-      const ids = descendants.map((c) => {
-        return c.id;
-      });
+      const ids = descendants.map(c => c.id);
       const expected = ['bar', 'tar'];
       expect(ids).toEqual(expect.arrayContaining(expected));
     });

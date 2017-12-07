@@ -15,6 +15,7 @@ class LanguageMenu extends React.Component {
     availableLocales: Array<string>,
     preferencesMapByLocale: { [string]: { nativeName: string, name: string, locale: string } }
   };
+
   static defaultProps = {
     className: ''
   };
@@ -76,18 +77,16 @@ class LanguageMenu extends React.Component {
             <MenuItem key={i18n.locale} className="active">
               {this.getLocaleLabel(i18n.locale)}
             </MenuItem>
-            {this.state.availableLocales.map((availableLocale) => {
-              return (
-                <MenuItem
-                  onClick={() => {
-                    this.doChangeLanguage(availableLocale);
-                  }}
-                  key={availableLocale}
-                >
-                  {this.getLocaleLabel(availableLocale)}
-                </MenuItem>
-              );
-            })}
+            {this.state.availableLocales.map(availableLocale => (
+              <MenuItem
+                onClick={() => {
+                  this.doChangeLanguage(availableLocale);
+                }}
+                key={availableLocale}
+              >
+                {this.getLocaleLabel(availableLocale)}
+              </MenuItem>
+            ))}
           </NavDropdown>
         </ul>
       );
@@ -96,33 +95,27 @@ class LanguageMenu extends React.Component {
   }
 }
 
-const mapStateToProps = (state) => {
-  return {
-    i18n: state.i18n
-  };
-};
+const mapStateToProps = state => ({
+  i18n: state.i18n
+});
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    changeLanguage: (locale) => {
-      dispatch(setLocale(locale));
-    },
-    addLanguageToStore: (locale) => {
-      dispatch(addLanguagePreference(locale));
-    }
-  };
-};
+const mapDispatchToProps = dispatch => ({
+  changeLanguage: (locale) => {
+    dispatch(setLocale(locale));
+  },
+  addLanguageToStore: (locale) => {
+    dispatch(addLanguagePreference(locale));
+  }
+});
 
 export default compose(
   connect(mapStateToProps, mapDispatchToProps),
   graphql(getDiscussionPreferenceLanguage, {
-    options: (props) => {
-      return {
-        variables: {
-          inLocale: props.i18n.locale
-        }
-      };
-    }
+    options: props => ({
+      variables: {
+        inLocale: props.i18n.locale
+      }
+    })
   }),
   withLoadingIndicator()
 )(LanguageMenu);

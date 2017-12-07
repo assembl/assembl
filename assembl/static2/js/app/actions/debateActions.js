@@ -1,33 +1,27 @@
 import { getDebateData } from '../services/debateService';
 
-const loadingDebateData = () => {
-  return {
-    type: 'FETCH_DEBATE_DATA',
-    debateData: null
-  };
-};
+const loadingDebateData = () => ({
+  type: 'FETCH_DEBATE_DATA',
+  debateData: null
+});
 
-const resolvedFetchDebateData = (debateData) => {
-  return {
-    type: 'RESOLVED_FETCH_DEBATE_DATA',
-    debateData: debateData
-  };
-};
+const resolvedFetchDebateData = debateData => ({
+  type: 'RESOLVED_FETCH_DEBATE_DATA',
+  debateData: debateData
+});
 
-const failedFetchDebateData = (error) => {
-  return {
-    type: 'FAILED_FETCH_DEBATE_DATA',
-    debateError: error
-  };
-};
+const failedFetchDebateData = error => ({
+  type: 'FAILED_FETCH_DEBATE_DATA',
+  debateError: error
+});
 
 // In future, if unauthorzed is supposed to be treated differently
 const unauthorizedDebateData = {
   type: 'UNAUTHORIZED_DEBATE_DATA'
 };
 
-export const fetchDebateData = (debateId) => {
-  return function (dispatch) {
+export const fetchDebateData = debateId =>
+  function (dispatch) {
     dispatch(loadingDebateData());
     return getDebateData(debateId).then(
       (debateData) => {
@@ -43,4 +37,3 @@ export const fetchDebateData = (debateId) => {
       }
     );
   };
-};

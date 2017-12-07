@@ -47,9 +47,7 @@ const FRAGMENT_SIZE = 400;
 const elasticsearchLangIndexesElement = document.getElementById('elasticsearchLangIndexes');
 const elasticsearchLangIndexes = elasticsearchLangIndexesElement ? elasticsearchLangIndexesElement.value.split(' ') : [];
 
-const truncateText = (text) => {
-  return truncate(text, { length: FRAGMENT_SIZE, separator: ' ', omission: ' [...]' });
-};
+const truncateText = text => truncate(text, { length: FRAGMENT_SIZE, separator: ' ', omission: ' [...]' });
 
 const highlightedTextOrTruncatedText = (hit, field) => {
   let text = get(hit, `highlight.${field}`);
@@ -77,9 +75,7 @@ if (typeof __resourceQuery !== 'undefined' && __resourceQuery) {
   // const querystring = require('querystring');
   // const params = querystring.parse(__resourceQuery.slice(1));
   // if (params.v === '1') {
-  Link = (props) => {
-    return <a href={props.to} dangerouslySetInnerHTML={props.dangerouslySetInnerHTML} />;
-  };
+  Link = props => <a href={props.to} dangerouslySetInnerHTML={props.dangerouslySetInnerHTML} />;
   getUrl = (hit) => {
     const id = hit._source.id;
     switch (hit._type) {
@@ -97,9 +93,7 @@ if (typeof __resourceQuery !== 'undefined' && __resourceQuery) {
   // }
 } else {
   // Link = require('react-router').Link; // eslint-disable-line
-  Link = (props) => {
-    return <a href={props.to} dangerouslySetInnerHTML={props.dangerouslySetInnerHTML} />;
-  };
+  Link = props => <a href={props.to} dangerouslySetInnerHTML={props.dangerouslySetInnerHTML} />;
   getUrl = (hit) => {
     const id = hit._source.id;
     let ideaBase64id;
@@ -145,9 +139,7 @@ const TYPE_TO_ICON = {
   synthesis: 'synthesis'
 };
 
-const ImageType = (props) => {
-  return <span className={`${props.className} assembl-icon-${TYPE_TO_ICON[props.type]}`} />;
-};
+const ImageType = props => <span className={`${props.className} assembl-icon-${TYPE_TO_ICON[props.type]}`} />;
 
 const getFieldAnyLang = (source, prop, locale) => {
   let result;
@@ -226,9 +218,7 @@ const DumbPostHit = (props) => {
   );
 };
 
-const PostHit = connect((state) => {
-  return { locale: getLocale(state) };
-})(DumbPostHit);
+const PostHit = connect(state => ({ locale: getLocale(state) }))(DumbPostHit);
 
 const DumbSynthesisHit = (props) => {
   const locale = props.locale;
@@ -264,9 +254,7 @@ const DumbSynthesisHit = (props) => {
   );
 };
 
-const SynthesisHit = connect((state) => {
-  return { locale: getLocale(state) };
-})(DumbSynthesisHit);
+const SynthesisHit = connect(state => ({ locale: getLocale(state) }))(DumbSynthesisHit);
 
 const UserHit = (props) => {
   const source = props.result._source;
@@ -347,9 +335,7 @@ const DumbIdeaHit = (props) => {
   );
 };
 
-const IdeaHit = connect((state) => {
-  return { locale: getLocale(state) };
-})(DumbIdeaHit);
+const IdeaHit = connect(state => ({ locale: getLocale(state) }))(DumbIdeaHit);
 
 const HitItem = (props) => {
   switch (props.result._type) {
@@ -365,9 +351,7 @@ const HitItem = (props) => {
   }
 };
 
-const NoPanel = (props) => {
-  return <div>{props.children}</div>;
-};
+const NoPanel = props => <div>{props.children}</div>;
 
 const calcQueryFields = () => {
   const base = [
@@ -459,9 +443,7 @@ export class SearchComponent extends React.Component {
       return modifiedQuery;
     });
     const translate = I18n.t.bind(I18n);
-    this.searchkit.translateFunction = (key) => {
-      return translate(`search.${key}`);
-    };
+    this.searchkit.translateFunction = key => translate(`search.${key}`);
     this.state = { show: false, queryString: null };
   }
 
@@ -678,13 +660,11 @@ export class SearchComponent extends React.Component {
   }
 }
 
-const mapStateToProps = (state) => {
-  return {
-    isExpert: connectedUserIsExpert(),
-    connectedUserId: getConnectedUserId(state),
-    discussionId: getDebateId(state)
-  };
-};
+const mapStateToProps = state => ({
+  isExpert: connectedUserIsExpert(),
+  connectedUserId: getConnectedUserId(state),
+  discussionId: getDebateId(state)
+});
 
 const ConnectedSearch = connect(mapStateToProps)(SearchComponent);
 export default ConnectedSearch;
