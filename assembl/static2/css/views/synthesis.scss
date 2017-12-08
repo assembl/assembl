@@ -1,31 +1,37 @@
-.synthesis-block .content-section {
-  padding: 0 0 60px 0;
-  text-align: justify;
-  font-size: $font-size-m;
-}
-
-.synthesis-tree {
-  padding-top: 60px;
-}
-
-.idea-synthesis-section {
-  .content-section {
-    padding: 0;
+.synthesis-page {
+  .header-section {
+    height: 500px;
   }
 
-  .title-section {
-    margin: 0;
+  .synthesis-block .content-section {
+    padding: 0 0 60px 0;
+    text-align: justify;
+    font-size: $font-size-m;
   }
 
-  .section-title1 {
-    font-size: 32px;
+  .synthesis-tree {
+    padding-top: 60px;
   }
 
-  .section-title-2 {
-    font-size: 26px;
-  }
+  .idea-synthesis-section {
+    .content-section {
+      padding: 0;
+    }
 
-  .section-title-3 {
-    font-size: 20px;
+    .title-section {
+      margin: 0;
+    }
+
+    .section-title1 {
+      font-size: 32px;
+    }
+
+    .section-title-2 {
+      font-size: 26px;
+    }
+
+    .section-title-3 {
+      font-size: 20px;
+    }
   }
 }

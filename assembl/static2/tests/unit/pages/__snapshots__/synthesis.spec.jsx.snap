@@ -2,57 +2,61 @@
 
 exports[`Synthesis component should match Synthesis snapshot 1`] = `
 <div
-  className="background-light"
+  className="synthesis-page"
 >
-  <Connect(Header)
-    imgUrl="http://foo.com/foo"
-    isSynthesesHeader={true}
-    title="Foo"
-  />
-  <Grid
-    bsClass="container"
-    componentClass="div"
-    fluid={true}
+  <div
+    className="background-light"
   >
-    <Row
-      bsClass="row"
-      className="background-grey synthesis-tree"
+    <Connect(Header)
+      imgUrl="http://foo.com/foo"
+      isSynthesesHeader={true}
+      title="Foo"
+    />
+    <Grid
+      bsClass="container"
       componentClass="div"
+      fluid={true}
     >
-      <Col
-        bsClass="col"
+      <Row
+        bsClass="row"
+        className="background-grey synthesis-tree"
         componentClass="div"
-        md={7}
-        mdOffset={3}
-        sm={10}
-        smOffset={1}
       >
-        <IdeaSynthesisTree
-          hasSiblings={false}
-          index={1}
-          parents={Array []}
-          rootIdea={
-            Object {
-              "ancestors": Array [],
-              "id": "barId",
-              "img": Object {
-                "externalUrl": "http://foo.com/bar",
-              },
-              "numContributors": 0,
-              "numPosts": 0,
-              "phaseIdentifier": "paseId",
-              "posts": Object {
-                "edges": Array [],
-              },
-              "synthesisTitle": "Foo",
-              "title": "Bar",
+        <Col
+          bsClass="col"
+          componentClass="div"
+          md={7}
+          mdOffset={3}
+          sm={10}
+          smOffset={1}
+        >
+          <IdeaSynthesisTree
+            hasSiblings={false}
+            index={1}
+            parents={Array []}
+            rootIdea={
+              Object {
+                "ancestors": Array [],
+                "id": "barId",
+                "img": Object {
+                  "externalUrl": "http://foo.com/bar",
+                },
+                "numContributors": 0,
+                "numPosts": 0,
+                "phaseIdentifier": "paseId",
+                "posts": Object {
+                  "edges": Array [],
+                },
+                "synthesisTitle": "Foo",
+                "title": "Bar",
+              }
             }
-          }
-          slug="slugId"
-          subIdeas={Array []}
-        />
-      </Col>
-    </Row>
-  </Grid>
+            slug="slugId"
+            subIdeas={Array []}
+          />
+        </Col>
+      </Row>
+    </Grid>
+  </div>
 </div>
 `;
