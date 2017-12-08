@@ -58,3 +58,21 @@
     }
   }
 }
+
+@media screen and (max-width: 600px) {
+  .profile {
+    .border-left {
+      border: none;
+    }
+
+    .profile-form {
+      width: 100%;
+      margin: 0;
+      padding: 0 20px 0 0;
+    }
+
+    .dark-title-1 {
+      margin-top: 60px;
+    }
+  }
+}
