@@ -126,7 +126,6 @@
     width: 100%;
 
     .right-part {
-      flex: 1;
       text-align: right;
     }
 
@@ -166,7 +165,8 @@
     }
 
     .navbar-logo {
-      flex: 1;
+      margin-right: auto;
+      margin-left: 15px;
     }
 
     .avatar {
@@ -185,16 +185,10 @@
       flex-direction: column;
     }
 
-    .burgermenu-icon {
-      margin-right: auto;
-      flex: 1;
-    }
-
     .navbar-icons {
       padding: 0 0;
       margin-left: auto;
       justify-content: flex-end;
-      flex: 1;
       z-index: 10;
     }
 
