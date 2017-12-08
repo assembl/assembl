@@ -59,6 +59,7 @@
     line-height: $navbar-line-height;
     padding: 0 20px;
     text-transform: uppercase;
+    white-space: nowrap;
 
     &:hover {
       color: $navbar-active-text-color;
@@ -191,7 +192,7 @@
     .navbar-icons {
       padding: 0 0;
       margin-left: auto;
-      justify-content: right;
+      justify-content: flex-end;
       flex: 1;
       z-index: 10;
     }
