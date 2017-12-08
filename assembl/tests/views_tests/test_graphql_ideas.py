@@ -279,7 +279,7 @@ def test_graphql_discussion_counters_thread_phase(graphql_request, proposals):
               numParticipants
             }
         """, context_value=graphql_request, variable_values={'identifier': 'thread'})
-    assert res.data['rootIdea']['numPosts'] == 45  # we count all posts from phase 1
+    assert res.data['rootIdea']['numPosts'] == 15  # we count all posts from phase 1
     assert res.data['numParticipants'] == 1
 
 
