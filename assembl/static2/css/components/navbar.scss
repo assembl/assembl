@@ -263,4 +263,25 @@
       vertical-align: middle;
     }
   }
+
+  /* Landscape phones and portrait tablets */
+  @media (max-width: $screen-xs-max) {
+    .right-part {
+      flex: 1;
+    }
+
+    .navbar-logo {
+      flex: 1;
+      margin: auto;
+    }
+
+    .burgermenu-icon {
+      margin-right: auto;
+      flex: 1;
+    }
+
+    .navbar-icons {
+      flex: 1;
+    }
+  }
 }
