@@ -58,7 +58,7 @@ class IdeaInterface(graphene.Interface):
             # based on countable states.
             # Don't use RootIdea.num_posts that give higher or lower count.
             return sum([child.num_posts for child in self.get_all_descendants(
-                inclusive=False)])
+                inclusive=False) if child.sqla_type in ('idea', 'question')])
 
         return self.num_posts
 
