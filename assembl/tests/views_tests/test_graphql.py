@@ -500,6 +500,21 @@ mutation myFirstMutation {
     assert json.loads(json.dumps(res.data)) == {u'thematics': []}
 
 
+def test_delete_thematic_questions(graphql_request, thematic_and_question, test_session):
+    thematic_id, first_question_id = thematic_and_question
+    res = schema.execute(u"""
+mutation myFirstMutation {
+    deleteThematic(
+        thematicId:"%s",
+    ) {
+        success
+    }
+}
+""" % thematic_id, context_value=graphql_request)
+    assert True == res.data['deleteThematic']['success']
+    assert test_session.query(models.Question).filter(models.Question.tombstone_condition()).count() == 0
+
+
 def test_get_thematic_via_node_query(graphql_request, thematic_and_question):
     thematic_id, first_question_id = thematic_and_question
     res = schema.execute(u"""query {

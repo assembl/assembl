@@ -872,5 +872,9 @@ class DeleteThematic(graphene.Mutation):
             raise HTTPUnauthorized()
 
         thematic.is_tombstone = True
+        questions = thematic.get_children()
+        # Tombstone all questions of the thematic as well
+        for q in questions:
+            q.is_tombstone = True
         thematic.db.flush()
         return DeleteThematic(success=True)
