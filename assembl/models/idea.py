@@ -445,8 +445,8 @@ class Idea(HistoryMixin, DiscussionBoundBase):
                 select([root_idea_id.label('id')]))
         return select_exp.alias()
 
-    def get_all_descendants(self, id_only=False):
-        query = self.get_descendants_query(self.id)
+    def get_all_descendants(self, id_only=False, inclusive=True):
+        query = self.get_descendants_query(self.id, inclusive=inclusive)
         if id_only:
             return list((id for (id,) in self.db.query(query)))
         else:
