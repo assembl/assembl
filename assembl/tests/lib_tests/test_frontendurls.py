@@ -57,13 +57,6 @@ def test_get_route_react_backend_login(discussion, test_webrequest):
     assert get_route('furl_login') == "/login"
 
 
-def test_get_route_react_frontend_join(discussion, test_webrequest):
-    from assembl.views import create_get_route
-    slug = discussion.slug
-    get_route = create_get_route(test_webrequest, discussion)
-    assert get_route('furl_join') == "/{slug}/join".format(slug=slug)
-
-
 def test_get_route_react_frontend_post(discussion, test_webrequest,
                                        idea_with_en_fr, reply_post_1):
     from assembl.views import create_get_route
