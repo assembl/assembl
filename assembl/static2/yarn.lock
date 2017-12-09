@@ -5919,10 +5919,6 @@ react-proxy@^3.0.0-alpha.0:
   dependencies:
     lodash "^4.6.1"
 
-react-pure-render@^1.0.2:
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/react-pure-render/-/react-pure-render-1.0.2.tgz#9d8a928c7f2c37513c2d064e57b3e3c356e9fabb"
-
 react-redux-i18n@^1.9.0:
   version "1.9.0"
   resolved "https://registry.yarnpkg.com/react-redux-i18n/-/react-redux-i18n-1.9.0.tgz#ed07d5335d5640dc88f19b2e4217a2c02f72002c"
@@ -5968,12 +5964,6 @@ react-test-renderer@^15.4.1:
   dependencies:
     fbjs "^0.8.9"
     object-assign "^4.1.0"
-
-react-transform-render-visualizer@^0.4.0:
-  version "0.4.0"
-  resolved "https://registry.yarnpkg.com/react-transform-render-visualizer/-/react-transform-render-visualizer-0.4.0.tgz#7ac1e527d9e3663142b7d1ec6219f58cbd57ef10"
-  dependencies:
-    react-pure-render "^1.0.2"
 
 react-tweet-embed@^1.0.8:
   version "1.0.8"

@@ -75,13 +75,7 @@ module.exports = {
                 plugins: [
                   'transform-object-rest-spread', 'transform-class-properties',
                   ['transform-runtime', { helpers: true, polyfill: false }],
-                  'react-hot-loader/babel',
-                  [
-                    'react-transform',
-                    {
-                      'transforms': [{ 'transform': 'react-transform-render-visualizer/lib/specify' }]
-                    }
-                  ]
+                  'react-hot-loader/babel'
                 ],
                 presets: [["env", { "modules": false, "targets": { "ie": 11 },
                                     "debug": true, "useBuiltIns": true,
