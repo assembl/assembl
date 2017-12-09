@@ -29,7 +29,6 @@ import ThreadAdmin from './pages/threadAdmin';
 import DiscussionAdmin from './pages/discussionAdmin';
 import MultiColumnsAdmin from './pages/multiColumnsAdmin';
 import TokenVoteAdmin from './pages/tokenVoteAdmin';
-import JoinDiscussion from './pages/joinDiscussion';
 import ResourcesCenter from './pages/resourcesCenter';
 import { routeForRouter } from './utils/routeMap';
 
@@ -107,7 +106,6 @@ export default [
         <Route path={routeForRouter('legalNotice')} component={LegalNotice} />
         <Route path={routeForRouter('terms')} component={TermsAndConditions} />
         <Route path={routeForRouter('community')} component={Community} />
-        <Route path={routeForRouter('join')} component={JoinDiscussion} />
         <Route path={routeForRouter('rootDebate')} />
         <Route path={routeForRouter('debate', false, { phase: ':phase' })} component={DebateHome}>
           <Route path={routeForRouter('theme', false, { themeId: ':themeId' })} component={DebateChild} />
