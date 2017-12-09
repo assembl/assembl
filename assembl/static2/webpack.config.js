@@ -84,23 +84,11 @@ module.exports = {
             test: /\.css$/,
             use: ExtractTextPlugin.extract({
               fallback:'style-loader',
-              use: ['css-loader', 'sass-loader']})
-        },
-        {
-            test: /\.png$/,
-            use: 'url-loader?limit=100000'
-        },
-        {
-            test: /\.jpg$/,
-            use: 'file-loader'
+              use: ['css-loader']})
         },
         {
             test: /\.(eot|woff|woff2|ttf|svg|png|jpe?g|gif)(\?\S*)?$/,
             use: 'url-loader?limit=100000&name=[name].[ext]'
-        },
-        {
-            test: /\.eot(\?v=\d+\.\d+\.\d+)?$/,
-            use: 'file-loader'
         },
         {
           test: /\.(graphql|gql)$/,
