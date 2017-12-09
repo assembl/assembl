@@ -26,7 +26,6 @@
   "rootDebate": "${slug}/debate",
   "community": "${slug}/community",
   "terms": "${slug}/terms",
-  "join": "${slug}/join",
   "theme": "theme/${themeId}",
   "administration": "${slug}/administration",
   "unauthorizedAdministration": "${slug}/unauthorizedAdministration",
