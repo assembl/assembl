@@ -16,13 +16,13 @@ function theme_entries() {
         name = 'theme_' + parts[parts.length - 2] + '_web';
         entries[name] = path;
     }
-    paths = glob.sync('./css/themes/**/*_notifications.scss');
-    for (i = 0; i < paths.length; i++) {
-        path = paths[i];
-        parts = path.split('/');
-        name = 'theme_' + parts[parts.length - 2] + '_notifications';
-        entries[name] = path;
-    }
+//    paths = glob.sync('./css/themes/**/*_notifications.scss');
+//    for (i = 0; i < paths.length; i++) {
+//        path = paths[i];
+//        parts = path.split('/');
+//        name = 'theme_' + parts[parts.length - 2] + '_notifications';
+//        entries[name] = path;
+//    }
     return entries;
 }
 
@@ -48,12 +48,10 @@ module.exports = {
     entry: _.extend(theme_entries(), {
         bundle: [
             'babel-polyfill', // this is already in index.jsx but we need it to be first, otherwise it doesn't work on IE 11
-            'webpack-dev-server/client?' + process.env.WEBPACK_URL,
             'react-hot-loader/patch',
             './js/app/index',
         ],
         searchv1: [
-            'webpack-dev-server/client?' + process.env.WEBPACK_URL,
             'react-hot-loader/patch',
             './js/app/searchv1'
         ]
