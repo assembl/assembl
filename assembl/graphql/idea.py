@@ -486,6 +486,7 @@ class CreateIdea(graphene.Mutation):
     @staticmethod
     @abort_transaction_on_exception
     def mutate(root, args, context, info):
+        EMBED_ATTACHMENT = models.AttachmentPurpose.EMBED_ATTACHMENT.value
         cls = models.Idea
         discussion_id = context.matchdict['discussion_id']
         discussion = models.Discussion.get(discussion_id)
@@ -560,7 +561,7 @@ class CreateIdea(graphene.Mutation):
                     discussion=discussion,
                     creator_id=context.authenticated_userid,
                     title=filename,
-                    attachmentPurpose="EMBED_ATTACHMENT"
+                    attachmentPurpose=EMBED_ATTACHMENT
                 )
 
             db.flush()
@@ -597,6 +598,7 @@ class CreateThematic(graphene.Mutation):
     @staticmethod
     @abort_transaction_on_exception
     def mutate(root, args, context, info):
+        EMBED_ATTACHMENT = models.AttachmentPurpose.EMBED_ATTACHMENT.value
         cls = models.Thematic
         discussion_id = context.matchdict['discussion_id']
         discussion = models.Discussion.get(discussion_id)
@@ -693,7 +695,7 @@ class CreateThematic(graphene.Mutation):
                     discussion=discussion,
                     creator_id=context.authenticated_userid,
                     title=filename,
-                    attachmentPurpose="EMBED_ATTACHMENT"
+                    attachmentPurpose=EMBED_ATTACHMENT
                 )
 
             db.flush()
@@ -732,6 +734,7 @@ class UpdateThematic(graphene.Mutation):
     @staticmethod
     @abort_transaction_on_exception
     def mutate(root, args, context, info):
+        EMBED_ATTACHMENT = models.AttachmentPurpose.EMBED_ATTACHMENT.value
         cls = models.Thematic
         discussion_id = context.matchdict['discussion_id']
         discussion = models.Discussion.get(discussion_id)
@@ -815,7 +818,7 @@ class UpdateThematic(graphene.Mutation):
                     discussion=discussion,
                     creator_id=context.authenticated_userid,
                     title=filename,
-                    attachmentPurpose="EMBED_ATTACHMENT"
+                    attachmentPurpose=EMBED_ATTACHMENT
                 )
                 thematic.attachments.append(attachment)
             db.flush()
