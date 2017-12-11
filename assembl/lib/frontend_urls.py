@@ -220,7 +220,10 @@ class FrontendUrls(object):
         # this method is kept mostly for legacy routes that do not exist in
         # new front-end yet.
         if request is None:
-            route = '/debate/' + self.discussion.slug
+            if current_phase_use_v1_interface(self.discussion.timeline_events):
+                route = '/debate/' + self.discussion.slug
+            else:
+                route = '/' + self.discussion.slug
         else:
             get_route = create_get_route(request, self.discussion)
             route = get_route('home')
