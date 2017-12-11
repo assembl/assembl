@@ -1,10 +1,16 @@
-mutation createSection($sectionType: SectionTypesEnum, $url: String, $titleEntries: [LangStringEntryInput]!, $order: Float) {
+mutation createSection(
+  $sectionType: SectionTypesEnum
+  $url: String
+  $titleEntries: [LangStringEntryInput]!
+  $order: Float
+  $lang: String
+) {
   createSection(sectionType: $sectionType, url: $url, titleEntries: $titleEntries, order: $order) {
     section {
       id
       sectionType
       url
-      title
+      title(lang: $lang)
       order
     }
   }
