@@ -125,16 +125,19 @@ def process_notification(notification):
             NotificationDeliveryStateType.DELIVERY_IN_PROGRESS
         email_was_sent(recipient)
     except UnverifiedEmailException as e:
+        capture_exception()
         sys.stderr.write("Not sending to unverified email: " + repr(e))
         notification.delivery_state = \
             NotificationDeliveryStateType.DELIVERY_TEMPORARY_FAILURE
     except MissingEmailException as e:
         notification.delivery_state = \
             NotificationDeliveryStateType.DELIVERY_TEMPORARY_FAILURE
+        capture_exception()
         sys.stderr.write("Missing email!: " + repr(e))
     except (smtplib.SMTPConnectError,
             socket.timeout, socket.error,
             smtplib.SMTPHeloError) as e:
+        capture_exception()
         sys.stderr.write("Temporary failure: " + repr(e))
         notification.delivery_state = \
             NotificationDeliveryStateType.DELIVERY_TEMPORARY_FAILURE
@@ -147,6 +150,7 @@ def process_notification(notification):
             NotificationDeliveryStateType.DELIVERY_TEMPORARY_FAILURE
         sys.stderr.write("Invalid configuration!: " + repr(e))
     except Exception as e:
+        capture_exception()
         import traceback
         traceback.print_exc()
         notification.delivery_state = \
