@@ -21,6 +21,26 @@ If you use several theme repositories (that is if you use both theme systems of 
 * Go to the Settings page of this github user, section "SSH and GPG keys". For each of your Assembl servers, add the SSH public key of the system user which runs assembl (for example, in `/home/assembl_user/.ssh/id_rsa.pub`). If your server does not have an SSH key yet, create one.
 
 
+# Using a theme in development mode
+
+In development mode, all the themes from vendor directory are not build
+for performance reason. This is to have a better developer experience with
+css rebuild time < 3s. When developping a new theme, you can create it first
+in the themes folder, restart webpack, do the changes, and move it to the
+`vendor/assembl2-client-themes` folder when you're done.
+
+An alternative to this is to create the theme directly in
+`vendor/assembl2-client-themes` and create a symlink like this:
+
+
+    cd css/themes; ln -s vendor/assembl2-client-themes/yourtheme
+
+When creating a folder or symlink in the `css/themes` folder, you need
+to restart webpack to take it into account:
+
+    supervisorctl restart dev:webpack
+
+
 # Defining which theme is shown as default
 
 You can select which theme is active with default_theme in the ini file.

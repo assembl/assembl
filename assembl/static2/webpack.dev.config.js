@@ -8,7 +8,7 @@ var webpackHost = process.env.WEBPACK_URL.split('://')[1].split(':')[0];
 
 function theme_entries() {
     var entries = {},
-        paths = glob.sync('./css/themes/**/*_web.scss'),
+        paths = glob.sync('./css/themes/*/*_web.scss'),
         i, path, parts, name;
     for (i = 0; i < paths.length; i++) {
         path = paths[i];
