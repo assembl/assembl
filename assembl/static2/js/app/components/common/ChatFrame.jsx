@@ -4,34 +4,36 @@ import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import lodashGet from 'lodash/get';
 
-class DumbChatFrame extends React.Component {
-  static Modal = ({ src }) => {
-    return (
-      <div className="chatframe-modal">
-        <div className="chatframe-modal-header">
-          <span className="chatframe-icon chatframe-modal-icon assembl-icon-robot" />
-          <Translate value="chatframe.title" />
-        </div>
-        <iframe className="chatframe-modal-iframe" title="chatframe" src={src} />
+const ChatFrameModal = ({ src }) => {
+  return (
+    <div className="chatframe-modal">
+      <div className="chatframe-modal-header">
+        <span className="chatframe-icon chatframe-modal-icon assembl-icon-robot" />
+        <Translate value="chatframe.title" />
       </div>
-    );
-  };
-  static Button = ({ isOpen, toggle }) => {
-    return isOpen ? (
-      <div onClick={toggle} className="chatframe-icon chatframe-button assembl-icon-cancel" />
-    ) : (
-      <OverlayTrigger
-        placement="left"
-        overlay={
-          <Tooltip id="chatframe-tooltip">
-            <Translate value="chatframe.tooltip" />
-          </Tooltip>
-        }
-      >
-        <div onClick={toggle} className="chatframe-icon chatframe-button assembl-icon-robot" />
-      </OverlayTrigger>
-    );
-  };
+      <iframe className="chatframe-modal-iframe" title="chatframe" src={src} />
+    </div>
+  );
+};
+
+const ChatFrameButton = ({ isOpen, toggle }) => {
+  return isOpen ? (
+    <div onClick={toggle} className="chatframe-icon chatframe-button assembl-icon-cancel" />
+  ) : (
+    <OverlayTrigger
+      placement="left"
+      overlay={
+        <Tooltip id="chatframe-tooltip">
+          <Translate value="chatframe.tooltip" />
+        </Tooltip>
+      }
+    >
+      <div onClick={toggle} className="chatframe-icon chatframe-button assembl-icon-robot" />
+    </OverlayTrigger>
+  );
+};
+
+class DumbChatFrame extends React.Component {
   toggle = () => {
     return this.setState(({ isOpen }) => {
       return { isOpen: !isOpen };
@@ -41,11 +43,10 @@ class DumbChatFrame extends React.Component {
     const { src } = this.props;
     if (!src) return null;
     const isOpen = lodashGet(this, 'state.isOpen');
-    const { Modal, Button } = DumbChatFrame;
     return (
       <div className="chatframe">
-        {isOpen && <Modal src={src} />}
-        <Button isOpen={isOpen} toggle={this.toggle} />
+        {isOpen && <ChatFrameModal src={src} />}
+        <ChatFrameButton isOpen={isOpen} toggle={this.toggle} />
       </div>
     );
   };
