@@ -7,7 +7,8 @@ import { signupAction } from '../../actions/authenticationActions';
 import { getDiscussionSlug } from '../../utils/globalFunctions';
 import { get, getContextual } from '../../utils/routeMap';
 import inputHandler from '../../utils/inputHandler';
-import { displayAlert } from '../../utils/utilityManager';
+import { displayAlert, displayCustomModal } from '../../utils/utilityManager';
+import TermsForm from '../common/termsForm';
 
 class SignupForm extends React.Component {
   constructor(props) {
@@ -95,6 +96,21 @@ class SignupForm extends React.Component {
                 placeholder={I18n.t('login.password2')}
                 onChange={this.handleInput}
               />
+              <div className="accept-terms">
+                <input type="checkbox" id="acceptTerms" value="terms" className="terms-checkbox" />
+                <label htmlFor="acceptTerms">
+                  <Translate value="termsAndConditions.accept" />
+                  <a
+                    onClick={(e) => {
+                      e.preventDefault();
+                      const Terms = <TermsForm />;
+                      displayCustomModal(Terms);
+                    }}
+                  >
+                    <Translate value="termsAndConditions.headerTitle" className="terms-link" />
+                  </a>
+                </label>
+              </div>
             </FormGroup>
             <FormGroup>
               <Button type="submit" name="register" value={I18n.t('login.signUp')} className="button-submit button-dark margin-m">
