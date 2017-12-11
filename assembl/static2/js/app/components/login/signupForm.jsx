@@ -99,7 +99,7 @@ class SignupForm extends React.Component {
               <div className="accept-terms">
                 <input type="checkbox" id="acceptTerms" value="terms" className="terms-checkbox" />
                 <label htmlFor="acceptTerms">
-                  <Translate value="termsAndConditions.accept" />
+                  <Translate value="termsAndConditions.iAccept" />
                   <a
                     onClick={(e) => {
                       e.preventDefault();

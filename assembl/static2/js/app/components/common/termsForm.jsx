@@ -1,9 +1,29 @@
 import React from 'react';
 import { Translate } from 'react-redux-i18n';
-import { Modal } from 'react-bootstrap';
+import { Modal, Button } from 'react-bootstrap';
 
 export default class TermsForm extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      isScrolled: false
+    };
+  }
+
+  componentDidMount() {
+    const wrappedElement = document.getElementById('box');
+    wrappedElement.addEventListener('scroll', (event) => {
+      const element = event.target;
+      if (element.scrollHeight - element.scrollTop === element.clientHeight) {
+        this.setState({
+          isScrolled: true
+        });
+      }
+    });
+  }
+
   render() {
+    const { isScrolled } = this.state;
     return (
       <div className="terms-form">
         <Modal.Header closeButton>
@@ -12,7 +32,7 @@ export default class TermsForm extends React.Component {
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <div className="terms-box">
+          <div className="terms-box" id="box">
             Le bitcoin vaudra 17 310 dollars le 17 janvier 2018, soit 1000 dollars de plus qu’aujourd’hui. C’est ce que prévoyait
             le Chicago Board Options Exchange (CBOE), dimanche 10 décembre, peu avant 21 heures locales, dans la foulée de
             l’inauguration du premier marché à terme sur la célèbre cryptomonnaie. Cette première a été très discrète, sans
@@ -44,6 +64,11 @@ export default class TermsForm extends React.Component {
             n’était pas une « monnaie rationnelle ». Il l’a comparé au « Continental », monnaie papier créée par les
             révolutionnaires américains en 1775 et qui finit par s’effondrer en 1782.
           </div>
+          {isScrolled && (
+            <Button type="submit" name="acceptTerms" className="button-submit button-dark terms-submit">
+              <Translate value="termsAndConditions.accept" />
+            </Button>
+          )}
         </Modal.Body>
       </div>
     );
