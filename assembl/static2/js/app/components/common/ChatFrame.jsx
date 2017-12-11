@@ -4,20 +4,18 @@ import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import lodashGet from 'lodash/get';
 
-const ChatFrameModal = ({ src }) => {
-  return (
-    <div className="chatframe-modal">
-      <div className="chatframe-modal-header">
-        <span className="chatframe-icon chatframe-modal-icon assembl-icon-robot" />
-        <Translate value="chatframe.title" />
-      </div>
-      <iframe className="chatframe-modal-iframe" title="chatframe" src={src} />
+const ChatFrameModal = ({ src }) => (
+  <div className="chatframe-modal">
+    <div className="chatframe-modal-header">
+      <span className="chatframe-icon chatframe-modal-icon assembl-icon-robot" />
+      <Translate value="chatframe.title" />
     </div>
-  );
-};
+    <iframe className="chatframe-modal-iframe" title="chatframe" src={src} />
+  </div>
+);
 
-const ChatFrameButton = ({ isOpen, toggle }) => {
-  return isOpen ? (
+const ChatFrameButton = ({ isOpen, toggle }) =>
+  (isOpen ? (
     <div onClick={toggle} className="chatframe-icon chatframe-button assembl-icon-cancel" />
   ) : (
     <OverlayTrigger
@@ -30,15 +28,11 @@ const ChatFrameButton = ({ isOpen, toggle }) => {
     >
       <div onClick={toggle} className="chatframe-icon chatframe-button assembl-icon-robot" />
     </OverlayTrigger>
-  );
-};
+  ));
 
 class DumbChatFrame extends React.Component {
-  toggle = () => {
-    return this.setState(({ isOpen }) => {
-      return { isOpen: !isOpen };
-    });
-  };
+  toggle = () => this.setState(({ isOpen }) => ({ isOpen: !isOpen }));
+
   render = () => {
     const { src } = this.props;
     if (!src) return null;
@@ -52,10 +46,8 @@ class DumbChatFrame extends React.Component {
   };
 }
 
-const ChatFrame = connect((state) => {
-  return {
-    src: lodashGet(state, 'debate.debateData.chatframe.src')
-  };
-})(DumbChatFrame);
+const ChatFrame = connect(state => ({
+  src: lodashGet(state, 'debate.debateData.chatframe.src')
+}))(DumbChatFrame);
 
 export default ChatFrame;
