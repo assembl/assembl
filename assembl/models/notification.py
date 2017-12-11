@@ -44,6 +44,7 @@ from .auth import (
 from .discussion import Discussion
 from .generic import Content
 from .post import Post, SynthesisPost
+from .auth import UserLanguagePreferenceCollection
 from assembl.semantic.virtuoso_mapping import QuadMapPatternS
 from assembl.semantic.namespaces import ASSEMBL
 
@@ -219,6 +220,11 @@ class NotificationSubscription(DiscussionBoundBase):
 
     def get_discussion_id(self):
         return self.discussion_id
+
+    def get_language_preferences(self):
+        if getattr(self, '_lang_pref', None) is None:
+            self._lang_pref = UserLanguagePreferenceCollection(self.user_id)
+        return self._lang_pref
 
     def class_description(self):
         return self.type.description
@@ -1087,11 +1093,12 @@ class NotificationOnPostCreated(NotificationOnPost):
     def get_notification_subject(self):
         loc = self.get_localizer()
         subject = "[" + self.first_matching_subscription.discussion.topic + "] "
+        langPrefs = self.first_matching_subscription.get_language_preferences()
         if isinstance(self.post, SynthesisPost):
             subject += loc.translate(_("SYNTHESIS: ")) \
-                + (self.post.publishes_synthesis.subject or "")
+                + (self.post.publishes_synthesis.subject.best_lang(langPrefs).value or "")
         else:
-            subject += (self.post.subject.first_original().value or "")
+            subject += (self.post.subject.best_lang(langPrefs).value or "")
         return subject
 
     def render_to_email_html_part(self):

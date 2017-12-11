@@ -147,9 +147,11 @@ def process_notification(notification):
             NotificationDeliveryStateType.DELIVERY_TEMPORARY_FAILURE
         sys.stderr.write("Invalid configuration!: " + repr(e))
     except Exception as e:
+        import traceback
+        traceback.print_exc()
         notification.delivery_state = \
             NotificationDeliveryStateType.DELIVERY_TEMPORARY_FAILURE
-        sys.stderr.write("Unkown Exception!: " + repr(e))
+        sys.stderr.write("Unknown Exception!: " + repr(e))
 
     mark_changed()
     sys.stderr.write(
