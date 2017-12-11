@@ -6,7 +6,6 @@ from graphene.relay import Node
 from graphene_sqlalchemy.converter import (convert_column_to_string,
                                            convert_sqlalchemy_type)
 from graphene_sqlalchemy.utils import get_query
-from sqlalchemy import desc
 from sqlalchemy.orm import contains_eager, joinedload, subqueryload
 
 from assembl import models
@@ -158,7 +157,7 @@ class Query(graphene.ObjectType):
         discussion = models.Discussion.get(discussion_id)
         return discussion.get_all_syntheses_query(
             include_unpublished=False).order_by(
-                desc(models.Synthesis.creation_date))
+                models.Synthesis.creation_date)
 
     def resolve_has_syntheses(self, args, context, info):
         discussion_id = context.matchdict['discussion_id']
