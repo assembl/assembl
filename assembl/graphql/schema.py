@@ -126,7 +126,8 @@ class Query(graphene.ObjectType):
             ).filter(model.id.in_(descendants_query)
             ).filter(
                 model.hidden == False,  # noqa: E712
-                model.sqla_type == 'idea'
+                model.sqla_type == 'idea',
+                model.tombstone_date == None  # noqa: E711
             ).options(
                 contains_eager(models.Idea.source_links),
                 subqueryload(models.Idea.attachments).joinedload("document"),
