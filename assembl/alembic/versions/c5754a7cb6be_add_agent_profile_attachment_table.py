@@ -1,14 +1,14 @@
 """Add agent_profile_attachment table
 
 Revision ID: c5754a7cb6be
-Revises: 91771ba48539
+Revises: c98a9b6f6b7f
 Create Date: 2017-12-06 13:32:59.251003
 
 """
 
 # revision identifiers, used by Alembic.
 revision = 'c5754a7cb6be'
-down_revision = '91771ba48539'
+down_revision = 'c98a9b6f6b7f'
 
 from alembic import context, op
 import sqlalchemy as sa
