@@ -2,12 +2,7 @@ import React from 'react';
 import { Translate } from 'react-redux-i18n';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { connect } from 'react-redux';
-
-const varPath = (root, path) => {
-  return path.split('.').reduce((value, nextKey) => {
-    return value && value[nextKey];
-  }, root);
-};
+import lodashGet from 'lodash/get';
 
 class DumbChatFrame extends React.Component {
   static Modal = ({ src }) => {
@@ -22,9 +17,10 @@ class DumbChatFrame extends React.Component {
     );
   };
   static Button = ({ isOpen, toggle }) => {
-    return isOpen
-      ? <div onClick={toggle} className="chatframe-icon chatframe-button assembl-icon-cancel" />
-      : <OverlayTrigger
+    return isOpen ? (
+      <div onClick={toggle} className="chatframe-icon chatframe-button assembl-icon-cancel" />
+    ) : (
+      <OverlayTrigger
         placement="left"
         overlay={
           <Tooltip id="chatframe-tooltip">
@@ -33,7 +29,8 @@ class DumbChatFrame extends React.Component {
         }
       >
         <div onClick={toggle} className="chatframe-icon chatframe-button assembl-icon-robot" />
-      </OverlayTrigger>;
+      </OverlayTrigger>
+    );
   };
   toggle = () => {
     return this.setState(({ isOpen }) => {
@@ -43,7 +40,7 @@ class DumbChatFrame extends React.Component {
   render = () => {
     const { src } = this.props;
     if (!src) return null;
-    const isOpen = varPath(this, 'state.isOpen');
+    const isOpen = lodashGet(this, 'state.isOpen');
     const { Modal, Button } = DumbChatFrame;
     return (
       <div className="chatframe">
@@ -56,7 +53,7 @@ class DumbChatFrame extends React.Component {
 
 const ChatFrame = connect((state) => {
   return {
-    src: varPath(state, 'debate.debateData.chatframe.src')
+    src: lodashGet(state, 'debate.debateData.chatframe.src')
   };
 })(DumbChatFrame);
 
