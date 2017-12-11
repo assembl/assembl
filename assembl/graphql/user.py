@@ -81,7 +81,7 @@ class UpdateUser(graphene.Mutation):
         allowed = user.user_can(
             user_id, CrudPermissions.UPDATE, permissions)
         if not allowed:
-            raise HTTPUnauthorized()
+            raise HTTPUnauthorized("The authenticated user can't update this user")
 
         with cls.default_db.no_autoflush as db:
             user.username_p = args.get('username')
@@ -107,8 +107,18 @@ class UpdateUser(graphene.Mutation):
                     if att.attachmentPurpose == 'PROFILE_PICTURE']
                 if images:
                     image = images[0]
+                    allowed = image.user_can(
+                        user_id, CrudPermissions.DELETE, permissions)
+                    if not allowed:
+                        raise HTTPUnauthorized("The authenticated user can't delete the existing AgentProfileAttachment")
+
                     db.delete(image.document)
                     user.profile_attachments.remove(image)
+
+                allowed = models.AgentProfileAttachment.user_can_cls(
+                    user_id, CrudPermissions.CREATE, permissions)
+                if not allowed:
+                    raise HTTPUnauthorized("The authenticated user can't create an AgentProfileAttachment")
 
                 models.AgentProfileAttachment(
                     document=document,
