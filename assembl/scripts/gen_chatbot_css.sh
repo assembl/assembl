@@ -85,7 +85,7 @@ echo "\
     color: ${botTextColor};
 }
 
-.chat-right .chat-body .chat-content {
+.chats .chat.chat-right .chat-body .chat-content {
     background-color: ${humanBackgroundColor} !important;
     color: ${humanTextColor};
 }
