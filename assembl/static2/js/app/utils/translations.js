@@ -293,7 +293,8 @@ const Translations = {
     },
     termsAndConditions: {
       headerTitle: "Conditions générales d'utilisation",
-      accept: "J'accepte les "
+      iAccept: "J'accepte les ",
+      accept: "Accepter les Conditions générales d'utilisation"
     },
     legalNotice: {
       headerTitle: "Mentions légales"
@@ -684,7 +685,8 @@ const Translations = {
     },
     termsAndConditions: {
       headerTitle: "Terms & Conditions",
-      accept: "I accept the "
+      iAccept: "I accept the ",
+      accept: "Accept the Terms & Conditions"
     },
     legalNotice: {
       headerTitle: "Legal Notice"
