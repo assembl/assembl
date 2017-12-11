@@ -8,6 +8,7 @@ import { fetchDebateData } from './actions/debateActions';
 import { addContext } from './actions/contextActions';
 import Loader from './components/common/loader';
 import Error from './components/common/error';
+import ChatFrame from './components/common/ChatFrame';
 
 class App extends React.Component {
   constructor(props) {
@@ -31,6 +32,7 @@ class App extends React.Component {
     const { debateData, debateLoading, debateError } = this.props.debate;
     return (
       <div className="app">
+        <ChatFrame />
         {debateLoading && <Loader />}
         {debateData && <div className="app-child">{this.props.children}</div>}
         {debateError && <Error errorMessage={debateError} />}

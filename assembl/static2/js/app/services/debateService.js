@@ -12,6 +12,7 @@ export const buildDebateData = (debateData, prefs, timeline, socialShare) => {
   const video = prefs.extra_json && prefs.extra_json.video ? prefs.extra_json.video : null;
   const twitter = prefs.extra_json && prefs.extra_json.twitter ? prefs.extra_json.twitter : null;
   const chatbot = prefs.extra_json && prefs.extra_json.chatbot ? prefs.extra_json.chatbot : null;
+  const chatframe = prefs.extra_json && prefs.extra_json.chatframe ? prefs.extra_json.chatframe : null;
   const partners = prefs.extra_json && prefs.extra_json.partners ? prefs.extra_json.partners : null;
   const socialMedias = prefs.extra_json && prefs.extra_json.socialMedias ? prefs.extra_json.socialMedias : null;
   const sortedTimeline = timeline.length > 0 ? getSortedArrayByKey(timeline, 'start') : null;
@@ -46,6 +47,7 @@ export const buildDebateData = (debateData, prefs, timeline, socialShare) => {
     socialMedias: socialMedias,
     twitter: twitter,
     chatbot: chatbot,
+    chatframe: chatframe,
     partners: partners,
     useSocialMedia: socialShare
   };
