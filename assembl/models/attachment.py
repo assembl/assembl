@@ -1,4 +1,5 @@
 """Documents attached to other objects, whether hosted externally or internally"""
+import enum
 from sqlalchemy import (
     Column,
     UniqueConstraint,
@@ -30,6 +31,15 @@ from .resource import Resource
 from .auth import (
     AgentProfile, CrudPermissions, P_READ, P_ADMIN_DISC, P_ADD_POST,
     P_SYSADMIN, P_EDIT_POST, P_ADD_IDEA, P_EDIT_IDEA, P_MANAGE_RESOURCE)
+
+
+class AttachmentPurpose(enum.Enum):
+
+    DOCUMENT = 'DOCUMENT'  # used for resources center
+    EMBED_ATTACHMENT = 'EMBED_ATTACHMENT'
+    IMAGE = 'IMAGE'  # used for resources center
+    PROFILE_PICTURE = 'PROFILE_PICTURE'
+    RESOURCES_CENTER_HEADER_IMAGE = 'RESOURCES_CENTER_HEADER_IMAGE'
 
 
 class Document(DiscussionBoundBase):

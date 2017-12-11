@@ -48,13 +48,15 @@ class Resource(SecureObjectType, SQLAlchemyObjectType):
         return resolve_langstring_entries(self, 'text')
 
     def resolve_image(self, args, context, info):
+        ATTACHMENT_PURPOSE_IMAGE = models.AttachmentPurpose.IMAGE.value
         for attachment in self.attachments:
-            if attachment.attachmentPurpose == 'IMAGE':
+            if attachment.attachmentPurpose == ATTACHMENT_PURPOSE_IMAGE:
                 return attachment.document
 
     def resolve_doc(self, args, context, info):
+        ATTACHMENT_PURPOSE_DOCUMENT = models.AttachmentPurpose.DOCUMENT.value
         for attachment in self.attachments:
-            if attachment.attachmentPurpose == 'DOCUMENT':
+            if attachment.attachmentPurpose == ATTACHMENT_PURPOSE_DOCUMENT:
                 return attachment.document
 
 
@@ -73,6 +75,8 @@ class CreateResource(graphene.Mutation):
     @staticmethod
     @abort_transaction_on_exception
     def mutate(root, args, context, info):
+        ATTACHMENT_PURPOSE_IMAGE = models.AttachmentPurpose.IMAGE.value
+        ATTACHMENT_PURPOSE_DOCUMENT = models.AttachmentPurpose.DOCUMENT.value
         cls = models.Resource
         discussion_id = context.matchdict['discussion_id']
         discussion = models.Discussion.get(discussion_id)
@@ -126,7 +130,7 @@ class CreateResource(graphene.Mutation):
                     discussion=discussion,
                     creator_id=context.authenticated_userid,
                     title=filename,
-                    attachmentPurpose="IMAGE"
+                    attachmentPurpose=ATTACHMENT_PURPOSE_IMAGE
                 )
 
             doc = args.get('doc')
@@ -147,7 +151,7 @@ class CreateResource(graphene.Mutation):
                     discussion=discussion,
                     creator_id=context.authenticated_userid,
                     title=filename,
-                    attachmentPurpose="DOCUMENT"
+                    attachmentPurpose=ATTACHMENT_PURPOSE_DOCUMENT
                 )
 
             db.flush()
@@ -196,6 +200,8 @@ class UpdateResource(graphene.Mutation):
     @staticmethod
     @abort_transaction_on_exception
     def mutate(root, args, context, info):
+        ATTACHMENT_PURPOSE_IMAGE = models.AttachmentPurpose.IMAGE.value
+        ATTACHMENT_PURPOSE_DOCUMENT = models.AttachmentPurpose.DOCUMENT.value
         cls = models.Resource
         discussion_id = context.matchdict['discussion_id']
         discussion = models.Discussion.get(discussion_id)
@@ -248,7 +254,7 @@ class UpdateResource(graphene.Mutation):
                 # associated document
                 images = [
                     att for att in resource.attachments
-                    if att.attachmentPurpose == 'IMAGE']
+                    if att.attachmentPurpose == ATTACHMENT_PURPOSE_IMAGE]
                 if images:
                     image = images[0]
                     db.delete(image.document)
@@ -260,7 +266,7 @@ class UpdateResource(graphene.Mutation):
                     resource=resource,
                     creator_id=context.authenticated_userid,
                     title=filename,
-                    attachmentPurpose="IMAGE"
+                    attachmentPurpose=ATTACHMENT_PURPOSE_IMAGE
                 )
 
         # add uploaded doc as an attachment to the resource
@@ -280,7 +286,7 @@ class UpdateResource(graphene.Mutation):
             # associated document
             docs = [
                 att for att in resource.attachments
-                if att.attachmentPurpose == 'DOCUMENT']
+                if att.attachmentPurpose == ATTACHMENT_PURPOSE_DOCUMENT]
             if docs:
                 doc = docs[0]
                 db.delete(doc.document)
@@ -292,7 +298,7 @@ class UpdateResource(graphene.Mutation):
                 resource=resource,
                 creator_id=context.authenticated_userid,
                 title=filename,
-                attachmentPurpose="DOCUMENT"
+                attachmentPurpose=ATTACHMENT_PURPOSE_DOCUMENT
             )
 
             db.flush()

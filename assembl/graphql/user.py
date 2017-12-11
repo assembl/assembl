@@ -50,8 +50,9 @@ class AgentProfile(SecureObjectType, SQLAlchemyObjectType):
             return self.get_preferred_email()
 
     def resolve_image(self, args, context, info):
+        PROFILE_PICTURE = models.AttachmentPurpose.PROFILE_PICTURE.value
         for attachment in self.profile_attachments:
-            if attachment.attachmentPurpose == 'PROFILE_PICTURE':
+            if attachment.attachmentPurpose == PROFILE_PICTURE:
                 return attachment.document
 
 
@@ -68,6 +69,7 @@ class UpdateUser(graphene.Mutation):
     @staticmethod
     @abort_transaction_on_exception
     def mutate(root, args, context, info):
+        PROFILE_PICTURE = models.AttachmentPurpose.PROFILE_PICTURE.value
         cls = models.User
         discussion_id = context.matchdict['discussion_id']
         discussion = models.Discussion.get(discussion_id)
@@ -104,7 +106,7 @@ class UpdateUser(graphene.Mutation):
                 # associated document
                 images = [
                     att for att in user.profile_attachments
-                    if att.attachmentPurpose == 'PROFILE_PICTURE']
+                    if att.attachmentPurpose == PROFILE_PICTURE]
                 if images:
                     image = images[0]
                     allowed = image.user_can(
@@ -126,7 +128,7 @@ class UpdateUser(graphene.Mutation):
                     user=user,
                     creator_id=context.authenticated_userid,
                     title=filename,
-                    attachmentPurpose="PROFILE_PICTURE"
+                    attachmentPurpose=PROFILE_PICTURE
                 )
 
             db.flush()
