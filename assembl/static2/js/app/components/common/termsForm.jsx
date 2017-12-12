@@ -1,6 +1,7 @@
 import React from 'react';
 import { Translate } from 'react-redux-i18n';
 import { Modal, Button } from 'react-bootstrap';
+import { closeModal } from '../../utils/utilityManager';
 
 export default class TermsForm extends React.Component {
   constructor(props) {
@@ -8,6 +9,7 @@ export default class TermsForm extends React.Component {
     this.state = {
       isScrolled: false
     };
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   componentDidMount() {
@@ -20,6 +22,11 @@ export default class TermsForm extends React.Component {
         });
       }
     });
+  }
+
+  handleSubmit() {
+    this.props.handleAcceptButton();
+    closeModal();
   }
 
   render() {
@@ -65,7 +72,12 @@ export default class TermsForm extends React.Component {
             révolutionnaires américains en 1775 et qui finit par s’effondrer en 1782.
           </div>
           {isScrolled && (
-            <Button type="submit" name="acceptTerms" className="button-submit button-dark terms-submit">
+            <Button
+              type="submit"
+              name="acceptTerms"
+              className="button-submit button-dark terms-submit"
+              onClick={this.handleSubmit}
+            >
               <Translate value="termsAndConditions.accept" />
             </Button>
           )}

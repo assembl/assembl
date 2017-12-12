@@ -24,6 +24,7 @@ class SignupForm extends React.Component {
     this.signupHandler = this.signupHandler.bind(this);
     this.handleInput = this.handleInput.bind(this);
     this.toggleCheck = this.toggleCheck.bind(this);
+    this.handleAcceptButton = this.handleAcceptButton.bind(this);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -68,6 +69,10 @@ class SignupForm extends React.Component {
     this.setState({ checked: !this.state.checked });
   }
 
+  handleAcceptButton() {
+    this.setState({ checked: true });
+  }
+
   render() {
     const slug = getDiscussionSlug();
     return (
@@ -110,7 +115,7 @@ class SignupForm extends React.Component {
                 <a
                   onClick={(e) => {
                     e.preventDefault();
-                    const Terms = <TermsForm />;
+                    const Terms = <TermsForm handleAcceptButton={this.handleAcceptButton} />;
                     displayCustomModal(Terms);
                   }}
                 >
