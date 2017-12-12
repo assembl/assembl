@@ -1,7 +1,18 @@
 // @flow
 import React from 'react';
 
-import type { Attachment } from './attachments';
+export type Document = {
+  id: string,
+  title?: string,
+  externalUrl: string,
+  mimeType?: string,
+  file?: File
+};
+
+export type Attachment = {
+  entityKey: string,
+  document: Document
+};
 
 type EditAttachmentsProps = {
   attachments: Array<Attachment>,

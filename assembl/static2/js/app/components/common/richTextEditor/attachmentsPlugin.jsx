@@ -2,7 +2,7 @@
 /* draft-js plugin for attachment management */
 import { convertFromRaw, convertToRaw, Entity, Modifier, RawContentState, SelectionState } from 'draft-js';
 import type { ContentBlock, ContentState } from 'draft-js';
-import type { Attachment, Document } from '../attachments';
+import type { Attachment, Document } from '../editAttachments';
 import { getExtension, getIconPath } from '../documentExtensionIcon';
 
 const ENTITY_TYPE = 'document';
