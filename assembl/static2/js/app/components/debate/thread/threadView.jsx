@@ -3,7 +3,8 @@ import { Grid } from 'react-bootstrap';
 import Permissions, { connectedUserCan } from '../../../utils/permissions';
 import TopPostFormContainer from '../../../components/debate/common/topPostFormContainer';
 import Tree from '../../../components/common/tree';
-import Post, { PostFolded } from '../../../components/debate/thread/post';
+import Post from '../common/post';
+import FoldedPost from '../common/post/foldedPost';
 import InfiniteSeparator from '../../../components/common/infiniteSeparator';
 import { getIfPhaseCompletedByIdentifier } from '../../../utils/timeline';
 
@@ -36,7 +37,7 @@ class ThreadView extends React.Component {
                 data={posts}
                 initialRowIndex={initialRowIndex}
                 InnerComponent={Post}
-                InnerComponentFolded={PostFolded}
+                InnerComponentFolded={FoldedPost}
                 noRowsRenderer={noRowsRenderer}
                 SeparatorComponent={InfiniteSeparator}
                 identifier={identifier}

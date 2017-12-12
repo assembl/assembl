@@ -1,13 +1,13 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`PostFolded component should render a folded post 1`] = `
+exports[`FoldedPost component should render a folded post 1`] = `
 <Translate
   count={1}
   value="debate.thread.foldedPostLink"
 />
 `;
 
-exports[`PostFolded component should render several folded posts 1`] = `
+exports[`FoldedPost component should render several folded posts 1`] = `
 <Translate
   count={3}
   value="debate.thread.foldedPostLink"

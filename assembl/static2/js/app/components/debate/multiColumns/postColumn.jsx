@@ -4,7 +4,7 @@ import React from 'react';
 import Tree from '../../common/tree';
 import ColumnHeader from './columnHeader';
 import ColumnsPost from '../../../components/debate/multiColumns/columnsPost';
-import { PostFolded } from '../../../components/debate/thread/post';
+import FoldedPost from '../common/post/foldedPost';
 import BoxWithHyphen from '../../common/boxWithHyphen';
 
 const Separator = () => <div style={{ height: '25px' }} />;
@@ -75,7 +75,7 @@ const PostColumn = ({
           initialRowIndex={initialRowIndex}
           noRowsRenderer={noRowsRenderer}
           InnerComponent={ColumnsPost}
-          InnerComponentFolded={PostFolded}
+          InnerComponentFolded={FoldedPost}
           SeparatorComponent={Separator}
           identifier={identifier}
         />
