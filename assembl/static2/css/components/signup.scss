@@ -2,6 +2,7 @@
   .terms-link {
     cursor: pointer;
     text-decoration: underline;
+    color: $second-color;
 
     &:hover {
       text-decoration: none;
