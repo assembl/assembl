@@ -3,6 +3,7 @@ import { I18n } from 'react-redux-i18n';
 
 import PostColumn from './postColumn';
 import { orderPostsByMessageClassifier } from './utils';
+import { getIfPhaseCompletedByIdentifier } from '../../../utils/timeline';
 
 const MultiColumns = ({
   messageColumns,
@@ -29,9 +30,12 @@ const MultiColumns = ({
           synthesisBody: col.header || I18n.t('multiColumns.synthesis.noSynthesisYet'),
           hyphenStyle: { borderTopColor: col.color }
         };
+        const isPhaseCompleted = getIfPhaseCompletedByIdentifier(debateData.timeline, identifier);
+        const canEditPosts = !isPhaseCompleted && col.header.length === 0;
         return (
           <PostColumn
             key={classifier}
+            canEditPosts={canEditPosts}
             synthesisProps={synthesisProps}
             width={width}
             contentLocaleMapping={contentLocaleMapping}

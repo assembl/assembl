@@ -6,7 +6,6 @@ import ColumnHeader from './columnHeader';
 import ColumnsPost from '../../../components/debate/multiColumns/columnsPost';
 import { PostFolded } from '../../../components/debate/thread/post';
 import BoxWithHyphen from '../../common/boxWithHyphen';
-import { getIfPhaseCompletedByIdentifier, type Timeline } from '../../../utils/timeline';
 
 const Separator = () => <div style={{ height: '25px' }} />;
 
@@ -32,6 +31,7 @@ const Synthesis = ({
 );
 
 const PostColumn = ({
+  canEditPosts,
   color,
   classifier,
   title,
@@ -44,9 +44,9 @@ const PostColumn = ({
   noRowsRenderer,
   ideaId,
   refetchIdea,
-  identifier,
-  debateData
+  identifier
 }: {
+  canEditPosts: boolean,
   color: string,
   classifier: string,
   title: string,
@@ -59,35 +59,31 @@ const PostColumn = ({
   noRowsRenderer: Function,
   ideaId: string,
   refetchIdea: Function,
-  identifier: string,
-  debateData: { timeline: Timeline }
-}) => {
-  const isPhaseCompleted = getIfPhaseCompletedByIdentifier(debateData.timeline, identifier);
-  return (
-    <div className="column-view" style={{ width: width }}>
-      {!isPhaseCompleted ? (
-        <ColumnHeader color={color} classifier={classifier} title={title} ideaId={ideaId} refetchIdea={refetchIdea} />
-      ) : null}
-      {synthesisProps && <Synthesis {...synthesisProps} />}
-      <div className="column-tree">
-        {data.length > 0 ? (
-          <Tree
-            contentLocaleMapping={contentLocaleMapping}
-            lang={lang}
-            data={data || []}
-            initialRowIndex={initialRowIndex}
-            noRowsRenderer={noRowsRenderer}
-            InnerComponent={ColumnsPost}
-            InnerComponentFolded={PostFolded}
-            SeparatorComponent={Separator}
-            identifier={identifier}
-          />
-        ) : (
-          noRowsRenderer()
-        )}
-      </div>
+  identifier: string
+}) => (
+  <div className="column-view" style={{ width: width }}>
+    {canEditPosts && (
+      <ColumnHeader color={color} classifier={classifier} title={title} ideaId={ideaId} refetchIdea={refetchIdea} />
+    )}
+    {synthesisProps && <Synthesis {...synthesisProps} />}
+    <div className="column-tree">
+      {data.length > 0 ? (
+        <Tree
+          contentLocaleMapping={contentLocaleMapping}
+          lang={lang}
+          data={data || []}
+          initialRowIndex={initialRowIndex}
+          noRowsRenderer={noRowsRenderer}
+          InnerComponent={ColumnsPost}
+          InnerComponentFolded={PostFolded}
+          SeparatorComponent={Separator}
+          identifier={identifier}
+        />
+      ) : (
+        noRowsRenderer()
+      )}
     </div>
-  );
-};
+  </div>
+);
 
 export default PostColumn;
