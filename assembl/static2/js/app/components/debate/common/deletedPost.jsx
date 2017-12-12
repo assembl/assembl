@@ -4,9 +4,10 @@ import { Translate } from 'react-redux-i18n';
 import { Row, Col } from 'react-bootstrap';
 
 type DeletedByType = 'user' | 'admin';
+
 type DeletedPostProps = {
   id: string,
-  subject: string,
+  subject: React.Element<*>,
   deletedBy: DeletedByType
 };
 
