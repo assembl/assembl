@@ -1,0 +1,6 @@
+fragment Document on Document {
+  id
+  title
+  externalUrl
+  mimeType
+}

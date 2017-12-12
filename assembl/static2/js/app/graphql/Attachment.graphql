@@ -1,0 +1,7 @@
+#import "./Document.graphql"
+fragment Attachment on PostAttachment {
+  id
+  document {
+    ...Document
+  }
+}

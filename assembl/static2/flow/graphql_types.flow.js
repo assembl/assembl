@@ -20,6 +20,8 @@ export type LangStringEntryInput = {|
   localeCode: string
 |};
 
+export type SectionTypesEnum = 'ADMINISTRATION' | 'CUSTOM' | 'DEBATE' | 'HOMEPAGE' | 'RESOURCES_CENTER' | 'SYNTHESES';
+
 export type QuestionInput = {|
   id?: ?string,
   titleEntries: Array<?LangStringEntryInput>
@@ -139,6 +141,7 @@ export type IdeaQuery = {|
     | {}
     | {}
     | {}
+    | {}
     | {})
 |};
 
@@ -189,6 +192,7 @@ export type IdeaWithPostsQuery = {|
           |}>
         |}
       }
+    | {}
     | {}
     | {}
     | {}
@@ -268,7 +272,7 @@ export type PostQuery = {|
           // The ID of the object.
           id: string,
           userId: number,
-          name: ?string
+          displayName: ?string
         |},
         modificationDate: ?any,
         bodyMimeType: string,
@@ -288,6 +292,7 @@ export type PostQuery = {|
           |}
         |}>
       }
+    | {}
     | {}
     | {}
     | {}
@@ -360,7 +365,12 @@ export type RootIdeaStatsQuery = {|
         numPosts: ?number
       }),
   totalSentiments: ?number,
-  numParticipants: ?number
+  numParticipants: ?number,
+  visitsAnalytics: ?{|
+    sumVisitsLength: ?number,
+    nbPageviews: ?number,
+    nbUniqPageviews: ?number
+  |}
 |};
 
 export type RootIdeasQueryQueryVariables = {|
@@ -383,6 +393,27 @@ export type RootIdeasQueryQuery = {|
         |}>
       }
     | {})
+|};
+
+export type SectionsQueryQueryVariables = {|
+  lang?: ?string
+|};
+
+export type SectionsQueryQuery = {|
+  hasResourcesCenter: ?boolean,
+  hasSyntheses: ?boolean,
+  sections: ?Array<?{|
+    // The ID of the object.
+    id: string,
+    sectionType: string,
+    order: number,
+    title: ?string,
+    titleEntries: ?Array<?{|
+      value: ?string,
+      localeCode: string
+    |}>,
+    url: ?string
+  |}>
 |};
 
 export type SynthesesQueryQueryVariables = {|
@@ -498,6 +529,10 @@ export type SynthesisQueryQuery = {|
     | {
         // The ID of the object.
         id: string
+      }
+    | {
+        // The ID of the object.
+        id: string
       })
 |};
 
@@ -509,7 +544,10 @@ export type TabsConditionQuery = {|
   hasResourcesCenter: ?boolean,
   hasSyntheses: ?boolean,
   hasLegalNotice: ?boolean,
-  hasTermsAndConditions: ?boolean
+  hasTermsAndConditions: ?boolean,
+  discussion: ?{|
+    homepageUrl: ?string
+  |}
 |};
 
 export type ThematicQueryQueryVariables = {|
@@ -558,6 +596,7 @@ export type ThematicQueryQuery = {|
           |}
         |}>
       }
+    | {}
     | {}
     | {})
 |};
@@ -670,7 +709,7 @@ export type createPostMutation = {|
         // The ID of the object.
         id: string,
         userId: number,
-        name: ?string
+        displayName: ?string
       |},
       modificationDate: ?any,
       bodyMimeType: string,
@@ -716,6 +755,27 @@ export type createResourceMutation = {|
       |},
       text: ?string,
       title: ?string
+    |}
+  |}
+|};
+
+export type createSectionMutationVariables = {|
+  sectionType?: ?SectionTypesEnum,
+  url?: ?string,
+  titleEntries: Array<?LangStringEntryInput>,
+  order?: ?number,
+  lang?: ?string
+|};
+
+export type createSectionMutation = {|
+  createSection: ?{|
+    section: ?{|
+      // The ID of the object.
+      id: string,
+      sectionType: string,
+      url: ?string,
+      title: ?string,
+      order: number
     |}
   |}
 |};
@@ -770,6 +830,16 @@ export type deleteResourceMutationVariables = {|
 
 export type deleteResourceMutation = {|
   deleteResource: ?{|
+    success: ?boolean
+  |}
+|};
+
+export type deleteSectionMutationVariables = {|
+  sectionId: string
+|};
+
+export type deleteSectionMutation = {|
+  deleteSection: ?{|
     success: ?boolean
   |}
 |};
@@ -877,7 +947,7 @@ export type updatePostMutation = {|
         // The ID of the object.
         id: string,
         userId: number,
-        name: ?string
+        displayName: ?string
       |},
       modificationDate: ?any,
       bodyMimeType: string,
@@ -946,6 +1016,27 @@ export type UpdateResourcesCenterMutation = {|
   |}
 |};
 
+export type updateSectionMutationVariables = {|
+  id: string,
+  url?: ?string,
+  titleEntries: Array<?LangStringEntryInput>,
+  order?: ?number,
+  lang?: ?string
+|};
+
+export type updateSectionMutation = {|
+  updateSection: ?{|
+    section: ?{|
+      // The ID of the object.
+      id: string,
+      url: ?string,
+      title: ?string,
+      sectionType: string,
+      order: number
+    |}
+  |}
+|};
+
 export type updateThematicMutationVariables = {|
   id: string,
   identifier: string,
@@ -978,6 +1069,24 @@ export type updateThematicMutation = {|
   |}
 |};
 
+export type UpdateUserMutationVariables = {|
+  id: string,
+  name: string,
+  username?: ?string
+|};
+
+export type UpdateUserMutation = {|
+  updateUser: ?{|
+    user: ?{|
+      // The ID of the object.
+      id: string,
+      name: ?string,
+      username: ?string,
+      displayName: ?string
+    |}
+  |}
+|};
+
 export type uploadDocumentMutationVariables = {|
   file: string
 |};
@@ -993,11 +1102,55 @@ export type uploadDocumentMutation = {|
   |}
 |};
 
+export type UserQueryVariables = {|
+  id: string
+|};
+
+export type UserQuery = {|
+  // The ID of the object
+  user: ?(
+    | {}
+    | {}
+    | {
+        // The ID of the object.
+        id: string,
+        name: ?string,
+        username: ?string,
+        displayName: ?string,
+        email: ?string
+      }
+    | {}
+    | {}
+    | {}
+    | {}
+    | {}
+    | {}
+    | {}
+    | {})
+|};
+
 export type AgentProfileInfoFragment = {|
   // The ID of the object.
   id: string,
   userId: number,
-  name: ?string
+  displayName: ?string
+|};
+
+export type AttachmentFragment = {|
+  id: string,
+  document: ?{|
+    id: string,
+    title: ?string,
+    externalUrl: ?string,
+    mimeType: ?string
+  |}
+|};
+
+export type DocumentFragment = {|
+  id: string,
+  title: ?string,
+  externalUrl: ?string,
+  mimeType: ?string
 |};
 
 export type IdeaMessageColumnFragment = {|
@@ -1041,7 +1194,7 @@ export type PostFragment = {|
     // The ID of the object.
     id: string,
     userId: number,
-    name: ?string
+    displayName: ?string
   |},
   modificationDate: ?any,
   bodyMimeType: string,
