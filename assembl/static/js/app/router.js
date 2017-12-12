@@ -38,6 +38,8 @@ var Router = Marionette.AppRouter.extend({
     "posts/*id": "post",
     "idea/*id": "idea",
     "widget/:id(/:result)": "widgetInModal",
+    "vote": "voteWidgetFromV2",
+    "vote/:id(/:result)": "voteWidgetFromV2",
     "profile/*id": "user",
     "G/*path": "groupSpec",
     "*actions": "defaults"

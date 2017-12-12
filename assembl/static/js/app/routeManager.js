@@ -386,6 +386,43 @@ var routeManager = Marionette.Object.extend({
     });
   },
 
+  voteWidgetFromV2: function(id, arg) {
+    Assembl.headerRegions.show(new NavBar());
+
+    var that = this;
+    var collectionManager = CollectionManager(); 
+    var widgetPromise = collectionManager.getAllWidgetsPromise()
+      .then(function(allWidgetsCollection) {
+        var widgetFromCollection;
+        if (!id){
+          widgetFromCollection = allWidgetsCollection.findWhere({
+            "@type": "TokenVotingWidget"
+          });
+        }
+        else {
+          id = "local:Widget/" + id;
+          widgetFromCollection = allWidgetsCollection.get(id);
+        }
+
+        return Promise.resolve(widgetFromCollection)
+          .catch(function(e) {
+            console.error(e.statusText);
+          });
+      });
+    widgetPromise.then(function(widget){
+      var CurrentWidgetView;
+      var Views = require('./views/tokenVoteSession.js');
+      if ((arg) && (arg === 'result')){
+        CurrentWidgetView = Views.TokenVoteSessionResultModal
+      }
+      else {
+        CurrentWidgetView = Views.TokenVoteSessionModal
+      }
+      var instanciatedView = new CurrentWidgetView({model: widget});
+      Assembl.groupContainer.show(instanciatedView);
+    });
+  },
+
   about: function() {
       this.restoreViews(undefined, undefined, true).then(function(groups) {
         var firstGroup = groups.children.first();
