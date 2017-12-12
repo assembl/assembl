@@ -41,7 +41,7 @@ const DebateHome = (props) => {
   case 'multiColumns':
     return <DebateThread {...props} />;
   case 'tokenVote':
-    return <Debate {...props} />;
+    return <TokenVote {...props} />;
   default:
     return <Debate {...props} />;
   }

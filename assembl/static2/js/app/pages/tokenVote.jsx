@@ -1,8 +1,12 @@
 import React from 'react';
+import { get } from '../utils/routeMap';
+import { getDiscussionSlug } from '../utils/globalFunctions';
 
 class TokenVote extends React.Component {
   render() {
-    return <div>Token Vote Module</div>;
+    const routeArgs = { slug: getDiscussionSlug() };
+    window.location = get('oldVote', routeArgs);
+    return <div />;
   }
 }
 

@@ -2,6 +2,7 @@
   "oldLogout": "legacy/logout",
   "oldLogin": "legacy/login",
   "oldDebate": "debate/${slug}",
+  "oldVote": "debate/${slug}/vote",
   "oldProfile": "debate/${slug}/user/profile",
   "graphql": "${slug}/graphql",
   "styleguide": "styleguide",
