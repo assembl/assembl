@@ -9,6 +9,8 @@ The core fixtures that will:
     7) A fixture for a headless browser
 """
 
+from datetime import datetime
+
 import pytest
 import transaction
 from webtest import TestApp
@@ -163,7 +165,7 @@ def admin_user(request, test_session):
 
     from assembl.models import User, UserRole, Role
     u = User(name=u"Mr. Administrator", type="user",
-        verified=True)
+        verified=True, last_assembl_login=datetime.utcnow())
     from assembl.models import EmailAccount
     account = EmailAccount(email="admin@assembl.com", profile=u, verified=True)
 

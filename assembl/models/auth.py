@@ -378,7 +378,12 @@ class AgentProfile(Base):
         """Get login expiry date. May be None.
         Only use within request."""
         from assembl.auth.util import get_current_discussion
-        return self.login_expiry(get_current_discussion())
+        discussion = None
+        try:
+            discussion = get_current_discussion()
+        except Exception as e:
+            pass
+        return self.login_expiry(discussion)
 
     def login_expiry(self, discussion):
         accounts = [a for a in self.social_accounts if a.verified]

@@ -1,3 +1,5 @@
+from datetime import datetime
+
 import pytest
 
 from assembl.auth import R_MODERATOR, R_PARTICIPANT
@@ -9,7 +11,7 @@ def participant1_user(request, test_session, discussion):
 
     from assembl.models import User, UserRole, Role, EmailAccount
     u = User(name=u"A. Barking Loon", type="user", password="password",
-             verified=True)
+             verified=True, last_assembl_login=datetime.utcnow())
     email = EmailAccount(email="abloon@gmail.com", profile=u, verified=True)
     test_session.add(u)
     r = Role.get_role(R_PARTICIPANT, test_session)
@@ -31,7 +33,8 @@ def participant2_user(request, test_session):
     """A User fixture with R_PARTICIPANT role"""
 
     from assembl.models import User, UserRole, Role
-    u = User(name=u"James T. Expert", type="user")
+    u = User(name=u"James T. Expert", type="user",
+             last_assembl_login=datetime.utcnow())
     test_session.add(u)
     r = Role.get_role(R_PARTICIPANT, test_session)
     ur = UserRole(user=u, role=r)
@@ -54,7 +57,8 @@ def discussion_admin_user(request, test_app, test_session, discussion):
     from assembl.models import User
     from assembl.models.auth import Role, LocalUserRole
 
-    u = User(name=u"Maximilien de Robespierre", type="user")
+    u = User(name=u"Maximilien de Robespierre", type="user",
+             last_assembl_login=datetime.utcnow())
     test_session.add(u)
 
     asid = u.create_agent_status_in_discussion(discussion)
@@ -80,7 +84,8 @@ def moderator_user(request, test_session, discussion):
 
     from assembl.models import User, UserRole, Role, EmailAccount
     u = User(
-        name=u"Jane Doe", type="user", password="password", verified=True)
+        name=u"Jane Doe", type="user", password="password", verified=True,
+        last_assembl_login=datetime.utcnow())
     email = EmailAccount(email="janedoe@example.com", profile=u, verified=True)
     test_session.add(u)
     r = Role.get_role(R_MODERATOR, test_session)
