@@ -63,6 +63,8 @@ Explanation of each permission
 -  ``edit_extract``: Allows editing everyone’s extracts
 -  ``delete_my_post``: Allows a user to delete their own message. It will show as "This message has been deleted by its author" if the "Show deleted messages" or the "Show also deleted messages" filter is active, or if the message has a non-deleted direct or indirect answer. It will not be counted in the number of messages in the idea or in the discussion.
 -  ``delete_post``: Allows a user to delete any message (including messages posted by someone else). It will show as "This message has been deleted by an administrator" if the "Show deleted messages" or the "Show also deleted messages" filter is active, or if the message has a non-deleted direct or indirect answer. It will not be counted in the number of messages in the idea or in the discussion.
--  ``discussion_stats``: TODO
--  ``export_post``: TODO
+-  ``discussion_stats``: Allow to access discussion statistics
+-  ``export_post``: TODO document (Aryan)
 -  ``moderate_post``: Allows a user to moderate a message, by editing its contents or hiding its contents. A moderated message does not disappear from the messageList and can be visually differentiated from a non-moderated message.
+- ``override_social_autologin``: Allow a user to access a discussion with a social autologin even if they don't have an account with that social login (i.e. allow them to login using another account.)
+- ``manage_resource``: TODO document (Cédric)

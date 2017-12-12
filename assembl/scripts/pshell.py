@@ -9,7 +9,8 @@ def main(argv=sys.argv, quiet=False):
     command = PShellCommandA(argv, quiet)
     try:
         return command.run()
-    except:
+    except Exception as e:
+        print e
         import pdb; pdb.post_mortem()
 
 
