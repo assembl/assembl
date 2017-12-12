@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Translate, I18n } from 'react-redux-i18n';
-import { form, FormGroup, FormControl, Button } from 'react-bootstrap';
+import { form, FormGroup, FormControl, Button, Checkbox } from 'react-bootstrap';
 import { Link } from 'react-router';
 import { signupAction } from '../../actions/authenticationActions';
 import { getDiscussionSlug } from '../../utils/globalFunctions';
@@ -17,11 +17,13 @@ class SignupForm extends React.Component {
       name: null,
       email: null,
       password1: null,
-      password2: null
+      password2: null,
+      checked: false
     };
 
     this.signupHandler = this.signupHandler.bind(this);
     this.handleInput = this.handleInput.bind(this);
+    this.toggleCheck = this.toggleCheck.bind(this);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -62,6 +64,10 @@ class SignupForm extends React.Component {
     }
   }
 
+  toggleCheck() {
+    this.setState({ checked: !this.state.checked });
+  }
+
   render() {
     const slug = getDiscussionSlug();
     return (
@@ -96,21 +102,21 @@ class SignupForm extends React.Component {
                 placeholder={I18n.t('login.password2')}
                 onChange={this.handleInput}
               />
-              <div className="accept-terms">
-                <input type="checkbox" id="acceptTerms" value="terms" className="terms-checkbox" />
-                <label htmlFor="acceptTerms">
-                  <Translate value="termsAndConditions.iAccept" />
-                  <a
-                    onClick={(e) => {
-                      e.preventDefault();
-                      const Terms = <TermsForm />;
-                      displayCustomModal(Terms);
-                    }}
-                  >
-                    <Translate value="termsAndConditions.headerTitle" className="terms-link" />
-                  </a>
-                </label>
-              </div>
+            </FormGroup>
+
+            <FormGroup>
+              <Checkbox checked={this.state.checked} type="checkbox" onChange={this.toggleCheck} required inline>
+                <Translate value="termsAndConditions.iAccept" />
+                <a
+                  onClick={(e) => {
+                    e.preventDefault();
+                    const Terms = <TermsForm />;
+                    displayCustomModal(Terms);
+                  }}
+                >
+                  <Translate value="termsAndConditions.headerTitle" className="terms-link" />
+                </a>
+              </Checkbox>
             </FormGroup>
             <FormGroup>
               <Button type="submit" name="register" value={I18n.t('login.signUp')} className="button-submit button-dark margin-m">

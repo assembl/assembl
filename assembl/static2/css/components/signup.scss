@@ -1,29 +1,23 @@
 .login-view {
-  .accept-terms {
-    margin-top: 10px;
+  .terms-link {
+    cursor: pointer;
+    text-decoration: underline;
 
-    .terms-link {
-      cursor: pointer;
-      text-decoration: underline;
-
-      &:hover {
-        text-decoration: none;
-      }
-    }
-
-    .terms-checkbox {
-      margin-right: 5px;
+    &:hover {
+      text-decoration: none;
     }
   }
 }
 
 .terms-form {
+  min-height: 530px;
+
   .terms-box {
     width: 500px;
     height: 350px;
     overflow: auto;
-    margin: 0 auto;
-    padding: 30px;
+    margin: 10px auto;
+    padding: 0 30px;
     text-align: justify;
   }
 
