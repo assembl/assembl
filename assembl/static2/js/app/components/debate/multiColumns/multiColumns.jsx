@@ -1,5 +1,6 @@
 import React from 'react';
 import { I18n } from 'react-redux-i18n';
+import get from 'lodash/get';
 
 import PostColumn from './postColumn';
 import { orderPostsByMessageClassifier } from './utils';
@@ -26,8 +27,8 @@ const MultiColumns = ({
         const col = messageColumns[index];
         const synthesisProps = showSynthesis && {
           classifier: classifier,
-          synthesisTitle: I18n.t('multiColumns.synthesis.title', { colName: col.name }),
-          synthesisBody: col.header || I18n.t('multiColumns.synthesis.noSynthesisYet'),
+          synthesisTitle: get(col, 'columnSynthesis.subject', I18n.t('multiColumns.synthesis.title', { colName: col.name })),
+          synthesisBody: get(col, 'columnSynthesis.body', I18n.t('multiColumns.synthesis.noSynthesisYet')),
           hyphenStyle: { borderTopColor: col.color }
         };
         const isPhaseCompleted = getIfPhaseCompletedByIdentifier(debateData.timeline, identifier);

@@ -1,5 +1,7 @@
 // @flow
 import React from 'react';
+import get from 'lodash/get';
+
 import TabbedColumns from './tabbedColumns';
 import MultiColumns from './multiColumns';
 import hashLinkScroll from '../../../utils/hashLinkScroll';
@@ -16,7 +18,7 @@ class ColumnsView extends React.Component {
   render = () => {
     const { messageColumns: columns, identifier, debateData } = this.props;
     if (!Array.isArray(columns)) return null;
-    const showSynthesis = columns.some(column => !!column.header);
+    const showSynthesis = columns.some(column => !!get(column, 'columnSynthesis.body'));
     return (
       <div className="max-container">
         {this.shouldShowTabs(columns.length) ? (

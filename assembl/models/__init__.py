@@ -151,6 +151,7 @@ from .generic import (
 )
 from .post import (
     AssemblPost,
+    ColumnSynthesisPost,
     IdeaProposalPost,
     ImportedPost,
     Post,

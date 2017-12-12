@@ -1,6 +1,10 @@
 fragment IdeaMessageColumn on IdeaMessageColumn {
   color
-  header(lang: $lang)
+  columnSynthesis {
+    id
+    subject(lang: $lang)
+    body(lang: $lang)
+  }
   index
   messageClassifier
   name(lang: $lang)
