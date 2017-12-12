@@ -31,6 +31,7 @@ export default class TermsForm extends React.Component {
 
   render() {
     const { isScrolled } = this.state;
+    const { isChecked } = this.props;
     return (
       <div className="terms-form">
         <Modal.Header closeButton>
@@ -71,16 +72,17 @@ export default class TermsForm extends React.Component {
             n’était pas une « monnaie rationnelle ». Il l’a comparé au « Continental », monnaie papier créée par les
             révolutionnaires américains en 1775 et qui finit par s’effondrer en 1782.
           </div>
-          {isScrolled && (
-            <Button
-              type="submit"
-              name="acceptTerms"
-              className="button-submit button-dark terms-submit"
-              onClick={this.handleSubmit}
-            >
-              <Translate value="termsAndConditions.accept" />
-            </Button>
-          )}
+          {isScrolled &&
+            !isChecked && (
+              <Button
+                type="submit"
+                name="acceptTerms"
+                className="button-submit button-dark terms-submit"
+                onClick={this.handleSubmit}
+              >
+                <Translate value="termsAndConditions.accept" />
+              </Button>
+            )}
         </Modal.Body>
       </div>
     );

@@ -115,7 +115,7 @@ class SignupForm extends React.Component {
                 <a
                   onClick={(e) => {
                     e.preventDefault();
-                    const Terms = <TermsForm handleAcceptButton={this.handleAcceptButton} />;
+                    const Terms = <TermsForm handleAcceptButton={this.handleAcceptButton} isChecked={this.state.checked} />;
                     displayCustomModal(Terms);
                   }}
                 >
