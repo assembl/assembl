@@ -25,7 +25,7 @@ $chatframeHeaderHeight: 60px;
   max-height: calc(100% - (#{$navbarHeight} + #{$buttonMargin} + #{$navbarMargin}));
 
   .chatframe-modal {
-    box-shadow: 2px 2px 7px rgba(0, 0, 0, 0.3);
+    box-shadow: 0px 10px 15px 0px rgba(0, 0, 0, 0.4);
     margin-bottom: $marginBetweenFrameAndButton;
     border-radius: $windowBorderRadius;
     height: calc(100% - (#{$buttonSize} + #{$marginBetweenFrameAndButton}));
@@ -41,7 +41,7 @@ $chatframeHeaderHeight: 60px;
       padding: 0 15px;
       color: $textColor;
       background-color: $backgroundColor;
-      box-shadow: 0 5px 5px rgba(0, 0, 0, 0.1);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
       position: relative;
       z-index: 400;
     }
