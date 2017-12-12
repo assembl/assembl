@@ -1,4 +1,5 @@
 import React from 'react';
+import { compose, graphql } from 'react-apollo';
 import { connect } from 'react-redux';
 import { Translate, I18n } from 'react-redux-i18n';
 import { form, FormGroup, FormControl, Button, Checkbox } from 'react-bootstrap';
@@ -9,6 +10,8 @@ import { get, getContextual } from '../../utils/routeMap';
 import inputHandler from '../../utils/inputHandler';
 import { displayAlert, displayCustomModal } from '../../utils/utilityManager';
 import TermsForm from '../common/termsForm';
+import withoutLoadingIndicator from '../../components/common/withoutLoadingIndicator';
+import TabsConditionQuery from '../../graphql/TabsConditionQuery.graphql';
 
 class SignupForm extends React.Component {
   constructor(props) {
@@ -75,6 +78,7 @@ class SignupForm extends React.Component {
 
   render() {
     const slug = getDiscussionSlug();
+    const { hasTermsAndConditions } = this.props;
     return (
       <div className="login-view">
         <div className="box-title">{I18n.t('login.createAccount')}</div>
@@ -109,20 +113,22 @@ class SignupForm extends React.Component {
               />
             </FormGroup>
 
-            <FormGroup>
-              <Checkbox checked={this.state.checked} type="checkbox" onChange={this.toggleCheck} required inline>
-                <Translate value="termsAndConditions.iAccept" />
-                <a
-                  onClick={(e) => {
-                    e.preventDefault();
-                    const Terms = <TermsForm handleAcceptButton={this.handleAcceptButton} isChecked={this.state.checked} />;
-                    displayCustomModal(Terms);
-                  }}
-                >
-                  <Translate value="termsAndConditions.headerTitle" className="terms-link" />
-                </a>
-              </Checkbox>
-            </FormGroup>
+            {hasTermsAndConditions && (
+              <FormGroup>
+                <Checkbox checked={this.state.checked} type="checkbox" onChange={this.toggleCheck} required inline>
+                  <Translate value="termsAndConditions.iAccept" />
+                  <a
+                    onClick={(e) => {
+                      e.preventDefault();
+                      const Terms = <TermsForm handleAcceptButton={this.handleAcceptButton} isChecked={this.state.checked} />;
+                      displayCustomModal(Terms);
+                    }}
+                  >
+                    <Translate value="termsAndConditions.link" className="terms-link" />
+                  </a>
+                </Checkbox>
+              </FormGroup>
+            )}
             <FormGroup>
               <Button type="submit" name="register" value={I18n.t('login.signUp')} className="button-submit button-dark margin-m">
                 <Translate value="login.signUp" />
@@ -143,7 +149,8 @@ class SignupForm extends React.Component {
 }
 
 const mapStateToProps = state => ({
-  auth: state.auth
+  auth: state.auth,
+  lang: state.i18n.locale
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -152,4 +159,10 @@ const mapDispatchToProps = dispatch => ({
   }
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(SignupForm);
+const withData = graphql(TabsConditionQuery, {
+  props: ({ data }) => ({
+    hasTermsAndConditions: data.hasTermsAndConditions
+  })
+});
+
+export default compose(connect(mapStateToProps, mapDispatchToProps), withData, withoutLoadingIndicator())(SignupForm);
