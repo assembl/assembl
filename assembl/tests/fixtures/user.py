@@ -1,8 +1,12 @@
 from datetime import datetime
 
 import pytest
+from pyramid import testing
+from pyramid.threadlocal import manager
 
 from assembl.auth import R_MODERATOR, R_PARTICIPANT
+from assembl.lib.config import get_config
+from ..utils import PyramidWebTestRequest
 
 
 @pytest.fixture(scope="function")
@@ -26,6 +30,35 @@ def participant1_user(request, test_session, discussion):
         test_session.flush()
     request.addfinalizer(fin)
     return u
+
+
+@pytest.fixture(scope="function")
+def test_participant1_webrequest(request, participant1_user, test_app_no_perm):
+    """A Pyramid request fixture with an ADMIN user authorized"""
+    req = PyramidWebTestRequest.blank('/', method="GET")
+    req.authenticated_userid = participant1_user.id
+
+    def fin():
+        # The request was not called
+        manager.pop()
+    request.addfinalizer(fin)
+    return req
+
+
+@pytest.fixture(scope="function")
+def test_app_participant1(request, participant1_user, test_app_no_perm):
+    """A configured Assembl fixture with permissions
+    and an participant1 user logged in"""
+
+    config = testing.setUp(
+        registry=test_app_no_perm.app.registry,
+        settings=get_config(),
+    )
+    dummy_policy = config.testing_securitypolicy(
+        userid=participant1_user.id, permissive=True)
+    config.set_authorization_policy(dummy_policy)
+    config.set_authentication_policy(dummy_policy)
+    return test_app_no_perm
 
 
 @pytest.fixture(scope="function")

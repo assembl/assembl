@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from collections import OrderedDict
 import urlparse
+from datetime import datetime
 
 import pytest
 import simplejson as json
@@ -217,3 +218,53 @@ def test_merge_social_account(
     assert account.uid == p1_uid
     assert account.profile == participant1_user
     account.delete()
+
+
+def test_autologin(
+        test_session, test_app_participant1, closed_discussion, participant1_user,
+        participant1_social_account, google_identity_provider, request,
+        test_participant1_webrequest):
+    # as a logged in participant, I can see the discussion
+    long_ago = datetime(2000, 1, 1)
+    now = datetime.utcnow()
+    closed_discussion.preferences['landing_page'] = True
+    participant1_user.last_assembl_login = now
+    participant1_social_account.last_checked = now
+    path = test_participant1_webrequest.route_path(
+        'new_home', discussion_slug=closed_discussion.slug)
+    reply = test_app_participant1.get(path)
+    assert reply.status_code == 200
+    # unless my social login is expired
+    participant1_social_account.last_checked = long_ago
+    reply = test_app_participant1.get(path)
+    assert reply.status_code == 307
+    assert test_participant1_webrequest.route_path(
+        'contextual_social.auth',
+        discussion_slug=closed_discussion.slug,
+        backend=google_identity_provider.name
+    ) == urlparse.urlparse(reply.location).path
+
+
+def test_autologin_override(
+        test_session, test_app, closed_discussion, admin_user,
+        admin_social_account, google_identity_provider, request,
+        test_adminuser_webrequest):
+    # as an admin, I can see the discussion based on my assembl login
+    long_ago = datetime(2000, 1, 1)
+    now = datetime.utcnow()
+    closed_discussion.preferences['landing_page'] = True
+    admin_social_account.last_checked = long_ago
+    admin_user.last_assembl_login = now
+    path = test_adminuser_webrequest.route_path(
+        'new_home', discussion_slug=closed_discussion.slug)
+    reply = test_app.get(path)
+    assert reply.status_code == 200
+    # unless my assembl login is also expired
+    admin_user.last_assembl_login = long_ago
+    reply = test_app.get(path)
+    assert reply.status_code == 307
+    assert test_adminuser_webrequest.route_path(
+        'contextual_social.auth',
+        discussion_slug=closed_discussion.slug,
+        backend=google_identity_provider.name
+    ) == urlparse.urlparse(reply.location).path

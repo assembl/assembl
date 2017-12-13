@@ -1,6 +1,8 @@
 import pytest
 from sqlalchemy import inspect
 
+from assembl.auth import P_READ, R_PARTICIPANT
+
 
 @pytest.fixture(scope="function")
 def discussion(request, test_session, default_preferences):
@@ -93,7 +95,13 @@ def discussion_with_lang_prefs(request, test_session, discussion):
 @pytest.fixture(scope="function")
 def closed_discussion(request, test_session, discussion):
     """An empty Discussion fixture restricted-to-social login"""
+    from assembl.models import Role, DiscussionPermission, Permission
     discussion.preferences['authorization_server_backend'] = 'google-oauth2'
+    role = test_session.query(Role).filter_by(name=R_PARTICIPANT).first()
+    # Take the read for everyone, put it on participant
+    dp = test_session.query(DiscussionPermission).join(Permission).filter(
+        DiscussionPermission.discussion==discussion, Permission.name==P_READ).first()
+    dp.role = role
     test_session.commit()
 
     return discussion
