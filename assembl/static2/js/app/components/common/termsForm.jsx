@@ -1,3 +1,4 @@
+// @flow
 import React from 'react';
 import { Translate } from 'react-redux-i18n';
 import { Modal, Button } from 'react-bootstrap';
@@ -6,9 +7,27 @@ import { closeModal } from '../../utils/utilityManager';
 import LegalNoticeAndTerms from '../../graphql/LegalNoticeAndTerms.graphql';
 import withLoadingIndicator from '../../components/common/withLoadingIndicator';
 
-class TermsForm extends React.Component {
-  constructor(props) {
-    super(props);
+type TermsFormProps = {
+  isChecked: boolean,
+  text: string,
+  handleAcceptButton: () => void
+};
+
+type TermsFormState = {
+  isScrolled: boolean
+};
+
+class DumbTermsForm extends React.Component<*, TermsFormProps, TermsFormState> {
+  props: TermsFormProps;
+
+  state: TermsFormState;
+
+  box: HTMLElement;
+
+  handleSubmit: () => void;
+
+  constructor() {
+    super();
     this.state = {
       isScrolled: false
     };
@@ -19,7 +38,7 @@ class TermsForm extends React.Component {
     this.box.addEventListener('scroll', this.trackScrolling);
   }
 
-  trackScrolling = () => {
+  trackScrolling = (): void => {
     const wrappedElement = this.box;
     if (wrappedElement.scrollHeight - wrappedElement.scrollTop === wrappedElement.clientHeight) {
       this.setState({
@@ -79,4 +98,6 @@ const withData = graphql(LegalNoticeAndTerms, {
   }
 });
 
-export default compose(withData, withLoadingIndicator())(TermsForm);
+export { DumbTermsForm };
+
+export default compose(withData, withLoadingIndicator())(DumbTermsForm);
