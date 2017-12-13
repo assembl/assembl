@@ -116,7 +116,7 @@ class PostView extends React.PureComponent<void, Props, State> {
               {creator && (
                 <ProfileLine
                   userId={creator.userId}
-                  userName={creator && creator.displayName}
+                  userName={creator.displayName}
                   creationDate={creationDate}
                   locale={lang}
                   modified={modificationDate !== null}
@@ -150,7 +150,7 @@ class PostView extends React.PureComponent<void, Props, State> {
             </div>
             <div className="post-right">
               <PostActions
-                creatorUserId={creator && creator.userId}
+                creatorUserId={creator.userId}
                 postId={id}
                 handleEditClick={handleEditClick}
                 sentimentCounts={sentimentCounts}
