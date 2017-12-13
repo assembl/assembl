@@ -75,39 +75,3 @@ class MediactiveAESCryptor(AESCryptor):
         digest.update(password)
         password = digest.finalize()
         super(MediactiveAESCryptor, self).__init__(password, backend)
-
-
-class RSAEncryptor(Encryptor):
-    """An asymmetric encryptor based on SSH keys.
-    Only works if the payload is smaller than the key,
-    but can be used for symmetric keys."""
-    def __init__(self, rsa_public_key):
-        self.public_key = serialization.load_ssh_public_key(rsa_public_key)
-
-    def encrypt(self, message):
-        return self.public_key.encrypt(
-            message,
-            padding.OAEP(
-                mgf=padding.MGF1(algorithm=hashes.SHA1()),
-                algorithm=hashes.SHA1(),
-                label=None
-            )
-        )
-
-
-class RSADecryptor(Decryptor):
-    """The decryptor symmetric to RSAEncryptor.
-    Requires the private key of course."""
-    def __init__(self, rsa_private_key):
-        self.private_key = private_key_from_cleaned_text(rsa_private_key)
-        self.public_key = self.private_key.public_key()
-
-    def decrypt(self, ciphertext):
-        return self.private_key.decrypt(
-            ciphertext,
-            padding.OAEP(
-                mgf=padding.MGF1(algorithm=hashes.SHA1()),
-                algorithm=hashes.SHA1(),
-                label=None
-            )
-        )
