@@ -1,0 +1,6 @@
+fragment IdeaContentLink on IdeaContentLink {
+  idea {
+    id
+    title(lang: $contentLocale)
+  }
+}

@@ -1,4 +1,4 @@
-#import "../Post.graphql"
+#import "../fragments/Post.graphql"
 
 mutation createPost(
   $contentLocale: String!

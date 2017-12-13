@@ -1,4 +1,4 @@
-#import "./IdeaMessageColumn.graphql"
+#import "./fragments/IdeaMessageColumn.graphql"
 
 query IdeaWithPosts($id: ID!, $lang: String) {
   idea: node(id: $id) {

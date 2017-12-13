@@ -1153,6 +1153,14 @@ export type DocumentFragment = {|
   mimeType: ?string
 |};
 
+export type IdeaContentLinkFragment = {|
+  idea: ?{|
+    // The ID of the object.
+    id: string,
+    title: ?string
+  |}
+|};
+
 export type IdeaMessageColumnFragment = {|
   // A CSS color that will be used to theme the column.
   color: ?string,

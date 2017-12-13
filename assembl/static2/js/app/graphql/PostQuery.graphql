@@ -1,4 +1,4 @@
-#import "./Post.graphql"
+#import "./fragments/Post.graphql"
 
 query Post($contentLocale: String!, $id: ID!) {
   post: node(id: $id) {

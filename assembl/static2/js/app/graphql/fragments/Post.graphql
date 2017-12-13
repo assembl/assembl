@@ -1,5 +1,6 @@
 #import "./AgentProfileInfo.graphql"
 #import "./Attachment.graphql"
+#import "./IdeaContentLink.graphql"
 
 fragment Post on Post {
   id
@@ -21,10 +22,7 @@ fragment Post on Post {
   }
   mySentiment
   indirectIdeaContentLinks {
-    idea {
-      id
-      title(lang: $contentLocale)
-    }
+    ...IdeaContentLink
   }
   creator {
     ...AgentProfileInfo

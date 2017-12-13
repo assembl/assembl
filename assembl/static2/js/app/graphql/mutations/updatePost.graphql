@@ -1,4 +1,4 @@
-#import "../Post.graphql"
+#import "../fragments/Post.graphql"
 
 mutation updatePost($contentLocale: String!, $postId: ID!, $subject: String, $body: String!, $attachments: [String]) {
   updatePost(postId: $postId, subject: $subject, body: $body, attachments: $attachments) {
