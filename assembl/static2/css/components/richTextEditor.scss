@@ -18,7 +18,10 @@
       .btn {
         background-color: #ccc;
 
-        &:first-child, &:last-child, &:focus, &:active {
+        &:first-child,
+        &:last-child,
+        &:focus,
+        &:active {
           border-radius: 0;
           outline: none;
         }
@@ -209,5 +212,9 @@
 
   img {
     width: 100%;
+  }
+
+  img.attachment-icon {
+    width: 30px;
   }
 }

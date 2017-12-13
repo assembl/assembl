@@ -25,13 +25,13 @@ const plugin = {
       const mimeType = entity.data.mimeType ? entity.data.mimeType : '';
       const title = entity.data.title ? entity.data.title : '';
       if (mimeType.startsWith('image')) {
-        return `<img src="${externalUrl}" alt="" title="${title}" width="60%" data-id="${id}" data-mimetype="${mimeType}" />`;
+        return `<img class="attachment-image" src="${externalUrl}" alt="" title="${title}" data-id="${id}" data-mimetype="${mimeType}" />`;
       }
 
       const extension = getExtension(title);
       const iconPath = getIconPath(extension);
       return (
-        `<img alt="${extension}" src="${iconPath}" width="30px" data-id="${id}" data-mimetype="${mimeType}"` +
+        `<img class="attachment-icon" alt="${extension}" src="${iconPath}" data-id="${id}" data-mimetype="${mimeType}"` +
         ` data-title="${title}" data-externalurl="${externalUrl}" />`
       );
     }
