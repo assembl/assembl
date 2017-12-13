@@ -5,12 +5,11 @@ import { Translate } from 'react-redux-i18n';
 import { getDomElementOffset } from '../../../../utils/globalFunctions';
 import Attachments from '../../../common/attachments';
 import ProfileLine from '../../../common/profileLine';
-import PostTranslate from '../../common/translations/postTranslate';
 import PostActions from '../../common/postActions';
 import AnswerForm from '../../thread/answerForm';
 import Nuggets from '../../thread/nuggets';
 import RelatedIdeas from './relatedIdeas';
-import { transformLinksInHtml } from '../../../../utils/linkify';
+import PostBody from './postBody';
 import type { Props as PostProps } from './index';
 
 type Props = PostProps & {
@@ -123,20 +122,18 @@ class PostView extends React.PureComponent<void, Props, State> {
                   modified={modificationDate !== null}
                 />
               )}
-              {debateData.translationEnabled ? (
-                <PostTranslate
-                  contentLocale={contentLocale}
-                  id={id}
-                  lang={lang}
-                  originalLocale={originalLocale}
-                  translate={translate}
-                />
-              ) : null}
-              <h3 className="dark-title-3">{modifiedSubject}</h3>
-              <div
-                className={`body ${bodyMimeType === 'text/plain' ? 'pre-wrap' : ''}`}
-                dangerouslySetInnerHTML={{ __html: transformLinksInHtml(body) }}
-                ref={this.recomputeTreeHeightOnImagesLoad}
+
+              <PostBody
+                body={body}
+                bodyMimeType={bodyMimeType}
+                contentLocale={contentLocale}
+                id={id}
+                lang={lang}
+                subject={modifiedSubject}
+                originalLocale={originalLocale}
+                translate={translate}
+                translationEnabled={debateData.translationEnabled}
+                bodyDivRef={this.recomputeTreeHeightOnImagesLoad}
               />
 
               <Attachments attachments={attachments} />

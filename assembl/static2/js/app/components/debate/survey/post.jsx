@@ -15,12 +15,11 @@ import PostQuery from '../../../graphql/PostQuery.graphql';
 import { likeTooltip, disagreeTooltip } from '../../common/tooltips';
 import { sentimentDefinitionsObject } from '../common/sentimentDefinitions';
 import StatisticsDoughnut from '../common/statisticsDoughnut';
-import PostTranslate from '../common/translations/postTranslate';
 import { EXTRA_SMALL_SCREEN_WIDTH } from '../../../constants';
 import withLoadingIndicator from '../../common/withLoadingIndicator';
 import ResponsiveOverlayTrigger from '../../common/responsiveOverlayTrigger';
-import { transformLinksInHtml } from '../../../utils/linkify';
 import { withScreenWidth } from '../../common/screenDimensions';
+import PostBody from '../common/post/postBody';
 
 class Post extends React.Component {
   handleSentiment = (event, type) => {
@@ -149,19 +148,18 @@ class Post extends React.Component {
       <div className={postIndex < 3 || moreProposals ? 'shown box' : 'hidden box'}>
         <div className="content">
           <PostCreator name={post.creator.displayName} />
-          {debateData.translationEnabled ? (
-            <PostTranslate
-              contentLocale={contentLocale}
-              id={post.id}
-              lang={lang}
-              translate={translate}
-              originalLocale={originalLocale}
-            />
-          ) : null}
-          <div
-            className={`body ${post.bodyMimeType === 'text/plain' ? 'pre-wrap' : ''}`}
-            dangerouslySetInnerHTML={{ __html: transformLinksInHtml(body) }}
+
+          <PostBody
+            translationEnabled={debateData.translationEnabled}
+            contentLocale={contentLocale}
+            id={post.id}
+            lang={lang}
+            translate={translate}
+            originalLocale={originalLocale}
+            body={body}
+            bodyMimeType={post.bodyMimeType}
           />
+
           <div className="sentiments">
             <div className="sentiment-label">
               <Translate value="debate.survey.react" />
