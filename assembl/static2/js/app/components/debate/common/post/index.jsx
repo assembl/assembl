@@ -34,7 +34,7 @@ type RouterParams = {
 };
 
 export type Props = {
-  borderLeftColor: string,
+  borderLeftColor: ?string,
   contentLocale: string,
   data: Response,
   fullLevel: string,
