@@ -42,7 +42,7 @@ export type Props = {
   id: string,
   lang: string,
   measureTreeHeight: Function,
-  multiColumn: boolean,
+  multiColumns: boolean,
   originalLocale: string,
   parentId: string,
   refetchIdea: Function,
@@ -62,7 +62,7 @@ type State = {
 
 type DefaultProps = {
   editable: boolean,
-  multiColumn: boolean
+  multiColumns: boolean
 };
 
 type bodyAndSubject = { body: string, subject: string, originalBody: string, originalSubject: string };
@@ -76,7 +76,7 @@ class Post extends React.PureComponent<DefaultProps, Props, State> {
 
   static defaultProps = {
     editable: true,
-    multiColumn: false
+    multiColumns: false
   };
 
   constructor(props: Props) {
@@ -155,7 +155,7 @@ class Post extends React.PureComponent<DefaultProps, Props, State> {
 
   render() {
     const { publicationState } = this.props.data.post;
-    const { contentLocale, fullLevel, id, multiColumn, originalLocale, parentId, refetchIdea } = this.props;
+    const { contentLocale, fullLevel, id, multiColumns, originalLocale, parentId, refetchIdea } = this.props;
     const translate = contentLocale !== originalLocale;
     const { body, subject, originalBody, originalSubject } = this.getBodyAndSubject(translate);
 
@@ -176,7 +176,7 @@ class Post extends React.PureComponent<DefaultProps, Props, State> {
       );
     }
 
-    const divClassnames = classnames('posts', { 'column-post': multiColumn });
+    const divClassnames = classnames('posts', { 'column-post': multiColumns });
     const modifiedOriginalSubject = (
       <span>
         {getSubjectPrefixString(fullLevel)}
