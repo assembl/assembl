@@ -1,17 +1,9 @@
 // @flow
 import React from 'react';
 
-export type Document = {
-  id: string,
-  title?: string,
-  externalUrl: string,
-  mimeType?: string,
-  file?: File
-};
-
 export type Attachment = {
   entityKey: string,
-  document: Document
+  document: EditableDocument
 };
 
 type EditAttachmentsProps = {

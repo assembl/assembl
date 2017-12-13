@@ -2,7 +2,7 @@
 /* draft-js plugin for attachment management */
 import { convertFromRaw, convertToRaw, Entity, Modifier, RawContentState, SelectionState } from 'draft-js';
 import type { ContentBlock, ContentState } from 'draft-js';
-import type { Attachment, Document } from '../editAttachments';
+import type { Attachment } from '../editAttachments';
 import { getExtension, getIconPath } from '../documentExtensionIcon';
 
 const ENTITY_TYPE = 'document';
@@ -19,9 +19,10 @@ const plugin = {
 
     return undefined;
   },
-  entityToHTML: (entity: { data: Document }, originalText: string): string => {
+  entityToHTML: (entity: { data: DocumentFragment }, originalText: string): string => {
     if (entity.type === ENTITY_TYPE) {
-      const { externalUrl, id } = entity.data;
+      const { id } = entity.data;
+      const externalUrl = entity.data.externalUrl ? entity.data.externalUrl : '';
       const mimeType = entity.data.mimeType ? entity.data.mimeType : '';
       const title = entity.data.title ? entity.data.title : '';
       if (mimeType.startsWith('image')) {
@@ -107,6 +108,7 @@ const plugin = {
                 doc = {
                   id: entity.data.file.name,
                   externalUrl: '',
+                  mimeType: '',
                   title: entity.data.file.name
                 };
               } else {

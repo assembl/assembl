@@ -7,3 +7,7 @@ type Post = PostFragment & {
   creationDate: string,
   parentId: number
 };
+
+type EditableDocument = DocumentFragment & {
+  file?: File
+};
