@@ -50,7 +50,7 @@ class IdeaContentLink(DiscussionBoundBase):
 
     # This is nullable, because in the case of extracts, the idea can be
     # attached later.
-    idea_id = Column(Integer, ForeignKey(Idea.id),
+    idea_id = Column(Integer, ForeignKey(Idea.id, ondelete="CASCADE", onupdate="CASCADE"),
                      nullable=True, index=True)
     idea = relationship(Idea, active_history=True)
 
