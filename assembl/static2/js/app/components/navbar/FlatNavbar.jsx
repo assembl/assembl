@@ -21,7 +21,8 @@ export default class FlatNavbar extends React.PureComponent {
 
   updateWidth = () => {
     const { leftWidth = 0, rightWidth = 0 } = this.state;
-    this.props.setWidth(leftWidth + rightWidth);
+    const margin = 10;
+    this.props.setWidth(leftWidth + rightWidth + margin);
   };
 
   setLanguageMenuWidth = (width: number) => this.setState({ languageMenuWidth: width });

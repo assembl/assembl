@@ -18,12 +18,11 @@ const shouldShow = (remainingWidth, breakPoint) => (typeof remainingWidth === 'n
 
 const UserMenu = ({ location, currentPhaseIdentifier, helpUrl, remainingWidth }: Props) => (
   <div className="navbar-icons">
-    {currentPhaseIdentifier !== 'survey' &&
-      shouldShow(remainingWidth, 250) && (
-        <div id="search">
-          <Search />
-        </div>
-      )}
+    {currentPhaseIdentifier !== 'survey' && (
+      <div id="search">
+        <Search />
+      </div>
+    )}
     {getConnectedUserId() &&
       helpUrl && (
         <Link to={helpUrl} target="_blank">
