@@ -1,7 +1,6 @@
 import React from 'react';
 import { Translate } from 'react-redux-i18n';
 import { Modal, Button } from 'react-bootstrap';
-import { connect } from 'react-redux';
 import { compose, graphql } from 'react-apollo';
 import { closeModal } from '../../utils/utilityManager';
 import LegalNoticeAndTerms from '../../graphql/LegalNoticeAndTerms.graphql';
@@ -62,10 +61,6 @@ class TermsForm extends React.Component {
   }
 }
 
-export const mapStateToProps = state => ({
-  lang: state.i18n.locale
-});
-
 const withData = graphql(LegalNoticeAndTerms, {
   props: ({ data }) => {
     const text = data.legalNoticeAndTerms ? data.legalNoticeAndTerms.termsAndConditions : '';
@@ -76,4 +71,4 @@ const withData = graphql(LegalNoticeAndTerms, {
   }
 });
 
-export default compose(connect(mapStateToProps), withData, withLoadingIndicator())(TermsForm);
+export default compose(withData, withLoadingIndicator())(TermsForm);

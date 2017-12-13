@@ -78,7 +78,7 @@ class SignupForm extends React.Component {
 
   render() {
     const slug = getDiscussionSlug();
-    const { hasTermsAndConditions } = this.props;
+    const { hasTermsAndConditions, lang } = this.props;
     return (
       <div className="login-view">
         <div className="box-title">{I18n.t('login.createAccount')}</div>
@@ -120,7 +120,9 @@ class SignupForm extends React.Component {
                   <a
                     onClick={(e) => {
                       e.preventDefault();
-                      const Terms = <TermsForm handleAcceptButton={this.handleAcceptButton} isChecked={this.state.checked} />;
+                      const Terms = (
+                        <TermsForm handleAcceptButton={this.handleAcceptButton} isChecked={this.state.checked} lang={lang} />
+                      );
                       displayCustomModal(Terms);
                     }}
                   >
@@ -161,6 +163,7 @@ const mapDispatchToProps = dispatch => ({
 
 const withData = graphql(TabsConditionQuery, {
   props: ({ data }) => ({
+    ...data,
     hasTermsAndConditions: data.hasTermsAndConditions
   })
 });
