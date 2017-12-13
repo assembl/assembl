@@ -88,3 +88,12 @@ def discussion_with_lang_prefs(request, test_session, discussion):
     test_session.commit()
 
     return discussion
+
+
+@pytest.fixture(scope="function")
+def closed_discussion(request, test_session, discussion):
+    """An empty Discussion fixture restricted-to-social login"""
+    discussion.preferences['authorization_server_backend'] = 'google-oauth2'
+    test_session.commit()
+
+    return discussion

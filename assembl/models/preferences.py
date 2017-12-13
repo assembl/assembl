@@ -72,6 +72,16 @@ class Preferences(MutableMapping, Base, NamedClassMixin):
         return ((cls.id == Discussion.preferences_id),
                 (Discussion.id == discussion_id))
 
+    @classmethod
+    def init_from_settings(cls, settings):
+        """Initialize some preference values"""
+        from ..auth.social_auth import get_active_auth_strategies
+        # TODO: Give linguistic names to social auth providers.
+        active_strategies = {
+            k: k for k in get_active_auth_strategies(settings)}
+        active_strategies[''] = _("No special authentication")
+        cls.preference_data['authorization_server_backend']['scalar_values'] = active_strategies
+
     @property
     def local_values_json(self):
         values = {}
@@ -845,11 +855,4 @@ class Preferences(MutableMapping, Base, NamedClassMixin):
 
 def includeme(config):
     """Initialize some preference values"""
-    from ..auth.social_auth import get_active_auth_strategies
-    # Note: This is temporary code, will probably create a new scalar type.
-    settings = config.get_settings()
-    # TODO: Give linguistic names to social auth providers.
-    active_strategies = {
-        k: k for k in get_active_auth_strategies(settings)}
-    active_strategies[''] = _("No special authentication")
-    Preferences.preference_data['authorization_server_backend']['scalar_values'] = active_strategies
+    Preferences.init_from_settings(config.get_settings())

@@ -352,9 +352,7 @@ def get_active_auth_strategies(settings):
             yield backend_name
 
 
-def includeme(config):
-    """Pre-parse certain settings for python_social_auth, then load it."""
-    settings = config.get_settings()
+def adjust_settings(settings):
     settings['login_providers'] = aslist(settings.get('login_providers', ''))
     settings['trusted_login_providers'] = aslist(settings.get('trusted_login_providers', ''))
     if not any(settings['login_providers']):
@@ -371,5 +369,10 @@ def includeme(config):
                  'SOCIAL_AUTH_PROTECTED_USER_FIELDS',
                  'SOCIAL_AUTH_FIELDS_STORED_IN_SESSION'):
         settings[name] = aslist(settings.get(name, ''))
+
+
+def includeme(config):
+    """Pre-parse certain settings for python_social_auth, then load it."""
+    adjust_settings(config.get_settings())
     config.add_request_method(
         'assembl.auth.social_auth.get_user', 'user', reify=True)
