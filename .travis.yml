@@ -4,6 +4,8 @@ dist: trusty
 addons:
   ssh_known_hosts: localhost
   postgresql: "9.5"
+git:
+  depth: 100
 cache:
   pip: true
   directories:
