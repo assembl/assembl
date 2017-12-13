@@ -22,3 +22,38 @@ only use them like described here.
 For youtube only, if you want to put a link to a youtube video like 
 'https://www.youtube.com/watch?v=somevid' rewrite it to 
 'https://www.youtube.com/embed/somevid' instead
+
+Integrating a motion.ai chatbot
+========================================
+
+First:
+
+* Generate the bot css by running
+
+::
+  
+  botBackgroundColor=whatever ./scripts/gen_chatbot_css.sh
+  
+The available variables are:
+
+* botBackgroundColor
+* botTextColor
+* botTimeColor
+* humanBackgroundColor
+* humanTextColor
+* humanTimeColor
+  
+Valid values are css colors. If the output is not printed to the terminal, it should be copied to your clipboard.
+
+Then:
+
+* Go to the motion.ai website, click on Webchat Settings, go to Customize tab, go to CSS subtab
+* Replace the code in the text area with the generated one
+* Go to deploy tab, copy the link in the 'Frame the webchat url yourself' section
+* Go to v1 administration of the debate, Discussion preferences section, under the extra json field, add the following key:
+
+::
+  
+  "chatframe": {
+    "src": "your_link"
+  }

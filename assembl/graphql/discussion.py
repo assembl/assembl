@@ -88,10 +88,11 @@ class ResourcesCenter(graphene.ObjectType):
         return resolve_langstring_entries(discussion, 'resources_center_title')
 
     def resolve_header_image(self, args, context, info):
+        RESOURCES_CENTER_HEADER_IMAGE = models.AttachmentPurpose.RESOURCES_CENTER_HEADER_IMAGE.value
         discussion_id = context.matchdict['discussion_id']
         discussion = models.Discussion.get(discussion_id)
         for attachment in discussion.attachments:
-            if attachment.attachmentPurpose == 'RESOURCES_CENTER_HEADER_IMAGE':
+            if attachment.attachmentPurpose == RESOURCES_CENTER_HEADER_IMAGE:
                 return attachment.document
 
 
@@ -141,6 +142,7 @@ class UpdateResourcesCenter(graphene.Mutation):
     @staticmethod
     @abort_transaction_on_exception
     def mutate(root, args, context, info):
+        RESOURCES_CENTER_HEADER_IMAGE = models.AttachmentPurpose.RESOURCES_CENTER_HEADER_IMAGE.value
         cls = models.Discussion
         discussion_id = context.matchdict['discussion_id']
         discussion = models.Discussion.get(discussion_id)
@@ -183,7 +185,7 @@ class UpdateResourcesCenter(graphene.Mutation):
                 # associated document
                 header_images = [
                     att for att in discussion.attachments
-                    if att.attachmentPurpose == 'RESOURCES_CENTER_HEADER_IMAGE'
+                    if att.attachmentPurpose == RESOURCES_CENTER_HEADER_IMAGE
                 ]
                 if header_images:
                     header_image = header_images[0]
@@ -195,7 +197,7 @@ class UpdateResourcesCenter(graphene.Mutation):
                     discussion=discussion,
                     creator_id=context.authenticated_userid,
                     title=filename,
-                    attachmentPurpose="RESOURCES_CENTER_HEADER_IMAGE"
+                    attachmentPurpose=RESOURCES_CENTER_HEADER_IMAGE
                 )
 
         db.flush()

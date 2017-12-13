@@ -237,6 +237,7 @@ class CreatePost(graphene.Mutation):
     @staticmethod
     @abort_transaction_on_exception
     def mutate(root, args, context, info):
+        EMBED_ATTACHMENT = models.AttachmentPurpose.EMBED_ATTACHMENT.value
         discussion_id = context.matchdict['discussion_id']
 
         user_id = context.authenticated_userid or Everyone
@@ -343,7 +344,7 @@ class CreatePost(graphene.Mutation):
                     creator_id=context.authenticated_userid,
                     post=new_post,
                     title=document.title,
-                    attachmentPurpose="EMBED_ATTACHMENT"
+                    attachmentPurpose=EMBED_ATTACHMENT
                 )
 
             db.flush()
@@ -363,6 +364,7 @@ class UpdatePost(graphene.Mutation):
     @staticmethod
     @abort_transaction_on_exception
     def mutate(root, args, context, info):
+        EMBED_ATTACHMENT = models.AttachmentPurpose.EMBED_ATTACHMENT.value
         discussion_id = context.matchdict['discussion_id']
 
         user_id = context.authenticated_userid or Everyone
@@ -422,7 +424,7 @@ class UpdatePost(graphene.Mutation):
                         creator_id=context.authenticated_userid,
                         post=post,
                         title=document.title,
-                        attachmentPurpose="EMBED_ATTACHMENT"
+                        attachmentPurpose=EMBED_ATTACHMENT
                     )
 
             # delete attachments that has been removed
@@ -524,6 +526,7 @@ class AddPostAttachment(graphene.Mutation):
     @staticmethod
     @abort_transaction_on_exception
     def mutate(root, args, context, info):
+        EMBED_ATTACHMENT = models.AttachmentPurpose.EMBED_ATTACHMENT.value
         discussion_id = context.matchdict['discussion_id']
         discussion = models.Discussion.get(discussion_id)
 
@@ -560,7 +563,7 @@ class AddPostAttachment(graphene.Mutation):
                 creator_id=context.authenticated_userid,
                 post=post,
                 title=filename,
-                attachmentPurpose="EMBED_ATTACHMENT"
+                attachmentPurpose=EMBED_ATTACHMENT
             )
             post.db.flush()
 

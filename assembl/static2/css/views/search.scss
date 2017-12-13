@@ -118,7 +118,7 @@ $highlightColor: $first-color-light;
 
   &__filters {
     background: #f4f4f4;
-    padding: 15px;
+    padding: 0 15px 15px 15px;
     margin: 15px 0 15px 15px;
     width: 250px;
     float: left;
@@ -174,7 +174,7 @@ $highlightColor: $first-color-light;
 }
 
 .sk-results-list {
-  padding: 15px 0;
+  padding: 0;
 }
 
 // components
@@ -264,6 +264,7 @@ $highlightColor: $first-color-light;
   font-size: 14px;
   margin: 0;
   padding-left: 0;
+  padding-top: 5px;
 }
 
 .sk-pagination-navigation {

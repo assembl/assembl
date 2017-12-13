@@ -6,7 +6,6 @@ from graphene.relay import Node
 from graphene_sqlalchemy.converter import (convert_column_to_string,
                                            convert_sqlalchemy_type)
 from graphene_sqlalchemy.utils import get_query
-from sqlalchemy import desc
 from sqlalchemy.orm import contains_eager, joinedload, subqueryload
 
 from assembl import models
@@ -121,13 +120,14 @@ class Query(graphene.ObjectType):
         discussion = models.Discussion.get(discussion_id)
         root_idea_id = discussion.root_idea.id
         descendants_query = model.get_descendants_query(
-            root_idea_id, inclusive=True)
+            root_idea_id, inclusive=False)
         query = query.outerjoin(
                 models.Idea.source_links
             ).filter(model.id.in_(descendants_query)
             ).filter(
                 model.hidden == False,  # noqa: E712
-                model.sqla_type == 'idea'
+                model.sqla_type == 'idea',
+                model.tombstone_date == None  # noqa: E711
             ).options(
                 contains_eager(models.Idea.source_links),
                 subqueryload(models.Idea.attachments).joinedload("document"),
@@ -158,7 +158,7 @@ class Query(graphene.ObjectType):
         discussion = models.Discussion.get(discussion_id)
         return discussion.get_all_syntheses_query(
             include_unpublished=False).order_by(
-                desc(models.Synthesis.creation_date))
+                models.Synthesis.creation_date)
 
     def resolve_has_syntheses(self, args, context, info):
         discussion_id = context.matchdict['discussion_id']

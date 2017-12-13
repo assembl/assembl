@@ -1,5 +1,5 @@
 pip==9.0.1
-setuptools==36.2.0
+setuptools==38.2.3
 alabaster==0.7.8
 alembic==0.8.6
 # Until new kombu release

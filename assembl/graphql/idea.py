@@ -52,14 +52,22 @@ class IdeaInterface(graphene.Interface):
 
     def resolve_num_posts(self, args, context, info):
         if isinstance(self, models.RootIdea):
-            # If this is RootIdea, do the sum of all descendants
+            # If this is RootIdea, do the sum of live descendants
             # excluding the root idea to be sure
             # we use the same counters that we see on each idea which are
             # based on countable states.
             # Don't use RootIdea.num_posts that give higher or lower count.
-            return sum([child.num_posts for child in self.get_all_descendants(
-                inclusive=False) if child.sqla_type in ('idea', 'question')
-                and child.tombstone_date is None])
+            descendants_query = models.Idea.get_descendants_query(
+                self.id, inclusive=False)
+            live_descendants = self.db.query(
+                models.Idea
+            ).filter(
+                models.Idea.id.in_(descendants_query)
+            ).filter(
+                models.Idea.sqla_type.in_(('idea', 'question'))
+            ).filter(
+                models.Idea.tombstone_date == None)  # noqa: E711
+            return sum([child.num_posts for child in live_descendants])
 
         return self.num_posts
 
@@ -478,6 +486,7 @@ class CreateIdea(graphene.Mutation):
     @staticmethod
     @abort_transaction_on_exception
     def mutate(root, args, context, info):
+        EMBED_ATTACHMENT = models.AttachmentPurpose.EMBED_ATTACHMENT.value
         cls = models.Idea
         discussion_id = context.matchdict['discussion_id']
         discussion = models.Discussion.get(discussion_id)
@@ -552,7 +561,7 @@ class CreateIdea(graphene.Mutation):
                     discussion=discussion,
                     creator_id=context.authenticated_userid,
                     title=filename,
-                    attachmentPurpose="EMBED_ATTACHMENT"
+                    attachmentPurpose=EMBED_ATTACHMENT
                 )
 
             db.flush()
@@ -589,6 +598,7 @@ class CreateThematic(graphene.Mutation):
     @staticmethod
     @abort_transaction_on_exception
     def mutate(root, args, context, info):
+        EMBED_ATTACHMENT = models.AttachmentPurpose.EMBED_ATTACHMENT.value
         cls = models.Thematic
         discussion_id = context.matchdict['discussion_id']
         discussion = models.Discussion.get(discussion_id)
@@ -685,7 +695,7 @@ class CreateThematic(graphene.Mutation):
                     discussion=discussion,
                     creator_id=context.authenticated_userid,
                     title=filename,
-                    attachmentPurpose="EMBED_ATTACHMENT"
+                    attachmentPurpose=EMBED_ATTACHMENT
                 )
 
             db.flush()
@@ -724,6 +734,7 @@ class UpdateThematic(graphene.Mutation):
     @staticmethod
     @abort_transaction_on_exception
     def mutate(root, args, context, info):
+        EMBED_ATTACHMENT = models.AttachmentPurpose.EMBED_ATTACHMENT.value
         cls = models.Thematic
         discussion_id = context.matchdict['discussion_id']
         discussion = models.Discussion.get(discussion_id)
@@ -807,7 +818,7 @@ class UpdateThematic(graphene.Mutation):
                     discussion=discussion,
                     creator_id=context.authenticated_userid,
                     title=filename,
-                    attachmentPurpose="EMBED_ATTACHMENT"
+                    attachmentPurpose=EMBED_ATTACHMENT
                 )
                 thematic.attachments.append(attachment)
             db.flush()

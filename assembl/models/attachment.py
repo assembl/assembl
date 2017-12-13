@@ -1,4 +1,5 @@
 """Documents attached to other objects, whether hosted externally or internally"""
+import enum
 from sqlalchemy import (
     Column,
     UniqueConstraint,
@@ -29,7 +30,16 @@ from .idea import Idea
 from .resource import Resource
 from .auth import (
     AgentProfile, CrudPermissions, P_READ, P_ADMIN_DISC, P_ADD_POST,
-    P_EDIT_POST, P_ADD_IDEA, P_EDIT_IDEA, P_MANAGE_RESOURCE)
+    P_SYSADMIN, P_EDIT_POST, P_ADD_IDEA, P_EDIT_IDEA, P_MANAGE_RESOURCE)
+
+
+class AttachmentPurpose(enum.Enum):
+
+    DOCUMENT = 'DOCUMENT'  # used for resources center
+    EMBED_ATTACHMENT = 'EMBED_ATTACHMENT'
+    IMAGE = 'IMAGE'  # used for resources center
+    PROFILE_PICTURE = 'PROFILE_PICTURE'
+    RESOURCES_CENTER_HEADER_IMAGE = 'RESOURCES_CENTER_HEADER_IMAGE'
 
 
 class Document(DiscussionBoundBase):
@@ -371,3 +381,40 @@ class ResourceAttachment(Attachment):
     crud_permissions = CrudPermissions(
         P_MANAGE_RESOURCE, P_READ, P_MANAGE_RESOURCE, P_MANAGE_RESOURCE,
         P_MANAGE_RESOURCE, P_MANAGE_RESOURCE)
+
+
+class AgentProfileAttachment(Attachment):
+
+    __tablename__ = "agent_profile_attachment"
+
+    id = Column(Integer, ForeignKey(
+        'attachment.id',
+        ondelete='CASCADE',
+        onupdate='CASCADE'
+    ), primary_key=True)
+
+    user_id = Column(Integer, ForeignKey(
+        'agent_profile.id',
+        ondelete='CASCADE',
+        onupdate='CASCADE',
+        ),
+        nullable=False,
+        index=True)
+
+    user = relationship(
+        AgentProfile,
+        backref=backref(
+            'profile_attachments',
+            cascade="all, delete-orphan"),
+    )
+    __mapper_args__ = {
+        'polymorphic_identity': 'agent_profile_attachment',
+        'with_polymorphic': '*'
+    }
+
+    crud_permissions = CrudPermissions(
+            P_READ, P_SYSADMIN, P_SYSADMIN, P_SYSADMIN,
+            P_READ, P_READ, P_READ)
+
+    def is_owner(self, user_id):
+        return user_id == self.user_id

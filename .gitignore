@@ -77,6 +77,10 @@ npm-debug.log
 /assembl/static2/npm-debug.log
 /assembl/static2/yarn-error.log
 /assembl/static2/messages.json
+/assembl/static2/css/themes/*
+!/assembl/static2/css/themes/default
+!/assembl/static2/css/themes/README.md
+!/assembl/static2/css/themes/vendor
 
 # Vagrant
 .bash_profile

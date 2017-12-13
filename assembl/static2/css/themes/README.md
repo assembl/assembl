@@ -21,6 +21,22 @@ If you use several theme repositories (that is if you use both theme systems of 
 * Go to the Settings page of this github user, section "SSH and GPG keys". For each of your Assembl servers, add the SSH public key of the system user which runs assembl (for example, in `/home/assembl_user/.ssh/id_rsa.pub`). If your server does not have an SSH key yet, create one.
 
 
+# Note about developer experience when changing css
+
+For a better developer experience with css rebuild time < 3s for any change
+you do in the css, you shouldn't keep the themes repository in the vendor folder.
+This is because any change in the css will rebuild all themes.
+It's best to have the themes repository out of the vendor folder and
+do a symlink to the themes you want to rebuild like this:
+
+    cd css/themes; ln -s /path/to/assembl2-client-themes/yourtheme
+
+When creating a folder or symlink in the `css/themes` folder, you need
+to restart webpack to take it into account:
+
+    supervisorctl restart dev:webpack
+
+
 # Defining which theme is shown as default
 
 You can select which theme is active with default_theme in the ini file.

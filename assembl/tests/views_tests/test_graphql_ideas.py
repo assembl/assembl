@@ -261,7 +261,7 @@ def test_graphql_discussion_counters_survey_phase_with_proposals(graphql_request
               numParticipants
             }
         """, context_value=graphql_request, variable_values={'identifier': 'survey'})
-    assert res.data['rootIdea']['numPosts'] == 15
+    assert res.data['rootIdea']['numPosts'] == 15  # phase 1 posts
     assert res.data['numParticipants'] == 1
 
 
@@ -279,7 +279,53 @@ def test_graphql_discussion_counters_thread_phase(graphql_request, proposals):
               numParticipants
             }
         """, context_value=graphql_request, variable_values={'identifier': 'thread'})
-    assert res.data['rootIdea']['numPosts'] == 15  # we count all posts from phase 1
+    assert res.data['rootIdea']['numPosts'] == 15  # phase 1 posts counted when current phase is thread
+    assert res.data['numParticipants'] == 1
+
+
+def test_graphql_discussion_counters_thread_phase_deleted_thematic(graphql_request, thematic_and_question, proposals):
+    thematic_id, first_question_id = thematic_and_question
+    res = schema.execute(
+        u"""mutation DeleteThematic($id: ID!) {
+              deleteThematic(thematicId: $id) {
+                success
+              }
+            }
+        """, context_value=graphql_request, variable_values={'id': thematic_id})
+    assert res.errors is None
+    assert res.data['deleteThematic']['success'] is True
+    res = schema.execute(
+        u"""query RootIdeaStats($identifier: String) {
+              rootIdea(identifier: $identifier) {
+                ... on Node {
+                  id
+                }
+                ... on IdeaInterface {
+                  numPosts
+                }
+              }
+              numParticipants
+            }
+        """, context_value=graphql_request, variable_values={'identifier': 'thread'})
+    assert res.data['rootIdea']['numPosts'] == 0  # all phase 1 posts associated to questions of the deleted thematic are not counted
+    assert res.data['numParticipants'] == 1
+
+
+def test_graphql_discussion_counters_thread_phase_with_posts(graphql_request, proposals, top_post_in_thread_phase):
+    res = schema.execute(
+        u"""query RootIdeaStats($identifier: String) {
+              rootIdea(identifier: $identifier) {
+                ... on Node {
+                  id
+                }
+                ... on IdeaInterface {
+                  numPosts
+                }
+              }
+              numParticipants
+            }
+        """, context_value=graphql_request, variable_values={'identifier': 'thread'})
+    assert res.data['rootIdea']['numPosts'] == 16  # phase 1 and phase 2 posts
     assert res.data['numParticipants'] == 1
 
 

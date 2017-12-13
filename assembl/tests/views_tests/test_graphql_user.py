@@ -14,6 +14,7 @@ query User($id: ID!) {
         username
         displayName
         email
+        image { externalUrl }
       }
     }
   }
@@ -25,6 +26,7 @@ query User($id: ID!) {
     assert res.data['user']['username'] is None
     assert res.data['user']['displayName'] == u'A. Barking Loon'
     assert res.data['user']['email'] == u'abloon@gmail.com'
+    assert res.data['user']['image'] is None
 
 
 def test_graphql_get_profile_should_not_see_email(graphql_request, participant1_user, participant2_user):
@@ -53,12 +55,26 @@ query User($id: ID!) {
 
 
 def test_graphql_update_user(graphql_request, participant1_user):
+    import os
+    from io import BytesIO
+
+    class FieldStorage(object):
+        file = BytesIO(os.urandom(16))
+
+        def __init__(self, filename, type):
+            self.filename = filename
+            self.type = type
+
+    graphql_request.POST['variables.img'] = FieldStorage(
+        u'path/to/new-img.png', 'image/png')
+
     res = schema.execute(u"""
-mutation UpdateUser($id: ID!, $name: String!, $username: String) {
+mutation UpdateUser($id: ID!, $name: String!, $username: String, $img: String) {
   updateUser(
-    id: $id,
-    name: $name,
+    id: $id
+    name: $name
     username: $username
+    image: $img
   ) {
     user {
       ... on AgentProfile {
@@ -66,6 +82,7 @@ mutation UpdateUser($id: ID!, $name: String!, $username: String) {
         name
         username
         displayName
+        image { externalUrl }
       }
     }
   }
@@ -73,12 +90,15 @@ mutation UpdateUser($id: ID!, $name: String!, $username: String) {
 """, context_value=graphql_request, variable_values={
         "id": to_global_id('AgentProfile', participant1_user.id),
         "name": u"M. Barking Loon",
-        "username": u"Barking.Loon"
+        "username": u"Barking.Loon",
+        "img": u"variables.img"
     })
     assert res.errors is None
     assert res.data['updateUser']['user']['name'] == u'M. Barking Loon'
     assert res.data['updateUser']['user']['username'] == u'Barking.Loon'
     assert res.data['updateUser']['user']['displayName'] == u'M. Barking Loon'
+    image = res.data['updateUser']['user']['image']
+    assert '/documents/' in image['externalUrl']
 
     # clean up
     participant1_user.username_p = None

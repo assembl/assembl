@@ -6,6 +6,10 @@ const Translations = {
     cancel: "Annuler",
     validate: "Valider",
     delete: "Supprimer",
+    chatframe: {
+      title: "Fenêtre de discussion instantanée",
+      tooltip: "Assemb'Bot"
+    },
     introduction: "Introduction",
     conclusion: "Conclusion",
     redirectToV1:
@@ -402,6 +406,10 @@ const Translations = {
     validate: "Validate",
     introduction: "Introduction",
     conclusion: "Conclusion",
+    chatframe: {
+      title: "Instant discussion window",
+      tooltip: "Assemb'Bot"
+    },
     redirectToV1:
       "You will be redirected to the %{phaseName} phase in a few seconds. Assembl is being improved, please excuse us for the interface change. If nothing happens, click on the button.",
     search: {
