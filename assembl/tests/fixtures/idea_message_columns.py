@@ -20,8 +20,9 @@ def idea_message_column_positive(request, test_adminuser_webrequest, subidea_1, 
     test_session.flush()
 
     def fin():
-        test_session.delete(column)
+        test_session.delete(synthesis.idea_links_of_content[0])
         test_session.delete(synthesis)
+        test_session.delete(column)
         test_session.flush()
 
     request.addfinalizer(fin)
@@ -49,8 +50,9 @@ def idea_message_column_negative(request, test_adminuser_webrequest, subidea_1,
     test_session.flush()
 
     def fin():
-        test_session.delete(column)
         test_session.delete(synthesis)
+        test_session.delete(synthesis.idea_links_of_content[0])
+        test_session.delete(column)
         test_session.flush()
 
     request.addfinalizer(fin)
@@ -76,8 +78,9 @@ def idea_message_column_positive_on_subidea_1_1(request, test_adminuser_webreque
     test_session.flush()
 
     def fin():
-        test_session.delete(column)
         test_session.delete(synthesis)
+        test_session.delete(synthesis.idea_links_of_content[0])
+        test_session.delete(column)
         test_session.flush()
 
     request.addfinalizer(fin)
