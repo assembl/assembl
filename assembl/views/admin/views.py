@@ -19,7 +19,7 @@ from ...models import (
     Discussion, DiscussionPermission, Role, Permission, UserRole,
     LocalUserRole, Preferences, User, Username, AgentProfile,
     IMAPMailbox, MailingList)
-from ...models.auth import create_default_permissions
+from ...lib.migration import create_default_discussion_data
 from ...nlp.translation_service import DummyGoogleTranslationService
 
 
@@ -156,7 +156,7 @@ def discussion_admin(request):
         session.add(discussion)
         discussion.invoke_callbacks_after_creation()
 
-        create_default_permissions(discussion)
+        create_default_discussion_data(discussion)
         mailbox_class = (
             MailingList if g('mailing_list_address') else IMAPMailbox)
         mailbox = mailbox_class(

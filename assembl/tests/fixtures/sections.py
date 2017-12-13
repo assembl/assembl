@@ -9,45 +9,11 @@ def sections(request, discussion, test_session):
     from assembl.models.section import SectionTypesEnum
     discussion_id = discussion.id
 
+    # default sections are created in the discussion fixture via
+    # create_default_discussion_data
+
     sections = []
-    homepage_section = Section(
-        discussion_id=discussion_id,
-        title=LangString.create(u'Home', 'en'),
-        section_type=SectionTypesEnum.HOMEPAGE.value,
-        order=0.0
-    )
-    sections.append(homepage_section)
-    debate_section = Section(
-        discussion_id=discussion_id,
-        title=LangString.create(u'Debate', 'en'),
-        section_type=SectionTypesEnum.DEBATE.value,
-        order=1.0
-    )
-    sections.append(debate_section)
-    syntheses_section = Section(
-        discussion_id=discussion_id,
-        title=LangString.create(u'Syntheses', 'en'),
-        section_type=SectionTypesEnum.SYNTHESES.value,
-        order=2.0
-    )
-    sections.append(syntheses_section)
-    resources_center_section = Section(
-        discussion_id=discussion_id,
-        title=LangString.create(u'Resources center', 'en'),
-        section_type=SectionTypesEnum.RESOURCES_CENTER.value,
-        order=3.0
-    )
-    sections.append(resources_center_section)
-
-    administration_section = Section(
-        discussion_id=discussion_id,
-        title=LangString.create(u'Administration', 'en'),
-        section_type=SectionTypesEnum.ADMINISTRATION.value,
-        order=99.0
-    )
-    sections.append(administration_section)
-
-    # also add a custom section
+    # add a custom section
     custom_section = Section(
         discussion_id=discussion_id,
         title=LangString.create(u'GNU is not Unix', 'en'),

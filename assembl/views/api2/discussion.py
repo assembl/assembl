@@ -46,6 +46,7 @@ from pyramid_mailer.message import Message
 import requests
 
 from assembl.lib.config import get_config
+from assembl.lib.migration import create_default_discussion_data
 from assembl.lib.parsedatetime import parse_datetime
 from assembl.lib.sqla import ObjectNotUniqueError
 from assembl.lib.json import DateJSONEncoder
@@ -57,7 +58,6 @@ from assembl.auth.password import verify_data_token, data_token, Validity
 from assembl.auth.util import get_permissions
 from assembl.graphql.langstring import resolve_langstring
 from assembl.models import (Discussion, Permission)
-from assembl.models.auth import create_default_permissions
 from assembl.utils import format_date, get_thematics, get_question_posts
 from ..traversal import InstanceContext, ClassContext
 from . import (JSON_HEADER, FORM_HEADER, CreationResponse)
@@ -1074,7 +1074,7 @@ def post_discussion(request):
         # Hackish. Discussion API? Generic post-init method?
         discussion.preferences.name = (
             'discussion_' + json.get('slug', str(discussion.id)))
-        create_default_permissions(discussion)
+        create_default_discussion_data(discussion)
         if user is not None:
             role = db.query(Role).filter_by(name=R_ADMINISTRATOR).first()
             local_role = LocalUserRole(discussion=discussion, user=user, role=role)

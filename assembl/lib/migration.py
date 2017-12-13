@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """Basic infrastructure for alembic migration"""
 from __future__ import absolute_import
 
@@ -118,6 +119,67 @@ def delete_boolean_constraint(db, table, column):
             db.execute('alter table "%s"."%s"."%s" drop constraint "%s"' % (
                 schema, username, table, constraint_name))
             treated.add(constraint_name)
+
+
+def create_default_discussion_sections(discussion):
+    from assembl import models as m
+    from assembl.models.section import SectionTypesEnum
+    db = discussion.db
+    langstring = m.LangString.create(u'Home', 'en')
+    langstring.add_value(u'Accueil', 'fr')
+    homepage_section = m.Section(
+        discussion=discussion,
+        title=langstring,
+        section_type=SectionTypesEnum.HOMEPAGE.value,
+        order=0.0
+    )
+    db.add(homepage_section)
+
+    langstring = m.LangString.create(u'Debate', 'en')
+    langstring.add_value(u'Débat', 'fr')
+    debate_section = m.Section(
+        discussion=discussion,
+        title=langstring,
+        section_type=SectionTypesEnum.DEBATE.value,
+        order=1.0
+    )
+    db.add(debate_section)
+
+    langstring = m.LangString.create(u'Syntheses', 'en')
+    langstring.add_value(u'Synthèses', 'fr')
+    syntheses_section = m.Section(
+        discussion=discussion,
+        title=langstring,
+        section_type=SectionTypesEnum.SYNTHESES.value,
+        order=2.0
+    )
+    db.add(syntheses_section)
+
+    langstring = m.LangString.create(u'Resources center', 'en')
+    langstring.add_value(u'Ressources', 'fr')
+    resources_center_section = m.Section(
+        discussion=discussion,
+        title=langstring,
+        section_type=SectionTypesEnum.RESOURCES_CENTER.value,
+        order=3.0
+    )
+    db.add(resources_center_section)
+
+    langstring = m.LangString.create(u'Administration', 'en')
+    langstring.add_value(u'Administration', 'fr')
+    administration_section = m.Section(
+        discussion=discussion,
+        title=langstring,
+        section_type=SectionTypesEnum.ADMINISTRATION.value,
+        order=99.0
+    )
+    db.add(administration_section)
+
+
+def create_default_discussion_data(discussion):
+    from ..models.auth import create_default_permissions
+    create_default_permissions(discussion)
+    create_default_discussion_sections(discussion)
 
 
 def includeme(config):

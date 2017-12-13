@@ -2008,10 +2008,11 @@ query { sections {
     assert res.data['sections'][0]['sectionType'] == SectionTypesEnum.HOMEPAGE.value
     assert res.data['sections'][0]['order'] == 0.0
 
-    assert res.data['sections'][-1]['url'] == u'http://www.gnu.org'
-    assert res.data['sections'][-1]['sectionType'] == SectionTypesEnum.CUSTOM.value
-    assert res.data['sections'][-1]['order'] == 4.0
-    assert res.data['sections'][-1]['title'] == u'GNU is not Unix'
+    assert res.data['sections'][-2]['url'] == u'http://www.gnu.org'
+    assert res.data['sections'][-2]['sectionType'] == SectionTypesEnum.CUSTOM.value
+    assert res.data['sections'][-2]['order'] == 4.0
+    assert res.data['sections'][-2]['title'] == u'GNU is not Unix'
+    # res.data['sections'][-1] is the Administration section
 
 
 def test_mutation_create_section(sections, graphql_request):
@@ -2078,8 +2079,8 @@ query { sections {
     assert len(result['sections']) == 5
 
 
-def test_mutation_delete_section_fails_for_non_custom_sections(sections, graphql_request):
-    non_custom_section_id = to_global_id('Section', sections[1].id)
+def test_mutation_delete_section_fails_for_non_custom_sections(graphql_request, discussion):
+    non_custom_section_id = to_global_id('Section', discussion.sections[1].id)  # Debate section
     variables = {
         'id': non_custom_section_id
     }
