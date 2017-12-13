@@ -110,7 +110,10 @@ class PostView extends React.PureComponent<void, Props, State> {
     };
     return (
       <div>
-        <Nuggets extracts={extracts} postId={id} nuggetsManager={nuggetsManager} completeLevel={completeLevelArray.join('-')} />
+        {!multiColumns && (
+          <Nuggets extracts={extracts} postId={id} nuggetsManager={nuggetsManager} completeLevel={completeLevelArray.join('-')} />
+        )}
+
         <div className="box" style={boxStyle}>
           <div className="post-row">
             <div className="post-left">
