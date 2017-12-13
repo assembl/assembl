@@ -71,7 +71,7 @@ const PostColumn = ({
         <Tree
           contentLocaleMapping={contentLocaleMapping}
           lang={lang}
-          data={data || []}
+          data={data}
           initialRowIndex={initialRowIndex}
           noRowsRenderer={noRowsRenderer}
           InnerComponent={ColumnsPost}
