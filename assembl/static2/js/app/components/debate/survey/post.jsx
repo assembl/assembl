@@ -111,7 +111,7 @@ class Post extends React.Component {
 
   render() {
     const { post } = this.props.data;
-    const { contentLocale, lang, moreProposals, originalLocale, postIndex, updateLocalContentLocale, screenWidth } = this.props;
+    const { contentLocale, lang, moreProposals, originalLocale, postIndex, screenWidth } = this.props;
     const { debateData } = this.props.debate;
     const { bodyEntries } = post;
     const translate = contentLocale !== originalLocale;
@@ -156,7 +156,6 @@ class Post extends React.Component {
               lang={lang}
               translate={translate}
               originalLocale={originalLocale}
-              updateLocalContentLocale={updateLocalContentLocale}
             />
           ) : null}
           <div
