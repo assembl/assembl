@@ -88,6 +88,10 @@ def associate_by_email(backend, details, provider=None, user=None, *args, **kwar
 
 
 def social_user(backend, uid, user=None, *args, **kwargs):
+    """Get the social account using the UID.
+    replaces social.pipeline.social_auth.social_user,
+    because it always uses the social account's user
+    versus a previous connection user."""
     provider = backend.name
     provider_domain = backend.get_provider_domain()
     social = backend.strategy.storage.user.get_social_auth(

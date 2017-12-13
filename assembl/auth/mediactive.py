@@ -8,6 +8,8 @@ from .encryption import MediactiveAESCryptor
 
 
 class Mediactive(BaseAuth):
+    """A simple SocialAuth backend agreed to with Mediactive.
+    Security is based on a shared secret key."""
     name = 'mediactive'
     USERNAME_KEY = 'username'
     html_parser = HTMLParser()

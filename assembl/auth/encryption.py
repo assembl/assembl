@@ -1,3 +1,5 @@
+"""A few symmetric encryption routines"""
+
 import base64
 from os import urandom
 
@@ -19,6 +21,7 @@ class Decryptor(object):
 
 
 class AESDecryptor(Decryptor):
+    """A decryptor that uses AES symmetric keys"""
     def __init__(self, password, backend=None):
         backend = backend or default_backend()
         self.backend = backend
@@ -40,6 +43,7 @@ class AESDecryptor(Decryptor):
 
 
 class AESEncryptor(Encryptor):
+    """An encryptor that uses AES symmetric keys"""
     def __init__(self, password, backend=None):
         backend = backend or default_backend()
         self.backend = backend
@@ -64,6 +68,7 @@ class AESCryptor(AESDecryptor, AESEncryptor):
 
 
 class MediactiveAESCryptor(AESCryptor):
+    """Mediactive uses the SHA hash of the key as a key"""
     def __init__(self, password):
         backend = default_backend()
         digest = hashes.Hash(hashes.SHA256(), backend=backend)
@@ -73,6 +78,9 @@ class MediactiveAESCryptor(AESCryptor):
 
 
 class RSAEncryptor(Encryptor):
+    """An asymmetric encryptor based on SSH keys.
+    Only works if the payload is smaller than the key,
+    but can be used for symmetric keys."""
     def __init__(self, rsa_public_key):
         self.public_key = serialization.load_ssh_public_key(rsa_public_key)
 
@@ -88,6 +96,8 @@ class RSAEncryptor(Encryptor):
 
 
 class RSADecryptor(Decryptor):
+    """The decryptor symmetric to RSAEncryptor.
+    Requires the private key of course."""
     def __init__(self, rsa_private_key):
         self.private_key = private_key_from_cleaned_text(rsa_private_key)
         self.public_key = self.private_key.public_key()
