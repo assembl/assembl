@@ -94,7 +94,7 @@ class PostView extends React.PureComponent<void, Props, State> {
       body,
       subject,
       modifiedSubject,
-      multiColumn
+      multiColumns
     } = this.props;
     const translate = contentLocale !== originalLocale;
 
@@ -138,7 +138,7 @@ class PostView extends React.PureComponent<void, Props, State> {
 
               <Attachments attachments={attachments} />
 
-              {!multiColumn && (
+              {!multiColumns && (
                 <div>
                   <RelatedIdeas indirectIdeaContentLinks={indirectIdeaContentLinks} />
 
@@ -164,7 +164,7 @@ class PostView extends React.PureComponent<void, Props, State> {
             </div>
           </div>
         </div>
-        {!multiColumn && (
+        {!multiColumns && (
           <div className={this.state.showAnswerForm ? 'answer-form' : 'collapsed-answer-form'}>
             <AnswerForm
               parentId={id}
