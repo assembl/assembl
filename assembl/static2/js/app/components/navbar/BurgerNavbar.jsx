@@ -56,6 +56,7 @@ export default class BurgerNavbar extends React.PureComponent {
             location={location}
             connectedUserId={connectedUserId}
             currentPhaseIdentifier={currentPhaseIdentifier}
+            remainingWidth={0}
           />
         </div>
       </div>

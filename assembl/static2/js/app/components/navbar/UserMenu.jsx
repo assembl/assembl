@@ -10,24 +10,32 @@ import { getConnectedUserId } from '../../utils/globalFunctions';
 type Props = {
   location: string,
   currentPhaseIdentifier: string,
-  helpUrl: string
+  helpUrl: string,
+  remainingWidth?: number
 };
 
-const UserMenu = ({ location, currentPhaseIdentifier, helpUrl }: Props) => (
+const shouldShow = (remainingWidth, breakPoint) => (typeof remainingWidth === 'number' ? remainingWidth > breakPoint : true);
+
+const UserMenu = ({ location, currentPhaseIdentifier, helpUrl, remainingWidth }: Props) => (
   <div className="navbar-icons">
-    {currentPhaseIdentifier !== 'survey' && (
-      <div id="search">
-        <Search />
-      </div>
-    )}
+    {currentPhaseIdentifier !== 'survey' &&
+      shouldShow(remainingWidth, 250) && (
+        <div id="search">
+          <Search />
+        </div>
+      )}
     {getConnectedUserId() &&
       helpUrl && (
         <Link to={helpUrl} target="_blank">
           <span className="assembl-icon-faq grey" />
         </Link>
       )}
-    <Avatar location={location} />
+    <Avatar location={location} showUsername={shouldShow(remainingWidth, 450)} />
   </div>
 );
+
+UserMenu.defaultProps = {
+  remainingWidth: null
+};
 
 export default UserMenu;

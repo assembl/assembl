@@ -371,9 +371,3 @@ $marginLeft: $imgtypeWidth + 2 * $imgtypeMargin;
     }
   }
 }
-
-@media screen and (max-width: 1023px) {
-  #search {
-    display: none;
-  }
-}

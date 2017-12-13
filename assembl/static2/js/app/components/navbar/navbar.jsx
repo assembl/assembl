@@ -168,6 +168,7 @@ export class AssemblNavbar extends React.PureComponent {
               {...commonProps}
               setWidth={this.setFlatWidth}
               style={screenTooSmall ? { opacity: 0, position: 'absolute', top: '-200px' } : {}}
+              maxWidth={maxAppWidth}
             />
           </div>
         </Navbar>
