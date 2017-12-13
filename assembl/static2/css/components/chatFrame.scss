@@ -1,6 +1,7 @@
 $windowBorderRadius: 10px;
 $backgroundColor: #120d9c;
 $buttonSize: 60px;
+$smallButtonSize: 40px;
 $textColor: white;
 $buttonMargin: 15px;
 $windowWidth: 350px;
@@ -25,11 +26,16 @@ $chatframeHeaderHeight: 60px;
   max-height: calc(100% - (#{$navbarHeight} + #{$buttonMargin} + #{$navbarMargin}));
 
   .chatframe-modal {
-    box-shadow: 0px 10px 15px 0px rgba(0, 0, 0, 0.4);
+    box-shadow: 0 10px 15px 0 rgba(0, 0, 0, 0.4);
     margin-bottom: $marginBetweenFrameAndButton;
     border-radius: $windowBorderRadius;
     height: calc(100% - (#{$buttonSize} + #{$marginBetweenFrameAndButton}));
     width: 100%;
+
+    /* Portrait phones and smaller */
+    @media (max-width: $screen-xxs-max) {
+      height: calc(100% - (#{$smallButtonSize} + #{$marginBetweenFrameAndButton}));
+    }
 
     .chatframe-modal-header {
       font-family: $font-family4;
@@ -65,9 +71,16 @@ $chatframeHeaderHeight: 60px;
     display: flex;
     justify-content: center;
     align-items: center;
-  }
-}
 
-.chatframe-icon:before {
-  font-size: 32px;
+    /* Portrait phones and smaller */
+    @media (max-width: $screen-xxs-max) {
+      height: $smallButtonSize;
+      width: $smallButtonSize;
+      border-radius: $smallButtonSize / 2;
+    }
+  }
+
+  .chatframe-icon:before {
+    font-size: 32px;
+  }
 }
