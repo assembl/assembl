@@ -48,7 +48,7 @@ echo "\
 
 .message-input-row {
     border: 1px solid rgba(0, 0, 0, 0.1);
-    box-shadow: -5px 0 5px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 -1px 10px 0px rgba(0, 0, 0, 0.2);
 }
 
 .chats-wrap {
