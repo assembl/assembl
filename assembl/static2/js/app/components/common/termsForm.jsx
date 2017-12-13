@@ -16,16 +16,18 @@ class TermsForm extends React.Component {
   }
 
   componentDidMount() {
-    const wrappedElement = document.getElementById('box');
-    wrappedElement.addEventListener('scroll', (event) => {
-      const element = event.target;
-      if (element.scrollHeight - element.scrollTop === element.clientHeight) {
-        this.setState({
-          isScrolled: true
-        });
-      }
-    });
+    this.box.addEventListener('scroll', this.trackScrolling);
   }
+
+  trackScrolling = () => {
+    const wrappedElement = this.box;
+    if (wrappedElement.scrollHeight - wrappedElement.scrollTop === wrappedElement.clientHeight) {
+      this.setState({
+        isScrolled: true
+      });
+      wrappedElement.removeEventListener('scroll', this.trackScrolling);
+    }
+  };
 
   handleSubmit() {
     this.props.handleAcceptButton();
@@ -43,7 +45,13 @@ class TermsForm extends React.Component {
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <div className="terms-box justify" id="box" dangerouslySetInnerHTML={{ __html: text }} />
+          <div
+            className="terms-box justify"
+            ref={(box) => {
+              this.box = box;
+            }}
+            dangerouslySetInnerHTML={{ __html: text }}
+          />
           {isScrolled &&
             !isChecked && (
               <Button
