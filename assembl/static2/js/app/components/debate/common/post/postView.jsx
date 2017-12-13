@@ -9,6 +9,7 @@ import PostTranslate from '../../common/translations/postTranslate';
 import PostActions from '../../common/postActions';
 import AnswerForm from '../../thread/answerForm';
 import Nuggets from '../../thread/nuggets';
+import RelatedIdeas from './relatedIdeas';
 import { transformLinksInHtml } from '../../../../utils/linkify';
 import type { Props as PostProps } from './index';
 
@@ -98,9 +99,6 @@ class PostView extends React.PureComponent<void, Props, State> {
     } = this.props;
     const translate = contentLocale !== originalLocale;
 
-    const relatedIdeasTitle = indirectIdeaContentLinks
-      ? indirectIdeaContentLinks.map(link => link && link.idea && link.idea.title)
-      : [];
     const completeLevelArray = fullLevel ? [rowIndex, ...fullLevel.split('-').map(string => Number(string))] : [rowIndex];
 
     const answerTextareaRef = (el: HTMLTextAreaElement) => {
@@ -143,25 +141,13 @@ class PostView extends React.PureComponent<void, Props, State> {
 
               <Attachments attachments={attachments} />
 
-              {!multiColumn &&
-                relatedIdeasTitle.length && (
-                  <div className="link-idea">
-                    <div className="label">
-                      <Translate value="debate.thread.linkIdea" />
-                    </div>
-                    <div className="badges">
-                      {relatedIdeasTitle.map((title, index) => (
-                        <span className="badge" key={index}>
-                          {title}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-                )}
-
               {!multiColumn && (
-                <div className="answers annotation">
-                  <Translate value="debate.thread.numberOfResponses" count={numChildren} />
+                <div>
+                  <RelatedIdeas indirectIdeaContentLinks={indirectIdeaContentLinks} />
+
+                  <div className="answers annotation">
+                    <Translate value="debate.thread.numberOfResponses" count={numChildren} />
+                  </div>
                 </div>
               )}
             </div>
