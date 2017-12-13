@@ -1,0 +1,30 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`PostBody component should render a post body 1`] = `
+<div
+  className="post-body"
+>
+  <Apollo(Connect(Component))
+    contentLocale="fr"
+    id="XYZ333"
+    lang="fr"
+    originalLocale="en"
+    translate={true}
+  />
+  <h3
+    className="dark-title-3"
+  >
+    <span>
+      open-source Associate
+    </span>
+  </h3>
+  <div
+    className="body "
+    dangerouslySetInnerHTML={
+      Object {
+        "__html": "<p>You can't index the port without programming the wireless HTTP program!</p>",
+      }
+    }
+  />
+</div>
+`;

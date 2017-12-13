@@ -1,0 +1,29 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`RelatedIdeas component should render related ideas 1`] = `
+<div
+  className="link-idea"
+>
+  <div
+    className="label"
+  >
+    <Translate
+      value="debate.thread.linkIdea"
+    />
+  </div>
+  <div
+    className="badges"
+  >
+    <span
+      className="badge"
+    >
+      Foo
+    </span>
+    <span
+      className="badge"
+    >
+      Bar
+    </span>
+  </div>
+</div>
+`;

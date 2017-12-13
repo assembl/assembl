@@ -67,7 +67,7 @@ type DefaultProps = {
 
 type bodyAndSubject = { body: string, subject: string, originalBody: string, originalSubject: string };
 
-class Post extends React.PureComponent<DefaultProps, Props, State> {
+export class DumbPost extends React.PureComponent<DefaultProps, Props, State> {
   defaultProps: DefaultProps;
 
   props: Props;
@@ -214,4 +214,4 @@ class Post extends React.PureComponent<DefaultProps, Props, State> {
 
 const withData: OperationComponent<Response> = graphql(PostQuery);
 
-export default compose(withData, withLoadingIndicator())(Post);
+export default compose(withData, withLoadingIndicator())(DumbPost);

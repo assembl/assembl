@@ -1,0 +1,212 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Post component should render a PostView component and pass its props to it 1`] = `
+<div
+  className="posts"
+  id="XYZ333"
+>
+  <PostView
+    body="I'll bypass the online CSS bus, that should firewall the SAS monitor!"
+    bodyMimeType="text/*"
+    borderLeftColor="red"
+    contentLocale="fr"
+    creationDate="11/11/2011"
+    data={
+      Object {
+        "post": Object {
+          "attachments": Array [],
+          "bodyEntries": Array [
+            Object {
+              "localeCode": "en",
+              "value": "I'll bypass the online CSS bus, that should firewall the SAS monitor!",
+            },
+          ],
+          "creator": Object {
+            "displayName": "Dannie Treutel",
+            "userId": "dannietreutel",
+          },
+          "extracts": Array [],
+          "id": "XYZ333",
+          "modificationDate": "12/12/2012",
+          "mySentiment": "like",
+          "publicationState": "PUBLISHED",
+          "sentimentCounts": 3,
+          "subjectEntries": Array [
+            Object {
+              "localeCode": "en",
+              "value": "We need to hack the solid state HTTP alarm!",
+            },
+          ],
+        },
+      }
+    }
+    debateData={
+      Object {
+        "translationEnabled": true,
+      }
+    }
+    editable={true}
+    fullLevel="0"
+    handleEditClick={[Function]}
+    id="XYZ333"
+    ideaId="ABC123"
+    identifier="thread"
+    indirectIdeaContentLinks={
+      Array [
+        Object {
+          "idea": Object {
+            "id": "foo",
+            "title": "Foo",
+          },
+        },
+      ]
+    }
+    lang="fr"
+    level={1}
+    modifiedSubject={
+      <span>
+        <span
+          className="subject-prefix"
+        >
+          Rep. 1: 
+        </span>
+        We need to hack the solid state HTTP alarm!
+      </span>
+    }
+    multiColumns={false}
+    nuggetsManager={null}
+    numChildren={3}
+    originalLocale="fr"
+    publicationState="PUBLISHED"
+    refetchIdea={[Function]}
+    routerParams={
+      Object {
+        "phase": "thread",
+        "slug": "/debate/thread/XYZ333",
+        "themeId": "VVV999",
+      }
+    }
+    rowIndex={0}
+    subject="We need to hack the solid state HTTP alarm!"
+  />
+</div>
+`;
+
+exports[`Post component should render a deleted post 1`] = `
+<DeletedPost
+  deletedBy="user"
+  id={undefined}
+  subject={
+    <span>
+      We need to hack the solid state HTTP alarm!
+    </span>
+  }
+/>
+`;
+
+exports[`PostView component should render a post in view mode 1`] = `
+<div>
+  <Nuggets
+    completeLevel="0-0"
+    extracts={Array []}
+    nuggetsManager={null}
+    postId="XYZ333"
+  />
+  <div
+    className="box"
+    style={
+      Object {
+        "borderLeftColor": "red",
+      }
+    }
+  >
+    <div
+      className="post-row"
+    >
+      <div
+        className="post-left"
+      >
+        <ProfileLine
+          creationDate="11/11/2011"
+          locale="fr"
+          modified={true}
+          userId="dannietreutel"
+          userName="Dannie Treutel"
+        />
+        <PostBody
+          body="<p>You can't index the port without programming the wireless HTTP program!</p>"
+          bodyDivRef={[Function]}
+          bodyMimeType={undefined}
+          contentLocale="fr"
+          id="XYZ333"
+          lang="fr"
+          originalLocale="fr"
+          subject={
+            <span>
+              open-source Associate
+            </span>
+          }
+          translate={false}
+          translationEnabled={true}
+        />
+        <Attachments
+          attachments={Array []}
+        />
+        <div>
+          <RelatedIdeas
+            indirectIdeaContentLinks={undefined}
+          />
+          <div
+            className="answers annotation"
+          >
+            <Translate
+              count={3}
+              value="debate.thread.numberOfResponses"
+            />
+          </div>
+        </div>
+      </div>
+      <div
+        className="post-right"
+      >
+        <Connect(withApollo(PostActions))
+          creatorUserId="dannietreutel"
+          debateData={
+            Object {
+              "translationEnabled": true,
+            }
+          }
+          editable={true}
+          handleEditClick={[Function]}
+          identifier="thread"
+          mySentiment="like"
+          numChildren={3}
+          postId="XYZ333"
+          postSubject="open-source Associate"
+          routerParams={
+            Object {
+              "phase": "thread",
+              "slug": "/debate/thread/XYZ333",
+              "themeId": "VVV999",
+            }
+          }
+          sentimentCounts={3}
+        />
+      </div>
+    </div>
+  </div>
+  <div
+    className="collapsed-answer-form"
+  >
+    <Connect(Apollo(Apollo(AnswerForm)))
+      handleAnswerClick={[Function]}
+      hideAnswerForm={[Function]}
+      ideaId="ABC123"
+      identifier="thread"
+      parentId="XYZ333"
+      refetchIdea={[Function]}
+      textareaRef={[Function]}
+    />
+  </div>
+</div>
+`;

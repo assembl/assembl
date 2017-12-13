@@ -1,0 +1,105 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Post component should render a PostView component and pass its props to it 1`] = `
+<div
+  className="posts"
+  id="XYZ333"
+>
+  <PostView
+    body="I'll bypass the online CSS bus, that should firewall the SAS monitor!"
+    bodyMimeType="text/*"
+    borderLeftColor="red"
+    contentLocale="fr"
+    creationDate="11/11/2011"
+    data={
+      Object {
+        "post": Object {
+          "attachments": Array [],
+          "bodyEntries": Array [
+            Object {
+              "localeCode": "en",
+              "value": "I'll bypass the online CSS bus, that should firewall the SAS monitor!",
+            },
+          ],
+          "creator": Object {
+            "displayName": "Dannie Treutel",
+            "userId": "dannietreutel",
+          },
+          "extracts": Array [],
+          "id": "XYZ333",
+          "modificationDate": "12/12/2012",
+          "mySentiment": "like",
+          "publicationState": "PUBLISHED",
+          "sentimentCounts": 3,
+          "subjectEntries": Array [
+            Object {
+              "localeCode": "en",
+              "value": "We need to hack the solid state HTTP alarm!",
+            },
+          ],
+        },
+      }
+    }
+    debateData={
+      Object {
+        "translationEnabled": true,
+      }
+    }
+    editable={true}
+    fullLevel="0"
+    handleEditClick={[Function]}
+    id="XYZ333"
+    ideaId="ABC123"
+    identifier="thread"
+    indirectIdeaContentLinks={
+      Array [
+        Object {
+          "idea": Object {
+            "id": "foo",
+            "title": "Foo",
+          },
+        },
+      ]
+    }
+    lang="fr"
+    level={1}
+    modifiedSubject={
+      <span>
+        <span
+          className="subject-prefix"
+        >
+          Rep. 1: 
+        </span>
+        We need to hack the solid state HTTP alarm!
+      </span>
+    }
+    multiColumns={false}
+    nuggetsManager={null}
+    numChildren={3}
+    originalLocale="fr"
+    publicationState="PUBLISHED"
+    refetchIdea={[Function]}
+    routerParams={
+      Object {
+        "phase": "thread",
+        "slug": "/debate/thread/XYZ333",
+        "themeId": "VVV999",
+      }
+    }
+    rowIndex={0}
+    subject="We need to hack the solid state HTTP alarm!"
+  />
+</div>
+`;
+
+exports[`Post component should render a deleted post 1`] = `
+<DeletedPost
+  deletedBy="user"
+  id={undefined}
+  subject={
+    <span>
+      We need to hack the solid state HTTP alarm!
+    </span>
+  }
+/>
+`;
