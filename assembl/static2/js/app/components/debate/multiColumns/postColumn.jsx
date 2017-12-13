@@ -78,6 +78,7 @@ const PostColumn = ({
           InnerComponentFolded={FoldedPost}
           SeparatorComponent={Separator}
           identifier={identifier}
+          innerComponentProps={{ editable: canEditPosts }}
         />
       ) : (
         noRowsRenderer()

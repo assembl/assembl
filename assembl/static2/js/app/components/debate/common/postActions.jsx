@@ -33,6 +33,7 @@ class PostActions extends React.Component {
 
   render() {
     const {
+      editable,
       client,
       creatorUserId,
       postId,
@@ -59,7 +60,7 @@ class PostActions extends React.Component {
     let overflowMenu = null;
     const tooltipPlacement = screenWidth >= MEDIUM_SCREEN_WIDTH ? 'left' : 'top';
     const isPhaseCompleted = getIfPhaseCompletedByIdentifier(debateData.timeline, identifier);
-    if (userCanDeleteThisMessage || userCanEditThisMessage) {
+    if (editable && (userCanDeleteThisMessage || userCanEditThisMessage)) {
       overflowMenu = (
         <div className="overflow-action">
           <OverlayTrigger

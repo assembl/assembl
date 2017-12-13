@@ -81,6 +81,7 @@ class PostView extends React.PureComponent<void, Props, State> {
       lang,
       ideaId,
       refetchIdea,
+      editable,
       // creationDate is retrieved by IdeaWithPosts query, not PostQuery
       creationDate,
       fullLevel,
@@ -148,9 +149,11 @@ class PostView extends React.PureComponent<void, Props, State> {
                 </div>
               )}
             </div>
+
             <div className="post-right">
               <PostActions
                 creatorUserId={creator.userId}
+                editable={editable}
                 postId={id}
                 handleEditClick={handleEditClick}
                 sentimentCounts={sentimentCounts}

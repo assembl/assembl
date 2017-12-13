@@ -35,6 +35,7 @@ type RouterParams = {
 
 export type Props = {
   borderLeftColor: ?string,
+  editable: boolean,
   contentLocale: string,
   data: Response,
   fullLevel: string,
@@ -60,6 +61,7 @@ type State = {
 };
 
 type DefaultProps = {
+  editable: boolean,
   multiColumn: boolean
 };
 
@@ -73,6 +75,7 @@ class Post extends React.PureComponent<DefaultProps, Props, State> {
   state: State;
 
   static defaultProps = {
+    editable: true,
     multiColumn: false
   };
 
