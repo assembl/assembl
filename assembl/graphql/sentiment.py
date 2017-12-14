@@ -49,7 +49,7 @@ class AddSentiment(graphene.Mutation):
 
         post_id = args.get('post_id')
         post_id = int(Node.from_global_id(post_id)[1])
-        post = models.Post.get(post_id)
+        post = models.Content.get(post_id)
 
         permissions = get_permissions(user_id, discussion_id)
         allowed = SentimentOfPost.user_can_cls(
@@ -92,7 +92,7 @@ class DeleteSentiment(graphene.Mutation):
 
         post_id = args.get('post_id')
         post_id = int(Node.from_global_id(post_id)[1])
-        post = models.Post.get(post_id)
+        post = models.Content.get(post_id)
 
         permissions = get_permissions(user_id, discussion_id)
         allowed = post.my_sentiment.user_can(
