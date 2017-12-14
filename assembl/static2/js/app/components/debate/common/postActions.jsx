@@ -33,8 +33,18 @@ type Props = {
   sentimentCounts: SentimentCountsFragment
 };
 
-class PostActions extends React.Component<void, Props, void> {
+type DefaultProps = {
+  numChildren: number
+};
+
+class PostActions extends React.Component<DefaultProps, Props, void> {
   props: Props;
+
+  defaultProps: DefaultProps;
+
+  static defaultProps = {
+    numChildren: 0
+  };
 
   displayPhaseCompletedModal = (): void => {
     const body = (
