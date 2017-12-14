@@ -223,7 +223,7 @@ var VotingWidgetModel = WidgetModel.extend({
     if ( currentUser.isUnknownUser() ){
       return Ctx.getLoginURL() + "?"; // "?" is added in order to handle the hacky adding of "&locale=..." in infobar.tmpl
     }
-    if (activityState == "ended") {
+    if (activityState == "ended" || page == "results") {
       base += "#/results"; // was "&page=results";
     }
     return base;
@@ -284,6 +284,9 @@ var VotingWidgetModel = WidgetModel.extend({
       case this.VOTE_REPORTS:
           if (activityState == "ended") {
             return i18n.gettext("See results from the vote of ") + Moment(endDate).fromNow();
+          }
+          else {
+            return i18n.gettext("Vote results");
           }
     }
     return "";
@@ -414,10 +417,19 @@ var VotingWidgetModel = WidgetModel.extend({
 var MultiCriterionVotingWidgetModel = VotingWidgetModel.extend({
   constructor: function MultiCriterionVotingWidgetModel() {
     VotingWidgetModel.apply(this, arguments);
+    this.on('showResult', this.onShowResult);
   },
 
   defaults: {
     '@type': 'MultiCriterionVotingWidget'
+  },
+
+  onShowResult: function(evt){
+    var options = {
+      "target_url": this.getUrlForUser(null, "results"),
+      "modal_title": this.getLinkText(this.VOTE_REPORTS)
+    };
+    Ctx.openTargetInModal(null, null, options);
   },
 
   getLinkText: function(context, idea) {
