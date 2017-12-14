@@ -25,16 +25,16 @@ type ProfileProps = {
   updateUser: Function
 };
 
-type ProfileSate = {
+type ProfileState = {
   username: string,
   name: string,
   email: string
 };
 
-class Profile extends React.PureComponent<*, ProfileProps, ProfileSate> {
+class Profile extends React.PureComponent<*, ProfileProps, ProfileState> {
   props: ProfileProps;
 
-  state: ProfileSate;
+  state: ProfileState;
 
   constructor(props) {
     super(props);
