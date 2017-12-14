@@ -27,33 +27,27 @@ export type Response = {
   post: PostQuery
 };
 
-type RouterParams = {
-  phase: string,
-  slug: string,
-  themeId: string
-};
-
 export type Props = {
   borderLeftColor: ?string,
-  editable: boolean,
   contentLocale: string,
+  creationDate: string,
   data: Response,
+  debateData: DebateData,
+  editable: boolean,
   fullLevel: string,
   id: string,
+  ideaId: string,
+  identifier: string,
   lang: string,
   measureTreeHeight: Function,
   multiColumns: boolean,
+  nuggetsManager: NuggetsManager,
+  numChildren: number,
   originalLocale: string,
   parentId: string,
   refetchIdea: Function,
-  creationDate: string,
-  debateData: Object, // FIXME: add type for debateData and use it everywhere
-  nuggetsManager: NuggetsManager,
-  rowIndex: number,
-  ideaId: string,
-  numChildren: number,
   routerParams: RouterParams,
-  identifier: string
+  rowIndex: number
 };
 
 type State = {
