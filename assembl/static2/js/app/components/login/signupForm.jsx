@@ -22,10 +22,10 @@ type SignupFormProps = {
 };
 
 type SignupFormState = {
-  name: string | null,
-  email: string | null,
-  password1: string | null,
-  password2: string | null,
+  name: ?string,
+  email: ?string,
+  password1: ?string,
+  password2: ?string,
   checked: boolean
 };
 
