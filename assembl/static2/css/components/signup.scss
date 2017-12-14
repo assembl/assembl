@@ -13,6 +13,10 @@
 .terms-form {
   min-height: 530px;
 
+  .full-height {
+    height: 430px !important;
+  }
+
   .terms-box {
     overflow: auto;
     height: 350px;
