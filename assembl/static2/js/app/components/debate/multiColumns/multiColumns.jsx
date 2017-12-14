@@ -32,7 +32,7 @@ const MultiColumns = ({
           hyphenStyle: { borderTopColor: col.color }
         };
         const isPhaseCompleted = getIfPhaseCompletedByIdentifier(debateData.timeline, identifier);
-        const canEditPosts = !isPhaseCompleted && col.header.length === 0;
+        const canEditPosts = !isPhaseCompleted && !get(col, 'columnSynthesis.body');
         return (
           <PostColumn
             key={classifier}
