@@ -3,6 +3,7 @@ import React from 'react';
 import { Translate } from 'react-redux-i18n';
 import { Modal, Button } from 'react-bootstrap';
 import { compose, graphql } from 'react-apollo';
+import get from 'lodash/get';
 import type { OperationComponent, QueryProps } from 'react-apollo';
 import { closeModal } from '../../utils/utilityManager';
 import LegalNoticeAndTerms from '../../graphql/LegalNoticeAndTerms.graphql';
@@ -11,7 +12,11 @@ import withLoadingIndicator from '../../components/common/withLoadingIndicator';
 type TermsFormProps = {
   isChecked: boolean,
   text: string,
-  handleAcceptButton: () => void
+  handleAcceptButton: () => void,
+  style: {
+    height: string,
+    width: string
+  }
 };
 
 type TermsFormState = {
@@ -49,16 +54,18 @@ class DumbTermsForm extends React.Component<*, TermsFormProps, TermsFormState> {
     }
   };
 
-  handleSubmit() {
+  handleSubmit = () => {
     this.props.handleAcceptButton();
     closeModal();
-  }
+  };
 
   render() {
     const { isScrolled } = this.state;
-    const { isChecked, text } = this.props;
+    const { isChecked, text, style = {} } = this.props;
+    const termsBoxClasses = isChecked ? 'terms-box justify full-height' : 'terms-box justify';
+
     return (
-      <div className="terms-form">
+      <div className="terms-form" style={style}>
         <Modal.Header closeButton>
           <Modal.Title>
             <Translate value="termsAndConditions.headerTitle" />
@@ -66,7 +73,7 @@ class DumbTermsForm extends React.Component<*, TermsFormProps, TermsFormState> {
         </Modal.Header>
         <Modal.Body>
           <div
-            className="terms-box justify"
+            className={termsBoxClasses}
             ref={(box) => {
               this.box = box;
             }}
@@ -95,16 +102,18 @@ type Response = {
 
 export type Props = Response | QueryProps;
 
+export const mapDataToProps = ({ data }: Object) => {
+  const text = get(data, 'legalNoticeAndTerms.termsAndConditions', '');
+  return {
+    ...data,
+    text: text
+  };
+};
+
 const withData: OperationComponent<LegalNoticeAndTermsQuery, LegalNoticeAndTermsQueryVariables, Props> = graphql(
   LegalNoticeAndTerms,
   {
-    props: ({ data }) => {
-      const text = data.legalNoticeAndTerms ? data.legalNoticeAndTerms.termsAndConditions : '';
-      return {
-        ...data,
-        text: text
-      };
-    }
+    props: mapDataToProps
   }
 );
 
