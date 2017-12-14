@@ -1,0 +1,21 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ColumnSynthesis component should render a folded post 1`] = `
+<div
+  className="box synthesis background-grey"
+  id="synthesis-positive"
+>
+  <BoxWithHyphen
+    additionalContainerClassNames="column-synthesis"
+    body="Excepturi est rerum nulla explicabo ex voluptatibus quam repellendus. Repudiandae quia nesciunt autem et aliquid. Dolores nisi perferendis voluptas corrupti voluptate molestias est. Porro et rerum sunt accusantium dolores qui."
+    date=""
+    href=""
+    hyphenStyle={
+      Object {
+        "borderTopColor": "green",
+      }
+    }
+    subject="We need to input the optical SSL microchip!"
+  />
+</div>
+`;

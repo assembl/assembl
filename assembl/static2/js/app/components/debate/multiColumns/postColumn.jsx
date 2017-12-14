@@ -3,32 +3,11 @@ import React from 'react';
 
 import Tree from '../../common/tree';
 import ColumnHeader from './columnHeader';
-import ColumnsPost from '../../../components/debate/multiColumns/columnsPost';
 import FoldedPost from '../common/post/foldedPost';
-import BoxWithHyphen from '../../common/boxWithHyphen';
+import ColumnsPost from '../../../components/debate/multiColumns/columnsPost';
+import ColumnSynthesis, { type Props as ColumnSynthesisProps } from './columnSynthesis';
 
 const Separator = () => <div style={{ height: '25px' }} />;
-
-const Synthesis = ({
-  classifier,
-  synthesisTitle,
-  synthesisBody,
-  hyphenStyle
-}: {
-  classifier: string,
-  synthesisTitle: string,
-  synthesisBody: string,
-  hyphenStyle: Object
-}) => (
-  <div id={`synthesis-${classifier}`} className="box synthesis background-grey">
-    <BoxWithHyphen
-      additionalContainerClassNames="column-synthesis"
-      subject={synthesisTitle}
-      body={synthesisBody}
-      hyphenStyle={hyphenStyle}
-    />
-  </div>
-);
 
 const PostColumn = ({
   canEditPosts,
@@ -50,7 +29,7 @@ const PostColumn = ({
   color: string,
   classifier: string,
   title: string,
-  synthesisProps: Object,
+  synthesisProps: ColumnSynthesisProps,
   width: number,
   data: Array<Post>,
   contentLocaleMapping: Object,
@@ -65,7 +44,7 @@ const PostColumn = ({
     {canEditPosts && (
       <ColumnHeader color={color} classifier={classifier} title={title} ideaId={ideaId} refetchIdea={refetchIdea} />
     )}
-    {synthesisProps && <Synthesis {...synthesisProps} />}
+    {synthesisProps && <ColumnSynthesis {...synthesisProps} />}
     <div className="column-tree">
       {data.length > 0 ? (
         <Tree
