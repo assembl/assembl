@@ -103,7 +103,7 @@ class AnswerForm extends React.PureComponent<*, AnswerFormProps, AnswerFormState
             displayAlert('success', I18n.t('debate.thread.postSuccess'));
           })
           .catch((error) => {
-            displayAlert('danger', error);
+            displayAlert('danger', `${error}`);
             this.setState({ submitting: false });
           });
       });

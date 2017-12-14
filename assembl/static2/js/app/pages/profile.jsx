@@ -82,7 +82,7 @@ class Profile extends React.PureComponent<*, ProfileProps, ProfileSate> {
         displayAlert('success', I18n.t('profile.saveSuccess'));
       })
       .catch((error) => {
-        displayAlert('danger', error);
+        displayAlert('danger', error.message.replace('GraphQL error: ', ''));
       });
   };
 

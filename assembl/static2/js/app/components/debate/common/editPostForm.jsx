@@ -108,7 +108,7 @@ class EditPostForm extends React.PureComponent<void, EditPostFormProps, EditPost
             }
           })
           .catch((error) => {
-            displayAlert('danger', error);
+            displayAlert('danger', `${error}`);
           });
       });
     } else if (subjectIsEmpty) {
