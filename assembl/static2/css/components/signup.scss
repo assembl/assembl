@@ -14,11 +14,34 @@
   min-height: 530px;
 
   .terms-box {
-    width: 500px;
-    height: 350px;
     overflow: auto;
-    margin: 10px auto;
-    padding: 0 30px;
+    height: 350px;
+  }
+
+  @media screen and (min-width: 600px) {
+    .terms-box {
+      width: 500px;
+      margin: 10px auto;
+      padding: 0 30px;
+    }
+  }
+
+  @media screen and (max-width: 600px) {
+    .button-submit {
+      white-space: normal;
+    }
+
+    .terms-box {
+      width: 100%;
+    }
+
+    .modal-body {
+      padding: 0 15px;
+    }
+
+    .modal-content {
+      padding: 0;
+    }
   }
 
   .terms-submit {
