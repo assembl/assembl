@@ -20,10 +20,25 @@ $chatframeHeaderHeight: 60px;
   align-items: flex-end;
   justify-content: flex-end;
   flex-direction: column;
-  height: $windowHeight;
-  width: $windowWidth;
+  height: $buttonSize;
+  width: $buttonSize;
   max-width: calc(100% - (2 * #{$buttonMargin}));
   max-height: calc(100% - (#{$navbarHeight} + #{$buttonMargin} + #{$navbarMargin}));
+  pointer-events: none;
+
+  & > * {
+    pointer-events: auto;
+  }
+
+  @media (max-width: $screen-xxs-max) {
+    height: $smallButtonSize;
+    width: $smallButtonSize;
+  }
+
+  &.open {
+    height: $windowHeight;
+    width: $windowWidth;
+  }
 
   .chatframe-modal {
     box-shadow: 0 10px 15px 0 rgba(0, 0, 0, 0.4);
