@@ -3,6 +3,7 @@ import React from 'react';
 import { Translate } from 'react-redux-i18n';
 import { Modal, Button } from 'react-bootstrap';
 import { compose, graphql } from 'react-apollo';
+import type { OperationComponent, QueryProps } from 'react-apollo';
 import { closeModal } from '../../utils/utilityManager';
 import LegalNoticeAndTerms from '../../graphql/LegalNoticeAndTerms.graphql';
 import withLoadingIndicator from '../../components/common/withLoadingIndicator';
@@ -88,15 +89,24 @@ class DumbTermsForm extends React.Component<*, TermsFormProps, TermsFormState> {
   }
 }
 
-const withData = graphql(LegalNoticeAndTerms, {
-  props: ({ data }) => {
-    const text = data.legalNoticeAndTerms ? data.legalNoticeAndTerms.termsAndConditions : '';
-    return {
-      ...data,
-      text: text
-    };
+type Response = {
+  text?: string
+};
+
+export type Props = Response | QueryProps;
+
+const withData: OperationComponent<LegalNoticeAndTermsQuery, LegalNoticeAndTermsQueryVariables, Props> = graphql(
+  LegalNoticeAndTerms,
+  {
+    props: ({ data }) => {
+      const text = data.legalNoticeAndTerms ? data.legalNoticeAndTerms.termsAndConditions : '';
+      return {
+        ...data,
+        text: text
+      };
+    }
   }
-});
+);
 
 export { DumbTermsForm };
 
