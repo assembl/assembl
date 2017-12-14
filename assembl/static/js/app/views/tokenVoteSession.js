@@ -1720,7 +1720,8 @@ var TokenVoteSessionSubmittedModal = Backbone.Modal.extend({
     var text = $("<p></p>");
     text.text(i18n.gettext("Your vote has been saved successfully."));
     container.append(text);
-    var btn = $("<a class='btn btn-sm btn-primary js_close'></a>");
+    var btn = $("<a class='btn btn-sm btn-primary'></a>");
+    btn.attr("href", Ctx.getDiscussionGenericURL());
     btn.text(i18n.gettext("Go back to the discussion"));
     container.append(btn);
 

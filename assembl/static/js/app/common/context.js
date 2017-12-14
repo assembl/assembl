@@ -1497,6 +1497,12 @@ Context.prototype = {
     return this.format('{0}//{1}/{2}', location.protocol, location.host, url);
   },
   /**
+   * Returns the generic URL of the discussion, which then redirects to V1 or V2 home page depending on discussion configuration.
+  **/
+  getDiscussionGenericURL: function() {
+    return this.getAbsoluteURLFromRelativeURL(this.getDiscussionSlug());
+  },
+  /**
    * Returns an absolute url from a discussion relative url
    * @param {String} url
    * @returns {String}
