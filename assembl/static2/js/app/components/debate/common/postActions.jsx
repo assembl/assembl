@@ -158,9 +158,11 @@ class PostActions extends React.Component<void, Props, void> {
           <div className="empty-sentiments-count" />
         )}
         {screenWidth >= MEDIUM_SCREEN_WIDTH ? overflowMenu : null}
-        <div className="answers annotation">
-          <Translate value="debate.thread.numberOfResponses" count={numChildren || 0} />
-        </div>
+        {editable && (
+          <div className="answers annotation">
+            <Translate value="debate.thread.numberOfResponses" count={numChildren} />
+          </div>
+        )}
         <div className="clear">&nbsp;</div>
       </div>
     );
