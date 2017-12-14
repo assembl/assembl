@@ -1625,9 +1625,9 @@ var TokenVoteSessionModal = Backbone.Modal.extend({
   },
 
   onSubmit: function(){
+    var modalView = new TokenVoteSessionSubmittedModal({ model: this.model});
     this.onDestroy();
     this.remove();
-    var modalView = new TokenVoteSessionSubmittedModal();
     Ctx.setCurrentModalView(modalView);
     Assembl.slider.show(modalView);
   },
@@ -1714,6 +1714,7 @@ var TokenVoteSessionSubmittedModal = Backbone.Modal.extend({
   cancelEl: '.close, .js_close',
 
   onShow: function(){
+    var that = this;
     var container = this.$el.find(".js_modal-body");
     container.empty();
     var text = $("<p></p>");
@@ -1722,7 +1723,23 @@ var TokenVoteSessionSubmittedModal = Backbone.Modal.extend({
     var btn = $("<a class='btn btn-sm btn-primary js_close'></a>");
     btn.text(i18n.gettext("Go back to the discussion"));
     container.append(btn);
+
+    var btn2 = $("<a class='btn btn-sm btn-secondary'></a>");
+    btn2.text(i18n.gettext("Modify my vote"));
+    container.append(btn2);
+
+    var editMyVote = function(){
+      var modalView = new TokenVoteSessionModal({
+        model: that.model
+      });
+
+      Ctx.setCurrentModalView(modalView);
+      Assembl.slider.show(modalView);
+    };
+    btn2.click(editMyVote);
   },
+
+
 
   serializeData: function(){
     return {
