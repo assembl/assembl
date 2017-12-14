@@ -1,6 +1,7 @@
 #import "./AgentProfileInfo.graphql"
 #import "./Attachment.graphql"
 #import "./IdeaContentLink.graphql"
+#import "./SentimentCounts.graphql"
 
 fragment Post on Post {
   id
@@ -15,10 +16,7 @@ fragment Post on Post {
     # supposedUnderstood
   }
   sentimentCounts {
-    like
-    disagree
-    dontUnderstand
-    moreInfo
+    ...SentimentCounts
   }
   mySentiment
   indirectIdeaContentLinks {

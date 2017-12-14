@@ -161,7 +161,19 @@ export type IdeaWithPostsQuery = {|
         messageColumns: ?Array<?{|
           // A CSS color that will be used to theme the column.
           color: ?string,
-          header: ?string,
+          columnSynthesis: ?{|
+            // The ID of the object.
+            id: string,
+            subject: ?string,
+            body: ?string,
+            mySentiment: ?SentimentTypes,
+            sentimentCounts: ?{|
+              disagree: ?number,
+              dontUnderstand: ?number,
+              like: ?number,
+              moreInfo: ?number
+            |}
+          |},
           index: ?number,
           // Identifier for the column, will match :py:attr:`assembl.models.generic.Content.message_classifier`
           messageClassifier: string,
@@ -255,9 +267,9 @@ export type PostQuery = {|
           localeCode: string
         |}>,
         sentimentCounts: ?{|
-          like: ?number,
           disagree: ?number,
           dontUnderstand: ?number,
+          like: ?number,
           moreInfo: ?number
         |},
         mySentiment: ?SentimentTypes,
@@ -692,9 +704,9 @@ export type createPostMutation = {|
         localeCode: string
       |}>,
       sentimentCounts: ?{|
-        like: ?number,
         disagree: ?number,
         dontUnderstand: ?number,
+        like: ?number,
         moreInfo: ?number
       |},
       mySentiment: ?SentimentTypes,
@@ -930,9 +942,9 @@ export type updatePostMutation = {|
         localeCode: string
       |}>,
       sentimentCounts: ?{|
-        like: ?number,
         disagree: ?number,
         dontUnderstand: ?number,
+        like: ?number,
         moreInfo: ?number
       |},
       mySentiment: ?SentimentTypes,
@@ -1072,7 +1084,8 @@ export type updateThematicMutation = {|
 export type UpdateUserMutationVariables = {|
   id: string,
   name: string,
-  username?: ?string
+  username?: ?string,
+  img?: ?string
 |};
 
 export type UpdateUserMutation = {|
@@ -1082,7 +1095,10 @@ export type UpdateUserMutation = {|
       id: string,
       name: ?string,
       username: ?string,
-      displayName: ?string
+      displayName: ?string,
+      image: ?{|
+        externalUrl: ?string
+      |}
     |}
   |}
 |};
@@ -1164,7 +1180,12 @@ export type IdeaContentLinkFragment = {|
 export type IdeaMessageColumnFragment = {|
   // A CSS color that will be used to theme the column.
   color: ?string,
-  header: ?string,
+  columnSynthesis: ?{|
+    // The ID of the object.
+    id: string,
+    subject: ?string,
+    body: ?string
+  |},
   index: ?number,
   // Identifier for the column, will match :py:attr:`assembl.models.generic.Content.message_classifier`
   messageClassifier: string,
@@ -1185,9 +1206,9 @@ export type PostFragment = {|
     localeCode: string
   |}>,
   sentimentCounts: ?{|
-    like: ?number,
     disagree: ?number,
     dontUnderstand: ?number,
+    like: ?number,
     moreInfo: ?number
   |},
   mySentiment: ?SentimentTypes,
@@ -1221,4 +1242,11 @@ export type PostFragment = {|
       mimeType: ?string
     |}
   |}>
+|};
+
+export type SentimentCountsFragment = {|
+  disagree: ?number,
+  dontUnderstand: ?number,
+  like: ?number,
+  moreInfo: ?number
 |};

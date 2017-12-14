@@ -1,4 +1,5 @@
 // @flow
+import get from 'lodash/get';
 import React from 'react';
 import { ApolloClient, withApollo } from 'react-apollo';
 import { Translate } from 'react-redux-i18n';
@@ -17,13 +18,6 @@ import sentimentDefinitions from './sentimentDefinitions';
 import { getIfPhaseCompletedByIdentifier } from '../../../utils/timeline';
 import { withScreenWidth } from '../../common/screenDimensions';
 
-type SentimentCounts = {
-  disagree: number,
-  dontUnderstand: number,
-  like: number,
-  moreInfo: number
-};
-
 type Props = {
   client: ApolloClient,
   creatorUserId: string,
@@ -36,7 +30,7 @@ type Props = {
   postId: string,
   routerParams: RouterParams,
   screenWidth: number,
-  sentimentCounts: SentimentCounts
+  sentimentCounts: SentimentCountsFragment
 };
 
 class PostActions extends React.Component<void, Props, void> {
@@ -135,7 +129,8 @@ class PostActions extends React.Component<void, Props, void> {
             <div className="sentiments-count margin-m">
               <div>
                 {sentimentDefinitions.reduce((result, sentiment) => {
-                  if (sentimentCounts[sentiment.camelType] > 0) {
+                  const sentimentCount = get(sentimentCounts, sentiment.camelType, 0);
+                  if (sentimentCount > 0) {
                     result.push(
                       <div className="min-sentiment" key={sentiment.type} style={{ left: `${(count += 1 * 6)}px` }}>
                         <sentiment.SvgComponent size={15} />
