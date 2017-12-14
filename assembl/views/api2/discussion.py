@@ -38,7 +38,7 @@ from pyramid.httpexceptions import (
     HTTPOk, HTTPBadRequest, HTTPUnauthorized, HTTPNotAcceptable, HTTPFound,
     HTTPServerError, HTTPConflict)
 from pyramid_dogpile_cache import get_region
-from pyramid.security import authenticated_userid, Everyone
+from pyramid.security import Everyone
 from pyramid.renderers import JSONP_VALID_CALLBACK
 from pyramid.settings import asbool
 from pyramid_mailer import get_mailer
@@ -109,7 +109,7 @@ def userprivate_jsonld(discussion_id):
 
 def read_user_token(request):
     salt = None
-    user_id = authenticated_userid(request) or Everyone
+    user_id = request.authenticated_userid or Everyone
     discussion_id = request.context.get_discussion_id()
     permissions = get_permissions(user_id, discussion_id)
     if P_READ in permissions:
@@ -177,7 +177,7 @@ def permission_token(
              ctx_instance_class=Discussion, request_method='GET',
              accept="application/ld+json", renderer="json")
 def get_token(request):
-    user_id = authenticated_userid(request)
+    user_id = request.authenticated_userid
     if not user_id:
         raise HTTPUnauthorized()
     discussion_id = request.context.get_discussion_id()
@@ -335,7 +335,7 @@ def get_time_series_timing(request, force_bounds=False):
 def get_time_series_analytics(request):
     start, end, interval = get_time_series_timing(request)
     discussion = request.context._instance
-    user_id = authenticated_userid(request) or Everyone
+    user_id = request.authenticated_userid or Everyone
     format = get_format(request)
     results = []
 
@@ -917,7 +917,7 @@ def get_analytics_alerts(discussion, user_id, types, all_users=False):
              permission=P_DISC_STATS)
 def get_activity_alerts(request):
     discussion = request.context._instance
-    user_id = authenticated_userid(request) or Everyone
+    user_id = request.authenticated_userid or Everyone
     result = get_analytics_alerts(
         discussion, user_id,
         ["lurking_user", "inactive_user", "user_gone_inactive"],
@@ -930,7 +930,7 @@ def get_activity_alerts(request):
              permission=P_DISC_STATS)
 def get_interest_alerts(request):
     discussion = request.context._instance
-    user_id = authenticated_userid(request) or Everyone
+    user_id = request.authenticated_userid or Everyone
     result = get_analytics_alerts(
         discussion, user_id,
         ["interesting_to_me"],
@@ -962,7 +962,7 @@ def show_optics_cluster(request):
     suggestions = request.GET.get("suggestions", True)
     discussion = request.context._instance
     output = StringIO()
-    user_id = authenticated_userid(request) or Everyone
+    user_id = request.authenticated_userid or Everyone
     from assembl.nlp.clusters import (
         OpticsSemanticsAnalysis, OpticsSemanticsAnalysisWithSuggestions)
     if asbool(suggestions):
@@ -986,7 +986,7 @@ def show_optics_cluster(request):
              permission=P_READ)
 def show_suggestions_test(request):
     discussion = request.context._instance
-    user_id = authenticated_userid(request)
+    user_id = request.authenticated_userid
     if not user_id:
         from urllib import quote
         return HTTPFound(location="/login?next="+quote(request.path))
@@ -1032,7 +1032,7 @@ def post_discussion(request):
     from assembl.models import EmailAccount, User, LocalUserRole, Role, AbstractAgentAccount
     ctx = request.context
     json = request.json_body
-    user_id = authenticated_userid(request) or Everyone
+    user_id = request.authenticated_userid or Everyone
     permissions = get_permissions(user_id, None)
     is_etalab_request = (request.matched_route and request.matched_route.name == 'etalab_discussions')
     if is_etalab_request:
@@ -1128,7 +1128,7 @@ def get_participant_time_series_analytics(request):
     data_descriptors = request.GET.getall("data")
     with_email = request.GET.get("email", None)
     discussion = request.context._instance
-    user_id = authenticated_userid(request) or Everyone
+    user_id = request.authenticated_userid or Everyone
     permissions = get_permissions(user_id, discussion.id)
     if with_email is None:
         with_email = P_ADMIN_DISC in permissions

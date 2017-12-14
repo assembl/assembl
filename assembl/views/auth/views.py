@@ -15,7 +15,6 @@ from pyramid.security import (
     forget,
     Everyone,
     Authenticated,
-    authenticated_userid,
     NO_PERMISSION_REQUIRED)
 from pyramid.httpexceptions import (
     HTTPUnauthorized,
@@ -261,7 +260,7 @@ def assembl_profile(request):
     localizer = request.localizer
     profile = get_profile(request)
     id_type = request.matchdict.get('type').strip()
-    logged_in = authenticated_userid(request)
+    logged_in = request.authenticated_userid
     save = request.method == 'POST'
     # if some other user
     if not profile or not logged_in or logged_in != profile.id:
@@ -506,7 +505,7 @@ def assembl_login_complete_view(request):
     referrer = request.POST.get('referrer', None)
     is_v2 = True if referrer == 'v2' else False
     next_view = handle_next_view(request, True)
-    logged_in = authenticated_userid(request)
+    logged_in = request.authenticated_userid
     localizer = request.localizer
     user = None
     user, account = from_identifier(identifier)
@@ -625,7 +624,7 @@ def user_confirm_email(request):
     token = request.matchdict.get('token') or ''
     account, validity = verify_email_token(token)
     session = AbstractAgentAccount.default_db
-    logged_in = authenticated_userid(request)  # if mismatch?
+    logged_in = request.authenticated_userid  # if mismatch?
     localizer = request.localizer
     if account and account.profile_id != logged_in:
         # token for someone else: forget login.
@@ -928,7 +927,7 @@ def do_password_change(request):
     discussion = discussion_from_request(request)
     token = request.matchdict.get('token')
     user, validity = verify_password_change_token(token)
-    logged_in = authenticated_userid(request)
+    logged_in = request.authenticated_userid
     if user and user.id != logged_in:
         # token for someone else: forget login.
         logged_in = None
@@ -1012,7 +1011,7 @@ def finish_password_change(request):
         title = localizer.translate(_('Change your password'))
 
     user, validity = verify_password_change_token(token)
-    logged_in = authenticated_userid(request)  # if mismatch?
+    logged_in = request.authenticated_userid  # if mismatch?
     if user and user.id != logged_in:
         # token for someone else: forget login.
         logged_in = None

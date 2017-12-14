@@ -5,8 +5,7 @@ from os import urandom
 import base64
 
 from sqlalchemy.sql.expression import and_
-from pyramid.security import (
-    authenticated_userid, Everyone, Authenticated)
+from pyramid.security import Everyone, Authenticated
 from pyramid.httpexceptions import HTTPNotFound
 from pyisemail import is_email
 from pyramid.authentication import SessionAuthenticationPolicy
@@ -22,7 +21,7 @@ from ..models.auth import (
 
 
 def get_user(request):
-    logged_in = authenticated_userid(request)
+    logged_in = request.authenticated_userid
     if logged_in:
         return User.get(logged_in)
 
@@ -130,7 +129,7 @@ def get_current_user_id():
     r = get_current_request()
     # CAN ONLY BE CALLED IF THERE IS A CURRENT REQUEST.
     assert r
-    return authenticated_userid(r)
+    return r.authenticated_userid
 
 
 class UpgradingSessionAuthenticationPolicy(SessionAuthenticationPolicy):

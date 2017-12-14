@@ -1,6 +1,6 @@
 """Cornice API for ContentSources"""
 from pyramid.httpexceptions import HTTPNotFound
-from pyramid.security import authenticated_userid, Everyone
+from pyramid.security import Everyone
 
 from cornice import Service
 
@@ -30,7 +30,7 @@ def get_sources(request):
             "Discussion with id '%s' not found." % discussion_id
         )
 
-    user_id = authenticated_userid(request) or Everyone
+    user_id = request.authenticated_userid or Everyone
     permissions = get_permissions(user_id, discussion_id)
 
     res = [source.generic_json(view_def, user_id, permissions)

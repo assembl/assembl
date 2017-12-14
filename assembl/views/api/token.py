@@ -1,6 +1,6 @@
 """API to get an authentication token, for use by Web annotation"""
 
-from pyramid.security import authenticated_userid, Everyone
+from pyramid.security import Everyone
 from pyramid.httpexceptions import (
     HTTPUnauthorized, HTTPBadRequest, HTTPOk)
 from pyramid.view import view_config
@@ -34,7 +34,7 @@ def auth_token(request, extra_headers=None):
         ])
         if extra_headers:
             headers.extend(extra_headers)
-    user_id = authenticated_userid(request)
+    user_id = request.authenticated_userid
     payload = {
         'consumerKey': 'assembl', 'userId': (user_id or Everyone), 'ttl': 86400
     }

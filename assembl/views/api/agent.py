@@ -1,7 +1,6 @@
 """Cornice API for agents"""
 from pyisemail import is_email
 from pyramid.httpexceptions import HTTPNotFound, HTTPUnauthorized, HTTPFound
-from pyramid.security import authenticated_userid
 from pyramid.i18n import TranslationStringFactory
 from sqlalchemy.orm import joinedload
 from cornice import Service
@@ -58,7 +57,7 @@ def get_agents(request, discussion_only=False):
         raise HTTPNotFound("Discussion with id '%s' not found." % discussion_id)
     view_def = request.GET.get('view')
     return _get_agents_real(
-        discussion, authenticated_userid(request), view_def)
+        discussion, request.authenticated_userid, view_def)
 
 
 @agent.get(permission=P_READ)
@@ -70,7 +69,7 @@ def get_agent(request):
     if not agent:
       raise HTTPNotFound("Agent with id '%s' not found." % agent_id)
     discussion_id = int(request.matchdict['discussion_id'])
-    user_id = authenticated_userid(request) or Everyone
+    user_id = request.authenticated_userid or Everyone
     permissions = get_permissions(user_id, discussion_id)
 
     agent_json = agent.generic_json(view_def, user_id, permissions)

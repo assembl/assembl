@@ -9,7 +9,7 @@ from pyramid.httpexceptions import (
     HTTPNotFound, HTTPUnauthorized, HTTPBadRequest)
 from pyramid.i18n import TranslationStringFactory
 from pyramid.settings import asbool
-from pyramid.security import authenticated_userid, Everyone
+from pyramid.security import Everyone
 
 from sqlalchemy import String, text
 
@@ -82,7 +82,7 @@ def get_posts(request):
 
     discussion.import_from_sources()
 
-    user_id = authenticated_userid(request) or Everyone
+    user_id = request.authenticated_userid or Everyone
     permissions = get_permissions(user_id, discussion_id)
 
     DEFAULT_PAGE_SIZE = 25
@@ -532,7 +532,7 @@ def get_post(request):
     if not post:
         raise HTTPNotFound("Post with id '%s' not found." % post_id)
     discussion_id = int(request.matchdict['discussion_id'])
-    user_id = authenticated_userid(request) or Everyone
+    user_id = request.authenticated_userid or Everyone
     permissions = get_permissions(user_id, discussion_id)
 
     return post.generic_json(view_def, user_id, permissions)
@@ -548,7 +548,7 @@ def mark_post_read(request):
     if not post:
         raise HTTPNotFound("Post with id '%s' not found." % post_id)
     post_id = post.id
-    user_id = authenticated_userid(request)
+    user_id = request.authenticated_userid
     if not user_id:
         raise HTTPUnauthorized()
     read_data = json.loads(request.body)
@@ -589,7 +589,7 @@ def create_post(request):
     """
     localizer = request.localizer
     request_body = json.loads(request.body)
-    user_id = authenticated_userid(request)
+    user_id = request.authenticated_userid
     if not user_id:
         raise HTTPUnauthorized()
 

@@ -2,7 +2,7 @@
 import json
 
 from pyramid.httpexceptions import HTTPNotFound, HTTPUnauthorized, HTTPNoContent
-from pyramid.security import authenticated_userid, Everyone, Authenticated
+from pyramid.security import Everyone, Authenticated
 
 from cornice import Service
 
@@ -50,7 +50,7 @@ def etalab_get_discussions(request):
     # - status: "running"
     # - metadata: metadata.creation_date => will probably be renamed, see above
     view = "etalab"
-    user_id = authenticated_userid(request) or Everyone
+    user_id = request.authenticated_userid or Everyone
     permissions = get_permissions(user_id, None)
     if P_READ not in permissions:
         raise HTTPUnauthorized()
@@ -67,7 +67,7 @@ def get_discussion(request):
     is_etalab_request = request.matched_route.name == 'etalab_discussion'
     view_def = request.GET.get(
         'view', 'etalab' if is_etalab_request else 'default')
-    user_id = authenticated_userid(request) or Everyone
+    user_id = request.authenticated_userid or Everyone
     permissions = get_permissions(user_id, discussion_id)
 
     if not discussion:
