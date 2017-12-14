@@ -207,7 +207,7 @@ class Query(graphene.ObjectType):
         model = models.Section
         query = get_query(model, context)
         discussion_id = context.matchdict['discussion_id']
-        return query.filter(model.discussion_id == discussion_id)
+        return query.filter(model.discussion_id == discussion_id).order_by(model.order)
 
     def resolve_legal_notice_and_terms(self, args, context, info):
         """Legal notice and terms and conditions entries (e.g. for admin form)."""
