@@ -1,3 +1,4 @@
+// @flow
 import React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { connect } from 'react-redux';
@@ -13,7 +14,34 @@ import TermsForm from '../common/termsForm';
 import withoutLoadingIndicator from '../../components/common/withoutLoadingIndicator';
 import TabsConditionQuery from '../../graphql/TabsConditionQuery.graphql';
 
-class SignupForm extends React.Component {
+type SignupFormProps = {
+  hasTermsAndConditions: boolean,
+  signUp: Function,
+  lang: string,
+  auth: Object
+};
+
+type SignupFormState = {
+  name: string | null,
+  email: string | null,
+  password1: string | null,
+  password2: string | null,
+  checked: boolean
+};
+
+class SignupForm extends React.Component<*, SignupFormProps, SignupFormState> {
+  props: SignupFormProps;
+
+  state: SignupFormState;
+
+  signupHandler: SyntheticEvent => void;
+
+  handleInput: SyntheticEvent => void;
+
+  toggleCheck: () => void;
+
+  handleAcceptButton: () => void;
+
   constructor(props) {
     super(props);
     this.state = {
