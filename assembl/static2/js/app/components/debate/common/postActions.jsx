@@ -1,5 +1,6 @@
+// @flow
 import React from 'react';
-import { withApollo } from 'react-apollo';
+import { ApolloClient, withApollo } from 'react-apollo';
 import { Translate } from 'react-redux-i18n';
 import { OverlayTrigger } from 'react-bootstrap';
 import { MEDIUM_SCREEN_WIDTH } from '../../../constants';
@@ -16,35 +17,54 @@ import sentimentDefinitions from './sentimentDefinitions';
 import { getIfPhaseCompletedByIdentifier } from '../../../utils/timeline';
 import { withScreenWidth } from '../../common/screenDimensions';
 
-class PostActions extends React.Component {
-  constructor(props) {
-    super(props);
-    this.displayPhaseCompletedModal = this.displayPhaseCompletedModal.bind(this);
-  }
+type SentimentCounts = {
+  disagree: number,
+  dontUnderstand: number,
+  like: number,
+  moreInfo: number
+};
 
-  displayPhaseCompletedModal() {
+type Props = {
+  client: ApolloClient,
+  creatorUserId: string,
+  debateData: DebateData,
+  editable: string,
+  handleEditClick: string,
+  identifier: string,
+  mySentiment: string,
+  numChildren: number,
+  postId: string,
+  routerParams: RouterParams,
+  screenWidth: number,
+  sentimentCounts: SentimentCounts
+};
+
+class PostActions extends React.Component<void, Props, void> {
+  props: Props;
+
+  displayPhaseCompletedModal = (): void => {
     const body = (
       <div>
         <Translate value="debate.noAnswer" />
       </div>
     );
     displayModal(null, body, true, null, null, true);
-  }
+  };
 
   render() {
     const {
-      editable,
       client,
       creatorUserId,
-      postId,
-      sentimentCounts,
-      mySentiment,
-      handleEditClick,
-      numChildren,
-      routerParams,
       debateData,
+      editable,
+      handleEditClick,
       identifier,
-      screenWidth
+      mySentiment,
+      numChildren,
+      postId,
+      routerParams,
+      screenWidth,
+      sentimentCounts
     } = this.props;
     let count = 0;
     const totalSentimentsCount = sentimentCounts
@@ -147,4 +167,5 @@ class PostActions extends React.Component {
   }
 }
 
+// $FlowFixMe
 export default withScreenWidth(withApollo(PostActions));
