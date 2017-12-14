@@ -10,8 +10,7 @@ from pyramid.events import subscriber, BeforeRender
 from pyramid.security import (
     remember,
     forget,
-    Everyone,
-    authenticated_userid)
+    Everyone)
 from pyramid.config import aslist
 import simplejson as json
 
@@ -33,12 +32,12 @@ def login_user(backend, user, user_social_auth):
 
 
 def login_required(request):
-    logged_in = authenticated_userid(request)
+    logged_in = request.authenticated_userid
     return logged_in is None
 
 
 def get_user(request):
-    user_id = authenticated_userid(request)
+    user_id = request.authenticated_userid
     if user_id:
         user = User.default_db.query(
             User).filter(User.id == user_id).first()
@@ -97,7 +96,7 @@ def maybe_merge(
     if adding_account is not None:
         del request.session["add_account"]
     # current discussion and next?
-    logged_in = authenticated_userid(request)
+    logged_in = request.authenticated_userid
     if logged_in:
         logged_in = User.get(logged_in)
         if adding_account:

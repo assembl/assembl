@@ -6,7 +6,7 @@ from pyramid.response import Response
 from pyramid.view import view_config
 from pyramid.settings import asbool
 from pyramid.security import (
-    authenticated_userid, Everyone, NO_PERMISSION_REQUIRED, remember, forget)
+    Everyone, NO_PERMISSION_REQUIRED, remember, forget)
 from pyramid.i18n import TranslationStringFactory
 from pyramid.httpexceptions import (
     HTTPNotFound, HTTPUnauthorized, HTTPBadRequest, HTTPClientError,
@@ -64,7 +64,7 @@ def add_local_role_on_class(request):
 def add_local_role(request):
     # Do not use check_permissions, this is a special case
     ctx = request.context
-    user_id = authenticated_userid(request)
+    user_id = request.authenticated_userid
     if not user_id:
         raise HTTPUnauthorized()
     discussion_id = ctx.get_discussion_id()
@@ -139,7 +139,7 @@ def set_local_role(request):
     # Do not use check_permissions, this is a special case
     ctx = request.context
     instance = ctx._instance
-    user_id = authenticated_userid(request)
+    user_id = request.authenticated_userid
     if not user_id:
         raise HTTPUnauthorized()
     discussion_id = ctx.get_discussion_id()
@@ -186,7 +186,7 @@ def set_local_role(request):
 def delete_local_role(request):
     ctx = request.context
     instance = ctx._instance
-    user_id = authenticated_userid(request)
+    user_id = request.authenticated_userid
     if not user_id:
         raise HTTPUnauthorized()
     discussion_id = ctx.get_discussion_id()
@@ -521,7 +521,7 @@ def assembl_register_user(request):
     request_method='DELETE', renderer='json')
 def delete_abstract_agent_account(request):
     ctx = request.context
-    user_id = authenticated_userid(request) or Everyone
+    user_id = request.authenticated_userid or Everyone
     permissions = get_permissions(
         user_id, ctx.get_discussion_id())
     instance = ctx._instance
@@ -581,7 +581,7 @@ def interesting_ideas(request):
     from .discussion import get_analytics_alerts
     ctx = request.context
     target = request.context._instance
-    user_id = authenticated_userid(request) or Everyone
+    user_id = request.authenticated_userid or Everyone
     discussion_id = ctx.get_discussion_id()
     permissions = get_permissions(
         user_id, discussion_id)
@@ -604,7 +604,7 @@ def interesting_ideas(request):
              header=JSON_HEADER, ctx_collection_class=UserLanguagePreference)
 def add_user_language_preference(request):
     ctx = request.context
-    user_id = authenticated_userid(request) or Everyone
+    user_id = request.authenticated_userid or Everyone
     permissions = get_permissions(
         user_id, ctx.get_discussion_id())
     check_permissions(ctx, user_id, permissions, CrudPermissions.CREATE)
@@ -633,7 +633,7 @@ def add_user_language_preference(request):
 def modify_user_language_preference(request):
     json_data = request.json_body
     ctx = request.context
-    user_id = authenticated_userid(request) or Everyone
+    user_id = request.authenticated_userid or Everyone
     permissions = get_permissions(
         user_id, ctx.get_discussion_id())
     instance = ctx._instance

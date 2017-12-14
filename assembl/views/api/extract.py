@@ -2,7 +2,7 @@
 
 import simplejson as json
 from cornice import Service
-from pyramid.security import authenticated_userid, Everyone
+from pyramid.security import Everyone
 from pyramid.httpexceptions import (
     HTTPNotFound, HTTPBadRequest, HTTPForbidden, HTTPServerError, HTTPNoContent)
 from sqlalchemy import Unicode
@@ -56,7 +56,7 @@ def get_extract(request):
     extract = Extract.get_instance(extract_id)
     view_def = request.GET.get('view') or 'default'
     discussion_id = int(request.matchdict['discussion_id'])
-    user_id = authenticated_userid(request) or Everyone
+    user_id = request.authenticated_userid or Everyone
     permissions = get_permissions(user_id, discussion_id)
 
     if extract is None:
@@ -98,7 +98,7 @@ def get_extracts(request):
     ids = request.GET.getall('ids')
 
     return _get_extracts_real(
-        discussion, view_def, ids, authenticated_userid(request))
+        discussion, view_def, ids, request.authenticated_userid)
 
 
 @extracts.post()
@@ -108,7 +108,7 @@ def post_extract(request):
     """
     extract_data = json.loads(request.body)
     discussion_id = int(request.matchdict['discussion_id'])
-    user_id = authenticated_userid(request)
+    user_id = request.authenticated_userid
     if not user_id:
         # Straight from annotator
         token = request.headers.get('X-Annotator-Auth-Token')
@@ -202,7 +202,7 @@ def put_extract(request):
     Updating an Extract
     """
     extract_id = request.matchdict['id']
-    user_id = authenticated_userid(request)
+    user_id = request.authenticated_userid
     discussion_id = int(request.matchdict['discussion_id'])
 
     if not user_id:
@@ -246,7 +246,7 @@ def put_extract(request):
 
 @extract.delete(permission=P_READ)
 def delete_extract(request):
-    user_id = authenticated_userid(request)
+    user_id = request.authenticated_userid
     discussion_id = int(request.matchdict['discussion_id'])
 
     if not user_id:
@@ -280,7 +280,7 @@ def do_search_extracts(request):
     uri = request.GET['uri']
     view_def = request.GET.get('view') or 'default'
     discussion_id = int(request.matchdict['discussion_id'])
-    user_id = authenticated_userid(request) or Everyone
+    user_id = request.authenticated_userid or Everyone
     permissions = get_permissions(user_id, discussion_id)
 
     if not uri:

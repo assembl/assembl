@@ -488,7 +488,6 @@ class Idea(HistoryMixin, DiscussionBoundBase):
     def get_discussion_data(cls, discussion_id):
         from pyramid.threadlocal import get_current_request
         from .path_utils import DiscussionGlobalData
-        from pyramid.security import authenticated_userid
         req = get_current_request()
         discussion_data = None
         if req:
@@ -496,7 +495,7 @@ class Idea(HistoryMixin, DiscussionBoundBase):
         if not discussion_data:
             discussion_data = DiscussionGlobalData(
                 cls.default_db(), discussion_id,
-                authenticated_userid(req) if req else None)
+                req.authenticated_userid if req else None)
             if req:
                 req.discussion_data = discussion_data
         return discussion_data

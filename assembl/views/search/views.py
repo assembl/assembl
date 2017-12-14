@@ -1,7 +1,7 @@
 import json
 from pyramid.events import NewRequest
 from pyramid.httpexceptions import HTTPUnauthorized, HTTPServiceUnavailable
-from pyramid.security import authenticated_userid, Everyone
+from pyramid.security import Everyone
 from pyramid.view import view_config
 
 from assembl.auth import CrudPermissions
@@ -39,7 +39,7 @@ def search_endpoint(context, request):
     if discussion is None:
         raise HTTPUnauthorized()
 
-    user_id = authenticated_userid(request) or Everyone
+    user_id = request.authenticated_userid or Everyone
     permissions = get_permissions(user_id, discussion_id)
     if not discussion.user_can(user_id, CrudPermissions.READ, permissions):
         raise HTTPUnauthorized()

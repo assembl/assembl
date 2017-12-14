@@ -16,7 +16,7 @@ from pyramid.httpexceptions import (
     HTTPException, HTTPInternalServerError, HTTPMovedPermanently, HTTPError,
     HTTPBadRequest, HTTPFound, HTTPTemporaryRedirect as HTTPTemporaryRedirectP)
 from pyramid.i18n import TranslationStringFactory
-from pyramid.security import authenticated_userid, Everyone
+from pyramid.security import Everyone
 from pyramid.settings import asbool, aslist
 from social.exceptions import AuthMissingParameter
 
@@ -401,7 +401,7 @@ def process_locale(
 
 def get_locale_from_request(request, session=None, user=None):
     if user is None:
-        user_id = authenticated_userid(request) or Everyone
+        user_id = request.authenticated_userid or Everyone
         if user_id != Everyone:
             user = User.get(user_id)
     session = session or User.default_db

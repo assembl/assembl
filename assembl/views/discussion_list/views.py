@@ -1,7 +1,7 @@
 import os.path
 
 from pyramid.view import view_config
-from pyramid.security import authenticated_userid, Everyone, Authenticated
+from pyramid.security import Everyone, Authenticated
 
 from assembl.auth import R_SYSADMIN, P_ADMIN_DISC
 from assembl.models import User
@@ -20,7 +20,7 @@ TEMPLATE_PATH = os.path.join(
     renderer='assembl:templates/discussion_list.jinja2')
 def discussion_list_view(request):
     request.session.pop('discussion')
-    user_id = authenticated_userid(request) or Everyone
+    user_id = request.authenticated_userid or Everyone
     user = None
     if user_id != Everyone:
         user = User.get(user_id)

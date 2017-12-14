@@ -1,7 +1,7 @@
 from pyramid.view import view_config
 from pyramid.response import Response
 from pyramid.httpexceptions import HTTPServerError, HTTPBadRequest
-from pyramid.security import authenticated_userid, Everyone
+from pyramid.security import Everyone
 from pyramid.compat import url_quote
 
 from assembl.auth import P_READ, P_ADD_POST
@@ -74,7 +74,7 @@ def upload_file(request):
 
     db = Document.default_db
     ctx = request.context
-    user_id = authenticated_userid(request) or Everyone
+    user_id = request.authenticated_userid or Everyone
     discusison_id = ctx.get_discussion_id()
     discussion = Discussion.get(discusison_id)
     permissions = get_permissions(user_id, discusison_id)
@@ -107,7 +107,7 @@ def upload_file(request):
 def update_upload_file(request):
     ctx = request.context
     instance = ctx._instance
-    user_id = authenticated_userid(request) or Everyone
+    user_id = request.authenticated_userid or Everyone
     try:
         form_data = request.POST
         # form_data['title'] = form_data['name']

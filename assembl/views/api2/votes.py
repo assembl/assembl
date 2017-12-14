@@ -4,7 +4,6 @@ from cStringIO import StringIO
 from pyramid.view import view_config
 from pyramid.httpexceptions import (
     HTTPBadRequest, HTTPUnauthorized, HTTPNotFound)
-from pyramid.security import authenticated_userid
 from pyramid.response import Response
 from pyramid.settings import asbool
 from simplejson import dumps
@@ -25,7 +24,7 @@ from . import (FORM_HEADER, JSON_HEADER, check_permissions)
              ctx_collection_class=AbstractIdeaVote)
 def votes_collection_view(request):
     ctx = request.context
-    user_id = authenticated_userid(request)
+    user_id = request.authenticated_userid
     if not user_id:
         raise HTTPUnauthorized
     view = request.GET.get('view', None) or ctx.get_default_view() or 'id_only'
@@ -43,7 +42,7 @@ def votes_collection_view(request):
              ctx_collection_class=AbstractIdeaVote)
 def votes_collection_add_json(request):
     ctx = request.context
-    user_id = authenticated_userid(request)
+    user_id = request.authenticated_userid
     if not user_id:
         raise HTTPUnauthorized
     permissions = get_permissions(
@@ -100,7 +99,7 @@ def votes_collection_add_json(request):
              ctx_collection_class=AbstractIdeaVote)
 def votes_collection_add(request):
     ctx = request.context
-    user_id = authenticated_userid(request)
+    user_id = request.authenticated_userid
     if not user_id:
         raise HTTPUnauthorized
     permissions = get_permissions(
@@ -152,7 +151,7 @@ def votes_collection_add(request):
              permission=P_READ)
 def vote_results(request):
     ctx = request.context
-    user_id = authenticated_userid(request)
+    user_id = request.authenticated_userid
     if not user_id:
         raise HTTPUnauthorized
     histogram = request.GET.get('histogram', None)
@@ -176,7 +175,7 @@ def vote_results(request):
              name="vote_results_csv", permission=P_READ)
 def vote_results_csv(request):
     ctx = request.context
-    user_id = authenticated_userid(request)
+    user_id = request.authenticated_userid
     if not user_id:
         raise HTTPUnauthorized
     histogram = request.GET.get('histogram', None)

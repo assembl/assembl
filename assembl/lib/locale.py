@@ -137,10 +137,9 @@ def locale_negotiator(request):
               request.params.get('_LOCALE_', None))
     # TODO: Set User preference in this function.
     if not locale:
-        from pyramid.security import authenticated_userid
         from assembl.auth.util import discussion_from_request
         from assembl.models import get_session_maker
-        user_id = authenticated_userid(request)
+        user_id = request.authenticated_userid
         if user_id:
             prefs = get_preferred_languages(get_session_maker()(), user_id)
             for locale in prefs:

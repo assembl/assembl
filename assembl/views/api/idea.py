@@ -5,7 +5,7 @@ from types import NoneType
 import simplejson as json
 from cornice import Service
 from pyramid.httpexceptions import HTTPNotFound, HTTPBadRequest, HTTPNoContent
-from pyramid.security import authenticated_userid, Everyone
+from pyramid.security import Everyone
 from sqlalchemy import and_
 from sqlalchemy.orm import contains_eager, joinedload, subqueryload, undefer
 
@@ -42,7 +42,7 @@ def create_idea(request):
     discussion_id = int(request.matchdict['discussion_id'])
     session = Discussion.default_db
     discussion = session.query(Discussion).get(int(discussion_id))
-    user_id = authenticated_userid(request)
+    user_id = request.authenticated_userid
     permissions = get_permissions(user_id, discussion.id)
     idea_data = json.loads(request.body)
     kwargs = {
@@ -80,7 +80,7 @@ def get_idea(request):
     idea = Idea.get_instance(idea_id)
     view_def = request.GET.get('view')
     discussion_id = int(request.matchdict['discussion_id'])
-    user_id = authenticated_userid(request) or Everyone
+    user_id = request.authenticated_userid or Everyone
     permissions = get_permissions(user_id, discussion_id)
 
     if not idea:
@@ -156,7 +156,7 @@ def _get_ideas_real(discussion, view_def=None, ids=None, user_id=None):
 
 @ideas.get(permission=P_READ)
 def get_ideas(request):
-    user_id = authenticated_userid(request) or Everyone
+    user_id = request.authenticated_userid or Everyone
     discussion_id = int(request.matchdict['discussion_id'])
     discussion = Discussion.get(int(discussion_id))
     if not discussion:
@@ -174,7 +174,7 @@ def save_idea(request):
     In case the ``parentId`` is changed, handle all
     ``IdeaLink`` changes and send relevant ideas on the socket."""
     discussion_id = int(request.matchdict['discussion_id'])
-    user_id = authenticated_userid(request)
+    user_id = request.authenticated_userid
     permissions = get_permissions(user_id, discussion_id)
     idea_id = request.matchdict['id']
     idea_data = json.loads(request.body)
@@ -290,7 +290,7 @@ def get_idea_extracts(request):
     idea = Idea.get_instance(idea_id)
     view_def = request.GET.get('view') or 'default'
     discussion_id = int(request.matchdict['discussion_id'])
-    user_id = authenticated_userid(request) or Everyone
+    user_id = request.authenticated_userid or Everyone
     permissions = get_permissions(user_id, discussion_id)
 
     if not idea:
