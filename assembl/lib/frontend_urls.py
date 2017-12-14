@@ -223,7 +223,7 @@ class FrontendUrls(object):
             route = '/debate/' + self.discussion.slug
         else:
             get_route = create_get_route(request, self.discussion)
-            route = get_route('home')
+            route = get_route('bare_slug')
         return urljoin(self.discussion.get_base_url(), route)
 
     # TODO: Decommission all of the route methods below. They are
