@@ -4,6 +4,7 @@ import graphene
 from graphene.relay import Node
 from graphene_sqlalchemy import SQLAlchemyObjectType
 from pyramid.httpexceptions import HTTPUnauthorized
+from pyramid.i18n import TranslationStringFactory
 
 from assembl import models
 from assembl.auth import CrudPermissions
@@ -13,6 +14,9 @@ from assembl.auth.util import get_permissions
 from .document import Document
 from .types import SecureObjectType
 from .utils import abort_transaction_on_exception
+
+
+_ = TranslationStringFactory('assembl')
 
 
 class AgentProfile(SecureObjectType, SQLAlchemyObjectType):
@@ -86,7 +90,16 @@ class UpdateUser(graphene.Mutation):
             raise HTTPUnauthorized("The authenticated user can't update this user")
 
         with cls.default_db.no_autoflush as db:
-            user.username_p = args.get('username')
+            username = args.get('username')
+            if username and username != user.username_p:
+                if db.query(models.Username).filter_by(
+                    username=username
+                ).count():
+                    msg = context.localizer.translate(_(
+                        "We already have a user with this username."))
+                    raise Exception(msg)
+
+            user.username_p = username
             user.real_name_p = args.get('name')
 
             # add uploaded image as an attachment to the user

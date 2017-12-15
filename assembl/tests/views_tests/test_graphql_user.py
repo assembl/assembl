@@ -102,3 +102,42 @@ mutation UpdateUser($id: ID!, $name: String!, $username: String, $img: String) {
 
     # clean up
     participant1_user.username_p = None
+
+
+def test_graphql_update_user_check_username_uniqueness(graphql_request, participant1_user, participant2_user):
+    class Localizer(object):
+        def translate(self, value):
+            return value
+
+    graphql_request.localizer = Localizer()
+    participant2_user.username_p = u"Barking.Loon"
+    participant2_user.db.flush()
+    res = schema.execute(u"""
+mutation UpdateUser($id: ID!, $name: String!, $username: String, $img: String) {
+  updateUser(
+    id: $id
+    name: $name
+    username: $username
+    image: $img
+  ) {
+    user {
+      ... on AgentProfile {
+        id
+        name
+        username
+        displayName
+        image { externalUrl }
+      }
+    }
+  }
+}
+""", context_value=graphql_request, variable_values={
+        "id": to_global_id('AgentProfile', participant1_user.id),
+        "name": u"M. Barking Loon",
+        "username": u"Barking.Loon",
+    })
+    assert res.errors is not None
+    assert res.errors[0].message == u'We already have a user with this username.'
+
+    # clean up
+    participant2_user.username_p = None

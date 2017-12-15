@@ -84,7 +84,7 @@ class Question extends React.Component {
         });
       })
       .catch((error) => {
-        displayAlert('danger', error);
+        displayAlert('danger', `${error}`);
       });
   }
 

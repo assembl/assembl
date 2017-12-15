@@ -107,7 +107,7 @@ class TopPostForm extends React.Component<*, TopPostFormProps, TopPostFormState>
             this.setState({ submitting: false });
           })
           .catch((error) => {
-            displayAlert('danger', error);
+            displayAlert('danger', `${error}`);
             this.setState({ submitting: false });
           });
       });
