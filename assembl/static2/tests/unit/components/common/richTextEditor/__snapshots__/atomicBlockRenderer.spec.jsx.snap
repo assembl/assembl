@@ -7,9 +7,9 @@ exports[`AtomicBlockRenderer component should render an image block 1`] = `
 >
   <img
     alt=""
+    className="attachment-image"
     src="http://www.example.com/foobar.jpg"
     title="Foobar"
-    width="60%"
   />
 </div>
 `;

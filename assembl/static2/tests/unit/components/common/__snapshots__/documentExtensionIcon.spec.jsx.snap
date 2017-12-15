@@ -3,7 +3,7 @@
 exports[`DocumentExtensionIcon component should render an icon depending on the extension of the file 1`] = `
 <img
   alt="doc"
+  className="attachment-icon"
   src="/static2/img/icons/black/doc.svg"
-  width="30px"
 />
 `;

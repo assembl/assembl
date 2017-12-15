@@ -36,7 +36,7 @@ export const getIconPath = (extension: string): string => {
 const DocumentExtensionIcon = ({ filename }: DocumentExtensionIconProps) => {
   const extension = getExtension(filename);
   const iconPath = getIconPath(extension);
-  return <img src={iconPath} alt={extension} width="30px" />;
+  return <img className="attachment-icon" src={iconPath} alt={extension} />;
 };
 
 export default DocumentExtensionIcon;

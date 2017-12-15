@@ -14,7 +14,7 @@ const AtomicBlockRenderer = ({ block, contentState }: { block: ContentBlock, con
     let innerContent;
     const { mimeType, title } = data;
     if (mimeType.startsWith('image')) {
-      innerContent = <img src={data.externalUrl} alt="" title={title} width="60%" />;
+      innerContent = <img className="attachment-image" src={data.externalUrl} alt="" title={title} />;
     } else {
       innerContent = <DocumentExtensionIcon filename={title} />;
     }
