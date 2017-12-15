@@ -3,7 +3,7 @@
 exports[`ColumnSynthesis component should render a folded post 1`] = `
 <div
   className="box synthesis background-grey posts"
-  id="synthesis-positive"
+  id="XYZ333"
 >
   <div
     className="post-row"
@@ -33,6 +33,13 @@ exports[`ColumnSynthesis component should render a folded post 1`] = `
         identifier={undefined}
         mySentiment="like"
         postId="XYZ333"
+        routerParams={
+          Object {
+            "phase": "thread",
+            "slug": "foobar",
+            "themeId": "ABC890",
+          }
+        }
         sentimentCounts={
           Object {
             "disagree": 1,

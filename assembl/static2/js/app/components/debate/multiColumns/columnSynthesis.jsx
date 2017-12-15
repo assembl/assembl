@@ -5,10 +5,10 @@ import BoxWithHyphen from '../../common/boxWithHyphen';
 import PostActions from '../common/postActions';
 
 export type Props = {
-  classifier: string,
   debateData: DebateData,
   identifier: string,
   mySentiment: ?string,
+  routerParams: RouterParams,
   sentimentCounts: SentimentCountsFragment,
   synthesisId: string,
   synthesisTitle: string,
@@ -17,17 +17,17 @@ export type Props = {
 };
 
 const ColumnSynthesis = ({
-  classifier,
   debateData,
   identifier,
   mySentiment,
+  routerParams,
   sentimentCounts,
   synthesisId,
   synthesisTitle,
   synthesisBody,
   hyphenStyle
 }: Props) => (
-  <div id={`synthesis-${classifier}`} className="box synthesis background-grey posts">
+  <div id={synthesisId} className="box synthesis background-grey posts">
     <div className="post-row">
       <div className="post-left">
         <BoxWithHyphen
@@ -44,6 +44,7 @@ const ColumnSynthesis = ({
           identifier={identifier}
           mySentiment={mySentiment}
           postId={synthesisId}
+          routerParams={routerParams}
           sentimentCounts={sentimentCounts}
         />
       </div>

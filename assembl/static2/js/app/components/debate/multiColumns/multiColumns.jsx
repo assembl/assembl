@@ -16,6 +16,7 @@ const MultiColumns = ({
   initialRowIndex,
   noRowsRenderer,
   refetchIdea,
+  routerParams,
   showSynthesis,
   identifier,
   debateData
@@ -30,6 +31,7 @@ const MultiColumns = ({
           debateData: debateData,
           identifier: identifier,
           mySentiment: col.columnSynthesis.mySentiment,
+          routerParams: routerParams,
           sentimentCounts: col.columnSynthesis.sentimentCounts,
           synthesisId: col.columnSynthesis.id,
           synthesisTitle: get(col, 'columnSynthesis.subject', I18n.t('multiColumns.synthesis.title', { colName: col.name })),

@@ -123,7 +123,7 @@ class Idea extends React.Component {
   }
 
   render() {
-    const { contentLocaleMapping, debateData, lang, ideaLoading, ideaWithPostsData, identifier } = this.props;
+    const { contentLocaleMapping, debateData, lang, ideaLoading, ideaWithPostsData, identifier, routerParams } = this.props;
     const refetchIdea = ideaWithPostsData.refetch;
     if (ideaLoading) {
       return (
@@ -161,7 +161,7 @@ class Idea extends React.Component {
         ? undefined
         : this.getInitialRowIndex(this.getTopPosts(), ideaWithPostsData.idea.posts.edges)
     };
-    const view = isMultiColumns ? <ColumnsView {...childProps} /> : <ThreadView {...childProps} />;
+    const view = isMultiColumns ? <ColumnsView {...childProps} routerParams={routerParams} /> : <ThreadView {...childProps} />;
     return (
       <div className="idea">
         <Header title={title} synthesisTitle={synthesisTitle} imgUrl={headerImgUrl} identifier={identifier} />
