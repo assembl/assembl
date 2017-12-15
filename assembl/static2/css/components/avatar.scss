@@ -22,17 +22,3 @@
     margin: 1px 0;
   }
 }
-
-@media screen and (max-width: 767px) {
-  .avatar {
-    .username {
-      display: none;
-    }
-  }
-}
-
-@media screen and (max-width: 420px) {
-  .avatar {
-    margin: 1px 10px 0 15px;
-  }
-}

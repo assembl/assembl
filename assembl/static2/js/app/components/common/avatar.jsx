@@ -32,11 +32,11 @@ class ProfileIcon extends React.Component {
   }
 
   render() {
-    const { slug, connectedUserId, displayName } = this.props;
+    const { slug, connectedUserId, displayName, showUsername } = this.props;
     const dropdownUser = (
       <div className="inline">
         <span className="assembl-icon-profil grey" />
-        <span className="username">{displayName}</span>
+        {showUsername && <span className="username">{displayName}</span>}
       </div>
     );
     return (

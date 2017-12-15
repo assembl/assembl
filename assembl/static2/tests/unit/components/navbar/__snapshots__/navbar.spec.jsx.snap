@@ -69,6 +69,7 @@ exports[`AssemblNavbar component should render a BurgerNavbar and a hidden FlatN
         location={undefined}
         logoLink="http://www.homesweethome.org"
         logoSrc={undefined}
+        maxWidth={-20}
         setWidth={[Function]}
         slug={undefined}
         style={
@@ -124,6 +125,7 @@ exports[`AssemblNavbar component should render a FlatNavbar with a big screenWid
         location={undefined}
         logoLink="http://www.homesweethome.org"
         logoSrc={undefined}
+        maxWidth={1370}
         setWidth={[Function]}
         slug={undefined}
         style={Object {}}
