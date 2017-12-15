@@ -1,16 +1,16 @@
 msgid ""
 msgstr ""
-"POT-Creation-Date: 2017-08-03T09:39:15.282Z\n"
+"Project-Id-Version: \n"
+"POT-Creation-Date: 2017-12-15T13:47:31.589Z\n"
+"PO-Revision-Date: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: zh_CN\n"
+"MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"MIME-Version: 1.0\n"
 "X-Generator: Poedit 2.0.3\n"
-"Project-Id-Version: \n"
-"PO-Revision-Date: \n"
-"Language-Team: \n"
-"Last-Translator: \n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"Language: zh_CN\n"
 
 #. [administration.addQuestion]
 #. defaultMessage is:
@@ -33,6 +33,14 @@ msgstr "添加主题"
 msgid "administration.annotation"
 msgstr "模块需要完成。＊需要填写区域"
 
+#. [administration.announcementModule]
+#. defaultMessage is:
+#. Announcement module
+#: messages.json
+#, fuzzy
+msgid "administration.announcementModule"
+msgstr "视频板块"
+
 #. [administration.changeLanguage]
 #. defaultMessage is:
 #. Set another language
@@ -54,9 +62,33 @@ msgstr "删除问题"
 msgid "administration.deleteThematic"
 msgstr "删除主题"
 
+#. [administration.discussion.0]
+#. defaultMessage is:
+#. Languages of the Discussion
+#: messages.json
+#, fuzzy
+msgid "administration.discussion.0"
+msgstr "讨论"
+
+#. [administration.discussion.3]
+#. defaultMessage is:
+#. Terms & Conditions and Legal Notice
+#: messages.json
+#, fuzzy
+msgid "administration.discussion.3"
+msgstr "讨论"
+
+#. [administration.down]
+#. defaultMessage is:
+#. Down
+#: messages.json
+#, fuzzy
+msgid "administration.down"
+msgstr "讨论"
+
 #. [administration.edition]
 #. defaultMessage is:
-#. Discussion
+#. Edit the Discussion
 #: messages.json
 msgid "administration.edition"
 msgstr "讨论"
@@ -68,12 +100,75 @@ msgstr "讨论"
 msgid "administration.landingpage"
 msgstr "登陆页"
 
+#. [administration.languageChoice]
+#. defaultMessage is:
+#. Select desired languages below
+#: messages.json
+#, fuzzy
+msgid "administration.languageChoice"
+msgstr "登陆页"
+
+#. [administration.legalNoticeAndTerms.legalNoticeLabel]
+#. defaultMessage is:
+#. Legal notice
+#: messages.json
+#, fuzzy
+msgid "administration.legalNoticeAndTerms.legalNoticeLabel"
+msgstr "删除主题"
+
+#. [administration.legalNoticeAndTerms.successSave]
+#. defaultMessage is:
+#. The T&C and legal notice have been saved with success!
+#: messages.json
+#, fuzzy
+msgid "administration.legalNoticeAndTerms.successSave"
+msgstr "保存"
+
+#. [administration.legalNoticeAndTerms.termsAndConditionsLabel]
+#. defaultMessage is:
+#. Terms and conditions
+#: messages.json
+msgid "administration.legalNoticeAndTerms.termsAndConditionsLabel"
+msgstr ""
+
+#. [administration.menu.language]
+#. defaultMessage is:
+#. Discussion Language
+#: messages.json
+#, fuzzy
+msgid "administration.menu.language"
+msgstr "段落 %{count} - %{description}"
+
+#. [administration.menu.legalNoticeAndTerms]
+#. defaultMessage is:
+#. T&C and Legal Notice
+#: messages.json
+#, fuzzy
+msgid "administration.menu.legalNoticeAndTerms"
+msgstr "段落 %{count} - %{description}"
+
 #. [administration.menu.phase]
 #. defaultMessage is:
 #. Phase %{count} - %{description}
 #: messages.json
 msgid "administration.menu.phase"
 msgstr "段落 %{count} - %{description}"
+
+#. [administration.menu.sections]
+#. defaultMessage is:
+#. Edit Debate Sections
+#: messages.json
+#, fuzzy
+msgid "administration.menu.sections"
+msgstr "段落 %{count} - %{description}"
+
+#. [administration.noTimeline]
+#. defaultMessage is:
+#. No timeline has been configured yet
+#: messages.json
+#, fuzzy
+msgid "administration.noTimeline"
+msgstr "讨论"
 
 #. [administration.ph.descriptionBottom]
 #. defaultMessage is:
@@ -89,6 +184,22 @@ msgstr "在视频下面讨论"
 msgid "administration.ph.descriptionTop"
 msgstr "在视频上面评论"
 
+#. [administration.ph.mediaLink]
+#. defaultMessage is:
+#. Online media link (video, picture, etc..)
+#: messages.json
+#, fuzzy
+msgid "administration.ph.mediaLink"
+msgstr "＊视频链接"
+
+#. [administration.ph.orAttachPicture]
+#. defaultMessage is:
+#. Or upload an image from your computer
+#: messages.json
+#, fuzzy
+msgid "administration.ph.orAttachPicture"
+msgstr "＊题名"
+
 #. [administration.ph.quote]
 #. defaultMessage is:
 #. Quote
@@ -103,18 +214,115 @@ msgstr "引用"
 msgid "administration.ph.title"
 msgstr "＊题名"
 
-#. [administration.ph.videoLink]
-#. defaultMessage is:
-#. *Video link
-#: messages.json
-msgid "administration.ph.videoLink"
-msgstr "＊视频链接"
-
 #. [administration.question_label]
 #. defaultMessage is:
 #. Question
 #: messages.json
 msgid "administration.question_label"
+msgstr "问题"
+
+#. [administration.resourcesCenter.createResource]
+#. defaultMessage is:
+#. Add a media
+#: messages.json
+#, fuzzy
+msgid "administration.resourcesCenter.createResource"
+msgstr "主题成功保存了！"
+
+#. [administration.resourcesCenter.deleteResource]
+#. defaultMessage is:
+#. Delete the resource
+#: messages.json
+#, fuzzy
+msgid "administration.resourcesCenter.deleteResource"
+msgstr "主题成功保存了！"
+
+#. [administration.resourcesCenter.documentLabel]
+#. defaultMessage is:
+#. Document
+#: messages.json
+#, fuzzy
+msgid "administration.resourcesCenter.documentLabel"
+msgstr "问题"
+
+#. [administration.resourcesCenter.editResourceFormTitle]
+#. defaultMessage is:
+#. Edit resource number %{num}
+#: messages.json
+#, fuzzy
+msgid "administration.resourcesCenter.editResourceFormTitle"
+msgstr "导出讨论数据"
+
+#. [administration.resourcesCenter.embedCodeLabel]
+#. defaultMessage is:
+#. Video/Slides
+#: messages.json
+#, fuzzy
+msgid "administration.resourcesCenter.embedCodeLabel"
+msgstr "主题成功保存了！"
+
+#. [administration.resourcesCenter.headerImageLabel]
+#. defaultMessage is:
+#. Header image
+#: messages.json
+#, fuzzy
+msgid "administration.resourcesCenter.headerImageLabel"
+msgstr "主题成功保存了！"
+
+#. [administration.resourcesCenter.imageLabel]
+#. defaultMessage is:
+#. Image
+#: messages.json
+#, fuzzy
+msgid "administration.resourcesCenter.imageLabel"
+msgstr "问题"
+
+#. [administration.resourcesCenter.menuTitle]
+#. defaultMessage is:
+#. Edit the resources center
+#: messages.json
+#, fuzzy
+msgid "administration.resourcesCenter.menuTitle"
+msgstr "导出讨论数据"
+
+#. [administration.resourcesCenter.pageTitleLabel]
+#. defaultMessage is:
+#. Page title
+#: messages.json
+#, fuzzy
+msgid "administration.resourcesCenter.pageTitleLabel"
+msgstr "问题"
+
+#. [administration.resourcesCenter.successSave]
+#. defaultMessage is:
+#. Resources have been saved with success!
+#: messages.json
+#, fuzzy
+msgid "administration.resourcesCenter.successSave"
+msgstr "主题成功保存了！"
+
+#. [administration.resourcesCenter.textLabel]
+#. defaultMessage is:
+#. Text
+#: messages.json
+#, fuzzy
+msgid "administration.resourcesCenter.textLabel"
+msgstr "问题"
+
+#. [administration.resourcesCenter.title]
+#. defaultMessage is:
+#. Resources center
+#: messages.json
+#, fuzzy
+msgid "administration.resourcesCenter.title"
+msgstr "导出讨论数据"
+
+#. [administration.resourcesCenter.titleLabel]
+#. defaultMessage is:
+#. Title
+#: messages.json
+#, fuzzy
+msgid "administration.resourcesCenter.titleLabel"
 msgstr "问题"
 
 #. [administration.saveThemes]
@@ -124,12 +332,92 @@ msgstr "问题"
 msgid "administration.saveThemes"
 msgstr "保存"
 
+#. [administration.sections.addSection]
+#. defaultMessage is:
+#. Add a section
+#: messages.json
+#, fuzzy
+msgid "administration.sections.addSection"
+msgstr "添加问题"
+
+#. [administration.sections.custom]
+#. defaultMessage is:
+#. Added section
+#: messages.json
+#, fuzzy
+msgid "administration.sections.custom"
+msgstr "讨论"
+
+#. [administration.sections.deleteSection]
+#. defaultMessage is:
+#. Delete the section
+#: messages.json
+#, fuzzy
+msgid "administration.sections.deleteSection"
+msgstr "删除问题"
+
+#. [administration.sections.externalPage]
+#. defaultMessage is:
+#. Use external page
+#: messages.json
+#, fuzzy
+msgid "administration.sections.externalPage"
+msgstr "问题"
+
+#. [administration.sections.resources_center]
+#. defaultMessage is:
+#. Resources center
+#: messages.json
+#, fuzzy
+msgid "administration.sections.resources_center"
+msgstr "讨论"
+
+#. [administration.sections.sectionsTitle]
+#. defaultMessage is:
+#. Set sections
+#: messages.json
+#, fuzzy
+msgid "administration.sections.sectionsTitle"
+msgstr "讨论"
+
+#. [administration.sections.successSave]
+#. defaultMessage is:
+#. Sections are modified with success
+#: messages.json
+#, fuzzy
+msgid "administration.sections.successSave"
+msgstr "讨论"
+
+#. [administration.sections.titlePh]
+#. defaultMessage is:
+#. Title
+#: messages.json
+#, fuzzy
+msgid "administration.sections.titlePh"
+msgstr "＊题名"
+
+#. [administration.sections.urlPh]
+#. defaultMessage is:
+#. URL
+#: messages.json
+#, fuzzy
+msgid "administration.sections.urlPh"
+msgstr "讨论"
+
 #. [administration.step_x_total]
 #. defaultMessage is:
 #. Section %{num} on %{total}
 #: messages.json
 msgid "administration.step_x_total"
 msgstr "部分%{num}上%{total}"
+
+#. [administration.successLanguagePreference]
+#. defaultMessage is:
+#. Discussion language preferences have been saved with success!
+#: messages.json
+#, fuzzy
+msgid "administration.successLanguagePreference"
+msgstr "用另外一种语言"
 
 #. [administration.successThemeCreation]
 #. defaultMessage is:
@@ -173,12 +461,28 @@ msgstr "你可以点击导出键来导入所有的讨论数据"
 msgid "administration.surveyExport.link"
 msgstr "导出"
 
+#. [administration.surveyExport.noExportLanguage]
+#. defaultMessage is:
+#. Keep the messages in their original languages
+#: messages.json
+#, fuzzy
+msgid "administration.surveyExport.noExportLanguage"
+msgstr "你可以点击导出键来导入所有的讨论数据"
+
 #. [administration.surveyExport.title]
 #. defaultMessage is:
 #. Export the debate data
 #: messages.json
 msgid "administration.surveyExport.title"
 msgstr "导出讨论数据"
+
+#. [administration.surveyExport.translateTheMessagesIn]
+#. defaultMessage is:
+#. Translate the messages in:
+#: messages.json
+#, fuzzy
+msgid "administration.surveyExport.translateTheMessagesIn"
+msgstr "你可以点击导出键来导入所有的讨论数据"
 
 #. [administration.thematic]
 #. defaultMessage is:
@@ -194,16 +498,25 @@ msgstr "主题"
 msgid "administration.themeNum"
 msgstr "主题%{index}"
 
-#. [administration.videoModule]
+#. [administration.up]
 #. defaultMessage is:
-#. Video module
+#. Up
 #: messages.json
-msgid "administration.videoModule"
+#, fuzzy
+msgid "administration.up"
+msgstr "段落 %{count} - %{description}"
+
+#. [administration.videoHelp]
+#. defaultMessage is:
+#. *Authorized video links: "https://www.youtube.com/embed/[videoId]" or "https://player.vimeo.com/video/[videoId]?"
+#: messages.json
+#, fuzzy
+msgid "administration.videoHelp"
 msgstr "视频板块"
 
 #. [cancel]
 #. defaultMessage is:
-#. Annuler
+#. Cancel
 #: messages.json
 msgid "cancel"
 msgstr "撤销"
@@ -214,6 +527,69 @@ msgstr "撤销"
 #: messages.json
 msgid "changePassword.panelTitle"
 msgstr "欢迎来到Assembl忘记密码页"
+
+#. [chatframe.title]
+#. defaultMessage is:
+#. Instant discussion window
+#: messages.json
+msgid "chatframe.title"
+msgstr ""
+
+#. [chatframe.tooltip]
+#. defaultMessage is:
+#. Assemb'Bot
+#: messages.json
+msgid "chatframe.tooltip"
+msgstr ""
+
+#. [common.attachFileForm.label]
+#. defaultMessage is:
+#. Add an attachment
+#: messages.json
+msgid "common.attachFileForm.label"
+msgstr ""
+
+#. [common.attachFileForm.submit]
+#. defaultMessage is:
+#. Submit
+#: messages.json
+msgid "common.attachFileForm.submit"
+msgstr ""
+
+#. [common.attachments.download]
+#. defaultMessage is:
+#. Download
+#: messages.json
+msgid "common.attachments.download"
+msgstr ""
+
+#. [common.editor.attachment]
+#. defaultMessage is:
+#. Add a file
+#: messages.json
+msgid "common.editor.attachment"
+msgstr ""
+
+#. [common.editor.bold]
+#. defaultMessage is:
+#. Bold
+#: messages.json
+msgid "common.editor.bold"
+msgstr ""
+
+#. [common.editor.bulletList]
+#. defaultMessage is:
+#. Bullet list
+#: messages.json
+msgid "common.editor.bulletList"
+msgstr ""
+
+#. [common.editor.italic]
+#. defaultMessage is:
+#. Italic
+#: messages.json
+msgid "common.editor.italic"
+msgstr ""
 
 #. [common.goUp]
 #. defaultMessage is:
@@ -236,6 +612,13 @@ msgstr "选择上传文件"
 msgid "community.panelTitle"
 msgstr "欢迎来到Assembl社区页面"
 
+#. [conclusion]
+#. defaultMessage is:
+#. Conclusion
+#: messages.json
+msgid "conclusion"
+msgstr ""
+
 #. [date.format]
 #. defaultMessage is:
 #. MMMM Do, YYYY
@@ -245,7 +628,7 @@ msgstr "MMMM Do, YYYY"
 
 #. [date.format2]
 #. defaultMessage is:
-#. MM-DD-YYYY
+#. YYYY-MM-DD
 #: messages.json
 msgid "date.format2"
 msgstr "MM-DD-YYYY"
@@ -256,6 +639,50 @@ msgstr "MM-DD-YYYY"
 #: messages.json
 msgid "debate.answer"
 msgstr "我的回答："
+
+#. [debate.confirmDeletionBody]
+#. defaultMessage is:
+#. Are you sure you want to delete this message?
+#: messages.json
+msgid "debate.confirmDeletionBody"
+msgstr ""
+
+#. [debate.confirmDeletionButtonCancel]
+#. defaultMessage is:
+#. Cancel
+#: messages.json
+msgid "debate.confirmDeletionButtonCancel"
+msgstr ""
+
+#. [debate.confirmDeletionButtonDelete]
+#. defaultMessage is:
+#. Delete
+#: messages.json
+msgid "debate.confirmDeletionButtonDelete"
+msgstr ""
+
+#. [debate.confirmDeletionTitle]
+#. defaultMessage is:
+#. Confirm deletion
+#: messages.json
+msgid "debate.confirmDeletionTitle"
+msgstr ""
+
+#. [debate.copyLink]
+#. defaultMessage is:
+#. Copy the link to the clipboard
+#: messages.json
+#, fuzzy
+msgid "debate.copyLink"
+msgstr "赞"
+
+#. [debate.deleteMessage]
+#. defaultMessage is:
+#. Delete this message
+#: messages.json
+#, fuzzy
+msgid "debate.deleteMessage"
+msgstr "不同意"
 
 #. [debate.disagree]
 #. defaultMessage is:
@@ -271,11 +698,51 @@ msgstr "不同意"
 msgid "debate.dontUnderstand"
 msgstr "不理解"
 
+#. [debate.edit.body]
+#. defaultMessage is:
+#. Comment
+#: messages.json
+#, fuzzy
+msgid "debate.edit.body"
+msgstr "请写评论"
+
+#. [debate.edit.subject]
+#. defaultMessage is:
+#. Subject
+#: messages.json
+#, fuzzy
+msgid "debate.edit.subject"
+msgstr "请写题名"
+
+#. [debate.edit.title]
+#. defaultMessage is:
+#. I edit my message
+#: messages.json
+#, fuzzy
+msgid "debate.edit.title"
+msgstr "一个能让你更好理解主题的视频..."
+
+#. [debate.editMessage]
+#. defaultMessage is:
+#. Edit this message
+#: messages.json
+#, fuzzy
+msgid "debate.editMessage"
+msgstr "不同意"
+
 #. [debate.insert]
 #. defaultMessage is:
 #. Post a comment
 #: messages.json
 msgid "debate.insert"
+msgstr "发表评论"
+
+#. [debate.isCompleted]
+#. defaultMessage is:
+#. This phase is closed. You can no longer vote.
+#: messages.json
+#, fuzzy
+msgid "debate.isCompleted"
 msgstr "发表评论"
 
 #. [debate.like]
@@ -285,6 +752,14 @@ msgstr "发表评论"
 msgid "debate.like"
 msgstr "赞"
 
+#. [debate.linkCopied]
+#. defaultMessage is:
+#. Link copied
+#: messages.json
+#, fuzzy
+msgid "debate.linkCopied"
+msgstr "赞"
+
 #. [debate.moreInfo]
 #. defaultMessage is:
 #. More info please
@@ -292,9 +767,17 @@ msgstr "赞"
 msgid "debate.moreInfo"
 msgstr "请给更多信息"
 
+#. [debate.noAnswer]
+#. defaultMessage is:
+#. This phase is closed. You can no longer answer.
+#: messages.json
+#, fuzzy
+msgid "debate.noAnswer"
+msgstr "回答"
+
 #. [debate.notStarted]
 #. defaultMessage is:
-#. The %{phaseName} phase has not started. Please come back from
+#. The %{phaseName} phase has not started. Please come back from 
 #: messages.json
 msgid "debate.notStarted"
 msgstr "这个%{phaseName} 段落还没有开始。请回到"
@@ -313,11 +796,20 @@ msgstr "发表"
 msgid "debate.remaining_x_characters"
 msgstr "你还可以输入 %{nbCharacters}字"
 
-#. [debate.share]
+#. [debate.sharePost]
 #. defaultMessage is:
-#. Share
+#. Share this message
 #: messages.json
-msgid "debate.share"
+#, fuzzy
+msgid "debate.sharePost"
+msgstr "分享"
+
+#. [debate.shareSynthesis]
+#. defaultMessage is:
+#. Share this synthesis
+#: messages.json
+#, fuzzy
+msgid "debate.shareSynthesis"
 msgstr "分享"
 
 #. [debate.subject]
@@ -411,12 +903,36 @@ msgstr "一个能让你更好理解主题的视频..."
 msgid "debate.survey.txtAreaPh"
 msgstr "请写你的观点"
 
+#. [debate.syntheses]
+#. defaultMessage is:
+#. Syntheses
+#: messages.json
+#, fuzzy
+msgid "debate.syntheses"
+msgstr "主题"
+
 #. [debate.themes]
 #. defaultMessage is:
 #. Themes
 #: messages.json
 msgid "debate.themes"
 msgstr "主题"
+
+#. [debate.thread.announcement]
+#. defaultMessage is:
+#. Announcement
+#: messages.json
+#, fuzzy
+msgid "debate.thread.announcement"
+msgstr "谢谢你的参与。你的评论已经发送成功！"
+
+#. [debate.thread.chooseLanguagePh]
+#. defaultMessage is:
+#. Please choose the language
+#: messages.json
+#, fuzzy
+msgid "debate.thread.chooseLanguagePh"
+msgstr "显示 %{count}回复"
 
 #. [debate.thread.fillBody]
 #. defaultMessage is:
@@ -446,6 +962,14 @@ msgstr "显示 %{count}回复"
 msgid "debate.thread.foldedPostLink_1"
 msgstr "显示一条评论"
 
+#. [debate.thread.goToIdea]
+#. defaultMessage is:
+#. View all messages
+#: messages.json
+#, fuzzy
+msgid "debate.thread.goToIdea"
+msgstr "这条帖子和下面这个主题有关"
+
 #. [debate.thread.linkIdea]
 #. defaultMessage is:
 #. This post is related to the following themes:
@@ -453,12 +977,44 @@ msgstr "显示一条评论"
 msgid "debate.thread.linkIdea"
 msgstr "这条帖子和下面这个主题有关"
 
+#. [debate.thread.messageOriginallyIn]
+#. defaultMessage is:
+#. This message has been written in %{language}
+#: messages.json
+#, fuzzy
+msgid "debate.thread.messageOriginallyIn"
+msgstr "请写评论"
+
+#. [debate.thread.messageTranslatedFrom]
+#. defaultMessage is:
+#. This message has been translated from %{language}.
+#: messages.json
+#, fuzzy
+msgid "debate.thread.messageTranslatedFrom"
+msgstr "成为第一个发言者，开始讨论！"
+
 #. [debate.thread.noPostsInThread]
 #. defaultMessage is:
 #. Be the first to contribute, start a discussion!
 #: messages.json
 msgid "debate.thread.noPostsInThread"
 msgstr "成为第一个发言者，开始讨论！"
+
+#. [debate.thread.numberOfReactions]
+#. defaultMessage is:
+#. %{count} reactions
+#: messages.json
+#, fuzzy
+msgid "debate.thread.numberOfReactions"
+msgstr "帖子的第%{count}条回复"
+
+#. [debate.thread.numberOfReactions_1]
+#. defaultMessage is:
+#. %{count} reaction
+#: messages.json
+#, fuzzy
+msgid "debate.thread.numberOfReactions_1"
+msgstr "帖子的第%{count}条回复"
 
 #. [debate.thread.numberOfResponses]
 #. defaultMessage is:
@@ -481,12 +1037,60 @@ msgstr "这个帖子没有回复"
 msgid "debate.thread.numberOfResponses_1"
 msgstr "帖子的第%{count}条回复"
 
+#. [debate.thread.postDeletedByAdmin]
+#. defaultMessage is:
+#. This message has been deleted by the community manager.
+#: messages.json
+#, fuzzy
+msgid "debate.thread.postDeletedByAdmin"
+msgstr "谢谢你的参与。你的评论已经发送成功！"
+
+#. [debate.thread.postDeletedByUser]
+#. defaultMessage is:
+#. This message has been deleted by the author.
+#: messages.json
+#, fuzzy
+msgid "debate.thread.postDeletedByUser"
+msgstr "谢谢你的参与。你的评论已经发送成功！"
+
+#. [debate.thread.postEdited]
+#. defaultMessage is:
+#. edited
+#: messages.json
+#, fuzzy
+msgid "debate.thread.postEdited"
+msgstr "谢谢你的参与。你的评论已经发送成功！"
+
 #. [debate.thread.postSuccess]
 #. defaultMessage is:
 #. Thanks for your participation. Your comment has been sent!
 #: messages.json
 msgid "debate.thread.postSuccess"
 msgstr "谢谢你的参与。你的评论已经发送成功！"
+
+#. [debate.thread.seeSubIdeas]
+#. defaultMessage is:
+#. See %{count} sub-thematics
+#: messages.json
+#, fuzzy
+msgid "debate.thread.seeSubIdeas"
+msgstr "这条帖子和下面这个主题有关"
+
+#. [debate.thread.seeSubIdeas_1]
+#. defaultMessage is:
+#. See sub-thematic
+#: messages.json
+#, fuzzy
+msgid "debate.thread.seeSubIdeas_1"
+msgstr "这条帖子和下面这个主题有关"
+
+#. [debate.thread.showOriginal]
+#. defaultMessage is:
+#. Show original
+#: messages.json
+#, fuzzy
+msgid "debate.thread.showOriginal"
+msgstr "这条帖子和下面这个主题有关"
 
 #. [debate.thread.startDiscussion]
 #. defaultMessage is:
@@ -495,12 +1099,67 @@ msgstr "谢谢你的参与。你的评论已经发送成功！"
 msgid "debate.thread.startDiscussion"
 msgstr "开始一个新的讨论主题"
 
+#. [debate.thread.translate]
+#. defaultMessage is:
+#. Translate
+#: messages.json
+#, fuzzy
+msgid "debate.thread.translate"
+msgstr "这条帖子和下面这个主题有关"
+
+#. [debate.thread.translateAllMessagesIn]
+#. defaultMessage is:
+#. Translate all messages posted in %{language}.
+#: messages.json
+#, fuzzy
+msgid "debate.thread.translateAllMessagesIn"
+msgstr "开始一个新的讨论主题"
+
+#. [debate.thread.translateOnlyThisMessage]
+#. defaultMessage is:
+#. Translate only this message.
+#: messages.json
+#, fuzzy
+msgid "debate.thread.translateOnlyThisMessage"
+msgstr "成为第一个发言者，开始讨论！"
+
+#. [debate.thread.untranslateAllMessagesIn]
+#. defaultMessage is:
+#. I don't want to translate all messages in %{language}.
+#: messages.json
+#, fuzzy
+msgid "debate.thread.untranslateAllMessagesIn"
+msgstr "开始一个新的讨论主题"
+
+#. [debate.thread.untranslateOnlyThisMessage]
+#. defaultMessage is:
+#. I don't want to translate only this message
+#: messages.json
+#, fuzzy
+msgid "debate.thread.untranslateOnlyThisMessage"
+msgstr "成为第一个发言者，开始讨论！"
+
 #. [debate.toAnswer]
 #. defaultMessage is:
 #. Answer
 #: messages.json
 msgid "debate.toAnswer"
 msgstr "回答"
+
+#. [debate.whatYouNeedToKnow]
+#. defaultMessage is:
+#. What you need to know
+#: messages.json
+msgid "debate.whatYouNeedToKnow"
+msgstr ""
+
+#. [duration.format]
+#. defaultMessage is:
+#. h [h]
+#: messages.json
+#, fuzzy
+msgid "duration.format"
+msgstr "MMMM Do, YYYY"
 
 #. [error.reason]
 #. defaultMessage is:
@@ -516,6 +1175,14 @@ msgstr "对不起，有一个错误："
 msgid "error.required"
 msgstr "需要填写区域"
 
+#. [footer.legalNotice]
+#. defaultMessage is:
+#. Legal Notice
+#: messages.json
+#, fuzzy
+msgid "footer.legalNotice"
+msgstr "条款"
+
 #. [footer.socialMedias]
 #. defaultMessage is:
 #. Follow us
@@ -525,14 +1192,14 @@ msgstr "关注我们"
 
 #. [footer.terms]
 #. defaultMessage is:
-#. Terms and Conditions
+#. Terms & Conditions
 #: messages.json
 msgid "footer.terms"
 msgstr "条款"
 
 #. [home.accessButton]
 #. defaultMessage is:
-#. Access the debate
+#. I want to participate
 #: messages.json
 msgid "home.accessButton"
 msgstr "加入讨论"
@@ -588,10 +1255,18 @@ msgstr "更长的讨论"
 
 #. [home.objectivesTitle]
 #. defaultMessage is:
-#. What is the objective of the debate?
+#. What is the objective?
 #: messages.json
 msgid "home.objectivesTitle"
 msgstr "这个讨论的目标是什么？"
+
+#. [home.pageViews]
+#. defaultMessage is:
+#. page views
+#: messages.json
+#, fuzzy
+msgid "home.pageViews"
+msgstr "合作者"
 
 #. [home.participant]
 #. defaultMessage is:
@@ -614,6 +1289,22 @@ msgstr "合作者"
 msgid "home.recentDiscussion"
 msgstr "最近的讨论"
 
+#. [home.sentiments]
+#. defaultMessage is:
+#. votes
+#: messages.json
+#, fuzzy
+msgid "home.sentiments"
+msgstr "讨论的时间线有 %{count}阶段"
+
+#. [home.sumVisitsLength]
+#. defaultMessage is:
+#. global time spent
+#: messages.json
+#, fuzzy
+msgid "home.sumVisitsLength"
+msgstr "访问"
+
 #. [home.themesSubtitle]
 #. defaultMessage is:
 #. Find your most controversial and highly acclaimed discussions on the front page
@@ -623,14 +1314,14 @@ msgstr "在主页找到最有争议的和最受好评的讨论"
 
 #. [home.themesTitle]
 #. defaultMessage is:
-#. Themes of the ongoing debate
+#. Ongoing themes
 #: messages.json
 msgid "home.themesTitle"
 msgstr "正在进行的讨论的主题"
 
 #. [home.timelineTitle]
 #. defaultMessage is:
-#. The timeline of the debate in %{count} phases
+#. The timeline in %{count} phases
 #: messages.json
 msgid "home.timelineTitle"
 msgstr "讨论的时间线有 %{count}阶段"
@@ -656,19 +1347,26 @@ msgstr "推特"
 msgid "home.video"
 msgstr "讨论的视频"
 
-#. [home.viewedPages]
-#. defaultMessage is:
-#. Viewed pages
-#: messages.json
-msgid "home.viewedPages"
-msgstr "看过的页面"
-
 #. [home.visit]
 #. defaultMessage is:
 #. visits
 #: messages.json
 msgid "home.visit"
 msgstr "访问"
+
+#. [introduction]
+#. defaultMessage is:
+#. Introduction
+#: messages.json
+msgid "introduction"
+msgstr ""
+
+#. [legalNotice.headerTitle]
+#. defaultMessage is:
+#. Legal Notice
+#: messages.json
+msgid "legalNotice.headerTitle"
+msgstr ""
 
 #. [loading.wait]
 #. defaultMessage is:
@@ -689,7 +1387,9 @@ msgstr "你的账号已经建立"
 #. A confirmation e-mail has been sent to your account and should be in your inbox in a few minutes. It contains a confirmation link, please click on it in order to confirm your e-mail address. Check your spam folder if you did not receive a confirmation e-mail.
 #: messages.json
 msgid "login.accountCreatedMsg"
-msgstr "一封帐号确认邮件已经发送到你的邮箱。邮件里有个确认链接，请点击链接确认你的邮箱。如果您没有收到邮件，请查看你的垃圾邮件夹。"
+msgstr ""
+"一封帐号确认邮件已经发送到你的邮箱。邮件里有个确认链接，请点击链接确认你的邮"
+"箱。如果您没有收到邮件，请查看你的垃圾邮件夹。"
 
 #. [login.alreadyAccount]
 #. defaultMessage is:
@@ -742,7 +1442,7 @@ msgstr "输入的用户名已经存在"
 
 #. [login.forgotPwd]
 #. defaultMessage is:
-#. Forgot your password?
+#. Reset your password
 #: messages.json
 msgid "login.forgotPwd"
 msgstr "忘记密码？"
@@ -878,7 +1578,9 @@ msgstr "要求更改密码"
 #. We have sent you an email with a temporary connection link. Please use that link to log in and change your password. Make sure to check your spam folder if an email is not in your inbox
 #: messages.json
 msgid "login.sendPwdMsg"
-msgstr "我们通过邮件发送给你了一个新链接。请点击链接进入页面，并更改你的密码。如果没有收到邮件，请查看您的垃圾邮件夹"
+msgstr ""
+"我们通过邮件发送给你了一个新链接。请点击链接进入页面，并更改你的密码。如果没"
+"有收到邮件，请查看您的垃圾邮件夹"
 
 #. [login.signUp]
 #. defaultMessage is:
@@ -907,6 +1609,21 @@ msgstr "用户名（可选）"
 #: messages.json
 msgid "login.username"
 msgstr "邮箱或用户名"
+
+#. [multiColumns.synthesis.noSynthesisYet]
+#. defaultMessage is:
+#. The synthesis is currently being written
+#: messages.json
+msgid "multiColumns.synthesis.noSynthesisYet"
+msgstr ""
+
+#. [multiColumns.synthesis.title]
+#. defaultMessage is:
+#. Synthesis: %{colName}
+#: messages.json
+#, fuzzy
+msgid "multiColumns.synthesis.title"
+msgstr "合成"
 
 #. [navbar.administration]
 #. defaultMessage is:
@@ -952,10 +1669,25 @@ msgstr "登出"
 
 #. [navbar.profile]
 #. defaultMessage is:
-#. Profile
+#. My profile
 #: messages.json
 msgid "navbar.profile"
 msgstr "个人资料"
+
+#. [navbar.resourcesCenter]
+#. defaultMessage is:
+#. Resources
+#: messages.json
+msgid "navbar.resourcesCenter"
+msgstr ""
+
+#. [navbar.syntheses]
+#. defaultMessage is:
+#. Syntheses
+#: messages.json
+#, fuzzy
+msgid "navbar.syntheses"
+msgstr "合成"
 
 #. [notFound.panelTitle]
 #. defaultMessage is:
@@ -964,19 +1696,97 @@ msgstr "个人资料"
 msgid "notFound.panelTitle"
 msgstr "对不起，这个页面不存在"
 
+#. [profile.changePassword]
+#. defaultMessage is:
+#. Modify
+#: messages.json
+#, fuzzy
+msgid "profile.changePassword"
+msgstr "更改密码"
+
+#. [profile.email]
+#. defaultMessage is:
+#. Email
+#: messages.json
+#, fuzzy
+msgid "profile.email"
+msgstr "欢迎来到Assembl的个人资料页"
+
+#. [profile.fullname]
+#. defaultMessage is:
+#. Full name
+#: messages.json
+#, fuzzy
+msgid "profile.fullname"
+msgstr "全名"
+
 #. [profile.panelTitle]
 #. defaultMessage is:
-#. Welcome to Assembl profile page
+#. Your account
 #: messages.json
 msgid "profile.panelTitle"
 msgstr "欢迎来到Assembl的个人资料页"
+
+#. [profile.password]
+#. defaultMessage is:
+#. Password
+#: messages.json
+#, fuzzy
+msgid "profile.password"
+msgstr "密码"
+
+#. [profile.personalInfos]
+#. defaultMessage is:
+#. Personal informations
+#: messages.json
+msgid "profile.personalInfos"
+msgstr ""
+
+#. [profile.save]
+#. defaultMessage is:
+#. Save
+#: messages.json
+#, fuzzy
+msgid "profile.save"
+msgstr "欢迎来到Assembl的个人资料页"
+
+#. [profile.saveSuccess]
+#. defaultMessage is:
+#. Your profile is updated
+#: messages.json
+msgid "profile.saveSuccess"
+msgstr ""
+
+#. [profile.userName]
+#. defaultMessage is:
+#. User name
+#: messages.json
+#, fuzzy
+msgid "profile.userName"
+msgstr "用户名（可选）"
 
 #. [redirectToV1]
 #. defaultMessage is:
 #. You will be redirected to the %{phaseName} phase in a few seconds. Assembl is being improved, please excuse us for the interface change. If nothing happens, click on the button.
 #: messages.json
 msgid "redirectToV1"
-msgstr "几秒钟之后你会跳转%{phaseName}段落。Assembl正在改进，请谅解我们界面的改变。如果没有反应，请点击按钮。"
+msgstr ""
+"几秒钟之后你会跳转%{phaseName}段落。Assembl正在改进，请谅解我们界面的改变。如"
+"果没有反应，请点击按钮。"
+
+#. [resourcesCenter.defaultHeaderTitle]
+#. defaultMessage is:
+#. Online resources center
+#: messages.json
+msgid "resourcesCenter.defaultHeaderTitle"
+msgstr ""
+
+#. [resourcesCenter.download]
+#. defaultMessage is:
+#. Download the document
+#: messages.json
+msgid "resourcesCenter.download"
+msgstr ""
 
 #. [search.All]
 #. defaultMessage is:
@@ -1118,6 +1928,14 @@ msgstr "搜索{query}不用筛选"
 msgid "search.Oldest first"
 msgstr "最早在前"
 
+#. [search.Participants]
+#. defaultMessage is:
+#. Participants
+#: messages.json
+#, fuzzy
+msgid "search.Participants"
+msgstr "有创造性的参与者"
+
 #. [search.Participants having the less posted messages]
 #. defaultMessage is:
 #. Participants having the less posted messages
@@ -1162,7 +1980,7 @@ msgstr "按"
 
 #. [search.collapse_search]
 #. defaultMessage is:
-#. Hide search
+#. Close search
 #: messages.json
 msgid "search.collapse_search"
 msgstr "隐藏搜索"
@@ -1194,13 +2012,6 @@ msgstr "不同意"
 #: messages.json
 msgid "search.dont_understand"
 msgstr "不理解"
-
-#. [search.expand_search]
-#. defaultMessage is:
-#. Show search
-#: messages.json
-msgid "search.expand_search"
-msgstr "显示搜索"
 
 #. [search.facets.view_all]
 #. defaultMessage is:
@@ -1328,6 +2139,22 @@ msgstr "合成"
 msgid "search.user"
 msgstr "参与者"
 
+#. [synthesis.noSynthesisYet]
+#. defaultMessage is:
+#. There is no synthesis available yet.
+#: messages.json
+#, fuzzy
+msgid "synthesis.noSynthesisYet"
+msgstr "合成"
+
+#. [synthesis.seeConversation]
+#. defaultMessage is:
+#. See the conversation
+#: messages.json
+#, fuzzy
+msgid "synthesis.seeConversation"
+msgstr "合成"
+
 #. [synthesis.title]
 #. defaultMessage is:
 #. synthesis
@@ -1335,12 +2162,12 @@ msgstr "参与者"
 msgid "synthesis.title"
 msgstr "合成"
 
-#. [terms.panelTitle]
+#. [termsAndConditions.headerTitle]
 #. defaultMessage is:
-#. Terms and Conditions
+#. Terms & Conditions
 #: messages.json
-msgid "terms.panelTitle"
-msgstr "条款"
+msgid "termsAndConditions.headerTitle"
+msgstr ""
 
 #. [unauthorizedAdministration.returnButton]
 #. defaultMessage is:
@@ -1355,3 +2182,19 @@ msgstr "回到主页"
 #: messages.json
 msgid "unauthorizedAdministration.unauthorizedMessage"
 msgstr "你没有权限看到管理者的页面。请联系管理者"
+
+#. [validate]
+#. defaultMessage is:
+#. Validate
+#: messages.json
+msgid "validate"
+msgstr ""
+
+#~ msgid "home.viewedPages"
+#~ msgstr "看过的页面"
+
+#~ msgid "search.expand_search"
+#~ msgstr "显示搜索"
+
+#~ msgid "terms.panelTitle"
+#~ msgstr "条款"

@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"POT-Creation-Date: 2017-11-15T13:37:10.748Z\n"
+"POT-Creation-Date: 2017-12-15T13:47:31.589Z\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "MIME-Version: 1.0\n"
@@ -64,6 +64,20 @@ msgid "administration.discussion.0"
 msgstr ""
 
 #: messages.json
+#. [administration.discussion.3]
+#. defaultMessage is:
+#. Terms & Conditions and Legal Notice
+msgid "administration.discussion.3"
+msgstr ""
+
+#: messages.json
+#. [administration.down]
+#. defaultMessage is:
+#. Down
+msgid "administration.down"
+msgstr ""
+
+#: messages.json
 #. [administration.edition]
 #. defaultMessage is:
 #. Edit the Discussion
@@ -85,6 +99,27 @@ msgid "administration.languageChoice"
 msgstr ""
 
 #: messages.json
+#. [administration.legalNoticeAndTerms.legalNoticeLabel]
+#. defaultMessage is:
+#. Legal notice
+msgid "administration.legalNoticeAndTerms.legalNoticeLabel"
+msgstr ""
+
+#: messages.json
+#. [administration.legalNoticeAndTerms.successSave]
+#. defaultMessage is:
+#. The T&C and legal notice have been saved with success!
+msgid "administration.legalNoticeAndTerms.successSave"
+msgstr ""
+
+#: messages.json
+#. [administration.legalNoticeAndTerms.termsAndConditionsLabel]
+#. defaultMessage is:
+#. Terms and conditions
+msgid "administration.legalNoticeAndTerms.termsAndConditionsLabel"
+msgstr ""
+
+#: messages.json
 #. [administration.menu.language]
 #. defaultMessage is:
 #. Discussion Language
@@ -92,10 +127,24 @@ msgid "administration.menu.language"
 msgstr ""
 
 #: messages.json
+#. [administration.menu.legalNoticeAndTerms]
+#. defaultMessage is:
+#. T&C and Legal Notice
+msgid "administration.menu.legalNoticeAndTerms"
+msgstr ""
+
+#: messages.json
 #. [administration.menu.phase]
 #. defaultMessage is:
 #. Phase %{count} - %{description}
 msgid "administration.menu.phase"
+msgstr ""
+
+#: messages.json
+#. [administration.menu.sections]
+#. defaultMessage is:
+#. Edit Debate Sections
+msgid "administration.menu.sections"
 msgstr ""
 
 #: messages.json
@@ -155,10 +204,164 @@ msgid "administration.question_label"
 msgstr ""
 
 #: messages.json
+#. [administration.resourcesCenter.createResource]
+#. defaultMessage is:
+#. Add a media
+msgid "administration.resourcesCenter.createResource"
+msgstr ""
+
+#: messages.json
+#. [administration.resourcesCenter.deleteResource]
+#. defaultMessage is:
+#. Delete the resource
+msgid "administration.resourcesCenter.deleteResource"
+msgstr ""
+
+#: messages.json
+#. [administration.resourcesCenter.documentLabel]
+#. defaultMessage is:
+#. Document
+msgid "administration.resourcesCenter.documentLabel"
+msgstr ""
+
+#: messages.json
+#. [administration.resourcesCenter.editResourceFormTitle]
+#. defaultMessage is:
+#. Edit resource number %{num}
+msgid "administration.resourcesCenter.editResourceFormTitle"
+msgstr ""
+
+#: messages.json
+#. [administration.resourcesCenter.embedCodeLabel]
+#. defaultMessage is:
+#. Video/Slides
+msgid "administration.resourcesCenter.embedCodeLabel"
+msgstr ""
+
+#: messages.json
+#. [administration.resourcesCenter.headerImageLabel]
+#. defaultMessage is:
+#. Header image
+msgid "administration.resourcesCenter.headerImageLabel"
+msgstr ""
+
+#: messages.json
+#. [administration.resourcesCenter.imageLabel]
+#. defaultMessage is:
+#. Image
+msgid "administration.resourcesCenter.imageLabel"
+msgstr ""
+
+#: messages.json
+#. [administration.resourcesCenter.menuTitle]
+#. defaultMessage is:
+#. Edit the resources center
+msgid "administration.resourcesCenter.menuTitle"
+msgstr ""
+
+#: messages.json
+#. [administration.resourcesCenter.pageTitleLabel]
+#. defaultMessage is:
+#. Page title
+msgid "administration.resourcesCenter.pageTitleLabel"
+msgstr ""
+
+#: messages.json
+#. [administration.resourcesCenter.successSave]
+#. defaultMessage is:
+#. Resources have been saved with success!
+msgid "administration.resourcesCenter.successSave"
+msgstr ""
+
+#: messages.json
+#. [administration.resourcesCenter.textLabel]
+#. defaultMessage is:
+#. Text
+msgid "administration.resourcesCenter.textLabel"
+msgstr ""
+
+#: messages.json
+#. [administration.resourcesCenter.title]
+#. defaultMessage is:
+#. Resources center
+msgid "administration.resourcesCenter.title"
+msgstr ""
+
+#: messages.json
+#. [administration.resourcesCenter.titleLabel]
+#. defaultMessage is:
+#. Title
+msgid "administration.resourcesCenter.titleLabel"
+msgstr ""
+
+#: messages.json
 #. [administration.saveThemes]
 #. defaultMessage is:
 #. Save
 msgid "administration.saveThemes"
+msgstr ""
+
+#: messages.json
+#. [administration.sections.addSection]
+#. defaultMessage is:
+#. Add a section
+msgid "administration.sections.addSection"
+msgstr ""
+
+#: messages.json
+#. [administration.sections.custom]
+#. defaultMessage is:
+#. Added section
+msgid "administration.sections.custom"
+msgstr ""
+
+#: messages.json
+#. [administration.sections.deleteSection]
+#. defaultMessage is:
+#. Delete the section
+msgid "administration.sections.deleteSection"
+msgstr ""
+
+#: messages.json
+#. [administration.sections.externalPage]
+#. defaultMessage is:
+#. Use external page
+msgid "administration.sections.externalPage"
+msgstr ""
+
+#: messages.json
+#. [administration.sections.resources_center]
+#. defaultMessage is:
+#. Resources center
+msgid "administration.sections.resources_center"
+msgstr ""
+
+#: messages.json
+#. [administration.sections.sectionsTitle]
+#. defaultMessage is:
+#. Set sections
+msgid "administration.sections.sectionsTitle"
+msgstr ""
+
+#: messages.json
+#. [administration.sections.successSave]
+#. defaultMessage is:
+#. Sections are modified with success
+msgid "administration.sections.successSave"
+msgstr ""
+
+#: messages.json
+#. [administration.sections.titlePh]
+#. defaultMessage is:
+#. Title
+msgid "administration.sections.titlePh"
+msgstr ""
+
+#: messages.json
+#. [administration.sections.urlPh]
+#. defaultMessage is:
+#. URL
+msgid "administration.sections.urlPh"
 msgstr ""
 
 #: messages.json
@@ -253,6 +456,13 @@ msgid "administration.themeNum"
 msgstr ""
 
 #: messages.json
+#. [administration.up]
+#. defaultMessage is:
+#. Up
+msgid "administration.up"
+msgstr ""
+
+#: messages.json
 #. [administration.videoHelp]
 #. defaultMessage is:
 #. *Authorized video links: "https://www.youtube.com/embed/[videoId]" or "https://player.vimeo.com/video/[videoId]?"
@@ -271,6 +481,20 @@ msgstr ""
 #. defaultMessage is:
 #. Welcome to Assembl forgot password page
 msgid "changePassword.panelTitle"
+msgstr ""
+
+#: messages.json
+#. [chatframe.title]
+#. defaultMessage is:
+#. Instant discussion window
+msgid "chatframe.title"
+msgstr ""
+
+#: messages.json
+#. [chatframe.tooltip]
+#. defaultMessage is:
+#. Assemb'Bot
+msgid "chatframe.tooltip"
 msgstr ""
 
 #: messages.json
@@ -341,6 +565,13 @@ msgstr ""
 #. defaultMessage is:
 #. Welcome to Assembl community page
 msgid "community.panelTitle"
+msgstr ""
+
+#: messages.json
+#. [conclusion]
+#. defaultMessage is:
+#. Conclusion
+msgid "conclusion"
 msgstr ""
 
 #: messages.json
@@ -617,6 +848,13 @@ msgid "debate.survey.txtAreaPh"
 msgstr ""
 
 #: messages.json
+#. [debate.syntheses]
+#. defaultMessage is:
+#. Syntheses
+msgid "debate.syntheses"
+msgstr ""
+
+#: messages.json
 #. [debate.themes]
 #. defaultMessage is:
 #. Themes
@@ -668,7 +906,7 @@ msgstr ""
 #: messages.json
 #. [debate.thread.goToIdea]
 #. defaultMessage is:
-#. Access the thread
+#. View all messages
 msgid "debate.thread.goToIdea"
 msgstr ""
 
@@ -841,6 +1079,13 @@ msgid "debate.whatYouNeedToKnow"
 msgstr ""
 
 #: messages.json
+#. [duration.format]
+#. defaultMessage is:
+#. h [h]
+msgid "duration.format"
+msgstr ""
+
+#: messages.json
 #. [error.reason]
 #. defaultMessage is:
 #. Sorry, an error occurred:
@@ -855,6 +1100,13 @@ msgid "error.required"
 msgstr ""
 
 #: messages.json
+#. [footer.legalNotice]
+#. defaultMessage is:
+#. Legal Notice
+msgid "footer.legalNotice"
+msgstr ""
+
+#: messages.json
 #. [footer.socialMedias]
 #. defaultMessage is:
 #. Follow us
@@ -864,14 +1116,14 @@ msgstr ""
 #: messages.json
 #. [footer.terms]
 #. defaultMessage is:
-#. Terms and Conditions
+#. Terms & Conditions
 msgid "footer.terms"
 msgstr ""
 
 #: messages.json
 #. [home.accessButton]
 #. defaultMessage is:
-#. Access the debate
+#. I want to participate
 msgid "home.accessButton"
 msgstr ""
 
@@ -927,8 +1179,15 @@ msgstr ""
 #: messages.json
 #. [home.objectivesTitle]
 #. defaultMessage is:
-#. What is the objective of the debate?
+#. What is the objective?
 msgid "home.objectivesTitle"
+msgstr ""
+
+#: messages.json
+#. [home.pageViews]
+#. defaultMessage is:
+#. page views
+msgid "home.pageViews"
 msgstr ""
 
 #: messages.json
@@ -960,6 +1219,13 @@ msgid "home.sentiments"
 msgstr ""
 
 #: messages.json
+#. [home.sumVisitsLength]
+#. defaultMessage is:
+#. global time spent
+msgid "home.sumVisitsLength"
+msgstr ""
+
+#: messages.json
 #. [home.themesSubtitle]
 #. defaultMessage is:
 #. Find your most controversial and highly acclaimed discussions on the front page
@@ -969,14 +1235,14 @@ msgstr ""
 #: messages.json
 #. [home.themesTitle]
 #. defaultMessage is:
-#. Themes of the ongoing debate
+#. Ongoing themes
 msgid "home.themesTitle"
 msgstr ""
 
 #: messages.json
 #. [home.timelineTitle]
 #. defaultMessage is:
-#. The timeline of the debate in %{count} phases
+#. The timeline in %{count} phases
 msgid "home.timelineTitle"
 msgstr ""
 
@@ -1002,17 +1268,24 @@ msgid "home.video"
 msgstr ""
 
 #: messages.json
-#. [home.viewedPages]
-#. defaultMessage is:
-#. Viewed pages
-msgid "home.viewedPages"
-msgstr ""
-
-#: messages.json
 #. [home.visit]
 #. defaultMessage is:
 #. visits
 msgid "home.visit"
+msgstr ""
+
+#: messages.json
+#. [introduction]
+#. defaultMessage is:
+#. Introduction
+msgid "introduction"
+msgstr ""
+
+#: messages.json
+#. [legalNotice.headerTitle]
+#. defaultMessage is:
+#. Legal Notice
+msgid "legalNotice.headerTitle"
 msgstr ""
 
 #: messages.json
@@ -1088,7 +1361,7 @@ msgstr ""
 #: messages.json
 #. [login.forgotPwd]
 #. defaultMessage is:
-#. Forgot your password?
+#. Reset your password
 msgid "login.forgotPwd"
 msgstr ""
 
@@ -1254,69 +1527,6 @@ msgid "login.username"
 msgstr ""
 
 #: messages.json
-#. [multiColumns.announcement.alternativeTitle]
-#. defaultMessage is:
-#. Alternative
-msgid "multiColumns.announcement.alternativeTitle"
-msgstr ""
-
-#: messages.json
-#. [multiColumns.announcement.negativeTitle]
-#. defaultMessage is:
-#. Against
-msgid "multiColumns.announcement.negativeTitle"
-msgstr ""
-
-#: messages.json
-#. [multiColumns.announcement.positiveTitle]
-#. defaultMessage is:
-#. For
-msgid "multiColumns.announcement.positiveTitle"
-msgstr ""
-
-#: messages.json
-#. [multiColumns.createTopPost.alternativeTitle]
-#. defaultMessage is:
-#. Add your alternative point of view on the theme %{ideaTitle}
-msgid "multiColumns.createTopPost.alternativeTitle"
-msgstr ""
-
-#: messages.json
-#. [multiColumns.createTopPost.negativeTitle]
-#. defaultMessage is:
-#. Add your point of view against the theme %{ideaTitle}
-msgid "multiColumns.createTopPost.negativeTitle"
-msgstr ""
-
-#: messages.json
-#. [multiColumns.createTopPost.positiveTitle]
-#. defaultMessage is:
-#. Add your point of view for the theme %{ideaTitle}
-msgid "multiColumns.createTopPost.positiveTitle"
-msgstr ""
-
-#: messages.json
-#. [multiColumns.synthesis.alternativeTitle]
-#. defaultMessage is:
-#. Synthesis of the alternative arguments of the theme %{ideaTitle}
-msgid "multiColumns.synthesis.alternativeTitle"
-msgstr ""
-
-#: messages.json
-#. [multiColumns.synthesis.colName]
-#. defaultMessage is:
-#. Synthesis: %{colName}
-msgid "multiColumns.synthesis.colName"
-msgstr ""
-
-#: messages.json
-#. [multiColumns.synthesis.negativeTitle]
-#. defaultMessage is:
-#. Synthesis of the arguments against the theme %{ideaTitle}
-msgid "multiColumns.synthesis.negativeTitle"
-msgstr ""
-
-#: messages.json
 #. [multiColumns.synthesis.noSynthesisYet]
 #. defaultMessage is:
 #. The synthesis is currently being written
@@ -1324,31 +1534,10 @@ msgid "multiColumns.synthesis.noSynthesisYet"
 msgstr ""
 
 #: messages.json
-#. [multiColumns.synthesis.positiveTitle]
+#. [multiColumns.synthesis.title]
 #. defaultMessage is:
-#. Synthesis of the arguments for the theme %{ideaTitle}
-msgid "multiColumns.synthesis.positiveTitle"
-msgstr ""
-
-#: messages.json
-#. [multiColumns.tab.alternativeTitle]
-#. defaultMessage is:
-#. Alternative
-msgid "multiColumns.tab.alternativeTitle"
-msgstr ""
-
-#: messages.json
-#. [multiColumns.tab.negativeTitle]
-#. defaultMessage is:
-#. Against
-msgid "multiColumns.tab.negativeTitle"
-msgstr ""
-
-#: messages.json
-#. [multiColumns.tab.positiveTitle]
-#. defaultMessage is:
-#. For
-msgid "multiColumns.tab.positiveTitle"
+#. Synthesis: %{colName}
+msgid "multiColumns.synthesis.title"
 msgstr ""
 
 #: messages.json
@@ -1396,8 +1585,22 @@ msgstr ""
 #: messages.json
 #. [navbar.profile]
 #. defaultMessage is:
-#. Profile
+#. My profile
 msgid "navbar.profile"
+msgstr ""
+
+#: messages.json
+#. [navbar.resourcesCenter]
+#. defaultMessage is:
+#. Resources
+msgid "navbar.resourcesCenter"
+msgstr ""
+
+#: messages.json
+#. [navbar.syntheses]
+#. defaultMessage is:
+#. Syntheses
+msgid "navbar.syntheses"
 msgstr ""
 
 #: messages.json
@@ -1408,10 +1611,66 @@ msgid "notFound.panelTitle"
 msgstr ""
 
 #: messages.json
+#. [profile.changePassword]
+#. defaultMessage is:
+#. Modify
+msgid "profile.changePassword"
+msgstr ""
+
+#: messages.json
+#. [profile.email]
+#. defaultMessage is:
+#. Email
+msgid "profile.email"
+msgstr ""
+
+#: messages.json
+#. [profile.fullname]
+#. defaultMessage is:
+#. Full name
+msgid "profile.fullname"
+msgstr ""
+
+#: messages.json
 #. [profile.panelTitle]
 #. defaultMessage is:
-#. Welcome to Assembl profile page
+#. Your account
 msgid "profile.panelTitle"
+msgstr ""
+
+#: messages.json
+#. [profile.password]
+#. defaultMessage is:
+#. Password
+msgid "profile.password"
+msgstr ""
+
+#: messages.json
+#. [profile.personalInfos]
+#. defaultMessage is:
+#. Personal informations
+msgid "profile.personalInfos"
+msgstr ""
+
+#: messages.json
+#. [profile.save]
+#. defaultMessage is:
+#. Save
+msgid "profile.save"
+msgstr ""
+
+#: messages.json
+#. [profile.saveSuccess]
+#. defaultMessage is:
+#. Your profile is updated
+msgid "profile.saveSuccess"
+msgstr ""
+
+#: messages.json
+#. [profile.userName]
+#. defaultMessage is:
+#. User name
+msgid "profile.userName"
 msgstr ""
 
 #: messages.json
@@ -1419,6 +1678,20 @@ msgstr ""
 #. defaultMessage is:
 #. You will be redirected to the %{phaseName} phase in a few seconds. Assembl is being improved, please excuse us for the interface change. If nothing happens, click on the button.
 msgid "redirectToV1"
+msgstr ""
+
+#: messages.json
+#. [resourcesCenter.defaultHeaderTitle]
+#. defaultMessage is:
+#. Online resources center
+msgid "resourcesCenter.defaultHeaderTitle"
+msgstr ""
+
+#: messages.json
+#. [resourcesCenter.download]
+#. defaultMessage is:
+#. Download the document
+msgid "resourcesCenter.download"
 msgstr ""
 
 #: messages.json
@@ -1772,6 +2045,20 @@ msgid "search.user"
 msgstr ""
 
 #: messages.json
+#. [synthesis.noSynthesisYet]
+#. defaultMessage is:
+#. There is no synthesis available yet.
+msgid "synthesis.noSynthesisYet"
+msgstr ""
+
+#: messages.json
+#. [synthesis.seeConversation]
+#. defaultMessage is:
+#. See the conversation
+msgid "synthesis.seeConversation"
+msgstr ""
+
+#: messages.json
 #. [synthesis.title]
 #. defaultMessage is:
 #. synthesis
@@ -1779,10 +2066,10 @@ msgid "synthesis.title"
 msgstr ""
 
 #: messages.json
-#. [terms.panelTitle]
+#. [termsAndConditions.headerTitle]
 #. defaultMessage is:
-#. Terms and Conditions
-msgid "terms.panelTitle"
+#. Terms & Conditions
+msgid "termsAndConditions.headerTitle"
 msgstr ""
 
 #: messages.json

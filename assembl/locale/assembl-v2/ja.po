@@ -1,10 +1,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"POT-Creation-Date: 2017-08-03T09:39:15.282Z\n"
+"POT-Creation-Date: 2017-12-15T13:47:31.589Z\n"
 "PO-Revision-Date: \n"
-"Last-Translator: Vincent Fretin <vincent.fretin@gmail."
-"com>\n"
+"Last-Translator: Vincent Fretin <vincent.fretin@gmail.com>\n"
 "Language-Team: \n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
@@ -33,6 +32,13 @@ msgstr "テーマを追加する"
 msgid "administration.annotation"
 msgstr "完成されるモジュール。 *フィールドは必須です"
 
+#. [administration.announcementModule]
+#. defaultMessage is:
+#. Announcement module
+#: messages.json
+msgid "administration.announcementModule"
+msgstr "告知モジュール"
+
 #. [administration.changeLanguage]
 #. defaultMessage is:
 #. Set another language
@@ -54,12 +60,35 @@ msgstr "質問を削除する"
 msgid "administration.deleteThematic"
 msgstr "テーマを削除する"
 
+#. [administration.discussion.0]
+#. defaultMessage is:
+#. Languages of the Discussion
+#: messages.json
+msgid "administration.discussion.0"
+msgstr "討論の言語"
+
+#. [administration.discussion.3]
+#. defaultMessage is:
+#. Terms & Conditions and Legal Notice
+#: messages.json
+#, fuzzy
+msgid "administration.discussion.3"
+msgstr "討論の言語"
+
+#. [administration.down]
+#. defaultMessage is:
+#. Down
+#: messages.json
+#, fuzzy
+msgid "administration.down"
+msgstr "討論を編集する"
+
 #. [administration.edition]
 #. defaultMessage is:
-#. Discussion
+#. Edit the Discussion
 #: messages.json
 msgid "administration.edition"
-msgstr "討論"
+msgstr "討論を編集する"
 
 #. [administration.landingpage]
 #. defaultMessage is:
@@ -68,6 +97,52 @@ msgstr "討論"
 msgid "administration.landingpage"
 msgstr "ランディングページ"
 
+#. [administration.languageChoice]
+#. defaultMessage is:
+#. Select desired languages below
+#: messages.json
+msgid "administration.languageChoice"
+msgstr "下の好きな言語を選択してください"
+
+#. [administration.legalNoticeAndTerms.legalNoticeLabel]
+#. defaultMessage is:
+#. Legal notice
+#: messages.json
+#, fuzzy
+msgid "administration.legalNoticeAndTerms.legalNoticeLabel"
+msgstr "タイトル"
+
+#. [administration.legalNoticeAndTerms.successSave]
+#. defaultMessage is:
+#. The T&C and legal notice have been saved with success!
+#: messages.json
+#, fuzzy
+msgid "administration.legalNoticeAndTerms.successSave"
+msgstr "リソースの保存に成功しました"
+
+#. [administration.legalNoticeAndTerms.termsAndConditionsLabel]
+#. defaultMessage is:
+#. Terms and conditions
+#: messages.json
+#, fuzzy
+msgid "administration.legalNoticeAndTerms.termsAndConditionsLabel"
+msgstr "ビデオ／スライド"
+
+#. [administration.menu.language]
+#. defaultMessage is:
+#. Discussion Language
+#: messages.json
+msgid "administration.menu.language"
+msgstr "議論の言語"
+
+#. [administration.menu.legalNoticeAndTerms]
+#. defaultMessage is:
+#. T&C and Legal Notice
+#: messages.json
+#, fuzzy
+msgid "administration.menu.legalNoticeAndTerms"
+msgstr "議論の言語"
+
 #. [administration.menu.phase]
 #. defaultMessage is:
 #. Phase %{count} - %{description}
@@ -75,19 +150,48 @@ msgstr "ランディングページ"
 msgid "administration.menu.phase"
 msgstr "段階 %{count} - %{description}"
 
+#. [administration.menu.sections]
+#. defaultMessage is:
+#. Edit Debate Sections
+#: messages.json
+#, fuzzy
+msgid "administration.menu.sections"
+msgstr "段階 %{count} - %{description}"
+
+#. [administration.noTimeline]
+#. defaultMessage is:
+#. No timeline has been configured yet
+#: messages.json
+msgid "administration.noTimeline"
+msgstr "まだタイムラインが形成されていません"
+
 #. [administration.ph.descriptionBottom]
 #. defaultMessage is:
 #. Comments below video
 #: messages.json
 msgid "administration.ph.descriptionBottom"
-msgstr "討論"
+msgstr "下のビデオにコメントしてください"
 
 #. [administration.ph.descriptionTop]
 #. defaultMessage is:
 #. Comments above video
 #: messages.json
 msgid "administration.ph.descriptionTop"
-msgstr "討論"
+msgstr "上のビデオにコメントしてください"
+
+#. [administration.ph.mediaLink]
+#. defaultMessage is:
+#. Online media link (video, picture, etc..)
+#: messages.json
+msgid "administration.ph.mediaLink"
+msgstr "オンラインのメディアリンク"
+
+#. [administration.ph.orAttachPicture]
+#. defaultMessage is:
+#. Or upload an image from your computer
+#: messages.json
+msgid "administration.ph.orAttachPicture"
+msgstr "またはあなたのコンピューターからイメージをアップロードしてください"
 
 #. [administration.ph.quote]
 #. defaultMessage is:
@@ -103,19 +207,103 @@ msgstr "引用"
 msgid "administration.ph.title"
 msgstr "*タイトル"
 
-#. [administration.ph.videoLink]
-#. defaultMessage is:
-#. *Video link
-#: messages.json
-msgid "administration.ph.videoLink"
-msgstr "*ビデオリンク"
-
 #. [administration.question_label]
 #. defaultMessage is:
 #. Question
 #: messages.json
 msgid "administration.question_label"
 msgstr "質問ラベル"
+
+#. [administration.resourcesCenter.createResource]
+#. defaultMessage is:
+#. Add a media
+#: messages.json
+msgid "administration.resourcesCenter.createResource"
+msgstr "メディアを追加する"
+
+#. [administration.resourcesCenter.deleteResource]
+#. defaultMessage is:
+#. Delete the resource
+#: messages.json
+msgid "administration.resourcesCenter.deleteResource"
+msgstr "リソースを削除する"
+
+#. [administration.resourcesCenter.documentLabel]
+#. defaultMessage is:
+#. Document
+#: messages.json
+msgid "administration.resourcesCenter.documentLabel"
+msgstr "ドキュメント"
+
+#. [administration.resourcesCenter.editResourceFormTitle]
+#. defaultMessage is:
+#. Edit resource number %{num}
+#: messages.json
+msgid "administration.resourcesCenter.editResourceFormTitle"
+msgstr "リソースナンバー %{num}を編集する"
+
+#. [administration.resourcesCenter.embedCodeLabel]
+#. defaultMessage is:
+#. Video/Slides
+#: messages.json
+msgid "administration.resourcesCenter.embedCodeLabel"
+msgstr "ビデオ／スライド"
+
+#. [administration.resourcesCenter.headerImageLabel]
+#. defaultMessage is:
+#. Header image
+#: messages.json
+msgid "administration.resourcesCenter.headerImageLabel"
+msgstr "ヘッダーのイメージ"
+
+#. [administration.resourcesCenter.imageLabel]
+#. defaultMessage is:
+#. Image
+#: messages.json
+msgid "administration.resourcesCenter.imageLabel"
+msgstr "イメージ"
+
+#. [administration.resourcesCenter.menuTitle]
+#. defaultMessage is:
+#. Edit the resources center
+#: messages.json
+msgid "administration.resourcesCenter.menuTitle"
+msgstr "リソースセンターを編集する"
+
+#. [administration.resourcesCenter.pageTitleLabel]
+#. defaultMessage is:
+#. Page title
+#: messages.json
+msgid "administration.resourcesCenter.pageTitleLabel"
+msgstr "ページのタイトル"
+
+#. [administration.resourcesCenter.successSave]
+#. defaultMessage is:
+#. Resources have been saved with success!
+#: messages.json
+msgid "administration.resourcesCenter.successSave"
+msgstr "リソースの保存に成功しました"
+
+#. [administration.resourcesCenter.textLabel]
+#. defaultMessage is:
+#. Text
+#: messages.json
+msgid "administration.resourcesCenter.textLabel"
+msgstr "テクスト"
+
+#. [administration.resourcesCenter.title]
+#. defaultMessage is:
+#. Resources center
+#: messages.json
+msgid "administration.resourcesCenter.title"
+msgstr "リソースセンター"
+
+#. [administration.resourcesCenter.titleLabel]
+#. defaultMessage is:
+#. Title
+#: messages.json
+msgid "administration.resourcesCenter.titleLabel"
+msgstr "タイトル"
 
 #. [administration.saveThemes]
 #. defaultMessage is:
@@ -124,6 +312,78 @@ msgstr "質問ラベル"
 msgid "administration.saveThemes"
 msgstr "テーマを保存"
 
+#. [administration.sections.addSection]
+#. defaultMessage is:
+#. Add a section
+#: messages.json
+#, fuzzy
+msgid "administration.sections.addSection"
+msgstr "質問を追加する"
+
+#. [administration.sections.custom]
+#. defaultMessage is:
+#. Added section
+#: messages.json
+#, fuzzy
+msgid "administration.sections.custom"
+msgstr "討論を編集する"
+
+#. [administration.sections.deleteSection]
+#. defaultMessage is:
+#. Delete the section
+#: messages.json
+#, fuzzy
+msgid "administration.sections.deleteSection"
+msgstr "質問を削除する"
+
+#. [administration.sections.externalPage]
+#. defaultMessage is:
+#. Use external page
+#: messages.json
+#, fuzzy
+msgid "administration.sections.externalPage"
+msgstr "質問ラベル"
+
+#. [administration.sections.resources_center]
+#. defaultMessage is:
+#. Resources center
+#: messages.json
+#, fuzzy
+msgid "administration.sections.resources_center"
+msgstr "リソースセンター"
+
+#. [administration.sections.sectionsTitle]
+#. defaultMessage is:
+#. Set sections
+#: messages.json
+#, fuzzy
+msgid "administration.sections.sectionsTitle"
+msgstr "討論を編集する"
+
+#. [administration.sections.successSave]
+#. defaultMessage is:
+#. Sections are modified with success
+#: messages.json
+#, fuzzy
+msgid "administration.sections.successSave"
+msgstr "リソースの保存に成功しました"
+
+#. [administration.sections.titlePh]
+#. defaultMessage is:
+#. Title
+#: messages.json
+#, fuzzy
+msgid "administration.sections.titlePh"
+msgstr "*タイトル"
+
+#. [administration.sections.urlPh]
+#. defaultMessage is:
+#. URL
+#: messages.json
+#, fuzzy
+msgid "administration.sections.urlPh"
+msgstr "討論を編集する"
+
 #. [administration.step_x_total]
 #. defaultMessage is:
 #. Section %{num} on %{total}
@@ -131,12 +391,19 @@ msgstr "テーマを保存"
 msgid "administration.step_x_total"
 msgstr "セクション%{num}の%{total}"
 
+#. [administration.successLanguagePreference]
+#. defaultMessage is:
+#. Discussion language preferences have been saved with success!
+#: messages.json
+msgid "administration.successLanguagePreference"
+msgstr "討論の言語の保存に成功しました"
+
 #. [administration.successThemeCreation]
 #. defaultMessage is:
 #. Themes have been saved with success!
 #: messages.json
 msgid "administration.successThemeCreation"
-msgstr "テーマは作成されました"
+msgstr "テーマの保存に成功しました"
 
 #. [administration.survey.0]
 #. defaultMessage is:
@@ -165,8 +432,8 @@ msgstr "データのエクスポート"
 #: messages.json
 msgid "administration.surveyExport.annotation"
 msgstr ""
-"すべての議論データをエクスポートするには、エクスポートボ"
-"タンをクリックしてください"
+"すべての議論データをエクスポートするには、エクスポートボタンをクリックしてく"
+"ださい"
 
 #. [administration.surveyExport.link]
 #. defaultMessage is:
@@ -175,12 +442,26 @@ msgstr ""
 msgid "administration.surveyExport.link"
 msgstr "エクスポート"
 
+#. [administration.surveyExport.noExportLanguage]
+#. defaultMessage is:
+#. Keep the messages in their original languages
+#: messages.json
+msgid "administration.surveyExport.noExportLanguage"
+msgstr "メッセージを元の言語のままにする"
+
 #. [administration.surveyExport.title]
 #. defaultMessage is:
 #. Export the debate data
 #: messages.json
 msgid "administration.surveyExport.title"
 msgstr "議論データをエクスポートする"
+
+#. [administration.surveyExport.translateTheMessagesIn]
+#. defaultMessage is:
+#. Translate the messages in:
+#: messages.json
+msgid "administration.surveyExport.translateTheMessagesIn"
+msgstr "メッセージを次の言語に翻訳："
 
 #. [administration.thematic]
 #. defaultMessage is:
@@ -196,16 +477,27 @@ msgstr "テーマ"
 msgid "administration.themeNum"
 msgstr "テーマ%{index}"
 
-#. [administration.videoModule]
+#. [administration.up]
 #. defaultMessage is:
-#. Video module
+#. Up
 #: messages.json
-msgid "administration.videoModule"
-msgstr "ビデオモジュール"
+#, fuzzy
+msgid "administration.up"
+msgstr "段階 %{count} - %{description}"
+
+#. [administration.videoHelp]
+#. defaultMessage is:
+#. *Authorized video links: "https://www.youtube.com/embed/[videoId]" or "https://player.vimeo.com/video/[videoId]?"
+#: messages.json
+msgid "administration.videoHelp"
+msgstr ""
+"*権限を受けたビデオリンク: “https://www.youtube.com/\n"
+"embed/[videoId]” と “https://player.vimeo.com/\n"
+"video/[videoId]?”のどちらですか"
 
 #. [cancel]
 #. defaultMessage is:
-#. Annuler
+#. Cancel
 #: messages.json
 msgid "cancel"
 msgstr "キャンセル"
@@ -217,12 +509,75 @@ msgstr "キャンセル"
 msgid "changePassword.panelTitle"
 msgstr "Assemblのパスワードをお忘れの方へ"
 
+#. [chatframe.title]
+#. defaultMessage is:
+#. Instant discussion window
+#: messages.json
+msgid "chatframe.title"
+msgstr ""
+
+#. [chatframe.tooltip]
+#. defaultMessage is:
+#. Assemb'Bot
+#: messages.json
+msgid "chatframe.tooltip"
+msgstr ""
+
+#. [common.attachFileForm.label]
+#. defaultMessage is:
+#. Add an attachment
+#: messages.json
+msgid "common.attachFileForm.label"
+msgstr "添付を追加する"
+
+#. [common.attachFileForm.submit]
+#. defaultMessage is:
+#. Submit
+#: messages.json
+msgid "common.attachFileForm.submit"
+msgstr "提出する"
+
+#. [common.attachments.download]
+#. defaultMessage is:
+#. Download
+#: messages.json
+msgid "common.attachments.download"
+msgstr "ダウンロード"
+
+#. [common.editor.attachment]
+#. defaultMessage is:
+#. Add a file
+#: messages.json
+msgid "common.editor.attachment"
+msgstr "ファイルを追加する"
+
+#. [common.editor.bold]
+#. defaultMessage is:
+#. Bold
+#: messages.json
+msgid "common.editor.bold"
+msgstr "太線"
+
+#. [common.editor.bulletList]
+#. defaultMessage is:
+#. Bullet list
+#: messages.json
+msgid "common.editor.bulletList"
+msgstr "箇条書きリスト"
+
+#. [common.editor.italic]
+#. defaultMessage is:
+#. Italic
+#: messages.json
+msgid "common.editor.italic"
+msgstr "斜線"
+
 #. [common.goUp]
 #. defaultMessage is:
 #. Back to top
 #: messages.json
 msgid "common.goUp"
-msgstr ""
+msgstr "トップに戻る"
 
 #. [common.uploadButton]
 #. defaultMessage is:
@@ -238,26 +593,75 @@ msgstr "アップロードするファイルを選択する"
 msgid "community.panelTitle"
 msgstr "Assemblのコミュニティページへようこそ"
 
+#. [conclusion]
+#. defaultMessage is:
+#. Conclusion
+#: messages.json
+msgid "conclusion"
+msgstr "結論"
+
 #. [date.format]
 #. defaultMessage is:
 #. MMMM Do, YYYY
 #: messages.json
 msgid "date.format"
-msgstr "LL"
+msgstr "MMMM YYYYをする"
 
 #. [date.format2]
 #. defaultMessage is:
-#. MM-DD-YYYY
+#. YYYY-MM-DD
 #: messages.json
 msgid "date.format2"
-msgstr "LL"
+msgstr "YYYY-MM-DD"
 
 #. [debate.answer]
 #. defaultMessage is:
 #. I answer:
 #: messages.json
 msgid "debate.answer"
-msgstr "答え"
+msgstr "答え："
+
+#. [debate.confirmDeletionBody]
+#. defaultMessage is:
+#. Are you sure you want to delete this message?
+#: messages.json
+msgid "debate.confirmDeletionBody"
+msgstr "このメッセージを削除してもよろしですか"
+
+#. [debate.confirmDeletionButtonCancel]
+#. defaultMessage is:
+#. Cancel
+#: messages.json
+msgid "debate.confirmDeletionButtonCancel"
+msgstr "キャンセル"
+
+#. [debate.confirmDeletionButtonDelete]
+#. defaultMessage is:
+#. Delete
+#: messages.json
+msgid "debate.confirmDeletionButtonDelete"
+msgstr "削除"
+
+#. [debate.confirmDeletionTitle]
+#. defaultMessage is:
+#. Confirm deletion
+#: messages.json
+msgid "debate.confirmDeletionTitle"
+msgstr "削除の確認"
+
+#. [debate.copyLink]
+#. defaultMessage is:
+#. Copy the link to the clipboard
+#: messages.json
+msgid "debate.copyLink"
+msgstr "クリップボードにリンクをコピーする"
+
+#. [debate.deleteMessage]
+#. defaultMessage is:
+#. Delete this message
+#: messages.json
+msgid "debate.deleteMessage"
+msgstr "メッセージの削除"
 
 #. [debate.disagree]
 #. defaultMessage is:
@@ -273,12 +677,47 @@ msgstr "同意しない"
 msgid "debate.dontUnderstand"
 msgstr "詳細を教えてください"
 
+#. [debate.edit.body]
+#. defaultMessage is:
+#. Comment
+#: messages.json
+msgid "debate.edit.body"
+msgstr "コメント"
+
+#. [debate.edit.subject]
+#. defaultMessage is:
+#. Subject
+#: messages.json
+msgid "debate.edit.subject"
+msgstr "議題"
+
+#. [debate.edit.title]
+#. defaultMessage is:
+#. I edit my message
+#: messages.json
+msgid "debate.edit.title"
+msgstr "メッセージを編集します"
+
+#. [debate.editMessage]
+#. defaultMessage is:
+#. Edit this message
+#: messages.json
+msgid "debate.editMessage"
+msgstr "このメッセージを編集する"
+
 #. [debate.insert]
 #. defaultMessage is:
 #. Post a comment
 #: messages.json
 msgid "debate.insert"
-msgstr "挿入する"
+msgstr "コメントの投稿"
+
+#. [debate.isCompleted]
+#. defaultMessage is:
+#. This phase is closed. You can no longer vote.
+#: messages.json
+msgid "debate.isCompleted"
+msgstr "このフェーズは閉じました。これ以降投票はできません"
 
 #. [debate.like]
 #. defaultMessage is:
@@ -287,21 +726,33 @@ msgstr "挿入する"
 msgid "debate.like"
 msgstr "いいね"
 
+#. [debate.linkCopied]
+#. defaultMessage is:
+#. Link copied
+#: messages.json
+msgid "debate.linkCopied"
+msgstr "リンクがコピーされました"
+
 #. [debate.moreInfo]
 #. defaultMessage is:
 #. More info please
 #: messages.json
 msgid "debate.moreInfo"
-msgstr "もっと知りたいですか"
+msgstr "もっと情報をください"
+
+#. [debate.noAnswer]
+#. defaultMessage is:
+#. This phase is closed. You can no longer answer.
+#: messages.json
+msgid "debate.noAnswer"
+msgstr "このフェーズは閉じました。これ以降答えることはできません"
 
 #. [debate.notStarted]
 #. defaultMessage is:
-#. The %{phaseName} phase has not started. Please come back from
+#. The %{phaseName} phase has not started. Please come back from 
 #: messages.json
 msgid "debate.notStarted"
-msgstr ""
-"%{phaseName}フェーズは開始していません。後日オープンしま"
-"す"
+msgstr "%{phaseName}フェーズは開始していません。後日オープンします"
 
 #. [debate.post]
 #. defaultMessage is:
@@ -317,19 +768,26 @@ msgstr "投稿する"
 msgid "debate.remaining_x_characters"
 msgstr "残り%{nbCharacters}文字"
 
-#. [debate.share]
+#. [debate.sharePost]
 #. defaultMessage is:
-#. Share
+#. Share this message
 #: messages.json
-msgid "debate.share"
-msgstr "共有する"
+msgid "debate.sharePost"
+msgstr "このメッセージを共有する"
+
+#. [debate.shareSynthesis]
+#. defaultMessage is:
+#. Share this synthesis
+#: messages.json
+msgid "debate.shareSynthesis"
+msgstr "このシンセシスを共有する"
 
 #. [debate.subject]
 #. defaultMessage is:
 #. Write the title
 #: messages.json
 msgid "debate.subject"
-msgstr "議題"
+msgstr "タイトルを記入する"
 
 #. [debate.survey.endPhase]
 #. defaultMessage is:
@@ -351,16 +809,14 @@ msgstr "その他の提案"
 #: messages.json
 msgid "debate.survey.noProposals"
 msgstr ""
-"現時点ではまだコメントは投稿されていません。最初の投稿者"
-"になりませんか？"
+"現時点ではまだコメントは投稿されていません。最初の投稿者になりませんか？"
 
 #. [debate.survey.postSuccess]
 #. defaultMessage is:
 #. Thanks for your participation. Your proposal has been sent!
 #: messages.json
 msgid "debate.survey.postSuccess"
-msgstr ""
-"ありがとうございます。あなたのコメントは送信されました！"
+msgstr "ありがとうございます。あなたのコメントは送信されました！"
 
 #. [debate.survey.proposalsTitle]
 #. defaultMessage is:
@@ -418,6 +874,13 @@ msgstr "テーマをよりよく理解するためのビデオ"
 msgid "debate.survey.txtAreaPh"
 msgstr "あなたのコメントを投稿する"
 
+#. [debate.syntheses]
+#. defaultMessage is:
+#. Syntheses
+#: messages.json
+msgid "debate.syntheses"
+msgstr "シンセシス"
+
 #. [debate.themes]
 #. defaultMessage is:
 #. Themes
@@ -425,34 +888,54 @@ msgstr "あなたのコメントを投稿する"
 msgid "debate.themes"
 msgstr "テーマ"
 
+#. [debate.thread.announcement]
+#. defaultMessage is:
+#. Announcement
+#: messages.json
+msgid "debate.thread.announcement"
+msgstr "アナウンスメント"
+
+#. [debate.thread.chooseLanguagePh]
+#. defaultMessage is:
+#. Please choose the language
+#: messages.json
+msgid "debate.thread.chooseLanguagePh"
+msgstr "言語を選択してください"
+
 #. [debate.thread.fillBody]
 #. defaultMessage is:
 #. Please, write a comment
 #: messages.json
 msgid "debate.thread.fillBody"
-msgstr ""
-"コメントと投票を行うには、ログインする必要があります。"
+msgstr "コメントを書いてください"
 
 #. [debate.thread.fillSubject]
 #. defaultMessage is:
 #. Please, write a title
 #: messages.json
 msgid "debate.thread.fillSubject"
-msgstr ""
+msgstr "タイトルを記入してください"
 
 #. [debate.thread.foldedPostLink]
 #. defaultMessage is:
 #. Show %{count} responses
 #: messages.json
 msgid "debate.thread.foldedPostLink"
-msgstr ""
+msgstr "%{count}の反応"
 
 #. [debate.thread.foldedPostLink_1]
 #. defaultMessage is:
 #. Show 1 response
 #: messages.json
 msgid "debate.thread.foldedPostLink_1"
-msgstr "組み込まれたリンク"
+msgstr "一つの反応"
+
+#. [debate.thread.goToIdea]
+#. defaultMessage is:
+#. View all messages
+#: messages.json
+msgid "debate.thread.goToIdea"
+msgstr "スレッドにアクセスする"
 
 #. [debate.thread.linkIdea]
 #. defaultMessage is:
@@ -461,48 +944,152 @@ msgstr "組み込まれたリンク"
 msgid "debate.thread.linkIdea"
 msgstr "アイディアをリンクする"
 
+#. [debate.thread.messageOriginallyIn]
+#. defaultMessage is:
+#. This message has been written in %{language}
+#: messages.json
+msgid "debate.thread.messageOriginallyIn"
+msgstr "このメッセージは %{language}で書かれています"
+
+#. [debate.thread.messageTranslatedFrom]
+#. defaultMessage is:
+#. This message has been translated from %{language}.
+#: messages.json
+msgid "debate.thread.messageTranslatedFrom"
+msgstr "このメッセージは %{language}から翻訳されました"
+
 #. [debate.thread.noPostsInThread]
 #. defaultMessage is:
 #. Be the first to contribute, start a discussion!
 #: messages.json
 msgid "debate.thread.noPostsInThread"
-msgstr ""
+msgstr "議論を始めましょう"
+
+#. [debate.thread.numberOfReactions]
+#. defaultMessage is:
+#. %{count} reactions
+#: messages.json
+msgid "debate.thread.numberOfReactions"
+msgstr "%{count}の反応"
+
+#. [debate.thread.numberOfReactions_1]
+#. defaultMessage is:
+#. %{count} reaction
+#: messages.json
+msgid "debate.thread.numberOfReactions_1"
+msgstr "%{count}の反応"
 
 #. [debate.thread.numberOfResponses]
 #. defaultMessage is:
 #. %{count} responses to this post
 #: messages.json
 msgid "debate.thread.numberOfResponses"
-msgstr ""
+msgstr "このポストへの%{count}の反応"
 
 #. [debate.thread.numberOfResponses_0]
 #. defaultMessage is:
 #. No response to this post
 #: messages.json
 msgid "debate.thread.numberOfResponses_0"
-msgstr ""
+msgstr "この投稿に反応はありません"
 
 #. [debate.thread.numberOfResponses_1]
 #. defaultMessage is:
 #. %{count} response to this post
 #: messages.json
 msgid "debate.thread.numberOfResponses_1"
-msgstr ""
+msgstr "このポストへの%{count}の反応"
+
+#. [debate.thread.postDeletedByAdmin]
+#. defaultMessage is:
+#. This message has been deleted by the community manager.
+#: messages.json
+msgid "debate.thread.postDeletedByAdmin"
+msgstr "このメッセージはコミュニティーのマネージャーによって削除されました"
+
+#. [debate.thread.postDeletedByUser]
+#. defaultMessage is:
+#. This message has been deleted by the author.
+#: messages.json
+msgid "debate.thread.postDeletedByUser"
+msgstr "このメッセージは著者によって削除されました"
+
+#. [debate.thread.postEdited]
+#. defaultMessage is:
+#. edited
+#: messages.json
+msgid "debate.thread.postEdited"
+msgstr "編集済み"
 
 #. [debate.thread.postSuccess]
 #. defaultMessage is:
 #. Thanks for your participation. Your comment has been sent!
 #: messages.json
 msgid "debate.thread.postSuccess"
-msgstr ""
-"ありがとうございます。あなたのコメントは送信されました！"
+msgstr "ありがとうございます。あなたのコメントは送信されました！"
+
+#. [debate.thread.seeSubIdeas]
+#. defaultMessage is:
+#. See %{count} sub-thematics
+#: messages.json
+msgid "debate.thread.seeSubIdeas"
+msgstr "%{count}の副題をみてください"
+
+#. [debate.thread.seeSubIdeas_1]
+#. defaultMessage is:
+#. See sub-thematic
+#: messages.json
+msgid "debate.thread.seeSubIdeas_1"
+msgstr "副題を見てください"
+
+#. [debate.thread.showOriginal]
+#. defaultMessage is:
+#. Show original
+#: messages.json
+msgid "debate.thread.showOriginal"
+msgstr "オリジナルを表示する"
 
 #. [debate.thread.startDiscussion]
 #. defaultMessage is:
 #. Start a new thread
 #: messages.json
 msgid "debate.thread.startDiscussion"
-msgstr "議論を開始する"
+msgstr "新しいスレッドを開始する"
+
+#. [debate.thread.translate]
+#. defaultMessage is:
+#. Translate
+#: messages.json
+msgid "debate.thread.translate"
+msgstr "翻訳する"
+
+#. [debate.thread.translateAllMessagesIn]
+#. defaultMessage is:
+#. Translate all messages posted in %{language}.
+#: messages.json
+msgid "debate.thread.translateAllMessagesIn"
+msgstr "投稿された全てのメッセージを%{language}に翻訳する"
+
+#. [debate.thread.translateOnlyThisMessage]
+#. defaultMessage is:
+#. Translate only this message.
+#: messages.json
+msgid "debate.thread.translateOnlyThisMessage"
+msgstr "このメッセージのみ翻訳する"
+
+#. [debate.thread.untranslateAllMessagesIn]
+#. defaultMessage is:
+#. I don't want to translate all messages in %{language}.
+#: messages.json
+msgid "debate.thread.untranslateAllMessagesIn"
+msgstr "私は全てのメッセージを%{language}に翻訳したくありません"
+
+#. [debate.thread.untranslateOnlyThisMessage]
+#. defaultMessage is:
+#. I don't want to translate only this message
+#: messages.json
+msgid "debate.thread.untranslateOnlyThisMessage"
+msgstr "私はこのメッセージのみを翻訳したくありません"
 
 #. [debate.toAnswer]
 #. defaultMessage is:
@@ -510,6 +1097,21 @@ msgstr "議論を開始する"
 #: messages.json
 msgid "debate.toAnswer"
 msgstr "答える"
+
+#. [debate.whatYouNeedToKnow]
+#. defaultMessage is:
+#. What you need to know
+#: messages.json
+msgid "debate.whatYouNeedToKnow"
+msgstr "知っておくべきこと"
+
+#. [duration.format]
+#. defaultMessage is:
+#. h [h]
+#: messages.json
+#, fuzzy
+msgid "duration.format"
+msgstr "MMMM YYYYをする"
 
 #. [error.reason]
 #. defaultMessage is:
@@ -525,6 +1127,14 @@ msgstr "申し訳ありませんが、エラーが発生しました："
 msgid "error.required"
 msgstr "この項目は必須です。"
 
+#. [footer.legalNotice]
+#. defaultMessage is:
+#. Legal Notice
+#: messages.json
+#, fuzzy
+msgid "footer.legalNotice"
+msgstr "規約と条件"
+
 #. [footer.socialMedias]
 #. defaultMessage is:
 #. Follow us
@@ -534,24 +1144,24 @@ msgstr "フォローする"
 
 #. [footer.terms]
 #. defaultMessage is:
-#. Terms and Conditions
+#. Terms & Conditions
 #: messages.json
 msgid "footer.terms"
 msgstr "規約と条件"
 
 #. [home.accessButton]
 #. defaultMessage is:
-#. Access the debate
+#. I want to participate
 #: messages.json
 msgid "home.accessButton"
-msgstr "対話にアクセスする"
+msgstr "参加を希望する"
 
 #. [home.chatbot]
 #. defaultMessage is:
 #. Chat with %{chatbotName}
 #: messages.json
 msgid "home.chatbot"
-msgstr "とチャットする%{chatbotName}"
+msgstr "%{chatbotName}とチャットする"
 
 #. [home.contact]
 #. defaultMessage is:
@@ -597,10 +1207,18 @@ msgstr "より長いスレッド"
 
 #. [home.objectivesTitle]
 #. defaultMessage is:
-#. What is the objective of the debate?
+#. What is the objective?
 #: messages.json
 msgid "home.objectivesTitle"
 msgstr "議論の目的は何ですか？"
+
+#. [home.pageViews]
+#. defaultMessage is:
+#. page views
+#: messages.json
+#, fuzzy
+msgid "home.pageViews"
+msgstr "パートナー"
 
 #. [home.participant]
 #. defaultMessage is:
@@ -623,23 +1241,39 @@ msgstr "パートナー"
 msgid "home.recentDiscussion"
 msgstr "最近の議論"
 
+#. [home.sentiments]
+#. defaultMessage is:
+#. votes
+#: messages.json
+msgid "home.sentiments"
+msgstr "投票"
+
+#. [home.sumVisitsLength]
+#. defaultMessage is:
+#. global time spent
+#: messages.json
+#, fuzzy
+msgid "home.sumVisitsLength"
+msgstr "訪問"
+
 #. [home.themesSubtitle]
 #. defaultMessage is:
 #. Find your most controversial and highly acclaimed discussions on the front page
 #: messages.json
 msgid "home.themesSubtitle"
-msgstr "進行中の副題"
+msgstr ""
+"フロントページにおけるあなたの最も多様な意見を集め、高く評価された議論を探す"
 
 #. [home.themesTitle]
 #. defaultMessage is:
-#. Themes of the ongoing debate
+#. Ongoing themes
 #: messages.json
 msgid "home.themesTitle"
 msgstr "進行中の議論のテーマ"
 
 #. [home.timelineTitle]
 #. defaultMessage is:
-#. The timeline of the debate in %{count} phases
+#. The timeline in %{count} phases
 #: messages.json
 msgid "home.timelineTitle"
 msgstr "議論のタイムラインは%{count}フェーズ"
@@ -665,19 +1299,26 @@ msgstr "Tweet"
 msgid "home.video"
 msgstr "議論のビデオ"
 
-#. [home.viewedPages]
-#. defaultMessage is:
-#. Viewed pages
-#: messages.json
-msgid "home.viewedPages"
-msgstr "閲覧したページ"
-
 #. [home.visit]
 #. defaultMessage is:
 #. visits
 #: messages.json
 msgid "home.visit"
 msgstr "訪問"
+
+#. [introduction]
+#. defaultMessage is:
+#. Introduction
+#: messages.json
+msgid "introduction"
+msgstr "導入"
+
+#. [legalNotice.headerTitle]
+#. defaultMessage is:
+#. Legal Notice
+#: messages.json
+msgid "legalNotice.headerTitle"
+msgstr ""
 
 #. [loading.wait]
 #. defaultMessage is:
@@ -699,9 +1340,8 @@ msgstr "あなたのアカウントが作成されました"
 #: messages.json
 msgid "login.accountCreatedMsg"
 msgstr ""
-"確認メールを送信しました。確認のためのリンクをクリックし"
-"てください。メールを受け取っていない場合、スパムフォルダ"
-"をご確認ください。"
+"確認メールを送信しました。確認のためのリンクをクリックしてください。メールを"
+"受け取っていない場合、スパムフォルダをご確認ください。"
 
 #. [login.alreadyAccount]
 #. defaultMessage is:
@@ -736,9 +1376,7 @@ msgstr "Eメール"
 #. The email you have entered was not found. Please try again.
 #: messages.json
 msgid "login.emailNotFound"
-msgstr ""
-"メールアドレスが見つかりませんでした。もう一度ご確認くだ"
-"さい。"
+msgstr "メールアドレスが見つかりませんでした。もう一度試してください。"
 
 #. [login.existingEmail]
 #. defaultMessage is:
@@ -756,7 +1394,7 @@ msgstr "入力したユーザー名は既に存在します"
 
 #. [login.forgotPwd]
 #. defaultMessage is:
-#. Forgot your password?
+#. Reset your password
 #: messages.json
 msgid "login.forgotPwd"
 msgstr "パスワードをお忘れですか？"
@@ -780,9 +1418,7 @@ msgstr "入力したパスワードが一致しません"
 #. The password you have entered does not match with the entered user. Please try again.
 #: messages.json
 msgid "login.incorrectPasswordLogin"
-msgstr ""
-"入力したパスワードが一致しません。もう一度お試しくださ"
-"い。"
+msgstr "入力したパスワードが一致しません。もう一度お試しください。"
 
 #. [login.invalidEmail]
 #. defaultMessage is:
@@ -803,14 +1439,14 @@ msgstr "ログイン"
 #. You have to be connected to participate.
 #: messages.json
 msgid "login.loginModalBody"
-msgstr "ログイン"
+msgstr "参加するにはログインする必要があります"
 
 #. [login.loginModalFooter]
 #. defaultMessage is:
 #. Please connect
 #: messages.json
 msgid "login.loginModalFooter"
-msgstr "ログイン"
+msgstr "ログインしてください"
 
 #. [login.loginWithSocialMedia]
 #. defaultMessage is:
@@ -867,8 +1503,8 @@ msgstr "問題があるようです。後でもう一度お試しください。
 #: messages.json
 msgid "login.passwordChangeRequestSuccess"
 msgstr ""
-"アカウントにメールを送信しました。受け取っていない場合、"
-"迷惑メールフォルダを確認してください"
+"アカウントにメールを送信しました。受け取っていない場合、迷惑メールフォルダを"
+"確認してください"
 
 #. [login.resend]
 #. defaultMessage is:
@@ -897,9 +1533,8 @@ msgstr "パスワードを変更してください"
 #: messages.json
 msgid "login.sendPwdMsg"
 msgstr ""
-"仮接続のためのリンクをメールに送りました。ログインしてパ"
-"スワードを変更してください。受け取っていない場合、迷惑"
-"メールフォルダを確認してください。"
+"仮接続のためのリンクをメールに送りました。ログインしてパスワードを変更してく"
+"ださい。受け取っていない場合、迷惑メールフォルダを確認してください。"
 
 #. [login.signUp]
 #. defaultMessage is:
@@ -928,6 +1563,20 @@ msgstr "ユーザー名（オプション）"
 #: messages.json
 msgid "login.username"
 msgstr "メールアドレスまたはユーザ名"
+
+#. [multiColumns.synthesis.noSynthesisYet]
+#. defaultMessage is:
+#. The synthesis is currently being written
+#: messages.json
+msgid "multiColumns.synthesis.noSynthesisYet"
+msgstr "シンセシスが現在書かれています"
+
+#. [multiColumns.synthesis.title]
+#. defaultMessage is:
+#. Synthesis: %{colName}
+#: messages.json
+msgid "multiColumns.synthesis.title"
+msgstr "シンセシス：%{colName}"
 
 #. [navbar.administration]
 #. defaultMessage is:
@@ -973,10 +1622,24 @@ msgstr "ログアウト"
 
 #. [navbar.profile]
 #. defaultMessage is:
-#. Profile
+#. My profile
 #: messages.json
 msgid "navbar.profile"
 msgstr "プロフィール"
+
+#. [navbar.resourcesCenter]
+#. defaultMessage is:
+#. Resources
+#: messages.json
+msgid "navbar.resourcesCenter"
+msgstr "リソース"
+
+#. [navbar.syntheses]
+#. defaultMessage is:
+#. Syntheses
+#: messages.json
+msgid "navbar.syntheses"
+msgstr "シンセシス"
 
 #. [notFound.panelTitle]
 #. defaultMessage is:
@@ -985,12 +1648,74 @@ msgstr "プロフィール"
 msgid "notFound.panelTitle"
 msgstr "申し訳ありません、このページは存在しません"
 
+#. [profile.changePassword]
+#. defaultMessage is:
+#. Modify
+#: messages.json
+#, fuzzy
+msgid "profile.changePassword"
+msgstr "パスワードを変更する"
+
+#. [profile.email]
+#. defaultMessage is:
+#. Email
+#: messages.json
+#, fuzzy
+msgid "profile.email"
+msgstr "Assemblのプロフィールページへようこそ"
+
+#. [profile.fullname]
+#. defaultMessage is:
+#. Full name
+#: messages.json
+#, fuzzy
+msgid "profile.fullname"
+msgstr "フルネーム"
+
 #. [profile.panelTitle]
 #. defaultMessage is:
-#. Welcome to Assembl profile page
+#. Your account
 #: messages.json
 msgid "profile.panelTitle"
 msgstr "Assemblのプロフィールページへようこそ"
+
+#. [profile.password]
+#. defaultMessage is:
+#. Password
+#: messages.json
+#, fuzzy
+msgid "profile.password"
+msgstr "パスワード"
+
+#. [profile.personalInfos]
+#. defaultMessage is:
+#. Personal informations
+#: messages.json
+msgid "profile.personalInfos"
+msgstr ""
+
+#. [profile.save]
+#. defaultMessage is:
+#. Save
+#: messages.json
+#, fuzzy
+msgid "profile.save"
+msgstr "Assemblのプロフィールページへようこそ"
+
+#. [profile.saveSuccess]
+#. defaultMessage is:
+#. Your profile is updated
+#: messages.json
+msgid "profile.saveSuccess"
+msgstr ""
+
+#. [profile.userName]
+#. defaultMessage is:
+#. User name
+#: messages.json
+#, fuzzy
+msgid "profile.userName"
+msgstr "ユーザー名（オプション）"
 
 #. [redirectToV1]
 #. defaultMessage is:
@@ -1002,6 +1727,20 @@ msgstr ""
 "数秒でリダイレクトされます。\n"
 "インタフェースの変更についてお許しください。もし\n"
 "何も起こらない場合は、ボタンをクリックしてください。"
+
+#. [resourcesCenter.defaultHeaderTitle]
+#. defaultMessage is:
+#. Online resources center
+#: messages.json
+msgid "resourcesCenter.defaultHeaderTitle"
+msgstr "オンラインのリソースセンター"
+
+#. [resourcesCenter.download]
+#. defaultMessage is:
+#. Download the document
+#: messages.json
+msgid "resourcesCenter.download"
+msgstr "ドキュメントをダウンロードする"
 
 #. [search.All]
 #. defaultMessage is:
@@ -1029,7 +1768,7 @@ msgstr "カテゴリー"
 #. Creative participants
 #: messages.json
 msgid "search.Creative participants"
-msgstr "新コメント作成者"
+msgstr "創造的な参加者"
 
 #. [search.Filter by date]
 #. defaultMessage is:
@@ -1145,6 +1884,13 @@ msgstr "フィルタなしで{query}を検索する"
 msgid "search.Oldest first"
 msgstr "古いものから"
 
+#. [search.Participants]
+#. defaultMessage is:
+#. Participants
+#: messages.json
+msgid "search.Participants"
+msgstr "参加者"
+
 #. [search.Participants having the less posted messages]
 #. defaultMessage is:
 #. Participants having the less posted messages
@@ -1189,7 +1935,7 @@ msgstr "〜によって"
 
 #. [search.collapse_search]
 #. defaultMessage is:
-#. Hide search
+#. Close search
 #: messages.json
 msgid "search.collapse_search"
 msgstr "検索を隠す"
@@ -1221,13 +1967,6 @@ msgstr "同意しない"
 #: messages.json
 msgid "search.dont_understand"
 msgstr "詳細を教えてください"
-
-#. [search.expand_search]
-#. defaultMessage is:
-#. Show search
-#: messages.json
-msgid "search.expand_search"
-msgstr "検索を表示する"
 
 #. [search.facets.view_all]
 #. defaultMessage is:
@@ -1276,7 +2015,7 @@ msgstr "いいね！"
 #. Member since
 #: messages.json
 msgid "search.member_since"
-msgstr "メンバー"
+msgstr "からのメンバー"
 
 #. [search.more_info]
 #. defaultMessage is:
@@ -1346,7 +2085,7 @@ msgstr "検索"
 #. Synthesis
 #: messages.json
 msgid "search.synthesis"
-msgstr "統合"
+msgstr "シンセシス"
 
 #. [search.user]
 #. defaultMessage is:
@@ -1355,34 +2094,63 @@ msgstr "統合"
 msgid "search.user"
 msgstr "参加者"
 
+#. [synthesis.noSynthesisYet]
+#. defaultMessage is:
+#. There is no synthesis available yet.
+#: messages.json
+msgid "synthesis.noSynthesisYet"
+msgstr "まだシンセシスが有効ではありません"
+
+#. [synthesis.seeConversation]
+#. defaultMessage is:
+#. See the conversation
+#: messages.json
+msgid "synthesis.seeConversation"
+msgstr "会話を見る"
+
 #. [synthesis.title]
 #. defaultMessage is:
 #. synthesis
 #: messages.json
 msgid "synthesis.title"
-msgstr "統合"
+msgstr "シンセシス"
 
-#. [terms.panelTitle]
+#. [termsAndConditions.headerTitle]
 #. defaultMessage is:
-#. Terms and Conditions
+#. Terms & Conditions
 #: messages.json
-msgid "terms.panelTitle"
-msgstr "規約と条件"
+msgid "termsAndConditions.headerTitle"
+msgstr ""
 
 #. [unauthorizedAdministration.returnButton]
 #. defaultMessage is:
 #. Back to home
 #: messages.json
-#, fuzzy
 msgid "unauthorizedAdministration.returnButton"
-msgstr "完成されるモジュール。 *フィールドは必須です。"
+msgstr "ホームに戻る"
 
 #. [unauthorizedAdministration.unauthorizedMessage]
 #. defaultMessage is:
 #. You are not authorized to access the administration section. Please contact the administrator of the website.
 #: messages.json
 msgid "unauthorizedAdministration.unauthorizedMessage"
-msgstr ""
+msgstr "アクセス権限がありません。ウェブサイトの管理者にコンタクトしてください"
+
+#. [validate]
+#. defaultMessage is:
+#. Validate
+#: messages.json
+msgid "validate"
+msgstr "有効にする"
+
+#~ msgid "home.viewedPages"
+#~ msgstr "閲覧したページ"
+
+#~ msgid "terms.panelTitle"
+#~ msgstr "規約と条件"
+
+#~ msgid "search.expand_search"
+#~ msgstr "検索を表示する"
 
 #~ msgid "home.from"
 #~ msgstr "から"
