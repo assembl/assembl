@@ -3,6 +3,8 @@ import ReactTestUtils from 'react-dom/test-utils';
 import ShallowRenderer from 'react-test-renderer/shallow';
 import { DumbTermsForm, mapDataToProps } from '../../../../js/app/components/common/termsForm';
 
+import { closeModal } from '../../../../js/app/utils/utilityManager';
+
 jest.mock('../../../../js/app/utils/utilityManager');
 
 describe('TermsForm component', () => {
@@ -36,6 +38,7 @@ describe('TermsForm component', () => {
     const button = findRenderedDOMComponentWithClass(component, 'button-submit button-dark terms-submit');
     Simulate.click(button);
     expect(handleAcceptButton).toBeCalled();
+    expect(closeModal).toBeCalled();
   });
   it('should not render an Accept Button when terms are partially scrolled down and the checkbox is not checked in SignupForm', () => {
     const component = renderIntoDocument(<DumbTermsForm text={fakeTerms} style={style} />);

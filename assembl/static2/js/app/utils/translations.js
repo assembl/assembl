@@ -299,7 +299,7 @@ const Translations = {
       headerTitle: "Conditions générales d'utilisation",
       iAccept: "J'ai lu et j'accepte les ",
       link: "conditions générales d'utilisation",
-      accept: "Accepter les conditions générales d'utilisation"
+      accept: "J'accepte les conditions générales d'utilisation"
     },
     legalNotice: {
       headerTitle: "Mentions légales"
@@ -696,7 +696,7 @@ const Translations = {
       headerTitle: "Terms & Conditions",
       link: "Terms & Conditions",
       iAccept: "I have read and I accept the ",
-      accept: "Accept the Terms & Conditions"
+      accept: "I accept the Terms & Conditions"
     },
     legalNotice: {
       headerTitle: "Legal Notice"
