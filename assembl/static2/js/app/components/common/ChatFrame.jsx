@@ -38,7 +38,7 @@ class DumbChatFrame extends React.Component {
     if (!src) return null;
     const isOpen = lodashGet(this, 'state.isOpen');
     return (
-      <div className="chatframe">
+      <div className={`chatframe ${isOpen ? 'open' : ''}`}>
         {isOpen && <ChatFrameModal src={src} />}
         <ChatFrameButton isOpen={isOpen} toggle={this.toggle} />
       </div>

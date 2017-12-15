@@ -35,6 +35,7 @@ echo "\
 .btn-primary {
     background: none !important;
     color: black !important;
+    transition: none !important;
 }
 
 .persistent-menu-container {
