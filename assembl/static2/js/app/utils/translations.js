@@ -259,7 +259,7 @@ const Translations = {
         showOriginal: "Afficher dans sa langue originale",
         startDiscussion: "Je démarre une discussion",
         translate: "Traduire",
-        goToIdea: "Accéder à la discussion",
+        goToIdea: "Voir tous les messages",
         seeSubIdeas: "Voir les %{count} sous-thèmes",
         seeSubIdeas_1: "Voir le sous-thème",
         announcement: "Consigne"
@@ -653,7 +653,7 @@ const Translations = {
         showOriginal: "Show original",
         startDiscussion: "Start a new thread",
         translate: "Translate",
-        goToIdea: "Access the thread",
+        goToIdea: "View all messages",
         seeSubIdeas: "See %{count} sub-thematics",
         seeSubIdeas_1: "See sub-thematic",
         announcement: "Announcement"
