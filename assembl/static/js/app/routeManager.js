@@ -387,8 +387,6 @@ var routeManager = Marionette.Object.extend({
   },
 
   voteWidgetFromV2: function(id, arg) {
-    Assembl.headerRegions.show(new NavBar());
-
     var that = this;
     var collectionManager = CollectionManager(); 
     var widgetPromise = collectionManager.getAllWidgetsPromise()
