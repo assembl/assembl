@@ -238,9 +238,14 @@ def react_view(request, required_permission=P_READ):
             # otherwise redirect to login page
             next_view = request.params.get('next', None)
             if not next_view:
-                # next_view = request.route_url("")
-                next_view = request.route_path("new_home" if canUseReact else "home",
-                                               discussion_slug=discussion.slug)
+                # TODO: check it's a valid v2 page using frontend_urls
+                if canUseReact and request.matched_route.name in (
+                        'new_home', 'react_general_page'):
+                    next_view = request.path
+                else:
+                    next_view = request.route_path(
+                        "new_home" if canUseReact else "home",
+                        discussion_slug=discussion.slug)
 
             login_url = get_social_autologin(request, discussion, next_view)
             if login_url:
