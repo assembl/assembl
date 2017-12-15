@@ -84,7 +84,7 @@ class DumbTermsForm extends React.Component<*, TermsFormProps, TermsFormState> {
               <Button
                 type="submit"
                 name="acceptTerms"
-                className="button-submit button-dark terms-submit"
+                className="button-submit button-dark terms-submit right"
                 onClick={this.handleSubmit}
               >
                 <Translate value="termsAndConditions.accept" />

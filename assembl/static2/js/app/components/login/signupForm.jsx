@@ -151,7 +151,7 @@ class SignupForm extends React.Component<*, SignupFormProps, SignupFormState> {
                       const Terms = (
                         <TermsForm handleAcceptButton={this.handleAcceptButton} isChecked={this.state.checked} lang={lang} />
                       );
-                      displayCustomModal(Terms);
+                      displayCustomModal(Terms, true, 'modal-large');
                     }}
                   >
                     <Translate value="termsAndConditions.link" className="terms-link" />

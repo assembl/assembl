@@ -38,10 +38,10 @@ class AssemblModal extends React.Component {
   }
 
   render() {
-    const { content, title, body, footer, footerTxt, button, bsSize } = this.state;
+    const { content, title, body, footer, footerTxt, button, bsSize, modalClass } = this.state;
     if (content) {
       return (
-        <Modal show={this.state.showModal} onHide={this.close}>
+        <Modal show={this.state.showModal} onHide={this.close} className={modalClass}>
           {content}
         </Modal>
       );

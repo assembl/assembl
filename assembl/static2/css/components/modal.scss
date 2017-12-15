@@ -1,0 +1,11 @@
+.modal-large {
+  @media screen and (min-width: 768px) {
+    .modal-dialog {
+      width: 768px;
+    }
+  }
+
+  .modal-body {
+    padding: 0 20px 15px 20px !important;
+  }
+}

@@ -11,7 +11,7 @@
 }
 
 .terms-form {
-  min-height: 530px;
+  height: 530px;
 
   .full-height {
     height: 430px !important;
@@ -22,11 +22,15 @@
     height: 350px;
   }
 
-  @media screen and (min-width: 600px) {
+  @media screen and (min-width: 768px) {
     .terms-box {
-      width: 500px;
+      width: 680px;
       margin: 10px auto;
-      padding: 0 30px;
+      padding: 0 10px;
+    }
+
+    .terms-submit {
+      margin-right: 5% !important;
     }
   }
 
@@ -37,10 +41,11 @@
 
     .terms-box {
       width: 100%;
+      height: 310px;
     }
 
     .modal-body {
-      padding: 0 15px;
+      padding: 0 20px !important;
     }
 
     .modal-content {
@@ -50,5 +55,11 @@
 
   .terms-submit {
     margin: 15px 0;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .terms-form {
+    height: 500px;
   }
 }
