@@ -1571,6 +1571,10 @@ var TokenVoteSessionModal = Backbone.Modal.extend({
 
   },
 
+  beforeCancel: function(){
+    window.location = Ctx.getDiscussionGenericURL();
+  },
+
   onShow: function(){
     var that = this;
 
