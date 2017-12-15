@@ -29,7 +29,7 @@ describe('TermsForm component', () => {
     box.dispatchEvent(new window.UIEvent('scroll', { detail: 0 }));
     findRenderedDOMComponentWithClass(component, 'button-submit button-dark terms-submit');
   });
-  it('should render an Accept Button and clicking on it should call the handleAcceptButton callback function', () => {
+  it('should render an Accept Button and clicking on it should call handleAcceptButton and closeModal', () => {
     const handleAcceptButton = jest.fn();
     const component = renderIntoDocument(<DumbTermsForm handleAcceptButton={handleAcceptButton} />);
     const box = findRenderedDOMComponentWithClass(component, 'terms-box justify');
