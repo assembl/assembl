@@ -79,16 +79,14 @@ assembl_css
                       <table class="twelve columns">
                         <tr>
                           <td class="panel">
-                            <p>{{ gettext("You are receiving this because you are %(notificationConfigLink)s to discussion %(discussionLink)s.  Specifically, you currently receive a notification when:",
-                                    discussionLink=discussionLink,
-                                    notificationConfigLink='<a href="'+notificationConfigUrl+'">'+gettext('subscribed')+'</a>')
+                            <p>{{ gettext("You are receiving this because you are subscribed to discussion %(discussionLink)s.  Specifically, you currently receive a notification when:",
+                                    discussionLink=discussionLink)
                                }}
                             <ul>
-                              
+
                               {% for applicableSubscription in notification.get_applicable_subscriptions() %}
                                 <li>
                                   {{ gettext(applicableSubscription.get_human_readable_description()) }}
-                                  <a href="{{ frontendUrls.getUserNotificationSubscriptionUnsubscribeUrl(applicableSubscription) }}">{{ gettext('Unsubscribe') }}</a>
                                   <!-- subscription: {{ applicableSubscription.id }} -->
                                 </li>
                               {% endfor %}
