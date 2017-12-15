@@ -9,6 +9,24 @@ import ColumnSynthesis, { type Props as ColumnSynthesisProps } from './columnSyn
 
 const Separator = () => <div style={{ height: '25px' }} />;
 
+type Props = {
+  canEditPosts: boolean,
+  classifier: string,
+  debateData: DebateData,
+  color: string,
+  contentLocaleMapping: Object,
+  data: Array<Post>,
+  ideaId: string,
+  identifier: string,
+  initialRowIndex: number,
+  lang: string,
+  noRowsRenderer: Function,
+  refetchIdea: Function,
+  synthesisProps: ColumnSynthesisProps,
+  title: string,
+  width: number
+};
+
 const PostColumn = ({
   canEditPosts,
   color,
@@ -24,22 +42,7 @@ const PostColumn = ({
   ideaId,
   refetchIdea,
   identifier
-}: {
-  canEditPosts: boolean,
-  color: string,
-  classifier: string,
-  title: string,
-  synthesisProps: ColumnSynthesisProps,
-  width: number,
-  data: Array<Post>,
-  contentLocaleMapping: Object,
-  lang: string,
-  initialRowIndex: number,
-  noRowsRenderer: Function,
-  ideaId: string,
-  refetchIdea: Function,
-  identifier: string
-}) => (
+}: Props) => (
   <div className="column-view" style={{ width: width }}>
     {canEditPosts && (
       <ColumnHeader color={color} classifier={classifier} title={title} ideaId={ideaId} refetchIdea={refetchIdea} />

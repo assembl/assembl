@@ -27,6 +27,11 @@ const MultiColumns = ({
         const col = messageColumns[index];
         const synthesisProps = showSynthesis && {
           classifier: classifier,
+          debateData: debateData,
+          identifier: identifier,
+          mySentiment: col.columnSynthesis.mySentiment,
+          sentimentCounts: col.columnSynthesis.sentimentCounts,
+          synthesisId: col.columnSynthesis.id,
           synthesisTitle: get(col, 'columnSynthesis.subject', I18n.t('multiColumns.synthesis.title', { colName: col.name })),
           synthesisBody: get(col, 'columnSynthesis.body', I18n.t('multiColumns.synthesis.noSynthesisYet')),
           hyphenStyle: { borderTopColor: col.color }

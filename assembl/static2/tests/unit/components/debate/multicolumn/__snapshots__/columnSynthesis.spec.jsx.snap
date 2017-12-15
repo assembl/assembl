@@ -2,20 +2,47 @@
 
 exports[`ColumnSynthesis component should render a folded post 1`] = `
 <div
-  className="box synthesis background-grey"
+  className="box synthesis background-grey posts"
   id="synthesis-positive"
 >
-  <BoxWithHyphen
-    additionalContainerClassNames="column-synthesis"
-    body="Excepturi est rerum nulla explicabo ex voluptatibus quam repellendus. Repudiandae quia nesciunt autem et aliquid. Dolores nisi perferendis voluptas corrupti voluptate molestias est. Porro et rerum sunt accusantium dolores qui."
-    date=""
-    href=""
-    hyphenStyle={
-      Object {
-        "borderTopColor": "green",
-      }
-    }
-    subject="We need to input the optical SSL microchip!"
-  />
+  <div
+    className="post-row"
+  >
+    <div
+      className="post-left"
+    >
+      <BoxWithHyphen
+        additionalContainerClassNames="column-synthesis"
+        body="Excepturi est rerum nulla explicabo ex voluptatibus quam repellendus. Repudiandae quia nesciunt autem et aliquid. Dolores nisi perferendis voluptas corrupti voluptate molestias est. Porro et rerum sunt accusantium dolores qui."
+        date=""
+        href=""
+        hyphenStyle={
+          Object {
+            "borderTopColor": "green",
+          }
+        }
+        subject="We need to input the optical SSL microchip!"
+      />
+    </div>
+    <div
+      className="post-right"
+    >
+      <Connect(withApollo(PostActions))
+        debateData={undefined}
+        editable={false}
+        identifier={undefined}
+        mySentiment="like"
+        postId="XYZ333"
+        sentimentCounts={
+          Object {
+            "disagree": 1,
+            "dontUnderstand": 0,
+            "like": 4,
+            "moreInfo": 0,
+          }
+        }
+      />
+    </div>
+  </div>
 </div>
 `;

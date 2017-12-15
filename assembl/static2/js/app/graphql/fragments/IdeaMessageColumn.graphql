@@ -6,6 +6,10 @@ fragment IdeaMessageColumn on IdeaMessageColumn {
     id
     subject(lang: $lang)
     body(lang: $lang)
+    mySentiment
+    sentimentCounts {
+      ...SentimentCounts
+    }
   }
   index
   messageClassifier

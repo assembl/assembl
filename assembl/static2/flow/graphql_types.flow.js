@@ -1184,7 +1184,14 @@ export type IdeaMessageColumnFragment = {|
     // The ID of the object.
     id: string,
     subject: ?string,
-    body: ?string
+    body: ?string,
+    mySentiment: ?SentimentTypes,
+    sentimentCounts: ?{|
+      disagree: ?number,
+      dontUnderstand: ?number,
+      like: ?number,
+      moreInfo: ?number
+    |}
   |},
   index: ?number,
   // Identifier for the column, will match :py:attr:`assembl.models.generic.Content.message_classifier`
