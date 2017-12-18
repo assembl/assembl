@@ -108,7 +108,7 @@ class Video extends React.Component {
                     <Col xs={12} md={6} className={this.state.isTextHigher ? 'col-bottom' : ''}>
                       <div className="video-container" id="video-vid">
                         {isVideoFile ? (
-                          <video src={videoUrl} controls preload="none" style={{ width: '100%' }} {...posterProps} /> // eslint-disable-line jsx-a11y/media-has-caption
+                          <video src={videoUrl} controls preload="none" {...posterProps} /> // eslint-disable-line jsx-a11y/media-has-caption
                         ) : (
                           <iframe src={debateData.video.videoUrl} frameBorder="0" width="560" height="315" title="video" />
                         )}
