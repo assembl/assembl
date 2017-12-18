@@ -22,21 +22,25 @@ class Decryptor(object):
 
 class AESDecryptor(Decryptor):
     """A decryptor that uses AES symmetric keys"""
+
+    IV_ENC_LENGTH = 24  # 4/3 of IV_LENGTH due to base64
+    BLOCK_LENGTH = 128
+
     def __init__(self, password, backend=None):
         backend = backend or default_backend()
         self.backend = backend
         self.password = password
 
     def decrypt(self, message):
-        iv = base64.b64decode(message[:24])
+        iv = base64.b64decode(message[:self.IV_ENC_LENGTH])
         cipher = Cipher(
             algorithms.AES(self.password),
             modes.CBC(iv), backend=self.backend)
-        message = base64.b64decode(message[24:])
+        message = base64.b64decode(message[self.IV_ENC_LENGTH:])
         decryptor = cipher.decryptor()
         padded = decryptor.update(message)
         padded += decryptor.finalize()
-        unpadder = padding.PKCS7(128).unpadder()
+        unpadder = padding.PKCS7(self.BLOCK_LENGTH).unpadder()
         decrypted = unpadder.update(padded)
         decrypted += unpadder.finalize()
         return decrypted
@@ -44,18 +48,22 @@ class AESDecryptor(Decryptor):
 
 class AESEncryptor(Encryptor):
     """An encryptor that uses AES symmetric keys"""
+
+    IV_LENGTH = 16
+    BLOCK_LENGTH = 128
+
     def __init__(self, password, backend=None):
         backend = backend or default_backend()
         self.backend = backend
         self.password = password
 
     def encrypt(self, message):
-        iv = urandom(16)
+        iv = urandom(self.IV_LENGTH)
         cipher = Cipher(
             algorithms.AES(self.password),
             modes.CBC(iv), backend=self.backend)
         encryptor = cipher.encryptor()
-        padder = padding.PKCS7(128).padder()
+        padder = padding.PKCS7(self.BLOCK_LENGTH).padder()
         padded = padder.update(message)
         padded += padder.finalize()
         encrypted = encryptor.update(padded)
