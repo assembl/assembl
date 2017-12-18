@@ -1,6 +1,7 @@
 import React from 'react';
 import { I18n } from 'react-redux-i18n';
 import { Grid, Col, Button, Image, ResponsiveEmbed } from 'react-bootstrap';
+import { EDFHacks } from '../home/video';
 
 import { displayModal } from '../../utils/utilityManager';
 
@@ -32,13 +33,20 @@ class Media extends React.Component {
     displayModal(null, content, false, null, null, true, 'large');
   };
 
-  static Content = ({ htmlCode, mediaFile }) => {
-    const isLocal = !htmlCode && mediaFile && mediaFile.externalUrl;
+
+  static Content = ({ content }) => {
+    const isLocal = content[0] === '/';
+    const isVideoFile = EDFHacks.srcIsVideoFile(content);
     const component = isLocal ? (
       <Image responsive src={mediaFile.externalUrl} />
     ) : (
       <ResponsiveEmbed a16by9>
-        <iframe title="media" src={htmlCode} />
+
+        {isVideoFile ? (
+          <video src={content} controls preload="none" /> // eslint-disable-line jsx-a11y/media-has-caption
+        ) : (
+          <iframe title="media" src={content} />
+        )}
       </ResponsiveEmbed>
     );
     return (

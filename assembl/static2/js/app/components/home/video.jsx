@@ -49,7 +49,7 @@ const videoExtensions = [
   'f4b'
 ];
 
-const EDFHacks = {
+export const EDFHacks = {
   srcIsVideoFile: (src) => {
     const components = src.split('.');
     const extension = components[components.length - 1];
