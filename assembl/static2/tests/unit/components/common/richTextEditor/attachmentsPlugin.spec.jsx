@@ -150,7 +150,7 @@ describe('attachmentsPlugin', () => {
       expect(result).toEqual(expected);
     });
 
-    it('should return atomic block type if the node is an atomic block', () => {
+    it('should return atomic block type if the node is an atomic block (image)', () => {
       const nodeName = 'div';
       const node = {
         dataset: {
@@ -162,6 +162,31 @@ describe('attachmentsPlugin', () => {
             mimeType: 'image/png'
           },
           nodename: 'img'
+        }
+      };
+      const lastList = null;
+      const inBlock = 'atomic';
+      const result = htmlToBlock(nodeName, node, lastList, inBlock);
+      const expected = 'atomic';
+      expect(result).toEqual(expected);
+    });
+
+    it('should return atomic block type if the node is an atomic block (non image)', () => {
+      const nodeName = 'div';
+      const node = {
+        dataset: {
+          blocktype: 'atomic'
+        },
+        firstChild: {
+          firstChild: {
+            dataset: {
+              externalurl: 'http://www.example.com/mydoc.pdf',
+              id: 'foobar',
+              mimetype: 'application/pdf'
+            },
+            nodename: 'img'
+          },
+          nodename: 'a'
         }
       };
       const lastList = null;
@@ -183,7 +208,7 @@ describe('attachmentsPlugin', () => {
         firstChild: {
           dataset: {
             id: 'foobar',
-            mimeType: 'image/png'
+            mimetype: 'image/png'
           },
           nodename: 'img'
         }
@@ -203,7 +228,8 @@ describe('attachmentsPlugin', () => {
         { entityKey: '2', document: { id: '1234', title: 'Foobar', mimeType: 'application/pdf' } },
         { entityKey: '3', document: { id: '1236', externalUrl: 'http://www.example.com/foo.png', mimeType: 'image/png' } }
       ];
-      expect(result).toEqual(expected);
+      expect(result[0].document).toEqual(expected[0].document);
+      expect(result[1].document).toEqual(expected[1].document);
     });
   });
 

@@ -32,8 +32,10 @@ const plugin = {
       const extension = getExtension(title);
       const iconPath = getIconPath(extension);
       return (
+        `<a href="${externalUrl}" title="${title}">` +
         `<img class="attachment-icon" alt="${extension}" src="${iconPath}" data-id="${id}" data-mimetype="${mimeType}"` +
-        ` data-title="${title}" data-externalurl="${externalUrl}" />`
+        ` data-title="${title}" data-externalurl="${externalUrl}" />` +
+        '</a>'
       );
     }
 
@@ -49,8 +51,10 @@ const plugin = {
   },
   htmlToEntity: (nodeName: string, node: NodeType, createEntity: Function): Entity | void => {
     const defaultImageMimeType = 'image/*';
+    const isNotAtomicBlockNode = n => n && n.dataset && n.dataset.blocktype !== BLOCK_TYPE;
     const isLegacyImage =
-      nodeName === 'img' && (node.parentNode && node.parentNode.dataset && node.parentNode.dataset.blocktype !== BLOCK_TYPE);
+      nodeName === 'img' && isNotAtomicBlockNode(node.parentNode) && isNotAtomicBlockNode(node.parentNode.parentNode);
+
     if (isLegacyImage) {
       return createEntity(ENTITY_TYPE, 'IMMUTABLE', {
         externalUrl: node.src,
@@ -76,13 +80,14 @@ const plugin = {
         mimeType: node.firstChild.dataset.mimetype || defaultImageMimeType
       });
     } else if (isAtomicBlock) {
+      const dataset = (node.firstChild.firstChild && node.firstChild.firstChild.dataset) || {};
       const defaultMimeType = 'application/*';
       return createEntity(ENTITY_TYPE, 'IMMUTABLE', {
-        externalUrl: node.firstChild.dataset.externalurl,
-        id: node.firstChild.dataset.id,
-        title: node.firstChild.dataset.title || '',
+        externalUrl: dataset.externalurl,
+        id: dataset.id,
+        title: dataset.title || '',
         type: 'document',
-        mimeType: node.firstChild.dataset.mimetype || defaultMimeType
+        mimeType: dataset.mimetype || defaultMimeType
       });
     }
 
