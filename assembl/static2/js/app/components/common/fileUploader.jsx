@@ -98,7 +98,8 @@ class FileUploader extends React.Component<Object, FileUploaderProps, FileUpload
   render() {
     const { mimeType, name, withPreview } = this.props;
     const fileSrc = this.state.fileSrc;
-    const fileIsImage = fileSrc && fileSrc instanceof String && fileSrc.startsWith('data:image/');
+    const fileIsImage =
+      fileSrc && (typeof fileSrc === 'string' || fileSrc instanceof String) && fileSrc.startsWith('data:image/');
     const mimeTypeIsImage = mimeType.startsWith('image/');
     const isImage = fileIsImage || mimeTypeIsImage;
     return (
