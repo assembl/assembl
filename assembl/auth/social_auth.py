@@ -179,7 +179,7 @@ def auto_subscribe(backend, social, user, *args, **kwargs):
                 discussion = Discussion.default_db.query(
                     Discussion).filter_by(slug=slug).first()
     if discussion:
-        user.successful_login(True)
+        user.successful_social_login()
         maybe_auto_subscribe(user, discussion)
         return {"discussion": discussion}
 

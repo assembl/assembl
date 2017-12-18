@@ -356,6 +356,9 @@ class AgentProfile(Base):
             return prefs[0]
         return Locale.locale_collection_byid[prefs[0].locale_id]
 
+    def successful_social_login(self):
+        self.successful_login(True)
+
     def successful_login(self, social=False):
         "A successful email login"
         self.last_login = datetime.utcnow()
@@ -371,21 +374,26 @@ class AgentProfile(Base):
             return None
         last_login = self.last_assembl_login
         if not last_login:
-            return datetime.utcnow() - timedelta(seconds=1)
+            # Return a date saying it's just expired.
+            return datetime.utcnow() - timedelta(1)
         return last_login + timedelta(float(duration))
 
     def login_expiry_req(self):
-        """Get login expiry date. May be None.
-        Only use within request."""
+        """Get login expiry date. May be None."""
         from assembl.auth.util import get_current_discussion
         discussion = None
         try:
+            # If called from within request
             discussion = get_current_discussion()
         except Exception as e:
+            # This is actually called from changes.json, so the request
+            # and discussion are inaccessible in that case.
             pass
         return self.login_expiry(discussion)
 
-    def login_expiry(self, discussion):
+    def login_expiry(self, discussion=None):
+        """When will this account's login expire, maybe in the context
+        of a specific discussion."""
         accounts = [a for a in self.social_accounts if a.verified]
         autologin = None
         if discussion:
@@ -403,7 +411,8 @@ class AgentProfile(Base):
                 if None in autologin_accs_expiry:
                     return None
                 return max(autologin_accs_expiry)
-            return datetime.utcnow() - timedelta(seconds=1)
+            # No social login, treat as already expired
+            return datetime.utcnow() - timedelta(1)
         expiries = [a.login_expiry() for a in accounts]
         expiries.append(self.assembl_login_expiry())
         if None in expiries:
