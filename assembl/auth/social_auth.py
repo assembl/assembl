@@ -362,7 +362,7 @@ def adjust_settings(settings):
         if k.startswith("SOCIAL_AUTH_"):
             if k.endswith("_SCOPE"):
                 settings[k] = aslist(v)
-            elif v.lstrip().startswith('{'):
+            elif isinstance(v, (str, unicode)) and v.lstrip().startswith('{'):
                 settings[k] = json.loads(v)
     for name in ('SOCIAL_AUTH_AUTHENTICATION_BACKENDS',
                  'SOCIAL_AUTH_USER_FIELDS',
