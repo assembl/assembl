@@ -1,4 +1,5 @@
 from urllib import urlencode
+from urlparse import urlparse, urlunparse, parse_qs
 from HTMLParser import HTMLParser
 
 from simplejson import loads
@@ -19,7 +20,10 @@ class Mediactive(BaseAuth):
         next_url = self.data.get('next', None)
         base = self.setting('LOGIN_URL')
         if next_url:
-            base += '?' + urlencode({'next': next_url})
+            pr = urlparse(base)
+            qs = parse_qs(pr.query)
+            qs['next'] = [next_url]
+            base = urlunparse(pr._replace(query=urlencode(qs, True)))
         return base
 
     def get_user_id(self, details, response):
