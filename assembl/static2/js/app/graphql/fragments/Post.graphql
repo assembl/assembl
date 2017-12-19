@@ -35,6 +35,7 @@ fragment Post on Post {
   publicationState
   extracts {
     id
+    important
     body
   }
   attachments {

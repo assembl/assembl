@@ -47,8 +47,8 @@ class Nuggets extends React.Component {
   render() {
     const { extracts } = this.props;
     const { top } = this.state;
-
-    return Array.isArray(extracts) && extracts.length > 0 ? (
+    const importantExtracts = Array.isArray(extracts) && extracts.filter(({ important }) => important);
+    return importantExtracts && importantExtracts.length > 0 ? (
       <div
         ref={(node) => {
           this.node = node;
@@ -61,7 +61,7 @@ class Nuggets extends React.Component {
             <span className="assembl-icon-pepite color2" />
           </div>
           <div>
-            {extracts.map(extract => (
+            {importantExtracts.map(extract => (
               <div key={extract.id} className="nugget">
                 <div className="nugget-txt">{extract.body}</div>
                 <div className="box-hyphen" />
