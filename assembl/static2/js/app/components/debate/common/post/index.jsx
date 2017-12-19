@@ -55,7 +55,6 @@ type State = {
 };
 
 type DefaultProps = {
-  editable: boolean,
   multiColumns: boolean
 };
 
@@ -69,7 +68,6 @@ export class DumbPost extends React.PureComponent<DefaultProps, Props, State> {
   state: State;
 
   static defaultProps = {
-    editable: true,
     multiColumns: false
   };
 

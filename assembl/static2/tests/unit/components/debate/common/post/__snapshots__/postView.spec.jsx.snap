@@ -176,7 +176,6 @@ exports[`PostView component should render a post in view mode 1`] = `
               "translationEnabled": true,
             }
           }
-          editable={true}
           handleEditClick={[Function]}
           identifier="thread"
           mySentiment="like"
