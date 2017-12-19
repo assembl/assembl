@@ -2043,7 +2043,7 @@ def update_vendor_themes_2():
 
 @task
 def update_vendor_themes_and_compile():
-    """Update vendor themes and compiles them"""
+    """Update vendor themes and compile them. Run this task when you want to deploy recent changes to themes on a server, without updating Assembl's code and dependencies."""
     execute(update_vendor_themes_1)
     execute(update_vendor_themes_2)
     execute(compile_stylesheets) # for themes of the v1 UI
