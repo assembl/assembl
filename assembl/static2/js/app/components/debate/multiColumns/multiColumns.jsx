@@ -22,6 +22,7 @@ const MultiColumns = ({
   debateData
 }) => {
   const columnsArray = orderPostsByMessageClassifier(messageColumns, posts);
+  const isPhaseCompleted = getIfPhaseCompletedByIdentifier(debateData.timeline, identifier);
   return (
     <div className="multi-column-container">
       {Object.keys(columnsArray).map((classifier, index) => {
@@ -38,12 +39,9 @@ const MultiColumns = ({
           synthesisBody: get(col, 'columnSynthesis.body', I18n.t('multiColumns.synthesis.noSynthesisYet')),
           hyphenStyle: { borderTopColor: col.color }
         };
-        const isPhaseCompleted = getIfPhaseCompletedByIdentifier(debateData.timeline, identifier);
-        const canEditPosts = !isPhaseCompleted && !get(col, 'columnSynthesis.body');
         return (
           <PostColumn
             key={classifier}
-            canEditPosts={canEditPosts}
             synthesisProps={synthesisProps}
             width={width}
             contentLocaleMapping={contentLocaleMapping}
@@ -58,6 +56,7 @@ const MultiColumns = ({
             refetchIdea={refetchIdea}
             identifier={identifier}
             debateData={debateData}
+            withColumnHeader={!isPhaseCompleted}
           />
         );
       })}
