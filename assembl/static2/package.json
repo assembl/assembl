@@ -104,6 +104,8 @@
     "react-share": "^1.16.0",
     "react-tweet-embed": "^1.0.8",
     "react-virtualized": "^9.9.0",
+    "react-youtube": "^7.5.0",
+    "react-active-html": "^1.1.6",
     "redux": "^3.7.2",
     "redux-thunk": "^2.1.0",
     "reselect": "^3.0.1",

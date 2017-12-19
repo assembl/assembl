@@ -1,0 +1,97 @@
+.post-section .ReactVirtualized__Grid.ReactVirtualized__List.tree-list {
+  will-change: auto !important;
+}
+
+.youtube-theater {
+  transition-property: background-color;
+  transition-duration: 2s;
+
+  .youtube-video {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+  }
+
+  .theater-content {
+    position: relative;
+    width: 100%;
+    height: 0;
+    padding-bottom: 51%;
+    display: block;
+
+    > :first-child {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+  }
+
+  &.open {
+    height: 100%;
+    top: 0;
+    left: 0;
+    width: 100%;
+    position: fixed;
+    background-color: rgba(black, 0.8);
+    z-index: 1031;
+
+    .theater-content {
+      width: 90%;
+      top: 50%;
+      left: 50%;
+      transform: translateY(-50%) translateX(-50%);
+
+      .close-theater-button {
+        $size: 30px;
+        $halfSize: $size / 2;
+
+        background-color: black;
+        background-clip: content-box;
+        color: white;
+        position: absolute;
+        border: 0;
+        border: 2px solid white;
+        border-radius: $size / 2;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0;
+        top: -$halfSize;
+        right: -$halfSize;
+        width: $size;
+        height: $size;
+
+        &:before {
+          margin: 0;
+          padding-left: 1.5px;
+        }
+      }
+
+      > :first-child {
+        height: 100%;
+        width: 100%;
+      }
+
+      .youtube-video {
+        max-width: calc(95vh * (16 / 9));
+        max-height: 95vh;
+        transform: translateX(-50%) translateY(-50%);
+        left: 50%;
+        top: 50%;
+      }
+    }
+  }
+}
+
+/*
+const baseContainerStyle = { display: 'flex', alignItems: 'center', justifyContent: 'center' };
+const theaterContainerStyle = {
+  ...baseContainerStyle,
+  backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  width: '100%',
+  height: '100%',
+  position: 'fixed',
+  zIndex: 9001
+};
+const containerStyle = { ...baseContainerStyle };
+*/
