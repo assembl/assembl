@@ -26,9 +26,15 @@
       height: 100%;
     }
 
-    .superpose-label {
-      top: calc(50% - 1.5em);
+    .superpose.doughnut-label {
+      top: 48%;
+      left: 50%;
+      transform: translateX(-50%) translateY(-50%);
+      width: auto;
+      height: auto;
+    }
 
+    .doughnut-label {
       .doughnut-label-count {
         font-family: $font-family3;
         font-size: $font-size-sm;
