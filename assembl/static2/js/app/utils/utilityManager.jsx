@@ -62,12 +62,13 @@ export const displayModal = (title, body, footer, footerTxt, button = null, show
   });
 };
 
-export const displayCustomModal = (content, showModal = true) => {
+export const displayCustomModal = (content, showModal = true, modalClass = null) => {
   /* display a modal with given content. You have to handle Modal.* components in your content */
   document.activeElement.blur();
   modalManager.component.setState({
     content: content,
-    showModal: showModal
+    showModal: showModal,
+    modalClass: modalClass
   });
 };
 

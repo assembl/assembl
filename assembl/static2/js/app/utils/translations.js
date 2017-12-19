@@ -296,7 +296,10 @@ const Translations = {
       panelTitle: "Désolé, cette page n'existe pas"
     },
     termsAndConditions: {
-      headerTitle: "Conditions générales d'utilisation"
+      headerTitle: "Conditions générales d'utilisation",
+      iAccept: "J'ai lu et j'accepte les ",
+      link: "conditions générales d'utilisation",
+      accept: "J'accepte les conditions générales d'utilisation"
     },
     legalNotice: {
       headerTitle: "Mentions légales"
@@ -690,7 +693,10 @@ const Translations = {
       panelTitle: "Sorry, this page doesn't exist"
     },
     termsAndConditions: {
-      headerTitle: "Terms & Conditions"
+      headerTitle: "Terms & Conditions",
+      link: "Terms & Conditions",
+      iAccept: "I have read and I accept the ",
+      accept: "I accept the Terms & Conditions"
     },
     legalNotice: {
       headerTitle: "Legal Notice"
