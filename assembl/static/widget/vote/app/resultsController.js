@@ -1,13 +1,15 @@
 "use strict";
 
 voteApp.controller('resultsCtl',
-  ['$scope', '$http', '$routeParams', '$log', '$location', '$translate', 'globalConfig', 'configTestingService', 'configService', 'AssemblToolsService', 'VoteWidgetService',
-  function($scope, $http, $routeParams, $log, $location, $translate, globalConfig, configTestingService, configService, AssemblToolsService, VoteWidgetService) {
+  ['$scope', '$http', '$routeParams', '$log', '$location', '$translate', 'globalConfig', 'configTestingService', 'configService', 'AssemblToolsService', 'VoteWidgetService', 'LangStringService',
+  function($scope, $http, $routeParams, $log, $location, $translate, globalConfig, configTestingService, configService, AssemblToolsService, VoteWidgetService, LangStringService) {
 
     // intialization code (constructor)
 
     $scope.init = function() {
       console.log("resultsCtl::init()");
+
+      $scope.current_lang = $translate.use();
 
       console.log("configService:");
       console.log(configService);
@@ -146,7 +148,8 @@ voteApp.controller('resultsCtl',
       if ( target_id in $scope.targets_promises ){
         $.when($scope.targets_promises[target_id]).done(function(data){
           if ( "shortTitle" in data ){
-            el_title.text(data.shortTitle);
+            var translatedTitle = LangStringService.bestStringForLang(data.shortTitle, $scope.current_lang);
+            el_title.text(translatedTitle);
             if ( "definition" in data && data.definition.length ){
               var ideaDescriptionHTML = data.definition;
               var ideaDescriptionText = AssemblToolsService.stripHtml(data.definition); // idea's definition field contains HTML

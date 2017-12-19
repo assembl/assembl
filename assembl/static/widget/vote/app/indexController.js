@@ -56,7 +56,7 @@ voteApp.controller('indexCtl',
       console.log("settings 1:");
       console.log($scope.settings);
 
-      if ($scope.settings.items && $scope.settings.items.length)
+      if ("items" in $scope.settings.items && $scope.settings.items && $scope.settings.items.length)
       {
         _.each($scope.settings.items, function(el) {
           VoteWidgetService.addDefaultFields(el, VoteWidgetService.mandatory_item_fields);
@@ -727,16 +727,16 @@ voteApp.controller('indexCtl',
       }
       var criterionValue = valueDefault;
       target_id = target_id || null;
-      xPosCenter = xPosCenter ? xPosCenter : item_data.width / 2;
       var width = "width" in item_data ? item_data.width : null;
       if ( !width )
         width = "width" in config ? config.witdth : 300;
+      xPosCenter = xPosCenter ? xPosCenter : width / 2;
       var height = "height" in item_data ? item_data.height : null;
       if ( !height )
         height = "height" in config ? config.height : 300;
       var padding = "padding" in item_data ? item_data.padding : null;
       if ( !padding )
-        padding = "padding" in padding ? config.padding : 60;
+        padding = "padding" in config ? config.padding : 60;
       var colorCursor = "colorCursor" in criterion ? criterion.colorCursor : "#9013FE";
       var colorCursorNoVoteYet = "#ccc";
       var showCriterionDescription = "showCriterionDescription" in config ? config.showCriterionDescription : "icon";
@@ -1065,7 +1065,7 @@ voteApp.controller('indexCtl',
 
       var padding = "padding" in item_data ? item_data.padding : null;
       if ( !padding )
-        padding = "padding" in padding ? config.padding : 60;
+        padding = "padding" in config ? config.padding : 60;
 
       var width = "width" in item_data ? item_data.width : null;
       if ( !width )
@@ -1495,7 +1495,7 @@ voteApp.controller('indexCtl',
         height = "height" in config ? config.height : 300;
       var padding = "padding" in item_data ? item_data.padding : null;
       if ( !padding )
-        padding = "padding" in padding ? config.padding : 60;
+        padding = "padding" in config ? config.padding : 60;
       
       var div = $('<div>');
       div.attr({
