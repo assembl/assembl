@@ -3,6 +3,13 @@
     top: $navbar-height;
   }
 
+  .top-post-sticky {
+    position: fixed;
+    top: 125px;
+    width: 100%;
+    z-index: 100;
+  }
+
   .timeline-section {
     background-color: $white;
     border-bottom: $navbar-border;
@@ -314,6 +321,10 @@
       .alert {
         top: ($navbar-height * 2) + 20px;
       }
+    }
+
+    .top-post-sticky {
+      top: 60px;
     }
 
     .timeline-section {
