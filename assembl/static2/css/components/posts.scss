@@ -15,6 +15,14 @@
   }
 }
 
+.proposals .post-body .body, .posts .post-body .body {
+  font-family: $font-family4;
+  color: $post-text-color;
+  line-height: 1.6em;
+  word-wrap: break-word;
+  text-align: left;
+}
+
 .proposals {
   .custom-overlay {
     display: inline-block;
@@ -46,13 +54,6 @@
 
   .translate {
     padding: 20px 0 0 75px;
-  }
-
-  .body {
-    font-family: $font-family4;
-    line-height: 1.6em;
-    text-align: left;
-    word-wrap: break-word;
   }
 
   .sentiments {
@@ -207,10 +208,7 @@ $deleted-post-border: 1px solid $grey1 !default;
   }
 
   .body {
-    font-family: $font-family4;
-    line-height: 1.6em;
     padding: 20px 0 40px;
-    word-wrap: break-word;
 
     p {
       margin: 0;
