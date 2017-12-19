@@ -13,10 +13,7 @@ type TermsFormProps = {
   isChecked: boolean,
   text: string,
   handleAcceptButton: () => void,
-  style: {
-    height: string,
-    width: string
-  }
+  style: Object
 };
 
 type TermsFormState = {
@@ -96,11 +93,11 @@ class DumbTermsForm extends React.Component<*, TermsFormProps, TermsFormState> {
   }
 }
 
-type Response = {
+type OutputProps = {
   text?: string
 };
 
-export type Props = Response | QueryProps;
+export type Props = OutputProps & QueryProps & LegalNoticeAndTermsQuery;
 
 export const mapDataToProps = ({ data }: Object) => {
   const text = get(data, 'legalNoticeAndTerms.termsAndConditions', '');

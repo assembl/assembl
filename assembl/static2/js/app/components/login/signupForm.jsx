@@ -29,7 +29,7 @@ type SignupFormState = {
   checked: boolean
 };
 
-class SignupForm extends React.Component<*, SignupFormProps, SignupFormState> {
+class SignupForm extends React.Component<void, SignupFormProps, SignupFormState> {
   props: SignupFormProps;
 
   state: SignupFormState;
