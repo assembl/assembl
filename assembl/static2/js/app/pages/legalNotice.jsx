@@ -13,12 +13,12 @@ export const mapStateToProps: RootReducer => LegalNoticeAndTermsQueryVariables =
   lang: state.i18n.locale
 });
 
-type Response = {
+type AdditionalProps = {
   text?: string,
   headerTitle?: string
 };
 
-export type Props = Response | QueryProps;
+export type Props = AdditionalProps & LegalNoticeAndTermsQuery & QueryProps;
 
 const withData: OperationComponent<LegalNoticeAndTermsQuery, LegalNoticeAndTermsQueryVariables, Props> = graphql(
   LegalNoticeAndTerms,
