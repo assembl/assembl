@@ -155,6 +155,7 @@ def instance_view(request):
     permissions = get_permissions(
         user_id, ctx.get_discussion_id())
     instance = ctx._instance
+    request.logger.info('instance_view', instance=instance, _name='assembl.views.api2')
     if not instance.user_can(user_id, CrudPermissions.READ, permissions):
         return HTTPUnauthorized()
     view = ctx.get_default_view() or 'default'

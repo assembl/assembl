@@ -68,6 +68,7 @@ def main(global_config, **settings):
     config.include('.auth')
     config.include('.models')
     config.include('.indexing')
+    config.include('.lib.logging')
     # Tasks first, because it includes ZCA registration (for now)
     config.include('.tasks')
 
