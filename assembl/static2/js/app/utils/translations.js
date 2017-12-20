@@ -163,7 +163,8 @@ const Translations = {
       contact: "Besoin d'échanger au sujet de la plateforme ?",
       contactUs: "Contactez-nous",
       from_start_to_end: "du %{start} au %{end}",
-      chatbot: "Chat avec %{chatbotName}"
+      chatbot: "Chat avec %{chatbotName}",
+      assemblNotConfigured: "La configuration d'Assembl n'est pas terminée"
     },
     multiColumns: {
       synthesis: {
@@ -560,7 +561,8 @@ const Translations = {
       contact: "Do you wish to know more about this platform?",
       contactUs: "Contact us",
       from_start_to_end: "from %{start} to %{end}",
-      chatbot: "Chat with %{chatbotName}"
+      chatbot: "Chat with %{chatbotName}",
+      assemblNotConfigured: "Assembl is not configured properly"
     },
     community: {
       panelTitle: "Welcome to Assembl community page"

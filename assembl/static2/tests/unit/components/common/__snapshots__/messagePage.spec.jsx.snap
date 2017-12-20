@@ -1,0 +1,22 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`MessagePage component should render a MessagePage component 1`] = `
+<div
+  className="container-fluid"
+>
+  <div
+    className="max-container"
+  >
+    <div
+      className="jumbotron"
+    >
+      <h3>
+        Supply chains
+      </h3>
+      <div>
+        The SCSI circuit is down, reboot the 1080p microchip so we can connect the RAM system!
+      </div>
+    </div>
+  </div>
+</div>
+`;
