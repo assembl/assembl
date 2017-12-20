@@ -163,6 +163,7 @@ class TopPostForm extends React.Component<*, TopPostFormProps, TopPostFormState>
               maxLength={TEXT_INPUT_MAX_LENGTH}
               handleTxtChange={this.handleSubjectChange}
               handleInputFocus={this.handleInputFocus}
+              isActive={this.state.isActive}
             />
           ) : null}
           {this.state.isActive || this.props.ideaOnColumn ? (

@@ -8,7 +8,8 @@ export const TextInputWithRemainingChars = ({
   label,
   maxLength,
   handleTxtChange,
-  handleInputFocus
+  handleInputFocus,
+  isActive
 }) => {
   const remainingChars = maxLength - value.length;
   return (
@@ -23,7 +24,11 @@ export const TextInputWithRemainingChars = ({
         onChange={handleTxtChange}
       />
       <div className="annotation margin-xs">
-        <Translate value="debate.remaining_x_characters" nbCharacters={remainingChars < 10000 ? remainingChars : maxLength} />
+        {isActive ? (
+          <Translate value="debate.remaining_x_characters" nbCharacters={remainingChars < 10000 ? remainingChars : maxLength} />
+        ) : (
+          <span>&nbsp;</span>
+        )}
       </div>
     </div>
   );
