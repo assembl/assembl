@@ -15,7 +15,7 @@ from alembic import context, op
 import sqlalchemy as sa
 import transaction
 
-
+from assembl.auth import R_SYSADMIN
 from assembl.lib import config
 from assembl.lib.sqla import mark_changed
 
@@ -26,7 +26,9 @@ def upgrade(pyramid_env):
     db = m.get_session_maker()()
     with transaction.manager:
         # take the first sysadmin as creator
-        creator_id = m.User.default_db.query(m.User).join(m.User.roles).filter(m.Role.id == 7)[0:1][0].id
+        sysadmin_role = db.query(m.Role).filter(m.Role.name == R_SYSADMIN).first()
+        creator_id = m.User.default_db.query(m.User).join(
+            m.User.roles).filter(m.Role.id == sysadmin_role.id)[0:1][0].id
         columns_headers = dict(list(db.execute(
             "SELECT id, header_id FROM idea_message_column")))
         columns = db.query(m.IdeaMessageColumn).all()
