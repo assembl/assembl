@@ -10,7 +10,9 @@ exports[`MessagePage component should render a MessagePage component 1`] = `
     <div
       className="jumbotron"
     >
-      <h3>
+      <h3
+        className="dark-title-3"
+      >
         Supply chains
       </h3>
       <div>
