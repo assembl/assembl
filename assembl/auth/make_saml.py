@@ -87,7 +87,7 @@ def make_saml_cert(key, country=None, state=None, locality=None, org=None,
     )
     if alt_names:
         # Describe what sites we want this certificate for.
-        crt = crt.add_extension(
+        builder = builder.add_extension(
             x509.SubjectAlternativeName([
                 x509.DNSName(n) for n in alt_names]),
             critical=False)
