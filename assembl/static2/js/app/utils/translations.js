@@ -562,7 +562,7 @@ const Translations = {
       contactUs: "Contact us",
       from_start_to_end: "from %{start} to %{end}",
       chatbot: "Chat with %{chatbotName}",
-      assemblNotConfigured: "Assembl is not configured properly"
+      assemblNotConfigured: "Assembl has not been fully configured yet"
     },
     community: {
       panelTitle: "Welcome to Assembl community page"
