@@ -60,9 +60,9 @@ class SignupForm extends React.Component<void, SignupFormProps, SignupFormState>
 
   componentWillReceiveProps(nextProps) {
     const { auth } = nextProps;
+    const { success, reason } = auth.signupSuccess;
     let msg;
-    if (auth.signupSuccess.success === false) {
-      const { reason } = auth.signupSuccess;
+    if (success === false && reason) {
       switch (reason) {
       case 'password': {
         msg = I18n.t('login.incorrectPassword');
