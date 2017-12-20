@@ -24,27 +24,28 @@ type Props = {
   refetchIdea: Function,
   synthesisProps: ColumnSynthesisProps,
   title: string,
-  width: number
+  width: number,
+  withColumnHeader: boolean
 };
 
 const PostColumn = ({
-  canEditPosts,
-  color,
   classifier,
-  title,
-  synthesisProps,
-  width,
-  data,
+  color,
   contentLocaleMapping,
-  lang,
-  initialRowIndex,
-  noRowsRenderer,
+  data,
   ideaId,
+  identifier,
+  initialRowIndex,
+  lang,
+  noRowsRenderer,
   refetchIdea,
-  identifier
+  synthesisProps,
+  title,
+  width,
+  withColumnHeader
 }: Props) => (
   <div className="column-view" style={{ width: width }}>
-    {canEditPosts && (
+    {withColumnHeader && (
       <ColumnHeader color={color} classifier={classifier} title={title} ideaId={ideaId} refetchIdea={refetchIdea} />
     )}
     {synthesisProps && <ColumnSynthesis {...synthesisProps} />}
@@ -60,7 +61,6 @@ const PostColumn = ({
           InnerComponentFolded={FoldedPost}
           SeparatorComponent={Separator}
           identifier={identifier}
-          innerComponentProps={{ editable: canEditPosts }}
         />
       ) : (
         noRowsRenderer()
