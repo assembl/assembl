@@ -4,6 +4,8 @@ import { graphql, compose } from 'react-apollo';
 import { connect } from 'react-redux';
 import { Translate, I18n } from 'react-redux-i18n';
 import { Grid, Col, FormGroup, FormControl, Button } from 'react-bootstrap';
+import get from 'lodash/get';
+
 import { getConnectedUserId } from '../../../utils/globalFunctions';
 import { getIfPhaseCompletedByIdentifier } from '../../../utils/timeline';
 import { inviteUserToLogin, displayAlert } from '../../../utils/utilityManager';
@@ -71,21 +73,27 @@ class Question extends React.Component {
     const maxChars = this.txtarea.props.maxLength;
     const { contentLocale, questionId, scrollToQuestion, index, refetchTheme } = this.props;
     const body = this.state.postBody;
-    this.props
-      .mutate({ variables: { contentLocale: contentLocale, ideaId: questionId, body: body } })
-      .then(() => {
-        scrollToQuestion(true, index + 1);
-        displayAlert('success', I18n.t('debate.survey.postSuccess'));
-        refetchTheme();
-        this.setState({
-          postBody: '',
-          showSubmitButton: false,
-          remainingChars: maxChars
-        });
-      })
-      .catch((error) => {
-        displayAlert('danger', `${error}`);
-      });
+    this.setState({ buttonDisabled: true }, () =>
+      this.props
+        .mutate({ variables: { contentLocale: contentLocale, ideaId: questionId, body: body } })
+        .then(() => {
+          scrollToQuestion(true, index + 1);
+          displayAlert('success', I18n.t('debate.survey.postSuccess'));
+          refetchTheme();
+          this.setState({
+            postBody: '',
+            showSubmitButton: false,
+            remainingChars: maxChars,
+            buttonDisabled: false
+          });
+        })
+        .catch((error) => {
+          displayAlert('danger', `${error}`);
+          this.setState({
+            buttonDisabled: false
+          });
+        })
+    );
   }
 
   redirectToLogin() {
@@ -139,7 +147,11 @@ class Question extends React.Component {
                 <Translate value="debate.remaining_x_characters" nbCharacters={this.state.remainingChars} />
               </div>
               {this.state.showSubmitButton && (
-                <Button onClick={this.createPost} className="button-submit button-dark right margin-l clear">
+                <Button
+                  onClick={this.createPost}
+                  disabled={get(this, 'state.buttonDisabled', false)}
+                  className="button-submit button-dark right margin-l clear"
+                >
                   <Translate value="debate.survey.submit" />
                 </Button>
               )}
