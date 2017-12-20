@@ -34,6 +34,7 @@ type Props = {
 };
 
 type DefaultProps = {
+  editable: boolean,
   numChildren: number
 };
 
@@ -43,6 +44,7 @@ class PostActions extends React.Component<DefaultProps, Props, void> {
   defaultProps: DefaultProps;
 
   static defaultProps = {
+    editable: true,
     numChildren: 0
   };
 
