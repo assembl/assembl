@@ -64,6 +64,9 @@ def main(global_config, **settings):
         config.add_tween(
             'assembl.tweens.virtuoso_deadlock.transient_deadlock_tween_factory',
             under="pyramid_tm.tm_tween_factory")
+    config.add_tween(
+        'assembl.tweens.logging.logging_tween_factory',
+        over="pyramid_tm.tm_tween_factory")
 
     config.include('.auth')
     config.include('.models')
