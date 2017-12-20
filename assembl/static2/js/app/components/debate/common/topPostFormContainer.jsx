@@ -15,7 +15,8 @@ type TopPostFormContainerProps = {
 };
 
 type TopPostFormContainerState = {
-  sticky: boolean
+  sticky: boolean,
+  topPostFormOffset: number
 };
 
 class TopPostFormContainer extends React.Component<*, TopPostFormContainerProps, TopPostFormContainerState> {
@@ -33,11 +34,15 @@ class TopPostFormContainer extends React.Component<*, TopPostFormContainerProps,
     super(props);
     this.setFormContainerRef = this.setFormContainerRef.bind(this);
     this.setFormPosition = this.setFormPosition.bind(this);
-    this.state = { sticky: false };
+    this.state = { sticky: false, topPostFormOffset: 0 };
   }
 
   componentWillMount() {
     window.addEventListener('scroll', this.setFormPosition);
+  }
+
+  componentWillReceiveProps() {
+    this.setState({ topPostFormOffset: this.topPostFormContainer.offsetTop });
   }
 
   componentWillUnmount() {
@@ -45,7 +50,7 @@ class TopPostFormContainer extends React.Component<*, TopPostFormContainerProps,
   }
 
   setFormPosition() {
-    if (this.topPostFormContainer.offsetTop <= window.scrollY) {
+    if (this.state.topPostFormOffset <= window.scrollY) {
       this.setState({ sticky: true });
     } else {
       this.setState({ sticky: false });
