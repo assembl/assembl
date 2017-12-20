@@ -8,6 +8,10 @@
       text-decoration: none;
     }
   }
+
+  input:required {
+    box-shadow: none;
+  }
 }
 
 .terms-form {

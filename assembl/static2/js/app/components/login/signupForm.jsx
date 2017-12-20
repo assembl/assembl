@@ -142,7 +142,7 @@ class SignupForm extends React.Component<void, SignupFormProps, SignupFormState>
             </FormGroup>
 
             {hasTermsAndConditions && (
-              <FormGroup>
+              <FormGroup className="left margin-left-2">
                 <Checkbox checked={this.state.checked} type="checkbox" onChange={this.toggleCheck} required inline>
                   <Translate value="termsAndConditions.iAccept" />
                   <a
