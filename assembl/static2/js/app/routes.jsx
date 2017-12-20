@@ -14,7 +14,6 @@ import Debate from './pages/debate';
 import DebateThread from './pages/debateThread';
 import Survey from './pages/survey';
 import Idea from './pages/idea';
-import TokenVote from './pages/tokenVote';
 import Community from './pages/community';
 import Profile from './pages/profile';
 import Styleguide from './pages/styleguide';
@@ -28,9 +27,8 @@ import SurveyAdmin from './pages/surveyAdmin';
 import ThreadAdmin from './pages/threadAdmin';
 import DiscussionAdmin from './pages/discussionAdmin';
 import MultiColumnsAdmin from './pages/multiColumnsAdmin';
-import TokenVoteAdmin from './pages/tokenVoteAdmin';
 import ResourcesCenter from './pages/resourcesCenter';
-import { routeForRouter } from './utils/routeMap';
+import { routeForRouter, getFullPath } from './utils/routeMap';
 
 const DebateHome = (props) => {
   switch (props.params.phase) {
@@ -41,7 +39,7 @@ const DebateHome = (props) => {
   case 'multiColumns':
     return <DebateThread {...props} />;
   case 'tokenVote':
-    return <TokenVote {...props} />;
+    return <NotFound />;
   default:
     return <Debate {...props} />;
   }
@@ -56,7 +54,7 @@ const DebateChild = (props) => {
   case 'multiColumns':
     return <Idea id={props.id} identifier={props.identifier} routerParams={props.params} />;
   case 'tokenVote':
-    return <TokenVote id={props.id} identifier={props.identifier} />;
+    return <NotFound />;
   default:
     return <Idea id={props.id} identifier={props.identifier} />;
   }
@@ -73,12 +71,17 @@ const AdminChild = (props) => {
   case 'multiColumns':
     return <MultiColumnsAdmin />;
   case 'tokenVote':
-    return <TokenVoteAdmin />;
+    return <NotFound />;
   case 'resourcesCenter':
     return <ResourcesCenterAdmin />;
   default:
     return <ThreadAdmin />;
   }
+};
+
+const DummyVotes = (props) => {
+  const slug = props.params.slug;
+  window.location = getFullPath('oldVote', { slug: slug });
 };
 
 export default [
@@ -94,6 +97,7 @@ export default [
     <Route path={routeForRouter('signup', true)} component={Signup} />
     <Route path={routeForRouter('changePassword', true)} component={ChangePassword} />
     <Route path={routeForRouter('requestPasswordChange', true)} component={RequestPasswordChange} />
+    <Route path={routeForRouter('oldVote', false)} component={DummyVotes} />
     <Route component={App}>
       <Route component={Main}>
         <Redirect from={routeForRouter('homeBare')} to={routeForRouter('home')} />
