@@ -243,7 +243,7 @@ export default compose(
         };
       }
 
-      const { thematic: { img, questions, refetch, title, video: media } } = data;
+      const { thematic: { img, questions, title, video: media }, refetch } = data;
 
       return {
         hasErrors: false,
