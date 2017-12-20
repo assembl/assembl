@@ -138,12 +138,14 @@ def maybe_merge(
 
 def associate_user(backend, uid, user=None, social=None, details=None,
                    *args, **kwargs):
-    from social.pipeline.social_auth import \
-        associate_user as psa_associate_user
-    results = psa_associate_user(
-        backend, uid, user, social, *args, **kwargs)
-    # User has logged in with this account
-    social = results.get('social', social)
+    results = None
+    if not social:
+        from social.pipeline.social_auth import \
+            associate_user as psa_associate_user
+        results = psa_associate_user(
+            backend, uid, user, social, *args, **kwargs)
+        # User has logged in with this account
+        social = results.get('social', social)
     if social:
         social.successful_login()
     # Delete old email accounts
