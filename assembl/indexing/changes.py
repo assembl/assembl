@@ -116,6 +116,9 @@ class ElasticChanges(threading.local):
         if uid in self._index:
             del self._index[uid]
 
+        # Proposition posts do not have uid's
+        if not uid:
+            return
         doc_type = get_doc_type_from_uid(uid)
         self._unindex[uid] = {
             'doc_type': doc_type,
