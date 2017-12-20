@@ -26,7 +26,10 @@ const plugin = {
       const mimeType = entity.data.mimeType ? entity.data.mimeType : '';
       const title = entity.data.title ? entity.data.title : '';
       if (mimeType.startsWith('image')) {
-        return `<img class="attachment-image" src="${externalUrl}" alt="" title="${title}" data-id="${id}" data-mimetype="${mimeType}" />`;
+        return (
+          `<img class="attachment-image" src="${externalUrl}" alt="" title="${title}" ` +
+          `data-id="${id}" data-mimetype="${mimeType}" />`
+        );
       }
 
       const extension = getExtension(title);

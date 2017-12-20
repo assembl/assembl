@@ -27,7 +27,8 @@ describe('transformLinksInHtml function', () => {
     const expected =
       'Foobar: <a href="https://youtube.com/watch?v=lnhB-y_WJSk" class="linkified"' +
       ' target="_blank">https://youtube.com/watch?v=lnhB-y_WJSk</a>' +
-      '<div><iframe title="" src="https://www.youtube.com/embed/lnhB-y_WJSk" frameborder="0" class="embedded-video" allowfullscreen=""></iframe></div>';
+      '<div><iframe title="" src="https://www.youtube.com/embed/lnhB-y_WJSk" frameborder="0" ' +
+      'class="embedded-video" allowfullscreen=""></iframe></div>';
     expect(actual).toEqual(expected);
   });
 
