@@ -57,7 +57,7 @@ class AssemblModal extends React.Component {
         )}
         {footer && (
           <Modal.Footer>
-            {footerTxt && <div>{footerTxt}</div>}
+            {footerTxt && footerTxt}
             {button && (
               <div>
                 {button.internalLink ? (
