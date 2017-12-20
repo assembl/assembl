@@ -211,7 +211,9 @@ class PostInterface(SQLAlchemyInterface):
 
 class Post(SecureObjectType, SQLAlchemyObjectType):
     class Meta:
-        model = models.Post
+        model = models.Content
+        # This matches models.Post and models.ColumnSynthesisPost which
+        # inherits from models.Content directly, not models.Post
         interfaces = (Node, PostInterface)
         only_fields = ('id',)  # inherits fields from Post interface only
 

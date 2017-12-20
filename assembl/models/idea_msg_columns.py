@@ -1,5 +1,6 @@
 """The name and description of a category of messages under a given idea"""
 
+from pyramid.threadlocal import get_current_request
 from sqlalchemy import (
     Column,
     Boolean,
@@ -25,8 +26,10 @@ from ..auth import (
     P_ADD_IDEA)
 from . import DiscussionBoundBase
 from .idea import Idea
+from .idea_content_link import IdeaContentLink, IdeaRelatedPostLink
 from .generic import Content
 from .langstrings import LangString
+from .post import ColumnSynthesisPost
 
 
 class IdeaMessageColumn(DiscussionBoundBase):
@@ -40,8 +43,6 @@ class IdeaMessageColumn(DiscussionBoundBase):
     message_classifier = Column(String(100), index=True, nullable=False,
         doc=("Identifier for the column, will match "
              ":py:attr:`assembl.models.generic.Content.message_classifier`"))
-    header_id = Column(Integer, ForeignKey(LangString.id),
-        doc="Text which will be shown above the column")
     previous_column_id = Column(
         Integer, ForeignKey(id, ondelete='SET NULL'),
         nullable=True, unique=True,
@@ -66,12 +67,6 @@ class IdeaMessageColumn(DiscussionBoundBase):
         lazy="joined", single_parent=True,
         primaryjoin=title_id == LangString.id,
         backref=backref("title_of_idea_message_column", lazy="dynamic"),
-        cascade="all, delete-orphan")
-
-    header = relationship(LangString,
-        lazy="joined", single_parent=True,
-        primaryjoin=header_id == LangString.id,
-        backref=backref("header_of_idea_message_column", lazy="dynamic"),
         cascade="all, delete-orphan")
 
     def get_discussion_id(self):
@@ -129,5 +124,52 @@ class IdeaMessageColumn(DiscussionBoundBase):
         for idea in ideas:
             cls.ensure_ordering_for_idea(idea)
 
+    def get_column_synthesis(self):
+        synthesis = self.db.query(ColumnSynthesisPost
+            ).join(ColumnSynthesisPost.idea_links_of_content
+            ).filter(
+                IdeaContentLink.idea_id == self.idea_id,
+                ColumnSynthesisPost.tombstone_date == None,
+                Content.message_classifier == self.message_classifier
+            ).all()
+        return synthesis[0] if synthesis else None
 
-LangString.setup_ownership_load_event(IdeaMessageColumn, ['name', 'title', 'header'])
+    def set_column_synthesis(self, subject=None, body=None, creator_id=None):
+        synthesis = self.get_column_synthesis()
+        if synthesis is None:
+            user_id = creator_id or get_current_request().authenticated_userid
+            synthesis = ColumnSynthesisPost(
+                message_classifier=self.message_classifier,
+                discussion_id=self.idea.discussion_id
+            )
+            self.db.add(synthesis)
+            idea_post_link = IdeaRelatedPostLink(
+                creator_id=user_id,
+                content=synthesis,
+                idea=self.idea
+            )
+            self.db.add(idea_post_link)
+
+        if subject is not None:
+            synthesis.subject = subject
+
+        if body is not None:
+            synthesis.body = body
+
+        self.db.flush()
+        return synthesis
+
+    @property
+    def header(self):
+        synthesis = self.get_column_synthesis()
+        if synthesis is None:
+            return None
+
+        return synthesis.body
+
+    @header.setter
+    def header(self, value):
+        self.set_column_synthesis(body=value)
+
+
+LangString.setup_ownership_load_event(IdeaMessageColumn, ['name', 'title'])

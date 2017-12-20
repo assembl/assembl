@@ -715,6 +715,17 @@ class PropositionPost(AssemblPost):
     }
 
 
+class ColumnSynthesisPost(Content):
+    """
+    A synthesis post attached to an IdeaMessageColumn.
+    """
+    # It doesn't inherit from AssemblPost so it's not counted in num_posts
+    # stats or retrieved as a top post.
+    __mapper_args__ = {
+        'polymorphic_identity': 'column_synthesis_post',
+    }
+
+
 class WidgetPost(AssemblPost):
     """
     A Post that comes from an inspiration widget

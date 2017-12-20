@@ -1,0 +1,6 @@
+fragment SentimentCounts on SentimentCounts {
+  disagree
+  dontUnderstand
+  like
+  moreInfo
+}

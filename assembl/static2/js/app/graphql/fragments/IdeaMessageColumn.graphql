@@ -1,6 +1,16 @@
+#import "./SentimentCounts.graphql"
+
 fragment IdeaMessageColumn on IdeaMessageColumn {
   color
-  header(lang: $lang)
+  columnSynthesis {
+    id
+    subject(lang: $lang)
+    body(lang: $lang)
+    mySentiment
+    sentimentCounts {
+      ...SentimentCounts
+    }
+  }
   index
   messageClassifier
   name(lang: $lang)

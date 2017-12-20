@@ -2,16 +2,21 @@ $column-half-gutter: 15px;
 $post-max-width: 600px;
 $header-margin: 30px;
 $synthesis-padding: 15px;
-$column-synthesis-height: 300px;
+$column-synthesis-height: 320px;
 
 .column-view {
   .synthesis {
     border: none;
     padding: $synthesis-padding;
-    margin-bottom: 20px;
+    margin-bottom: 60px;
     max-width: calc(#{$post-max-width} + 2 * #{$synthesis-padding});
     margin-left: auto;
     margin-right: auto;
+    height: $column-synthesis-height;
+
+    .post-left {
+      padding: 0;
+    }
   }
 
   .column-tree {

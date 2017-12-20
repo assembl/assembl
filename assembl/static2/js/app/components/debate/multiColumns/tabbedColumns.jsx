@@ -1,5 +1,6 @@
 import React from 'react';
 import { I18n } from 'react-redux-i18n';
+import get from 'lodash/get';
 
 import PostColumn from './postColumn';
 import { hexToRgb } from '../../../utils/globalFunctions';
@@ -28,8 +29,8 @@ export default class TabbedColumns extends React.Component {
     const col = messageColumns[index];
     const synthesisProps = showSynthesis && {
       classifier: activeKey,
-      synthesisTitle: I18n.t('multiColumns.synthesis.title', { colName: col.name }),
-      synthesisBody: col.header || I18n.t('multiColumns.synthesis.noSynthesisYet'),
+      synthesisTitle: get(col, 'columnSynthesis.subject', I18n.t('multiColumns.synthesis.title', { colName: col.name })),
+      synthesisBody: get(col, 'columnSynthesis.body', I18n.t('multiColumns.synthesis.noSynthesisYet')),
       hyphenStyle: { borderTopColor: col.color }
     };
     const style = { width: `${100 / messageColumns.length}%` };

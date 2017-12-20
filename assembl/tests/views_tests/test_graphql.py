@@ -1627,7 +1627,10 @@ query ColumnsQuery($id: ID!, $lang: String!) {
       id
       messageColumns {
         color
-        header(lang: $lang)
+        columnSynthesis {
+          subject(lang: $lang)
+          body(lang: $lang)
+        }
         index
         messageClassifier
         name(lang: $lang)
@@ -1656,7 +1659,10 @@ query ColumnsQuery($id: ID!, $lang: String!) {
       id
       messageColumns {
         color
-        header(lang: $lang)
+        columnSynthesis {
+          subject(lang: $lang)
+          body(lang: $lang)
+        }
         index
         messageClassifier
         name(lang: $lang)
@@ -1675,7 +1681,10 @@ query ColumnsQuery($id: ID!, $lang: String!) {
                       idea_message_column_negative.message_classifier, columns)[0]
     assert positive == {
         u'color': u'green',
-        u'header': u'This is a positive header',
+        u'columnSynthesis': {
+            u'subject': u'Be positive!',
+            u'body': u'This is a positive header',
+        },
         u'index': 0,
         u'messageClassifier': u'positive',
         u'name': u'Say my name',
@@ -1684,7 +1693,10 @@ query ColumnsQuery($id: ID!, $lang: String!) {
     }
     assert negative == {
         u'color': u'red',
-        u'header': u'This is a negative header',
+        u'columnSynthesis': {
+            u'subject': u'Be negative!',
+            u'body': u'This is a negative header',
+        },
         u'index': 1,
         u'messageClassifier': u'negative',
         u'name': u'My other name',

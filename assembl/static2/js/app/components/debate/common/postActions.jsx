@@ -1,5 +1,7 @@
+// @flow
+import get from 'lodash/get';
 import React from 'react';
-import { withApollo } from 'react-apollo';
+import { ApolloClient, withApollo } from 'react-apollo';
 import { Translate } from 'react-redux-i18n';
 import { OverlayTrigger } from 'react-bootstrap';
 import { MEDIUM_SCREEN_WIDTH } from '../../../constants';
@@ -16,35 +18,57 @@ import sentimentDefinitions from './sentimentDefinitions';
 import { getIfPhaseCompletedByIdentifier } from '../../../utils/timeline';
 import { withScreenWidth } from '../../common/screenDimensions';
 
-class PostActions extends React.Component {
-  constructor(props) {
-    super(props);
-    this.displayPhaseCompletedModal = this.displayPhaseCompletedModal.bind(this);
-  }
+type Props = {
+  client: ApolloClient,
+  creatorUserId: string,
+  debateData: DebateData,
+  editable: boolean,
+  handleEditClick: Function,
+  identifier: string,
+  mySentiment: string,
+  numChildren: number,
+  postId: string,
+  routerParams: RouterParams,
+  screenWidth: number,
+  sentimentCounts: SentimentCountsFragment
+};
 
-  displayPhaseCompletedModal() {
+type DefaultProps = {
+  numChildren: number
+};
+
+class PostActions extends React.Component<DefaultProps, Props, void> {
+  props: Props;
+
+  defaultProps: DefaultProps;
+
+  static defaultProps = {
+    numChildren: 0
+  };
+
+  displayPhaseCompletedModal = (): void => {
     const body = (
       <div>
         <Translate value="debate.noAnswer" />
       </div>
     );
     displayModal(null, body, true, null, null, true);
-  }
+  };
 
   render() {
     const {
-      editable,
       client,
       creatorUserId,
-      postId,
-      sentimentCounts,
-      mySentiment,
-      handleEditClick,
-      numChildren,
-      routerParams,
       debateData,
+      editable,
+      handleEditClick,
       identifier,
-      screenWidth
+      mySentiment,
+      numChildren,
+      postId,
+      routerParams,
+      screenWidth,
+      sentimentCounts
     } = this.props;
     let count = 0;
     const totalSentimentsCount = sentimentCounts
@@ -115,7 +139,8 @@ class PostActions extends React.Component {
             <div className="sentiments-count margin-m">
               <div>
                 {sentimentDefinitions.reduce((result, sentiment) => {
-                  if (sentimentCounts[sentiment.camelType] > 0) {
+                  const sentimentCount = get(sentimentCounts, sentiment.camelType, 0);
+                  if (sentimentCount > 0) {
                     result.push(
                       <div className="min-sentiment" key={sentiment.type} style={{ left: `${(count += 1 * 6)}px` }}>
                         <sentiment.SvgComponent size={15} />
@@ -138,13 +163,16 @@ class PostActions extends React.Component {
           <div className="empty-sentiments-count" />
         )}
         {screenWidth >= MEDIUM_SCREEN_WIDTH ? overflowMenu : null}
-        <div className="answers annotation">
-          <Translate value="debate.thread.numberOfResponses" count={numChildren || 0} />
-        </div>
+        {editable && (
+          <div className="answers annotation">
+            <Translate value="debate.thread.numberOfResponses" count={numChildren} />
+          </div>
+        )}
         <div className="clear">&nbsp;</div>
       </div>
     );
   }
 }
 
+// $FlowFixMe
 export default withScreenWidth(withApollo(PostActions));

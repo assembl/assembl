@@ -123,7 +123,7 @@ class IdeaMessageColumn(SecureObjectType, SQLAlchemyObjectType):
     idea = graphene.Field(lambda: Idea)
     name = graphene.String(lang=graphene.String())
     title = graphene.String(lang=graphene.String())
-    header = graphene.String(lang=graphene.String())
+    column_synthesis = graphene.Field('assembl.graphql.post.Post')
     num_posts = graphene.Int()
 
     def resolve_idea(self, args, context, info):
@@ -136,8 +136,8 @@ class IdeaMessageColumn(SecureObjectType, SQLAlchemyObjectType):
     def resolve_title(self, args, context, info):
         return resolve_langstring(self.title, args.get('lang'))
 
-    def resolve_header(self, args, context, info):
-        return resolve_langstring(self.header, args.get('lang'))
+    def resolve_column_synthesis(self, args, context, info):
+        return self.get_column_synthesis()
 
     def resolve_num_posts(self, args, context, info):
         related = self.idea.get_related_posts_query(
