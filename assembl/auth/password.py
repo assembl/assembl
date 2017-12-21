@@ -59,7 +59,7 @@ def verify_password(password, hash, encoding=HashEncoding.BINARY,
         salt, hash = unhexlify(hash[:salt_len]), unhexlify(hash[salt_len:])
     elif encoding == HashEncoding.BASE64:
         hash = str(unquote(hash))
-        salt_len = 4 * int((salt_size+2)/3)
+        salt_len = 4 * int((salt_size + 2) / 3)
         salt, hash = (urlsafe_b64decode(hash[:salt_len]),
                       urlsafe_b64decode(hash[salt_len:]))
     else:
@@ -78,7 +78,7 @@ def email_token(email):
 
 
 def email_token_legacy(email):
-    return str(email.id)+'f'+hash_password(
+    return str(email.id) + 'f' + hash_password(
         str(email.id) + email.email + config.get('security.email_token_salt'),
         HashEncoding.HEX)
 
@@ -92,9 +92,9 @@ def password_change_token_legacy(user):
     now = datetime.utcnow()
     user.last_login = now
     resolution = 19
-    token_str = str(user.id)+now.isoformat()[:resolution]
+    token_str = str(user.id) + now.isoformat()[:resolution]
     print "hashing " + token_str
-    return str(user.id)+'e'+hash_password(token_str, HashEncoding.HEX)
+    return str(user.id) + 'e' + hash_password(token_str, HashEncoding.HEX)
 
 
 def data_token(data, extra_hash_data=''):
@@ -116,12 +116,12 @@ def verify_data_token(token, extra_hash_data='', max_age=None):
         creation_date = datetime.strptime(expiry_str, '%Y%j%H%M%S')
         password = (data + extra_hash_data + expiry_str +
                     config.get('security.email_token_salt'))
-    except (ValueError, TypeError) as e:
+    except (ValueError, TypeError):
         return None, Validity.INVALID_FORMAT
     try:
         if not verify_password(password, hash, HashEncoding.BASE64, 3):
             return data, Validity.BAD_HASH
-    except (ValueError, TypeError) as e:
+    except (ValueError, TypeError):
         return data, Validity.BAD_HASH
     if max_age is not None and datetime.utcnow() > max_age + creation_date:
         return data, Validity.EXPIRED
@@ -160,7 +160,7 @@ def verify_email_token(token, max_age=None):
         if verify_password(
             str(account.id) + account.email + config.get(
                 'security.account_token_salt'), hash, HashEncoding.HEX):
-                return account, Validity.VALID
+            return account, Validity.VALID
         return account, Validity.BAD_HASH
     except:
         return None, Validity.INVALID_FORMAT
@@ -189,7 +189,7 @@ def verify_password_change_token(token, max_age=None):
         age = datetime.utcnow() - user.last_login
         if age > timedelta(days=3):
             return user, Validity.EXPIRED
-        check = str(id)+user.last_login.isoformat()[:19]
+        check = str(id) + user.last_login.isoformat()[:19]
         valid = verify_password(
             check, hash, HashEncoding.HEX)
         if not valid:

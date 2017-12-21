@@ -2,6 +2,7 @@ from abc import ABCMeta, abstractmethod
 
 from beaker.session import Session
 
+
 # Note: pull request soon to propose this in Beaker.
 class UpgradableSession(Session):
     "A Session with different expiry parameters for elevated privileges"

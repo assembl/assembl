@@ -3,31 +3,25 @@
 .. _PythonSocialAuth: http://psa.matiasaguirre.net/
 """
 import re
-from datetime import datetime
 import logging
 
 from pyramid.events import subscriber, BeforeRender
-from pyramid.security import (
-    remember,
-    forget,
-    Everyone)
+from pyramid.security import remember, forget
 from pyramid.config import aslist
 import simplejson as json
 
 from social.apps.pyramid_app.utils import backends
 from social.strategies.pyramid_strategy import PyramidStrategy
-from social.apps.pyramid_app.utils import load_strategy
 from social.utils import to_setting_name, setting_name, SETTING_PREFIX
-from social.exceptions import AuthException
-from social.backends.utils import load_backends, get_backend
+from social.backends.utils import load_backends
 
-from assembl.models import (
-    User, Preferences, AbstractAgentAccount, IdentityProvider)
+from assembl.models import User, Preferences, IdentityProvider
 from .util import discussion_from_request, maybe_auto_subscribe
 from ..lib import config
 
 
 log = logging.getLogger('assembl')
+
 
 def login_user(backend, user, user_social_auth):
     remember(backend.strategy.request, user.id)
@@ -339,8 +333,9 @@ def get_active_auth_strategies(settings):
     all_backends = load_backends(settings.get('SOCIAL_AUTH_AUTHENTICATION_BACKENDS'))
     for backend_name in all_backends:
         def get_setting(name):
-            return (settings.get(setting_name(SETTING_PREFIX, backend_name, name), None)
-                    or settings.get(setting_name(backend_name, name), None))
+            return (
+                settings.get(setting_name(SETTING_PREFIX, backend_name, name), None) or
+                settings.get(setting_name(backend_name, name), None))
         if backend_name == 'wordpress-oauth2':
             # TODO: This special case needs to be treated the same as saml asap.
             # Also: maybe check preferences

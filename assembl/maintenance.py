@@ -11,6 +11,7 @@ maintenance_template = '''\
 ${html_comment}
 '''
 
+
 def maintenance_message(request):
     _ = TranslationStringFactory('assembl')
     localizer = request.localizer
@@ -27,6 +28,7 @@ def main(global_config, **settings):
     config = Configurator(registry=getGlobalSiteManager())
     config.setup_registry(settings=settings)
     config.add_translation_dirs('assembl:locale/')
+
     def my_locale_negotiator(request):
         locale = default_locale_negotiator(request)
         available = settings['available_languages'].split()

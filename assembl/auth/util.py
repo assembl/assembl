@@ -1,14 +1,12 @@
 """Sundry utility functions having to do with users or permissions"""
 from csv import reader
 from datetime import datetime, timedelta
-from os import urandom
 import base64
 
 from sqlalchemy.sql.expression import and_
 from pyramid.security import (Everyone, Authenticated, forget)
 from pyramid.httpexceptions import HTTPNotFound
 from pyisemail import is_email
-from pyramid.i18n import TranslationStringFactory
 from pyramid.authentication import SessionAuthenticationPolicy
 
 from assembl.lib.locale import _
@@ -17,11 +15,8 @@ from . import R_SYSADMIN, P_READ, SYSTEM_ROLES
 from .password import verify_data_token, Validity
 from ..models.auth import (
     User, Role, UserRole, LocalUserRole, Permission,
-    DiscussionPermission, IdentityProvider, AgentProfile,
+    DiscussionPermission, AgentProfile,
     EmailAccount)
-
-
-_ = TranslationStringFactory('assembl')
 
 
 def get_user(request):
@@ -41,7 +36,7 @@ def get_roles(user_id, discussion_id=None):
             session.query(Role.name).join(
                 LocalUserRole).filter(and_(
                     LocalUserRole.user_id == user_id,
-                    LocalUserRole.requested == False,
+                    LocalUserRole.requested == False,  # noqa: E712
                     LocalUserRole.discussion_id == discussion_id)))
     return [x[0] for x in roles.distinct()]
 
@@ -54,15 +49,13 @@ def get_permissions(user_id, discussion_id):
             return []
         permissions = session.query(Permission.name).join(
             DiscussionPermission, Role).filter(
-                (DiscussionPermission.discussion_id == discussion_id)
-                & (Role.name == user_id))
+                (DiscussionPermission.discussion_id == discussion_id) & (Role.name == user_id))
     elif user_id == Authenticated:
         if not discussion_id:
             return []
         permissions = session.query(Permission.name).join(
             DiscussionPermission, Role).filter(
-                (DiscussionPermission.discussion_id == discussion_id)
-                & (Role.name.in_((Authenticated, Everyone))))
+                (DiscussionPermission.discussion_id == discussion_id) & (Role.name.in_((Authenticated, Everyone))))
     else:
         sysadmin = session.query(UserRole).filter_by(
             user_id=user_id).join(Role).filter_by(name=R_SYSADMIN).first()
@@ -77,7 +70,7 @@ def get_permissions(user_id, discussion_id):
             ).union(session.query(Permission.name).join(
                 DiscussionPermission, Role, LocalUserRole).filter(and_(
                     LocalUserRole.user_id == user_id,
-                    LocalUserRole.requested == False,
+                    LocalUserRole.requested == False,  # noqa: E712
                     LocalUserRole.discussion_id == discussion_id,
                     DiscussionPermission.discussion_id == discussion_id))
             ).union(session.query(Permission.name).join(
@@ -153,6 +146,7 @@ def get_non_expired_user_id(request):
 class UpgradingSessionAuthenticationPolicy(SessionAuthenticationPolicy):
     """ A session authentication policy that tells the underlying beaker session
     whenever the user logs in or out. Allows to have different cookie policies"""
+
     def remember(self, request, user_id, **kwargs):
         request.session.elevate_privilege(True)
         return super(UpgradingSessionAuthenticationPolicy, self).remember(
@@ -264,7 +258,7 @@ def discussions_with_access(userid, permission=P_READ):
                     Role, Permission).join(
                         LocalUserRole, and_(
                             LocalUserRole.discussion_id == DiscussionPermission.discussion_id,
-                            LocalUserRole.requested == False)
+                            LocalUserRole.requested == False)  # noqa: E712
                     ).join(User).filter(
                         User.id == userid).filter(
                             Permission.name == permission)
@@ -314,7 +308,7 @@ def user_has_permission(discussion_id, user_id, permission):
     if sysadmin:
         return True
     permission = db.query(DiscussionPermission).join(
-        Permission, Role, UserRole).filter(
+            Permission, Role, UserRole).filter(
             DiscussionPermission.discussion_id == discussion_id).filter(
                 UserRole.user_id == user_id).filter(
                     Permission.name == permission
@@ -326,14 +320,14 @@ def user_has_permission(discussion_id, user_id, permission):
                             # So I have to add this one as well.
                             LocalUserRole.discussion_id == discussion_id,
                             LocalUserRole.user_id == user_id,
-                            LocalUserRole.requested == False,
+                            LocalUserRole.requested == False,  # noqa: E712
                             Permission.name == permission))
                 ).union(
                     db.query(DiscussionPermission).join(
-                            Permission, Role).filter(
-                                DiscussionPermission.discussion_id == discussion_id).filter(
-                                    Role.name.in_((Authenticated, Everyone))).filter(
-                                        Permission.name == permission)
+                        Permission, Role).filter(
+                        DiscussionPermission.discussion_id == discussion_id).filter(
+                        Role.name.in_((Authenticated, Everyone))).filter(
+                        Permission.name == permission)
                 ).first()
     return permission is not None
 
@@ -344,10 +338,10 @@ def users_with_permission(discussion_id, permission, id_only=True):
     db = Discussion.default_db
     user_ids = db.query(User.id).join(
         LocalUserRole, Role, DiscussionPermission, Permission).filter(and_(
-        Permission.name == permission,
-        LocalUserRole.requested == False,
-        LocalUserRole.discussion_id == discussion_id,
-        DiscussionPermission.discussion_id == discussion_id)
+            Permission.name == permission,
+            LocalUserRole.requested == False,  # noqa: E712
+            LocalUserRole.discussion_id == discussion_id,
+            DiscussionPermission.discussion_id == discussion_id)
         ).union(
             db.query(User.id).join(
                 UserRole, Role, DiscussionPermission, Permission).filter(
@@ -501,15 +495,15 @@ def add_multiple_users_csv(
         resend_if_not_logged_in=False):
     r = reader(csv_file, skipinitialspace=True)
     localizer = request.localizer
-    for i, l in enumerate(r):
-        if not len(l):
+    for i, row in enumerate(r):
+        if not len(row):
             # tolerate empty lines
             continue
-        l = [x.decode('utf-8').strip() for x in l]
-        if len(l) != 2:
+        row = [x.decode('utf-8').strip() for x in row]
+        if len(row) != 2:
             raise RuntimeError(localizer.translate(_(
                 "The CSV file must have two columns")))
-        (name, email) = l
+        (name, email) = row
         if not is_email(email):
             if i == 0:
                 # Header
