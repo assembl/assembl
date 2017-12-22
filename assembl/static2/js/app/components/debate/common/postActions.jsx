@@ -82,6 +82,7 @@ class PostActions extends React.Component<DefaultProps, Props, void> {
       connectedUserCan(Permissions.DELETE_POST);
     const userCanEditThisMessage = connectedUserId === String(creatorUserId) && connectedUserCan(Permissions.EDIT_MY_POST);
     const modalTitle = <Translate value="debate.sharePost" />;
+    if (!debateData) return null;
     const useSocial = debateData.useSocialMedia;
     let overflowMenu = null;
     const tooltipPlacement = screenWidth >= MEDIUM_SCREEN_WIDTH ? 'left' : 'top';
