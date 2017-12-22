@@ -12,7 +12,6 @@ const Separator = () => <div style={{ height: '25px' }} />;
 type Props = {
   canEditPosts: boolean,
   classifier: string,
-  debateData: DebateData,
   color: string,
   contentLocaleMapping: Object,
   data: Array<Post>,
