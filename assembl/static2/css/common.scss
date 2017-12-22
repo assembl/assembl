@@ -259,6 +259,10 @@ input.placeholder, textarea.placeholder {
   top: 131px;
 }
 
+.capitalized {
+  text-transform: capitalize;
+}
+
 @media screen and (min-width: 992px) {
   .col-bottom {
     display: table-cell;

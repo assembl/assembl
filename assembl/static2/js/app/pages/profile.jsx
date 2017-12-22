@@ -104,7 +104,7 @@ class Profile extends React.PureComponent<*, ProfileProps, ProfileState> {
                 <div className="center">
                   <span className="assembl-icon-profil" />
                 </div>
-                <h4 className="dark-title-4 center">{this.props.name}</h4>
+                <h4 className="dark-title-4 capitalized center">{this.props.name}</h4>
               </Col>
               <Col xs={12} sm={9}>
                 <div className="border-left">
