@@ -7,14 +7,9 @@ from sqlalchemy import (
     UnicodeText,
     DateTime,
     String,
-    Unicode,
     ForeignKey,
-    Binary,
     LargeBinary,
-    Text,
-    or_,
-    event,
-    func
+    event
 )
 from ..lib.sqla_types import CoerceUnicode
 from sqlalchemy.orm import relationship, backref
@@ -151,8 +146,7 @@ class Document(DiscussionBoundBase):
     # Same crud permissions as a post. Issue with idea edition,
     # but that is usually more restricted than post permission.
     crud_permissions = CrudPermissions(
-            P_ADD_POST, P_READ, P_EDIT_POST, P_ADMIN_DISC,
-            P_EDIT_POST, P_ADMIN_DISC)
+        P_ADD_POST, P_READ, P_EDIT_POST, P_ADMIN_DISC, P_EDIT_POST, P_ADMIN_DISC)
 
 
 class File(Document):
@@ -180,8 +174,7 @@ class File(Document):
         """
         if not self.id or not self.discussion:
             return None
-        return self.discussion.compose_external_uri(
-               'documents', self.id, 'data')
+        return self.discussion.compose_external_uri('documents', self.id, 'data')
 
 
 class Attachment(DiscussionBoundBase):
@@ -295,8 +288,7 @@ class PostAttachment(Attachment):
 
     # Same crud permissions as a post
     crud_permissions = CrudPermissions(
-            P_ADD_POST, P_READ, P_EDIT_POST, P_ADMIN_DISC,
-            P_EDIT_POST, P_ADMIN_DISC)
+        P_ADD_POST, P_READ, P_EDIT_POST, P_ADMIN_DISC, P_EDIT_POST, P_ADMIN_DISC)
 
 
 @event.listens_for(PostAttachment.post, 'set',
@@ -413,8 +405,7 @@ class AgentProfileAttachment(Attachment):
     }
 
     crud_permissions = CrudPermissions(
-            P_READ, P_SYSADMIN, P_SYSADMIN, P_SYSADMIN,
-            P_READ, P_READ, P_READ)
+        P_READ, P_SYSADMIN, P_SYSADMIN, P_SYSADMIN, P_READ, P_READ, P_READ)
 
     def is_owner(self, user_id):
         return user_id == self.user_id

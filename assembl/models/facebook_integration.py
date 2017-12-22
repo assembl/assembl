@@ -16,16 +16,12 @@ from sqlalchemy import (
 )
 import simplejson as json
 # from dateutil.parser import parse as parse_datetime
-from dateutil.tz import tzutc
 from sqlalchemy.orm import (
     relationship,
     backref,
     deferred,
     undefer)
-from .auth import (
-    AgentProfile,
-    IdentityProvider,
-)
+from .auth import IdentityProvider
 from .social_auth import SocialAuthAccount
 
 from ..auth import (CrudPermissions, P_EXPORT_EXTERNAL_SOURCE, P_SYSADMIN)
@@ -122,7 +118,7 @@ def language_sdk_existance(lang, default_locale_dict):
                     return True, lang + '_' + tmp_country
 
             # language exists, but no country
-            rand_country =  _get_rand_country(lang, facebook_sdk_locales)
+            rand_country = _get_rand_country(lang, facebook_sdk_locales)
             if rand_country:
                 return True, lang + '_' + rand_country
             else:
@@ -289,9 +285,7 @@ class FacebookParser(object):
         comments, next_page = self.get_comments(parent_comment.get('id'))
         for comment in comments:
             yield comment
-        for comments in self._get_next_comments(
-                                           parent_comment.get('id'),
-                                           next_page):
+        for comments in self._get_next_comments(parent_comment.get('id'), next_page):
             for comment in comments:
                 yield comment
 
@@ -460,16 +454,16 @@ class FacebookParser(object):
         if attach_type == 'photo' or attach_type == 'video':
             # Just return the full post address
             return {
-                    'url': attachment.get('url', None),
-                    'title': attachment.get('title', None),
-                    'description': attachment.get('description', None)
-                }
+                'url': attachment.get('url', None),
+                'title': attachment.get('title', None),
+                'description': attachment.get('description', None)
+            }
         else:
             return {
-                    'url': self.parse_attachment_url(attachment.get('url', None)),
-                    'title': attachment.get('title', None),
-                    'description': attachment.get('description', None)
-                }
+                'url': self.parse_attachment_url(attachment.get('url', None)),
+                'title': attachment.get('title', None),
+                'description': attachment.get('description', None)
+            }
 
     # ============================SETTERS=================================== #
 
@@ -684,20 +678,20 @@ class FacebookGenericSource(PostSource):
                                  create a Facebook attachment")
 
         try:
-            if not raw_attach or attachment.get('url') == None:
+            if not raw_attach or attachment.get('url') == None:  # noqa: E711
                 return
 
             old_attachments_on_post = assembl_post.attachments
 
             with self.db.no_autoflush:
                 doc = Document(
-                        uri_id=attachment.get('url'),
-                        creation_date=_now,
-                        discussion=self.discussion,
-                        title=attachment.get('title'),
-                        description=attachment.get('description'),
-                        thumbnail_url=attachment.get('thumbnail', None)
-                    ).get_unique_from_db()
+                    uri_id=attachment.get('url'),
+                    creation_date=_now,
+                    discussion=self.discussion,
+                    title=attachment.get('title'),
+                    description=attachment.get('description'),
+                    thumbnail_url=attachment.get('thumbnail', None)
+                ).get_unique_from_db()
 
             from assembl.lib.frontend_urls import ATTACHMENT_PURPOSES
             if not self._url_exists(attachment.get('url'),
@@ -841,7 +835,6 @@ class FacebookGenericSource(PostSource):
         self.db.query(self.__class__).populate_existing().get(self.id)
         self.db.query(parent_post.__class__).populate_existing(
             ).get(parent_post.id)
-
 
         cmt_creator_agent = users_db.get(user_id)
         # cmt_result = self._create_post(comment, cmt_creator_agent, posts_db)

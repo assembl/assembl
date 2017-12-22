@@ -1,32 +1,30 @@
 """Announcements are similar to messages, but editable."""
 from sqlalchemy import (
     Column,
-    UniqueConstraint,
     Integer,
-    UnicodeText,
     DateTime,
     String,
     Boolean,
     ForeignKey,
-    Binary,
-    Text,
-    or_,
-    event,
-    func
+    event
 )
-from ..lib.sqla_types import CoerceUnicode
 from sqlalchemy.orm import relationship, backref
 
 from datetime import datetime
-from ..lib.sqla_types import URLString
 from ..semantic.virtuoso_mapping import QuadMapPatternS
 from ..semantic.namespaces import DCTERMS
 from . import DiscussionBoundBase
 from .idea import Idea
 from .langstrings import LangString
 from .auth import (
-    AgentProfile, CrudPermissions, P_READ, P_ADMIN_DISC, P_ADD_POST,
-    P_EDIT_POST, P_ADD_IDEA, P_EDIT_IDEA)
+    AgentProfile,
+    CrudPermissions,
+    P_READ,
+    P_ADMIN_DISC,
+    P_ADD_IDEA,
+    P_EDIT_IDEA
+)
+
 
 class Announcement(DiscussionBoundBase):
     """
@@ -44,7 +42,6 @@ class Announcement(DiscussionBoundBase):
         onupdate='CASCADE',
         ),
         nullable=False, index=True)
-
 
     discussion = relationship(
         "Discussion",
@@ -65,8 +62,8 @@ class Announcement(DiscussionBoundBase):
         AgentProfile,
         foreign_keys=[creator_id], backref="announcements_created")
 
-    last_updated_by_id = Column(Integer, ForeignKey('agent_profile.id'),
-                        nullable=False)
+    last_updated_by_id = Column(
+        Integer, ForeignKey('agent_profile.id'), nullable=False)
     last_updated_by = relationship(
         AgentProfile,
         foreign_keys=[last_updated_by_id], backref="announcements_updated")
@@ -137,12 +134,12 @@ class IdeaAnnouncement(Announcement):
         Idea,
         backref=backref(
             'announcement',
-            #One-to-one relationship
+            # One-to-one relationship
             uselist=False,
             cascade="all, delete-orphan"),
     )
 
-    #Should this announcement propagate down to it's descendant ideas in the messageList?
+    # Should this announcement propagate down to it's descendant ideas in the messageList?
     should_propagate_down = Column(Boolean, nullable=False, server_default='0')
 
     __mapper_args__ = {

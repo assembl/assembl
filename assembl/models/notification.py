@@ -14,19 +14,16 @@ import threading
 
 from sqlalchemy import (
     Column,
-    Boolean,
     Integer,
     String,
-    Float,
     UnicodeText,
     DateTime,
     ForeignKey,
     event,
     inspect
 )
-from sqlalchemy.orm import (
-    relationship, backref, aliased, contains_eager, joinedload)
-from  sqlalchemy.orm.exc import DetachedInstanceError
+from sqlalchemy.orm import relationship, backref
+from sqlalchemy.orm.exc import DetachedInstanceError
 from zope import interface
 from pyramid.httpexceptions import HTTPUnauthorized, HTTPBadRequest
 from pyramid.i18n import TranslationStringFactory, make_localizer
@@ -37,6 +34,7 @@ from jinja2 import Environment, PackageLoader
 from . import Base, DiscussionBoundBase
 from ..lib.model_watcher import IModelEventWatcher
 from ..lib.decl_enums import DeclEnum
+from ..lib.sqla import get_session_maker
 from ..lib.utils import waiting_get
 from ..lib import config
 from .auth import (
@@ -54,7 +52,8 @@ _ = TranslationStringFactory('assembl')
 # Don't BASE64-encode UTF-8 messages so that we avoid unwanted attention from
 # some spam filters.
 utf8_charset = Charset.Charset('utf-8')
-utf8_charset.body_encoding = None # Python defaults to BASE64
+utf8_charset.body_encoding = None  # Python defaults to BASE64
+
 
 class SafeMIMEText(MIMEText):
     def __init__(self, text, subtype, charset):
@@ -72,7 +71,7 @@ class SafeMIMEText(MIMEText):
 
 
 class NotificationSubscriptionClasses(DeclEnum):
-    #System notifications (can't unsubscribe)
+    # System notifications (can't unsubscribe)
     EMAIL_BOUNCED = "EMAIL_BOUNCED", "Mandatory"
     EMAIL_VALIDATE = "EMAIL_VALIDATE", "Mandatory"
     RECOVER_ACCOUNT = "RECOVER_ACCOUNT", ""
@@ -85,7 +84,7 @@ class NotificationSubscriptionClasses(DeclEnum):
     FOLLOW_OWN_MESSAGES_DIRECT_REPLIES = "FOLLOW_OWN_MESSAGES_DIRECT_REPLIES", "Mandatory?"
     # Note:  indirect replies are FOLLOW_THREAD_DISCUSSION
     SESSIONS_STARTING = "SESSIONS_STARTING", ""
-    #Follow phase changes?
+    # Follow phase changes?
     FOLLOW_IDEA_FAMILY_DISCUSSION = "FOLLOW_IDEA_FAMILY_DISCUSSION", ""
     FOLLOW_IDEA_FAMILY_MEMBERSHIP_CHANGES = "FOLLOW_IDEA_FAMILY_MEMBERSHIP_CHANGES", ""
     FOLLOW_IDEA_FAMILY_SUB_IDEA_SUGGESTIONS = "FOLLOW_IDEA_FAMILY_SUB_IDEA_SUGGESTIONS", ""
@@ -97,7 +96,7 @@ class NotificationSubscriptionClasses(DeclEnum):
     FOLLOW_USER_POSTS = "FOLLOW_USER_POSTS", ""
     USER_JOINS = "USER_JOINS", "User joins discussion"
 
-    #System error notifications
+    # System error notifications
     SYSTEM_ERRORS = "SYSTEM_ERRORS", ""
     # Abstract notification types. Those need not be in the constraint, so no migration.
     ABSTRACT_NOTIFICATION_SUBSCRIPTION = "ABSTRACT_NOTIFICATION_SUBSCRIPTION"
@@ -149,18 +148,18 @@ class NotificationSubscription(DiscussionBoundBase):
     )
     creation_date = Column(
         DateTime,
-        nullable = False,
-        default = datetime.utcnow)
+        nullable=False,
+        default=datetime.utcnow)
     creation_origin = Column(
         NotificationCreationOrigin.db_type(),
-        nullable = False)
+        nullable=False)
     parent_subscription_id = Column(
         Integer,
         ForeignKey(
             'notification_subscription.id',
             ondelete='CASCADE',
             onupdate='CASCADE'),
-        nullable = True)
+        nullable=True)
     children_subscriptions = relationship(
         "NotificationSubscription",
         foreign_keys=[parent_subscription_id],
@@ -168,21 +167,21 @@ class NotificationSubscription(DiscussionBoundBase):
     )
     status = Column(
         NotificationSubscriptionStatus.db_type(),
-        nullable = False,
-        index = True,
-        default = NotificationSubscriptionStatus.ACTIVE)
+        nullable=False,
+        index=True,
+        default=NotificationSubscriptionStatus.ACTIVE)
     last_status_change_date = Column(
         DateTime,
-        nullable = False,
-        default = datetime.utcnow)
+        nullable=False,
+        default=datetime.utcnow)
     user_id = Column(
         Integer,
         ForeignKey(
             'user.id',
             ondelete='CASCADE',
             onupdate='CASCADE'),
-            nullable = False,
-            index = True)
+        nullable=False,
+        index=True)
     user = relationship(
         User,
         backref=backref(
@@ -190,8 +189,8 @@ class NotificationSubscription(DiscussionBoundBase):
             cascade="all, delete-orphan")
     )
 
-    #allowed_transports Ex: email_bounce cannot be bounced by the same email.  For now we'll special case in code
-    priority = 1 #An integer, if more than one subsciption match for one event, only the one with the lowest integer can create a notification
+    # allowed_transports Ex: email_bounce cannot be bounced by the same email.  For now we'll special case in code
+    priority = 1  # An integer, if more than one subsciption match for one event, only the one with the lowest integer can create a notification
     unsubscribe_allowed = False
 
     __mapper_args__ = {
@@ -201,17 +200,17 @@ class NotificationSubscription(DiscussionBoundBase):
     }
 
     def can_merge(self, other):
-        return (self.discussion_id == other.discussion_id
-            and self.type == other.type
-            and self.user_id == other.user_id
-            and self.parent_subscription_id == other.parent_subscription_id)
+        return (
+            self.discussion_id == other.discussion_id and
+            self.type == other.type and
+            self.user_id == other.user_id and
+            self.parent_subscription_id == other.parent_subscription_id
+        )
 
     def merge(self, other):
         assert self.can_merge(other)
         self.creation_date = min(self.creation_date, other.creation_date)
-        if (self.status == NotificationSubscriptionStatus.INACTIVE_DFT
-            or (other.status != NotificationSubscriptionStatus.INACTIVE_DFT
-                and self.last_status_change_date < other.last_status_change_date)):
+        if (self.status == NotificationSubscriptionStatus.INACTIVE_DFT or (other.status != NotificationSubscriptionStatus.INACTIVE_DFT and self.last_status_change_date < other.last_status_change_date)):
             self.status = other.status
         self.last_status_change_date = max(
             self.last_status_change_date, other.last_status_change_date)
@@ -252,12 +251,12 @@ class NotificationSubscription(DiscussionBoundBase):
         """
         applicable_subscriptions = []
         subscriptionsQuery = cls.default_db.query(cls)
-        subscriptionsQuery = subscriptionsQuery.filter(cls.status==NotificationSubscriptionStatus.ACTIVE);
-        subscriptionsQuery = subscriptionsQuery.filter(cls.discussion_id==discussion_id);
+        subscriptionsQuery = subscriptionsQuery.filter(cls.status == NotificationSubscriptionStatus.ACTIVE)
+        subscriptionsQuery = subscriptionsQuery.filter(cls.discussion_id == discussion_id)
         if user:
-            subscriptionsQuery = subscriptionsQuery.filter(cls.user==user)
-        #print "findApplicableInstances(called) with discussion_id=%s, verb=%s, object=%s, user=%s"%(discussion_id, verb, object, user)
-        #print repr(subscriptionsQuery.all())
+            subscriptionsQuery = subscriptionsQuery.filter(cls.user == user)
+        # print "findApplicableInstances(called) with discussion_id=%s, verb=%s, object=%s, user=%s"%(discussion_id, verb, object, user)
+        # print repr(subscriptionsQuery.all())
         for subscription in subscriptionsQuery:
             if(subscription.wouldCreateNotification(object.get_discussion_id(), verb, object)):
                 applicable_subscriptions.append(subscription)
@@ -274,8 +273,8 @@ class NotificationSubscription(DiscussionBoundBase):
         return self.external_typename()
 
     def _do_update_from_json(
-                self, json, parse_def, aliases, ctx, permissions,
-                user_id, duplicate_handling=None, jsonld=None):
+            self, json, parse_def, aliases, ctx, permissions,
+            user_id, duplicate_handling=None, jsonld=None):
         from ..auth.util import user_has_permission
         target_user_id = user_id
         user = ctx.get_instance_of_class(User)
@@ -327,8 +326,8 @@ class NotificationSubscription(DiscussionBoundBase):
                 self.status = status
                 self.last_status_change_date = datetime.utcnow()
         return self.handle_duplication(
-                json, parse_def, aliases, ctx, permissions, user_id,
-                duplicate_handling, jsonld)
+            json, parse_def, aliases, ctx, permissions, user_id,
+            duplicate_handling, jsonld)
 
     def unique_query(self):
         # documented in lib/sqla
@@ -371,7 +370,7 @@ class NotificationSubscription(DiscussionBoundBase):
                 break
         assert alias
         return query.outerjoin(utt, alias.user_id == utt.c.id).filter(
-            (cls.user_id == user_id) | (utt.c.id != None))
+            (cls.user_id == user_id) | (utt.c.id != None))  # noqa: E711
 
     def user_can(self, user_id, operation, permissions):
         # special case: If you can read the discussion, you can read
@@ -383,8 +382,7 @@ class NotificationSubscription(DiscussionBoundBase):
                 user = self.user
             except DetachedInstanceError:
                 user = User.get(user_id)
-        if (operation == CrudPermissions.READ
-                and user and isinstance(user, UserTemplate)):
+        if (operation == CrudPermissions.READ and user and isinstance(user, UserTemplate)):
             return self.discussion.user_can(user_id, operation, permissions)
         return super(NotificationSubscription, self).user_can(
             user_id, operation, permissions)
@@ -398,7 +396,6 @@ class NotificationSubscription(DiscussionBoundBase):
 def update_last_status_change_date(target, value, oldvalue, initiator):
     target.last_status_change_date = datetime.utcnow()
 
-from ..lib.sqla import get_session_maker
 
 @event.listens_for(get_session_maker(), "after_flush")
 def after_flush_list(session, flush_context):
@@ -409,6 +406,7 @@ def after_flush_list(session, flush_context):
     for obj in session.dirty:
         if isinstance(obj, NotificationSubscription) and session.is_modified(obj):
             session.assembl_objects_to_check_unique.append(obj)
+
 
 @event.listens_for(get_session_maker(), "after_flush_postexec")
 def after_flush_check(session, flush_context):
@@ -438,6 +436,7 @@ class NotificationSubscriptionOnObject(NotificationSubscription):
     def followed_object(self):
         pass
 
+
 class NotificationSubscriptionOnPost(NotificationSubscriptionOnObject):
 
     __tablename__ = "notification_subscription_on_post"
@@ -453,7 +452,7 @@ class NotificationSubscriptionOnPost(NotificationSubscriptionOnObject):
 
     post_id = Column(
         Integer, ForeignKey("post.id",
-            ondelete='CASCADE', onupdate='CASCADE'), nullable=False)
+                            ondelete='CASCADE', onupdate='CASCADE'), nullable=False)
 
     post = relationship("Post", backref=backref(
         "subscriptions_on_post", cascade="all, delete-orphan"))
@@ -462,8 +461,7 @@ class NotificationSubscriptionOnPost(NotificationSubscriptionOnObject):
         return self.post
 
     def can_merge(self, other):
-        return (super(NotificationSubscriptionOnPost, self).can_merge(other)
-            and self.post_id == other.post_id)
+        return (super(NotificationSubscriptionOnPost, self).can_merge(other) and self.post_id == other.post_id)
 
     def unique_query(self):
         query, _ = super(NotificationSubscriptionOnPost, self).unique_query()
@@ -497,7 +495,7 @@ class NotificationSubscriptionOnIdea(NotificationSubscriptionOnObject):
 
     idea_id = Column(
         Integer, ForeignKey("idea.id",
-            ondelete='CASCADE', onupdate='CASCADE'),
+                            ondelete='CASCADE', onupdate='CASCADE'),
         nullable=False, index=True)
 
     idea = relationship("Idea", backref=backref(
@@ -507,8 +505,7 @@ class NotificationSubscriptionOnIdea(NotificationSubscriptionOnObject):
         return self.idea
 
     def can_merge(self, other):
-        return (super(NotificationSubscriptionOnPost, self).can_merge(other)
-            and self.idea_id == other.idea_id)
+        return (super(NotificationSubscriptionOnPost, self).can_merge(other) and self.idea_id == other.idea_id)
 
     def unique_query(self):
         query, _ = super(NotificationSubscriptionOnIdea, self).unique_query()
@@ -542,7 +539,7 @@ class NotificationSubscriptionOnExtract(NotificationSubscriptionOnObject):
 
     extract_id = Column(
         Integer, ForeignKey("extract.id",
-            ondelete='CASCADE', onupdate='CASCADE'),
+                            ondelete='CASCADE', onupdate='CASCADE'),
         nullable=False, index=True)
 
     extract = relationship("Extract", backref=backref(
@@ -552,8 +549,7 @@ class NotificationSubscriptionOnExtract(NotificationSubscriptionOnObject):
         return self.extract
 
     def can_merge(self, other):
-        return (super(NotificationSubscriptionOnPost, self).can_merge(other)
-            and self.extract_id == other.extract_id)
+        return (super(NotificationSubscriptionOnPost, self).can_merge(other) and self.extract_id == other.extract_id)
 
     def unique_query(self):
         query, _ = super(NotificationSubscriptionOnExtract, self).unique_query()
@@ -587,7 +583,7 @@ class NotificationSubscriptionOnUserAccount(NotificationSubscriptionOnObject):
 
     on_user_id = Column(
         Integer, ForeignKey("user.id",
-            ondelete='CASCADE', onupdate='CASCADE'),
+                            ondelete='CASCADE', onupdate='CASCADE'),
         nullable=False, index=True)
 
     on_user = relationship("User", foreign_keys=[on_user_id], backref=backref(
@@ -597,8 +593,7 @@ class NotificationSubscriptionOnUserAccount(NotificationSubscriptionOnObject):
         return self.user
 
     def can_merge(self, other):
-        return (super(NotificationSubscriptionOnPost, self).can_merge(other)
-            and self.on_user_id == other.on_user_id)
+        return (super(NotificationSubscriptionOnPost, self).can_merge(other) and self.on_user_id == other.on_user_id)
 
     def unique_query(self):
         query, _ = super(NotificationSubscriptionOnUserAccount, self).unique_query()
@@ -638,10 +633,10 @@ class NotificationSubscriptionFollowSyntheses(NotificationSubscriptionGlobal):
         from ..tasks.notify import notify
         assert self.wouldCreateNotification(discussion_id, verb, objectInstance)
         notification = NotificationOnPostCreated(
-            post = objectInstance,
-            first_matching_subscription = self,
-            push_method = NotificationPushMethodType.EMAIL,
-            #push_address = TODO
+            post=objectInstance,
+            first_matching_subscription=self,
+            push_method=NotificationPushMethodType.EMAIL,
+            # push_address = TODO
             )
         self.db.add(notification)
         self.db.flush()
@@ -650,6 +645,7 @@ class NotificationSubscriptionFollowSyntheses(NotificationSubscriptionGlobal):
     __mapper_args__ = {
         'polymorphic_identity': NotificationSubscriptionClasses.FOLLOW_SYNTHESES
     }
+
 
 class NotificationSubscriptionFollowAllMessages(NotificationSubscriptionGlobal):
     priority = 1
@@ -666,10 +662,10 @@ class NotificationSubscriptionFollowAllMessages(NotificationSubscriptionGlobal):
         assert self.wouldCreateNotification(discussion_id, verb, objectInstance)
         from ..tasks.notify import notify
         notification = NotificationOnPostCreated(
-            post_id = objectInstance.id,
-            first_matching_subscription = self,
-            push_method = NotificationPushMethodType.EMAIL,
-            #push_address = TODO
+            post_id=objectInstance.id,
+            first_matching_subscription=self,
+            push_method=NotificationPushMethodType.EMAIL,
+            # push_address = TODO
             )
         self.db.add(notification)
         self.db.flush()
@@ -678,6 +674,7 @@ class NotificationSubscriptionFollowAllMessages(NotificationSubscriptionGlobal):
     __mapper_args__ = {
         'polymorphic_identity': NotificationSubscriptionClasses.FOLLOW_ALL_MESSAGES
     }
+
 
 class NotificationSubscriptionFollowOwnMessageDirectReplies(NotificationSubscriptionGlobal):
     priority = 1
@@ -688,22 +685,23 @@ class NotificationSubscriptionFollowOwnMessageDirectReplies(NotificationSubscrip
 
     def wouldCreateNotification(self, discussion_id, verb, object):
         parentWouldCreate = super(NotificationSubscriptionFollowOwnMessageDirectReplies, self).wouldCreateNotification(discussion_id, verb, object)
-        return ( parentWouldCreate
-                 and (verb == CrudVerbs.CREATE)
-                 and isinstance(object, Post)
-                 and discussion_id == object.get_discussion_id()
-                 and object.parent is not None
-                 and object.parent.creator == self.user
-                 )
+        return (
+            parentWouldCreate and
+            (verb == CrudVerbs.CREATE) and
+            isinstance(object, Post) and
+            discussion_id == object.get_discussion_id() and
+            object.parent is not None and
+            object.parent.creator == self.user
+        )
 
     def process(self, discussion_id, verb, objectInstance, otherApplicableSubscriptions):
         assert self.wouldCreateNotification(discussion_id, verb, objectInstance)
         from ..tasks.notify import notify
         notification = NotificationOnPostCreated(
-            post = objectInstance,
-            first_matching_subscription = self,
-            push_method = NotificationPushMethodType.EMAIL,
-            #push_address = TODO
+            post=objectInstance,
+            first_matching_subscription=self,
+            push_method=NotificationPushMethodType.EMAIL,
+            # push_address = TODO
             )
         self.db.add(notification)
         self.db.flush()
@@ -741,12 +739,11 @@ class ModelEventWatcherNotificationSubscriptionDispatcher(object):
         with transaction.manager:
             for userId, applicableInstances in applicableInstancesByUser.iteritems():
                 if(len(applicableInstances) > 0):
-                    applicableInstances.sort(cmp=lambda x,y: cmp(x.priority, y.priority))
+                    applicableInstances.sort(cmp=lambda x, y: cmp(x.priority, y.priority))
                     applicableInstances[0].process(objectInstance.get_discussion_id(), verb, objectInstance, applicableInstances[1:])
         if bool(current_task):
             # In a celery task, there's no one else to commit
             objectInstance.db.commit()
-
 
     def processPostCreated(self, id):
         print "processPostCreated", id
@@ -776,12 +773,14 @@ class ModelEventWatcherNotificationSubscriptionDispatcher(object):
     def processAccountModified(self, id):
         print "processAccountModified", id
 
+
 class NotificationPushMethodType(DeclEnum):
     """
     The type of event that caused the notification to be created
     """
     EMAIL = "EMAIL", "Email notification"
     LOGIN_NOTIFICATION = "LOGIN_NOTIFICATION", "A notification upon next login to Assembl"
+
 
 class NotificationDeliveryStateType(DeclEnum):
     """
@@ -810,6 +809,7 @@ class NotificationDeliveryStateType(DeclEnum):
     def getRetryableDeliveryStates(cls):
         return [cls.QUEUED, cls.DELIVERY_TEMPORARY_FAILURE]
 
+
 class NotificationDeliveryConfirmationType(DeclEnum):
     """
     The type of event that caused the notification to be created
@@ -817,6 +817,7 @@ class NotificationDeliveryConfirmationType(DeclEnum):
     NONE = "NONE", "TNo confirmation was recieved"
     LINK_FOLLOWED = "LINK_FOLLOWED", "The user followed a link in the notification"
     NOTIFICATION_DISMISSED = "NOTIFICATION_DISMISSED", "The user dismissed the notification"
+
 
 class NotificationClasses():
 
@@ -849,7 +850,7 @@ class Notification(Base):
     }
     id = Column(
         Integer,
-    primary_key=True)
+        primary_key=True)
 
     sqla_type = Column(
         String,
@@ -860,10 +861,10 @@ class Notification(Base):
         Integer,
         ForeignKey(
             'notification_subscription.id',
-            ondelete = 'CASCADE', #Apparently, virtuoso doesn't suport ondelete RESTRICT
-            onupdate = 'CASCADE'
+            ondelete='CASCADE',  # Apparently, virtuoso doesn't suport ondelete RESTRICT
+            onupdate='CASCADE'
             ),
-        nullable=False, #Maybe should be true, not sure-benoitg
+        nullable=False,  # Maybe should be true, not sure-benoitg
         doc="An annonymous pointer to the database object that originated the event")
 
     first_matching_subscription = relationship(
@@ -872,32 +873,32 @@ class Notification(Base):
     )
     creation_date = Column(
         DateTime,
-        nullable = False,
-        default = datetime.utcnow)
-    #user_id we can get it from the notification for "free"
-    #Note:  The may be more than one interface to view notification, but we assume there is only one push method àt a time
-    push_method =  Column(
+        nullable=False,
+        default=datetime.utcnow)
+    # user_id we can get it from the notification for "free"
+    # Note:  The may be more than one interface to view notification, but we assume there is only one push method àt a time
+    push_method = Column(
         NotificationPushMethodType.db_type(),
-        nullable = False,
-        default = NotificationPushMethodType.EMAIL)
+        nullable=False,
+        default=NotificationPushMethodType.EMAIL)
     push_address = Column(
         UnicodeText,
-        nullable = True)
+        nullable=True)
     push_date = Column(
         DateTime,
-        nullable = True,
-        default = None)
+        nullable=True,
+        default=None)
     delivery_state = Column(
         NotificationDeliveryStateType.db_type(),
-        nullable = False,
-        default = NotificationDeliveryStateType.QUEUED)
+        nullable=False,
+        default=NotificationDeliveryStateType.QUEUED)
     delivery_confirmation = Column(
         NotificationDeliveryConfirmationType.db_type(),
-        nullable = False,
-        default = NotificationDeliveryConfirmationType.NONE)
+        nullable=False,
+        default=NotificationDeliveryConfirmationType.NONE)
     delivery_confirmation_date = Column(
         DateTime,
-        nullable = True)
+        nullable=True)
 
     threadlocals = threading.local()
 
@@ -910,13 +911,14 @@ class Notification(Base):
 
     def get_applicable_subscriptions(self):
         """ Fist matching_subscription is guaranteed to always be on top """
-        #TODO: Store CRUDVERB
+        # TODO: Store CRUDVERB
         applicableInstances = NotificationSubscription.findApplicableInstances(
             self.event_source_object().get_discussion_id(),
             CrudVerbs.CREATE,
             self.event_source_object(),
             self.first_matching_subscription.user)
-        def sortSubscriptions(x,y):
+
+        def sortSubscriptions(x, y):
             if x.id == self.first_matching_subscription_id:
                 return -1
             elif y.id == self.first_matching_subscription_id:
@@ -943,8 +945,8 @@ class Notification(Base):
     @classmethod
     def make_unlocalized_jinja_env(cls):
         return Environment(
-                loader=PackageLoader('assembl', 'templates'),
-                extensions=['jinja2.ext.i18n'])
+            loader=PackageLoader('assembl', 'templates'),
+            extensions=['jinja2.ext.i18n'])
 
     @classmethod
     def make_jinja_env(cls, user=None):
@@ -987,7 +989,7 @@ class Notification(Base):
         assembl_css_path = os.path.normpath(os.path.join(get_theme_base_path(), theme_relative_path, 'assembl_notifications.css'))
         assembl_css = open(assembl_css_path)
         assert assembl_css
-        ink_css_path = os.path.normpath(os.path.join(os.path.abspath(__file__), '..' , '..', 'static', 'js', 'bower', 'ink', 'css', 'ink.css'))
+        ink_css_path = os.path.normpath(os.path.join(os.path.abspath(__file__), '..', '..', 'static', 'js', 'bower', 'ink', 'css', 'ink.css'))
         ink_css = open(ink_css_path)
         assert ink_css
         return (assembl_css, ink_css)
@@ -1003,9 +1005,9 @@ class Notification(Base):
         """
         prefered_email_account = self.first_matching_subscription.user.get_preferred_email_account()
         if not prefered_email_account:
-            raise MissingEmailException("Missing email account for account "+ str(self.first_matching_subscription.user.id))
+            raise MissingEmailException("Missing email account for account " + str(self.first_matching_subscription.user.id))
         if not prefered_email_account.verified:
-            raise UnverifiedEmailException("Email account for email "+ prefered_email_account.email +"is not verified")
+            raise UnverifiedEmailException("Email account for email " + prefered_email_account.email + "is not verified")
         to_email = prefered_email_account.email
         assert to_email
         return to_email
@@ -1018,17 +1020,16 @@ class Notification(Base):
             return ''
         frontendUrls = FrontendUrls(self.first_matching_subscription.discussion)
         headers = {}
-        msg = email.mime.Multipart.MIMEMultipart('alternative')
         headers['Precedence'] = 'list'
 
         headers['List-ID'] = self.first_matching_subscription.discussion.uri()
         headers['Date'] = email.Utils.formatdate()
 
-        headers['Message-ID'] = "<"+self.event_source_object().message_id+">"
+        headers['Message-ID'] = "<" + self.event_source_object().message_id + ">"
         if self.event_source_object().parent:
-            headers['In-Reply-To'] = "<"+self.event_source_object().parent.message_id+">"
+            headers['In-Reply-To'] = "<" + self.event_source_object().parent.message_id + ">"
 
-        #Archived-At: A direct link to the archived form of an individual email message.
+        # Archived-At: A direct link to the archived form of an individual email message.
         headers['List-Subscribe'] = frontendUrls.getUserNotificationSubscriptionsConfigurationUrl()
         headers['List-Unsubscribe'] = frontendUrls.getUserNotificationSubscriptionsConfigurationUrl()
 
@@ -1051,6 +1052,7 @@ User.notifications = relationship(
     secondary=NotificationSubscription.__mapper__.mapped_table,
     backref="owner")
 
+
 class NotificationOnPost(Notification):
 
     __tablename__ = "notification_on_post"
@@ -1071,8 +1073,8 @@ class NotificationOnPost(Notification):
         ForeignKey(
             Post.id,
             ondelete='CASCADE',
-             onupdate='CASCADE'),
-        nullable = False, index=True)
+            onupdate='CASCADE'),
+        nullable=False, index=True)
 
     post = relationship(Post, backref=backref(
         "notifications_on_post", cascade="all, delete-orphan"))
@@ -1080,6 +1082,7 @@ class NotificationOnPost(Notification):
     @abstractmethod
     def event_source_object(self):
         return self.post
+
 
 class NotificationOnPostCreated(NotificationOnPost):
     __mapper_args__ = {
@@ -1107,17 +1110,17 @@ class NotificationOnPostCreated(NotificationOnPost):
         discussion = self.first_matching_subscription.discussion
         (assembl_css, ink_css) = self.get_css_paths(discussion)
         jinja_env = self.get_jinja_env()
-        template_data={'subscription': self.first_matching_subscription,
-                       'discussion': discussion,
-                       'notification': self,
-                       'frontendUrls': FrontendUrls(discussion),
-                       'ink_css': ink_css.read(),
-                       'assembl_notification_css': assembl_css.read().decode('utf_8'),
-                       'discriminants': {
-                                            'url': URL_DISCRIMINANTS,
-                                            'source': SOURCE_DISCRIMINANTS
-                                        },
-                       'jinja_env': jinja_env
+        template_data = {'subscription': self.first_matching_subscription,
+                         'discussion': discussion,
+                         'notification': self,
+                         'frontendUrls': FrontendUrls(discussion),
+                         'ink_css': ink_css.read(),
+                         'assembl_notification_css': assembl_css.read().decode('utf_8'),
+                         'discriminants': {
+                             'url': URL_DISCRIMINANTS,
+                             'source': SOURCE_DISCRIMINANTS
+                             },
+                         'jinja_env': jinja_env
                        }
         if isinstance(self.post, SynthesisPost):
             template = jinja_env.get_template('notifications/html_mail_post_synthesis.jinja2')
