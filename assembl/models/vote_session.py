@@ -1,12 +1,12 @@
 from sqlalchemy import (Column, Integer, ForeignKey)
 from sqlalchemy.orm import (relationship, backref)
 
-from . import DiscussionBoundBase
+from .timeline import DiscussionSession
 from ..auth import (CrudPermissions, P_READ, P_ADMIN_DISC)
 from .langstrings import LangString
 
 
-class VoteSession(DiscussionBoundBase):
+class VoteSession(DiscussionSession):
     __tablename__ = "vote_session"
 
     id = Column(Integer, primary_key=True)
