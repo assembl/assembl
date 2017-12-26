@@ -330,6 +330,11 @@ const Translations = {
         1: "Renseigner les questions",
         2: "Exporter les données"
       },
+      tokenVote: {
+        0: "Renseigner les instructions",
+        1: "Configurer les modules de vote",
+        2: "Configurer les propositions de vote"
+      },
       sections: {
         addSection: "Ajouter une rubrique",
         deleteSection: "Supprimer la rubrique",
@@ -727,6 +732,11 @@ const Translations = {
         0: "Set themes",
         1: "Set questions",
         2: "Export data"
+      },
+      tokenVote: {
+        0: "Fill in the instructions",
+        1: "Configure the voting modules",
+        2: "Configure the voting proposals"
       },
       sections: {
         addSection: "Add a section",

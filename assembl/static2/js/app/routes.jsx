@@ -72,7 +72,7 @@ const AdminChild = (props) => {
   case 'multiColumns':
     return <MultiColumnsAdmin />;
   case 'tokenVote':
-    return <TokenVoteAdmin />;
+    return <TokenVoteAdmin section={props.location.query.section} />;
   case 'resourcesCenter':
     return <ResourcesCenterAdmin />;
   default:
