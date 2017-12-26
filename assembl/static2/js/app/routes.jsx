@@ -27,6 +27,7 @@ import SurveyAdmin from './pages/surveyAdmin';
 import ThreadAdmin from './pages/threadAdmin';
 import DiscussionAdmin from './pages/discussionAdmin';
 import MultiColumnsAdmin from './pages/multiColumnsAdmin';
+import TokenVoteAdmin from './pages/tokenVoteAdmin';
 import ResourcesCenter from './pages/resourcesCenter';
 import { routeForRouter, getFullPath } from './utils/routeMap';
 
@@ -71,7 +72,7 @@ const AdminChild = (props) => {
   case 'multiColumns':
     return <MultiColumnsAdmin />;
   case 'tokenVote':
-    return <NotFound />;
+    return <TokenVoteAdmin />;
   case 'resourcesCenter':
     return <ResourcesCenterAdmin />;
   default:
