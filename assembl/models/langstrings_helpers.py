@@ -26,8 +26,7 @@ def declareLangStrings(Model, lang_strings_names):
 
     for lang_string_name in lang_strings_names:
         id_name = lang_string_name + '_id'
-        setattr(Model, id_name, property(langStringId()))
-        setattr(Model, lang_string_name, property(
-            langStringRelationship(Model, lang_string_name)))
+        setattr(Model, id_name, langStringId())
+        setattr(Model, lang_string_name, langStringRelationship(Model, lang_string_name))
 
     LangString.setup_ownership_load_event(Model, lang_strings_names)

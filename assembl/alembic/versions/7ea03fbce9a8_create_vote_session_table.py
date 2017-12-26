@@ -22,32 +22,29 @@ def LangStringId(column_name):
     )
 
 
+def lang_strings_args(lang_strings_names):
+    args = [LangStringId(lang_string_name)
+        for lang_string_name in lang_strings_names]
+    
+    lang_strings_id_names = [name + "_id"
+        for name in lang_strings_names]
+    
+    args.append(sa.schema.UniqueConstraint(
+        *lang_strings_id_names))
+        
+    return args
+    
+        
+
 def upgrade(pyramid_env):
     with context.begin_transaction():
         op.create_table(
             'vote_session',
             sa.Column('id', sa.Integer, primary_key=True),
-            sa.Column(
-                'discussion_id',
-                sa.Integer,
-                sa.ForeignKey(
-                    'discussion.id',
-                    ondelete="CASCADE",
-                    onupdate="CASCADE"
-                ),
-                nullable=False,
-                index=False
-            ),
-            LangStringId('title'),
-            LangStringId('subtitle'),
-            LangStringId('instructions_section_title'),
-            LangStringId('propositions_section_title'),
-            sa.schema.UniqueConstraint(
-                "title_id",
-                "subtitle_id",
-                "instructions_section_title_id",
-                "propositions_section_title_id",
-            )
+            *lang_strings_args([
+                'instructions_section_title',
+                'instructions_section_content',
+                'propositions_section_title'])
         )
 
 

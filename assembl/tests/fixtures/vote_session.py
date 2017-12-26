@@ -8,7 +8,7 @@ def vote_session(request, discussion, test_session):
         discussion=discussion,
         title=LangString.create(u"vote session fixture", "en"),
         description=LangString.create(u"vote session subtitle fixture", "en"),
-        instructions_title=LangString.create(u"vote session instructions title fixture", "en"),
+        instructions_section_title=LangString.create(u"vote session instructions title fixture", "en"),
         instructions_section_content=LangString.create(u"vote session instructions fixture. Lorem ipsum dolor sit amet", "en"),
         propositions_section_title=LangString.create(u"vote session propositions section tile fixture", "en"),
         image_url=u"",

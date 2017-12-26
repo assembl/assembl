@@ -26,6 +26,7 @@ from assembl.tests.fixtures.user_language_preference import *
 from assembl.tests.fixtures.idea_message_columns import *
 from assembl.tests.fixtures.sections import *
 from assembl.tests.fixtures.timeline import *
+from assembl.tests.fixtures.vote_session import *
 
 
 engine = None
