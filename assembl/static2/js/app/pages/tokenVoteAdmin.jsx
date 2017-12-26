@@ -12,7 +12,7 @@ type TokenVoteAdminProps = {
 const TokenVoteAdmin = (props: TokenVoteAdminProps) => {
   const currentStep = parseInt(props.section, 10);
   return (
-    <div className="survey-admin">
+    <div className="token-vote-admin">
       {props.section === '1' && <InstructionsSection />}
       {props.section === '2' && <ModulesSection />}
       {props.section === '3' && <ProposalsSection />}
