@@ -7,6 +7,16 @@ from assembl import models
 from assembl.auth import CrudPermissions
 from assembl.auth.util import get_permissions
 from assembl.graphql.schema import Schema
+from assembl.lib.logging import getLogger
+
+
+class LoggingMiddleware(object):
+    def resolve(self, next, source, gargs, context, info, *args, **kwargs):
+        if source is None:
+            getLogger().debug(
+                'graphql', op=info.operation.operation,
+                opname=info.operation.name.value, vars=info.variable_values)
+        return next(source, gargs, context, info, *args, **kwargs)
 
 
 # Only allow POST (query may be GET, but mutations should always be a POST,
@@ -28,5 +38,5 @@ def graphql_api(request):
     if not discussion.user_can(user_id, CrudPermissions.READ, permissions):
         raise HTTPUnauthorized()
 
-    solver = graphql_wsgi(Schema)
+    solver = graphql_wsgi(Schema, middleware=[LoggingMiddleware()])
     return solver(request)
