@@ -336,7 +336,7 @@ const Translations = {
         2: "Configurer les propositions de vote"
       },
       headerTitle: "Bandeau haut de page",
-      sectionTitle: "Section propositions",
+      proposalsSectionTitle: "Section propositions",
       instructions: "Instructions",
       sections: {
         addSection: "Ajouter une rubrique",
@@ -366,10 +366,10 @@ const Translations = {
         mediaLink: "Lien média en ligne (vidéo, image, etc..)",
         orAttachPicture: "Ou téléchargez une image depuis votre ordinateur",
         headerTitle: "Titre du bandeau",
-        headerSubTitle: "Sous-titre du bandeau",
+        headerDescription: "Sous-titre du bandeau",
         instructionsTitle: "Titre des instructions",
-        instructionsText: "Instructions",
-        sectionTitle: "Titre de la section"
+        instructionsContent: "Instructions",
+        proposalsSectionTitle: "Titre de la section"
       },
       resourcesCenter: {
         createResource: "Ajouter un média",
@@ -747,7 +747,7 @@ const Translations = {
         2: "Configure the voting proposals"
       },
       headerTitle: "Header",
-      sectionTitle: "Proposals section",
+      proposalsSectionTitle: "Proposals section",
       instructions: "Instructions",
       sections: {
         addSection: "Add a section",
@@ -777,10 +777,10 @@ const Translations = {
         mediaLink: "Online media link (video, picture, etc..)",
         orAttachPicture: "Or upload an image from your computer",
         headerTitle: "Header title",
-        headerSubTitle: "Header subtitle",
+        headerDescription: "Header subtitle",
         instructionsTitle: "Instructions title",
-        instructionsText: "Instructions",
-        sectionTitle: "Section title"
+        instructionsContent: "Instructions",
+        proposalsSectionTitle: "Section title"
       },
       resourcesCenter: {
         createResource: "Add a media",

@@ -7,6 +7,7 @@ import { connect } from 'react-redux';
 
 import { updateThematics } from '../actions/adminActions';
 import { updateResources, updateResourcesCenterPage } from '../actions/adminActions/resourcesCenter';
+import { updateTokenVotePage } from '../actions/adminActions/tokenVote';
 import { updateSections } from '../actions/adminActions/adminSections';
 import { updateLegalNoticeAndTerms } from '../actions/adminActions/legalNoticeAndTerms';
 import withLoadingIndicator from '../components/common/withLoadingIndicator';
@@ -63,6 +64,7 @@ class Administration extends React.Component {
     this.putThematicsInStore(this.props.data);
     this.putSectionsInStore(this.props.sections);
     this.putLegalNoticeAndTermsInStore(this.props.legalNoticeAndTerms);
+    this.putTokenVoteInStore();
   }
 
   componentWillReceiveProps(nextProps) {
@@ -107,6 +109,10 @@ class Administration extends React.Component {
   putResourcesCenterInStore(resourcesCenter) {
     const filteredResourcesCenter = filter(ResourcesCenterPage, { resourcesCenter: resourcesCenter });
     this.props.updateResourcesCenterPage(filteredResourcesCenter.resourcesCenter);
+  }
+
+  putTokenVoteInStore() {
+    this.props.updateTokenVotePage();
   }
 
   putSectionsInStore(sections) {
@@ -209,6 +215,40 @@ const mapDispatchToProps = dispatch => ({
   updateThematics: thematics => dispatch(updateThematics(thematics)),
   updateResourcesCenterPage: ({ titleEntries, headerImage }) => {
     dispatch(updateResourcesCenterPage(titleEntries, headerImage));
+  },
+  updateTokenVotePage: () => {
+    // TODO replace by graphql query
+    const titleEntries = [{ localeCode: 'en', value: 'Header title' }, { localeCode: 'fr', value: 'Titre du header' }];
+    const descriptionEntries = [
+      { localeCode: 'en', value: 'Header description' },
+      { localeCode: 'fr', value: 'Description du header' }
+    ];
+    const instructionsTitleEntries = [
+      { localeCode: 'en', value: 'Instructions title' },
+      { localeCode: 'fr', value: 'Titre instructions' }
+    ];
+    const instructionsDescriptionEntries = [
+      { localeCode: 'en', value: 'Instructions description' },
+      { localeCode: 'fr', value: 'Description instructions' }
+    ];
+    const proposalsTitleEntries = [
+      { localeCode: 'en', value: 'Proposals title' },
+      { localeCode: 'fr', value: 'Propositions titre' }
+    ];
+    const headerImage = {
+      externalUrl: 'https://dev-assembl.bluenove.com/data/Discussion/7/documents/2091/data',
+      mimeType: 'image/jpeg'
+    };
+    dispatch(
+      updateTokenVotePage(
+        titleEntries,
+        descriptionEntries,
+        instructionsTitleEntries,
+        instructionsDescriptionEntries,
+        proposalsTitleEntries,
+        headerImage
+      )
+    );
   },
   updateLegalNoticeAndTerms: legalNoticeAndTerms => dispatch(updateLegalNoticeAndTerms(legalNoticeAndTerms))
 });

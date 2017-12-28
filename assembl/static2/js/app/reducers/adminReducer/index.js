@@ -8,6 +8,7 @@ import legalNoticeAndTerms from './legalNoticeAndTerms';
 import type { LegalNoticeAndTermsReducer } from './legalNoticeAndTerms';
 import resourcesCenter from './resourcesCenter';
 import sections from './adminSections';
+import tokenVote from './tokenVote';
 import type { AdminSectionsReducers } from './adminSections';
 import { updateInLangstringEntries } from '../../utils/i18n';
 
@@ -216,6 +217,7 @@ const reducers: AdminReducer = {
   discussionLanguagePreferencesHasChanged: discussionLanguagePreferencesHasChanged,
   resourcesCenter: resourcesCenter,
   sections: sections,
+  tokenVote: tokenVote,
   legalNoticeAndTerms: legalNoticeAndTerms
 };
 

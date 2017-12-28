@@ -26,6 +26,15 @@ export const MOVE_DOWN_SECTION: 'MOVE_DOWN_SECTION' = 'MOVE_DOWN_SECTION';
 export const UPDATE_LEGAL_NOTICE_ENTRY: 'UPDATE_LEGAL_NOTICE_ENTRY' = 'UPDATE_LEGAL_NOTICE_ENTRY';
 export const UPDATE_TERMS_AND_CONDITIONS_ENTRY: 'UPDATE_TERMS_AND_CONDITIONS_ENTRY' = 'UPDATE_TERMS_AND_CONDITIONS_ENTRY';
 export const UPDATE_LEGAL_NOTICE_AND_TERMS: 'UPDATE_LEGAL_NOTICE_AND_TERMS' = 'UPDATE_LEGAL_NOTICE_AND_TERMS';
+export const UPDATE_TOKEN_PAGE: 'UPDATE_TOKEN_PAGE' = 'UPDATE_TOKEN_PAGE';
+export const UPDATE_TOKEN_PAGE_TITLE: 'UPDATE_TOKEN_PAGE_TITLE' = 'UPDATE_TOKEN_PAGE_TITLE';
+export const UPDATE_TOKEN_PAGE_DESCRIPTION: 'UPDATE_TOKEN_PAGE_DESCRIPTION' = 'UPDATE_TOKEN_PAGE_DESCRIPTION';
+export const UPDATE_TOKEN_PAGE_INSTRUCTIONS_TITLE: 'UPDATE_TOKEN_PAGE_INSTRUCTIONS_TITLE' =
+  'UPDATE_TOKEN_PAGE_INSTRUCTIONS_TITLE';
+export const UPDATE_TOKEN_PAGE_INSTRUCTIONS_DESCRIPTION: 'UPDATE_TOKEN_PAGE_INSTRUCTIONS_DESCRIPTION' =
+  'UPDATE_TOKEN_PAGE_INSTRUCTIONS_DESCRIPTION';
+export const UPDATE_TOKEN_PAGE_PROPOSALS_TITLE: 'UPDATE_TOKEN_PAGE_PROPOSALS_TITLE' = 'UPDATE_TOKEN_PAGE_PROPOSALS_TITLE';
+export const UPDATE_TOKEN_PAGE_IMAGE: 'UPDATE_TOKEN_PAGE_IMAGE' = 'UPDATE_TOKEN_PAGE_IMAGE';
 
 export type UpdateContentLocaleById = {
   type: typeof UPDATE_CONTENT_LOCALE_BY_ID,
@@ -191,6 +200,50 @@ export type UpdateLegalNoticeAndTerms = {
   type: typeof UPDATE_LEGAL_NOTICE_AND_TERMS
 };
 
+export type UpdateTokenVotePageTitle = {
+  locale: string,
+  value: string,
+  type: typeof UPDATE_TOKEN_PAGE_TITLE
+};
+
+export type UpdateTokenVotePageDescription = {
+  locale: string,
+  value: string,
+  type: typeof UPDATE_TOKEN_PAGE_DESCRIPTION
+};
+
+export type UpdateTokenVotePageInstructionsTitle = {
+  locale: string,
+  value: string,
+  type: typeof UPDATE_TOKEN_PAGE_INSTRUCTIONS_TITLE
+};
+
+export type UpdateTokenVotePageInstructionsDescription = {
+  locale: string,
+  value: string,
+  type: typeof UPDATE_TOKEN_PAGE_INSTRUCTIONS_DESCRIPTION
+};
+
+export type UpdateTokenVotePageProposalsTitle = {
+  locale: string,
+  value: string,
+  type: typeof UPDATE_TOKEN_PAGE_PROPOSALS_TITLE
+};
+
+export type UpdateTokenVoteHeaderImage = {
+  value: File,
+  type: typeof UPDATE_TOKEN_PAGE_IMAGE
+};
+
+export type UpdateTokenVotePage = {
+  titleEntries: Array<any>,
+  descriptionEntries: Array<any>,
+  instructionsTitleEntries: Array<any>,
+  instructionsDescriptionEntries: Array<any>,
+  proposalsTitleEntries: Array<any>,
+  headerImage: File | null
+};
+
 type BasicAction = {
   type: string
 };
@@ -214,10 +267,19 @@ type LegalNoticeAndTermsActions = UpdateLegalNoticeEntry | UpdateTermsAndConditi
 
 type SectionActions = CreateSection | DeleteSection | UpSection | DownSection;
 
+type TokenVoteActions =
+  | UpdateTokenVotePageTitle
+  | UpdateTokenVotePageDescription
+  | UpdateTokenVotePageInstructionsTitle
+  | UpdateTokenVotePageInstructionsDescription
+  | UpdateTokenVotePageProposalsTitle
+  | UpdateTokenVoteHeaderImage;
+
 export type Action =
   | UpdateContentLocaleById
   | UpdateContentLocaleByOriginalLocale
   | ResourcesCenterActions
   | LegalNoticeAndTermsActions
   | SectionActions
+  | TokenVoteActions
   | BasicAction;
