@@ -1,0 +1,44 @@
+fragment langStringEntry on LangStringEntry {
+  localeCode
+  value
+}
+
+fragment voteSessionGlobals on VoteSession {
+  headerImgUrl
+}
+
+fragment voteSessionLangstrings on VoteSession {
+  title(lang: $lang)
+  subTitle(lang: $lang)
+  instructionsSectionTitle(lang: $lang)
+  instructionsSectionContent(lang: $lang)
+  propositionsSectionTitle(lang: $lang)
+}
+
+fragment voteSessionLangstringsEntries on VoteSession {
+  titleEntries {
+    ...langStringEntry
+  }
+  subTitleEntries {
+    ...langStringEntry
+  }
+  instructionsSectionEntries {
+    ...langStringEntry
+  }
+  instructionsSectionContentEntries {
+    ...langStringEntry
+  }
+  propositionsSectionTitleEntries {
+    ...langStringEntry
+  }
+}
+
+fragment voteSession on VoteSession {
+  ...voteSessionGlobals
+  ...voteSessionLangstrings
+}
+
+fragment voteSessionWithEntries on VoteSession {
+  ...voteSessionGlobals
+  ...voteSessionLangstringsEntries
+}
