@@ -1,10 +1,11 @@
 from sqlalchemy import (
     Column,
     Integer,
-    ForeignKey
+    ForeignKey,
+    String
 )
 
-def IdColumn(Base):
+def InheritedId(Base):
     return Column(
         Integer,
         ForeignKey(
@@ -12,3 +13,6 @@ def IdColumn(Base):
             ondelete='CASCADE',
             onupdate='CASCADE'),
         primary_key=True)
+        
+def Type():
+    return Column(String(60), nullable=False)
