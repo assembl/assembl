@@ -134,3 +134,31 @@ def timeline_phase2_interface_v2(request, test_app, test_session, discussion):
 
     request.addfinalizer(fin)
     return phase2
+
+@pytest.fixture(scope="function")
+def timeline_token_vote(request, test_session, discussion):
+    from assembl.models import DiscussionPhase, LangString
+    
+    token_vote = DiscussionPhase(
+        discussion = discussion,
+        identifier = 'tokenVote',
+        title = LangString.create(u"token vote fixture", "en"),
+        description = LangString.create(u"token vote subtitle fixture", "en"),
+        start = u"20141231T09:00:00Z",
+        end = u"20151231T09:00:00Z",
+        interface_v1 = False,
+        image_url = u'https://example.net/image.jpg'
+    )
+    
+
+    # Create the phase
+    test_session.add(token_vote)
+    test_session.flush()
+
+    def fin():
+        print "finalizer timeline"
+        test_session.delete(token_vote)
+        test_session.flush()
+
+    request.addfinalizer(fin)
+    return token_vote
