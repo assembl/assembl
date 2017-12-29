@@ -1,3 +1,5 @@
+import get from 'lodash/get';
+
 import { xmlHttpRequest } from '../utils/httpRequestHandler';
 import { getSortedArrayByKey } from '../utils/globalFunctions';
 
@@ -18,12 +20,12 @@ export const buildDebateData = (debateData, prefs, timeline, socialShare) => {
   const sortedTimeline = timeline.length > 0 ? getSortedArrayByKey(timeline, 'start') : null;
   if (sortedTimeline) {
     sortedTimeline.forEach((phase) => {
-      phase.description.entries.forEach((entry) => {
+      get(phase, 'description.entries', []).forEach((entry) => {
         if (entry['@language'] === 'zh_Hans') {
           entry['@language'] = 'zh_CN'; // eslint-disable-line
         }
       });
-      phase.title.entries.forEach((entry) => {
+      get(phase, 'title.entries', []).forEach((entry) => {
         if (entry['@language'] === 'zh_Hans') {
           entry['@language'] = 'zh_CN'; // eslint-disable-line
         }
