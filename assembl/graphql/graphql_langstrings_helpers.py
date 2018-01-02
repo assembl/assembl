@@ -35,7 +35,7 @@ def make_entries_resolver(langstring_name, langstring_def):
 def graphql_langstrings_attrs_dict(langstrings_defs):
     d = {}
     for langstring_name in langstrings_defs.keys():
-        d[langstring_name] = graphene.String(lang=graphene.String())
+        d[langstring_name] = graphene.String(lang=graphene.String(required=True))
         d["resolve_" + langstring_name] = make_langstring_resolver(
             langstring_name,
             langstrings_defs[langstring_name]
