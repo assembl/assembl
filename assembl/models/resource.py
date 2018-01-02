@@ -30,7 +30,6 @@ class Resource(DiscussionBoundBase):
         ),
         nullable=False, index=True)
 
-
     discussion = relationship(
         "Discussion",
         backref=backref(
