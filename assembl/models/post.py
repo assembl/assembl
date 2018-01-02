@@ -32,7 +32,7 @@ from .generic import Content, ContentSource
 from .auth import AgentProfile
 from ..semantic.namespaces import SIOC, ASSEMBL, QUADNAMES
 from ..lib import config
-from .langstrings import LangString
+from .langstrings import LangString, LangStringEntry
 from assembl.views.traversal import AbstractCollectionDefinition
 
 
@@ -240,6 +240,9 @@ class Post(Content):
                 short = self.shorten_text(entry.value)
             if short != entry.value:
                 shortened = True
+
+            # create a LangStringEntry object
+            LangStringEntry(value=short, locale_id=entry.locale_id, langstring=ls)
 
         if shortened or is_html:
             return ls
