@@ -840,12 +840,6 @@ class User(AgentProfile):
                     self.db.delete(notification_subscription)
             session.autoflush = old_autoflush
 
-    def send_email(self, **kwargs):
-        subject = kwargs.get('subject', '')
-        body = kwargs.get('body', '')
-
-        # Send email.
-
     def avatar_url(self, size=32, app_url=None, email=None):
         return super(User, self).avatar_url(
             size, app_url, email or self.preferred_email)
