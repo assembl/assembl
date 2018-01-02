@@ -37,10 +37,10 @@ def langstrings_attrs_dict(langstrings_names):
         d[langstring_name] = make_langstring(id_name, langstring_name)
     return d
     
-def LangstringsMixin(langstrings_names):
-    langstrings_mixin = type(
-        "LangstringsMixin",
+def LangstringsBase(langstrings_names):
+    langstrings_base = type(
+        "LangstringsBase",
         (object, ),
         langstrings_attrs_dict(langstrings_names)
     )
-    return langstrings_mixin
+    return langstrings_base

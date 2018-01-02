@@ -50,13 +50,13 @@ def graphql_langstrings_attrs_dict(langstrings_defs):
     return d
 
 
-def GraphQLLangstringsMixin(langstrings_defs):
-    langstrings_mixin = type(
-        "GraphLangstringsMixin",
+def LangstringsInterface(langstrings_defs):
+    langstrings_interface = type(
+        "LangstringsInterface",
         (graphene.Interface, ),
         graphql_langstrings_attrs_dict(langstrings_defs)
     )
-    return langstrings_mixin
+    return langstrings_interface
 
 
 def update_langstrings(model, langstrings_defs, args):

@@ -2,7 +2,7 @@ from sqlalchemy.orm import relationship, backref
 
 from .timeline import DiscussionBoundBase, DiscussionPhase
 from .langstrings import LangString
-from .langstrings_helpers import LangstringsMixin
+from .langstrings_helpers import LangstringsBase
 from .sqla_helpers import Id, ForeignId
 
 langstrings_names = [
@@ -12,7 +12,7 @@ langstrings_names = [
 ]
 
 class VoteSession(
-    LangstringsMixin(langstrings_names),
+    LangstringsBase(langstrings_names),
     DiscussionBoundBase
 ):
     """ A vote session bound to a discussion phase.

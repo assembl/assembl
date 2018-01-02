@@ -5,8 +5,11 @@ from assembl import models
 
 from .types import SecureObjectType
 from .utils import abort_transaction_on_exception
-from .graphql_langstrings_helpers import (GraphQLLangstringsMixin,
-                                          update_langstrings, add_langstrings_input_attrs)
+from .graphql_langstrings_helpers import (
+    LangstringsInterface,
+    update_langstrings,
+    add_langstrings_input_attrs
+)
 
 # from assembl.auth import IF_OWNED, CrudPermissions
 # from assembl.auth.util import get_permissions
@@ -54,7 +57,7 @@ langstrings_defs = {
 class VoteSession(SecureObjectType, SQLAlchemyObjectType):
     class Meta:
         model = models.VoteSession
-        interfaces = (Node, GraphQLLangstringsMixin(langstrings_defs))
+        interfaces = (Node, LangstringsInterface(langstrings_defs))
         only_fields = ('id', )
 
     header_img_url = graphene.String()
