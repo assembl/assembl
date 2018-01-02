@@ -1,4 +1,5 @@
 from sqlalchemy import Column, Integer, ForeignKey
+from sqlalchemy.ext.declarative import declared_attr
 from sqlalchemy.orm import relationship, backref
 
 from .langstrings import LangString
@@ -16,38 +17,30 @@ def langstring_relationship(model_name, column, column_name):
 def LangStringId():
     return Column(Integer(), ForeignKey(LangString.id))
 
-def langstrings_dict(Model, lang_strings_names):
-    """ Return a dict of langstrings relationships columns """
-    langstrings = {}
-    for lang_string_name in lang_strings_names:
-        id_name = lang_string_name + "_id"
-        langstrings[lang_string_name] = langstring_relationship(
-            Model.__tablename__,
-            getattr(Model, id_name),
-            id_name,
-        )
-    return langstrings
-        
-def langstrings_ids_dict(lang_strings_names):
-    """ Return a dict of langstrings ids columns """
-    langstrings_ids = {}
-    for lang_string_name in lang_strings_names:
-        id_name = lang_string_name + '_id'
-        langstrings_ids[id_name] = LangStringId()
-    return langstrings_ids
+def make_langstring_id():
+    @declared_attr
+    def langstring_id(cls):
+        return LangStringId()
+    return langstring_id
 
-def with_langstrings(ModelWithoutLangstrings):
-    """ Set langstrings attributes on a model using the Model.langstrings_names """
-    class_name = ModelWithoutLangstrings.__class__.__name__
-    names = ModelWithoutLangstrings.__langstrings__
-    ModelWithIds = type(class_name + "WithLangstringsIds",
-        (ModelWithoutLangstrings, ),
-        langstrings_ids_dict(names))
-        
-    Model = type(class_name + "WithLangstrings",
-        (ModelWithIds, ),
-        langstrings_dict(ModelWithIds, names))
-        
-    LangString.setup_ownership_load_event(Model, names)
+def make_langstring(id_name, langstring_name):
+    @declared_attr
+    def langstring(cls):
+        return langstring_relationship(cls.__tablename__, getattr(cls, id_name), langstring_name)
+    return langstring
+
+def langstrings_attrs_dict(langstrings_names):
+    d = { }
+    for langstring_name in langstrings_names:
+        id_name = langstring_name + "_id"
+        d[id_name] = make_langstring_id()
+        d[langstring_name] = make_langstring(id_name, langstring_name)
+    return d
     
-    return Model
+def LangstringsMixin(langstrings_names):
+    langstrings_mixin = type(
+        "LangstringsMixin",
+        (object, ),
+        langstrings_attrs_dict(langstrings_names)
+    )
+    return langstrings_mixin
