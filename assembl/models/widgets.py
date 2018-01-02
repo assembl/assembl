@@ -3,14 +3,10 @@
 In theory, arbitrary widgets could be added to Assembl.
 In reality, the set of widget behaviours is constrained here.
 """
-from itertools import chain
 from datetime import datetime
 
-from sqlalchemy import (
-    Column, Integer, ForeignKey, Text, String, Boolean, DateTime, inspect)
-from sqlalchemy.sql import text, column
-from sqlalchemy.orm import (
-    relationship, backref, aliased, join)
+from sqlalchemy import Column, Integer, ForeignKey, Text, String, Boolean, DateTime
+from sqlalchemy.orm import relationship, backref, aliased
 from sqlalchemy.ext.associationproxy import association_proxy
 import simplejson as json
 
@@ -30,7 +26,7 @@ from .votes import AbstractVoteSpecification, AbstractIdeaVote
 from ..views.traversal import (
     CollectionDefinition, AbstractCollectionDefinition)
 from ..semantic.virtuoso_mapping import QuadMapPatternS
-from ..semantic.namespaces import (ASSEMBL, QUADNAMES)
+from ..semantic.namespaces import ASSEMBL
 
 
 class Widget(DiscussionBoundBase):
@@ -158,23 +154,22 @@ class Widget(DiscussionBoundBase):
     @classmethod
     def filter_started(cls, query):
         return query.filter(
-            (cls.start_date == None) | (cls.start_date <= datetime.utcnow()))
+            (cls.start_date == None) | (cls.start_date <= datetime.utcnow()))  # noqa: E711
 
     @classmethod
     def test_active(cls):
         now = datetime.utcnow()
-        return ((cls.end_date == None) | (cls.end_date > now)
-                & (cls.start_date == None) | (cls.start_date <= now))
+        return ((cls.end_date == None) | (cls.end_date > now) & (cls.start_date == None) | (cls.start_date <= now))  # noqa: E711
 
     @classmethod
     def filter_active(cls, query):
         return query.filter(cls.test_active())
 
     def is_started(self):
-        return self.start_date == None or self.start_date <= datetime.utcnow()
+        return self.start_date == None or self.start_date <= datetime.utcnow()  # noqa: E711
 
     def is_ended(self):
-        return self.end_date != None and self.end_date < datetime.utcnow()
+        return self.end_date != None and self.end_date < datetime.utcnow()  # noqa: E711
 
     def is_active(self):
         return self.is_started() and not self.is_ended()
@@ -189,7 +184,7 @@ class Widget(DiscussionBoundBase):
 
     @classmethod
     def test_ended(cls):
-        return (cls.end_date != None) | (cls.end_date < datetime.utcnow())
+        return (cls.end_date != None) | (cls.end_date < datetime.utcnow())  # noqa: E711
 
     crud_permissions = CrudPermissions(P_ADMIN_DISC)
 
@@ -208,7 +203,7 @@ class Widget(DiscussionBoundBase):
                 end = parse_datetime(end) if end else datetime.max
                 if now < start or now > end:
                     continue
-            except (ValueError, TypeError, KeyError) as e:
+            except (ValueError, TypeError, KeyError):
                 continue
             notification_data = self.notification_data(notification)
             if notification_data:
@@ -297,7 +292,6 @@ class IdeaInspireMeWidgetLink(
     }
 
 
-
 class IdeaCreativitySessionWidgetLink(
         BaseIdeaWidgetLink, IdeaShowingWidgetLink):
     __mapper_args__ = {
@@ -329,27 +323,23 @@ Idea.widgets = association_proxy('widget_links', 'widget')
 
 Widget.showing_idea_links = relationship(
     IdeaWidgetLink,
-    primaryjoin=((Widget.id == IdeaShowingWidgetLink.widget_id)
-                 & IdeaShowingWidgetLink.polymorphic_filter()))
+    primaryjoin=((Widget.id == IdeaShowingWidgetLink.widget_id) & IdeaShowingWidgetLink.polymorphic_filter()))
 Idea.has_showing_widget_links = relationship(
     IdeaWidgetLink,
-    primaryjoin=((Idea.id == IdeaShowingWidgetLink.idea_id)
-                 & IdeaShowingWidgetLink.polymorphic_filter()))
+    primaryjoin=((Idea.id == IdeaShowingWidgetLink.idea_id) & IdeaShowingWidgetLink.polymorphic_filter()))
 
 Widget.showing_ideas = relationship(
     Idea, viewonly=True, secondary=IdeaShowingWidgetLink.__table__,
-    primaryjoin=((Widget.id == IdeaShowingWidgetLink.widget_id)
-                 & IdeaShowingWidgetLink.polymorphic_filter()),
+    primaryjoin=((Widget.id == IdeaShowingWidgetLink.widget_id) & IdeaShowingWidgetLink.polymorphic_filter()),
     secondaryjoin=IdeaShowingWidgetLink.idea_id == Idea.id,
     backref='showing_widget')
 
 
 Idea.active_showing_widget_links = relationship(
     IdeaWidgetLink, viewonly=True,
-    primaryjoin=((IdeaShowingWidgetLink.idea_id == Idea.id)
-                 & IdeaShowingWidgetLink.polymorphic_filter()
-                 & (IdeaShowingWidgetLink.widget_id == Widget.id)
-                 & Widget.test_active()))
+    primaryjoin=(
+        (IdeaShowingWidgetLink.idea_id == Idea.id) & IdeaShowingWidgetLink.polymorphic_filter() &
+        (IdeaShowingWidgetLink.widget_id == Widget.id) & Widget.test_active()))
 
 
 class BaseIdeaWidget(Widget):
@@ -390,16 +380,17 @@ class BaseIdeaWidget(Widget):
 
     @classmethod
     def extra_collections(cls):
-        return {'base_idea': BaseIdeaCollection(),
-                'base_idea_descendants': BaseIdeaDescendantsCollection() }
+        return {
+            'base_idea': BaseIdeaCollection(),
+            'base_idea_descendants': BaseIdeaDescendantsCollection()
+        }
 
 
 BaseIdeaWidget.base_idea = relationship(
-        Idea, viewonly=True, secondary=BaseIdeaWidgetLink.__table__,
-        primaryjoin=((BaseIdeaWidget.id == BaseIdeaWidgetLink.widget_id)
-                     & BaseIdeaWidgetLink.polymorphic_filter()),
-        secondaryjoin=BaseIdeaWidgetLink.idea_id == Idea.id,
-        uselist=False)
+    Idea, viewonly=True, secondary=BaseIdeaWidgetLink.__table__,
+    primaryjoin=((BaseIdeaWidget.id == BaseIdeaWidgetLink.widget_id) & BaseIdeaWidgetLink.polymorphic_filter()),
+    secondaryjoin=BaseIdeaWidgetLink.idea_id == Idea.id,
+    uselist=False)
 
 
 class BaseIdeaCollection(CollectionDefinition):
@@ -429,7 +420,6 @@ class BaseIdeaDescendantsCollection(AbstractCollectionDefinition):
     def decorate_query(self, query, owner_alias, last_alias, parent_instance, ctx):
         widget = owner_alias
         descendant = last_alias
-        base_idea = aliased(Idea, name="base_idea")
         # using base_idea_id() is cheating, but a proper join fails.
         descendants_subq = Idea.get_descendants_query(
             parent_instance.base_idea_id())
@@ -440,7 +430,6 @@ class BaseIdeaDescendantsCollection(AbstractCollectionDefinition):
 
     def contains(self, parent_instance, instance):
         descendant = aliased(Idea, name="descendant")
-        base_idea = aliased(Idea, name="base_idea")
         # using base_idea_id() is cheating, but a proper join fails.
         descendants_subq = Idea.get_descendants_query(
             parent_instance.base_idea_id())
@@ -540,9 +529,7 @@ class IdeaCreatingWidget(BaseIdeaWidget):
                     gen_idea_link = aliased(GeneratedIdeaWidgetLink)
                     query = query.join(
                         gen_idea_link,
-                        (gen_idea_link.idea_id ==
-                            children_ctx.class_alias.id) & (
-                        gen_idea_link.widget_id == owner_alias.id))
+                        (gen_idea_link.idea_id == children_ctx.class_alias.id) & (gen_idea_link.widget_id == owner_alias.id))
                 return query
 
             def decorate_instance(
@@ -586,7 +573,6 @@ class IdeaCreatingWidget(BaseIdeaWidget):
                 if P_ADD_POST in permissions and P_ADD_IDEA not in permissions:
                     return [P_ADD_IDEA]
                 return super(BaseIdeaHidingCollection, self).ctx_permissions(permissions)
-
 
         class BaseIdeaDescendantsCollectionC(BaseIdeaDescendantsCollection):
             hide_proposed_ideas = False
@@ -632,7 +618,8 @@ class IdeaCreatingWidget(BaseIdeaWidget):
                             **self.filter_kwargs(
                                 GeneratedIdeaWidgetLink, kwargs)))
 
-        return dict(BaseIdeaWidget.extra_collections(),
+        return dict(
+            BaseIdeaWidget.extra_collections(),
             base_idea=BaseIdeaCollectionC(),
             base_idea_hiding=BaseIdeaHidingCollection(),
             base_idea_descendants=BaseIdeaDescendantsCollectionC())
@@ -640,8 +627,7 @@ class IdeaCreatingWidget(BaseIdeaWidget):
 
 IdeaCreatingWidget.generated_ideas = relationship(
     Idea, viewonly=True, secondary=GeneratedIdeaWidgetLink.__table__,
-    primaryjoin=((IdeaCreatingWidget.id == GeneratedIdeaWidgetLink.widget_id)
-                 & GeneratedIdeaWidgetLink.polymorphic_filter()),
+    primaryjoin=((IdeaCreatingWidget.id == GeneratedIdeaWidgetLink.widget_id) & GeneratedIdeaWidgetLink.polymorphic_filter()),
     secondaryjoin=GeneratedIdeaWidgetLink.idea_id == Idea.id)
 
 
@@ -655,8 +641,7 @@ class InspirationWidget(IdeaCreatingWidget):
     @property
     def configured(self):
         active_modules = self.settings_json.get('active_modules', {})
-        return bool(active_modules.get('card', None)
-                or active_modules.get('video', None))
+        return bool(active_modules.get('card', None) or active_modules.get('video', None))
 
     @classmethod
     def get_ui_endpoint_base(cls):
@@ -719,7 +704,7 @@ class CreativitySessionWidget(IdeaCreatingWidget):
         from .post import WidgetPost
         return self.db.query(WidgetPost
             ).join(self.__class__
-            ).filter(WidgetPost.creator_id==user_id).count()
+            ).filter(WidgetPost.creator_id == user_id).count()
 
     @property
     def num_posts_by_current_user(self):
@@ -758,20 +743,20 @@ class VotingWidget(BaseIdeaWidget):
                 try:
                     criterion_idea = Idea.get_instance(criterion["@id"])
                     self.add_criterion(criterion_idea)
-                except Exception as e:
+                except Exception:
                     print "Missing criterion. Discarded.", criterion
         if 'votables' in settings:
             for votable_id in settings['votables']:
                 try:
                     votable_idea = Idea.get_instance(votable_id)
                     self.add_votable(votable_idea)
-                except Exception as e:
+                except Exception:
                     print "Missing votable. Discarded.", votable_id
         elif 'votable_root_id' in settings:
             try:
                 votable_root_idea = Idea.get_instance(
                     settings['votable_root_id'])
-            except Exception as e:
+            except Exception:
                 print "Cannot find votable root.", settings['votable_root_id']
                 return
             if len(votable_root_idea.children):
@@ -823,7 +808,6 @@ class VotingWidget(BaseIdeaWidget):
             for vote_spec in self.vote_specifications
         }
 
-
     def add_criterion(self, idea):
         if idea not in self.criteria:
             self.criteria_links.append(VotingCriterionWidgetLink(
@@ -837,8 +821,7 @@ class VotingWidget(BaseIdeaWidget):
 
     @property
     def configured(self):
-        if not bool(len(self.votable_idea_links)
-                    and len(self.vote_specifications)):
+        if not bool(len(self.votable_idea_links) and len(self.vote_specifications)):
             return False
         items = self.settings_json.get('items', ())
         return bool(len(
@@ -912,8 +895,7 @@ class VotingWidget(BaseIdeaWidget):
                         criterion_ctx = ctx.find_collection(
                             'CriterionCollection.criteria')
                         search_ctx = ctx
-                        while (search_ctx.__parent__
-                               and search_ctx.__parent__ != criterion_ctx):
+                        while (search_ctx.__parent__ and search_ctx.__parent__ != criterion_ctx):
                             search_ctx = search_ctx.__parent__
                         assert search_ctx.__parent__
                         inst.criterion = search_ctx._instance
@@ -957,10 +939,12 @@ class VotingWidget(BaseIdeaWidget):
     # def criteria(self):
     #     return [cl.idea for cl in self.criteria_links]
 
+
 class MultiCriterionVotingWidget(VotingWidget):
     __mapper_args__ = {
         'polymorphic_identity': 'multicriterion_voting_widget',
     }
+
 
 class TokenVotingWidget(VotingWidget):
     __mapper_args__ = {
@@ -1016,28 +1000,27 @@ class WidgetUserConfig(DiscussionBoundBase):
     crud_permissions = CrudPermissions(P_ADD_POST)  # all participants...
 
 
-
 Idea.has_votable_links = relationship(VotableIdeaWidgetLink)
 Idea.has_criterion_links = relationship(VotingCriterionWidgetLink)
 
 VotingWidget.votable_ideas = relationship(
     Idea, viewonly=True, secondary=VotableIdeaWidgetLink.__table__,
-    primaryjoin=((VotingWidget.id == VotableIdeaWidgetLink.widget_id)
-                 & VotableIdeaWidgetLink.polymorphic_filter()),
+    primaryjoin=(
+        (VotingWidget.id == VotableIdeaWidgetLink.widget_id) & VotableIdeaWidgetLink.polymorphic_filter()),
     secondaryjoin=VotableIdeaWidgetLink.idea_id == Idea.id,
     backref='votable_by_widget')
 
 VotingWidget.voted_ideas = relationship(
     Idea, viewonly=True, secondary=VotedIdeaWidgetLink.__table__,
-    primaryjoin=((VotingWidget.id == VotedIdeaWidgetLink.widget_id)
-                 & VotedIdeaWidgetLink.polymorphic_filter()),
+    primaryjoin=(
+        (VotingWidget.id == VotedIdeaWidgetLink.widget_id) & VotedIdeaWidgetLink.polymorphic_filter()),
     secondaryjoin=VotedIdeaWidgetLink.idea_id == Idea.id,
     backref="voted_by_widget")
 
 VotingWidget.criteria = relationship(
     Idea,
     viewonly=True, secondary=VotingCriterionWidgetLink.__table__,
-    primaryjoin=((VotingWidget.id == VotingCriterionWidgetLink.widget_id)
-                 & VotingCriterionWidgetLink.polymorphic_filter()),
+    primaryjoin=(
+        (VotingWidget.id == VotingCriterionWidgetLink.widget_id) & VotingCriterionWidgetLink.polymorphic_filter()),
     secondaryjoin=VotingCriterionWidgetLink.idea_id == Idea.id,
     backref='criterion_of_widget')
