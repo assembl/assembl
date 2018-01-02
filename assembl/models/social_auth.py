@@ -251,8 +251,8 @@ class SocialAuthAccount(
         # choose best known profile for base_account
         # prefer profiles with verified users, then users, then oldest profiles
         users.sort(key=lambda p: (
-                isinstance(p, User) and p.verified,
-                isinstance(p, User), -p.id),
+            isinstance(p, User) and p.verified,
+            isinstance(p, User), -p.id),
             reverse=True)
         return users
 

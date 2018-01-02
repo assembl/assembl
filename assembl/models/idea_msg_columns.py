@@ -3,27 +3,15 @@
 from pyramid.threadlocal import get_current_request
 from sqlalchemy import (
     Column,
-    Boolean,
     Integer,
-    SmallInteger,
     String,
-    Unicode,
-    Float,
-    UnicodeText,
-    DateTime,
     ForeignKey,
-    inspect,
-    select,
-    func,
-    event,
     UniqueConstraint,
 )
-from sqlalchemy.orm import relationship, backref, aliased
+from sqlalchemy.orm import relationship, backref
 from sqlalchemy.sql.functions import count
 
-from ..auth import (
-    CrudPermissions, P_READ, P_ADMIN_DISC, P_EDIT_IDEA,
-    P_ADD_IDEA)
+from ..auth import CrudPermissions, P_READ, P_ADMIN_DISC
 from . import DiscussionBoundBase
 from .idea import Idea
 from .idea_content_link import IdeaContentLink, IdeaRelatedPostLink
@@ -39,35 +27,35 @@ class IdeaMessageColumn(DiscussionBoundBase):
         UniqueConstraint('idea_id', 'message_classifier'),)
     id = Column(Integer, primary_key=True)
     idea_id = Column(Integer, ForeignKey(Idea.id), index=True, nullable=False,
-        doc="The idea to which this column applies")
+                     doc="The idea to which this column applies")
     message_classifier = Column(String(100), index=True, nullable=False,
-        doc=("Identifier for the column, will match "
-             ":py:attr:`assembl.models.generic.Content.message_classifier`"))
+                                doc=("Identifier for the column, will match "
+                                     ":py:attr:`assembl.models.generic.Content.message_classifier`"))
     previous_column_id = Column(
         Integer, ForeignKey(id, ondelete='SET NULL'),
         nullable=True, unique=True,
         doc="Allows ordering columns as a linked list")
     name_id = Column(Integer, ForeignKey(LangString.id), nullable=False,
-        doc="The name of the column as a langstr")
+                     doc="The name of the column as a langstr")
     title_id = Column(Integer, ForeignKey(LangString.id), nullable=True,
-        doc="The title of the column as a langstr")
+                      doc="The title of the column as a langstr")
     color = Column(String(20),
-        doc="A CSS color that will be used to theme the column.")
+                   doc="A CSS color that will be used to theme the column.")
 
     idea = relationship(Idea, backref="message_columns")
     previous_column = relationship(
         "IdeaMessageColumn", remote_side=[id],
         backref=backref("next_column", uselist=False))
     name = relationship(LangString,
-        lazy="joined", single_parent=True,
-        primaryjoin=name_id == LangString.id,
-        backref=backref("name_of_idea_message_column", lazy="dynamic"),
-        cascade="all, delete-orphan")
+                        lazy="joined", single_parent=True,
+                        primaryjoin=name_id == LangString.id,
+                        backref=backref("name_of_idea_message_column", lazy="dynamic"),
+                        cascade="all, delete-orphan")
     title = relationship(LangString,
-        lazy="joined", single_parent=True,
-        primaryjoin=title_id == LangString.id,
-        backref=backref("title_of_idea_message_column", lazy="dynamic"),
-        cascade="all, delete-orphan")
+                         lazy="joined", single_parent=True,
+                         primaryjoin=title_id == LangString.id,
+                         backref=backref("title_of_idea_message_column", lazy="dynamic"),
+                         cascade="all, delete-orphan")
 
     def get_discussion_id(self):
         idea = self.idea or Idea.get(self.idea_id)
@@ -129,7 +117,7 @@ class IdeaMessageColumn(DiscussionBoundBase):
             ).join(ColumnSynthesisPost.idea_links_of_content
             ).filter(
                 IdeaContentLink.idea_id == self.idea_id,
-                ColumnSynthesisPost.tombstone_date == None,
+                ColumnSynthesisPost.tombstone_date == None,  # noqa: E711
                 Content.message_classifier == self.message_classifier
             ).all()
         return synthesis[0] if synthesis else None
