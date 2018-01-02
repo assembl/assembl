@@ -1,0 +1,4 @@
+fragment langStringEntry on LangStringEntry {
+  localeCode
+  value
+}

@@ -1,7 +1,4 @@
-fragment langStringEntry on LangStringEntry {
-  localeCode
-  value
-}
+#import "./LangString.graphql"
 
 fragment voteSessionGlobals on VoteSession {
   headerImgUrl
@@ -22,7 +19,7 @@ fragment voteSessionLangstringsEntries on VoteSession {
   subTitleEntries {
     ...langStringEntry
   }
-  instructionsSectionEntries {
+  instructionsSectionTitleEntries {
     ...langStringEntry
   }
   instructionsSectionContentEntries {
@@ -31,14 +28,4 @@ fragment voteSessionLangstringsEntries on VoteSession {
   propositionsSectionTitleEntries {
     ...langStringEntry
   }
-}
-
-fragment voteSession on VoteSession {
-  ...voteSessionGlobals
-  ...voteSessionLangstrings
-}
-
-fragment voteSessionWithEntries on VoteSession {
-  ...voteSessionGlobals
-  ...voteSessionLangstringsEntries
 }

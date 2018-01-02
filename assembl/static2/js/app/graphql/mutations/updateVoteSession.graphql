@@ -1,16 +1,26 @@
 #import "../fragments/VoteSession.graphql"
 
-mutation updateVoteSession(
-  $discussionPhaseId: ID!
+mutation UpdateVoteSession(
+  $discussionPhaseId: Int
   $headerImgUrl: String
-  $titleEntries: [LangStringEntryInput]
-  $subTitleEntries: [LangStringEntryInput]
-  $instructionsSectionTitleEntries: [LangStringEntryInput]
-  $instructionsSectionContentEntries: [LangStringEntryInput]
-  $propositionsSectionTitleEntries: [LangStringEntryInput]
+  $titleEntries: LangStringEntryInput
+  $subTitleEntries: LangStringEntryInput
+  $instructionsSectionTitleEntries: LangStringEntryInput
+  $instructionsSectionContentEntries: LangStringEntryInput
+  $propositionsSectionTitleEntries: LangStringEntryInput
 ) {
-  voteSession {
-    ...global
-    ...entries
+  updateVoteSession(
+    discussionPhaseId: $discussionPhaseId
+    headerImgUrl: $headerImgUrl
+    titleEntries: $titleEntries
+    subTitleEntries: $subTitleEntries
+    instructionsSectionTitleEntries: $instructionsSectionTitleEntries
+    instructionsSectionContentEntries: $instructionsSectionContentEntries
+    propositionsSectionTitleEntries: $propositionsSectionTitleEntries
+  ) {
+    voteSession {
+      ...voteSessionGlobals
+      ...voteSessionLangstringsEntries
+    }
   }
 }
