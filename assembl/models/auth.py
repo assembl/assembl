@@ -42,6 +42,7 @@ from ..lib.sqla_types import (
     URLString, EmailString, EmailUnicode, CaseInsensitiveWord, CoerceUnicode)
 from ..lib.raven_client import capture_exception
 from . import Base, DiscussionBoundBase, PrivateObjectMixin
+from .generic import ContentSource
 from ..auth import (
     ASSEMBL_PERMISSIONS,
     CrudPermissions,
@@ -117,8 +118,8 @@ class AgentProfile(Base):
         if inspect(self).attrs.accounts.loaded_value is NO_VALUE:
             account = self.db.query(AbstractAgentAccount).filter(
                 (AbstractAgentAccount.profile_id == self.id) &
-                (AbstractAgentAccount.email != None)  # noqa: E711
-                & (AbstractAgentAccount.email != '')).order_by(
+                (AbstractAgentAccount.email != None) & (AbstractAgentAccount.email != '')  # noqa: E711
+            ).order_by(
                 AbstractAgentAccount.verified.desc(),
                 AbstractAgentAccount.preferred.desc()).first()
             if account:
@@ -201,8 +202,8 @@ class AgentProfile(Base):
             attachment.creator = self
         from .action import Action
         for action in session.query(Action).filter_by(actor_id=other_profile.id).all():
-                action.actor = self
-                action.actor_id = self.id
+            action.actor = self
+            action.actor_id = self.id
         my_status_by_discussion = {
             s.discussion_id: s for s in self.agent_status_in_discussion
         }
@@ -797,9 +798,7 @@ class User(AgentProfile):
                 # NOTE: The user may be confused by the implicit change of
                 # password when we destroy the second account.
                 # Use most recent login
-                if other_user.last_login and (
-                        (not self.last_login)
-                        or (other_user.last_login > self.last_login)):
+                if other_user.last_login and (not self.last_login or other_user.last_login > self.last_login):
                     self.password = other_user.password
             for extract in other_user.extracts_created[:]:
                 extract.creator = self
@@ -1128,15 +1127,11 @@ class User(AgentProfile):
                 subscribed[subscription.__class__] |= subscription.status == NotificationSubscriptionStatus.ACTIVE
         if reset_defaults:
             for sub in my_subscriptions[:]:
-                if (sub.creation_origin ==
-                        NotificationCreationOrigin.DISCUSSION_DEFAULT
-                        # only actual defaults
-                        and sub.__class__ in subscribed):
-                    if (sub.status == NotificationSubscriptionStatus.ACTIVE
-                            and not subscribed[sub.__class__]):
+                # only actual defaults
+                if sub.creation_origin == NotificationCreationOrigin.DISCUSSION_DEFAULT and sub.__class__ in subscribed:
+                    if sub.status == NotificationSubscriptionStatus.ACTIVE and not subscribed[sub.__class__]:
                         sub.status = NotificationSubscriptionStatus.INACTIVE_DFT
-                    elif (sub.status == NotificationSubscriptionStatus.INACTIVE_DFT
-                            and subscribed[sub.__class__]):
+                    elif sub.status == NotificationSubscriptionStatus.INACTIVE_DFT and subscribed[sub.__class__]:
                         sub.status = NotificationSubscriptionStatus.ACTIVE
 
         def create_missing(include_inactive=False):
@@ -1250,9 +1245,11 @@ class UserRole(Base, PrivateObjectMixin):
         role_alias = alias_maker.alias_from_relns(cls.role)
         return [
             QuadMapPatternS(cls.iri_class().apply(cls.id), SIOC.name, role_alias.name, name=QUADNAMES.class_UserRole_rolename, sections=(USER_SECTION,)),
-            QuadMapPatternS(AgentProfile.agent_as_account_iri.apply(cls.user_id), SIOC.has_function, cls.iri_class().apply(cls.id), name=QUADNAMES.class_UserRole_global, sections=(USER_SECTION,)),
+            QuadMapPatternS(AgentProfile.agent_as_account_iri.apply(cls.user_id), SIOC.has_function,
+                            cls.iri_class().apply(cls.id), name=QUADNAMES.class_UserRole_global, sections=(USER_SECTION,)),
             # Note: The IRIs need to distinguish UserRole from LocalUserRole
-            QuadMapPatternS(cls.iri_class().apply(cls.id), SIOC.has_scope, URIRef(AssemblQuadStorageManager.local_uri()), name=QUADNAMES.class_UserRole_globalscope, sections=(USER_SECTION,)),
+            QuadMapPatternS(cls.iri_class().apply(cls.id), SIOC.has_scope, URIRef(AssemblQuadStorageManager.local_uri()),
+                            name=QUADNAMES.class_UserRole_globalscope, sections=(USER_SECTION,)),
         ]
 
 
@@ -1510,7 +1507,6 @@ class AnonymousUser(DiscussionBoundBase, User):
 
     @classmethod
     def get_discussion_conditions(cls, discussion_id, alias_maker=None):
-        from .generic import ContentSource
         if alias_maker is None:
             anonymous_user = cls
             source = ContentSource
@@ -1743,6 +1739,7 @@ class LanguagePreferenceCollection(object):
 
 class LanguagePreferenceCollectionWithDefault(LanguagePreferenceCollection):
     """A LanguagePreferenceCollection with a fallback language."""
+
     def __init__(self, locale_code):
         self.default_locale = Locale.get_or_create(locale_code)
 
@@ -1768,6 +1765,7 @@ class LanguagePreferenceCollectionWithDefault(LanguagePreferenceCollection):
 
 class UserLanguagePreferenceCollection(LanguagePreferenceCollection):
     """A LanguagePreferenceCollection that represent one user's preferences."""
+
     def __init__(self, user_id):
         user = User.get(user_id)
         user_prefs = user.language_preference
@@ -1859,7 +1857,7 @@ class UserLanguagePreference(Base):
         nullable=False, index=True)
 
     locale_id = Column(Integer, ForeignKey('locale.id',
-                       ondelete='CASCADE', onupdate='CASCADE'),
+                                           ondelete='CASCADE', onupdate='CASCADE'),
                        nullable=False, index=False)
 
     locale = relationship(Locale, foreign_keys=[locale_id])

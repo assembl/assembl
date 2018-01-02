@@ -171,7 +171,7 @@ class SourceSpecificUnknownAccount(SourceSpecificAccount):
     def display_name(self):
         localizer = get_localizer()
         return localizer.translate(_("Unknown User ${uid}",
-                                   mapping={'uid': self.user_id}))
+                                     mapping={'uid': self.user_id}))
 
 
 class SourceSpecificPost(ImportedPost):

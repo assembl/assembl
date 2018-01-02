@@ -145,6 +145,7 @@ class ActionOnPost(Action):
 
 class UniqueActionOnPost(ActionOnPost):
     "An action that should be unique of its subclass for a post, user pair"
+
     def unique_query(self):
         # inheritance leads in trouble
         query = self.db.query(self.__class__)
@@ -372,6 +373,7 @@ class ActionOnIdea(Action):
 
 class UniqueActionOnIdea(ActionOnIdea):
     "An action that should be unique of its subclass for an idea, user pair"
+
     def unique_query(self):
         # inheritance leads in trouble
         query = self.db.query(self.__class__)

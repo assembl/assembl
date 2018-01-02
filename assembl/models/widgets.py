@@ -395,6 +395,7 @@ BaseIdeaWidget.base_idea = relationship(
 
 class BaseIdeaCollection(CollectionDefinition):
     """The 'collection' of the ``base_idea`` of this :py:class:`BaseIdeaWidget`"""
+
     def __init__(self):
         super(BaseIdeaCollection, self).__init__(
             BaseIdeaWidget, BaseIdeaWidget.base_idea)

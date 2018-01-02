@@ -143,6 +143,7 @@ def language_sdk_existance(lang, default_locale_dict):
 
 class FacebookAPI(object):
     """Proxy object to the unofficial facebook sdk"""
+
     def __init__(self, user_token=None):
         config = get_config()
         self._app_id = config.get('facebook.consumer_key')
@@ -504,7 +505,7 @@ class FacebookGenericSource(PostSource):
     fb_source_id = Column(String(512), nullable=False)
     url_path = Column(URLString)
     creator_id = Column(Integer, ForeignKey(SocialAuthAccount.id,
-                        onupdate='CASCADE', ondelete='CASCADE'))
+                                            onupdate='CASCADE', ondelete='CASCADE'))
     creator = relationship(SocialAuthAccount,
                            backref=backref('sources',
                                            cascade="all, delete-orphan"))
@@ -1119,7 +1120,7 @@ class FacebookAccessToken(Base):
 
     id = Column(Integer, primary_key=True)
     fb_account_id = Column(Integer, ForeignKey(SocialAuthAccount.id,
-                           onupdate='CASCADE', ondelete='CASCADE'),
+                                               onupdate='CASCADE', ondelete='CASCADE'),
                            index=True)
 
     fb_account = relationship(SocialAuthAccount,
@@ -1166,7 +1167,7 @@ class FacebookAccessToken(Base):
         def debug_token(token):
             try:
                 resp = api.request('debug_token', {'input_token': token,
-                                   'access_token': api._app_access_token})
+                                                   'access_token': api._app_access_token})
                 return resp.get('data', None)
             except:
                 return token

@@ -399,6 +399,7 @@ class UserPreferenceCollection(NamespacedUserKVCollection):
 
 class UserNsDict(MutableMapping):
     """The dictonary of :py:class:NamespacedUserKVCollection, indexed by namespace, as a python dict"""
+
     def __init__(self, target, user_id):
         self.target = target
         self.user_id = user_id
@@ -446,6 +447,7 @@ class UserNsDict(MutableMapping):
 
 class NsDict(MutableMapping):
     """The dictonary of :py:class:NamespacedKVCollection, indexed by namespace, as a python dict"""
+
     def __init__(self, target):
         self.target = target
 

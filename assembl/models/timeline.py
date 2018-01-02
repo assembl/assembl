@@ -1,13 +1,10 @@
 """Models for a timeline of the conversation. Unused as of yet."""
 
-from datetime import datetime
-
-from sqlalchemy.orm import relationship, backref, deferred
+from sqlalchemy.orm import relationship, backref
 from sqlalchemy import (
     Column,
     Integer,
     Boolean,
-    UnicodeText,
     String,
     DateTime,
     ForeignKey,
@@ -16,10 +13,8 @@ from sqlalchemy import (
 
 from . import DiscussionBoundBase
 from ..semantic.virtuoso_mapping import QuadMapPatternS
-from ..auth import (
-    CrudPermissions, P_ADD_POST, P_READ, P_EDIT_POST, P_ADMIN_DISC,
-    P_EDIT_POST, P_ADMIN_DISC)
-from ..lib.sqla_types import CoerceUnicode, URLString
+from ..auth import CrudPermissions, P_READ, P_ADMIN_DISC
+from ..lib.sqla_types import URLString
 from ..semantic.namespaces import TIME, DCTERMS, ASSEMBL
 from .discussion import Discussion
 from .langstrings import LangString
@@ -189,6 +184,7 @@ Discussion.timeline_sessions = relationship(
 class DiscussionMilestone(TimelineEvent):
     """This is a point in time, not an interval."""
     # Not worth an extra table, but we'll disallow "end".
+
     def __init__(self, **kwargs):
         if 'end' in kwargs:
             del kwargs['end']
