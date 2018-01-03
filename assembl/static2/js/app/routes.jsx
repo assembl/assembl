@@ -67,15 +67,15 @@ const AdminChild = (props) => {
   case 'survey':
     return <SurveyAdmin {...props} thematicId={props.location.query.thematic} section={props.location.query.section} />;
   case 'thread':
-    return <ThreadAdmin />;
+    return <ThreadAdmin {...props} />;
   case 'multiColumns':
-    return <MultiColumnsAdmin />;
+    return <MultiColumnsAdmin {...props} />;
   case 'tokenVote':
     return <NotFound />;
   case 'resourcesCenter':
-    return <ResourcesCenterAdmin />;
+    return <ResourcesCenterAdmin {...props} />;
   default:
-    return <ThreadAdmin />;
+    return <ThreadAdmin {...props} />;
   }
 };
 
