@@ -66,7 +66,7 @@ class Query(graphene.ObjectType):
     locales = graphene.List(Locale, lang=graphene.String(required=True))
     total_sentiments = graphene.Int()
     has_syntheses = graphene.Boolean()
-    vote_session = graphene.Field(VoteSession, discussion_phase_id=graphene.Int(required=True), lang=graphene.String(required=True))
+    vote_session = graphene.Field(VoteSession, discussion_phase_id=graphene.Int(required=True))
     vote_sessions = graphene.List(VoteSession)
     resources = graphene.List(Resource)
     resources_center = graphene.Field(lambda: ResourcesCenter)
