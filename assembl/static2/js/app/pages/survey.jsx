@@ -2,9 +2,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { compose, graphql } from 'react-apollo';
-import { browserHistory } from 'react-router';
 import { Translate } from 'react-redux-i18n';
-import { Grid, Button } from 'react-bootstrap';
+import { Grid } from 'react-bootstrap';
 import type { Map } from 'immutable';
 
 import { updateContentLocale } from '../actions/contentLocaleActions';
@@ -48,12 +47,13 @@ type SurveyProps = {
   questions: Array<QuestionType>,
   refetchThematic: Function,
   title: string,
+  id: string,
+  slug: string,
   updateContentLocaleMapping: Function
 };
 
 type SurveyState = {
   isScroll: boolean,
-  moreProposals: boolean,
   questionIndex: number | null,
   showModal: boolean
 };
@@ -63,13 +63,10 @@ class Survey extends React.Component<*, SurveyProps, SurveyState> {
 
   state: SurveyState;
 
-  unlisten: Function;
-
   constructor(props) {
     super(props);
     this.state = {
       isScroll: false,
-      moreProposals: false,
       showModal: false,
       questionIndex: null
     };
@@ -79,20 +76,10 @@ class Survey extends React.Component<*, SurveyProps, SurveyState> {
     this.updateContentLocaleMappingFromProps(this.props);
   }
 
-  componentDidMount() {
-    this.unlisten = browserHistory.listen(() => {
-      this.setState({ moreProposals: false });
-    });
-  }
-
   componentWillReceiveProps(nextProps) {
     if (nextProps.questions !== this.props.questions) {
       this.updateContentLocaleMappingFromProps(nextProps);
     }
-  }
-
-  componentWillUnmount() {
-    this.unlisten();
   }
 
   updateContentLocaleMappingFromProps(props) {
@@ -122,12 +109,6 @@ class Survey extends React.Component<*, SurveyProps, SurveyState> {
     return isProposals;
   };
 
-  showMoreProposals = () => {
-    this.setState({
-      moreProposals: true
-    });
-  };
-
   scrollToQuestion = (isScroll, questionIndex) => {
     this.setState({
       isScroll: isScroll,
@@ -140,9 +121,10 @@ class Survey extends React.Component<*, SurveyProps, SurveyState> {
       displayAlert('danger', 'An error occured, please reload the page');
       return null;
     }
-    const { imgUrl, media, questions, refetchThematic, title } = this.props;
+    const { imgUrl, media, questions, refetchThematic, title, slug } = this.props;
     const { debateData } = this.props.debate;
     const isPhaseCompleted = getIfPhaseCompletedByIdentifier(debateData.timeline, 'survey');
+    const themeSlug = `/${slug}/debate/survey`;
     return (
       <div className="survey">
         <div className="relative">
@@ -185,18 +167,13 @@ class Survey extends React.Component<*, SurveyProps, SurveyState> {
                         <Proposals
                           title={question.title}
                           posts={question.posts.edges}
-                          moreProposals={this.state.moreProposals}
                           questionIndex={index + 1}
+                          questionId={question.id}
+                          themeSlug={themeSlug}
                           key={index}
                           refetchTheme={refetchThematic}
                         />
                       ))}
-                    {!this.state.moreProposals &&
-                      this.getIfProposals(questions) && (
-                        <Button className="button-submit button-dark" onClick={this.showMoreProposals}>
-                          <Translate value="debate.survey.moreProposals" />
-                        </Button>
-                      )}
                   </div>
                   <div className="margin-xl">&nbsp;</div>
                 </div>
@@ -212,7 +189,8 @@ class Survey extends React.Component<*, SurveyProps, SurveyState> {
 const mapStateToProps = state => ({
   debate: state.debate,
   defaultContentLocaleMapping: state.defaultContentLocaleMapping,
-  lang: state.i18n.locale
+  lang: state.i18n.locale,
+  slug: state.debate.debateData.slug
 });
 
 const mapDispatchToProps = dispatch => ({

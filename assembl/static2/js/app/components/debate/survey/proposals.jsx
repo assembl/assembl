@@ -1,48 +1,57 @@
 import React from 'react';
+import { Link } from 'react-router';
 import { Translate } from 'react-redux-i18n';
 import Post from './post';
+
+const nbPostsToShow = 3;
 
 class Proposals extends React.Component {
   constructor(props) {
     super(props);
     this.state = { hideProposals: false };
-    this.displayProposals = this.displayProposals.bind(this);
   }
 
-  displayProposals() {
+  displayProposals = () => {
     this.setState({ hideProposals: !this.state.hideProposals });
-  }
+  };
 
   render() {
-    const { questionIndex, title, posts, moreProposals, refetchTheme } = this.props;
+    const { questionIndex, questionId, title, posts, refetchTheme, themeSlug } = this.props;
+    const postsToShow = posts.slice(0, nbPostsToShow);
+    const link = `${themeSlug}/question/${questionId}/${questionIndex}`;
     return (
-      <div className={questionIndex < 2 || moreProposals ? 'shown' : 'hidden'}>
+      <div className={'shown'}>
         <h3 className="collapsed-title">
           <span>{`${questionIndex}/ ${title}`}</span>
-          <div className={moreProposals && posts.length > 0 ? 'shown proposal-arrow' : 'hidden proposal-arrow'}>
+          <div className={postsToShow.length > 0 ? 'shown proposal-arrow' : 'hidden proposal-arrow'}>
             <span
               className={this.state.hideProposals ? 'assembl-icon-down-open color pointer' : 'assembl-icon-up-open color pointer'}
               onClick={this.displayProposals}
             />
           </div>
         </h3>
-        {posts.length > 0 && (
+        {postsToShow.length > 0 && (
           <div className={this.state.hideProposals ? 'hidden' : 'shown'}>
-            {posts.map((post, index) => (
+            {postsToShow.map((post, index) => (
               <Post
                 refetchTheme={refetchTheme}
                 id={post.node.id}
                 originalLocale={post.node.originalLocale}
                 postIndex={index}
-                moreProposals={moreProposals}
                 key={post.node.id}
               />
             ))}
           </div>
         )}
-        {posts.length === 0 && (
+        {postsToShow.length === 0 ? (
           <div className="no-proposals">
             <Translate value="debate.survey.noProposals" />
+          </div>
+        ) : (
+          <div className="all-proposals">
+            <Link to={link} className="button-submit button-light">
+              <Translate value="debate.survey.allProposals" />
+            </Link>
           </div>
         )}
       </div>

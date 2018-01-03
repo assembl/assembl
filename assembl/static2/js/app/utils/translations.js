@@ -229,10 +229,14 @@ const Translations = {
         reactions: "Réactions",
         react: "Réagissez :",
         moreProposals: "Voir plus de propositions",
+        allProposals: "Voir toutes les propositions",
         noProposals: "Il n'y a pas de propositions. Soyez le premier à contribuer !",
         submit: "Envoyer",
         postSuccess: "Merci pour votre participation. Votre proposition a bien été envoyée !",
         endPhase: "La phase %{closedPhaseName} est terminée."
+      },
+      question: {
+        backToQuestions: "Retour aux questions"
       },
       thread: {
         messageTranslatedFrom: "Ce message a été traduit du texte %{language}.",
@@ -647,10 +651,14 @@ const Translations = {
         reactions: "Reactions",
         react: "React:",
         moreProposals: "More points of view",
+        allProposals: "See all points of view",
         noProposals: "There is no point of view for the moment. Be the first to contribute!",
         submit: "Submit",
         postSuccess: "Thanks for your participation. Your proposal has been sent!",
         endPhase: "The %{closedPhaseName} phase is closed."
+      },
+      question: {
+        backToQuestions: "Back to questions"
       },
       thread: {
         messageTranslatedFrom: "This message has been translated from %{language}.",

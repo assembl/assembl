@@ -37,11 +37,12 @@ class Debate extends React.Component {
   render() {
     const { loading, thematics } = this.props.data;
     const { identifier } = this.props;
-    const isParentRoute = !this.props.params.themeId || false;
     const themeId = this.props.params.themeId || null;
+    const questionId = this.props.params.questionId || null;
+    const isParentRoute = !(themeId || questionId) || false;
     const children = React.Children.map(this.props.children, child =>
       React.cloneElement(child, {
-        id: themeId,
+        id: themeId || questionId,
         identifier: identifier
       })
     );

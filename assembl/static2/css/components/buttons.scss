@@ -99,3 +99,46 @@
     opacity: inherit;
   }
 }
+
+.button-diamond-dark {
+  border-left: none;
+  transition: none;
+  color: $btn-dark-border-color;
+
+  &:before {
+    transition: none;
+  }
+
+  .button-diamond-dark-back {
+    transition: none;
+    position: absolute;
+    left: -13px;
+    height: 26px;
+    width: 26px;
+    border: $btn-dark-border-style $btn-dark-border-width $btn-dark-border-color;
+    transform: rotate(45deg);
+    top: 4px;
+    border-top: none;
+    border-right: none;
+  }
+}
+
+.button-diamond-dark:hover {
+  background-color: initial;
+
+  .button-diamond-dark-back {
+    background-color: $btn-dark-border-color;
+    border-color: $btn-dark-border-color;
+
+    &:before {
+      content: "";
+      position: absolute;
+      background: $btn-dark-border-color;
+      bottom: 0;
+      left: 0;
+      top: 0;
+      z-index: -1;
+      right: 0;
+    }
+  }
+}
