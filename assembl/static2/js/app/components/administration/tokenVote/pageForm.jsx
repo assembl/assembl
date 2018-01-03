@@ -50,11 +50,11 @@ const PageForm = ({
   handleInstructionsContentChange,
   handleProposalsSectionTitleChange
 }: PageFormProps) => {
-  const headerTitlePh = `${I18n.t('administration.ph.headerTitle')}* ${selectedLocale.toUpperCase()}`;
-  const headerDescriptionPh = `${I18n.t('administration.ph.headerDescription')}* ${selectedLocale.toUpperCase()}`;
-  const instructionsTitlePh = `${I18n.t('administration.ph.instructionsTitle')}* ${selectedLocale.toUpperCase()}`;
-  const instructionsContentPh = `${I18n.t('administration.ph.instructionsContent')}* ${selectedLocale.toUpperCase()}`;
-  const proposalsSectionTitlePh = `${I18n.t('administration.ph.proposalsSectionTitle')}* ${selectedLocale.toUpperCase()}`;
+  const headerTitlePh = `${I18n.t('administration.ph.headerTitle')} ${selectedLocale.toUpperCase()}*`;
+  const headerDescriptionPh = `${I18n.t('administration.ph.headerDescription')} ${selectedLocale.toUpperCase()}`;
+  const instructionsTitlePh = `${I18n.t('administration.ph.instructionsTitle')} ${selectedLocale.toUpperCase()}*`;
+  const instructionsContentPh = `${I18n.t('administration.ph.instructionsContent')} ${selectedLocale.toUpperCase()}*`;
+  const proposalsSectionTitlePh = `${I18n.t('administration.ph.proposalsSectionTitle')} ${selectedLocale.toUpperCase()}*`;
   return (
     <div className="admin-box">
       <SectionTitle title={I18n.t('administration.tokenVote.0')} annotation={I18n.t('administration.annotation')} />
@@ -76,7 +76,6 @@ const PageForm = ({
             <FormControlWithLabel
               label={headerDescriptionPh}
               onChange={handleHeaderDescriptionChange}
-              required
               type="text"
               value={headerDescription}
             />

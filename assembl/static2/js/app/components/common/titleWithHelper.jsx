@@ -18,6 +18,7 @@ const overflowMenu = (previewUrl, txt) => (
 const TitleWithHelper = ({ title, previewUrl, txt }: TitleWithHelperProps) => (
   <div className="title">
     {title}
+    &nbsp;
     <OverlayTrigger trigger={['hover', 'focus']} rootClose placement="right" overlay={overflowMenu(previewUrl, txt)}>
       <span className="assembl-icon-faq grey pointer" />
     </OverlayTrigger>
