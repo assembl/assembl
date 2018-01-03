@@ -12,7 +12,7 @@ const DiscussionAdmin = (props) => {
     <div className="discussion-admin">
       {props.section === '1' && <LanguageSection {...props} />}
       {props.section === '2' && <ManageSectionsForm {...props} />}
-      {props.section === '3' && <LegalNoticeAndTermsForm locale={props.selectedLocale} />}
+      {props.section === '3' && <LegalNoticeAndTermsForm {...props} />}
       {!isNaN(currentStep) && <Navbar currentStep={currentStep} totalSteps={3} phaseIdentifier="discussion" />}
     </div>
   );

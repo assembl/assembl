@@ -11,16 +11,16 @@ import type { RootReducer } from '../../../reducers/rootReducer';
 import { getEntryValueForLocale } from '../../../utils/i18n';
 
 type LegalNoticeAndTermsFormProps = {
-  locale: string,
   legalNotice: string,
+  selectedLocale: string,
   termsAndConditions: string,
   updateLegalNotice: Function,
   updateTermsAndConditions: Function
 };
 
 export const DumbLegalNoticeAndTermsForm = ({
-  locale,
   legalNotice,
+  selectedLocale,
   termsAndConditions,
   updateLegalNotice,
   updateTermsAndConditions
@@ -34,7 +34,7 @@ export const DumbLegalNoticeAndTermsForm = ({
         <Row>
           <div className="form-container">
             <FormControlWithLabel
-              key={`tac-${locale}-${termsAndConditions}`}
+              key={`tac-${selectedLocale}-${termsAndConditions}`}
               label={`${tacLabel}*`}
               onChange={updateTermsAndConditions}
               required
@@ -43,7 +43,7 @@ export const DumbLegalNoticeAndTermsForm = ({
             />
             <div className="separator" />
             <FormControlWithLabel
-              key={`legal-notice-${locale}-${legalNotice}`}
+              key={`legal-notice-${selectedLocale}-${legalNotice}`}
               label={`${legalNoticeLabel}*`}
               onChange={updateLegalNotice}
               required
@@ -57,19 +57,19 @@ export const DumbLegalNoticeAndTermsForm = ({
   );
 };
 
-const mapStateToProps = (state: RootReducer, { locale }: LegalNoticeAndTermsFormProps) => {
+const mapStateToProps = (state: RootReducer, { selectedLocale }: LegalNoticeAndTermsFormProps) => {
   const legalNoticeAndTerms = state.admin.legalNoticeAndTerms;
-  const legalNotice = getEntryValueForLocale(legalNoticeAndTerms.get('legalNoticeEntries'), locale);
-  const termsAndConditions = getEntryValueForLocale(legalNoticeAndTerms.get('termsAndConditionsEntries'), locale);
+  const legalNotice = getEntryValueForLocale(legalNoticeAndTerms.get('legalNoticeEntries'), selectedLocale);
+  const termsAndConditions = getEntryValueForLocale(legalNoticeAndTerms.get('termsAndConditionsEntries'), selectedLocale);
   return {
     legalNotice: legalNotice ? legalNotice.toJS() : '',
     termsAndConditions: termsAndConditions ? termsAndConditions.toJS() : ''
   };
 };
 
-const mapDispatchToProps = (dispatch: Function, { locale }: LegalNoticeAndTermsFormProps) => ({
-  updateLegalNotice: (value: string) => dispatch(actions.updateLegalNoticeEntry(locale, value)),
-  updateTermsAndConditions: (value: string) => dispatch(actions.updateTermsAndConditionsEntry(locale, value))
+const mapDispatchToProps = (dispatch: Function, { selectedLocale }: LegalNoticeAndTermsFormProps) => ({
+  updateLegalNotice: (value: string) => dispatch(actions.updateLegalNoticeEntry(selectedLocale, value)),
+  updateTermsAndConditions: (value: string) => dispatch(actions.updateTermsAndConditionsEntry(selectedLocale, value))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(DumbLegalNoticeAndTermsForm);
