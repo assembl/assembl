@@ -1,0 +1,26 @@
+query QuestionQuery($lang: String!, $id: ID!) {
+  question: node(id: $id) {
+    ... on Question {
+      title(lang: $lang)
+      id
+      thematic {
+        id
+        title(lang: $lang)
+        img {
+          externalUrl
+          mimeType
+        }
+      }
+      posts(first: 10, random: true) {
+        edges {
+          node {
+            ... on Post {
+              id
+              originalLocale
+            }
+          }
+        }
+      }
+    }
+  }
+}
