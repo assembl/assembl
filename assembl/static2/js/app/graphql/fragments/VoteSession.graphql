@@ -1,0 +1,31 @@
+#import "./LangString.graphql"
+
+fragment voteSessionGlobals on VoteSession {
+  headerImgUrl
+}
+
+fragment voteSessionLangstrings on VoteSession {
+  title(lang: $lang)
+  subTitle(lang: $lang)
+  instructionsSectionTitle(lang: $lang)
+  instructionsSectionContent(lang: $lang)
+  propositionsSectionTitle(lang: $lang)
+}
+
+fragment voteSessionLangstringsEntries on VoteSession {
+  titleEntries {
+    ...langStringEntry
+  }
+  subTitleEntries {
+    ...langStringEntry
+  }
+  instructionsSectionTitleEntries {
+    ...langStringEntry
+  }
+  instructionsSectionContentEntries {
+    ...langStringEntry
+  }
+  propositionsSectionTitleEntries {
+    ...langStringEntry
+  }
+}

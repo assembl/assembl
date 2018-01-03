@@ -320,6 +320,8 @@ from .resource import Resource
 
 from .section import Section
 
+from .vote_session import VoteSession
+
 
 def includeme(config):
     config.include('.langstrings')

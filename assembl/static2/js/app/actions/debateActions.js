@@ -29,7 +29,7 @@ export const fetchDebateData = debateId =>
       },
       (error) => {
         const firstError = error[0];
-        if (firstError.status === 401) {
+        if (firstError && firstError.status === 401) {
           dispatch(unauthorizedDebateData);
         } else {
           dispatch(failedFetchDebateData(error));
