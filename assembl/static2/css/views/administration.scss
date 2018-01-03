@@ -296,4 +296,24 @@
     font-size: $font-size-xs;
     margin: 5px 0 0 5px;
   }
+
+  .assembl-icon-faq {
+    &:before {
+      font-size: 16px;
+    }
+  }
+}
+
+.helper-popover {
+  width: auto;
+  min-width: 332px;
+  padding-top: 8px;
+
+  .arrow {
+    display: none;
+  }
+
+  img {
+    padding-bottom: 10px;
+  }
 }

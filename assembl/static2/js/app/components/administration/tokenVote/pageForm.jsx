@@ -1,11 +1,12 @@
 // @flow
 import React from 'react';
 import { connect } from 'react-redux';
-import { I18n, Translate } from 'react-redux-i18n';
+import { I18n } from 'react-redux-i18n';
 import { FormGroup } from 'react-bootstrap';
 import SectionTitle from '../sectionTitle';
 import FormControlWithLabel from '../../common/formControlWithLabel';
 import FileUploader from '../../common/fileUploader';
+import TitleWithHelper from '../../common/titleWithHelper';
 import { getEntryValueForLocale } from '../../../utils/i18n';
 import {
   updateTokenVotePageTitle,
@@ -52,7 +53,7 @@ const PageForm = ({
   const headerTitlePh = `${I18n.t('administration.ph.headerTitle')}* ${selectedLocale.toUpperCase()}`;
   const headerDescriptionPh = `${I18n.t('administration.ph.headerDescription')}* ${selectedLocale.toUpperCase()}`;
   const instructionsTitlePh = `${I18n.t('administration.ph.instructionsTitle')}* ${selectedLocale.toUpperCase()}`;
-  const instructionsContentPh = `${I18n.t('administration.ph.headerDescription')}* ${selectedLocale.toUpperCase()}`;
+  const instructionsContentPh = `${I18n.t('administration.ph.instructionsContent')}* ${selectedLocale.toUpperCase()}`;
   const proposalsSectionTitlePh = `${I18n.t('administration.ph.proposalsSectionTitle')}* ${selectedLocale.toUpperCase()}`;
   return (
     <div className="admin-box">
@@ -60,9 +61,11 @@ const PageForm = ({
       <div className="admin-content">
         <div className="form-container">
           <form>
-            <div className="title">
-              <Translate value="administration.headerTitle" />
-            </div>
+            <TitleWithHelper
+              title={I18n.t('administration.headerTitle')}
+              previewUrl="/static2/img/helpers/helper1.png"
+              txt={I18n.t('administration.helpers.tokenHeader')}
+            />
             <FormControlWithLabel
               label={headerTitlePh}
               onChange={handleHeaderTitleChange}
@@ -82,9 +85,11 @@ const PageForm = ({
             </FormGroup>
           </form>
           <div className="separator" />
-          <div className="title">
-            <Translate value="administration.instructions" />
-          </div>
+          <TitleWithHelper
+            title={I18n.t('administration.instructions')}
+            previewUrl="/static2/img/helpers/helper2.png"
+            txt={I18n.t('administration.helpers.tokenInstructions')}
+          />
           <FormControlWithLabel
             label={instructionsTitlePh}
             onChange={handleInstructionsTitleChange}
@@ -101,9 +106,11 @@ const PageForm = ({
             value={instructionsContent}
           />
           <div className="separator" />
-          <div className="title">
-            <Translate value="administration.proposalsSectionTitle" />
-          </div>
+          <TitleWithHelper
+            title={I18n.t('administration.proposalsSectionTitle')}
+            previewUrl="/static2/img/helpers/helper3.png"
+            txt={I18n.t('administration.helpers.tokenProposalsSection')}
+          />
           <FormControlWithLabel
             label={proposalsSectionTitlePh}
             onChange={handleProposalsSectionTitleChange}
@@ -120,15 +127,14 @@ const PageForm = ({
 const mapStateToProps = (state, { selectedLocale }) => {
   const tokenVote = state.admin.tokenVote;
   return {
-    selectedLocale: selectedLocale,
     headerTitle: getEntryValueForLocale(tokenVote.get('titleEntries'), selectedLocale),
     headerDescription: getEntryValueForLocale(tokenVote.get('descriptionEntries'), selectedLocale),
     instructionsTitle: getEntryValueForLocale(tokenVote.get('instructionsTitleEntries'), selectedLocale),
     instructionsContent: '',
     proposalsSectionTitle: getEntryValueForLocale(tokenVote.get('proposalsTitleEntries'), selectedLocale),
-    headerImgName: tokenVote.getIn(['headerImage', 'externalUrl']),
+    headerImgName: tokenVote.getIn(['headerImage', 'title']),
     headerImgMimeType: tokenVote.getIn(['headerImage', 'mimeType']),
-    headerImgUrl: tokenVote.getIn(['headerImage', 'title'])
+    headerImgUrl: tokenVote.getIn(['headerImage', 'externalUrl'])
   };
 };
 

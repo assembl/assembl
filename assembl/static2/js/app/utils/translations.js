@@ -335,7 +335,7 @@ const Translations = {
         1: "Configurer les modules de vote",
         2: "Configurer les propositions de vote"
       },
-      headerTitle: "Bandeau haut de page",
+      headerTitle: "Bandeau de haut de page",
       proposalsSectionTitle: "Section propositions",
       instructions: "Instructions",
       sections: {
@@ -348,6 +348,11 @@ const Translations = {
         urlPh: "URL",
         successSave: "Les rubriques ont été modifiées avec succès",
         sectionsTitle: "Renseigner les rubriques"
+      },
+      helpers: {
+        tokenHeader: "Le bandeau de haut de page doit contenir une image et un titre. Le sous-titre est optionnel.",
+        tokenInstructions: "La section des instructions doit contenir un titre et une description.",
+        tokenProposalsSection: "La section des propositions doit contenir un titre."
       },
       videoHelp:
         "*Liens vidéo autorisés : \"https://www.youtube.com/embed/[videoId]\" ou \"https://player.vimeo.com/video/[videoId]?\"",
@@ -746,7 +751,7 @@ const Translations = {
         1: "Configure the voting modules",
         2: "Configure the voting proposals"
       },
-      headerTitle: "Header",
+      headerTitle: "Top page Header",
       proposalsSectionTitle: "Proposals section",
       instructions: "Instructions",
       sections: {
@@ -759,6 +764,11 @@ const Translations = {
         urlPh: "URL",
         successSave: "Sections are modified with success",
         sectionsTitle: "Set sections"
+      },
+      helpers: {
+        tokenHeader: "The top page header must contain an image and a title. The subtitle is optional.",
+        tokenInstructions: "The instructions section must contain a title and a description.",
+        tokenProposalsSection: "The proposals section must contain a title."
       },
       videoHelp:
         "*Authorized video links: \"https://www.youtube.com/embed/[videoId]\" or \"https://player.vimeo.com/video/[videoId]?\"",
