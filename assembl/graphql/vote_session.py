@@ -58,7 +58,7 @@ class VoteSession(SecureObjectType, SQLAlchemyObjectType):
     class Meta:
         model = models.VoteSession
         interfaces = (Node, LangstringsInterface(langstrings_defs))
-        only_fields = ('id', )
+        only_fields = ('id', 'discussion_phase_id')
 
     header_img_url = graphene.String()
 

@@ -67,6 +67,7 @@ class Query(graphene.ObjectType):
     total_sentiments = graphene.Int()
     has_syntheses = graphene.Boolean()
     vote_session = graphene.Field(VoteSession, discussion_phase_id=graphene.Int(required=True), lang=graphene.String(required=True))
+    vote_sessions = graphene.List(VoteSession)
     resources = graphene.List(Resource)
     resources_center = graphene.Field(lambda: ResourcesCenter)
     has_resources_center = graphene.Boolean()
@@ -115,11 +116,24 @@ class Query(graphene.ObjectType):
         return root_thematic
 
     def resolve_vote_session(self, args, context, info):
+
         discussion_phase_id = args.get('discussion_phase_id')
         discussion_phase = models.DiscussionPhase.get(discussion_phase_id)
         # TODO: see if we can avoid this next(iter( thing with a one-to-one relationship
         vote_session = next(iter(discussion_phase.vote_session or []), None)
         return vote_session
+
+    def resolve_vote_sessions(self, args, context, info):
+        vote_sessions = []
+        discussion_id = context.matchdict['discussion_id']
+        discussion = models.Discussion.get(discussion_id)
+        for discussion_phase in discussion.timeline_phases:
+            if discussion_phase.identifier == "tokenVote":
+                vote_session = next(iter(discussion_phase.vote_session or []), None)
+                if vote_session is None:
+                    vote_session = models.VoteSession(discussion_phase=discussion_phase)
+                vote_sessions = vote_sessions + [vote_session]
+        return vote_sessions
 
     def resolve_ideas(self, args, context, info):
         model = models.Idea
