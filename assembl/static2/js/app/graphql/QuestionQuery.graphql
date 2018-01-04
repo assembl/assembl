@@ -11,16 +11,6 @@ query QuestionQuery($lang: String!, $id: ID!) {
           mimeType
         }
       }
-      posts(first: 10, random: true) {
-        edges {
-          node {
-            ... on Post {
-              id
-              originalLocale
-            }
-          }
-        }
-      }
     }
   }
 }

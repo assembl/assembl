@@ -1,0 +1,99 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Question page should match Question with data snapshot 1`] = `
+<div
+  className="question"
+>
+  <div
+    className="relative"
+  >
+    <Connect(Header)
+      identifier="survey"
+      imgUrl="https://foo.bar/umgurl"
+      title="Bar"
+    />
+    <div
+      className="background-light proposals"
+    >
+      <Grid
+        bsClass="container"
+        className="background-light"
+        componentClass="div"
+        fluid={true}
+      >
+        <div
+          className="max-container"
+        >
+          <div
+            className="margin-xl"
+          >
+             
+          </div>
+          <Link
+            className="button-diamond-dark button-submit button-dark"
+            onlyActiveOnIndex={false}
+            style={Object {}}
+            to="/FooSlug/debate/survey/theme/ThematicId"
+          >
+            <Translate
+              value="debate.question.backToQuestions"
+            />
+            <span
+              className="button-diamond-dark-back"
+            />
+          </Link>
+          <div
+            className="question-title"
+          >
+            <div
+              className="title-hyphen"
+            >
+               
+            </div>
+            <h1
+              className="dark-title-1"
+            >
+              <Translate
+                value="debate.survey.proposalsTitle"
+              />
+            </h1>
+          </div>
+          <div
+            className="center"
+          >
+            <h3
+              className="collapsed-title"
+            >
+              <span>
+                Index/ Foo
+              </span>
+            </h3>
+            <Connect(Apollo(Component))
+              questionId="FooInd"
+            />
+            <div
+              className="back-btn-container"
+            >
+              <Link
+                className="button-submit button-dark"
+                onlyActiveOnIndex={false}
+                style={Object {}}
+                to="/FooSlug/debate/survey/theme/ThematicId"
+              >
+                <Translate
+                  value="debate.question.backToQuestions"
+                />
+              </Link>
+            </div>
+          </div>
+          <div
+            className="margin-xl"
+          >
+             
+          </div>
+        </div>
+      </Grid>
+    </div>
+  </div>
+</div>
+`;
