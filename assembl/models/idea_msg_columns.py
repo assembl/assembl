@@ -12,6 +12,7 @@ from sqlalchemy.orm import relationship, backref
 from sqlalchemy.sql.functions import count
 
 from ..auth import CrudPermissions, P_READ, P_ADMIN_DISC
+from ..lib.clean_input import sanitize_text
 from . import DiscussionBoundBase
 from .idea import Idea
 from .idea_content_link import IdeaContentLink, IdeaRelatedPostLink
@@ -158,6 +159,21 @@ class IdeaMessageColumn(DiscussionBoundBase):
     @header.setter
     def header(self, value):
         self.set_column_synthesis(body=value)
+
+    @property
+    def synthesis_title(self):
+        synthesis = self.get_column_synthesis()
+        if synthesis is None:
+            return None
+
+        return synthesis.subject
+
+    @synthesis_title.setter
+    def synthesis_title(self, value):
+        for lse in value.entries:
+            lse.value = sanitize_text(lse.value)
+
+        self.set_column_synthesis(subject=value)
 
 
 LangString.setup_ownership_load_event(IdeaMessageColumn, ['name', 'title'])
