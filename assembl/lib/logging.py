@@ -10,18 +10,24 @@ import structlog
 LOGGER = None
 
 
-def make_logger_for_request(request):
-    assert LOGGER
-    return LOGGER.bind(
-        user=request.authenticated_userid,
-        request=id(request),
-    )
+def logger_for_request(request):
+    if getattr(request, '_logger', None) is None:
+        request._logger = LOGGER.bind(
+            user=request.authenticated_userid,
+            request=id(request),
+        )
+    if request.matchdict and 'discussion' not in request._logger._context:
+        from ..auth.util import discussion_from_request
+        discussion = discussion_from_request(request)
+        slug = discussion.slug if discussion else None
+        request._logger = request._logger.bind(discussion=slug)
+    return request._logger
 
 
 def getLogger(logger_name=None):
     request = get_current_request()
     if request and request.logger:
-        logger = request.logger
+        logger = request.logger()
     else:
         logger = LOGGER
     if logger_name is not None:
@@ -99,4 +105,4 @@ def includeme(config):
     LOGGER = structlog.getLogger('assembl')
 
     config.add_request_method(
-        'assembl.lib.logging.make_logger_for_request', 'logger', reify=True)
+        'assembl.lib.logging.logger_for_request', 'logger')
