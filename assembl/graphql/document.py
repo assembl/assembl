@@ -20,6 +20,7 @@ class Document(SecureObjectType, SQLAlchemyObjectType):
         only_fields = ('id', 'title', 'mime_type')
 
     external_url = graphene.String()
+    av_checked = graphene.String()
 
 
 class UploadDocument(graphene.Mutation):
