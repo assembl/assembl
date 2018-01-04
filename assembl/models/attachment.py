@@ -21,7 +21,6 @@ from ..lib.antivirus import get_antivirus
 from ..lib.sqla_types import CoerceUnicode
 from ..lib.sqla import DuplicateHandling
 from ..lib.sqla_types import URLString
-from ..lib import config
 from ..semantic.virtuoso_mapping import QuadMapPatternS
 from ..semantic.namespaces import DCTERMS
 from . import DiscussionBoundBase
@@ -192,9 +191,12 @@ class File(Document):
     def check_for_viruses(self, antivirus=None):
         "Check if the file has viruses"
         antivirus = antivirus or get_antivirus()
-        safe = antivirus.check(self.data, self.guess_extension())
-        status = AntiVirusStatus.passed.name if safe else AntiVirusStatus.failed.name
-        self.av_checked = status
+        # Lock row to avoid multiple antivirus processes
+        (status,) = self.db.query(File.av_checked).filter_by(id=self.id).with_for_update().first()
+        if status == AntiVirusStatus.failed.unchecked.name:
+            safe = antivirus.check(self.data, self.guess_extension())
+            status = AntiVirusStatus.passed.name if safe else AntiVirusStatus.failed.name
+            self.av_checked = status
         return status
 
     def safe_data(self):
