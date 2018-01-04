@@ -9,62 +9,62 @@ import FileUploader from '../../common/fileUploader';
 import TitleWithHelper from '../../common/titleWithHelper';
 import { getEntryValueForLocale } from '../../../utils/i18n';
 import {
-  updateTokenVotePageTitle,
-  updateTokenVotePageDescription,
-  updateTokenVoteHeaderImage,
-  updateTokenVotePageInstructionsTitle,
-  updateTokenVotePageInstructionsDescription,
-  updateTokenVotePageProposalsTitle
-} from '../../../actions/adminActions/tokenVote';
+  updateVoteSessionPageTitle,
+  updateVoteSessionPageSubtitle,
+  updateVoteSessionHeaderImage,
+  updateVoteSessionPageInstructionsTitle,
+  updateVoteSessionPageInstructionsContent,
+  updateVoteSessionPagePropositionsTitle
+} from '../../../actions/adminActions/voteSession';
 
 type PageFormProps = {
   headerTitle: string,
-  headerDescription: string,
+  headerSubtitle: string,
   headerImgUrl: string,
   headerImgMimeType: string,
   instructionsTitle: string,
   instructionsContent: string,
-  proposalsSectionTitle: string,
+  propositionSectionTitle: string,
   selectedLocale: string,
   handleHeaderTitleChange: Function,
-  handleHeaderDescriptionChange: Function,
+  handleHeaderSubtitleChange: Function,
   handleHeaderImageChange: Function,
   handleInstructionsTitleChange: Function,
   handleInstructionsContentChange: Function,
-  handleProposalsSectionTitleChange: Function
+  handlePropositionSectionTitleChange: Function
 };
 
 const PageForm = ({
   headerTitle,
-  headerDescription,
+  headerSubtitle,
   headerImgUrl,
   headerImgMimeType,
   instructionsTitle,
   instructionsContent,
-  proposalsSectionTitle,
+  propositionSectionTitle,
   selectedLocale,
   handleHeaderTitleChange,
-  handleHeaderDescriptionChange,
+  handleHeaderSubtitleChange,
   handleHeaderImageChange,
   handleInstructionsTitleChange,
   handleInstructionsContentChange,
-  handleProposalsSectionTitleChange
+  handlePropositionSectionTitleChange
 }: PageFormProps) => {
   const headerTitlePh = `${I18n.t('administration.ph.headerTitle')} ${selectedLocale.toUpperCase()}*`;
-  const headerDescriptionPh = `${I18n.t('administration.ph.headerDescription')} ${selectedLocale.toUpperCase()}`;
+  const headerSubtitlePh = `${I18n.t('administration.ph.headerSubtitle')} ${selectedLocale.toUpperCase()}`;
   const instructionsTitlePh = `${I18n.t('administration.ph.instructionsTitle')} ${selectedLocale.toUpperCase()}*`;
   const instructionsContentPh = `${I18n.t('administration.ph.instructionsContent')} ${selectedLocale.toUpperCase()}*`;
-  const proposalsSectionTitlePh = `${I18n.t('administration.ph.proposalsSectionTitle')} ${selectedLocale.toUpperCase()}*`;
+  const propositionSectionTitlePh = `${I18n.t('administration.ph.propositionSectionTitle')} ${selectedLocale.toUpperCase()}*`;
   return (
     <div className="admin-box">
-      <SectionTitle title={I18n.t('administration.tokenVote.0')} annotation={I18n.t('administration.annotation')} />
+      <SectionTitle title={I18n.t('administration.voteSession.0')} annotation={I18n.t('administration.annotation')} />
       <div className="admin-content">
         <div className="form-container">
           <form>
             <TitleWithHelper
               title={I18n.t('administration.headerTitle')}
               previewUrl="/static2/img/helpers/helper1.png"
-              txt={I18n.t('administration.helpers.tokenHeader')}
+              txt={I18n.t('administration.helpers.voteSessionHeader')}
             />
             <FormControlWithLabel
               label={headerTitlePh}
@@ -74,10 +74,10 @@ const PageForm = ({
               value={headerTitle}
             />
             <FormControlWithLabel
-              label={headerDescriptionPh}
-              onChange={handleHeaderDescriptionChange}
+              label={headerSubtitlePh}
+              onChange={handleHeaderSubtitleChange}
               type="text"
-              value={headerDescription}
+              value={headerSubtitle}
             />
             <FormGroup>
               <FileUploader fileOrUrl={headerImgUrl} handleChange={handleHeaderImageChange} mimeType={headerImgMimeType} />
@@ -87,7 +87,7 @@ const PageForm = ({
           <TitleWithHelper
             title={I18n.t('administration.instructions')}
             previewUrl="/static2/img/helpers/helper2.png"
-            txt={I18n.t('administration.helpers.tokenInstructions')}
+            txt={I18n.t('administration.helpers.voteSessionInstructions')}
           />
           <FormControlWithLabel
             label={instructionsTitlePh}
@@ -106,16 +106,16 @@ const PageForm = ({
           />
           <div className="separator" />
           <TitleWithHelper
-            title={I18n.t('administration.proposalsSectionTitle')}
+            title={I18n.t('administration.propositionSectionTitle')}
             previewUrl="/static2/img/helpers/helper3.png"
-            txt={I18n.t('administration.helpers.tokenProposalsSection')}
+            txt={I18n.t('administration.helpers.voteSessionPropositionSection')}
           />
           <FormControlWithLabel
-            label={proposalsSectionTitlePh}
-            onChange={handleProposalsSectionTitleChange}
+            label={propositionSectionTitlePh}
+            onChange={handlePropositionSectionTitleChange}
             required
             type="text"
-            value={proposalsSectionTitle}
+            value={propositionSectionTitle}
           />
         </div>
       </div>
@@ -124,26 +124,25 @@ const PageForm = ({
 };
 
 const mapStateToProps = (state, { selectedLocale }) => {
-  const tokenVote = state.admin.tokenVote;
+  const voteSession = state.admin.voteSession;
   return {
-    headerTitle: getEntryValueForLocale(tokenVote.get('titleEntries'), selectedLocale),
-    headerDescription: getEntryValueForLocale(tokenVote.get('descriptionEntries'), selectedLocale),
-    instructionsTitle: getEntryValueForLocale(tokenVote.get('instructionsTitleEntries'), selectedLocale),
+    headerTitle: getEntryValueForLocale(voteSession.get('titleEntries'), selectedLocale),
+    headerSubtitle: getEntryValueForLocale(voteSession.get('subTitleEntries'), selectedLocale),
+    instructionsTitle: getEntryValueForLocale(voteSession.get('instructionsSectionTitleEntries'), selectedLocale),
     instructionsContent: '',
-    proposalsSectionTitle: getEntryValueForLocale(tokenVote.get('proposalsTitleEntries'), selectedLocale),
-    headerImgName: tokenVote.getIn(['headerImage', 'title']),
-    headerImgMimeType: tokenVote.getIn(['headerImage', 'mimeType']),
-    headerImgUrl: tokenVote.getIn(['headerImage', 'externalUrl'])
+    propositionSectionTitle: getEntryValueForLocale(voteSession.get('propositionsSectionTitleEntries'), selectedLocale),
+    headerImgUrl: voteSession.get('headerImgUrl'),
+    headerImgMimeType: 'image/jpeg'
   };
 };
 
 const mapDispatchToProps = (dispatch, { selectedLocale }) => ({
-  handleHeaderTitleChange: e => dispatch(updateTokenVotePageTitle(selectedLocale, e.target.value)),
-  handleHeaderDescriptionChange: e => dispatch(updateTokenVotePageDescription(selectedLocale, e.target.value)),
-  handleHeaderImageChange: value => dispatch(updateTokenVoteHeaderImage(value)),
-  handleInstructionsTitleChange: e => dispatch(updateTokenVotePageInstructionsTitle(selectedLocale, e.target.value)),
-  handleInstructionsContentChange: value => dispatch(updateTokenVotePageInstructionsDescription(selectedLocale, value)),
-  handleProposalsSectionTitleChange: e => dispatch(updateTokenVotePageProposalsTitle(selectedLocale, e.target.value))
+  handleHeaderTitleChange: e => dispatch(updateVoteSessionPageTitle(selectedLocale, e.target.value)),
+  handleHeaderSubtitleChange: e => dispatch(updateVoteSessionPageSubtitle(selectedLocale, e.target.value)),
+  handleHeaderImageChange: value => dispatch(updateVoteSessionHeaderImage(value)),
+  handleInstructionsTitleChange: e => dispatch(updateVoteSessionPageInstructionsTitle(selectedLocale, e.target.value)),
+  handleInstructionsContentChange: value => dispatch(updateVoteSessionPageInstructionsContent(selectedLocale, value)),
+  handlePropositionSectionTitleChange: e => dispatch(updateVoteSessionPagePropositionsTitle(selectedLocale, e.target.value))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(PageForm);

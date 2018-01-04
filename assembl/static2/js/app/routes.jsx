@@ -27,7 +27,7 @@ import SurveyAdmin from './pages/surveyAdmin';
 import ThreadAdmin from './pages/threadAdmin';
 import DiscussionAdmin from './pages/discussionAdmin';
 import MultiColumnsAdmin from './pages/multiColumnsAdmin';
-import TokenVoteAdmin from './pages/tokenVoteAdmin';
+import VoteSessionAdmin from './pages/voteSessionAdmin';
 import ResourcesCenter from './pages/resourcesCenter';
 import { routeForRouter, getFullPath } from './utils/routeMap';
 
@@ -39,7 +39,7 @@ const DebateHome = (props) => {
     return <DebateThread {...props} />;
   case 'multiColumns':
     return <DebateThread {...props} />;
-  case 'tokenVote':
+  case 'voteSession':
     return <NotFound />;
   default:
     return <Debate {...props} />;
@@ -54,7 +54,7 @@ const DebateChild = (props) => {
     return <Idea id={props.id} identifier={props.identifier} routerParams={props.params} />;
   case 'multiColumns':
     return <Idea id={props.id} identifier={props.identifier} routerParams={props.params} />;
-  case 'tokenVote':
+  case 'voteSession':
     return <NotFound />;
   default:
     return <Idea id={props.id} identifier={props.identifier} />;
@@ -71,8 +71,8 @@ const AdminChild = (props) => {
     return <ThreadAdmin />;
   case 'multiColumns':
     return <MultiColumnsAdmin />;
-  case 'tokenVote':
-    return <TokenVoteAdmin section={props.location.query.section} />;
+  case 'voteSession':
+    return <VoteSessionAdmin section={props.location.query.section} />;
   case 'resourcesCenter':
     return <ResourcesCenterAdmin />;
   default:
@@ -100,7 +100,7 @@ export default [
     <Route path={routeForRouter('changePassword', true)} component={ChangePassword} />
     <Route path={routeForRouter('requestPasswordChange', true)} component={RequestPasswordChange} />
     <Route path={routeForRouter('oldVote', false)} component={DummyVotes} />
-    <Route path={routeForRouter('debate', false, { phase: 'tokenVote' })} component={DummyVotes} />
+    <Route path={routeForRouter('debate', false, { phase: 'voteSession' })} component={DummyVotes} />
     <Route component={App}>
       <Route component={Main}>
         <Redirect from={routeForRouter('homeBare')} to={routeForRouter('home')} />

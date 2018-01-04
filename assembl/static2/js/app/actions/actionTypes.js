@@ -26,15 +26,16 @@ export const MOVE_DOWN_SECTION: 'MOVE_DOWN_SECTION' = 'MOVE_DOWN_SECTION';
 export const UPDATE_LEGAL_NOTICE_ENTRY: 'UPDATE_LEGAL_NOTICE_ENTRY' = 'UPDATE_LEGAL_NOTICE_ENTRY';
 export const UPDATE_TERMS_AND_CONDITIONS_ENTRY: 'UPDATE_TERMS_AND_CONDITIONS_ENTRY' = 'UPDATE_TERMS_AND_CONDITIONS_ENTRY';
 export const UPDATE_LEGAL_NOTICE_AND_TERMS: 'UPDATE_LEGAL_NOTICE_AND_TERMS' = 'UPDATE_LEGAL_NOTICE_AND_TERMS';
-export const UPDATE_TOKEN_PAGE: 'UPDATE_TOKEN_PAGE' = 'UPDATE_TOKEN_PAGE';
-export const UPDATE_TOKEN_PAGE_TITLE: 'UPDATE_TOKEN_PAGE_TITLE' = 'UPDATE_TOKEN_PAGE_TITLE';
-export const UPDATE_TOKEN_PAGE_DESCRIPTION: 'UPDATE_TOKEN_PAGE_DESCRIPTION' = 'UPDATE_TOKEN_PAGE_DESCRIPTION';
-export const UPDATE_TOKEN_PAGE_INSTRUCTIONS_TITLE: 'UPDATE_TOKEN_PAGE_INSTRUCTIONS_TITLE' =
-  'UPDATE_TOKEN_PAGE_INSTRUCTIONS_TITLE';
-export const UPDATE_TOKEN_PAGE_INSTRUCTIONS_DESCRIPTION: 'UPDATE_TOKEN_PAGE_INSTRUCTIONS_DESCRIPTION' =
-  'UPDATE_TOKEN_PAGE_INSTRUCTIONS_DESCRIPTION';
-export const UPDATE_TOKEN_PAGE_PROPOSALS_TITLE: 'UPDATE_TOKEN_PAGE_PROPOSALS_TITLE' = 'UPDATE_TOKEN_PAGE_PROPOSALS_TITLE';
-export const UPDATE_TOKEN_PAGE_IMAGE: 'UPDATE_TOKEN_PAGE_IMAGE' = 'UPDATE_TOKEN_PAGE_IMAGE';
+export const UPDATE_VOTE_SESSION_PAGE: 'UPDATE_VOTE_SESSION_PAGE' = 'UPDATE_VOTE_SESSION_PAGE';
+export const UPDATE_VOTE_SESSION_PAGE_TITLE: 'UPDATE_VOTE_SESSION_PAGE_TITLE' = 'UPDATE_VOTE_SESSION_PAGE_TITLE';
+export const UPDATE_VOTE_SESSION_PAGE_SUBTITLE: 'UPDATE_VOTE_SESSION_PAGE_SUBTITLE' = 'UPDATE_VOTE_SESSION_PAGE_SUBTITLE';
+export const UPDATE_VOTE_SESSION_PAGE_INSTRUCTIONS_TITLE: 'UPDATE_VOTE_SESSION_PAGE_INSTRUCTIONS_TITLE' =
+  'UPDATE_VOTE_SESSION_PAGE_INSTRUCTIONS_TITLE';
+export const UPDATE_VOTE_SESSION_PAGE_INSTRUCTIONS_CONTENT: 'UPDATE_VOTE_SESSION_PAGE_INSTRUCTIONS_CONTENT' =
+  'UPDATE_VOTE_SESSION_PAGE_INSTRUCTIONS_CONTENT';
+export const UPDATE_VOTE_SESSION_PAGE_PROPOSITIONS_TITLE: 'UPDATE_VOTE_SESSION_PAGE_PROPOSITIONS_TITLE' =
+  'UPDATE_VOTE_SESSION_PAGE_PROPOSITIONS_TITLE';
+export const UPDATE_VOTE_SESSION_PAGE_IMAGE: 'UPDATE_VOTE_SESSION_PAGE_IMAGE' = 'UPDATE_VOTE_SESSION_PAGE_IMAGE';
 
 export type UpdateContentLocaleById = {
   type: typeof UPDATE_CONTENT_LOCALE_BY_ID,
@@ -200,48 +201,49 @@ export type UpdateLegalNoticeAndTerms = {
   type: typeof UPDATE_LEGAL_NOTICE_AND_TERMS
 };
 
-export type UpdateTokenVotePageTitle = {
+export type UpdateVoteSessionPageTitle = {
   locale: string,
   value: string,
-  type: typeof UPDATE_TOKEN_PAGE_TITLE
+  type: typeof UPDATE_VOTE_SESSION_PAGE_TITLE
 };
 
-export type UpdateTokenVotePageDescription = {
+export type UpdateVoteSessionPageSubtitle = {
   locale: string,
   value: string,
-  type: typeof UPDATE_TOKEN_PAGE_DESCRIPTION
+  type: typeof UPDATE_VOTE_SESSION_PAGE_SUBTITLE
 };
 
-export type UpdateTokenVotePageInstructionsTitle = {
+export type UpdateVoteSessionPageInstructionsTitle = {
   locale: string,
   value: string,
-  type: typeof UPDATE_TOKEN_PAGE_INSTRUCTIONS_TITLE
+  type: typeof UPDATE_VOTE_SESSION_PAGE_INSTRUCTIONS_TITLE
 };
 
-export type UpdateTokenVotePageInstructionsDescription = {
+export type UpdateVoteSessionPageInstructionsContent = {
   locale: string,
   value: string,
-  type: typeof UPDATE_TOKEN_PAGE_INSTRUCTIONS_DESCRIPTION
+  type: typeof UPDATE_VOTE_SESSION_PAGE_INSTRUCTIONS_CONTENT
 };
 
-export type UpdateTokenVotePageProposalsTitle = {
+export type UpdateVoteSessionPagePropositionsTitle = {
   locale: string,
   value: string,
-  type: typeof UPDATE_TOKEN_PAGE_PROPOSALS_TITLE
+  type: typeof UPDATE_VOTE_SESSION_PAGE_PROPOSITIONS_TITLE
 };
 
-export type UpdateTokenVoteHeaderImage = {
+export type UpdateVoteSessionHeaderImage = {
   value: File,
-  type: typeof UPDATE_TOKEN_PAGE_IMAGE
+  type: typeof UPDATE_VOTE_SESSION_PAGE_IMAGE
 };
 
-export type UpdateTokenVotePage = {
-  titleEntries: Array<any>,
-  descriptionEntries: Array<any>,
-  instructionsTitleEntries: Array<any>,
-  instructionsDescriptionEntries: Array<any>,
-  proposalsTitleEntries: Array<any>,
-  headerImage: File | null
+export type UpdateVoteSessionPage = {
+  titleEntries: Array<LangStringEntryInput>,
+  subTitleEntries: Array<LangStringEntryInput>,
+  instructionsSectionTitleEntries: Array<LangStringEntryInput>,
+  instructionsSectionContentEntries: Array<LangStringEntryInput>,
+  propositionsSectionTitleEntries: Array<LangStringEntryInput>,
+  headerImgUrl: string,
+  type: typeof UPDATE_VOTE_SESSION_PAGE
 };
 
 type BasicAction = {
@@ -267,13 +269,13 @@ type LegalNoticeAndTermsActions = UpdateLegalNoticeEntry | UpdateTermsAndConditi
 
 type SectionActions = CreateSection | DeleteSection | UpSection | DownSection;
 
-type TokenVoteActions =
-  | UpdateTokenVotePageTitle
-  | UpdateTokenVotePageDescription
-  | UpdateTokenVotePageInstructionsTitle
-  | UpdateTokenVotePageInstructionsDescription
-  | UpdateTokenVotePageProposalsTitle
-  | UpdateTokenVoteHeaderImage;
+type VoteSessionActions =
+  | UpdateVoteSessionPageTitle
+  | UpdateVoteSessionPageSubtitle
+  | UpdateVoteSessionPageInstructionsTitle
+  | UpdateVoteSessionPageInstructionsContent
+  | UpdateVoteSessionPagePropositionsTitle
+  | UpdateVoteSessionHeaderImage;
 
 export type Action =
   | UpdateContentLocaleById
@@ -281,5 +283,5 @@ export type Action =
   | ResourcesCenterActions
   | LegalNoticeAndTermsActions
   | SectionActions
-  | TokenVoteActions
+  | VoteSessionActions
   | BasicAction;
