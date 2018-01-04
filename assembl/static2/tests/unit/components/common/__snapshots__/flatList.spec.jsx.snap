@@ -1,0 +1,21 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`FlatList component should match FlatList loading snapshot 1`] = `
+<Loader
+  color="black"
+/>
+`;
+
+exports[`FlatList component should match FlatList with data snapshot 1`] = `
+<div
+  className={undefined}
+>
+  <ListItem
+    node={
+      Object {
+        "title": "Foobar",
+      }
+    }
+  />
+</div>
+`;
