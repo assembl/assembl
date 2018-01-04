@@ -22,7 +22,7 @@ from .idea_content_link import IdeaContentWidgetLink
 from .generic import Content
 from .post import Post, IdeaProposalPost
 from .auth import User
-from .votes import AbstractVoteSpecification, AbstractIdeaVote
+from . import AbstractVoteSpecification, AbstractIdeaVote
 from ..views.traversal import (
     CollectionDefinition, AbstractCollectionDefinition)
 from ..semantic.virtuoso_mapping import QuadMapPatternS

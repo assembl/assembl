@@ -7,7 +7,7 @@ from sqlalchemy import (
 )
 from sqlalchemy.orm import relationship, backref
 
-from .auth import CrudPermissions, P_MANAGE_RESOURCE, P_READ
+from assembl.auth import CrudPermissions, P_MANAGE_RESOURCE, P_READ
 from . import DiscussionBoundBase
 from .langstrings import LangString
 

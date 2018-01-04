@@ -9,7 +9,8 @@ from urllib import unquote
 
 from enum import IntEnum
 from assembl.lib import config
-from ..models import AbstractAgentAccount, User
+from assembl.models import AbstractAgentAccount, User
+
 
 SALT_SIZE = 8
 
@@ -157,10 +158,9 @@ def verify_email_token(token, max_age=None):
         account = AbstractAgentAccount.get(int(id))
         if not account:
             return None, Validity.DATA_NOT_FOUND
-        if verify_password(
-            str(account.id) + account.email + config.get(
-                'security.account_token_salt'), hash, HashEncoding.HEX):
+        if verify_password(str(account.id) + account.email + config.get('security.account_token_salt'), hash, HashEncoding.HEX):
             return account, Validity.VALID
+
         return account, Validity.BAD_HASH
     except:
         return None, Validity.INVALID_FORMAT

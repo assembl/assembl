@@ -28,6 +28,7 @@ from zope import interface
 from pyramid.httpexceptions import HTTPUnauthorized, HTTPBadRequest
 from pyramid.i18n import TranslationStringFactory, make_localizer
 from pyramid_mailer.message import Message
+from pyramid.security import Everyone
 from celery import current_task
 from jinja2 import Environment, PackageLoader
 
@@ -37,8 +38,7 @@ from ..lib.decl_enums import DeclEnum
 from ..lib.sqla import get_session_maker
 from ..lib.utils import waiting_get
 from ..lib import config
-from .auth import (
-    User, Everyone, P_ADMIN_DISC, CrudPermissions, P_READ, UserTemplate)
+from .auth import User, P_ADMIN_DISC, CrudPermissions, P_READ, UserTemplate
 from .discussion import Discussion
 from .generic import Content
 from .post import Post, SynthesisPost

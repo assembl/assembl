@@ -20,7 +20,6 @@ from ..lib.sqla_types import URLString
 from .discussion import Discussion
 from .idea import Idea, AppendingVisitor
 from .auth import User
-from .widgets import Widget
 from ..auth import CrudPermissions, P_VOTE, P_SYSADMIN, P_ADMIN_DISC, P_READ
 from ..semantic.virtuoso_mapping import QuadMapPatternS
 from ..semantic.namespaces import (VOTE, ASSEMBL, DCTERMS, QUADNAMES)
@@ -211,6 +210,7 @@ class AbstractVoteSpecification(DiscussionBoundBase):
         self.settings = json.dumps(val)
 
     def get_discussion_id(self):
+        from .widgets import Widget
         widget = self.widget or Widget.get(self.widget_id)
         return widget.get_discussion_id()
 

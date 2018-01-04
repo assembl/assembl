@@ -37,12 +37,11 @@ from sqla_rdfbridge.mapping import PatternIriClass
 from ..lib import config
 from ..lib.utils import get_global_base_url
 from ..lib.locale import to_posix_string
-from ..lib.sqla import CrudOperation, get_model_watcher
+from ..lib.sqla import CrudOperation, get_model_watcher, PrivateObjectMixin
 from ..lib.sqla_types import (
     URLString, EmailString, EmailUnicode, CaseInsensitiveWord, CoerceUnicode)
 from ..lib.raven_client import capture_exception
-from . import Base, DiscussionBoundBase, PrivateObjectMixin
-from .generic import ContentSource
+from . import Base, DiscussionBoundBase
 from ..auth import (
     ASSEMBL_PERMISSIONS,
     CrudPermissions,
@@ -1502,11 +1501,13 @@ class AnonymousUser(DiscussionBoundBase, User):
     # Create an index for (discussion, role)?
 
     def get_discussion_id(self):
+        from .generic import ContentSource
         source = self.source or ContentSource.get(self.source_id)
         return source.discussion_id
 
     @classmethod
     def get_discussion_conditions(cls, discussion_id, alias_maker=None):
+        from .generic import ContentSource
         if alias_maker is None:
             anonymous_user = cls
             source = ContentSource

@@ -99,7 +99,10 @@ class NamedClassMixin(object):
         return query.filter_by(**{cls.get_naming_column_name(): name}).first()
 
 
-# ignore qa because we import models from everywhere to enable imports like "from assembl.models import Whatever"
+# ignore qa because we import this stuff from here
+from ..lib.history_mixin import HistoryMixin, TombstonableMixin  # noqa: E402, F401
+from ..lib.sqla import get_database_id, get_session_maker, DummyContext, PrivateObjectMixin  # noqa: E402, F401
+
 from .auth import (  # noqa: E402, F401
     AbstractAgentAccount,
     AgentProfile,

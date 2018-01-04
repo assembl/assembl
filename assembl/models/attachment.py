@@ -23,8 +23,9 @@ from . import DiscussionBoundBase
 from .post import Post
 from .idea import Idea
 from .resource import Resource
-from .auth import (
-    AgentProfile, CrudPermissions, P_READ, P_ADMIN_DISC, P_ADD_POST,
+from .auth import AgentProfile
+from assembl.auth import (
+    CrudPermissions, P_READ, P_ADMIN_DISC, P_ADD_POST,
     P_SYSADMIN, P_EDIT_POST, P_ADD_IDEA, P_EDIT_IDEA, P_MANAGE_RESOURCE)
 
 

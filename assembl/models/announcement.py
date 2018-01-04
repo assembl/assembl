@@ -16,14 +16,14 @@ from ..semantic.namespaces import DCTERMS
 from . import DiscussionBoundBase
 from .idea import Idea
 from .langstrings import LangString
-from .auth import (
-    AgentProfile,
+from assembl.auth import (
     CrudPermissions,
     P_READ,
     P_ADMIN_DISC,
     P_ADD_IDEA,
     P_EDIT_IDEA
 )
+from .auth import AgentProfile
 
 
 class Announcement(DiscussionBoundBase):
