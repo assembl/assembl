@@ -199,6 +199,7 @@ var MessageColumnView = BaseMessageColumnView.extend({
     panelBody: ".subpanel-body",
     messageColumnHeader: '.js_messageColumnHeader',
     messageColumnDescription: '.js_messageColumnDescription',
+    messageColumnSynthesisTitle: '.js_messageColumnSynthesisTitle',
     topPostRegion: '.js_topPostRegion',
     messageFamilyList: '.js_messageFamilies_region',
     pendingMessage: '.pendingMessage',
@@ -214,6 +215,7 @@ var MessageColumnView = BaseMessageColumnView.extend({
     messageFamilyList: '@ui.messageFamilyList',
     topPostRegion: '@ui.topPostRegion',
     messageColumnDescription: '@ui.messageColumnDescription',
+    messageColumnSynthesisTitle: '@ui.messageColumnSynthesisTitle',
   },
 
   events: function() {
@@ -346,10 +348,16 @@ var MessageColumnView = BaseMessageColumnView.extend({
     BaseMessageColumnView.prototype.onRender.apply(this, arguments);
     var that = this,
         header = this.model.get('header'),
+        synthesis_title = this.model.get('synthesis_title'),
         canEdit = Ctx.getCurrentUser().can(Permissions.ADMIN_DISCUSSION),
         renderId = _.clone(this._renderId);
 
     if (this.processIsEnded() || canEdit) {
+      this.messageColumnSynthesisTitle.show(new CKEditorLSField({
+        model: this.model,
+        modelProp: 'synthesis_title',
+        canEdit: canEdit,
+      }));
       this.messageColumnDescription.show(new CKEditorLSField({
         model: this.model,
         modelProp: 'header',
@@ -394,6 +402,11 @@ var MessageColumnView = BaseMessageColumnView.extend({
         $('.js_messageColumnDescription').addClass('message-column-description');
       }else{
         $('.js_messageColumnDescription').removeClass('message-column-description');
+      }
+      if(!synthesis_title || synthesis_title.isEmptyStripped(translationData)){
+        $('.js_messageColumnSynthesisTitle').addClass('message-column-description');
+      }else{
+        $('.js_messageColumnSynthesisTitle').removeClass('message-column-description');
       }
     });
   },
