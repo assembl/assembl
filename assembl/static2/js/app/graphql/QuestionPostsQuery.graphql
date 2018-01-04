@@ -1,0 +1,21 @@
+query PostsQuery($id: ID!, $first: Int!, $after: String!) {
+  question: node(id: $id) {
+    ... on Question {
+      id
+      posts(first: $first, after: $after) {
+        pageInfo {
+          endCursor
+          hasNextPage
+        }
+        edges {
+          node {
+            ... on Post {
+              id
+              originalLocale
+            }
+          }
+        }
+      }
+    }
+  }
+}
