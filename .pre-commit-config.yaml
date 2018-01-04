@@ -39,4 +39,4 @@
     name: flake8
     entry: bash -c "PATH=./venv/bin/:$PATH flake8 `git diff --name-only --diff-filter=d --cached -- '*.py'|grep assembl/`"
     language: system
-    files: "assembl/"
+    types: [python]
