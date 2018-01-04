@@ -3,22 +3,26 @@ from collections import defaultdict
 from datetime import datetime
 
 from sqlalchemy import (
-    Column, ForeignKey, Integer, Boolean, String, SmallInteger,
-    UnicodeText, UniqueConstraint, event, inspect, Sequence, events,
+    Column,
+    ForeignKey,
+    Integer,
+    Boolean,
+    String,
+    SmallInteger,
+    UnicodeText,
+    UniqueConstraint,
+    event,
+    inspect,
+    Sequence,
     literal)
 from sqlalchemy.sql.expression import case
-from sqlalchemy.ext.declarative import declared_attr
-from sqlalchemy.orm import (
-    relationship, backref, subqueryload, joinedload, aliased,
-    attributes)
+from sqlalchemy.orm import relationship, backref, subqueryload, joinedload, aliased
 from sqlalchemy.orm.query import Query
-from sqlalchemy.orm.collections import attribute_mapped_collection
 from sqlalchemy.ext.hybrid import hybrid_method, hybrid_property
 from ..lib.sqla_types import CoerceUnicode
 import simplejson as json
 
 from . import Base, TombstonableMixin
-from ..lib import config
 from ..lib.abc import classproperty
 from ..auth import CrudPermissions, P_READ, P_ADMIN_DISC, P_SYSADMIN
 
@@ -147,9 +151,9 @@ class Locale(Base):
 
     @staticmethod
     def extract_translated_from_locale(locale_code):
-        l = locale_code.split('-x-mtfrom-', 1)
-        if len(l) == 2:
-            return l[1]
+        locale = locale_code.split('-x-mtfrom-', 1)
+        if len(locale) == 2:
+            return locale[1]
 
     @property
     def machine_translated_from(self):
@@ -207,8 +211,7 @@ class Locale(Base):
 
     @classmethod
     def code_for_id(cls, id):
-        if (cls._locale_collection_byid is not None
-                and id not in cls._locale_collection_byid):
+        if cls._locale_collection_byid is not None and id not in cls._locale_collection_byid:
             # may have been created in another process
             cls.reset_cache()
         return cls.locale_collection_byid[id]
@@ -224,8 +227,7 @@ class Locale(Base):
 
     @classmethod
     def get_id_of(cls, code, create=True):
-        if (cls._locale_collection is not None
-                and code not in cls._locale_collection):
+        if cls._locale_collection is not None and code not in cls._locale_collection:
             # may have been created in another process
             if create:
                 return cls.get_or_create(code).id
@@ -314,9 +316,9 @@ class LocaleLabel(Base):
     name = Column(CoerceUnicode)
 
     named_locale = relationship(Locale, foreign_keys=(
-            named_locale_id,))
+        named_locale_id,))
     locale_of_label = relationship(Locale, foreign_keys=(
-            locale_id_of_label,))
+        locale_id_of_label,))
 
     @classmethod
     def names_in_locale(cls, locale):
@@ -469,7 +471,7 @@ class LangString(Base):
     @classmethod
     def create(cls, value, locale_code=Locale.UNDEFINED):
         ls = cls()
-        lse = LangStringEntry(
+        LangStringEntry(
             langstring=ls, value=value,
             locale_id=Locale.get_id_of(locale_code))
         return ls
@@ -547,6 +549,7 @@ class LangString(Base):
                     ls.owner_object = target
         event.listen(owner_class, "load", load_owner_object, propagate=True)
         event.listens_for(owner_class, "refresh", load_owner_object, propagate=True)
+
         def set_owner_object(target, value, old_value, initiator):
             if old_value is not None:
                 old_value.owner_object = None
@@ -857,8 +860,7 @@ class LangStringEntry(TombstonableMixin, Base):
         """ in the kwargs, you can specify locale info in many ways:
         as a Locale numeric id (locale_id), Locale object (locale)
         or language code (@language)"""
-        if ("locale_id" not in kwargs and "locale" not in kwargs
-                and '@language' in kwargs):
+        if "locale_id" not in kwargs and "locale" not in kwargs and '@language' in kwargs:
             # Create locale on demand.
             locale_code = kwargs.get("@language", "und")
             del kwargs["@language"]
@@ -903,10 +905,10 @@ class LangStringEntry(TombstonableMixin, Base):
             langstring=langstring,
             locale_id=self.locale_id,
             value=self.value,
-            tombstone_date = self.tombstone_date or (
+            tombstone_date=self.tombstone_date or (
                 tombstone if tombstone else None),
             locale_identification_data=self.locale_identification_data,
-            locale_confirmed = self.locale_confirmed,
+            locale_confirmed=self.locale_confirmed,
             error_code=self.error_code,
             error_count=self.error_count)
         db = db or self.db
@@ -916,7 +918,7 @@ class LangStringEntry(TombstonableMixin, Base):
     def __repr__(self):
         value = self.value or ''
         if len(value) > 50:
-            value = value[:50]+'...'
+            value = value[:50] + '...'
         if self.error_code:
             return (u'%d: [%s, ERROR %d] "%s"' % (
                 self.id or -1,
@@ -1065,7 +1067,6 @@ class LangStringEntry(TombstonableMixin, Base):
 #     crud_permissions = CrudPermissions(
 #          P_TRANSLATE, P_READ, P_SYSADMIN, P_SYSADMIN,
 #          P_TRANSLATE, P_TRANSLATE)
-
 
 
 def includeme(config):

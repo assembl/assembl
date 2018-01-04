@@ -1,19 +1,10 @@
-from sqlalchemy.orm import (
-    relationship, backref, aliased, contains_eager, joinedload, deferred,
-    column_property, with_polymorphic)
+from sqlalchemy.orm import relationship, backref
 from sqlalchemy import (
     Column,
-    Boolean,
     Integer,
     String,
-    Unicode,
-    Float,
     UnicodeText,
-    DateTime,
-    ForeignKey,
-    inspect,
-    select,
-    func,
+    ForeignKey
 )
 
 from ..auth import CrudPermissions, P_ADMIN_DISC, P_READ
@@ -36,9 +27,7 @@ class Thematic(Idea):
         onupdate='CASCADE'
     ), primary_key=True)
 
-
-    identifier = Column(String(60),
-        doc="An identifier correspond to a specific phase.")
+    identifier = Column(String(60), doc="An identifier correspond to a specific phase.")
 
     video_title_id = Column(
         Integer(), ForeignKey(LangString.id))
@@ -82,13 +71,11 @@ class Thematic(Idea):
 
     video_html_code = Column(UnicodeText)
 
-    crud_permissions = CrudPermissions(P_ADMIN_DISC, P_READ, P_ADMIN_DISC,
-        P_ADMIN_DISC)
+    crud_permissions = CrudPermissions(P_ADMIN_DISC, P_READ, P_ADMIN_DISC, P_ADMIN_DISC)
 
 
-LangString.setup_ownership_load_event(Thematic,
-    ['video_title', 'video_description_top', 'video_description_bottom',
-     'video_description_side'])
+LangString.setup_ownership_load_event(
+    Thematic, ['video_title', 'video_description_top', 'video_description_bottom', 'video_description_side'])
 
 
 class Question(Idea):
@@ -106,5 +93,4 @@ class Question(Idea):
         onupdate='CASCADE'
     ), primary_key=True)
 
-    crud_permissions = CrudPermissions(P_ADMIN_DISC, P_READ, P_ADMIN_DISC,
-        P_ADMIN_DISC)
+    crud_permissions = CrudPermissions(P_ADMIN_DISC, P_READ, P_ADMIN_DISC, P_ADMIN_DISC)

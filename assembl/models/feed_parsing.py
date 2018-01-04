@@ -4,12 +4,7 @@ from importlib import import_module
 from datetime import datetime
 from calendar import timegm
 
-from sqlalchemy import (
-    Column,
-    ForeignKey,
-    Integer,
-    String,
- )
+from sqlalchemy import Column, ForeignKey, Integer, String
 from pyisemail import is_email
 import feedparser
 import requests
@@ -81,7 +76,7 @@ class ParsedData(object):
         if not self._feed:
             self._feed = self._parse_agent.parse(self.url)
 
-    def _update_feed(self,url):
+    def _update_feed(self, url):
         self._feed = self._parse_agent.parse(url)
 
     def refetch_source(self):
@@ -98,7 +93,7 @@ class ParsedData(object):
         return self.get_parsed_feed()['feed']
 
     # Does not update the source
-    def get_feed_forced(self,url):
+    def get_feed_forced(self, url):
         return self._parse_agent.parse(url)
 
     def get_feed_title(self):
@@ -117,6 +112,7 @@ class PaginatedParsedData(ParsedData):
     @TODO: Extend this object to support variable key pagination, rather than
     simple integer incrementation.
     """
+
     def __init__(self, url, parser_wrapper=None,
                  page_key='page', start_page=1):
         self.page_number = start_page
@@ -239,7 +235,7 @@ class FeedPostSource(PostSource):
         'polymorphic_identity': 'feed_posts_source'
     }
 
-    post_type = FeedPost # for db querying
+    post_type = FeedPost  # for db querying
     user_type = WebLinkAccount
 
     def make_reader(self):
@@ -257,7 +253,7 @@ class FeedPostSource(PostSource):
                    parser_full_class_name=parser_name)
 
     def send_post(self, post):
-        #TODO?
+        # TODO?
         print "TODO?: FeedPostSource::send_post():  Actually send the post"
 
     def generate_message_id(self, source_post_id):
@@ -286,14 +282,14 @@ class LoomioPostSource(FeedPostSource):
         return LoomioSourceReader(self.id)
 
     def send_post(self, post):
-        #TODO?
+        # TODO?
         print "TODO?: LoomioPostSource::send_post():  Actually send the post"
 
 
 class FeedSourceReader(PullSourceReader):
 
     def __init__(self, source_id):
-        super(FeedSourceReader,self).__init__(source_id)
+        super(FeedSourceReader, self).__init__(source_id)
         self._parse_agent = None
 
     def do_read(self):
@@ -308,7 +304,6 @@ class FeedSourceReader(PullSourceReader):
         for entry in self._parse_agent.get_entries():
             try:
                 post_id = self._get_entry_id(entry)
-                user_link = self._get_author_link(entry)
                 persisted_post = self._return_existing_post(post_id)
                 account = self._create_account_from_entry(entry)
                 other_account = account.find_duplicate(True, True)
@@ -369,7 +364,7 @@ class FeedSourceReader(PullSourceReader):
     def _check_parser_loaded(self):
         if not self._parse_agent:
             module, parse_cls = \
-                tmp =  self.source.parser_full_class_name.rsplit(".",1)
+                tmp = self.source.parser_full_class_name.rsplit(".", 1)
             mod = import_module(module)
             tmp = getattr(mod, parse_cls)
             self._parse_agent = tmp(self.source.url)
@@ -398,25 +393,25 @@ class FeedSourceReader(PullSourceReader):
         self._check_parser_loaded()
         return self._parse_agent.get_feed_title()
 
-    def _get_creation_date(self,entry):
+    def _get_creation_date(self, entry):
         return datetime.fromtimestamp(timegm(entry['updated_parsed']))
 
     def _get_entry_id(self, entry):
         return entry['id'].encode('utf-8')
 
-    def _get_body_mime_type(self,entry):
+    def _get_body_mime_type(self, entry):
         return entry['content'][0]['type']
 
-    def _get_subject(self,entry):
+    def _get_subject(self, entry):
         return entry['title'].encode('utf-8')
 
-    def _get_body(self,entry):
+    def _get_body(self, entry):
         return entry['content'][0]['value'].encode('utf-8')
 
-    def _get_author(self,entry):
+    def _get_author(self, entry):
         return entry['author'].encode('utf-8')
 
-    def _get_author_link(self,entry):
+    def _get_author_link(self, entry):
         return entry['author_detail']['href'].encode('utf-8')
 
     def _convert_to_post(self, entry, account):
@@ -452,11 +447,9 @@ class LoomioSourceReader(FeedSourceReader):
             _process_reimport_post(entry, post, discussion)
         post.subject = self._get_title_from_feed()
 
-    def _get_body(self,entry):
+    def _get_body(self, entry):
         return entry['content'][0]['value']
 
-    def _convert_to_post(self,entry,account):
-        post = super(LoomioSourceReader, self)._convert_to_post(entry,account)
-        subject = self._get_title_from_feed()
-        body = self._get_body(entry)
+    def _convert_to_post(self, entry, account):
+        post = super(LoomioSourceReader, self)._convert_to_post(entry, account)
         return post

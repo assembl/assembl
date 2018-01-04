@@ -14,7 +14,7 @@ def get_thematics(discussion_id, phase_id):
     query = model.query.filter(
         model.discussion_id == discussion_id
         ).filter(model.identifier == phase_id
-        ).filter(model.hidden == False
+        ).filter(model.hidden == False  # noqa: E712
         ).filter(model.tombstone_date == None
         ).order_by(model.id)
 

@@ -7,13 +7,13 @@ from collections import defaultdict
 from csv import DictWriter
 
 from sqlalchemy import (
-    Column, Integer, ForeignKey, Boolean, String, Float, DateTime, Unicode,
-    Text, and_, UniqueConstraint)
+    Column, Integer, ForeignKey, Boolean, String, Float, DateTime,
+    Text, UniqueConstraint)
 from sqlalchemy.sql import functions
-from sqlalchemy.orm import (relationship, backref, joinedload, aliased)
+from sqlalchemy.orm import relationship, backref, aliased
 from pyramid.settings import asbool
 
-from . import (Base, DiscussionBoundBase, HistoryMixin)
+from . import DiscussionBoundBase, HistoryMixin
 from ..lib.abc import abstractclassmethod
 from ..lib.sqla import DuplicateHandling
 from ..lib.sqla_types import URLString
@@ -83,7 +83,7 @@ class AbstractVoteSpecification(DiscussionBoundBase):
 
     def get_generic_voting_url(self):
         return 'local:Discussion/%d/widgets/%d/vote_specifications/%d/votes' % (
-                self.get_discussion_id(), self.widget_id, self.id)
+            self.get_discussion_id(), self.widget_id, self.id)
 
     def get_vote_results_url(self):
         return 'local:Discussion/%d/widgets/%d/vote_specifications/%d/vote_results' % (
@@ -159,16 +159,15 @@ class AbstractVoteSpecification(DiscussionBoundBase):
                 votable_link_alias = aliased(VotableIdeaWidgetLink)
                 idea_alias = last_alias
                 return query.join(
-                        votable_link_alias,
-                        votable_link_alias.idea_id == idea_alias.id
-                    ).join(
-                        widget_alias,
-                        (widget_alias.id == votable_link_alias.widget_id)
-                        & (widget_alias.id == widget.id)
-                    ).join(
-                        spec_alias,
-                        spec_alias.id == parent_instance.id
-                    )
+                    votable_link_alias,
+                    votable_link_alias.idea_id == idea_alias.id
+                ).join(
+                    widget_alias,
+                    (widget_alias.id == votable_link_alias.widget_id) & (widget_alias.id == widget.id)
+                ).join(
+                    spec_alias,
+                    spec_alias.id == parent_instance.id
+                )
 
             def decorate_instance(
                     self, instance, parent_instance, assocs, user_id, ctx,
@@ -211,6 +210,7 @@ class AbstractVoteSpecification(DiscussionBoundBase):
         self.settings = json.dumps(val)
 
     def get_discussion_id(self):
+        from .widgets import Widget
         widget = self.widget or Widget.get(self.widget_id)
         return widget.get_discussion_id()
 
@@ -229,7 +229,7 @@ def empty_matrix(size, dim):
     if dim == 1:
         # shortcut
         return [0] * size
-    return [empty_matrix(size, dim-1) for i in range(size)]
+    return [empty_matrix(size, dim - 1) for i in range(size)]
 
 
 class TokenVoteSpecification(AbstractVoteSpecification):
@@ -295,23 +295,20 @@ class TokenVoteSpecification(AbstractVoteSpecification):
         if vote.token_category:
             return vote.token_category.is_valid_vote(vote)
         else:
-            return True # TODO: post-validate
+            return True  # TODO: post-validate
 
 
 class TokenCategorySpecification(DiscussionBoundBase):
     "This represents a token type, with its constraints"
 
     __tablename__ = "token_category_specification"
-    __table_args__ = (UniqueConstraint(
-      'token_vote_specification_id', 'typename'),)
+    __table_args__ = (UniqueConstraint('token_vote_specification_id', 'typename'),)
 
     id = Column(Integer, primary_key=True)
     total_number = Column(Integer, nullable=False)
     maximum_per_idea = Column(Integer)
-    name_ls_id = Column(Integer, ForeignKey(LangString.id),
-        nullable=False, index=True)
-    typename = Column(String, nullable=False,
-      doc='categories which have the same typename will be comparable (example: "positive")')
+    name_ls_id = Column(Integer, ForeignKey(LangString.id), nullable=False, index=True)
+    typename = Column(String, nullable=False, doc='categories which have the same typename will be comparable (example: "positive")')
     image = Column(URLString)
     image_empty = Column(URLString)
 
@@ -343,7 +340,7 @@ class TokenCategorySpecification(DiscussionBoundBase):
         (total,) = self.db.query(functions.sum(TokenIdeaVote.vote_value)).filter(
             TokenIdeaVote.token_category_id == self.id,
             TokenIdeaVote.voter_id == vote.voter_id,
-            TokenIdeaVote.tombstone_date == None
+            TokenIdeaVote.tombstone_date == None  # noqa: E711
             ).first()
         if total > self.total_number:
             return False
@@ -393,17 +390,16 @@ class LickertVoteSpecification(AbstractVoteSpecification):
     def voting_results(self, histogram_size=None):
         if self.question_id:
             group_specs = [vs for vs in self.widget.vote_specifications
-                           if vs.question_id == self.question_id
-                           and isinstance(vs, LickertVoteSpecification)]
+                           if vs.question_id == self.question_id and isinstance(vs, LickertVoteSpecification)]
             assert self in group_specs
             if len(group_specs) > 1:
                 # arbitrary but constant order
                 group_specs.sort(key=lambda s: s.id)
                 base_results = {
-                        spec.uri(): super(LickertVoteSpecification, spec
-                                    ).voting_results(histogram_size)
-                        for spec in group_specs
-                    }
+                    spec.uri(): super(LickertVoteSpecification, spec
+                                ).voting_results(histogram_size)
+                    for spec in group_specs
+                }
                 if histogram_size:
                     self.joint_histogram(
                         group_specs, histogram_size, base_results)
@@ -448,11 +444,10 @@ class LickertVoteSpecification(AbstractVoteSpecification):
                     for gn, spec in enumerate(group_specs):
                         vote_val = votes_by_spec[spec].vote_value
                         sums[gn] += vote_val
-                        sum_squares[gn] += vote_val*vote_val
+                        sum_squares[gn] += vote_val * vote_val
                         prod *= vote_val
-                        bin_num = int((vote_val - spec.minimum)
-                                      / bin_sizes[spec])
-                        bin_num = min(bin_num, histogram_size-1)
+                        bin_num = int((vote_val - spec.minimum) / bin_sizes[spec])
+                        bin_num = min(bin_num, histogram_size - 1)
                         bin_num = max(bin_num, 0)
                         if gn == len(group_specs) - 1:
                             h[bin_num] += 1
@@ -462,9 +457,9 @@ class LickertVoteSpecification(AbstractVoteSpecification):
             results['n'] = n
             if len(group_specs) == 2 and n > 1:
                 try:
-                    b1 = (sums[0]*sums[1] - n*sum_prods
-                          ) / (sums[0]*sums[0] - n*sum_squares[0])
-                    b0 = (sums[1] - b1*sums[0])/n
+                    b1 = (sums[0] * sums[1] - n * sum_prods
+                          ) / (sums[0] * sums[0] - n * sum_squares[0])
+                    b0 = (sums[1] - b1 * sums[0]) / n
                     results['b0'] = b0
                     results['b1'] = b1
                 except ZeroDivisionError:
@@ -473,7 +468,7 @@ class LickertVoteSpecification(AbstractVoteSpecification):
         if len(group_specs) > 2:
             # eliminate a dimension and recurse
             for n in range(len(group_specs)):
-                sub_group_specs = group_specs[:n] + group_specs[n+1:]
+                sub_group_specs = group_specs[:n] + group_specs[n + 1:]
                 cls.joint_histogram(
                     sub_group_specs, histogram_size, joint_histograms,
                     votes_by_idea_user_spec)
@@ -491,7 +486,7 @@ class LickertVoteSpecification(AbstractVoteSpecification):
             bin_size = float(self.maximum - self.minimum) / histogram_size
             for vote in voting_results:
                 bin_num = int((vote.vote_value - self.minimum) / bin_size)
-                bin_num = min(bin_num, histogram_size-1)
+                bin_num = min(bin_num, histogram_size - 1)
                 bin_num = max(bin_num, 0)
                 histogram[bin_num] += 1
             base['histogram'] = histogram
@@ -499,7 +494,6 @@ class LickertVoteSpecification(AbstractVoteSpecification):
 
     def csv_results(self, csv_file, histogram_size=None):
         histogram_size = histogram_size or 10
-        bin_size = float(self.maximum - self.minimum) / histogram_size
         bins = range(histogram_size)
         bins.insert(0, "idea")
         bins.extend(["avg", "std_dev"])
@@ -651,13 +645,11 @@ class AbstractIdeaVote(HistoryMixin, DiscussionBoundBase):
         backref=backref("votes_ts", cascade="all, delete-orphan"))
     idea = relationship(
         Idea,
-        primaryjoin="and_(Idea.id == AbstractIdeaVote.idea_id,"
-                         "Idea.tombstone_date == None)",
+        primaryjoin="and_(Idea.id == AbstractIdeaVote.idea_id, Idea.tombstone_date == None)",
         foreign_keys=(idea_id,),
         backref=backref(
             "votes",
-            primaryjoin="and_(Idea.id == AbstractIdeaVote.idea_id,"
-                 "AbstractIdeaVote.tombstone_date == None)"))
+            primaryjoin="and_(Idea.id == AbstractIdeaVote.idea_id, AbstractIdeaVote.tombstone_date == None)"))
 
     vote_spec_id = Column(
         Integer,
@@ -672,8 +664,7 @@ class AbstractIdeaVote(HistoryMixin, DiscussionBoundBase):
         primaryjoin="AbstractVoteSpecification.id==AbstractIdeaVote.vote_spec_id",
         backref=backref(
             "votes",
-            primaryjoin="and_(AbstractVoteSpecification.id==AbstractIdeaVote.vote_spec_id, "
-                             "AbstractIdeaVote.tombstone_date == None)",
+            primaryjoin="and_(AbstractVoteSpecification.id==AbstractIdeaVote.vote_spec_id, AbstractIdeaVote.tombstone_date == None)",
             ))
 
     criterion_id = Column(
@@ -690,7 +681,7 @@ class AbstractIdeaVote(HistoryMixin, DiscussionBoundBase):
                 VOTE.voting_criterion,
                 Idea.iri_class().apply(cls.idea_id),
                 name=QUADNAMES.voting_criterion,
-                conditions=(cls.idea_id != None,)),
+                conditions=(cls.idea_id != None,)),  # noqa: E711
         ]
 
     # This dies and becomes indirect through vote_spec
@@ -698,13 +689,11 @@ class AbstractIdeaVote(HistoryMixin, DiscussionBoundBase):
         Idea, foreign_keys=(criterion_id,))
     criterion = relationship(
         Idea,
-        primaryjoin="and_(Idea.id == AbstractIdeaVote.criterion_id,"
-                         "Idea.tombstone_date == None)",
+        primaryjoin="and_(Idea.id == AbstractIdeaVote.criterion_id, Idea.tombstone_date == None)",
         foreign_keys=(criterion_id,),
         backref=backref(
             "votes_using_this_criterion",
-            primaryjoin="and_(Idea.id == AbstractIdeaVote.criterion_id,"
-                             "AbstractIdeaVote.tombstone_date == None)",
+            primaryjoin="and_(Idea.id == AbstractIdeaVote.criterion_id, AbstractIdeaVote.tombstone_date == None)",
             ))
 
     vote_date = Column(DateTime, default=datetime.utcnow,
@@ -723,8 +712,7 @@ class AbstractIdeaVote(HistoryMixin, DiscussionBoundBase):
         primaryjoin="User.id==AbstractIdeaVote.voter_id",
         backref=backref(
             "votes",
-            primaryjoin="and_(User.id==AbstractIdeaVote.voter_id, "
-                             "AbstractIdeaVote.tombstone_date == None)"))
+            primaryjoin="and_(User.id==AbstractIdeaVote.voter_id, AbstractIdeaVote.tombstone_date == None)"))
 
     def is_owner(self, user_id):
         return self.voter_id == user_id
@@ -745,8 +733,7 @@ class AbstractIdeaVote(HistoryMixin, DiscussionBoundBase):
         primaryjoin="VotingWidget.id==AbstractIdeaVote.widget_id",
         backref=backref(
             "votes",
-            primaryjoin="and_(VotingWidget.id==AbstractIdeaVote.widget_id, "
-                             "AbstractIdeaVote.tombstone_date == None)"))
+            primaryjoin="and_(VotingWidget.id==AbstractIdeaVote.widget_id, AbstractIdeaVote.tombstone_date == None)"))
     widget_ts = relationship(
         "VotingWidget",
         backref=backref("votes_ts", cascade="all, delete-orphan"))

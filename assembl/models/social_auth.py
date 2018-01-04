@@ -9,43 +9,27 @@ from datetime import datetime, timedelta
 
 import transaction
 from sqlalchemy import (
-    Boolean,
     Column,
     String,
     ForeignKey,
     Integer,
     Unicode,
-    UnicodeText,
     DateTime,
-    Time,
-    Binary,
-    Text,
-    inspect,
-    desc,
-    event,
-    Index,
     UniqueConstraint
 )
-import simplejson as json
-from sqlalchemy.orm import (
-    relationship, backref, deferred)
+from sqlalchemy.orm import relationship
 from social.storage.sqlalchemy_orm import (
-    SQLAlchemyMixin, SQLAlchemyUserMixin, SQLAlchemyNonceMixin, UserMixin,
+    SQLAlchemyMixin, SQLAlchemyNonceMixin, UserMixin,
     SQLAlchemyAssociationMixin, SQLAlchemyCodeMixin, BaseSQLAlchemyStorage)
 from sqlalchemy.ext.mutable import MutableDict
-from urllib import quote, unquote
+from urllib import unquote
 
 from ..lib import config
-from ..lib.sqla_types import (
-    URLString, EmailString, EmailUnicode, CaseInsensitiveWord, JSONType)
-from .auth import (
-    AbstractAgentAccount, IdentityProvider, AgentProfile, User, Username)
+from ..lib.sqla_types import URLString, JSONType
+from .auth import AbstractAgentAccount, IdentityProvider, AgentProfile, User, Username
 from . import Base
-from ..semantic.namespaces import (
-    SIOC, ASSEMBL, QUADNAMES, FOAF, DCTERMS, RDF)
-from ..semantic.virtuoso_mapping import (
-    QuadMapPatternS, USER_SECTION, PRIVATE_USER_SECTION,
-    AssemblQuadStorageManager)
+from ..semantic.namespaces import SIOC
+from ..semantic.virtuoso_mapping import QuadMapPatternS
 
 
 log = logging.getLogger('assembl')
@@ -251,8 +235,8 @@ class SocialAuthAccount(
         # choose best known profile for base_account
         # prefer profiles with verified users, then users, then oldest profiles
         users.sort(key=lambda p: (
-                isinstance(p, User) and p.verified,
-                isinstance(p, User), -p.id),
+            isinstance(p, User) and p.verified,
+            isinstance(p, User), -p.id),
             reverse=True)
         return users
 

@@ -10,7 +10,6 @@ from sqlalchemy import (
     Column,
     Integer,
     Text,
-    Unicode,
     ForeignKey,
 )
 from sqlalchemy.orm import relationship
@@ -18,7 +17,40 @@ from ..lib.sqla_types import CoerceUnicode
 from pyramid.httpexceptions import HTTPUnauthorized
 
 from . import Base, DeclarativeAbstractMeta, NamedClassMixin
-from ..auth import *
+from ..auth import (
+    ASSEMBL_PERMISSIONS,
+    Authenticated,
+    CrudPermissions,
+    Everyone,
+    P_ADD_EXTRACT,
+    P_ADD_IDEA,
+    P_ADD_POST,
+    P_ADMIN_DISC,
+    P_DELETE_MY_POST,
+    P_DELETE_POST,
+    P_DISC_STATS,
+    P_EDIT_EXTRACT,
+    P_EDIT_IDEA,
+    P_EDIT_MY_EXTRACT,
+    P_EDIT_MY_POST,
+    P_EDIT_POST,
+    P_EDIT_SYNTHESIS,
+    P_EXPORT_EXTERNAL_SOURCE,
+    P_MANAGE_RESOURCE,
+    P_MODERATE,
+    P_OVERRIDE_SOCIAL_AUTOLOGIN,
+    P_READ_PUBLIC_CIF,
+    P_READ,
+    P_SELF_REGISTER,
+    P_SEND_SYNTHESIS,
+    P_SYSADMIN,
+    P_VOTE,
+    R_ADMINISTRATOR,
+    R_CATCHER,
+    R_MODERATOR,
+    R_PARTICIPANT,
+    SYSTEM_ROLES
+)
 from ..lib.abc import classproperty
 from ..lib.locale import _, strip_country
 from ..lib import config
@@ -192,12 +224,12 @@ class Preferences(MutableMapping, Base, NamedClassMixin):
 
     def safe_del(self, key, permissions=(P_READ,)):
         if not self.can_edit(key, permissions):
-            raise HTTPUnauthorized("Cannot delete "+key)
+            raise HTTPUnauthorized("Cannot delete " + key)
         del self[key]
 
     def safe_set(self, key, value, permissions=(P_READ,)):
         if not self.can_edit(key, permissions):
-            raise HTTPUnauthorized("Cannot edit "+key)
+            raise HTTPUnauthorized("Cannot edit " + key)
         self[key] = value
 
     def validate(self, key, value, pref_data=None):

@@ -287,8 +287,7 @@ class CreatePost(graphene.Mutation):
                 # We apply the same logic than in views/api/post.py::create_post  # noqa: E501
                 locale = models.Locale.UNDEFINED
                 if in_reply_to_post and in_reply_to_post.get_title():
-                    original_subject = in_reply_to_post.get_title(
-                        ).first_original()
+                    original_subject = in_reply_to_post.get_title().first_original()
                     locale = original_subject.locale_code
                     subject = original_subject.value
                 elif in_reply_to_idea:
@@ -304,8 +303,7 @@ class CreatePost(graphene.Mutation):
                     if (in_reply_to_post and new_subject == subject and
                             in_reply_to_post.get_title()):
                         # reuse subject and translations
-                        subject_langstring = in_reply_to_post.get_title(
-                            ).clone(discussion.db)
+                        subject_langstring = in_reply_to_post.get_title().clone(discussion.db)
                     else:
                         subject_langstring = models.LangString.create(
                             new_subject, locale)

@@ -4,8 +4,6 @@ PythonSocialAuth_ backend for `WP OAuth Server`_
 .. _PythonSocialAuth: http://psa.matiasaguirre.net/
 .. _`WP OAuth Server`: https://wordpress.org/plugins/oauth2-provider/
 """
-from hashlib import md5
-
 from social.p3 import unquote
 from social.backends.oauth import BaseOAuth2
 

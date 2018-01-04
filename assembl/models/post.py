@@ -47,10 +47,10 @@ class PostVisitor(object):
     def visit_post(self, post):
         pass
 
+
 # Those states lists need to be kept in sync with frontend code
 # static/js/app/models/message.js
 # static2/js/app/constants.js
-
 class PublicationStates(DeclEnum):
     DRAFT = "DRAFT", ""
     SUBMITTED_IN_EDIT_GRACE_PERIOD = "SUBMITTED_IN_EDIT_GRACE_PERIOD", ""
@@ -112,7 +112,7 @@ class Post(Content):
     ancestry = Column(String, default="")
 
     __table_args__ = (
-         Index(
+        Index(
             'ix_%s_post_ancestry' % (Content.full_schema,),
             'ancestry', unique=False,
             postgresql_ops={'ancestry': 'varchar_pattern_ops'}),)
@@ -164,7 +164,7 @@ class Post(Content):
                 SIOC.reply_of,
                 cls.iri_class().apply(cls.parent_id),
                 name=QUADNAMES.post_parent,
-                conditions=(cls.parent_id != None,)),
+                conditions=(cls.parent_id != None,)),  # noqa: E711
         ]
 
     creator_id = Column(
@@ -240,8 +240,10 @@ class Post(Content):
                 short = self.shorten_text(entry.value)
             if short != entry.value:
                 shortened = True
-            _ = LangStringEntry(
-                value=short, locale_id=entry.locale_id, langstring=ls)
+
+            # create a LangStringEntry object
+            LangStringEntry(value=short, locale_id=entry.locale_id, langstring=ls)
+
         if shortened or is_html:
             return ls
         else:
@@ -304,26 +306,13 @@ class Post(Content):
         return query.scalar()
 
     def ancestor_ids(self):
-        ancestor_ids = [
-            int(ancestor_id) \
-            for ancestor_id \
-            in self.ancestry.split(',') \
-            if ancestor_id
-        ]
-        return ancestor_ids
+        return [int(ancestor_id) for ancestor_id in self.ancestry.split(',') if ancestor_id]
 
     def ancestors(self):
-
-        ancestors = [
-            Post.get(ancestor_id) \
-            for ancestor_id \
-            in self.ancestor_ids
-        ]
-
-        return ancestors
+        return [Post.get(ancestor_id) for ancestor_id in self.ancestor_ids]
 
     def prefetch_descendants(self):
-        pass  #TODO
+        pass  # TODO
 
     def visit_posts_depth_first(self, post_visitor):
         self.prefetch_descendants()
@@ -400,14 +389,12 @@ class Post(Content):
 
     def get_subject(self):
         if self.publication_state in blocking_publication_states:
-            #return None
             return LangString.EMPTY()
         if self.subject:
             return super(Post, self).get_subject()
 
     def get_body(self):
         if self.publication_state in blocking_publication_states:
-            #return None
             return LangString.EMPTY()
         if self.body:
             return super(Post, self).get_body()
@@ -583,6 +570,7 @@ class Post(Content):
                     parent_instance.ancestry.split(","))
 
         return {'indirect_idea_content_links': IdeaContentLinkCollection(cls)}
+
     @classmethod
     def restrict_to_owners(cls, query, user_id):
         "filter query according to object owners"
@@ -609,6 +597,7 @@ def orm_insert_listener(mapper, connection, target):
     # from ..tasks.translate import translate_content_task
     # translate_content_task.delay(target.id)
 
+
 event.listen(Post, 'after_insert', orm_insert_listener, propagate=True)
 
 
@@ -626,7 +615,7 @@ class AssemblPost(Post):
     @classmethod
     def generate_message_id(cls):
         # Create a local message_id with uuid1 and hostname
-        return uuid.uuid1().hex+"_assembl@"+config.get('public_hostname')
+        return uuid.uuid1().hex + "_assembl@" + config.get('public_hostname')
 
     id = Column(Integer, ForeignKey(
         'post.id',
@@ -636,10 +625,11 @@ class AssemblPost(Post):
 
     modification_date = Column(DateTime)
 
-    body_mime_type = Column(CoerceUnicode(),
-                        nullable=False,
-                        server_default="text/plain",
-                        doc="The mime type of the body.  See Content::get_body_mime_type() for allowed values.")
+    body_mime_type = Column(
+        CoerceUnicode(),
+        nullable=False,
+        server_default="text/plain",
+        doc="The mime type of the body. See Content::get_body_mime_type() for allowed values.")
 
     __mapper_args__ = {
         'polymorphic_identity': 'assembl_post',
@@ -683,8 +673,8 @@ class SynthesisPost(AssemblPost):
         nullable=False, index=True
     )
 
-    publishes_synthesis = relationship('Synthesis',
-                                     backref=backref('published_in_post',uselist=False))
+    publishes_synthesis = relationship(
+        'Synthesis', backref=backref('published_in_post', uselist=False))
 
     __mapper_args__ = {
         'polymorphic_identity': 'synthesis_post',
@@ -746,7 +736,7 @@ class WidgetPost(AssemblPost):
         "widget.id",
         ondelete='SET NULL',
         onupdate='CASCADE'
-        ), nullable=True, index=True,
+    ), nullable=True, index=True,
         info={"pseudo_nullable": False})
 
     widget = relationship("Widget", backref="posts")
@@ -784,8 +774,8 @@ class IdeaProposalPost(WidgetPost):
         nullable=False
     )
 
-    proposes_idea = relationship('Idea',
-                                 backref=backref('proposed_in_post',uselist=False))
+    proposes_idea = relationship(
+        'Idea', backref=backref('proposed_in_post', uselist=False))
 
     __mapper_args__ = {
         'polymorphic_identity': 'idea_proposal_post',
@@ -798,8 +788,8 @@ class ImportedPost(Post):
     """
     __tablename__ = "imported_post"
     __table_args__ = (
-                UniqueConstraint('source_post_id', 'source_id'),
-            )
+        UniqueConstraint('source_post_id', 'source_id'),
+    )
 
     def __init__(self, *args, **kwargs):
         if 'message_id' not in kwargs:
@@ -822,9 +812,10 @@ class ImportedPost(Post):
 
     import_date = Column(DateTime, nullable=False, default=datetime.utcnow)
 
-    source_post_id = Column(CoerceUnicode(),
-                        nullable=False,
-                        doc="The source-specific unique id of the imported post.  A listener keeps the message_id in the post class in sync")
+    source_post_id = Column(
+        CoerceUnicode(),
+        nullable=False,
+        doc="The source-specific unique id of the imported post.  A listener keeps the message_id in the post class in sync")
 
     source_id = Column('source_id', Integer, ForeignKey(
         'post_source.id', ondelete='CASCADE'), nullable=False,
@@ -835,9 +826,10 @@ class ImportedPost(Post):
         backref=backref('contents')
     )
 
-    body_mime_type = Column(CoerceUnicode(),
-                        nullable=False,
-                        doc="The mime type of the body of the imported content.  See Content::get_body_mime_type() for allowed values.")
+    body_mime_type = Column(
+        CoerceUnicode(),
+        nullable=False,
+        doc="The mime type of the body of the imported content.  See Content::get_body_mime_type() for allowed values.")
 
     imported_blob = deferred(Column(Binary), group='raw_details')
 
@@ -854,7 +846,6 @@ class ImportedPost(Post):
         return query.filter_by(
             source_id=source_id,
             source_post_id=self.source_post_id), True
-
 
 
 @event.listens_for(ImportedPost.source_post_id, 'set', propagate=True)

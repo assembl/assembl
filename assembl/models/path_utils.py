@@ -58,7 +58,7 @@ from .action import ViewPost
 @total_ordering
 class PostPathData(object):
     "Data about a single post_path."
-    __slots__=("positive", "post_path")
+    __slots__ = ("positive", "post_path")
 
     def __init__(self, post_path, positive):
         self.post_path = post_path
@@ -85,8 +85,7 @@ class PostPathData(object):
     def __eq__(self, other):
         if not isinstance(other, self.__class__):
             return False
-        return ((self.positive == other.positive)
-            and (self.post_path == other.post_path))
+        return ((self.positive == other.positive) and (self.post_path == other.post_path))
 
     def __lt__(self, other):
         if not isinstance(other, self.__class__):
@@ -107,6 +106,7 @@ class PostPathData(object):
 
 class PostPathLocalCollection(object):
     "Data about all PostPaths local to an Idea."
+
     def __init__(self):
         self.paths = []
         self.reduced = True
@@ -178,7 +178,7 @@ class PostPathLocalCollection(object):
         point = bisect_right(self.paths, data)
         is_below = False
         if point:
-            previous = self.paths[point-1]
+            previous = self.paths[point - 1]
             is_below = data.post_path.startswith(previous.post_path)
         return point, is_below
 
@@ -190,7 +190,7 @@ class PostPathLocalCollection(object):
         point, is_below = self.find_insertion(subpath)
         if not is_below:
             return False
-        return self.paths[point-1].positive
+        return self.paths[point - 1].positive
 
     def includes_post(self, post_path):
         "Is this post (given as path) included in this collection?"
@@ -217,7 +217,7 @@ class PostPathLocalCollection(object):
         return clone
 
     def __repr__(self):
-        return " ; ".join((`x` for x in self.paths))
+        return " ; ".join((repr(x) for x in self.paths))
 
     def as_clause_base(self, db, include_breakpoints=False,
                        include_deleted=False):
@@ -230,6 +230,7 @@ class PostPathLocalCollection(object):
             False means only live posts or deleted posts with live descendants.
         """
         assert self.reduced
+
         def base_query(labeled=False):
             post = with_polymorphic(
                 Post, [], Post.__table__,
@@ -247,7 +248,7 @@ class PostPathLocalCollection(object):
                     query = query.filter(
                         post.publication_state.in_(deleted_publication_states))
                 else:
-                    query = query.filter(content.tombstone_date == None)
+                    query = query.filter(content.tombstone_date == None)  # noqa: E711
             return post, query
         if not self.paths:
             post, q = base_query(True)
@@ -278,9 +279,9 @@ class PostPathLocalCollection(object):
             # with use_labels, name of final column determined by first query
             post, q2 = base_query(level == 0)
             includes = (includes_by_level[level]
-                if level < len(includes_by_level) else [])
+                        if level < len(includes_by_level) else [])
             excludes = (excludes_by_level[level]
-                if level < len(excludes_by_level) else [])
+                        if level < len(excludes_by_level) else [])
             include_ids = [path.last_id for path in includes]
             exclude_ids = [path.last_id for path in excludes]
             if include_breakpoints:
@@ -330,9 +331,8 @@ class PostPathLocalCollection(object):
             aliased=False, flat=True)
 
         q = db.query(content).filter(
-                (content.discussion_id == discussion_id)
-                & (content.hidden == False)
-                ).join(subq, content.id == subq.c.post_id)
+            (content.discussion_id == discussion_id) & (content.hidden == False)  # noqa: E712
+            ).join(subq, content.id == subq.c.post_id)
         if include_deleted is not None:
             if include_deleted:
                 post = with_polymorphic(
@@ -342,16 +342,14 @@ class PostPathLocalCollection(object):
                     post, (post.id == content.id) &
                     post.publication_state.in_(deleted_publication_states))
             else:
-                q = q.filter(content.tombstone_date == None)
+                q = q.filter(content.tombstone_date == None)  # noqa: E711
 
         if user_id:
             # subquery?
             q = q.outerjoin(
                 ViewPost,
-                (ViewPost.post_id == content.id)
-                & (ViewPost.tombstone_date == None)
-                & (ViewPost.actor_id == user_id)
-                ).add_columns(ViewPost.id)
+                (ViewPost.post_id == content.id) & (ViewPost.tombstone_date == None) & (ViewPost.actor_id == user_id)  # noqa: E711
+            ).add_columns(ViewPost.id)
         return q
 
 
@@ -385,9 +383,9 @@ class PostPathGlobalCollection(object):
             ).join(post, post.id == ICL.content_id
             ).join(content, content.id == post.id
             ).filter(
-                ICL.idea_id != None,
-                content.discussion_id==discussion.id,
-                content.hidden==False)
+                ICL.idea_id != None,  # noqa: E711
+                content.discussion_id == discussion.id,
+                content.hidden == False)
         for (idea_id, typename, path) in q:
             path += ","
             if typename in self.positives:
@@ -403,6 +401,7 @@ class PostPathCombiner(PostPathGlobalCollection, IdeaVisitor):
     of an idea with those of the idea's ancestors.
     The result is that the as_clause of each PostPathLocalCollections
     in self.paths is globally complete"""
+
     def __init__(self, discussion):
         super(PostPathCombiner, self).__init__(discussion)
         self.postponed_paths = []
@@ -463,10 +462,10 @@ class PostPathCombiner(PostPathGlobalCollection, IdeaVisitor):
         synth_post_type = SynthesisPost.__mapper_args__['polymorphic_identity']
         webpage_post_type = Webpage.__mapper_args__['polymorphic_identity']
         q = db.query(content.id.label("post_id")).filter(
-                (content.discussion_id == self.discussion.id)
-                & (content.hidden == False)
-                & (content.type.notin_((synth_post_type, webpage_post_type)))
-                & content.id.notin_(subq))
+            (content.discussion_id == self.discussion.id) &
+            (content.hidden == False) &  # noqa: E712
+            (content.type.notin_((synth_post_type, webpage_post_type))) &
+            content.id.notin_(subq))
         if include_deleted is not None:
             if include_deleted:
                 post = with_polymorphic(
@@ -476,21 +475,20 @@ class PostPathCombiner(PostPathGlobalCollection, IdeaVisitor):
                     post, (post.id == content.id) &
                     post.publication_state.in_(deleted_publication_states))
             else:
-                q = q.filter(content.tombstone_date == None)
+                q = q.filter(content.tombstone_date == None)  # noqa: E711
 
         if user_id:
             # subquery?
             q = q.outerjoin(
                 ViewPost,
-                (ViewPost.post_id == content.id)
-                & (ViewPost.tombstone_date == None)
-                & (ViewPost.actor_id == user_id)
-                ).add_columns(ViewPost.id)
+                (ViewPost.post_id == content.id) & (ViewPost.tombstone_date == None) & (ViewPost.actor_id == user_id)  # noqa: E711
+            ).add_columns(ViewPost.id)
         return q
 
 
 class PostPathCounter(PostPathCombiner):
     "Adds the ability to do post counts to PostPathCombiner."
+
     def __init__(self, discussion, user_id=None, calc_subset=None):
         super(PostPathCounter, self).__init__(discussion)
         self.counts = {}
@@ -593,6 +591,7 @@ class PostPathCounter(PostPathCombiner):
 
 class DiscussionGlobalData(object):
     "Cache for global discussion data, lasts as long as the pyramid request object."
+
     def __init__(self, db, discussion_id, user_id=None, discussion=None):
         self.discussion_id = discussion_id
         self.db = db
@@ -623,7 +622,7 @@ class DiscussionGlobalData(object):
                 ).join(target, target.id == IdeaLink.target_id
                 ).filter(
                 source.discussion_id == self.discussion_id,
-                IdeaLink.tombstone_date == None,
+                IdeaLink.tombstone_date == None,  # noqa: E711
                 source.tombstone_date == None,
                 target.tombstone_date == None,
                 target.discussion_id == self.discussion_id))
@@ -660,9 +659,7 @@ class DiscussionGlobalData(object):
         return self._post_path_collection_raw
 
     def post_path_counter(self, user_id, calc_all):
-        if (self._post_path_counter is None
-                or not isinstance(self._post_path_counter, PostPathCounter)):
-            collection = self.post_path_collection_raw
+        if (self._post_path_counter is None or not isinstance(self._post_path_counter, PostPathCounter)):
             counter = PostPathCounter(
                 self.discussion, user_id, None if calc_all else ())
             counter.init_from(self.post_path_collection_raw)

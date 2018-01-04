@@ -4,10 +4,8 @@ import base64
 from os import urandom
 
 from cryptography.hazmat.backends import default_backend
-from cryptography.hazmat.primitives import padding, hashes, serialization
+from cryptography.hazmat.primitives import padding, hashes
 from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
-
-from .make_saml import private_key_from_cleaned_text
 
 
 class Encryptor(object):
@@ -77,6 +75,7 @@ class AESCryptor(AESDecryptor, AESEncryptor):
 
 class MediactiveAESCryptor(AESCryptor):
     """Mediactive uses the SHA hash of the key as a key"""
+
     def __init__(self, password):
         backend = default_backend()
         digest = hashes.Hash(hashes.SHA256(), backend=backend)

@@ -3,7 +3,7 @@
 .. _`Edgesense Drupal module`: https://github.com/Wikitalia/edgesense/tree/master/php/drupal
 """
 from datetime import datetime
-from urlparse import urlparse, urljoin
+from urlparse import urlparse
 import uuid
 import re
 
@@ -15,7 +15,7 @@ from sqlalchemy import (
     String,
     UniqueConstraint,
     Text
- )
+)
 import requests
 import simplejson as json
 
@@ -171,7 +171,7 @@ class SourceSpecificUnknownAccount(SourceSpecificAccount):
     def display_name(self):
         localizer = get_localizer()
         return localizer.translate(_("Unknown User ${uid}",
-                                   mapping={'uid': self.user_id}))
+                                     mapping={'uid': self.user_id}))
 
 
 class SourceSpecificPost(ImportedPost):
@@ -397,7 +397,8 @@ class EdgeSenseParser(object):
                     # Simplification:
                     # There is a user that is created with a user that
                     # does not exist in the users.json db
-                    unknown_user = {"user": {
+                    unknown_user = {
+                        "user": {
                             "uid": user_id,
                             "name": None
                         }
@@ -420,7 +421,8 @@ class EdgeSenseParser(object):
                     # Simplification:
                     # There is a user that is created with a user that
                     # does not exist in the users.json db
-                    unknown_user = {"user": {
+                    unknown_user = {
+                        "user": {
                             "uid": user_id,
                             "name": None
                         }

@@ -55,7 +55,7 @@ class ContentSource(DiscussionBoundBase):
     type = Column(String(60), nullable=False)
 
     creation_date = Column(DateTime, nullable=False, default=datetime.utcnow,
-        info={'rdf': QuadMapPatternS(None, DCTERMS.created)})
+                           info={'rdf': QuadMapPatternS(None, DCTERMS.created)})
 
     discussion_id = Column(Integer, ForeignKey(
         'discussion.id',
@@ -74,7 +74,7 @@ class ContentSource(DiscussionBoundBase):
                 CATALYST.uses_source,
                 cls.iri_class().apply(cls.id),
                 name=QUADNAMES.uses_source,
-                conditions=(cls.discussion_id != None,)),
+                conditions=(cls.discussion_id != None,)),  # noqa: E711
         ]
 
     discussion = relationship(
@@ -120,7 +120,7 @@ class ContentSource(DiscussionBoundBase):
             d.update(source_post_id)
             d = base64.urlsafe_b64encode(d.digest())
             sanitized = sanitized[
-                :max(0, 64-len(d)-extra_length-1)]
+                :max(0, 64 - len(d) - extra_length - 1)]
             if sanitized:
                 sanitized += "_" + d
             else:
@@ -269,7 +269,7 @@ class Content(TombstonableMixin, DiscussionBoundBase):
                 info={'rdf': QuadMapPatternS(None, ASSEMBL.db_id)})
     type = Column(String(60), nullable=False)
     creation_date = Column(DateTime, nullable=False, default=datetime.utcnow,
-        info={'rdf': QuadMapPatternS(None, DCTERMS.created)})
+                           info={'rdf': QuadMapPatternS(None, DCTERMS.created)})
 
     discussion_id = Column(Integer, ForeignKey(
         'discussion.id',
@@ -302,8 +302,7 @@ class Content(TombstonableMixin, DiscussionBoundBase):
         cascade="all, delete-orphan")
 
     message_classifier = Column(String(100), index=True,
-        doc="Classifier for column views")
-
+                                doc="Classifier for column views")
 
     def __init__(self, *args, **kwargs):
         if (kwargs.get('subject', None) is None and
@@ -413,7 +412,7 @@ class Content(TombstonableMixin, DiscussionBoundBase):
         elif mimetype == "text/plain":
             ls = LangString()
             for e in body.entries:
-                _ = LangStringEntry(
+                LangStringEntry(
                     value='<span style="white-space: pre-wrap">%s</div>' % (
                         e.value,),
                     langstring=ls, locale_id=e.locale_id)
@@ -431,7 +430,7 @@ class Content(TombstonableMixin, DiscussionBoundBase):
             return body.first_original().value
         elif mimetype == "text/plain":
             return '<span style="white-space: pre-wrap">%s</div>' % (
-                        body.first_original().value,)
+                body.first_original().value,)
         else:
             log.error("What is this mimetype?" + mimetype)
             return body
@@ -465,7 +464,7 @@ class Content(TombstonableMixin, DiscussionBoundBase):
             mime_type = document.mime_type
             if mime_type and 'image' in mime_type:
                 output.append(img_source % (document.external_url, img_style,
-                              document.external_url))
+                                            document.external_url))
             else:
                 title = document.title or document.external_url
                 output.append(other_source % (document.external_url, title))
@@ -481,7 +480,7 @@ class Content(TombstonableMixin, DiscussionBoundBase):
         elif mimetype == 'text/html':
             ls = LangString()
             for e in body.entries:
-                _ = LangStringEntry(
+                LangStringEntry(
                     value=sanitize_text(e.value),
                     langstring=ls, locale_id=e.locale_id)
             return ls
@@ -543,7 +542,7 @@ class Content(TombstonableMixin, DiscussionBoundBase):
             name: 0 for name in SentimentOfPost.all_sentiments
         }
         r = self.db.query(
-                SentimentOfPost.type, count(SentimentOfPost.id)
+            SentimentOfPost.type, count(SentimentOfPost.id)
             ).filter(SentimentOfPost.post_id == self.id,
                      SentimentOfPost.tombstone_condition()
             ).group_by(SentimentOfPost.type)
@@ -601,8 +600,8 @@ class Content(TombstonableMixin, DiscussionBoundBase):
         return [Idea.uri_generic(wil.idea_id) for wil in self.widget_idea_links]
 
     crud_permissions = CrudPermissions(
-            P_ADD_POST, P_READ, P_EDIT_POST, P_DELETE_POST,
-            P_EDIT_MY_POST, P_DELETE_MY_POST)
+        P_ADD_POST, P_READ, P_EDIT_POST, P_DELETE_POST,
+        P_EDIT_MY_POST, P_DELETE_MY_POST)
 
 
 LangString.setup_ownership_load_event(Content, ['subject', 'body'])
