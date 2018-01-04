@@ -97,7 +97,7 @@ const PageForm = ({
             value={instructionsTitle}
           />
           <FormControlWithLabel
-            key="instructions-content"
+            key={`instructions-${selectedLocale}`}
             label={instructionsContentPh}
             onChange={handleInstructionsContentChange}
             required
@@ -125,11 +125,12 @@ const PageForm = ({
 
 const mapStateToProps = (state, { selectedLocale }) => {
   const voteSession = state.admin.voteSession;
+  const instructionsContent = getEntryValueForLocale(voteSession.get('instructionsSectionContentEntries'), selectedLocale);
   return {
     headerTitle: getEntryValueForLocale(voteSession.get('titleEntries'), selectedLocale),
     headerSubtitle: getEntryValueForLocale(voteSession.get('subTitleEntries'), selectedLocale),
     instructionsTitle: getEntryValueForLocale(voteSession.get('instructionsSectionTitleEntries'), selectedLocale),
-    instructionsContent: '',
+    instructionsContent: instructionsContent ? instructionsContent.toJS() : null,
     propositionSectionTitle: getEntryValueForLocale(voteSession.get('propositionsSectionTitleEntries'), selectedLocale),
     headerImgUrl: voteSession.get('headerImgUrl'),
     headerImgMimeType: 'image/jpeg'
