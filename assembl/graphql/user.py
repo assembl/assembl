@@ -13,7 +13,7 @@ from assembl.auth.util import get_permissions
 
 from .document import Document
 from .types import SecureObjectType
-from .utils import abort_transaction_on_exception
+from .utils import DateTime, abort_transaction_on_exception
 
 
 _ = TranslationStringFactory('assembl')
@@ -31,6 +31,7 @@ class AgentProfile(SecureObjectType, SQLAlchemyObjectType):
     display_name = graphene.String()
     email = graphene.String()
     image = graphene.Field(Document)
+    creation_date = DateTime()  # creation_date only exists on User, not AgentProfile
 
     def resolve_user_id(self, args, context, info):
         return self.id
