@@ -37,7 +37,7 @@ def main():
     for file_id in file_ids:
         with transaction.manager:
             file_obj = session.query(File).options(undefer(File.data)).get(file_id)
-            file_obj.check_for_viruses(antivirus)
+            file_obj.ensure_virus_checked(antivirus)
 
 
 if __name__ == '__main__':

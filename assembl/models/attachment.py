@@ -188,7 +188,7 @@ class File(Document):
             # somewhat random
             return extensions[0]
 
-    def check_for_viruses(self, antivirus=None):
+    def ensure_virus_checked(self, antivirus=None):
         "Check if the file has viruses"
         antivirus = antivirus or get_antivirus()
         # Lock row to avoid multiple antivirus processes
@@ -203,7 +203,7 @@ class File(Document):
         if self.av_checked == AntiVirusStatus.unchecked.name:
             needs_check = self.discussion.preferences['requires_virus_check']
             if needs_check:
-                self.av_checked = self.check_for_viruses()
+                self.ensure_virus_checked()
         if self.av_checked == AntiVirusStatus.failed.name:
             return ''
         return self.data
