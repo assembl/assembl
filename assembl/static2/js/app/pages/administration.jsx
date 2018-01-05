@@ -20,7 +20,7 @@ import ResourcesCenterPage from '../graphql/ResourcesCenterPage.graphql';
 import SectionsQuery from '../graphql/SectionsQuery.graphql';
 import TabsConditionQuery from '../graphql/TabsConditionQuery.graphql';
 import LegalNoticeAndTermsQuery from '../graphql/LegalNoticeAndTerms.graphql';
-import VoteSession from '../graphql/VoteSession.graphql';
+import VoteSessionQuery from '../graphql/VoteSession.graphql';
 import { convertEntriesToRawContentState } from '../utils/draftjs';
 import { getPhaseId } from '../utils/timeline';
 
@@ -114,7 +114,8 @@ class Administration extends React.Component {
   }
 
   putVoteSessionInStore(voteSession) {
-    this.props.updateVoteSessionPage(voteSession);
+    const filteredVoteSession = filter(VoteSessionQuery, { voteSession: voteSession });
+    this.props.updateVoteSessionPage(filteredVoteSession.voteSession);
   }
 
   putSectionsInStore(sections) {
@@ -285,7 +286,7 @@ export default compose(
       };
     }
   }),
-  graphql(VoteSession, {
+  graphql(VoteSessionQuery, {
     options: ({ debate }) => ({
       variables: { discussionPhaseId: getPhaseId(debate.debateData.timeline, 'voteSession') }
     }),
