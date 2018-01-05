@@ -55,6 +55,7 @@ const PageForm = ({
   const instructionsTitlePh = `${I18n.t('administration.ph.instructionsTitle')} ${selectedLocale.toUpperCase()}*`;
   const instructionsContentPh = `${I18n.t('administration.ph.instructionsContent')} ${selectedLocale.toUpperCase()}*`;
   const propositionSectionTitlePh = `${I18n.t('administration.ph.propositionSectionTitle')} ${selectedLocale.toUpperCase()}*`;
+  const headerImageFieldName = 'header-image';
   return (
     <div className="admin-box">
       <SectionTitle title={I18n.t('administration.voteSession.0')} annotation={I18n.t('administration.annotation')} />
@@ -80,7 +81,13 @@ const PageForm = ({
               value={headerSubtitle}
             />
             <FormGroup>
-              <FileUploader fileOrUrl={headerImgUrl} handleChange={handleHeaderImageChange} mimeType={headerImgMimeType} />
+              <FileUploader
+                mimeType={headerImgMimeType}
+                name={headerImageFieldName}
+                fileOrUrl={headerImgUrl}
+                handleChange={handleHeaderImageChange}
+                withPreview
+              />
             </FormGroup>
           </form>
           <div className="separator" />
@@ -92,7 +99,6 @@ const PageForm = ({
           <FormControlWithLabel
             label={instructionsTitlePh}
             onChange={handleInstructionsTitleChange}
-            required
             type="text"
             value={instructionsTitle}
           />
@@ -100,7 +106,6 @@ const PageForm = ({
             key={`instructions-${selectedLocale}`}
             label={instructionsContentPh}
             onChange={handleInstructionsContentChange}
-            required
             type="rich-text"
             value={instructionsContent}
           />
@@ -132,8 +137,8 @@ const mapStateToProps = (state, { selectedLocale }) => {
     instructionsTitle: getEntryValueForLocale(voteSession.get('instructionsSectionTitleEntries'), selectedLocale),
     instructionsContent: instructionsContent ? instructionsContent.toJS() : null,
     propositionSectionTitle: getEntryValueForLocale(voteSession.get('propositionsSectionTitleEntries'), selectedLocale),
-    headerImgUrl: voteSession.get('headerImgUrl'),
-    headerImgMimeType: 'image/jpeg'
+    headerImgUrl: voteSession.headerImage ? voteSession.headerImage.get('externalUrl') : '',
+    headerImgMimeType: voteSession.headerImage ? voteSession.headerImage.get('mimeType') : ''
   };
 };
 

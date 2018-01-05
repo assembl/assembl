@@ -338,6 +338,7 @@ const Translations = {
       headerTitle: "Bandeau de haut de page",
       PropositionSectionTitle: "Section propositions",
       instructions: "Instructions",
+      voteSessionSuccess: "La session de vote a été enregistrée avec succès.",
       sections: {
         addSection: "Ajouter une rubrique",
         deleteSection: "Supprimer la rubrique",
@@ -754,6 +755,7 @@ const Translations = {
       headerTitle: "Top page Header",
       propositionSectionTitle: "Proposals section",
       instructions: "Instructions",
+      voteSessionSuccess: "The vote session is saved with succès.",
       sections: {
         addSection: "Add a section",
         deleteSection: "Delete the section",

@@ -242,7 +242,7 @@ export type UpdateVoteSessionPage = {
   instructionsSectionTitleEntries: Array<LangStringEntryInput>,
   instructionsSectionContentEntries: Array<LangStringEntryInput>,
   propositionsSectionTitleEntries: Array<LangStringEntryInput>,
-  headerImgUrl: string,
+  headerImage: File | null,
   type: typeof UPDATE_VOTE_SESSION_PAGE
 };
 

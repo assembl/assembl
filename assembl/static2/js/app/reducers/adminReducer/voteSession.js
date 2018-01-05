@@ -21,7 +21,11 @@ const initialState = Map({
   instructionsSectionTitleEntries: List(),
   instructionsSectionContentEntries: List(),
   propositionsSectionTitleEntries: List(),
-  headerImgUrl: ''
+  headerImage: Map({
+    externalUrl: '',
+    mimeType: '',
+    title: ''
+  })
 });
 
 export type VoteSessionReducer = (Map, ReduxAction<Action>) => Map;
@@ -46,7 +50,10 @@ const voteSession: VoteSessionReducer = (state = initialState, action) => {
       .update('propositionsSectionTitleEntries', updateInLangstringEntries(action.locale, fromJS(action.value)))
       .set('hasChanged', true);
   case UPDATE_VOTE_SESSION_PAGE_IMAGE:
-    return state.set('headerImgUrl', action.value);
+    return state
+      .setIn(['headerImage', 'externalUrl'], action.value)
+      .setIn(['headerImage', 'mimeType'], action.value.type)
+      .set('hasChanged', true);
   case UPDATE_VOTE_SESSION_PAGE: {
     return Map({
       hasChanged: false,
@@ -55,7 +62,10 @@ const voteSession: VoteSessionReducer = (state = initialState, action) => {
       instructionsSectionTitleEntries: fromJS(action.instructionsSectionTitleEntries),
       instructionsSectionContentEntries: fromJS(action.instructionsSectionContentEntries),
       propositionsSectionTitleEntries: fromJS(action.propositionsSectionTitleEntries),
-      headerImgUrl: fromJS(action.headerImgUrl)
+      headerImage: Map({
+        externalUrl: action.headerImage ? fromJS(action.headerImage.externalUrl) : '',
+        mimeType: action.headerImage ? fromJS(action.headerImage.mimeType) : ''
+      })
     });
   }
   default:

@@ -267,26 +267,27 @@ const SaveButton = ({
     }
 
     if (voteSession.get('hasChanged')) {
-      const titleEntries = voteSession.get('titleEntries');
-      const subTitleEntries = voteSession.get('subTitleEntries');
-      const instructionsSectionTitleEntries = voteSession.get('instructionsSectionTitleEntries');
-      const instructionsSectionContentEntries = voteSession.get('instructionsSectionContentEntries');
-      const propositionsSectionTitleEntries = voteSession.get('propositionsSectionTitleEntries');
-      const headerImgUrl = voteSession.get('headerImgUrl');
+      const titleEntries = voteSession.get('titleEntries').toJS();
+      const subTitleEntries = voteSession.get('subTitleEntries').toJS();
+      const instructionsSectionTitleEntries = voteSession.get('instructionsSectionTitleEntries').toJS();
+      const instructionsSectionContentEntries = voteSession.get('instructionsSectionContentEntries').toJS();
+      const propositionsSectionTitleEntries = voteSession.get('propositionsSectionTitleEntries').toJS();
+      const pageHeaderImage = voteSession.get('headerImage').toJS();
+      const headerImage = typeof pageHeaderImage.externalUrl === 'object' ? pageHeaderImage.externalUrl : null;
       const payload = {
         variables: {
           discussionPhaseId: getPhaseId(debate.debateData.timeline, 'voteSession'),
           titleEntries: titleEntries,
           subTitleEntries: subTitleEntries,
           instructionsSectionTitleEntries: instructionsSectionTitleEntries,
-          instructionsSectionContentEntries: instructionsSectionContentEntries,
+          instructionsSectionContentEntries: convertEntriesToHTML(instructionsSectionContentEntries),
           propositionsSectionTitleEntries: propositionsSectionTitleEntries,
-          headerImgUrl: headerImgUrl
+          headerImage: headerImage
         }
       };
       updateVoteSession(payload)
         .then(() => {
-          displayAlert('success', 'Bravo');
+          displayAlert('success', I18n.t('administration.voteSessionSuccess'));
         })
         .catch((error) => {
           displayAlert('danger', `${error}`, false, 30000);

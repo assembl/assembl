@@ -46,11 +46,11 @@ export const updateVoteSessionHeaderImage = (value: File): actionTypes.UpdateVot
 });
 
 export const updateVoteSessionPage = (value: Object): actionTypes.UpdateVoteSessionPage => ({
-  titleEntries: value.titleEntries,
-  subTitleEntries: value.subTitleEntries,
-  instructionsSectionTitleEntries: value.instructionsSectionTitleEntries,
-  instructionsSectionContentEntries: value.instructionsSectionContentEntries,
-  propositionsSectionTitleEntries: value.propositionsSectionTitleEntries,
-  headerImgUrl: value.headerImgUrl,
+  titleEntries: value ? value.titleEntries : [],
+  subTitleEntries: value ? value.subTitleEntries : [],
+  instructionsSectionTitleEntries: value ? value.instructionsSectionTitleEntries : [],
+  instructionsSectionContentEntries: value ? value.instructionsSectionContentEntries : [],
+  propositionsSectionTitleEntries: value ? value.propositionsSectionTitleEntries : [],
+  headerImage: value ? value.headerImage : null,
   type: actionTypes.UPDATE_VOTE_SESSION_PAGE
 });

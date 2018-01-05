@@ -55,6 +55,7 @@ class Administration extends React.Component {
     this.putThematicsInStore = this.putThematicsInStore.bind(this);
     this.toggleLanguageMenu = this.toggleLanguageMenu.bind(this);
     this.putLegalNoticeAndTermsInStore = this.putLegalNoticeAndTermsInStore.bind(this);
+    this.putVoteSessionInStore = this.putVoteSessionInStore.bind(this);
     this.state = {
       showLanguageMenu: true
     };
@@ -81,6 +82,10 @@ class Administration extends React.Component {
 
     if (nextProps.sections !== this.props.sections) {
       this.putSectionsInStore(nextProps.sections);
+    }
+
+    if (nextProps.voteSession !== this.props.voteSession) {
+      this.putVoteSessionInStore(nextProps.voteSession);
     }
 
     this.putResourcesCenterInStore(nextProps.resourcesCenter);
@@ -115,7 +120,13 @@ class Administration extends React.Component {
 
   putVoteSessionInStore(voteSession) {
     const filteredVoteSession = filter(VoteSessionQuery, { voteSession: voteSession });
-    this.props.updateVoteSessionPage(filteredVoteSession.voteSession);
+    const voteSessionForStore = {
+      ...filteredVoteSession.voteSession,
+      instructionsSectionContentEntries: filteredVoteSession.voteSession.instructionsSectionContentEntries
+        ? convertEntriesToRawContentState(filteredVoteSession.voteSession.instructionsSectionContentEntries)
+        : null
+    };
+    this.props.updateVoteSessionPage(voteSessionForStore);
   }
 
   putSectionsInStore(sections) {
