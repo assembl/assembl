@@ -59,10 +59,8 @@ def get_timeline_for_date(discussion, date):
     """
     if isinstance(date, basestring):
         date = dateutil.parser.parse(date)
-    mindate = datetime.date(datetime.MINYEAR, 1, 1)
-    mindate = datetime.datetime.combine(mindate, datetime.datetime.min.time())
-    maxdate = datetime.date(datetime.MAXYEAR, 1, 1)
-    maxdate = datetime.datetime.combine(maxdate, datetime.datetime.max.time())
+    mindate = datetime.datetime(datetime.MINYEAR, 1, 1)
+    maxdate = datetime.datetime(datetime.MAXYEAR, 1, 1)
     phases = sorted(discussion.timeline_phases, key=lambda p: p.start or mindate)
     actual_phase = None
     for index, phase in enumerate(phases):
