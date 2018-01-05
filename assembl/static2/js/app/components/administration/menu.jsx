@@ -13,7 +13,7 @@ class Menu extends React.Component {
     return (
       <ul className="admin-menu">
         <li className="menu-item">
-          <Link to={`${get('administration', slug)}/discussion`} activeClassName="active">
+          <Link to={`${get('administration', slug)}/discussion?section=1`} activeClassName="active">
             <Translate value="administration.edition" />
           </Link>
           <ul className={requestedPhase === 'discussion' ? 'shown admin-menu2' : 'hidden admin-menu2'}>
@@ -54,7 +54,7 @@ class Menu extends React.Component {
           ? timeline.map((phase, phaseIndex) => (
             <li className="menu-item" key={phaseIndex}>
               <Link
-                to={`${get('administration', slug)}${get('adminPhase', { ...slug, phase: phase.identifier })}`}
+                to={`${get('administration', slug)}${get('adminPhase', { ...slug, phase: phase.identifier })}?section=1`}
                 activeClassName="active"
               >
                 {phase.title.entries.map((entry, index) => {
