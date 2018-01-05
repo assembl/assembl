@@ -4,6 +4,7 @@ import { compose, graphql, withApollo } from 'react-apollo';
 import { Button } from 'react-bootstrap';
 import { Translate, I18n } from 'react-redux-i18n';
 
+import { getPhaseId } from '../../utils/timeline';
 import { displayAlert } from '../../utils/utilityManager';
 import { convertEntriesToHTML } from '../../utils/draftjs';
 import { languagePreferencesHasChanged, updateSelectedLocale } from '../../actions/adminActions';
@@ -20,6 +21,7 @@ import updateResourcesCenterMutation from '../../graphql/mutations/updateResourc
 import updateLegalNoticeAndTermsMutation from '../../graphql/mutations/updateLegalNoticeAndTerms.graphql';
 import updateDiscussionPreferenceQuery from '../../graphql/mutations/updateDiscussionPreference.graphql';
 import getDiscussionPreferenceLanguage from '../../graphql/DiscussionPreferenceLanguage.graphql';
+import updateVoteSessionMutation from '../../graphql/mutations/updateVoteSession.graphql';
 
 const runSerial = (tasks) => {
   let result = Promise.resolve();
@@ -109,6 +111,7 @@ const createVariablesForDeleteSectionMutation = section => ({ sectionId: section
 
 const SaveButton = ({
   i18n,
+  debate,
   client,
   createThematic,
   deleteThematic,
@@ -139,7 +142,9 @@ const SaveButton = ({
   createSection,
   updateSection,
   deleteSection,
-  refetchLegalNoticeAndTerms
+  refetchLegalNoticeAndTerms,
+  updateVoteSession,
+  voteSession
 }) => {
   const saveAction = () => {
     displayAlert('success', `${I18n.t('loading.wait')}...`);
@@ -260,6 +265,33 @@ const SaveButton = ({
           displayAlert('danger', `${error}`, false, 30000);
         });
     }
+
+    if (voteSession.get('hasChanged')) {
+      const titleEntries = voteSession.get('titleEntries');
+      const subTitleEntries = voteSession.get('subTitleEntries');
+      const instructionsSectionTitleEntries = voteSession.get('instructionsSectionTitleEntries');
+      const instructionsSectionContentEntries = voteSession.get('instructionsSectionContentEntries');
+      const propositionsSectionTitleEntries = voteSession.get('propositionsSectionTitleEntries');
+      const headerImgUrl = voteSession.get('headerImgUrl');
+      const payload = {
+        variables: {
+          discussionPhaseId: getPhaseId(debate.debateData.timeline, 'voteSession'),
+          titleEntries: titleEntries,
+          subTitleEntries: subTitleEntries,
+          instructionsSectionTitleEntries: instructionsSectionTitleEntries,
+          instructionsSectionContentEntries: instructionsSectionContentEntries,
+          propositionsSectionTitleEntries: propositionsSectionTitleEntries,
+          headerImgUrl: headerImgUrl
+        }
+      };
+      updateVoteSession(payload)
+        .then(() => {
+          displayAlert('success', 'Bravo');
+        })
+        .catch((error) => {
+          displayAlert('danger', `${error}`, false, 30000);
+        });
+    }
   };
 
   const disabled = !(
@@ -268,7 +300,8 @@ const SaveButton = ({
     resourcesHaveChanged ||
     sectionsHaveChanged ||
     resourcesCenterPage.get('hasChanged') ||
-    legalNoticeAndTerms.get('hasChanged')
+    legalNoticeAndTerms.get('hasChanged') ||
+    voteSession.get('hasChanged')
   );
   return (
     <Button className="button-submit button-dark right" disabled={disabled} onClick={saveAction}>
@@ -313,10 +346,14 @@ const SaveButtonWithMutations = compose(
   }),
   graphql(updateLegalNoticeAndTermsMutation, {
     name: 'updateLegalNoticeAndTerms'
+  }),
+  graphql(updateVoteSessionMutation, {
+    name: 'updateVoteSession'
   })
 )(SaveButton);
 
 const mapStateToProps = ({
+  debate,
   i18n,
   admin: {
     sections,
@@ -326,7 +363,8 @@ const mapStateToProps = ({
     thematicsInOrder,
     discussionLanguagePreferences,
     discussionLanguagePreferencesHasChanged,
-    legalNoticeAndTerms
+    legalNoticeAndTerms,
+    voteSession
   }
 }) => {
   const { page, resourcesById, resourcesHaveChanged, resourcesInOrder } = resourcesCenter;
@@ -339,6 +377,7 @@ const mapStateToProps = ({
     thematics: thematicsInOrder.toArray().map(id => thematicsById.get(id).toJS()),
     preferences: discussionLanguagePreferences,
     i18n: i18n,
+    debate: debate,
     languagePreferenceHasChanged: discussionLanguagePreferencesHasChanged,
     sectionsHaveChanged: sectionsHaveChanged,
     sections: sectionsById
@@ -348,7 +387,8 @@ const mapStateToProps = ({
       }) // fix order of sections
       .valueSeq() // convert to array of Map
       .toJS(), // convert to array of objects
-    legalNoticeAndTerms: legalNoticeAndTerms
+    legalNoticeAndTerms: legalNoticeAndTerms,
+    voteSession: voteSession
   };
 };
 

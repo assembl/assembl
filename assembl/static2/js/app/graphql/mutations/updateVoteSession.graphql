@@ -1,13 +1,13 @@
 #import "../fragments/VoteSession.graphql"
 
 mutation UpdateVoteSession(
-  $discussionPhaseId: Int
+  $discussionPhaseId: Int!
   $headerImgUrl: String
-  $titleEntries: LangStringEntryInput
-  $subTitleEntries: LangStringEntryInput
-  $instructionsSectionTitleEntries: LangStringEntryInput
-  $instructionsSectionContentEntries: LangStringEntryInput
-  $propositionsSectionTitleEntries: LangStringEntryInput
+  $titleEntries: [LangStringEntryInput]
+  $subTitleEntries: [LangStringEntryInput]
+  $instructionsSectionTitleEntries: [LangStringEntryInput]
+  $instructionsSectionContentEntries: [LangStringEntryInput]
+  $propositionsSectionTitleEntries: [LangStringEntryInput]
 ) {
   updateVoteSession(
     discussionPhaseId: $discussionPhaseId
