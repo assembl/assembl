@@ -26,6 +26,7 @@ var Backbone = require('backbone'),
     scrollUtils = require('../utils/scrollUtils.js'),
     AssemblPanel = require('./assemblPanel.js'),
     CKEditorLSField = require('./reusableDataFields/ckeditorLSField.js'),
+    EditableLSField = require('./reusableDataFields/editableLSField.js'),
     BaseMessageListMixin = require('./baseMessageList.js'),
     CollectionManager = require('../common/collectionManager.js'),
     Widget = require('../models/widget.js'),
@@ -352,17 +353,23 @@ var MessageColumnView = BaseMessageColumnView.extend({
         canEdit = Ctx.getCurrentUser().can(Permissions.ADMIN_DISCUSSION),
         renderId = _.clone(this._renderId);
 
-    if (this.processIsEnded() || canEdit) {
-      this.messageColumnSynthesisTitle.show(new CKEditorLSField({
-        model: this.model,
-        modelProp: 'synthesis_title',
-        canEdit: canEdit,
-      }));
-      this.messageColumnDescription.show(new CKEditorLSField({
-        model: this.model,
-        modelProp: 'header',
-        canEdit: canEdit,
-      }));
+    if ((this.processIsEnded() || canEdit)) {
+      this.translationDataPromise.then(function(translationData) {
+        that.translationData = translationData;
+
+        that.messageColumnSynthesisTitle && that.messageColumnSynthesisTitle.show(new EditableLSField({
+          model: that.model,
+          modelProp: 'synthesis_title',
+          canEdit: canEdit,
+          translationData: translationData,
+        }));
+        that.messageColumnDescription && that.messageColumnDescription.show(new CKEditorLSField({
+          model: that.model,
+          modelProp: 'header',
+          canEdit: canEdit,
+          translationData: translationData,
+        }));
+      });
     }
     this.renderMessageListViewStyleDropdown();
     Promise.join(this.messagesIdsPromise, this.translationDataPromise, function(resultMessageIdCollection, translationData) {
