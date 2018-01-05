@@ -137,8 +137,8 @@ const mapStateToProps = (state, { selectedLocale }) => {
     instructionsTitle: getEntryValueForLocale(voteSession.get('instructionsSectionTitleEntries'), selectedLocale),
     instructionsContent: instructionsContent ? instructionsContent.toJS() : null,
     propositionSectionTitle: getEntryValueForLocale(voteSession.get('propositionsSectionTitleEntries'), selectedLocale),
-    headerImgUrl: voteSession.headerImage ? voteSession.headerImage.get('externalUrl') : '',
-    headerImgMimeType: voteSession.headerImage ? voteSession.headerImage.get('mimeType') : ''
+    headerImgUrl: voteSession.getIn(['headerImage', 'externalUrl']),
+    headerImgMimeType: voteSession.getIn(['headerImage', 'mimeType'])
   };
 };
 
