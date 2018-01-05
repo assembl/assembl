@@ -89,9 +89,10 @@ class UpdateVoteSession(graphene.Mutation):
         if discussion_phase is None:
             raise Exception(
                 "A vote session requires a discussion phase, check discussionPhaseId value")
-        if discussion_phase.identifier != "tokenVote":
+        phase_slug = "voteSession"
+        if discussion_phase.identifier != phase_slug:
             raise Exception(
-                "A vote session can only be created or edited with a tokenVote discussion phase, check discussionPhaseId value")
+                "A vote session can only be created or edited with a '{}' discussion phase, check discussionPhaseId value".format(phase_slug))
 
         # TODO: see if we can avoid this next(iter( thing with a one-to-one relationship
         vote_session = next(iter(discussion_phase.vote_session or []), None)
