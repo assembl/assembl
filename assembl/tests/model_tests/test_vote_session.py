@@ -3,13 +3,14 @@ def en_value(lang_string):
 
 def test_vote_session(vote_session):
     assert (en_value(vote_session.discussion_phase.title)
-        == u"token vote fixture")
+        == u"vote session fixture")
     assert (en_value(vote_session.discussion_phase.description)
-        == u"token vote subtitle fixture")
+        == u"vote session sub title fixture")
     assert (en_value(vote_session.instructions_section_title)
         == u"vote session instructions title fixture")
     assert (en_value(vote_session.instructions_section_content)
         == u"vote session instructions fixture. Lorem ipsum dolor sit amet")
     assert (en_value(vote_session.propositions_section_title)
         == u"vote session propositions section tile fixture")
-    assert vote_session.discussion_phase.image_url == u"https://example.net/image.jpg"
+    assert (vote_session.header_image.title == u"vote session image fixture")
+    
