@@ -59,12 +59,13 @@ def get_timeline_for_date(discussion, date):
     """
     if isinstance(date, basestring):
         date = dateutil.parser.parse(date)
-
-    phases = sorted(discussion.timeline_phases, key=lambda p: p.start)
+    mindate = datetime.datetime(datetime.MINYEAR, 1, 1)
+    maxdate = datetime.datetime(datetime.MAXYEAR, 1, 1)
+    phases = sorted(discussion.timeline_phases, key=lambda p: p.start or mindate)
     actual_phase = None
     for index, phase in enumerate(phases):
         # Assume all dates are in utc, no tz_info however
-        if phase.start <= date < phase.end:
+        if (phase.start or mindate) <= date < (phase.end or maxdate):
             actual_phase = phase
             break
     return actual_phase
