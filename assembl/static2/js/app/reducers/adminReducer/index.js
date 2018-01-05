@@ -11,11 +11,14 @@ import sections from './adminSections';
 import type { AdminSectionsReducers } from './adminSections';
 import { updateInLangstringEntries } from '../../utils/i18n';
 
-type SelectedLocaleState = string;
-type SelectedLocaleReducer = (SelectedLocaleState, ReduxAction<Action>) => SelectedLocaleState;
-export const selectedLocale: SelectedLocaleReducer = (state = 'fr', action) => {
+type EditLocaleState = string;
+type EditLocaleReducer = (EditLocaleState, ReduxAction<Action>) => EditLocaleState;
+/*
+  The locale that is used to edit the content in the administration
+*/
+export const editLocale: EditLocaleReducer = (state = 'fr', action) => {
   switch (action.type) {
-  case 'UPDATE_SELECTED_LOCALE':
+  case 'UPDATE_EDIT_LOCALE':
     return action.newLocale;
   default:
     return state;
@@ -196,7 +199,7 @@ export const discussionLanguagePreferencesHasChanged: DiscussionLanguagePreferen
 
 type ResourcesCenterReducer = Function; // TODO
 export type AdminReducer = {
-  selectedLocale: SelectedLocaleReducer,
+  editLocale: EditLocaleReducer,
   thematicsHaveChanged: ThematicsHaveChangedReducer,
   thematicsInOrder: ThematicsInOrderReducer,
   thematicsById: ThematicsByIdReducer,
@@ -208,7 +211,7 @@ export type AdminReducer = {
 };
 
 const reducers: AdminReducer = {
-  selectedLocale: selectedLocale,
+  editLocale: editLocale,
   thematicsHaveChanged: thematicsHaveChanged,
   thematicsInOrder: thematicsInOrder,
   thematicsById: thematicsById,

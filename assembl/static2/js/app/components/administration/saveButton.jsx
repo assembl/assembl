@@ -6,7 +6,7 @@ import { Translate, I18n } from 'react-redux-i18n';
 
 import { displayAlert } from '../../utils/utilityManager';
 import { convertEntriesToHTML } from '../../utils/draftjs';
-import { languagePreferencesHasChanged, updateSelectedLocale } from '../../actions/adminActions';
+import { languagePreferencesHasChanged, updateEditLocale } from '../../actions/adminActions';
 import createThematicMutation from '../../graphql/mutations/createThematic.graphql';
 import deleteThematicMutation from '../../graphql/mutations/deleteThematic.graphql';
 import updateThematicMutation from '../../graphql/mutations/updateThematic.graphql';
@@ -357,7 +357,7 @@ const mapDispatchToProps = dispatch => ({
     dispatch(languagePreferencesHasChanged(false));
   },
   changeLocale: (newLocale) => {
-    dispatch(updateSelectedLocale(newLocale));
+    dispatch(updateEditLocale(newLocale));
   }
 });
 

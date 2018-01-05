@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { OverlayTrigger } from 'react-bootstrap';
 
 import { languageTooltip } from '../common/tooltips';
-import { updateSelectedLocale } from '../../actions/adminActions';
+import { updateEditLocale } from '../../actions/adminActions';
 import En from '../svg/flags/en';
 import Fr from '../svg/flags/fr';
 import Ja from '../svg/flags/ja';
@@ -28,7 +28,7 @@ const Flag = ({ locale }) => {
   }
 };
 
-const LanguageMenu = ({ changeLocale, selectedLocale, discussionPreferences, visibility }) => {
+const LanguageMenu = ({ changeLocale, editLocale, discussionPreferences, visibility }) => {
   if (visibility) {
     return (
       <div className="relative">
@@ -39,7 +39,7 @@ const LanguageMenu = ({ changeLocale, selectedLocale, discussionPreferences, vis
                 <div
                   onClick={() => changeLocale(key)}
                   id={key}
-                  className={selectedLocale === key ? 'flag-container active' : 'flag-container'}
+                  className={editLocale === key ? 'flag-container active' : 'flag-container'}
                   key={index}
                 >
                   <Flag locale={key} />
@@ -57,13 +57,13 @@ const LanguageMenu = ({ changeLocale, selectedLocale, discussionPreferences, vis
 
 const mapStateToProps = state => ({
   translations: state.i18n.translations,
-  selectedLocale: state.admin.selectedLocale,
+  editLocale: state.admin.editLocale,
   discussionPreferences: state.admin.discussionLanguagePreferences
 });
 
 const mapDispatchToProps = dispatch => ({
   changeLocale: (newLocale) => {
-    dispatch(updateSelectedLocale(newLocale));
+    dispatch(updateEditLocale(newLocale));
   }
 });
 

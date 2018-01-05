@@ -6,16 +6,16 @@ import SectionTitle from '../components/administration/sectionTitle';
 import PageForm from '../components/administration/resourcesCenter/pageForm';
 import ManageResourcesForm from '../components/administration/resourcesCenter/manageResourcesForm';
 
-const ResourcesCenterAdmin = ({ selectedLocale }) => (
+const ResourcesCenterAdmin = ({ editLocale }) => (
   <div className="resources-center-admin admin-box">
     <SectionTitle title={I18n.t('administration.resourcesCenter.title')} annotation={I18n.t('administration.annotation')} />
-    <PageForm selectedLocale={selectedLocale} />
-    <ManageResourcesForm selectedLocale={selectedLocale} />
+    <PageForm editLocale={editLocale} />
+    <ManageResourcesForm editLocale={editLocale} />
   </div>
 );
 
 const mapStateToProps = state => ({
-  selectedLocale: state.admin.selectedLocale
+  editLocale: state.admin.editLocale
 });
 
 export default connect(mapStateToProps)(ResourcesCenterAdmin);

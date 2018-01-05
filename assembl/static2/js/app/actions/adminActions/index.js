@@ -1,6 +1,6 @@
-export const updateSelectedLocale = newLocale => ({
+export const updateEditLocale = newLocale => ({
   newLocale: newLocale,
-  type: 'UPDATE_SELECTED_LOCALE'
+  type: 'UPDATE_EDIT_LOCALE'
 });
 
 export const updateThematics = thematics => ({

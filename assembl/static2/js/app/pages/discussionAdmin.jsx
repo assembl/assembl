@@ -19,7 +19,7 @@ const DiscussionAdmin = (props) => {
 };
 
 const mapStateToProps = state => ({
-  selectedLocale: state.admin.selectedLocale
+  editLocale: state.admin.editLocale
 });
 
 export default connect(mapStateToProps)(DiscussionAdmin);

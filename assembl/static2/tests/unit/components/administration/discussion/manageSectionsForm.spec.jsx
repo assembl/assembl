@@ -8,7 +8,7 @@ describe('DumbManageSectionsForm component', () => {
     const createSectionSpy = jest.fn(() => {});
     const props = {
       sections: List.of('123', '456', '789'),
-      selectedLocale: 'en',
+      editLocale: 'en',
       createSection: createSectionSpy
     };
     const renderer = new ShallowRenderer();
