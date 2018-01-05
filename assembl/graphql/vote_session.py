@@ -117,9 +117,9 @@ class UpdateVoteSession(graphene.Mutation):
                 mime_type=mime_type,
                 title=filename,
                 data=data)
-            models.ResourceAttachment(
+            models.VoteSessionAttachment(
                 document=document,
-                resource=vote_session,
+                vote_session=vote_session,
                 discussion=discussion,
                 creator_id=context.authenticated_userid,
                 title=filename,
