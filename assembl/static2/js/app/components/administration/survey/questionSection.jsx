@@ -28,7 +28,7 @@ class QuestionSection extends React.Component {
   }
 
   render() {
-    const { selectedLocale, thematics } = this.props;
+    const { editLocale, thematics } = this.props;
     const selectedThematicId = this.state.selectedThematicId;
     return (
       <div className="admin-box">
@@ -55,14 +55,14 @@ class QuestionSection extends React.Component {
           {selectedThematicId && (
             <Row>
               <MediaForm
-                key={`media-form-${selectedThematicId}-${selectedLocale}`}
+                key={`media-form-${selectedThematicId}-${editLocale}`}
                 thematicId={selectedThematicId}
-                selectedLocale={selectedLocale}
+                editLocale={editLocale}
               />
               <QuestionsForm
-                key={`questions-form-${selectedThematicId}-${selectedLocale}`}
+                key={`questions-form-${selectedThematicId}-${editLocale}`}
                 thematicId={selectedThematicId}
-                selectedLocale={selectedLocale}
+                editLocale={editLocale}
               />
             </Row>
           )}
@@ -72,9 +72,9 @@ class QuestionSection extends React.Component {
   }
 }
 
-const mapStateToProps = ({ admin: { thematicsById, thematicsInOrder, selectedLocale } }) => ({
+const mapStateToProps = ({ admin: { thematicsById, thematicsInOrder, editLocale } }) => ({
   thematics: thematicsInOrder.filter(id => !thematicsById.getIn([id, 'toDelete'])).toArray(),
-  selectedLocale: selectedLocale
+  editLocale: editLocale
 });
 
 export default connect(mapStateToProps)(QuestionSection);

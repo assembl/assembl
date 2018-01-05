@@ -14,7 +14,7 @@ type PageFormProps = {
   handlePageTitleChange: Function,
   headerMimeType: string,
   headerUrl: File | string,
-  selectedLocale: string,
+  editLocale: string,
   title: string
 };
 
@@ -23,14 +23,14 @@ const DumbPageForm = ({
   handlePageTitleChange,
   headerMimeType,
   headerUrl,
-  selectedLocale,
+  editLocale,
   title
 }: PageFormProps) => {
   const titleLabel = I18n.t('administration.resourcesCenter.pageTitleLabel');
   const headerImageFieldName = 'header-image';
   return (
     <div>
-      <FormControlWithLabel key={selectedLocale} label={titleLabel} onChange={handlePageTitleChange} type="text" value={title} />
+      <FormControlWithLabel key={editLocale} label={titleLabel} onChange={handlePageTitleChange} type="text" value={title} />
       <FormGroup>
         <label htmlFor={headerImageFieldName}>
           <Translate value="administration.resourcesCenter.headerImageLabel" />
@@ -47,19 +47,19 @@ const DumbPageForm = ({
   );
 };
 
-const mapStateToProps = (state, { selectedLocale }) => {
+const mapStateToProps = (state, { editLocale }) => {
   const page = state.admin.resourcesCenter.page;
   return {
-    title: getEntryValueForLocale(page.get('titleEntries'), selectedLocale, ''),
+    title: getEntryValueForLocale(page.get('titleEntries'), editLocale, ''),
     headerFilename: page.getIn(['headerImage', 'title']),
     headerMimeType: page.getIn(['headerImage', 'mimeType']),
     headerUrl: page.getIn(['headerImage', 'externalUrl'])
   };
 };
 
-const mapDispatchToProps = (dispatch, { selectedLocale }) => ({
+const mapDispatchToProps = (dispatch, { editLocale }) => ({
   handleHeaderImageChange: value => dispatch(updateResourcesCenterHeaderImage(value)),
-  handlePageTitleChange: e => dispatch(updateResourcesCenterPageTitle(selectedLocale, e.target.value))
+  handlePageTitleChange: e => dispatch(updateResourcesCenterPageTitle(editLocale, e.target.value))
 });
 
 export { DumbPageForm };

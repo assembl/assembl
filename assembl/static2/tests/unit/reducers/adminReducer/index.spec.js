@@ -3,26 +3,26 @@ import { fromJS, List, Map } from 'immutable';
 import * as reducers from '../../../../js/app/reducers/adminReducer';
 
 describe('Admin reducers', () => {
-  describe('selectedLocale reducer', () => {
-    const { selectedLocale } = reducers;
+  describe('editLocale reducer', () => {
+    const { editLocale } = reducers;
     it('should return the initial state', () => {
-      expect(selectedLocale(undefined, {})).toEqual('fr');
+      expect(editLocale(undefined, {})).toEqual('fr');
     });
 
     it('should return state by default', () => {
       const state = 'en';
       const expected = 'en';
-      const actual = selectedLocale(state, {});
+      const actual = editLocale(state, {});
       expect(actual).toEqual(expected);
     });
 
-    it('should handle UPDATE_SELECTED_LOCALE action type', () => {
+    it('should handle UPDATE_EDIT_LOCALE action type', () => {
       const state = 'en';
       const action = {
-        type: 'UPDATE_SELECTED_LOCALE',
+        type: 'UPDATE_EDIT_LOCALE',
         newLocale: 'fr'
       };
-      const actual = selectedLocale(state, action);
+      const actual = editLocale(state, action);
       const expected = 'fr';
       expect(actual).toEqual(expected);
     });

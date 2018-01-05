@@ -6,17 +6,12 @@ import { addQuestionTooltip } from '../../common/tooltips';
 import QuestionTitle from './questionTitle';
 import { addQuestionToThematic } from '../../../actions/adminActions';
 
-const QuestionsForm = ({ addQuestion, selectedLocale, thematicId, questions }) => (
+const QuestionsForm = ({ addQuestion, editLocale, thematicId, questions }) => (
   <div className={thematicId ? 'form-container' : 'hidden'}>
     <div className="margin-xl">
       {questions.map((question, index) => (
         <FormGroup key={index}>
-          <QuestionTitle
-            thematicId={thematicId}
-            qIndex={index}
-            titleEntries={question.titleEntries}
-            selectedLocale={selectedLocale}
-          />
+          <QuestionTitle thematicId={thematicId} qIndex={index} titleEntries={question.titleEntries} editLocale={editLocale} />
         </FormGroup>
       ))}
       <OverlayTrigger placement="top" overlay={addQuestionTooltip}>
@@ -36,8 +31,8 @@ export const mapStateToProps = ({ admin: { thematicsById, thematicsInOrder } }, 
     .toJS()
 });
 
-export const mapDispatchToProps = (dispatch, { thematicId, selectedLocale }) => ({
-  addQuestion: () => dispatch(addQuestionToThematic(thematicId, selectedLocale))
+export const mapDispatchToProps = (dispatch, { thematicId, editLocale }) => ({
+  addQuestion: () => dispatch(addQuestionToThematic(thematicId, editLocale))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(QuestionsForm);

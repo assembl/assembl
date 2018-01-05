@@ -7,10 +7,10 @@ import { removeQuestion, updateQuestionTitle } from '../../../actions/adminActio
 import FormControlWithLabel from '../../common/formControlWithLabel';
 import { deleteQuestionTooltip } from '../../common/tooltips';
 
-const QuestionsTitle = ({ titleEntries, qIndex, remove, selectedLocale, updateTitle }) => {
-  const titleEntry = titleEntries.find(entry => entry.localeCode === selectedLocale);
+const QuestionsTitle = ({ titleEntries, qIndex, remove, editLocale, updateTitle }) => {
+  const titleEntry = titleEntries.find(entry => entry.localeCode === editLocale);
   const title = titleEntry ? titleEntry.value : '';
-  const label = `${I18n.t('administration.question_label')} ${qIndex + 1} ${selectedLocale.toUpperCase()}`;
+  const label = `${I18n.t('administration.question_label')} ${qIndex + 1} ${editLocale.toUpperCase()}`;
   return (
     <div className="question-section">
       <FormControlWithLabel
@@ -32,8 +32,8 @@ const QuestionsTitle = ({ titleEntries, qIndex, remove, selectedLocale, updateTi
   );
 };
 
-export const mapDispatchToProps = (dispatch, { thematicId, qIndex, selectedLocale }) => ({
-  updateTitle: value => dispatch(updateQuestionTitle(thematicId, qIndex, selectedLocale, value)),
+export const mapDispatchToProps = (dispatch, { thematicId, qIndex, editLocale }) => ({
+  updateTitle: value => dispatch(updateQuestionTitle(thematicId, qIndex, editLocale, value)),
   remove: () => dispatch(removeQuestion(thematicId, qIndex))
 });
 export default connect(null, mapDispatchToProps)(QuestionsTitle);

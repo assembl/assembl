@@ -44,7 +44,7 @@ class MediaForm extends React.Component {
       descriptionSide,
       hasMedia,
       htmlCode,
-      selectedLocale,
+      editLocale,
       title,
       toggle,
       updateDescriptionTop,
@@ -53,7 +53,7 @@ class MediaForm extends React.Component {
       updateTitle,
       updateHtmlCode
     } = this.props;
-    const upperCaseLocale = selectedLocale.toUpperCase();
+    const upperCaseLocale = editLocale.toUpperCase();
     const titlePh = `${I18n.t('administration.ph.title')} ${upperCaseLocale}`;
     const quotePh = `${I18n.t('administration.ph.quote')} ${upperCaseLocale}`;
     const descriptionTopPh = `${I18n.t('administration.ph.descriptionTop')} ${upperCaseLocale}`;
@@ -141,7 +141,7 @@ class MediaForm extends React.Component {
   }
 }
 
-export const mapStateToProps = ({ admin: { thematicsById } }, { thematicId, selectedLocale }) => {
+export const mapStateToProps = ({ admin: { thematicsById } }, { thematicId, editLocale }) => {
   const media = thematicsById.getIn([thematicId, 'video']);
   const hasMedia = media && media !== null;
   let descriptionTop;
@@ -150,11 +150,11 @@ export const mapStateToProps = ({ admin: { thematicsById } }, { thematicId, sele
   let htmlCode = '';
   let title = '';
   if (hasMedia) {
-    descriptionTop = getEntryValueForLocale(media.get('descriptionEntriesTop'), selectedLocale);
-    descriptionBottom = getEntryValueForLocale(media.get('descriptionEntriesBottom'), selectedLocale);
-    descriptionSide = getEntryValueForLocale(media.get('descriptionEntriesSide'), selectedLocale);
+    descriptionTop = getEntryValueForLocale(media.get('descriptionEntriesTop'), editLocale);
+    descriptionBottom = getEntryValueForLocale(media.get('descriptionEntriesBottom'), editLocale);
+    descriptionSide = getEntryValueForLocale(media.get('descriptionEntriesSide'), editLocale);
     htmlCode = media.get('htmlCode', '');
-    title = getEntryValueForLocale(media.get('titleEntries'), selectedLocale, '');
+    title = getEntryValueForLocale(media.get('titleEntries'), editLocale, '');
   }
   return {
     descriptionTop: descriptionTop ? descriptionTop.toJS() : null,
@@ -166,13 +166,13 @@ export const mapStateToProps = ({ admin: { thematicsById } }, { thematicId, sele
   };
 };
 
-export const mapDispatchToProps = (dispatch, { selectedLocale, thematicId }) => ({
+export const mapDispatchToProps = (dispatch, { editLocale, thematicId }) => ({
   toggle: () => dispatch(toggleVideo(thematicId)),
   updateHtmlCode: value => dispatch(updateVideoHtmlCode(thematicId, value)),
-  updateDescriptionTop: value => dispatch(updateVideoDescriptionTop(thematicId, selectedLocale, value)),
-  updateDescriptionBottom: value => dispatch(updateVideoDescriptionBottom(thematicId, selectedLocale, value)),
-  updateDescriptionSide: value => dispatch(updateVideoDescriptionSide(thematicId, selectedLocale, value)),
-  updateTitle: value => dispatch(updateVideoTitle(thematicId, selectedLocale, value))
+  updateDescriptionTop: value => dispatch(updateVideoDescriptionTop(thematicId, editLocale, value)),
+  updateDescriptionBottom: value => dispatch(updateVideoDescriptionBottom(thematicId, editLocale, value)),
+  updateDescriptionSide: value => dispatch(updateVideoDescriptionSide(thematicId, editLocale, value)),
+  updateTitle: value => dispatch(updateVideoTitle(thematicId, editLocale, value))
 });
 
 export default compose(connect(mapStateToProps, mapDispatchToProps), graphql(uploadDocumentMutation, { name: 'uploadDocument' }))(

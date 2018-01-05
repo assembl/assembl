@@ -46,10 +46,10 @@ class LanguageSection extends React.Component {
 
     // Manage toggling of checkbox states from the store
     const totalLocaleList = List(Object.keys(this.state.localeState));
-    const currentSelectedLocaleList = totalLocaleList.filter(locale => this.state.localeState[locale].selected).sort();
+    const currentEditLocaleList = totalLocaleList.filter(locale => this.state.localeState[locale].selected).sort();
     const newLocalePreferences = nextProps.discussionLanguagePreferences.sort();
     // Only update the state if there is a change in language preferences
-    if (!currentSelectedLocaleList.equals(newLocalePreferences)) {
+    if (!currentEditLocaleList.equals(newLocalePreferences)) {
       const newState = { ...this.state.localeState };
       Object.entries(newState).forEach(([locale, state]) => {
         const selectedState = state;
