@@ -109,7 +109,8 @@ class UpdateVoteSession(graphene.Mutation):
             uploaded_file = context.POST[image].file
             uploaded_file.seek(0)
             data = uploaded_file.read()
-            discussion = vote_session.discussion
+            discussion_id = context.matchdict['discussion_id']
+            discussion = models.Discussion.get(discussion_id)
             ATTACHMENT_PURPOSE_IMAGE = models.AttachmentPurpose.IMAGE.value
             document = models.File(
                 discussion=discussion,
