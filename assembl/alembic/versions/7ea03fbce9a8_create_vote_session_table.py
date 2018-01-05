@@ -93,5 +93,5 @@ def upgrade(pyramid_env):
 
 def downgrade(pyramid_env):
     with context.begin_transaction():
-        op.drop_table('vote_session')
         op.drop_table('vote_session_attachment')
+        op.drop_table('vote_session')
