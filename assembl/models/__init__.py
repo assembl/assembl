@@ -308,7 +308,8 @@ from .attachment import (
     Attachment,
     PostAttachment,
     IdeaAttachment,
-    ResourceAttachment
+    ResourceAttachment,
+    VoteSessionAttachment
 )
 
 from .announcement import (

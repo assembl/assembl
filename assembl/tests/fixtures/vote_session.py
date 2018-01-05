@@ -2,11 +2,11 @@ import pytest
 
 
 @pytest.fixture(scope="function")
-def vote_session(request, test_session, discussion, timeline_token_vote,
+def vote_session(request, test_session, discussion, timeline_vote_session,
                     simple_file, moderator_user):
-    from assembl.models import VoteSession, LangString
+    from assembl.models import VoteSession, VoteSessionAttachment, LangString
     vote_session = VoteSession(
-        discussion_phase=timeline_token_vote,
+        discussion_phase=timeline_vote_session,
         title=LangString.create(u"vote session fixture", "en"),
         sub_title=LangString.create(u"vote session sub title fixture", "en"),
         instructions_section_title=LangString.create(u"vote session instructions title fixture", "en"),
@@ -27,7 +27,7 @@ def vote_session(request, test_session, discussion, timeline_token_vote,
 
     def fin():
         print "finalizer resource"
-        test_session.delete(vote_session_image)
+        test_session.delete(header_image)
         test_session.delete(vote_session)
         test_session.flush()
     request.addfinalizer(fin)
