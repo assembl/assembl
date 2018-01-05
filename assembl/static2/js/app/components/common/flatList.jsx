@@ -46,17 +46,19 @@ class FlatList extends React.Component<*, FlatListProps, void> {
   }
 
   handleScroll = () => {
-    const { onEndReachedThreshold } = this.props;
-    // $FlowFixMe
-    const windowHeight = 'innerHeight' in window ? window.innerHeight : document.documentElement.offsetHeight;
-    const body = document.body;
-    const html = document.documentElement;
-    // $FlowFixMe
-    const docHeight = Math.max(body.scrollHeight, body.offsetHeight, html.clientHeight, html.scrollHeight, html.offsetHeight);
-    const windowBottom = windowHeight + window.pageYOffset;
-    const threshold = docHeight * onEndReachedThreshold;
-    if (windowBottom >= threshold && !this.loading) {
-      this.onEndReached();
+    if (!this.loading) {
+      const { onEndReachedThreshold } = this.props;
+      // $FlowFixMe
+      const windowHeight = 'innerHeight' in window ? window.innerHeight : document.documentElement.offsetHeight;
+      const body = document.body;
+      const html = document.documentElement;
+      // $FlowFixMe
+      const docHeight = Math.max(body.scrollHeight, body.offsetHeight, html.clientHeight, html.scrollHeight, html.offsetHeight);
+      const windowBottom = windowHeight + window.pageYOffset;
+      const threshold = docHeight * onEndReachedThreshold;
+      if (windowBottom >= threshold) {
+        this.onEndReached();
+      }
     }
   };
 
