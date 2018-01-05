@@ -1,7 +1,11 @@
 #import "./LangString.graphql"
 
 fragment voteSessionGlobals on VoteSession {
-  headerImgUrl
+  headerImage {
+    title
+    mimeType
+    externalUrl
+  }
 }
 
 fragment voteSessionLangstringsEntries on VoteSession {

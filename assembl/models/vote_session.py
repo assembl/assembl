@@ -44,5 +44,7 @@ class VoteSession(
     @classmethod
     def get_discussion_conditions(cls, discussion_id, alias_maker=None):
         return (cls.discussion_phase.discussion_id == discussion_id,)
+        
+    # TODO: permissions !!!
 
 LangString.setup_ownership_load_event(VoteSession, langstrings_names)

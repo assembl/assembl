@@ -2,6 +2,7 @@ import graphene
 from graphene.relay import Node
 from graphene_sqlalchemy import SQLAlchemyObjectType
 from assembl import models
+import os
 
 from .types import SecureObjectType
 from .utils import abort_transaction_on_exception
@@ -10,6 +11,7 @@ from .graphql_langstrings_helpers import (
     update_langstrings,
     add_langstrings_input_attrs
 )
+from .document import Document
 
 # from assembl.auth import IF_OWNED, CrudPermissions
 # from assembl.auth.util import get_permissions
@@ -55,16 +57,19 @@ class VoteSession(SecureObjectType, SQLAlchemyObjectType):
         interfaces = (Node, LangstringsInterface(langstrings_defs))
         only_fields = ('id', 'discussion_phase_id')
 
-    header_img_url = graphene.String()
+    header_image = graphene.Field(Document)
 
-    def resolve_header_img_url(self, args, context, info):
-        return self.discussion_phase.image_url
+    def resolve_header_image(self, args, context, info):
+        ATTACHMENT_PURPOSE_IMAGE = models.AttachmentPurpose.IMAGE.value
+        for attachment in self.attachments:
+            if attachment.attachmentPurpose == ATTACHMENT_PURPOSE_IMAGE:
+                return attachment.document
 
 
 class UpdateVoteSession(graphene.Mutation):
     class Input:
         discussion_phase_id = graphene.Int(required=True)
-        header_img_url = graphene.String()
+        header_image = graphene.String()
 
     add_langstrings_input_attrs(Input, langstrings_defs.keys())
 
@@ -95,9 +100,30 @@ class UpdateVoteSession(graphene.Mutation):
                 discussion_phase=discussion_phase)
 
         update_langstrings(vote_session, langstrings_defs, args)
-        add_and_flush(vote_session)
 
-        discussion_phase.image_url = args.get('header_img_url')
-        add_and_flush(discussion_phase)
+        image = args.get('header_image')
+        if image is not None:
+            filename = os.path.basename(context.POST[image].filename)
+            mime_type = context.POST[image].type
+            uploaded_file = context.POST[image].file
+            uploaded_file.seek(0)
+            data = uploaded_file.read()
+            discussion = vote_session.discussion
+            ATTACHMENT_PURPOSE_IMAGE = models.AttachmentPurpose.IMAGE.value
+            document = models.File(
+                discussion=discussion,
+                mime_type=mime_type,
+                title=filename,
+                data=data)
+            models.ResourceAttachment(
+                document=document,
+                resource=vote_session,
+                discussion=discussion,
+                creator_id=context.authenticated_userid,
+                title=filename,
+                attachmentPurpose=ATTACHMENT_PURPOSE_IMAGE
+            )
+
+        add_and_flush(vote_session)
 
         return UpdateVoteSession(vote_session=vote_session)

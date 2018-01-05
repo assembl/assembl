@@ -2,7 +2,7 @@
 
 mutation UpdateVoteSession(
   $discussionPhaseId: Int
-  $headerImgUrl: String
+  $headerImage: String
   $titleEntries: LangStringEntryInput
   $subTitleEntries: LangStringEntryInput
   $instructionsSectionTitleEntries: LangStringEntryInput
@@ -11,7 +11,7 @@ mutation UpdateVoteSession(
 ) {
   updateVoteSession(
     discussionPhaseId: $discussionPhaseId
-    headerImgUrl: $headerImgUrl
+    headerImage: $headerImage
     titleEntries: $titleEntries
     subTitleEntries: $subTitleEntries
     instructionsSectionTitleEntries: $instructionsSectionTitleEntries

@@ -64,8 +64,34 @@ def upgrade(pyramid_env):
                 "propositions_section_title"
             ])
         )
+        op.create_table(
+            'vote_session_attachment',
+            Column(
+                'id',
+                Integer,
+                ForeignKey(
+                    'attachment.id',
+                    ondelete="CASCADE",
+                    onupdate="CASCADE"
+                ),
+                primary_key=True
+            ),
+            Column(
+                'vote_session_id',
+                Integer,
+                ForeignKey(
+                    'vote_session.id',
+                    ondelete="CASCADE",
+                    onupdate="CASCADE"
+                ),
+                nullable=False,
+                index=True
+            ),
+        )
+
 
 
 def downgrade(pyramid_env):
     with context.begin_transaction():
         op.drop_table('vote_session')
+        op.drop_table('vote_session_attachment')
