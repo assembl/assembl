@@ -41,16 +41,11 @@ def require_update_permission(cls, user_id, discussion_id):
 """
 
 langstrings_defs = {
+    "title": {},
+    "sub_title": {},
     "instructions_section_title": {},
     "instructions_section_content": {},
-    "propositions_section_title": {},
-    "title": {
-        "relation_name": "discussion_phase"
-    },
-    "sub_title": {
-        "relation_name": "discussion_phase",
-        "target_name": "description"
-    }
+    "propositions_section_title": {}
 }
 
 

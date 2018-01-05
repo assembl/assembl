@@ -57,6 +57,8 @@ def upgrade(pyramid_env):
                 unique = True,
             ),
             *lang_strings_args([
+                "title",
+                "sub_title",
                 "instructions_section_title",
                 "instructions_section_content",
                 "propositions_section_title"

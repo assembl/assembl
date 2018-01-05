@@ -6,6 +6,8 @@ from .langstrings_helpers import LangstringsBase
 from .sqla_helpers import Id, ForeignId
 
 langstrings_names = [
+    "title",
+    "sub_title",
     "instructions_section_title",
     "instructions_section_content",
     "propositions_section_title"
