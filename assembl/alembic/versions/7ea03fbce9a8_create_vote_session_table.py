@@ -13,7 +13,7 @@ Create Date: 2017-12-22 13:28:30.634303
 
 # revision identifiers, used by Alembic.
 revision = '7ea03fbce9a8'
-down_revision = 'c3f8bc9c75d5'
+down_revision = 'c67bcb5d6faa'
 
 
 def LangStringId(column_name):
