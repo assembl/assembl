@@ -50,12 +50,12 @@ const PageForm = ({
   handleInstructionsContentChange,
   handlePropositionSectionTitleChange
 }: PageFormProps) => {
-  const localInUppercase = editLocale.toUpperCase();
-  const headerTitlePh = `${I18n.t('administration.ph.headerTitle')} ${localInUppercase}*`;
-  const headerSubtitlePh = `${I18n.t('administration.ph.headerSubtitle')} ${localInUppercase}`;
-  const instructionsTitlePh = `${I18n.t('administration.ph.instructionsTitle')} ${localInUppercase}*`;
-  const instructionsContentPh = `${I18n.t('administration.ph.instructionsContent')} ${localInUppercase}*`;
-  const propositionSectionTitlePh = `${I18n.t('administration.ph.propositionSectionTitle')} ${localInUppercase}*`;
+  const editLocaleInUppercase = editLocale.toUpperCase();
+  const headerTitlePh = `${I18n.t('administration.ph.headerTitle')} ${editLocaleInUppercase}*`;
+  const headerSubtitlePh = `${I18n.t('administration.ph.headerSubtitle')} ${editLocaleInUppercase}`;
+  const instructionsTitlePh = `${I18n.t('administration.ph.instructionsTitle')} ${editLocaleInUppercase}*`;
+  const instructionsContentPh = `${I18n.t('administration.ph.instructionsContent')} ${editLocaleInUppercase}*`;
+  const propositionSectionTitlePh = `${I18n.t('administration.ph.propositionSectionTitle')} ${editLocaleInUppercase}*`;
   const headerImageFieldName = 'header-image';
   return (
     <div className="admin-box">
