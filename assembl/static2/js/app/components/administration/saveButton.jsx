@@ -111,7 +111,7 @@ const createVariablesForDeleteSectionMutation = section => ({ sectionId: section
 
 const SaveButton = ({
   i18n,
-  debate,
+  timeline,
   client,
   createThematic,
   deleteThematic,
@@ -276,7 +276,7 @@ const SaveButton = ({
       const headerImage = typeof pageHeaderImage.externalUrl === 'object' ? pageHeaderImage.externalUrl : null;
       const payload = {
         variables: {
-          discussionPhaseId: getPhaseId(debate.debateData.timeline, 'voteSession'),
+          discussionPhaseId: getPhaseId(timeline, 'voteSession'),
           titleEntries: titleEntries,
           subTitleEntries: subTitleEntries,
           instructionsSectionTitleEntries: instructionsSectionTitleEntries,
@@ -354,7 +354,7 @@ const SaveButtonWithMutations = compose(
 )(SaveButton);
 
 const mapStateToProps = ({
-  debate,
+  timeline,
   i18n,
   admin: {
     sections,
@@ -378,7 +378,7 @@ const mapStateToProps = ({
     thematics: thematicsInOrder.toArray().map(id => thematicsById.get(id).toJS()),
     preferences: discussionLanguagePreferences,
     i18n: i18n,
-    debate: debate,
+    timeline: timeline,
     languagePreferenceHasChanged: discussionLanguagePreferencesHasChanged,
     sectionsHaveChanged: sectionsHaveChanged,
     sections: sectionsById
