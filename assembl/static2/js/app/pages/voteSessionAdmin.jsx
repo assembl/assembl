@@ -8,14 +8,14 @@ import Navbar from '../components/administration/navbar';
 
 type VoteSessionAdminProps = {
   section: string,
-  selectedLocale: string
+  editLocale: string
 };
 
 const VoteSessionAdmin = (props: VoteSessionAdminProps) => {
   const currentStep = parseInt(props.section, 10);
   return (
     <div className="token-vote-admin">
-      {props.section === '1' && <PageForm selectedLocale={props.selectedLocale} />}
+      {props.section === '1' && <PageForm editLocale={props.editLocale} />}
       {props.section === '2' && <ModulesSection />}
       {props.section === '3' && <PropositionSection />}
       {!isNaN(currentStep) && <Navbar currentStep={currentStep} totalSteps={3} phaseIdentifier="voteSession" />}
@@ -24,7 +24,7 @@ const VoteSessionAdmin = (props: VoteSessionAdminProps) => {
 };
 
 const mapStateToProps = state => ({
-  selectedLocale: state.admin.selectedLocale
+  editLocale: state.admin.editLocale
 });
 
 export default connect(mapStateToProps)(VoteSessionAdmin);

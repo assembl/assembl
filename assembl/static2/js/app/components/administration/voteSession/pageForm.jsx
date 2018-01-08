@@ -25,7 +25,7 @@ type PageFormProps = {
   instructionsTitle: string,
   instructionsContent: string,
   propositionSectionTitle: string,
-  selectedLocale: string,
+  editLocale: string,
   handleHeaderTitleChange: Function,
   handleHeaderSubtitleChange: Function,
   handleHeaderImageChange: Function,
@@ -42,7 +42,7 @@ const PageForm = ({
   instructionsTitle,
   instructionsContent,
   propositionSectionTitle,
-  selectedLocale,
+  editLocale,
   handleHeaderTitleChange,
   handleHeaderSubtitleChange,
   handleHeaderImageChange,
@@ -50,7 +50,7 @@ const PageForm = ({
   handleInstructionsContentChange,
   handlePropositionSectionTitleChange
 }: PageFormProps) => {
-  const localInUppercase = selectedLocale.toUpperCase();
+  const localInUppercase = editLocale.toUpperCase();
   const headerTitlePh = `${I18n.t('administration.ph.headerTitle')} ${localInUppercase}*`;
   const headerSubtitlePh = `${I18n.t('administration.ph.headerSubtitle')} ${localInUppercase}`;
   const instructionsTitlePh = `${I18n.t('administration.ph.instructionsTitle')} ${localInUppercase}*`;
@@ -104,7 +104,7 @@ const PageForm = ({
             value={instructionsTitle}
           />
           <FormControlWithLabel
-            key={`instructions-${selectedLocale}`}
+            key={`instructions-${editLocale}`}
             label={instructionsContentPh}
             onChange={handleInstructionsContentChange}
             type="rich-text"
@@ -129,27 +129,27 @@ const PageForm = ({
   );
 };
 
-const mapStateToProps = (state, { selectedLocale }) => {
+const mapStateToProps = (state, { editLocale }) => {
   const voteSession = state.admin.voteSession;
-  const instructionsContent = getEntryValueForLocale(voteSession.get('instructionsSectionContentEntries'), selectedLocale);
+  const instructionsContent = getEntryValueForLocale(voteSession.get('instructionsSectionContentEntries'), editLocale);
   return {
-    headerTitle: getEntryValueForLocale(voteSession.get('titleEntries'), selectedLocale),
-    headerSubtitle: getEntryValueForLocale(voteSession.get('subTitleEntries'), selectedLocale),
-    instructionsTitle: getEntryValueForLocale(voteSession.get('instructionsSectionTitleEntries'), selectedLocale),
+    headerTitle: getEntryValueForLocale(voteSession.get('titleEntries'), editLocale),
+    headerSubtitle: getEntryValueForLocale(voteSession.get('subTitleEntries'), editLocale),
+    instructionsTitle: getEntryValueForLocale(voteSession.get('instructionsSectionTitleEntries'), editLocale),
     instructionsContent: instructionsContent ? instructionsContent.toJS() : null,
-    propositionSectionTitle: getEntryValueForLocale(voteSession.get('propositionsSectionTitleEntries'), selectedLocale),
+    propositionSectionTitle: getEntryValueForLocale(voteSession.get('propositionsSectionTitleEntries'), editLocale),
     headerImgUrl: voteSession.getIn(['headerImage', 'externalUrl']),
     headerImgMimeType: voteSession.getIn(['headerImage', 'mimeType'])
   };
 };
 
-const mapDispatchToProps = (dispatch, { selectedLocale }) => ({
-  handleHeaderTitleChange: e => dispatch(updateVoteSessionPageTitle(selectedLocale, e.target.value)),
-  handleHeaderSubtitleChange: e => dispatch(updateVoteSessionPageSubtitle(selectedLocale, e.target.value)),
+const mapDispatchToProps = (dispatch, { editLocale }) => ({
+  handleHeaderTitleChange: e => dispatch(updateVoteSessionPageTitle(editLocale, e.target.value)),
+  handleHeaderSubtitleChange: e => dispatch(updateVoteSessionPageSubtitle(editLocale, e.target.value)),
   handleHeaderImageChange: value => dispatch(updateVoteSessionHeaderImage(value)),
-  handleInstructionsTitleChange: e => dispatch(updateVoteSessionPageInstructionsTitle(selectedLocale, e.target.value)),
-  handleInstructionsContentChange: value => dispatch(updateVoteSessionPageInstructionsContent(selectedLocale, value)),
-  handlePropositionSectionTitleChange: e => dispatch(updateVoteSessionPagePropositionsTitle(selectedLocale, e.target.value))
+  handleInstructionsTitleChange: e => dispatch(updateVoteSessionPageInstructionsTitle(editLocale, e.target.value)),
+  handleInstructionsContentChange: value => dispatch(updateVoteSessionPageInstructionsContent(editLocale, value)),
+  handlePropositionSectionTitleChange: e => dispatch(updateVoteSessionPagePropositionsTitle(editLocale, e.target.value))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(PageForm);
