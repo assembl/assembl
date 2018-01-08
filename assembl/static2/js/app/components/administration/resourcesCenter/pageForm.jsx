@@ -29,7 +29,7 @@ const DumbPageForm = ({
   const titleLabel = I18n.t('administration.resourcesCenter.pageTitleLabel');
   const headerImageFieldName = 'header-image';
   return (
-    <div>
+    <div className="form-container">
       <FormControlWithLabel key={editLocale} label={titleLabel} onChange={handlePageTitleChange} type="text" value={title} />
       <FormGroup>
         <label htmlFor={headerImageFieldName}>
