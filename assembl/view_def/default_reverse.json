@@ -278,6 +278,7 @@
         "idea": true,
         "message_classifier": true,
         "header": true,
+        "synthesis_title": true,
         "title": true,
         "name": true,
         "color": true,

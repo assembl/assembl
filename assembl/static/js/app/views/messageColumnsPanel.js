@@ -26,6 +26,7 @@ var Backbone = require('backbone'),
     scrollUtils = require('../utils/scrollUtils.js'),
     AssemblPanel = require('./assemblPanel.js'),
     CKEditorLSField = require('./reusableDataFields/ckeditorLSField.js'),
+    EditableLSField = require('./reusableDataFields/editableLSField.js'),
     BaseMessageListMixin = require('./baseMessageList.js'),
     CollectionManager = require('../common/collectionManager.js'),
     Widget = require('../models/widget.js'),
@@ -199,6 +200,7 @@ var MessageColumnView = BaseMessageColumnView.extend({
     panelBody: ".subpanel-body",
     messageColumnHeader: '.js_messageColumnHeader',
     messageColumnDescription: '.js_messageColumnDescription',
+    messageColumnSynthesisTitle: '.js_messageColumnSynthesisTitle',
     topPostRegion: '.js_topPostRegion',
     messageFamilyList: '.js_messageFamilies_region',
     pendingMessage: '.pendingMessage',
@@ -214,6 +216,7 @@ var MessageColumnView = BaseMessageColumnView.extend({
     messageFamilyList: '@ui.messageFamilyList',
     topPostRegion: '@ui.topPostRegion',
     messageColumnDescription: '@ui.messageColumnDescription',
+    messageColumnSynthesisTitle: '@ui.messageColumnSynthesisTitle',
   },
 
   events: function() {
@@ -346,15 +349,27 @@ var MessageColumnView = BaseMessageColumnView.extend({
     BaseMessageColumnView.prototype.onRender.apply(this, arguments);
     var that = this,
         header = this.model.get('header'),
+        synthesis_title = this.model.get('synthesis_title'),
         canEdit = Ctx.getCurrentUser().can(Permissions.ADMIN_DISCUSSION),
         renderId = _.clone(this._renderId);
 
-    if (this.processIsEnded() || canEdit) {
-      this.messageColumnDescription.show(new CKEditorLSField({
-        model: this.model,
-        modelProp: 'header',
-        canEdit: canEdit,
-      }));
+    if ((this.processIsEnded() || canEdit)) {
+      this.translationDataPromise.then(function(translationData) {
+        that.translationData = translationData;
+
+        that.messageColumnSynthesisTitle && that.messageColumnSynthesisTitle.show(new EditableLSField({
+          model: that.model,
+          modelProp: 'synthesis_title',
+          canEdit: canEdit,
+          translationData: translationData,
+        }));
+        that.messageColumnDescription && that.messageColumnDescription.show(new CKEditorLSField({
+          model: that.model,
+          modelProp: 'header',
+          canEdit: canEdit,
+          translationData: translationData,
+        }));
+      });
     }
     this.renderMessageListViewStyleDropdown();
     Promise.join(this.messagesIdsPromise, this.translationDataPromise, function(resultMessageIdCollection, translationData) {
@@ -394,6 +409,11 @@ var MessageColumnView = BaseMessageColumnView.extend({
         $('.js_messageColumnDescription').addClass('message-column-description');
       }else{
         $('.js_messageColumnDescription').removeClass('message-column-description');
+      }
+      if(!synthesis_title || synthesis_title.isEmptyStripped(translationData)){
+        $('.js_messageColumnSynthesisTitle').addClass('message-column-description');
+      }else{
+        $('.js_messageColumnSynthesisTitle').removeClass('message-column-description');
       }
     });
   },

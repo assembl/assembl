@@ -159,5 +159,17 @@ class IdeaMessageColumn(DiscussionBoundBase):
     def header(self, value):
         self.set_column_synthesis(body=value)
 
+    @property
+    def synthesis_title(self):
+        synthesis = self.get_column_synthesis()
+        if synthesis is None:
+            return None
+
+        return synthesis.subject
+
+    @synthesis_title.setter
+    def synthesis_title(self, value):
+        self.set_column_synthesis(subject=value)
+
 
 LangString.setup_ownership_load_event(IdeaMessageColumn, ['name', 'title'])

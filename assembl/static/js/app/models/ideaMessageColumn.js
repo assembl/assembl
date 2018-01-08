@@ -32,6 +32,7 @@ var IdeaMessageColumnModel = Base.Model.extend({
     'title': null,
     'name': null,
     'header': null,
+    'synthesis_title': null,
     'color': null,
     'previous_column': null,
   },
@@ -44,6 +45,9 @@ var IdeaMessageColumnModel = Base.Model.extend({
     }
     if (rawModel.header !== undefined) {
       rawModel.header = new LangString.Model(rawModel.header, {parse: true});
+    }
+    if (rawModel.synthesis_title !== undefined) {
+      rawModel.synthesis_title = new LangString.Model(rawModel.synthesis_title, {parse: true});
     }
     return rawModel;
   },
