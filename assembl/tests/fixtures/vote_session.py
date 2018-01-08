@@ -11,7 +11,7 @@ def vote_session(request, test_session, discussion, timeline_vote_session,
         sub_title=LangString.create(u"vote session sub title fixture", "en"),
         instructions_section_title=LangString.create(u"vote session instructions title fixture", "en"),
         instructions_section_content=LangString.create(u"vote session instructions fixture. Lorem ipsum dolor sit amet", "en"),
-        propositions_section_title=LangString.create(u"vote session propositions section tile fixture", "en")
+        propositions_section_title=LangString.create(u"vote session propositions section title fixture", "en")
     )
     header_image = VoteSessionAttachment(
         discussion=discussion,
