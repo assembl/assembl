@@ -26,7 +26,7 @@ def vote_session(request, test_session, discussion, timeline_vote_session,
     test_session.flush()
 
     def fin():
-        print "finalizer resource"
+        print "finalizer vote_session"
         test_session.delete(header_image)
         test_session.delete(vote_session)
         test_session.flush()
