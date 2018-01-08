@@ -12,17 +12,17 @@ import * as actions from '../../../actions/adminActions/adminSections';
 
 type ManageSectionFormProps = {
   sections: List<string>,
-  selectedLocale: string,
+  editLocale: string,
   createSection: Function
 };
 
-const DumbManageSectionsForm = ({ sections, selectedLocale, createSection }: ManageSectionFormProps) => (
+const DumbManageSectionsForm = ({ sections, editLocale, createSection }: ManageSectionFormProps) => (
   <div className="admin-box">
     <SectionTitle title={I18n.t('administration.sections.sectionsTitle')} annotation={I18n.t('administration.annotation')} />
     <div className="admin-content">
       <form>
         {sections.map((id, index) => (
-          <EditSectionForm key={id} id={id} index={index} locale={selectedLocale} nbSections={sections.size} />
+          <EditSectionForm key={id} id={id} index={index} locale={editLocale} nbSections={sections.size} />
         ))}
         <OverlayTrigger placement="top" overlay={addSectionTooltip}>
           <div onClick={() => createSection(sections.size)} className="plus margin-l">
@@ -37,7 +37,7 @@ const DumbManageSectionsForm = ({ sections, selectedLocale, createSection }: Man
 const mapStateToProps = (state) => {
   const { sectionsInOrder } = state.admin.sections;
   return {
-    selectedLocale: state.admin.selectedLocale,
+    editLocale: state.admin.editLocale,
     sections: sectionsInOrder
   };
 };

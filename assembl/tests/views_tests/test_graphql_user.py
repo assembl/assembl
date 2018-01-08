@@ -14,6 +14,7 @@ query User($id: ID!) {
         username
         displayName
         email
+        creationDate
         image { externalUrl }
       }
     }
@@ -26,6 +27,8 @@ query User($id: ID!) {
     assert res.data['user']['username'] is None
     assert res.data['user']['displayName'] == u'A. Barking Loon'
     assert res.data['user']['email'] == u'abloon@gmail.com'
+    # 2018-01-04T12:08:44.735489+00:00
+    assert u'T' in res.data['user']['creationDate']
     assert res.data['user']['image'] is None
 
 

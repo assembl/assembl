@@ -20,10 +20,8 @@ from abc import ABCMeta, abstractmethod
 from assembl.auth import P_READ, R_SYSADMIN
 from assembl.auth.util import get_permissions
 from assembl.lib.sqla import *
+from assembl.lib.logging import getLogger
 from assembl.lib.decl_enums import DeclEnumType
-
-
-log = logging.getLogger('assembl')
 
 
 class DictContext(object):
@@ -373,7 +371,7 @@ class InstanceContext(TraversalContext):
                     break
         if nullables and not found:
             reln = nullables[0]
-            log.debug("Setting nullable column" + reln)
+            getLogger().debug("Setting nullable column" + reln)
             setattr(inst, reln.key, self._instance)
         super(InstanceContext, self).decorate_instance(
             instance, assocs, user_id, ctx, kwargs)

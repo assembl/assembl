@@ -3,4 +3,5 @@ fragment Document on Document {
   title
   externalUrl
   mimeType
+  avChecked
 }

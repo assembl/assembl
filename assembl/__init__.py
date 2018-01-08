@@ -18,7 +18,6 @@ from os.path import dirname, join
 
 import transaction
 from pyramid.config import Configurator
-from pyramid.authentication import SessionAuthenticationPolicy
 from pyramid.authorization import ACLAuthorizationPolicy
 from pyramid_beaker import session_factory_from_settings
 from pyramid.settings import asbool
@@ -30,17 +29,18 @@ from .lib.sqla import (
     configure_engine, session_maker_is_initialized, using_virtuoso)
 from .lib.locale import locale_negotiator as my_locale_negotiator
 from .lib.config import set_config
-from .lib.database_functions import ensure_functions
 
 # Do not import models here, it will break tests.
 
-#Use a local odbc.ini
+# Use a local odbc.ini
 putenv('ODBCINI', join(dirname(dirname(__file__)), 'odbc.ini'))
 
 resolver = DottedNameResolver(__package__)
 
 # Do not import models here, it will break tests.
 # WSGI calls main. This is a convention.
+
+
 def main(global_config, **settings):
     """ Return a Pyramid WSGI application. """
     settings['config_uri'] = global_config['__file__']
@@ -64,10 +64,14 @@ def main(global_config, **settings):
         config.add_tween(
             'assembl.tweens.virtuoso_deadlock.transient_deadlock_tween_factory',
             under="pyramid_tm.tm_tween_factory")
+    config.add_tween(
+        'assembl.tweens.logging.logging_tween_factory',
+        over="pyramid_tm.tm_tween_factory")
 
     config.include('.auth')
     config.include('.models')
     config.include('.indexing')
+    config.include('.lib.logging')
     # Tasks first, because it includes ZCA registration (for now)
     config.include('.tasks')
 

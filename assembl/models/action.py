@@ -5,19 +5,15 @@
 from datetime import datetime
 
 from sqlalchemy import (
-    Boolean,
     Column,
     String,
     ForeignKey,
     Integer,
-    Unicode,
     DateTime,
-    desc,
     select,
     func,
     event,
 )
-from sqlalchemy.inspection import inspect
 from sqlalchemy.orm import relationship, backref, column_property
 from sqla_rdfbridge.mapping import IriClass
 from abc import abstractproperty
@@ -46,8 +42,7 @@ class Action(TombstonableMixin, DiscussionBoundBase):
 
     id = Column(Integer, primary_key=True)
     type = Column(String(255), nullable=False)
-    creation_date = Column(DateTime, nullable=False, default=datetime.utcnow,
-        info={'rdf': QuadMapPatternS(None, VERSION.when)})
+    creation_date = Column(DateTime, nullable=False, default=datetime.utcnow, info={'rdf': QuadMapPatternS(None, VERSION.when)})
 
     __mapper_args__ = {
         'polymorphic_identity': 'action',
@@ -113,20 +108,17 @@ class ActionOnPost(Action):
         info={'rdf': QuadMapPatternS(None, VERSION.what)}
     )
 
-
     post_ts = relationship(
         Content, foreign_keys=(post_id,),
         backref=backref("actions_ts", cascade="all, delete-orphan"))
 
     post = relationship(
         Content,
-        primaryjoin="and_(Content.id == ActionOnPost.post_id,"
-                         "Content.tombstone_date == None)",
+        primaryjoin="and_(Content.id == ActionOnPost.post_id, Content.tombstone_date == None)",
         foreign_keys=(post_id,),
         backref=backref(
             'actions',
-            primaryjoin="and_(Content.id == ActionOnPost.post_id,"
-                             "ActionOnPost.tombstone_date == None)",
+            primaryjoin="and_(Content.id == ActionOnPost.post_id, ActionOnPost.tombstone_date == None)",
             cascade="all, delete-orphan"))
 
     object_type = 'post'
@@ -137,9 +129,7 @@ class ActionOnPost(Action):
 
     @classmethod
     def special_quad_patterns(cls, alias_maker, discussion_id):
-        return [QuadMapPatternS(None,
-            RDF.type, IriClass(VirtRDF.QNAME_ID_SUFFIX).apply(Action.type),
-            name=QUADNAMES.class_ActionOnPost_class)]
+        return [QuadMapPatternS(None, RDF.type, IriClass(VirtRDF.QNAME_ID_SUFFIX).apply(Action.type), name=QUADNAMES.class_ActionOnPost_class)]
 
     @classmethod
     def get_discussion_conditions(cls, discussion_id, alias_maker=None):
@@ -155,6 +145,7 @@ class ActionOnPost(Action):
 
 class UniqueActionOnPost(ActionOnPost):
     "An action that should be unique of its subclass for a post, user pair"
+
     def unique_query(self):
         # inheritance leads in trouble
         query = self.db.query(self.__class__)
@@ -198,13 +189,11 @@ class SentimentOfPost(UniqueActionOnPost):
 
     post_from_sentiments = relationship(
         'Content',
-        primaryjoin="and_(Content.id == ActionOnPost.post_id,"
-                         "Content.tombstone_date == None)",
+        primaryjoin="and_(Content.id == ActionOnPost.post_id, Content.tombstone_date == None)",
         foreign_keys=(ActionOnPost.post_id,),
         backref=backref(
             'sentiments',
-            primaryjoin="and_(Content.id == ActionOnPost.post_id,"
-                             "ActionOnPost.tombstone_date == None)"))
+            primaryjoin="and_(Content.id == ActionOnPost.post_id, ActionOnPost.tombstone_date == None)"))
 
     verb = 'assign_sentiment'
     default_duplicate_handling = DuplicateHandling.TOMBSTONE
@@ -289,11 +278,10 @@ _lpt = LikeSentimentOfPost.__table__
 _actt = Action.__table__
 Content.like_count = column_property(
     select([func.count(_actt.c.id)]).where(
-        (_lpt.c.id == _actt.c.id)
-        & (_lpt.c.post_id == Content.__table__.c.id)
-        & (_actt.c.type ==
-           LikeSentimentOfPost.__mapper_args__['polymorphic_identity'])
-        & (_actt.c.tombstone_date == None)
+        (_lpt.c.id == _actt.c.id) &
+        (_lpt.c.post_id == Content.__table__.c.id) &
+        (_actt.c.type == LikeSentimentOfPost.__mapper_args__['polymorphic_identity']) &
+        (_actt.c.tombstone_date == None)  # noqa: E711
         ).correlate_except(_actt, _lpt), deferred=True)
 
 
@@ -301,11 +289,10 @@ _dpt = DisagreeSentimentOfPost.__table__
 _actt2 = Action.__table__
 Content.disagree_count = column_property(
     select([func.count(_actt2.c.id)]).where(
-        (_dpt.c.id == _actt2.c.id)
-        & (_dpt.c.post_id == Content.__table__.c.id)
-        & (_actt2.c.type ==
-           DisagreeSentimentOfPost.__mapper_args__['polymorphic_identity'])
-        & (_actt2.c.tombstone_date == None)
+        (_dpt.c.id == _actt2.c.id) &
+        (_dpt.c.post_id == Content.__table__.c.id) &
+        (_actt2.c.type == DisagreeSentimentOfPost.__mapper_args__['polymorphic_identity']) &
+        (_actt2.c.tombstone_date == None)  # noqa: E711
         ).correlate_except(_actt2, _dpt), deferred=True)
 
 
@@ -355,24 +342,19 @@ class ActionOnIdea(Action):
 
     idea = relationship(
         Idea,
-        primaryjoin="and_(Idea.id == ActionOnIdea.idea_id,"
-                         "Idea.tombstone_date == None)",
+        primaryjoin="and_(Idea.id == ActionOnIdea.idea_id, Idea.tombstone_date == None)",
         foreign_keys=(idea_id,),
         backref=backref(
             'actions',
-            primaryjoin="and_(Idea.id == ActionOnIdea.idea_id,"
-                             "ActionOnIdea.tombstone_date == None)"))
-        # TODO: cascade="all, delete-orphan"
-
+            primaryjoin="and_(Idea.id == ActionOnIdea.idea_id, ActionOnIdea.tombstone_date == None)"))
+    # TODO: cascade="all, delete-orphan"
 
     object_type = 'idea'
 
     # This should not be necessary, but is.
     @classmethod
     def special_quad_patterns(cls, alias_maker, discussion_id):
-        return [QuadMapPatternS(None,
-            RDF.type, IriClass(VirtRDF.QNAME_ID_SUFFIX).apply(Action.type),
-            name=QUADNAMES.class_ActionOnIdea_class)]
+        return [QuadMapPatternS(None, RDF.type, IriClass(VirtRDF.QNAME_ID_SUFFIX).apply(Action.type), name=QUADNAMES.class_ActionOnIdea_class)]
 
     def get_discussion_id(self):
         idea = self.idea or Idea.get(self.idea_id)
@@ -391,6 +373,7 @@ class ActionOnIdea(Action):
 
 class UniqueActionOnIdea(ActionOnIdea):
     "An action that should be unique of its subclass for an idea, user pair"
+
     def unique_query(self):
         # inheritance leads in trouble
         query = self.db.query(self.__class__)

@@ -21,8 +21,9 @@ describe('ColumnSynthesis component', () => {
       },
       synthesisId: 'XYZ333',
       synthesisTitle: 'We need to input the optical SSL microchip!',
-      synthesisBody:
-        'Excepturi est rerum nulla explicabo ex voluptatibus quam repellendus. Repudiandae quia nesciunt autem et aliquid. Dolores nisi perferendis voluptas corrupti voluptate molestias est. Porro et rerum sunt accusantium dolores qui.',
+      synthesisBody: `Excepturi est rerum nulla explicabo ex voluptatibus quam repellendus.
+Repudiandae quia nesciunt autem et aliquid. Dolores nisi perferendis voluptas
+corrupti voluptate molestias est. Porro et rerum sunt accusantium dolores qui.`,
       hyphenStyle: {
         borderTopColor: 'green'
       }

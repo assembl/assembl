@@ -36,6 +36,8 @@ Only the first time you run it:
     fab -c configs/testing.rc create_local_ini
     assembl-db-manage testing.ini bootstrap
 
+Note that the ``fab -c configs/testing.rc create_local_ini`` command should be repeated whenever ``production.ini``, ``configs/base_env.rc`` or ``configs/testing.ini`` changes.
+
 Thereafter:
 
 .. code:: sh

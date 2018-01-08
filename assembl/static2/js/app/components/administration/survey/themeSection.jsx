@@ -15,13 +15,13 @@ class ThemeSection extends React.Component {
   }
 
   render() {
-    const { addThematic, selectedLocale, thematics } = this.props;
+    const { addThematic, editLocale, thematics } = this.props;
     return (
       <div className="admin-box">
         <SectionTitle title={I18n.t('administration.survey.0')} annotation={I18n.t('administration.annotation')} />
         <div className="admin-content">
           <form>
-            {thematics.map((id, idx) => <ThemeForm key={id} id={id} index={idx} selectedLocale={selectedLocale} />)}
+            {thematics.map((id, idx) => <ThemeForm key={id} id={id} index={idx} editLocale={editLocale} />)}
             <OverlayTrigger placement="top" overlay={addThematicTooltip}>
               <div onClick={addThematic} className="plus margin-l">
                 +
@@ -34,9 +34,9 @@ class ThemeSection extends React.Component {
   }
 }
 
-const mapStateToProps = ({ admin: { thematicsById, thematicsInOrder, selectedLocale } }) => ({
+const mapStateToProps = ({ admin: { thematicsById, thematicsInOrder, editLocale } }) => ({
   thematics: thematicsInOrder.filter(id => !thematicsById.getIn([id, 'toDelete'])),
-  selectedLocale: selectedLocale
+  editLocale: editLocale
 });
 
 const mapDispatchToProps = dispatch => ({

@@ -21,7 +21,6 @@ from sqlalchemy import (
     Time,
     Binary,
     inspect,
-    desc,
     event,
     Index,
     func,
@@ -30,25 +29,32 @@ from sqlalchemy import (
 from pyramid.httpexceptions import HTTPBadRequest, HTTPUnauthorized
 from sqlalchemy.orm import (
     relationship, backref, deferred)
-from sqlalchemy.types import Text
 from sqlalchemy.orm.attributes import NO_VALUE
 from sqlalchemy.sql.functions import count
-from pyramid.security import Everyone, Authenticated
 from rdflib import URIRef
 from sqla_rdfbridge.mapping import PatternIriClass
-import transaction
 
 from ..lib import config
 from ..lib.utils import get_global_base_url
 from ..lib.locale import to_posix_string
-from ..lib.sqla import (
-    CrudOperation, get_model_watcher, ObjectNotUniqueError)
+from ..lib.sqla import CrudOperation, get_model_watcher, PrivateObjectMixin
 from ..lib.sqla_types import (
     URLString, EmailString, EmailUnicode, CaseInsensitiveWord, CoerceUnicode)
-from ..lib.raven_client import capture_message
-from . import Base, DiscussionBoundBase, PrivateObjectMixin
-from ..auth import *
-from assembl.lib.raven_client import capture_exception, capture_message
+from ..lib.raven_client import capture_exception
+from . import Base, DiscussionBoundBase
+from ..auth import (
+    ASSEMBL_PERMISSIONS,
+    CrudPermissions,
+    IF_OWNED,
+    P_ADMIN_DISC,
+    P_OVERRIDE_SOCIAL_AUTOLOGIN,
+    P_READ,
+    P_SELF_REGISTER_REQUEST,
+    P_SELF_REGISTER,
+    P_SYSADMIN,
+    R_PARTICIPANT,
+    SYSTEM_ROLES
+)
 from .langstrings import Locale
 from ..semantic.namespaces import (
     SIOC, ASSEMBL, QUADNAMES, FOAF, DCTERMS, RDF)
@@ -66,6 +72,7 @@ def minN(a, b):
     if b is None:
         return a
     return min(a, b)
+
 
 def maxN(a, b):
     if a is None:
@@ -88,17 +95,11 @@ class AgentProfile(Base):
     # This is very hackish. We need Posts to point to accounts vs users,
     # but right now they do not know the accounts.
     agent_as_account_iri = PatternIriClass(
-            QUADNAMES.agent_as_account_iri,
-            get_global_base_url() + '/data/AgentAccount/%d', None,
-            ('id', Integer, False))
+        QUADNAMES.agent_as_account_iri, get_global_base_url() + '/data/AgentAccount/%d', None, ('id', Integer, False))
 
     id = Column(Integer, primary_key=True)
-    name = Column(CoerceUnicode(1024),
-        info={'rdf': QuadMapPatternS(
-            None, FOAF.name, sections = (PRIVATE_USER_SECTION,))})
-    description = Column(UnicodeText,
-        info={'rdf': QuadMapPatternS(
-            None, DCTERMS.description, sections = (PRIVATE_USER_SECTION,))})
+    name = Column(CoerceUnicode(1024), info={'rdf': QuadMapPatternS(None, FOAF.name, sections=(PRIVATE_USER_SECTION,))})
+    description = Column(UnicodeText, info={'rdf': QuadMapPatternS(None, DCTERMS.description, sections=(PRIVATE_USER_SECTION,))})
     type = Column(String(60))
 
     __mapper_args__ = {
@@ -115,9 +116,9 @@ class AgentProfile(Base):
     def get_preferred_email_account(self):
         if inspect(self).attrs.accounts.loaded_value is NO_VALUE:
             account = self.db.query(AbstractAgentAccount).filter(
-                (AbstractAgentAccount.profile_id == self.id)
-                & (AbstractAgentAccount.email != None)
-                & (AbstractAgentAccount.email != '')).order_by(
+                (AbstractAgentAccount.profile_id == self.id) &
+                (AbstractAgentAccount.email != None) & (AbstractAgentAccount.email != '')  # noqa: E711
+            ).order_by(
                 AbstractAgentAccount.verified.desc(),
                 AbstractAgentAccount.preferred.desc()).first()
             if account:
@@ -199,10 +200,9 @@ class AgentProfile(Base):
         for attachment in other_profile.attachments[:]:
             attachment.creator = self
         from .action import Action
-        for action in session.query(Action).filter_by(
-            actor_id=other_profile.id).all():
-                action.actor = self
-                action.actor_id = self.id
+        for action in session.query(Action).filter_by(actor_id=other_profile.id).all():
+            action.actor = self
+            action.actor_id = self.id
         my_status_by_discussion = {
             s.discussion_id: s for s in self.agent_status_in_discussion
         }
@@ -225,7 +225,6 @@ class AgentProfile(Base):
                 else:
                     status.agent_profile = self
 
-
     def has_permission(self, verb, subject):
         if self is subject.owner:
             return True
@@ -239,7 +238,7 @@ class AgentProfile(Base):
 
     def avatar_url(self, size=32, app_url=None, email=None):
         default = config.get('avatar.default_image_url') or \
-            (app_url and app_url+'/static/img/icon/user.png')
+            (app_url and app_url + '/static/img/icon/user.png')
 
         offline_mode = config.get('offline_mode')
         if offline_mode == "true":
@@ -304,11 +303,9 @@ class AgentProfile(Base):
     @classmethod
     def special_quad_patterns(cls, alias_maker, discussion_id):
         return [
-            QuadMapPatternS(cls.agent_as_account_iri.apply(cls.id),
-                SIOC.account_of, cls.iri_class().apply(cls.id),
-                name=QUADNAMES.account_of_self),
-            QuadMapPatternS(cls.agent_as_account_iri.apply(cls.id),
-                RDF.type, SIOC.UserAccount, name=QUADNAMES.pseudo_account_type)]
+            QuadMapPatternS(cls.agent_as_account_iri.apply(cls.id), SIOC.account_of, cls.iri_class().apply(cls.id), name=QUADNAMES.account_of_self),
+            QuadMapPatternS(cls.agent_as_account_iri.apply(cls.id), RDF.type, SIOC.UserAccount, name=QUADNAMES.pseudo_account_type)
+        ]
 
     # True iff the user visits current discussion for the first time
     @property
@@ -385,7 +382,7 @@ class AgentProfile(Base):
         try:
             # If called from within request
             discussion = get_current_discussion()
-        except Exception as e:
+        except Exception:
             # This is actually called from changes.json, so the request
             # and discussion are inaccessible in that case.
             pass
@@ -597,8 +594,7 @@ class IdentityProvider(Base):
 
     id = Column(Integer, primary_key=True)
     provider_type = Column(String(32), nullable=False)
-    name = Column(String(60), nullable=False,
-        info={'rdf': QuadMapPatternS(None, SIOC.name)})
+    name = Column(String(60), nullable=False, info={'rdf': QuadMapPatternS(None, SIOC.name)})
     # TODO: More complicated model, where trust also depends on realm.
     trust_emails = Column(Boolean, default=True)
 
@@ -648,18 +644,13 @@ class AgentStatusInDiscussion(DiscussionBoundBase):
         UniqueConstraint('discussion_id', 'profile_id'), )
 
     id = Column(Integer, primary_key=True)
-    discussion_id = Column(Integer, ForeignKey(
-            "discussion.id", ondelete='CASCADE', onupdate='CASCADE'),
-        nullable=False, index=True)
+    discussion_id = Column(
+        Integer, ForeignKey("discussion.id", ondelete='CASCADE', onupdate='CASCADE'), nullable=False, index=True)
     discussion = relationship(
-        "Discussion", backref=backref(
-            "agent_status_in_discussion", cascade="all, delete-orphan"))
-    profile_id = Column(Integer, ForeignKey(
-            "agent_profile.id", ondelete='CASCADE', onupdate='CASCADE'),
-        nullable=False, index=True)
+        "Discussion", backref=backref("agent_status_in_discussion", cascade="all, delete-orphan"))
+    profile_id = Column(Integer, ForeignKey("agent_profile.id", ondelete='CASCADE', onupdate='CASCADE'), nullable=False, index=True)
     agent_profile = relationship(
-        AgentProfile, backref=backref(
-            "agent_status_in_discussion", cascade="all, delete-orphan"))
+        AgentProfile, backref=backref("agent_status_in_discussion", cascade="all, delete-orphan"))
     first_visit = Column(DateTime)
     last_visit = Column(DateTime)
     first_subscribed = Column(DateTime)
@@ -677,8 +668,7 @@ class AgentStatusInDiscussion(DiscussionBoundBase):
         return user_id == self.profile_id
 
     crud_permissions = CrudPermissions(
-        P_READ, P_ADMIN_DISC, P_ADMIN_DISC, P_ADMIN_DISC,
-        P_READ, P_READ, P_READ)
+        P_READ, P_ADMIN_DISC, P_ADMIN_DISC, P_ADMIN_DISC, P_READ, P_READ, P_READ)
 
 
 @event.listens_for(AgentStatusInDiscussion, 'after_insert', propagate=True)
@@ -714,9 +704,8 @@ class User(AgentProfile):
     last_login = Column(DateTime)
     last_assembl_login = Column(DateTime)
     login_failures = Column(Integer, default=0)
-    creation_date = Column(DateTime, nullable=False, default=datetime.utcnow,
-        info={'rdf': QuadMapPatternS(
-            None, DCTERMS.created, sections=(PRIVATE_USER_SECTION,))})
+    creation_date = Column(
+        DateTime, nullable=False, default=datetime.utcnow, info={'rdf': QuadMapPatternS(None, DCTERMS.created, sections=(PRIVATE_USER_SECTION,))})
     social_accounts = relationship('SocialAuthAccount')
 
     def __init__(self, **kwargs):
@@ -808,9 +797,7 @@ class User(AgentProfile):
                 # NOTE: The user may be confused by the implicit change of
                 # password when we destroy the second account.
                 # Use most recent login
-                if other_user.last_login and (
-                        (not self.last_login)
-                        or (other_user.last_login > self.last_login)):
+                if other_user.last_login and (not self.last_login or other_user.last_login > self.last_login):
                     self.password = other_user.password
             for extract in other_user.extracts_created[:]:
                 extract.creator = self
@@ -850,12 +837,6 @@ class User(AgentProfile):
                 if notification_subscription.find_duplicate(False) is not None:
                     self.db.delete(notification_subscription)
             session.autoflush = old_autoflush
-
-    def send_email(self, **kwargs):
-        subject = kwargs.get('subject', '')
-        body = kwargs.get('body', '')
-
-        # Send email.
 
     def avatar_url(self, size=32, app_url=None, email=None):
         return super(User, self).avatar_url(
@@ -956,9 +937,9 @@ class User(AgentProfile):
         from assembl.views.traversal import (
             CollectionDefinition, AbstractCollectionDefinition,
             UserNSBoundDictContext)
-        from .notification import NotificationSubscription
         from .discussion import Discussion
         from .user_key_values import UserPreferenceCollection
+
         class NotificationSubscriptionCollection(CollectionDefinition):
             def __init__(self, cls):
                 super(NotificationSubscriptionCollection, self).__init__(
@@ -983,9 +964,7 @@ class User(AgentProfile):
             def decorate_instance(
                     self, instance, parent_instance, assocs, user_id,
                     ctx, kwargs):
-                super(NotificationSubscriptionCollection,
-                      self).decorate_instance(
-                      instance, parent_instance, assocs, user_id, ctx, kwargs)
+                super(NotificationSubscriptionCollection, self).decorate_instance(instance, parent_instance, assocs, user_id, ctx, kwargs)
 
             def contains(self, parent_instance, instance):
                 if not super(NotificationSubscriptionCollection, self).contains(
@@ -1015,9 +994,7 @@ class User(AgentProfile):
             def decorate_instance(
                     self, instance, parent_instance, assocs, user_id,
                     ctx, kwargs):
-                super(LocalRoleCollection,
-                      self).decorate_instance(
-                      instance, parent_instance, assocs, user_id, ctx, kwargs)
+                super(LocalRoleCollection, self).decorate_instance(instance, parent_instance, assocs, user_id, ctx, kwargs)
 
             def contains(self, parent_instance, instance):
                 if not super(LocalRoleCollection, self).contains(
@@ -1149,15 +1126,11 @@ class User(AgentProfile):
                 subscribed[subscription.__class__] |= subscription.status == NotificationSubscriptionStatus.ACTIVE
         if reset_defaults:
             for sub in my_subscriptions[:]:
-                if (sub.creation_origin ==
-                        NotificationCreationOrigin.DISCUSSION_DEFAULT
-                        # only actual defaults
-                        and sub.__class__ in subscribed):
-                    if (sub.status == NotificationSubscriptionStatus.ACTIVE
-                            and not subscribed[sub.__class__]):
+                # only actual defaults
+                if sub.creation_origin == NotificationCreationOrigin.DISCUSSION_DEFAULT and sub.__class__ in subscribed:
+                    if sub.status == NotificationSubscriptionStatus.ACTIVE and not subscribed[sub.__class__]:
                         sub.status = NotificationSubscriptionStatus.INACTIVE_DFT
-                    elif (sub.status == NotificationSubscriptionStatus.INACTIVE_DFT
-                            and subscribed[sub.__class__]):
+                    elif sub.status == NotificationSubscriptionStatus.INACTIVE_DFT and subscribed[sub.__class__]:
                         sub.status = NotificationSubscriptionStatus.ACTIVE
 
         def create_missing(include_inactive=False):
@@ -1194,7 +1167,6 @@ class User(AgentProfile):
         if user_id == self.id:
             return True
         return super(User, self).user_can(user_id, operation, permissions)
-
 
 
 class Username(Base):
@@ -1271,18 +1243,13 @@ class UserRole(Base, PrivateObjectMixin):
     def special_quad_patterns(cls, alias_maker, discussion_id):
         role_alias = alias_maker.alias_from_relns(cls.role)
         return [
-            QuadMapPatternS(cls.iri_class().apply(cls.id),
-                SIOC.name, role_alias.name,
-                name=QUADNAMES.class_UserRole_rolename,
-                sections=(USER_SECTION,)),
-            QuadMapPatternS(AgentProfile.agent_as_account_iri.apply(cls.user_id),
-                SIOC.has_function, cls.iri_class().apply(cls.id),
-                name=QUADNAMES.class_UserRole_global, sections=(USER_SECTION,)),
+            QuadMapPatternS(cls.iri_class().apply(cls.id), SIOC.name, role_alias.name, name=QUADNAMES.class_UserRole_rolename, sections=(USER_SECTION,)),
+            QuadMapPatternS(AgentProfile.agent_as_account_iri.apply(cls.user_id), SIOC.has_function,
+                            cls.iri_class().apply(cls.id), name=QUADNAMES.class_UserRole_global, sections=(USER_SECTION,)),
             # Note: The IRIs need to distinguish UserRole from LocalUserRole
-            QuadMapPatternS(cls.iri_class().apply(cls.id),
-                SIOC.has_scope, URIRef(AssemblQuadStorageManager.local_uri()),
-                name=QUADNAMES.class_UserRole_globalscope, sections=(USER_SECTION,)),
-            ]
+            QuadMapPatternS(cls.iri_class().apply(cls.id), SIOC.has_scope, URIRef(AssemblQuadStorageManager.local_uri()),
+                            name=QUADNAMES.class_UserRole_globalscope, sections=(USER_SECTION,)),
+        ]
 
 
 @event.listens_for(UserRole, 'after_insert', propagate=True)
@@ -1295,7 +1262,6 @@ def send_user_to_socket_for_user_role(mapper, connection, target):
     user.send_to_changes(connection, CrudOperation.UPDATE)
 
 
-
 class LocalUserRole(DiscussionBoundBase, PrivateObjectMixin):
     """The role that a user has in the context of a discussion"""
     __tablename__ = 'local_user_role'
@@ -1303,10 +1269,9 @@ class LocalUserRole(DiscussionBoundBase, PrivateObjectMixin):
     rdf_class = SIOC.Role
 
     id = Column(Integer, primary_key=True)
-    user_id = Column(Integer, ForeignKey('user.id', ondelete='CASCADE', onupdate='CASCADE'),
-        nullable=False, index=True,
-        info={'rdf': QuadMapPatternS(
-            None, SIOC.function_of, AgentProfile.agent_as_account_iri.apply(None))})
+    user_id = Column(
+        Integer, ForeignKey('user.id', ondelete='CASCADE', onupdate='CASCADE'),
+        nullable=False, index=True, info={'rdf': QuadMapPatternS(None, SIOC.function_of, AgentProfile.agent_as_account_iri.apply(None))})
     user = relationship(User, backref=backref("local_roles", cascade="all, delete-orphan"))
     discussion_id = Column(Integer, ForeignKey(
         'discussion.id', ondelete='CASCADE'), nullable=False, index=True,
@@ -1366,7 +1331,7 @@ class LocalUserRole(DiscussionBoundBase, PrivateObjectMixin):
         if role_name:
             role = self.db.query(Role).filter_by(name=role_name).first()
             if not role:
-                raise HTTPBadRequest("Invalid role name:"+role_name)
+                raise HTTPBadRequest("Invalid role name:" + role_name)
             self.role = role
         json_discussion_id = json.get('discussion', None)
         if json_discussion_id:
@@ -1395,20 +1360,22 @@ class LocalUserRole(DiscussionBoundBase, PrivateObjectMixin):
     @classmethod
     def base_conditions(cls, alias=None, alias_maker=None):
         cls = alias or cls
-        return (cls.requested == False,)
+        return (cls.requested == False,)  # noqa: E711
 
     @classmethod
     def special_quad_patterns(cls, alias_maker, discussion_id):
         role_alias = alias_maker.alias_from_relns(cls.role)
         return [
-            QuadMapPatternS(AgentProfile.agent_as_account_iri.apply(cls.user_id),
+            QuadMapPatternS(
+                AgentProfile.agent_as_account_iri.apply(cls.user_id),
                 SIOC.has_function, cls.iri_class().apply(cls.id),
                 name=QUADNAMES.class_LocalUserRole_global,
-                conditions=(cls.requested == False,),
+                conditions=(cls.requested == False,),  # noqa: E711
                 sections=(USER_SECTION,)),
-            QuadMapPatternS(cls.iri_class().apply(cls.id),
+            QuadMapPatternS(
+                cls.iri_class().apply(cls.id),
                 SIOC.name, role_alias.name,
-                conditions=(cls.requested == False,),
+                conditions=(cls.requested == False,),  # noqa: E711
                 sections=(USER_SECTION,),
                 name=QUADNAMES.class_LocalUserRole_rolename)]
 
@@ -1534,6 +1501,7 @@ class AnonymousUser(DiscussionBoundBase, User):
     # Create an index for (discussion, role)?
 
     def get_discussion_id(self):
+        from .generic import ContentSource
         source = self.source or ContentSource.get(self.source_id)
         return source.discussion_id
 
@@ -1682,8 +1650,7 @@ Index("user_template", "discussion_id", "role_id")
 class PartnerOrganization(DiscussionBoundBase):
     """A corporate entity that we want to display in the discussion's page"""
     __tablename__ = "partner_organization"
-    id = Column(Integer, primary_key=True,
-        info={'rdf': QuadMapPatternS(None, ASSEMBL.db_id)})
+    id = Column(Integer, primary_key=True, info={'rdf': QuadMapPatternS(None, ASSEMBL.db_id)})
 
     discussion_id = Column(Integer, ForeignKey(
         "discussion.id", ondelete='CASCADE'), nullable=False, index=True,
@@ -1693,17 +1660,13 @@ class PartnerOrganization(DiscussionBoundBase):
             'partner_organizations', cascade="all, delete-orphan"),
         info={'rdf': QuadMapPatternS(None, ASSEMBL.in_conversation)})
 
-    name = Column(CoerceUnicode(256),
-        info={'rdf': QuadMapPatternS(None, FOAF.name)})
+    name = Column(CoerceUnicode(256), info={'rdf': QuadMapPatternS(None, FOAF.name)})
 
-    description = Column(UnicodeText,
-        info={'rdf': QuadMapPatternS(None, DCTERMS.description)})
+    description = Column(UnicodeText, info={'rdf': QuadMapPatternS(None, DCTERMS.description)})
 
-    logo = Column(URLString(),
-        info={'rdf': QuadMapPatternS(None, FOAF.logo)})
+    logo = Column(URLString(), info={'rdf': QuadMapPatternS(None, FOAF.logo)})
 
-    homepage = Column(URLString(),
-        info={'rdf': QuadMapPatternS(None, FOAF.homepage)})
+    homepage = Column(URLString(), info={'rdf': QuadMapPatternS(None, FOAF.homepage)})
 
     is_initiator = Column(Boolean)
 
@@ -1728,6 +1691,7 @@ class LanguagePreferenceOrder(IntEnum):
     DeducedFromTranslation = 3
     OS_Default = 4
     Discussion = 5
+
 
 LanguagePreferenceOrder.unique_prefs = (
     LanguagePreferenceOrder.Cookie,
@@ -1773,8 +1737,10 @@ class LanguagePreferenceCollection(object):
     def known_languages(self):
         return []
 
+
 class LanguagePreferenceCollectionWithDefault(LanguagePreferenceCollection):
     """A LanguagePreferenceCollection with a fallback language."""
+
     def __init__(self, locale_code):
         self.default_locale = Locale.get_or_create(locale_code)
 
@@ -1800,6 +1766,7 @@ class LanguagePreferenceCollectionWithDefault(LanguagePreferenceCollection):
 
 class UserLanguagePreferenceCollection(LanguagePreferenceCollection):
     """A LanguagePreferenceCollection that represent one user's preferences."""
+
     def __init__(self, user_id):
         user = User.get(user_id)
         user_prefs = user.language_preference
@@ -1830,8 +1797,7 @@ class UserLanguagePreferenceCollection(LanguagePreferenceCollection):
                 locale = Locale.get_or_create(l)
                 new_pref = UserLanguagePreference(
                     locale=locale, locale_id=locale.id,
-                    source_of_evidence=
-                        LanguagePreferenceOrder.DeducedFromTranslation.value,
+                    source_of_evidence=LanguagePreferenceOrder.DeducedFromTranslation.value,
                     preferred_order=pref.preferred_order)
                 prefs_without_trans.append(new_pref)
                 prefs_without_trans_by_loc[l] = new_pref
@@ -1892,7 +1858,7 @@ class UserLanguagePreference(Base):
         nullable=False, index=True)
 
     locale_id = Column(Integer, ForeignKey('locale.id',
-                       ondelete='CASCADE', onupdate='CASCADE'),
+                                           ondelete='CASCADE', onupdate='CASCADE'),
                        nullable=False, index=False)
 
     locale = relationship(Locale, foreign_keys=[locale_id])
@@ -1917,8 +1883,7 @@ class UserLanguagePreference(Base):
                         order_by=source_of_evidence))
 
     crud_permissions = CrudPermissions(
-            P_READ, P_SYSADMIN, P_SYSADMIN, P_SYSADMIN,
-            P_READ, P_READ, P_READ)
+        P_READ, P_SYSADMIN, P_SYSADMIN, P_SYSADMIN, P_READ, P_READ, P_READ)
 
     def is_owner(self, user_id):
         return user_id == self.user_id

@@ -127,6 +127,10 @@ def create_default_discussion_sections(discussion):
     db = discussion.db
     langstring = m.LangString.create(u'Home', 'en')
     langstring.add_value(u'Accueil', 'fr')
+    langstring.add_value(u"ホーム", 'ja')
+    langstring.add_value(u"Главная", 'ru')
+    langstring.add_value(u"主页", 'zh_CN')
+
     homepage_section = m.Section(
         discussion=discussion,
         title=langstring,
@@ -137,6 +141,9 @@ def create_default_discussion_sections(discussion):
 
     langstring = m.LangString.create(u'Debate', 'en')
     langstring.add_value(u'Débat', 'fr')
+    langstring.add_value(u"討論", 'ja')
+    langstring.add_value(u"обсуждение", 'ru')
+    langstring.add_value(u"讨论", 'zh_CN')
     debate_section = m.Section(
         discussion=discussion,
         title=langstring,
@@ -147,6 +154,9 @@ def create_default_discussion_sections(discussion):
 
     langstring = m.LangString.create(u'Syntheses', 'en')
     langstring.add_value(u'Synthèses', 'fr')
+    langstring.add_value(u"シンセシス", 'ja')
+    langstring.add_value(u"Синтезы", 'ru')
+    langstring.add_value(u"合成", 'zh_CN')
     syntheses_section = m.Section(
         discussion=discussion,
         title=langstring,
@@ -157,6 +167,7 @@ def create_default_discussion_sections(discussion):
 
     langstring = m.LangString.create(u'Resources center', 'en')
     langstring.add_value(u'Ressources', 'fr')
+    langstring.add_value(u"リソース", 'ja')
     resources_center_section = m.Section(
         discussion=discussion,
         title=langstring,
@@ -167,6 +178,9 @@ def create_default_discussion_sections(discussion):
 
     langstring = m.LangString.create(u'Administration', 'en')
     langstring.add_value(u'Administration', 'fr')
+    langstring.add_value(u"管理", 'ja')
+    langstring.add_value(u"администрация", 'ru')
+    langstring.add_value(u"管理者", 'zh_CN')
     administration_section = m.Section(
         discussion=discussion,
         title=langstring,

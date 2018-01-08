@@ -165,6 +165,7 @@ class Administration extends React.Component {
     const { timeline } = this.props.debate.debateData;
     const childrenWithProps = React.Children.map(children, child =>
       React.cloneElement(child, {
+        locale: i18n.locale,
         toggleLanguageMenu: this.toggleLanguageMenu
       })
     );

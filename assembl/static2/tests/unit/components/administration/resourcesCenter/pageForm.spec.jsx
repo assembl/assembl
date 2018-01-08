@@ -12,7 +12,7 @@ describe('DumbPageForm component', () => {
       handlePageTitleChange: handlePageTitleChangeSpy,
       headerMimeType: 'image/jpeg',
       headerUrl: 'http://www.example.com/documents/myimage/data',
-      selectedLocale: 'fr',
+      editLocale: 'fr',
       title: 'Centre de ressources',
       disabled: false
     };

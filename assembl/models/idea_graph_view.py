@@ -2,7 +2,6 @@
 from collections import defaultdict
 from datetime import datetime
 from abc import abstractmethod
-from itertools import chain
 
 from sqlalchemy.orm import (
     relationship, backref)
@@ -10,14 +9,12 @@ from sqlalchemy import (
     Column,
     Integer,
     String,
-    UnicodeText,
     DateTime,
     ForeignKey,
     UniqueConstraint,
 )
 from sqlalchemy.ext.associationproxy import association_proxy
 from sqlalchemy.orm import join
-import lxml.html as htmlt
 
 from . import DiscussionBoundBase
 from .discussion import Discussion
@@ -47,7 +44,9 @@ class IdeaGraphView(DiscussionBoundBase):
     id = Column(Integer, primary_key=True,
                 info={'rdf': QuadMapPatternS(None, ASSEMBL.db_id)})
 
-    creation_date = Column(DateTime, nullable=False, default=datetime.utcnow,
+    creation_date = Column(
+        DateTime, nullable=False,
+        default=datetime.utcnow,
         info={'rdf': QuadMapPatternS(None, DCTERMS.created)})
 
     discussion_id = Column(
@@ -89,7 +88,6 @@ class IdeaGraphView(DiscussionBoundBase):
         pass
 
 
-
 class SubGraphIdeaAssociation(DiscussionBoundBase):
     """Association table saying that an Idea is part of a ExplicitSubGraphView"""
     __tablename__ = 'sub_graph_idea_association'
@@ -116,7 +114,7 @@ class SubGraphIdeaAssociation(DiscussionBoundBase):
         idea_alias = alias_maker.alias_from_relns(cls.idea)
         # Assume tombstone status of target is similar to source, for now.
         conditions = [(idea_assoc.idea_id == idea_alias.id),
-                      (idea_alias.tombstone_date == None)]
+                      (idea_alias.tombstone_date == None)]  # noqa: E711
         if discussion_id:
             conditions.append((idea_alias.discussion_id == discussion_id))
         return [
@@ -187,7 +185,7 @@ class SubGraphIdeaLinkAssociation(DiscussionBoundBase):
         idea_link_alias = alias_maker.alias_from_relns(cls.idea_link)
         # Assume tombstone status of target is similar to source, for now.
         conditions = [(idea_link_assoc.idea_link_id == idea_link_alias.id),
-                      (idea_link_alias.tombstone_date == None)]
+                      (idea_link_alias.tombstone_date == None)]  # noqa: E711
         if discussion_id:
             conditions.extend(cls.get_discussion_conditions(
                 discussion_id, alias_maker))
@@ -242,13 +240,13 @@ class ExplicitSubGraphView(IdeaGraphView):
 
     # proxy the 'idea' attribute from the 'idea_assocs' relationship
     # for direct access
-    ideas = association_proxy('idea_assocs', 'idea',
-        creator=lambda idea: SubGraphIdeaAssociation(idea=idea))
+    ideas = association_proxy(
+        'idea_assocs', 'idea', creator=lambda idea: SubGraphIdeaAssociation(idea=idea))
 
     # proxy the 'idea_link' attribute from the 'idealink_assocs'
     # relationship for direct access
-    idea_links = association_proxy('idealink_assocs', 'idea_link',
-        creator=lambda idea_link: SubGraphIdeaLinkAssociation(idea_link=idea_link))
+    idea_links = association_proxy(
+        'idealink_assocs', 'idea_link', creator=lambda idea_link: SubGraphIdeaLinkAssociation(idea_link=idea_link))
 
     __mapper_args__ = {
         'polymorphic_identity': 'explicit_sub_graph_view',
@@ -301,7 +299,7 @@ class ExplicitSubGraphView(IdeaGraphView):
                 child_id = link.target_id
                 r = self._visit_ideas_depth_first(
                     child_id, ideas_by_id, children_links, idea_visitor,
-                    visited, level+1, result)
+                    visited, level + 1, result)
                 if r:
                     child_results.append((child_id, r))
         return idea_visitor.end_visit(idea, level, result, child_results)
@@ -326,10 +324,9 @@ class ExplicitSubGraphView(IdeaGraphView):
                             **self.filter_kwargs(
                                 SubGraphIdeaAssociation, kwargs)))
                     elif isinstance(inst, IdeaLink):
-                        assocs.append(SubGraphIdeaLinkAssociation(
-                                idea_link=inst, sub_graph=parent_instance,
-                                **self.filter_kwargs(
-                                    SubGraphIdeaLinkAssociation, kwargs)))
+                        assocs.append(
+                            SubGraphIdeaLinkAssociation(
+                                idea_link=inst, sub_graph=parent_instance, **self.filter_kwargs(SubGraphIdeaLinkAssociation, kwargs)))
 
             def contains(self, parent_instance, instance):
                 return instance.db.query(
@@ -371,12 +368,12 @@ class ExplicitSubGraphView(IdeaGraphView):
 
 
 SubGraphIdeaLinkAssociation.discussion = relationship(
-        Discussion, viewonly=True, uselist=False,
-        secondary=join(
-            ExplicitSubGraphView.__table__,
-            IdeaGraphView.__table__,
-            ExplicitSubGraphView.id == IdeaGraphView.id),
-        info={'rdf': QuadMapPatternS(None, ASSEMBL.in_conversation)})
+    Discussion, viewonly=True, uselist=False,
+    secondary=join(
+        ExplicitSubGraphView.__table__,
+        IdeaGraphView.__table__,
+        ExplicitSubGraphView.id == IdeaGraphView.id),
+    info={'rdf': QuadMapPatternS(None, ASSEMBL.in_conversation)})
 
 
 class TableOfContents(IdeaGraphView):
@@ -489,6 +486,7 @@ class Synthesis(ExplicitSubGraphView):
         idea_copies = {root.id: root}
         # Also copies ideas between two synthesis ideas
         relevant_idea_ids = synthesis_idea_ids.copy()
+
         def add_ancestors_between(idea, path=None):
             if isinstance(idea, RootIdea):
                 return
@@ -543,6 +541,7 @@ class Synthesis(ExplicitSubGraphView):
         return r[:-1] + (subject.first_original().value.encode("ascii", "ignore") if subject else "") + ">"
 
     crud_permissions = CrudPermissions(P_EDIT_SYNTHESIS)
+
 
 LangString.setup_ownership_load_event(
     Synthesis, ['subject', 'introduction', 'conclusion'])

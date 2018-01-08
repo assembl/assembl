@@ -31,12 +31,13 @@ const MultiColumns = ({
           classifier: classifier,
           debateData: debateData,
           identifier: identifier,
-          mySentiment: col.columnSynthesis.mySentiment,
+          mySentiment: get(col, 'columnSynthesis.mySentiment', null),
           routerParams: routerParams,
-          sentimentCounts: col.columnSynthesis.sentimentCounts,
-          synthesisId: col.columnSynthesis.id,
+          sentimentCounts: get(col, 'columnSynthesis.sentimentCounts', 0),
+          synthesisId: get(col, 'columnSynthesis.id'),
           synthesisTitle: get(col, 'columnSynthesis.subject', I18n.t('multiColumns.synthesis.title', { colName: col.name })),
-          synthesisBody: get(col, 'columnSynthesis.body', I18n.t('multiColumns.synthesis.noSynthesisYet')),
+          synthesisBody: get(col, 'columnSynthesis.body') || I18n.t('multiColumns.synthesis.noSynthesisYet'),
+          // keep the || here, if body is empty string, we want noSynthesisYet message
           hyphenStyle: { borderTopColor: col.color }
         };
         return (

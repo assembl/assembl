@@ -79,12 +79,14 @@ def db_tables(request, empty_db):
 def base_registry(request):
     """A Zope registry that is configured by with the testing.ini"""
     from assembl.views.traversal import root_factory
+    from assembl.lib.logging import includeme as configure_logging
     from pyramid.config import Configurator
     from zope.component import getGlobalSiteManager
     registry = getGlobalSiteManager()
     config = Configurator(registry)
     config.setup_registry(
         settings=get_config(), root_factory=root_factory)
+    configure_logging(config)
     configure_tasks(registry, 'assembl')
     config.add_tween('assembl.tests.utils.committing_session_tween_factory')
     return registry

@@ -7,26 +7,26 @@ from .lib.config import set_config
 from .tests.utils import log
 
 # Load all of the fixtures to be used by Assembl
-from assembl.tests.fixtures.base import *
-from assembl.tests.fixtures.auth import *
-from assembl.tests.fixtures.discussion import *
-from assembl.tests.fixtures.documents import *
-from assembl.tests.fixtures.creativity_session import *
-from assembl.tests.fixtures.graphql import *
-from assembl.tests.fixtures.idea_content_links import *
-from assembl.tests.fixtures.ideas import *
-from assembl.tests.fixtures.langstring import *
-from assembl.tests.fixtures.locale import *
-from assembl.tests.fixtures.mailbox import *
-from assembl.tests.fixtures.posts import *
-from assembl.tests.fixtures.preferences import *
-from assembl.tests.fixtures.resources import *
-from assembl.tests.fixtures.user import *
-from assembl.tests.fixtures.user_language_preference import *
-from assembl.tests.fixtures.idea_message_columns import *
-from assembl.tests.fixtures.sections import *
-from assembl.tests.fixtures.timeline import *
-from assembl.tests.fixtures.vote_session import *
+from assembl.tests.fixtures.base import *  # noqa: F401
+from assembl.tests.fixtures.auth import *  # noqa: F401
+from assembl.tests.fixtures.discussion import *  # noqa: F401
+from assembl.tests.fixtures.documents import *  # noqa: F401
+from assembl.tests.fixtures.creativity_session import *  # noqa: F401
+from assembl.tests.fixtures.graphql import *  # noqa: F401
+from assembl.tests.fixtures.idea_content_links import *  # noqa: F401
+from assembl.tests.fixtures.ideas import *  # noqa: F401
+from assembl.tests.fixtures.langstring import *  # noqa: F401
+from assembl.tests.fixtures.locale import *  # noqa: F401
+from assembl.tests.fixtures.mailbox import *  # noqa: F401
+from assembl.tests.fixtures.posts import *  # noqa: F401
+from assembl.tests.fixtures.preferences import *  # noqa: F401
+from assembl.tests.fixtures.resources import *  # noqa: F401
+from assembl.tests.fixtures.user import *  # noqa: F401
+from assembl.tests.fixtures.user_language_preference import *  # noqa: F401
+from assembl.tests.fixtures.idea_message_columns import *  # noqa: F401
+from assembl.tests.fixtures.sections import *  # noqa: F401
+from assembl.tests.fixtures.timeline import *  # noqa: F401
+from assembl.tests.fixtures.vote_session import *  # noqa: F401
 
 
 engine = None

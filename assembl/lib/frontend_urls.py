@@ -59,12 +59,13 @@ def get_timeline_for_date(discussion, date):
     """
     if isinstance(date, basestring):
         date = dateutil.parser.parse(date)
-
-    phases = sorted(discussion.timeline_phases, key=lambda p: p.start)
+    mindate = datetime.datetime(datetime.MINYEAR, 1, 1)
+    maxdate = datetime.datetime(datetime.MAXYEAR, 1, 1)
+    phases = sorted(discussion.timeline_phases, key=lambda p: p.start or mindate)
     actual_phase = None
     for index, phase in enumerate(phases):
         # Assume all dates are in utc, no tz_info however
-        if phase.start <= date < phase.end:
+        if (phase.start or mindate) <= date < (phase.end or maxdate):
             actual_phase = phase
             break
     return actual_phase
@@ -221,7 +222,10 @@ class FrontendUrls(object):
         # this method is kept mostly for legacy routes that do not exist in
         # new front-end yet.
         if request is None:
-            route = '/debate/' + self.discussion.slug
+            if current_phase_use_v1_interface(self.discussion.timeline_events):
+                route = '/debate/' + self.discussion.slug
+            else:
+                route = '/' + self.discussion.slug
         else:
             get_route = create_get_route(request, self.discussion)
             route = get_route('bare_slug')

@@ -1,7 +1,9 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`DumbPageForm component should render a form to update the resources center page title and header 1`] = `
-<div>
+<div
+  className="form-container"
+>
   <div
     className="form-group"
   >

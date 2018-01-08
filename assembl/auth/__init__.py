@@ -2,8 +2,7 @@
 
 This module defines basic roles and permissions."""
 
-from pyramid.security import (
-    Everyone, Authenticated, ALL_PERMISSIONS)
+from pyramid.security import Everyone, Authenticated
 
 
 R_PARTICIPANT = 'r:participant'

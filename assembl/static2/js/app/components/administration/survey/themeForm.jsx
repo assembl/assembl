@@ -14,7 +14,7 @@ export const DumbThemeCreationForm = ({
   imgUrl,
   index,
   markAsToDelete,
-  selectedLocale,
+  editLocale,
   title,
   toDelete,
   updateImgUrl,
@@ -24,14 +24,14 @@ export const DumbThemeCreationForm = ({
     return null;
   }
 
-  const handleTitleChange = e => updateTitle(selectedLocale, e.target.value);
+  const handleTitleChange = e => updateTitle(editLocale, e.target.value);
 
   const handleImageChange = (file) => {
     updateImgUrl(file);
   };
 
   const trsl = I18n.t('administration.ph.title');
-  const ph = `${trsl} ${selectedLocale.toUpperCase()}`;
+  const ph = `${trsl} ${editLocale.toUpperCase()}`;
   const num = (Number(index) + 1).toString();
   return (
     <div className="form-container">
@@ -58,12 +58,12 @@ DumbThemeCreationForm.defaultProps = {
   title: ''
 };
 
-const mapStateToProps = ({ admin: { thematicsById } }, { id, selectedLocale }) => {
+const mapStateToProps = ({ admin: { thematicsById } }, { id, editLocale }) => {
   const thematic = thematicsById.get(id);
   return {
     imgMimeType: thematic.getIn(['img', 'mimeType']),
     imgUrl: thematic.getIn(['img', 'externalUrl']),
-    title: getEntryValueForLocale(thematic.get('titleEntries'), selectedLocale, ''),
+    title: getEntryValueForLocale(thematic.get('titleEntries'), editLocale, ''),
     toDelete: thematic.get('toDelete', false)
   };
 };

@@ -83,7 +83,7 @@ const Sentiment = ({ sentimentCounts, mySentiment, sentiment, client, isSelected
         }
       }}
     >
-      <sentiment.SvgComponent size={25} />
+      <sentiment.SvgComponent size={23} />
     </div>
   );
   return <ResponsiveOverlayTrigger placement={placement} tooltip={sentiment.tooltip} component={sentimentComponent} />;

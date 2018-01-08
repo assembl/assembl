@@ -1,5 +1,8 @@
 """Documents attached to other objects, whether hosted externally or internally"""
 import enum
+from datetime import datetime
+from mimetypes import guess_all_extensions
+
 from sqlalchemy import (
     Column,
     UniqueConstraint,
@@ -7,19 +10,15 @@ from sqlalchemy import (
     UnicodeText,
     DateTime,
     String,
-    Unicode,
     ForeignKey,
-    Binary,
+    Enum,
     LargeBinary,
-    Text,
-    or_,
-    event,
-    func
+    event
 )
-from ..lib.sqla_types import CoerceUnicode
 from sqlalchemy.orm import relationship, backref
 
-from datetime import datetime
+from ..lib.antivirus import get_antivirus
+from ..lib.sqla_types import CoerceUnicode
 from ..lib.sqla import DuplicateHandling
 from ..lib.sqla_types import URLString
 from ..semantic.virtuoso_mapping import QuadMapPatternS
@@ -29,8 +28,9 @@ from .post import Post
 from .idea import Idea
 from .resource import Resource
 from .vote_session import VoteSession
-from .auth import (
-    AgentProfile, CrudPermissions, P_READ, P_ADMIN_DISC, P_ADD_POST,
+from .auth import AgentProfile
+from assembl.auth import (
+    CrudPermissions, P_READ, P_ADMIN_DISC, P_ADD_POST,
     P_SYSADMIN, P_EDIT_POST, P_ADD_IDEA, P_EDIT_IDEA, P_MANAGE_RESOURCE)
 
 
@@ -41,6 +41,12 @@ class AttachmentPurpose(enum.Enum):
     IMAGE = 'IMAGE'  # used for resources center
     PROFILE_PICTURE = 'PROFILE_PICTURE'
     RESOURCES_CENTER_HEADER_IMAGE = 'RESOURCES_CENTER_HEADER_IMAGE'
+
+
+class AntiVirusStatus(enum.Enum):
+    unchecked = "unchecked"
+    passed = "passed"
+    failed = "failed"
 
 
 class Document(DiscussionBoundBase):
@@ -152,8 +158,7 @@ class Document(DiscussionBoundBase):
     # Same crud permissions as a post. Issue with idea edition,
     # but that is usually more restricted than post permission.
     crud_permissions = CrudPermissions(
-            P_ADD_POST, P_READ, P_EDIT_POST, P_ADMIN_DISC,
-            P_EDIT_POST, P_ADMIN_DISC)
+        P_ADD_POST, P_READ, P_EDIT_POST, P_ADMIN_DISC, P_EDIT_POST, P_ADMIN_DISC)
 
 
 class File(Document):
@@ -173,6 +178,36 @@ class File(Document):
 
     # Should we defer this?
     data = Column(LargeBinary, nullable=False)
+    # Note: use SQLA 1.1 for a better Enum behaviour
+    av_checked = Column(Enum(*AntiVirusStatus.__members__.keys(),
+                             name="anti_virus_status"),
+                        server_default='unchecked')
+
+    def guess_extension(self):
+        extensions = guess_all_extensions(self.mime_type)
+        if extensions:
+            # somewhat random
+            return extensions[0]
+
+    def ensure_virus_checked(self, antivirus=None):
+        "Check if the file has viruses"
+        antivirus = antivirus or get_antivirus()
+        # Lock row to avoid multiple antivirus processes
+        (status,) = self.db.query(File.av_checked).filter_by(id=self.id).with_for_update().first()
+        if status == AntiVirusStatus.failed.unchecked.name:
+            safe = antivirus.check(self.data, self.guess_extension())
+            status = AntiVirusStatus.passed.name if safe else AntiVirusStatus.failed.name
+            self.av_checked = status
+        return status
+
+    def safe_data(self):
+        if self.av_checked == AntiVirusStatus.unchecked.name:
+            needs_check = self.discussion.preferences['requires_virus_check']
+            if needs_check:
+                self.ensure_virus_checked()
+        if self.av_checked == AntiVirusStatus.failed.name:
+            return ''
+        return self.data
 
     @Document.external_url.getter
     def external_url(self):
@@ -181,8 +216,7 @@ class File(Document):
         """
         if not self.id or not self.discussion:
             return None
-        return self.discussion.compose_external_uri(
-               'documents', self.id, 'data')
+        return self.discussion.compose_external_uri('documents', self.id, 'data')
 
 
 class Attachment(DiscussionBoundBase):
@@ -296,8 +330,7 @@ class PostAttachment(Attachment):
 
     # Same crud permissions as a post
     crud_permissions = CrudPermissions(
-            P_ADD_POST, P_READ, P_EDIT_POST, P_ADMIN_DISC,
-            P_EDIT_POST, P_ADMIN_DISC)
+        P_ADD_POST, P_READ, P_EDIT_POST, P_ADMIN_DISC, P_EDIT_POST, P_ADMIN_DISC)
 
 
 @event.listens_for(PostAttachment.post, 'set',
@@ -414,12 +447,12 @@ class AgentProfileAttachment(Attachment):
     }
 
     crud_permissions = CrudPermissions(
-            P_READ, P_SYSADMIN, P_SYSADMIN, P_SYSADMIN,
-            P_READ, P_READ, P_READ)
+        P_READ, P_SYSADMIN, P_SYSADMIN, P_SYSADMIN, P_READ, P_READ, P_READ)
 
     def is_owner(self, user_id):
         return user_id == self.user_id
-        
+
+
 class VoteSessionAttachment(Attachment):
 
     __tablename__ = "vote_session_attachment"
@@ -450,4 +483,3 @@ class VoteSessionAttachment(Attachment):
     }
 
     # TODO: permissions !!!
-

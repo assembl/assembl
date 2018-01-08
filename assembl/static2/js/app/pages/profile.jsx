@@ -17,6 +17,7 @@ type ProfileProps = {
   name: string,
   email: string,
   connectedUserId: string,
+  creationDate: ?string,
   slug: string,
   userId: string,
   id: string,
@@ -35,6 +36,10 @@ class Profile extends React.PureComponent<*, ProfileProps, ProfileState> {
   props: ProfileProps;
 
   state: ProfileState;
+
+  defaultProps: {
+    creationDate: null
+  };
 
   constructor(props) {
     super(props);
@@ -93,6 +98,7 @@ class Profile extends React.PureComponent<*, ProfileProps, ProfileState> {
 
   render() {
     const { username, name, email } = this.state;
+    const { creationDate } = this.props;
     const fullNameLabel = I18n.t('profile.fullname');
     const emailLabel = I18n.t('profile.email');
     return (
@@ -104,7 +110,12 @@ class Profile extends React.PureComponent<*, ProfileProps, ProfileState> {
                 <div className="center">
                   <span className="assembl-icon-profil" />
                 </div>
-                <h4 className="dark-title-4 capitalized center">{this.props.name}</h4>
+                <h3 className="dark-title-3 capitalized center">{this.props.name}</h3>
+                {creationDate && (
+                  <div className="center">
+                    <Translate value="profile.memberSince" date={I18n.l(creationDate, { dateFormat: 'date.format2' })} />
+                  </div>
+                )}
               </Col>
               <Col xs={12} sm={9}>
                 <div className="border-left">
@@ -180,7 +191,8 @@ export default compose(
       return {
         username: data.user.username,
         name: data.user.name,
-        email: data.user.email
+        email: data.user.email,
+        creationDate: data.user.creationDate
       };
     }
   }),

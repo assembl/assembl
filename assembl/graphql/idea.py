@@ -87,10 +87,9 @@ class IdeaInterface(graphene.Interface):
             j = join(_ilt, _it, _ilt.c.source_id == _it.c.id
                      ).join(_target_it, _ilt.c.target_id == _target_it.c.id)
             num = select([func.count(_ilt.c.id)]).select_from(j).where(
-                (_ilt.c.tombstone_date == None)  # noqa: E711
-                & (_it.c.tombstone_date == None)
-                & (_it.c.id == self.id)
-                & (_target_it.c.message_view_override == 'messageColumns')
+                (_ilt.c.tombstone_date == None) & (_it.c.tombstone_date == None) & (  # noqa: E711
+                    _it.c.id == self.id) & (_target_it.c.message_view_override == 'messageColumns')
+
             ).correlate_except(_ilt)
             return self.db.execute(num).fetchone()[0]
 

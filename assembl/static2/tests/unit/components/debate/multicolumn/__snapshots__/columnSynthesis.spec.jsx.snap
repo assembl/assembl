@@ -13,7 +13,9 @@ exports[`ColumnSynthesis component should render a folded post 1`] = `
     >
       <BoxWithHyphen
         additionalContainerClassNames="column-synthesis"
-        body="Excepturi est rerum nulla explicabo ex voluptatibus quam repellendus. Repudiandae quia nesciunt autem et aliquid. Dolores nisi perferendis voluptas corrupti voluptate molestias est. Porro et rerum sunt accusantium dolores qui."
+        body="Excepturi est rerum nulla explicabo ex voluptatibus quam repellendus.
+      Repudiandae quia nesciunt autem et aliquid. Dolores nisi perferendis voluptas
+      corrupti voluptate molestias est. Porro et rerum sunt accusantium dolores qui."
         date=""
         href=""
         hyphenStyle={

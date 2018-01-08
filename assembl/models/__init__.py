@@ -19,11 +19,7 @@ from sqlalchemy import and_
 from sqlalchemy.ext.declarative import DeclarativeMeta
 
 from ..lib.abc import abstractclassmethod
-from ..lib.sqla import (
-    Base, TimestampedBase, get_metadata, get_session_maker, PrivateObjectMixin,
-    get_named_object, get_database_id, Tombstone, CrudOperation,
-    DummyContext)
-from ..lib.history_mixin import TombstonableMixin, HistoryMixin
+from ..lib.sqla import Base, Tombstone, CrudOperation
 
 
 class DeclarativeAbstractMeta(DeclarativeMeta, ABCMeta):
@@ -76,6 +72,7 @@ class DiscussionBoundBase(Base):
 
 class DiscussionBoundTombstone(Tombstone):
     "A :py:class:`assembl.lib.sqla.Tombstone` that is bound to a discussion"
+
     def __init__(self, ob, **kwargs):
         super(DiscussionBoundTombstone, self).__init__(ob, **kwargs)
         self.discussion_id = ob.get_discussion_id()
@@ -102,7 +99,11 @@ class NamedClassMixin(object):
         return query.filter_by(**{cls.get_naming_column_name(): name}).first()
 
 
-from .auth import (
+# ignore qa because we import this stuff from here
+from ..lib.history_mixin import HistoryMixin, TombstonableMixin  # noqa: E402, F401
+from ..lib.sqla import get_database_id, get_session_maker, DummyContext, PrivateObjectMixin  # noqa: E402, F401
+
+from .auth import (  # noqa: E402, F401
     AbstractAgentAccount,
     AgentProfile,
     AgentStatusInDiscussion,
@@ -121,20 +122,20 @@ from .auth import (
     UserTemplate,
     Username,
 )
-from .social_auth import (
+from .social_auth import (  # noqa: E402, F401
     Nonce,
     Association,
     Code,
     SocialAuthAccount,
 )
-from .langstrings import (
+from .langstrings import (  # noqa: E402, F401
     Locale,
     LocaleLabel,
     LangString,
     LangStringEntry,
 )
-from .discussion import Discussion
-from .user_key_values import (
+from .discussion import Discussion  # noqa: E402, F401
+from .user_key_values import (  # noqa: E402, F401
     # AbstractNamespacedKeyValue,
     # AbstractPerUserNamespacedKeyValue,
     DiscussionPerUserNamespacedKeyValue,
@@ -142,14 +143,14 @@ from .user_key_values import (
     # UserNsDict,
     UserPreferenceCollection,
 )
-from .preferences import Preferences
-from .generic import (
+from .preferences import Preferences  # noqa: E402, F401
+from .generic import (  # noqa: E402, F401
     AnnotatorSource,
     Content,
     ContentSource,
     PostSource,
 )
-from .post import (
+from .post import (  # noqa: E402, F401
     AssemblPost,
     ColumnSynthesisPost,
     IdeaProposalPost,
@@ -160,7 +161,7 @@ from .post import (
     WidgetPost,
     SynthesisPost,
 )
-from .mail import (
+from .mail import (  # noqa: E402, F401
     AbstractFilesystemMailbox,
     AbstractMailbox,
     Email,
@@ -168,19 +169,19 @@ from .mail import (
     MaildirMailbox,
     MailingList,
 )
-from .idea import (
+from .idea import (  # noqa: E402, F401
     Idea,
     IdeaLink,
     RootIdea,
 )
-from .thematic import (
+from .thematic import (  # noqa: E402, F401
     Question,
     Thematic,
 )
-from .idea_msg_columns import (
+from .idea_msg_columns import (  # noqa: E402, F401
     IdeaMessageColumn,
 )
-from .action import (
+from .action import (  # noqa: E402, F401
     Action,
     ActionOnIdea,
     ActionOnPost,
@@ -196,7 +197,7 @@ from .action import (
     ViewIdea,
     ViewPost,
 )
-from .idea_content_link import (
+from .idea_content_link import (  # noqa: E402, F401
     Extract,
     IdeaContentLink,
     IdeaContentNegativeLink,
@@ -206,7 +207,7 @@ from .idea_content_link import (
     IdeaThreadContextBreakLink,
     TextFragmentIdentifier,
 )
-from .idea_graph_view import (
+from .idea_graph_view import (  # noqa: E402, F401
     ExplicitSubGraphView,
     IdeaGraphView,
     SubGraphIdeaAssociation,
@@ -214,7 +215,7 @@ from .idea_graph_view import (
     Synthesis,
     TableOfContents,
 )
-from .votes import (
+from .votes import (  # noqa: E402, F401
     AbstractIdeaVote,
     AbstractVoteSpecification,
     BinaryIdeaVote,
@@ -227,16 +228,16 @@ from .votes import (
     TokenIdeaVote,
     TokenVoteSpecification,
 )
-from .annotation import (
+from .annotation import (  # noqa: E402, F401
     Webpage,
 )
-from .timeline import (
+from .timeline import (  # noqa: E402, F401
     DiscussionMilestone,
     DiscussionPhase,
     DiscussionSession,
     TimelineEvent,
 )
-from .widgets import (
+from .widgets import (  # noqa: E402, F401
     BaseIdeaWidget,
     BaseIdeaWidgetLink,
     CreativitySessionWidget,
@@ -258,7 +259,7 @@ from .widgets import (
     WidgetUserConfig,
 )
 
-from .notification import (
+from .notification import (  # noqa: E402, F401
     NotificationSubscription,
     NotificationSubscriptionGlobal,
     NotificationSubscriptionOnPost,
@@ -276,7 +277,7 @@ from .notification import (
     NotificationOnPostCreated,
 )
 
-from .feed_parsing import (
+from .feed_parsing import (  # noqa: E402, F401
     FeedPostSource,
     LoomioPostSource,
     FeedPost,
@@ -284,12 +285,12 @@ from .feed_parsing import (
     WebLinkAccount,
     LoomioAccount,
 )
-from .edgesense_drupal import (
+from .edgesense_drupal import (  # noqa: E402, F401
     EdgeSenseDrupalSource,
     SourceSpecificAccount,
     SourceSpecificPost,
 )
-from .facebook_integration import (
+from .facebook_integration import (  # noqa: E402, F401
     FacebookAccessToken,
     FacebookGenericSource,
     FacebookGroupSource,
@@ -299,7 +300,7 @@ from .facebook_integration import (
     FacebookPost
 )
 
-from .attachment import (
+from .attachment import (  # noqa: E402, F401
     AttachmentPurpose,
     AgentProfileAttachment,
     DiscussionAttachment,
@@ -312,16 +313,16 @@ from .attachment import (
     VoteSessionAttachment
 )
 
-from .announcement import (
+from .announcement import (  # noqa: E402, F401
     Announcement,
     IdeaAnnouncement,
 )
 
-from .resource import Resource
+from .resource import Resource  # noqa: E402, F401
 
-from .section import Section
+from .section import Section  # noqa: E402, F401
 
-from .vote_session import VoteSession
+from .vote_session import VoteSession  # noqa: E402, F401
 
 
 def includeme(config):

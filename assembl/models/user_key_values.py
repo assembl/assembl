@@ -1,27 +1,19 @@
 """Models for arbitrary key-values storage, bound to a namespace, a user, and some other object (currently only the discussion)."""
-from collections import Mapping, MutableMapping
+from collections import MutableMapping
 
 import simplejson as json
 from sqlalchemy import (
-    Boolean,
     Column,
     String,
     Text,
     ForeignKey,
     Integer,
-    Unicode,
-    DateTime,
-    desc,
-    select,
-    func,
     UniqueConstraint,
-    event,
 )
 from sqlalchemy.orm import (relationship)
 from sqlalchemy.ext.declarative import declared_attr
 from pyramid.httpexceptions import HTTPUnauthorized
 
-from ..lib.abc import abstractclassmethod
 from . import DiscussionBoundBase
 from assembl.lib import config
 from auth import User
@@ -41,12 +33,12 @@ class AbstractNamespacedKeyValue(object):
     @declared_attr
     def namespace(self):
         """The namespace of the key-value tuple"""
-        return Column("namespace", String)#, index=True)
+        return Column("namespace", String)
 
     @declared_attr
     def key(self):
         """The key of the key-value tuple"""
-        return Column("key", String)#, index=True)
+        return Column("key", String)
 
     @declared_attr
     def value(self):
@@ -407,6 +399,7 @@ class UserPreferenceCollection(NamespacedUserKVCollection):
 
 class UserNsDict(MutableMapping):
     """The dictonary of :py:class:NamespacedUserKVCollection, indexed by namespace, as a python dict"""
+
     def __init__(self, target, user_id):
         self.target = target
         self.user_id = user_id
@@ -454,6 +447,7 @@ class UserNsDict(MutableMapping):
 
 class NsDict(MutableMapping):
     """The dictonary of :py:class:NamespacedKVCollection, indexed by namespace, as a python dict"""
+
     def __init__(self, target):
         self.target = target
 
@@ -524,6 +518,7 @@ class DiscussionPerUserNamespacedKeyValue(
             AbstractNamespacedKeyValue.key == self.key)
         return (query, True)
 
+
 Discussion.per_user_namespaced_kv_class = DiscussionPerUserNamespacedKeyValue
 
 
@@ -560,5 +555,6 @@ class IdeaNamespacedKeyValue(
             AbstractNamespacedKeyValue.namespace == self.namespace,
             AbstractNamespacedKeyValue.key == self.key)
         return (query, True)
+
 
 Idea.namespaced_kv_class = IdeaNamespacedKeyValue

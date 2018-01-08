@@ -27,7 +27,6 @@ from .discussion import Discussion
 from .idea import Idea
 from .generic import Content
 from .post import Post
-from .mail import IMAPMailbox
 from ..auth import (
     CrudPermissions, P_READ, P_EDIT_IDEA,
     P_EDIT_EXTRACT, P_ADD_IDEA, P_ADD_EXTRACT,
@@ -62,8 +61,8 @@ class IdeaContentLink(DiscussionBoundBase):
 
     order = Column(Float, nullable=False, default=0.0)
 
-    creation_date = Column(DateTime, nullable=False, default=datetime.utcnow,
-        info={'rdf': QuadMapPatternS(None, DCTERMS.created)})
+    creation_date = Column(
+        DateTime, nullable=False, default=datetime.utcnow, info={'rdf': QuadMapPatternS(None, DCTERMS.created)})
 
     creator_id = Column(
         Integer,
@@ -74,7 +73,7 @@ class IdeaContentLink(DiscussionBoundBase):
 
     creator = relationship(
         'AgentProfile', foreign_keys=[creator_id], backref=backref(
-            'extracts_created', cascade="all")) # do not delete orphan
+            'extracts_created', cascade="all"))  # do not delete orphan
 
     __mapper_args__ = {
         'polymorphic_identity': 'assembl:relatedToIdea',
@@ -95,7 +94,6 @@ class IdeaContentLink(DiscussionBoundBase):
         Discussion, viewonly=True, uselist=False, secondary=Content.__table__,
         info={'rdf': QuadMapPatternS(None, ASSEMBL.in_conversation)})
 
-
     @classmethod
     def base_conditions(cls, alias=None, alias_maker=None):
         if alias_maker is None:
@@ -104,12 +102,11 @@ class IdeaContentLink(DiscussionBoundBase):
         else:
             idea_content_link = alias or alias_maker.alias_from_class(cls)
             idea = alias_maker.alias_from_relns(idea_content_link.idea)
-        return ((idea_content_link.idea_id != None),
+        return ((idea_content_link.idea_id != None),  # noqa: E711
                 (idea.tombstone_date == None))
 
-    crud_permissions = CrudPermissions(
-            P_ADD_IDEA, P_READ, P_EDIT_IDEA, P_EDIT_IDEA,
-            P_EDIT_IDEA, P_EDIT_IDEA)
+    crud_permissions = CrudPermissions(P_ADD_IDEA, P_READ, P_EDIT_IDEA, P_EDIT_IDEA, P_EDIT_IDEA, P_EDIT_IDEA)
+
 
 @event.listens_for(IdeaContentLink.idea, 'set', propagate=True, active_history=True)
 def idea_content_link_idea_set_listener(target, value, oldvalue, initiator):
@@ -146,7 +143,7 @@ class IdeaContentPositiveLink(IdeaContentLink):
             ASSEMBL.postLinkedToIdea,
             Idea.iri_class().apply(cls.idea_id),
             name=QUADNAMES.assembl_postLinkedToIdea,
-            conditions=(cls.idea_id != None,))]
+            conditions=(cls.idea_id != None,))]  # noqa: E711
 
     __mapper_args__ = {
         'polymorphic_identity': 'assembl:postLinkedToIdea_abstract',
@@ -168,6 +165,7 @@ class IdeaContentWidgetLink(IdeaContentPositiveLink):
     __mapper_args__ = {
         'polymorphic_identity': 'assembl:postHiddenLinkedToIdea',
     }
+
 
 Idea.widget_owned_contents = relationship(IdeaContentWidgetLink)
 Content.widget_idea_links = relationship(
@@ -193,7 +191,7 @@ class IdeaRelatedPostLink(IdeaContentPositiveLink):
             ASSEMBL.postRelatedToIdea,
             Idea.iri_class().apply(cls.idea_id),
             name=QUADNAMES.assembl_postRelatedToIdea,
-            conditions=(cls.idea_id != None,))]
+            conditions=(cls.idea_id != None,))]  # noqa: E711
 
     __mapper_args__ = {
         'polymorphic_identity': 'assembl:postLinkedToIdea',
@@ -213,11 +211,11 @@ class Extract(IdeaContentPositiveLink):
         get_global_base_url() + '/data/SpecificResource/%d', None,
         ('id', Integer, False))
 
-    id = Column(Integer, ForeignKey(
-            'idea_content_positive_link.id',
-            ondelete='CASCADE', onupdate='CASCADE'
-        ), primary_key=True, info= {
-            'rdf': QuadMapPatternS(None, ASSEMBL.db_id)})
+    id = Column(
+        Integer,
+        ForeignKey('idea_content_positive_link.id', ondelete='CASCADE', onupdate='CASCADE'),
+        primary_key=True,
+        info={'rdf': QuadMapPatternS(None, ASSEMBL.db_id)})
 
     graph_iri_class = PatternIriClass(
         QUADNAMES.ExcerptGraph_iri,
@@ -258,10 +256,10 @@ class Extract(IdeaContentPositiveLink):
                 None, OA.hasBody,
                 cls.graph_iri_class.apply(cls.id),
                 name=QUADNAMES.oa_hasBody,
-                conditions=((cls.idea_id != None),
+                conditions=((cls.idea_id != None),  # noqa: E711
                             (Idea.tombstone_date == None))),
             QuadMapPatternS(
-                #Content.iri_class().apply(cls.content_id),
+                # Content.iri_class().apply(cls.content_id),
                 cls.specific_resource_iri.apply(cls.id),
                 # It would be better to use CATALYST.expressesIdea,
                 # but Virtuoso hates the redundancy.
@@ -297,7 +295,6 @@ class Extract(IdeaContentPositiveLink):
             #     conditions=(cls.idea_id != None,)),
             ]
 
-
     annotation_text = Column(UnicodeText)
 
     owner_id = Column(
@@ -315,11 +312,10 @@ class Extract(IdeaContentPositiveLink):
     __mapper_args__ = {
         'polymorphic_identity': 'assembl:postExtractRelatedToIdea',
     }
+
     @property
     def target(self):
-        retval = {
-                '@type': self.content.external_typename()
-                }
+        retval = {'@type': self.content.external_typename()}
         if isinstance(self.content, Post):
             retval['@id'] = Post.uri_generic(self.content.id)
         elif self.content.type == 'webpage':
@@ -372,7 +368,7 @@ class Extract(IdeaContentPositiveLink):
             tfi = TextFragmentIdentifier(extract=self)
         tfi.xpath_start = tfi.xpath_end = xpath
         tfi.offset_start = start
-        tfi.offset_end = start+len(quote)
+        tfi.offset_end = start + len(quote)
         return tfi
 
     def send_to_changes(self, connection=None, operation=CrudOperation.UPDATE,
@@ -406,8 +402,8 @@ class Extract(IdeaContentPositiveLink):
         return query.filter(cls.owner_id == user_id)
 
     crud_permissions = CrudPermissions(
-            P_ADD_EXTRACT, P_READ, P_EDIT_EXTRACT, P_EDIT_EXTRACT,
-            P_EDIT_MY_EXTRACT, P_EDIT_MY_EXTRACT)
+        P_ADD_EXTRACT, P_READ, P_EDIT_EXTRACT, P_EDIT_EXTRACT, P_EDIT_MY_EXTRACT, P_EDIT_MY_EXTRACT)
+
 
 class IdeaContentNegativeLink(IdeaContentLink):
     """
@@ -467,7 +463,7 @@ class TextFragmentIdentifier(DiscussionBoundBase):
                 OA.hasSelector,
                 cls.iri_class().apply(cls.id),
                 name=QUADNAMES.oa_hasSelector,
-                conditions=(cls.extract_id != None,)),
+                conditions=(cls.extract_id != None,)),  # noqa: E711
             QuadMapPatternS(
                 None, DCTERMS.conformsTo,
                 URIRef("http://tools.ietf.org/rfc/rfc3023")),  # XPointer
@@ -481,9 +477,7 @@ class TextFragmentIdentifier(DiscussionBoundBase):
 
     def __string__(self):
         return ("xpointer(start-point(string-range(%s,'',%d))/"
-                "range-to(string-range(%s,'',%d)))" % (
-                self.xpath_start, self.offset_start,
-                self.xpath_end, self.offset_end))
+                "range-to(string-range(%s,'',%d)))" % (self.xpath_start, self.offset_start, self.xpath_end, self.offset_end))
 
     def __json__(self):
         return {"start": self.xpath_start, "startOffset": self.offset_start,
@@ -526,5 +520,4 @@ class TextFragmentIdentifier(DiscussionBoundBase):
         info={'rdf': QuadMapPatternS(None, ASSEMBL.in_conversation)})
 
     crud_permissions = CrudPermissions(
-            P_ADD_EXTRACT, P_READ, P_EDIT_EXTRACT, P_EDIT_EXTRACT,
-            P_EDIT_MY_EXTRACT, P_EDIT_MY_EXTRACT)
+        P_ADD_EXTRACT, P_READ, P_EDIT_EXTRACT, P_EDIT_EXTRACT, P_EDIT_MY_EXTRACT, P_EDIT_MY_EXTRACT)

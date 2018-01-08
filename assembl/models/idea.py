@@ -1,20 +1,15 @@
 # -*- coding: utf-8 -*-
 """Defining the idea and links between ideas."""
 
-from itertools import chain, groupby
+from itertools import chain
 from collections import defaultdict
 from abc import ABCMeta, abstractmethod
 from datetime import datetime
-import threading
 
 from ..lib.clean_input import sanitize_text
-from rdflib import URIRef
-from sqlalchemy.orm import (
-    relationship, backref, aliased, contains_eager, joinedload, deferred,
-    column_property, with_polymorphic)
-from sqlalchemy.orm.attributes import NO_VALUE
+from sqlalchemy.orm import relationship, backref, aliased, contains_eager, column_property, with_polymorphic
 from sqlalchemy.sql import text, column
-from sqlalchemy.sql.expression import union, bindparam, literal_column
+from sqlalchemy.sql.expression import bindparam, literal_column
 
 from sqlalchemy import (
     Column,
@@ -23,10 +18,8 @@ from sqlalchemy import (
     String,
     Unicode,
     Float,
-    UnicodeText,
     DateTime,
     ForeignKey,
-    inspect,
     select,
     func,
 )
@@ -56,6 +49,7 @@ else:
 
 class defaultdictlist(defaultdict):
     """A defaultdict of lists."""
+
     def __init__(self):
         super(defaultdictlist, self).__init__(list)
 
@@ -103,6 +97,7 @@ class AppendingVisitor(IdeaVisitor):
 
 class WordCountVisitor(IdeaVisitor):
     """A Visitor that counts words related to an idea"""
+
     def __init__(self, langs, count_posts=True):
         self.counter = WordCounter(langs)
         self.count_posts = True
@@ -122,7 +117,7 @@ class WordCountVisitor(IdeaVisitor):
             query = idea.db.query(Content)
             related = idea.get_related_posts_query(True)
             query = query.join(related, Content.id == related.c.post_id
-                ).filter(Content.hidden==False,
+                ).filter(Content.hidden == False,  # noqa: E712
                          Content.tombstone_condition()).options(
                     Content.subqueryload_options())
             titles = set()
@@ -198,12 +193,12 @@ class Idea(HistoryMixin, DiscussionBoundBase):
             return self.title.first_original().value
         return ""
 
-
-    messages_in_parent = Column(Boolean, default=True, server_default='true',
+    messages_in_parent = Column(
+        Boolean, default=True, server_default='true',
         doc="are messages in this idea also part of the parent idea?")
 
-    message_view_override = Column(String(100),
-        doc="Use a non-standard view for this idea")
+    message_view_override = Column(
+        String(100), doc="Use a non-standard view for this idea")
 
     creation_date = Column(
         DateTime, nullable=False, default=datetime.utcnow,
@@ -233,15 +228,15 @@ class Idea(HistoryMixin, DiscussionBoundBase):
             cascade="all, delete-orphan")
     )
 
-    #widget_id = deferred(Column(Integer, ForeignKey('widget.id')))
-    #widget = relationship("Widget", backref=backref('ideas', order_by=creation_date))
+    # widget_id = deferred(Column(Integer, ForeignKey('widget.id')))
+    # widget = relationship("Widget", backref=backref('ideas', order_by=creation_date))
 
     __mapper_args__ = {
         'polymorphic_identity': 'idea',
         'polymorphic_on': sqla_type,
         # Not worth it for now, as the only other class is RootIdea, and there
         # is only one per discussion - benoitg 2013-12-23
-        #'with_polymorphic': '*'
+        # 'with_polymorphic': '*'
     }
 
     @classmethod
@@ -277,19 +272,16 @@ class Idea(HistoryMixin, DiscussionBoundBase):
         creator=lambda idea: IdeaLink(target=idea))
 
     def get_children(self):
-        return self.db.query(Idea).join(
-            IdeaLink, (IdeaLink.target_id == Idea.id)
-            & (IdeaLink.tombstone_date == None)).filter(
-            (IdeaLink.source_id == self.id)
-            & (Idea.tombstone_date == None)
+        return self.db.query(Idea
+            ).join(IdeaLink, (IdeaLink.target_id == Idea.id) & (IdeaLink.tombstone_date == None)  # noqa: E711
+            ).filter((IdeaLink.source_id == self.id) & (Idea.tombstone_date == None)
             ).order_by(IdeaLink.order).all()
 
     def get_parents(self):
-        return self.db.query(Idea).join(
-            IdeaLink, (IdeaLink.source_id == Idea.id)
-            & (IdeaLink.tombstone_date == None)).filter(
-            (IdeaLink.target_id == self.id)
-            & (Idea.tombstone_date == None)).all()
+        return self.db.query(Idea
+            ).join(IdeaLink, (IdeaLink.source_id == Idea.id) & (IdeaLink.tombstone_date == None)  # noqa: E711
+            ).filter((IdeaLink.target_id == self.id) & (Idea.tombstone_date == None)  # noqa: E711
+            ).all()
 
     @property
     def parent_uris(self):
@@ -351,14 +343,14 @@ class Idea(HistoryMixin, DiscussionBoundBase):
                     WHERE tombstone_date IS NULL"""
                 ).columns(column('source_id'), column('target_id')).alias()
             select_exp = select([sql.c.source_id.label('id')]
-                ).select_from(sql).where(sql.c.target_id==target_id)
+                ).select_from(sql).where(sql.c.target_id == target_id)
         else:
             if isinstance(target_id, list):
                 root_condition = IdeaLink.target_id.in_(target_id)
             else:
                 root_condition = (IdeaLink.target_id == target_id)
             link = select(
-                    [IdeaLink.source_id, IdeaLink.target_id]
+                [IdeaLink.source_id, IdeaLink.target_id]
                 ).select_from(
                     IdeaLink
                 ).where(
@@ -369,9 +361,9 @@ class Idea(HistoryMixin, DiscussionBoundBase):
             sources_alias = aliased(IdeaLink)
             parent_link = sources_alias.target_id == target_alias.c.source_id
             parents = select(
-                    [sources_alias.source_id, sources_alias.target_id]
-                ).select_from(sources_alias).where(parent_link
-                    & (sources_alias.tombstone_date == tombstone_date))
+                [sources_alias.source_id, sources_alias.target_id]
+                ).select_from(sources_alias).where(
+                    parent_link & (sources_alias.tombstone_date == tombstone_date))
             with_parents = link.union(parents)
             select_exp = select([with_parents.c.source_id.label('id')]
                 ).select_from(with_parents)
@@ -401,7 +393,7 @@ class Idea(HistoryMixin, DiscussionBoundBase):
         aq = self.get_ancestors_query(self.id)
         announcements = self.db.query(IdeaAnnouncement
             ).filter(IdeaAnnouncement.idea_id.in_(aq),
-                     IdeaAnnouncement.should_propagate_down==True
+                     IdeaAnnouncement.should_propagate_down == True  # noqa: E712
             ).all()
         # assume order is preserved from aq...
         if announcements:
@@ -418,23 +410,21 @@ class Idea(HistoryMixin, DiscussionBoundBase):
                     WHERE tombstone_date IS NULL"""
                 ).columns(column('source_id'), column('target_id')).alias()
             select_exp = select([sql.c.target_id.label('id')]
-                ).select_from(sql).where(sql.c.source_id==root_idea_id)
+                ).select_from(sql).where(sql.c.source_id == root_idea_id)
         else:
             link = select(
-                    [IdeaLink.source_id, IdeaLink.target_id]
+                [IdeaLink.source_id, IdeaLink.target_id]
                 ).select_from(
                     IdeaLink
                 ).where(
-                    (IdeaLink.tombstone_date == None) &
-                    (IdeaLink.source_id == root_idea_id)
+                    (IdeaLink.tombstone_date == None) & (IdeaLink.source_id == root_idea_id)  # noqa: E711
                 ).cte(recursive=True)
             source_alias = aliased(link)
             targets_alias = aliased(IdeaLink)
             parent_link = targets_alias.source_id == source_alias.c.target_id
             children = select(
-                    [targets_alias.source_id, targets_alias.target_id]
-                ).select_from(targets_alias).where(parent_link
-                    & (targets_alias.tombstone_date == None))
+                [targets_alias.source_id, targets_alias.target_id]
+                ).select_from(targets_alias).where(parent_link & (targets_alias.tombstone_date == None))  # noqa: E711
             with_children = link.union(children)
             select_exp = select([with_children.c.target_id.label('id')]
                 ).select_from(with_children)
@@ -568,7 +558,7 @@ class Idea(HistoryMixin, DiscussionBoundBase):
         if result is not IdeaVisitor.CUT_VISIT:
             for child in children_dict.get(self.id, ()):
                 r = child._visit_ideas_depth_first(
-                    idea_visitor, visited, level+1, result, children_dict)
+                    idea_visitor, visited, level + 1, result, children_dict)
                 if r:
                     child_results.append((child, r))
         return idea_visitor.end_visit(self, level, result, child_results)
@@ -576,20 +566,20 @@ class Idea(HistoryMixin, DiscussionBoundBase):
     @classmethod
     def children_dict(cls, discussion_id):
         # We do not want a subclass
-        cls = [c for c in cls.mro() if c.__name__=="Idea"][0]
+        cls = [c for c in cls.mro() if c.__name__ == "Idea"][0]
         source = aliased(cls, name="source")
         target = aliased(cls, name="target")
         link_info = list(cls.default_db.query(
             IdeaLink.target_id, IdeaLink.source_id
-            ).join(source, source.id == IdeaLink.source_id
-            ).join(target, target.id == IdeaLink.target_id
-            ).filter(
+        ).join(source, source.id == IdeaLink.source_id
+        ).join(target, target.id == IdeaLink.target_id
+        ).filter(
             source.discussion_id == discussion_id,
-            IdeaLink.tombstone_date == None,
-            source.tombstone_date == None,
-            target.tombstone_date == None,
+            IdeaLink.tombstone_date == None,  # noqa: E711
+            source.tombstone_date == None,  # noqa: E711
+            target.tombstone_date == None,  # noqa: E711
             target.discussion_id == discussion_id
-            ).order_by(IdeaLink.order))
+        ).order_by(IdeaLink.order))
         if not link_info:
             (root_id,) = cls.default_db.query(
                 RootIdea.id).filter_by(discussion_id=discussion_id).first()
@@ -626,7 +616,7 @@ class Idea(HistoryMixin, DiscussionBoundBase):
         if result is not IdeaVisitor.CUT_VISIT:
             for child_id in children_dict[idea_id]:
                 r = cls._visit_idea_ids_depth_first(
-                    child_id, idea_visitor, children_dict, visited, level+1, result)
+                    child_id, idea_visitor, children_dict, visited, level + 1, result)
                 if r:
                     child_results.append((child_id, r))
         return idea_visitor.end_visit(idea_id, level, result, child_results)
@@ -652,10 +642,10 @@ class Idea(HistoryMixin, DiscussionBoundBase):
             if result != IdeaVisitor.CUT_VISIT:
                 children.append(child)
                 if result:
-                    child_results.append((child, r))
+                    child_results.append((child, result))
         for child in children:
             child._visit_ideas_breadth_first(
-                idea_visitor, visited, level+1, result)
+                idea_visitor, visited, level + 1, result)
         return idea_visitor.end_visit(self, level, prev_result, child_results)
 
     def most_common_words(self, lang=None, num=8):
@@ -683,14 +673,13 @@ class Idea(HistoryMixin, DiscussionBoundBase):
         from .idea_content_link import Extract
         from .auth import AgentProfile
         from .post import Post
-        from .generic import Content
         from sqlalchemy.sql.functions import count
         subquery = self.get_descendants_query(self.id)
         query = self.db.query(
             Post.creator_id
             ).join(Extract
             ).join(subquery, Extract.idea_id == subquery.c.id
-            ).filter(Extract.important == True
+            ).filter(Extract.important == True  # noqa: E712
             ).group_by(Post.creator_id
             ).order_by(count(Extract.id).desc())
         if id_only:
@@ -717,8 +706,7 @@ class Idea(HistoryMixin, DiscussionBoundBase):
         query = self.db.query(post.creator_id
             ).join(content, post.id == content.id
             ).join(related, content.id == related.c.post_id
-            ).filter(content.hidden == False,
-                content.discussion_id == self.discussion_id
+            ).filter(content.hidden == False, content.discussion_id == self.discussion_id  # noqa: E712
             ).group_by(
                 post.creator_id
             ).order_by(
@@ -793,19 +781,19 @@ class Idea(HistoryMixin, DiscussionBoundBase):
         from sqlalchemy.sql.functions import func
         from .idea_content_link import IdeaContentPositiveLink
         from .post import Post
-        (ancestry, discussion_id, idea_link_ids)  = cls.default_db.query(
+        (ancestry, discussion_id, idea_link_ids) = cls.default_db.query(
             Post.ancestry, Post.discussion_id,
             func.idea_content_links_above_post(Post.id)
-            ).filter(Post.id==post_id).first()
+            ).filter(Post.id == post_id).first()
         post_path = "%s%d," % (ancestry, post_id)
         if not idea_link_ids:
             return []
         idea_link_ids = [int(id) for id in idea_link_ids.split(',') if id]
         # This could be combined with previous in postgres.
         root_ideas = cls.default_db.query(
-                IdeaContentPositiveLink.idea_id.distinct()
+            IdeaContentPositiveLink.idea_id.distinct()
             ).filter(
-                IdeaContentPositiveLink.idea_id != None,
+                IdeaContentPositiveLink.idea_id != None,  # noqa: E711
                 IdeaContentPositiveLink.id.in_(idea_link_ids)).all()
         if not root_ideas:
             return []
@@ -856,13 +844,11 @@ class Idea(HistoryMixin, DiscussionBoundBase):
             target, target.id == IdeaLink.target_id).filter(
             target.discussion_id == discussion_id).filter(
             source.discussion_id == discussion_id).filter(
-            IdeaLink.tombstone_date == None).all()
+            IdeaLink.tombstone_date == None).all()  # noqa: E711
 
     @classmethod
     def extra_collections(cls):
-        from .votes import AbstractIdeaVote
-        from .widgets import (
-            Widget, IdeaWidgetLink, VotedIdeaWidgetLink, InspirationWidget)
+        from .widgets import Widget, IdeaWidgetLink, InspirationWidget
         from .idea_content_link import (
             IdeaRelatedPostLink, IdeaContentWidgetLink)
         from .generic import Content
@@ -880,8 +866,8 @@ class Idea(HistoryMixin, DiscussionBoundBase):
                     IdeaLink, IdeaLink.target_id == children.id).join(
                     parent, IdeaLink.source_id == parent.id).filter(
                     IdeaLink.source_id == parent_instance.id,
-                    IdeaLink.tombstone_date == None,
-                    children.tombstone_date == None)
+                    IdeaLink.tombstone_date == None,  # noqa: E711
+                    children.tombstone_date == None)  # noqa: E711
 
             def decorate_instance(
                     self, instance, parent_instance, assocs, user_id,
@@ -907,7 +893,6 @@ class Idea(HistoryMixin, DiscussionBoundBase):
 
             def decorate_query(self, query, owner_alias, last_alias, parent_instance, ctx):
                 parent = owner_alias
-                widgets = last_alias
                 ancestry = parent_instance.get_ancestors_query(
                     parent_instance.id)
                 ancestors = aliased(Idea)
@@ -1001,7 +986,7 @@ class Idea(HistoryMixin, DiscussionBoundBase):
                         mapper.entities for mapper in query._entities)):
                     query = query.options(
                         contains_eager(Content.widget_idea_links))
-                        # contains_eager(Content.extracts) seems to slow things down instead
+                    # contains_eager(Content.extracts) seems to slow things down instead
                 # Filter out idea proposal posts
                 query = query.filter(last_alias.type.notin_(
                     IdeaProposalPost.polymorphic_identities()))
@@ -1033,6 +1018,7 @@ class Idea(HistoryMixin, DiscussionBoundBase):
             def __init__(self, cls):
                 super(ActiveShowingWidgetsCollection, self).__init__(
                     cls, cls.active_showing_widget_links)
+
             def decorate_query(self, query, owner_alias, last_alias, parent_instance, ctx):
                 from .widgets import IdeaShowingWidgetLink
                 idea = owner_alias
@@ -1071,8 +1057,8 @@ class Idea(HistoryMixin, DiscussionBoundBase):
         P_ADD_IDEA, P_READ, P_EDIT_IDEA, P_ADMIN_DISC, P_ADMIN_DISC,
         P_ADMIN_DISC)
 
-LangString.setup_ownership_load_event(Idea,
-    ['title', 'description', 'synthesis_title'])
+
+LangString.setup_ownership_load_event(Idea, ['title', 'description', 'synthesis_title'])
 
 
 class RootIdea(Idea):
@@ -1096,7 +1082,7 @@ class RootIdea(Idea):
         from .post import Post
         result = self.db.query(Post).filter(
             Post.discussion_id == self.discussion_id,
-            Post.hidden==False,
+            Post.hidden == False,  # noqa: E712
             Post.tombstone_condition()
         ).count()
         return int(result)
@@ -1109,13 +1095,11 @@ class RootIdea(Idea):
         discussion_data = self.get_discussion_data(self.discussion_id)
         result = self.db.query(Post).filter(
             Post.discussion_id == self.discussion_id,
-            Post.hidden==False,
+            Post.hidden == False,  # noqa: E712
             Post.tombstone_condition()
         ).join(
             ViewPost,
-            (ViewPost.post_id == Post.id)
-            & (ViewPost.tombstone_date == None)
-            & (ViewPost.actor_id == discussion_data.user_id)
+            (ViewPost.post_id == Post.id) & (ViewPost.tombstone_date == None) & (ViewPost.actor_id == discussion_data.user_id)
         ).count()
         return int(result)
 
@@ -1126,7 +1110,7 @@ class RootIdea(Idea):
         from .post import Post
         result = self.db.query(Post.creator_id).filter(
             Post.discussion_id == self.discussion_id,
-            Post.hidden==False,
+            Post.hidden == False,  # noqa: E712
             Post.tombstone_condition()
         ).distinct().count()
         return int(result)
@@ -1167,7 +1151,7 @@ class IdeaLink(HistoryMixin, DiscussionBoundBase):
         Integer, ForeignKey(
             'idea.id', ondelete="CASCADE", onupdate="CASCADE"),
         nullable=False, index=True)
-        #info={'rdf': QuadMapPatternS(None, IDEA.target_idea)})
+    # info={'rdf': QuadMapPatternS(None, IDEA.target_idea)})
     target_id = Column(Integer, ForeignKey(
         'idea.id', ondelete="CASCADE", onupdate="CASCADE"),
         nullable=False, index=True)
@@ -1213,7 +1197,7 @@ class IdeaLink(HistoryMixin, DiscussionBoundBase):
             source_idea = alias_maker.alias_from_relns(idea_link.source)
 
         # Assume tombstone status of target is similar to source, for now.
-        return ((idea_link.tombstone_date == None),
+        return ((idea_link.tombstone_date == None),  # noqa: E711
                 (idea_link.source_id == source_idea.id),
                 (source_idea.tombstone_date == None))
 
@@ -1221,10 +1205,9 @@ class IdeaLink(HistoryMixin, DiscussionBoundBase):
     def special_quad_patterns(cls, alias_maker, discussion_id):
         idea_link = alias_maker.alias_from_class(cls)
         target_alias = alias_maker.alias_from_relns(cls.target)
-        source_alias = alias_maker.alias_from_relns(cls.source)
         # Assume tombstone status of target is similar to source, for now.
         conditions = [(idea_link.target_id == target_alias.id),
-                      (target_alias.tombstone_date == None)]
+                      (target_alias.tombstone_date == None)]  # noqa: E711
         if discussion_id:
             conditions.append((target_alias.discussion_id == discussion_id))
         return [
@@ -1240,7 +1223,7 @@ class IdeaLink(HistoryMixin, DiscussionBoundBase):
                 Idea.iri_class().apply(idea_link.target_id),
                 conditions=conditions,
                 name=QUADNAMES.col_pattern_IdeaLink_target_id
-                #exclude_base_condition=True
+                # exclude_base_condition=True
                 ),
             QuadMapPatternS(
                 cls.iri_class().apply(idea_link.id),
@@ -1294,7 +1277,6 @@ class IdeaLink(HistoryMixin, DiscussionBoundBase):
     #     secondary=Idea.__table__, primaryjoin=(source_id == Idea.id),
     #     info={'rdf': QuadMapPatternS(None, ASSEMBL.in_conversation)})
 
-
     discussion = relationship(
         Discussion,
         viewonly=True,
@@ -1326,8 +1308,6 @@ _it = Idea.__table__
 _ilt = IdeaLink.__table__
 Idea.num_children = column_property(
     select([func.count(_ilt.c.id)]).where(
-        (_ilt.c.source_id == _it.c.id)
-        & (_ilt.c.tombstone_date == None)
-        & (_it.c.tombstone_date == None)
+        (_ilt.c.source_id == _it.c.id) & (_ilt.c.tombstone_date == None) & (_it.c.tombstone_date == None)  # noqa: E711
         ).correlate_except(_ilt),
     deferred=True)

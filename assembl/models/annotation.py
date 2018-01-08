@@ -3,7 +3,7 @@ from sqlalchemy import Column, Integer, ForeignKey, DateTime
 
 from .generic import Content
 from ..lib.sqla_types import CoerceUnicode
-from .langstrings import LangString, LangStringEntry, Locale
+from .langstrings import LangString, Locale
 
 
 class Webpage(Content):
