@@ -6,14 +6,14 @@ import transaction
 """create vote_session table
 
 Revision ID: 7ea03fbce9a8
-Revises: c67bcb5d6faa
+Revises: c14c885ecdc2
 Create Date: 2017-12-22 13:28:30.634303
 
 """
 
 # revision identifiers, used by Alembic.
 revision = '7ea03fbce9a8'
-down_revision = 'c67bcb5d6faa'
+down_revision = 'c14c885ecdc2'
 
 
 def LangStringId(column_name):
