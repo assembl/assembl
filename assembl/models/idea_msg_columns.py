@@ -12,7 +12,6 @@ from sqlalchemy.orm import relationship, backref
 from sqlalchemy.sql.functions import count
 
 from ..auth import CrudPermissions, P_READ, P_ADMIN_DISC
-from ..lib.clean_input import sanitize_text
 from . import DiscussionBoundBase
 from .idea import Idea
 from .idea_content_link import IdeaContentLink, IdeaRelatedPostLink
@@ -170,9 +169,6 @@ class IdeaMessageColumn(DiscussionBoundBase):
 
     @synthesis_title.setter
     def synthesis_title(self, value):
-        for lse in value.entries:
-            lse.value = sanitize_text(lse.value)
-
         self.set_column_synthesis(subject=value)
 
 
