@@ -6,7 +6,7 @@ import transaction
 """create vote_session table
 
 Revision ID: 7ea03fbce9a8
-Revises: c3f8bc9c75d5
+Revises: c67bcb5d6faa
 Create Date: 2017-12-22 13:28:30.634303
 
 """
@@ -27,22 +27,22 @@ def LangStringId(column_name):
 def lang_strings_args(lang_strings_names):
     args = [LangStringId(lang_string_name)
         for lang_string_name in lang_strings_names]
-    
+
     lang_strings_id_names = [name + "_id" for name in lang_strings_names]
-    
+
     args.append(UniqueConstraint(*lang_strings_id_names))
-        
+
     return args
-    
-    
+
+
 def ForeignIdColumn(foreign_column_name, fk_kwargs = {}, **kwargs):
     return Column(foreign_column_name + '_id',
         Integer(),
         ForeignKey(foreign_column_name + '.id', **fk_kwargs),
         **kwargs
     )
-    
-    
+
+
 def IdColumn():
     return Column('id', Integer(), primary_key = True)
 
