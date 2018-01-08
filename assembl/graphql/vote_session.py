@@ -13,34 +13,6 @@ from .graphql_langstrings_helpers import (
 )
 from .document import Document
 
-# from assembl.auth import IF_OWNED, CrudPermissions
-# from assembl.auth.util import get_permissions
-# from pyramid.httpexceptions import HTTPUnauthorized
-# from pyramid.security import Everyone
-
-
-def add_and_flush(model):
-    db = model.db
-    db.add(model)
-    db.flush()
-
-
-"""
-
-def require_permission(cls, user_id, discussion_id, permission):
-    permissions = get_permissions(user_id, discussion_id)
-    allowed = cls.user_can_cls(
-        user_id, permission, permissions)
-    if not allowed or (allowed == IF_OWNED and user_id == Everyone):
-        raise HTTPUnauthorized()
-
-def require_create_permission(cls, user_id, discussion_id):
-    require_permission(cls, user_id, discussion_id, CrudPermissions.UPDATE)
-
-def require_update_permission(cls, user_id, discussion_id):
-    require_permission(cls, user_id, discussion_id, CrudPermissions.CREATE)
-
-"""
 
 langstrings_defs = {
     "title": {},
@@ -78,11 +50,6 @@ class UpdateVoteSession(graphene.Mutation):
     @staticmethod
     @abort_transaction_on_exception
     def mutate(root, args, context, info):
-        # user_id = context.authenticated_userid or Everyone
-        # discussion_id = context.matchdict['discussion_id']
-        # require_update_permission(models.DiscussionPhase, user_id, discussion_id) TODO: !!!
-        # TODO: Persmissions !!
-
         discussion_phase_id = args.get('discussion_phase_id')
         discussion_phase = models.DiscussionPhase.get(discussion_phase_id)
 
@@ -126,6 +93,8 @@ class UpdateVoteSession(graphene.Mutation):
                 attachmentPurpose=ATTACHMENT_PURPOSE_IMAGE
             )
 
-        add_and_flush(vote_session)
+        db = vote_session.db
+        db.add(vote_session)
+        db.flush()
 
         return UpdateVoteSession(vote_session=vote_session)

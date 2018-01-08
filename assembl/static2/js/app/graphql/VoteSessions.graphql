@@ -1,8 +1,0 @@
-#import "./fragments/VoteSession.graphql"
-
-query VoteSessions {
-  voteSessions {
-    ...voteSessionGlobals
-    ...voteSessionLangstringsEntries
-  }
-}
