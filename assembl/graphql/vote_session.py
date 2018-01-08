@@ -26,7 +26,7 @@ langstrings_defs = {
 class VoteSession(SecureObjectType, SQLAlchemyObjectType):
     class Meta:
         model = models.VoteSession
-        interfaces = (Node, LangstringsInterface(langstrings_defs))
+        interfaces = (Node, LangstringsInterface(langstrings_defs, "VoteSession"))
         only_fields = ('id', 'discussion_phase_id')
 
     header_image = graphene.Field(Document)

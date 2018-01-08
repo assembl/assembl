@@ -50,9 +50,9 @@ def graphql_langstrings_attrs_dict(langstrings_defs):
     return d
 
 
-def LangstringsInterface(langstrings_defs):
+def LangstringsInterface(langstrings_defs, model_name):
     langstrings_interface = type(
-        "LangstringsInterface",
+        model_name + "LangstringsInterface",
         (graphene.Interface, ),
         graphql_langstrings_attrs_dict(langstrings_defs)
     )
