@@ -1,5 +1,5 @@
 
-def test_creation_landing_page_module_type(request, test_session):
+def test_creation_landing_page_module_type(test_session):
     from assembl.models.landing_page import LandingPageModuleType
     from assembl.models import LangString
     module_type = LandingPageModuleType(
