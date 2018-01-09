@@ -757,7 +757,7 @@ const Translations = {
       headerTitle: "Top page Header",
       propositionSectionTitle: "Proposals section",
       instructions: "Instructions",
-      voteSessionSuccess: "The vote session is saved with succes.",
+      voteSessionSuccess: "The vote session is saved with success.",
       sections: {
         addSection: "Add a section",
         deleteSection: "Delete the section",
