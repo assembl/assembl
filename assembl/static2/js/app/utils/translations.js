@@ -331,6 +331,15 @@ const Translations = {
         1: "Renseigner les questions",
         2: "Exporter les données"
       },
+      voteSession: {
+        0: "Renseigner les instructions",
+        1: "Configurer les modules de vote",
+        2: "Configurer les propositions de vote"
+      },
+      headerTitle: "Bandeau de haut de page",
+      PropositionSectionTitle: "Section propositions",
+      instructions: "Instructions",
+      voteSessionSuccess: "La session de vote a été enregistrée avec succès.",
       sections: {
         addSection: "Ajouter une rubrique",
         deleteSection: "Supprimer la rubrique",
@@ -342,9 +351,14 @@ const Translations = {
         successSave: "Les rubriques ont été modifiées avec succès",
         sectionsTitle: "Renseigner les rubriques"
       },
+      helpers: {
+        voteSessionHeader: "Le bandeau de haut de page doit contenir une image et un titre. Le sous-titre est optionnel.",
+        voteSessionInstructions: "La section des instructions doit contenir un titre et une description.",
+        voteSessionPropositionSection: "La section des propositions doit contenir un titre."
+      },
       videoHelp:
         "*Liens vidéo autorisés : \"https://www.youtube.com/embed/[videoId]\" ou \"https://player.vimeo.com/video/[videoId]?\"",
-      annotation: "Module à renseigner obligatoirement. Les champs * sont requis.",
+      annotation: "Les champs * sont requis.",
       themeNum: "Thématique %{index}",
       discussion: {
         0: "Langues utilisées",
@@ -357,7 +371,12 @@ const Translations = {
         descriptionTop: "Texte au-dessus de la vidéo",
         descriptionBottom: "Texte en-dessous de la vidéo",
         mediaLink: "Lien média en ligne (vidéo, image, etc..)",
-        orAttachPicture: "Ou téléchargez une image depuis votre ordinateur"
+        orAttachPicture: "Ou téléchargez une image depuis votre ordinateur",
+        headerTitle: "Titre du bandeau",
+        headerSubtitle: "Sous-titre du bandeau",
+        instructionsTitle: "Titre des instructions",
+        instructionsContent: "Instructions",
+        propositionSectionTitle: "Titre de la section"
       },
       resourcesCenter: {
         createResource: "Ajouter un média",
@@ -730,6 +749,15 @@ const Translations = {
         1: "Set questions",
         2: "Export data"
       },
+      voteSession: {
+        0: "Fill in the instructions",
+        1: "Configure the voting modules",
+        2: "Configure the voting proposals"
+      },
+      headerTitle: "Top page Header",
+      propositionSectionTitle: "Proposals section",
+      instructions: "Instructions",
+      voteSessionSuccess: "The vote session is saved with succes.",
       sections: {
         addSection: "Add a section",
         deleteSection: "Delete the section",
@@ -741,9 +769,14 @@ const Translations = {
         successSave: "Sections are modified with success",
         sectionsTitle: "Set sections"
       },
+      helpers: {
+        voteSessionHeader: "The top page header must contain an image and a title. The subtitle is optional.",
+        voteSessionInstructions: "The instructions section must contain a title and a description.",
+        voteSessionPropositionSection: "The proposals section must contain a title."
+      },
       videoHelp:
         "*Authorized video links: \"https://www.youtube.com/embed/[videoId]\" or \"https://player.vimeo.com/video/[videoId]?\"",
-      annotation: "Module to be completed. * Fields are required.",
+      annotation: "* Fields are required.",
       themeNum: "Theme %{index}",
       discussion: {
         0: "Languages of the Discussion",
@@ -756,7 +789,12 @@ const Translations = {
         descriptionTop: "Comments above video",
         descriptionBottom: "Comments below video",
         mediaLink: "Online media link (video, picture, etc..)",
-        orAttachPicture: "Or upload an image from your computer"
+        orAttachPicture: "Or upload an image from your computer",
+        headerTitle: "Header title",
+        headerSubtitle: "Header subtitle",
+        instructionsTitle: "Instructions title",
+        instructionsContent: "Instructions",
+        PropositionSectionTitle: "Section title"
       },
       resourcesCenter: {
         createResource: "Add a media",

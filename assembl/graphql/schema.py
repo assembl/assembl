@@ -30,6 +30,7 @@ from assembl.graphql.section import (CreateSection, DeleteSection, Section,
 from assembl.graphql.sentiment import AddSentiment, DeleteSentiment
 from assembl.graphql.synthesis import Synthesis
 from assembl.graphql.user import UpdateUser
+from assembl.graphql.vote_session import VoteSession, UpdateVoteSession
 from assembl.graphql.utils import get_fields, get_root_thematic_for_phase
 from assembl.lib.locale import strip_country
 from assembl.lib.sqla_types import EmailString
@@ -52,7 +53,6 @@ log = logging.getLogger('assembl')
 # object types Post, PostConnection which will conflict with those added
 # manually.
 
-
 class Query(graphene.ObjectType):
     node = Node.Field()
     root_idea = graphene.Field(IdeaUnion, identifier=graphene.String())
@@ -66,6 +66,7 @@ class Query(graphene.ObjectType):
     locales = graphene.List(Locale, lang=graphene.String(required=True))
     total_sentiments = graphene.Int()
     has_syntheses = graphene.Boolean()
+    vote_session = graphene.Field(VoteSession, discussion_phase_id=graphene.Int(required=True))
     resources = graphene.List(Resource)
     resources_center = graphene.Field(lambda: ResourcesCenter)
     has_resources_center = graphene.Boolean()
@@ -112,6 +113,14 @@ class Query(graphene.ObjectType):
 
         root_thematic = get_root_thematic_for_phase(discussion, identifier)
         return root_thematic
+
+    def resolve_vote_session(self, args, context, info):
+
+        discussion_phase_id = args.get('discussion_phase_id')
+        discussion_phase = models.DiscussionPhase.get(discussion_phase_id)
+        # TODO: see if we can avoid this next(iter( thing with a one-to-one relationship
+        vote_session = next(iter(discussion_phase.vote_session or []), None)
+        return vote_session
 
     def resolve_ideas(self, args, context, info):
         model = models.Idea
@@ -266,6 +275,7 @@ class Mutations(graphene.ObjectType):
     update_section = UpdateSection.Field()
     update_legal_notice_and_terms = UpdateLegalNoticeAndTerms.Field()
     update_user = UpdateUser.Field()
+    update_vote_session = UpdateVoteSession.Field()
 
 
 Schema = graphene.Schema(query=Query, mutation=Mutations)

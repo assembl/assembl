@@ -7,6 +7,7 @@ type Phase = {
   interface_v1: boolean,
   start: string,
   end: string,
+  '@id': string,
   title: { entries: Array<{ [string]: string }> }
 };
 export type Timeline = Array<Phase>;
@@ -16,6 +17,7 @@ export const getCurrentPhaseIdentifier = (_timeline: Timeline) => {
   if (!timeline) {
     timeline = [];
   }
+
   const currentDate = new Date();
   let identifier = '';
   timeline.forEach((phase) => {
@@ -163,4 +165,14 @@ export const getBarPercent = (_phase: Phase) => {
     }
   }
   return barWidth;
+};
+
+export const getPhaseId = (_timeline: Timeline, identifier: string) => {
+  let timeline = _timeline;
+  if (!timeline) {
+    timeline = [];
+  }
+  const phase = timeline.find(p => p.identifier === identifier);
+  const phaseId = phase && phase['@id'].split('/')[1];
+  return phaseId;
 };

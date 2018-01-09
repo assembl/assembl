@@ -3,6 +3,8 @@
     padding: 5px;
     border: 1px solid $grey5;
     border-radius: 4px;
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
 
     .DraftEditor-root {
       max-height: 180px;
@@ -12,12 +14,9 @@
     }
 
     .editor-toolbar {
-      background-color: #ccc;
       margin: -5px;
 
       .btn {
-        background-color: #ccc;
-
         &:first-child,
         &:last-child,
         &:focus,
@@ -48,6 +47,8 @@
   font-family: $font-family;
   margin-top: 16px;
   position: relative;
+  letter-spacing: 0;
+  font-size: $font-size-xs;
 
   .insertion-box {
     min-height: 200px;
@@ -142,15 +143,22 @@
   }
 
   .editor-toolbar {
-    float: right;
+    background-color: $grey8;
+    width: 100%;
+    text-align: right;
 
     .btn-group {
       margin-right: 5px;
+
+      .active {
+        background-color: $grey2 !important;
+      }
 
       .btn {
         font-size: 10px;
         border: 0;
         border-radius: 0;
+        background-color: $grey8;
 
         span {
           &:before {
@@ -177,13 +185,8 @@
     position: absolute;
   }
 
-  .DraftEditor-root {
-    padding: 5px;
-  }
-
   .DraftEditor-editorContainer {
     padding: 5px;
-    background-color: $white;
   }
 
   .public-DraftEditorPlaceholder-root {
@@ -194,6 +197,12 @@
     height: 200px;
     overflow: auto;
   }
+}
+
+.public-DraftEditorPlaceholder-inner {
+  font-size: $font-size-xs;
+  font-family: $font-family6;
+  letter-spacing: 0;
 }
 
 .rich-text-editor.hidePlaceholder {

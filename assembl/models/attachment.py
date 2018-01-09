@@ -27,6 +27,7 @@ from . import DiscussionBoundBase
 from .post import Post
 from .idea import Idea
 from .resource import Resource
+from .vote_session import VoteSession
 from .auth import AgentProfile
 from assembl.auth import (
     CrudPermissions, P_READ, P_ADMIN_DISC, P_ADD_POST,
@@ -450,3 +451,35 @@ class AgentProfileAttachment(Attachment):
 
     def is_owner(self, user_id):
         return user_id == self.user_id
+
+
+class VoteSessionAttachment(Attachment):
+
+    __tablename__ = "vote_session_attachment"
+
+    id = Column(Integer, ForeignKey(
+        'attachment.id',
+        ondelete='CASCADE',
+        onupdate='CASCADE'
+    ), primary_key=True)
+
+    vote_session_id = Column(Integer, ForeignKey(
+        'vote_session.id',
+        ondelete='CASCADE',
+        onupdate='CASCADE',
+        ),
+        nullable=False,
+        index=True)
+
+    vote_session = relationship(
+        VoteSession,
+        backref=backref(
+            'attachments',
+            cascade="all, delete-orphan"),
+    )
+    __mapper_args__ = {
+        'polymorphic_identity': 'vote_session_attachment',
+        'with_polymorphic': '*'
+    }
+
+    # TODO: permissions !!!

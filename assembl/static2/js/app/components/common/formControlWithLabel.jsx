@@ -23,7 +23,8 @@ class FormControlWithLabel extends React.Component {
   setValidationState() {
     let errorMessage = '';
     let validationState = null;
-    if (this.props.required && this.props.value.length === 0) {
+    const valueSize = this.props.value ? this.props.value.length : 0;
+    if (this.props.required && valueSize === 0) {
       errorMessage = I18n.t('error.required');
       validationState = 'error';
     }

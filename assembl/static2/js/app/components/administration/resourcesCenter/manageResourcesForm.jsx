@@ -7,7 +7,7 @@ import { createResourceTooltip } from '../../common/tooltips';
 import EditResourceForm from './editResourceForm';
 
 const ManageResourcesForm = ({ createResource, resources, editLocale }) => (
-  <div className="admin-content">
+  <div style={{ paddingBottom: '50px' }}>
     {resources.map(id => <EditResourceForm key={id} id={id} locale={editLocale} />)}
     <OverlayTrigger placement="top" overlay={createResourceTooltip}>
       <div onClick={() => createResource(resources.size + 1)} className="plus margin-l">

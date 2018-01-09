@@ -1,0 +1,27 @@
+#import "./LangString.graphql"
+
+fragment voteSessionGlobals on VoteSession {
+  headerImage {
+    title
+    mimeType
+    externalUrl
+  }
+}
+
+fragment voteSessionLangstringsEntries on VoteSession {
+  titleEntries {
+    ...langStringEntry
+  }
+  subTitleEntries {
+    ...langStringEntry
+  }
+  instructionsSectionTitleEntries {
+    ...langStringEntry
+  }
+  instructionsSectionContentEntries {
+    ...langStringEntry
+  }
+  propositionsSectionTitleEntries {
+    ...langStringEntry
+  }
+}

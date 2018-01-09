@@ -309,7 +309,8 @@ from .attachment import (  # noqa: E402, F401
     Attachment,
     PostAttachment,
     IdeaAttachment,
-    ResourceAttachment
+    ResourceAttachment,
+    VoteSessionAttachment
 )
 
 from .announcement import (  # noqa: E402, F401
@@ -320,6 +321,8 @@ from .announcement import (  # noqa: E402, F401
 from .resource import Resource  # noqa: E402, F401
 
 from .section import Section  # noqa: E402, F401
+
+from .vote_session import VoteSession  # noqa: E402, F401
 
 
 def includeme(config):

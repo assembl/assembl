@@ -7,6 +7,7 @@ import { connect } from 'react-redux';
 
 import { updateThematics } from '../actions/adminActions';
 import { updateResources, updateResourcesCenterPage } from '../actions/adminActions/resourcesCenter';
+import { updateVoteSessionPage } from '../actions/adminActions/voteSession';
 import { updateSections } from '../actions/adminActions/adminSections';
 import { updateLegalNoticeAndTerms } from '../actions/adminActions/legalNoticeAndTerms';
 import withLoadingIndicator from '../components/common/withLoadingIndicator';
@@ -19,7 +20,9 @@ import ResourcesCenterPage from '../graphql/ResourcesCenterPage.graphql';
 import SectionsQuery from '../graphql/SectionsQuery.graphql';
 import TabsConditionQuery from '../graphql/TabsConditionQuery.graphql';
 import LegalNoticeAndTermsQuery from '../graphql/LegalNoticeAndTerms.graphql';
+import VoteSessionQuery from '../graphql/VoteSession.graphql';
 import { convertEntriesToRawContentState } from '../utils/draftjs';
+import { getPhaseId } from '../utils/timeline';
 
 export function convertVideoDescriptions(thematics) {
   return thematics.map((t) => {
@@ -52,6 +55,7 @@ class Administration extends React.Component {
     this.putThematicsInStore = this.putThematicsInStore.bind(this);
     this.toggleLanguageMenu = this.toggleLanguageMenu.bind(this);
     this.putLegalNoticeAndTermsInStore = this.putLegalNoticeAndTermsInStore.bind(this);
+    this.putVoteSessionInStore = this.putVoteSessionInStore.bind(this);
     this.state = {
       showLanguageMenu: true
     };
@@ -63,6 +67,7 @@ class Administration extends React.Component {
     this.putThematicsInStore(this.props.data);
     this.putSectionsInStore(this.props.sections);
     this.putLegalNoticeAndTermsInStore(this.props.legalNoticeAndTerms);
+    this.putVoteSessionInStore(this.props.voteSession);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -77,6 +82,10 @@ class Administration extends React.Component {
 
     if (nextProps.sections !== this.props.sections) {
       this.putSectionsInStore(nextProps.sections);
+    }
+
+    if (nextProps.voteSession !== this.props.voteSession) {
+      this.putVoteSessionInStore(nextProps.voteSession);
     }
 
     this.putResourcesCenterInStore(nextProps.resourcesCenter);
@@ -107,6 +116,29 @@ class Administration extends React.Component {
   putResourcesCenterInStore(resourcesCenter) {
     const filteredResourcesCenter = filter(ResourcesCenterPage, { resourcesCenter: resourcesCenter });
     this.props.updateResourcesCenterPage(filteredResourcesCenter.resourcesCenter);
+  }
+
+  putVoteSessionInStore(voteSession) {
+    const emptyVoteSession = {
+      titleEntries: [],
+      subTitleEntries: [],
+      instructionsSectionTitleEntries: [],
+      instructionsSectionContentEntries: [],
+      propositionsSectionTitleEntries: [],
+      headerImage: {
+        externalUrl: '',
+        mimeType: '',
+        title: ''
+      }
+    };
+    const filteredVoteSession = filter(VoteSessionQuery, { voteSession: voteSession || emptyVoteSession });
+    const voteSessionForStore = {
+      ...filteredVoteSession.voteSession,
+      instructionsSectionContentEntries: filteredVoteSession.voteSession.instructionsSectionContentEntries
+        ? convertEntriesToRawContentState(filteredVoteSession.voteSession.instructionsSectionContentEntries)
+        : null
+    };
+    this.props.updateVoteSessionPage(voteSessionForStore);
   }
 
   putSectionsInStore(sections) {
@@ -211,6 +243,7 @@ const mapDispatchToProps = dispatch => ({
   updateResourcesCenterPage: ({ titleEntries, headerImage }) => {
     dispatch(updateResourcesCenterPage(titleEntries, headerImage));
   },
+  updateVoteSessionPage: voteSession => dispatch(updateVoteSessionPage(voteSession)),
   updateLegalNoticeAndTerms: legalNoticeAndTerms => dispatch(updateLegalNoticeAndTerms(legalNoticeAndTerms))
 });
 
@@ -220,6 +253,8 @@ const mergeLoadingAndHasErrors = WrappedComponent => (props) => {
     resourcesHasErrors,
     resourcesCenterHasErrors,
     resourcesLoading,
+    voteSessionHasErrors,
+    voteSessionLoading,
     resourcesCenterLoading,
     sectionsHasErrors,
     sectionsLoading,
@@ -229,6 +264,7 @@ const mergeLoadingAndHasErrors = WrappedComponent => (props) => {
     legalNoticeAndTermsHasErrors
   } = props;
   const hasErrors =
+    voteSessionHasErrors ||
     resourcesHasErrors ||
     resourcesCenterHasErrors ||
     tabsConditionsHasErrors ||
@@ -236,6 +272,7 @@ const mergeLoadingAndHasErrors = WrappedComponent => (props) => {
     sectionsHasErrors ||
     (data && data.error);
   const loading =
+    voteSessionLoading ||
     resourcesLoading ||
     resourcesCenterLoading ||
     tabsConditionsLoading ||
@@ -270,6 +307,30 @@ export default compose(
 
       return {
         refetchTabsConditions: data.refetch
+      };
+    }
+  }),
+  graphql(VoteSessionQuery, {
+    skip: ({ debate }) => typeof getPhaseId(debate.debateData.timeline, 'voteSession') !== 'string',
+    options: ({ debate }) => ({
+      variables: { discussionPhaseId: getPhaseId(debate.debateData.timeline, 'voteSession') }
+    }),
+    props: ({ data }) => {
+      if (data.loading) {
+        return {
+          voteSessionLoading: true
+        };
+      }
+      if (data.error) {
+        return {
+          voteSessionHasErrors: true
+        };
+      }
+
+      return {
+        voteSessionLoading: data.loading,
+        voteSessionHasErrors: data.error,
+        voteSession: data.voteSession
       };
     }
   }),
