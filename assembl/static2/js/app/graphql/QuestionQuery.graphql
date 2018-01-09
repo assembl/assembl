@@ -1,4 +1,4 @@
-query QuestionQuery($lang: String!, $id: ID!) {
+query Question($lang: String!, $id: ID!) {
   question: node(id: $id) {
     ... on Question {
       title(lang: $lang)

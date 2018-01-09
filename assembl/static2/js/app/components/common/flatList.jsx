@@ -1,9 +1,11 @@
 /* eslint-disable no-undef */
 // @flow
 import React from 'react';
+import { I18n } from 'react-redux-i18n';
 
 import Loader from './loader';
 import { displayAlert } from '../../utils/utilityManager';
+import { APOLLO_NETWORK_STATUS } from '../../constants';
 
 type ItemNode = {
   node: Object
@@ -67,7 +69,7 @@ class FlatList extends React.Component<*, FlatListProps, void> {
     // to the original query we used to populate the list
     const { fetchMore, items, extractItems, networkStatus } = this.props;
     // If no request is in flight for this query, and no errors happened. Everything is OK.
-    if (networkStatus === 7) {
+    if (networkStatus === APOLLO_NETWORK_STATUS.ready) {
       this.loading = true;
       fetchMore({
         variables: { after: items.pageInfo.endCursor || '' },
@@ -86,7 +88,7 @@ class FlatList extends React.Component<*, FlatListProps, void> {
           this.loading = false;
         })
         .catch(() => {
-          displayAlert('danger', 'An error occured, please reload the page');
+          displayAlert('danger', I18n.t('error.loading'));
           this.loading = false;
         });
     }
@@ -95,13 +97,17 @@ class FlatList extends React.Component<*, FlatListProps, void> {
   onRefresh = () => {
     const { refetch } = this.props;
     refetch().catch(() => {
-      displayAlert('danger', 'An error occured, please reload the page');
+      displayAlert('danger', I18n.t('error.loading'));
     });
   };
 
   render() {
     const { networkStatus, items, ListItem, itemData, className } = this.props;
-    if (items == null || networkStatus === 1 || networkStatus === 2) {
+    if (
+      items == null ||
+      networkStatus === APOLLO_NETWORK_STATUS.loading ||
+      networkStatus === APOLLO_NETWORK_STATUS.setVariables
+    ) {
       return <Loader color="black" />;
     }
     const entities = items.edges;
@@ -110,7 +116,7 @@ class FlatList extends React.Component<*, FlatListProps, void> {
         {entities &&
           entities.length > 0 &&
           entities.map((item, index) => <ListItem key={item.node.id || index} {...itemData(item)} node={item.node} />)}
-        {networkStatus === 3 && items.pageInfo.hasNextPage && <Loader color="black" />}
+        {networkStatus === APOLLO_NETWORK_STATUS.fetchMore && items.pageInfo.hasNextPage && <Loader color="black" />}
       </div>
     );
   }

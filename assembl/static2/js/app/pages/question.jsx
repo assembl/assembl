@@ -2,15 +2,16 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { compose, graphql } from 'react-apollo';
-import { Translate } from 'react-redux-i18n';
+import { Translate, I18n } from 'react-redux-i18n';
 import { Grid } from 'react-bootstrap';
 import { Link } from 'react-router';
 
 import withLoadingIndicator from '../components/common/withLoadingIndicator';
 import Header from '../components/common/header';
 import Posts from '../components/debate/survey/posts';
-import QuestionQuery from '../graphql/QuestionQuery.graphql';
+import Question from '../graphql/QuestionQuery.graphql';
 import { displayAlert } from '../utils/utilityManager';
+import { get as getRoute } from '../utils/routeMap';
 
 type NavigationParams = {
   questionIndex: string,
@@ -29,11 +30,11 @@ type QuestionProps = {
 
 export function DumbQuestion(props: QuestionProps) {
   if (props.hasErrors) {
-    displayAlert('danger', 'An error occured, please reload the page');
+    displayAlert('danger', I18n.t('error.loading'));
     return null;
   }
   const { imgUrl, title, thematicTitle, thematicId, params, slug } = props;
-  const link = `/${slug}/debate/survey/theme/${thematicId}`;
+  const link = `${getRoute('debate', { slug: slug, phase: 'survey' })}${getRoute('theme', { themeId: thematicId })}`;
   return (
     <div className="question">
       <div className="relative">
@@ -79,7 +80,7 @@ const mapStateToProps = state => ({
 
 export default compose(
   connect(mapStateToProps),
-  graphql(QuestionQuery, {
+  graphql(Question, {
     props: ({ data }) => {
       if (data.loading) {
         return {

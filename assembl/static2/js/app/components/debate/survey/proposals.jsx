@@ -1,9 +1,9 @@
 import React from 'react';
 import { Link } from 'react-router';
 import { Translate } from 'react-redux-i18n';
-import Post from './post';
 
-const nbPostsToShow = 3;
+import { get as getRoute } from '../../../utils/routeMap';
+import Post from './post';
 
 class Proposals extends React.Component {
   constructor(props) {
@@ -16,9 +16,9 @@ class Proposals extends React.Component {
   };
 
   render() {
-    const { questionIndex, questionId, title, posts, refetchTheme, themeSlug } = this.props;
+    const { questionIndex, questionId, title, posts, refetchTheme, nbPostsToShow, phaseUrl } = this.props;
     const postsToShow = posts.slice(0, nbPostsToShow);
-    const link = `${themeSlug}/question/${questionId}/${questionIndex}`;
+    const link = `${phaseUrl}${getRoute('question', { questionId: questionId, questionIndex: questionIndex })}`;
     return (
       <div className={'shown'}>
         <h3 className="collapsed-title">

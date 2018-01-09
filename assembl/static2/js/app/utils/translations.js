@@ -296,7 +296,8 @@ const Translations = {
     },
     error: {
       reason: "Désolé, une erreur s'est produite :",
-      required: "Ce champ est obligatoire."
+      required: "Ce champ est obligatoire.",
+      loading: "Une erreur est survenue, veuillez recharger la page"
     },
     notFound: {
       panelTitle: "Désolé, cette page n'existe pas"
@@ -718,7 +719,8 @@ const Translations = {
     },
     error: {
       reason: "Sorry, an error occurred:",
-      required: "This field is required."
+      required: "This field is required.",
+      loading: "An error occurred, please reload the page"
     },
     notFound: {
       panelTitle: "Sorry, this page doesn't exist"

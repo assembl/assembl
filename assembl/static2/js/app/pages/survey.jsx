@@ -2,7 +2,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { compose, graphql } from 'react-apollo';
-import { Translate } from 'react-redux-i18n';
+import { Translate, I18n } from 'react-redux-i18n';
 import { Grid } from 'react-bootstrap';
 import type { Map } from 'immutable';
 
@@ -17,6 +17,7 @@ import { getIfPhaseCompletedByIdentifier } from '../utils/timeline';
 import ThematicQuery from '../graphql/ThematicQuery.graphql';
 import { displayAlert } from '../utils/utilityManager';
 import type { Timeline } from '../utils/timeline';
+import { get as getRoute } from '../utils/routeMap';
 
 type PostNode = {
   node: {
@@ -118,13 +119,13 @@ class Survey extends React.Component<*, SurveyProps, SurveyState> {
 
   render() {
     if (this.props.hasErrors) {
-      displayAlert('danger', 'An error occured, please reload the page');
+      displayAlert('danger', I18n.t('error.loading'));
       return null;
     }
     const { imgUrl, media, questions, refetchThematic, title, slug } = this.props;
     const { debateData } = this.props.debate;
     const isPhaseCompleted = getIfPhaseCompletedByIdentifier(debateData.timeline, 'survey');
-    const themeSlug = `/${slug}/debate/survey`;
+    const phaseUrl = `${getRoute('debate', { slug: slug, phase: 'survey' })}`;
     return (
       <div className="survey">
         <div className="relative">
@@ -165,11 +166,12 @@ class Survey extends React.Component<*, SurveyProps, SurveyState> {
                     {questions &&
                       questions.map((question, index) => (
                         <Proposals
+                          nbPostsToShow={3}
                           title={question.title}
                           posts={question.posts.edges}
                           questionIndex={index + 1}
                           questionId={question.id}
-                          themeSlug={themeSlug}
+                          phaseUrl={phaseUrl}
                           key={index}
                           refetchTheme={refetchThematic}
                         />

@@ -1,4 +1,4 @@
-query PostsQuery($id: ID!, $first: Int!, $after: String!) {
+query QuestionPosts($id: ID!, $first: Int!, $after: String!) {
   question: node(id: $id) {
     ... on Question {
       id

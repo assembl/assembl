@@ -1,6 +1,7 @@
 /* eslint-disable  react/no-unused-prop-types */
 // @flow
 import React from 'react';
+import { I18n } from 'react-redux-i18n';
 import { connect } from 'react-redux';
 import { compose, graphql } from 'react-apollo';
 import type { Map } from 'immutable';
@@ -9,7 +10,7 @@ import { updateContentLocale } from '../../../actions/contentLocaleActions';
 import withLoadingIndicator from '../../common/withLoadingIndicator';
 import FlatList from '../../common/flatList';
 import Post from './post';
-import PostsQuery from '../../../graphql/QuestionPostsQuery.graphql';
+import QuestionPosts from '../../../graphql/QuestionPostsQuery.graphql';
 import { displayAlert } from '../../../utils/utilityManager';
 
 type PostNode = {
@@ -62,7 +63,7 @@ export class DumbPosts extends React.Component<*, PostsProps, void> {
 
   render() {
     if (this.props.hasErrors) {
-      displayAlert('danger', 'An error occured, please reload the page');
+      displayAlert('danger', I18n.t('error.loading'));
       return null;
     }
     const { networkStatus, fetchMore, refetch, posts } = this.props;
@@ -93,7 +94,7 @@ const mapDispatchToProps = dispatch => ({
 
 export default compose(
   connect(mapStateToProps, mapDispatchToProps),
-  graphql(PostsQuery, {
+  graphql(QuestionPosts, {
     options: props => ({
       variables: { first: 8, after: '', id: props.questionId }
     }),
