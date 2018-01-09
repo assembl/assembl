@@ -67,6 +67,8 @@ class UpdateVoteSession(graphene.Mutation):
             vote_session = models.VoteSession(
                 discussion_phase=discussion_phase)
 
+        db = vote_session.db
+
         update_langstrings(vote_session, langstrings_defs, args)
 
         image = args.get('header_image')
@@ -79,6 +81,13 @@ class UpdateVoteSession(graphene.Mutation):
             discussion_id = context.matchdict['discussion_id']
             discussion = models.Discussion.get(discussion_id)
             ATTACHMENT_PURPOSE_IMAGE = models.AttachmentPurpose.IMAGE.value
+            images = [
+                att for att in vote_session.attachments
+                if att.attachmentPurpose == ATTACHMENT_PURPOSE_IMAGE]
+            if images:
+                image = images[0]
+                db.delete(image.document)
+                vote_session.attachments.remove(image)
             document = models.File(
                 discussion=discussion,
                 mime_type=mime_type,
@@ -93,7 +102,6 @@ class UpdateVoteSession(graphene.Mutation):
                 attachmentPurpose=ATTACHMENT_PURPOSE_IMAGE
             )
 
-        db = vote_session.db
         db.add(vote_session)
         db.flush()
 
