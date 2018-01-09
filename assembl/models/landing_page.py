@@ -10,7 +10,7 @@ from sqlalchemy import (
 )
 from sqlalchemy.orm import relationship, backref
 
-from assembl.sqla import Base
+from assembl.lib.sqla import Base
 from assembl.auth import CrudPermissions, P_SYSADMIN, P_READ
 from assembl.lib.sqla_types import URLString
 from .langstrings import LangString
