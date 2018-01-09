@@ -354,7 +354,7 @@ const SaveButtonWithMutations = compose(
 )(SaveButton);
 
 const mapStateToProps = ({
-  timeline,
+  debate,
   i18n,
   admin: {
     sections,
@@ -378,7 +378,7 @@ const mapStateToProps = ({
     thematics: thematicsInOrder.toArray().map(id => thematicsById.get(id).toJS()),
     preferences: discussionLanguagePreferences,
     i18n: i18n,
-    timeline: timeline,
+    timeline: debate.debateData.timeline,
     languagePreferenceHasChanged: discussionLanguagePreferencesHasChanged,
     sectionsHaveChanged: sectionsHaveChanged,
     sections: sectionsById

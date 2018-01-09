@@ -63,8 +63,8 @@ const voteSession: VoteSessionReducer = (state = initialState, action) => {
       instructionsSectionContentEntries: fromJS(action.instructionsSectionContentEntries),
       propositionsSectionTitleEntries: fromJS(action.propositionsSectionTitleEntries),
       headerImage: Map({
-        externalUrl: action.headerImage ? fromJS(action.headerImage.externalUrl) : '',
-        mimeType: action.headerImage ? fromJS(action.headerImage.mimeType) : ''
+        externalUrl: fromJS(action.headerImage.externalUrl),
+        mimeType: fromJS(action.headerImage.mimeType)
       })
     });
   }
