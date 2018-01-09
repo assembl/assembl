@@ -47,7 +47,8 @@ class DiscussionBoundBase(Base):
                         discussion_id=None, view_def="changes"):
         if not connection:
             # WARNING: invalidate has to be called within an active transaction.
-            # This should be the case in general, no need to add a transaction manager.
+            # This should be the case in general, no need to add a transaction
+            # manager.
             connection = self.db.connection()
         if 'cdict' not in connection.info:
             connection.info['cdict'] = {}
@@ -63,7 +64,8 @@ class DiscussionBoundBase(Base):
         query, usable = super(DiscussionBoundBase, self).unique_query()
         discussion_id = self.get_discussion_id()
         if discussion_id:
-            query = query.filter(and_(*self.get_discussion_conditions(discussion_id)))
+            query = query.filter(
+                and_(*self.get_discussion_conditions(discussion_id)))
         return (query, usable)
 
     def tombstone(self):
@@ -327,6 +329,7 @@ from .resource import Resource  # noqa: E402, F401
 from .section import Section  # noqa: E402, F401
 
 from .vote_session import VoteSession  # noqa: E402, F401
+from .landing_page import LandingPageModuleType  # noqa: E402, F401
 
 
 def includeme(config):
