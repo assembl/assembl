@@ -172,7 +172,7 @@ export const getPhaseId = (_timeline: Timeline, identifier: string) => {
   if (!timeline) {
     timeline = [];
   }
-  const phase = timeline.filter(p => p.identifier === identifier);
-  const phaseId: string = phase[0]['@id'].split('/')[1];
+  const phase = timeline.find(p => p.identifier === identifier);
+  const phaseId = phase && phase['@id'].split('/')[1];
   return phaseId;
 };
