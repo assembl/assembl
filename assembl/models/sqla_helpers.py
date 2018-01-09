@@ -7,7 +7,8 @@ from sqlalchemy import (
 
 def Id():
     return Column(Integer, primary_key=True)
-    
+
+
 def ForeignId(ForeignModel, fk_kwargs={}, **kwargs):
     return Column(
         Integer,
