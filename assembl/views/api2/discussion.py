@@ -1760,6 +1760,17 @@ def phase2_csv_export(request):
     return response
 
 
+@view_config(context=InstanceContext, name="update_notification_subscriptions",
+             ctx_instance_class=Discussion, request_method='GET',
+             permission=P_ADMIN_DISC, renderer='json')
+def update_notification_subscriptions(request):
+    discussion = request.context._instance
+    participants = discussion.all_participants
+    for user in participants:
+        user.get_notification_subscriptions(discussion.id)
+    return {'status': 'Notification subscriptions have been updated.'}
+
+
 def includeme(config):
     # Make sure that the cornice view is registered
     pass
