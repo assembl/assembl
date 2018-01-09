@@ -35,20 +35,25 @@ export const DumbThemeCreationForm = ({
   const num = (Number(index) + 1).toString();
   return (
     <div className="form-container">
-      <div className="title">
-        <Translate value="administration.themeNum" index={num} />
+      <div>
+        <div className="title left">
+          <Translate value="administration.themeNum" index={num} />
+        </div>
+        <div className="pointer right">
+          <div className="inline">
+            <OverlayTrigger placement="top" overlay={deleteThematicTooltip}>
+              <Button onClick={markAsToDelete} className="admin-icons">
+                <span className="assembl-icon-delete grey" />
+              </Button>
+            </OverlayTrigger>
+          </div>
+        </div>
       </div>
+      <div className="clear" />
       <FormControlWithLabel label={ph} onChange={handleTitleChange} required type="text" value={title} />
       <FormGroup>
         <FileUploader fileOrUrl={imgUrl} handleChange={handleImageChange} mimeType={imgMimeType} />
       </FormGroup>
-      <div className="pointer right">
-        <OverlayTrigger placement="top" overlay={deleteThematicTooltip}>
-          <Button onClick={markAsToDelete}>
-            <span className="assembl-icon-delete grey" />
-          </Button>
-        </OverlayTrigger>
-      </div>
       <div className="separator" />
     </div>
   );

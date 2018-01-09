@@ -42,8 +42,18 @@ const sectionKey = ({ sectionType, id }) => (sectionType === 'CUSTOM' ? `${secti
 
 const sectionSlug = sectionType => snakeToCamel(sectionType === 'HOMEPAGE' ? 'HOME' : sectionType);
 
-const sectionURL = ({ sectionType, url }, options) =>
-  (sectionType === 'CUSTOM' ? url : url || `${get(sectionSlug(sectionType), options)}`);
+const sectionURL = ({ sectionType, url }, options) => {
+  if (sectionType === 'ADMINISTRATION') {
+    const defaultAdminPhase = 'discussion';
+    return `${get(sectionSlug(sectionType), options)}${get('adminPhase', {
+      ...options,
+      phase: defaultAdminPhase
+    })}?section=1`;
+  }
+
+  // url may be defined for non-custom sections (i.e. HOMEPAGE section)
+  return sectionType === 'CUSTOM' ? url : url || get(sectionSlug(sectionType), options);
+};
 
 const SectionLink = ({ section, options }) => {
   const { title, url, sectionType } = section;
