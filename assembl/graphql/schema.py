@@ -310,7 +310,7 @@ def generate_schema_json():
 
 
 '''  # noqa: E501
-$ pshell local.ini
+$ assembl-pshell local.ini
 import json
 from assembl.graphql.schema import Schema as schema
 from webtest import TestRequest
