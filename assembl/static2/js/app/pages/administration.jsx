@@ -119,7 +119,7 @@ class Administration extends React.Component {
   }
 
   putVoteSessionInStore(voteSession) {
-    const filteredVoteSession = filter(VoteSessionQuery, { voteSession: voteSession });
+    const filteredVoteSession = filter(VoteSessionQuery, { voteSession: voteSession || [] });
     const voteSessionForStore = {
       ...filteredVoteSession.voteSession,
       instructionsSectionContentEntries: filteredVoteSession.voteSession.instructionsSectionContentEntries
