@@ -25,3 +25,22 @@ def test_landing_page_module_type_populate_db(test_session):
             assert module_type.default_order == 99.0
 
         test_session.delete(module_type)
+
+
+def test_creation_landing_page_module(discussion, test_session):
+    from assembl.models.landing_page import LandingPageModule
+    from assembl.models.landing_page import LandingPageModuleType
+    first_module_type = test_session.query(LandingPageModuleType).first()
+    configuration = '{text:"The SDD feed is down, override the optical system so we can connect the SAS bus!"}'
+    module = LandingPageModule(
+        discussion=discussion,
+        module_type=first_module_type,
+        configuration=configuration,
+        order=42.0,
+        enabled=True
+    )
+    assert module.enabled is True
+    assert module.configuration == configuration
+    assert module.order == 42.0
+    assert module.discussion == discussion
+    assert module.module_type.identifier == first_module_type.identifier

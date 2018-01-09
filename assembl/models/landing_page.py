@@ -7,12 +7,14 @@ from sqlalchemy import (
     Integer,
     String,
     ForeignKey,
+    UnicodeText
 )
 from sqlalchemy.orm import relationship, backref
 
 from assembl.lib.sqla import Base
-from assembl.auth import CrudPermissions, P_SYSADMIN, P_READ
+from assembl.auth import CrudPermissions, P_ADMIN_DISC, P_SYSADMIN, P_READ
 from assembl.lib.sqla_types import URLString
+from . import DiscussionBoundBase
 from .langstrings import LangString
 
 
@@ -183,3 +185,61 @@ class LandingPageModuleType(Base):
 
 
 LangString.setup_ownership_load_event(LandingPageModuleType, ['title'])
+
+
+class LandingPageModule(DiscussionBoundBase):
+
+    """Landing page module for a discussion."""
+
+    __tablename__ = "landing_page_module"
+    type = Column(String(60), nullable=False)
+
+    id = Column(Integer, primary_key=True)
+
+    discussion_id = Column(
+        Integer,
+        ForeignKey(
+            'discussion.id',
+            ondelete='CASCADE',
+            onupdate='CASCADE',
+        ),
+        nullable=False, index=True)
+
+    discussion = relationship(
+        "Discussion",
+        backref=backref('landing_page_modules', cascade="all, delete-orphan")
+    )
+
+    module_type_id = Column(
+        Integer,
+        ForeignKey(
+            'landing_page_module_type.id', ondelete='CASCADE', onupdate='CASCADE'
+        ),
+        nullable=False, index=True
+    )
+    module_type = relationship(
+        "LandingPageModuleType",
+        backref=backref('landing_page_modules', cascade="all, delete-orphan")
+    )
+
+    configuration = Column(UnicodeText)
+
+    order = Column(Float, nullable=False)
+
+    enabled = Column(Boolean, default=False)
+
+    def get_discussion_id(self):
+        return self.discussion_id or self.discussion.id
+
+    @classmethod
+    def get_discussion_conditions(cls, discussion_id, alias_maker=None):
+        return (cls.discussion_id == discussion_id,)
+
+    __mapper_args__ = {
+        'polymorphic_identity': 'resource',
+        'polymorphic_on': type,
+        'with_polymorphic': '*'
+    }
+
+    crud_permissions = CrudPermissions(
+        P_ADMIN_DISC, P_READ, P_ADMIN_DISC, P_ADMIN_DISC)
