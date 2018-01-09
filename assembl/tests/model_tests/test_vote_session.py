@@ -11,6 +11,5 @@ def test_vote_session(vote_session):
     assert (en_value(vote_session.instructions_section_content)
         == u"vote session instructions fixture. Lorem ipsum dolor sit amet")
     assert (en_value(vote_session.propositions_section_title)
-        == u"vote session propositions section tile fixture")
+        == u"vote session propositions section title fixture")
     assert (vote_session.attachments[0].title == u"vote session image fixture")
-    
