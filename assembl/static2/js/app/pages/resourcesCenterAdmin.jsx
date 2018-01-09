@@ -7,7 +7,7 @@ import PageForm from '../components/administration/resourcesCenter/pageForm';
 import ManageResourcesForm from '../components/administration/resourcesCenter/manageResourcesForm';
 
 const ResourcesCenterAdmin = ({ editLocale }) => (
-  <div className="resources-center-admin admin-box">
+  <div className="resources-center-admin admin-box admin-content">
     <SectionTitle title={I18n.t('administration.resourcesCenter.title')} annotation={I18n.t('administration.annotation')} />
     <PageForm editLocale={editLocale} />
     <ManageResourcesForm editLocale={editLocale} />

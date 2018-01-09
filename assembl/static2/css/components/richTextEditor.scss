@@ -47,6 +47,8 @@
   font-family: $font-family;
   margin-top: 16px;
   position: relative;
+  letter-spacing: 0;
+  font-size: $font-size-xs;
 
   .insertion-box {
     min-height: 200px;
