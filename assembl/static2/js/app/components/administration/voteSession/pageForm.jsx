@@ -65,7 +65,7 @@ const PageForm = ({
           <form>
             <TitleWithHelper
               title={I18n.t('administration.headerTitle')}
-              previewUrl="/static2/img/helpers/helper1.png"
+              helperUrl="/static2/img/helpers/helper1.png"
               txt={I18n.t('administration.helpers.voteSessionHeader')}
             />
             <FormControlWithLabel
@@ -94,7 +94,7 @@ const PageForm = ({
           <div className="separator" />
           <TitleWithHelper
             title={I18n.t('administration.instructions')}
-            previewUrl="/static2/img/helpers/helper2.png"
+            helperUrl="/static2/img/helpers/helper2.png"
             txt={I18n.t('administration.helpers.voteSessionInstructions')}
           />
           <FormControlWithLabel
@@ -113,7 +113,7 @@ const PageForm = ({
           <div className="separator" />
           <TitleWithHelper
             title={I18n.t('administration.propositionSectionTitle')}
-            previewUrl="/static2/img/helpers/helper3.png"
+            helperUrl="/static2/img/helpers/helper3.png"
             txt={I18n.t('administration.helpers.voteSessionPropositionSection')}
           />
           <FormControlWithLabel

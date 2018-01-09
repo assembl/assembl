@@ -167,12 +167,12 @@ export const getBarPercent = (_phase: Phase) => {
   return barWidth;
 };
 
-export const getPhaseId = (_timeline: Timeline, _identifier: string) => {
+export const getPhaseId = (_timeline: Timeline, identifier: string) => {
   let timeline = _timeline;
-  const identifier = _identifier;
   if (!timeline) {
     timeline = [];
   }
   const phase = timeline.filter(p => p.identifier === identifier);
-  return phase[0]['@id'].split('/')[1];
+  const phaseId: string = phase[0]['@id'].split('/')[1];
+  return phaseId;
 };

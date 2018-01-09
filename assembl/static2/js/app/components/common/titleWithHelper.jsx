@@ -4,22 +4,22 @@ import { OverlayTrigger, Popover } from 'react-bootstrap';
 
 type TitleWithHelperProps = {
   title: string,
-  previewUrl: string,
+  helperUrl: string,
   txt: string
 };
 
-const overflowMenu = (previewUrl, txt) => (
+const overflowMenu = (helperUrl, txt) => (
   <Popover id="admin-title-helper" className="helper-popover">
-    <img src={previewUrl} width="300" height="auto" alt="admin-helper" />
+    <img src={helperUrl} width="300" height="auto" alt="admin-helper" />
     <div>{txt}</div>
   </Popover>
 );
 
-const TitleWithHelper = ({ title, previewUrl, txt }: TitleWithHelperProps) => (
+const TitleWithHelper = ({ title, helperUrl, txt }: TitleWithHelperProps) => (
   <div className="title">
     {title}
     &nbsp;
-    <OverlayTrigger trigger={['hover', 'focus']} rootClose placement="right" overlay={overflowMenu(previewUrl, txt)}>
+    <OverlayTrigger trigger={['hover', 'focus']} rootClose placement="right" overlay={overflowMenu(helperUrl, txt)}>
       <span className="assembl-icon-faq grey pointer" />
     </OverlayTrigger>
   </div>
