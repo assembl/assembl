@@ -63,9 +63,17 @@ const EditResourceForm = ({
   const documentFieldName = `document-${id}`;
   return (
     <div className={divClassname}>
-      <div className="title">
+      <div className="title left">
         <Translate value="administration.resourcesCenter.editResourceFormTitle" num={order} />
       </div>
+      <div className="pointer right">
+        <OverlayTrigger placement="top" overlay={deleteResourceTooltip}>
+          <Button onClick={markAsToDelete} className="admin-icons">
+            <span className="assembl-icon-delete grey" />
+          </Button>
+        </OverlayTrigger>
+      </div>
+      <div className="clear" />
       <FormControlWithLabel label={titleLabel} onChange={handleTitleChange} required type="text" value={title} />
       <FormControlWithLabel
         key={`text-${locale}`}
@@ -101,13 +109,6 @@ const EditResourceForm = ({
           withPreview={false}
         />
       </FormGroup>
-      <div className="pointer right">
-        <OverlayTrigger placement="top" overlay={deleteResourceTooltip}>
-          <Button onClick={markAsToDelete}>
-            <span className="assembl-icon-delete grey" />
-          </Button>
-        </OverlayTrigger>
-      </div>
       <div className="separator" />
     </div>
   );
