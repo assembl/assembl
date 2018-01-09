@@ -10,3 +10,18 @@ def test_creation_landing_page_module_type(test_session):
     assert module_type.default_order == 1.0
     assert module_type.required is True
     assert module_type.helper_img_url == u"www.jacklayton.com/jacklayton/monimage.jpeg"
+
+
+def test_landing_page_module_type_populate_db(test_session):
+    from assembl.models.landing_page import LandingPageModuleType
+    LandingPageModuleType.populate_db(test_session)
+    module_types = test_session.query(LandingPageModuleType).all()
+    assert len(module_types) == 11
+    for module_type in module_types:
+        if module_type.identifier == 'HEADER':
+            assert module_type.default_order == 1.0
+
+        if module_type.identifier == 'FOOTER':
+            assert module_type.default_order == 99.0
+
+        test_session.delete(module_type)
