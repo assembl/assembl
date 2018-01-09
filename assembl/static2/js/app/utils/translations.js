@@ -358,7 +358,7 @@ const Translations = {
       },
       videoHelp:
         "*Liens vidéo autorisés : \"https://www.youtube.com/embed/[videoId]\" ou \"https://player.vimeo.com/video/[videoId]?\"",
-      annotation: "Module à renseigner obligatoirement. Les champs * sont requis.",
+      annotation: "Les champs * sont requis.",
       themeNum: "Thématique %{index}",
       discussion: {
         0: "Langues utilisées",
@@ -776,7 +776,7 @@ const Translations = {
       },
       videoHelp:
         "*Authorized video links: \"https://www.youtube.com/embed/[videoId]\" or \"https://player.vimeo.com/video/[videoId]?\"",
-      annotation: "Module to be completed. * Fields are required.",
+      annotation: "* Fields are required.",
       themeNum: "Theme %{index}",
       discussion: {
         0: "Languages of the Discussion",
