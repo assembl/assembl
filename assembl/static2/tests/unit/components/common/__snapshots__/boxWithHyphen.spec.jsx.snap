@@ -14,7 +14,7 @@ exports[`BoxWithHyphen component should not render a link that wraps the box if 
         Synthesis
       </div>
       <div
-        className="margin-xs"
+        className="ellipsis margin-xs"
       >
         Foobar
       </div>
@@ -71,7 +71,7 @@ exports[`BoxWithHyphen component should render a box with hyphen with its data 1
           Synthesis
         </div>
         <div
-          className="margin-xs"
+          className="ellipsis margin-xs"
         >
           Foobar
         </div>

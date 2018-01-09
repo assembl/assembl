@@ -75,47 +75,20 @@
     float: left;
   }
 
-  .synthesis {
-    font-family: $font-family4;
-    padding: 0;
-    margin: 0 0 40px;
-    max-height: 500px;
-    border: none;
-
-    .insert-box {
-      border: none;
-      height: 355px;
-    }
-
-    .ellipsis {
-      overflow: inherit;
-      text-overflow: inherit;
-      white-space: inherit;
-      line-height: 25px;
-      padding: 0 0 0 10px;
-      margin-bottom: 0;
-    }
-
-    .column-post {
-      overflow: hidden;
-      height: 400px;
-    }
-
-    .insert-content {
-      height: 215px;
-      overflow-y: auto;
-      padding: 0 0 0 10px;
-    }
-
-    .posts {
-      .post-left {
-        padding: 10px;
-      }
-    }
-  }
-
   .start-discussion-multicol {
     max-width: 80%;
     vertical-align: top;
+  }
+}
+
+.synthesis {
+  font-family: $font-family4;
+
+  .ellipsis {
+    white-space: normal;
+    line-height: 1.8em;
+    height: 3.6em;
+    // synthesis title can be on two lines
+    // note that text-overflow: ellipsis; only works when white-space is nowrap.
   }
 }

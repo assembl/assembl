@@ -25,7 +25,7 @@ const Box = ({ body, date, hyphenStyle, subject, title }: BoxProps) => (
   <div className="insert-box">
     <h3 className="dark-title-4">
       <div>{title}</div>
-      <div className="margin-xs">{subject}</div>
+      <div className="ellipsis margin-xs">{subject}</div>
     </h3>
     <div className="box-hyphen" style={hyphenStyle}>
       &nbsp;
