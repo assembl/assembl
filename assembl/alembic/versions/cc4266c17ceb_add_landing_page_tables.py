@@ -40,8 +40,22 @@ def upgrade(pyramid_env):
             sa.Column('required', sa.Boolean, default=False),
             sa.schema.UniqueConstraint("title_id")
         )
+        # create landing_page_module table
+        op.create_table(
+            'landing_page_module',
+            sa.Column('id', sa.Integer, primary_key=True),
+            sa.Column('type', sa.String(60), nullable=False),
+            sa.Column('discussion_id', sa.Integer,
+                      sa.ForeignKey("discussion.id", ondelete="CASCADE", onupdate="CASCADE")),
+            sa.Column("module_type_id", sa.Integer,
+                      sa.ForeignKey("landing_page_module_type.id", ondelete="CASCADE", onupdate="CASCADE")),
+            sa.Column('configuration', sa.UnicodeText, nullable=False),
+            sa.Column('order', sa.Float, nullable=False),
+            sa.Column('enabled', sa.Boolean, default=False)
+        )
 
 
 def downgrade(pyramid_env):
     with context.begin_transaction():
+        op.drop_table('landing_page_module')
         op.drop_table('landing_page_module_type')
