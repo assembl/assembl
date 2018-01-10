@@ -1,4 +1,7 @@
 .post-section .ReactVirtualized__Grid.ReactVirtualized__List.tree-list {
+  /* Without this, this class uses 'will-change: transform;' which creates
+     a new stacking context and changes the behaviour of 'position: fixed;'
+     childs */
   will-change: auto !important;
 }
 
