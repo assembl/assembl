@@ -4,7 +4,6 @@
 <PROJECT_ROOT>/node_modules/config-chain
 <PROJECT_ROOT>/node_modules/npm/node_modules/config-chain
 <PROJECT_ROOT>/node_modules/stylelint
-<PROJECT_ROOT>/node_modules/youtube-player
 
 [include]
 
