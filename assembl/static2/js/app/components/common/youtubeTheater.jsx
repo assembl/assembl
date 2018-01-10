@@ -3,22 +3,22 @@ import React from 'react';
 
 export default class YoutubeTheater extends React.Component {
   state: {
-    theaterMode: boolean
+    open: boolean
   };
 
   timeout: number;
 
   state = {
-    theaterMode: false
+    open: false
   };
 
-  closeTheater = () => this.setState({ theaterMode: false });
+  closeTheater = () => this.setState({ open: false });
 
-  openTheater = () => this.setState({ theaterMode: true });
+  openTheater = () => this.setState({ open: true });
 
   render = () => {
     const { videoId } = this.props;
-    const { theaterMode } = this.state;
+    const { open } = this.state;
     const video = (
       <iframe
         title="YouTube video"
@@ -31,8 +31,8 @@ export default class YoutubeTheater extends React.Component {
       />
     );
     return (
-      <div className={`youtube-theater ${theaterMode ? 'open' : ''}`}>
-        {theaterMode ? (
+      <div className={`youtube-theater ${open ? 'open' : ''}`}>
+        {open ? (
           <div className="theater-content">
             <div className="youtube-video">
               {video}
