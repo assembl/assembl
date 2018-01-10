@@ -84,3 +84,76 @@ def test_graphql_get_vote_session(graphql_request, vote_session):
     assert fetched_image['title'] == source_image.title
     assert fetched_image['mimeType'] == source_image.mime_type
     assert fetched_image['externalUrl'] == source_image.external_url
+
+def test_graphql_update_vote_session(graphql_request, vote_session):
+    new_title = u"updated vote session title"
+    response = schema.execute(
+        u"""
+            fragment voteSessionGlobals on VoteSession {
+              headerImage {
+                title
+                mimeType
+                externalUrl
+              }
+            }
+
+            fragment langStringEntry on LangStringEntry {
+              localeCode
+              value
+            }
+
+            fragment voteSessionLangstringsEntries on VoteSession {
+              titleEntries {
+                ...langStringEntry
+              }
+              subTitleEntries {
+                ...langStringEntry
+              }
+              instructionsSectionTitleEntries {
+                ...langStringEntry
+              }
+              instructionsSectionContentEntries {
+                ...langStringEntry
+              }
+              propositionsSectionTitleEntries {
+                ...langStringEntry
+              }
+            }
+
+            mutation UpdateVoteSession(
+              $discussionPhaseId: Int!
+              $headerImage: String
+              $titleEntries: [LangStringEntryInput]
+              $subTitleEntries: [LangStringEntryInput]
+              $instructionsSectionTitleEntries: [LangStringEntryInput]
+              $instructionsSectionContentEntries: [LangStringEntryInput]
+              $propositionsSectionTitleEntries: [LangStringEntryInput]
+            ) {
+              updateVoteSession(
+                discussionPhaseId: $discussionPhaseId
+                headerImage: $headerImage
+                titleEntries: $titleEntries
+                subTitleEntries: $subTitleEntries
+                instructionsSectionTitleEntries: $instructionsSectionTitleEntries
+                instructionsSectionContentEntries: $instructionsSectionContentEntries
+                propositionsSectionTitleEntries: $propositionsSectionTitleEntries
+              ) {
+                voteSession {
+                  ...voteSessionGlobals
+                  ...voteSessionLangstringsEntries
+                }
+              }
+            }
+        """,
+        context_value=graphql_request,
+        variable_values={
+            "discussionPhaseId": vote_session.discussion_phase_id,
+            "titleEntries": [ { "localeCode": "en", "value": new_title } ]
+        }
+    )
+
+    assert response.errors is None
+    fetched_vote_session = response.data['updateVoteSession']['voteSession']
+
+    fetched_title = fetched_vote_session['titleEntries'][0]['value']
+    assert fetched_title == new_title
