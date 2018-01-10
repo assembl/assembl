@@ -171,7 +171,7 @@ class LandingPageModuleType(Base):
         current_module_types = [item[0] for item in db.query(cls.identifier).all()]
         for info in module_types:
             if info['identifier'] not in current_module_types:
-                args = info
+                kw = info
                 title = None
                 for locale, value in info[u'title'].iteritems():
                     if title:
@@ -179,8 +179,8 @@ class LandingPageModuleType(Base):
 
                     title = LangString.create(value, locale)
 
-                args['title'] = title
-                saobj = LandingPageModuleType(**args)
+                kw['title'] = title
+                saobj = LandingPageModuleType(**kw)
                 db.add(saobj)
 
 
