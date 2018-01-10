@@ -1,5 +1,5 @@
 
-def test_creation_landing_page_module_type(test_session):
+def test_create_landing_page_module_type(test_session):
     from assembl.models.landing_page import LandingPageModuleType
     from assembl.models import LangString
     module_type = LandingPageModuleType(
@@ -24,8 +24,7 @@ def test_landing_page_module_types_are_populated(test_session):
             assert module_type.default_order == 99.0
 
 
-
-def test_creation_landing_page_module(discussion, test_session):
+def test_create_landing_page_module(discussion, test_session):
     from assembl.models.landing_page import LandingPageModule
     from assembl.models.landing_page import LandingPageModuleType
     first_module_type = test_session.query(LandingPageModuleType).first()
