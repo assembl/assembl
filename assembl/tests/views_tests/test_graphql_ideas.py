@@ -455,32 +455,6 @@ query Idea($id: ID!, $lang: String!){
     }
 
 
-def test_no_announcement_on_ideas(graphql_request, idea_with_en_fr):
-    from graphene.relay import Node
-    idea_id = idea_with_en_fr.id
-    node_id = Node.to_global_id('Idea', idea_id)
-    res = schema.execute(u"""
-query Idea($id: ID!, $lang: String!){
-    idea: node(id: $id) {
-        ... on Idea {
-            announcement {
-                title(lang: $lang)
-                body(lang: $lang)
-            }
-        }
-    }
-}""", context_value=graphql_request, variable_values={
-        "id": node_id,
-        "lang": "en"
-    })
-    assert json.loads(json.dumps(res.data)) == {
-        u'idea': {
-            u'announcement': None
-        }
-    }
-
-
-
 def test_graphql_get_question(graphql_request, thematic_and_question):
     node_id = thematic_and_question[1]
     res = schema.execute(u"""
