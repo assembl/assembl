@@ -6,7 +6,7 @@ import { FormGroup } from 'react-bootstrap';
 import SectionTitle from '../sectionTitle';
 import FormControlWithLabel from '../../common/formControlWithLabel';
 import FileUploader from '../../common/fileUploader';
-import TitleWithHelper from '../../common/titleWithHelper';
+import TextWithHelper from '../../common/textWithHelper';
 import { getEntryValueForLocale } from '../../../utils/i18n';
 import {
   updateVoteSessionPageTitle,
@@ -63,10 +63,11 @@ const PageForm = ({
       <div className="admin-content">
         <div className="form-container">
           <form>
-            <TitleWithHelper
-              title={I18n.t('administration.headerTitle')}
+            <TextWithHelper
+              text={I18n.t('administration.headerTitle')}
               helperUrl="/static2/img/helpers/helper1.png"
-              txt={I18n.t('administration.helpers.voteSessionHeader')}
+              helperText={I18n.t('administration.helpers.voteSessionHeader')}
+              classname="title"
             />
             <FormControlWithLabel
               label={headerTitlePh}
@@ -92,10 +93,11 @@ const PageForm = ({
             </FormGroup>
           </form>
           <div className="separator" />
-          <TitleWithHelper
-            title={I18n.t('administration.instructions')}
+          <TextWithHelper
+            text={I18n.t('administration.instructions')}
             helperUrl="/static2/img/helpers/helper2.png"
-            txt={I18n.t('administration.helpers.voteSessionInstructions')}
+            helperText={I18n.t('administration.helpers.voteSessionInstructions')}
+            classname="title"
           />
           <FormControlWithLabel
             label={instructionsTitlePh}
@@ -111,10 +113,11 @@ const PageForm = ({
             value={instructionsContent}
           />
           <div className="separator" />
-          <TitleWithHelper
-            title={I18n.t('administration.propositionSectionTitle')}
+          <TextWithHelper
+            text={I18n.t('administration.propositionSectionTitle')}
             helperUrl="/static2/img/helpers/helper3.png"
-            txt={I18n.t('administration.helpers.voteSessionPropositionSection')}
+            helperText={I18n.t('administration.helpers.voteSessionPropositionSection')}
+            classname="title"
           />
           <FormControlWithLabel
             label={propositionSectionTitlePh}
