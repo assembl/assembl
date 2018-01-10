@@ -49,7 +49,7 @@ env:
   - TO_TEST=BACKEND
   - TO_TEST=FRONTEND
 script:
-  - if [ "$TO_TEST" = "BACKEND" ]; then py.test --cov assembl --cov-report term --cov-report html --junit-xml junit.xml assembl; fi
+  - if [ "$TO_TEST" = "BACKEND" ]; then py.test --cov assembl --cov-report term --cov-report html --junit-xml junit.xml --maxfail=2 assembl; fi
   - if [ "$TO_TEST" = "BACKEND" ]; then flake8 assembl; fi
   - cd assembl/static2
   - if [ "$TO_TEST" = "FRONTEND" ]; then npm test; fi
