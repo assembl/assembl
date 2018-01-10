@@ -167,21 +167,24 @@ class LandingPageModuleType(Base):
 
     @classmethod
     def populate_db(cls, db=None):
-        db.execute("lock table %s in exclusive mode" % cls.__table__.name)
-        current_module_types = [item[0] for item in db.query(cls.identifier).all()]
-        for info in module_types:
-            if info['identifier'] not in current_module_types:
-                kw = info.copy()
-                title = None
-                for locale, value in info[u'title'].items():
-                    if title:
-                        title.add_value(value, locale)
+        engine = db.bind
+        # table may not exist (alembic migration)
+        if engine.dialect.has_table(engine.connect(), "landing_page_module_type"):
+            db.execute("lock table %s in exclusive mode" % cls.__table__.name)
+            current_module_types = [item[0] for item in db.query(cls.identifier).all()]
+            for info in module_types:
+                if info['identifier'] not in current_module_types:
+                    kw = info.copy()
+                    title = None
+                    for locale, value in info[u'title'].items():
+                        if title:
+                            title.add_value(value, locale)
 
-                    title = LangString.create(value, locale)
+                        title = LangString.create(value, locale)
 
-                kw['title'] = title
-                saobj = LandingPageModuleType(**kw)
-                db.add(saobj)
+                    kw['title'] = title
+                    saobj = LandingPageModuleType(**kw)
+                    db.add(saobj)
 
 
 LangString.setup_ownership_load_event(LandingPageModuleType, ['title'])
