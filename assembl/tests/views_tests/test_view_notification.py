@@ -5,7 +5,15 @@ import simplejson as json
 
 from assembl.models import (
     NotificationSubscription,
+    UserTemplate,
+    Role,
 )
+from assembl.models.notification import (
+    NotificationSubscriptionClasses,
+    NotificationSubscriptionStatus,
+    NotificationCreationOrigin,
+)
+from assembl.auth import R_PARTICIPANT
 
 
 def local_to_absolute(uri):
@@ -215,3 +223,26 @@ def test_user_subscribed_stable(test_app, discussion, admin_user, participant1_u
     assert response.status_code == 200
     default_subscribed_after = response.json
     assert default_subscribed_after['status'] == 'ACTIVE'
+
+
+def test_discussion_has_default_participant_user_template_with_default_notification_subscriptions(test_app, test_session, discussion):
+    # See also `test_adding_a_discussion_automatically_adds_participant_user_template_for_notifications` in `model_test/test_discussion.py` which just checks that discussion has a participant user template
+
+    # Check that discussion's user template for role participant has correct default notification subscriptions
+    participant_role = test_session.query(Role).filter_by(name=R_PARTICIPANT).one()
+    user_templates_for_role_participant = test_session.query(UserTemplate).filter_by(discussion=discussion, for_role=participant_role).all()
+    assert len(user_templates_for_role_participant) > 0
+    template_user = user_templates_for_role_participant[0]
+    subscriptions = template_user.notification_subscriptions
+    # There are currently 3 default notification subscriptions, of `type` "NotificationSubscriptionFollowAllMessages", "NotificationSubscriptionFollowOwnMessageDirectReplies", "NotificationSubscriptionFollowSyntheses". Their `creation_origin` is "DISCUSSION_DEFAULT", and their `status` is either "ACTIVE" or "UNSUBSCRIBED", depending on application config (determined by the value of `subscriptions.participant.default` in ini file).
+    assert len(subscriptions) == 3
+
+    subscriptions_expected_status_per_type = {}
+    subscriptions_expected_status_per_type[NotificationSubscriptionClasses.FOLLOW_SYNTHESES] = NotificationSubscriptionStatus.ACTIVE # TODO: read from app config which subscriptions should be present
+
+    for k, v in subscriptions_expected_status_per_type.iteritems():
+        subscriptions = filter(lambda x: x.type == k, subscriptions)
+        assert len(subscriptions) == 1
+        subscription = subscriptions[0]
+        assert subscription.status == v
+        assert subscription.creation_origin == NotificationCreationOrigin.DISCUSSION_DEFAULT
