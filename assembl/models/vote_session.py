@@ -16,7 +16,7 @@ langstrings_names = [
 
 
 class VoteSession(
-    LangstringsBase(langstrings_names),
+    LangstringsBase(langstrings_names, "VoteSession"),
     DiscussionBoundBase
 ):
     """ A vote session bound to a discussion phase.

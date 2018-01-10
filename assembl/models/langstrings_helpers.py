@@ -43,9 +43,9 @@ def langstrings_attrs_dict(langstrings_names):
     return d
 
 
-def LangstringsBase(langstrings_names):
+def LangstringsBase(langstrings_names, model_name):
     langstrings_base = type(
-        "LangstringsBase",
+        "LangstringsBase" + model_name,
         (object, ),
         langstrings_attrs_dict(langstrings_names)
     )
