@@ -1,14 +1,14 @@
 """add_landing_page_tables
 
 Revision ID: cc4266c17ceb
-Revises: c14c885ecdc2
+Revises: 7ea03fbce9a8
 Create Date: 2018-01-09 15:52:07.323894
 
 """
 
 # revision identifiers, used by Alembic.
 revision = 'cc4266c17ceb'
-down_revision = 'c14c885ecdc2'
+down_revision = '7ea03fbce9a8'
 
 from alembic import context, op
 import sqlalchemy as sa
