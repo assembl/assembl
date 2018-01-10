@@ -2,7 +2,6 @@
 import React from 'react';
 import get from 'lodash/get';
 import activeHtml from 'react-active-html';
-import YouTube from 'react-youtube';
 
 import PostTranslate from '../../common/translations/postTranslate';
 import { transformLinksInHtml } from '../../../../utils/linkify';
@@ -36,26 +35,35 @@ class YouTubeWithTheater extends React.Component {
     const { videoId } = this.props;
     const theaterMode = get(this, 'state.theaterMode', false);
     const video = (
-      <YouTube
-        className="youtube-video"
-        videoId={videoId}
-        id={`youtube-${videoId}`} // might create problems if there is two times the same videoId
-        onPlay={() => {
-          clearTimeout(this.timeout);
-          this.openTheater();
-        }}
-        onPause={() => {
-          const skipTimeout = 200; // The timeout is there because skipping through the video fires an onPause followed by an onPlay
-          this.timeout = setTimeout(this.closeTheater, skipTimeout);
-        }}
+      <iframe
+        title="YouTube video"
+        id="ytplayer"
+        type="text/html"
+        width="640"
+        height="360"
+        src={`https://www.youtube.com/embed/${videoId}?autoplay=1`}
+        frameBorder="0"
       />
     );
     return (
       <div className={`youtube-theater ${theaterMode ? 'open' : ''}`}>
-        <div className="theater-content">
-          {video}
-          {theaterMode && <button onClick={this.closeTheater} className="close-theater-button assembl-icon-cancel" />}
-        </div>
+        {theaterMode ? (
+          <div className="theater-content">
+            <div className="youtube-video">
+              {video}
+              {theaterMode && <button onClick={this.closeTheater} className="close-theater-button assembl-icon-cancel" />}
+            </div>
+          </div>
+        ) : (
+          <div
+            className="youtube-thumbnail-container"
+            onClick={this.openTheater}
+            style={{ backgroundImage: `https://img.youtube.com/vi/${videoId}/mqdefault.jpg` }}
+          >
+            <img className="youtube-thumbnail" alt="youtube video" src={`https://img.youtube.com/vi/${videoId}/mqdefault.jpg`} />
+            <span className="play-button" />
+          </div>
+        )}
       </div>
     );
   };
