@@ -145,10 +145,9 @@ class Post extends React.Component {
       </div>
     );
     return (
-      <div className={'shown box'}>
+      <div className="shown box">
         <div className="content">
           <PostCreator name={post.creator.displayName} />
-
           <PostBody
             translationEnabled={debateData.translationEnabled}
             contentLocale={contentLocale}
@@ -159,7 +158,6 @@ class Post extends React.Component {
             body={body}
             bodyMimeType={post.bodyMimeType}
           />
-
           <div className="sentiments">
             <div className="sentiment-label">
               <Translate value="debate.survey.react" />

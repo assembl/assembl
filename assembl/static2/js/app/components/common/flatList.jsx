@@ -113,9 +113,7 @@ class FlatList extends React.Component<*, FlatListProps, void> {
     const entities = items.edges;
     return (
       <div className={className}>
-        {entities &&
-          entities.length > 0 &&
-          entities.map((item, index) => <ListItem key={item.node.id || index} {...itemData(item)} node={item.node} />)}
+        {entities && entities.map((item, index) => <ListItem key={item.node.id || index} {...itemData(item)} node={item.node} />)}
         {networkStatus === APOLLO_NETWORK_STATUS.fetchMore && items.pageInfo.hasNextPage && <Loader color="black" />}
       </div>
     );
