@@ -171,9 +171,9 @@ class LandingPageModuleType(Base):
         current_module_types = [item[0] for item in db.query(cls.identifier).all()]
         for info in module_types:
             if info['identifier'] not in current_module_types:
-                kw = info
+                kw = info.copy()
                 title = None
-                for locale, value in info[u'title'].iteritems():
+                for locale, value in info[u'title'].items():
                     if title:
                         title.add_value(value, locale)
 
