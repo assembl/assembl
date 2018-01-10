@@ -19,23 +19,20 @@ export default class YoutubeTheater extends React.Component {
   render = () => {
     const { videoId } = this.props;
     const { open } = this.state;
-    const video = (
-      <iframe
-        title="YouTube video"
-        id="ytplayer"
-        type="text/html"
-        width="640"
-        height="360"
-        src={`https://www.youtube.com/embed/${videoId}?autoplay=1`}
-        frameBorder="0"
-      />
-    );
     return (
       <div className={`youtube-theater ${open ? 'open' : ''}`}>
         {open ? (
           <div className="theater-content">
             <div className="youtube-video">
-              {video}
+              <iframe
+                title="YouTube video"
+                id="ytplayer"
+                type="text/html"
+                width="640"
+                height="360"
+                src={`https://www.youtube.com/embed/${videoId}?autoplay=1`}
+                frameBorder="0"
+              />
               <button onClick={this.closeTheater} className="close-theater-button assembl-icon-cancel" />
             </div>
           </div>
