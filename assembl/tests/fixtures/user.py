@@ -94,8 +94,7 @@ def discussion_admin_user(request, test_app, test_session, discussion):
              last_assembl_login=datetime.utcnow())
     test_session.add(u)
 
-    asid = u.create_agent_status_in_discussion(discussion)
-    asid.last_visit = datetime.utcnow()
+    u.update_agent_status_last_visit(discussion)
     role = Role.get_role(R_ADMINISTRATOR, test_session)
     test_session.add(
         LocalUserRole(user=u, discussion=discussion, role=role))
