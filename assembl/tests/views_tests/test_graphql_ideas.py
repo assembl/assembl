@@ -453,3 +453,112 @@ query Idea($id: ID!, $lang: String!){
             u'announcement': None
         }
     }
+
+
+def test_no_announcement_on_ideas(graphql_request, idea_with_en_fr):
+    from graphene.relay import Node
+    idea_id = idea_with_en_fr.id
+    node_id = Node.to_global_id('Idea', idea_id)
+    res = schema.execute(u"""
+query Idea($id: ID!, $lang: String!){
+    idea: node(id: $id) {
+        ... on Idea {
+            announcement {
+                title(lang: $lang)
+                body(lang: $lang)
+            }
+        }
+    }
+}""", context_value=graphql_request, variable_values={
+        "id": node_id,
+        "lang": "en"
+    })
+    assert json.loads(json.dumps(res.data)) == {
+        u'idea': {
+            u'announcement': None
+        }
+    }
+
+
+
+def test_graphql_get_question(graphql_request, thematic_and_question):
+    node_id = thematic_and_question[1]
+    res = schema.execute(u"""
+query Question($lang: String!, $id: ID!) {
+  question: node(id: $id) {
+    ... on Question {
+      title(lang: $lang)
+      id
+      thematic {
+        id
+        title(lang: $lang)
+        img {
+          externalUrl
+          mimeType
+        }
+      }
+    }
+  }
+}
+""", context_value=graphql_request, variable_values={
+        "id": node_id,
+        "lang": "en"
+    })
+    
+    assert json.loads(json.dumps(res.data)) == {
+      u'question': {
+          u'thematic': {
+              u'id': thematic_and_question[0],
+              u'img': None,
+              u'title': u'Understanding the dynamics and issues'
+          }, 
+          u'id': node_id,
+          u'title': u"Comment qualifiez-vous l'emergence de l'Intelligence Artificielle dans notre société ?"
+      }
+    }
+
+
+def test_graphql_get_question_posts(graphql_request, thematic_and_question, proposals):
+    node_id = thematic_and_question[1]
+    res = schema.execute(u"""
+query QuestionPosts($id: ID!, $first: Int!, $after: String!) {
+  question: node(id: $id) {
+    ... on Question {
+      id
+      posts(first: $first, after: $after) {
+        pageInfo {
+          endCursor
+          hasNextPage
+        }
+        edges {
+          node {
+            ... on Post {
+              id
+              originalLocale
+            }
+          }
+        }
+      }
+    }
+  }
+}
+""", context_value=graphql_request, variable_values={
+        "id": node_id,
+        "first": "5",
+        "after": ""
+    })
+    assert json.loads(json.dumps(res.data)) == {
+      u'question': {
+          u'posts': {
+              u'edges': [
+                  {u'node': {u'id': u'UG9zdDoxNQ==', u'originalLocale': u'fr'}},
+                  {u'node': {u'id': u'UG9zdDoxNA==', u'originalLocale': u'fr'}}, 
+                  {u'node': {u'id': u'UG9zdDoxMw==', u'originalLocale': u'fr'}},
+                  {u'node': {u'id': u'UG9zdDoxMg==', u'originalLocale': u'fr'}},
+                  {u'node': {u'id': u'UG9zdDoxMQ==', u'originalLocale': u'fr'}}
+              ],
+              u'pageInfo': {u'endCursor': u'YXJyYXljb25uZWN0aW9uOjQ=', u'hasNextPage': True}
+          },
+          u'id': node_id
+      }
+    }
