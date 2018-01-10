@@ -1,13 +1,16 @@
 // @flow
 import React from 'react';
-import get from 'lodash/get';
 
 export default class YoutubeTheater extends React.Component {
   state: {
-    theaterMode?: boolean
+    theaterMode: boolean
   };
 
   timeout: number;
+
+  state = {
+    theaterMode: false
+  };
 
   closeTheater = () => this.setState({ theaterMode: false });
 
@@ -15,7 +18,7 @@ export default class YoutubeTheater extends React.Component {
 
   render = () => {
     const { videoId } = this.props;
-    const theaterMode = get(this, 'state.theaterMode', false);
+    const { theaterMode } = this.state;
     const video = (
       <iframe
         title="YouTube video"
@@ -33,7 +36,7 @@ export default class YoutubeTheater extends React.Component {
           <div className="theater-content">
             <div className="youtube-video">
               {video}
-              {theaterMode && <button onClick={this.closeTheater} className="close-theater-button assembl-icon-cancel" />}
+              <button onClick={this.closeTheater} className="close-theater-button assembl-icon-cancel" />
             </div>
           </div>
         ) : (
