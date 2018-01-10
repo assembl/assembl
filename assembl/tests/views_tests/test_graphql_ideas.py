@@ -494,6 +494,7 @@ query Question($lang: String!, $id: ID!) {
 
 def test_graphql_get_question_posts(graphql_request, thematic_and_question, proposals):
     node_id = thematic_and_question[1]
+    len_proposals = len(proposals)
     res = schema.execute(u"""
 query QuestionPosts($id: ID!, $first: Int!, $after: String!) {
   question: node(id: $id) {
@@ -518,21 +519,11 @@ query QuestionPosts($id: ID!, $first: Int!, $after: String!) {
 }
 """, context_value=graphql_request, variable_values={
         "id": node_id,
-        "first": "5",
+        "first": len_proposals,
         "after": ""
     })
-    assert json.loads(json.dumps(res.data)) == {
-      u'question': {
-          u'posts': {
-              u'edges': [
-                  {u'node': {u'id': u'UG9zdDoxNQ==', u'originalLocale': u'fr'}},
-                  {u'node': {u'id': u'UG9zdDoxNA==', u'originalLocale': u'fr'}}, 
-                  {u'node': {u'id': u'UG9zdDoxMw==', u'originalLocale': u'fr'}},
-                  {u'node': {u'id': u'UG9zdDoxMg==', u'originalLocale': u'fr'}},
-                  {u'node': {u'id': u'UG9zdDoxMQ==', u'originalLocale': u'fr'}}
-              ],
-              u'pageInfo': {u'endCursor': u'YXJyYXljb25uZWN0aW9uOjQ=', u'hasNextPage': True}
-          },
-          u'id': node_id
-      }
-    }
+    result = json.loads(json.dumps(res.data))
+    assert 'question' in result and 'posts' in result['question'] and 'edges' in result['question']['posts']
+    question_posts = result['question']['posts']['edges']
+    assert len(question_posts) ==  len_proposals
+    assert all(post['node']['id'] in proposals for post in question_posts)
