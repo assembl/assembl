@@ -482,4 +482,8 @@ class VoteSessionAttachment(Attachment):
         'with_polymorphic': '*'
     }
 
-    # TODO: permissions !!!
+    crud_permissions = CrudPermissions(
+        P_ADMIN_DISC,   # create
+        P_READ,         # read
+        P_ADMIN_DISC,   # update
+        P_ADMIN_DISC)   # delete

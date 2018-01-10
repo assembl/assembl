@@ -115,7 +115,6 @@ class Query(graphene.ObjectType):
         return root_thematic
 
     def resolve_vote_session(self, args, context, info):
-
         discussion_phase_id = args.get('discussion_phase_id')
         discussion_phase = models.DiscussionPhase.get(discussion_phase_id)
         # TODO: see if we can avoid this next(iter( thing with a one-to-one relationship
