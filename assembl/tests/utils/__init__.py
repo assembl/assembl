@@ -122,15 +122,7 @@ def clear_rows(app_settings, session):
 def drop_tables(app_settings, session):
     log.info('Dropping all tables.')
     if not using_virtuoso():
-        # postgres. Thank you to
-        # http://stackoverflow.com/questions/5408156/how-to-drop-a-postgresql-database-if-there-are-active-connections-to-it
         session.close()
-        session.execute(
-            """SELECT pg_terminate_backend(pg_stat_activity.pid)
-                FROM pg_stat_activity
-                WHERE pg_stat_activity.datname = '%s'
-                  AND pid <> pg_backend_pid()""" % (
-                    app_settings.get("db_database")))
 
     try:
         get_metadata().drop_all(session.connection())

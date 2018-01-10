@@ -3,14 +3,14 @@ import pytest
 
 
 @pytest.fixture(scope="function")
-def sections(request, discussion, test_session):
+def sections(request, discussion_with_default_data, test_session):
     """Create default sections."""
     from assembl.models import Section, LangString
     from assembl.models.section import SectionTypesEnum
-    discussion_id = discussion.id
+    discussion_id = discussion_with_default_data.id
 
-    # default sections are created in the discussion fixture via
-    # create_default_discussion_data
+    # default sections are created in the discussion_with_default_data fixture
+    # via create_default_discussion_data
 
     sections = []
     # add a custom section

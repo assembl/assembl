@@ -78,7 +78,7 @@ class Discussion(DiscussionBoundBase, NamedClassMixin):
         Integer(), ForeignKey(LangString.id))
     resources_center_title = relationship(
         LangString,
-        lazy="joined", single_parent=True,
+        lazy="select", single_parent=True,
         primaryjoin=resources_center_title_id == LangString.id,
         backref=backref(
             "discussion_from_resources_center_title", lazy="dynamic"),
@@ -86,12 +86,12 @@ class Discussion(DiscussionBoundBase, NamedClassMixin):
 
     terms_and_conditions_id = Column(Integer(), ForeignKey(LangString.id))
     terms_and_conditions = relationship(
-        LangString, lazy="joined", single_parent=True, primaryjoin=terms_and_conditions_id == LangString.id,
+        LangString, lazy="select", single_parent=True, primaryjoin=terms_and_conditions_id == LangString.id,
         backref=backref("discussion_from_terms_and_conditions", lazy="dynamic"), cascade="all, delete-orphan")
 
     legal_notice_id = Column(Integer(), ForeignKey(LangString.id))
     legal_notice = relationship(
-        LangString, lazy="joined", single_parent=True, primaryjoin=legal_notice_id == LangString.id,
+        LangString, lazy="select", single_parent=True, primaryjoin=legal_notice_id == LangString.id,
         backref=backref("discussion_from_legal_notice", lazy="dynamic"), cascade="all, delete-orphan")
 
     @classmethod

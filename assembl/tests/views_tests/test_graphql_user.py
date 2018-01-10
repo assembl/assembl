@@ -32,7 +32,7 @@ query User($id: ID!) {
     assert res.data['user']['image'] is None
 
 
-def test_graphql_get_profile_should_not_see_email(graphql_request, participant1_user, participant2_user):
+def test_graphql_get_profile_should_not_see_email(graphql_request, discussion_with_default_data, participant1_user, participant2_user):
     # participant2_user sould not see the email of participant1_user
     graphql_request.authenticated_userid = participant2_user.id
     res = schema.execute(u"""
