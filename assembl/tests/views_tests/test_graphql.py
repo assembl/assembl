@@ -1997,7 +1997,7 @@ mutation updateResourcesCenter($headerImage:String) {
     assert resources_center['headerImage']['title'] == 'new-img.png'
 
 
-def test_query_sections(discussion, graphql_request, sections):
+def test_query_sections(sections, graphql_request):
     from assembl.models.section import SectionTypesEnum
     query = u"""
 query { sections {
@@ -2091,8 +2091,8 @@ query { sections {
     assert len(result['sections']) == 5
 
 
-def test_mutation_delete_section_fails_for_non_custom_sections(graphql_request, discussion):
-    non_custom_section_id = to_global_id('Section', discussion.sections[1].id)  # Debate section
+def test_mutation_delete_section_fails_for_non_custom_sections(graphql_request, discussion_with_default_data):
+    non_custom_section_id = to_global_id('Section', discussion_with_default_data.sections[1].id)  # Debate section
     variables = {
         'id': non_custom_section_id
     }
@@ -2111,7 +2111,7 @@ mutation deleteSection($id: ID!) {
     assert result['deleteSection']['success'] is False
 
 
-def test_mutation_update_section(graphql_request, sections):
+def test_mutation_update_section(sections, graphql_request):
     section_id = to_global_id('section', sections[-1].id)
     title_entries = [
         {u"value": u"Reddit", u"localeCode": u"fr"},
