@@ -19,9 +19,6 @@ def test_default_notifications(test_app, test_session, discussion, participant1_
     from assembl.models.auth import Role, LocalUserRole
     # Set conditions for user to be subscribable
     participant1_user.update_agent_status_last_visit(discussion)
-    role = Role.get_role(R_PARTICIPANT, test_session)
-    test_session.add(
-        LocalUserRole(user=participant1_user, discussion=discussion, role=role))
     test_session.flush()
     # Template created
     assert len(discussion.user_templates) == 1
