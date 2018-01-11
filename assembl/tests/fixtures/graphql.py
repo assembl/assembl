@@ -4,7 +4,24 @@ import pytest
 
 @pytest.fixture(scope="function")
 def graphql_request(request, test_adminuser_webrequest, discussion):
+    """ A graphql request fixture with an ADMIN user authenticated """
     req = test_adminuser_webrequest
+    req.matchdict = {"discussion_id": discussion.id}
+    req.method = 'POST'
+    return req
+
+
+@pytest.fixture(scope="function")
+def graphql_unauthenticated_request(request, test_webrequest, discussion):
+    req = test_webrequest
+    req.matchdict = {"discussion_id": discussion.id}
+    req.method = 'POST'
+    return req
+
+
+@pytest.fixture(scope="function")
+def graphql_participant_request(request, test_participant_webrequest, discussion):
+    req = test_participant_webrequest
     req.matchdict = {"discussion_id": discussion.id}
     req.method = 'POST'
     return req

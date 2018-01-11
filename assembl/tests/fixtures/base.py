@@ -26,7 +26,7 @@ from assembl.lib.config import get_config
 from assembl.lib.migration import bootstrap_db, bootstrap_db_data
 from assembl.lib.sqla import get_session_maker
 from assembl.tasks import configure as configure_tasks
-from assembl.auth import R_SYSADMIN
+from assembl.auth import R_SYSADMIN, R_PARTICIPANT
 from ..utils import PyramidWebTestRequest
 from ..utils import clear_rows, drop_tables
 
@@ -193,12 +193,57 @@ def admin_user(request, test_session):
 
 
 @pytest.fixture(scope="function")
+def participant_user(request, test_session):
+    """A User fixture with R_PARTICIPANT role"""
+
+    from assembl.models import User, UserRole, Role
+    u = User(name=u"Mr. Participant", type="user",
+             verified=True, last_assembl_login=datetime.utcnow())
+    from assembl.models import EmailAccount
+    account = EmailAccount(email="participant@example.net", profile=u, verified=True)
+
+    test_session.add(u)
+    test_session.add(account)
+    r = Role.get_role(R_PARTICIPANT, test_session)
+    ur = UserRole(user=u, role=r)
+    test_session.add(ur)
+    test_session.flush()
+    uid = u.id
+
+    def fin():
+        print "finalizer participant_user"
+        # I often get expired objects here, and I need to figure out why
+        user = test_session.query(User).get(uid)
+        user_role = user.roles[0]
+        test_session.delete(user_role)
+        test_session.delete(account)
+        test_session.delete(user)
+        test_session.flush()
+    request.addfinalizer(fin)
+    return u
+
+
+@pytest.fixture(scope="function")
 def test_adminuser_webrequest(request, admin_user, test_app_no_perm):
     """A Pyramid request fixture with an ADMIN user authorized"""
     req = PyramidWebTestRequest.blank('/', method="GET")
     req.authenticated_userid = admin_user.id
 
     def fin():
+        # The request was not called
+        manager.pop()
+    request.addfinalizer(fin)
+    return req
+
+
+@pytest.fixture(scope="function")
+def test_participantuser_webrequest(request, participant_user, test_app_no_perm):
+    """A Pyramid request fixture with permissions and no user authenticated"""
+    req = PyramidWebTestRequest.blank('/', method="GET")
+    req.authenticated_userid = participant_user.id
+
+    def fin():
+        print "finalizer test_webrequest"
         # The request was not called
         manager.pop()
     request.addfinalizer(fin)
