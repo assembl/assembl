@@ -3,31 +3,16 @@ from graphene.relay import Node
 from graphene_sqlalchemy import SQLAlchemyObjectType
 from assembl import models
 import os
-from pyramid.httpexceptions import HTTPUnauthorized
-from pyramid.security import Everyone
 
 from .types import SecureObjectType
 from .utils import abort_transaction_on_exception
-from .graphql_langstrings_helpers import (
-    LangstringsInterface,
-    update_langstrings,
-    add_langstrings_input_attrs
-)
 from .document import Document
 from assembl.auth import CrudPermissions
-from assembl.auth.util import get_permissions
-
-
-def make_permissions_querier(cls, context):
-    user_id = context.authenticated_userid or Everyone
-    discussion_id = context.matchdict['discussion_id']
-
-    def require_permission(permission_type):
-        permissions = get_permissions(user_id, discussion_id)
-        allowed = cls.user_can_cls(user_id, permission_type, permissions)
-        if not allowed:
-            raise HTTPUnauthorized()
-    return require_permission
+from .graphql_langstrings_helpers import (LangstringsInterface,
+                                          update_langstrings,
+                                          add_langstrings_input_attrs)
+from .permissions_helpers import (make_cls_permissions_querier,
+                                  make_instance_permissions_querier)
 
 
 langstrings_defs = {
@@ -77,14 +62,14 @@ class UpdateVoteSession(graphene.Mutation):
             raise Exception(
                 "A vote session can only be created or edited with a '{}' discussion phase, check discussionPhaseId value".format(phase_identifier))
 
-        require_permission = make_permissions_querier(models.VoteSession, context)
-
         vote_session = discussion_phase.vote_session
         if vote_session is None:
-            require_permission(CrudPermissions.CREATE)
+            require_cls_permission = make_cls_permissions_querier(models.VoteSession, context)
+            require_cls_permission(CrudPermissions.CREATE)
             vote_session = models.VoteSession(discussion_phase=discussion_phase)
         else:
-            require_permission(CrudPermissions.UPDATE)
+            require_instance_permission = make_instance_permissions_querier(vote_session, context)
+            require_instance_permission(CrudPermissions.UPDATE)
 
         db = vote_session.db
 
