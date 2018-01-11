@@ -1,7 +1,7 @@
 // @flow
+import { combineReducers } from 'redux';
 import type ReduxAction from 'redux';
 import { fromJS, List, Map } from 'immutable';
-
 import {
   type Action,
   UPDATE_VOTE_SESSION_PAGE_TITLE,
@@ -14,7 +14,7 @@ import {
 } from '../../actions/actionTypes';
 import { updateInLangstringEntries } from '../../utils/i18n';
 
-const initialState = Map({
+const initialPage = Map({
   hasChanged: false,
   titleEntries: List(),
   subTitleEntries: List(),
@@ -27,9 +27,8 @@ const initialState = Map({
     title: ''
   })
 });
-
-export type VoteSessionReducer = (Map, ReduxAction<Action>) => Map;
-const voteSession: VoteSessionReducer = (state = initialState, action) => {
+export type VoteSessionPageReducer = (Map, ReduxAction<Action>) => Map;
+const voteSessionPage: VoteSessionPageReducer = (state = initialPage, action) => {
   switch (action.type) {
   case UPDATE_VOTE_SESSION_PAGE_TITLE:
     return state.update('titleEntries', updateInLangstringEntries(action.locale, fromJS(action.value))).set('hasChanged', true);
@@ -72,5 +71,41 @@ const voteSession: VoteSessionReducer = (state = initialState, action) => {
     return state;
   }
 };
-
-export default voteSession;
+export const modulesInOrder = (state: List<number> = List(), action: ReduxAction<Action>) => {
+  switch (action.type) {
+  case UPDATE_VOTE_SESSION_PAGE:
+    return List(action.modules.map(m => m.id));
+  default:
+    return state;
+  }
+};
+export const modulesById = (state: Map<string, Map> = Map(), action: ReduxAction<Action>) => {
+  switch (action.type) {
+  case UPDATE_VOTE_SESSION_PAGE: {
+    let newState = Map();
+    action.modules.forEach((m) => {
+      let moduleInfo = Map();
+      if (m.type === 'tokens') {
+        moduleInfo = Map({
+          toDelete: false,
+          isNew: false,
+          type: m.type,
+          id: m.id,
+          titleEntries: fromJS(m.titleEntries),
+          instructionsEntries: fromJS(m.textEntries),
+          exclusive: m.exclusive
+        });
+      }
+      newState = newState.set(m.id, moduleInfo);
+    });
+    return newState;
+  }
+  default:
+    return state;
+  }
+};
+export default combineReducers({
+  voteSessionPage: voteSessionPage,
+  modulesInOrder: modulesInOrder,
+  modulesById: modulesById
+});
