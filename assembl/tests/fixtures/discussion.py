@@ -62,6 +62,14 @@ def discussion_with_default_data(discussion, test_session):
     from assembl.lib.migration import create_default_discussion_data
     create_default_discussion_data(discussion)
     test_session.flush()
+
+    def fin():
+        for acl in discussion.acls:
+            test_session.delete(acl)
+        for section in discussion.sections:
+            test_session.delete(section)
+        test_session.flush()
+    request.addfinalizer(fin)
     return discussion
 
 
@@ -119,4 +127,9 @@ def closed_discussion(request, test_session, discussion):
     dp.role = role
     test_session.commit()
 
+    def fin():
+        for acl in discussion.acls:
+            test_session.delete(acl)
+        test_session.flush()
+    request.addfinalizer(fin)
     return discussion
