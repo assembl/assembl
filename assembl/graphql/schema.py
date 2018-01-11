@@ -18,7 +18,7 @@ from assembl.graphql.discussion import (Discussion, DiscussionPreferences,
 from assembl.graphql.document import UploadDocument
 from assembl.graphql.idea import (CreateIdea, CreateThematic, DeleteThematic,
                                   Idea, IdeaUnion, Thematic, UpdateThematic)
-from assembl.graphql.landing_page import LandingPageModuleType
+from assembl.graphql.landing_page import LandingPageModuleType, LandingPageModule
 from assembl.graphql.langstring import resolve_langstring
 from assembl.graphql.locale import Locale
 from assembl.graphql.post import (AddPostAttachment, CreatePost, DeletePost,
@@ -84,6 +84,7 @@ class Query(graphene.ObjectType):
     visits_analytics = graphene.Field(lambda: VisitsAnalytics)
     discussion = graphene.Field(Discussion)
     landing_page_module_types = graphene.List(LandingPageModuleType)
+    landing_page_modules = graphene.List(LandingPageModule)
 
     def resolve_resources(self, args, context, info):
         model = models.Resource
@@ -264,6 +265,12 @@ class Query(graphene.ObjectType):
     def resolve_landing_page_module_types(self, args, context, info):
         model = models.LandingPageModuleType
         return get_query(model, context)
+
+    def resolve_landing_page_modules(self, args, context, info):
+        model = models.LandingPageModule
+        query = get_query(model, context)
+        discussion_id = context.matchdict['discussion_id']
+        return query.filter(model.discussion_id == discussion_id).order_by(model.order)
 
 
 class Mutations(graphene.ObjectType):

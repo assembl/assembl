@@ -24,3 +24,11 @@ class LandingPageModuleType(SecureObjectType, SQLAlchemyObjectType):
 
     def resolve_title_entries(self, args, context, info):
         return resolve_langstring_entries(self, 'title')
+
+
+class LandingPageModule(SecureObjectType, SQLAlchemyObjectType):
+
+    class Meta:
+        model = models.LandingPageModule
+        interfaces = (Node, )
+        only_fields = ('id', 'enabled', 'order', 'configuration')

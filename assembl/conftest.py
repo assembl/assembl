@@ -29,6 +29,7 @@ from assembl.tests.fixtures.timeline import *  # noqa: F401
 from assembl.tests.fixtures.vote_session import *  # noqa: F401
 from assembl.tests.fixtures.graphql_registry import *  # noqa: F401
 from assembl.tests.fixtures.actions import *  # noqa: F401
+from assembl.tests.fixtures.landing_page import *  # noqa: F401
 
 
 engine = None

@@ -30,3 +30,25 @@ def test_query_landing_page_module_types(graphql_request):
             assert module_type['editableOrder'] is True
             assert module_type['helperImgUrl'] == u''
             assert module_type['required'] is False
+
+
+def test_query_landing_page_modules(graphql_request, simple_landing_page_module):
+    assert simple_landing_page_module
+    query = u"""query LandingPageModules {
+        landingPageModules {
+            order
+            enabled
+            configuration
+        }
+    }
+    """
+    res = schema.execute(
+        query,
+        context_value=graphql_request)
+
+    assert len(res.data[u'landingPageModules']) == 1
+    lpm = res.data[u'landingPageModules'][0]
+    assert lpm[u'order'] == 42.0
+    assert lpm[u'enabled'] is True
+    assert lpm[
+        u'configuration'] == '{text:"The SDD feed is down, override the optical system so we can connect the SAS bus!"}'
