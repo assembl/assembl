@@ -32,3 +32,5 @@ class LandingPageModule(SecureObjectType, SQLAlchemyObjectType):
         model = models.LandingPageModule
         interfaces = (Node, )
         only_fields = ('id', 'enabled', 'order', 'configuration')
+
+    module_type = graphene.Field(LandingPageModuleType)

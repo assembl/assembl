@@ -2,17 +2,19 @@ import pytest
 
 
 @pytest.fixture(scope="function")
-def simple_landing_page_module_type(request, test_session, discussion):
+def header_landing_page_module_type(request, test_session, discussion):
     from assembl.models.landing_page import LandingPageModuleType
-    first_module_type = test_session.query(LandingPageModuleType).first()
-    return first_module_type
+    header_module_type = test_session.query(LandingPageModuleType).filter(
+        LandingPageModuleType.identifier == u'HEADER'
+    ).one()
+    return header_module_type
 
 
 @pytest.fixture(scope="function")
-def simple_landing_page_module(request, test_session, discussion, simple_landing_page_module_type):
+def simple_landing_page_module(request, test_session, discussion, header_landing_page_module_type):
     from assembl.models.landing_page import LandingPageModule
     configuration = '{text:"The SDD feed is down, override the optical system so we can connect the SAS bus!"}'
-    simple_landing_page_module = LandingPageModule(discussion=discussion, module_type=simple_landing_page_module_type,
+    simple_landing_page_module = LandingPageModule(discussion=discussion, module_type=header_landing_page_module_type,
                                                    configuration=configuration,
                                                    order=42.0,
                                                    enabled=True)
