@@ -127,8 +127,85 @@ class Administration extends React.Component {
         title: ''
       }
     };
+    const mock = {
+      titleEntries: [],
+      subTitleEntries: [],
+      instructionsSectionTitleEntries: [],
+      instructionsSectionContentEntries: [],
+      propositionsSectionTitleEntries: [],
+      headerImage: {
+        externalUrl: '',
+        mimeType: '',
+        title: ''
+      },
+      publicVote: true,
+      modules: [
+        {
+          type: 'tokens',
+          id: '12345',
+          titleEntries: [
+            {
+              localeCode: 'fr',
+              value: 'Titre du module token'
+            }
+          ],
+          instructionsEntries: [
+            {
+              localeCode: 'fr',
+              value: 'balblabla'
+            }
+          ],
+          exclusive: true,
+          tokenTypes: [
+            {
+              labelEntries: [
+                {
+                  localeCode: 'fr',
+                  value: 'balblabla'
+                }
+              ],
+              number: 10,
+              color: '#123456'
+            },
+            {
+              labelEntries: [
+                {
+                  localeCode: 'fr',
+                  value: 'balblabla'
+                }
+              ],
+              number: 3,
+              color: '#789456'
+            }
+          ]
+        },
+        {
+          type: 'gauge',
+          id: '123456789',
+          titleEntries: [
+            {
+              localeCode: 'fr',
+              value: 'Titre du module gauge'
+            }
+          ],
+          instructionsEntries: [
+            {
+              localeCode: 'fr',
+              value: 'balblabla'
+            }
+          ],
+          intervalNumber: 10,
+          textualValue: false,
+          numberValue: true,
+          minValue: 100,
+          maxValue: 300,
+          unit: '€'
+        }
+      ]
+    };
     const filteredVoteSession = filter(VoteSessionQuery, { voteSession: voteSession || emptyVoteSession });
     const voteSessionForStore = {
+      ...mock,
       ...filteredVoteSession.voteSession,
       instructionsSectionContentEntries: filteredVoteSession.voteSession.instructionsSectionContentEntries
         ? convertEntriesToRawContentState(filteredVoteSession.voteSession.instructionsSectionContentEntries)
