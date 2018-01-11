@@ -15,6 +15,7 @@ import DebateThread from './pages/debateThread';
 import Survey from './pages/survey';
 import Idea from './pages/idea';
 import Community from './pages/community';
+import Question from './pages/question';
 import Profile from './pages/profile';
 import Styleguide from './pages/styleguide';
 import NotFound from './pages/notFound';
@@ -116,6 +117,10 @@ export default [
         <Route path={routeForRouter('rootDebate')} />
         <Route path={routeForRouter('debate', false, { phase: ':phase' })} component={DebateHome}>
           <Route path={routeForRouter('theme', false, { themeId: ':themeId' })} component={DebateChild} />
+          <Route
+            path={routeForRouter('question', false, { questionId: ':questionId', questionIndex: ':questionIndex' })}
+            component={Question}
+          />
         </Route>
         <Route path={routeForRouter('unauthorizedAdministration')} component={UnauthorizedAdministration} />
         <Route path={routeForRouter('administration')} component={Administration}>

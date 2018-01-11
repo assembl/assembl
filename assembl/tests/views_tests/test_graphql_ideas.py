@@ -453,3 +453,77 @@ query Idea($id: ID!, $lang: String!){
             u'announcement': None
         }
     }
+
+
+def test_graphql_get_question(graphql_request, thematic_and_question):
+    node_id = thematic_and_question[1]
+    res = schema.execute(u"""
+query Question($lang: String!, $id: ID!) {
+  question: node(id: $id) {
+    ... on Question {
+      title(lang: $lang)
+      id
+      thematic {
+        id
+        title(lang: $lang)
+        img {
+          externalUrl
+          mimeType
+        }
+      }
+    }
+  }
+}
+""", context_value=graphql_request, variable_values={
+        "id": node_id,
+        "lang": "en"
+    })
+    
+    assert json.loads(json.dumps(res.data)) == {
+      u'question': {
+          u'thematic': {
+              u'id': thematic_and_question[0],
+              u'img': None,
+              u'title': u'Understanding the dynamics and issues'
+          }, 
+          u'id': node_id,
+          u'title': u"Comment qualifiez-vous l'emergence de l'Intelligence Artificielle dans notre société ?"
+      }
+    }
+
+
+def test_graphql_get_question_posts(graphql_request, thematic_and_question, proposals):
+    node_id = thematic_and_question[1]
+    len_proposals = len(proposals)
+    res = schema.execute(u"""
+query QuestionPosts($id: ID!, $first: Int!, $after: String!) {
+  question: node(id: $id) {
+    ... on Question {
+      id
+      posts(first: $first, after: $after) {
+        pageInfo {
+          endCursor
+          hasNextPage
+        }
+        edges {
+          node {
+            ... on Post {
+              id
+              originalLocale
+            }
+          }
+        }
+      }
+    }
+  }
+}
+""", context_value=graphql_request, variable_values={
+        "id": node_id,
+        "first": len_proposals,
+        "after": ""
+    })
+    result = json.loads(json.dumps(res.data))
+    assert 'question' in result and 'posts' in result['question'] and 'edges' in result['question']['posts']
+    question_posts = result['question']['posts']['edges']
+    assert len(question_posts) ==  len_proposals
+    assert all(post['node']['id'] in proposals for post in question_posts)

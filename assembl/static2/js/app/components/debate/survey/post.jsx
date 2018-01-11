@@ -110,7 +110,7 @@ class Post extends React.Component {
 
   render() {
     const { post } = this.props.data;
-    const { contentLocale, lang, moreProposals, originalLocale, postIndex, screenWidth } = this.props;
+    const { contentLocale, lang, screenWidth, originalLocale } = this.props;
     const { debateData } = this.props.debate;
     const { bodyEntries } = post;
     const translate = contentLocale !== originalLocale;
@@ -145,10 +145,9 @@ class Post extends React.Component {
       </div>
     );
     return (
-      <div className={postIndex < 3 || moreProposals ? 'shown box' : 'hidden box'}>
+      <div className="shown box">
         <div className="content">
           <PostCreator name={post.creator.displayName} />
-
           <PostBody
             translationEnabled={debateData.translationEnabled}
             contentLocale={contentLocale}
@@ -159,7 +158,6 @@ class Post extends React.Component {
             body={body}
             bodyMimeType={post.bodyMimeType}
           />
-
           <div className="sentiments">
             <div className="sentiment-label">
               <Translate value="debate.survey.react" />

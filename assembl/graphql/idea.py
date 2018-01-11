@@ -297,6 +297,13 @@ class Question(SecureObjectType, SQLAlchemyObjectType):
     posts = SQLAlchemyConnectionField(
         'assembl.graphql.post.PostConnection',  # use dotted name to avoid circular import  # noqa: E501
         random=graphene.Boolean())
+    thematic = graphene.Field(lambda: Thematic)
+
+    def resolve_thematic(self, args, context, info):
+        parents = self.get_parents()
+        if not parents:
+            return None
+        return parents[0]
 
     def resolve_title(self, args, context, info):
         title = resolve_langstring(self.title, args.get('lang'))

@@ -28,6 +28,7 @@
   "community": "${slug}/community",
   "terms": "${slug}/terms",
   "theme": "theme/${themeId}",
+  "question": "question/${questionId}/${questionIndex}",
   "administration": "${slug}/administration",
   "unauthorizedAdministration": "${slug}/unauthorizedAdministration",
   "adminPhase": "${phase}",

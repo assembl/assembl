@@ -1,0 +1,16 @@
+query Question($lang: String!, $id: ID!) {
+  question: node(id: $id) {
+    ... on Question {
+      title(lang: $lang)
+      id
+      thematic {
+        id
+        title(lang: $lang)
+        img {
+          externalUrl
+          mimeType
+        }
+      }
+    }
+  }
+}

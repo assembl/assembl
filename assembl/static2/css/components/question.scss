@@ -1,0 +1,21 @@
+.all-proposals {
+  .button-light {
+    color: $first-color;
+
+    &:hover, &:focus, &:active, &:focus:active, &:active:hover, &[disabled]:hover {
+      color: #fff; /* opposite of current non-hover color */
+    }
+  }
+}
+
+.back-btn-container {
+  margin-top: 105px;
+
+  .button-dark {
+    color: $first-color;
+
+    &:hover, &:focus, &:active, &:focus:active, &:active:hover, &[disabled]:hover {
+      color: #fff; /* opposite of current non-hover color */
+    }
+  }
+}
