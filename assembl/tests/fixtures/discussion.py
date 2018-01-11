@@ -58,7 +58,7 @@ def discussion(request, test_session, default_preferences):
 
 
 @pytest.fixture(scope="function")
-def discussion_with_default_data(discussion, test_session):
+def discussion_with_default_data(request, discussion, test_session):
     from assembl.lib.migration import create_default_discussion_data
     create_default_discussion_data(discussion)
     test_session.flush()
