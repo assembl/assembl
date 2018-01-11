@@ -26,7 +26,7 @@ from assembl.lib.config import get_config
 from assembl.lib.migration import bootstrap_db, bootstrap_db_data
 from assembl.lib.sqla import get_session_maker
 from assembl.tasks import configure as configure_tasks
-from assembl.auth import R_SYSADMIN, R_PARTICIPANT
+from assembl.auth import R_SYSADMIN
 from ..utils import PyramidWebTestRequest
 from ..utils import clear_rows, drop_tables
 
