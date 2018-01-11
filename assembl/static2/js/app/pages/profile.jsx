@@ -112,7 +112,7 @@ class Profile extends React.PureComponent<*, ProfileProps, ProfileState> {
                 </div>
                 <h3 className="dark-title-3 capitalized center">{this.props.name}</h3>
                 {creationDate && (
-                  <div className="center">
+                  <div className="center member-since">
                     <Translate value="profile.memberSince" date={I18n.l(creationDate, { dateFormat: 'date.format2' })} />
                   </div>
                 )}
