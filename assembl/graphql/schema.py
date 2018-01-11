@@ -37,7 +37,8 @@ from assembl.lib.sqla_types import EmailString
 from assembl.models.action import SentimentOfPost
 from assembl.models.post import countable_publication_states
 from assembl.nlp.translation_service import DummyGoogleTranslationService
-
+from assembl.graphql.permissions_helpers import make_instance_permissions_querier
+from assembl.auth import CrudPermissions
 
 convert_sqlalchemy_type.register(EmailString)(convert_column_to_string)
 models.Base.query = models.Base.default_db.query_property()
@@ -117,7 +118,13 @@ class Query(graphene.ObjectType):
     def resolve_vote_session(self, args, context, info):
         discussion_phase_id = args.get('discussion_phase_id')
         discussion_phase = models.DiscussionPhase.get(discussion_phase_id)
-        return discussion_phase.vote_session
+        require_discussion_phase_permission = make_instance_permissions_querier(discussion_phase, context)
+        require_discussion_phase_permission(CrudPermissions.READ)
+        vote_session = discussion_phase.vote_session
+        if vote_session is not None:
+            require_vote_session_permission = make_instance_permissions_querier(vote_session, context)
+            require_vote_session_permission(CrudPermissions.READ)
+        return vote_session
 
     def resolve_ideas(self, args, context, info):
         model = models.Idea
