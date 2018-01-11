@@ -1,8 +1,11 @@
 // @flow
 import React from 'react';
+import activeHtml from 'react-active-html';
 
 import PostTranslate from '../../common/translations/postTranslate';
 import { transformLinksInHtml } from '../../../../utils/linkify';
+import { youtubeRegexp } from '../../../../utils/globalFunctions';
+import YoutubeTheater from '../../../common/youtubeTheater';
 
 type Props = {
   body: string,
@@ -15,6 +18,37 @@ type Props = {
   originalLocale: string,
   translate: boolean,
   translationEnabled: boolean
+};
+
+const postBodyReplacementComponents = {
+  iframe: (attributes) => {
+    const { src } = attributes;
+    const regexpMatch = src.match(youtubeRegexp);
+    if (regexpMatch) {
+      const videoId = regexpMatch[1];
+      return <YoutubeTheater videoId={videoId} />;
+    }
+    return <iframe title="post-embed" {...attributes} />;
+  }
+};
+
+const Html = (props) => {
+  const { rawHtml, divRef, replacementComponents } = props;
+  /*
+   * The activeHtml() function will parse the raw html,
+   * replace specified tags with provided components
+   * and return a list of react elements
+  */
+  const nodes = activeHtml(rawHtml, replacementComponents);
+  const containerProps = { ...props };
+  delete containerProps.rawHtml;
+  delete containerProps.divRef;
+  delete containerProps.replacementComponents;
+  return (
+    <div ref={divRef} {...containerProps}>
+      {nodes}
+    </div>
+  );
 };
 
 const PostBody = ({
@@ -34,11 +68,14 @@ const PostBody = ({
       <PostTranslate contentLocale={contentLocale} id={id} lang={lang} originalLocale={originalLocale} translate={translate} />
     ) : null}
     {subject && <h3 className="dark-title-3">{subject}</h3>}
-    <div
-      className={`body ${bodyMimeType === 'text/plain' ? 'pre-wrap' : ''}`}
-      dangerouslySetInnerHTML={{ __html: transformLinksInHtml(body) }}
-      ref={bodyDivRef}
-    />
+    {body && (
+      <Html
+        rawHtml={transformLinksInHtml(body)}
+        className={`body ${bodyMimeType === 'text/plain' ? 'pre-wrap' : ''}`}
+        divRef={bodyDivRef}
+        replacementComponents={postBodyReplacementComponents}
+      />
+    )}
   </div>
 );
 

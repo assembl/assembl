@@ -2,6 +2,8 @@
 import linkifyHtml from 'linkifyjs/html';
 import * as linkify from 'linkifyjs';
 
+import { youtubeRegexp } from './globalFunctions';
+
 type LinkToReplace = {
   dest: string,
   origin: string
@@ -20,15 +22,12 @@ export function transformLinksInHtml(html: string): string {
     .find(htmlForLinkify)
     .map((link: LinkifyLink) => {
       const url = link.href;
-      const re = /(?:youtube\.com\/(?:[^/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?/ ]{11})/i;
-      const result = url.match(re);
+      const result = url.match(youtubeRegexp);
 
       if (result) {
         const videoId = result[1];
         const embedUrl = `https://www.youtube.com/embed/${videoId}`;
-        const embeddedIFrame = `<div><iframe title="" src="${
-          embedUrl
-        }" frameborder="0" class="embedded-video" allowfullscreen></iframe></div>`;
+        const embeddedIFrame = `<div><iframe title="" src="${embedUrl}" frameborder="0" class="embedded-video" allowfullscreen></iframe></div>`;
         return {
           origin: new RegExp(url.replace(/[-/\\^$*+?.()|[\]{}]/gm, '\\$&'), 'g'),
           dest: url + embeddedIFrame
