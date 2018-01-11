@@ -36,6 +36,7 @@ export const UPDATE_VOTE_SESSION_PAGE_INSTRUCTIONS_CONTENT: 'UPDATE_VOTE_SESSION
 export const UPDATE_VOTE_SESSION_PAGE_PROPOSITIONS_TITLE: 'UPDATE_VOTE_SESSION_PAGE_PROPOSITIONS_TITLE' =
   'UPDATE_VOTE_SESSION_PAGE_PROPOSITIONS_TITLE';
 export const UPDATE_VOTE_SESSION_PAGE_IMAGE: 'UPDATE_VOTE_SESSION_PAGE_IMAGE' = 'UPDATE_VOTE_SESSION_PAGE_IMAGE';
+export const UPDATE_VOTE_SESSION_PUBLIC_VOTE: 'UPDATE_VOTE_SESSION_PUBLIC_VOTE' = 'UPDATE_VOTE_SESSION_PUBLIC_VOTE';
 
 export type UpdateContentLocaleById = {
   type: typeof UPDATE_CONTENT_LOCALE_BY_ID,
@@ -236,6 +237,11 @@ export type UpdateVoteSessionHeaderImage = {
   type: typeof UPDATE_VOTE_SESSION_PAGE_IMAGE
 };
 
+export type UpdateVoteSessionPublicVote = {
+  value: boolean,
+  type: typeof UPDATE_VOTE_SESSION_PUBLIC_VOTE
+};
+
 export type UpdateVoteSessionPage = {
   titleEntries: Array<LangStringEntryInput>,
   subTitleEntries: Array<LangStringEntryInput>,
@@ -243,6 +249,9 @@ export type UpdateVoteSessionPage = {
   instructionsSectionContentEntries: Array<LangStringEntryInput>,
   propositionsSectionTitleEntries: Array<LangStringEntryInput>,
   headerImage: File | null,
+  publicVote: boolean,
+  modules: Array<any>,
+  // Todo: define types for modules elements
   type: typeof UPDATE_VOTE_SESSION_PAGE
 };
 
@@ -275,7 +284,8 @@ type VoteSessionActions =
   | UpdateVoteSessionPageInstructionsTitle
   | UpdateVoteSessionPageInstructionsContent
   | UpdateVoteSessionPagePropositionsTitle
-  | UpdateVoteSessionHeaderImage;
+  | UpdateVoteSessionHeaderImage
+  | UpdateVoteSessionPublicVote;
 
 export type Action =
   | UpdateContentLocaleById

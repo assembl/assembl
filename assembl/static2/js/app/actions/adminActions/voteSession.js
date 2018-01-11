@@ -45,6 +45,11 @@ export const updateVoteSessionHeaderImage = (value: File): actionTypes.UpdateVot
   type: actionTypes.UPDATE_VOTE_SESSION_PAGE_IMAGE
 });
 
+export const updateVoteSessionPublicVote = (value: boolean): actionTypes.UpdateVoteSessionPublicVote => ({
+  value: value,
+  type: actionTypes.UPDATE_VOTE_SESSION_PUBLIC_VOTE
+});
+
 export const updateVoteSessionPage = (value: Object): actionTypes.UpdateVoteSessionPage => ({
   titleEntries: value.titleEntries,
   subTitleEntries: value.subTitleEntries,
@@ -52,5 +57,7 @@ export const updateVoteSessionPage = (value: Object): actionTypes.UpdateVoteSess
   instructionsSectionContentEntries: value.instructionsSectionContentEntries,
   propositionsSectionTitleEntries: value.propositionsSectionTitleEntries,
   headerImage: value.headerImage,
+  publicVote: value.publicVote,
+  modules: value.modules,
   type: actionTypes.UPDATE_VOTE_SESSION_PAGE
 });
