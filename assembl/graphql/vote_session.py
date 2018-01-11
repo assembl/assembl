@@ -79,8 +79,7 @@ class UpdateVoteSession(graphene.Mutation):
 
         require_permission = make_permissions_querier(models.VoteSession, context)
 
-        # TODO: see if we can avoid this next(iter( thing with a one-to-one relationship
-        vote_session = next(iter(discussion_phase.vote_session or []), None)
+        vote_session = discussion_phase.vote_session
         if vote_session is None:
             require_permission(CrudPermissions.CREATE)
             vote_session = models.VoteSession(discussion_phase=discussion_phase)

@@ -117,9 +117,7 @@ class Query(graphene.ObjectType):
     def resolve_vote_session(self, args, context, info):
         discussion_phase_id = args.get('discussion_phase_id')
         discussion_phase = models.DiscussionPhase.get(discussion_phase_id)
-        # TODO: see if we can avoid this next(iter( thing with a one-to-one relationship
-        vote_session = next(iter(discussion_phase.vote_session or []), None)
-        return vote_session
+        return discussion_phase.vote_session
 
     def resolve_ideas(self, args, context, info):
         model = models.Idea

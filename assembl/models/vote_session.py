@@ -36,6 +36,7 @@ class VoteSession(
         backref=backref(
             "vote_session",
             single_parent=True,
+            uselist=False,
             cascade="all, delete-orphan"
         ),
     )
