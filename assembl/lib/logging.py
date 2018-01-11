@@ -7,9 +7,6 @@ from pyramid.threadlocal import get_current_request
 import structlog
 
 
-LOGGER = None
-
-
 def logger_for_request(request):
     if getattr(request, '_logger', None) is None:
         request._logger = LOGGER.bind(
@@ -82,27 +79,25 @@ class ConsoleFormatter(structlog.stdlib.ProcessorFormatter):
         return super(ConsoleFormatter, self).format(record)
 
 
+structlog.configure(
+    processors=[
+        structlog.stdlib.filter_by_level,
+        structlog.stdlib.PositionalArgumentsFormatter(),
+        structlog.processors.StackInfoRenderer(),
+        structlog.processors.format_exc_info,
+        structlog.processors.UnicodeEncoder(),
+        simulate_stdlib_logging
+    ],
+    context_class=dict,
+    logger_factory=structlog.stdlib.LoggerFactory(),
+    wrapper_class=structlog.stdlib.BoundLogger,
+    cache_logger_on_first_use=True,
+)
+
+LOGGER = structlog.getLogger('assembl')
+
+
 def includeme(config):
     """add request.logger"""
-    global LOGGER
-    # initialize after config
-
-    structlog.configure(
-        processors=[
-            structlog.stdlib.filter_by_level,
-            structlog.stdlib.PositionalArgumentsFormatter(),
-            structlog.processors.StackInfoRenderer(),
-            structlog.processors.format_exc_info,
-            structlog.processors.UnicodeEncoder(),
-            simulate_stdlib_logging
-        ],
-        context_class=dict,
-        logger_factory=structlog.stdlib.LoggerFactory(),
-        wrapper_class=structlog.stdlib.BoundLogger,
-        cache_logger_on_first_use=True,
-    )
-
-    LOGGER = structlog.getLogger('assembl')
-
     config.add_request_method(
         'assembl.lib.logging.logger_for_request', 'logger')
