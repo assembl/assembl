@@ -110,7 +110,7 @@ class Profile extends React.PureComponent<*, ProfileProps, ProfileState> {
                 <div className="center">
                   <span className="assembl-icon-profil" />
                 </div>
-                <h3 className="dark-title-3 capitalized center">{this.props.name}</h3>
+                <h2 className="dark-title-2 capitalized center">{this.props.name}</h2>
                 {creationDate && (
                   <div className="center member-since">
                     <Translate value="profile.memberSince" date={I18n.l(creationDate, { dateFormat: 'date.format2' })} />
@@ -122,9 +122,9 @@ class Profile extends React.PureComponent<*, ProfileProps, ProfileState> {
                   <h1 className="dark-title-1">
                     <Translate value="profile.panelTitle" />
                   </h1>
-                  <h3 className="dark-title-3 margin-l">
+                  <h2 className="dark-title-2 margin-l">
                     <Translate value="profile.personalInfos" />
-                  </h3>
+                  </h2>
                   <div className="profile-form center">
                     <FormControlWithLabel
                       label={I18n.t('profile.userName')}
@@ -150,9 +150,9 @@ class Profile extends React.PureComponent<*, ProfileProps, ProfileState> {
                       <Translate value="profile.save" />
                     </Button>
                   </div>
-                  <h3 className="dark-title-3 margin-l">
+                  <h2 className="dark-title-2 margin-l">
                     <Translate value="profile.password" />
-                  </h3>
+                  </h2>
                   <div className="profile-form center">
                     <Button className="button-submit button-dark" onClick={this.handlePasswordClick}>
                       <Translate value="profile.changePassword" />

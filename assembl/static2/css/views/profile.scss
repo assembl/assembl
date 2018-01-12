@@ -26,13 +26,20 @@
   .member-since {
     width: 20ex;
     line-height: 1.5em;
+    font-family: $font-family4;
+    font-size: 12px;
   }
 
   .button-submit {
     width: 150px;
   }
 
-  .dark-title-4 {
+  .dark-title-2 {
+    color: $title3-dark-color;
+    font-family: $font-family;
+    font-size: 20px;
+    letter-spacing: $title-letter-spacing;
+    text-transform: none;
     margin-top: 28px;
   }
 
