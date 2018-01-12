@@ -556,7 +556,6 @@ def build_virtualenv():
                     venv_config.set(sec, option, val)
                 with open(vefile, 'w') as f:
                     venv_config.write(f)
-    run('rm /tmp/distribute* || echo "ok"')  # clean after myself
 
 
 @task
