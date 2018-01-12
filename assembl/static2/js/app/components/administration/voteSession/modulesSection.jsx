@@ -7,8 +7,13 @@ import SectionTitle from '../sectionTitle';
 import TextWithHelper from '../../common/textWithHelper';
 import TokensForm from './tokensForm';
 
-const ModulesSection = ({ tokenModules, editLocale }) => {
-  const checked = true;
+type ModulesSectionProps = {
+  tokenModules: Array,
+  editLocale: string
+};
+
+const ModulesSection = ({ tokenModules, editLocale }: ModulesSectionProps) => {
+  const checked = tokenModules.size > 0;
   const handleCheckBoxChange = () => {};
   return (
     <div className="admin-box">

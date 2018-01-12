@@ -45,9 +45,9 @@ export const updateVoteSessionHeaderImage = (value: File): actionTypes.UpdateVot
   type: actionTypes.UPDATE_VOTE_SESSION_PAGE_IMAGE
 });
 
-export const updateVoteSessionPublicVote = (value: boolean): actionTypes.UpdateVoteSessionPublicVote => ({
-  value: value,
-  type: actionTypes.UPDATE_VOTE_SESSION_PUBLIC_VOTE
+export const updateVoteModules = (voteModules: actionTypes.VoteModulesArray): actionTypes.UpdateVoteModules => ({
+  voteModules: voteModules,
+  type: actionTypes.UPDATE_VOTE_MODULES
 });
 
 export const updateTokenVoteInstructions = (id, locale, value) => ({
@@ -57,16 +57,11 @@ export const updateTokenVoteInstructions = (id, locale, value) => ({
   type: actionTypes.UPDATE_TOKEN_VOTE_INSTRUCTIONS
 });
 
-export const updateTokenVoteTypeNumber = (value, id) => ({
+export const createTokenVoteType = (id, value, tokenTypeNumber) => ({
   id: id,
   value: value,
-  type: actionTypes.UPDATE_TOKEN_VOTE_TYPE_NUMBER
-});
-
-export const updateTokenVoteTypeExclusivity = (value, id) => ({
-  id: id,
-  value: value,
-  type: actionTypes.UPDATE_TOKEN_VOTE_TYPE_EXCLUSIVITY
+  tokenTypeNumber: tokenTypeNumber,
+  type: actionTypes.CREATE_TOKEN_VOTE_TYPE
 });
 
 export const updateVoteSessionPage = (value: Object): actionTypes.UpdateVoteSessionPage => ({
@@ -76,7 +71,5 @@ export const updateVoteSessionPage = (value: Object): actionTypes.UpdateVoteSess
   instructionsSectionContentEntries: value.instructionsSectionContentEntries,
   propositionsSectionTitleEntries: value.propositionsSectionTitleEntries,
   headerImage: value.headerImage,
-  publicVote: value.publicVote,
-  modules: value.modules,
   type: actionTypes.UPDATE_VOTE_SESSION_PAGE
 });

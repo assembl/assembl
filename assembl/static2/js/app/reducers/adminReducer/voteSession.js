@@ -11,13 +11,13 @@ import {
   UPDATE_VOTE_SESSION_PAGE_PROPOSITIONS_TITLE,
   UPDATE_VOTE_SESSION_PAGE_IMAGE,
   UPDATE_VOTE_SESSION_PAGE,
+  UPDATE_VOTE_MODULES,
   UPDATE_TOKEN_VOTE_INSTRUCTIONS,
-  UPDATE_TOKEN_VOTE_TYPE_NUMBER,
-  UPDATE_TOKEN_VOTE_TYPE_EXCLUSIVITY
+  CREATE_TOKEN_VOTE_TYPE
 } from '../../actions/actionTypes';
 import { updateInLangstringEntries } from '../../utils/i18n';
 
-const initialPage = Map({
+const page = Map({
   hasChanged: false,
   titleEntries: List(),
   subTitleEntries: List(),
@@ -31,7 +31,7 @@ const initialPage = Map({
   })
 });
 export type VoteSessionPageReducer = (Map, ReduxAction<Action>) => Map;
-const voteSessionPage: VoteSessionPageReducer = (state = initialPage, action) => {
+const voteSessionPage: VoteSessionPageReducer = (state = page, action) => {
   switch (action.type) {
   case UPDATE_VOTE_SESSION_PAGE_TITLE:
     return state.update('titleEntries', updateInLangstringEntries(action.locale, fromJS(action.value))).set('hasChanged', true);
@@ -74,47 +74,45 @@ const voteSessionPage: VoteSessionPageReducer = (state = initialPage, action) =>
     return state;
   }
 };
+
 export const modulesInOrder = (state: List<number> = List(), action: ReduxAction<Action>) => {
   switch (action.type) {
-  case UPDATE_VOTE_SESSION_PAGE:
-    return List(action.modules.map(m => m.id));
+  case UPDATE_VOTE_MODULES:
+    return List(action.voteModules.map(m => m.id));
   default:
     return state;
   }
 };
+
 export const modulesById = (state: Map<string, Map> = Map(), action: ReduxAction<Action>) => {
   switch (action.type) {
-  case UPDATE_VOTE_SESSION_PAGE: {
+  case UPDATE_VOTE_MODULES: {
     let newState = Map();
-    action.modules.forEach((m) => {
+    action.voteModules.forEach((m) => {
       let moduleInfo = Map();
       if (m.type === 'tokens') {
         moduleInfo = Map({
-          toDelete: false,
-          isNew: false,
           type: m.type,
           id: m.id,
           titleEntries: fromJS(m.titleEntries),
           instructionsEntries: fromJS(m.instructionsEntries),
           exclusive: m.exclusive,
-          tokenTypes: m.tokenTypes
+          tokenTypes: fromJS(m.tokenTypes)
         });
       }
       newState = newState.set(m.id, moduleInfo);
     });
     return newState;
   }
-  case UPDATE_TOKEN_VOTE_INSTRUCTIONS: {
+  case UPDATE_TOKEN_VOTE_INSTRUCTIONS:
     return state.updateIn([action.id, 'instructionsEntries'], updateInLangstringEntries(action.locale, action.value));
-  }
-  case UPDATE_TOKEN_VOTE_TYPE_EXCLUSIVITY: {
-    return state.updateIn([action.id, 'exclusive'], action.value);
-  }
-  // TODO: Pour chaque type de jeton créer une entrée dans un array
+  case CREATE_TOKEN_VOTE_TYPE:
+    return state;
   default:
     return state;
   }
 };
+
 export default combineReducers({
   page: voteSessionPage,
   modulesInOrder: modulesInOrder,

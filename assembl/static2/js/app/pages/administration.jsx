@@ -7,7 +7,7 @@ import { connect } from 'react-redux';
 
 import { updateThematics, displayLanguageMenu } from '../actions/adminActions';
 import { updateResources, updateResourcesCenterPage } from '../actions/adminActions/resourcesCenter';
-import { updateVoteSessionPage } from '../actions/adminActions/voteSession';
+import { updateVoteSessionPage, updateVoteModules } from '../actions/adminActions/voteSession';
 import { updateSections } from '../actions/adminActions/adminSections';
 import { updateLegalNoticeAndTerms } from '../actions/adminActions/legalNoticeAndTerms';
 import withLoadingIndicator from '../components/common/withLoadingIndicator';
@@ -64,7 +64,7 @@ class Administration extends React.Component {
     this.putSectionsInStore(this.props.sections);
     this.putLegalNoticeAndTermsInStore(this.props.legalNoticeAndTerms);
     this.putVoteSessionInStore(this.props.voteSession);
-
+    this.putVoteModulesInStore();
     const isHidden = this.props.identifier === 'discussion' && this.props.location.query.section === '1';
     this.props.displayLanguageMenu(isHidden);
   }
@@ -129,8 +129,18 @@ class Administration extends React.Component {
       publicVote: true,
       modules: []
     };
+    const filteredVoteSession = filter(VoteSessionQuery, { voteSession: voteSession || emptyVoteSession });
+    const voteSessionForStore = {
+      ...filteredVoteSession.voteSession,
+      instructionsSectionContentEntries: filteredVoteSession.voteSession.instructionsSectionContentEntries
+        ? convertEntriesToRawContentState(filteredVoteSession.voteSession.instructionsSectionContentEntries)
+        : null
+    };
+    this.props.updateVoteSessionPage(voteSessionForStore);
+  }
+
+  putVoteModulesInStore() {
     const mock = {
-      publicVote: true,
       modules: [
         {
           type: 'tokens',
@@ -154,20 +164,22 @@ class Administration extends React.Component {
           exclusive: true,
           tokenTypes: [
             {
-              labelEntries: [
+              id: '555',
+              titleEntries: [
                 {
                   localeCode: 'fr',
-                  value: 'balblabla'
+                  value: 'instruction 1'
                 }
               ],
               number: 10,
               color: '#123456'
             },
             {
-              labelEntries: [
+              id: '666',
+              titleEntries: [
                 {
                   localeCode: 'fr',
-                  value: 'balblabla'
+                  value: 'instruction 2'
                 }
               ],
               number: 3,
@@ -199,16 +211,7 @@ class Administration extends React.Component {
         }
       ]
     };
-
-    const filteredVoteSession = filter(VoteSessionQuery, { voteSession: voteSession || emptyVoteSession });
-    const voteSessionForStore = {
-      ...mock,
-      ...filteredVoteSession.voteSession,
-      instructionsSectionContentEntries: filteredVoteSession.voteSession.instructionsSectionContentEntries
-        ? convertEntriesToRawContentState(filteredVoteSession.voteSession.instructionsSectionContentEntries)
-        : null
-    };
-    this.props.updateVoteSessionPage(voteSessionForStore);
+    this.props.updateVoteModules(mock.modules);
   }
 
   putSectionsInStore(sections) {
@@ -312,6 +315,7 @@ const mapDispatchToProps = dispatch => ({
   updateResourcesCenterPage: ({ titleEntries, headerImage }) => {
     dispatch(updateResourcesCenterPage(titleEntries, headerImage));
   },
+  updateVoteModules: voteModules => dispatch(updateVoteModules(voteModules)),
   updateVoteSessionPage: voteSession => dispatch(updateVoteSessionPage(voteSession)),
   updateLegalNoticeAndTerms: legalNoticeAndTerms => dispatch(updateLegalNoticeAndTerms(legalNoticeAndTerms)),
   displayLanguageMenu: isHidden => dispatch(displayLanguageMenu(isHidden))

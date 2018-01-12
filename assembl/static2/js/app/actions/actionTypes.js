@@ -36,10 +36,9 @@ export const UPDATE_VOTE_SESSION_PAGE_INSTRUCTIONS_CONTENT: 'UPDATE_VOTE_SESSION
 export const UPDATE_VOTE_SESSION_PAGE_PROPOSITIONS_TITLE: 'UPDATE_VOTE_SESSION_PAGE_PROPOSITIONS_TITLE' =
   'UPDATE_VOTE_SESSION_PAGE_PROPOSITIONS_TITLE';
 export const UPDATE_VOTE_SESSION_PAGE_IMAGE: 'UPDATE_VOTE_SESSION_PAGE_IMAGE' = 'UPDATE_VOTE_SESSION_PAGE_IMAGE';
-export const UPDATE_VOTE_SESSION_PUBLIC_VOTE: 'UPDATE_VOTE_SESSION_PUBLIC_VOTE' = 'UPDATE_VOTE_SESSION_PUBLIC_VOTE';
+export const UPDATE_VOTE_MODULES: 'UPDATE_VOTE_MODULES' = 'UPDATE_VOTE_MODULES';
 export const UPDATE_TOKEN_VOTE_INSTRUCTIONS: 'UPDATE_TOKEN_VOTE_INSTRUCTIONS' = 'UPDATE_TOKEN_VOTE_INSTRUCTIONS';
-export const UPDATE_TOKEN_VOTE_TYPE_NUMBER: 'UPDATE_TOKEN_VOTE_TYPE_NUMBER' = 'UPDATE_TOKEN_VOTE_TYPE_NUMBER';
-export const UPDATE_TOKEN_VOTE_TYPE_EXCLUSIVITY: 'UPDATE_TOKEN_VOTE_TYPE_EXCLUSIVITY' = 'UPDATE_TOKEN_VOTE_TYPE_EXCLUSIVITY';
+export const CREATE_TOKEN_VOTE_TYPE: 'CREATE_TOKEN_VOTE_TYPE' = 'CREATE_TOKEN_VOTE_TYPE';
 
 export type UpdateContentLocaleById = {
   type: typeof UPDATE_CONTENT_LOCALE_BY_ID,
@@ -240,9 +239,11 @@ export type UpdateVoteSessionHeaderImage = {
   type: typeof UPDATE_VOTE_SESSION_PAGE_IMAGE
 };
 
-export type UpdateVoteSessionPublicVote = {
-  value: boolean,
-  type: typeof UPDATE_VOTE_SESSION_PUBLIC_VOTE
+export type updateTokenVoteInstructions = {
+  id: string,
+  locale: string,
+  value: string,
+  type: typeof UPDATE_TOKEN_VOTE_INSTRUCTIONS
 };
 
 export type UpdateVoteSessionPage = {
@@ -252,10 +253,34 @@ export type UpdateVoteSessionPage = {
   instructionsSectionContentEntries: Array<LangStringEntryInput>,
   propositionsSectionTitleEntries: Array<LangStringEntryInput>,
   headerImage: File | null,
-  publicVote: boolean,
-  modules: Array<any>,
-  // Todo: define types for modules elements
   type: typeof UPDATE_VOTE_SESSION_PAGE
+};
+
+export type ModuleInfo = {
+  id: string
+};
+
+export type VoteModulesArray = Array<ModuleInfo>;
+
+export type UpdateVoteModules = {
+  VoteModules: VoteModulesArray,
+  type: typeof UPDATE_VOTE_MODULES
+};
+
+export type TokenTypeInfo = {
+  id: string,
+  titleEntries: Array<LangStringEntryInput>,
+  number: Number,
+  color: string
+};
+
+export type TokenTypeArray = Array<TokenTypeInfo>;
+
+export type createTokenVoteType = {
+  id: srting,
+  tokenTypeNumber: Number,
+  tokenVoteTypeArray: TokenTypeArray,
+  type: typeof CREATE_TOKEN_VOTE_TYPE
 };
 
 type BasicAction = {
@@ -288,7 +313,10 @@ type VoteSessionActions =
   | UpdateVoteSessionPageInstructionsContent
   | UpdateVoteSessionPagePropositionsTitle
   | UpdateVoteSessionHeaderImage
-  | UpdateVoteSessionPublicVote;
+  | UpdateVoteSessionPublicVote
+  | UpdateVoteModules
+  | updateTokenVoteInstructions
+  | createTokenVoteType;
 
 export type Action =
   | UpdateContentLocaleById
