@@ -535,7 +535,8 @@ def build_virtualenv():
         print(cyan('The virtualenv seems to already exist, so we don\'t try to create it again'))
         print(cyan('(otherwise the virtualenv command would produce an error)'))
         return
-    run('python2 -mvirtualenv %(venvpath)s' % env)
+    run('python2 -mvirtualenv --no-setuptools %(venvpath)s' % env)
+    # create the virtualenv with --no-setuptools to avoid downgrading setuptools that may fail
     if env.mac:
         # Virtualenv does not reuse distutils.cfg from the homebrew python,
         # and that sometimes precludes building python modules.
@@ -570,6 +571,8 @@ def update_pip_requirements(force_reinstall=False):
         cmd = "%(venvpath)s/bin/pip install --ignore-installed -r %(projectpath)s/requirements.txt" % env
     else:
         # Thanks to https://github.com/pypa/pip/issues/4453 disable wheel separately.
+        run("egrep '^setuptools' %(projectpath)s/requirements.txt | xargs %(venvpath)s/bin/pip install" % env)
+        # setuptools needs to be installed before compiling dm.xmlsec.binding
         run("egrep '^lxml' %(projectpath)s/requirements.txt | xargs %(venvpath)s/bin/pip install" % env)
         run("egrep '^dm.xmlsec.binding' %(projectpath)s/requirements.txt | xargs %(venvpath)s/bin/pip install --install-option='-q'" % env)
         cmd = "%(venvpath)s/bin/pip install -r %(projectpath)s/requirements.txt" % env
