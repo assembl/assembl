@@ -28,6 +28,14 @@
     line-height: 1.5em;
     font-family: $font-family4;
     font-size: 12px;
+
+    &.lang-fr {
+      width: 21ex;
+    }
+
+    &.lang-en {
+      width: 18ex;
+    }
   }
 
   .button-submit {

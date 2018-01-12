@@ -18,6 +18,7 @@ type ProfileProps = {
   email: string,
   connectedUserId: string,
   creationDate: ?string,
+  lang: string,
   slug: string,
   userId: string,
   id: string,
@@ -98,7 +99,7 @@ class Profile extends React.PureComponent<*, ProfileProps, ProfileState> {
 
   render() {
     const { username, name, email } = this.state;
-    const { creationDate } = this.props;
+    const { creationDate, lang } = this.props;
     const fullNameLabel = I18n.t('profile.fullname');
     const emailLabel = I18n.t('profile.email');
     return (
@@ -112,7 +113,7 @@ class Profile extends React.PureComponent<*, ProfileProps, ProfileState> {
                 </div>
                 <h2 className="dark-title-2 capitalized center">{this.props.name}</h2>
                 {creationDate && (
-                  <div className="center member-since">
+                  <div className={`center member-since lang-${lang}`}>
                     <Translate value="profile.memberSince" date={I18n.l(creationDate, { dateFormat: 'date.format2' })} />
                   </div>
                 )}
@@ -168,12 +169,13 @@ class Profile extends React.PureComponent<*, ProfileProps, ProfileState> {
   }
 }
 
-const mapStateToProps = ({ context, debate }, ownProps) => {
+const mapStateToProps = ({ context, debate, i18n }, ownProps) => {
   const userId = ownProps.params.userId;
   return {
     slug: debate.debateData.slug,
     connectedUserId: context.connectedUserId,
-    id: btoa(`AgentProfile:${userId}`)
+    id: btoa(`AgentProfile:${userId}`),
+    lang: i18n.locale
   };
 };
 
