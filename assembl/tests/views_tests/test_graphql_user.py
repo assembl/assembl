@@ -4,6 +4,29 @@ from graphql_relay.node.node import to_global_id
 from assembl.graphql.schema import Schema as schema
 
 
+UPDATE_USER_MUTATION = u"""
+mutation UpdateUser($id: ID!, $name: String, $username: String, $img: String, $password: String) {
+  updateUser(
+    id: $id
+    name: $name
+    username: $username
+    image: $img,
+    password: $password
+  ) {
+    user {
+      ... on AgentProfile {
+        id
+        name
+        username
+        displayName
+        image { externalUrl }
+      }
+    }
+  }
+}
+"""
+
+
 def test_graphql_get_profile(graphql_request, participant1_user):
     res = schema.execute(u"""
 query User($id: ID!) {
@@ -71,26 +94,8 @@ def test_graphql_update_user(graphql_request, participant1_user):
     graphql_request.POST['variables.img'] = FieldStorage(
         u'path/to/new-img.png', 'image/png')
 
-    res = schema.execute(u"""
-mutation UpdateUser($id: ID!, $name: String!, $username: String, $img: String) {
-  updateUser(
-    id: $id
-    name: $name
-    username: $username
-    image: $img
-  ) {
-    user {
-      ... on AgentProfile {
-        id
-        name
-        username
-        displayName
-        image { externalUrl }
-      }
-    }
-  }
-}
-""", context_value=graphql_request, variable_values={
+    res = schema.execute(UPDATE_USER_MUTATION,
+                         context_value=graphql_request, variable_values={
         "id": to_global_id('AgentProfile', participant1_user.id),
         "name": u"M. Barking Loon",
         "username": u"Barking.Loon",
@@ -108,33 +113,10 @@ mutation UpdateUser($id: ID!, $name: String!, $username: String, $img: String) {
 
 
 def test_graphql_update_user_check_username_uniqueness(graphql_request, participant1_user, participant2_user):
-    class Localizer(object):
-        def translate(self, value):
-            return value
-
-    graphql_request.localizer = Localizer()
     participant2_user.username_p = u"Barking.Loon"
     participant2_user.db.flush()
-    res = schema.execute(u"""
-mutation UpdateUser($id: ID!, $name: String!, $username: String, $img: String) {
-  updateUser(
-    id: $id
-    name: $name
-    username: $username
-    image: $img
-  ) {
-    user {
-      ... on AgentProfile {
-        id
-        name
-        username
-        displayName
-        image { externalUrl }
-      }
-    }
-  }
-}
-""", context_value=graphql_request, variable_values={
+    res = schema.execute(UPDATE_USER_MUTATION,
+                         context_value=graphql_request, variable_values={
         "id": to_global_id('AgentProfile', participant1_user.id),
         "name": u"M. Barking Loon",
         "username": u"Barking.Loon",
@@ -144,3 +126,32 @@ mutation UpdateUser($id: ID!, $name: String!, $username: String, $img: String) {
 
     # clean up
     participant2_user.username_p = None
+
+
+def test_graphql_update_user_modify_password(graphql_request, participant1_user):
+    old_password = participant1_user.password
+    res = schema.execute(UPDATE_USER_MUTATION,
+                         context_value=graphql_request, variable_values={
+        "id": to_global_id('AgentProfile', participant1_user.id),
+        "password": "new_secret"
+    })
+    assert res.errors is None
+    # verify there is no changes in other fields
+    assert res.data['updateUser']['user']['name'] == u'A. Barking Loon'
+    assert res.data['updateUser']['user']['username'] is None
+    assert res.data['updateUser']['user']['displayName'] == u'A. Barking Loon'
+    # verify password has changed
+    new_password = participant1_user.password
+    assert new_password != old_password
+
+
+def test_graphql_update_user_modify_password_refused_because_not_owner(graphql_request, discussion_with_default_data, participant1_user, participant2_user):
+    # participant2_user can't modify the password of participant1_user
+    graphql_request.authenticated_userid = participant2_user.id
+    res = schema.execute(UPDATE_USER_MUTATION,
+                         context_value=graphql_request, variable_values={
+        "id": to_global_id('AgentProfile', participant1_user.id),
+        "password": "new_secret"
+    })
+    assert res.errors is not None
+    assert res.errors[0].message == u"The authenticated user can't update this user"

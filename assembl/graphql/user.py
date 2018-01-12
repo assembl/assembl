@@ -64,10 +64,11 @@ class AgentProfile(SecureObjectType, SQLAlchemyObjectType):
 class UpdateUser(graphene.Mutation):
     class Input:
         id = graphene.ID(required=True)
-        name = graphene.String(required=True)
+        name = graphene.String()
         username = graphene.String()
         # this is the identifier of the part in a multipart POST
         image = graphene.String()
+        password = graphene.String()
 
     user = graphene.Field(lambda: AgentProfile)
 
@@ -101,7 +102,15 @@ class UpdateUser(graphene.Mutation):
                     raise Exception(msg)
 
             user.username_p = username
-            user.real_name_p = args.get('name')
+            name = args.get('name')
+            # only modify the name if it was given in parameter
+            if name is not None:
+                user.real_name_p = name
+
+            password = args.get('password')
+            # only modify the password if it was given in parameter
+            if password is not None:
+                user.password_p = password
 
             # add uploaded image as an attachment to the user
             image = args.get('image')

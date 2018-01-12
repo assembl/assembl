@@ -1,5 +1,5 @@
-mutation UpdateUser($id: ID!, $name: String!, $username: String, $img: String) {
-  updateUser(id: $id, name: $name, username: $username, image: $img) {
+mutation UpdateUser($id: ID!, $name: String, $username: String, $img: String, $password: String) {
+  updateUser(id: $id, name: $name, username: $username, image: $img, password: $password) {
     user {
       ... on AgentProfile {
         id
