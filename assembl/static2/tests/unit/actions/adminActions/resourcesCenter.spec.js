@@ -71,7 +71,7 @@ describe('resourcesCenter admin actions', () => {
 
   describe('updateResourceText action', () => {
     const { updateResourceText } = actions;
-    it('should return a UPDATE_RESOURCE_TEXT action type', () => {
+    it('should return an UPDATE_RESOURCE_TEXT action type', () => {
       const actual = updateResourceText('123', 'en', 'new value');
       const expected = {
         id: '123',
@@ -85,7 +85,7 @@ describe('resourcesCenter admin actions', () => {
 
   describe('updateResourceTitle action', () => {
     const { updateResourceTitle } = actions;
-    it('should return a UPDATE_RESOURCE_TITLE action type', () => {
+    it('should return an UPDATE_RESOURCE_TITLE action type', () => {
       const actual = updateResourceTitle('123', 'en', 'new value');
       const expected = {
         id: '123',
@@ -99,7 +99,7 @@ describe('resourcesCenter admin actions', () => {
 
   describe('updateResourcesCenterPageTitle action', () => {
     const { updateResourcesCenterPageTitle } = actions;
-    it('should return a UPDATE_RC_PAGE_TITLE action type', () => {
+    it('should return an UPDATE_RC_PAGE_TITLE action type', () => {
       const actual = updateResourcesCenterPageTitle('en', 'New value');
       const expected = {
         locale: 'en',
@@ -112,7 +112,7 @@ describe('resourcesCenter admin actions', () => {
 
   describe('updateResourcesCenterHeaderImage action', () => {
     const { updateResourcesCenterHeaderImage } = actions;
-    it('should return a UPDATE_RESOURCE_IMAGE action type', () => {
+    it('should return an UPDATE_RESOURCE_IMAGE action type', () => {
       const actual = updateResourcesCenterHeaderImage({ name: 'foo.jpg', type: 'image/jpeg' });
       const expected = {
         value: { name: 'foo.jpg', type: 'image/jpeg' },
