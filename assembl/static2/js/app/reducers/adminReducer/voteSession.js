@@ -17,7 +17,7 @@ import {
 } from '../../actions/actionTypes';
 import { updateInLangstringEntries } from '../../utils/i18n';
 
-const page = Map({
+const initialPage = Map({
   hasChanged: false,
   titleEntries: List(),
   subTitleEntries: List(),
@@ -31,7 +31,7 @@ const page = Map({
   })
 });
 export type VoteSessionPageReducer = (Map, ReduxAction<Action>) => Map;
-const voteSessionPage: VoteSessionPageReducer = (state = page, action) => {
+export const voteSessionPage: VoteSessionPageReducer = (state = initialPage, action) => {
   switch (action.type) {
   case UPDATE_VOTE_SESSION_PAGE_TITLE:
     return state.update('titleEntries', updateInLangstringEntries(action.locale, fromJS(action.value))).set('hasChanged', true);

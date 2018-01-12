@@ -16,7 +16,7 @@ import * as reducers from '../../../../js/app/reducers/adminReducer/resourcesCen
 describe('resourcesCenter admin reducers', () => {
   describe('page reducer', () => {
     const { page } = reducers;
-    it('it should return the initial state', () => {
+    it('should return the initial state', () => {
       const action = {};
       expect(page(undefined, action)).toEqual(
         Map({
