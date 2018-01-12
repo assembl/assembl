@@ -133,7 +133,7 @@ const PageForm = ({
 };
 
 const mapStateToProps = (state, { editLocale }) => {
-  const voteSession = state.admin.voteSession;
+  const voteSession = state.admin.voteSession.page;
   const instructionsContent = getEntryValueForLocale(voteSession.get('instructionsSectionContentEntries'), editLocale);
   return {
     headerTitle: getEntryValueForLocale(voteSession.get('titleEntries'), editLocale),

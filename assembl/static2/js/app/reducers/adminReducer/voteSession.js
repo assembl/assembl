@@ -10,7 +10,10 @@ import {
   UPDATE_VOTE_SESSION_PAGE_INSTRUCTIONS_CONTENT,
   UPDATE_VOTE_SESSION_PAGE_PROPOSITIONS_TITLE,
   UPDATE_VOTE_SESSION_PAGE_IMAGE,
-  UPDATE_VOTE_SESSION_PAGE
+  UPDATE_VOTE_SESSION_PAGE,
+  UPDATE_TOKEN_VOTE_INSTRUCTIONS,
+  UPDATE_TOKEN_VOTE_TYPE_NUMBER,
+  UPDATE_TOKEN_VOTE_TYPE_EXCLUSIVITY
 } from '../../actions/actionTypes';
 import { updateInLangstringEntries } from '../../utils/i18n';
 
@@ -92,20 +95,28 @@ export const modulesById = (state: Map<string, Map> = Map(), action: ReduxAction
           type: m.type,
           id: m.id,
           titleEntries: fromJS(m.titleEntries),
-          instructionsEntries: fromJS(m.textEntries),
-          exclusive: m.exclusive
+          instructionsEntries: fromJS(m.instructionsEntries),
+          exclusive: m.exclusive,
+          tokenTypes: m.tokenTypes
         });
       }
       newState = newState.set(m.id, moduleInfo);
     });
     return newState;
   }
+  case UPDATE_TOKEN_VOTE_INSTRUCTIONS: {
+    return state.updateIn([action.id, 'instructionsEntries'], updateInLangstringEntries(action.locale, action.value));
+  }
+  case UPDATE_TOKEN_VOTE_TYPE_EXCLUSIVITY: {
+    return state.updateIn([action.id, 'exclusive'], action.value);
+  }
+  // TODO: Pour chaque type de jeton créer une entrée dans un array
   default:
     return state;
   }
 };
 export default combineReducers({
-  voteSessionPage: voteSessionPage,
+  page: voteSessionPage,
   modulesInOrder: modulesInOrder,
   modulesById: modulesById
 });

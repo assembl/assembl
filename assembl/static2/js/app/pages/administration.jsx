@@ -125,19 +125,11 @@ class Administration extends React.Component {
         externalUrl: '',
         mimeType: '',
         title: ''
-      }
+      },
+      publicVote: true,
+      modules: []
     };
     const mock = {
-      titleEntries: [],
-      subTitleEntries: [],
-      instructionsSectionTitleEntries: [],
-      instructionsSectionContentEntries: [],
-      propositionsSectionTitleEntries: [],
-      headerImage: {
-        externalUrl: '',
-        mimeType: '',
-        title: ''
-      },
       publicVote: true,
       modules: [
         {
@@ -152,7 +144,11 @@ class Administration extends React.Component {
           instructionsEntries: [
             {
               localeCode: 'fr',
-              value: 'balblabla'
+              value: 'instructions en francais'
+            },
+            {
+              localeCode: 'en',
+              value: 'instructions en anglais'
             }
           ],
           exclusive: true,
@@ -203,6 +199,7 @@ class Administration extends React.Component {
         }
       ]
     };
+
     const filteredVoteSession = filter(VoteSessionQuery, { voteSession: voteSession || emptyVoteSession });
     const voteSessionForStore = {
       ...mock,

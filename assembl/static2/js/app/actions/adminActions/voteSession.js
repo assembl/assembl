@@ -50,6 +50,25 @@ export const updateVoteSessionPublicVote = (value: boolean): actionTypes.UpdateV
   type: actionTypes.UPDATE_VOTE_SESSION_PUBLIC_VOTE
 });
 
+export const updateTokenVoteInstructions = (id, locale, value) => ({
+  id: id,
+  locale: locale,
+  value: value,
+  type: actionTypes.UPDATE_TOKEN_VOTE_INSTRUCTIONS
+});
+
+export const updateTokenVoteTypeNumber = (value, id) => ({
+  id: id,
+  value: value,
+  type: actionTypes.UPDATE_TOKEN_VOTE_TYPE_NUMBER
+});
+
+export const updateTokenVoteTypeExclusivity = (value, id) => ({
+  id: id,
+  value: value,
+  type: actionTypes.UPDATE_TOKEN_VOTE_TYPE_EXCLUSIVITY
+});
+
 export const updateVoteSessionPage = (value: Object): actionTypes.UpdateVoteSessionPage => ({
   titleEntries: value.titleEntries,
   subTitleEntries: value.subTitleEntries,

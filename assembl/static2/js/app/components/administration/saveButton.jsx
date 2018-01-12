@@ -144,7 +144,7 @@ const SaveButton = ({
   deleteSection,
   refetchLegalNoticeAndTerms,
   updateVoteSession,
-  voteSession
+  voteSessionPage
 }) => {
   const saveAction = () => {
     displayAlert('success', `${I18n.t('loading.wait')}...`);
@@ -266,13 +266,13 @@ const SaveButton = ({
         });
     }
 
-    if (voteSession.get('hasChanged')) {
-      const titleEntries = voteSession.get('titleEntries').toJS();
-      const subTitleEntries = voteSession.get('subTitleEntries').toJS();
-      const instructionsSectionTitleEntries = voteSession.get('instructionsSectionTitleEntries').toJS();
-      const instructionsSectionContentEntries = voteSession.get('instructionsSectionContentEntries').toJS();
-      const propositionsSectionTitleEntries = voteSession.get('propositionsSectionTitleEntries').toJS();
-      const pageHeaderImage = voteSession.get('headerImage').toJS();
+    if (voteSessionPage.get('hasChanged')) {
+      const titleEntries = voteSessionPage.get('titleEntries').toJS();
+      const subTitleEntries = voteSessionPage.get('subTitleEntries').toJS();
+      const instructionsSectionTitleEntries = voteSessionPage.get('instructionsSectionTitleEntries').toJS();
+      const instructionsSectionContentEntries = voteSessionPage.get('instructionsSectionContentEntries').toJS();
+      const propositionsSectionTitleEntries = voteSessionPage.get('propositionsSectionTitleEntries').toJS();
+      const pageHeaderImage = voteSessionPage.get('headerImage').toJS();
       const headerImage = typeof pageHeaderImage.externalUrl === 'object' ? pageHeaderImage.externalUrl : null;
       const payload = {
         variables: {
@@ -302,7 +302,7 @@ const SaveButton = ({
     sectionsHaveChanged ||
     resourcesCenterPage.get('hasChanged') ||
     legalNoticeAndTerms.get('hasChanged') ||
-    voteSession.get('hasChanged')
+    voteSessionPage.get('hasChanged')
   );
   return (
     <Button className="button-submit button-dark right" disabled={disabled} onClick={saveAction}>
@@ -389,7 +389,7 @@ const mapStateToProps = ({
       .valueSeq() // convert to array of Map
       .toJS(), // convert to array of objects
     legalNoticeAndTerms: legalNoticeAndTerms,
-    voteSession: voteSession
+    voteSessionPage: voteSession.page
   };
 };
 
