@@ -1,13 +1,12 @@
 import os
 
+from pip.download import PipSession
+from pip.req import parse_requirements
 from setuptools import setup, find_packages
 
 here = os.path.abspath(os.path.dirname(__file__))
 README = open(os.path.join(here, 'README.md')).read()
 CHANGES = open(os.path.join(here, 'CHANGES.txt')).read()
-
-from pip.download import PipSession
-from pip.req import parse_requirements
 
 # parse_requirements() returns generator of pip.req.InstallRequirement objects
 install_reqs = parse_requirements('requirements.txt', session=PipSession())
@@ -19,21 +18,20 @@ requires = [str(ir.req) for ir in install_reqs]
 tests_require = ['WebTest']
 
 
-
 setup(name='assembl',
       version='2.7.4',
       description='Collective Intelligence platform',
-      long_description=README + '\n\n' +  CHANGES,
+      long_description=README + '\n\n' + CHANGES,
       classifiers=[
-        "Programming Language :: Python :: 2.7",
-        "Programming Language :: Javascript",
-        "Framework :: Pyramid",
-        "Topic :: Communications",
-        "Topic :: Internet :: WWW/HTTP",
-        "Topic :: Internet :: WWW/HTTP :: Dynamic Content :: Message Boards",
-        "Topic :: Internet :: WWW/HTTP :: WSGI :: Application",
-        "License :: OSI Approved :: GNU Affero General Public License v3",
-        ],
+          "Programming Language :: Python :: 2.7",
+          "Programming Language :: Javascript",
+          "Framework :: Pyramid",
+          "Topic :: Communications",
+          "Topic :: Internet :: WWW/HTTP",
+          "Topic :: Internet :: WWW/HTTP :: Dynamic Content :: Message Boards",
+          "Topic :: Internet :: WWW/HTTP :: WSGI :: Application",
+          "License :: OSI Approved :: GNU Affero General Public License v3",
+      ],
       author='',
       author_email='',
       url='http://assembl.org/',
@@ -43,7 +41,7 @@ setup(name='assembl',
       include_package_data=True,
       zip_safe=False,
       test_suite='assembl',
-      setup_requires = ['pip>=6'],
+      setup_requires=['pip>=6'],
       install_requires=requires,
       tests_require=tests_require,
       extras_require=dict(test=tests_require),
