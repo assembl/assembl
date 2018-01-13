@@ -59,7 +59,6 @@ changes.websocket.port = 8090
 changes.socket = ipc:///tmp/assembl_changes/5
 
 _mac = false
-_uses_apache = false
 # We now use systemd instead of a global supervisor
 _uses_global_supervisor = false
 _uses_memcache = true
