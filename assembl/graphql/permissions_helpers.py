@@ -4,12 +4,12 @@ from assembl.auth.util import get_permissions
 
 
 def require_cls_permission(permission_type, cls, request):
-        user_id = request.authenticated_userid or Everyone
-        discussion_id = request.matchdict['discussion_id']
-        permissions = get_permissions(user_id, discussion_id)
-        allowed = cls.user_can_cls(user_id, permission_type, permissions)
-        if not allowed:
-            raise HTTPUnauthorized()
+    user_id = request.authenticated_userid or Everyone
+    discussion_id = request.matchdict['discussion_id']
+    permissions = get_permissions(user_id, discussion_id)
+    allowed = cls.user_can_cls(user_id, permission_type, permissions)
+    if not allowed:
+        raise HTTPUnauthorized()
 
 
 def require_instance_permissions(permission_type, instance, request):
