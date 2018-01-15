@@ -64,6 +64,12 @@ export const createTokenVoteType = (id, value, tokenTypeNumber) => ({
   type: actionTypes.CREATE_TOKEN_VOTE_TYPE
 });
 
+export const updateTokenColor = (id, value) => ({
+  id: id,
+  value: value,
+  type: actionTypes.UPDATE_TOKEN_COLOR
+});
+
 export const updateVoteSessionPage = (value: Object): actionTypes.UpdateVoteSessionPage => ({
   titleEntries: value.titleEntries,
   subTitleEntries: value.subTitleEntries,
