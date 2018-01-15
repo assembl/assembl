@@ -11,8 +11,8 @@ from assembl.auth import CrudPermissions
 from .graphql_langstrings_helpers import (LangstringsInterface,
                                           update_langstrings,
                                           add_langstrings_input_attrs)
-from .permissions_helpers import (make_cls_permissions_querier,
-                                  make_instance_permissions_querier)
+from .permissions_helpers import (require_cls_permission,
+                                  require_instance_permission)
 
 
 langstrings_defs = {
@@ -64,12 +64,10 @@ class UpdateVoteSession(graphene.Mutation):
 
         vote_session = discussion_phase.vote_session
         if vote_session is None:
-            require_cls_permission = make_cls_permissions_querier(models.VoteSession, context)
-            require_cls_permission(CrudPermissions.CREATE)
+            require_cls_permission(CrudPermissions.CREATE, models.VoteSession, context)
             vote_session = models.VoteSession(discussion_phase=discussion_phase)
         else:
-            require_instance_permission = make_instance_permissions_querier(vote_session, context)
-            require_instance_permission(CrudPermissions.UPDATE)
+            require_instance_permission(CrudPermissions.UPDATE, vote_session, context)
 
         db = vote_session.db
 
