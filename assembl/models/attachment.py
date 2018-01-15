@@ -483,7 +483,7 @@ class VoteSessionAttachment(Attachment):
     }
 
     crud_permissions = CrudPermissions(
-        P_ADMIN_DISC,   # create
-        P_READ,         # read
-        P_ADMIN_DISC,   # update
-        P_ADMIN_DISC)   # delete
+        create=P_ADMIN_DISC,
+        read=P_READ,
+        update=P_ADMIN_DISC,
+        delete=P_ADMIN_DISC)
