@@ -1,14 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from assembl.graphql.schema import Schema as schema
-
-
-def snake_to_camel(string):
-    # https://stackoverflow.com/questions/19053707/converting-snake-case-to-lower-camel-case-lowercamelcase
-    components = string.split('_')
-    # We capitalize the first letter of each component except the first one
-    # with the 'title' method and join them together.
-    return components[0] + "".join(x.title() for x in components[1:])
+from assembl.lib.utils import snake_to_camel
 
 
 def assert_langstring_is_equal(langstring_name, fetched_model, source_model):
