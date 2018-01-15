@@ -40,6 +40,7 @@ export const UPDATE_VOTE_MODULES: 'UPDATE_VOTE_MODULES' = 'UPDATE_VOTE_MODULES';
 export const UPDATE_TOKEN_VOTE_INSTRUCTIONS: 'UPDATE_TOKEN_VOTE_INSTRUCTIONS' = 'UPDATE_TOKEN_VOTE_INSTRUCTIONS';
 export const CREATE_TOKEN_VOTE_TYPE: 'CREATE_TOKEN_VOTE_TYPE' = 'CREATE_TOKEN_VOTE_TYPE';
 export const DELETE_TOKEN_VOTE_TYPE: 'DELETE_TOKEN_VOTE_TYPE' = 'DELETE_TOKEN_VOTE_TYPE';
+export const UPDATE_TOKEN_VOTE_TYPE_TITLE: 'UPDATE_TOKEN_VOTE_TYPE_TITLE' = 'UPDATE_TOKEN_VOTE_TYPE_TITLE';
 
 export type UpdateContentLocaleById = {
   type: typeof UPDATE_CONTENT_LOCALE_BY_ID,
@@ -278,6 +279,13 @@ export type DeleteTokenVoteType = {
   type: typeof DELETE_TOKEN_VOTE_TYPE
 };
 
+export type UpdateTokenVoteTypeTitle = {
+  id: string,
+  locale: string,
+  value: string,
+  type: typeof UPDATE_TOKEN_VOTE_TYPE_TITLE
+};
+
 type BasicAction = {
   type: string
 };
@@ -311,7 +319,8 @@ type VoteSessionActions =
   | UpdateVoteModules
   | UpdateTokenVoteInstructions
   | CreateTokenVoteType
-  | DeleteTokenVoteType;
+  | DeleteTokenVoteType
+  | UpdateTokenVoteTypeTitle;
 
 export type Action =
   | UpdateContentLocaleById
