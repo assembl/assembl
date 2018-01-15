@@ -3,11 +3,26 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { getEntryValueForLocale } from '../../../utils/i18n';
 import FormControlWithLabel from '../../common/formControlWithLabel';
+import ColorPicker from '../../common/colorPicker';
+import { updateTokenColor } from '../../../actions/adminActions/voteSession';
 
-const TokenTypeForm = ({ title, color, number }) => {
+const TokenTypeForm = ({ title, color, number, handleColorChange }) => {
   const handleTitleChange = () => {};
   const handleNumberChange = () => {};
-  const handleColorChange = () => {};
+
+  const pickerColors = [
+    '#FF6900',
+    '#FCB900',
+    '#8646ED',
+    '#FF82BE',
+    '#1652C1',
+    '#00DCFF',
+    '#00AA7B',
+    '#EB144C',
+    '#B8E986',
+    '#000000'
+  ];
+
   return (
     <div>
       <FormControlWithLabel
@@ -31,6 +46,7 @@ const TokenTypeForm = ({ title, color, number }) => {
         onChange={handleColorChange}
         value={color}
       />
+      <ColorPicker colors={pickerColors} onColorChange={handleColorChange} />
       <div className="separator" />
     </div>
   );
@@ -44,4 +60,9 @@ const mapStateToProps = (state, { tokenType, editLocale }) => {
     number: tokenType.get('number')
   };
 };
-export default connect(mapStateToProps)(TokenTypeForm);
+
+const mapDispatchToProps = dispatch => ({
+  handleColorChange: color => dispatch(updateTokenColor(color.hex))
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(TokenTypeForm);
