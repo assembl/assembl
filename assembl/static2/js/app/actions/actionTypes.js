@@ -47,6 +47,8 @@ export const UPDATE_TOKEN_VOTE_EXCLUSIVE_CATEGORY: 'UPDATE_TOKEN_VOTE_EXCLUSIVE_
 export const UPDATE_TOKEN_VOTE_CATEGORY_TITLE: 'UPDATE_TOKEN_VOTE_CATEGORY_TITLE' = 'UPDATE_TOKEN_VOTE_CATEGORY_TITLE';
 export const UPDATE_TOKEN_VOTE_CATEGORY_COLOR: 'UPDATE_TOKEN_VOTE_CATEGORY_COLOR' = 'UPDATE_TOKEN_VOTE_CATEGORY_COLOR';
 export const UPDATE_TOKEN_TOTAL_NUMBER: 'UPDATE_TOKEN_TOTAL_NUMBER' = 'UPDATE_TOKEN_TOTAL_NUMBER';
+export const UPDATE_LANDING_PAGE_MODULES: 'UPDATE_LANDING_PAGE_MODULES' = 'UPDATE_LANDING_PAGE_MODULES';
+export const TOGGLE_LANDING_PAGE_MODULE: 'TOGGLE_LANDING_PAGE_MODULE' = 'TOGGLE_LANDING_PAGE_MODULE';
 
 export type UpdateContentLocaleById = {
   type: typeof UPDATE_CONTENT_LOCALE_BY_ID,
@@ -320,6 +322,20 @@ export type UpdateTokenVoteCategoryColor = {
   id: string,
   value: string,
   type: typeof UPDATE_TOKEN_VOTE_CATEGORY_COLOR
+}
+
+export type toggleLandingPageModule = {
+  moduleTypeIdentifier: string,
+  type: typeof TOGGLE_LANDING_PAGE_MODULE
+};
+
+type LandingPageModuleInfo = {
+  identifier: string
+};
+export type LandingPageModules = Array<LandingPageModuleInfo>;
+export type UpdateLandingPageModules = {
+  modules: LandingPageModules,
+  type: typeof UPDATE_LANDING_PAGE_MODULES
 };
 
 type BasicAction = {

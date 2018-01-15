@@ -1,0 +1,101 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ManageModules component should render a form to manage the landing page modules 1`] = `
+<div
+  className="admin-box"
+>
+  <SectionTitle
+    annotation="Annotation"
+    title="Title"
+  />
+  <div
+    className="admin-content form-container"
+  >
+    <Translate
+      value="administration.landingPage.manageModules.helper"
+    />
+    <div
+      className="two-columns-admin"
+    >
+      <div
+        className="column-left"
+      >
+        <Apollo(Component)
+          lang={undefined}
+          modulesByIdentifier={
+            Immutable.Map {
+              HEADER: Immutable.Map {
+                enabled: true,
+                moduleType: Immutable.Map {
+                  identifier: "HEADER",
+                  title: "Header",
+                },
+                order: 1,
+              },
+              INTRODUCTION: Immutable.Map {
+                enabled: false,
+                moduleType: Immutable.Map {
+                  identifier: "INTRODUCTION",
+                  title: "Introduction",
+                },
+                order: 2,
+              },
+              VIDEO: Immutable.Map {
+                enabled: true,
+                moduleType: Immutable.Map {
+                  identifier: "VIDEO",
+                  title: "Video",
+                },
+                order: 5,
+              },
+              FOOTER: Immutable.Map {
+                enabled: true,
+                moduleType: Immutable.Map {
+                  identifier: "FOOTER",
+                  title: "Footer",
+                },
+                order: 99,
+              },
+            }
+          }
+          toggleModule={undefined}
+        />
+      </div>
+      <div
+        className="column-right"
+      >
+        <ModulesPreview
+          modules={
+            Array [
+              Immutable.Map {
+                enabled: true,
+                moduleType: Immutable.Map {
+                    identifier: "HEADER",
+                    title: "Header",
+                },
+                order: 1,
+            },
+              Immutable.Map {
+                enabled: true,
+                moduleType: Immutable.Map {
+                    identifier: "VIDEO",
+                    title: "Video",
+                },
+                order: 5,
+            },
+              Immutable.Map {
+                enabled: true,
+                moduleType: Immutable.Map {
+                    identifier: "FOOTER",
+                    title: "Footer",
+                },
+                order: 99,
+            },
+            ]
+          }
+        />
+      </div>
+    </div>
+  </div>
+</div>
+`;

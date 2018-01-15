@@ -1,0 +1,16 @@
+query LandingPageModules($lang: String!) {
+  landingPageModules {
+    configuration
+    enabled
+    existsInDatabase
+    id
+    order
+    moduleType {
+      defaultOrder
+      editableOrder
+      identifier
+      required
+      title(lang: $lang)
+    }
+  }
+}

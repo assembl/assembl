@@ -76,6 +76,18 @@
       }
     }
 
+    .two-columns-admin {
+      display: flex;
+
+      .column-left {
+        flex: 1;
+      }
+
+      .column-right {
+        flex: 1;
+      }
+    }
+
     .annotation {
       margin: 0 40px 20px;
     }
@@ -309,6 +321,31 @@
   .token-vote-form {
     .flex > .form-group {
       flex-grow: 1;
+    }
+  }
+
+  .landing-page-admin {
+    .admin-box {
+      .admin-content {
+        text-align: left;
+      }
+    }
+
+    .form-container {
+      max-width: 700px;
+    }
+
+    .modules-preview {
+      border: 1px solid black;
+      margin: 5px;
+      padding: 5px;
+
+      .module-block {
+        margin: 5px;
+        padding: 5px;
+        border: 1px solid grey;
+        text-align: center;
+      }
     }
   }
 }

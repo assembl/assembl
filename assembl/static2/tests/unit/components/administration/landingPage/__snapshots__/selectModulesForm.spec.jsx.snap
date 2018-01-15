@@ -1,0 +1,52 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`DumbSelectModulesForm component should render a form to select the landing page modules 1`] = `
+<div
+  className="select-modules-form"
+>
+  <FormGroup
+    bsClass="form-group"
+  >
+    <Checkbox
+      bsClass="checkbox"
+      checked={true}
+      disabled={true}
+      inline={false}
+      onChange={[Function]}
+      title=""
+    >
+      Header
+    </Checkbox>
+    <Checkbox
+      bsClass="checkbox"
+      checked={false}
+      disabled={false}
+      inline={false}
+      onChange={[Function]}
+      title=""
+    >
+      Introduction
+    </Checkbox>
+    <Checkbox
+      bsClass="checkbox"
+      checked={true}
+      disabled={false}
+      inline={false}
+      onChange={[Function]}
+      title=""
+    >
+      Video
+    </Checkbox>
+    <Checkbox
+      bsClass="checkbox"
+      checked={true}
+      disabled={true}
+      inline={false}
+      onChange={[Function]}
+      title=""
+    >
+      Footer
+    </Checkbox>
+  </FormGroup>
+</div>
+`;

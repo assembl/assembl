@@ -10,6 +10,8 @@ import resourcesCenter from './resourcesCenter';
 import sections from './adminSections';
 import voteSession from './voteSession';
 import type { AdminSectionsReducers } from './adminSections';
+import landingPage from './landingPage';
+import type { LandingPageReducer } from './landingPage';
 import { updateInLangstringEntries } from '../../utils/i18n';
 
 type EditLocaleState = string;
@@ -220,7 +222,8 @@ export type AdminReducer = {
   displayLanguageMenu: DisplayLanguageMenuReducer,
   resourcesCenter: ResourcesCenterReducer,
   sections: AdminSectionsReducers,
-  legalNoticeAndTerms: LegalNoticeAndTermsReducer
+  legalNoticeAndTerms: LegalNoticeAndTermsReducer,
+  landingPage: LandingPageReducer
 };
 
 const reducers: AdminReducer = {
@@ -234,7 +237,8 @@ const reducers: AdminReducer = {
   resourcesCenter: resourcesCenter,
   sections: sections,
   voteSession: voteSession,
-  legalNoticeAndTerms: legalNoticeAndTerms
+  legalNoticeAndTerms: legalNoticeAndTerms,
+  landingPage: landingPage
 };
 
 export default combineReducers(reducers);

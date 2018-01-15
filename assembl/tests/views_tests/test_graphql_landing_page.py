@@ -36,7 +36,7 @@ def test_query_landing_page_module_types(graphql_request):
 
 
 def test_query_landing_page_modules(graphql_request, simple_landing_page_module):
-    query = u"""query LandingPageModules {
+    query = u"""query LandingPageModules($lang: String!) {
         landingPageModules {
             configuration
             enabled
@@ -48,14 +48,15 @@ def test_query_landing_page_modules(graphql_request, simple_landing_page_module)
                 editableOrder
                 identifier
                 required
-                title
+                title(lang: $lang)
             }
         }
     }
     """
     res = schema.execute(
         query,
-        context_value=graphql_request)
+        context_value=graphql_request,
+        variable_values={"lang": u"en"})
 
     assert len(res.data[u'landingPageModules']) == MODULES_COUNT
     orders = []

@@ -440,6 +440,12 @@ const Translations = {
         legalNoticeLabel: "Mentions légales",
         termsAndConditionsLabel: "Conditions générales d'utilisation",
         successSave: "Les CGU et mentions légales ont été enregistrées avec succès !"
+      },
+      landingPage: {
+        manageModules: {
+          title: "Administrer les modules",
+          helper: "Choisissez les modules que vous souhaitez voir apparaître dans la page d'accueil et leur emplacement"
+        }
       }
     },
     unauthorizedAdministration: {
@@ -890,6 +896,12 @@ const Translations = {
         legalNoticeLabel: "Legal notice",
         termsAndConditionsLabel: "Terms and conditions",
         successSave: "The T&C and legal notice have been saved with success!"
+      },
+      landingPage: {
+        manageModules: {
+          title: "Manage the modules",
+          helper: "Choose the modules that you want to see in the landing page and their position."
+        }
       }
     },
     unauthorizedAdministration: {

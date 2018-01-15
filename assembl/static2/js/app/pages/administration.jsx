@@ -10,6 +10,7 @@ import { updateResources, updateResourcesCenterPage } from '../actions/adminActi
 import { updateVoteSessionPage, updateVoteModules } from '../actions/adminActions/voteSession';
 import { updateSections } from '../actions/adminActions/adminSections';
 import { updateLegalNoticeAndTerms } from '../actions/adminActions/legalNoticeAndTerms';
+import { updateLandingPageModules } from '../actions/adminActions/landingPage';
 import withLoadingIndicator from '../components/common/withLoadingIndicator';
 import Menu from '../components/administration/menu';
 import LanguageMenu from '../components/administration/languageMenu';
@@ -23,6 +24,7 @@ import LegalNoticeAndTermsQuery from '../graphql/LegalNoticeAndTerms.graphql';
 import VoteSessionQuery from '../graphql/VoteSession.graphql';
 import { convertEntriesToRawContentState } from '../utils/draftjs';
 import { getPhaseId } from '../utils/timeline';
+import landingPagePlugin from '../utils/administration/landingPage';
 
 export function convertVideoDescriptions(thematics) {
   return thematics.map((t) => {
@@ -55,6 +57,10 @@ class Administration extends React.Component {
     this.putThematicsInStore = this.putThematicsInStore.bind(this);
     this.putLegalNoticeAndTermsInStore = this.putLegalNoticeAndTermsInStore.bind(this);
     this.putVoteSessionInStore = this.putVoteSessionInStore.bind(this);
+    this.putLandingPageModulesInStore = this.putLandingPageModulesInStore.bind(this);
+    this.state = {
+      showLanguageMenu: true
+    };
   }
 
   componentDidMount() {
@@ -67,6 +73,7 @@ class Administration extends React.Component {
     this.putVoteModulesInStore(this.props.voteSession);
     const isHidden = this.props.identifier === 'discussion' && this.props.location.query.section === '1';
     this.props.displayLanguageMenu(isHidden);
+    this.putLandingPageModulesInStore(this.props.landingPageModules);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -88,6 +95,10 @@ class Administration extends React.Component {
     }
 
     this.putResourcesCenterInStore(nextProps.resourcesCenter);
+
+    if (nextProps.landingPageModules !== this.props.landingPageModules) {
+      this.putLandingPageModulesInStore(nextProps.landingPageModules);
+    }
 
     const isHidden = nextProps.identifier === 'discussion' && nextProps.location.query.section === '1';
     this.props.displayLanguageMenu(isHidden);
@@ -172,6 +183,11 @@ class Administration extends React.Component {
         : null
     };
     this.props.updateLegalNoticeAndTerms(convertedLegalNoticeAndTerms);
+  }
+
+  putLandingPageModulesInStore(landingPageModules) {
+    const filtered = filter(landingPagePlugin.graphqlQuery, { landingPageModules: landingPageModules });
+    this.props.updateLandingPageModules(filtered.landingPageModules);
   }
 
   render() {
@@ -261,7 +277,8 @@ const mapDispatchToProps = dispatch => ({
   updateVoteModules: voteModules => dispatch(updateVoteModules(voteModules)),
   updateVoteSessionPage: voteSession => dispatch(updateVoteSessionPage(voteSession)),
   updateLegalNoticeAndTerms: legalNoticeAndTerms => dispatch(updateLegalNoticeAndTerms(legalNoticeAndTerms)),
-  displayLanguageMenu: isHidden => dispatch(displayLanguageMenu(isHidden))
+  displayLanguageMenu: isHidden => dispatch(displayLanguageMenu(isHidden)),
+  updateLandingPageModules: landingPageModules => dispatch(updateLandingPageModules(landingPageModules))
 });
 
 const mergeLoadingAndHasErrors = WrappedComponent => (props) => {
@@ -280,6 +297,7 @@ const mergeLoadingAndHasErrors = WrappedComponent => (props) => {
     legalNoticeAndTermsLoading,
     legalNoticeAndTermsHasErrors
   } = props;
+
   const hasErrors =
     voteSessionHasErrors ||
     resourcesHasErrors ||
@@ -287,6 +305,7 @@ const mergeLoadingAndHasErrors = WrappedComponent => (props) => {
     tabsConditionsHasErrors ||
     legalNoticeAndTermsHasErrors ||
     sectionsHasErrors ||
+    props[landingPagePlugin.hasErrors] ||
     (data && data.error);
   const loading =
     voteSessionLoading ||
@@ -295,6 +314,7 @@ const mergeLoadingAndHasErrors = WrappedComponent => (props) => {
     tabsConditionsLoading ||
     legalNoticeAndTermsLoading ||
     sectionsLoading ||
+    props[landingPagePlugin.loading] ||
     (data && data.loading);
 
   return <WrappedComponent {...props} hasErrors={hasErrors} loading={loading} />;
@@ -441,6 +461,7 @@ export default compose(
       };
     }
   }),
+  graphql(landingPagePlugin.graphqlQuery, { options: landingPagePlugin.queryOptions, props: landingPagePlugin.dataToProps }),
   mergeLoadingAndHasErrors,
   withLoadingIndicator()
 )(Administration);

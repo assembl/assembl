@@ -41,7 +41,7 @@ class Menu extends React.Component {
           </ul>
         </li>
         <li className="menu-item">
-          <Link to={`${get('administration', slug)}/landingPage`} activeClassName="active">
+          <Link to={`${get('administration', slug)}/landingPage?section=1`} activeClassName="active">
             <Translate value="administration.landingpage" />
           </Link>
         </li>
