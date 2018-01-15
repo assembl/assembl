@@ -2,6 +2,8 @@
 
 from assembl.graphql.schema import Schema as schema
 from assembl.lib.utils import snake_to_camel
+import os
+from io import BytesIO
 
 
 def assert_langstring_is_equal(langstring_name, fetched_model, source_model):
@@ -15,55 +17,25 @@ def assert_langstrings_are_equal(langstrings_names, fetched_model, source_model)
         assert_langstring_is_equal(langstring_name, fetched_model, source_model)
 
 
-fragments = u"""
-    fragment voteSessionGlobals on VoteSession {
-      headerImage {
-        title
-        mimeType
-        externalUrl
-      }
-    }
-
-    fragment langStringEntry on LangStringEntry {
-      localeCode
-      value
-    }
-
-    fragment voteSessionLangstringsEntries on VoteSession {
-      titleEntries {
-        ...langStringEntry
-      }
-      subTitleEntries {
-        ...langStringEntry
-      }
-      instructionsSectionTitleEntries {
-        ...langStringEntry
-      }
-      instructionsSectionContentEntries {
-        ...langStringEntry
-      }
-      propositionsSectionTitleEntries {
-        ...langStringEntry
-      }
-    }
-"""
-
-
 def en_value(entry):
     return entry[0]['value']
 
 
-def test_graphql_get_vote_session(graphql_unauthenticated_request, vote_session):
+def test_graphql_get_vote_session_unauthenticated(graphql_unauthenticated_request, vote_session, graphql_registry):
     response = schema.execute(
-        fragments + u"""
-            query VoteSession($discussionPhaseId: Int!) {
-                voteSession(discussionPhaseId: $discussionPhaseId) {
-                    ...voteSessionGlobals
-                    ...voteSessionLangstringsEntries
-                }
-            }
-        """,
+        graphql_registry['fragments']['LangString'] + graphql_registry['fragments']['VoteSession'] + graphql_registry['VoteSession'],
         context_value=graphql_unauthenticated_request,
+        variable_values={
+            "discussionPhaseId": vote_session.discussion_phase_id
+        }
+    )
+    assert "wrong credentials" in response.errors[0].message
+
+
+def test_graphql_get_vote_session(graphql_participant1_request, vote_session, graphql_registry):
+    response = schema.execute(
+        graphql_registry['fragments']['LangString'] + graphql_registry['fragments']['VoteSession'] + graphql_registry['VoteSession'],
+        context_value=graphql_participant1_request,
         variable_values={
             "discussionPhaseId": vote_session.discussion_phase_id
         }
@@ -94,15 +66,12 @@ def en_entry(value):
     return [{"localeCode": "en", "value": value}]
 
 
-def mutate_and_assert(graphql_request, discussion_phase_id, test_app):
+def mutate_and_assert(graphql_request, discussion_phase_id, test_app, graphql_registry):
     new_title = u"updated vote session title"
     new_sub_title = u"updated vote session sub title"
     new_instructions_section_title = u"updated vote session instructions title"
     new_instructions_section_content = u"updated vote session instructions content"
     new_propositions_section_title = u"updated vote session propositions section title"
-
-    import os
-    from io import BytesIO
 
     class FieldStorage(object):
         file = BytesIO(os.urandom(16))
@@ -118,32 +87,7 @@ def mutate_and_assert(graphql_request, discussion_phase_id, test_app):
     graphql_request.POST[image_var_name] = new_image
 
     response = schema.execute(
-        fragments + u"""
-            mutation UpdateVoteSession(
-              $discussionPhaseId: Int!
-              $headerImage: String
-              $titleEntries: [LangStringEntryInput]
-              $subTitleEntries: [LangStringEntryInput]
-              $instructionsSectionTitleEntries: [LangStringEntryInput]
-              $instructionsSectionContentEntries: [LangStringEntryInput]
-              $propositionsSectionTitleEntries: [LangStringEntryInput]
-            ) {
-              updateVoteSession(
-                discussionPhaseId: $discussionPhaseId
-                headerImage: $headerImage
-                titleEntries: $titleEntries
-                subTitleEntries: $subTitleEntries
-                instructionsSectionTitleEntries: $instructionsSectionTitleEntries
-                instructionsSectionContentEntries: $instructionsSectionContentEntries
-                propositionsSectionTitleEntries: $propositionsSectionTitleEntries
-              ) {
-                voteSession {
-                  ...voteSessionGlobals
-                  ...voteSessionLangstringsEntries
-                }
-              }
-            }
-        """,
+        graphql_registry['fragments']['LangString'] + graphql_registry['fragments']['VoteSession'] + graphql_registry['mutations']['updateVoteSession'],
         context_value=graphql_request,
         variable_values={
             "discussionPhaseId": discussion_phase_id,
@@ -173,66 +117,33 @@ def mutate_and_assert(graphql_request, discussion_phase_id, test_app):
     assert fetched_image_data == new_image_data
 
 
-def test_graphql_update_vote_session(graphql_request, vote_session, test_app):
-    mutate_and_assert(graphql_request, vote_session.discussion_phase_id, test_app)
+def test_graphql_update_vote_session(graphql_request, vote_session, test_app, graphql_registry):
+    mutate_and_assert(graphql_request, vote_session.discussion_phase_id, test_app, graphql_registry)
 
 
-simple_get_query = u"""
-    query VoteSesion($discussionPhaseId: Int!) {
-        voteSession(discussionPhaseId: $discussionPhaseId) {
-            id
-        }
-    }
-"""
-
-
-def vote_session_not_created(discussion_phase_id, graphql_request):
+def assert_vote_session_not_created(discussion_phase_id, graphql_request, graphql_registry):
     response = schema.execute(
-        simple_get_query,
+        graphql_registry['fragments']['LangString'] + graphql_registry['fragments']['VoteSession'] + graphql_registry['VoteSession'],
         context_value=graphql_request,
         variable_values={"discussionPhaseId": discussion_phase_id}
     )
-    return (response.errors is None) and (response.data['voteSession'] is None)
+    assert (response.errors is None) and (response.data['voteSession'] is None)
 
 
-def test_graphql_create_vote_session(graphql_request, timeline_vote_session, test_app):
-    assert vote_session_not_created(timeline_vote_session.id, graphql_request)
-    mutate_and_assert(graphql_request, timeline_vote_session.id, test_app)
+def test_graphql_create_vote_session(graphql_request, timeline_vote_session, test_app, graphql_registry):
+    assert_vote_session_not_created(timeline_vote_session.id, graphql_request, graphql_registry)
+    mutate_and_assert(graphql_request, timeline_vote_session.id, test_app, graphql_registry)
 
 
-def test_graphql_create_vote_session_unauthenticated(graphql_unauthenticated_request, timeline_vote_session, test_app):
-    assert vote_session_not_created(timeline_vote_session.id, graphql_unauthenticated_request)
-    mutate_and_assert_fail(graphql_unauthenticated_request, timeline_vote_session.id)
+def test_graphql_create_vote_session_unauthenticated(graphql_participant1_request, timeline_vote_session, test_app, graphql_registry):
+    assert_vote_session_not_created(timeline_vote_session.id, graphql_participant1_request, graphql_registry)
+    mutate_and_assert_fail(graphql_participant1_request, timeline_vote_session.id, graphql_registry)
 
 
-def mutate_and_assert_fail(graphql_request, discussion_phase_id):
+def mutate_and_assert_fail(graphql_request, discussion_phase_id, graphql_registry):
     new_title = u"updated vote session title"
     response = schema.execute(
-        u"""
-            mutation UpdateVoteSession(
-              $discussionPhaseId: Int!
-              $headerImage: String
-              $titleEntries: [LangStringEntryInput]
-              $subTitleEntries: [LangStringEntryInput]
-              $instructionsSectionTitleEntries: [LangStringEntryInput]
-              $instructionsSectionContentEntries: [LangStringEntryInput]
-              $propositionsSectionTitleEntries: [LangStringEntryInput]
-            ) {
-              updateVoteSession(
-                discussionPhaseId: $discussionPhaseId
-                headerImage: $headerImage
-                titleEntries: $titleEntries
-                subTitleEntries: $subTitleEntries
-                instructionsSectionTitleEntries: $instructionsSectionTitleEntries
-                instructionsSectionContentEntries: $instructionsSectionContentEntries
-                propositionsSectionTitleEntries: $propositionsSectionTitleEntries
-              ) {
-                voteSession {
-                  id
-                }
-              }
-            }
-        """,
+        graphql_registry['fragments']['LangString'] + graphql_registry['fragments']['VoteSession'] + graphql_registry['mutations']['updateVoteSession'],
         context_value=graphql_request,
         variable_values={
             "discussionPhaseId": discussion_phase_id,
@@ -243,5 +154,5 @@ def mutate_and_assert_fail(graphql_request, discussion_phase_id):
     assert ("wrong credentials" in response.errors[0].message)
 
 
-def test_graphql_update_vote_session_unauthenticated(graphql_unauthenticated_request, vote_session):
-    mutate_and_assert_fail(graphql_unauthenticated_request, vote_session.discussion_phase_id)
+def test_graphql_update_vote_session_unauthenticated(graphql_unauthenticated_request, vote_session, graphql_registry):
+    mutate_and_assert_fail(graphql_unauthenticated_request, vote_session.discussion_phase_id, graphql_registry)

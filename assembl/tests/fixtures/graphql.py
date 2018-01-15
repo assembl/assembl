@@ -20,9 +20,9 @@ def graphql_unauthenticated_request(request, test_webrequest, discussion):
 
 
 @pytest.fixture(scope="function")
-def graphql_participant_request(request, test_participant_webrequest, discussion):
-    req = test_participant_webrequest
-    req.matchdict = {"discussion_id": discussion.id}
+def graphql_participant1_request(request, test_participant1_webrequest, discussion_with_default_data):
+    req = test_participant1_webrequest
+    req.matchdict = {"discussion_id": discussion_with_default_data.id}
     req.method = 'POST'
     return req
 
