@@ -37,6 +37,6 @@
     files: ".*/static2/.*graphql$"
   - id: flake8
     name: flake8
-    entry: bash -c "PATH=./venv/bin/:$PATH flake8 `git diff --name-only --diff-filter=d --cached -- '*.py'|grep assembl/`"
+    entry: bash -c "PATH=./venv/bin/:$PATH flake8 `git diff --name-only --diff-filter=d --cached -- '*.py'`"
     language: system
     types: [python]

@@ -6,13 +6,9 @@ from os import getenv
 import sys
 import re
 from getpass import getuser
-from hashlib import sha1
-from platform import system
 from shutil import rmtree
-from shutil import move
 from time import sleep, strftime, time
-from urllib import urlretrieve
-from ConfigParser import ConfigParser, SafeConfigParser, NoOptionError
+from ConfigParser import ConfigParser, SafeConfigParser
 from StringIO import StringIO
 # Importing the "safe" os.path commands
 from os.path import join, dirname, split, normpath
@@ -20,31 +16,30 @@ from os.path import join, dirname, split, normpath
 import os.path
 from functools import wraps
 from tempfile import NamedTemporaryFile
-import re
 
 from fabric.operations import (
-    local, put, get, local, sudo, run, require)
+    local, put, get, sudo, run)
 from fabric.contrib.files import (exists, is_link, append)
 from fabric.api import (
     abort, cd, env, execute, hide, prefix, settings, task as fab_task)
 from fabric.colors import yellow, cyan, red, green
 
-#import logging
-#import paramiko
+# import logging
+# import paramiko
 
-#logger = logging.getLogger("paramiko")
-#project_path = os.path.abspath('.')
-#log_filename = os.path.join(project_path, 'paramiko.log')
-#ch = logging.FileHandler(filename=log_filename)
-#ch.setFormatter(logging.Formatter('%(asctime)s %(message)s'))
-#logger.addHandler(ch)
-#logger.setLevel(logging.DEBUG)
+# logger = logging.getLogger("paramiko")
+# project_path = os.path.abspath('.')
+# log_filename = os.path.join(project_path, 'paramiko.log')
+# ch = logging.FileHandler(filename=log_filename)
+# ch.setFormatter(logging.Formatter('%(asctime)s %(message)s'))
+# logger.addHandler(ch)
+# logger.setLevel(logging.DEBUG)
 
 
 DEFAULT_SECTION = "DEFAULT"
 
 
-def running_locally(hosts = None):
+def running_locally(hosts=None):
     hosts = hosts or env.hosts
     return set(env.hosts) - set(['localhost', '127.0.0.1']) == set()
 
@@ -154,8 +149,10 @@ def realpath(path):
 def is_file(path):
     return run("test -f " + path, quiet=True).succeeded
 
+
 def is_dir(path):
     return run("test -d " + path, quiet=True).succeeded
+
 
 def getmtime(path):
     if env.mac:
@@ -174,7 +171,7 @@ def update_vendor_config():
     config_file_dir = dirname(env.rcfile)
     here = dirname(__file__)
     if config_file_dir.startswith(here):
-        config_file_dir = config_file_dir[len(here)+1:]
+        config_file_dir = config_file_dir[len(here) + 1:]
     while config_file_dir:
         if os.path.exists(os.path.join(config_file_dir, '.git')):
             break
@@ -318,10 +315,10 @@ def migrate_local_ini():
 def supervisor_restart():
     "Restart supervisor itself."
     with hide('running', 'stdout'):
-        supervisord_cmd_result = venvcmd("supervisorctl shutdown")
+        venvcmd("supervisorctl shutdown")
     # Another supervisor,upstart, etc may be watching it, give it a little while
     # Ideally we should wait, but I didn't have time to code it.
-    sleep(30);
+    sleep(30)
     # If supervisor is already started, this will do nothing
 
 
@@ -332,6 +329,7 @@ def is_supervisor_running():
             return False
         else:
             return True
+
 
 def supervisor_process_start(process_name):
     """
@@ -529,13 +527,13 @@ def build_virtualenv():
     """
     print(cyan('Creating a fresh virtualenv'))
     assert env.venvpath
-    import sys
     # This relies on env.venvpath
     if exists(join(env.venvpath, "bin/activate")):
         print(cyan('The virtualenv seems to already exist, so we don\'t try to create it again'))
         print(cyan('(otherwise the virtualenv command would produce an error)'))
         return
-    run('python2 -mvirtualenv %(venvpath)s' % env)
+    run('python2 -mvirtualenv --no-setuptools %(venvpath)s' % env)
+    # create the virtualenv with --no-setuptools to avoid downgrading setuptools that may fail
     if env.mac:
         # Virtualenv does not reuse distutils.cfg from the homebrew python,
         # and that sometimes precludes building python modules.
@@ -556,7 +554,6 @@ def build_virtualenv():
                     venv_config.set(sec, option, val)
                 with open(vefile, 'w') as f:
                     venv_config.write(f)
-    run('rm /tmp/distribute* || echo "ok"')  # clean after myself
 
 
 @task
@@ -571,6 +568,8 @@ def update_pip_requirements(force_reinstall=False):
         cmd = "%(venvpath)s/bin/pip install --ignore-installed -r %(projectpath)s/requirements.txt" % env
     else:
         # Thanks to https://github.com/pypa/pip/issues/4453 disable wheel separately.
+        run("egrep '^setuptools' %(projectpath)s/requirements.txt | xargs %(venvpath)s/bin/pip install" % env)
+        # setuptools needs to be installed before compiling dm.xmlsec.binding
         run("egrep '^lxml' %(projectpath)s/requirements.txt | xargs %(venvpath)s/bin/pip install" % env)
         run("egrep '^dm.xmlsec.binding' %(projectpath)s/requirements.txt | xargs %(venvpath)s/bin/pip install --install-option='-q'" % env)
         cmd = "%(venvpath)s/bin/pip install -r %(projectpath)s/requirements.txt" % env
@@ -681,7 +680,7 @@ def bootstrap(projectpath):
 
     takes the same arguments at env_dev, but projectpath is mandatory
     """
-    #env.projectname = "assembl"
+    # env.projectname = "assembl"
     assert projectpath, "projectpath is mandatory, and corresponds to the directory where assembl will be installed"
 
     with settings(projectpath=projectpath):
@@ -774,12 +773,13 @@ def app_update_dependencies(force_reinstall=False):
     execute(update_vendor_themes_1)
     execute(update_vendor_themes_2)
     execute(update_pip_requirements, force_reinstall=force_reinstall)
-    #Nodeenv is installed by python , so this must be after update_pip_requirements
+    # Nodeenv is installed by python , so this must be after update_pip_requirements
     execute(update_node, force_reinstall=force_reinstall)
-    #bower is installed by node, so this must be after update_node
+    # bower is installed by node, so this must be after update_node
     execute(update_bower)
     execute(update_bower_requirements, force_reinstall=force_reinstall)
     execute(update_npm_requirements, force_reinstall=force_reinstall)
+
 
 @task
 def app_reinstall_all_dependencies():
@@ -788,6 +788,7 @@ def app_reinstall_all_dependencies():
     Usefull after a OS upgrade, node upgrade, etc.
     """
     execute(app_update_dependencies, force_reinstall=True)
+
 
 @task
 def update_node(force_reinstall=False):
@@ -811,6 +812,7 @@ def update_node(force_reinstall=False):
             venvcmd("npm install reinstall -g", chdir=False)
     else:
         print(green('Node version ok'))
+
 
 @task
 def app_compile():
@@ -853,15 +855,6 @@ def webservers_reload():
     """
     Reload the webserver stack.
     """
-    if env.uses_apache:
-        print(cyan("Reloading apache"))
-        # Apache (sudo is part of command line here because we don't have full
-        # sudo access
-        for f in apache_files:
-            if exists(f):
-                run('sudo %s reload' % (f,))
-                break
-
     if env.uses_ngnix:
         # Nginx (sudo is part of command line here because we don't have full
         # sudo access
@@ -876,13 +869,6 @@ def webservers_stop():
     """
     Stop all webservers
     """
-    if env.uses_apache:
-        # Apache
-        for f in apache_files:
-            if exists(f):
-                run('sudo %s stop' % (f,))
-                break
-
     if env.uses_ngnix:
         # Nginx
         if exists('/etc/init.d/nginx'):
@@ -895,13 +881,6 @@ def webservers_start():
     """
     Start all webservers
     """
-    if env.uses_apache:
-        # Apache
-        for f in apache_files:
-            if exists(f):
-                run('sudo %s start' % (f,))
-                break
-
     if env.uses_ngnix:
         # Nginx
         if exists('/etc/init.d/nginx'):
@@ -919,29 +898,36 @@ def update_bower():
     with cd(get_node_base_path()):
         venvcmd('npm update bower po2json', chdir=False)
 
+
 def get_node_base_path():
     return normpath(join(
-            env.projectpath, 'assembl', 'static', 'js'))
+        env.projectpath, 'assembl', 'static', 'js'))
+
 
 def get_new_node_base_path():
     return normpath(join(
-            env.projectpath, 'assembl', 'static2'))
+        env.projectpath, 'assembl', 'static2'))
+
 
 def get_node_modules_path():
     return normpath(join(
-            get_node_base_path(), 'node_modules'))
+        get_node_base_path(), 'node_modules'))
+
 
 def get_new_node_modules_path():
     return normpath(join(
-            get_new_node_base_path(), 'node_modules'))
+        get_new_node_base_path(), 'node_modules'))
+
 
 def get_node_bin_path():
     return normpath(join(
-            get_node_modules_path(), '.bin'))
+        get_node_modules_path(), '.bin'))
+
 
 def get_new_node_bin_path():
     return normpath(join(
-            get_new_node_modules_path(), '.bin'))
+        get_new_node_modules_path(), '.bin'))
+
 
 def bower_cmd(cmd, relative_path='.'):
     with cd(env.projectpath):
@@ -1231,8 +1217,9 @@ def start_edit_fontello_fonts():
         env.projectpath, 'assembl', 'static', 'css', 'fonts')
     config_file = join(font_dir, 'config.json')
     id_file = join(font_dir, 'fontello.id')
-    r = requests.post("http://fontello.com",
-                    files={'config': open(config_file)})
+    r = requests.post(
+        "http://fontello.com",
+        files={'config': open(config_file)})
     if not r.ok:
         raise RuntimeError("Could not get the ID")
     fid = r.text
@@ -1247,12 +1234,10 @@ def start_edit_fontello_fonts():
 def compile_fontello_fonts():
     """Compile the fontello fonts once you have edited them in Fontello. Run start_edit_fontello_fonts first."""
     from zipfile import ZipFile
-    from StringIO import StringIO
     assert running_locally()
     import requests
     font_dir = join(
         env.projectpath, 'assembl', 'static', 'css', 'fonts')
-    config_file = join(font_dir, 'config.json')
     id_file = join(font_dir, 'fontello.id')
     assert os.path.exists(id_file)
     with open(id_file) as f:
@@ -1330,7 +1315,6 @@ def create_sentry_project():
         scheme='https' if as_bool(env.get("sentry_is_secure", False)) else 'http',
         port=env.get("sentry_port", "80"),
         host=env.sentry_host)
-    host = env.public_hostname
     slug = "_".join(env.public_hostname.lower().split("."))
     projects_url = "{base}teams/{organization}/{team}/projects/".format(
         base=base, organization=organization, team=team)
@@ -1397,20 +1381,22 @@ def database_create():
 
     if not check_if_database_exists():
         print(yellow("Cannot connect to database, trying to create"))
-        createDatabase = venvcmd('assembl-pypsql --autocommit -u {user} -p {password} -n {host}'
-                ' "CREATE DATABASE {database} WITH OWNER = {user} TEMPLATE = template0 ENCODING = UNICODE"'.format(
-                    user=env.db_user, password=env.db_password, host=env.db_host,
-                    database=env.db_database))
+        createDatabase = venvcmd(
+            'assembl-pypsql --autocommit -u {user} -p {password} -n {host}'
+            ' "CREATE DATABASE {database} WITH OWNER = {user} TEMPLATE = template0 ENCODING = UNICODE"'.format(
+                user=env.db_user, password=env.db_password, host=env.db_host,
+                database=env.db_database))
         if createDatabase.succeeded:
             print(green("Database created successfully!"))
     else:
         print(green("Database exists and user can connect"))
 
+
 @task
 def rotate_database_dumps(dry_run=False):
     """Rotate database backups for real"""
     try:
-        from executor.contexts import LocalContext, RemoteContext, ExternalCommand
+        from executor.contexts import LocalContext, RemoteContext
         from rotate_backups import RotateBackups, Location
         import rotate_backups
         import coloredlogs
@@ -1422,7 +1408,7 @@ def rotate_database_dumps(dry_run=False):
     coloredlogs.increase_verbosity()
     rotation_scheme = {
         # same as doc/borg_backup_script/assembl_borg_backup.sh
-        'daily':7, 'weekly':4, 'monthly':6,
+        'daily': 7, 'weekly': 4, 'monthly': 6,
         # Plus yearly for good conscience
         'yearly': 'always'
     }
@@ -1498,10 +1484,11 @@ def database_delete():
     Deletes the database instance
     """
     if(env.is_production_env is True):
-        abort(red("You are not allowed to delete the database of a production " +
-                "environment.  If this is a server restore situation, you " +
-                "have to temporarily declare env.is_production_env = False " +
-                "in the environment"))
+        abort(red(
+            "You are not allowed to delete the database of a production " +
+            "environment.  If this is a server restore situation, you " +
+            "have to temporarily declare env.is_production_env = False " +
+            "in the environment"))
     execute(check_and_create_database_user)
 
     with settings(warn_only=True), hide('stdout'):
@@ -1521,10 +1508,11 @@ def database_delete():
 @task
 def postgres_user_detach():
     """Terminate the PID processes owned by the assembl user"""
-    process_list = run('psql -U %s -h %s -d %s -c "SELECT pid FROM pg_stat_activity where pid <> pg_backend_pid()" ' % (
-                        env.db_user,
-                        env.db_host,
-                        env.db_database))
+    process_list = run(
+        'psql -U %s -h %s -d %s -c "SELECT pid FROM pg_stat_activity where pid <> pg_backend_pid()" ' % (
+            env.db_user,
+            env.db_host,
+            env.db_database))
 
     pids = process_list.split("\r\n")[2:-1:]
     for pid in pids:
@@ -1554,7 +1542,7 @@ def database_restore():
         supervisor_process_stop(process)
 
     # Kill postgres processes in order to be able to drop tables
-    #execute(postgres_user_detach)
+    # execute(postgres_user_detach)
 
     # Drop db
     with settings(warn_only=True):
@@ -1573,12 +1561,12 @@ def database_restore():
     # Restore data
     with prefix(venv_prefix()), cd(env.projectpath):
         run('PGPASSWORD=%s pg_restore --no-owner --role=%s --host=%s --dbname=%s -U%s --schema=public %s' % (
-                env.db_password,
-                env.db_user,
-                env.db_host,
-                env.db_database,
-                env.db_user,
-                remote_db_path())
+            env.db_password,
+            env.db_user,
+            env.db_host,
+            env.db_database,
+            env.db_user,
+            remote_db_path())
         )
 
     for process in processes:
@@ -1645,7 +1633,7 @@ def docker_compose():
     if not os.path.exists("./docker/build"):
         os.mkdir("./docker/build")
     else:
-        pass # TODO: Delete contents
+        pass  # TODO: Delete contents
     if not isinstance(env.docker_assembl_hosts, list):
         env.docker_assembl_hosts = env.docker_assembl_hosts.split()
     jenv = Environment(
@@ -1659,12 +1647,12 @@ def docker_compose():
     if os.path.exists(env.random_file):
         env.update(as_rc(env.random_file))
     for i, hostname in enumerate(env.docker_assembl_hosts):
-        with open('./docker/build/assembl%d.rc' % (i+1,), 'w') as f:
+        with open('./docker/build/assembl%d.rc' % (i + 1,), 'w') as f:
             f.write(rc_template.render(
-                public_hostname_=hostname, assembl_index=i+1, **env))
+                public_hostname_=hostname, assembl_index=i + 1, **env))
         with open('./docker/build/nginx_%s.conf' % (hostname,), 'w') as f:
             f.write(nginx_template.render(
-                public_hostname_=hostname, assembl_index=i+1, **env))
+                public_hostname_=hostname, assembl_index=i + 1, **env))
     with open('./docker/build/docker-compose.yml', 'w') as f:
         f.write(compose_template.render(**env))
     with open('./docker/build/docker-compose-stage1.yml', 'w') as f:
@@ -2002,7 +1990,7 @@ def update_vendor_themes(frontend_version=1):
         if urls_string:
             urls = urls_string.split(',')
         vendor_themes_path = normpath(join(
-                env.projectpath, base_path))
+            env.projectpath, base_path))
         print vendor_themes_path
         with settings(warn_only=True), cd(env.projectpath):
             # We do not use env.gitbranch, because in env_deb it may not match the real current branch
@@ -2029,6 +2017,7 @@ def update_vendor_themes(frontend_version=1):
                         print red("Branch %s not known to fabfile.  Leaving theme branch on %s" % (current_assembl_branch_name, current_vendor_themes_branch_name))
                 run('git pull --ff-only')
 
+
 @task
 def update_vendor_themes_1():
     """Update optional themes in assembl/static/css/themes/vendor"""
@@ -2046,8 +2035,8 @@ def update_vendor_themes_and_compile():
     """Update vendor themes and compile them. Run this task when you want to deploy recent changes to themes on a server, without updating Assembl's code and dependencies."""
     execute(update_vendor_themes_1)
     execute(update_vendor_themes_2)
-    execute(compile_stylesheets) # for themes of the v1 UI
-    execute(compile_javascript) # for themes of the v2 UI
+    execute(compile_stylesheets)  # for themes of the v1 UI
+    execute(compile_javascript)  # for themes of the v2 UI
 
 
 def system_db_user():

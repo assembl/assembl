@@ -1,7 +1,6 @@
 _extends = ./base_env.rc
 _wsginame = dev.wsgi
 _urlhost = localhost
-_uses_apache = False
 _uses_ngnix = False
 _gitbranch = develop
 _is_production_env = false

@@ -29,7 +29,6 @@ coverage==4.1
 cryptography==2.0.3
 DateTime==4.1.1
 defusedxml==0.4.1
-# distribute==0.7.3 # This fails with latest pip. Installed properly as a dependency.
 docutils==0.12
 dogpile.cache==0.6.1
 ecdsa==0.13
