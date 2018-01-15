@@ -5,13 +5,15 @@ from assembl.graphql.schema import Schema as schema
 
 
 UPDATE_USER_MUTATION = u"""
-mutation UpdateUser($id: ID!, $name: String, $username: String, $img: String, $password: String) {
+mutation UpdateUser($id: ID!, $name: String, $username: String, $img: String, $oldPassword: String, $newPassword: String, $newPassword2: String) {
   updateUser(
     id: $id
     name: $name
     username: $username
     image: $img,
-    password: $password
+    oldPassword: $oldPassword,
+    newPassword: $newPassword,
+    newPassword2: $newPassword2
   ) {
     user {
       ... on AgentProfile {
@@ -129,11 +131,14 @@ def test_graphql_update_user_check_username_uniqueness(graphql_request, particip
 
 
 def test_graphql_update_user_modify_password(graphql_request, participant1_user):
+    graphql_request.authenticated_userid = participant1_user.id
     old_password = participant1_user.password
     res = schema.execute(UPDATE_USER_MUTATION,
                          context_value=graphql_request, variable_values={
         "id": to_global_id('AgentProfile', participant1_user.id),
-        "password": "new_secret"
+        "oldPassword": "password",
+        "newPassword": "new_secret",
+        "newPassword2": "new_secret"
     })
     assert res.errors is None
     # verify there is no changes in other fields
@@ -151,7 +156,48 @@ def test_graphql_update_user_modify_password_refused_because_not_owner(graphql_r
     res = schema.execute(UPDATE_USER_MUTATION,
                          context_value=graphql_request, variable_values={
         "id": to_global_id('AgentProfile', participant1_user.id),
-        "password": "new_secret"
+        "oldPassword": "password",
+        "newPassword": "new_secret",
+        "newPassword2": "new_secret"
     })
     assert res.errors is not None
     assert res.errors[0].message == u"The authenticated user can't update this user"
+
+
+def test_graphql_update_user_modify_password_wrong_password(graphql_request, participant1_user):
+    graphql_request.authenticated_userid = participant1_user.id
+    res = schema.execute(UPDATE_USER_MUTATION,
+                         context_value=graphql_request, variable_values={
+        "id": to_global_id('AgentProfile', participant1_user.id),
+        "oldPassword": "passwrd",  # wrong password
+        "newPassword": "new_secret",
+        "newPassword2": "new_secret"
+    })
+    assert res.errors is not None
+    assert res.errors[0].message == u"You entered a wrong password."
+
+
+def test_graphql_update_user_modify_password_passwords_mismatch(graphql_request, participant1_user):
+    graphql_request.authenticated_userid = participant1_user.id
+    res = schema.execute(UPDATE_USER_MUTATION,
+                         context_value=graphql_request, variable_values={
+        "id": to_global_id('AgentProfile', participant1_user.id),
+        "oldPassword": "password",
+        "newPassword": "new_secret",
+        "newPassword2": "newsecret"  # not the same password
+    })
+    assert res.errors is not None
+    assert res.errors[0].message == u"You entered two different passwords."
+
+
+def test_graphql_update_user_modify_password_needs_to_be_different(graphql_request, participant1_user):
+    graphql_request.authenticated_userid = participant1_user.id
+    res = schema.execute(UPDATE_USER_MUTATION,
+                         context_value=graphql_request, variable_values={
+        "id": to_global_id('AgentProfile', participant1_user.id),
+        "oldPassword": "password",
+        "newPassword": "password",
+        "newPassword2": "password"
+    })
+    assert res.errors is not None
+    assert res.errors[0].message == u"The new password has to be different than the actual password."

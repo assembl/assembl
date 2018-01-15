@@ -68,7 +68,9 @@ class UpdateUser(graphene.Mutation):
         username = graphene.String()
         # this is the identifier of the part in a multipart POST
         image = graphene.String()
-        password = graphene.String()
+        old_password = graphene.String()
+        new_password = graphene.String()
+        new_password2 = graphene.String()
 
     user = graphene.Field(lambda: AgentProfile)
 
@@ -98,7 +100,7 @@ class UpdateUser(graphene.Mutation):
                     username=username
                 ).count():
                     msg = context.localizer.translate(_(
-                        "We already have a user with this username."))
+                        u"We already have a user with this username."))
                     raise Exception(msg)
 
             user.username_p = username
@@ -107,10 +109,29 @@ class UpdateUser(graphene.Mutation):
             if name is not None:
                 user.real_name_p = name
 
-            password = args.get('password')
+            old_password = args.get('old_password')
+            new_password = args.get('new_password')
+            new_password2 = args.get('new_password2')
             # only modify the password if it was given in parameter
-            if password is not None:
-                user.password_p = password
+            if old_password is not None and new_password is not None and new_password2 is not None:
+                if not user.check_password(old_password):
+                    msg = context.localizer.translate(_(
+                        u"You entered a wrong password."))
+                    raise Exception(msg)
+
+                if new_password != new_password2:
+                    msg = context.localizer.translate(_(
+                        u"You entered two different passwords."))
+                    raise Exception(msg)
+
+                if old_password == new_password:
+                    msg = context.localizer.translate(_(
+                        u"The new password has to be different than the actual password."))
+                    raise Exception(msg)
+
+                # TODO The new password has to be different than the last 5 passwords you set
+
+                user.password_p = new_password
 
             # add uploaded image as an attachment to the user
             image = args.get('image')
