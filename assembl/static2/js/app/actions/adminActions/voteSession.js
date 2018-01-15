@@ -57,10 +57,9 @@ export const updateTokenVoteInstructions = (id, locale, value) => ({
   type: actionTypes.UPDATE_TOKEN_VOTE_INSTRUCTIONS
 });
 
-export const createTokenVoteType = (id, value, tokenTypeNumber) => ({
+export const createTokenVoteType = (id, value) => ({
   id: id,
   value: value,
-  tokenTypeNumber: tokenTypeNumber,
   type: actionTypes.CREATE_TOKEN_VOTE_TYPE
 });
 

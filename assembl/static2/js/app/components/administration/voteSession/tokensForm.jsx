@@ -6,7 +6,7 @@ import FormControlWithLabel from '../../common/formControlWithLabel';
 import { getEntryValueForLocale } from '../../../utils/i18n';
 import TextWithHelper from '../../common/textWithHelper';
 import TokenTypeForm from './tokenTypeForm';
-import { updateTokenVoteInstructions } from '../../../actions/adminActions/voteSession';
+import { updateTokenVoteInstructions, createTokenVoteType } from '../../../actions/adminActions/voteSession';
 
 type TokensFormProps = {
   instructions: string,
@@ -23,9 +23,9 @@ const TokensForm = ({
   tokenTypeNumber,
   tokenTypes,
   editLocale,
-  handleInstructionsChange
+  handleInstructionsChange,
+  handleTokenVoteTypeNumberChange
 }: TokensFormProps) => {
-  const handleTypesNumberChange = () => {};
   const handleExclusiveCheckboxChange = () => {};
   return (
     <div className="token-vote-form">
@@ -58,7 +58,7 @@ const TokensForm = ({
             label="Nombre de types de jetons" // TODO ajouter une key dans le fichier de trad
             required
             type="text"
-            onChange={handleTypesNumberChange}
+            onChange={handleTokenVoteTypeNumberChange}
             value={tokenTypeNumber}
           />
           <TextWithHelper
@@ -92,7 +92,8 @@ const mapStateToProps = (state, { id, editLocale }) => {
 };
 
 const mapDispatchToProps = (dispatch, { id, editLocale }) => ({
-  handleInstructionsChange: e => dispatch(updateTokenVoteInstructions(id, editLocale, e.target.value))
+  handleInstructionsChange: e => dispatch(updateTokenVoteInstructions(id, editLocale, e.target.value)),
+  handleTokenVoteTypeNumberChange: e => dispatch(createTokenVoteType(id, e.target.value))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(TokensForm);

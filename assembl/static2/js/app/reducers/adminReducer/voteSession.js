@@ -84,6 +84,12 @@ export const modulesInOrder = (state: List<number> = List(), action: ReduxAction
   }
 };
 
+const initialTokenType = Map({
+  titleEntries: List(),
+  number: 0,
+  color: ''
+});
+
 export const modulesById = (state: Map<string, Map> = Map(), action: ReduxAction<Action>) => {
   switch (action.type) {
   case UPDATE_VOTE_MODULES: {
@@ -106,8 +112,21 @@ export const modulesById = (state: Map<string, Map> = Map(), action: ReduxAction
   }
   case UPDATE_TOKEN_VOTE_INSTRUCTIONS:
     return state.updateIn([action.id, 'instructionsEntries'], updateInLangstringEntries(action.locale, action.value));
-  case CREATE_TOKEN_VOTE_TYPE:
-    return state;
+  case CREATE_TOKEN_VOTE_TYPE: {
+    let existingTokenType = state.getIn([action.id, 'tokenTypes']);
+    const newTokenTypeNumber = action.value - existingTokenType.size;
+    if (action.value > existingTokenType.size) {
+      for (let i = 0; i < newTokenTypeNumber; i += 1) {
+        existingTokenType = existingTokenType.push(initialTokenType);
+      }
+    } else {
+      const positiveTokenTypeNumber = -newTokenTypeNumber;
+      for (let i = 0; i < positiveTokenTypeNumber; i += 1) {
+        existingTokenType = existingTokenType.delete(existingTokenType.size - (i + 1));
+      }
+    }
+    return state.setIn([action.id, 'tokenTypes'], existingTokenType);
+  }
   default:
     return state;
   }
