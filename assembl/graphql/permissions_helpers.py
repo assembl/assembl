@@ -12,7 +12,7 @@ def require_cls_permission(permission_type, cls, request):
         raise HTTPUnauthorized()
 
 
-def require_instance_permissions(permission_type, instance, request):
+def require_instance_permission(permission_type, instance, request):
     user_id = request.authenticated_userid or Everyone
     discussion_id = request.matchdict['discussion_id']
     permissions = get_permissions(user_id, discussion_id)
