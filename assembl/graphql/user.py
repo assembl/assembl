@@ -99,9 +99,7 @@ class UpdateUser(graphene.Mutation):
                 if db.query(models.Username).filter_by(
                     username=username
                 ).count():
-                    msg = context.localizer.translate(_(
-                        u"We already have a user with this username."))
-                    raise Exception(msg)
+                    raise Exception(u"001: We already have a user with this username.")
 
             user.username_p = username
             name = args.get('name')
@@ -115,21 +113,15 @@ class UpdateUser(graphene.Mutation):
             # only modify the password if it was given in parameter
             if old_password is not None and new_password is not None and new_password2 is not None:
                 if not user.check_password(old_password):
-                    msg = context.localizer.translate(_(
-                        u"You entered a wrong password."))
-                    raise Exception(msg)
+                    raise Exception(u"002: You entered a wrong password.")
 
                 if new_password != new_password2:
-                    msg = context.localizer.translate(_(
-                        u"You entered two different passwords."))
-                    raise Exception(msg)
+                    raise Exception(u"003: You entered two different passwords.")
 
                 if old_password == new_password:
-                    msg = context.localizer.translate(_(
-                        u"The new password has to be different than the actual password."))
-                    raise Exception(msg)
+                    raise Exception(u"004: The new password has to be different than the actual password.")
 
-                # TODO The new password has to be different than the last 5 passwords you set
+                # TODO 005: The new password has to be different than the last 5 passwords you set.
 
                 user.password_p = new_password
 

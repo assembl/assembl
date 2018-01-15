@@ -293,7 +293,16 @@ const Translations = {
       password: "Mot de passe",
       changePassword: "Modifier mon mot de passe",
       passwordModifiedSuccess: "Votre mot de passe a été modifié avec succès",
-      saveSuccess: "Votre profil a été mis à jour avec succès"
+      saveSuccess: "Votre profil a été mis à jour avec succès",
+      updateUser: {
+        errorMessage: {
+          1: "Nous avons déjà un utilisateur ayant ce nom d'utilisateur.",
+          2: "Vous avez entré une mauvais mot de passe.",
+          3: "Vous avez entré deux mots de passe différents.",
+          4: "Le nouveau mot de passe doit être différent du mot de passe actuel.",
+          5: "Le nouveau mot de passe doit être différent des 5 derniers mots de passe que vous avez utilisés."
+        }
+      }
     },
     loading: {
       wait: "Veuillez patienter"
@@ -720,7 +729,16 @@ const Translations = {
       password: "Password",
       changePassword: "Change my password",
       passwordModifiedSuccess: "Your password has been changed with success",
-      saveSuccess: "Your profile is updated"
+      saveSuccess: "Your profile is updated",
+      updateUser: {
+        errorMessage: {
+          1: "We already have a user with this username.",
+          2: "You entered a wrong password.",
+          3: "You entered two different passwords.",
+          4: "The new password has to be different than the actual password.",
+          5: "The new password has to be different than the last 5 passwords you set."
+        }
+      }
     },
     loading: {
       wait: "Please wait..."

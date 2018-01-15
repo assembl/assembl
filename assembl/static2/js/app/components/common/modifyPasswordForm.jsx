@@ -72,7 +72,12 @@ class ModifyPasswordForm extends React.Component<void, Props, State> {
           this.props.successCallback();
         })
         .catch((error) => {
-          displayAlert('danger', error.message.replace('GraphQL error: ', ''));
+          let message = error.message.replace('GraphQL error: ', '');
+          if (message.startsWith('00')) {
+            const code = message.slice(2, 3);
+            message = I18n.t(`profile.updateUser.errorMessage.${code}`);
+          }
+          displayAlert('danger', message);
           this.setState({ disabled: false });
         });
     this.setState({ disabled: true }, changePassword);

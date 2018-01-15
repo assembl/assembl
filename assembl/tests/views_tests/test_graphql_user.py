@@ -124,7 +124,7 @@ def test_graphql_update_user_check_username_uniqueness(graphql_request, particip
         "username": u"Barking.Loon",
     })
     assert res.errors is not None
-    assert res.errors[0].message == u'We already have a user with this username.'
+    assert res.errors[0].message == u'001: We already have a user with this username.'
 
     # clean up
     participant2_user.username_p = None
@@ -174,7 +174,7 @@ def test_graphql_update_user_modify_password_wrong_password(graphql_request, par
         "newPassword2": "new_secret"
     })
     assert res.errors is not None
-    assert res.errors[0].message == u"You entered a wrong password."
+    assert res.errors[0].message == u"002: You entered a wrong password."
 
 
 def test_graphql_update_user_modify_password_passwords_mismatch(graphql_request, participant1_user):
@@ -187,7 +187,7 @@ def test_graphql_update_user_modify_password_passwords_mismatch(graphql_request,
         "newPassword2": "newsecret"  # not the same password
     })
     assert res.errors is not None
-    assert res.errors[0].message == u"You entered two different passwords."
+    assert res.errors[0].message == u"003: You entered two different passwords."
 
 
 def test_graphql_update_user_modify_password_needs_to_be_different(graphql_request, participant1_user):
@@ -200,4 +200,4 @@ def test_graphql_update_user_modify_password_needs_to_be_different(graphql_reque
         "newPassword2": "password"
     })
     assert res.errors is not None
-    assert res.errors[0].message == u"The new password has to be different than the actual password."
+    assert res.errors[0].message == u"004: The new password has to be different than the actual password."
