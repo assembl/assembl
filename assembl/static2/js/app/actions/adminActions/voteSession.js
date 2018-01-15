@@ -50,23 +50,25 @@ export const updateVoteModules = (voteModules: actionTypes.VoteModulesArray): ac
   type: actionTypes.UPDATE_VOTE_MODULES
 });
 
-export const updateTokenVoteInstructions = (id, locale, value) => ({
+export const updateTokenVoteInstructions = (
+  id: string,
+  locale: string,
+  value: string
+): actionTypes.UpdateTokenVoteInstructions => ({
   id: id,
   locale: locale,
   value: value,
   type: actionTypes.UPDATE_TOKEN_VOTE_INSTRUCTIONS
 });
 
-export const createTokenVoteType = (id, value) => ({
+export const createTokenVoteType = (id: string): actionTypes.CreateTokenVoteType => ({
   id: id,
-  value: value,
   type: actionTypes.CREATE_TOKEN_VOTE_TYPE
 });
 
-export const updateTokenColor = (id, value) => ({
-  id: id,
+export const deleteTokenVoteType = (value: number): actionTypes.CreateTokenVoteType => ({
   value: value,
-  type: actionTypes.UPDATE_TOKEN_COLOR
+  type: actionTypes.DELETE_TOKEN_VOTE_TYPE
 });
 
 export const updateVoteSessionPage = (value: Object): actionTypes.UpdateVoteSessionPage => ({

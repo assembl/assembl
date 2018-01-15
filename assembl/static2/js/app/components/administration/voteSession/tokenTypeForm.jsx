@@ -4,11 +4,11 @@ import { connect } from 'react-redux';
 import { TwitterPicker } from 'react-color';
 import { getEntryValueForLocale } from '../../../utils/i18n';
 import FormControlWithLabel from '../../common/formControlWithLabel';
-import { updateTokenColor } from '../../../actions/adminActions/voteSession';
 
-const TokenTypeForm = ({ title, color, number, handleColorChange }) => {
+const TokenTypeForm = ({ title, color, number }) => {
   const handleTitleChange = () => {};
   const handleNumberChange = () => {};
+  const handleColorChange = () => {};
 
   const pickerColors = [
     '#B8E986',
@@ -52,7 +52,9 @@ const TokenTypeForm = ({ title, color, number, handleColorChange }) => {
   );
 };
 
-const mapStateToProps = (state, { tokenType, editLocale }) => {
+const mapStateToProps = (state, { id, editLocale }) => {
+  const { tokenTypesById } = state.admin.voteSession;
+  const tokenType = tokenTypesById.get(id);
   const title = getEntryValueForLocale(tokenType.get('titleEntries'), editLocale);
   return {
     title: title,
@@ -61,8 +63,4 @@ const mapStateToProps = (state, { tokenType, editLocale }) => {
   };
 };
 
-const mapDispatchToProps = dispatch => ({
-  handleColorChange: color => dispatch(updateTokenColor(color.hex))
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(TokenTypeForm);
+export default connect(mapStateToProps)(TokenTypeForm);

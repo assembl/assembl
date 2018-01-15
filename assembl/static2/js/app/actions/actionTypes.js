@@ -39,7 +39,7 @@ export const UPDATE_VOTE_SESSION_PAGE_IMAGE: 'UPDATE_VOTE_SESSION_PAGE_IMAGE' = 
 export const UPDATE_VOTE_MODULES: 'UPDATE_VOTE_MODULES' = 'UPDATE_VOTE_MODULES';
 export const UPDATE_TOKEN_VOTE_INSTRUCTIONS: 'UPDATE_TOKEN_VOTE_INSTRUCTIONS' = 'UPDATE_TOKEN_VOTE_INSTRUCTIONS';
 export const CREATE_TOKEN_VOTE_TYPE: 'CREATE_TOKEN_VOTE_TYPE' = 'CREATE_TOKEN_VOTE_TYPE';
-export const UPDATE_TOKEN_COLOR: 'UPDATE_TOKEN_COLOR' = UPDATE_TOKEN_COLOR;
+export const DELETE_TOKEN_VOTE_TYPE: 'DELETE_TOKEN_VOTE_TYPE' = 'DELETE_TOKEN_VOTE_TYPE';
 
 export type UpdateContentLocaleById = {
   type: typeof UPDATE_CONTENT_LOCALE_BY_ID,
@@ -240,13 +240,6 @@ export type UpdateVoteSessionHeaderImage = {
   type: typeof UPDATE_VOTE_SESSION_PAGE_IMAGE
 };
 
-export type updateTokenVoteInstructions = {
-  id: string,
-  locale: string,
-  value: string,
-  type: typeof UPDATE_TOKEN_VOTE_INSTRUCTIONS
-};
-
 export type UpdateVoteSessionPage = {
   titleEntries: Array<LangStringEntryInput>,
   subTitleEntries: Array<LangStringEntryInput>,
@@ -268,26 +261,21 @@ export type UpdateVoteModules = {
   type: typeof UPDATE_VOTE_MODULES
 };
 
-export type TokenTypeInfo = {
+export type UpdateTokenVoteInstructions = {
   id: string,
-  titleEntries: Array<LangStringEntryInput>,
-  number: Number,
-  color: string
+  locale: string,
+  value: string,
+  type: typeof UPDATE_TOKEN_VOTE_INSTRUCTIONS
 };
 
-export type TokenTypeArray = Array<TokenTypeInfo>;
-
-export type createTokenVoteType = {
+export type CreateTokenVoteType = {
   id: string,
-  tokenTypeNumber: Number,
-  tokenVoteTypeArray: TokenTypeArray,
   type: typeof CREATE_TOKEN_VOTE_TYPE
 };
 
-export type updateTokenColor = {
-  id: string,
-  value: string,
-  type: typeof UPDATE_TOKEN_COLOR
+export type DeleteTokenVoteType = {
+  value: number,
+  type: typeof DELETE_TOKEN_VOTE_TYPE
 };
 
 type BasicAction = {
@@ -320,11 +308,10 @@ type VoteSessionActions =
   | UpdateVoteSessionPageInstructionsContent
   | UpdateVoteSessionPagePropositionsTitle
   | UpdateVoteSessionHeaderImage
-  | UpdateVoteSessionPublicVote
   | UpdateVoteModules
-  | updateTokenVoteInstructions
-  | createTokenVoteType
-  | updateTokenColor;
+  | UpdateTokenVoteInstructions
+  | CreateTokenVoteType
+  | DeleteTokenVoteType;
 
 export type Action =
   | UpdateContentLocaleById

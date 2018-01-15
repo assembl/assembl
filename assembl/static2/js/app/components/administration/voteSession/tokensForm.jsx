@@ -6,15 +6,16 @@ import FormControlWithLabel from '../../common/formControlWithLabel';
 import { getEntryValueForLocale } from '../../../utils/i18n';
 import TextWithHelper from '../../common/textWithHelper';
 import TokenTypeForm from './tokenTypeForm';
-import { updateTokenVoteInstructions, createTokenVoteType } from '../../../actions/adminActions/voteSession';
+import { updateTokenVoteInstructions, createTokenVoteType, deleteTokenVoteType } from '../../../actions/adminActions/voteSession';
 
 type TokensFormProps = {
   instructions: string,
   exclusive: boolean,
   tokenTypeNumber: number,
-  tokenTypes: Array,
+  tokenTypes: Object,
   editLocale: string,
-  handleInstructionsChange: Function
+  handleInstructionsChange: Function,
+  handleTokenVoteTypeNumberChange: Function
 };
 
 const TokensForm = ({
@@ -69,9 +70,7 @@ const TokensForm = ({
         {tokenTypeNumber > 0 ? (
           <div>
             <div className="separator" />
-            {tokenTypes.map((tokenType, index) => (
-              <TokenTypeForm key={`token-type-${index}`} tokenType={tokenType} editLocale={editLocale} />
-            ))}
+            {tokenTypes.map((id, index) => <TokenTypeForm key={`token-type-${index}`} id={id} editLocale={editLocale} />)}
           </div>
         ) : null}
       </form>
@@ -81,19 +80,30 @@ const TokensForm = ({
 
 const mapStateToProps = (state, { id, editLocale }) => {
   const module = state.admin.voteSession.modulesById.get(id);
+  const { tokenTypesInOrder } = state.admin.voteSession;
   const instructions = getEntryValueForLocale(module.get('instructionsEntries'), editLocale);
   return {
     instructions: instructions,
     exclusive: module.get('exclusive'),
-    tokenTypeNumber: module.get('tokenTypes').size,
-    tokenTypes: module.get('tokenTypes'),
+    tokenTypeNumber: tokenTypesInOrder.size,
+    tokenTypes: tokenTypesInOrder,
     editLocale: editLocale
   };
 };
 
-const mapDispatchToProps = (dispatch, { id, editLocale }) => ({
+const mapDispatchToProps = (dispatch, { id, editLocale, tokenTypesNumber }) => ({
   handleInstructionsChange: e => dispatch(updateTokenVoteInstructions(id, editLocale, e.target.value)),
-  handleTokenVoteTypeNumberChange: e => dispatch(createTokenVoteType(id, e.target.value))
+  handleTokenVoteTypeNumberChange: (e) => {
+    const newTokenTypesNumber = e.target.value - tokenTypesNumber;
+    if (e.target.value > tokenTypesNumber) {
+      for (let i = 0; i < newTokenTypesNumber; i += 1) {
+        const newId = Math.round(Math.random() * -1000000).toString();
+        dispatch(createTokenVoteType(newId));
+      }
+    } else {
+      dispatch(deleteTokenVoteType(e.target.value));
+    }
+  }
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(TokensForm);

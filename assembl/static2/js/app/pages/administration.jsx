@@ -164,7 +164,7 @@ class Administration extends React.Component {
           exclusive: true,
           tokenTypes: [
             {
-              id: '555',
+              id: 'tokentypeid555',
               titleEntries: [
                 {
                   localeCode: 'fr',
@@ -175,7 +175,7 @@ class Administration extends React.Component {
               color: '#123456'
             },
             {
-              id: '666',
+              id: 'tokentypeid666',
               titleEntries: [
                 {
                   localeCode: 'fr',

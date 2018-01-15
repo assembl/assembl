@@ -13,7 +13,8 @@ import {
   UPDATE_VOTE_SESSION_PAGE,
   UPDATE_VOTE_MODULES,
   UPDATE_TOKEN_VOTE_INSTRUCTIONS,
-  CREATE_TOKEN_VOTE_TYPE
+  CREATE_TOKEN_VOTE_TYPE,
+  DELETE_TOKEN_VOTE_TYPE
 } from '../../actions/actionTypes';
 import { updateInLangstringEntries } from '../../utils/i18n';
 
@@ -84,49 +85,86 @@ export const modulesInOrder = (state: List<number> = List(), action: ReduxAction
   }
 };
 
-const initialTokenType = Map({
-  titleEntries: List(),
-  number: 0,
-  color: ''
-});
-
 export const modulesById = (state: Map<string, Map> = Map(), action: ReduxAction<Action>) => {
   switch (action.type) {
   case UPDATE_VOTE_MODULES: {
     let newState = Map();
     action.voteModules.forEach((m) => {
       let moduleInfo = Map();
-      if (m.type === 'tokens') {
-        moduleInfo = Map({
-          type: m.type,
-          id: m.id,
-          titleEntries: fromJS(m.titleEntries),
-          instructionsEntries: fromJS(m.instructionsEntries),
-          exclusive: m.exclusive,
-          tokenTypes: fromJS(m.tokenTypes)
-        });
-      }
+      moduleInfo = Map({
+        type: m.type,
+        id: m.id,
+        titleEntries: fromJS(m.titleEntries),
+        instructionsEntries: fromJS(m.instructionsEntries),
+        exclusive: m.exclusive,
+        tokenTypes: fromJS(m.tokenTypes)
+      });
       newState = newState.set(m.id, moduleInfo);
     });
     return newState;
   }
   case UPDATE_TOKEN_VOTE_INSTRUCTIONS:
     return state.updateIn([action.id, 'instructionsEntries'], updateInLangstringEntries(action.locale, action.value));
-  case CREATE_TOKEN_VOTE_TYPE: {
-    let existingTokenType = state.getIn([action.id, 'tokenTypes']);
-    const newTokenTypeNumber = action.value - existingTokenType.size;
-    if (action.value > existingTokenType.size) {
-      for (let i = 0; i < newTokenTypeNumber; i += 1) {
-        existingTokenType = existingTokenType.push(initialTokenType);
-      }
-    } else {
-      const positiveTokenTypeNumber = -newTokenTypeNumber;
-      for (let i = 0; i < positiveTokenTypeNumber; i += 1) {
-        existingTokenType = existingTokenType.delete(existingTokenType.size - (i + 1));
-      }
-    }
-    return state.setIn([action.id, 'tokenTypes'], existingTokenType);
+  default:
+    return state;
   }
+};
+
+export const tokenTypesInOrder = (state: List<number> = List(), action: ReduxAction<Action>) => {
+  switch (action.type) {
+  case UPDATE_VOTE_MODULES: {
+    let tokenTypes = List();
+    action.voteModules.forEach((m) => {
+      if (m.type === 'tokens') {
+        tokenTypes = List(m.tokenTypes.map(t => t.id));
+      }
+    });
+    return tokenTypes;
+  }
+  case CREATE_TOKEN_VOTE_TYPE:
+    return state.push(action.id);
+  case DELETE_TOKEN_VOTE_TYPE: {
+    let newState = state;
+    const numberToDelete = state.size - action.value;
+    for (let i = 0; i < numberToDelete; i += 1) {
+      newState = newState.delete(newState.size - 1);
+    }
+    return newState;
+  }
+  default:
+    return state;
+  }
+};
+
+const initialTokenType = Map({
+  id: '',
+  titleEntries: List(),
+  number: 0,
+  color: ''
+});
+
+export const tokenTypesById = (state: Map<string, Map> = Map(), action: ReduxAction<Action>) => {
+  switch (action.type) {
+  case UPDATE_VOTE_MODULES: {
+    let newState = Map();
+    action.voteModules.forEach((m) => {
+      if (m.type === 'tokens') {
+        m.tokenTypes.forEach((t) => {
+          let tokenTypeInfo = Map();
+          tokenTypeInfo = Map({
+            id: t.id,
+            titleEntries: fromJS(t.titleEntries),
+            color: t.color,
+            number: t.number
+          });
+          newState = newState.set(t.id, tokenTypeInfo);
+        });
+      }
+    });
+    return newState;
+  }
+  case CREATE_TOKEN_VOTE_TYPE:
+    return state.set(action.id, initialTokenType.set('id', action.id));
   default:
     return state;
   }
@@ -135,5 +173,7 @@ export const modulesById = (state: Map<string, Map> = Map(), action: ReduxAction
 export default combineReducers({
   page: voteSessionPage,
   modulesInOrder: modulesInOrder,
-  modulesById: modulesById
+  modulesById: modulesById,
+  tokenTypesInOrder: tokenTypesInOrder,
+  tokenTypesById: tokenTypesById
 });

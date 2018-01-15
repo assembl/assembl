@@ -8,11 +8,12 @@ import TextWithHelper from '../../common/textWithHelper';
 import TokensForm from './tokensForm';
 
 type ModulesSectionProps = {
-  tokenModules: Array,
-  editLocale: string
+  tokenModules: Object,
+  editLocale: string,
+  tokenTypesNumber: Number
 };
 
-const ModulesSection = ({ tokenModules, editLocale }: ModulesSectionProps) => {
+const ModulesSection = ({ tokenModules, editLocale, tokenTypesNumber }: ModulesSectionProps) => {
   const checked = tokenModules.size > 0;
   const handleCheckBoxChange = () => {};
   return (
@@ -30,7 +31,7 @@ const ModulesSection = ({ tokenModules, editLocale }: ModulesSectionProps) => {
                   classname="inline"
                 />
               </Checkbox>
-              {checked ? <TokensForm key={id} id={id} editLocale={editLocale} /> : null}
+              {checked ? <TokensForm key={id} id={id} editLocale={editLocale} tokenTypesNumber={tokenTypesNumber} /> : null}
             </div>
           ))}
         </div>
@@ -40,12 +41,12 @@ const ModulesSection = ({ tokenModules, editLocale }: ModulesSectionProps) => {
 };
 
 const mapStateToProps = ({ admin }) => {
-  const { modulesInOrder, modulesById } = admin.voteSession;
+  const { modulesInOrder, modulesById, tokenTypesInOrder } = admin.voteSession;
   const { editLocale } = admin;
-
   return {
     tokenModules: modulesInOrder.filter(id => modulesById.get(id).get('type') === 'tokens'),
-    editLocale: editLocale
+    editLocale: editLocale,
+    tokenTypesNumber: tokenTypesInOrder.size
   };
 };
 
