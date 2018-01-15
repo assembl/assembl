@@ -285,10 +285,14 @@ const Translations = {
       userName: "Nom d'utilisateur",
       fullname: "Nom complet",
       email: "Email",
+      oldPassword: "Ancien mot de passe",
+      newPassword: "Nouveau mot de passe",
+      newPassword2: "Retaper le mot de passe",
       memberSince: "Membre depuis le %{date}",
       save: "Enregistrer",
       password: "Mot de passe",
-      changePassword: "Modifier",
+      changePassword: "Modifier mon mot de passe",
+      passwordModifiedSuccess: "Votre mot de passe a été modifié avec succès",
       saveSuccess: "Votre profil a été mis à jour avec succès"
     },
     loading: {
@@ -708,10 +712,14 @@ const Translations = {
       userName: "User name",
       fullname: "Full name",
       email: "Email",
+      oldPassword: "Old password",
+      newPassword: "New password",
+      newPassword2: "Retype password",
       memberSince: "Member since %{date}",
       save: "Save",
       password: "Password",
-      changePassword: "Modify",
+      changePassword: "Change my password",
+      passwordModifiedSuccess: "Your password has been changed with success",
       saveSuccess: "Your profile is updated"
     },
     loading: {
