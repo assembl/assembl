@@ -32,6 +32,11 @@ def discussion(request, test_session, default_preferences):
         # create_default_discussion_data, create_default_discussion_sections
         # or create_default_permissions in your specific test or
         # use discussion_with_default_data fixture.
+        # If you do permissions tests, be aware that the admin user
+        # having R_SYSADMIN is actually a special case, see
+        # auth/utils.py:get_permissions, it doesn't use discussion permissions
+        # at all. So you need discussion permissions if you test with the
+        # unauthenticated user Everyone or a user not having the R_SYSADMIN role.
     test_session.flush()
 
     def fin():
