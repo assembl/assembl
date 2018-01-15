@@ -1,9 +1,9 @@
 // @flow
 import React from 'react';
 import { connect } from 'react-redux';
+import { TwitterPicker } from 'react-color';
 import { getEntryValueForLocale } from '../../../utils/i18n';
 import FormControlWithLabel from '../../common/formControlWithLabel';
-import ColorPicker from '../../common/colorPicker';
 import { updateTokenColor } from '../../../actions/adminActions/voteSession';
 
 const TokenTypeForm = ({ title, color, number, handleColorChange }) => {
@@ -11,20 +11,20 @@ const TokenTypeForm = ({ title, color, number, handleColorChange }) => {
   const handleNumberChange = () => {};
 
   const pickerColors = [
-    '#FF6900',
+    '#B8E986',
+    '#00AA7B',
     '#FCB900',
+    '#FF6900',
     '#8646ED',
     '#FF82BE',
-    '#1652C1',
     '#00DCFF',
-    '#00AA7B',
+    '#1652C1',
     '#EB144C',
-    '#B8E986',
     '#000000'
   ];
 
   return (
-    <div>
+    <div className="token-type-form">
       <FormControlWithLabel
         label="Intitulé du jeton" // TODO ajouter une key dans le fichier de trad
         required
@@ -46,7 +46,7 @@ const TokenTypeForm = ({ title, color, number, handleColorChange }) => {
         onChange={handleColorChange}
         value={color}
       />
-      <ColorPicker colors={pickerColors} onColorChange={handleColorChange} />
+      <TwitterPicker colors={pickerColors} onChange={handleColorChange} width="400" className="color-picker" />
       <div className="separator" />
     </div>
   );
