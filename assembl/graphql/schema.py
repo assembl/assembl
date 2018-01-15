@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 import logging
+from random import randint
+from operator import attrgetter
 
 import graphene
 from graphene.relay import Node
@@ -270,7 +272,33 @@ class Query(graphene.ObjectType):
         model = models.LandingPageModule
         query = get_query(model, context)
         discussion_id = context.matchdict['discussion_id']
-        return query.filter(model.discussion_id == discussion_id).order_by(model.order)
+        # we want to return a LandingPageModule for each module type (even if there is no entry yet in LandingPageModule table)
+        module_types = get_query(models.LandingPageModuleType, context).order_by(models.LandingPageModuleType.default_order).all()
+        modules = []
+        for module_type in module_types:
+            saobj = query.filter(
+                model.discussion_id == discussion_id
+            ).join(
+                model.module_type
+            ).filter(
+                models.LandingPageModuleType.identifier == module_type.identifier
+            ).first()
+
+            if saobj:
+                module = saobj
+            else:
+                # create the graphene object for this module type
+                module = LandingPageModule(
+                    configuration=u'{}',
+                    id=randint(-100000, 0),
+                    enabled=module_type.required,
+                    module_type=module_type,
+                    order=module_type.default_order
+                )
+
+            modules.append(module)
+
+        return sorted(modules, key=attrgetter('order'))
 
 
 class Mutations(graphene.ObjectType):

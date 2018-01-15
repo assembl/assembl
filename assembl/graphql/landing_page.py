@@ -34,3 +34,20 @@ class LandingPageModule(SecureObjectType, SQLAlchemyObjectType):
         only_fields = ('id', 'enabled', 'order', 'configuration')
 
     module_type = graphene.Field(LandingPageModuleType)
+    exists_in_database = graphene.Boolean()
+
+    def resolve_exists_in_database(self, args, context, info):
+        return self.id > 0
+
+    def resolve_id(self, args, context, info):
+        if self.id < 0:
+            # this is a temporary object we created manually in resolve_landing_page_modules
+            return self.id
+        else:
+            # this is a SQLAlchemy object
+            # we can't use super here, so we just copy/paste resolve_id method from SQLAlchemyObjectType class
+            from graphene.relay import is_node
+            graphene_type = info.parent_type.graphene_type
+            if is_node(graphene_type):
+                return self.__mapper__.primary_key_from_instance(self)[0]
+            return getattr(self, graphene_type._meta.id, None)
