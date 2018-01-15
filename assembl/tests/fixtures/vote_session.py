@@ -3,7 +3,7 @@ import pytest
 
 @pytest.fixture(scope="function")
 def vote_session(request, test_session, discussion, timeline_vote_session,
-                    simple_file, moderator_user):
+                 simple_file, admin_user):
     from assembl.models import VoteSession, VoteSessionAttachment, LangString
     vote_session = VoteSession(
         discussion_phase=timeline_vote_session,
@@ -18,7 +18,7 @@ def vote_session(request, test_session, discussion, timeline_vote_session,
         document=simple_file,
         vote_session=vote_session,
         title=u"vote session image fixture",
-        creator=moderator_user,
+        creator=admin_user,
         attachmentPurpose='IMAGE'
     )
 
