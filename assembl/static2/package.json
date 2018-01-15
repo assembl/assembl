@@ -94,6 +94,7 @@
     "react-active-html": "^1.1.6",
     "react-apollo": "^1.4.12",
     "react-bootstrap": "^0.31.2",
+    "react-color": "^2.13.8",
     "react-copy-to-clipboard": "^5.0.1",
     "react-datepicker": "^0.41.1",
     "react-dom": "^15.4.1",
