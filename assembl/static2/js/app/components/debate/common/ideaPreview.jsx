@@ -27,14 +27,8 @@ const IdeaPreview = ({
     <div className="content-box" to={link}>
       <h3 className="light-title-3 center">{title}</h3>
       <div className="access-discussion">
-        <div className="see-discussion">
-          <Link to={link}>
-            <Translate value="debate.thread.goToIdea" />
-          </Link>
-        </div>
         {numChildren ? (
           <div>
-            <div>/</div>
             <div
               className="see-sub-ideas"
               onClick={() => {
@@ -48,10 +42,16 @@ const IdeaPreview = ({
             >
               <Translate value="debate.thread.seeSubIdeas" count={numChildren} />
             </div>
+            <div>/</div>
           </div>
         ) : (
           <div />
         )}
+        <div className="see-discussion">
+          <Link to={link}>
+            <Translate value="debate.thread.goToIdea" />
+          </Link>
+        </div>
       </div>
       <div className="selected-idea-arrow">
         <span className="assembl-icon-down-open" />
