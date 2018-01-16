@@ -21,20 +21,40 @@ def en_value(entry):
     return entry[0]['value']
 
 
+def en_entry(value):
+    return [{"localeCode": "en", "value": value}]
+
+
+def assert_graphql_unauthorized(response):
+    assert "wrong credentials" in response.errors[0].message
+
+
+def voteSessionQuery(graphql_registry):
+    return (graphql_registry['fragments']['LangString'] +
+            graphql_registry['fragments']['VoteSession'] +
+            graphql_registry['VoteSession'])
+
+
+def updateVoteSessionQuery(graphql_registry):
+    return (graphql_registry['fragments']['LangString'] +
+            graphql_registry['fragments']['VoteSession'] +
+            graphql_registry['mutations']['updateVoteSession'])
+
+
 def test_graphql_get_vote_session_unauthenticated(graphql_unauthenticated_request, vote_session, graphql_registry):
     response = schema.execute(
-        graphql_registry['fragments']['LangString'] + graphql_registry['fragments']['VoteSession'] + graphql_registry['VoteSession'],
+        voteSessionQuery(graphql_registry),
         context_value=graphql_unauthenticated_request,
         variable_values={
             "discussionPhaseId": vote_session.discussion_phase_id
         }
     )
-    assert "wrong credentials" in response.errors[0].message
+    assert_graphql_unauthorized(response)
 
 
 def test_graphql_get_vote_session(graphql_participant1_request, vote_session, graphql_registry):
     response = schema.execute(
-        graphql_registry['fragments']['LangString'] + graphql_registry['fragments']['VoteSession'] + graphql_registry['VoteSession'],
+        voteSessionQuery(graphql_registry),
         context_value=graphql_participant1_request,
         variable_values={
             "discussionPhaseId": vote_session.discussion_phase_id
@@ -62,10 +82,6 @@ def test_graphql_get_vote_session(graphql_participant1_request, vote_session, gr
     assert fetched_image['externalUrl'] == source_image.external_url
 
 
-def en_entry(value):
-    return [{"localeCode": "en", "value": value}]
-
-
 def mutate_and_assert(graphql_request, discussion_phase_id, test_app, graphql_registry):
     new_title = u"updated vote session title"
     new_sub_title = u"updated vote session sub title"
@@ -87,7 +103,7 @@ def mutate_and_assert(graphql_request, discussion_phase_id, test_app, graphql_re
     graphql_request.POST[image_var_name] = new_image
 
     response = schema.execute(
-        graphql_registry['fragments']['LangString'] + graphql_registry['fragments']['VoteSession'] + graphql_registry['mutations']['updateVoteSession'],
+        updateVoteSessionQuery(graphql_registry),
         context_value=graphql_request,
         variable_values={
             "discussionPhaseId": discussion_phase_id,
@@ -123,7 +139,7 @@ def test_graphql_update_vote_session(graphql_request, vote_session, test_app, gr
 
 def assert_vote_session_not_created(discussion_phase_id, graphql_request, graphql_registry):
     response = schema.execute(
-        graphql_registry['fragments']['LangString'] + graphql_registry['fragments']['VoteSession'] + graphql_registry['VoteSession'],
+        voteSessionQuery(graphql_registry),
         context_value=graphql_request,
         variable_values={"discussionPhaseId": discussion_phase_id}
     )
@@ -137,22 +153,21 @@ def test_graphql_create_vote_session(graphql_request, timeline_vote_session, tes
 
 def test_graphql_create_vote_session_unauthenticated(graphql_participant1_request, timeline_vote_session, test_app, graphql_registry):
     assert_vote_session_not_created(timeline_vote_session.id, graphql_participant1_request, graphql_registry)
-    mutate_and_assert_fail(graphql_participant1_request, timeline_vote_session.id, graphql_registry)
+    mutate_and_assert_unauthorized(graphql_participant1_request, timeline_vote_session.id, graphql_registry)
 
 
-def mutate_and_assert_fail(graphql_request, discussion_phase_id, graphql_registry):
+def mutate_and_assert_unauthorized(graphql_request, discussion_phase_id, graphql_registry):
     new_title = u"updated vote session title"
     response = schema.execute(
-        graphql_registry['fragments']['LangString'] + graphql_registry['fragments']['VoteSession'] + graphql_registry['mutations']['updateVoteSession'],
+        updateVoteSessionQuery(graphql_registry),
         context_value=graphql_request,
         variable_values={
             "discussionPhaseId": discussion_phase_id,
             "titleEntries": [{"localeCode": "en", "value": new_title}]
         }
     )
-
-    assert ("wrong credentials" in response.errors[0].message)
+    assert_graphql_unauthorized(response)
 
 
 def test_graphql_update_vote_session_unauthenticated(graphql_unauthenticated_request, vote_session, graphql_registry):
-    mutate_and_assert_fail(graphql_unauthenticated_request, vote_session.discussion_phase_id, graphql_registry)
+    mutate_and_assert_unauthorized(graphql_unauthenticated_request, vote_session.discussion_phase_id, graphql_registry)
