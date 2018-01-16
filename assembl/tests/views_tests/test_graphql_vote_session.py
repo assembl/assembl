@@ -3,6 +3,7 @@
 from assembl.graphql.schema import Schema as schema
 from assembl.lib.utils import snake_to_camel
 from assembl.graphql.langstring import resolve_langstring
+from assembl import models
 import os
 from io import BytesIO
 
@@ -38,12 +39,14 @@ def assert_graphql_unauthorized(response):
 
 
 def voteSessionQuery(graphql_registry):
+    # TODO: Replace manual concatenation by a graphql loader inspired from javascript's graphql-loader
     return (graphql_registry['fragments']['LangString'] +
             graphql_registry['fragments']['VoteSession'] +
             graphql_registry['VoteSession'])
 
 
 def updateVoteSessionQuery(graphql_registry):
+    # TODO: Replace manual concatenation by a graphql loader inspired from javascript's graphql-loader
     return (graphql_registry['fragments']['LangString'] +
             graphql_registry['fragments']['VoteSession'] +
             graphql_registry['mutations']['updateVoteSession'])
@@ -65,7 +68,7 @@ def mutate_and_assert_unauthorized(graphql_request, discussion_phase_id, graphql
         context_value=graphql_request,
         variable_values={
             "discussionPhaseId": discussion_phase_id,
-            "titleEntries": [{"localeCode": "en", "value": new_title}]
+            "titleEntries": en_entry(new_title)
         }
     )
     assert_graphql_unauthorized(response)
@@ -121,9 +124,42 @@ def mutate_and_assert(graphql_request, discussion_phase_id, test_app, graphql_re
     graphql_image_data = test_app.get(graphql_image['externalUrl']).body
     assert graphql_image_data == new_image_data
 
+def vote_session_from_phase(discussion_phase_id):
+    discussion_phase = models.DiscussionPhase.get(discussion_phase_id)
+    return discussion_phase.vote_session
+
+
+def image_from_vote_session(vote_session):
+    ATTACHMENT_PURPOSE_IMAGE = models.AttachmentPurpose.IMAGE.value
+    for attachment in vote_session.attachments:
+        if attachment.attachmentPurpose == ATTACHMENT_PURPOSE_IMAGE:
+            return attachment.document
+
+
+def delete_vote_session(vote_session):
+    db = vote_session.db
+    image = image_from_vote_session(vote_session)
+    db.delete(vote_session)
+    db.delete(image)
+    db.flush()
+
 
 def test_graphql_update_vote_session(graphql_request, vote_session, test_app, graphql_registry):
     mutate_and_assert(graphql_request, vote_session.discussion_phase_id, test_app, graphql_registry)
+    delete_vote_session(vote_session)
+
+
+def test_graphql_delete_vote_session_cascade(graphql_request, vote_session, test_app, graphql_registry):
+    db = vote_session.db;
+    image_id = image_from_vote_session(vote_session).id
+    attachment_id = vote_session.attachments[0].id
+    db.delete(vote_session)
+    db.flush()
+    attachment = models.VoteSessionAttachment().get(attachment_id)
+    assert attachment is None
+    # TODO: fix the cascade behaviour to delete the actual document maybe?
+    # image = models.Document.get(image_id)
+    # assert image is None
 
 
 def test_graphql_update_vote_session_unauthenticated(graphql_unauthenticated_request, vote_session, graphql_registry):
@@ -133,6 +169,8 @@ def test_graphql_update_vote_session_unauthenticated(graphql_unauthenticated_req
 def test_graphql_create_vote_session(graphql_request, timeline_vote_session, test_app, graphql_registry):
     assert_vote_session_not_created(timeline_vote_session.id, graphql_request, graphql_registry)
     mutate_and_assert(graphql_request, timeline_vote_session.id, test_app, graphql_registry)
+    vote_session = vote_session_from_phase(timeline_vote_session.id)
+    delete_vote_session(vote_session)
 
 
 def test_graphql_create_vote_session_unauthenticated(graphql_participant1_request, timeline_vote_session, test_app, graphql_registry):
@@ -164,7 +202,7 @@ def test_graphql_get_vote_session(graphql_participant1_request, vote_session, gr
         vote_session)
 
     graphql_image = graphql_vote_session['headerImage']
-    source_image = vote_session.attachments[0].document
+    source_image = image_from_vote_session(vote_session)
     assert graphql_image['title'] == source_image.title
     assert graphql_image['mimeType'] == source_image.mime_type
     assert graphql_image['externalUrl'] == source_image.external_url
