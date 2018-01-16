@@ -107,8 +107,8 @@ def current_phase_use_v1_interface(timeline):
     return False
 
 
-def using_landing_page(discussion):
-    return discussion.preferences['landing_page']
+def is_using_landing_page(discussion):
+    return discussion.preferences.get('landing_page', False)
 
 
 class FrontendUrls(object):
@@ -225,10 +225,14 @@ class FrontendUrls(object):
         # this method is kept mostly for legacy routes that do not exist in
         # new front-end yet.
         if request is None:
-            if (not using_landing_page(self.discussion)) or current_phase_use_v1_interface(self.discussion.timeline_events):
-                route = '/debate/' + self.discussion.slug
+            if (not is_using_landing_page(self.discussion)) or \
+                current_phase_use_v1_interface(
+                    self.discussion.timeline_events):
+                return self.get_frontend_url(
+                    'oldDebate', slug=self.discussion.slug)
             else:
-                route = '/' + self.discussion.slug
+                return self.get_frontend_url(
+                    'homeBare', slug=self.discussion.slug)
         else:
             get_route = create_get_route(request, self.discussion)
             route = get_route('bare_slug')
