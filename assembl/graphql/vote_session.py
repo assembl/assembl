@@ -8,7 +8,7 @@ from .types import SecureObjectType
 from .utils import abort_transaction_on_exception
 from .document import Document
 from assembl.auth import CrudPermissions
-from .graphql_langstrings_helpers import (LangstringsInterface,
+from .graphql_langstrings_helpers import (langstrings_interface,
                                           update_langstrings,
                                           add_langstrings_input_attrs)
 from .permissions_helpers import (require_cls_permission,
@@ -27,7 +27,7 @@ langstrings_defs = {
 class VoteSession(SecureObjectType, SQLAlchemyObjectType):
     class Meta:
         model = models.VoteSession
-        interfaces = (Node, LangstringsInterface(langstrings_defs, "VoteSession"))
+        interfaces = (Node, langstrings_interface(langstrings_defs, models.VoteSession.__name__))
         only_fields = ('id', 'discussion_phase_id')
 
     header_image = graphene.Field(Document)
