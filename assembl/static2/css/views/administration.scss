@@ -336,15 +336,47 @@
     }
 
     .modules-preview {
-      border: 1px solid black;
       margin: 5px;
       padding: 5px;
+      background-color: $grey0;
+      min-height: 400px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
 
-      .module-block {
-        margin: 5px;
-        padding: 5px;
-        border: 1px solid grey;
-        text-align: center;
+      .inner {
+        margin: auto;
+        border: 1px solid black;
+        width: 70%;
+        min-height: 330px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+
+        .module-block {
+          text-align: center;
+        }
+
+        .module-block:first-child,
+        .module-block:last-child {
+          background-color: $first-color-light;
+          color: $grey3;
+          border: 0;
+          margin: 0;
+        }
+
+        .other-modules {
+          flex: 1;
+          justify-content: flex-start;
+
+          .module-block {
+            margin: 7px;
+            padding: 7px;
+            border: 0.8px solid $first-color;
+            color: $first-color;
+            background-color: $white;
+          }
+        }
       }
     }
   }

@@ -20,6 +20,7 @@ export const DumbManageModules = ({ locale, modulesByIdentifier, toggleModule }:
     .filter(value => value.get('enabled'))
     .sortBy(value => value.get('order'))
     .toArray();
+
   return (
     <div className="admin-box">
       <SectionTitle

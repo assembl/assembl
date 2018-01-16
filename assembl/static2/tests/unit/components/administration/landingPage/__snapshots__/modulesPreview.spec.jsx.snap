@@ -2,22 +2,30 @@
 
 exports[`ModulesPreview component should render a preview of the enabled modules 1`] = `
 <div
-  className="modules-preview"
+  className="box modules-preview"
 >
   <div
-    className="module-block"
+    className="inner"
   >
-    Header
-  </div>
-  <div
-    className="module-block"
-  >
-    Video
-  </div>
-  <div
-    className="module-block"
-  >
-    Footer
+    <div
+      className="module-block"
+    >
+      Header
+    </div>
+    <div
+      className="other-modules"
+    >
+      <div
+        className="module-block"
+      >
+        Video
+      </div>
+    </div>
+    <div
+      className="module-block"
+    >
+      Footer
+    </div>
   </div>
 </div>
 `;
