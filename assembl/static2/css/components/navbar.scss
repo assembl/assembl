@@ -139,6 +139,11 @@
         position: static;
         height: auto;
 
+        &.open > .dropdown-menu {
+          position: static;
+          height: auto;
+        }
+
         > .dropdown-toggle {
           line-height: $navbar-line-height;
         }
@@ -163,6 +168,8 @@
       position: absolute;
       top: $navbar-height;
       width: 100%;
+      max-height: calc(100vh - #{$navbar-height});
+      overflow-y: scroll;
     }
 
     .navbar-logo {

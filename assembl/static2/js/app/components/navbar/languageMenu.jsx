@@ -10,6 +10,8 @@ import { addLanguagePreference } from '../../actions/adminActions';
 import withLoadingIndicator from '../common/withLoadingIndicator';
 import getDiscussionPreferenceLanguage from '../../graphql/DiscussionPreferenceLanguage.graphql';
 
+const doNothing = () => {};
+
 export const refWidthUpdate = (setWidth: (width: number) => void) => (ref: ?HTMLElement) => {
   if (ref) setWidth(ref.getBoundingClientRect().width);
 };
@@ -73,7 +75,7 @@ class LanguageMenu extends React.Component {
   };
 
   render() {
-    const { size, i18n, style, className, setWidth } = this.props;
+    const { size, i18n, style, className, setWidth = doNothing } = this.props;
     if (this.state.availableLocales.length > 0) {
       return (
         <ul ref={refWidthUpdate(setWidth)} className={`dropdown-${size} uppercase ${className}`} style={style}>
