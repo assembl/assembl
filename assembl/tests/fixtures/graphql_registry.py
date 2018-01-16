@@ -1,24 +1,19 @@
-import os
-import codecs
-import pytest
-from stat import ST_MODE, S_ISDIR, S_ISREG
+import pytest, io, os
 
 
-def walktree(top, callback, file_dict, root=None):
-    '''recursively descend the directory tree rooted at top,
-       calling the callback function for each regular file'''
+def walktree(top, callback, data, root=None):
+    """Recursively descend the directory tree rooted at top,
+       calling the callback function for each regular file."""
     if root is None:
         root = top
     for f in os.listdir(top):
-        pathname = os.path.join(top, f)
-        mode = os.stat(pathname)[ST_MODE]
-        if S_ISDIR(mode):
+        path = os.path.join(top, f)
+        if os.path.isdir(path):
             # It's a directory, recurse into it
-            walktree(pathname, callback, file_dict, root)
-        elif S_ISREG(mode):
-            # It's a file, call the callback function
-            callback(pathname, file_dict, root)
-    return file_dict
+            walktree(path, callback, data, root)
+        elif os.path.isfile(path):
+            callback(path, data, root)
+    return data
 
 
 def strip_prefix(text, prefix):
@@ -42,13 +37,16 @@ def add_graphql_files_to_dict(pathname, file_dict, root):
             node[component] = {}
         node = node[component]
     last_component = components[-1]
-    with codecs.open(pathname, encoding='utf-8') as file_object:
-        node[strip_suffix(last_component, '.graphql')] = file_object.read()
+    with io.open(pathname, encoding='utf-8') as file_object:
+        extension = '.graphql'
+        if last_component.endswith(extension):
+            key = strip_suffix(last_component, extension)
+            node[key] = file_object.read()
 
 
-registry_path = os.path.split(__file__)[0] + '/../../static2/js/app/graphql'
+registry_path = os.path.dirname(__file__) + '/../../static2/js/app/graphql'
 
 
-@pytest.fixture(scope="function")
+@pytest.fixture(scope="session")
 def graphql_registry():
     return walktree(registry_path, add_graphql_files_to_dict, {})
