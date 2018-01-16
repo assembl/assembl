@@ -206,6 +206,20 @@ def test_adminuser_webrequest(request, admin_user, test_app_no_perm):
 
 
 @pytest.fixture(scope="function")
+def test_participantuser_webrequest(request, participant1_user, test_app_no_perm):
+    """A Pyramid request fixture with permissions and no user authenticated"""
+    req = PyramidWebTestRequest.blank('/', method="GET")
+    req.authenticated_userid = participant1_user.id
+
+    def fin():
+        print "finalizer test_webrequest"
+        # The request was not called
+        manager.pop()
+    request.addfinalizer(fin)
+    return req
+
+
+@pytest.fixture(scope="function")
 def test_app(request, admin_user, test_app_no_perm):
     """A configured Assembl fixture with permissions
     and an admin user logged in"""

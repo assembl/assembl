@@ -126,3 +126,11 @@ def normalize_email_name(name):
     name = re.sub(
         ur"[^-\w\s'\u2019\u2032\u00b4\.\(\)]", '', name, 0, re.UNICODE)
     return name
+
+
+def snake_to_camel(string):
+    # https://stackoverflow.com/questions/19053707/converting-snake-case-to-lower-camel-case-lowercamelcase
+    components = string.split('_')
+    # We capitalize the first letter of each component except the first one
+    # with the 'title' method and join them together.
+    return components[0] + "".join(x.title() for x in components[1:])

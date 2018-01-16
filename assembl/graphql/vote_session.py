@@ -6,12 +6,13 @@ import os
 
 from .types import SecureObjectType
 from .utils import abort_transaction_on_exception
-from .graphql_langstrings_helpers import (
-    LangstringsInterface,
-    update_langstrings,
-    add_langstrings_input_attrs
-)
 from .document import Document
+from assembl.auth import CrudPermissions
+from .graphql_langstrings_helpers import (langstrings_interface,
+                                          update_langstrings,
+                                          add_langstrings_input_attrs)
+from .permissions_helpers import (require_cls_permission,
+                                  require_instance_permission)
 
 
 langstrings_defs = {
@@ -26,7 +27,7 @@ langstrings_defs = {
 class VoteSession(SecureObjectType, SQLAlchemyObjectType):
     class Meta:
         model = models.VoteSession
-        interfaces = (Node, LangstringsInterface(langstrings_defs, "VoteSession"))
+        interfaces = (Node, langstrings_interface(langstrings_defs, models.VoteSession.__name__))
         only_fields = ('id', 'discussion_phase_id')
 
     header_image = graphene.Field(Document)
@@ -56,16 +57,17 @@ class UpdateVoteSession(graphene.Mutation):
         if discussion_phase is None:
             raise Exception(
                 "A vote session requires a discussion phase, check discussionPhaseId value")
-        phase_slug = "voteSession"
-        if discussion_phase.identifier != phase_slug:
+        phase_identifier = "voteSession"
+        if discussion_phase.identifier != phase_identifier:
             raise Exception(
-                "A vote session can only be created or edited with a '{}' discussion phase, check discussionPhaseId value".format(phase_slug))
+                "A vote session can only be created or edited with a '{}' discussion phase, check discussionPhaseId value".format(phase_identifier))
 
-        # TODO: see if we can avoid this next(iter( thing with a one-to-one relationship
-        vote_session = next(iter(discussion_phase.vote_session or []), None)
+        vote_session = discussion_phase.vote_session
         if vote_session is None:
-            vote_session = models.VoteSession(
-                discussion_phase=discussion_phase)
+            require_cls_permission(CrudPermissions.CREATE, models.VoteSession, context)
+            vote_session = models.VoteSession(discussion_phase=discussion_phase)
+        else:
+            require_instance_permission(CrudPermissions.UPDATE, vote_session, context)
 
         db = vote_session.db
 
@@ -78,7 +80,7 @@ class UpdateVoteSession(graphene.Mutation):
             uploaded_file = context.POST[image].file
             uploaded_file.seek(0)
             data = uploaded_file.read()
-            discussion_id = context.matchdict['discussion_id']
+            discussion_id = context.matchdict["discussion_id"]
             discussion = models.Discussion.get(discussion_id)
             ATTACHMENT_PURPOSE_IMAGE = models.AttachmentPurpose.IMAGE.value
             images = [

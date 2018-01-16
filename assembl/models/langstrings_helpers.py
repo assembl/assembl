@@ -43,9 +43,12 @@ def langstrings_attrs_dict(langstrings_names):
     return d
 
 
-def LangstringsBase(langstrings_names):
+def langstrings_base(langstrings_names, model_name):
+    """ Create and returns a class with sqlalchemy columns for the given langstrings_names.
+        :param model_name: A string to differenciate the type created.
+        You need to provide a different model_name for each call to this function. """
     langstrings_base = type(
-        "LangstringsBase",
+        "LangstringsBase" + model_name,
         (object, ),
         langstrings_attrs_dict(langstrings_names)
     )
