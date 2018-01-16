@@ -352,13 +352,22 @@ const Translations = {
       voteSession: {
         0: "Renseigner les instructions",
         1: "Configurer les modules de vote",
-        2: "Configurer les propositions de vote",
-        tokenTypeNumber: "Nombre de types de jetons"
+        2: "Configurer les propositions de vote"
       },
+      tokenTypeNumber: "Nombre de types de jetons",
+      tokenTypeNumberHelper: "Sélectionnez le nombre de types de jetons différents souhaité",
+      tokenNumber: "Nombre de jetons",
+      tokenTitle: "Intitulé du jeton",
+      tokenColor: "Couleur du jeton",
       headerTitle: "Bandeau de haut de page",
       PropositionSectionTitle: "Section propositions",
       instructions: "Instructions",
       voteSessionSuccess: "La session de vote a été enregistrée avec succès.",
+      exclusive: "Exclusif",
+      exclusiveHelper: "Cochez cette case pour rendre les jetons exclusifs les uns des autres",
+      tokenVoteInstructions: "Consigne du vote par jeton",
+      tokenVoteInstructionsHelper: "Entrez les instructions pour le vote par jeton",
+
       sections: {
         addSection: "Ajouter une rubrique",
         deleteSection: "Supprimer la rubrique",
@@ -795,6 +804,16 @@ const Translations = {
       propositionSectionTitle: "Proposals section",
       instructions: "Instructions",
       voteSessionSuccess: "The vote session is saved with success.",
+      exclusive: "Exclusive",
+      exclusiveHelper: "Check this box to make the different tokens exclusive from each other",
+      tokenVoteInstructions: "Instructions for the token vote",
+      tokenVoteInstructionsHelper: "Enter the instructions for the token vote",
+
+      tokenTypeNumber: "Number of token types",
+      tokenTypeNumberHelper: "Select the number of different token types",
+      tokenNumber: "Nombre de jetons",
+      tokenTitle: "Token title",
+      tokenColor: "Color of the token",
       sections: {
         addSection: "Add a section",
         deleteSection: "Delete the section",

@@ -1,38 +1,42 @@
 // @flow
 import React from 'react';
 import { connect } from 'react-redux';
-import { TwitterPicker } from 'react-color';
+import { I18n } from 'react-redux-i18n';
+import { BlockPicker } from 'react-color';
 import { getEntryValueForLocale } from '../../../utils/i18n';
 import FormControlWithLabel from '../../common/formControlWithLabel';
 import { updateTokenVoteTypeTitle, updateTokenVoteTypeColor } from '../../../actions/adminActions/voteSession';
 import { pickerColors } from '../../../constants';
+
+// TODO: Flow
 
 const TokenTypeForm = ({ title, color, number, handleTitleChange, handleColorChange }) => {
   const handleNumberChange = () => {};
   return (
     <div className="token-type-form">
       <FormControlWithLabel
-        label="Intitulé du jeton" // TODO ajouter une key dans le fichier de trad
+        label={I18n.t('administration.tokenTitle')}
         required
         type="text"
         onChange={handleTitleChange}
         value={title}
       />
       <FormControlWithLabel
-        label="Nombre de jeton" // TODO ajouter une key dans le fichier de trad
+        label={I18n.t('administration.tokenNumber')}
         required
         type="text"
         onChange={handleNumberChange}
         value={number}
       />
-      <FormControlWithLabel
-        label="Couleur du jeton" // TODO ajouter une key dans le fichier de trad
-        required
-        type="text"
+      <label htmlFor="color-picker">{I18n.t('administration.tokenColor')}</label>
+      <BlockPicker
+        colors={pickerColors}
         onChange={handleColorChange}
-        value={color}
+        color={color}
+        width="400px"
+        id="color-picker"
+        triangle="hide"
       />
-      <TwitterPicker colors={pickerColors} onChange={handleColorChange} color={color} width="400px" className="color-picker" />
       <div className="separator" />
     </div>
   );

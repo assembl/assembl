@@ -1,7 +1,7 @@
 // @flow
 import React from 'react';
 import { connect } from 'react-redux';
-import { Translate, I18n } from 'react-redux-i18n';
+import { I18n } from 'react-redux-i18n';
 import { Checkbox, DropdownButton, MenuItem } from 'react-bootstrap';
 import FormControlWithLabel from '../../common/formControlWithLabel';
 import { getEntryValueForLocale } from '../../../utils/i18n';
@@ -35,16 +35,16 @@ const TokensForm = ({
         <div className="flex">
           <Checkbox checked={exclusive} onChange={handleExclusiveCheckboxChange}>
             <TextWithHelper
-              text="Exclusif" // TODO ajouter une key dans le fichier de trad
+              text={I18n.t('administration.exclusive')}
               helperUrl="/static2/img/helpers/helper1.png" // TODO ajouter le preview
-              helperText="Les différents types de jetons sont-ils exclusifs les uns des autres" // TODO ajouter une key dans le fichier de trad
+              helperText={I18n.t('administration.exclusiveHelper')}
               classname="inline"
             />
           </Checkbox>
         </div>
         <div className="flex">
           <FormControlWithLabel
-            label="Consigne du vote par jeton" // TODO ajouter une key dans le fichier de trad
+            label={I18n.t('administration.tokenVoteInstructions')}
             required
             type="text"
             onChange={handleInstructionsChange}
@@ -52,14 +52,14 @@ const TokensForm = ({
           />
           <TextWithHelper
             helperUrl="/static2/img/helpers/helper1.png" // TODO ajouter le preview
-            helperText="Instructions sur le champs consigne" // TODO ajouter une key dans le fichier de trad
+            helperText={I18n.t('administration.tokenVoteInstructionsHelper')}
           />
         </div>
         <div className="flex">
-          <label htmlFor="input-dropdown-addon">{I18n.t('administration.voteSession.tokenTypeNumber')}</label>
+          <label htmlFor="input-dropdown-addon">{I18n.t('administration.tokenTypeNumber')}</label>
           <TextWithHelper
             helperUrl="/static2/img/helpers/helper2.png" // TODO ajouter le preview
-            helperText="Instructions sur le champs 'type de jetons'" // TODO ajouter une key dans le fichier de trad
+            helperText={I18n.t('administration.tokenTypeNumberHelper')}
           />
         </div>
         <DropdownButton title={tokenTypeNumber} onSelect={handleTokenVoteTypeNumberChange} id="input-dropdown-addon" required>
