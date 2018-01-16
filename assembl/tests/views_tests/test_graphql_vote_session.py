@@ -5,16 +5,17 @@ from assembl.lib.utils import snake_to_camel
 import os
 from io import BytesIO
 
+""" These helpers assume there is only one entry in the provided langstrings """
 
-def assert_langstring_is_equal(langstring_name, fetched_model, source_model):
-    source_value = getattr(source_model, langstring_name).entries[0].value
-    fetched_value = fetched_model[snake_to_camel(langstring_name) + 'Entries'][0]['value']
-    assert source_value == fetched_value
+def assert_langstring_is_equal(langstring_name, graphql_model, sqla_model):
+    source_value = getattr(sqla_model, langstring_name).entries[0].value
+    graphql_value = en_value(graphql_model[snake_to_camel(langstring_name) + 'Entries'])
+    assert source_value == graphql_value
 
 
-def assert_langstrings_are_equal(langstrings_names, fetched_model, source_model):
+def assert_langstrings_are_equal(langstrings_names, graphql_model, sqla_model):
     for langstring_name in langstrings_names:
-        assert_langstring_is_equal(langstring_name, fetched_model, source_model)
+        assert_langstring_is_equal(langstring_name, graphql_model, sqla_model)
 
 
 def en_value(entry):
@@ -98,20 +99,20 @@ def mutate_and_assert(graphql_request, discussion_phase_id, test_app, graphql_re
     )
 
     assert response.errors is None
-    fetched_vote_session = response.data['updateVoteSession']['voteSession']
+    graphql_vote_session = response.data['updateVoteSession']['voteSession']
 
-    assert en_value(fetched_vote_session['titleEntries']) == new_title
-    assert en_value(fetched_vote_session['subTitleEntries']) == new_sub_title
-    assert en_value(fetched_vote_session['instructionsSectionTitleEntries']) == new_instructions_section_title
-    assert en_value(fetched_vote_session['instructionsSectionContentEntries']) == new_instructions_section_content
-    assert en_value(fetched_vote_session['propositionsSectionTitleEntries']) == new_propositions_section_title
+    assert en_value(graphql_vote_session['titleEntries']) == new_title
+    assert en_value(graphql_vote_session['subTitleEntries']) == new_sub_title
+    assert en_value(graphql_vote_session['instructionsSectionTitleEntries']) == new_instructions_section_title
+    assert en_value(graphql_vote_session['instructionsSectionContentEntries']) == new_instructions_section_content
+    assert en_value(graphql_vote_session['propositionsSectionTitleEntries']) == new_propositions_section_title
 
-    fetched_image = fetched_vote_session['headerImage']
-    assert fetched_image['title'] == new_image_name
-    assert fetched_image['mimeType'] == new_image_mime_type
+    graphql_image = graphql_vote_session['headerImage']
+    assert graphql_image['title'] == new_image_name
+    assert graphql_image['mimeType'] == new_image_mime_type
     new_image_data = new_image.file.getvalue()
-    fetched_image_data = test_app.get(fetched_image['externalUrl']).body
-    assert fetched_image_data == new_image_data
+    graphql_image_data = test_app.get(graphql_image['externalUrl']).body
+    assert graphql_image_data == new_image_data
 
 
 def test_graphql_update_vote_session(graphql_request, vote_session, test_app, graphql_registry):
@@ -142,7 +143,7 @@ def test_graphql_get_vote_session(graphql_participant1_request, vote_session, gr
     )
 
     assert response.errors is None
-    fetched_vote_session = response.data['voteSession']
+    graphql_vote_session = response.data['voteSession']
 
     assert_langstrings_are_equal(
         [
@@ -152,14 +153,14 @@ def test_graphql_get_vote_session(graphql_participant1_request, vote_session, gr
             "instructions_section_content",
             "propositions_section_title"
         ],
-        fetched_vote_session,
+        graphql_vote_session,
         vote_session)
 
-    fetched_image = fetched_vote_session['headerImage']
+    graphql_image = graphql_vote_session['headerImage']
     source_image = vote_session.attachments[0].document
-    assert fetched_image['title'] == source_image.title
-    assert fetched_image['mimeType'] == source_image.mime_type
-    assert fetched_image['externalUrl'] == source_image.external_url
+    assert graphql_image['title'] == source_image.title
+    assert graphql_image['mimeType'] == source_image.mime_type
+    assert graphql_image['externalUrl'] == source_image.external_url
 
 
 def test_graphql_get_vote_session_unauthenticated(graphql_unauthenticated_request, vote_session, graphql_registry):
