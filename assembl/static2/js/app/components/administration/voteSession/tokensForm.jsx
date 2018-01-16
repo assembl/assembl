@@ -31,7 +31,7 @@ const TokensForm = ({
   return (
     <div className="token-vote-form">
       <form>
-        <div style={{ display: 'flex' }}>
+        <div style={{ display: 'flex' }} /* TODO: create css class instead */>
           <Checkbox checked={exclusive} onChange={handleExclusiveCheckboxChange}>
             <TextWithHelper
               text="Exclusif" // TODO ajouter une key dans le fichier de trad

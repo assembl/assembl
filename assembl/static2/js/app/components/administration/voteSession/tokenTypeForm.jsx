@@ -5,23 +5,11 @@ import { TwitterPicker } from 'react-color';
 import { getEntryValueForLocale } from '../../../utils/i18n';
 import FormControlWithLabel from '../../common/formControlWithLabel';
 import { updateTokenVoteTypeTitle } from '../../../actions/adminActions/voteSession';
+import { pickerColors } from '../../../constants';
 
 const TokenTypeForm = ({ title, color, number, handleTitleChange }) => {
   const handleNumberChange = () => {};
   const handleColorChange = () => {};
-
-  const pickerColors = [
-    '#B8E986',
-    '#00AA7B',
-    '#FCB900',
-    '#FF6900',
-    '#8646ED',
-    '#FF82BE',
-    '#00DCFF',
-    '#1652C1',
-    '#EB144C',
-    '#000000'
-  ];
 
   return (
     <div className="token-type-form">
@@ -46,7 +34,7 @@ const TokenTypeForm = ({ title, color, number, handleTitleChange }) => {
         onChange={handleColorChange}
         value={color}
       />
-      <TwitterPicker colors={pickerColors} onChange={handleColorChange} width="400" className="color-picker" />
+      <TwitterPicker colors={pickerColors} onChange={handleColorChange} width="400px" className="color-picker" />
       <div className="separator" />
     </div>
   );
