@@ -6,34 +6,38 @@ import { Checkbox } from 'react-bootstrap';
 import SectionTitle from '../sectionTitle';
 import TextWithHelper from '../../common/textWithHelper';
 import TokensForm from './tokensForm';
+import { createTokenVoteModule } from '../../../actions/adminActions/voteSession';
 
 type ModulesSectionProps = {
   tokenModules: Object,
   editLocale: string,
-  tokenTypesNumber: Number
+  tokenTypesNumber: Number,
+  handleCheckBoxChange: Function
 };
 
-const ModulesSection = ({ tokenModules, editLocale, tokenTypesNumber }: ModulesSectionProps) => {
+const ModulesSection = ({ tokenModules, editLocale, tokenTypesNumber, handleCheckBoxChange }: ModulesSectionProps) => {
   const checked = tokenModules.size > 0;
-  const handleCheckBoxChange = () => {};
   return (
     <div className="admin-box">
       <SectionTitle title={I18n.t('administration.voteSession.1')} annotation={I18n.t('administration.annotation')} />
       <div className="admin-content">
         <div className="form-container">
-          {tokenModules.map(id => (
-            <div key={id}>
-              <Checkbox checked={checked} onChange={handleCheckBoxChange}>
-                <TextWithHelper
-                  text="Vote par jetons"
-                  helperUrl="/static2/img/helpers/helper2.png"
-                  helperText="Description of the module"
-                  classname="inline"
-                />
-              </Checkbox>
-              {checked ? <TokensForm key={id} id={id} editLocale={editLocale} tokenTypesNumber={tokenTypesNumber} /> : null}
-            </div>
-          ))}
+          <div>
+            <Checkbox
+              checked={checked}
+              onChange={() => {
+                handleCheckBoxChange(checked);
+              }}
+            >
+              <TextWithHelper
+                text="Vote par jetons"
+                helperUrl="/static2/img/helpers/helper2.png"
+                helperText="Description of the module"
+                classname="inline"
+              />
+            </Checkbox>
+            {tokenModules.map(id => <TokensForm key={id} id={id} editLocale={editLocale} tokenTypesNumber={tokenTypesNumber} />)}
+          </div>
         </div>
       </div>
     </div>
@@ -50,4 +54,17 @@ const mapStateToProps = ({ admin }) => {
   };
 };
 
-export default connect(mapStateToProps)(ModulesSection);
+const mapDispatchToProps = (dispatch) => {
+  const newId = Math.round(Math.random() * -1000000).toString();
+  return {
+    handleCheckBoxChange: (checked) => {
+      if (!checked) {
+        dispatch(createTokenVoteModule(newId));
+      } else {
+        console.log('delete');
+      }
+    }
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(ModulesSection);

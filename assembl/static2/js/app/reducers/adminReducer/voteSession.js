@@ -12,6 +12,7 @@ import {
   UPDATE_VOTE_SESSION_PAGE_IMAGE,
   UPDATE_VOTE_SESSION_PAGE,
   UPDATE_VOTE_MODULES,
+  CREATE_TOKEN_VOTE_MODULE,
   UPDATE_TOKEN_VOTE_INSTRUCTIONS,
   CREATE_TOKEN_VOTE_TYPE,
   DELETE_TOKEN_VOTE_TYPE,
@@ -82,10 +83,20 @@ export const modulesInOrder = (state: List<number> = List(), action: ReduxAction
   switch (action.type) {
   case UPDATE_VOTE_MODULES:
     return List(action.voteModules.map(m => m.id));
+  case CREATE_TOKEN_VOTE_MODULE:
+    return state.push(action.id);
   default:
     return state;
   }
 };
+
+const defaultTokenModule = Map({
+  type: 'tokens',
+  titleEntries: List(),
+  instructionsEntries: List(),
+  exclusive: false,
+  tokenTypes: List()
+});
 
 export const modulesById = (state: Map<string, Map> = Map(), action: ReduxAction<Action>) => {
   switch (action.type) {
@@ -105,6 +116,8 @@ export const modulesById = (state: Map<string, Map> = Map(), action: ReduxAction
     });
     return newState;
   }
+  case CREATE_TOKEN_VOTE_MODULE:
+    return state.set(action.id, defaultTokenModule.set('id', action.id));
   case UPDATE_TOKEN_VOTE_INSTRUCTIONS:
     return state.updateIn([action.id, 'instructionsEntries'], updateInLangstringEntries(action.locale, action.value));
   default:

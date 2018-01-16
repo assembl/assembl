@@ -50,6 +50,11 @@ export const updateVoteModules = (voteModules: actionTypes.VoteModulesArray): ac
   type: actionTypes.UPDATE_VOTE_MODULES
 });
 
+export const createTokenVoteModule = (id: string): actionTypes.CreateTokenVoteModule => ({
+  id: id,
+  type: actionTypes.CREATE_TOKEN_VOTE_MODULE
+});
+
 export const updateTokenVoteInstructions = (
   id: string,
   locale: string,

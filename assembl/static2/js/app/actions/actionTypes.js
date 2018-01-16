@@ -37,6 +37,7 @@ export const UPDATE_VOTE_SESSION_PAGE_PROPOSITIONS_TITLE: 'UPDATE_VOTE_SESSION_P
   'UPDATE_VOTE_SESSION_PAGE_PROPOSITIONS_TITLE';
 export const UPDATE_VOTE_SESSION_PAGE_IMAGE: 'UPDATE_VOTE_SESSION_PAGE_IMAGE' = 'UPDATE_VOTE_SESSION_PAGE_IMAGE';
 export const UPDATE_VOTE_MODULES: 'UPDATE_VOTE_MODULES' = 'UPDATE_VOTE_MODULES';
+export const CREATE_TOKEN_VOTE_MODULE: 'CREATE_TOKEN_VOTE_MODULE' = 'CREATE_TOKEN_VOTE_MODULE';
 export const UPDATE_TOKEN_VOTE_INSTRUCTIONS: 'UPDATE_TOKEN_VOTE_INSTRUCTIONS' = 'UPDATE_TOKEN_VOTE_INSTRUCTIONS';
 export const CREATE_TOKEN_VOTE_TYPE: 'CREATE_TOKEN_VOTE_TYPE' = 'CREATE_TOKEN_VOTE_TYPE';
 export const DELETE_TOKEN_VOTE_TYPE: 'DELETE_TOKEN_VOTE_TYPE' = 'DELETE_TOKEN_VOTE_TYPE';
@@ -263,6 +264,11 @@ export type UpdateVoteModules = {
   type: typeof UPDATE_VOTE_MODULES
 };
 
+export type CreateTokenVoteModule = {
+  id: string,
+  type: typeof CREATE_TOKEN_VOTE_MODULE
+};
+
 export type UpdateTokenVoteInstructions = {
   id: string,
   locale: string,
@@ -324,6 +330,7 @@ type VoteSessionActions =
   | UpdateVoteSessionPagePropositionsTitle
   | UpdateVoteSessionHeaderImage
   | UpdateVoteModules
+  | CreateTokenVoteModule
   | UpdateTokenVoteInstructions
   | CreateTokenVoteType
   | DeleteTokenVoteType
