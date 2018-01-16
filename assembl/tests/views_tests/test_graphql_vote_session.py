@@ -2,15 +2,15 @@
 
 from assembl.graphql.schema import Schema as schema
 from assembl.lib.utils import snake_to_camel
+from assembl.graphql.langstring import resolve_langstring
 import os
 from io import BytesIO
 
-""" These helpers assume there is only one entry in the provided langstrings """
 
 def assert_langstring_is_equal(langstring_name, graphql_model, sqla_model):
-    source_value = getattr(sqla_model, langstring_name).entries[0].value
-    graphql_value = en_value(graphql_model[snake_to_camel(langstring_name) + 'Entries'])
-    assert source_value == graphql_value
+    sqla_value = sqla_en_value(getattr(sqla_model, langstring_name))
+    graphql_value = graphql_en_value(graphql_model[snake_to_camel(langstring_name) + 'Entries'])
+    assert sqla_value == graphql_value
 
 
 def assert_langstrings_are_equal(langstrings_names, graphql_model, sqla_model):
@@ -18,8 +18,15 @@ def assert_langstrings_are_equal(langstrings_names, graphql_model, sqla_model):
         assert_langstring_is_equal(langstring_name, graphql_model, sqla_model)
 
 
-def en_value(entry):
-    return entry[0]['value']
+def graphql_en_value(entries):
+    for entry in entries:
+        if entry['localeCode'] == "en":
+            return entry['value']
+    raise Exception("No 'en' value in entries {}".format(entries))
+
+
+def sqla_en_value(entries):
+    return resolve_langstring(entries, "en")
 
 
 def en_entry(value):
@@ -101,11 +108,11 @@ def mutate_and_assert(graphql_request, discussion_phase_id, test_app, graphql_re
     assert response.errors is None
     graphql_vote_session = response.data['updateVoteSession']['voteSession']
 
-    assert en_value(graphql_vote_session['titleEntries']) == new_title
-    assert en_value(graphql_vote_session['subTitleEntries']) == new_sub_title
-    assert en_value(graphql_vote_session['instructionsSectionTitleEntries']) == new_instructions_section_title
-    assert en_value(graphql_vote_session['instructionsSectionContentEntries']) == new_instructions_section_content
-    assert en_value(graphql_vote_session['propositionsSectionTitleEntries']) == new_propositions_section_title
+    assert graphql_en_value(graphql_vote_session['titleEntries']) == new_title
+    assert graphql_en_value(graphql_vote_session['subTitleEntries']) == new_sub_title
+    assert graphql_en_value(graphql_vote_session['instructionsSectionTitleEntries']) == new_instructions_section_title
+    assert graphql_en_value(graphql_vote_session['instructionsSectionContentEntries']) == new_instructions_section_content
+    assert graphql_en_value(graphql_vote_session['propositionsSectionTitleEntries']) == new_propositions_section_title
 
     graphql_image = graphql_vote_session['headerImage']
     assert graphql_image['title'] == new_image_name
