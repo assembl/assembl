@@ -60,6 +60,11 @@ export const deleteTokenVoteModule = (id: string): actionTypes.DeleteTokenVoteMo
   type: actionTypes.DELETE_TOKEN_VOTE_MODULE
 });
 
+export const updateTokenVoteExclusive = (value: boolean): actionTypes.UpdateTokenVoteExclusive => ({
+  value: value,
+  type: actionTypes.UPDATE_TOKEN_VOTE_EXCLUSIVE
+});
+
 export const updateTokenVoteInstructions = (
   id: string,
   locale: string,
