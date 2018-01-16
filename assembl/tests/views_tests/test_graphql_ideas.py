@@ -307,7 +307,8 @@ def test_graphql_discussion_counters_thread_phase_deleted_thematic(graphql_reque
               numParticipants
             }
         """, context_value=graphql_request, variable_values={'identifier': 'thread'})
-    assert res.data['rootIdea']['numPosts'] == 0  # all phase 1 posts associated to questions of the deleted thematic are not counted
+    # posts are counted on the root whether or not they belong to a thematic
+    assert res.data['rootIdea']['numPosts'] == 15
     assert res.data['numParticipants'] == 1
 
 
