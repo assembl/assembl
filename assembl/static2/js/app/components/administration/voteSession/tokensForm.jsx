@@ -92,7 +92,7 @@ const mapStateToProps = (state, { id, editLocale }) => {
   };
 };
 
-const mapDispatchToProps = (dispatch, { id, editLocale, tokenTypesNumber }) => ({
+const mapDispatchToProps = (dispatch, { id, editLocale, tokenTypesNumber, toDelete }) => ({
   handleInstructionsChange: e => dispatch(updateTokenVoteInstructions(id, editLocale, e.target.value)),
   handleTokenVoteTypeNumberChange: (value) => {
     const newTokenTypesNumber = value - tokenTypesNumber;

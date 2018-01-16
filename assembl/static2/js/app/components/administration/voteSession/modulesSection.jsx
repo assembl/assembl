@@ -6,7 +6,7 @@ import { Checkbox } from 'react-bootstrap';
 import SectionTitle from '../sectionTitle';
 import TextWithHelper from '../../common/textWithHelper';
 import TokensForm from './tokensForm';
-import { createTokenVoteModule } from '../../../actions/adminActions/voteSession';
+import { createTokenVoteModule, deleteTokenVoteModule } from '../../../actions/adminActions/voteSession';
 
 type ModulesSectionProps = {
   tokenModules: Object,
@@ -26,7 +26,7 @@ const ModulesSection = ({ tokenModules, editLocale, tokenTypesNumber, handleChec
             <Checkbox
               checked={tokenModuleChecked}
               onChange={() => {
-                handleCheckBoxChange(tokenModuleChecked);
+                handleCheckBoxChange(tokenModuleChecked, tokenModules[0]);
               }}
             >
               <TextWithHelper
@@ -36,15 +36,7 @@ const ModulesSection = ({ tokenModules, editLocale, tokenTypesNumber, handleChec
                 classname="inline"
               />
             </Checkbox>
-            {tokenModules.map(id => (
-              <TokensForm
-                key={id}
-                id={id}
-                editLocale={editLocale}
-                tokenTypesNumber={tokenTypesNumber}
-                toDelete={tokenModuleChecked}
-              />
-            ))}
+            {tokenModules.map(id => <TokensForm key={id} id={id} editLocale={editLocale} tokenTypesNumber={tokenTypesNumber} />)}
           </div>
         </div>
       </div>
@@ -65,9 +57,11 @@ const mapStateToProps = ({ admin }) => {
 const mapDispatchToProps = (dispatch) => {
   const newId = Math.round(Math.random() * -1000000).toString();
   return {
-    handleCheckBoxChange: (checked) => {
+    handleCheckBoxChange: (checked, id) => {
       if (!checked) {
         dispatch(createTokenVoteModule(newId));
+      } else {
+        dispatch(deleteTokenVoteModule(id));
       }
     }
   };

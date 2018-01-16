@@ -55,6 +55,11 @@ export const createTokenVoteModule = (id: string): actionTypes.CreateTokenVoteMo
   type: actionTypes.CREATE_TOKEN_VOTE_MODULE
 });
 
+export const deleteTokenVoteModule = (id: string): actionTypes.DeleteTokenVoteModule => ({
+  id: id,
+  type: actionTypes.DELETE_TOKEN_VOTE_MODULE
+});
+
 export const updateTokenVoteInstructions = (
   id: string,
   locale: string,

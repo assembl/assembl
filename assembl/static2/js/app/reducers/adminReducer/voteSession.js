@@ -13,6 +13,7 @@ import {
   UPDATE_VOTE_SESSION_PAGE,
   UPDATE_VOTE_MODULES,
   CREATE_TOKEN_VOTE_MODULE,
+  DELETE_TOKEN_VOTE_MODULE,
   UPDATE_TOKEN_VOTE_INSTRUCTIONS,
   CREATE_TOKEN_VOTE_TYPE,
   DELETE_TOKEN_VOTE_TYPE,
@@ -85,6 +86,12 @@ export const modulesInOrder = (state: List<number> = List(), action: ReduxAction
     return List(action.voteModules.map(m => m.id));
   case CREATE_TOKEN_VOTE_MODULE:
     return state.push(action.id);
+  case DELETE_TOKEN_VOTE_MODULE: {
+    const index = state.indexOf(action.id);
+    let newState = state;
+    newState = newState.delete(index);
+    return newState;
+  }
   default:
     return state;
   }
