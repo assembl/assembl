@@ -352,7 +352,8 @@ const Translations = {
       voteSession: {
         0: "Renseigner les instructions",
         1: "Configurer les modules de vote",
-        2: "Configurer les propositions de vote"
+        2: "Configurer les propositions de vote",
+        tokenTypeNumber: "Nombre de types de jetons"
       },
       headerTitle: "Bandeau de haut de page",
       PropositionSectionTitle: "Section propositions",

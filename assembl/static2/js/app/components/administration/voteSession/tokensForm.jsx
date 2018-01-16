@@ -1,7 +1,8 @@
 // @flow
 import React from 'react';
 import { connect } from 'react-redux';
-import { Checkbox } from 'react-bootstrap';
+import { Translate } from 'react-redux-i18n';
+import { Checkbox, DropdownButton, MenuItem } from 'react-bootstrap';
 import FormControlWithLabel from '../../common/formControlWithLabel';
 import { getEntryValueForLocale } from '../../../utils/i18n';
 import TextWithHelper from '../../common/textWithHelper';
@@ -54,19 +55,19 @@ const TokensForm = ({
             helperText="Instructions sur le champs consigne" // TODO ajouter une key dans le fichier de trad
           />
         </div>
-        <div style={{ display: 'flex' }}>
-          <FormControlWithLabel
-            label="Nombre de types de jetons" // TODO ajouter une key dans le fichier de trad
-            required
-            type="text"
-            onChange={handleTokenVoteTypeNumberChange}
-            value={tokenTypeNumber}
-          />
+        <div style={{ display: 'flex', marginBottom: '2px' }}>
+          <Translate value="administration.voteSession.tokenTypeNumber" />
           <TextWithHelper
             helperUrl="/static2/img/helpers/helper2.png" // TODO ajouter le preview
             helperText="Instructions sur le champs 'type de jetons'" // TODO ajouter une key dans le fichier de trad
           />
         </div>
+        <DropdownButton title={tokenTypeNumber} onSelect={handleTokenVoteTypeNumberChange} id="input-dropdown-addon" required>
+          <MenuItem eventKey="1">1</MenuItem>
+          <MenuItem eventKey="2">2</MenuItem>
+          <MenuItem eventKey="3">3</MenuItem>
+          <MenuItem eventKey="4">4</MenuItem>
+        </DropdownButton>
         {tokenTypeNumber > 0 ? (
           <div>
             <div className="separator" />
@@ -93,15 +94,15 @@ const mapStateToProps = (state, { id, editLocale }) => {
 
 const mapDispatchToProps = (dispatch, { id, editLocale, tokenTypesNumber }) => ({
   handleInstructionsChange: e => dispatch(updateTokenVoteInstructions(id, editLocale, e.target.value)),
-  handleTokenVoteTypeNumberChange: (e) => {
-    const newTokenTypesNumber = e.target.value - tokenTypesNumber;
-    if (e.target.value > tokenTypesNumber) {
+  handleTokenVoteTypeNumberChange: (value) => {
+    const newTokenTypesNumber = value - tokenTypesNumber;
+    if (value > tokenTypesNumber) {
       for (let i = 0; i < newTokenTypesNumber; i += 1) {
         const newId = Math.round(Math.random() * -1000000).toString();
         dispatch(createTokenVoteType(newId));
       }
     } else {
-      dispatch(deleteTokenVoteType(e.target.value));
+      dispatch(deleteTokenVoteType(value));
     }
   }
 });
