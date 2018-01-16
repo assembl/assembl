@@ -201,3 +201,88 @@ def test_graphql_update_user_modify_password_needs_to_be_different(graphql_reque
     })
     assert res.errors is not None
     assert res.errors[0].message == u"004: The new password has to be different than the actual password."
+
+
+def test_graphql_update_user_modify_password_needs_to_be_different_from_previous_5_passwords_1(graphql_request, participant1_user):
+    graphql_request.authenticated_userid = participant1_user.id
+    participant1_user.password_p = "password2"
+    participant1_user.db.flush()
+    res = schema.execute(UPDATE_USER_MUTATION,
+                         context_value=graphql_request, variable_values={
+        "id": to_global_id('AgentProfile', participant1_user.id),
+        "oldPassword": "password2",
+        "newPassword": "password",
+        "newPassword2": "password"
+    })
+    assert res.errors is not None
+    assert res.errors[0].message == u"005: The new password has to be different than the last 5 passwords you set."
+
+
+def test_graphql_update_user_modify_password_needs_to_be_different_from_previous_5_passwords_2(graphql_request, participant1_user):
+    graphql_request.authenticated_userid = participant1_user.id
+    participant1_user.password_p = "password2"
+    participant1_user.password_p = "password3"
+    participant1_user.db.flush()
+    res = schema.execute(UPDATE_USER_MUTATION,
+                         context_value=graphql_request, variable_values={
+        "id": to_global_id('AgentProfile', participant1_user.id),
+        "oldPassword": "password3",
+        "newPassword": "password",
+        "newPassword2": "password"
+    })
+    assert res.errors is not None
+    assert res.errors[0].message == u"005: The new password has to be different than the last 5 passwords you set."
+
+
+def test_graphql_update_user_modify_password_needs_to_be_different_from_previous_5_passwords_3(graphql_request, participant1_user):
+    graphql_request.authenticated_userid = participant1_user.id
+    participant1_user.password_p = "password2"
+    participant1_user.password_p = "password3"
+    participant1_user.password_p = "password4"
+    participant1_user.db.flush()
+    res = schema.execute(UPDATE_USER_MUTATION,
+                         context_value=graphql_request, variable_values={
+        "id": to_global_id('AgentProfile', participant1_user.id),
+        "oldPassword": "password4",
+        "newPassword": "password",
+        "newPassword2": "password"
+    })
+    assert res.errors is not None
+    assert res.errors[0].message == u"005: The new password has to be different than the last 5 passwords you set."
+
+
+def test_graphql_update_user_modify_password_needs_to_be_different_from_previous_5_passwords_4(graphql_request, participant1_user):
+    graphql_request.authenticated_userid = participant1_user.id
+    participant1_user.password_p = "password2"
+    participant1_user.password_p = "password3"
+    participant1_user.password_p = "password4"
+    participant1_user.password_p = "password5"
+    participant1_user.db.flush()
+    res = schema.execute(UPDATE_USER_MUTATION,
+                         context_value=graphql_request, variable_values={
+        "id": to_global_id('AgentProfile', participant1_user.id),
+        "oldPassword": "password5",
+        "newPassword": "password",
+        "newPassword2": "password"
+    })
+    assert res.errors is not None
+    assert res.errors[0].message == u"005: The new password has to be different than the last 5 passwords you set."
+
+
+def test_graphql_update_user_modify_password_can_reuse_the_old_6th_password_set(graphql_request, participant1_user):
+    graphql_request.authenticated_userid = participant1_user.id
+    participant1_user.password_p = "password2"
+    participant1_user.password_p = "password3"
+    participant1_user.password_p = "password4"
+    participant1_user.password_p = "password5"
+    participant1_user.db.flush()
+    participant1_user.password_p = "password6"
+    participant1_user.db.flush()
+    res = schema.execute(UPDATE_USER_MUTATION,
+                         context_value=graphql_request, variable_values={
+        "id": to_global_id('AgentProfile', participant1_user.id),
+        "oldPassword": "password6",
+        "newPassword": "password",
+        "newPassword2": "password"
+    })
+    assert res.errors is None
