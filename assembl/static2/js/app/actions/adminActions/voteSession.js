@@ -86,11 +86,21 @@ export const deleteTokenVoteType = (value: number): actionTypes.CreateTokenVoteT
   type: actionTypes.DELETE_TOKEN_VOTE_TYPE
 });
 
-export const updateTokenVoteTypeTitle = (id: string, locale: string, value: string): actionTypes.UpdateTokenVoteTypeTitle => ({
+export const updateTokenVoteTypeTitle = (
+  id: string,
+  locale: string,
+  value: string
+): actionTypes.UpdateTokenVoteTypeTitleType => ({
   id: id,
   locale: locale,
   value: value,
   type: actionTypes.UPDATE_TOKEN_VOTE_TYPE_TITLE
+});
+
+export const updateTokenNumber = (id: string, value: number): actionTypes.UpdateTokenNumberType => ({
+  id: id,
+  value: value,
+  type: actionTypes.UPDATE_TOKEN_NUMBER
 });
 
 export const updateTokenVoteTypeColor = (id: string, value: string): actionTypes.UpdateTokenVoteTypeColor => ({
