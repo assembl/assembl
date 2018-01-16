@@ -1,7 +1,7 @@
 // @flow
 import React from 'react';
 import { connect } from 'react-redux';
-import { Translate } from 'react-redux-i18n';
+import { Translate, I18n } from 'react-redux-i18n';
 import { Checkbox, DropdownButton, MenuItem } from 'react-bootstrap';
 import FormControlWithLabel from '../../common/formControlWithLabel';
 import { getEntryValueForLocale } from '../../../utils/i18n';
@@ -32,7 +32,7 @@ const TokensForm = ({
   return (
     <div className="token-vote-form">
       <form>
-        <div style={{ display: 'flex' }} /* TODO: create css class instead */>
+        <div className="flex">
           <Checkbox checked={exclusive} onChange={handleExclusiveCheckboxChange}>
             <TextWithHelper
               text="Exclusif" // TODO ajouter une key dans le fichier de trad
@@ -42,7 +42,7 @@ const TokensForm = ({
             />
           </Checkbox>
         </div>
-        <div style={{ display: 'flex' }}>
+        <div className="flex">
           <FormControlWithLabel
             label="Consigne du vote par jeton" // TODO ajouter une key dans le fichier de trad
             required
@@ -55,8 +55,8 @@ const TokensForm = ({
             helperText="Instructions sur le champs consigne" // TODO ajouter une key dans le fichier de trad
           />
         </div>
-        <div style={{ display: 'flex', marginBottom: '2px' }}>
-          <Translate value="administration.voteSession.tokenTypeNumber" />
+        <div className="flex">
+          <label htmlFor="input-dropdown-addon">{I18n.t('administration.voteSession.tokenTypeNumber')}</label>
           <TextWithHelper
             helperUrl="/static2/img/helpers/helper2.png" // TODO ajouter le preview
             helperText="Instructions sur le champs 'type de jetons'" // TODO ajouter une key dans le fichier de trad
