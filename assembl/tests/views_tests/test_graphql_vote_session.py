@@ -41,45 +41,26 @@ def updateVoteSessionQuery(graphql_registry):
             graphql_registry['mutations']['updateVoteSession'])
 
 
-def test_graphql_get_vote_session_unauthenticated(graphql_unauthenticated_request, vote_session, graphql_registry):
+def assert_vote_session_not_created(discussion_phase_id, graphql_request, graphql_registry):
     response = schema.execute(
         voteSessionQuery(graphql_registry),
-        context_value=graphql_unauthenticated_request,
+        context_value=graphql_request,
+        variable_values={"discussionPhaseId": discussion_phase_id}
+    )
+    assert (response.errors is None) and (response.data['voteSession'] is None)
+
+
+def mutate_and_assert_unauthorized(graphql_request, discussion_phase_id, graphql_registry):
+    new_title = u"updated vote session title"
+    response = schema.execute(
+        updateVoteSessionQuery(graphql_registry),
+        context_value=graphql_request,
         variable_values={
-            "discussionPhaseId": vote_session.discussion_phase_id
+            "discussionPhaseId": discussion_phase_id,
+            "titleEntries": [{"localeCode": "en", "value": new_title}]
         }
     )
     assert_graphql_unauthorized(response)
-
-
-def test_graphql_get_vote_session(graphql_participant1_request, vote_session, graphql_registry):
-    response = schema.execute(
-        voteSessionQuery(graphql_registry),
-        context_value=graphql_participant1_request,
-        variable_values={
-            "discussionPhaseId": vote_session.discussion_phase_id
-        }
-    )
-
-    assert response.errors is None
-    fetched_vote_session = response.data['voteSession']
-
-    assert_langstrings_are_equal(
-        [
-            "title",
-            "sub_title",
-            "instructions_section_title",
-            "instructions_section_content",
-            "propositions_section_title"
-        ],
-        fetched_vote_session,
-        vote_session)
-
-    fetched_image = fetched_vote_session['headerImage']
-    source_image = vote_session.attachments[0].document
-    assert fetched_image['title'] == source_image.title
-    assert fetched_image['mimeType'] == source_image.mime_type
-    assert fetched_image['externalUrl'] == source_image.external_url
 
 
 def mutate_and_assert(graphql_request, discussion_phase_id, test_app, graphql_registry):
@@ -137,13 +118,8 @@ def test_graphql_update_vote_session(graphql_request, vote_session, test_app, gr
     mutate_and_assert(graphql_request, vote_session.discussion_phase_id, test_app, graphql_registry)
 
 
-def assert_vote_session_not_created(discussion_phase_id, graphql_request, graphql_registry):
-    response = schema.execute(
-        voteSessionQuery(graphql_registry),
-        context_value=graphql_request,
-        variable_values={"discussionPhaseId": discussion_phase_id}
-    )
-    assert (response.errors is None) and (response.data['voteSession'] is None)
+def test_graphql_update_vote_session_unauthenticated(graphql_unauthenticated_request, vote_session, graphql_registry):
+    mutate_and_assert_unauthorized(graphql_unauthenticated_request, vote_session.discussion_phase_id, graphql_registry)
 
 
 def test_graphql_create_vote_session(graphql_request, timeline_vote_session, test_app, graphql_registry):
@@ -156,18 +132,42 @@ def test_graphql_create_vote_session_unauthenticated(graphql_participant1_reques
     mutate_and_assert_unauthorized(graphql_participant1_request, timeline_vote_session.id, graphql_registry)
 
 
-def mutate_and_assert_unauthorized(graphql_request, discussion_phase_id, graphql_registry):
-    new_title = u"updated vote session title"
+def test_graphql_get_vote_session(graphql_participant1_request, vote_session, graphql_registry):
     response = schema.execute(
-        updateVoteSessionQuery(graphql_registry),
-        context_value=graphql_request,
+        voteSessionQuery(graphql_registry),
+        context_value=graphql_participant1_request,
         variable_values={
-            "discussionPhaseId": discussion_phase_id,
-            "titleEntries": [{"localeCode": "en", "value": new_title}]
+            "discussionPhaseId": vote_session.discussion_phase_id
+        }
+    )
+
+    assert response.errors is None
+    fetched_vote_session = response.data['voteSession']
+
+    assert_langstrings_are_equal(
+        [
+            "title",
+            "sub_title",
+            "instructions_section_title",
+            "instructions_section_content",
+            "propositions_section_title"
+        ],
+        fetched_vote_session,
+        vote_session)
+
+    fetched_image = fetched_vote_session['headerImage']
+    source_image = vote_session.attachments[0].document
+    assert fetched_image['title'] == source_image.title
+    assert fetched_image['mimeType'] == source_image.mime_type
+    assert fetched_image['externalUrl'] == source_image.external_url
+
+
+def test_graphql_get_vote_session_unauthenticated(graphql_unauthenticated_request, vote_session, graphql_registry):
+    response = schema.execute(
+        voteSessionQuery(graphql_registry),
+        context_value=graphql_unauthenticated_request,
+        variable_values={
+            "discussionPhaseId": vote_session.discussion_phase_id
         }
     )
     assert_graphql_unauthorized(response)
-
-
-def test_graphql_update_vote_session_unauthenticated(graphql_unauthenticated_request, vote_session, graphql_registry):
-    mutate_and_assert_unauthorized(graphql_unauthenticated_request, vote_session.discussion_phase_id, graphql_registry)
