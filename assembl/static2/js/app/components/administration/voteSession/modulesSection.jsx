@@ -16,7 +16,7 @@ type ModulesSectionProps = {
 };
 
 const ModulesSection = ({ tokenModules, editLocale, tokenTypesNumber, handleCheckBoxChange }: ModulesSectionProps) => {
-  const checked = tokenModules.size > 0;
+  const tokenModuleChecked = tokenModules.size > 0;
   return (
     <div className="admin-box">
       <SectionTitle title={I18n.t('administration.voteSession.1')} annotation={I18n.t('administration.annotation')} />
@@ -24,9 +24,9 @@ const ModulesSection = ({ tokenModules, editLocale, tokenTypesNumber, handleChec
         <div className="form-container">
           <div>
             <Checkbox
-              checked={checked}
+              checked={tokenModuleChecked}
               onChange={() => {
-                handleCheckBoxChange(checked);
+                handleCheckBoxChange(tokenModuleChecked);
               }}
             >
               <TextWithHelper
@@ -36,7 +36,15 @@ const ModulesSection = ({ tokenModules, editLocale, tokenTypesNumber, handleChec
                 classname="inline"
               />
             </Checkbox>
-            {tokenModules.map(id => <TokensForm key={id} id={id} editLocale={editLocale} tokenTypesNumber={tokenTypesNumber} />)}
+            {tokenModules.map(id => (
+              <TokensForm
+                key={id}
+                id={id}
+                editLocale={editLocale}
+                tokenTypesNumber={tokenTypesNumber}
+                toDelete={tokenModuleChecked}
+              />
+            ))}
           </div>
         </div>
       </div>
@@ -60,8 +68,6 @@ const mapDispatchToProps = (dispatch) => {
     handleCheckBoxChange: (checked) => {
       if (!checked) {
         dispatch(createTokenVoteModule(newId));
-      } else {
-        console.log('delete');
       }
     }
   };
