@@ -60,7 +60,8 @@ export const deleteTokenVoteModule = (id: string): actionTypes.DeleteTokenVoteMo
   type: actionTypes.DELETE_TOKEN_VOTE_MODULE
 });
 
-export const updateTokenVoteExclusive = (value: boolean): actionTypes.UpdateTokenVoteExclusive => ({
+export const updateTokenVoteExclusive = (id: string, value: boolean): actionTypes.UpdateTokenVoteExclusive => ({
+  id: id,
   value: value,
   type: actionTypes.UPDATE_TOKEN_VOTE_EXCLUSIVE
 });

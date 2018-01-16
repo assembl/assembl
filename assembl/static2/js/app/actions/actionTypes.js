@@ -278,6 +278,7 @@ export type DeleteTokenVoteModule = {
 };
 
 export type UpdateTokenVoteExclusive = {
+  id: string,
   value: boolean,
   type: typeof UPDATE_TOKEN_VOTE_EXCLUSIVE
 };

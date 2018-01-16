@@ -128,7 +128,7 @@ export const modulesById = (state: Map<string, Map> = Map(), action: ReduxAction
   case CREATE_TOKEN_VOTE_MODULE:
     return state.set(action.id, defaultTokenModule.set('id', action.id));
   case UPDATE_TOKEN_VOTE_EXCLUSIVE:
-    return state.updateIn([action.id, 'exclusive'], action.value);
+    return state.setIn([action.id, 'exclusive'], action.value);
   case UPDATE_TOKEN_VOTE_INSTRUCTIONS:
     return state.updateIn([action.id, 'instructionsEntries'], updateInLangstringEntries(action.locale, action.value));
   default:

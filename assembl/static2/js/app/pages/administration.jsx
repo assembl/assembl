@@ -143,6 +143,27 @@ class Administration extends React.Component {
     const mock = {
       modules: [
         {
+          type: 'tokens',
+          id: '12345',
+          titleEntries: [],
+          instructionsEntries: [],
+          exclusive: true,
+          tokenTypes: [
+            {
+              id: 'tokentypeid555',
+              titleEntries: [],
+              number: 10,
+              color: '#123456'
+            },
+            {
+              id: 'tokentypeid666',
+              titleEntries: [],
+              number: 3,
+              color: '#789456'
+            }
+          ]
+        },
+        {
           type: 'gauge',
           id: '123456789',
           titleEntries: [

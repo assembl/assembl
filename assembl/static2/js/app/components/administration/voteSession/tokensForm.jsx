@@ -7,7 +7,12 @@ import FormControlWithLabel from '../../common/formControlWithLabel';
 import { getEntryValueForLocale } from '../../../utils/i18n';
 import TextWithHelper from '../../common/textWithHelper';
 import TokenTypeForm from './tokenTypeForm';
-import { updateTokenVoteInstructions, createTokenVoteType, deleteTokenVoteType } from '../../../actions/adminActions/voteSession';
+import {
+  updateTokenVoteInstructions,
+  createTokenVoteType,
+  deleteTokenVoteType,
+  updateTokenVoteExclusive
+} from '../../../actions/adminActions/voteSession';
 
 type TokensFormProps = {
   instructions: string,
@@ -16,7 +21,8 @@ type TokensFormProps = {
   tokenTypes: Object,
   editLocale: string,
   handleInstructionsChange: Function,
-  handleTokenVoteTypeNumberChange: Function
+  handleTokenVoteTypeNumberChange: Function,
+  handleExclusiveCheckboxChange: Function
 };
 
 const TokensForm = ({
@@ -26,58 +32,61 @@ const TokensForm = ({
   tokenTypes,
   editLocale,
   handleInstructionsChange,
-  handleTokenVoteTypeNumberChange
-}: TokensFormProps) => {
-  const handleExclusiveCheckboxChange = () => {};
-  return (
-    <div className="token-vote-form">
-      <form>
-        <div className="flex">
-          <Checkbox checked={exclusive} onChange={handleExclusiveCheckboxChange}>
-            <TextWithHelper
-              text={I18n.t('administration.exclusive')}
-              helperUrl="/static2/img/helpers/helper1.png" // TODO ajouter le preview
-              helperText={I18n.t('administration.exclusiveHelper')}
-              classname="inline"
-            />
-          </Checkbox>
-        </div>
-        <div className="flex">
-          <FormControlWithLabel
-            label={I18n.t('administration.tokenVoteInstructions')}
-            required
-            type="text"
-            onChange={handleInstructionsChange}
-            value={instructions}
-          />
+  handleTokenVoteTypeNumberChange,
+  handleExclusiveCheckboxChange
+}: TokensFormProps) => (
+  <div className="token-vote-form">
+    <form>
+      <div className="flex">
+        <Checkbox
+          checked={exclusive}
+          onChange={() => {
+            handleExclusiveCheckboxChange(exclusive);
+          }}
+        >
           <TextWithHelper
+            text={I18n.t('administration.exclusive')}
             helperUrl="/static2/img/helpers/helper1.png" // TODO ajouter le preview
-            helperText={I18n.t('administration.tokenVoteInstructionsHelper')}
+            helperText={I18n.t('administration.exclusiveHelper')}
+            classname="inline"
           />
+        </Checkbox>
+      </div>
+      <div className="flex">
+        <FormControlWithLabel
+          label={I18n.t('administration.tokenVoteInstructions')}
+          required
+          type="text"
+          onChange={handleInstructionsChange}
+          value={instructions}
+        />
+        <TextWithHelper
+          helperUrl="/static2/img/helpers/helper1.png" // TODO ajouter le preview
+          helperText={I18n.t('administration.tokenVoteInstructionsHelper')}
+        />
+      </div>
+      <div className="flex">
+        <label htmlFor="input-dropdown-addon">{I18n.t('administration.tokenTypeNumber')}</label>
+        <TextWithHelper
+          helperUrl="/static2/img/helpers/helper2.png" // TODO ajouter le preview
+          helperText={I18n.t('administration.tokenTypeNumberHelper')}
+        />
+      </div>
+      <DropdownButton title={tokenTypeNumber} onSelect={handleTokenVoteTypeNumberChange} id="input-dropdown-addon" required>
+        <MenuItem eventKey="1">1</MenuItem>
+        <MenuItem eventKey="2">2</MenuItem>
+        <MenuItem eventKey="3">3</MenuItem>
+        <MenuItem eventKey="4">4</MenuItem>
+      </DropdownButton>
+      {tokenTypeNumber > 0 ? (
+        <div>
+          <div className="separator" />
+          {tokenTypes.map((id, index) => <TokenTypeForm key={`token-type-${index}`} id={id} editLocale={editLocale} />)}
         </div>
-        <div className="flex">
-          <label htmlFor="input-dropdown-addon">{I18n.t('administration.tokenTypeNumber')}</label>
-          <TextWithHelper
-            helperUrl="/static2/img/helpers/helper2.png" // TODO ajouter le preview
-            helperText={I18n.t('administration.tokenTypeNumberHelper')}
-          />
-        </div>
-        <DropdownButton title={tokenTypeNumber} onSelect={handleTokenVoteTypeNumberChange} id="input-dropdown-addon" required>
-          <MenuItem eventKey="1">1</MenuItem>
-          <MenuItem eventKey="2">2</MenuItem>
-          <MenuItem eventKey="3">3</MenuItem>
-          <MenuItem eventKey="4">4</MenuItem>
-        </DropdownButton>
-        {tokenTypeNumber > 0 ? (
-          <div>
-            <div className="separator" />
-            {tokenTypes.map((id, index) => <TokenTypeForm key={`token-type-${index}`} id={id} editLocale={editLocale} />)}
-          </div>
-        ) : null}
-      </form>
-    </div>
-  );
-};
+      ) : null}
+    </form>
+  </div>
+);
 
 const mapStateToProps = (state, { id, editLocale }) => {
   const module = state.admin.voteSession.modulesById.get(id);
@@ -92,7 +101,7 @@ const mapStateToProps = (state, { id, editLocale }) => {
   };
 };
 
-const mapDispatchToProps = (dispatch, { id, editLocale, tokenTypesNumber, toDelete }) => ({
+const mapDispatchToProps = (dispatch, { id, editLocale, tokenTypesNumber }) => ({
   handleInstructionsChange: e => dispatch(updateTokenVoteInstructions(id, editLocale, e.target.value)),
   handleTokenVoteTypeNumberChange: (value) => {
     const newTokenTypesNumber = value - tokenTypesNumber;
@@ -104,7 +113,8 @@ const mapDispatchToProps = (dispatch, { id, editLocale, tokenTypesNumber, toDele
     } else {
       dispatch(deleteTokenVoteType(value));
     }
-  }
+  },
+  handleExclusiveCheckboxChange: checked => dispatch(updateTokenVoteExclusive(id, !checked))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(TokensForm);
