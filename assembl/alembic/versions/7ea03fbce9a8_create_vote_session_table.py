@@ -1,8 +1,3 @@
-from alembic import context, op
-from sqlalchemy import Column, Integer, ForeignKey
-from sqlalchemy.schema import UniqueConstraint
-import transaction
-
 """create vote_session table
 
 Revision ID: 7ea03fbce9a8
@@ -10,6 +5,11 @@ Revises: c14c885ecdc2
 Create Date: 2017-12-22 13:28:30.634303
 
 """
+from alembic import context, op
+from sqlalchemy import Column, Integer, ForeignKey
+from sqlalchemy.schema import UniqueConstraint
+import transaction
+
 
 # revision identifiers, used by Alembic.
 revision = '7ea03fbce9a8'
