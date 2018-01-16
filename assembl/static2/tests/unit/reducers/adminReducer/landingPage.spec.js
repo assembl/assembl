@@ -48,3 +48,40 @@ describe('Landing page modules reducer', () => {
     expect(actual).toEqual(expected);
   });
 });
+
+describe('Landing page modulesHasChanged reducer', () => {
+  const reducer = reducers.modulesHasChanged;
+  it('it should return the initial state', () => {
+    const action = {};
+    const expected = false;
+    expect(reducer(undefined, action)).toEqual(expected);
+  });
+
+  it('should return the current state for other actions', () => {
+    const action = { type: 'FOOBAR' };
+    const oldState = true;
+    expect(reducer(oldState, action)).toEqual(oldState);
+  });
+
+  it('should handle TOGGLE_LANDING_PAGE_MODULE action type', () => {
+    const action = {
+      moduleTypeIdentifier: 'HEADER',
+      type: actionTypes.TOGGLE_LANDING_PAGE_MODULE
+    };
+    const oldState = false;
+    const expected = true;
+    const actual = reducer(oldState, action);
+    expect(actual).toEqual(expected);
+  });
+
+  it('should handle UPDATE_LANDING_PAGE_MODULES action type', () => {
+    const action = {
+      modules: modulesByIdentifier.map(v => v.toJS()).toArray(),
+      type: actionTypes.UPDATE_LANDING_PAGE_MODULES
+    };
+    const oldState = true;
+    const expected = false;
+    const actual = reducer(oldState, action);
+    expect(actual).toEqual(expected);
+  });
+});
