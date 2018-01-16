@@ -60,6 +60,19 @@ export const PublicationStates = {
   DELETED_BY_ADMIN: 'DELETED_BY_ADMIN'
 };
 
+export const pickerColors = [
+  '#B8E986',
+  '#00AA7B',
+  '#FCB900',
+  '#FF6900',
+  '#8646ED',
+  '#FF82BE',
+  '#00DCFF',
+  '#1652C1',
+  '#EB144C',
+  '#000000'
+];
+
 export const BlockingPublicationStates = {};
 BlockingPublicationStates[PublicationStates.MODERATED_TEXT_NEVER_AVAILABLE] = PublicationStates.MODERATED_TEXT_NEVER_AVAILABLE;
 BlockingPublicationStates[PublicationStates.DELETED_BY_USER] = PublicationStates.DELETED_BY_USER;

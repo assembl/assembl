@@ -78,6 +78,12 @@ export const updateTokenVoteTypeTitle = (id: string, locale: string, value: stri
   type: actionTypes.UPDATE_TOKEN_VOTE_TYPE_TITLE
 });
 
+export const updateTokenVoteTypeColor = (id: string, value: string): actionTypes.UpdateTokenVoteTypeColor => ({
+  id: id,
+  value: value,
+  type: actionTypes.UPDATE_TOKEN_VOTE_TYPE_COLOR
+});
+
 export const updateVoteSessionPage = (value: Object): actionTypes.UpdateVoteSessionPage => ({
   titleEntries: value.titleEntries,
   subTitleEntries: value.subTitleEntries,

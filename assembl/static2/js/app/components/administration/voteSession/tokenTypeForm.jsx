@@ -4,13 +4,11 @@ import { connect } from 'react-redux';
 import { TwitterPicker } from 'react-color';
 import { getEntryValueForLocale } from '../../../utils/i18n';
 import FormControlWithLabel from '../../common/formControlWithLabel';
-import { updateTokenVoteTypeTitle } from '../../../actions/adminActions/voteSession';
+import { updateTokenVoteTypeTitle, updateTokenVoteTypeColor } from '../../../actions/adminActions/voteSession';
 import { pickerColors } from '../../../constants';
 
-const TokenTypeForm = ({ title, color, number, handleTitleChange }) => {
+const TokenTypeForm = ({ title, color, number, handleTitleChange, handleColorChange }) => {
   const handleNumberChange = () => {};
-  const handleColorChange = () => {};
-
   return (
     <div className="token-type-form">
       <FormControlWithLabel
@@ -34,7 +32,7 @@ const TokenTypeForm = ({ title, color, number, handleTitleChange }) => {
         onChange={handleColorChange}
         value={color}
       />
-      <TwitterPicker colors={pickerColors} onChange={handleColorChange} width="400px" className="color-picker" />
+      <TwitterPicker colors={pickerColors} onChange={handleColorChange} color={color} width="400px" className="color-picker" />
       <div className="separator" />
     </div>
   );
@@ -52,7 +50,8 @@ const mapStateToProps = (state, { id, editLocale }) => {
 };
 
 const mapDispatchToProps = (dispatch, { id, editLocale }) => ({
-  handleTitleChange: e => dispatch(updateTokenVoteTypeTitle(id, editLocale, e.target.value))
+  handleTitleChange: e => dispatch(updateTokenVoteTypeTitle(id, editLocale, e.target.value)),
+  handleColorChange: color => dispatch(updateTokenVoteTypeColor(id, color.hex))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(TokenTypeForm);

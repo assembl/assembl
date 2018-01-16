@@ -15,7 +15,8 @@ import {
   UPDATE_TOKEN_VOTE_INSTRUCTIONS,
   CREATE_TOKEN_VOTE_TYPE,
   DELETE_TOKEN_VOTE_TYPE,
-  UPDATE_TOKEN_VOTE_TYPE_TITLE
+  UPDATE_TOKEN_VOTE_TYPE_TITLE,
+  UPDATE_TOKEN_VOTE_TYPE_COLOR
 } from '../../actions/actionTypes';
 import { updateInLangstringEntries } from '../../utils/i18n';
 
@@ -168,6 +169,8 @@ export const tokenTypesById = (state: Map<string, Map> = Map(), action: ReduxAct
     return state.set(action.id, initialTokenType.set('id', action.id));
   case UPDATE_TOKEN_VOTE_TYPE_TITLE:
     return state.updateIn([action.id, 'titleEntries'], updateInLangstringEntries(action.locale, action.value));
+  case UPDATE_TOKEN_VOTE_TYPE_COLOR:
+    return state.setIn([action.id, 'color'], action.value);
   default:
     return state;
   }
