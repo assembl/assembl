@@ -13,9 +13,15 @@ from assembl.lib.logging import getLogger
 class LoggingMiddleware(object):
     def resolve(self, next, source, gargs, context, info, *args, **kwargs):
         if source is None:
+            variables = {}
+            for key, value in info.variable_values.items():
+                if 'password' in key or 'Password' in key:
+                    variables[key] = 'xxxxxxxxxxxxx'
+                else:
+                    variables[key] = value
             getLogger().debug(
                 'graphql', op=info.operation.operation,
-                opname=info.operation.name.value, vars=info.variable_values)
+                opname=info.operation.name.value, vars=variables)
         return next(source, gargs, context, info, *args, **kwargs)
 
 
