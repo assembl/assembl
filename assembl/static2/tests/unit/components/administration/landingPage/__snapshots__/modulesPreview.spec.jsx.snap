@@ -1,0 +1,23 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ModulesPreview component should render a preview of the enabled modules 1`] = `
+<div
+  className="modules-preview"
+>
+  <div
+    className="module-block"
+  >
+    Header
+  </div>
+  <div
+    className="module-block"
+  >
+    Video
+  </div>
+  <div
+    className="module-block"
+  >
+    Footer
+  </div>
+</div>
+`;
