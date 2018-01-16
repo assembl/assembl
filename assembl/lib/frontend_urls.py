@@ -225,7 +225,7 @@ class FrontendUrls(object):
         # this method is kept mostly for legacy routes that do not exist in
         # new front-end yet.
         if request is None:
-            if (not using_landing_page(self.discussion)) and current_phase_use_v1_interface(self.discussion.timeline_events):
+            if (not using_landing_page(self.discussion)) or current_phase_use_v1_interface(self.discussion.timeline_events):
                 route = '/debate/' + self.discussion.slug
             else:
                 route = '/' + self.discussion.slug
