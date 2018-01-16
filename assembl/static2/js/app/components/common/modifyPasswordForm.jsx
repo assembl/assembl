@@ -21,6 +21,8 @@ type State = {
   newPassword2: string
 };
 
+const isEmpty = value => value.length === 0;
+
 class ModifyPasswordForm extends React.Component<void, Props, State> {
   props: Props;
 
@@ -36,24 +38,24 @@ class ModifyPasswordForm extends React.Component<void, Props, State> {
   handleOldPasswordChange = (e: SyntheticEvent) => {
     if (e.target instanceof HTMLInputElement) {
       const value = e.target.value;
-      const disabled = value.length === 0 || this.state.newPassword.length === 0 || this.state.newPassword2.length === 0;
-      this.setState({ oldPassword: e.target.value, disabled: disabled });
+      const disabled = isEmpty(value) || isEmpty(this.state.newPassword) || isEmpty(this.state.newPassword2);
+      this.setState({ oldPassword: value, disabled: disabled });
     }
   };
 
   handleNewPasswordChange = (e: SyntheticEvent) => {
     if (e.target instanceof HTMLInputElement) {
       const value = e.target.value;
-      const disabled = this.state.oldPassword.length === 0 || value.length === 0 || this.state.newPassword2.length === 0;
-      this.setState({ newPassword: e.target.value, disabled: disabled });
+      const disabled = isEmpty(this.state.oldPassword) || isEmpty(value) || isEmpty(this.state.newPassword2);
+      this.setState({ newPassword: value, disabled: disabled });
     }
   };
 
   handleNewPassword2Change = (e: SyntheticEvent) => {
     if (e.target instanceof HTMLInputElement) {
       const value = e.target.value;
-      const disabled = this.state.oldPassword.length === 0 || this.state.newPassword.length === 0 || value.length === 0;
-      this.setState({ newPassword2: e.target.value, disabled: disabled });
+      const disabled = isEmpty(this.state.oldPassword) || isEmpty(this.state.newPassword) || isEmpty(value);
+      this.setState({ newPassword2: value, disabled: disabled });
     }
   };
 
