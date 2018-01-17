@@ -43,6 +43,7 @@ class Video(graphene.ObjectType):
 
 class IdeaInterface(graphene.Interface):
     num_posts = graphene.Int()
+    num_total_posts = graphene.Int()
     num_contributors = graphene.Int()
     num_children = graphene.Int(identifier=graphene.String())
     img = graphene.Field(Document)
@@ -50,8 +51,20 @@ class IdeaInterface(graphene.Interface):
     live = graphene.Field(lambda: IdeaUnion)
     message_view_override = graphene.String()
 
+    def resolve_num_total_posts(self, args, context, info):
+        if isinstance(self, models.RootIdea):
+            return self.num_posts
+        else:
+            return self.discussion.root_idea.num_posts
+
     def resolve_num_posts(self, args, context, info):
-        return self.num_posts
+        # Return the number of posts bound to this idea.
+        # Special case for root: do not count all posts, but only those bound to an idea.
+        # TODO: Find a way to get all posts of a given phase.
+        if isinstance(self, models.RootIdea):
+            return self.num_posts - self.num_orphan_posts
+        else:
+            return self.num_posts
 
     def resolve_img(self, args, context, info):
         if self.attachments:
