@@ -354,8 +354,9 @@ const Translations = {
         1: "Configurer les modules de vote",
         2: "Configurer les propositions de vote"
       },
+      tokenVoteCheckbox: "Cochez cette case pour créer un mouvote par jeton",
       tokenTypeNumber: "Nombre de types de jetons",
-      tokenTypeNumberHelper: "Sélectionnez le nombre de types de jetons différents souhaité",
+      tokenTypeNumberHelper: "Sélectionnez le nombre de types de jetons différents souhaité pour ce vote",
       tokenNumber: "Nombre de jetons",
       tokenTitle: "Intitulé du jeton",
       tokenColor: "Couleur du jeton",
@@ -800,6 +801,7 @@ const Translations = {
         1: "Configure the voting modules",
         2: "Configure the voting proposals"
       },
+      tokenVoteCheckbox: "Check this box to create a token vote module",
       headerTitle: "Top page Header",
       propositionSectionTitle: "Proposals section",
       instructions: "Instructions",
@@ -810,7 +812,7 @@ const Translations = {
       tokenVoteInstructionsHelper: "Enter the instructions for the token vote",
 
       tokenTypeNumber: "Number of token types",
-      tokenTypeNumberHelper: "Select the number of different token types",
+      tokenTypeNumberHelper: "Select the number of different token types for this vote",
       tokenNumber: "Nombre de jetons",
       tokenTitle: "Token title",
       tokenColor: "Color of the token",
