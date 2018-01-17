@@ -4,7 +4,7 @@ import { I18n } from 'react-redux-i18n';
 import { connect } from 'react-redux';
 import { Checkbox } from 'react-bootstrap';
 import SectionTitle from '../sectionTitle';
-import TextWithHelper from '../../common/textWithHelper';
+import Helper from '../../common/helper';
 import TokensForm from './tokensForm';
 import { createTokenVoteModule, deleteTokenVoteModule } from '../../../actions/adminActions/voteSession';
 
@@ -29,10 +29,10 @@ const ModulesSection = ({ tokenModules, editLocale, tokenTypesNumber, handleChec
                 handleCheckBoxChange(tokenModuleChecked, tokenModules[0]);
               }}
             >
-              <TextWithHelper
-                text="Vote par jetons"
-                helperUrl="/static2/img/helpers/helper2.png"
-                helperText="Description of the module"
+              <Helper
+                label="Vote par jetons"
+                helperUrl="/static2/img/helpers/helper4.png"
+                helperText={I18n.t('administration.tokenVoteCheckbox')}
                 classname="inline"
               />
             </Checkbox>

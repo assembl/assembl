@@ -8,9 +8,23 @@ import FormControlWithLabel from '../../common/formControlWithLabel';
 import { updateTokenVoteTypeTitle, updateTokenVoteTypeColor, updateTokenNumber } from '../../../actions/adminActions/voteSession';
 import { pickerColors } from '../../../constants';
 
-// TODO: Flow
+type TokenTypeFormProps = {
+  title: string,
+  color: string,
+  number: number,
+  handleTitleChange: Function,
+  handleColorChange: Function,
+  handleNumberChange: Function
+};
 
-const TokenTypeForm = ({ title, color, number, handleTitleChange, handleColorChange, handleNumberChange }) => (
+const TokenTypeForm = ({
+  title,
+  color,
+  number,
+  handleTitleChange,
+  handleColorChange,
+  handleNumberChange
+}: TokenTypeFormProps) => (
   <div className="token-type-form">
     <FormControlWithLabel
       label={I18n.t('administration.tokenTitle')}

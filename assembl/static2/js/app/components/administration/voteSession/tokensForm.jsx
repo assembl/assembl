@@ -5,7 +5,7 @@ import { I18n } from 'react-redux-i18n';
 import { Checkbox, DropdownButton, MenuItem } from 'react-bootstrap';
 import FormControlWithLabel from '../../common/formControlWithLabel';
 import { getEntryValueForLocale } from '../../../utils/i18n';
-import TextWithHelper from '../../common/textWithHelper';
+import Helper from '../../common/helper';
 import TokenTypeForm from './tokenTypeForm';
 import {
   updateTokenVoteInstructions,
@@ -44,11 +44,11 @@ const TokensForm = ({
             handleExclusiveCheckboxChange(exclusive);
           }}
         >
-          <TextWithHelper
-            text={I18n.t('administration.exclusive')}
-            helperUrl="/static2/img/helpers/helper1.png" // TODO ajouter le preview
+          <Helper
+            label={I18n.t('administration.exclusive')}
             helperText={I18n.t('administration.exclusiveHelper')}
             classname="inline"
+            helperTextClassName="helper-text-only"
           />
         </Checkbox>
       </div>
@@ -60,17 +60,11 @@ const TokensForm = ({
           onChange={handleInstructionsChange}
           value={instructions}
         />
-        <TextWithHelper
-          helperUrl="/static2/img/helpers/helper1.png" // TODO ajouter le preview
-          helperText={I18n.t('administration.tokenVoteInstructionsHelper')}
-        />
+        <Helper helperText={I18n.t('administration.tokenVoteInstructionsHelper')} helperTextClassName="helper-text-only" />
       </div>
       <div className="flex">
         <label htmlFor="input-dropdown-addon">{I18n.t('administration.tokenTypeNumber')}</label>
-        <TextWithHelper
-          helperUrl="/static2/img/helpers/helper2.png" // TODO ajouter le preview
-          helperText={I18n.t('administration.tokenTypeNumberHelper')}
-        />
+        <Helper helperUrl="/static2/img/helpers/helper2.png" helperText={I18n.t('administration.tokenTypeNumberHelper')} />
       </div>
       <DropdownButton title={tokenTypeNumber} onSelect={handleTokenVoteTypeNumberChange} id="input-dropdown-addon" required>
         <MenuItem eventKey="1">1</MenuItem>
