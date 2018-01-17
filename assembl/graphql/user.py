@@ -64,10 +64,13 @@ class AgentProfile(SecureObjectType, SQLAlchemyObjectType):
 class UpdateUser(graphene.Mutation):
     class Input:
         id = graphene.ID(required=True)
-        name = graphene.String(required=True)
+        name = graphene.String()
         username = graphene.String()
         # this is the identifier of the part in a multipart POST
         image = graphene.String()
+        old_password = graphene.String()
+        new_password = graphene.String()
+        new_password2 = graphene.String()
 
     user = graphene.Field(lambda: AgentProfile)
 
@@ -96,12 +99,34 @@ class UpdateUser(graphene.Mutation):
                 if db.query(models.Username).filter_by(
                     username=username
                 ).count():
-                    msg = context.localizer.translate(_(
-                        "We already have a user with this username."))
-                    raise Exception(msg)
+                    raise Exception(u"001: We already have a user with this username.")
 
             user.username_p = username
-            user.real_name_p = args.get('name')
+            name = args.get('name')
+            # only modify the name if it was given in parameter
+            if name is not None:
+                user.real_name_p = name
+
+            old_password = args.get('old_password')
+            new_password = args.get('new_password')
+            new_password2 = args.get('new_password2')
+            # only modify the password if it was given in parameter
+            if old_password is not None and new_password is not None and new_password2 is not None:
+                if not user.check_password(old_password):
+                    raise Exception(u"002: The entered password doesn't match your current password.")
+
+                if new_password != new_password2:
+                    raise Exception(u"003: You entered two different passwords.")
+
+                if old_password == new_password:
+                    raise Exception(u"004: The new password has to be different than the current password.")
+
+                from ..auth.password import verify_password
+                for p in user.old_passwords:
+                    if verify_password(new_password, p.password):
+                        raise Exception(u"005: The new password has to be different than the last 5 passwords you set.")
+
+                user.password_p = new_password
 
             # add uploaded image as an attachment to the user
             image = args.get('image')

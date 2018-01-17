@@ -6,6 +6,7 @@ import { compose, graphql } from 'react-apollo';
 import { Translate, I18n } from 'react-redux-i18n';
 import { Grid, Col, Button } from 'react-bootstrap';
 import FormControlWithLabel from '../components/common/formControlWithLabel';
+import ModifyPasswordForm from '../components/common/modifyPasswordForm';
 import { get, getContextual } from '../utils/routeMap';
 import { displayAlert } from '../utils/utilityManager';
 import withLoadingIndicator from '../components/common/withLoadingIndicator';
@@ -30,7 +31,8 @@ type ProfileProps = {
 type ProfileState = {
   username: string,
   name: string,
-  email: string
+  email: string,
+  passwordEditionOpen: boolean
 };
 
 class Profile extends React.PureComponent<*, ProfileProps, ProfileState> {
@@ -48,7 +50,8 @@ class Profile extends React.PureComponent<*, ProfileProps, ProfileState> {
     this.state = {
       username: username,
       name: name,
-      email: email
+      email: email,
+      passwordEditionOpen: false
     };
   }
 
@@ -93,13 +96,12 @@ class Profile extends React.PureComponent<*, ProfileProps, ProfileState> {
   };
 
   handlePasswordClick = () => {
-    const { slug } = this.props;
-    browserHistory.push(get('ctxRequestPasswordChange', { slug: slug }));
+    this.setState({ passwordEditionOpen: true });
   };
 
   render() {
     const { username, name, email } = this.state;
-    const { creationDate, lang } = this.props;
+    const { creationDate, lang, id } = this.props;
     const fullNameLabel = I18n.t('profile.fullname');
     const emailLabel = I18n.t('profile.email');
     return (
@@ -155,9 +157,13 @@ class Profile extends React.PureComponent<*, ProfileProps, ProfileState> {
                     <Translate value="profile.password" />
                   </h2>
                   <div className="profile-form center">
-                    <Button className="button-submit button-dark" onClick={this.handlePasswordClick}>
-                      <Translate value="profile.changePassword" />
-                    </Button>
+                    {this.state.passwordEditionOpen ? (
+                      <ModifyPasswordForm id={id} successCallback={() => this.setState({ passwordEditionOpen: false })} />
+                    ) : (
+                      <Button className="button-submit button-dark" onClick={this.handlePasswordClick}>
+                        <Translate value="profile.changePassword" />
+                      </Button>
+                    )}
                   </div>
                 </div>
               </Col>

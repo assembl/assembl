@@ -759,6 +759,15 @@ class User(AgentProfile):
     def password_p(self, password):
         from ..auth.password import hash_password
         if password:
+            # keep the current password to avoid the user to reuse it later
+            self.old_passwords.append(
+                OldPassword(password=self.password))
+            # keep only the last 5 passwords (4 in self.old_passwords
+            # and the current password)
+            for p in self.old_passwords[0:-4]:
+                self.old_passwords.remove(p)
+
+            # set the new password
             self.password = hash_password(password)
 
     def check_password(self, password):
@@ -1191,6 +1200,20 @@ class Username(Base):
     #     return [QuadMapPatternS(User.iri_class().apply(Username.user_id),
     #         SIOC.name, Username.username,
     #         name=QUADNAMES.class_User_username, sections=(PRIVATE_USER_SECTION,))]
+
+
+class OldPassword(Base):
+    """Table to keep the old passwords of the user.
+    """
+    __tablename__ = 'old_password'
+    id = Column(Integer, primary_key=True)
+    user_id = Column(Integer,
+                     ForeignKey('user.id', ondelete='CASCADE', onupdate='CASCADE'),
+                     nullable=False, index=True)
+    password = Column(Binary(115))
+    user = relationship(
+        User, backref=backref('old_passwords', order_by="OldPassword.id",
+                              cascade="all, delete-orphan"))
 
 
 class Role(Base):
