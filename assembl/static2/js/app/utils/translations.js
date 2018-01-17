@@ -285,7 +285,7 @@ const Translations = {
       userName: "Nom d'utilisateur",
       fullname: "Nom complet",
       email: "Email",
-      oldPassword: "Ancien mot de passe",
+      oldPassword: "Mot de passe actuel",
       newPassword: "Nouveau mot de passe",
       newPassword2: "Retaper le mot de passe",
       memberSince: "Membre depuis le %{date}",
@@ -297,7 +297,7 @@ const Translations = {
       updateUser: {
         errorMessage: {
           1: "Nous avons déjà un utilisateur ayant ce nom d'utilisateur.",
-          2: "Vous avez entré une mauvais mot de passe.",
+          2: "Le mot de passe renseigné ne correspond pas à votre mot de passe actuel.",
           3: "Vous avez entré deux mots de passe différents.",
           4: "Le nouveau mot de passe doit être différent du mot de passe actuel.",
           5: "Le nouveau mot de passe doit être différent des 5 derniers mots de passe que vous avez utilisés."
@@ -717,11 +717,11 @@ const Translations = {
     },
     profile: {
       panelTitle: "Your account",
-      personalInfos: "Personal informations",
+      personalInfos: "Personal information",
       userName: "User name",
       fullname: "Full name",
       email: "Email",
-      oldPassword: "Old password",
+      oldPassword: "Current password",
       newPassword: "New password",
       newPassword2: "Retype password",
       memberSince: "Member since %{date}",
@@ -733,9 +733,9 @@ const Translations = {
       updateUser: {
         errorMessage: {
           1: "We already have a user with this username.",
-          2: "You entered a wrong password.",
+          2: "The entered password doesn't match your current password.",
           3: "You entered two different passwords.",
-          4: "The new password has to be different than the actual password.",
+          4: "The new password has to be different than the current password.",
           5: "The new password has to be different than the last 5 passwords you set."
         }
       }

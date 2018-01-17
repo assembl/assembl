@@ -174,7 +174,7 @@ def test_graphql_update_user_modify_password_wrong_password(graphql_request, par
         "newPassword2": "new_secret"
     })
     assert res.errors is not None
-    assert res.errors[0].message == u"002: You entered a wrong password."
+    assert res.errors[0].message == u"002: The entered password doesn't match your current password."
 
 
 def test_graphql_update_user_modify_password_passwords_mismatch(graphql_request, participant1_user):
@@ -200,7 +200,7 @@ def test_graphql_update_user_modify_password_needs_to_be_different(graphql_reque
         "newPassword2": "password"
     })
     assert res.errors is not None
-    assert res.errors[0].message == u"004: The new password has to be different than the actual password."
+    assert res.errors[0].message == u"004: The new password has to be different than the current password."
 
 
 def test_graphql_update_user_modify_password_needs_to_be_different_from_previous_5_passwords_1(graphql_request, participant1_user):

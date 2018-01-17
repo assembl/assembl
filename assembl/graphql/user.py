@@ -113,13 +113,13 @@ class UpdateUser(graphene.Mutation):
             # only modify the password if it was given in parameter
             if old_password is not None and new_password is not None and new_password2 is not None:
                 if not user.check_password(old_password):
-                    raise Exception(u"002: You entered a wrong password.")
+                    raise Exception(u"002: The entered password doesn't match your current password.")
 
                 if new_password != new_password2:
                     raise Exception(u"003: You entered two different passwords.")
 
                 if old_password == new_password:
-                    raise Exception(u"004: The new password has to be different than the actual password.")
+                    raise Exception(u"004: The new password has to be different than the current password.")
 
                 from ..auth.password import verify_password
                 for p in user.old_passwords:
