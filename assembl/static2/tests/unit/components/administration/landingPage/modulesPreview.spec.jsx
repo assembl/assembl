@@ -7,8 +7,12 @@ import { enabledModulesInOrder } from './fakeData';
 
 describe('ModulesPreview component', () => {
   it('should render a preview of the enabled modules', () => {
+    const moveModuleDownSpy = jest.fn(() => {});
+    const moveModuleUpSpy = jest.fn(() => {});
     const props = {
-      modules: enabledModulesInOrder
+      modules: enabledModulesInOrder,
+      moveModuleDown: moveModuleDownSpy,
+      moveModuleUp: moveModuleUpSpy
     };
     const component = renderer.create(<ModulesPreview {...props} />);
     const tree = component.toJSON();

@@ -3,7 +3,13 @@ import { fromJS, List, Map } from 'immutable';
 import { combineReducers } from 'redux';
 import type ReduxAction from 'redux';
 
-import { type Action, TOGGLE_LANDING_PAGE_MODULE, UPDATE_LANDING_PAGE_MODULES } from '../../actions/actionTypes';
+import {
+  type Action,
+  MOVE_LANDING_PAGE_MODULE_DOWN,
+  MOVE_LANDING_PAGE_MODULE_UP,
+  TOGGLE_LANDING_PAGE_MODULE,
+  UPDATE_LANDING_PAGE_MODULES
+} from '../../actions/actionTypes';
 
 type ModulesHasChangedReducer = (boolean, ReduxAction<Action>) => boolean;
 export const modulesHasChanged: ModulesHasChangedReducer = (state = false, action) => {
@@ -20,6 +26,21 @@ export const modulesHasChanged: ModulesHasChangedReducer = (state = false, actio
 type EnabledModulesInOrderReducer = (List<string>, ReduxAction<Action>) => List<string>;
 export const enabledModulesInOrder: EnabledModulesInOrderReducer = (state = List(), action) => {
   switch (action.type) {
+  case MOVE_LANDING_PAGE_MODULE_UP: {
+    const idx = state.indexOf(action.moduleTypeIdentifier);
+    if (idx === 1) {
+      return state;
+    }
+    return state.delete(idx).insert(idx - 1, action.moduleTypeIdentifier);
+  }
+  case MOVE_LANDING_PAGE_MODULE_DOWN: {
+    const idx = state.indexOf(action.moduleTypeIdentifier);
+    if (idx === state.size - 2) {
+      return state;
+    }
+
+    return state.delete(idx).insert(idx + 1, action.moduleTypeIdentifier);
+  }
   case TOGGLE_LANDING_PAGE_MODULE: {
     const identifier = action.moduleTypeIdentifier;
     const idx = state.indexOf(identifier);

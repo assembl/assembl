@@ -5,28 +5,37 @@ import { List, Map } from 'immutable';
 import ModuleBlock from './moduleBlock';
 
 type Props = {
-  modules: List<Map>
+  modules: List<Map>,
+  moveModuleDown: Function,
+  moveModuleUp: Function
 };
 
-const ModulesPreview = ({ modules }: Props) => {
+const ModulesPreview = ({ modules, moveModuleDown, moveModuleUp }: Props) => {
   if (modules.size <= 0) {
     return null;
   }
+
+  const renderModuleBlock = (module) => {
+    const identifier = module.getIn(['moduleType', 'identifier']);
+    return (
+      <ModuleBlock
+        key={identifier}
+        moveDown={() => moveModuleDown(identifier)}
+        moveUp={() => moveModuleUp(identifier)}
+        title={module.getIn(['moduleType', 'title'])}
+        withArrows={module.getIn(['moduleType', 'editableOrder'])}
+      />
+    );
+  };
 
   const header = modules.get(0);
   const footer = modules.get(modules.size - 1);
   return (
     <div className="box modules-preview">
       <div className="inner">
-        <ModuleBlock key={header.getIn(['moduleType', 'identifier'])} title={header.getIn(['moduleType', 'title'])} />
-        <div className="other-modules">
-          {modules
-            .slice(1, -1)
-            .map(module => (
-              <ModuleBlock key={module.getIn(['moduleType', 'identifier'])} title={module.getIn(['moduleType', 'title'])} />
-            ))}
-        </div>
-        <ModuleBlock key={footer.getIn(['moduleType', 'identifier'])} title={footer.getIn(['moduleType', 'title'])} />
+        {renderModuleBlock(header)}
+        <div className="other-modules">{modules.slice(1, -1).map(module => renderModuleBlock(module))}</div>
+        {renderModuleBlock(footer)}
       </div>
     </div>
   );

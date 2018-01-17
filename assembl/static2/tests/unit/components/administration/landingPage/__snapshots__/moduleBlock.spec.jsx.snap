@@ -7,3 +7,41 @@ exports[`ModuleBlock component should render a block that represents the module 
   Header
 </div>
 `;
+
+exports[`ModuleBlock component should render a block that represents the module with move up/down arrows 1`] = `
+<div
+  className="module-block"
+>
+  Introduction
+  <span>
+    <button
+      className="admin-icons btn btn-default"
+      disabled={false}
+      onBlur={[Function]}
+      onClick={[Function]}
+      onFocus={[Function]}
+      onMouseOut={[Function]}
+      onMouseOver={[Function]}
+      type="button"
+    >
+      <span
+        className="assembl-icon-down-bold grey"
+      />
+    </button>
+    <button
+      className="admin-icons btn btn-default"
+      disabled={false}
+      onBlur={[Function]}
+      onClick={[Function]}
+      onFocus={[Function]}
+      onMouseOut={[Function]}
+      onMouseOver={[Function]}
+      type="button"
+    >
+      <span
+        className="assembl-icon-up-bold grey"
+      />
+    </button>
+  </span>
+</div>
+`;

@@ -7,16 +7,29 @@ import type { List, Map } from 'immutable';
 import ModulesPreview from './modulesPreview';
 import SectionTitle from '../../administration/sectionTitle';
 import SelectModulesForm from './selectModulesForm';
-import { toggleLandingPageModule } from '../../../actions/adminActions/landingPage';
+import {
+  toggleLandingPageModule,
+  moveLandingPageModuleDown,
+  moveLandingPageModuleUp
+} from '../../../actions/adminActions/landingPage';
 
 type Props = {
   enabledModulesInOrder: List<Map>,
   locale: string,
   modulesByIdentifier: Map<string, Map>,
+  moveModuleDown: Function,
+  moveModuleUp: Function,
   toggleModule: Function
 };
 
-export const DumbManageModules = ({ enabledModulesInOrder, locale, modulesByIdentifier, toggleModule }: Props) => (
+export const DumbManageModules = ({
+  enabledModulesInOrder,
+  locale,
+  modulesByIdentifier,
+  moveModuleDown,
+  moveModuleUp,
+  toggleModule
+}: Props) => (
   <div className="admin-box">
     <SectionTitle
       title={I18n.t('administration.landingPage.manageModules.title')}
@@ -31,7 +44,7 @@ export const DumbManageModules = ({ enabledModulesInOrder, locale, modulesByIden
           <SelectModulesForm lang={locale} modulesByIdentifier={modulesByIdentifier} toggleModule={toggleModule} />
         </div>
         <div className="column-right">
-          <ModulesPreview modules={enabledModulesInOrder} />
+          <ModulesPreview modules={enabledModulesInOrder} moveModuleDown={moveModuleDown} moveModuleUp={moveModuleUp} />
         </div>
       </div>
     </div>
@@ -47,6 +60,8 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = dispatch => ({
+  moveModuleDown: identifier => dispatch(moveLandingPageModuleDown(identifier)),
+  moveModuleUp: identifier => dispatch(moveLandingPageModuleUp(identifier)),
   toggleModule: identifier => dispatch(toggleLandingPageModule(identifier))
 });
 

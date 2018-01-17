@@ -29,4 +29,28 @@ describe('Landing page administration actions', () => {
       expect(actual).toEqual(expected);
     });
   });
+
+  describe('moveLandingPageModuleUp action', () => {
+    const { moveLandingPageModuleUp } = actions;
+    it('should return a MOVE_LANDING_PAGE_MODULE_UP action type', () => {
+      const expected = {
+        moduleTypeIdentifier: 'VIDEO',
+        type: actionTypes.MOVE_LANDING_PAGE_MODULE_UP
+      };
+      const actual = moveLandingPageModuleUp('VIDEO');
+      expect(actual).toEqual(expected);
+    });
+  });
+
+  describe('moveLandingPageModuleDown action', () => {
+    const { moveLandingPageModuleDown } = actions;
+    it('should return a MOVE_LANDING_PAGE_MODULE_DOWN action type', () => {
+      const expected = {
+        moduleTypeIdentifier: 'VIDEO',
+        type: actionTypes.MOVE_LANDING_PAGE_MODULE_DOWN
+      };
+      const actual = moveLandingPageModuleDown('VIDEO');
+      expect(actual).toEqual(expected);
+    });
+  });
 });

@@ -29,6 +29,7 @@ exports[`ManageModules component should render a form to manage the landing page
               HEADER: Immutable.Map {
                 enabled: true,
                 moduleType: Immutable.Map {
+                  editableOrder: false,
                   identifier: "HEADER",
                   title: "Header",
                 },
@@ -37,6 +38,7 @@ exports[`ManageModules component should render a form to manage the landing page
               INTRODUCTION: Immutable.Map {
                 enabled: false,
                 moduleType: Immutable.Map {
+                  editableOrder: true,
                   identifier: "INTRODUCTION",
                   title: "Introduction",
                 },
@@ -45,6 +47,7 @@ exports[`ManageModules component should render a form to manage the landing page
               VIDEO: Immutable.Map {
                 enabled: true,
                 moduleType: Immutable.Map {
+                  editableOrder: true,
                   identifier: "VIDEO",
                   title: "Video",
                 },
@@ -53,6 +56,7 @@ exports[`ManageModules component should render a form to manage the landing page
               FOOTER: Immutable.Map {
                 enabled: true,
                 moduleType: Immutable.Map {
+                  editableOrder: false,
                   identifier: "FOOTER",
                   title: "Footer",
                 },
@@ -60,7 +64,7 @@ exports[`ManageModules component should render a form to manage the landing page
               },
             }
           }
-          toggleModule={undefined}
+          toggleModule={[Function]}
         />
       </div>
       <div
@@ -72,6 +76,7 @@ exports[`ManageModules component should render a form to manage the landing page
               Immutable.Map {
                 enabled: true,
                 moduleType: Immutable.Map {
+                  editableOrder: false,
                   identifier: "HEADER",
                   title: "Header",
                 },
@@ -80,6 +85,7 @@ exports[`ManageModules component should render a form to manage the landing page
               Immutable.Map {
                 enabled: true,
                 moduleType: Immutable.Map {
+                  editableOrder: true,
                   identifier: "VIDEO",
                   title: "Video",
                 },
@@ -88,6 +94,7 @@ exports[`ManageModules component should render a form to manage the landing page
               Immutable.Map {
                 enabled: true,
                 moduleType: Immutable.Map {
+                  editableOrder: false,
                   identifier: "FOOTER",
                   title: "Footer",
                 },
@@ -95,6 +102,8 @@ exports[`ManageModules component should render a form to manage the landing page
               },
             ]
           }
+          moveModuleDown={[Function]}
+          moveModuleUp={[Function]}
         />
       </div>
     </div>

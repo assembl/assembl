@@ -42,6 +42,48 @@ describe('Landing page enabledModulesInOrder reducer', () => {
     const actual = reducer(oldState, action);
     expect(actual).toEqual(expected);
   });
+
+  it('should handle MOVE_LANDING_PAGE_MODULE_DOWN action type', () => {
+    const action = {
+      moduleTypeIdentifier: 'INTRODUCTION',
+      type: actionTypes.MOVE_LANDING_PAGE_MODULE_DOWN
+    };
+    const oldState = List.of('HEADER', 'INTRODUCTION', 'TIMELINE', 'FOOTER');
+    const expected = List.of('HEADER', 'TIMELINE', 'INTRODUCTION', 'FOOTER');
+    const actual = reducer(oldState, action);
+    expect(actual).toEqual(expected);
+  });
+
+  it('should handle MOVE_LANDING_PAGE_MODULE_DOWN action type, no change if module is the last before FOOTER', () => {
+    const action = {
+      moduleTypeIdentifier: 'TIMELINE',
+      type: actionTypes.MOVE_LANDING_PAGE_MODULE_DOWN
+    };
+    const oldState = List.of('HEADER', 'INTRODUCTION', 'TIMELINE', 'FOOTER');
+    const actual = reducer(oldState, action);
+    expect(actual).toEqual(oldState);
+  });
+
+  it('should handle MOVE_LANDING_PAGE_MODULE_UP action type', () => {
+    const action = {
+      moduleTypeIdentifier: 'TIMELINE',
+      type: actionTypes.MOVE_LANDING_PAGE_MODULE_UP
+    };
+    const oldState = List.of('HEADER', 'INTRODUCTION', 'TIMELINE', 'FOOTER');
+    const expected = List.of('HEADER', 'TIMELINE', 'INTRODUCTION', 'FOOTER');
+    const actual = reducer(oldState, action);
+    expect(actual).toEqual(expected);
+  });
+
+  it('should handle MOVE_LANDING_PAGE_MODULE_UP action type, no change if module is the first after HEADER', () => {
+    const action = {
+      moduleTypeIdentifier: 'INTRODUCTION',
+      type: actionTypes.MOVE_LANDING_PAGE_MODULE_UP
+    };
+    const oldState = List.of('HEADER', 'INTRODUCTION', 'TIMELINE', 'FOOTER');
+    const actual = reducer(oldState, action);
+    expect(actual).toEqual(oldState);
+  });
 });
 
 describe('Landing page modulesByIdentifier reducer', () => {

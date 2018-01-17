@@ -3,6 +3,7 @@ import { List, Map } from 'immutable';
 const HEADER = Map({
   enabled: true,
   moduleType: Map({
+    editableOrder: false,
     identifier: 'HEADER',
     title: 'Header'
   }),
@@ -12,6 +13,7 @@ const HEADER = Map({
 const INTRODUCTION = Map({
   enabled: false,
   moduleType: Map({
+    editableOrder: true,
     identifier: 'INTRODUCTION',
     title: 'Introduction'
   }),
@@ -21,6 +23,7 @@ const INTRODUCTION = Map({
 const VIDEO = Map({
   enabled: true,
   moduleType: Map({
+    editableOrder: true,
     identifier: 'VIDEO',
     title: 'Video'
   }),
@@ -30,6 +33,7 @@ const VIDEO = Map({
 const FOOTER = Map({
   enabled: true,
   moduleType: Map({
+    editableOrder: false,
     identifier: 'FOOTER',
     title: 'Footer'
   }),
