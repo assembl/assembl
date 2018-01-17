@@ -292,10 +292,12 @@ export type UpdateTokenVoteInstructions = {
 
 export type CreateTokenVoteType = {
   id: string,
+  parentId: string,
   type: typeof CREATE_TOKEN_VOTE_TYPE
 };
 
 export type DeleteTokenVoteType = {
+  parentId: string,
   value: number,
   type: typeof DELETE_TOKEN_VOTE_TYPE
 };

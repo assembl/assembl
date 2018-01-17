@@ -119,7 +119,7 @@ export const modulesById = (state: Map<string, Map> = Map(), action: ReduxAction
         titleEntries: fromJS(m.titleEntries),
         instructionsEntries: fromJS(m.instructionsEntries),
         exclusive: m.exclusive,
-        tokenTypes: fromJS(m.tokenTypes)
+        tokenTypes: List(m.tokenTypes.map(t => t.id))
       });
       newState = newState.set(m.id, moduleInfo);
     });
@@ -131,31 +131,18 @@ export const modulesById = (state: Map<string, Map> = Map(), action: ReduxAction
     return state.setIn([action.id, 'exclusive'], action.value);
   case UPDATE_TOKEN_VOTE_INSTRUCTIONS:
     return state.updateIn([action.id, 'instructionsEntries'], updateInLangstringEntries(action.locale, action.value));
-  default:
-    return state;
+  case CREATE_TOKEN_VOTE_TYPE: {
+    let tokenTypes = state.getIn([action.parentId, 'tokenTypes']);
+    tokenTypes = tokenTypes.push(action.id);
+    return state.setIn([action.parentId, 'tokenTypes'], tokenTypes);
   }
-};
-
-export const tokenTypesInOrder = (state: List<number> = List(), action: ReduxAction<Action>) => {
-  switch (action.type) {
-  case UPDATE_VOTE_MODULES: {
-    let tokenTypes = List();
-    action.voteModules.forEach((m) => {
-      if (m.type === 'tokens') {
-        tokenTypes = List(m.tokenTypes.map(t => t.id));
-      }
-    });
-    return tokenTypes;
-  }
-  case CREATE_TOKEN_VOTE_TYPE:
-    return state.push(action.id);
   case DELETE_TOKEN_VOTE_TYPE: {
-    let newState = state;
-    const numberToDelete = state.size - action.value;
+    let tokenTypes = state.getIn([action.parentId, 'tokenTypes']);
+    const numberToDelete = tokenTypes.size - action.value;
     for (let i = 0; i < numberToDelete; i += 1) {
-      newState = newState.delete(newState.size - 1);
+      tokenTypes = tokenTypes.delete(tokenTypes.size - 1);
     }
-    return newState;
+    return state.setIn([action.parentId, 'tokenTypes'], tokenTypes);
   }
   default:
     return state;
@@ -206,6 +193,5 @@ export default combineReducers({
   page: voteSessionPage,
   modulesInOrder: modulesInOrder,
   modulesById: modulesById,
-  tokenTypesInOrder: tokenTypesInOrder,
   tokenTypesById: tokenTypesById
 });

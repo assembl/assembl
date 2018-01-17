@@ -66,7 +66,14 @@ const TokensForm = ({
         <label htmlFor="input-dropdown-addon">{I18n.t('administration.tokenTypeNumber')}</label>
         <Helper helperUrl="/static2/img/helpers/helper2.png" helperText={I18n.t('administration.tokenTypeNumberHelper')} />
       </div>
-      <DropdownButton title={tokenTypeNumber} onSelect={handleTokenVoteTypeNumberChange} id="input-dropdown-addon" required>
+      <DropdownButton
+        title={tokenTypeNumber}
+        onSelect={(e) => {
+          handleTokenVoteTypeNumberChange(e, tokenTypeNumber);
+        }}
+        id="input-dropdown-addon"
+        required
+      >
         <MenuItem eventKey="1">1</MenuItem>
         <MenuItem eventKey="2">2</MenuItem>
         <MenuItem eventKey="3">3</MenuItem>
@@ -84,28 +91,27 @@ const TokensForm = ({
 
 const mapStateToProps = (state, { id, editLocale }) => {
   const module = state.admin.voteSession.modulesById.get(id);
-  const { tokenTypesInOrder } = state.admin.voteSession;
   const instructions = getEntryValueForLocale(module.get('instructionsEntries'), editLocale);
   return {
     instructions: instructions,
     exclusive: module.get('exclusive'),
-    tokenTypeNumber: tokenTypesInOrder.size,
-    tokenTypes: tokenTypesInOrder,
+    tokenTypeNumber: module.get('tokenTypes').size,
+    tokenTypes: module.get('tokenTypes'),
     editLocale: editLocale
   };
 };
 
-const mapDispatchToProps = (dispatch, { id, editLocale, tokenTypesNumber }) => ({
+const mapDispatchToProps = (dispatch, { id, editLocale }) => ({
   handleInstructionsChange: e => dispatch(updateTokenVoteInstructions(id, editLocale, e.target.value)),
-  handleTokenVoteTypeNumberChange: (value) => {
-    const newTokenTypesNumber = value - tokenTypesNumber;
-    if (value > tokenTypesNumber) {
-      for (let i = 0; i < newTokenTypesNumber; i += 1) {
+  handleTokenVoteTypeNumberChange: (value, tokenTypeNumber) => {
+    const newTokenTypeNumber = value - tokenTypeNumber;
+    if (value > tokenTypeNumber) {
+      for (let i = 0; i < newTokenTypeNumber; i += 1) {
         const newId = Math.round(Math.random() * -1000000).toString();
-        dispatch(createTokenVoteType(newId));
+        dispatch(createTokenVoteType(newId, id));
       }
     } else {
-      dispatch(deleteTokenVoteType(value));
+      dispatch(deleteTokenVoteType(value, id));
     }
   },
   handleExclusiveCheckboxChange: checked => dispatch(updateTokenVoteExclusive(id, !checked))

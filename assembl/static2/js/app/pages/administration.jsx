@@ -162,28 +162,6 @@ class Administration extends React.Component {
               color: '#789456'
             }
           ]
-        },
-        {
-          type: 'gauge',
-          id: '123456789',
-          titleEntries: [
-            {
-              localeCode: 'fr',
-              value: 'Titre du module gauge'
-            }
-          ],
-          instructionsEntries: [
-            {
-              localeCode: 'fr',
-              value: 'balblabla'
-            }
-          ],
-          intervalNumber: 10,
-          textualValue: false,
-          numberValue: true,
-          minValue: 100,
-          maxValue: 300,
-          unit: '€'
         }
       ]
     };

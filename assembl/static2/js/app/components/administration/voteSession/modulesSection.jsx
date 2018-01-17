@@ -11,11 +11,10 @@ import { createTokenVoteModule, deleteTokenVoteModule } from '../../../actions/a
 type ModulesSectionProps = {
   tokenModules: Object,
   editLocale: string,
-  tokenTypesNumber: Number,
   handleCheckBoxChange: Function
 };
 
-const ModulesSection = ({ tokenModules, editLocale, tokenTypesNumber, handleCheckBoxChange }: ModulesSectionProps) => {
+const ModulesSection = ({ tokenModules, editLocale, handleCheckBoxChange }: ModulesSectionProps) => {
   const tokenModuleChecked = tokenModules.size > 0;
   return (
     <div className="admin-box">
@@ -36,7 +35,7 @@ const ModulesSection = ({ tokenModules, editLocale, tokenTypesNumber, handleChec
                 classname="inline"
               />
             </Checkbox>
-            {tokenModules.map(id => <TokensForm key={id} id={id} editLocale={editLocale} tokenTypesNumber={tokenTypesNumber} />)}
+            {tokenModules.map(id => <TokensForm key={id} id={id} editLocale={editLocale} />)}
           </div>
         </div>
       </div>
@@ -45,12 +44,11 @@ const ModulesSection = ({ tokenModules, editLocale, tokenTypesNumber, handleChec
 };
 
 const mapStateToProps = ({ admin }) => {
-  const { modulesInOrder, modulesById, tokenTypesInOrder } = admin.voteSession;
+  const { modulesInOrder, modulesById } = admin.voteSession;
   const { editLocale } = admin;
   return {
     tokenModules: modulesInOrder.filter(id => modulesById.get(id).get('type') === 'tokens'),
-    editLocale: editLocale,
-    tokenTypesNumber: tokenTypesInOrder.size
+    editLocale: editLocale
   };
 };
 

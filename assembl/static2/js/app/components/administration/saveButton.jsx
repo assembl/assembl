@@ -370,6 +370,7 @@ const mapStateToProps = ({
 }) => {
   const { page, resourcesById, resourcesHaveChanged, resourcesInOrder } = resourcesCenter;
   const { sectionsById, sectionsHaveChanged, sectionsInOrder } = sections;
+  const { modulesById, modulesInOrder, tokenTypesById } = voteSession;
   return {
     resourcesCenterPage: page,
     resourcesHaveChanged: resourcesHaveChanged,
@@ -389,7 +390,16 @@ const mapStateToProps = ({
       .valueSeq() // convert to array of Map
       .toJS(), // convert to array of objects
     legalNoticeAndTerms: legalNoticeAndTerms,
-    voteSessionPage: voteSession.page
+    voteSessionPage: voteSession.page,
+    voteModules: modulesInOrder.map(id =>
+      modulesById.get(id).set(
+        'tokenTypes',
+        modulesById
+          .get(id)
+          .get('tokenTypes')
+          .map(t => tokenTypesById.get(t))
+      )
+    )
   };
 };
 

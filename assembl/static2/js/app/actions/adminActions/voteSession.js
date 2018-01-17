@@ -77,12 +77,14 @@ export const updateTokenVoteInstructions = (
   type: actionTypes.UPDATE_TOKEN_VOTE_INSTRUCTIONS
 });
 
-export const createTokenVoteType = (id: string): actionTypes.CreateTokenVoteType => ({
+export const createTokenVoteType = (id: string, parentId: string): actionTypes.CreateTokenVoteType => ({
   id: id,
+  parentId: parentId,
   type: actionTypes.CREATE_TOKEN_VOTE_TYPE
 });
 
-export const deleteTokenVoteType = (value: number): actionTypes.CreateTokenVoteType => ({
+export const deleteTokenVoteType = (value: number, parentId: string): actionTypes.CreateTokenVoteType => ({
+  parentId: parentId,
   value: value,
   type: actionTypes.DELETE_TOKEN_VOTE_TYPE
 });
