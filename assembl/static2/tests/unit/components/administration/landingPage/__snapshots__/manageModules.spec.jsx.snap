@@ -66,31 +66,31 @@ exports[`ManageModules component should render a form to manage the landing page
       >
         <ModulesPreview
           modules={
-            Array [
+            Immutable.List [
               Immutable.Map {
                 enabled: true,
                 moduleType: Immutable.Map {
-                    identifier: "HEADER",
-                    title: "Header",
+                  identifier: "HEADER",
+                  title: "Header",
                 },
                 order: 1,
-            },
+              },
               Immutable.Map {
                 enabled: true,
                 moduleType: Immutable.Map {
-                    identifier: "VIDEO",
-                    title: "Video",
+                  identifier: "VIDEO",
+                  title: "Video",
                 },
                 order: 5,
-            },
+              },
               Immutable.Map {
                 enabled: true,
                 moduleType: Immutable.Map {
-                    identifier: "FOOTER",
-                    title: "Footer",
+                  identifier: "FOOTER",
+                  title: "Footer",
                 },
                 order: 99,
-            },
+              },
             ]
           }
         />

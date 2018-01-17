@@ -1,5 +1,5 @@
 // @flow
-import { fromJS, Map } from 'immutable';
+import { fromJS, List, Map } from 'immutable';
 import { combineReducers } from 'redux';
 import type ReduxAction from 'redux';
 
@@ -17,9 +17,29 @@ export const modulesHasChanged: ModulesHasChangedReducer = (state = false, actio
   }
 };
 
+type EnabledModulesInOrderReducer = (List<string>, ReduxAction<Action>) => List<string>;
+export const enabledModulesInOrder: EnabledModulesInOrderReducer = (state = List(), action) => {
+  switch (action.type) {
+  case TOGGLE_LANDING_PAGE_MODULE: {
+    const identifier = action.moduleTypeIdentifier;
+    const idx = state.indexOf(identifier);
+    if (idx !== -1) {
+      return state.delete(idx);
+    }
+
+    // insert at the end (just before FOOTER module)
+    return state.insert(state.size - 1, identifier);
+  }
+  case UPDATE_LANDING_PAGE_MODULES:
+    return List(action.modules.filter(module => module.enabled).map(module => module.moduleType.identifier));
+  default:
+    return state;
+  }
+};
+
 const initialState = Map();
-type ModulesReducer = (Map<string, Map>, ReduxAction<Action>) => Map<string, Map>;
-export const modules: ModulesReducer = (state = initialState, action) => {
+type ModulesByIdentifierReducer = (Map<string, Map>, ReduxAction<Action>) => Map<string, Map>;
+export const modulesByIdentifier: ModulesByIdentifierReducer = (state = initialState, action) => {
   switch (action.type) {
   case TOGGLE_LANDING_PAGE_MODULE: {
     const moduleType = action.moduleTypeIdentifier;
@@ -38,11 +58,13 @@ export const modules: ModulesReducer = (state = initialState, action) => {
 };
 
 export type LandingPageReducer = {
+  enabledModulesInOrder: EnabledModulesInOrderReducer,
   modulesHasChanged: ModulesHasChangedReducer,
-  modules: ModulesReducer
+  modulesByIdentifier: ModulesByIdentifierReducer
 };
 const reducers: LandingPageReducer = {
+  enabledModulesInOrder: enabledModulesInOrder,
   modulesHasChanged: modulesHasChanged,
-  modules: modules
+  modulesByIdentifier: modulesByIdentifier
 };
 export default combineReducers(reducers);

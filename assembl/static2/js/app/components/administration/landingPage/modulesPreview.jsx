@@ -1,16 +1,20 @@
 // @flow
 import React from 'react';
-import { Map } from 'immutable';
+import { List, Map } from 'immutable';
 
 import ModuleBlock from './moduleBlock';
 
 type Props = {
-  modules: Map<string, Map>
+  modules: List<Map>
 };
 
 const ModulesPreview = ({ modules }: Props) => {
-  const header = modules[0];
-  const footer = modules[modules.length - 1];
+  if (modules.size <= 0) {
+    return null;
+  }
+
+  const header = modules.get(0);
+  const footer = modules.get(modules.size - 1);
   return (
     <div className="box modules-preview">
       <div className="inner">

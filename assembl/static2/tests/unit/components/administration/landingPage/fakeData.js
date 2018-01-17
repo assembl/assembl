@@ -1,4 +1,4 @@
-import { Map } from 'immutable';
+import { List, Map } from 'immutable';
 
 const HEADER = Map({
   enabled: true,
@@ -66,4 +66,4 @@ export const modulesTypes = [
   }
 ];
 
-export const enabledModulesInOrder = [HEADER, VIDEO, FOOTER];
+export const enabledModulesInOrder = List.of(HEADER, VIDEO, FOOTER);

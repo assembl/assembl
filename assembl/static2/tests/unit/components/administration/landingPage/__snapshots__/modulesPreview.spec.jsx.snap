@@ -1,5 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`ModulesPreview component should display nothing if modules are empty 1`] = `null`;
+
 exports[`ModulesPreview component should render a preview of the enabled modules 1`] = `
 <div
   className="box modules-preview"
