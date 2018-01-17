@@ -13,6 +13,7 @@ def test_add_discussion(test_session):
         u"Use the haptic JSON system, then you can quantify the cross-platform capacitor!", "en")
     d.legal_notice = LangString.create(
         u"Use the optical SCSI microchip, then you can generate the cross-platform pixel!", "en")
+    test_session.flush()
     assert d.topic == u"Education"
     assert d.discussion_locales == ['en', 'fr', 'de']
     assert d.terms_and_conditions.entries[0].value == u"Use the haptic JSON system, then you can quantify the cross-platform capacitor!"  # noqa: E501

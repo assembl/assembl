@@ -157,8 +157,8 @@ def subidea_1_2(request, discussion, subidea_1, test_session):
     test_session.flush()
 
     def fin():
-        print "finalizer subidea_1_1"
-        test_session.delete(l_1_11)
+        print "finalizer subidea_1_2"
+        test_session.delete(l_1_12)
         test_session.delete(i)
         test_session.flush()
     request.addfinalizer(fin)
