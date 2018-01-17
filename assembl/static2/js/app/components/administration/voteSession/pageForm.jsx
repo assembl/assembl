@@ -34,7 +34,7 @@ type PageFormProps = {
   handlePropositionSectionTitleChange: Function
 };
 
-const PageForm = ({
+const DumbPageForm = ({
   headerTitle,
   headerSubtitle,
   headerImgUrl,
@@ -155,4 +155,6 @@ const mapDispatchToProps = (dispatch, { editLocale }) => ({
   handlePropositionSectionTitleChange: e => dispatch(updateVoteSessionPagePropositionsTitle(editLocale, e.target.value))
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(PageForm);
+export { DumbPageForm };
+
+export default connect(mapStateToProps, mapDispatchToProps)(DumbPageForm);

@@ -1,0 +1,346 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Vote Session DumbPageForm component should render a form to update the vote session page title, subtitle, header, instructions' title, instructions and proposals section title 1`] = `
+<div
+  className="admin-box"
+>
+  <div>
+    <h3
+      className="dark-title-3"
+    >
+      Missing translation: administration.voteSession.0
+    </h3>
+    <div
+      className="box-hyphen"
+    />
+    <div
+      className="annotation"
+    >
+      Missing translation: administration.annotation
+    </div>
+  </div>
+  <div
+    className="admin-content"
+  >
+    <div
+      className="form-container"
+    >
+      <form>
+        <div
+          className="title"
+        >
+          Missing translation: administration.headerTitle
+           
+          <span
+            className="assembl-icon-faq grey pointer"
+            onBlur={[Function]}
+            onClick={null}
+            onFocus={[Function]}
+            onMouseOut={[Function]}
+            onMouseOver={[Function]}
+          />
+        </div>
+        <div
+          className="form-group"
+        >
+          <label
+            className="control-label"
+            htmlFor={undefined}
+          >
+            Missing translation: administration.ph.headerTitle FR*
+          </label>
+          <input
+            className="form-control"
+            disabled={undefined}
+            id={undefined}
+            onBlur={[Function]}
+            onChange={[Function]}
+            placeholder="Missing translation: administration.ph.headerTitle FR*"
+            type="text"
+            value="Phase de vote a la majorite et estimation multicritere"
+          />
+        </div>
+        <div
+          className="form-group"
+        >
+          <label
+            className="control-label"
+            htmlFor={undefined}
+          >
+            Missing translation: administration.ph.headerSubtitle FR
+          </label>
+          <input
+            className="form-control"
+            disabled={undefined}
+            id={undefined}
+            onBlur={[Function]}
+            onChange={[Function]}
+            placeholder="Missing translation: administration.ph.headerSubtitle FR"
+            type="text"
+            value="La phase de vote est ouverte !"
+          />
+        </div>
+        <div
+          className="form-group"
+        >
+          <div>
+            <button
+              className="btn btn-default"
+              disabled={false}
+              onClick={[Function]}
+              type="button"
+            >
+              <span
+                className={undefined}
+                style={undefined}
+              >
+                Missing translation: common.uploadButton
+              </span>
+            </button>
+            <div
+              className="preview"
+            >
+              <img
+                alt="preview"
+                src="http://www.example.com/documents/myimage/data"
+              />
+            </div>
+            <input
+              className="hidden"
+              name="header-image"
+              onChange={[Function]}
+              type="file"
+            />
+          </div>
+        </div>
+      </form>
+      <div
+        className="separator"
+      />
+      <div
+        className="title"
+      >
+        Missing translation: administration.instructions
+         
+        <span
+          className="assembl-icon-faq grey pointer"
+          onBlur={[Function]}
+          onClick={null}
+          onFocus={[Function]}
+          onMouseOut={[Function]}
+          onMouseOver={[Function]}
+        />
+      </div>
+      <div
+        className="form-group"
+      >
+        <label
+          className="control-label"
+          htmlFor={undefined}
+        >
+          Missing translation: administration.ph.instructionsTitle FR*
+        </label>
+        <input
+          className="form-control"
+          disabled={undefined}
+          id={undefined}
+          onBlur={[Function]}
+          onChange={[Function]}
+          placeholder="Missing translation: administration.ph.instructionsTitle FR*"
+          type="text"
+          value="Votez pour elire les 3 meilleures proppositions et leur alouer une estimation de cout!"
+        />
+      </div>
+      <div
+        className="form-group"
+      >
+        <div
+          className="rich-text-editor"
+        >
+          <div
+            className="editor-header"
+          >
+            <div
+              className="editor-label form-label"
+            >
+              Missing translation: administration.ph.instructionsContent FR*
+            </div>
+            <div
+              className="clear"
+            />
+          </div>
+          <div
+            onClick={[Function]}
+          >
+            <div
+              className="DraftEditor-root"
+            >
+              <div
+                className="DraftEditor-editorContainer"
+              >
+                <div
+                  aria-activedescendant={undefined}
+                  aria-autocomplete={undefined}
+                  aria-describedby={null}
+                  aria-expanded={undefined}
+                  aria-haspopup={undefined}
+                  aria-label={undefined}
+                  aria-owns={undefined}
+                  autoCapitalize={undefined}
+                  autoComplete={undefined}
+                  autoCorrect={undefined}
+                  className="notranslate public-DraftEditor-content"
+                  contentEditable={true}
+                  data-testid={undefined}
+                  onBeforeInput={[Function]}
+                  onBlur={[Function]}
+                  onCompositionEnd={[Function]}
+                  onCompositionStart={[Function]}
+                  onCopy={[Function]}
+                  onCut={[Function]}
+                  onDragEnd={[Function]}
+                  onDragEnter={[Function]}
+                  onDragLeave={[Function]}
+                  onDragOver={[Function]}
+                  onDragStart={[Function]}
+                  onDrop={[Function]}
+                  onFocus={[Function]}
+                  onInput={[Function]}
+                  onKeyDown={[Function]}
+                  onKeyPress={[Function]}
+                  onKeyUp={[Function]}
+                  onMouseUp={[Function]}
+                  onPaste={[Function]}
+                  onSelect={[Function]}
+                  role="textbox"
+                  spellCheck={true}
+                  style={
+                    Object {
+                      "outline": "none",
+                      "whiteSpace": "pre-wrap",
+                      "wordWrap": "break-word",
+                    }
+                  }
+                  suppressContentEditableWarning={true}
+                  tabIndex={undefined}
+                >
+                  <div
+                    data-contents="true"
+                  >
+                    <div
+                      className=""
+                      data-block={true}
+                      data-editor="2e7nr"
+                      data-offset-key="9ubsb-0-0"
+                    >
+                      <div
+                        className="public-DraftStyleDefault-block public-DraftStyleDefault-ltr"
+                        data-offset-key="9ubsb-0-0"
+                      >
+                        <span
+                          data-offset-key="9ubsb-0-0"
+                          style={Object {}}
+                        >
+                          <span
+                            data-text="true"
+                          >
+                            Vous disposez de 8 jetons favorables et de 3 jetons défavorables
+                          </span>
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            className="editor-toolbar"
+          >
+            <div
+              className="btn-group"
+            >
+              <button
+                className="btn btn-default"
+                disabled={false}
+                onClick={[Function]}
+                onMouseDown={[Function]}
+                title="Missing translation: common.editor.bold"
+                type="button"
+              >
+                <span
+                  className="assembl-icon-text-bold"
+                />
+              </button>
+              <button
+                className="btn btn-default"
+                disabled={false}
+                onClick={[Function]}
+                onMouseDown={[Function]}
+                title="Missing translation: common.editor.italic"
+                type="button"
+              >
+                <span
+                  className="assembl-icon-text-italics"
+                />
+              </button>
+              <button
+                className="btn btn-default"
+                disabled={false}
+                onClick={[Function]}
+                onMouseDown={[Function]}
+                title="Missing translation: common.editor.bulletList"
+                type="button"
+              >
+                <span
+                  className="assembl-icon-text-bullets"
+                />
+              </button>
+            </div>
+          </div>
+          <div
+            className="attachments"
+          />
+        </div>
+      </div>
+      <div
+        className="separator"
+      />
+      <div
+        className="title"
+      >
+        Missing translation: administration.propositionSectionTitle
+         
+        <span
+          className="assembl-icon-faq grey pointer"
+          onBlur={[Function]}
+          onClick={null}
+          onFocus={[Function]}
+          onMouseOut={[Function]}
+          onMouseOver={[Function]}
+        />
+      </div>
+      <div
+        className="form-group"
+      >
+        <label
+          className="control-label"
+          htmlFor={undefined}
+        >
+          Missing translation: administration.ph.propositionSectionTitle FR*
+        </label>
+        <input
+          className="form-control"
+          disabled={undefined}
+          id={undefined}
+          onBlur={[Function]}
+          onChange={[Function]}
+          placeholder="Missing translation: administration.ph.propositionSectionTitle FR*"
+          type="text"
+          value="Vote sur 8 propositions"
+        />
+      </div>
+    </div>
+  </div>
+</div>
+`;
