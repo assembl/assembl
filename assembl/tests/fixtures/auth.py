@@ -106,11 +106,11 @@ def local_user_role(request, test_session, simple_role,
 
 @pytest.fixture(scope="function")
 def simple_permission(request, test_session):
-	"""A Permission fixture"""
-	from assembl.models.auth import Permission
-	simple_permission = Permission(name='s', )
-	test_session.add(simple_permission)
-	test_session.flush()
+    """A permission fixture"""
+    from assembl.models.auth import Permission
+    simple_permission = Permission(name='s',)
+    test_session.add(simple_permission)
+    test_session.flush()
 
     def fin():
         print "Finalizing the simple_permission fixture"
@@ -176,7 +176,6 @@ def simple_abstract_agent_account(request, test_session, simple_agent_profile):
 
 
 @pytest.fixture(scope="function")
-
 def simple_partner_organization(request, test_session, discussion):
     from assembl.models.auth import PartnerOrganization
     simple_partner_organization = PartnerOrganization(discussion=discussion,
@@ -191,6 +190,7 @@ def simple_partner_organization(request, test_session, discussion):
         test_session.flush()
     request.addfinalizer(fin)
     return simple_partner_organization
+
 
 @pytest.fixture(scope="function")
 def admin_social_account(request, admin_user, google_identity_provider, test_session):
