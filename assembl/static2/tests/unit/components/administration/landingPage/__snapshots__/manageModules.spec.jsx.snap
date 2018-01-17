@@ -11,9 +11,11 @@ exports[`ManageModules component should render a form to manage the landing page
   <div
     className="admin-content form-container"
   >
-    <Translate
-      value="administration.landingPage.manageModules.helper"
-    />
+    <p>
+      <Translate
+        value="administration.landingPage.manageModules.helper"
+      />
+    </p>
     <div
       className="two-columns-admin"
     >

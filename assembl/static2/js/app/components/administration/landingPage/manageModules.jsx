@@ -23,7 +23,9 @@ export const DumbManageModules = ({ enabledModulesInOrder, locale, modulesByIden
       annotation={I18n.t('administration.annotation')}
     />
     <div className="admin-content form-container">
-      <Translate value="administration.landingPage.manageModules.helper" />
+      <p>
+        <Translate value="administration.landingPage.manageModules.helper" />
+      </p>
       <div className="two-columns-admin">
         <div className="column-left">
           <SelectModulesForm lang={locale} modulesByIdentifier={modulesByIdentifier} toggleModule={toggleModule} />
