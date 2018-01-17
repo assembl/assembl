@@ -79,7 +79,7 @@ class ModifyPasswordForm extends React.Component<void, Props, State> {
             const code = message.slice(2, 3);
             message = I18n.t(`profile.updateUser.errorMessage.${code}`);
           }
-          displayAlert('danger', message);
+          displayAlert('danger', message, false, 10000);
           this.setState({ disabled: false });
         });
     this.setState({ disabled: true }, changePassword);
