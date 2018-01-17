@@ -285,7 +285,6 @@ class FrontendUrls(object):
                     'Question':
                 thematic = post.get_closest_thematic()
                 route = self.get_frontend_url('post', **{
-                    'slug': self.discussion.slug,
                     'phase': phase.identifier,
                     'themeId': thematic.graphene_id(),
                     'element': ''
@@ -293,7 +292,6 @@ class FrontendUrls(object):
 
             if not route:
                 route = self.get_frontend_url('post', **{
-                    'slug': self.discussion.slug,
                     'phase': phase.identifier,
                     'themeId': Node.to_global_id('Idea', first_idea.id),
                     'element': Node.to_global_id('Post', post.id)
@@ -329,6 +327,8 @@ class FrontendUrls(object):
             frontend_routes = get_frontend_urls()
         if route_name not in frontend_routes:
             return None
+        if 'slug' not in params:
+            params['slug'] = self.discussion.slug
         return "/" + frontend_routes[route_name].format(**params)
 
     def append_query_string(self, url, **kwargs):
