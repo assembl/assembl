@@ -3,7 +3,7 @@ import { compose, graphql } from 'react-apollo';
 
 import { Checkbox, FormGroup } from 'react-bootstrap';
 import LandingPageModuleTypes from '../../../graphql/LandingPageModuleTypes.graphql';
-import withLoadingIndicator from '../../common/withLoadingIndicator';
+import withoutLoadingIndicator from '../../common/withoutLoadingIndicator';
 
 export const DumbSelectModulesForm = ({ hasErrors, modulesByIdentifier, moduleTypes, toggleModule }) => {
   if (hasErrors) {
@@ -55,5 +55,5 @@ export default compose(
       };
     }
   }),
-  withLoadingIndicator()
+  withoutLoadingIndicator()
 )(DumbSelectModulesForm);
