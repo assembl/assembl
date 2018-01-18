@@ -123,28 +123,13 @@ def closed_discussion(request, test_session, discussion):
     role = test_session.query(Role).filter_by(name=R_PARTICIPANT).first()
     # Take the read for everyone, put it on participant
     dp = test_session.query(DiscussionPermission).join(Permission).filter(
-        DiscussionPermission.discussion == discussion, Permission.name == P_READ).first()
+        DiscussionPermission.discussion==discussion, Permission.name==P_READ).first()
     dp.role = role
     test_session.commit()
 
     def fin():
         for acl in discussion.acls:
             test_session.delete(acl)
-        test_session.flush()
-    request.addfinalizer(fin)
-    return discussion
-
-
-@pytest.fixture(scope="function")
-def discussion_with_permissions(request, test_session, discussion):
-    """An empty Discussion fixture with default permissions"""
-    from assembl.models.auth import create_default_permissions
-    create_default_permissions(discussion)
-    test_session.flush()
-
-    def fin():
-        for ul in discussion.acls:
-            ul.delete()
         test_session.flush()
     request.addfinalizer(fin)
     return discussion
