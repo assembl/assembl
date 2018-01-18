@@ -354,7 +354,8 @@ const Translations = {
         1: "Configurer les modules de vote",
         2: "Configurer les propositions de vote"
       },
-      tokenVoteCheckbox: "Cochez cette case pour créer un mouvote par jeton",
+      tokenVoteCheckbox:
+        "Le vote par jetons permet de sélectionner des propositions à la proportionnelle. Chaque participant dispose d'une certaine quantité de jetons et devra les répartir sur les propositions.",
       tokenTypeNumber: "Nombre de types de jetons",
       tokenTypeNumberHelper: "Sélectionnez le nombre de types de jetons différents souhaité pour ce vote",
       tokenNumber: "Nombre de jetons",
@@ -364,10 +365,11 @@ const Translations = {
       PropositionSectionTitle: "Section propositions",
       instructions: "Instructions",
       voteSessionSuccess: "La session de vote a été enregistrée avec succès.",
-      exclusive: "Exclusif",
-      exclusiveHelper: "Cochez cette case pour rendre les jetons exclusifs les uns des autres",
-      tokenVoteInstructions: "Consigne du vote par jeton",
-      tokenVoteInstructionsHelper: "Entrez les instructions pour le vote par jeton",
+      exclusive: "Exclusifs",
+      exclusiveHelper:
+        "Vous pouvez décider si le participant peut distributer un seul type de jetons (exclusifs) ou plusieurs types de jetons par proposition.",
+      tokenVoteInstructions: "Consigne du vote par jetons",
+      tokenVoteInstructionsHelper: "En fonction de l'objectif du module de jetons, incitez les participants à passer à l'action.",
 
       sections: {
         addSection: "Ajouter une rubrique",
@@ -807,9 +809,10 @@ const Translations = {
       instructions: "Instructions",
       voteSessionSuccess: "The vote session is saved with success.",
       exclusive: "Exclusive",
-      exclusiveHelper: "Check this box to make the different tokens exclusive from each other",
+      exclusiveHelper:
+        "You can decide wether the participant can distribute a single type of token (exclusive) or several types of token per proposition.",
       tokenVoteInstructions: "Instructions for the token vote",
-      tokenVoteInstructionsHelper: "Enter the instructions for the token vote",
+      tokenVoteInstructionsHelper: "Depending on the objective of the token module, incite the participants to take action.",
 
       tokenTypeNumber: "Number of token types",
       tokenTypeNumberHelper: "Select the number of different token types for this vote",
