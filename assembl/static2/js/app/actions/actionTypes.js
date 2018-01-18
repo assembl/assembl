@@ -263,7 +263,7 @@ export type ModuleInfo = {
 export type VoteModulesArray = Array<ModuleInfo>;
 
 export type UpdateVoteModules = {
-  VoteModules: VoteModulesArray,
+  voteModules: VoteModulesArray,
   type: typeof UPDATE_VOTE_MODULES
 };
 
@@ -302,7 +302,7 @@ export type DeleteTokenVoteType = {
   type: typeof DELETE_TOKEN_VOTE_TYPE
 };
 
-export type UpdateTokenVoteTypeTitleType = {
+export type UpdateTokenVoteTypeTitle = {
   id: string,
   locale: string,
   value: string,
@@ -357,7 +357,7 @@ type VoteSessionActions =
   | CreateTokenVoteType
   | DeleteTokenVoteType
   | UpdateTokenVoteTypeTitle
-  | updateTokenNumber
+  | UpdateTokenNumber
   | UpdateTokenVoteTypeColor;
 
 export type Action =

@@ -3,11 +3,11 @@ import React from 'react';
 import { OverlayTrigger, Popover } from 'react-bootstrap';
 
 type HelperProps = {
-  label: string,
-  helperUrl: string,
+  label?: string,
+  helperUrl?: string,
   helperText: string,
-  classname: string,
-  helperTextClassName: string
+  classname?: string,
+  helperTextClassName?: string
 };
 
 const overflowMenu = (helperUrl, helperText, helperTextClassName) => (
@@ -31,5 +31,12 @@ const Helper = ({ label, helperUrl, helperText, classname, helperTextClassName }
     </OverlayTrigger>
   </div>
 );
+
+Helper.defaultProps = {
+  label: '',
+  helperUrl: '',
+  classname: '',
+  helperTextClassName: ''
+};
 
 export default Helper;

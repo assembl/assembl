@@ -46,7 +46,7 @@ const TokensForm = ({
         >
           <Helper
             label={I18n.t('administration.exclusive')}
-            helperText={I18n.t('administration.exclusiveHelper')}
+            helperText={I18n.t('administration.exclusive')}
             classname="inline"
             helperTextClassName="helper-text-only"
           />
@@ -60,11 +60,11 @@ const TokensForm = ({
           onChange={handleInstructionsChange}
           value={instructions}
         />
-        <Helper helperText={I18n.t('administration.tokenVoteInstructionsHelper')} helperTextClassName="helper-text-only" />
+        <Helper helperText={I18n.t('administration.tokenVoteInstructions')} helperTextClassName="helper-text-only" />
       </div>
       <div className="flex">
         <label htmlFor="input-dropdown-addon">{I18n.t('administration.tokenTypeNumber')}</label>
-        <Helper helperUrl="/static2/img/helpers/helper2.png" helperText={I18n.t('administration.tokenTypeNumberHelper')} />
+        <Helper helperUrl="/static2/img/helpers/helper2.png" helperText={I18n.t('administration.helpers.tokenTypeNumber')} />
       </div>
       <DropdownButton
         title={tokenTypeNumber}

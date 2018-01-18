@@ -357,7 +357,6 @@ const Translations = {
       tokenVoteCheckbox:
         "Le vote par jetons permet de sélectionner des propositions à la proportionnelle. Chaque participant dispose d'une certaine quantité de jetons et devra les répartir sur les propositions.",
       tokenTypeNumber: "Nombre de types de jetons",
-      tokenTypeNumberHelper: "Sélectionnez le nombre de types de jetons différents souhaité pour ce vote",
       tokenNumber: "Nombre de jetons",
       tokenTitle: "Intitulé du jeton",
       tokenColor: "Couleur du jeton",
@@ -366,10 +365,8 @@ const Translations = {
       instructions: "Instructions",
       voteSessionSuccess: "La session de vote a été enregistrée avec succès.",
       exclusive: "Exclusifs",
-      exclusiveHelper:
-        "Vous pouvez décider si le participant peut distributer un seul type de jetons (exclusifs) ou plusieurs types de jetons par proposition.",
+
       tokenVoteInstructions: "Consigne du vote par jetons",
-      tokenVoteInstructionsHelper: "En fonction de l'objectif du module de jetons, incitez les participants à passer à l'action.",
 
       sections: {
         addSection: "Ajouter une rubrique",
@@ -385,7 +382,11 @@ const Translations = {
       helpers: {
         voteSessionHeader: "Le bandeau de haut de page doit contenir une image et un titre. Le sous-titre est optionnel.",
         voteSessionInstructions: "La section des instructions doit contenir un titre et une description.",
-        voteSessionPropositionSection: "La section des propositions doit contenir un titre."
+        voteSessionPropositionSection: "La section des propositions doit contenir un titre.",
+        tokenTypeNumber: "Sélectionnez le nombre de types de jetons différents souhaité pour ce vote",
+        exclusive:
+          "Vous pouvez décider si le participant peut distributer un seul type de jetons (exclusifs) ou plusieurs types de jetons par proposition.",
+        tokenVoteInstructions: "En fonction de l'objectif du module de jetons, incitez les participants à passer à l'action."
       },
       videoHelp:
         "*Liens vidéo autorisés : \"https://www.youtube.com/embed/[videoId]\" ou \"https://player.vimeo.com/video/[videoId]?\"",
@@ -809,13 +810,10 @@ const Translations = {
       instructions: "Instructions",
       voteSessionSuccess: "The vote session is saved with success.",
       exclusive: "Exclusive",
-      exclusiveHelper:
-        "You can decide wether the participant can distribute a single type of token (exclusive) or several types of token per proposition.",
+
       tokenVoteInstructions: "Instructions for the token vote",
-      tokenVoteInstructionsHelper: "Depending on the objective of the token module, incite the participants to take action.",
 
       tokenTypeNumber: "Number of token types",
-      tokenTypeNumberHelper: "Select the number of different token types for this vote",
       tokenNumber: "Nombre de jetons",
       tokenTitle: "Token title",
       tokenColor: "Color of the token",
@@ -833,7 +831,11 @@ const Translations = {
       helpers: {
         voteSessionHeader: "The top page header must contain an image and a title. The subtitle is optional.",
         voteSessionInstructions: "The instructions section must contain a title and a description.",
-        voteSessionPropositionSection: "The proposals section must contain a title."
+        voteSessionPropositionSection: "The proposals section must contain a title.",
+        tokenTypeNumber: "Select the number of different token types for this vote",
+        exclusive:
+          "You can decide wether the participant can distribute a single type of token (exclusive) or several types of token per proposition.",
+        tokenVoteInstructions: "Depending on the objective of the token module, incite the participants to take action."
       },
       videoHelp:
         "*Authorized video links: \"https://www.youtube.com/embed/[videoId]\" or \"https://player.vimeo.com/video/[videoId]?\"",

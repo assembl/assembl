@@ -1,5 +1,5 @@
 import React from 'react';
-import renderer from 'react-test-renderer';
+import ShallowRenderer from 'react-test-renderer/shallow';
 import { convertToRaw, ContentState } from 'draft-js';
 
 import { DumbPageForm } from '../../../../../js/app/components/administration/voteSession/pageForm';
@@ -31,8 +31,9 @@ describe('Vote Session DumbPageForm component', () => {
       propositionSectionTitle: 'Vote sur 8 propositions',
       editLocale: 'fr'
     };
-    const component = renderer.create(<DumbPageForm {...prop} />);
-    const tree = component.toJSON();
-    expect(tree).toMatchSnapshot();
+    const shallowRenderer = new ShallowRenderer();
+    shallowRenderer.render(<DumbPageForm {...prop} />);
+    const result = shallowRenderer.getRenderOutput();
+    expect(result).toMatchSnapshot();
   });
 });
