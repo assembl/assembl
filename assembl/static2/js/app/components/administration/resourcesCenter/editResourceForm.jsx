@@ -114,9 +114,9 @@ const EditResourceForm = ({
   );
 };
 
-const mapStateToProps = (state, { id, locale }) => {
+const mapStateToProps = (state, { id, editLocale }) => {
   const resource = state.admin.resourcesCenter.resourcesById.get(id);
-  const text = getEntryValueForLocale(resource.get('textEntries'), locale);
+  const text = getEntryValueForLocale(resource.get('textEntries'), editLocale);
   return {
     documentFilename: resource.getIn(['doc', 'title']),
     documentUrl: resource.getIn(['doc', 'externalUrl']),
@@ -125,18 +125,18 @@ const mapStateToProps = (state, { id, locale }) => {
     imgUrl: resource.getIn(['img', 'externalUrl']),
     order: resource.get('order'),
     text: text ? text.toJS() : null,
-    title: getEntryValueForLocale(resource.get('titleEntries'), locale, '')
+    title: getEntryValueForLocale(resource.get('titleEntries'), editLocale, '')
   };
 };
 
-const mapDispatchToProps = (dispatch, { id, locale }) => ({
+const mapDispatchToProps = (dispatch, { id, editLocale }) => ({
   handleDocumentChange: value => dispatch(updateResourceDocument(id, value)),
   handleEmbedCodeChange: e => dispatch(updateResourceEmbedCode(id, e.target.value)),
   handleImageChange: (value) => {
     dispatch(updateResourceImage(id, value));
   },
-  handleTextChange: value => dispatch(updateResourceText(id, locale, value)),
-  handleTitleChange: e => dispatch(updateResourceTitle(id, locale, e.target.value)),
+  handleTextChange: value => dispatch(updateResourceText(id, editLocale, value)),
+  handleTitleChange: e => dispatch(updateResourceTitle(id, editLocale, e.target.value)),
   markAsToDelete: () => dispatch(deleteResource(id))
 });
 

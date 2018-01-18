@@ -14,21 +14,21 @@ exports[`DumbManageSectionsForm component should render a list of forms to edit 
     <form>
       Immutable.List [
         <Connect(DumbEditSectionForm)
+          editLocale="en"
           id="123"
           index={0}
-          locale="en"
           nbSections={3}
         />,
         <Connect(DumbEditSectionForm)
+          editLocale="en"
           id="456"
           index={1}
-          locale="en"
           nbSections={3}
         />,
         <Connect(DumbEditSectionForm)
+          editLocale="en"
           id="789"
           index={2}
-          locale="en"
           nbSections={3}
         />,
       ]

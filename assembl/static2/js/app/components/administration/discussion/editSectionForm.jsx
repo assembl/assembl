@@ -97,18 +97,18 @@ const DumbEditSectionForm = ({
   );
 };
 
-const mapStateToProps = (state, { id, locale }) => {
+const mapStateToProps = (state, { id, editLocale }) => {
   const section = state.admin.sections.sectionsById.get(id);
   return {
     url: section.get('url'),
     type: section.get('type'),
     order: section.get('order'),
-    title: getEntryValueForLocale(section.get('titleEntries'), locale, '')
+    title: getEntryValueForLocale(section.get('titleEntries'), editLocale, '')
   };
 };
 
-const mapDispatchToProps = (dispatch, { id, locale }) => ({
-  handleTitleChange: e => dispatch(updateSectionTitle(id, locale, e.target.value)),
+const mapDispatchToProps = (dispatch, { id, editLocale }) => ({
+  handleTitleChange: e => dispatch(updateSectionTitle(id, editLocale, e.target.value)),
   handleUrlChange: e => dispatch(updateSectionUrl(id, e.target.value)),
   toggleExternalPageField: () => dispatch(toggleExternalPage(id)),
   handleDeleteClick: () => dispatch(deleteSection(id)),
