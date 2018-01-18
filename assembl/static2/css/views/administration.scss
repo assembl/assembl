@@ -301,6 +301,12 @@
       font-size: 16px;
     }
   }
+
+  .token-vote-form {
+    .flex > .form-group {
+      flex-grow: 1;
+    }
+  }
 }
 
 .helper-popover {
