@@ -950,7 +950,7 @@ class TestPhase1Export(object):
         assert first_row[TestPhase1Export.POST_LIKE_COUNT] == b'0'
         assert first_row[TestPhase1Export.POST_DISAGREE_COUNT] == b'0'
         assert first_row[TestPhase1Export.POST_CREATOR_NAME] == b'Mr. Administrator'
-        assert first_row[TestPhase1Export.POST_CREATOR_EMAIL] == b''
+        assert first_row[TestPhase1Export.POST_CREATOR_EMAIL] == b'admin@assembl.com'
         date = datetime.utcnow().strftime('%d/%m/%Y')
         assert first_row[TestPhase1Export.POST_CREATION_DATE].startswith(date)
         assert first_row[TestPhase1Export.SENTIMENT_ACTOR_NAME] == b''
