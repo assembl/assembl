@@ -1243,6 +1243,7 @@ def test_get_proposals_random(graphql_request, thematic_and_question, proposals)
                     edges {
                         node {
                         ... on Post { body } } } } } } }""" % first_question_id, context_value=graphql_request)
+    assert res.errors is None
     assert json.loads(json.dumps(res.data)) != {
         u'node': {
             u"title": u"Comment qualifiez-vous l'emergence de l'Intelligence Artificielle dans notre soci\xe9t\xe9 ?",
