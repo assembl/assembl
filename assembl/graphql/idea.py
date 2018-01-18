@@ -1,6 +1,7 @@
 import os.path
 from collections import defaultdict
 from random import sample as random_sample
+from random import shuffle as random_shuffle
 
 import graphene
 from graphene.relay import Node
@@ -348,7 +349,7 @@ class Question(SecureObjectType, SQLAlchemyObjectType):
             # The query always gives the posts in the same order.
             # We need to random it again.
             posts = query.all()
-            random.shuffle(posts)
+            random_shuffle(posts)
             if first_post is not None:
                 query = [first_post] + posts
 
