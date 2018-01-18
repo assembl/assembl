@@ -11,6 +11,7 @@ def root_idea(request, discussion, test_session):
 @pytest.fixture(scope="function")
 def idea_with_en_fr(request, discussion, en_locale,
                     fr_locale, test_session):
+    """A top idea with english and french"""
     from assembl.models import Idea, LangString, LangStringEntry
 
     title = LangString.create(u'Title in english', 'en')
@@ -95,8 +96,8 @@ def announcement_en_fr(request, discussion, en_locale,
 
 
 @pytest.fixture(scope="function")
-def subidea_1(request, discussion, root_idea, test_session, ):
-    """An Idea fixture with a idealink to root idea fixture -
+def subidea_1(request, discussion, root_idea, test_session):
+    """A subidea fixture with a idealink to root idea fixture -
     root_idea
         |-> subidea_1"""
 
@@ -137,6 +138,27 @@ def subidea_1_1(request, discussion, subidea_1, test_session):
     def fin():
         print "finalizer subidea_1_1"
         test_session.delete(l_1_11)
+        test_session.delete(i)
+        test_session.flush()
+    request.addfinalizer(fin)
+    return i
+
+
+@pytest.fixture(scope="function")
+def subidea_1_2(request, discussion, subidea_1, test_session):
+    """A subidea fixture with idealink to subidea_1 fixture"""
+    from assembl.models import Idea, IdeaLink, LangString
+    i = Idea(title=LangString.create(u"Even lower taxes", 'en'),
+             discussion=discussion,
+             description=LangString.create("The definition of the subidea_1_2", 'en'))
+    test_session.add(i)
+    l_1_12 = IdeaLink(source=subidea_1, target=i)
+    test_session.add(l_1_12)
+    test_session.flush()
+
+    def fin():
+        print "finalizer subidea_1_2"
+        test_session.delete(l_1_12)
         test_session.delete(i)
         test_session.flush()
     request.addfinalizer(fin)
