@@ -345,8 +345,12 @@ class Question(SecureObjectType, SQLAlchemyObjectType):
                 query = query.options(
                     models.LangString.joinedload_option(Post.body))
 
+            # The query always gives the posts in the same order.
+            # We need to random it again.
+            posts = query.all()
+            random.shuffle(posts)
             if first_post is not None:
-                query = [first_post] + query.all()
+                query = [first_post] + posts
 
         else:
             # The related query returns a list of

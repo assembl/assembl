@@ -1232,6 +1232,40 @@ def test_get_proposals(graphql_request, thematic_and_question, proposals):
         }}
 
 
+def test_get_proposals_random(graphql_request, thematic_and_question, proposals):
+    # verify that the posts are in a random order even if we get them all
+    thematic_id, first_question_id = thematic_and_question
+    res = schema.execute(u"""query {
+        node(id: "%s") {
+            ... on Question {
+                title,
+                posts(first: 20, random: true) {
+                    edges {
+                        node {
+                        ... on Post { body } } } } } } }""" % first_question_id, context_value=graphql_request)
+    assert json.loads(json.dumps(res.data)) != {
+        u'node': {
+            u"title": u"Comment qualifiez-vous l'emergence de l'Intelligence Artificielle dans notre soci\xe9t\xe9 ?",
+            u"posts":
+            {u'edges': [{u'node': {u'body': u'une proposition 14'}},
+                        {u'node': {u'body': u'une proposition 0'}},
+                        {u'node': {u'body': u'une proposition 1'}},
+                        {u'node': {u'body': u'une proposition 2'}},
+                        {u'node': {u'body': u'une proposition 3'}},
+                        {u'node': {u'body': u'une proposition 4'}},
+                        {u'node': {u'body': u'une proposition 5'}},
+                        {u'node': {u'body': u'une proposition 6'}},
+                        {u'node': {u'body': u'une proposition 7'}},
+                        {u'node': {u'body': u'une proposition 8'}},
+                        {u'node': {u'body': u'une proposition 9'}},
+                        {u'node': {u'body': u'une proposition 10'}},
+                        {u'node': {u'body': u'une proposition 11'}},
+                        {u'node': {u'body': u'une proposition 12'}},
+                        {u'node': {u'body': u'une proposition 13'}},
+                        ]},
+        }}
+
+
 def test_get_thematics_order(graphql_request, thematic_with_video_and_question, second_thematic_with_questions):
 
     res = schema.execute(
