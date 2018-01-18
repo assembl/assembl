@@ -130,7 +130,7 @@ class Survey extends React.Component<*, SurveyProps, SurveyState> {
       <div className="survey">
         <div className="relative">
           <Header title={title} imgUrl={imgUrl} identifier="survey" />
-          <Media {...media} />
+          {media && <Media {...media} />}
           <div className="questions">
             {questions &&
               questions.map((question, index) => (
