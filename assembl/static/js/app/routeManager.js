@@ -388,7 +388,8 @@ var routeManager = Marionette.Object.extend({
 
   voteWidgetFromV2: function(id, arg) {
     var that = this;
-    var collectionManager = CollectionManager(); 
+    id = parseInt(id.match(/\d+/)[0], 10); // extract number from id, in case provided id is "local:Widget/23" instead of "23"
+    var collectionManager = CollectionManager();
     var widgetPromise = collectionManager.getAllWidgetsPromise()
       .then(function(allWidgetsCollection) {
         var widgetFromCollection;
@@ -408,6 +409,11 @@ var routeManager = Marionette.Object.extend({
           });
       });
     widgetPromise.then(function(widget){
+      if (!widget){
+        var error_text = "Requested vote widget could not be found.";
+        alert(error_text);
+        return;
+      }
       var CurrentWidgetView;
       var Views = require('./views/tokenVoteSession.js');
       if ((arg) && (arg === 'result')){
