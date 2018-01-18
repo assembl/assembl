@@ -80,7 +80,7 @@ exports[`Vote Session DumbPageForm component should render a form to update the 
                 "depth": 0,
                 "entityRanges": Array [],
                 "inlineStyleRanges": Array [],
-                "key": "dbd9",
+                "key": "",
                 "text": "Vous disposez de 8 jetons favorables et de 3 jetons défavorables",
                 "type": "unstyled",
               },
