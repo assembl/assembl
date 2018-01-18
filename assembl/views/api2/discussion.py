@@ -1635,7 +1635,7 @@ def phase1_csv_export(request):
                     row[POST_BODY] = resolve_langstring(
                         post.get_body_as_text(), None)
                 row[POST_CREATOR_NAME] = post.creator.name
-                row[POST_CREATOR_EMAIL] = post.creator.preferred_email
+                row[POST_CREATOR_EMAIL] = post.creator.get_preferred_email()
                 row[POST_CREATION_DATE] = format_date(post.creation_date)
                 row[POST_LIKE_COUNT] = post.like_count
                 row[POST_DISAGREE_COUNT] = post.disagree_count
