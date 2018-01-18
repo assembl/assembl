@@ -30,7 +30,6 @@ type EditResourceFormProps = {
   id: string,
   imgMimeType: string,
   imgUrl: string | File,
-  locale: string,
   markAsToDelete: Function,
   order: number,
   text: string,
@@ -49,7 +48,6 @@ const EditResourceForm = ({
   id,
   imgMimeType,
   imgUrl,
-  locale,
   markAsToDelete,
   order,
   text,
@@ -75,14 +73,7 @@ const EditResourceForm = ({
       </div>
       <div className="clear" />
       <FormControlWithLabel label={titleLabel} onChange={handleTitleChange} required type="text" value={title} />
-      <FormControlWithLabel
-        key={`text-${locale}`}
-        label={textLabel}
-        onChange={handleTextChange}
-        required
-        type="rich-text"
-        value={text}
-      />
+      <FormControlWithLabel label={textLabel} onChange={handleTextChange} required type="rich-text" value={text} />
       <FormControlWithLabel
         componentClass="textarea"
         label={embedCodeLabel}
@@ -123,6 +114,7 @@ const mapStateToProps = (state, { id, editLocale }) => {
     embedCode: resource.get('embedCode'),
     imgMimeType: resource.getIn(['img', 'mimeType']),
     imgUrl: resource.getIn(['img', 'externalUrl']),
+    locale: state.i18n.locale, // for I18n.t()
     order: resource.get('order'),
     text: text ? text.toJS() : null,
     title: getEntryValueForLocale(resource.get('titleEntries'), editLocale, '')

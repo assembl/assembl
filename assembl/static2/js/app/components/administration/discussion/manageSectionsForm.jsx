@@ -38,6 +38,7 @@ const mapStateToProps = (state) => {
   const { sectionsInOrder } = state.admin.sections;
   return {
     editLocale: state.admin.editLocale,
+    locale: state.i18n.locale, // for I18n.t()
     sections: sectionsInOrder
   };
 };

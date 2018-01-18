@@ -63,11 +63,12 @@ DumbThemeCreationForm.defaultProps = {
   title: ''
 };
 
-const mapStateToProps = ({ admin: { thematicsById } }, { id, editLocale }) => {
+const mapStateToProps = ({ admin: { thematicsById }, i18n }, { id, editLocale }) => {
   const thematic = thematicsById.get(id);
   return {
     imgMimeType: thematic.getIn(['img', 'mimeType']),
     imgUrl: thematic.getIn(['img', 'externalUrl']),
+    locale: i18n.locale, // for I18n.t()
     title: getEntryValueForLocale(thematic.get('titleEntries'), editLocale, ''),
     toDelete: thematic.get('toDelete', false)
   };

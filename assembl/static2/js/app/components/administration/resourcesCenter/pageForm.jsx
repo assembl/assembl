@@ -30,7 +30,13 @@ const DumbPageForm = ({
   const headerImageFieldName = 'header-image';
   return (
     <div className="form-container">
-      <FormControlWithLabel key={editLocale} label={titleLabel} onChange={handlePageTitleChange} type="text" value={title} />
+      <FormControlWithLabel
+        key={`title-${editLocale}`}
+        label={titleLabel}
+        onChange={handlePageTitleChange}
+        type="text"
+        value={title}
+      />
       <FormGroup>
         <label htmlFor={headerImageFieldName}>
           <Translate value="administration.resourcesCenter.headerImageLabel" />
@@ -50,6 +56,7 @@ const DumbPageForm = ({
 const mapStateToProps = (state, { editLocale }) => {
   const page = state.admin.resourcesCenter.page;
   return {
+    locale: state.i18n.locale, // for I18n.t()
     title: getEntryValueForLocale(page.get('titleEntries'), editLocale, ''),
     headerFilename: page.getIn(['headerImage', 'title']),
     headerMimeType: page.getIn(['headerImage', 'mimeType']),

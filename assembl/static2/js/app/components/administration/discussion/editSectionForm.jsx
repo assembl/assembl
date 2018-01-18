@@ -100,6 +100,7 @@ const DumbEditSectionForm = ({
 const mapStateToProps = (state, { id, editLocale }) => {
   const section = state.admin.sections.sectionsById.get(id);
   return {
+    locale: state.i18n.locale, // for I18n.t()
     url: section.get('url'),
     type: section.get('type'),
     order: section.get('order'),
