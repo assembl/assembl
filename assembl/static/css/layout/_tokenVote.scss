@@ -408,6 +408,41 @@
   }
 }
 
+@media (max-width: 650px) {
+  .token-vote-session.token-vote-form {
+    .available-tokens-container {
+      .available-tokens.fixed {
+        padding-top: 0;
+      }
+      .token-bag-for-category {
+        .description, .available-tokens-icons {
+          display: block;
+          margin-bottom: 2px;
+          padding-left: 0;
+        }
+      }
+    }
+    .left-column.absorbing-column {
+      width: initial;
+      max-width: 50vw;
+    }
+    .right-column {
+      max-width: 50vw;
+    }
+    .negative-tokens, .positive-tokens {
+      display: block !important;
+
+      .token-category-allocation {
+        clear: left;
+      }
+
+      .token-icon {
+        float: left;
+      }
+    }
+  }
+}
+
 .token-vote-session.token-vote-results { /* used only by vote results page (not by vote form page) */
   overflow-x: scroll;
 
