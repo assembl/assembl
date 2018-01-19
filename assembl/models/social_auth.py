@@ -18,7 +18,7 @@ from sqlalchemy import (
     UniqueConstraint
 )
 from sqlalchemy.orm import relationship
-from social.storage.sqlalchemy_orm import (
+from social_sqlalchemy.storage import (
     SQLAlchemyMixin, SQLAlchemyNonceMixin, UserMixin,
     SQLAlchemyAssociationMixin, SQLAlchemyCodeMixin, BaseSQLAlchemyStorage)
 from sqlalchemy.ext.mutable import MutableDict

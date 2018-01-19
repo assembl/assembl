@@ -25,9 +25,9 @@ from pyramid.httpexceptions import (
 from pyramid.settings import asbool, aslist
 from sqlalchemy import desc
 from pyisemail import is_email
-from social.actions import do_auth
-from social.apps.pyramid_app.utils import psa
-from social.exceptions import (
+from social_core.actions import do_auth
+from social_pyramid.utils import psa
+from social_core.exceptions import (
     AuthException, AuthFailed, AuthCanceled, AuthUnknownError,
     AuthMissingParameter, AuthStateMissing, AuthStateForbidden,
     AuthTokenError)

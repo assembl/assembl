@@ -10,10 +10,10 @@ from pyramid.security import remember, forget
 from pyramid.config import aslist
 import simplejson as json
 
-from social.apps.pyramid_app.utils import backends
-from social.strategies.pyramid_strategy import PyramidStrategy
-from social.utils import to_setting_name, setting_name, SETTING_PREFIX
-from social.backends.utils import load_backends
+from social_pyramid.utils import backends
+from social_pyramid.strategy import PyramidStrategy
+from social_core.utils import to_setting_name, setting_name, SETTING_PREFIX
+from social_core.backends.utils import load_backends
 
 from assembl.models import User, Preferences, IdentityProvider
 from .util import discussion_from_request, maybe_auto_subscribe
@@ -61,7 +61,7 @@ def associate_by_email(backend, details, provider=None, user=None, *args, **kwar
     """
     Find other users of the same email. One of them may be appropriate.
 
-    Taken from social.pipeline.social_auth.associate_by_email and rewritten
+    Taken from social_core.pipeline.social_auth.associate_by_email and rewritten
     """
     email = details.get('email')
     provider = IdentityProvider.get_by_type(backend.name)
@@ -134,7 +134,7 @@ def associate_user(backend, uid, user=None, social=None, details=None,
                    *args, **kwargs):
     results = None
     if not social:
-        from social.pipeline.social_auth import \
+        from social_core.pipeline.social_auth import \
             associate_user as psa_associate_user
         results = psa_associate_user(
             backend, uid, user, social, *args, **kwargs)
@@ -259,7 +259,7 @@ class AssemblStrategy(PyramidStrategy):
         return super(AssemblStrategy, self).get_setting(name)
 
     # def partial_from_session(self, session):
-    #     from social.pipeline.utils import partial_from_session
+    #     from social_core.pipeline.utils import partial_from_session
     #     return partial_from_session(self, session)
 
     def build_absolute_uri(self, path=None):

@@ -18,7 +18,7 @@ from pyramid.httpexceptions import (
 from pyramid.i18n import TranslationStringFactory
 from pyramid.security import Everyone
 from pyramid.settings import asbool, aslist
-from social.exceptions import AuthMissingParameter
+from social_core.exceptions import AuthMissingParameter
 
 from assembl.lib.json import json_renderer_factory
 from assembl.lib import config

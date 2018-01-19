@@ -18,7 +18,7 @@ from assembl.auth import (
 from assembl.auth.util import (
     user_has_permission as a_user_has_permission, get_permissions,
     users_with_permission as a_users_with_permission)
-from social.apps.pyramid_app.utils import load_backend, load_strategy
+from social_pyramid.utils import load_backend, load_strategy
 
 
 cors_policy = dict(

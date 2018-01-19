@@ -2,7 +2,7 @@
 
 import sys
 
-from social.apps.pyramid_app.views import (
+from social_pyramid.views import (
     auth as psa_auth_view, complete as psa_complete_view)
 
 
@@ -58,6 +58,6 @@ def includeme(config):
     react_contextual_route('register', '/signup')
     react_contextual_route('request_password_change', '/requestPasswordChange')
     react_contextual_route('do_password_change', '/changePassword')
-    config.include('social.apps.pyramid_app')
+    config.include('social_pyramid')
     config.scan()
-    config.scan('social.apps.pyramid_app')
+    config.scan('social_pyramid')

@@ -3,7 +3,7 @@ from urlparse import urlparse, urlunparse, parse_qs
 from HTMLParser import HTMLParser
 
 from simplejson import loads
-from social.backends.base import BaseAuth
+from social_core.backends.base import BaseAuth
 
 from .encryption import MediactiveAESCryptor
 
