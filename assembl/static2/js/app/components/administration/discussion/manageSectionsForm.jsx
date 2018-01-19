@@ -22,7 +22,7 @@ const DumbManageSectionsForm = ({ sections, editLocale, createSection }: ManageS
     <div className="admin-content">
       <form>
         {sections.map((id, index) => (
-          <EditSectionForm key={id} id={id} index={index} locale={editLocale} nbSections={sections.size} />
+          <EditSectionForm key={id} id={id} index={index} editLocale={editLocale} nbSections={sections.size} />
         ))}
         <OverlayTrigger placement="top" overlay={addSectionTooltip}>
           <div onClick={() => createSection(sections.size)} className="plus margin-l">
@@ -38,6 +38,7 @@ const mapStateToProps = (state) => {
   const { sectionsInOrder } = state.admin.sections;
   return {
     editLocale: state.admin.editLocale,
+    locale: state.i18n.locale, // for I18n.t()
     sections: sectionsInOrder
   };
 };
