@@ -25,7 +25,7 @@ type TokensFormProps = {
   handleExclusiveCheckboxChange: Function
 };
 
-const TokensForm = ({
+const DumbTokensForm = ({
   instructions,
   exclusive,
   tokenTypeNumber,
@@ -121,4 +121,6 @@ const mapDispatchToProps = (dispatch, { id, editLocale }) => ({
   handleExclusiveCheckboxChange: checked => dispatch(updateTokenVoteExclusive(id, !checked))
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(TokensForm);
+export { DumbTokensForm };
+
+export default connect(mapStateToProps, mapDispatchToProps)(DumbTokensForm);

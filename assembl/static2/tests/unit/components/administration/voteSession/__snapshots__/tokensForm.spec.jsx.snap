@@ -1,0 +1,232 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`tokensForm component should render a form to configure a tokens vote, the exclusivity, instructions and number of tokens types and 3 TokenTypeForm 1`] = `
+<div
+  className="token-vote-form"
+>
+  <form>
+    <div
+      className="flex"
+    >
+      <Checkbox
+        bsClass="checkbox"
+        checked={true}
+        disabled={false}
+        inline={false}
+        onChange={[Function]}
+        title=""
+      >
+        <Helper
+          classname="inline"
+          helperText="Missing translation: administration.helpers.exclusive"
+          helperTextClassName="helper-text-only"
+          helperUrl=""
+          label="Missing translation: administration.exclusive"
+        />
+      </Checkbox>
+    </div>
+    <div
+      className="flex"
+    >
+      <FormControlWithLabel
+        label="Missing translation: administration.tokenVoteInstructions"
+        labelAlwaysVisible={false}
+        onChange={[Function]}
+        required={true}
+        type="text"
+        value="Je vous prie de bien vouloir voter."
+      />
+      <Helper
+        classname=""
+        helperText="Missing translation: administration.helpers.tokenVoteInstructions"
+        helperTextClassName="helper-text-only"
+        helperUrl="/static2/img/helpers/helper5.png"
+        label=""
+      />
+    </div>
+    <div
+      className="flex"
+    >
+      <label
+        htmlFor="input-dropdown-addon"
+      >
+        Missing translation: administration.tokenTypeNumber
+      </label>
+      <Helper
+        classname=""
+        helperText="Missing translation: administration.helpers.tokenTypeNumber"
+        helperTextClassName=""
+        helperUrl="/static2/img/helpers/helper2.png"
+        label=""
+      />
+    </div>
+    <DropdownButton
+      id="input-dropdown-addon"
+      onSelect={[Function]}
+      required={true}
+      title={3}
+    >
+      <MenuItem
+        bsClass="dropdown"
+        disabled={false}
+        divider={false}
+        eventKey="1"
+        header={false}
+      >
+        1
+      </MenuItem>
+      <MenuItem
+        bsClass="dropdown"
+        disabled={false}
+        divider={false}
+        eventKey="2"
+        header={false}
+      >
+        2
+      </MenuItem>
+      <MenuItem
+        bsClass="dropdown"
+        disabled={false}
+        divider={false}
+        eventKey="3"
+        header={false}
+      >
+        3
+      </MenuItem>
+      <MenuItem
+        bsClass="dropdown"
+        disabled={false}
+        divider={false}
+        eventKey="4"
+        header={false}
+      >
+        4
+      </MenuItem>
+    </DropdownButton>
+    <div>
+      <div
+        className="separator"
+      />
+      <Connect(TokenTypeForm)
+        editLocale="fr"
+        id="1234"
+      />
+      <Connect(TokenTypeForm)
+        editLocale="fr"
+        id="5678"
+      />
+      <Connect(TokenTypeForm)
+        editLocale="fr"
+        id="9874"
+      />
+    </div>
+  </form>
+</div>
+`;
+
+exports[`tokensForm component should render a form to configure a tokens vote, the exclusivity, instructions and number of tokens types but no TokenTypeForm 1`] = `
+<div
+  className="token-vote-form"
+>
+  <form>
+    <div
+      className="flex"
+    >
+      <Checkbox
+        bsClass="checkbox"
+        checked={true}
+        disabled={false}
+        inline={false}
+        onChange={[Function]}
+        title=""
+      >
+        <Helper
+          classname="inline"
+          helperText="Missing translation: administration.helpers.exclusive"
+          helperTextClassName="helper-text-only"
+          helperUrl=""
+          label="Missing translation: administration.exclusive"
+        />
+      </Checkbox>
+    </div>
+    <div
+      className="flex"
+    >
+      <FormControlWithLabel
+        label="Missing translation: administration.tokenVoteInstructions"
+        labelAlwaysVisible={false}
+        onChange={[Function]}
+        required={true}
+        type="text"
+        value="Je vous prie de bien vouloir voter."
+      />
+      <Helper
+        classname=""
+        helperText="Missing translation: administration.helpers.tokenVoteInstructions"
+        helperTextClassName="helper-text-only"
+        helperUrl="/static2/img/helpers/helper5.png"
+        label=""
+      />
+    </div>
+    <div
+      className="flex"
+    >
+      <label
+        htmlFor="input-dropdown-addon"
+      >
+        Missing translation: administration.tokenTypeNumber
+      </label>
+      <Helper
+        classname=""
+        helperText="Missing translation: administration.helpers.tokenTypeNumber"
+        helperTextClassName=""
+        helperUrl="/static2/img/helpers/helper2.png"
+        label=""
+      />
+    </div>
+    <DropdownButton
+      id="input-dropdown-addon"
+      onSelect={[Function]}
+      required={true}
+      title={0}
+    >
+      <MenuItem
+        bsClass="dropdown"
+        disabled={false}
+        divider={false}
+        eventKey="1"
+        header={false}
+      >
+        1
+      </MenuItem>
+      <MenuItem
+        bsClass="dropdown"
+        disabled={false}
+        divider={false}
+        eventKey="2"
+        header={false}
+      >
+        2
+      </MenuItem>
+      <MenuItem
+        bsClass="dropdown"
+        disabled={false}
+        divider={false}
+        eventKey="3"
+        header={false}
+      >
+        3
+      </MenuItem>
+      <MenuItem
+        bsClass="dropdown"
+        disabled={false}
+        divider={false}
+        eventKey="4"
+        header={false}
+      >
+        4
+      </MenuItem>
+    </DropdownButton>
+  </form>
+</div>
+`;

@@ -17,7 +17,7 @@ describe('Vote Session DumbPageForm component', () => {
     );
     // We remove the generated key to avoid problems with the Snapshot testing
     rawContentState = { ...rawContentState, blocks: [{ ...rawContentState.blocks[0], key: '' }] };
-    const prop = {
+    const props = {
       handleHeaderTitleChange: handleHeaderTitleChangeSpy,
       handleHeaderSubtitleChange: handleHeaderSubtitleChangeSpy,
       handleHeaderImageChange: handleHeaderImageChangeSpy,
@@ -34,7 +34,7 @@ describe('Vote Session DumbPageForm component', () => {
       editLocale: 'fr'
     };
     const shallowRenderer = new ShallowRenderer();
-    shallowRenderer.render(<DumbPageForm {...prop} />);
+    shallowRenderer.render(<DumbPageForm {...props} />);
     const result = shallowRenderer.getRenderOutput();
     expect(result).toMatchSnapshot();
   });
