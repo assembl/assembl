@@ -14,7 +14,7 @@ type ModulesSectionProps = {
   handleCheckBoxChange: Function
 };
 
-const ModulesSection = ({ tokenModules, editLocale, handleCheckBoxChange }: ModulesSectionProps) => {
+const DumbModulesSection = ({ tokenModules, editLocale, handleCheckBoxChange }: ModulesSectionProps) => {
   const tokenModuleChecked = tokenModules.size > 0;
   return (
     <div className="admin-box">
@@ -65,4 +65,6 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(ModulesSection);
+export { DumbModulesSection };
+
+export default connect(mapStateToProps, mapDispatchToProps)(DumbModulesSection);
