@@ -252,8 +252,15 @@ var RemainingCategoryTokensView = Marionette.ItemView.extend({
     el.addClass("description");
 
     var categoryNameLangString = category.get("name");
-    var categoryNameBestTranslation = categoryNameLangString.bestWithErrors(that.userLanguagePreferences, false).entry.value();
-    // var s = i18n.sprintf(i18n.ngettext("<span class='available-tokens-number'>%d</span> remaining %s token", "<span class='available-tokens-number'>%d</span> remaining %s tokens", data["remaining_tokens"]), data["remaining_tokens"], category.get("typename")); // TODO: use "name" field instead (LangString)
+    var categoryNameBestTranslation = "";
+    try {
+      categoryNameBestTranslation = categoryNameLangString.bestWithErrors(that.userLanguagePreferences, false).entry.value();
+    }
+    catch (e) {
+      console.error("error managing langstring categoryNameLangString: ", e, "langstring was:", categoryNameLangString);
+      // TODO: understand and fix the root cause of the problem (happens only when displayed in a modal)
+      categoryNameBestTranslation = category.get("typename");
+    }
     var s = i18n.sprintf(i18n.ngettext("<span class='available-tokens-number'>%d</span> remaining %s token", "<span class='available-tokens-number'>%d</span> remaining %s tokens", data["remaining_tokens"]), data["remaining_tokens"], categoryNameBestTranslation);
     el.html(s);
     //el.text("You have used " + data["my_votes_count"] + " of your " + data["total_number"] + " \"" + category.get("typename") + "\" tokens.");
@@ -1414,16 +1421,15 @@ var TokenVoteSessionResultModal = Backbone.Modal.extend({
 });
 
 
-// This view shows the whole vote popin and its contents
+// This view shows the whole voting UI
 // The model which should be given as parameter of this view is a Widget.Model instance (or a subclass of it)
-var TokenVoteSessionModal = Backbone.Modal.extend({
-  constructor: function TokenVoteSessionModal() {
-    Backbone.Modal.apply(this, arguments);
+var TokenVoteSessionView = Marionette.LayoutView.extend({
+  constructor: function TokenVoteSessionView(){
+    Marionette.LayoutView.apply(this, arguments);
   },
 
-  template: '#tmpl-tokenVoteSessionModal',
-  className: 'modal-token-vote-session popin-wrapper',
-  cancelEl: '.close, .js_close',
+  template: '#tmpl-tokenVoteSession',
+  className: 'token-vote-session-container-view',
   events: {
     //'scroll .popin-body': 'onScroll', // scroll event does not bubble up, and scrollable element is now .popin-body instead of this.$el
     'click .submit-button-container a': 'onSubmit'
@@ -1436,6 +1442,8 @@ var TokenVoteSessionModal = Backbone.Modal.extend({
 
 
     this.widgetModel = this.model;
+    this.outerHeader = options.outerHeader;
+    this.showConfirmationInModal = ("showConfirmationInModal" in options && options.showConfirmationInModal == true) ? true : false;
     console.log("that.widgetModel: ", that.widgetModel);
 
     var Widget = require('../models/widget.js'); // FIXME: why does it work here but not at the top of the file?
@@ -1571,20 +1579,16 @@ var TokenVoteSessionModal = Backbone.Modal.extend({
 
   },
 
-  beforeCancel: function(){
-    window.location = Ctx.getDiscussionGenericURL();
-  },
-
   onShow: function(){
     var that = this;
 
     that.availableTokensPositionTop = that.$(".available-tokens").position().top;
-    that.$(".available-tokens").width(that.$(".popin-body").width());
-    var popinHeaderTotalHeight = that.$(".popin-header").outerHeight();
+    that.$(".available-tokens").width(that.$(".token-vote-session-container").width());
+    var popinHeaderTotalHeight = that.outerHeader ? that.outerHeader.outerHeight() : 0;
     that.$(".available-tokens").css("top", popinHeaderTotalHeight + (popinHeaderTotalHeight > 0 ? "px" : ""));
     that.$(".available-tokens-container").css('min-height', "36px");
 
-    that.$(".popin-body").on('scroll', _.bind(that.onScroll, that)); // scroll event does not bubble up, and scrollable element is now .popin-body instead of this.$el
+    that.$(".token-vote-session-container").on('scroll', _.bind(that.onScroll, that)); // scroll event does not bubble up, and scrollable element is now .popin-body instead of this.$el
   },
 
   onScroll: function(){
@@ -1592,7 +1596,7 @@ var TokenVoteSessionModal = Backbone.Modal.extend({
   },
 
   myOnScroll: function(){
-    if (this.$(".popin-body").scrollTop() > this.availableTokensPositionTop) {
+    if (this.$(".token-vote-session-container").scrollTop() > this.availableTokensPositionTop) {
       this.$(".available-tokens").addClass("fixed");
     }
     else {
@@ -1607,7 +1611,6 @@ var TokenVoteSessionModal = Backbone.Modal.extend({
     var question_title = "question_title" in question_item ? question_item.question_title : "";
     var question_description = "question_description" in question_item ? question_item.question_description : "";
     return {
-      popin_title: i18n.gettext("Collective votes"),
       question_title: question_title,
       question_description: question_description,
       available_tokens_info: i18n.gettext("Split your tokens among the ideas of your choice. By default, your vote is neutral per project."),
@@ -1625,15 +1628,22 @@ var TokenVoteSessionModal = Backbone.Modal.extend({
       */
       this.widgetModel.fetch();
     }
-    Ctx.clearModal({destroyModal: false});
   },
 
   onSubmit: function(){
-    var modalView = new TokenVoteSessionSubmittedModal({ model: this.model});
-    this.onDestroy();
-    this.remove();
-    Ctx.setCurrentModalView(modalView);
-    Assembl.slider.show(modalView);
+    var showConfirmInModal = this.showConfirmationInModal;
+    var confirmationViewClass = showConfirmInModal ? TokenVoteSessionSubmittedModal : TokenVoteSessionSubmittedView;
+    var confirmationView = new confirmationViewClass({
+      model: this.model
+    });
+
+    if (showConfirmInModal){
+      Ctx.setCurrentModalView(confirmationView);
+      Assembl.slider.show(confirmationView);
+    }
+    else {
+      Assembl.groupContainer.show(confirmationView);
+    }
   },
 
   /*
@@ -1708,19 +1718,107 @@ var TokenVoteSessionModal = Backbone.Modal.extend({
   }
 });
 
-var TokenVoteSessionSubmittedModal = Backbone.Modal.extend({
-  constructor: function TokenVoteSessionSubmittedModal(){
+
+// This view shows the whole vote popin and its contents
+// The model which should be given as parameter of this view is a Widget.Model instance (or a subclass of it)
+var TokenVoteSessionModal = Backbone.Modal.extend({
+  constructor: function TokenVoteSessionModal() {
     Backbone.Modal.apply(this, arguments);
   },
 
   template: '#tmpl-modalWithoutIframe',
-  className: 'modal-token-vote-session-submitted popin-wrapper',
+  className: 'modal-token-vote-session popin-wrapper',
   cancelEl: '.close, .js_close',
+
+  initialize: function(options) {
+    var that = this;
+
+    that.throttledScroll = _.throttle(that.myOnScroll, 100);
+  },
+
+  beforeCancel: function(){
+    window.location = Ctx.getDiscussionGenericURL();
+  },
 
   onShow: function(){
     var that = this;
-    var container = this.$el.find(".js_modal-body");
-    container.empty();
+
+    var displayRegion = new Marionette.Region({
+      el: that.$(".popin-body")
+    });
+
+    var outerHeader = this.$(".popin-header");
+    var displayView = new TokenVoteSessionView(
+      {
+        model: this.model,
+        showConfirmationInModal: true,
+        outerHeader: outerHeader
+      }
+    );
+
+    displayRegion.show(displayView);
+
+    that.availableTokensPositionTop = that.$(".available-tokens").position().top;
+    that.$(".available-tokens").width(that.$(".popin-body").width());
+    var popinHeaderTotalHeight = that.$(".popin-header").outerHeight();
+    that.$(".available-tokens").css("top", popinHeaderTotalHeight + (popinHeaderTotalHeight > 0 ? "px" : ""));
+    that.$(".available-tokens-container").css('min-height', "36px");
+
+    that.$(".popin-body").on('scroll', _.bind(that.onScroll, that)); // scroll event does not bubble up, and scrollable element is now .popin-body instead of this.$el
+  },
+
+  onScroll: function(){
+    this.throttledScroll();
+  },
+
+  myOnScroll: function(){
+    if (this.$(".popin-body").scrollTop() > this.availableTokensPositionTop) {
+      this.$(".available-tokens").addClass("fixed");
+    }
+    else {
+      this.$(".available-tokens").removeClass("fixed");
+    }
+  },
+
+  serializeData: function() {
+    return {
+      modal_title: i18n.gettext("Collective votes"),
+    };
+  },
+
+  onDestroy: function(){
+    if ( this.model ){
+      /*
+      We re-fetch widget data from the server, so that when the user opens the vote popin again,
+      up-to-date information is displayed (because this widget data comes from a model contained
+      in the collection collectionManager::getAllWidgetsPromise()).
+      TODO: This is a bit hacky, maybe we should find a better way, for example when popin opens, re-load user votes (instead of widget) and use these instead of the ones listed in the widget.
+      */
+      this.model.fetch();
+    }
+    Ctx.clearModal({destroyModal: false});
+  }
+});
+
+var TokenVoteSessionSubmittedView = Marionette.LayoutView.extend({
+  constructor: function TokenVoteSessionSubmittedView(){
+    Marionette.LayoutView.apply(this, arguments);
+  },
+
+  template: false,
+  className: 'token-vote-session-submitted',
+
+  initialize(options){
+    this.editInModal = ("editInModal" in options && options.editInModal == true) ? true : false;
+    console.log("TokenVoteSessionSubmittedView::initialize() editInModal:", this.editInModal);
+  },
+
+  onShow: function(){
+    var that = this;
+    console.log("TokenVoteSessionSubmittedView::onShow() editInModal:", that.editInModal);
+    var container = this.$el;
+    console.log("TokenVoteSessionSubmittedView::onShow() container:", container);
+    
     var text = $("<p></p>");
     text.text(i18n.gettext("Your vote has been saved successfully."));
     container.append(text);
@@ -1734,27 +1832,65 @@ var TokenVoteSessionSubmittedModal = Backbone.Modal.extend({
     container.append(btn2);
 
     var editMyVote = function(){
-      var modalView = new TokenVoteSessionModal({
-        model: that.model
+      console.log("TokenVoteSessionSubmittedView::editMyVote() editInModal:", that.editInModal);
+      var editInModal = that.editInModal;
+      var voteViewClass = editInModal ? TokenVoteSessionModal : TokenVoteSessionView;
+      var voteView = new voteViewClass({
+        model: that.model,
+        showConfirmationInModal: editInModal
       });
 
-      Ctx.setCurrentModalView(modalView);
-      Assembl.slider.show(modalView);
+      if (editInModal){
+        Ctx.setCurrentModalView(voteView);
+        Assembl.slider.show(voteView);
+      }
+      else {
+        Assembl.groupContainer.show(voteView);
+      }
     };
     btn2.click(editMyVote);
   },
-
-
 
   serializeData: function(){
     return {
       modal_title: i18n.gettext("Vote confirmation")
     }
   }
+});
 
+var TokenVoteSessionSubmittedModal = Backbone.Modal.extend({
+  constructor: function TokenVoteSessionSubmittedModal(){
+    Backbone.Modal.apply(this, arguments);
+  },
+
+  template: '#tmpl-modalWithoutIframe',
+  className: 'modal-token-vote-session-submitted popin-wrapper',
+  cancelEl: '.close, .js_close',
+
+  onShow: function(){
+    var displayRegion = new Marionette.Region({
+      el: this.$(".popin-body")
+    });
+
+    var resultView = new TokenVoteSessionSubmittedView(
+      {
+        model: this.model,
+        editInModal: true
+      }
+    );
+
+    displayRegion.show(resultView);
+  },
+
+  serializeData: function(){
+    return {
+      modal_title: i18n.gettext("Vote confirmation")
+    }
+  }
 });
 
 module.exports = {
   TokenVoteSessionModal: TokenVoteSessionModal,
+  TokenVoteSessionView: TokenVoteSessionView,
   TokenVoteSessionResultModal: TokenVoteSessionResultModal
 };

@@ -386,8 +386,9 @@ var routeManager = Marionette.Object.extend({
     });
   },
 
-  voteWidgetFromV2: function(id, arg) {
+  voteWidgetFromV2: function(id, arg, showInModal) {
     var that = this;
+    showInModal = showInModal ? true : false;
     id = parseInt(id.match(/\d+/)[0], 10); // extract number from id, in case provided id is "local:Widget/23" instead of "23"
     var collectionManager = CollectionManager();
     var widgetPromise = collectionManager.getAllWidgetsPromise()
@@ -414,17 +415,40 @@ var routeManager = Marionette.Object.extend({
         alert(error_text);
         return;
       }
-      var CurrentWidgetView;
+      var currentWidgetView;
       var Views = require('./views/tokenVoteSession.js');
+      var currentWidgetViewOptions = {
+        model: widget
+      };
       if ((arg) && (arg === 'result')){
-        CurrentWidgetView = Views.TokenVoteSessionResultModal
+        currentWidgetView = Views.TokenVoteSessionResultModal;
       }
       else {
-        CurrentWidgetView = Views.TokenVoteSessionModal
+        if ( showInModal ){
+          currentWidgetView = Views.TokenVoteSessionModal;
+        }
+        else {
+          currentWidgetView = Views.TokenVoteSessionView;
+        }
+        currentWidgetViewOptions["showConfirmationInModal"] = showInModal;
       }
-      var instanciatedView = new CurrentWidgetView({model: widget});
-      Assembl.groupContainer.show(instanciatedView);
+      var instanciatedView = new currentWidgetView(currentWidgetViewOptions);
+
+      if ( showInModal ){
+        Ctx.setCurrentModalView(instanciatedView);
+        Assembl.slider.show(instanciatedView);
+      }
+      else {
+        Assembl.groupContainer.show(instanciatedView);
+        // some CSS hacks to clear default page
+        $("body").css("background", "white");
+        $("#header").css("display", "none");
+      }
     });
+  },
+
+  voteWidgetFromV2InModal: function(id, arg){
+    return this.voteWidgetFromV2(id, arg, true);
   },
 
   about: function() {
