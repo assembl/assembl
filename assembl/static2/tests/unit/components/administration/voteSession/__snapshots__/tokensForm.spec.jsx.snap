@@ -107,15 +107,15 @@ exports[`tokensForm component should render a form to configure a tokens vote, t
       <div
         className="separator"
       />
-      <Connect(TokenTypeForm)
+      <Connect(DumbTokenTypeForm)
         editLocale="fr"
         id="1234"
       />
-      <Connect(TokenTypeForm)
+      <Connect(DumbTokenTypeForm)
         editLocale="fr"
         id="5678"
       />
-      <Connect(TokenTypeForm)
+      <Connect(DumbTokenTypeForm)
         editLocale="fr"
         id="9874"
       />

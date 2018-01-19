@@ -17,7 +17,7 @@ type TokenTypeFormProps = {
   handleNumberChange: Function
 };
 
-const TokenTypeForm = ({
+const DumbTokenTypeForm = ({
   title,
   color,
   number,
@@ -70,4 +70,6 @@ const mapDispatchToProps = (dispatch, { id, editLocale }) => ({
   handleColorChange: color => dispatch(updateTokenVoteTypeColor(id, color.hex))
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(TokenTypeForm);
+export { DumbTokenTypeForm };
+
+export default connect(mapStateToProps, mapDispatchToProps)(DumbTokenTypeForm);
