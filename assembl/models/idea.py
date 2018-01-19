@@ -854,6 +854,7 @@ class Idea(HistoryMixin, DiscussionBoundBase):
         from .generic import Content
         from .post import Post
         from ..views.traversal import NsDictCollection
+        from assembl.models import IdeaMessageColumn, ColumnSynthesisPost
 
         class ChildIdeaCollectionDefinition(AbstractCollectionDefinition):
             def __init__(self, cls):
@@ -882,7 +883,31 @@ class Idea(HistoryMixin, DiscussionBoundBase):
                 return instance.db.query(
                     IdeaLink).filter_by(
                     source=parent_instance, target=instance
-                    ).count() > 0
+                ).count() > 0
+
+        class ColumnCollectionDefinition(CollectionDefinition):
+            def __init__(self, cls):
+                super(ColumnCollectionDefinition, self).__init__(
+                    cls, cls.message_columns)
+
+            def decorate_instance(
+                    self, instance, parent_instance, assocs, user_id,
+                    ctx, kwargs):
+                if isinstance(instance, IdeaMessageColumn):
+                    synthesis = ColumnSynthesisPost(
+                        message_classifier=instance.message_classifier,
+                        discussion_id=parent_instance.discussion_id,
+                        subject=LangString.EMPTY(),
+                        body=LangString.EMPTY()
+                    )
+                    idea_post_link = IdeaRelatedPostLink(
+                        creator_id=user_id,
+                        content=synthesis,
+                        idea=parent_instance
+                    )
+
+                    assocs.append(synthesis)
+                    assocs.append(idea_post_link)
 
         class AncestorWidgetsCollectionDefinition(AbstractCollectionDefinition):
             # For widgets which represent general configuration.
@@ -1039,7 +1064,8 @@ class Idea(HistoryMixin, DiscussionBoundBase):
                 'ancestor_widgets': AncestorWidgetsCollectionDefinition(cls),
                 'ancestor_inspiration_widgets': AncestorWidgetsCollectionDefinition(
                     cls, InspirationWidget),
-                'active_showing_widget_links': ActiveShowingWidgetsCollection(cls)}
+                'active_showing_widget_links': ActiveShowingWidgetsCollection(cls),
+                'message_columns': ColumnCollectionDefinition(cls)}
 
     def widget_link_signatures(self):
         from .widgets import Widget

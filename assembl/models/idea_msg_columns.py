@@ -122,30 +122,34 @@ class IdeaMessageColumn(DiscussionBoundBase):
             ).all()
         return synthesis[0] if synthesis else None
 
+    def create_column_synthesis(self, subject=None, body=None,
+                                creator_id=None):
+        user_id = creator_id or \
+            get_current_request().authenticated_userid
+        synthesis = ColumnSynthesisPost(
+            message_classifier=self.message_classifier,
+            discussion_id=self.idea.discussion_id,
+            subject=subject if subject else LangString.EMPTY(),
+            body=body if body else LangString.EMPTY()
+        )
+        idea_post_link = IdeaRelatedPostLink(
+            creator_id=user_id,
+            content=synthesis,
+            idea=self.idea
+        )
+        self.db.add(synthesis)
+        self.db.add(idea_post_link)
+        self.db.flush()
+        return synthesis
+
     def set_column_synthesis(self, subject=None, body=None, creator_id=None):
         synthesis = self.get_column_synthesis()
-        if synthesis is None:
-            user_id = creator_id or get_current_request().authenticated_userid
-            synthesis = ColumnSynthesisPost(
-                message_classifier=self.message_classifier,
-                discussion_id=self.idea.discussion_id
-            )
-            self.db.add(synthesis)
-            idea_post_link = IdeaRelatedPostLink(
-                creator_id=user_id,
-                content=synthesis,
-                idea=self.idea
-            )
-            self.db.add(idea_post_link)
-
+        assert synthesis
         if subject is not None:
             synthesis.subject = subject
 
         if body is not None:
             synthesis.body = body
-
-        self.db.flush()
-        return synthesis
 
     @property
     def header(self):
@@ -157,7 +161,10 @@ class IdeaMessageColumn(DiscussionBoundBase):
 
     @header.setter
     def header(self, value):
-        self.set_column_synthesis(body=value)
+        # If None is passed, a synthesis object will be created downstream
+        # with an empty body and title
+        if value:
+            self.set_column_synthesis(body=value)
 
     @property
     def synthesis_title(self):
@@ -169,7 +176,10 @@ class IdeaMessageColumn(DiscussionBoundBase):
 
     @synthesis_title.setter
     def synthesis_title(self, value):
-        self.set_column_synthesis(subject=value)
+        # If None is passed, a synthesis object will be created downstream
+        # with an empty body and title
+        if value:
+            self.set_column_synthesis(subject=value)
 
 
 LangString.setup_ownership_load_event(IdeaMessageColumn, ['name', 'title'])
