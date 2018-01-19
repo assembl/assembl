@@ -41,7 +41,7 @@ def upgrade(pyramid_env):
                 subject_ls = m.LangString.create(u"Synthesis: {}".format(name_en.value), 'en')
                 subject_ls.add_value(u"Synthèse : {}".format(name_fr.value), 'fr')
                 body_ls = m.LangString.get(header_id)  # don't clone, reuse the same langstring
-                column.set_column_synthesis(
+                column.create_column_synthesis(
                     subject=subject_ls,
                     body=body_ls,
                     creator_id=creator_id)
