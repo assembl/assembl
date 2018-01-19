@@ -60,7 +60,7 @@ exports[`tokensForm component should render a form to configure a tokens vote, t
         label=""
       />
     </div>
-    <DropdownButton
+    <SplitButton
       id="input-dropdown-addon"
       onSelect={[Function]}
       required={true}
@@ -70,7 +70,14 @@ exports[`tokensForm component should render a form to configure a tokens vote, t
         bsClass="dropdown"
         disabled={false}
         divider={false}
-        eventKey="1"
+        eventKey={0}
+        header={false}
+      />
+      <MenuItem
+        bsClass="dropdown"
+        disabled={false}
+        divider={false}
+        eventKey={1}
         header={false}
       >
         1
@@ -79,7 +86,7 @@ exports[`tokensForm component should render a form to configure a tokens vote, t
         bsClass="dropdown"
         disabled={false}
         divider={false}
-        eventKey="2"
+        eventKey={2}
         header={false}
       >
         2
@@ -88,7 +95,7 @@ exports[`tokensForm component should render a form to configure a tokens vote, t
         bsClass="dropdown"
         disabled={false}
         divider={false}
-        eventKey="3"
+        eventKey={3}
         header={false}
       >
         3
@@ -97,12 +104,66 @@ exports[`tokensForm component should render a form to configure a tokens vote, t
         bsClass="dropdown"
         disabled={false}
         divider={false}
-        eventKey="4"
+        eventKey={4}
         header={false}
       >
         4
       </MenuItem>
-    </DropdownButton>
+      <MenuItem
+        bsClass="dropdown"
+        disabled={false}
+        divider={false}
+        eventKey={5}
+        header={false}
+      >
+        5
+      </MenuItem>
+      <MenuItem
+        bsClass="dropdown"
+        disabled={false}
+        divider={false}
+        eventKey={6}
+        header={false}
+      >
+        6
+      </MenuItem>
+      <MenuItem
+        bsClass="dropdown"
+        disabled={false}
+        divider={false}
+        eventKey={7}
+        header={false}
+      >
+        7
+      </MenuItem>
+      <MenuItem
+        bsClass="dropdown"
+        disabled={false}
+        divider={false}
+        eventKey={8}
+        header={false}
+      >
+        8
+      </MenuItem>
+      <MenuItem
+        bsClass="dropdown"
+        disabled={false}
+        divider={false}
+        eventKey={9}
+        header={false}
+      >
+        9
+      </MenuItem>
+      <MenuItem
+        bsClass="dropdown"
+        disabled={false}
+        divider={false}
+        eventKey={10}
+        header={false}
+      >
+        10
+      </MenuItem>
+    </SplitButton>
     <div>
       <div
         className="separator"
@@ -110,14 +171,17 @@ exports[`tokensForm component should render a form to configure a tokens vote, t
       <Connect(DumbTokenTypeForm)
         editLocale="fr"
         id="1234"
+        index={0}
       />
       <Connect(DumbTokenTypeForm)
         editLocale="fr"
         id="5678"
+        index={1}
       />
       <Connect(DumbTokenTypeForm)
         editLocale="fr"
         id="9874"
+        index={2}
       />
     </div>
   </form>
@@ -184,7 +248,7 @@ exports[`tokensForm component should render a form to configure a tokens vote, t
         label=""
       />
     </div>
-    <DropdownButton
+    <SplitButton
       id="input-dropdown-addon"
       onSelect={[Function]}
       required={true}
@@ -194,7 +258,14 @@ exports[`tokensForm component should render a form to configure a tokens vote, t
         bsClass="dropdown"
         disabled={false}
         divider={false}
-        eventKey="1"
+        eventKey={0}
+        header={false}
+      />
+      <MenuItem
+        bsClass="dropdown"
+        disabled={false}
+        divider={false}
+        eventKey={1}
         header={false}
       >
         1
@@ -203,7 +274,7 @@ exports[`tokensForm component should render a form to configure a tokens vote, t
         bsClass="dropdown"
         disabled={false}
         divider={false}
-        eventKey="2"
+        eventKey={2}
         header={false}
       >
         2
@@ -212,7 +283,7 @@ exports[`tokensForm component should render a form to configure a tokens vote, t
         bsClass="dropdown"
         disabled={false}
         divider={false}
-        eventKey="3"
+        eventKey={3}
         header={false}
       >
         3
@@ -221,12 +292,66 @@ exports[`tokensForm component should render a form to configure a tokens vote, t
         bsClass="dropdown"
         disabled={false}
         divider={false}
-        eventKey="4"
+        eventKey={4}
         header={false}
       >
         4
       </MenuItem>
-    </DropdownButton>
+      <MenuItem
+        bsClass="dropdown"
+        disabled={false}
+        divider={false}
+        eventKey={5}
+        header={false}
+      >
+        5
+      </MenuItem>
+      <MenuItem
+        bsClass="dropdown"
+        disabled={false}
+        divider={false}
+        eventKey={6}
+        header={false}
+      >
+        6
+      </MenuItem>
+      <MenuItem
+        bsClass="dropdown"
+        disabled={false}
+        divider={false}
+        eventKey={7}
+        header={false}
+      >
+        7
+      </MenuItem>
+      <MenuItem
+        bsClass="dropdown"
+        disabled={false}
+        divider={false}
+        eventKey={8}
+        header={false}
+      >
+        8
+      </MenuItem>
+      <MenuItem
+        bsClass="dropdown"
+        disabled={false}
+        divider={false}
+        eventKey={9}
+        header={false}
+      >
+        9
+      </MenuItem>
+      <MenuItem
+        bsClass="dropdown"
+        disabled={false}
+        divider={false}
+        eventKey={10}
+        header={false}
+      >
+        10
+      </MenuItem>
+    </SplitButton>
   </form>
 </div>
 `;

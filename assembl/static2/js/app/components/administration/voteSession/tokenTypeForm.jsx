@@ -12,6 +12,7 @@ type TokenTypeFormProps = {
   title: string,
   color: string,
   number: number,
+  index: number,
   handleTitleChange: Function,
   handleColorChange: Function,
   handleNumberChange: Function
@@ -21,6 +22,7 @@ const DumbTokenTypeForm = ({
   title,
   color,
   number,
+  index,
   handleTitleChange,
   handleColorChange,
   handleNumberChange
@@ -44,7 +46,7 @@ const DumbTokenTypeForm = ({
     <BlockPicker
       colors={pickerColors}
       onChange={handleColorChange}
-      color={color}
+      color={color || pickerColors[index]}
       width="400px"
       id="color-picker"
       triangle="hide"

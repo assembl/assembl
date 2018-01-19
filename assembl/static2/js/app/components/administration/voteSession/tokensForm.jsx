@@ -2,7 +2,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { I18n } from 'react-redux-i18n';
-import { Checkbox, DropdownButton, MenuItem } from 'react-bootstrap';
+import { Checkbox, SplitButton, MenuItem } from 'react-bootstrap';
+import range from 'lodash/range';
 import FormControlWithLabel from '../../common/formControlWithLabel';
 import { getEntryValueForLocale } from '../../../utils/i18n';
 import Helper from '../../common/helper';
@@ -70,7 +71,7 @@ const DumbTokensForm = ({
         <label htmlFor="input-dropdown-addon">{I18n.t('administration.tokenTypeNumber')}</label>
         <Helper helperUrl="/static2/img/helpers/helper2.png" helperText={I18n.t('administration.helpers.tokenTypeNumber')} />
       </div>
-      <DropdownButton
+      <SplitButton
         title={tokenTypeNumber}
         onSelect={(e) => {
           handleTokenVoteTypeNumberChange(e, tokenTypeNumber);
@@ -78,15 +79,14 @@ const DumbTokensForm = ({
         id="input-dropdown-addon"
         required
       >
-        <MenuItem eventKey="1">1</MenuItem>
-        <MenuItem eventKey="2">2</MenuItem>
-        <MenuItem eventKey="3">3</MenuItem>
-        <MenuItem eventKey="4">4</MenuItem>
-      </DropdownButton>
+        {range(11).map(value => <MenuItem eventKey={value}>{value}</MenuItem>)}
+      </SplitButton>
       {tokenTypeNumber > 0 ? (
         <div>
           <div className="separator" />
-          {tokenTypes.map((id, index) => <TokenTypeForm key={`token-type-${index}`} id={id} editLocale={editLocale} />)}
+          {tokenTypes.map((id, index) => (
+            <TokenTypeForm key={`token-type-${index}`} id={id} editLocale={editLocale} index={index} />
+          ))}
         </div>
       ) : null}
     </form>

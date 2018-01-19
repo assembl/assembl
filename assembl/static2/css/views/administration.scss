@@ -286,7 +286,7 @@
   }
 
   label {
-    font-family: $font-family2;
+    font-family: $font-family7;
     font-size: $font-size-xs;
     margin: 0 0 5px 5px;
   }
@@ -298,9 +298,13 @@
 
   .assembl-icon-faq {
     &:before {
-      font-size: 16px;
+      font-size: 12px;
+    }
+    &:hover {
+      color: $grey3;
     }
   }
+
 
   .token-vote-form {
     .flex > .form-group {
