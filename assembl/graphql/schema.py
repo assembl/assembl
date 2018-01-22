@@ -240,10 +240,14 @@ class Query(graphene.ObjectType):
         return text and len(text) > 10
 
     def resolve_visits_analytics(self, args, context, info):
-        fields = get_fields(info)
-        if 'sumVisitsLength' in fields and 'nbPageviews' in fields and 'nbUniqPageviews' in fields:
-            return VisitsAnalytics.build_from_full_query(args, context, info)
-        else:
+        try:
+            fields = get_fields(info)
+            if 'sumVisitsLength' in fields and 'nbPageviews' in fields and 'nbUniqPageviews' in fields:
+                return VisitsAnalytics.build_from_full_query(args, context, info)
+            else:
+                return VisitsAnalytics()
+        except Exception:
+            context.logger().exception('Error with piwik request')
             return VisitsAnalytics()
 
     def resolve_discussion(self, args, context, info):
