@@ -59,7 +59,7 @@ script:
   - if [ "$TO_TEST" = "FRONTEND" ]; then npm run eslint; fi
   - if [ "$TO_TEST" = "FRONTEND" ]; then npm run flow; fi
   - if [ "$TO_TEST" = "FRONTEND" ]; then npm run stylelint; fi
-  - if [ "$TO_TEST" = "FRONTEND" ]; then bash -c "npm run build >/dev/null && test `ls -l build/bundle.js|awk '{print $5}'` -gt 2621440 && echo 'build/bundle.js size exceed 2.5 MB, is this normal? It was previously around 2.4 MB. If this is normal, please update this check in .travis.yml (2.5 MB = 2.5*1024*1024 = 2621440)' && exit 1 || exit 0"; fi
+  - if [ "$TO_TEST" = "FRONTEND" ]; then bash -c "npm run build >/dev/null && test `ls -l build/bundle.js|awk '{print $5}'` -gt 2936012 && echo 'build/bundle.js size exceed 2.8 MB, is this normal? It was previously around 2.6 MB. If this is normal, please update this check in .travis.yml (2.8 MB = 2.8*1024*1024 = 2936012)' && exit 1 || exit 0"; fi
   - ls -l build/bundle.js
 notifications:
   slack:
