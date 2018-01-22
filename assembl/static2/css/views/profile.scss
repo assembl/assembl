@@ -3,6 +3,11 @@
     width: 360px;
     margin: 35px 0 0 100px;
 
+    .form-control {
+      height: 44px;
+      width: 130%;
+    }
+
     .control-label {
       font-size: $font-size-xxs;
       text-align: left;
