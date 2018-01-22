@@ -11,11 +11,11 @@ def piwik_UsersManager_userExists(piwik_url, piwik_api_token, userLogin):
     params["userLogin"] = userLogin # Piwik has two different fields for login and email, but a user can have the same value as login and email
     result = requests.get(piwik_url, params=params, timeout=15)
     if result.status_code != 200:
-        raise requests.ConnectionError()
+        raise Exception("Matomo request status code returned is different from 200")
 
     content = result.json()
     if not content:
-        raise requests.ConnectionError()
+        raise Exception("Matomo request has empty json body.")
 
     user_already_exists = asbool(content.get("value", False))
     return user_already_exists
@@ -30,16 +30,16 @@ def piwik_UsersManager_getUserByEmail(piwik_url, piwik_api_token, userEmail):
     params["userEmail"] = userEmail # Piwik has two different fields for login and email, but a user can have the same value as login and email
     result = requests.get(piwik_url, params=params, timeout=15)
     if result.status_code != 200:
-        raise requests.ConnectionError()
+        raise Exception("Matomo request status code returned is different from 200")
 
     content = result.json() # returns something like [{"login":"aaa","email":"aaa@aaa.com"}] or {"result":"error","message":"L'utilisateur 'aaa@aaa.com' est inexistant."}
     if not content:
-        raise requests.ConnectionError()
+        raise Exception("Matomo request has empty json body.")
 
     if "result" in content and content["result"] == "error":
         return False
     elif not isinstance(content, list):
-        raise requests.ConnectionError()
+        raise Exception("Matomo request json body is not a list")
     else:
         return content
 
@@ -58,11 +58,11 @@ def piwik_UsersManager_addUser(piwik_url, piwik_api_token, userLogin, password, 
         params["alias"] = alias
     result = requests.get(piwik_url, params=params, timeout=15)
     if result.status_code != 200:
-        raise requests.ConnectionError()
+        raise Exception("Matomo request status code returned is different from 200")
 
     content = result.json()
     if not content:
-        raise requests.ConnectionError()
+        raise Exception("Matomo request has empty json body.")
 
     user_added = ("result" in content and content["result"] == "success")
     return user_added
@@ -79,10 +79,10 @@ def piwik_SitesManager_getSitesIdFromSiteUrl(piwik_url, piwik_api_token, url):
     result = requests.get(piwik_url, params=params, timeout=15)
 
     if result.status_code != 200:
-        raise requests.ConnectionError()
+        raise Exception("Matomo request status code returned is different from 200")
     content = result.json() # Content should be either an empty array, or an array like [{"idsite":"44"}]
     if not isinstance(content, list):
-        raise requests.ConnectionError()
+        raise Exception("Matomo request json body is not a list")
 
     return content
 
@@ -132,12 +132,12 @@ def piwik_SitesManager_addSite(piwik_url, piwik_api_token, siteName, urls, ecomm
     result = requests.get(piwik_url, params=params, timeout=15)
 
     if result.status_code != 200:
-        raise requests.ConnectionError()
+        raise Exception("Matomo request status code returned is different from 200")
 
     content = result.json() # Content should be something like {"value": 47}
 
     if not content:
-        raise requests.ConnectionError()
+        raise Exception("Matomo request has empty json body.")
 
     return content.get('value', False)
 
@@ -155,11 +155,11 @@ def piwik_UsersManager_setUserAccess(piwik_url, piwik_api_token, userLogin, acce
     result = requests.get(piwik_url, params=params, timeout=15)
 
     if result.status_code != 200:
-        raise requests.ConnectionError()
+        raise Exception("Matomo request status code returned is different from 200")
     content = result.json() # Content should be either an empty array, or an array like [{"idsite":"44"}]
 
     if not content:
-        raise requests.ConnectionError()
+        raise Exception("Matomo request has empty json body.")
 
     user_access_is_set = content.get("result", "error") == "success"
     return user_access_is_set
@@ -177,11 +177,11 @@ def piwik_UsersManager_hasSuperUserAccess(piwik_url, piwik_api_token, userLogin)
     result = requests.get(piwik_url, params=params, timeout=15)
 
     if result.status_code != 200:
-        raise requests.ConnectionError()
+        raise Exception("Matomo request status code returned is different from 200")
     content = result.json() # Content should be like {"value": true}
 
     if not content:
-        raise requests.ConnectionError()
+        raise Exception("Matomo request has empty json body.")
 
     return asbool(content.get("value", False))
 
@@ -200,14 +200,14 @@ def piwik_VisitsSummary_getSumVisitsLength(piwik_url, piwik_api_token, idSite, p
     result = requests.get(piwik_url, params=params, timeout=15)
 
     if result.status_code != 200:
-        raise requests.ConnectionError()
+        raise Exception("Matomo request status code returned is different from 200")
     content = result.json() # content should be like {"value": 15}
 
     if not content:
-        raise requests.ConnectionError()
+        raise Exception("Matomo request has empty json body.")
 
     if not "value" in content:
-        raise requests.ConnectionError()
+        raise Exception("Matomo request json body doesn't have a value key")
     return content['value']
 
 
@@ -232,6 +232,6 @@ def piwik_Actions_get(piwik_url, piwik_api_token, idSite, period, date):
         raise Exception("Matomo request has empty json body.")
 
     if not "nb_pageviews" in content:
-        raise Exception("Matomo request json body doesn't have nb_pageviews key")
+        raise Exception("Matomo request json body doesn't have a nb_pageviews key")
 
     return content
