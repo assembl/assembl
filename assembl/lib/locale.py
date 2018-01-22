@@ -133,8 +133,8 @@ def get_preferred_languages(session, user_id):
 def locale_negotiator(request):
     settings = get_config()
     available = settings.get('available_languages').split()
-    locale = (request.cookies.get('_LOCALE_', None) or
-              request.params.get('_LOCALE_', None))
+    locale = (request.params.get('_LOCALE_', None) or
+              request.cookies.get('_LOCALE_', None))
     # TODO: Set User preference in this function.
     if not locale:
         from assembl.auth.util import discussion_from_request

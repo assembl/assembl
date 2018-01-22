@@ -406,15 +406,14 @@ def get_locale_from_request(request, session=None, user=None):
             user = User.get(user_id)
     session = session or User.default_db
     if user:
-        if '_LOCALE_' in request.cookies:
-            locale = request.cookies['_LOCALE_']
-            process_locale(locale, user, session,
-                           LanguagePreferenceOrder.Cookie)
-
-        elif '_LOCALE_' in request.params:
+        if '_LOCALE_' in request.params:
             locale = request.params['_LOCALE_']
             process_locale(locale, user, session,
                            LanguagePreferenceOrder.Parameter)
+        elif '_LOCALE_' in request.cookies:
+            locale = request.cookies['_LOCALE_']
+            process_locale(locale, user, session,
+                           LanguagePreferenceOrder.Cookie)
         else:
             # uses my locale negotiator
             locale = request.locale_name
