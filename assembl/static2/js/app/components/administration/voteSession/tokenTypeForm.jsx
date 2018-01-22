@@ -2,7 +2,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { I18n } from 'react-redux-i18n';
-import { BlockPicker } from 'react-color';
+import { BlockPicker as ColorPicker } from 'react-color';
 import { getEntryValueForLocale } from '../../../utils/i18n';
 import FormControlWithLabel from '../../common/formControlWithLabel';
 import { updateTokenVoteTypeTitle, updateTokenVoteTypeColor, updateTokenNumber } from '../../../actions/adminActions/voteSession';
@@ -43,7 +43,7 @@ const DumbTokenTypeForm = ({
       value={number}
     />
     <label htmlFor="color-picker">{I18n.t('administration.tokenColor')}</label>
-    <BlockPicker
+    <ColorPicker
       colors={pickerColors}
       onChange={handleColorChange}
       color={color || pickerColors[index]}

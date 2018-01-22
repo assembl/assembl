@@ -90,9 +90,7 @@ export const modulesInOrder = (state: List<number> = List(), action: ReduxAction
     return state.push(action.id);
   case DELETE_TOKEN_VOTE_MODULE: {
     const index = state.indexOf(action.id);
-    let newState = state;
-    newState = newState.delete(index);
-    return newState;
+    return state.delete(index);
   }
   default:
     return state;
@@ -112,14 +110,13 @@ export const modulesById = (state: Map<string, Map> = Map(), action: ReduxAction
   case UPDATE_VOTE_MODULES: {
     let newState = Map();
     action.voteModules.forEach((m) => {
-      let moduleInfo = Map();
-      moduleInfo = Map({
+      const moduleInfo = fromJS({
         type: m.type,
         id: m.id,
-        titleEntries: fromJS(m.titleEntries),
-        instructionsEntries: fromJS(m.instructionsEntries),
+        titleEntries: m.titleEntries,
+        instructionsEntries: m.instructionsEntries,
         exclusive: m.exclusive,
-        tokenTypes: List(m.tokenTypes.map(t => t.id))
+        tokenTypes: m.tokenTypes.map(t => t.id)
       });
       newState = newState.set(m.id, moduleInfo);
     });
@@ -131,19 +128,10 @@ export const modulesById = (state: Map<string, Map> = Map(), action: ReduxAction
     return state.setIn([action.id, 'exclusive'], action.value);
   case UPDATE_TOKEN_VOTE_INSTRUCTIONS:
     return state.updateIn([action.id, 'instructionsEntries'], updateInLangstringEntries(action.locale, action.value));
-  case CREATE_TOKEN_VOTE_TYPE: {
-    let tokenTypes = state.getIn([action.parentId, 'tokenTypes']);
-    tokenTypes = tokenTypes.push(action.id);
-    return state.setIn([action.parentId, 'tokenTypes'], tokenTypes);
-  }
-  case DELETE_TOKEN_VOTE_TYPE: {
-    let tokenTypes = state.getIn([action.parentId, 'tokenTypes']);
-    const numberToDelete = tokenTypes.size - action.value;
-    for (let i = 0; i < numberToDelete; i += 1) {
-      tokenTypes = tokenTypes.delete(tokenTypes.size - 1);
-    }
-    return state.setIn([action.parentId, 'tokenTypes'], tokenTypes);
-  }
+  case CREATE_TOKEN_VOTE_TYPE:
+    return state.updateIn([action.parentId, 'tokenTypes'], tokenTypes => tokenTypes.push(action.id));
+  case DELETE_TOKEN_VOTE_TYPE:
+    return state.updateIn([action.parentId, 'tokenTypes'], tokenTypes => tokenTypes.delete(tokenTypes.size - 1));
   default:
     return state;
   }
@@ -163,8 +151,7 @@ export const tokenTypesById = (state: Map<string, Map> = Map(), action: ReduxAct
     action.voteModules.forEach((m) => {
       if (m.type === 'tokens') {
         m.tokenTypes.forEach((t) => {
-          let tokenTypeInfo = Map();
-          tokenTypeInfo = Map({
+          const tokenTypeInfo = Map({
             id: t.id,
             titleEntries: fromJS(t.titleEntries),
             color: t.color,

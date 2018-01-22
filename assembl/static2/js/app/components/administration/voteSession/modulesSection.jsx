@@ -29,7 +29,7 @@ const DumbModulesSection = ({ tokenModules, editLocale, handleCheckBoxChange }: 
               }}
             >
               <Helper
-                label="Vote par jetons"
+                label={I18n.t('administration.voteWithTokens')}
                 helperUrl="/static2/img/helpers/helper4.png"
                 helperText={I18n.t('administration.tokenVoteCheckbox')}
                 classname="inline"
@@ -47,7 +47,7 @@ const mapStateToProps = ({ admin }) => {
   const { modulesInOrder, modulesById } = admin.voteSession;
   const { editLocale } = admin;
   return {
-    tokenModules: modulesInOrder.filter(id => modulesById.get(id).get('type') === 'tokens'),
+    tokenModules: modulesInOrder.filter(id => modulesById.getIn([id, 'type']) === 'tokens'),
     editLocale: editLocale
   };
 };

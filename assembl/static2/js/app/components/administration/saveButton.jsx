@@ -392,13 +392,7 @@ const mapStateToProps = ({
     legalNoticeAndTerms: legalNoticeAndTerms,
     voteSessionPage: voteSession.page,
     voteModules: modulesInOrder.map(id =>
-      modulesById.get(id).set(
-        'tokenTypes',
-        modulesById
-          .get(id)
-          .get('tokenTypes')
-          .map(t => tokenTypesById.get(t))
-      )
+      modulesById.get(id).set('tokenTypes', modulesById.getIn([id], 'tokenTypes').map(t => tokenTypesById.get(t)))
     )
   };
 };

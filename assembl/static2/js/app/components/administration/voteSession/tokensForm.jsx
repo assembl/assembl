@@ -79,7 +79,11 @@ const DumbTokensForm = ({
         id="input-dropdown-addon"
         required
       >
-        {range(11).map(value => <MenuItem eventKey={value}>{value}</MenuItem>)}
+        {range(11).map(value => (
+          <MenuItem key={`item-${value}`} eventKey={value}>
+            {value}
+          </MenuItem>
+        ))}
       </SplitButton>
       {tokenTypeNumber > 0 ? (
         <div>
