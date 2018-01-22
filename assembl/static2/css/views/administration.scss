@@ -375,6 +375,10 @@
             border: 0.8px solid $first-color;
             color: $first-color;
             background-color: $white;
+
+            .admin-icons {
+              color: $first-color;
+            }
           }
         }
       }

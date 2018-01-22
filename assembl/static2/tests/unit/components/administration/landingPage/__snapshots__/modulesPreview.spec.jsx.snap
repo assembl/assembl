@@ -33,7 +33,7 @@ exports[`ModulesPreview component should render a preview of the enabled modules
             type="button"
           >
             <span
-              className="assembl-icon-down-bold grey"
+              className="assembl-icon-down-small"
             />
           </button>
           <button
@@ -47,7 +47,7 @@ exports[`ModulesPreview component should render a preview of the enabled modules
             type="button"
           >
             <span
-              className="assembl-icon-up-bold grey"
+              className="assembl-icon-up-small"
             />
           </button>
         </span>

@@ -18,12 +18,12 @@ const ModuleBlock = ({ moveDown, moveUp, title, withArrows }: Props) => (
       <span>
         <OverlayTrigger placement="top" overlay={downTooltip}>
           <Button onClick={moveDown} className="admin-icons">
-            <span className="assembl-icon-down-bold grey" />
+            <span className="assembl-icon-down-small" />
           </Button>
         </OverlayTrigger>
         <OverlayTrigger placement="top" overlay={upTooltip}>
           <Button onClick={moveUp} className="admin-icons">
-            <span className="assembl-icon-up-bold grey" />
+            <span className="assembl-icon-up-small" />
           </Button>
         </OverlayTrigger>
       </span>
