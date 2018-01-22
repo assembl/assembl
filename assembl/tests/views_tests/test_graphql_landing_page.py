@@ -126,3 +126,51 @@ def test_mutation_create_landing_page_module(graphql_request):
     assert lpm[u'moduleType'][u'identifier'] == u'HEADER'
     assert lpm[u'moduleType'][u'title'] == u'Header'
     assert lpm[u'order'] == 42.0
+
+
+def test_mutation_update_landing_page_module(graphql_request, simple_landing_page_module):
+    mutation = u""" mutation updateLandingPageModule
+                            (
+                            $moduleIdentifier: ID!
+                            $typeIdentifier: String
+                            $enabled: Boolean
+                            $order: Float
+                            $configuration: String
+                            )
+                                {
+                                updateLandingPageModule
+                                (
+                                moduleIdentifier: $moduleIdentifier
+                                typeIdentifier: $typeIdentifier
+                                enabled: $enabled
+                                order: $order
+                                configuration: $configuration
+                                ) 
+                                    {
+                                    landingPageModule
+                                        {
+                                        configuration
+                                        enabled
+                                        moduleType
+                                            {
+                                            identifier
+                                            title
+                                            }
+                                        order
+                                        }
+                                    }
+                                }"""
+
+    res = schema.execute(mutation, context_value=graphql_request, variable_values={
+        'moduleIdentifier': simple_landing_page_module.id,
+        'typeIdentifier': "HEADER_UPDATED",
+        'enabled': False, 'order': 43.0,
+        'configuration': 'Standard_configuration_updated',
+    })
+    assert res.errors is None
+    lpm = res.data[u'updateLandingPageModule']['landingPageModule']
+    assert lpm[u'configuration'] == 'Standard_configuration_updated'
+    assert lpm[u'enabled'] is False
+    assert lpm[u'moduleType'][u'identifier'] == u'HEADER'
+    assert lpm[u'moduleType'][u'title'] == u'Header'
+    assert lpm[u'order'] == 43.0

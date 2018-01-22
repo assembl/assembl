@@ -101,3 +101,45 @@ class CreateLandingPageModule(graphene.Mutation):
             db.flush()
 
         return CreateLandingPageModule(landing_page_module=saobj)
+
+
+class UpdateLandingPageModule(graphene.Mutation):
+
+    class Input:
+        moduleIdentifier = graphene.ID(required=True)
+        type_identifier = graphene.String()
+        enabled = graphene.Boolean()
+        order = graphene.Float()
+        configuration = graphene.String()
+
+    landing_page_module = graphene.Field(lambda: LandingPageModule)
+
+    @staticmethod
+    @abort_transaction_on_exception
+    def mutate(root, args, context, info):
+        cls = models.LandingPageModule
+
+        discussion_id = context.matchdict['discussion_id']
+        user_id = context.authenticated_userid or Everyone
+        configuration = args.get('configuration')
+        order = args.get('order')
+        enabled = args.get('enabled')
+
+        module_id = int(args.get('moduleIdentifier'))
+
+        with cls.default_db.no_autoflush as db:
+            module = db.query(models.LandingPageModule).filter(
+                models.LandingPageModule.id == module_id).first()
+            permissions = get_permissions(user_id, discussion_id)
+            allowed = cls.user_can_cls(
+                user_id, CrudPermissions.CREATE, permissions)
+            if not allowed or (allowed == IF_OWNED and user_id == Everyone):
+                raise HTTPUnauthorized()
+
+            module.enabled = enabled
+            module.order = order
+            module.configuration = configuration
+
+            db.flush()
+
+        return UpdateLandingPageModule(landing_page_module=module)
