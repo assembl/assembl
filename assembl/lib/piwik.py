@@ -225,12 +225,13 @@ def piwik_Actions_get(piwik_url, piwik_api_token, idSite, period, date):
     result = requests.get(piwik_url, params=params, timeout=15)
 
     if result.status_code != 200:
-        raise requests.ConnectionError()
+        raise Exception("Matomo request status code returned is different from 200")
     content = result.json() # content should be like {"nb_pageviews": 15, "nb_uniq_pageviews": 10} and other fields
 
     if not content:
-        raise requests.ConnectionError()
+        raise Exception("Matomo request has empty json body.")
 
     if not "nb_pageviews" in content:
-        raise requests.ConnectionError()
+        raise Exception("Matomo request json body doesn't have nb_pageviews key")
+
     return content
