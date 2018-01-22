@@ -20,7 +20,7 @@ from assembl.graphql.discussion import (Discussion, DiscussionPreferences,
 from assembl.graphql.document import UploadDocument
 from assembl.graphql.idea import (CreateIdea, CreateThematic, DeleteThematic,
                                   Idea, IdeaUnion, Thematic, UpdateThematic)
-from assembl.graphql.landing_page import LandingPageModuleType, LandingPageModule
+from assembl.graphql.landing_page import LandingPageModuleType, LandingPageModule, CreateLandingPageModule
 from assembl.graphql.langstring import resolve_langstring
 from assembl.graphql.locale import Locale
 from assembl.graphql.post import (AddPostAttachment, CreatePost, DeletePost,
@@ -334,6 +334,7 @@ class Mutations(graphene.ObjectType):
     create_number_gauge_vote_specification = CreateNumberGaugeVoteSpecification.Field()
     update_number_gauge_vote_specification = UpdateNumberGaugeVoteSpecification.Field()
     delete_vote_specification = DeleteVoteSpecification.Field()
+    create_landing_page_module = CreateLandingPageModule.Field()
 
 
 Schema = graphene.Schema(query=Query, mutation=Mutations)

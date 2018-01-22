@@ -1,5 +1,6 @@
 from assembl.graphql.schema import Schema as schema
-
+from graphql_relay.node.node import to_global_id
+from assembl.models.landing_page import LandingPageModuleType
 
 MODULES_COUNT = 11
 
@@ -67,8 +68,7 @@ def test_query_landing_page_modules(graphql_request, simple_landing_page_module)
             assert lpm[u'existsInDatabase'] is True
             assert lpm[u'order'] == 42.0
             assert lpm[u'enabled'] is True
-            assert lpm[
-                u'configuration'] == u'{text:"The SDD feed is down, override the optical system so we can connect the SAS bus!"}'
+            assert lpm[u'configuration'] == u'{text:"The SDD feed is down, override the optical system so we can connect the SAS bus!"}'
             assert lpm[u'moduleType'][u'title'] == u'Header'
             assert lpm[u'moduleType'][u'defaultOrder'] == 1.0
             assert lpm[u'moduleType'][u'editableOrder'] is False
@@ -83,19 +83,46 @@ def test_query_landing_page_modules(graphql_request, simple_landing_page_module)
     assert orders == sorted(orders)
 
 
-# def test_mutation_create_landing_page_module(graphql_request):
-#     mutation = u""" mutation createLandingPageModule($typeIdentifier: String!, $enabled: Boolean, $order: Float, $configuration: String) {
-#     createLandingPageModule(typeIdentifier: $typeIdentifier, enabled: $enabled, order: $order, configuration: $configuration) {
-#     landingPageModule {
-#         configuration
-#         enabled
-#         moduleType {
-#         identifier
-#         title
-#         }
-#         order
-#         }
-#     }
-# }"""
-#     res = schema.execute(mutation)
-#     assert res.errors is None
+def test_mutation_create_landing_page_module(graphql_request):
+
+    mutation = u""" mutation createLandingPageModule
+                            (
+                            $typeIdentifier: String
+                            $enabled: Boolean
+                            $order: Float
+                            $configuration: String
+                            )
+                                {
+                                createLandingPageModule
+                                (
+                                typeIdentifier: $typeIdentifier
+                                enabled: $enabled
+                                order: $order
+                                configuration: $configuration
+                                ) 
+                                    {
+                                    landingPageModule
+                                        {
+                                        configuration
+                                        enabled
+                                        moduleType
+                                            {
+                                            identifier
+                                            title
+                                            }
+                                        order
+                                        }
+                                    }
+                                }"""
+    res = schema.execute(mutation, context_value=graphql_request, variable_values={
+        'typeIdentifier': "HEADER",
+        'enabled': True, 'order': 42.0,
+        'configuration': 'Standard_configuration',
+    })
+    assert res.errors is None
+    lpm = res.data[u'createLandingPageModule']['landingPageModule']
+    assert lpm[u'configuration'] == 'Standard_configuration'
+    assert lpm[u'enabled'] is True
+    assert lpm[u'moduleType'][u'identifier'] == u'HEADER'
+    assert lpm[u'moduleType'][u'title'] == u'Header'
+    assert lpm[u'order'] == 42.0

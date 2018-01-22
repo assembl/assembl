@@ -7,9 +7,15 @@ from assembl import models
 from .langstring import (
     LangStringEntry, resolve_langstring, resolve_langstring_entries)
 from .types import SecureObjectType
+from .utils import abort_transaction_on_exception
+from assembl.auth.util import get_permissions
+from assembl.auth import IF_OWNED, CrudPermissions
+from pyramid.httpexceptions import HTTPUnauthorized
+from pyramid.security import Everyone
 
 
 class LandingPageModuleType(SecureObjectType, SQLAlchemyObjectType):
+
     class Meta:
         model = models.LandingPageModuleType
         interfaces = (Node, )
@@ -51,3 +57,47 @@ class LandingPageModule(SecureObjectType, SQLAlchemyObjectType):
             if is_node(graphene_type):
                 return self.__mapper__.primary_key_from_instance(self)[0]
             return getattr(self, graphene_type._meta.id, None)
+
+
+class CreateLandingPageModule(graphene.Mutation):
+
+    class Input:
+        type_identifier = graphene.String()
+        enabled = graphene.Boolean()
+        order = graphene.Float()
+        configuration = graphene.String()
+
+    landing_page_module = graphene.Field(lambda: LandingPageModule)
+
+    @staticmethod
+    @abort_transaction_on_exception
+    def mutate(root, args, context, info):
+
+        cls = models.LandingPageModule
+
+        discussion_id = context.matchdict['discussion_id']
+        user_id = context.authenticated_userid or Everyone
+        configuration = args.get('configuration')
+        order = args.get('order')
+        enabled = args.get('enabled')
+        module_type_identifier = args.get('type_identifier')
+        with cls.default_db.no_autoflush as db:
+            module_type = db.query(models.LandingPageModuleType).filter(
+                models.LandingPageModuleType.identifier == module_type_identifier).one()
+            permissions = get_permissions(user_id, discussion_id)
+            allowed = cls.user_can_cls(
+                user_id, CrudPermissions.CREATE, permissions)
+            if not allowed or (allowed == IF_OWNED and user_id == Everyone):
+                raise HTTPUnauthorized()
+
+            saobj = cls(
+                discussion_id=discussion_id,
+                configuration=configuration,
+                order=order,
+                enabled=enabled,
+                module_type=module_type
+            )
+            db.add(saobj)
+            db.flush()
+
+        return CreateLandingPageModule(landing_page_module=saobj)
