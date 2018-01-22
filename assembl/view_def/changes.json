@@ -200,6 +200,7 @@
         "idea": true,
         "message_classifier": true,
         "header": ":extended",
+        "synthesis_title": ":extended",
         "title": ":extended",
         "name": ":extended",
         "color": true,

@@ -12,7 +12,7 @@ def idea_message_column_positive(request, test_adminuser_webrequest, subidea_1, 
                                color="green")
 
     test_session.add(column)
-    synthesis = column.set_column_synthesis(
+    synthesis = column.create_column_synthesis(
         subject=LangString.create('Be positive!', 'en'),
         body=LangString.create('This is a positive header', 'en'),
         creator_id=test_adminuser_webrequest.authenticated_userid
@@ -42,7 +42,7 @@ def idea_message_column_negative(request, test_adminuser_webrequest, subidea_1,
                                previous_column=idea_message_column_positive)
 
     test_session.add(column)
-    synthesis = column.set_column_synthesis(
+    synthesis = column.create_column_synthesis(
         subject=LangString.create('Be negative!', 'en'),
         body=LangString.create('This is a negative header', 'en'),
         creator_id=test_adminuser_webrequest.authenticated_userid
@@ -70,7 +70,7 @@ def idea_message_column_positive_on_subidea_1_1(request, test_adminuser_webreque
                                color="green")
 
     test_session.add(column)
-    synthesis = column.set_column_synthesis(
+    synthesis = column.create_column_synthesis(
         subject=LangString.create('Be positive!', 'en'),
         body=LangString.create('This is a positive header', 'en'),
         creator_id=test_adminuser_webrequest.authenticated_userid
