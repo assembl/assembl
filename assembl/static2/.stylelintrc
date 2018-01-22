@@ -5,6 +5,7 @@
     "at-rule-no-unknown": null,
     "selector-pseudo-element-colon-notation": null,
     "selector-list-comma-newline-after": null,
-    "number-leading-zero": null
+    "number-leading-zero": null,
+    "max-line-length": 130
   }
 }
