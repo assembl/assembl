@@ -61,8 +61,10 @@ const icons = [
   'assembl-icon-double-page',
   'assembl-icon-timer',
   'assembl-icon-up-bold',
-  'assembl-icon-down-bold'
-]
+  'assembl-icon-down-bold',
+  'assembl-icon-down-small',
+  'assembl-icon-up-small'
+];
 
 class Icons extends React.Component {
   render() {
