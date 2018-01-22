@@ -386,9 +386,9 @@ var routeManager = Marionette.Object.extend({
     });
   },
 
-  voteWidgetFromV2: function(id, arg, showInModal) {
+  voteWidgetFromV2: function(id, arg, queryString, showInModal) {
     var that = this;
-    showInModal = showInModal ? true : false;
+    showInModal = (showInModal === true) ? true : false;
     id = parseInt(id.match(/\d+/)[0], 10); // extract number from id, in case provided id is "local:Widget/23" instead of "23"
     var collectionManager = CollectionManager();
     var widgetPromise = collectionManager.getAllWidgetsPromise()
@@ -447,8 +447,8 @@ var routeManager = Marionette.Object.extend({
     });
   },
 
-  voteWidgetFromV2InModal: function(id, arg){
-    return this.voteWidgetFromV2(id, arg, true);
+  voteWidgetFromV2InModal: function(id, arg, queryString){
+    return this.voteWidgetFromV2(id, arg, queryString, true);
   },
 
   about: function() {
