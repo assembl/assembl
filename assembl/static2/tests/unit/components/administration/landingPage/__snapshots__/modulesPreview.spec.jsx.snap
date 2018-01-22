@@ -13,6 +13,7 @@ exports[`ModulesPreview component should render a preview of the enabled modules
       className="module-block"
     >
       Header
+      
     </div>
     <div
       className="other-modules"
@@ -21,6 +22,7 @@ exports[`ModulesPreview component should render a preview of the enabled modules
         className="module-block"
       >
         Video
+        
         <span>
           <button
             className="admin-icons btn btn-default"
@@ -57,6 +59,7 @@ exports[`ModulesPreview component should render a preview of the enabled modules
       className="module-block"
     >
       Footer
+      
     </div>
   </div>
 </div>

@@ -7,13 +7,15 @@ import { upTooltip, downTooltip } from '../../common/tooltips';
 type Props = {
   moveUp: Function,
   moveDown: Function,
+  required: boolean,
   title: string,
   withArrows: boolean
 };
 
-const ModuleBlock = ({ moveDown, moveUp, title, withArrows }: Props) => (
+const ModuleBlock = ({ moveDown, moveUp, required, title, withArrows }: Props) => (
   <div className="module-block">
     {title}
+    {required ? '*' : ''}
     {withArrows ? (
       <span>
         <OverlayTrigger placement="top" overlay={downTooltip}>

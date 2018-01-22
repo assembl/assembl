@@ -22,6 +22,7 @@ const ModulesPreview = ({ modules, moveModuleDown, moveModuleUp }: Props) => {
         key={identifier}
         moveDown={() => moveModuleDown(identifier)}
         moveUp={() => moveModuleUp(identifier)}
+        required={module.getIn(['moduleType', 'required'])}
         title={module.getIn(['moduleType', 'title'])}
         withArrows={module.getIn(['moduleType', 'editableOrder'])}
       />
