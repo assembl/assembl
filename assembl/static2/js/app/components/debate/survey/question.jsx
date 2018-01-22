@@ -1,10 +1,8 @@
 import React from 'react';
-import { PropTypes } from 'prop-types';
 import { graphql, compose } from 'react-apollo';
 import { connect } from 'react-redux';
 import { Translate, I18n } from 'react-redux-i18n';
-import { Grid, Col, FormGroup, FormControl, Button } from 'react-bootstrap';
-import get from 'lodash/get';
+import { Grid, Col, Button } from 'react-bootstrap';
 
 import { getConnectedUserId } from '../../../utils/globalFunctions';
 import { getIfPhaseCompletedByIdentifier } from '../../../utils/timeline';
@@ -12,40 +10,20 @@ import { inviteUserToLogin, displayAlert } from '../../../utils/utilityManager';
 import createPostMutation from '../../../graphql/mutations/createPost.graphql';
 import { SMALL_SCREEN_WIDTH } from '../../../constants';
 import { withScreenDimensions } from '../../common/screenDimensions';
+import TextAreaWithRemainingChars from '../../common/textAreaWithRemainingChars';
+
+const MINIMUM_BODY_LENGTH = 10;
 
 class Question extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      showSubmitButton: false
+      buttonDisabled: false,
+      postBody: ''
     };
     this.getProposalText = this.getProposalText.bind(this);
     this.createPost = this.createPost.bind(this);
     this.redirectToLogin = this.redirectToLogin.bind(this);
-  }
-
-  componentDidMount() {
-    const maxChars = this.txtarea.props.maxLength;
-    this.state = {
-      remainingChars: maxChars
-    };
-  }
-
-  componentWillReceiveProps() {
-    const maxChars = this.txtarea.props.maxLength;
-    this.state = {
-      showSubmitButton: false,
-      postBody: '',
-      remainingChars: maxChars
-    };
-  }
-
-  getRemainingChars(e) {
-    const maxChars = this.txtarea.props.maxLength;
-    const remainingChars = maxChars - e.currentTarget.value.length;
-    this.setState({
-      remainingChars: remainingChars
-    });
   }
 
   getProposalText(e) {
@@ -55,22 +33,7 @@ class Question extends React.Component {
     });
   }
 
-  displaySubmitButton(e) {
-    const nbChars = e.currentTarget.value.length;
-    const minAcceptableChars = 10;
-    if (nbChars > minAcceptableChars) {
-      this.setState({
-        showSubmitButton: true
-      });
-    } else {
-      this.setState({
-        showSubmitButton: false
-      });
-    }
-  }
-
   createPost() {
-    const maxChars = this.txtarea.props.maxLength;
     const { contentLocale, questionId, scrollToQuestion, index, refetchTheme } = this.props;
     const body = this.state.postBody;
     this.setState({ buttonDisabled: true }, () =>
@@ -82,8 +45,6 @@ class Question extends React.Component {
           refetchTheme();
           this.setState({
             postBody: '',
-            showSubmitButton: false,
-            remainingChars: maxChars,
             buttonDisabled: false
           });
         })
@@ -124,32 +85,17 @@ class Question extends React.Component {
               <h1 className="dark-title-1">{`${index}/ ${title}`}</h1>
             </div>
             <Col xs={12} md={9} className="col-centered">
-              <FormGroup className="no-margin">
-                <FormControl
-                  className="txt-area"
-                  componentClass="textarea"
-                  id={`txt${index}`}
-                  onClick={this.redirectToLogin}
-                  placeholder={I18n.t('debate.survey.txtAreaPh')}
-                  onKeyUp={(e) => {
-                    this.getRemainingChars(e);
-                    this.displaySubmitButton(e);
-                  }}
-                  value={this.state.postBody}
-                  maxLength={300}
-                  ref={(t) => {
-                    this.txtarea = t;
-                  }}
-                  onChange={this.getProposalText}
-                />
-              </FormGroup>
-              <div className="annotation margin-s">
-                <Translate value="debate.remaining_x_characters" nbCharacters={this.state.remainingChars} />
-              </div>
-              {this.state.showSubmitButton && (
+              <TextAreaWithRemainingChars
+                domId={`txt${index}`}
+                onChange={this.getProposalText}
+                onClick={this.redirectToLogin}
+                placeholder={I18n.t('debate.survey.txtAreaPh')}
+                value={this.state.postBody}
+              />
+              {this.state.postBody.length > MINIMUM_BODY_LENGTH && (
                 <Button
                   onClick={this.createPost}
-                  disabled={get(this, 'state.buttonDisabled', false)}
+                  disabled={this.state.buttonDisabled}
                   className="button-submit button-dark right margin-l clear"
                 >
                   <Translate value="debate.survey.submit" />
@@ -162,10 +108,6 @@ class Question extends React.Component {
     );
   }
 }
-
-Question.propTypes = {
-  mutate: PropTypes.func.isRequired
-};
 
 const mapStateToProps = state => ({
   debate: state.debate,
