@@ -247,7 +247,7 @@ class Query(graphene.ObjectType):
             else:
                 return VisitsAnalytics()
         except Exception:
-            context.logger().exception('Error with piwik request')
+            context.logger().exception('Error with Matomo request')
             return VisitsAnalytics()
 
     def resolve_discussion(self, args, context, info):

@@ -308,6 +308,9 @@ class VisitsAnalytics(graphene.ObjectType):
                 return discussion.get_visits_time_series_analytics(start, end)
         except ValueError:
             return None
+        except Exception:
+            context.logger().exception('Error with Matomo request')
+            return None
 
     def generic_resolver(self, args, context, info, field_name):
         val = getattr(self, field_name, None)
