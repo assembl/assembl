@@ -24,9 +24,9 @@ exports[`ModulesSection component should render a ModulesSection component witho
           title=""
         >
           <Helper
+            additionalTextClasses=""
             classname="inline"
             helperText="Missing translation: administration.tokenVoteCheckbox"
-            helperTextClassName=""
             helperUrl="/static2/img/helpers/helper4.png"
             label="Missing translation: administration.voteWithTokens"
           />

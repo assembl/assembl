@@ -16,9 +16,9 @@ exports[`Vote Session DumbPageForm component should render a form to update the 
     >
       <form>
         <Helper
+          additionalTextClasses=""
           classname="title"
           helperText="Missing translation: administration.helpers.voteSessionHeader"
-          helperTextClassName=""
           helperUrl="/static2/img/helpers/helper1.png"
           label="Missing translation: administration.headerTitle"
         />
@@ -54,9 +54,9 @@ exports[`Vote Session DumbPageForm component should render a form to update the 
         className="separator"
       />
       <Helper
+        additionalTextClasses=""
         classname="title"
         helperText="Missing translation: administration.helpers.voteSessionInstructions"
-        helperTextClassName=""
         helperUrl="/static2/img/helpers/helper2.png"
         label="Missing translation: administration.instructions"
       />
@@ -93,9 +93,9 @@ exports[`Vote Session DumbPageForm component should render a form to update the 
         className="separator"
       />
       <Helper
+        additionalTextClasses=""
         classname="title"
         helperText="Missing translation: administration.helpers.voteSessionPropositionSection"
-        helperTextClassName=""
         helperUrl="/static2/img/helpers/helper3.png"
         label="Missing translation: administration.propositionSectionTitle"
       />

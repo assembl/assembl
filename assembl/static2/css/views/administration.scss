@@ -156,7 +156,7 @@
   }
 
   .separator {
-    border-bottom: $btn-dark-border-width $btn-dark-border-style $btn-dark-border-color;
+    border-bottom: 1px $btn-dark-border-style $btn-dark-border-color;
     clear: both;
     margin: 0 0 50px;
     padding: 40px 0 15px;

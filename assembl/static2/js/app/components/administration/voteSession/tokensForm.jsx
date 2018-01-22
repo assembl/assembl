@@ -49,7 +49,7 @@ const DumbTokensForm = ({
             label={I18n.t('administration.exclusive')}
             helperText={I18n.t('administration.helpers.exclusive')}
             classname="inline"
-            helperTextClassName="helper-text-only"
+            additionalTextClasses="helper-text-only"
           />
         </Checkbox>
       </div>
@@ -64,7 +64,7 @@ const DumbTokensForm = ({
         <Helper
           helperUrl="/static2/img/helpers/helper5.png"
           helperText={I18n.t('administration.helpers.tokenVoteInstructions')}
-          helperTextClassName="helper-text-only"
+          additionalTextClasses="helper-text-only"
         />
       </div>
       <div className="flex">

@@ -17,9 +17,9 @@ exports[`tokensForm component should render a form to configure a tokens vote, t
         title=""
       >
         <Helper
+          additionalTextClasses="helper-text-only"
           classname="inline"
           helperText="Missing translation: administration.helpers.exclusive"
-          helperTextClassName="helper-text-only"
           helperUrl=""
           label="Missing translation: administration.exclusive"
         />
@@ -37,9 +37,9 @@ exports[`tokensForm component should render a form to configure a tokens vote, t
         value="Je vous prie de bien vouloir voter."
       />
       <Helper
+        additionalTextClasses="helper-text-only"
         classname=""
         helperText="Missing translation: administration.helpers.tokenVoteInstructions"
-        helperTextClassName="helper-text-only"
         helperUrl="/static2/img/helpers/helper5.png"
         label=""
       />
@@ -53,9 +53,9 @@ exports[`tokensForm component should render a form to configure a tokens vote, t
         Missing translation: administration.tokenTypeNumber
       </label>
       <Helper
+        additionalTextClasses=""
         classname=""
         helperText="Missing translation: administration.helpers.tokenTypeNumber"
-        helperTextClassName=""
         helperUrl="/static2/img/helpers/helper2.png"
         label=""
       />
@@ -205,9 +205,9 @@ exports[`tokensForm component should render a form to configure a tokens vote, t
         title=""
       >
         <Helper
+          additionalTextClasses="helper-text-only"
           classname="inline"
           helperText="Missing translation: administration.helpers.exclusive"
-          helperTextClassName="helper-text-only"
           helperUrl=""
           label="Missing translation: administration.exclusive"
         />
@@ -225,9 +225,9 @@ exports[`tokensForm component should render a form to configure a tokens vote, t
         value="Je vous prie de bien vouloir voter."
       />
       <Helper
+        additionalTextClasses="helper-text-only"
         classname=""
         helperText="Missing translation: administration.helpers.tokenVoteInstructions"
-        helperTextClassName="helper-text-only"
         helperUrl="/static2/img/helpers/helper5.png"
         label=""
       />
@@ -241,9 +241,9 @@ exports[`tokensForm component should render a form to configure a tokens vote, t
         Missing translation: administration.tokenTypeNumber
       </label>
       <Helper
+        additionalTextClasses=""
         classname=""
         helperText="Missing translation: administration.helpers.tokenTypeNumber"
-        helperTextClassName=""
         helperUrl="/static2/img/helpers/helper2.png"
         label=""
       />
