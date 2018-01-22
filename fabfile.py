@@ -1134,7 +1134,7 @@ def update_python_package_builddeps():
              'libxslt1-dev libffi-dev libhiredis-dev libxml2-dev libssl-dev '
              'libreadline-dev liblapack-dev libblas-dev '
              'libgraphviz-dev libxmlsec1-dev')
-        sudo('apt-get install -y libatlas-base-dev', warn_only=True)  # ubuntu > 17.10
+        sudo('apt-get install -y libatlas-base-dev', warn_only=True)  # ubuntu >= 17.10
         sudo('apt-get install -y libatlas-dev', warn_only=True)  # others
         print ("We are still trying to get some requirements right for linux, "
                "See http://www.scipy.org/scipylib/building/linux.html "
