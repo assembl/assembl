@@ -155,6 +155,8 @@ class IdeaMessageColumn(DiscussionBoundBase):
         return synthesis
 
     def set_column_synthesis(self, subject=None, body=None, creator_id=None):
+        # Only use after self has been created! This should never be used
+        # for side-effectful APIs
         synthesis = self.get_column_synthesis()
         assert synthesis
         if subject is not None:
@@ -162,6 +164,8 @@ class IdeaMessageColumn(DiscussionBoundBase):
 
         if body is not None:
             synthesis.body = body
+
+        self.db.flush()
 
     @property
     def header(self):
