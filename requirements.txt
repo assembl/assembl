@@ -69,6 +69,7 @@ isodate==0.5.4
 -e git+https://github.com/assembl/jasmine-splinter-runner.git#egg=jasmine-splinter-runner
 jdcal==1.3
 Jinja2==2.8
+jsonpath-ng==1.4.3
 -e git+https://github.com/benoitg/jwzthreading.git@master#egg=jwzthreading
 kombu==3.0.35
 -e git+https://github.com/maparent/langdetect.git@no_sample#egg=langdetect

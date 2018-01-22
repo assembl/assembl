@@ -18,6 +18,7 @@ from sqlalchemy import (
     UniqueConstraint
 )
 from sqlalchemy.orm import relationship
+from social_core.exceptions import MissingBackend
 from social_sqlalchemy.storage import (
     SQLAlchemyMixin, SQLAlchemyNonceMixin, UserMixin,
     SQLAlchemyAssociationMixin, SQLAlchemyCodeMixin, BaseSQLAlchemyStorage)
@@ -27,6 +28,7 @@ from urllib import unquote
 from ..lib import config
 from ..lib.sqla_types import URLString, JSONType
 from .auth import AbstractAgentAccount, IdentityProvider, AgentProfile, User, Username
+from ..auth.generic_auth_backend import GenericAuth
 from . import Base
 from ..semantic.namespaces import SIOC
 from ..semantic.virtuoso_mapping import QuadMapPatternS
@@ -241,41 +243,51 @@ class SocialAuthAccount(
         return users
 
     @classmethod
-    def get_social_auth(cls, provider, uid, provider_domain=None):
+    def get_social_auth(cls, provider, uid):
         if not isinstance(uid, six.string_types):
             uid = str(uid)
         return cls._query().join(
             cls.identity_provider).filter(
-                IdentityProvider.provider_type == provider, cls.uid == uid,
-                cls.provider_domain == provider_domain).first()
+                IdentityProvider.provider_type == provider, cls.uid == uid).first()
 
     @classmethod
     def get_social_auth_for_user(
-            cls, user, provider=None, id=None, provider_domain=None):
+            cls, user, provider=None, id=None):
         qs = cls._query().filter_by(profile_id=user.id)
         if provider:
             qs = qs.join(
                 cls.identity_provider).filter(
-                    IdentityProvider.provider_type == provider,
-                    cls.provider_domain == provider_domain)
+                    IdentityProvider.provider_type == provider)
         if id:
             qs = qs.filter(cls.id == id)
         return qs
 
     @classmethod
-    def create_social_auth(cls, user, uid, provider, provider_domain=None):
+    def create_social_auth(cls, user, uid, provider):
         if not isinstance(uid, six.string_types):
             uid = str(uid)
         id_provider = IdentityProvider.get_by_type(provider)
         return cls._new_instance(
-            cls, profile=user, uid=uid, provider_domain=provider_domain,
+            cls, profile=user, uid=uid,
             identity_provider=id_provider, verified=id_provider.trust_emails)
+
+    # override social_core.storage.UserMixin.get_backend_instance
+    def get_backend_instance(self, strategy):
+        try:
+            backend_class = self.get_backend(strategy)
+        except MissingBackend:
+            return None
+        else:
+            if issubclass(backend_class, GenericAuth):
+                return backend_class(strategy=strategy, name=self.provider)
+            else:
+                return backend_class(strategy=strategy)
 
     # Lifted from IdentityProviderAccount
 
     def signature(self):
-        return ('idprovider_agent_account', self.provider_id, self.username,
-                self.provider_domain, self.uid)
+        return ('idprovider_agent_account',
+                self.provider_id, self.username, self.uid)
 
     def interpret_profile(self, profile=None):
         profile = profile or self.extra_data

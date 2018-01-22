@@ -13,11 +13,11 @@ import simplejson as json
 from social_pyramid.utils import backends
 from social_pyramid.strategy import PyramidStrategy
 from social_core.utils import to_setting_name, setting_name, SETTING_PREFIX
-from social_core.backends.utils import load_backends
 
 from assembl.models import User, Preferences, IdentityProvider
 from .util import discussion_from_request, maybe_auto_subscribe
 from ..lib import config
+from .generic_auth_backend import load_backends, GenericAuth
 
 
 log = logging.getLogger('assembl')
@@ -87,9 +87,8 @@ def social_user(backend, uid, user=None, *args, **kwargs):
     because it always uses the social account's user
     versus a previous connection user."""
     provider = backend.name
-    provider_domain = backend.get_provider_domain()
     social = backend.strategy.storage.user.get_social_auth(
-        provider, uid, provider_domain)
+        provider, uid)
     user = social.user if social else None
     return {'social': social,
             'user': user,
@@ -268,7 +267,7 @@ class AssemblStrategy(PyramidStrategy):
             path = 'https' + path[4:]
         return path
 
-    def get_pipeline(self):
+    def get_pipeline(self, backend=None):
         return (
             # Optional step: print details so we see what's going on
             # 'assembl.auth.social_auth.print_details',
@@ -277,26 +276,26 @@ class AssemblStrategy(PyramidStrategy):
             # format to create the user instance later. On some cases the details are
             # already part of the auth response from the provider, but sometimes this
             # could hit a provider API.
-            'social.pipeline.social_auth.social_details',
+            'social_core.pipeline.social_auth.social_details',
 
             # Get the social uid from whichever service we're authing thru. The uid is
             # the unique identifier of the given user in the provider.
-            'social.pipeline.social_auth.social_uid',
+            'social_core.pipeline.social_auth.social_uid',
 
             # Verifies that the current auth process is valid within the current
             # project, this is were emails and domains whitelists are applied (if
             # defined).
-            'social.pipeline.social_auth.auth_allowed',
+            'social_core.pipeline.social_auth.auth_allowed',
 
             # Checks if the current social-account is already associated in the site.
             'assembl.auth.social_auth.social_user',
 
             # Make up a username for this person, appends a random string at the end if
             # there's any collision.
-            'social.pipeline.user.get_username',
+            'social_core.pipeline.user.get_username',
 
             # Send a validation email to the user to verify its email address.
-            # 'social.pipeline.mail.mail_validation',
+            # 'social_core.pipeline.mail.mail_validation',
 
             # Associates the current social details with another user account with
             # a similar email address.
@@ -308,7 +307,7 @@ class AssemblStrategy(PyramidStrategy):
             'assembl.auth.social_auth.maybe_merge',
 
             # Create a user account if we haven't found one yet.
-            'social.pipeline.user.create_user',
+            'social_core.pipeline.user.create_user',
 
             # Create the record that associated the social account with this user.
             'assembl.auth.social_auth.associate_user',
@@ -318,7 +317,7 @@ class AssemblStrategy(PyramidStrategy):
 
             # Populate the extra_data field in the social record with the values
             # specified by settings (and the default ones like access_token, etc).
-            'social.pipeline.social_auth.load_extra_data',
+            'social_core.pipeline.social_auth.load_extra_data',
 
             # Update the user record with any changed info from the auth service.
             'assembl.auth.social_auth.user_details'
@@ -345,6 +344,9 @@ def get_active_auth_strategies(settings):
             idps = get_setting('ENABLED_IDPS') or {}
             for idp in idps.keys():
                 yield 'saml:' + idp
+        elif issubclass(all_backends[backend_name], GenericAuth):
+            if backend_name in settings.get('SOCIAL_AUTH_GENERICAUTH_SUBCONFIGS'):
+                yield backend_name
         elif get_setting('key'):
             yield backend_name
 
