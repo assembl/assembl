@@ -207,7 +207,7 @@ def piwik_VisitsSummary_getSumVisitsLength(piwik_url, piwik_api_token, idSite, p
         raise Exception("Matomo request has empty json body.")
 
     if "result" in content and content["result"] == "error":
-	raise Exception("Matomo responded with an error")
+        raise Exception("Matomo responded with an error")
 
     if not "value" in content:
         raise Exception("Matomo request json body doesn't have a value key")
