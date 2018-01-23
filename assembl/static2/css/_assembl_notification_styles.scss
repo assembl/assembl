@@ -1,3 +1,5 @@
-@import "../../static/css/base/variables.scss";
-//@import 'variables'; // The current theme imports the default theme which imports variables.scss. The current theme then overrides some of these variables.
-@import "notifications/_mail_notifications.scss";
+@import '../../static/css/base/variables.scss';
+//@import 'variables';
+// The current theme imports the default theme which imports variables.scss.
+// The current theme then overrides some of these variables.
+@import 'notifications/_mail_notifications.scss';
