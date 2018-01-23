@@ -44,8 +44,11 @@ class AbstractVoteSpecification(DiscussionBoundBase):
     }
 
     widget_id = Column(Integer, ForeignKey(
-        "widget.id"), nullable=False, index=True)
+        "widget.id"), nullable=True, index=True)
     "Used by a voting widget"
+
+    vote_session_id = Column(Integer, ForeignKey(
+        "vote_session.id"), nullable=True, index=True)
 
     criterion_idea_id = Column(Integer, ForeignKey(
         Idea.id),  # ondelete="SET NULL", onupdate="CASCADE"), WIP
@@ -58,9 +61,32 @@ class AbstractVoteSpecification(DiscussionBoundBase):
 
     settings = Column(Text)  # JSON blob
 
+    title_id = Column(Integer, ForeignKey(LangString.id), nullable=True, index=True)
+
+    title = relationship(
+        LangString, foreign_keys=(title_id,),
+        backref=backref("title_of_vote_spec", lazy="dynamic"),
+        single_parent=True,
+        lazy="joined",
+        cascade="all, delete-orphan")
+
+    instructions_id = Column(Integer, ForeignKey(LangString.id), nullable=True, index=True)
+
+    instructions = relationship(
+        LangString, foreign_keys=(title_id,),
+        backref=backref("instructions_of_vote_spec", lazy="dynamic"),
+        single_parent=True,
+        lazy="joined",
+        cascade="all, delete-orphan")
+
     widget = relationship(
         "VotingWidget", backref=backref(
             "vote_specifications", cascade="all, delete-orphan"))
+
+    vote_session = relationship(
+        "VoteSession", backref=backref(
+            "vote_specifications", cascade="all, delete-orphan"))
+
     criterion_idea = relationship(
         Idea, backref="criterion_for")
 
