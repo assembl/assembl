@@ -34,6 +34,7 @@ const icons = [
   'assembl-icon-menu-on',
   'assembl-icon-message',
   'assembl-icon-expert',
+  'assembl-icon-right-dir',
   'assembl-icon-pepite',
   'assembl-icon-plus',
   'assembl-icon-schedule',

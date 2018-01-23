@@ -1,3 +1,148 @@
+.debate-link.active {
+  > .navbar-menu-item {
+    background-color: $first-color;
+    color: #fff !important;
+  }
+
+  .header-container {
+    display: block;
+  }
+}
+
+.debate-link {
+  .timeline-shifted {
+    top: $navbar-height;
+  }
+
+  .header-container {
+    display: none;
+    position: absolute;
+    width: 100%;
+    right: 0;
+    left: 0;
+    background-color: $first-color;
+
+    .thematics-container {
+      background-color: #fff;
+      display: flex;
+      position: fixed;
+      right: 0;
+      left: 0;
+      top: calc(#{$navbar-height} + 63px);
+      z-index: -1;
+    }
+
+    .thematics-table {
+      width: 25%;
+      float: left;
+
+      .thematic-item-container {
+        display: flex;
+        flex: 1;
+        justify-content: flex-end;
+        margin-bottom: 10px;
+        margin-top: 10px;
+
+        .thematic-item {
+          display: flex;
+          max-width: 300px;
+          width: 100%;
+          align-items: center;
+          color: inherit;
+
+          .thumb-img {
+            height: 45px;
+            width: 25%;
+            background-position: top left;
+            background-repeat: no-repeat;
+            background-size: cover;
+            position: relative;
+          }
+
+          .thumb-body {
+            padding: 5px 10px;
+            font-size: 10px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            width: calc(75% - 15px);
+            height: 100%;
+          }
+
+          .assembl-icon::before {
+            font-size: 12px;
+          }
+
+          .thumb-title {
+            font-size: 11px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            width: 100%;
+          }
+        }
+
+        &.active {
+          background-color: $first-color-light;
+          color: $first-color;
+
+          .thumb-img {
+            border: solid 2px $first-color;
+
+            .thumb-img-background {
+              background-color: rgba(25, 40, 130, 0.5);
+              height: 100%;
+              position: absolute;
+              top: 0;
+              left: 0;
+              width: 100%;
+            }
+          }
+
+          .thumb-title {
+            font-weight: bold;
+          }
+        }
+      }
+    }
+
+    .max-container {
+      position: relative;
+    }
+
+    .timeline-section {
+      // border-bottom: $navbar-border;
+      // border-top: $navbar-border;
+      padding-top: 17px;
+      width: 100%;
+      z-index: 200;
+
+      .timeline-container {
+        margin: 0 100px;
+        max-width: 500px;
+        height: auto;
+        display: flex;
+        position: relative;
+      }
+
+      .burger-menu {
+        cursor: pointer;
+        position: absolute;
+        text-align: center;
+        top: 12px;
+
+        &:hover {
+          color: $grey2;
+        }
+      }
+
+      .burger-menu-label {
+        font-size: $font-size-xxs;
+      }
+    }
+  }
+}
+
 .debate {
   .timeline-shifted {
     top: $navbar-height;
