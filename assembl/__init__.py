@@ -54,6 +54,12 @@ def main(global_config, **settings):
         from assembl.lib import signals
         signals.listen()
 
+    import os
+    if 'UWSGI_ORIGINAL_PROC_NAME' in os.environ:
+        # uwsgi does not load logging properly
+        from pyramid.paster import setup_logging
+        setup_logging(global_config['__file__'])
+
     from views.traversal import root_factory
     config = Configurator(registry=getGlobalSiteManager())
     config.setup_registry(settings=settings, root_factory=root_factory)
