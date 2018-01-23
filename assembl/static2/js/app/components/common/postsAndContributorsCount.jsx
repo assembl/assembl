@@ -15,9 +15,9 @@ const PostsAndContributorsCount = ({
   showNumContributors = true
 }) => (
   <div className={`counters ${className}`}>
-    {showNumPosts && <Counter num={numPosts} className="assembl-icon-message" />}
+    {showNumPosts && <Counter num={numPosts} className="assembl-icon assembl-icon-message" />}
     {vertical || ' - '}
-    {showNumContributors && <Counter num={numContributors} className="assembl-icon-profil" />}
+    {showNumContributors && <Counter num={numContributors} className="assembl-icon assembl-icon-profil" />}
   </div>
 );
 

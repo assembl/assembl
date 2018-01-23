@@ -6,14 +6,31 @@ import classNames from 'classnames';
 import { get } from '../../../utils/routeMap';
 import { displayModal } from '../../../utils/utilityManager';
 import { getPhaseStatus, isSeveralIdentifiers } from '../../../utils/timeline';
+import ThematicsTable from './thematicsTable';
 
 class TimelineSegment extends React.Component {
   constructor(props) {
     super(props);
-    this.displayPhase = this.displayPhase.bind(this);
+    this.state = {
+      active: false
+    };
   }
 
-  displayPhase() {
+  showMenu = () => {
+    const { onMouseOver, thematic } = this.props;
+    this.setState({ active: true }, () => {
+      if (onMouseOver) onMouseOver(thematic.id);
+    });
+  };
+
+  hideMenu = () => {
+    const { onMouseLeave, thematic } = this.props;
+    this.setState({ active: false }, () => {
+      if (onMouseLeave) onMouseLeave(thematic.id);
+    });
+  };
+
+  displayPhase = () => {
     const { locale } = this.props.i18n;
     const { phaseIdentifier, title, startDate, endDate } = this.props;
     const { debateData } = this.props.debate;
@@ -56,26 +73,26 @@ class TimelineSegment extends React.Component {
     } else {
       window.location = get('oldDebate', slug);
     }
-  }
+  };
 
   render() {
-    const { index, barPercent, isCurrentPhase, isStepCompleted, title, locale } = this.props;
-    const timelineClass = classNames('timeline-title', {
-      'txt-active-bold': isCurrentPhase,
-      'txt-active-light': isStepCompleted,
-      'txt-not-active': !isCurrentPhase && !isStepCompleted
-    });
+    const { barPercent, title, locale, phaseIdentifier } = this.props;
+    const { active } = this.state;
+    const timelineClass = 'timeline-title txt-active-light';
     return (
-      <div className="minimized-timeline">
-        {title.entries.filter(entry => locale === entry['@language']).map((entry, index2) => (
-          <div onClick={this.displayPhase} className={timelineClass} key={index2}>
+      <div
+        className={classNames('minimized-timeline', {
+          active: active
+        })}
+        onMouseOver={this.showMenu}
+        onMouseLeave={this.hideMenu}
+      >
+        {title.entries.filter(entry => locale === entry['@language']).map((entry, index) => (
+          <div onClick={this.displayPhase} className={timelineClass} key={index}>
             <div className="timeline-link">{entry.value}</div>
           </div>
         ))}
         <div className="timeline-graph">
-          <div className={isStepCompleted || isCurrentPhase ? 'timeline-number active' : 'timeline-number not-active'}>
-            {isStepCompleted ? <span className="assembl-icon-checked white" /> : <span>{index + 1}</span>}
-          </div>
           <div className="timeline-bars">
             {barPercent > 0 && (
               <div className="timeline-bar-filler" style={barPercent < 20 ? { width: '20%' } : { width: `${barPercent}%` }}>
@@ -85,6 +102,12 @@ class TimelineSegment extends React.Component {
             <div className="timeline-bar-background">&nbsp;</div>
           </div>
         </div>
+        <span className="timeline-arrow" />
+        {active && (
+          <div className="thematics-container">
+            <ThematicsTable identifier={phaseIdentifier} />
+          </div>
+        )}
       </div>
     );
   }

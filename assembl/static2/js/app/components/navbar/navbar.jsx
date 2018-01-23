@@ -19,6 +19,7 @@ import { APP_CONTAINER_MAX_WIDTH, APP_CONTAINER_PADDING } from '../../constants'
 import { displayModal } from '../../utils/utilityManager';
 import { getDiscussionSlug, snakeToCamel } from '../../utils/globalFunctions';
 import withoutLoadingIndicator from '../common/withoutLoadingIndicator';
+import DebateLink from '../debate/navigation/debateLink';
 
 const filterSection = ({ sectionType }, { hasResourcesCenter, hasSyntheses }) => {
   switch (sectionType) {
@@ -57,10 +58,23 @@ const sectionURL = ({ sectionType, url }, options) => {
 
 const SectionLink = ({ section, options }) => {
   const { title, url, sectionType } = section;
-  return url || sectionType === 'CUSTOM' ? (
-    <a href={url} className="navbar-menu-item pointer" data-text={title}>
+  if (url || sectionType === 'CUSTOM') {
+    return (
+      <a href={url} className="navbar-menu-item pointer" data-text={title}>
+        {title}
+      </a>
+    );
+  }
+  return sectionType === 'DEBATE' ? (
+    <DebateLink
+      to={sectionURL(section, options)}
+      identifier={options.phase}
+      className="navbar-menu-item pointer"
+      activeClassName="active"
+      dataText={title}
+    >
       {title}
-    </a>
+    </DebateLink>
   ) : (
     <Link to={sectionURL(section, options)} className="navbar-menu-item pointer" activeClassName="active" data-text={title}>
       {title}

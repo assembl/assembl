@@ -43,7 +43,8 @@
   flex-grow: 1;
   flex-basis: 0;
   display: flex;
-  flex-direction: column-reverse;
+  flex-direction: column;
+  padding-bottom: 8px;
 
   .active {
     background-color: $first-color;
@@ -76,17 +77,16 @@
 
   .timeline-graph {
     position: relative;
+    margin-right: 3px;
+    z-index: 1;
 
     .timeline-bars {
       display: inline-block;
       width: calc(100% - 10px);
-      height: auto;
-      position: absolute;
-      top: 9px;
-      left: 12px;
+      height: 9px;
 
       .timeline-bar-background {
-        background-color: $grey5;
+        background-color: $first-color-light;
         height: 6px;
         position: absolute;
         width: 100%;
@@ -95,7 +95,7 @@
       }
 
       .timeline-bar-filler {
-        background-color: $first-color;
+        background-color: #fff;
         height: 6px;
         position: absolute;
         z-index: 1;
@@ -104,12 +104,22 @@
     }
   }
 
+  .timeline-arrow {
+    transition: none;
+    position: absolute;
+    left: calc(50% - 9px);
+    height: 22px;
+    width: 22px;
+    background-color: #192882;
+    transform: rotate(45deg);
+    bottom: -5px;
+    display: none;
+  }
+
   .timeline-title {
     cursor: pointer;
     font-size: 13px;
-    padding: 0 0 0 15px;
     text-align: center;
-    top: 28px;
 
     .timeline-link {
       height: 100%;
@@ -121,8 +131,38 @@
       color: $grey5;
       font-family: $font-family4;
     }
+  }
 
-    &:hover {
+  .txt-active-light {
+    .timeline-link {
+      color: #fff;
+      font-family: $font-family4;
+    }
+  }
+
+  .txt-active-bold {
+    .timeline-link {
+      color: #fff;
+      font-family: $font-family3;
+    }
+  }
+
+  .assembl-icon-down-dir:before {
+    font-size: 15px;
+  }
+
+  &.active {
+    .timeline-arrow {
+      display: block;
+    }
+
+    .txt-active-light {
+      .timeline-link {
+        font-family: $font-family;
+      }
+    }
+
+    .txt-not-active {
       ~ .timeline-graph {
         .timeline-number {
           background-color: $first-color;
@@ -137,27 +177,5 @@
         color: $first-color;
       }
     }
-  }
-
-  .txt-active-light {
-    .timeline-link {
-      color: $first-color;
-      font-family: $font-family4;
-
-      &:hover {
-        font-family: $font-family;
-      }
-    }
-  }
-
-  .txt-active-bold {
-    .timeline-link {
-      color: $first-color;
-      font-family: $font-family3;
-    }
-  }
-
-  .assembl-icon-down-dir:before {
-    font-size: 15px;
   }
 }
