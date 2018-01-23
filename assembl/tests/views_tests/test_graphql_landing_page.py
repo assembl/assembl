@@ -131,8 +131,7 @@ def test_mutation_create_landing_page_module(graphql_request):
 def test_mutation_update_landing_page_module(graphql_request, simple_landing_page_module):
     mutation = u""" mutation updateLandingPageModule
                             (
-                            $moduleIdentifier: ID!
-                            $typeIdentifier: String
+                            $moduleId: ID!
                             $enabled: Boolean
                             $order: Float
                             $configuration: String
@@ -140,8 +139,7 @@ def test_mutation_update_landing_page_module(graphql_request, simple_landing_pag
                                 {
                                 updateLandingPageModule
                                 (
-                                moduleIdentifier: $moduleIdentifier
-                                typeIdentifier: $typeIdentifier
+                                moduleId: $moduleId
                                 enabled: $enabled
                                 order: $order
                                 configuration: $configuration
@@ -162,8 +160,7 @@ def test_mutation_update_landing_page_module(graphql_request, simple_landing_pag
                                 }"""
 
     res = schema.execute(mutation, context_value=graphql_request, variable_values={
-        'moduleIdentifier': simple_landing_page_module.id,
-        'typeIdentifier': "HEADER_UPDATED",
+        'moduleId': to_global_id('LandingPageModule', simple_landing_page_module.id),
         'enabled': False, 'order': 43.0,
         'configuration': 'Standard_configuration_updated',
     })
@@ -171,6 +168,4 @@ def test_mutation_update_landing_page_module(graphql_request, simple_landing_pag
     lpm = res.data[u'updateLandingPageModule']['landingPageModule']
     assert lpm[u'configuration'] == 'Standard_configuration_updated'
     assert lpm[u'enabled'] is False
-    assert lpm[u'moduleType'][u'identifier'] == u'HEADER'
-    assert lpm[u'moduleType'][u'title'] == u'Header'
     assert lpm[u'order'] == 43.0

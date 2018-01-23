@@ -106,8 +106,7 @@ class CreateLandingPageModule(graphene.Mutation):
 class UpdateLandingPageModule(graphene.Mutation):
 
     class Input:
-        moduleIdentifier = graphene.ID(required=True)
-        type_identifier = graphene.String()
+        module_id = graphene.ID(required=True)
         enabled = graphene.Boolean()
         order = graphene.Float()
         configuration = graphene.String()
@@ -125,7 +124,8 @@ class UpdateLandingPageModule(graphene.Mutation):
         order = args.get('order')
         enabled = args.get('enabled')
 
-        module_id = int(args.get('moduleIdentifier'))
+        module_id = args.get('module_id')
+        module_id = int(Node.from_global_id(module_id)[1])
 
         with cls.default_db.no_autoflush as db:
             module = db.query(models.LandingPageModule).filter(
