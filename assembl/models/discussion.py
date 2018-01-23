@@ -1079,7 +1079,7 @@ class Discussion(DiscussionBoundBase, NamedClassMixin):
                     actions = piwik_Actions_get(piwik_url, piwik_api_token, piwik_id_site, period, date)
                 except:
                     raise ValueError("Analytics server responded with an error")
-                if not "nb_uniq_pageviews" in actions or not "nb_pageviews" in actions:
+                if "nb_uniq_pageviews" not in actions or "nb_pageviews" not in actions:
                     raise ValueError("Analytics server responded with a malformed response")
                 result["nb_uniq_pageviews"] = actions["nb_uniq_pageviews"]
                 result["nb_pageviews"] = actions["nb_pageviews"]
@@ -1095,7 +1095,7 @@ class Discussion(DiscussionBoundBase, NamedClassMixin):
             except:
                 raise ValueError("Analytics server responded with an error")
 
-            if not "nb_uniq_pageviews" in actions or not "nb_pageviews" in actions:
+            if "nb_uniq_pageviews" not in actions or "nb_pageviews" not in actions:
                 raise ValueError("Analytics server responded with a malformed response")
 
             return {
