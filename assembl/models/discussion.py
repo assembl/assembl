@@ -1067,16 +1067,37 @@ class Discussion(DiscussionBoundBase, NamedClassMixin):
             if "nb_uniq_pageviews" in only_fields or "nb_pageviews" in only_fields:
                 should_query_actions = True
             if should_query_visits_length:
-                sum_visits_length = piwik_VisitsSummary_getSumVisitsLength(piwik_url, piwik_api_token, piwik_id_site, period, date)
+                sum_visits_length = None
+                try:
+                    sum_visits_length = piwik_VisitsSummary_getSumVisitsLength(piwik_url, piwik_api_token, piwik_id_site, period, date)
+                except:
+                    raise ValueError("Analytics server responded with an error")
                 result["sum_visits_length"] = sum_visits_length
             if should_query_actions:
-                actions = piwik_Actions_get(piwik_url, piwik_api_token, piwik_id_site, period, date)
+                actions = None
+                try:
+                    actions = piwik_Actions_get(piwik_url, piwik_api_token, piwik_id_site, period, date)
+                except:
+                    raise ValueError("Analytics server responded with an error")
+                if not "nb_uniq_pageviews" in actions or not "nb_pageviews" in actions:
+                    raise ValueError("Analytics server responded with a malformed response")
                 result["nb_uniq_pageviews"] = actions["nb_uniq_pageviews"]
                 result["nb_pageviews"] = actions["nb_pageviews"]
             return result
         else:
-            sum_visits_length = piwik_VisitsSummary_getSumVisitsLength(piwik_url, piwik_api_token, piwik_id_site, period, date)
-            actions = piwik_Actions_get(piwik_url, piwik_api_token, piwik_id_site, period, date)
+            try:
+                sum_visits_length = piwik_VisitsSummary_getSumVisitsLength(piwik_url, piwik_api_token, piwik_id_site, period, date)
+            except:
+                raise ValueError("Analytics server responded with an error")
+
+            try:
+                actions = piwik_Actions_get(piwik_url, piwik_api_token, piwik_id_site, period, date)
+            except:
+                raise ValueError("Analytics server responded with an error")
+
+            if not "nb_uniq_pageviews" in actions or not "nb_pageviews" in actions:
+                raise ValueError("Analytics server responded with a malformed response")
+
             return {
                 "sum_visits_length": sum_visits_length,
                 "nb_uniq_pageviews": actions["nb_uniq_pageviews"],
