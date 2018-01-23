@@ -13,6 +13,7 @@ import Synthesis from './pages/synthesis';
 import Debate from './pages/debate';
 import DebateThread from './pages/debateThread';
 import Survey from './pages/survey';
+import VoteSession from './pages/voteSession';
 import Idea from './pages/idea';
 import Community from './pages/community';
 import Question from './pages/question';
@@ -41,7 +42,7 @@ const DebateHome = (props) => {
   case 'multiColumns':
     return <DebateThread {...props} />;
   case 'voteSession':
-    return <NotFound />;
+    return <VoteSession />;
   default:
     return <Debate {...props} />;
   }
