@@ -9,7 +9,7 @@ import classNames from 'classnames';
 
 import createPostMutation from '../../../graphql/mutations/createPost.graphql';
 import uploadDocumentMutation from '../../../graphql/mutations/uploadDocument.graphql';
-import { displayAlert, displayModal, promptForLoginOr } from '../../../utils/utilityManager';
+import { displayAlert, promptForLoginOr } from '../../../utils/utilityManager';
 import { convertRawContentStateToHTML, rawContentStateIsEmpty } from '../../../utils/draftjs';
 import RichTextEditor from '../../common/richTextEditor';
 import attachmentsPlugin from '../../common/richTextEditor/attachmentsPlugin';
@@ -32,7 +32,8 @@ type AnswerFormProps = {
 
 type AnswerFormState = {
   body: null | RawContentState,
-  submitting: boolean
+  submitting: boolean,
+  isHidden: boolean
 };
 
 class AnswerForm extends React.PureComponent<*, AnswerFormProps, AnswerFormState> {
@@ -44,8 +45,15 @@ class AnswerForm extends React.PureComponent<*, AnswerFormProps, AnswerFormState
     super();
     this.state = {
       body: null,
-      submitting: false
+      submitting: false,
+      isHidden: false
     };
+  }
+
+  componentWillMount() {
+    const { debateData, identifier } = this.props;
+    const isPhaseCompleted = getIfPhaseCompletedByIdentifier(debateData.timeline, identifier);
+    if (isPhaseCompleted) this.setState({ isHidden: true });
   }
 
   handleCancel = () => {
@@ -60,18 +68,8 @@ class AnswerForm extends React.PureComponent<*, AnswerFormProps, AnswerFormState
   };
 
   handleInputFocus = () => {
-    const { debateData, identifier, handleAnswerClick } = this.props;
-    const isPhaseCompleted = getIfPhaseCompletedByIdentifier(debateData.timeline, identifier);
-    if (isPhaseCompleted) {
-      const body = (
-        <div>
-          <Translate value="debate.noAnswer" />
-        </div>
-      );
-      displayModal(null, body, true, null, null, true);
-    } else {
-      promptForLoginOr(handleAnswerClick)();
-    }
+    const { handleAnswerClick } = this.props;
+    promptForLoginOr(handleAnswerClick)();
   };
 
   handleSubmit = () => {
@@ -120,31 +118,34 @@ class AnswerForm extends React.PureComponent<*, AnswerFormProps, AnswerFormState
 
   render() {
     const { textareaRef } = this.props;
+    const { isHidden } = this.state;
     return (
       <Row>
-        <Col xs={12} md={12}>
-          <div className="answer-form-inner">
-            <FormGroup>
-              <RichTextEditor
-                rawContentState={this.state.body}
-                handleInputFocus={this.handleInputFocus}
-                maxLength={TEXT_AREA_MAX_LENGTH}
-                placeholder={I18n.t('debate.toAnswer')}
-                updateContentState={this.updateBody}
-                textareaRef={textareaRef}
-                withAttachmentButton
-              />
-              <div className="button-container">
-                <Button className="button-cancel button-dark btn btn-default left" onClick={this.handleCancel}>
-                  <Translate value="cancel" />
-                </Button>
-                <Button className={this.getClassNames()} onClick={this.handleSubmit} disabled={this.state.submitting}>
-                  <Translate value="debate.post" />
-                </Button>
-              </div>
-            </FormGroup>
-          </div>
-        </Col>
+        {!isHidden ? (
+          <Col xs={12} md={12}>
+            <div className="answer-form-inner">
+              <FormGroup>
+                <RichTextEditor
+                  rawContentState={this.state.body}
+                  handleInputFocus={this.handleInputFocus}
+                  maxLength={TEXT_AREA_MAX_LENGTH}
+                  placeholder={I18n.t('debate.toAnswer')}
+                  updateContentState={this.updateBody}
+                  textareaRef={textareaRef}
+                  withAttachmentButton
+                />
+                <div className="button-container">
+                  <Button className="button-cancel button-dark btn btn-default left" onClick={this.handleCancel}>
+                    <Translate value="cancel" />
+                  </Button>
+                  <Button className={this.getClassNames()} onClick={this.handleSubmit} disabled={this.state.submitting}>
+                    <Translate value="debate.post" />
+                  </Button>
+                </div>
+              </FormGroup>
+            </div>
+          </Col>
+        ) : null}
       </Row>
     );
   }
