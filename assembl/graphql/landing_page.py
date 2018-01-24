@@ -72,9 +72,7 @@ class CreateLandingPageModule(graphene.Mutation):
     @staticmethod
     @abort_transaction_on_exception
     def mutate(root, args, context, info):
-
         cls = models.LandingPageModule
-
         discussion_id = context.matchdict['discussion_id']
         user_id = context.authenticated_userid or Everyone
         configuration = args.get('configuration')
@@ -106,7 +104,7 @@ class CreateLandingPageModule(graphene.Mutation):
 class UpdateLandingPageModule(graphene.Mutation):
 
     class Input:
-        module_id = graphene.ID(required=True)
+        id = graphene.ID(required=True)
         enabled = graphene.Boolean()
         order = graphene.Float()
         configuration = graphene.String()
@@ -117,16 +115,13 @@ class UpdateLandingPageModule(graphene.Mutation):
     @abort_transaction_on_exception
     def mutate(root, args, context, info):
         cls = models.LandingPageModule
-
         discussion_id = context.matchdict['discussion_id']
         user_id = context.authenticated_userid or Everyone
         configuration = args.get('configuration')
         order = args.get('order')
         enabled = args.get('enabled')
-
-        module_id = args.get('module_id')
+        module_id = args.get('id')
         module_id = int(Node.from_global_id(module_id)[1])
-
         with cls.default_db.no_autoflush as db:
             module = db.query(models.LandingPageModule).filter(
                 models.LandingPageModule.id == module_id).first()
@@ -139,7 +134,6 @@ class UpdateLandingPageModule(graphene.Mutation):
             module.enabled = enabled
             module.order = order
             module.configuration = configuration
-
             db.flush()
 
         return UpdateLandingPageModule(landing_page_module=module)

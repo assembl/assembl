@@ -99,7 +99,7 @@ def test_mutation_create_landing_page_module(graphql_request):
                                 enabled: $enabled
                                 order: $order
                                 configuration: $configuration
-                                ) 
+                                )
                                     {
                                     landingPageModule
                                         {
@@ -131,7 +131,7 @@ def test_mutation_create_landing_page_module(graphql_request):
 def test_mutation_update_landing_page_module(graphql_request, simple_landing_page_module):
     mutation = u""" mutation updateLandingPageModule
                             (
-                            $moduleId: ID!
+                            $id: ID!
                             $enabled: Boolean
                             $order: Float
                             $configuration: String
@@ -139,11 +139,11 @@ def test_mutation_update_landing_page_module(graphql_request, simple_landing_pag
                                 {
                                 updateLandingPageModule
                                 (
-                                moduleId: $moduleId
+                                id: $id
                                 enabled: $enabled
                                 order: $order
                                 configuration: $configuration
-                                ) 
+                                )
                                     {
                                     landingPageModule
                                         {
@@ -160,7 +160,7 @@ def test_mutation_update_landing_page_module(graphql_request, simple_landing_pag
                                 }"""
 
     res = schema.execute(mutation, context_value=graphql_request, variable_values={
-        'moduleId': to_global_id('LandingPageModule', simple_landing_page_module.id),
+        'id': to_global_id('LandingPageModule', simple_landing_page_module.id),
         'enabled': False, 'order': 43.0,
         'configuration': 'Standard_configuration_updated',
     })
