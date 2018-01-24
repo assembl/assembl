@@ -7,19 +7,24 @@ import Header from '../components/common/header';
 import Section from '../components/common/section';
 import { getPhaseId } from '../utils/timeline';
 
-const VoteSession = () => (
+const VoteSession = ({
+  title,
+  subTitle,
+  headerImageUrl,
+  instructionsSectionTitle,
+  instructionsSectionContent,
+  propositionsSectionTitle
+}) => (
   <div className="votesession-page">
-    <Header
-      title="Phase de vote à la majorité"
-      subtitle="Après 6 semaines, nous arrivons à une nouvelle phase: le vote."
-      additionalHeaderClasses="left"
-    />
+    <Header title={title} subtitle={subTitle} imgUrl={headerImageUrl} additionalHeaderClasses="left" />
     <Grid fluid>
-      <Section title="Instructions" translate>
+      <Section title="Instructions">
         {/* TODO: add translation */}
         <Row>
           <Col mdOffset={3} md={8} smOffset={1} sm={10}>
-            <div>Instructions of the vote session</div>
+            <div>{instructionsSectionTitle}</div>
+            <div dangerouslySetInnerHTML={{ __html: instructionsSectionContent }} />
+            <div>{propositionsSectionTitle}</div>
           </Col>
         </Row>
       </Section>
@@ -35,8 +40,8 @@ const mapStateToProps = state => ({
 export default compose(
   connect(mapStateToProps),
   graphql(VoteSessionQuery, {
-    options: ({ debate }) => ({
-      variables: { discussionPhaseId: getPhaseId(debate.debateData.timeline, 'voteSession') }
+    options: ({ debate, lang }) => ({
+      variables: { discussionPhaseId: getPhaseId(debate.debateData.timeline, 'voteSession'), lang: lang }
     }),
     props: ({ data, ownProps }) => {
       const defaultHeaderImage = ownProps.debate.debateData.headerBackgroundUrl || '';
@@ -50,9 +55,21 @@ export default compose(
           hasErrors: true
         };
       }
-      const { headerImage } = data.voteSession;
+      const {
+        title,
+        subTitle,
+        headerImage,
+        instructionsSectionTitle,
+        instructionsSectionContent,
+        propositionsSectionTitle
+      } = data.voteSession;
       return {
-        headerImageUrl: headerImage ? headerImage.externalUrl : defaultHeaderImage
+        headerImageUrl: headerImage ? headerImage.externalUrl : defaultHeaderImage,
+        title: title,
+        subTitle: subTitle,
+        instructionsSectionTitle: instructionsSectionTitle,
+        instructionsSectionContent: instructionsSectionContent,
+        propositionsSectionTitle: propositionsSectionTitle
       };
     }
   })
