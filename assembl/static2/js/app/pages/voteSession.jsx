@@ -17,7 +17,7 @@ type voteSessionPageProps = {
   propositionsSectionTitle: string
 };
 
-const VoteSession = ({
+const DumbVoteSession = ({
   title,
   subTitle,
   headerImageUrl,
@@ -51,6 +51,8 @@ const mapStateToProps = state => ({
   debate: state.debate,
   lang: state.i18n.locale
 });
+
+export { DumbVoteSession };
 
 export default compose(
   connect(mapStateToProps),
@@ -88,4 +90,4 @@ export default compose(
       };
     }
   })
-)(VoteSession);
+)(DumbVoteSession);
