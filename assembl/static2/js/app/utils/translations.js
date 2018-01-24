@@ -769,15 +769,15 @@ const Translations = {
       question_label: "Question",
       announcementModule: "Announcement module",
       thematic: "Theme",
-      edition: "Edit the Discussion",
+      edition: "Edit the discussion",
       landingpage: "Landing page",
       up: "Up",
       down: "Down",
       menu: {
         phase: "Phase %{count} - %{description}",
-        language: "Discussion Language",
-        sections: "Edit Debate Sections",
-        legalNoticeAndTerms: "T&C and Legal Notice"
+        language: "Discussion language",
+        sections: "Edit debate sections",
+        legalNoticeAndTerms: "T&C and legal notice"
       },
       noTimeline: "No timeline has been configured yet",
       survey: {
