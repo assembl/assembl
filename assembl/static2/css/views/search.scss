@@ -183,13 +183,19 @@ $highlightColor: $first-color-light;
   font-size: 16px;
 }
 
+.sk-item-list-option {
+  align-items: flex-start;
+  line-height: 14px;
+  margin-bottom: 6px;
+}
+
 .sk-item-list-option__text,
 .sk-item-list-option__count {
   color: #777;
 }
 
 .sk-item-list-option input.sk-item-list-option__checkbox {
-  margin: 6px 4px 0 0;
+  margin: 0 4px 0 0;
 }
 
 .sk-search-box {
