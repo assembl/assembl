@@ -18,13 +18,18 @@ const VoteSession = ({
   <div className="votesession-page">
     <Header title={title} subtitle={subTitle} imgUrl={headerImageUrl} additionalHeaderClasses="left" />
     <Grid fluid>
-      <Section title="Instructions">
-        {/* TODO: add translation */}
+      <Section title={instructionsSectionTitle}>
+        <Row>
+          <Col mdOffset={4} md={8} smOffset={1} sm={10}>
+            <div dangerouslySetInnerHTML={{ __html: instructionsSectionContent }} className="vote-instructions" />
+            {/* Insérer les jetons ici */}
+          </Col>
+        </Row>
+      </Section>
+      <Section title={propositionsSectionTitle}>
         <Row>
           <Col mdOffset={3} md={8} smOffset={1} sm={10}>
-            <div>{instructionsSectionTitle}</div>
-            <div dangerouslySetInnerHTML={{ __html: instructionsSectionContent }} />
-            <div>{propositionsSectionTitle}</div>
+            {/* INSÉRER LES PROPOSITIONS ICI */}
           </Col>
         </Row>
       </Section>
