@@ -122,15 +122,15 @@ class UpdateLandingPageModule(graphene.Mutation):
         enabled = args.get('enabled')
         module_id = args.get('id')
         module_id = int(Node.from_global_id(module_id)[1])
+        permissions = get_permissions(user_id, discussion_id)
+        allowed = cls.user_can_cls(
+            user_id, CrudPermissions.UPDATE, permissions)
+        if not allowed or (allowed == IF_OWNED and user_id == Everyone):
+            raise HTTPUnauthorized()
+
         with cls.default_db.no_autoflush as db:
             module = db.query(models.LandingPageModule).filter(
                 models.LandingPageModule.id == module_id).first()
-            permissions = get_permissions(user_id, discussion_id)
-            allowed = cls.user_can_cls(
-                user_id, CrudPermissions.CREATE, permissions)
-            if not allowed or (allowed == IF_OWNED and user_id == Everyone):
-                raise HTTPUnauthorized()
-
             module.enabled = enabled
             module.order = order
             module.configuration = configuration
