@@ -1,0 +1,13 @@
+mutation updateLandingPageModule($id: ID!, $enabled: Boolean, $order: Float, $configuration: String) {
+  updateLandingPageModule(id: $id, enabled: $enabled, order: $order, configuration: $configuration) {
+    landingPageModule {
+      configuration
+      enabled
+      moduleType {
+        identifier
+        title
+      }
+      order
+    }
+  }
+}

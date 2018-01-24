@@ -1,7 +1,13 @@
 /* Plugin for landing page administration */
 import LandingPageModules from '../../graphql/LandingPageModules.graphql';
+import createLandingPageModule from '../../graphql/mutations/createLandingPageModule.graphql';
+import updateLandingPageModule from '../../graphql/mutations/updateLandingPageModule.graphql';
 
 const landingPagePlugin = {
+  createMutation: createLandingPageModule,
+  createMutationName: 'createLandingPageModule',
+  updateMutation: updateLandingPageModule,
+  updateMutationName: 'updateLandingPageModule',
   graphqlQuery: LandingPageModules,
   loading: 'landingPageLoading',
   hasErrors: 'landingPageHasErrors',
@@ -30,7 +36,13 @@ const landingPagePlugin = {
       refetchLandingPageModules: data.refetch,
       landingPageModules: data.landingPageModules
     };
-  }
+  },
+  variablesCreator: item => ({
+    configuration: '{}',
+    enabled: item.enabled,
+    order: item.order,
+    typeIdentifier: item.moduleType.identifier
+  })
 };
 
 export default landingPagePlugin;

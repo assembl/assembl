@@ -445,7 +445,8 @@ const Translations = {
         manageModules: {
           title: "Administrer les modules",
           helper: "Choisissez les modules que vous souhaitez voir apparaître dans la page d'accueil et leur emplacement"
-        }
+        },
+        successSave: "Les modules ont été enregistrés avec succès !"
       }
     },
     unauthorizedAdministration: {
@@ -901,7 +902,8 @@ const Translations = {
         manageModules: {
           title: "Manage the modules",
           helper: "Choose the modules that you want to see in the landing page and their position."
-        }
+        },
+        successSave: "The modules have been saved with success !"
       }
     },
     unauthorizedAdministration: {

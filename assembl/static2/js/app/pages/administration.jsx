@@ -202,7 +202,8 @@ class Administration extends React.Component {
       refetchTabsConditions,
       refetchSections,
       refetchLegalNoticeAndTerms,
-      refetchVoteSession
+      refetchVoteSession,
+      refetchLandingPageModules
     } = this.props;
     const { phase } = params;
     const { timeline } = this.props.debate.debateData;
@@ -227,6 +228,7 @@ class Administration extends React.Component {
                     refetchVoteSession={refetchVoteSession}
                     refetchSections={refetchSections}
                     refetchResourcesCenter={refetchResourcesCenter}
+                    refetchLandingPageModules={refetchLandingPageModules}
                     refetchLegalNoticeAndTerms={refetchLegalNoticeAndTerms}
                   />
                 </Col>

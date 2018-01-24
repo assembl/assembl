@@ -7,6 +7,7 @@ import { Translate, I18n } from 'react-redux-i18n';
 import { getPhaseId } from '../../utils/timeline';
 import { displayAlert } from '../../utils/utilityManager';
 import { convertEntriesToHTML } from '../../utils/draftjs';
+import landingPagePlugin from '../../utils/administration/landingPage';
 import { languagePreferencesHasChanged, updateEditLocale } from '../../actions/adminActions';
 import createThematicMutation from '../../graphql/mutations/createThematic.graphql';
 import deleteThematicMutation from '../../graphql/mutations/deleteThematic.graphql';
@@ -168,10 +169,31 @@ const SaveButton = ({
   deleteTokenVoteSpecification,
   createTokenVoteSpecification,
   updateTokenVoteSpecification,
-  refetchVoteSession
+  refetchVoteSession,
+  landingPageModulesHasChanged,
+  ...otherProps
 }) => {
   const saveAction = () => {
     displayAlert('success', `${I18n.t('loading.wait')}...`);
+    if (landingPageModulesHasChanged) {
+      const { landingPageModules, refetchLandingPageModules } = otherProps;
+      const mutationsPromises = getMutationsPromises({
+        items: landingPageModules,
+        variablesCreator: landingPagePlugin.variablesCreator,
+        createMutation: otherProps[landingPagePlugin.createMutationName],
+        updateMutation: otherProps[landingPagePlugin.updateMutationName]
+      });
+
+      runSerial(mutationsPromises)
+        .then(() => {
+          refetchLandingPageModules();
+          displayAlert('success', I18n.t('administration.landingPage.successSave'));
+        })
+        .catch((error) => {
+          displayAlert('danger', error, false, 30000);
+        });
+    }
+
     if (languagePreferenceHasChanged) {
       // Save and update the apolloStore
       const payload = {
@@ -353,7 +375,8 @@ const SaveButton = ({
     modulesHaveChanged ||
     resourcesCenterPage.get('hasChanged') ||
     legalNoticeAndTerms.get('hasChanged') ||
-    voteSessionPage.get('hasChanged')
+    voteSessionPage.get('hasChanged') ||
+    landingPageModulesHasChanged
   );
   return (
     <Button className="button-submit button-dark right" disabled={disabled} onClick={saveAction}>
@@ -410,6 +433,12 @@ const SaveButtonWithMutations = compose(
   }),
   graphql(updateTokenVoteSpecificationMutation, {
     name: 'updateTokenVoteSpecification'
+  }),
+  graphql(landingPagePlugin.createMutation, {
+    name: landingPagePlugin.createMutationName
+  }),
+  graphql(landingPagePlugin.updateMutation, {
+    name: landingPagePlugin.updateMutationName
   })
 )(SaveButton);
 
@@ -417,6 +446,7 @@ const mapStateToProps = ({
   debate,
   i18n,
   admin: {
+    landingPage,
     sections,
     resourcesCenter,
     thematicsById,
@@ -432,6 +462,15 @@ const mapStateToProps = ({
   const { sectionsById, sectionsHaveChanged, sectionsInOrder } = sections;
   const { modulesById, modulesInOrder, tokenCategoriesById, modulesHaveChanged } = voteSession;
   return {
+    landingPageModulesHasChanged: landingPage.modulesHasChanged,
+    landingPageModules: landingPage.modulesByIdentifier
+      .map((module) => {
+        const identifier = module.getIn(['moduleType', 'identifier']);
+        const idx = landingPage.enabledModulesInOrder.indexOf(identifier);
+        return module.set('order', idx + 1).set('isNew', !module.get('existsInDatabase'));
+      })
+      .valueSeq()
+      .toJS(),
     resourcesCenterPage: page,
     resourcesHaveChanged: resourcesHaveChanged,
     resources: resourcesInOrder.map(id => resourcesById.get(id).toJS()),
