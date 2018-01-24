@@ -1,0 +1,75 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`VoteSession component should match VoteSession snapshot 1`] = `
+<div
+  className="votesession-page"
+>
+  <Connect(Header)
+    additionalHeaderClasses="left"
+    imgUrl="foo.jpg"
+    subtitle="Maintenant il faut voter."
+    title="Phase de vote à la majorité et estimation multicritère"
+  />
+  <Grid
+    bsClass="container"
+    componentClass="div"
+    fluid={true}
+  >
+    <Section
+      className="themes-section"
+      displayIndex={false}
+      index={1}
+      indexGenerator={[Function]}
+      parents={Array []}
+      title="Instructions de la phase de vote"
+      translate={false}
+    >
+      <Row
+        bsClass="row"
+        componentClass="div"
+      >
+        <Col
+          bsClass="col"
+          componentClass="div"
+          md={8}
+          mdOffset={3}
+          sm={10}
+          smOffset={1}
+        >
+          <div
+            className="vote-instructions"
+            dangerouslySetInnerHTML={
+              Object {
+                "__html": "Elisez les meilleurs propositions, vous avez 8 jetons pour et 3 jetons contre",
+              }
+            }
+          />
+        </Col>
+      </Row>
+    </Section>
+    <Section
+      className="themes-section"
+      displayIndex={false}
+      index={1}
+      indexGenerator={[Function]}
+      parents={Array []}
+      title="Vote sur 10 propositions"
+      translate={false}
+    >
+      <Row
+        bsClass="row"
+        componentClass="div"
+      >
+        <Col
+          bsClass="col"
+          componentClass="div"
+          md={8}
+          mdOffset={3}
+          sm={10}
+          smOffset={1}
+        />
+      </Row>
+    </Section>
+  </Grid>
+</div>
+`;
