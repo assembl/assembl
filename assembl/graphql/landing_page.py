@@ -75,6 +75,11 @@ class CreateLandingPageModule(graphene.Mutation):
         cls = models.LandingPageModule
         discussion_id = context.matchdict['discussion_id']
         user_id = context.authenticated_userid or Everyone
+        permissions = get_permissions(user_id, discussion_id)
+        allowed = cls.user_can_cls(
+            user_id, CrudPermissions.CREATE, permissions)
+        if not allowed or (allowed == IF_OWNED and user_id == Everyone):
+            raise HTTPUnauthorized()
         configuration = args.get('configuration')
         order = args.get('order')
         enabled = args.get('enabled')
@@ -82,12 +87,6 @@ class CreateLandingPageModule(graphene.Mutation):
         with cls.default_db.no_autoflush as db:
             module_type = db.query(models.LandingPageModuleType).filter(
                 models.LandingPageModuleType.identifier == module_type_identifier).one()
-            permissions = get_permissions(user_id, discussion_id)
-            allowed = cls.user_can_cls(
-                user_id, CrudPermissions.CREATE, permissions)
-            if not allowed or (allowed == IF_OWNED and user_id == Everyone):
-                raise HTTPUnauthorized()
-
             saobj = cls(
                 discussion_id=discussion_id,
                 configuration=configuration,
