@@ -145,6 +145,28 @@ describe('Landing page modulesHasChanged reducer', () => {
     expect(reducer(oldState, action)).toEqual(oldState);
   });
 
+  it('should handle MOVE_LANDING_PAGE_MODULE_UP action type', () => {
+    const action = {
+      moduleTypeIdentifier: 'INTRODUCTION',
+      type: actionTypes.MOVE_LANDING_PAGE_MODULE_UP
+    };
+    const oldState = false;
+    const expected = true;
+    const actual = reducer(oldState, action);
+    expect(actual).toEqual(expected);
+  });
+
+  it('should handle MOVE_LANDING_PAGE_MODULE_DOWN action type', () => {
+    const action = {
+      moduleTypeIdentifier: 'INTRODUCTION',
+      type: actionTypes.MOVE_LANDING_PAGE_MODULE_DOWN
+    };
+    const oldState = false;
+    const expected = true;
+    const actual = reducer(oldState, action);
+    expect(actual).toEqual(expected);
+  });
+
   it('should handle TOGGLE_LANDING_PAGE_MODULE action type', () => {
     const action = {
       moduleTypeIdentifier: 'HEADER',
