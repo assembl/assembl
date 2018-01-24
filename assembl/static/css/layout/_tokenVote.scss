@@ -200,6 +200,7 @@
     span.available-tokens-number {
       font-weight: 500;
       font-size: 150%;
+      padding-right: 2px;
     }
 
     .available:not(.animating-towards-not-available) {
@@ -420,7 +421,7 @@
     .token-vote-session--header, .available-tokens.fixed {
       background-color: #F6F6F6;
     }
-    
+
     .token-vote-session--header {
       .question-title {
         background-color: #232929;
@@ -434,6 +435,9 @@
 
 @media (max-width: 650px) {
   .token-vote-session.token-vote-form {
+    .available-tokens-info {
+      margin-bottom: 4px;
+    }
     .available-tokens-container {
       .available-tokens.fixed {
         padding-top: 0;
@@ -441,9 +445,12 @@
       .token-bag-for-category {
         .description, .available-tokens-icons {
           display: block;
-          margin-bottom: 2px;
+          margin-bottom: 4px;
           padding-left: 0;
         }
+      }
+      .token-bag-for-category:nth-child(2) .description {
+        margin-top: 5px;
       }
     }
     .left-column.absorbing-column {
@@ -462,6 +469,34 @@
 
       .token-icon {
         float: left;
+      }
+    }
+
+    .votables-collection {
+      th:nth-child(2) {
+        display: none;
+      }
+
+      tbody > div {
+        border-bottom: none !important;
+      }
+
+      tbody > div:first-child .left-column, tbody > div:first-child .right-column,  {
+        padding-top: 12px;
+      }
+
+      .left-column.absorbing-column, .right-column {
+        display: block !important;
+        clear: both !important;
+        max-width: initial !important;
+      }
+
+      .left-column {
+        padding-top: 30px;
+      }
+
+      .tokens-for-idea .token-icon {
+        margin: 0 5px 5px 0;
       }
     }
   }
