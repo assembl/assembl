@@ -9,11 +9,6 @@ import { createNewThematic } from '../../../actions/adminActions';
 import { addThematicTooltip } from '../../common/tooltips';
 
 class ThemeSection extends React.Component {
-  componentWillMount() {
-    const { toggleLanguageMenu } = this.props;
-    toggleLanguageMenu(true);
-  }
-
   render() {
     const { addThematic, editLocale, thematics } = this.props;
     return (
