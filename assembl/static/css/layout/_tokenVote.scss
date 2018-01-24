@@ -118,7 +118,8 @@
   }
 
   .available-tokens-info {
-    padding-top: 20px;
+    padding-top: 15px;
+    margin-left: 5px;
     font-size: 13px;
   }
 
@@ -146,6 +147,10 @@
       }
     }
 
+    .token-bags {
+      margin-left: 5px;
+    }
+
     .token-bags-content > div {
       display: table;
       border-spacing: 0 3px;
@@ -167,6 +172,8 @@
     }
     .available-tokens-icons {
       padding-left: 10px;
+      padding-top: 2px;
+
       .token-icon {
         display: inline-block;
         margin-right: 5px;
@@ -408,6 +415,23 @@
   }
 }
 
+#groupContainer .token-vote-session-container-view {
+  .token-vote-session.token-vote-form { /* used only by vote form page (not by vote results page) */
+    .token-vote-session--header, .available-tokens.fixed {
+      background-color: #F6F6F6;
+    }
+    
+    .token-vote-session--header {
+      .question-title {
+        background-color: #232929;
+        padding: 20px;
+        color: white;
+      }
+    }
+    
+  }
+}
+
 @media (max-width: 650px) {
   .token-vote-session.token-vote-form {
     .available-tokens-container {
@@ -553,13 +577,14 @@
       font-weight: 600;
     }
     .question-description {
+      margin-left: 5px;
       font-size: 13px;
     }
   }
 
   .votables-collection {
     margin-top: 10px;
-
+    margin-left: 5px;
 
     .idea-title {
       font-size: 15px;
