@@ -105,7 +105,7 @@ class Profile extends React.PureComponent<*, ProfileProps, ProfileState> {
     const fullNameLabel = I18n.t('profile.fullname');
     const emailLabel = I18n.t('profile.email');
     return (
-      <div className="profile">
+      <div className="profile background-dark-grey">
         <div className="content-section">
           <Grid fluid>
             <div className="max-container">
