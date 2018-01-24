@@ -14,6 +14,8 @@ import {
 type ModulesHasChangedReducer = (boolean, ReduxAction<Action>) => boolean;
 export const modulesHasChanged: ModulesHasChangedReducer = (state = false, action) => {
   switch (action.type) {
+  case MOVE_LANDING_PAGE_MODULE_UP:
+  case MOVE_LANDING_PAGE_MODULE_DOWN:
   case TOGGLE_LANDING_PAGE_MODULE:
     return true;
   case UPDATE_LANDING_PAGE_MODULES:
