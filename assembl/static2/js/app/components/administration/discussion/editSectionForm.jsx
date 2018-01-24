@@ -85,7 +85,7 @@ const DumbEditSectionForm = ({
       {type === 'HOMEPAGE' ? (
         <FormGroup>
           <Checkbox checked={hasUrl} onChange={toggleExternalPageField}>
-            <Translate value="administration.sections.externalPage" />
+            <Translate value="administration.sections.externalPage" style={{ lineHeight: '20px' }} />
           </Checkbox>
         </FormGroup>
       ) : null}

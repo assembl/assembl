@@ -34,7 +34,11 @@ exports[`DumbEditSectionForm component should render a form to edit a section of
         />
         <span
           className={undefined}
-          style={undefined}
+          style={
+            Object {
+              "lineHeight": "20px",
+            }
+          }
         >
           Missing translation: administration.sections.externalPage
         </span>
