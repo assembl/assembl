@@ -59,7 +59,7 @@ const mapStateToProps = state => ({
   translations: state.i18n.translations,
   editLocale: state.admin.editLocale,
   discussionPreferences: state.admin.discussionLanguagePreferences,
-  isHidden: state.admin.toggleLanguageMenu
+  isHidden: state.admin.displayLanguageMenu
 });
 
 const mapDispatchToProps = dispatch => ({

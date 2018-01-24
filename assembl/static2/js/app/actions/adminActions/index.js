@@ -84,4 +84,4 @@ export const removeLanguagePreference = locale => ({ locale: locale, selected: f
 
 export const languagePreferencesHasChanged = state => ({ state: state, type: 'LANGUAGE_PREFERENCE_HAS_CHANGED' });
 
-export const toggleLanguageMenu = state => ({ state: state, type: 'TOGGLE_LANGUAGE_MENU' });
+export const displayLanguageMenu = state => ({ state: state, type: 'UPDATE_LANGUAGE_MENU_VISIBILITY' });

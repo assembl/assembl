@@ -198,11 +198,11 @@ export const discussionLanguagePreferencesHasChanged: DiscussionLanguagePreferen
   }
 };
 
-type ToggleLanguageMenu = boolean;
-type ToggleLanguageMenuReducer = (ToggleLanguageMenu, ReduxAction<Action>) => ToggleLanguageMenu;
-export const toggleLanguageMenu: ToggleLanguageMenuReducer = (state = false, action) => {
+type DisplayLanguageMenu = boolean;
+type DisplayLanguageMenuReducer = (DisplayLanguageMenu, ReduxAction<Action>) => DisplayLanguageMenu;
+export const displayLanguageMenu: DisplayLanguageMenuReducer = (state = false, action) => {
   switch (action.type) {
-  case 'TOGGLE_LANGUAGE_MENU':
+  case 'UPDATE_LANGUAGE_MENU_VISIBILITY':
     return action.state;
   default:
     return state;
@@ -217,7 +217,7 @@ export type AdminReducer = {
   thematicsById: ThematicsByIdReducer,
   discussionLanguagePreferences: LanguagePreferencesReducer,
   discussionLanguagePreferencesHasChanged: DiscussionLanguagePreferencesHasChangedReducer,
-  toggleLanguageMenu: ToggleLanguageMenuReducer,
+  displayLanguageMenu: DisplayLanguageMenuReducer,
   resourcesCenter: ResourcesCenterReducer,
   sections: AdminSectionsReducers,
   legalNoticeAndTerms: LegalNoticeAndTermsReducer
@@ -230,7 +230,7 @@ const reducers: AdminReducer = {
   thematicsById: thematicsById,
   discussionLanguagePreferences: languagePreferences,
   discussionLanguagePreferencesHasChanged: discussionLanguagePreferencesHasChanged,
-  toggleLanguageMenu: toggleLanguageMenu,
+  displayLanguageMenu: displayLanguageMenu,
   resourcesCenter: resourcesCenter,
   sections: sections,
   voteSession: voteSession,

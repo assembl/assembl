@@ -5,7 +5,7 @@ import { filter } from 'graphql-anywhere';
 import { Grid, Row, Col } from 'react-bootstrap';
 import { connect } from 'react-redux';
 
-import { updateThematics, toggleLanguageMenu } from '../actions/adminActions';
+import { updateThematics, displayLanguageMenu } from '../actions/adminActions';
 import { updateResources, updateResourcesCenterPage } from '../actions/adminActions/resourcesCenter';
 import { updateVoteSessionPage } from '../actions/adminActions/voteSession';
 import { updateSections } from '../actions/adminActions/adminSections';
@@ -66,7 +66,7 @@ class Administration extends React.Component {
     this.putVoteSessionInStore(this.props.voteSession);
 
     const isHidden = this.props.identifier === 'discussion' && this.props.location.query.section === '1';
-    this.props.toggleLanguageMenu(isHidden);
+    this.props.displayLanguageMenu(isHidden);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -90,7 +90,7 @@ class Administration extends React.Component {
     this.putResourcesCenterInStore(nextProps.resourcesCenter);
 
     const isHidden = nextProps.identifier === 'discussion' && nextProps.location.query.section === '1';
-    this.props.toggleLanguageMenu(isHidden);
+    this.props.displayLanguageMenu(isHidden);
   }
 
   putThematicsInStore(data) {
@@ -240,7 +240,7 @@ const mapDispatchToProps = dispatch => ({
   },
   updateVoteSessionPage: voteSession => dispatch(updateVoteSessionPage(voteSession)),
   updateLegalNoticeAndTerms: legalNoticeAndTerms => dispatch(updateLegalNoticeAndTerms(legalNoticeAndTerms)),
-  toggleLanguageMenu: isHidden => dispatch(toggleLanguageMenu(isHidden))
+  displayLanguageMenu: isHidden => dispatch(displayLanguageMenu(isHidden))
 });
 
 const mergeLoadingAndHasErrors = WrappedComponent => (props) => {
