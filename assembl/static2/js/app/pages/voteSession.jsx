@@ -1,3 +1,4 @@
+// @flow
 import React from 'react';
 import { Grid, Row, Col } from 'react-bootstrap';
 import { graphql, compose } from 'react-apollo';
@@ -7,6 +8,15 @@ import Header from '../components/common/header';
 import Section from '../components/common/section';
 import { getPhaseId } from '../utils/timeline';
 
+type voteSessionPageProps = {
+  title: string,
+  subTitle: string,
+  headerImageUrl: string,
+  instructionsSectionTitle: string,
+  instructionsSectionContent: string,
+  propositionsSectionTitle: string
+};
+
 const VoteSession = ({
   title,
   subTitle,
@@ -14,15 +24,15 @@ const VoteSession = ({
   instructionsSectionTitle,
   instructionsSectionContent,
   propositionsSectionTitle
-}) => (
+}: voteSessionPageProps) => (
   <div className="votesession-page">
     <Header title={title} subtitle={subTitle} imgUrl={headerImageUrl} additionalHeaderClasses="left" />
     <Grid fluid>
       <Section title={instructionsSectionTitle}>
         <Row>
-          <Col mdOffset={4} md={8} smOffset={1} sm={10}>
+          <Col mdOffset={3} md={8} smOffset={1} sm={10}>
             <div dangerouslySetInnerHTML={{ __html: instructionsSectionContent }} className="vote-instructions" />
-            {/* Insérer les jetons ici */}
+            {/* INSÉRER LES JETONS ICI */}
           </Col>
         </Row>
       </Section>
