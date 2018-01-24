@@ -78,6 +78,7 @@
 
     .two-columns-admin {
       display: flex;
+      margin: 40px 0 0;
 
       .column-left {
         flex: 1;
@@ -357,10 +358,14 @@
           text-align: center;
         }
 
+        .module-block:first-child {
+          padding: 10px 0;
+        }
+
         .module-block:first-child,
         .module-block:last-child {
           background-color: $first-color-light;
-          color: $grey3;
+          color: $white;
           border: 0;
           margin: 0;
         }
@@ -371,13 +376,15 @@
 
           .module-block {
             margin: 7px;
-            padding: 7px;
+            padding: 15px 7px;
             border: 0.8px solid $first-color;
             color: $first-color;
             background-color: $white;
 
             .admin-icons {
               color: $first-color;
+              padding: 0;
+              width: 20px;
             }
           }
         }
