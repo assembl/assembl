@@ -436,7 +436,7 @@ class SocialAuthAccount(
             config_t = config.get('login_expiry_default', None)
         if intrinsic is not None:
             # convert to days
-            intrinsic /= 864000.0
+            intrinsic = float(intrinsic) / 864000
             if config_t is not None:
                 # take minimum of intrinsic or config.
                 intrinsic = min(config_t, intrinsic)
