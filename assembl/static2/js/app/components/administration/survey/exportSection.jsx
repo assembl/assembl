@@ -33,11 +33,6 @@ class ExportSection extends React.Component {
 
   state = { exportLocale: null, translate: false };
 
-  componentWillMount() {
-    const { toggleLanguageMenu } = this.props;
-    toggleLanguageMenu(false);
-  }
-
   selectExportLocale = (locale) => {
     this.setState({ exportLocale: locale });
   };

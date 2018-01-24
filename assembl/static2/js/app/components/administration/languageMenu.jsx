@@ -28,8 +28,8 @@ const Flag = ({ locale }) => {
   }
 };
 
-const LanguageMenu = ({ changeLocale, editLocale, discussionPreferences, visibility }) => {
-  if (visibility) {
+const LanguageMenu = ({ changeLocale, editLocale, discussionPreferences, isHidden }) => {
+  if (!isHidden) {
     return (
       <div className="relative">
         <div className="language-menu">
@@ -58,7 +58,8 @@ const LanguageMenu = ({ changeLocale, editLocale, discussionPreferences, visibil
 const mapStateToProps = state => ({
   translations: state.i18n.translations,
   editLocale: state.admin.editLocale,
-  discussionPreferences: state.admin.discussionLanguagePreferences
+  discussionPreferences: state.admin.discussionLanguagePreferences,
+  isHidden: state.admin.displayLanguageMenu
 });
 
 const mapDispatchToProps = dispatch => ({

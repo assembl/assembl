@@ -5,7 +5,7 @@ import { filter } from 'graphql-anywhere';
 import { Grid, Row, Col } from 'react-bootstrap';
 import { connect } from 'react-redux';
 
-import { updateThematics } from '../actions/adminActions';
+import { updateThematics, displayLanguageMenu } from '../actions/adminActions';
 import { updateResources, updateResourcesCenterPage } from '../actions/adminActions/resourcesCenter';
 import { updateVoteSessionPage } from '../actions/adminActions/voteSession';
 import { updateSections } from '../actions/adminActions/adminSections';
@@ -53,12 +53,8 @@ class Administration extends React.Component {
     super(props);
     this.putResourcesCenterInStore = this.putResourcesCenterInStore.bind(this);
     this.putThematicsInStore = this.putThematicsInStore.bind(this);
-    this.toggleLanguageMenu = this.toggleLanguageMenu.bind(this);
     this.putLegalNoticeAndTermsInStore = this.putLegalNoticeAndTermsInStore.bind(this);
     this.putVoteSessionInStore = this.putVoteSessionInStore.bind(this);
-    this.state = {
-      showLanguageMenu: true
-    };
   }
 
   componentDidMount() {
@@ -68,6 +64,9 @@ class Administration extends React.Component {
     this.putSectionsInStore(this.props.sections);
     this.putLegalNoticeAndTermsInStore(this.props.legalNoticeAndTerms);
     this.putVoteSessionInStore(this.props.voteSession);
+
+    const isHidden = this.props.identifier === 'discussion' && this.props.location.query.section === '1';
+    this.props.displayLanguageMenu(isHidden);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -89,12 +88,9 @@ class Administration extends React.Component {
     }
 
     this.putResourcesCenterInStore(nextProps.resourcesCenter);
-  }
 
-  toggleLanguageMenu(state) {
-    this.setState({
-      showLanguageMenu: state
-    });
+    const isHidden = nextProps.identifier === 'discussion' && nextProps.location.query.section === '1';
+    this.props.displayLanguageMenu(isHidden);
   }
 
   putThematicsInStore(data) {
@@ -177,8 +173,7 @@ class Administration extends React.Component {
     const { timeline } = this.props.debate.debateData;
     const childrenWithProps = React.Children.map(children, child =>
       React.cloneElement(child, {
-        locale: i18n.locale,
-        toggleLanguageMenu: this.toggleLanguageMenu
+        locale: i18n.locale
       })
     );
 
@@ -221,7 +216,7 @@ class Administration extends React.Component {
                 {childrenWithProps}
               </Col>
               <Col xs={12} md={1}>
-                <LanguageMenu visibility={this.state.showLanguageMenu} />
+                <LanguageMenu />
               </Col>
             </Row>
           </Grid>
@@ -244,7 +239,8 @@ const mapDispatchToProps = dispatch => ({
     dispatch(updateResourcesCenterPage(titleEntries, headerImage));
   },
   updateVoteSessionPage: voteSession => dispatch(updateVoteSessionPage(voteSession)),
-  updateLegalNoticeAndTerms: legalNoticeAndTerms => dispatch(updateLegalNoticeAndTerms(legalNoticeAndTerms))
+  updateLegalNoticeAndTerms: legalNoticeAndTerms => dispatch(updateLegalNoticeAndTerms(legalNoticeAndTerms)),
+  displayLanguageMenu: isHidden => dispatch(displayLanguageMenu(isHidden))
 });
 
 const mergeLoadingAndHasErrors = WrappedComponent => (props) => {

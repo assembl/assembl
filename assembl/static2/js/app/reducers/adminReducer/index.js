@@ -198,6 +198,17 @@ export const discussionLanguagePreferencesHasChanged: DiscussionLanguagePreferen
   }
 };
 
+type DisplayLanguageMenu = boolean;
+type DisplayLanguageMenuReducer = (DisplayLanguageMenu, ReduxAction<Action>) => DisplayLanguageMenu;
+export const displayLanguageMenu: DisplayLanguageMenuReducer = (state = false, action) => {
+  switch (action.type) {
+  case 'UPDATE_LANGUAGE_MENU_VISIBILITY':
+    return action.state;
+  default:
+    return state;
+  }
+};
+
 type ResourcesCenterReducer = Function; // TODO
 export type AdminReducer = {
   editLocale: EditLocaleReducer,
@@ -206,6 +217,7 @@ export type AdminReducer = {
   thematicsById: ThematicsByIdReducer,
   discussionLanguagePreferences: LanguagePreferencesReducer,
   discussionLanguagePreferencesHasChanged: DiscussionLanguagePreferencesHasChangedReducer,
+  displayLanguageMenu: DisplayLanguageMenuReducer,
   resourcesCenter: ResourcesCenterReducer,
   sections: AdminSectionsReducers,
   legalNoticeAndTerms: LegalNoticeAndTermsReducer
@@ -218,6 +230,7 @@ const reducers: AdminReducer = {
   thematicsById: thematicsById,
   discussionLanguagePreferences: languagePreferences,
   discussionLanguagePreferencesHasChanged: discussionLanguagePreferencesHasChanged,
+  displayLanguageMenu: displayLanguageMenu,
   resourcesCenter: resourcesCenter,
   sections: sections,
   voteSession: voteSession,
