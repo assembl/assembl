@@ -58,7 +58,7 @@ const sectionURL = ({ sectionType, url }, options) => {
 const SectionLink = ({ section, options }) => {
   const { title, url, sectionType } = section;
   return url || sectionType === 'CUSTOM' ? (
-    <a href={url} target="_blank" className="navbar-menu-item pointer" data-text={title}>
+    <a href={url} className="navbar-menu-item pointer" data-text={title}>
       {title}
     </a>
   ) : (

@@ -12,9 +12,7 @@ const Logo = ({ src, slug, url }: Props) => {
   return (
     <div className="navbar-logo">
       {url ? (
-        <a href={url} target="_blank">
-          {image}
-        </a>
+        <a href={url}>{image}</a>
       ) : (
         <Link to={`${get('home', { slug: slug })}`} activeClassName="logo-active">
           {image}
