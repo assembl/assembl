@@ -1,5 +1,6 @@
 
 _extends = base_env.rc
+# add configs/no_sentry to the mix if you're not using sentry at all
 ini_files = production.ini RANDOM:random.ini.tmpl:saml_random.ini.tmpl:random_docker.ini.tmpl RC_DATA
 _projectpath = /opt/assembl
 db_password = __delete_key__

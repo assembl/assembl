@@ -1,6 +1,6 @@
 _extends = base_env.rc
 public_hostname = localhost
-ini_files = production.ini develop_overlay.ini RANDOM:random.ini.tmpl RC_DATA
+ini_files = production.ini configs/no_sentry.ini develop_overlay.ini RANDOM:random.ini.tmpl RC_DATA
 # ZMQ model changes local socket (backend will connect to this)
 # UNIQUE_PER_SERVER
 # Convention:
@@ -25,9 +25,6 @@ public_port = 6543
 # 6546 thru 6547: reserved for automated testing
 # 6548-: production
 server:main__port = 6543
-raven_url =
-handler_sentry__args = ()
-filter:raven__dsn =
 web_analytics_piwik_url=
 web_analytics_piwik_script=
 # The port to use for the websocket (client frontends will connect to this)

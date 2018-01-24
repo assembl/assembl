@@ -39,7 +39,6 @@ assembl/locale/*/LC_MESSAGES/*.jed.json
 /local.cfg
 /assembl.db
 /vendor_config.ini
-/configs
 
 # app
 /data/*
