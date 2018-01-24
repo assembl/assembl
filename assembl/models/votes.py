@@ -44,7 +44,8 @@ class AbstractVoteSpecification(DiscussionBoundBase):
     }
 
     widget_id = Column(Integer, ForeignKey(
-        "widget.id"), nullable=True, index=True)
+        "widget.id"), nullable=True, index=True,
+        info={"pseudo_nullable": False})
     "Used by a voting widget"
 
     vote_session_id = Column(Integer, ForeignKey(
