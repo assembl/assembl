@@ -44,6 +44,13 @@ class Menu extends React.Component {
           <Link to={`${get('administration', slug)}/landingPage?section=1`} activeClassName="active">
             <Translate value="administration.landingpage" />
           </Link>
+          <ul className={requestedPhase === 'landingPage' ? 'shown admin-menu2' : 'hidden admin-menu2'}>
+            <li>
+              <Link to={`${get('administration', slug)}/landingPage?section=1`} activeClassName="active">
+                <Translate value="administration.landingPage.manageModules.title" />
+              </Link>
+            </li>
+          </ul>
         </li>
         <li className="menu-item">
           <Link to={`${get('administration', slug)}/resourcesCenter`} activeClassName="active">
