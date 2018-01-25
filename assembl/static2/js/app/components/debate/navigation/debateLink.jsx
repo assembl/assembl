@@ -1,16 +1,27 @@
+// @flow
 import React from 'react';
 import { Link } from 'react-router';
-import { connect } from 'react-redux';
 import classNames from 'classnames';
+
 import Timeline from '../navigation/timeline';
 
-class DebateLink extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      menuActive: false
-    };
-  }
+type DebateLinkProps = {
+  identifier: string,
+  className: string,
+  activeClassName: string,
+  children: Array<*>,
+  to: string,
+  dataText: string
+};
+
+type DebateLinkState = {
+  menuActive: boolean
+};
+
+class DebateLink extends React.Component<*, DebateLinkProps, DebateLinkState> {
+  state = {
+    menuActive: false
+  };
 
   showMenu = () => {
     this.setState({ menuActive: true });
@@ -31,7 +42,7 @@ class DebateLink extends React.Component {
         <div className="header-container">
           <section className="timeline-section" id="timeline">
             <div className="max-container">
-              <Timeline showNavigation identifier={identifier} />
+              <Timeline showNavigation identifier={identifier} onMenuItemClick={this.hideMenu} />
             </div>
           </section>
         </div>
@@ -40,8 +51,4 @@ class DebateLink extends React.Component {
   }
 }
 
-const mapStateToProps = state => ({
-  lang: state.i18n.locale
-});
-
-export default connect(mapStateToProps)(DebateLink);
+export default DebateLink;

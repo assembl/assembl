@@ -1,66 +1,104 @@
+// @flow
 import React from 'react';
+import { withApollo, type ApolloClient } from 'react-apollo';
 import { browserHistory } from 'react-router';
 import { Translate, Localize, I18n } from 'react-redux-i18n';
 import { connect } from 'react-redux';
 import classNames from 'classnames';
-import { get } from '../../../utils/routeMap';
+
+import MenuTable, { prefetchMenuQuery } from './menuTable';
+import { getPhaseStatus, isSeveralIdentifiers, type Timeline } from '../../../utils/timeline';
 import { displayModal } from '../../../utils/utilityManager';
-import { getPhaseStatus, isSeveralIdentifiers } from '../../../utils/timeline';
-import ThematicsTable from './thematicsTable';
+import { get } from '../../../utils/routeMap';
+import { PHASE_STATUS } from '../../../constants';
 
-class TimelineSegment extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      active: false
-    };
+export type DebateType = {
+  debateData: {
+    timeline: Timeline,
+    slug: string
   }
+};
 
-  showMenu = () => {
-    const { onMouseOver, thematic } = this.props;
-    this.setState({ active: true }, () => {
-      if (onMouseOver) onMouseOver(thematic.id);
-    });
+type TimelineSegmentProps = {
+  client: ApolloClient,
+  title: {
+    entries: Array<*>
+  },
+  startDate: string,
+  endDate: string,
+  phaseIdentifier: string,
+  debate: DebateType,
+  barPercent: number,
+  locale: string,
+  onMenuItemClick: Function
+};
+
+type TimelineSegmentState = {
+  active: boolean
+};
+
+export class DumbTimelineSegment extends React.Component<*, TimelineSegmentProps, TimelineSegmentState> {
+  state = {
+    active: false
   };
 
-  hideMenu = () => {
-    const { onMouseLeave, thematic } = this.props;
-    this.setState({ active: false }, () => {
-      if (onMouseLeave) onMouseLeave(thematic.id);
-    });
-  };
-
-  displayPhase = () => {
-    const { locale } = this.props.i18n;
-    const { phaseIdentifier, title, startDate, endDate } = this.props;
-    const { debateData } = this.props.debate;
-    const phase = debateData.timeline.filter(p => p.identifier === phaseIdentifier);
-    const isRedirectionToV1 = phase[0].interface_v1;
-    const slug = { slug: debateData.slug };
-    const params = { slug: debateData.slug, phase: phaseIdentifier };
+  componentWillMount() {
+    const { phaseIdentifier, title, startDate, endDate, locale, client } = this.props;
+    this.phaseStatus = getPhaseStatus(startDate, endDate);
     let phaseName = '';
     title.entries.forEach((entry) => {
       if (locale === entry['@language']) {
         phaseName = entry.value.toLowerCase();
       }
     });
+    this.phaseName = phaseName;
+    prefetchMenuQuery(client, {
+      lang: locale,
+      identifier: phaseIdentifier
+    });
+  }
+
+  phaseStatus = null;
+
+  phaseName = null;
+
+  showMenu = () => {
+    this.setState({ active: true });
+  };
+
+  hideMenu = () => {
+    this.setState({ active: false });
+  };
+
+  renderNotStarted = (className?: string) => {
+    const { startDate } = this.props;
+    return (
+      <div className={className}>
+        <Translate value="debate.notStarted" phaseName={this.phaseName} />
+        <Localize value={startDate} dateFormat="date.format" />
+      </div>
+    );
+  };
+
+  displayPhase = () => {
+    const { phaseIdentifier } = this.props;
+    const { debateData } = this.props.debate;
+    const phase = debateData.timeline.filter(p => p.identifier === phaseIdentifier);
+    const isRedirectionToV1 = phase[0].interface_v1;
+    const slug = { slug: debateData.slug };
+    const params = { slug: debateData.slug, phase: phaseIdentifier };
     const isSeveralPhases = isSeveralIdentifiers(debateData.timeline);
-    const phaseStatus = getPhaseStatus(startDate, endDate);
     if (isSeveralPhases) {
-      if (phaseStatus === 'notStarted') {
-        const body = (
-          <div>
-            <Translate value="debate.notStarted" phaseName={phaseName} />
-            <Localize value={startDate} dateFormat="date.format" />
-          </div>
-        );
+      if (this.phaseStatus === PHASE_STATUS.notStarted) {
+        const body = this.renderNotStarted();
         displayModal(null, body, true, null, null, true);
       }
-      if (phaseStatus === 'inProgress' || phaseStatus === 'completed') {
+      if (this.phaseStatus === PHASE_STATUS.inProgress || this.phaseStatus === PHASE_STATUS.completed) {
         if (!isRedirectionToV1) {
           browserHistory.push(get('debate', params));
+          this.hideMenu();
         } else {
-          const body = <Translate value="redirectToV1" phaseName={phaseName} />;
+          const body = <Translate value="redirectToV1" phaseName={this.phaseName} />;
           const button = { link: get('oldDebate', slug), label: I18n.t('home.accessButton'), internalLink: false };
           displayModal(null, body, true, null, button, true);
           setTimeout(() => {
@@ -70,13 +108,30 @@ class TimelineSegment extends React.Component {
       }
     } else if (!isRedirectionToV1) {
       browserHistory.push(get('debate', params));
+      this.hideMenu();
     } else {
       window.location = get('oldDebate', slug);
     }
   };
 
+  renderMenu = () => {
+    const { phaseIdentifier, onMenuItemClick } = this.props;
+    const { active } = this.state;
+    const isNotStarted = this.phaseStatus === PHASE_STATUS.notStarted;
+    if (!active) return null;
+    return (
+      <div className="menu-container">
+        {isNotStarted ? (
+          this.renderNotStarted('not-started')
+        ) : (
+          <MenuTable identifier={phaseIdentifier} onMenuItemClick={onMenuItemClick} />
+        )}
+      </div>
+    );
+  };
+
   render() {
-    const { barPercent, title, locale, phaseIdentifier } = this.props;
+    const { barPercent, title, locale } = this.props;
     const { active } = this.state;
     const timelineClass = 'timeline-title txt-active-light';
     return (
@@ -102,20 +157,17 @@ class TimelineSegment extends React.Component {
             <div className="timeline-bar-background">&nbsp;</div>
           </div>
         </div>
-        <span className="timeline-arrow" />
-        {active && (
-          <div className="thematics-container">
-            <ThematicsTable identifier={phaseIdentifier} />
-          </div>
-        )}
+        {active && <span className="timeline-arrow" />}
+        {this.renderMenu()}
       </div>
     );
   }
 }
 
 const mapStateToProps = state => ({
-  i18n: state.i18n,
+  locale: state.i18n.locale,
   debate: state.debate
 });
 
-export default connect(mapStateToProps)(TimelineSegment);
+// $FlowFixMe
+export default connect(mapStateToProps)(withApollo(DumbTimelineSegment));
