@@ -1,3 +1,5 @@
+#import "./LangString.graphql"
+
 mutation updateTokenVoteSpecification(
   $id: ID!
   $titleEntries: [LangStringEntryInput]!
@@ -16,14 +18,20 @@ mutation updateTokenVoteSpecification(
       ... on TokenVoteSpecification {
         id
         voteSessionId
-        titleEntries
-        instructionsEntries
+        titleEntries {
+          ...langStringEntry
+        }
+        instructionsEntries {
+          ...langStringEntry
+        }
         exclusiveCategories
         tokenCategories {
           id
           totalNumber
           typename
-          titleEntries
+          titleEntries {
+            ...langStringEntry
+          }
           color
         }
       }
