@@ -3,9 +3,11 @@ import React from 'react';
 import { Grid, Row, Col } from 'react-bootstrap';
 import { graphql, compose } from 'react-apollo';
 import { connect } from 'react-redux';
+import range from 'lodash/range';
 import VoteSessionQuery from '../graphql/VoteSession.graphql';
 import Header from '../components/common/header';
 import Section from '../components/common/section';
+import Token from '../components/voteSession/token';
 import { getPhaseId } from '../utils/timeline';
 
 type voteSessionPageProps = {
@@ -32,14 +34,15 @@ const DumbVoteSession = ({
         <Row>
           <Col mdOffset={3} md={8} smOffset={1} sm={10}>
             <div dangerouslySetInnerHTML={{ __html: instructionsSectionContent }} className="vote-instructions" />
-            {/* INSÉRER LES JETONS ICI */}
+            {/* INSERT THE TOKENS HERE */}
+            <div className="flex tokens">{range(8).map(() => <Token color="green" />)}</div>
           </Col>
         </Row>
       </Section>
       <Section title={propositionsSectionTitle}>
         <Row>
           <Col mdOffset={3} md={8} smOffset={1} sm={10}>
-            {/* INSÉRER LES PROPOSITIONS ICI */}
+            {/* INSERT THE PROPOSITIONS HERE */}
           </Col>
         </Row>
       </Section>
