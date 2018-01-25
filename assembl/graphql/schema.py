@@ -39,6 +39,7 @@ from assembl.models.post import countable_publication_states
 from assembl.nlp.translation_service import DummyGoogleTranslationService
 from assembl.graphql.permissions_helpers import require_instance_permission
 from assembl.auth import CrudPermissions
+from assembl.graphql.vote_session import CreateTokenVoteSpecification, UpdateTokenVoteSpecification
 
 convert_sqlalchemy_type.register(EmailString)(convert_column_to_string)
 models.Base.query = models.Base.default_db.query_property()
@@ -282,6 +283,8 @@ class Mutations(graphene.ObjectType):
     update_legal_notice_and_terms = UpdateLegalNoticeAndTerms.Field()
     update_user = UpdateUser.Field()
     update_vote_session = UpdateVoteSession.Field()
+    create_token_vote_specification = CreateTokenVoteSpecification.Field()
+    update_token_vote_specification = UpdateTokenVoteSpecification.Field()
 
 
 Schema = graphene.Schema(query=Query, mutation=Mutations)
