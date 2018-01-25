@@ -1,0 +1,32 @@
+mutation createTokenVoteSpecification(
+  $voteSessionId: ID!
+  $titleEntries: [LangStringEntryInput]!
+  $instructionsEntries: [LangStringEntryInput]!
+  $exclusiveCategories: Boolean!
+  $tokenCategories: [TokenCategorySpecificationInput]!
+) {
+  createTokenVoteSpecification(
+    voteSessionId: $voteSessionId
+    titleEntries: $titleEntries
+    instructionsEntries: $instructionsEntries
+    exclusiveCategories: $exclusiveCategories
+    tokenCategories: $tokenCategories
+  ) {
+    tokenVoteSpecification {
+      ... on TokenVoteSpecification {
+        id
+        voteSessionId
+        titleEntries
+        instructionsEntries
+        exclusiveCategories
+        tokenCategories {
+          id
+          totalNumber
+          typename
+          titleEntries
+          color
+        }
+      }
+    }
+  }
+}
