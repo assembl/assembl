@@ -1,7 +1,7 @@
 .debate-link.active {
   > .navbar-menu-item {
     background-color: $first-color;
-    color: #fff !important;
+    color: $white !important;
   }
 
   .header-container {
@@ -22,28 +22,47 @@
     left: 0;
     background-color: $first-color;
 
-    .thematics-container {
-      background-color: #fff;
-      display: flex;
+    .menu-container {
       position: fixed;
+      top: calc(#{$navbar-height} + 63px);
       right: 0;
       left: 0;
-      top: calc(#{$navbar-height} + 63px);
       z-index: -1;
+      max-height: 70%;
+      padding: 10px 0 10px;
+      background-color: $white;
+      box-shadow: 0 1px 10px rgba(0, 0, 0, 0.45);
+      overflow: auto;
     }
 
-    .thematics-table {
+    .menu-table-col {
+      width: 100%;
+      display: flex;
+      flex: 1;
+
+      &.sub-menu {
+        .menu-table {
+          max-width: 300px;
+        }
+      }
+    }
+
+    .menu-table {
       width: 25%;
       float: left;
+      height: 100%;
+      border-right: solid 1px rgba(0, 0, 0, 0.15);
+      padding: 0 5px;
+      min-width: 300px;
 
-      .thematic-item-container {
+      .menu-item-container {
         display: flex;
         flex: 1;
         justify-content: flex-end;
         margin-bottom: 10px;
         margin-top: 10px;
 
-        .thematic-item {
+        .menu-item {
           display: flex;
           max-width: 300px;
           width: 100%;
@@ -56,11 +75,12 @@
             background-position: top left;
             background-repeat: no-repeat;
             background-size: cover;
+            background-color: $first-color;
             position: relative;
           }
 
           .thumb-body {
-            padding: 5px 10px;
+            padding: 10px 5px 10px 10px;
             font-size: 10px;
             display: flex;
             flex-direction: column;
@@ -110,9 +130,15 @@
       position: relative;
     }
 
+    .not-started {
+      width: 100%;
+      max-width: 500px;
+      text-align: center;
+      padding: 30px;
+      margin: auto;
+    }
+
     .timeline-section {
-      // border-bottom: $navbar-border;
-      // border-top: $navbar-border;
       padding-top: 17px;
       width: 100%;
       z-index: 200;
@@ -548,7 +574,7 @@
 @media screen and (min-width: 768px) {
   .debate {
     .header-section {
-      margin-top: $navbar-height * 2;
+      margin-top: $navbar-height;
     }
   }
 }
