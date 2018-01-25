@@ -13,4 +13,11 @@
   .content-section {
     padding: 0;
   }
+
+  .separator {
+    border-bottom: 1px $btn-dark-border-style $btn-dark-border-color;
+    clear: both;
+    margin: 0 0 15px;
+    padding: 10px 0 10px;
+  }
 }

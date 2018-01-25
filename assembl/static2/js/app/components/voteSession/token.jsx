@@ -1,7 +1,24 @@
+// @flow
 import React from 'react';
 
-class Token extends React.Component {
-  constructor(props) {
+type TokenProps = {
+  color: string
+};
+
+type TokenState = {
+  active: boolean
+};
+
+class Token extends React.Component<Object, TokenProps, TokenState> {
+  props: TokenProps;
+
+  state: TokenState;
+
+  static defaultProps = {
+    color: '#f6f7fb'
+  };
+
+  constructor(props: TokenProps) {
     super(props);
     this.state = {
       active: true
@@ -12,7 +29,9 @@ class Token extends React.Component {
     const { color } = this.props;
     const { active } = this.state;
     const tokenClassNames = active ? 'token token-active' : 'token';
-    return <div className={tokenClassNames} style={{ color: color, borderColor: color }} />;
+    const tokenStyle = this.state.active ? { borderColor: color, backgroundColor: color } : { borderColor: color };
+
+    return <div className={tokenClassNames} style={tokenStyle} />;
   }
 }
 
