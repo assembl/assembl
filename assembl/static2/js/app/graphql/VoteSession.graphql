@@ -9,5 +9,27 @@ query VoteSession($discussionPhaseId: Int!, $lang: String!) {
     instructionsSectionTitle(lang: $lang)
     instructionsSectionContent(lang: $lang)
     propositionsSectionTitle(lang: $lang)
+    # voteSpecifications {
+    #   ... on TokenVoteSpecification {
+    #     id
+    #     voteSessionId
+    #     titleEntries {
+    #       ...langStringEntry
+    #     }
+    #     instructionsEntries {
+    #       ...langStringEntry
+    #     }
+    #     exclusiveCategories
+    #     tokenCategories {
+    #       id
+    #       totalNumber
+    #       typename
+    #       titleEntries {
+    #         ...langStringEntry
+    #       }
+    #       color
+    #     }
+    #   }
+    # }
   }
 }
