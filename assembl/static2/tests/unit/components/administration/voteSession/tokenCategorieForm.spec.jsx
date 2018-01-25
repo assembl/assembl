@@ -1,23 +1,23 @@
 import React from 'react';
 import ShallowRenderer from 'react-test-renderer/shallow';
 
-import { DumbTokenTypeForm } from '../../../../../js/app/components/administration/voteSession/tokenTypeForm';
+import { DumbTokenCategorieForm } from '../../../../../js/app/components/administration/voteSession/tokenCategorieForm';
 
 describe('tokenTypeForm component', () => {
-  it('should render a TokenTypeForm component', () => {
+  it('should render a TokenCategorieForm component', () => {
     const handleTitleChangeSpy = jest.fn(() => {});
     const handleColorChangeSpy = jest.fn(() => {});
-    const handleNumberChangeSpy = jest.fn(() => {});
+    const handleTotalNumberChangeSpy = jest.fn(() => {});
     const props = {
       title: 'En faveur',
       color: '#00AA7B',
-      number: 12,
+      totalNumber: 12,
       handleTitleChange: handleTitleChangeSpy,
       handleColorChange: handleColorChangeSpy,
-      handleNumberChange: handleNumberChangeSpy
+      handleTotalNumberChange: handleTotalNumberChangeSpy
     };
     const shallowRenderer = new ShallowRenderer();
-    shallowRenderer.render(<DumbTokenTypeForm {...props} />);
+    shallowRenderer.render(<DumbTokenCategorieForm {...props} />);
     const result = shallowRenderer.getRenderOutput();
     expect(result).toMatchSnapshot();
   });

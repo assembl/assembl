@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`tokenTypeForm component should render a TokenTypeForm component 1`] = `
+exports[`tokenTypeForm component should render a TokenCategorieForm component 1`] = `
 <div
   className="token-type-form"
 >
@@ -15,7 +15,7 @@ exports[`tokenTypeForm component should render a TokenTypeForm component 1`] = `
   <FormControlWithLabel
     label="Missing translation: administration.tokenNumber"
     labelAlwaysVisible={false}
-    onChange={[Function]}
+    onChange={undefined}
     required={true}
     type="number"
     value={12}

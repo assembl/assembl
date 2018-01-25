@@ -370,7 +370,7 @@ const mapStateToProps = ({
 }) => {
   const { page, resourcesById, resourcesHaveChanged, resourcesInOrder } = resourcesCenter;
   const { sectionsById, sectionsHaveChanged, sectionsInOrder } = sections;
-  const { modulesById, modulesInOrder, tokenTypesById } = voteSession;
+  const { modulesById, modulesInOrder, tokenCategoriesById } = voteSession;
   return {
     resourcesCenterPage: page,
     resourcesHaveChanged: resourcesHaveChanged,
@@ -392,7 +392,7 @@ const mapStateToProps = ({
     legalNoticeAndTerms: legalNoticeAndTerms,
     voteSessionPage: voteSession.page,
     voteModules: modulesInOrder.map(id =>
-      modulesById.get(id).set('tokenTypes', modulesById.getIn([id], 'tokenTypes').map(t => tokenTypesById.get(t)))
+      modulesById.get(id).set('tokenCategories', modulesById.getIn([id], 'tokenCategories').map(t => tokenCategoriesById.get(t)))
     )
   };
 };

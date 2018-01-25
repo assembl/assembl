@@ -147,18 +147,20 @@ class Administration extends React.Component {
           id: '12345',
           titleEntries: [],
           instructionsEntries: [],
-          exclusive: true,
-          tokenTypes: [
+          exclusiveCategories: true,
+          tokenCategories: [
             {
-              id: 'tokentypeid555',
+              id: '123456789',
+              typename: 'positive',
               titleEntries: [],
-              number: 10,
+              totalNumber: 10,
               color: '#123456'
             },
             {
-              id: 'tokentypeid666',
+              id: '987654321',
+              typename: 'negative',
               titleEntries: [],
-              number: 3,
+              totalNumber: 3,
               color: '#789456'
             }
           ]

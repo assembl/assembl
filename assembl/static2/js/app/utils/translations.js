@@ -357,7 +357,7 @@ const Translations = {
       voteWithTokens: "Vote par jetons",
       tokenVoteCheckbox:
         "Le vote par jetons permet de sélectionner des propositions à la proportionnelle. Chaque participant dispose d'une certaine quantité de jetons et devra les répartir sur les propositions.",
-      tokenTypeNumber: "Nombre de types de jetons",
+      tokenCategorieNumber: "Nombre de types de jetons",
       tokenNumber: "Nombre de jetons",
       tokenTitle: "Intitulé du jeton",
       tokenColor: "Couleur du jeton",
@@ -383,7 +383,7 @@ const Translations = {
         voteSessionHeader: "Le bandeau de haut de page doit contenir une image et un titre. Le sous-titre est optionnel.",
         voteSessionInstructions: "La section des instructions doit contenir un titre et une description.",
         voteSessionPropositionSection: "La section des propositions doit contenir un titre.",
-        tokenTypeNumber: "Sélectionnez le nombre de types de jetons différents souhaité pour ce vote",
+        tokenCategorieNumber: "Sélectionnez le nombre de types de jetons différents souhaité pour ce vote",
         exclusive:
           "Vous pouvez décider si le participant peut distributer un seul type de jetons (exclusifs) ou plusieurs types de jetons par proposition.",
         tokenVoteInstructions: "En fonction de l'objectif du module de jetons, incitez les participants à passer à l'action."
@@ -814,7 +814,7 @@ const Translations = {
 
       tokenVoteInstructions: "Instructions for the token vote",
 
-      tokenTypeNumber: "Number of token types",
+      tokenCategorieNumber: "Number of token types",
       tokenNumber: "Number of tokens",
       tokenTitle: "Token title",
       tokenColor: "Color of the token",
@@ -833,7 +833,7 @@ const Translations = {
         voteSessionHeader: "The top page header must contain an image and a title. The subtitle is optional.",
         voteSessionInstructions: "The instructions section must contain a title and a description.",
         voteSessionPropositionSection: "The proposals section must contain a title.",
-        tokenTypeNumber: "Select the number of different token types for this vote",
+        tokenCategorieNumber: "Select the number of different token types for this vote",
         exclusive:
           "You can decide wether the participant can distribute a single type of token (exclusive) or several types of token per proposition.",
         tokenVoteInstructions: "Depending on the objective of the token module, incite the participants to take action."

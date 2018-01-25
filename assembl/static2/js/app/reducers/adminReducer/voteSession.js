@@ -14,13 +14,13 @@ import {
   UPDATE_VOTE_MODULES,
   CREATE_TOKEN_VOTE_MODULE,
   DELETE_TOKEN_VOTE_MODULE,
-  UPDATE_TOKEN_VOTE_EXCLUSIVE,
+  UPDATE_TOKEN_VOTE_EXCLUSIVE_CATEGORIE,
   UPDATE_TOKEN_VOTE_INSTRUCTIONS,
-  CREATE_TOKEN_VOTE_TYPE,
-  DELETE_TOKEN_VOTE_TYPE,
-  UPDATE_TOKEN_VOTE_TYPE_TITLE,
-  UPDATE_TOKEN_NUMBER,
-  UPDATE_TOKEN_VOTE_TYPE_COLOR
+  CREATE_TOKEN_VOTE_CATEGORIE,
+  DELETE_TOKEN_VOTE_CATEGORIE,
+  UPDATE_TOKEN_VOTE_CATEGORIE_TITLE,
+  UPDATE_TOKEN_TOTAL_NUMBER,
+  UPDATE_TOKEN_VOTE_CATEGORIE_COLOR
 } from '../../actions/actionTypes';
 import { updateInLangstringEntries } from '../../utils/i18n';
 
@@ -101,8 +101,8 @@ const defaultTokenModule = Map({
   type: 'tokens',
   titleEntries: List(),
   instructionsEntries: List(),
-  exclusive: false,
-  tokenTypes: List()
+  exclusiveCategories: false,
+  tokenCategories: List()
 });
 
 export const modulesById = (state: Map<string, Map> = Map(), action: ReduxAction<Action>) => {
@@ -115,8 +115,8 @@ export const modulesById = (state: Map<string, Map> = Map(), action: ReduxAction
         id: m.id,
         titleEntries: m.titleEntries,
         instructionsEntries: m.instructionsEntries,
-        exclusive: m.exclusive,
-        tokenTypes: m.tokenTypes.map(t => t.id)
+        exclusiveCategories: m.exclusiveCategories,
+        tokenCategories: m.tokenCategories.map(t => t.id)
       });
       newState = newState.set(m.id, moduleInfo);
     });
@@ -124,53 +124,55 @@ export const modulesById = (state: Map<string, Map> = Map(), action: ReduxAction
   }
   case CREATE_TOKEN_VOTE_MODULE:
     return state.set(action.id, defaultTokenModule.set('id', action.id));
-  case UPDATE_TOKEN_VOTE_EXCLUSIVE:
-    return state.setIn([action.id, 'exclusive'], action.value);
+  case UPDATE_TOKEN_VOTE_EXCLUSIVE_CATEGORIE:
+    return state.setIn([action.id, 'exclusiveCategories'], action.value);
   case UPDATE_TOKEN_VOTE_INSTRUCTIONS:
     return state.updateIn([action.id, 'instructionsEntries'], updateInLangstringEntries(action.locale, action.value));
-  case CREATE_TOKEN_VOTE_TYPE:
-    return state.updateIn([action.parentId, 'tokenTypes'], tokenTypes => tokenTypes.push(action.id));
-  case DELETE_TOKEN_VOTE_TYPE:
-    return state.updateIn([action.parentId, 'tokenTypes'], tokenTypes => tokenTypes.delete(tokenTypes.size - 1));
+  case CREATE_TOKEN_VOTE_CATEGORIE:
+    return state.updateIn([action.parentId, 'tokenCategories'], tokenCategories => tokenCategories.push(action.id));
+  case DELETE_TOKEN_VOTE_CATEGORIE:
+    return state.updateIn([action.parentId, 'tokenCategories'], tokenCategories =>
+      tokenCategories.delete(tokenCategories.size - 1)
+    );
   default:
     return state;
   }
 };
 
-const initialTokenType = Map({
+const initialTokenCategorie = Map({
   id: '',
   titleEntries: List(),
-  number: 0,
+  totalNumber: 0,
   color: ''
 });
 
-export const tokenTypesById = (state: Map<string, Map> = Map(), action: ReduxAction<Action>) => {
+export const tokenCategoriesById = (state: Map<string, Map> = Map(), action: ReduxAction<Action>) => {
   switch (action.type) {
   case UPDATE_VOTE_MODULES: {
     let newState = Map();
     action.voteModules.forEach((m) => {
       if (m.type === 'tokens') {
-        m.tokenTypes.forEach((t) => {
-          const tokenTypeInfo = Map({
+        m.tokenCategories.forEach((t) => {
+          const tokenCategorieInfo = Map({
             id: t.id,
             titleEntries: fromJS(t.titleEntries),
             color: t.color,
-            number: t.number
+            totalNumber: t.totalNumber
           });
-          newState = newState.set(t.id, tokenTypeInfo);
+          newState = newState.set(t.id, tokenCategorieInfo);
         });
       }
     });
     return newState;
   }
-  case CREATE_TOKEN_VOTE_TYPE:
-    return state.set(action.id, initialTokenType.set('id', action.id));
-  case UPDATE_TOKEN_VOTE_TYPE_TITLE:
+  case CREATE_TOKEN_VOTE_CATEGORIE:
+    return state.set(action.id, initialTokenCategorie.set('id', action.id));
+  case UPDATE_TOKEN_VOTE_CATEGORIE_TITLE:
     return state.updateIn([action.id, 'titleEntries'], updateInLangstringEntries(action.locale, action.value));
-  case UPDATE_TOKEN_VOTE_TYPE_COLOR:
+  case UPDATE_TOKEN_VOTE_CATEGORIE_COLOR:
     return state.setIn([action.id, 'color'], action.value);
-  case UPDATE_TOKEN_NUMBER:
-    return state.setIn([action.id, 'number'], action.value);
+  case UPDATE_TOKEN_TOTAL_NUMBER:
+    return state.setIn([action.id, 'totalNumber'], action.value);
   default:
     return state;
   }
@@ -180,5 +182,5 @@ export default combineReducers({
   page: voteSessionPage,
   modulesInOrder: modulesInOrder,
   modulesById: modulesById,
-  tokenTypesById: tokenTypesById
+  tokenCategoriesById: tokenCategoriesById
 });

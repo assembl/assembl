@@ -5,28 +5,32 @@ import { I18n } from 'react-redux-i18n';
 import { BlockPicker as ColorPicker } from 'react-color';
 import { getEntryValueForLocale } from '../../../utils/i18n';
 import FormControlWithLabel from '../../common/formControlWithLabel';
-import { updateTokenVoteTypeTitle, updateTokenVoteTypeColor, updateTokenNumber } from '../../../actions/adminActions/voteSession';
+import {
+  updateTokenVoteCategorieTitle,
+  updateTokenVoteCategorieColor,
+  updateTokenTotalNumber
+} from '../../../actions/adminActions/voteSession';
 import { pickerColors } from '../../../constants';
 
-type TokenTypeFormProps = {
+type TokenCategorieFormProps = {
   title: string,
   color: string,
-  number: number,
+  totalNumber: number,
   index: number,
   handleTitleChange: Function,
   handleColorChange: Function,
   handleNumberChange: Function
 };
 
-const DumbTokenTypeForm = ({
+const DumbTokenCategorieForm = ({
   title,
   color,
-  number,
+  totalNumber,
   index,
   handleTitleChange,
   handleColorChange,
   handleNumberChange
-}: TokenTypeFormProps) => (
+}: TokenCategorieFormProps) => (
   <div className="token-type-form">
     <FormControlWithLabel
       label={I18n.t('administration.tokenTitle')}
@@ -40,7 +44,7 @@ const DumbTokenTypeForm = ({
       required
       type="number"
       onChange={handleNumberChange}
-      value={number}
+      value={totalNumber}
     />
     <label htmlFor="color-picker">{I18n.t('administration.tokenColor')}</label>
     <ColorPicker
@@ -56,22 +60,22 @@ const DumbTokenTypeForm = ({
 );
 
 const mapStateToProps = (state, { id, editLocale }) => {
-  const { tokenTypesById } = state.admin.voteSession;
-  const tokenType = tokenTypesById.get(id);
-  const title = getEntryValueForLocale(tokenType.get('titleEntries'), editLocale);
+  const { tokenCategoriesById } = state.admin.voteSession;
+  const tokenCategorie = tokenCategoriesById.get(id);
+  const title = getEntryValueForLocale(tokenCategorie.get('titleEntries'), editLocale);
   return {
     title: title,
-    color: tokenType.get('color'),
-    number: tokenType.get('number')
+    color: tokenCategorie.get('color'),
+    totalNumber: tokenCategorie.get('totalNumber')
   };
 };
 
 const mapDispatchToProps = (dispatch, { id, editLocale }) => ({
-  handleTitleChange: e => dispatch(updateTokenVoteTypeTitle(id, editLocale, e.target.value)),
-  handleNumberChange: e => dispatch(updateTokenNumber(id, e.target.value)),
-  handleColorChange: color => dispatch(updateTokenVoteTypeColor(id, color.hex))
+  handleTitleChange: e => dispatch(updateTokenVoteCategorieTitle(id, editLocale, e.target.value)),
+  handleNumberChange: e => dispatch(updateTokenTotalNumber(id, e.target.value)),
+  handleColorChange: color => dispatch(updateTokenVoteCategorieColor(id, color.hex))
 });
 
-export { DumbTokenTypeForm };
+export { DumbTokenCategorieForm };
 
-export default connect(mapStateToProps, mapDispatchToProps)(DumbTokenTypeForm);
+export default connect(mapStateToProps, mapDispatchToProps)(DumbTokenCategorieForm);

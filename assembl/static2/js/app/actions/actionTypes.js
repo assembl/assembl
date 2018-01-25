@@ -40,12 +40,13 @@ export const UPDATE_VOTE_MODULES: 'UPDATE_VOTE_MODULES' = 'UPDATE_VOTE_MODULES';
 export const CREATE_TOKEN_VOTE_MODULE: 'CREATE_TOKEN_VOTE_MODULE' = 'CREATE_TOKEN_VOTE_MODULE';
 export const DELETE_TOKEN_VOTE_MODULE: 'DELETE_TOKEN_VOTE_MODULE' = 'DELETE_TOKEN_VOTE_MODULE';
 export const UPDATE_TOKEN_VOTE_INSTRUCTIONS: 'UPDATE_TOKEN_VOTE_INSTRUCTIONS' = 'UPDATE_TOKEN_VOTE_INSTRUCTIONS';
-export const CREATE_TOKEN_VOTE_TYPE: 'CREATE_TOKEN_VOTE_TYPE' = 'CREATE_TOKEN_VOTE_TYPE';
-export const DELETE_TOKEN_VOTE_TYPE: 'DELETE_TOKEN_VOTE_TYPE' = 'DELETE_TOKEN_VOTE_TYPE';
-export const UPDATE_TOKEN_VOTE_EXCLUSIVE: 'UPDATE_TOKEN_VOTE_EXCLUSIVE' = 'UPDATE_TOKEN_VOTE_EXCLUSIVE';
-export const UPDATE_TOKEN_VOTE_TYPE_TITLE: 'UPDATE_TOKEN_VOTE_TYPE_TITLE' = 'UPDATE_TOKEN_VOTE_TYPE_TITLE';
-export const UPDATE_TOKEN_VOTE_TYPE_COLOR: 'UPDATE_TOKEN_VOTE_TYPE_COLOR' = 'UPDATE_TOKEN_VOTE_TYPE_COLOR';
-export const UPDATE_TOKEN_NUMBER: 'UPDATE_TOKEN_NUMBER' = 'UPDATE_TOKEN_NUMBER';
+export const CREATE_TOKEN_VOTE_CATEGORIE: 'CREATE_TOKEN_VOTE_CATEGORIE' = 'CREATE_TOKEN_VOTE_CATEGORIE';
+export const DELETE_TOKEN_VOTE_CATEGORIE: 'DELETE_TOKEN_VOTE_CATEGORIE' = 'DELETE_TOKEN_VOTE_CATEGORIE';
+export const UPDATE_TOKEN_VOTE_EXCLUSIVE_CATEGORIE: 'UPDATE_TOKEN_VOTE_EXCLUSIVE_CATEGORIE' =
+  'UPDATE_TOKEN_VOTE_EXCLUSIVE_CATEGORIE';
+export const UPDATE_TOKEN_VOTE_CATEGORIE_TITLE: 'UPDATE_TOKEN_VOTE_CATEGORIE_TITLE' = 'UPDATE_TOKEN_VOTE_CATEGORIE_TITLE';
+export const UPDATE_TOKEN_VOTE_CATEGORIE_COLOR: 'UPDATE_TOKEN_VOTE_CATEGORIE_COLOR' = 'UPDATE_TOKEN_VOTE_CATEGORIE_COLOR';
+export const UPDATE_TOKEN_TOTAL_NUMBER: 'UPDATE_TOKEN_TOTAL_NUMBER' = 'UPDATE_TOKEN_TOTAL_NUMBER';
 
 export type UpdateContentLocaleById = {
   type: typeof UPDATE_CONTENT_LOCALE_BY_ID,
@@ -277,10 +278,10 @@ export type DeleteTokenVoteModule = {
   type: typeof DELETE_TOKEN_VOTE_MODULE
 };
 
-export type UpdateTokenVoteExclusive = {
+export type UpdateTokenVoteExclusiveCategorie = {
   id: string,
   value: boolean,
-  type: typeof UPDATE_TOKEN_VOTE_EXCLUSIVE
+  type: typeof UPDATE_TOKEN_VOTE_EXCLUSIVE_CATEGORIE
 };
 
 export type UpdateTokenVoteInstructions = {
@@ -290,35 +291,35 @@ export type UpdateTokenVoteInstructions = {
   type: typeof UPDATE_TOKEN_VOTE_INSTRUCTIONS
 };
 
-export type CreateTokenVoteType = {
+export type CreateTokenVoteCategorie = {
   id: string,
   parentId: string,
-  type: typeof CREATE_TOKEN_VOTE_TYPE
+  type: typeof CREATE_TOKEN_VOTE_CATEGORIE
 };
 
-export type DeleteTokenVoteType = {
+export type DeleteTokenVoteCategorie = {
   parentId: string,
   value: number,
-  type: typeof DELETE_TOKEN_VOTE_TYPE
+  type: typeof DELETE_TOKEN_VOTE_CATEGORIE
 };
 
-export type UpdateTokenVoteTypeTitle = {
+export type UpdateTokenVoteCategorieTitle = {
   id: string,
   locale: string,
   value: string,
-  type: typeof UPDATE_TOKEN_VOTE_TYPE_TITLE
+  type: typeof UPDATE_TOKEN_VOTE_CATEGORIE_TITLE
 };
 
-export type UpdateTokenNumber = {
+export type UpdateTokenTotalNumber = {
   id: string,
   value: number,
-  type: typeof UPDATE_TOKEN_NUMBER
+  type: typeof UPDATE_TOKEN_TOTAL_NUMBER
 };
 
-export type UpdateTokenVoteTypeColor = {
+export type UpdateTokenVoteCategorieColor = {
   id: string,
   value: string,
-  type: typeof UPDATE_TOKEN_VOTE_TYPE_COLOR
+  type: typeof UPDATE_TOKEN_VOTE_CATEGORIE_COLOR
 };
 
 type BasicAction = {
@@ -354,11 +355,11 @@ type VoteSessionActions =
   | UpdateVoteModules
   | CreateTokenVoteModule
   | UpdateTokenVoteInstructions
-  | CreateTokenVoteType
-  | DeleteTokenVoteType
-  | UpdateTokenVoteTypeTitle
-  | UpdateTokenNumber
-  | UpdateTokenVoteTypeColor;
+  | CreateTokenVoteCategorie
+  | DeleteTokenVoteCategorie
+  | UpdateTokenVoteCategorieTitle
+  | UpdateTokenTotalNumber
+  | UpdateTokenVoteCategorieColor;
 
 export type Action =
   | UpdateContentLocaleById

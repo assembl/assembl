@@ -7,42 +7,42 @@ import range from 'lodash/range';
 import FormControlWithLabel from '../../common/formControlWithLabel';
 import { getEntryValueForLocale } from '../../../utils/i18n';
 import Helper from '../../common/helper';
-import TokenTypeForm from './tokenTypeForm';
+import TokenCategorieForm from './tokenCategorieForm';
 import {
   updateTokenVoteInstructions,
-  createTokenVoteType,
-  deleteTokenVoteType,
-  updateTokenVoteExclusive
+  createTokenVoteCategorie,
+  deleteTokenVoteCategorie,
+  updateTokenVoteExclusiveCategorie
 } from '../../../actions/adminActions/voteSession';
 
 type TokensFormProps = {
   instructions: string,
-  exclusive: boolean,
-  tokenTypeNumber: number,
-  tokenTypes: Object,
+  exclusiveCategories: boolean,
+  tokenCategorieNumber: number,
+  tokenCategories: Object,
   editLocale: string,
   handleInstructionsChange: Function,
-  handleTokenVoteTypeNumberChange: Function,
-  handleExclusiveCheckboxChange: Function
+  handleTokenVoteCategorieNumberChange: Function,
+  handleExclusiveCategoriesCheckboxChange: Function
 };
 
 const DumbTokensForm = ({
   instructions,
-  exclusive,
-  tokenTypeNumber,
-  tokenTypes,
+  exclusiveCategories,
+  tokenCategorieNumber,
+  tokenCategories,
   editLocale,
   handleInstructionsChange,
-  handleTokenVoteTypeNumberChange,
-  handleExclusiveCheckboxChange
+  handleTokenVoteCategorieNumberChange,
+  handleExclusiveCategoriesCheckboxChange
 }: TokensFormProps) => (
   <div className="token-vote-form">
     <form>
       <div className="flex">
         <Checkbox
-          checked={exclusive}
+          checked={exclusiveCategories}
           onChange={() => {
-            handleExclusiveCheckboxChange(exclusive);
+            handleExclusiveCategoriesCheckboxChange(exclusiveCategories);
           }}
         >
           <Helper
@@ -68,13 +68,13 @@ const DumbTokensForm = ({
         />
       </div>
       <div className="flex">
-        <label htmlFor="input-dropdown-addon">{I18n.t('administration.tokenTypeNumber')}</label>
-        <Helper helperUrl="/static2/img/helpers/helper2.png" helperText={I18n.t('administration.helpers.tokenTypeNumber')} />
+        <label htmlFor="input-dropdown-addon">{I18n.t('administration.tokenCategorieNumber')}</label>
+        <Helper helperUrl="/static2/img/helpers/helper2.png" helperText={I18n.t('administration.helpers.tokenCategorieNumber')} />
       </div>
       <SplitButton
-        title={tokenTypeNumber}
+        title={tokenCategorieNumber}
         onSelect={(e) => {
-          handleTokenVoteTypeNumberChange(e, tokenTypeNumber);
+          handleTokenVoteCategorieNumberChange(e, tokenCategorieNumber);
         }}
         id="input-dropdown-addon"
         required
@@ -85,11 +85,11 @@ const DumbTokensForm = ({
           </MenuItem>
         ))}
       </SplitButton>
-      {tokenTypeNumber > 0 ? (
+      {tokenCategorieNumber > 0 ? (
         <div>
           <div className="separator" />
-          {tokenTypes.map((id, index) => (
-            <TokenTypeForm key={`token-type-${index}`} id={id} editLocale={editLocale} index={index} />
+          {tokenCategories.map((id, index) => (
+            <TokenCategorieForm key={`token-type-${index}`} id={id} editLocale={editLocale} index={index} />
           ))}
         </div>
       ) : null}
@@ -102,27 +102,27 @@ const mapStateToProps = (state, { id, editLocale }) => {
   const instructions = getEntryValueForLocale(module.get('instructionsEntries'), editLocale);
   return {
     instructions: instructions,
-    exclusive: module.get('exclusive'),
-    tokenTypeNumber: module.get('tokenTypes').size,
-    tokenTypes: module.get('tokenTypes'),
+    exclusiveCategories: module.get('exclusiveCategories'),
+    tokenCategorieNumber: module.get('tokenCategories').size,
+    tokenCategories: module.get('tokenCategories'),
     editLocale: editLocale
   };
 };
 
 const mapDispatchToProps = (dispatch, { id, editLocale }) => ({
   handleInstructionsChange: e => dispatch(updateTokenVoteInstructions(id, editLocale, e.target.value)),
-  handleTokenVoteTypeNumberChange: (value, tokenTypeNumber) => {
-    const newTokenTypeNumber = value - tokenTypeNumber;
-    if (value > tokenTypeNumber) {
-      for (let i = 0; i < newTokenTypeNumber; i += 1) {
+  handleTokenVoteCategorieNumberChange: (value, tokenCategorieNumber) => {
+    const newTokenCategorieNumber = value - tokenCategorieNumber;
+    if (value > tokenCategorieNumber) {
+      for (let i = 0; i < newTokenCategorieNumber; i += 1) {
         const newId = Math.round(Math.random() * -1000000).toString();
-        dispatch(createTokenVoteType(newId, id));
+        dispatch(createTokenVoteCategorie(newId, id));
       }
     } else {
-      dispatch(deleteTokenVoteType(value, id));
+      dispatch(deleteTokenVoteCategorie(value, id));
     }
   },
-  handleExclusiveCheckboxChange: checked => dispatch(updateTokenVoteExclusive(id, !checked))
+  handleExclusiveCategoriesCheckboxChange: checked => dispatch(updateTokenVoteExclusiveCategorie(id, !checked))
 });
 
 export { DumbTokensForm };

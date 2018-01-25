@@ -10,7 +10,7 @@ exports[`tokensForm component should render a form to configure a tokens vote, t
     >
       <Checkbox
         bsClass="checkbox"
-        checked={true}
+        checked={undefined}
         disabled={false}
         inline={false}
         onChange={[Function]}
@@ -50,12 +50,12 @@ exports[`tokensForm component should render a form to configure a tokens vote, t
       <label
         htmlFor="input-dropdown-addon"
       >
-        Missing translation: administration.tokenTypeNumber
+        Missing translation: administration.tokenCategorieNumber
       </label>
       <Helper
         additionalTextClasses=""
         classname=""
-        helperText="Missing translation: administration.helpers.tokenTypeNumber"
+        helperText="Missing translation: administration.helpers.tokenCategorieNumber"
         helperUrl="/static2/img/helpers/helper2.png"
         label=""
       />
@@ -64,7 +64,7 @@ exports[`tokensForm component should render a form to configure a tokens vote, t
       id="input-dropdown-addon"
       onSelect={[Function]}
       required={true}
-      title={3}
+      title={undefined}
     >
       <MenuItem
         bsClass="dropdown"
@@ -164,26 +164,6 @@ exports[`tokensForm component should render a form to configure a tokens vote, t
         10
       </MenuItem>
     </SplitButton>
-    <div>
-      <div
-        className="separator"
-      />
-      <Connect(DumbTokenTypeForm)
-        editLocale="fr"
-        id="1234"
-        index={0}
-      />
-      <Connect(DumbTokenTypeForm)
-        editLocale="fr"
-        id="5678"
-        index={1}
-      />
-      <Connect(DumbTokenTypeForm)
-        editLocale="fr"
-        id="9874"
-        index={2}
-      />
-    </div>
   </form>
 </div>
 `;
@@ -198,7 +178,7 @@ exports[`tokensForm component should render a form to configure a tokens vote, t
     >
       <Checkbox
         bsClass="checkbox"
-        checked={true}
+        checked={undefined}
         disabled={false}
         inline={false}
         onChange={[Function]}
@@ -238,12 +218,12 @@ exports[`tokensForm component should render a form to configure a tokens vote, t
       <label
         htmlFor="input-dropdown-addon"
       >
-        Missing translation: administration.tokenTypeNumber
+        Missing translation: administration.tokenCategorieNumber
       </label>
       <Helper
         additionalTextClasses=""
         classname=""
-        helperText="Missing translation: administration.helpers.tokenTypeNumber"
+        helperText="Missing translation: administration.helpers.tokenCategorieNumber"
         helperUrl="/static2/img/helpers/helper2.png"
         label=""
       />
@@ -252,7 +232,7 @@ exports[`tokensForm component should render a form to configure a tokens vote, t
       id="input-dropdown-addon"
       onSelect={[Function]}
       required={true}
-      title={0}
+      title={undefined}
     >
       <MenuItem
         bsClass="dropdown"
