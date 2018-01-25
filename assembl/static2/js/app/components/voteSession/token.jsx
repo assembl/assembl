@@ -15,7 +15,7 @@ class Token extends React.Component<Object, TokenProps, TokenState> {
   state: TokenState;
 
   static defaultProps = {
-    color: '#f6f7fb'
+    color: '#B8E986'
   };
 
   constructor(props: TokenProps) {
