@@ -31,6 +31,7 @@ exports[`ManageModules component should render a form to manage the landing page
                 moduleType: Immutable.Map {
                   editableOrder: false,
                   identifier: "HEADER",
+                  required: true,
                   title: "Header",
                 },
                 order: 1,
@@ -58,6 +59,7 @@ exports[`ManageModules component should render a form to manage the landing page
                 moduleType: Immutable.Map {
                   editableOrder: false,
                   identifier: "FOOTER",
+                  required: true,
                   title: "Footer",
                 },
                 order: 99,
@@ -78,6 +80,7 @@ exports[`ManageModules component should render a form to manage the landing page
                 moduleType: Immutable.Map {
                   editableOrder: false,
                   identifier: "HEADER",
+                  required: true,
                   title: "Header",
                 },
                 order: 1,
@@ -96,6 +99,7 @@ exports[`ManageModules component should render a form to manage the landing page
                 moduleType: Immutable.Map {
                   editableOrder: false,
                   identifier: "FOOTER",
+                  required: true,
                   title: "Footer",
                 },
                 order: 99,

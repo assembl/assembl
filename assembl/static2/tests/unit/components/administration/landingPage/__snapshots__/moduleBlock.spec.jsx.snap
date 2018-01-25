@@ -4,8 +4,10 @@ exports[`ModuleBlock component should render a block that represents the module 
 <div
   className="module-block"
 >
-  Header
-  
+  <span>
+    Header
+    *
+  </span>
 </div>
 `;
 
@@ -13,8 +15,10 @@ exports[`ModuleBlock component should render a block that represents the module 
 <div
   className="module-block"
 >
-  Introduction
-  
+  <span>
+    Introduction
+    
+  </span>
   <span>
     <button
       className="admin-icons btn btn-default"

@@ -14,8 +14,10 @@ type Props = {
 
 const ModuleBlock = ({ moveDown, moveUp, required, title, withArrows }: Props) => (
   <div className="module-block">
-    {title}
-    {required ? '*' : ''}
+    <span>
+      {title}
+      {required ? '*' : ''}
+    </span>
     {withArrows ? (
       <span>
         <OverlayTrigger placement="top" overlay={downTooltip}>

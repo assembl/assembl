@@ -354,10 +354,6 @@
         flex-direction: column;
         justify-content: space-between;
 
-        .module-block {
-          text-align: center;
-        }
-
         .module-block:first-child {
           padding: 10px 0;
         }
@@ -368,6 +364,7 @@
           color: $white;
           border: 0;
           margin: 0;
+          text-align: center;
         }
 
         .other-modules {
@@ -376,10 +373,12 @@
 
           .module-block {
             margin: 7px;
-            padding: 15px 7px;
+            padding: 15px 10px 15px 16px;
             border: 0.8px solid $first-color;
             color: $first-color;
             background-color: $white;
+            display: flex;
+            justify-content: space-between;
 
             .admin-icons {
               color: $first-color;

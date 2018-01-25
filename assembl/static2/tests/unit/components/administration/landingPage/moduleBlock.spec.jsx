@@ -7,6 +7,7 @@ describe('ModuleBlock component', () => {
   it('should render a block that represents the module', () => {
     const props = {
       identifier: 'HEADER',
+      required: true,
       title: 'Header'
     };
     const component = renderer.create(<ModuleBlock {...props} />);

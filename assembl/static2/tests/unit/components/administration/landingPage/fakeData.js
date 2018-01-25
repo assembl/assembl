@@ -5,6 +5,7 @@ const HEADER = Map({
   moduleType: Map({
     editableOrder: false,
     identifier: 'HEADER',
+    required: true,
     title: 'Header'
   }),
   order: 1.0
@@ -35,6 +36,7 @@ const FOOTER = Map({
   moduleType: Map({
     editableOrder: false,
     identifier: 'FOOTER',
+    required: true,
     title: 'Footer'
   }),
   order: 99.0
