@@ -1,8 +1,16 @@
 #import "./fragments/VoteSession.graphql"
 
-query VoteSession($discussionPhaseId: Int!) {
+query VoteSession($discussionPhaseId: Int!, $lang: String!) {
   voteSession(discussionPhaseId: $discussionPhaseId) {
     ...voteSessionGlobals
     ...voteSessionLangstringsEntries
+    headerImage {
+      externalUrl
+    }
+    title(lang: $lang)
+    subTitle(lang: $lang)
+    instructionsSectionTitle(lang: $lang)
+    instructionsSectionContent(lang: $lang)
+    propositionsSectionTitle(lang: $lang)
   }
 }

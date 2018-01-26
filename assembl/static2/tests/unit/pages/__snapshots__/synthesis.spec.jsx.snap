@@ -8,8 +8,8 @@ exports[`Synthesis component should match Synthesis snapshot 1`] = `
     className="background-light"
   >
     <Connect(Header)
+      additionalHeaderClasses="left"
       imgUrl="http://foo.com/foo"
-      isSynthesesHeader={true}
       title="Foo"
     />
     <Grid

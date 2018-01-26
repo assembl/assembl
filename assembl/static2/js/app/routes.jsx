@@ -13,6 +13,7 @@ import Synthesis from './pages/synthesis';
 import Debate from './pages/debate';
 import DebateThread from './pages/debateThread';
 import Survey from './pages/survey';
+import VoteSession from './pages/voteSession';
 import Idea from './pages/idea';
 import Community from './pages/community';
 import Question from './pages/question';
@@ -30,7 +31,7 @@ import DiscussionAdmin from './pages/discussionAdmin';
 import MultiColumnsAdmin from './pages/multiColumnsAdmin';
 import VoteSessionAdmin from './pages/voteSessionAdmin';
 import ResourcesCenter from './pages/resourcesCenter';
-import { routeForRouter, getFullPath } from './utils/routeMap';
+import { routeForRouter } from './utils/routeMap';
 
 const DebateHome = (props) => {
   switch (props.params.phase) {
@@ -41,7 +42,7 @@ const DebateHome = (props) => {
   case 'multiColumns':
     return <DebateThread {...props} />;
   case 'voteSession':
-    return <NotFound />;
+    return <VoteSession />;
   default:
     return <Debate {...props} />;
   }
@@ -81,12 +82,6 @@ const AdminChild = (props) => {
   }
 };
 
-const DummyVotes = (props) => {
-  const slug = props.params.slug;
-  window.location = getFullPath('oldVote', { slug: slug });
-  return <div />;
-};
-
 export default [
   <Route path="/" component={Root}>
     <Route path={routeForRouter('styleguide', false, { preSlash: true })} component={Styleguide} />
@@ -100,8 +95,6 @@ export default [
     <Route path={routeForRouter('signup', true)} component={Signup} />
     <Route path={routeForRouter('changePassword', true)} component={ChangePassword} />
     <Route path={routeForRouter('requestPasswordChange', true)} component={RequestPasswordChange} />
-    <Route path={routeForRouter('oldVote', false)} component={DummyVotes} />
-    <Route path={routeForRouter('debate', false, { phase: 'voteSession' })} component={DummyVotes} />
     <Route component={App}>
       <Route component={Main}>
         <Redirect from={routeForRouter('homeBare')} to={routeForRouter('home')} />

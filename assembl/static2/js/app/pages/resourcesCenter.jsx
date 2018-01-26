@@ -31,9 +31,7 @@ export default compose(
           hasErrors: true
         };
       }
-
-      const title = data.resourcesCenter.title;
-      const headerImage = data.resourcesCenter.headerImage;
+      const { title, headerImage } = data.resourcesCenter;
       return {
         resourcesCenterTitle: title || I18n.t('resourcesCenter.defaultHeaderTitle'),
         resourcesCenterHeaderUrl: headerImage ? headerImage.externalUrl : defaultHeaderImage

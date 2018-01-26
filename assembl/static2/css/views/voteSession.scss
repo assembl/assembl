@@ -1,0 +1,23 @@
+.votesession-page {
+  .header-content {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-left: 100px;
+  }
+
+  .vote-instructions {
+    font-size: $font-size-sm;
+  }
+
+  .content-section {
+    padding: 0;
+  }
+
+  .separator {
+    border-bottom: 1px $btn-dark-border-style $btn-dark-border-color;
+    clear: both;
+    margin: 0 0 15px;
+    padding: 10px 0 10px;
+  }
+}

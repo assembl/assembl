@@ -308,8 +308,8 @@ export default compose(
   }),
   graphql(VoteSessionQuery, {
     skip: ({ debate }) => typeof getPhaseId(debate.debateData.timeline, 'voteSession') !== 'string',
-    options: ({ debate }) => ({
-      variables: { discussionPhaseId: getPhaseId(debate.debateData.timeline, 'voteSession') }
+    options: ({ debate, i18n }) => ({
+      variables: { discussionPhaseId: getPhaseId(debate.debateData.timeline, 'voteSession'), lang: i18n.locale }
     }),
     props: ({ data }) => {
       if (data.loading) {

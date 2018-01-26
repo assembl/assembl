@@ -8,10 +8,9 @@ import WhatYouNeedToKnow from '../debate/common/whatYouNeedToKnow';
 
 class Header extends React.Component {
   render() {
-    const { title, imgUrl, identifier, synthesisTitle, isSynthesesHeader } = this.props;
+    const { title, subtitle, imgUrl, identifier, synthesisTitle, additionalHeaderClasses } = this.props;
     const { debateData } = this.props.debate;
     const { locale } = this.props.i18n;
-    const additionalHeaderClasses = isSynthesesHeader ? 'left' : null;
     const isPhaseCompleted = getIfPhaseCompletedByIdentifier(debateData.timeline, identifier);
     const closedPhaseName = getPhaseName(debateData.timeline, identifier, locale).toLowerCase();
     const titleClassNames = classnames([additionalHeaderClasses], 'light-title-1');
@@ -20,8 +19,9 @@ class Header extends React.Component {
         <Grid fluid className="max-container">
           <div className="header-content">
             <h1 className={titleClassNames}>{title}</h1>
+            <h3 className="light-title-2">{subtitle}</h3>
             {isPhaseCompleted && (
-              <h6 className="light-title-6">
+              <h6 className="light-title-4">
                 <Translate value="debate.survey.endPhase" closedPhaseName={closedPhaseName} />
               </h6>
             )}
