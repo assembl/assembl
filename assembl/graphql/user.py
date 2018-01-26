@@ -32,6 +32,7 @@ class AgentProfile(SecureObjectType, SQLAlchemyObjectType):
     email = graphene.String()
     image = graphene.Field(Document)
     creation_date = DateTime()  # creation_date only exists on User, not AgentProfile
+    has_password = graphene.Boolean()
 
     def resolve_user_id(self, args, context, info):
         return self.id
@@ -59,6 +60,9 @@ class AgentProfile(SecureObjectType, SQLAlchemyObjectType):
         for attachment in self.profile_attachments:
             if attachment.attachmentPurpose == PROFILE_PICTURE:
                 return attachment.document
+
+    def resolve_has_password(self, args, context, info):
+        return self.password is not None
 
 
 class UpdateUser(graphene.Mutation):

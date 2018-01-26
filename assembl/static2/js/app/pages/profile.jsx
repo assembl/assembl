@@ -23,6 +23,7 @@ type ProfileProps = {
   slug: string,
   userId: string,
   id: string,
+  hasPassword: boolean,
   params: Object,
   location: Object,
   updateUser: Function
@@ -101,7 +102,7 @@ class Profile extends React.PureComponent<*, ProfileProps, ProfileState> {
 
   render() {
     const { username, name, email } = this.state;
-    const { creationDate, lang, id } = this.props;
+    const { creationDate, hasPassword, lang, id } = this.props;
     const fullNameLabel = I18n.t('profile.fullname');
     const emailLabel = I18n.t('profile.email');
     return (
@@ -153,18 +154,22 @@ class Profile extends React.PureComponent<*, ProfileProps, ProfileState> {
                       <Translate value="profile.save" />
                     </Button>
                   </div>
-                  <h2 className="dark-title-2 margin-l">
-                    <Translate value="profile.password" />
-                  </h2>
-                  <div className="profile-form center">
-                    {this.state.passwordEditionOpen ? (
-                      <ModifyPasswordForm id={id} successCallback={() => this.setState({ passwordEditionOpen: false })} />
-                    ) : (
-                      <Button className="button-submit button-dark" onClick={this.handlePasswordClick}>
-                        <Translate value="profile.changePassword" />
-                      </Button>
-                    )}
-                  </div>
+                  {hasPassword && (
+                    <div>
+                      <h2 className="dark-title-2 margin-l">
+                        <Translate value="profile.password" />
+                      </h2>
+                      <div className="profile-form center">
+                        {this.state.passwordEditionOpen ? (
+                          <ModifyPasswordForm id={id} successCallback={() => this.setState({ passwordEditionOpen: false })} />
+                        ) : (
+                          <Button className="button-submit button-dark" onClick={this.handlePasswordClick}>
+                            <Translate value="profile.changePassword" />
+                          </Button>
+                        )}
+                      </div>
+                    </div>
+                  )}
                 </div>
               </Col>
             </div>
@@ -200,7 +205,8 @@ export default compose(
         username: data.user.username,
         name: data.user.name,
         email: data.user.email,
-        creationDate: data.user.creationDate
+        creationDate: data.user.creationDate,
+        hasPassword: data.user.hasPassword
       };
     }
   }),
