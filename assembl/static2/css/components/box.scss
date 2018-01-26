@@ -74,6 +74,14 @@
         transform: rotate(90deg);
       }
     }
+
+    .timeline-box-number {
+      color: $timeline-box-number-color;
+      font-family: $font-family4;
+      font-size: $title1-size;
+      letter-spacing: $title-letter-spacing;
+      line-height: $title1-size + 10px;
+    }
   }
 
   .color-box {
