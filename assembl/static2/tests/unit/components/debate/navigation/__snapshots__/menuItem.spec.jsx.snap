@@ -1,0 +1,92 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`DumbMenuItem component should match a not selected menu item 1`] = `
+<div
+  className="menu-item-container"
+  onMouseLeave={[Function]}
+  onMouseOver={[Function]}
+>
+  <Link
+    className="menu-item"
+    onClick={undefined}
+    onlyActiveOnIndex={false}
+    style={Object {}}
+    to="/slug/debate/survey/theme/fooId"
+  >
+    <div
+      className="thumb-img"
+      style={
+        Object {
+          "backgroundImage": "url(https://foo.bar/img)",
+        }
+      }
+    >
+      <div
+        className="thumb-img-background"
+      />
+    </div>
+    <div
+      className="thumb-body"
+    >
+      <div
+        className="thumb-title"
+        title="Foo"
+      >
+        Foo
+      </div>
+      <PostsAndContributorsCount
+        className="menu-stats"
+        numContributors={10}
+        numPosts={123}
+      />
+    </div>
+  </Link>
+</div>
+`;
+
+exports[`DumbMenuItem component should match a selected menu item 1`] = `
+<div
+  className="menu-item-container active"
+  onMouseLeave={[Function]}
+  onMouseOver={[Function]}
+>
+  <Link
+    className="menu-item"
+    onClick={undefined}
+    onlyActiveOnIndex={false}
+    style={Object {}}
+    to="/slug/debate/survey/theme/fooId"
+  >
+    <div
+      className="thumb-img"
+      style={
+        Object {
+          "backgroundImage": "url(https://foo.bar/img)",
+        }
+      }
+    >
+      <div
+        className="thumb-img-background"
+      />
+    </div>
+    <div
+      className="thumb-body"
+    >
+      <div
+        className="thumb-title"
+        title="Foo"
+      >
+        Foo
+      </div>
+      <PostsAndContributorsCount
+        className="menu-stats"
+        numContributors={10}
+        numPosts={123}
+      />
+    </div>
+    <span
+      className="thumb-arrow assembl-icon assembl-icon-right-dir"
+    />
+  </Link>
+</div>
+`;

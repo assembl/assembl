@@ -1,0 +1,33 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`DumbTimeline component should match the DumbTimeline 1`] = `
+<div
+  className="minimized-timeline"
+  onMouseLeave={[Function]}
+  onMouseOver={[Function]}
+>
+  <div
+    className="timeline-graph"
+  >
+    <div
+      className="timeline-bars"
+    >
+      <div
+        className="timeline-bar-filler"
+        style={
+          Object {
+            "width": "20%",
+          }
+        }
+      >
+         
+      </div>
+      <div
+        className="timeline-bar-background"
+      >
+         
+      </div>
+    </div>
+  </div>
+</div>
+`;
