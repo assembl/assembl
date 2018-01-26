@@ -65,7 +65,7 @@ class Phase extends React.Component {
       <div className="illustration-box">
         <div className="image-box" style={imgUrl ? { backgroundImage: `url(${imgUrl})` } : null} />
         <div onClick={this.displayPhase} className="content-box">
-          <h1 className="light-title-1">{stepNumber}</h1>
+          <h1 className="timeline-box-number">{stepNumber}</h1>
           {title && (
             <h3 className="light-title-3">
               {title.entries.map((entry, index2) => <span key={index2}>{locale === entry['@language'] ? entry.value : ''}</span>)}
