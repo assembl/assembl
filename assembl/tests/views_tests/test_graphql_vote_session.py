@@ -56,7 +56,7 @@ def assert_vote_session_not_created(discussion_phase_id, graphql_request, graphq
     response = schema.execute(
         voteSessionQuery(graphql_registry),
         context_value=graphql_request,
-        variable_values={"discussionPhaseId": discussion_phase_id}
+        variable_values={"discussionPhaseId": discussion_phase_id, "lang": "en"}
     )
     assert (response.errors is None) and (response.data['voteSession'] is None)
 
@@ -183,7 +183,8 @@ def test_graphql_get_vote_session(graphql_participant1_request, vote_session, gr
         voteSessionQuery(graphql_registry),
         context_value=graphql_participant1_request,
         variable_values={
-            "discussionPhaseId": vote_session.discussion_phase_id
+            "discussionPhaseId": vote_session.discussion_phase_id,
+            "lang": "en"
         }
     )
 
@@ -213,7 +214,8 @@ def test_graphql_get_vote_session_unauthenticated(graphql_unauthenticated_reques
         voteSessionQuery(graphql_registry),
         context_value=graphql_unauthenticated_request,
         variable_values={
-            "discussionPhaseId": vote_session.discussion_phase_id
+            "discussionPhaseId": vote_session.discussion_phase_id,
+            "lang": "en"
         }
     )
     assert_graphql_unauthorized(response)
