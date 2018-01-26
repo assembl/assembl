@@ -4,9 +4,6 @@ query VoteSession($discussionPhaseId: Int!, $lang: String!) {
   voteSession(discussionPhaseId: $discussionPhaseId) {
     ...voteSessionGlobals
     ...voteSessionLangstringsEntries
-    headerImage {
-      externalUrl
-    }
     title(lang: $lang)
     subTitle(lang: $lang)
     instructionsSectionTitle(lang: $lang)
