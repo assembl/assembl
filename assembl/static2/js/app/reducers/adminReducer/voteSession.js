@@ -14,13 +14,13 @@ import {
   UPDATE_VOTE_MODULES,
   CREATE_TOKEN_VOTE_MODULE,
   DELETE_TOKEN_VOTE_MODULE,
-  UPDATE_TOKEN_VOTE_EXCLUSIVE_CATEGORIE,
+  UPDATE_TOKEN_VOTE_EXCLUSIVE_CATEGORY,
   UPDATE_TOKEN_VOTE_INSTRUCTIONS,
-  CREATE_TOKEN_VOTE_CATEGORIE,
-  DELETE_TOKEN_VOTE_CATEGORIE,
-  UPDATE_TOKEN_VOTE_CATEGORIE_TITLE,
+  CREATE_TOKEN_VOTE_CATEGORY,
+  DELETE_TOKEN_VOTE_CATEGORY,
+  UPDATE_TOKEN_VOTE_CATEGORY_TITLE,
   UPDATE_TOKEN_TOTAL_NUMBER,
-  UPDATE_TOKEN_VOTE_CATEGORIE_COLOR
+  UPDATE_TOKEN_VOTE_CATEGORY_COLOR
 } from '../../actions/actionTypes';
 import { updateInLangstringEntries } from '../../utils/i18n';
 
@@ -124,13 +124,13 @@ export const modulesById = (state: Map<string, Map> = Map(), action: ReduxAction
   }
   case CREATE_TOKEN_VOTE_MODULE:
     return state.set(action.id, defaultTokenModule.set('id', action.id));
-  case UPDATE_TOKEN_VOTE_EXCLUSIVE_CATEGORIE:
+  case UPDATE_TOKEN_VOTE_EXCLUSIVE_CATEGORY:
     return state.setIn([action.id, 'exclusiveCategories'], action.value);
   case UPDATE_TOKEN_VOTE_INSTRUCTIONS:
     return state.updateIn([action.id, 'instructionsEntries'], updateInLangstringEntries(action.locale, action.value));
-  case CREATE_TOKEN_VOTE_CATEGORIE:
+  case CREATE_TOKEN_VOTE_CATEGORY:
     return state.updateIn([action.parentId, 'tokenCategories'], tokenCategories => tokenCategories.push(action.id));
-  case DELETE_TOKEN_VOTE_CATEGORIE:
+  case DELETE_TOKEN_VOTE_CATEGORY:
     return state.updateIn([action.parentId, 'tokenCategories'], tokenCategories =>
       tokenCategories.delete(tokenCategories.size - 1)
     );
@@ -139,7 +139,7 @@ export const modulesById = (state: Map<string, Map> = Map(), action: ReduxAction
   }
 };
 
-const initialTokenCategorie = Map({
+const initialTokenCategory = Map({
   id: '',
   titleEntries: List(),
   totalNumber: 0,
@@ -153,23 +153,23 @@ export const tokenCategoriesById = (state: Map<string, Map> = Map(), action: Red
     action.voteModules.forEach((m) => {
       if (m.type === 'tokens') {
         m.tokenCategories.forEach((t) => {
-          const tokenCategorieInfo = Map({
+          const tokenCategoryInfo = Map({
             id: t.id,
             titleEntries: fromJS(t.titleEntries),
             color: t.color,
             totalNumber: t.totalNumber
           });
-          newState = newState.set(t.id, tokenCategorieInfo);
+          newState = newState.set(t.id, tokenCategoryInfo);
         });
       }
     });
     return newState;
   }
-  case CREATE_TOKEN_VOTE_CATEGORIE:
-    return state.set(action.id, initialTokenCategorie.set('id', action.id));
-  case UPDATE_TOKEN_VOTE_CATEGORIE_TITLE:
+  case CREATE_TOKEN_VOTE_CATEGORY:
+    return state.set(action.id, initialTokenCategory.set('id', action.id));
+  case UPDATE_TOKEN_VOTE_CATEGORY_TITLE:
     return state.updateIn([action.id, 'titleEntries'], updateInLangstringEntries(action.locale, action.value));
-  case UPDATE_TOKEN_VOTE_CATEGORIE_COLOR:
+  case UPDATE_TOKEN_VOTE_CATEGORY_COLOR:
     return state.setIn([action.id, 'color'], action.value);
   case UPDATE_TOKEN_TOTAL_NUMBER:
     return state.setIn([action.id, 'totalNumber'], action.value);

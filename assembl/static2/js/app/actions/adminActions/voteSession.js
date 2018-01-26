@@ -60,10 +60,10 @@ export const deleteTokenVoteModule = (id: string): actionTypes.DeleteTokenVoteMo
   type: actionTypes.DELETE_TOKEN_VOTE_MODULE
 });
 
-export const updateTokenVoteExclusiveCategorie = (id: string, value: boolean): actionTypes.UpdateTokenVoteExclusiveCategorie => ({
+export const updateTokenVoteExclusiveCategory = (id: string, value: boolean): actionTypes.UpdateTokenVoteExclusiveCategory => ({
   id: id,
   value: value,
-  type: actionTypes.UPDATE_TOKEN_VOTE_EXCLUSIVE_CATEGORIE
+  type: actionTypes.UPDATE_TOKEN_VOTE_EXCLUSIVE_CATEGORY
 });
 
 export const updateTokenVoteInstructions = (
@@ -77,27 +77,27 @@ export const updateTokenVoteInstructions = (
   type: actionTypes.UPDATE_TOKEN_VOTE_INSTRUCTIONS
 });
 
-export const createTokenVoteCategorie = (id: string, parentId: string): actionTypes.CreateTokenVoteCategorie => ({
+export const createTokenVoteCategory = (id: string, parentId: string): actionTypes.CreateTokenVoteCategory => ({
   id: id,
   parentId: parentId,
-  type: actionTypes.CREATE_TOKEN_VOTE_CATEGORIE
+  type: actionTypes.CREATE_TOKEN_VOTE_CATEGORY
 });
 
-export const deleteTokenVoteCategorie = (value: number, parentId: string): actionTypes.DeleteTokenVoteCategorie => ({
+export const deleteTokenVoteCategory = (value: number, parentId: string): actionTypes.DeleteTokenVoteCategory => ({
   parentId: parentId,
   value: value,
-  type: actionTypes.DELETE_TOKEN_VOTE_CATEGORIE
+  type: actionTypes.DELETE_TOKEN_VOTE_CATEGORY
 });
 
-export const updateTokenVoteCategorieTitle = (
+export const updateTokenVoteCategoryTitle = (
   id: string,
   locale: string,
   value: string
-): actionTypes.UpdateTokenVoteCategorieTitle => ({
+): actionTypes.UpdateTokenVoteCategoryTitle => ({
   id: id,
   locale: locale,
   value: value,
-  type: actionTypes.UPDATE_TOKEN_VOTE_CATEGORIE_TITLE
+  type: actionTypes.UPDATE_TOKEN_VOTE_CATEGORY_TITLE
 });
 
 export const updateTokenTotalNumber = (id: string, value: number): actionTypes.UpdateTokenTotalNumber => ({
@@ -106,10 +106,10 @@ export const updateTokenTotalNumber = (id: string, value: number): actionTypes.U
   type: actionTypes.UPDATE_TOKEN_TOTAL_NUMBER
 });
 
-export const updateTokenVoteCategorieColor = (id: string, value: string): actionTypes.UpdateTokenVoteCategorieColor => ({
+export const updateTokenVoteCategoryColor = (id: string, value: string): actionTypes.UpdateTokenVoteCategoryColor => ({
   id: id,
   value: value,
-  type: actionTypes.UPDATE_TOKEN_VOTE_CATEGORIE_COLOR
+  type: actionTypes.UPDATE_TOKEN_VOTE_CATEGORY_COLOR
 });
 
 export const updateVoteSessionPage = (value: Object): actionTypes.UpdateVoteSessionPage => ({

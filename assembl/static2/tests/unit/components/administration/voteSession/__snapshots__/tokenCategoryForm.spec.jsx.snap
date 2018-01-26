@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`tokenTypeForm component should render a TokenCategorieForm component 1`] = `
+exports[`tokenTypeForm component should render a TokenCategoryForm component 1`] = `
 <div
   className="token-type-form"
 >

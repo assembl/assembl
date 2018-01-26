@@ -1,10 +1,10 @@
 import React from 'react';
 import ShallowRenderer from 'react-test-renderer/shallow';
 
-import { DumbTokenCategorieForm } from '../../../../../js/app/components/administration/voteSession/tokenCategorieForm';
+import { DumbTokenCategoryForm } from '../../../../../js/app/components/administration/voteSession/tokenCategoryForm';
 
 describe('tokenTypeForm component', () => {
-  it('should render a TokenCategorieForm component', () => {
+  it('should render a TokenCategoryForm component', () => {
     const handleTitleChangeSpy = jest.fn(() => {});
     const handleColorChangeSpy = jest.fn(() => {});
     const handleTotalNumberChangeSpy = jest.fn(() => {});
@@ -17,7 +17,7 @@ describe('tokenTypeForm component', () => {
       handleTotalNumberChange: handleTotalNumberChangeSpy
     };
     const shallowRenderer = new ShallowRenderer();
-    shallowRenderer.render(<DumbTokenCategorieForm {...props} />);
+    shallowRenderer.render(<DumbTokenCategoryForm {...props} />);
     const result = shallowRenderer.getRenderOutput();
     expect(result).toMatchSnapshot();
   });

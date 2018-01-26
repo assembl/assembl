@@ -50,12 +50,12 @@ exports[`tokensForm component should render a form to configure a tokens vote, t
       <label
         htmlFor="input-dropdown-addon"
       >
-        Missing translation: administration.tokenCategorieNumber
+        Missing translation: administration.tokenCategoryNumber
       </label>
       <Helper
         additionalTextClasses=""
         classname=""
-        helperText="Missing translation: administration.helpers.tokenCategorieNumber"
+        helperText="Missing translation: administration.helpers.tokenCategoryNumber"
         helperUrl="/static2/img/helpers/helper2.png"
         label=""
       />
@@ -218,12 +218,12 @@ exports[`tokensForm component should render a form to configure a tokens vote, t
       <label
         htmlFor="input-dropdown-addon"
       >
-        Missing translation: administration.tokenCategorieNumber
+        Missing translation: administration.tokenCategoryNumber
       </label>
       <Helper
         additionalTextClasses=""
         classname=""
-        helperText="Missing translation: administration.helpers.tokenCategorieNumber"
+        helperText="Missing translation: administration.helpers.tokenCategoryNumber"
         helperUrl="/static2/img/helpers/helper2.png"
         label=""
       />

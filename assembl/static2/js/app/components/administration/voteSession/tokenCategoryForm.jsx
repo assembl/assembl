@@ -6,13 +6,13 @@ import { BlockPicker as ColorPicker } from 'react-color';
 import { getEntryValueForLocale } from '../../../utils/i18n';
 import FormControlWithLabel from '../../common/formControlWithLabel';
 import {
-  updateTokenVoteCategorieTitle,
-  updateTokenVoteCategorieColor,
+  updateTokenVoteCategoryTitle,
+  updateTokenVoteCategoryColor,
   updateTokenTotalNumber
 } from '../../../actions/adminActions/voteSession';
 import { pickerColors } from '../../../constants';
 
-type TokenCategorieFormProps = {
+type TokenCategoryFormProps = {
   title: string,
   color: string,
   totalNumber: number,
@@ -22,7 +22,7 @@ type TokenCategorieFormProps = {
   handleNumberChange: Function
 };
 
-const DumbTokenCategorieForm = ({
+const DumbTokenCategoryForm = ({
   title,
   color,
   totalNumber,
@@ -30,7 +30,7 @@ const DumbTokenCategorieForm = ({
   handleTitleChange,
   handleColorChange,
   handleNumberChange
-}: TokenCategorieFormProps) => (
+}: TokenCategoryFormProps) => (
   <div className="token-type-form">
     <FormControlWithLabel
       label={I18n.t('administration.tokenTitle')}
@@ -61,21 +61,21 @@ const DumbTokenCategorieForm = ({
 
 const mapStateToProps = (state, { id, editLocale }) => {
   const { tokenCategoriesById } = state.admin.voteSession;
-  const tokenCategorie = tokenCategoriesById.get(id);
-  const title = getEntryValueForLocale(tokenCategorie.get('titleEntries'), editLocale);
+  const tokenCategory = tokenCategoriesById.get(id);
+  const title = getEntryValueForLocale(tokenCategory.get('titleEntries'), editLocale);
   return {
     title: title,
-    color: tokenCategorie.get('color'),
-    totalNumber: tokenCategorie.get('totalNumber')
+    color: tokenCategory.get('color'),
+    totalNumber: tokenCategory.get('totalNumber')
   };
 };
 
 const mapDispatchToProps = (dispatch, { id, editLocale }) => ({
-  handleTitleChange: e => dispatch(updateTokenVoteCategorieTitle(id, editLocale, e.target.value)),
+  handleTitleChange: e => dispatch(updateTokenVoteCategoryTitle(id, editLocale, e.target.value)),
   handleNumberChange: e => dispatch(updateTokenTotalNumber(id, e.target.value)),
-  handleColorChange: color => dispatch(updateTokenVoteCategorieColor(id, color.hex))
+  handleColorChange: color => dispatch(updateTokenVoteCategoryColor(id, color.hex))
 });
 
-export { DumbTokenCategorieForm };
+export { DumbTokenCategoryForm };
 
-export default connect(mapStateToProps, mapDispatchToProps)(DumbTokenCategorieForm);
+export default connect(mapStateToProps, mapDispatchToProps)(DumbTokenCategoryForm);
