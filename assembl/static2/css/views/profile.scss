@@ -1,11 +1,14 @@
 .profile {
   .profile-form {
-    width: 360px;
+    width: 468px;
     margin: 35px 0 0 100px;
+
+    button {
+      margin-bottom: 40px;
+    }
 
     .form-control {
       height: 44px;
-      width: 130%;
     }
 
     .control-label {
@@ -41,6 +44,10 @@
     &.lang-en {
       width: 18ex;
     }
+  }
+
+  .dark-title-1 {
+    margin: 15px 0 25px 0;
   }
 
   .dark-title-2 {
