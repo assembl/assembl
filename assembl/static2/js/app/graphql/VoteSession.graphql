@@ -9,27 +9,58 @@ query VoteSession($discussionPhaseId: Int!, $lang: String!) {
     instructionsSectionTitle(lang: $lang)
     instructionsSectionContent(lang: $lang)
     propositionsSectionTitle(lang: $lang)
-    # voteSpecifications {
-    #   ... on TokenVoteSpecification {
-    #     id
-    #     voteSessionId
-    #     titleEntries {
-    #       ...langStringEntry
-    #     }
-    #     instructionsEntries {
-    #       ...langStringEntry
-    #     }
-    #     exclusiveCategories
-    #     tokenCategories {
-    #       id
-    #       totalNumber
-    #       typename
-    #       titleEntries {
-    #         ...langStringEntry
-    #       }
-    #       color
-    #     }
-    #   }
-    # }
+    voteSpecifications {
+      ... on TokenVoteSpecification {
+        id
+        voteSessionId
+        titleEntries {
+          ...langStringEntry
+        }
+        instructionsEntries {
+          ...langStringEntry
+        }
+        exclusiveCategories
+        tokenCategories {
+          id
+          totalNumber
+          typename
+          titleEntries {
+            ...langStringEntry
+          }
+          color
+        }
+      }
+      # ... on NumberGaugeVoteSpecification {
+      #   id
+      #   voteSessionId
+      #   titleEntries {
+      #     ...langStringEntry
+      #   }
+      #   instructionsEntries {
+      #     ...langStringEntry
+      #   }
+      #   minimum
+      #   maximum
+      #   nbTicks
+      #   unit
+      # }
+      # ... on TextGaugeVoteSpecification {
+      #   id
+      #   voteSessionId
+      #   titleEntries {
+      #     ...langStringEntry
+      #   }
+      #   instructionsEntries {
+      #     ...langStringEntry
+      #   }
+      #   choices {
+      #     id
+      #     value # float
+      #     label {
+      #       ...langStringEntry
+      #     }
+      #   }
+      # }
+    }
   }
 }

@@ -1,4 +1,4 @@
-#import "./LangString.graphql"
+#import "../fragments/LangString.graphql"
 
 mutation updateTokenVoteSpecification(
   $id: ID!

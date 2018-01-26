@@ -1,24 +1,26 @@
+import os
+
 import graphene
 from graphene.relay import Node
 from graphene_sqlalchemy import SQLAlchemyObjectType
-from assembl import models
-import os
-
-from .types import SecureObjectType, SQLAlchemyInterface
-from .utils import abort_transaction_on_exception
-from .document import Document
-from .graphql_langstrings_helpers import (langstrings_interface,
-                                          update_langstrings,
-                                          add_langstrings_input_attrs)
-from .permissions_helpers import (require_cls_permission,
-                                  require_instance_permission)
-
-from .langstring import (LangStringEntry, LangStringEntryInput,
-                         langstring_from_input_entries, resolve_langstring)
-from assembl.auth.util import get_permissions
-from assembl.auth import IF_OWNED, CrudPermissions
 from pyramid.security import Everyone
 from pyramid.httpexceptions import HTTPUnauthorized
+
+from assembl import models
+from assembl.auth.util import get_permissions
+from assembl.auth import IF_OWNED, CrudPermissions
+from .document import Document
+from .graphql_langstrings_helpers import (
+    langstrings_interface, update_langstrings, add_langstrings_input_attrs)
+from .permissions_helpers import (
+    require_cls_permission, require_instance_permission)
+from .langstring import (
+    LangStringEntry, LangStringEntryInput,
+    langstring_from_input_entries,
+    update_langstring_from_input_entries,
+    resolve_langstring, resolve_langstring_entries)
+from .types import SecureObjectType, SQLAlchemyUnion
+from .utils import abort_transaction_on_exception
 
 
 langstrings_defs = {
@@ -38,6 +40,7 @@ class VoteSession(SecureObjectType, SQLAlchemyObjectType):
         only_fields = ('id', 'discussion_phase_id')
 
     header_image = graphene.Field(Document)
+    vote_specifications = graphene.List(lambda: VoteSpecificationUnion)
 
     def resolve_header_image(self, args, context, info):
         ATTACHMENT_PURPOSE_IMAGE = models.AttachmentPurpose.IMAGE.value
@@ -117,30 +120,24 @@ class UpdateVoteSession(graphene.Mutation):
         return UpdateVoteSession(vote_session=vote_session)
 
 
-class VoteSpecificationInterface(SQLAlchemyInterface):
+class VoteSpecificationInterface(graphene.Interface):
 
-    class Meta:
-        model = models.AbstractVoteSpecification
-        only_fields = ('id',)
+    title = graphene.String(lang=graphene.String())
+    title_entries = graphene.List(LangStringEntry)
+    instructions = graphene.String(lang=graphene.String())
+    instructions_entries = graphene.List(LangStringEntry)
 
-    instructions_entries = graphene.List(LangStringEntry, lang=graphene.String())
-    title_entries = graphene.List(LangStringEntry, lang=graphene.String())
-    type = graphene.String()
-
-    def resolve_instructions_entries(self, args, context, info):
-        return resolve_langstring(self.instructions_entries, args.get('lang'))
+    def resolve_title(self, args, context, info):
+        return resolve_langstring(self.title, args.get('lang'))
 
     def resolve_title_entries(self, args, context, info):
-        return resolve_langstring(self.title_entries, args.get('lang'))
+        return resolve_langstring_entries(self, 'title')
 
-    def resolve_type(self, args, context, info):
-        # do an if/condition
-        if self.__class___ == models.TokenVoteSpecification:
-            return 'tokens'
-        elif self.__class__ == models.GaugeVoteSpecification:
-            return 'gauge'
-        else:
-            return 'multi_criteria'
+    def resolve_instructions(self, args, context, info):
+        return resolve_langstring(self.instructions, args.get('lang'))
+
+    def resolve_instructions_entries(self, args, context, info):
+        return resolve_langstring_entries(self, 'instructions')
 
 
 class TokenCategorySpecification(SecureObjectType, SQLAlchemyObjectType):
@@ -150,32 +147,49 @@ class TokenCategorySpecification(SecureObjectType, SQLAlchemyObjectType):
         interfaces = (Node,)
         only_fields = ('id', 'color', 'typename', 'total_number')
 
-    title_entries = graphene.List(LangStringEntry, lang=graphene.String())
+    title = graphene.String(lang=graphene.String())
+    title_entries = graphene.List(LangStringEntry)
+
+    def resolve_title(self, args, context, info):
+        return resolve_langstring(self.name, args.get('lang'))
 
     def resolve_title_entries(self, args, context, info):
-        return resolve_langstring(self.name, args.get('lang'))
+        return resolve_langstring_entries(self, 'name')
 
 
 class TokenVoteSpecification(SecureObjectType, SQLAlchemyObjectType):
 
     class Meta:
         model = models.TokenVoteSpecification
-        interfaces = (Node, VoteSpecificationInterface, )
+        interfaces = (Node, VoteSpecificationInterface)
         only_fields = ('id', 'exclusive_categories')
 
-    token_categories = graphene.Field(lambda: TokenCategorySpecification)
+    token_categories = graphene.List(TokenCategorySpecification)
     vote_session_id = graphene.ID(required=True)
 
     def resolve_vote_session_id(self, args, context, info):
         return Node.to_global_id('VoteSession', self.vote_session_id)
 
 
+class VoteSpecificationUnion(SQLAlchemyUnion):
+    class Meta:
+        types = (TokenVoteSpecification, )
+        model = models.AbstractVoteSpecification
+
+    @classmethod
+    def resolve_type(cls, instance, context, info):
+        if isinstance(instance, graphene.ObjectType):
+            return type(instance)
+        elif isinstance(instance, models.TokenVoteSpecification):
+            return TokenVoteSpecification
+
+
 class TokenCategorySpecificationInput(graphene.InputObjectType):
     id = graphene.ID()
-    title_entries = graphene.List(LangStringEntryInput)
-    total_number = graphene.Int()
+    title_entries = graphene.List(LangStringEntryInput, required=True)
+    total_number = graphene.Int(required=True)
     typename = graphene.String()
-    color = graphene.String()
+    color = graphene.String(required=True)
 
 
 class CreateTokenVoteSpecification(graphene.Mutation):
@@ -193,15 +207,14 @@ class CreateTokenVoteSpecification(graphene.Mutation):
     @abort_transaction_on_exception
     def mutate(root, args, context, info):
         cls = models.TokenVoteSpecification
-
         discussion_id = context.matchdict['discussion_id']
         user_id = context.authenticated_userid or Everyone
         vote_session_id = args.get('vote_session_id')
         vote_session_id = int(Node.from_global_id(vote_session_id)[1])
-        instructions = args.get('instructions_entries')
+        title_entries = args.get('title_entries')
+        instructions_entries = args.get('instructions_entries')
         exclusive_categories = args.get('exclusive_categories')
         token_categories = args.get('token_categories')
-        title_entries = args.get('title_entries')
 
         with cls.default_db.no_autoflush as db:
             vote_session = db.query(models.VoteSession).get(vote_session_id)
@@ -211,18 +224,18 @@ class CreateTokenVoteSpecification(graphene.Mutation):
             if not allowed or (allowed == IF_OWNED and user_id == Everyone):
                 raise HTTPUnauthorized()
 
-            title_entries = langstring_from_input_entries(title_entries)
-            instructions = langstring_from_input_entries(instructions)
+            title_ls = langstring_from_input_entries(title_entries)
+            instructions_ls = langstring_from_input_entries(instructions_entries)
             saobj = cls(
-                title=title_entries,
-                instructions=instructions,
+                title=title_ls,
+                instructions=instructions_ls,
                 exclusive_categories=exclusive_categories
             )
-            for token_category in token_categories:
+            for idx, token_category in enumerate(token_categories):
                 title_ls = langstring_from_input_entries(
                     token_category.get('title_entries', None))
                 total_number = token_category.get('total_number')
-                typename = token_category.get('typename')
+                typename = token_category.get('typename', 'category{}'.format(idx + 1))
                 color = token_category.get('color')
 
                 saobj.token_categories.append(
@@ -238,58 +251,102 @@ class CreateTokenVoteSpecification(graphene.Mutation):
         return CreateTokenVoteSpecification(token_vote_specification=saobj)
 
 
-# class UpdateTokenVoteSpecification(graphene.Mutation):
+class UpdateTokenVoteSpecification(graphene.Mutation):
 
-#     class Input:
-#         id = graphene.ID(required=True)
-#         token_category_specification_input = graphene.Argument(TokenCategorySpecificationInput)
-#         instruction_entries = graphene.List(LangStringEntryInput)
-#         exclusive_categories = graphene.Boolean()
+    class Input:
+        id = graphene.ID(required=True)
+        title_entries = graphene.List(LangStringEntryInput, required=True)
+        instructions_entries = graphene.List(LangStringEntryInput, required=True)
+        exclusive_categories = graphene.Boolean(required=True)
+        token_categories = graphene.List(TokenCategorySpecificationInput, required=True)
 
-#     token_vote_specification = graphene.Field(lambda: TokenVoteSpecification)
+    token_vote_specification = graphene.Field(lambda: TokenVoteSpecification)
 
-#     @staticmethod
-#     @abort_transaction_on_exception
-#     def mutate(root, args, context, info):
+    @staticmethod
+    @abort_transaction_on_exception
+    def mutate(root, args, context, info):
+        cls = models.TokenVoteSpecification
+        discussion_id = context.matchdict['discussion_id']
+        user_id = context.authenticated_userid or Everyone
+        token_vote_spec_id = args.get('id')
+        token_vote_spec_id = int(Node.from_global_id(token_vote_spec_id)[1])
+        title_entries = args.get('title_entries')
+        instructions_entries = args.get('instructions_entries')
+        exclusive_categories = args.get('exclusive_categories')
+        token_categories = args.get('token_categories')
 
-#         cls = models.TokenVoteSpecification
+        with cls.default_db.no_autoflush as db:
+            toke_vote_spec = cls.get(token_vote_spec_id)
+            permissions = get_permissions(user_id, discussion_id)
+            allowed = toke_vote_spec.user_can(
+                user_id, CrudPermissions.UPDATE, permissions)
+            if not allowed:
+                raise HTTPUnauthorized()
 
-#         discussion_id = context.matchdict['discussion_id']
-#         user_id = context.authenticated_userid or Everyone
-#         instruction_entries = args.get('instructions')
-#         exclusive_categories = args.get('exclusive_categories')
-#         tcp = args.get('token_category_specification_input')
-#         token_id = args.get('id')
-#         token_id = int(Node.from_global_id(token_id)[1])
-#         tcp = args.get('token_category_specification_input')
+            update_langstring_from_input_entries(
+                toke_vote_spec, 'title', title_entries)
+            update_langstring_from_input_entries(
+                toke_vote_spec, 'instructions', instructions_entries)
+            toke_vote_spec.exclusive_categories = exclusive_categories
+            existing_token_categories = {
+                token_category.id: token_category for token_category in toke_vote_spec.token_categories}
+            updated_token_categories = set()
+            for idx, token_category_input in enumerate(token_categories):
+                if token_category_input.get('id', None) is not None:
+                    id_ = int(Node.from_global_id(token_category_input['id'])[1])
+                    updated_token_categories.add(id_)
+                    token_category = models.TokenCategorySpecification.get(id_)
+                    update_langstring_from_input_entries(
+                        token_category, 'name', token_category_input['title_entries'])
+                    token_category.total_number = token_category_input.get('total_number')
+                    token_category.typename = token_category_input.get('typename', 'category{}'.format(idx + 1))
+                    token_category.color = token_category_input.get('color')
+                else:
+                    title_ls = langstring_from_input_entries(
+                        token_category_input.get('title_entries', None))
+                    total_number = token_category_input.get('total_number')
+                    typename = token_category_input.get('typename', 'category{}'.format(idx + 1))
+                    color = token_category_input.get('color')
+                    toke_vote_spec.token_categories.append(
+                        models.TokenCategorySpecification(
+                            total_number=total_number,
+                            typename=typename, name=title_ls,
+                            color=color)
+                    )
 
-#         with cls.default_db.no_autoflush as db:
-#             token = db.query(models.TokenVoteSpecification).filter(
-#                 models.TokenVoteSpecification.id == token_id).one()
-#             permissions = get_permissions(user_id, discussion_id)
-#             allowed = token.user_can(
-#                 user_id, CrudPermissions.UPDATE, permissions)
-#             if not allowed or (allowed == IF_OWNED and user_id == Everyone):
-#                 raise HTTPUnauthorized()
+            # remove token categories that are not in token_categories input
+            for token_category_id in set(existing_token_categories.keys()
+                                   ).difference(updated_token_categories):
+                db.delete(existing_token_categories[token_category_id])
 
-#             tcp_title_entries = langstring_from_input_entries(
-#                 tcp.get('title_entries', None))
-#             tcp_total_number = tcp.get('total_number')
-#             tcp_typename = tcp.get('typename')
-#             tcp_color = tcp.get('color')
-#             tcp_name = tcp.get('name')
+            db.flush()
 
-#             token.exclusive_categories = exclusive_categories
-#             update_langstring_from_input_entries(token, 'title_entries', tcp_title_entries)
-#             update_langstring_from_input_entries(token, 'instruction_entries', instruction_entries)
-#             token.token_categories.pop()
-#             token.token_categories.append(
-#                 TokenCategorySpecification(
-#                     total_number=total_number,
-#                     typename=tcp_typename, name=tcp_name,
-#                     color=tcp_color)
-#             )
-#             db.add(token)
-#             db.flush()
+        return UpdateTokenVoteSpecification(token_vote_specification=toke_vote_spec)
 
-#         return UpdateTokenVoteSpecification(token_vote_specification=token)
+
+class DeleteTokenVoteSpecification(graphene.Mutation):
+
+    class Input:
+        id = graphene.ID(required=True)
+
+    success = graphene.Boolean()
+
+    @staticmethod
+    @abort_transaction_on_exception
+    def mutate(root, args, context, info):
+        discussion_id = context.matchdict['discussion_id']
+        user_id = context.authenticated_userid or Everyone
+
+        token_id = args.get('id')
+        token_id = int(Node.from_global_id(token_id)[1])
+        token = models.TokenVoteSpecification.get(token_id)
+
+        permissions = get_permissions(user_id, discussion_id)
+        allowed = token.user_can(
+            user_id, CrudPermissions.DELETE, permissions)
+        if not allowed:
+            raise HTTPUnauthorized()
+
+        token.db.delete(token)
+        token.db.flush()
+        return DeleteTokenVoteSpecification(success=True)

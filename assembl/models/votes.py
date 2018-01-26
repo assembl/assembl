@@ -239,7 +239,9 @@ class AbstractVoteSpecification(DiscussionBoundBase):
 
     def get_discussion_id(self):
         from .widgets import Widget
-        widget = self.widget or Widget.get(self.widget_id)
+        from .vote_session import VoteSession
+        widget = (self.widget_id and Widget.get(self.widget_id)
+            ) or (self.vote_session_id and VoteSession.get(self.vote_session_id))
         return widget.get_discussion_id()
 
     @classmethod
@@ -249,6 +251,9 @@ class AbstractVoteSpecification(DiscussionBoundBase):
                 (VotingWidget.discussion_id == discussion_id))
 
     crud_permissions = CrudPermissions(P_ADMIN_DISC, P_READ)
+
+
+LangString.setup_ownership_load_event(AbstractVoteSpecification, ['title', 'instructions'])
 
 
 def empty_matrix(size, dim):

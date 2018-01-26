@@ -30,7 +30,9 @@ from assembl.graphql.section import (CreateSection, DeleteSection, Section,
 from assembl.graphql.sentiment import AddSentiment, DeleteSentiment
 from assembl.graphql.synthesis import Synthesis
 from assembl.graphql.user import UpdateUser
-from assembl.graphql.vote_session import VoteSession, UpdateVoteSession
+from assembl.graphql.vote_session import (
+    VoteSession, UpdateVoteSession, CreateTokenVoteSpecification,
+    UpdateTokenVoteSpecification, DeleteTokenVoteSpecification)
 from assembl.graphql.utils import get_fields, get_root_thematic_for_phase
 from assembl.lib.locale import strip_country
 from assembl.lib.sqla_types import EmailString
@@ -39,7 +41,6 @@ from assembl.models.post import countable_publication_states
 from assembl.nlp.translation_service import DummyGoogleTranslationService
 from assembl.graphql.permissions_helpers import require_instance_permission
 from assembl.auth import CrudPermissions
-from assembl.graphql.vote_session import CreateTokenVoteSpecification, UpdateTokenVoteSpecification
 
 convert_sqlalchemy_type.register(EmailString)(convert_column_to_string)
 models.Base.query = models.Base.default_db.query_property()
@@ -285,6 +286,7 @@ class Mutations(graphene.ObjectType):
     update_vote_session = UpdateVoteSession.Field()
     create_token_vote_specification = CreateTokenVoteSpecification.Field()
     update_token_vote_specification = UpdateTokenVoteSpecification.Field()
+    delete_token_vote_specification = DeleteTokenVoteSpecification.Field()
 
 
 Schema = graphene.Schema(query=Query, mutation=Mutations)

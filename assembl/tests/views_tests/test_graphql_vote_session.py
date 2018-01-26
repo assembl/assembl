@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import json
 
 from assembl.graphql.schema import Schema as schema
 from assembl.lib.utils import snake_to_camel
@@ -39,33 +40,20 @@ def assert_graphql_unauthorized(response):
     assert "wrong credentials" in response.errors[0].message
 
 
-def voteSessionQuery(graphql_registry):
-    # TODO: Replace manual concatenation by a graphql loader inspired from javascript's graphql-loader
-    return (graphql_registry['fragments']['LangString'] +
-            graphql_registry['fragments']['VoteSession'] +
-            graphql_registry['VoteSession'])
-
-
-def updateVoteSessionQuery(graphql_registry):
-    # TODO: Replace manual concatenation by a graphql loader inspired from javascript's graphql-loader
-    return (graphql_registry['fragments']['LangString'] +
-            graphql_registry['fragments']['VoteSession'] +
-            graphql_registry['mutations']['updateVoteSession'])
-
-
 def assert_vote_session_not_created(discussion_phase_id, graphql_request, graphql_registry):
     response = schema.execute(
-        voteSessionQuery(graphql_registry),
+        graphql_registry['VoteSession'],
         context_value=graphql_request,
         variable_values={"discussionPhaseId": discussion_phase_id, "lang": "en"}
     )
-    assert (response.errors is None) and (response.data['voteSession'] is None)
+    assert response.errors is None
+    assert response.data['voteSession'] is None
 
 
 def mutate_and_assert_unauthorized(graphql_request, discussion_phase_id, graphql_registry):
     new_title = u"updated vote session title"
     response = schema.execute(
-        updateVoteSessionQuery(graphql_registry),
+        graphql_registry['updateVoteSession'],
         context_value=graphql_request,
         variable_values={
             "discussionPhaseId": discussion_phase_id,
@@ -96,7 +84,7 @@ def mutate_and_assert(graphql_request, discussion_phase_id, test_app, graphql_re
     graphql_request.POST[image_var_name] = new_image
 
     response = schema.execute(
-        updateVoteSessionQuery(graphql_registry),
+        graphql_registry['updateVoteSession'],
         context_value=graphql_request,
         variable_values={
             "discussionPhaseId": discussion_phase_id,
@@ -125,6 +113,7 @@ def mutate_and_assert(graphql_request, discussion_phase_id, test_app, graphql_re
     graphql_image_data = test_app.get(graphql_image['externalUrl']).body
     assert graphql_image_data == new_image_data
 
+
 def vote_session_from_phase(discussion_phase_id):
     discussion_phase = models.DiscussionPhase.get(discussion_phase_id)
     return discussion_phase.vote_session
@@ -147,7 +136,6 @@ def delete_vote_session(vote_session):
 
 def test_graphql_update_vote_session(graphql_request, vote_session, test_app, graphql_registry):
     mutate_and_assert(graphql_request, vote_session.discussion_phase_id, test_app, graphql_registry)
-    delete_vote_session(vote_session)
 
 
 def test_graphql_delete_vote_session_cascade(graphql_request, vote_session, test_app, graphql_registry):
@@ -156,7 +144,7 @@ def test_graphql_delete_vote_session_cascade(graphql_request, vote_session, test
     attachment_id = vote_session.attachments[0].id
     db.delete(vote_session)
     db.flush()
-    attachment = models.VoteSessionAttachment().get(attachment_id)
+    attachment = models.VoteSessionAttachment.get(attachment_id)
     assert attachment is None
     # TODO: fix the cascade behaviour to delete the actual document maybe?
     # image = models.Document.get(image_id)
@@ -181,7 +169,7 @@ def test_graphql_create_vote_session_unauthenticated(graphql_participant1_reques
 
 def test_graphql_get_vote_session(graphql_participant1_request, vote_session, graphql_registry):
     response = schema.execute(
-        voteSessionQuery(graphql_registry),
+        graphql_registry['VoteSession'],
         context_value=graphql_participant1_request,
         variable_values={
             "discussionPhaseId": vote_session.discussion_phase_id,
@@ -212,7 +200,7 @@ def test_graphql_get_vote_session(graphql_participant1_request, vote_session, gr
 
 def test_graphql_get_vote_session_unauthenticated(graphql_unauthenticated_request, vote_session, graphql_registry):
     response = schema.execute(
-        voteSessionQuery(graphql_registry),
+        graphql_registry['VoteSession'],
         context_value=graphql_unauthenticated_request,
         variable_values={
             "discussionPhaseId": vote_session.discussion_phase_id,
@@ -222,152 +210,134 @@ def test_graphql_get_vote_session_unauthenticated(graphql_unauthenticated_reques
     assert_graphql_unauthorized(response)
 
 
-def test_mutation_create_token_vote_specification(graphql_request, vote_session):
-
-    mutation = u"""
-    fragment langStringEntry on LangStringEntry {localeCode value}
-    
-    mutation createTokenVoteSpecification(
-        $voteSessionId: ID!
-        $titleEntries: [LangStringEntryInput]!
-        $instructionsEntries: [LangStringEntryInput]!
-        $exclusiveCategories: Boolean!
-        $tokenCategories: [TokenCategorySpecificationInput]!
-        ) 
-    {
-            createTokenVoteSpecification(
-                voteSessionId: $voteSessionId
-                titleEntries: $titleEntries
-                instructionsEntries: $instructionsEntries
-                exclusiveCategories: $exclusiveCategories
-                tokenCategories: $tokenCategories
-        ) 
-            {
-                tokenVoteSpecification {
-                ... on TokenVoteSpecification {
-                        id
-                        voteSessionId
-                        titleEntries {
-                            ...langStringEntry
-                        }
-                        instructionsEntries {
-                            ...langStringEntry
-                        }
-                        exclusiveCategories
-                        tokenCategories {
-                                        id
-                                        totalNumber
-                                        typename
-                                        titleEntries {
-                                            ...langStringEntry
-                                        }
-                                        color
-                                        }
-                                                }
-    }
-  }
-}"""
-    import pdb
-    pdb.set_trace()
+def test_mutation_create_token_vote_specification(graphql_request, vote_session, graphql_registry):
+    mutation = graphql_registry['createTokenVoteSpecification']
+    vote_session_id = to_global_id("VoteSession", vote_session.id)
     res = schema.execute(mutation, context_value=graphql_request, variable_values={
-        'voteSessionId': to_global_id('VoteSession', vote_session.id),
-        'titleEntries': [
-            {'value': "Comprendre les dynamiques et les enjeux", 'localeCode': "fr"},
-            {'value': "Understanding the dynamics and issues", 'localeCode': "en"}
+        "voteSessionId": vote_session_id,
+        "titleEntries": [
+            {"value": u"Comprendre les dynamiques et les enjeux", "localeCode": "fr"},
+            {"value": u"Understanding the dynamics and issues", "localeCode": "en"}
         ],
-        'instructionsEntries':
+        "instructionsEntries":
         [
-            {'value': "Comprendre les dynamiques et les enjeux", 'localeCode': "fr"},
-            {'value': "Understanding the dynamics and issues", 'localeCode': "en"}
+            {"value": u"Comprendre les dynamiques et les enjeux", "localeCode": "fr"},
+            {"value": u"Understanding the dynamics and issues", "localeCode": "en"}
         ],
-        'exclusiveCategories': True,
-        'tokenCategories':   [
-            {'titleEntries':
-             [
-                 {'value': "Comprendre les dynamiques et les enjeux", 'localeCode': "fr"},
-                 {'value': "Understanding the dynamics and issues", 'localeCode': "en"}
+        "exclusiveCategories": True,
+        "tokenCategories": [
+            {"titleEntries": [
+                {"value": u"Comprendre les dynamiques et les enjeux", "localeCode": "fr"},
+                {"value": u"Understanding the dynamics and issues", "localeCode": "en"}
              ],
-             'typename': 'positive',
-             'totalNumber': 10,
-             'color': 'red'
-             }
-
-        ],
-
+             "typename": "positive",
+             "totalNumber": 10,
+             "color": 'red'
+            }
+        ]
     })
+    assert res.errors is None
+    token_vote_spec = vote_session.vote_specifications[0]
+    token_vote_spec_id = to_global_id("TokenVoteSpecification", token_vote_spec.id)
+    token_category = token_vote_spec.token_categories[0]
+    token_category_id = to_global_id("TokenCategorySpecification", token_category.id)
+    assert json.loads(json.dumps(res.data)) == {
+u'createTokenVoteSpecification': {u'tokenVoteSpecification': {u'exclusiveCategories': True,
+                                                              u'id': token_vote_spec_id,
+                                                              u'instructionsEntries': [{u'localeCode': u'en',
+                                                                                        u'value': u'Understanding the dynamics and issues'},
+                                                                                       {u'localeCode': u'fr',
+                                                                                        u'value': u'Comprendre les dynamiques et les enjeux'}],
+                                                              u'titleEntries': [{u'localeCode': u'en',
+                                                                                 u'value': u'Understanding the dynamics and issues'},
+                                                                                {u'localeCode': u'fr',
+                                                                                 u'value': u'Comprendre les dynamiques et les enjeux'}],
+                                                              u'tokenCategories': [{u'color': u'red',
+                                                                                    u'id': token_category_id,
+                                                                                    u'titleEntries': [{u'localeCode': u'en',
+                                                                                                       u'value': u'Understanding the dynamics and issues'},
+                                                                                                      {u'localeCode': u'fr',
+                                                                                                       u'value': u'Comprendre les dynamiques et les enjeux'}],
+                                                                                    u'totalNumber': 10,
+                                                                                    u'typename': u'positive'}],
+                                                              u'voteSessionId': vote_session_id}}}
+    # remove created vote specification
+    vote_session.vote_specifications.remove(token_vote_spec)
+    vote_session.db.flush()
 
 
-def test_mutation_update_token_vote_specification(graphql_request, vote_session):
-    mutation = u"""
-    fragment langStringEntry on LangStringEntry {localeCode value}
-    
-    mutation createTokenVoteSpecification(
-        $tokenVoteSpecificationId: ID!
-        $voteSessionId: ID!
-        $titleEntries: [LangStringEntryInput]!
-        $instructionsEntries: [LangStringEntryInput]!
-        $exclusiveCategories: Boolean!
-        $tokenCategories: [TokenCategorySpecificationInput]!
-        ) 
-    {
-            createTokenVoteSpecification(
-                tokenVoteSpecificationId: $tokenVoteSpecificationId
-                voteSessionId: $voteSessionId
-                titleEntries: $titleEntries
-                instructionsEntries: $instructionsEntries
-                exclusiveCategories: $exclusiveCategories
-                tokenCategories: $tokenCategories
-        ) 
-            {
-                tokenVoteSpecification {
-                ... on TokenVoteSpecification {
-                        id
-                        voteSessionId
-                        titleEntries {
-                            ...langStringEntry
-                        }
-                        instructionsEntries {
-                            ...langStringEntry
-                        }
-                        exclusiveCategories
-                        tokenCategories {
-                                        id
-                                        totalNumber
-                                        typename
-                                        titleEntries {
-                                            ...langStringEntry
-                                        }
-                                        color
-                                        }
-                                                }
-    }
-  }
-}"""
+def test_mutation_delete_token_vote_specification(graphql_request, token_vote_specification, graphql_registry):
+    mutation = graphql_registry['deleteTokenVoteSpecification']
+    token_vote_spec_id = to_global_id("TokenVoteSpecification", token_vote_specification.id)
     res = schema.execute(mutation, context_value=graphql_request, variable_values={
-        'voteSessionId': to_global_id('VoteSession', vote_session.id),
-        'titleEntries': [
-            {'value': "Comprendre les dynamiques et les enjeux (updated)", 'localeCode': "fr"},
-            {'value': "Understanding the dynamics and issues (updated)", 'localeCode': "en"}
+        "id": token_vote_spec_id
+    })
+    assert res.errors is None
+    assert True == res.data['deleteTokenVoteSpecification']['success']
+
+
+def test_mutation_update_token_vote_specification(graphql_request, vote_session, token_vote_specification, graphql_registry):
+    mutation = graphql_registry['updateTokenVoteSpecification']
+    vote_session_id = to_global_id("VoteSession", vote_session.id)
+    token_vote_spec_id = to_global_id("TokenVoteSpecification", token_vote_specification.id)
+    token_category = token_vote_specification.token_categories[0]
+    token_category_id = to_global_id("TokenCategorySpecification", token_category.id)
+    res = schema.execute(mutation, context_value=graphql_request, variable_values={
+        "id": token_vote_spec_id,
+        "titleEntries": [
+            {"value": u"Comprendre les dynamiques et les enjeux (updated)", "localeCode": "fr"},
+            {"value": u"Understanding the dynamics and issues (updated)", "localeCode": "en"}
         ],
-        'instructionsEntries':
-        [
-            {'value': "Comprendre les dynamiques et les enjeux(updated)", 'localeCode': "fr"},
-            {'value': "Understanding the dynamics and issues(updated)", 'localeCode': "en"}
+        "instructionsEntries": [
+            {"value": u"Comprendre les dynamiques et les enjeux (updated)", "localeCode": "fr"},
+            {"value": u"Understanding the dynamics and issues (updated)", "localeCode": "en"}
         ],
-        'exclusiveCategories': True,
-        'tokenCategories':   [
-            {'titleEntries':
-             [
-                 {'value': "Comprendre les dynamiques et les enjeux (updated)", 'localeCode': "fr"},
-                 {'value': "Understanding the dynamics and issues (updated)", 'localeCode': "en"}
+        "exclusiveCategories": True,
+        "tokenCategories": [
+            {
+             "id": token_category_id,
+             "titleEntries": [
+                {"value": u"Comprendre les dynamiques et les enjeux (updated)", "localeCode": "fr"},
+                {"value": u"Understanding the dynamics and issues (updated)", "localeCode": "en"}
              ],
-             'typename': 'negative',
-             'totalNumber': 14,
-             'color': 'blue'
-             }
-
-        ],
-
+             "typename": "negative",
+             "totalNumber": 14,
+             "color": "blue"
+            }
+        ]
     })
 
     assert res.errors is None
+    assert json.loads(json.dumps(res.data)) == {
+u'updateTokenVoteSpecification': {u'tokenVoteSpecification': {u'exclusiveCategories': True,
+                                                              u'id': token_vote_spec_id,
+                                                              u'instructionsEntries': [{u'localeCode': u'en',
+                                                                                        u'value': u'Understanding the dynamics and issues (updated)'},
+                                                                                       {u'localeCode': u'fr',
+                                                                                        u'value': u'Comprendre les dynamiques et les enjeux (updated)'}],
+                                                              u'titleEntries': [{u'localeCode': u'en',
+                                                                                 u'value': u'Understanding the dynamics and issues (updated)'},
+                                                                                {u'localeCode': u'fr',
+                                                                                 u'value': u'Comprendre les dynamiques et les enjeux (updated)'}],
+                                                              u'tokenCategories': [{u'color': u'blue',
+                                                                                    u'id': token_category_id,
+                                                                                    u'titleEntries': [{u'localeCode': u'en',
+                                                                                                       u'value': u'Understanding the dynamics and issues (updated)'},
+                                                                                                      {u'localeCode': u'fr',
+                                                                                                       u'value': u'Comprendre les dynamiques et les enjeux (updated)'}],
+                                                                                    u'totalNumber': 14,
+                                                                                    u'typename': u'negative'}],
+                                                              u'voteSessionId': vote_session_id}}}
+
+
+def test_graphql_get_vote_session_and_vote_specifications(graphql_participant1_request, vote_session, token_vote_specification, graphql_registry):
+    response = schema.execute(
+        graphql_registry['VoteSession'],
+        context_value=graphql_participant1_request,
+        variable_values={
+            "discussionPhaseId": vote_session.discussion_phase_id
+        }
+    )
+    assert response.errors is None
+    assert len(response.data['voteSession']['voteSpecifications']) == 1
+    assert 'tokenCategories' in response.data['voteSession']['voteSpecifications'][0]
