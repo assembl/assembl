@@ -170,6 +170,7 @@ class AbstractVoteSpecification(DiscussionBoundBase):
         class VoteTargetsCollection(AbstractCollectionDefinition):
             # The set of voting target ideas.
             # Fake: There is no DB link here.
+
             def __init__(self, cls):
                 super(VoteTargetsCollection, self).__init__(cls, Idea)
 

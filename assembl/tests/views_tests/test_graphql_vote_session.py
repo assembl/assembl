@@ -222,7 +222,7 @@ def test_graphql_get_vote_session_unauthenticated(graphql_unauthenticated_reques
     assert_graphql_unauthorized(response)
 
 
-def test_query_token_vote_specification(graphql_request, vote_session):
+def test_mutation_create_token_vote_specification(graphql_request, vote_session):
 
     mutation = u"""
     fragment langStringEntry on LangStringEntry {localeCode value}
@@ -295,3 +295,79 @@ def test_query_token_vote_specification(graphql_request, vote_session):
         ],
 
     })
+
+
+def test_mutation_update_token_vote_specification(graphql_request, vote_session):
+    mutation = u"""
+    fragment langStringEntry on LangStringEntry {localeCode value}
+    
+    mutation createTokenVoteSpecification(
+        $tokenVoteSpecificationId: ID!
+        $voteSessionId: ID!
+        $titleEntries: [LangStringEntryInput]!
+        $instructionsEntries: [LangStringEntryInput]!
+        $exclusiveCategories: Boolean!
+        $tokenCategories: [TokenCategorySpecificationInput]!
+        ) 
+    {
+            createTokenVoteSpecification(
+                tokenVoteSpecificationId: $tokenVoteSpecificationId
+                voteSessionId: $voteSessionId
+                titleEntries: $titleEntries
+                instructionsEntries: $instructionsEntries
+                exclusiveCategories: $exclusiveCategories
+                tokenCategories: $tokenCategories
+        ) 
+            {
+                tokenVoteSpecification {
+                ... on TokenVoteSpecification {
+                        id
+                        voteSessionId
+                        titleEntries {
+                            ...langStringEntry
+                        }
+                        instructionsEntries {
+                            ...langStringEntry
+                        }
+                        exclusiveCategories
+                        tokenCategories {
+                                        id
+                                        totalNumber
+                                        typename
+                                        titleEntries {
+                                            ...langStringEntry
+                                        }
+                                        color
+                                        }
+                                                }
+    }
+  }
+}"""
+    res = schema.execute(mutation, context_value=graphql_request, variable_values={
+        'voteSessionId': to_global_id('VoteSession', vote_session.id),
+        'titleEntries': [
+            {'value': "Comprendre les dynamiques et les enjeux (updated)", 'localeCode': "fr"},
+            {'value': "Understanding the dynamics and issues (updated)", 'localeCode': "en"}
+        ],
+        'instructionsEntries':
+        [
+            {'value': "Comprendre les dynamiques et les enjeux(updated)", 'localeCode': "fr"},
+            {'value': "Understanding the dynamics and issues(updated)", 'localeCode': "en"}
+        ],
+        'exclusiveCategories': True,
+        'tokenCategories':   [
+            {'titleEntries':
+             [
+                 {'value': "Comprendre les dynamiques et les enjeux (updated)", 'localeCode': "fr"},
+                 {'value': "Understanding the dynamics and issues (updated)", 'localeCode': "en"}
+             ],
+             'typename': 'negative',
+             'totalNumber': 14,
+             'color': 'blue'
+             }
+
+        ],
+
+    })
+
+    assert res.errors is None

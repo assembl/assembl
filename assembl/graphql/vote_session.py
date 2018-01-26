@@ -127,11 +127,11 @@ class VoteSpecificationInterface(SQLAlchemyInterface):
     title_entries = graphene.List(LangStringEntry, lang=graphene.String())
     type = graphene.String()
 
-    def resolve_instruction_entries(self, args, context, info):
-        return resolve_langstring(self.instruction_entries, args.get('lang'))
+    def resolve_instructions_entries(self, args, context, info):
+        return resolve_langstring(self.instructions_entries, args.get('lang'))
 
     def resolve_title_entries(self, args, context, info):
-        return resolve_langstring(self.instruction_entries, args.get('lang'))
+        return resolve_langstring(self.title_entries, args.get('lang'))
 
     def resolve_type(self, args, context, info):
         # do an if/condition
@@ -151,9 +151,6 @@ class TokenCategorySpecification(SecureObjectType, SQLAlchemyObjectType):
         only_fields = ('id', 'color', 'typename', 'total_number')
 
     title_entries = graphene.List(LangStringEntry, lang=graphene.String())
-
-    def resolve_number(self, args, context, info):
-        return self.total_number
 
     def resolve_title_entries(self, args, context, info):
         return resolve_langstring(self.name, args.get('lang'))
@@ -201,7 +198,7 @@ class CreateTokenVoteSpecification(graphene.Mutation):
         user_id = context.authenticated_userid or Everyone
         vote_session_id = args.get('vote_session_id')
         vote_session_id = int(Node.from_global_id(vote_session_id)[1])
-        instructions = args.get('instructions')
+        instructions = args.get('instructions_entries')
         exclusive_categories = args.get('exclusive_categories')
         token_categories = args.get('token_categories')
         title_entries = args.get('title_entries')
@@ -215,6 +212,7 @@ class CreateTokenVoteSpecification(graphene.Mutation):
                 raise HTTPUnauthorized()
 
             title_entries = langstring_from_input_entries(title_entries)
+            instructions = langstring_from_input_entries(instructions)
             saobj = cls(
                 title=title_entries,
                 instructions=instructions,
