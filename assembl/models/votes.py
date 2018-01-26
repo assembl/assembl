@@ -240,8 +240,8 @@ class AbstractVoteSpecification(DiscussionBoundBase):
     def get_discussion_id(self):
         from .widgets import Widget
         from .vote_session import VoteSession
-        widget = (self.widget_id and Widget.get(self.widget_id)
-            ) or (self.vote_session_id and VoteSession.get(self.vote_session_id))
+        widget = self.widget or (self.widget_id and Widget.get(self.widget_id)
+            ) or self.vote_session or (self.vote_session_id and VoteSession.get(self.vote_session_id))
         return widget.get_discussion_id()
 
     @classmethod
