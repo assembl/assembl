@@ -79,6 +79,9 @@ _projectname = assembl
 # _projectpath
 # _dbdumps_dir
 
+# If you wish to have ssl_stapling for nginx, path to certificate
+# on server
+oscp_path = '/tmp/ssl_certificates'
 
 supervisor__autostart_celery_imap = true
 supervisor__autostart_celery_notification_dispatch = true
