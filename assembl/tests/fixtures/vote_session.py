@@ -15,7 +15,7 @@ def vote_session(request, test_session, discussion, timeline_vote_session,
         instructions_section_content=LangString.create(u"vote session instructions fixture. Lorem ipsum dolor sit amet", "en"),
         propositions_section_title=LangString.create(u"vote session propositions section title fixture", "en")
     )
-    header_image = VoteSessionAttachment(
+    VoteSessionAttachment(
         discussion=discussion,
         document=simple_file,
         vote_session=vote_session,
@@ -69,12 +69,55 @@ def token_vote_specification(request, test_session, graphql_request, vote_sessio
         ]
     })
     assert res.errors is None
-    token_vote_spec = vote_session.vote_specifications[0]
+    vote_spec = vote_session.vote_specifications[0]
 
     def fin():
         print "finalizer token_vote_specification"
-        test_session.delete(token_vote_spec)
+        test_session.delete(vote_spec)
         test_session.flush()
 
     request.addfinalizer(fin)
-    return token_vote_spec
+    return vote_spec
+
+
+@pytest.fixture(scope="function")
+def gauge_vote_specification(request, test_session, graphql_request, vote_session, graphql_registry):
+    mutation = graphql_registry['createGaugeVoteSpecification']
+    vote_session_id = to_global_id("VoteSession", vote_session.id)
+    from assembl.graphql.schema import Schema as schema
+    res = schema.execute(mutation, context_value=graphql_request, variable_values={
+        "voteSessionId": vote_session_id,
+        "titleEntries": [
+            {"value": u"Comprendre les dynamiques et les enjeux", "localeCode": "fr"},
+            {"value": u"Understanding the dynamics and issues", "localeCode": "en"}
+        ],
+        "instructionsEntries":
+        [
+            {"value": u"Comprendre les dynamiques et les enjeux", "localeCode": "fr"},
+            {"value": u"Understanding the dynamics and issues", "localeCode": "en"}
+        ],
+        "choices": [
+            {"labelEntries": [
+                {"value": u"Cran 1", "localeCode": "fr"},
+                {"value": u"Tick 1", "localeCode": "en"}
+             ],
+             "value": 10.0,
+            },
+            {"labelEntries": [
+                {"value": u"Cran 2", "localeCode": "fr"},
+                {"value": u"Tick 2", "localeCode": "en"}
+             ],
+             "value": 20.0,
+            }
+        ]
+    })
+    assert res.errors is None
+    vote_spec = vote_session.vote_specifications[0]
+
+    def fin():
+        print "finalizer gauge_vote_specification"
+        test_session.delete(vote_spec)
+        test_session.flush()
+
+    request.addfinalizer(fin)
+    return vote_spec

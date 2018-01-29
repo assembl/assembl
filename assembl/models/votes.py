@@ -601,6 +601,22 @@ class GaugeChoiceSpecification(DiscussionBoundBase):
         gvs = self.gauge_vote_specification or GaugeVoteSpecification.get(self.gauge_vote_specification_id)
         return gvs.get_discussion_id()
 
+    @classmethod
+    def get_discussion_conditions(cls, discussion_id, alias_maker=None):
+        from .widgets import VotingWidget
+        if alias_maker is None:
+            gcs = cls
+            gvs = GaugeVoteSpecification
+            widget = VotingWidget
+        else:
+            gcs = alias_maker.alias_from_class(cls)
+            gvs = alias_maker.alias_from_relns(gcs.gauge_vote_specification)
+            widget = alias_maker.alias_from_relns(
+                gcs.gauge_vote_specification, gvs.widget)
+        return ((gcs.gauge_vote_specification_id == gvs.id),
+                (gvs.widget_id == widget.id),
+                (widget.discussion_id == discussion_id))
+
     crud_permissions = CrudPermissions(P_ADMIN_DISC, P_READ)
 
 

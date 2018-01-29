@@ -14,7 +14,7 @@ mutation updateTokenVoteSpecification(
     exclusiveCategories: $exclusiveCategories
     tokenCategories: $tokenCategories
   ) {
-    tokenVoteSpecification {
+    voteSpecification {
       ... on TokenVoteSpecification {
         id
         voteSessionId

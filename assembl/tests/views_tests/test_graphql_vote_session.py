@@ -242,7 +242,7 @@ def test_mutation_create_token_vote_specification(graphql_request, vote_session,
     token_category = token_vote_spec.token_categories[0]
     token_category_id = to_global_id("TokenCategorySpecification", token_category.id)
     assert json.loads(json.dumps(res.data)) == {
-u'createTokenVoteSpecification': {u'tokenVoteSpecification': {u'exclusiveCategories': True,
+u'createTokenVoteSpecification': {u'voteSpecification': {u'exclusiveCategories': True,
                                                               u'id': token_vote_spec_id,
                                                               u'instructionsEntries': [{u'localeCode': u'en',
                                                                                         u'value': u'Understanding the dynamics and issues'},
@@ -267,13 +267,13 @@ u'createTokenVoteSpecification': {u'tokenVoteSpecification': {u'exclusiveCategor
 
 
 def test_mutation_delete_token_vote_specification(graphql_request, token_vote_specification, graphql_registry):
-    mutation = graphql_registry['deleteTokenVoteSpecification']
+    mutation = graphql_registry['deleteVoteSpecification']
     token_vote_spec_id = to_global_id("TokenVoteSpecification", token_vote_specification.id)
     res = schema.execute(mutation, context_value=graphql_request, variable_values={
         "id": token_vote_spec_id
     })
     assert res.errors is None
-    assert True == res.data['deleteTokenVoteSpecification']['success']
+    assert True == res.data['deleteVoteSpecification']['success']
 
 
 def test_mutation_update_token_vote_specification(graphql_request, vote_session, token_vote_specification, graphql_registry):
@@ -309,25 +309,25 @@ def test_mutation_update_token_vote_specification(graphql_request, vote_session,
 
     assert res.errors is None
     assert json.loads(json.dumps(res.data)) == {
-u'updateTokenVoteSpecification': {u'tokenVoteSpecification': {u'exclusiveCategories': True,
-                                                              u'id': token_vote_spec_id,
-                                                              u'instructionsEntries': [{u'localeCode': u'en',
-                                                                                        u'value': u'Understanding the dynamics and issues (updated)'},
-                                                                                       {u'localeCode': u'fr',
-                                                                                        u'value': u'Comprendre les dynamiques et les enjeux (updated)'}],
-                                                              u'titleEntries': [{u'localeCode': u'en',
-                                                                                 u'value': u'Understanding the dynamics and issues (updated)'},
-                                                                                {u'localeCode': u'fr',
-                                                                                 u'value': u'Comprendre les dynamiques et les enjeux (updated)'}],
-                                                              u'tokenCategories': [{u'color': u'blue',
-                                                                                    u'id': token_category_id,
-                                                                                    u'titleEntries': [{u'localeCode': u'en',
-                                                                                                       u'value': u'Understanding the dynamics and issues (updated)'},
-                                                                                                      {u'localeCode': u'fr',
-                                                                                                       u'value': u'Comprendre les dynamiques et les enjeux (updated)'}],
-                                                                                    u'totalNumber': 14,
-                                                                                    u'typename': u'negative'}],
-                                                              u'voteSessionId': vote_session_id}}}
+u'updateTokenVoteSpecification': {u'voteSpecification': {u'exclusiveCategories': True,
+                                                         u'id': token_vote_spec_id,
+                                                         u'instructionsEntries': [{u'localeCode': u'en',
+                                                                                   u'value': u'Understanding the dynamics and issues (updated)'},
+                                                                                  {u'localeCode': u'fr',
+                                                                                   u'value': u'Comprendre les dynamiques et les enjeux (updated)'}],
+                                                         u'titleEntries': [{u'localeCode': u'en',
+                                                                            u'value': u'Understanding the dynamics and issues (updated)'},
+                                                                           {u'localeCode': u'fr',
+                                                                            u'value': u'Comprendre les dynamiques et les enjeux (updated)'}],
+                                                         u'tokenCategories': [{u'color': u'blue',
+                                                                               u'id': token_category_id,
+                                                                               u'titleEntries': [{u'localeCode': u'en',
+                                                                                                  u'value': u'Understanding the dynamics and issues (updated)'},
+                                                                                                 {u'localeCode': u'fr',
+                                                                                                  u'value': u'Comprendre les dynamiques et les enjeux (updated)'}],
+                                                                               u'totalNumber': 14,
+                                                                               u'typename': u'negative'}],
+                                                         u'voteSessionId': vote_session_id}}}
 
 
 def test_graphql_get_vote_session_and_vote_specifications(graphql_participant1_request, vote_session, token_vote_specification, graphql_registry):
@@ -341,3 +341,149 @@ def test_graphql_get_vote_session_and_vote_specifications(graphql_participant1_r
     assert response.errors is None
     assert len(response.data['voteSession']['voteSpecifications']) == 1
     assert 'tokenCategories' in response.data['voteSession']['voteSpecifications'][0]
+
+
+def test_mutation_create_gauge_vote_specification(graphql_request, vote_session, graphql_registry):
+    mutation = graphql_registry['createGaugeVoteSpecification']
+    vote_session_id = to_global_id("VoteSession", vote_session.id)
+    res = schema.execute(mutation, context_value=graphql_request, variable_values={
+        "voteSessionId": vote_session_id,
+        "titleEntries": [
+            {"value": u"Comprendre les dynamiques et les enjeux", "localeCode": "fr"},
+            {"value": u"Understanding the dynamics and issues", "localeCode": "en"}
+        ],
+        "instructionsEntries":
+        [
+            {"value": u"Comprendre les dynamiques et les enjeux", "localeCode": "fr"},
+            {"value": u"Understanding the dynamics and issues", "localeCode": "en"}
+        ],
+        "choices": [
+            {"labelEntries": [
+                {"value": u"Cran 1", "localeCode": "fr"},
+                {"value": u"Tick 1", "localeCode": "en"}
+             ],
+             "value": 10.0,
+            },
+            {"labelEntries": [
+                {"value": u"Cran 2", "localeCode": "fr"},
+                {"value": u"Tick 2", "localeCode": "en"}
+             ],
+             "value": 20.0,
+            }
+        ]
+    })
+    assert res.errors is None
+    vote_spec = vote_session.vote_specifications[0]
+    vote_spec_id = to_global_id("GaugeVoteSpecification", vote_spec.id)
+    choice1 = vote_spec.choices[0]
+    choice1_id = to_global_id("GaugeChoiceSpecification", choice1.id)
+    choice2 = vote_spec.choices[1]
+    choice2_id = to_global_id("GaugeChoiceSpecification", choice2.id)
+    assert json.loads(json.dumps(res.data)) == {
+u'createGaugeVoteSpecification': {u'voteSpecification': {u'id': vote_spec_id,
+                                                         u'instructionsEntries': [{u'localeCode': u'en',
+                                                                                   u'value': u'Understanding the dynamics and issues'},
+                                                                                  {u'localeCode': u'fr',
+                                                                                   u'value': u'Comprendre les dynamiques et les enjeux'}],
+                                                         u'titleEntries': [{u'localeCode': u'en',
+                                                                            u'value': u'Understanding the dynamics and issues'},
+                                                                           {u'localeCode': u'fr',
+                                                                            u'value': u'Comprendre les dynamiques et les enjeux'}],
+                                                         u'choices': [
+                                                             {u'value': 10.0,
+                                                              u'id': choice1_id,
+                                                              u'labelEntries': [{u'localeCode': u'en',
+                                                                                 u'value': u'Tick 1'},
+                                                                                {u'localeCode': u'fr',
+                                                                                 u'value': u'Cran 1'}],
+                                                             },
+                                                             {u'value': 20.0,
+                                                              u'id': choice2_id,
+                                                              u'labelEntries': [{u'localeCode': u'en',
+                                                                                 u'value': u'Tick 2'},
+                                                                                {u'localeCode': u'fr',
+                                                                                 u'value': u'Cran 2'}],
+                                                             },
+                                                         ],
+                                                         u'voteSessionId': vote_session_id}}}
+    # remove created vote specification
+    vote_session.vote_specifications.remove(vote_spec)
+    vote_session.db.flush()
+
+
+def test_mutation_delete_gauge_vote_specification(graphql_request, gauge_vote_specification, graphql_registry):
+    mutation = graphql_registry['deleteVoteSpecification']
+    vote_spec_id = to_global_id("GaugeVoteSpecification", gauge_vote_specification.id)
+    res = schema.execute(mutation, context_value=graphql_request, variable_values={
+        "id": vote_spec_id
+    })
+    assert res.errors is None
+    assert True == res.data['deleteVoteSpecification']['success']
+
+
+def test_mutation_update_gauge_vote_specification(graphql_request, vote_session, gauge_vote_specification, graphql_registry):
+    mutation = graphql_registry['updateGaugeVoteSpecification']
+    vote_session_id = to_global_id("VoteSession", vote_session.id)
+    gauge_vote_spec_id = to_global_id("GaugeVoteSpecification", gauge_vote_specification.id)
+    choice1 = gauge_vote_specification.choices[0]
+    choice1_id = to_global_id("GaugeChoiceSpecification", choice1.id)
+    choice2 = gauge_vote_specification.choices[1]
+    choice2_id = to_global_id("GaugeChoiceSpecification", choice2.id)
+    res = schema.execute(mutation, context_value=graphql_request, variable_values={
+        "id": gauge_vote_spec_id,
+        "titleEntries": [
+            {"value": u"Comprendre les dynamiques et les enjeux (updated)", "localeCode": "fr"},
+            {"value": u"Understanding the dynamics and issues (updated)", "localeCode": "en"}
+        ],
+        "instructionsEntries": [
+            {"value": u"Comprendre les dynamiques et les enjeux (updated)", "localeCode": "fr"},
+            {"value": u"Understanding the dynamics and issues (updated)", "localeCode": "en"}
+        ],
+        "choices": [
+            {
+             "id": choice1_id,
+             "labelEntries": [
+                {"value": u"Cran 1 (updated)", "localeCode": "fr"},
+                {"value": u"Tick 1 (updated)", "localeCode": "en"}
+             ],
+             "value": 20.0,
+            },
+            {
+             "id": choice2_id,
+             "labelEntries": [
+                {"value": u"Cran 2 (updated)", "localeCode": "fr"},
+                {"value": u"Tick 2 (updated)", "localeCode": "en"}
+             ],
+             "value": 30.0,
+            }
+        ]
+    })
+
+    assert res.errors is None
+    assert json.loads(json.dumps(res.data)) == {
+u'updateGaugeVoteSpecification': {u'voteSpecification': {u'id': gauge_vote_spec_id,
+                                                         u'instructionsEntries': [{u'localeCode': u'en',
+                                                                                   u'value': u'Understanding the dynamics and issues (updated)'},
+                                                                                  {u'localeCode': u'fr',
+                                                                                   u'value': u'Comprendre les dynamiques et les enjeux (updated)'}],
+                                                         u'titleEntries': [{u'localeCode': u'en',
+                                                                            u'value': u'Understanding the dynamics and issues (updated)'},
+                                                                           {u'localeCode': u'fr',
+                                                                            u'value': u'Comprendre les dynamiques et les enjeux (updated)'}],
+                                                         u'choices': [
+                                                             {u'value': 20.0,
+                                                              u'id': choice1_id,
+                                                              u'labelEntries': [{u'localeCode': u'en',
+                                                                                 u'value': u'Tick 1 (updated)'},
+                                                                                {u'localeCode': u'fr',
+                                                                                 u'value': u'Cran 1 (updated)'}],
+                                                             },
+                                                             {u'value': 30.0,
+                                                              u'id': choice2_id,
+                                                              u'labelEntries': [{u'localeCode': u'en',
+                                                                                 u'value': u'Tick 2 (updated)'},
+                                                                                {u'localeCode': u'fr',
+                                                                                 u'value': u'Cran 2 (updated)'}],
+                                                             },
+                                                         ],
+                                                         u'voteSessionId': vote_session_id}}}

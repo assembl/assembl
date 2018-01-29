@@ -1,5 +1,0 @@
-mutation deleteTokenVoteSpecification($id: ID!) {
-  deleteTokenVoteSpecification(id: $id) {
-    success
-  }
-}

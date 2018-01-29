@@ -126,6 +126,7 @@ class VoteSpecificationInterface(graphene.Interface):
     title_entries = graphene.List(LangStringEntry)
     instructions = graphene.String(lang=graphene.String())
     instructions_entries = graphene.List(LangStringEntry)
+    vote_session_id = graphene.ID(required=True)
 
     def resolve_title(self, args, context, info):
         return resolve_langstring(self.title, args.get('lang'))
@@ -138,6 +139,9 @@ class VoteSpecificationInterface(graphene.Interface):
 
     def resolve_instructions_entries(self, args, context, info):
         return resolve_langstring_entries(self, 'instructions')
+
+    def resolve_vote_session_id(self, args, context, info):
+        return Node.to_global_id('VoteSession', self.vote_session_id)
 
 
 class TokenCategorySpecification(SecureObjectType, SQLAlchemyObjectType):
@@ -165,15 +169,46 @@ class TokenVoteSpecification(SecureObjectType, SQLAlchemyObjectType):
         only_fields = ('id', 'exclusive_categories')
 
     token_categories = graphene.List(TokenCategorySpecification)
-    vote_session_id = graphene.ID(required=True)
 
-    def resolve_vote_session_id(self, args, context, info):
-        return Node.to_global_id('VoteSession', self.vote_session_id)
+
+class GaugeChoiceSpecification(SecureObjectType, SQLAlchemyObjectType):
+
+    class Meta:
+        model = models.GaugeChoiceSpecification
+        interfaces = (Node,)
+        only_fields = ('id', 'value')
+
+    label = graphene.String(lang=graphene.String())
+    label_entries = graphene.List(LangStringEntry)
+
+    def resolve_label(self, args, context, info):
+        return resolve_langstring(self.label, args.get('lang'))
+
+    def resolve_label_entries(self, args, context, info):
+        return resolve_langstring_entries(self, 'label')
+
+
+class GaugeVoteSpecification(SecureObjectType, SQLAlchemyObjectType):
+
+    class Meta:
+        model = models.GaugeVoteSpecification
+        interfaces = (Node, VoteSpecificationInterface)
+        only_fields = ('id', )
+
+    choices = graphene.List(GaugeChoiceSpecification)
+
+
+class NumberGaugeVoteSpecification(SecureObjectType, SQLAlchemyObjectType):
+
+    class Meta:
+        model = models.NumberGaugeVoteSpecification
+        interfaces = (Node, VoteSpecificationInterface)
+        only_fields = ('id', 'minimum', 'maximum', 'nb_ticks', 'unit')
 
 
 class VoteSpecificationUnion(SQLAlchemyUnion):
     class Meta:
-        types = (TokenVoteSpecification, )
+        types = (TokenVoteSpecification, GaugeVoteSpecification, NumberGaugeVoteSpecification)
         model = models.AbstractVoteSpecification
 
     @classmethod
@@ -182,6 +217,10 @@ class VoteSpecificationUnion(SQLAlchemyUnion):
             return type(instance)
         elif isinstance(instance, models.TokenVoteSpecification):
             return TokenVoteSpecification
+        elif isinstance(instance, models.GaugeVoteSpecification):
+            return GaugeVoteSpecification
+        elif isinstance(instance, models.NumberGaugeVoteSpecification):
+            return NumberGaugeVoteSpecification
 
 
 class TokenCategorySpecificationInput(graphene.InputObjectType):
@@ -190,6 +229,12 @@ class TokenCategorySpecificationInput(graphene.InputObjectType):
     total_number = graphene.Int(required=True)
     typename = graphene.String()
     color = graphene.String(required=True)
+
+
+class GaugeChoiceSpecificationInput(graphene.InputObjectType):
+    id = graphene.ID()
+    label_entries = graphene.List(LangStringEntryInput, required=True)
+    value = graphene.Float(required=True)
 
 
 class CreateTokenVoteSpecification(graphene.Mutation):
@@ -201,7 +246,7 @@ class CreateTokenVoteSpecification(graphene.Mutation):
         exclusive_categories = graphene.Boolean(required=True)
         token_categories = graphene.List(TokenCategorySpecificationInput, required=True)
 
-    token_vote_specification = graphene.Field(lambda: TokenVoteSpecification)
+    vote_specification = graphene.Field(lambda: TokenVoteSpecification)
 
     @staticmethod
     @abort_transaction_on_exception
@@ -226,7 +271,7 @@ class CreateTokenVoteSpecification(graphene.Mutation):
 
             title_ls = langstring_from_input_entries(title_entries)
             instructions_ls = langstring_from_input_entries(instructions_entries)
-            saobj = cls(
+            vote_spec = cls(
                 title=title_ls,
                 instructions=instructions_ls,
                 exclusive_categories=exclusive_categories
@@ -238,17 +283,18 @@ class CreateTokenVoteSpecification(graphene.Mutation):
                 typename = token_category.get('typename', 'category{}'.format(idx + 1))
                 color = token_category.get('color')
 
-                saobj.token_categories.append(
+                vote_spec.token_categories.append(
                     models.TokenCategorySpecification(
                         total_number=total_number,
                         typename=typename, name=title_ls,
                         color=color)
                 )
-            db.add(saobj)
-            vote_session.vote_specifications.append(saobj)
+
+            db.add(vote_spec)
+            vote_session.vote_specifications.append(vote_spec)
             db.flush()
 
-        return CreateTokenVoteSpecification(token_vote_specification=saobj)
+        return CreateTokenVoteSpecification(vote_specification=vote_spec)
 
 
 class UpdateTokenVoteSpecification(graphene.Mutation):
@@ -260,7 +306,7 @@ class UpdateTokenVoteSpecification(graphene.Mutation):
         exclusive_categories = graphene.Boolean(required=True)
         token_categories = graphene.List(TokenCategorySpecificationInput, required=True)
 
-    token_vote_specification = graphene.Field(lambda: TokenVoteSpecification)
+    vote_specification = graphene.Field(lambda: TokenVoteSpecification)
 
     @staticmethod
     @abort_transaction_on_exception
@@ -268,28 +314,28 @@ class UpdateTokenVoteSpecification(graphene.Mutation):
         cls = models.TokenVoteSpecification
         discussion_id = context.matchdict['discussion_id']
         user_id = context.authenticated_userid or Everyone
-        token_vote_spec_id = args.get('id')
-        token_vote_spec_id = int(Node.from_global_id(token_vote_spec_id)[1])
+        vote_spec_id = args.get('id')
+        vote_spec_id = int(Node.from_global_id(vote_spec_id)[1])
         title_entries = args.get('title_entries')
         instructions_entries = args.get('instructions_entries')
         exclusive_categories = args.get('exclusive_categories')
         token_categories = args.get('token_categories')
 
         with cls.default_db.no_autoflush as db:
-            toke_vote_spec = cls.get(token_vote_spec_id)
+            vote_spec = cls.get(vote_spec_id)
             permissions = get_permissions(user_id, discussion_id)
-            allowed = toke_vote_spec.user_can(
+            allowed = vote_spec.user_can(
                 user_id, CrudPermissions.UPDATE, permissions)
             if not allowed:
                 raise HTTPUnauthorized()
 
             update_langstring_from_input_entries(
-                toke_vote_spec, 'title', title_entries)
+                vote_spec, 'title', title_entries)
             update_langstring_from_input_entries(
-                toke_vote_spec, 'instructions', instructions_entries)
-            toke_vote_spec.exclusive_categories = exclusive_categories
+                vote_spec, 'instructions', instructions_entries)
+            vote_spec.exclusive_categories = exclusive_categories
             existing_token_categories = {
-                token_category.id: token_category for token_category in toke_vote_spec.token_categories}
+                token_category.id: token_category for token_category in vote_spec.token_categories}
             updated_token_categories = set()
             for idx, token_category_input in enumerate(token_categories):
                 if token_category_input.get('id', None) is not None:
@@ -307,7 +353,7 @@ class UpdateTokenVoteSpecification(graphene.Mutation):
                     total_number = token_category_input.get('total_number')
                     typename = token_category_input.get('typename', 'category{}'.format(idx + 1))
                     color = token_category_input.get('color')
-                    toke_vote_spec.token_categories.append(
+                    vote_spec.token_categories.append(
                         models.TokenCategorySpecification(
                             total_number=total_number,
                             typename=typename, name=title_ls,
@@ -321,10 +367,10 @@ class UpdateTokenVoteSpecification(graphene.Mutation):
 
             db.flush()
 
-        return UpdateTokenVoteSpecification(token_vote_specification=toke_vote_spec)
+        return UpdateTokenVoteSpecification(vote_specification=vote_spec)
 
 
-class DeleteTokenVoteSpecification(graphene.Mutation):
+class DeleteVoteSpecification(graphene.Mutation):
 
     class Input:
         id = graphene.ID(required=True)
@@ -337,9 +383,9 @@ class DeleteTokenVoteSpecification(graphene.Mutation):
         discussion_id = context.matchdict['discussion_id']
         user_id = context.authenticated_userid or Everyone
 
-        token_id = args.get('id')
-        token_id = int(Node.from_global_id(token_id)[1])
-        token = models.TokenVoteSpecification.get(token_id)
+        vote_spec_id = args.get('id')
+        vote_spec_id = int(Node.from_global_id(vote_spec_id)[1])
+        token = models.AbstractVoteSpecification.get(vote_spec_id)
 
         permissions = get_permissions(user_id, discussion_id)
         allowed = token.user_can(
@@ -349,4 +395,120 @@ class DeleteTokenVoteSpecification(graphene.Mutation):
 
         token.db.delete(token)
         token.db.flush()
-        return DeleteTokenVoteSpecification(success=True)
+        return DeleteVoteSpecification(success=True)
+
+
+class CreateGaugeVoteSpecification(graphene.Mutation):
+
+    class Input:
+        vote_session_id = graphene.ID(required=True)
+        title_entries = graphene.List(LangStringEntryInput, required=True)
+        instructions_entries = graphene.List(LangStringEntryInput, required=True)
+        choices = graphene.List(GaugeChoiceSpecificationInput, required=True)
+
+    vote_specification = graphene.Field(lambda: GaugeVoteSpecification)
+
+    @staticmethod
+    @abort_transaction_on_exception
+    def mutate(root, args, context, info):
+        cls = models.GaugeVoteSpecification
+        discussion_id = context.matchdict['discussion_id']
+        user_id = context.authenticated_userid or Everyone
+        vote_session_id = args.get('vote_session_id')
+        vote_session_id = int(Node.from_global_id(vote_session_id)[1])
+        title_entries = args.get('title_entries')
+        instructions_entries = args.get('instructions_entries')
+        choices = args.get('choices')
+
+        with cls.default_db.no_autoflush as db:
+            vote_session = db.query(models.VoteSession).get(vote_session_id)
+            permissions = get_permissions(user_id, discussion_id)
+            allowed = cls.user_can_cls(
+                user_id, CrudPermissions.CREATE, permissions)
+            if not allowed or (allowed == IF_OWNED and user_id == Everyone):
+                raise HTTPUnauthorized()
+
+            title_ls = langstring_from_input_entries(title_entries)
+            instructions_ls = langstring_from_input_entries(instructions_entries)
+            vote_spec = cls(
+                title=title_ls,
+                instructions=instructions_ls
+            )
+            for idx, choice in enumerate(choices):
+                label_ls = langstring_from_input_entries(
+                    choice['label_entries'])
+                value = choice['value']
+                vote_spec.choices.append(
+                    models.GaugeChoiceSpecification(
+                        label=label_ls, value=value)
+                )
+
+            db.add(vote_spec)
+            vote_session.vote_specifications.append(vote_spec)
+            db.flush()
+
+        return CreateGaugeVoteSpecification(vote_specification=vote_spec)
+
+
+class UpdateGaugeVoteSpecification(graphene.Mutation):
+
+    class Input:
+        id = graphene.ID(required=True)
+        title_entries = graphene.List(LangStringEntryInput, required=True)
+        instructions_entries = graphene.List(LangStringEntryInput, required=True)
+        choices = graphene.List(GaugeChoiceSpecificationInput, required=True)
+
+    vote_specification = graphene.Field(lambda: GaugeVoteSpecification)
+
+    @staticmethod
+    @abort_transaction_on_exception
+    def mutate(root, args, context, info):
+        cls = models.GaugeVoteSpecification
+        discussion_id = context.matchdict['discussion_id']
+        user_id = context.authenticated_userid or Everyone
+        vote_spec_id = args.get('id')
+        vote_spec_id = int(Node.from_global_id(vote_spec_id)[1])
+        title_entries = args.get('title_entries')
+        instructions_entries = args.get('instructions_entries')
+        choices = args.get('choices')
+
+        with cls.default_db.no_autoflush as db:
+            vote_spec = cls.get(vote_spec_id)
+            permissions = get_permissions(user_id, discussion_id)
+            allowed = vote_spec.user_can(
+                user_id, CrudPermissions.UPDATE, permissions)
+            if not allowed:
+                raise HTTPUnauthorized()
+
+            update_langstring_from_input_entries(
+                vote_spec, 'title', title_entries)
+            update_langstring_from_input_entries(
+                vote_spec, 'instructions', instructions_entries)
+            existing_choices = {
+                choice.id: choice for choice in vote_spec.choices}
+            updated_choices = set()
+            for idx, choice_input in enumerate(choices):
+                if choice_input.get('id', None) is not None:
+                    id_ = int(Node.from_global_id(choice_input['id'])[1])
+                    updated_choices.add(id_)
+                    choice = models.GaugeChoiceSpecification.get(id_)
+                    update_langstring_from_input_entries(
+                        choice, 'label', choice_input['label_entries'])
+                    choice.value = choice_input['value']
+                else:
+                    label_ls = langstring_from_input_entries(
+                        choice_input.get('label_entries', None))
+                    value = choice_input.get('value')
+                    vote_spec.choices.append(
+                        models.GaugeChoiceSpecification(
+                            label=label_ls, value=value)
+                    )
+
+            # remove choices that are not in choices input
+            for choice_id in set(existing_choices.keys()
+                                   ).difference(updated_choices):
+                db.delete(existing_choices[choice_id])
+
+            db.flush()
+
+        return UpdateGaugeVoteSpecification(vote_specification=vote_spec)

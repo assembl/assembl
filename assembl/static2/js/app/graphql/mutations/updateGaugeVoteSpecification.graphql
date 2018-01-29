@@ -1,21 +1,19 @@
 #import "../fragments/LangString.graphql"
 
-mutation createTokenVoteSpecification(
-  $voteSessionId: ID!
+mutation updateGaugeVoteSpecification(
+  $id: ID!
   $titleEntries: [LangStringEntryInput]!
   $instructionsEntries: [LangStringEntryInput]!
-  $exclusiveCategories: Boolean!
-  $tokenCategories: [TokenCategorySpecificationInput]!
+  $choices: [GaugeChoiceSpecificationInput]!
 ) {
-  createTokenVoteSpecification(
-    voteSessionId: $voteSessionId
+  updateGaugeVoteSpecification(
+    id: $id
     titleEntries: $titleEntries
     instructionsEntries: $instructionsEntries
-    exclusiveCategories: $exclusiveCategories
-    tokenCategories: $tokenCategories
+    choices: $choices
   ) {
     voteSpecification {
-      ... on TokenVoteSpecification {
+      ... on GaugeVoteSpecification {
         id
         voteSessionId
         titleEntries {
@@ -24,15 +22,12 @@ mutation createTokenVoteSpecification(
         instructionsEntries {
           ...langStringEntry
         }
-        exclusiveCategories
-        tokenCategories {
+        choices {
           id
-          totalNumber
-          typename
-          titleEntries {
+          value
+          labelEntries {
             ...langStringEntry
           }
-          color
         }
       }
     }

@@ -30,37 +30,37 @@ query VoteSession($discussionPhaseId: Int!, $lang: String!) {
           color
         }
       }
-      # ... on NumberGaugeVoteSpecification {
-      #   id
-      #   voteSessionId
-      #   titleEntries {
-      #     ...langStringEntry
-      #   }
-      #   instructionsEntries {
-      #     ...langStringEntry
-      #   }
-      #   minimum
-      #   maximum
-      #   nbTicks
-      #   unit
-      # }
-      # ... on GaugeVoteSpecification {
-      #   id
-      #   voteSessionId
-      #   titleEntries {
-      #     ...langStringEntry
-      #   }
-      #   instructionsEntries {
-      #     ...langStringEntry
-      #   }
-      #   choices {
-      #     id
-      #     value # float
-      #     label {
-      #       ...langStringEntry
-      #     }
-      #   }
-      # }
+      ... on NumberGaugeVoteSpecification {
+        id
+        voteSessionId
+        titleEntries {
+          ...langStringEntry
+        }
+        instructionsEntries {
+          ...langStringEntry
+        }
+        minimum
+        maximum
+        nbTicks
+        unit
+      }
+      ... on GaugeVoteSpecification {
+        id
+        voteSessionId
+        titleEntries {
+          ...langStringEntry
+        }
+        instructionsEntries {
+          ...langStringEntry
+        }
+        choices {
+          id
+          value
+          labelEntries {
+            ...langStringEntry
+          }
+        }
+      }
     }
   }
 }
