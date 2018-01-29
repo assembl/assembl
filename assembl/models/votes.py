@@ -558,6 +558,79 @@ class LickertVoteSpecification(AbstractVoteSpecification):
         return self.minimum <= vote.vote_value <= self.maximum
 
 
+class GaugeVoteSpecification(AbstractVoteSpecification):
+    __mapper_args__ = {
+        'polymorphic_identity': 'gauge_vote_specification'
+    }
+
+    @classmethod
+    def get_vote_class(cls):
+        return GaugeIdeaVote
+
+    def results_for(self, voting_results, histogram_size=None):
+        raise NotImplementedError
+
+    def csv_results(self, csv_file, histogram_size=None):
+        raise NotImplementedError
+
+
+class GaugeChoiceSpecification(DiscussionBoundBase):
+    "This represents a choice in the gauge"
+
+    __tablename__ = "gauge_choice_specification"
+
+    id = Column(Integer, primary_key=True)
+    value = Column(Float, nullable=False)
+    label_id = Column(Integer, ForeignKey(LangString.id), nullable=False, index=True)
+    gauge_vote_specification_id = Column(
+        Integer, ForeignKey(
+            GaugeVoteSpecification.id, ondelete='CASCADE', onupdate='CASCADE'),
+        nullable=False, index=True)
+
+    gauge_vote_specification = relationship(
+        GaugeVoteSpecification, foreign_keys=(gauge_vote_specification_id,),
+        backref=backref("choices", cascade="all, delete-orphan"))
+    label = relationship(
+        LangString, foreign_keys=(label_id,),
+        backref=backref("label_of_gauge_choice", lazy="dynamic"),
+        single_parent=True,
+        lazy="joined",
+        cascade="all, delete-orphan")
+
+    def get_discussion_id(self):
+        gvs = self.gauge_vote_specification or GaugeVoteSpecification.get(self.gauge_vote_specification_id)
+        return gvs.get_discussion_id()
+
+    crud_permissions = CrudPermissions(P_ADMIN_DISC, P_READ)
+
+
+LangString.setup_ownership_load_event(GaugeChoiceSpecification, ['label'])
+
+
+class NumberGaugeVoteSpecification(AbstractVoteSpecification):
+    __tablename__ = "number_gauge_vote_specification"
+    __mapper_args__ = {
+        'polymorphic_identity': 'number_gauge_vote_specification'
+    }
+
+    id = Column(
+        Integer, ForeignKey(AbstractVoteSpecification.id), primary_key=True)
+    minimum = Column(Float, default=1)
+    maximum = Column(Float, default=10)
+    nb_ticks = Column(Integer, default=10)
+    unit = Column(String(60))
+
+    @classmethod
+    def get_vote_class(cls):
+        return GaugeIdeaVote
+
+    def results_for(self, voting_results, histogram_size=None):
+        raise NotImplementedError
+
+    def csv_results(self, csv_file, histogram_size=None):
+        raise NotImplementedError
+
+
 class BinaryVoteSpecification(AbstractVoteSpecification):
     __mapper_args__ = {
         'polymorphic_identity': 'binary_vote_specification'
@@ -855,6 +928,41 @@ class LickertIdeaVote(AbstractIdeaVote):
             vote_value=self.vote_value
         )
         return super(LickertIdeaVote, self).copy(db=db, **kwargs)
+
+    @value.setter
+    def value(self, val):
+        val = float(val)
+        self.vote_value = val
+
+
+class GaugeIdeaVote(AbstractIdeaVote):
+    __tablename__ = "gauge_idea_vote"
+    __table_args__ = ()
+    __mapper_args__ = {
+        'polymorphic_identity': 'gauge_idea_vote',
+    }
+    id = Column(Integer, ForeignKey(
+        AbstractIdeaVote.id,
+        ondelete='CASCADE',
+        onupdate='CASCADE'
+    ), primary_key=True)
+
+    vote_value = Column(Float, nullable=False)
+
+    @classmethod
+    def external_typename(cls):
+        return cls.__name__
+
+    @property
+    def value(self):
+        return self.vote_value
+
+    def copy(self, tombstone=None, db=None, **kwargs):
+        kwargs.update(
+            tombstone=tombstone,
+            vote_value=self.vote_value
+        )
+        return super(GaugeIdeaVote, self).copy(db=db, **kwargs)
 
     @value.setter
     def value(self, val):

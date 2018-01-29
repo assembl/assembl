@@ -44,7 +44,7 @@ query VoteSession($discussionPhaseId: Int!, $lang: String!) {
       #   nbTicks
       #   unit
       # }
-      # ... on TextGaugeVoteSpecification {
+      # ... on GaugeVoteSpecification {
       #   id
       #   voteSessionId
       #   titleEntries {
