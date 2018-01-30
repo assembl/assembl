@@ -109,6 +109,130 @@ def root_post_en_under_positive_column_of_idea(
 
 
 @pytest.fixture(scope="function")
+def root_post_en_under_positive_column_of_subidea_1_1(
+        request, test_session, discussion, admin_user,
+        idea_message_column_positive_on_subidea_1_1):
+    from assembl.models import Post, LangString, IdeaRelatedPostLink
+    idea = idea_message_column_positive_on_subidea_1_1.idea
+    p = Post(
+        discussion=discussion, creator=admin_user,
+        subject=LangString.create(u"A simple root post under positive column of subidea_1_1"),
+        body=LangString.create(u"A simple root post under positive column of subidea_1_1"),
+        type='post', message_id="msg2@example3.com",
+        message_classifier=idea_message_column_positive_on_subidea_1_1.message_classifier)
+
+    idc = IdeaRelatedPostLink(
+        idea=idea,
+        creator=admin_user,
+        content=p)
+
+    test_session.add(p)
+    test_session.add(idc)
+    test_session.flush()
+
+    def fin():
+        print "finalizer root_post_en_under_positive_column_of_subidea_1_1"
+        test_session.delete(p)
+        test_session.delete(idc)
+        test_session.flush()
+
+    request.addfinalizer(fin)
+    return p
+
+
+@pytest.fixture(scope="function")
+def root_post_en_under_negative_column_of_subidea_1_1(
+        request, test_session, discussion, admin_user,
+        idea_message_column_negative_on_subidea_1_1):
+    from assembl.models import Post, LangString, IdeaRelatedPostLink
+    idea = idea_message_column_negative_on_subidea_1_1.idea
+    p = Post(
+        discussion=discussion, creator=admin_user,
+        subject=LangString.create(u"A simple root post under negative column of subidea_1_1"),
+        body=LangString.create(u"A simple root post under negative column of subidea_1_1"),
+        type='post', message_id="msg2@example3.com",
+        message_classifier=idea_message_column_negative_on_subidea_1_1.message_classifier)
+
+    idc = IdeaRelatedPostLink(
+        idea=idea,
+        creator=admin_user,
+        content=p)
+
+    test_session.add(p)
+    test_session.add(idc)
+    test_session.flush()
+
+    def fin():
+        print "finalizer root_post_en_under_negative_column_of_subidea_1_1"
+        test_session.delete(p)
+        test_session.delete(idc)
+        test_session.flush()
+
+    request.addfinalizer(fin)
+    return p
+
+
+@pytest.fixture(scope="function")
+def post_related_to_sub_idea_1(
+        request, test_session, discussion, admin_user, subidea_1):
+    from assembl.models import Post, LangString, IdeaRelatedPostLink
+    idea = subidea_1
+    p = Post(
+        discussion=discussion, creator=admin_user,
+        subject=LangString.create(u"A post related to sub_idea_1 "),
+        body=LangString.create(u"A post related to sub_idea_1"),
+        type='post', message_id="msg3@example3.com")
+
+    idc = IdeaRelatedPostLink(
+        idea=idea,
+        creator=admin_user,
+        content=p)
+
+    test_session.add(p)
+    test_session.add(idc)
+    test_session.flush()
+
+    def fin():
+        print "finalizer root_post_en_under_positive_column_of_idea"
+        test_session.delete(p)
+        test_session.delete(idc)
+        test_session.flush()
+
+    request.addfinalizer(fin)
+    return p
+
+
+@pytest.fixture(scope="function")
+def post_related_to_sub_idea_1_1_1(
+        request, test_session, discussion, admin_user, subidea_1_1_1):
+    from assembl.models import Post, LangString, IdeaRelatedPostLink
+    idea = subidea_1_1_1
+    p = Post(
+        discussion=discussion, creator=admin_user,
+        subject=LangString.create(u"A post related to sub_idea_1_1_1 "),
+        body=LangString.create(u"A post related to sub_idea_1_1_1"),
+        type='post', message_id="msg3@example3.com")
+
+    idc = IdeaRelatedPostLink(
+        idea=idea,
+        creator=admin_user,
+        content=p)
+
+    test_session.add(p)
+    test_session.add(idc)
+    test_session.flush()
+
+    def fin():
+        print "finalizer post_related_to_sub_idea_1_1_1"
+        test_session.delete(p)
+        test_session.delete(idc)
+        test_session.flush()
+
+    request.addfinalizer(fin)
+    return p
+
+
+@pytest.fixture(scope="function")
 def root_post_en_under_negative_column_of_idea(
         request, test_session, discussion, admin_user,
         idea_message_column_negative):
