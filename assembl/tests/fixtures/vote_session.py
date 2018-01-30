@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import pytest
 
 from graphql_relay.node.node import to_global_id
@@ -116,6 +117,39 @@ def gauge_vote_specification(request, test_session, graphql_request, vote_sessio
 
     def fin():
         print "finalizer gauge_vote_specification"
+        test_session.delete(vote_spec)
+        test_session.flush()
+
+    request.addfinalizer(fin)
+    return vote_spec
+
+
+@pytest.fixture(scope="function")
+def number_gauge_vote_specification(request, test_session, graphql_request, vote_session, graphql_registry):
+    mutation = graphql_registry['createNumberGaugeVoteSpecification']
+    vote_session_id = to_global_id("VoteSession", vote_session.id)
+    from assembl.graphql.schema import Schema as schema
+    res = schema.execute(mutation, context_value=graphql_request, variable_values={
+        "voteSessionId": vote_session_id,
+        "titleEntries": [
+            {"value": u"Comprendre les dynamiques et les enjeux", "localeCode": "fr"},
+            {"value": u"Understanding the dynamics and issues", "localeCode": "en"}
+        ],
+        "instructionsEntries":
+        [
+            {"value": u"Comprendre les dynamiques et les enjeux", "localeCode": "fr"},
+            {"value": u"Understanding the dynamics and issues", "localeCode": "en"}
+        ],
+        "minimum": 0.0,
+        "maximum": 60.0,
+        "nbTicks": 7,
+        "unit": u"M€"
+    })
+    assert res.errors is None
+    vote_spec = vote_session.vote_specifications[0]
+
+    def fin():
+        print "finalizer number_gauge_vote_specification"
         test_session.delete(vote_spec)
         test_session.flush()
 

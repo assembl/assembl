@@ -33,6 +33,7 @@ from assembl.graphql.user import UpdateUser
 from assembl.graphql.vote_session import (
     VoteSession, UpdateVoteSession, CreateTokenVoteSpecification,
     CreateGaugeVoteSpecification, UpdateGaugeVoteSpecification,
+    CreateNumberGaugeVoteSpecification, UpdateNumberGaugeVoteSpecification,
     UpdateTokenVoteSpecification, DeleteVoteSpecification)
 from assembl.graphql.utils import get_fields, get_root_thematic_for_phase
 from assembl.lib.locale import strip_country
@@ -289,6 +290,8 @@ class Mutations(graphene.ObjectType):
     update_token_vote_specification = UpdateTokenVoteSpecification.Field()
     create_gauge_vote_specification = CreateGaugeVoteSpecification.Field()
     update_gauge_vote_specification = UpdateGaugeVoteSpecification.Field()
+    create_number_gauge_vote_specification = CreateNumberGaugeVoteSpecification.Field()
+    update_number_gauge_vote_specification = UpdateNumberGaugeVoteSpecification.Field()
     delete_vote_specification = DeleteVoteSpecification.Field()
 
 

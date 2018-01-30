@@ -512,3 +512,97 @@ class UpdateGaugeVoteSpecification(graphene.Mutation):
             db.flush()
 
         return UpdateGaugeVoteSpecification(vote_specification=vote_spec)
+
+
+class CreateNumberGaugeVoteSpecification(graphene.Mutation):
+
+    class Input:
+        vote_session_id = graphene.ID(required=True)
+        title_entries = graphene.List(LangStringEntryInput, required=True)
+        instructions_entries = graphene.List(LangStringEntryInput, required=True)
+        minimum = graphene.Float(required=True)
+        maximum = graphene.Float(required=True)
+        nb_ticks = graphene.Int(required=True)
+        unit = graphene.String(required=True)
+
+    vote_specification = graphene.Field(lambda: NumberGaugeVoteSpecification)
+
+    @staticmethod
+    @abort_transaction_on_exception
+    def mutate(root, args, context, info):
+        cls = models.NumberGaugeVoteSpecification
+        discussion_id = context.matchdict['discussion_id']
+        user_id = context.authenticated_userid or Everyone
+        vote_session_id = args.get('vote_session_id')
+        vote_session_id = int(Node.from_global_id(vote_session_id)[1])
+        title_entries = args.get('title_entries')
+        instructions_entries = args.get('instructions_entries')
+
+        with cls.default_db.no_autoflush as db:
+            vote_session = db.query(models.VoteSession).get(vote_session_id)
+            permissions = get_permissions(user_id, discussion_id)
+            allowed = cls.user_can_cls(
+                user_id, CrudPermissions.CREATE, permissions)
+            if not allowed or (allowed == IF_OWNED and user_id == Everyone):
+                raise HTTPUnauthorized()
+
+            title_ls = langstring_from_input_entries(title_entries)
+            instructions_ls = langstring_from_input_entries(instructions_entries)
+            vote_spec = cls(
+                title=title_ls,
+                instructions=instructions_ls,
+                minimum=args['minimum'],
+                maximum=args['maximum'],
+                nb_ticks=args['nb_ticks'],
+                unit=args['unit']
+            )
+            db.add(vote_spec)
+            vote_session.vote_specifications.append(vote_spec)
+            db.flush()
+
+        return CreateNumberGaugeVoteSpecification(vote_specification=vote_spec)
+
+
+class UpdateNumberGaugeVoteSpecification(graphene.Mutation):
+
+    class Input:
+        id = graphene.ID(required=True)
+        title_entries = graphene.List(LangStringEntryInput, required=True)
+        instructions_entries = graphene.List(LangStringEntryInput, required=True)
+        minimum = graphene.Float(required=True)
+        maximum = graphene.Float(required=True)
+        nb_ticks = graphene.Int(required=True)
+        unit = graphene.String(required=True)
+
+    vote_specification = graphene.Field(lambda: NumberGaugeVoteSpecification)
+
+    @staticmethod
+    @abort_transaction_on_exception
+    def mutate(root, args, context, info):
+        cls = models.NumberGaugeVoteSpecification
+        discussion_id = context.matchdict['discussion_id']
+        user_id = context.authenticated_userid or Everyone
+        vote_spec_id = args.get('id')
+        vote_spec_id = int(Node.from_global_id(vote_spec_id)[1])
+        title_entries = args.get('title_entries')
+        instructions_entries = args.get('instructions_entries')
+
+        with cls.default_db.no_autoflush as db:
+            vote_spec = cls.get(vote_spec_id)
+            permissions = get_permissions(user_id, discussion_id)
+            allowed = vote_spec.user_can(
+                user_id, CrudPermissions.UPDATE, permissions)
+            if not allowed:
+                raise HTTPUnauthorized()
+
+            update_langstring_from_input_entries(
+                vote_spec, 'title', title_entries)
+            update_langstring_from_input_entries(
+                vote_spec, 'instructions', instructions_entries)
+            vote_spec.minimum = args['minimum']
+            vote_spec.maximum = args['maximum']
+            vote_spec.nb_ticks = args['nb_ticks']
+            vote_spec.unit = args['unit']
+            db.flush()
+
+        return UpdateNumberGaugeVoteSpecification(vote_specification=vote_spec)

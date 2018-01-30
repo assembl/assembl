@@ -487,3 +487,102 @@ u'updateGaugeVoteSpecification': {u'voteSpecification': {u'id': gauge_vote_spec_
                                                              },
                                                          ],
                                                          u'voteSessionId': vote_session_id}}}
+
+
+def test_mutation_create_number_gauge_vote_specification(graphql_request, vote_session, graphql_registry):
+    mutation = graphql_registry['createNumberGaugeVoteSpecification']
+    vote_session_id = to_global_id("VoteSession", vote_session.id)
+    res = schema.execute(mutation, context_value=graphql_request, variable_values={
+        "voteSessionId": vote_session_id,
+        "titleEntries": [
+            {"value": u"Comprendre les dynamiques et les enjeux", "localeCode": "fr"},
+            {"value": u"Understanding the dynamics and issues", "localeCode": "en"}
+        ],
+        "instructionsEntries":
+        [
+            {"value": u"Comprendre les dynamiques et les enjeux", "localeCode": "fr"},
+            {"value": u"Understanding the dynamics and issues", "localeCode": "en"}
+        ],
+        "minimum": 0.0,
+        "maximum": 60.0,
+        "nbTicks": 7,
+        "unit": u"M€"
+    })
+    assert res.errors is None
+    vote_spec = vote_session.vote_specifications[0]
+    vote_spec_id = to_global_id("NumberGaugeVoteSpecification", vote_spec.id)
+    assert json.loads(json.dumps(res.data)) == {
+u'createNumberGaugeVoteSpecification': {
+    u'voteSpecification': {
+        u'id': vote_spec_id,
+        u'instructionsEntries': [
+            {u'localeCode': u'en',
+             u'value': u'Understanding the dynamics and issues'},
+            {u'localeCode': u'fr',
+             u'value': u'Comprendre les dynamiques et les enjeux'}],
+        u'titleEntries': [
+            {u'localeCode': u'en',
+             u'value': u'Understanding the dynamics and issues'},
+            {u'localeCode': u'fr',
+             u'value': u'Comprendre les dynamiques et les enjeux'}],
+        u"minimum": 0.0,
+        u"maximum": 60.0,
+        u"nbTicks": 7,
+        u"unit": u"M€",
+        u'voteSessionId': vote_session_id}}}
+    # remove created vote specification
+    vote_session.vote_specifications.remove(vote_spec)
+    vote_session.db.flush()
+
+
+def test_mutation_delete_number_gauge_vote_specification(graphql_request, number_gauge_vote_specification, graphql_registry):
+    mutation = graphql_registry['deleteVoteSpecification']
+    vote_spec_id = to_global_id("NumberGaugeVoteSpecification", number_gauge_vote_specification.id)
+    res = schema.execute(mutation, context_value=graphql_request, variable_values={
+        "id": vote_spec_id
+    })
+    assert res.errors is None
+    assert True == res.data['deleteVoteSpecification']['success']
+
+
+def test_mutation_update_number_gauge_vote_specification(graphql_request, vote_session, number_gauge_vote_specification, graphql_registry):
+    mutation = graphql_registry['updateNumberGaugeVoteSpecification']
+    vote_session_id = to_global_id("VoteSession", vote_session.id)
+    gauge_vote_spec_id = to_global_id("NumberGaugeVoteSpecification", number_gauge_vote_specification.id)
+    res = schema.execute(mutation, context_value=graphql_request, variable_values={
+        "id": gauge_vote_spec_id,
+        "titleEntries": [
+            {"value": u"Comprendre les dynamiques et les enjeux (updated)", "localeCode": "fr"},
+            {"value": u"Understanding the dynamics and issues (updated)", "localeCode": "en"}
+        ],
+        "instructionsEntries": [
+            {"value": u"Comprendre les dynamiques et les enjeux (updated)", "localeCode": "fr"},
+            {"value": u"Understanding the dynamics and issues (updated)", "localeCode": "en"}
+        ],
+        u"minimum": 1.0,
+        u"maximum": 80.0,
+        u"nbTicks": 8,
+        u"unit": u"M$",
+        u'voteSessionId': vote_session_id
+    })
+
+    assert res.errors is None
+    assert json.loads(json.dumps(res.data)) == {
+u'updateNumberGaugeVoteSpecification': {
+    u'voteSpecification': {
+        u'id': gauge_vote_spec_id,
+        u'instructionsEntries': [
+            {u'localeCode': u'en',
+             u'value': u'Understanding the dynamics and issues (updated)'},
+            {u'localeCode': u'fr',
+             u'value': u'Comprendre les dynamiques et les enjeux (updated)'}],
+        u'titleEntries': [
+            {u'localeCode': u'en',
+             u'value': u'Understanding the dynamics and issues (updated)'},
+            {u'localeCode': u'fr',
+             u'value': u'Comprendre les dynamiques et les enjeux (updated)'}],
+        u"minimum": 1.0,
+        u"maximum": 80.0,
+        u"nbTicks": 8,
+        u"unit": u"M$",
+        u'voteSessionId': vote_session_id}}}

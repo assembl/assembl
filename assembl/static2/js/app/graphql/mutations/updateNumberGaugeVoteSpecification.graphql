@@ -1,0 +1,38 @@
+#import "../fragments/LangString.graphql"
+
+mutation updateNumberGaugeVoteSpecification(
+  $id: ID!
+  $titleEntries: [LangStringEntryInput]!
+  $instructionsEntries: [LangStringEntryInput]!
+  $minimum: Float!
+  $maximum: Float!
+  $nbTicks: Int!
+  $unit: String!
+) {
+  updateNumberGaugeVoteSpecification(
+    id: $id
+    titleEntries: $titleEntries
+    instructionsEntries: $instructionsEntries
+    minimum: $minimum
+    maximum: $maximum
+    nbTicks: $nbTicks
+    unit: $unit
+  ) {
+    voteSpecification {
+      ... on NumberGaugeVoteSpecification {
+        id
+        voteSessionId
+        titleEntries {
+          ...langStringEntry
+        }
+        instructionsEntries {
+          ...langStringEntry
+        }
+        minimum
+        maximum
+        nbTicks
+        unit
+      }
+    }
+  }
+}
