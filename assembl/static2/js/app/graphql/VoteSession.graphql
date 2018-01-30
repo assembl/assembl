@@ -2,6 +2,7 @@
 
 query VoteSession($discussionPhaseId: Int!, $lang: String!) {
   voteSession(discussionPhaseId: $discussionPhaseId) {
+    id
     ...voteSessionGlobals
     ...voteSessionLangstringsEntries
     title(lang: $lang)
@@ -9,7 +10,7 @@ query VoteSession($discussionPhaseId: Int!, $lang: String!) {
     instructionsSectionTitle(lang: $lang)
     instructionsSectionContent(lang: $lang)
     propositionsSectionTitle(lang: $lang)
-    voteSpecifications {
+    modules: voteSpecifications {
       ... on TokenVoteSpecification {
         id
         voteSessionId

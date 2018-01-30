@@ -19,6 +19,7 @@ describe('voteSession admin reducers', () => {
       expect(voteSessionPage(undefined, action)).toEqual(
         Map({
           hasChanged: false,
+          id: '',
           titleEntries: List(),
           subTitleEntries: List(),
           instructionsSectionTitleEntries: List(),
@@ -32,6 +33,7 @@ describe('voteSession admin reducers', () => {
       const action = { type: 'WHATEVER' };
       const oldState = Map({
         hasChanged: false,
+        id: '',
         titleEntries: List.of({ locale: 'en', value: 'Vote session title' }),
         subTitleEntries: List(),
         instructionsSectionTitleEntries: List(),
@@ -44,6 +46,7 @@ describe('voteSession admin reducers', () => {
     it('should handle UPDATE_VOTE_SESSION_PAGE_TITLE action type', () => {
       const oldState = fromJS({
         hasChanged: false,
+        id: '',
         titleEntries: [{ localeCode: 'fr', value: 'Titre en français' }, { localeCode: 'en', value: 'Title in english' }],
         subTitleEntries: [],
         instructionsSectionTitleEntries: [],
@@ -53,6 +56,7 @@ describe('voteSession admin reducers', () => {
       });
       const expected = fromJS({
         hasChanged: true,
+        id: '',
         titleEntries: [
           { localeCode: 'fr', value: 'Titre en français' },
           { localeCode: 'en', value: 'An elaborate title for the vote session page' }
@@ -74,6 +78,7 @@ describe('voteSession admin reducers', () => {
     it('should handle UPDATE_VOTE_SESSION_PAGE_SUBTITLE action type', () => {
       const oldState = fromJS({
         hasChanged: false,
+        id: '',
         titleEntries: [],
         subTitleEntries: [
           { localeCode: 'fr', value: 'Sous-titre en français' },
@@ -86,6 +91,7 @@ describe('voteSession admin reducers', () => {
       });
       const expected = fromJS({
         hasChanged: true,
+        id: '',
         titleEntries: [],
         subTitleEntries: [
           { localeCode: 'fr', value: 'Sous-titre en français' },
@@ -107,6 +113,7 @@ describe('voteSession admin reducers', () => {
     it('should handle UPDATE_VOTE_SESSION_PAGE_INSTRUCTIONS_TITLE action type', () => {
       const oldState = fromJS({
         hasChanged: false,
+        id: '',
         titleEntries: [],
         subTitleEntries: [],
         instructionsSectionTitleEntries: [
@@ -119,6 +126,7 @@ describe('voteSession admin reducers', () => {
       });
       const expected = fromJS({
         hasChanged: true,
+        id: '',
         titleEntries: [],
         subTitleEntries: [],
         instructionsSectionTitleEntries: [
@@ -140,6 +148,7 @@ describe('voteSession admin reducers', () => {
     it('should handle UPDATE_VOTE_SESSION_PAGE_INSTRUCTIONS_CONTENT action type', () => {
       const oldState = fromJS({
         hasChanged: false,
+        id: '',
         titleEntries: [],
         subTitleEntries: [],
         instructionsSectionTitleEntries: [],
@@ -152,6 +161,7 @@ describe('voteSession admin reducers', () => {
       });
       const expected = fromJS({
         hasChanged: true,
+        id: '',
         titleEntries: [],
         subTitleEntries: [],
         instructionsSectionTitleEntries: [],
@@ -173,6 +183,7 @@ describe('voteSession admin reducers', () => {
     it('should handle UPDATE_VOTE_SESSION_PAGE_PROPOSITIONS_TITLE action type', () => {
       const oldState = fromJS({
         hasChanged: false,
+        id: '',
         titleEntries: [],
         subTitleEntries: [],
         instructionsSectionTitleEntries: [],
@@ -185,6 +196,7 @@ describe('voteSession admin reducers', () => {
       });
       const expected = fromJS({
         hasChanged: true,
+        id: '',
         titleEntries: [],
         subTitleEntries: [],
         instructionsSectionTitleEntries: [],
@@ -206,6 +218,7 @@ describe('voteSession admin reducers', () => {
     it('should handle UPDATE_VOTE_SESSION_PAGE_IMAGE action type', () => {
       const oldState = fromJS({
         hasChanged: false,
+        id: '',
         titleEntries: [],
         subTitleEntries: [],
         instructionsSectionTitleEntries: [],
@@ -216,6 +229,7 @@ describe('voteSession admin reducers', () => {
       const file = new File([''], 'foo.jpg', { type: 'image/jpeg' });
       const expected = {
         hasChanged: true,
+        id: '',
         titleEntries: [],
         subTitleEntries: [],
         instructionsSectionTitleEntries: [],

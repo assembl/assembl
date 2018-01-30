@@ -16,6 +16,7 @@ type ModulesSectionProps = {
 
 const DumbModulesSection = ({ tokenModules, editLocale, handleCheckBoxChange }: ModulesSectionProps) => {
   const tokenModuleChecked = tokenModules.size > 0;
+  const tModule = tokenModules.toJS();
   return (
     <div className="admin-box">
       <SectionTitle title={I18n.t('administration.voteSession.1')} annotation={I18n.t('administration.annotation')} />
@@ -25,7 +26,7 @@ const DumbModulesSection = ({ tokenModules, editLocale, handleCheckBoxChange }: 
             <Checkbox
               checked={tokenModuleChecked}
               onChange={() => {
-                handleCheckBoxChange(tokenModuleChecked, tokenModules[0]);
+                handleCheckBoxChange(tokenModuleChecked, tModule[0]);
               }}
             >
               <Helper
@@ -47,7 +48,9 @@ const mapStateToProps = ({ admin }) => {
   const { modulesInOrder, modulesById } = admin.voteSession;
   const { editLocale } = admin;
   return {
-    tokenModules: modulesInOrder.filter(id => modulesById.getIn([id, 'type']) === 'tokens'),
+    tokenModules: modulesInOrder.filter(
+      id => modulesById.getIn([id, 'type']) === 'tokens' && !modulesById.getIn([id, 'toDelete'])
+    ),
     editLocale: editLocale
   };
 };

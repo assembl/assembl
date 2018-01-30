@@ -113,6 +113,7 @@ export const updateTokenVoteCategoryColor = (id: string, value: string): actionT
 });
 
 export const updateVoteSessionPage = (value: Object): actionTypes.UpdateVoteSessionPage => ({
+  id: value.id,
   titleEntries: value.titleEntries,
   subTitleEntries: value.subTitleEntries,
   instructionsSectionTitleEntries: value.instructionsSectionTitleEntries,

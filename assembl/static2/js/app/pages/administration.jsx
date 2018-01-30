@@ -64,7 +64,7 @@ class Administration extends React.Component {
     this.putSectionsInStore(this.props.sections);
     this.putLegalNoticeAndTermsInStore(this.props.legalNoticeAndTerms);
     this.putVoteSessionInStore(this.props.voteSession);
-    this.putVoteModulesInStore();
+    this.putVoteModulesInStore(this.props.voteSession);
     const isHidden = this.props.identifier === 'discussion' && this.props.location.query.section === '1';
     this.props.displayLanguageMenu(isHidden);
   }
@@ -116,6 +116,7 @@ class Administration extends React.Component {
 
   putVoteSessionInStore(voteSession) {
     const emptyVoteSession = {
+      id: '',
       titleEntries: [],
       subTitleEntries: [],
       instructionsSectionTitleEntries: [],
@@ -139,35 +140,19 @@ class Administration extends React.Component {
     this.props.updateVoteSessionPage(voteSessionForStore);
   }
 
-  putVoteModulesInStore() {
-    const mock = {
-      modules: [
-        {
-          type: 'tokens',
-          id: '12345',
-          titleEntries: [],
-          instructionsEntries: [],
-          exclusiveCategories: true,
-          tokenCategories: [
-            {
-              id: '123456789',
-              typename: 'positive',
-              titleEntries: [],
-              totalNumber: 10,
-              color: '#123456'
-            },
-            {
-              id: '987654321',
-              typename: 'negative',
-              titleEntries: [],
-              totalNumber: 3,
-              color: '#789456'
-            }
-          ]
-        }
-      ]
-    };
-    this.props.updateVoteModules(mock.modules);
+  putVoteModulesInStore(voteSession) {
+    const filteredVoteModules = filter(VoteSessionQuery, { voteSession: voteSession });
+    const filteredTokenVoteModules = filteredVoteModules.voteSession.modules.filter(
+      tokenVoteModule => tokenVoteModule.tokenCategories
+    );
+    const modules = [];
+    if (filteredTokenVoteModules[0]) {
+      modules.push({
+        ...filteredTokenVoteModules[0],
+        type: 'tokens'
+      });
+    }
+    this.props.updateVoteModules(modules);
   }
 
   putSectionsInStore(sections) {

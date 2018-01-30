@@ -22,6 +22,9 @@ import updateLegalNoticeAndTermsMutation from '../../graphql/mutations/updateLeg
 import updateDiscussionPreferenceQuery from '../../graphql/mutations/updateDiscussionPreference.graphql';
 import getDiscussionPreferenceLanguage from '../../graphql/DiscussionPreferenceLanguage.graphql';
 import updateVoteSessionMutation from '../../graphql/mutations/updateVoteSession.graphql';
+import deleteTokenVoteSpecificationMutation from '../../graphql/mutations/deleteTokenVoteSpecification.graphql';
+import createTokenVoteSpecificationMutation from '../../graphql/mutations/createTokenVoteSpecification.graphql';
+import updateTokenVoteSpecificationMutation from '../../graphql/mutations/updateTokenVoteSpecification.graphql';
 
 const runSerial = (tasks) => {
   let result = Promise.resolve();
@@ -109,6 +112,21 @@ const createVariablesForSectionMutation = section => ({
 
 const createVariablesForDeleteSectionMutation = section => ({ sectionId: section.id });
 
+const createVariablesForDeleteTokenVoteSpecificationMutation = voteModule => ({ id: voteModule.id });
+
+const createVariablesForTokenVoteSpecificationMutation = voteModules => ({
+  voteSessionId: voteModules.voteSessionId,
+  exclusiveCategories: voteModules.exclusiveCategories,
+  instructionsEntries: voteModules.instructionsEntries,
+  titleEntries: voteModules.titleEntries,
+  tokenCategories: voteModules.tokenCategories.map(t => ({
+    titleEntries: t.titleEntries,
+    color: t.color,
+    totalNumber: t.totalNumber,
+    typename: t.id
+  }))
+});
+
 const SaveButton = ({
   i18n,
   timeline,
@@ -144,7 +162,12 @@ const SaveButton = ({
   deleteSection,
   refetchLegalNoticeAndTerms,
   updateVoteSession,
-  voteSessionPage
+  voteSessionPage,
+  voteModules,
+  modulesHaveChanged,
+  deleteTokenVoteSpecification,
+  createTokenVoteSpecification,
+  updateTokenVoteSpecification
 }) => {
   const saveAction = () => {
     displayAlert('success', `${I18n.t('loading.wait')}...`);
@@ -293,6 +316,31 @@ const SaveButton = ({
           displayAlert('danger', `${error}`, false, 30000);
         });
     }
+
+    if (modulesHaveChanged) {
+      const voteSession = voteSessionPage.toJS();
+      const vModules = voteModules.toJS();
+      const items = [
+        {
+          ...vModules[0],
+          voteSessionId: voteSession.id
+        }
+      ];
+      const mutationsPromises = getMutationsPromises({
+        items: items,
+        variablesCreator: createVariablesForTokenVoteSpecificationMutation,
+        deleteVariablesCreator: createVariablesForDeleteTokenVoteSpecificationMutation,
+        createMutation: createTokenVoteSpecification,
+        updateMutation: updateTokenVoteSpecification,
+        deleteMutation: deleteTokenVoteSpecification,
+        lang: i18n.locale
+      });
+
+      runSerial(mutationsPromises).then(() => {
+        refetchSections();
+        displayAlert('success', I18n.t('administration.voteSessionSuccess'));
+      });
+    }
   };
 
   const disabled = !(
@@ -300,6 +348,7 @@ const SaveButton = ({
     languagePreferenceHasChanged ||
     resourcesHaveChanged ||
     sectionsHaveChanged ||
+    modulesHaveChanged ||
     resourcesCenterPage.get('hasChanged') ||
     legalNoticeAndTerms.get('hasChanged') ||
     voteSessionPage.get('hasChanged')
@@ -350,6 +399,15 @@ const SaveButtonWithMutations = compose(
   }),
   graphql(updateVoteSessionMutation, {
     name: 'updateVoteSession'
+  }),
+  graphql(deleteTokenVoteSpecificationMutation, {
+    name: 'deleteTokenVoteSpecification'
+  }),
+  graphql(createTokenVoteSpecificationMutation, {
+    name: 'createTokenVoteSpecification'
+  }),
+  graphql(updateTokenVoteSpecificationMutation, {
+    name: 'updateTokenVoteSpecification'
   })
 )(SaveButton);
 
@@ -370,7 +428,7 @@ const mapStateToProps = ({
 }) => {
   const { page, resourcesById, resourcesHaveChanged, resourcesInOrder } = resourcesCenter;
   const { sectionsById, sectionsHaveChanged, sectionsInOrder } = sections;
-  const { modulesById, modulesInOrder, tokenCategoriesById } = voteSession;
+  const { modulesById, modulesInOrder, tokenCategoriesById, modulesHaveChanged } = voteSession;
   return {
     resourcesCenterPage: page,
     resourcesHaveChanged: resourcesHaveChanged,
@@ -391,8 +449,9 @@ const mapStateToProps = ({
       .toJS(), // convert to array of objects
     legalNoticeAndTerms: legalNoticeAndTerms,
     voteSessionPage: voteSession.page,
+    modulesHaveChanged: modulesHaveChanged,
     voteModules: modulesInOrder.map(id =>
-      modulesById.get(id).set('tokenCategories', modulesById.getIn([id], 'tokenCategories').map(t => tokenCategoriesById.get(t)))
+      modulesById.get(id).set('tokenCategories', modulesById.getIn([id, 'tokenCategories']).map(t => tokenCategoriesById.get(t)))
     )
   };
 };
