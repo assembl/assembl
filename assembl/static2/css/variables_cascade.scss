@@ -3,6 +3,8 @@
 
 $first-color-opacity-70: rgba($first-color, 0.7) !default;
 
+$first-color-light-25: lighten($first-color, 25%) !default;
+
 $btn-light-border-color: $second-color !default;
 $btn-dark-border-color: $first-color !default;
 
