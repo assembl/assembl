@@ -3,8 +3,8 @@
 <svg xmlns="http://www.w3.org/2000/svg">
 <metadata>Copyright (C) 2018 by original authors @ fontello.com</metadata>
 <defs>
-<font id="fontello" horiz-adv-x="1000" >
-<font-face font-family="fontello" font-weight="400" font-stretch="normal" units-per-em="1000" ascent="850" descent="-150" />
+<font id="assembl-glyph" horiz-adv-x="1000" >
+<font-face font-family="assembl-glyph" font-weight="400" font-stretch="normal" units-per-em="1000" ascent="850" descent="-150" />
 <missing-glyph horiz-adv-x="1000" />
 <glyph glyph-name="add" unicode="&#xe800;" d="M946 420h-376v376c0 17-23 54-70 54s-70-37-70-54v-376h-376c-17 0-54-23-54-70s37-70 54-70h376v-376c0-17 24-54 70-54s70 37 70 54v376h376c17 0 54 24 54 70s-37 70-54 70z" horiz-adv-x="1000" />
 
@@ -47,6 +47,8 @@
 <glyph glyph-name="message" unicode="&#xe813;" d="M875 725h-750c-69 0-125-56-125-125v-500c0-69 56-125 125-125h750c69 0 125 56 125 125v500c0 69-56 125-125 125z m-206-334l265 227c2-6 4-11 4-18v-500c0-4-2-8-3-12l-266 303z m206 272c4 0 8-2 12-3l-387-331-387 331c4 1 8 3 12 3h750z m-810-575c-1 4-2 8-2 12v500c0 7 1 12 3 18l265-226-266-304z m60-50c-6 0-12 1-18 3l271 310 102-87c6-5 13-8 20-8s15 3 20 8l102 87 271-310c-6-2-12-3-18-3h-750z" horiz-adv-x="1000" />
 
 <glyph glyph-name="expert-1" unicode="&#xe814;" d="M500 648c-191 0-364-104-492-274-11-14-11-34 0-47 128-170 301-275 492-275s364 105 492 274c11 14 11 34 0 48-128 170-301 274-492 274z m14-508c-127-8-232 97-224 224 7 104 92 189 196 196 127 8 232-97 224-224-7-104-92-189-196-196z m-7 97c-68-4-124 52-120 120 4 57 49 102 106 106 68 4 125-52 120-120-4-57-49-102-106-106z" horiz-adv-x="1000" />
+
+<glyph glyph-name="right-dir" unicode="&#xe815;" d="M321 350q0-14-10-25l-250-250q-11-11-25-11t-25 11-11 25v500q0 15 11 25t25 11 25-11l250-250q10-10 10-25z" horiz-adv-x="357.1" />
 
 <glyph glyph-name="down-small" unicode="&#xe817;" d="M505 346q15-15 15-37t-15-37l-245-245-245 245q-15 15-15 37t15 37 37 15 37-15l120-119 0 395q0 21 15 36t36 15 37-15 16-36l0-395 120 119q15 15 36 15t36-15z" horiz-adv-x="520" />
 

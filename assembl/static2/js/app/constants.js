@@ -43,6 +43,12 @@ export const APOLLO_NETWORK_STATUS = {
   ready: 7
 };
 
+export const PHASE_STATUS = {
+  notStarted: 'notStarted',
+  completed: 'completed',
+  inProgress: 'inProgress'
+};
+
 // Those states lists need to be kept in sync with models/post.py
 export const PublicationStates = {
   DRAFT: 'DRAFT',

@@ -1,40 +1,44 @@
+// @flow
 import React from 'react';
 import { connect } from 'react-redux';
 import { isCurrentPhase, getBarPercent, isStepCompleted } from '../../../utils/timeline';
-import TimelineSegment from './timelineSegment';
+import TimelineSegment, { type DebateType } from './timelineSegment';
 
-class Timeline extends React.Component {
-  render() {
-    const { debateData } = this.props.debate;
-    const { locale } = this.props.i18n;
-    const { showNavigation, identifier } = this.props;
-    return (
-      <div className="timeline-container">
-        {debateData.timeline &&
-          debateData.timeline.map((phase, index) => (
-            <TimelineSegment
-              title={phase.title}
-              locale={locale}
-              index={index}
-              key={index}
-              barPercent={getBarPercent(debateData.timeline[index])}
-              isCurrentPhase={isCurrentPhase(debateData.timeline[index])}
-              showNavigation={showNavigation}
-              identifier={identifier}
-              phaseIdentifier={phase.identifier}
-              startDate={phase.start}
-              endDate={phase.end}
-              isStepCompleted={isStepCompleted(phase)}
-            />
-          ))}
-      </div>
-    );
-  }
+type TimelineProps = {
+  debate: DebateType,
+  showNavigation: boolean,
+  identifier: string,
+  onMenuItemClick: Function
+};
+
+export function DumbTimeline(props: TimelineProps) {
+  const { debateData } = props.debate;
+  const { showNavigation, identifier, onMenuItemClick } = props;
+  return (
+    <div className="timeline-container">
+      {debateData.timeline &&
+        debateData.timeline.map((phase, index) => (
+          <TimelineSegment
+            title={phase.title}
+            index={index}
+            key={index}
+            barPercent={getBarPercent(debateData.timeline[index])}
+            isCurrentPhase={isCurrentPhase(debateData.timeline[index])}
+            showNavigation={showNavigation}
+            identifier={identifier}
+            phaseIdentifier={phase.identifier}
+            startDate={phase.start}
+            endDate={phase.end}
+            isStepCompleted={isStepCompleted(phase)}
+            onMenuItemClick={onMenuItemClick}
+          />
+        ))}
+    </div>
+  );
 }
 
 const mapStateToProps = state => ({
-  debate: state.debate,
-  i18n: state.i18n
+  debate: state.debate
 });
 
-export default connect(mapStateToProps)(Timeline);
+export default connect(mapStateToProps)(DumbTimeline);

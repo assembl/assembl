@@ -1,0 +1,39 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`MenuList component should match the MenuList 1`] = `
+<div
+  className="menu-table-col debate-class"
+>
+  <div
+    className="menu-table"
+  >
+    <Connect(DumbMenuItem)
+      hasSubItems={false}
+      identifier="survey"
+      item={
+        Object {
+          "id": "foo",
+          "parentId": "root",
+        }
+      }
+      onClick={undefined}
+      onMouseOver={[Function]}
+      selected={false}
+    />
+    <Connect(DumbMenuItem)
+      hasSubItems={false}
+      identifier="survey"
+      item={
+        Object {
+          "id": "bar",
+          "parentId": "root",
+        }
+      }
+      onClick={undefined}
+      onMouseOver={[Function]}
+      selected={false}
+    />
+  </div>
+  
+</div>
+`;

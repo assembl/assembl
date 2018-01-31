@@ -1,0 +1,22 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`IdeasTable component should match the IdeasTable 1`] = `
+<MenuList
+  className=""
+  identifier="multiColumns"
+  items={
+    Array [
+      Object {
+        "id": "foo",
+        "parentId": "root",
+      },
+      Object {
+        "id": "bar",
+        "parentId": "root",
+      },
+    ]
+  }
+  onMenuItemClick={undefined}
+  rootItem="root"
+/>
+`;

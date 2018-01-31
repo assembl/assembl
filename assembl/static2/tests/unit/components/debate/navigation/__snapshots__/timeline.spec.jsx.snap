@@ -1,0 +1,50 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`DumbTimeline component should match the DumbTimeline 1`] = `
+<div
+  className="timeline-container"
+>
+  <Connect(withApollo(DumbTimelineSegment))
+    barPercent={0}
+    endDate="date2"
+    identifier="survey"
+    index={0}
+    isCurrentPhase={false}
+    isStepCompleted={false}
+    onMenuItemClick={undefined}
+    phaseIdentifier="foo"
+    showNavigation={true}
+    startDate="date1"
+    title={
+      Object {
+        "entries": Array [
+          Object {
+            "en": "Foo",
+          },
+        ],
+      }
+    }
+  />
+  <Connect(withApollo(DumbTimelineSegment))
+    barPercent={0}
+    endDate="date2Bar"
+    identifier="survey"
+    index={1}
+    isCurrentPhase={false}
+    isStepCompleted={false}
+    onMenuItemClick={undefined}
+    phaseIdentifier="bar"
+    showNavigation={true}
+    startDate="date1Bar"
+    title={
+      Object {
+        "entries": Array [
+          Object {
+            "en": "Bar",
+          },
+        ],
+      }
+    }
+  />
+</div>
+`;

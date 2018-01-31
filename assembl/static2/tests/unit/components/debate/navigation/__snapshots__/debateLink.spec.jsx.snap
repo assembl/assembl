@@ -1,0 +1,40 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`DebateLink component should match the DebateLink 1`] = `
+<div
+  className="debate-link"
+  onMouseLeave={[Function]}
+  onMouseOver={[Function]}
+>
+  <Link
+    activeClassName="debate-class-active"
+    className="debate-class"
+    data-text="Debate"
+    onlyActiveOnIndex={false}
+    style={Object {}}
+    to="https://foo.bar"
+  >
+    <span>
+      Debate
+    </span>
+  </Link>
+  <div
+    className="header-container"
+  >
+    <section
+      className="timeline-section"
+      id="timeline"
+    >
+      <div
+        className="max-container"
+      >
+        <Connect(DumbTimeline)
+          identifier="survey"
+          onMenuItemClick={[Function]}
+          showNavigation={true}
+        />
+      </div>
+    </section>
+  </div>
+</div>
+`;
