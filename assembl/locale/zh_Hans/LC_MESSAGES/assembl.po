@@ -7,28 +7,31 @@ msgid ""
 msgstr ""
 "Project-Id-Version: assembl 0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2017-05-17 18:30+0200\n"
+"POT-Creation-Date: 2018-01-31 10:34+0100\n"
 "PO-Revision-Date: 2017-09-27 21:10+0800\n"
 "Last-Translator: Benoit Grégoire <benoitg@coeus.ca>\n"
-"Language: en\n"
+"Language: zh_Hans\n"
 "Language-Team: en <LL@li.org>\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.3.4\n"
-"X-Generator: Poedit 2.0.3\n"
 
-#: assembl/auth/util.py:493
+#: assembl/auth/util.py:140
+msgid "Your session has expired, you need to login again"
+msgstr ""
+
+#: assembl/auth/util.py:504
 msgid "The CSV file must have two columns"
 msgstr "CSV文件必须有两列"
 
-#: assembl/auth/util.py:500
+#: assembl/auth/util.py:511
 #, python-format
 msgid "Not an email: <%s> at line %d"
 msgstr "不是电子邮件：<%s>在行%d"
 
-#: assembl/auth/util.py:503
+#: assembl/auth/util.py:514
 #, python-format
 msgid "Name too short: <%s> at line %d"
 msgstr "名称太短：<%s>在行%d"
@@ -45,291 +48,315 @@ msgstr "${val}不是一个字符串：${err}"
 msgid "Unknown User ${uid}"
 msgstr "未知用户${uid}"
 
-#: assembl/models/notification.py:624
+#: assembl/models/notification.py:626
 msgid "A synthesis is posted"
 msgstr "发布了一个综合"
 
-#: assembl/models/notification.py:652
+#: assembl/models/notification.py:655
 msgid "Any message is posted to the discussion"
 msgstr "任何消息都会发布到讨论中"
 
-#: assembl/models/notification.py:680
+#: assembl/models/notification.py:684
 msgid "Someone directly responds to one of your messages"
 msgstr "有人直接回复你的一个消息"
 
-#: assembl/models/notification.py:1090
+#: assembl/models/notification.py:1101
 msgid "SYNTHESIS: "
 msgstr "合成"
 
-#: assembl/models/preferences.py:344
-msgid "Languages used"
-msgstr "使用的语言"
-
-#: assembl/models/preferences.py:345
-msgid "All languages expected in the discussion"
-msgstr "讨论中预期的所有语言"
-
-#: assembl/models/preferences.py:355
-msgid "Use landing page"
-msgstr "使用着陆页"
-
-#: assembl/models/preferences.py:356
-msgid "Are users directed to the landing page and phases at login, or diretly to the debate"
-msgstr "用户是否直接登录到登陆页面并分阶段登录，或直接进行辩论"
-
-#: assembl/models/preferences.py:364 assembl/models/preferences.py:378
-msgid "Translation service"
-msgstr "翻译服务"
-
-#: assembl/models/preferences.py:367
-msgid "No translation"
-msgstr "没有翻译"
-
-#: assembl/models/preferences.py:369
-msgid "Dummy translation service (two steps)"
-msgstr "虚拟翻译服务（两步）"
-
-#: assembl/models/preferences.py:371
-msgid "Dummy translation service (one step)"
-msgstr "虚拟翻译服务（一步）"
-
-#: assembl/models/preferences.py:373
-msgid "Dummy translation service (two steps) with errors"
-msgstr "错误的翻译服务（两个步骤）"
-
-#: assembl/models/preferences.py:375
-msgid "Dummy translation service (one step) with errors"
-msgstr "错误翻译服务（一步）"
-
-#: assembl/models/preferences.py:377
-msgid "Google Translate"
-msgstr "谷歌翻译"
-
-#: assembl/models/preferences.py:390
-msgid "Panel order in simple view"
-msgstr "面板顺序简介模式"
-
-#: assembl/models/preferences.py:393
-msgid "Navigation, Idea, Messages"
-msgstr "导航，想法，消息"
-
-#: assembl/models/preferences.py:394
-msgid "Navigation, Messages, Idea"
-msgstr "导航，消息，想法"
-
-#: assembl/models/preferences.py:395
-msgid "Order of panels"
-msgstr "面板顺序"
-
-#: assembl/models/preferences.py:407
-msgid "Extra JSON parameters"
-msgstr "额外的JSON参数"
-
-#: assembl/models/preferences.py:409
-msgid "Parameters for quick frontend settings"
-msgstr "快速前端设置的参数"
-
-#: assembl/models/preferences.py:418
-msgid "Terms of use URL"
-msgstr "使用条款URL"
-
-#: assembl/models/preferences.py:420
-msgid "URL of a document presenting terms of use for the discussion"
-msgstr "提供讨论使用条款的文件的网址"
-
-#: assembl/models/preferences.py:429
-msgid "Video URL"
-msgstr "视频网址"
-
-#: assembl/models/preferences.py:431
-msgid "URL of a video presenting the discussion"
-msgstr "提供讨论的视频的网址"
-
-#: assembl/models/preferences.py:440
-msgid "Video description"
-msgstr "视频说明"
-
-#: assembl/models/preferences.py:442
-msgid "Description of the video presenting the discussion"
-msgstr "描述讨论的视频"
-
-#: assembl/models/preferences.py:451
-msgid "Social sharing"
-msgstr "社会化共享"
-
-#: assembl/models/preferences.py:454
-msgid "Show the share button on posts and ideas"
-msgstr "现实分享帖子和想法的按钮"
-
-#: assembl/models/preferences.py:465
-msgid "Private authentication server"
-msgstr "专用认证服务器"
-
-#: assembl/models/preferences.py:467
-msgid "Endpoint URL of a private authentication that users will mandatorily have to authenticate themselves with."
-msgstr "用户将被强制自己验证的私有身份验证的端点URL。"
-
-#: assembl/models/preferences.py:481 assembl/models/preferences.py:845
+#: assembl/models/preferences.py:114 assembl/models/preferences.py:537
 msgid "No special authentication"
 msgstr "没有特殊认证"
 
-#: assembl/models/preferences.py:483
+#: assembl/models/preferences.py:386
+msgid "Languages used"
+msgstr "使用的语言"
+
+#: assembl/models/preferences.py:387
+msgid "All languages expected in the discussion"
+msgstr "讨论中预期的所有语言"
+
+#: assembl/models/preferences.py:397
+msgid "Use landing page"
+msgstr "使用着陆页"
+
+#: assembl/models/preferences.py:398
+msgid ""
+"Are users directed to the landing page and phases at login, or diretly to"
+" the debate"
+msgstr "用户是否直接登录到登陆页面并分阶段登录，或直接进行辩论"
+
+#: assembl/models/preferences.py:406 assembl/models/preferences.py:420
+msgid "Translation service"
+msgstr "翻译服务"
+
+#: assembl/models/preferences.py:409
+msgid "No translation"
+msgstr "没有翻译"
+
+#: assembl/models/preferences.py:411
+msgid "Dummy translation service (two steps)"
+msgstr "虚拟翻译服务（两步）"
+
+#: assembl/models/preferences.py:413
+msgid "Dummy translation service (one step)"
+msgstr "虚拟翻译服务（一步）"
+
+#: assembl/models/preferences.py:415
+msgid "Dummy translation service (two steps) with errors"
+msgstr "错误的翻译服务（两个步骤）"
+
+#: assembl/models/preferences.py:417
+msgid "Dummy translation service (one step) with errors"
+msgstr "错误翻译服务（一步）"
+
+#: assembl/models/preferences.py:419
+msgid "Google Translate"
+msgstr "谷歌翻译"
+
+#: assembl/models/preferences.py:432
+msgid "Panel order in simple view"
+msgstr "面板顺序简介模式"
+
+#: assembl/models/preferences.py:435
+msgid "Navigation, Idea, Messages"
+msgstr "导航，想法，消息"
+
+#: assembl/models/preferences.py:436
+msgid "Navigation, Messages, Idea"
+msgstr "导航，消息，想法"
+
+#: assembl/models/preferences.py:437
+msgid "Order of panels"
+msgstr "面板顺序"
+
+#: assembl/models/preferences.py:449
+msgid "Extra JSON parameters"
+msgstr "额外的JSON参数"
+
+#: assembl/models/preferences.py:451
+msgid "Parameters for quick frontend settings"
+msgstr "快速前端设置的参数"
+
+#: assembl/models/preferences.py:460
+msgid "Terms of use URL"
+msgstr "使用条款URL"
+
+#: assembl/models/preferences.py:462
+msgid "URL of a document presenting terms of use for the discussion"
+msgstr "提供讨论使用条款的文件的网址"
+
+#: assembl/models/preferences.py:471
+msgid "Video URL"
+msgstr "视频网址"
+
+#: assembl/models/preferences.py:473
+msgid "URL of a video presenting the discussion"
+msgstr "提供讨论的视频的网址"
+
+#: assembl/models/preferences.py:482
+msgid "Video description"
+msgstr "视频说明"
+
+#: assembl/models/preferences.py:484
+msgid "Description of the video presenting the discussion"
+msgstr "描述讨论的视频"
+
+#: assembl/models/preferences.py:493
+msgid "Social sharing"
+msgstr "社会化共享"
+
+#: assembl/models/preferences.py:496
+msgid "Show the share button on posts and ideas"
+msgstr "现实分享帖子和想法的按钮"
+
+#: assembl/models/preferences.py:507
+msgid "Require anti-virus check"
+msgstr ""
+
+#: assembl/models/preferences.py:510
+msgid "Run an anti-virus on file attachments"
+msgstr ""
+
+#: assembl/models/preferences.py:521
+msgid "Private authentication server"
+msgstr "专用认证服务器"
+
+#: assembl/models/preferences.py:523
+msgid ""
+"Endpoint URL of a private authentication that users will mandatorily have"
+" to authenticate themselves with."
+msgstr "用户将被强制自己验证的私有身份验证的端点URL。"
+
+#: assembl/models/preferences.py:539
 msgid "WordPress OAuth Server"
 msgstr "WordPress OAuth服务器"
 
-#: assembl/models/preferences.py:485
+#: assembl/models/preferences.py:541
 msgid "Authentication service type"
 msgstr "验证服务类型"
 
-#: assembl/models/preferences.py:487
+#: assembl/models/preferences.py:543
 msgid ""
-"A primary authentication server for this discussion, defined as a python-social-auth backend. Participants will be auto-logged in to that server, and discussion auto-subscription will require "
-"an account from this backend."
+"A primary authentication server for this discussion, defined as a python-"
+"social-auth backend. Participants will be auto-logged in to that server, "
+"and discussion auto-subscription will require an account from this "
+"backend."
 msgstr "这个讨论的主要认证服务器，定义为python-social-auth后端。参与者将自动登录到该服务器，并且讨论自动订阅将需要此后端的帐户。"
 
-#: assembl/models/preferences.py:502
+#: assembl/models/preferences.py:558
 msgid "Authentication key"
 msgstr "认证密钥"
 
-#: assembl/models/preferences.py:503
+#: assembl/models/preferences.py:559
 msgid "Key for assembl as a client of the authentication server"
 msgstr "作为身份验证服务器的客户端进行汇编的密钥"
 
-#: assembl/models/preferences.py:515
+#: assembl/models/preferences.py:571
 msgid "Authentication secret"
 msgstr "认证秘密"
 
-#: assembl/models/preferences.py:516
+#: assembl/models/preferences.py:572
 msgid "Secret for assembl as a client of the authentication server"
 msgstr "作为认证服务器的客户端进行组装的秘密"
 
-#: assembl/models/preferences.py:529
+#: assembl/models/preferences.py:585
 msgid "Allow access to moderated text"
 msgstr "允许访问经过审核的文本"
 
-#: assembl/models/preferences.py:532
+#: assembl/models/preferences.py:588
 msgid "Are moderated posts simply hidden or made inaccessible by default?"
 msgstr "主持人的帖子是否隐藏或默认无法访问？"
 
-#: assembl/models/preferences.py:545
+#: assembl/models/preferences.py:601
 msgid "Idea panel opens automatically"
 msgstr "Idea面板自动打开"
 
-#: assembl/models/preferences.py:548
-msgid "Does the Idea panel automatically open when an idea is clicked ? (and close when a special section is clicked)"
+#: assembl/models/preferences.py:604
+msgid ""
+"Does the Idea panel automatically open when an idea is clicked ? (and "
+"close when a special section is clicked)"
 msgstr "点击想法时，Idea Panel会自动打开吗？ （当点击特殊部分时关闭）"
 
-#: assembl/models/preferences.py:560
+#: assembl/models/preferences.py:616
 msgid "Ids of columns in column view"
 msgstr "列视图中的列的标识"
 
-#: assembl/models/preferences.py:562
+#: assembl/models/preferences.py:618
 msgid "What are (ordered) identifiers of columns in multi-column views?"
 msgstr "多列视图中的列的哪些（有序）标识符？"
 
-#: assembl/models/preferences.py:575
+#: assembl/models/preferences.py:631
 msgid "Default colors of columns in column view"
 msgstr "列视图中列的默认颜色"
 
-#: assembl/models/preferences.py:577
+#: assembl/models/preferences.py:633
 msgid "What are (default) theme colors of columns in multi-column views?"
 msgstr "多列视图中的（默认）主题颜色是什么？"
 
-#: assembl/models/preferences.py:589
+#: assembl/models/preferences.py:645
 msgid "Names of columns in column view"
 msgstr "列视图中的列名"
 
-#: assembl/models/preferences.py:591
-msgid "What are (default) names of columns in multi-column views, in each discussion language?"
+#: assembl/models/preferences.py:647
+msgid ""
+"What are (default) names of columns in multi-column views, in each "
+"discussion language?"
 msgstr "在多列视图中，每种讨论语言中的（默认）列的名称是什么？"
 
-#: assembl/models/preferences.py:604
+#: assembl/models/preferences.py:660
 msgid "Default permissions"
 msgstr "默认权限"
 
-#: assembl/models/preferences.py:607
+#: assembl/models/preferences.py:663
 msgid "The basic permissions for a new discussion"
 msgstr "新讨论的基本权限"
 
-#: assembl/models/preferences.py:680
+#: assembl/models/preferences.py:745
 msgid "Require Email Domain"
 msgstr "需要电子邮件域"
 
-#: assembl/models/preferences.py:683
+#: assembl/models/preferences.py:748
 msgid ""
-"List of domain names of user email address required for self-registration. Only accounts with at least an email from those domains can self-register to this discussion. Anyone can self-"
-"register if this is empty."
+"List of domain names of user email address required for self-"
+"registration. Only accounts with at least an email from those domains can"
+" self-register to this discussion. Anyone can self-register if this is "
+"empty."
 msgstr "用户电子邮件地址自动注册所需的域名列表。只有至少有这些域名的电子邮件的帐户可以自行注册到此讨论。任何人都可以自行注册，如果这是空的。"
 
-#: assembl/models/preferences.py:699
+#: assembl/models/preferences.py:764
 msgid "Show CI Dashboard"
 msgstr "显示CI仪表板"
 
-#: assembl/models/preferences.py:702
+#: assembl/models/preferences.py:767
 msgid "Show the CI Dashboard in the panel group window"
 msgstr "在面板组窗口中显示CI仪表板"
 
-#: assembl/models/preferences.py:714
+#: assembl/models/preferences.py:779
 msgid "URL of CI Dashboard"
 msgstr "CI仪表板的URL"
 
-#: assembl/models/preferences.py:716
+#: assembl/models/preferences.py:781
 msgid "Configuration of the visualizations shown in the CI Dashboard"
 msgstr "CI仪表板中显示的可视化配置"
 
-#: assembl/models/preferences.py:734
+#: assembl/models/preferences.py:799
 msgid "Catalyst Visualizations"
 msgstr "催化剂可视化"
 
-#: assembl/models/preferences.py:737
+#: assembl/models/preferences.py:802
 msgid "A JSON description of available Catalyst visualizations"
 msgstr "可用Catalyst可视化的JSON描述"
 
-#: assembl/models/preferences.py:749
+#: assembl/models/preferences.py:814
 msgid "Navigation sections"
 msgstr "导航部分"
 
-#: assembl/models/preferences.py:752
-msgid "A JSON specification of Catalyst visualizations to show in the navigation section"
+#: assembl/models/preferences.py:817
+msgid ""
+"A JSON specification of Catalyst visualizations to show in the navigation"
+" section"
 msgstr "催化剂可视化的JSON规范显示在导航部分"
 
-#: assembl/models/preferences.py:765
+#: assembl/models/preferences.py:830
 msgid "Catalyst translations"
 msgstr "催化剂翻译"
 
-#: assembl/models/preferences.py:768
+#: assembl/models/preferences.py:833
 msgid "Translations applicable to Catalyst visualizations, in Jed (JSON) format"
 msgstr "适用于Jed（JSON）格式的Catalyst可视化的翻译"
 
-#: assembl/models/preferences.py:785
+#: assembl/models/preferences.py:850
 msgid "Default Table of Ideas Collapsed state"
 msgstr "想法的默认表折叠状态"
 
-#: assembl/models/preferences.py:788
-msgid "Default expanded/collapsed state of each idea in the table of ideas. A user can override it by opening/closing an idea"
+#: assembl/models/preferences.py:853
+msgid ""
+"Default expanded/collapsed state of each idea in the table of ideas. A "
+"user can override it by opening/closing an idea"
 msgstr "每个想法在思想表中的默认展开/折叠状态。用户可以通过打开/关闭想法来覆盖它"
 
-#: assembl/models/preferences.py:803
+#: assembl/models/preferences.py:868
 msgid "Preference data"
 msgstr "偏好数据"
 
-#: assembl/models/preferences.py:806
+#: assembl/models/preferences.py:871
 msgid "The preference configuration; override only with care"
 msgstr "偏好配置;只有小心重写"
 
-#: assembl/models/preferences.py:818
+#: assembl/models/preferences.py:883
 msgid "Cookies banner"
 msgstr "密码横幅"
 
-#: assembl/models/preferences.py:821
+#: assembl/models/preferences.py:886
 msgid "Show the banner offering to disable Piwik cookies"
 msgstr "显示横幅提供，以禁用Piwik密码"
 
-#: assembl/static/js/app/routeManager.js:535
+#: assembl/static/js/app/routeManager.js:570
 msgid "You must be logged in to access this page."
 msgstr "你必须先登录才能访问此页！"
 
-#: assembl/static/js/app/routeManager.js:558
+#: assembl/static/js/app/routeManager.js:593
 msgid "Your level of permissions do not allow you to see the rest of this content"
 msgstr "您的权限级别不允许您查看其余内容"
 
@@ -397,27 +424,28 @@ msgstr "在消息结束时显示以下预览"
 msgid "Sorry, only an image type is supported in this upload. Please try again."
 msgstr "对不起，此上传仅支持图像类型。请再试一次。"
 
-#: assembl/static/js/app/models/idea.js:120
+#: assembl/static/js/app/models/idea.js:132
 msgid "The root idea will not be in the synthesis"
 msgstr "根本的想法不会在综合中"
 
-#: assembl/static/js/app/models/idea.js:131
+#: assembl/static/js/app/models/idea.js:149
 msgid "Add a description of this idea"
 msgstr "添加这个想法的描述"
 
-#: assembl/static/js/app/models/idea.js:143
+#: assembl/static/js/app/models/idea.js:160
 msgid "The root idea will never be in the synthesis"
 msgstr "根本的想法永远不会在综合中"
 
-#: assembl/static/js/app/models/idea.js:156
+#: assembl/static/js/app/models/idea.js:183
 msgid "You can add an expression for the next synthesis"
 msgstr "您可以添加下一个合成的表达式"
 
-#: assembl/static/js/app/models/idea.js:167
+#: assembl/static/js/app/models/idea.js:193
 msgid "All posts"
 msgstr "所有文章"
 
-#: assembl/static/js/app/models/idea.js:179 assembl/static/js/app/views/ideaPanel.js:522
+#: assembl/static/js/app/models/idea.js:216
+#: assembl/static/js/app/views/ideaPanel.js:528
 msgid "New idea"
 msgstr "新想法"
 
@@ -426,7 +454,9 @@ msgid "You must be logged in to create segments"
 msgstr "您必须登录才能创建细分"
 
 #: assembl/static/js/app/models/segment.js:125
-msgid "invalid extract: the extract must have a valid idPost (here ) or a valid uri (here )"
+msgid ""
+"invalid extract: the extract must have a valid idPost (here ) or a valid "
+"uri (here )"
 msgstr "无效提取：提取必须有一个有效的idPost（这里）或一个有效的uri（这里）"
 
 #: assembl/static/js/app/models/segment.js:129
@@ -473,28 +503,22 @@ msgstr "您订阅的Facebook页面的帖子"
 msgid "Posts from users on a Facebook page to which you're subscribed"
 msgstr "您订阅的Facebook页面上的用户的帖子"
 
-#: assembl/static/js/app/models/synthesis.js:66
-msgid "Add a title"
-msgstr "添加标题"
-
-#: assembl/static/js/app/models/synthesis.js:67
-msgid "Add an introduction"
-msgstr "添加介绍"
-
-#: assembl/static/js/app/models/synthesis.js:68
-msgid "Add a conclusion"
-msgstr "得出结论"
-
 #: assembl/static/js/app/models/widget.js:258
 msgid "Create a voting session on this idea"
 msgstr "创建一个关于这个想法的投票会议"
 
-#: assembl/static/js/app/models/widget.js:261 assembl/static/js/app/models/widget.js:273 assembl/static/js/app/models/widget.js:466
+#: assembl/static/js/app/models/widget.js:261
+#: assembl/static/js/app/models/widget.js:273
+#: assembl/static/js/app/models/widget.js:478
 msgid "Vote"
 msgstr "投票"
 
-#: assembl/static/js/app/models/widget.js:263 assembl/static/js/app/models/widget.js:267 assembl/static/js/app/models/widget.js:468 assembl/static/js/app/models/widget.js:1025
-#: assembl/static/js/app/models/widget.js:1033 assembl/static/js/app/models/widget.js:1173
+#: assembl/static/js/app/models/widget.js:263
+#: assembl/static/js/app/models/widget.js:267
+#: assembl/static/js/app/models/widget.js:480
+#: assembl/static/js/app/models/widget.js:1037
+#: assembl/static/js/app/models/widget.js:1045
+#: assembl/static/js/app/models/widget.js:1185
 msgid "Configure"
 msgstr "配置"
 
@@ -518,118 +542,128 @@ msgstr "配置此投票小部件"
 msgid "See results from the vote of "
 msgstr "看投票结果"
 
-#: assembl/static/js/app/models/widget.js:329
+#: assembl/static/js/app/models/widget.js:289
+#, fuzzy
+#| msgid "See the vote results"
+msgid "Vote results"
+msgstr "看投票结果"
+
+#: assembl/static/js/app/models/widget.js:332
 msgid "This vote widget is not fully configured"
 msgstr "此投票窗口小部件尚未完全配置"
 
-#: assembl/static/js/app/models/widget.js:333
+#: assembl/static/js/app/models/widget.js:336
 msgid "A voting session has started."
 msgstr "投票会议开始了。"
 
-#: assembl/static/js/app/models/widget.js:339
+#: assembl/static/js/app/models/widget.js:342
 #, python-format
 msgid "You cannot vote right now because %s."
 msgstr "你现在不能投票，因为%s 。"
 
-#: assembl/static/js/app/models/widget.js:347
+#: assembl/static/js/app/models/widget.js:350
 #, python-format
 msgid "The option “%s” is being considered in a vote"
 msgstr "选项“ %s ”正在投票中被考虑"
 
-#: assembl/static/js/app/models/widget.js:350
+#: assembl/static/js/app/models/widget.js:353
 #, python-format
 msgid "The option “%s” was considered in a vote"
 msgstr "选项“ %s ”在投票中被考虑"
 
-#: assembl/static/js/app/models/widget.js:352
+#: assembl/static/js/app/models/widget.js:355
 msgid "A voting session is ongoing on this issue"
 msgstr "这个问题正在进行表决"
 
-#: assembl/static/js/app/models/widget.js:354
+#: assembl/static/js/app/models/widget.js:357
 msgid "A voting session has happened on this issue"
 msgstr "在这个问题上发生了一个投票会议"
 
-#: assembl/static/js/app/models/widget.js:356
+#: assembl/static/js/app/models/widget.js:359
 #, python-format
 msgid "“%s” is being used as a criterion in a vote"
 msgstr "“%s”被用作投票的标准"
 
-#: assembl/static/js/app/models/widget.js:358
+#: assembl/static/js/app/models/widget.js:361
 #, python-format
 msgid "“%s” was used as a criterion in a vote"
 msgstr "“%s”被用作投票的标准"
 
-#: assembl/static/js/app/models/widget.js:368
+#: assembl/static/js/app/models/widget.js:371
 #, python-format
 msgid "You have %s to vote"
 msgstr "您有%s投票"
 
-#: assembl/static/js/app/models/widget.js:426
+#: assembl/static/js/app/models/widget.js:438
 msgid "Create a multi-criterion voting session on this idea"
 msgstr "创建一个关于这个想法的多标准投票会话"
 
-#: assembl/static/js/app/models/widget.js:462
+#: assembl/static/js/app/models/widget.js:474
 msgid "Create a token voting session on this idea"
 msgstr "创建关于这个想法的令牌投票会话"
 
-#: assembl/static/js/app/models/widget.js:1020
+#: assembl/static/js/app/models/widget.js:1032
 msgid "Create a creativity session on this idea"
 msgstr "创建一个关于这个想法的创意会议"
 
-#: assembl/static/js/app/models/widget.js:1023 assembl/static/js/app/models/widget.js:1037
+#: assembl/static/js/app/models/widget.js:1035
+#: assembl/static/js/app/models/widget.js:1049
 msgid "Participate"
 msgstr "参与"
 
-#: assembl/static/js/app/models/widget.js:1030
+#: assembl/static/js/app/models/widget.js:1042
 msgid "Configure the creativity session on this idea"
 msgstr "配置创意会议这个想法"
 
-#: assembl/static/js/app/models/widget.js:1039
+#: assembl/static/js/app/models/widget.js:1051
 msgid "Review the session"
 msgstr "查看会话"
 
-#: assembl/static/js/app/models/widget.js:1068
+#: assembl/static/js/app/models/widget.js:1080
 msgid "This widget is not fully configured"
 msgstr "此小部件尚未完全配置"
 
-#: assembl/static/js/app/models/widget.js:1072
+#: assembl/static/js/app/models/widget.js:1084
 msgid "A creativity session is ongoing."
 msgstr "创意会议正在进行中。"
 
-#: assembl/static/js/app/models/widget.js:1080
+#: assembl/static/js/app/models/widget.js:1092
 msgid "A creativity session is ongoing on this issue"
 msgstr "在这个问题上正在进行创造性的会议"
 
-#: assembl/static/js/app/models/widget.js:1082
+#: assembl/static/js/app/models/widget.js:1094
 msgid "A creativity session has happened on this issue"
 msgstr "在这个问题上发生了一个创造性的会议"
 
-#: assembl/static/js/app/models/widget.js:1086
+#: assembl/static/js/app/models/widget.js:1098
 #, python-format
 msgid "You have %s to participate"
 msgstr "您有%s参与"
 
-#: assembl/static/js/app/models/widget.js:1162
+#: assembl/static/js/app/models/widget.js:1174
 msgid "Create an inspiration module on this idea"
 msgstr "创建一个关于这个想法的灵感模块"
 
-#: assembl/static/js/app/models/widget.js:1164
+#: assembl/static/js/app/models/widget.js:1176
 msgid "Create an inspiration module on this discussion"
 msgstr "在此讨论中创建灵感模块"
 
-#: assembl/static/js/app/models/widget.js:1166
+#: assembl/static/js/app/models/widget.js:1178
 msgid "Configure the inspiration module associated to the discussion"
 msgstr "配置与讨论相关的灵感模块"
 
-#: assembl/static/js/app/models/widget.js:1168
+#: assembl/static/js/app/models/widget.js:1180
 msgid "Configure the inspiration module associated to this idea"
 msgstr "配置与这个想法相关联的灵感模块"
 
-#: assembl/static/js/app/models/widget.js:1171 assembl/templates/views/messageList.tmpl:35 assembl/templates/views/messageList.tmpl:45
+#: assembl/static/js/app/models/widget.js:1183
+#: assembl/templates/views/messageList.tmpl:35
+#: assembl/templates/views/messageList.tmpl:45
 msgid "I need inspiration"
 msgstr "我需要灵感"
 
-#: assembl/static/js/app/utils/tourManager.js:22 assembl/static/js/app/utils/tourManager.js:193
+#: assembl/static/js/app/utils/tourManager.js:22
+#: assembl/static/js/app/utils/tourManager.js:193
 msgid "Next"
 msgstr "下一个"
 
@@ -645,11 +679,13 @@ msgstr "完成"
 msgid "Skip"
 msgstr "跳过"
 
-#: assembl/static/js/app/utils/tourManager.js:26 assembl/templates/views/exportPostModal.tmpl:32
+#: assembl/static/js/app/utils/tourManager.js:26
+#: assembl/templates/views/exportPostModal.tmpl:32
 msgid "Close"
 msgstr "关闭"
 
-#: assembl/static/js/app/utils/tours/assemblTours.js:18 assembl/templates/views/helperDebate.tmpl:3
+#: assembl/static/js/app/utils/tours/assemblTours.js:18
+#: assembl/templates/views/helperDebate.tmpl:3
 msgid "Welcome!"
 msgstr "欢迎！ "
 
@@ -658,7 +694,9 @@ msgid "Thank you"
 msgstr "谢谢你们"
 
 #: assembl/static/js/app/utils/tours/assemblTours.js:22
-msgid "Welcome to this discussion. We’ve created series of hints to help you get started using Assembl."
+msgid ""
+"Welcome to this discussion. We’ve created series of hints to help you get"
+" started using Assembl."
 msgstr "欢迎来到这个讨论。我们创建了一系列的提示来帮助您开始使用Assembl。"
 
 #: assembl/static/js/app/utils/tours/assemblTours.js:37
@@ -667,8 +705,9 @@ msgstr "加入讨论"
 
 #: assembl/static/js/app/utils/tours/assemblTours.js:38
 msgid ""
-"This is the conversation panel, where the discussion takes place. You can reply to messages directly, or start a new topic by clicking ‘Start a new discussion thread’ at the bottom of the "
-"panel."
+"This is the conversation panel, where the discussion takes place. You can"
+" reply to messages directly, or start a new topic by clicking ‘Start a "
+"new discussion thread’ at the bottom of the panel."
 msgstr "这是讨论的对话小组。您可以直接用信息回复，或通过点击面板底部的“开始新的讨论话题”来开始新的主题。"
 
 #: assembl/static/js/app/utils/tours/assemblTours.js:64
@@ -676,7 +715,9 @@ msgid "Customize your view"
 msgstr "自定义您的视图"
 
 #: assembl/static/js/app/utils/tours/assemblTours.js:65
-msgid "You can view the discussion in many different ways using the filters at the top."
+msgid ""
+"You can view the discussion in many different ways using the filters at "
+"the top."
 msgstr "您可以使用顶部的过滤器以许多不同的方式查看讨论。"
 
 #: assembl/static/js/app/utils/tours/assemblTours.js:91
@@ -684,7 +725,9 @@ msgid "Spot relevant quotes on each idea"
 msgstr "每个想法的相关报价"
 
 #: assembl/static/js/app/utils/tours/assemblTours.js:92
-msgid "Excerpts from messages are harvested and are organized to help you find relevant contributions on this idea."
+msgid ""
+"Excerpts from messages are harvested and are organized to help you find "
+"relevant contributions on this idea."
 msgstr "收集消息的摘录并组织起来，以帮助您找到有关这一想法的相关贡献。"
 
 #: assembl/static/js/app/utils/tours/assemblTours.js:107
@@ -693,7 +736,9 @@ msgstr "探索其中一个主题"
 
 #: assembl/static/js/app/utils/tours/assemblTours.js:108
 msgid ""
-"You can find the topics that are currently being discussed in this table of contents. Clicking on a topic will filter the conversation to only show messages that are related to this topic."
+"You can find the topics that are currently being discussed in this table "
+"of contents. Clicking on a topic will filter the conversation to only "
+"show messages that are related to this topic."
 msgstr "您可以在本表内容中找到当前正在讨论的主题。单击主题将过滤对话以仅显示与此主题相关的消息。"
 
 #: assembl/static/js/app/utils/tours/assemblTours.js:119
@@ -701,7 +746,9 @@ msgid "Catch up on what’s been said"
 msgstr "补上钢材所说的话"
 
 #: assembl/static/js/app/utils/tours/assemblTours.js:121
-msgid "Periodically an executive summary of the discussion is created to give you a quick overview of what was said since the last executive summary"
+msgid ""
+"Periodically an executive summary of the discussion is created to give "
+"you a quick overview of what was said since the last executive summary"
 msgstr "定期推出讨论的摘要，以便快速概述自上次摘要以来发表的内容"
 
 #: assembl/static/js/app/utils/tours/assemblTours.js:131
@@ -709,7 +756,9 @@ msgid "DISABLED"
 msgstr "已停用"
 
 #: assembl/static/js/app/utils/tours/assemblTours.js:133
-msgid "Find the different syntheses produced since the beginning of the discussion"
+msgid ""
+"Find the different syntheses produced since the beginning of the "
+"discussion"
 msgstr "找到自讨论开始以来产生的不同综合"
 
 #: assembl/static/js/app/utils/tours/assemblTours.js:143
@@ -717,7 +766,9 @@ msgid "Catch up on the evolution"
 msgstr "赶上进化"
 
 #: assembl/static/js/app/utils/tours/assemblTours.js:145
-msgid "The facilitator of the discussion has written this synthesis to help you get on board of the discussion. Enjoy reading!"
+msgid ""
+"The facilitator of the discussion has written this synthesis to help you "
+"get on board of the discussion. Enjoy reading!"
 msgstr "讨论的协调人撰写了这一综合信息，以帮助您了解讨论情况。享受阅读！"
 
 #: assembl/static/js/app/utils/tours/assemblTours.js:155
@@ -725,7 +776,9 @@ msgid "Dig more on an interesting idea and post your contribution"
 msgstr "挖掘更多有趣的想法，并发布您的贡献"
 
 #: assembl/static/js/app/utils/tours/assemblTours.js:157
-msgid "You can click on this idea to see current discussions happening on it. You would be able to start contributing on this idea from there."
+msgid ""
+"You can click on this idea to see current discussions happening on it. "
+"You would be able to start contributing on this idea from there."
 msgstr "您可以点击这个想法来查看当前的讨论情况。你可以从那里开始对这个想法做出贡献。"
 
 #: assembl/static/js/app/utils/tours/assemblTours.js:170
@@ -733,7 +786,10 @@ msgid "Stay informed"
 msgstr "随时掌握信息！"
 
 #: assembl/static/js/app/utils/tours/assemblTours.js:171
-msgid "Notifications are set to go to your email. If you aren’t receiving them, make sure to check your spam folder! You can update your notification settings here."
+msgid ""
+"Notifications are set to go to your email. If you aren’t receiving them, "
+"make sure to check your spam folder! You can update your notification "
+"settings here."
 msgstr "通知将设置为您的电子邮件。如果您没有收到它们，请确保检查您的垃圾邮件文件夹！您可以在这里更新您的通知设置。"
 
 #: assembl/static/js/app/views/agent.js:87
@@ -741,11 +797,11 @@ msgstr "通知将设置为您的电子邮件。如果您没有收到它们，请
 msgid "All messages by %s"
 msgstr "所有消息由%s"
 
-#: assembl/static/js/app/views/announcements.js:143
+#: assembl/static/js/app/views/announcements.js:177
 msgid "Please give a title of this announcement..."
 msgstr "请给出本公告的标题..."
 
-#: assembl/static/js/app/views/announcements.js:150
+#: assembl/static/js/app/views/announcements.js:185
 msgid "Please write the content of this announcement here..."
 msgstr "请在这里写下这个公告的内容..."
 
@@ -754,7 +810,8 @@ msgstr "请在这里写下这个公告的内容..."
 msgid "For URL %s in the text above"
 msgstr "对于上述文本中的URL %s"
 
-#: assembl/static/js/app/views/attachments.js:260 assembl/templates/views/langStringEntry.tmpl:12
+#: assembl/static/js/app/views/attachments.js:260
+#: assembl/templates/views/langStringEntry.tmpl:12
 msgid "Remove"
 msgstr "去掉"
 
@@ -764,7 +821,9 @@ msgstr "对于上传的文件"
 
 #: assembl/static/js/app/views/attachments.js:336
 #, python-format
-msgid "We are sorry, there was an error during the upload of the file \"%s\". Please try again."
+msgid ""
+"We are sorry, there was an error during the upload of the file \"%s\". "
+"Please try again."
 msgstr "很抱歉，在上传文件“%s”时发生错误。请再试一次。"
 
 #: assembl/static/js/app/views/attachments.js:507
@@ -787,11 +846,13 @@ msgstr "按时间顺序排列"
 msgid "Chronological threads + jump to oldest unread message"
 msgstr "按时间顺序线程+跳到最旧的未读消息"
 
-#: assembl/static/js/app/views/baseMessageList.js:206 assembl/static/js/app/views/messageColumnsPanel.js:236
+#: assembl/static/js/app/views/baseMessageList.js:206
+#: assembl/static/js/app/views/messageColumnsPanel.js:241
 msgid "Newest messages first"
 msgstr "最新消息"
 
-#: assembl/static/js/app/views/baseMessageList.js:211 assembl/static/js/app/views/messageColumnsPanel.js:241
+#: assembl/static/js/app/views/baseMessageList.js:211
+#: assembl/static/js/app/views/messageColumnsPanel.js:246
 msgid "Most popular messages first"
 msgstr "最流行的消息第一"
 
@@ -799,7 +860,9 @@ msgstr "最流行的消息第一"
 msgid "No messages"
 msgstr "没有消息"
 
-#: assembl/static/js/app/views/baseMessageList.js:1046 assembl/static/js/app/views/messageSend.js:181 assembl/templates/do_password_change.jinja2:30
+#: assembl/static/js/app/views/baseMessageList.js:1046
+#: assembl/static/js/app/views/messageSend.js:191
+#: assembl/templates/do_password_change.jinja2:30
 #: assembl/templates/request_password_change.jinja2:28
 msgid "Send"
 msgstr "发送"
@@ -824,11 +887,20 @@ msgstr "您需要设置主题才能添加新主题..."
 msgid "Send to clipboard"
 msgstr "发送到剪贴板"
 
-#: assembl/static/js/app/views/baseMessageList.js:1557 assembl/static/js/app/views/confirmModal.js:32 assembl/static/js/app/views/messageSend.js:180
-#: assembl/templates/styleguide/components/Dialogs.jinja2:119 assembl/templates/styleguide/components/Dialogs.jinja2:146 assembl/templates/views/adminPartnerEditForm.tmpl:65
-#: assembl/templates/views/adminPartnerEditForm.tmpl:71 assembl/templates/views/adminPartnerForm.tmpl:63 assembl/templates/views/adminPartnerForm.tmpl:69
-#: assembl/templates/views/ckeditorField.tmpl:10 assembl/templates/views/create-group.tmpl:128 assembl/templates/views/messageModerationOptions.tmpl:32
-#: assembl/templates/views/message_translation_question_selection.tmpl:14 assembl/templates/views/showSegmentByAnnotation.tmpl:9
+#: assembl/static/js/app/views/baseMessageList.js:1557
+#: assembl/static/js/app/views/confirmModal.js:32
+#: assembl/static/js/app/views/messageSend.js:190
+#: assembl/templates/styleguide/components/Dialogs.jinja2:119
+#: assembl/templates/styleguide/components/Dialogs.jinja2:146
+#: assembl/templates/views/adminPartnerEditForm.tmpl:65
+#: assembl/templates/views/adminPartnerEditForm.tmpl:71
+#: assembl/templates/views/adminPartnerForm.tmpl:63
+#: assembl/templates/views/adminPartnerForm.tmpl:69
+#: assembl/templates/views/ckeditorField.tmpl:10
+#: assembl/templates/views/create-group.tmpl:128
+#: assembl/templates/views/messageModerationOptions.tmpl:32
+#: assembl/templates/views/message_translation_question_selection.tmpl:14
+#: assembl/templates/views/showSegmentByAnnotation.tmpl:9
 msgid "Cancel"
 msgstr "取消"
 
@@ -840,31 +912,38 @@ msgstr "您可以将下面的段落直接拖动到想法表"
 msgid "You can also copy-paste from the text in the zone below"
 msgstr "您还可以从以下区域的文本复制粘贴"
 
-#: assembl/static/js/app/views/baseMessageList.js:1603
+#: assembl/static/js/app/views/baseMessageList.js:1606
 #, python-format
-msgid "This extract was organized in the idea \" %s \" by the facilitator of the debate"
+msgid ""
+"This extract was organized in the idea \" %s \" by the facilitator of the"
+" debate"
 msgstr "这个提法由辩论的协调人组织在“%s”的想法中"
 
-#: assembl/static/js/app/views/baseMessageList.js:1606
+#: assembl/static/js/app/views/baseMessageList.js:1609
 msgid "This extract is in a harvester's clipboard and hasn' been sorted yet."
 msgstr "该提取物在收割机的剪贴板中，尚未排序。"
 
-#: assembl/static/js/app/views/baseMessageList.js:2262
+#: assembl/static/js/app/views/baseMessageList.js:2265
 #, python-format
 msgid "%d new message has been posted.  Click here to refresh"
 msgid_plural "%d new messages have been posted.  Click here to refresh"
 msgstr[0] "已发布%d新消息。点击这里刷新"
 msgstr[1] "已发布%d新消息。点击这里刷新"
 
-#: assembl/static/js/app/views/confirmModal.js:33 assembl/static/js/app/views/ideaPanel.js:714 assembl/static/js/app/views/ideaPanel.js:725 assembl/static/js/app/views/ideaPanel.js:734
+#: assembl/static/js/app/views/confirmModal.js:33
+#: assembl/static/js/app/views/ideaPanel.js:720
+#: assembl/static/js/app/views/ideaPanel.js:731
+#: assembl/static/js/app/views/ideaPanel.js:740
 msgid "OK"
 msgstr "好"
 
-#: assembl/static/js/app/views/contextPage.js:90 assembl/static/js/app/views/navigation/synthesisInNavigation.js:146
+#: assembl/static/js/app/views/contextPage.js:91
+#: assembl/static/js/app/views/navigation/synthesisInNavigation.js:146
 msgid "No synthesis of the discussion has been published yet"
 msgstr "讨论的综合尚未公布"
 
-#: assembl/static/js/app/views/contextPage.js:272 assembl/templates/views/navigation.tmpl:21
+#: assembl/static/js/app/views/contextPage.js:274
+#: assembl/templates/views/navigation.tmpl:21
 msgid "Home"
 msgstr "主页"
 
@@ -873,7 +952,8 @@ msgstr "主页"
 msgid "Sorry, we have failed to upload your file \"%s\". Please try again."
 msgstr "对不起，我们无法上传您的文件“%s”。请再试一次。"
 
-#: assembl/static/js/app/views/externalVisualization.js:24 assembl/templates/views/create-group.tmpl:107
+#: assembl/static/js/app/views/externalVisualization.js:24
+#: assembl/templates/views/create-group.tmpl:107
 msgid "CI Dashboard"
 msgstr "CI仪表板"
 
@@ -899,11 +979,15 @@ msgstr ""
 "\n"
 
 #: assembl/static/js/app/views/facebookViews.js:51
-msgid "Please be aware that comments below will be imported into a discussion found at "
+msgid ""
+"Please be aware that comments below will be imported into a discussion "
+"found at "
 msgstr "请注意，以下评论将导入到讨论中"
 
 #: assembl/static/js/app/views/facebookViews.js:297
-msgid "An error occured whilst communicating with Facebook. Close the box and try again."
+msgid ""
+"An error occured whilst communicating with Facebook. Close the box and "
+"try again."
 msgstr "与Facebook进行通信时发生错误。关闭该框，然后重试。"
 
 #: assembl/static/js/app/views/facebookViews.js:432
@@ -911,11 +995,15 @@ msgid "You did not log into facebook. Please log-in to continue."
 msgstr "你没有登录Facebook。请登录访问更多内容。"
 
 #: assembl/static/js/app/views/facebookViews.js:451
-msgid "There was an issue with getting your Facebook login status. Please close this box and contact your discussion administrator."
+msgid ""
+"There was an issue with getting your Facebook login status. Please close "
+"this box and contact your discussion administrator."
 msgstr "获取您的Facebook登录状态有问题。请关闭此框，并与您的讨论管理员联系。"
 
 #: assembl/static/js/app/views/facebookViews.js:546
-msgid "Great! You already have a facebook account. Below are the list of permissions we need for the exportation process."
+msgid ""
+"Great! You already have a facebook account. Below are the list of "
+"permissions we need for the exportation process."
 msgstr "大！你已经有一个Facebook帐户。以下是导出过程所需的权限列表。"
 
 #: assembl/static/js/app/views/facebookViews.js:547
@@ -923,7 +1011,10 @@ msgid "Click here if you agree with these permissions."
 msgstr "如果您同意这些权限，请点击此处。"
 
 #: assembl/static/js/app/views/facebookViews.js:551
-msgid "It appears that your session was expired. Click below to refresh your session. As always, below are the permissions that Assembl would need to continue."
+msgid ""
+"It appears that your session was expired. Click below to refresh your "
+"session. As always, below are the permissions that Assembl would need to "
+"continue."
 msgstr "看来您的会话已过期。点击下面刷新您的会话。和往常一样，下面是Assembl需要继续的权限。"
 
 #: assembl/static/js/app/views/facebookViews.js:552
@@ -939,7 +1030,9 @@ msgid "Sign in using your Facebook account"
 msgstr "使用您的Facebook帐户登录"
 
 #: assembl/static/js/app/views/facebookViews.js:799
-msgid "Assembl is a collective intelligence tool designed to enable open, democratic discussions that lead to idea generation and innovation."
+msgid ""
+"Assembl is a collective intelligence tool designed to enable open, "
+"democratic discussions that lead to idea generation and innovation."
 msgstr "Assembl是一个集体情报工具，旨在实现公开，民主的讨论，导致思想创造和创新。"
 
 #: assembl/static/js/app/views/facebookViews.js:866
@@ -947,11 +1040,15 @@ msgid "Facebook was unable to create the post. Close the box and try again."
 msgstr "Facebook无法创建该帖子。关闭该框，然后重试。"
 
 #: assembl/static/js/app/views/facebookViews.js:947
-msgid "Please select between pages, groups or your wall as the final destination to complete the form."
+msgid ""
+"Please select between pages, groups or your wall as the final destination"
+" to complete the form."
 msgstr "请在页面，组或墙之间选择作为完成表单的最终目的地。"
 
 #: assembl/static/js/app/views/facebookViews.js:970
-msgid "Something went wrong on Assembl whilst creating your post. Please contact the Discussion administrator for more information."
+msgid ""
+"Something went wrong on Assembl whilst creating your post. Please contact"
+" the Discussion administrator for more information."
 msgstr "创建你的帖子时，Assembl发生错误。有关详细信息，请联系讨论管理员。"
 
 #: assembl/static/js/app/views/facebookViews.js:1066
@@ -962,7 +1059,8 @@ msgstr "该帐户没有Facebook帐户"
 msgid "Could not create the message source"
 msgstr "无法创建消息源"
 
-#: assembl/static/js/app/views/facebookViews.js:1088 assembl/static/js/app/views/facebookViews.js:1093
+#: assembl/static/js/app/views/facebookViews.js:1088
+#: assembl/static/js/app/views/facebookViews.js:1093
 msgid "There was an error creating the message source"
 msgstr "创建消息源时出错"
 
@@ -978,130 +1076,124 @@ msgstr "请选择要导出的目的地，然后再继续"
 msgid "Please complete facebook login"
 msgstr "请填写Facebook登录"
 
-#: assembl/static/js/app/views/ideaClassificationOnMessage.js:153
+#: assembl/static/js/app/views/ideaClassificationOnMessage.js:152
 msgid "Go to this idea"
 msgstr "去这个想法"
 
-#: assembl/static/js/app/views/ideaClassificationOnMessage.js:363
+#: assembl/static/js/app/views/ideaClassificationOnMessage.js:362
 msgid "This message is linked to the following idea because: "
 msgid_plural "This message is linked to the %1$d following ideas because: "
 msgstr[0] "此消息与以下想法相关联%1$d因为："
 msgstr[1] "此消息与以下想法相关联%1$d因为："
 
-#: assembl/static/js/app/views/ideaClassificationOnMessage.js:368
+#: assembl/static/js/app/views/ideaClassificationOnMessage.js:367
 msgid "Link between this message and the idea"
 msgid_plural "Links between this message and ideas"
 msgstr[0] "链接这个消息和想法"
 msgstr[1] "链接这个消息和想法"
 
-#: assembl/static/js/app/views/ideaInSynthesis.js:159
+#: assembl/static/js/app/views/ideaInSynthesis.js:167
 #, python-format
 msgid "%d message is available under this idea"
 msgid_plural "%d messages are available under this idea"
 msgstr[0] "这个想法可以使用%d信息"
 msgstr[1] "这个想法可以使用%d信息"
 
-#: assembl/static/js/app/views/ideaInSynthesis.js:229 assembl/static/js/app/views/message.js:804
-msgid "Type your response here..."
-msgstr "在这里输入您的回复"
-
-#: assembl/static/js/app/views/ideaInSynthesis.js:231 assembl/static/js/app/views/message.js:806
-msgid "Send your reply"
-msgstr "发送你的回复"
-
-#: assembl/static/js/app/views/ideaInSynthesis.js:234 assembl/static/js/app/views/message.js:808
-msgid "You did not type a response yet..."
-msgstr "你还没有输入回复..."
-
-#: assembl/static/js/app/views/ideaList.js:269 assembl/templates/views/create-group.tmpl:42 assembl/templates/views/ideaList.tmpl:14
+#: assembl/static/js/app/views/ideaList.js:260
+#: assembl/templates/views/create-group.tmpl:42
+#: assembl/templates/views/ideaList.tmpl:14
 msgid "Table of ideas"
 msgstr "想法列表"
 
-#: assembl/static/js/app/views/ideaList.js:810
+#: assembl/static/js/app/views/ideaList.js:805
 msgid "You don't have the permission to do this."
 msgstr "你没有这样做的权限。"
 
-#: assembl/static/js/app/views/ideaPanel.js:208
+#: assembl/static/js/app/views/ideaPanel.js:211
 msgid "Idea"
 msgstr "想法"
 
-#: assembl/static/js/app/views/ideaPanel.js:211
-msgid "Detailled information about the currently selected idea in the Table of ideas"
+#: assembl/static/js/app/views/ideaPanel.js:214
+msgid ""
+"Detailled information about the currently selected idea in the Table of "
+"ideas"
 msgstr "有关目前所选想法的详细信息，请参见表中的想法"
 
-#: assembl/static/js/app/views/ideaPanel.js:219
+#: assembl/static/js/app/views/ideaPanel.js:222
 msgid "This idea has no sub-ideas"
 msgstr "这个想法没有子想法"
 
-#: assembl/static/js/app/views/ideaPanel.js:222
+#: assembl/static/js/app/views/ideaPanel.js:225
 #, python-format
 msgid "This idea has %d sub-idea"
 msgid_plural "This idea has %d sub-ideas"
 msgstr[0] "这个想法有%d个子想法"
 msgstr[1] "这个想法有%d个子想法"
 
-#: assembl/static/js/app/views/ideaPanel.js:243
+#: assembl/static/js/app/views/ideaPanel.js:246
 msgid "No extract was harvested"
 msgstr "没有收获提取物"
 
-#: assembl/static/js/app/views/ideaPanel.js:246
+#: assembl/static/js/app/views/ideaPanel.js:249
 msgid "No important nugget was harvested"
 msgstr "没有收获到重要的金块"
 
-#: assembl/static/js/app/views/ideaPanel.js:251
+#: assembl/static/js/app/views/ideaPanel.js:254
 #, python-format
 msgid "%d extract was harvested"
 msgid_plural "%d extracts were harvested"
 msgstr[0] "收获%d提取物"
 msgstr[1] "收获%d提取物"
 
-#: assembl/static/js/app/views/ideaPanel.js:254
+#: assembl/static/js/app/views/ideaPanel.js:257
 #, python-format
 msgid "%d important nugget was harvested"
 msgid_plural "%d important nuggets were harvested"
 msgstr[0] "%d重要的矿块被收获"
 msgstr[1] "%d重要的矿块被收获"
 
-#: assembl/static/js/app/views/ideaPanel.js:500
+#: assembl/static/js/app/views/ideaPanel.js:505
 #, python-format
 msgid "%d contributor"
 msgid_plural "%d contributors"
 msgstr[0] "%d贡献者"
 msgstr[1] "%d贡献者"
 
-#: assembl/static/js/app/views/ideaPanel.js:521
+#: assembl/static/js/app/views/ideaPanel.js:527
 msgid "Short expression (only a few words) of the idea in the table of ideas."
 msgstr "思想表达中的简短表达（只有几句话）。"
 
-#: assembl/static/js/app/views/ideaPanel.js:713
+#: assembl/static/js/app/views/ideaPanel.js:719
 msgid "You cannot delete an idea while it has sub-ideas."
 msgstr "当您的想法具有子提示时，您不能删除该想法。"
 
-#: assembl/static/js/app/views/ideaPanel.js:724
+#: assembl/static/js/app/views/ideaPanel.js:730
 msgid "You cannot delete an idea associated to extracts."
 msgstr "您不能删除与摘要相关联的想法。"
 
-#: assembl/static/js/app/views/ideaPanel.js:733
+#: assembl/static/js/app/views/ideaPanel.js:739
 msgid "You cannot delete an idea associated to comments."
 msgstr "您不能删除与评论相关联的想法。"
 
-#: assembl/static/js/app/views/ideaPanel.js:753
+#: assembl/static/js/app/views/ideaPanel.js:759
 msgid "Confirm that you want to delete this idea."
 msgstr "确认您要删除此建议。"
 
-#: assembl/static/js/app/views/ideaPanel.js:754 assembl/static/js/app/views/message.js:1652
+#: assembl/static/js/app/views/ideaPanel.js:760
+#: assembl/static/js/app/views/message.js:1650
 msgid "No"
 msgstr "没有"
 
-#: assembl/static/js/app/views/ideaPanel.js:755 assembl/static/js/app/views/message.js:1653
+#: assembl/static/js/app/views/ideaPanel.js:761
+#: assembl/static/js/app/views/message.js:1651
 msgid "Yes"
 msgstr "当然"
 
-#: assembl/static/js/app/views/ideaPanel.js:930
+#: assembl/static/js/app/views/ideaPanel.js:936
 msgid "Confirm that you want to send all extracts back to the clipboard."
 msgstr "确认您要将所有摘要发送回剪贴板。"
 
-#: assembl/static/js/app/views/ideaPanel.js:998
+#: assembl/static/js/app/views/ideaPanel.js:1005
 msgid "You may want to describe this idea for users here..."
 msgstr "你可能想在这里为用户描述这个想法"
 
@@ -1118,52 +1210,65 @@ msgid_plural "and %d other ideas</a>"
 msgstr[0] "和%d其他想法</a>"
 msgstr[1] "和%d其他想法</a>"
 
-#: assembl/static/js/app/views/message.js:1031
+#: assembl/static/js/app/views/message.js:802
+msgid "Type your response here..."
+msgstr "在这里输入您的回复"
+
+#: assembl/static/js/app/views/message.js:804
+msgid "Send your reply"
+msgstr "发送你的回复"
+
+#: assembl/static/js/app/views/message.js:806
+msgid "You did not type a response yet..."
+msgstr "你还没有输入回复..."
+
+#: assembl/static/js/app/views/message.js:1029
 msgid "You"
 msgstr "你"
 
-#: assembl/static/js/app/views/message.js:1036
+#: assembl/static/js/app/views/message.js:1034
 #, python-format
 msgid "You and %d Another person"
 msgid_plural "You and %d Other persons"
 msgstr[0] "你和%d另一个人"
 msgstr[1] "你和%d另一个人"
 
-#: assembl/static/js/app/views/message.js:1044
+#: assembl/static/js/app/views/message.js:1042
 #, python-format
 msgid "%d person"
 msgid_plural "%d persons"
 msgstr[0] "%d人"
 msgstr[1] "%d人"
 
-#: assembl/static/js/app/views/message.js:1634
+#: assembl/static/js/app/views/message.js:1632
 msgid "Message has been successfully deleted."
 msgstr "消息已成功删除。"
 
-#: assembl/static/js/app/views/message.js:1645
+#: assembl/static/js/app/views/message.js:1643
 msgid "Error: Message could not be deleted."
 msgstr "错误：无法删除邮件。"
 
-#: assembl/static/js/app/views/message.js:1651
+#: assembl/static/js/app/views/message.js:1649
 msgid "Are you sure you want to delete this message?"
 msgstr "你确定要删除这条消息吗？"
 
-#: assembl/static/js/app/views/messageColumnsPanel.js:167 assembl/static/js/app/views/messageList.js:184
+#: assembl/static/js/app/views/messageColumnsPanel.js:170
+#: assembl/static/js/app/views/messageList.js:184
 msgid "Messages"
 msgstr "消息"
 
-#: assembl/static/js/app/views/messageColumnsPanel.js:246
+#: assembl/static/js/app/views/messageColumnsPanel.js:251
 msgid "Oldest messages first"
 msgstr "最早的邮件"
 
-#: assembl/static/js/app/views/messageColumnsPanel.js:365
+#: assembl/static/js/app/views/messageColumnsPanel.js:388
 #, python-format
 msgid "%d message on theme “%s”"
 msgid_plural "%d messages on theme “%s”"
 msgstr[0] "主题“%s”上的%d消息"
 msgstr[1] "主题“%s”上的%d消息"
 
-#: assembl/static/js/app/views/messageColumnsPanel.js:406
+#: assembl/static/js/app/views/messageColumnsPanel.js:434
 #, python-format
 msgid "Add your thoughts on theme “%s”"
 msgstr "在主题“%s”上添加您的想法"
@@ -1186,11 +1291,13 @@ msgstr[1] "%d更多的消息在此消息的完整上下文可用。"
 #: assembl/static/js/app/views/messageFamily.js:123
 #, python-format
 msgid "Messages available in this message's full context are from %d more author."
-msgid_plural "Messages available in this message's full context are from %d more authors."
+msgid_plural ""
+"Messages available in this message's full context are from %d more "
+"authors."
 msgstr[0] "此消息完整上下文中可用的消息来自%d更多的作者。"
 msgstr[1] "此消息完整上下文中可用的消息来自%d更多的作者。"
 
-#: assembl/static/js/app/views/messageFamily.js:244
+#: assembl/static/js/app/views/messageFamily.js:245
 #, python-format
 msgid "Zooming on the conversation around \"%s\""
 msgstr "放大“%s”周围的对话"
@@ -1260,41 +1367,38 @@ msgid_plural "Found %d messages%s out of %d messages:"
 msgstr[0] "实测值%d消息%s总分%d信息："
 msgstr[1] "实测值%d消息%s总分%d信息："
 
-#: assembl/static/js/app/views/messageSend.js:88
+#: assembl/static/js/app/views/messageSend.js:94
 msgid "Type your message here..."
 msgstr "在此输入您的留言"
 
-#: assembl/static/js/app/views/messageSend.js:166 assembl/templates/views/messageList.tmpl:43
+#: assembl/static/js/app/views/messageSend.js:176
+#: assembl/templates/views/messageList.tmpl:43
 msgid "Start a new discussion thread"
 msgstr "开始一个新的讨论线程"
 
-#: assembl/static/js/app/views/messageSend.js:182 assembl/templates/admin/discussion_permissions.jinja2:124
-msgid "Subject:"
-msgstr "主题:"
-
-#: assembl/static/js/app/views/messageSend.js:214
+#: assembl/static/js/app/views/messageSend.js:223
 #, python-format
 msgid "Before you can reply to this message %s"
 msgstr "在您可以回复此消息%s"
 
-#: assembl/static/js/app/views/messageSend.js:217
+#: assembl/static/js/app/views/messageSend.js:226
 #, python-format
 msgid "Before you can post a message %s"
 msgstr "之前您可以发布消息%s"
 
-#: assembl/static/js/app/views/messageSend.js:292
+#: assembl/static/js/app/views/messageSend.js:308
 msgid "You need to set a subject before you can send your message..."
 msgstr "您需要设置一个主题才能发送您的消息..."
 
-#: assembl/static/js/app/views/messageSend.js:302
+#: assembl/static/js/app/views/messageSend.js:318
 msgid "You need to type a message before you can send your message..."
 msgstr "您需要先输入邮件才能发送邮件..."
 
-#: assembl/static/js/app/views/messageSend.js:310
+#: assembl/static/js/app/views/messageSend.js:326
 msgid "Sending..."
 msgstr "发送中..."
 
-#: assembl/static/js/app/views/messageSend.js:342
+#: assembl/static/js/app/views/messageSend.js:358
 msgid "Message posted!"
 msgstr "信息登出！"
 
@@ -1311,25 +1415,25 @@ msgstr "您不能选择多种语言"
 msgid "Select the language you wish to translate %s to:"
 msgstr "选择您要翻译%s的语言："
 
-#: assembl/static/js/app/views/messageTranslationQuestion.js:291
+#: assembl/static/js/app/views/messageTranslationQuestion.js:289
 #, python-format
 msgid "Translate all messages from %s to %s?"
 msgstr "将所有邮件从%s翻译成%s？"
 
-#: assembl/static/js/app/views/messageTranslationQuestion.js:302
+#: assembl/static/js/app/views/messageTranslationQuestion.js:300
 #, python-format
 msgid "Keep %s messages untranslated?"
 msgstr "保持%s邮件不翻译？"
 
-#: assembl/static/js/app/views/messageTranslationQuestion.js:307
+#: assembl/static/js/app/views/messageTranslationQuestion.js:305
 msgid "Yes, Thanks!"
 msgstr "好的 谢谢"
 
-#: assembl/static/js/app/views/messageTranslationQuestion.js:308
+#: assembl/static/js/app/views/messageTranslationQuestion.js:306
 msgid "Do not translate"
 msgstr "不要翻译"
 
-#: assembl/static/js/app/views/messageTranslationQuestion.js:309
+#: assembl/static/js/app/views/messageTranslationQuestion.js:307
 msgid "Translate to another language"
 msgstr "翻译成另一种语言"
 
@@ -1363,208 +1467,231 @@ msgid "Related to idea"
 msgstr "与想法有关"
 
 #: assembl/static/js/app/views/postFilters.js:227
-msgid "Only include messages related to the specified idea.  The filter is recursive:  Messages related to ideas that are descendents of the idea are included."
+msgid ""
+"Only include messages related to the specified idea.  The filter is "
+"recursive:  Messages related to ideas that are descendents of the idea "
+"are included."
 msgstr "只包括与指定想法相关的消息。过滤器是递归的：包含与想法后代相关的消息。"
 
-#: assembl/static/js/app/views/postFilters.js:242
+#: assembl/static/js/app/views/postFilters.js:245
 #, python-format
 msgid "Discuss idea %s"
 msgid_plural "Discuss ideas: %s"
 msgstr[0] "讨论想法%s"
 msgstr[1] "讨论想法%s"
 
-#: assembl/static/js/app/views/postFilters.js:242 assembl/static/js/app/views/postFilters.js:284 assembl/static/js/app/views/postFilters.js:326 assembl/static/js/app/views/postFilters.js:361
-#: assembl/static/js/app/views/postFilters.js:416 assembl/static/js/app/views/postFilters.js:444
+#: assembl/static/js/app/views/postFilters.js:245
+#: assembl/static/js/app/views/postFilters.js:289
+#: assembl/static/js/app/views/postFilters.js:333
+#: assembl/static/js/app/views/postFilters.js:368
+#: assembl/static/js/app/views/postFilters.js:423
+#: assembl/static/js/app/views/postFilters.js:451
 msgid " AND "
 msgstr "和："
 
-#: assembl/static/js/app/views/postFilters.js:260
+#: assembl/static/js/app/views/postFilters.js:263
 msgid "Part of thread of"
 msgstr "的一部分"
 
-#: assembl/static/js/app/views/postFilters.js:263
+#: assembl/static/js/app/views/postFilters.js:266
 msgid "Only include messages that are in the specified post reply thread."
 msgstr "只包括指定的回复主题中的消息。"
 
-#: assembl/static/js/app/views/postFilters.js:275 assembl/static/js/app/views/postFilters.js:317
+#: assembl/static/js/app/views/postFilters.js:280
+#: assembl/static/js/app/views/postFilters.js:324
 #, python-format
 msgid "synthesis \"%s\""
 msgstr "综合“%s”"
 
-#: assembl/static/js/app/views/postFilters.js:278 assembl/static/js/app/views/postFilters.js:320
+#: assembl/static/js/app/views/postFilters.js:283
+#: assembl/static/js/app/views/postFilters.js:327
 #, python-format
 msgid "message \"%s\""
 msgstr "消息“%s”"
 
-#: assembl/static/js/app/views/postFilters.js:284
+#: assembl/static/js/app/views/postFilters.js:289
 #, python-format
 msgid "Are in the conversation that follows: %s"
 msgstr "在谈话中如下：%s"
 
-#: assembl/static/js/app/views/postFilters.js:302
+#: assembl/static/js/app/views/postFilters.js:307
 msgid "Part of the context of"
 msgstr "部分上下文"
 
-#: assembl/static/js/app/views/postFilters.js:305
-msgid "Only include messages that are in the specified post reply thread or ancestry."
+#: assembl/static/js/app/views/postFilters.js:310
+msgid ""
+"Only include messages that are in the specified post reply thread or "
+"ancestry."
 msgstr "只包括在指定的回复帖子或源头中的邮件。"
 
-#: assembl/static/js/app/views/postFilters.js:326
+#: assembl/static/js/app/views/postFilters.js:333
 #, python-format
 msgid "Are in the context of: %s"
 msgstr "在以下情况下：%s"
 
-#: assembl/static/js/app/views/postFilters.js:344
+#: assembl/static/js/app/views/postFilters.js:351
 msgid "Posted by"
 msgstr "发布者"
 
-#: assembl/static/js/app/views/postFilters.js:347
+#: assembl/static/js/app/views/postFilters.js:354
 msgid "Only include messages that are posted by a specific user."
 msgstr "只包括由特定用户发布的邮件。"
 
-#: assembl/static/js/app/views/postFilters.js:356 assembl/static/js/app/views/postFilters.js:411
+#: assembl/static/js/app/views/postFilters.js:363
+#: assembl/static/js/app/views/postFilters.js:418
 #, python-format
 msgid "\"%s\""
 msgstr "\"%s\""
 
-#: assembl/static/js/app/views/postFilters.js:361
+#: assembl/static/js/app/views/postFilters.js:368
 #, python-format
 msgid "Are posted by: %s"
 msgstr "发布者：%s"
 
-#: assembl/static/js/app/views/postFilters.js:379
+#: assembl/static/js/app/views/postFilters.js:386
 msgid "Messages I posted"
 msgstr "我发布的消息"
 
-#: assembl/static/js/app/views/postFilters.js:382
+#: assembl/static/js/app/views/postFilters.js:389
 msgid "Only include messages that I posted."
 msgstr "只包括我发布的消息。"
 
-#: assembl/static/js/app/views/postFilters.js:399
+#: assembl/static/js/app/views/postFilters.js:406
 msgid "Replies to"
 msgstr "回复"
 
-#: assembl/static/js/app/views/postFilters.js:402
+#: assembl/static/js/app/views/postFilters.js:409
 msgid "Only include messages that reply to a specific user."
 msgstr "只包括回复特定用户的消息。"
 
-#: assembl/static/js/app/views/postFilters.js:416
+#: assembl/static/js/app/views/postFilters.js:423
 #, python-format
 msgid "Replies to: %s"
 msgstr "回复：%s"
 
-#: assembl/static/js/app/views/postFilters.js:434
+#: assembl/static/js/app/views/postFilters.js:441
 msgid "In column category"
 msgstr "列类别"
 
-#: assembl/static/js/app/views/postFilters.js:437
-msgid "Only include messages that were classified in a specific category. Use \"null\" for no category."
+#: assembl/static/js/app/views/postFilters.js:444
+msgid ""
+"Only include messages that were classified in a specific category. Use "
+"\"null\" for no category."
 msgstr "仅包括分类在特定类别的消息。使用“null”作为无类别。"
 
-#: assembl/static/js/app/views/postFilters.js:444
+#: assembl/static/js/app/views/postFilters.js:451
 #, python-format
 msgid "In category: %s"
 msgstr "类别：%s"
 
-#: assembl/static/js/app/views/postFilters.js:462
+#: assembl/static/js/app/views/postFilters.js:469
 msgid "Messages that reply to me"
 msgstr "回复我的消息"
 
-#: assembl/static/js/app/views/postFilters.js:465
+#: assembl/static/js/app/views/postFilters.js:472
 msgid "Only include messages that reply one of the messages I posted."
 msgstr "只包括回复我发布的消息之一的消息。"
 
-#: assembl/static/js/app/views/postFilters.js:485 assembl/templates/views/orphanMessagesInIdeaList.tmpl:4
+#: assembl/static/js/app/views/postFilters.js:492
+#: assembl/templates/views/orphanMessagesInIdeaList.tmpl:4
 msgid "Messages not yet associated with an idea"
 msgstr "消息尚未与想法相关联"
 
-#: assembl/static/js/app/views/postFilters.js:488
+#: assembl/static/js/app/views/postFilters.js:495
 msgid "Only include messages that are not found in any idea."
 msgstr "只包括在任何想法中找不到的消息。"
 
-#: assembl/static/js/app/views/postFilters.js:508
+#: assembl/static/js/app/views/postFilters.js:515
 msgid "Synthesis messages"
 msgstr "综合信息"
 
-#: assembl/static/js/app/views/postFilters.js:511
+#: assembl/static/js/app/views/postFilters.js:518
 msgid "Only include messages that represent a synthesis of the discussion."
 msgstr "只包含代表讨论综合的消息。"
 
-#: assembl/static/js/app/views/postFilters.js:533
+#: assembl/static/js/app/views/postFilters.js:540
 msgid "Have unread value"
 msgstr "有未读的价值"
 
-#: assembl/static/js/app/views/postFilters.js:539
+#: assembl/static/js/app/views/postFilters.js:546
 msgid "You haven't read yet"
 msgstr "你还没读"
 
-#: assembl/static/js/app/views/postFilters.js:541
+#: assembl/static/js/app/views/postFilters.js:548
 msgid "You've already read"
 msgstr "你已经读过"
 
-#: assembl/static/js/app/views/postFilters.js:569
+#: assembl/static/js/app/views/postFilters.js:576
 msgid "Unread messages"
 msgstr "未读消息"
 
-#: assembl/static/js/app/views/postFilters.js:572
+#: assembl/static/js/app/views/postFilters.js:579
 msgid "Only include messages you haven't read yet, or you manually marked unread."
 msgstr "只包括您尚未阅读的消息，或手动标记为未读。"
 
-#: assembl/static/js/app/views/postFilters.js:592
+#: assembl/static/js/app/views/postFilters.js:599
 msgid "Read messages"
 msgstr "已读的邮件"
 
-#: assembl/static/js/app/views/postFilters.js:595
+#: assembl/static/js/app/views/postFilters.js:602
 msgid "Only include messages that have previously been marked read."
 msgstr "只包括先前已被标记为已读的消息。"
 
-#: assembl/static/js/app/views/postFilters.js:635
+#: assembl/static/js/app/views/postFilters.js:642
 msgid "Messages posted after..."
 msgstr "消息发布后..."
 
-#: assembl/static/js/app/views/postFilters.js:641
+#: assembl/static/js/app/views/postFilters.js:648
 msgid "Only include posts created after a given date."
 msgstr "只包括在给定日期之后创建的帖子。"
 
-#: assembl/static/js/app/views/postFilters.js:645
-msgid "Please type a date. The filter will then show only posts which have been created after this date. Example: 2015-01-01"
+#: assembl/static/js/app/views/postFilters.js:652
+msgid ""
+"Please type a date. The filter will then show only posts which have been "
+"created after this date. Example: 2015-01-01"
 msgstr "请输入日期。然后，过滤器将只显示在此日期之后创建的帖子。示例：2015-01-01"
 
-#: assembl/static/js/app/views/postFilters.js:687
+#: assembl/static/js/app/views/postFilters.js:694
 msgid "Messages posted before..."
 msgstr "消息发布之前..."
 
-#: assembl/static/js/app/views/postFilters.js:693
+#: assembl/static/js/app/views/postFilters.js:700
 msgid "Only include posts created before a given date."
 msgstr "只包括在给定日期之前创建的帖子。"
 
-#: assembl/static/js/app/views/postFilters.js:697
-msgid "Please type a date. The filter will then show only posts which have been created before this date. Example: 2015-01-01"
+#: assembl/static/js/app/views/postFilters.js:704
+msgid ""
+"Please type a date. The filter will then show only posts which have been "
+"created before this date. Example: 2015-01-01"
 msgstr "请输入日期。然后，过滤器将只显示在此日期之前创建的帖子。示例：2015-01-01"
 
-#: assembl/static/js/app/views/postFilters.js:737
+#: assembl/static/js/app/views/postFilters.js:744
 #, python-format
 msgid "Messages posted since the last synthesis (%s)"
 msgstr "自上次综合以来发布的讯息（%s）"
 
-#: assembl/static/js/app/views/postFilters.js:741
+#: assembl/static/js/app/views/postFilters.js:748
 msgid "Only include posts created after the last synthesis."
 msgstr "只包括上次合成后创建的帖子。"
 
-#: assembl/static/js/app/views/postFilters.js:764
+#: assembl/static/js/app/views/postFilters.js:771
 msgid "Deleted messages"
 msgstr "已删除的邮件"
 
-#: assembl/static/js/app/views/postFilters.js:767
-msgid "Only include messages that have been deleted (by their author or by an administrator), and their ancestors."
+#: assembl/static/js/app/views/postFilters.js:774
+msgid ""
+"Only include messages that have been deleted (by their author or by an "
+"administrator), and their ancestors."
 msgstr "仅包括已被删除的消息（由作者或管理员）及其祖先。"
 
-#: assembl/static/js/app/views/postFilters.js:804
+#: assembl/static/js/app/views/postFilters.js:811
 msgid "Show also deleted messages"
 msgstr "显示还删除的消息"
 
-#: assembl/static/js/app/views/postFilters.js:807
-msgid "Also include messages that have been deleted (by their author or by an administrator)."
+#: assembl/static/js/app/views/postFilters.js:814
+msgid ""
+"Also include messages that have been deleted (by their author or by an "
+"administrator)."
 msgstr "还包括已被删除的消息（由他们的作者或管理员）。"
 
 #: assembl/static/js/app/views/preferencesView.js:153
@@ -1603,8 +1730,11 @@ msgstr "这似乎不是域"
 msgid "The following settings were not saved: "
 msgstr "以下设置未保存："
 
-#: assembl/static/js/app/views/admin/adminDiscussion.js:96 assembl/static/js/app/views/preferencesView.js:904 assembl/static/js/app/views/sourceEditView.js:49
-#: assembl/static/js/app/views/user/account.js:126 assembl/static/js/app/views/user/profile.js:66
+#: assembl/static/js/app/views/admin/adminDiscussion.js:96
+#: assembl/static/js/app/views/preferencesView.js:904
+#: assembl/static/js/app/views/sourceEditView.js:49
+#: assembl/static/js/app/views/user/account.js:126
+#: assembl/static/js/app/views/user/profile.js:66
 msgid "Your settings were saved!"
 msgstr "您的设置已保存！"
 
@@ -1612,7 +1742,10 @@ msgstr "您的设置已保存！"
 msgid "Your settings are up-to-date."
 msgstr "您的设置是最新的。"
 
-#: assembl/static/js/app/views/segmentList.js:321 assembl/static/js/app/views/segmentList.js:367 assembl/static/js/app/views/segmentList.js:370 assembl/templates/views/create-group.tmpl:118
+#: assembl/static/js/app/views/segmentList.js:321
+#: assembl/static/js/app/views/segmentList.js:367
+#: assembl/static/js/app/views/segmentList.js:370
+#: assembl/templates/views/create-group.tmpl:118
 msgid "Clipboard"
 msgstr "剪贴板"
 
@@ -1624,7 +1757,9 @@ msgstr "空的."
 msgid "Are you sure you want to empty your entire clipboard?"
 msgstr "您确定要清空整个剪贴簿吗？"
 
-#: assembl/static/js/app/views/admin/adminDiscussion.js:99 assembl/static/js/app/views/sourceEditView.js:53 assembl/static/js/app/views/user/account.js:129
+#: assembl/static/js/app/views/admin/adminDiscussion.js:99
+#: assembl/static/js/app/views/sourceEditView.js:53
+#: assembl/static/js/app/views/user/account.js:129
 #: assembl/static/js/app/views/user/profile.js:69
 msgid "Your settings failed to update."
 msgstr "您的设置无法更新。"
@@ -1637,7 +1772,9 @@ msgstr "消息总数的演进"
 msgid "Evolution of the number of messages posted"
 msgstr "发布消息数量的演变"
 
-#: assembl/static/js/app/views/statistics.js:72 assembl/templates/views/navigation.tmpl:28 assembl/templates/views/statistics.tmpl:5
+#: assembl/static/js/app/views/statistics.js:72
+#: assembl/templates/views/navigation.tmpl:28
+#: assembl/templates/views/statistics.tmpl:5
 msgid "Statistics"
 msgstr "统计"
 
@@ -1645,7 +1782,8 @@ msgstr "统计"
 msgid "messages"
 msgstr "信息"
 
-#: assembl/static/js/app/views/statistics.js:612 assembl/static/js/app/views/statistics.js:625
+#: assembl/static/js/app/views/statistics.js:612
+#: assembl/static/js/app/views/statistics.js:625
 msgid "messages, posted by"
 msgstr "由 {0} 发布的消息"
 
@@ -1720,29 +1858,44 @@ msgstr "贡献者最近活跃"
 msgid "Contributors inactive recently"
 msgstr "贡献者最近不活跃"
 
-#: assembl/static/js/app/views/synthesisPanel.js:110 assembl/templates/views/navigation.tmpl:3 assembl/templates/views/synthesisContext.tmpl:6
+#: assembl/static/js/app/views/synthesisPanel.js:113
+#: assembl/templates/views/navigation.tmpl:3
+#: assembl/templates/views/synthesisContext.tmpl:6
 msgid "Synthesis"
 msgstr "合成"
 
+#: assembl/static/js/app/views/synthesisPanel.js:227
+#, fuzzy
+#| msgid "Read the synthesis"
+msgid "A short title for the synthesis"
+msgstr "阅读综合"
+
 #: assembl/static/js/app/views/synthesisPanel.js:228
+#, fuzzy
+#| msgid "Last synthesis"
+msgid "New Synthesis"
+msgstr "最后综合"
+
+#: assembl/static/js/app/views/synthesisPanel.js:239
 msgid "You can add an introduction to your synthesis here..."
 msgstr "你可以在这里添加一个你的综合介绍"
 
-#: assembl/static/js/app/views/synthesisPanel.js:238
+#: assembl/static/js/app/views/synthesisPanel.js:251
 msgid "You can add a conclusion to your synthesis here..."
 msgstr "你可以在这里为你的综合添加一个结论"
 
-#: assembl/static/js/app/views/synthesisPanel.js:307
+#: assembl/static/js/app/views/synthesisPanel.js:321
 msgid ""
-"Are you sure you want to publish the synthesis? You will not be able to delete it afterwards, and participants who subscribed to notifications related to the synthesis will receive a "
-"notification by email."
+"Are you sure you want to publish the synthesis? You will not be able to "
+"delete it afterwards, and participants who subscribed to notifications "
+"related to the synthesis will receive a notification by email."
 msgstr "你确定要发表综合吗？之后您将无法删除，并且订阅与综合相关的通知的参与者将通过电子邮件收到通知。"
 
-#: assembl/static/js/app/views/synthesisPanel.js:330
+#: assembl/static/js/app/views/synthesisPanel.js:344
 msgid "Synthesis has been successfully published!"
 msgstr "综合已成功发表！"
 
-#: assembl/static/js/app/views/synthesisPanel.js:337
+#: assembl/static/js/app/views/synthesisPanel.js:351
 msgid "Failed publishing synthesis!"
 msgstr "失败的出版综合！"
 
@@ -1753,74 +1906,90 @@ msgid_plural "<span class='available-tokens-number'>%d</span> remaining %s token
 msgstr[0] "<span class='available-tokens-number'>%d</span> 剩余%s标记"
 msgstr[1] "<span class='available-tokens-number'>%d</span> 剩余%s标记"
 
-#: assembl/static/js/app/views/tokenVoteSession.js:530
+#: assembl/static/js/app/views/tokenVoteSession.js:528
 #, python-format
 msgid "set %d tokens"
 msgstr "设置%d令牌"
 
-#: assembl/static/js/app/views/tokenVoteSession.js:561
+#: assembl/static/js/app/views/tokenVoteSession.js:559
 msgid "You don't have enough tokens remaining."
 msgstr "你没有足够的令牌。"
 
-#: assembl/static/js/app/views/tokenVoteSession.js:947
+#: assembl/static/js/app/views/tokenVoteSession.js:949
 msgid "See Description"
 msgstr "参见说明"
 
-#: assembl/static/js/app/views/tokenVoteSession.js:1033
+#: assembl/static/js/app/views/tokenVoteSession.js:1036
 #, python-format
-msgid "%d token \"%s\" was voted on this idea, out of a total %d \"%s\" tokens voted "
-msgid_plural "%d tokens \"%s\" were voted on this idea, out of a total %d \"%s\" tokens voted"
+msgid ""
+"%d token \"%s\" was voted on this idea, out of a total %d \"%s\" tokens "
+"voted "
+msgid_plural ""
+"%d tokens \"%s\" were voted on this idea, out of a total %d \"%s\" tokens"
+" voted"
 msgstr[0] "%d标记“%s”被表决为这个想法，总共%d “%s”表示投票"
 msgstr[1] "%d标记“%s”被表决为这个想法，总共%d “%s”表示投票"
 
-#: assembl/static/js/app/views/tokenVoteSession.js:1089
+#: assembl/static/js/app/views/tokenVoteSession.js:1092
 msgid "Hide Description"
 msgstr "隐藏说明"
 
-#: assembl/static/js/app/views/tokenVoteSession.js:1210
+#: assembl/static/js/app/views/tokenVoteSession.js:1214
 #, python-format
 msgid "Token: \"%s\""
 msgstr "令牌：“%s”"
 
-#: assembl/static/js/app/views/tokenVoteSession.js:1332
+#: assembl/static/js/app/views/tokenVoteSession.js:1352
 #, python-format
-msgid "%d participant voted between %s and %s. The number of tokens available for voting per participant:"
-msgid_plural "%d participants voted between %s and %s. The number of tokens available for voting per participant:"
+msgid ""
+"%d participant voted between %s and %s. The number of tokens available "
+"for voting per participant:"
+msgid_plural ""
+"%d participants voted between %s and %s. The number of tokens available "
+"for voting per participant:"
 msgstr[0] "%d参与者在%s和%s之间进行了投票。每个参与者可以投票的令牌数量："
 msgstr[1] "%d参与者在%s和%s之间进行了投票。每个参与者可以投票的令牌数量："
 
-#: assembl/static/js/app/views/tokenVoteSession.js:1341
+#: assembl/static/js/app/views/tokenVoteSession.js:1361
 #, python-format
 msgid "<strong>%d</strong> token of type \"%s\""
 msgid_plural "<strong>%d</strong> tokens of type \"%s\""
 msgstr[0] "<strong>%d</strong>类型为“%s”的令牌"
 msgstr[1] "<strong>%d</strong>类型为“%s”的令牌"
 
-#: assembl/static/js/app/views/tokenVoteSession.js:1390
+#: assembl/static/js/app/views/tokenVoteSession.js:1410
 msgid "Token Vote Results"
 msgstr "令牌表决结果"
 
-#: assembl/static/js/app/views/tokenVoteSession.js:1566
+#: assembl/static/js/app/views/tokenVoteSession.js:1610
 msgid "Collective votes"
 msgstr "集体投票"
 
-#: assembl/static/js/app/views/tokenVoteSession.js:1569
-msgid "Split your tokens among the ideas of your choice. By default, your vote is neutral per project."
+#: assembl/static/js/app/views/tokenVoteSession.js:1613
+msgid ""
+"Split your tokens among the ideas of your choice. By default, your vote "
+"is neutral per project."
 msgstr "在您选择的想法之间拆分你的标记。默认情况下，您的投票对于每项目是中性的。"
 
-#: assembl/static/js/app/views/tokenVoteSession.js:1570
+#: assembl/static/js/app/views/tokenVoteSession.js:1614
 msgid "Save my votes"
 msgstr "保存我的投票"
 
-#: assembl/static/js/app/views/tokenVoteSession.js:1680
+#: assembl/static/js/app/views/tokenVoteSession.js:1725
 msgid "Your vote has been saved successfully."
 msgstr "您的投票已成功保存。"
 
-#: assembl/static/js/app/views/tokenVoteSession.js:1683
+#: assembl/static/js/app/views/tokenVoteSession.js:1729
 msgid "Go back to the discussion"
 msgstr "回去讨论"
 
-#: assembl/static/js/app/views/tokenVoteSession.js:1689
+#: assembl/static/js/app/views/tokenVoteSession.js:1733
+#, fuzzy
+#| msgid "Modify your vote"
+msgid "Modify my vote"
+msgstr "修改你的投票"
+
+#: assembl/static/js/app/views/tokenVoteSession.js:1751
 msgid "Vote confirmation"
 msgstr "投票确认"
 
@@ -1828,15 +1997,16 @@ msgstr "投票确认"
 msgid "The logo will show like this:"
 msgstr "标志将显示如下："
 
-#: assembl/static/js/app/views/admin/adminMessageColumns.js:97
+#: assembl/static/js/app/views/admin/adminMessageColumns.js:100
 msgid "Columns saved"
 msgstr "已保存列"
 
-#: assembl/static/js/app/views/admin/adminMessageColumns.js:304
+#: assembl/static/js/app/views/admin/adminMessageColumns.js:319
 msgid "Define columns"
 msgstr "定义列"
 
-#: assembl/static/js/app/views/admin/adminTimelineEvents.js:240 assembl/static/js/app/views/admin/adminTimelineEvents.js:250
+#: assembl/static/js/app/views/admin/adminTimelineEvents.js:247
+#: assembl/static/js/app/views/admin/adminTimelineEvents.js:257
 msgid "Invalid date and time"
 msgstr "日期和时间无效"
 
@@ -1868,11 +2038,15 @@ msgstr "重新处理失败"
 msgid "Import has begun!"
 msgstr "进口已经开始了！"
 
-#: assembl/static/js/app/views/groups/panelWrapper.js:186 assembl/templates/views/panelWrapper.tmpl:34
+#: assembl/static/js/app/views/groups/panelWrapper.js:186
+#: assembl/templates/views/panelWrapper.tmpl:34
 msgid "Maximize panel"
 msgstr "最大化面板"
 
-#: assembl/static/js/app/views/groups/panelWrapper.js:197 assembl/templates/views/navigation.tmpl:5 assembl/templates/views/navigation.tmpl:14 assembl/templates/views/panelWrapper.tmpl:8
+#: assembl/static/js/app/views/groups/panelWrapper.js:197
+#: assembl/templates/views/navigation.tmpl:5
+#: assembl/templates/views/navigation.tmpl:14
+#: assembl/templates/views/panelWrapper.tmpl:8
 msgid "Minimize panel"
 msgstr "最小化面板"
 
@@ -1881,11 +2055,15 @@ msgid "Unlock panel"
 msgstr "解锁面板"
 
 #: assembl/static/js/app/views/groups/panelWrapper.js:263
-msgid "We have locked the panel for you, so its content won't change while you're writing your message. Click here to unlock"
+msgid ""
+"We have locked the panel for you, so its content won't change while "
+"you're writing your message. Click here to unlock"
 msgstr "我们已经为您锁定面板，因此在撰写信息时内容不会改变。点击这里解锁"
 
 #: assembl/static/js/app/views/groups/panelWrapper.js:266
-msgid "We have unlocked the panel for you, so its content can change now that you're not writing a message anymore. Click here to lock it back"
+msgid ""
+"We have unlocked the panel for you, so its content can change now that "
+"you're not writing a message anymore. Click here to lock it back"
 msgstr "我们已经为您解锁了面板，所以内容可能会改变，现在你不再写信息了。点击这里锁定它"
 
 #: assembl/static/js/app/views/groups/panelWrapper.js:270
@@ -1896,7 +2074,8 @@ msgstr "我们已经为您锁定了面板。点击这里解锁"
 msgid "We have unlocked the panel for you. Click here to lock it back"
 msgstr "我们已经为您解锁了面板。点击这里锁定它"
 
-#: assembl/static/js/app/views/groups/panelWrapper.js:311 assembl/templates/views/panelWrapper.tmpl:14
+#: assembl/static/js/app/views/groups/panelWrapper.js:311
+#: assembl/templates/views/panelWrapper.tmpl:14
 msgid "Lock panel"
 msgstr "锁面板"
 
@@ -1904,11 +2083,13 @@ msgstr "锁面板"
 msgid "The end date should be later than the start date"
 msgstr "结束日期应晚于开始日期"
 
-#: assembl/static/js/app/views/modals/discussionStatisticsModal.js:187 assembl/templates/views/navBarLeft.tmpl:25
+#: assembl/static/js/app/views/modals/discussionStatisticsModal.js:187
+#: assembl/templates/views/navBarLeft.tmpl:25
 msgid "Discussion statistics"
 msgstr "讨论统计"
 
-#: assembl/static/js/app/views/modals/ideaInModal.js:44 assembl/static/js/app/views/modals/ideaInModal.js:49
+#: assembl/static/js/app/views/modals/ideaInModal.js:44
+#: assembl/static/js/app/views/modals/ideaInModal.js:49
 #, python-format
 msgid "Exploring idea \"%s\""
 msgstr "探索想法“%s”"
@@ -1943,7 +2124,9 @@ msgstr "您无权阅读此讨论。"
 
 #: assembl/templates/cannot_read_discussion.jinja2:5
 #, python-format
-msgid "You may <a href=\"%(logout)s\">logout</a> and login as another user with those permissions."
+msgid ""
+"You may <a href=\"%(logout)s\">logout</a> and login as another user with "
+"those permissions."
 msgstr "您可以<a href=\"%(logout)s\">注销</a>并以具有这些权限的其他用户身份登录。"
 
 #: assembl/templates/confirm.jinja2:23
@@ -1954,15 +2137,18 @@ msgstr "重新发送电子邮件"
 msgid "Admin"
 msgstr "管理员"
 
-#: assembl/templates/admin/discussion_permissions.jinja2:15 assembl/templates/discussion_list.jinja2:13
+#: assembl/templates/admin/discussion_permissions.jinja2:15
+#: assembl/templates/discussion_list.jinja2:13
 msgid "Permissions"
 msgstr "权限"
 
-#: assembl/templates/admin/discussions.jinja2:77 assembl/templates/discussion_list.jinja2:21
+#: assembl/templates/admin/discussions.jinja2:77
+#: assembl/templates/discussion_list.jinja2:21
 msgid "There are no discussions on this server yet"
 msgstr "这个服务器还没有讨论"
 
-#: assembl/templates/discussion_list.jinja2:27 assembl/templates/views/navBarRight.tmpl:60
+#: assembl/templates/discussion_list.jinja2:27
+#: assembl/templates/views/navBarRight.tmpl:60
 msgid "Sign in"
 msgstr "登录"
 
@@ -1982,19 +2168,25 @@ msgstr "更改全局权限"
 msgid "Change global preferences"
 msgstr "更改全局首选项"
 
-#: assembl/templates/discussion_list.jinja2:45 assembl/templates/views/navBarRight.tmpl:55
+#: assembl/templates/discussion_list.jinja2:45
+#: assembl/templates/views/navBarRight.tmpl:55
 msgid "Sign out"
 msgstr "退出"
 
-#: assembl/templates/do_password_change.jinja2:28 assembl/templates/login.jinja2:73 assembl/templates/register.jinja2:28
+#: assembl/templates/do_password_change.jinja2:28
+#: assembl/templates/login.jinja2:73 assembl/templates/register.jinja2:28
+#: assembl/templates/views/emailSource.tmpl:74
 msgid "Password"
 msgstr "密码"
 
-#: assembl/templates/do_password_change.jinja2:29 assembl/templates/profile.jinja2:56 assembl/templates/profile.jinja2:58 assembl/templates/register.jinja2:29
+#: assembl/templates/do_password_change.jinja2:29
+#: assembl/templates/profile.jinja2:56 assembl/templates/profile.jinja2:58
+#: assembl/templates/register.jinja2:29
 msgid "Repeat password"
 msgstr "重复输入密码"
 
-#: assembl/templates/idea_in_synthesis.jinja2:10 assembl/templates/views/ideaInSynthesis.tmpl:6
+#: assembl/templates/idea_in_synthesis.jinja2:10
+#: assembl/templates/views/ideaInSynthesis.tmpl:6
 msgid "By"
 msgstr "通过"
 
@@ -2023,7 +2215,8 @@ msgstr "与登录"
 msgid "Already have an account?"
 msgstr "已经有账户？"
 
-#: assembl/templates/login.jinja2:70 assembl/templates/request_password_change.jinja2:27
+#: assembl/templates/login.jinja2:70
+#: assembl/templates/request_password_change.jinja2:27
 msgid "Email or username"
 msgstr "电子邮件或用户名"
 
@@ -2043,11 +2236,15 @@ msgstr "还没有帐号？"
 msgid "Sign up"
 msgstr "注册"
 
-#: assembl/templates/profile.jinja2:7 assembl/templates/view_profile.jinja2:7 assembl/templates/views/navBarRight.tmpl:38 assembl/templates/views/userProfile.tmpl:6
+#: assembl/templates/profile.jinja2:7 assembl/templates/view_profile.jinja2:7
+#: assembl/templates/views/navBarRight.tmpl:38
+#: assembl/templates/views/userProfile.tmpl:6
 msgid "Profile"
 msgstr "简述"
 
-#: assembl/templates/profile.jinja2:27 assembl/templates/view_profile.jinja2:25 assembl/templates/views/userAccountForm.tmpl:6
+#: assembl/templates/profile.jinja2:27 assembl/templates/view_profile.jinja2:25
+#: assembl/templates/views/emailSource.tmpl:67
+#: assembl/templates/views/userAccountForm.tmpl:6
 msgid "Username"
 msgstr "用户名"
 
@@ -2055,7 +2252,10 @@ msgstr "用户名"
 msgid "Desired username"
 msgstr "所需的用户名"
 
-#: assembl/templates/profile.jinja2:38 assembl/templates/view_profile.jinja2:29 assembl/templates/views/adminMessageColumn.tmpl:13 assembl/templates/views/discussionStatisticsModal.tmpl:95
+#: assembl/templates/profile.jinja2:38 assembl/templates/view_profile.jinja2:29
+#: assembl/templates/views/adminMessageColumn.tmpl:17
+#: assembl/templates/views/discussionStatisticsModal.tmpl:95
+#: assembl/templates/views/emailSource.tmpl:5
 msgid "Name"
 msgstr "名称"
 
@@ -2095,9 +2295,16 @@ msgstr "添加电子邮件帐户"
 msgid "Email"
 msgstr "电子邮件"
 
-#: assembl/templates/admin/discussion_permissions.jinja2:52 assembl/templates/admin/discussion_permissions.jinja2:89 assembl/templates/admin/discussion_permissions.jinja2:149
-#: assembl/templates/admin/global_permissions.jinja2:37 assembl/templates/profile.jinja2:89 assembl/templates/views/ckeditorField.tmpl:9 assembl/templates/views/messageModerationOptions.tmpl:32
-#: assembl/templates/views/preferenceView.tmpl:14 assembl/templates/views/sourceFacebook.tmpl:3 assembl/templates/views/userAccount.tmpl:47
+#: assembl/templates/admin/discussion_permissions.jinja2:52
+#: assembl/templates/admin/discussion_permissions.jinja2:89
+#: assembl/templates/admin/discussion_permissions.jinja2:149
+#: assembl/templates/admin/global_permissions.jinja2:37
+#: assembl/templates/profile.jinja2:89
+#: assembl/templates/views/ckeditorField.tmpl:9
+#: assembl/templates/views/messageModerationOptions.tmpl:32
+#: assembl/templates/views/preferenceView.tmpl:14
+#: assembl/templates/views/sourceFacebook.tmpl:3
+#: assembl/templates/views/userAccount.tmpl:47
 msgid "Save"
 msgstr "保存"
 
@@ -2137,7 +2344,8 @@ msgstr "加入组合"
 msgid "This is a closed discussion."
 msgstr "这是一个封闭的讨论。"
 
-#: assembl/templates/register.jinja2:26 assembl/templates/views/userProfile.tmpl:13
+#: assembl/templates/register.jinja2:26
+#: assembl/templates/views/userProfile.tmpl:13
 msgid "Full name"
 msgstr "全名"
 
@@ -2161,7 +2369,9 @@ msgstr "讨论："
 msgid "Role permissions:"
 msgstr "角色权限："
 
-#: assembl/templates/admin/discussion_permissions.jinja2:15 assembl/templates/admin/discussion_permissions.jinja2:60 assembl/templates/admin/global_permissions.jinja2:8
+#: assembl/templates/admin/discussion_permissions.jinja2:15
+#: assembl/templates/admin/discussion_permissions.jinja2:60
+#: assembl/templates/admin/global_permissions.jinja2:8
 msgid "Roles"
 msgstr "角色"
 
@@ -2177,11 +2387,13 @@ msgstr "添加角色"
 msgid "User roles specific to this discussion:"
 msgstr "本讨论专用的用户角色："
 
-#: assembl/templates/admin/discussion_permissions.jinja2:60 assembl/templates/admin/global_permissions.jinja2:8
+#: assembl/templates/admin/discussion_permissions.jinja2:60
+#: assembl/templates/admin/global_permissions.jinja2:8
 msgid "Users"
 msgstr "用户"
 
-#: assembl/templates/admin/discussion_permissions.jinja2:84 assembl/templates/admin/global_permissions.jinja2:32
+#: assembl/templates/admin/discussion_permissions.jinja2:84
+#: assembl/templates/admin/global_permissions.jinja2:32
 msgid "Search for users"
 msgstr "搜索用户"
 
@@ -2191,14 +2403,16 @@ msgstr "添加带有CSV文件的用户"
 
 #: assembl/templates/admin/discussion_permissions.jinja2:95
 msgid ""
-"The CSV file must have two fields, in this order: full name, email. If it has a header, it MUST be on the first line. Imported user's email will be considered validated. Here is an example of "
-"CSV file:"
+"The CSV file must have two fields, in this order: full name, email. If it"
+" has a header, it MUST be on the first line. Imported user's email will "
+"be considered validated. Here is an example of CSV file:"
 msgstr "CSV文件必须有以下顺序的两个字段：全名，电子邮件。如果它有一个标题，它必须在第一行。导入的用户的电子邮件将被视为已验证。以下是CSV文件的示例："
 
 #: assembl/templates/admin/discussion_permissions.jinja2:99
 msgid ""
-"The invite message will not be sent to existing users, even if created on another discussion. If you do not get Assembl to \"Send an invite message\", send one yourself, explaining how to "
-"reset password."
+"The invite message will not be sent to existing users, even if created on"
+" another discussion. If you do not get Assembl to \"Send an invite "
+"message\", send one yourself, explaining how to reset password."
 msgstr "即使在另一次讨论中创建了邀请消息也不会发送给现有用户。如果您没有收到“发送邀请消息”的Assembl，请自己发送一条，说明如何重置密码。"
 
 #: assembl/templates/admin/discussion_permissions.jinja2:101
@@ -2214,14 +2428,22 @@ msgid "Send an invite message"
 msgstr "发送邀请消息"
 
 #: assembl/templates/admin/discussion_permissions.jinja2:120
-msgid "Note that this email will only be sent to new users. In the message, you can use the following placeholders: {name}, {confirm_url}, {discussion_topic}, {discussion_url}"
+msgid ""
+"Note that this email will only be sent to new users. In the message, you "
+"can use the following placeholders: {name}, {confirm_url}, "
+"{discussion_topic}, {discussion_url}"
 msgstr "请注意，此电子邮件只会发送给新用户。在消息中，您可以使用以下占位符：{name}，{confirm_url}，{discussion_topic}，{discussion_url}"
 
 #: assembl/templates/admin/discussion_permissions.jinja2:122
 msgid "Sender name:"
 msgstr "发信人姓名"
 
-#: assembl/templates/admin/discussion_permissions.jinja2:125 assembl/views/auth/views.py:1005
+#: assembl/templates/admin/discussion_permissions.jinja2:124
+msgid "Subject:"
+msgstr "主题:"
+
+#: assembl/templates/admin/discussion_permissions.jinja2:125
+#: assembl/views/auth/views.py:1011
 msgid "Welcome to {discussion_topic}."
 msgstr "欢迎来到{discussion_topic}。"
 
@@ -2233,7 +2455,8 @@ msgstr "文字电子邮件："
 msgid ""
 "Hello, {name}!\n"
 "You have been invited to the Assembl discussion {discussion_topic}.\n"
-"This link will allow you to set your password, after which you can log in.\n"
+"This link will allow you to set your password, after which you can log "
+"in.\n"
 "<{confirm_url}>\n"
 "\n"
 "If you did not ask to join please disregard this email.\n"
@@ -2258,8 +2481,10 @@ msgstr "HTML电子邮件："
 #: assembl/templates/admin/discussion_permissions.jinja2:138
 msgid ""
 "<p>Hello, {name}!</p>\n"
-"<p>You have been invited to the Assembl discussion <a href=\"{discussion_url}\">{discussion_topic}</a>.\n"
-"Please <a href=\"{confirm_url}\">click here</a> to set your password, after which you can log in.</p>\n"
+"<p>You have been invited to the Assembl discussion <a "
+"href=\"{discussion_url}\">{discussion_topic}</a>.\n"
+"Please <a href=\"{confirm_url}\">click here</a> to set your password, "
+"after which you can log in.</p>\n"
 "<p>If you did not ask to join please disregard this email.</p>\n"
 "<p>Best regards,<br />The Assembl Team</p>\n"
 msgstr ""
@@ -2273,12 +2498,15 @@ msgstr ""
 msgid "Re-send to people who did not log in yet (USE SPARINGLY)"
 msgstr "重新发送给尚未登录的用户（使用SPARINGLY）"
 
-#: assembl/templates/admin/global_permissions.jinja2:4 assembl/templates/views/globalAdminNavigationMenu.tmpl:6
+#: assembl/templates/admin/global_permissions.jinja2:4
+#: assembl/templates/views/globalAdminNavigationMenu.tmpl:6
 msgid "Global roles"
 msgstr "全球角色"
 
 #: assembl/templates/includes/updatebrowser.jinja2:41
-msgid "Your version of <strong>{0}</strong> is outdated and may deteriorate your experience on Assembl."
+msgid ""
+"Your version of <strong>{0}</strong> is outdated and may deteriorate your"
+" experience on Assembl."
 msgstr "您的<strong>{0}</strong>版本已过时，可能会降低您在Assembl上的体验。"
 
 #: assembl/templates/includes/updatebrowser.jinja2:42
@@ -2289,53 +2517,65 @@ msgstr "更新您的浏览器"
 msgid "Thanks!"
 msgstr "谢谢！"
 
-#: assembl/templates/notifications/html_mail.jinja2:81
-#, python-format
-msgid "You are receiving this because you are %(notificationConfigLink)s to discussion %(discussionLink)s.  Specifically, you currently receive a notification when:"
+#: assembl/templates/notifications/html_mail.jinja2:82
+#, fuzzy, python-format
+#| msgid "" "You are receiving this because you are %(notificationConfigLink)s
+#| to " "discussion %(discussionLink)s.  Specifically, you currently receive a
+#| " "notification when:"
+msgid ""
+"You are receiving this because you are subscribed to discussion "
+"%(discussionLink)s.  Specifically, you currently receive a notification "
+"when:"
 msgstr "你收到这个是因为你是%(notificationConfigLink)s的讨论%(discussionLink)s。具体来说，您当前收到通知："
-
-#: assembl/templates/notifications/html_mail.jinja2:83 assembl/templates/views/userSubscriber.tmpl:11
-msgid "subscribed"
-msgstr "订阅"
-
-#: assembl/templates/notifications/html_mail.jinja2:90 assembl/templates/views/userSubscriber.tmpl:14
-msgid "Unsubscribe"
-msgstr "取消订阅"
 
 #: assembl/templates/notifications/html_mail_post.jinja2:62
 msgid "Reply to this message"
 msgstr "回覆这封邮件"
 
-#: assembl/templates/notifications/html_mail_post_synthesis.jinja2:35
-msgid "Comment this synthesis"
+#: assembl/templates/notifications/html_mail_post_synthesis.jinja2:37
+#, fuzzy
+#| msgid "Comment this synthesis"
+msgid "Comment on this synthesis"
 msgstr "评论这个综合"
 
 #: assembl/templates/notifications/html_new_discussion.jinja2:22
 msgid ""
-"<h1>Congratulations, your <a href='{discussion_url}'>Assembl consultation</a> is ready.</h1>\n"
-"<p>You can <a href='{connection_url}'>connect here</a> to define your password.</p>\n"
-"<p>You will find <a href='{documentation_url}'>documentation here</a>.</p>\n"
-"<p>The Assembl tool enables consultations involving a great number of users (hundreds or thousands of users, public officials, etc.) in the co-design of a deliverable. If you need advice on "
-"structuring your consultation process and building skills in using Assembl, you can contact <a href='mailto:{admin_email}'>{admin_name}</a> from <a href='{admin_org_url}'>{admin_org_name}</a>."
-"</p>"
+"<h1>Congratulations, your <a href='{discussion_url}'>Assembl "
+"consultation</a> is ready.</h1>\n"
+"<p>You can <a href='{connection_url}'>connect here</a> to define your "
+"password.</p>\n"
+"<p>You will find <a href='{documentation_url}'>documentation "
+"here</a>.</p>\n"
+"<p>The Assembl tool enables consultations involving a great number of "
+"users (hundreds or thousands of users, public officials, etc.) in the co-"
+"design of a deliverable. If you need advice on structuring your "
+"consultation process and building skills in using Assembl, you can "
+"contact <a href='mailto:{admin_email}'>{admin_name}</a> from <a "
+"href='{admin_org_url}'>{admin_org_name}</a>.</p>"
 msgstr ""
 "恭喜，您的<a href='{discussion_url}'>Assembl咨询</a>已经准备就绪。</h1>\n"
 "<p>您可以<a href='{connection_url}'>在这里连接</a>定义您的密码。</p>\n"
 "<p>您将在这里找到<a href='{documentation_url}'>文档</a>。</p>\n"
-"<p>Assembl工具可以协商涉及到大量用户（数百或数千名用户，公职人员等）的共同设计可交付成果。如果您需要关于构建您的咨询过程和构建使用Assembl的技能的建议，可以从 联系人<a href='mailto:"
-"{admin_email}'>{admin_name}</a> <a href='{admin_org_url}'>联系{admin_org_name} </a>。</p>"
+"<p>Assembl工具可以协商涉及到大量用户（数百或数千名用户，公职人员等）的共同设计可交付成果。如果您需要关于构建您的咨询过程和构建使用Assembl的技能的建议，可以从"
+" 联系人<a href='mailto:{admin_email}'>{admin_name}</a> <a "
+"href='{admin_org_url}'>联系{admin_org_name} </a>。</p>"
 
 #: assembl/templates/notifications/txt_new_discussion.jinja2:16
 msgid ""
-"Congratulations, your Assembl consultation is ready, and you can find it here:\n"
+"Congratulations, your Assembl consultation is ready, and you can find it "
+"here:\n"
 "{discussion_url}\n"
 "You can use the following link to define your password:\n"
 "{connection_url}\n"
 "You will find documentation here:\n"
 "{documentation_url}\n"
 "\n"
-"The Assembl tool enables consultations involving a great number of users (hundreds or thousands of users, public officials, etc.) in the co-design of a deliverable. If you need advice on "
-"structuring your consultation process and building skills in using Assembl, you can contact {admin_name} at <{admin_email}>, from {admin_org_name} ({admin_org_url}) for more details."
+"The Assembl tool enables consultations involving a great number of users "
+"(hundreds or thousands of users, public officials, etc.) in the co-design"
+" of a deliverable. If you need advice on structuring your consultation "
+"process and building skills in using Assembl, you can contact "
+"{admin_name} at <{admin_email}>, from {admin_org_name} ({admin_org_url}) "
+"for more details."
 msgstr ""
 "恭喜，您的Assembl咨询已经准备好了，您可以在这里找到：\n"
 "{discussion_url}\n"
@@ -2344,11 +2584,15 @@ msgstr ""
 "您可以在这里找到文档：\n"
 "{documentation_url}\n"
 "\n"
-"组合工具可协助大量用户（数百或数千用户，公职人员等）进行协同设计。如果您需要关于构建您的咨询过程和构建使用Assembl的技能的建议，可以通过{admin_org_name}（{admin_org_url}）与<{admin_email}> "
-"{admin_name}联系获取更多详细信息。"
+"组合工具可协助大量用户（数百或数千用户，公职人员等）进行协同设计。如果您需要关于构建您的咨询过程和构建使用Assembl的技能的建议，可以通过{admin_org_name}（{admin_org_url}）与<{admin_email}>"
+" {admin_name}联系获取更多详细信息。"
 
-#: assembl/templates/styleguide/components/Dialogs.jinja2:120 assembl/templates/styleguide/components/Dialogs.jinja2:147 assembl/templates/views/adminPartnerEditForm.tmpl:72
-#: assembl/templates/views/adminPartnerForm.tmpl:70 assembl/templates/views/create-group.tmpl:129 assembl/templates/views/message_translation_question_selection.tmpl:12
+#: assembl/templates/styleguide/components/Dialogs.jinja2:120
+#: assembl/templates/styleguide/components/Dialogs.jinja2:147
+#: assembl/templates/views/adminPartnerEditForm.tmpl:72
+#: assembl/templates/views/adminPartnerForm.tmpl:70
+#: assembl/templates/views/create-group.tmpl:129
+#: assembl/templates/views/message_translation_question_selection.tmpl:12
 msgid "Validate"
 msgstr "验证"
 
@@ -2373,14 +2617,20 @@ msgstr ""
 msgid ""
 "<p>How to participate in the discussion \"%(debate_name)s\":</p>\n"
 "\t<ol>\n"
-"\t\t<li>Explore the discussions using the ideas that have already emerged</li>\n"
-"\t\t<li>Join in the conversation by replying directly to the contributions of participants</li>\n"
-"\t\t<li>Start a new topic of discussion if you wish to rejuvenate the discussion around a particular idea</li>\n"
+"\t\t<li>Explore the discussions using the ideas that have already "
+"emerged</li>\n"
+"\t\t<li>Join in the conversation by replying directly to the "
+"contributions of participants</li>\n"
+"\t\t<li>Start a new topic of discussion if you wish to rejuvenate the "
+"discussion around a particular idea</li>\n"
 "\t</ol>\n"
 "\t<p>How the process works:</p>\n"
 "\t<ol>\n"
-"\t\t<li>As you contribute, Harvesters will select the key ideas from your messages – they are here to make sure your contributions get noticed</li>\n"
-"\t\t<li>Based on these ideas, they will reorganize the ideas into a table of contents of the ideas shared</li>\n"
+"\t\t<li>As you contribute, Harvesters will select the key ideas from your"
+" messages – they are here to make sure your contributions get "
+"noticed</li>\n"
+"\t\t<li>Based on these ideas, they will reorganize the ideas into a table"
+" of contents of the ideas shared</li>\n"
 "\t</ol>"
 msgstr ""
 "<p>如何参与讨论“%(debate_name)s”：</p>\n"
@@ -2411,7 +2661,8 @@ msgstr "阅读讨论"
 msgid "Content to be tracked!"
 msgstr "内容要跟踪！"
 
-#: assembl/templates/views/adminDiscussion.tmpl:6 assembl/templates/views/discussionAdminNavigationMenu.tmpl:3
+#: assembl/templates/views/adminDiscussion.tmpl:6
+#: assembl/templates/views/discussionAdminNavigationMenu.tmpl:3
 msgid "Edit discussion"
 msgstr "编辑讨论"
 
@@ -2427,7 +2678,9 @@ msgstr "讨论话题"
 msgid "Discussion slug"
 msgstr "讨论地址"
 
-#: assembl/templates/views/adminDiscussion.tmpl:36 assembl/templates/views/synthesisPanel.tmpl:5 assembl/templates/views/synthesisPanelMessage.tmpl:4
+#: assembl/templates/views/adminDiscussion.tmpl:36
+#: assembl/templates/views/synthesisPanel.tmpl:5
+#: assembl/templates/views/synthesisPanelMessage.tmpl:4
 msgid "Introduction"
 msgstr "介绍"
 
@@ -2457,14 +2710,21 @@ msgid "Logo URL (optional)"
 msgstr "徽标网址（可选）"
 
 #: assembl/templates/views/adminDiscussion.tmpl:95
-msgid "The logo image can have a maximum height of 40px, and a maximum width of 215px. Background must be transparent. Margins must be included in the image."
+msgid ""
+"The logo image can have a maximum height of 40px, and a maximum width of "
+"215px. Background must be transparent. Margins must be included in the "
+"image."
 msgstr "标志图像的最大高度可以为40像素，最大宽度为215像素。背景必须是透明的。图像中必须包含边距。"
 
-#: assembl/templates/views/adminDiscussion.tmpl:101 assembl/templates/views/emailSource.tmpl:80 assembl/templates/views/userAccountForm.tmpl:42 assembl/templates/views/userProfile.tmpl:74
+#: assembl/templates/views/adminDiscussion.tmpl:101
+#: assembl/templates/views/emailSource.tmpl:82
+#: assembl/templates/views/userAccountForm.tmpl:42
+#: assembl/templates/views/userProfile.tmpl:74
 msgid "Save changes"
 msgstr "保存更变内容"
 
-#: assembl/templates/views/adminDiscussionSettings.tmpl:6 assembl/templates/views/navBarLeft.tmpl:21
+#: assembl/templates/views/adminDiscussionSettings.tmpl:6
+#: assembl/templates/views/navBarLeft.tmpl:21
 msgid "Discussion settings"
 msgstr "讨论设置"
 
@@ -2500,25 +2760,40 @@ msgstr "下一次连接尝试："
 msgid "Manual start"
 msgstr "手动启动"
 
-#: assembl/templates/views/adminDiscussionSettingsGeneralSourceRead.tmpl:15 assembl/templates/views/message.tmpl:33 assembl/templates/views/messageDeletedByUser.tmpl:25
+#: assembl/templates/views/adminDiscussionSettingsGeneralSourceRead.tmpl:15
+#: assembl/templates/views/message.tmpl:33
+#: assembl/templates/views/messageDeletedByUser.tmpl:25
 #: assembl/templates/views/messageListHeader.tmpl:4
 msgid "More options"
 msgstr "更多选项"
 
-#: assembl/templates/views/adminMessageColumn.tmpl:4 assembl/templates/views/adminMessageColumn.tmpl:5 assembl/templates/views/adminTimelineEvent.tmpl:5
+#: assembl/templates/views/adminMessageColumn.tmpl:4
+#: assembl/templates/views/adminMessageColumn.tmpl:5
+#: assembl/templates/views/adminTimelineEvent.tmpl:5
 msgid "Identifier"
 msgstr "识别码"
 
-#: assembl/templates/views/adminMessageColumn.tmpl:8 assembl/templates/views/adminMessageColumn.tmpl:9
+#: assembl/templates/views/adminMessageColumn.tmpl:8
+#: assembl/templates/views/adminMessageColumn.tmpl:9
 msgid "Color"
 msgstr "颜色"
 
-#: assembl/templates/views/adminMessageColumn.tmpl:23 assembl/templates/views/adminTimelineEvent.tmpl:45 assembl/templates/views/dictPreferenceItemView.tmpl:8
-#: assembl/templates/views/listPreferenceItemView.tmpl:7 assembl/templates/views/partnersInAdmin.tmpl:20
+#: assembl/templates/views/adminMessageColumn.tmpl:13
+#: assembl/templates/views/adminTimelineEvent.tmpl:37
+msgid "Title"
+msgstr "标题"
+
+#: assembl/templates/views/adminMessageColumn.tmpl:27
+#: assembl/templates/views/adminTimelineEvent.tmpl:51
+#: assembl/templates/views/dictPreferenceItemView.tmpl:8
+#: assembl/templates/views/listPreferenceItemView.tmpl:7
+#: assembl/templates/views/partnersInAdmin.tmpl:20
 msgid "Delete"
 msgstr "删除"
 
-#: assembl/templates/views/adminMessageColumns.tmpl:5 assembl/templates/views/adminPartnerForm.tmpl:62 assembl/templates/views/adminTimelineEvents.tmpl:20
+#: assembl/templates/views/adminMessageColumns.tmpl:5
+#: assembl/templates/views/adminPartnerForm.tmpl:62
+#: assembl/templates/views/adminTimelineEvents.tmpl:20
 #: assembl/templates/views/listPreferenceView.tmpl:4
 msgid "Add"
 msgstr "加"
@@ -2527,11 +2802,13 @@ msgstr "加"
 msgid "Activate multi-column view"
 msgstr "激活多列视图"
 
-#: assembl/templates/views/adminNotificationSubscriptions.tmpl:6 assembl/templates/views/discussionAdminNavigationMenu.tmpl:12
+#: assembl/templates/views/adminNotificationSubscriptions.tmpl:6
+#: assembl/templates/views/discussionAdminNavigationMenu.tmpl:12
 msgid "Edit notifications"
 msgstr "编辑通知"
 
-#: assembl/templates/views/adminNotificationSubscriptions.tmpl:13 assembl/templates/views/adminTimelineEvents.tmpl:13
+#: assembl/templates/views/adminNotificationSubscriptions.tmpl:13
+#: assembl/templates/views/adminTimelineEvents.tmpl:13
 msgid "Your change has been saved!"
 msgstr "您的更改已保存！"
 
@@ -2541,12 +2818,16 @@ msgstr "默认通知"
 
 #: assembl/templates/views/adminNotificationSubscriptions.tmpl:18
 msgid ""
-"These are the notifications which a user gets subscribed to when one of these conditions is matched: 1. The user clicks on the \"Join this discussion\" button. 2. The user posts his/her first "
-"message, Assembl shows a subscription pop-in, and the user accepts subscribing. 3. The discussion parameter \"Auto-subscribe users to default notifications when they register\" is active and "
-"the user confirms their account."
+"These are the notifications which a user gets subscribed to when one of "
+"these conditions is matched: 1. The user clicks on the \"Join this "
+"discussion\" button. 2. The user posts his/her first message, Assembl "
+"shows a subscription pop-in, and the user accepts subscribing. 3. The "
+"discussion parameter \"Auto-subscribe users to default notifications when"
+" they register\" is active and the user confirms their account."
 msgstr ""
-"这些是当匹配这些条件之一时用户获得订阅的通知：1.用户点击“加入此讨论”按钮。 2.用户发布他/她的第一条消息，Assembl显示订阅弹出式菜单，用户接受订阅。 3.讨论参数“自动订阅用户注册时的默认通知”为活动"
-"状态，用户确认其帐号。"
+"这些是当匹配这些条件之一时用户获得订阅的通知：1.用户点击“加入此讨论”按钮。 "
+"2.用户发布他/她的第一条消息，Assembl显示订阅弹出式菜单，用户接受订阅。 "
+"3.讨论参数“自动订阅用户注册时的默认通知”为活动状态，用户确认其帐号。"
 
 #: assembl/templates/views/adminNotificationSubscriptions.tmpl:21
 msgid "Auto-subscribe users to default notifications"
@@ -2556,48 +2837,61 @@ msgstr "自动订阅用户到默认通知"
 msgid "edit partner"
 msgstr "编辑合作伙伴"
 
-#: assembl/templates/views/adminPartnerEditForm.tmpl:9 assembl/templates/views/adminPartnerForm.tmpl:8
+#: assembl/templates/views/adminPartnerEditForm.tmpl:9
+#: assembl/templates/views/adminPartnerForm.tmpl:8
 msgid "Partner name"
 msgstr "合作伙伴姓名"
 
-#: assembl/templates/views/adminPartnerEditForm.tmpl:13 assembl/templates/views/adminPartnerForm.tmpl:12
+#: assembl/templates/views/adminPartnerEditForm.tmpl:13
+#: assembl/templates/views/adminPartnerForm.tmpl:12
 msgid "This field is mandatory"
 msgstr "此字段是强制性的"
 
-#: assembl/templates/views/adminPartnerEditForm.tmpl:20 assembl/templates/views/adminPartnerForm.tmpl:19 assembl/templates/views/adminTimelineEvent.tmpl:35
+#: assembl/templates/views/adminPartnerEditForm.tmpl:20
+#: assembl/templates/views/adminPartnerForm.tmpl:19
+#: assembl/templates/views/adminTimelineEvent.tmpl:41
 msgid "Description"
 msgstr "说明"
 
-#: assembl/templates/views/adminPartnerEditForm.tmpl:23 assembl/templates/views/adminPartnerForm.tmpl:22
+#: assembl/templates/views/adminPartnerEditForm.tmpl:23
+#: assembl/templates/views/adminPartnerForm.tmpl:22
 msgid "Share what the organisation is all about"
 msgstr "分享组织的内容"
 
-#: assembl/templates/views/adminPartnerEditForm.tmpl:25 assembl/templates/views/adminPartnerForm.tmpl:24
+#: assembl/templates/views/adminPartnerEditForm.tmpl:25
+#: assembl/templates/views/adminPartnerForm.tmpl:24
 msgid "please correct the error"
 msgstr "请纠正错误"
 
-#: assembl/templates/views/adminPartnerEditForm.tmpl:32 assembl/templates/views/adminPartnerForm.tmpl:31
+#: assembl/templates/views/adminPartnerEditForm.tmpl:32
+#: assembl/templates/views/adminPartnerForm.tmpl:31
 msgid "Website"
 msgstr "网站"
 
-#: assembl/templates/views/adminPartnerEditForm.tmpl:35 assembl/templates/views/adminPartnerForm.tmpl:34
+#: assembl/templates/views/adminPartnerEditForm.tmpl:35
+#: assembl/templates/views/adminPartnerForm.tmpl:34
 msgid "Example : http://example.org/ or http://www.hompage.com/"
 msgstr "示例：http://example.org/或http://www.hompage.com/"
 
-#: assembl/templates/views/adminPartnerEditForm.tmpl:37 assembl/templates/views/adminPartnerEditForm.tmpl:49 assembl/templates/views/adminPartnerForm.tmpl:36
+#: assembl/templates/views/adminPartnerEditForm.tmpl:37
+#: assembl/templates/views/adminPartnerEditForm.tmpl:49
+#: assembl/templates/views/adminPartnerForm.tmpl:36
 #: assembl/templates/views/adminPartnerForm.tmpl:48
 msgid "Invalid URL format"
 msgstr "网址格式无效"
 
-#: assembl/templates/views/adminPartnerEditForm.tmpl:44 assembl/templates/views/adminPartnerForm.tmpl:43
+#: assembl/templates/views/adminPartnerEditForm.tmpl:44
+#: assembl/templates/views/adminPartnerForm.tmpl:43
 msgid "URL of logo image"
 msgstr "标志图片网址"
 
-#: assembl/templates/views/adminPartnerEditForm.tmpl:47 assembl/templates/views/adminPartnerForm.tmpl:46
+#: assembl/templates/views/adminPartnerEditForm.tmpl:47
+#: assembl/templates/views/adminPartnerForm.tmpl:46
 msgid "Example : http://example.org/logo.jpg"
 msgstr "示例：http://example.org/logo.jpg"
 
-#: assembl/templates/views/adminPartnerEditForm.tmpl:56 assembl/templates/views/adminPartnerForm.tmpl:55
+#: assembl/templates/views/adminPartnerEditForm.tmpl:56
+#: assembl/templates/views/adminPartnerForm.tmpl:55
 msgid "Is instigator of the discussion"
 msgstr "是煽动者的讨论"
 
@@ -2609,7 +2903,10 @@ msgstr "确认"
 msgid "Add a new partner"
 msgstr "添加新的合作伙伴"
 
-#: assembl/templates/views/adminPartners.tmpl:7 assembl/templates/views/partnerList.tmpl:6 assembl/templates/views/partnerList.tmpl:10 assembl/templates/views/partnerList.tmpl:12
+#: assembl/templates/views/adminPartners.tmpl:7
+#: assembl/templates/views/partnerList.tmpl:6
+#: assembl/templates/views/partnerList.tmpl:10
+#: assembl/templates/views/partnerList.tmpl:12
 msgid "Partners"
 msgstr "合伙人"
 
@@ -2633,11 +2930,12 @@ msgstr "结束日期（当地时间）"
 msgid "Image URL"
 msgstr "图片网址"
 
-#: assembl/templates/views/adminTimelineEvent.tmpl:31
-msgid "Title"
-msgstr "标题"
+#: assembl/templates/views/adminTimelineEvent.tmpl:29
+msgid "Use v1 interface"
+msgstr ""
 
-#: assembl/templates/views/adminTimelineEvents.tmpl:6 assembl/templates/views/discussionAdminNavigationMenu.tmpl:15
+#: assembl/templates/views/adminTimelineEvents.tmpl:6
+#: assembl/templates/views/discussionAdminNavigationMenu.tmpl:15
 msgid "Edit timeline"
 msgstr "编辑时间轴"
 
@@ -2654,7 +2952,10 @@ msgid "Assembl needs to be reloaded"
 msgstr "Assembl需要重新加载"
 
 #: assembl/templates/views/ajaxError.tmpl:7
-msgid "Assembl has encountered a problem and needs to be refreshed. Do not worry, any messages that are in the process of being composed will not be lost."
+msgid ""
+"Assembl has encountered a problem and needs to be refreshed. Do not "
+"worry, any messages that are in the process of being composed will not be"
+" lost."
 msgstr "Assembl遇到问题，需要刷新。不要担心，正在编写的任何消息都不会丢失。"
 
 #: assembl/templates/views/ajaxError.tmpl:8
@@ -2662,10 +2963,13 @@ msgid "See you in a minute on Assembl!"
 msgstr "一会在Assembl见！"
 
 #: assembl/templates/views/ajaxError.tmpl:9
-msgid "If you are in contact with the technical team, please let them know about the following message:"
+msgid ""
+"If you are in contact with the technical team, please let them know about"
+" the following message:"
 msgstr "如果您与技术团队联系，请告知他们以下信息："
 
-#: assembl/templates/views/ajaxError.tmpl:16 assembl/templates/views/firstPost.tmpl:18
+#: assembl/templates/views/ajaxError.tmpl:16
+#: assembl/templates/views/firstPost.tmpl:18
 msgid "Not now"
 msgstr "暂时不"
 
@@ -2677,7 +2981,8 @@ msgstr "刷新"
 msgid "Number of posts in the entire discussion"
 msgstr "整个讨论中的职位数"
 
-#: assembl/templates/views/allMessagesInIdeaList.tmpl:9 assembl/templates/views/allMessagesInIdeaList.tmpl:10
+#: assembl/templates/views/allMessagesInIdeaList.tmpl:9
+#: assembl/templates/views/allMessagesInIdeaList.tmpl:10
 msgid "All messages"
 msgstr "所有消息"
 
@@ -2690,11 +2995,15 @@ msgid "The title of this announcement"
 msgstr "本公告的标题"
 
 #: assembl/templates/views/announcementEditable.tmpl:4
-msgid "The text of this this announcement.  Will be displayed on top of the message list for this idea."
+msgid ""
+"The text of this this announcement.  Will be displayed on top of the "
+"message list for this idea."
 msgstr "本公告的文字。将显示在这个想法的消息列表的顶部。"
 
 #: assembl/templates/views/announcementEditable.tmpl:7
-msgid "If checked, this announcement will also be shown for any sub-idea that doesn't have its own announcement."
+msgid ""
+"If checked, this announcement will also be shown for any sub-idea that "
+"doesn't have its own announcement."
 msgstr "如果选中，本公告也将显示任何没有自己的公告的子想法。"
 
 #: assembl/templates/views/announcementEditable.tmpl:8
@@ -2709,7 +3018,10 @@ msgstr "删除此公告"
 msgid "Add a new announcement to this idea"
 msgstr "为这个想法添加一个新的公告"
 
-#: assembl/templates/views/announcementMessage.tmpl:10 assembl/templates/views/message.tmpl:150 assembl/templates/views/message.tmpl:169 assembl/templates/views/messageDeletedByUser.tmpl:53
+#: assembl/templates/views/announcementMessage.tmpl:10
+#: assembl/templates/views/message.tmpl:150
+#: assembl/templates/views/message.tmpl:169
+#: assembl/templates/views/messageDeletedByUser.tmpl:53
 #: assembl/templates/views/messageDeletedByUser.tmpl:72
 #, python-format
 msgid "<time title=\"%(precise_date)s\">%(nice_date)s</time>"
@@ -2741,8 +3053,10 @@ msgstr "在浏览器的书签栏中拖动以下按钮。"
 
 #: assembl/templates/views/bookmarket.tmpl:12
 msgid ""
-"Drag this button to your bookmark bar to create a bookmarklet. You can then capture selections from most webpages (those that are not secured with https) by 1. Clicking on the bookmarklet and "
-"2. Highlighting the section of text you wish to send to the discussion."
+"Drag this button to your bookmark bar to create a bookmarklet. You can "
+"then capture selections from most webpages (those that are not secured "
+"with https) by 1. Clicking on the bookmarklet and 2. Highlighting the "
+"section of text you wish to send to the discussion."
 msgstr "将此按钮拖到书签栏创建一个书签。然后，您可以通过以下方式从大多数网页（不使用https保护的网页）中捕获选择。单击书签和2.突出显示要发送到讨论的部分文本。"
 
 #: assembl/templates/views/bookmarket.tmpl:12
@@ -2750,7 +3064,9 @@ msgid "Web capture to"
 msgstr "网页捕获到"
 
 #: assembl/templates/views/bookmarket.tmpl:14
-msgid "Find extracts that will add value to the current discussion. For example, you could find extracts for:"
+msgid ""
+"Find extracts that will add value to the current discussion. For example,"
+" you could find extracts for:"
 msgstr "查找将为当前讨论增值的摘录。例如，您可以找到："
 
 #: assembl/templates/views/bookmarket.tmpl:16
@@ -2770,7 +3086,9 @@ msgid "Add an inspiring quote"
 msgstr "添加一个鼓舞人心的报价"
 
 #: assembl/templates/views/bookmarket.tmpl:22
-msgid "Click on the button, where you had dragged it in your browser, to activate web annotation."
+msgid ""
+"Click on the button, where you had dragged it in your browser, to "
+"activate web annotation."
 msgstr "点击您在浏览器中拖动它的按钮，激活Web注释。"
 
 #: assembl/templates/views/bookmarket.tmpl:28
@@ -2786,7 +3104,9 @@ msgid "See less"
 msgstr "看少了"
 
 #: assembl/templates/views/cookieBanner.tmpl:2
-msgid "By using our site, you consent to cookies being used for improvement of our service?"
+msgid ""
+"By using our site, you consent to cookies being used for improvement of "
+"our service?"
 msgstr "使用我们的网站，您同意cookies用于改进我们的服务？"
 
 #: assembl/templates/views/cookieBanner.tmpl:3
@@ -2817,11 +3137,14 @@ msgstr "创建一个综合"
 msgid "Others:"
 msgstr "其他:"
 
-#: assembl/templates/views/create-group.tmpl:61 assembl/templates/views/create-group.tmpl:93
+#: assembl/templates/views/create-group.tmpl:61
+#: assembl/templates/views/create-group.tmpl:93
 msgid "Idea Panel"
 msgstr "想法面板"
 
-#: assembl/templates/views/create-group.tmpl:71 assembl/templates/views/create-group.tmpl:83 assembl/templates/views/navigation.tmpl:11
+#: assembl/templates/views/create-group.tmpl:71
+#: assembl/templates/views/create-group.tmpl:83
+#: assembl/templates/views/navigation.tmpl:11
 msgid "Discussion"
 msgstr "讨论"
 
@@ -2829,7 +3152,8 @@ msgstr "讨论"
 msgid "Auto-subscribe users to default notifications when they register"
 msgstr "自动订阅用户注册时的默认通知"
 
-#: assembl/templates/views/discussionAdminNavigationMenu.tmpl:6 assembl/templates/views/userNavigationMenu.tmpl:14
+#: assembl/templates/views/discussionAdminNavigationMenu.tmpl:6
+#: assembl/templates/views/userNavigationMenu.tmpl:14
 msgid "Discussion preferences"
 msgstr "讨论偏好"
 
@@ -2841,7 +3165,9 @@ msgstr "服务器设置"
 msgid "Edit partners"
 msgstr "编辑合作伙伴"
 
-#: assembl/templates/views/discussionAdminNavigationMenu.tmpl:21 assembl/templates/views/userAccountForm.tmpl:43 assembl/templates/views/userNavigationMenu.tmpl:17
+#: assembl/templates/views/discussionAdminNavigationMenu.tmpl:21
+#: assembl/templates/views/userAccountForm.tmpl:43
+#: assembl/templates/views/userNavigationMenu.tmpl:17
 #: assembl/templates/views/userProfile.tmpl:75
 msgid "Return to the discussion"
 msgstr "回到讨论"
@@ -2926,51 +3252,63 @@ msgstr "每位参与者统计"
 msgid "Show fields:"
 msgstr "显示字段："
 
-#: assembl/templates/views/discussionStatisticsModal.tmpl:65 assembl/templates/views/discussionStatisticsModal.tmpl:99
+#: assembl/templates/views/discussionStatisticsModal.tmpl:65
+#: assembl/templates/views/discussionStatisticsModal.tmpl:99
 msgid "Posts"
 msgstr "文章"
 
-#: assembl/templates/views/discussionStatisticsModal.tmpl:66 assembl/templates/views/discussionStatisticsModal.tmpl:100
+#: assembl/templates/views/discussionStatisticsModal.tmpl:66
+#: assembl/templates/views/discussionStatisticsModal.tmpl:100
 msgid "Cumulative posts"
 msgstr "累积职位"
 
-#: assembl/templates/views/discussionStatisticsModal.tmpl:67 assembl/templates/views/discussionStatisticsModal.tmpl:101
+#: assembl/templates/views/discussionStatisticsModal.tmpl:67
+#: assembl/templates/views/discussionStatisticsModal.tmpl:101
 msgid "Replies received"
 msgstr "收到的回覆"
 
-#: assembl/templates/views/discussionStatisticsModal.tmpl:68 assembl/templates/views/discussionStatisticsModal.tmpl:102
+#: assembl/templates/views/discussionStatisticsModal.tmpl:68
+#: assembl/templates/views/discussionStatisticsModal.tmpl:102
 msgid "Cumulative replies received"
 msgstr "收到的累积回复"
 
-#: assembl/templates/views/discussionStatisticsModal.tmpl:70 assembl/templates/views/discussionStatisticsModal.tmpl:104
+#: assembl/templates/views/discussionStatisticsModal.tmpl:70
+#: assembl/templates/views/discussionStatisticsModal.tmpl:104
 msgid "Liking"
 msgstr "喜爱"
 
-#: assembl/templates/views/discussionStatisticsModal.tmpl:71 assembl/templates/views/discussionStatisticsModal.tmpl:105
+#: assembl/templates/views/discussionStatisticsModal.tmpl:71
+#: assembl/templates/views/discussionStatisticsModal.tmpl:105
 msgid "Cumulative liking"
 msgstr "累积喜好"
 
-#: assembl/templates/views/discussionStatisticsModal.tmpl:72 assembl/templates/views/discussionStatisticsModal.tmpl:106
+#: assembl/templates/views/discussionStatisticsModal.tmpl:72
+#: assembl/templates/views/discussionStatisticsModal.tmpl:106
 msgid "Liked"
 msgstr "赞"
 
-#: assembl/templates/views/discussionStatisticsModal.tmpl:73 assembl/templates/views/discussionStatisticsModal.tmpl:107
+#: assembl/templates/views/discussionStatisticsModal.tmpl:73
+#: assembl/templates/views/discussionStatisticsModal.tmpl:107
 msgid "Cumulative liked"
 msgstr "累积赞"
 
-#: assembl/templates/views/discussionStatisticsModal.tmpl:75 assembl/templates/views/discussionStatisticsModal.tmpl:109
+#: assembl/templates/views/discussionStatisticsModal.tmpl:75
+#: assembl/templates/views/discussionStatisticsModal.tmpl:109
 msgid "Disagreeing"
 msgstr "不同意"
 
-#: assembl/templates/views/discussionStatisticsModal.tmpl:76 assembl/templates/views/discussionStatisticsModal.tmpl:110
+#: assembl/templates/views/discussionStatisticsModal.tmpl:76
+#: assembl/templates/views/discussionStatisticsModal.tmpl:110
 msgid "Cumulative disagreeing"
 msgstr "累积不同意"
 
-#: assembl/templates/views/discussionStatisticsModal.tmpl:77 assembl/templates/views/discussionStatisticsModal.tmpl:111
+#: assembl/templates/views/discussionStatisticsModal.tmpl:77
+#: assembl/templates/views/discussionStatisticsModal.tmpl:111
 msgid "Disagreed"
 msgstr "不同意"
 
-#: assembl/templates/views/discussionStatisticsModal.tmpl:78 assembl/templates/views/discussionStatisticsModal.tmpl:112
+#: assembl/templates/views/discussionStatisticsModal.tmpl:78
+#: assembl/templates/views/discussionStatisticsModal.tmpl:112
 msgid "Cumulative disagreed"
 msgstr "累积不同意"
 
@@ -2978,31 +3316,38 @@ msgstr "累积不同意"
 msgid "misunderstanding"
 msgstr "误解"
 
-#: assembl/templates/views/discussionStatisticsModal.tmpl:81 assembl/templates/views/discussionStatisticsModal.tmpl:115
+#: assembl/templates/views/discussionStatisticsModal.tmpl:81
+#: assembl/templates/views/discussionStatisticsModal.tmpl:115
 msgid "Cumulative misunderstanding"
 msgstr "累积误会"
 
-#: assembl/templates/views/discussionStatisticsModal.tmpl:82 assembl/templates/views/discussionStatisticsModal.tmpl:116
+#: assembl/templates/views/discussionStatisticsModal.tmpl:82
+#: assembl/templates/views/discussionStatisticsModal.tmpl:116
 msgid "Misunderstood"
 msgstr "被误读"
 
-#: assembl/templates/views/discussionStatisticsModal.tmpl:83 assembl/templates/views/discussionStatisticsModal.tmpl:117
+#: assembl/templates/views/discussionStatisticsModal.tmpl:83
+#: assembl/templates/views/discussionStatisticsModal.tmpl:117
 msgid "Cumulative misunderstood"
 msgstr "累积误解"
 
-#: assembl/templates/views/discussionStatisticsModal.tmpl:85 assembl/templates/views/discussionStatisticsModal.tmpl:119
+#: assembl/templates/views/discussionStatisticsModal.tmpl:85
+#: assembl/templates/views/discussionStatisticsModal.tmpl:119
 msgid "Requesting info"
 msgstr "请求信息"
 
-#: assembl/templates/views/discussionStatisticsModal.tmpl:86 assembl/templates/views/discussionStatisticsModal.tmpl:120
+#: assembl/templates/views/discussionStatisticsModal.tmpl:86
+#: assembl/templates/views/discussionStatisticsModal.tmpl:120
 msgid "Cumulative requesting info"
 msgstr "累积请求信息"
 
-#: assembl/templates/views/discussionStatisticsModal.tmpl:87 assembl/templates/views/discussionStatisticsModal.tmpl:121
+#: assembl/templates/views/discussionStatisticsModal.tmpl:87
+#: assembl/templates/views/discussionStatisticsModal.tmpl:121
 msgid "Info requested"
 msgstr "信息要求"
 
-#: assembl/templates/views/discussionStatisticsModal.tmpl:88 assembl/templates/views/discussionStatisticsModal.tmpl:122
+#: assembl/templates/views/discussionStatisticsModal.tmpl:88
+#: assembl/templates/views/discussionStatisticsModal.tmpl:122
 msgid "Cumulative info requested"
 msgstr "累积信息要求"
 
@@ -3026,6 +3371,56 @@ msgstr "显示电子邮件"
 msgid "Get discussion participant statistics"
 msgstr "获取讨论参与者统计"
 
+#: assembl/templates/views/emailSource.tmpl:13
+msgid "Admin sender"
+msgstr ""
+
+#: assembl/templates/views/emailSource.tmpl:16
+msgid ""
+"This field is an e-mail address, and is mandatory: it will be the value "
+"of notification emails' From field"
+msgstr ""
+
+#: assembl/templates/views/emailSource.tmpl:22
+msgid "Post email address"
+msgstr ""
+
+#: assembl/templates/views/emailSource.tmpl:25
+msgid "For mailing lists only: Where messages are sent to the list"
+msgstr ""
+
+#: assembl/templates/views/emailSource.tmpl:30
+#, fuzzy
+#| msgid "Posts"
+msgid "Host"
+msgstr "文章"
+
+#: assembl/templates/views/emailSource.tmpl:37
+msgid "Use SSL"
+msgstr ""
+
+#: assembl/templates/views/emailSource.tmpl:43
+msgid "True"
+msgstr ""
+
+#: assembl/templates/views/emailSource.tmpl:48
+#, fuzzy
+#| msgid "Close"
+msgid "False"
+msgstr "关闭"
+
+#: assembl/templates/views/emailSource.tmpl:52
+#, fuzzy
+#| msgid "Role"
+msgid "Folder"
+msgstr "角色"
+
+#: assembl/templates/views/emailSource.tmpl:60
+#, fuzzy
+#| msgid "Reimport"
+msgid "Port"
+msgstr "重新导入"
+
 #: assembl/templates/views/exportPostModal-fb-group.tmpl:2
 msgid "Select Group"
 msgstr "选择组"
@@ -3043,7 +3438,10 @@ msgid "Basic"
 msgstr "基本"
 
 #: assembl/templates/views/exportPostModal-fb-token-error.tmpl:6
-msgid "We will need your permission to publish the message you are exporting on your behalf,  as well as permission to read the posts back in order to import them back into Assembl."
+msgid ""
+"We will need your permission to publish the message you are exporting on "
+"your behalf,  as well as permission to read the posts back in order to "
+"import them back into Assembl."
 msgstr "我们需要您的许可才能发布您代表您出口的邮件，以及读取帖子的权限，以便将其导入Assembl。"
 
 #: assembl/templates/views/exportPostModal-fb-token-error.tmpl:7
@@ -3052,8 +3450,9 @@ msgstr "小组"
 
 #: assembl/templates/views/exportPostModal-fb-token-error.tmpl:7
 msgid ""
-"We will need your permission to access the list of groups that you are a part of and to be able to post on them, both on your behalf, or if you are the group administrator, on behalf of the "
-"group itself. "
+"We will need your permission to access the list of groups that you are a "
+"part of and to be able to post on them, both on your behalf, or if you "
+"are the group administrator, on behalf of the group itself. "
 msgstr "我们将需要您的许可才能访问您所属组织的列表，并且可以代表您发布，也可以代表您发布，或者如果您是组管理员，则代表组本身。"
 
 #: assembl/templates/views/exportPostModal-fb-token-error.tmpl:8
@@ -3062,8 +3461,10 @@ msgstr "页面"
 
 #: assembl/templates/views/exportPostModal-fb-token-error.tmpl:8
 msgid ""
-"We will need your permission to access the list of pages you have liked, as well as those in which you are an administrator, and to be able to post both on your behalf or, if you are the page "
-"administrator, on behalf of the page itself"
+"We will need your permission to access the list of pages you have liked, "
+"as well as those in which you are an administrator, and to be able to "
+"post both on your behalf or, if you are the page administrator, on behalf"
+" of the page itself"
 msgstr "我们需要您的许可才能访问您喜欢的页面列表以及您是管理员的页面列表，并且能够代表您发布，或者如果您是页面管理员，则代表页面本身"
 
 #: assembl/templates/views/exportPostModal-fb.tmpl:23
@@ -3119,7 +3520,9 @@ msgid "Select your desired export location"
 msgstr "选择所需的导出位置"
 
 #: assembl/templates/views/facebookSourceForm.tmpl:7
-msgid "How many top posts and their comments would you like to import? Leave blank to import all posts"
+msgid ""
+"How many top posts and their comments would you like to import? Leave "
+"blank to import all posts"
 msgstr "您要导入多少个热门帖子及其评论？留空以导入所有帖子"
 
 #: assembl/templates/views/facebookSourceForm.tmpl:7
@@ -3127,7 +3530,9 @@ msgid "Maximum number of threads"
 msgstr "最大线程数"
 
 #: assembl/templates/views/facebookSourceForm.tmpl:14
-msgid "When has been posted the oldest post you would like to import? Use ISO 8601 UTC. (ex: 2015-10-20T00:00:00Z ) Leave blank for no limit"
+msgid ""
+"When has been posted the oldest post you would like to import? Use ISO "
+"8601 UTC. (ex: 2015-10-20T00:00:00Z ) Leave blank for no limit"
 msgstr "何时发布您想导入的最旧的帖子？使用ISO 8601 UTC。 （例如：2015-10-20T00:00:00Z）留空为无限制"
 
 #: assembl/templates/views/facebookSourceForm.tmpl:14
@@ -3135,7 +3540,9 @@ msgid "Minimum date"
 msgstr "最短日期"
 
 #: assembl/templates/views/facebookSourceForm.tmpl:21
-msgid "When has been posted the newest post you would like to import? Use ISO 8601 UTC. (ex: 2015-10-20T00:00:00Z ) Leave blank for no limit"
+msgid ""
+"When has been posted the newest post you would like to import? Use ISO "
+"8601 UTC. (ex: 2015-10-20T00:00:00Z ) Leave blank for no limit"
 msgstr "什么时候发布你想导入的最新文章？使用ISO 8601 UTC。（例如：2015-10-20T00:00:00Z）留空为无限制"
 
 #: assembl/templates/views/facebookSourceForm.tmpl:21
@@ -3150,11 +3557,16 @@ msgstr "欢迎讨论！"
 msgid "You will receive notifications when:"
 msgstr "您将收到通知："
 
-#: assembl/templates/views/firstLoginAfterAutoSubscribeToNotifications.tmpl:12 assembl/templates/views/firstPost.tmpl:12 assembl/templates/views/joinDiscussion.tmpl:12
-msgid "You can modify at anytime the type of notification you receive by clicking on the ‘Notifications’ section of your profile."
+#: assembl/templates/views/firstLoginAfterAutoSubscribeToNotifications.tmpl:12
+#: assembl/templates/views/firstPost.tmpl:12
+#: assembl/templates/views/joinDiscussion.tmpl:12
+msgid ""
+"You can modify at anytime the type of notification you receive by "
+"clicking on the ‘Notifications’ section of your profile."
 msgstr "您可以随时通过点击您的个人资料的“通知”部分修改收到的通知类型。"
 
-#: assembl/templates/views/firstLoginAfterAutoSubscribeToNotifications.tmpl:18 assembl/templates/views/joinDiscussion.tmpl:18
+#: assembl/templates/views/firstLoginAfterAutoSubscribeToNotifications.tmpl:18
+#: assembl/templates/views/joinDiscussion.tmpl:18
 msgid "Edit my notifications"
 msgstr "修改我的通知"
 
@@ -3166,11 +3578,15 @@ msgstr "继续讨论"
 msgid "Congratulations on making your first contribution!"
 msgstr "恭喜您做出您的第一个贡献！"
 
-#: assembl/templates/views/firstPost.tmpl:8 assembl/templates/views/joinDiscussion.tmpl:8
-msgid "Stay informed and up to date with the evolution of the discussion and receive notifications when:"
+#: assembl/templates/views/firstPost.tmpl:8
+#: assembl/templates/views/joinDiscussion.tmpl:8
+msgid ""
+"Stay informed and up to date with the evolution of the discussion and "
+"receive notifications when:"
 msgstr "随时随地了解讨论的进展情况，并在以下情况下收到通知："
 
-#: assembl/templates/views/firstPost.tmpl:19 assembl/templates/views/joinDiscussion.tmpl:19
+#: assembl/templates/views/firstPost.tmpl:19
+#: assembl/templates/views/joinDiscussion.tmpl:19
 msgid "Receive notifications"
 msgstr "接收通知"
 
@@ -3187,7 +3603,10 @@ msgid "Pick a topic and start contributing"
 msgstr "选择一个主题并开始贡献"
 
 #: assembl/templates/views/helperDebate.tmpl:5
-msgid "This table of contents helps you find the conversations and topics you are interested in so you don’t get overwhelmed. Topics include messages from all related sub-topics as well."
+msgid ""
+"This table of contents helps you find the conversations and topics you "
+"are interested in so you don’t get overwhelmed. Topics include messages "
+"from all related sub-topics as well."
 msgstr "这个目录可以帮助你找到你感兴趣的对话和话题，这样你就不会被淹没了。主题还包括所有相关子主题的消息。"
 
 #: assembl/templates/views/helperDebate.tmpl:6
@@ -3196,31 +3615,41 @@ msgstr "这是一个安全和尊重的空间。欢迎所有的想法！"
 
 #: assembl/templates/views/ideaClassification_directExtract.tmpl:3
 #, python-format
-msgid "<span class=\"harvester\">%s</span> has considered this message relevant to the idea:"
+msgid ""
+"<span class=\"harvester\">%s</span> has considered this message relevant "
+"to the idea:"
 msgstr "<span class=\"harvester\">%s</span>已经考虑了与该想法相关的此消息："
 
-#: assembl/templates/views/ideaClassification_directExtract.tmpl:7 assembl/templates/views/ideaClassification_indirectExtract.tmpl:7
+#: assembl/templates/views/ideaClassification_directExtract.tmpl:7
+#: assembl/templates/views/ideaClassification_indirectExtract.tmpl:7
 msgid "Considering this extract:"
 msgstr "考虑到这个提取："
 
-#: assembl/templates/views/ideaClassification_directExtract.tmpl:12 assembl/templates/views/ideaClassification_indirectExtract.tmpl:12
+#: assembl/templates/views/ideaClassification_directExtract.tmpl:12
+#: assembl/templates/views/ideaClassification_indirectExtract.tmpl:12
 #, python-format
 msgid "by %s"
 msgstr "由%s"
 
 #: assembl/templates/views/ideaClassification_directMessage.tmpl:3
 #, python-format
-msgid "<span class=\"author\">%s</span> started this new discussion thread directly on the idea:"
+msgid ""
+"<span class=\"author\">%s</span> started this new discussion thread "
+"directly on the idea:"
 msgstr "<span class=\"author\">%s</span>直接启动了这个新的讨论线程的想法："
 
 #: assembl/templates/views/ideaClassification_indirectExtract.tmpl:3
 #, python-format
-msgid "This message is part of a thread, which <span class=\"harvester\">%s</span> considered relevant to the idea:"
+msgid ""
+"This message is part of a thread, which <span "
+"class=\"harvester\">%s</span> considered relevant to the idea:"
 msgstr "此消息是线程的一部分，<span class=\"harvester\">%s</span>与思想相关："
 
 #: assembl/templates/views/ideaClassification_indirectMessage.tmpl:3
 #, python-format
-msgid "This message is part of a thread, started by <span class=\"author\">%s</span> on the idea:"
+msgid ""
+"This message is part of a thread, started by <span "
+"class=\"author\">%s</span> on the idea:"
 msgstr "该消息是线程的一部分，由<span class=\"author\">%s</span>启动："
 
 #: assembl/templates/views/ideaInIdeaList.tmpl:7
@@ -3248,7 +3677,9 @@ msgid "Number of unread messages related to this idea, or any of its sub-ideas"
 msgstr "与这个想法或其任何子想法相关的未读邮件的数量"
 
 #: assembl/templates/views/ideaInIdeaList.tmpl:59
-msgid "Number of unread messages related to this idea, or any of its sub-ideas.  Click on this number to view ONLY the new unread messages"
+msgid ""
+"Number of unread messages related to this idea, or any of its sub-ideas."
+"  Click on this number to view ONLY the new unread messages"
 msgstr "与这个想法或其任何子想法相关的未读邮件的数量。点击此号码仅查看新的未读邮件"
 
 #: assembl/templates/views/ideaInSynthesis.tmpl:14
@@ -3295,7 +3726,8 @@ msgstr "将当前展开/折叠状态保存为用户的默认状态"
 msgid "Restore default expanded/collapsed state"
 msgstr "恢复默认展开/折叠状态"
 
-#: assembl/templates/views/ideaPanel.tmpl:2 assembl/templates/views/message.tmpl:25
+#: assembl/templates/views/ideaPanel.tmpl:2
+#: assembl/templates/views/message.tmpl:25
 msgid "Share"
 msgstr "分享"
 
@@ -3316,7 +3748,9 @@ msgid "Expression in next synthesis"
 msgstr "下一步合成中的表达"
 
 #: assembl/templates/views/ideaPanel.tmpl:36
-msgid "Expression of this idea in the next synthesis.  You may want to edit them all together in the synthesis panel rather than here."
+msgid ""
+"Expression of this idea in the next synthesis.  You may want to edit them"
+" all together in the synthesis panel rather than here."
 msgstr "这个想法在下一个合成中的表达。您可能需要在综合面板中编辑它们，而不是在这里。"
 
 #: assembl/templates/views/ideaPanel.tmpl:40
@@ -3332,7 +3766,9 @@ msgid "Announcement for this idea"
 msgstr "这个想法的公告"
 
 #: assembl/templates/views/ideaPanel.tmpl:67
-msgid "Number of participants who contributed messages about this idea or it's sub-ideas."
+msgid ""
+"Number of participants who contributed messages about this idea or it's "
+"sub-ideas."
 msgstr "提供关于这个想法的消息的参与者人数或其子想法。"
 
 #: assembl/templates/views/ideaPanel.tmpl:86
@@ -3348,7 +3784,9 @@ msgid "Add extracts by dragging them in this panel from the clipboard or message
 msgstr "通过从剪贴板或消息将其拖动到此面板中来添加摘要"
 
 #: assembl/templates/views/ideaPanel.tmpl:109
-msgid "Remove all extracts from this idea.  Removed extracts will be available in your clipboard"
+msgid ""
+"Remove all extracts from this idea.  Removed extracts will be available "
+"in your clipboard"
 msgstr "删除这个想法的所有摘要。已删除的摘要将在您的剪贴板中可用"
 
 #: assembl/templates/views/ideaPanel.tmpl:109
@@ -3376,10 +3814,13 @@ msgid "No idea selected"
 msgstr "没有选择"
 
 #: assembl/templates/views/ideaPanel.tmpl:131
-msgid "Choose an idea in the Table of ideas to explore the discussion or close this panel as you will have open"
+msgid ""
+"Choose an idea in the Table of ideas to explore the discussion or close "
+"this panel as you will have open"
 msgstr "在表中选择一个想法来探讨讨论或关闭这个面板，因为你将会开放"
 
-#: assembl/templates/views/instigator.tmpl:6 assembl/templates/views/instigator.tmpl:8
+#: assembl/templates/views/instigator.tmpl:6
+#: assembl/templates/views/instigator.tmpl:8
 msgid "Instigated by"
 msgstr "受制于"
 
@@ -3407,11 +3848,17 @@ msgstr "你可能想添加一些讨论目标"
 msgid "Keep up with the evolution of the discussion"
 msgstr "跟上讨论的演变"
 
-#: assembl/templates/views/message.tmpl:10 assembl/templates/views/message.tmpl:39 assembl/templates/views/messageDeletedByUser.tmpl:10 assembl/templates/views/messageDeletedByUser.tmpl:31
+#: assembl/templates/views/message.tmpl:10
+#: assembl/templates/views/message.tmpl:39
+#: assembl/templates/views/messageDeletedByUser.tmpl:10
+#: assembl/templates/views/messageDeletedByUser.tmpl:31
 msgid "Mark as unread"
 msgstr "标记为未读"
 
-#: assembl/templates/views/message.tmpl:12 assembl/templates/views/message.tmpl:41 assembl/templates/views/messageDeletedByUser.tmpl:12 assembl/templates/views/messageDeletedByUser.tmpl:33
+#: assembl/templates/views/message.tmpl:12
+#: assembl/templates/views/message.tmpl:41
+#: assembl/templates/views/messageDeletedByUser.tmpl:12
+#: assembl/templates/views/messageDeletedByUser.tmpl:33
 msgid "Mark as read"
 msgstr "标记为已读"
 
@@ -3448,7 +3895,8 @@ msgstr "仅显示此消息及其回复"
 msgid "Show all posts by %s"
 msgstr "显示%s所有帖子"
 
-#: assembl/templates/views/message.tmpl:74 assembl/templates/views/messageDeletedByUser.tmpl:38
+#: assembl/templates/views/message.tmpl:74
+#: assembl/templates/views/messageDeletedByUser.tmpl:38
 msgid "Send an email to this user"
 msgstr "发送电子邮件给这个用户"
 
@@ -3489,30 +3937,38 @@ msgid "Please try again later."
 msgstr "请稍后再试。"
 
 #: assembl/templates/views/message.tmpl:131
-msgid "Sorry, we cannot translate this because we could not identify the source language."
+msgid ""
+"Sorry, we cannot translate this because we could not identify the source "
+"language."
 msgstr "对不起，我们无法翻译，因为我们无法识别源语言。"
 
-#: assembl/templates/views/message.tmpl:190 assembl/templates/views/messageDeletedByUser.tmpl:92
+#: assembl/templates/views/message.tmpl:190
+#: assembl/templates/views/messageDeletedByUser.tmpl:92
 msgid "Read more"
 msgstr "进去瞧瞧"
 
-#: assembl/templates/views/message.tmpl:199 assembl/templates/views/messageDeletedByUser.tmpl:100
+#: assembl/templates/views/message.tmpl:199
+#: assembl/templates/views/messageDeletedByUser.tmpl:100
 msgid "Read less"
 msgstr "停止阅读"
 
-#: assembl/templates/views/message.tmpl:203 assembl/templates/views/message.tmpl:255
+#: assembl/templates/views/message.tmpl:203
+#: assembl/templates/views/message.tmpl:255
 msgid "Like"
 msgstr "喜欢"
 
-#: assembl/templates/views/message.tmpl:204 assembl/templates/views/message.tmpl:271
+#: assembl/templates/views/message.tmpl:204
+#: assembl/templates/views/message.tmpl:271
 msgid "Disagree"
 msgstr "不同意"
 
-#: assembl/templates/views/message.tmpl:205 assembl/templates/views/message.tmpl:286
+#: assembl/templates/views/message.tmpl:205
+#: assembl/templates/views/message.tmpl:286
 msgid "Did not get it"
 msgstr "没收到"
 
-#: assembl/templates/views/message.tmpl:206 assembl/templates/views/message.tmpl:301
+#: assembl/templates/views/message.tmpl:206
+#: assembl/templates/views/message.tmpl:301
 msgid "More info please?"
 msgstr "更多信息请"
 
@@ -3520,15 +3976,18 @@ msgstr "更多信息请"
 msgid "Reply"
 msgstr "回复"
 
-#: assembl/templates/views/messageColumn.tmpl:22 assembl/templates/views/messageList.tmpl:13
+#: assembl/templates/views/messageColumn.tmpl:23
+#: assembl/templates/views/messageList.tmpl:13
 msgid "Load previous messages"
 msgstr "加载以前的消息"
 
-#: assembl/templates/views/messageColumn.tmpl:35 assembl/templates/views/messageList.tmpl:25
+#: assembl/templates/views/messageColumn.tmpl:36
+#: assembl/templates/views/messageList.tmpl:25
 msgid "Load more messages"
 msgstr "加载更多消息"
 
-#: assembl/templates/views/messageColumn.tmpl:36 assembl/templates/views/messageList.tmpl:26
+#: assembl/templates/views/messageColumn.tmpl:37
+#: assembl/templates/views/messageList.tmpl:26
 msgid "Load all remaining messages at once"
 msgstr "一次载入所有剩余的邮件"
 
@@ -3572,7 +4031,8 @@ msgstr "主持人"
 msgid "Moderated version of the message"
 msgstr "短信的版本"
 
-#: assembl/templates/views/messageModerationOptions.tmpl:22 assembl/templates/views/messageModerationOptions.tmpl:27
+#: assembl/templates/views/messageModerationOptions.tmpl:22
+#: assembl/templates/views/messageModerationOptions.tmpl:27
 msgid "Type something..."
 msgstr "输入一些东西..."
 
@@ -3595,7 +4055,10 @@ msgstr "在“%s”的想法下"
 
 #: assembl/templates/views/messageSend.tmpl:31
 #, python-format
-msgid "In the general \"%s\" conversation (a community manager will organize your contribution in the table of ideas afterwards, possibly by creating a new idea)"
+msgid ""
+"In the general \"%s\" conversation (a community manager will organize "
+"your contribution in the table of ideas afterwards, possibly by creating "
+"a new idea)"
 msgstr "在一般的“%s”对话中（社区经理将在后面的想法表中组织您的贡献，可能通过创建一个新的想法）"
 
 #: assembl/templates/views/messageSend.tmpl:33
@@ -3630,11 +4093,15 @@ msgstr "讨论权限"
 msgid "Help"
 msgstr "帮助"
 
-#: assembl/templates/views/navBarRight.tmpl:14 assembl/templates/views/navBarRight.tmpl:20 assembl/templates/views/userSubscriber.tmpl:23
+#: assembl/templates/views/navBarRight.tmpl:14
+#: assembl/templates/views/navBarRight.tmpl:20
+#: assembl/templates/views/userSubscriber.tmpl:23
 msgid "Join this discussion"
 msgstr "加入讨论"
 
-#: assembl/templates/views/navBarRight.tmpl:41 assembl/templates/views/userNavigationMenu.tmpl:10 assembl/templates/views/userNotificationSubscriptions.tmpl:6
+#: assembl/templates/views/navBarRight.tmpl:41
+#: assembl/templates/views/userNavigationMenu.tmpl:10
+#: assembl/templates/views/userNotificationSubscriptions.tmpl:6
 msgid "Notifications"
 msgstr "通知"
 
@@ -3659,7 +4126,9 @@ msgid "Receive notifications on"
 msgstr "接收通知"
 
 #: assembl/templates/views/orphanMessagesInIdeaList.tmpl:8
-msgid "Messages top-posted and whose thread has not yet been harvested into an idea"
+msgid ""
+"Messages top-posted and whose thread has not yet been harvested into an "
+"idea"
 msgstr "消息最新发布，其线程尚未被收录到一个想法中"
 
 #: assembl/templates/views/orphanMessagesInIdeaList.tmpl:9
@@ -3678,7 +4147,8 @@ msgstr "完整大"
 msgid "Close panel"
 msgstr "关闭面板"
 
-#: assembl/templates/views/partnerList.tmpl:6 assembl/templates/views/partnerList.tmpl:10
+#: assembl/templates/views/partnerList.tmpl:6
+#: assembl/templates/views/partnerList.tmpl:10
 msgid "edit partners"
 msgstr "编辑合作伙伴"
 
@@ -3778,7 +4248,9 @@ msgid "Clear"
 msgstr "清除"
 
 #: assembl/templates/views/showSegmentByAnnotation.tmpl:3
-msgid "You will be redirected to another idea in connection with the nugget on which you clicked."
+msgid ""
+"You will be redirected to another idea in connection with the nugget on "
+"which you clicked."
 msgstr "您将被重定向到与您点击的块相关的另一个想法。"
 
 #: assembl/templates/views/showSegmentByAnnotation.tmpl:10
@@ -3822,7 +4294,8 @@ msgstr "综合是定期公布的讨论摘要"
 msgid "Syntheses"
 msgstr "合成"
 
-#: assembl/templates/views/synthesisPanel.tmpl:15 assembl/templates/views/synthesisPanelMessage.tmpl:14
+#: assembl/templates/views/synthesisPanel.tmpl:15
+#: assembl/templates/views/synthesisPanelMessage.tmpl:14
 msgid "Conclusion"
 msgstr "结论"
 
@@ -3861,9 +4334,12 @@ msgstr "添加其他电子邮件"
 
 #: assembl/templates/views/userAccount.tmpl:55
 msgid ""
-"Linking your account allows you to connect through social networks, and to use your profile's picture. Otherwise, you can set your profile picture with the <a href='http://en.gravatar."
-"com/'>gravatar</a> service."
-msgstr "链接您的帐户可让您通过社交网络进行连接，并使用您的个人资料的图片。否则，您可以使用<a href='http://en.gravatar.com/'>gravatar</a>服务设置个人资料图片。"
+"Linking your account allows you to connect through social networks, and "
+"to use your profile's picture. Otherwise, you can set your profile "
+"picture with the <a href='http://en.gravatar.com/'>gravatar</a> service."
+msgstr ""
+"链接您的帐户可让您通过社交网络进行连接，并使用您的个人资料的图片。否则，您可以使用<a "
+"href='http://en.gravatar.com/'>gravatar</a>服务设置个人资料图片。"
 
 #: assembl/templates/views/userAccountForm.tmpl:10
 msgid "You can set a username as an alternate way to login."
@@ -3873,7 +4349,8 @@ msgstr "您可以将用户名设置为备用登录方式。"
 msgid "New password"
 msgstr "新密码"
 
-#: assembl/templates/views/userAccountForm.tmpl:20 assembl/templates/views/userAccountForm.tmpl:31
+#: assembl/templates/views/userAccountForm.tmpl:20
+#: assembl/templates/views/userAccountForm.tmpl:31
 msgid "password 1 and 2 should be identical"
 msgstr "密码1和2应该是一样的"
 
@@ -3882,7 +4359,9 @@ msgid "Confirm password"
 msgstr "确认密码"
 
 #: assembl/templates/views/userAccountForm.tmpl:37
-msgid "You can set your profile picture with the <a href='http://en.gravatar.com/'>gravatar</a> service."
+msgid ""
+"You can set your profile picture with the <a "
+"href='http://en.gravatar.com/'>gravatar</a> service."
 msgstr "您可以使用<a href='http://en.gravatar.com/'>gravatar</a>服务设置个人资料图片。"
 
 #: assembl/templates/views/userNavigationMenu.tmpl:3
@@ -3905,6 +4384,14 @@ msgstr "真实姓名"
 msgid "Subscription settings"
 msgstr "订阅设置"
 
+#: assembl/templates/views/userSubscriber.tmpl:11
+msgid "subscribed"
+msgstr "订阅"
+
+#: assembl/templates/views/userSubscriber.tmpl:14
+msgid "Unsubscribe"
+msgstr "取消订阅"
+
 #: assembl/templates/views/userSubscriber.tmpl:20
 msgid "unsubscribed"
 msgstr "退订"
@@ -3913,206 +4400,220 @@ msgstr "退订"
 msgid "No file given."
 msgstr "没有文件给"
 
-#: assembl/views/api/post.py:80 assembl/views/api/post.py:624
+#: assembl/views/api/post.py:81 assembl/views/api/post.py:625
 #, python-format
 msgid "No discussion found with id=%s"
 msgstr "没有与id=%s进行讨论"
 
-#: assembl/views/api/post.py:227
+#: assembl/views/api/post.py:228
 msgid "Getting orphan posts of a specific idea isn't supported."
 msgstr "不支持获取特定想法的孤儿帖子。"
 
-#: assembl/views/api/post.py:297
+#: assembl/views/api/post.py:298
 msgid "Do not combine negative and positive classifiers"
 msgstr "不要组合负分数和正分数"
 
-#: assembl/views/api/post.py:358
+#: assembl/views/api/post.py:359
 msgid "You must be logged in to view which posts are read"
 msgstr "您必须登录才能查看哪些帖子已被阅读"
 
-#: assembl/views/api/post.py:608
+#: assembl/views/api/post.py:609
 msgid "Your message is empty"
 msgstr "你的消息是空的"
 
-#: assembl/views/api2/auth.py:338
+#: assembl/views/api2/auth.py:343
 msgid "The user does not exist"
 msgstr "用户不存在"
 
-#: assembl/views/api2/auth.py:349
+#: assembl/views/api2/auth.py:354
 msgid "This email does not exist"
 msgstr "此电子邮件不存在"
 
-#: assembl/views/api2/auth.py:354
+#: assembl/views/api2/auth.py:359
 msgid "Please give an identifier"
 msgstr "请给一个标识符"
 
-#: assembl/views/api2/auth.py:359
+#: assembl/views/api2/auth.py:364
 msgid "This user has no email"
 msgstr "该用户没有电子邮件"
 
-#: assembl/views/api2/auth.py:362
+#: assembl/views/api2/auth.py:367
 msgid "This is not a user"
 msgstr "这不是用户"
 
-#: assembl/views/api2/auth.py:383
+#: assembl/views/api2/auth.py:388
 msgid "The passwords that were entered are mismatched!"
 msgstr "输入的密码不匹配！"
 
-#: assembl/views/api2/auth.py:397 assembl/views/auth/views.py:958 assembl/views/auth/views.py:1026
+#: assembl/views/api2/auth.py:402 assembl/views/auth/views.py:964
+#: assembl/views/auth/views.py:1032
 msgid "This link is not valid. Do you want us to send another?"
 msgstr "此链接无效。你要我们再发送吗？"
 
-#: assembl/views/api2/auth.py:400 assembl/views/auth/views.py:961 assembl/views/auth/views.py:1029
+#: assembl/views/api2/auth.py:405 assembl/views/auth/views.py:967
+#: assembl/views/auth/views.py:1035
 msgid "This link has been used. Do you want us to send another?"
 msgstr "此链接已被使用。你要我们再发送吗？"
 
-#: assembl/views/api2/auth.py:435 assembl/views/auth/views.py:382
+#: assembl/views/api2/auth.py:440 assembl/views/auth/views.py:388
 msgid "Please use a name of at least 3 characters"
 msgstr "请使用至少3个字符的名称"
 
-#: assembl/views/api2/auth.py:444 assembl/views/auth/views.py:317 assembl/views/auth/views.py:389
+#: assembl/views/api2/auth.py:449 assembl/views/auth/views.py:321
+#: assembl/views/auth/views.py:395
 msgid "This is not a valid email"
 msgstr "这不是有效的电子邮件"
 
-#: assembl/views/api2/auth.py:452 assembl/views/auth/views.py:396
+#: assembl/views/api2/auth.py:457 assembl/views/auth/views.py:402
 msgid "We already have a user with this email."
 msgstr "我们已经有一个使用此电子邮件的用户。"
 
-#: assembl/views/api2/auth.py:457
+#: assembl/views/api2/auth.py:462
 msgid "No email."
 msgstr "没有电子邮件"
 
-#: assembl/views/api2/auth.py:463
+#: assembl/views/api2/auth.py:468
 msgid "We already have a user with this username."
 msgstr "我们已经有一个使用此用户名的用户。"
 
-#: assembl/views/auth/views.py:290
+#: assembl/views/auth/views.py:294
 #, python-format
 msgid "The username %s is already used"
 msgstr "用户名%s已被使用"
 
-#: assembl/views/auth/views.py:309 assembl/views/auth/views.py:1040
+#: assembl/views/auth/views.py:313 assembl/views/auth/views.py:1046
 msgid "The passwords are not identical"
 msgstr "密码不一样"
 
-#: assembl/views/auth/views.py:400
+#: assembl/views/auth/views.py:406
 msgid "The passwords should be identical"
 msgstr "密码应该相同"
 
-#: assembl/views/auth/views.py:456
-msgid "Your email was refused by the SMTP server.  You probably entered an email that does not exist."
+#: assembl/views/auth/views.py:462
+msgid ""
+"Your email was refused by the SMTP server.  You probably entered an email"
+" that does not exist."
 msgstr "您的电子邮件被SMTP服务器拒绝。您可能输入了不存在的电子邮件。"
 
-#: assembl/views/auth/views.py:513 assembl/views/auth/views.py:838 assembl/views/auth/views.py:844
+#: assembl/views/auth/views.py:519 assembl/views/auth/views.py:844
+#: assembl/views/auth/views.py:850
 msgid "This user cannot be found"
 msgstr "无法找到该用户"
 
-#: assembl/views/auth/views.py:531
+#: assembl/views/auth/views.py:537
 msgid "Invalid user and password"
 msgstr "无效的用户和密码"
 
-#: assembl/views/auth/views.py:595
+#: assembl/views/auth/views.py:601
 msgid "This email address is already confirmed"
 msgstr "此电子邮件地址已被确认"
 
-#: assembl/views/auth/views.py:596
+#: assembl/views/auth/views.py:602
 msgid "You do not need to confirm this email address, it is already confirmed."
 msgstr "您不需要确认此电子邮件地址，已经确认。"
 
-#: assembl/views/auth/views.py:604 assembl/views/auth/views.py:803
+#: assembl/views/auth/views.py:610 assembl/views/auth/views.py:809
 msgid "Confirmation requested"
 msgstr "确认要求"
 
-#: assembl/views/auth/views.py:605 assembl/views/auth/views.py:804
+#: assembl/views/auth/views.py:611 assembl/views/auth/views.py:810
 msgid ""
-"A confirmation e-mail has been sent to your account and should be in your inbox in a few minutes. It contains a confirmation link, please click on it in order to confirm your e-mail address. "
-"If you did not receive any confirmation e-mail (check your spams), click here."
+"A confirmation e-mail has been sent to your account and should be in your"
+" inbox in a few minutes. It contains a confirmation link, please click on"
+" it in order to confirm your e-mail address. If you did not receive any "
+"confirmation e-mail (check your spams), click here."
 msgstr "确认电子邮件已发送到您的帐户，并且应该在几分钟之内在您的收件箱中。它包含一个确认链接，请点击它以确认您的电子邮件地址。如果您没有收到任何确认电子邮件（检查您的垃圾邮件），请点击此处。"
 
-#: assembl/views/auth/views.py:653 assembl/views/auth/views.py:677 assembl/views/auth/views.py:699
+#: assembl/views/auth/views.py:659 assembl/views/auth/views.py:683
+#: assembl/views/auth/views.py:705
 #, python-format
 msgid "Email <%s> already confirmed"
 msgstr "电子邮件<%s>已经确认"
 
-#: assembl/views/auth/views.py:665
+#: assembl/views/auth/views.py:671
 msgid "This link was not valid. We sent another."
 msgstr "此链接无效。我们发了另一个"
 
-#: assembl/views/auth/views.py:668
+#: assembl/views/auth/views.py:674
 msgid "This link has been used. We sent another."
 msgstr "此链接已被使用。我们发了另一个"
 
-#: assembl/views/auth/views.py:681
+#: assembl/views/auth/views.py:687
 msgid "This link is not valid. Please attempt to login to get another one."
 msgstr "此链接无效。请尝试登录以获得另一个。"
 
-#: assembl/views/auth/views.py:720
+#: assembl/views/auth/views.py:726
 #, python-format
-msgid "Your email address %s has been confirmed, and you are now subscribed to discussion's default notifications."
+msgid ""
+"Your email address %s has been confirmed, and you are now subscribed to "
+"discussion's default notifications."
 msgstr "您的电子邮件地址%s已被确认，您现在已订阅讨论的默认通知。"
 
-#: assembl/views/auth/views.py:725
+#: assembl/views/auth/views.py:731
 #, python-format
 msgid "Your email address %s has been confirmed."
 msgstr "您的电子邮件地址%s已被确认。"
 
-#: assembl/views/auth/views.py:750
+#: assembl/views/auth/views.py:756
 msgid "Login failed, try again"
 msgstr "登录失败，再试一次"
 
-#: assembl/views/auth/views.py:791
+#: assembl/views/auth/views.py:797
 msgid "This email is already confirmed."
 msgstr "此电子邮件已被确认。"
 
-#: assembl/views/auth/views.py:812
+#: assembl/views/auth/views.py:818
 msgid "We do not know about this email."
 msgstr "我们不知道这封电子邮件。"
 
-#: assembl/views/auth/views.py:891
+#: assembl/views/auth/views.py:897
 msgid "Password change requested"
 msgstr "密码更改请求"
 
-#: assembl/views/auth/views.py:892
-msgid "We have sent you an email with a temporary connection link. Please use that link to log in and change your password."
+#: assembl/views/auth/views.py:898
+msgid ""
+"We have sent you an email with a temporary connection link. Please use "
+"that link to log in and change your password."
 msgstr "我们向您发送了一个带有临时连接链接的电子邮件。请使用该链接登录并更改密码。"
 
-#: assembl/views/auth/views.py:973
+#: assembl/views/auth/views.py:979
 msgid "You will enter the discussion as <b>{name}</b>."
 msgstr "您将作为<b>{name}</b>输入讨论。"
 
-#: assembl/views/auth/views.py:977
+#: assembl/views/auth/views.py:983
 msgid "You will enter Assembl as <b>{name}</b>."
 msgstr "您将作为<b>{name}</b>输入Assembl。"
 
-#: assembl/views/auth/views.py:980
+#: assembl/views/auth/views.py:986
 msgid "Please choose your password for security reasons."
 msgstr "出于安全考虑，请选择您的密码。"
 
-#: assembl/views/auth/views.py:1009
+#: assembl/views/auth/views.py:1015
 msgid "Change your password"
 msgstr "更改您的密码"
 
-#: assembl/views/auth/views.py:1048
+#: assembl/views/auth/views.py:1054
 msgid "Password changed"
 msgstr "密码已更改"
 
-#: assembl/views/auth/views.py:1062
+#: assembl/views/auth/views.py:1068
 msgid "email"
 msgstr "电子邮件"
 
-#: assembl/views/auth/views.py:1063
+#: assembl/views/auth/views.py:1069
 msgid "Please confirm your {confirm_what} with {assembl}"
 msgstr "请使用{assembl}确认您的{confirm_what}"
 
-#: assembl/views/auth/views.py:1065
+#: assembl/views/auth/views.py:1071
 msgid "account"
 msgstr "帐户"
 
-#: assembl/views/auth/views.py:1066
+#: assembl/views/auth/views.py:1072
 msgid ""
 "Hello, {name}, and welcome to {assembl}!\n"
 "\n"
-"Please confirm your email address and complete your registration by clicking the link below.\n"
+"Please confirm your email address and complete your registration by "
+"clicking the link below.\n"
 "<{confirm_url}>\n"
 "\n"
 "Best regards,\n"
@@ -4126,10 +4627,11 @@ msgstr ""
 "最好的问候，\n"
 "{assembl}团队"
 
-#: assembl/views/auth/views.py:1073
+#: assembl/views/auth/views.py:1079
 msgid ""
 "<p>Hello, {name}, and welcome to {assembl}!</p>\n"
-"<p>Please <a href=\"{confirm_url}\">click here to confirm your email address</a>\n"
+"<p>Please <a href=\"{confirm_url}\">click here to confirm your email "
+"address</a>\n"
 "and complete your registration.</p>\n"
 "<p>Best regards,<br />The {assembl} Team</p>"
 msgstr ""
@@ -4138,11 +4640,12 @@ msgstr ""
 "不要填写你的注册。</p>\n"
 "<p>最好的问候，<br /> {assembl}团队</p>"
 
-#: assembl/views/auth/views.py:1078
+#: assembl/views/auth/views.py:1084
 msgid ""
 "Hello, {name}!\n"
 "\n"
-"Please confirm your new email address <{email}> on your {assembl} account by clicking the link below.\n"
+"Please confirm your new email address <{email}> on your {assembl} account"
+" by clicking the link below.\n"
 "<{confirm_url}>\n"
 "\n"
 "Best regards,\n"
@@ -4156,10 +4659,11 @@ msgstr ""
 "最好的问候，\n"
 " {assembl}团队"
 
-#: assembl/views/auth/views.py:1085
+#: assembl/views/auth/views.py:1091
 msgid ""
 "<p>Hello, {name}!</p>\n"
-"<p>Please <a href=\"{confirm_url}\">click here to confirm your new email address</a>\n"
+"<p>Please <a href=\"{confirm_url}\">click here to confirm your new email "
+"address</a>\n"
 "on your {assembl} account.</p>\n"
 "<p>Best regards,<br />The {assembl} Team</p>"
 msgstr ""
@@ -4168,16 +4672,19 @@ msgstr ""
 "非您的{assembl}帐户</p>\n"
 "<p>最好的问候，<br /> {assembl}团队</p>"
 
-#: assembl/views/auth/views.py:1136
+#: assembl/views/auth/views.py:1142
 msgid "Request for password change"
 msgstr "请求更改密码"
 
-#: assembl/views/auth/views.py:1140
+#: assembl/views/auth/views.py:1146
 msgid ""
 "<p>Hello, {name}!</p>\n"
-"<p>We have received a request to change the password on your {assembl} account.\n"
-"Please <a href=\"{confirm_url}\">click here to confirm your password change</a>.</p>\n"
-"<p>If you did not ask to reset your password please disregard this email.</p>\n"
+"<p>We have received a request to change the password on your {assembl} "
+"account.\n"
+"Please <a href=\"{confirm_url}\">click here to confirm your password "
+"change</a>.</p>\n"
+"<p>If you did not ask to reset your password please disregard this "
+"email.</p>\n"
 "<p>Best regards,<br />The {assembl} Team</p>\n"
 msgstr ""
 "<p>您好：{name}！</p>\n"
@@ -4186,10 +4693,11 @@ msgstr ""
 "<p>如果您没有要求重置密码，请忽略此电子邮件。</p>\n"
 "<p>最好的问候，<br /> {assembl}团队</p>\n"
 
-#: assembl/views/auth/views.py:1146
+#: assembl/views/auth/views.py:1152
 msgid ""
 "Hello, {name}!\n"
-"We have received a request to change the password on your {assembl} account.\n"
+"We have received a request to change the password on your {assembl} "
+"account.\n"
 "To confirm your password change please click on the link below.\n"
 "<{confirm_url}>\n"
 "\n"
@@ -4208,7 +4716,17 @@ msgstr ""
 "最好的问候，\n"
 "{assembl}团队\n"
 
-#: assembl/views/discussion/views.py:48
+#: assembl/views/discussion/views.py:51
 #, python-format
 msgid "No discussion found for slug=%s"
 msgstr "没有讨论slug=%s"
+
+#~ msgid "Add a title"
+#~ msgstr "添加标题"
+
+#~ msgid "Add an introduction"
+#~ msgstr "添加介绍"
+
+#~ msgid "Add a conclusion"
+#~ msgstr "得出结论"
+

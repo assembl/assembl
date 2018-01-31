@@ -1,4 +1,4 @@
-# Translations template for assembl.
+# Japanese translations for assembl.
 # Copyright (C) 2017 ORGANIZATION
 # This file is distributed under the same license as the assembl project.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2017.
@@ -7,28 +7,31 @@ msgid ""
 msgstr ""
 "Project-Id-Version: assembl 0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2017-07-06 17:12+0200\n"
+"POT-Creation-Date: 2018-01-31 10:34+0100\n"
 "PO-Revision-Date: 2017-08-26 01:06+0900\n"
+"Last-Translator: \n"
+"Language: ja\n"
 "Language-Team: \n"
+"Plural-Forms: nplurals=1; plural=0\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.3.4\n"
-"X-Generator: Poedit 2.0.3\n"
-"Last-Translator: \n"
-"Plural-Forms: nplurals=1; plural=0;\n"
-"Language: ja\n"
 
-#: assembl/auth/util.py:493
+#: assembl/auth/util.py:140
+msgid "Your session has expired, you need to login again"
+msgstr ""
+
+#: assembl/auth/util.py:504
 msgid "The CSV file must have two columns"
 msgstr "CSVファイルには2つの列が必要です"
 
-#: assembl/auth/util.py:500
+#: assembl/auth/util.py:511
 #, python-format
 msgid "Not an email: <%s> at line %d"
 msgstr "メールではない：<%s> ラインで %d"
 
-#: assembl/auth/util.py:503
+#: assembl/auth/util.py:514
 #, python-format
 msgid "Name too short: <%s> at line %d"
 msgstr "名前が短すぎます。：<%s> at line %d"
@@ -45,287 +48,320 @@ msgstr "${val} 文字列ではありません：${err}"
 msgid "Unknown User ${uid}"
 msgstr "不明なユーザ ${uid}"
 
-#: assembl/models/notification.py:624
+#: assembl/models/notification.py:626
 msgid "A synthesis is posted"
 msgstr "シンセシスが投稿されました"
 
-#: assembl/models/notification.py:652
+#: assembl/models/notification.py:655
 msgid "Any message is posted to the discussion"
 msgstr "全てのメッセージがディスカッションに投稿されます"
 
-#: assembl/models/notification.py:680
+#: assembl/models/notification.py:684
 msgid "Someone directly responds to one of your messages"
 msgstr "誰かがあなたのメッセージに応答しています"
 
-#: assembl/models/notification.py:1090
+#: assembl/models/notification.py:1101
 msgid "SYNTHESIS: "
 msgstr "シンセシス : "
 
-#: assembl/models/preferences.py:344
-msgid "Languages used"
-msgstr "使用言語"
-
-#: assembl/models/preferences.py:345
-msgid "All languages expected in the discussion"
-msgstr "ディスカッションで期待されるすべての言語"
-
-#: assembl/models/preferences.py:355
-msgid "Use landing page"
-msgstr "ランディングページを使用する"
-
-#: assembl/models/preferences.py:356
-msgid "Are users directed to the landing page and phases at login, or diretly to the debate"
-msgstr "ログイン時にユーザーがリンク先ページやフェーズに誘導されましたか、もしくは討論に直接誘導されましたか"
-
-#: assembl/models/preferences.py:364 assembl/models/preferences.py:378
-msgid "Translation service"
-msgstr "翻訳サービス"
-
-#: assembl/models/preferences.py:367
-msgid "No translation"
-msgstr "翻訳がありません"
-
-#: assembl/models/preferences.py:369
-msgid "Dummy translation service (two steps)"
-msgstr "ダミー翻訳サービス(2ステップ)"
-
-#: assembl/models/preferences.py:371
-msgid "Dummy translation service (one step)"
-msgstr "ダミー翻訳サービス(ワンステップ)"
-
-#: assembl/models/preferences.py:373
-msgid "Dummy translation service (two steps) with errors"
-msgstr "エラーのあるダミー翻訳サービス(２ステップ)"
-
-#: assembl/models/preferences.py:375
-msgid "Dummy translation service (one step) with errors"
-msgstr "エラーのあるダミー翻訳サービス(1ステップ)"
-
-#: assembl/models/preferences.py:377
-msgid "Google Translate"
-msgstr "グーグル翻訳"
-
-#: assembl/models/preferences.py:390
-msgid "Panel order in simple view"
-msgstr "シンプルなビューでのパネルオーダー"
-
-#: assembl/models/preferences.py:393
-msgid "Navigation, Idea, Messages"
-msgstr "ナビゲーション、アイデア、メッセージ"
-
-#: assembl/models/preferences.py:394
-msgid "Navigation, Messages, Idea"
-msgstr "ナビゲーション、メッセージ、アイデア"
-
-#: assembl/models/preferences.py:395
-msgid "Order of panels"
-msgstr "パネルの順序"
-
-#: assembl/models/preferences.py:407
-msgid "Extra JSON parameters"
-msgstr "追加のJSONパラメータ"
-
-#: assembl/models/preferences.py:409
-msgid "Parameters for quick frontend settings"
-msgstr "クイックフロントエンド設定のパラメータ"
-
-#: assembl/models/preferences.py:418
-msgid "Terms of use URL"
-msgstr "利用規約のURL"
-
-#: assembl/models/preferences.py:420
-msgid "URL of a document presenting terms of use for the discussion"
-msgstr "議論のための利用規約のURL"
-
-#: assembl/models/preferences.py:429
-msgid "Video URL"
-msgstr "動画のURL"
-
-#: assembl/models/preferences.py:431
-msgid "URL of a video presenting the discussion"
-msgstr "ディスカッションを紹介するビデオのURL"
-
-#: assembl/models/preferences.py:440
-msgid "Video description"
-msgstr "動画の説明"
-
-#: assembl/models/preferences.py:442
-msgid "Description of the video presenting the discussion"
-msgstr "ディスカッションを紹介するビデオの説明"
-
-#: assembl/models/preferences.py:451
-msgid "Social sharing"
-msgstr "ソーシャルシェアリング"
-
-#: assembl/models/preferences.py:454
-msgid "Show the share button on posts and ideas"
-msgstr "投稿とアイデアの共有ボタンを表示する"
-
-#: assembl/models/preferences.py:465
-msgid "Private authentication server"
-msgstr "私的認証サーバ"
-
-#: assembl/models/preferences.py:467
-msgid "Endpoint URL of a private authentication that users will mandatorily have to authenticate themselves with."
-msgstr "ユーザーが認証する必要のある個人認証のエンドポイントURL."
-
-#: assembl/models/preferences.py:481 assembl/models/preferences.py:845
+#: assembl/models/preferences.py:114 assembl/models/preferences.py:537
 msgid "No special authentication"
 msgstr "特別な認証なし"
 
-#: assembl/models/preferences.py:483
+#: assembl/models/preferences.py:386
+msgid "Languages used"
+msgstr "使用言語"
+
+#: assembl/models/preferences.py:387
+msgid "All languages expected in the discussion"
+msgstr "ディスカッションで期待されるすべての言語"
+
+#: assembl/models/preferences.py:397
+msgid "Use landing page"
+msgstr "ランディングページを使用する"
+
+#: assembl/models/preferences.py:398
+msgid ""
+"Are users directed to the landing page and phases at login, or diretly to"
+" the debate"
+msgstr "ログイン時にユーザーがリンク先ページやフェーズに誘導されましたか、もしくは討論に直接誘導されましたか"
+
+#: assembl/models/preferences.py:406 assembl/models/preferences.py:420
+msgid "Translation service"
+msgstr "翻訳サービス"
+
+#: assembl/models/preferences.py:409
+msgid "No translation"
+msgstr "翻訳がありません"
+
+#: assembl/models/preferences.py:411
+msgid "Dummy translation service (two steps)"
+msgstr "ダミー翻訳サービス(2ステップ)"
+
+#: assembl/models/preferences.py:413
+msgid "Dummy translation service (one step)"
+msgstr "ダミー翻訳サービス(ワンステップ)"
+
+#: assembl/models/preferences.py:415
+msgid "Dummy translation service (two steps) with errors"
+msgstr "エラーのあるダミー翻訳サービス(２ステップ)"
+
+#: assembl/models/preferences.py:417
+msgid "Dummy translation service (one step) with errors"
+msgstr "エラーのあるダミー翻訳サービス(1ステップ)"
+
+#: assembl/models/preferences.py:419
+msgid "Google Translate"
+msgstr "グーグル翻訳"
+
+#: assembl/models/preferences.py:432
+msgid "Panel order in simple view"
+msgstr "シンプルなビューでのパネルオーダー"
+
+#: assembl/models/preferences.py:435
+msgid "Navigation, Idea, Messages"
+msgstr "ナビゲーション、アイデア、メッセージ"
+
+#: assembl/models/preferences.py:436
+msgid "Navigation, Messages, Idea"
+msgstr "ナビゲーション、メッセージ、アイデア"
+
+#: assembl/models/preferences.py:437
+msgid "Order of panels"
+msgstr "パネルの順序"
+
+#: assembl/models/preferences.py:449
+msgid "Extra JSON parameters"
+msgstr "追加のJSONパラメータ"
+
+#: assembl/models/preferences.py:451
+msgid "Parameters for quick frontend settings"
+msgstr "クイックフロントエンド設定のパラメータ"
+
+#: assembl/models/preferences.py:460
+msgid "Terms of use URL"
+msgstr "利用規約のURL"
+
+#: assembl/models/preferences.py:462
+msgid "URL of a document presenting terms of use for the discussion"
+msgstr "議論のための利用規約のURL"
+
+#: assembl/models/preferences.py:471
+msgid "Video URL"
+msgstr "動画のURL"
+
+#: assembl/models/preferences.py:473
+msgid "URL of a video presenting the discussion"
+msgstr "ディスカッションを紹介するビデオのURL"
+
+#: assembl/models/preferences.py:482
+msgid "Video description"
+msgstr "動画の説明"
+
+#: assembl/models/preferences.py:484
+msgid "Description of the video presenting the discussion"
+msgstr "ディスカッションを紹介するビデオの説明"
+
+#: assembl/models/preferences.py:493
+msgid "Social sharing"
+msgstr "ソーシャルシェアリング"
+
+#: assembl/models/preferences.py:496
+msgid "Show the share button on posts and ideas"
+msgstr "投稿とアイデアの共有ボタンを表示する"
+
+#: assembl/models/preferences.py:507
+msgid "Require anti-virus check"
+msgstr ""
+
+#: assembl/models/preferences.py:510
+msgid "Run an anti-virus on file attachments"
+msgstr ""
+
+#: assembl/models/preferences.py:521
+msgid "Private authentication server"
+msgstr "私的認証サーバ"
+
+#: assembl/models/preferences.py:523
+msgid ""
+"Endpoint URL of a private authentication that users will mandatorily have"
+" to authenticate themselves with."
+msgstr "ユーザーが認証する必要のある個人認証のエンドポイントURL."
+
+#: assembl/models/preferences.py:539
 msgid "WordPress OAuth Server"
 msgstr "WordPress OAuthサーバー"
 
-#: assembl/models/preferences.py:485
+#: assembl/models/preferences.py:541
 msgid "Authentication service type"
 msgstr "認証サービスの種類"
 
-#: assembl/models/preferences.py:487
-msgid "A primary authentication server for this discussion, defined as a python-social-auth backend. Participants will be auto-logged in to that server, and discussion auto-subscription will require an account from this backend."
-msgstr "この議論のためのon-social-authバックエンドとして定義されるプライマリ認証サーバー。参加者はこのサーバーに自動ログインし、ディスカッションの自動登録にはこのバックエンドからのアカウントが必要です."
+#: assembl/models/preferences.py:543
+msgid ""
+"A primary authentication server for this discussion, defined as a python-"
+"social-auth backend. Participants will be auto-logged in to that server, "
+"and discussion auto-subscription will require an account from this "
+"backend."
+msgstr ""
+"この議論のためのon-social-"
+"authバックエンドとして定義されるプライマリ認証サーバー。参加者はこのサーバーに自動ログインし、ディスカッションの自動登録にはこのバックエンドからのアカウントが必要です."
 
-#: assembl/models/preferences.py:502
+#: assembl/models/preferences.py:558
 msgid "Authentication key"
 msgstr "認証キー"
 
-#: assembl/models/preferences.py:503
+#: assembl/models/preferences.py:559
 msgid "Key for assembl as a client of the authentication server"
 msgstr "認証サーバーのクライアントとしてのAssemblキー"
 
-#: assembl/models/preferences.py:515
+#: assembl/models/preferences.py:571
 msgid "Authentication secret"
 msgstr "認証暗証"
 
-#: assembl/models/preferences.py:516
+#: assembl/models/preferences.py:572
 msgid "Secret for assembl as a client of the authentication server"
 msgstr "認証サーバーのクライアントとしてのAssemblの暗証"
 
-#: assembl/models/preferences.py:529
+#: assembl/models/preferences.py:585
 msgid "Allow access to moderated text"
 msgstr "モデレートされたテキストへのアクセスを許可する"
 
-#: assembl/models/preferences.py:532
+#: assembl/models/preferences.py:588
 msgid "Are moderated posts simply hidden or made inaccessible by default?"
 msgstr "モデレートされた投稿は、デフォルトで隠されているかアクセス不能になっていますか ?"
 
-#: assembl/models/preferences.py:545
+#: assembl/models/preferences.py:601
 msgid "Idea panel opens automatically"
 msgstr "アイデアパネルが自動的に開きます"
 
-#: assembl/models/preferences.py:548
-msgid "Does the Idea panel automatically open when an idea is clicked ? (and close when a special section is clicked)"
+#: assembl/models/preferences.py:604
+msgid ""
+"Does the Idea panel automatically open when an idea is clicked ? (and "
+"close when a special section is clicked)"
 msgstr "アイデアがクリックされるとアイデアパネルが自動的に開きますか？ (そして、特別なセクションがクリックされたときに閉じますか？)"
 
-#: assembl/models/preferences.py:560
+#: assembl/models/preferences.py:616
 msgid "Ids of columns in column view"
 msgstr "カラムビューのカラムのID"
 
-#: assembl/models/preferences.py:562
+#: assembl/models/preferences.py:618
 msgid "What are (ordered) identifiers of columns in multi-column views?"
 msgstr "マルチカラムビューのカラムの（順序付けられた）識別子は何ですか?"
 
-#: assembl/models/preferences.py:575
+#: assembl/models/preferences.py:631
 msgid "Default colors of columns in column view"
 msgstr "カラムビュー内のカラムのデフォルトの色"
 
-#: assembl/models/preferences.py:577
+#: assembl/models/preferences.py:633
 msgid "What are (default) theme colors of columns in multi-column views?"
 msgstr "マルチカラムビューのカラムの（デフォルトの）テーマカラーは何ですか ?"
 
-#: assembl/models/preferences.py:589
+#: assembl/models/preferences.py:645
 msgid "Names of columns in column view"
 msgstr "カラムビューのカラム名"
 
-#: assembl/models/preferences.py:591
-msgid "What are (default) names of columns in multi-column views, in each discussion language?"
+#: assembl/models/preferences.py:647
+msgid ""
+"What are (default) names of columns in multi-column views, in each "
+"discussion language?"
 msgstr "各列の言語で、マルチカラムビューの（デフォルトの）カラムの名前は何ですか ?"
 
-#: assembl/models/preferences.py:604
+#: assembl/models/preferences.py:660
 msgid "Default permissions"
 msgstr "デフォルトのアクセス許可"
 
-#: assembl/models/preferences.py:607
+#: assembl/models/preferences.py:663
 msgid "The basic permissions for a new discussion"
 msgstr "新しいディスカッションのためのベーシックのアクセス許可"
 
-#: assembl/models/preferences.py:680
+#: assembl/models/preferences.py:745
 msgid "Require Email Domain"
 msgstr "電子メールドメインを要求する"
 
-#: assembl/models/preferences.py:683
-msgid "List of domain names of user email address required for self-registration. Only accounts with at least an email from those domains can self-register to this discussion. Anyone can self-register if this is empty."
-msgstr "自動登録に必要なユーザーの電子メールアドレスのドメイン名のリスト。 これらのドメインからの電子メールを少なくとも一つ含むアカウントだけがこのディスカッションに自動登録することができます. これが空であれば誰でも自動登録することができます."
+#: assembl/models/preferences.py:748
+msgid ""
+"List of domain names of user email address required for self-"
+"registration. Only accounts with at least an email from those domains can"
+" self-register to this discussion. Anyone can self-register if this is "
+"empty."
+msgstr ""
+"自動登録に必要なユーザーの電子メールアドレスのドメイン名のリスト。 "
+"これらのドメインからの電子メールを少なくとも一つ含むアカウントだけがこのディスカッションに自動登録することができます. "
+"これが空であれば誰でも自動登録することができます."
 
-#: assembl/models/preferences.py:699
+#: assembl/models/preferences.py:764
 msgid "Show CI Dashboard"
 msgstr "CIダッシュボードを表示する"
 
-#: assembl/models/preferences.py:702
+#: assembl/models/preferences.py:767
 msgid "Show the CI Dashboard in the panel group window"
 msgstr "パネルグループウィンドウにCIダッシュボードを表示する"
 
-#: assembl/models/preferences.py:714
+#: assembl/models/preferences.py:779
 msgid "URL of CI Dashboard"
 msgstr "CIダッシュボードのURL"
 
-#: assembl/models/preferences.py:716
+#: assembl/models/preferences.py:781
 msgid "Configuration of the visualizations shown in the CI Dashboard"
 msgstr "CIダッシュボードに表示されるビジュアライゼーションの設定"
 
-#: assembl/models/preferences.py:734
+#: assembl/models/preferences.py:799
 msgid "Catalyst Visualizations"
 msgstr "Catalystの可視化"
 
-#: assembl/models/preferences.py:737
+#: assembl/models/preferences.py:802
 msgid "A JSON description of available Catalyst visualizations"
 msgstr "利用可能なCatalystの可視化に関するJSONの説明"
 
-#: assembl/models/preferences.py:749
+#: assembl/models/preferences.py:814
 msgid "Navigation sections"
 msgstr "ナビゲーションセクション"
 
-#: assembl/models/preferences.py:752
-msgid "A JSON specification of Catalyst visualizations to show in the navigation section"
+#: assembl/models/preferences.py:817
+msgid ""
+"A JSON specification of Catalyst visualizations to show in the navigation"
+" section"
 msgstr "ナビゲーションセクションに表示するCatalystの可視化のJSON仕様"
 
-#: assembl/models/preferences.py:765
+#: assembl/models/preferences.py:830
 msgid "Catalyst translations"
 msgstr "Catalystの翻訳"
 
-#: assembl/models/preferences.py:768
+#: assembl/models/preferences.py:833
 msgid "Translations applicable to Catalyst visualizations, in Jed (JSON) format"
 msgstr "Jed（JSON）形式のCatalystの可視化に適用される翻訳"
 
-#: assembl/models/preferences.py:785
+#: assembl/models/preferences.py:850
 msgid "Default Table of Ideas Collapsed state"
 msgstr "アイデアの折りたたまれた状態のデフォルトの表"
 
-#: assembl/models/preferences.py:788
-msgid "Default expanded/collapsed state of each idea in the table of ideas. A user can override it by opening/closing an idea"
+#: assembl/models/preferences.py:853
+msgid ""
+"Default expanded/collapsed state of each idea in the table of ideas. A "
+"user can override it by opening/closing an idea"
 msgstr "アイデアの表の各アイデアのデフォルトの展開/折りたたみ状態。ユーザーは、アイデアを開いたり閉じたりすることでオーバーライドすることができます"
 
-#: assembl/models/preferences.py:803
+#: assembl/models/preferences.py:868
 msgid "Preference data"
 msgstr "プリファレンスデータ"
 
-#: assembl/models/preferences.py:806
+#: assembl/models/preferences.py:871
 msgid "The preference configuration; override only with care"
 msgstr "プリファレンス設定。慎重にオーバーライドすること"
 
-#: assembl/models/preferences.py:818
+#: assembl/models/preferences.py:883
 msgid "Cookies banner"
 msgstr "クッキーのバナー"
 
-#: assembl/models/preferences.py:821
+#: assembl/models/preferences.py:886
 msgid "Show the banner offering to disable Piwik cookies"
 msgstr "Piwikクッキーを無効にするためのバナーを表示する"
 
-#: assembl/static/js/app/routeManager.js:535
+#: assembl/static/js/app/routeManager.js:570
 msgid "You must be logged in to access this page."
 msgstr "このページにアクセスするにはログインする必要があります."
 
-#: assembl/static/js/app/routeManager.js:558
+#: assembl/static/js/app/routeManager.js:593
 msgid "Your level of permissions do not allow you to see the rest of this content"
 msgstr "あなたの権限レベルでは、このコンテンツの残りの部分を見ることはできません"
 
@@ -392,27 +428,28 @@ msgstr "メッセージの最後に次のプレビューを表示する"
 msgid "Sorry, only an image type is supported in this upload. Please try again."
 msgstr "申し訳ありませんが、イメージタイプのみがアップロードでサポートされています。. もう一度お試しください."
 
-#: assembl/static/js/app/models/idea.js:120
+#: assembl/static/js/app/models/idea.js:132
 msgid "The root idea will not be in the synthesis"
 msgstr "根本概念がこのシンセシスにはない"
 
-#: assembl/static/js/app/models/idea.js:131
+#: assembl/static/js/app/models/idea.js:149
 msgid "Add a description of this idea"
 msgstr "このアイデアの説明を追加する"
 
-#: assembl/static/js/app/models/idea.js:143
+#: assembl/static/js/app/models/idea.js:160
 msgid "The root idea will never be in the synthesis"
 msgstr "根本概念は決してこのシンセシスにはない"
 
-#: assembl/static/js/app/models/idea.js:156
+#: assembl/static/js/app/models/idea.js:183
 msgid "You can add an expression for the next synthesis"
 msgstr "次のシンセシスの式を追加することができます"
 
-#: assembl/static/js/app/models/idea.js:167
+#: assembl/static/js/app/models/idea.js:193
 msgid "All posts"
 msgstr "すべての記事"
 
-#: assembl/static/js/app/models/idea.js:179 assembl/static/js/app/views/ideaPanel.js:522
+#: assembl/static/js/app/models/idea.js:216
+#: assembl/static/js/app/views/ideaPanel.js:528
 msgid "New idea"
 msgstr "新しいアイデア"
 
@@ -421,7 +458,9 @@ msgid "You must be logged in to create segments"
 msgstr "セグメントを作成するには、ログインする必要があります"
 
 #: assembl/static/js/app/models/segment.js:125
-msgid "invalid extract: the extract must have a valid idPost (here ) or a valid uri (here )"
+msgid ""
+"invalid extract: the extract must have a valid idPost (here ) or a valid "
+"uri (here )"
 msgstr "無効な抜粋：抜粋には有効なidPostまたは有効なURLが必要です"
 
 #: assembl/static/js/app/models/segment.js:129
@@ -468,27 +507,22 @@ msgstr "あなたが購読しているFacebookページからの投稿"
 msgid "Posts from users on a Facebook page to which you're subscribed"
 msgstr "あなたが購読しているFacebookページのユーザーからの投稿"
 
-#: assembl/static/js/app/models/synthesis.js:66
-msgid "Add a title"
-msgstr "タイトルを追加"
-
-#: assembl/static/js/app/models/synthesis.js:67
-msgid "Add an introduction"
-msgstr "紹介を追加"
-
-#: assembl/static/js/app/models/synthesis.js:68
-msgid "Add a conclusion"
-msgstr "結論を追加"
-
 #: assembl/static/js/app/models/widget.js:258
 msgid "Create a voting session on this idea"
 msgstr "このアイデアで投票セッションを作成する"
 
-#: assembl/static/js/app/models/widget.js:261 assembl/static/js/app/models/widget.js:273 assembl/static/js/app/models/widget.js:466
+#: assembl/static/js/app/models/widget.js:261
+#: assembl/static/js/app/models/widget.js:273
+#: assembl/static/js/app/models/widget.js:478
 msgid "Vote"
 msgstr "投票"
 
-#: assembl/static/js/app/models/widget.js:263 assembl/static/js/app/models/widget.js:267 assembl/static/js/app/models/widget.js:468 assembl/static/js/app/models/widget.js:1025 assembl/static/js/app/models/widget.js:1033 assembl/static/js/app/models/widget.js:1173
+#: assembl/static/js/app/models/widget.js:263
+#: assembl/static/js/app/models/widget.js:267
+#: assembl/static/js/app/models/widget.js:480
+#: assembl/static/js/app/models/widget.js:1037
+#: assembl/static/js/app/models/widget.js:1045
+#: assembl/static/js/app/models/widget.js:1185
 msgid "Configure"
 msgstr "設定"
 
@@ -512,118 +546,128 @@ msgstr "この投票ウィジェットを設定する"
 msgid "See results from the vote of "
 msgstr "投票結果を見る "
 
-#: assembl/static/js/app/models/widget.js:329
+#: assembl/static/js/app/models/widget.js:289
+#, fuzzy
+#| msgid "See the vote results"
+msgid "Vote results"
+msgstr "投票結果を見る"
+
+#: assembl/static/js/app/models/widget.js:332
 msgid "This vote widget is not fully configured"
 msgstr "この投票ウィジェットの設定は完全でありません"
 
-#: assembl/static/js/app/models/widget.js:333
+#: assembl/static/js/app/models/widget.js:336
 msgid "A voting session has started."
 msgstr "投票セッションが開始されました."
 
-#: assembl/static/js/app/models/widget.js:339
+#: assembl/static/js/app/models/widget.js:342
 #, python-format
 msgid "You cannot vote right now because %s."
 msgstr "%sのためいますぐ投票することはできません."
 
-#: assembl/static/js/app/models/widget.js:347
+#: assembl/static/js/app/models/widget.js:350
 #, python-format
 msgid "The option “%s” is being considered in a vote"
 msgstr "オプション “%s” が投票で考慮されています"
 
-#: assembl/static/js/app/models/widget.js:350
+#: assembl/static/js/app/models/widget.js:353
 #, python-format
 msgid "The option “%s” was considered in a vote"
 msgstr "オプション “%s” が投票で考慮されました"
 
-#: assembl/static/js/app/models/widget.js:352
+#: assembl/static/js/app/models/widget.js:355
 msgid "A voting session is ongoing on this issue"
 msgstr "この論点について投票セッションが進行中です"
 
-#: assembl/static/js/app/models/widget.js:354
+#: assembl/static/js/app/models/widget.js:357
 msgid "A voting session has happened on this issue"
 msgstr "この論点で投票セッションが行われました"
 
-#: assembl/static/js/app/models/widget.js:356
+#: assembl/static/js/app/models/widget.js:359
 #, python-format
 msgid "“%s” is being used as a criterion in a vote"
 msgstr "“%s” が投票の基準として使用されている"
 
-#: assembl/static/js/app/models/widget.js:358
+#: assembl/static/js/app/models/widget.js:361
 #, python-format
 msgid "“%s” was used as a criterion in a vote"
 msgstr "“%s” が投票の基準として使用された"
 
-#: assembl/static/js/app/models/widget.js:368
+#: assembl/static/js/app/models/widget.js:371
 #, python-format
 msgid "You have %s to vote"
 msgstr "投票するための %s があります"
 
-#: assembl/static/js/app/models/widget.js:426
+#: assembl/static/js/app/models/widget.js:438
 msgid "Create a multi-criterion voting session on this idea"
 msgstr "このアイデアで多基準投票セッションを作成する"
 
-#: assembl/static/js/app/models/widget.js:462
+#: assembl/static/js/app/models/widget.js:474
 msgid "Create a token voting session on this idea"
 msgstr "このアイデアでトークン投票セッションを作成する"
 
-#: assembl/static/js/app/models/widget.js:1020
+#: assembl/static/js/app/models/widget.js:1032
 msgid "Create a creativity session on this idea"
 msgstr "このアイデアでクリエイティビティセッションを作成する"
 
-#: assembl/static/js/app/models/widget.js:1023 assembl/static/js/app/models/widget.js:1037
+#: assembl/static/js/app/models/widget.js:1035
+#: assembl/static/js/app/models/widget.js:1049
 msgid "Participate"
 msgstr "参加する"
 
-#: assembl/static/js/app/models/widget.js:1030
+#: assembl/static/js/app/models/widget.js:1042
 msgid "Configure the creativity session on this idea"
 msgstr "このアイデアのクリエイティビティセッションを設定する"
 
-#: assembl/static/js/app/models/widget.js:1039
+#: assembl/static/js/app/models/widget.js:1051
 msgid "Review the session"
 msgstr "セッションを確認する"
 
-#: assembl/static/js/app/models/widget.js:1068
+#: assembl/static/js/app/models/widget.js:1080
 msgid "This widget is not fully configured"
 msgstr "このウィジェットの設定は完全でありません"
 
-#: assembl/static/js/app/models/widget.js:1072
+#: assembl/static/js/app/models/widget.js:1084
 msgid "A creativity session is ongoing."
 msgstr "クリエイティビティセッションが進行中です."
 
-#: assembl/static/js/app/models/widget.js:1080
+#: assembl/static/js/app/models/widget.js:1092
 msgid "A creativity session is ongoing on this issue"
 msgstr "この論点については、クリエイティビティセッションが進行中です"
 
-#: assembl/static/js/app/models/widget.js:1082
+#: assembl/static/js/app/models/widget.js:1094
 msgid "A creativity session has happened on this issue"
 msgstr "この論点でクリエイティビティセッションが行われました"
 
-#: assembl/static/js/app/models/widget.js:1086
+#: assembl/static/js/app/models/widget.js:1098
 #, python-format
 msgid "You have %s to participate"
 msgstr "参加するための %s があります"
 
-#: assembl/static/js/app/models/widget.js:1162
+#: assembl/static/js/app/models/widget.js:1174
 msgid "Create an inspiration module on this idea"
 msgstr "このアイデアについてのインスピレーションモジュールを作成する"
 
-#: assembl/static/js/app/models/widget.js:1164
+#: assembl/static/js/app/models/widget.js:1176
 msgid "Create an inspiration module on this discussion"
 msgstr "このディスカッションについてのインスピレーションモジュールを作成する"
 
-#: assembl/static/js/app/models/widget.js:1166
+#: assembl/static/js/app/models/widget.js:1178
 msgid "Configure the inspiration module associated to the discussion"
 msgstr "このディスカッションに関連するインスピレーションモジュールを設定する"
 
-#: assembl/static/js/app/models/widget.js:1168
+#: assembl/static/js/app/models/widget.js:1180
 msgid "Configure the inspiration module associated to this idea"
 msgstr "このアイデアに関連するインスピレーションモジュールを設定する"
 
-#: assembl/static/js/app/models/widget.js:1171 assembl/templates/views/messageList.tmpl:35 assembl/templates/views/messageList.tmpl:45
+#: assembl/static/js/app/models/widget.js:1183
+#: assembl/templates/views/messageList.tmpl:35
+#: assembl/templates/views/messageList.tmpl:45
 msgid "I need inspiration"
 msgstr "私はインスピレーションが必要です"
 
-#: assembl/static/js/app/utils/tourManager.js:22 assembl/static/js/app/utils/tourManager.js:193
+#: assembl/static/js/app/utils/tourManager.js:22
+#: assembl/static/js/app/utils/tourManager.js:193
 msgid "Next"
 msgstr "次"
 
@@ -639,11 +683,13 @@ msgstr "完了"
 msgid "Skip"
 msgstr "スキップ"
 
-#: assembl/static/js/app/utils/tourManager.js:26 assembl/templates/views/exportPostModal.tmpl:32
+#: assembl/static/js/app/utils/tourManager.js:26
+#: assembl/templates/views/exportPostModal.tmpl:32
 msgid "Close"
 msgstr "閉じる"
 
-#: assembl/static/js/app/utils/tours/assemblTours.js:18 assembl/templates/views/helperDebate.tmpl:3
+#: assembl/static/js/app/utils/tours/assemblTours.js:18
+#: assembl/templates/views/helperDebate.tmpl:3
 msgid "Welcome!"
 msgstr "ようこそ !"
 
@@ -652,7 +698,9 @@ msgid "Thank you"
 msgstr "ありがとうございました"
 
 #: assembl/static/js/app/utils/tours/assemblTours.js:22
-msgid "Welcome to this discussion. We’ve created series of hints to help you get started using Assembl."
+msgid ""
+"Welcome to this discussion. We’ve created series of hints to help you get"
+" started using Assembl."
 msgstr "このディスカッションへようこそ。 Assemblを使い始めるのに役立つ一連のヒントを作成しました."
 
 #: assembl/static/js/app/utils/tours/assemblTours.js:37
@@ -660,7 +708,10 @@ msgid "Join the discussion"
 msgstr "ディスカッションに参加する"
 
 #: assembl/static/js/app/utils/tours/assemblTours.js:38
-msgid "This is the conversation panel, where the discussion takes place. You can reply to messages directly, or start a new topic by clicking ‘Start a new discussion thread’ at the bottom of the panel."
+msgid ""
+"This is the conversation panel, where the discussion takes place. You can"
+" reply to messages directly, or start a new topic by clicking ‘Start a "
+"new discussion thread’ at the bottom of the panel."
 msgstr "これはディスカッションが行われる会話パネルです。パネルの下部にある[新しいディスカッションスレッドの開始]をクリックすると、メッセージに直接返信したり、新しいトピックを開始したりすることができます."
 
 #: assembl/static/js/app/utils/tours/assemblTours.js:64
@@ -668,7 +719,9 @@ msgid "Customize your view"
 msgstr "あなたのビューをカスタマイズする"
 
 #: assembl/static/js/app/utils/tours/assemblTours.js:65
-msgid "You can view the discussion in many different ways using the filters at the top."
+msgid ""
+"You can view the discussion in many different ways using the filters at "
+"the top."
 msgstr "上部のフィルタを使用して、さまざまな方法でディスカッションを表示できます."
 
 #: assembl/static/js/app/utils/tours/assemblTours.js:91
@@ -676,7 +729,9 @@ msgid "Spot relevant quotes on each idea"
 msgstr "各アイデアに関連する重要な引用を掲載する"
 
 #: assembl/static/js/app/utils/tours/assemblTours.js:92
-msgid "Excerpts from messages are harvested and are organized to help you find relevant contributions on this idea."
+msgid ""
+"Excerpts from messages are harvested and are organized to help you find "
+"relevant contributions on this idea."
 msgstr "あなたがこのアイデアに関連する重要な投稿を見つけるのに役立てるため、メッセージの抜粋は収集されまとめられます。"
 
 #: assembl/static/js/app/utils/tours/assemblTours.js:107
@@ -684,7 +739,10 @@ msgid "Explore one of these topics"
 msgstr "これらのトピックの1つを調査する"
 
 #: assembl/static/js/app/utils/tours/assemblTours.js:108
-msgid "You can find the topics that are currently being discussed in this table of contents. Clicking on a topic will filter the conversation to only show messages that are related to this topic."
+msgid ""
+"You can find the topics that are currently being discussed in this table "
+"of contents. Clicking on a topic will filter the conversation to only "
+"show messages that are related to this topic."
 msgstr "この目次では、現在議論されているトピックを見つけることができます。トピックをクリックすると、このトピックに関連するメッセージのみが表示されます."
 
 #: assembl/static/js/app/utils/tours/assemblTours.js:119
@@ -692,7 +750,9 @@ msgid "Catch up on what’s been said"
 msgstr "何が言われたのか把握する"
 
 #: assembl/static/js/app/utils/tours/assemblTours.js:121
-msgid "Periodically an executive summary of the discussion is created to give you a quick overview of what was said since the last executive summary"
+msgid ""
+"Periodically an executive summary of the discussion is created to give "
+"you a quick overview of what was said since the last executive summary"
 msgstr "定期的に、ディスカッションのエグゼクティブサマリーが作成され、前回のエグゼクティブサマリー以降に何が言われたのかを簡単に概観できます"
 
 #: assembl/static/js/app/utils/tours/assemblTours.js:131
@@ -700,7 +760,9 @@ msgid "DISABLED"
 msgstr "無効です"
 
 #: assembl/static/js/app/utils/tours/assemblTours.js:133
-msgid "Find the different syntheses produced since the beginning of the discussion"
+msgid ""
+"Find the different syntheses produced since the beginning of the "
+"discussion"
 msgstr "ディスカッションの開始から作成されたさまざまなシンセシスを見つけ出す"
 
 #: assembl/static/js/app/utils/tours/assemblTours.js:143
@@ -708,7 +770,9 @@ msgid "Catch up on the evolution"
 msgstr "展開に追いつく"
 
 #: assembl/static/js/app/utils/tours/assemblTours.js:145
-msgid "The facilitator of the discussion has written this synthesis to help you get on board of the discussion. Enjoy reading!"
+msgid ""
+"The facilitator of the discussion has written this synthesis to help you "
+"get on board of the discussion. Enjoy reading!"
 msgstr "議論のファシリテーターは、あなたが議論に参加するのをサポーツするために、このシンセシスを書いています"
 
 #: assembl/static/js/app/utils/tours/assemblTours.js:155
@@ -716,7 +780,9 @@ msgid "Dig more on an interesting idea and post your contribution"
 msgstr "興味深いアイデアをもっと掘り下げて投稿する"
 
 #: assembl/static/js/app/utils/tours/assemblTours.js:157
-msgid "You can click on this idea to see current discussions happening on it. You would be able to start contributing on this idea from there."
+msgid ""
+"You can click on this idea to see current discussions happening on it. "
+"You would be able to start contributing on this idea from there."
 msgstr "このアイデアをクリックすると、現在のディスカッションが表示されます。あなたはそこからこのアイデアに投稿することができます."
 
 #: assembl/static/js/app/utils/tours/assemblTours.js:170
@@ -724,7 +790,10 @@ msgid "Stay informed"
 msgstr "情報を得る"
 
 #: assembl/static/js/app/utils/tours/assemblTours.js:171
-msgid "Notifications are set to go to your email. If you aren’t receiving them, make sure to check your spam folder! You can update your notification settings here."
+msgid ""
+"Notifications are set to go to your email. If you aren’t receiving them, "
+"make sure to check your spam folder! You can update your notification "
+"settings here."
 msgstr "通知はあなたの電子メールに行くように設定されています。メールを受け取っていない場合は、あなたの迷惑メールフォルダを確認してください。ここで通知設定を更新することができます."
 
 #: assembl/static/js/app/views/agent.js:87
@@ -732,11 +801,11 @@ msgstr "通知はあなたの電子メールに行くように設定されてい
 msgid "All messages by %s"
 msgstr "%s によるすべてのメッセージ"
 
-#: assembl/static/js/app/views/announcements.js:143
+#: assembl/static/js/app/views/announcements.js:177
 msgid "Please give a title of this announcement..."
 msgstr "この告知のタイトルを記入してください"
 
-#: assembl/static/js/app/views/announcements.js:150
+#: assembl/static/js/app/views/announcements.js:185
 msgid "Please write the content of this announcement here..."
 msgstr "この告知の内容をここに書いてください"
 
@@ -745,7 +814,8 @@ msgstr "この告知の内容をここに書いてください"
 msgid "For URL %s in the text above"
 msgstr "上記のテキストのURL%sについて"
 
-#: assembl/static/js/app/views/attachments.js:260 assembl/templates/views/langStringEntry.tmpl:12
+#: assembl/static/js/app/views/attachments.js:260
+#: assembl/templates/views/langStringEntry.tmpl:12
 msgid "Remove"
 msgstr "削除する"
 
@@ -755,7 +825,9 @@ msgstr "アップロードされたファイル"
 
 #: assembl/static/js/app/views/attachments.js:336
 #, python-format
-msgid "We are sorry, there was an error during the upload of the file \"%s\". Please try again."
+msgid ""
+"We are sorry, there was an error during the upload of the file \"%s\". "
+"Please try again."
 msgstr "申し訳ありません、ファイル “%s” のアップロード中にエラーが発生しました。もう一度お試しください。"
 
 #: assembl/static/js/app/views/attachments.js:507
@@ -778,11 +850,13 @@ msgstr "年代順のスレッド"
 msgid "Chronological threads + jump to oldest unread message"
 msgstr "年代順のスレッド+最も古い未読メッセージへのジャンプ"
 
-#: assembl/static/js/app/views/baseMessageList.js:206 assembl/static/js/app/views/messageColumnsPanel.js:236
+#: assembl/static/js/app/views/baseMessageList.js:206
+#: assembl/static/js/app/views/messageColumnsPanel.js:241
 msgid "Newest messages first"
 msgstr "最新のメッセージを最初に"
 
-#: assembl/static/js/app/views/baseMessageList.js:211 assembl/static/js/app/views/messageColumnsPanel.js:241
+#: assembl/static/js/app/views/baseMessageList.js:211
+#: assembl/static/js/app/views/messageColumnsPanel.js:246
 msgid "Most popular messages first"
 msgstr "最も人気のあるメッセージを最初に"
 
@@ -790,7 +864,10 @@ msgstr "最も人気のあるメッセージを最初に"
 msgid "No messages"
 msgstr "メッセージなし"
 
-#: assembl/static/js/app/views/baseMessageList.js:1046 assembl/static/js/app/views/messageSend.js:181 assembl/templates/do_password_change.jinja2:30 assembl/templates/request_password_change.jinja2:28
+#: assembl/static/js/app/views/baseMessageList.js:1046
+#: assembl/static/js/app/views/messageSend.js:191
+#: assembl/templates/do_password_change.jinja2:30
+#: assembl/templates/request_password_change.jinja2:28
 msgid "Send"
 msgstr "送信"
 
@@ -814,8 +891,20 @@ msgstr "新しいトピックを追加するには題材を設定する必要が
 msgid "Send to clipboard"
 msgstr "クリップボードに送る"
 
-#: assembl/static/js/app/views/baseMessageList.js:1557 assembl/static/js/app/views/confirmModal.js:32 assembl/static/js/app/views/messageSend.js:180 assembl/templates/styleguide/components/Dialogs.jinja2:119 assembl/templates/styleguide/components/Dialogs.jinja2:146 assembl/templates/views/adminPartnerEditForm.tmpl:65 assembl/templates/views/adminPartnerEditForm.tmpl:71 assembl/templates/views/adminPartnerForm.tmpl:63
-#: assembl/templates/views/adminPartnerForm.tmpl:69 assembl/templates/views/ckeditorField.tmpl:10 assembl/templates/views/create-group.tmpl:128 assembl/templates/views/messageModerationOptions.tmpl:32 assembl/templates/views/message_translation_question_selection.tmpl:14 assembl/templates/views/showSegmentByAnnotation.tmpl:9
+#: assembl/static/js/app/views/baseMessageList.js:1557
+#: assembl/static/js/app/views/confirmModal.js:32
+#: assembl/static/js/app/views/messageSend.js:190
+#: assembl/templates/styleguide/components/Dialogs.jinja2:119
+#: assembl/templates/styleguide/components/Dialogs.jinja2:146
+#: assembl/templates/views/adminPartnerEditForm.tmpl:65
+#: assembl/templates/views/adminPartnerEditForm.tmpl:71
+#: assembl/templates/views/adminPartnerForm.tmpl:63
+#: assembl/templates/views/adminPartnerForm.tmpl:69
+#: assembl/templates/views/ckeditorField.tmpl:10
+#: assembl/templates/views/create-group.tmpl:128
+#: assembl/templates/views/messageModerationOptions.tmpl:32
+#: assembl/templates/views/message_translation_question_selection.tmpl:14
+#: assembl/templates/views/showSegmentByAnnotation.tmpl:9
 msgid "Cancel"
 msgstr "キャンセル"
 
@@ -827,30 +916,37 @@ msgstr "下のセグメントをアイデアの表に直接ドラッグするこ
 msgid "You can also copy-paste from the text in the zone below"
 msgstr "下のゾーンのテキストからコピー・貼り付けすることもできます"
 
-#: assembl/static/js/app/views/baseMessageList.js:1603
+#: assembl/static/js/app/views/baseMessageList.js:1606
 #, python-format
-msgid "This extract was organized in the idea \" %s \" by the facilitator of the debate"
+msgid ""
+"This extract was organized in the idea \" %s \" by the facilitator of the"
+" debate"
 msgstr "この抜粋は議論のファシリテーターによってアイデア \" %s \" に編制されました"
 
-#: assembl/static/js/app/views/baseMessageList.js:1606
+#: assembl/static/js/app/views/baseMessageList.js:1609
 msgid "This extract is in a harvester's clipboard and hasn' been sorted yet."
 msgstr "この抜粋はハーベスターのクリップボードにあり、まだソートされていません."
 
-#: assembl/static/js/app/views/baseMessageList.js:2262
+#: assembl/static/js/app/views/baseMessageList.js:2265
 #, python-format
 msgid "%d new message has been posted.  Click here to refresh"
 msgid_plural "%d new messages have been posted.  Click here to refresh"
 msgstr[0] "%d新しいメッセージが投稿されました。反映するにはここをクリック"
 
-#: assembl/static/js/app/views/confirmModal.js:33 assembl/static/js/app/views/ideaPanel.js:714 assembl/static/js/app/views/ideaPanel.js:725 assembl/static/js/app/views/ideaPanel.js:734
+#: assembl/static/js/app/views/confirmModal.js:33
+#: assembl/static/js/app/views/ideaPanel.js:720
+#: assembl/static/js/app/views/ideaPanel.js:731
+#: assembl/static/js/app/views/ideaPanel.js:740
 msgid "OK"
 msgstr "OK"
 
-#: assembl/static/js/app/views/contextPage.js:90 assembl/static/js/app/views/navigation/synthesisInNavigation.js:146
+#: assembl/static/js/app/views/contextPage.js:91
+#: assembl/static/js/app/views/navigation/synthesisInNavigation.js:146
 msgid "No synthesis of the discussion has been published yet"
 msgstr "議論のシンセシスはまだ発表されていない"
 
-#: assembl/static/js/app/views/contextPage.js:272 assembl/templates/views/navigation.tmpl:21
+#: assembl/static/js/app/views/contextPage.js:274
+#: assembl/templates/views/navigation.tmpl:21
 msgid "Home"
 msgstr "ホーム"
 
@@ -859,7 +955,8 @@ msgstr "ホーム"
 msgid "Sorry, we have failed to upload your file \"%s\". Please try again."
 msgstr "申し訳ありませんが、ファイル \" %s \" のアップロードに失敗しました。もう一度お試しください。"
 
-#: assembl/static/js/app/views/externalVisualization.js:24 assembl/templates/views/create-group.tmpl:107
+#: assembl/static/js/app/views/externalVisualization.js:24
+#: assembl/templates/views/create-group.tmpl:107
 msgid "CI Dashboard"
 msgstr "CIダッシュボード"
 
@@ -868,7 +965,10 @@ msgid ""
 "The following message was posted on Assembl:\n"
 "\n"
 "\n"
-msgstr "次のメッセージがAssemblに掲載されました：\n\n\n"
+msgstr ""
+"次のメッセージがAssemblに掲載されました：\n"
+"\n"
+"\n"
 
 #: assembl/static/js/app/views/facebookViews.js:42
 #, python-format
@@ -876,14 +976,21 @@ msgid ""
 "The following message was posted by %s on Assembl:\n"
 "\n"
 "\n"
-msgstr "次のメッセージがAssemblに%sによって投稿されました：\n\n\n"
+msgstr ""
+"次のメッセージがAssemblに%sによって投稿されました：\n"
+"\n"
+"\n"
 
 #: assembl/static/js/app/views/facebookViews.js:51
-msgid "Please be aware that comments below will be imported into a discussion found at "
+msgid ""
+"Please be aware that comments below will be imported into a discussion "
+"found at "
 msgstr "下記のコメントは、下記のディスカッションにインポートされますのでご注意ください"
 
 #: assembl/static/js/app/views/facebookViews.js:297
-msgid "An error occured whilst communicating with Facebook. Close the box and try again."
+msgid ""
+"An error occured whilst communicating with Facebook. Close the box and "
+"try again."
 msgstr "Facebookとのコミュニケーション中にエラーが発生しました。ボックスを閉じてもう一度やり直してください。"
 
 #: assembl/static/js/app/views/facebookViews.js:432
@@ -891,11 +998,15 @@ msgid "You did not log into facebook. Please log-in to continue."
 msgstr "あなたはFacebookにログインしていません。続行するにはログインしてください。"
 
 #: assembl/static/js/app/views/facebookViews.js:451
-msgid "There was an issue with getting your Facebook login status. Please close this box and contact your discussion administrator."
+msgid ""
+"There was an issue with getting your Facebook login status. Please close "
+"this box and contact your discussion administrator."
 msgstr "Facebookのログインステータスを取得する際に問題が発生しました。このボックスを閉じ、ディスカッションの管理者にご連絡ください。"
 
 #: assembl/static/js/app/views/facebookViews.js:546
-msgid "Great! You already have a facebook account. Below are the list of permissions we need for the exportation process."
+msgid ""
+"Great! You already have a facebook account. Below are the list of "
+"permissions we need for the exportation process."
 msgstr "あなたはすでにFacebookのアカウントを持っています。以下は、エクスポートプロセスに必要な権限のリストです。"
 
 #: assembl/static/js/app/views/facebookViews.js:547
@@ -903,7 +1014,10 @@ msgid "Click here if you agree with these permissions."
 msgstr "これらのアクセス許可に同意する場合は、ここをクリックしてください。"
 
 #: assembl/static/js/app/views/facebookViews.js:551
-msgid "It appears that your session was expired. Click below to refresh your session. As always, below are the permissions that Assembl would need to continue."
+msgid ""
+"It appears that your session was expired. Click below to refresh your "
+"session. As always, below are the permissions that Assembl would need to "
+"continue."
 msgstr "セッションが終了したようです。セッションを更新するには、以下をクリックしてください。通常通りAssemblが続行する必要がある認証は以下の通りです。"
 
 #: assembl/static/js/app/views/facebookViews.js:552
@@ -919,7 +1033,9 @@ msgid "Sign in using your Facebook account"
 msgstr "あなたのFacebookアカウントにサインインする"
 
 #: assembl/static/js/app/views/facebookViews.js:799
-msgid "Assembl is a collective intelligence tool designed to enable open, democratic discussions that lead to idea generation and innovation."
+msgid ""
+"Assembl is a collective intelligence tool designed to enable open, "
+"democratic discussions that lead to idea generation and innovation."
 msgstr "Assemblは、アイデアの創造と革新をもたらすオープンで民主的な議論を可能にするために設計された集団知能ツールです。"
 
 #: assembl/static/js/app/views/facebookViews.js:866
@@ -927,11 +1043,15 @@ msgid "Facebook was unable to create the post. Close the box and try again."
 msgstr "Facebookは投稿に失敗しました。ボックスを閉じてもう一度やり直してください。"
 
 #: assembl/static/js/app/views/facebookViews.js:947
-msgid "Please select between pages, groups or your wall as the final destination to complete the form."
+msgid ""
+"Please select between pages, groups or your wall as the final destination"
+" to complete the form."
 msgstr "フォームを完成させる場所として、ページ、グループ、ウォールのいずれかを選択してください"
 
 #: assembl/static/js/app/views/facebookViews.js:970
-msgid "Something went wrong on Assembl whilst creating your post. Please contact the Discussion administrator for more information."
+msgid ""
+"Something went wrong on Assembl whilst creating your post. Please contact"
+" the Discussion administrator for more information."
 msgstr "あなたの投稿を作成している間、Assemblに何か問題がありました。詳細については、ディスカッションの管理者にお問い合わせください。"
 
 #: assembl/static/js/app/views/facebookViews.js:1066
@@ -942,7 +1062,8 @@ msgstr "このアカウントはFacebookアカウントを持っていません"
 msgid "Could not create the message source"
 msgstr "メッセージソースを作成できませんでした"
 
-#: assembl/static/js/app/views/facebookViews.js:1088 assembl/static/js/app/views/facebookViews.js:1093
+#: assembl/static/js/app/views/facebookViews.js:1088
+#: assembl/static/js/app/views/facebookViews.js:1093
 msgid "There was an error creating the message source"
 msgstr "メッセージソースを作成中にエラーが発生しました"
 
@@ -958,123 +1079,117 @@ msgstr "続行する前にエクスポート先を選択してください"
 msgid "Please complete facebook login"
 msgstr "Facebookのログインを完了してください"
 
-#: assembl/static/js/app/views/ideaClassificationOnMessage.js:153
+#: assembl/static/js/app/views/ideaClassificationOnMessage.js:152
 msgid "Go to this idea"
 msgstr "このアイデアに参加する"
 
-#: assembl/static/js/app/views/ideaClassificationOnMessage.js:363
+#: assembl/static/js/app/views/ideaClassificationOnMessage.js:362
 msgid "This message is linked to the following idea because: "
 msgid_plural "This message is linked to the %1$d following ideas because: "
 msgstr[0] "このメッセージは次の理由から以下に述べるアイデアにリンクされています"
 
-#: assembl/static/js/app/views/ideaClassificationOnMessage.js:368
+#: assembl/static/js/app/views/ideaClassificationOnMessage.js:367
 msgid "Link between this message and the idea"
 msgid_plural "Links between this message and ideas"
 msgstr[0] "このメッセージとアイデアを繋げる"
 
-#: assembl/static/js/app/views/ideaInSynthesis.js:159
+#: assembl/static/js/app/views/ideaInSynthesis.js:167
 #, python-format
 msgid "%d message is available under this idea"
 msgid_plural "%d messages are available under this idea"
 msgstr[0] "このアイデアで%dのメッセージが利用可能です"
 
-#: assembl/static/js/app/views/ideaInSynthesis.js:229 assembl/static/js/app/views/message.js:804
-msgid "Type your response here..."
-msgstr "あなたの回答をここに入力してください"
-
-#: assembl/static/js/app/views/ideaInSynthesis.js:231 assembl/static/js/app/views/message.js:806
-msgid "Send your reply"
-msgstr "返信する"
-
-#: assembl/static/js/app/views/ideaInSynthesis.js:234 assembl/static/js/app/views/message.js:808
-msgid "You did not type a response yet..."
-msgstr "あなたはまだ回答を入力していません"
-
-#: assembl/static/js/app/views/ideaList.js:269 assembl/templates/views/create-group.tmpl:42 assembl/templates/views/ideaList.tmpl:14
+#: assembl/static/js/app/views/ideaList.js:260
+#: assembl/templates/views/create-group.tmpl:42
+#: assembl/templates/views/ideaList.tmpl:14
 msgid "Table of ideas"
 msgstr "アイデア表"
 
-#: assembl/static/js/app/views/ideaList.js:810
+#: assembl/static/js/app/views/ideaList.js:805
 msgid "You don't have the permission to do this."
 msgstr "これを行う許可がありません。"
 
-#: assembl/static/js/app/views/ideaPanel.js:208
+#: assembl/static/js/app/views/ideaPanel.js:211
 msgid "Idea"
 msgstr "アイデア"
 
-#: assembl/static/js/app/views/ideaPanel.js:211
-msgid "Detailled information about the currently selected idea in the Table of ideas"
+#: assembl/static/js/app/views/ideaPanel.js:214
+msgid ""
+"Detailled information about the currently selected idea in the Table of "
+"ideas"
 msgstr "アイデア表で現在選択されているアイデアに関する詳細な情報"
 
-#: assembl/static/js/app/views/ideaPanel.js:219
+#: assembl/static/js/app/views/ideaPanel.js:222
 msgid "This idea has no sub-ideas"
 msgstr "このアイデアにはサブアイデアはありません"
 
-#: assembl/static/js/app/views/ideaPanel.js:222
+#: assembl/static/js/app/views/ideaPanel.js:225
 #, python-format
 msgid "This idea has %d sub-idea"
 msgid_plural "This idea has %d sub-ideas"
 msgstr[0] "このアイデアには%dのサブアイデアがあります"
 
-#: assembl/static/js/app/views/ideaPanel.js:243
+#: assembl/static/js/app/views/ideaPanel.js:246
 msgid "No extract was harvested"
 msgstr "抜粋は収穫されなかった"
 
-#: assembl/static/js/app/views/ideaPanel.js:246
+#: assembl/static/js/app/views/ideaPanel.js:249
 msgid "No important nugget was harvested"
 msgstr "重要なナゲットは収穫されませんでした"
 
-#: assembl/static/js/app/views/ideaPanel.js:251
+#: assembl/static/js/app/views/ideaPanel.js:254
 #, python-format
 msgid "%d extract was harvested"
 msgid_plural "%d extracts were harvested"
 msgstr[0] "%dの抜粋が収穫されました"
 
-#: assembl/static/js/app/views/ideaPanel.js:254
+#: assembl/static/js/app/views/ideaPanel.js:257
 #, python-format
 msgid "%d important nugget was harvested"
 msgid_plural "%d important nuggets were harvested"
 msgstr[0] "%dの重要な情報が収穫されました"
 
-#: assembl/static/js/app/views/ideaPanel.js:500
+#: assembl/static/js/app/views/ideaPanel.js:505
 #, python-format
 msgid "%d contributor"
 msgid_plural "%d contributors"
 msgstr[0] "投稿者%d"
 
-#: assembl/static/js/app/views/ideaPanel.js:521
+#: assembl/static/js/app/views/ideaPanel.js:527
 msgid "Short expression (only a few words) of the idea in the table of ideas."
 msgstr "アイデア表のアイデアの短い説明"
 
-#: assembl/static/js/app/views/ideaPanel.js:713
+#: assembl/static/js/app/views/ideaPanel.js:719
 msgid "You cannot delete an idea while it has sub-ideas."
 msgstr "サブアイデアを持っている間はアイデアを削除することはできません。"
 
-#: assembl/static/js/app/views/ideaPanel.js:724
+#: assembl/static/js/app/views/ideaPanel.js:730
 msgid "You cannot delete an idea associated to extracts."
 msgstr "抜粋に関連付けられたアイデアは削除できません。"
 
-#: assembl/static/js/app/views/ideaPanel.js:733
+#: assembl/static/js/app/views/ideaPanel.js:739
 msgid "You cannot delete an idea associated to comments."
 msgstr "コメントに関連付けられたアイデアは削除できません。"
 
-#: assembl/static/js/app/views/ideaPanel.js:753
+#: assembl/static/js/app/views/ideaPanel.js:759
 msgid "Confirm that you want to delete this idea."
 msgstr "このアイデアを削除することを確認します。"
 
-#: assembl/static/js/app/views/ideaPanel.js:754 assembl/static/js/app/views/message.js:1652
+#: assembl/static/js/app/views/ideaPanel.js:760
+#: assembl/static/js/app/views/message.js:1650
 msgid "No"
 msgstr "いいえ"
 
-#: assembl/static/js/app/views/ideaPanel.js:755 assembl/static/js/app/views/message.js:1653
+#: assembl/static/js/app/views/ideaPanel.js:761
+#: assembl/static/js/app/views/message.js:1651
 msgid "Yes"
 msgstr "はい"
 
-#: assembl/static/js/app/views/ideaPanel.js:930
+#: assembl/static/js/app/views/ideaPanel.js:936
 msgid "Confirm that you want to send all extracts back to the clipboard."
 msgstr "すべての抜粋をクリップボードに戻すことを確認します。"
 
-#: assembl/static/js/app/views/ideaPanel.js:998
+#: assembl/static/js/app/views/ideaPanel.js:1005
 msgid "You may want to describe this idea for users here..."
 msgstr "ここのユーザーのためにこのアイデアを説明してはいかがでしょう。"
 
@@ -1089,49 +1204,62 @@ msgid "and %d other idea</a>"
 msgid_plural "and %d other ideas</a>"
 msgstr[0] "%dその他のアイデア</a>"
 
-#: assembl/static/js/app/views/message.js:1031
+#: assembl/static/js/app/views/message.js:802
+msgid "Type your response here..."
+msgstr "あなたの回答をここに入力してください"
+
+#: assembl/static/js/app/views/message.js:804
+msgid "Send your reply"
+msgstr "返信する"
+
+#: assembl/static/js/app/views/message.js:806
+msgid "You did not type a response yet..."
+msgstr "あなたはまだ回答を入力していません"
+
+#: assembl/static/js/app/views/message.js:1029
 msgid "You"
 msgstr "あなた"
 
-#: assembl/static/js/app/views/message.js:1036
+#: assembl/static/js/app/views/message.js:1034
 #, python-format
 msgid "You and %d Another person"
 msgid_plural "You and %d Other persons"
 msgstr[0] "あなたと%dの別の人"
 
-#: assembl/static/js/app/views/message.js:1044
+#: assembl/static/js/app/views/message.js:1042
 #, python-format
 msgid "%d person"
 msgid_plural "%d persons"
 msgstr[0] "%d人"
 
-#: assembl/static/js/app/views/message.js:1634
+#: assembl/static/js/app/views/message.js:1632
 msgid "Message has been successfully deleted."
 msgstr "メッセージは正常に削除されました。"
 
-#: assembl/static/js/app/views/message.js:1645
+#: assembl/static/js/app/views/message.js:1643
 msgid "Error: Message could not be deleted."
 msgstr "エラー：メッセージを削除できませんでした。"
 
-#: assembl/static/js/app/views/message.js:1651
+#: assembl/static/js/app/views/message.js:1649
 msgid "Are you sure you want to delete this message?"
 msgstr "このメッセージを削除してもよろしいですか？"
 
-#: assembl/static/js/app/views/messageColumnsPanel.js:167 assembl/static/js/app/views/messageList.js:184
+#: assembl/static/js/app/views/messageColumnsPanel.js:170
+#: assembl/static/js/app/views/messageList.js:184
 msgid "Messages"
 msgstr "メッセージ"
 
-#: assembl/static/js/app/views/messageColumnsPanel.js:246
+#: assembl/static/js/app/views/messageColumnsPanel.js:251
 msgid "Oldest messages first"
 msgstr "最も古いメッセージが最初に"
 
-#: assembl/static/js/app/views/messageColumnsPanel.js:365
+#: assembl/static/js/app/views/messageColumnsPanel.js:388
 #, python-format
 msgid "%d message on theme “%s”"
 msgid_plural "%d messages on theme “%s”"
 msgstr[0] "%d メッセージ, テーマ \" %s \""
 
-#: assembl/static/js/app/views/messageColumnsPanel.js:406
+#: assembl/static/js/app/views/messageColumnsPanel.js:434
 #, python-format
 msgid "Add your thoughts on theme “%s”"
 msgstr "テーマ \" %s \"にあなたの考えを追加する"
@@ -1153,10 +1281,12 @@ msgstr[0] "最大で更に%dのメッセージがこのメッセージのコン�
 #: assembl/static/js/app/views/messageFamily.js:123
 #, python-format
 msgid "Messages available in this message's full context are from %d more author."
-msgid_plural "Messages available in this message's full context are from %d more authors."
+msgid_plural ""
+"Messages available in this message's full context are from %d more "
+"authors."
 msgstr[0] "このメッセージは、 %d以上の投稿者によるものです。"
 
-#: assembl/static/js/app/views/messageFamily.js:244
+#: assembl/static/js/app/views/messageFamily.js:245
 #, python-format
 msgid "Zooming on the conversation around \"%s\""
 msgstr " \" %s \" に関する会話をズームする"
@@ -1226,41 +1356,38 @@ msgid "Found %d message%s out of %d messages:"
 msgid_plural "Found %d messages%s out of %d messages:"
 msgstr[0] "%dのメッセージ%sのうち%dのメッセージを発見："
 
-#: assembl/static/js/app/views/messageSend.js:88
+#: assembl/static/js/app/views/messageSend.js:94
 msgid "Type your message here..."
 msgstr "ここにメッセージを入力してください"
 
-#: assembl/static/js/app/views/messageSend.js:166 assembl/templates/views/messageList.tmpl:43
+#: assembl/static/js/app/views/messageSend.js:176
+#: assembl/templates/views/messageList.tmpl:43
 msgid "Start a new discussion thread"
 msgstr "新しいディスカッションスレッドを開始する"
 
-#: assembl/static/js/app/views/messageSend.js:182 assembl/templates/admin/discussion_permissions.jinja2:124
-msgid "Subject:"
-msgstr "件名:"
-
-#: assembl/static/js/app/views/messageSend.js:214
+#: assembl/static/js/app/views/messageSend.js:223
 #, python-format
 msgid "Before you can reply to this message %s"
 msgstr "このメッセージに返信する前に%s"
 
-#: assembl/static/js/app/views/messageSend.js:217
+#: assembl/static/js/app/views/messageSend.js:226
 #, python-format
 msgid "Before you can post a message %s"
 msgstr "このメッセージを投稿する前に%s"
 
-#: assembl/static/js/app/views/messageSend.js:292
+#: assembl/static/js/app/views/messageSend.js:308
 msgid "You need to set a subject before you can send your message..."
 msgstr "メッセージを送信する前に、件名を設定する必要があります"
 
-#: assembl/static/js/app/views/messageSend.js:302
+#: assembl/static/js/app/views/messageSend.js:318
 msgid "You need to type a message before you can send your message..."
 msgstr "メッセージを送信する前にメッセージを入力する必要があります"
 
-#: assembl/static/js/app/views/messageSend.js:310
+#: assembl/static/js/app/views/messageSend.js:326
 msgid "Sending..."
 msgstr "送信中"
 
-#: assembl/static/js/app/views/messageSend.js:342
+#: assembl/static/js/app/views/messageSend.js:358
 msgid "Message posted!"
 msgstr "メッセージが投稿されました！"
 
@@ -1277,25 +1404,25 @@ msgstr "1つ以上の言語を選択することはできません"
 msgid "Select the language you wish to translate %s to:"
 msgstr "%sを翻訳したい言語を選択してください："
 
-#: assembl/static/js/app/views/messageTranslationQuestion.js:291
+#: assembl/static/js/app/views/messageTranslationQuestion.js:289
 #, python-format
 msgid "Translate all messages from %s to %s?"
 msgstr "すべてのメッセージを%sから%sに翻訳しますか？"
 
-#: assembl/static/js/app/views/messageTranslationQuestion.js:302
+#: assembl/static/js/app/views/messageTranslationQuestion.js:300
 #, python-format
 msgid "Keep %s messages untranslated?"
 msgstr "%sのメッセージを未翻訳のままにしますか？"
 
-#: assembl/static/js/app/views/messageTranslationQuestion.js:307
+#: assembl/static/js/app/views/messageTranslationQuestion.js:305
 msgid "Yes, Thanks!"
 msgstr "はい、ありがとう！"
 
-#: assembl/static/js/app/views/messageTranslationQuestion.js:308
+#: assembl/static/js/app/views/messageTranslationQuestion.js:306
 msgid "Do not translate"
 msgstr "翻訳しないでください"
 
-#: assembl/static/js/app/views/messageTranslationQuestion.js:309
+#: assembl/static/js/app/views/messageTranslationQuestion.js:307
 msgid "Translate to another language"
 msgstr "別の言語に翻訳する"
 
@@ -1328,206 +1455,230 @@ msgid "Related to idea"
 msgstr "アイデアに関連する"
 
 #: assembl/static/js/app/views/postFilters.js:227
-msgid "Only include messages related to the specified idea.  The filter is recursive:  Messages related to ideas that are descendents of the idea are included."
+msgid ""
+"Only include messages related to the specified idea.  The filter is "
+"recursive:  Messages related to ideas that are descendents of the idea "
+"are included."
 msgstr "指定したアイデアに関連するメッセージのみを含めます。フィルタは再帰的です。このアイデアから派生する別のアイデアに関連するメッセージが含まれます。"
 
-#: assembl/static/js/app/views/postFilters.js:242
+#: assembl/static/js/app/views/postFilters.js:245
 #, python-format
 msgid "Discuss idea %s"
 msgid_plural "Discuss ideas: %s"
 msgstr[0] "アイデア%sについて議論する"
 
-#: assembl/static/js/app/views/postFilters.js:242 assembl/static/js/app/views/postFilters.js:284 assembl/static/js/app/views/postFilters.js:326 assembl/static/js/app/views/postFilters.js:361 assembl/static/js/app/views/postFilters.js:416 assembl/static/js/app/views/postFilters.js:444
+#: assembl/static/js/app/views/postFilters.js:245
+#: assembl/static/js/app/views/postFilters.js:289
+#: assembl/static/js/app/views/postFilters.js:333
+#: assembl/static/js/app/views/postFilters.js:368
+#: assembl/static/js/app/views/postFilters.js:423
+#: assembl/static/js/app/views/postFilters.js:451
 msgid " AND "
 msgstr "及び"
 
-#: assembl/static/js/app/views/postFilters.js:260
+#: assembl/static/js/app/views/postFilters.js:263
 msgid "Part of thread of"
 msgstr "スレッドの一部"
 
-#: assembl/static/js/app/views/postFilters.js:263
+#: assembl/static/js/app/views/postFilters.js:266
 msgid "Only include messages that are in the specified post reply thread."
 msgstr "指定された投稿返信スレッドに含まれるメッセージのみを含めます。"
 
-#: assembl/static/js/app/views/postFilters.js:275 assembl/static/js/app/views/postFilters.js:317
+#: assembl/static/js/app/views/postFilters.js:280
+#: assembl/static/js/app/views/postFilters.js:324
 #, python-format
 msgid "synthesis \"%s\""
 msgstr "シンセシス \" %s \""
 
-#: assembl/static/js/app/views/postFilters.js:278 assembl/static/js/app/views/postFilters.js:320
+#: assembl/static/js/app/views/postFilters.js:283
+#: assembl/static/js/app/views/postFilters.js:327
 #, python-format
 msgid "message \"%s\""
 msgstr "メッセージ \" %s \""
 
-#: assembl/static/js/app/views/postFilters.js:284
+#: assembl/static/js/app/views/postFilters.js:289
 #, python-format
 msgid "Are in the conversation that follows: %s"
 msgstr "次の会話に参加しています：%s"
 
-#: assembl/static/js/app/views/postFilters.js:302
+#: assembl/static/js/app/views/postFilters.js:307
 msgid "Part of the context of"
 msgstr "コンテキストの一部"
 
-#: assembl/static/js/app/views/postFilters.js:305
-msgid "Only include messages that are in the specified post reply thread or ancestry."
+#: assembl/static/js/app/views/postFilters.js:310
+msgid ""
+"Only include messages that are in the specified post reply thread or "
+"ancestry."
 msgstr "指定された投稿返信スレッドまたはその系統のスレッドのメッセージのみを含めます。"
 
-#: assembl/static/js/app/views/postFilters.js:326
+#: assembl/static/js/app/views/postFilters.js:333
 #, python-format
 msgid "Are in the context of: %s"
 msgstr "%sのコンテキスト内にあります"
 
-#: assembl/static/js/app/views/postFilters.js:344
+#: assembl/static/js/app/views/postFilters.js:351
 msgid "Posted by"
 msgstr "による投稿"
 
-#: assembl/static/js/app/views/postFilters.js:347
+#: assembl/static/js/app/views/postFilters.js:354
 msgid "Only include messages that are posted by a specific user."
 msgstr "特定のユーザーによって投稿されたメッセージのみを含めます。"
 
-#: assembl/static/js/app/views/postFilters.js:356 assembl/static/js/app/views/postFilters.js:411
+#: assembl/static/js/app/views/postFilters.js:363
+#: assembl/static/js/app/views/postFilters.js:418
 #, python-format
 msgid "\"%s\""
 msgstr "\"%s\""
 
-#: assembl/static/js/app/views/postFilters.js:361
+#: assembl/static/js/app/views/postFilters.js:368
 #, python-format
 msgid "Are posted by: %s"
 msgstr "投稿者： %s"
 
-#: assembl/static/js/app/views/postFilters.js:379
+#: assembl/static/js/app/views/postFilters.js:386
 msgid "Messages I posted"
 msgstr "投稿したメッセージ"
 
-#: assembl/static/js/app/views/postFilters.js:382
+#: assembl/static/js/app/views/postFilters.js:389
 msgid "Only include messages that I posted."
 msgstr "投稿したメッセージのみを含めてください。"
 
-#: assembl/static/js/app/views/postFilters.js:399
+#: assembl/static/js/app/views/postFilters.js:406
 msgid "Replies to"
 msgstr "返信先"
 
-#: assembl/static/js/app/views/postFilters.js:402
+#: assembl/static/js/app/views/postFilters.js:409
 msgid "Only include messages that reply to a specific user."
 msgstr "特定のユーザーへの返信メッセージのみを含めます。"
 
-#: assembl/static/js/app/views/postFilters.js:416
+#: assembl/static/js/app/views/postFilters.js:423
 #, python-format
 msgid "Replies to: %s"
 msgstr "返信先： %s"
 
-#: assembl/static/js/app/views/postFilters.js:434
+#: assembl/static/js/app/views/postFilters.js:441
 msgid "In column category"
 msgstr "列カテゴリ"
 
-#: assembl/static/js/app/views/postFilters.js:437
-msgid "Only include messages that were classified in a specific category. Use \"null\" for no category."
+#: assembl/static/js/app/views/postFilters.js:444
+msgid ""
+"Only include messages that were classified in a specific category. Use "
+"\"null\" for no category."
 msgstr "特定のカテゴリに分類されたメッセージのみを含めます。カテゴリがない場合は\"null\"を使用します。"
 
-#: assembl/static/js/app/views/postFilters.js:444
+#: assembl/static/js/app/views/postFilters.js:451
 #, python-format
 msgid "In category: %s"
 msgstr "カテゴリ： %s"
 
-#: assembl/static/js/app/views/postFilters.js:462
+#: assembl/static/js/app/views/postFilters.js:469
 msgid "Messages that reply to me"
 msgstr "私への返信メッセージ"
 
-#: assembl/static/js/app/views/postFilters.js:465
+#: assembl/static/js/app/views/postFilters.js:472
 msgid "Only include messages that reply one of the messages I posted."
 msgstr "投稿したメッセージの1つに返信するメッセージのみを含めてください。"
 
-#: assembl/static/js/app/views/postFilters.js:485 assembl/templates/views/orphanMessagesInIdeaList.tmpl:4
+#: assembl/static/js/app/views/postFilters.js:492
+#: assembl/templates/views/orphanMessagesInIdeaList.tmpl:4
 msgid "Messages not yet associated with an idea"
 msgstr "まだアイデアに関連付けられていないメッセージ"
 
-#: assembl/static/js/app/views/postFilters.js:488
+#: assembl/static/js/app/views/postFilters.js:495
 msgid "Only include messages that are not found in any idea."
 msgstr "どのアイデアにも見つからないメッセージのみを含める。"
 
-#: assembl/static/js/app/views/postFilters.js:508
+#: assembl/static/js/app/views/postFilters.js:515
 msgid "Synthesis messages"
 msgstr "シンセシスメッセージ"
 
-#: assembl/static/js/app/views/postFilters.js:511
+#: assembl/static/js/app/views/postFilters.js:518
 msgid "Only include messages that represent a synthesis of the discussion."
 msgstr "ディスカッションのシンセシスを表すメッセージのみを含める。"
 
-#: assembl/static/js/app/views/postFilters.js:533
+#: assembl/static/js/app/views/postFilters.js:540
 msgid "Have unread value"
 msgstr "unread valueを持つ"
 
-#: assembl/static/js/app/views/postFilters.js:539
+#: assembl/static/js/app/views/postFilters.js:546
 msgid "You haven't read yet"
 msgstr "未読"
 
-#: assembl/static/js/app/views/postFilters.js:541
+#: assembl/static/js/app/views/postFilters.js:548
 msgid "You've already read"
 msgstr "既読"
 
-#: assembl/static/js/app/views/postFilters.js:569
+#: assembl/static/js/app/views/postFilters.js:576
 msgid "Unread messages"
 msgstr "未読メッセージ"
 
-#: assembl/static/js/app/views/postFilters.js:572
+#: assembl/static/js/app/views/postFilters.js:579
 msgid "Only include messages you haven't read yet, or you manually marked unread."
 msgstr "未読のメッセージ、または手動で未読とマークしたメッセージのみを含む"
 
-#: assembl/static/js/app/views/postFilters.js:592
+#: assembl/static/js/app/views/postFilters.js:599
 msgid "Read messages"
 msgstr "メッセージを読む"
 
-#: assembl/static/js/app/views/postFilters.js:595
+#: assembl/static/js/app/views/postFilters.js:602
 msgid "Only include messages that have previously been marked read."
 msgstr "以前に既読とマークされたメッセージのみを含める。"
 
-#: assembl/static/js/app/views/postFilters.js:635
+#: assembl/static/js/app/views/postFilters.js:642
 msgid "Messages posted after..."
 msgstr "後に投稿されたメッセージ"
 
-#: assembl/static/js/app/views/postFilters.js:641
+#: assembl/static/js/app/views/postFilters.js:648
 msgid "Only include posts created after a given date."
 msgstr "指定した日付以降に作成された投稿のみを含めます。"
 
-#: assembl/static/js/app/views/postFilters.js:645
-msgid "Please type a date. The filter will then show only posts which have been created after this date. Example: 2015-01-01"
+#: assembl/static/js/app/views/postFilters.js:652
+msgid ""
+"Please type a date. The filter will then show only posts which have been "
+"created after this date. Example: 2015-01-01"
 msgstr "日付を入力してください。この日付以降に作成された投稿のみが表示されます。例：2015-01-01"
 
-#: assembl/static/js/app/views/postFilters.js:687
+#: assembl/static/js/app/views/postFilters.js:694
 msgid "Messages posted before..."
 msgstr "前に投稿されたメッセージ..."
 
-#: assembl/static/js/app/views/postFilters.js:693
+#: assembl/static/js/app/views/postFilters.js:700
 msgid "Only include posts created before a given date."
 msgstr "指定された日付より前に作成された投稿のみを含めます。"
 
-#: assembl/static/js/app/views/postFilters.js:697
-msgid "Please type a date. The filter will then show only posts which have been created before this date. Example: 2015-01-01"
+#: assembl/static/js/app/views/postFilters.js:704
+msgid ""
+"Please type a date. The filter will then show only posts which have been "
+"created before this date. Example: 2015-01-01"
 msgstr "日付を入力してください。その日付より前に作成された投稿のみを表示します。例：2015-01-01"
 
-#: assembl/static/js/app/views/postFilters.js:737
+#: assembl/static/js/app/views/postFilters.js:744
 #, python-format
 msgid "Messages posted since the last synthesis (%s)"
 msgstr "最後のシンセシス以降に投稿されたメッセージ（%s）"
 
-#: assembl/static/js/app/views/postFilters.js:741
+#: assembl/static/js/app/views/postFilters.js:748
 msgid "Only include posts created after the last synthesis."
 msgstr "最後のシンセシス後に作成された投稿のみを含めます。"
 
-#: assembl/static/js/app/views/postFilters.js:764
+#: assembl/static/js/app/views/postFilters.js:771
 msgid "Deleted messages"
 msgstr "削除されたメッセージ"
 
-#: assembl/static/js/app/views/postFilters.js:767
-msgid "Only include messages that have been deleted (by their author or by an administrator), and their ancestors."
+#: assembl/static/js/app/views/postFilters.js:774
+msgid ""
+"Only include messages that have been deleted (by their author or by an "
+"administrator), and their ancestors."
 msgstr "作成者と管理者によって削除されたメッセージおよびその系統のみを含めます。"
 
-#: assembl/static/js/app/views/postFilters.js:804
+#: assembl/static/js/app/views/postFilters.js:811
 msgid "Show also deleted messages"
 msgstr "削除されたメッセージも表示する"
 
-#: assembl/static/js/app/views/postFilters.js:807
-msgid "Also include messages that have been deleted (by their author or by an administrator)."
+#: assembl/static/js/app/views/postFilters.js:814
+msgid ""
+"Also include messages that have been deleted (by their author or by an "
+"administrator)."
 msgstr "作成者と管理者によって削除されたメッセージも含めます。"
 
 #: assembl/static/js/app/views/preferencesView.js:153
@@ -1566,7 +1717,11 @@ msgstr "これはドメインではないようです"
 msgid "The following settings were not saved: "
 msgstr "次の設定は保存されませんでした："
 
-#: assembl/static/js/app/views/admin/adminDiscussion.js:96 assembl/static/js/app/views/preferencesView.js:904 assembl/static/js/app/views/sourceEditView.js:49 assembl/static/js/app/views/user/account.js:126 assembl/static/js/app/views/user/profile.js:66
+#: assembl/static/js/app/views/admin/adminDiscussion.js:96
+#: assembl/static/js/app/views/preferencesView.js:904
+#: assembl/static/js/app/views/sourceEditView.js:49
+#: assembl/static/js/app/views/user/account.js:126
+#: assembl/static/js/app/views/user/profile.js:66
 msgid "Your settings were saved!"
 msgstr "あなたの設定は保存されました"
 
@@ -1574,7 +1729,10 @@ msgstr "あなたの設定は保存されました"
 msgid "Your settings are up-to-date."
 msgstr "あなたの設定は最新です。"
 
-#: assembl/static/js/app/views/segmentList.js:321 assembl/static/js/app/views/segmentList.js:367 assembl/static/js/app/views/segmentList.js:370 assembl/templates/views/create-group.tmpl:118
+#: assembl/static/js/app/views/segmentList.js:321
+#: assembl/static/js/app/views/segmentList.js:367
+#: assembl/static/js/app/views/segmentList.js:370
+#: assembl/templates/views/create-group.tmpl:118
 msgid "Clipboard"
 msgstr "クリップボード"
 
@@ -1586,7 +1744,10 @@ msgstr "空"
 msgid "Are you sure you want to empty your entire clipboard?"
 msgstr "クリップボード全体を空にしてもよろしいですか？"
 
-#: assembl/static/js/app/views/admin/adminDiscussion.js:99 assembl/static/js/app/views/sourceEditView.js:53 assembl/static/js/app/views/user/account.js:129 assembl/static/js/app/views/user/profile.js:69
+#: assembl/static/js/app/views/admin/adminDiscussion.js:99
+#: assembl/static/js/app/views/sourceEditView.js:53
+#: assembl/static/js/app/views/user/account.js:129
+#: assembl/static/js/app/views/user/profile.js:69
 msgid "Your settings failed to update."
 msgstr "設定を更新できませんでした。"
 
@@ -1598,7 +1759,9 @@ msgstr "総メッセージ数の変化"
 msgid "Evolution of the number of messages posted"
 msgstr "投稿されたメッセージの数の変化"
 
-#: assembl/static/js/app/views/statistics.js:72 assembl/templates/views/navigation.tmpl:28 assembl/templates/views/statistics.tmpl:5
+#: assembl/static/js/app/views/statistics.js:72
+#: assembl/templates/views/navigation.tmpl:28
+#: assembl/templates/views/statistics.tmpl:5
 msgid "Statistics"
 msgstr "統計"
 
@@ -1606,7 +1769,8 @@ msgstr "統計"
 msgid "messages"
 msgstr "メッセージ"
 
-#: assembl/static/js/app/views/statistics.js:612 assembl/static/js/app/views/statistics.js:625
+#: assembl/static/js/app/views/statistics.js:612
+#: assembl/static/js/app/views/statistics.js:625
 msgid "messages, posted by"
 msgstr "によって投稿されたメッセージ"
 
@@ -1676,27 +1840,44 @@ msgstr "最近アクティブな投稿者"
 msgid "Contributors inactive recently"
 msgstr "最近アクティブでない投稿者"
 
-#: assembl/static/js/app/views/synthesisPanel.js:110 assembl/templates/views/navigation.tmpl:3 assembl/templates/views/synthesisContext.tmpl:6
+#: assembl/static/js/app/views/synthesisPanel.js:113
+#: assembl/templates/views/navigation.tmpl:3
+#: assembl/templates/views/synthesisContext.tmpl:6
 msgid "Synthesis"
 msgstr "シンセシス"
 
+#: assembl/static/js/app/views/synthesisPanel.js:227
+#, fuzzy
+#| msgid "Read the synthesis"
+msgid "A short title for the synthesis"
+msgstr "シンセシスを読む"
+
 #: assembl/static/js/app/views/synthesisPanel.js:228
+#, fuzzy
+#| msgid "Last synthesis"
+msgid "New Synthesis"
+msgstr "最後のシンセシス"
+
+#: assembl/static/js/app/views/synthesisPanel.js:239
 msgid "You can add an introduction to your synthesis here..."
 msgstr "ここであなたのシンセシスの紹介を追加することができます..."
 
-#: assembl/static/js/app/views/synthesisPanel.js:238
+#: assembl/static/js/app/views/synthesisPanel.js:251
 msgid "You can add a conclusion to your synthesis here..."
 msgstr "ここであなたのシンセシスの結論を追加することができます..."
 
-#: assembl/static/js/app/views/synthesisPanel.js:307
-msgid "Are you sure you want to publish the synthesis? You will not be able to delete it afterwards, and participants who subscribed to notifications related to the synthesis will receive a notification by email."
+#: assembl/static/js/app/views/synthesisPanel.js:321
+msgid ""
+"Are you sure you want to publish the synthesis? You will not be able to "
+"delete it afterwards, and participants who subscribed to notifications "
+"related to the synthesis will receive a notification by email."
 msgstr "シンセシスを公開してもよろしいですか？後で削除することはできません。シンセシスに関連する通知を購読した参加者は、電子メールで通知を受け取ります。"
 
-#: assembl/static/js/app/views/synthesisPanel.js:330
+#: assembl/static/js/app/views/synthesisPanel.js:344
 msgid "Synthesis has been successfully published!"
 msgstr "シンセシスが正常に公開されました！"
 
-#: assembl/static/js/app/views/synthesisPanel.js:337
+#: assembl/static/js/app/views/synthesisPanel.js:351
 msgid "Failed publishing synthesis!"
 msgstr "シンセシスの公開に失敗しました！"
 
@@ -1706,71 +1887,87 @@ msgid "<span class='available-tokens-number'>%d</span> remaining %s token"
 msgid_plural "<span class='available-tokens-number'>%d</span> remaining %s tokens"
 msgstr[0] "<span class='available-tokens-number'>%d</span>残りの%sトークン"
 
-#: assembl/static/js/app/views/tokenVoteSession.js:530
+#: assembl/static/js/app/views/tokenVoteSession.js:528
 #, python-format
 msgid "set %d tokens"
 msgstr "%dトークンを設定する"
 
-#: assembl/static/js/app/views/tokenVoteSession.js:561
+#: assembl/static/js/app/views/tokenVoteSession.js:559
 msgid "You don't have enough tokens remaining."
 msgstr "十分なトークンが残っていません。"
 
-#: assembl/static/js/app/views/tokenVoteSession.js:947
+#: assembl/static/js/app/views/tokenVoteSession.js:949
 msgid "See Description"
 msgstr "説明を参照してください"
 
-#: assembl/static/js/app/views/tokenVoteSession.js:1033
+#: assembl/static/js/app/views/tokenVoteSession.js:1036
 #, python-format
-msgid "%d token \"%s\" was voted on this idea, out of a total %d \"%s\" tokens voted "
-msgid_plural "%d tokens \"%s\" were voted on this idea, out of a total %d \"%s\" tokens voted"
+msgid ""
+"%d token \"%s\" was voted on this idea, out of a total %d \"%s\" tokens "
+"voted "
+msgid_plural ""
+"%d tokens \"%s\" were voted on this idea, out of a total %d \"%s\" tokens"
+" voted"
 msgstr[0] "合計で%d “%s”投票されたトークンのうち、このアイデアには%d のトークン “%s” が投票されました。"
 
-#: assembl/static/js/app/views/tokenVoteSession.js:1089
+#: assembl/static/js/app/views/tokenVoteSession.js:1092
 msgid "Hide Description"
 msgstr "説明を隠す"
 
-#: assembl/static/js/app/views/tokenVoteSession.js:1210
+#: assembl/static/js/app/views/tokenVoteSession.js:1214
 #, python-format
 msgid "Token: \"%s\""
 msgstr "トークン：\" %s \""
 
-#: assembl/static/js/app/views/tokenVoteSession.js:1332
+#: assembl/static/js/app/views/tokenVoteSession.js:1352
 #, python-format
-msgid "%d participant voted between %s and %s. The number of tokens available for voting per participant:"
-msgid_plural "%d participants voted between %s and %s. The number of tokens available for voting per participant:"
+msgid ""
+"%d participant voted between %s and %s. The number of tokens available "
+"for voting per participant:"
+msgid_plural ""
+"%d participants voted between %s and %s. The number of tokens available "
+"for voting per participant:"
 msgstr[0] "%d人が%sと%s間で投票しました。参加者1人あたりの投票に使用できるトークンの数："
 
-#: assembl/static/js/app/views/tokenVoteSession.js:1341
+#: assembl/static/js/app/views/tokenVoteSession.js:1361
 #, python-format
 msgid "<strong>%d</strong> token of type \"%s\""
 msgid_plural "<strong>%d</strong> tokens of type \"%s\""
 msgstr[0] "<strong>%d</strong> \" %s \"タイプのトークン"
 
-#: assembl/static/js/app/views/tokenVoteSession.js:1390
+#: assembl/static/js/app/views/tokenVoteSession.js:1410
 msgid "Token Vote Results"
 msgstr "トークン投票結果"
 
-#: assembl/static/js/app/views/tokenVoteSession.js:1566
+#: assembl/static/js/app/views/tokenVoteSession.js:1610
 msgid "Collective votes"
 msgstr "集団投票"
 
-#: assembl/static/js/app/views/tokenVoteSession.js:1569
-msgid "Split your tokens among the ideas of your choice. By default, your vote is neutral per project."
+#: assembl/static/js/app/views/tokenVoteSession.js:1613
+msgid ""
+"Split your tokens among the ideas of your choice. By default, your vote "
+"is neutral per project."
 msgstr "あなたの選択したアイデアにあなたのトークンを割り当てます。デフォルトでは、あなたの投票はプロジェクトごとに同数です。"
 
-#: assembl/static/js/app/views/tokenVoteSession.js:1570
+#: assembl/static/js/app/views/tokenVoteSession.js:1614
 msgid "Save my votes"
 msgstr "私の票を保存"
 
-#: assembl/static/js/app/views/tokenVoteSession.js:1680
+#: assembl/static/js/app/views/tokenVoteSession.js:1725
 msgid "Your vote has been saved successfully."
 msgstr "あなたの投票は正常に保存されました。"
 
-#: assembl/static/js/app/views/tokenVoteSession.js:1683
+#: assembl/static/js/app/views/tokenVoteSession.js:1729
 msgid "Go back to the discussion"
 msgstr "ディスカッションに戻る"
 
-#: assembl/static/js/app/views/tokenVoteSession.js:1689
+#: assembl/static/js/app/views/tokenVoteSession.js:1733
+#, fuzzy
+#| msgid "Modify your vote"
+msgid "Modify my vote"
+msgstr "あなたの投票を修正する"
+
+#: assembl/static/js/app/views/tokenVoteSession.js:1751
 msgid "Vote confirmation"
 msgstr "投票の確認"
 
@@ -1778,15 +1975,16 @@ msgstr "投票の確認"
 msgid "The logo will show like this:"
 msgstr "ロゴは次のように表示されます："
 
-#: assembl/static/js/app/views/admin/adminMessageColumns.js:97
+#: assembl/static/js/app/views/admin/adminMessageColumns.js:100
 msgid "Columns saved"
 msgstr "保存された列"
 
-#: assembl/static/js/app/views/admin/adminMessageColumns.js:304
+#: assembl/static/js/app/views/admin/adminMessageColumns.js:319
 msgid "Define columns"
 msgstr "列を定義する"
 
-#: assembl/static/js/app/views/admin/adminTimelineEvents.js:240 assembl/static/js/app/views/admin/adminTimelineEvents.js:250
+#: assembl/static/js/app/views/admin/adminTimelineEvents.js:247
+#: assembl/static/js/app/views/admin/adminTimelineEvents.js:257
 msgid "Invalid date and time"
 msgstr "無効な日付と時刻"
 
@@ -1818,11 +2016,15 @@ msgstr "再処理に失敗しました"
 msgid "Import has begun!"
 msgstr "インポートが始まりました"
 
-#: assembl/static/js/app/views/groups/panelWrapper.js:186 assembl/templates/views/panelWrapper.tmpl:34
+#: assembl/static/js/app/views/groups/panelWrapper.js:186
+#: assembl/templates/views/panelWrapper.tmpl:34
 msgid "Maximize panel"
 msgstr "パネルを最大化する"
 
-#: assembl/static/js/app/views/groups/panelWrapper.js:197 assembl/templates/views/navigation.tmpl:5 assembl/templates/views/navigation.tmpl:14 assembl/templates/views/panelWrapper.tmpl:8
+#: assembl/static/js/app/views/groups/panelWrapper.js:197
+#: assembl/templates/views/navigation.tmpl:5
+#: assembl/templates/views/navigation.tmpl:14
+#: assembl/templates/views/panelWrapper.tmpl:8
 msgid "Minimize panel"
 msgstr "パネルを最小化する"
 
@@ -1831,11 +2033,15 @@ msgid "Unlock panel"
 msgstr "パネルのロックを解除する"
 
 #: assembl/static/js/app/views/groups/panelWrapper.js:263
-msgid "We have locked the panel for you, so its content won't change while you're writing your message. Click here to unlock"
+msgid ""
+"We have locked the panel for you, so its content won't change while "
+"you're writing your message. Click here to unlock"
 msgstr "あなたのパネルはロックされているため、あなたがメッセージを書いている間はその内容は変わりません。ロックを解除するにはここをクリック"
 
 #: assembl/static/js/app/views/groups/panelWrapper.js:266
-msgid "We have unlocked the panel for you, so its content can change now that you're not writing a message anymore. Click here to lock it back"
+msgid ""
+"We have unlocked the panel for you, so its content can change now that "
+"you're not writing a message anymore. Click here to lock it back"
 msgstr "パネルのロックを解除しました。そのため、内容が変更される可能性があります。ロックを元に戻すにはここをクリック"
 
 #: assembl/static/js/app/views/groups/panelWrapper.js:270
@@ -1846,7 +2052,8 @@ msgstr "パネルをロックしています。ロックを解除するにはこ
 msgid "We have unlocked the panel for you. Click here to lock it back"
 msgstr "パネルのロックを解除しました。元に戻すにはここをクリック"
 
-#: assembl/static/js/app/views/groups/panelWrapper.js:311 assembl/templates/views/panelWrapper.tmpl:14
+#: assembl/static/js/app/views/groups/panelWrapper.js:311
+#: assembl/templates/views/panelWrapper.tmpl:14
 msgid "Lock panel"
 msgstr "パネルをロックする"
 
@@ -1854,11 +2061,13 @@ msgstr "パネルをロックする"
 msgid "The end date should be later than the start date"
 msgstr "終了日は開始日より後である必要があります"
 
-#: assembl/static/js/app/views/modals/discussionStatisticsModal.js:187 assembl/templates/views/navBarLeft.tmpl:25
+#: assembl/static/js/app/views/modals/discussionStatisticsModal.js:187
+#: assembl/templates/views/navBarLeft.tmpl:25
 msgid "Discussion statistics"
 msgstr "ディスカッションの統計"
 
-#: assembl/static/js/app/views/modals/ideaInModal.js:44 assembl/static/js/app/views/modals/ideaInModal.js:49
+#: assembl/static/js/app/views/modals/ideaInModal.js:44
+#: assembl/static/js/app/views/modals/ideaInModal.js:49
 #, python-format
 msgid "Exploring idea \"%s\""
 msgstr "\\ \" %s \"というアイデアを探る"
@@ -1893,7 +2102,9 @@ msgstr "あなたはこのディスカッションを読む権限がありませ
 
 #: assembl/templates/cannot_read_discussion.jinja2:5
 #, python-format
-msgid "You may <a href=\"%(logout)s\">logout</a> and login as another user with those permissions."
+msgid ""
+"You may <a href=\"%(logout)s\">logout</a> and login as another user with "
+"those permissions."
 msgstr "<a href=\"%(logout)s\">ログアウト</a>して、これらの権限を持つ別のユーザーとしてログインすることができます。"
 
 #: assembl/templates/confirm.jinja2:23
@@ -1904,15 +2115,18 @@ msgstr "電子メールを再送する"
 msgid "Admin"
 msgstr "管理者"
 
-#: assembl/templates/admin/discussion_permissions.jinja2:15 assembl/templates/discussion_list.jinja2:13
+#: assembl/templates/admin/discussion_permissions.jinja2:15
+#: assembl/templates/discussion_list.jinja2:13
 msgid "Permissions"
 msgstr "アクセス権限"
 
-#: assembl/templates/admin/discussions.jinja2:77 assembl/templates/discussion_list.jinja2:21
+#: assembl/templates/admin/discussions.jinja2:77
+#: assembl/templates/discussion_list.jinja2:21
 msgid "There are no discussions on this server yet"
 msgstr "このサーバーに関する議論はまだありません"
 
-#: assembl/templates/discussion_list.jinja2:27 assembl/templates/views/navBarRight.tmpl:60
+#: assembl/templates/discussion_list.jinja2:27
+#: assembl/templates/views/navBarRight.tmpl:60
 msgid "Sign in"
 msgstr "サインイン"
 
@@ -1932,19 +2146,25 @@ msgstr "グローバルな権限を変更する"
 msgid "Change global preferences"
 msgstr "グローバルな設定を変更する"
 
-#: assembl/templates/discussion_list.jinja2:45 assembl/templates/views/navBarRight.tmpl:55
+#: assembl/templates/discussion_list.jinja2:45
+#: assembl/templates/views/navBarRight.tmpl:55
 msgid "Sign out"
 msgstr "サインアウト"
 
-#: assembl/templates/do_password_change.jinja2:28 assembl/templates/login.jinja2:73 assembl/templates/register.jinja2:28
+#: assembl/templates/do_password_change.jinja2:28
+#: assembl/templates/login.jinja2:73 assembl/templates/register.jinja2:28
+#: assembl/templates/views/emailSource.tmpl:74
 msgid "Password"
 msgstr "パスワード"
 
-#: assembl/templates/do_password_change.jinja2:29 assembl/templates/profile.jinja2:56 assembl/templates/profile.jinja2:58 assembl/templates/register.jinja2:29
+#: assembl/templates/do_password_change.jinja2:29
+#: assembl/templates/profile.jinja2:56 assembl/templates/profile.jinja2:58
+#: assembl/templates/register.jinja2:29
 msgid "Repeat password"
 msgstr "パスワード再入力"
 
-#: assembl/templates/idea_in_synthesis.jinja2:10 assembl/templates/views/ideaInSynthesis.tmpl:6
+#: assembl/templates/idea_in_synthesis.jinja2:10
+#: assembl/templates/views/ideaInSynthesis.tmpl:6
 msgid "By"
 msgstr "投稿者"
 
@@ -1973,7 +2193,8 @@ msgstr "でログイン"
 msgid "Already have an account?"
 msgstr "アカウントをお持ちですか?"
 
-#: assembl/templates/login.jinja2:70 assembl/templates/request_password_change.jinja2:27
+#: assembl/templates/login.jinja2:70
+#: assembl/templates/request_password_change.jinja2:27
 msgid "Email or username"
 msgstr "メールアドレスまたはユーザ名"
 
@@ -1993,11 +2214,15 @@ msgstr "未登録の方はこちらから"
 msgid "Sign up"
 msgstr "登録"
 
-#: assembl/templates/profile.jinja2:7 assembl/templates/view_profile.jinja2:7 assembl/templates/views/navBarRight.tmpl:38 assembl/templates/views/userProfile.tmpl:6
+#: assembl/templates/profile.jinja2:7 assembl/templates/view_profile.jinja2:7
+#: assembl/templates/views/navBarRight.tmpl:38
+#: assembl/templates/views/userProfile.tmpl:6
 msgid "Profile"
 msgstr "プロフィール"
 
-#: assembl/templates/profile.jinja2:27 assembl/templates/view_profile.jinja2:25 assembl/templates/views/userAccountForm.tmpl:6
+#: assembl/templates/profile.jinja2:27 assembl/templates/view_profile.jinja2:25
+#: assembl/templates/views/emailSource.tmpl:67
+#: assembl/templates/views/userAccountForm.tmpl:6
 msgid "Username"
 msgstr "ユーザー名"
 
@@ -2005,7 +2230,10 @@ msgstr "ユーザー名"
 msgid "Desired username"
 msgstr "希望のユーザー名"
 
-#: assembl/templates/profile.jinja2:38 assembl/templates/view_profile.jinja2:29 assembl/templates/views/adminMessageColumn.tmpl:13 assembl/templates/views/discussionStatisticsModal.tmpl:95
+#: assembl/templates/profile.jinja2:38 assembl/templates/view_profile.jinja2:29
+#: assembl/templates/views/adminMessageColumn.tmpl:17
+#: assembl/templates/views/discussionStatisticsModal.tmpl:95
+#: assembl/templates/views/emailSource.tmpl:5
 msgid "Name"
 msgstr "名前"
 
@@ -2045,8 +2273,16 @@ msgstr "電子メールアカウントを追加する"
 msgid "Email"
 msgstr "メール"
 
-#: assembl/templates/admin/discussion_permissions.jinja2:52 assembl/templates/admin/discussion_permissions.jinja2:89 assembl/templates/admin/discussion_permissions.jinja2:149 assembl/templates/admin/global_permissions.jinja2:37 assembl/templates/profile.jinja2:89 assembl/templates/views/ckeditorField.tmpl:9 assembl/templates/views/messageModerationOptions.tmpl:32 assembl/templates/views/preferenceView.tmpl:14
-#: assembl/templates/views/sourceFacebook.tmpl:3 assembl/templates/views/userAccount.tmpl:47
+#: assembl/templates/admin/discussion_permissions.jinja2:52
+#: assembl/templates/admin/discussion_permissions.jinja2:89
+#: assembl/templates/admin/discussion_permissions.jinja2:149
+#: assembl/templates/admin/global_permissions.jinja2:37
+#: assembl/templates/profile.jinja2:89
+#: assembl/templates/views/ckeditorField.tmpl:9
+#: assembl/templates/views/messageModerationOptions.tmpl:32
+#: assembl/templates/views/preferenceView.tmpl:14
+#: assembl/templates/views/sourceFacebook.tmpl:3
+#: assembl/templates/views/userAccount.tmpl:47
 msgid "Save"
 msgstr "保存"
 
@@ -2086,7 +2322,8 @@ msgstr "Assemblに参加する"
 msgid "This is a closed discussion."
 msgstr "これは閉鎖された議論です。"
 
-#: assembl/templates/register.jinja2:26 assembl/templates/views/userProfile.tmpl:13
+#: assembl/templates/register.jinja2:26
+#: assembl/templates/views/userProfile.tmpl:13
 msgid "Full name"
 msgstr "フルネーム"
 
@@ -2110,7 +2347,9 @@ msgstr "考察"
 msgid "Role permissions:"
 msgstr "役割のアクセス許可："
 
-#: assembl/templates/admin/discussion_permissions.jinja2:15 assembl/templates/admin/discussion_permissions.jinja2:60 assembl/templates/admin/global_permissions.jinja2:8
+#: assembl/templates/admin/discussion_permissions.jinja2:15
+#: assembl/templates/admin/discussion_permissions.jinja2:60
+#: assembl/templates/admin/global_permissions.jinja2:8
 msgid "Roles"
 msgstr "役割"
 
@@ -2126,11 +2365,13 @@ msgstr "役割を追加する"
 msgid "User roles specific to this discussion:"
 msgstr "このディスカッションに固有のユーザーロール："
 
-#: assembl/templates/admin/discussion_permissions.jinja2:60 assembl/templates/admin/global_permissions.jinja2:8
+#: assembl/templates/admin/discussion_permissions.jinja2:60
+#: assembl/templates/admin/global_permissions.jinja2:8
 msgid "Users"
 msgstr "ユーザー"
 
-#: assembl/templates/admin/discussion_permissions.jinja2:84 assembl/templates/admin/global_permissions.jinja2:32
+#: assembl/templates/admin/discussion_permissions.jinja2:84
+#: assembl/templates/admin/global_permissions.jinja2:32
 msgid "Search for users"
 msgstr "ユーザーを検索する"
 
@@ -2139,12 +2380,22 @@ msgid "Add users with a CSV file"
 msgstr "ユーザーのCSVファイルを追加する"
 
 #: assembl/templates/admin/discussion_permissions.jinja2:95
-msgid "The CSV file must have two fields, in this order: full name, email. If it has a header, it MUST be on the first line. Imported user's email will be considered validated. Here is an example of CSV file:"
-msgstr "CSVファイルには、フルネーム、電子メールの順に2つのフィールドが必要です。それがヘッダーを持っているならば、それは最初の行になければなりません。インポートされたユーザーの電子メールは有効とみなされます。 CSVファイルの例を次に示します"
+msgid ""
+"The CSV file must have two fields, in this order: full name, email. If it"
+" has a header, it MUST be on the first line. Imported user's email will "
+"be considered validated. Here is an example of CSV file:"
+msgstr ""
+"CSVファイルには、フルネーム、電子メールの順に2つのフィールドが必要です。それがヘッダーを持っているならば、それは最初の行になければなりません。インポートされたユーザーの電子メールは有効とみなされます。"
+" CSVファイルの例を次に示します"
 
 #: assembl/templates/admin/discussion_permissions.jinja2:99
-msgid "The invite message will not be sent to existing users, even if created on another discussion. If you do not get Assembl to \"Send an invite message\", send one yourself, explaining how to reset password."
-msgstr "招待メッセージは、別のディスカッションで作成されたとしても、既存のユーザーには送信されません。 Assemblを\"招待メッセージを送信する\"にしていない場合は、あなた自身で送信し、パスワードをリセットする方法を説明してください。"
+msgid ""
+"The invite message will not be sent to existing users, even if created on"
+" another discussion. If you do not get Assembl to \"Send an invite "
+"message\", send one yourself, explaining how to reset password."
+msgstr ""
+"招待メッセージは、別のディスカッションで作成されたとしても、既存のユーザーには送信されません。 "
+"Assemblを\"招待メッセージを送信する\"にしていない場合は、あなた自身で送信し、パスワードをリセットする方法を説明してください。"
 
 #: assembl/templates/admin/discussion_permissions.jinja2:101
 msgid "Role"
@@ -2159,14 +2410,22 @@ msgid "Send an invite message"
 msgstr "招待メッセージを送信する"
 
 #: assembl/templates/admin/discussion_permissions.jinja2:120
-msgid "Note that this email will only be sent to new users. In the message, you can use the following placeholders: {name}, {confirm_url}, {discussion_topic}, {discussion_url}"
+msgid ""
+"Note that this email will only be sent to new users. In the message, you "
+"can use the following placeholders: {name}, {confirm_url}, "
+"{discussion_topic}, {discussion_url}"
 msgstr "このメールは新しいユーザーにのみ送信されることに注意してください。メッセージでは、{name}、{confirm_url}、{discussion_topic}、{discussion_url}のプレースホルダを使用できます。"
 
 #: assembl/templates/admin/discussion_permissions.jinja2:122
 msgid "Sender name:"
 msgstr "送信者名："
 
-#: assembl/templates/admin/discussion_permissions.jinja2:125 assembl/views/auth/views.py:1005
+#: assembl/templates/admin/discussion_permissions.jinja2:124
+msgid "Subject:"
+msgstr "件名:"
+
+#: assembl/templates/admin/discussion_permissions.jinja2:125
+#: assembl/views/auth/views.py:1011
 msgid "Welcome to {discussion_topic}."
 msgstr "{discussion_topic}へようこそ。"
 
@@ -2178,14 +2437,24 @@ msgstr "テキストメール："
 msgid ""
 "Hello, {name}!\n"
 "You have been invited to the Assembl discussion {discussion_topic}.\n"
-"This link will allow you to set your password, after which you can log in.\n"
+"This link will allow you to set your password, after which you can log "
+"in.\n"
 "<{confirm_url}>\n"
 "\n"
 "If you did not ask to join please disregard this email.\n"
 "\n"
 "Best regards,\n"
 "The Assembl Team\n"
-msgstr "こんにちは、{name}！\nあなたはAssemblディスカッションに招待されました。{discussion_topic}\nこのリンクをクリックすると、パスワードを設定してログインできます。\n<{confirm_url}>\n\n参加の申請をしていない場合は、このメールを無視してください。\n\nありがとうございます。\nAssemblチーム\n"
+msgstr ""
+"こんにちは、{name}！\n"
+"あなたはAssemblディスカッションに招待されました。{discussion_topic}\n"
+"このリンクをクリックすると、パスワードを設定してログインできます。\n"
+"<{confirm_url}>\n"
+"\n"
+"参加の申請をしていない場合は、このメールを無視してください。\n"
+"\n"
+"ありがとうございます。\n"
+"Assemblチーム\n"
 
 #: assembl/templates/admin/discussion_permissions.jinja2:137
 msgid "HTML email message:"
@@ -2194,22 +2463,33 @@ msgstr "HTMLメールメッセージ："
 #: assembl/templates/admin/discussion_permissions.jinja2:138
 msgid ""
 "<p>Hello, {name}!</p>\n"
-"<p>You have been invited to the Assembl discussion <a href=\"{discussion_url}\">{discussion_topic}</a>.\n"
-"Please <a href=\"{confirm_url}\">click here</a> to set your password, after which you can log in.</p>\n"
+"<p>You have been invited to the Assembl discussion <a "
+"href=\"{discussion_url}\">{discussion_topic}</a>.\n"
+"Please <a href=\"{confirm_url}\">click here</a> to set your password, "
+"after which you can log in.</p>\n"
 "<p>If you did not ask to join please disregard this email.</p>\n"
 "<p>Best regards,<br />The Assembl Team</p>\n"
-msgstr "<p>こんにちは、{name}！</p>\n<p>Assemblディスカッション<a href=\"{discussion_url}\">{discussion_topic}</a>に招待されました。\nパスワードを設定するには、<a href=\"{confirm_url}\">ここをクリック</a>してください。<p>その後、ログインすることができます。</p>\n<p>よろしくお願いいたします。<br />Assemblチーム</p>\n"
+msgstr ""
+"<p>こんにちは、{name}！</p>\n"
+"<p>Assemblディスカッション<a "
+"href=\"{discussion_url}\">{discussion_topic}</a>に招待されました。\n"
+"パスワードを設定するには、<a "
+"href=\"{confirm_url}\">ここをクリック</a>してください。<p>その後、ログインすることができます。</p>\n"
+"<p>よろしくお願いいたします。<br />Assemblチーム</p>\n"
 
 #: assembl/templates/admin/discussion_permissions.jinja2:145
 msgid "Re-send to people who did not log in yet (USE SPARINGLY)"
 msgstr "まだログインしていないユーザーに再送信する"
 
-#: assembl/templates/admin/global_permissions.jinja2:4 assembl/templates/views/globalAdminNavigationMenu.tmpl:6
+#: assembl/templates/admin/global_permissions.jinja2:4
+#: assembl/templates/views/globalAdminNavigationMenu.tmpl:6
 msgid "Global roles"
 msgstr "グローバルな役割"
 
 #: assembl/templates/includes/updatebrowser.jinja2:41
-msgid "Your version of <strong>{0}</strong> is outdated and may deteriorate your experience on Assembl."
+msgid ""
+"Your version of <strong>{0}</strong> is outdated and may deteriorate your"
+" experience on Assembl."
 msgstr "<strong>{0}</strong>のバージョンが古く、Assemblの使用経験の質が低下する可能性があります。"
 
 #: assembl/templates/includes/updatebrowser.jinja2:42
@@ -2220,56 +2500,81 @@ msgstr "ブラウザを最新版にアップデートする"
 msgid "Thanks!"
 msgstr "ありがとうございます！"
 
-#: assembl/templates/notifications/html_mail.jinja2:81
-#, python-format
-msgid "You are receiving this because you are %(notificationConfigLink)s to discussion %(discussionLink)s.  Specifically, you currently receive a notification when:"
+#: assembl/templates/notifications/html_mail.jinja2:82
+#, fuzzy, python-format
+#| msgid "" "You are receiving this because you are %(notificationConfigLink)s
+#| to " "discussion %(discussionLink)s.  Specifically, you currently receive a
+#| " "notification when:"
+msgid ""
+"You are receiving this because you are subscribed to discussion "
+"%(discussionLink)s.  Specifically, you currently receive a notification "
+"when:"
 msgstr "あなたはディスカッション%(discussionLink)sの%(notificationConfigLink)sなので、これを受け取っています。具体的には、あなたは次の場合に通知を受け取ります。"
-
-#: assembl/templates/notifications/html_mail.jinja2:83 assembl/templates/views/userSubscriber.tmpl:11
-msgid "subscribed"
-msgstr "購読した"
-
-#: assembl/templates/notifications/html_mail.jinja2:90 assembl/templates/views/userSubscriber.tmpl:14
-msgid "Unsubscribe"
-msgstr "登録解除"
 
 #: assembl/templates/notifications/html_mail_post.jinja2:62
 msgid "Reply to this message"
 msgstr "このメッセージに返信する"
 
-#: assembl/templates/notifications/html_mail_post_synthesis.jinja2:35
-msgid "Comment this synthesis"
+#: assembl/templates/notifications/html_mail_post_synthesis.jinja2:37
+#, fuzzy
+#| msgid "Comment this synthesis"
+msgid "Comment on this synthesis"
 msgstr "このシンセシスにコメントする"
 
 #: assembl/templates/notifications/html_new_discussion.jinja2:22
 msgid ""
-"<h1>Congratulations, your <a href='{discussion_url}'>Assembl consultation</a> is ready.</h1>\n"
-"<p>You can <a href='{connection_url}'>connect here</a> to define your password.</p>\n"
-"<p>You will find <a href='{documentation_url}'>documentation here</a>.</p>\n"
-"<p>The Assembl tool enables consultations involving a great number of users (hundreds or thousands of users, public officials, etc.) in the co-design of a deliverable. If you need advice on structuring your consultation process and building skills in using Assembl, you can contact <a href='mailto:{admin_email}'>{admin_name}</a> from <a href='{admin_org_url}'>{admin_org_name}</a>.</p>"
+"<h1>Congratulations, your <a href='{discussion_url}'>Assembl "
+"consultation</a> is ready.</h1>\n"
+"<p>You can <a href='{connection_url}'>connect here</a> to define your "
+"password.</p>\n"
+"<p>You will find <a href='{documentation_url}'>documentation "
+"here</a>.</p>\n"
+"<p>The Assembl tool enables consultations involving a great number of "
+"users (hundreds or thousands of users, public officials, etc.) in the co-"
+"design of a deliverable. If you need advice on structuring your "
+"consultation process and building skills in using Assembl, you can "
+"contact <a href='mailto:{admin_email}'>{admin_name}</a> from <a "
+"href='{admin_org_url}'>{admin_org_name}</a>.</p>"
 msgstr ""
 "<h1><a href='{discussion_url}'>Assembl協議</a>の準備が整いました。</h1>\n"
 "<p>Assemblツールを使用すると、あなたのパスワードを定義することができます。</p>\n"
-"<p><a href='{documentation_url}'>ドキュメンテーション</a>をご覧ください。成果物の共同設計において、非常に多くのユーザー（数百人または数千人のユーザー、公務員など）が関与しています。Assemblを使用して相談プロセスを構築し、スキルを習得するためのアドバイスが必要な場合は、<a href='{admin_org_url}'> {admin_org_url} </a>から<a href='mailto:"
-"{admin_email}'> {admin_name} </a>までご連絡ください。</p>"
+"<p><a "
+"href='{documentation_url}'>ドキュメンテーション</a>をご覧ください。成果物の共同設計において、非常に多くのユーザー（数百人または数千人のユーザー、公務員など）が関与しています。Assemblを使用して相談プロセスを構築し、スキルを習得するためのアドバイスが必要な場合は、<a"
+" href='{admin_org_url}'> {admin_org_url} </a>から<a "
+"href='mailto:{admin_email}'> {admin_name} </a>までご連絡ください。</p>"
 
 #: assembl/templates/notifications/txt_new_discussion.jinja2:16
 msgid ""
-"Congratulations, your Assembl consultation is ready, and you can find it here:\n"
+"Congratulations, your Assembl consultation is ready, and you can find it "
+"here:\n"
 "{discussion_url}\n"
 "You can use the following link to define your password:\n"
 "{connection_url}\n"
 "You will find documentation here:\n"
 "{documentation_url}\n"
 "\n"
-"The Assembl tool enables consultations involving a great number of users (hundreds or thousands of users, public officials, etc.) in the co-design of a deliverable. If you need advice on structuring your consultation process and building skills in using Assembl, you can contact {admin_name} at <{admin_email}>, from {admin_org_name} ({admin_org_url}) for more details."
+"The Assembl tool enables consultations involving a great number of users "
+"(hundreds or thousands of users, public officials, etc.) in the co-design"
+" of a deliverable. If you need advice on structuring your consultation "
+"process and building skills in using Assembl, you can contact "
+"{admin_name} at <{admin_email}>, from {admin_org_name} ({admin_org_url}) "
+"for more details."
 msgstr ""
-"{discussion_url}\n次のリンクを使用してパスワードを定義することができます：\n{connection_url}\n"
-"ここにドキュメントを\n{documentation_url}\n見つけることができます。\n"
-"Assemblツールを使用すると、多数のユーザー（数百人または数千人のユーザー、公務員など）が関与するコンサルテーションが可能になります。 Assemblの使用に関するコンサルテーションプロセスの構築とスキルの習得についてアドバイスが必要な場合は、"
-"{admin_org_name}（{admin_org_url}）から{admin_email}の{admin_name}までご連絡ください。"
+"{discussion_url}\n"
+"次のリンクを使用してパスワードを定義することができます：\n"
+"{connection_url}\n"
+"ここにドキュメントを\n"
+"{documentation_url}\n"
+"見つけることができます。\n"
+"Assemblツールを使用すると、多数のユーザー（数百人または数千人のユーザー、公務員など）が関与するコンサルテーションが可能になります。 "
+"Assemblの使用に関するコンサルテーションプロセスの構築とスキルの習得についてアドバイスが必要な場合は、{admin_org_name}（{admin_org_url}）から{admin_email}の{admin_name}までご連絡ください。"
 
-#: assembl/templates/styleguide/components/Dialogs.jinja2:120 assembl/templates/styleguide/components/Dialogs.jinja2:147 assembl/templates/views/adminPartnerEditForm.tmpl:72 assembl/templates/views/adminPartnerForm.tmpl:70 assembl/templates/views/create-group.tmpl:129 assembl/templates/views/message_translation_question_selection.tmpl:12
+#: assembl/templates/styleguide/components/Dialogs.jinja2:120
+#: assembl/templates/styleguide/components/Dialogs.jinja2:147
+#: assembl/templates/views/adminPartnerEditForm.tmpl:72
+#: assembl/templates/views/adminPartnerForm.tmpl:70
+#: assembl/templates/views/create-group.tmpl:129
+#: assembl/templates/views/message_translation_question_selection.tmpl:12
 msgid "Validate"
 msgstr "検証"
 
@@ -2294,14 +2599,20 @@ msgstr "仕組み"
 msgid ""
 "<p>How to participate in the discussion \"%(debate_name)s\":</p>\n"
 "\t<ol>\n"
-"\t\t<li>Explore the discussions using the ideas that have already emerged</li>\n"
-"\t\t<li>Join in the conversation by replying directly to the contributions of participants</li>\n"
-"\t\t<li>Start a new topic of discussion if you wish to rejuvenate the discussion around a particular idea</li>\n"
+"\t\t<li>Explore the discussions using the ideas that have already "
+"emerged</li>\n"
+"\t\t<li>Join in the conversation by replying directly to the "
+"contributions of participants</li>\n"
+"\t\t<li>Start a new topic of discussion if you wish to rejuvenate the "
+"discussion around a particular idea</li>\n"
 "\t</ol>\n"
 "\t<p>How the process works:</p>\n"
 "\t<ol>\n"
-"\t\t<li>As you contribute, Harvesters will select the key ideas from your messages – they are here to make sure your contributions get noticed</li>\n"
-"\t\t<li>Based on these ideas, they will reorganize the ideas into a table of contents of the ideas shared</li>\n"
+"\t\t<li>As you contribute, Harvesters will select the key ideas from your"
+" messages – they are here to make sure your contributions get "
+"noticed</li>\n"
+"\t\t<li>Based on these ideas, they will reorganize the ideas into a table"
+" of contents of the ideas shared</li>\n"
 "\t</ol>"
 msgstr ""
 "<p>ディスカッションに参加する方法 \"%(debate_name)s\"：</p>\n"
@@ -2312,7 +2623,8 @@ msgstr ""
 "\t</ol>\n"
 "\t<p>プロセスがどのように機能するか：</p>\n"
 "\t<ol>\n"
-"\t\t<li>あなたが投稿するにつれて、ハーベースターはあなたのメッセージから重要なアイデアを選択します - あなたの投稿が気づかれるようにするために彼らはいます。</li>\n"
+"\t\t<li>あなたが投稿するにつれて、ハーベースターはあなたのメッセージから重要なアイデアを選択します - "
+"あなたの投稿が気づかれるようにするために彼らはいます。</li>\n"
 "\t\t<li>この発想に基づいて、彼らはアイデアを共有されたアイデアの目次の中に再構成します</li>\n"
 "\t</ol>"
 
@@ -2332,7 +2644,8 @@ msgstr "ディスカッションを読む"
 msgid "Content to be tracked!"
 msgstr "追跡するコンテンツ"
 
-#: assembl/templates/views/adminDiscussion.tmpl:6 assembl/templates/views/discussionAdminNavigationMenu.tmpl:3
+#: assembl/templates/views/adminDiscussion.tmpl:6
+#: assembl/templates/views/discussionAdminNavigationMenu.tmpl:3
 msgid "Edit discussion"
 msgstr "ディスカッションを編集"
 
@@ -2348,7 +2661,9 @@ msgstr "ディスカッショントピック"
 msgid "Discussion slug"
 msgstr "ディスカッションスラグ"
 
-#: assembl/templates/views/adminDiscussion.tmpl:36 assembl/templates/views/synthesisPanel.tmpl:5 assembl/templates/views/synthesisPanelMessage.tmpl:4
+#: assembl/templates/views/adminDiscussion.tmpl:36
+#: assembl/templates/views/synthesisPanel.tmpl:5
+#: assembl/templates/views/synthesisPanelMessage.tmpl:4
 msgid "Introduction"
 msgstr "導入"
 
@@ -2378,14 +2693,21 @@ msgid "Logo URL (optional)"
 msgstr "ロゴURL（オプション）"
 
 #: assembl/templates/views/adminDiscussion.tmpl:95
-msgid "The logo image can have a maximum height of 40px, and a maximum width of 215px. Background must be transparent. Margins must be included in the image."
+msgid ""
+"The logo image can have a maximum height of 40px, and a maximum width of "
+"215px. Background must be transparent. Margins must be included in the "
+"image."
 msgstr "ロゴ画像の最大高さは40ピクセル、最大幅は215ピクセルです。背景は透明でなければなりません。余白は画像に含まれている必要があります。"
 
-#: assembl/templates/views/adminDiscussion.tmpl:101 assembl/templates/views/emailSource.tmpl:80 assembl/templates/views/userAccountForm.tmpl:42 assembl/templates/views/userProfile.tmpl:74
+#: assembl/templates/views/adminDiscussion.tmpl:101
+#: assembl/templates/views/emailSource.tmpl:82
+#: assembl/templates/views/userAccountForm.tmpl:42
+#: assembl/templates/views/userProfile.tmpl:74
 msgid "Save changes"
 msgstr "変更内容を保存"
 
-#: assembl/templates/views/adminDiscussionSettings.tmpl:6 assembl/templates/views/navBarLeft.tmpl:21
+#: assembl/templates/views/adminDiscussionSettings.tmpl:6
+#: assembl/templates/views/navBarLeft.tmpl:21
 msgid "Discussion settings"
 msgstr "ディスカッション設定"
 
@@ -2421,23 +2743,41 @@ msgstr "次の接続試行："
 msgid "Manual start"
 msgstr "手動開始"
 
-#: assembl/templates/views/adminDiscussionSettingsGeneralSourceRead.tmpl:15 assembl/templates/views/message.tmpl:33 assembl/templates/views/messageDeletedByUser.tmpl:25 assembl/templates/views/messageListHeader.tmpl:4
+#: assembl/templates/views/adminDiscussionSettingsGeneralSourceRead.tmpl:15
+#: assembl/templates/views/message.tmpl:33
+#: assembl/templates/views/messageDeletedByUser.tmpl:25
+#: assembl/templates/views/messageListHeader.tmpl:4
 msgid "More options"
 msgstr "詳細オプション"
 
-#: assembl/templates/views/adminMessageColumn.tmpl:4 assembl/templates/views/adminMessageColumn.tmpl:5 assembl/templates/views/adminTimelineEvent.tmpl:5
+#: assembl/templates/views/adminMessageColumn.tmpl:4
+#: assembl/templates/views/adminMessageColumn.tmpl:5
+#: assembl/templates/views/adminTimelineEvent.tmpl:5
 msgid "Identifier"
 msgstr "識別子(Identifier)"
 
-#: assembl/templates/views/adminMessageColumn.tmpl:8 assembl/templates/views/adminMessageColumn.tmpl:9
+#: assembl/templates/views/adminMessageColumn.tmpl:8
+#: assembl/templates/views/adminMessageColumn.tmpl:9
 msgid "Color"
 msgstr "色"
 
-#: assembl/templates/views/adminMessageColumn.tmpl:23 assembl/templates/views/adminTimelineEvent.tmpl:45 assembl/templates/views/dictPreferenceItemView.tmpl:8 assembl/templates/views/listPreferenceItemView.tmpl:7 assembl/templates/views/partnersInAdmin.tmpl:20
+#: assembl/templates/views/adminMessageColumn.tmpl:13
+#: assembl/templates/views/adminTimelineEvent.tmpl:37
+msgid "Title"
+msgstr "タイトル"
+
+#: assembl/templates/views/adminMessageColumn.tmpl:27
+#: assembl/templates/views/adminTimelineEvent.tmpl:51
+#: assembl/templates/views/dictPreferenceItemView.tmpl:8
+#: assembl/templates/views/listPreferenceItemView.tmpl:7
+#: assembl/templates/views/partnersInAdmin.tmpl:20
 msgid "Delete"
 msgstr "削除"
 
-#: assembl/templates/views/adminMessageColumns.tmpl:5 assembl/templates/views/adminPartnerForm.tmpl:62 assembl/templates/views/adminTimelineEvents.tmpl:20 assembl/templates/views/listPreferenceView.tmpl:4
+#: assembl/templates/views/adminMessageColumns.tmpl:5
+#: assembl/templates/views/adminPartnerForm.tmpl:62
+#: assembl/templates/views/adminTimelineEvents.tmpl:20
+#: assembl/templates/views/listPreferenceView.tmpl:4
 msgid "Add"
 msgstr "追加"
 
@@ -2445,11 +2785,13 @@ msgstr "追加"
 msgid "Activate multi-column view"
 msgstr "マルチカラムビューを有効にする"
 
-#: assembl/templates/views/adminNotificationSubscriptions.tmpl:6 assembl/templates/views/discussionAdminNavigationMenu.tmpl:12
+#: assembl/templates/views/adminNotificationSubscriptions.tmpl:6
+#: assembl/templates/views/discussionAdminNavigationMenu.tmpl:12
 msgid "Edit notifications"
 msgstr "通知の編集"
 
-#: assembl/templates/views/adminNotificationSubscriptions.tmpl:13 assembl/templates/views/adminTimelineEvents.tmpl:13
+#: assembl/templates/views/adminNotificationSubscriptions.tmpl:13
+#: assembl/templates/views/adminTimelineEvents.tmpl:13
 msgid "Your change has been saved!"
 msgstr "あなたの変更は保存されました！"
 
@@ -2458,8 +2800,17 @@ msgid "Default notifications"
 msgstr "デフォルトの通知"
 
 #: assembl/templates/views/adminNotificationSubscriptions.tmpl:18
-msgid "These are the notifications which a user gets subscribed to when one of these conditions is matched: 1. The user clicks on the \"Join this discussion\" button. 2. The user posts his/her first message, Assembl shows a subscription pop-in, and the user accepts subscribing. 3. The discussion parameter \"Auto-subscribe users to default notifications when they register\" is active and the user confirms their account."
-msgstr "これらは、次のいずれかの条件が満たされたときにユーザーが購読する通知です。1.ユーザーが「このディスカッションに参加する」ボタンをクリックする。 2.ユーザが最初のメッセージを投稿し、Assemblが購読ポップインを表示し、ユーザが購読を受け入れる。 3.ディスカッションパラメータ 登録時にユーザーをデフォルトの自動通知に登録”がアクティブで、ユーザーが自分のアカウントを確認する。"
+msgid ""
+"These are the notifications which a user gets subscribed to when one of "
+"these conditions is matched: 1. The user clicks on the \"Join this "
+"discussion\" button. 2. The user posts his/her first message, Assembl "
+"shows a subscription pop-in, and the user accepts subscribing. 3. The "
+"discussion parameter \"Auto-subscribe users to default notifications when"
+" they register\" is active and the user confirms their account."
+msgstr ""
+"これらは、次のいずれかの条件が満たされたときにユーザーが購読する通知です。1.ユーザーが「このディスカッションに参加する」ボタンをクリックする。 "
+"2.ユーザが最初のメッセージを投稿し、Assemblが購読ポップインを表示し、ユーザが購読を受け入れる。 3.ディスカッションパラメータ "
+"登録時にユーザーをデフォルトの自動通知に登録”がアクティブで、ユーザーが自分のアカウントを確認する。"
 
 #: assembl/templates/views/adminNotificationSubscriptions.tmpl:21
 msgid "Auto-subscribe users to default notifications"
@@ -2469,47 +2820,61 @@ msgstr "ユーザーをデフォルトの通知に自動登録する"
 msgid "edit partner"
 msgstr "編集パートナー"
 
-#: assembl/templates/views/adminPartnerEditForm.tmpl:9 assembl/templates/views/adminPartnerForm.tmpl:8
+#: assembl/templates/views/adminPartnerEditForm.tmpl:9
+#: assembl/templates/views/adminPartnerForm.tmpl:8
 msgid "Partner name"
 msgstr "パートナー名:"
 
-#: assembl/templates/views/adminPartnerEditForm.tmpl:13 assembl/templates/views/adminPartnerForm.tmpl:12
+#: assembl/templates/views/adminPartnerEditForm.tmpl:13
+#: assembl/templates/views/adminPartnerForm.tmpl:12
 msgid "This field is mandatory"
 msgstr "このフィールドは必須です"
 
-#: assembl/templates/views/adminPartnerEditForm.tmpl:20 assembl/templates/views/adminPartnerForm.tmpl:19 assembl/templates/views/adminTimelineEvent.tmpl:35
+#: assembl/templates/views/adminPartnerEditForm.tmpl:20
+#: assembl/templates/views/adminPartnerForm.tmpl:19
+#: assembl/templates/views/adminTimelineEvent.tmpl:41
 msgid "Description"
 msgstr "説明"
 
-#: assembl/templates/views/adminPartnerEditForm.tmpl:23 assembl/templates/views/adminPartnerForm.tmpl:22
+#: assembl/templates/views/adminPartnerEditForm.tmpl:23
+#: assembl/templates/views/adminPartnerForm.tmpl:22
 msgid "Share what the organisation is all about"
 msgstr "組織が何をすべきかを共有する"
 
-#: assembl/templates/views/adminPartnerEditForm.tmpl:25 assembl/templates/views/adminPartnerForm.tmpl:24
+#: assembl/templates/views/adminPartnerEditForm.tmpl:25
+#: assembl/templates/views/adminPartnerForm.tmpl:24
 msgid "please correct the error"
 msgstr "エラーを修正してください"
 
-#: assembl/templates/views/adminPartnerEditForm.tmpl:32 assembl/templates/views/adminPartnerForm.tmpl:31
+#: assembl/templates/views/adminPartnerEditForm.tmpl:32
+#: assembl/templates/views/adminPartnerForm.tmpl:31
 msgid "Website"
 msgstr "ウェブサイト"
 
-#: assembl/templates/views/adminPartnerEditForm.tmpl:35 assembl/templates/views/adminPartnerForm.tmpl:34
+#: assembl/templates/views/adminPartnerEditForm.tmpl:35
+#: assembl/templates/views/adminPartnerForm.tmpl:34
 msgid "Example : http://example.org/ or http://www.hompage.com/"
 msgstr "例：http://example.org/またはhttp://www.hompage.com/"
 
-#: assembl/templates/views/adminPartnerEditForm.tmpl:37 assembl/templates/views/adminPartnerEditForm.tmpl:49 assembl/templates/views/adminPartnerForm.tmpl:36 assembl/templates/views/adminPartnerForm.tmpl:48
+#: assembl/templates/views/adminPartnerEditForm.tmpl:37
+#: assembl/templates/views/adminPartnerEditForm.tmpl:49
+#: assembl/templates/views/adminPartnerForm.tmpl:36
+#: assembl/templates/views/adminPartnerForm.tmpl:48
 msgid "Invalid URL format"
 msgstr "URLフォーマットが無効です"
 
-#: assembl/templates/views/adminPartnerEditForm.tmpl:44 assembl/templates/views/adminPartnerForm.tmpl:43
+#: assembl/templates/views/adminPartnerEditForm.tmpl:44
+#: assembl/templates/views/adminPartnerForm.tmpl:43
 msgid "URL of logo image"
 msgstr "ロゴ画像のURL"
 
-#: assembl/templates/views/adminPartnerEditForm.tmpl:47 assembl/templates/views/adminPartnerForm.tmpl:46
+#: assembl/templates/views/adminPartnerEditForm.tmpl:47
+#: assembl/templates/views/adminPartnerForm.tmpl:46
 msgid "Example : http://example.org/logo.jpg"
 msgstr "例：http://example.org/logo.jpg"
 
-#: assembl/templates/views/adminPartnerEditForm.tmpl:56 assembl/templates/views/adminPartnerForm.tmpl:55
+#: assembl/templates/views/adminPartnerEditForm.tmpl:56
+#: assembl/templates/views/adminPartnerForm.tmpl:55
 msgid "Is instigator of the discussion"
 msgstr "議論の仕掛け人"
 
@@ -2521,7 +2886,10 @@ msgstr "確認"
 msgid "Add a new partner"
 msgstr "新しいパートナーを追加する"
 
-#: assembl/templates/views/adminPartners.tmpl:7 assembl/templates/views/partnerList.tmpl:6 assembl/templates/views/partnerList.tmpl:10 assembl/templates/views/partnerList.tmpl:12
+#: assembl/templates/views/adminPartners.tmpl:7
+#: assembl/templates/views/partnerList.tmpl:6
+#: assembl/templates/views/partnerList.tmpl:10
+#: assembl/templates/views/partnerList.tmpl:12
 msgid "Partners"
 msgstr "パートナー"
 
@@ -2545,11 +2913,12 @@ msgstr "終了日（現地時間）"
 msgid "Image URL"
 msgstr "画像のURL"
 
-#: assembl/templates/views/adminTimelineEvent.tmpl:31
-msgid "Title"
-msgstr "タイトル"
+#: assembl/templates/views/adminTimelineEvent.tmpl:29
+msgid "Use v1 interface"
+msgstr ""
 
-#: assembl/templates/views/adminTimelineEvents.tmpl:6 assembl/templates/views/discussionAdminNavigationMenu.tmpl:15
+#: assembl/templates/views/adminTimelineEvents.tmpl:6
+#: assembl/templates/views/discussionAdminNavigationMenu.tmpl:15
 msgid "Edit timeline"
 msgstr "タイムラインを編集"
 
@@ -2566,7 +2935,10 @@ msgid "Assembl needs to be reloaded"
 msgstr "Assemblを再読み込みする必要があります"
 
 #: assembl/templates/views/ajaxError.tmpl:7
-msgid "Assembl has encountered a problem and needs to be refreshed. Do not worry, any messages that are in the process of being composed will not be lost."
+msgid ""
+"Assembl has encountered a problem and needs to be refreshed. Do not "
+"worry, any messages that are in the process of being composed will not be"
+" lost."
 msgstr "Assemblに問題が発生し、更新する必要があります。作成中のメッセージは失われません。"
 
 #: assembl/templates/views/ajaxError.tmpl:8
@@ -2574,10 +2946,13 @@ msgid "See you in a minute on Assembl!"
 msgstr "すぐにAssemblでお会いしましょう！"
 
 #: assembl/templates/views/ajaxError.tmpl:9
-msgid "If you are in contact with the technical team, please let them know about the following message:"
+msgid ""
+"If you are in contact with the technical team, please let them know about"
+" the following message:"
 msgstr "テクニカルチームと連絡を取っている場合は、次のメッセージについてお知らせください"
 
-#: assembl/templates/views/ajaxError.tmpl:16 assembl/templates/views/firstPost.tmpl:18
+#: assembl/templates/views/ajaxError.tmpl:16
+#: assembl/templates/views/firstPost.tmpl:18
 msgid "Not now"
 msgstr "今はやめる"
 
@@ -2589,7 +2964,8 @@ msgstr "リロード"
 msgid "Number of posts in the entire discussion"
 msgstr "ディスカッション全体の投稿数"
 
-#: assembl/templates/views/allMessagesInIdeaList.tmpl:9 assembl/templates/views/allMessagesInIdeaList.tmpl:10
+#: assembl/templates/views/allMessagesInIdeaList.tmpl:9
+#: assembl/templates/views/allMessagesInIdeaList.tmpl:10
 msgid "All messages"
 msgstr "すべてのメッセージ"
 
@@ -2602,11 +2978,15 @@ msgid "The title of this announcement"
 msgstr "この発表のタイトル"
 
 #: assembl/templates/views/announcementEditable.tmpl:4
-msgid "The text of this this announcement.  Will be displayed on top of the message list for this idea."
+msgid ""
+"The text of this this announcement.  Will be displayed on top of the "
+"message list for this idea."
 msgstr "この発表の文章。このアイデアのメッセージリストの上に表示されます。"
 
 #: assembl/templates/views/announcementEditable.tmpl:7
-msgid "If checked, this announcement will also be shown for any sub-idea that doesn't have its own announcement."
+msgid ""
+"If checked, this announcement will also be shown for any sub-idea that "
+"doesn't have its own announcement."
 msgstr "このチェックボックスをオンにすると、アナウンスメントがないサブアイデアに対してもこのアナウンスが表示されます。"
 
 #: assembl/templates/views/announcementEditable.tmpl:8
@@ -2621,7 +3001,11 @@ msgstr "このアナウンスを削除する"
 msgid "Add a new announcement to this idea"
 msgstr "このアイデアに新しいアナウンスを追加する"
 
-#: assembl/templates/views/announcementMessage.tmpl:10 assembl/templates/views/message.tmpl:150 assembl/templates/views/message.tmpl:169 assembl/templates/views/messageDeletedByUser.tmpl:53 assembl/templates/views/messageDeletedByUser.tmpl:72
+#: assembl/templates/views/announcementMessage.tmpl:10
+#: assembl/templates/views/message.tmpl:150
+#: assembl/templates/views/message.tmpl:169
+#: assembl/templates/views/messageDeletedByUser.tmpl:53
+#: assembl/templates/views/messageDeletedByUser.tmpl:72
 #, python-format
 msgid "<time title=\"%(precise_date)s\">%(nice_date)s</time>"
 msgstr "<time title=\"%(precise_date)s\">%(nice_date)s</time>"
@@ -2651,7 +3035,11 @@ msgid "Drag the following button in your browser's bookmark bar."
 msgstr "ブラウザのブックマークバーに次のボタンをドラッグします。"
 
 #: assembl/templates/views/bookmarket.tmpl:12
-msgid "Drag this button to your bookmark bar to create a bookmarklet. You can then capture selections from most webpages (those that are not secured with https) by 1. Clicking on the bookmarklet and 2. Highlighting the section of text you wish to send to the discussion."
+msgid ""
+"Drag this button to your bookmark bar to create a bookmarklet. You can "
+"then capture selections from most webpages (those that are not secured "
+"with https) by 1. Clicking on the bookmarklet and 2. Highlighting the "
+"section of text you wish to send to the discussion."
 msgstr "このボタンをブックマークバーにドラッグすると、ブックマークレットが作成されます。その後、次の手順によって、ほとんどのWebページ（httpsで保護されていないもの）からの抜粋を取り込むことができます。１.ブックマークレットをクリックし、2.ディスカッションに送信したいテキストのセクションをハイライト表示します。"
 
 #: assembl/templates/views/bookmarket.tmpl:12
@@ -2659,7 +3047,9 @@ msgid "Web capture to"
 msgstr "へのウェブキャプチャ"
 
 #: assembl/templates/views/bookmarket.tmpl:14
-msgid "Find extracts that will add value to the current discussion. For example, you could find extracts for:"
+msgid ""
+"Find extracts that will add value to the current discussion. For example,"
+" you could find extracts for:"
 msgstr "現在のディスカッションに価値を加えるエキスを見つけます。たとえば、次のような抽出を見つけることができます"
 
 #: assembl/templates/views/bookmarket.tmpl:16
@@ -2679,7 +3069,9 @@ msgid "Add an inspiring quote"
 msgstr "刺激的な引用を追加する"
 
 #: assembl/templates/views/bookmarket.tmpl:22
-msgid "Click on the button, where you had dragged it in your browser, to activate web annotation."
+msgid ""
+"Click on the button, where you had dragged it in your browser, to "
+"activate web annotation."
 msgstr "ブラウザでドラッグしたボタンをクリックして、Web注釈を有効にします。"
 
 #: assembl/templates/views/bookmarket.tmpl:28
@@ -2695,7 +3087,9 @@ msgid "See less"
 msgstr "見えなくする"
 
 #: assembl/templates/views/cookieBanner.tmpl:2
-msgid "By using our site, you consent to cookies being used for improvement of our service?"
+msgid ""
+"By using our site, you consent to cookies being used for improvement of "
+"our service?"
 msgstr "当社のサイトを使用することにより、お客様はサービスの改善に使用されるクッキーに同意するものとしますか？"
 
 #: assembl/templates/views/cookieBanner.tmpl:3
@@ -2726,11 +3120,14 @@ msgstr "シンセシスを作成する"
 msgid "Others:"
 msgstr "その他"
 
-#: assembl/templates/views/create-group.tmpl:61 assembl/templates/views/create-group.tmpl:93
+#: assembl/templates/views/create-group.tmpl:61
+#: assembl/templates/views/create-group.tmpl:93
 msgid "Idea Panel"
 msgstr "アイデアパネル"
 
-#: assembl/templates/views/create-group.tmpl:71 assembl/templates/views/create-group.tmpl:83 assembl/templates/views/navigation.tmpl:11
+#: assembl/templates/views/create-group.tmpl:71
+#: assembl/templates/views/create-group.tmpl:83
+#: assembl/templates/views/navigation.tmpl:11
 msgid "Discussion"
 msgstr "ディスカッション"
 
@@ -2738,7 +3135,8 @@ msgstr "ディスカッション"
 msgid "Auto-subscribe users to default notifications when they register"
 msgstr "登録時にユーザーをデフォルトの通知に自動登録する"
 
-#: assembl/templates/views/discussionAdminNavigationMenu.tmpl:6 assembl/templates/views/userNavigationMenu.tmpl:14
+#: assembl/templates/views/discussionAdminNavigationMenu.tmpl:6
+#: assembl/templates/views/userNavigationMenu.tmpl:14
 msgid "Discussion preferences"
 msgstr "ディスカッションの設定"
 
@@ -2750,7 +3148,10 @@ msgstr "サーバー設定"
 msgid "Edit partners"
 msgstr "パートナーの編集"
 
-#: assembl/templates/views/discussionAdminNavigationMenu.tmpl:21 assembl/templates/views/userAccountForm.tmpl:43 assembl/templates/views/userNavigationMenu.tmpl:17 assembl/templates/views/userProfile.tmpl:75
+#: assembl/templates/views/discussionAdminNavigationMenu.tmpl:21
+#: assembl/templates/views/userAccountForm.tmpl:43
+#: assembl/templates/views/userNavigationMenu.tmpl:17
+#: assembl/templates/views/userProfile.tmpl:75
 msgid "Return to the discussion"
 msgstr "ディスカッションに戻る"
 
@@ -2834,51 +3235,63 @@ msgstr "参加者ごとの統計"
 msgid "Show fields:"
 msgstr "フィールドを表示："
 
-#: assembl/templates/views/discussionStatisticsModal.tmpl:65 assembl/templates/views/discussionStatisticsModal.tmpl:99
+#: assembl/templates/views/discussionStatisticsModal.tmpl:65
+#: assembl/templates/views/discussionStatisticsModal.tmpl:99
 msgid "Posts"
 msgstr "投稿"
 
-#: assembl/templates/views/discussionStatisticsModal.tmpl:66 assembl/templates/views/discussionStatisticsModal.tmpl:100
+#: assembl/templates/views/discussionStatisticsModal.tmpl:66
+#: assembl/templates/views/discussionStatisticsModal.tmpl:100
 msgid "Cumulative posts"
 msgstr "累積投稿数"
 
-#: assembl/templates/views/discussionStatisticsModal.tmpl:67 assembl/templates/views/discussionStatisticsModal.tmpl:101
+#: assembl/templates/views/discussionStatisticsModal.tmpl:67
+#: assembl/templates/views/discussionStatisticsModal.tmpl:101
 msgid "Replies received"
 msgstr "返信を受け取った"
 
-#: assembl/templates/views/discussionStatisticsModal.tmpl:68 assembl/templates/views/discussionStatisticsModal.tmpl:102
+#: assembl/templates/views/discussionStatisticsModal.tmpl:68
+#: assembl/templates/views/discussionStatisticsModal.tmpl:102
 msgid "Cumulative replies received"
 msgstr "受け取った累積返信数"
 
-#: assembl/templates/views/discussionStatisticsModal.tmpl:70 assembl/templates/views/discussionStatisticsModal.tmpl:104
+#: assembl/templates/views/discussionStatisticsModal.tmpl:70
+#: assembl/templates/views/discussionStatisticsModal.tmpl:104
 msgid "Liking"
 msgstr "好み"
 
-#: assembl/templates/views/discussionStatisticsModal.tmpl:71 assembl/templates/views/discussionStatisticsModal.tmpl:105
+#: assembl/templates/views/discussionStatisticsModal.tmpl:71
+#: assembl/templates/views/discussionStatisticsModal.tmpl:105
 msgid "Cumulative liking"
 msgstr "累積選好"
 
-#: assembl/templates/views/discussionStatisticsModal.tmpl:72 assembl/templates/views/discussionStatisticsModal.tmpl:106
+#: assembl/templates/views/discussionStatisticsModal.tmpl:72
+#: assembl/templates/views/discussionStatisticsModal.tmpl:106
 msgid "Liked"
 msgstr "お気に入り"
 
-#: assembl/templates/views/discussionStatisticsModal.tmpl:73 assembl/templates/views/discussionStatisticsModal.tmpl:107
+#: assembl/templates/views/discussionStatisticsModal.tmpl:73
+#: assembl/templates/views/discussionStatisticsModal.tmpl:107
 msgid "Cumulative liked"
 msgstr "累積のお気に入り"
 
-#: assembl/templates/views/discussionStatisticsModal.tmpl:75 assembl/templates/views/discussionStatisticsModal.tmpl:109
+#: assembl/templates/views/discussionStatisticsModal.tmpl:75
+#: assembl/templates/views/discussionStatisticsModal.tmpl:109
 msgid "Disagreeing"
 msgstr "同意しない"
 
-#: assembl/templates/views/discussionStatisticsModal.tmpl:76 assembl/templates/views/discussionStatisticsModal.tmpl:110
+#: assembl/templates/views/discussionStatisticsModal.tmpl:76
+#: assembl/templates/views/discussionStatisticsModal.tmpl:110
 msgid "Cumulative disagreeing"
 msgstr "累積不同意数"
 
-#: assembl/templates/views/discussionStatisticsModal.tmpl:77 assembl/templates/views/discussionStatisticsModal.tmpl:111
+#: assembl/templates/views/discussionStatisticsModal.tmpl:77
+#: assembl/templates/views/discussionStatisticsModal.tmpl:111
 msgid "Disagreed"
 msgstr "意見の不一致"
 
-#: assembl/templates/views/discussionStatisticsModal.tmpl:78 assembl/templates/views/discussionStatisticsModal.tmpl:112
+#: assembl/templates/views/discussionStatisticsModal.tmpl:78
+#: assembl/templates/views/discussionStatisticsModal.tmpl:112
 msgid "Cumulative disagreed"
 msgstr "累積不一致"
 
@@ -2886,31 +3299,38 @@ msgstr "累積不一致"
 msgid "misunderstanding"
 msgstr "誤解"
 
-#: assembl/templates/views/discussionStatisticsModal.tmpl:81 assembl/templates/views/discussionStatisticsModal.tmpl:115
+#: assembl/templates/views/discussionStatisticsModal.tmpl:81
+#: assembl/templates/views/discussionStatisticsModal.tmpl:115
 msgid "Cumulative misunderstanding"
 msgstr "累積誤解"
 
-#: assembl/templates/views/discussionStatisticsModal.tmpl:82 assembl/templates/views/discussionStatisticsModal.tmpl:116
+#: assembl/templates/views/discussionStatisticsModal.tmpl:82
+#: assembl/templates/views/discussionStatisticsModal.tmpl:116
 msgid "Misunderstood"
 msgstr "誤解された"
 
-#: assembl/templates/views/discussionStatisticsModal.tmpl:83 assembl/templates/views/discussionStatisticsModal.tmpl:117
+#: assembl/templates/views/discussionStatisticsModal.tmpl:83
+#: assembl/templates/views/discussionStatisticsModal.tmpl:117
 msgid "Cumulative misunderstood"
 msgstr "累積誤解"
 
-#: assembl/templates/views/discussionStatisticsModal.tmpl:85 assembl/templates/views/discussionStatisticsModal.tmpl:119
+#: assembl/templates/views/discussionStatisticsModal.tmpl:85
+#: assembl/templates/views/discussionStatisticsModal.tmpl:119
 msgid "Requesting info"
 msgstr "情報をリクエストしています"
 
-#: assembl/templates/views/discussionStatisticsModal.tmpl:86 assembl/templates/views/discussionStatisticsModal.tmpl:120
+#: assembl/templates/views/discussionStatisticsModal.tmpl:86
+#: assembl/templates/views/discussionStatisticsModal.tmpl:120
 msgid "Cumulative requesting info"
 msgstr "累積要求情報"
 
-#: assembl/templates/views/discussionStatisticsModal.tmpl:87 assembl/templates/views/discussionStatisticsModal.tmpl:121
+#: assembl/templates/views/discussionStatisticsModal.tmpl:87
+#: assembl/templates/views/discussionStatisticsModal.tmpl:121
 msgid "Info requested"
 msgstr "リクエストされた情報"
 
-#: assembl/templates/views/discussionStatisticsModal.tmpl:88 assembl/templates/views/discussionStatisticsModal.tmpl:122
+#: assembl/templates/views/discussionStatisticsModal.tmpl:88
+#: assembl/templates/views/discussionStatisticsModal.tmpl:122
 msgid "Cumulative info requested"
 msgstr "要求された累積情報"
 
@@ -2934,6 +3354,56 @@ msgstr "メールを表示する"
 msgid "Get discussion participant statistics"
 msgstr "ディスカッション参加者の統計情報を取得する"
 
+#: assembl/templates/views/emailSource.tmpl:13
+msgid "Admin sender"
+msgstr ""
+
+#: assembl/templates/views/emailSource.tmpl:16
+msgid ""
+"This field is an e-mail address, and is mandatory: it will be the value "
+"of notification emails' From field"
+msgstr ""
+
+#: assembl/templates/views/emailSource.tmpl:22
+msgid "Post email address"
+msgstr ""
+
+#: assembl/templates/views/emailSource.tmpl:25
+msgid "For mailing lists only: Where messages are sent to the list"
+msgstr ""
+
+#: assembl/templates/views/emailSource.tmpl:30
+#, fuzzy
+#| msgid "Posts"
+msgid "Host"
+msgstr "投稿"
+
+#: assembl/templates/views/emailSource.tmpl:37
+msgid "Use SSL"
+msgstr ""
+
+#: assembl/templates/views/emailSource.tmpl:43
+msgid "True"
+msgstr ""
+
+#: assembl/templates/views/emailSource.tmpl:48
+#, fuzzy
+#| msgid "Close"
+msgid "False"
+msgstr "閉じる"
+
+#: assembl/templates/views/emailSource.tmpl:52
+#, fuzzy
+#| msgid "Role"
+msgid "Folder"
+msgstr "役割"
+
+#: assembl/templates/views/emailSource.tmpl:60
+#, fuzzy
+#| msgid "Reimport"
+msgid "Port"
+msgstr "再インポート"
+
 #: assembl/templates/views/exportPostModal-fb-group.tmpl:2
 msgid "Select Group"
 msgstr "グループ​を​選択"
@@ -2951,7 +3421,10 @@ msgid "Basic"
 msgstr "ベーシック"
 
 #: assembl/templates/views/exportPostModal-fb-token-error.tmpl:6
-msgid "We will need your permission to publish the message you are exporting on your behalf,  as well as permission to read the posts back in order to import them back into Assembl."
+msgid ""
+"We will need your permission to publish the message you are exporting on "
+"your behalf,  as well as permission to read the posts back in order to "
+"import them back into Assembl."
 msgstr "私たちはあなたに代わってあなたがエクスポートしているメッセージを公開するための許可と、それらをAssemblにインポートし返すために投稿を読む許可を必要とします。"
 
 #: assembl/templates/views/exportPostModal-fb-token-error.tmpl:7
@@ -2959,7 +3432,10 @@ msgid "Groups"
 msgstr "品群"
 
 #: assembl/templates/views/exportPostModal-fb-token-error.tmpl:7
-msgid "We will need your permission to access the list of groups that you are a part of and to be able to post on them, both on your behalf, or if you are the group administrator, on behalf of the group itself. "
+msgid ""
+"We will need your permission to access the list of groups that you are a "
+"part of and to be able to post on them, both on your behalf, or if you "
+"are the group administrator, on behalf of the group itself. "
 msgstr "あなたの代理として、またはあなたがグループ管理者の場合には、あなたが参加しているグループの代理として、あなたが参加しているグループのリストにアクセスするための許可が必要です"
 
 #: assembl/templates/views/exportPostModal-fb-token-error.tmpl:8
@@ -2967,7 +3443,11 @@ msgid "Pages"
 msgstr "ページ"
 
 #: assembl/templates/views/exportPostModal-fb-token-error.tmpl:8
-msgid "We will need your permission to access the list of pages you have liked, as well as those in which you are an administrator, and to be able to post both on your behalf or, if you are the page administrator, on behalf of the page itself"
+msgid ""
+"We will need your permission to access the list of pages you have liked, "
+"as well as those in which you are an administrator, and to be able to "
+"post both on your behalf or, if you are the page administrator, on behalf"
+" of the page itself"
 msgstr "私たちは、あなたが管理しているページだけでなく、あなたがお気に入りにしたページのリストにアクセスし、またあなたの代わりに、またはページ管理者の場合はページ自体の代わりに投稿するためのあなたの許可を必要とします"
 
 #: assembl/templates/views/exportPostModal-fb.tmpl:23
@@ -3023,7 +3503,9 @@ msgid "Select your desired export location"
 msgstr "エクスポート先を選択してください"
 
 #: assembl/templates/views/facebookSourceForm.tmpl:7
-msgid "How many top posts and their comments would you like to import? Leave blank to import all posts"
+msgid ""
+"How many top posts and their comments would you like to import? Leave "
+"blank to import all posts"
 msgstr "いくつのトップ記事とそのコメントをインポートしたいですか？すべての投稿をインポートする場合には空白のままにしてください"
 
 #: assembl/templates/views/facebookSourceForm.tmpl:7
@@ -3031,16 +3513,24 @@ msgid "Maximum number of threads"
 msgstr "最大スレッド数"
 
 #: assembl/templates/views/facebookSourceForm.tmpl:14
-msgid "When has been posted the oldest post you would like to import? Use ISO 8601 UTC. (ex: 2015-10-20T00:00:00Z ) Leave blank for no limit"
-msgstr "あなたがインポートしたい最も古い投稿はいつ投稿されましたか？ ISO 8601 UTCを使用してください。 （例：2015-10-20T00:00:00Z）無制限の場合は空白のままにしてください"
+msgid ""
+"When has been posted the oldest post you would like to import? Use ISO "
+"8601 UTC. (ex: 2015-10-20T00:00:00Z ) Leave blank for no limit"
+msgstr ""
+"あなたがインポートしたい最も古い投稿はいつ投稿されましたか？ ISO 8601 UTCを使用してください。 "
+"（例：2015-10-20T00:00:00Z）無制限の場合は空白のままにしてください"
 
 #: assembl/templates/views/facebookSourceForm.tmpl:14
 msgid "Minimum date"
 msgstr "日付の最小値"
 
 #: assembl/templates/views/facebookSourceForm.tmpl:21
-msgid "When has been posted the newest post you would like to import? Use ISO 8601 UTC. (ex: 2015-10-20T00:00:00Z ) Leave blank for no limit"
-msgstr "あなたがインポートしたい最新の投稿はいつ投稿されましたか？ ISO 8601 UTCを使用してください。 （例：2015-10-20T00:00:00Z）無制限の場合は空白のままにしてください"
+msgid ""
+"When has been posted the newest post you would like to import? Use ISO "
+"8601 UTC. (ex: 2015-10-20T00:00:00Z ) Leave blank for no limit"
+msgstr ""
+"あなたがインポートしたい最新の投稿はいつ投稿されましたか？ ISO 8601 UTCを使用してください。 "
+"（例：2015-10-20T00:00:00Z）無制限の場合は空白のままにしてください"
 
 #: assembl/templates/views/facebookSourceForm.tmpl:21
 msgid "Maximum date"
@@ -3054,11 +3544,16 @@ msgstr "ディスカッションへようこそ！"
 msgid "You will receive notifications when:"
 msgstr "次の場合に通知が届きます"
 
-#: assembl/templates/views/firstLoginAfterAutoSubscribeToNotifications.tmpl:12 assembl/templates/views/firstPost.tmpl:12 assembl/templates/views/joinDiscussion.tmpl:12
-msgid "You can modify at anytime the type of notification you receive by clicking on the ‘Notifications’ section of your profile."
+#: assembl/templates/views/firstLoginAfterAutoSubscribeToNotifications.tmpl:12
+#: assembl/templates/views/firstPost.tmpl:12
+#: assembl/templates/views/joinDiscussion.tmpl:12
+msgid ""
+"You can modify at anytime the type of notification you receive by "
+"clicking on the ‘Notifications’ section of your profile."
 msgstr "プロフィールの「通知」セクションをクリックすることによって、いつでも通知のタイプを変更することができます。"
 
-#: assembl/templates/views/firstLoginAfterAutoSubscribeToNotifications.tmpl:18 assembl/templates/views/joinDiscussion.tmpl:18
+#: assembl/templates/views/firstLoginAfterAutoSubscribeToNotifications.tmpl:18
+#: assembl/templates/views/joinDiscussion.tmpl:18
 msgid "Edit my notifications"
 msgstr "私の通知を編集する"
 
@@ -3070,11 +3565,15 @@ msgstr "ディスカッションを続ける"
 msgid "Congratulations on making your first contribution!"
 msgstr "初めての投稿をしていただきありがとうございます！"
 
-#: assembl/templates/views/firstPost.tmpl:8 assembl/templates/views/joinDiscussion.tmpl:8
-msgid "Stay informed and up to date with the evolution of the discussion and receive notifications when:"
+#: assembl/templates/views/firstPost.tmpl:8
+#: assembl/templates/views/joinDiscussion.tmpl:8
+msgid ""
+"Stay informed and up to date with the evolution of the discussion and "
+"receive notifications when:"
 msgstr "ディスカッションの進展を常に最新の状態に保ち、次の場合に通知を受け取ります"
 
-#: assembl/templates/views/firstPost.tmpl:19 assembl/templates/views/joinDiscussion.tmpl:19
+#: assembl/templates/views/firstPost.tmpl:19
+#: assembl/templates/views/joinDiscussion.tmpl:19
 msgid "Receive notifications"
 msgstr "通知を受け取る"
 
@@ -3091,7 +3590,10 @@ msgid "Pick a topic and start contributing"
 msgstr "トピックを選んで投稿を始めよう"
 
 #: assembl/templates/views/helperDebate.tmpl:5
-msgid "This table of contents helps you find the conversations and topics you are interested in so you don’t get overwhelmed. Topics include messages from all related sub-topics as well."
+msgid ""
+"This table of contents helps you find the conversations and topics you "
+"are interested in so you don’t get overwhelmed. Topics include messages "
+"from all related sub-topics as well."
 msgstr "この目次はあなたが興味を持っている会話やトピックを見つけるのに役立ちます。トピックには、関連するすべてのサブトピックのメッセージも含まれます。"
 
 #: assembl/templates/views/helperDebate.tmpl:6
@@ -3100,31 +3602,41 @@ msgstr "ここは安全で礼儀正しい空間です。全てのアイデアは
 
 #: assembl/templates/views/ideaClassification_directExtract.tmpl:3
 #, python-format
-msgid "<span class=\"harvester\">%s</span> has considered this message relevant to the idea:"
+msgid ""
+"<span class=\"harvester\">%s</span> has considered this message relevant "
+"to the idea:"
 msgstr "<span class=\"harvester\">%s</span>は、このメッセージがアイデアに関連すると考えました"
 
-#: assembl/templates/views/ideaClassification_directExtract.tmpl:7 assembl/templates/views/ideaClassification_indirectExtract.tmpl:7
+#: assembl/templates/views/ideaClassification_directExtract.tmpl:7
+#: assembl/templates/views/ideaClassification_indirectExtract.tmpl:7
 msgid "Considering this extract:"
 msgstr "この抜粋を考慮すると："
 
-#: assembl/templates/views/ideaClassification_directExtract.tmpl:12 assembl/templates/views/ideaClassification_indirectExtract.tmpl:12
+#: assembl/templates/views/ideaClassification_directExtract.tmpl:12
+#: assembl/templates/views/ideaClassification_indirectExtract.tmpl:12
 #, python-format
 msgid "by %s"
 msgstr "投稿者: %s"
 
 #: assembl/templates/views/ideaClassification_directMessage.tmpl:3
 #, python-format
-msgid "<span class=\"author\">%s</span> started this new discussion thread directly on the idea:"
+msgid ""
+"<span class=\"author\">%s</span> started this new discussion thread "
+"directly on the idea:"
 msgstr "<span class=\"author\">%s</span>はこの新しいディスカッションスレッドをアイデアに直接開始しました："
 
 #: assembl/templates/views/ideaClassification_indirectExtract.tmpl:3
 #, python-format
-msgid "This message is part of a thread, which <span class=\"harvester\">%s</span> considered relevant to the idea:"
+msgid ""
+"This message is part of a thread, which <span "
+"class=\"harvester\">%s</span> considered relevant to the idea:"
 msgstr "このメッセージは、<span class=\"harvester\">%s</span>がアイデアに関連すると考えたスレッドの一部です："
 
 #: assembl/templates/views/ideaClassification_indirectMessage.tmpl:3
 #, python-format
-msgid "This message is part of a thread, started by <span class=\"author\">%s</span> on the idea:"
+msgid ""
+"This message is part of a thread, started by <span "
+"class=\"author\">%s</span> on the idea:"
 msgstr "このメッセージは、<span class=\"author\">%s</span>によってアイデア上に開始されたスレッドの一部です："
 
 #: assembl/templates/views/ideaInIdeaList.tmpl:7
@@ -3152,7 +3664,9 @@ msgid "Number of unread messages related to this idea, or any of its sub-ideas"
 msgstr "このアイデアまたはそのサブアイデアのいずれかに関連する未読メッセージの数"
 
 #: assembl/templates/views/ideaInIdeaList.tmpl:59
-msgid "Number of unread messages related to this idea, or any of its sub-ideas.  Click on this number to view ONLY the new unread messages"
+msgid ""
+"Number of unread messages related to this idea, or any of its sub-ideas."
+"  Click on this number to view ONLY the new unread messages"
 msgstr "このアイデアまたはそのサブアイデアに関連する未読メッセージの数。この番号をクリックすると、新しい未読メッセージのみが表示されます"
 
 #: assembl/templates/views/ideaInSynthesis.tmpl:14
@@ -3199,7 +3713,8 @@ msgstr "現在の拡大/折りたたみ状態をユーザーのデフォルト�
 msgid "Restore default expanded/collapsed state"
 msgstr "デフォルトの展開/折りたたみ状態を復元する"
 
-#: assembl/templates/views/ideaPanel.tmpl:2 assembl/templates/views/message.tmpl:25
+#: assembl/templates/views/ideaPanel.tmpl:2
+#: assembl/templates/views/message.tmpl:25
 msgid "Share"
 msgstr "シェア"
 
@@ -3220,7 +3735,9 @@ msgid "Expression in next synthesis"
 msgstr "次のシンセシスにおける表現"
 
 #: assembl/templates/views/ideaPanel.tmpl:36
-msgid "Expression of this idea in the next synthesis.  You may want to edit them all together in the synthesis panel rather than here."
+msgid ""
+"Expression of this idea in the next synthesis.  You may want to edit them"
+" all together in the synthesis panel rather than here."
 msgstr "次のシンセシスにおけるこのアイデアの表現. ここではなく、シンセシスパネルですべてを一緒に編集することもできます。"
 
 #: assembl/templates/views/ideaPanel.tmpl:40
@@ -3236,7 +3753,9 @@ msgid "Announcement for this idea"
 msgstr "このアイデアの発表"
 
 #: assembl/templates/views/ideaPanel.tmpl:67
-msgid "Number of participants who contributed messages about this idea or it's sub-ideas."
+msgid ""
+"Number of participants who contributed messages about this idea or it's "
+"sub-ideas."
 msgstr "このアイデアやサブアイデアに関するメッセージを投稿した参加者の数."
 
 #: assembl/templates/views/ideaPanel.tmpl:86
@@ -3252,7 +3771,9 @@ msgid "Add extracts by dragging them in this panel from the clipboard or message
 msgstr "このパネルでクリップボードやメッセージからドラッグして抜粋を追加する"
 
 #: assembl/templates/views/ideaPanel.tmpl:109
-msgid "Remove all extracts from this idea.  Removed extracts will be available in your clipboard"
+msgid ""
+"Remove all extracts from this idea.  Removed extracts will be available "
+"in your clipboard"
 msgstr "このアイデアからすべての抜粋を削除します。削除された抜粋はクリップボードで利用可能になります"
 
 #: assembl/templates/views/ideaPanel.tmpl:109
@@ -3280,10 +3801,13 @@ msgid "No idea selected"
 msgstr "選択されたアイデアはありません"
 
 #: assembl/templates/views/ideaPanel.tmpl:131
-msgid "Choose an idea in the Table of ideas to explore the discussion or close this panel as you will have open"
+msgid ""
+"Choose an idea in the Table of ideas to explore the discussion or close "
+"this panel as you will have open"
 msgstr "アイデア表からアイデアを選択してディスカッションを閲覧するか、今開いているこのパネルを閉じます"
 
-#: assembl/templates/views/instigator.tmpl:6 assembl/templates/views/instigator.tmpl:8
+#: assembl/templates/views/instigator.tmpl:6
+#: assembl/templates/views/instigator.tmpl:8
 msgid "Instigated by"
 msgstr "による主催"
 
@@ -3311,11 +3835,17 @@ msgstr "あなたはいくつかのディスカッションの目標を追加し
 msgid "Keep up with the evolution of the discussion"
 msgstr "ディスカッションの変化について"
 
-#: assembl/templates/views/message.tmpl:10 assembl/templates/views/message.tmpl:39 assembl/templates/views/messageDeletedByUser.tmpl:10 assembl/templates/views/messageDeletedByUser.tmpl:31
+#: assembl/templates/views/message.tmpl:10
+#: assembl/templates/views/message.tmpl:39
+#: assembl/templates/views/messageDeletedByUser.tmpl:10
+#: assembl/templates/views/messageDeletedByUser.tmpl:31
 msgid "Mark as unread"
 msgstr "未読にする"
 
-#: assembl/templates/views/message.tmpl:12 assembl/templates/views/message.tmpl:41 assembl/templates/views/messageDeletedByUser.tmpl:12 assembl/templates/views/messageDeletedByUser.tmpl:33
+#: assembl/templates/views/message.tmpl:12
+#: assembl/templates/views/message.tmpl:41
+#: assembl/templates/views/messageDeletedByUser.tmpl:12
+#: assembl/templates/views/messageDeletedByUser.tmpl:33
 msgid "Mark as read"
 msgstr "既読にする"
 
@@ -3352,7 +3882,8 @@ msgstr "このメッセージとその返信だけを表示する"
 msgid "Show all posts by %s"
 msgstr "%sによる投稿をすべて表示"
 
-#: assembl/templates/views/message.tmpl:74 assembl/templates/views/messageDeletedByUser.tmpl:38
+#: assembl/templates/views/message.tmpl:74
+#: assembl/templates/views/messageDeletedByUser.tmpl:38
 msgid "Send an email to this user"
 msgstr "このユーザーにメールを送信する"
 
@@ -3393,30 +3924,38 @@ msgid "Please try again later."
 msgstr "しばらくたってから、もう一度やり直してください。"
 
 #: assembl/templates/views/message.tmpl:131
-msgid "Sorry, we cannot translate this because we could not identify the source language."
+msgid ""
+"Sorry, we cannot translate this because we could not identify the source "
+"language."
 msgstr "申し訳ありませんが、翻訳元言語を特定できなかったため翻訳できません。"
 
-#: assembl/templates/views/message.tmpl:190 assembl/templates/views/messageDeletedByUser.tmpl:92
+#: assembl/templates/views/message.tmpl:190
+#: assembl/templates/views/messageDeletedByUser.tmpl:92
 msgid "Read more"
 msgstr "続きを読む"
 
-#: assembl/templates/views/message.tmpl:199 assembl/templates/views/messageDeletedByUser.tmpl:100
+#: assembl/templates/views/message.tmpl:199
+#: assembl/templates/views/messageDeletedByUser.tmpl:100
 msgid "Read less"
 msgstr "表示しない"
 
-#: assembl/templates/views/message.tmpl:203 assembl/templates/views/message.tmpl:255
+#: assembl/templates/views/message.tmpl:203
+#: assembl/templates/views/message.tmpl:255
 msgid "Like"
 msgstr "いいね！"
 
-#: assembl/templates/views/message.tmpl:204 assembl/templates/views/message.tmpl:271
+#: assembl/templates/views/message.tmpl:204
+#: assembl/templates/views/message.tmpl:271
 msgid "Disagree"
 msgstr "同意しない"
 
-#: assembl/templates/views/message.tmpl:205 assembl/templates/views/message.tmpl:286
+#: assembl/templates/views/message.tmpl:205
+#: assembl/templates/views/message.tmpl:286
 msgid "Did not get it"
 msgstr "取得に失敗しました"
 
-#: assembl/templates/views/message.tmpl:206 assembl/templates/views/message.tmpl:301
+#: assembl/templates/views/message.tmpl:206
+#: assembl/templates/views/message.tmpl:301
 msgid "More info please?"
 msgstr "もっと情報を依頼しますか？"
 
@@ -3424,15 +3963,18 @@ msgstr "もっと情報を依頼しますか？"
 msgid "Reply"
 msgstr "返信"
 
-#: assembl/templates/views/messageColumn.tmpl:22 assembl/templates/views/messageList.tmpl:13
+#: assembl/templates/views/messageColumn.tmpl:23
+#: assembl/templates/views/messageList.tmpl:13
 msgid "Load previous messages"
 msgstr "以前のメッセージを読み込む"
 
-#: assembl/templates/views/messageColumn.tmpl:35 assembl/templates/views/messageList.tmpl:25
+#: assembl/templates/views/messageColumn.tmpl:36
+#: assembl/templates/views/messageList.tmpl:25
 msgid "Load more messages"
 msgstr "他のメッセージも表示"
 
-#: assembl/templates/views/messageColumn.tmpl:36 assembl/templates/views/messageList.tmpl:26
+#: assembl/templates/views/messageColumn.tmpl:37
+#: assembl/templates/views/messageList.tmpl:26
 msgid "Load all remaining messages at once"
 msgstr "残りのすべてのメッセージを一度にロードする"
 
@@ -3476,7 +4018,8 @@ msgstr "モデレーター"
 msgid "Moderated version of the message"
 msgstr "モデレートされたバージョンのメッセージ"
 
-#: assembl/templates/views/messageModerationOptions.tmpl:22 assembl/templates/views/messageModerationOptions.tmpl:27
+#: assembl/templates/views/messageModerationOptions.tmpl:22
+#: assembl/templates/views/messageModerationOptions.tmpl:27
 msgid "Type something..."
 msgstr "何かを入力してください"
 
@@ -3499,7 +4042,10 @@ msgstr "\" %s \"という考え方のもとで、"
 
 #: assembl/templates/views/messageSend.tmpl:31
 #, python-format
-msgid "In the general \"%s\" conversation (a community manager will organize your contribution in the table of ideas afterwards, possibly by creating a new idea)"
+msgid ""
+"In the general \"%s\" conversation (a community manager will organize "
+"your contribution in the table of ideas afterwards, possibly by creating "
+"a new idea)"
 msgstr "一般的な \" %s \"の会話（コミュニティマネージャーは新しいアイデアを作成することによって、後であなたの投稿をアイデア表に反映します）"
 
 #: assembl/templates/views/messageSend.tmpl:33
@@ -3534,11 +4080,15 @@ msgstr "ディスカッションのアクセス許可"
 msgid "Help"
 msgstr "ヘルプ"
 
-#: assembl/templates/views/navBarRight.tmpl:14 assembl/templates/views/navBarRight.tmpl:20 assembl/templates/views/userSubscriber.tmpl:23
+#: assembl/templates/views/navBarRight.tmpl:14
+#: assembl/templates/views/navBarRight.tmpl:20
+#: assembl/templates/views/userSubscriber.tmpl:23
 msgid "Join this discussion"
 msgstr "このディスカッションに参加する"
 
-#: assembl/templates/views/navBarRight.tmpl:41 assembl/templates/views/userNavigationMenu.tmpl:10 assembl/templates/views/userNotificationSubscriptions.tmpl:6
+#: assembl/templates/views/navBarRight.tmpl:41
+#: assembl/templates/views/userNavigationMenu.tmpl:10
+#: assembl/templates/views/userNotificationSubscriptions.tmpl:6
 msgid "Notifications"
 msgstr "お知らせ"
 
@@ -3563,7 +4113,9 @@ msgid "Receive notifications on"
 msgstr "の通知を受け取る"
 
 #: assembl/templates/views/orphanMessagesInIdeaList.tmpl:8
-msgid "Messages top-posted and whose thread has not yet been harvested into an idea"
+msgid ""
+"Messages top-posted and whose thread has not yet been harvested into an "
+"idea"
 msgstr "トップに投稿され、スレッドがまだアイデアに収穫されていないメッセージ"
 
 #: assembl/templates/views/orphanMessagesInIdeaList.tmpl:9
@@ -3582,7 +4134,8 @@ msgstr "フルサイズ"
 msgid "Close panel"
 msgstr "パネルを閉じる"
 
-#: assembl/templates/views/partnerList.tmpl:6 assembl/templates/views/partnerList.tmpl:10
+#: assembl/templates/views/partnerList.tmpl:6
+#: assembl/templates/views/partnerList.tmpl:10
 msgid "edit partners"
 msgstr "編集パートナー"
 
@@ -3682,7 +4235,9 @@ msgid "Clear"
 msgstr "クリア"
 
 #: assembl/templates/views/showSegmentByAnnotation.tmpl:3
-msgid "You will be redirected to another idea in connection with the nugget on which you clicked."
+msgid ""
+"You will be redirected to another idea in connection with the nugget on "
+"which you clicked."
 msgstr "クリックしたナゲットに関連して別のアイデアにリダイレクトされます。"
 
 #: assembl/templates/views/showSegmentByAnnotation.tmpl:10
@@ -3726,7 +4281,8 @@ msgstr "新エッシスは定期的に発表される、ディスカッション
 msgid "Syntheses"
 msgstr "シンセシス"
 
-#: assembl/templates/views/synthesisPanel.tmpl:15 assembl/templates/views/synthesisPanelMessage.tmpl:14
+#: assembl/templates/views/synthesisPanel.tmpl:15
+#: assembl/templates/views/synthesisPanelMessage.tmpl:14
 msgid "Conclusion"
 msgstr "結論"
 
@@ -3764,8 +4320,14 @@ msgid "Add another email"
 msgstr "別のメールを追加"
 
 #: assembl/templates/views/userAccount.tmpl:55
-msgid "Linking your account allows you to connect through social networks, and to use your profile's picture. Otherwise, you can set your profile picture with the <a href='http://en.gravatar.com/'>gravatar</a> service."
-msgstr "あなたのアカウントをリンクすることで、ソーシャルネットワークを介して接続し、あなたのプロフィールの画像を使用することができます. それ以外の場合は、プロフィール画像 を<a href='http://en.gravatar.com/'>グラバター</a> サービスによって設定できます。"
+msgid ""
+"Linking your account allows you to connect through social networks, and "
+"to use your profile's picture. Otherwise, you can set your profile "
+"picture with the <a href='http://en.gravatar.com/'>gravatar</a> service."
+msgstr ""
+"あなたのアカウントをリンクすることで、ソーシャルネットワークを介して接続し、あなたのプロフィールの画像を使用することができます. "
+"それ以外の場合は、プロフィール画像 を<a href='http://en.gravatar.com/'>グラバター</a> "
+"サービスによって設定できます。"
 
 #: assembl/templates/views/userAccountForm.tmpl:10
 msgid "You can set a username as an alternate way to login."
@@ -3775,7 +4337,8 @@ msgstr "ユーザー名を別のログイン方法として設定することが
 msgid "New password"
 msgstr "新しいパスワード"
 
-#: assembl/templates/views/userAccountForm.tmpl:20 assembl/templates/views/userAccountForm.tmpl:31
+#: assembl/templates/views/userAccountForm.tmpl:20
+#: assembl/templates/views/userAccountForm.tmpl:31
 msgid "password 1 and 2 should be identical"
 msgstr "パスワード1と2は同一である必要があります"
 
@@ -3784,7 +4347,9 @@ msgid "Confirm password"
 msgstr "パスワードを認証する"
 
 #: assembl/templates/views/userAccountForm.tmpl:37
-msgid "You can set your profile picture with the <a href='http://en.gravatar.com/'>gravatar</a> service."
+msgid ""
+"You can set your profile picture with the <a "
+"href='http://en.gravatar.com/'>gravatar</a> service."
 msgstr "プロフィール画像を <a href='http://en.gravatar.com/'>グラバター</a> サービスによって設定することができます"
 
 #: assembl/templates/views/userNavigationMenu.tmpl:3
@@ -3807,6 +4372,14 @@ msgstr "本名"
 msgid "Subscription settings"
 msgstr "サブスクリプション設定"
 
+#: assembl/templates/views/userSubscriber.tmpl:11
+msgid "subscribed"
+msgstr "購読した"
+
+#: assembl/templates/views/userSubscriber.tmpl:14
+msgid "Unsubscribe"
+msgstr "登録解除"
+
 #: assembl/templates/views/userSubscriber.tmpl:20
 msgid "unsubscribed"
 msgstr "登録解除されました"
@@ -3815,209 +4388,226 @@ msgstr "登録解除されました"
 msgid "No file given."
 msgstr "ファイルがありません."
 
-#: assembl/views/api/post.py:80 assembl/views/api/post.py:624
+#: assembl/views/api/post.py:81 assembl/views/api/post.py:625
 #, python-format
 msgid "No discussion found with id=%s"
 msgstr "id = %sディスカッションは見つかりませんでした"
 
-#: assembl/views/api/post.py:227
+#: assembl/views/api/post.py:228
 msgid "Getting orphan posts of a specific idea isn't supported."
 msgstr "特定のアイデアの孤立した投稿を取得することはできません."
 
-#: assembl/views/api/post.py:297
+#: assembl/views/api/post.py:298
 msgid "Do not combine negative and positive classifiers"
 msgstr "あなたは否定と陽性の分類子を結合していないpostDoが読まれるのを見るためにログインしなければなりません"
 
-#: assembl/views/api/post.py:358
+#: assembl/views/api/post.py:359
 msgid "You must be logged in to view which posts are read"
 msgstr "読んだ投稿を表示するには、ログインしている必要があります"
 
-#: assembl/views/api/post.py:608
+#: assembl/views/api/post.py:609
 msgid "Your message is empty"
 msgstr "あなたのメッセージは空です"
 
-#: assembl/views/api2/auth.py:338
+#: assembl/views/api2/auth.py:343
 msgid "The user does not exist"
 msgstr "ユーザーが存在しません"
 
-#: assembl/views/api2/auth.py:349
+#: assembl/views/api2/auth.py:354
 msgid "This email does not exist"
 msgstr "このメールは存在しません"
 
-#: assembl/views/api2/auth.py:354
+#: assembl/views/api2/auth.py:359
 msgid "Please give an identifier"
 msgstr "識別子を与えてください"
 
-#: assembl/views/api2/auth.py:359
+#: assembl/views/api2/auth.py:364
 msgid "This user has no email"
 msgstr "このユーザーのメールはありません"
 
-#: assembl/views/api2/auth.py:362
+#: assembl/views/api2/auth.py:367
 msgid "This is not a user"
 msgstr "これはユーザーではありません"
 
-#: assembl/views/api2/auth.py:383
+#: assembl/views/api2/auth.py:388
 msgid "The passwords that were entered are mismatched!"
 msgstr "入力されたパスワードが一致していません"
 
-#: assembl/views/api2/auth.py:397 assembl/views/auth/views.py:958 assembl/views/auth/views.py:1026
+#: assembl/views/api2/auth.py:402 assembl/views/auth/views.py:964
+#: assembl/views/auth/views.py:1032
 msgid "This link is not valid. Do you want us to send another?"
 msgstr "このリンクは無効です。別のリンクを受信しますか？"
 
-#: assembl/views/api2/auth.py:400 assembl/views/auth/views.py:961 assembl/views/auth/views.py:1029
+#: assembl/views/api2/auth.py:405 assembl/views/auth/views.py:967
+#: assembl/views/auth/views.py:1035
 msgid "This link has been used. Do you want us to send another?"
 msgstr "このリンクは使用されています。別のリンクを受信しますか？"
 
-#: assembl/views/api2/auth.py:435 assembl/views/auth/views.py:382
+#: assembl/views/api2/auth.py:440 assembl/views/auth/views.py:388
 msgid "Please use a name of at least 3 characters"
 msgstr "3文字以上の名前を使用してください"
 
-#: assembl/views/api2/auth.py:444 assembl/views/auth/views.py:317 assembl/views/auth/views.py:389
+#: assembl/views/api2/auth.py:449 assembl/views/auth/views.py:321
+#: assembl/views/auth/views.py:395
 msgid "This is not a valid email"
 msgstr "これは有効なメールではありません"
 
-#: assembl/views/api2/auth.py:452 assembl/views/auth/views.py:396
+#: assembl/views/api2/auth.py:457 assembl/views/auth/views.py:402
 msgid "We already have a user with this email."
 msgstr "既にこのメールアドレスを利用しているユーザーがいます。"
 
-#: assembl/views/api2/auth.py:457
+#: assembl/views/api2/auth.py:462
 msgid "No email."
 msgstr "メールはありません."
 
-#: assembl/views/api2/auth.py:463
+#: assembl/views/api2/auth.py:468
 msgid "We already have a user with this username."
 msgstr "既にこのユーザー名を持つユーザーがいます."
 
-#: assembl/views/auth/views.py:290
+#: assembl/views/auth/views.py:294
 #, python-format
 msgid "The username %s is already used"
 msgstr "ユーザー名 %s は既に使用されています"
 
-#: assembl/views/auth/views.py:309 assembl/views/auth/views.py:1040
+#: assembl/views/auth/views.py:313 assembl/views/auth/views.py:1046
 msgid "The passwords are not identical"
 msgstr "パスワードは同一ではありません"
 
-#: assembl/views/auth/views.py:400
+#: assembl/views/auth/views.py:406
 msgid "The passwords should be identical"
 msgstr "パスワードは同じでなければなりません"
 
-#: assembl/views/auth/views.py:456
-msgid "Your email was refused by the SMTP server.  You probably entered an email that does not exist."
+#: assembl/views/auth/views.py:462
+msgid ""
+"Your email was refused by the SMTP server.  You probably entered an email"
+" that does not exist."
 msgstr "電子メールはSMTPサーバーによって拒否されました. 存在しない電子メールを入力した可能性があります."
 
-#: assembl/views/auth/views.py:513 assembl/views/auth/views.py:838 assembl/views/auth/views.py:844
+#: assembl/views/auth/views.py:519 assembl/views/auth/views.py:844
+#: assembl/views/auth/views.py:850
 msgid "This user cannot be found"
 msgstr "このユーザーは見つかりません"
 
-#: assembl/views/auth/views.py:531
+#: assembl/views/auth/views.py:537
 msgid "Invalid user and password"
 msgstr "無効なユーザーとパスワード"
 
-#: assembl/views/auth/views.py:595
+#: assembl/views/auth/views.py:601
 msgid "This email address is already confirmed"
 msgstr "このメールアドレスは既に確認済みです"
 
-#: assembl/views/auth/views.py:596
+#: assembl/views/auth/views.py:602
 msgid "You do not need to confirm this email address, it is already confirmed."
 msgstr "このメールアドレスを確認する必要はありません。既に確認済みです."
 
-#: assembl/views/auth/views.py:604 assembl/views/auth/views.py:803
+#: assembl/views/auth/views.py:610 assembl/views/auth/views.py:809
 msgid "Confirmation requested"
 msgstr "確認のリクエスト"
 
-#: assembl/views/auth/views.py:605 assembl/views/auth/views.py:804
-msgid "A confirmation e-mail has been sent to your account and should be in your inbox in a few minutes. It contains a confirmation link, please click on it in order to confirm your e-mail address. If you did not receive any confirmation e-mail (check your spams), click here."
+#: assembl/views/auth/views.py:611 assembl/views/auth/views.py:810
+msgid ""
+"A confirmation e-mail has been sent to your account and should be in your"
+" inbox in a few minutes. It contains a confirmation link, please click on"
+" it in order to confirm your e-mail address. If you did not receive any "
+"confirmation e-mail (check your spams), click here."
 msgstr "あなたのアカウントに確認メールが送信されました。数分で受信トレイに届きます。。メールには確認リンクが含まれていますので、メールアドレスの確認のためリンクをクリックしてください。確認メールが届かない場合は、迷惑メールを確認した上で、ここをクリックしてください."
 
-#: assembl/views/auth/views.py:653 assembl/views/auth/views.py:677 assembl/views/auth/views.py:699
+#: assembl/views/auth/views.py:659 assembl/views/auth/views.py:683
+#: assembl/views/auth/views.py:705
 #, python-format
 msgid "Email <%s> already confirmed"
 msgstr "既に確認済みのメール<%s>"
 
-#: assembl/views/auth/views.py:665
+#: assembl/views/auth/views.py:671
 msgid "This link was not valid. We sent another."
 msgstr "このリンクは無効です。別のリンクを送りました。"
 
-#: assembl/views/auth/views.py:668
+#: assembl/views/auth/views.py:674
 msgid "This link has been used. We sent another."
 msgstr "このリンクが使用されています。別のリンクを送りました。"
 
-#: assembl/views/auth/views.py:681
+#: assembl/views/auth/views.py:687
 msgid "This link is not valid. Please attempt to login to get another one."
 msgstr "このリンクは無効です。別のリンクの取得のため、もう一度ログインしてください。"
 
-#: assembl/views/auth/views.py:720
+#: assembl/views/auth/views.py:726
 #, python-format
-msgid "Your email address %s has been confirmed, and you are now subscribed to discussion's default notifications."
+msgid ""
+"Your email address %s has been confirmed, and you are now subscribed to "
+"discussion's default notifications."
 msgstr "あなたのメールアドレス%sが確認され、ディスカッションのデフォルトの通知に登録されました。"
 
-#: assembl/views/auth/views.py:725
+#: assembl/views/auth/views.py:731
 #, python-format
 msgid "Your email address %s has been confirmed."
 msgstr "あなたのメールアドレス%sが確認されました。"
 
-#: assembl/views/auth/views.py:750
+#: assembl/views/auth/views.py:756
 msgid "Login failed, try again"
 msgstr "ログインに失敗しました。もう一度お試しください"
 
-#: assembl/views/auth/views.py:791
+#: assembl/views/auth/views.py:797
 msgid "This email is already confirmed."
 msgstr "このメールは既に確認済みです."
 
-#: assembl/views/auth/views.py:812
+#: assembl/views/auth/views.py:818
 msgid "We do not know about this email."
 msgstr "このメールについてはわかりません."
 
-#: assembl/views/auth/views.py:891
+#: assembl/views/auth/views.py:897
 msgid "Password change requested"
 msgstr "パスワードの変更がリクエストされました"
 
-#: assembl/views/auth/views.py:892
-msgid "We have sent you an email with a temporary connection link. Please use that link to log in and change your password."
+#: assembl/views/auth/views.py:898
+msgid ""
+"We have sent you an email with a temporary connection link. Please use "
+"that link to log in and change your password."
 msgstr "一時的に有効なリンクを記載したメールをお送りしています. ログインしてパスワードを変更するには、そのリンクを使用してください."
 
-#: assembl/views/auth/views.py:973
+#: assembl/views/auth/views.py:979
 msgid "You will enter the discussion as <b>{name}</b>."
 msgstr "あなたは<b> {name} </b>としてディスカッションに参加します。"
 
-#: assembl/views/auth/views.py:977
+#: assembl/views/auth/views.py:983
 msgid "You will enter Assembl as <b>{name}</b>."
 msgstr "Assemblに<b> {name} </b>として参加します。"
 
-#: assembl/views/auth/views.py:980
+#: assembl/views/auth/views.py:986
 msgid "Please choose your password for security reasons."
 msgstr "セキュリティ上の理由からパスワードを選択してください."
 
-#: assembl/views/auth/views.py:1009
+#: assembl/views/auth/views.py:1015
 msgid "Change your password"
 msgstr "パスワードを変更してください"
 
-#: assembl/views/auth/views.py:1048
+#: assembl/views/auth/views.py:1054
 msgid "Password changed"
 msgstr "パスワードが変更されました"
 
-#: assembl/views/auth/views.py:1062
+#: assembl/views/auth/views.py:1068
 msgid "email"
 msgstr "eメール"
 
-#: assembl/views/auth/views.py:1063
+#: assembl/views/auth/views.py:1069
 msgid "Please confirm your {confirm_what} with {assembl}"
 msgstr "{assembl}で{confirm_what}を確認してください"
 
-#: assembl/views/auth/views.py:1065
+#: assembl/views/auth/views.py:1071
 msgid "account"
 msgstr "アカウント"
 
-#: assembl/views/auth/views.py:1066
+#: assembl/views/auth/views.py:1072
 msgid ""
 "Hello, {name}, and welcome to {assembl}!\n"
 "\n"
-"Please confirm your email address and complete your registration by clicking the link below.\n"
+"Please confirm your email address and complete your registration by "
+"clicking the link below.\n"
 "<{confirm_url}>\n"
 "\n"
 "Best regards,\n"
 "The {assembl} Team"
-msgstr "Assemblへようこそ！\n"
+msgstr ""
+"Assemblへようこそ！\n"
 "\n"
 "下記のリンクをクリックしてメールアドレスを確認し、登録を完了してください。\n"
 "<{confirm_url}>\n"
@@ -4025,48 +4615,58 @@ msgstr "Assemblへようこそ！\n"
 "よろしくお願いします。\n"
 "{assembl}チーム"
 
-#: assembl/views/auth/views.py:1073
+#: assembl/views/auth/views.py:1079
 msgid ""
 "<p>Hello, {name}, and welcome to {assembl}!</p>\n"
-"<p>Please <a href=\"{confirm_url}\">click here to confirm your email address</a>\n"
+"<p>Please <a href=\"{confirm_url}\">click here to confirm your email "
+"address</a>\n"
 "and complete your registration.</p>\n"
 "<p>Best regards,<br />The {assembl} Team</p>"
-msgstr "<p> Hello、{name}、{assembl}へようこそ！</p>\n"
+msgstr ""
+"<p> Hello、{name}、{assembl}へようこそ！</p>\n"
 "<p>あなたのメールアドレスを確認するために<a href=\"{confirm_url}\">ここをクリックし、</a>\n"
 "あなたの登録を完了してください。</p>\n"
 "<p>よろしくお願いいたします。<br />{assembl}チーム</p>"
 
-#: assembl/views/auth/views.py:1078
+#: assembl/views/auth/views.py:1084
 msgid ""
 "Hello, {name}!\n"
 "\n"
-"Please confirm your new email address <{email}> on your {assembl} account by clicking the link below.\n"
+"Please confirm your new email address <{email}> on your {assembl} account"
+" by clicking the link below.\n"
 "<{confirm_url}>\n"
 "\n"
 "Best regards,\n"
 "The {assembl} Team"
-msgstr "\\ n \\ n下のリンクをクリックして{{email}>あなたの新しい電子メールアドレスを確認してください。\\ n <{confirm_url}> \\ n \\ nよろしくお願いします。\\ n {Assembl}チーム"
+msgstr ""
+"\\ n \\ n下のリンクをクリックして{{email}>あなたの新しい電子メールアドレスを確認してください。\\ n "
+"<{confirm_url}> \\ n \\ nよろしくお願いします。\\ n {Assembl}チーム"
 
-#: assembl/views/auth/views.py:1085
+#: assembl/views/auth/views.py:1091
 msgid ""
 "<p>Hello, {name}!</p>\n"
-"<p>Please <a href=\"{confirm_url}\">click here to confirm your new email address</a>\n"
+"<p>Please <a href=\"{confirm_url}\">click here to confirm your new email "
+"address</a>\n"
 "on your {assembl} account.</p>\n"
 "<p>Best regards,<br />The {assembl} Team</p>"
-msgstr "<p>Hello、{name}！</p>\n"
+msgstr ""
+"<p>Hello、{name}！</p>\n"
 "<p>新しい電子メールアドレスを確認するには<a href=\"{confirm_url}\">ここをクリック</a>してください。</p>\n"
 "<p>よろしくお願いいたします。<br />{assembl}チーム</p>"
 
-#: assembl/views/auth/views.py:1136
+#: assembl/views/auth/views.py:1142
 msgid "Request for password change"
 msgstr "パスワード変更の要求"
 
-#: assembl/views/auth/views.py:1140
+#: assembl/views/auth/views.py:1146
 msgid ""
 "<p>Hello, {name}!</p>\n"
-"<p>We have received a request to change the password on your {assembl} account.\n"
-"Please <a href=\"{confirm_url}\">click here to confirm your password change</a>.</p>\n"
-"<p>If you did not ask to reset your password please disregard this email.</p>\n"
+"<p>We have received a request to change the password on your {assembl} "
+"account.\n"
+"Please <a href=\"{confirm_url}\">click here to confirm your password "
+"change</a>.</p>\n"
+"<p>If you did not ask to reset your password please disregard this "
+"email.</p>\n"
 "<p>Best regards,<br />The {assembl} Team</p>\n"
 msgstr ""
 "<p>Hello、{name}！</p>\n"
@@ -4075,10 +4675,11 @@ msgstr ""
 "<p>パスワード変更の申請をしていない場合は、このメールを無視してください。</p> \n"
 "<p>よろしくお願いします。<br /> {assembl}チーム</p>\n"
 
-#: assembl/views/auth/views.py:1146
+#: assembl/views/auth/views.py:1152
 msgid ""
 "Hello, {name}!\n"
-"We have received a request to change the password on your {assembl} account.\n"
+"We have received a request to change the password on your {assembl} "
+"account.\n"
 "To confirm your password change please click on the link below.\n"
 "<{confirm_url}>\n"
 "\n"
@@ -4097,7 +4698,17 @@ msgstr ""
 "宜しくお願いします、\n"
 "{assembl}チーム\n"
 
-#: assembl/views/discussion/views.py:48
+#: assembl/views/discussion/views.py:51
 #, python-format
 msgid "No discussion found for slug=%s"
 msgstr "slug=%s のディスカッションは見つかりませんでした"
+
+#~ msgid "Add a title"
+#~ msgstr "タイトルを追加"
+
+#~ msgid "Add an introduction"
+#~ msgstr "紹介を追加"
+
+#~ msgid "Add a conclusion"
+#~ msgstr "結論を追加"
+
