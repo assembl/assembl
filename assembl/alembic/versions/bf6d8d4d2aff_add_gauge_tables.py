@@ -19,7 +19,8 @@ def upgrade(pyramid_env):
         op.create_table('gauge_choice_specification',
             sa.Column('id', sa.Integer, sa.ForeignKey('vote_specification.id', ondelete='CASCADE', onupdate='CASCADE'), primary_key=True),
             sa.Column('value', sa.Float),
-            sa.Column('label_id', sa.Integer, sa.ForeignKey('langstring.id'))
+            sa.Column('label_id', sa.Integer, sa.ForeignKey('langstring.id')),
+            sa.Column('vote_specification_id', sa.Integer, sa.ForeignKey('vote_specification.id', ondelete='CASCADE', onupdate='CASCADE'), nullable=False, index=True)
         )
         op.create_table('number_gauge_vote_specification',
             sa.Column('id', sa.Integer, sa.ForeignKey('vote_specification.id', ondelete='CASCADE', onupdate='CASCADE'), primary_key=True),

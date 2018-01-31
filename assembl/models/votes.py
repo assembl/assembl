@@ -582,13 +582,13 @@ class GaugeChoiceSpecification(DiscussionBoundBase):
     id = Column(Integer, primary_key=True)
     value = Column(Float, nullable=False)
     label_id = Column(Integer, ForeignKey(LangString.id), nullable=False, index=True)
-    gauge_vote_specification_id = Column(
+    vote_specification_id = Column(
         Integer, ForeignKey(
             GaugeVoteSpecification.id, ondelete='CASCADE', onupdate='CASCADE'),
         nullable=False, index=True)
 
-    gauge_vote_specification = relationship(
-        GaugeVoteSpecification, foreign_keys=(gauge_vote_specification_id,),
+    vote_specification = relationship(
+        GaugeVoteSpecification, foreign_keys=(vote_specification_id,),
         backref=backref("choices", cascade="all, delete-orphan"))
     label = relationship(
         LangString, foreign_keys=(label_id,),
@@ -598,7 +598,7 @@ class GaugeChoiceSpecification(DiscussionBoundBase):
         cascade="all, delete-orphan")
 
     def get_discussion_id(self):
-        gvs = self.gauge_vote_specification or GaugeVoteSpecification.get(self.gauge_vote_specification_id)
+        gvs = self.vote_specification or GaugeVoteSpecification.get(self.vote_specification_id)
         return gvs.get_discussion_id()
 
     @classmethod
@@ -610,10 +610,10 @@ class GaugeChoiceSpecification(DiscussionBoundBase):
             widget = VotingWidget
         else:
             gcs = alias_maker.alias_from_class(cls)
-            gvs = alias_maker.alias_from_relns(gcs.gauge_vote_specification)
+            gvs = alias_maker.alias_from_relns(gcs.vote_specification)
             widget = alias_maker.alias_from_relns(
-                gcs.gauge_vote_specification, gvs.widget)
-        return ((gcs.gauge_vote_specification_id == gvs.id),
+                gcs.vote_specification, gvs.widget)
+        return ((gcs.vote_specification_id == gvs.id),
                 (gvs.widget_id == widget.id),
                 (widget.discussion_id == discussion_id))
 
