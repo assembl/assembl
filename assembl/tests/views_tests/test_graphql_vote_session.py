@@ -335,7 +335,7 @@ def test_graphql_get_vote_session_and_vote_specifications(graphql_participant1_r
         graphql_registry['VoteSession'],
         context_value=graphql_participant1_request,
         variable_values={
-            "discussionPhaseId": vote_session.discussion_phase_id
+            "discussionPhaseId": vote_session.discussion_phase_id, "lang": "en"
         }
     )
     assert response.errors is None
