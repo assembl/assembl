@@ -339,8 +339,8 @@ def test_graphql_get_vote_session_and_vote_specifications(graphql_participant1_r
         }
     )
     assert response.errors is None
-    assert len(response.data['voteSession']['voteSpecifications']) == 1
-    assert 'tokenCategories' in response.data['voteSession']['voteSpecifications'][0]
+    assert len(response.data['voteSession']['modules']) == 1
+    assert 'tokenCategories' in response.data['voteSession']['modules'][0]
 
 
 def test_mutation_create_gauge_vote_specification(graphql_request, vote_session, graphql_registry):
