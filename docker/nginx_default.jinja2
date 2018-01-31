@@ -30,7 +30,7 @@ server {
     ssl_stapling_verify on;
     {% if oscp_path %}
       ssl_trusted_certificate {{ oscp_path }};
-      {% endif %}
+    {% endif %}
 
   {% else %}
     listen    80;
