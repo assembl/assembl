@@ -3,7 +3,7 @@ from pyramid.httpexceptions import HTTPUnauthorized
 from pyramid.security import Everyone
 from graphql_wsgi import graphql_wsgi as graphql_wsgi_wrapper
 from graphql_wsgi.main import get_graphql_params as original_get_graphql_params
-import graphql_wsgi.main
+# import graphql_wsgi.main
 
 from assembl import models
 from assembl.auth import CrudPermissions
@@ -46,7 +46,7 @@ def get_graphql_params(request, data):
 
 
 # monkey patch get_graphql_params for logging
-graphql_wsgi.main.get_graphql_params = get_graphql_params
+# graphql_wsgi.main.get_graphql_params = get_graphql_params
 
 
 # Only allow POST (query may be GET, but mutations should always be a POST,
