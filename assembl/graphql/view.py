@@ -3,7 +3,7 @@ from pyramid.httpexceptions import HTTPUnauthorized
 from pyramid.security import Everyone
 from graphql_wsgi import graphql_wsgi as graphql_wsgi_wrapper
 from graphql_wsgi.main import get_graphql_params as original_get_graphql_params
-# import graphql_wsgi.main
+import graphql_wsgi.main
 
 from assembl import models
 from assembl.auth import CrudPermissions
@@ -31,11 +31,12 @@ class LoggingMiddleware(object):
 def get_graphql_params(request, data):
     query, variables, operation_name = original_get_graphql_params(request, data)
     modified_variables = {}
-    for key, value in variables.items():
-        if 'password' in key or 'Password' in key:
-            modified_variables[key] = 'xxxxxxxxxxxxx'
-        else:
-            modified_variables[key] = value
+    if variables is not None:
+        for key, value in variables.items():
+            if 'password' in key or 'Password' in key:
+                modified_variables[key] = 'xxxxxxxxxxxxx'
+            else:
+                modified_variables[key] = value
 
     operation = query.split()[0]
     getLogger().debug(
@@ -46,7 +47,7 @@ def get_graphql_params(request, data):
 
 
 # monkey patch get_graphql_params for logging
-# graphql_wsgi.main.get_graphql_params = get_graphql_params
+graphql_wsgi.main.get_graphql_params = get_graphql_params
 
 
 # Only allow POST (query may be GET, but mutations should always be a POST,
