@@ -27,6 +27,11 @@ type Posts = {
   edges: Array<{ node: { sentimentCounts: { [string]: number }, publicationState: string } }>
 };
 
+export const getColumnInfos = (messageColumns: Array<IdeaMessageColumnFragment>) => {
+  const columnsArray = messageColumns.map(col => ({ count: col.numPosts, color: col.color, name: col.name }));
+  return columnsArray;
+};
+
 export const getSentimentsCount = (posts: Posts) => {
   const counters: SentimentsCounts = { ...sentimentDefinitionsObject };
   Object.keys(counters).forEach((key) => {
@@ -73,19 +78,13 @@ const dirtySplitHack = (announcementContent) => {
 };
 
 class Announcement extends React.Component {
-  getColumnInfos() {
-    const { messageColumns } = this.props.ideaWithPostsData.idea;
-    const columnsArray = messageColumns.map(col => ({ count: col.numPosts, color: col.color, name: col.name }));
-    return columnsArray;
-  }
-
   render = () => {
     const { ideaWithPostsData: { idea }, announcementContent, isMultiColumns } = this.props;
-    const { numContributors, numPosts, posts } = idea;
+    const { numContributors, numPosts, posts, messageColumns } = idea;
     const sentimentsCount = getSentimentsCount(posts);
     const mediaContent = announcementContent.body && dirtySplitHack(announcementContent);
-    const columnInfos = this.getColumnInfos();
-    const doughnutsElements = isMultiColumns ? columnInfos : createDoughnutElements(sentimentsCount);
+    const columnInfos = getColumnInfos(messageColumns);
+    const doughnutElements = isMultiColumns ? columnInfos : createDoughnutElements(sentimentsCount);
     return (
       <div className="announcement">
         <div className="announcement-title">
@@ -100,7 +99,7 @@ class Announcement extends React.Component {
         <Col xs={12} md={4} className="col-md-pull-8">
           <div className="announcement-statistics">
             <div className="announcement-doughnut">
-              <StatisticsDoughnut elements={doughnutsElements} />
+              <StatisticsDoughnut elements={doughnutElements} />
             </div>
             {isMultiColumns ? (
               <div className="announcement-numbers-multicol">
