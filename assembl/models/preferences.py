@@ -516,27 +516,10 @@ class Preferences(MutableMapping, Base, NamedClassMixin):
         },
 
         {
-            "id": "authorization_server",
-            "value_type": "url",
-            "name": _(
-                "Private authentication server"),
-            "description": _(
-                "Endpoint URL of a private authentication that users will "
-                "mandatorily have to authenticate themselves with."),
-            "allow_user_override": None,
-            "modification_permission": P_SYSADMIN,
-            # "frontend_validator_function": func_name...?,
-            # "backend_validator_function": func_name...?,
-            "default": None
-        },
-
-        {
             "id": "authorization_server_backend",
             "value_type": "scalar",
             "scalar_values": {
                 "": _("No special authentication"),
-                "wordpress-oauth2":
-                    _("WordPress OAuth Server"),
             },
             "name": _(
                 "Authentication service type"),
@@ -550,33 +533,6 @@ class Preferences(MutableMapping, Base, NamedClassMixin):
             # "frontend_validator_function": func_name...?,
             # "backend_validator_function": func_name...?,
             "default": ""
-        },
-
-        {
-            "id": "authorization_key",
-            "value_type": "string",
-            "name": _("Authentication key"),
-            "description": _(
-                "Key for assembl as a client of the authentication server"),
-            "allow_user_override": None,
-            "modification_permission": P_SYSADMIN,
-            # "frontend_validator_function": func_name...?,
-            # "backend_validator_function": func_name...?,
-            "default": None
-        },
-
-        {
-            "id": "authorization_secret",
-            "value_type": "string",
-            "name": _("Authentication secret"),
-            "description": _(
-                "Secret for assembl as a client of the authentication server"),
-            "allow_user_override": None,
-            "view_permission": P_SYSADMIN,
-            "modification_permission": P_SYSADMIN,
-            # "frontend_validator_function": func_name...?,
-            # "backend_validator_function": func_name...?,
-            "default": None
         },
 
         # Are moderated posts simply hidden or made inaccessible by default?
