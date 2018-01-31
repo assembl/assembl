@@ -1,5 +1,5 @@
 # Spanish translations for assembl.
-# Copyright (C) 2017 ORGANIZATION
+# Copyright (C) 2018 ORGANIZATION
 # This file is distributed under the same license as the assembl project.
 #
 # Translators:
@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  Assembl\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2018-01-31 10:34+0100\n"
-"PO-Revision-Date: 2017-09-23 03:16+0000\n"
+"POT-Creation-Date: 2018-01-31 10:49+0100\n"
+"PO-Revision-Date: 2018-01-31 09:36+0000\n"
 "Last-Translator: Quentin Grimaud <quentin.grimaud@gmail.com>\n"
 "Language: es\n"
 "Language-Team: Spanish "
@@ -4623,23 +4623,4 @@ msgstr ""
 #, python-format
 msgid "No discussion found for slug=%s"
 msgstr ""
-
-#~ msgid "Add a title"
-#~ msgstr ""
-
-#~ msgid "Add an introduction"
-#~ msgstr ""
-
-#~ msgid "Add a conclusion"
-#~ msgstr ""
-
-#~ msgid ""
-#~ "You are receiving this because you "
-#~ "are %(notificationConfigLink)s to discussion "
-#~ "%(discussionLink)s.  Specifically, you currently "
-#~ "receive a notification when:"
-#~ msgstr ""
-
-#~ msgid "Comment this synthesis"
-#~ msgstr ""
 

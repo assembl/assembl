@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: assembl 0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2018-01-31 10:34+0100\n"
+"POT-Creation-Date: 2018-01-31 10:49+0100\n"
 "PO-Revision-Date: 2017-08-26 01:06+0900\n"
 "Last-Translator: \n"
 "Language: ja\n"
@@ -548,7 +548,6 @@ msgstr "投票結果を見る "
 
 #: assembl/static/js/app/models/widget.js:289
 #, fuzzy
-#| msgid "See the vote results"
 msgid "Vote results"
 msgstr "投票結果を見る"
 
@@ -1848,13 +1847,11 @@ msgstr "シンセシス"
 
 #: assembl/static/js/app/views/synthesisPanel.js:227
 #, fuzzy
-#| msgid "Read the synthesis"
 msgid "A short title for the synthesis"
 msgstr "シンセシスを読む"
 
 #: assembl/static/js/app/views/synthesisPanel.js:228
 #, fuzzy
-#| msgid "Last synthesis"
 msgid "New Synthesis"
 msgstr "最後のシンセシス"
 
@@ -1963,7 +1960,6 @@ msgstr "ディスカッションに戻る"
 
 #: assembl/static/js/app/views/tokenVoteSession.js:1733
 #, fuzzy
-#| msgid "Modify your vote"
 msgid "Modify my vote"
 msgstr "あなたの投票を修正する"
 
@@ -2502,9 +2498,6 @@ msgstr "ありがとうございます！"
 
 #: assembl/templates/notifications/html_mail.jinja2:82
 #, fuzzy, python-format
-#| msgid "" "You are receiving this because you are %(notificationConfigLink)s
-#| to " "discussion %(discussionLink)s.  Specifically, you currently receive a
-#| " "notification when:"
 msgid ""
 "You are receiving this because you are subscribed to discussion "
 "%(discussionLink)s.  Specifically, you currently receive a notification "
@@ -2517,7 +2510,6 @@ msgstr "このメッセージに返信する"
 
 #: assembl/templates/notifications/html_mail_post_synthesis.jinja2:37
 #, fuzzy
-#| msgid "Comment this synthesis"
 msgid "Comment on this synthesis"
 msgstr "このシンセシスにコメントする"
 
@@ -3374,7 +3366,6 @@ msgstr ""
 
 #: assembl/templates/views/emailSource.tmpl:30
 #, fuzzy
-#| msgid "Posts"
 msgid "Host"
 msgstr "投稿"
 
@@ -3388,19 +3379,16 @@ msgstr ""
 
 #: assembl/templates/views/emailSource.tmpl:48
 #, fuzzy
-#| msgid "Close"
 msgid "False"
 msgstr "閉じる"
 
 #: assembl/templates/views/emailSource.tmpl:52
 #, fuzzy
-#| msgid "Role"
 msgid "Folder"
 msgstr "役割"
 
 #: assembl/templates/views/emailSource.tmpl:60
 #, fuzzy
-#| msgid "Reimport"
 msgid "Port"
 msgstr "再インポート"
 

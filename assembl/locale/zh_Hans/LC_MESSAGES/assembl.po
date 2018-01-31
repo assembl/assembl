@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: assembl 0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2018-01-31 10:34+0100\n"
+"POT-Creation-Date: 2018-01-31 10:49+0100\n"
 "PO-Revision-Date: 2017-09-27 21:10+0800\n"
 "Last-Translator: Benoit Grégoire <benoitg@coeus.ca>\n"
 "Language: zh_Hans\n"
@@ -544,7 +544,6 @@ msgstr "看投票结果"
 
 #: assembl/static/js/app/models/widget.js:289
 #, fuzzy
-#| msgid "See the vote results"
 msgid "Vote results"
 msgstr "看投票结果"
 
@@ -1866,13 +1865,11 @@ msgstr "合成"
 
 #: assembl/static/js/app/views/synthesisPanel.js:227
 #, fuzzy
-#| msgid "Read the synthesis"
 msgid "A short title for the synthesis"
 msgstr "阅读综合"
 
 #: assembl/static/js/app/views/synthesisPanel.js:228
 #, fuzzy
-#| msgid "Last synthesis"
 msgid "New Synthesis"
 msgstr "最后综合"
 
@@ -1985,7 +1982,6 @@ msgstr "回去讨论"
 
 #: assembl/static/js/app/views/tokenVoteSession.js:1733
 #, fuzzy
-#| msgid "Modify your vote"
 msgid "Modify my vote"
 msgstr "修改你的投票"
 
@@ -2519,9 +2515,6 @@ msgstr "谢谢！"
 
 #: assembl/templates/notifications/html_mail.jinja2:82
 #, fuzzy, python-format
-#| msgid "" "You are receiving this because you are %(notificationConfigLink)s
-#| to " "discussion %(discussionLink)s.  Specifically, you currently receive a
-#| " "notification when:"
 msgid ""
 "You are receiving this because you are subscribed to discussion "
 "%(discussionLink)s.  Specifically, you currently receive a notification "
@@ -2534,7 +2527,6 @@ msgstr "回覆这封邮件"
 
 #: assembl/templates/notifications/html_mail_post_synthesis.jinja2:37
 #, fuzzy
-#| msgid "Comment this synthesis"
 msgid "Comment on this synthesis"
 msgstr "评论这个综合"
 
@@ -3391,7 +3383,6 @@ msgstr ""
 
 #: assembl/templates/views/emailSource.tmpl:30
 #, fuzzy
-#| msgid "Posts"
 msgid "Host"
 msgstr "文章"
 
@@ -3405,19 +3396,16 @@ msgstr ""
 
 #: assembl/templates/views/emailSource.tmpl:48
 #, fuzzy
-#| msgid "Close"
 msgid "False"
 msgstr "关闭"
 
 #: assembl/templates/views/emailSource.tmpl:52
 #, fuzzy
-#| msgid "Role"
 msgid "Folder"
 msgstr "角色"
 
 #: assembl/templates/views/emailSource.tmpl:60
 #, fuzzy
-#| msgid "Reimport"
 msgid "Port"
 msgstr "重新导入"
 

@@ -1,5 +1,5 @@
 # German translations for assembl.
-# Copyright (C) 2017 ORGANIZATION
+# Copyright (C) 2018 ORGANIZATION
 # This file is distributed under the same license as the assembl project.
 #
 # Translators:
@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  Assembl\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2018-01-31 10:34+0100\n"
-"PO-Revision-Date: 2017-09-22 18:12+0000\n"
+"POT-Creation-Date: 2018-01-31 10:49+0100\n"
+"PO-Revision-Date: 2018-01-31 09:36+0000\n"
 "Last-Translator: Quentin Grimaud <quentin.grimaud@gmail.com>\n"
 "Language: de\n"
 "Language-Team: German "
@@ -551,10 +551,8 @@ msgid "See results from the vote of "
 msgstr "Ergebnisse ansehen aus der Abstimmung von"
 
 #: assembl/static/js/app/models/widget.js:289
-#, fuzzy
-#| msgid "See the vote results"
 msgid "Vote results"
-msgstr "Die Abstimmungsergebnisse ansehen"
+msgstr ""
 
 #: assembl/static/js/app/models/widget.js:332
 msgid "This vote widget is not fully configured"
@@ -1959,16 +1957,12 @@ msgid "Synthesis"
 msgstr "Synthese"
 
 #: assembl/static/js/app/views/synthesisPanel.js:227
-#, fuzzy
-#| msgid "Read the synthesis"
 msgid "A short title for the synthesis"
-msgstr "Die Synthese lesen"
+msgstr ""
 
 #: assembl/static/js/app/views/synthesisPanel.js:228
-#, fuzzy
-#| msgid "Last synthesis"
 msgid "New Synthesis"
-msgstr "Letzte Synthese"
+msgstr ""
 
 #: assembl/static/js/app/views/synthesisPanel.js:239
 msgid "You can add an introduction to your synthesis here..."
@@ -2082,10 +2076,8 @@ msgid "Go back to the discussion"
 msgstr ""
 
 #: assembl/static/js/app/views/tokenVoteSession.js:1733
-#, fuzzy
-#| msgid "Modify your vote"
 msgid "Modify my vote"
-msgstr "Ihre Stimmabgabe ändern"
+msgstr ""
 
 #: assembl/static/js/app/views/tokenVoteSession.js:1751
 msgid "Vote confirmation"
@@ -2612,28 +2604,20 @@ msgid "Thanks!"
 msgstr "Vielen Dank!"
 
 #: assembl/templates/notifications/html_mail.jinja2:82
-#, fuzzy, python-format
-#| msgid "" "You are receiving this because you are %(notificationConfigLink)s
-#| to " "discussion %(discussionLink)s.  Specifically, you currently receive a
-#| " "notification when:"
+#, python-format
 msgid ""
 "You are receiving this because you are subscribed to discussion "
 "%(discussionLink)s.  Specifically, you currently receive a notification "
 "when:"
 msgstr ""
-"Sie erhalten diese Nachricht, weil Sie in der Diskussion "
-"%(discussionLink)s %(notificationConfigLink)s sind. Sie erhalten derzeit "
-"eine Benachrichtigung, wenn:"
 
 #: assembl/templates/notifications/html_mail_post.jinja2:62
 msgid "Reply to this message"
 msgstr "Auf diese Nachricht antworten"
 
 #: assembl/templates/notifications/html_mail_post_synthesis.jinja2:37
-#, fuzzy
-#| msgid "Comment this synthesis"
 msgid "Comment on this synthesis"
-msgstr "Diese Synthese kommentieren"
+msgstr ""
 
 #: assembl/templates/notifications/html_new_discussion.jinja2:22
 msgid ""
@@ -3515,22 +3499,16 @@ msgid "True"
 msgstr ""
 
 #: assembl/templates/views/emailSource.tmpl:48
-#, fuzzy
-#| msgid "Close"
 msgid "False"
-msgstr "Schließen"
+msgstr ""
 
 #: assembl/templates/views/emailSource.tmpl:52
-#, fuzzy
-#| msgid "Role"
 msgid "Folder"
-msgstr "Rolle"
+msgstr ""
 
 #: assembl/templates/views/emailSource.tmpl:60
-#, fuzzy
-#| msgid "Reimport"
 msgid "Port"
-msgstr "Neu importieren"
+msgstr ""
 
 #: assembl/templates/views/exportPostModal-fb-group.tmpl:2
 msgid "Select Group"
@@ -4861,13 +4839,4 @@ msgstr ""
 #, python-format
 msgid "No discussion found for slug=%s"
 msgstr "Keine Diskussionen gefunden für Slug=%s"
-
-#~ msgid "Add a title"
-#~ msgstr "Einen Titel hinzufügen"
-
-#~ msgid "Add an introduction"
-#~ msgstr "Eine Einleitung hinzufügen"
-
-#~ msgid "Add a conclusion"
-#~ msgstr "Eine Schlussfolgerung hinzufügen"
 

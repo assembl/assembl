@@ -1,5 +1,5 @@
 # French translations for assembl.
-# Copyright (C) 2017 ORGANIZATION
+# Copyright (C) 2018 ORGANIZATION
 # This file is distributed under the same license as the assembl project.
 #
 # Translators:
@@ -8,13 +8,13 @@
 # François Burra <francoisburra@imaginationforpeople.org>, 2014-2016
 # Hotellook, 2014
 # Marc-Antoine Parent <maparent@acm.org>, 2014-2015
-# Quentin Grimaud <quentin.grimaud@gmail.com>, 2014-2016
+# Quentin Grimaud <quentin.grimaud@gmail.com>, 2014-2016,2018
 msgid ""
 msgstr ""
 "Project-Id-Version:  Assembl\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2018-01-31 10:34+0100\n"
-"PO-Revision-Date: 2017-09-23 20:05+0000\n"
+"POT-Creation-Date: 2018-01-31 10:49+0100\n"
+"PO-Revision-Date: 2018-01-31 09:49+0000\n"
 "Last-Translator: Quentin Grimaud <quentin.grimaud@gmail.com>\n"
 "Language: fr\n"
 "Language-Team: French "
@@ -27,7 +27,7 @@ msgstr ""
 
 #: assembl/auth/util.py:140
 msgid "Your session has expired, you need to login again"
-msgstr ""
+msgstr "Votre session a expiré, il faut que vous vous connectiez à nouveau"
 
 #: assembl/auth/util.py:504
 msgid "The CSV file must have two columns"
@@ -181,11 +181,11 @@ msgstr "Voir le bouton Partager sur les messages et le panneau Idée"
 
 #: assembl/models/preferences.py:507
 msgid "Require anti-virus check"
-msgstr ""
+msgstr "Forcer une analyse anti-virus"
 
 #: assembl/models/preferences.py:510
 msgid "Run an anti-virus on file attachments"
-msgstr ""
+msgstr "Exécuter une analyse anti-virus sur les fichiers attachés"
 
 #: assembl/models/preferences.py:521
 msgid "Private authentication server"
@@ -597,10 +597,8 @@ msgid "See results from the vote of "
 msgstr "Voir les résultats des votes de "
 
 #: assembl/static/js/app/models/widget.js:289
-#, fuzzy
-#| msgid "See the vote results"
 msgid "Vote results"
-msgstr "Voir les résultats de vote"
+msgstr "Résultats du vote"
 
 #: assembl/static/js/app/models/widget.js:332
 msgid "This vote widget is not fully configured"
@@ -2008,16 +2006,12 @@ msgid "Synthesis"
 msgstr "Synthèse"
 
 #: assembl/static/js/app/views/synthesisPanel.js:227
-#, fuzzy
-#| msgid "Read the synthesis"
 msgid "A short title for the synthesis"
-msgstr "Lire la synthèse"
+msgstr "Un titre court pour la synthèse"
 
 #: assembl/static/js/app/views/synthesisPanel.js:228
-#, fuzzy
-#| msgid "Last synthesis"
 msgid "New Synthesis"
-msgstr "Dernière synthèse"
+msgstr "Nouvelle synthèse"
 
 #: assembl/static/js/app/views/synthesisPanel.js:239
 msgid "You can add an introduction to your synthesis here..."
@@ -2140,10 +2134,8 @@ msgid "Go back to the discussion"
 msgstr "Revenir à la discussion"
 
 #: assembl/static/js/app/views/tokenVoteSession.js:1733
-#, fuzzy
-#| msgid "Modify your vote"
 msgid "Modify my vote"
-msgstr "Modifier votre vote"
+msgstr "Modifier mon vote"
 
 #: assembl/static/js/app/views/tokenVoteSession.js:1751
 msgid "Vote confirmation"
@@ -2713,26 +2705,20 @@ msgid "Thanks!"
 msgstr "Merci !"
 
 #: assembl/templates/notifications/html_mail.jinja2:82
-#, fuzzy, python-format
-#| msgid "" "You are receiving this because you are %(notificationConfigLink)s
-#| to " "discussion %(discussionLink)s.  Specifically, you currently receive a
-#| " "notification when:"
+#, python-format
 msgid ""
 "You are receiving this because you are subscribed to discussion "
 "%(discussionLink)s.  Specifically, you currently receive a notification "
 "when:"
 msgstr ""
-"Vous recevez ceci parce que vous êtes %(notificationConfigLink)s à la "
-"discussion %(discussionLink)s. Vous recevez actuellement une notification"
-" lorsque :"
+"Vous recevez ceci parce que vous êtes abonné à la discussion "
+"%(discussionLink)s. Vous recevez actuellement une notification lorsque :"
 
 #: assembl/templates/notifications/html_mail_post.jinja2:62
 msgid "Reply to this message"
 msgstr "Répondre à ce message"
 
 #: assembl/templates/notifications/html_mail_post_synthesis.jinja2:37
-#, fuzzy
-#| msgid "Comment this synthesis"
 msgid "Comment on this synthesis"
 msgstr "Commentez cette synthèse"
 
@@ -3145,7 +3131,7 @@ msgstr "URL d'une image"
 
 #: assembl/templates/views/adminTimelineEvent.tmpl:29
 msgid "Use v1 interface"
-msgstr ""
+msgstr "Utiliser l'interface utilisateur v1"
 
 #: assembl/templates/views/adminTimelineEvents.tmpl:6
 #: assembl/templates/views/discussionAdminNavigationMenu.tmpl:15
@@ -3609,53 +3595,49 @@ msgstr "Obtenir les statistiques des participants à la discussion"
 
 #: assembl/templates/views/emailSource.tmpl:13
 msgid "Admin sender"
-msgstr ""
+msgstr "Expéditeur administrateur"
 
 #: assembl/templates/views/emailSource.tmpl:16
 msgid ""
 "This field is an e-mail address, and is mandatory: it will be the value "
 "of notification emails' From field"
 msgstr ""
+"Ce champ est une adresse e-mail, et est obligatoire : ce sera la valeur "
+"que prendra le champ De dans les emails de notification"
 
 #: assembl/templates/views/emailSource.tmpl:22
 msgid "Post email address"
-msgstr ""
+msgstr "Adresse email Post"
 
 #: assembl/templates/views/emailSource.tmpl:25
 msgid "For mailing lists only: Where messages are sent to the list"
 msgstr ""
+"Pour les listes de discussion seulement : C'est l'adresse email de "
+"destination pour que laquelle les messages sont envoyés à toute la liste"
 
 #: assembl/templates/views/emailSource.tmpl:30
-#, fuzzy
-#| msgid "Posts"
 msgid "Host"
-msgstr "Messages"
+msgstr "Host"
 
 #: assembl/templates/views/emailSource.tmpl:37
 msgid "Use SSL"
-msgstr ""
+msgstr "Utiliser SSL"
 
 #: assembl/templates/views/emailSource.tmpl:43
 msgid "True"
-msgstr ""
+msgstr "Vrai"
 
 #: assembl/templates/views/emailSource.tmpl:48
-#, fuzzy
-#| msgid "Close"
 msgid "False"
-msgstr "Fermer"
+msgstr "Faux"
 
 #: assembl/templates/views/emailSource.tmpl:52
-#, fuzzy
-#| msgid "Role"
 msgid "Folder"
-msgstr "Rôle"
+msgstr "Dossier"
 
 #: assembl/templates/views/emailSource.tmpl:60
-#, fuzzy
-#| msgid "Reimport"
 msgid "Port"
-msgstr "Réimportation"
+msgstr "Port"
 
 #: assembl/templates/views/exportPostModal-fb-group.tmpl:2
 msgid "Select Group"
@@ -5060,13 +5042,4 @@ msgstr ""
 #, python-format
 msgid "No discussion found for slug=%s"
 msgstr "Nous n’avons pas de discussion sous le code=%s"
-
-#~ msgid "Add a title"
-#~ msgstr "Ajouter un titre"
-
-#~ msgid "Add an introduction"
-#~ msgstr "Ajouter une introduction"
-
-#~ msgid "Add a conclusion"
-#~ msgstr "Ajouter une conclusion"
 

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: assembl 0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2018-01-31 10:34+0100\n"
+"POT-Creation-Date: 2018-01-31 10:49+0100\n"
 "PO-Revision-Date: 2017-11-08 22:44+0400\n"
 "Last-Translator: Benoit Grégoire <benoitg@coeus.ca>\n"
 "Language: ru\n"
@@ -577,7 +577,6 @@ msgstr "См. Результаты голосования "
 
 #: assembl/static/js/app/models/widget.js:289
 #, fuzzy
-#| msgid "See the vote results"
 msgid "Vote results"
 msgstr "См. Результаты голосования"
 
@@ -1967,13 +1966,11 @@ msgstr "синтез;"
 
 #: assembl/static/js/app/views/synthesisPanel.js:227
 #, fuzzy
-#| msgid "Read the synthesis"
 msgid "A short title for the synthesis"
 msgstr "Прочитать синтез"
 
 #: assembl/static/js/app/views/synthesisPanel.js:228
 #, fuzzy
-#| msgid "Last synthesis"
 msgid "New Synthesis"
 msgstr "Последний синтез"
 
@@ -2099,7 +2096,6 @@ msgstr "Вернуться к обсуждению"
 
 #: assembl/static/js/app/views/tokenVoteSession.js:1733
 #, fuzzy
-#| msgid "Modify your vote"
 msgid "Modify my vote"
 msgstr "Изменить голос"
 
@@ -2662,9 +2658,6 @@ msgstr "Спасибо!"
 
 #: assembl/templates/notifications/html_mail.jinja2:82
 #, fuzzy, python-format
-#| msgid "" "You are receiving this because you are %(notificationConfigLink)s
-#| to " "discussion %(discussionLink)s.  Specifically, you currently receive a
-#| " "notification when:"
 msgid ""
 "You are receiving this because you are subscribed to discussion "
 "%(discussionLink)s.  Specifically, you currently receive a notification "
@@ -2680,7 +2673,6 @@ msgstr "Ответить на это сообщение"
 
 #: assembl/templates/notifications/html_mail_post_synthesis.jinja2:37
 #, fuzzy
-#| msgid "Comment this synthesis"
 msgid "Comment on this synthesis"
 msgstr "Прокомментировать этот синтез"
 
@@ -3585,7 +3577,6 @@ msgstr ""
 
 #: assembl/templates/views/emailSource.tmpl:30
 #, fuzzy
-#| msgid "Posts"
 msgid "Host"
 msgstr "Посты"
 
@@ -3599,19 +3590,16 @@ msgstr ""
 
 #: assembl/templates/views/emailSource.tmpl:48
 #, fuzzy
-#| msgid "Close"
 msgid "False"
 msgstr "Закрыть"
 
 #: assembl/templates/views/emailSource.tmpl:52
 #, fuzzy
-#| msgid "Role"
 msgid "Folder"
 msgstr "Роль"
 
 #: assembl/templates/views/emailSource.tmpl:60
 #, fuzzy
-#| msgid "Reimport"
 msgid "Port"
 msgstr "Реимпорт"
 
