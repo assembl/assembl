@@ -17,7 +17,7 @@ import sqlalchemy as sa
 def upgrade(pyramid_env):
     with context.begin_transaction():
         op.create_table('gauge_choice_specification',
-            sa.Column('id', sa.Integer, sa.ForeignKey('vote_specification.id', ondelete='CASCADE', onupdate='CASCADE'), primary_key=True),
+            sa.Column('id', sa.Integer, primary_key=True),
             sa.Column('value', sa.Float),
             sa.Column('label_id', sa.Integer, sa.ForeignKey('langstring.id')),
             sa.Column('vote_specification_id', sa.Integer, sa.ForeignKey('vote_specification.id', ondelete='CASCADE', onupdate='CASCADE'), nullable=False, index=True)
