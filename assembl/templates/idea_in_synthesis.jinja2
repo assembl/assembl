@@ -1,6 +1,8 @@
 <div>
 {% if idea %}
-{% if idea.long_title %}
+{% if idea.synthesis_title %}
+{{idea.synthesis_title.best_lang(lang_prefs).value|safe}}
+{% elif idea.long_title %}
 {{idea.long_title|safe}}
 {% else %}
 <p>{{idea.short_title}}</p>
