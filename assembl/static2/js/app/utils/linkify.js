@@ -27,7 +27,7 @@ export function transformLinksInHtml(html: string): string {
       if (result) {
         const videoId = result[1];
         const embedUrl = `https://www.youtube.com/embed/${videoId}`;
-        const embeddedIFrame = `<div><iframe title="" src="${embedUrl}" frameborder="0" class="embedded-video" allowfullscreen></iframe></div>`;
+        const embeddedIFrame = `<div><iframe title="" src="${embedUrl}" frameborder="0" class="embedded-video" allowfullscreen></iframe></div>`; // eslint-disable-line max-len
         return {
           origin: new RegExp(url.replace(/[-/\\^$*+?.()|[\]{}]/gm, '\\$&'), 'g'),
           dest: url + embeddedIFrame

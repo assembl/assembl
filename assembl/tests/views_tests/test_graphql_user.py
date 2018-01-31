@@ -41,6 +41,7 @@ query User($id: ID!) {
         email
         creationDate
         image { externalUrl }
+        hasPassword
       }
     }
   }
@@ -55,6 +56,7 @@ query User($id: ID!) {
     # 2018-01-04T12:08:44.735489+00:00
     assert u'T' in res.data['user']['creationDate']
     assert res.data['user']['image'] is None
+    assert res.data['user']['hasPassword']
 
 
 def test_graphql_get_profile_should_not_see_email(graphql_request, discussion_with_default_data, participant1_user, participant2_user):
