@@ -9,12 +9,14 @@ notification
 frontendUrls
 ink_css
 synthesis
+jinja_env
+lang_prefs
 #}
 
 {% extends "notifications/html_mail_post.jinja2" %}
 
 {%- block post_body %}
-  {{ synthesis.as_html(jinja_env) }}
+  {{ synthesis.as_html(jinja_env, lang_prefs) }}
   {#
   {{ synthesis.introduction }}
   #}
