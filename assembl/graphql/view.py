@@ -1,7 +1,9 @@
 from pyramid.view import view_config
 from pyramid.httpexceptions import HTTPUnauthorized
 from pyramid.security import Everyone
-from graphql_wsgi import graphql_wsgi
+from graphql_wsgi import graphql_wsgi as graphql_wsgi_wrapper
+from graphql_wsgi.main import get_graphql_params as original_get_graphql_params
+import graphql_wsgi.main
 
 from assembl import models
 from assembl.auth import CrudPermissions
@@ -13,16 +15,38 @@ from assembl.lib.logging import getLogger
 class LoggingMiddleware(object):
     def resolve(self, next, source, gargs, context, info, *args, **kwargs):
         if source is None:
-            variables = {}
+            modified_variables = {}
             for key, value in info.variable_values.items():
                 if 'password' in key or 'Password' in key:
-                    variables[key] = 'xxxxxxxxxxxxx'
+                    modified_variables[key] = 'xxxxxxxxxxxxx'
                 else:
-                    variables[key] = value
+                    modified_variables[key] = value
+
             getLogger().debug(
                 'graphql', op=info.operation.operation,
-                opname=info.operation.name.value, vars=variables)
+                opname=info.operation.name.value, vars=modified_variables)
         return next(source, gargs, context, info, *args, **kwargs)
+
+
+def get_graphql_params(request, data):
+    query, variables, operation_name = original_get_graphql_params(request, data)
+    modified_variables = {}
+    for key, value in variables.items():
+        if 'password' in key or 'Password' in key:
+            modified_variables[key] = 'xxxxxxxxxxxxx'
+        else:
+            modified_variables[key] = value
+
+    operation = query.split()[0]
+    getLogger().debug(
+        'graphql', op=operation,
+        opname=operation_name, vars=modified_variables)
+
+    return query, variables, operation_name
+
+
+# monkey patch get_graphql_params for logging
+graphql_wsgi.main.get_graphql_params = get_graphql_params
 
 
 # Only allow POST (query may be GET, but mutations should always be a POST,
@@ -44,5 +68,8 @@ def graphql_api(request):
     if not discussion.user_can(user_id, CrudPermissions.READ, permissions):
         raise HTTPUnauthorized()
 
-    solver = graphql_wsgi(Schema, middleware=[LoggingMiddleware()])
+    # Using a middleware transforms the request to a promise that
+    # doesn't play nice with multiprocesses or multithreading and sqlalchemy session.
+    # We monkey patch get_graphql_params for logging instead.
+    solver = graphql_wsgi_wrapper(Schema)  # , middleware=[LoggingMiddleware()])
     return solver(request)

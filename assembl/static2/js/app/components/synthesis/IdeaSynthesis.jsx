@@ -6,7 +6,7 @@ import { Link } from 'react-router';
 
 import StatisticsDoughnut from '../debate/common/statisticsDoughnut';
 import PostsAndContributorsCount from '../common/postsAndContributorsCount';
-import { getSentimentsCount, createDoughnutElements } from '../debate/common/announcement';
+import { getColumnInfos, getSentimentsCount, createDoughnutElements } from '../debate/common/announcement';
 
 export type SynthesisIdea = {
   id: string,
@@ -21,6 +21,8 @@ export type SynthesisIdea = {
     },
     numContributors: number,
     numPosts: number,
+    messageColumns: Array<IdeaMessageColumnFragment>,
+    messageViewOverride: string,
     posts: {
       edges: Array<Object>
     }
@@ -41,13 +43,14 @@ const LinkToIdea = ({ href }) => (
   </Link>
 );
 
-const SynthesisStats = ({ numContributors, numPosts, ideaLink, posts }) => {
-  const sentimentCounts = getSentimentsCount(posts);
-  const doughnutElements = createDoughnutElements(sentimentCounts);
+const SynthesisStats = ({ numContributors, numPosts, ideaLink, posts, isMultiColumns, messageColumns }) => {
+  const sentimentsCount = getSentimentsCount(posts);
+  const columnInfos = getColumnInfos(messageColumns);
+  const doughnutElements = isMultiColumns ? columnInfos : createDoughnutElements(sentimentsCount);
   return (
     <div className="synthesis-stats">
       <StatisticsDoughnut elements={doughnutElements} placement="after" />
-      <PostsAndContributorsCount vertical numContributors={numContributors} numPosts={numPosts} />
+      <PostsAndContributorsCount vertical numContributors={numContributors} numPosts={numPosts} showNumPosts={!isMultiColumns} />
       <LinkToIdea href={ideaLink} />
     </div>
   );
@@ -76,13 +79,22 @@ const SynthesisImage = ({ level, imgUrl, stats }) => {
 
 const IdeaSynthesis = (props: { idea: SynthesisIdea, hasSiblings: boolean, level: number, slug: string }) => {
   const { idea, hasSiblings, level, slug } = props;
-  const { id, img, numContributors, numPosts, posts } = idea.live;
+  const { id, img, numContributors, numPosts, posts, messageViewOverride, messageColumns } = idea.live;
   const phaseIdentifier = 'thread'; // TODO: Proper phase identification
   // For now, syntheses can only have ideas from the "thread" phase.
 
   const imgUrl = img && img.externalUrl;
   const link = `/${slug}/debate/${phaseIdentifier}/theme/${id}`;
-  const stats = <SynthesisStats numContributors={numContributors} numPosts={numPosts} ideaLink={link} posts={posts} />;
+  const stats = (
+    <SynthesisStats
+      numContributors={numContributors}
+      numPosts={numPosts}
+      ideaLink={link}
+      posts={posts}
+      isMultiColumns={messageViewOverride === 'messageColumns'}
+      messageColumns={messageColumns}
+    />
+  );
   return (
     <div className={`${'idea-synthesis idea-synthesis-level-'}${level}`}>
       <SynthesisImage level={level} imgUrl={imgUrl} stats={stats} />

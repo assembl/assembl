@@ -1,18 +1,24 @@
 import React from 'react';
 
-const PostsAndContributorsCount = ({ vertical, numContributors, numPosts, className = '' }) => {
-  const elemClassName = 'counter-with-icon';
-  return (
-    <div className={`counters ${className}`}>
-      <span className={elemClassName}>
-        {numPosts} <span className="assembl-icon-message" />
-      </span>
-      {vertical || ' - '}
-      <span className={elemClassName}>
-        {numContributors} <span className="assembl-icon-profil" />
-      </span>
-    </div>
-  );
-};
+export const Counter = ({ num, elemClassName = 'counter-with-icon', className = '' }) => (
+  <span className={elemClassName}>
+    {num} <span className={className} />
+  </span>
+);
+
+const PostsAndContributorsCount = ({
+  vertical,
+  numContributors,
+  numPosts,
+  className = '',
+  showNumPosts = true,
+  showNumContributors = true
+}) => (
+  <div className={`counters ${className}`}>
+    {showNumPosts && <Counter num={numPosts} className="assembl-icon-message" />}
+    {vertical || ' - '}
+    {showNumContributors && <Counter num={numContributors} className="assembl-icon-profil" />}
+  </div>
+);
 
 export default PostsAndContributorsCount;
