@@ -69,7 +69,7 @@ export class DumbMenuItem extends React.Component<*, MenuItemProps, MenuItemStat
         <Link
           onClick={onClick}
           className="menu-item"
-          to={`${get('debate', { slug: slug, phase: identifier })}${get('theme', { themeId: id })}`}
+          to={`${get('themeInPhase', { slug: slug, phase: identifier, themeId: id })}`}
         >
           <div className="thumb-img" style={img && img.externalUrl ? { backgroundImage: `url(${img.externalUrl})` } : null}>
             <div className="thumb-img-background" />
