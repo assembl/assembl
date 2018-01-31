@@ -142,11 +142,11 @@ class Administration extends React.Component {
 
   putVoteModulesInStore(voteSession) {
     const filteredVoteModules = filter(VoteSessionQuery, { voteSession: voteSession });
-    const filteredTokenVoteModules = filteredVoteModules.voteSession.modules.filter(
-      tokenVoteModule => tokenVoteModule.tokenCategories
-    );
+    const filteredTokenVoteModules = filteredVoteModules.voteSession
+      ? filteredVoteModules.voteSession.modules.filter(tokenVoteModule => tokenVoteModule.tokenCategories)
+      : null;
     const modules = [];
-    if (filteredTokenVoteModules[0]) {
+    if (filteredTokenVoteModules && filteredTokenVoteModules[0]) {
       modules.push({
         ...filteredTokenVoteModules[0],
         type: 'tokens'
@@ -185,7 +185,8 @@ class Administration extends React.Component {
       refetchResourcesCenter,
       refetchTabsConditions,
       refetchSections,
-      refetchLegalNoticeAndTerms
+      refetchLegalNoticeAndTerms,
+      refetchVoteSession
     } = this.props;
     const { phase } = params;
     const { timeline } = this.props.debate.debateData;
@@ -207,6 +208,7 @@ class Administration extends React.Component {
                     refetchTabsConditions={refetchTabsConditions}
                     refetchThematics={data.refetch}
                     refetchResources={refetchResources}
+                    refetchVoteSession={refetchVoteSession}
                     refetchSections={refetchSections}
                     refetchResourcesCenter={refetchResourcesCenter}
                     refetchLegalNoticeAndTerms={refetchLegalNoticeAndTerms}
@@ -345,7 +347,8 @@ export default compose(
       return {
         voteSessionLoading: data.loading,
         voteSessionHasErrors: data.error,
-        voteSession: data.voteSession
+        voteSession: data.voteSession,
+        refetchVoteSession: data.refetch
       };
     }
   }),

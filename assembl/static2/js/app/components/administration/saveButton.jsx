@@ -22,7 +22,7 @@ import updateLegalNoticeAndTermsMutation from '../../graphql/mutations/updateLeg
 import updateDiscussionPreferenceQuery from '../../graphql/mutations/updateDiscussionPreference.graphql';
 import getDiscussionPreferenceLanguage from '../../graphql/DiscussionPreferenceLanguage.graphql';
 import updateVoteSessionMutation from '../../graphql/mutations/updateVoteSession.graphql';
-import deleteTokenVoteSpecificationMutation from '../../graphql/mutations/deleteTokenVoteSpecification.graphql';
+import deleteTokenVoteSpecificationMutation from '../../graphql/mutations/deleteVoteSpecification.graphql';
 import createTokenVoteSpecificationMutation from '../../graphql/mutations/createTokenVoteSpecification.graphql';
 import updateTokenVoteSpecificationMutation from '../../graphql/mutations/updateTokenVoteSpecification.graphql';
 
@@ -167,7 +167,8 @@ const SaveButton = ({
   modulesHaveChanged,
   deleteTokenVoteSpecification,
   createTokenVoteSpecification,
-  updateTokenVoteSpecification
+  updateTokenVoteSpecification,
+  refetchVoteSession
 }) => {
   const saveAction = () => {
     displayAlert('success', `${I18n.t('loading.wait')}...`);
@@ -310,6 +311,7 @@ const SaveButton = ({
       };
       updateVoteSession(payload)
         .then(() => {
+          refetchVoteSession();
           displayAlert('success', I18n.t('administration.voteSessionSuccess'));
         })
         .catch((error) => {
@@ -337,7 +339,7 @@ const SaveButton = ({
       });
 
       runSerial(mutationsPromises).then(() => {
-        refetchSections();
+        refetchVoteSession();
         displayAlert('success', I18n.t('administration.voteSessionSuccess'));
       });
     }
@@ -450,8 +452,13 @@ const mapStateToProps = ({
     legalNoticeAndTerms: legalNoticeAndTerms,
     voteSessionPage: voteSession.page,
     modulesHaveChanged: modulesHaveChanged,
-    voteModules: modulesInOrder.map(id =>
-      modulesById.get(id).set('tokenCategories', modulesById.getIn([id, 'tokenCategories']).map(t => tokenCategoriesById.get(t)))
+    voteModules: modulesInOrder.map(
+      id =>
+        (modulesById.getIn([id, 'tokenCategories'])
+          ? modulesById
+            .get(id)
+            .set('tokenCategories', modulesById.getIn([id, 'tokenCategories']).map(t => tokenCategoriesById.get(t)))
+          : [])
     )
   };
 };
