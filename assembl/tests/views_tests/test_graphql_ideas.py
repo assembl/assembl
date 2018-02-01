@@ -8,8 +8,7 @@ from assembl import models
 from assembl.graphql.schema import Schema as schema
 
 
-@pytest.mark.skip(reason="Faling test")
-def test_graphql_numTotalPosts_of_sub_idea_1(graphql_request, root_idea, subidea_1, subidea_1_1,
+def test_graphql_numPosts_of_sub_idea_1(graphql_request, root_idea, subidea_1, subidea_1_1,
                                              subidea_1_1_1,
                                              idea_message_column_positive_on_subidea_1_1,
                                              idea_message_column_negative_on_subidea_1_1,
@@ -18,21 +17,23 @@ def test_graphql_numTotalPosts_of_sub_idea_1(graphql_request, root_idea, subidea
                                              post_related_to_sub_idea_1_1_1,
                                              post_related_to_sub_idea_1
                                              ):
+    subidea_1_1.message_view_override = 'messageColumns'
+    subidea_1_1.messages_in_parent = False
+    subidea_1_1.db.flush()
+
+    # This test verify that we don't care about messages_in_parent to count posts.
     res = schema.execute(
         u"""query AllIdeasQuery ($identifier: String!){
             ideas (identifier: $identifier) {
               ... on Idea {
                 id
                 numPosts
-                numTotalPosts
-                parentId
               }
             }
             rootIdea {
               ... on Idea {
                 id
                 numPosts
-                numTotalPosts
               }
             }
         }
@@ -45,11 +46,13 @@ def test_graphql_numTotalPosts_of_sub_idea_1(graphql_request, root_idea, subidea
             if int(from_global_id(idea['id'])[1]) == id:
                 return idea
 
-    ideaA = findIdeaById(subidea_1.id)
+    idea = findIdeaById(subidea_1.id)
     child_idea = findIdeaById(subidea_1_1.id)
     grand_child_idea = findIdeaById(subidea_1_1_1.id)
-    assert ideaA['numTotalPosts'] == ideaA['numPosts'] + child_idea['numTotalPosts']
-    assert ideaA['numTotalPosts'] == ideaA['numPosts'] + child_idea['numPosts'] + grand_child_idea['numTotalPosts']
+    assert root_idea['numPosts'] == 4
+    assert idea['numPosts'] == 4
+    assert child_idea['numPosts'] == 3
+    assert grand_child_idea['numPosts'] == 1
 
 
 def test_graphql_get_all_ideas(graphql_request,
