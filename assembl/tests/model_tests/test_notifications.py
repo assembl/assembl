@@ -124,6 +124,7 @@ def test_synthesis_notification_in_user_preferred_language_fr(test_session, disc
     assert "subject FR" in html_content
     assert "introduction FR" in html_content
     assert "conclusion FR" in html_content
+    # TODO: also check that syntheses of several ideas do also show in the user's preferred language, and other gettext strings if available
 
 
 def test_synthesis_notification_in_user_preferred_language_en(test_session, discussion,
@@ -152,6 +153,7 @@ def test_synthesis_notification_in_user_preferred_language_en(test_session, disc
     assert "subject EN" in html_content
     assert "introduction EN" in html_content
     assert "conclusion EN" in html_content
+    # TODO: also check that syntheses of several ideas do also show in the user's preferred language, and other gettext strings if available
 
 
 def test_notification_follow_all_messages(test_session, discussion,
