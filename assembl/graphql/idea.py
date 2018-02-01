@@ -10,7 +10,7 @@ from graphene_sqlalchemy.utils import is_mapped
 from pyramid.httpexceptions import HTTPUnauthorized
 from pyramid.security import Everyone
 from sqlalchemy import desc, func, join, select
-from sqlalchemy.orm import joinedload, undefer
+from sqlalchemy.orm import joinedload
 from sqlalchemy.sql.functions import count
 
 from assembl import models
@@ -235,29 +235,34 @@ class Idea(SecureObjectType, SQLAlchemyObjectType):
         related = self.get_related_posts_query(
             partial=True, include_deleted=None)
         # The related query returns a list of (<PropositionPost id=2 >, None) instead of <PropositionPost id=2 > when authenticated, this is why we do another query here:  # noqa: E501
-        Post = models.Post
-        query = Post.query.join(
-            related, Post.id == related.c.post_id
-        ).order_by(desc(Post.creation_date), Post.id
-                   ).options(
-            joinedload(Post.creator),
-            undefer(Post.idea_content_links_above_post)
+        fields = get_fields(info)
+        no_pagination = args.get('first') is None and args.get('after') is None
+        sentiments_only = no_pagination and sorted(fields.get('edges', {}).get('node', {}).keys()) == [u'publicationState', u'sentimentCounts']
+
+        query = models.Post.query.join(
+            related, models.Post.id == related.c.post_id
         )
-        if len(discussion.discussion_locales) > 1:
-            query = query.options(*models.Content.subqueryload_options())
+        if not sentiments_only:
+            Post = models.Post
+            query = query.order_by(desc(Post.creation_date), Post.id)
+            if len(discussion.discussion_locales) > 1:
+                query = query.options(*models.Content.subqueryload_options())
+            else:
+                query = query.options(*models.Content.joinedload_options())
+            post_ids = query.with_entities(models.Post.id).subquery()
         else:
-            query = query.options(*models.Content.joinedload_options())
+            query = query.with_entities(models.Post.id, models.Post.publication_state)
+            query = query.all()  # execute the query only once, we iter again below
+            post_ids = [id for id, _ in query]
 
         # do only one sql query to calculate sentiment_counts
         # instead of doing one query for each post
-        fields = get_fields(info)
         if 'sentimentCounts' in fields.get('edges', {}).get('node', {}):
             sentiment_counts = discussion.db.query(
                 models.Post.id, models.SentimentOfPost.type, count(
                     models.SentimentOfPost.id)
             ).join(models.SentimentOfPost).filter(
-                models.Post.id.in_(
-                    query.with_entities(models.Post.id).subquery()),
+                models.Post.id.in_(post_ids),
                 models.SentimentOfPost.tombstone_condition()
             ).group_by(models.Post.id, models.SentimentOfPost.type)
             sentiment_counts_by_post_id = defaultdict(dict)
@@ -269,7 +274,16 @@ class Idea(SecureObjectType, SQLAlchemyObjectType):
             # in Post's resolve_sentiment_counts
             context.sentiment_counts_by_post_id = sentiment_counts_by_post_id
 
+        if sentiments_only:
+            from .post import Post
+            query = [Post(id=id, publication_state=publication_state) for id, publication_state in query]
+            return query
+
         # pagination is done after that, no need to do it ourself
+        # but if we get all posts, iterate now to avoid an extra count query
+        if no_pagination:
+            return query.all()
+
         return query
 
     def resolve_contributors(self, args, context, info):
