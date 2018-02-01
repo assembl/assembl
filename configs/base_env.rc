@@ -79,7 +79,7 @@ _projectname = assembl
 # _projectpath
 # _dbdumps_dir
 
-# If you wish to have ssl_stapling for nginx, path to certificate
+# Optional - Path to SSL Stapling certificates, must be single file
 # on server
 oscp_path =
 

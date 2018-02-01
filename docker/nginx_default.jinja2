@@ -29,7 +29,7 @@ server {
     ssl_stapling on;
     ssl_stapling_verify on;
     {% if oscp_path %}
-      ssl_trusted_certificate {{ oscp_path }};
+    ssl_trusted_certificate {{ oscp_path }};
     {% endif %}
 
   {% else %}
