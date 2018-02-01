@@ -38,8 +38,12 @@ class PShellCommandA(PShellCommand):
             elif k == 'default_shell':
                 self.preferred_shells = [x.lower() for x in aslist(v)]
             else:
-                self.loaded_objects[k] = resolver.maybe_resolve(v)
-                self.object_help[k] = v
+                try:
+                    self.loaded_objects[k] = resolver.maybe_resolve(v)
+                    self.object_help[k] = v
+                except ImportError:
+                    print "Pshell ImportError\n"
+                    print k, v
 
 
 if __name__ == '__main__':  # pragma: no cover
