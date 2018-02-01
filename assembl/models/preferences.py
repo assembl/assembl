@@ -501,6 +501,21 @@ class Preferences(MutableMapping, Base, NamedClassMixin):
             "default": True
         },
 
+        # Extra data from social fields to put in CSV reports
+        {
+            "id": "extra_csv_data",
+            "name": _("Extra data for CSV reports"),
+            "value_type": "dict_of_string_to_langstr",
+            # "scalar_values": {value: "label"},
+            "description": _("data taken from social_auth's extra_data to add to CSV reports"),
+            "allow_user_override": None,
+            "modification_permission": P_ADMIN_DISC,
+            # "frontend_validator_function": func_name...?,
+            "backend_validator_function": "assembl.models.social_data_extraction.validate_json_paths",
+            "item_default": {"": {"en": ""}},
+            "default": {}  # for development
+        },
+
         # Require virus check
         {
             "id": "requires_virus_check",
