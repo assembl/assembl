@@ -98,6 +98,62 @@ def test_notification_follow_synthesis(test_session, discussion,
     assert notification_count == initial_notification_count + 1, "The synthesis post should have matched and created a notification"
 
 
+def test_synthesis_notification_in_user_preferred_language_fr(test_session, discussion,
+                                                           participant1_user, participant1_user_language_preference_fr_cookie,
+                                                           test_app, root_post_1,
+                                                           synthesis_post_1):
+    test_session.flush()
+    subscription = NotificationSubscriptionFollowSyntheses(
+        discussion=discussion,
+        user=participant1_user,
+        creation_origin=NotificationCreationOrigin.USER_REQUESTED
+    )
+    test_session.add(subscription)
+
+    initial_notification_count = test_session.query(Notification).count()
+    dispatcher = ModelEventWatcherNotificationSubscriptionDispatcher()
+
+    notification_count = test_session.query(Notification).count()
+    
+    dispatcher.processPostCreated(synthesis_post_1.id)
+
+    last_notification = participant1_user.notifications[-1]
+
+    html_content = last_notification.render_to_email_html_part()
+
+    assert "subject FR" in html_content
+    assert "introduction FR" in html_content
+    assert "conclusion FR" in html_content
+
+
+def test_synthesis_notification_in_user_preferred_language_en(test_session, discussion,
+                                                           participant1_user, participant1_user_language_preference_en_cookie,
+                                                           test_app, root_post_1,
+                                                           synthesis_post_1):
+    test_session.flush()
+    subscription = NotificationSubscriptionFollowSyntheses(
+        discussion=discussion,
+        user=participant1_user,
+        creation_origin=NotificationCreationOrigin.USER_REQUESTED
+    )
+    test_session.add(subscription)
+
+    initial_notification_count = test_session.query(Notification).count()
+    dispatcher = ModelEventWatcherNotificationSubscriptionDispatcher()
+
+    notification_count = test_session.query(Notification).count()
+    
+    dispatcher.processPostCreated(synthesis_post_1.id)
+
+    last_notification = participant1_user.notifications[-1]
+
+    html_content = last_notification.render_to_email_html_part()
+
+    assert "subject EN" in html_content
+    assert "introduction EN" in html_content
+    assert "conclusion EN" in html_content
+
+
 def test_notification_follow_all_messages(test_session, discussion,
                                           participant1_user, reply_post_2,
                                           test_app, root_post_1,
