@@ -23,7 +23,6 @@ class LandingPageModuleType(SecureObjectType, SQLAlchemyObjectType):
 
     title = graphene.String(lang=graphene.String())
     title_entries = graphene.List(LangStringEntry)
-    helper_img_url = graphene.String()
 
     def resolve_title(self, args, context, info):
         return resolve_langstring(self.title, args.get('lang'))

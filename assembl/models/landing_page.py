@@ -13,7 +13,6 @@ from sqlalchemy.orm import relationship, backref
 
 from assembl.lib.sqla import Base
 from assembl.auth import CrudPermissions, P_ADMIN_DISC, P_SYSADMIN, P_READ
-from assembl.lib.sqla_types import URLString
 from . import DiscussionBoundBase
 from .langstrings import LangString
 
@@ -25,7 +24,6 @@ module_types = [
             u'en': u'Header',
             u'fr': u'Bandeau header'
         },
-        u'helper_img_url': u'',
         u'default_order': 1.0,
         u'editable_order': False,
         u'required': True
@@ -36,7 +34,6 @@ module_types = [
             u'en': u'Introduction',
             u'fr': u'Introduction'
         },
-        u'helper_img_url': u'',
         u'default_order': 2.0,
         u'editable_order': True,
         u'required': False
@@ -47,7 +44,6 @@ module_types = [
             u'en': u'Timeline',
             u'fr': u'Timeline'
         },
-        u'helper_img_url': u'',
         u'default_order': 3.0,
         u'editable_order': True,
         u'required': True
@@ -58,7 +54,6 @@ module_types = [
             u'en': u'Footer',
             u'fr': u'Footer'
         },
-        u'helper_img_url': u'',
         u'default_order': 99.0,
         u'editable_order': False,
         u'required': True
@@ -69,7 +64,6 @@ module_types = [
             u'en': u'Top thematics',
             u'fr': u'Thématiques à la une'
         },
-        u'helper_img_url': u'',
         u'default_order': 4.0
     },
     {
@@ -78,7 +72,6 @@ module_types = [
             u'en': u'Tweets',
             u'fr': u'Tweets'
         },
-        u'helper_img_url': u'',
         u'default_order': 5.0
     },
     {
@@ -87,7 +80,6 @@ module_types = [
             u'en': u'Video',
             u'fr': u'Vidéo'
         },
-        u'helper_img_url': u'',
         u'default_order': 6.0
     },
     {
@@ -96,7 +88,6 @@ module_types = [
             u'en': u'Chatbot',
             u'fr': u'Chatbot'
         },
-        u'helper_img_url': u'',
         u'default_order': 7.0
     },
     {
@@ -105,7 +96,6 @@ module_types = [
             u'en': u'Contact',
             u'fr': u'Contact'
         },
-        u'helper_img_url': u'',
         u'default_order': 8.0
     },
     {
@@ -114,7 +104,6 @@ module_types = [
             u'en': u'News',
             u'fr': u'Actualités à la une'
         },
-        u'helper_img_url': u'',
         u'default_order': 9.0
     },
     {
@@ -123,7 +112,6 @@ module_types = [
             u'en': u'Data',
             u'fr': u'Module bandeau Data'
         },
-        u'helper_img_url': u'',
         u'default_order': 10.0
     },
     {
@@ -132,7 +120,6 @@ module_types = [
             u'en': u'Partners',
             u'fr': u'Partenaires'
         },
-        u'helper_img_url': u'',
         u'default_order': 11.0
     },
 ]
@@ -157,8 +144,6 @@ class LandingPageModuleType(Base):
         primaryjoin=title_id == LangString.id,
         backref=backref("landing_page_module_type_from_title", lazy="dynamic"),
         cascade="all, delete-orphan")
-
-    helper_img_url = Column(URLString)
 
     default_order = Column(Float, nullable=False)
 

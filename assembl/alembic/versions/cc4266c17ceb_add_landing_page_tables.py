@@ -34,7 +34,6 @@ def upgrade(pyramid_env):
             sa.Column('type', sa.String(60), nullable=False),
             sa.Column('identifier', sa.String(30), nullable=False),
             sa.Column("title_id", sa.Integer, sa.ForeignKey("langstring.id")),
-            sa.Column('helper_img_url', URLString(1024)),
             sa.Column('default_order', sa.Float, nullable=False),
             sa.Column('editable_order', sa.Boolean, default=True),
             sa.Column('required', sa.Boolean, default=False),
