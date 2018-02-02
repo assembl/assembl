@@ -60,6 +60,16 @@ export const deleteTokenVoteModule = (id: string): actionTypes.DeleteTokenVoteMo
   type: actionTypes.DELETE_TOKEN_VOTE_MODULE
 });
 
+export const createGaugeVoteModule = (id: string): actionTypes.CreateTokenVoteModule => ({
+  id: id,
+  type: actionTypes.CREATE_GAUGE_VOTE_MODULE
+});
+
+export const deleteGaugeVoteModule = (id: string): actionTypes.DeleteTokenVoteModule => ({
+  id: id,
+  type: actionTypes.DELETE_GAUGE_VOTE_MODULE
+});
+
 export const updateTokenVoteExclusiveCategory = (id: string, value: boolean): actionTypes.UpdateTokenVoteExclusiveCategory => ({
   id: id,
   value: value,
