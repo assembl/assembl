@@ -16,7 +16,7 @@
 
 .token-vote-session-container {
   .submit-button-container {
-    margin-top: 20px;
+    margin-top: 25px;
     margin-bottom: 10px;
     text-align: right;
   }
@@ -226,7 +226,7 @@
     }
     th {
       color: #999;
-      padding-bottom: 0;
+      padding-bottom: 5px;
     }
     tbody > div {
       display: table-row;
@@ -238,8 +238,8 @@
     .left-column, .right-column {
       display: table-cell;
       vertical-align: top;
-      padding-top: 12px;
-      padding-bottom: 6px;
+      padding-top: 18px;
+      padding-bottom: 13px;
     }
     tbody > div:first-child {
       .left-column, .right-column {
@@ -428,6 +428,13 @@
         padding: 20px;
         color: white;
       }
+
+      .question-guideline-title {
+        font-size: 16px;
+        font-weight: bold;
+        color: $theme_btn_primary_bg_color;
+        margin-left: 5px;
+      }
     }
     
   }
@@ -527,8 +534,8 @@
   
   .left-column, .right-column {
     vertical-align: top;
-    padding-top: 12px;
-    padding-bottom: 6px;
+    padding-top: 18px;
+    padding-bottom: 13px;
     padding-left: 5px;
   }
 
@@ -618,7 +625,7 @@
   }
 
   .votables-collection {
-    margin-top: 10px;
+    margin-top: 25px;
     margin-left: 5px;
 
     .idea-title {

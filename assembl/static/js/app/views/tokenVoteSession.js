@@ -1613,6 +1613,7 @@ var TokenVoteSessionView = Marionette.LayoutView.extend({
     return {
       question_title: question_title,
       question_description: question_description,
+      question_guideline_title: i18n.gettext("Guideline"),
       available_tokens_info: i18n.gettext("Split your tokens among the ideas of your choice. By default, your vote is neutral per project."),
       save_vote: i18n.gettext("Save my votes")
     };
