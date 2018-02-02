@@ -16,27 +16,41 @@ import sqlalchemy as sa
 
 def upgrade(pyramid_env):
     with context.begin_transaction():
-        op.create_table('gauge_choice_specification',
+        op.create_table(
+            'gauge_choice_specification',
             sa.Column('id', sa.Integer, primary_key=True),
             sa.Column('value', sa.Float),
             sa.Column('label_id', sa.Integer, sa.ForeignKey('langstring.id')),
-            sa.Column('vote_specification_id', sa.Integer, sa.ForeignKey('vote_specification.id', ondelete='CASCADE', onupdate='CASCADE'), nullable=False, index=True)
+            sa.Column(
+                'vote_specification_id',
+                sa.Integer,
+                sa.ForeignKey('vote_specification.id', ondelete='CASCADE', onupdate='CASCADE'),
+                nullable=False, index=True)
         )
-        op.create_table('number_gauge_vote_specification',
-            sa.Column('id', sa.Integer, sa.ForeignKey('vote_specification.id', ondelete='CASCADE', onupdate='CASCADE'), primary_key=True),
+        op.create_table(
+            'number_gauge_vote_specification',
+            sa.Column(
+                'id', sa.Integer,
+                sa.ForeignKey('vote_specification.id', ondelete='CASCADE', onupdate='CASCADE'),
+                primary_key=True),
             sa.Column('minimum', sa.Float),
             sa.Column('maximum', sa.Float),
             sa.Column('nb_ticks', sa.Integer),
             sa.Column('unit', sa.String(60))
         )
-        op.create_table('gauge_idea_vote',
-            sa.Column('id', sa.Integer, sa.ForeignKey('idea_vote.id', ondelete='CASCADE', onupdate='CASCADE'), primary_key=True),
+        op.create_table(
+            'gauge_idea_vote',
+            sa.Column(
+                'id',
+                sa.Integer,
+                sa.ForeignKey('idea_vote.id', ondelete='CASCADE', onupdate='CASCADE'),
+                primary_key=True),
             sa.Column('vote_value', sa.Float, nullable=False)
         )
 
 
 def downgrade(pyramid_env):
     with context.begin_transaction():
-        op.drop_table('gauge_choice_specification')
-        op.drop_table('number_gauge_vote_specification')
         op.drop_table('gauge_idea_vote')
+        op.drop_table('number_gauge_vote_specification')
+        op.drop_table('gauge_choice_specification')

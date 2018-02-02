@@ -16,14 +16,26 @@ import transaction
 
 
 def upgrade(pyramid_env):
-    with context.begin_transaction():
-        pass
-
     with transaction.manager:
-        op.add_column('vote_specification', sa.Column('title_id', sa.Integer(), sa.ForeignKey('langstring.id'), nullable=True, index=True))
-        op.add_column('vote_specification', sa.Column('instructions_id', sa.Integer(), sa.ForeignKey('langstring.id'), nullable=True, index=True))
-        op.add_column('vote_specification', sa.Column('vote_session_id', sa.Integer(), sa.ForeignKey('vote_session.id'), nullable=True, index=True))
-        op.alter_column("vote_specification", "widget_id", nullable=True)
+        op.add_column('vote_specification',
+            sa.Column(
+                'title_id',
+                sa.Integer(),
+                sa.ForeignKey('langstring.id'), nullable=True, index=True))
+        op.add_column(
+            'vote_specification',
+            sa.Column(
+                'instructions_id',
+                sa.Integer(),
+                sa.ForeignKey('langstring.id'), nullable=True, index=True))
+        op.add_column(
+            'vote_specification',
+            sa.Column(
+                'vote_session_id',
+                sa.Integer(),
+                sa.ForeignKey('vote_session.id'), nullable=True, index=True))
+        op.alter_column(
+            'vote_specification', 'widget_id', nullable=True)
 
 
 def downgrade(pyramid_env):
