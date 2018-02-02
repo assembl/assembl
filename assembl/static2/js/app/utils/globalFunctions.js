@@ -182,8 +182,7 @@ export const getCookieItem = (sKey: string) => {
   return (
     decodeURIComponent(
       document.cookie.replace(
-        // eslint-disable-next-line no-useless-escape
-        new RegExp(`(?:(?:^|.*;)\\s*${encodeURIComponent(sKey).replace(/[\-\.\+\*]/g, '\\$&')}\\s*\\=\\s*([^;]*).*$)|^.*$`),
+        new RegExp(`(?:(?:^|.*;)\\s*${encodeURIComponent(sKey).replace(/[-.+*]/g, '\\$&')}\\s*\\=\\s*([^;]*).*$)|^.*$`),
         '$1'
       )
     ) || null
