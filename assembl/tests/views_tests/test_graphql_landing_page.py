@@ -1,8 +1,7 @@
 from assembl.graphql.schema import Schema as schema
 from graphql_relay.node.node import to_global_id
 from assembl.models.landing_page import LandingPageModuleType
-
-MODULES_COUNT = 11
+from assembl.tests.model_tests.test_landing_page import MODULES_COUNT
 
 
 def test_query_landing_page_module_types(graphql_request):

@@ -126,6 +126,15 @@ module_types = [
         u'helper_img_url': u'',
         u'default_order': 10.0
     },
+    {
+        u'identifier': 'PARTNERS',
+        u'title': {
+            u'en': u'Partners',
+            u'fr': u'Partenaires'
+        },
+        u'helper_img_url': u'',
+        u'default_order': 11.0
+    },
 ]
 
 

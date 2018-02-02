@@ -1,3 +1,6 @@
+MODULES_COUNT = 12
+
+
 def test_create_landing_page_module_type(test_session):
     from assembl.models.landing_page import LandingPageModuleType
     from assembl.models import LangString
@@ -18,7 +21,7 @@ def test_create_landing_page_module_type(test_session):
 def test_landing_page_module_types_are_populated(test_session):
     from assembl.models.landing_page import LandingPageModuleType
     module_types = test_session.query(LandingPageModuleType).all()
-    assert len(module_types) == 11
+    assert len(module_types) == MODULES_COUNT
     for module_type in module_types:
         if module_type.identifier == 'HEADER':
             assert module_type.default_order == 1.0
