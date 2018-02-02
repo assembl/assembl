@@ -8,7 +8,7 @@ def test_graphql_get_syntheses(graphql_request,
                                synthesis_in_syntheses):
     assert len(synthesis_in_syntheses.data['syntheses']) == 1
     synthesis = synthesis_in_syntheses.data['syntheses'][0]
-    assert synthesis['subject'] is None
+    assert synthesis['subject'] == 'subject EN'
     assert len(synthesis['ideas']) == 2
 
 
