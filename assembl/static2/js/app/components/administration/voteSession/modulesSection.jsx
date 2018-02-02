@@ -6,17 +6,24 @@ import { Checkbox } from 'react-bootstrap';
 import SectionTitle from '../sectionTitle';
 import Helper from '../../common/helper';
 import TokensForm from './tokensForm';
-import { createTokenVoteModule, deleteTokenVoteModule } from '../../../actions/adminActions/voteSession';
+import {
+  createTokenVoteModule,
+  deleteTokenVoteModule,
+  createGaugeVoteModule,
+  deleteGaugeVoteModule
+} from '../../../actions/adminActions/voteSession';
 
 type ModulesSectionProps = {
   tokenModules: Object,
   editLocale: string,
-  handleCheckBoxChange: Function
+  handleTokenCheckBoxChange: Function
 };
 
-const DumbModulesSection = ({ tokenModules, editLocale, handleCheckBoxChange }: ModulesSectionProps) => {
+const DumbModulesSection = ({ tokenModules, editLocale, handleTokenCheckBoxChange }: ModulesSectionProps) => {
   const tokenModuleChecked = tokenModules.size > 0;
+  // const gaugeModuleChecked = gaugeModules.size > 0;
   const tModule = tokenModules.toJS();
+  // const gModule = gaugeModules.toJS();
   return (
     <div className="admin-box">
       <SectionTitle title={I18n.t('administration.voteSession.1')} annotation={I18n.t('administration.annotation')} />
@@ -26,13 +33,21 @@ const DumbModulesSection = ({ tokenModules, editLocale, handleCheckBoxChange }: 
             <Checkbox
               checked={tokenModuleChecked}
               onChange={() => {
-                handleCheckBoxChange(tokenModuleChecked, tModule[0]);
+                handleTokenCheckBoxChange(tokenModuleChecked, tModule[0]);
               }}
             >
               <Helper
                 label={I18n.t('administration.voteWithTokens')}
                 helperUrl="/static2/img/helpers/helper4.png"
                 helperText={I18n.t('administration.tokenVoteCheckbox')}
+                classname="inline"
+              />
+            </Checkbox>
+            <Checkbox checked={false} onChange={() => {}}>
+              <Helper
+                label={I18n.t('administration.voteWithGages')}
+                helperUrl="/static2/img/helpers/helper3.png" // TODO: add an actual screenshot
+                helperText={I18n.t('administration.gaugeVoteCheckbox')}
                 classname="inline"
               />
             </Checkbox>
@@ -58,11 +73,18 @@ const mapStateToProps = ({ admin }) => {
 const mapDispatchToProps = (dispatch) => {
   const newId = Math.round(Math.random() * -1000000).toString();
   return {
-    handleCheckBoxChange: (checked, id) => {
+    handleTokenCheckBoxChange: (checked, id) => {
       if (!checked) {
         dispatch(createTokenVoteModule(newId));
       } else {
         dispatch(deleteTokenVoteModule(id));
+      }
+    },
+    handleGaugeCheckBoxChange: (checked, id) => {
+      if (!checked) {
+        dispatch(createGaugeVoteModule(newId));
+      } else {
+        dispatch(deleteGaugeVoteModule(id));
       }
     }
   };
