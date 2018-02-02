@@ -30,7 +30,11 @@ from assembl.graphql.section import (CreateSection, DeleteSection, Section,
 from assembl.graphql.sentiment import AddSentiment, DeleteSentiment
 from assembl.graphql.synthesis import Synthesis
 from assembl.graphql.user import UpdateUser
-from assembl.graphql.vote_session import VoteSession, UpdateVoteSession
+from assembl.graphql.vote_session import (
+    VoteSession, UpdateVoteSession, CreateTokenVoteSpecification,
+    CreateGaugeVoteSpecification, UpdateGaugeVoteSpecification,
+    CreateNumberGaugeVoteSpecification, UpdateNumberGaugeVoteSpecification,
+    UpdateTokenVoteSpecification, DeleteVoteSpecification)
 from assembl.graphql.utils import get_fields, get_root_thematic_for_phase
 from assembl.lib.locale import strip_country
 from assembl.lib.sqla_types import EmailString
@@ -282,6 +286,13 @@ class Mutations(graphene.ObjectType):
     update_legal_notice_and_terms = UpdateLegalNoticeAndTerms.Field()
     update_user = UpdateUser.Field()
     update_vote_session = UpdateVoteSession.Field()
+    create_token_vote_specification = CreateTokenVoteSpecification.Field()
+    update_token_vote_specification = UpdateTokenVoteSpecification.Field()
+    create_gauge_vote_specification = CreateGaugeVoteSpecification.Field()
+    update_gauge_vote_specification = UpdateGaugeVoteSpecification.Field()
+    create_number_gauge_vote_specification = CreateNumberGaugeVoteSpecification.Field()
+    update_number_gauge_vote_specification = UpdateNumberGaugeVoteSpecification.Field()
+    delete_vote_specification = DeleteVoteSpecification.Field()
 
 
 Schema = graphene.Schema(query=Query, mutation=Mutations)

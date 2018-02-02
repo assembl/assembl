@@ -1,0 +1,40 @@
+#import "../fragments/LangString.graphql"
+
+mutation createTokenVoteSpecification(
+  $voteSessionId: ID!
+  $titleEntries: [LangStringEntryInput]!
+  $instructionsEntries: [LangStringEntryInput]!
+  $exclusiveCategories: Boolean!
+  $tokenCategories: [TokenCategorySpecificationInput]!
+) {
+  createTokenVoteSpecification(
+    voteSessionId: $voteSessionId
+    titleEntries: $titleEntries
+    instructionsEntries: $instructionsEntries
+    exclusiveCategories: $exclusiveCategories
+    tokenCategories: $tokenCategories
+  ) {
+    voteSpecification {
+      ... on TokenVoteSpecification {
+        id
+        voteSessionId
+        titleEntries {
+          ...langStringEntry
+        }
+        instructionsEntries {
+          ...langStringEntry
+        }
+        exclusiveCategories
+        tokenCategories {
+          id
+          totalNumber
+          typename
+          titleEntries {
+            ...langStringEntry
+          }
+          color
+        }
+      }
+    }
+  }
+}

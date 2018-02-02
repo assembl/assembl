@@ -49,4 +49,25 @@ registry_path = os.path.dirname(__file__) + '/../../static2/js/app/graphql'
 
 @pytest.fixture(scope="session")
 def graphql_registry():
-    return walktree(registry_path, add_graphql_files_to_dict, {})
+    class Registry(object):
+        def __init__(self, data):
+            self.data = data
+
+        def __getitem__(self, key):
+            op = self.data.get(key)
+            if op is None:  # not a query, should be a mutation
+                op = self.data['mutations'][key]
+
+            def include_fragments(text, included_fragments):
+                for fragment, content in self.data['fragments'].items():
+                    if fragment + '.graphql' in text and fragment not in included_fragments:
+                        text = include_fragments(content, included_fragments) + text
+                        included_fragments.append(fragment)
+
+                return text
+
+            op = include_fragments(op, [])
+            return op
+
+    data = walktree(registry_path, add_graphql_files_to_dict, {})
+    return Registry(data)

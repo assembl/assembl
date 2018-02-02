@@ -7,7 +7,7 @@ import { connect } from 'react-redux';
 
 import { updateThematics, displayLanguageMenu } from '../actions/adminActions';
 import { updateResources, updateResourcesCenterPage } from '../actions/adminActions/resourcesCenter';
-import { updateVoteSessionPage } from '../actions/adminActions/voteSession';
+import { updateVoteSessionPage, updateVoteModules } from '../actions/adminActions/voteSession';
 import { updateSections } from '../actions/adminActions/adminSections';
 import { updateLegalNoticeAndTerms } from '../actions/adminActions/legalNoticeAndTerms';
 import withLoadingIndicator from '../components/common/withLoadingIndicator';
@@ -64,7 +64,7 @@ class Administration extends React.Component {
     this.putSectionsInStore(this.props.sections);
     this.putLegalNoticeAndTermsInStore(this.props.legalNoticeAndTerms);
     this.putVoteSessionInStore(this.props.voteSession);
-
+    this.putVoteModulesInStore(this.props.voteSession);
     const isHidden = this.props.identifier === 'discussion' && this.props.location.query.section === '1';
     this.props.displayLanguageMenu(isHidden);
   }
@@ -116,6 +116,7 @@ class Administration extends React.Component {
 
   putVoteSessionInStore(voteSession) {
     const emptyVoteSession = {
+      id: '',
       titleEntries: [],
       subTitleEntries: [],
       instructionsSectionTitleEntries: [],
@@ -125,7 +126,9 @@ class Administration extends React.Component {
         externalUrl: '',
         mimeType: '',
         title: ''
-      }
+      },
+      publicVote: true,
+      modules: []
     };
     const filteredVoteSession = filter(VoteSessionQuery, { voteSession: voteSession || emptyVoteSession });
     const voteSessionForStore = {
@@ -135,6 +138,21 @@ class Administration extends React.Component {
         : null
     };
     this.props.updateVoteSessionPage(voteSessionForStore);
+  }
+
+  putVoteModulesInStore(voteSession) {
+    const filteredVoteModules = filter(VoteSessionQuery, { voteSession: voteSession });
+    const filteredTokenVoteModules = filteredVoteModules.voteSession
+      ? filteredVoteModules.voteSession.modules.filter(tokenVoteModule => tokenVoteModule.tokenCategories)
+      : null;
+    const modules = [];
+    if (filteredTokenVoteModules && filteredTokenVoteModules[0]) {
+      modules.push({
+        ...filteredTokenVoteModules[0],
+        type: 'tokens'
+      });
+    }
+    this.props.updateVoteModules(modules);
   }
 
   putSectionsInStore(sections) {
@@ -167,7 +185,8 @@ class Administration extends React.Component {
       refetchResourcesCenter,
       refetchTabsConditions,
       refetchSections,
-      refetchLegalNoticeAndTerms
+      refetchLegalNoticeAndTerms,
+      refetchVoteSession
     } = this.props;
     const { phase } = params;
     const { timeline } = this.props.debate.debateData;
@@ -189,6 +208,7 @@ class Administration extends React.Component {
                     refetchTabsConditions={refetchTabsConditions}
                     refetchThematics={data.refetch}
                     refetchResources={refetchResources}
+                    refetchVoteSession={refetchVoteSession}
                     refetchSections={refetchSections}
                     refetchResourcesCenter={refetchResourcesCenter}
                     refetchLegalNoticeAndTerms={refetchLegalNoticeAndTerms}
@@ -238,6 +258,7 @@ const mapDispatchToProps = dispatch => ({
   updateResourcesCenterPage: ({ titleEntries, headerImage }) => {
     dispatch(updateResourcesCenterPage(titleEntries, headerImage));
   },
+  updateVoteModules: voteModules => dispatch(updateVoteModules(voteModules)),
   updateVoteSessionPage: voteSession => dispatch(updateVoteSessionPage(voteSession)),
   updateLegalNoticeAndTerms: legalNoticeAndTerms => dispatch(updateLegalNoticeAndTerms(legalNoticeAndTerms)),
   displayLanguageMenu: isHidden => dispatch(displayLanguageMenu(isHidden))
@@ -326,7 +347,8 @@ export default compose(
       return {
         voteSessionLoading: data.loading,
         voteSessionHasErrors: data.error,
-        voteSession: data.voteSession
+        voteSession: data.voteSession,
+        refetchVoteSession: data.refetch
       };
     }
   }),

@@ -2,6 +2,7 @@
 
 query VoteSession($discussionPhaseId: Int!, $lang: String!) {
   voteSession(discussionPhaseId: $discussionPhaseId) {
+    id
     ...voteSessionGlobals
     ...voteSessionLangstringsEntries
     title(lang: $lang)
@@ -9,5 +10,58 @@ query VoteSession($discussionPhaseId: Int!, $lang: String!) {
     instructionsSectionTitle(lang: $lang)
     instructionsSectionContent(lang: $lang)
     propositionsSectionTitle(lang: $lang)
+    modules: voteSpecifications {
+      ... on TokenVoteSpecification {
+        id
+        voteSessionId
+        titleEntries {
+          ...langStringEntry
+        }
+        instructionsEntries {
+          ...langStringEntry
+        }
+        exclusiveCategories
+        tokenCategories {
+          id
+          totalNumber
+          typename
+          titleEntries {
+            ...langStringEntry
+          }
+          color
+        }
+      }
+      ... on NumberGaugeVoteSpecification {
+        id
+        voteSessionId
+        titleEntries {
+          ...langStringEntry
+        }
+        instructionsEntries {
+          ...langStringEntry
+        }
+        minimum
+        maximum
+        nbTicks
+        unit
+      }
+      ... on GaugeVoteSpecification {
+        id
+        voteSessionId
+        titleEntries {
+          ...langStringEntry
+        }
+        instructionsEntries {
+          ...langStringEntry
+        }
+        choices {
+          id
+          value
+          labelEntries {
+            ...langStringEntry
+          }
+        }
+      }
+    }
   }
 }

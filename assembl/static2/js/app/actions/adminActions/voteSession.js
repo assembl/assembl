@@ -45,7 +45,75 @@ export const updateVoteSessionHeaderImage = (value: File): actionTypes.UpdateVot
   type: actionTypes.UPDATE_VOTE_SESSION_PAGE_IMAGE
 });
 
+export const updateVoteModules = (voteModules: actionTypes.VoteModulesArray): actionTypes.UpdateVoteModules => ({
+  voteModules: voteModules,
+  type: actionTypes.UPDATE_VOTE_MODULES
+});
+
+export const createTokenVoteModule = (id: string): actionTypes.CreateTokenVoteModule => ({
+  id: id,
+  type: actionTypes.CREATE_TOKEN_VOTE_MODULE
+});
+
+export const deleteTokenVoteModule = (id: string): actionTypes.DeleteTokenVoteModule => ({
+  id: id,
+  type: actionTypes.DELETE_TOKEN_VOTE_MODULE
+});
+
+export const updateTokenVoteExclusiveCategory = (id: string, value: boolean): actionTypes.UpdateTokenVoteExclusiveCategory => ({
+  id: id,
+  value: value,
+  type: actionTypes.UPDATE_TOKEN_VOTE_EXCLUSIVE_CATEGORY
+});
+
+export const updateTokenVoteInstructions = (
+  id: string,
+  locale: string,
+  value: string
+): actionTypes.UpdateTokenVoteInstructions => ({
+  id: id,
+  locale: locale,
+  value: value,
+  type: actionTypes.UPDATE_TOKEN_VOTE_INSTRUCTIONS
+});
+
+export const createTokenVoteCategory = (id: string, parentId: string): actionTypes.CreateTokenVoteCategory => ({
+  id: id,
+  parentId: parentId,
+  type: actionTypes.CREATE_TOKEN_VOTE_CATEGORY
+});
+
+export const deleteTokenVoteCategory = (value: number, parentId: string): actionTypes.DeleteTokenVoteCategory => ({
+  parentId: parentId,
+  value: value,
+  type: actionTypes.DELETE_TOKEN_VOTE_CATEGORY
+});
+
+export const updateTokenVoteCategoryTitle = (
+  id: string,
+  locale: string,
+  value: string
+): actionTypes.UpdateTokenVoteCategoryTitle => ({
+  id: id,
+  locale: locale,
+  value: value,
+  type: actionTypes.UPDATE_TOKEN_VOTE_CATEGORY_TITLE
+});
+
+export const updateTokenTotalNumber = (id: string, value: number): actionTypes.UpdateTokenTotalNumber => ({
+  id: id,
+  value: value,
+  type: actionTypes.UPDATE_TOKEN_TOTAL_NUMBER
+});
+
+export const updateTokenVoteCategoryColor = (id: string, value: string): actionTypes.UpdateTokenVoteCategoryColor => ({
+  id: id,
+  value: value,
+  type: actionTypes.UPDATE_TOKEN_VOTE_CATEGORY_COLOR
+});
+
 export const updateVoteSessionPage = (value: Object): actionTypes.UpdateVoteSessionPage => ({
+  id: value.id,
   titleEntries: value.titleEntries,
   subTitleEntries: value.subTitleEntries,
   instructionsSectionTitleEntries: value.instructionsSectionTitleEntries,

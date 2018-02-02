@@ -1,7 +1,7 @@
 // @flow
+import { combineReducers } from 'redux';
 import type ReduxAction from 'redux';
 import { fromJS, List, Map } from 'immutable';
-
 import {
   type Action,
   UPDATE_VOTE_SESSION_PAGE_TITLE,
@@ -10,12 +10,23 @@ import {
   UPDATE_VOTE_SESSION_PAGE_INSTRUCTIONS_CONTENT,
   UPDATE_VOTE_SESSION_PAGE_PROPOSITIONS_TITLE,
   UPDATE_VOTE_SESSION_PAGE_IMAGE,
-  UPDATE_VOTE_SESSION_PAGE
+  UPDATE_VOTE_SESSION_PAGE,
+  UPDATE_VOTE_MODULES,
+  CREATE_TOKEN_VOTE_MODULE,
+  DELETE_TOKEN_VOTE_MODULE,
+  UPDATE_TOKEN_VOTE_EXCLUSIVE_CATEGORY,
+  UPDATE_TOKEN_VOTE_INSTRUCTIONS,
+  CREATE_TOKEN_VOTE_CATEGORY,
+  DELETE_TOKEN_VOTE_CATEGORY,
+  UPDATE_TOKEN_VOTE_CATEGORY_TITLE,
+  UPDATE_TOKEN_TOTAL_NUMBER,
+  UPDATE_TOKEN_VOTE_CATEGORY_COLOR
 } from '../../actions/actionTypes';
 import { updateInLangstringEntries } from '../../utils/i18n';
 
-const initialState = Map({
+const initialPage = Map({
   hasChanged: false,
+  id: '',
   titleEntries: List(),
   subTitleEntries: List(),
   instructionsSectionTitleEntries: List(),
@@ -27,9 +38,8 @@ const initialState = Map({
     title: ''
   })
 });
-
-export type VoteSessionReducer = (Map, ReduxAction<Action>) => Map;
-const voteSession: VoteSessionReducer = (state = initialState, action) => {
+export type VoteSessionPageReducer = (Map, ReduxAction<Action>) => Map;
+export const voteSessionPage: VoteSessionPageReducer = (state = initialPage, action) => {
   switch (action.type) {
   case UPDATE_VOTE_SESSION_PAGE_TITLE:
     return state.update('titleEntries', updateInLangstringEntries(action.locale, fromJS(action.value))).set('hasChanged', true);
@@ -57,6 +67,7 @@ const voteSession: VoteSessionReducer = (state = initialState, action) => {
   case UPDATE_VOTE_SESSION_PAGE: {
     return Map({
       hasChanged: false,
+      id: fromJS(action.id),
       titleEntries: fromJS(action.titleEntries),
       subTitleEntries: fromJS(action.subTitleEntries),
       instructionsSectionTitleEntries: fromJS(action.instructionsSectionTitleEntries),
@@ -73,4 +84,129 @@ const voteSession: VoteSessionReducer = (state = initialState, action) => {
   }
 };
 
-export default voteSession;
+export const modulesHaveChanged = (state: boolean = false, action: ReduxAction<Action>) => {
+  switch (action.type) {
+  case CREATE_TOKEN_VOTE_MODULE:
+  case DELETE_TOKEN_VOTE_MODULE:
+  case UPDATE_TOKEN_VOTE_EXCLUSIVE_CATEGORY:
+  case UPDATE_TOKEN_VOTE_INSTRUCTIONS:
+  case CREATE_TOKEN_VOTE_CATEGORY:
+  case DELETE_TOKEN_VOTE_CATEGORY:
+  case UPDATE_TOKEN_VOTE_CATEGORY_TITLE:
+  case UPDATE_TOKEN_VOTE_CATEGORY_COLOR:
+  case UPDATE_TOKEN_TOTAL_NUMBER:
+    return true;
+  case UPDATE_VOTE_MODULES:
+    return false;
+  default:
+    return state;
+  }
+};
+
+export const modulesInOrder = (state: List<number> = List(), action: ReduxAction<Action>) => {
+  switch (action.type) {
+  case UPDATE_VOTE_MODULES:
+    return List(Object.keys(action.voteModules).map(key => action.voteModules[key].id || null));
+  case CREATE_TOKEN_VOTE_MODULE:
+    return state.push(action.id);
+  default:
+    return state;
+  }
+};
+
+const defaultTokenModule = Map({
+  isNew: true,
+  toDelete: false,
+  type: 'tokens',
+  titleEntries: List(),
+  instructionsEntries: List(),
+  exclusiveCategories: false,
+  tokenCategories: List()
+});
+
+export const modulesById = (state: Map<string, Map> = Map(), action: ReduxAction<Action>) => {
+  switch (action.type) {
+  case UPDATE_VOTE_MODULES: {
+    let newState = Map();
+    action.voteModules.forEach((m) => {
+      if (m.type === 'tokens') {
+        const moduleInfo = fromJS({
+          isNew: false,
+          toDelete: false,
+          type: m.type,
+          id: m.id,
+          titleEntries: m.titleEntries,
+          instructionsEntries: m.instructionsEntries,
+          exclusiveCategories: m.exclusiveCategories,
+          tokenCategories: m.tokenCategories.map(t => t.id)
+        });
+        newState = newState.set(m.id, moduleInfo);
+      }
+    });
+    return newState;
+  }
+  case CREATE_TOKEN_VOTE_MODULE:
+    return state.set(action.id, defaultTokenModule.set('id', action.id));
+  case DELETE_TOKEN_VOTE_MODULE:
+    return state.setIn([action.id, 'toDelete'], true);
+  case UPDATE_TOKEN_VOTE_EXCLUSIVE_CATEGORY:
+    return state.setIn([action.id, 'exclusiveCategories'], action.value);
+  case UPDATE_TOKEN_VOTE_INSTRUCTIONS:
+    return state.updateIn([action.id, 'instructionsEntries'], updateInLangstringEntries(action.locale, action.value));
+  case CREATE_TOKEN_VOTE_CATEGORY:
+    return state.updateIn([action.parentId, 'tokenCategories'], tokenCategories => tokenCategories.push(action.id));
+  case DELETE_TOKEN_VOTE_CATEGORY:
+    return state.updateIn([action.parentId, 'tokenCategories'], tokenCategories =>
+      tokenCategories.delete(tokenCategories.size - 1)
+    );
+  default:
+    return state;
+  }
+};
+
+const initialTokenCategory = Map({
+  id: '',
+  titleEntries: List(),
+  totalNumber: 0,
+  color: ''
+});
+
+export const tokenCategoriesById = (state: Map<string, Map> = Map(), action: ReduxAction<Action>) => {
+  switch (action.type) {
+  case UPDATE_VOTE_MODULES: {
+    let newState = Map();
+    action.voteModules.forEach((m) => {
+      if (m.type === 'tokens') {
+        m.tokenCategories.forEach((t) => {
+          const tokenCategoryInfo = Map({
+            id: t.id,
+            titleEntries: fromJS(t.titleEntries),
+            color: t.color,
+            totalNumber: t.totalNumber
+          });
+          newState = newState.set(t.id, tokenCategoryInfo);
+        });
+      }
+    });
+    return newState;
+  }
+  case CREATE_TOKEN_VOTE_CATEGORY:
+    return state.set(action.id, initialTokenCategory.set('id', action.id));
+  case UPDATE_TOKEN_VOTE_CATEGORY_TITLE:
+    return state.updateIn([action.id, 'titleEntries'], updateInLangstringEntries(action.locale, action.value));
+  case UPDATE_TOKEN_VOTE_CATEGORY_COLOR:
+    return state.setIn([action.id, 'color'], action.value);
+  case UPDATE_TOKEN_TOTAL_NUMBER:
+    return state.setIn([action.id, 'totalNumber'], action.value);
+  default:
+    return state;
+  }
+};
+
+export default combineReducers({
+  page: voteSessionPage,
+  modulesInOrder: modulesInOrder,
+  modulesById: modulesById,
+  tokenCategoriesById: tokenCategoriesById,
+  modulesHaveChanged: modulesHaveChanged
+});

@@ -1,6 +1,7 @@
 from sqlalchemy.orm import relationship, backref
 
-from .timeline import DiscussionBoundBase, DiscussionPhase
+from . import DiscussionBoundBase
+from .timeline import DiscussionPhase
 from .langstrings import LangString
 from .langstrings_helpers import langstrings_base
 from .sqla_helpers import Id, ForeignId

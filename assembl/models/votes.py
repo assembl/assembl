@@ -44,8 +44,12 @@ class AbstractVoteSpecification(DiscussionBoundBase):
     }
 
     widget_id = Column(Integer, ForeignKey(
-        "widget.id"), nullable=False, index=True)
+        "widget.id"), nullable=True, index=True,
+        info={"pseudo_nullable": False})
     "Used by a voting widget"
+
+    vote_session_id = Column(Integer, ForeignKey(
+        "vote_session.id"), nullable=True, index=True)
 
     criterion_idea_id = Column(Integer, ForeignKey(
         Idea.id),  # ondelete="SET NULL", onupdate="CASCADE"), WIP
@@ -58,9 +62,32 @@ class AbstractVoteSpecification(DiscussionBoundBase):
 
     settings = Column(Text)  # JSON blob
 
+    title_id = Column(Integer, ForeignKey(LangString.id), nullable=True, index=True)
+
+    title = relationship(
+        LangString, foreign_keys=(title_id,),
+        backref=backref("title_of_vote_spec", lazy="dynamic"),
+        single_parent=True,
+        lazy="joined",
+        cascade="all, delete-orphan")
+
+    instructions_id = Column(Integer, ForeignKey(LangString.id), nullable=True, index=True)
+
+    instructions = relationship(
+        LangString, foreign_keys=(title_id,),
+        backref=backref("instructions_of_vote_spec", lazy="dynamic"),
+        single_parent=True,
+        lazy="joined",
+        cascade="all, delete-orphan")
+
     widget = relationship(
         "VotingWidget", backref=backref(
             "vote_specifications", cascade="all, delete-orphan"))
+
+    vote_session = relationship(
+        "VoteSession", backref=backref(
+            "vote_specifications", cascade="all, delete-orphan"))
+
     criterion_idea = relationship(
         Idea, backref="criterion_for")
 
@@ -143,6 +170,7 @@ class AbstractVoteSpecification(DiscussionBoundBase):
         class VoteTargetsCollection(AbstractCollectionDefinition):
             # The set of voting target ideas.
             # Fake: There is no DB link here.
+
             def __init__(self, cls):
                 super(VoteTargetsCollection, self).__init__(cls, Idea)
 
@@ -211,7 +239,9 @@ class AbstractVoteSpecification(DiscussionBoundBase):
 
     def get_discussion_id(self):
         from .widgets import Widget
-        widget = self.widget or Widget.get(self.widget_id)
+        from .vote_session import VoteSession
+        widget = self.widget or (self.widget_id and Widget.get(self.widget_id)
+            ) or self.vote_session or (self.vote_session_id and VoteSession.get(self.vote_session_id))
         return widget.get_discussion_id()
 
     @classmethod
@@ -221,6 +251,9 @@ class AbstractVoteSpecification(DiscussionBoundBase):
                 (VotingWidget.discussion_id == discussion_id))
 
     crud_permissions = CrudPermissions(P_ADMIN_DISC, P_READ)
+
+
+LangString.setup_ownership_load_event(AbstractVoteSpecification, ['title', 'instructions'])
 
 
 def empty_matrix(size, dim):
@@ -525,6 +558,95 @@ class LickertVoteSpecification(AbstractVoteSpecification):
         return self.minimum <= vote.vote_value <= self.maximum
 
 
+class GaugeVoteSpecification(AbstractVoteSpecification):
+    __mapper_args__ = {
+        'polymorphic_identity': 'gauge_vote_specification'
+    }
+
+    @classmethod
+    def get_vote_class(cls):
+        return GaugeIdeaVote
+
+    def results_for(self, voting_results, histogram_size=None):
+        raise NotImplementedError
+
+    def csv_results(self, csv_file, histogram_size=None):
+        raise NotImplementedError
+
+
+class GaugeChoiceSpecification(DiscussionBoundBase):
+    "This represents a choice in the gauge"
+
+    __tablename__ = "gauge_choice_specification"
+
+    id = Column(Integer, primary_key=True)
+    value = Column(Float, nullable=False)
+    label_id = Column(Integer, ForeignKey(LangString.id), nullable=False, index=True)
+    vote_specification_id = Column(
+        Integer, ForeignKey(
+            GaugeVoteSpecification.id, ondelete='CASCADE', onupdate='CASCADE'),
+        nullable=False, index=True)
+
+    vote_specification = relationship(
+        GaugeVoteSpecification, foreign_keys=(vote_specification_id,),
+        backref=backref("choices", cascade="all, delete-orphan"))
+    label = relationship(
+        LangString, foreign_keys=(label_id,),
+        backref=backref("label_of_gauge_choice", lazy="dynamic"),
+        single_parent=True,
+        lazy="joined",
+        cascade="all, delete-orphan")
+
+    def get_discussion_id(self):
+        gvs = self.vote_specification or GaugeVoteSpecification.get(self.vote_specification_id)
+        return gvs.get_discussion_id()
+
+    @classmethod
+    def get_discussion_conditions(cls, discussion_id, alias_maker=None):
+        from .widgets import VotingWidget
+        if alias_maker is None:
+            gcs = cls
+            gvs = GaugeVoteSpecification
+            widget = VotingWidget
+        else:
+            gcs = alias_maker.alias_from_class(cls)
+            gvs = alias_maker.alias_from_relns(gcs.vote_specification)
+            widget = alias_maker.alias_from_relns(
+                gcs.vote_specification, gvs.widget)
+        return ((gcs.vote_specification_id == gvs.id),
+                (gvs.widget_id == widget.id),
+                (widget.discussion_id == discussion_id))
+
+    crud_permissions = CrudPermissions(P_ADMIN_DISC, P_READ)
+
+
+LangString.setup_ownership_load_event(GaugeChoiceSpecification, ['label'])
+
+
+class NumberGaugeVoteSpecification(AbstractVoteSpecification):
+    __tablename__ = "number_gauge_vote_specification"
+    __mapper_args__ = {
+        'polymorphic_identity': 'number_gauge_vote_specification'
+    }
+
+    id = Column(
+        Integer, ForeignKey(AbstractVoteSpecification.id), primary_key=True)
+    minimum = Column(Float, default=1)
+    maximum = Column(Float, default=10)
+    nb_ticks = Column(Integer, default=10)
+    unit = Column(String(60))
+
+    @classmethod
+    def get_vote_class(cls):
+        return GaugeIdeaVote
+
+    def results_for(self, voting_results, histogram_size=None):
+        raise NotImplementedError
+
+    def csv_results(self, csv_file, histogram_size=None):
+        raise NotImplementedError
+
+
 class BinaryVoteSpecification(AbstractVoteSpecification):
     __mapper_args__ = {
         'polymorphic_identity': 'binary_vote_specification'
@@ -822,6 +944,41 @@ class LickertIdeaVote(AbstractIdeaVote):
             vote_value=self.vote_value
         )
         return super(LickertIdeaVote, self).copy(db=db, **kwargs)
+
+    @value.setter
+    def value(self, val):
+        val = float(val)
+        self.vote_value = val
+
+
+class GaugeIdeaVote(AbstractIdeaVote):
+    __tablename__ = "gauge_idea_vote"
+    __table_args__ = ()
+    __mapper_args__ = {
+        'polymorphic_identity': 'gauge_idea_vote',
+    }
+    id = Column(Integer, ForeignKey(
+        AbstractIdeaVote.id,
+        ondelete='CASCADE',
+        onupdate='CASCADE'
+    ), primary_key=True)
+
+    vote_value = Column(Float, nullable=False)
+
+    @classmethod
+    def external_typename(cls):
+        return cls.__name__
+
+    @property
+    def value(self):
+        return self.vote_value
+
+    def copy(self, tombstone=None, db=None, **kwargs):
+        kwargs.update(
+            tombstone=tombstone,
+            vote_value=self.vote_value
+        )
+        return super(GaugeIdeaVote, self).copy(db=db, **kwargs)
 
     @value.setter
     def value(self, val):

@@ -1,0 +1,35 @@
+#import "../fragments/LangString.graphql"
+
+mutation updateGaugeVoteSpecification(
+  $id: ID!
+  $titleEntries: [LangStringEntryInput]!
+  $instructionsEntries: [LangStringEntryInput]!
+  $choices: [GaugeChoiceSpecificationInput]!
+) {
+  updateGaugeVoteSpecification(
+    id: $id
+    titleEntries: $titleEntries
+    instructionsEntries: $instructionsEntries
+    choices: $choices
+  ) {
+    voteSpecification {
+      ... on GaugeVoteSpecification {
+        id
+        voteSessionId
+        titleEntries {
+          ...langStringEntry
+        }
+        instructionsEntries {
+          ...langStringEntry
+        }
+        choices {
+          id
+          value
+          labelEntries {
+            ...langStringEntry
+          }
+        }
+      }
+    }
+  }
+}
