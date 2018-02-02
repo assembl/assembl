@@ -44,7 +44,7 @@ def test_graphql_get_synthesis(graphql_request,
         })
     assert len(res.data) == 1
     synthesis = res.data['synthesis']
-    assert synthesis['subject'] is None
+    assert synthesis['subject'] == 'subject EN'
     assert len(synthesis['ideas']) == 2
 
 
