@@ -15,7 +15,13 @@ exports[`DumbSelectModulesForm component should render a form to select the land
       onChange={[Function]}
       title=""
     >
-      Header
+      <Helper
+        additionalTextClasses=""
+        classname=""
+        helperText="Header"
+        helperUrl="/static2/img/helpers/landing_page_admin/header.png"
+        label="Header"
+      />
     </Checkbox>
     <Checkbox
       bsClass="checkbox"
@@ -25,7 +31,13 @@ exports[`DumbSelectModulesForm component should render a form to select the land
       onChange={[Function]}
       title=""
     >
-      Introduction
+      <Helper
+        additionalTextClasses=""
+        classname=""
+        helperText="Introduction"
+        helperUrl="/static2/img/helpers/landing_page_admin/introduction.png"
+        label="Introduction"
+      />
     </Checkbox>
     <Checkbox
       bsClass="checkbox"
@@ -35,7 +47,13 @@ exports[`DumbSelectModulesForm component should render a form to select the land
       onChange={[Function]}
       title=""
     >
-      Video
+      <Helper
+        additionalTextClasses=""
+        classname=""
+        helperText="Video"
+        helperUrl="/static2/img/helpers/landing_page_admin/video.png"
+        label="Video"
+      />
     </Checkbox>
     <Checkbox
       bsClass="checkbox"
@@ -45,7 +63,13 @@ exports[`DumbSelectModulesForm component should render a form to select the land
       onChange={[Function]}
       title=""
     >
-      Footer
+      <Helper
+        additionalTextClasses=""
+        classname=""
+        helperText="Footer"
+        helperUrl="/static2/img/helpers/landing_page_admin/footer.png"
+        label="Footer"
+      />
     </Checkbox>
   </FormGroup>
 </div>

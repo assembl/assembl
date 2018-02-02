@@ -386,7 +386,26 @@ const Translations = {
         tokenCategoryNumber: "Sélectionnez le nombre de types de jetons différents souhaité pour ce vote",
         exclusive:
           "Vous pouvez décider si le participant peut distributer un seul type de jetons (exclusifs) ou plusieurs types de jetons par proposition.",
-        tokenVoteInstructions: "En fonction de l'objectif du module de jetons, incitez les participants à passer à l'action."
+        tokenVoteInstructions: "En fonction de l'objectif du module de jetons, incitez les participants à passer à l'action.",
+        landingPage: {
+          header:
+            "Bandeau image en haut de la page. Il contient le titre de la consultation, et un sous-titre informatif, ainsi qu'un bouton d'accès à la consultation.",
+          timeline:
+            "La section timeline met en avant les différentes phases de la consultation ainsi que le niveau de progression dans le temps. Elle contient un titre, un sous-titre, et pour chaque phase, un descriptif et des images associées. Pour la configuration du débat en phases, revenir au menu Éditer la discussion.",
+          tweets:
+            "La section Tweets met en avant les tweets relatifs à la consulation. Vous devez renseigner le titre de la section tweet, le #tag de recherche, et une image pour le fond de la section.",
+          chatbot:
+            "Il s'agit d'un bandeau de redirection vers un module chatbot messenger dédié à la consultation. Vous devez renseigner le titre, l'url du chatbot messenger et l'intitulé du bouton de redirection.",
+          news:
+            "Permet de mettre en avant une ou plusieurs actualités en rapport avec la consultation (publication d'une nouvelle synthèse, création d'une nouvelle thématique, …) avec des liens de redirection.",
+          introduction: "",
+          data: "",
+          footer: "",
+          video: "",
+          contact: "",
+          top_thematics: "",
+          partners: ""
+        }
       },
       videoHelp:
         "*Liens vidéo autorisés : \"https://www.youtube.com/embed/[videoId]\" ou \"https://player.vimeo.com/video/[videoId]?\"",
@@ -843,7 +862,22 @@ const Translations = {
         tokenCategoryNumber: "Select the number of different token types for this vote",
         exclusive:
           "You can decide wether the participant can distribute a single type of token (exclusive) or several types of token per proposition.",
-        tokenVoteInstructions: "Depending on the objective of the token module, incite the participants to take action."
+        tokenVoteInstructions: "Depending on the objective of the token module, incite the participants to take action.",
+        landingPage: {
+          header:
+            "Top page header. It contains the consultation's title and subtitle and a button to access to the consultation.",
+          timeline: "",
+          tweets: "",
+          chatbot: "",
+          news: "",
+          introduction: "",
+          data: "",
+          footer: "",
+          video: "",
+          contact: "",
+          top_thematics: "",
+          partners: ""
+        }
       },
       videoHelp:
         "*Authorized video links: \"https://www.youtube.com/embed/[videoId]\" or \"https://player.vimeo.com/video/[videoId]?\"",

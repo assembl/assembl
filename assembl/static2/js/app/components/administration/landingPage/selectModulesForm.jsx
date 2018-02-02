@@ -1,9 +1,11 @@
 import React from 'react';
 import { compose, graphql } from 'react-apollo';
-
 import { Checkbox, FormGroup } from 'react-bootstrap';
+import { I18n } from 'react-redux-i18n';
+
 import LandingPageModuleTypes from '../../../graphql/LandingPageModuleTypes.graphql';
 import withoutLoadingIndicator from '../../common/withoutLoadingIndicator';
+import Helper from '../../common/helper';
 
 export const DumbSelectModulesForm = ({ hasErrors, modulesByIdentifier, moduleTypes, toggleModule }) => {
   if (hasErrors) {
@@ -15,6 +17,7 @@ export const DumbSelectModulesForm = ({ hasErrors, modulesByIdentifier, moduleTy
       <FormGroup>
         {moduleTypes.map((moduleType) => {
           const module = modulesByIdentifier.get(moduleType.identifier);
+          const identifierLowerCase = moduleType.identifier.toLowerCase();
           return (
             <Checkbox
               key={moduleType.identifier}
@@ -22,7 +25,11 @@ export const DumbSelectModulesForm = ({ hasErrors, modulesByIdentifier, moduleTy
               onChange={() => toggleModule(moduleType.identifier)}
               disabled={moduleType.required}
             >
-              {moduleType.title}
+              <Helper
+                label={moduleType.title}
+                helperUrl={`/static2/img/helpers/landing_page_admin/${identifierLowerCase}.png`}
+                helperText={I18n.t(`administration.helpers.landingPage.${identifierLowerCase}`)}
+              />
             </Checkbox>
           );
         })}
