@@ -3,12 +3,9 @@ import os
 import graphene
 from graphene.relay import Node
 from graphene_sqlalchemy import SQLAlchemyObjectType
-from pyramid.security import Everyone
-from pyramid.httpexceptions import HTTPUnauthorized
 
 from assembl import models
-from assembl.auth.util import get_permissions
-from assembl.auth import IF_OWNED, CrudPermissions
+from assembl.auth import CrudPermissions
 from .document import Document
 from .graphql_langstrings_helpers import (
     langstrings_interface, update_langstrings, add_langstrings_input_attrs)
@@ -252,8 +249,7 @@ class CreateTokenVoteSpecification(graphene.Mutation):
     @abort_transaction_on_exception
     def mutate(root, args, context, info):
         cls = models.TokenVoteSpecification
-        discussion_id = context.matchdict['discussion_id']
-        user_id = context.authenticated_userid or Everyone
+        require_cls_permission(CrudPermissions.CREATE, cls, context)
         vote_session_id = args.get('vote_session_id')
         vote_session_id = int(Node.from_global_id(vote_session_id)[1])
         title_entries = args.get('title_entries')
@@ -263,12 +259,6 @@ class CreateTokenVoteSpecification(graphene.Mutation):
 
         with cls.default_db.no_autoflush as db:
             vote_session = db.query(models.VoteSession).get(vote_session_id)
-            permissions = get_permissions(user_id, discussion_id)
-            allowed = cls.user_can_cls(
-                user_id, CrudPermissions.CREATE, permissions)
-            if not allowed or (allowed == IF_OWNED and user_id == Everyone):
-                raise HTTPUnauthorized()
-
             title_ls = langstring_from_input_entries(title_entries)
             instructions_ls = langstring_from_input_entries(instructions_entries)
             vote_spec = cls(
@@ -312,8 +302,6 @@ class UpdateTokenVoteSpecification(graphene.Mutation):
     @abort_transaction_on_exception
     def mutate(root, args, context, info):
         cls = models.TokenVoteSpecification
-        discussion_id = context.matchdict['discussion_id']
-        user_id = context.authenticated_userid or Everyone
         vote_spec_id = args.get('id')
         vote_spec_id = int(Node.from_global_id(vote_spec_id)[1])
         title_entries = args.get('title_entries')
@@ -323,12 +311,7 @@ class UpdateTokenVoteSpecification(graphene.Mutation):
 
         with cls.default_db.no_autoflush as db:
             vote_spec = cls.get(vote_spec_id)
-            permissions = get_permissions(user_id, discussion_id)
-            allowed = vote_spec.user_can(
-                user_id, CrudPermissions.UPDATE, permissions)
-            if not allowed:
-                raise HTTPUnauthorized()
-
+            require_instance_permission(CrudPermissions.UPDATE, vote_spec, context)
             update_langstring_from_input_entries(
                 vote_spec, 'title', title_entries)
             update_langstring_from_input_entries(
@@ -380,21 +363,12 @@ class DeleteVoteSpecification(graphene.Mutation):
     @staticmethod
     @abort_transaction_on_exception
     def mutate(root, args, context, info):
-        discussion_id = context.matchdict['discussion_id']
-        user_id = context.authenticated_userid or Everyone
-
         vote_spec_id = args.get('id')
         vote_spec_id = int(Node.from_global_id(vote_spec_id)[1])
-        token = models.AbstractVoteSpecification.get(vote_spec_id)
-
-        permissions = get_permissions(user_id, discussion_id)
-        allowed = token.user_can(
-            user_id, CrudPermissions.DELETE, permissions)
-        if not allowed:
-            raise HTTPUnauthorized()
-
-        token.db.delete(token)
-        token.db.flush()
+        vote_spec = models.AbstractVoteSpecification.get(vote_spec_id)
+        require_instance_permission(CrudPermissions.DELETE, vote_spec, context)
+        vote_spec.db.delete(vote_spec)
+        vote_spec.db.flush()
         return DeleteVoteSpecification(success=True)
 
 
@@ -412,8 +386,7 @@ class CreateGaugeVoteSpecification(graphene.Mutation):
     @abort_transaction_on_exception
     def mutate(root, args, context, info):
         cls = models.GaugeVoteSpecification
-        discussion_id = context.matchdict['discussion_id']
-        user_id = context.authenticated_userid or Everyone
+        require_cls_permission(CrudPermissions.CREATE, cls, context)
         vote_session_id = args.get('vote_session_id')
         vote_session_id = int(Node.from_global_id(vote_session_id)[1])
         title_entries = args.get('title_entries')
@@ -422,12 +395,6 @@ class CreateGaugeVoteSpecification(graphene.Mutation):
 
         with cls.default_db.no_autoflush as db:
             vote_session = db.query(models.VoteSession).get(vote_session_id)
-            permissions = get_permissions(user_id, discussion_id)
-            allowed = cls.user_can_cls(
-                user_id, CrudPermissions.CREATE, permissions)
-            if not allowed or (allowed == IF_OWNED and user_id == Everyone):
-                raise HTTPUnauthorized()
-
             title_ls = langstring_from_input_entries(title_entries)
             instructions_ls = langstring_from_input_entries(instructions_entries)
             vote_spec = cls(
@@ -464,8 +431,6 @@ class UpdateGaugeVoteSpecification(graphene.Mutation):
     @abort_transaction_on_exception
     def mutate(root, args, context, info):
         cls = models.GaugeVoteSpecification
-        discussion_id = context.matchdict['discussion_id']
-        user_id = context.authenticated_userid or Everyone
         vote_spec_id = args.get('id')
         vote_spec_id = int(Node.from_global_id(vote_spec_id)[1])
         title_entries = args.get('title_entries')
@@ -474,12 +439,7 @@ class UpdateGaugeVoteSpecification(graphene.Mutation):
 
         with cls.default_db.no_autoflush as db:
             vote_spec = cls.get(vote_spec_id)
-            permissions = get_permissions(user_id, discussion_id)
-            allowed = vote_spec.user_can(
-                user_id, CrudPermissions.UPDATE, permissions)
-            if not allowed:
-                raise HTTPUnauthorized()
-
+            require_instance_permission(CrudPermissions.UPDATE, vote_spec, context)
             update_langstring_from_input_entries(
                 vote_spec, 'title', title_entries)
             update_langstring_from_input_entries(
@@ -531,8 +491,7 @@ class CreateNumberGaugeVoteSpecification(graphene.Mutation):
     @abort_transaction_on_exception
     def mutate(root, args, context, info):
         cls = models.NumberGaugeVoteSpecification
-        discussion_id = context.matchdict['discussion_id']
-        user_id = context.authenticated_userid or Everyone
+        require_cls_permission(CrudPermissions.CREATE, cls, context)
         vote_session_id = args.get('vote_session_id')
         vote_session_id = int(Node.from_global_id(vote_session_id)[1])
         title_entries = args.get('title_entries')
@@ -540,12 +499,6 @@ class CreateNumberGaugeVoteSpecification(graphene.Mutation):
 
         with cls.default_db.no_autoflush as db:
             vote_session = db.query(models.VoteSession).get(vote_session_id)
-            permissions = get_permissions(user_id, discussion_id)
-            allowed = cls.user_can_cls(
-                user_id, CrudPermissions.CREATE, permissions)
-            if not allowed or (allowed == IF_OWNED and user_id == Everyone):
-                raise HTTPUnauthorized()
-
             title_ls = langstring_from_input_entries(title_entries)
             instructions_ls = langstring_from_input_entries(instructions_entries)
             vote_spec = cls(
@@ -580,8 +533,6 @@ class UpdateNumberGaugeVoteSpecification(graphene.Mutation):
     @abort_transaction_on_exception
     def mutate(root, args, context, info):
         cls = models.NumberGaugeVoteSpecification
-        discussion_id = context.matchdict['discussion_id']
-        user_id = context.authenticated_userid or Everyone
         vote_spec_id = args.get('id')
         vote_spec_id = int(Node.from_global_id(vote_spec_id)[1])
         title_entries = args.get('title_entries')
@@ -589,12 +540,7 @@ class UpdateNumberGaugeVoteSpecification(graphene.Mutation):
 
         with cls.default_db.no_autoflush as db:
             vote_spec = cls.get(vote_spec_id)
-            permissions = get_permissions(user_id, discussion_id)
-            allowed = vote_spec.user_can(
-                user_id, CrudPermissions.UPDATE, permissions)
-            if not allowed:
-                raise HTTPUnauthorized()
-
+            require_instance_permission(CrudPermissions.UPDATE, vote_spec, context)
             update_langstring_from_input_entries(
                 vote_spec, 'title', title_entries)
             update_langstring_from_input_entries(

@@ -1,5 +1,6 @@
 from pyramid.security import Everyone
 from pyramid.httpexceptions import HTTPUnauthorized
+
 from assembl.auth.util import get_permissions
 
 
