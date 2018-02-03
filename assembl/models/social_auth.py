@@ -451,7 +451,7 @@ class SocialAuthAccount(
             intrinsic = float(intrinsic) / 864000
             if config_t is not None:
                 # take minimum of intrinsic or config.
-                intrinsic = min(config_t, intrinsic)
+                intrinsic = min(float(config_t), intrinsic)
         return float(intrinsic or config_t or 0)
 
     # temporary shims
