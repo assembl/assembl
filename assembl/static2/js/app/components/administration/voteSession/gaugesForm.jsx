@@ -6,28 +6,44 @@ import Helper from '../../common/helper';
 import { getEntryValueForLocale } from '../../../utils/i18n';
 import GaugeForm from './gaugeForm';
 
-const DumbGaugesForm = (props) => {
-  console.log(props);
-  return (
-    <div className="gauges-vote-form">
-      <div className="flex">
-        <label htmlFor="input-dropdown-addon">Nombre de jauges</label>
-        <Helper helperUrl="/static2/img/helpers/helper2.png" helperText="Définissez le nombre de jauges" />
+class DumbGaugesForm extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      gaugesNumber: 0
+    };
+  }
+
+  render() {
+    const { gaugesNumber } = this.state;
+    return (
+      <div className="gauges-vote-form">
+        <div className="flex">
+          <label htmlFor="input-dropdown-addon">Nombre de jauges</label>
+          <Helper helperUrl="/static2/img/helpers/helper2.png" helperText="Définissez le nombre de jauges" />
+        </div>
+        <SplitButton
+          title={gaugesNumber}
+          id="input-dropdown-addon"
+          required
+          onSelect={(eventKey) => {
+            this.setState({ gaugesNumber: eventKey });
+          }}
+        >
+          {range(11).map(value => (
+            <MenuItem key={`gauge-item-${value}`} eventKey={value}>
+              {value}
+            </MenuItem>
+          ))}
+        </SplitButton>
+        <div>
+          <div className="separator" />
+          {range(gaugesNumber).map((gaugeForm, index) => <GaugeForm key={`gauge-form-${gaugeForm}`} index={index} />)}
+        </div>
       </div>
-      <SplitButton title="Nombre de jauges" id="input-dropdown-addon" required>
-        {range(11).map(value => (
-          <MenuItem key={`gauge-item-${value}`} eventKey={value}>
-            {value}
-          </MenuItem>
-        ))}
-      </SplitButton>
-      <div>
-        <div className="separator" />
-        {range(3).map((gaugeForm, index) => <GaugeForm key={`gauge-form-${gaugeForm}`} index={index} />)}
-      </div>
-    </div>
-  );
-};
+    );
+  }
+}
 
 // const mapStateToProps = (state, { id, editLocale }) => {
 //   console.log(state);
