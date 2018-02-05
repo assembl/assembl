@@ -935,9 +935,9 @@ const Translations = {
       landingPage: {
         manageModules: {
           title: "Manage the modules",
-          helper: "Choose the modules that you want to see in the landing page and their position."
+          helper: "Choose the modules you want to see in the landing page and their position."
         },
-        successSave: "The modules have been saved with success !"
+        successSave: "The modules have been saved with success!"
       }
     },
     unauthorizedAdministration: {
