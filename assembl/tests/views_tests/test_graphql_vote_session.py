@@ -1,13 +1,15 @@
 # -*- coding: utf-8 -*-
-import json
-
-from assembl.graphql.schema import Schema as schema
-from assembl.lib.utils import snake_to_camel
-from assembl.graphql.langstring import resolve_langstring
-from assembl import models
-import os
 from io import BytesIO
+import json
+import os
+
 from graphql_relay.node.node import to_global_id
+
+from assembl import models
+from assembl.graphql.langstring import resolve_langstring
+from assembl.graphql.schema import Schema as schema
+from assembl.graphql.utils import get_root_thematic_for_phase
+from assembl.lib.utils import snake_to_camel
 
 
 def assert_langstring_is_equal(langstring_name, graphql_model, sqla_model):
@@ -586,3 +588,85 @@ u'updateNumberGaugeVoteSpecification': {
         u"nbTicks": 8,
         u"unit": u"M$",
         u'voteSessionId': vote_session_id}}}
+
+
+def test_mutation_create_proposal(graphql_request, discussion, vote_session, graphql_registry):
+    mutation = graphql_registry['createProposal']
+    vote_session_id = to_global_id("VoteSession", vote_session.id)
+    res = schema.execute(mutation, context_value=graphql_request, variable_values={
+        "voteSessionId": vote_session_id,
+        "titleEntries": [
+            {"value": u"Comprendre les dynamiques et les enjeux", "localeCode": "fr"},
+            {"value": u"Understanding the dynamics and issues", "localeCode": "en"}
+        ],
+        "descriptionEntries": [
+            {"value": u"Description: Comprendre les dynamiques et les enjeux", "localeCode": "fr"},
+            {"value": u"Description: Understanding the dynamics and issues", "localeCode": "en"}
+        ]
+    })
+    assert res.errors is None
+    identifier = 'voteSession{}'.format(vote_session.id)
+    root_thematic = get_root_thematic_for_phase(discussion, identifier)
+    proposal = root_thematic.children[0]
+    proposal_id = to_global_id("Idea", proposal.id)
+    assert json.loads(json.dumps(res.data)) == {
+u'createProposal': {
+    u'proposal': {
+        u'id': proposal_id,
+        u'titleEntries': [
+            {u'localeCode': u'en',
+             u'value': u'Understanding the dynamics and issues'},
+            {u'localeCode': u'fr',
+             u'value': u'Comprendre les dynamiques et les enjeux'}],
+        u'descriptionEntries': [
+            {u'localeCode': u'en',
+              u'value': u'Description: Understanding the dynamics and issues'},
+            {u'localeCode': u'fr',
+              u'value': u'Description: Comprendre les dynamiques et les enjeux'}]
+        }}}
+    # remove created proposal
+    proposal.delete()
+    root_thematic.delete()
+    proposal.db.flush()
+
+
+def test_mutation_delete_proposal(graphql_request, vote_proposal, graphql_registry):
+    mutation = graphql_registry['deleteProposal']
+    proposal_id = to_global_id("Idea", vote_proposal.id)
+    res = schema.execute(mutation, context_value=graphql_request, variable_values={
+        "id": proposal_id
+    })
+    assert res.errors is None
+    assert True == res.data['deleteProposal']['success']
+
+
+def test_mutation_update_proposal(graphql_request, discussion, vote_proposal, graphql_registry):
+    mutation = graphql_registry['updateProposal']
+    proposal_id = to_global_id("Idea", vote_proposal.id)
+    res = schema.execute(mutation, context_value=graphql_request, variable_values={
+        "id": proposal_id,
+        "titleEntries": [
+            {"value": u"Comprendre les dynamiques et les enjeux (updated)", "localeCode": "fr"},
+            {"value": u"Understanding the dynamics and issues (updated)", "localeCode": "en"}
+        ],
+        "descriptionEntries": [
+            {"value": u"Description: Comprendre les dynamiques et les enjeux (updated)", "localeCode": "fr"},
+            {"value": u"Description: Understanding the dynamics and issues (updated)", "localeCode": "en"}
+        ]
+    })
+    assert res.errors is None
+    assert json.loads(json.dumps(res.data)) == {
+u'updateProposal': {
+    u'proposal': {
+        u'id': proposal_id,
+        u'titleEntries': [
+            {u'localeCode': u'en',
+             u'value': u'Understanding the dynamics and issues (updated)'},
+            {u'localeCode': u'fr',
+             u'value': u'Comprendre les dynamiques et les enjeux (updated)'}],
+        u'descriptionEntries': [
+            {u'localeCode': u'en',
+              u'value': u'Description: Understanding the dynamics and issues (updated)'},
+            {u'localeCode': u'fr',
+              u'value': u'Description: Comprendre les dynamiques et les enjeux (updated)'}]
+        }}}

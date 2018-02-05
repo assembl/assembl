@@ -11,13 +11,17 @@ from .graphql_langstrings_helpers import (
     langstrings_interface, update_langstrings, add_langstrings_input_attrs)
 from .permissions_helpers import (
     require_cls_permission, require_instance_permission)
+from .idea import Idea
 from .langstring import (
     LangStringEntry, LangStringEntryInput,
     langstring_from_input_entries,
     update_langstring_from_input_entries,
     resolve_langstring, resolve_langstring_entries)
 from .types import SecureObjectType, SQLAlchemyUnion
-from .utils import abort_transaction_on_exception
+from .utils import (
+    abort_transaction_on_exception,
+    get_root_thematic_for_phase,
+    create_root_thematic)
 
 
 langstrings_defs = {
@@ -552,3 +556,104 @@ class UpdateNumberGaugeVoteSpecification(graphene.Mutation):
             db.flush()
 
         return UpdateNumberGaugeVoteSpecification(vote_specification=vote_spec)
+
+
+class CreateProposal(graphene.Mutation):
+
+    class Input:
+        vote_session_id = graphene.ID(required=True)
+        title_entries = graphene.List(LangStringEntryInput, required=True)
+        description_entries = graphene.List(LangStringEntryInput, required=True)
+        order = graphene.Float()
+
+    proposal = graphene.Field(lambda: Idea)
+
+    @staticmethod
+    @abort_transaction_on_exception
+    def mutate(root, args, context, info):
+        cls = models.Idea
+        require_cls_permission(CrudPermissions.CREATE, cls, context)
+        vote_session_id = args.get('vote_session_id')
+        vote_session_id = int(Node.from_global_id(vote_session_id)[1])
+        title_entries = args.get('title_entries')
+        description_entries = args.get('description_entries')
+        discussion_id = context.matchdict['discussion_id']
+        discussion = models.Discussion.get(discussion_id)
+
+        with cls.default_db.no_autoflush as db:
+            title_ls = langstring_from_input_entries(title_entries)
+            description_ls = langstring_from_input_entries(description_entries)
+            proposal = cls(
+                discussion_id=discussion_id,
+                title=title_ls,
+                description=description_ls
+            )
+            db.add(proposal)
+            identifier = 'voteSession{}'.format(vote_session_id)
+            root_thematic = get_root_thematic_for_phase(discussion, identifier)
+            if root_thematic is None:
+                root_thematic = create_root_thematic(discussion, identifier)
+
+            order = len(root_thematic.get_children()) + 1.0
+            db.add(
+                models.IdeaLink(source=root_thematic, target=proposal,
+                                order=args.get('order', order)))
+            db.flush()
+
+        return CreateProposal(proposal=proposal)
+
+
+class UpdateProposal(graphene.Mutation):
+
+    class Input:
+        id = graphene.ID(required=True)
+        title_entries = graphene.List(LangStringEntryInput, required=True)
+        description_entries = graphene.List(LangStringEntryInput, required=True)
+        order = graphene.Float()
+
+    proposal = graphene.Field(lambda: Idea)
+
+    @staticmethod
+    @abort_transaction_on_exception
+    def mutate(root, args, context, info):
+        cls = models.Idea
+        proposal_id = args.get('id')
+        proposal_id = int(Node.from_global_id(proposal_id)[1])
+        title_entries = args.get('title_entries')
+        description_entries = args.get('description_entries')
+
+        with cls.default_db.no_autoflush as db:
+            proposal = cls.get(proposal_id)
+            require_instance_permission(CrudPermissions.UPDATE, proposal, context)
+            update_langstring_from_input_entries(
+                proposal, 'title', title_entries)
+            update_langstring_from_input_entries(
+                proposal, 'description', description_entries)
+
+            # change order if needed
+            order = args.get('order')
+            if order:
+                proposal.source_links[0].order = order
+
+            db.flush()
+
+        return UpdateProposal(proposal=proposal)
+
+
+class DeleteProposal(graphene.Mutation):
+
+    class Input:
+        id = graphene.ID(required=True)
+
+    success = graphene.Boolean()
+
+    @staticmethod
+    @abort_transaction_on_exception
+    def mutate(root, args, context, info):
+        proposal_id = args.get('id')
+        proposal_id = int(Node.from_global_id(proposal_id)[1])
+        proposal = models.Idea.get(proposal_id)
+        require_instance_permission(CrudPermissions.DELETE, proposal, context)
+        proposal.db.delete(proposal)
+        proposal.db.flush()
+        return DeleteProposal(success=True)

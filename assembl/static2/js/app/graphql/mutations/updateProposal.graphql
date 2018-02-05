@@ -1,0 +1,17 @@
+#import "../fragments/LangString.graphql"
+
+mutation updateProposal($id: ID!, $titleEntries: [LangStringEntryInput]!, $descriptionEntries: [LangStringEntryInput]!) {
+  updateProposal(id: $id, titleEntries: $titleEntries, descriptionEntries: $descriptionEntries) {
+    proposal {
+      ... on Idea {
+        id
+        titleEntries {
+          ...langStringEntry
+        }
+        descriptionEntries {
+          ...langStringEntry
+        }
+      }
+    }
+  }
+}
