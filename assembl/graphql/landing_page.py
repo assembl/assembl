@@ -4,13 +4,12 @@ from graphene.relay import Node
 from graphene_sqlalchemy import SQLAlchemyObjectType
 
 from assembl import models
-from .langstring import (
-    LangStringEntry, resolve_langstring, resolve_langstring_entries)
+from assembl.auth import CrudPermissions
+
+from .langstring import LangStringEntry, resolve_langstring, resolve_langstring_entries
+from .permissions_helpers import require_cls_permission, require_instance_permission
 from .types import SecureObjectType
 from .utils import abort_transaction_on_exception
-from assembl.auth import CrudPermissions
-from .permissions_helpers import (
-    require_cls_permission, require_instance_permission)
 
 
 class LandingPageModuleType(SecureObjectType, SQLAlchemyObjectType):
