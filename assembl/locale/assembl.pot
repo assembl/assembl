@@ -6,9 +6,9 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: assembl 2.8.2\n"
+"Project-Id-Version: assembl 2.8.3\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2018-01-31 10:49+0100\n"
+"POT-Creation-Date: 2018-02-05 17:34+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -170,190 +170,172 @@ msgid "Show the share button on posts and ideas"
 msgstr ""
 
 #: assembl/models/preferences.py:507
-msgid "Require anti-virus check"
+msgid "Extra data for CSV reports"
 msgstr ""
 
 #: assembl/models/preferences.py:510
+msgid "data taken from social_auth's extra_data to add to CSV reports"
+msgstr ""
+
+#: assembl/models/preferences.py:522
+msgid "Require anti-virus check"
+msgstr ""
+
+#: assembl/models/preferences.py:525
 msgid "Run an anti-virus on file attachments"
 msgstr ""
 
-#: assembl/models/preferences.py:521
-msgid "Private authentication server"
-msgstr ""
-
-#: assembl/models/preferences.py:523
-msgid ""
-"Endpoint URL of a private authentication that users will mandatorily have to "
-"authenticate themselves with."
-msgstr ""
-
 #: assembl/models/preferences.py:539
-msgid "WordPress OAuth Server"
-msgstr ""
-
-#: assembl/models/preferences.py:541
 msgid "Authentication service type"
 msgstr ""
 
-#: assembl/models/preferences.py:543
+#: assembl/models/preferences.py:541
 msgid ""
 "A primary authentication server for this discussion, defined as a python-"
 "social-auth backend. Participants will be auto-logged in to that server, and "
 "discussion auto-subscription will require an account from this backend."
 msgstr ""
 
-#: assembl/models/preferences.py:558
-msgid "Authentication key"
-msgstr ""
-
-#: assembl/models/preferences.py:559
-msgid "Key for assembl as a client of the authentication server"
-msgstr ""
-
-#: assembl/models/preferences.py:571
-msgid "Authentication secret"
-msgstr ""
-
-#: assembl/models/preferences.py:572
-msgid "Secret for assembl as a client of the authentication server"
-msgstr ""
-
-#: assembl/models/preferences.py:585
+#: assembl/models/preferences.py:556
 msgid "Allow access to moderated text"
 msgstr ""
 
-#: assembl/models/preferences.py:588
+#: assembl/models/preferences.py:559
 msgid "Are moderated posts simply hidden or made inaccessible by default?"
 msgstr ""
 
-#: assembl/models/preferences.py:601
+#: assembl/models/preferences.py:572
 msgid "Idea panel opens automatically"
 msgstr ""
 
-#: assembl/models/preferences.py:604
+#: assembl/models/preferences.py:575
 msgid ""
 "Does the Idea panel automatically open when an idea is clicked ? (and close "
 "when a special section is clicked)"
 msgstr ""
 
-#: assembl/models/preferences.py:616
+#: assembl/models/preferences.py:587
 msgid "Ids of columns in column view"
 msgstr ""
 
-#: assembl/models/preferences.py:618
+#: assembl/models/preferences.py:589
 msgid "What are (ordered) identifiers of columns in multi-column views?"
 msgstr ""
 
-#: assembl/models/preferences.py:631
+#: assembl/models/preferences.py:602
 msgid "Default colors of columns in column view"
 msgstr ""
 
-#: assembl/models/preferences.py:633
+#: assembl/models/preferences.py:604
 msgid "What are (default) theme colors of columns in multi-column views?"
 msgstr ""
 
-#: assembl/models/preferences.py:645
+#: assembl/models/preferences.py:616
 msgid "Names of columns in column view"
 msgstr ""
 
-#: assembl/models/preferences.py:647
+#: assembl/models/preferences.py:618
 msgid ""
 "What are (default) names of columns in multi-column views, in each discussion"
 " language?"
 msgstr ""
 
-#: assembl/models/preferences.py:660
+#: assembl/models/preferences.py:631
 msgid "Default permissions"
 msgstr ""
 
-#: assembl/models/preferences.py:663
+#: assembl/models/preferences.py:634
 msgid "The basic permissions for a new discussion"
 msgstr ""
 
-#: assembl/models/preferences.py:745
+#: assembl/models/preferences.py:716
 msgid "Require Email Domain"
 msgstr ""
 
-#: assembl/models/preferences.py:748
+#: assembl/models/preferences.py:719
 msgid ""
 "List of domain names of user email address required for self-registration. "
 "Only accounts with at least an email from those domains can self-register to "
 "this discussion. Anyone can self-register if this is empty."
 msgstr ""
 
-#: assembl/models/preferences.py:764
+#: assembl/models/preferences.py:735
 msgid "Show CI Dashboard"
 msgstr ""
 
-#: assembl/models/preferences.py:767
+#: assembl/models/preferences.py:738
 msgid "Show the CI Dashboard in the panel group window"
 msgstr ""
 
-#: assembl/models/preferences.py:779
+#: assembl/models/preferences.py:750
 msgid "URL of CI Dashboard"
 msgstr ""
 
-#: assembl/models/preferences.py:781
+#: assembl/models/preferences.py:752
 msgid "Configuration of the visualizations shown in the CI Dashboard"
 msgstr ""
 
-#: assembl/models/preferences.py:799
+#: assembl/models/preferences.py:770
 msgid "Catalyst Visualizations"
 msgstr ""
 
-#: assembl/models/preferences.py:802
+#: assembl/models/preferences.py:773
 msgid "A JSON description of available Catalyst visualizations"
 msgstr ""
 
-#: assembl/models/preferences.py:814
+#: assembl/models/preferences.py:785
 msgid "Navigation sections"
 msgstr ""
 
-#: assembl/models/preferences.py:817
+#: assembl/models/preferences.py:788
 msgid ""
 "A JSON specification of Catalyst visualizations to show in the navigation "
 "section"
 msgstr ""
 
-#: assembl/models/preferences.py:830
+#: assembl/models/preferences.py:801
 msgid "Catalyst translations"
 msgstr ""
 
-#: assembl/models/preferences.py:833
+#: assembl/models/preferences.py:804
 msgid "Translations applicable to Catalyst visualizations, in Jed (JSON) format"
 msgstr ""
 
-#: assembl/models/preferences.py:850
+#: assembl/models/preferences.py:821
 msgid "Default Table of Ideas Collapsed state"
 msgstr ""
 
-#: assembl/models/preferences.py:853
+#: assembl/models/preferences.py:824
 msgid ""
 "Default expanded/collapsed state of each idea in the table of ideas. A user "
 "can override it by opening/closing an idea"
 msgstr ""
 
-#: assembl/models/preferences.py:868
+#: assembl/models/preferences.py:839
 msgid "Preference data"
 msgstr ""
 
-#: assembl/models/preferences.py:871
+#: assembl/models/preferences.py:842
 msgid "The preference configuration; override only with care"
 msgstr ""
 
-#: assembl/models/preferences.py:883
+#: assembl/models/preferences.py:854
 msgid "Cookies banner"
 msgstr ""
 
-#: assembl/models/preferences.py:886
+#: assembl/models/preferences.py:857
 msgid "Show the banner offering to disable Piwik cookies"
 msgstr ""
 
-#: assembl/static/js/app/routeManager.js:570
+#: assembl/static/js/app/routeManager.js:416
+msgid "Requested vote widget could not be found."
+msgstr ""
+
+#: assembl/static/js/app/routeManager.js:602
 msgid "You must be logged in to access this page."
 msgstr ""
 
-#: assembl/static/js/app/routeManager.js:593
+#: assembl/static/js/app/routeManager.js:625
 msgid "Your level of permissions do not allow you to see the rest of this content"
 msgstr ""
 
@@ -1876,27 +1858,27 @@ msgstr ""
 msgid "Failed publishing synthesis!"
 msgstr ""
 
-#: assembl/static/js/app/views/tokenVoteSession.js:257
+#: assembl/static/js/app/views/tokenVoteSession.js:264
 #, python-format
 msgid "<span class='available-tokens-number'>%d</span> remaining %s token"
 msgid_plural "<span class='available-tokens-number'>%d</span> remaining %s tokens"
 msgstr[0] ""
 msgstr[1] ""
 
-#: assembl/static/js/app/views/tokenVoteSession.js:528
+#: assembl/static/js/app/views/tokenVoteSession.js:535
 #, python-format
 msgid "set %d tokens"
 msgstr ""
 
-#: assembl/static/js/app/views/tokenVoteSession.js:559
+#: assembl/static/js/app/views/tokenVoteSession.js:566
 msgid "You don't have enough tokens remaining."
 msgstr ""
 
-#: assembl/static/js/app/views/tokenVoteSession.js:949
+#: assembl/static/js/app/views/tokenVoteSession.js:950
 msgid "See Description"
 msgstr ""
 
-#: assembl/static/js/app/views/tokenVoteSession.js:1036
+#: assembl/static/js/app/views/tokenVoteSession.js:1037
 #, python-format
 msgid "%d token \"%s\" was voted on this idea, out of a total %d \"%s\" tokens voted "
 msgid_plural ""
@@ -1905,16 +1887,16 @@ msgid_plural ""
 msgstr[0] ""
 msgstr[1] ""
 
-#: assembl/static/js/app/views/tokenVoteSession.js:1092
+#: assembl/static/js/app/views/tokenVoteSession.js:1093
 msgid "Hide Description"
 msgstr ""
 
-#: assembl/static/js/app/views/tokenVoteSession.js:1214
+#: assembl/static/js/app/views/tokenVoteSession.js:1215
 #, python-format
 msgid "Token: \"%s\""
 msgstr ""
 
-#: assembl/static/js/app/views/tokenVoteSession.js:1352
+#: assembl/static/js/app/views/tokenVoteSession.js:1353
 #, python-format
 msgid ""
 "%d participant voted between %s and %s. The number of tokens available for "
@@ -1925,44 +1907,49 @@ msgid_plural ""
 msgstr[0] ""
 msgstr[1] ""
 
-#: assembl/static/js/app/views/tokenVoteSession.js:1361
+#: assembl/static/js/app/views/tokenVoteSession.js:1362
 #, python-format
 msgid "<strong>%d</strong> token of type \"%s\""
 msgid_plural "<strong>%d</strong> tokens of type \"%s\""
 msgstr[0] ""
 msgstr[1] ""
 
-#: assembl/static/js/app/views/tokenVoteSession.js:1410
+#: assembl/static/js/app/views/tokenVoteSession.js:1411
 msgid "Token Vote Results"
 msgstr ""
 
-#: assembl/static/js/app/views/tokenVoteSession.js:1610
-msgid "Collective votes"
+#: assembl/static/js/app/views/tokenVoteSession.js:1602
+msgid "Guideline"
 msgstr ""
 
-#: assembl/static/js/app/views/tokenVoteSession.js:1613
+#: assembl/static/js/app/views/tokenVoteSession.js:1603
 msgid ""
 "Split your tokens among the ideas of your choice. By default, your vote is "
 "neutral per project."
 msgstr ""
 
-#: assembl/static/js/app/views/tokenVoteSession.js:1614
+#: assembl/static/js/app/views/tokenVoteSession.js:1604
 msgid "Save my votes"
 msgstr ""
 
-#: assembl/static/js/app/views/tokenVoteSession.js:1725
+#: assembl/static/js/app/views/tokenVoteSession.js:1772
+msgid "Collective votes"
+msgstr ""
+
+#: assembl/static/js/app/views/tokenVoteSession.js:1807
 msgid "Your vote has been saved successfully."
 msgstr ""
 
-#: assembl/static/js/app/views/tokenVoteSession.js:1729
+#: assembl/static/js/app/views/tokenVoteSession.js:1811
 msgid "Go back to the discussion"
 msgstr ""
 
-#: assembl/static/js/app/views/tokenVoteSession.js:1733
+#: assembl/static/js/app/views/tokenVoteSession.js:1815
 msgid "Modify my vote"
 msgstr ""
 
-#: assembl/static/js/app/views/tokenVoteSession.js:1751
+#: assembl/static/js/app/views/tokenVoteSession.js:1839
+#: assembl/static/js/app/views/tokenVoteSession.js:1870
 msgid "Vote confirmation"
 msgstr ""
 
@@ -2157,12 +2144,12 @@ msgstr ""
 msgid "Repeat password"
 msgstr ""
 
-#: assembl/templates/idea_in_synthesis.jinja2:10
+#: assembl/templates/idea_in_synthesis.jinja2:12
 #: assembl/templates/views/ideaInSynthesis.tmpl:6
 msgid "By"
 msgstr ""
 
-#: assembl/templates/idea_in_synthesis.jinja2:14
+#: assembl/templates/idea_in_synthesis.jinja2:16
 msgid "See the conversation around this idea"
 msgstr ""
 
@@ -2483,7 +2470,7 @@ msgstr ""
 msgid "Reply to this message"
 msgstr ""
 
-#: assembl/templates/notifications/html_mail_post_synthesis.jinja2:37
+#: assembl/templates/notifications/html_mail_post_synthesis.jinja2:31
 msgid "Comment on this synthesis"
 msgstr ""
 

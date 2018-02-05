@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: assembl 0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2018-01-31 10:49+0100\n"
+"POT-Creation-Date: 2018-02-05 17:34+0100\n"
 "PO-Revision-Date: 2017-08-26 01:06+0900\n"
 "Last-Translator: \n"
 "Language: ja\n"
@@ -171,32 +171,26 @@ msgid "Show the share button on posts and ideas"
 msgstr "投稿とアイデアの共有ボタンを表示する"
 
 #: assembl/models/preferences.py:507
-msgid "Require anti-virus check"
+msgid "Extra data for CSV reports"
 msgstr ""
 
 #: assembl/models/preferences.py:510
+msgid "data taken from social_auth's extra_data to add to CSV reports"
+msgstr ""
+
+#: assembl/models/preferences.py:522
+msgid "Require anti-virus check"
+msgstr ""
+
+#: assembl/models/preferences.py:525
 msgid "Run an anti-virus on file attachments"
 msgstr ""
 
-#: assembl/models/preferences.py:521
-msgid "Private authentication server"
-msgstr "私的認証サーバ"
-
-#: assembl/models/preferences.py:523
-msgid ""
-"Endpoint URL of a private authentication that users will mandatorily have"
-" to authenticate themselves with."
-msgstr "ユーザーが認証する必要のある個人認証のエンドポイントURL."
-
 #: assembl/models/preferences.py:539
-msgid "WordPress OAuth Server"
-msgstr "WordPress OAuthサーバー"
-
-#: assembl/models/preferences.py:541
 msgid "Authentication service type"
 msgstr "認証サービスの種類"
 
-#: assembl/models/preferences.py:543
+#: assembl/models/preferences.py:541
 msgid ""
 "A primary authentication server for this discussion, defined as a python-"
 "social-auth backend. Participants will be auto-logged in to that server, "
@@ -206,79 +200,63 @@ msgstr ""
 "この議論のためのon-social-"
 "authバックエンドとして定義されるプライマリ認証サーバー。参加者はこのサーバーに自動ログインし、ディスカッションの自動登録にはこのバックエンドからのアカウントが必要です."
 
-#: assembl/models/preferences.py:558
-msgid "Authentication key"
-msgstr "認証キー"
-
-#: assembl/models/preferences.py:559
-msgid "Key for assembl as a client of the authentication server"
-msgstr "認証サーバーのクライアントとしてのAssemblキー"
-
-#: assembl/models/preferences.py:571
-msgid "Authentication secret"
-msgstr "認証暗証"
-
-#: assembl/models/preferences.py:572
-msgid "Secret for assembl as a client of the authentication server"
-msgstr "認証サーバーのクライアントとしてのAssemblの暗証"
-
-#: assembl/models/preferences.py:585
+#: assembl/models/preferences.py:556
 msgid "Allow access to moderated text"
 msgstr "モデレートされたテキストへのアクセスを許可する"
 
-#: assembl/models/preferences.py:588
+#: assembl/models/preferences.py:559
 msgid "Are moderated posts simply hidden or made inaccessible by default?"
 msgstr "モデレートされた投稿は、デフォルトで隠されているかアクセス不能になっていますか ?"
 
-#: assembl/models/preferences.py:601
+#: assembl/models/preferences.py:572
 msgid "Idea panel opens automatically"
 msgstr "アイデアパネルが自動的に開きます"
 
-#: assembl/models/preferences.py:604
+#: assembl/models/preferences.py:575
 msgid ""
 "Does the Idea panel automatically open when an idea is clicked ? (and "
 "close when a special section is clicked)"
 msgstr "アイデアがクリックされるとアイデアパネルが自動的に開きますか？ (そして、特別なセクションがクリックされたときに閉じますか？)"
 
-#: assembl/models/preferences.py:616
+#: assembl/models/preferences.py:587
 msgid "Ids of columns in column view"
 msgstr "カラムビューのカラムのID"
 
-#: assembl/models/preferences.py:618
+#: assembl/models/preferences.py:589
 msgid "What are (ordered) identifiers of columns in multi-column views?"
 msgstr "マルチカラムビューのカラムの（順序付けられた）識別子は何ですか?"
 
-#: assembl/models/preferences.py:631
+#: assembl/models/preferences.py:602
 msgid "Default colors of columns in column view"
 msgstr "カラムビュー内のカラムのデフォルトの色"
 
-#: assembl/models/preferences.py:633
+#: assembl/models/preferences.py:604
 msgid "What are (default) theme colors of columns in multi-column views?"
 msgstr "マルチカラムビューのカラムの（デフォルトの）テーマカラーは何ですか ?"
 
-#: assembl/models/preferences.py:645
+#: assembl/models/preferences.py:616
 msgid "Names of columns in column view"
 msgstr "カラムビューのカラム名"
 
-#: assembl/models/preferences.py:647
+#: assembl/models/preferences.py:618
 msgid ""
 "What are (default) names of columns in multi-column views, in each "
 "discussion language?"
 msgstr "各列の言語で、マルチカラムビューの（デフォルトの）カラムの名前は何ですか ?"
 
-#: assembl/models/preferences.py:660
+#: assembl/models/preferences.py:631
 msgid "Default permissions"
 msgstr "デフォルトのアクセス許可"
 
-#: assembl/models/preferences.py:663
+#: assembl/models/preferences.py:634
 msgid "The basic permissions for a new discussion"
 msgstr "新しいディスカッションのためのベーシックのアクセス許可"
 
-#: assembl/models/preferences.py:745
+#: assembl/models/preferences.py:716
 msgid "Require Email Domain"
 msgstr "電子メールドメインを要求する"
 
-#: assembl/models/preferences.py:748
+#: assembl/models/preferences.py:719
 msgid ""
 "List of domain names of user email address required for self-"
 "registration. Only accounts with at least an email from those domains can"
@@ -289,79 +267,83 @@ msgstr ""
 "これらのドメインからの電子メールを少なくとも一つ含むアカウントだけがこのディスカッションに自動登録することができます. "
 "これが空であれば誰でも自動登録することができます."
 
-#: assembl/models/preferences.py:764
+#: assembl/models/preferences.py:735
 msgid "Show CI Dashboard"
 msgstr "CIダッシュボードを表示する"
 
-#: assembl/models/preferences.py:767
+#: assembl/models/preferences.py:738
 msgid "Show the CI Dashboard in the panel group window"
 msgstr "パネルグループウィンドウにCIダッシュボードを表示する"
 
-#: assembl/models/preferences.py:779
+#: assembl/models/preferences.py:750
 msgid "URL of CI Dashboard"
 msgstr "CIダッシュボードのURL"
 
-#: assembl/models/preferences.py:781
+#: assembl/models/preferences.py:752
 msgid "Configuration of the visualizations shown in the CI Dashboard"
 msgstr "CIダッシュボードに表示されるビジュアライゼーションの設定"
 
-#: assembl/models/preferences.py:799
+#: assembl/models/preferences.py:770
 msgid "Catalyst Visualizations"
 msgstr "Catalystの可視化"
 
-#: assembl/models/preferences.py:802
+#: assembl/models/preferences.py:773
 msgid "A JSON description of available Catalyst visualizations"
 msgstr "利用可能なCatalystの可視化に関するJSONの説明"
 
-#: assembl/models/preferences.py:814
+#: assembl/models/preferences.py:785
 msgid "Navigation sections"
 msgstr "ナビゲーションセクション"
 
-#: assembl/models/preferences.py:817
+#: assembl/models/preferences.py:788
 msgid ""
 "A JSON specification of Catalyst visualizations to show in the navigation"
 " section"
 msgstr "ナビゲーションセクションに表示するCatalystの可視化のJSON仕様"
 
-#: assembl/models/preferences.py:830
+#: assembl/models/preferences.py:801
 msgid "Catalyst translations"
 msgstr "Catalystの翻訳"
 
-#: assembl/models/preferences.py:833
+#: assembl/models/preferences.py:804
 msgid "Translations applicable to Catalyst visualizations, in Jed (JSON) format"
 msgstr "Jed（JSON）形式のCatalystの可視化に適用される翻訳"
 
-#: assembl/models/preferences.py:850
+#: assembl/models/preferences.py:821
 msgid "Default Table of Ideas Collapsed state"
 msgstr "アイデアの折りたたまれた状態のデフォルトの表"
 
-#: assembl/models/preferences.py:853
+#: assembl/models/preferences.py:824
 msgid ""
 "Default expanded/collapsed state of each idea in the table of ideas. A "
 "user can override it by opening/closing an idea"
 msgstr "アイデアの表の各アイデアのデフォルトの展開/折りたたみ状態。ユーザーは、アイデアを開いたり閉じたりすることでオーバーライドすることができます"
 
-#: assembl/models/preferences.py:868
+#: assembl/models/preferences.py:839
 msgid "Preference data"
 msgstr "プリファレンスデータ"
 
-#: assembl/models/preferences.py:871
+#: assembl/models/preferences.py:842
 msgid "The preference configuration; override only with care"
 msgstr "プリファレンス設定。慎重にオーバーライドすること"
 
-#: assembl/models/preferences.py:883
+#: assembl/models/preferences.py:854
 msgid "Cookies banner"
 msgstr "クッキーのバナー"
 
-#: assembl/models/preferences.py:886
+#: assembl/models/preferences.py:857
 msgid "Show the banner offering to disable Piwik cookies"
 msgstr "Piwikクッキーを無効にするためのバナーを表示する"
 
-#: assembl/static/js/app/routeManager.js:570
+#: assembl/static/js/app/routeManager.js:416
+msgid "Requested vote widget could not be found."
+msgstr ""
+
+#: assembl/static/js/app/routeManager.js:602
 msgid "You must be logged in to access this page."
 msgstr "このページにアクセスするにはログインする必要があります."
 
-#: assembl/static/js/app/routeManager.js:593
+#: assembl/static/js/app/routeManager.js:625
 msgid "Your level of permissions do not allow you to see the rest of this content"
 msgstr "あなたの権限レベルでは、このコンテンツの残りの部分を見ることはできません"
 
@@ -1878,26 +1860,26 @@ msgstr "シンセシスが正常に公開されました！"
 msgid "Failed publishing synthesis!"
 msgstr "シンセシスの公開に失敗しました！"
 
-#: assembl/static/js/app/views/tokenVoteSession.js:257
+#: assembl/static/js/app/views/tokenVoteSession.js:264
 #, python-format
 msgid "<span class='available-tokens-number'>%d</span> remaining %s token"
 msgid_plural "<span class='available-tokens-number'>%d</span> remaining %s tokens"
 msgstr[0] "<span class='available-tokens-number'>%d</span>残りの%sトークン"
 
-#: assembl/static/js/app/views/tokenVoteSession.js:528
+#: assembl/static/js/app/views/tokenVoteSession.js:535
 #, python-format
 msgid "set %d tokens"
 msgstr "%dトークンを設定する"
 
-#: assembl/static/js/app/views/tokenVoteSession.js:559
+#: assembl/static/js/app/views/tokenVoteSession.js:566
 msgid "You don't have enough tokens remaining."
 msgstr "十分なトークンが残っていません。"
 
-#: assembl/static/js/app/views/tokenVoteSession.js:949
+#: assembl/static/js/app/views/tokenVoteSession.js:950
 msgid "See Description"
 msgstr "説明を参照してください"
 
-#: assembl/static/js/app/views/tokenVoteSession.js:1036
+#: assembl/static/js/app/views/tokenVoteSession.js:1037
 #, python-format
 msgid ""
 "%d token \"%s\" was voted on this idea, out of a total %d \"%s\" tokens "
@@ -1907,16 +1889,16 @@ msgid_plural ""
 " voted"
 msgstr[0] "合計で%d “%s”投票されたトークンのうち、このアイデアには%d のトークン “%s” が投票されました。"
 
-#: assembl/static/js/app/views/tokenVoteSession.js:1092
+#: assembl/static/js/app/views/tokenVoteSession.js:1093
 msgid "Hide Description"
 msgstr "説明を隠す"
 
-#: assembl/static/js/app/views/tokenVoteSession.js:1214
+#: assembl/static/js/app/views/tokenVoteSession.js:1215
 #, python-format
 msgid "Token: \"%s\""
 msgstr "トークン：\" %s \""
 
-#: assembl/static/js/app/views/tokenVoteSession.js:1352
+#: assembl/static/js/app/views/tokenVoteSession.js:1353
 #, python-format
 msgid ""
 "%d participant voted between %s and %s. The number of tokens available "
@@ -1926,44 +1908,49 @@ msgid_plural ""
 "for voting per participant:"
 msgstr[0] "%d人が%sと%s間で投票しました。参加者1人あたりの投票に使用できるトークンの数："
 
-#: assembl/static/js/app/views/tokenVoteSession.js:1361
+#: assembl/static/js/app/views/tokenVoteSession.js:1362
 #, python-format
 msgid "<strong>%d</strong> token of type \"%s\""
 msgid_plural "<strong>%d</strong> tokens of type \"%s\""
 msgstr[0] "<strong>%d</strong> \" %s \"タイプのトークン"
 
-#: assembl/static/js/app/views/tokenVoteSession.js:1410
+#: assembl/static/js/app/views/tokenVoteSession.js:1411
 msgid "Token Vote Results"
 msgstr "トークン投票結果"
 
-#: assembl/static/js/app/views/tokenVoteSession.js:1610
-msgid "Collective votes"
-msgstr "集団投票"
+#: assembl/static/js/app/views/tokenVoteSession.js:1602
+msgid "Guideline"
+msgstr ""
 
-#: assembl/static/js/app/views/tokenVoteSession.js:1613
+#: assembl/static/js/app/views/tokenVoteSession.js:1603
 msgid ""
 "Split your tokens among the ideas of your choice. By default, your vote "
 "is neutral per project."
 msgstr "あなたの選択したアイデアにあなたのトークンを割り当てます。デフォルトでは、あなたの投票はプロジェクトごとに同数です。"
 
-#: assembl/static/js/app/views/tokenVoteSession.js:1614
+#: assembl/static/js/app/views/tokenVoteSession.js:1604
 msgid "Save my votes"
 msgstr "私の票を保存"
 
-#: assembl/static/js/app/views/tokenVoteSession.js:1725
+#: assembl/static/js/app/views/tokenVoteSession.js:1772
+msgid "Collective votes"
+msgstr "集団投票"
+
+#: assembl/static/js/app/views/tokenVoteSession.js:1807
 msgid "Your vote has been saved successfully."
 msgstr "あなたの投票は正常に保存されました。"
 
-#: assembl/static/js/app/views/tokenVoteSession.js:1729
+#: assembl/static/js/app/views/tokenVoteSession.js:1811
 msgid "Go back to the discussion"
 msgstr "ディスカッションに戻る"
 
-#: assembl/static/js/app/views/tokenVoteSession.js:1733
+#: assembl/static/js/app/views/tokenVoteSession.js:1815
 #, fuzzy
 msgid "Modify my vote"
 msgstr "あなたの投票を修正する"
 
-#: assembl/static/js/app/views/tokenVoteSession.js:1751
+#: assembl/static/js/app/views/tokenVoteSession.js:1839
+#: assembl/static/js/app/views/tokenVoteSession.js:1870
 msgid "Vote confirmation"
 msgstr "投票の確認"
 
@@ -2159,12 +2146,12 @@ msgstr "パスワード"
 msgid "Repeat password"
 msgstr "パスワード再入力"
 
-#: assembl/templates/idea_in_synthesis.jinja2:10
+#: assembl/templates/idea_in_synthesis.jinja2:12
 #: assembl/templates/views/ideaInSynthesis.tmpl:6
 msgid "By"
 msgstr "投稿者"
 
-#: assembl/templates/idea_in_synthesis.jinja2:14
+#: assembl/templates/idea_in_synthesis.jinja2:16
 msgid "See the conversation around this idea"
 msgstr "このアイデア周辺の会話を見る"
 
@@ -2508,7 +2495,7 @@ msgstr "あなたはディスカッション%(discussionLink)sの%(notificationC
 msgid "Reply to this message"
 msgstr "このメッセージに返信する"
 
-#: assembl/templates/notifications/html_mail_post_synthesis.jinja2:37
+#: assembl/templates/notifications/html_mail_post_synthesis.jinja2:31
 #, fuzzy
 msgid "Comment on this synthesis"
 msgstr "このシンセシスにコメントする"
@@ -4699,4 +4686,25 @@ msgstr "slug=%s のディスカッションは見つかりませんでした"
 
 #~ msgid "Add a conclusion"
 #~ msgstr "結論を追加"
+
+#~ msgid "Private authentication server"
+#~ msgstr "私的認証サーバ"
+
+#~ msgid ""
+#~ msgstr "ユーザーが認証する必要のある個人認証のエンドポイントURL."
+
+#~ msgid "WordPress OAuth Server"
+#~ msgstr "WordPress OAuthサーバー"
+
+#~ msgid "Authentication key"
+#~ msgstr "認証キー"
+
+#~ msgid "Key for assembl as a client of the authentication server"
+#~ msgstr "認証サーバーのクライアントとしてのAssemblキー"
+
+#~ msgid "Authentication secret"
+#~ msgstr "認証暗証"
+
+#~ msgid "Secret for assembl as a client of the authentication server"
+#~ msgstr "認証サーバーのクライアントとしてのAssemblの暗証"
 
