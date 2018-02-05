@@ -107,6 +107,13 @@ class PostView extends React.PureComponent<void, Props, State> {
     const boxStyle = {
       borderLeftColor: borderLeftColor
     };
+
+    let canReply = !multiColumns;
+    // If we're in thread mode, check if the first idea associated to the post is multi columns.
+    if (!multiColumns && indirectIdeaContentLinks && indirectIdeaContentLinks.length > 0) {
+      canReply = indirectIdeaContentLinks[0].idea.messageViewOverride !== 'messageColumns';
+    }
+
     return (
       <div>
         {!multiColumns && (
@@ -167,7 +174,7 @@ class PostView extends React.PureComponent<void, Props, State> {
             </div>
           </div>
         </div>
-        {!multiColumns && (
+        {canReply && (
           <div className={this.state.showAnswerForm ? 'answer-form' : 'collapsed-answer-form'}>
             <AnswerForm
               parentId={id}
