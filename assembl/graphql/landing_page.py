@@ -8,10 +8,9 @@ from .langstring import (
     LangStringEntry, resolve_langstring, resolve_langstring_entries)
 from .types import SecureObjectType
 from .utils import abort_transaction_on_exception
-from assembl.auth.util import get_permissions
-from assembl.auth import IF_OWNED, CrudPermissions
-from pyramid.httpexceptions import HTTPUnauthorized
-from pyramid.security import Everyone
+from assembl.auth import CrudPermissions
+from .permissions_helpers import (
+    require_cls_permission, require_instance_permission)
 
 
 class LandingPageModuleType(SecureObjectType, SQLAlchemyObjectType):
@@ -73,12 +72,7 @@ class CreateLandingPageModule(graphene.Mutation):
     def mutate(root, args, context, info):
         cls = models.LandingPageModule
         discussion_id = context.matchdict['discussion_id']
-        user_id = context.authenticated_userid or Everyone
-        permissions = get_permissions(user_id, discussion_id)
-        allowed = cls.user_can_cls(
-            user_id, CrudPermissions.CREATE, permissions)
-        if not allowed or (allowed == IF_OWNED and user_id == Everyone):
-            raise HTTPUnauthorized()
+        require_cls_permission(CrudPermissions.CREATE, cls, context)
         configuration = args.get('configuration')
         order = args.get('order')
         enabled = args.get('enabled')
@@ -113,19 +107,12 @@ class UpdateLandingPageModule(graphene.Mutation):
     @abort_transaction_on_exception
     def mutate(root, args, context, info):
         cls = models.LandingPageModule
-        discussion_id = context.matchdict['discussion_id']
-        user_id = context.authenticated_userid or Everyone
         configuration = args.get('configuration')
         order = args.get('order')
         enabled = args.get('enabled')
         module_id = args.get('id')
         module_id = int(Node.from_global_id(module_id)[1])
-        permissions = get_permissions(user_id, discussion_id)
-        allowed = cls.user_can_cls(
-            user_id, CrudPermissions.UPDATE, permissions)
-        if not allowed or (allowed == IF_OWNED and user_id == Everyone):
-            raise HTTPUnauthorized()
-
+        require_instance_permission(CrudPermissions.UPDATE, cls.get(module_id), context)
         with cls.default_db.no_autoflush as db:
             module = db.query(models.LandingPageModule).filter(
                 models.LandingPageModule.id == module_id).one()
