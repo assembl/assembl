@@ -613,7 +613,6 @@ var TokenCategoryAllocationView = Marionette.ItemView.extend({
       return;
     }
 
-    console.log("set " + number_of_tokens_represented_by_this_icon + " tokens");
     var animation_duration = 800;
 
     var endAnimationTowardsNotAvailable = function(el){
@@ -636,7 +635,6 @@ var TokenCategoryAllocationView = Marionette.ItemView.extend({
     if ( that.currentValue < number_of_tokens_represented_by_this_icon ){ // we are adding tokens to this idea
       for ( var i = that.currentValue + 1; i <= number_of_tokens_represented_by_this_icon; ++i ){
         var selector = ".token-vote-session .token-bag-for-category." + that.model.getCssClassFromId() + " .available-tokens-icons .available";
-        console.log("selector: ", selector);
         var theAvailableToken = $(selector).eq($(selector).length - 1 - (number_of_tokens_represented_by_this_icon - i));
         var theAllocatedToken = tokenContainer.parent().children().eq(i);
         theAvailableToken[0].classList.add("animating-towards-not-available");
@@ -649,7 +647,6 @@ var TokenCategoryAllocationView = Marionette.ItemView.extend({
       var initial_value = number_of_tokens_represented_by_this_icon;
       for ( var i = that.currentValue; i > number_of_tokens_represented_by_this_icon; --i ){
         var selector = ".token-vote-session .token-bag-for-category." + that.model.getCssClassFromId() + " .available-tokens-icons .not-available";
-        console.log("selector: ", selector);
         var theAvailableToken = $(selector).eq(i - number_of_tokens_represented_by_this_icon - 1);
         var theAllocatedToken = tokenContainer.parent().children().eq(i);
         theAvailableToken[0].classList.add("animating-towards-available");
@@ -693,7 +690,6 @@ var TokenCategoryAllocationView = Marionette.ItemView.extend({
       delete properties["value"];
       properties["idea"] = that.idea.get("@id");
       var previousVote = that.myVotesCollection.findWhere(properties);
-      console.log("previousVote found: ", previousVote);
       if ( previousVote ){
         previousVote.set({"value": number_of_tokens_represented_by_this_icon});
         previousVote.save();
@@ -782,7 +778,6 @@ var TokenCategoryExclusivePairCollectionView = Marionette.LayoutView.extend({
 
 
     positiveTokensView.on("token:click", function(clicked_value){
-      console.log("positiveTokensView click clicked_value: ", clicked_value);
       var currentNegativeValue = negativeTokensView.getCurrentValue();
       var currentPositiveValue = positiveTokensView.getCurrentValue();
       negativeTokensView.setForceUnselectZero(true);
@@ -798,7 +793,6 @@ var TokenCategoryExclusivePairCollectionView = Marionette.LayoutView.extend({
     });
 
     negativeTokensView.on("token:click", function(clicked_value){
-      console.log("negativeTokensView click clicked_value: ", clicked_value);
       var currentNegativeValue = negativeTokensView.getCurrentValue();
       var currentPositiveValue = positiveTokensView.getCurrentValue();
       negativeTokensView.setForceUnselectZero(false);
@@ -1444,14 +1438,12 @@ var TokenVoteSessionView = Marionette.LayoutView.extend({
     this.widgetModel = this.model;
     this.outerHeader = options.outerHeader;
     this.showConfirmationInModal = ("showConfirmationInModal" in options && options.showConfirmationInModal == true) ? true : false;
-    console.log("that.widgetModel: ", that.widgetModel);
 
     var Widget = require('../models/widget.js'); // FIXME: why does it work here but not at the top of the file?
     var CollectionManager = require('../common/collectionManager.js'); // FIXME: Why does it not work when we write it only at the top of the file?
     var collectionManager = new CollectionManager();
 
     var voteSpecifications = that.widgetModel.get("vote_specifications");
-    console.log("voteSpecifications: ", voteSpecifications);
 
     that.tokenVoteSpecification = null;
     that.tokenCategories = null;
@@ -1463,10 +1455,9 @@ var TokenVoteSessionView = Marionette.LayoutView.extend({
       if ( that.tokenVoteSpecification ){
         if ( "token_categories" in that.tokenVoteSpecification ){
           if ( _.isArray(that.tokenVoteSpecification.token_categories) ){
-            console.log("going to parse tokenVoteSpecification.token_categories and convert it into a TokenCategorySpecificationCollection");
             that.tokenCategories = new Widget.TokenCategorySpecificationCollection(that.tokenVoteSpecification.token_categories, {parse: true});
           } else if ( _.isObject(that.tokenVoteSpecification.token_categories) ){
-            console.log("wtf, tokenVoteSpecification.token_categories was already parsed and converted into a TokenCategorySpecificationCollection");
+            // in some cases tokenVoteSpecification.token_categories seems to be already parsed and converted into a TokenCategorySpecificationCollection
             that.tokenCategories = that.tokenVoteSpecification.token_categories;
           }
         }
@@ -1483,8 +1474,7 @@ var TokenVoteSessionView = Marionette.LayoutView.extend({
 
     // This URL needs the idea id in the JSON payload
     var genericVotingUrl = "voting_url" in that.tokenVoteSpecification ? that.tokenVoteSpecification.voting_url : null; // for example: http://localhost:6543/data/Discussion/6/widgets/90/vote_specifications/22/votes
-    that.myVotesCollection.url = Ctx.getUrlFromUri(genericVotingUrl); 
-    console.log("that.myVotesCollection: ", that.myVotesCollection);
+    that.myVotesCollection.url = Ctx.getUrlFromUri(genericVotingUrl);
     
     
     Promise.join(collectionManager.getUserLanguagePreferencesPromise(Ctx), collectionManager.getAllIdeasCollectionPromise(), function(userLanguagePreferences, allIdeasCollection) {
@@ -1536,16 +1526,12 @@ var TokenVoteSessionView = Marionette.LayoutView.extend({
         if ( u ){
           var permutationIndex = alternatedIndex(u % m, m);
           var permutation = nthPermutation(orderedVotableIdeas, permutationIndex, orderedVotableIdeas.length);
-          console.log("permutation: ", permutation);
         }
       }
 
       var tokenVoteSpecificationModel = new Widget.TokenVoteSpecificationModel(that.tokenVoteSpecification, {parse: true});
-      console.log("tokenVoteSpecificationModel: ", tokenVoteSpecificationModel);
       var maximumTokensPerRow = that.computeMaximumTokensPerRow(tokenVoteSpecificationModel);
-      console.log("maximumTokensPerRow: ", maximumTokensPerRow);
       var tokenSize = that.computeTokenSize(maximumTokensPerRow);
-      console.log("tokenSize: ", tokenSize);
 
       // Show available (remaining) tokens
       var tokenBagsView = new TokenBagsView({
@@ -1811,14 +1797,11 @@ var TokenVoteSessionSubmittedView = Marionette.LayoutView.extend({
 
   initialize(options){
     this.editInModal = ("editInModal" in options && options.editInModal == true) ? true : false;
-    console.log("TokenVoteSessionSubmittedView::initialize() editInModal:", this.editInModal);
   },
 
   onShow: function(){
     var that = this;
-    console.log("TokenVoteSessionSubmittedView::onShow() editInModal:", that.editInModal);
     var container = this.$el;
-    console.log("TokenVoteSessionSubmittedView::onShow() container:", container);
     
     var text = $("<p></p>");
     text.text(i18n.gettext("Your vote has been saved successfully."));
@@ -1833,7 +1816,6 @@ var TokenVoteSessionSubmittedView = Marionette.LayoutView.extend({
     container.append(btn2);
 
     var editMyVote = function(){
-      console.log("TokenVoteSessionSubmittedView::editMyVote() editInModal:", that.editInModal);
       var editInModal = that.editInModal;
       var voteViewClass = editInModal ? TokenVoteSessionModal : TokenVoteSessionView;
       var voteView = new voteViewClass({
