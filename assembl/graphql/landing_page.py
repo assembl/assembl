@@ -128,7 +128,7 @@ class UpdateLandingPageModule(graphene.Mutation):
 
         with cls.default_db.no_autoflush as db:
             module = db.query(models.LandingPageModule).filter(
-                models.LandingPageModule.id == module_id).first()
+                models.LandingPageModule.id == module_id).one()
             module.enabled = enabled
             module.order = order
             module.configuration = configuration
