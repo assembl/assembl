@@ -42,12 +42,23 @@ class VoteSession(SecureObjectType, SQLAlchemyObjectType):
 
     header_image = graphene.Field(Document)
     vote_specifications = graphene.List(lambda: VoteSpecificationUnion)
+    proposals = graphene.List(lambda: Idea)
 
     def resolve_header_image(self, args, context, info):
         ATTACHMENT_PURPOSE_IMAGE = models.AttachmentPurpose.IMAGE.value
         for attachment in self.attachments:
             if attachment.attachmentPurpose == ATTACHMENT_PURPOSE_IMAGE:
                 return attachment.document
+
+    def resolve_proposals(self, args, context, info):
+        identifier = 'voteSession{}'.format(self.id)
+        discussion_id = context.matchdict["discussion_id"]
+        discussion = models.Discussion.get(discussion_id)
+        root_thematic = get_root_thematic_for_phase(discussion, identifier)
+        if root_thematic is None:
+            return []
+
+        return root_thematic.get_children()
 
 
 class UpdateVoteSession(graphene.Mutation):

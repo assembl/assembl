@@ -670,3 +670,29 @@ u'updateProposal': {
             {u'localeCode': u'fr',
               u'value': u'Description: Comprendre les dynamiques et les enjeux (updated)'}]
         }}}
+
+
+def test_query_vote_session_proposals(graphql_request, timeline_vote_session, vote_session, vote_proposal, graphql_registry):
+    query = graphql_registry['VoteSession']
+    res = schema.execute(query, context_value=graphql_request, variable_values={
+        "discussionPhaseId": timeline_vote_session.id,
+        "lang": "en"
+    })
+    assert res.errors is None
+    proposal_id = to_global_id("Idea", vote_proposal.id)
+    assert json.loads(json.dumps(res.data['voteSession']['proposals'])) == [{
+        u'id': proposal_id,
+        u'order': 1.0,
+        u'title': u'Understanding the dynamics and issues',
+        u'description': u'Description: Understanding the dynamics and issues',
+        u'titleEntries': [
+            {u'localeCode': u'en',
+             u'value': u'Understanding the dynamics and issues'},
+            {u'localeCode': u'fr',
+             u'value': u'Comprendre les dynamiques et les enjeux'}],
+        u'descriptionEntries': [
+            {u'localeCode': u'en',
+              u'value': u'Description: Understanding the dynamics and issues'},
+            {u'localeCode': u'fr',
+              u'value': u'Description: Comprendre les dynamiques et les enjeux'}]
+        }]
