@@ -14,7 +14,6 @@ def test_query_landing_page_module_types(graphql_request):
             title(lang: $lang)
             defaultOrder
             editableOrder
-            helperImgUrl
             identifier
             required
         }
@@ -31,7 +30,6 @@ def test_query_landing_page_module_types(graphql_request):
             assert module_type['title'] == u'Introduction'
             assert module_type['defaultOrder'] == 2.0
             assert module_type['editableOrder'] is True
-            assert module_type['helperImgUrl'] == u''
             assert module_type['required'] is False
 
 
