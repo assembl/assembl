@@ -12,6 +12,7 @@ import {
   createGaugeVoteModule,
   deleteGaugeVoteModule
 } from '../../../actions/adminActions/voteSession';
+import GaugesForm from './gaugesForm';
 
 type ModulesSectionProps = {
   tokenModules: Object,
@@ -19,45 +20,62 @@ type ModulesSectionProps = {
   handleTokenCheckBoxChange: Function
 };
 
-const DumbModulesSection = ({ tokenModules, editLocale, handleTokenCheckBoxChange }: ModulesSectionProps) => {
-  const tokenModuleChecked = tokenModules.size > 0;
-  // const gaugeModuleChecked = gaugeModules.size > 0;
-  const tModule = tokenModules.toJS();
-  // const gModule = gaugeModules.toJS();
-  return (
-    <div className="admin-box">
-      <SectionTitle title={I18n.t('administration.voteSession.1')} annotation={I18n.t('administration.annotation')} />
-      <div className="admin-content">
-        <div className="form-container">
-          <div>
-            <Checkbox
-              checked={tokenModuleChecked}
-              onChange={() => {
-                handleTokenCheckBoxChange(tokenModuleChecked, tModule[0]);
-              }}
-            >
-              <Helper
-                label={I18n.t('administration.voteWithTokens')}
-                helperUrl="/static2/img/helpers/helper4.png"
-                helperText={I18n.t('administration.tokenVoteCheckbox')}
-                classname="inline"
-              />
-            </Checkbox>
-            <Checkbox checked={false} onChange={() => {}}>
-              <Helper
-                label={I18n.t('administration.voteWithGages')}
-                helperUrl="/static2/img/helpers/helper3.png" // TODO: add an actual screenshot
-                helperText={I18n.t('administration.gaugeVoteCheckbox')}
-                classname="inline"
-              />
-            </Checkbox>
-            {tokenModules.map(id => <TokensForm key={id} id={id} editLocale={editLocale} />)}
+class DumbModulesSection extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      showGauge: false
+    };
+  }
+
+  render() {
+    const { tokenModules, editLocale, handleTokenCheckBoxChange } = this.props;
+    const tokenModuleChecked = tokenModules.size > 0;
+    // const gaugeModuleChecked = gaugeModules.size > 0;
+    const tModule = tokenModules.toJS();
+    const { showGauge } = this.state;
+    // const gModule = gaugeModules.toJS();
+    return (
+      <div className="admin-box">
+        <SectionTitle title={I18n.t('administration.voteSession.1')} annotation={I18n.t('administration.annotation')} />
+        <div className="admin-content">
+          <div className="form-container">
+            <div>
+              <Checkbox
+                checked={tokenModuleChecked}
+                onChange={() => {
+                  handleTokenCheckBoxChange(tokenModuleChecked, tModule[0]);
+                }}
+              >
+                <Helper
+                  label={I18n.t('administration.voteWithTokens')}
+                  helperUrl="/static2/img/helpers/helper4.png"
+                  helperText={I18n.t('administration.tokenVoteCheckbox')}
+                  classname="inline"
+                />
+              </Checkbox>
+              <Checkbox
+                checked={showGauge}
+                onChange={() => {
+                  this.setState({ showGauge: !showGauge });
+                }}
+              >
+                <Helper
+                  label={I18n.t('administration.voteWithGages')}
+                  helperUrl="/static2/img/helpers/helper3.png" // TODO: add an actual screenshot
+                  helperText={I18n.t('administration.gaugeVoteCheckbox')}
+                  classname="inline"
+                />
+              </Checkbox>
+              {tokenModules.map(id => <TokensForm key={id} id={id} editLocale={editLocale} />)}
+              {showGauge && <GaugesForm />}
+            </div>
           </div>
         </div>
       </div>
-    </div>
-  );
-};
+    );
+  }
+}
 
 const mapStateToProps = ({ admin }) => {
   const { modulesInOrder, modulesById } = admin.voteSession;
