@@ -369,6 +369,7 @@ const Translations = {
       voteSessionSuccess: "La session de vote a été enregistrée avec succès.",
       exclusive: "Exclusifs",
       tokenVoteInstructions: "Consigne du vote par jetons",
+      gaugeVoteInstructions: "Consigne du vote par jauge",
       propositionSectionTitle: "Titre de la section",
       sections: {
         addSection: "Ajouter une rubrique",
@@ -388,7 +389,8 @@ const Translations = {
         tokenCategoryNumber: "Sélectionnez le nombre de types de jetons différents souhaité pour ce vote",
         exclusive:
           "Vous pouvez décider si le participant peut distributer un seul type de jetons (exclusifs) ou plusieurs types de jetons par proposition.",
-        tokenVoteInstructions: "En fonction de l'objectif du module de jetons, incitez les participants à passer à l'action."
+        tokenVoteInstructions: "En fonction de l'objectif du module de jetons, incitez les participants à passer à l'action.",
+        gaugeVoteInstructions: "En fonction de l'objectif du module jauge, incitez les participants à passer à l'action."
       },
       videoHelp:
         "*Liens vidéo autorisés : \"https://www.youtube.com/embed/[videoId]\" ou \"https://player.vimeo.com/video/[videoId]?\"",
@@ -818,7 +820,7 @@ const Translations = {
       exclusive: "Exclusive",
 
       tokenVoteInstructions: "Instructions for the token vote",
-
+      gaugeVoteInstructions: "Instructions for the gauge vote",
       tokenCategoryNumber: "Number of token types",
       tokenNumber: "Number of tokens",
       tokenTitle: "Token title",
@@ -841,7 +843,8 @@ const Translations = {
         tokenCategoryNumber: "Select the number of different token types for this vote",
         exclusive:
           "You can decide wether the participant can distribute a single type of token (exclusive) or several types of token per proposition.",
-        tokenVoteInstructions: "Depending on the objective of the token module, incite the participants to take action."
+        tokenVoteInstructions: "Depending on the objective of the token module, incite the participants to take action.",
+        gaugeVoteInstructions: "Depending on the objective of the gauge module, incite the participants to take action."
       },
       videoHelp:
         "*Authorized video links: \"https://www.youtube.com/embed/[videoId]\" or \"https://player.vimeo.com/video/[videoId]?\"",

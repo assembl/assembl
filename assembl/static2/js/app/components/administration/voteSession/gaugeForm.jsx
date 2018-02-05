@@ -1,5 +1,6 @@
 import React from 'react';
 import { SplitButton, MenuItem, Radio, FormGroup } from 'react-bootstrap';
+import { I18n } from 'react-redux-i18n';
 import range from 'lodash/range';
 import Helper from '../../common/helper';
 import FormControlWithLabel from '../../common/formControlWithLabel';
@@ -19,10 +20,10 @@ class DumbGaugeForm extends React.Component {
     return (
       <div className="gauge-vote-form">
         <div className="flex">
-          <FormControlWithLabel label="Consigne de la jauge" required type="text" />
+          <FormControlWithLabel label={I18n.t('administration.gaugeVoteInstructions')} required type="text" />
           <Helper
-            helperUrl="/static2/img/helpers/helper5.png"
-            helperText="Entrez les instructions pour le vote par jauge"
+            helperUrl="/static2/img/helpers/helper6.png"
+            helperText={I18n.t('administration.helpers.gaugeVoteInstructions')}
             additionalTextClasses="helper-text-only"
           />
         </div>
