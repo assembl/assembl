@@ -413,8 +413,8 @@ var routeManager = Marionette.Object.extend({
       });
     widgetPromise.then(function(widget){
       if (!widget){
-        var error_text = "Requested vote widget could not be found.";
-        alert(error_text);
+        var errorText = i18n.gettext("Requested vote widget could not be found.");
+        $("body").text(errorText);
         return;
       }
       var currentWidgetView;
