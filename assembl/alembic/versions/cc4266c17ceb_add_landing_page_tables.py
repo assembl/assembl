@@ -19,9 +19,6 @@ from assembl.lib.sqla_types import URLString
 
 
 def upgrade(pyramid_env):
-    with context.begin_transaction():
-        pass
-
     # Do stuff with the app's models here.
     from assembl import models as m
 
