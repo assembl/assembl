@@ -439,7 +439,8 @@ class LangString(Base):
                 # create an add_entries method.
                 if ex_entry is entry:
                     continue
-                if ex_entry.value == entry.value:
+                if (ex_entry.value == entry.value and
+                        ex_entry.locale_id == entry.locale_id):
                     if entry in self.entries:
                         self.entries.remove(entry)
                     return ex_entry
@@ -455,6 +456,7 @@ class LangString(Base):
                         if inspect(self).persistent:
                             self.db.expire(self, ["entries"])
             entry.langstring = self
+            self.db.add(entry)
             return entry
 
     def remove_translations_of(self, local_code):
