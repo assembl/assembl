@@ -12,6 +12,7 @@ from assembl.lib.zmqlib import configure_zmq
 from assembl.lib.config import set_config
 from assembl.semantic import upgrade_semantic_mapping
 from assembl.indexing.changes import configure_indexing
+from assembl.lib.migration import bootstrap_db_data
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
@@ -20,8 +21,9 @@ config = context.config
 # Interpret the config file for Python logging.
 # This line sets up loggers basically.
 fileConfig(config.config_file_name)
-
-set_config(config.file_config._sections['app:assembl'])
+_config = config.file_config._sections['app:assembl']
+_config['in_migration'] = True
+set_config(_config)
 pyramid_env = bootstrap(config.config_file_name)
 configure_zmq(pyramid_env['registry'].settings['changes.socket'], False)
 configure_engine(pyramid_env['registry'].settings, False)
@@ -35,13 +37,15 @@ def run_migrations_online():
     and associate a connection with the context.
 
     """
-    engine = get_session_maker().bind
+    session_maker = get_session_maker()
+    engine = session_maker.bind
     connection = engine.connect()
     context.configure(connection=connection,
                       target_metadata=get_metadata())
 
     try:
         context.run_migrations(pyramid_env=pyramid_env)
+        # bootstrap_db_data(session_maker)
     finally:
         connection.close()
 
@@ -63,7 +67,8 @@ def run_migrations_offline():
 
     with context.begin_transaction():
         context.run_migrations(pyramid_env=pyramid_env)
-
+        session_maker = get_session_maker()
+        # bootstrap_db_data(session_maker)
 
 if context.is_offline_mode():
     run_migrations_offline()
