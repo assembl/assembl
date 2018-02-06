@@ -699,12 +699,10 @@ def test_query_vote_session_proposals(graphql_request, timeline_vote_session, vo
         }]
 
 
-def test_query_associate_vote_spec_to_proposal_with_tokenCategories_should_fail(graphql_request, vote_session, vote_proposal, token_vote_specification, graphql_registry, test_session):
+def test_query_associate_vote_spec_to_proposal(graphql_request, timeline_vote_session, vote_session, vote_proposal, token_vote_specification, graphql_registry):
     mutation = graphql_registry['createTokenVoteSpecification']
     vote_session_id = to_global_id("VoteSession", vote_session.id)
     proposal_id = to_global_id("Idea", vote_proposal.id)
-    # this commit is needed to a do proper rollback after failed mutation
-    test_session.commit()
     # token vote spec similar to token_vote_specification fixture, but with exclusiveCategories set to False
     res = schema.execute(mutation, context_value=graphql_request, variable_values={
         "voteSessionId": vote_session_id,
@@ -730,34 +728,6 @@ def test_query_associate_vote_spec_to_proposal_with_tokenCategories_should_fail(
             }
         ]
     })
-    assert res.errors[0].message == 'Please remove token categories for token vote specification attached to a proposal, so it uses the categories of the template (step 2)'
-    # the mutation trigger an exception that the abort_transaction_on_exception decorator catched and do transaction.abort(), but transaction.abort() doesn't work in the test
-    # so we rollback the session ourself.
-    test_session.rollback()
-
-
-def test_query_associate_vote_spec_to_proposal(graphql_request, timeline_vote_session, vote_session, vote_proposal, token_vote_specification, graphql_registry):
-    mutation = graphql_registry['createTokenVoteSpecification']
-    vote_session_id = to_global_id("VoteSession", vote_session.id)
-    proposal_id = to_global_id("Idea", vote_proposal.id)
-    # token vote spec similar to token_vote_specification fixture, but with exclusiveCategories set to False
-    res = schema.execute(mutation, context_value=graphql_request, variable_values={
-        "voteSessionId": vote_session_id,
-        "proposalId": proposal_id,
-        "titleEntries": [
-            {"value": u"Comprendre les dynamiques et les enjeux", "localeCode": "fr"},
-            {"value": u"Understanding the dynamics and issues", "localeCode": "en"}
-        ],
-        "instructionsEntries":
-        [
-            {"value": u"Comprendre les dynamiques et les enjeux", "localeCode": "fr"},
-            {"value": u"Understanding the dynamics and issues", "localeCode": "en"}
-        ],
-        "exclusiveCategories": False,
-        "tokenCategories": []
-    })
-    # tokenCategories needs to be empty when associating to a proposal, this
-    # will use the token categories from the template (step 2) [first token vote spec non attached to a proposal in the vote session]
     query = graphql_registry['VoteSession']
     res = schema.execute(query, context_value=graphql_request, variable_values={
         "discussionPhaseId": timeline_vote_session.id,
@@ -769,4 +739,3 @@ def test_query_associate_vote_spec_to_proposal(graphql_request, timeline_vote_se
     assert res.data['voteSession']['modules'][0]['exclusiveCategories'] == True
     assert len(res.data['voteSession']['proposals'][0]['modules']) == 1
     assert res.data['voteSession']['proposals'][0]['modules'][0]['exclusiveCategories'] == False
-    assert len(res.data['voteSession']['proposals'][0]['modules'][0]['tokenCategories']) == 1

@@ -292,13 +292,6 @@ class CreateTokenVoteSpecification(graphene.Mutation):
                 proposal = models.Idea.get(proposal_id)
                 vote_spec.criterion_idea = proposal
 
-            if proposal_id and token_categories:
-                raise Exception("Please remove token categories for token vote specification attached to a proposal, so it uses the categories of the template (step 2)")
-
-            if proposal_id:
-                template_token_vote_spec = [v for v in vote_session.vote_specifications if isinstance(v, cls)][0]
-                vote_spec.token_categories = template_token_vote_spec.token_categories
-
             for idx, token_category in enumerate(token_categories):
                 title_ls = langstring_from_input_entries(
                     token_category.get('title_entries', None))
