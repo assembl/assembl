@@ -262,6 +262,7 @@ u'createTokenVoteSpecification': {u'voteSpecification': {u'exclusiveCategories':
                                                                                                        u'value': u'Comprendre les dynamiques et les enjeux'}],
                                                                                     u'totalNumber': 10,
                                                                                     u'typename': u'positive'}],
+                                                              u'voteSpecTemplateId': None,
                                                               u'voteSessionId': vote_session_id}}}
     # remove created vote specification
     vote_session.vote_specifications.remove(token_vote_spec)
@@ -407,6 +408,7 @@ u'createGaugeVoteSpecification': {u'voteSpecification': {u'id': vote_spec_id,
                                                                                  u'value': u'Cran 2'}],
                                                              },
                                                          ],
+                                                         u'voteSpecTemplateId': None,
                                                          u'voteSessionId': vote_session_id}}}
     # remove created vote specification
     vote_session.vote_specifications.remove(vote_spec)
@@ -531,6 +533,7 @@ u'createNumberGaugeVoteSpecification': {
         u"maximum": 60.0,
         u"nbTicks": 7,
         u"unit": u"M€",
+        u'voteSpecTemplateId': None,
         u'voteSessionId': vote_session_id}}}
     # remove created vote specification
     vote_session.vote_specifications.remove(vote_spec)
@@ -704,9 +707,11 @@ def test_query_associate_vote_spec_to_proposal(graphql_request, timeline_vote_se
     vote_session_id = to_global_id("VoteSession", vote_session.id)
     proposal_id = to_global_id("Idea", vote_proposal.id)
     # token vote spec similar to token_vote_specification fixture, but with exclusiveCategories set to False
+    template_token_vote_spec_id = to_global_id("TokenVoteSpecification", token_vote_specification.id)
     res = schema.execute(mutation, context_value=graphql_request, variable_values={
         "voteSessionId": vote_session_id,
         "proposalId": proposal_id,
+        "voteSpecTemplateId": template_token_vote_spec_id,
         "titleEntries": [
             {"value": u"Comprendre les dynamiques et les enjeux", "localeCode": "fr"},
             {"value": u"Understanding the dynamics and issues", "localeCode": "en"}
@@ -739,3 +744,7 @@ def test_query_associate_vote_spec_to_proposal(graphql_request, timeline_vote_se
     assert res.data['voteSession']['modules'][0]['exclusiveCategories'] == True
     assert len(res.data['voteSession']['proposals'][0]['modules']) == 1
     assert res.data['voteSession']['proposals'][0]['modules'][0]['exclusiveCategories'] == False
+    assert res.data['voteSession']['proposals'][0]['modules'][0]['voteSpecTemplateId'] == template_token_vote_spec_id
+
+    # clean up
+    vote_session.vote_specifications[-1].delete()
