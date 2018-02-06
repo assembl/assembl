@@ -1,5 +1,59 @@
 #import "./fragments/VoteSession.graphql"
 
+fragment tokenVoteSpecification on TokenVoteSpecification {
+  id
+  voteSessionId
+  titleEntries {
+    ...langStringEntry
+  }
+  instructionsEntries {
+    ...langStringEntry
+  }
+  exclusiveCategories
+  tokenCategories {
+    id
+    totalNumber
+    typename
+    titleEntries {
+      ...langStringEntry
+    }
+    color
+  }
+}
+
+fragment numberGaugeVoteSpecification on NumberGaugeVoteSpecification {
+  id
+  voteSessionId
+  titleEntries {
+    ...langStringEntry
+  }
+  instructionsEntries {
+    ...langStringEntry
+  }
+  minimum
+  maximum
+  nbTicks
+  unit
+}
+
+fragment gaugeVoteSpecification on GaugeVoteSpecification {
+  id
+  voteSessionId
+  titleEntries {
+    ...langStringEntry
+  }
+  instructionsEntries {
+    ...langStringEntry
+  }
+  choices {
+    id
+    value
+    labelEntries {
+      ...langStringEntry
+    }
+  }
+}
+
 query VoteSession($discussionPhaseId: Int!, $lang: String!) {
   voteSession(discussionPhaseId: $discussionPhaseId) {
     id
@@ -23,59 +77,16 @@ query VoteSession($discussionPhaseId: Int!, $lang: String!) {
         }
         order
       }
+      modules: voteSpecifications {
+        ...tokenVoteSpecification
+        ...numberGaugeVoteSpecification
+        ...gaugeVoteSpecification
+      }
     }
     modules: voteSpecifications {
-      ... on TokenVoteSpecification {
-        id
-        voteSessionId
-        titleEntries {
-          ...langStringEntry
-        }
-        instructionsEntries {
-          ...langStringEntry
-        }
-        exclusiveCategories
-        tokenCategories {
-          id
-          totalNumber
-          typename
-          titleEntries {
-            ...langStringEntry
-          }
-          color
-        }
-      }
-      ... on NumberGaugeVoteSpecification {
-        id
-        voteSessionId
-        titleEntries {
-          ...langStringEntry
-        }
-        instructionsEntries {
-          ...langStringEntry
-        }
-        minimum
-        maximum
-        nbTicks
-        unit
-      }
-      ... on GaugeVoteSpecification {
-        id
-        voteSessionId
-        titleEntries {
-          ...langStringEntry
-        }
-        instructionsEntries {
-          ...langStringEntry
-        }
-        choices {
-          id
-          value
-          labelEntries {
-            ...langStringEntry
-          }
-        }
-      }
+      ...tokenVoteSpecification
+      ...numberGaugeVoteSpecification
+      ...gaugeVoteSpecification
     }
   }
 }

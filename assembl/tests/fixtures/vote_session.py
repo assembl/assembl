@@ -70,7 +70,7 @@ def token_vote_specification(request, test_session, graphql_request, vote_sessio
         ]
     })
     assert res.errors is None
-    vote_spec = vote_session.vote_specifications[0]
+    vote_spec = vote_session.vote_specifications[-1]
 
     def fin():
         print "finalizer token_vote_specification"
@@ -113,7 +113,7 @@ def gauge_vote_specification(request, test_session, graphql_request, vote_sessio
         ]
     })
     assert res.errors is None
-    vote_spec = vote_session.vote_specifications[0]
+    vote_spec = vote_session.vote_specifications[-1]
 
     def fin():
         print "finalizer gauge_vote_specification"
@@ -146,7 +146,7 @@ def number_gauge_vote_specification(request, test_session, graphql_request, vote
         "unit": u"M€"
     })
     assert res.errors is None
-    vote_spec = vote_session.vote_specifications[0]
+    vote_spec = vote_session.vote_specifications[-1]
 
     def fin():
         print "finalizer number_gauge_vote_specification"
