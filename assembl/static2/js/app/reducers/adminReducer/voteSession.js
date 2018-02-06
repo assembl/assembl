@@ -113,6 +113,8 @@ export const modulesInOrder = (state: List<number> = List(), action: ReduxAction
     return List(Object.keys(action.voteModules).map(key => action.voteModules[key].id || null));
   case CREATE_TOKEN_VOTE_MODULE:
     return state.push(action.id);
+  case CREATE_GAUGE_VOTE_MODULE:
+    return state.push(action.id);
   default:
     return state;
   }
@@ -122,10 +124,31 @@ const defaultTokenModule = Map({
   isNew: true,
   toDelete: false,
   type: 'tokens',
-  titleEntries: List(),
   instructionsEntries: List(),
   exclusiveCategories: false,
   tokenCategories: List()
+});
+
+const defaultGaugeModule = Map({
+  isNew: true,
+  toDelete: false,
+  type: 'numberGauge',
+  instructionsEntries: List()
+});
+
+const defaultNumberGaugeModule = Map({
+  maximum: Number,
+  minimum: Number,
+  nbTicks: Number,
+  unit: ''
+});
+
+const defaultTextGaugeModule = Map({
+  choices: Map({
+    id: '',
+    labelEntries: List(),
+    value: Number
+  })
 });
 
 export const modulesById = (state: Map<string, Map> = Map(), action: ReduxAction<Action>) => {
@@ -139,10 +162,32 @@ export const modulesById = (state: Map<string, Map> = Map(), action: ReduxAction
           toDelete: false,
           type: m.type,
           id: m.id,
-          titleEntries: m.titleEntries,
           instructionsEntries: m.instructionsEntries,
           exclusiveCategories: m.exclusiveCategories,
           tokenCategories: m.tokenCategories.map(t => t.id)
+        });
+        newState = newState.set(m.id, moduleInfo);
+      } else if (m.type === 'numberGauge') {
+        const moduleInfo = fromJS({
+          isNew: false,
+          toDelete: false,
+          type: m.type,
+          id: m.id,
+          instructionsEntries: m.instructionsEntries,
+          maximum: m.maximum,
+          minimum: m.minimum,
+          nbTicks: m.nbTicks,
+          unit: m.unit
+        });
+        newState = newState.set(m.id, moduleInfo);
+      } else if (m.type === 'textGauge') {
+        const moduleInfo = fromJS({
+          isNew: false,
+          toDelete: false,
+          type: m.type,
+          id: m.id,
+          instructionsEntries: m.instructionsEntries,
+          choices: m.choices
         });
         newState = newState.set(m.id, moduleInfo);
       }
@@ -163,6 +208,10 @@ export const modulesById = (state: Map<string, Map> = Map(), action: ReduxAction
     return state.updateIn([action.parentId, 'tokenCategories'], tokenCategories =>
       tokenCategories.delete(tokenCategories.size - 1)
     );
+  case CREATE_GAUGE_VOTE_MODULE:
+    return state.set(action.id, defaultGaugeModule.set('id', action.id));
+  case DELETE_GAUGE_VOTE_MODULE:
+    return state.setIn([action.id, 'toDelete'], true);
   default:
     return state;
   }

@@ -280,6 +280,16 @@ export type DeleteTokenVoteModule = {
   type: typeof DELETE_TOKEN_VOTE_MODULE
 };
 
+export type CreateGaugeVoteModule = {
+  id: string,
+  type: typeof CREATE_GAUGE_VOTE_MODULE
+};
+
+export type DeleteGaugeVoteModule = {
+  id: string,
+  type: typeof DELETE_GAUGE_VOTE_MODULE
+};
+
 export type UpdateTokenVoteExclusiveCategory = {
   id: string,
   value: boolean,
