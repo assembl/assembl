@@ -1,7 +1,9 @@
+# -*- coding: utf-8 -*-
 """Links between :py:class:`assembl.models.idea.Idea` and :py:class:`assembl.models.generic.Content`."""
 import re
 import quopri
 from datetime import datetime
+from enum import Enum
 
 from sqlalchemy.orm import (relationship, backref)
 from sqlalchemy import (
@@ -27,6 +29,7 @@ from .discussion import Discussion
 from .idea import Idea
 from .generic import Content
 from .post import Post
+from .vocabulary import AbstractEnumVocabulary
 from ..auth import (
     CrudPermissions, P_READ, P_EDIT_IDEA,
     P_EDIT_EXTRACT, P_ADD_IDEA, P_ADD_EXTRACT,
@@ -198,6 +201,110 @@ class IdeaRelatedPostLink(IdeaContentPositiveLink):
     }
 
 
+class ExtractNatureVocabulary(AbstractEnumVocabulary):
+    __tablename__ = "extract_nature"
+
+    class Enum(Enum):
+        issue = 1
+        actionable_solution = 2
+        knowledge = 3
+        example = 4
+        concept = 5
+        argument = 6
+
+    _initial_names = {
+        Enum.issue: {
+            "en": "Issue",
+            "fr": "Problématique",
+            },
+        Enum.actionable_solution: {
+            "en": "actionable solution",
+            "fr": "Solution actionnable",
+            },
+        Enum.knowledge: {
+            "en": "knowledge",
+            "fr": "Connaissance",
+            },
+        Enum.example: {
+            "en": "example",
+            "fr": "Exemple",
+            },
+        Enum.concept: {
+            "en": "concept",
+            "fr": "Concept",
+            },
+        Enum.argument: {
+            "en": "argument",
+            "fr": "Argument",
+            },
+    }
+
+# Note: Do not call setup_ownership_load_event, as the IDs are not integers.
+# LangString.setup_ownership_load_event(ExtractNatureVocabulary, ['name'])
+
+
+class ExtractActionVocabulary(AbstractEnumVocabulary):
+    __tablename__ = "extract_action"
+
+    class Enum(Enum):
+        classify = 1
+        make_generic = 2
+        argument = 3
+        give_examples = 4
+        more_specific = 5
+        mix_match = 6
+        display_multi_column = 7
+        display_thread = 8
+        display_tokens = 9
+        display_open_questions = 10
+
+    _initial_names = {
+        Enum.classify: {
+            "fr": "Ranger",
+            "en": "Classify",
+        },
+        Enum.make_generic: {
+            "fr": "Rendre plus générique",
+            "en": "Make generic",
+        },
+        Enum.argument: {
+            "fr": "Argumenter",
+            "en": "Argument",
+        },
+        Enum.give_examples: {
+            "fr": "Donner des exemples",
+            "en": "Give examples",
+        },
+        Enum.more_specific: {
+            "fr": "Rendre plus opérationnel",
+            "en": "Be more specific",
+        },
+        Enum.mix_match: {
+            "fr": "Croiser avec un autre extrait",
+            "en": "Mix & match",
+        },
+        Enum.display_multi_column: {
+            "fr": "Activer multi-col.",
+            "en": "Display Multi-column",
+        },
+        Enum.display_thread: {
+            "fr": "Activer Thread",
+            "en": "Display Thread",
+        },
+        Enum.display_tokens: {
+            "fr": "Activer Tokens",
+            "en": "Display tokens",
+        },
+        Enum.display_open_questions: {
+            "fr": "Activer Q° ouvertes",
+            "en": "Display Open questions",
+        },
+    }
+
+# Note: Do not call setup_ownership_load_event, as the IDs are not integers.
+# LangString.setup_ownership_load_event(ExtractActionVocabulary, ['name'])
+
+
 class Extract(IdeaContentPositiveLink):
     """
     An extracted part of a Content. A quotation to be referenced by an `Idea`.
@@ -239,6 +346,27 @@ class Extract(IdeaContentPositiveLink):
         info={'rdf': QuadMapPatternS(None, ASSEMBL.in_conversation)})
 
     important = Column('important', Boolean, server_default='0')
+
+    extract_nature = Column(
+        'extract_nature', ExtractNatureVocabulary.pg_enum,
+        ForeignKey(ExtractNatureVocabulary.id))
+    extract_action = Column(
+        'extract_action', ExtractActionVocabulary.pg_enum,
+        ForeignKey(ExtractActionVocabulary.id))
+
+    extract_nature_term = relationship(ExtractNatureVocabulary)
+
+    extract_action_term = relationship(ExtractActionVocabulary)
+
+    @property
+    def extract_nature_name(self):
+        if self.extract_nature is not None:
+            return self.extract_nature.name
+
+    @property
+    def extract_action_name(self):
+        if self.extract_action is not None:
+            return self.extract_action.name
 
     def extract_graph_name(self):
         from pyramid.threadlocal import get_current_registry
