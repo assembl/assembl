@@ -74,7 +74,9 @@ class SurveyAdmin extends React.Component {
         {section === '1' && <ThemeSection {...this.props} />}
         {section === '2' && <QuestionSection {...this.props} />}
         {section === '3' && <ExportSection {...this.props} />}
-        {!isNaN(currentStep) && <Navbar currentStep={currentStep} totalSteps={3} phaseIdentifier="survey" />}
+        {!isNaN(currentStep) && (
+          <Navbar currentStep={currentStep} totalSteps={3} phaseIdentifier="survey" beforeChangeSection={this.saveAction} />
+        )}
       </div>
     );
   }
