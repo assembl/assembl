@@ -27,7 +27,8 @@ type TopPostFormProps = {
   uploadDocument: Function,
   ideaOnColumn: boolean,
   messageClassifier: string,
-  scrollOffset: number
+  scrollOffset: number,
+  onDisplayForm: Function
 };
 
 type TopPostFormState = {
@@ -45,7 +46,8 @@ class TopPostForm extends React.Component<*, TopPostFormProps, TopPostFormState>
   formContainer: HTMLDivElement | void;
 
   static defaultProps = {
-    scrollOffset: 125
+    scrollOffset: 125,
+    onDisplayForm: () => {}
   };
 
   constructor() {
@@ -59,6 +61,7 @@ class TopPostForm extends React.Component<*, TopPostFormProps, TopPostFormState>
   }
 
   displayForm = (isActive: boolean): void => {
+    this.props.onDisplayForm(isActive);
     this.setState(
       {
         isActive: isActive
