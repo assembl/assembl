@@ -14,7 +14,6 @@ import { updateLandingPageModules } from '../actions/adminActions/landingPage';
 import withLoadingIndicator from '../components/common/withLoadingIndicator';
 import Menu from '../components/administration/menu';
 import LanguageMenu from '../components/administration/languageMenu';
-import SaveButton from '../components/administration/saveButton';
 import ThematicsQuery from '../graphql/ThematicsQuery.graphql';
 import ResourcesQuery from '../graphql/ResourcesQuery.graphql';
 import ResourcesCenterPage from '../graphql/ResourcesCenterPage.graphql';
@@ -209,7 +208,15 @@ class Administration extends React.Component {
     const { timeline } = this.props.debate.debateData;
     const childrenWithProps = React.Children.map(children, child =>
       React.cloneElement(child, {
-        locale: i18n.locale
+        locale: i18n.locale,
+        refetchTabsConditions: refetchTabsConditions,
+        refetchThematics: data.refetch,
+        refetchResources: refetchResources,
+        refetchVoteSession: refetchVoteSession,
+        refetchSections: refetchSections,
+        refetchResourcesCenter: refetchResourcesCenter,
+        refetchLandingPageModules: refetchLandingPageModules,
+        refetchLegalNoticeAndTerms: refetchLegalNoticeAndTerms
       })
     );
 
@@ -221,16 +228,7 @@ class Administration extends React.Component {
               <Row>
                 <Col xs={12} md={3} />
                 <Col xs={12} md={8}>
-                  <SaveButton
-                    refetchTabsConditions={refetchTabsConditions}
-                    refetchThematics={data.refetch}
-                    refetchResources={refetchResources}
-                    refetchVoteSession={refetchVoteSession}
-                    refetchSections={refetchSections}
-                    refetchResourcesCenter={refetchResourcesCenter}
-                    refetchLandingPageModules={refetchLandingPageModules}
-                    refetchLegalNoticeAndTerms={refetchLegalNoticeAndTerms}
-                  />
+                  {/* save button is moved here in css */}
                 </Col>
                 <Col xs={12} md={1} />
               </Row>
