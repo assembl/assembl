@@ -256,6 +256,13 @@
     z-index: 100;
   }
 
+  .save-button {
+    position: fixed;
+    margin-top: -102px;
+    right: 0;
+    z-index: 101;
+  }
+
   .tab-title {
     border-bottom: $border-not-active;
     color: $grey2;
