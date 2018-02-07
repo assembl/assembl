@@ -16,6 +16,7 @@ type TopPostFormContainerProps = {
 
 type TopPostFormContainerState = {
   sticky: boolean,
+  expanded: boolean,
   topPostFormOffset: number
 };
 
@@ -34,7 +35,7 @@ class TopPostFormContainer extends React.Component<*, TopPostFormContainerProps,
     super(props);
     this.setFormContainerRef = this.setFormContainerRef.bind(this);
     this.setFormPosition = this.setFormPosition.bind(this);
-    this.state = { sticky: false, topPostFormOffset: 0 };
+    this.state = { sticky: false, expanded: false, topPostFormOffset: 0 };
   }
 
   componentWillMount() {
@@ -50,10 +51,12 @@ class TopPostFormContainer extends React.Component<*, TopPostFormContainerProps,
   }
 
   setFormPosition() {
-    if (this.state.topPostFormOffset <= window.scrollY) {
-      this.setState({ sticky: true });
-    } else {
-      this.setState({ sticky: false });
+    if (!this.state.expanded) {
+      if (this.state.topPostFormOffset <= window.scrollY) {
+        this.setState({ sticky: true });
+      } else {
+        this.setState({ sticky: false });
+      }
     }
   }
 
@@ -130,6 +133,9 @@ class TopPostFormContainer extends React.Component<*, TopPostFormContainerProps,
                           className="no-padding"
                         >
                           <TopPostForm
+                            onDisplayForm={(isActive) => {
+                              this.setState({ sticky: !isActive, expanded: isActive });
+                            }}
                             ideaId={ideaId}
                             refetchIdea={refetchIdea}
                             ideaOnColumn={messageColumns.length > 1}
