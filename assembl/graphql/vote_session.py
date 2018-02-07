@@ -735,6 +735,6 @@ class DeleteProposal(graphene.Mutation):
         proposal_id = int(Node.from_global_id(proposal_id)[1])
         proposal = models.Idea.get(proposal_id)
         require_instance_permission(CrudPermissions.DELETE, proposal, context)
-        proposal.db.delete(proposal)
+        proposal.is_tombstone = True
         proposal.db.flush()
         return DeleteProposal(success=True)

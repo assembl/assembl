@@ -748,3 +748,4 @@ def test_query_associate_vote_spec_to_proposal(graphql_request, timeline_vote_se
 
     # clean up
     vote_session.vote_specifications[-1].delete()
+    vote_session.db.flush()
