@@ -122,6 +122,29 @@ export const updateTokenVoteCategoryColor = (id: string, value: string): actionT
   type: actionTypes.UPDATE_TOKEN_VOTE_CATEGORY_COLOR
 });
 
+export const updateGaugeVoteInstructions = (
+  id: string,
+  locale: string,
+  value: string
+): actionTypes.UpdateGaugeVoteInstructions => ({
+  id: id,
+  locale: locale,
+  value: value,
+  type: actionTypes.UPDATE_GAUGE_VOTE_INSTRUCTIONS
+});
+
+export const updateGaugeVoteNbTicks = (id: string, value: number): actionTypes.UpdateGaugeVoteNbTicks => ({
+  id: id,
+  value: value,
+  type: actionTypes.UPDATE_GAUGE_VOTE_NUMBER_TICKS
+});
+
+export const updateGaugeVoteIsNumber = (id: string, value: boolean): actionTypes.UpdateGaugeVoteIsNumber => ({
+  id: id,
+  value: value,
+  type: actionTypes.UPDATE_GAUGE_VOTE_IS_NUMBER
+});
+
 export const updateVoteSessionPage = (value: Object): actionTypes.UpdateVoteSessionPage => ({
   id: value.id,
   titleEntries: value.titleEntries,

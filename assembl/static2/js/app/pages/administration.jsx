@@ -141,29 +141,7 @@ class Administration extends React.Component {
   }
 
   putVoteModulesInStore(voteSession) {
-    const modules = [];
-    voteSession.modules.forEach((module) => {
-      if (module.__typename === 'TokenVoteSpecification') {
-        // eslint-disable-line
-        modules.push({
-          ...module,
-          type: 'tokens'
-        });
-      } else if (module.__typename === 'NumberGaugeVoteSpecification') {
-        // eslint-disable-line
-        modules.push({
-          ...module,
-          type: 'numberGauge'
-        });
-      } else if (module.__typename === 'GaugeVoteSpecification') {
-        // eslint-disable-line
-        modules.push({
-          ...module,
-          type: 'textGauge'
-        });
-      }
-    });
-    this.props.updateVoteModules(modules);
+    this.props.updateVoteModules(voteSession.modules);
   }
 
   putSectionsInStore(sections) {

@@ -49,6 +49,9 @@ export const UPDATE_TOKEN_VOTE_EXCLUSIVE_CATEGORY: 'UPDATE_TOKEN_VOTE_EXCLUSIVE_
 export const UPDATE_TOKEN_VOTE_CATEGORY_TITLE: 'UPDATE_TOKEN_VOTE_CATEGORY_TITLE' = 'UPDATE_TOKEN_VOTE_CATEGORY_TITLE';
 export const UPDATE_TOKEN_VOTE_CATEGORY_COLOR: 'UPDATE_TOKEN_VOTE_CATEGORY_COLOR' = 'UPDATE_TOKEN_VOTE_CATEGORY_COLOR';
 export const UPDATE_TOKEN_TOTAL_NUMBER: 'UPDATE_TOKEN_TOTAL_NUMBER' = 'UPDATE_TOKEN_TOTAL_NUMBER';
+export const UPDATE_GAUGE_VOTE_INSTRUCTIONS: 'UPDATE_GAUGE_VOTE_INSTRUCTIONS' = 'UPDATE_GAUGE_VOTE_INSTRUCTIONS';
+export const UPDATE_GAUGE_VOTE_NUMBER_TICKS: 'UPDATE_GAUGE_VOTE_NUMBER_TICKS' = 'UPDATE_GAUGE_VOTE_NUMBER_TICKS';
+export const UPDATE_GAUGE_VOTE_IS_NUMBER: 'UPDATE_GAUGE_VOTE_IS_NUMBER' = 'UPDATE_GAUGE_VOTE_IS_NUMBER';
 
 export type UpdateContentLocaleById = {
   type: typeof UPDATE_CONTENT_LOCALE_BY_ID,
@@ -334,6 +337,25 @@ export type UpdateTokenVoteCategoryColor = {
   type: typeof UPDATE_TOKEN_VOTE_CATEGORY_COLOR
 };
 
+export type UpdateGaugeVoteInstructions = {
+  id: string,
+  locale: string,
+  value: string,
+  type: typeof UPDATE_GAUGE_VOTE_INSTRUCTIONS
+};
+
+export type UpdateGaugeVoteNbTicks = {
+  id: string,
+  value: number,
+  type: typeof UPDATE_GAUGE_VOTE_NUMBER_TICKS
+};
+
+export type UpdateGaugeVoteIsNumber = {
+  id: string,
+  value: boolean,
+  type: typeof UPDATE_GAUGE_VOTE_IS_NUMBER
+};
+
 type BasicAction = {
   type: string
 };
@@ -374,7 +396,10 @@ type VoteSessionActions =
   | DeleteTokenVoteCategory
   | UpdateTokenVoteCategoryTitle
   | UpdateTokenTotalNumber
-  | UpdateTokenVoteCategoryColor;
+  | UpdateTokenVoteCategoryColor
+  | UpdateGaugeVoteNbTicks
+  | UpdateGaugeVoteIsNumber
+  | UpdateGaugeVoteInstructions;
 
 export type Action =
   | UpdateContentLocaleById

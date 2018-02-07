@@ -371,6 +371,12 @@ const Translations = {
       tokenVoteInstructions: "Consigne du vote par jetons",
       gaugeVoteInstructions: "Consigne du vote par jauge",
       propositionSectionTitle: "Titre de la section",
+      gaugeNumber: "Nombre de jauges",
+      defineGaugeNumer: "Définissez le nombre de jauges",
+      nbTicksHelper: "Définissez le nombre de crans pour la jauge",
+      nbTicks: "Nombre de crans",
+      textValue: "Valeur textuelle",
+      numberValue: "Valeur numéraire",
       sections: {
         addSection: "Ajouter une rubrique",
         deleteSection: "Supprimer la rubrique",
@@ -809,7 +815,7 @@ const Translations = {
         2: "Configure the voting proposals"
       },
       voteWithTokens: "Tokens vote",
-      voteWithGages: "Gage(s) vote",
+      voteWithGages: "Gauge(s) vote",
       tokenVoteCheckbox:
         "The token vote module allows you to select propositions proportionnaly. Each participant has a certain amount of tokens et will have to spread them on the different propositions",
       gaugeVoteCheckbox: "You can choose to have one or several gages",
@@ -821,6 +827,12 @@ const Translations = {
 
       tokenVoteInstructions: "Instructions for the token vote",
       gaugeVoteInstructions: "Instructions for the gauge vote",
+      gaugeNumber: "Gauge number",
+      defineGaugeNumer: "Define gauges number",
+      nbTicksHelper: "Define ticks number for the gauge",
+      nbTicks: "Ticks number",
+      textValue: "Textual value",
+      numberValue: "Number value",
       tokenCategoryNumber: "Number of token types",
       tokenNumber: "Number of tokens",
       tokenTitle: "Token title",

@@ -1,6 +1,6 @@
 // @flow
 import React from 'react';
-import { I18n } from 'react-redux-i18n';
+import { I18n, Translate } from 'react-redux-i18n';
 import { connect } from 'react-redux';
 import { Checkbox, SplitButton, MenuItem } from 'react-bootstrap';
 import range from 'lodash/range';
@@ -17,9 +17,11 @@ import {
 
 type ModulesSectionProps = {
   tokenModules: Object,
+  gaugeModules: Object,
   editLocale: string,
   handleTokenCheckBoxChange: Function,
-  handleGaugeCheckBoxChange: Function
+  handleGaugeCheckBoxChange: Function,
+  handleGaugeSelectChange: Function
 };
 
 const DumbModulesSection = ({
@@ -27,12 +29,15 @@ const DumbModulesSection = ({
   editLocale,
   handleTokenCheckBoxChange,
   gaugeModules,
-  handleGaugeCheckBoxChange
+  handleGaugeCheckBoxChange,
+  handleGaugeSelectChange
 }: ModulesSectionProps) => {
   const tokenModuleChecked = tokenModules.size > 0;
   const gaugeModuleChecked = gaugeModules.size > 0;
   const tModule = tokenModules.toJS();
   const gModule = gaugeModules.toJS();
+  const newId = Math.round(Math.random() * -1000000).toString();
+
   return (
     <div className="admin-box">
       <SectionTitle title={I18n.t('administration.voteSession.1')} annotation={I18n.t('administration.annotation')} />
@@ -42,7 +47,7 @@ const DumbModulesSection = ({
             <Checkbox
               checked={tokenModuleChecked}
               onChange={() => {
-                handleTokenCheckBoxChange(tokenModuleChecked, tModule[0]);
+                handleTokenCheckBoxChange(tokenModuleChecked, tModule[0], newId);
               }}
             >
               <Helper
@@ -56,7 +61,7 @@ const DumbModulesSection = ({
             <Checkbox
               checked={gaugeModuleChecked}
               onChange={() => {
-                handleGaugeCheckBoxChange(gaugeModuleChecked, gModule[0]);
+                handleGaugeCheckBoxChange(gaugeModuleChecked, gModule, newId);
               }}
             >
               <Helper
@@ -66,18 +71,31 @@ const DumbModulesSection = ({
                 classname="inline"
               />
             </Checkbox>
-            <div className="flex">
-              <label htmlFor="input-dropdown-addon">Nombre de jauges</label>
-              <Helper helperUrl="/static2/img/helpers/helper2.png" helperText="Définissez le nombre de jauges" />
-            </div>
-            <SplitButton title={gaugeModules.size} id="input-dropdown-addon" required>
-              {range(11).map(value => (
-                <MenuItem key={`gauge-item-${value}`} eventKey={value}>
-                  {value}
-                </MenuItem>
-              ))}
-            </SplitButton>
-            {gaugeModules.map(id => <GaugeForm key={id} id={id} />)}
+            {gaugeModuleChecked ? (
+              <div>
+                <div className="flex">
+                  <label htmlFor="input-dropdown-addon">
+                    <Translate value="administration.gaugeNumber" />
+                  </label>
+                  <Helper helperUrl="/static2/img/helpers/helper2.png" helperText={I18n.t('administration.defineGaugeNumer')} />
+                </div>
+                <SplitButton
+                  title={gaugeModules.size}
+                  id="input-dropdown-addon"
+                  required
+                  onSelect={(eventKey) => {
+                    handleGaugeSelectChange(eventKey, gaugeModules.size, newId, gModule);
+                  }}
+                >
+                  {range(10).map(value => (
+                    <MenuItem key={`gauge-item-${value + 1}`} eventKey={value + 1}>
+                      {value + 1}
+                    </MenuItem>
+                  ))}
+                </SplitButton>
+              </div>
+            ) : null}
+            {gaugeModules.map(id => <GaugeForm key={id} id={id} editLocale={editLocale} />)}
             {/* <label htmlFor="visible-vote-radio">
               Voulez-vous que les participants puissent voir l evolution du vote en cours ?
             </label>
@@ -100,33 +118,45 @@ const mapStateToProps = ({ admin }) => {
       id => modulesById.getIn([id, 'type']) === 'tokens' && !modulesById.getIn([id, 'toDelete'])
     ),
     gaugeModules: modulesInOrder.filter(
-      id =>
-        modulesById.getIn([id, 'type']) === 'numberGauge' ||
-        (modulesById.getIn([id, 'type']) === 'textGauge' && !modulesById.getIn([id, 'toDelete']))
+      id => modulesById.getIn([id, 'type']) === 'gauge' && !modulesById.getIn([id, 'toDelete'])
     ),
     editLocale: editLocale
   };
 };
 
-const mapDispatchToProps = (dispatch) => {
-  const newId = Math.round(Math.random() * -1000000).toString();
-  return {
-    handleTokenCheckBoxChange: (checked, id) => {
-      if (!checked) {
-        dispatch(createTokenVoteModule(newId));
-      } else {
-        dispatch(deleteTokenVoteModule(id));
-      }
-    },
-    handleGaugeCheckBoxChange: (checked, id) => {
-      if (!checked) {
-        dispatch(createGaugeVoteModule(newId));
-      } else {
-        dispatch(deleteGaugeVoteModule(id));
-      }
+const mapDispatchToProps = dispatch => ({
+  handleTokenCheckBoxChange: (checked, id, newId) => {
+    if (!checked) {
+      dispatch(createTokenVoteModule(newId));
+    } else {
+      dispatch(deleteTokenVoteModule(id));
     }
-  };
-};
+  },
+  handleGaugeCheckBoxChange: (checked, idArray, newId) => {
+    if (!checked) {
+      dispatch(createGaugeVoteModule(newId));
+    } else {
+      idArray.forEach((id) => {
+        dispatch(deleteGaugeVoteModule(id));
+      });
+    }
+  },
+  handleGaugeSelectChange: (selectedNumber, gaugeNumber, newId, idArray) => {
+    if (selectedNumber > gaugeNumber) {
+      const numberToCreate = selectedNumber - gaugeNumber;
+      for (let i = 0; i < numberToCreate; i += 1) {
+        dispatch(createGaugeVoteModule(newId + i));
+      }
+    } else {
+      idArray.forEach((id, index) => {
+        const numberToDelete = gaugeNumber - selectedNumber;
+        if (numberToDelete > index) {
+          dispatch(deleteGaugeVoteModule(id));
+        }
+      });
+    }
+  }
+});
 
 export { DumbModulesSection };
 
