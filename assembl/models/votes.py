@@ -94,6 +94,9 @@ class AbstractVoteSpecification(DiscussionBoundBase):
     retypeable_as = ("LickertVoteSpecification", "BinaryVoteSpecification",
                      "MultipleChoiceVoteSpecification", "TokenVoteSpecification")
 
+    vote_spec_template_id = Column(
+        Integer, ForeignKey("vote_specification.id"), nullable=True, index=True)
+
     ##
     # TODO (MAP):
     #   These and several functions that return a hard-encoded 'local' should

@@ -6,6 +6,8 @@ mutation createTokenVoteSpecification(
   $instructionsEntries: [LangStringEntryInput]!
   $exclusiveCategories: Boolean!
   $tokenCategories: [TokenCategorySpecificationInput]!
+  $proposalId: ID
+  $voteSpecTemplateId: ID
 ) {
   createTokenVoteSpecification(
     voteSessionId: $voteSessionId
@@ -13,6 +15,8 @@ mutation createTokenVoteSpecification(
     instructionsEntries: $instructionsEntries
     exclusiveCategories: $exclusiveCategories
     tokenCategories: $tokenCategories
+    proposalId: $proposalId
+    voteSpecTemplateId: $voteSpecTemplateId
   ) {
     voteSpecification {
       ... on TokenVoteSpecification {
@@ -34,6 +38,7 @@ mutation createTokenVoteSpecification(
           }
           color
         }
+        voteSpecTemplateId
       }
     }
   }

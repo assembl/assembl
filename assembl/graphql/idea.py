@@ -51,6 +51,7 @@ class IdeaInterface(graphene.Interface):
     order = graphene.Float()
     live = graphene.Field(lambda: IdeaUnion)
     message_view_override = graphene.String()
+    vote_specifications = graphene.List('assembl.graphql.vote_session.VoteSpecificationUnion')
 
     def resolve_num_total_posts(self, args, context, info):
         if isinstance(self, models.RootIdea):
@@ -90,6 +91,9 @@ class IdeaInterface(graphene.Interface):
             return self.db.execute(num).fetchone()[0]
 
         return self.num_children
+
+    def resolve_vote_specifications(self, args, context, info):
+        return self.criterion_for
 
 
 class IdeaAnnoucement(SecureObjectType, SQLAlchemyObjectType):

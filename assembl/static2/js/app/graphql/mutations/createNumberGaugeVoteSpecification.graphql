@@ -8,6 +8,8 @@ mutation createNumberGaugeVoteSpecification(
   $maximum: Float!
   $nbTicks: Int!
   $unit: String!
+  $proposalId: ID
+  $voteSpecTemplateId: ID
 ) {
   createNumberGaugeVoteSpecification(
     voteSessionId: $voteSessionId
@@ -17,6 +19,8 @@ mutation createNumberGaugeVoteSpecification(
     maximum: $maximum
     nbTicks: $nbTicks
     unit: $unit
+    proposalId: $proposalId
+    voteSpecTemplateId: $voteSpecTemplateId
   ) {
     voteSpecification {
       ... on NumberGaugeVoteSpecification {
@@ -32,6 +36,7 @@ mutation createNumberGaugeVoteSpecification(
         maximum
         nbTicks
         unit
+        voteSpecTemplateId
       }
     }
   }

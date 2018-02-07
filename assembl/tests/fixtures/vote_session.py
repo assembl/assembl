@@ -70,7 +70,7 @@ def token_vote_specification(request, test_session, graphql_request, vote_sessio
         ]
     })
     assert res.errors is None
-    vote_spec = vote_session.vote_specifications[0]
+    vote_spec = vote_session.vote_specifications[-1]
 
     def fin():
         print "finalizer token_vote_specification"
@@ -113,7 +113,7 @@ def gauge_vote_specification(request, test_session, graphql_request, vote_sessio
         ]
     })
     assert res.errors is None
-    vote_spec = vote_session.vote_specifications[0]
+    vote_spec = vote_session.vote_specifications[-1]
 
     def fin():
         print "finalizer gauge_vote_specification"
@@ -146,7 +146,7 @@ def number_gauge_vote_specification(request, test_session, graphql_request, vote
         "unit": u"M€"
     })
     assert res.errors is None
-    vote_spec = vote_session.vote_specifications[0]
+    vote_spec = vote_session.vote_specifications[-1]
 
     def fin():
         print "finalizer number_gauge_vote_specification"
@@ -155,3 +155,35 @@ def number_gauge_vote_specification(request, test_session, graphql_request, vote
 
     request.addfinalizer(fin)
     return vote_spec
+
+
+@pytest.fixture(scope="function")
+def vote_proposal(request, test_session, discussion, graphql_request, vote_session, graphql_registry):
+    mutation = graphql_registry['createProposal']
+    vote_session_id = to_global_id("VoteSession", vote_session.id)
+    from assembl.graphql.schema import Schema as schema
+    res = schema.execute(mutation, context_value=graphql_request, variable_values={
+        "voteSessionId": vote_session_id,
+        "titleEntries": [
+            {"value": u"Comprendre les dynamiques et les enjeux", "localeCode": "fr"},
+            {"value": u"Understanding the dynamics and issues", "localeCode": "en"}
+        ],
+        "descriptionEntries": [
+            {"value": u"Description: Comprendre les dynamiques et les enjeux", "localeCode": "fr"},
+            {"value": u"Description: Understanding the dynamics and issues", "localeCode": "en"}
+        ]
+    })
+    assert res.errors is None
+    identifier = 'voteSession{}'.format(vote_session.id)
+    from assembl.graphql.utils import get_root_thematic_for_phase
+    root_thematic = get_root_thematic_for_phase(discussion, identifier)
+    proposal = root_thematic.children[0]
+
+    def fin():
+        print "finalizer vote_proposal"
+        test_session.delete(proposal)
+        test_session.delete(root_thematic)
+        test_session.flush()
+
+    request.addfinalizer(fin)
+    return proposal
