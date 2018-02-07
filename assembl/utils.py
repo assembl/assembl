@@ -38,9 +38,8 @@ def get_ideas(discussion_id, phase_id):
     model = models.Idea
     query = model.query
     discussion = models.Discussion.get(discussion_id)
-    root_idea_id = discussion.root_idea.id
-    descendants_query = model.get_descendants_query(
-        root_idea_id, inclusive=False)
+    descendants_query = discussion.root_idea.get_descendants_query(
+        inclusive=False)
     query = query.outerjoin(
             models.Idea.source_links
         ).filter(model.id.in_(descendants_query)
