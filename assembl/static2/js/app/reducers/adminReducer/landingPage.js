@@ -25,7 +25,8 @@ export const modulesHasChanged: ModulesHasChangedReducer = (state = false, actio
   }
 };
 
-type EnabledModulesInOrderReducer = (List<string>, ReduxAction<Action>) => List<string>;
+type EnabledModulesInOrderState = List<string>;
+type EnabledModulesInOrderReducer = (EnabledModulesInOrderState, ReduxAction<Action>) => EnabledModulesInOrderState;
 export const enabledModulesInOrder: EnabledModulesInOrderReducer = (state = List(), action) => {
   switch (action.type) {
   case MOVE_LANDING_PAGE_MODULE_UP: {
@@ -61,7 +62,8 @@ export const enabledModulesInOrder: EnabledModulesInOrderReducer = (state = List
 };
 
 const initialState = Map();
-type ModulesByIdentifierReducer = (Map<string, Map>, ReduxAction<Action>) => Map<string, Map>;
+type ModulesByIdentifierState = Map<string, Map>;
+type ModulesByIdentifierReducer = (ModulesByIdentifierState, ReduxAction<Action>) => ModulesByIdentifierState;
 export const modulesByIdentifier: ModulesByIdentifierReducer = (state = initialState, action) => {
   switch (action.type) {
   case TOGGLE_LANDING_PAGE_MODULE: {
@@ -80,14 +82,16 @@ export const modulesByIdentifier: ModulesByIdentifierReducer = (state = initialS
   }
 };
 
-export type LandingPageReducer = {
-  enabledModulesInOrder: EnabledModulesInOrderReducer,
-  modulesHasChanged: ModulesHasChangedReducer,
-  modulesByIdentifier: ModulesByIdentifierReducer
+export type LandingPageState = {
+  enabledModulesInOrder: EnabledModulesInOrderState,
+  modulesByIdentifier: Map<string>,
+  modulesHasChanged: boolean
 };
-const reducers: LandingPageReducer = {
+
+const reducers = {
   enabledModulesInOrder: enabledModulesInOrder,
   modulesHasChanged: modulesHasChanged,
   modulesByIdentifier: modulesByIdentifier
 };
+
 export default combineReducers(reducers);

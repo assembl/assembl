@@ -1,7 +1,9 @@
+// @flow
 import React from 'react';
-import { connect } from 'react-redux';
-import { compose, graphql, withApollo } from 'react-apollo';
+import { connect, type Dispatch, type MapStateToProps } from 'react-redux';
+import { type ApolloClient, compose, graphql, withApollo } from 'react-apollo';
 import { I18n } from 'react-redux-i18n';
+import { type Map } from 'immutable';
 
 import { languagePreferencesHasChanged, updateEditLocale } from '../actions/adminActions';
 import ManageSectionsForm from '../components/administration/discussion/manageSectionsForm';
@@ -16,6 +18,10 @@ import deleteSectionMutation from '../graphql/mutations/deleteSection.graphql';
 import updateLegalNoticeAndTermsMutation from '../graphql/mutations/updateLegalNoticeAndTerms.graphql';
 import updateDiscussionPreferenceQuery from '../graphql/mutations/updateDiscussionPreference.graphql';
 import getDiscussionPreferenceLanguage from '../graphql/DiscussionPreferenceLanguage.graphql';
+import { type LanguagePreferencesState } from '../reducers/adminReducer';
+import { type State } from '../reducers/rootReducer';
+
+type Section = Object;
 
 const createVariablesForSectionMutation = section => ({
   type: section.type,
@@ -26,7 +32,31 @@ const createVariablesForSectionMutation = section => ({
 
 const createVariablesForDeleteSectionMutation = section => ({ sectionId: section.id });
 
-class DiscussionAdmin extends React.Component {
+type Props = {
+  changeLocale: Function,
+  client: ApolloClient,
+  createSection: Function,
+  deleteSection: Function,
+  editLocale: string,
+  i18n: {
+    locale: string,
+    translations: { [string]: string }
+  },
+  languagePreferenceHasChanged: boolean,
+  legalNoticeAndTerms: Map,
+  preferences: LanguagePreferencesState,
+  refetchLegalNoticeAndTerms: Function,
+  refetchSections: Function,
+  resetLanguagePreferenceChanged: Function,
+  section: string,
+  sections: Array<Section>,
+  sectionsHaveChanged: boolean,
+  updateDiscussionPreference: Function,
+  updateLegalNoticeAndTerms: Function,
+  updateSection: Function
+};
+
+class DiscussionAdmin extends React.Component<void, Props, void> {
   saveAction = () => {
     const {
       changeLocale,
@@ -119,7 +149,7 @@ class DiscussionAdmin extends React.Component {
   }
 }
 
-const mapStateToProps = ({
+const mapStateToProps: MapStateToProps<State, *, *> = ({
   admin: { discussionLanguagePreferences, discussionLanguagePreferencesHasChanged, editLocale, legalNoticeAndTerms, sections },
   i18n
 }) => {
@@ -141,7 +171,8 @@ const mapStateToProps = ({
   };
 };
 
-const mapDispatchToProps = dispatch => ({
+type MapDispatchToProps = Dispatch => { changeLocale: Function, resetLanguagePreferenceChanged: Function };
+const mapDispatchToProps: MapDispatchToProps = dispatch => ({
   resetLanguagePreferenceChanged: () => {
     dispatch(languagePreferencesHasChanged(false));
   },
