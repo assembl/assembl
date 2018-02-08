@@ -3,7 +3,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PageForm from '../components/administration/voteSession/pageForm';
 import ModulesSection from '../components/administration/voteSession/modulesSection';
-import PropositionSection from '../components/administration/voteSession/propositionSection';
+import PropositionsSection from '../components/administration/voteSession/propositionsSection';
 import Navbar from '../components/administration/navbar';
 
 type VoteSessionAdminProps = {
@@ -17,7 +17,7 @@ const VoteSessionAdmin = (props: VoteSessionAdminProps) => {
     <div className="token-vote-admin">
       {props.section === '1' && <PageForm editLocale={props.editLocale} />}
       {props.section === '2' && <ModulesSection />}
-      {props.section === '3' && <PropositionSection />}
+      {props.section === '3' && <PropositionsSection />}
       {!isNaN(currentStep) && <Navbar currentStep={currentStep} totalSteps={3} phaseIdentifier="voteSession" />}
     </div>
   );

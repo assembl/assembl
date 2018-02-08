@@ -368,6 +368,10 @@ const Translations = {
       exclusive: "Exclusifs",
       tokenVoteInstructions: "Consigne du vote par jetons",
       propositionSectionTitle: "Titre de la section",
+      propositions: {
+        addProposition: "Ajouter une proposition",
+        deleteProposition: "Supprimer la proposition"
+      },
       sections: {
         addSection: "Ajouter une rubrique",
         deleteSection: "Supprimer la rubrique",
@@ -844,6 +848,10 @@ const Translations = {
       tokenNumber: "Number of tokens",
       tokenTitle: "Token title",
       tokenColor: "Color of the token",
+      propositions: {
+        addProposition: "Add a proposition",
+        deleteProposition: "Delete this proposition"
+      },
       sections: {
         addSection: "Add a section",
         deleteSection: "Delete the section",
