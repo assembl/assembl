@@ -6,6 +6,10 @@ import { getDiscussionSlug, calculatePercentage } from '../../utils/globalFuncti
 import { get } from '../../utils/routeMap';
 
 class Navbar extends React.Component {
+  static defaultProps = {
+    beforeChangeSection: () => {}
+  };
+
   constructor(props) {
     super(props);
     const { currentStep, totalSteps } = this.props;
@@ -35,6 +39,7 @@ class Navbar extends React.Component {
   }
 
   render() {
+    const { beforeChangeSection } = this.props;
     const barWidth = calculatePercentage(this.state.currentStep, this.state.totalSteps);
     return (
       <div className="admin-navbar">
@@ -54,6 +59,7 @@ class Navbar extends React.Component {
             {this.state.currentStep < this.state.totalSteps && (
               <div
                 onClick={() => {
+                  beforeChangeSection();
                   this.goToSection(this.state.currentStep + 1);
                 }}
                 className="arrow right"
@@ -64,6 +70,7 @@ class Navbar extends React.Component {
             {this.state.currentStep > 1 && (
               <div
                 onClick={() => {
+                  beforeChangeSection();
                   this.goToSection(this.state.currentStep - 1);
                 }}
                 className="arrow right"

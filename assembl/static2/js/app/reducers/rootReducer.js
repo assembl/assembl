@@ -8,25 +8,10 @@ import Synthesis from './synthesisReducer';
 import Auth from './authenticationReducer';
 import Phase from './phaseReducer';
 import Admin from './adminReducer';
-import type { AdminReducer } from './adminReducer';
 import contentLocale, { defaultContentLocaleMapping } from './contentLocaleReducer';
 import * as screenDimensions from './screenDimensionsReducers';
 
-export type RootReducer = {
-  i18n: Object,
-  contentLocale: Object,
-  defaultContentLocaleMapping: Object,
-  context: Object,
-  debate: Object,
-  partners: Object,
-  synthesis: Object,
-  auth: Object,
-  phase: Object,
-  admin: AdminReducer,
-  screenDimensions: Object // TODO: screenDimensions type
-};
-
-const reducers: RootReducer = {
+const reducers = {
   i18n: i18nReducer,
   contentLocale: contentLocale,
   defaultContentLocaleMapping: defaultContentLocaleMapping,
@@ -39,5 +24,11 @@ const reducers: RootReducer = {
   admin: Admin,
   ...screenDimensions
 };
+
+export type Reducers = typeof reducers;
+
+type $ExtractFunctionReturn = <V>(v: (...args: any) => V) => V;
+
+export type State = $ObjMap<Reducers, $ExtractFunctionReturn>;
 
 export default combineReducers(reducers);
