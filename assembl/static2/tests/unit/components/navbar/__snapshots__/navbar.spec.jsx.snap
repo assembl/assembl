@@ -19,7 +19,7 @@ exports[`AssemblNavbar component should render a BurgerNavbar and a hidden FlatN
             <SectionLink
               options={
                   Object {
-                      "displayDebateModal": [Function],
+                      "displayRedirectionToV1": [Function],
                       "phase": "thread",
                       "phaseContext": "new",
                       "slug": undefined,
@@ -48,7 +48,7 @@ exports[`AssemblNavbar component should render a BurgerNavbar and a hidden FlatN
             <SectionLink
               options={
                   Object {
-                      "displayDebateModal": [Function],
+                      "displayRedirectionToV1": [Function],
                       "phase": "thread",
                       "phaseContext": "new",
                       "slug": undefined,
@@ -104,7 +104,7 @@ exports[`AssemblNavbar component should render a FlatNavbar with a big screenWid
             <SectionLink
               options={
                   Object {
-                      "displayDebateModal": [Function],
+                      "displayRedirectionToV1": [Function],
                       "phase": "thread",
                       "phaseContext": "new",
                       "slug": undefined,
