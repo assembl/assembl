@@ -1,0 +1,50 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Proposals component should match Proposals snapshot 1`] = `
+<div>
+  <div
+    className="box"
+  >
+    <div
+      className="left"
+    >
+      <h3
+        className="dark-title-3"
+      >
+        Foo
+      </h3>
+      <p>
+        You can't hack the alarm without connecting the primary AGP microchip!
+      </p>
+    </div>
+    <div
+      className="right"
+    />
+    <div
+      className="clear"
+    />
+  </div>
+  <div
+    className="box"
+  >
+    <div
+      className="left"
+    >
+      <h3
+        className="dark-title-3"
+      >
+        Bar
+      </h3>
+      <p>
+        I'll input the multi-byte SAS monitor, that should bandwidth the USB microchip!
+      </p>
+    </div>
+    <div
+      className="right"
+    />
+    <div
+      className="clear"
+    />
+  </div>
+</div>
+`;

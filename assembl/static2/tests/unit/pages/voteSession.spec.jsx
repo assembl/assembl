@@ -11,7 +11,10 @@ describe('VoteSession component', () => {
       headerImageUrl: 'foo.jpg',
       instructionsSectionTitle: 'Instructions de la phase de vote',
       instructionsSectionContent: 'Elisez les meilleurs propositions, vous avez 8 jetons pour et 3 jetons contre',
-      propositionsSectionTitle: 'Vote sur 10 propositions'
+      propositionsSectionTitle: 'Vote sur 10 propositions',
+      proposals: [
+        { id: 'foo', title: 'Foo', description: 'You can\'t hack the alarm without connecting the primary AGP microchip!' }
+      ]
     };
     const shallowRenderer = new ShallowRenderer();
     shallowRenderer.render(<DumbVoteSession {...props} />);

@@ -6,7 +6,9 @@ import { connect } from 'react-redux';
 import VoteSessionQuery from '../graphql/VoteSession.graphql';
 import Header from '../components/common/header';
 import Section from '../components/common/section';
+import Proposals from '../components/voteSession/proposals';
 import { getPhaseId } from '../utils/timeline';
+import withLoadingIndicator from '../components/common/withLoadingIndicator';
 
 type voteSessionPageProps = {
   title: string,
@@ -14,7 +16,8 @@ type voteSessionPageProps = {
   headerImageUrl: string,
   instructionsSectionTitle: string,
   instructionsSectionContent: string,
-  propositionsSectionTitle: string
+  propositionsSectionTitle: string,
+  proposals: Array<Object>
 };
 
 const DumbVoteSession = ({
@@ -23,7 +26,8 @@ const DumbVoteSession = ({
   headerImageUrl,
   instructionsSectionTitle,
   instructionsSectionContent,
-  propositionsSectionTitle
+  propositionsSectionTitle,
+  proposals
 }: voteSessionPageProps) => (
   <div className="votesession-page">
     <Header title={title} subtitle={subTitle} imgUrl={headerImageUrl} additionalHeaderClasses="left" />
@@ -39,7 +43,7 @@ const DumbVoteSession = ({
       <Section title={propositionsSectionTitle}>
         <Row>
           <Col mdOffset={3} md={8} smOffset={1} sm={10}>
-            {/* INSERT THE PROPOSITIONS HERE */}
+            <Proposals proposals={proposals} />
           </Col>
         </Row>
       </Section>
@@ -78,16 +82,21 @@ export default compose(
         headerImage,
         instructionsSectionTitle,
         instructionsSectionContent,
-        propositionsSectionTitle
+        propositionsSectionTitle,
+        proposals
       } = data.voteSession;
+
       return {
+        loading: data.loading,
         headerImageUrl: headerImage ? headerImage.externalUrl : defaultHeaderImage,
         title: title,
         subTitle: subTitle,
         instructionsSectionTitle: instructionsSectionTitle,
         instructionsSectionContent: instructionsSectionContent,
-        propositionsSectionTitle: propositionsSectionTitle
+        propositionsSectionTitle: propositionsSectionTitle,
+        proposals: proposals
       };
     }
-  })
+  }),
+  withLoadingIndicator()
 )(DumbVoteSession);

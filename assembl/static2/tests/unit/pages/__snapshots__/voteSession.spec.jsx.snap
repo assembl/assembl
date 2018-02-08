@@ -67,7 +67,19 @@ exports[`VoteSession component should match VoteSession snapshot 1`] = `
           mdOffset={3}
           sm={10}
           smOffset={1}
-        />
+        >
+          <Proposals
+            proposals={
+              Array [
+                Object {
+                  "description": "You can't hack the alarm without connecting the primary AGP microchip!",
+                  "id": "foo",
+                  "title": "Foo",
+                },
+              ]
+            }
+          />
+        </Col>
       </Row>
     </Section>
   </Grid>
