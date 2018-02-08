@@ -2,32 +2,41 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { I18n } from 'react-redux-i18n';
+import { getEntryValueForLocale } from '../../../utils/i18n';
 import FormControlWithLabel from '../../common/formControlWithLabel';
+import { updateGaugeVoteChoiceLabel } from '../../../actions/adminActions/voteSession';
 
 type TextGaugeFormProps = {
-  choices: Object
+  title: string,
+  handleGaugeChoiceLabelChange: Function
 };
 
-const DumbTextGaugeForm = ({ choices }: TextGaugeFormProps) => (
-  <div>
-    {choices.map((choice, index) => (
+const DumbTextGaugeForm = ({ index, handleGaugeChoiceLabelChange, title }: TextGaugeFormProps) => {
+  console.log('title', title);
+  return (
+    <div>
       <FormControlWithLabel
+        value={title}
+        onChange={handleGaugeChoiceLabelChange}
         label={`${I18n.t('administration.valueTitle')} ${index + 1}`}
-        key={`value-title-${index}`}
         required
         type="text"
       />
-    ))}
-  </div>
-);
+    </div>
+  );
+};
 
-const mapStateToProps = (state, { id }) => {
-  const module = state.admin.voteSession.modulesById.get(id);
+const mapStateToProps = (state, { choice, editLocale }) => {
+  const title = getEntryValueForLocale(choice.get('labelEntries'), editLocale);
   return {
-    choices: module.get('choices')
+    title: title
   };
 };
 
+const mapDispatchToProps = (dispatch, { parentId, choice, editLocale }) => ({
+  handleGaugeChoiceLabelChange: e => dispatch(updateGaugeVoteChoiceLabel(parentId, choice.get('id'), editLocale, e.target.value))
+});
+
 export { DumbTextGaugeForm };
 
-export default connect(mapStateToProps)(DumbTextGaugeForm);
+export default connect(mapStateToProps, mapDispatchToProps)(DumbTextGaugeForm);

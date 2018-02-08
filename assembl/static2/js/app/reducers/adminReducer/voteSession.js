@@ -27,7 +27,8 @@ import {
   UPDATE_GAUGE_VOTE_NUMBER_TICKS,
   UPDATE_GAUGE_VOTE_IS_NUMBER,
   CREATE_GAUGE_VOTE_CHOICE,
-  DELETE_GAUGE_VOTE_CHOICE
+  DELETE_GAUGE_VOTE_CHOICE,
+  UPDATE_GAUGE_VOTE_CHOICE_LABEL
 } from '../../actions/actionTypes';
 import { updateInLangstringEntries } from '../../utils/i18n';
 
@@ -109,6 +110,7 @@ export const modulesHaveChanged = (state: boolean = false, action: ReduxAction<A
   case UPDATE_GAUGE_VOTE_IS_NUMBER:
   case CREATE_GAUGE_VOTE_CHOICE:
   case DELETE_GAUGE_VOTE_CHOICE:
+  case UPDATE_GAUGE_VOTE_CHOICE_LABEL:
     return true;
   case UPDATE_VOTE_MODULES:
     return false;
@@ -243,9 +245,13 @@ export const modulesById = (state: Map<string, Map> = Map(), action: ReduxAction
   case UPDATE_GAUGE_VOTE_NUMBER_TICKS:
     return state.setIn([action.id, 'nbTicks'], action.value);
   case CREATE_GAUGE_VOTE_CHOICE:
-    return state.updateIn([action.id, 'choices'], choices => choices.push(defaultTextGaugeChoice));
+    return state.updateIn([action.parentId, 'choices'], choices => choices.push(defaultTextGaugeChoice.set('id', action.id)));
   case DELETE_GAUGE_VOTE_CHOICE:
     return state.updateIn([action.id, 'choices'], choices => choices.delete(action.index));
+  case UPDATE_GAUGE_VOTE_CHOICE_LABEL:
+    return state.updateIn([action.parentId, 'choices'], choices =>
+      choices.setIn([action.id, 'labelEntries'], updateInLangstringEntries(action.locale, action.value))
+    );
   default:
     return state;
   }

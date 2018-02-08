@@ -23,6 +23,7 @@ type GaugeFormProps = {
   instructions: string,
   nbTicks: number,
   isNumberGauge: boolean,
+  choices: Object,
   handleInstructionsChange: Function,
   handleNbTicksSelectChange: Function,
   handleNumberGaugeCheck: Function,
@@ -35,6 +36,7 @@ const DumbGaugeForm = ({
   instructions,
   nbTicks,
   isNumberGauge,
+  choices,
   handleInstructionsChange,
   handleNbTicksSelectChange,
   handleNumberGaugeCheck,
@@ -81,18 +83,22 @@ const DumbGaugeForm = ({
     <Radio onChange={handleNumberGaugeCheck} checked={isNumberGauge}>
       <Translate value="administration.numberValue" />
     </Radio>
-    {isNumberGauge ? <NumberGaugeForm id={id} editLocale={editLocale} /> : <TextGaugeForm id={id} editLocale={editLocale} />}
+    {isNumberGauge && <NumberGaugeForm id={id} editLocale={editLocale} />}
+    {!isNumberGauge &&
+      choices.map((choice, index) => (
+        <TextGaugeForm key={`gauge-choice-${index}`} parentId={id} choice={choice} index={index} editLocale={editLocale} />
+      ))}
     <div className="separator" />
   </div>
 );
-
 const mapStateToProps = (state, { id, editLocale }) => {
   const module = state.admin.voteSession.modulesById.get(id);
   const instructions = getEntryValueForLocale(module.get('instructionsEntries'), editLocale);
   return {
     instructions: instructions,
     nbTicks: module.get('isNumberGauge') ? module.get('nbTicks') : module.get('choices').size,
-    isNumberGauge: module.get('isNumberGauge')
+    isNumberGauge: module.get('isNumberGauge'),
+    choices: module.get('isNumberGauge') ? null : module.get('choices')
   };
 };
 
@@ -104,7 +110,8 @@ const mapDispatchToProps = (dispatch, { id, editLocale }) => ({
     } else if (nbTicks < value) {
       const nbChoiceToCreate = value - nbTicks;
       for (let i = 0; i < nbChoiceToCreate; i += 1) {
-        dispatch(createGaugeVoteChoice(id));
+        const newId = Math.round(Math.random() * -1000000).toString();
+        dispatch(createGaugeVoteChoice(id, newId));
       }
     } else {
       const nbChoiceToDelete = nbTicks - value;

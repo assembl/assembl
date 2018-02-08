@@ -54,6 +54,7 @@ export const UPDATE_GAUGE_VOTE_NUMBER_TICKS: 'UPDATE_GAUGE_VOTE_NUMBER_TICKS' = 
 export const UPDATE_GAUGE_VOTE_IS_NUMBER: 'UPDATE_GAUGE_VOTE_IS_NUMBER' = 'UPDATE_GAUGE_VOTE_IS_NUMBER';
 export const CREATE_GAUGE_VOTE_CHOICE: 'CREATE_GAUGE_VOTE_CHOICE' = 'CREATE_GAUGE_VOTE_CHOICE';
 export const DELETE_GAUGE_VOTE_CHOICE: 'DELETE_GAUGE_VOTE_CHOICE' = 'DELETE_GAUGE_VOTE_CHOICE';
+export const UPDATE_GAUGE_VOTE_CHOICE_LABEL: 'UPDATE_GAUGE_VOTE_CHOICE_LABEL' = 'UPDATE_GAUGE_VOTE_CHOICE_LABEL';
 
 export type UpdateContentLocaleById = {
   type: typeof UPDATE_CONTENT_LOCALE_BY_ID,
@@ -359,6 +360,7 @@ export type UpdateGaugeVoteIsNumber = {
 };
 
 export type CreateGaugeVoteChoice = {
+  parentId: string,
   id: string,
   type: typeof CREATE_GAUGE_VOTE_CHOICE
 };
@@ -367,6 +369,12 @@ export type DeleteGaugeVoteChoice = {
   id: string,
   index: number,
   type: typeof DELETE_GAUGE_VOTE_CHOICE
+};
+
+export type UpdateGaugeVoteChoiceLabel = {
+  parentId: string,
+  id: string,
+  type: typeof UPDATE_GAUGE_VOTE_CHOICE_LABEL
 };
 
 type BasicAction = {
@@ -413,6 +421,8 @@ type VoteSessionActions =
   | UpdateGaugeVoteNbTicks
   | UpdateGaugeVoteIsNumber
   | CreateGaugeVoteChoice
+  | DeleteGaugeVoteChoice
+  | UpdateGaugeVoteChoiceLabel
   | UpdateGaugeVoteInstructions;
 
 export type Action =
