@@ -377,6 +377,7 @@ const Translations = {
       nbTicks: "Nombre de crans",
       textValue: "Valeur textuelle",
       numberValue: "Valeur numéraire",
+      valueTitle: "Intitulé de la valeur",
       sections: {
         addSection: "Ajouter une rubrique",
         deleteSection: "Supprimer la rubrique",
@@ -832,6 +833,7 @@ const Translations = {
       nbTicksHelper: "Define ticks number for the gauge",
       nbTicks: "Ticks number",
       textValue: "Textual value",
+      valueTitle: "Value title",
       numberValue: "Number value",
       tokenCategoryNumber: "Number of token types",
       tokenNumber: "Number of tokens",

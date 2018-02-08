@@ -25,7 +25,9 @@ import {
   UPDATE_TOKEN_VOTE_CATEGORY_COLOR,
   UPDATE_GAUGE_VOTE_INSTRUCTIONS,
   UPDATE_GAUGE_VOTE_NUMBER_TICKS,
-  UPDATE_GAUGE_VOTE_IS_NUMBER
+  UPDATE_GAUGE_VOTE_IS_NUMBER,
+  CREATE_GAUGE_VOTE_CHOICE,
+  DELETE_GAUGE_VOTE_CHOICE
 } from '../../actions/actionTypes';
 import { updateInLangstringEntries } from '../../utils/i18n';
 
@@ -105,6 +107,8 @@ export const modulesHaveChanged = (state: boolean = false, action: ReduxAction<A
   case UPDATE_GAUGE_VOTE_INSTRUCTIONS:
   case UPDATE_GAUGE_VOTE_NUMBER_TICKS:
   case UPDATE_GAUGE_VOTE_IS_NUMBER:
+  case CREATE_GAUGE_VOTE_CHOICE:
+  case DELETE_GAUGE_VOTE_CHOICE:
     return true;
   case UPDATE_VOTE_MODULES:
     return false;
@@ -135,29 +139,32 @@ const defaultTokenModule = Map({
   tokenCategories: List()
 });
 
-const defaultGaugeModule = Map({
+const defaultTextGaugeChoice = Map({
+  id: String,
+  labelEntries: List(),
+  value: Number
+});
+
+const defaultTextGaugeModule = Map({
+  isNew: true,
+  toDelete: false,
+  type: 'gauge',
+  instructionsEntries: List(),
+  isNumberGauge: false,
+  choices: List()
+});
+
+const defaultNumberGaugeModule = Map({
   isNew: true,
   toDelete: false,
   type: 'gauge',
   instructionsEntries: List(),
   nbTicks: 1,
-  isNumberGauge: false
+  isNumberGauge: true,
+  minimum: Number,
+  maximum: Number,
+  unit: String
 });
-
-// const defaultNumberGaugeModule = Map({
-//   maximum: Number,
-//   minimum: Number,
-//   nbTicks: Number,
-//   unit: ''
-// });
-
-// const defaultTextGaugeModule = Map({
-//   choices: Map({
-//     id: '',
-//     labelEntries: List(),
-//     value: Number
-//   })
-// });
 
 export const modulesById = (state: Map<string, Map> = Map(), action: ReduxAction<Action>) => {
   switch (action.type) {
@@ -222,21 +229,29 @@ export const modulesById = (state: Map<string, Map> = Map(), action: ReduxAction
       tokenCategories.delete(tokenCategories.size - 1)
     );
   case CREATE_GAUGE_VOTE_MODULE:
-    return state.set(action.id, defaultGaugeModule.set('id', action.id));
+    return state.set(action.id, defaultTextGaugeModule.set('id', action.id));
   case DELETE_GAUGE_VOTE_MODULE:
     return state.setIn([action.id, 'toDelete'], true);
   case UPDATE_GAUGE_VOTE_INSTRUCTIONS:
     return state.updateIn([action.id, 'instructionsEntries'], updateInLangstringEntries(action.locale, action.value));
+  case UPDATE_GAUGE_VOTE_IS_NUMBER: {
+    if (action.value) {
+      return state.set(action.id, defaultNumberGaugeModule.set('id', action.id));
+    }
+    return state.set(action.id, defaultTextGaugeModule.set('id', action.id));
+  }
   case UPDATE_GAUGE_VOTE_NUMBER_TICKS:
     return state.setIn([action.id, 'nbTicks'], action.value);
-  case UPDATE_GAUGE_VOTE_IS_NUMBER:
-    return state.setIn([action.id, 'isNumberGauge'], action.value);
+  case CREATE_GAUGE_VOTE_CHOICE:
+    return state.updateIn([action.id, 'choices'], choices => choices.push(defaultTextGaugeChoice));
+  case DELETE_GAUGE_VOTE_CHOICE:
+    return state.updateIn([action.id, 'choices'], choices => choices.delete(action.index));
   default:
     return state;
   }
 };
 
-const initialTokenCategory = Map({
+const defaultTokenCategory = Map({
   id: '',
   titleEntries: List(),
   totalNumber: 0,
@@ -264,7 +279,7 @@ export const tokenCategoriesById = (state: Map<string, Map> = Map(), action: Red
     return newState;
   }
   case CREATE_TOKEN_VOTE_CATEGORY:
-    return state.set(action.id, initialTokenCategory.set('id', action.id));
+    return state.set(action.id, defaultTokenCategory.set('id', action.id));
   case UPDATE_TOKEN_VOTE_CATEGORY_TITLE:
     return state.updateIn([action.id, 'titleEntries'], updateInLangstringEntries(action.locale, action.value));
   case UPDATE_TOKEN_VOTE_CATEGORY_COLOR:

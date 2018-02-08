@@ -133,16 +133,27 @@ export const updateGaugeVoteInstructions = (
   type: actionTypes.UPDATE_GAUGE_VOTE_INSTRUCTIONS
 });
 
+export const updateGaugeVoteIsNumber = (id: string, value: boolean): actionTypes.UpdateGaugeVoteIsNumber => ({
+  id: id,
+  value: value,
+  type: actionTypes.UPDATE_GAUGE_VOTE_IS_NUMBER
+});
+
 export const updateGaugeVoteNbTicks = (id: string, value: number): actionTypes.UpdateGaugeVoteNbTicks => ({
   id: id,
   value: value,
   type: actionTypes.UPDATE_GAUGE_VOTE_NUMBER_TICKS
 });
 
-export const updateGaugeVoteIsNumber = (id: string, value: boolean): actionTypes.UpdateGaugeVoteIsNumber => ({
+export const createGaugeVoteChoice = (id: string): actionTypes.CreateGaugeVoteChoice => ({
   id: id,
-  value: value,
-  type: actionTypes.UPDATE_GAUGE_VOTE_IS_NUMBER
+  type: actionTypes.CREATE_GAUGE_VOTE_CHOICE
+});
+
+export const deleteGaugeVoteChoice = (id: string, index: number): actionTypes.DeleteGaugeVoteChoice => ({
+  id: id,
+  index: index,
+  type: actionTypes.DELETE_GAUGE_VOTE_CHOICE
 });
 
 export const updateVoteSessionPage = (value: Object): actionTypes.UpdateVoteSessionPage => ({

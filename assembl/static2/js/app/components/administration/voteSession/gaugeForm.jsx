@@ -12,7 +12,9 @@ import TextGaugeForm from './textGaugeForm';
 import {
   updateGaugeVoteInstructions,
   updateGaugeVoteNbTicks,
-  updateGaugeVoteIsNumber
+  updateGaugeVoteIsNumber,
+  createGaugeVoteChoice,
+  deleteGaugeVoteChoice
 } from '../../../actions/adminActions/voteSession';
 
 type GaugeFormProps = {
@@ -64,7 +66,7 @@ const DumbGaugeForm = ({
       id={`dropdown-${id}`}
       required
       onSelect={(eventKey) => {
-        handleNbTicksSelectChange(eventKey);
+        handleNbTicksSelectChange(eventKey, isNumberGauge, nbTicks);
       }}
     >
       {range(10).map(value => (
@@ -89,14 +91,28 @@ const mapStateToProps = (state, { id, editLocale }) => {
   const instructions = getEntryValueForLocale(module.get('instructionsEntries'), editLocale);
   return {
     instructions: instructions,
-    nbTicks: module.get('nbTicks'),
+    nbTicks: module.get('isNumberGauge') ? module.get('nbTicks') : module.get('choices').size,
     isNumberGauge: module.get('isNumberGauge')
   };
 };
 
 const mapDispatchToProps = (dispatch, { id, editLocale }) => ({
   handleInstructionsChange: e => dispatch(updateGaugeVoteInstructions(id, editLocale, e.target.value)),
-  handleNbTicksSelectChange: value => dispatch(updateGaugeVoteNbTicks(id, value)),
+  handleNbTicksSelectChange: (value, isNumberGauge, nbTicks) => {
+    if (isNumberGauge) {
+      dispatch(updateGaugeVoteNbTicks(id, value));
+    } else if (nbTicks < value) {
+      const nbChoiceToCreate = value - nbTicks;
+      for (let i = 0; i < nbChoiceToCreate; i += 1) {
+        dispatch(createGaugeVoteChoice(id));
+      }
+    } else {
+      const nbChoiceToDelete = nbTicks - value;
+      for (let i = 0; i < nbChoiceToDelete; i += 1) {
+        dispatch(deleteGaugeVoteChoice(id, nbTicks - 1 - i));
+      }
+    }
+  },
   handleNumberGaugeCheck: () => dispatch(updateGaugeVoteIsNumber(id, true)),
   handleNumberGaugeUncheck: () => dispatch(updateGaugeVoteIsNumber(id, false))
 });

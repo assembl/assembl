@@ -1,19 +1,19 @@
 // @flow
 import React from 'react';
 import { connect } from 'react-redux';
-import range from 'lodash/range';
+import { I18n } from 'react-redux-i18n';
 import FormControlWithLabel from '../../common/formControlWithLabel';
 
 type TextGaugeFormProps = {
-  ticksNumber: number
+  choices: Object
 };
 
-const DumbTextGaugeForm = ({ ticksNumber }: TextGaugeFormProps) => (
+const DumbTextGaugeForm = ({ choices }: TextGaugeFormProps) => (
   <div>
-    {range(ticksNumber).map(tick => (
+    {choices.map((choice, index) => (
       <FormControlWithLabel
-        label={`Intitulé de la valeur ${tick + 1}`}
-        key={`Intitulé de la valeur ${tick + 1}`}
+        label={`${I18n.t('administration.valueTitle')} ${index + 1}`}
+        key={`value-title-${index}`}
         required
         type="text"
       />
@@ -21,9 +21,12 @@ const DumbTextGaugeForm = ({ ticksNumber }: TextGaugeFormProps) => (
   </div>
 );
 
-const mapStateToProps = () => ({
-  ticksNumber: 3
-});
+const mapStateToProps = (state, { id }) => {
+  const module = state.admin.voteSession.modulesById.get(id);
+  return {
+    choices: module.get('choices')
+  };
+};
 
 export { DumbTextGaugeForm };
 
