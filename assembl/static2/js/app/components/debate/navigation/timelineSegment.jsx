@@ -98,14 +98,14 @@ export class DumbTimelineSegment extends React.Component<*, TimelineSegmentProps
           browserHistory.push(get('debate', params));
           this.hideMenu();
         } else {
-          window.location = get('oldDebate', slug);
+          window.location = get('oldVote', slug);
         }
       }
     } else if (!isRedirectionToV1) {
       browserHistory.push(get('debate', params));
       this.hideMenu();
     } else {
-      window.location = get('oldDebate', slug);
+      window.location = get('oldVote', slug);
     }
   };
 

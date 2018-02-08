@@ -42,13 +42,13 @@ class Phase extends React.Component {
         if (!isRedirectionToV1) {
           browserHistory.push(get('debate', params));
         } else {
-          window.location = get('oldDebate', slug);
+          window.location = get('oldVote', slug);
         }
       }
     } else if (!isRedirectionToV1) {
       browserHistory.push(get('debate', params));
     } else {
-      window.location = get('oldDebate', slug);
+      window.location = get('oldVote', slug);
     }
   }
 

@@ -20,7 +20,7 @@ class Objectives extends React.Component {
     const { timeline } = this.props.debate.debateData;
     const currentPhaseIdentifier = getCurrentPhaseIdentifier(timeline);
     if (isRedirectionToV1) {
-      window.location = get('oldDebate', slug);
+      window.location = get('oldVote', slug);
     } else {
       browserHistory.push(get('debate', { ...slug, phase: currentPhaseIdentifier }));
     }

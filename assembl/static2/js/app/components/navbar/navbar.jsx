@@ -83,7 +83,7 @@ SectionLink.displayName = 'SectionLink';
 
 const createRedirectionToV1 = () => () => {
   const slug = { slug: getDiscussionSlug() };
-  window.location = get('oldDebate', slug);
+  window.location = get('oldVote', slug);
 };
 
 const mapDebateSectionToElement = (debateSection, options) => {
@@ -99,7 +99,7 @@ const mapDebateSectionToElement = (debateSection, options) => {
     );
   case 'old':
     return (
-      <a key={key} className="navbar-menu-item pointer" href={get('oldDebate', { slug: options.slug })} data-text={title}>
+      <a key={key} className="navbar-menu-item pointer" href={get('oldVote', { slug: options.slug })} data-text={title}>
         {title}
       </a>
     );
