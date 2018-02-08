@@ -51,6 +51,8 @@ export const UPDATE_LANDING_PAGE_MODULES: 'UPDATE_LANDING_PAGE_MODULES' = 'UPDAT
 export const TOGGLE_LANDING_PAGE_MODULE: 'TOGGLE_LANDING_PAGE_MODULE' = 'TOGGLE_LANDING_PAGE_MODULE';
 export const MOVE_LANDING_PAGE_MODULE_UP: 'MOVE_LANDING_PAGE_MODULE_UP' = 'MOVE_LANDING_PAGE_MODULE_UP';
 export const MOVE_LANDING_PAGE_MODULE_DOWN: 'MOVE_LANDING_PAGE_MODULE_DOWN' = 'MOVE_LANDING_PAGE_MODULE_DOWN';
+export const UPDATE_VOTE_PROPOSALS: 'UPDATE_VOTE_PROPOSALS' = 'UPDATE_VOTE_PROPOSALS';
+export const CREATE_VOTE_PROPOSAL: 'CREATE_VOTE_PROPOSAL' = 'CREATE_VOTE_PROPOSAL';
 
 export type UpdateContentLocaleById = {
   type: typeof UPDATE_CONTENT_LOCALE_BY_ID,
@@ -267,6 +269,12 @@ export type ModuleInfo = {
 
 export type VoteModulesArray = Array<ModuleInfo>;
 
+export type VoteProposalInfo = {
+  id: string
+};
+
+export type VoteProposalArray = Array<VoteProposalInfo>;
+
 export type UpdateVoteModules = {
   voteModules: VoteModulesArray,
   type: typeof UPDATE_VOTE_MODULES
@@ -324,7 +332,17 @@ export type UpdateTokenVoteCategoryColor = {
   id: string,
   value: string,
   type: typeof UPDATE_TOKEN_VOTE_CATEGORY_COLOR
-}
+};
+
+export type UpdateVoteProposals = {
+  voteProposals: VoteProposalArray,
+  type: typeof UPDATE_VOTE_PROPOSALS
+};
+
+export type CreateVoteProposal = {
+  id: string,
+  type: typeof CREATE_VOTE_PROPOSAL
+};
 
 export type toggleLandingPageModule = {
   moduleTypeIdentifier: string,
@@ -387,7 +405,9 @@ type VoteSessionActions =
   | DeleteTokenVoteCategory
   | UpdateTokenVoteCategoryTitle
   | UpdateTokenTotalNumber
-  | UpdateTokenVoteCategoryColor;
+  | UpdateTokenVoteCategoryColor
+  | UpdateVoteProposal
+  | CreateVoteProposal;
 
 export type Action =
   | UpdateContentLocaleById

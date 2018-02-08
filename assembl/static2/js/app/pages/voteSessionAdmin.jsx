@@ -7,7 +7,7 @@ import type { List, Map } from 'immutable';
 
 import PageForm from '../components/administration/voteSession/pageForm';
 import ModulesSection from '../components/administration/voteSession/modulesSection';
-import PropositionsSection from '../components/administration/voteSession/propositionsSection';
+import VoteProposalsSection from '../components/administration/voteSession/voteProposalsSection';
 import Navbar from '../components/administration/navbar';
 import SaveButton, { getMutationsPromises, runSerial } from '../components/administration/saveButton';
 import updateVoteSessionMutation from '../graphql/mutations/updateVoteSession.graphql';
@@ -128,7 +128,7 @@ class VoteSessionAdmin extends React.Component<void, VoteSessionAdminProps, void
         <SaveButton disabled={saveDisabled} saveAction={this.saveAction} />
         {section === '1' && <PageForm editLocale={editLocale} />}
         {section === '2' && <ModulesSection />}
-        {section === '3' && <PropositionsSection />}
+        {section === '3' && <VoteProposalsSection />}
         {!isNaN(currentStep) && <Navbar currentStep={currentStep} totalSteps={3} phaseIdentifier="voteSession" />}
       </div>
     );

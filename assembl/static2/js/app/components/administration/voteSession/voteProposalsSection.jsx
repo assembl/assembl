@@ -4,9 +4,9 @@ import { I18n } from 'react-redux-i18n';
 import { OverlayTrigger } from 'react-bootstrap';
 import { addPropositionTooltip } from '../../common/tooltips';
 import SectionTitle from '../sectionTitle';
-import PropositionForm from './propositionForm';
+import VoteProposalForm from './voteProposalForm';
 
-const PropositionsSection = () => (
+const VoteProposalsSection = () => (
   <div className="admin-box">
     <SectionTitle
       title="Configurer les propositions associées aux modules de vote"
@@ -14,13 +14,9 @@ const PropositionsSection = () => (
     />
     <div className="admin-content">
       <form>
+        <VoteProposalForm />
         <OverlayTrigger placement="top" overlay={addPropositionTooltip}>
-          <div
-            onClick={() => {
-              console.log('create a proposition!');
-            }}
-            className="plus margin-l"
-          >
+          <div onClick={() => {}} className="plus margin-l">
             +
           </div>
         </OverlayTrigger>
@@ -29,4 +25,9 @@ const PropositionsSection = () => (
   </div>
 );
 
-export default PropositionsSection;
+const mapStateToProps = ({ admin }) => {
+  const { voteProposalsInOrder } = admin.voteSession;
+  return admin;
+};
+
+export default connect(mapStateToProps)(VoteProposalsSection);

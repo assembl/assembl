@@ -122,3 +122,13 @@ export const updateVoteSessionPage = (value: Object): actionTypes.UpdateVoteSess
   headerImage: value.headerImage,
   type: actionTypes.UPDATE_VOTE_SESSION_PAGE
 });
+
+export const updateVoteProposals = (voteProposals: ActionTypes.VoteProposalsArray): actionTypes.UpdateVoteProposals => ({
+  voteProposals: voteProposals,
+  type: actionTypes.UPDATE_VOTE_PROPOSALS
+});
+
+export const createVoteProposal = (id: string): actionTypes.CreateVoteProposal => ({
+  id: id,
+  type: actionTypes.CREATE_VOTE_PROPOSAL
+});

@@ -370,7 +370,9 @@ const Translations = {
       propositionSectionTitle: "Titre de la section",
       propositions: {
         addProposition: "Ajouter une proposition",
-        deleteProposition: "Supprimer la proposition"
+        deleteProposition: "Supprimer la proposition",
+        title: "Titre de la proposition",
+        description: "Description"
       },
       sections: {
         addSection: "Ajouter une rubrique",
@@ -850,7 +852,9 @@ const Translations = {
       tokenColor: "Color of the token",
       propositions: {
         addProposition: "Add a proposition",
-        deleteProposition: "Delete this proposition"
+        deleteProposition: "Delete this proposition",
+        title: "Title of the proposition",
+        description: "Description"
       },
       sections: {
         addSection: "Add a section",

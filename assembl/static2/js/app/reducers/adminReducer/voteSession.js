@@ -20,7 +20,9 @@ import {
   DELETE_TOKEN_VOTE_CATEGORY,
   UPDATE_TOKEN_VOTE_CATEGORY_TITLE,
   UPDATE_TOKEN_TOTAL_NUMBER,
-  UPDATE_TOKEN_VOTE_CATEGORY_COLOR
+  UPDATE_TOKEN_VOTE_CATEGORY_COLOR,
+  UPDATE_VOTE_PROPOSALS,
+  CREATE_VOTE_PROPOSAL
 } from '../../actions/actionTypes';
 import { updateInLangstringEntries } from '../../utils/i18n';
 
@@ -203,10 +205,22 @@ export const tokenCategoriesById = (state: Map<string, Map> = Map(), action: Red
   }
 };
 
+export const voteProposalsInOrder = (state: List<number> = List(), action: ReduxAction<Action>) => {
+  switch (action.type) {
+  case UPDATE_VOTE_PROPOSALS:
+    return List(Object.keys(action.voteProposals).map(key => action.voteProposals[key].id || null));
+  case CREATE_VOTE_PROPOSAL:
+    return state.push(action.id);
+  default:
+    return state;
+  }
+};
+
 export default combineReducers({
   page: voteSessionPage,
   modulesInOrder: modulesInOrder,
   modulesById: modulesById,
   tokenCategoriesById: tokenCategoriesById,
-  modulesHaveChanged: modulesHaveChanged
+  modulesHaveChanged: modulesHaveChanged,
+  voteProposalsInOrder: voteProposalsInOrder
 });
