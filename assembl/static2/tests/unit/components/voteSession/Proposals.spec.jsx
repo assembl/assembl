@@ -18,6 +18,11 @@ describe('Proposals component', () => {
             }
           ],
           voteType: 'token_vote_specification'
+        },
+        {
+          id: 'ABC',
+          instructions: 'I\'ll generate the mobile SMS bus, that should microchip the TCP matrix!',
+          voteType: 'gauge_vote_specification'
         }
       ],
       proposals: [

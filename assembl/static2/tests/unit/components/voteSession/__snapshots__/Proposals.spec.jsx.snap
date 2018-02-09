@@ -178,6 +178,11 @@ exports[`Proposals component should match Proposals snapshot 1`] = `
           </svg>
         </div>
       </div>
+      <div
+        className="gauge"
+      >
+        I'll generate the mobile SMS bus, that should microchip the TCP matrix!
+      </div>
     </div>
     <div
       className="clear"
@@ -358,6 +363,11 @@ exports[`Proposals component should match Proposals snapshot 1`] = `
             />
           </svg>
         </div>
+      </div>
+      <div
+        className="gauge"
+      >
+        I'll generate the mobile SMS bus, that should microchip the TCP matrix!
       </div>
     </div>
     <div
