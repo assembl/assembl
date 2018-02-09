@@ -1,5 +1,6 @@
 // @flow
 import React from 'react';
+import { Grid } from 'react-bootstrap';
 
 import Proposal from './proposal';
 
@@ -9,7 +10,7 @@ type Props = {
 };
 
 const Proposals = (props: Props) => (
-  <div>{props.proposals.map(proposal => <Proposal key={proposal.id} {...proposal} modules={props.modules} />)}</div>
+  <Grid>{props.proposals.map(proposal => <Proposal key={proposal.id} {...proposal} modules={props.modules} />)}</Grid>
 );
 
 export default Proposals;

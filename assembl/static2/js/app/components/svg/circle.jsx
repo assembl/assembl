@@ -1,22 +1,21 @@
 import React from 'react';
 
-const Circle = () => (
+const Circle = ({ fillColor, strokeColor, size }) => (
   <svg
     x="0px"
     y="0px"
-    style={{ width: '20px', height: '20px' }}
     xmlSpace="preserve"
     aria-hidden="true"
     role="img"
-    width="20px"
-    height="20px"
+    width={size}
+    height={size}
     viewBox="0 0 20 20"
     version="1.1"
   >
     <path
       className="outer"
-      fill="none"
-      stroke="#000000"
+      fill={fillColor}
+      stroke={strokeColor}
       strokeWidth="1"
       strokeMiterlimit="4"
       strokeOpacity="1"
@@ -27,5 +26,11 @@ const Circle = () => (
     />
   </svg>
 );
+
+Circle.defaultProps = {
+  fillColor: 'none',
+  size: '30px',
+  strokeColor: '#000'
+};
 
 export default Circle;
