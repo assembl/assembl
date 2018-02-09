@@ -51,7 +51,7 @@ export const PHASE_STATUS = {
 
 export const PHASES = {
   survey: 'survey',
-  multiColumn: 'multiColumn',
+  multiColumns: 'multiColumns',
   voteSession: 'voteSession'
 };
 
