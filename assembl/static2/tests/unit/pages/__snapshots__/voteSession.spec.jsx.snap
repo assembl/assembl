@@ -31,8 +31,8 @@ exports[`VoteSession component should match VoteSession snapshot 1`] = `
         <Col
           bsClass="col"
           componentClass="div"
-          md={8}
-          mdOffset={3}
+          md={10}
+          mdOffset={1}
           sm={10}
           smOffset={1}
         >

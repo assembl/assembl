@@ -36,7 +36,7 @@ const DumbVoteSession = ({
     <Grid fluid>
       <Section title={instructionsSectionTitle}>
         <Row>
-          <Col mdOffset={3} md={8} smOffset={1} sm={10}>
+          <Col mdOffset={1} md={10} smOffset={1} sm={10}>
             <div dangerouslySetInnerHTML={{ __html: instructionsSectionContent }} className="vote-instructions" />
             {/* INSERT THE TOKENS HERE */}
           </Col>

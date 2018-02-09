@@ -28,6 +28,7 @@ fragment tokenVoteSpecification on TokenVoteSpecification {
 fragment numberGaugeVoteSpecification on NumberGaugeVoteSpecification {
   id
   voteSessionId
+  instructions(lang: $lang)
   titleEntries {
     ...langStringEntry
   }
@@ -39,11 +40,13 @@ fragment numberGaugeVoteSpecification on NumberGaugeVoteSpecification {
   nbTicks
   unit
   voteSpecTemplateId
+  voteType
 }
 
 fragment gaugeVoteSpecification on GaugeVoteSpecification {
   id
   voteSessionId
+  instructions(lang: $lang)
   titleEntries {
     ...langStringEntry
   }
@@ -58,6 +61,7 @@ fragment gaugeVoteSpecification on GaugeVoteSpecification {
     }
   }
   voteSpecTemplateId
+  voteType
 }
 
 query VoteSession($discussionPhaseId: Int!, $lang: String!) {
