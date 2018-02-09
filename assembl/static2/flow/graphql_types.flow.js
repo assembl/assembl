@@ -20,6 +20,12 @@ export type LangStringEntryInput = {|
   localeCode: string
 |};
 
+export type GaugeChoiceSpecificationInput = {|
+  id?: ?string,
+  labelEntries: Array<?LangStringEntryInput>,
+  value: number
+|};
+
 export type SectionTypesEnum = 'ADMINISTRATION' | 'CUSTOM' | 'DEBATE' | 'HOMEPAGE' | 'RESOURCES_CENTER' | 'SYNTHESES';
 
 export type QuestionInput = {|
@@ -33,6 +39,14 @@ export type VideoInput = {|
   descriptionEntriesBottom?: ?Array<?LangStringEntryInput>,
   descriptionEntriesSide?: ?Array<?LangStringEntryInput>,
   htmlCode?: ?string
+|};
+
+export type TokenCategorySpecificationInput = {|
+  id?: ?string,
+  titleEntries: Array<?LangStringEntryInput>,
+  totalNumber: number,
+  typename?: ?string,
+  color: string
 |};
 
 export type AllIdeasQueryQueryVariables = {|
@@ -142,6 +156,14 @@ export type IdeaQuery = {|
     | {}
     | {}
     | {}
+    | {}
+    | {}
+    | {}
+    | {}
+    | {}
+    | {}
+    | {}
+    | {}
     | {})
 |};
 
@@ -213,7 +235,54 @@ export type IdeaWithPostsQuery = {|
     | {}
     | {}
     | {}
+    | {}
+    | {}
+    | {}
+    | {}
+    | {}
+    | {}
+    | {}
+    | {}
     | {})
+|};
+
+export type LandingPageModuleTypesQueryVariables = {|
+  lang?: ?string
+|};
+
+export type LandingPageModuleTypesQuery = {|
+  landingPageModuleTypes: ?Array<?{|
+    defaultOrder: number,
+    identifier: string,
+    required: ?boolean,
+    title: ?string,
+    titleEntries: ?Array<?{|
+      localeCode: string,
+      value: ?string
+    |}>
+  |}>
+|};
+
+export type LandingPageModulesQueryVariables = {|
+  lang: string
+|};
+
+export type LandingPageModulesQuery = {|
+  landingPageModules: ?Array<?{|
+    configuration: ?string,
+    enabled: ?boolean,
+    existsInDatabase: ?boolean,
+    // The ID of the object.
+    id: string,
+    order: number,
+    moduleType: ?{|
+      defaultOrder: number,
+      editableOrder: ?boolean,
+      identifier: string,
+      required: ?boolean,
+      title: ?string
+    |}
+  |}>
 |};
 
 export type LegalNoticeAndTermsQueryVariables = {|
@@ -255,6 +324,11 @@ export type PostQuery = {|
   // The ID of the object
   post: ?(
     | {}
+    | {}
+    | {}
+    | {}
+    | {}
+    | {}
     | {
         // The ID of the object.
         id: string,
@@ -277,7 +351,8 @@ export type PostQuery = {|
           idea: ?{|
             // The ID of the object.
             id: string,
-            title: ?string
+            title: ?string,
+            messageViewOverride: ?string
           |}
         |}>,
         creator: ?{|
@@ -292,6 +367,7 @@ export type PostQuery = {|
         extracts: ?Array<?{|
           // The ID of the object.
           id: string,
+          important: ?boolean,
           body: string
         |}>,
         attachments: ?Array<?{|
@@ -300,7 +376,8 @@ export type PostQuery = {|
             id: string,
             title: ?string,
             externalUrl: ?string,
-            mimeType: ?string
+            mimeType: ?string,
+            avChecked: ?string
           |}
         |}>
       }
@@ -308,6 +385,100 @@ export type PostQuery = {|
     | {}
     | {}
     | {}
+    | {}
+    | {}
+    | {}
+    | {}
+    | {}
+    | {}
+    | {}
+    | {})
+|};
+
+export type QuestionPostsQueryVariables = {|
+  id: string,
+  first: number,
+  after: string
+|};
+
+export type QuestionPostsQuery = {|
+  // The ID of the object
+  question: ?(
+    | {}
+    | {}
+    | {}
+    | {}
+    | {}
+    | {}
+    | {}
+    | {}
+    | {}
+    | {}
+    | {}
+    | {}
+    | {}
+    | {
+        // The ID of the object.
+        id: string,
+        posts: ?{|
+          pageInfo: {|
+            // When paginating forwards, the cursor to continue.
+            endCursor: ?string,
+            // When paginating forwards, are there more items?
+            hasNextPage: boolean
+          |},
+          edges: Array<?{|
+            // The item at the end of the edge
+            node: ?{|
+              // The ID of the object.
+              id: string,
+              originalLocale: ?string
+            |}
+          |}>
+        |}
+      }
+    | {}
+    | {}
+    | {}
+    | {}
+    | {})
+|};
+
+export type QuestionQueryVariables = {|
+  lang: string,
+  id: string
+|};
+
+export type QuestionQuery = {|
+  // The ID of the object
+  question: ?(
+    | {}
+    | {}
+    | {}
+    | {}
+    | {}
+    | {}
+    | {}
+    | {}
+    | {}
+    | {}
+    | {}
+    | {}
+    | {}
+    | {
+        title: ?string,
+        // The ID of the object.
+        id: string,
+        thematic: ?{|
+          // The ID of the object.
+          id: string,
+          title: ?string,
+          img: ?{|
+            externalUrl: ?string,
+            mimeType: ?string
+          |}
+        |}
+      }
     | {}
     | {}
     | {}
@@ -462,6 +633,26 @@ export type SynthesisQueryQuery = {|
       }
     | {
         // The ID of the object.
+        id: string
+      }
+    | {
+        // The ID of the object.
+        id: string
+      }
+    | {
+        // The ID of the object.
+        id: string
+      }
+    | {
+        // The ID of the object.
+        id: string
+      }
+    | {
+        // The ID of the object.
+        id: string
+      }
+    | {
+        // The ID of the object.
         id: string,
         publishesSynthesis: ?{|
           // The ID of the object.
@@ -487,6 +678,30 @@ export type SynthesisQueryQuery = {|
                       order: ?number,
                       numPosts: ?number,
                       numContributors: ?number,
+                      messageColumns: ?Array<?{|
+                        // A CSS color that will be used to theme the column.
+                        color: ?string,
+                        columnSynthesis: ?{|
+                          // The ID of the object.
+                          id: string,
+                          subject: ?string,
+                          body: ?string,
+                          mySentiment: ?SentimentTypes,
+                          sentimentCounts: ?{|
+                            disagree: ?number,
+                            dontUnderstand: ?number,
+                            like: ?number,
+                            moreInfo: ?number
+                          |}
+                        |},
+                        index: ?number,
+                        // Identifier for the column, will match :py:attr:`assembl.models.generic.Content.message_classifier`
+                        messageClassifier: string,
+                        name: ?string,
+                        numPosts: ?number,
+                        title: ?string
+                      |}>,
+                      messageViewOverride: ?string,
                       img: ?{|
                         externalUrl: ?string
                       |},
@@ -509,6 +724,18 @@ export type SynthesisQueryQuery = {|
               }
             | {})>
         |}
+      }
+    | {
+        // The ID of the object.
+        id: string
+      }
+    | {
+        // The ID of the object.
+        id: string
+      }
+    | {
+        // The ID of the object.
+        id: string
       }
     | {
         // The ID of the object.
@@ -577,6 +804,11 @@ export type ThematicQueryQuery = {|
     | {}
     | {}
     | {}
+    | {}
+    | {}
+    | {}
+    | {}
+    | {}
     | {
         title: ?string,
         img: ?{|
@@ -608,6 +840,9 @@ export type ThematicQueryQuery = {|
           |}
         |}>
       }
+    | {}
+    | {}
+    | {}
     | {}
     | {}
     | {})
@@ -659,6 +894,207 @@ export type ThematicsQueryQuery = {|
   |}>
 |};
 
+export type VoteSessionQueryVariables = {|
+  discussionPhaseId: number,
+  lang: string
+|};
+
+export type VoteSessionQuery = {|
+  voteSession: ?{|
+    // The ID of the object.
+    id: string,
+    headerImage: ?{|
+      title: ?string,
+      mimeType: ?string,
+      externalUrl: ?string
+    |},
+    titleEntries: ?Array<?{|
+      localeCode: string,
+      value: ?string
+    |}>,
+    subTitleEntries: ?Array<?{|
+      localeCode: string,
+      value: ?string
+    |}>,
+    instructionsSectionTitleEntries: ?Array<?{|
+      localeCode: string,
+      value: ?string
+    |}>,
+    instructionsSectionContentEntries: ?Array<?{|
+      localeCode: string,
+      value: ?string
+    |}>,
+    propositionsSectionTitleEntries: ?Array<?{|
+      localeCode: string,
+      value: ?string
+    |}>,
+    title: ?string,
+    subTitle: ?string,
+    instructionsSectionTitle: ?string,
+    instructionsSectionContent: ?string,
+    propositionsSectionTitle: ?string,
+    proposals: ?Array<?{|
+      // The ID of the object.
+      id: string,
+      title: ?string,
+      description: ?string,
+      titleEntries: ?Array<?{|
+        localeCode: string,
+        value: ?string
+      |}>,
+      descriptionEntries: ?Array<?{|
+        localeCode: string,
+        value: ?string
+      |}>,
+      order: ?number,
+      modules: ?Array<?(
+        | {
+            // The ID of the object.
+            id: string,
+            voteSessionId: string,
+            instructions: ?string,
+            titleEntries: ?Array<?{|
+              localeCode: string,
+              value: ?string
+            |}>,
+            instructionsEntries: ?Array<?{|
+              localeCode: string,
+              value: ?string
+            |}>,
+            exclusiveCategories: ?boolean,
+            tokenCategories: ?Array<?{|
+              // The ID of the object.
+              id: string,
+              totalNumber: number,
+              // categories which have the same typename will be comparable (example: "positive")
+              typename: string,
+              title: ?string,
+              titleEntries: ?Array<?{|
+                localeCode: string,
+                value: ?string
+              |}>,
+              color: ?string
+            |}>,
+            voteSpecTemplateId: ?string,
+            voteType: ?string
+          }
+        | {
+            // The ID of the object.
+            id: string,
+            voteSessionId: string,
+            titleEntries: ?Array<?{|
+              localeCode: string,
+              value: ?string
+            |}>,
+            instructionsEntries: ?Array<?{|
+              localeCode: string,
+              value: ?string
+            |}>,
+            choices: ?Array<?{|
+              // The ID of the object.
+              id: string,
+              value: number,
+              labelEntries: ?Array<?{|
+                localeCode: string,
+                value: ?string
+              |}>
+            |}>,
+            voteSpecTemplateId: ?string
+          }
+        | {
+            // The ID of the object.
+            id: string,
+            voteSessionId: string,
+            titleEntries: ?Array<?{|
+              localeCode: string,
+              value: ?string
+            |}>,
+            instructionsEntries: ?Array<?{|
+              localeCode: string,
+              value: ?string
+            |}>,
+            minimum: ?number,
+            maximum: ?number,
+            nbTicks: ?number,
+            unit: ?string,
+            voteSpecTemplateId: ?string
+          })>
+    |}>,
+    modules: ?Array<?(
+      | {
+          // The ID of the object.
+          id: string,
+          voteSessionId: string,
+          instructions: ?string,
+          titleEntries: ?Array<?{|
+            localeCode: string,
+            value: ?string
+          |}>,
+          instructionsEntries: ?Array<?{|
+            localeCode: string,
+            value: ?string
+          |}>,
+          exclusiveCategories: ?boolean,
+          tokenCategories: ?Array<?{|
+            // The ID of the object.
+            id: string,
+            totalNumber: number,
+            // categories which have the same typename will be comparable (example: "positive")
+            typename: string,
+            title: ?string,
+            titleEntries: ?Array<?{|
+              localeCode: string,
+              value: ?string
+            |}>,
+            color: ?string
+          |}>,
+          voteSpecTemplateId: ?string,
+          voteType: ?string
+        }
+      | {
+          // The ID of the object.
+          id: string,
+          voteSessionId: string,
+          titleEntries: ?Array<?{|
+            localeCode: string,
+            value: ?string
+          |}>,
+          instructionsEntries: ?Array<?{|
+            localeCode: string,
+            value: ?string
+          |}>,
+          choices: ?Array<?{|
+            // The ID of the object.
+            id: string,
+            value: number,
+            labelEntries: ?Array<?{|
+              localeCode: string,
+              value: ?string
+            |}>
+          |}>,
+          voteSpecTemplateId: ?string
+        }
+      | {
+          // The ID of the object.
+          id: string,
+          voteSessionId: string,
+          titleEntries: ?Array<?{|
+            localeCode: string,
+            value: ?string
+          |}>,
+          instructionsEntries: ?Array<?{|
+            localeCode: string,
+            value: ?string
+          |}>,
+          minimum: ?number,
+          maximum: ?number,
+          nbTicks: ?number,
+          unit: ?string,
+          voteSpecTemplateId: ?string
+        })>
+  |}
+|};
+
 export type addSentimentMutationVariables = {|
   type: SentimentTypes,
   postId: string
@@ -676,6 +1112,99 @@ export type addSentimentMutation = {|
         moreInfo: ?number
       |},
       mySentiment: ?SentimentTypes
+    |}
+  |}
+|};
+
+export type createGaugeVoteSpecificationMutationVariables = {|
+  voteSessionId: string,
+  titleEntries: Array<?LangStringEntryInput>,
+  instructionsEntries: Array<?LangStringEntryInput>,
+  choices: Array<?GaugeChoiceSpecificationInput>,
+  proposalId?: ?string,
+  voteSpecTemplateId?: ?string
+|};
+
+export type createGaugeVoteSpecificationMutation = {|
+  createGaugeVoteSpecification: ?{|
+    voteSpecification: ?{|
+      // The ID of the object.
+      id: string,
+      voteSessionId: string,
+      titleEntries: ?Array<?{|
+        localeCode: string,
+        value: ?string
+      |}>,
+      instructionsEntries: ?Array<?{|
+        localeCode: string,
+        value: ?string
+      |}>,
+      choices: ?Array<?{|
+        // The ID of the object.
+        id: string,
+        value: number,
+        labelEntries: ?Array<?{|
+          localeCode: string,
+          value: ?string
+        |}>
+      |}>,
+      voteSpecTemplateId: ?string
+    |}
+  |}
+|};
+
+export type createLandingPageModuleMutationVariables = {|
+  typeIdentifier: string,
+  enabled?: ?boolean,
+  order?: ?number,
+  configuration?: ?string
+|};
+
+export type createLandingPageModuleMutation = {|
+  createLandingPageModule: ?{|
+    landingPageModule: ?{|
+      configuration: ?string,
+      enabled: ?boolean,
+      moduleType: ?{|
+        identifier: string,
+        title: ?string
+      |},
+      order: number
+    |}
+  |}
+|};
+
+export type createNumberGaugeVoteSpecificationMutationVariables = {|
+  voteSessionId: string,
+  titleEntries: Array<?LangStringEntryInput>,
+  instructionsEntries: Array<?LangStringEntryInput>,
+  minimum: number,
+  maximum: number,
+  nbTicks: number,
+  unit: string,
+  proposalId?: ?string,
+  voteSpecTemplateId?: ?string
+|};
+
+export type createNumberGaugeVoteSpecificationMutation = {|
+  createNumberGaugeVoteSpecification: ?{|
+    voteSpecification: ?{|
+      // The ID of the object.
+      id: string,
+      voteSessionId: string,
+      titleEntries: ?Array<?{|
+        localeCode: string,
+        value: ?string
+      |}>,
+      instructionsEntries: ?Array<?{|
+        localeCode: string,
+        value: ?string
+      |}>,
+      minimum: ?number,
+      maximum: ?number,
+      nbTicks: ?number,
+      unit: ?string,
+      voteSpecTemplateId: ?string
     |}
   |}
 |};
@@ -714,7 +1243,8 @@ export type createPostMutation = {|
         idea: ?{|
           // The ID of the object.
           id: string,
-          title: ?string
+          title: ?string,
+          messageViewOverride: ?string
         |}
       |}>,
       creator: ?{|
@@ -729,6 +1259,7 @@ export type createPostMutation = {|
       extracts: ?Array<?{|
         // The ID of the object.
         id: string,
+        important: ?boolean,
         body: string
       |}>,
       attachments: ?Array<?{|
@@ -737,11 +1268,35 @@ export type createPostMutation = {|
           id: string,
           title: ?string,
           externalUrl: ?string,
-          mimeType: ?string
+          mimeType: ?string,
+          avChecked: ?string
         |}
       |}>,
       parentId: ?string,
       creationDate: ?any
+    |}
+  |}
+|};
+
+export type createProposalMutationVariables = {|
+  voteSessionId: string,
+  titleEntries: Array<?LangStringEntryInput>,
+  descriptionEntries: Array<?LangStringEntryInput>
+|};
+
+export type createProposalMutation = {|
+  createProposal: ?{|
+    proposal: ?{|
+      // The ID of the object.
+      id: string,
+      titleEntries: ?Array<?{|
+        localeCode: string,
+        value: ?string
+      |}>,
+      descriptionEntries: ?Array<?{|
+        localeCode: string,
+        value: ?string
+      |}>
     |}
   |}
 |};
@@ -822,6 +1377,48 @@ export type createThematicMutation = {|
   |}
 |};
 
+export type createTokenVoteSpecificationMutationVariables = {|
+  voteSessionId: string,
+  titleEntries: Array<?LangStringEntryInput>,
+  instructionsEntries: Array<?LangStringEntryInput>,
+  exclusiveCategories: boolean,
+  tokenCategories: Array<?TokenCategorySpecificationInput>,
+  proposalId?: ?string,
+  voteSpecTemplateId?: ?string
+|};
+
+export type createTokenVoteSpecificationMutation = {|
+  createTokenVoteSpecification: ?{|
+    voteSpecification: ?{|
+      // The ID of the object.
+      id: string,
+      voteSessionId: string,
+      titleEntries: ?Array<?{|
+        localeCode: string,
+        value: ?string
+      |}>,
+      instructionsEntries: ?Array<?{|
+        localeCode: string,
+        value: ?string
+      |}>,
+      exclusiveCategories: ?boolean,
+      tokenCategories: ?Array<?{|
+        // The ID of the object.
+        id: string,
+        totalNumber: number,
+        // categories which have the same typename will be comparable (example: "positive")
+        typename: string,
+        titleEntries: ?Array<?{|
+          localeCode: string,
+          value: ?string
+        |}>,
+        color: ?string
+      |}>,
+      voteSpecTemplateId: ?string
+    |}
+  |}
+|};
+
 export type deletePostMutationVariables = {|
   postId: string
 |};
@@ -833,6 +1430,16 @@ export type deletePostMutation = {|
       id: string,
       publicationState: ?PublicationStates
     |}
+  |}
+|};
+
+export type deleteProposalMutationVariables = {|
+  id: string
+|};
+
+export type deleteProposalMutation = {|
+  deleteProposal: ?{|
+    success: ?boolean
   |}
 |};
 
@@ -886,6 +1493,16 @@ export type deleteThematicMutation = {|
   |}
 |};
 
+export type deleteVoteSpecificationMutationVariables = {|
+  id: string
+|};
+
+export type deleteVoteSpecificationMutation = {|
+  deleteVoteSpecification: ?{|
+    success: ?boolean
+  |}
+|};
+
 export type updateDiscussionPreferenceMutationVariables = {|
   languages: Array<?string>
 |};
@@ -896,6 +1513,61 @@ export type updateDiscussionPreferenceMutation = {|
       languages: ?Array<?{|
         locale: ?string
       |}>
+    |}
+  |}
+|};
+
+export type updateGaugeVoteSpecificationMutationVariables = {|
+  id: string,
+  titleEntries: Array<?LangStringEntryInput>,
+  instructionsEntries: Array<?LangStringEntryInput>,
+  choices: Array<?GaugeChoiceSpecificationInput>
+|};
+
+export type updateGaugeVoteSpecificationMutation = {|
+  updateGaugeVoteSpecification: ?{|
+    voteSpecification: ?{|
+      // The ID of the object.
+      id: string,
+      voteSessionId: string,
+      titleEntries: ?Array<?{|
+        localeCode: string,
+        value: ?string
+      |}>,
+      instructionsEntries: ?Array<?{|
+        localeCode: string,
+        value: ?string
+      |}>,
+      choices: ?Array<?{|
+        // The ID of the object.
+        id: string,
+        value: number,
+        labelEntries: ?Array<?{|
+          localeCode: string,
+          value: ?string
+        |}>
+      |}>
+    |}
+  |}
+|};
+
+export type updateLandingPageModuleMutationVariables = {|
+  id: string,
+  enabled?: ?boolean,
+  order?: ?number,
+  configuration?: ?string
+|};
+
+export type updateLandingPageModuleMutation = {|
+  updateLandingPageModule: ?{|
+    landingPageModule: ?{|
+      configuration: ?string,
+      enabled: ?boolean,
+      moduleType: ?{|
+        identifier: string,
+        title: ?string
+      |},
+      order: number
     |}
   |}
 |};
@@ -916,6 +1588,38 @@ export type UpdateLegalNoticeAndTermsMutation = {|
         localeCode: string,
         value: ?string
       |}>
+    |}
+  |}
+|};
+
+export type updateNumberGaugeVoteSpecificationMutationVariables = {|
+  id: string,
+  titleEntries: Array<?LangStringEntryInput>,
+  instructionsEntries: Array<?LangStringEntryInput>,
+  minimum: number,
+  maximum: number,
+  nbTicks: number,
+  unit: string
+|};
+
+export type updateNumberGaugeVoteSpecificationMutation = {|
+  updateNumberGaugeVoteSpecification: ?{|
+    voteSpecification: ?{|
+      // The ID of the object.
+      id: string,
+      voteSessionId: string,
+      titleEntries: ?Array<?{|
+        localeCode: string,
+        value: ?string
+      |}>,
+      instructionsEntries: ?Array<?{|
+        localeCode: string,
+        value: ?string
+      |}>,
+      minimum: ?number,
+      maximum: ?number,
+      nbTicks: ?number,
+      unit: ?string
     |}
   |}
 |};
@@ -952,7 +1656,8 @@ export type updatePostMutation = {|
         idea: ?{|
           // The ID of the object.
           id: string,
-          title: ?string
+          title: ?string,
+          messageViewOverride: ?string
         |}
       |}>,
       creator: ?{|
@@ -967,6 +1672,7 @@ export type updatePostMutation = {|
       extracts: ?Array<?{|
         // The ID of the object.
         id: string,
+        important: ?boolean,
         body: string
       |}>,
       attachments: ?Array<?{|
@@ -975,8 +1681,32 @@ export type updatePostMutation = {|
           id: string,
           title: ?string,
           externalUrl: ?string,
-          mimeType: ?string
+          mimeType: ?string,
+          avChecked: ?string
         |}
+      |}>
+    |}
+  |}
+|};
+
+export type updateProposalMutationVariables = {|
+  id: string,
+  titleEntries: Array<?LangStringEntryInput>,
+  descriptionEntries: Array<?LangStringEntryInput>
+|};
+
+export type updateProposalMutation = {|
+  updateProposal: ?{|
+    proposal: ?{|
+      // The ID of the object.
+      id: string,
+      titleEntries: ?Array<?{|
+        localeCode: string,
+        value: ?string
+      |}>,
+      descriptionEntries: ?Array<?{|
+        localeCode: string,
+        value: ?string
       |}>
     |}
   |}
@@ -1081,11 +1811,53 @@ export type updateThematicMutation = {|
   |}
 |};
 
+export type updateTokenVoteSpecificationMutationVariables = {|
+  id: string,
+  titleEntries: Array<?LangStringEntryInput>,
+  instructionsEntries: Array<?LangStringEntryInput>,
+  exclusiveCategories: boolean,
+  tokenCategories: Array<?TokenCategorySpecificationInput>
+|};
+
+export type updateTokenVoteSpecificationMutation = {|
+  updateTokenVoteSpecification: ?{|
+    voteSpecification: ?{|
+      // The ID of the object.
+      id: string,
+      voteSessionId: string,
+      titleEntries: ?Array<?{|
+        localeCode: string,
+        value: ?string
+      |}>,
+      instructionsEntries: ?Array<?{|
+        localeCode: string,
+        value: ?string
+      |}>,
+      exclusiveCategories: ?boolean,
+      tokenCategories: ?Array<?{|
+        // The ID of the object.
+        id: string,
+        totalNumber: number,
+        // categories which have the same typename will be comparable (example: "positive")
+        typename: string,
+        titleEntries: ?Array<?{|
+          localeCode: string,
+          value: ?string
+        |}>,
+        color: ?string
+      |}>
+    |}
+  |}
+|};
+
 export type UpdateUserMutationVariables = {|
   id: string,
-  name: string,
+  name?: ?string,
   username?: ?string,
-  img?: ?string
+  img?: ?string,
+  oldPassword?: ?string,
+  newPassword?: ?string,
+  newPassword2?: ?string
 |};
 
 export type UpdateUserMutation = {|
@@ -1099,6 +1871,48 @@ export type UpdateUserMutation = {|
       image: ?{|
         externalUrl: ?string
       |}
+    |}
+  |}
+|};
+
+export type UpdateVoteSessionMutationVariables = {|
+  discussionPhaseId: number,
+  headerImage?: ?string,
+  titleEntries?: ?Array<?LangStringEntryInput>,
+  subTitleEntries?: ?Array<?LangStringEntryInput>,
+  instructionsSectionTitleEntries?: ?Array<?LangStringEntryInput>,
+  instructionsSectionContentEntries?: ?Array<?LangStringEntryInput>,
+  propositionsSectionTitleEntries?: ?Array<?LangStringEntryInput>
+|};
+
+export type UpdateVoteSessionMutation = {|
+  updateVoteSession: ?{|
+    voteSession: ?{|
+      headerImage: ?{|
+        title: ?string,
+        mimeType: ?string,
+        externalUrl: ?string
+      |},
+      titleEntries: ?Array<?{|
+        localeCode: string,
+        value: ?string
+      |}>,
+      subTitleEntries: ?Array<?{|
+        localeCode: string,
+        value: ?string
+      |}>,
+      instructionsSectionTitleEntries: ?Array<?{|
+        localeCode: string,
+        value: ?string
+      |}>,
+      instructionsSectionContentEntries: ?Array<?{|
+        localeCode: string,
+        value: ?string
+      |}>,
+      propositionsSectionTitleEntries: ?Array<?{|
+        localeCode: string,
+        value: ?string
+      |}>
     |}
   |}
 |};
@@ -1127,13 +1941,20 @@ export type UserQuery = {|
   user: ?(
     | {}
     | {}
+    | {}
+    | {}
+    | {}
+    | {}
+    | {}
     | {
         // The ID of the object.
         id: string,
         name: ?string,
         username: ?string,
         displayName: ?string,
-        email: ?string
+        email: ?string,
+        creationDate: ?any,
+        hasPassword: ?boolean
       }
     | {}
     | {}
@@ -1142,7 +1963,84 @@ export type UserQuery = {|
     | {}
     | {}
     | {}
+    | {}
+    | {}
+    | {}
     | {})
+|};
+
+export type tokenVoteSpecificationFragment = {|
+  // The ID of the object.
+  id: string,
+  voteSessionId: string,
+  instructions: ?string,
+  titleEntries: ?Array<?{|
+    localeCode: string,
+    value: ?string
+  |}>,
+  instructionsEntries: ?Array<?{|
+    localeCode: string,
+    value: ?string
+  |}>,
+  exclusiveCategories: ?boolean,
+  tokenCategories: ?Array<?{|
+    // The ID of the object.
+    id: string,
+    totalNumber: number,
+    // categories which have the same typename will be comparable (example: "positive")
+    typename: string,
+    title: ?string,
+    titleEntries: ?Array<?{|
+      localeCode: string,
+      value: ?string
+    |}>,
+    color: ?string
+  |}>,
+  voteSpecTemplateId: ?string,
+  voteType: ?string
+|};
+
+export type numberGaugeVoteSpecificationFragment = {|
+  // The ID of the object.
+  id: string,
+  voteSessionId: string,
+  titleEntries: ?Array<?{|
+    localeCode: string,
+    value: ?string
+  |}>,
+  instructionsEntries: ?Array<?{|
+    localeCode: string,
+    value: ?string
+  |}>,
+  minimum: ?number,
+  maximum: ?number,
+  nbTicks: ?number,
+  unit: ?string,
+  voteSpecTemplateId: ?string
+|};
+
+export type gaugeVoteSpecificationFragment = {|
+  // The ID of the object.
+  id: string,
+  voteSessionId: string,
+  titleEntries: ?Array<?{|
+    localeCode: string,
+    value: ?string
+  |}>,
+  instructionsEntries: ?Array<?{|
+    localeCode: string,
+    value: ?string
+  |}>,
+  choices: ?Array<?{|
+    // The ID of the object.
+    id: string,
+    value: number,
+    labelEntries: ?Array<?{|
+      localeCode: string,
+      value: ?string
+    |}>
+  |}>,
+  voteSpecTemplateId: ?string
 |};
 
 export type AgentProfileInfoFragment = {|
@@ -1158,7 +2056,8 @@ export type AttachmentFragment = {|
     id: string,
     title: ?string,
     externalUrl: ?string,
-    mimeType: ?string
+    mimeType: ?string,
+    avChecked: ?string
   |}
 |};
 
@@ -1166,14 +2065,16 @@ export type DocumentFragment = {|
   id: string,
   title: ?string,
   externalUrl: ?string,
-  mimeType: ?string
+  mimeType: ?string,
+  avChecked: ?string
 |};
 
 export type IdeaContentLinkFragment = {|
   idea: ?{|
     // The ID of the object.
     id: string,
-    title: ?string
+    title: ?string,
+    messageViewOverride: ?string
   |}
 |};
 
@@ -1201,6 +2102,11 @@ export type IdeaMessageColumnFragment = {|
   title: ?string
 |};
 
+export type langStringEntryFragment = {|
+  localeCode: string,
+  value: ?string
+|};
+
 export type PostFragment = {|
   // The ID of the object.
   id: string,
@@ -1223,7 +2129,8 @@ export type PostFragment = {|
     idea: ?{|
       // The ID of the object.
       id: string,
-      title: ?string
+      title: ?string,
+      messageViewOverride: ?string
     |}
   |}>,
   creator: ?{|
@@ -1238,6 +2145,7 @@ export type PostFragment = {|
   extracts: ?Array<?{|
     // The ID of the object.
     id: string,
+    important: ?boolean,
     body: string
   |}>,
   attachments: ?Array<?{|
@@ -1246,7 +2154,8 @@ export type PostFragment = {|
       id: string,
       title: ?string,
       externalUrl: ?string,
-      mimeType: ?string
+      mimeType: ?string,
+      avChecked: ?string
     |}
   |}>
 |};
@@ -1256,4 +2165,35 @@ export type SentimentCountsFragment = {|
   dontUnderstand: ?number,
   like: ?number,
   moreInfo: ?number
+|};
+
+export type voteSessionGlobalsFragment = {|
+  headerImage: ?{|
+    title: ?string,
+    mimeType: ?string,
+    externalUrl: ?string
+  |}
+|};
+
+export type voteSessionLangstringsEntriesFragment = {|
+  titleEntries: ?Array<?{|
+    localeCode: string,
+    value: ?string
+  |}>,
+  subTitleEntries: ?Array<?{|
+    localeCode: string,
+    value: ?string
+  |}>,
+  instructionsSectionTitleEntries: ?Array<?{|
+    localeCode: string,
+    value: ?string
+  |}>,
+  instructionsSectionContentEntries: ?Array<?{|
+    localeCode: string,
+    value: ?string
+  |}>,
+  propositionsSectionTitleEntries: ?Array<?{|
+    localeCode: string,
+    value: ?string
+  |}>
 |};

@@ -117,7 +117,8 @@ const plugin = {
                   id: entity.data.file.name,
                   externalUrl: '',
                   mimeType: '',
-                  title: entity.data.file.name
+                  title: entity.data.file.name,
+                  avChecked: null
                 };
               } else {
                 doc = entity.data;
