@@ -158,16 +158,32 @@ export const deleteGaugeVoteChoice = (id: string, index: number): actionTypes.De
 });
 
 export const updateGaugeVoteChoiceLabel = (
-  parentId: string,
   id: string,
   locale: string,
   value: string
 ): actionTypes.UpdateGaugeVoteChoiceLabel => ({
-  parentId: parentId,
   id: id,
   locale: locale,
   value: value,
   type: actionTypes.UPDATE_GAUGE_VOTE_CHOICE_LABEL
+});
+
+export const updateGaugeMinimum = (id: string, value: number): actionTypes.UpdateGaugeMinimum => ({
+  id: id,
+  value: value,
+  type: actionTypes.UPDATE_GAUGE_MINIMUM
+});
+
+export const updateGaugeMaximum = (id: string, value: number): actionTypes.UpdateGaugeMaximum => ({
+  id: id,
+  value: value,
+  type: actionTypes.UPDATE_GAUGE_MAXIMUM
+});
+
+export const updateGaugeUnit = (id: string, value: string): actionTypes.UpdateGaugeUnit => ({
+  id: id,
+  value: value,
+  type: actionTypes.UPDATE_GAUGE_UNIT
 });
 
 export const updateVoteSessionPage = (value: Object): actionTypes.UpdateVoteSessionPage => ({

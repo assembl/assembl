@@ -83,14 +83,13 @@ const DumbGaugeForm = ({
     <Radio onChange={handleNumberGaugeCheck} checked={isNumberGauge}>
       <Translate value="administration.numberValue" />
     </Radio>
-    {isNumberGauge && <NumberGaugeForm id={id} editLocale={editLocale} />}
+    {isNumberGauge && <NumberGaugeForm id={id} />}
     {!isNumberGauge &&
-      choices.map((choice, index) => (
-        <TextGaugeForm key={`gauge-choice-${index}`} parentId={id} choice={choice} index={index} editLocale={editLocale} />
-      ))}
+      choices.map((cid, index) => <TextGaugeForm key={`gauge-choice-${index}`} id={cid} index={index} editLocale={editLocale} />)}
     <div className="separator" />
   </div>
 );
+
 const mapStateToProps = (state, { id, editLocale }) => {
   const module = state.admin.voteSession.modulesById.get(id);
   const instructions = getEntryValueForLocale(module.get('instructionsEntries'), editLocale);

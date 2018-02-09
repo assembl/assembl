@@ -28,7 +28,10 @@ import {
   UPDATE_GAUGE_VOTE_IS_NUMBER,
   CREATE_GAUGE_VOTE_CHOICE,
   DELETE_GAUGE_VOTE_CHOICE,
-  UPDATE_GAUGE_VOTE_CHOICE_LABEL
+  UPDATE_GAUGE_VOTE_CHOICE_LABEL,
+  UPDATE_GAUGE_MINIMUM,
+  UPDATE_GAUGE_MAXIMUM,
+  UPDATE_GAUGE_UNIT
 } from '../../actions/actionTypes';
 import { updateInLangstringEntries } from '../../utils/i18n';
 
@@ -111,6 +114,9 @@ export const modulesHaveChanged = (state: boolean = false, action: ReduxAction<A
   case CREATE_GAUGE_VOTE_CHOICE:
   case DELETE_GAUGE_VOTE_CHOICE:
   case UPDATE_GAUGE_VOTE_CHOICE_LABEL:
+  case UPDATE_GAUGE_MINIMUM:
+  case UPDATE_GAUGE_MAXIMUM:
+  case UPDATE_GAUGE_UNIT:
     return true;
   case UPDATE_VOTE_MODULES:
     return false;
@@ -165,7 +171,7 @@ const defaultNumberGaugeModule = Map({
   isNumberGauge: true,
   minimum: Number,
   maximum: Number,
-  unit: String
+  unit: ''
 });
 
 export const modulesById = (state: Map<string, Map> = Map(), action: ReduxAction<Action>) => {
@@ -196,7 +202,6 @@ export const modulesById = (state: Map<string, Map> = Map(), action: ReduxAction
           id: m.id,
           maximum: m.maximum,
           minimum: m.minimum,
-
           unit: m.unit
         });
         newState = newState.set(m.id, moduleInfo);
@@ -209,7 +214,7 @@ export const modulesById = (state: Map<string, Map> = Map(), action: ReduxAction
           nbTicks: m.choices.size,
           isNumberGauge: false,
           id: m.id,
-          choices: m.choices
+          choices: m.choices.map(c => c.id)
         });
         newState = newState.set(m.id, moduleInfo);
       }
@@ -245,13 +250,15 @@ export const modulesById = (state: Map<string, Map> = Map(), action: ReduxAction
   case UPDATE_GAUGE_VOTE_NUMBER_TICKS:
     return state.setIn([action.id, 'nbTicks'], action.value);
   case CREATE_GAUGE_VOTE_CHOICE:
-    return state.updateIn([action.parentId, 'choices'], choices => choices.push(defaultTextGaugeChoice.set('id', action.id)));
+    return state.updateIn([action.parentId, 'choices'], choices => choices.push(action.id));
   case DELETE_GAUGE_VOTE_CHOICE:
     return state.updateIn([action.id, 'choices'], choices => choices.delete(action.index));
-  case UPDATE_GAUGE_VOTE_CHOICE_LABEL:
-    return state.updateIn([action.parentId, 'choices'], choices =>
-      choices.setIn([action.id, 'labelEntries'], updateInLangstringEntries(action.locale, action.value))
-    );
+  case UPDATE_GAUGE_MINIMUM:
+    return state.setIn([action.id, 'minimum'], action.value);
+  case UPDATE_GAUGE_MAXIMUM:
+    return state.setIn([action.id, 'maximum'], action.value);
+  case UPDATE_GAUGE_UNIT:
+    return state.setIn([action.id, 'unit'], action.value);
   default:
     return state;
   }
@@ -297,10 +304,39 @@ export const tokenCategoriesById = (state: Map<string, Map> = Map(), action: Red
   }
 };
 
+export const gaugeChoicesById = (state: Map<string, Map> = Map(), action: ReduxAction<Action>) => {
+  switch (action.type) {
+  case UPDATE_VOTE_MODULES: {
+    let newState = Map();
+    action.voteModules.forEach((m) => {
+        const type = m.__typename; // eslint-disable-line
+      if (type === 'GaugeVoteSpecification') {
+        m.choices.forEach((c) => {
+          const gaugeChoiceInfo = Map({
+            id: c.id,
+            labelEntries: fromJS(c.labelEntries),
+            value: c.value
+          });
+          newState = newState.set(c.id, gaugeChoiceInfo);
+        });
+      }
+    });
+    return newState;
+  }
+  case CREATE_GAUGE_VOTE_CHOICE:
+    return state.set(action.id, defaultTextGaugeChoice.set('id', action.id));
+  case UPDATE_GAUGE_VOTE_CHOICE_LABEL:
+    return state.updateIn([action.id, 'labelEntries'], updateInLangstringEntries(action.locale, action.value));
+  default:
+    return state;
+  }
+};
+
 export default combineReducers({
   page: voteSessionPage,
   modulesInOrder: modulesInOrder,
   modulesById: modulesById,
   tokenCategoriesById: tokenCategoriesById,
+  gaugeChoicesById: gaugeChoicesById,
   modulesHaveChanged: modulesHaveChanged
 });

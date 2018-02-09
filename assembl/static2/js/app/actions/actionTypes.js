@@ -55,6 +55,9 @@ export const UPDATE_GAUGE_VOTE_IS_NUMBER: 'UPDATE_GAUGE_VOTE_IS_NUMBER' = 'UPDAT
 export const CREATE_GAUGE_VOTE_CHOICE: 'CREATE_GAUGE_VOTE_CHOICE' = 'CREATE_GAUGE_VOTE_CHOICE';
 export const DELETE_GAUGE_VOTE_CHOICE: 'DELETE_GAUGE_VOTE_CHOICE' = 'DELETE_GAUGE_VOTE_CHOICE';
 export const UPDATE_GAUGE_VOTE_CHOICE_LABEL: 'UPDATE_GAUGE_VOTE_CHOICE_LABEL' = 'UPDATE_GAUGE_VOTE_CHOICE_LABEL';
+export const UPDATE_GAUGE_MINIMUM: 'UPDATE_GAUGE_MINIMUM' = 'UPDATE_GAUGE_MINIMUM';
+export const UPDATE_GAUGE_MAXIMUM: 'UPDATE_GAUGE_MAXIMUM' = 'UPDATE_GAUGE_MAXIMUM';
+export const UPDATE_GAUGE_UNIT: 'UPDATE_GAUGE_UNIT' = 'UPDATE_GAUGE_UNIT';
 
 export type UpdateContentLocaleById = {
   type: typeof UPDATE_CONTENT_LOCALE_BY_ID,
@@ -372,9 +375,28 @@ export type DeleteGaugeVoteChoice = {
 };
 
 export type UpdateGaugeVoteChoiceLabel = {
-  parentId: string,
   id: string,
+  locale: string,
+  value: string,
   type: typeof UPDATE_GAUGE_VOTE_CHOICE_LABEL
+};
+
+export type UpdateGaugeMinimum = {
+  id: string,
+  value: number,
+  type: typeof UPDATE_GAUGE_MINIMUM
+};
+
+export type UpdateGaugeMaximum = {
+  id: string,
+  value: number,
+  type: typeof UPDATE_GAUGE_MAXIMUM
+};
+
+export type UpdateGaugeUnit = {
+  id: string,
+  value: string,
+  type: typeof UPDATE_GAUGE_UNIT
 };
 
 type BasicAction = {
@@ -423,6 +445,9 @@ type VoteSessionActions =
   | CreateGaugeVoteChoice
   | DeleteGaugeVoteChoice
   | UpdateGaugeVoteChoiceLabel
+  | UpdateGaugeMinimum
+  | UpdateGaugeMaximum
+  | UpdateGaugeUnit
   | UpdateGaugeVoteInstructions;
 
 export type Action =

@@ -7,34 +7,34 @@ import FormControlWithLabel from '../../common/formControlWithLabel';
 import { updateGaugeVoteChoiceLabel } from '../../../actions/adminActions/voteSession';
 
 type TextGaugeFormProps = {
+  index: number,
   title: string,
   handleGaugeChoiceLabelChange: Function
 };
 
-const DumbTextGaugeForm = ({ index, handleGaugeChoiceLabelChange, title }: TextGaugeFormProps) => {
-  console.log('title', title);
-  return (
-    <div>
-      <FormControlWithLabel
-        value={title}
-        onChange={handleGaugeChoiceLabelChange}
-        label={`${I18n.t('administration.valueTitle')} ${index + 1}`}
-        required
-        type="text"
-      />
-    </div>
-  );
-};
+const DumbTextGaugeForm = ({ index, handleGaugeChoiceLabelChange, title }: TextGaugeFormProps) => (
+  <div>
+    <FormControlWithLabel
+      value={title}
+      onChange={handleGaugeChoiceLabelChange}
+      label={`${I18n.t('administration.valueTitle')} ${index + 1}`}
+      required
+      type="text"
+    />
+  </div>
+);
 
-const mapStateToProps = (state, { choice, editLocale }) => {
-  const title = getEntryValueForLocale(choice.get('labelEntries'), editLocale);
+const mapStateToProps = (state, { id, editLocale }) => {
+  const { gaugeChoicesById } = state.admin.voteSession;
+  const gaugeChoice = gaugeChoicesById.get(id);
+  const title = getEntryValueForLocale(gaugeChoice.get('labelEntries'), editLocale);
   return {
     title: title
   };
 };
 
-const mapDispatchToProps = (dispatch, { parentId, choice, editLocale }) => ({
-  handleGaugeChoiceLabelChange: e => dispatch(updateGaugeVoteChoiceLabel(parentId, choice.get('id'), editLocale, e.target.value))
+const mapDispatchToProps = (dispatch, { id, editLocale }) => ({
+  handleGaugeChoiceLabelChange: e => dispatch(updateGaugeVoteChoiceLabel(id, editLocale, e.target.value))
 });
 
 export { DumbTextGaugeForm };
