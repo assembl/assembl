@@ -70,7 +70,8 @@ let getUrl;
 
 // __resourceQuery is set by webpack, it is empty string or '?v=1' when this file is included from the searchv1.js bundle.
 // __resourceQuery is undefined in jest tests.
-if (typeof __resourceQuery !== 'undefined' && __resourceQuery) {
+const v1Interface = typeof __resourceQuery !== 'undefined' && __resourceQuery;
+if (v1Interface) {
   // v1
   // const querystring = require('querystring');
   // const params = querystring.parse(__resourceQuery.slice(1));
@@ -565,6 +566,23 @@ export class SearchComponent extends React.Component {
                     />
                   </div>
                 ) : null}
+                {!v1Interface &&
+                  isExpert && (
+                    <div className="sk-panel">
+                      <MenuFilter
+                        listComponent={CheckboxItemList}
+                        field="taxonomy_nature"
+                        id="taxonomy_nature"
+                        title={I18n.t('search.Nature')}
+                      />
+                      <MenuFilter
+                        listComponent={CheckboxItemList}
+                        field="taxonomy_action"
+                        id="taxonomy_action"
+                        title={I18n.t('search.Action')}
+                      />
+                    </div>
+                  )}
               </Panel>
               {isExpert ? (
                 <Panel title={I18n.t('search.Participants')} className={usersSelected ? null : 'hidden'}>
