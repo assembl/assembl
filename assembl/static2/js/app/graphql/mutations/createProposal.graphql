@@ -1,0 +1,21 @@
+#import "../fragments/LangString.graphql"
+
+mutation createProposal(
+  $voteSessionId: ID!
+  $titleEntries: [LangStringEntryInput]!
+  $descriptionEntries: [LangStringEntryInput]!
+) {
+  createProposal(voteSessionId: $voteSessionId, titleEntries: $titleEntries, descriptionEntries: $descriptionEntries) {
+    proposal {
+      ... on Idea {
+        id
+        titleEntries {
+          ...langStringEntry
+        }
+        descriptionEntries {
+          ...langStringEntry
+        }
+      }
+    }
+  }
+}

@@ -1,13 +1,15 @@
 # -*- coding: utf-8 -*-
-import json
-
-from assembl.graphql.schema import Schema as schema
-from assembl.lib.utils import snake_to_camel
-from assembl.graphql.langstring import resolve_langstring
-from assembl import models
-import os
 from io import BytesIO
+import json
+import os
+
 from graphql_relay.node.node import to_global_id
+
+from assembl import models
+from assembl.graphql.langstring import resolve_langstring
+from assembl.graphql.schema import Schema as schema
+from assembl.graphql.utils import get_root_thematic_for_phase
+from assembl.lib.utils import snake_to_camel
 
 
 def assert_langstring_is_equal(langstring_name, graphql_model, sqla_model):
@@ -260,6 +262,7 @@ u'createTokenVoteSpecification': {u'voteSpecification': {u'exclusiveCategories':
                                                                                                        u'value': u'Comprendre les dynamiques et les enjeux'}],
                                                                                     u'totalNumber': 10,
                                                                                     u'typename': u'positive'}],
+                                                              u'voteSpecTemplateId': None,
                                                               u'voteSessionId': vote_session_id}}}
     # remove created vote specification
     vote_session.vote_specifications.remove(token_vote_spec)
@@ -405,6 +408,7 @@ u'createGaugeVoteSpecification': {u'voteSpecification': {u'id': vote_spec_id,
                                                                                  u'value': u'Cran 2'}],
                                                              },
                                                          ],
+                                                         u'voteSpecTemplateId': None,
                                                          u'voteSessionId': vote_session_id}}}
     # remove created vote specification
     vote_session.vote_specifications.remove(vote_spec)
@@ -529,6 +533,7 @@ u'createNumberGaugeVoteSpecification': {
         u"maximum": 60.0,
         u"nbTicks": 7,
         u"unit": u"M€",
+        u'voteSpecTemplateId': None,
         u'voteSessionId': vote_session_id}}}
     # remove created vote specification
     vote_session.vote_specifications.remove(vote_spec)
@@ -586,3 +591,161 @@ u'updateNumberGaugeVoteSpecification': {
         u"nbTicks": 8,
         u"unit": u"M$",
         u'voteSessionId': vote_session_id}}}
+
+
+def test_mutation_create_proposal(graphql_request, discussion, vote_session, graphql_registry):
+    mutation = graphql_registry['createProposal']
+    vote_session_id = to_global_id("VoteSession", vote_session.id)
+    res = schema.execute(mutation, context_value=graphql_request, variable_values={
+        "voteSessionId": vote_session_id,
+        "titleEntries": [
+            {"value": u"Comprendre les dynamiques et les enjeux", "localeCode": "fr"},
+            {"value": u"Understanding the dynamics and issues", "localeCode": "en"}
+        ],
+        "descriptionEntries": [
+            {"value": u"Description: Comprendre les dynamiques et les enjeux", "localeCode": "fr"},
+            {"value": u"Description: Understanding the dynamics and issues", "localeCode": "en"}
+        ]
+    })
+    assert res.errors is None
+    identifier = 'voteSession{}'.format(vote_session.id)
+    root_thematic = get_root_thematic_for_phase(discussion, identifier)
+    proposal = root_thematic.children[0]
+    proposal_id = to_global_id("Idea", proposal.id)
+    assert json.loads(json.dumps(res.data)) == {
+u'createProposal': {
+    u'proposal': {
+        u'id': proposal_id,
+        u'titleEntries': [
+            {u'localeCode': u'en',
+             u'value': u'Understanding the dynamics and issues'},
+            {u'localeCode': u'fr',
+             u'value': u'Comprendre les dynamiques et les enjeux'}],
+        u'descriptionEntries': [
+            {u'localeCode': u'en',
+              u'value': u'Description: Understanding the dynamics and issues'},
+            {u'localeCode': u'fr',
+              u'value': u'Description: Comprendre les dynamiques et les enjeux'}]
+        }}}
+    # remove created proposal
+    proposal.delete()
+    root_thematic.delete()
+    proposal.db.flush()
+
+
+def test_mutation_delete_proposal(graphql_request, vote_proposal, graphql_registry):
+    mutation = graphql_registry['deleteProposal']
+    proposal_id = to_global_id("Idea", vote_proposal.id)
+    res = schema.execute(mutation, context_value=graphql_request, variable_values={
+        "id": proposal_id
+    })
+    assert res.errors is None
+    assert True == res.data['deleteProposal']['success']
+
+
+def test_mutation_update_proposal(graphql_request, discussion, vote_proposal, graphql_registry):
+    mutation = graphql_registry['updateProposal']
+    proposal_id = to_global_id("Idea", vote_proposal.id)
+    res = schema.execute(mutation, context_value=graphql_request, variable_values={
+        "id": proposal_id,
+        "titleEntries": [
+            {"value": u"Comprendre les dynamiques et les enjeux (updated)", "localeCode": "fr"},
+            {"value": u"Understanding the dynamics and issues (updated)", "localeCode": "en"}
+        ],
+        "descriptionEntries": [
+            {"value": u"Description: Comprendre les dynamiques et les enjeux (updated)", "localeCode": "fr"},
+            {"value": u"Description: Understanding the dynamics and issues (updated)", "localeCode": "en"}
+        ]
+    })
+    assert res.errors is None
+    assert json.loads(json.dumps(res.data)) == {
+u'updateProposal': {
+    u'proposal': {
+        u'id': proposal_id,
+        u'titleEntries': [
+            {u'localeCode': u'en',
+             u'value': u'Understanding the dynamics and issues (updated)'},
+            {u'localeCode': u'fr',
+             u'value': u'Comprendre les dynamiques et les enjeux (updated)'}],
+        u'descriptionEntries': [
+            {u'localeCode': u'en',
+              u'value': u'Description: Understanding the dynamics and issues (updated)'},
+            {u'localeCode': u'fr',
+              u'value': u'Description: Comprendre les dynamiques et les enjeux (updated)'}]
+        }}}
+
+
+def test_query_vote_session_proposals(graphql_request, timeline_vote_session, vote_session, vote_proposal, graphql_registry):
+    query = graphql_registry['VoteSession']
+    res = schema.execute(query, context_value=graphql_request, variable_values={
+        "discussionPhaseId": timeline_vote_session.id,
+        "lang": "en"
+    })
+    assert res.errors is None
+    proposal_id = to_global_id("Idea", vote_proposal.id)
+    assert json.loads(json.dumps(res.data['voteSession']['proposals'])) == [{
+        u'id': proposal_id,
+        u'order': 1.0,
+        u'title': u'Understanding the dynamics and issues',
+        u'description': u'Description: Understanding the dynamics and issues',
+        u'titleEntries': [
+            {u'localeCode': u'en',
+             u'value': u'Understanding the dynamics and issues'},
+            {u'localeCode': u'fr',
+             u'value': u'Comprendre les dynamiques et les enjeux'}],
+        u'descriptionEntries': [
+            {u'localeCode': u'en',
+              u'value': u'Description: Understanding the dynamics and issues'},
+            {u'localeCode': u'fr',
+              u'value': u'Description: Comprendre les dynamiques et les enjeux'}],
+        u'modules': []
+        }]
+
+
+def test_query_associate_vote_spec_to_proposal(graphql_request, timeline_vote_session, vote_session, vote_proposal, token_vote_specification, graphql_registry):
+    mutation = graphql_registry['createTokenVoteSpecification']
+    vote_session_id = to_global_id("VoteSession", vote_session.id)
+    proposal_id = to_global_id("Idea", vote_proposal.id)
+    # token vote spec similar to token_vote_specification fixture, but with exclusiveCategories set to False
+    template_token_vote_spec_id = to_global_id("TokenVoteSpecification", token_vote_specification.id)
+    res = schema.execute(mutation, context_value=graphql_request, variable_values={
+        "voteSessionId": vote_session_id,
+        "proposalId": proposal_id,
+        "voteSpecTemplateId": template_token_vote_spec_id,
+        "titleEntries": [
+            {"value": u"Comprendre les dynamiques et les enjeux", "localeCode": "fr"},
+            {"value": u"Understanding the dynamics and issues", "localeCode": "en"}
+        ],
+        "instructionsEntries":
+        [
+            {"value": u"Comprendre les dynamiques et les enjeux", "localeCode": "fr"},
+            {"value": u"Understanding the dynamics and issues", "localeCode": "en"}
+        ],
+        "exclusiveCategories": False,
+        "tokenCategories": [
+            {"titleEntries": [
+                {"value": u"Comprendre les dynamiques et les enjeux", "localeCode": "fr"},
+                {"value": u"Understanding the dynamics and issues", "localeCode": "en"}
+             ],
+             "typename": "positive",
+             "totalNumber": 10,
+             "color": 'red'
+            }
+        ]
+    })
+    query = graphql_registry['VoteSession']
+    res = schema.execute(query, context_value=graphql_request, variable_values={
+        "discussionPhaseId": timeline_vote_session.id,
+        "lang": "en"
+    })
+    assert res.errors is None
+    proposal_id = to_global_id("Idea", vote_proposal.id)
+    assert len(res.data['voteSession']['modules']) == 1  # only vote spec not associated to a proposal
+    assert res.data['voteSession']['modules'][0]['exclusiveCategories'] == True
+    assert len(res.data['voteSession']['proposals'][0]['modules']) == 1
+    assert res.data['voteSession']['proposals'][0]['modules'][0]['exclusiveCategories'] == False
+    assert res.data['voteSession']['proposals'][0]['modules'][0]['voteSpecTemplateId'] == template_token_vote_spec_id
+
+    # clean up
+    vote_session.vote_specifications[-1].delete()
+    vote_session.db.flush()

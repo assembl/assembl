@@ -41,8 +41,9 @@ class LanguageMenu extends React.Component {
 
   doChangeLanguage(key) {
     const { changeLanguage } = this.props;
-    localStorage.setItem('locale', key);
+    document.cookie = `_LOCALE_=${key}; path=/`;
     changeLanguage(key);
+    location.reload(true);
   }
 
   setAvailableLanguages = (props) => {

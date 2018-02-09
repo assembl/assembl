@@ -1,6 +1,7 @@
 /* Begin Code specific to the button hover animation (horizontal fill of background and inversion of text color) */
 
-@mixin button-with-hover-animation($text-color, $border-color, $hover-background-color: $border-color, $background-color: initial) {
+@mixin button-with-hover-animation(
+  $text-color, $border-color, $hover-background-color: $border-color, $background-color: initial) {
   position: relative; /* so that on hover, background animation can fill the button instead of its parent */
   background-color: $background-color;
   border-color: $border-color;
@@ -8,7 +9,12 @@
   z-index: 0;
   transition: color 0.2s ease-in;
 
-  &:hover, &:focus, &:active, &:focus:active, &:active:hover, &[disabled]:hover {
+  &:hover,
+  &:focus,
+  &:active,
+  &:focus:active,
+  &:active:hover,
+  &[disabled]:hover {
     color: #fff; /* opposite of current non-hover color */
     border-color: $border-color;
     background-color: $background-color;
@@ -16,7 +22,7 @@
   }
 
   &:before {
-    content: "";
+    content: '';
     position: absolute;
     background: $hover-background-color;
     bottom: 0;
@@ -27,7 +33,10 @@
     transition: right 0.2s ease-in;
   }
 
-  &:hover:before, &:focus:before, &:active:before, &:focus:active:before {
+  &:hover:before,
+  &:focus:before,
+  &:active:before,
+  &:focus:active:before {
     right: 0;
   }
 }
@@ -89,7 +98,10 @@
   text-transform: $btn-text-transform;
   text-decoration: none;
 
-  &:active, &:hover, &:focus, &:visited {
+  &:active,
+  &:hover,
+  &:focus,
+  &:visited {
     text-decoration: none;
     outline: none;
   }
@@ -132,7 +144,7 @@
     border-color: $btn-dark-border-color;
 
     &:before {
-      content: "";
+      content: '';
       position: absolute;
       background: $btn-dark-border-color;
       bottom: 0;

@@ -7,9 +7,9 @@ import { I18n } from 'react-redux-i18n';
 import TextWithHeaderPage from '../components/common/textWithHeaderPage';
 import withLoadingIndicator from '../components/common/withLoadingIndicator';
 import LegalNoticeAndTerms from '../graphql/LegalNoticeAndTerms.graphql';
-import type { RootReducer } from '../reducers/rootReducer';
+import type { State } from '../reducers/rootReducer';
 
-export const mapStateToProps: RootReducer => LegalNoticeAndTermsQueryVariables = state => ({
+export const mapStateToProps: State => LegalNoticeAndTermsQueryVariables = state => ({
   lang: state.i18n.locale
 });
 

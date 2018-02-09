@@ -9,10 +9,41 @@
     position: relative;
   }
 
+  .token-vote-session-container {
+    max-height: initial;
+  }
+}
+
+.token-vote-session-container {
   .submit-button-container {
-    margin-top: 20px;
+    margin-top: 25px;
     margin-bottom: 10px;
     text-align: right;
+  }
+}
+
+
+#groupContainer .token-vote-session-submitted {
+  margin: 0 auto;
+}
+
+.popin-body .token-vote-session-submitted {
+  padding: 30px 0;
+}
+
+.token-vote-session-submitted {
+  max-width: 500px;
+
+  text-align: center;
+  padding: 100px 0;
+  
+  p {
+    font-size: 13px;
+  }
+  a {
+    margin-top: 20px;
+    margin-left: 10px;
+    margin-right: 10px;
   }
 }
 
@@ -31,6 +62,13 @@
       margin-right: 10px;
     }
   }
+}
+
+.token-vote-session-container {
+  max-width: 1100px;
+  margin: 0 auto 20px;
+  max-height: 95vh;
+  overflow-y: scroll;
 }
 
 .token-vote-session.token-vote-form { /* used only by vote form page (not by vote results page) */
@@ -80,8 +118,13 @@
   }
 
   .available-tokens-info {
-    padding-top: 20px;
+    padding-top: 15px;
+    margin-left: 5px;
     font-size: 13px;
+  }
+
+  .available-tokens-container {
+    overflow-x: hidden;
   }
 
   .available-tokens {
@@ -102,6 +145,10 @@
         height: 5px;
         margin-top: 2px;
       }
+    }
+
+    .token-bags {
+      margin-left: 5px;
     }
 
     .token-bags-content > div {
@@ -125,6 +172,8 @@
     }
     .available-tokens-icons {
       padding-left: 10px;
+      padding-top: 2px;
+
       .token-icon {
         display: inline-block;
         margin-right: 5px;
@@ -151,6 +200,7 @@
     span.available-tokens-number {
       font-weight: 500;
       font-size: 150%;
+      padding-right: 2px;
     }
 
     .available:not(.animating-towards-not-available) {
@@ -176,7 +226,7 @@
     }
     th {
       color: #999;
-      padding-bottom: 0;
+      padding-bottom: 5px;
     }
     tbody > div {
       display: table-row;
@@ -188,8 +238,8 @@
     .left-column, .right-column {
       display: table-cell;
       vertical-align: top;
-      padding-top: 12px;
-      padding-bottom: 6px;
+      padding-top: 18px;
+      padding-bottom: 13px;
     }
     tbody > div:first-child {
       .left-column, .right-column {
@@ -366,6 +416,99 @@
   }
 }
 
+#groupContainer .token-vote-session-container-view {
+  .token-vote-session.token-vote-form { /* used only by vote form page (not by vote results page) */
+    .token-vote-session--header, .available-tokens.fixed {
+      background-color: #F6F6F6;
+    }
+
+    .token-vote-session--header {
+      .question-title {
+        background-color: #232929;
+        padding: 20px;
+        color: white;
+      }
+
+      .question-guideline-title {
+        font-size: 16px;
+        font-weight: bold;
+        color: $theme_btn_primary_bg_color;
+        margin-left: 5px;
+      }
+    }
+    
+  }
+}
+
+@media (max-width: 650px) {
+  .token-vote-session.token-vote-form {
+    .available-tokens-info {
+      margin-bottom: 4px;
+    }
+    .available-tokens-container {
+      .available-tokens.fixed {
+        padding-top: 0;
+      }
+      .token-bag-for-category {
+        .description, .available-tokens-icons {
+          display: block;
+          margin-bottom: 4px;
+          padding-left: 0;
+        }
+      }
+      .token-bag-for-category:nth-child(2) .description {
+        margin-top: 5px;
+      }
+    }
+    .left-column.absorbing-column {
+      width: initial;
+      max-width: 50vw;
+    }
+    .right-column {
+      max-width: 50vw;
+    }
+    .negative-tokens, .positive-tokens {
+      display: block !important;
+
+      .token-category-allocation {
+        clear: left;
+      }
+
+      .token-icon {
+        float: left;
+      }
+    }
+
+    .votables-collection {
+      th:nth-child(2) {
+        display: none;
+      }
+
+      tbody > div {
+        border-bottom: none !important;
+      }
+
+      tbody > div:first-child .left-column, tbody > div:first-child .right-column,  {
+        padding-top: 12px;
+      }
+
+      .left-column.absorbing-column, .right-column {
+        display: block !important;
+        clear: both !important;
+        max-width: initial !important;
+      }
+
+      .left-column {
+        padding-top: 30px;
+      }
+
+      .tokens-for-idea .token-icon {
+        margin: 0 5px 5px 0;
+      }
+    }
+  }
+}
+
 .token-vote-session.token-vote-results { /* used only by vote results page (not by vote form page) */
   overflow-x: scroll;
 
@@ -391,8 +534,8 @@
   
   .left-column, .right-column {
     vertical-align: top;
-    padding-top: 12px;
-    padding-bottom: 6px;
+    padding-top: 18px;
+    padding-bottom: 13px;
     padding-left: 5px;
   }
 
@@ -476,13 +619,14 @@
       font-weight: 600;
     }
     .question-description {
+      margin-left: 5px;
       font-size: 13px;
     }
   }
 
   .votables-collection {
-    margin-top: 10px;
-
+    margin-top: 25px;
+    margin-left: 5px;
 
     .idea-title {
       font-size: 15px;

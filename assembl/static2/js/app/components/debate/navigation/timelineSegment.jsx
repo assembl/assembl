@@ -2,7 +2,7 @@
 import React from 'react';
 import { withApollo, type ApolloClient } from 'react-apollo';
 import { browserHistory } from 'react-router';
-import { Translate, Localize, I18n } from 'react-redux-i18n';
+import { Translate, Localize } from 'react-redux-i18n';
 import { connect } from 'react-redux';
 import classNames from 'classnames';
 
@@ -98,19 +98,14 @@ export class DumbTimelineSegment extends React.Component<*, TimelineSegmentProps
           browserHistory.push(get('debate', params));
           this.hideMenu();
         } else {
-          const body = <Translate value="redirectToV1" phaseName={this.phaseName} />;
-          const button = { link: get('oldDebate', slug), label: I18n.t('home.accessButton'), internalLink: false };
-          displayModal(null, body, true, null, button, true);
-          setTimeout(() => {
-            window.location = get('oldDebate', slug);
-          }, 6000);
+          window.location = get('oldVote', slug);
         }
       }
     } else if (!isRedirectionToV1) {
       browserHistory.push(get('debate', params));
       this.hideMenu();
     } else {
-      window.location = get('oldDebate', slug);
+      window.location = get('oldVote', slug);
     }
   };
 

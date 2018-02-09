@@ -1,9 +1,12 @@
 /*
   ASSEMBL DEFAULT THEME
-  If you want to create a new theme, it is recommended that your theme SCSS file uses `@import` of this default theme file (for example, `@import "../../../default/_theme.scss";`), so if a default theme variable is not overriden in your theme (for example a variable which would have been added in Assembl code after the creation of your theme), the SCSS will still compile, and the variable will have the default value.
+  If you want to create a new theme, it is recommended that your theme SCSS file uses `@import` of this default theme file
+  (for example, `@import "../../../default/_theme.scss";`), so if a default theme variable is not overriden in your theme
+  (for example a variable which would have been added in Assembl code after the creation of your theme),
+  the SCSS will still compile, and the variable will have the default value.
 */
 
-@import "../../variables.scss";
+@import '../../variables.scss';
 
 /*
   Local theme variables
@@ -17,7 +20,8 @@
   $first-color: $th_local_brand_logo_red;
   $title1-dark-color: $th_local_brand_logo_red;
 
-  Variables in this section should only be used within this current theme file. NEVER refer to these color variables in other SCSS files.
+  Variables in this section should only be used within this current theme file.
+  NEVER refer to these color variables in other SCSS files.
 */
 
 $theme-local-blue: #192882;
@@ -28,7 +32,9 @@ $theme-local-blue-opacity-min: rgba(25, 40, 130, 0.1);
 
 /*
   Global theme variables
-  You can redefine here any of the default theme variables. Theme variables are used in the entire SCSS infrastructure. Theme variables which are not redefined by a theme will keep their default value, which is defined in css/themes/default/_theme.scss and in css/variables.scss.
+  You can redefine here any of the default theme variables. Theme variables are used in the entire SCSS infrastructure.
+  Theme variables which are not redefined by a theme will keep their default value,
+  which is defined in css/themes/default/_theme.scss and in css/variables.scss.
 */
 
 $first-color: $theme-local-blue;

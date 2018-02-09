@@ -38,4 +38,10 @@ const legalNoticeAndTerms: LegalNoticeAndTermsReducer = (state = initialState, a
   }
 };
 
+export type LegalNoticeAndTermsState = {
+  hasChanged: boolean,
+  legalNoticeEntries: List<LangstringEntry>,
+  termsAndConditionsEntries: List<LangstringEntry>
+};
+
 export default legalNoticeAndTerms;

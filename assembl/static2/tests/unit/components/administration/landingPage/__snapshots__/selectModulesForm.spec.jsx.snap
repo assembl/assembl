@@ -1,0 +1,76 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`DumbSelectModulesForm component should render a form to select the landing page modules 1`] = `
+<div
+  className="select-modules-form"
+>
+  <FormGroup
+    bsClass="form-group"
+  >
+    <Checkbox
+      bsClass="checkbox"
+      checked={true}
+      disabled={true}
+      inline={false}
+      onChange={[Function]}
+      title=""
+    >
+      <Helper
+        additionalTextClasses=""
+        classname=""
+        helperText="Header"
+        helperUrl="/static2/img/helpers/landing_page_admin/header.png"
+        label="Header"
+      />
+    </Checkbox>
+    <Checkbox
+      bsClass="checkbox"
+      checked={false}
+      disabled={false}
+      inline={false}
+      onChange={[Function]}
+      title=""
+    >
+      <Helper
+        additionalTextClasses=""
+        classname=""
+        helperText="Introduction"
+        helperUrl="/static2/img/helpers/landing_page_admin/introduction.png"
+        label="Introduction"
+      />
+    </Checkbox>
+    <Checkbox
+      bsClass="checkbox"
+      checked={true}
+      disabled={false}
+      inline={false}
+      onChange={[Function]}
+      title=""
+    >
+      <Helper
+        additionalTextClasses=""
+        classname=""
+        helperText="Video"
+        helperUrl="/static2/img/helpers/landing_page_admin/video.png"
+        label="Video"
+      />
+    </Checkbox>
+    <Checkbox
+      bsClass="checkbox"
+      checked={true}
+      disabled={true}
+      inline={false}
+      onChange={[Function]}
+      title=""
+    >
+      <Helper
+        additionalTextClasses=""
+        classname=""
+        helperText="Footer"
+        helperUrl="/static2/img/helpers/landing_page_admin/footer.png"
+        label="Footer"
+      />
+    </Checkbox>
+  </FormGroup>
+</div>
+`;

@@ -69,9 +69,26 @@ def synthesis_1(request, discussion, subidea_1, subidea_1_1, test_session):
     """A Synthesis fixture"""
 
     from assembl.models import Synthesis, SubGraphIdeaAssociation,\
-        SubGraphIdeaLinkAssociation
-    s = Synthesis(discussion=discussion)
+        SubGraphIdeaLinkAssociation, LangString
+
+    ls_subject = LangString()
+    ls_subject.add_value("subject FR", "fr")
+    ls_subject.add_value("subject EN", "en")
+    test_session.add(ls_subject)
+
+    ls_introduction = LangString()
+    ls_introduction.add_value("introduction FR", "fr")
+    ls_introduction.add_value("introduction EN", "en")
+    test_session.add(ls_introduction)
+
+    ls_conclusion = LangString()
+    ls_conclusion.add_value("conclusion FR", "fr")
+    ls_conclusion.add_value("conclusion EN", "en")
+    test_session.add(ls_conclusion)
+
+    s = Synthesis(discussion=discussion, subject=ls_subject, introduction=ls_introduction, conclusion=ls_conclusion)
     test_session.add(s)
+
     i1_a = SubGraphIdeaAssociation(sub_graph=s, idea=subidea_1)
     test_session.add(i1_a)
     i11_a = SubGraphIdeaAssociation(sub_graph=s, idea=subidea_1_1)
@@ -87,6 +104,9 @@ def synthesis_1(request, discussion, subidea_1, subidea_1_1, test_session):
         test_session.delete(i11_a)
         test_session.delete(i1_a)
         test_session.delete(s)
+        test_session.delete(ls_subject)
+        test_session.delete(ls_introduction)
+        test_session.delete(ls_conclusion)
         test_session.flush()
     request.addfinalizer(fin)
 

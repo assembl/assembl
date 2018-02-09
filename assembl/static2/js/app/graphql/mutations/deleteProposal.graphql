@@ -1,0 +1,5 @@
+mutation deleteProposal($id: ID!) {
+  deleteProposal(id: $id) {
+    success
+  }
+}

@@ -1,0 +1,13 @@
+mutation createLandingPageModule($typeIdentifier: String!, $enabled: Boolean, $order: Float, $configuration: String) {
+  createLandingPageModule(typeIdentifier: $typeIdentifier, enabled: $enabled, order: $order, configuration: $configuration) {
+    landingPageModule {
+      configuration
+      enabled
+      moduleType {
+        identifier
+        title
+      }
+      order
+    }
+  }
+}

@@ -59,6 +59,8 @@ from assembl.auth.util import get_permissions
 from assembl.graphql.langstring import resolve_langstring
 from assembl.models import (Discussion, Permission)
 from assembl.utils import format_date, get_thematics, get_published_posts, get_ideas
+from assembl.models.social_data_extraction import (
+    get_social_columns_from_user, load_social_columns_info, get_provider_id_for_discussion)
 from ..traversal import InstanceContext, ClassContext
 from . import (JSON_HEADER, FORM_HEADER, CreationResponse)
 from ..api.discussion import etalab_discussions, API_ETALAB_DISCUSSIONS_PREFIX
@@ -1025,6 +1027,7 @@ def test_sentry(request):
     raise RuntimeError("Let's test sentry")
 
 
+
 @etalab_discussions.post(permission=P_SYSADMIN)
 @view_config(context=ClassContext, ctx_class=Discussion,
              request_method='POST', header=JSON_HEADER, permission=P_SYSADMIN)
@@ -1585,7 +1588,8 @@ def phase1_csv_export(request):
             language = u'fr'
     else:
         language = u'fr'
-    discussion_id = request.context.get_discussion_id()
+    discussion = request.context._instance
+    discussion_id = discussion.id
     THEMATIC_NAME = u"Nom de la thématique"
     QUESTION_ID = u"Numéro de la question"
     QUESTION_TITLE = u"Intitulé de la question"
@@ -1613,6 +1617,14 @@ def phase1_csv_export(request):
         SENTIMENT_CREATION_DATE.encode('utf-8'),
     ]
 
+    extra_columns_info = (None if 'no_extra_columns' in request.GET else
+                          load_social_columns_info(discussion, language))
+    if extra_columns_info:
+        # insert after email
+        fieldnames[8:8] = [name.encode('utf-8') for (name, path) in extra_columns_info]
+        column_info_per_user = {}
+        provider_id = get_provider_id_for_discussion(discussion)
+
     output = tempfile.NamedTemporaryFile('w+b', delete=True)
     # include BOM for Excel to open the file in UTF-8 properly
     output.write(u'\ufeff'.encode('utf-8'))
@@ -1639,6 +1651,13 @@ def phase1_csv_export(request):
                 row[POST_CREATION_DATE] = format_date(post.creation_date)
                 row[POST_LIKE_COUNT] = post.like_count
                 row[POST_DISAGREE_COUNT] = post.disagree_count
+                if extra_columns_info:
+                    if post.creator_id not in column_info_per_user:
+                        column_info_per_user[post.creator_id] = get_social_columns_from_user(
+                            post.creator, extra_columns_info, provider_id)
+                    extra_info = column_info_per_user[post.creator_id]
+                    for num, (name, path) in enumerate(extra_columns_info):
+                        row[name] = extra_info[num]
                 if not post.sentiments:
                     row[SENTIMENT_ACTOR_NAME] = u''
                     row[SENTIMENT_ACTOR_EMAIL] = u''
@@ -1677,7 +1696,9 @@ def phase2_csv_export(request):
     else:
         language = u'fr'
 
-    discussion_id = request.context.get_discussion_id()
+    discussion = request.context._instance
+    discussion_id = discussion.id
+
     IDEA_ID = u"Numéro de l'idée"
     IDEA_NAME = u"Nom de l'idée"
     POST_SUBJECT = u"Sujet"
@@ -1704,6 +1725,15 @@ def phase2_csv_export(request):
         SENTIMENT_ACTOR_EMAIL.encode('utf-8'),
         SENTIMENT_CREATION_DATE.encode('utf-8'),
     ]
+    extra_columns_info = (None if 'no_extra_columns' in request.GET else
+                          load_social_columns_info(discussion, language))
+
+    if extra_columns_info:
+        # insert after email
+        fieldnames[8:8] = [name.encode('utf-8') for (name, path) in extra_columns_info]
+        column_info_per_user = {}
+        provider_id = get_provider_id_for_discussion(discussion)
+
 
     output = tempfile.NamedTemporaryFile('w+b', delete=True)
     # include BOM for Excel to open the file in UTF-8 properly
@@ -1737,6 +1767,13 @@ def phase2_csv_export(request):
             row[POST_CREATION_DATE] = format_date(post.creation_date)
             row[POST_LIKE_COUNT] = post.like_count
             row[POST_DISAGREE_COUNT] = post.disagree_count
+            if extra_columns_info:
+                if post.creator_id not in column_info_per_user:
+                    column_info_per_user[post.creator_id] = get_social_columns_from_user(
+                        post.creator, extra_columns_info, provider_id)
+                extra_info = column_info_per_user[post.creator_id]
+                for num, (name, path) in enumerate(extra_columns_info):
+                    row[name] = extra_info[num]
             if not post.sentiments:
                 row[SENTIMENT_ACTOR_NAME] = u''
                 row[SENTIMENT_ACTOR_EMAIL] = u''

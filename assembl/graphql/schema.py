@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 import logging
+from random import randint
+from operator import attrgetter
 
 import graphene
 from graphene.relay import Node
@@ -18,6 +20,8 @@ from assembl.graphql.discussion import (Discussion, DiscussionPreferences,
 from assembl.graphql.document import UploadDocument
 from assembl.graphql.idea import (CreateIdea, CreateThematic, DeleteThematic,
                                   Idea, IdeaUnion, Thematic, UpdateThematic)
+from assembl.graphql.landing_page import (LandingPageModuleType, LandingPageModule, CreateLandingPageModule,
+                                          UpdateLandingPageModule)
 from assembl.graphql.langstring import resolve_langstring
 from assembl.graphql.locale import Locale
 from assembl.graphql.post import (AddPostAttachment, CreatePost, DeletePost,
@@ -34,7 +38,9 @@ from assembl.graphql.vote_session import (
     VoteSession, UpdateVoteSession, CreateTokenVoteSpecification,
     CreateGaugeVoteSpecification, UpdateGaugeVoteSpecification,
     CreateNumberGaugeVoteSpecification, UpdateNumberGaugeVoteSpecification,
-    UpdateTokenVoteSpecification, DeleteVoteSpecification)
+    UpdateTokenVoteSpecification, DeleteVoteSpecification,
+    CreateProposal, UpdateProposal, DeleteProposal
+    )
 from assembl.graphql.utils import get_fields, get_root_thematic_for_phase
 from assembl.lib.locale import strip_country
 from assembl.lib.sqla_types import EmailString
@@ -82,6 +88,8 @@ class Query(graphene.ObjectType):
         lang=graphene.String(required=True))
     visits_analytics = graphene.Field(lambda: VisitsAnalytics)
     discussion = graphene.Field(Discussion)
+    landing_page_module_types = graphene.List(LandingPageModuleType)
+    landing_page_modules = graphene.List(LandingPageModule)
 
     def resolve_resources(self, args, context, info):
         model = models.Resource
@@ -133,9 +141,7 @@ class Query(graphene.ObjectType):
         query = get_query(model, context)
         discussion_id = context.matchdict['discussion_id']
         discussion = models.Discussion.get(discussion_id)
-        root_idea_id = discussion.root_idea.id
-        descendants_query = model.get_descendants_query(
-            root_idea_id, inclusive=False)
+        descendants_query = discussion.root_idea.get_descendants_query(inclusive=False)
         query = query.outerjoin(
                 models.Idea.source_links
             ).filter(model.id.in_(descendants_query)
@@ -259,6 +265,42 @@ class Query(graphene.ObjectType):
         discussion = models.Discussion.get(discussion_id)
         return discussion
 
+    def resolve_landing_page_module_types(self, args, context, info):
+        model = models.LandingPageModuleType
+        return get_query(model, context)
+
+    def resolve_landing_page_modules(self, args, context, info):
+        model = models.LandingPageModule
+        query = get_query(model, context)
+        discussion_id = context.matchdict['discussion_id']
+        # we want to return a LandingPageModule for each module type (even if there is no entry yet in LandingPageModule table)
+        module_types = get_query(models.LandingPageModuleType, context).order_by(models.LandingPageModuleType.default_order).all()
+        modules = []
+        for module_type in module_types:
+            saobj = query.filter(
+                model.discussion_id == discussion_id
+            ).join(
+                model.module_type
+            ).filter(
+                models.LandingPageModuleType.identifier == module_type.identifier
+            ).first()
+
+            if saobj:
+                module = saobj
+            else:
+                # create the graphene object for this module type
+                module = LandingPageModule(
+                    configuration=u'{}',
+                    id=randint(-100000, 0),
+                    enabled=module_type.required,
+                    module_type=module_type,
+                    order=module_type.default_order
+                )
+
+            modules.append(module)
+
+        return sorted(modules, key=attrgetter('order'))
+
 
 class Mutations(graphene.ObjectType):
 
@@ -293,6 +335,11 @@ class Mutations(graphene.ObjectType):
     create_number_gauge_vote_specification = CreateNumberGaugeVoteSpecification.Field()
     update_number_gauge_vote_specification = UpdateNumberGaugeVoteSpecification.Field()
     delete_vote_specification = DeleteVoteSpecification.Field()
+    create_landing_page_module = CreateLandingPageModule.Field()
+    update_landing_page_module = UpdateLandingPageModule.Field()
+    create_proposal = CreateProposal.Field()
+    update_proposal = UpdateProposal.Field()
+    delete_proposal = DeleteProposal.Field()
 
 
 Schema = graphene.Schema(query=Query, mutation=Mutations)
@@ -310,7 +357,7 @@ def generate_schema_json():
 
 
 '''  # noqa: E501
-$ pshell local.ini
+$ assembl-pshell local.ini
 import json
 from assembl.graphql.schema import Schema as schema
 from webtest import TestRequest

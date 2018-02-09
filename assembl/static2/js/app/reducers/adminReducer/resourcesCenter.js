@@ -28,7 +28,9 @@ const initialPage = Map({
     title: ''
   })
 });
-export const page = (state: Map = initialPage, action: ReduxAction<Action>) => {
+type PageState = Map<string, any>;
+type PageReducer = (PageState, ReduxAction<Action>) => PageState;
+export const page: PageReducer = (state = initialPage, action) => {
   switch (action.type) {
   case UPDATE_RC_PAGE_TITLE:
     return state.update('titleEntries', updateInLangstringEntries(action.locale, fromJS(action.value))).set('hasChanged', true);
@@ -73,7 +75,9 @@ export const resourcesHaveChanged = (state: boolean = false, action: ReduxAction
   }
 };
 
-export const resourcesInOrder = (state: List<number> = List(), action: ReduxAction<Action>) => {
+type ResourcesInOrderState = List<number>;
+type ResourcesInOrderReducer = (ResourcesInOrderState, ReduxAction<Action>) => ResourcesInOrderState;
+export const resourcesInOrder: ResourcesInOrderReducer = (state = List(), action) => {
   switch (action.type) {
   case CREATE_RESOURCE:
     return state.push(action.id);
@@ -119,7 +123,9 @@ const defaultResource = Map({
   textEntries: List(),
   embedCode: ''
 });
-export const resourcesById = (state: Map<string, Map> = Map(), action: ReduxAction<Action>) => {
+type ResourcesByIdState = Map<string, Map>;
+type ResourcesByIdReducer = (ResourcesByIdState, ReduxAction<Action>) => ResourcesByIdState;
+export const resourcesById: ResourcesByIdReducer = (state: ResourcesByIdState = Map(), action: ReduxAction<Action>) => {
   switch (action.type) {
   case CREATE_RESOURCE:
     return state.set(action.id, defaultResource.set('id', action.id).set('order', action.order));
@@ -160,6 +166,13 @@ export const resourcesById = (state: Map<string, Map> = Map(), action: ReduxActi
   default:
     return state;
   }
+};
+
+export type ResourcesCenterState = {
+  page: PageState,
+  resourcesHaveChanged: boolean,
+  resourcesInOrder: ResourcesInOrderState,
+  resourcesById: ResourcesByIdState
 };
 
 export default combineReducers({

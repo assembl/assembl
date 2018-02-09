@@ -5,11 +5,10 @@ import type ReduxAction from 'redux';
 
 import { type Action } from '../../actions/actionTypes';
 import legalNoticeAndTerms from './legalNoticeAndTerms';
-import type { LegalNoticeAndTermsReducer } from './legalNoticeAndTerms';
 import resourcesCenter from './resourcesCenter';
 import sections from './adminSections';
 import voteSession from './voteSession';
-import type { AdminSectionsReducers } from './adminSections';
+import landingPage from './landingPage';
 import { updateInLangstringEntries } from '../../utils/i18n';
 
 type EditLocaleState = string;
@@ -164,7 +163,7 @@ const hasLocale = (l: string, arr: Array<string>): boolean => {
   return i >= 0;
 };
 
-type LanguagePreferencesState = List<string>;
+export type LanguagePreferencesState = List<string>;
 type LanguagePreferencesReducer = (LanguagePreferencesState, ReduxAction<Action>) => LanguagePreferencesState;
 export const languagePreferences: LanguagePreferencesReducer = (state = List(), action) => {
   switch (action.type) {
@@ -198,8 +197,8 @@ export const discussionLanguagePreferencesHasChanged: DiscussionLanguagePreferen
   }
 };
 
-type DisplayLanguageMenu = boolean;
-type DisplayLanguageMenuReducer = (DisplayLanguageMenu, ReduxAction<Action>) => DisplayLanguageMenu;
+type DisplayLanguageMenuState = boolean;
+type DisplayLanguageMenuReducer = (DisplayLanguageMenuState, ReduxAction<Action>) => DisplayLanguageMenuState;
 export const displayLanguageMenu: DisplayLanguageMenuReducer = (state = false, action) => {
   switch (action.type) {
   case 'UPDATE_LANGUAGE_MENU_VISIBILITY':
@@ -209,21 +208,7 @@ export const displayLanguageMenu: DisplayLanguageMenuReducer = (state = false, a
   }
 };
 
-type ResourcesCenterReducer = Function; // TODO
-export type AdminReducer = {
-  editLocale: EditLocaleReducer,
-  thematicsHaveChanged: ThematicsHaveChangedReducer,
-  thematicsInOrder: ThematicsInOrderReducer,
-  thematicsById: ThematicsByIdReducer,
-  discussionLanguagePreferences: LanguagePreferencesReducer,
-  discussionLanguagePreferencesHasChanged: DiscussionLanguagePreferencesHasChangedReducer,
-  displayLanguageMenu: DisplayLanguageMenuReducer,
-  resourcesCenter: ResourcesCenterReducer,
-  sections: AdminSectionsReducers,
-  legalNoticeAndTerms: LegalNoticeAndTermsReducer
-};
-
-const reducers: AdminReducer = {
+const reducers = {
   editLocale: editLocale,
   thematicsHaveChanged: thematicsHaveChanged,
   thematicsInOrder: thematicsInOrder,
@@ -234,7 +219,8 @@ const reducers: AdminReducer = {
   resourcesCenter: resourcesCenter,
   sections: sections,
   voteSession: voteSession,
-  legalNoticeAndTerms: legalNoticeAndTerms
+  legalNoticeAndTerms: legalNoticeAndTerms,
+  landingPage: landingPage
 };
 
 export default combineReducers(reducers);

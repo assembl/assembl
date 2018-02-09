@@ -7,7 +7,7 @@ import { I18n } from 'react-redux-i18n';
 import SectionTitle from '../sectionTitle';
 import FormControlWithLabel from '../../common/formControlWithLabel';
 import * as actions from '../../../actions/adminActions/legalNoticeAndTerms';
-import type { RootReducer } from '../../../reducers/rootReducer';
+import type { State } from '../../../reducers/rootReducer';
 import { getEntryValueForLocale } from '../../../utils/i18n';
 
 type LegalNoticeAndTermsFormProps = {
@@ -57,7 +57,7 @@ export const DumbLegalNoticeAndTermsForm = ({
   );
 };
 
-const mapStateToProps = (state: RootReducer, { editLocale }: LegalNoticeAndTermsFormProps) => {
+const mapStateToProps = (state: State, { editLocale }: LegalNoticeAndTermsFormProps) => {
   const legalNoticeAndTerms = state.admin.legalNoticeAndTerms;
   const legalNotice = getEntryValueForLocale(legalNoticeAndTerms.get('legalNoticeEntries'), editLocale);
   const termsAndConditions = getEntryValueForLocale(legalNoticeAndTerms.get('termsAndConditionsEntries'), editLocale);

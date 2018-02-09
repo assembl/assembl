@@ -1108,6 +1108,7 @@ class NotificationOnPostCreated(NotificationOnPost):
         from ..lib.frontend_urls import FrontendUrls, URL_DISCRIMINANTS, SOURCE_DISCRIMINANTS
         from premailer import Premailer
         discussion = self.first_matching_subscription.discussion
+        langPrefs = self.first_matching_subscription.get_language_preferences()
         (assembl_css, ink_css) = self.get_css_paths(discussion)
         jinja_env = self.get_jinja_env()
         template_data = {'subscription': self.first_matching_subscription,
@@ -1120,7 +1121,8 @@ class NotificationOnPostCreated(NotificationOnPost):
                              'url': URL_DISCRIMINANTS,
                              'source': SOURCE_DISCRIMINANTS
                              },
-                         'jinja_env': jinja_env
+                         'jinja_env': jinja_env,
+                         'lang_prefs': langPrefs
                        }
         if isinstance(self.post, SynthesisPost):
             template = jinja_env.get_template('notifications/html_mail_post_synthesis.jinja2')

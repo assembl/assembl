@@ -1,0 +1,12 @@
+query LandingPageModuleTypes($lang: String) {
+  landingPageModuleTypes {
+    defaultOrder
+    identifier
+    required
+    title(lang: $lang)
+    titleEntries {
+      localeCode
+      value
+    }
+  }
+}

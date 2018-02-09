@@ -58,6 +58,10 @@ export const UPDATE_GAUGE_VOTE_CHOICE_LABEL: 'UPDATE_GAUGE_VOTE_CHOICE_LABEL' = 
 export const UPDATE_GAUGE_MINIMUM: 'UPDATE_GAUGE_MINIMUM' = 'UPDATE_GAUGE_MINIMUM';
 export const UPDATE_GAUGE_MAXIMUM: 'UPDATE_GAUGE_MAXIMUM' = 'UPDATE_GAUGE_MAXIMUM';
 export const UPDATE_GAUGE_UNIT: 'UPDATE_GAUGE_UNIT' = 'UPDATE_GAUGE_UNIT';
+export const UPDATE_LANDING_PAGE_MODULES: 'UPDATE_LANDING_PAGE_MODULES' = 'UPDATE_LANDING_PAGE_MODULES';
+export const TOGGLE_LANDING_PAGE_MODULE: 'TOGGLE_LANDING_PAGE_MODULE' = 'TOGGLE_LANDING_PAGE_MODULE';
+export const MOVE_LANDING_PAGE_MODULE_UP: 'MOVE_LANDING_PAGE_MODULE_UP' = 'MOVE_LANDING_PAGE_MODULE_UP';
+export const MOVE_LANDING_PAGE_MODULE_DOWN: 'MOVE_LANDING_PAGE_MODULE_DOWN' = 'MOVE_LANDING_PAGE_MODULE_DOWN';
 
 export type UpdateContentLocaleById = {
   type: typeof UPDATE_CONTENT_LOCALE_BY_ID,
@@ -341,6 +345,30 @@ export type UpdateTokenVoteCategoryColor = {
   id: string,
   value: string,
   type: typeof UPDATE_TOKEN_VOTE_CATEGORY_COLOR
+};
+
+export type toggleLandingPageModule = {
+  moduleTypeIdentifier: string,
+  type: typeof TOGGLE_LANDING_PAGE_MODULE
+};
+
+type LandingPageModuleInfo = {
+  identifier: string
+};
+export type LandingPageModules = Array<LandingPageModuleInfo>;
+export type UpdateLandingPageModules = {
+  modules: LandingPageModules,
+  type: typeof UPDATE_LANDING_PAGE_MODULES
+};
+
+export type MoveLandingPageModuleUp = {
+  moduleTypeIdentifier: string,
+  type: typeof MOVE_LANDING_PAGE_MODULE_UP
+};
+
+export type MoveLandingPageModuleDown = {
+  moduleTypeIdentifier: string,
+  type: typeof MOVE_LANDING_PAGE_MODULE_DOWN
 };
 
 export type UpdateGaugeVoteInstructions = {

@@ -174,3 +174,17 @@ export const isMobile = {
 export const snakeToCamel = (string: string) => string.toLowerCase().replace(/_[a-z]/g, match => match[1].toUpperCase());
 
 export const youtubeRegexp = /(?:youtube\.com\/(?:[^/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?/ ]{11})/i;
+
+export const getCookieItem = (sKey: string) => {
+  if (!sKey) {
+    return null;
+  }
+  return (
+    decodeURIComponent(
+      document.cookie.replace(
+        new RegExp(`(?:(?:^|.*;)\\s*${encodeURIComponent(sKey).replace(/[-.+*]/g, '\\$&')}\\s*\\=\\s*([^;]*).*$)|^.*$`),
+        '$1'
+      )
+    ) || null
+  );
+};

@@ -47,6 +47,8 @@ type SocialMedia = {
   url: string
 };
 
+type Timeline = Array<Phase>;
+
 type DebateData = Object & {
   chatbot: Chatbot,
   chatframe: any, // TODO
@@ -68,7 +70,7 @@ type DebateData = Object & {
   slug: string,
   socialMedias: Array<SocialMedia>,
   termsOfUseUrl: ?string,
-  timeline: Array<Phase>,
+  timeline: Timeline,
   topic: TitleEntries,
   translationEnabled: boolean,
   translationEnabled: boolean,

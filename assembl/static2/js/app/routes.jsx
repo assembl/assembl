@@ -31,6 +31,7 @@ import DiscussionAdmin from './pages/discussionAdmin';
 import MultiColumnsAdmin from './pages/multiColumnsAdmin';
 import VoteSessionAdmin from './pages/voteSessionAdmin';
 import ResourcesCenter from './pages/resourcesCenter';
+import LandingPageAdmin from './pages/landingPageAdmin';
 import { routeForRouter } from './utils/routeMap';
 
 const DebateHome = (props) => {
@@ -77,6 +78,8 @@ const AdminChild = (props) => {
     return <VoteSessionAdmin {...props} section={props.location.query.section} />;
   case 'resourcesCenter':
     return <ResourcesCenterAdmin {...props} />;
+  case 'landingPage':
+    return <LandingPageAdmin {...props} section={props.location.query.section} />;
   default:
     return <ThreadAdmin {...props} />;
   }
