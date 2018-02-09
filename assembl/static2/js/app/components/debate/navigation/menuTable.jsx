@@ -5,9 +5,10 @@ import type { ApolloClient } from 'react-apollo';
 import { SurveyTable, IdeasTable } from './tables';
 import AllIdeasQuery from '../../../graphql/AllIdeasQuery.graphql';
 import DebateThematicsQuery from '../../../graphql/DebateThematicsQuery.graphql';
+import { PHASES } from '../../../constants';
 
 const queries = {
-  survey: DebateThematicsQuery,
+  [PHASES.survey]: DebateThematicsQuery,
   default: AllIdeasQuery
 };
 
@@ -25,8 +26,10 @@ type MenuTableProps = {
 
 function MenuTable(props: MenuTableProps) {
   switch (props.identifier) {
-  case 'survey':
+  case PHASES.survey:
     return <SurveyTable {...props} />;
+  case PHASES.voteSession:
+    return null;
   default:
     return <IdeasTable {...props} />;
   }
