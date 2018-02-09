@@ -216,11 +216,33 @@ export const voteProposalsInOrder = (state: List<number> = List(), action: Redux
   }
 };
 
+export const voteProposalsById = (state: Map<string, Map> = Map(), action: ReduxAction<Action>) => {
+  switch (action.type) {
+  case UPDATE_VOTE_PROPOSALS: {
+    let newState = Map();
+    action.voteProposals.forEach((proposal) => {
+      const proposalInfo = fromJS({
+        isNew: false,
+        toDelete: false,
+        id: proposal.id,
+        titleEntries: proposal.titleEntries,
+        descriptionEntries: proposal.descriptionEntries
+      });
+      newState = newState.set(proposal.id, proposalInfo);
+    });
+    return newState;
+  }
+  default:
+    return state;
+  }
+};
+
 export default combineReducers({
   page: voteSessionPage,
   modulesInOrder: modulesInOrder,
   modulesById: modulesById,
   tokenCategoriesById: tokenCategoriesById,
   modulesHaveChanged: modulesHaveChanged,
-  voteProposalsInOrder: voteProposalsInOrder
+  voteProposalsInOrder: voteProposalsInOrder,
+  voteProposalsById: voteProposalsById
 });

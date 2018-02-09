@@ -7,7 +7,7 @@ import { connect } from 'react-redux';
 
 import { updateThematics, displayLanguageMenu } from '../actions/adminActions';
 import { updateResources, updateResourcesCenterPage } from '../actions/adminActions/resourcesCenter';
-import { updateVoteSessionPage, updateVoteModules } from '../actions/adminActions/voteSession';
+import { updateVoteSessionPage, updateVoteModules, updateVoteProposals } from '../actions/adminActions/voteSession';
 import { updateSections } from '../actions/adminActions/adminSections';
 import { updateLegalNoticeAndTerms } from '../actions/adminActions/legalNoticeAndTerms';
 import { updateLandingPageModules } from '../actions/adminActions/landingPage';
@@ -70,6 +70,7 @@ class Administration extends React.Component {
     this.putLegalNoticeAndTermsInStore(this.props.legalNoticeAndTerms);
     this.putVoteSessionInStore(this.props.voteSession);
     this.putVoteModulesInStore(this.props.voteSession);
+    this.putVoteProposalsInStore(this.props.voteSession);
     const isHidden = this.props.identifier === 'discussion' && this.props.location.query.section === '1';
     this.props.displayLanguageMenu(isHidden);
     this.putLandingPageModulesInStore(this.props.landingPageModules);
@@ -163,6 +164,11 @@ class Administration extends React.Component {
       });
     }
     this.props.updateVoteModules(modules);
+  }
+
+  putVoteProposalsInStore(voteSession) {
+    const proposals = filter(VoteSessionQuery, { voteSession: voteSession }).voteSession.proposals;
+    this.props.updateVoteProposals(proposals);
   }
 
   putSectionsInStore(sections) {
@@ -276,6 +282,7 @@ const mapDispatchToProps = dispatch => ({
   },
   updateVoteModules: voteModules => dispatch(updateVoteModules(voteModules)),
   updateVoteSessionPage: voteSession => dispatch(updateVoteSessionPage(voteSession)),
+  updateVoteProposals: voteProposals => dispatch(updateVoteProposals(voteProposals)),
   updateLegalNoticeAndTerms: legalNoticeAndTerms => dispatch(updateLegalNoticeAndTerms(legalNoticeAndTerms)),
   displayLanguageMenu: isHidden => dispatch(displayLanguageMenu(isHidden)),
   updateLandingPageModules: landingPageModules => dispatch(updateLandingPageModules(landingPageModules))
