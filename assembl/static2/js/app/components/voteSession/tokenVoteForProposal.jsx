@@ -14,7 +14,9 @@ const TokenVoteForProposal = ({ instructions, tokenCategories }: Props) => (
     {tokenCategories.map(category => (
       <div key={category.id}>
         <p>{category.title}</p>
-        {[...Array(category.totalNumber).keys()].map(i => <Circle key={i} />)}
+        <div className="tokens">
+          {[...Array(category.totalNumber).keys()].map(n => <Circle key={n} size="35px" strokeColor={category.color} />)}
+        </div>
       </div>
     ))}
   </div>

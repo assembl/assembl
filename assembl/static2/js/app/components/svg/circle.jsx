@@ -1,6 +1,13 @@
+// @flow
 import React from 'react';
 
-const Circle = ({ fillColor, strokeColor, size }) => (
+type Props = {
+  fillColor?: string,
+  size?: string,
+  strokeColor?: string
+};
+
+const Circle = ({ fillColor, strokeColor, size }: Props) => (
   <svg
     x="0px"
     y="0px"
