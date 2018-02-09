@@ -16,6 +16,7 @@ type voteSessionPageProps = {
   headerImageUrl: string,
   instructionsSectionTitle: string,
   instructionsSectionContent: string,
+  modules: Array<Object>,
   propositionsSectionTitle: string,
   proposals: Array<Object>
 };
@@ -27,7 +28,8 @@ const DumbVoteSession = ({
   instructionsSectionTitle,
   instructionsSectionContent,
   propositionsSectionTitle,
-  proposals
+  proposals,
+  modules
 }: voteSessionPageProps) => (
   <div className="votesession-page">
     <Header title={title} subtitle={subTitle} imgUrl={headerImageUrl} additionalHeaderClasses="left" />
@@ -43,7 +45,7 @@ const DumbVoteSession = ({
       <Section title={propositionsSectionTitle}>
         <Row>
           <Col mdOffset={3} md={8} smOffset={1} sm={10}>
-            <Proposals proposals={proposals} />
+            <Proposals modules={modules} proposals={proposals} />
           </Col>
         </Row>
       </Section>
@@ -83,6 +85,7 @@ export default compose(
         instructionsSectionTitle,
         instructionsSectionContent,
         propositionsSectionTitle,
+        modules, // TODO: remove this and use the modules from proposals
         proposals
       } = data.voteSession;
 
@@ -94,6 +97,7 @@ export default compose(
         instructionsSectionTitle: instructionsSectionTitle,
         instructionsSectionContent: instructionsSectionContent,
         propositionsSectionTitle: propositionsSectionTitle,
+        modules: modules,
         proposals: proposals
       };
     }

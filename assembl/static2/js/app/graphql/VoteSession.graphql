@@ -3,6 +3,7 @@
 fragment tokenVoteSpecification on TokenVoteSpecification {
   id
   voteSessionId
+  instructions(lang: $lang)
   titleEntries {
     ...langStringEntry
   }
@@ -14,12 +15,14 @@ fragment tokenVoteSpecification on TokenVoteSpecification {
     id
     totalNumber
     typename
+    title(lang: $lang)
     titleEntries {
       ...langStringEntry
     }
     color
   }
   voteSpecTemplateId
+  voteType
 }
 
 fragment numberGaugeVoteSpecification on NumberGaugeVoteSpecification {

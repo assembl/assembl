@@ -69,6 +69,7 @@ exports[`VoteSession component should match VoteSession snapshot 1`] = `
           smOffset={1}
         >
           <Proposals
+            modules={Array []}
             proposals={
               Array [
                 Object {
