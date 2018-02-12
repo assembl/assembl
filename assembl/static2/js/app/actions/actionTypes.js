@@ -56,6 +56,8 @@ export const CREATE_VOTE_PROPOSAL: 'CREATE_VOTE_PROPOSAL' = 'CREATE_VOTE_PROPOSA
 export const DELETE_VOTE_PROPOSAL: 'DELETE_VOTE_PROPOSAL' = 'DELETE_VOTE_PROPOSAL';
 export const UPDATE_VOTE_PROPOSAL_TITLE: 'UPDATE_VOTE_PROPOSAL_TITLE' = 'UPDATE_VOTE_PROPOSAL_TITLE';
 export const UPDATE_VOTE_PROPOSAL_DESCRIPTION: 'UPDATE_VOTE_PROPOSAL_DESCRIPTION' = 'UPDATE_VOTE_PROPOSAL_DESCRIPTION';
+export const MOVE_PROPOSAL_UP: 'MOVE_PROPOSAL_UP' = 'MOVE_PROPOSAL_UP';
+export const MOVE_PROPOSAL_DOWN: 'MOVE_PROPOSAL_DOWN' = 'MOVE_PROPOSAL_DOWN';
 
 export type UpdateContentLocaleById = {
   type: typeof UPDATE_CONTENT_LOCALE_BY_ID,
@@ -366,6 +368,16 @@ export type UpdateVoteProposalDescription = {
   type: typeof UPDATE_VOTE_PROPOSAL_DESCRIPTION
 };
 
+export type MoveProposalUp = {
+  id: string,
+  type: typeof MOVE_PROPOSAL_UP
+};
+
+export type MoveProposalDown = {
+  id: string,
+  type: typeof MOVE_PROPOSAL_DOWN
+};
+
 export type toggleLandingPageModule = {
   moduleTypeIdentifier: string,
   type: typeof TOGGLE_LANDING_PAGE_MODULE
@@ -432,7 +444,9 @@ type VoteSessionActions =
   | CreateVoteProposal
   | DeleteVoteProposal
   | UpdateVoteProposalTitle
-  | UpdateVoteProposalDescription;
+  | UpdateVoteProposalDescription
+  | MoveProposalUp
+  | MoveProposalDown;
 
 export type Action =
   | UpdateContentLocaleById

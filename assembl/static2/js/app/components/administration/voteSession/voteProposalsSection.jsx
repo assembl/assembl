@@ -15,7 +15,9 @@ const VoteProposalsSection = ({ voteProposals, editLocale, addVoteProposal }) =>
     />
     <div className="admin-content">
       <form>
-        {voteProposals.map((id, index) => <VoteProposalForm key={id} id={id} index={index} editLocale={editLocale} />)}
+        {voteProposals.map((id, index) => (
+          <VoteProposalForm key={id} id={id} index={index + 1} editLocale={editLocale} nbProposals={voteProposals.size} />
+        ))}
         <OverlayTrigger placement="top" overlay={addVoteProposalTooltip}>
           <div onClick={addVoteProposal} className="plus margin-l">
             +

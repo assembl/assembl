@@ -4,11 +4,13 @@ import { I18n, Translate } from 'react-redux-i18n';
 import { OverlayTrigger, Button } from 'react-bootstrap';
 import FormControlWithLabel from '../../common/formControlWithLabel';
 import { getEntryValueForLocale } from '../../../utils/i18n';
-import { deleteVoteProposalTooltip } from '../../common/tooltips';
+import { deleteVoteProposalTooltip, upTooltip, downTooltip } from '../../common/tooltips';
 import {
   updateVoteProposalTitle,
   updateVoteProposalDescription,
-  deleteVoteProposal
+  deleteVoteProposal,
+  moveProposalUp,
+  moveProposalDown
 } from '../../../actions/adminActions/voteSession';
 
 const VoteProposalForm = ({
@@ -19,7 +21,10 @@ const VoteProposalForm = ({
   markAsToDelete,
   updateTitle,
   updateDescription,
-  editLocale
+  editLocale,
+  nbProposals,
+  handleUpClick,
+  handleDownClick
 }) => {
   if (toDelete) {
     return null;
@@ -27,20 +32,33 @@ const VoteProposalForm = ({
 
   const handleTitleChange = e => updateTitle(editLocale, e.target.value);
   const handleDescriptionChange = e => updateDescription(editLocale, e.target.value);
-
   return (
     <div className="form-container">
       <div className="pointer right">
         <div className="inline">
-          <OverlayTrigger placement="top" overlay={deleteVoteProposalTooltip}>
-            <Button onClick={markAsToDelete} className="admin-icons">
-              <span className="assembl-icon-delete grey" />
-            </Button>
-          </OverlayTrigger>
+          {index < nbProposals ? (
+            <OverlayTrigger placement="top" overlay={downTooltip}>
+              <Button onClick={handleDownClick} className="admin-icons">
+                <span className="assembl-icon-down-bold grey" />
+              </Button>
+            </OverlayTrigger>
+          ) : null}
+          {index > 1 ? (
+            <OverlayTrigger placement="top" overlay={upTooltip}>
+              <Button onClick={handleUpClick} className="admin-icons">
+                <span className="assembl-icon-up-bold grey" />
+              </Button>
+            </OverlayTrigger>
+          ) : null}
         </div>
+        <OverlayTrigger placement="top" overlay={deleteVoteProposalTooltip}>
+          <Button onClick={markAsToDelete} className="admin-icons">
+            <span className="assembl-icon-delete grey" />
+          </Button>
+        </OverlayTrigger>
       </div>
       <div className="title">
-        <Translate value="administration.voteProposals.defineProposal" number={index + 1} />
+        <Translate value="administration.voteProposals.defineProposal" number={index} />
       </div>
       <FormControlWithLabel
         value={title}
@@ -78,7 +96,9 @@ const mapDispatchToProps = (dispatch, { id }) => ({
   },
   updateDescription: (locale, value) => {
     dispatch(updateVoteProposalDescription(id, locale, value));
-  }
+  },
+  handleUpClick: () => dispatch(moveProposalUp(id)),
+  handleDownClick: () => dispatch(moveProposalDown(id))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(VoteProposalForm);

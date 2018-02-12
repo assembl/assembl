@@ -155,3 +155,13 @@ export const updateVoteProposalDescription = (
   locale: locale,
   type: actionTypes.UPDATE_VOTE_PROPOSAL_DESCRIPTION
 });
+
+export const moveProposalUp = (id: string): actionTypes.MoveProposalUp => ({
+  id: id,
+  type: actionTypes.MOVE_PROPOSAL_UP
+});
+
+export const moveProposalDown = (id: string): actionTypes.MoveProposalDown => ({
+  id: id,
+  type: actionTypes.MOVE_PROPOSAL_DOWN
+});

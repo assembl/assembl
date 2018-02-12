@@ -25,7 +25,9 @@ import {
   CREATE_VOTE_PROPOSAL,
   DELETE_VOTE_PROPOSAL,
   UPDATE_VOTE_PROPOSAL_TITLE,
-  UPDATE_VOTE_PROPOSAL_DESCRIPTION
+  UPDATE_VOTE_PROPOSAL_DESCRIPTION,
+  MOVE_PROPOSAL_UP,
+  MOVE_PROPOSAL_DOWN
 } from '../../actions/actionTypes';
 import { updateInLangstringEntries } from '../../utils/i18n';
 
@@ -228,6 +230,14 @@ export const voteProposalsInOrder = (state: List<number> = List(), action: Redux
     return List(Object.keys(action.voteProposals).map(key => action.voteProposals[key].id || null));
   case CREATE_VOTE_PROPOSAL:
     return state.push(action.id);
+  case MOVE_PROPOSAL_UP: {
+    const idx = state.indexOf(action.id);
+    return state.delete(idx).insert(idx - 1, action.id);
+  }
+  case MOVE_PROPOSAL_DOWN: {
+    const idx = state.indexOf(action.id);
+    return state.delete(idx).insert(idx + 1, action.id);
+  }
   default:
     return state;
   }
@@ -248,6 +258,7 @@ export const voteProposalsById = (state: Map<string, Map> = Map(), action: Redux
     action.voteProposals.forEach((proposal) => {
       const proposalInfo = fromJS({
         isNew: false,
+        order: proposal.order,
         toDelete: false,
         id: proposal.id,
         titleEntries: proposal.titleEntries,
