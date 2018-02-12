@@ -95,7 +95,7 @@ export const voteSessionPage: VoteSessionPageReducer = (state = initialPage, act
   }
 };
 
-export const modulesHaveChanged = (state: boolean = false, action: ReduxAction<Action>) => {
+export const tokenModulesHaveChanged = (state: boolean = false, action: ReduxAction<Action>) => {
   switch (action.type) {
   case CREATE_TOKEN_VOTE_MODULE:
   case DELETE_TOKEN_VOTE_MODULE:
@@ -338,5 +338,5 @@ export default combineReducers({
   modulesById: modulesById,
   tokenCategoriesById: tokenCategoriesById,
   gaugeChoicesById: gaugeChoicesById,
-  modulesHaveChanged: modulesHaveChanged
+  tokenModulesHaveChanged: tokenModulesHaveChanged
 });

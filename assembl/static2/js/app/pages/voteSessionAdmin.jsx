@@ -23,7 +23,7 @@ type VoteSessionAdminProps = {
   i18n: {
     locale: string
   },
-  modulesHaveChanged: boolean,
+  tokenModulesHaveChanged: boolean,
   refetchVoteSession: Function,
   section: string,
   timeline: Timeline,
@@ -41,7 +41,7 @@ const createVariablesForTokenVoteSpecificationMutation = voteModules => ({
   voteSessionId: voteModules.voteSessionId,
   exclusiveCategories: voteModules.exclusiveCategories,
   instructionsEntries: voteModules.instructionsEntries,
-  titleEntries: voteModules.titleEntries,
+  titleEntries: [],
   tokenCategories: voteModules.tokenCategories.map(t => ({
     titleEntries: t.titleEntries,
     color: t.color,
@@ -54,7 +54,7 @@ class VoteSessionAdmin extends React.Component<void, VoteSessionAdminProps, void
   saveAction = () => {
     const {
       i18n,
-      modulesHaveChanged,
+      tokenModulesHaveChanged,
       refetchVoteSession,
       timeline,
       voteModules,
@@ -64,6 +64,7 @@ class VoteSessionAdmin extends React.Component<void, VoteSessionAdminProps, void
       updateTokenVoteSpecification,
       updateVoteSession
     } = this.props;
+
     if (voteSessionPage.get('hasChanged')) {
       const titleEntries = voteSessionPage.get('titleEntries').toJS();
       const subTitleEntries = voteSessionPage.get('subTitleEntries').toJS();
@@ -93,35 +94,36 @@ class VoteSessionAdmin extends React.Component<void, VoteSessionAdminProps, void
         });
     }
 
-    if (modulesHaveChanged) {
-      const voteSession = voteSessionPage.toJS();
-      const vModules = voteModules.toJS();
-      const items = [
-        {
-          ...vModules[0],
-          voteSessionId: voteSession.id
-        }
-      ];
-      const mutationsPromises = getMutationsPromises({
-        items: items,
-        variablesCreator: createVariablesForTokenVoteSpecificationMutation,
-        deleteVariablesCreator: createVariablesForDeleteTokenVoteSpecificationMutation,
-        createMutation: createTokenVoteSpecification,
-        updateMutation: updateTokenVoteSpecification,
-        deleteMutation: deleteTokenVoteSpecification,
-        lang: i18n.locale
-      });
+    if (tokenModulesHaveChanged) {
+      if (voteSessionPage.get('id')) {
+        const tokenModules = voteModules.filter(m => m.get('type') === 'tokens');
+        const items = [];
+        tokenModules.forEach((t) => {
+          items.push({ ...t.toJS(), voteSessionId: voteSessionPage.get('id') });
+        });
+        const mutationsPromises = getMutationsPromises({
+          items: items,
+          variablesCreator: createVariablesForTokenVoteSpecificationMutation,
+          deleteVariablesCreator: createVariablesForDeleteTokenVoteSpecificationMutation,
+          createMutation: createTokenVoteSpecification,
+          updateMutation: updateTokenVoteSpecification,
+          deleteMutation: deleteTokenVoteSpecification,
+          lang: i18n.locale
+        });
 
-      runSerial(mutationsPromises).then(() => {
-        refetchVoteSession();
-        displayAlert('success', I18n.t('administration.voteSessionSuccess'));
-      });
+        runSerial(mutationsPromises).then(() => {
+          refetchVoteSession();
+          displayAlert('success', I18n.t('administration.voteSessionSuccess'));
+        });
+      } else {
+        displayAlert('warning', I18n.t('administration.saveFirstStep'));
+      }
     }
   };
 
   render() {
-    const { editLocale, modulesHaveChanged, section, voteSessionPage } = this.props;
-    const saveDisabled = !modulesHaveChanged && !voteSessionPage.get('hasChanged');
+    const { editLocale, tokenModulesHaveChanged, section, voteSessionPage } = this.props;
+    const saveDisabled = !tokenModulesHaveChanged && !voteSessionPage.get('hasChanged');
     const currentStep = parseInt(section, 10);
     return (
       <div className="token-vote-admin">
@@ -136,11 +138,11 @@ class VoteSessionAdmin extends React.Component<void, VoteSessionAdminProps, void
 }
 
 const mapStateToProps = ({ admin: { editLocale, voteSession }, debate, i18n }) => {
-  const { modulesById, modulesInOrder, tokenCategoriesById, modulesHaveChanged } = voteSession;
+  const { modulesById, modulesInOrder, tokenCategoriesById, tokenModulesHaveChanged } = voteSession;
   return {
     editLocale: editLocale,
     i18n: i18n,
-    modulesHaveChanged: modulesHaveChanged,
+    tokenModulesHaveChanged: tokenModulesHaveChanged,
     timeline: debate.debateData.timeline,
     voteModules: modulesInOrder.map(
       id =>
