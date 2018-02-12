@@ -323,8 +323,8 @@ export type CreateTokenVoteCategory = {
 };
 
 export type DeleteTokenVoteCategory = {
-  parentId: string,
-  value: number,
+  id: string,
+  index: number,
   type: typeof DELETE_TOKEN_VOTE_CATEGORY
 };
 

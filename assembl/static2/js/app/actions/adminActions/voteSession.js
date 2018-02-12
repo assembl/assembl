@@ -93,9 +93,9 @@ export const createTokenVoteCategory = (id: string, parentId: string): actionTyp
   type: actionTypes.CREATE_TOKEN_VOTE_CATEGORY
 });
 
-export const deleteTokenVoteCategory = (value: number, parentId: string): actionTypes.DeleteTokenVoteCategory => ({
-  parentId: parentId,
-  value: value,
+export const deleteTokenVoteCategory = (id: string, index: number): actionTypes.DeleteTokenVoteCategory => ({
+  id: id,
+  index: index,
   type: actionTypes.DELETE_TOKEN_VOTE_CATEGORY
 });
 

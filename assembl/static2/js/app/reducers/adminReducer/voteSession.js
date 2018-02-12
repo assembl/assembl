@@ -256,9 +256,7 @@ export const modulesById = (state: Map<string, Map> = Map(), action: ReduxAction
   case CREATE_TOKEN_VOTE_CATEGORY:
     return state.updateIn([action.parentId, 'tokenCategories'], tokenCategories => tokenCategories.push(action.id));
   case DELETE_TOKEN_VOTE_CATEGORY:
-    return state.updateIn([action.parentId, 'tokenCategories'], tokenCategories =>
-      tokenCategories.delete(tokenCategories.size - 1)
-    );
+    return state.updateIn([action.id, 'tokenCategories'], tokenCategories => tokenCategories.delete(action.index));
   case CREATE_GAUGE_VOTE_MODULE:
     return state.set(action.id, defaultTextGaugeModule.set('id', action.id));
   case DELETE_GAUGE_VOTE_MODULE:
