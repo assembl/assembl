@@ -2,8 +2,6 @@
 import React from 'react';
 import Slider from 'rc-slider';
 
-// There is a conflict of pre-commit rules between eslint and flow about numeric object keys
-/* eslint-disable */
 const marks = {
   '-10': '-10°C',
   '0': '<strong>0°C</strong>',
