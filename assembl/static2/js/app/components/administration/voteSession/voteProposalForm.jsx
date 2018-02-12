@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { I18n, Translate } from 'react-redux-i18n';
 import { OverlayTrigger, Button } from 'react-bootstrap';
 import FormControlWithLabel from '../../common/formControlWithLabel';
 import { getEntryValueForLocale } from '../../../utils/i18n';
@@ -38,11 +39,19 @@ const VoteProposalForm = ({
           </OverlayTrigger>
         </div>
       </div>
-      <div className="title">Définir proposition {index + 1}</div>
-      <FormControlWithLabel value={title} label="Titre de la proposition" onChange={handleTitleChange} required type="text" />
+      <div className="title">
+        <Translate value="administration.voteProposals.defineProposal" number={index + 1} />
+      </div>
+      <FormControlWithLabel
+        value={title}
+        label={I18n.t('administration.voteProposals.title')}
+        onChange={handleTitleChange}
+        required
+        type="text"
+      />
       <FormControlWithLabel
         value={description}
-        label="Description de la proposition"
+        label={I18n.t('administration.voteProposals.description')}
         onChange={handleDescriptionChange}
         type="text"
         required

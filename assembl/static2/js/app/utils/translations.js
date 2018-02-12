@@ -362,15 +362,16 @@ const Translations = {
       tokenTitle: "Intitulé du jeton",
       tokenColor: "Couleur du jeton",
       headerTitle: "Bandeau de haut de page",
-      PropositionSectionTitle: "Section propositions",
+      ProposalsSectionTitle: "Section propositions",
       instructions: "Instructions",
       voteSessionSuccess: "La session de vote a été enregistrée avec succès.",
       exclusive: "Exclusifs",
       tokenVoteInstructions: "Consigne du vote par jetons",
-      propositionSectionTitle: "Titre de la section",
-      propositions: {
-        addProposition: "Ajouter une proposition",
-        deleteProposition: "Supprimer la proposition",
+      proposalsSectionTitle: "Titre de la section",
+      voteProposals: {
+        defineProposal: "Définir proposition %{number}",
+        addProposal: "Ajouter une proposition",
+        deleteProposal: "Supprimer la proposition",
         title: "Titre de la proposition",
         description: "Description"
       },
@@ -388,7 +389,7 @@ const Translations = {
       helpers: {
         voteSessionHeader: "Le bandeau de haut de page doit contenir une image et un titre. Le sous-titre est optionnel.",
         voteSessionInstructions: "La section des instructions doit contenir un titre et une description.",
-        voteSessionPropositionSection: "La section des propositions doit contenir un titre.",
+        voteSessionProposalSection: "La section des propositions doit contenir un titre.",
         tokenCategoryNumber: "Sélectionnez le nombre de types de jetons différents souhaité pour ce vote",
         exclusive:
           "Vous pouvez décider si le participant peut distributer un seul type de jetons (exclusifs) ou plusieurs types de jetons par proposition.",
@@ -850,10 +851,11 @@ const Translations = {
       tokenNumber: "Number of tokens",
       tokenTitle: "Token title",
       tokenColor: "Color of the token",
-      propositions: {
-        addProposition: "Add a proposition",
-        deleteProposition: "Delete this proposition",
-        title: "Title of the proposition",
+      voteProposals: {
+        defineProposal: "Define proposal %{number}",
+        addProposal: "Add a proposal",
+        deleteProposal: "Delete this proposal",
+        title: "Title of the proposal",
         description: "Description"
       },
       sections: {
@@ -870,10 +872,10 @@ const Translations = {
       helpers: {
         voteSessionHeader: "The top page header must contain an image and a title. The subtitle is optional.",
         voteSessionInstructions: "The instructions section must contain a title and a description.",
-        voteSessionPropositionSection: "The proposals section must contain a title.",
+        voteSessionProposalsSection: "The proposals section must contain a title.",
         tokenCategoryNumber: "Select the number of different token types for this vote",
         exclusive:
-          "You can decide wether the participant can distribute a single type of token (exclusive) or several types of token per proposition.",
+          "You can decide wether the participant can distribute a single type of token (exclusive) or several types of token per proposal.",
         tokenVoteInstructions: "Depending on the objective of the token module, incite the participants to take action.",
         landingPage: {
           header:
