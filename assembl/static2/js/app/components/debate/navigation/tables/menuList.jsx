@@ -119,7 +119,6 @@ class MenuList extends React.Component<*, MenuListProps, MenuListState> {
         </div>
         {selected && (
           <MenuList
-            subMenu
             onMenuItemClick={onMenuItemClick}
             className="sub-menu"
             items={items}
