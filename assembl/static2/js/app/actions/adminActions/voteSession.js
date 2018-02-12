@@ -132,3 +132,26 @@ export const createVoteProposal = (id: string): actionTypes.CreateVoteProposal =
   id: id,
   type: actionTypes.CREATE_VOTE_PROPOSAL
 });
+
+export const deleteVoteProposal = (id: string): actionTypes.DeleteVoteProposal => ({
+  id: id,
+  type: actionTypes.DELETE_VOTE_PROPOSAL
+});
+
+export const updateVoteProposalTitle = (id: string, value: string, locale: string): actionTypes.UpdateVoteProposalTitle => ({
+  id: id,
+  value: value,
+  locale: locale,
+  type: actionTypes.UPDATE_VOTE_PROPOSAL_TITLE
+});
+
+export const updateVoteProposalDescription = (
+  id: string,
+  value: string,
+  locale: string
+): actionTypes.UpdateVoteProposalDescription => ({
+  id: id,
+  value: value,
+  locale: locale,
+  type: actionTypes.UPDATE_VOTE_PROPOSAL_DESCRIPTION
+});
