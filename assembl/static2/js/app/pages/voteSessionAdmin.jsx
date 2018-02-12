@@ -53,6 +53,7 @@ const createVariablesForTokenVoteSpecificationMutation = voteModule => ({
   instructionsEntries: voteModule.instructionsEntries,
   titleEntries: [],
   tokenCategories: voteModule.tokenCategories.map(t => ({
+    id: t.id,
     titleEntries: t.titleEntries,
     color: t.color,
     totalNumber: t.totalNumber

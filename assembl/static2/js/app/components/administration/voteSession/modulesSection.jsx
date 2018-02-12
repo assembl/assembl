@@ -54,7 +54,7 @@ const DumbModulesSection = ({
                 label={I18n.t('administration.voteWithTokens')}
                 helperUrl="/static2/img/helpers/helper4.png"
                 helperText={I18n.t('administration.tokenVoteCheckbox')}
-                classname="inline"
+                classname="inline checkbox-title"
               />
             </Checkbox>
             {tokenModules.map(id => <TokensForm key={id} id={id} editLocale={editLocale} />)}
@@ -68,7 +68,7 @@ const DumbModulesSection = ({
                 label={I18n.t('administration.voteWithGages')}
                 helperUrl="/static2/img/helpers/helper3.png" // TODO: add an actual screenshot
                 helperText={I18n.t('administration.gaugeVoteCheckbox')}
-                classname="inline"
+                classname="inline checkbox-title"
               />
             </Checkbox>
             {gaugeModuleChecked ? (
@@ -96,13 +96,6 @@ const DumbModulesSection = ({
               </div>
             ) : null}
             {gaugeModules.map(id => <GaugeForm key={id} id={id} editLocale={editLocale} />)}
-            {/* <label htmlFor="visible-vote-radio">
-              Voulez-vous que les participants puissent voir l evolution du vote en cours ?
-            </label>
-            <FormGroup id="visible-vote-radio">
-              <Radio>Oui</Radio>
-              <Radio>Non</Radio>
-            </FormGroup> */}
           </div>
         </div>
       </div>

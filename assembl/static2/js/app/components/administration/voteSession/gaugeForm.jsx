@@ -43,7 +43,7 @@ const DumbGaugeForm = ({
   handleNumberGaugeUncheck
 }: GaugeFormProps) => (
   <div className="gauges-vote-form">
-    <div className="flex">
+    <div className="flex margin-m">
       <FormControlWithLabel
         value={instructions}
         label={I18n.t('administration.gaugeVoteInstructions')}
@@ -77,12 +77,14 @@ const DumbGaugeForm = ({
         </MenuItem>
       ))}
     </SplitButton>
-    <Radio onChange={handleNumberGaugeUncheck} checked={!isNumberGauge}>
-      <Translate value="administration.textValue" />
-    </Radio>
-    <Radio onChange={handleNumberGaugeCheck} checked={isNumberGauge}>
-      <Translate value="administration.numberValue" />
-    </Radio>
+    <div className="margin-m">
+      <Radio onChange={handleNumberGaugeUncheck} checked={!isNumberGauge}>
+        <Translate value="administration.textValue" />
+      </Radio>
+      <Radio onChange={handleNumberGaugeCheck} checked={isNumberGauge}>
+        <Translate value="administration.numberValue" />
+      </Radio>
+    </div>
     {isNumberGauge && <NumberGaugeForm id={id} />}
     {!isNumberGauge &&
       choices.map((cid, index) => <TextGaugeForm key={`gauge-choice-${index}`} id={cid} index={index} editLocale={editLocale} />)}
