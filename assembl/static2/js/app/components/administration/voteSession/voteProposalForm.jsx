@@ -1,3 +1,4 @@
+// @flow
 import React from 'react';
 import { connect } from 'react-redux';
 import { I18n, Translate } from 'react-redux-i18n';
@@ -13,6 +14,20 @@ import {
   moveProposalDown
 } from '../../../actions/adminActions/voteSession';
 
+type VoteProposalFormProps = {
+  index: number,
+  title: string,
+  description: string,
+  toDelete: boolean,
+  markAsToDelete: Function,
+  updateTitle: Function,
+  updateDescription: Function,
+  editLocale: string,
+  nbProposals: number,
+  handleUpClick: Function,
+  handleDownClick: Function
+};
+
 const VoteProposalForm = ({
   index,
   title,
@@ -25,7 +40,7 @@ const VoteProposalForm = ({
   nbProposals,
   handleUpClick,
   handleDownClick
-}) => {
+}: VoteProposalFormProps) => {
   if (toDelete) {
     return null;
   }

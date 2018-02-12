@@ -278,7 +278,7 @@ export type VoteProposalInfo = {
   id: string
 };
 
-export type VoteProposalArray = Array<VoteProposalInfo>;
+export type VoteProposalsArray = Array<VoteProposalInfo>;
 
 export type UpdateVoteModules = {
   voteModules: VoteModulesArray,
@@ -340,7 +340,7 @@ export type UpdateTokenVoteCategoryColor = {
 };
 
 export type UpdateVoteProposals = {
-  voteProposals: VoteProposalArray,
+  voteProposals: VoteProposalsArray,
   type: typeof UPDATE_VOTE_PROPOSALS
 };
 
@@ -440,7 +440,7 @@ type VoteSessionActions =
   | UpdateTokenVoteCategoryTitle
   | UpdateTokenTotalNumber
   | UpdateTokenVoteCategoryColor
-  | UpdateVoteProposal
+  | UpdateVoteProposals
   | CreateVoteProposal
   | DeleteVoteProposal
   | UpdateVoteProposalTitle

@@ -1,3 +1,4 @@
+// @flow
 import React from 'react';
 import { connect } from 'react-redux';
 import { I18n } from 'react-redux-i18n';
@@ -7,7 +8,13 @@ import { createVoteProposal } from '../../../actions/adminActions/voteSession';
 import SectionTitle from '../sectionTitle';
 import VoteProposalForm from './voteProposalForm';
 
-const VoteProposalsSection = ({ voteProposals, editLocale, addVoteProposal }) => (
+type VoteProposalsSectionProps = {
+  voteProposals: Object,
+  editLocale: string,
+  addVoteProposal: Function
+};
+
+const VoteProposalsSection = ({ voteProposals, editLocale, addVoteProposal }: VoteProposalsSectionProps) => (
   <div className="admin-box">
     <SectionTitle
       title="Configurer les propositions associées aux modules de vote"

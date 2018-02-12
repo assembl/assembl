@@ -123,7 +123,7 @@ export const updateVoteSessionPage = (value: Object): actionTypes.UpdateVoteSess
   type: actionTypes.UPDATE_VOTE_SESSION_PAGE
 });
 
-export const updateVoteProposals = (voteProposals: ActionTypes.VoteProposalsArray): actionTypes.UpdateVoteProposals => ({
+export const updateVoteProposals = (voteProposals: actionTypes.VoteProposalsArray): actionTypes.UpdateVoteProposals => ({
   voteProposals: voteProposals,
   type: actionTypes.UPDATE_VOTE_PROPOSALS
 });
