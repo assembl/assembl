@@ -11,9 +11,13 @@ import PropositionSection from '../components/administration/voteSession/proposi
 import Navbar from '../components/administration/navbar';
 import SaveButton, { getMutationsPromises, runSerial } from '../components/administration/saveButton';
 import updateVoteSessionMutation from '../graphql/mutations/updateVoteSession.graphql';
-import deleteTokenVoteSpecificationMutation from '../graphql/mutations/deleteVoteSpecification.graphql';
+import deleteVoteSpecificationMutation from '../graphql/mutations/deleteVoteSpecification.graphql';
 import createTokenVoteSpecificationMutation from '../graphql/mutations/createTokenVoteSpecification.graphql';
 import updateTokenVoteSpecificationMutation from '../graphql/mutations/updateTokenVoteSpecification.graphql';
+import createGaugeVoteSpecificationMutation from '../graphql/mutations/createGaugeVoteSpecification.graphql';
+import updateGaugeVoteSpecificationMutation from '../graphql/mutations/updateGaugeVoteSpecification.graphql';
+import createNumberGaugeVoteSpecificationMutation from '../graphql/mutations/createNumberGaugeVoteSpecification.graphql';
+import updateNumberGaugeVoteSpecificationMutation from '../graphql/mutations/updateNumberGaugeVoteSpecification.graphql';
 import { convertEntriesToHTML } from '../utils/draftjs';
 import { getPhaseId } from '../utils/timeline';
 import { displayAlert } from '../utils/utilityManager';
@@ -24,43 +28,84 @@ type VoteSessionAdminProps = {
     locale: string
   },
   tokenModulesHaveChanged: boolean,
+  textGaugeModulesHaveChanged: boolean,
+  numberGaugeModulesHaveChanged: boolean,
   refetchVoteSession: Function,
   section: string,
   timeline: Timeline,
   voteModules: List,
   voteSessionPage: Map<string, *>,
   updateVoteSession: Function,
-  deleteTokenVoteSpecification: Function,
+  deleteVoteSpecification: Function,
   createTokenVoteSpecification: Function,
-  updateTokenVoteSpecification: Function
+  updateTokenVoteSpecification: Function,
+  createGaugeVoteSpecification: Function,
+  updateGaugeVoteSpecification: Function,
+  createNumberGaugeVoteSpecification: Function,
+  updateNumberGaugeVoteSpecification: Function
 };
 
-const createVariablesForDeleteTokenVoteSpecificationMutation = voteModule => ({ id: voteModule.id });
+const createVariablesForDeleteMutation = voteModule => ({ id: voteModule.id });
 
-const createVariablesForTokenVoteSpecificationMutation = voteModules => ({
-  voteSessionId: voteModules.voteSessionId,
-  exclusiveCategories: voteModules.exclusiveCategories,
-  instructionsEntries: voteModules.instructionsEntries,
+const createVariablesForTokenVoteSpecificationMutation = voteModule => ({
+  voteSessionId: voteModule.voteSessionId,
+  exclusiveCategories: voteModule.exclusiveCategories,
+  instructionsEntries: voteModule.instructionsEntries,
   titleEntries: [],
-  tokenCategories: voteModules.tokenCategories.map(t => ({
+  tokenCategories: voteModule.tokenCategories.map(t => ({
     titleEntries: t.titleEntries,
     color: t.color,
-    totalNumber: t.totalNumber,
-    typename: t.id
+    totalNumber: t.totalNumber
   }))
 });
 
+const createVariablesForTextGaugeMutation = voteModule => ({
+  voteSessionId: voteModule.voteSessionId,
+  titleEntries: [],
+  instructionsEntries: voteModule.instructionsEntries,
+  choices: voteModule.choices.map((c, index) => ({
+    labelEntries: c.labelEntries,
+    value: index.toFixed(2)
+  }))
+});
+
+const createVariablesForNumberGaugeMutation = voteModule => ({
+  voteSessionId: voteModule.voteSessionId,
+  titleEntries: [],
+  instructionsEntries: voteModule.instructionsEntries,
+  nbTicks: voteModule.nbTicks,
+  minimum: voteModule.minimum,
+  maximum: voteModule.maximum,
+  unit: voteModule.unit
+});
+
 class VoteSessionAdmin extends React.Component<void, VoteSessionAdminProps, void> {
+  componentWillReceiveProps(nextProps) {
+    const { section, voteSessionPage } = nextProps;
+    const currentStep = parseInt(section, 10);
+    if (currentStep === 2 && !voteSessionPage.get('id')) {
+      setTimeout(() => {
+        displayAlert('warning', I18n.t('administration.saveFirstStep'), false, 20000);
+      }, 500);
+    }
+  }
+
   saveAction = () => {
     const {
       i18n,
       tokenModulesHaveChanged,
+      numberGaugeModulesHaveChanged,
+      textGaugeModulesHaveChanged,
       refetchVoteSession,
       timeline,
       voteModules,
       voteSessionPage,
       createTokenVoteSpecification,
-      deleteTokenVoteSpecification,
+      createGaugeVoteSpecification,
+      updateGaugeVoteSpecification,
+      createNumberGaugeVoteSpecification,
+      updateNumberGaugeVoteSpecification,
+      deleteVoteSpecification,
       updateTokenVoteSpecification,
       updateVoteSession
     } = this.props;
@@ -94,8 +139,8 @@ class VoteSessionAdmin extends React.Component<void, VoteSessionAdminProps, void
         });
     }
 
-    if (tokenModulesHaveChanged) {
-      if (voteSessionPage.get('id')) {
+    if (voteSessionPage.get('id')) {
+      if (tokenModulesHaveChanged) {
         const tokenModules = voteModules.filter(m => m.get('type') === 'tokens');
         const items = [];
         tokenModules.forEach((t) => {
@@ -104,10 +149,10 @@ class VoteSessionAdmin extends React.Component<void, VoteSessionAdminProps, void
         const mutationsPromises = getMutationsPromises({
           items: items,
           variablesCreator: createVariablesForTokenVoteSpecificationMutation,
-          deleteVariablesCreator: createVariablesForDeleteTokenVoteSpecificationMutation,
+          deleteVariablesCreator: createVariablesForDeleteMutation,
           createMutation: createTokenVoteSpecification,
           updateMutation: updateTokenVoteSpecification,
-          deleteMutation: deleteTokenVoteSpecification,
+          deleteMutation: deleteVoteSpecification,
           lang: i18n.locale
         });
 
@@ -115,15 +160,68 @@ class VoteSessionAdmin extends React.Component<void, VoteSessionAdminProps, void
           refetchVoteSession();
           displayAlert('success', I18n.t('administration.voteSessionSuccess'));
         });
-      } else {
-        displayAlert('warning', I18n.t('administration.saveFirstStep'));
       }
+      if (textGaugeModulesHaveChanged) {
+        const textGaugeModules = voteModules.filter(m => m.get('type') === 'gauge' && !m.get('isNumberGauge'));
+        const items = [];
+        textGaugeModules.forEach((t) => {
+          items.push({ ...t.toJS(), voteSessionId: voteSessionPage.get('id') });
+        });
+        const mutationsPromises = getMutationsPromises({
+          items: items,
+          variablesCreator: createVariablesForTextGaugeMutation,
+          deleteVariablesCreator: createVariablesForDeleteMutation,
+          createMutation: createGaugeVoteSpecification,
+          updateMutation: updateGaugeVoteSpecification,
+          deleteMutation: deleteVoteSpecification,
+          lang: i18n.locale
+        });
+
+        runSerial(mutationsPromises).then(() => {
+          refetchVoteSession();
+          displayAlert('success', I18n.t('administration.voteSessionSuccess'));
+        });
+      }
+      if (numberGaugeModulesHaveChanged) {
+        const numberGaugeModules = voteModules.filter(m => m.get('type') === 'gauge' && m.get('isNumberGauge'));
+        const items = [];
+        numberGaugeModules.forEach((t) => {
+          items.push({ ...t.toJS(), voteSessionId: voteSessionPage.get('id') });
+        });
+        const mutationsPromises = getMutationsPromises({
+          items: items,
+          variablesCreator: createVariablesForNumberGaugeMutation,
+          deleteVariablesCreator: createVariablesForDeleteMutation,
+          createMutation: createNumberGaugeVoteSpecification,
+          updateMutation: updateNumberGaugeVoteSpecification,
+          deleteMutation: deleteVoteSpecification,
+          lang: i18n.locale
+        });
+
+        runSerial(mutationsPromises).then(() => {
+          refetchVoteSession();
+          displayAlert('success', I18n.t('administration.voteSessionSuccess'));
+        });
+      }
+    } else {
+      displayAlert('warning', I18n.t('administration.saveFirstStep'));
     }
   };
 
   render() {
-    const { editLocale, tokenModulesHaveChanged, section, voteSessionPage } = this.props;
-    const saveDisabled = !tokenModulesHaveChanged && !voteSessionPage.get('hasChanged');
+    const {
+      editLocale,
+      tokenModulesHaveChanged,
+      textGaugeModulesHaveChanged,
+      numberGaugeModulesHaveChanged,
+      section,
+      voteSessionPage
+    } = this.props;
+    const saveDisabled =
+      !tokenModulesHaveChanged &&
+      !textGaugeModulesHaveChanged &&
+      !numberGaugeModulesHaveChanged &&
+      !voteSessionPage.get('hasChanged');
     const currentStep = parseInt(section, 10);
     return (
       <div className="token-vote-admin">
@@ -138,20 +236,34 @@ class VoteSessionAdmin extends React.Component<void, VoteSessionAdminProps, void
 }
 
 const mapStateToProps = ({ admin: { editLocale, voteSession }, debate, i18n }) => {
-  const { modulesById, modulesInOrder, tokenCategoriesById, tokenModulesHaveChanged } = voteSession;
+  const {
+    modulesById,
+    modulesInOrder,
+    tokenCategoriesById,
+    gaugeChoicesById,
+    tokenModulesHaveChanged,
+    textGaugeModulesHaveChanged,
+    numberGaugeModulesHaveChanged
+  } = voteSession;
+
+  const modules = modulesInOrder.map((id) => {
+    if (modulesById.getIn([id, 'choices'])) {
+      return modulesById.get(id).set('choices', modulesById.getIn([id, 'choices']).map(t => gaugeChoicesById.get(t)));
+    } else if (modulesById.getIn([id, 'tokenCategories'])) {
+      return modulesById
+        .get(id)
+        .set('tokenCategories', modulesById.getIn([id, 'tokenCategories']).map(t => tokenCategoriesById.get(t)));
+    }
+    return modulesById.get(id);
+  });
   return {
     editLocale: editLocale,
     i18n: i18n,
     tokenModulesHaveChanged: tokenModulesHaveChanged,
+    textGaugeModulesHaveChanged: textGaugeModulesHaveChanged,
+    numberGaugeModulesHaveChanged: numberGaugeModulesHaveChanged,
     timeline: debate.debateData.timeline,
-    voteModules: modulesInOrder.map(
-      id =>
-        (modulesById.getIn([id, 'tokenCategories'])
-          ? modulesById
-            .get(id)
-            .set('tokenCategories', modulesById.getIn([id, 'tokenCategories']).map(t => tokenCategoriesById.get(t)))
-          : [])
-    ),
+    voteModules: modules,
     voteSessionPage: voteSession.page
   };
 };
@@ -161,13 +273,25 @@ export default compose(
   graphql(updateVoteSessionMutation, {
     name: 'updateVoteSession'
   }),
-  graphql(deleteTokenVoteSpecificationMutation, {
-    name: 'deleteTokenVoteSpecification'
+  graphql(deleteVoteSpecificationMutation, {
+    name: 'deleteVoteSpecification'
   }),
   graphql(createTokenVoteSpecificationMutation, {
     name: 'createTokenVoteSpecification'
   }),
   graphql(updateTokenVoteSpecificationMutation, {
     name: 'updateTokenVoteSpecification'
+  }),
+  graphql(createGaugeVoteSpecificationMutation, {
+    name: 'createGaugeVoteSpecification'
+  }),
+  graphql(updateGaugeVoteSpecificationMutation, {
+    name: 'updateGaugeVoteSpecification'
+  }),
+  graphql(createNumberGaugeVoteSpecificationMutation, {
+    name: 'createNumberGaugeVoteSpecification'
+  }),
+  graphql(updateNumberGaugeVoteSpecificationMutation, {
+    name: 'updateNumberGaugeVoteSpecification'
   })
 )(VoteSessionAdmin);

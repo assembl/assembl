@@ -151,7 +151,9 @@ class Administration extends React.Component {
   }
 
   putVoteModulesInStore(voteSession) {
-    const modules = voteSession && voteSession.modules ? voteSession.modules : [];
+    const filteredVoteSession = filter(VoteSessionQuery, { voteSession: voteSession });
+    const modules =
+      filteredVoteSession.voteSession && filteredVoteSession.voteSession.modules ? filteredVoteSession.voteSession.modules : [];
     this.props.updateVoteModules(modules);
   }
 

@@ -106,6 +106,16 @@ export const tokenModulesHaveChanged = (state: boolean = false, action: ReduxAct
   case UPDATE_TOKEN_VOTE_CATEGORY_TITLE:
   case UPDATE_TOKEN_VOTE_CATEGORY_COLOR:
   case UPDATE_TOKEN_TOTAL_NUMBER:
+    return true;
+  case UPDATE_VOTE_MODULES:
+    return false;
+  default:
+    return state;
+  }
+};
+
+export const textGaugeModulesHaveChanged = (state: boolean = false, action: ReduxAction<Action>) => {
+  switch (action.type) {
   case CREATE_GAUGE_VOTE_MODULE:
   case DELETE_GAUGE_VOTE_MODULE:
   case UPDATE_GAUGE_VOTE_INSTRUCTIONS:
@@ -114,6 +124,21 @@ export const tokenModulesHaveChanged = (state: boolean = false, action: ReduxAct
   case CREATE_GAUGE_VOTE_CHOICE:
   case DELETE_GAUGE_VOTE_CHOICE:
   case UPDATE_GAUGE_VOTE_CHOICE_LABEL:
+    return true;
+  case UPDATE_VOTE_MODULES:
+    return false;
+  default:
+    return state;
+  }
+};
+
+export const numberGaugeModulesHaveChanged = (state: boolean = false, action: ReduxAction<Action>) => {
+  switch (action.type) {
+  case CREATE_GAUGE_VOTE_MODULE:
+  case DELETE_GAUGE_VOTE_MODULE:
+  case UPDATE_GAUGE_VOTE_INSTRUCTIONS:
+  case UPDATE_GAUGE_VOTE_NUMBER_TICKS:
+  case UPDATE_GAUGE_VOTE_IS_NUMBER:
   case UPDATE_GAUGE_MINIMUM:
   case UPDATE_GAUGE_MAXIMUM:
   case UPDATE_GAUGE_UNIT:
@@ -179,8 +204,7 @@ export const modulesById = (state: Map<string, Map> = Map(), action: ReduxAction
   case UPDATE_VOTE_MODULES: {
     let newState = Map();
     action.voteModules.forEach((m) => {
-        const type = m.__typename; // eslint-disable-line
-      if (type === 'TokenVoteSpecification') {
+      if (m.voteType === 'token_vote_specification') {
         const moduleInfo = fromJS({
           isNew: false,
           toDelete: false,
@@ -191,7 +215,7 @@ export const modulesById = (state: Map<string, Map> = Map(), action: ReduxAction
           tokenCategories: m.tokenCategories.map(t => t.id)
         });
         newState = newState.set(m.id, moduleInfo);
-      } else if (type === 'NumberGaugeVoteSpecification') {
+      } else if (m.voteType === 'number_gauge_vote_specification') {
         const moduleInfo = fromJS({
           isNew: false,
           toDelete: false,
@@ -205,7 +229,7 @@ export const modulesById = (state: Map<string, Map> = Map(), action: ReduxAction
           unit: m.unit
         });
         newState = newState.set(m.id, moduleInfo);
-      } else if (type === 'GaugeVoteSpecification') {
+      } else if (m.voteType === 'gauge_vote_specification') {
         const moduleInfo = fromJS({
           isNew: false,
           toDelete: false,
@@ -276,8 +300,7 @@ export const tokenCategoriesById = (state: Map<string, Map> = Map(), action: Red
   case UPDATE_VOTE_MODULES: {
     let newState = Map();
     action.voteModules.forEach((m) => {
-        const type = m.__typename; // eslint-disable-line
-      if (type === 'TokenVoteSpecification') {
+      if (m.voteType === 'token_vote_specification') {
         m.tokenCategories.forEach((t) => {
           const tokenCategoryInfo = Map({
             id: t.id,
@@ -309,8 +332,7 @@ export const gaugeChoicesById = (state: Map<string, Map> = Map(), action: ReduxA
   case UPDATE_VOTE_MODULES: {
     let newState = Map();
     action.voteModules.forEach((m) => {
-        const type = m.__typename; // eslint-disable-line
-      if (type === 'GaugeVoteSpecification') {
+      if (m.voteType === 'gauge_vote_specification') {
         m.choices.forEach((c) => {
           const gaugeChoiceInfo = Map({
             id: c.id,
@@ -338,5 +360,7 @@ export default combineReducers({
   modulesById: modulesById,
   tokenCategoriesById: tokenCategoriesById,
   gaugeChoicesById: gaugeChoicesById,
-  tokenModulesHaveChanged: tokenModulesHaveChanged
+  tokenModulesHaveChanged: tokenModulesHaveChanged,
+  textGaugeModulesHaveChanged: textGaugeModulesHaveChanged,
+  numberGaugeModulesHaveChanged: numberGaugeModulesHaveChanged
 });
