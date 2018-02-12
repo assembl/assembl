@@ -6,7 +6,7 @@ import { addPropositionTooltip } from '../../common/tooltips';
 import SectionTitle from '../sectionTitle';
 import VoteProposalForm from './voteProposalForm';
 
-const VoteProposalsSection = () => (
+const VoteProposalsSection = ({ voteProposals, editLocale, addVoteProposal }) => (
   <div className="admin-box">
     <SectionTitle
       title="Configurer les propositions associées aux modules de vote"
@@ -14,10 +14,10 @@ const VoteProposalsSection = () => (
     />
     <div className="admin-content">
       <form>
-        <VoteProposalForm />
+        {voteProposals.map((id, index) => <VoteProposalForm key={id} id={id} index={index} editLocale={editLocale} />)}
         <OverlayTrigger placement="top" overlay={addPropositionTooltip}>
-          <div onClick={() => {}} className="plus margin-l">
-            +
+          <div onClick={addVoteProposal} className="plus margin-l">
+              +
           </div>
         </OverlayTrigger>
       </form>
@@ -26,8 +26,16 @@ const VoteProposalsSection = () => (
 );
 
 const mapStateToProps = ({ admin }) => {
-  const { voteProposalsInOrder } = admin.voteSession;
-  return admin;
+  const { voteProposalsInOrder, voteProposalsById } = admin.voteSession;
+  const { editLocale } = admin;
+  return {
+    voteProposals: voteProposalsInOrder.filter(id => !voteProposalsById.getIn([id, 'toDelete'])),
+    editLocale: editLocale
+  };
 };
 
-export default connect(mapStateToProps)(VoteProposalsSection);
+const mapDispatchToProps = () => ({
+  addVoteProposal: () => {}
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(VoteProposalsSection);
