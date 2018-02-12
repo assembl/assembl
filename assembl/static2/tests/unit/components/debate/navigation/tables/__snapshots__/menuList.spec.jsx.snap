@@ -3,9 +3,15 @@
 exports[`MenuList component should match the MenuList 1`] = `
 <div
   className="menu-table-col debate-class"
+  onMouseLeave={[Function]}
 >
   <div
     className="menu-table"
+    style={
+      Object {
+        "paddingTop": 0,
+      }
+    }
   >
     <Connect(DumbMenuItem)
       hasSubItems={false}
