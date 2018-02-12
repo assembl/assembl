@@ -22,7 +22,10 @@ import {
   UPDATE_TOKEN_TOTAL_NUMBER,
   UPDATE_TOKEN_VOTE_CATEGORY_COLOR,
   UPDATE_VOTE_PROPOSALS,
-  CREATE_VOTE_PROPOSAL
+  CREATE_VOTE_PROPOSAL,
+  DELETE_VOTE_PROPOSAL,
+  UPDATE_VOTE_PROPOSAL_TITLE,
+  UPDATE_VOTE_PROPOSAL_DESCRIPTION
 } from '../../actions/actionTypes';
 import { updateInLangstringEntries } from '../../utils/i18n';
 
@@ -205,6 +208,20 @@ export const tokenCategoriesById = (state: Map<string, Map> = Map(), action: Red
   }
 };
 
+export const voteProposalsHaveChanged = (state: boolean = false, action: ReduxAction<Action>) => {
+  switch (action.type) {
+  case CREATE_VOTE_PROPOSAL:
+  case DELETE_VOTE_PROPOSAL:
+  case UPDATE_VOTE_PROPOSAL_TITLE:
+  case UPDATE_VOTE_PROPOSAL_DESCRIPTION:
+    return true;
+  case UPDATE_VOTE_PROPOSALS:
+    return false;
+  default:
+    return state;
+  }
+};
+
 export const voteProposalsInOrder = (state: List<number> = List(), action: ReduxAction<Action>) => {
   switch (action.type) {
   case UPDATE_VOTE_PROPOSALS:
@@ -215,6 +232,14 @@ export const voteProposalsInOrder = (state: List<number> = List(), action: Redux
     return state;
   }
 };
+
+const defaultVoteProposition = Map({
+  isNew: true,
+  toDelete: false,
+  id: '',
+  titleEntries: List(),
+  descriptionEntries: List()
+});
 
 export const voteProposalsById = (state: Map<string, Map> = Map(), action: ReduxAction<Action>) => {
   switch (action.type) {
@@ -232,6 +257,14 @@ export const voteProposalsById = (state: Map<string, Map> = Map(), action: Redux
     });
     return newState;
   }
+  case CREATE_VOTE_PROPOSAL:
+    return state.set(action.id, defaultVoteProposition.set('id', action.id));
+  case DELETE_VOTE_PROPOSAL:
+    return state.setIn([action.id, 'toDelete'], true);
+  case UPDATE_VOTE_PROPOSAL_TITLE:
+    return state.updateIn([action.id, 'titleEntries'], updateInLangstringEntries(action.locale, action.value));
+  case UPDATE_VOTE_PROPOSAL_DESCRIPTION:
+    return state.updateIn([action.id, 'descriptionEntries'], updateInLangstringEntries(action.locale, action.value));
   default:
     return state;
   }
@@ -244,5 +277,6 @@ export default combineReducers({
   tokenCategoriesById: tokenCategoriesById,
   modulesHaveChanged: modulesHaveChanged,
   voteProposalsInOrder: voteProposalsInOrder,
-  voteProposalsById: voteProposalsById
+  voteProposalsById: voteProposalsById,
+  voteProposalsHaveChanged: voteProposalsHaveChanged
 });

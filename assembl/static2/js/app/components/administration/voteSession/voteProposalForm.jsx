@@ -4,6 +4,11 @@ import { OverlayTrigger, Button } from 'react-bootstrap';
 import FormControlWithLabel from '../../common/formControlWithLabel';
 import { getEntryValueForLocale } from '../../../utils/i18n';
 import { deleteVoteProposalTooltip } from '../../common/tooltips';
+import {
+  updateVoteProposalTitle,
+  updateVoteProposalDescription,
+  deleteVoteProposal
+} from '../../../actions/adminActions/voteSession';
 
 const VoteProposalForm = ({
   index,
@@ -55,10 +60,16 @@ const mapStateToProps = ({ admin }, { id, editLocale }) => {
   };
 };
 
-const mapDispatchToProps = () => ({
-  markAsToDelete: () => {},
-  updateTitle: () => {},
-  updateDescription: () => {}
+const mapDispatchToProps = (dispatch, { id }) => ({
+  markAsToDelete: () => {
+    dispatch(deleteVoteProposal(id));
+  },
+  updateTitle: (locale, value) => {
+    dispatch(updateVoteProposalTitle(id, locale, value));
+  },
+  updateDescription: (locale, value) => {
+    dispatch(updateVoteProposalDescription(id, locale, value));
+  }
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(VoteProposalForm);

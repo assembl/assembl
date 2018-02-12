@@ -138,7 +138,7 @@ export const deleteVoteProposal = (id: string): actionTypes.DeleteVoteProposal =
   type: actionTypes.DELETE_VOTE_PROPOSAL
 });
 
-export const updateVoteProposalTitle = (id: string, value: string, locale: string): actionTypes.UpdateVoteProposalTitle => ({
+export const updateVoteProposalTitle = (id: string, locale: string, value: string): actionTypes.UpdateVoteProposalTitle => ({
   id: id,
   value: value,
   locale: locale,
@@ -147,8 +147,8 @@ export const updateVoteProposalTitle = (id: string, value: string, locale: strin
 
 export const updateVoteProposalDescription = (
   id: string,
-  value: string,
-  locale: string
+  locale: string,
+  value: string
 ): actionTypes.UpdateVoteProposalDescription => ({
   id: id,
   value: value,
