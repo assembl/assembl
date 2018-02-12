@@ -1,8 +1,9 @@
 // @flow
 import React from 'react';
-import { Button } from 'react-bootstrap';
+import { Button, OverlayTrigger } from 'react-bootstrap';
 
 import Circle from '../svg/circle';
+import { resetTokensTooltip } from '../common/tooltips';
 import { type TokenVotesForProposal } from '../../pages/voteSession';
 
 type Props = {
@@ -27,6 +28,11 @@ const TokenVoteForProposal = ({ instructions, proposalId, tokenCategories, token
                 <Circle size="35px" strokeColor={category.color} fillColor={n + 1 <= currentVote ? category.color : undefined} />
               </Button>
             ))}
+            <OverlayTrigger placement="top" overlay={resetTokensTooltip}>
+              <Button onClick={() => voteForProposal(proposalId, category.id, 0)}>
+                <span className="assembl-icon-delete grey" />
+              </Button>
+            </OverlayTrigger>
           </div>
         </div>
       );

@@ -123,3 +123,9 @@ export const deleteResourceTooltip = (
     <Translate value="administration.resourcesCenter.deleteResource" />
   </Tooltip>
 );
+
+export const resetTokensTooltip = (
+  <Tooltip id="resetTokensTooltip">
+    <Translate value="debate.voteSession.resetTokens" />
+  </Tooltip>
+);

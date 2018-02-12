@@ -277,6 +277,9 @@ const Translations = {
         title: "Je modifie mon message",
         subject: "Titre",
         body: "Message"
+      },
+      voteSession: {
+        resetTokens: "Supprimer mon vote"
       }
     },
     profile: {
@@ -296,11 +299,11 @@ const Translations = {
       saveSuccess: "Votre profil a été mis à jour avec succès",
       updateUser: {
         errorMessage: {
-          1: "Nous avons déjà un utilisateur ayant ce nom d'utilisateur.",
-          2: "Le mot de passe renseigné ne correspond pas à votre mot de passe actuel.",
-          3: "Vous avez entré deux mots de passe différents.",
-          4: "Le nouveau mot de passe doit être différent du mot de passe actuel.",
-          5: "Le nouveau mot de passe doit être différent des 5 derniers mots de passe que vous avez utilisés."
+          "1": "Nous avons déjà un utilisateur ayant ce nom d'utilisateur.",
+          "2": "Le mot de passe renseigné ne correspond pas à votre mot de passe actuel.",
+          "3": "Vous avez entré deux mots de passe différents.",
+          "4": "Le nouveau mot de passe doit être différent du mot de passe actuel.",
+          "5": "Le nouveau mot de passe doit être différent des 5 derniers mots de passe que vous avez utilisés."
         }
       }
     },
@@ -345,14 +348,14 @@ const Translations = {
       },
       noTimeline: "Aucune timeline n'a été configurée pour ce débat.",
       survey: {
-        0: "Renseigner les thématiques",
-        1: "Renseigner les questions",
-        2: "Exporter les données"
+        "0": "Renseigner les thématiques",
+        "1": "Renseigner les questions",
+        "2": "Exporter les données"
       },
       voteSession: {
-        0: "Renseigner les instructions",
-        1: "Configurer les modules de vote",
-        2: "Configurer les propositions de vote"
+        "0": "Renseigner les instructions",
+        "1": "Configurer les modules de vote",
+        "2": "Configurer les propositions de vote"
       },
       voteWithTokens: "Vote par jetons",
       tokenVoteCheckbox:
@@ -412,8 +415,8 @@ const Translations = {
       annotation: "Les champs * sont requis.",
       themeNum: "Thématique %{index}",
       discussion: {
-        0: "Langues utilisées",
-        3: "Conditions générales d'utilisation & mentions légales"
+        "0": "Langues utilisées",
+        "3": "Conditions générales d'utilisation & mentions légales"
       },
       languageChoice: "Sélection des langues du débat",
       ph: {
@@ -753,6 +756,9 @@ const Translations = {
         title: "I edit my message",
         subject: "Subject",
         body: "Comment"
+      },
+      voteSession: {
+        resetTokens: "Reset my vote"
       }
     },
     profile: {
@@ -772,11 +778,11 @@ const Translations = {
       saveSuccess: "Your profile is updated",
       updateUser: {
         errorMessage: {
-          1: "We already have a user with this username.",
-          2: "The entered password doesn't match your current password.",
-          3: "You entered two different passwords.",
-          4: "The new password has to be different than the current password.",
-          5: "The new password has to be different than the last 5 passwords you set."
+          "1": "We already have a user with this username.",
+          "2": "The entered password doesn't match your current password.",
+          "3": "You entered two different passwords.",
+          "4": "The new password has to be different than the current password.",
+          "5": "The new password has to be different than the last 5 passwords you set."
         }
       }
     },
@@ -821,14 +827,14 @@ const Translations = {
       },
       noTimeline: "No timeline has been configured yet",
       survey: {
-        0: "Set themes",
-        1: "Set questions",
-        2: "Export data"
+        "0": "Set themes",
+        "1": "Set questions",
+        "2": "Export data"
       },
       voteSession: {
-        0: "Fill in the instructions",
-        1: "Configure the voting modules",
-        2: "Configure the voting proposals"
+        "0": "Fill in the instructions",
+        "1": "Configure the voting modules",
+        "2": "Configure the voting proposals"
       },
       voteWithTokens: "Tokens vote",
       tokenVoteCheckbox: "Check this box to create a token vote module",
@@ -884,8 +890,8 @@ const Translations = {
       annotation: "* Fields are required.",
       themeNum: "Theme %{index}",
       discussion: {
-        0: "Languages of the Discussion",
-        3: "Terms & Conditions and Legal Notice"
+        "0": "Languages of the Discussion",
+        "3": "Terms & Conditions and Legal Notice"
       },
       languageChoice: "Select desired languages below",
       ph: {

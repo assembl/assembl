@@ -189,6 +189,20 @@ exports[`Proposals component should match Proposals snapshot 1`] = `
                   />
                 </svg>
               </button>
+              <button
+                className="btn btn-default"
+                disabled={false}
+                onBlur={[Function]}
+                onClick={[Function]}
+                onFocus={[Function]}
+                onMouseOut={[Function]}
+                onMouseOver={[Function]}
+                type="button"
+              >
+                <span
+                  className="assembl-icon-delete grey"
+                />
+              </button>
             </div>
           </div>
           <div>
@@ -321,6 +335,20 @@ exports[`Proposals component should match Proposals snapshot 1`] = `
                     transform="matrix(1.4872568,0,0,1.4575117,-3.9272774,-6.4278868)"
                   />
                 </svg>
+              </button>
+              <button
+                className="btn btn-default"
+                disabled={false}
+                onBlur={[Function]}
+                onClick={[Function]}
+                onFocus={[Function]}
+                onMouseOut={[Function]}
+                onMouseOver={[Function]}
+                type="button"
+              >
+                <span
+                  className="assembl-icon-delete grey"
+                />
               </button>
             </div>
           </div>
@@ -683,6 +711,20 @@ exports[`Proposals component should match Proposals snapshot 1`] = `
                   />
                 </svg>
               </button>
+              <button
+                className="btn btn-default"
+                disabled={false}
+                onBlur={[Function]}
+                onClick={[Function]}
+                onFocus={[Function]}
+                onMouseOut={[Function]}
+                onMouseOver={[Function]}
+                type="button"
+              >
+                <span
+                  className="assembl-icon-delete grey"
+                />
+              </button>
             </div>
           </div>
           <div>
@@ -815,6 +857,20 @@ exports[`Proposals component should match Proposals snapshot 1`] = `
                     transform="matrix(1.4872568,0,0,1.4575117,-3.9272774,-6.4278868)"
                   />
                 </svg>
+              </button>
+              <button
+                className="btn btn-default"
+                disabled={false}
+                onBlur={[Function]}
+                onClick={[Function]}
+                onFocus={[Function]}
+                onMouseOut={[Function]}
+                onMouseOver={[Function]}
+                type="button"
+              >
+                <span
+                  className="assembl-icon-delete grey"
+                />
               </button>
             </div>
           </div>
