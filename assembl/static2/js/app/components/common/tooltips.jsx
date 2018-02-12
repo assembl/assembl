@@ -16,13 +16,13 @@ export const deleteSectionTooltip = (
   </Tooltip>
 );
 
-export const addPropositionTooltip = (
+export const addVoteProposalTooltip = (
   <Tooltip id="addPropositionTooltip">
     <Translate value="administration.propositions.addProposition" />
   </Tooltip>
 );
 
-export const deletePropositionTooltip = (
+export const deleteVoteProposalTooltip = (
   <Tooltip id="deletePropositionTooltip">
     <Translate value="administration.propositions.deleteProposition" />
   </Tooltip>

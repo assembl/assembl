@@ -1,7 +1,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { OverlayTrigger, Button } from 'react-bootstrap';
 import FormControlWithLabel from '../../common/formControlWithLabel';
 import { getEntryValueForLocale } from '../../../utils/i18n';
+import { deleteVoteProposalTooltip } from '../../common/tooltips';
 
 const VoteProposalForm = ({
   index,
@@ -22,6 +24,15 @@ const VoteProposalForm = ({
 
   return (
     <div className="form-container">
+      <div className="pointer right">
+        <div className="inline">
+          <OverlayTrigger placement="top" overlay={deleteVoteProposalTooltip}>
+            <Button onClick={markAsToDelete} className="admin-icons">
+              <span className="assembl-icon-delete grey" />
+            </Button>
+          </OverlayTrigger>
+        </div>
+      </div>
       <div className="title">Définir proposition {index + 1}</div>
       <FormControlWithLabel value={title} label="Titre de la proposition" onChange={handleTitleChange} required type="text" />
       <FormControlWithLabel
