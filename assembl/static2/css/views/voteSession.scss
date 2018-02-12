@@ -25,8 +25,14 @@
     margin: 40px 10px;
     padding: 15px;
 
-    .tokens > svg {
+    .tokens > button {
+      border: none;
       margin: 2px;
+      padding: 0;
+    }
+
+    .tokens > .btn-default:hover {
+      background-color: transparent;
     }
   }
 }

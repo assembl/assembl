@@ -79,6 +79,11 @@ exports[`VoteSession component should match VoteSession snapshot 1`] = `
                 },
               ]
             }
+            tokenVotes={
+              Immutable.Map {
+              }
+            }
+            voteForProposal={[Function]}
           />
         </Col>
       </Row>

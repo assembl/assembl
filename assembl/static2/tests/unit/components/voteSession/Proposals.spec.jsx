@@ -1,5 +1,6 @@
 import React from 'react';
 import renderer from 'react-test-renderer';
+import { Map } from 'immutable';
 
 import Proposals from '../../../../js/app/components/voteSession/proposals';
 
@@ -12,9 +13,16 @@ describe('Proposals component', () => {
           instructions: 'If we generate the feed, we can get to the AGP driver through the primary ADP interface!',
           tokenCategories: [
             {
-              id: '123',
+              color: '#226622',
+              id: 'positive',
               title: 'Positive',
               totalNumber: 5
+            },
+            {
+              color: '#771122',
+              id: 'negative',
+              title: 'Negative',
+              totalNumber: 4
             }
           ],
           voteType: 'token_vote_specification'
@@ -32,7 +40,13 @@ describe('Proposals component', () => {
           title: 'Bar',
           description: 'I\'ll input the multi-byte SAS monitor, that should bandwidth the USB microchip!'
         }
-      ]
+      ],
+      tokenVotes: Map({
+        foo: Map({
+          positive: 2,
+          negative: 1
+        })
+      })
     };
     const rendered = renderer.create(<Proposals {...props} />).toJSON();
     expect(rendered).toMatchSnapshot();
