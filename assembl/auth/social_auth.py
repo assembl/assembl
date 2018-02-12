@@ -304,7 +304,7 @@ class AssemblStrategy(PyramidStrategy):
             # If we do not already have a user, see if we're in a situation
             # where we're adding an account to an existing user, and maybe
             # even merging. We may also forget the logged in user.
-            'assembl.auth.social_auth.maybe_merge',
+            # 'assembl.auth.social_auth.maybe_merge', # commented out because of different users merge issues
 
             # Create a user account if we haven't found one yet.
             'social_core.pipeline.user.create_user',
