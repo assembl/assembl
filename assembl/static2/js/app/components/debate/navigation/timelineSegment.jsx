@@ -12,6 +12,7 @@ import { displayModal } from '../../../utils/utilityManager';
 import { get } from '../../../utils/routeMap';
 import { PHASE_STATUS, PHASES } from '../../../constants';
 import { menuScrollEventId } from './tables/menuList';
+import { createEvent } from '../../../utils/globalFunctions';
 
 const phasesToIgnore = [PHASES.voteSession];
 
@@ -79,9 +80,11 @@ export class DumbTimelineSegment extends React.Component<*, TimelineSegmentProps
   };
 
   handleMenuScroll = (event: SyntheticEvent & { currentTarget: HTMLDivElement }) => {
-    const scrollEvent = new CustomEvent(menuScrollEventId, {
-      detail: { position: event.currentTarget.scrollTop }
-    });
+    const scrollEvent = createEvent(menuScrollEventId, { bubbles: true, cancelable: true });
+    // $FlowFixMe
+    scrollEvent.detail = {
+      position: event.currentTarget.scrollTop
+    };
     window.dispatchEvent(scrollEvent);
   };
 
