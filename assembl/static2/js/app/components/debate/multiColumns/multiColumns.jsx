@@ -56,7 +56,6 @@ const MultiColumns = ({
             ideaId={ideaId}
             refetchIdea={refetchIdea}
             identifier={identifier}
-            debateData={debateData}
             withColumnHeader={!isPhaseCompleted}
           />
         );
