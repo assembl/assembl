@@ -1,5 +1,26 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`DebateLink component should match the DebateLink (small screen) 1`] = `
+<div
+  className="debate-link"
+  onMouseLeave={false}
+  onMouseOver={false}
+>
+  <Link
+    activeClassName="debate-class-active"
+    className="debate-class"
+    data-text="Debate"
+    onlyActiveOnIndex={false}
+    style={Object {}}
+    to="https://foo.bar"
+  >
+    <span>
+      Debate
+    </span>
+  </Link>
+</div>
+`;
+
 exports[`DebateLink component should match the DebateLink 1`] = `
 <div
   className="debate-link"

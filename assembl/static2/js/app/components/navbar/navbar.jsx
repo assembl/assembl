@@ -70,6 +70,7 @@ const SectionLink = ({ section, options }) => {
       className="navbar-menu-item pointer"
       activeClassName="active"
       dataText={title}
+      screenTooSmall={options.screenTooSmall}
     >
       {title}
     </DebateLink>
@@ -112,7 +113,8 @@ type MapSectionOptions = {
   phase: string,
   phaseContext: string,
   displayRedirectionToV1: () => mixed,
-  slug: string
+  slug: string,
+  screenTooSmall: boolean
 };
 
 type Section = {
@@ -162,7 +164,8 @@ export class AssemblNavbar extends React.PureComponent {
       slug: slug,
       phase: getCurrentPhaseIdentifier(timeline),
       phaseContext: phaseContext(timeline, phase),
-      displayRedirectionToV1: createRedirectionToV1()
+      displayRedirectionToV1: createRedirectionToV1(),
+      screenTooSmall: screenTooSmall
     };
     const commonProps = {
       elements: filteredSections.map(bind(mapSectionToElement, null, bind.placeholder, mapOptions)),

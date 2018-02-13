@@ -11,7 +11,8 @@ type DebateLinkProps = {
   activeClassName: string,
   children: Array<*>,
   to: string,
-  dataText: string
+  dataText: string,
+  screenTooSmall: boolean
 };
 
 type DebateLinkState = {
@@ -32,20 +33,26 @@ class DebateLink extends React.Component<*, DebateLinkProps, DebateLinkState> {
   };
 
   render() {
-    const { identifier, children, to, className, activeClassName, dataText } = this.props;
+    const { identifier, children, to, className, activeClassName, dataText, screenTooSmall } = this.props;
     const { menuActive } = this.state;
     return (
-      <div className={classNames('debate-link', { active: menuActive })} onMouseOver={this.showMenu} onMouseLeave={this.hideMenu}>
+      <div
+        className={classNames('debate-link', { active: menuActive })}
+        onMouseOver={!screenTooSmall && this.showMenu}
+        onMouseLeave={!screenTooSmall && this.hideMenu}
+      >
         <Link to={to} className={className} activeClassName={activeClassName} data-text={dataText}>
           {children}
         </Link>
-        <div className="header-container">
-          <section className="timeline-section" id="timeline">
-            <div className="max-container">
-              <Timeline showNavigation identifier={identifier} onMenuItemClick={this.hideMenu} />
-            </div>
-          </section>
-        </div>
+        {!screenTooSmall && (
+          <div className="header-container">
+            <section className="timeline-section" id="timeline">
+              <div className="max-container">
+                <Timeline showNavigation identifier={identifier} onMenuItemClick={this.hideMenu} />
+              </div>
+            </section>
+          </div>
+        )}
       </div>
     );
   }

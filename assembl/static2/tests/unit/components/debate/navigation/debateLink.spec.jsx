@@ -18,4 +18,19 @@ describe('DebateLink component', () => {
     const rendered = renderer.getRenderOutput();
     expect(rendered).toMatchSnapshot();
   });
+  it('should match the DebateLink (small screen)', () => {
+    const props = {
+      identifier: 'survey',
+      children: <span>Debate</span>,
+      to: 'https://foo.bar',
+      className: 'debate-class',
+      activeClassName: 'debate-class-active',
+      dataText: 'Debate',
+      screenTooSmall: true
+    };
+    const renderer = new ShallowRenderer();
+    renderer.render(<DebateLink {...props} />);
+    const rendered = renderer.getRenderOutput();
+    expect(rendered).toMatchSnapshot();
+  });
 });
