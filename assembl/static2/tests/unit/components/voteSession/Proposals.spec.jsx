@@ -41,6 +41,10 @@ describe('Proposals component', () => {
           description: 'I\'ll input the multi-byte SAS monitor, that should bandwidth the USB microchip!'
         }
       ],
+      remainingTokensByCategory: Map({
+        negative: 4,
+        positive: 2
+      }),
       tokenVotes: Map({
         foo: Map({
           positive: 2,

@@ -37,12 +37,14 @@ describe('VoteSession component', () => {
             {
               color: '#117711',
               id: 'negative',
-              title: 'Negative'
+              title: 'Negative',
+              totalNumber: 10
             },
             {
               color: '#881111',
               id: 'positive',
-              title: 'Positive'
+              title: 'Positive',
+              totalNumber: 8
             }
           ],
           voteType: 'token_vote_specification'

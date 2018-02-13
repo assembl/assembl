@@ -160,7 +160,7 @@ exports[`Proposals component should match Proposals snapshot 1`] = `
               </button>
               <button
                 className="admin-icons btn btn-default"
-                disabled={false}
+                disabled={true}
                 onClick={[Function]}
                 type="button"
               >
@@ -498,7 +498,7 @@ exports[`Proposals component should match Proposals snapshot 1`] = `
               </button>
               <button
                 className="admin-icons btn btn-default"
-                disabled={false}
+                disabled={true}
                 onClick={[Function]}
                 type="button"
               >
@@ -529,7 +529,7 @@ exports[`Proposals component should match Proposals snapshot 1`] = `
               </button>
               <button
                 className="admin-icons btn btn-default"
-                disabled={false}
+                disabled={true}
                 onClick={[Function]}
                 type="button"
               >
@@ -560,7 +560,7 @@ exports[`Proposals component should match Proposals snapshot 1`] = `
               </button>
               <button
                 className="admin-icons btn btn-default"
-                disabled={false}
+                disabled={true}
                 onClick={[Function]}
                 type="button"
               >

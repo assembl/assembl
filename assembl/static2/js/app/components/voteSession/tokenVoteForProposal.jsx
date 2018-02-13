@@ -4,7 +4,7 @@ import { Button, OverlayTrigger } from 'react-bootstrap';
 
 import Circle from '../svg/circle';
 import { resetTokensTooltip } from '../common/tooltips';
-import { type TokenVotesForProposal } from '../../pages/voteSession';
+import { type RemainingTokensByCategory, type TokenVotesForProposal } from '../../pages/voteSession';
 
 type TokenCategory = {|
   id: string,
@@ -18,12 +18,20 @@ type TokenCategory = {|
 type Props = {
   instructions: ?string,
   proposalId: string,
+  remainingTokensByCategory: RemainingTokensByCategory,
   tokenCategories: ?Array<?TokenCategory>,
   tokenVotes: TokenVotesForProposal,
   voteForProposal: Function
 };
 
-const TokenVoteForProposal = ({ instructions, proposalId, tokenCategories, tokenVotes, voteForProposal }: Props) => (
+const TokenVoteForProposal = ({
+  instructions,
+  proposalId,
+  remainingTokensByCategory,
+  tokenCategories,
+  tokenVotes,
+  voteForProposal
+}: Props) => (
   <div>
     {instructions}
     {tokenCategories &&
@@ -36,7 +44,12 @@ const TokenVoteForProposal = ({ instructions, proposalId, tokenCategories, token
               <p>{title}</p>
               <div className="tokens">
                 {[...Array(totalNumber).keys()].map(n => (
-                  <Button key={n + 1} className="admin-icons" onClick={() => voteForProposal(proposalId, id, n + 1)}>
+                  <Button
+                    key={n + 1}
+                    className="admin-icons"
+                    disabled={n + 1 > currentVote + remainingTokensByCategory.get(id)}
+                    onClick={() => voteForProposal(proposalId, id, n + 1)}
+                  >
                     <Circle size="35px" strokeColor={color} fillColor={n + 1 <= currentVote ? color : undefined} />
                   </Button>
                 ))}

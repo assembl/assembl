@@ -45,23 +45,27 @@ exports[`VoteSession component should match VoteSession snapshot 1`] = `
             }
           />
           <AvailableTokens
+            remainingTokensByCategory={
+              Immutable.Map {
+                negative: 10,
+                positive: 8,
+              }
+            }
             tokenCategories={
               Array [
                 Object {
                   "color": "#117711",
                   "id": "negative",
                   "title": "Negative",
+                  "totalNumber": 10,
                 },
                 Object {
                   "color": "#881111",
                   "id": "positive",
                   "title": "Positive",
+                  "totalNumber": 8,
                 },
               ]
-            }
-            tokenVotes={
-              Immutable.Map {
-              }
             }
           />
         </Col>
@@ -97,11 +101,13 @@ exports[`VoteSession component should match VoteSession snapshot 1`] = `
                       "color": "#117711",
                       "id": "negative",
                       "title": "Negative",
+                      "totalNumber": 10,
                     },
                     Object {
                       "color": "#881111",
                       "id": "positive",
                       "title": "Positive",
+                      "totalNumber": 8,
                     },
                   ],
                   "voteType": "token_vote_specification",
@@ -116,6 +122,12 @@ exports[`VoteSession component should match VoteSession snapshot 1`] = `
                   "title": "Foo",
                 },
               ]
+            }
+            remainingTokensByCategory={
+              Immutable.Map {
+                negative: 10,
+                positive: 8,
+              }
             }
             tokenVotes={
               Immutable.Map {
@@ -201,6 +213,10 @@ exports[`VoteSession component should match VoteSession snapshot with empty modu
           <Proposals
             modules={Array []}
             proposals={Array []}
+            remainingTokensByCategory={
+              Immutable.Map {
+              }
+            }
             tokenVotes={
               Immutable.Map {
               }

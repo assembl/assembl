@@ -48,7 +48,10 @@ type Props = {
   proposals: Array<Proposal>
 };
 
+export type RemainingTokensByCategory = Map<string, number>;
+
 export type TokenVotesForProposal = Map<string, number>;
+
 export type UserTokenVotes = Map<string, TokenVotesForProposal>;
 
 type State = {
@@ -77,6 +80,21 @@ class DumbVoteSession extends React.Component<void, Props, State> {
     });
   };
 
+  getRemainingTokensByCategory: (?tokenVoteSpecificationFragment) => RemainingTokensByCategory = (module) => {
+    let remainingTokensByCategory = Map();
+    if (module && module.tokenCategories) {
+      module.tokenCategories.forEach((category) => {
+        if (category) {
+          remainingTokensByCategory = remainingTokensByCategory.set(category.id, category.totalNumber);
+        }
+      });
+    }
+    const proposalsVotes = this.state.userTokenVotes.valueSeq().toList();
+    remainingTokensByCategory = remainingTokensByCategory.mergeWith((x, y) => x - y, ...proposalsVotes);
+
+    return remainingTokensByCategory;
+  };
+
   render() {
     const {
       title,
@@ -88,7 +106,8 @@ class DumbVoteSession extends React.Component<void, Props, State> {
       proposals,
       modules
     } = this.props;
-    const tokensVoteModule = findTokenVoteModule(modules);
+    const tokenVoteModule = findTokenVoteModule(modules);
+    const remainingTokensByCategory = this.getRemainingTokensByCategory(tokenVoteModule);
     return (
       <div className="votesession-page">
         <Header title={title} subtitle={subTitle} imgUrl={headerImageUrl} additionalHeaderClasses="left" />
@@ -97,8 +116,11 @@ class DumbVoteSession extends React.Component<void, Props, State> {
             <Row>
               <Col mdOffset={1} md={10} smOffset={1} sm={10}>
                 <div dangerouslySetInnerHTML={{ __html: instructionsSectionContent }} className="vote-instructions" />
-                {tokensVoteModule && (
-                  <AvailableTokens tokenCategories={tokensVoteModule.tokenCategories} tokenVotes={this.state.userTokenVotes} />
+                {tokenVoteModule && (
+                  <AvailableTokens
+                    remainingTokensByCategory={remainingTokensByCategory}
+                    tokenCategories={tokenVoteModule.tokenCategories}
+                  />
                 )}
               </Col>
             </Row>
@@ -109,6 +131,7 @@ class DumbVoteSession extends React.Component<void, Props, State> {
                 <Proposals
                   modules={modules}
                   proposals={proposals}
+                  remainingTokensByCategory={remainingTokensByCategory}
                   tokenVotes={this.state.userTokenVotes}
                   voteForProposal={this.voteForProposal}
                 />

@@ -6,18 +6,24 @@ import { Map } from 'immutable';
 import TokenVoteForProposal from './tokenVoteForProposal';
 import GaugeVoteForProposal from './gaugeVoteForProposal';
 import NumberGaugeVoteForProposal from './numberGaugeVoteForProposal';
-import { findTokenVoteModule, type UserTokenVotes, type VoteSpecification } from '../../pages/voteSession';
+import {
+  findTokenVoteModule,
+  type RemainingTokensByCategory,
+  type UserTokenVotes,
+  type VoteSpecification
+} from '../../pages/voteSession';
 
 type Props = {
   description: ?string,
   id: string,
   modules: ?Array<VoteSpecification>,
+  remainingTokensByCategory: RemainingTokensByCategory,
   title: ?string,
   tokenVotes: UserTokenVotes,
   voteForProposal: Function
 };
 
-const Proposal = ({ description, id, modules, title, tokenVotes, voteForProposal }: Props) => {
+const Proposal = ({ description, id, modules, remainingTokensByCategory, title, tokenVotes, voteForProposal }: Props) => {
   const tokenVoteModule = modules ? findTokenVoteModule(modules) : null;
   return (
     <div className="theme-box">
@@ -32,6 +38,7 @@ const Proposal = ({ description, id, modules, title, tokenVotes, voteForProposal
               key={tokenVoteModule.id}
               instructions={tokenVoteModule.instructions}
               proposalId={id}
+              remainingTokensByCategory={remainingTokensByCategory}
               tokenCategories={tokenVoteModule.tokenCategories}
               tokenVotes={tokenVotes.get(id, Map())}
               voteForProposal={voteForProposal}
