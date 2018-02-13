@@ -4,7 +4,7 @@ import Slider from 'rc-slider';
 
 const marks = {
   '-10': '-10°C',
-  '0': '<strong>0°C</strong>',
+  '0': <strong>0°C</strong>,
   '26': '26°C',
   '37': '37°C',
   '50': '50°C',
@@ -12,7 +12,7 @@ const marks = {
     style: {
       color: 'red'
     },
-    label: '<strong>100°C</strong>'
+    label: <strong>100°C</strong>
   }
 };
 /* eslint-enable */

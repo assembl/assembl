@@ -474,7 +474,9 @@ exports[`Proposals component should match Proposals snapshot 1`] = `
                   }
                 }
               >
-                &lt;strong&gt;0°C&lt;/strong&gt;
+                <strong>
+                  0°C
+                </strong>
               </span>
               <span
                 className="rc-slider-mark-text"
@@ -523,7 +525,9 @@ exports[`Proposals component should match Proposals snapshot 1`] = `
                   }
                 }
               >
-                &lt;strong&gt;100°C&lt;/strong&gt;
+                <strong>
+                  100°C
+                </strong>
               </span>
             </div>
           </div>
@@ -1001,7 +1005,9 @@ exports[`Proposals component should match Proposals snapshot 1`] = `
                   }
                 }
               >
-                &lt;strong&gt;0°C&lt;/strong&gt;
+                <strong>
+                  0°C
+                </strong>
               </span>
               <span
                 className="rc-slider-mark-text"
@@ -1050,7 +1056,9 @@ exports[`Proposals component should match Proposals snapshot 1`] = `
                   }
                 }
               >
-                &lt;strong&gt;100°C&lt;/strong&gt;
+                <strong>
+                  100°C
+                </strong>
               </span>
             </div>
           </div>
