@@ -2,28 +2,52 @@
 import React from 'react';
 import Slider from 'rc-slider';
 
-const marks = {
-  '0': <strong>0°C</strong>,
-  '26': '26°C',
-  '37': '37°C',
-  '50': '50°C',
-  '100': {
-    style: {
-      color: 'red'
-    },
-    label: <strong>100°C</strong>
-  }
+type Choice = {
+  id: string,
+  label: string,
+  value: number
 };
 
 type Props = {
-  instructions: string
+  instructions: string,
+  choices: ?Array<Choice>
 };
 
-const GaugeVoteForProposal = ({ instructions }: Props) => (
-  <div className="gauge-vote-for-proposal">
-    <p>{instructions}</p>
-    <Slider min={-10} max={100} marks={marks} step={10} included={false} defaultValue={20} />
-  </div>
-);
+const GaugeVoteForProposal = ({ instructions, choices }: Props) => {
+  const marks = {};
+  let maximum = null;
+  let minimum = null;
+
+  if (choices && choices.length) {
+    const choicesValues = choices.reduce((accumulator, item) => {
+      if ('value' in item) {
+        return accumulator.concat(item.value);
+      }
+      return accumulator;
+    }, []);
+    if (choicesValues.length) {
+      maximum = Math.max(...choicesValues);
+      minimum = Math.min(...choicesValues);
+    }
+  }
+
+  if (choices && choices.length) {
+    choices.forEach((choice) => {
+      marks[`${choice.value}`] = {
+        style: {
+          color: 'black'
+        },
+        label: <strong>{choice.label}</strong>
+      };
+    });
+  }
+
+  return (
+    <div className="gauge-vote-for-proposal">
+      <p>{instructions}</p>
+      <Slider min={minimum} max={maximum} marks={marks} included={false} step={null} />
+    </div>
+  );
+};
 
 export default GaugeVoteForProposal;

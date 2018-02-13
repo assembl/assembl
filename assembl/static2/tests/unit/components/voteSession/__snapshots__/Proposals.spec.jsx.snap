@@ -360,7 +360,7 @@ exports[`Proposals component should match Proposals snapshot 1`] = `
             I'll generate the mobile SMS bus, that should microchip the TCP matrix!
           </p>
           <div
-            className="rc-slider rc-slider-with-marks"
+            className="rc-slider"
             onBlur={[Function]}
             onFocus={[Function]}
             onKeyDown={[Function]}
@@ -379,137 +379,26 @@ exports[`Proposals component should match Proposals snapshot 1`] = `
                 Object {
                   "left": "0%",
                   "visibility": "hidden",
-                  "width": "27.27272727272727%",
+                  "width": "NaN%",
                 }
               }
             />
             <div
               className="rc-slider-step"
-            >
-              <span
-                className="rc-slider-dot"
-                style={
-                  Object {
-                    "left": "9.090909090909092%",
-                  }
-                }
-              />
-              <span
-                className="rc-slider-dot"
-                style={
-                  Object {
-                    "left": "32.72727272727273%",
-                  }
-                }
-              />
-              <span
-                className="rc-slider-dot"
-                style={
-                  Object {
-                    "left": "42.72727272727273%",
-                  }
-                }
-              />
-              <span
-                className="rc-slider-dot"
-                style={
-                  Object {
-                    "left": "54.54545454545454%",
-                  }
-                }
-              />
-              <span
-                className="rc-slider-dot"
-                style={
-                  Object {
-                    "left": "100%",
-                  }
-                }
-              />
-            </div>
+            />
             <div
-              aria-disabled={false}
-              aria-valuemax={100}
-              aria-valuemin={-10}
-              aria-valuenow={20}
               className="rc-slider-handle"
               role="slider"
               style={
                 Object {
-                  "left": "27.27272727272727%",
+                  "left": "NaN%",
                 }
               }
               tabIndex={0}
             />
             <div
               className="rc-slider-mark"
-            >
-              <span
-                className="rc-slider-mark-text"
-                style={
-                  Object {
-                    "left": "9.090909090909092%",
-                    "marginLeft": "-11.25%",
-                    "width": "22.5%",
-                  }
-                }
-              >
-                <strong>
-                  0°C
-                </strong>
-              </span>
-              <span
-                className="rc-slider-mark-text"
-                style={
-                  Object {
-                    "left": "32.72727272727273%",
-                    "marginLeft": "-11.25%",
-                    "width": "22.5%",
-                  }
-                }
-              >
-                26°C
-              </span>
-              <span
-                className="rc-slider-mark-text"
-                style={
-                  Object {
-                    "left": "42.72727272727273%",
-                    "marginLeft": "-11.25%",
-                    "width": "22.5%",
-                  }
-                }
-              >
-                37°C
-              </span>
-              <span
-                className="rc-slider-mark-text"
-                style={
-                  Object {
-                    "left": "54.54545454545454%",
-                    "marginLeft": "-11.25%",
-                    "width": "22.5%",
-                  }
-                }
-              >
-                50°C
-              </span>
-              <span
-                className="rc-slider-mark-text"
-                style={
-                  Object {
-                    "color": "red",
-                    "left": "100%",
-                    "marginLeft": "-11.25%",
-                    "width": "22.5%",
-                  }
-                }
-              >
-                <strong>
-                  100°C
-                </strong>
-              </span>
-            </div>
+            />
           </div>
         </div>
       </div>
@@ -871,7 +760,7 @@ exports[`Proposals component should match Proposals snapshot 1`] = `
             I'll generate the mobile SMS bus, that should microchip the TCP matrix!
           </p>
           <div
-            className="rc-slider rc-slider-with-marks"
+            className="rc-slider"
             onBlur={[Function]}
             onFocus={[Function]}
             onKeyDown={[Function]}
@@ -890,137 +779,26 @@ exports[`Proposals component should match Proposals snapshot 1`] = `
                 Object {
                   "left": "0%",
                   "visibility": "hidden",
-                  "width": "27.27272727272727%",
+                  "width": "NaN%",
                 }
               }
             />
             <div
               className="rc-slider-step"
-            >
-              <span
-                className="rc-slider-dot"
-                style={
-                  Object {
-                    "left": "9.090909090909092%",
-                  }
-                }
-              />
-              <span
-                className="rc-slider-dot"
-                style={
-                  Object {
-                    "left": "32.72727272727273%",
-                  }
-                }
-              />
-              <span
-                className="rc-slider-dot"
-                style={
-                  Object {
-                    "left": "42.72727272727273%",
-                  }
-                }
-              />
-              <span
-                className="rc-slider-dot"
-                style={
-                  Object {
-                    "left": "54.54545454545454%",
-                  }
-                }
-              />
-              <span
-                className="rc-slider-dot"
-                style={
-                  Object {
-                    "left": "100%",
-                  }
-                }
-              />
-            </div>
+            />
             <div
-              aria-disabled={false}
-              aria-valuemax={100}
-              aria-valuemin={-10}
-              aria-valuenow={20}
               className="rc-slider-handle"
               role="slider"
               style={
                 Object {
-                  "left": "27.27272727272727%",
+                  "left": "NaN%",
                 }
               }
               tabIndex={0}
             />
             <div
               className="rc-slider-mark"
-            >
-              <span
-                className="rc-slider-mark-text"
-                style={
-                  Object {
-                    "left": "9.090909090909092%",
-                    "marginLeft": "-11.25%",
-                    "width": "22.5%",
-                  }
-                }
-              >
-                <strong>
-                  0°C
-                </strong>
-              </span>
-              <span
-                className="rc-slider-mark-text"
-                style={
-                  Object {
-                    "left": "32.72727272727273%",
-                    "marginLeft": "-11.25%",
-                    "width": "22.5%",
-                  }
-                }
-              >
-                26°C
-              </span>
-              <span
-                className="rc-slider-mark-text"
-                style={
-                  Object {
-                    "left": "42.72727272727273%",
-                    "marginLeft": "-11.25%",
-                    "width": "22.5%",
-                  }
-                }
-              >
-                37°C
-              </span>
-              <span
-                className="rc-slider-mark-text"
-                style={
-                  Object {
-                    "left": "54.54545454545454%",
-                    "marginLeft": "-11.25%",
-                    "width": "22.5%",
-                  }
-                }
-              >
-                50°C
-              </span>
-              <span
-                className="rc-slider-mark-text"
-                style={
-                  Object {
-                    "color": "red",
-                    "left": "100%",
-                    "marginLeft": "-11.25%",
-                    "width": "22.5%",
-                  }
-                }
-              >
-                <strong>
-                  100°C
-                </strong>
-              </span>
-            </div>
+            />
           </div>
         </div>
       </div>
