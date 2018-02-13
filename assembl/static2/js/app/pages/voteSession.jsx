@@ -8,9 +8,34 @@ import { Map } from 'immutable';
 import VoteSessionQuery from '../graphql/VoteSession.graphql';
 import Header from '../components/common/header';
 import Section from '../components/common/section';
+import AvailableTokens from '../components/voteSession/availableTokens';
 import Proposals from '../components/voteSession/proposals';
 import { getPhaseId } from '../utils/timeline';
 import withLoadingIndicator from '../components/common/withLoadingIndicator';
+
+export type TokenCategory = {|
+  id: string,
+  totalNumber: number,
+  typename: string,
+  title: ?string,
+  titleEntries: ?Array<?LangStringEntryInput>,
+  color: ?string
+|};
+
+export type VoteSpecification =
+  | tokenVoteSpecificationFragment
+  | numberGaugeVoteSpecificationFragment
+  | gaugeVoteSpecificationFragment;
+
+export type Proposal = {|
+  id: string,
+  title: ?string,
+  description: ?string,
+  titleEntries: ?Array<?LangStringEntryInput>,
+  descriptionEntries: ?Array<?LangStringEntryInput>,
+  order: ?number,
+  modules: ?Array<VoteSpecification>
+|};
 
 type Props = {
   title: string,
@@ -18,9 +43,9 @@ type Props = {
   headerImageUrl: string,
   instructionsSectionTitle: string,
   instructionsSectionContent: string,
-  modules: Array<Object>,
+  modules: Array<VoteSpecification>,
   propositionsSectionTitle: string,
-  proposals: Array<Object>
+  proposals: Array<Proposal>
 };
 
 export type TokenVotesForProposal = Map<string, number>;
@@ -29,6 +54,10 @@ export type UserTokenVotes = Map<string, TokenVotesForProposal>;
 type State = {
   userTokenVotes: UserTokenVotes
 };
+
+// $FlowFixMe: if voteType === 'token_vote_specification', it must be a tokenVoteSpecificationFragment
+type FindTokenVoteModule = (Array<VoteSpecification>) => ?tokenVoteSpecificationFragment;
+export const findTokenVoteModule: FindTokenVoteModule = modules => modules.find(m => m.voteType === 'token_vote_specification');
 
 class DumbVoteSession extends React.Component<void, Props, State> {
   props: Props;
@@ -59,6 +88,7 @@ class DumbVoteSession extends React.Component<void, Props, State> {
       proposals,
       modules
     } = this.props;
+    const tokensVoteModule = findTokenVoteModule(modules);
     return (
       <div className="votesession-page">
         <Header title={title} subtitle={subTitle} imgUrl={headerImageUrl} additionalHeaderClasses="left" />
@@ -67,7 +97,9 @@ class DumbVoteSession extends React.Component<void, Props, State> {
             <Row>
               <Col mdOffset={1} md={10} smOffset={1} sm={10}>
                 <div dangerouslySetInnerHTML={{ __html: instructionsSectionContent }} className="vote-instructions" />
-                {/* INSERT THE TOKENS HERE */}
+                {tokensVoteModule && (
+                  <AvailableTokens tokenCategories={tokensVoteModule.tokenCategories} tokenVotes={this.state.userTokenVotes} />
+                )}
               </Col>
             </Row>
           </Section>

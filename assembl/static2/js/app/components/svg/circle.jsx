@@ -2,9 +2,9 @@
 import React from 'react';
 
 type Props = {
-  fillColor?: string,
+  fillColor?: ?string,
   size?: string,
-  strokeColor?: string
+  strokeColor?: ?string
 };
 
 const Circle = ({ fillColor, strokeColor, size }: Props) => (

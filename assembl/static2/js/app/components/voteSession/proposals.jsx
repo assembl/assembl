@@ -3,11 +3,11 @@ import React from 'react';
 import { Grid } from 'react-bootstrap';
 
 import Proposal from './proposal';
-import { type UserTokenVotes } from '../../pages/voteSession';
+import { type Proposal as ProposalType, type UserTokenVotes, type VoteSpecification } from '../../pages/voteSession';
 
 type Props = {
-  modules: Array<Object>,
-  proposals: Array<Object>,
+  modules: Array<VoteSpecification>,
+  proposals: Array<ProposalType>,
   tokenVotes: UserTokenVotes,
   voteForProposal: Function
 };

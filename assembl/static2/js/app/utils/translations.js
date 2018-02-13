@@ -279,6 +279,7 @@ const Translations = {
         body: "Message"
       },
       voteSession: {
+        remainingTokens: "Il vous reste %{count} jetons disponibles.",
         resetTokens: "Supprimer mon vote"
       }
     },
@@ -758,6 +759,7 @@ const Translations = {
         body: "Comment"
       },
       voteSession: {
+        remainingTokens: "You have %{count} tokens remaining.",
         resetTokens: "Reset my vote"
       }
     },

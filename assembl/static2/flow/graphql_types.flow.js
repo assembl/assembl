@@ -982,6 +982,7 @@ export type VoteSessionQuery = {|
             // The ID of the object.
             id: string,
             voteSessionId: string,
+            instructions: ?string,
             titleEntries: ?Array<?{|
               localeCode: string,
               value: ?string
@@ -999,12 +1000,14 @@ export type VoteSessionQuery = {|
                 value: ?string
               |}>
             |}>,
-            voteSpecTemplateId: ?string
+            voteSpecTemplateId: ?string,
+            voteType: ?string
           }
         | {
             // The ID of the object.
             id: string,
             voteSessionId: string,
+            instructions: ?string,
             titleEntries: ?Array<?{|
               localeCode: string,
               value: ?string
@@ -1017,7 +1020,8 @@ export type VoteSessionQuery = {|
             maximum: ?number,
             nbTicks: ?number,
             unit: ?string,
-            voteSpecTemplateId: ?string
+            voteSpecTemplateId: ?string,
+            voteType: ?string
           })>
     |}>,
     modules: ?Array<?(
@@ -1055,6 +1059,7 @@ export type VoteSessionQuery = {|
           // The ID of the object.
           id: string,
           voteSessionId: string,
+          instructions: ?string,
           titleEntries: ?Array<?{|
             localeCode: string,
             value: ?string
@@ -1072,12 +1077,14 @@ export type VoteSessionQuery = {|
               value: ?string
             |}>
           |}>,
-          voteSpecTemplateId: ?string
+          voteSpecTemplateId: ?string,
+          voteType: ?string
         }
       | {
           // The ID of the object.
           id: string,
           voteSessionId: string,
+          instructions: ?string,
           titleEntries: ?Array<?{|
             localeCode: string,
             value: ?string
@@ -1090,7 +1097,8 @@ export type VoteSessionQuery = {|
           maximum: ?number,
           nbTicks: ?number,
           unit: ?string,
-          voteSpecTemplateId: ?string
+          voteSpecTemplateId: ?string,
+          voteType: ?string
         })>
   |}
 |};
@@ -2004,6 +2012,7 @@ export type numberGaugeVoteSpecificationFragment = {|
   // The ID of the object.
   id: string,
   voteSessionId: string,
+  instructions: ?string,
   titleEntries: ?Array<?{|
     localeCode: string,
     value: ?string
@@ -2016,13 +2025,15 @@ export type numberGaugeVoteSpecificationFragment = {|
   maximum: ?number,
   nbTicks: ?number,
   unit: ?string,
-  voteSpecTemplateId: ?string
+  voteSpecTemplateId: ?string,
+  voteType: ?string
 |};
 
 export type gaugeVoteSpecificationFragment = {|
   // The ID of the object.
   id: string,
   voteSessionId: string,
+  instructions: ?string,
   titleEntries: ?Array<?{|
     localeCode: string,
     value: ?string
@@ -2040,7 +2051,8 @@ export type gaugeVoteSpecificationFragment = {|
       value: ?string
     |}>
   |}>,
-  voteSpecTemplateId: ?string
+  voteSpecTemplateId: ?string,
+  voteType: ?string
 |};
 
 export type AgentProfileInfoFragment = {|
