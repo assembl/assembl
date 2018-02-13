@@ -79,6 +79,8 @@ class UpdateVoteSession(graphene.Mutation):
     def mutate(root, args, context, info):
         discussion_phase_id = args.get('discussion_phase_id')
         discussion_phase = models.DiscussionPhase.get(discussion_phase_id)
+        discussion_id = context.matchdict["discussion_id"]
+        discussion = models.Discussion.get(discussion_id)
 
         if discussion_phase is None:
             raise Exception(
@@ -91,7 +93,7 @@ class UpdateVoteSession(graphene.Mutation):
         vote_session = discussion_phase.vote_session
         if vote_session is None:
             require_cls_permission(CrudPermissions.CREATE, models.VoteSession, context)
-            vote_session = models.VoteSession(discussion_phase=discussion_phase)
+            vote_session = models.VoteSession(discussion=discussion, discussion_phase=discussion_phase)
         else:
             require_instance_permission(CrudPermissions.UPDATE, vote_session, context)
 
@@ -106,8 +108,6 @@ class UpdateVoteSession(graphene.Mutation):
             uploaded_file = context.POST[image].file
             uploaded_file.seek(0)
             data = uploaded_file.read()
-            discussion_id = context.matchdict["discussion_id"]
-            discussion = models.Discussion.get(discussion_id)
             ATTACHMENT_PURPOSE_IMAGE = models.AttachmentPurpose.IMAGE.value
             images = [
                 att for att in vote_session.attachments
@@ -159,7 +159,7 @@ class VoteSpecificationInterface(graphene.Interface):
         return resolve_langstring_entries(self, 'instructions')
 
     def resolve_vote_session_id(self, args, context, info):
-        return Node.to_global_id('VoteSession', self.vote_session_id)
+        return Node.to_global_id('VoteSession', self.widget_id)
 
     def resolve_vote_spec_template_id(self, args, context, info):
         if self.vote_spec_template_id:

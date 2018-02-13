@@ -9,6 +9,7 @@ def vote_session(request, test_session, discussion, timeline_vote_session,
                  simple_file, admin_user):
     from assembl.models import VoteSession, VoteSessionAttachment, LangString
     vote_session = VoteSession(
+        discussion=discussion,
         discussion_phase=timeline_vote_session,
         title=LangString.create(u"vote session fixture", "en"),
         sub_title=LangString.create(u"vote session sub title fixture", "en"),
