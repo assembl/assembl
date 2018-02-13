@@ -373,7 +373,10 @@ const Translations = {
         addProposal: "Ajouter une proposition",
         deleteProposal: "Supprimer la proposition",
         title: "Titre de la proposition",
-        description: "Description"
+        description: "Description",
+        tokenVote: "Vote par jetons",
+        gauge: "Jauge %{number}",
+        gaugeSettings: "Modifier le paramétrage"
       },
       sections: {
         addSection: "Ajouter une rubrique",
@@ -856,7 +859,10 @@ const Translations = {
         addProposal: "Add a proposal",
         deleteProposal: "Delete this proposal",
         title: "Title of the proposal",
-        description: "Description"
+        description: "Description",
+        tokenVote: "Token vote",
+        gauge: "Gauge %{number}",
+        gaugeSettings: "Modify the settings"
       },
       sections: {
         addSection: "Add a section",

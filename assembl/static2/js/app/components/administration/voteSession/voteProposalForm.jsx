@@ -2,7 +2,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { I18n, Translate } from 'react-redux-i18n';
-import { OverlayTrigger, Button } from 'react-bootstrap';
+import { OverlayTrigger, Button, Checkbox } from 'react-bootstrap';
 import FormControlWithLabel from '../../common/formControlWithLabel';
 import { getEntryValueForLocale } from '../../../utils/i18n';
 import { deleteVoteProposalTooltip, upTooltip, downTooltip } from '../../common/tooltips';
@@ -25,7 +25,9 @@ type VoteProposalFormProps = {
   editLocale: string,
   nbProposals: number,
   handleUpClick: Function,
-  handleDownClick: Function
+  handleDownClick: Function,
+  tokenModules: Object,
+  gaugeModules: Object
 };
 
 const VoteProposalForm = ({
@@ -39,7 +41,9 @@ const VoteProposalForm = ({
   editLocale,
   nbProposals,
   handleUpClick,
-  handleDownClick
+  handleDownClick,
+  tokenModules,
+  gaugeModules
 }: VoteProposalFormProps) => {
   if (toDelete) {
     return null;
@@ -48,7 +52,7 @@ const VoteProposalForm = ({
   const handleTitleChange = e => updateTitle(editLocale, e.target.value);
   const handleDescriptionChange = e => updateDescription(editLocale, e.target.value);
   return (
-    <div className="form-container">
+    <div className="form-container vote-proposal-form">
       <div className="pointer right">
         <div className="inline">
           {index < nbProposals ? (
@@ -89,16 +93,48 @@ const VoteProposalForm = ({
         type="text"
         required
       />
+      {tokenModules.map(moduleId => (
+        <Checkbox key={moduleId} checked onChange={() => {}}>
+          <Translate value="administration.voteProposals.tokenVote" />
+        </Checkbox>
+      ))}
+      {gaugeModules.map((moduleId, idx) => {
+        const number = gaugeModules.size > 1 ? idx + 1 : '';
+        return (
+          <div key={moduleId}>
+            <Checkbox className="inline" checked onChange={() => {}}>
+              <Translate value="administration.voteProposals.gauge" number={number} />
+            </Checkbox>
+            <span
+              className="inline settings-link"
+              onClick={() => {
+                /* OPEN THE SETTINGS MODAL */
+              }}
+            >
+              <i className="assembl-icon-edit" />
+              <Translate value="administration.voteProposals.gaugeSettings" />
+            </span>
+          </div>
+        );
+      })}
+      <div className="separator" />
     </div>
   );
 };
 
 const mapStateToProps = ({ admin }, { id, editLocale }) => {
   const proposal = admin.voteSession.voteProposalsById.get(id);
+  const { modulesInOrder, modulesById } = admin.voteSession;
   return {
     title: getEntryValueForLocale(proposal.get('titleEntries'), editLocale),
     description: getEntryValueForLocale(proposal.get('descriptionEntries'), editLocale, ''),
-    toDelete: proposal.get('toDelete', false)
+    toDelete: proposal.get('toDelete', false),
+    tokenModules: modulesInOrder.filter(
+      moduleId => modulesById.getIn([moduleId, 'type']) === 'tokens' && !modulesById.getIn([id, 'toDelete'])
+    ),
+    gaugeModules: modulesInOrder.filter(
+      moduleId => modulesById.getIn([moduleId, 'type']) === 'gauge' && !modulesById.getIn([id, 'toDelete'])
+    )
   };
 };
 
