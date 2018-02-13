@@ -398,6 +398,17 @@
     }
   }
 
+  .vote-proposals-section {
+    .intro-text {
+      padding-left: 40px;
+      font-size: $font-size-s;
+    }
+
+    .bold {
+      font-family: $font-family5;
+    }
+  }
+
   .vote-proposal-form {
     margin-top: 65px;
 

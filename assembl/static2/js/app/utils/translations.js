@@ -369,6 +369,8 @@ const Translations = {
       tokenVoteInstructions: "Consigne du vote par jetons",
       proposalsSectionTitle: "Titre de la section",
       voteProposals: {
+        introText1: "Vous avez choisi le dispositif de vote.",
+        introText2: "Pour modifier votre choix, modifiez la ligne de temps du débat.",
         defineProposal: "Définir proposition %{number}",
         addProposal: "Ajouter une proposition",
         deleteProposal: "Supprimer la proposition",
@@ -855,6 +857,8 @@ const Translations = {
       tokenTitle: "Token title",
       tokenColor: "Color of the token",
       voteProposals: {
+        introText1: "You chose the vote module",
+        introText2: "To modify this choice, modify the timeline of the debate.",
         defineProposal: "Define proposal %{number}",
         addProposal: "Add a proposal",
         deleteProposal: "Delete this proposal",

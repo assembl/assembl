@@ -130,6 +130,7 @@ const mapStateToProps = ({ admin }, { id, editLocale }) => {
     title: getEntryValueForLocale(proposal.get('titleEntries'), editLocale),
     description: description ? description.toJS() : null,
     toDelete: proposal.get('toDelete', false),
+    order: proposal.get('order'),
     tokenModules: modulesInOrder.filter(
       moduleId => modulesById.getIn([moduleId, 'type']) === 'tokens' && !modulesById.getIn([id, 'toDelete'])
     ),

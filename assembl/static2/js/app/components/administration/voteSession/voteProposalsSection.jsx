@@ -15,22 +15,26 @@ type VoteProposalsSectionProps = {
 };
 
 const VoteProposalsSection = ({ voteProposals, editLocale, addVoteProposal }: VoteProposalsSectionProps) => (
-  <div className="admin-box">
-    <SectionTitle
-      title="Configurer les propositions associées aux modules de vote"
-      annotation={I18n.t('administration.annotation')}
-    />
-    <div className="admin-content">
-      <form>
-        {voteProposals.map((id, index) => (
-          <VoteProposalForm key={id} id={id} index={index + 1} editLocale={editLocale} nbProposals={voteProposals.size} />
-        ))}
-        <OverlayTrigger placement="top" overlay={addVoteProposalTooltip}>
-          <div onClick={addVoteProposal} className="plus margin-l">
-            +
-          </div>
-        </OverlayTrigger>
-      </form>
+  <div className="vote-proposals-section">
+    <div className="admin-box">
+      <SectionTitle
+        title="Configurer les propositions associées aux modules de vote"
+        annotation={I18n.t('administration.annotation')}
+      />
+      <div className="intro-text bold">{I18n.t('administration.voteProposals.introText1')}</div>
+      <div className="intro-text">{I18n.t('administration.voteProposals.introText2')}</div>
+      <div className="admin-content">
+        <form>
+          {voteProposals.map((id, index) => (
+            <VoteProposalForm key={id} id={id} index={index + 1} editLocale={editLocale} nbProposals={voteProposals.size} />
+          ))}
+          <OverlayTrigger placement="top" overlay={addVoteProposalTooltip}>
+            <div onClick={addVoteProposal} className="plus margin-l">
+              +
+            </div>
+          </OverlayTrigger>
+        </form>
+      </div>
     </div>
   </div>
 );
