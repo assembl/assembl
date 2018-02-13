@@ -275,7 +275,7 @@ export const voteProposalsById = (state: Map<string, Map> = Map(), action: Redux
   case UPDATE_VOTE_PROPOSAL_TITLE:
     return state.updateIn([action.id, 'titleEntries'], updateInLangstringEntries(action.locale, action.value));
   case UPDATE_VOTE_PROPOSAL_DESCRIPTION:
-    return state.updateIn([action.id, 'descriptionEntries'], updateInLangstringEntries(action.locale, action.value));
+    return state.updateIn([action.id, 'descriptionEntries'], updateInLangstringEntries(action.locale, fromJS(action.value)));
   default:
     return state;
   }

@@ -168,7 +168,11 @@ class Administration extends React.Component {
 
   putVoteProposalsInStore(voteSession) {
     const proposals = filter(VoteSessionQuery, { voteSession: voteSession }).voteSession.proposals;
-    this.props.updateVoteProposals(proposals);
+    const proposalsForStore = proposals.map(proposal => ({
+      ...proposal,
+      descriptionEntries: proposal.descriptionEntries ? convertEntriesToRawContentState(proposal.descriptionEntries) : null
+    }));
+    this.props.updateVoteProposals(proposalsForStore);
   }
 
   putSectionsInStore(sections) {

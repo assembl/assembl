@@ -50,7 +50,7 @@ const VoteProposalForm = ({
   }
 
   const handleTitleChange = e => updateTitle(editLocale, e.target.value);
-  const handleDescriptionChange = e => updateDescription(editLocale, e.target.value);
+  const handleDescriptionChange = value => updateDescription(editLocale, value);
   return (
     <div className="form-container vote-proposal-form">
       <div className="pointer right">
@@ -90,7 +90,7 @@ const VoteProposalForm = ({
         value={description}
         label={I18n.t('administration.voteProposals.description')}
         onChange={handleDescriptionChange}
-        type="text"
+        type="rich-text"
         required
       />
       {tokenModules.map(moduleId => (
@@ -125,9 +125,10 @@ const VoteProposalForm = ({
 const mapStateToProps = ({ admin }, { id, editLocale }) => {
   const proposal = admin.voteSession.voteProposalsById.get(id);
   const { modulesInOrder, modulesById } = admin.voteSession;
+  const description = getEntryValueForLocale(proposal.get('descriptionEntries'), editLocale);
   return {
     title: getEntryValueForLocale(proposal.get('titleEntries'), editLocale),
-    description: getEntryValueForLocale(proposal.get('descriptionEntries'), editLocale, ''),
+    description: description ? description.toJS() : null,
     toDelete: proposal.get('toDelete', false),
     tokenModules: modulesInOrder.filter(
       moduleId => modulesById.getIn([moduleId, 'type']) === 'tokens' && !modulesById.getIn([id, 'toDelete'])
