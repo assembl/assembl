@@ -145,6 +145,7 @@ class VoteSpecificationInterface(graphene.Interface):
     vote_session_id = graphene.ID(required=True)
     vote_spec_template_id = graphene.ID()
     vote_type = graphene.String()
+    my_votes = graphene.List('assembl.graphql.votes.VoteUnion')
 
     def resolve_title(self, args, context, info):
         return resolve_langstring(self.title, args.get('lang'))
@@ -167,6 +168,12 @@ class VoteSpecificationInterface(graphene.Interface):
 
     def resolve_vote_type(self, args, context, info):
         return self.type
+
+    def resolve_my_votes(self, args, context, info):
+        user_id = context.authenticated_userid
+        # use votes_of(user_id) instead of votes_of_current_user because
+        # request threadlocal is not properly set in tests
+        return self.votes_of(user_id)
 
 
 class TokenCategorySpecification(SecureObjectType, SQLAlchemyObjectType):

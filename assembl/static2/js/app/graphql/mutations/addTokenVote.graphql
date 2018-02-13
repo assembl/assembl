@@ -1,0 +1,16 @@
+mutation addTokenVote($proposalId: ID!, $tokenCategoryId: ID!, $voteSpecId: ID!, $voteValue: Int!) {
+  addTokenVote(proposalId: $proposalId, tokenCategoryId: $tokenCategoryId, voteSpecId: $voteSpecId, voteValue: $voteValue) {
+    voteSpecification {
+      ... on TokenVoteSpecification {
+        id
+        myVotes {
+          ... on TokenVote {
+            voteValue
+            proposalId
+            tokenCategoryId
+          }
+        }
+      }
+    }
+  }
+}

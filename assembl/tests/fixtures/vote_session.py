@@ -188,3 +188,48 @@ def vote_proposal(request, test_session, discussion, graphql_request, vote_sessi
 
     request.addfinalizer(fin)
     return proposal
+
+
+@pytest.fixture(scope="function")
+def token_vote_specification_associated_to_proposal(request, test_session, discussion, graphql_request, vote_session, token_vote_specification, vote_proposal, graphql_registry):
+    mutation = graphql_registry['createTokenVoteSpecification']
+    vote_session_id = to_global_id("VoteSession", vote_session.id)
+    proposal_id = to_global_id("Idea", vote_proposal.id)
+    # token vote spec similar to token_vote_specification fixture, but with exclusiveCategories set to False
+    template_token_vote_spec_id = to_global_id("TokenVoteSpecification", token_vote_specification.id)
+    from assembl.graphql.schema import Schema as schema
+    res = schema.execute(mutation, context_value=graphql_request, variable_values={
+        "voteSessionId": vote_session_id,
+        "proposalId": proposal_id,
+        "voteSpecTemplateId": template_token_vote_spec_id,
+        "titleEntries": [
+            {"value": u"Comprendre les dynamiques et les enjeux", "localeCode": "fr"},
+            {"value": u"Understanding the dynamics and issues", "localeCode": "en"}
+        ],
+        "instructionsEntries":
+        [
+            {"value": u"Instructions : Comprendre les dynamiques et les enjeux", "localeCode": "fr"},
+            {"value": u"Instructions: Understanding the dynamics and issues", "localeCode": "en"}
+        ],
+        "exclusiveCategories": False,
+        "tokenCategories": [
+            {"titleEntries": [
+                {"value": u"Pour", "localeCode": "fr"},
+                {"value": u"In favor", "localeCode": "en"}
+             ],
+             "typename": "positive",
+             "totalNumber": 9,
+             "color": 'green'
+            }
+        ]
+    })
+    assert res.errors is None
+    vote_spec = vote_session.vote_specifications[-1]
+
+    def fin():
+        print "finalizer token_vote_specification_associated_to_proposal"
+        test_session.delete(vote_spec)
+        test_session.flush()
+
+    request.addfinalizer(fin)
+    return vote_spec
