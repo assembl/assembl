@@ -11,6 +11,8 @@ import { getPhaseStatus, isSeveralIdentifiers, type Timeline } from '../../../ut
 import { displayModal } from '../../../utils/utilityManager';
 import { get } from '../../../utils/routeMap';
 import { PHASE_STATUS, PHASES } from '../../../constants';
+import { menuScrollEventId } from './tables/menuList';
+import { createEvent } from '../../../utils/globalFunctions';
 
 const phasesToIgnore = [PHASES.voteSession];
 
@@ -77,6 +79,15 @@ export class DumbTimelineSegment extends React.Component<*, TimelineSegmentProps
     this.setState({ active: false });
   };
 
+  handleMenuScroll = (event: SyntheticEvent & { currentTarget: HTMLDivElement }) => {
+    const scrollEvent = createEvent(menuScrollEventId, { bubbles: true, cancelable: true });
+    // $FlowFixMe
+    scrollEvent.detail = {
+      position: event.currentTarget.scrollTop
+    };
+    window.dispatchEvent(scrollEvent);
+  };
+
   renderNotStarted = (className?: string) => {
     const { startDate } = this.props;
     return (
@@ -126,7 +137,7 @@ export class DumbTimelineSegment extends React.Component<*, TimelineSegmentProps
     }
     if (!this.ignoreMenu) {
       return (
-        <div className="menu-container">
+        <div onScroll={this.handleMenuScroll} className="menu-container">
           <MenuTable identifier={phaseIdentifier} onMenuItemClick={onMenuItemClick} />
         </div>
       );
