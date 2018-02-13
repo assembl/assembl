@@ -426,14 +426,6 @@ exports[`Proposals component should match Proposals snapshot 1`] = `
                   }
                 }
               />
-              <span
-                className="rc-slider-dot"
-                style={
-                  Object {
-                    "left": "0%",
-                  }
-                }
-              />
             </div>
             <div
               aria-disabled={false}
@@ -456,21 +448,9 @@ exports[`Proposals component should match Proposals snapshot 1`] = `
                 className="rc-slider-mark-text"
                 style={
                   Object {
-                    "left": "0%",
-                    "marginLeft": "-9%",
-                    "width": "18%",
-                  }
-                }
-              >
-                -10°C
-              </span>
-              <span
-                className="rc-slider-mark-text"
-                style={
-                  Object {
                     "left": "9.090909090909092%",
-                    "marginLeft": "-9%",
-                    "width": "18%",
+                    "marginLeft": "-11.25%",
+                    "width": "22.5%",
                   }
                 }
               >
@@ -483,8 +463,8 @@ exports[`Proposals component should match Proposals snapshot 1`] = `
                 style={
                   Object {
                     "left": "32.72727272727273%",
-                    "marginLeft": "-9%",
-                    "width": "18%",
+                    "marginLeft": "-11.25%",
+                    "width": "22.5%",
                   }
                 }
               >
@@ -495,8 +475,8 @@ exports[`Proposals component should match Proposals snapshot 1`] = `
                 style={
                   Object {
                     "left": "42.72727272727273%",
-                    "marginLeft": "-9%",
-                    "width": "18%",
+                    "marginLeft": "-11.25%",
+                    "width": "22.5%",
                   }
                 }
               >
@@ -507,8 +487,8 @@ exports[`Proposals component should match Proposals snapshot 1`] = `
                 style={
                   Object {
                     "left": "54.54545454545454%",
-                    "marginLeft": "-9%",
-                    "width": "18%",
+                    "marginLeft": "-11.25%",
+                    "width": "22.5%",
                   }
                 }
               >
@@ -520,8 +500,8 @@ exports[`Proposals component should match Proposals snapshot 1`] = `
                   Object {
                     "color": "red",
                     "left": "100%",
-                    "marginLeft": "-9%",
-                    "width": "18%",
+                    "marginLeft": "-11.25%",
+                    "width": "22.5%",
                   }
                 }
               >
@@ -957,14 +937,6 @@ exports[`Proposals component should match Proposals snapshot 1`] = `
                   }
                 }
               />
-              <span
-                className="rc-slider-dot"
-                style={
-                  Object {
-                    "left": "0%",
-                  }
-                }
-              />
             </div>
             <div
               aria-disabled={false}
@@ -987,21 +959,9 @@ exports[`Proposals component should match Proposals snapshot 1`] = `
                 className="rc-slider-mark-text"
                 style={
                   Object {
-                    "left": "0%",
-                    "marginLeft": "-9%",
-                    "width": "18%",
-                  }
-                }
-              >
-                -10°C
-              </span>
-              <span
-                className="rc-slider-mark-text"
-                style={
-                  Object {
                     "left": "9.090909090909092%",
-                    "marginLeft": "-9%",
-                    "width": "18%",
+                    "marginLeft": "-11.25%",
+                    "width": "22.5%",
                   }
                 }
               >
@@ -1014,8 +974,8 @@ exports[`Proposals component should match Proposals snapshot 1`] = `
                 style={
                   Object {
                     "left": "32.72727272727273%",
-                    "marginLeft": "-9%",
-                    "width": "18%",
+                    "marginLeft": "-11.25%",
+                    "width": "22.5%",
                   }
                 }
               >
@@ -1026,8 +986,8 @@ exports[`Proposals component should match Proposals snapshot 1`] = `
                 style={
                   Object {
                     "left": "42.72727272727273%",
-                    "marginLeft": "-9%",
-                    "width": "18%",
+                    "marginLeft": "-11.25%",
+                    "width": "22.5%",
                   }
                 }
               >
@@ -1038,8 +998,8 @@ exports[`Proposals component should match Proposals snapshot 1`] = `
                 style={
                   Object {
                     "left": "54.54545454545454%",
-                    "marginLeft": "-9%",
-                    "width": "18%",
+                    "marginLeft": "-11.25%",
+                    "width": "22.5%",
                   }
                 }
               >
@@ -1051,8 +1011,8 @@ exports[`Proposals component should match Proposals snapshot 1`] = `
                   Object {
                     "color": "red",
                     "left": "100%",
-                    "marginLeft": "-9%",
-                    "width": "18%",
+                    "marginLeft": "-11.25%",
+                    "width": "22.5%",
                   }
                 }
               >

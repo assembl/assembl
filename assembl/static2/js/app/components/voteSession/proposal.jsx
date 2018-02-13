@@ -5,6 +5,7 @@ import { Map } from 'immutable';
 
 import TokenVoteForProposal from './tokenVoteForProposal';
 import GaugeVoteForProposal from './gaugeVoteForProposal';
+import NumberGaugeVoteForProposal from './numberGaugeVoteForProposal';
 import { findTokenVoteModule, type UserTokenVotes, type VoteSpecification } from '../../pages/voteSession';
 
 type Props = {
@@ -36,11 +37,18 @@ const Proposal = ({ description, id, modules, title, tokenVotes, voteForProposal
               voteForProposal={voteForProposal}
             />
           )}
+
           {modules &&
             modules
               .filter(module => module.voteType === 'gauge_vote_specification')
               // $FlowFixMe
               .map(module => <GaugeVoteForProposal key={module.id} {...module} />)}
+
+          {modules &&
+            modules
+              .filter(module => module.voteType === 'number_gauge_vote_specification')
+              // $FlowFixMe
+              .map(module => <NumberGaugeVoteForProposal key={module.id} {...module} />)}
         </Col>
       </Row>
     </div>
