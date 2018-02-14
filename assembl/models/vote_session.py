@@ -47,7 +47,14 @@ class VoteSession(
 
     @classmethod
     def get_discussion_conditions(cls, discussion_id, alias_maker=None):
-        return (cls.discussion_phase.discussion_id == discussion_id,)
+        if alias_maker is None:
+            vote_session = cls
+            discussion_phase = DiscussionPhase
+        else:
+            vote_session = alias_maker.alias_from_class(cls)
+            discussion_phase = alias_maker.alias_from_relns(vote_session.discussion_phase)
+        return ((vote_session.discussion_phase_id == discussion_phase.id),
+                (discussion_phase.discussion_id == discussion_id))
 
     crud_permissions = CrudPermissions(
         create=P_ADMIN_DISC,

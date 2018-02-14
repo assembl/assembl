@@ -133,6 +133,15 @@ def get_data(content):
         data['idea_id'] = [link.idea_id
             for link in content.indirect_idea_content_links_without_cache()
             if link.__class__.__name__ == 'IdeaRelatedPostLink']
+
+        data['taxonomy_nature'] = [
+            'taxonomy_nature.' + enum_entry.name
+            for enum_entry in set([extract.extract_nature for extract in content.extracts
+                 if extract.extract_nature is not None])]
+        data['taxonomy_action'] = [
+            'taxonomy_action.' + enum_entry.name
+            for enum_entry in set([extract.extract_action for extract in content.extracts
+                 if extract.extract_action is not None])]
         data['sentiment_tags'] = [key for key in data['sentiment_counts']
                                   if data['sentiment_counts'][key] > 0]
         like = data['sentiment_counts']['like']

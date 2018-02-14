@@ -1,39 +1,30 @@
+// @flow
 import React from 'react';
-import { I18n } from 'react-redux-i18n';
-import get from 'lodash/get';
 
-import PostColumn from './postColumn';
 import { hexToRgb } from '../../../utils/globalFunctions';
 import { COLUMN_OPACITY_GAIN } from '../../../constants';
-import { orderPostsByMessageClassifier } from './utils';
 
-export default class TabbedColumns extends React.Component {
+type Props = {
+  children: any,
+  messageColumns: IdeaMessageColumns
+};
+
+type State = {
+  activeKey: ?string
+};
+
+export default class TabbedColumns extends React.Component<void, Props, State> {
+  props: Props;
+
+  state: State;
+
+  state = {
+    activeKey: null
+  };
+
   render() {
-    const {
-      contentLocaleMapping,
-      lang,
-      width,
-      posts,
-      messageColumns,
-      initialRowIndex,
-      noRowsRenderer,
-      ideaId,
-      refetchIdea,
-      showSynthesis,
-      identifier,
-      debateData
-    } = this.props;
-    const activeKey = this.state && 'activeKey' in this.state ? this.state.activeKey : messageColumns[0].messageClassifier;
-    const columnsArray = orderPostsByMessageClassifier(messageColumns, posts);
-    const index = messageColumns.indexOf(messageColumns.find(messageColumn => messageColumn.messageClassifier === activeKey));
-    const col = messageColumns[index];
-    const synthesisProps = showSynthesis && {
-      classifier: activeKey,
-      debateData: debateData,
-      synthesisTitle: get(col, 'columnSynthesis.subject', I18n.t('multiColumns.synthesis.title', { colName: col.name })),
-      synthesisBody: get(col, 'columnSynthesis.body', I18n.t('multiColumns.synthesis.noSynthesisYet')),
-      hyphenStyle: { borderTopColor: col.color }
-    };
+    const { messageColumns, children } = this.props;
+    const activeKey = this.state.activeKey || messageColumns[0].messageClassifier;
     const style = { width: `${100 / messageColumns.length}%` };
     const inactiveTabColor = 'lightgrey';
     return (
@@ -60,23 +51,7 @@ export default class TabbedColumns extends React.Component {
             );
           })}
         </div>
-        <div className="tab-content">
-          <PostColumn
-            synthesisProps={synthesisProps}
-            width={width}
-            color={col.color}
-            classifier={activeKey}
-            title={col.title}
-            contentLocaleMapping={contentLocaleMapping}
-            lang={lang}
-            data={columnsArray[activeKey]}
-            initialRowIndex={initialRowIndex}
-            noRowsRenderer={noRowsRenderer}
-            ideaId={ideaId}
-            refetchIdea={refetchIdea}
-            identifier={identifier}
-          />
-        </div>
+        <div className="tab-content">{children.filter(child => child.key === activeKey)}</div>
       </div>
     );
   }

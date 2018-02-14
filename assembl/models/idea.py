@@ -331,7 +331,7 @@ class Idea(HistoryMixin, DiscussionBoundBase):
         return super(Idea, self).copy(db=db, **kwargs)
 
     @classmethod
-    def get_ancestors_query(
+    def get_ancestors_query_cls(
             cls, target_id=bindparam('root_id', type_=Integer),
             inclusive=True, tombstone_date=None):
         if cls.using_virtuoso:
@@ -376,11 +376,19 @@ class Idea(HistoryMixin, DiscussionBoundBase):
             else:
                 select_exp = select_exp.union(
                     select([target_id.label('id')]))
-        return select_exp.alias()
+        return select_exp.alias('ancestors')
+
+    def get_ancestors_query(
+            self, inclusive=True, tombstone_date=None, subquery=True):
+        select_exp = self.get_ancestors_query_cls(
+            self.id, inclusive=inclusive, tombstone_date=tombstone_date)
+        if subquery:
+            select_exp = self.db.query(select_exp).subquery()
+        return select_exp
 
     def get_all_ancestors(self, id_only=False):
         query = self.get_ancestors_query(
-            self.id, tombstone_date=self.tombstone_date)
+            tombstone_date=self.tombstone_date, subquery=not id_only)
         if id_only:
             return list((id for (id,) in self.db.query(query)))
         else:
@@ -390,7 +398,7 @@ class Idea(HistoryMixin, DiscussionBoundBase):
         from .announcement import IdeaAnnouncement
         if self.announcement:
             return self.announcement
-        aq = self.get_ancestors_query(self.id)
+        aq = self.get_ancestors_query()
         announcements = self.db.query(IdeaAnnouncement
             ).filter(IdeaAnnouncement.idea_id.in_(aq),
                      IdeaAnnouncement.should_propagate_down == True  # noqa: E712
@@ -400,7 +408,7 @@ class Idea(HistoryMixin, DiscussionBoundBase):
             return announcements[-1]
 
     @classmethod
-    def get_descendants_query(
+    def get_descendants_query_cls(
             cls, root_idea_id=bindparam('root_idea_id', type_=Integer),
             inclusive=True):
         if cls.using_virtuoso:
@@ -433,10 +441,18 @@ class Idea(HistoryMixin, DiscussionBoundBase):
                 root_idea_id = literal_column(str(root_idea_id), Integer)
             select_exp = select_exp.union(
                 select([root_idea_id.label('id')]))
-        return select_exp.alias()
+        return select_exp.alias('descendants')
+
+    def get_descendants_query(
+            self, inclusive=True, subquery=True):
+        select_exp = self.get_descendants_query_cls(self.id, inclusive=inclusive)
+        if subquery:
+            select_exp = self.db.query(select_exp).subquery()
+        return select_exp
 
     def get_all_descendants(self, id_only=False, inclusive=True):
-        query = self.get_descendants_query(self.id, inclusive=inclusive)
+        query = self.get_descendants_query(
+            inclusive=inclusive, subquery=not id_only)
         if id_only:
             return list((id for (id,) in self.db.query(query)))
         else:
@@ -674,7 +690,7 @@ class Idea(HistoryMixin, DiscussionBoundBase):
         from .auth import AgentProfile
         from .post import Post
         from sqlalchemy.sql.functions import count
-        subquery = self.get_descendants_query(self.id)
+        subquery = self.get_descendants_query()
         query = self.db.query(
             Post.creator_id
             ).join(Extract
@@ -918,8 +934,7 @@ class Idea(HistoryMixin, DiscussionBoundBase):
 
             def decorate_query(self, query, owner_alias, last_alias, parent_instance, ctx):
                 parent = owner_alias
-                ancestry = parent_instance.get_ancestors_query(
-                    parent_instance.id)
+                ancestry = parent_instance.get_ancestors_query()
                 ancestors = aliased(Idea)
                 iwlink = aliased(IdeaWidgetLink)
                 query = query.join(iwlink).join(ancestors).filter(
@@ -943,8 +958,7 @@ class Idea(HistoryMixin, DiscussionBoundBase):
             def contains(self, parent_instance, instance):
                 ancestors = aliased(Idea)
                 iwlink = aliased(IdeaWidgetLink)
-                ancestry = parent_instance.get_ancestors_query(
-                    parent_instance.id)
+                ancestry = parent_instance.get_ancestors_query()
                 query = instance.db.query(Widget).join(iwlink).join(
                     ancestors).filter(ancestors.id.in_(ancestry)).filter(
                     Widget.id == instance.id)

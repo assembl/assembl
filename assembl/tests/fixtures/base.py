@@ -99,8 +99,9 @@ def test_app_no_perm(request, base_registry, db_tables):
         '__file__': request.config.getoption('test_settings_file'),
         'here': get_distribution('assembl').location
     }
-    app = TestApp(assembl.main(
-        global_config, nosecurity=True, **get_config()))
+    config = dict(get_config())
+    config['nosecurity'] = True
+    app = TestApp(assembl.main(global_config, **config))
     app.PyramidWebTestRequest = PyramidWebTestRequest
     PyramidWebTestRequest._pyramid_app = app.app
     PyramidWebTestRequest._registry = base_registry

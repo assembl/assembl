@@ -141,9 +141,7 @@ class Query(graphene.ObjectType):
         query = get_query(model, context)
         discussion_id = context.matchdict['discussion_id']
         discussion = models.Discussion.get(discussion_id)
-        root_idea_id = discussion.root_idea.id
-        descendants_query = model.get_descendants_query(
-            root_idea_id, inclusive=False)
+        descendants_query = discussion.root_idea.get_descendants_query(inclusive=False)
         query = query.outerjoin(
                 models.Idea.source_links
             ).filter(model.id.in_(descendants_query)

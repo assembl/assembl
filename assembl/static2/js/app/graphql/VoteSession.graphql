@@ -13,13 +13,13 @@ fragment tokenVoteSpecification on TokenVoteSpecification {
   tokenCategories {
     id
     totalNumber
-    typename
     titleEntries {
       ...langStringEntry
     }
     color
   }
   voteSpecTemplateId
+  voteType
 }
 
 fragment numberGaugeVoteSpecification on NumberGaugeVoteSpecification {
@@ -36,6 +36,7 @@ fragment numberGaugeVoteSpecification on NumberGaugeVoteSpecification {
   nbTicks
   unit
   voteSpecTemplateId
+  voteType
 }
 
 fragment gaugeVoteSpecification on GaugeVoteSpecification {
@@ -55,6 +56,7 @@ fragment gaugeVoteSpecification on GaugeVoteSpecification {
     }
   }
   voteSpecTemplateId
+  voteType
 }
 
 query VoteSession($discussionPhaseId: Int!, $lang: String!) {

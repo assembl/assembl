@@ -144,8 +144,14 @@
           height: auto;
         }
 
+        &.open > .dropdown-toggle {
+          color: $first-color;
+        }
+
         > .dropdown-toggle {
           line-height: $navbar-line-height;
+          font-size: 13px;
+          color: inherit;
         }
       }
     }
@@ -168,7 +174,7 @@
       position: absolute;
       top: $navbar-height;
       width: 100%;
-      max-height: calc(100vh - #{$navbar-height});
+      height: 100vh;
       overflow-y: scroll;
     }
 
@@ -191,6 +197,8 @@
       line-height: $navbar-line-height;
       align-items: center;
       flex-direction: column;
+      font-size: 13px;
+      color: inherit;
     }
 
     .navbar-icons {
@@ -206,6 +214,8 @@
 
     .active {
       font-family: $font-family3;
+      background-color: $first-color-light;
+      color: $first-color;
     }
   }
 

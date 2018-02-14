@@ -201,6 +201,8 @@ from .action import (  # noqa: E402, F401
 )
 from .idea_content_link import (  # noqa: E402, F401
     Extract,
+    ExtractNatureVocabulary,
+    ExtractActionVocabulary,
     IdeaContentLink,
     IdeaContentNegativeLink,
     IdeaContentPositiveLink,

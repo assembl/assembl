@@ -144,6 +144,7 @@ class VoteSpecificationInterface(graphene.Interface):
     instructions_entries = graphene.List(LangStringEntry)
     vote_session_id = graphene.ID(required=True)
     vote_spec_template_id = graphene.ID()
+    vote_type = graphene.String()
 
     def resolve_title(self, args, context, info):
         return resolve_langstring(self.title, args.get('lang'))
@@ -163,6 +164,9 @@ class VoteSpecificationInterface(graphene.Interface):
     def resolve_vote_spec_template_id(self, args, context, info):
         if self.vote_spec_template_id:
             return Node.to_global_id(self.__class__.__name__, self.vote_spec_template_id)
+
+    def resolve_vote_type(self, args, context, info):
+        return self.type
 
 
 class TokenCategorySpecification(SecureObjectType, SQLAlchemyObjectType):

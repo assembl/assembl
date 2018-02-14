@@ -5,10 +5,9 @@ import { Link } from 'react-router';
 import { connect } from 'react-redux';
 import { Navbar } from 'react-bootstrap';
 import { compose, graphql } from 'react-apollo';
-import { I18n, Translate } from 'react-redux-i18n';
 import bind from 'lodash/bind';
 
-import { getCurrentPhaseIdentifier, isSeveralIdentifiers, getPhaseName } from '../../utils/timeline';
+import { getCurrentPhaseIdentifier, isSeveralIdentifiers } from '../../utils/timeline';
 import { get } from '../../utils/routeMap';
 import { withScreenWidth } from '../common/screenDimensions';
 import { connectedUserIsAdmin } from '../../utils/permissions';
@@ -16,7 +15,6 @@ import SectionsQuery from '../../graphql/SectionsQuery.graphql';
 import FlatNavbar from './FlatNavbar';
 import BurgerNavbar from './BurgerNavbar';
 import { APP_CONTAINER_MAX_WIDTH, APP_CONTAINER_PADDING } from '../../constants';
-import { displayModal } from '../../utils/utilityManager';
 import { getDiscussionSlug, snakeToCamel } from '../../utils/globalFunctions';
 import withoutLoadingIndicator from '../common/withoutLoadingIndicator';
 import DebateLink from '../debate/navigation/debateLink';
@@ -72,6 +70,7 @@ const SectionLink = ({ section, options }) => {
       className="navbar-menu-item pointer"
       activeClassName="active"
       dataText={title}
+      screenTooSmall={options.screenTooSmall}
     >
       {title}
     </DebateLink>
@@ -83,34 +82,25 @@ const SectionLink = ({ section, options }) => {
 };
 SectionLink.displayName = 'SectionLink';
 
-const createDisplayModal = ({ debate, i18n }) => () => {
+const createRedirectionToV1 = () => () => {
   const slug = { slug: getDiscussionSlug() };
-  const { timeline } = debate.debateData;
-  const { locale } = i18n;
-  const currentPhaseIdentifier = getCurrentPhaseIdentifier(timeline);
-  const phaseName = getPhaseName(timeline, currentPhaseIdentifier, locale).toLowerCase();
-  const body = <Translate value="redirectToV1" phaseName={phaseName} />;
-  const button = { link: get('oldDebate', slug), label: I18n.t('home.accessButton'), internalLink: false };
-  displayModal(null, body, true, null, button, true);
-  setTimeout(() => {
-    window.location = get('oldDebate', slug);
-  }, 6000);
+  window.location = get('oldVote', slug);
 };
 
 const mapDebateSectionToElement = (debateSection, options) => {
   const { title } = debateSection;
-  const { phaseContext, displayDebateModal } = options;
+  const { phaseContext, displayRedirectionToV1 } = options;
   const key = sectionKey(debateSection);
   switch (phaseContext) {
   case 'modal':
     return (
-      <div key={key} onClick={displayDebateModal} className="navbar-menu-item pointer" data-text={title}>
+      <div key={key} onClick={displayRedirectionToV1} className="navbar-menu-item pointer" data-text={title}>
         {title}
       </div>
     );
   case 'old':
     return (
-      <a key={key} className="navbar-menu-item pointer" href={get('oldDebate', { slug: options.slug })} data-text={title}>
+      <a key={key} className="navbar-menu-item pointer" href={get('oldVote', { slug: options.slug })} data-text={title}>
         {title}
       </a>
     );
@@ -122,8 +112,9 @@ const mapDebateSectionToElement = (debateSection, options) => {
 type MapSectionOptions = {
   phase: string,
   phaseContext: string,
-  displayDebateModal: () => mixed,
-  slug: string
+  displayRedirectionToV1: () => mixed,
+  slug: string,
+  screenTooSmall: boolean
 };
 
 type Section = {
@@ -161,7 +152,7 @@ export class AssemblNavbar extends React.PureComponent {
   };
 
   render = () => {
-    const { screenWidth, debate, data, location, phase, i18n } = this.props;
+    const { screenWidth, debate, data, location, phase } = this.props;
     const sections = data.sections;
     const { debateData } = debate;
     const { timeline, logo, slug, helpUrl } = debateData;
@@ -173,7 +164,8 @@ export class AssemblNavbar extends React.PureComponent {
       slug: slug,
       phase: getCurrentPhaseIdentifier(timeline),
       phaseContext: phaseContext(timeline, phase),
-      displayDebateModal: createDisplayModal({ debate: debate, i18n: i18n })
+      displayRedirectionToV1: createRedirectionToV1(),
+      screenTooSmall: screenTooSmall
     };
     const commonProps = {
       elements: filteredSections.map(bind(mapSectionToElement, null, bind.placeholder, mapOptions)),

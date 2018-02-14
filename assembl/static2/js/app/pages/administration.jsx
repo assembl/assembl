@@ -152,17 +152,9 @@ class Administration extends React.Component {
   }
 
   putVoteModulesInStore(voteSession) {
-    const filteredVoteModules = filter(VoteSessionQuery, { voteSession: voteSession });
-    const filteredTokenVoteModules = filteredVoteModules.voteSession
-      ? filteredVoteModules.voteSession.modules.filter(tokenVoteModule => tokenVoteModule.tokenCategories)
-      : null;
-    const modules = [];
-    if (filteredTokenVoteModules && filteredTokenVoteModules[0]) {
-      modules.push({
-        ...filteredTokenVoteModules[0],
-        type: 'tokens'
-      });
-    }
+    const filteredVoteSession = filter(VoteSessionQuery, { voteSession: voteSession });
+    const modules =
+      filteredVoteSession.voteSession && filteredVoteSession.voteSession.modules ? filteredVoteSession.voteSession.modules : [];
     this.props.updateVoteModules(modules);
   }
 

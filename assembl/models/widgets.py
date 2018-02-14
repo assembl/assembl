@@ -421,22 +421,22 @@ class BaseIdeaDescendantsCollection(AbstractCollectionDefinition):
     def decorate_query(self, query, owner_alias, last_alias, parent_instance, ctx):
         widget = owner_alias
         descendant = last_alias
-        # using base_idea_id() is cheating, but a proper join fails.
-        descendants_subq = Idea.get_descendants_query(
-            parent_instance.base_idea_id())
-        query = query.filter(
-            descendant.id.in_(descendants_subq)).join(
-            widget, widget.id == parent_instance.id)
+        link = parent_instance.base_idea_link
+        if link:
+            descendants_subq = link.idea.get_descendants_query()
+            query = query.filter(
+                descendant.id.in_(descendants_subq)).join(
+                widget, widget.id == parent_instance.id)
         return query
 
     def contains(self, parent_instance, instance):
         descendant = aliased(Idea, name="descendant")
-        # using base_idea_id() is cheating, but a proper join fails.
-        descendants_subq = Idea.get_descendants_query(
-            parent_instance.base_idea_id())
-        query = instance.db.query(descendant).filter(
-            descendant.id.in_(descendants_subq)).join(
-            Widget, Widget.id == parent_instance.id)
+        link = parent_instance.base_idea_link
+        if link:
+            descendants_subq = link.idea.get_descendants_query()
+            query = instance.db.query(descendant).filter(
+                descendant.id.in_(descendants_subq)).join(
+                Widget, Widget.id == parent_instance.id)
         return query.count() > 0
 
     def decorate_instance(

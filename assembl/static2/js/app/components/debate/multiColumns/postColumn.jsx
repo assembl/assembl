@@ -10,7 +10,6 @@ import ColumnSynthesis, { type Props as ColumnSynthesisProps } from './columnSyn
 const Separator = () => <div style={{ height: '25px' }} />;
 
 type Props = {
-  canEditPosts: boolean,
   classifier: string,
   color: string,
   contentLocaleMapping: Object,
@@ -23,7 +22,7 @@ type Props = {
   refetchIdea: Function,
   synthesisProps: ColumnSynthesisProps,
   title: string,
-  width: number,
+  width?: string,
   withColumnHeader: boolean
 };
 
@@ -67,5 +66,7 @@ const PostColumn = ({
     </div>
   </div>
 );
+
+PostColumn.defaultProps = { width: undefined };
 
 export default PostColumn;

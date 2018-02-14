@@ -94,6 +94,8 @@ COMMON_POST = {
         'id': LONG,
         'parent_id': {'type': 'long', 'null_value': 0},
         'idea_id': LONG,
+        'taxonomy_nature': KEYWORD,
+        'taxonomy_action': KEYWORD,
         'creator_id': LONG,
         'parent_creator_id': LONG,
     #    'publishes_synthesis_id': KEYWORD,

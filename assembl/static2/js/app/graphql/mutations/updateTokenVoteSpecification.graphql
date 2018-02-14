@@ -28,7 +28,6 @@ mutation updateTokenVoteSpecification(
         tokenCategories {
           id
           totalNumber
-          typename
           titleEntries {
             ...langStringEntry
           }
