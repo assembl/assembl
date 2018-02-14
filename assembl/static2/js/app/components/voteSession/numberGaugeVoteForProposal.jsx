@@ -80,6 +80,17 @@ const NumberGaugeVoteForProposal = ({ instructions, minimum, maximum, nbTicks, u
     marginLeft: '0'
   };
 
+  const handleStyle = [
+    {
+      backgroundColor: '#4F17D4', // TODO: use theme colors
+      height: '20px',
+      width: '20px',
+      marginTop: '-20px',
+      border: 'none',
+      boxShadow: 'none'
+    }
+  ];
+
   return (
     <div className="gauge-vote-for-proposal">
       <p>{instructions}</p>
@@ -93,6 +104,7 @@ const NumberGaugeVoteForProposal = ({ instructions, minimum, maximum, nbTicks, u
         trackStyle={trackStyle}
         railStyle={railStyle}
         dotStyle={dotStyle}
+        handleStyle={handleStyle}
       />
     </div>
   );

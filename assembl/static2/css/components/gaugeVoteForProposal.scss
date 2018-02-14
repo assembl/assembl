@@ -4,5 +4,9 @@
 
   .rc-slider {
     height: 55px;
+
+    .rc-slider-dot:first-child, .rc-slider-dot:nth-child(2) {
+      display: none;
+    }
   }
 }
