@@ -44,8 +44,12 @@ class AbstractVoteSpecification(DiscussionBoundBase):
     }
 
     widget_id = Column(Integer, ForeignKey(
-        "widget.id"), nullable=False, index=True)
+        "widget.id"), nullable=True, index=True,
+        info={"pseudo_nullable": False})
     "Used by a voting widget"
+
+    vote_session_id = Column(Integer, ForeignKey(
+        "vote_session.id"), nullable=True, index=True)
 
     criterion_idea_id = Column(Integer, ForeignKey(
         Idea.id),  # ondelete="SET NULL", onupdate="CASCADE"), WIP
@@ -78,6 +82,10 @@ class AbstractVoteSpecification(DiscussionBoundBase):
 
     widget = relationship(
         "VotingWidget", backref=backref(
+            "vote_specifications", cascade="all, delete-orphan"))
+
+    vote_session = relationship(
+        "VoteSession", backref=backref(
             "vote_specifications", cascade="all, delete-orphan"))
 
     criterion_idea = relationship(
@@ -234,7 +242,9 @@ class AbstractVoteSpecification(DiscussionBoundBase):
 
     def get_discussion_id(self):
         from .widgets import Widget
-        widget = self.widget or Widget.get(self.widget_id)
+        from .vote_session import VoteSession
+        widget = self.widget or (self.widget_id and Widget.get(self.widget_id)
+            ) or self.vote_session or (self.vote_session_id and VoteSession.get(self.vote_session_id))
         return widget.get_discussion_id()
 
     @classmethod

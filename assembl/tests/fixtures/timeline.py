@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-from datetime import datetime
 import pytest
 
 
@@ -139,18 +138,18 @@ def timeline_phase2_interface_v2(request, test_app, test_session, discussion):
 @pytest.fixture(scope="function")
 def timeline_vote_session(request, test_session, discussion):
     from assembl.models import DiscussionPhase, LangString
-
+    
     phase = DiscussionPhase(
         discussion = discussion,
         identifier = 'voteSession',
         title = LangString.create(u"voteSession phase title fixture", "en"),
         description = LangString.create(u"voteSession phase description fixture", "en"),
-        start = datetime(2014, 12, 31, 9, 0, 0),
-        end = datetime(2015, 12, 31, 9, 0, 0),
+        start = u"20141231T09:00:00Z",
+        end = u"20151231T09:00:00Z",
         interface_v1 = False,
         image_url = u'https://example.net/image.jpg'
     )
-
+    
 
     # Create the phase
     test_session.add(phase)
