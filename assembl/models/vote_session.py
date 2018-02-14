@@ -1,11 +1,17 @@
-from sqlalchemy.orm import relationship, backref
+from datetime import datetime
 
-from . import DiscussionBoundBase
-from .timeline import DiscussionPhase
+from sqlalchemy.orm import relationship, backref
+from sqlalchemy import (
+    Column,
+    Integer,
+    ForeignKey
+)
+
+from assembl.auth import CrudPermissions, P_READ, P_ADMIN_DISC
 from .langstrings import LangString
 from .langstrings_helpers import langstrings_base
-from .sqla_helpers import Id, ForeignId
-from assembl.auth import CrudPermissions, P_READ, P_ADMIN_DISC
+from .timeline import DiscussionPhase
+from .widgets import VotingWidget
 
 langstrings_names = [
     "title",
@@ -18,19 +24,26 @@ langstrings_names = [
 
 class VoteSession(
     langstrings_base(langstrings_names, "VoteSession"),
-    DiscussionBoundBase
+    VotingWidget
 ):
     """ A vote session bound to a discussion phase.
         Uses TimelineEvent.description as frontend subtitle. """
 
     __tablename__ = "vote_session"
+    __mapper_args__ = {
+        'polymorphic_identity': 'vote_session',
+    }
 
-    id = Id()
+    id = Column(Integer, ForeignKey(
+        VotingWidget.id,
+        ondelete='CASCADE',
+        onupdate='CASCADE'
+    ), primary_key=True)
 
-    discussion_phase_id = ForeignId(
-        DiscussionPhase,
-        nullable=False,
-    )
+    discussion_phase_id = Column(
+        Integer,
+        ForeignKey(DiscussionPhase.id),
+        nullable=False)
 
     discussion_phase = relationship(
         DiscussionPhase,
@@ -42,19 +55,25 @@ class VoteSession(
         ),
     )
 
-    def get_discussion_id(self):
-        return self.discussion_phase.discussion_id
+    @classmethod
+    def filter_started(cls, query):
+        return query.join(cls.discussion_phase).filter(
+            (DiscussionPhase.start == None) | (DiscussionPhase.start <= datetime.utcnow()))  # noqa: E711
 
     @classmethod
-    def get_discussion_conditions(cls, discussion_id, alias_maker=None):
-        if alias_maker is None:
-            vote_session = cls
-            discussion_phase = DiscussionPhase
-        else:
-            vote_session = alias_maker.alias_from_class(cls)
-            discussion_phase = alias_maker.alias_from_relns(vote_session.discussion_phase)
-        return ((vote_session.discussion_phase_id == discussion_phase.id),
-                (discussion_phase.discussion_id == discussion_id))
+    def test_active(cls):
+        now = datetime.utcnow()
+        return ((DiscussionPhase.end == None) | (DiscussionPhase.end > now) & (DiscussionPhase.start == None) | (DiscussionPhase.start <= now))  # noqa: E711
+
+    @classmethod
+    def filter_active(cls, query):
+        return query.join(cls.discussion_phase).filter(cls.test_active())
+
+    def is_started(self):
+        return self.discussion_phase.start == None or self.discussion_phase.start <= datetime.utcnow()  # noqa: E711
+
+    def is_ended(self):
+        return self.discussion_phase.end != None and self.discussion_phase.end < datetime.utcnow()  # noqa: E711
 
     crud_permissions = CrudPermissions(
         create=P_ADMIN_DISC,
