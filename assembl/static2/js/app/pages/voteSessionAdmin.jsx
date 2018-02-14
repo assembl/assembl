@@ -2,8 +2,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { compose, graphql } from 'react-apollo';
-import { I18n } from 'react-redux-i18n';
+import { I18n, Translate } from 'react-redux-i18n';
 import type { List, Map } from 'immutable';
+import { Button } from 'react-bootstrap';
 
 import PageForm from '../components/administration/voteSession/pageForm';
 import ModulesSection from '../components/administration/voteSession/modulesSection';
@@ -20,7 +21,7 @@ import createNumberGaugeVoteSpecificationMutation from '../graphql/mutations/cre
 import updateNumberGaugeVoteSpecificationMutation from '../graphql/mutations/updateNumberGaugeVoteSpecification.graphql';
 import { convertEntriesToHTML } from '../utils/draftjs';
 import { getPhaseId } from '../utils/timeline';
-import { displayAlert } from '../utils/utilityManager';
+import { displayAlert, displayModal, closeModal } from '../utils/utilityManager';
 
 type VoteSessionAdminProps = {
   editLocale: string,
@@ -204,7 +205,15 @@ class VoteSessionAdmin extends React.Component<void, VoteSessionAdminProps, void
         this.runMutations(mutationsPromises);
       }
     } else {
-      displayAlert('warning', I18n.t('administration.saveFirstStep'));
+      const title = null;
+      const body = <Translate value="administration.saveFirstStep" />;
+      const footer = (
+        <Button key="cancel" onClick={closeModal} className="button-cancel button-dark">
+          OK
+        </Button>
+      );
+      const includeFooter = true;
+      displayModal(title, body, includeFooter, footer);
     }
   };
 
