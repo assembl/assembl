@@ -233,3 +233,50 @@ def token_vote_specification_associated_to_proposal(request, test_session, discu
 
     request.addfinalizer(fin)
     return vote_spec
+
+
+@pytest.fixture(scope="function")
+def gauge_vote_specification_associated_to_proposal(request, test_session, discussion, graphql_request, vote_session, gauge_vote_specification, vote_proposal, graphql_registry):
+    mutation = graphql_registry['createGaugeVoteSpecification']
+    vote_session_id = to_global_id("VoteSession", vote_session.id)
+    proposal_id = to_global_id("Idea", vote_proposal.id)
+    template_gauge_vote_spec_id = to_global_id("GaugeVoteSpecification", gauge_vote_specification.id)
+    from assembl.graphql.schema import Schema as schema
+    res = schema.execute(mutation, context_value=graphql_request, variable_values={
+        "voteSessionId": vote_session_id,
+        "proposalId": proposal_id,
+        "voteSpecTemplateId": template_gauge_vote_spec_id,
+        "titleEntries": [
+            {"value": u"Comprendre les dynamiques et les enjeux", "localeCode": "fr"},
+            {"value": u"Understanding the dynamics and issues", "localeCode": "en"}
+        ],
+        "instructionsEntries":
+        [
+            {"value": u"Instructions : Comprendre les dynamiques et les enjeux", "localeCode": "fr"},
+            {"value": u"Instructions: Understanding the dynamics and issues", "localeCode": "en"}
+        ],
+        "choices": [
+            {"labelEntries": [
+                {"value": u"Cran 1", "localeCode": "fr"},
+                {"value": u"Tick 1", "localeCode": "en"}
+             ],
+             "value": 10.0,
+            },
+            {"labelEntries": [
+                {"value": u"Cran 2", "localeCode": "fr"},
+                {"value": u"Tick 2", "localeCode": "en"}
+             ],
+             "value": 20.0,
+            }
+        ]
+    })
+    assert res.errors is None
+    vote_spec = vote_session.vote_specifications[-1]
+
+    def fin():
+        print "finalizer gauge_vote_specification_associated_to_proposal"
+        test_session.delete(vote_spec)
+        test_session.flush()
+
+    request.addfinalizer(fin)
+    return vote_spec

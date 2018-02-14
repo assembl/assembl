@@ -52,3 +52,48 @@ def test_graphql_delete_token_vote(graphql_participant1_request, vote_session, v
     )
     assert res.errors is None
     assert len(res.data['deleteTokenVote']['voteSpecification']['myVotes']) == 0
+
+
+def test_graphql_add_gauge_vote(graphql_participant1_request, vote_session, vote_proposal, gauge_vote_specification_associated_to_proposal, graphql_registry):
+    proposal_id = to_global_id("Idea", vote_proposal.id)
+    vote_spec_id = to_global_id("GaugeVoteSpecification", gauge_vote_specification_associated_to_proposal.id)
+    res = schema.execute(
+        graphql_registry['addGaugeVote'],
+        context_value=graphql_participant1_request,
+        variable_values={
+            "proposalId": proposal_id,
+            "voteSpecId": vote_spec_id,
+            "voteValue": 20.0
+        }
+    )
+    assert res.errors is None
+    assert len(res.data['addGaugeVote']['voteSpecification']['myVotes']) == 1
+    assert res.data['addGaugeVote']['voteSpecification']['myVotes'][0]['selectedValue'] == 20.0
+    assert res.data['addGaugeVote']['voteSpecification']['myVotes'][0]['proposalId'] == proposal_id
+
+
+def test_graphql_delete_gauge_vote(graphql_participant1_request, vote_session, vote_proposal, gauge_vote_specification_associated_to_proposal, graphql_registry):
+    proposal_id = to_global_id("Idea", vote_proposal.id)
+    vote_spec_id = to_global_id("GaugeVoteSpecification", gauge_vote_specification_associated_to_proposal.id)
+    # add gauge vote
+    res = schema.execute(
+        graphql_registry['addGaugeVote'],
+        context_value=graphql_participant1_request,
+        variable_values={
+            "proposalId": proposal_id,
+            "voteSpecId": vote_spec_id,
+            "voteValue": 20.0
+        }
+    )
+    assert res.errors is None
+    # and remove it
+    res = schema.execute(
+        graphql_registry['deleteGaugeVote'],
+        context_value=graphql_participant1_request,
+        variable_values={
+            "proposalId": proposal_id,
+            "voteSpecId": vote_spec_id
+        }
+    )
+    assert res.errors is None
+    assert len(res.data['deleteGaugeVote']['voteSpecification']['myVotes']) == 0

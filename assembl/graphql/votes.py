@@ -144,3 +144,71 @@ class DeleteTokenVote(graphene.Mutation):
         vote.db.flush()
         return DeleteTokenVote(vote_specification=vote_spec)
 
+
+class AddGaugeVote(graphene.Mutation):
+    class Input:
+        proposal_id = graphene.ID(required=True)
+        vote_spec_id = graphene.ID(required=True)
+        vote_value = graphene.Float(required=True)
+
+    vote_specification = graphene.Field(lambda: VoteSpecificationUnion)  # need to match GaugeVoteSpecification / NumberGaugeVoteSpecification
+
+    @staticmethod
+    @abort_transaction_on_exception
+    def mutate(root, args, context, info):
+        require_cls_permission(CrudPermissions.CREATE, models.TokenIdeaVote, context)
+        discussion_id = context.matchdict['discussion_id']
+        discussion = models.Discussion.get(discussion_id)
+        user_id = context.authenticated_userid
+        vote_value = args.get('vote_value')
+
+        proposal_id = args.get('proposal_id')
+        proposal_id = int(Node.from_global_id(proposal_id)[1])
+        proposal = models.Idea.get(proposal_id)
+
+        vote_spec_id = args.get('vote_spec_id')
+        vote_spec_id = int(Node.from_global_id(vote_spec_id)[1])
+        vote_spec = models.AbstractVoteSpecification.get(vote_spec_id)
+
+        vote = models.GaugeIdeaVote(
+            discussion=discussion,
+            vote_spec=vote_spec,
+            widget=vote_spec.widget,
+            voter_id=user_id,
+            idea=proposal,
+            vote_value=vote_value)
+
+        permissions = get_permissions(user_id, discussion_id)
+        vote = vote.handle_duplication(
+            permissions=permissions, user_id=user_id)
+        vote.db.add(vote)
+        vote.db.flush()
+        return AddGaugeVote(vote_specification=vote_spec)
+
+
+class DeleteGaugeVote(graphene.Mutation):
+    class Input:
+        proposal_id = graphene.ID(required=True)
+        vote_spec_id = graphene.ID(required=True)
+
+    vote_specification = graphene.Field(lambda: VoteSpecificationUnion)  # need to match GaugeVoteSpecification / NumberGaugeVoteSpecification
+
+    @staticmethod
+    @abort_transaction_on_exception
+    def mutate(root, args, context, info):
+        user_id = context.authenticated_userid
+
+        proposal_id = args.get('proposal_id')
+        proposal_id = int(Node.from_global_id(proposal_id)[1])
+
+        vote_spec_id = args.get('vote_spec_id')
+        vote_spec_id = int(Node.from_global_id(vote_spec_id)[1])
+        vote_spec = models.AbstractVoteSpecification.get(vote_spec_id)
+
+        vote = models.GaugeIdeaVote.query.filter_by(
+            vote_spec_id=vote_spec.id, tombstone_date=None, voter_id=user_id).one()
+
+        require_instance_permission(CrudPermissions.DELETE, vote, context)
+        vote.is_tombstone = True
+        vote.db.flush()
+        return DeleteGaugeVote(vote_specification=vote_spec)
