@@ -83,14 +83,14 @@ class DumbVoteSession extends React.Component<void, Props, State> {
   }
 
   componentWillMount() {
-    window.addEventListener('scroll', this.setInstructionsPosition);
+    window.addEventListener('scroll', this.setAvailableTokensSticky);
   }
 
   componentWillUnmount() {
-    window.removeEventListener('scroll', this.setInstructionsPosition);
+    window.removeEventListener('scroll', this.setAvailableTokensSticky);
   }
 
-  setInstructionsPosition = () => {
+  setAvailableTokensSticky = () => {
     const topPosition =
       this.voteSessionPageDivRef.offsetTop +
       this.voteSessionPageDivRef.children[0].offsetTop +
