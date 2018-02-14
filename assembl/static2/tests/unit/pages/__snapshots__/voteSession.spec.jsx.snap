@@ -77,7 +77,7 @@ exports[`VoteSession component should match VoteSession snapshot 1`] = `
       </Row>
     </Section>
     <Section
-      className="themes-section"
+      className={null}
       containerAdditionalClassNames={Array []}
       displayIndex={false}
       index={1}
@@ -198,7 +198,7 @@ exports[`VoteSession component should match VoteSession snapshot with empty modu
       </Row>
     </Section>
     <Section
-      className="themes-section"
+      className={null}
       containerAdditionalClassNames={Array []}
       displayIndex={false}
       index={1}

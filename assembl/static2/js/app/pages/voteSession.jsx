@@ -10,6 +10,7 @@ import Header from '../components/common/header';
 import Section from '../components/common/section';
 import AvailableTokens from '../components/voteSession/availableTokens';
 import Proposals from '../components/voteSession/proposals';
+import { getDomElementOffset } from '../utils/globalFunctions';
 import { getPhaseId } from '../utils/timeline';
 import withLoadingIndicator from '../components/common/withLoadingIndicator';
 
@@ -56,8 +57,7 @@ export type UserTokenVotes = Map<string, TokenVotesForProposal>;
 
 type State = {
   userTokenVotes: UserTokenVotes,
-  availableTokensSticky: boolean,
-  instructionsOffset: number
+  availableTokensSticky: boolean
 };
 
 // $FlowFixMe: if voteType === 'token_vote_specification', we know it is a tokenVoteSpecificationFragment
@@ -71,14 +71,11 @@ class DumbVoteSession extends React.Component<void, Props, State> {
 
   availableTokensContainerRef: HTMLDivElement;
 
-  voteSessionPageDivRef: HTMLDivElement;
-
   constructor(props: Props) {
     super(props);
     this.state = {
       availableTokensSticky: false,
-      userTokenVotes: Map(),
-      instructionsOffset: 0
+      userTokenVotes: Map()
     };
   }
 
@@ -91,12 +88,8 @@ class DumbVoteSession extends React.Component<void, Props, State> {
   }
 
   setAvailableTokensSticky = () => {
-    const topPosition =
-      this.voteSessionPageDivRef.offsetTop +
-      this.voteSessionPageDivRef.children[0].offsetTop +
-      this.voteSessionPageDivRef.children[1].offsetTop +
-      this.availableTokensContainerRef.offsetTop;
-    if (topPosition <= window.scrollY) {
+    const availableTokensDivOffset = getDomElementOffset(this.availableTokensContainerRef).top;
+    if (availableTokensDivOffset <= window.scrollY) {
       this.setState({ availableTokensSticky: true });
     } else {
       this.setState({ availableTokensSticky: false });
@@ -128,10 +121,6 @@ class DumbVoteSession extends React.Component<void, Props, State> {
     this.availableTokensContainerRef = el;
   };
 
-  setVoteSessionPageDivRef = (el: HTMLDivElement) => {
-    this.voteSessionPageDivRef = el;
-  };
-
   render() {
     const {
       title,
@@ -146,7 +135,7 @@ class DumbVoteSession extends React.Component<void, Props, State> {
     const tokenVoteModule = findTokenVoteModule(modules);
     const remainingTokensByCategory = this.getRemainingTokensByCategory(tokenVoteModule);
     return (
-      <div className="votesession-page" ref={this.setVoteSessionPageDivRef}>
+      <div className="votesession-page">
         <Header title={title} subtitle={subTitle} imgUrl={headerImageUrl} additionalHeaderClasses="left" />
         <Grid fluid>
           <Section
@@ -175,7 +164,7 @@ class DumbVoteSession extends React.Component<void, Props, State> {
               </Col>
             </Row>
           </Section>
-          <Section title={propositionsSectionTitle}>
+          <Section title={propositionsSectionTitle} className={this.state.availableTokensSticky ? 'extra-margin-top' : null}>
             <Row>
               <Col mdOffset={1} md={10} smOffset={1} sm={10}>
                 <Proposals
