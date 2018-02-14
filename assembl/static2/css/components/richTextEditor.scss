@@ -141,6 +141,9 @@
   .editor-label {
     float: left;
     padding-top: 12px;
+    font-family: $font-family7;
+    margin: 0 0 5px 4px;
+    font-size: $font-size-xs;
   }
 
   .editor-toolbar {
@@ -254,5 +257,10 @@
     font-size: $font-size-xs;
     font-family: $font-family6;
     letter-spacing: 0;
+    padding: 5px 0 0 5px;
+  }
+
+  .public-DraftStyleDefault-block {
+    padding: 5px 0 0 5px;
   }
 }
