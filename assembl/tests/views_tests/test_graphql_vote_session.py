@@ -261,7 +261,8 @@ u'createTokenVoteSpecification': {u'voteSpecification': {u'exclusiveCategories':
                                                                                                       {u'localeCode': u'fr',
                                                                                                        u'value': u'Comprendre les dynamiques et les enjeux'}],
                                                                                     u'totalNumber': 10,
-                                                                                    u'typename': u'positive'}],
+#                                                                                    u'typename': u'positive'
+                                                                                    }],
                                                               u'voteSpecTemplateId': None,
                                                               u'voteSessionId': vote_session_id}}}
     # remove created vote specification
@@ -329,7 +330,8 @@ u'updateTokenVoteSpecification': {u'voteSpecification': {u'exclusiveCategories':
                                                                                                  {u'localeCode': u'fr',
                                                                                                   u'value': u'Comprendre les dynamiques et les enjeux (updated)'}],
                                                                                u'totalNumber': 14,
-                                                                               u'typename': u'negative'}],
+#                                                                               u'typename': u'negative'
+                                                                               }],
                                                          u'voteSessionId': vote_session_id}}}
 
 

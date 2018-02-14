@@ -32,7 +32,6 @@ mutation createTokenVoteSpecification(
         tokenCategories {
           id
           totalNumber
-          typename
           titleEntries {
             ...langStringEntry
           }

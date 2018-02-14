@@ -39,6 +39,8 @@ export const UPDATE_VOTE_SESSION_PAGE_IMAGE: 'UPDATE_VOTE_SESSION_PAGE_IMAGE' = 
 export const UPDATE_VOTE_MODULES: 'UPDATE_VOTE_MODULES' = 'UPDATE_VOTE_MODULES';
 export const CREATE_TOKEN_VOTE_MODULE: 'CREATE_TOKEN_VOTE_MODULE' = 'CREATE_TOKEN_VOTE_MODULE';
 export const DELETE_TOKEN_VOTE_MODULE: 'DELETE_TOKEN_VOTE_MODULE' = 'DELETE_TOKEN_VOTE_MODULE';
+export const CREATE_GAUGE_VOTE_MODULE: 'CREATE_GAUGE_VOTE_MODULE' = 'CREATE_GAUGE_VOTE_MODULE';
+export const DELETE_GAUGE_VOTE_MODULE: 'DELETE_GAUGE_VOTE_MODULE' = 'DELETE_GAUGE_VOTE_MODULE';
 export const UPDATE_TOKEN_VOTE_INSTRUCTIONS: 'UPDATE_TOKEN_VOTE_INSTRUCTIONS' = 'UPDATE_TOKEN_VOTE_INSTRUCTIONS';
 export const CREATE_TOKEN_VOTE_CATEGORY: 'CREATE_TOKEN_VOTE_CATEGORY' = 'CREATE_TOKEN_VOTE_CATEGORY';
 export const DELETE_TOKEN_VOTE_CATEGORY: 'DELETE_TOKEN_VOTE_CATEGORY' = 'DELETE_TOKEN_VOTE_CATEGORY';
@@ -47,6 +49,15 @@ export const UPDATE_TOKEN_VOTE_EXCLUSIVE_CATEGORY: 'UPDATE_TOKEN_VOTE_EXCLUSIVE_
 export const UPDATE_TOKEN_VOTE_CATEGORY_TITLE: 'UPDATE_TOKEN_VOTE_CATEGORY_TITLE' = 'UPDATE_TOKEN_VOTE_CATEGORY_TITLE';
 export const UPDATE_TOKEN_VOTE_CATEGORY_COLOR: 'UPDATE_TOKEN_VOTE_CATEGORY_COLOR' = 'UPDATE_TOKEN_VOTE_CATEGORY_COLOR';
 export const UPDATE_TOKEN_TOTAL_NUMBER: 'UPDATE_TOKEN_TOTAL_NUMBER' = 'UPDATE_TOKEN_TOTAL_NUMBER';
+export const UPDATE_GAUGE_VOTE_INSTRUCTIONS: 'UPDATE_GAUGE_VOTE_INSTRUCTIONS' = 'UPDATE_GAUGE_VOTE_INSTRUCTIONS';
+export const UPDATE_GAUGE_VOTE_NUMBER_TICKS: 'UPDATE_GAUGE_VOTE_NUMBER_TICKS' = 'UPDATE_GAUGE_VOTE_NUMBER_TICKS';
+export const UPDATE_GAUGE_VOTE_IS_NUMBER: 'UPDATE_GAUGE_VOTE_IS_NUMBER' = 'UPDATE_GAUGE_VOTE_IS_NUMBER';
+export const CREATE_GAUGE_VOTE_CHOICE: 'CREATE_GAUGE_VOTE_CHOICE' = 'CREATE_GAUGE_VOTE_CHOICE';
+export const DELETE_GAUGE_VOTE_CHOICE: 'DELETE_GAUGE_VOTE_CHOICE' = 'DELETE_GAUGE_VOTE_CHOICE';
+export const UPDATE_GAUGE_VOTE_CHOICE_LABEL: 'UPDATE_GAUGE_VOTE_CHOICE_LABEL' = 'UPDATE_GAUGE_VOTE_CHOICE_LABEL';
+export const UPDATE_GAUGE_MINIMUM: 'UPDATE_GAUGE_MINIMUM' = 'UPDATE_GAUGE_MINIMUM';
+export const UPDATE_GAUGE_MAXIMUM: 'UPDATE_GAUGE_MAXIMUM' = 'UPDATE_GAUGE_MAXIMUM';
+export const UPDATE_GAUGE_UNIT: 'UPDATE_GAUGE_UNIT' = 'UPDATE_GAUGE_UNIT';
 export const UPDATE_LANDING_PAGE_MODULES: 'UPDATE_LANDING_PAGE_MODULES' = 'UPDATE_LANDING_PAGE_MODULES';
 export const TOGGLE_LANDING_PAGE_MODULE: 'TOGGLE_LANDING_PAGE_MODULE' = 'TOGGLE_LANDING_PAGE_MODULE';
 export const MOVE_LANDING_PAGE_MODULE_UP: 'MOVE_LANDING_PAGE_MODULE_UP' = 'MOVE_LANDING_PAGE_MODULE_UP';
@@ -282,6 +293,16 @@ export type DeleteTokenVoteModule = {
   type: typeof DELETE_TOKEN_VOTE_MODULE
 };
 
+export type CreateGaugeVoteModule = {
+  id: string,
+  type: typeof CREATE_GAUGE_VOTE_MODULE
+};
+
+export type DeleteGaugeVoteModule = {
+  id: string,
+  type: typeof DELETE_GAUGE_VOTE_MODULE
+};
+
 export type UpdateTokenVoteExclusiveCategory = {
   id: string,
   value: boolean,
@@ -302,8 +323,8 @@ export type CreateTokenVoteCategory = {
 };
 
 export type DeleteTokenVoteCategory = {
-  parentId: string,
-  value: number,
+  id: string,
+  index: number,
   type: typeof DELETE_TOKEN_VOTE_CATEGORY
 };
 
@@ -324,7 +345,7 @@ export type UpdateTokenVoteCategoryColor = {
   id: string,
   value: string,
   type: typeof UPDATE_TOKEN_VOTE_CATEGORY_COLOR
-}
+};
 
 export type toggleLandingPageModule = {
   moduleTypeIdentifier: string,
@@ -348,6 +369,62 @@ export type MoveLandingPageModuleUp = {
 export type MoveLandingPageModuleDown = {
   moduleTypeIdentifier: string,
   type: typeof MOVE_LANDING_PAGE_MODULE_DOWN
+};
+
+export type UpdateGaugeVoteInstructions = {
+  id: string,
+  locale: string,
+  value: string,
+  type: typeof UPDATE_GAUGE_VOTE_INSTRUCTIONS
+};
+
+export type UpdateGaugeVoteNbTicks = {
+  id: string,
+  value: number,
+  type: typeof UPDATE_GAUGE_VOTE_NUMBER_TICKS
+};
+
+export type UpdateGaugeVoteIsNumber = {
+  id: string,
+  value: boolean,
+  type: typeof UPDATE_GAUGE_VOTE_IS_NUMBER
+};
+
+export type CreateGaugeVoteChoice = {
+  parentId: string,
+  id: string,
+  type: typeof CREATE_GAUGE_VOTE_CHOICE
+};
+
+export type DeleteGaugeVoteChoice = {
+  id: string,
+  index: number,
+  type: typeof DELETE_GAUGE_VOTE_CHOICE
+};
+
+export type UpdateGaugeVoteChoiceLabel = {
+  id: string,
+  locale: string,
+  value: string,
+  type: typeof UPDATE_GAUGE_VOTE_CHOICE_LABEL
+};
+
+export type UpdateGaugeMinimum = {
+  id: string,
+  value: number,
+  type: typeof UPDATE_GAUGE_MINIMUM
+};
+
+export type UpdateGaugeMaximum = {
+  id: string,
+  value: number,
+  type: typeof UPDATE_GAUGE_MAXIMUM
+};
+
+export type UpdateGaugeUnit = {
+  id: string,
+  value: string,
+  type: typeof UPDATE_GAUGE_UNIT
 };
 
 type BasicAction = {
@@ -382,12 +459,24 @@ type VoteSessionActions =
   | UpdateVoteSessionHeaderImage
   | UpdateVoteModules
   | CreateTokenVoteModule
+  | DeleteTokenVoteModule
+  | CreateGaugeVoteModule
+  | DeleteGaugeVoteModule
   | UpdateTokenVoteInstructions
   | CreateTokenVoteCategory
   | DeleteTokenVoteCategory
   | UpdateTokenVoteCategoryTitle
   | UpdateTokenTotalNumber
-  | UpdateTokenVoteCategoryColor;
+  | UpdateTokenVoteCategoryColor
+  | UpdateGaugeVoteNbTicks
+  | UpdateGaugeVoteIsNumber
+  | CreateGaugeVoteChoice
+  | DeleteGaugeVoteChoice
+  | UpdateGaugeVoteChoiceLabel
+  | UpdateGaugeMinimum
+  | UpdateGaugeMaximum
+  | UpdateGaugeUnit
+  | UpdateGaugeVoteInstructions;
 
 export type Action =
   | UpdateContentLocaleById
