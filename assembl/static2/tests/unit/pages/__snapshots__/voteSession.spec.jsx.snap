@@ -17,6 +17,7 @@ exports[`VoteSession component should match VoteSession snapshot 1`] = `
   >
     <Section
       className="themes-section"
+      containerAdditionalClassNames={null}
       displayIndex={false}
       index={1}
       indexGenerator={[Function]}
@@ -30,9 +31,10 @@ exports[`VoteSession component should match VoteSession snapshot 1`] = `
       >
         <Col
           bsClass="col"
+          className="no-padding"
           componentClass="div"
-          md={10}
-          mdOffset={1}
+          md={8}
+          mdOffset={3}
           sm={10}
           smOffset={1}
         >
@@ -44,35 +46,39 @@ exports[`VoteSession component should match VoteSession snapshot 1`] = `
               }
             }
           />
-          <AvailableTokens
-            remainingTokensByCategory={
-              Immutable.Map {
-                negative: 10,
-                positive: 8,
+          <div>
+            <AvailableTokens
+              remainingTokensByCategory={
+                Immutable.Map {
+                  negative: 10,
+                  positive: 8,
+                }
               }
-            }
-            tokenCategories={
-              Array [
-                Object {
-                  "color": "#117711",
-                  "id": "negative",
-                  "title": "Negative",
-                  "totalNumber": 10,
-                },
-                Object {
-                  "color": "#881111",
-                  "id": "positive",
-                  "title": "Positive",
-                  "totalNumber": 8,
-                },
-              ]
-            }
-          />
+              sticky={false}
+              tokenCategories={
+                Array [
+                  Object {
+                    "color": "#117711",
+                    "id": "negative",
+                    "title": "Negative",
+                    "totalNumber": 10,
+                  },
+                  Object {
+                    "color": "#881111",
+                    "id": "positive",
+                    "title": "Positive",
+                    "totalNumber": 8,
+                  },
+                ]
+              }
+            />
+          </div>
         </Col>
       </Row>
     </Section>
     <Section
       className="themes-section"
+      containerAdditionalClassNames={Array []}
       displayIndex={false}
       index={1}
       indexGenerator={[Function]}
@@ -159,6 +165,7 @@ exports[`VoteSession component should match VoteSession snapshot with empty modu
   >
     <Section
       className="themes-section"
+      containerAdditionalClassNames={null}
       displayIndex={false}
       index={1}
       indexGenerator={[Function]}
@@ -172,9 +179,10 @@ exports[`VoteSession component should match VoteSession snapshot with empty modu
       >
         <Col
           bsClass="col"
+          className="no-padding"
           componentClass="div"
-          md={10}
-          mdOffset={1}
+          md={8}
+          mdOffset={3}
           sm={10}
           smOffset={1}
         >
@@ -191,6 +199,7 @@ exports[`VoteSession component should match VoteSession snapshot with empty modu
     </Section>
     <Section
       className="themes-section"
+      containerAdditionalClassNames={Array []}
       displayIndex={false}
       index={1}
       indexGenerator={[Function]}

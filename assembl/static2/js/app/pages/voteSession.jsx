@@ -55,7 +55,9 @@ export type TokenVotesForProposal = Map<string, number>;
 export type UserTokenVotes = Map<string, TokenVotesForProposal>;
 
 type State = {
-  userTokenVotes: UserTokenVotes
+  userTokenVotes: UserTokenVotes,
+  availableTokensSticky: boolean,
+  instructionsOffset: number
 };
 
 // $FlowFixMe: if voteType === 'token_vote_specification', it must be a tokenVoteSpecificationFragment
@@ -67,12 +69,39 @@ class DumbVoteSession extends React.Component<void, Props, State> {
 
   state: State;
 
+  availableTokensContainerRef: HTMLDivElement;
+
+  voteSessionPageDivRef: HTMLDivElement;
+
   constructor(props: Props) {
     super(props);
     this.state = {
-      userTokenVotes: Map()
+      availableTokensSticky: false,
+      userTokenVotes: Map(),
+      instructionsOffset: 0
     };
   }
+
+  componentWillMount() {
+    window.addEventListener('scroll', this.setInstructionsPosition);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('scroll', this.setInstructionsPosition);
+  }
+
+  setInstructionsPosition = () => {
+    const topPosition =
+      this.voteSessionPageDivRef.offsetTop +
+      this.voteSessionPageDivRef.children[0].offsetTop +
+      this.voteSessionPageDivRef.children[1].offsetTop +
+      this.availableTokensContainerRef.offsetTop;
+    if (topPosition <= window.scrollY) {
+      this.setState({ availableTokensSticky: true });
+    } else {
+      this.setState({ availableTokensSticky: false });
+    }
+  };
 
   voteForProposal = (proposalId: string, categoryId: string, value: number): void => {
     this.setState({
@@ -95,6 +124,14 @@ class DumbVoteSession extends React.Component<void, Props, State> {
     return remainingTokensByCategory;
   };
 
+  setAvailableTokensRef = (el: HTMLDivElement) => {
+    this.availableTokensContainerRef = el;
+  };
+
+  setVoteSessionPageDivRef = (el: HTMLDivElement) => {
+    this.voteSessionPageDivRef = el;
+  };
+
   render() {
     const {
       title,
@@ -109,19 +146,32 @@ class DumbVoteSession extends React.Component<void, Props, State> {
     const tokenVoteModule = findTokenVoteModule(modules);
     const remainingTokensByCategory = this.getRemainingTokensByCategory(tokenVoteModule);
     return (
-      <div className="votesession-page">
+      <div className="votesession-page" ref={this.setVoteSessionPageDivRef}>
         <Header title={title} subtitle={subTitle} imgUrl={headerImageUrl} additionalHeaderClasses="left" />
         <Grid fluid>
-          <Section title={instructionsSectionTitle}>
+          <Section
+            title={instructionsSectionTitle}
+            containerAdditionalClassNames={this.state.availableTokensSticky ? ['no-margin'] : null}
+          >
             <Row>
-              <Col mdOffset={1} md={10} smOffset={1} sm={10}>
+              <Col
+                mdOffset={!this.state.availableTokensSticky ? 3 : null}
+                smOffset={!this.state.availableTokensSticky ? 1 : null}
+                md={8}
+                sm={10}
+                className="no-padding"
+              >
                 <div dangerouslySetInnerHTML={{ __html: instructionsSectionContent }} className="vote-instructions" />
-                {tokenVoteModule && (
-                  <AvailableTokens
-                    remainingTokensByCategory={remainingTokensByCategory}
-                    tokenCategories={tokenVoteModule.tokenCategories}
-                  />
-                )}
+                {tokenVoteModule &&
+                  tokenVoteModule.tokenCategories && (
+                    <div ref={this.setAvailableTokensRef}>
+                      <AvailableTokens
+                        sticky={this.state.availableTokensSticky}
+                        remainingTokensByCategory={remainingTokensByCategory}
+                        tokenCategories={tokenVoteModule.tokenCategories}
+                      />
+                    </div>
+                  )}
               </Col>
             </Row>
           </Section>

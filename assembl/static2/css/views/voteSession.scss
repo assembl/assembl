@@ -21,8 +21,43 @@
     padding: 10px 0 10px;
   }
 
+  .available-tokens {
+    margin-top: 70px;
+
+    .category-available-tokens {
+      display: flex;
+      padding: 30px;
+
+      .tokens {
+        padding-left: 70px;
+      }
+    }
+  }
+
+  .available-tokens-sticky {
+    position: fixed;
+    top: 60px;
+    width: 100%;
+    z-index: 100;
+    display: flex;
+    justify-content: space-around;
+    box-shadow: 3px 4px 7px #bbb;
+
+    .category-available-tokens {
+      display: flex;
+
+      .tokens {
+        padding-left: 30px;
+      }
+    }
+
+    .separator {
+      border: none;
+    }
+  }
+
   .tokens > * {
-    margin: 2px;
+    margin: 5px;
   }
 
   .proposal.row {
