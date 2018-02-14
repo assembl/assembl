@@ -91,6 +91,14 @@ class VoteSessionAdmin extends React.Component<void, VoteSessionAdminProps, void
     }
   }
 
+  runMutations(mutationsPromises) {
+    const { refetchVoteSession } = this.props;
+    runSerial(mutationsPromises).then(() => {
+      refetchVoteSession();
+      displayAlert('success', I18n.t('administration.voteSessionSuccess'));
+    });
+  }
+
   saveAction = () => {
     const {
       i18n,
@@ -157,10 +165,7 @@ class VoteSessionAdmin extends React.Component<void, VoteSessionAdminProps, void
           lang: i18n.locale
         });
 
-        runSerial(mutationsPromises).then(() => {
-          refetchVoteSession();
-          displayAlert('success', I18n.t('administration.voteSessionSuccess'));
-        });
+        this.runMutations(mutationsPromises);
       }
       if (textGaugeModulesHaveChanged) {
         const textGaugeModules = voteModules.filter(m => m.get('type') === 'gauge' && !m.get('isNumberGauge'));
@@ -178,10 +183,7 @@ class VoteSessionAdmin extends React.Component<void, VoteSessionAdminProps, void
           lang: i18n.locale
         });
 
-        runSerial(mutationsPromises).then(() => {
-          refetchVoteSession();
-          displayAlert('success', I18n.t('administration.voteSessionSuccess'));
-        });
+        this.runMutations(mutationsPromises);
       }
       if (numberGaugeModulesHaveChanged) {
         const numberGaugeModules = voteModules.filter(m => m.get('type') === 'gauge' && m.get('isNumberGauge'));
@@ -199,10 +201,7 @@ class VoteSessionAdmin extends React.Component<void, VoteSessionAdminProps, void
           lang: i18n.locale
         });
 
-        runSerial(mutationsPromises).then(() => {
-          refetchVoteSession();
-          displayAlert('success', I18n.t('administration.voteSessionSuccess'));
-        });
+        this.runMutations(mutationsPromises);
       }
     } else {
       displayAlert('warning', I18n.t('administration.saveFirstStep'));

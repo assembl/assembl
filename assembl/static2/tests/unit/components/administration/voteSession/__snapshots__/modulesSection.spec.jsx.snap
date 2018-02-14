@@ -46,7 +46,7 @@ exports[`ModulesSection component should render a ModulesSection component witho
             classname="inline checkbox-title"
             helperText="Missing translation: administration.gaugeVoteCheckbox"
             helperUrl="/static2/img/helpers/helper3.png"
-            label="Missing translation: administration.voteWithGages"
+            label="Missing translation: administration.voteWithGauges"
           />
         </Checkbox>
         Immutable.List [

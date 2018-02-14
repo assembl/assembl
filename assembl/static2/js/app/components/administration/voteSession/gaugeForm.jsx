@@ -23,7 +23,7 @@ type GaugeFormProps = {
   instructions: string,
   nbTicks: number,
   isNumberGauge: boolean,
-  choices: Object,
+  choices: Array<Object>,
   handleInstructionsChange: Function,
   handleNbTicksSelectChange: Function,
   handleNumberGaugeCheck: Function,
@@ -78,10 +78,10 @@ const DumbGaugeForm = ({
       ))}
     </SplitButton>
     <div className="margin-m">
-      <Radio onChange={handleNumberGaugeUncheck} checked={!isNumberGauge}>
+      <Radio onChange={handleNumberGaugeUncheck} checked={!isNumberGauge} name="gauge-radio">
         <Translate value="administration.textValue" />
       </Radio>
-      <Radio onChange={handleNumberGaugeCheck} checked={isNumberGauge}>
+      <Radio onChange={handleNumberGaugeCheck} checked={isNumberGauge} name="gauge-radio">
         <Translate value="administration.numberValue" />
       </Radio>
     </div>

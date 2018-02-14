@@ -65,7 +65,7 @@ const DumbModulesSection = ({
               }}
             >
               <Helper
-                label={I18n.t('administration.voteWithGages')}
+                label={I18n.t('administration.voteWithGauges')}
                 helperUrl="/static2/img/helpers/helper3.png" // TODO: add an actual screenshot
                 helperText={I18n.t('administration.gaugeVoteCheckbox')}
                 classname="inline checkbox-title"

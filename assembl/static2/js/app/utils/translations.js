@@ -355,7 +355,7 @@ const Translations = {
         2: "Configurer les propositions de vote"
       },
       voteWithTokens: "Vote par jetons",
-      voteWithGages: "Vote par jauge(s)",
+      voteWithGauges: "Vote par jauge(s)",
       tokenVoteCheckbox:
         "Le vote par jetons permet de sélectionner des propositions à la proportionnelle. Chaque participant dispose d'une certaine quantité de jetons et devra les répartir sur les propositions.",
       gaugeVoteCheckbox: "Vous pouvez choisir d'avoir une ou plusieurs jauges",
@@ -846,7 +846,7 @@ const Translations = {
         2: "Configure the voting proposals"
       },
       voteWithTokens: "Tokens vote",
-      voteWithGages: "Gauge(s) vote",
+      voteWithGauges: "Gauge(s) vote",
       tokenVoteCheckbox:
         "The token vote module allows you to select propositions proportionnaly. Each participant has a certain amount of tokens et will have to spread them on the different propositions",
       gaugeVoteCheckbox: "You can choose to have one or several gages",
@@ -860,8 +860,8 @@ const Translations = {
       gaugeVoteInstructions: "Instructions for the gauge vote",
       gaugeNumber: "Gauge number",
       defineGaugeNumer: "Define gauges number",
-      minValue: "Minimale value",
-      maxValue: "Maximale value",
+      minValue: "Minimum value",
+      maxValue: "Maximum value",
       unit: "Unit",
       saveFirstStep: "Please go back to step 1 first and save the instructions",
       nbTicksHelper: "Define ticks number for the gauge",
