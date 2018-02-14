@@ -29,7 +29,6 @@ def upgrade(pyramid_env):
             if vote_spec_ids:
                 # we need to do this because the foreign key is not in cascade
                 db.execute('DELETE FROM token_vote_specification WHERE id IN (%s)' % ','.join([str(id) for id in vote_spec_ids]))
-                db.execute('DELETE FROM gauge_vote_specification WHERE id IN (%s)' % ','.join([str(id) for id in vote_spec_ids]))
                 db.execute('DELETE FROM number_gauge_vote_specification WHERE id IN (%s)' % ','.join([str(id) for id in vote_spec_ids]))
                 db.execute('DELETE FROM vote_specification WHERE id IN (%s)' % ','.join([str(id) for id in vote_spec_ids]))
             vote_session.delete()
