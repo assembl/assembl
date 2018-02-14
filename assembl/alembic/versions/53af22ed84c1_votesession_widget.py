@@ -13,6 +13,7 @@ down_revision = '95750e0267d8'
 from alembic import context, op
 import sqlalchemy as sa
 import transaction
+from assembl.lib.sqla import mark_changed
 
 
 def upgrade(pyramid_env):
@@ -21,7 +22,12 @@ def upgrade(pyramid_env):
     db = m.get_session_maker()()
     with transaction.manager:
         # remove all existing vote sessions (there is no vote session currently in prod)
-        db.query(m.VoteSession).delete()
+        vote_sessions = db.query(m.VoteSession).all()
+        for vote_session in vote_sessions:
+            db = vote_session.db
+            db.execute('DELETE FROM vote_specification WHERE vote_session_id IS NOT NULL')
+            vote_session.delete()
+        mark_changed()
 
     with context.begin_transaction():
         op.create_foreign_key(None, 'vote_session', 'widget', ['id'], ['id'])
