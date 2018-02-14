@@ -28,11 +28,11 @@ const Proposal = ({ description, id, modules, remainingTokensByCategory, title, 
   return (
     <div className="theme-box">
       <Row className="proposal">
-        <Col xs={6} md={6}>
+        <Col xs={12} md={5}>
           <h3 className="dark-title-3">{title}</h3>
           <p>{description}</p>
         </Col>
-        <Col xs={6} md={6}>
+        <Col xs={12} md={7}>
           {tokenVoteModule && (
             <TokenVoteForProposal
               key={tokenVoteModule.id}
