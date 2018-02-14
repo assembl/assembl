@@ -60,7 +60,7 @@ type State = {
   instructionsOffset: number
 };
 
-// $FlowFixMe: if voteType === 'token_vote_specification', it must be a tokenVoteSpecificationFragment
+// $FlowFixMe: if voteType === 'token_vote_specification', we know it is a tokenVoteSpecificationFragment
 type FindTokenVoteModule = (Array<VoteSpecification>) => ?tokenVoteSpecificationFragment;
 export const findTokenVoteModule: FindTokenVoteModule = modules => modules.find(m => m.voteType === 'token_vote_specification');
 
