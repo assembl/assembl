@@ -14,11 +14,16 @@ const NumberGaugeVoteForProposal = ({ instructions, minimum, maximum, nbTicks, u
   const marks = {};
   let step = null;
 
+  const markStyle = {
+    color: 'black',
+    marginTop: '10px'
+  };
+
+  const extremumMarkStyle = Object.assign({}, markStyle, { color: 'red' });
+
   if (minimum !== undefined && maximum !== undefined) {
     marks[`${minimum}`] = {
-      style: {
-        color: 'red'
-      },
+      style: extremumMarkStyle,
       label: (
         <strong>
           {minimum} {unit}
@@ -27,9 +32,7 @@ const NumberGaugeVoteForProposal = ({ instructions, minimum, maximum, nbTicks, u
     };
 
     marks[`${maximum}`] = {
-      style: {
-        color: 'red'
-      },
+      style: extremumMarkStyle,
       label: (
         <strong>
           {maximum} {unit}
@@ -43,9 +46,7 @@ const NumberGaugeVoteForProposal = ({ instructions, minimum, maximum, nbTicks, u
         // minimum and maximum are already shown as ticks
         const value = minimum + i * step;
         marks[`${value}`] = {
-          style: {
-            color: 'black'
-          },
+          style: markStyle,
           label: (
             <strong>
               {value.toFixed(2)} {unit}
@@ -56,10 +57,43 @@ const NumberGaugeVoteForProposal = ({ instructions, minimum, maximum, nbTicks, u
     }
   }
 
+  const trackStyle = [
+    {
+      backgroundColor: '#4F17D4', // TODO: use theme colors
+      visibility: 'visible',
+      height: '20px'
+    }
+  ];
+
+  const railStyle = {
+    backgroundColor: '#E6E5F4', // TODO: use theme colors
+    height: '20px'
+  };
+
+  const dotStyle = {
+    backgroundColor: '#E6E5F4', // TODO: use theme colors
+    height: '20px',
+    top: '0',
+    width: '2px',
+    border: 'none',
+    borderRadius: 'initial',
+    marginLeft: '0'
+  };
+
   return (
     <div className="gauge-vote-for-proposal">
       <p>{instructions}</p>
-      <Slider min={minimum} max={maximum} marks={marks} step={step} included={false} defaultValue={minimum} />
+      <Slider
+        min={minimum}
+        max={maximum}
+        marks={marks}
+        step={step}
+        included={false}
+        defaultValue={minimum}
+        trackStyle={trackStyle}
+        railStyle={railStyle}
+        dotStyle={dotStyle}
+      />
     </div>
   );
 };
