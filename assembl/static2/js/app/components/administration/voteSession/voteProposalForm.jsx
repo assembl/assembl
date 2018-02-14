@@ -13,6 +13,7 @@ import {
   moveProposalUp,
   moveProposalDown
 } from '../../../actions/adminActions/voteSession';
+import { displayModal, closeModal } from '../../../utils/utilityManager';
 
 type VoteProposalFormProps = {
   index: number,
@@ -51,6 +52,22 @@ const VoteProposalForm = ({
 
   const handleTitleChange = e => updateTitle(editLocale, e.target.value);
   const handleDescriptionChange = value => updateDescription(editLocale, value);
+
+  const confirmModal = () => {
+    const modalTitle = 'Confirmation de suppression';
+    const body = 'Êtes vous sur de vouloir supprimer cette proposition ?';
+    const footer = [
+      <Button key="cancel" onClick={closeModal} className="button-cancel button-dark">
+        <Translate value="debate.confirmDeletionButtonCancel" />
+      </Button>,
+      <Button key="delete" onClick={markAsToDelete} className="button-submit button-dark">
+        <Translate value="debate.confirmDeletionButtonDelete" />
+      </Button>
+    ];
+    const includeFooter = true;
+    return displayModal(modalTitle, body, includeFooter, footer);
+  };
+
   return (
     <div className="form-container vote-proposal-form">
       <div className="pointer right">
@@ -70,11 +87,13 @@ const VoteProposalForm = ({
             </OverlayTrigger>
           ) : null}
         </div>
-        <OverlayTrigger placement="top" overlay={deleteVoteProposalTooltip}>
-          <Button onClick={markAsToDelete} className="admin-icons">
-            <span className="assembl-icon-delete grey" />
-          </Button>
-        </OverlayTrigger>
+        {nbProposals > 2 && (
+          <OverlayTrigger placement="top" overlay={deleteVoteProposalTooltip}>
+            <Button className="admin-icons">
+              <span className="assembl-icon-delete grey" onClick={confirmModal} />
+            </Button>
+          </OverlayTrigger>
+        )}
       </div>
       <div className="title">
         <Translate value="administration.voteProposals.defineProposal" number={index} />
@@ -143,6 +162,7 @@ const mapStateToProps = ({ admin }, { id, editLocale }) => {
 const mapDispatchToProps = (dispatch, { id }) => ({
   markAsToDelete: () => {
     dispatch(deleteVoteProposal(id));
+    closeModal();
   },
   updateTitle: (locale, value) => {
     dispatch(updateVoteProposalTitle(id, locale, value));
