@@ -54,8 +54,8 @@ const VoteProposalForm = ({
   const handleDescriptionChange = value => updateDescription(editLocale, value);
 
   const confirmModal = () => {
-    const modalTitle = 'Confirmation de suppression';
-    const body = 'Êtes vous sur de vouloir supprimer cette proposition ?';
+    const modalTitle = <Translate value="administration.voteProposals.deleteModalTitle" />;
+    const body = <Translate value="administration.voteProposals.deleteModalBody" />;
     const footer = [
       <Button key="cancel" onClick={closeModal} className="button-cancel button-dark">
         <Translate value="debate.confirmDeletionButtonCancel" />

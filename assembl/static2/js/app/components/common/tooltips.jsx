@@ -135,3 +135,15 @@ export const deleteResourceTooltip = (
     <Translate value="administration.resourcesCenter.deleteResource" />
   </Tooltip>
 );
+
+export const nextStepTooltip = (
+  <Tooltip id="nextStepTooltip">
+    <Translate value="administration.nextStep" />
+  </Tooltip>
+);
+
+export const previousStepTooltip = (
+  <Tooltip id="previousStepTooltip">
+    <Translate value="administration.previousStep" />
+  </Tooltip>
+);
