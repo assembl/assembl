@@ -19,6 +19,9 @@ import createGaugeVoteSpecificationMutation from '../graphql/mutations/createGau
 import updateGaugeVoteSpecificationMutation from '../graphql/mutations/updateGaugeVoteSpecification.graphql';
 import createNumberGaugeVoteSpecificationMutation from '../graphql/mutations/createNumberGaugeVoteSpecification.graphql';
 import updateNumberGaugeVoteSpecificationMutation from '../graphql/mutations/updateNumberGaugeVoteSpecification.graphql';
+import createProposalMutation from '../graphql/mutations/createProposal.graphql';
+import updateProposalMutation from '../graphql/mutations/updateProposal.graphql';
+import deleteProposalMutation from '../graphql/mutations/deleteProposal.graphql';
 import { convertEntriesToHTML } from '../utils/draftjs';
 import { getPhaseId } from '../utils/timeline';
 import { displayAlert, displayModal, closeModal } from '../utils/utilityManager';
@@ -81,13 +84,27 @@ const createVariablesForNumberGaugeMutation = voteModule => ({
   unit: voteModule.unit
 });
 
+const createVariablesForProposalsMutation = proposals => ({
+  voteSessionId: proposals.voteSessionId,
+  titleEntries: proposals.titleEntries,
+  descriptionEntries: proposals.descriptionEntries
+});
+
 class VoteSessionAdmin extends React.Component<void, VoteSessionAdminProps, void> {
   componentWillReceiveProps(nextProps) {
     const { section, voteSessionPage } = nextProps;
     const currentStep = parseInt(section, 10);
-    if (currentStep === 2 && !voteSessionPage.get('id')) {
+    if ((currentStep === 2 || currentStep === 3) && !voteSessionPage.get('id')) {
       setTimeout(() => {
-        displayAlert('warning', I18n.t('administration.saveFirstStep'), false, 20000);
+        const title = null;
+        const body = <Translate value="administration.saveFirstStep" />;
+        const footer = (
+          <Button key="cancel" onClick={closeModal} className="button-cancel button-dark">
+            OK
+          </Button>
+        );
+        const includeFooter = true;
+        displayModal(title, body, includeFooter, footer);
       }, 500);
     }
   }
@@ -106,10 +123,12 @@ class VoteSessionAdmin extends React.Component<void, VoteSessionAdminProps, void
       tokenModulesHaveChanged,
       numberGaugeModulesHaveChanged,
       textGaugeModulesHaveChanged,
+      voteProposalsHaveChanged,
       refetchVoteSession,
       timeline,
       voteModules,
       voteSessionPage,
+      voteProposals,
       createTokenVoteSpecification,
       createGaugeVoteSpecification,
       updateGaugeVoteSpecification,
@@ -117,7 +136,10 @@ class VoteSessionAdmin extends React.Component<void, VoteSessionAdminProps, void
       updateNumberGaugeVoteSpecification,
       deleteVoteSpecification,
       updateTokenVoteSpecification,
-      updateVoteSession
+      updateVoteSession,
+      createProposal,
+      updateProposal,
+      deleteProposal
     } = this.props;
 
     if (voteSessionPage.get('hasChanged')) {
@@ -204,16 +226,23 @@ class VoteSessionAdmin extends React.Component<void, VoteSessionAdminProps, void
 
         this.runMutations(mutationsPromises);
       }
-    } else {
-      const title = null;
-      const body = <Translate value="administration.saveFirstStep" />;
-      const footer = (
-        <Button key="cancel" onClick={closeModal} className="button-cancel button-dark">
-          OK
-        </Button>
-      );
-      const includeFooter = true;
-      displayModal(title, body, includeFooter, footer);
+      if (voteProposalsHaveChanged) {
+        const items = [];
+        voteProposals.forEach((t) => {
+          items.push({ ...t.toJS(), voteSessionId: voteSessionPage.get('id') });
+        });
+        const mutationsPromises = getMutationsPromises({
+          items: items,
+          variablesCreator: createVariablesForProposalsMutation,
+          deleteVariablesCreator: createVariablesForDeleteMutation,
+          createMutation: createProposal,
+          updateMutation: updateProposal,
+          deleteMutation: deleteProposal,
+          lang: i18n.locale
+        });
+
+        this.runMutations(mutationsPromises);
+      }
     }
   };
 
@@ -223,6 +252,7 @@ class VoteSessionAdmin extends React.Component<void, VoteSessionAdminProps, void
       tokenModulesHaveChanged,
       textGaugeModulesHaveChanged,
       numberGaugeModulesHaveChanged,
+      voteProposalsHaveChanged,
       section,
       voteSessionPage
     } = this.props;
@@ -230,6 +260,7 @@ class VoteSessionAdmin extends React.Component<void, VoteSessionAdminProps, void
       !tokenModulesHaveChanged &&
       !textGaugeModulesHaveChanged &&
       !numberGaugeModulesHaveChanged &&
+      !voteProposalsHaveChanged &&
       !voteSessionPage.get('hasChanged');
     const currentStep = parseInt(section, 10);
     return (
@@ -252,7 +283,10 @@ const mapStateToProps = ({ admin: { editLocale, voteSession }, debate, i18n }) =
     gaugeChoicesById,
     tokenModulesHaveChanged,
     textGaugeModulesHaveChanged,
-    numberGaugeModulesHaveChanged
+    numberGaugeModulesHaveChanged,
+    voteProposalsHaveChanged,
+    voteProposalsInOrder,
+    voteProposalsById
   } = voteSession;
 
   const modules = modulesInOrder.map((id) => {
@@ -271,9 +305,11 @@ const mapStateToProps = ({ admin: { editLocale, voteSession }, debate, i18n }) =
     tokenModulesHaveChanged: tokenModulesHaveChanged,
     textGaugeModulesHaveChanged: textGaugeModulesHaveChanged,
     numberGaugeModulesHaveChanged: numberGaugeModulesHaveChanged,
+    voteProposalsHaveChanged: voteProposalsHaveChanged,
     timeline: debate.debateData.timeline,
     voteModules: modules,
-    voteSessionPage: voteSession.page
+    voteSessionPage: voteSession.page,
+    voteProposals: voteProposalsInOrder.map(id => voteProposalsById.get(id))
   };
 };
 
@@ -302,5 +338,14 @@ export default compose(
   }),
   graphql(updateNumberGaugeVoteSpecificationMutation, {
     name: 'updateNumberGaugeVoteSpecification'
+  }),
+  graphql(createProposalMutation, {
+    name: 'createProposal'
+  }),
+  graphql(updateProposalMutation, {
+    name: 'updateProposal'
+  }),
+  graphql(deleteProposalMutation, {
+    name: 'deleteProposal'
   })
 )(VoteSessionAdmin);
