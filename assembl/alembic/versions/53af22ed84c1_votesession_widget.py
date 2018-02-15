@@ -20,20 +20,23 @@ def upgrade(pyramid_env):
     # Do stuff with the app's models here.
     from assembl import models as m
     db = m.get_session_maker()()
+    with context.begin_transaction():
+        # temporary fix vote_session_id foreign key
+        op.drop_constraint(u'vote_specification_vote_session_id_fkey', 'vote_specification', type_='foreignkey')
+        op.create_foreign_key(None, 'vote_specification', 'vote_session', ['vote_session_id'], ['id'], ondelete='CASCADE', onupdate='CASCADE')
+
     with transaction.manager:
         # remove all existing vote sessions (there is no vote session currently in prod)
         db.execute('DELETE FROM vote_session')
         mark_changed()
 
     with context.begin_transaction():
-        op.create_foreign_key(None, 'vote_session', 'widget', ['id'], ['id'])
         op.drop_column('vote_specification', 'vote_session_id')
         op.alter_column("vote_specification", "widget_id", nullable=False)
 
 
 def downgrade(pyramid_env):
     with context.begin_transaction():
-        op.drop_constraint(u'vote_session_id_fkey', 'vote_session', type_='foreignkey')
         op.add_column(
             'vote_specification',
             sa.Column(
