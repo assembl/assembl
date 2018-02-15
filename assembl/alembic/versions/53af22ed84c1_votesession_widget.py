@@ -11,9 +11,9 @@ revision = '53af22ed84c1'
 down_revision = '95750e0267d8'
 
 from alembic import context, op
+from assembl.lib.sqla import mark_changed
 import sqlalchemy as sa
 import transaction
-from assembl.lib.sqla import mark_changed
 
 
 def upgrade(pyramid_env):
@@ -22,16 +22,7 @@ def upgrade(pyramid_env):
     db = m.get_session_maker()()
     with transaction.manager:
         # remove all existing vote sessions (there is no vote session currently in prod)
-        vote_sessions = db.query(m.VoteSession).all()
-        for vote_session in vote_sessions:
-            db = vote_session.db
-            vote_spec_ids = [id for id, in db.execute('SELECT id FROM vote_specification WHERE vote_session_id IS NOT NULL')]
-            if vote_spec_ids:
-                # we need to do this because the foreign key is not in cascade
-                db.execute('DELETE FROM token_vote_specification WHERE id IN (%s)' % ','.join([str(id) for id in vote_spec_ids]))
-                db.execute('DELETE FROM number_gauge_vote_specification WHERE id IN (%s)' % ','.join([str(id) for id in vote_spec_ids]))
-                db.execute('DELETE FROM vote_specification WHERE id IN (%s)' % ','.join([str(id) for id in vote_spec_ids]))
-            vote_session.delete()
+        db.execute('DELETE FROM vote_session')
         mark_changed()
 
     with context.begin_transaction():
