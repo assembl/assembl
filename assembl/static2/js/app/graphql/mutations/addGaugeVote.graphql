@@ -1,0 +1,24 @@
+mutation addGaugeVote($proposalId: ID!, $voteSpecId: ID!, $voteValue: Float!) {
+  addGaugeVote(proposalId: $proposalId, voteSpecId: $voteSpecId, voteValue: $voteValue) {
+    voteSpecification {
+      ... on GaugeVoteSpecification {
+        id
+        myVotes {
+          ... on GaugeVote {
+            selectedValue: voteValue
+            proposalId
+          }
+        }
+      }
+      ... on NumberGaugeVoteSpecification {
+        id
+        myVotes {
+          ... on GaugeVote {
+            selectedValue: voteValue
+            proposalId
+          }
+        }
+      }
+    }
+  }
+}
