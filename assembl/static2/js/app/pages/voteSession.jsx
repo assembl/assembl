@@ -12,6 +12,7 @@ import AvailableTokens from '../components/voteSession/availableTokens';
 import Proposals from '../components/voteSession/proposals';
 import { getDomElementOffset } from '../utils/globalFunctions';
 import { getPhaseId } from '../utils/timeline';
+import { promptForLoginOr } from '../utils/utilityManager';
 import withLoadingIndicator from '../components/common/withLoadingIndicator';
 
 export type TokenCategory = {|
@@ -99,9 +100,11 @@ class DumbVoteSession extends React.Component<void, Props, State> {
   };
 
   voteForProposal = (proposalId: string, categoryId: string, value: number): void => {
-    this.setState({
-      userTokenVotes: this.state.userTokenVotes.setIn([proposalId, categoryId], value)
-    });
+    const setVote = () =>
+      this.setState({
+        userTokenVotes: this.state.userTokenVotes.setIn([proposalId, categoryId], value)
+      });
+    promptForLoginOr(setVote)();
   };
 
   getRemainingTokensByCategory: (?tokenVoteSpecificationFragment) => RemainingTokensByCategory = (module) => {
