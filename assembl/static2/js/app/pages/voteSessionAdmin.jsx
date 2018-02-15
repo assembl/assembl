@@ -100,22 +100,22 @@ const createVariablesForProposalsMutation = proposals => ({
 
 class VoteSessionAdmin extends React.Component<void, VoteSessionAdminProps, void> {
   componentWillReceiveProps(nextProps) {
-    const { section, voteSessionPage } = nextProps;
+    const { section, voteSessionPage, voteModules } = nextProps;
     const currentStep = parseInt(section, 10);
     const slug = { slug: getDiscussionSlug() };
-    if ((currentStep === 2 || currentStep === 3) && !voteSessionPage.get('id')) {
+    const showModal = (message1, message2, buttonMessage, stepNumber) => {
       setTimeout(() => {
         const content = (
           <div className="modal-body">
             <p>
-              <Translate value="administration.configureVoteSession" />
+              <Translate value={message1} />
             </p>
             <p>
-              <Translate value="administration.saveFirstStep" />
+              <Translate value={message2} />
             </p>
-            <Link to={`${get('administration', slug)}/voteSession?section=1`}>
+            <Link to={`${get('administration', slug)}/voteSession?section=${stepNumber}`}>
               <Button key="cancel" onClick={closeModal} className="button-cancel button-dark button-modal">
-                <Translate value="administration.backToStep1" />
+                <Translate value={buttonMessage} number={stepNumber} />
               </Button>
             </Link>
           </div>
@@ -123,6 +123,12 @@ class VoteSessionAdmin extends React.Component<void, VoteSessionAdminProps, void
 
         displayCustomModal(content, true, 'modal-centered');
       }, 500);
+    };
+    if ((currentStep === 2 || currentStep === 3) && !voteSessionPage.get('id')) {
+      showModal('administration.configureVoteSession', 'administration.saveFirstStep', 'administration.backToPreviousStep', 1);
+    }
+    if (currentStep === 3 && voteModules.size < 1) {
+      showModal('administration.configureVoteModules', 'administration.saveSecondStep', 'administration.backToPreviousStep', 2);
     }
   }
 
