@@ -1,10 +1,39 @@
-.gauge-vote-for-proposal {
+.gauge-vote-for-proposal, .number-gauge-vote-for-proposal {
   width: 100%;
   padding: 10px;
 
   .rc-slider {
     height: 55px;
 
+    .rc-slider-dot:first-child, .rc-slider-dot:nth-child(2) {
+      display: none;
+    }
+
+    .rc-slider-dot {
+      /* rc-slider dotStyle prop mysteriously does not work anymore */
+      background-color: #e6e5f4; /* TODO: use theme color */
+      height: 12px;
+      top: 0;
+      width: 2px;
+      border: none;
+      border-radius: initial;
+      margin-left: 0;
+    }
+
+    .rc-slider-mark-text {
+      color: #ccc; /* TODO: use theme color */
+      margin-top: 7px;
+
+      &.rc-slider-mark-text-active {
+        color: #4f17d4; /* TODO: use theme color */
+        font-weight: bold;
+      }
+    }
+  }
+}
+
+.number-gauge-vote-for-proposal {
+  .rc-slider {
     .rc-slider-dot:first-child, .rc-slider-dot:nth-child(2) {
       display: none;
     }

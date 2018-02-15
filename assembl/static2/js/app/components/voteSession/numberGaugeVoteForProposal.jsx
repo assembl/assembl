@@ -11,32 +11,30 @@ type Props = {
 };
 
 const NumberGaugeVoteForProposal = ({ instructions, minimum, maximum, nbTicks, unit }: Props) => {
+  const gaugeHeight = '12px';
   const marks = {};
   let step = null;
 
   const markStyle = {
-    color: 'black',
-    marginTop: '10px'
+    marginTop: '7px'
   };
-
-  const extremumMarkStyle = Object.assign({}, markStyle, { color: 'red' });
 
   if (minimum !== undefined && maximum !== undefined) {
     marks[`${minimum}`] = {
-      style: extremumMarkStyle,
+      style: markStyle,
       label: (
-        <strong>
+        <div>
           {minimum} {unit}
-        </strong>
+        </div>
       )
     };
 
     marks[`${maximum}`] = {
-      style: extremumMarkStyle,
+      style: markStyle,
       label: (
-        <strong>
+        <div>
           {maximum} {unit}
-        </strong>
+        </div>
       )
     };
 
@@ -48,9 +46,9 @@ const NumberGaugeVoteForProposal = ({ instructions, minimum, maximum, nbTicks, u
         marks[`${value}`] = {
           style: markStyle,
           label: (
-            <strong>
+            <div>
               {value.toFixed(2)} {unit}
-            </strong>
+            </div>
           )
         };
       }
@@ -61,15 +59,16 @@ const NumberGaugeVoteForProposal = ({ instructions, minimum, maximum, nbTicks, u
     {
       backgroundColor: '#4F17D4', // TODO: use theme colors
       visibility: 'visible',
-      height: '20px'
+      height: gaugeHeight
     }
   ];
 
   const railStyle = {
     backgroundColor: '#E6E5F4', // TODO: use theme colors
-    height: '20px'
+    height: gaugeHeight
   };
 
+  /* dotStyle prop of rc-slider mysteriously does not work anymore, so we declare these rules in the SCSS file
   const dotStyle = {
     backgroundColor: '#E6E5F4', // TODO: use theme colors
     height: '20px',
@@ -79,6 +78,7 @@ const NumberGaugeVoteForProposal = ({ instructions, minimum, maximum, nbTicks, u
     borderRadius: 'initial',
     marginLeft: '0'
   };
+  */
 
   const handleStyle = [
     {
@@ -92,7 +92,7 @@ const NumberGaugeVoteForProposal = ({ instructions, minimum, maximum, nbTicks, u
   ];
 
   return (
-    <div className="gauge-vote-for-proposal">
+    <div className="number-gauge-vote-for-proposal">
       <p>{instructions}</p>
       <Slider
         min={minimum}
@@ -103,7 +103,6 @@ const NumberGaugeVoteForProposal = ({ instructions, minimum, maximum, nbTicks, u
         defaultValue={minimum}
         trackStyle={trackStyle}
         railStyle={railStyle}
-        dotStyle={dotStyle}
         handleStyle={handleStyle}
       />
     </div>
