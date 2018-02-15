@@ -34,9 +34,11 @@ type VoteSessionAdminProps = {
   tokenModulesHaveChanged: boolean,
   textGaugeModulesHaveChanged: boolean,
   numberGaugeModulesHaveChanged: boolean,
+  voteProposalsHaveChanged: boolean,
   refetchVoteSession: Function,
   section: string,
   timeline: Timeline,
+  voteProposals: List,
   voteModules: List,
   voteSessionPage: Map<string, *>,
   updateVoteSession: Function,
@@ -46,7 +48,10 @@ type VoteSessionAdminProps = {
   createGaugeVoteSpecification: Function,
   updateGaugeVoteSpecification: Function,
   createNumberGaugeVoteSpecification: Function,
-  updateNumberGaugeVoteSpecification: Function
+  updateNumberGaugeVoteSpecification: Function,
+  createProposal: Function,
+  updateProposal: Function,
+  deleteProposal: Function
 };
 
 const createVariablesForDeleteMutation = voteModule => ({ id: voteModule.id });
@@ -87,7 +92,7 @@ const createVariablesForNumberGaugeMutation = voteModule => ({
 const createVariablesForProposalsMutation = proposals => ({
   voteSessionId: proposals.voteSessionId,
   titleEntries: proposals.titleEntries,
-  descriptionEntries: proposals.descriptionEntries
+  descriptionEntries: convertEntriesToHTML(proposals.descriptionEntries)
 });
 
 class VoteSessionAdmin extends React.Component<void, VoteSessionAdminProps, void> {
@@ -141,7 +146,6 @@ class VoteSessionAdmin extends React.Component<void, VoteSessionAdminProps, void
       updateProposal,
       deleteProposal
     } = this.props;
-
     if (voteSessionPage.get('hasChanged')) {
       const titleEntries = voteSessionPage.get('titleEntries').toJS();
       const subTitleEntries = voteSessionPage.get('subTitleEntries').toJS();
@@ -174,12 +178,8 @@ class VoteSessionAdmin extends React.Component<void, VoteSessionAdminProps, void
     if (voteSessionPage.get('id')) {
       if (tokenModulesHaveChanged) {
         const tokenModules = voteModules.filter(m => m.get('type') === 'tokens');
-        const items = [];
-        tokenModules.forEach((t) => {
-          items.push({ ...t.toJS(), voteSessionId: voteSessionPage.get('id') });
-        });
         const mutationsPromises = getMutationsPromises({
-          items: items,
+          items: tokenModules,
           variablesCreator: createVariablesForTokenVoteSpecificationMutation,
           deleteVariablesCreator: createVariablesForDeleteMutation,
           createMutation: createTokenVoteSpecification,
@@ -192,12 +192,8 @@ class VoteSessionAdmin extends React.Component<void, VoteSessionAdminProps, void
       }
       if (textGaugeModulesHaveChanged) {
         const textGaugeModules = voteModules.filter(m => m.get('type') === 'gauge' && !m.get('isNumberGauge'));
-        const items = [];
-        textGaugeModules.forEach((t) => {
-          items.push({ ...t.toJS(), voteSessionId: voteSessionPage.get('id') });
-        });
         const mutationsPromises = getMutationsPromises({
-          items: items,
+          items: textGaugeModules,
           variablesCreator: createVariablesForTextGaugeMutation,
           deleteVariablesCreator: createVariablesForDeleteMutation,
           createMutation: createGaugeVoteSpecification,
@@ -210,12 +206,8 @@ class VoteSessionAdmin extends React.Component<void, VoteSessionAdminProps, void
       }
       if (numberGaugeModulesHaveChanged) {
         const numberGaugeModules = voteModules.filter(m => m.get('type') === 'gauge' && m.get('isNumberGauge'));
-        const items = [];
-        numberGaugeModules.forEach((t) => {
-          items.push({ ...t.toJS(), voteSessionId: voteSessionPage.get('id') });
-        });
         const mutationsPromises = getMutationsPromises({
-          items: items,
+          items: numberGaugeModules,
           variablesCreator: createVariablesForNumberGaugeMutation,
           deleteVariablesCreator: createVariablesForDeleteMutation,
           createMutation: createNumberGaugeVoteSpecification,
