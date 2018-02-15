@@ -5,6 +5,7 @@ import { compose, graphql } from 'react-apollo';
 import { I18n, Translate } from 'react-redux-i18n';
 import type { List, Map } from 'immutable';
 import { Button } from 'react-bootstrap';
+import { Link } from 'react-router';
 
 import PageForm from '../components/administration/voteSession/pageForm';
 import ModulesSection from '../components/administration/voteSession/modulesSection';
@@ -24,7 +25,9 @@ import updateProposalMutation from '../graphql/mutations/updateProposal.graphql'
 import deleteProposalMutation from '../graphql/mutations/deleteProposal.graphql';
 import { convertEntriesToHTML } from '../utils/draftjs';
 import { getPhaseId } from '../utils/timeline';
-import { displayAlert, displayModal, closeModal } from '../utils/utilityManager';
+import { get } from '../utils/routeMap';
+import { displayAlert, displayCustomModal, closeModal } from '../utils/utilityManager';
+import { getDiscussionSlug } from '../utils/globalFunctions';
 
 type VoteSessionAdminProps = {
   editLocale: string,
@@ -94,17 +97,26 @@ class VoteSessionAdmin extends React.Component<void, VoteSessionAdminProps, void
   componentWillReceiveProps(nextProps) {
     const { section, voteSessionPage } = nextProps;
     const currentStep = parseInt(section, 10);
+    const slug = { slug: getDiscussionSlug() };
     if ((currentStep === 2 || currentStep === 3) && !voteSessionPage.get('id')) {
       setTimeout(() => {
-        const title = null;
-        const body = <Translate value="administration.saveFirstStep" />;
-        const footer = (
-          <Button key="cancel" onClick={closeModal} className="button-cancel button-dark">
-            OK
-          </Button>
+        const content = (
+          <div className="modal-body">
+            <p>
+              <Translate value="administration.configureVoteSession" />
+            </p>
+            <p>
+              <Translate value="administration.saveFirstStep" />
+            </p>
+            <Link to={`${get('administration', slug)}/voteSession?section=1`}>
+              <Button key="cancel" onClick={closeModal} className="button-cancel button-dark button-modal">
+                <Translate value="administration.backToStep1" />
+              </Button>
+            </Link>
+          </div>
         );
-        const includeFooter = true;
-        displayModal(title, body, includeFooter, footer);
+
+        displayCustomModal(content, true, 'modal-centered');
       }, 500);
     }
   }

@@ -9,3 +9,17 @@
     padding: 0 20px 15px 20px !important;
   }
 }
+
+.modal-centered {
+  .modal-content {
+    padding: 40px;
+  }
+
+  .modal-dialog {
+    margin-top: 250px;
+  }
+
+  .button-modal {
+    margin-top: 20px;
+  }
+}
