@@ -7,9 +7,10 @@ import { DumbModulesSection } from '../../../../../js/app/components/administrat
 describe('ModulesSection component', () => {
   const handleCheckBoxChangeSpy = jest.fn(() => {});
 
-  it('should render a ModulesSection component without any TokensForm', () => {
+  it('should render a ModulesSection component without any TokensForm nor GaugeForm', () => {
     const props = {
       tokenModules: List(),
+      gaugeModules: List(),
       editLocale: 'fr',
       handleCheckBoxChange: handleCheckBoxChangeSpy
     };

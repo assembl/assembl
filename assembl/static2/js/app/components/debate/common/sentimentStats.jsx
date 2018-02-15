@@ -1,6 +1,6 @@
 import React from 'react';
 import { Popover } from 'react-bootstrap';
-import Gauge from '../../svg/gauge';
+import Gauge from '../../svg/sentimentsGauge';
 import sentimentDefinitions from './sentimentDefinitions';
 
 const getSentimentDetails = (totalSentimentsCount, sentimentCounts, mySentiment) => (

@@ -49,6 +49,12 @@ export const PHASE_STATUS = {
   inProgress: 'inProgress'
 };
 
+export const PHASES = {
+  survey: 'survey',
+  multiColumns: 'multiColumns',
+  voteSession: 'voteSession'
+};
+
 // Those states lists need to be kept in sync with models/post.py
 export const PublicationStates = {
   DRAFT: 'DRAFT',

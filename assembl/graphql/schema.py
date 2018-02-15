@@ -34,6 +34,7 @@ from assembl.graphql.section import (CreateSection, DeleteSection, Section,
 from assembl.graphql.sentiment import AddSentiment, DeleteSentiment
 from assembl.graphql.synthesis import Synthesis
 from assembl.graphql.user import UpdateUser
+from assembl.graphql.votes import AddTokenVote, DeleteTokenVote, AddGaugeVote, DeleteGaugeVote
 from assembl.graphql.vote_session import (
     VoteSession, UpdateVoteSession, CreateTokenVoteSpecification,
     CreateGaugeVoteSpecification, UpdateGaugeVoteSpecification,
@@ -141,9 +142,7 @@ class Query(graphene.ObjectType):
         query = get_query(model, context)
         discussion_id = context.matchdict['discussion_id']
         discussion = models.Discussion.get(discussion_id)
-        root_idea_id = discussion.root_idea.id
-        descendants_query = model.get_descendants_query(
-            root_idea_id, inclusive=False)
+        descendants_query = discussion.root_idea.get_descendants_query(inclusive=False)
         query = query.outerjoin(
                 models.Idea.source_links
             ).filter(model.id.in_(descendants_query)
@@ -342,6 +341,10 @@ class Mutations(graphene.ObjectType):
     create_proposal = CreateProposal.Field()
     update_proposal = UpdateProposal.Field()
     delete_proposal = DeleteProposal.Field()
+    add_token_vote = AddTokenVote.Field()
+    delete_token_vote = DeleteTokenVote.Field()
+    add_gauge_vote = AddGaugeVote.Field()
+    delete_gauge_vote = DeleteGaugeVote.Field()
 
 
 Schema = graphene.Schema(query=Query, mutation=Mutations)

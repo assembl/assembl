@@ -202,7 +202,7 @@ class Locale(Base):
             # And will not show up in the query
             uncommitted = [
                 l for l in cls._locale_uncommitted
-                if not (inspect(l).expired or inspect(l).deleted)]
+                if inspect(l).pending]
             cls._locale_uncommitted = uncommitted
             if uncommitted:
                 cls._locale_collection_byid.update(
@@ -255,8 +255,10 @@ class Locale(Base):
             return locale
         locale_id = cls.locale_collection.get(locale_code, None)
         if locale_id:
-            locale_object_cache[locale_code] = locale = Locale.get(locale_id)
-            return locale
+            locale = Locale.get(locale_id)
+            if locale:
+                locale_object_cache[locale_code] = locale
+                return locale
         db = db or cls.default_db
         # Maybe exists despite not in cache
         locale = db.query(cls).filter_by(code=locale_code).first()

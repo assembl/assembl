@@ -13,11 +13,11 @@ def set_config(settings, reconfig=False):
         if reconfig:
             _settings = settings
         else:
-            # Re-initializing settings fails. Patch.
-            print "initialized twice:", settings
-            print "keeping:", _settings
+            _settings.update(settings)
+            print "combined settings:", _settings
     else:
         _settings = settings
+    return _settings
 
 
 def get_config():

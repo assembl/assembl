@@ -229,10 +229,10 @@ class FrontendUrls(object):
             if (not is_using_landing_page(self.discussion)) or \
                 current_phase_use_v1_interface(
                     self.discussion.timeline_events):
-                return self.get_frontend_url(
+                route = self.get_frontend_url(
                     'oldDebate', slug=self.discussion.slug)
             else:
-                return self.get_frontend_url(
+                route = self.get_frontend_url(
                     'homeBare', slug=self.discussion.slug)
         else:
             get_route = create_get_route(request, self.discussion)

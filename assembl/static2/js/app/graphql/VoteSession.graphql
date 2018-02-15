@@ -23,6 +23,13 @@ fragment tokenVoteSpecification on TokenVoteSpecification {
   }
   voteSpecTemplateId
   voteType
+  myVotes {
+    ... on TokenVote {
+      voteValue
+      proposalId
+      tokenCategoryId
+    }
+  }
 }
 
 fragment numberGaugeVoteSpecification on NumberGaugeVoteSpecification {
@@ -41,6 +48,12 @@ fragment numberGaugeVoteSpecification on NumberGaugeVoteSpecification {
   unit
   voteSpecTemplateId
   voteType
+  myVotes {
+    ... on GaugeVote {
+      selectedValue: voteValue
+      proposalId
+    }
+  }
 }
 
 fragment gaugeVoteSpecification on GaugeVoteSpecification {
@@ -63,6 +76,12 @@ fragment gaugeVoteSpecification on GaugeVoteSpecification {
   }
   voteSpecTemplateId
   voteType
+  myVotes {
+    ... on GaugeVote {
+      selectedValue: voteValue
+      proposalId
+    }
+  }
 }
 
 query VoteSession($discussionPhaseId: Int!, $lang: String!) {

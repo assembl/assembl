@@ -60,6 +60,16 @@ export const deleteTokenVoteModule = (id: string): actionTypes.DeleteTokenVoteMo
   type: actionTypes.DELETE_TOKEN_VOTE_MODULE
 });
 
+export const createGaugeVoteModule = (id: string): actionTypes.CreateGaugeVoteModule => ({
+  id: id,
+  type: actionTypes.CREATE_GAUGE_VOTE_MODULE
+});
+
+export const deleteGaugeVoteModule = (id: string): actionTypes.DeleteGaugeVoteModule => ({
+  id: id,
+  type: actionTypes.DELETE_GAUGE_VOTE_MODULE
+});
+
 export const updateTokenVoteExclusiveCategory = (id: string, value: boolean): actionTypes.UpdateTokenVoteExclusiveCategory => ({
   id: id,
   value: value,
@@ -83,9 +93,9 @@ export const createTokenVoteCategory = (id: string, parentId: string): actionTyp
   type: actionTypes.CREATE_TOKEN_VOTE_CATEGORY
 });
 
-export const deleteTokenVoteCategory = (value: number, parentId: string): actionTypes.DeleteTokenVoteCategory => ({
-  parentId: parentId,
-  value: value,
+export const deleteTokenVoteCategory = (id: string, index: number): actionTypes.DeleteTokenVoteCategory => ({
+  id: id,
+  index: index,
   type: actionTypes.DELETE_TOKEN_VOTE_CATEGORY
 });
 
@@ -110,6 +120,70 @@ export const updateTokenVoteCategoryColor = (id: string, value: string): actionT
   id: id,
   value: value,
   type: actionTypes.UPDATE_TOKEN_VOTE_CATEGORY_COLOR
+});
+
+export const updateGaugeVoteInstructions = (
+  id: string,
+  locale: string,
+  value: string
+): actionTypes.UpdateGaugeVoteInstructions => ({
+  id: id,
+  locale: locale,
+  value: value,
+  type: actionTypes.UPDATE_GAUGE_VOTE_INSTRUCTIONS
+});
+
+export const updateGaugeVoteIsNumber = (id: string, value: boolean): actionTypes.UpdateGaugeVoteIsNumber => ({
+  id: id,
+  value: value,
+  type: actionTypes.UPDATE_GAUGE_VOTE_IS_NUMBER
+});
+
+export const updateGaugeVoteNbTicks = (id: string, value: number): actionTypes.UpdateGaugeVoteNbTicks => ({
+  id: id,
+  value: value,
+  type: actionTypes.UPDATE_GAUGE_VOTE_NUMBER_TICKS
+});
+
+export const createGaugeVoteChoice = (parentId: string, id: string): actionTypes.CreateGaugeVoteChoice => ({
+  parentId: parentId,
+  id: id,
+  type: actionTypes.CREATE_GAUGE_VOTE_CHOICE
+});
+
+export const deleteGaugeVoteChoice = (id: string, index: number): actionTypes.DeleteGaugeVoteChoice => ({
+  id: id,
+  index: index,
+  type: actionTypes.DELETE_GAUGE_VOTE_CHOICE
+});
+
+export const updateGaugeVoteChoiceLabel = (
+  id: string,
+  locale: string,
+  value: string
+): actionTypes.UpdateGaugeVoteChoiceLabel => ({
+  id: id,
+  locale: locale,
+  value: value,
+  type: actionTypes.UPDATE_GAUGE_VOTE_CHOICE_LABEL
+});
+
+export const updateGaugeMinimum = (id: string, value: number): actionTypes.UpdateGaugeMinimum => ({
+  id: id,
+  value: value,
+  type: actionTypes.UPDATE_GAUGE_MINIMUM
+});
+
+export const updateGaugeMaximum = (id: string, value: number): actionTypes.UpdateGaugeMaximum => ({
+  id: id,
+  value: value,
+  type: actionTypes.UPDATE_GAUGE_MAXIMUM
+});
+
+export const updateGaugeUnit = (id: string, value: string): actionTypes.UpdateGaugeUnit => ({
+  id: id,
+  value: value,
+  type: actionTypes.UPDATE_GAUGE_UNIT
 });
 
 export const updateVoteSessionPage = (value: Object): actionTypes.UpdateVoteSessionPage => ({

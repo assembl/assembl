@@ -365,6 +365,10 @@ $marginLeft: $imgtypeWidth + 2 * $imgtypeMargin;
 }
 
 .sk-layout__filters {
+  max-height: 600px;
+  overflow-x: hidden;
+  overflow-y: scroll;
+
   .sk-select select {
     width: 100%;
   }

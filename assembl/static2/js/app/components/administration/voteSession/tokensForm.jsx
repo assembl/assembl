@@ -119,7 +119,10 @@ const mapDispatchToProps = (dispatch, { id, editLocale }) => ({
         dispatch(createTokenVoteCategory(newId, id));
       }
     } else {
-      dispatch(deleteTokenVoteCategory(value, id));
+      const nbTokenCategoryToDelete = tokenCategoryNumber - value;
+      for (let i = 0; i < nbTokenCategoryToDelete; i += 1) {
+        dispatch(deleteTokenVoteCategory(id, tokenCategoryNumber - 1 - i));
+      }
     }
   },
   handleExclusiveCategoriesCheckboxChange: checked => dispatch(updateTokenVoteExclusiveCategory(id, !checked))

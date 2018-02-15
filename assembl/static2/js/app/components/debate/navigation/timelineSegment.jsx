@@ -2,7 +2,7 @@
 import React from 'react';
 import { withApollo, type ApolloClient } from 'react-apollo';
 import { browserHistory } from 'react-router';
-import { Translate, Localize, I18n } from 'react-redux-i18n';
+import { Translate, Localize } from 'react-redux-i18n';
 import { connect } from 'react-redux';
 import classNames from 'classnames';
 
@@ -10,7 +10,11 @@ import MenuTable, { prefetchMenuQuery } from './menuTable';
 import { getPhaseStatus, isSeveralIdentifiers, type Timeline } from '../../../utils/timeline';
 import { displayModal } from '../../../utils/utilityManager';
 import { get } from '../../../utils/routeMap';
-import { PHASE_STATUS } from '../../../constants';
+import { PHASE_STATUS, PHASES } from '../../../constants';
+import { menuScrollEventId } from './tables/menuList';
+import { createEvent } from '../../../utils/globalFunctions';
+
+const phasesToIgnore = [PHASES.voteSession];
 
 export type DebateType = {
   debateData: {
@@ -45,6 +49,9 @@ export class DumbTimelineSegment extends React.Component<*, TimelineSegmentProps
   componentWillMount() {
     const { phaseIdentifier, title, startDate, endDate, locale, client } = this.props;
     this.phaseStatus = getPhaseStatus(startDate, endDate);
+    const inProgress = this.phaseStatus === PHASE_STATUS.inProgress;
+    const ignore = phasesToIgnore.includes(phaseIdentifier);
+    this.ignoreMenu = ignore && !inProgress;
     let phaseName = '';
     title.entries.forEach((entry) => {
       if (locale === entry['@language']) {
@@ -62,12 +69,23 @@ export class DumbTimelineSegment extends React.Component<*, TimelineSegmentProps
 
   phaseName = null;
 
+  ignoreMenu = false;
+
   showMenu = () => {
     this.setState({ active: true });
   };
 
   hideMenu = () => {
     this.setState({ active: false });
+  };
+
+  handleMenuScroll = (event: SyntheticEvent & { currentTarget: HTMLDivElement }) => {
+    const scrollEvent = createEvent(menuScrollEventId, { bubbles: true, cancelable: true });
+    // $FlowFixMe
+    scrollEvent.detail = {
+      position: event.currentTarget.scrollTop
+    };
+    window.dispatchEvent(scrollEvent);
   };
 
   renderNotStarted = (className?: string) => {
@@ -98,36 +116,33 @@ export class DumbTimelineSegment extends React.Component<*, TimelineSegmentProps
           browserHistory.push(get('debate', params));
           this.hideMenu();
         } else {
-          const body = <Translate value="redirectToV1" phaseName={this.phaseName} />;
-          const button = { link: get('oldDebate', slug), label: I18n.t('home.accessButton'), internalLink: false };
-          displayModal(null, body, true, null, button, true);
-          setTimeout(() => {
-            window.location = get('oldDebate', slug);
-          }, 6000);
+          window.location = get('oldVote', slug);
         }
       }
     } else if (!isRedirectionToV1) {
       browserHistory.push(get('debate', params));
       this.hideMenu();
     } else {
-      window.location = get('oldDebate', slug);
+      window.location = get('oldVote', slug);
     }
   };
 
   renderMenu = () => {
-    const { phaseIdentifier, onMenuItemClick } = this.props;
     const { active } = this.state;
-    const isNotStarted = this.phaseStatus === PHASE_STATUS.notStarted;
     if (!active) return null;
-    return (
-      <div className="menu-container">
-        {isNotStarted ? (
-          this.renderNotStarted('not-started')
-        ) : (
+    const { phaseIdentifier, onMenuItemClick } = this.props;
+    const isNotStarted = this.phaseStatus === PHASE_STATUS.notStarted;
+    if (isNotStarted) {
+      return <div className="menu-container">{this.renderNotStarted('not-started')}</div>;
+    }
+    if (!this.ignoreMenu) {
+      return (
+        <div onScroll={this.handleMenuScroll} className="menu-container">
           <MenuTable identifier={phaseIdentifier} onMenuItemClick={onMenuItemClick} />
-        )}
-      </div>
-    );
+        </div>
+      );
+    }
+    return null;
   };
 
   render() {
@@ -157,7 +172,7 @@ export class DumbTimelineSegment extends React.Component<*, TimelineSegmentProps
             <div className="timeline-bar-background">&nbsp;</div>
           </div>
         </div>
-        {active && <span className="timeline-arrow" />}
+        {!this.ignoreMenu && active && <span className="timeline-arrow" />}
         {this.renderMenu()}
       </div>
     );

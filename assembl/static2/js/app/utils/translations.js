@@ -61,6 +61,28 @@ const Translations = {
       disagree: "Pas convaincu",
       dont_understand: "Pas tout compris",
       more_info: "SVP + d'infos",
+      Nature: "Nature",
+      taxonomy_nature: {
+        issue: "Problématique",
+        actionable_solution: "Solution actionnable",
+        knowledge: "Connaissance",
+        example: "Exemple",
+        concept: "Concept",
+        argument: "Argument"
+      },
+      Action: "Action",
+      taxonomy_action: {
+        classify: "Ranger",
+        make_generic: "Rendre plus générique",
+        argument: "Argumenter",
+        give_examples: "Donner des exemples",
+        more_specific: "Rendre plus opérationnel",
+        mix_match: "Croiser avec un autre extrait",
+        display_multi_column: "Activer multi-col.",
+        display_thread: "Activer Thread",
+        display_tokens: "Activer Tokens",
+        display_open_questions: "Activer Q° ouvertes"
+      },
       Sort: "Trier",
       "By relevance": "Par pertinence",
       "Most recent first": "Du plus récent au plus ancien",
@@ -359,8 +381,10 @@ const Translations = {
         "2": "Configurer les propositions de vote"
       },
       voteWithTokens: "Vote par jetons",
+      voteWithGauges: "Vote par jauge(s)",
       tokenVoteCheckbox:
         "Le vote par jetons permet de sélectionner des propositions à la proportionnelle. Chaque participant dispose d'une certaine quantité de jetons et devra les répartir sur les propositions.",
+      gaugeVoteCheckbox: "Vous pouvez choisir d'avoir une ou plusieurs jauges",
       tokenCategoryNumber: "Nombre de types de jetons",
       tokenNumber: "Nombre de jetons",
       tokenTitle: "Intitulé du jeton",
@@ -371,7 +395,19 @@ const Translations = {
       voteSessionSuccess: "La session de vote a été enregistrée avec succès.",
       exclusive: "Exclusifs",
       tokenVoteInstructions: "Consigne du vote par jetons",
+      gaugeVoteInstructions: "Consigne du vote par jauge",
       propositionSectionTitle: "Titre de la section",
+      gaugeNumber: "Nombre de jauges",
+      defineGaugeNumer: "Définissez le nombre de jauges",
+      minValue: "Valeur minimale",
+      maxValue: "Valeur maximale",
+      unit: "Unité",
+      saveFirstStep: "Veuillez d'abord revenir à l'étape 1 et sauvegarder les instructions",
+      nbTicksHelper: "Définissez le nombre de crans pour la jauge",
+      nbTicks: "Nombre de crans",
+      textValue: "Valeur textuelle",
+      numberValue: "Valeur numéraire",
+      valueTitle: "Intitulé de la valeur",
       sections: {
         addSection: "Ajouter une rubrique",
         deleteSection: "Supprimer la rubrique",
@@ -391,6 +427,7 @@ const Translations = {
         exclusive:
           "Vous pouvez décider si le participant peut distributer un seul type de jetons (exclusifs) ou plusieurs types de jetons par proposition.",
         tokenVoteInstructions: "En fonction de l'objectif du module de jetons, incitez les participants à passer à l'action.",
+        gaugeVoteInstructions: "En fonction de l'objectif du module jauge, incitez les participants à passer à l'action.",
         landingPage: {
           header:
             "Bandeau image en haut de la page. Il contient le titre de la consultation, et un sous-titre informatif, ainsi qu'un bouton d'accès à la consultation.",
@@ -542,6 +579,28 @@ const Translations = {
       disagree: "Disagree",
       dont_understand: "Did not get it",
       more_info: "More info please?",
+      Nature: "Nature",
+      taxonomy_nature: {
+        issue: "Issue",
+        actionable_solution: "Actionable solution",
+        knowledge: "Knowledge",
+        example: "Example",
+        concept: "Concept",
+        argument: "Argument"
+      },
+      Action: "Action",
+      taxonomy_action: {
+        classify: "Classify",
+        make_generic: "Make generic",
+        argument: "Argument",
+        give_examples: "Give examples",
+        more_specific: "Be more specific",
+        mix_match: "Mix & match",
+        display_multi_column: "Display Multi-column",
+        display_thread: "Display Thread",
+        display_tokens: "Display tokens",
+        display_open_questions: "Display Open questions"
+      },
       Sort: "Sort",
       "By relevance": "By relevance",
       "Most recent first": "More recent first",
@@ -839,7 +898,10 @@ const Translations = {
         "2": "Configure the voting proposals"
       },
       voteWithTokens: "Tokens vote",
-      tokenVoteCheckbox: "Check this box to create a token vote module",
+      voteWithGauges: "Gauge(s) vote",
+      tokenVoteCheckbox:
+        "The token vote module allows you to select propositions proportionnaly. Each participant has a certain amount of tokens et will have to spread them on the different propositions",
+      gaugeVoteCheckbox: "You can choose to have one or several gages",
       headerTitle: "Top page Header",
       propositionSectionTitle: "Proposals section",
       instructions: "Instructions",
@@ -847,7 +909,18 @@ const Translations = {
       exclusive: "Exclusive",
 
       tokenVoteInstructions: "Instructions for the token vote",
-
+      gaugeVoteInstructions: "Instructions for the gauge vote",
+      gaugeNumber: "Gauge number",
+      defineGaugeNumer: "Define gauges number",
+      minValue: "Minimum value",
+      maxValue: "Maximum value",
+      unit: "Unit",
+      saveFirstStep: "Please go back to step 1 first and save the instructions",
+      nbTicksHelper: "Define ticks number for the gauge",
+      nbTicks: "Ticks number",
+      textValue: "Textual value",
+      valueTitle: "Value title",
+      numberValue: "Number value",
       tokenCategoryNumber: "Number of token types",
       tokenNumber: "Number of tokens",
       tokenTitle: "Token title",
@@ -871,6 +944,7 @@ const Translations = {
         exclusive:
           "You can decide wether the participant can distribute a single type of token (exclusive) or several types of token per proposition.",
         tokenVoteInstructions: "Depending on the objective of the token module, incite the participants to take action.",
+        gaugeVoteInstructions: "Depending on the objective of the gauge module, incite the participants to take action.",
         landingPage: {
           header:
             "Top page header. It contains the consultation's title and subtitle and a button to access to the consultation.",
