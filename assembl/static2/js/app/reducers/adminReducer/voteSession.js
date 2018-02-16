@@ -217,7 +217,6 @@ export const modulesById = (state: Map<string, Map> = Map(), action: ReduxAction
           toDelete: false,
           type: 'tokens',
           id: m.id,
-          voteSessionId: m.voteSessionId,
           instructionsEntries: m.instructionsEntries,
           exclusiveCategories: m.exclusiveCategories,
           tokenCategories: m.tokenCategories.map(t => t.id)
@@ -229,7 +228,6 @@ export const modulesById = (state: Map<string, Map> = Map(), action: ReduxAction
           toDelete: false,
           type: 'gauge',
           id: m.id,
-          voteSessionId: m.voteSessionId,
           instructionsEntries: m.instructionsEntries,
           nbTicks: m.nbTicks,
           isNumberGauge: true,
@@ -244,7 +242,6 @@ export const modulesById = (state: Map<string, Map> = Map(), action: ReduxAction
           toDelete: false,
           type: 'gauge',
           id: m.id,
-          voteSessionId: m.voteSessionId,
           instructionsEntries: m.instructionsEntries,
           nbTicks: m.choices.size,
           isNumberGauge: false,

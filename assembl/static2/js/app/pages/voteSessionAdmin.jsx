@@ -164,6 +164,7 @@ class VoteSessionAdmin extends React.Component<void, VoteSessionAdminProps, void
       updateProposal,
       deleteProposal
     } = this.props;
+
     if (voteSessionPage.get('hasChanged')) {
       const titleEntries = voteSessionPage.get('titleEntries').toJS();
       const subTitleEntries = voteSessionPage.get('subTitleEntries').toJS();
@@ -196,8 +197,12 @@ class VoteSessionAdmin extends React.Component<void, VoteSessionAdminProps, void
     if (voteSessionPage.get('id')) {
       if (tokenModulesHaveChanged) {
         const tokenModules = voteModules.filter(m => m.get('type') === 'tokens');
+        const items = [];
+        tokenModules.forEach((t) => {
+          items.push({ ...t.toJS(), voteSessionId: voteSessionPage.get('id') });
+        });
         const mutationsPromises = getMutationsPromises({
-          items: tokenModules,
+          items: items,
           variablesCreator: createVariablesForTokenVoteSpecificationMutation,
           deleteVariablesCreator: createVariablesForDeleteMutation,
           createMutation: createTokenVoteSpecification,
@@ -210,8 +215,12 @@ class VoteSessionAdmin extends React.Component<void, VoteSessionAdminProps, void
       }
       if (textGaugeModulesHaveChanged) {
         const textGaugeModules = voteModules.filter(m => m.get('type') === 'gauge' && !m.get('isNumberGauge'));
+        const items = [];
+        textGaugeModules.forEach((t) => {
+          items.push({ ...t.toJS(), voteSessionId: voteSessionPage.get('id') });
+        });
         const mutationsPromises = getMutationsPromises({
-          items: textGaugeModules,
+          items: items,
           variablesCreator: createVariablesForTextGaugeMutation,
           deleteVariablesCreator: createVariablesForDeleteMutation,
           createMutation: createGaugeVoteSpecification,
@@ -224,8 +233,12 @@ class VoteSessionAdmin extends React.Component<void, VoteSessionAdminProps, void
       }
       if (numberGaugeModulesHaveChanged) {
         const numberGaugeModules = voteModules.filter(m => m.get('type') === 'gauge' && m.get('isNumberGauge'));
+        const items = [];
+        numberGaugeModules.forEach((t) => {
+          items.push({ ...t.toJS(), voteSessionId: voteSessionPage.get('id') });
+        });
         const mutationsPromises = getMutationsPromises({
-          items: numberGaugeModules,
+          items: items,
           variablesCreator: createVariablesForNumberGaugeMutation,
           deleteVariablesCreator: createVariablesForDeleteMutation,
           createMutation: createNumberGaugeVoteSpecification,
