@@ -128,6 +128,15 @@ class DumbVoteSession extends React.Component<void, Props, State> {
     this.availableTokensContainerRef = el;
   };
 
+  displaySubmitButton: void => boolean = () => {
+    const tokenVotesSum = this.state.userTokenVotes
+      .valueSeq()
+      .flatMap(v => v.valueSeq())
+      .reduce((sum, x) => sum + x, 0);
+
+    return tokenVotesSum > 0;
+  };
+
   render() {
     const {
       title,
@@ -193,15 +202,15 @@ class DumbVoteSession extends React.Component<void, Props, State> {
                 />
               </Col>
             </Row>
-            {!this.state.userTokenVotes.isEmpty() ? (
-              <Row className="form-actions center">
-                <Col mdOffset={1} md={10} smOffset={1} sm={10}>
+            <Row className="form-actions center">
+              <Col mdOffset={1} md={10} smOffset={1} sm={10}>
+                {this.displaySubmitButton() ? (
                   <Button className="button-submit button-dark">
                     <Translate value="debate.voteSession.submit" />
                   </Button>
-                </Col>
-              </Row>
-            ) : null}
+                ) : null}
+              </Col>
+            </Row>
           </Section>
         </Grid>
       </div>

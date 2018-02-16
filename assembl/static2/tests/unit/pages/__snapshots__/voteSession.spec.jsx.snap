@@ -143,6 +143,20 @@ exports[`VoteSession component should match VoteSession snapshot 1`] = `
           />
         </Col>
       </Row>
+      <Row
+        bsClass="row"
+        className="form-actions center"
+        componentClass="div"
+      >
+        <Col
+          bsClass="col"
+          componentClass="div"
+          md={10}
+          mdOffset={1}
+          sm={10}
+          smOffset={1}
+        />
+      </Row>
     </Section>
   </Grid>
 </div>
@@ -240,6 +254,20 @@ exports[`VoteSession component should match VoteSession snapshot with empty modu
             voteForProposal={[Function]}
           />
         </Col>
+      </Row>
+      <Row
+        bsClass="row"
+        className="form-actions center"
+        componentClass="div"
+      >
+        <Col
+          bsClass="col"
+          componentClass="div"
+          md={10}
+          mdOffset={1}
+          sm={10}
+          smOffset={1}
+        />
       </Row>
     </Section>
   </Grid>
