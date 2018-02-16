@@ -11,7 +11,7 @@ import Header from '../components/common/header';
 import Section from '../components/common/section';
 import AvailableTokens from '../components/voteSession/availableTokens';
 import Proposals from '../components/voteSession/proposals';
-import { getDomElementOffset } from '../utils/globalFunctions';
+import { getDomElementOffset, isMobile } from '../utils/globalFunctions';
 import { getPhaseId } from '../utils/timeline';
 import { promptForLoginOr } from '../utils/utilityManager';
 import withLoadingIndicator from '../components/common/withLoadingIndicator';
@@ -91,7 +91,7 @@ class DumbVoteSession extends React.Component<void, Props, State> {
   }
 
   setAvailableTokensSticky = () => {
-    if (this.availableTokensContainerRef) {
+    if (this.availableTokensContainerRef && !isMobile.any()) {
       const availableTokensDivOffset = getDomElementOffset(this.availableTokensContainerRef).top;
       if (availableTokensDivOffset <= window.scrollY) {
         this.setState({ availableTokensSticky: true });
