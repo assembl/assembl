@@ -4,10 +4,8 @@
 
   .rc-slider {
     height: 55px;
-
-    .rc-slider-dot:first-child, .rc-slider-dot:nth-child(2) {
-      display: none;
-    }
+    margin-top: 20px;
+    margin-bottom: 8px;
 
     .rc-slider-dot {
       /* rc-slider dotStyle prop mysteriously does not work anymore */
@@ -29,12 +27,24 @@
         font-weight: bold;
       }
     }
+
+    svg.pointer {
+      fill: #4f17d4; /* TODO: use theme color */
+    }
   }
 }
 
 .number-gauge-vote-for-proposal {
   .rc-slider {
     .rc-slider-dot:first-child, .rc-slider-dot:nth-child(2) {
+      display: none;
+    }
+  }
+}
+
+.gauge-vote-for-proposal {
+  .rc-slider {
+    .rc-slider-dot:first-child, .rc-slider-dot:last-child() {
       display: none;
     }
   }

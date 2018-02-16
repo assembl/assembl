@@ -3,12 +3,16 @@ import React from 'react';
 class Pointer extends React.Component {
   render() {
     const position = this.props.position;
+    const marginLeft = position ? `calc(${position}% - 15px)` : 'initial';
+    const width = this.props.width ? this.props.width : '31px';
+    const height = this.props.height ? this.props.height : '46px';
+    const style = Object.assign({}, { marginLeft: marginLeft }, this.props.style);
     return (
       <svg
-        style={{ marginLeft: `calc(${position}% - 15px)` }}
+        style={style}
         className="pointer"
-        width="31px"
-        height="46px"
+        width={width}
+        height={height}
         viewBox="0 0 31 46"
         version="1.1"
         xmlns="http://www.w3.org/2000/svg"

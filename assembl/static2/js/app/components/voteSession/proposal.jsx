@@ -4,8 +4,7 @@ import { Col, Row } from 'react-bootstrap';
 import { Map } from 'immutable';
 
 import TokenVoteForProposal from './tokenVoteForProposal';
-import GaugeVoteForProposal from './gaugeVoteForProposal';
-import NumberGaugeVoteForProposal from './numberGaugeVoteForProposal';
+import { GaugeVoteForProposal, NumberGaugeVoteForProposal } from './gaugeVoteForProposal';
 import {
   findTokenVoteModule,
   type RemainingTokensByCategory,
