@@ -306,7 +306,8 @@ const Translations = {
           text: "Un administrateur doit configurer la session de vote"
         },
         remainingTokens: "Il vous reste %{count} jetons disponibles.",
-        resetTokens: "Supprimer mon vote"
+        resetTokens: "Supprimer mon vote",
+        submit: "Soumettre le vote"
       }
     },
     profile: {
@@ -827,7 +828,8 @@ const Translations = {
           text: "An administrator must configure the vote session"
         },
         remainingTokens: "You have %{count} tokens remaining.",
-        resetTokens: "Reset my vote"
+        resetTokens: "Reset my vote",
+        submit: "Submit vote"
       }
     },
     profile: {

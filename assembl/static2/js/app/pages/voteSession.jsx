@@ -1,9 +1,9 @@
 // @flow
 import React from 'react';
-import { Grid, Row, Col } from 'react-bootstrap';
+import { Button, Grid, Row, Col } from 'react-bootstrap';
 import { graphql, compose } from 'react-apollo';
 import { connect } from 'react-redux';
-import { I18n } from 'react-redux-i18n';
+import { I18n, Translate } from 'react-redux-i18n';
 import { Map } from 'immutable';
 
 import VoteSessionQuery from '../graphql/VoteSession.graphql';
@@ -193,6 +193,15 @@ class DumbVoteSession extends React.Component<void, Props, State> {
                 />
               </Col>
             </Row>
+            {!this.state.userTokenVotes.isEmpty() ? (
+              <Row className="form-actions center">
+                <Col mdOffset={1} md={10} smOffset={1} sm={10}>
+                  <Button className="button-submit button-dark">
+                    <Translate value="debate.voteSession.submit" />
+                  </Button>
+                </Col>
+              </Row>
+            ) : null}
           </Section>
         </Grid>
       </div>
