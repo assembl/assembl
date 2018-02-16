@@ -417,7 +417,7 @@ const Translations = {
       unit: "Unité",
       saveFirstStep: "Veuillez d'abord revenir à l'étape 1 et sauvegarder les instructions.",
       saveSecondStep: "Veuillez d'abord revenir à l'étape 2 et configurez puis sauvegardez les modules de vote.",
-      configureVoteSession: "Vous devez avoir configuré une session de vote.",
+      configureVoteSession: "Vous devez configurer une session de vote.",
       configureVoteModules: "Vous devez avoir configuré au moins un module de vote.",
       backToPreviousStep: "Revenir à l'étape %{number}",
       nbTicksHelper: "Définissez le nombre de crans pour la jauge",

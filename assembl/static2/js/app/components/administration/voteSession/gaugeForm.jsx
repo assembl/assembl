@@ -61,7 +61,6 @@ const DumbGaugeForm = ({
       <label htmlFor={`dropdown-${id}`}>
         <Translate value="administration.nbTicks" />
       </label>
-      <Helper helperUrl="/static2/img/helpers/helper2.png" helperText={'administration.nbTicksHelper'} />
     </div>
     <SplitButton
       title={nbTicks}
@@ -78,10 +77,10 @@ const DumbGaugeForm = ({
       ))}
     </SplitButton>
     <div className="margin-m">
-      <Radio onChange={handleNumberGaugeUncheck} checked={!isNumberGauge} name="gauge-radio">
+      <Radio onChange={handleNumberGaugeUncheck} checked={!isNumberGauge} name={`gauge-radio-text-${id}`}>
         <Translate value="administration.textValue" />
       </Radio>
-      <Radio onChange={handleNumberGaugeCheck} checked={isNumberGauge} name="gauge-radio">
+      <Radio onChange={handleNumberGaugeCheck} checked={isNumberGauge} name={`gauge-radio-number-${id}`}>
         <Translate value="administration.numberValue" />
       </Radio>
     </div>
