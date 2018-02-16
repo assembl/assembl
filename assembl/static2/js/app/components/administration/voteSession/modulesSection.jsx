@@ -43,7 +43,7 @@ const DumbModulesSection = ({
       <SectionTitle title={I18n.t('administration.voteSession.1')} annotation={I18n.t('administration.annotation')} />
       <div className="admin-content">
         <div className="form-container">
-          <div>
+          <div className="vote-modules-form">
             <Checkbox
               checked={tokenModuleChecked}
               onChange={() => {

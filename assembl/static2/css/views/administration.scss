@@ -2,8 +2,8 @@
   margin: $margin-section + $navbar-height 0;
 
   .checkbox-title {
-    line-height: $font-size-sm;
-    font-size: $font-size-m;
+    line-height: 20px;
+    font-size: $font-size-xs;
     font-family: $font-family;
   }
 
@@ -341,7 +341,7 @@
     }
   }
 
-  .token-vote-form {
+  .vote-modules-form {
     .flex > .form-group {
       flex-grow: 1;
     }
