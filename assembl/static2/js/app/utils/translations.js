@@ -301,6 +301,10 @@ const Translations = {
         body: "Message"
       },
       voteSession: {
+        noVoteSession: {
+          title: "La session de vote n'est pas configurée",
+          text: "Un administrateur doit configurer la session de vote"
+        },
         remainingTokens: "Il vous reste %{count} jetons disponibles.",
         resetTokens: "Supprimer mon vote"
       }
@@ -818,6 +822,10 @@ const Translations = {
         body: "Comment"
       },
       voteSession: {
+        noVoteSession: {
+          title: "Vote session is not configured",
+          text: "An administrator must configure the vote session"
+        },
         remainingTokens: "You have %{count} tokens remaining.",
         resetTokens: "Reset my vote"
       }

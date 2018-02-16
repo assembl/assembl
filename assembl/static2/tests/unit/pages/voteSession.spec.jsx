@@ -4,8 +4,24 @@ import ShallowRenderer from 'react-test-renderer/shallow';
 import { DumbVoteSession } from '../../../js/app/pages/voteSession';
 
 describe('VoteSession component', () => {
+  it('should match VoteSession snapshot when vote session is not configured', () => {
+    const props = {
+      title: '',
+      subTitle: '',
+      headerImageUrl: '',
+      instructionsSectionTitle: '',
+      instructionsSectionContent: '',
+      modules: [],
+      propositionsSectionTitle: '',
+      proposals: []
+    };
+    const shallowRenderer = new ShallowRenderer();
+    shallowRenderer.render(<DumbVoteSession {...props} />);
+    const result = shallowRenderer.getRenderOutput();
+    expect(result).toMatchSnapshot();
+  });
+
   it('should match VoteSession snapshot with empty modules and proposals', () => {
-    const voteForProposalSpy = jest.fn();
     const props = {
       title: 'Phase de vote à la majorité et estimation multicritère',
       subTitle: 'Maintenant il faut voter.',
@@ -14,8 +30,7 @@ describe('VoteSession component', () => {
       instructionsSectionContent: '',
       modules: [],
       propositionsSectionTitle: 'Vote sur 0 propositions',
-      proposals: [],
-      voteForProposal: voteForProposalSpy
+      proposals: []
     };
     const shallowRenderer = new ShallowRenderer();
     shallowRenderer.render(<DumbVoteSession {...props} />);
@@ -24,7 +39,6 @@ describe('VoteSession component', () => {
   });
 
   it('should match VoteSession snapshot', () => {
-    const voteForProposalSpy = jest.fn();
     const props = {
       title: 'Phase de vote à la majorité et estimation multicritère',
       subTitle: 'Maintenant il faut voter.',
@@ -53,8 +67,7 @@ describe('VoteSession component', () => {
       propositionsSectionTitle: 'Vote sur 10 propositions',
       proposals: [
         { id: 'foo', title: 'Foo', description: 'You can\'t hack the alarm without connecting the primary AGP microchip!' }
-      ],
-      voteForProposal: voteForProposalSpy
+      ]
     };
     const shallowRenderer = new ShallowRenderer();
     shallowRenderer.render(<DumbVoteSession {...props} />);

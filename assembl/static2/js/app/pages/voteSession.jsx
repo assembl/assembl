@@ -3,6 +3,7 @@ import React from 'react';
 import { Grid, Row, Col } from 'react-bootstrap';
 import { graphql, compose } from 'react-apollo';
 import { connect } from 'react-redux';
+import { I18n } from 'react-redux-i18n';
 import { Map } from 'immutable';
 
 import VoteSessionQuery from '../graphql/VoteSession.graphql';
@@ -14,6 +15,7 @@ import { getDomElementOffset } from '../utils/globalFunctions';
 import { getPhaseId } from '../utils/timeline';
 import { promptForLoginOr } from '../utils/utilityManager';
 import withLoadingIndicator from '../components/common/withLoadingIndicator';
+import MessagePage from '../components/common/messagePage';
 
 export type TokenCategory = {|
   id: string,
@@ -137,6 +139,16 @@ class DumbVoteSession extends React.Component<void, Props, State> {
       proposals,
       modules
     } = this.props;
+
+    if (title.length === 0) {
+      return (
+        <MessagePage
+          title={I18n.t('debate.voteSession.noVoteSession.title')}
+          text={I18n.t('debate.voteSession.noVoteSession.text')}
+        />
+      );
+    }
+
     const tokenVoteModule = findTokenVoteModule(modules);
     const remainingTokensByCategory = this.getRemainingTokensByCategory(tokenVoteModule);
     return (
@@ -213,6 +225,21 @@ export default compose(
           hasErrors: true
         };
       }
+
+      if (!data.voteSession) {
+        return {
+          loading: data.loading,
+          title: '',
+          subTitle: '',
+          headerImageUrl: '',
+          instructionsSectionTitle: '',
+          instructionsSectionContent: '',
+          modules: [],
+          propositionsSectionTitle: '',
+          proposals: []
+        };
+      }
+
       const {
         title,
         subTitle,
@@ -233,7 +260,8 @@ export default compose(
         instructionsSectionContent: instructionsSectionContent,
         propositionsSectionTitle: propositionsSectionTitle,
         modules: modules,
-        proposals: proposals
+        proposals: proposals,
+        noVoteSession: false
       };
     }
   }),

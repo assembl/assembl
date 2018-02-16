@@ -361,7 +361,11 @@ exports[`Proposals component should match Proposals snapshot 1`] = `
           </p>
           <div
             className="rc-slider"
+            onBlur={[Function]}
+            onFocus={[Function]}
+            onKeyDown={[Function]}
             onMouseDown={[Function]}
+            onMouseUp={[Function]}
             onTouchStart={[Function]}
             style={undefined}
           >
@@ -390,6 +394,7 @@ exports[`Proposals component should match Proposals snapshot 1`] = `
                   "left": "NaN%",
                 }
               }
+              tabIndex={0}
             />
             <div
               className="rc-slider-mark"
@@ -756,7 +761,11 @@ exports[`Proposals component should match Proposals snapshot 1`] = `
           </p>
           <div
             className="rc-slider"
+            onBlur={[Function]}
+            onFocus={[Function]}
+            onKeyDown={[Function]}
             onMouseDown={[Function]}
+            onMouseUp={[Function]}
             onTouchStart={[Function]}
             style={undefined}
           >
@@ -785,6 +794,7 @@ exports[`Proposals component should match Proposals snapshot 1`] = `
                   "left": "NaN%",
                 }
               }
+              tabIndex={0}
             />
             <div
               className="rc-slider-mark"
