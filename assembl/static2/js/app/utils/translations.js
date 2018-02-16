@@ -500,7 +500,7 @@ const Translations = {
       landingPage: {
         manageModules: {
           title: "Administrer les modules",
-          helper: "Choisissez les modules que vous souhaitez voir apparaître dans la page d'accueil et leur emplacement"
+          helper: "Choisissez les modules que vous souhaitez voir apparaître dans la page d'accueil et leurs emplacements."
         },
         successSave: "Les modules ont été enregistrés avec succès !"
       }

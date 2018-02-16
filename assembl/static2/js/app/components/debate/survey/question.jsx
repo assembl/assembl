@@ -82,7 +82,7 @@ class Question extends React.Component {
           <div className="max-container">
             <div className="question-title">
               <div className="title-hyphen">&nbsp;</div>
-              <h1 className="dark-title-1">{`${index}/ ${title}`}</h1>
+              <h1 className="dark-title-5">{`${index}/ ${title}`}</h1>
             </div>
             <Col xs={12} md={9} className="col-centered">
               <TextAreaWithRemainingChars
