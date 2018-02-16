@@ -378,7 +378,6 @@ exports[`Proposals component should match Proposals snapshot 1`] = `
               className="rc-slider-track"
               style={
                 Object {
-                  "backgroundColor": "#4F17D4",
                   "height": "12px",
                   "left": "0%",
                   "visibility": "visible",
@@ -826,7 +825,6 @@ exports[`Proposals component should match Proposals snapshot 1`] = `
               className="rc-slider-track"
               style={
                 Object {
-                  "backgroundColor": "#4F17D4",
                   "height": "12px",
                   "left": "0%",
                   "visibility": "visible",

@@ -1,15 +1,19 @@
 .gauge-vote-for-proposal, .number-gauge-vote-for-proposal {
   width: 100%;
-  padding: 10px;
+  padding: 20px 10px;
 
   .rc-slider {
     height: 55px;
     margin-top: 20px;
     margin-bottom: 8px;
 
+    .rc-slider-track {
+      background-color: $first-color;
+    }
+
     .rc-slider-dot {
       /* rc-slider dotStyle prop mysteriously does not work anymore */
-      background-color: #e6e5f4; /* TODO: use theme color */
+      background-color: #e6e5f4;
       height: 12px;
       top: 0;
       width: 2px;
@@ -19,17 +23,16 @@
     }
 
     .rc-slider-mark-text {
-      color: #ccc; /* TODO: use theme color */
       margin-top: 7px;
 
       &.rc-slider-mark-text-active {
-        color: #4f17d4; /* TODO: use theme color */
+        color: $first-color;
         font-weight: bold;
       }
     }
 
     svg.pointer {
-      fill: #4f17d4; /* TODO: use theme color */
+      fill: $first-color;
     }
   }
 }

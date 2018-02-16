@@ -22,14 +22,13 @@ const markStyle = {
 
 const trackStyle = [
   {
-    backgroundColor: '#4F17D4', // TODO: use theme colors
     visibility: 'visible',
     height: gaugeHeight
   }
 ];
 
 const railStyle = {
-  backgroundColor: '#E6E5F4', // TODO: use theme colors
+  backgroundColor: '#E6E5F4',
   height: gaugeHeight
 };
 
