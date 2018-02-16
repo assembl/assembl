@@ -415,7 +415,9 @@
 
   .vote-proposals-section {
     .intro-text {
-      padding-left: 40px;
+      display: flex;
+      flex-direction: column;
+      padding-left: 45px;
       font-size: $font-size-s;
     }
 

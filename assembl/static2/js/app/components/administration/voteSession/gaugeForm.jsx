@@ -89,7 +89,7 @@ const DumbGaugeForm = ({
     </div>
     {isNumberGauge && <NumberGaugeForm id={id} />}
     {!isNumberGauge &&
-      choices.map((cid, index) => <TextGaugeForm key={`gauge-choice-${index}`} id={cid} index={index} editLocale={editLocale} />)}
+      choices.map((cid, idx) => <TextGaugeForm key={`gauge-choice-${idx}`} id={cid} index={idx} editLocale={editLocale} />)}
     <div className="separator" />
   </div>
 );

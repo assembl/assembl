@@ -1,7 +1,7 @@
 // @flow
 import React from 'react';
 import { connect } from 'react-redux';
-import { I18n } from 'react-redux-i18n';
+import { I18n, Translate } from 'react-redux-i18n';
 import { OverlayTrigger } from 'react-bootstrap';
 import { addVoteProposalTooltip } from '../../common/tooltips';
 import { createVoteProposal } from '../../../actions/adminActions/voteSession';
@@ -21,8 +21,10 @@ const VoteProposalsSection = ({ voteProposals, editLocale, addVoteProposal }: Vo
         title="Configurer les propositions associées aux modules de vote"
         annotation={I18n.t('administration.annotation')}
       />
-      <div className="intro-text bold">{I18n.t('administration.voteProposals.introText1')}</div>
-      <div className="intro-text">{I18n.t('administration.voteProposals.introText2')}</div>
+      <div className="intro-text">
+        <Translate className="bold" value="administration.voteProposals.introText1" />
+        <Translate value="administration.voteProposals.introText2" />
+      </div>
       <div className="admin-content">
         <form>
           {voteProposals.map((id, index) => (
