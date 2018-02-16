@@ -19,6 +19,7 @@ import {
 
 type GaugeFormProps = {
   id: string,
+  index: number,
   editLocale: string,
   instructions: string,
   nbTicks: number,
@@ -40,9 +41,11 @@ const DumbGaugeForm = ({
   handleInstructionsChange,
   handleNbTicksSelectChange,
   handleNumberGaugeCheck,
-  handleNumberGaugeUncheck
+  handleNumberGaugeUncheck,
+  index
 }: GaugeFormProps) => (
   <div className="gauges-vote-form">
+    <Translate value="administration.gauge" number={index + 1} />
     <div className="flex margin-m">
       <FormControlWithLabel
         value={instructions}

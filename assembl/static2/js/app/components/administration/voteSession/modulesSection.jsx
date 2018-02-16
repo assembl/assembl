@@ -95,7 +95,7 @@ const DumbModulesSection = ({
                 </SplitButton>
               </div>
             ) : null}
-            {gaugeModules.map(id => <GaugeForm key={id} id={id} editLocale={editLocale} />)}
+            {gaugeModules.map((id, index) => <GaugeForm key={id} index={index} id={id} editLocale={editLocale} />)}
           </div>
         </div>
       </div>

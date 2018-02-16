@@ -380,6 +380,7 @@ const Translations = {
       },
       voteWithTokens: "Vote par jetons",
       voteWithGauges: "Vote par jauge(s)",
+      gauge: "Jauge %{number}",
       tokenVoteCheckbox:
         "Le vote par jetons permet de sélectionner des propositions à la proportionnelle. Chaque participant dispose d'une certaine quantité de jetons et devra les répartir sur les propositions.",
       gaugeVoteCheckbox: "Vous pouvez choisir d'avoir une ou plusieurs jauges",
@@ -914,6 +915,7 @@ const Translations = {
       },
       voteWithTokens: "Tokens vote",
       voteWithGauges: "Gauge(s) vote",
+      gauge: "Gauge %{number}",
       tokenVoteCheckbox:
         "The token vote module allows you to select propositions proportionnaly. Each participant has a certain amount of tokens et will have to spread them on the different propositions",
       gaugeVoteCheckbox: "You can choose to have one or several gages",
