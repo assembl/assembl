@@ -165,18 +165,23 @@ class GaugeVoteForProposal extends React.Component<*, GaugeVoteForProposalProps,
 }
 
 type NumberGaugeVoteForProposalProps = {
-  instructions: string,
-  minimum: number,
-  maximum: number,
-  nbTicks: number,
-  unit: string
+  instructions: ?string,
+  minimum: ?number,
+  maximum: ?number,
+  nbTicks: ?number,
+  unit: ?string
 };
 
-const NumberGaugeVoteForProposal = ({ instructions, minimum, maximum, nbTicks, unit }: NumberGaugeVoteForProposalProps) => {
+const NumberGaugeVoteForProposal = (props: NumberGaugeVoteForProposalProps) => {
   const marks = {};
   let step = null;
+  const minimum = props.minimum;
+  const maximum = props.maximum;
+  const instructions = props.instructions;
+  const nbTicks = props.nbTicks;
+  const unit = props.unit;
 
-  if (minimum !== undefined && maximum !== undefined) {
+  if (minimum !== undefined && minimum !== null && maximum !== undefined && maximum !== null) {
     marks[`${minimum}`] = {
       style: markStyle,
       label: (
@@ -195,7 +200,7 @@ const NumberGaugeVoteForProposal = ({ instructions, minimum, maximum, nbTicks, u
       )
     };
 
-    if (nbTicks !== undefined && nbTicks > 0) {
+    if (nbTicks !== undefined && nbTicks !== null && nbTicks > 0) {
       step = (maximum - minimum) / (nbTicks - 1);
       for (let i = 1; i < nbTicks - 1; i += 1) {
         // minimum and maximum are already shown as ticks

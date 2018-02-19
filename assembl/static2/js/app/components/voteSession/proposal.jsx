@@ -5,10 +5,12 @@ import { Translate } from 'react-redux-i18n';
 import { Map } from 'immutable';
 
 import TokenVoteForProposal from './tokenVoteForProposal';
-import { GaugeVoteForProposal } from './gaugeVoteForProposal';
+import { GaugeVoteForProposal, NumberGaugeVoteForProposal } from './gaugeVoteForProposal';
 import VotesInProgress from './votesInProgress';
 import {
   findTokenVoteModule,
+  filterGaugeVoteModules,
+  filterNumberGaugeVoteModules,
   type RemainingTokensByCategory,
   type UserTokenVotes,
   type VoteSpecification
@@ -80,14 +82,25 @@ class Proposal extends React.Component<void, Props, State> {
             )}
 
             {modules &&
-              modules
-                .filter(module => module.voteType === 'gauge_vote_specification')
-                .map(module => <GaugeVoteForProposal key={module.id} {...module} />)}
-
-            {modules &&
-              modules.filter(module => module.voteType === 'gauge_vote_specification').map(module => (
+              filterGaugeVoteModules(modules).map(module => (
                 <GaugeVoteForProposal
                   key={module.id}
+                  {...module}
+                  voteForProposal={voteForProposalGauge}
+                  proposalId={id}
+                  value={0} // TODO: use myVotes
+                />
+              ))}
+
+            {modules &&
+              filterNumberGaugeVoteModules(modules).map(module => (
+                <NumberGaugeVoteForProposal
+                  key={module.id}
+                  minimum={module.minimum}
+                  maximum={module.maximum}
+                  nbTicks={module.nbTicks}
+                  unit={module.unit}
+                  instructions={module.instructions}
                   {...module}
                   voteForProposal={voteForProposalGauge}
                   proposalId={id}

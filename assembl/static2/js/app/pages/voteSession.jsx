@@ -70,6 +70,16 @@ type State = {
 type FindTokenVoteModule = (Array<VoteSpecification>) => ?tokenVoteSpecificationFragment;
 export const findTokenVoteModule: FindTokenVoteModule = modules => modules.find(m => m.voteType === 'token_vote_specification');
 
+// $FlowFixMe: if voteType === 'gauge_vote_specification', we know it is a gaugeVoteSpecificationFragment
+type FilterGaugeVoteModules = (Array<VoteSpecification>) => Array<gaugeVoteSpecificationFragment>;
+export const filterGaugeVoteModules: FilterGaugeVoteModules = modules =>
+  modules.filter(module => module.voteType === 'gauge_vote_specification');
+
+// $FlowFixMe: if voteType === 'number_gauge_vote_specification', we know it is a numberGaugeVoteSpecificationFragment
+type FilterNumberGaugeVoteModules = (Array<VoteSpecification>) => Array<numberGaugeVoteSpecificationFragment>;
+export const filterNumberGaugeVoteModules: FilterNumberGaugeVoteModules = modules =>
+  modules.filter(module => module.voteType === 'number_gauge_vote_specification');
+
 class DumbVoteSession extends React.Component<void, Props, State> {
   props: Props;
 
