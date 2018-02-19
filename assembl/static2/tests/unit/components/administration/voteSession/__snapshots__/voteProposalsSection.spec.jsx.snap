@@ -61,3 +61,97 @@ exports[`VoteProposalsSection component should render a VoteProposalsSection com
   </div>
 </div>
 `;
+
+exports[`VoteProposalsSection component should render a voteProposalsSection with 2 proposals 1`] = `
+<div
+  className="vote-proposals-section"
+>
+  <div
+    className="admin-box"
+  >
+    <SectionTitle
+      annotation="Missing translation: administration.annotation"
+      title="Configurer les propositions associées aux modules de vote"
+    />
+    <div
+      className="intro-text"
+    >
+      <Translate
+        className="bold"
+        value="administration.voteProposals.introText1"
+      />
+      <Translate
+        value="administration.voteProposals.introText2"
+      />
+    </div>
+    <div
+      className="admin-content"
+    >
+      <form>
+        Immutable.List [
+          <Connect(DumbVoteProposalForm)
+            editLocale="fr"
+            id={
+              Immutable.Map {
+                isNew: false,
+                toDelete: false,
+                id: "1234",
+                titleEntries: Immutable.List [
+                ],
+                descriptionEntries: Immutable.List [
+                ],
+              }
+            }
+            index={1}
+            nbProposals={2}
+          />,
+          <Connect(DumbVoteProposalForm)
+            editLocale="fr"
+            id={
+              Immutable.Map {
+                isNew: false,
+                toDelete: false,
+                id: "5678",
+                titleEntries: Immutable.List [
+                ],
+                descriptionEntries: Immutable.List [
+                ],
+              }
+            }
+            index={2}
+            nbProposals={2}
+          />,
+        ]
+        <OverlayTrigger
+          defaultOverlayShown={false}
+          overlay={
+            <Tooltip
+              bsClass="tooltip"
+              id="addProposalTooltip"
+              placement="right"
+            >
+              <Translate
+                value="administration.voteProposals.addProposal"
+              />
+            </Tooltip>
+          }
+          placement="top"
+          trigger={
+            Array [
+              "hover",
+              "focus",
+            ]
+          }
+        >
+          <div
+            className="plus margin-l"
+            onClick={[Function]}
+          >
+            +
+          </div>
+        </OverlayTrigger>
+      </form>
+    </div>
+  </div>
+</div>
+`;

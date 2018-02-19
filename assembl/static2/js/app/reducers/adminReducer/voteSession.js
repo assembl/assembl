@@ -365,7 +365,7 @@ export const voteProposalsInOrder = (state: List<number> = List(), action: Redux
   }
 };
 
-const defaultVoteProposition = Map({
+const defaultVoteProposal = Map({
   isNew: true,
   toDelete: false,
   id: '',
@@ -391,7 +391,7 @@ export const voteProposalsById = (state: Map<string, Map> = Map(), action: Redux
     return newState;
   }
   case CREATE_VOTE_PROPOSAL:
-    return state.set(action.id, defaultVoteProposition.set('id', action.id));
+    return state.set(action.id, defaultVoteProposal.set('id', action.id));
   case DELETE_VOTE_PROPOSAL:
     return state.setIn([action.id, 'toDelete'], true);
   case UPDATE_VOTE_PROPOSAL_TITLE:
