@@ -1,0 +1,17 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ParticipantsCount component should match ParticipantsCount snapshot 1`] = `
+<div
+  className="participants-count box background-grey center"
+>
+  <div
+    className="assembl-icon-profil black"
+  />
+  <span
+    className={undefined}
+    style={undefined}
+  >
+    Participants Count
+  </span>
+</div>
+`;

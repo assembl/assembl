@@ -118,4 +118,16 @@
   .link-button:hover {
     background-color: transparent;
   }
+
+  .votes-in-progress {
+    display: flex;
+    justify-content: space-between;
+
+    .participants-count {
+      .assembl-icon-profil:before {
+        font-size: 40px;
+        margin-bottom: 12px;
+      }
+    }
+  }
 }

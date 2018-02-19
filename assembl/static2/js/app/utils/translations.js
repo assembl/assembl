@@ -309,7 +309,8 @@ const Translations = {
         resetTokens: "Supprimer mon vote",
         submit: "Soumettre le vote",
         showVotesInProgress: "Voir les votes en cours",
-        showLess: "Voir moins"
+        showLess: "Voir moins",
+        participantsCount: "%{count} participants ont voté !"
       }
     },
     profile: {
@@ -833,7 +834,8 @@ const Translations = {
         resetTokens: "Reset my vote",
         submit: "Submit vote",
         showVotesInProgress: "Show votes in progress",
-        showLess: "Show less"
+        showLess: "Show less",
+        participantsCount: "%{count} participants voted!"
       }
     },
     profile: {
