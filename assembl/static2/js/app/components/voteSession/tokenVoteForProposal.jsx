@@ -33,14 +33,14 @@ const TokenVoteForProposal = ({
   voteForProposal
 }: Props) => (
   <div>
-    {instructions}
+    <p>{instructions}</p>
     {tokenCategories &&
       tokenCategories.map((category) => {
         if (category) {
           const { color, id, title, totalNumber } = category;
           const currentVote = tokenVotes.get(category.id, 0);
           return (
-            <div key={id}>
+            <div key={id} className="tokens-line">
               <p>{title}</p>
               <div className="tokens">
                 {[...Array(totalNumber).keys()].map(n => (
@@ -50,7 +50,7 @@ const TokenVoteForProposal = ({
                     disabled={n + 1 > currentVote + remainingTokensByCategory.get(id)}
                     onClick={() => voteForProposal(proposalId, id, n + 1)}
                   >
-                    <Circle size="35px" strokeColor={color} fillColor={n + 1 <= currentVote ? color : undefined} />
+                    <Circle size="32px" strokeColor={color} fillColor={n + 1 <= currentVote ? color : undefined} />
                   </Button>
                 ))}
                 <OverlayTrigger placement="top" overlay={resetTokensTooltip}>

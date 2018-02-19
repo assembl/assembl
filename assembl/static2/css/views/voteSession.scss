@@ -41,6 +41,7 @@
     display: flex;
     justify-content: space-around;
     box-shadow: 3px 4px 7px #bbb;
+    padding: 12px 20px 0;
 
     .category-available-tokens {
       display: flex;
@@ -73,6 +74,10 @@
 
     .proposal-vote-modules {
       padding-top: 29px;
+    }
+
+    .tokens-line {
+      margin-top: 14px;
     }
 
     .tokens > button {

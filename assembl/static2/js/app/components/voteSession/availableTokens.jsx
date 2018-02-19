@@ -24,13 +24,13 @@ const AvailableTokens = ({ remainingTokensByCategory, sticky, tokenCategories }:
         });
         return (
           <div key={id} className={divClass}>
-            <div>
+            <div className="text">
               <h4 className="dark-title-4">{title}</h4>
               <Translate value="debate.voteSession.remainingTokens" count={remaining} />
             </div>
             <div className="tokens">
               {[...Array(totalNumber).keys()].map(n => (
-                <Circle key={n + 1} size="35px" strokeColor={color} fillColor={n + 1 <= remaining ? color : undefined} />
+                <Circle key={n + 1} size="32px" strokeColor={color} fillColor={n + 1 <= remaining ? color : undefined} />
               ))}
             </div>
           </div>
