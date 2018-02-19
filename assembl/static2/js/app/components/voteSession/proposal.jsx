@@ -71,7 +71,7 @@ class Proposal extends React.Component<void, Props, State> {
           <Col xs={12} md={7} className="proposal-vote-modules">
             {tokenVoteModule && (
               <TokenVoteForProposal
-                key={tokenVoteModule.id}
+                key={`${id}-TokenVoteForProposal-${tokenVoteModule.id}`}
                 instructions={tokenVoteModule.instructions}
                 proposalId={id}
                 remainingTokensByCategory={remainingTokensByCategory}
@@ -84,7 +84,7 @@ class Proposal extends React.Component<void, Props, State> {
             {modules &&
               filterGaugeVoteModules(modules).map(module => (
                 <GaugeVoteForProposal
-                  key={module.id}
+                  key={`${id}-GaugeVoteForProposal-${module.id}`}
                   {...module}
                   voteForProposal={voteForProposalGauge}
                   proposalId={id}
@@ -95,7 +95,7 @@ class Proposal extends React.Component<void, Props, State> {
             {modules &&
               filterNumberGaugeVoteModules(modules).map(module => (
                 <NumberGaugeVoteForProposal
-                  key={module.id}
+                  key={`${id}-NumberGaugeVoteForProposal-${module.id}`}
                   minimum={module.minimum}
                   maximum={module.maximum}
                   nbTicks={module.nbTicks}
