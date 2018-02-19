@@ -140,6 +140,7 @@ exports[`VoteSession component should match VoteSession snapshot 1`] = `
               }
             }
             voteForProposal={[Function]}
+            voteForProposalGauge={[Function]}
           />
         </Col>
       </Row>
@@ -252,6 +253,7 @@ exports[`VoteSession component should match VoteSession snapshot with empty modu
               }
             }
             voteForProposal={[Function]}
+            voteForProposalGauge={[Function]}
           />
         </Col>
       </Row>

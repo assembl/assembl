@@ -15,7 +15,8 @@ type Props = {
   proposals: Array<ProposalType>,
   remainingTokensByCategory: RemainingTokensByCategory,
   tokenVotes: UserTokenVotes,
-  voteForProposal: Function
+  voteForProposal: Function,
+  voteForProposalGauge: Function
 };
 
 const Proposals = (props: Props) => (
@@ -28,6 +29,7 @@ const Proposals = (props: Props) => (
         remainingTokensByCategory={props.remainingTokensByCategory}
         tokenVotes={props.tokenVotes}
         voteForProposal={props.voteForProposal}
+        voteForProposalGauge={props.voteForProposalGauge}
       />
     ))}
   </Grid>

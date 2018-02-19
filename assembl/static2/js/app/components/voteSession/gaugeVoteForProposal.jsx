@@ -10,8 +10,16 @@ type Choice = {
 };
 
 type GaugeVoteForProposalProps = {
+  id: string, // the vote specification id
+  proposalId: string,
+  voteForProposal: Function,
   instructions: string,
-  choices: ?Array<Choice>
+  choices: ?Array<Choice>,
+  value: number
+};
+
+type GaugeVoteForProposalState = {
+  value: number
 };
 
 const gaugeHeight = '12px';
@@ -68,50 +76,93 @@ const handleIcon = (props) => {
   );
 };
 
-const GaugeVoteForProposal = ({ instructions, choices }: GaugeVoteForProposalProps) => {
-  const marks = {};
-  let maximum = null;
-  let minimum = null;
+class GaugeVoteForProposal extends React.Component<*, GaugeVoteForProposalProps, GaugeVoteForProposalState> {
+  props: GaugeVoteForProposalProps;
 
-  if (choices && choices.length) {
-    const choicesValues = choices.reduce((accumulator, item) => {
-      if ('value' in item) {
-        return accumulator.concat(item.value);
+  state: GaugeVoteForProposalState;
+
+  onAfterChange: Function;
+
+  marks: Object;
+
+  maximum: ?number;
+
+  minimum: ?number;
+
+  inputElement: ?Object;
+
+  constructor(props: GaugeVoteForProposalProps) {
+    super(props);
+    this.state = { value: this.props.value };
+    this.onAfterChange = this.onAfterChange.bind(this);
+
+    this.marks = {};
+    this.maximum = null;
+    this.minimum = null;
+    this.inputElement = null;
+
+    if (props.choices && props.choices.length) {
+      const choicesValues = props.choices.reduce((accumulator, item) => {
+        if ('value' in item) {
+          return accumulator.concat(item.value);
+        }
+        return accumulator;
+      }, []);
+      if (choicesValues.length) {
+        this.maximum = Math.max(...choicesValues);
+        this.minimum = Math.min(...choicesValues);
       }
-      return accumulator;
-    }, []);
-    if (choicesValues.length) {
-      maximum = Math.max(...choicesValues);
-      minimum = Math.min(...choicesValues);
+    }
+
+    if (props.choices && props.choices.length) {
+      props.choices.forEach((choice) => {
+        this.marks[`${choice.value}`] = {
+          style: markStyle,
+          label: <div>{choice.label}</div>
+        };
+      });
     }
   }
 
-  if (choices && choices.length) {
-    choices.forEach((choice) => {
-      marks[`${choice.value}`] = {
-        style: markStyle,
-        label: <div>{choice.label}</div>
-      };
+  onAfterChange(value: number) {
+    this.setState({
+      value: value
     });
+    if (this.inputElement && 'value' in this.inputElement) {
+      this.inputElement.value = value;
+    }
+    this.props.voteForProposal(this.props.proposalId, this.props.id, value);
   }
 
-  return (
-    <div className="gauge-vote-for-proposal">
-      <p>{instructions}</p>
-      <Slider
-        min={minimum}
-        max={maximum}
-        marks={marks}
-        included={false}
-        step={null}
-        trackStyle={trackStyle}
-        railStyle={railStyle}
-        handleStyle={handleStyle}
-        handle={handleIcon}
-      />
-    </div>
-  );
-};
+  render() {
+    return (
+      <div className="gauge-vote-for-proposal">
+        <p>{this.props.instructions}</p>
+        <Slider
+          min={this.minimum}
+          max={this.maximum}
+          marks={this.marks}
+          included={false}
+          step={null}
+          trackStyle={trackStyle}
+          railStyle={railStyle}
+          handleStyle={handleStyle}
+          handle={handleIcon}
+          defaultValue={this.state.value}
+          onAfterChange={this.onAfterChange}
+        />
+        <input
+          type="hidden"
+          name={`vote-for-proposal-${this.props.proposalId}-vote-specification-${this.props.id}`}
+          value={this.state.value}
+          ref={(input) => {
+            this.inputElement = input;
+          }}
+        />
+      </div>
+    );
+  }
+}
 
 type NumberGaugeVoteForProposalProps = {
   instructions: string,

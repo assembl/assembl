@@ -19,10 +19,20 @@ type Props = {
   remainingTokensByCategory: RemainingTokensByCategory,
   title: ?string,
   tokenVotes: UserTokenVotes,
-  voteForProposal: Function
+  voteForProposal: Function,
+  voteForProposalGauge: Function
 };
 
-const Proposal = ({ description, id, modules, remainingTokensByCategory, title, tokenVotes, voteForProposal }: Props) => {
+const Proposal = ({
+  description,
+  id,
+  modules,
+  remainingTokensByCategory,
+  title,
+  tokenVotes,
+  voteForProposal,
+  voteForProposalGauge
+}: Props) => {
   const tokenVoteModule = modules ? findTokenVoteModule(modules) : null;
   return (
     <div className="theme-box">
@@ -45,10 +55,15 @@ const Proposal = ({ description, id, modules, remainingTokensByCategory, title, 
           )}
 
           {modules &&
-            modules
-              .filter(module => module.voteType === 'gauge_vote_specification')
-              // $FlowFixMe
-              .map(module => <GaugeVoteForProposal key={module.id} {...module} />)}
+            modules.filter(module => module.voteType === 'gauge_vote_specification').map(module => (
+              <GaugeVoteForProposal
+                key={module.id}
+                {...module}
+                voteForProposal={voteForProposalGauge}
+                proposalId={id}
+                value={0} // TODO: use myVotes
+              />
+            ))}
 
           {modules &&
             modules

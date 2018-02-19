@@ -55,11 +55,14 @@ type Props = {
 export type RemainingTokensByCategory = Map<string, number>;
 
 export type TokenVotesForProposal = Map<string, number>;
+export type GaugeVotesForProposal = Map<string, number>;
 
 export type UserTokenVotes = Map<string, TokenVotesForProposal>;
+export type UserGaugeVotes = Map<string, GaugeVotesForProposal>;
 
 type State = {
   userTokenVotes: UserTokenVotes,
+  userGaugeVotes: UserGaugeVotes,
   availableTokensSticky: boolean
 };
 
@@ -78,7 +81,8 @@ class DumbVoteSession extends React.Component<void, Props, State> {
     super(props);
     this.state = {
       availableTokensSticky: false,
-      userTokenVotes: Map()
+      userTokenVotes: Map(),
+      userGaugeVotes: Map()
     };
   }
 
@@ -105,6 +109,14 @@ class DumbVoteSession extends React.Component<void, Props, State> {
     const setVote = () =>
       this.setState({
         userTokenVotes: this.state.userTokenVotes.setIn([proposalId, categoryId], value)
+      });
+    promptForLoginOr(setVote)();
+  };
+
+  voteForProposalGauge = (proposalId: string, voteSpecificationId: string, value: number): void => {
+    const setVote = () =>
+      this.setState({
+        userGaugeVotes: this.state.userGaugeVotes.setIn([proposalId, voteSpecificationId], value)
       });
     promptForLoginOr(setVote)();
   };
@@ -199,6 +211,7 @@ class DumbVoteSession extends React.Component<void, Props, State> {
                   remainingTokensByCategory={remainingTokensByCategory}
                   tokenVotes={this.state.userTokenVotes}
                   voteForProposal={this.voteForProposal}
+                  voteForProposalGauge={this.voteForProposalGauge}
                 />
               </Col>
             </Row>
