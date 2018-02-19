@@ -381,11 +381,12 @@ const Translations = {
       voteWithTokens: "Vote par jetons",
       voteWithGauges: "Vote par jauge(s)",
       gauge: "Jauge %{number}",
+      token: "Jeton %{number}",
       tokenVoteCheckbox:
         "Le vote par jetons permet de sélectionner des propositions à la proportionnelle. Chaque participant dispose d'une certaine quantité de jetons et devra les répartir sur les propositions.",
       gaugeVoteCheckbox: "Vous pouvez choisir d'avoir une ou plusieurs jauges",
       tokenCategoryNumber: "Nombre de types de jetons",
-      tokenNumber: "Nombre de jetons",
+      tokenNumber: "Nombre de jetons par personne",
       tokenTitle: "Intitulé du jeton",
       tokenColor: "Couleur du jeton",
       headerTitle: "Bandeau de haut de page",
@@ -395,9 +396,9 @@ const Translations = {
       exclusive: "Exclusifs",
       tokenVoteInstructions: "Consigne du vote par jetons",
       proposalsSectionTitle: "Titre de la section",
+      voteModulesIntroText1: "Vous avez choisi le dispositif de vote.",
+      voteModulesIntroText2: "Pour modifier votre choix, modifiez la ligne de temps du débat.",
       voteProposals: {
-        introText1: "Vous avez choisi le dispositif de vote.",
-        introText2: "Pour modifier votre choix, modifiez la ligne de temps du débat.",
         defineProposal: "Définir proposition %{number}",
         addProposal: "Ajouter une proposition",
         deleteProposal: "Supprimer la proposition",
@@ -916,6 +917,7 @@ const Translations = {
       voteWithTokens: "Tokens vote",
       voteWithGauges: "Gauge(s) vote",
       gauge: "Gauge %{number}",
+      token: "Token %{number}",
       tokenVoteCheckbox:
         "The token vote module allows you to select propositions proportionnaly. Each participant has a certain amount of tokens et will have to spread them on the different propositions",
       gaugeVoteCheckbox: "You can choose to have one or several gages",
@@ -943,12 +945,13 @@ const Translations = {
       valueTitle: "Value title",
       numberValue: "Number value",
       tokenCategoryNumber: "Number of token types",
-      tokenNumber: "Number of tokens",
+      tokenNumber: "Number of tokens per participant",
       tokenTitle: "Token title",
       tokenColor: "Color of the token",
       voteProposals: {
         introText1: "You chose the vote module",
         introText2: "To modify this choice, modify the timeline of the debate.",
+        gauge: "Gauge %{number}",
         defineProposal: "Define proposal %{number}",
         addProposal: "Add a proposal",
         deleteProposal: "Delete this proposal",
@@ -957,7 +960,6 @@ const Translations = {
         title: "Title of the proposal",
         description: "Description",
         tokenVote: "Token vote",
-        gauge: "Gauge %{number}",
         gaugeSettings: "Modify the settings"
       },
       sections: {

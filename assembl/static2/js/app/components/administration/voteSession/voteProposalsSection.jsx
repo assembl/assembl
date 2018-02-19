@@ -22,8 +22,8 @@ const DumbVoteProposalsSection = ({ voteProposals, editLocale, addVoteProposal }
         annotation={I18n.t('administration.annotation')}
       />
       <div className="intro-text">
-        <Translate className="bold" value="administration.voteProposals.introText1" />
-        <Translate value="administration.voteProposals.introText2" />
+        <Translate className="bold" value="administration.voteModulesIntroText1" />
+        <Translate value="administration.voteModulesIntroText2" />
       </div>
       <div className="admin-content">
         <form>

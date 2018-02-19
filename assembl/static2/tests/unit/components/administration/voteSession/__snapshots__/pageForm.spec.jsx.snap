@@ -9,6 +9,17 @@ exports[`Vote Session DumbPageForm component should render a form to update the 
     title="Missing translation: administration.voteSession.0"
   />
   <div
+    className="intro-text"
+  >
+    <Translate
+      className="bold"
+      value="administration.voteModulesIntroText1"
+    />
+    <Translate
+      value="administration.voteModulesIntroText2"
+    />
+  </div>
+  <div
     className="admin-content"
   >
     <div

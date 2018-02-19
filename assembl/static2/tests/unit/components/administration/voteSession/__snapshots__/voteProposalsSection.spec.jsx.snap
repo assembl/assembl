@@ -16,10 +16,10 @@ exports[`VoteProposalsSection component should render a VoteProposalsSection com
     >
       <Translate
         className="bold"
-        value="administration.voteProposals.introText1"
+        value="administration.voteModulesIntroText1"
       />
       <Translate
-        value="administration.voteProposals.introText2"
+        value="administration.voteModulesIntroText2"
       />
     </div>
     <div
@@ -78,10 +78,10 @@ exports[`VoteProposalsSection component should render a voteProposalsSection wit
     >
       <Translate
         className="bold"
-        value="administration.voteProposals.introText1"
+        value="administration.voteModulesIntroText1"
       />
       <Translate
-        value="administration.voteProposals.introText2"
+        value="administration.voteModulesIntroText2"
       />
     </div>
     <div

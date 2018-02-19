@@ -1,7 +1,7 @@
 // @flow
 import React from 'react';
 import { connect } from 'react-redux';
-import { I18n } from 'react-redux-i18n';
+import { I18n, Translate } from 'react-redux-i18n';
 import { FormGroup } from 'react-bootstrap';
 import SectionTitle from '../sectionTitle';
 import FormControlWithLabel from '../../common/formControlWithLabel';
@@ -60,6 +60,10 @@ const DumbPageForm = ({
   return (
     <div className="admin-box">
       <SectionTitle title={I18n.t('administration.voteSession.0')} annotation={I18n.t('administration.annotation')} />
+      <div className="intro-text">
+        <Translate className="bold" value="administration.voteModulesIntroText1" />
+        <Translate value="administration.voteModulesIntroText2" />
+      </div>
       <div className="admin-content">
         <div className="form-container">
           <form>
