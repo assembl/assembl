@@ -38,7 +38,9 @@ import {
   UPDATE_GAUGE_VOTE_CHOICE_LABEL,
   UPDATE_GAUGE_MINIMUM,
   UPDATE_GAUGE_MAXIMUM,
-  UPDATE_GAUGE_UNIT
+  UPDATE_GAUGE_UNIT,
+  ADD_MODULE_TO_PROPOSAL,
+  DELETE_MODULE_FROM_PROPOSAL
 } from '../../actions/actionTypes';
 import { updateInLangstringEntries } from '../../utils/i18n';
 
@@ -176,7 +178,9 @@ const defaultTokenModule = Map({
   type: 'tokens',
   instructionsEntries: List(),
   exclusiveCategories: false,
-  tokenCategories: List()
+  tokenCategories: List(),
+  proposalId: null,
+  voteSpecTemplateId: null
 });
 
 const defaultTextGaugeChoice = Map({
@@ -191,7 +195,9 @@ const defaultTextGaugeModule = Map({
   type: 'gauge',
   instructionsEntries: List(),
   isNumberGauge: false,
-  choices: List()
+  choices: List(),
+  proposalId: null,
+  voteSpecTemplateId: null
 });
 
 const defaultNumberGaugeModule = Map({
@@ -203,7 +209,9 @@ const defaultNumberGaugeModule = Map({
   isNumberGauge: true,
   minimum: Number,
   maximum: Number,
-  unit: ''
+  unit: '',
+  proposalId: null,
+  voteSpecTemplateId: null
 });
 
 export const modulesById = (state: Map<string, Map> = Map(), action: ReduxAction<Action>) => {
@@ -219,7 +227,9 @@ export const modulesById = (state: Map<string, Map> = Map(), action: ReduxAction
           id: m.id,
           instructionsEntries: m.instructionsEntries,
           exclusiveCategories: m.exclusiveCategories,
-          tokenCategories: m.tokenCategories.map(t => t.id)
+          tokenCategories: m.tokenCategories.map(t => t.id),
+          proposalId: m.proposalId,
+          voteSpecTemplateId: m.voteSpecTemplateId
         });
         newState = newState.set(m.id, moduleInfo);
       } else if (m.voteType === 'number_gauge_vote_specification') {
@@ -233,7 +243,9 @@ export const modulesById = (state: Map<string, Map> = Map(), action: ReduxAction
           isNumberGauge: true,
           maximum: m.maximum,
           minimum: m.minimum,
-          unit: m.unit
+          unit: m.unit,
+          proposalId: m.proposalId,
+          voteSpecTemplateId: m.voteSpecTemplateId
         });
         newState = newState.set(m.id, moduleInfo);
       } else if (m.voteType === 'gauge_vote_specification') {
@@ -245,7 +257,9 @@ export const modulesById = (state: Map<string, Map> = Map(), action: ReduxAction
           instructionsEntries: m.instructionsEntries,
           nbTicks: m.choices.size,
           isNumberGauge: false,
-          choices: m.choices.map(c => c.id)
+          choices: m.choices.map(c => c.id),
+          proposalId: m.proposalId,
+          voteSpecTemplateId: m.voteSpecTemplateId
         });
         newState = newState.set(m.id, moduleInfo);
       }
@@ -338,6 +352,8 @@ export const voteProposalsHaveChanged = (state: boolean = false, action: ReduxAc
   case DELETE_VOTE_PROPOSAL:
   case UPDATE_VOTE_PROPOSAL_TITLE:
   case UPDATE_VOTE_PROPOSAL_DESCRIPTION:
+  case ADD_MODULE_TO_PROPOSAL:
+  case DELETE_MODULE_FROM_PROPOSAL:
     return true;
   case UPDATE_VOTE_PROPOSALS:
     return false;
@@ -370,7 +386,8 @@ const defaultVoteProposal = Map({
   toDelete: false,
   id: '',
   titleEntries: List(),
-  descriptionEntries: List()
+  descriptionEntries: List(),
+  modules: List()
 });
 
 export const voteProposalsById = (state: Map<string, Map> = Map(), action: ReduxAction<Action>) => {
@@ -384,7 +401,8 @@ export const voteProposalsById = (state: Map<string, Map> = Map(), action: Redux
         toDelete: false,
         id: proposal.id,
         titleEntries: proposal.titleEntries,
-        descriptionEntries: proposal.descriptionEntries
+        descriptionEntries: proposal.descriptionEntries,
+        modules: proposal.modules ? proposal.modules.map(m => m.voteSpecTemplateId) : []
       });
       newState = newState.set(proposal.id, proposalInfo);
     });
@@ -398,6 +416,12 @@ export const voteProposalsById = (state: Map<string, Map> = Map(), action: Redux
     return state.updateIn([action.id, 'titleEntries'], updateInLangstringEntries(action.locale, action.value));
   case UPDATE_VOTE_PROPOSAL_DESCRIPTION:
     return state.updateIn([action.id, 'descriptionEntries'], updateInLangstringEntries(action.locale, fromJS(action.value)));
+  case ADD_MODULE_TO_PROPOSAL:
+    return state.updateIn([action.id, 'modules'], modules => modules.push(action.moduleId));
+  case DELETE_MODULE_FROM_PROPOSAL: {
+    const index = state.getIn([action.id, 'modules']).indexOf(action.moduleId);
+    return state.updateIn([action.id, 'modules'], modules => modules.delete(index));
+  }
   default:
     return state;
   }

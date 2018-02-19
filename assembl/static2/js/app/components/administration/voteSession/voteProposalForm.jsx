@@ -2,6 +2,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { I18n, Translate } from 'react-redux-i18n';
+import some from 'lodash/some';
+import includes from 'lodash/includes';
 import { OverlayTrigger, Button, Checkbox } from 'react-bootstrap';
 import FormControlWithLabel from '../../common/formControlWithLabel';
 import { getEntryValueForLocale } from '../../../utils/i18n';
@@ -11,7 +13,9 @@ import {
   updateVoteProposalDescription,
   deleteVoteProposal,
   moveProposalUp,
-  moveProposalDown
+  moveProposalDown,
+  addModuleToProposal,
+  deleteModuleFromProposal
 } from '../../../actions/adminActions/voteSession';
 import { displayModal, closeModal } from '../../../utils/utilityManager';
 
@@ -27,8 +31,11 @@ type VoteProposalFormProps = {
   nbProposals: number,
   handleUpClick: Function,
   handleDownClick: Function,
+  associateModuleToProposal: Function,
+  deassociateModuleToProposal: Function,
   tokenModules: Object,
-  gaugeModules: Object
+  gaugeModules: Object,
+  proposalModules: Object
 };
 
 const DumbVoteProposalForm = ({
@@ -44,7 +51,10 @@ const DumbVoteProposalForm = ({
   handleUpClick,
   handleDownClick,
   tokenModules,
-  gaugeModules
+  gaugeModules,
+  proposalModules,
+  associateModuleToProposal,
+  deassociateModuleToProposal
 }: VoteProposalFormProps) => {
   if (toDelete) {
     return null;
@@ -112,16 +122,40 @@ const DumbVoteProposalForm = ({
         type="rich-text"
         required
       />
-      {tokenModules.map(moduleId => (
-        <Checkbox key={moduleId} checked onChange={() => {}}>
-          <Translate value="administration.voteProposals.tokenVote" />
-        </Checkbox>
-      ))}
+      {tokenModules.map((moduleId) => {
+        const isChecked = proposalModules ? some(proposalModules.toJS(), id => includes(moduleId, id)) : false;
+        return (
+          <Checkbox
+            key={moduleId}
+            checked={isChecked}
+            onChange={() => {
+              if (isChecked) {
+                deassociateModuleToProposal(moduleId);
+              } else {
+                associateModuleToProposal(moduleId);
+              }
+            }}
+          >
+            <Translate value="administration.voteProposals.tokenVote" />
+          </Checkbox>
+        );
+      })}
       {gaugeModules.map((moduleId, idx) => {
         const number = gaugeModules.size > 1 ? idx + 1 : '';
+        const isChecked = proposalModules ? some(proposalModules.toJS(), id => includes(moduleId, id)) : false;
         return (
           <div key={moduleId}>
-            <Checkbox className="inline" checked onChange={() => {}}>
+            <Checkbox
+              className="inline"
+              checked={isChecked}
+              onChange={() => {
+                if (isChecked) {
+                  deassociateModuleToProposal(moduleId);
+                } else {
+                  associateModuleToProposal(moduleId);
+                }
+              }}
+            >
               <Translate value="administration.voteProposals.gauge" number={number} />
             </Checkbox>
             <span
@@ -150,6 +184,7 @@ const mapStateToProps = ({ admin }, { id, editLocale }) => {
     description: description ? description.toJS() : null,
     toDelete: proposal.get('toDelete', false),
     order: proposal.get('order'),
+    proposalModules: proposal.get('modules'),
     tokenModules: modulesInOrder.filter(
       moduleId => modulesById.getIn([moduleId, 'type']) === 'tokens' && !modulesById.getIn([id, 'toDelete'])
     ),
@@ -171,7 +206,9 @@ const mapDispatchToProps = (dispatch, { id }) => ({
     dispatch(updateVoteProposalDescription(id, locale, value));
   },
   handleUpClick: () => dispatch(moveProposalUp(id)),
-  handleDownClick: () => dispatch(moveProposalDown(id))
+  handleDownClick: () => dispatch(moveProposalDown(id)),
+  associateModuleToProposal: moduleId => dispatch(addModuleToProposal(id, moduleId)),
+  deassociateModuleToProposal: moduleId => dispatch(deleteModuleFromProposal(id, moduleId))
 });
 
 export { DumbVoteProposalForm };

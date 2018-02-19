@@ -69,6 +69,8 @@ export const UPDATE_VOTE_PROPOSAL_TITLE: 'UPDATE_VOTE_PROPOSAL_TITLE' = 'UPDATE_
 export const UPDATE_VOTE_PROPOSAL_DESCRIPTION: 'UPDATE_VOTE_PROPOSAL_DESCRIPTION' = 'UPDATE_VOTE_PROPOSAL_DESCRIPTION';
 export const MOVE_PROPOSAL_UP: 'MOVE_PROPOSAL_UP' = 'MOVE_PROPOSAL_UP';
 export const MOVE_PROPOSAL_DOWN: 'MOVE_PROPOSAL_DOWN' = 'MOVE_PROPOSAL_DOWN';
+export const ADD_MODULE_TO_PROPOSAL: 'ADD_MODULE_TO_PROPOSAL' = 'ADD_MODULE_TO_PROPOSAL';
+export const DELETE_MODULE_FROM_PROPOSAL: 'DELETE_MODULE_FROM_PROPOSAL' = 'DELETE_MODULE_FROM_PROPOSAL';
 
 export type UpdateContentLocaleById = {
   type: typeof UPDATE_CONTENT_LOCALE_BY_ID,
@@ -479,6 +481,18 @@ export type UpdateGaugeUnit = {
   type: typeof UPDATE_GAUGE_UNIT
 };
 
+export type AddModuleToProposal = {
+  id: string,
+  moduleId: string,
+  type: typeof ADD_MODULE_TO_PROPOSAL
+};
+
+export type DeleteModuleFromProposal = {
+  id: string,
+  moduleId: string,
+  type: typeof DELETE_MODULE_FROM_PROPOSAL
+};
+
 type BasicAction = {
   type: string
 };
@@ -535,6 +549,8 @@ type VoteSessionActions =
   | UpdateGaugeMinimum
   | UpdateGaugeMaximum
   | UpdateGaugeUnit
+  | AddModuleToProposal
+  | DeleteModuleFromProposal
   | UpdateGaugeVoteInstructions;
 
 export type Action =

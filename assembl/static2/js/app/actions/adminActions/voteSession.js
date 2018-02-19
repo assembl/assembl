@@ -239,3 +239,15 @@ export const moveProposalDown = (id: string): actionTypes.MoveProposalDown => ({
   id: id,
   type: actionTypes.MOVE_PROPOSAL_DOWN
 });
+
+export const addModuleToProposal = (id: string, moduleId: string): actionTypes.AddModuleToProposal => ({
+  id: id,
+  moduleId: moduleId,
+  type: actionTypes.ADD_MODULE_TO_PROPOSAL
+});
+
+export const deleteModuleFromProposal = (id: string, moduleId: string): actionTypes.DeleteModuleFromProposal => ({
+  id: id,
+  moduleId: moduleId,
+  type: actionTypes.DELETE_MODULE_FROM_PROPOSAL
+});

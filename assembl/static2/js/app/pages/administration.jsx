@@ -93,6 +93,7 @@ class Administration extends React.Component {
     if (nextProps.voteSession !== this.props.voteSession) {
       this.putVoteSessionInStore(nextProps.voteSession);
       this.putVoteModulesInStore(nextProps.voteSession);
+      this.putVoteProposalsInStore(nextProps.voteSession);
     }
 
     this.putResourcesCenterInStore(nextProps.resourcesCenter);
