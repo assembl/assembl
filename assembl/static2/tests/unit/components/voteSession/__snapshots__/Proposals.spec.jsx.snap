@@ -14,7 +14,7 @@ exports[`Proposals component should match Proposals snapshot 1`] = `
         className="col-md-5 col-xs-12"
       >
         <h3
-          className="dark-title-3"
+          className="proposal-title dark-title-3"
         >
           Foo
         </h3>
@@ -23,7 +23,7 @@ exports[`Proposals component should match Proposals snapshot 1`] = `
         </p>
       </div>
       <div
-        className="col-md-7 col-xs-12"
+        className="proposal-vote-modules col-md-7 col-xs-12"
       >
         <div>
           If we generate the feed, we can get to the AGP driver through the primary ADP interface!
@@ -461,7 +461,7 @@ exports[`Proposals component should match Proposals snapshot 1`] = `
         className="col-md-5 col-xs-12"
       >
         <h3
-          className="dark-title-3"
+          className="proposal-title dark-title-3"
         >
           Bar
         </h3>
@@ -470,7 +470,7 @@ exports[`Proposals component should match Proposals snapshot 1`] = `
         </p>
       </div>
       <div
-        className="col-md-7 col-xs-12"
+        className="proposal-vote-modules col-md-7 col-xs-12"
       >
         <div>
           If we generate the feed, we can get to the AGP driver through the primary ADP interface!
