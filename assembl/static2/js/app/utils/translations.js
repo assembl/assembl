@@ -307,7 +307,9 @@ const Translations = {
         },
         remainingTokens: "Il vous reste %{count} jetons disponibles.",
         resetTokens: "Supprimer mon vote",
-        submit: "Soumettre le vote"
+        submit: "Soumettre le vote",
+        showVotesInProgress: "Voir les votes en cours",
+        showLess: "Voir moins"
       }
     },
     profile: {
@@ -829,7 +831,9 @@ const Translations = {
         },
         remainingTokens: "You have %{count} tokens remaining.",
         resetTokens: "Reset my vote",
-        submit: "Submit vote"
+        submit: "Submit vote",
+        showVotesInProgress: "Show votes in progress",
+        showLess: "Show less"
       }
     },
     profile: {

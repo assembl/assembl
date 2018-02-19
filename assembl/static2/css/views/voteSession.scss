@@ -94,4 +94,28 @@
     margin-top: 50px;
     margin-bottom: 100px;
   }
+
+  .link-button {
+    border: none;
+    font-size: $font-size-xs;
+    color: $link-color;
+    text-decoration: none;
+
+    &:hover {
+      color: $link-hover-color;
+      text-decoration: none;
+    }
+
+    [class^='assembl-icon-']:before,
+    [class*=' assembl-icon-']:before {
+      font-size: $font-size-xxs;
+      margin-left: 5px;
+    }
+  }
+
+  .link-button:focus,
+  .link-button:active,
+  .link-button:hover {
+    background-color: transparent;
+  }
 }
