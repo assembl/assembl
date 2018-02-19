@@ -97,7 +97,7 @@ class Proposal extends React.Component<void, Props, State> {
           </Col>
         </Row>
         <Row>
-          <Col xs={12} md="12" className="center">
+          <Col xs={12} md={12} className="center">
             {this.state.showVotesInProgress ? (
               <Button className="link-button" onClick={this.toggleShowVotesInProgress}>
                 <Translate value="debate.voteSession.showLess" />

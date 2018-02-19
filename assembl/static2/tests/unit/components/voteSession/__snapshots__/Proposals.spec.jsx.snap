@@ -369,11 +369,7 @@ exports[`Proposals component should match Proposals snapshot 1`] = `
           </p>
           <div
             className="rc-slider"
-            onBlur={[Function]}
-            onFocus={[Function]}
-            onKeyDown={[Function]}
             onMouseDown={[Function]}
-            onMouseUp={[Function]}
             onTouchStart={[Function]}
             style={undefined}
           >
@@ -402,7 +398,6 @@ exports[`Proposals component should match Proposals snapshot 1`] = `
             />
             <div
               className="rc-slider-handle"
-              index={0}
               role="slider"
               style={
                 Object {
@@ -414,7 +409,6 @@ exports[`Proposals component should match Proposals snapshot 1`] = `
                   "width": "0",
                 }
               }
-              tabIndex={0}
             >
               <svg
                 className="pointer"
@@ -475,11 +469,7 @@ exports[`Proposals component should match Proposals snapshot 1`] = `
           </p>
           <div
             className="rc-slider"
-            onBlur={[Function]}
-            onFocus={[Function]}
-            onKeyDown={[Function]}
             onMouseDown={[Function]}
-            onMouseUp={[Function]}
             onTouchStart={[Function]}
             style={undefined}
           >
@@ -508,7 +498,6 @@ exports[`Proposals component should match Proposals snapshot 1`] = `
             />
             <div
               className="rc-slider-handle"
-              index={0}
               role="slider"
               style={
                 Object {
@@ -520,7 +509,6 @@ exports[`Proposals component should match Proposals snapshot 1`] = `
                   "width": "0",
                 }
               }
-              tabIndex={0}
             >
               <svg
                 className="pointer"
@@ -965,11 +953,7 @@ exports[`Proposals component should match Proposals snapshot 1`] = `
           </p>
           <div
             className="rc-slider"
-            onBlur={[Function]}
-            onFocus={[Function]}
-            onKeyDown={[Function]}
             onMouseDown={[Function]}
-            onMouseUp={[Function]}
             onTouchStart={[Function]}
             style={undefined}
           >
@@ -998,7 +982,6 @@ exports[`Proposals component should match Proposals snapshot 1`] = `
             />
             <div
               className="rc-slider-handle"
-              index={0}
               role="slider"
               style={
                 Object {
@@ -1010,7 +993,6 @@ exports[`Proposals component should match Proposals snapshot 1`] = `
                   "width": "0",
                 }
               }
-              tabIndex={0}
             >
               <svg
                 className="pointer"
@@ -1071,11 +1053,7 @@ exports[`Proposals component should match Proposals snapshot 1`] = `
           </p>
           <div
             className="rc-slider"
-            onBlur={[Function]}
-            onFocus={[Function]}
-            onKeyDown={[Function]}
             onMouseDown={[Function]}
-            onMouseUp={[Function]}
             onTouchStart={[Function]}
             style={undefined}
           >
@@ -1104,7 +1082,6 @@ exports[`Proposals component should match Proposals snapshot 1`] = `
             />
             <div
               className="rc-slider-handle"
-              index={0}
               role="slider"
               style={
                 Object {
@@ -1116,7 +1093,6 @@ exports[`Proposals component should match Proposals snapshot 1`] = `
                   "width": "0",
                 }
               }
-              tabIndex={0}
             >
               <svg
                 className="pointer"
