@@ -31,7 +31,7 @@ type VoteProposalFormProps = {
   gaugeModules: Object
 };
 
-const VoteProposalForm = ({
+const DumbVoteProposalForm = ({
   index,
   title,
   description,
@@ -174,4 +174,6 @@ const mapDispatchToProps = (dispatch, { id }) => ({
   handleDownClick: () => dispatch(moveProposalDown(id))
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(VoteProposalForm);
+export { DumbVoteProposalForm };
+
+export default connect(mapStateToProps, mapDispatchToProps)(DumbVoteProposalForm);

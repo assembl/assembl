@@ -1,0 +1,63 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`VoteProposalsSection component should render a VoteProposalsSection component without any proposal 1`] = `
+<div
+  className="vote-proposals-section"
+>
+  <div
+    className="admin-box"
+  >
+    <SectionTitle
+      annotation="Missing translation: administration.annotation"
+      title="Configurer les propositions associées aux modules de vote"
+    />
+    <div
+      className="intro-text"
+    >
+      <Translate
+        className="bold"
+        value="administration.voteProposals.introText1"
+      />
+      <Translate
+        value="administration.voteProposals.introText2"
+      />
+    </div>
+    <div
+      className="admin-content"
+    >
+      <form>
+        Immutable.List [
+        ]
+        <OverlayTrigger
+          defaultOverlayShown={false}
+          overlay={
+            <Tooltip
+              bsClass="tooltip"
+              id="addProposalTooltip"
+              placement="right"
+            >
+              <Translate
+                value="administration.voteProposals.addProposal"
+              />
+            </Tooltip>
+          }
+          placement="top"
+          trigger={
+            Array [
+              "hover",
+              "focus",
+            ]
+          }
+        >
+          <div
+            className="plus margin-l"
+            onClick={[Function]}
+          >
+            +
+          </div>
+        </OverlayTrigger>
+      </form>
+    </div>
+  </div>
+</div>
+`;

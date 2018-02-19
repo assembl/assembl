@@ -14,7 +14,7 @@ type VoteProposalsSectionProps = {
   addVoteProposal: Function
 };
 
-const VoteProposalsSection = ({ voteProposals, editLocale, addVoteProposal }: VoteProposalsSectionProps) => (
+const DumbVoteProposalsSection = ({ voteProposals, editLocale, addVoteProposal }: VoteProposalsSectionProps) => (
   <div className="vote-proposals-section">
     <div className="admin-box">
       <SectionTitle
@@ -57,4 +57,6 @@ const mapDispatchToProps = dispatch => ({
   }
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(VoteProposalsSection);
+export { DumbVoteProposalsSection };
+
+export default connect(mapStateToProps, mapDispatchToProps)(DumbVoteProposalsSection);
