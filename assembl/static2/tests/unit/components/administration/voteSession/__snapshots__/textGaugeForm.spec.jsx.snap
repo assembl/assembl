@@ -1,0 +1,14 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ModulesSection component should render a form to set up a textual gauge 1`] = `
+<div>
+  <FormControlWithLabel
+    label="Missing translation: administration.valueTitle 2"
+    labelAlwaysVisible={false}
+    onChange={[Function]}
+    required={true}
+    type="text"
+    value=""
+  />
+</div>
+`;
