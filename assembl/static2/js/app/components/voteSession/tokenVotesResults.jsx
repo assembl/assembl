@@ -15,8 +15,8 @@ type CreateTooltip = (TokenCategory, number) => React.Element<*>;
 export const createTooltip: CreateTooltip = (category, count) => (
   <Tooltip
     id={`${category.typename}-token-tooltip`}
-    className="no-arrow-tooltip"
-    style={{ 'background-color': category.color, '&:*': category.color }}
+    className="no-arrow-tooltip token-tooltip"
+    style={{ backgroundColor: category.color }}
   >
     <Translate value="debate.voteSession.tokenTooltip" count={count} name={category.title} />
   </Tooltip>
@@ -44,7 +44,9 @@ const TokenVotesResults = ({ categories, votes }: Props) => {
     .filter(e => e); // remove null items
   return (
     <div className="box background-grey" style={{ width: 200 }}>
-      <Doughnut elements={elements} />
+      <div className="doughnut-container">
+        <Doughnut elements={elements} />
+      </div>
       <Translate value="debate.voteSession.votesTotal" count={total} />
     </div>
   );

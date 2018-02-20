@@ -129,5 +129,24 @@
         margin-bottom: 12px;
       }
     }
+
+    .doughnut-container {
+      height: 140px;
+      width: 140px;
+
+      .doughnut {
+        .circle {
+          stroke-width: 17px;
+        }
+      }
+    }
+  }
+}
+
+.token-tooltip {
+  border-radius: 4px;
+
+  .tooltip-inner {
+    background: none;
   }
 }
