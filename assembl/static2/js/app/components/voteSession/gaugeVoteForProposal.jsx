@@ -1,4 +1,5 @@
 // @flow
+/* eslint-disable react/no-multi-comp */
 import React from 'react';
 import Slider from 'rc-slider';
 import Pointer from '../svg/pointer';
@@ -19,6 +20,10 @@ type GaugeVoteForProposalProps = {
 };
 
 type GaugeVoteForProposalState = {
+  value: number
+};
+
+type NumberGaugeVoteForProposalState = {
   value: number
 };
 
@@ -165,75 +170,123 @@ class GaugeVoteForProposal extends React.Component<*, GaugeVoteForProposalProps,
 }
 
 type NumberGaugeVoteForProposalProps = {
+  id: string, // the vote specification id
   instructions: ?string,
   minimum: ?number,
   maximum: ?number,
   nbTicks: ?number,
-  unit: ?string
+  unit: ?string,
+  proposalId: string,
+  voteForProposal: Function,
+  value: number
 };
 
-const NumberGaugeVoteForProposal = (props: NumberGaugeVoteForProposalProps) => {
-  const marks = {};
-  let step = null;
-  const minimum = props.minimum;
-  const maximum = props.maximum;
-  const instructions = props.instructions;
-  const nbTicks = props.nbTicks;
-  const unit = props.unit;
+class NumberGaugeVoteForProposal extends React.Component<*, NumberGaugeVoteForProposalProps, NumberGaugeVoteForProposalState> {
+  props: NumberGaugeVoteForProposalProps;
 
-  if (minimum !== undefined && minimum !== null && maximum !== undefined && maximum !== null) {
-    marks[`${minimum}`] = {
-      style: markStyle,
-      label: (
-        <div>
-          {minimum} {unit}
-        </div>
-      )
-    };
+  state: NumberGaugeVoteForProposalState;
 
-    marks[`${maximum}`] = {
-      style: markStyle,
-      label: (
-        <div>
-          {maximum} {unit}
-        </div>
-      )
-    };
+  onAfterChange: Function;
 
-    if (nbTicks !== undefined && nbTicks !== null && nbTicks > 0) {
-      step = (maximum - minimum) / (nbTicks - 1);
-      for (let i = 1; i < nbTicks - 1; i += 1) {
-        // minimum and maximum are already shown as ticks
-        const value = minimum + i * step;
-        marks[`${value}`] = {
-          style: markStyle,
-          label: (
-            <div>
-              {value.toFixed(2)} {unit}
-            </div>
-          )
-        };
+  marks: Object;
+
+  maximum: ?number;
+
+  minimum: ?number;
+
+  inputElement: ?Object;
+
+  step: ?number;
+
+  constructor(props: NumberGaugeVoteForProposalProps) {
+    super(props);
+    this.state = { value: this.props.value };
+    this.onAfterChange = this.onAfterChange.bind(this);
+
+    this.marks = {};
+    this.inputElement = null;
+    this.step = null;
+
+    const minimum = props.minimum;
+    const maximum = props.maximum;
+    const nbTicks = props.nbTicks;
+    const unit = props.unit;
+
+    if (minimum !== undefined && minimum !== null && maximum !== undefined && maximum !== null) {
+      this.marks[`${minimum}`] = {
+        style: markStyle,
+        label: (
+          <div>
+            {minimum} {unit}
+          </div>
+        )
+      };
+
+      this.marks[`${maximum}`] = {
+        style: markStyle,
+        label: (
+          <div>
+            {maximum} {unit}
+          </div>
+        )
+      };
+
+      if (nbTicks !== undefined && nbTicks !== null && nbTicks > 0) {
+        this.step = (maximum - minimum) / (nbTicks - 1);
+        for (let i = 1; i < nbTicks - 1; i += 1) {
+          // minimum and maximum are already shown as ticks
+          const value = minimum + i * this.step;
+          this.marks[`${value}`] = {
+            style: markStyle,
+            label: (
+              <div>
+                {value.toFixed(2)} {unit}
+              </div>
+            )
+          };
+        }
       }
     }
   }
 
-  return (
-    <div className="number-gauge-vote-for-proposal">
-      <p>{instructions}</p>
-      <Slider
-        min={minimum}
-        max={maximum}
-        marks={marks}
-        step={step}
-        included={false}
-        defaultValue={minimum}
-        trackStyle={trackStyle}
-        railStyle={railStyle}
-        handleStyle={handleStyle}
-        handle={handleIcon}
-      />
-    </div>
-  );
-};
+  onAfterChange(value: number) {
+    this.setState({
+      value: value
+    });
+    if (this.inputElement && 'value' in this.inputElement) {
+      this.inputElement.value = value;
+    }
+    this.props.voteForProposal(this.props.proposalId, this.props.id, value);
+  }
+
+  render() {
+    return (
+      <div className="number-gauge-vote-for-proposal">
+        <p>{this.props.instructions}</p>
+        <Slider
+          min={this.props.minimum}
+          max={this.props.maximum}
+          marks={this.marks}
+          step={this.step}
+          included={false}
+          trackStyle={trackStyle}
+          railStyle={railStyle}
+          handleStyle={handleStyle}
+          handle={handleIcon}
+          defaultValue={this.state.value}
+          onAfterChange={this.onAfterChange}
+        />
+        <input
+          type="hidden"
+          name={`vote-for-proposal-${this.props.proposalId}-vote-specification-${this.props.id}`}
+          value={this.state.value}
+          ref={(input) => {
+            this.inputElement = input;
+          }}
+        />
+      </div>
+    );
+  }
+}
 
 export { GaugeVoteForProposal, NumberGaugeVoteForProposal };
