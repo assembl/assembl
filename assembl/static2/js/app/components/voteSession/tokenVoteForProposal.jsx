@@ -6,7 +6,7 @@ import Circle from '../svg/circle';
 import { resetTokensTooltip } from '../common/tooltips';
 import { type RemainingTokensByCategory, type TokenVotesForProposal } from '../../pages/voteSession';
 
-type TokenCategory = {|
+export type TokenCategory = {|
   id: string,
   totalNumber: number,
   typename: string,
@@ -15,11 +15,13 @@ type TokenCategory = {|
   color: ?string
 |};
 
+export type TokenCategories = ?Array<?TokenCategory>;
+
 type Props = {
   instructions: ?string,
   proposalId: string,
   remainingTokensByCategory: RemainingTokensByCategory,
-  tokenCategories: ?Array<?TokenCategory>,
+  tokenCategories: TokenCategories,
   tokenVotes: TokenVotesForProposal,
   voteForProposal: Function
 };

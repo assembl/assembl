@@ -310,7 +310,9 @@ const Translations = {
         submit: "Soumettre le vote",
         showVotesInProgress: "Voir les votes en cours",
         showLess: "Voir moins",
-        participantsCount: "%{count} participants ont voté !"
+        participantsCount: "%{count} participants ont voté !",
+        tokenTooltip: "%{count} jetons %{name}",
+        totalVotes: "%{count} votes"
       }
     },
     profile: {
@@ -835,7 +837,9 @@ const Translations = {
         submit: "Submit vote",
         showVotesInProgress: "Show votes in progress",
         showLess: "Show less",
-        participantsCount: "%{count} participants voted!"
+        participantsCount: "%{count} participants voted!",
+        tokenTooltip: "%{count} %{name} tokens",
+        totalVotes: "%{count} votes"
       }
     },
     profile: {
