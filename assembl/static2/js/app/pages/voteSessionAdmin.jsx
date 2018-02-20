@@ -29,34 +29,6 @@ import { get } from '../utils/routeMap';
 import { displayAlert, displayCustomModal, closeModal } from '../utils/utilityManager';
 import { getDiscussionSlug } from '../utils/globalFunctions';
 
-type VoteSessionAdminProps = {
-  editLocale: string,
-  i18n: {
-    locale: string
-  },
-  tokenModulesHaveChanged: boolean,
-  textGaugeModulesHaveChanged: boolean,
-  numberGaugeModulesHaveChanged: boolean,
-  voteProposalsHaveChanged: boolean,
-  refetchVoteSession: Function,
-  section: string,
-  timeline: Timeline,
-  voteProposals: List,
-  voteModules: List,
-  voteSessionPage: Map<string, *>,
-  updateVoteSession: Function,
-  deleteVoteSpecification: Function,
-  createTokenVoteSpecification: Function,
-  updateTokenVoteSpecification: Function,
-  createGaugeVoteSpecification: Function,
-  updateGaugeVoteSpecification: Function,
-  createNumberGaugeVoteSpecification: Function,
-  updateNumberGaugeVoteSpecification: Function,
-  createProposal: Function,
-  updateProposal: Function,
-  deleteProposal: Function
-};
-
 const createVariablesForDeleteMutation = voteModule => ({ id: voteModule.id });
 
 const createVariablesForTokenVoteSpecificationMutation = voteModule => ({
@@ -98,9 +70,55 @@ const createVariablesForProposalsMutation = proposals => ({
   descriptionEntries: convertEntriesToHTML(proposals.descriptionEntries)
 });
 
-class VoteSessionAdmin extends React.Component<void, VoteSessionAdminProps, void> {
+type VoteSessionAdminProps = {
+  editLocale: string,
+  i18n: {
+    locale: string
+  },
+  tokenModulesHaveChanged: boolean,
+  textGaugeModulesHaveChanged: boolean,
+  numberGaugeModulesHaveChanged: boolean,
+  voteProposalsHaveChanged: boolean,
+  refetchVoteSession: Function,
+  section: string,
+  timeline: Timeline,
+  voteProposals: List,
+  voteModules: List,
+  voteSessionPage: Map<string, *>,
+  updateVoteSession: Function,
+  deleteVoteSpecification: Function,
+  createTokenVoteSpecification: Function,
+  updateTokenVoteSpecification: Function,
+  createGaugeVoteSpecification: Function,
+  updateGaugeVoteSpecification: Function,
+  createNumberGaugeVoteSpecification: Function,
+  updateNumberGaugeVoteSpecification: Function,
+  createProposal: Function,
+  updateProposal: Function,
+  deleteProposal: Function
+};
+
+type VoteSessionAdminState = {
+  firstWarningDisplayed: boolean,
+  secondWarningDisplayed: boolean
+};
+
+class VoteSessionAdmin extends React.Component<void, VoteSessionAdminProps, VoteSessionAdminState> {
+  props: VoteSessionAdminProps;
+
+  state: VoteSessionAdminState;
+
+  constructor(props: VoteSessionAdminProps) {
+    super(props);
+    this.state = {
+      firstWarningDisplayed: false,
+      secondWarningDisplayed: false
+    };
+  }
+
   componentWillReceiveProps(nextProps) {
     const { section, voteSessionPage, voteModules } = nextProps;
+    const { firstWarningDisplayed, secondWarningDisplayed } = this.state;
     const currentStep = parseInt(section, 10);
     const slug = { slug: getDiscussionSlug() };
     const showModal = (message1, message2, buttonMessage, stepNumber) => {
@@ -124,11 +142,16 @@ class VoteSessionAdmin extends React.Component<void, VoteSessionAdminProps, void
         displayCustomModal(content, true, 'modal-centered');
       }, 500);
     };
-    if ((currentStep === 2 || currentStep === 3) && !voteSessionPage.get('id')) {
+    if ((currentStep === 2 || currentStep === 3) && !voteSessionPage.get('id') && !firstWarningDisplayed) {
       showModal('administration.configureVoteSession', 'administration.saveFirstStep', 'administration.backToPreviousStep', 1);
+      this.setState({ firstWarningDisplayed: true });
     }
-    if (currentStep === 3 && voteModules.size < 1) {
+    if (currentStep === 3 && !voteSessionPage.get('id') && !secondWarningDisplayed) {
+      showModal('administration.configureVoteSession', 'administration.saveFirstStep', 'administration.backToPreviousStep', 1);
+      this.setState({ secondWarningDisplayed: true });
+    } else if (currentStep === 3 && voteModules.size < 1 && !secondWarningDisplayed) {
       showModal('administration.configureVoteModules', 'administration.saveSecondStep', 'administration.backToPreviousStep', 2);
+      this.setState({ secondWarningDisplayed: true });
     }
   }
 
