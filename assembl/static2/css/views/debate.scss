@@ -28,29 +28,29 @@
       right: 0;
       left: 0;
       z-index: -1;
-      height: 70%;
+      height: 65%;
       padding: 10px 0 10px;
       background-color: $white;
       box-shadow: 0 1px 10px rgba(0, 0, 0, 0.45);
 
       @media (min-height: 534px) and (max-height: 549px) {
-        height: calc(70% - 30px);
+        height: calc(65% - 30px);
       }
 
       @media (min-height: 720px) and (max-height: 735px) {
-        height: calc(70% - 45px);
+        height: calc(65% - 45px);
       }
 
       @media (min-height: 800px) and (max-height: 815px) {
-        height: calc(70% - 45px);
+        height: calc(65% - 45px);
       }
 
       @media (min-height: 864px) and (max-height: 879px) {
-        height: calc(70% - 30px);
+        height: calc(65% - 30px);
       }
 
       @media (min-height: 1050px) and (max-height: 1065px) {
-        height: calc(70% - 30px);
+        height: calc(65% - 30px);
       }
     }
 
