@@ -112,10 +112,13 @@ class Proposal extends React.Component<void, Props, State> {
         <Row>
           <Col xs={12} md={12} className="center">
             {this.state.showVotesInProgress ? (
-              <Button className="link-button" onClick={this.toggleShowVotesInProgress}>
-                <Translate value="debate.voteSession.showLess" />
-                <span className="assembl-icon-up-open pointer" />
-              </Button>
+              <div>
+                {tokenVoteModule && <VotesInProgress tokenCategories={tokenVoteModule.tokenCategories} />}
+                <Button className="link-button" onClick={this.toggleShowVotesInProgress}>
+                  <Translate value="debate.voteSession.showLess" />
+                  <span className="assembl-icon-up-open pointer" />
+                </Button>
+              </div>
             ) : (
               <Button className="link-button" onClick={this.toggleShowVotesInProgress}>
                 <Translate value="debate.voteSession.showVotesInProgress" />
@@ -124,7 +127,6 @@ class Proposal extends React.Component<void, Props, State> {
             )}
           </Col>
         </Row>
-        {this.state.showVotesInProgress && <VotesInProgress />}
       </div>
     );
   }
