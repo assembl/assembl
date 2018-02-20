@@ -85,13 +85,22 @@
       width: calc(100% - 10px);
       height: 9px;
 
-      .timeline-bar-background {
-        background-color: $first-color-light-25;
+      .timeline-bar-background-container {
+        background-color: $white;
         height: 6px;
         position: absolute;
         width: 100%;
         z-index: 0;
         display: inline-block;
+
+        .timeline-bar-background {
+          position: absolute;
+          top: 0;
+          bottom: 0;
+          width: 100%;
+          background-color: $first-color;
+          opacity: 0.7;
+        }
       }
 
       .timeline-bar-filler {
@@ -119,7 +128,18 @@
   .timeline-title {
     cursor: pointer;
     font-size: 13px;
-    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .arrow {
+      color: $white;
+      margin-right: -5px;
+
+      &::before {
+        font-size: 17px;
+      }
+    }
 
     .timeline-link {
       height: 100%;
@@ -168,7 +188,7 @@
           background-color: $first-color;
         }
 
-        .timeline-bar-background {
+        .timeline-bar-background-container {
           background-color: $first-color;
         }
       }

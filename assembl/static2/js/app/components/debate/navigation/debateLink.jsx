@@ -24,6 +24,16 @@ class DebateLink extends React.Component<*, DebateLinkProps, DebateLinkState> {
     menuActive: false
   };
 
+  componentDidMount() {
+    document.addEventListener('click', this.handleClickOutside);
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener('click', this.handleClickOutside);
+  }
+
+  debate = null;
+
   showMenu = () => {
     this.setState({ menuActive: true });
   };
@@ -32,11 +42,20 @@ class DebateLink extends React.Component<*, DebateLinkProps, DebateLinkState> {
     this.setState({ menuActive: false });
   };
 
+  handleClickOutside = (event: MouseEvent) => {
+    if (this.debate && !this.debate.contains(event.target)) {
+      this.hideMenu();
+    }
+  };
+
   render() {
     const { identifier, children, to, className, activeClassName, dataText, screenTooSmall } = this.props;
     const { menuActive } = this.state;
     return (
       <div
+        ref={(debate) => {
+          this.debate = debate;
+        }}
         className={classNames('debate-link', { active: menuActive })}
         onMouseOver={!screenTooSmall && this.showMenu}
         onMouseLeave={!screenTooSmall && this.hideMenu}
