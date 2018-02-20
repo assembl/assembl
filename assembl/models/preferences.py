@@ -137,7 +137,7 @@ class Preferences(MutableMapping, Base, NamedClassMixin):
 
     def _get_local(self, key):
         if key not in self.preference_data:
-            raise RuntimeError("Unknown preference: " + key)
+            raise KeyError("Unknown preference: " + key)
         values = self.local_values_json
         if key in values:
             value = values[key]
