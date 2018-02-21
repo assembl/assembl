@@ -204,7 +204,7 @@ class FrontendUrls(object):
         return urljoin(
             self.discussion.get_base_url(), '/static/img/assembl.png')
 
-    def get_discussion_url(self, request=None):
+    def get_discussion_url(self, request=None, force_v1=False):
         """
         from pyramid.request import Request
         req = Request.blank('/', base_url=self.discussion.get_base_url())
@@ -226,7 +226,7 @@ class FrontendUrls(object):
         # this method is kept mostly for legacy routes that do not exist in
         # new front-end yet.
         if request is None:
-            if (not is_using_landing_page(self.discussion)) or \
+            if force_v1 or (not is_using_landing_page(self.discussion)) or \
                 current_phase_use_v1_interface(
                     self.discussion.timeline_events):
                 route = self.get_frontend_url(
@@ -236,13 +236,16 @@ class FrontendUrls(object):
                     'homeBare', slug=self.discussion.slug)
         else:
             get_route = create_get_route(request, self.discussion)
-            route = get_route('bare_slug')
+            if force_v1:
+                route = get_route('oldDebate')
+            else:
+                route = get_route('bare_slug')
         return urljoin(self.discussion.get_base_url(), route)
 
     # TODO: Decommission all of the route methods below. They are
     # no longer Object Oriented.
     def getUserNotificationSubscriptionsConfigurationUrl(self):
-        return self.get_discussion_url() + '/user/notifications'
+        return self.get_discussion_url(force_v1=True) + '/user/notifications'
 
     def getUserNotificationSubscriptionUnsubscribeUrl(self, subscription):
         """ TODO:  Give an actual subscription URL """
@@ -307,7 +310,7 @@ class FrontendUrls(object):
         return self.get_discussion_url() + self.get_relative_idea_url(idea)
 
     def get_discussion_edition_url(self):
-        return self.get_discussion_url() + '/edition'
+        return self.get_discussion_url(force_v1=True) + '/edition'
 
     def get_frontend_url(self, route_name, **params):
         """
