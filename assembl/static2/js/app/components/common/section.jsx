@@ -82,7 +82,7 @@ class Section extends React.Component<Object, SectionProps, void> {
       <section className={className}>
         <div className={containerClassName}>
           <div className="title-section">{this.getTitle()}</div>
-          <div className="content-section">{children}</div>
+          <div className="content-section margin-l">{children}</div>
         </div>
       </section>
     );

@@ -2,16 +2,20 @@
 
 exports[`ParticipantsCount component should match ParticipantsCount snapshot 1`] = `
 <div
-  className="participants-count box background-grey center"
+  className="participants-count box center"
 >
   <div
     className="assembl-icon-profil black"
   />
-  <span
-    className={undefined}
-    style={undefined}
+  <div
+    className="margin-m"
   >
-    Participants Count
-  </span>
+    <span
+      className={undefined}
+      style={undefined}
+    >
+      Participants Count
+    </span>
+  </div>
 </div>
 `;

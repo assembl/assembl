@@ -12,6 +12,7 @@ exports[`VoteSession component should match VoteSession snapshot 1`] = `
   />
   <Grid
     bsClass="container"
+    className="background-light"
     componentClass="div"
     fluid={true}
   >
@@ -76,6 +77,13 @@ exports[`VoteSession component should match VoteSession snapshot 1`] = `
         </Col>
       </Row>
     </Section>
+  </Grid>
+  <Grid
+    bsClass="container"
+    className="background-grey"
+    componentClass="div"
+    fluid={true}
+  >
     <Section
       className={null}
       containerAdditionalClassNames={Array []}
@@ -182,6 +190,7 @@ exports[`VoteSession component should match VoteSession snapshot with empty modu
   />
   <Grid
     bsClass="container"
+    className="background-light"
     componentClass="div"
     fluid={true}
   >
@@ -219,6 +228,13 @@ exports[`VoteSession component should match VoteSession snapshot with empty modu
         </Col>
       </Row>
     </Section>
+  </Grid>
+  <Grid
+    bsClass="container"
+    className="background-grey"
+    componentClass="div"
+    fluid={true}
+  >
     <Section
       className={null}
       containerAdditionalClassNames={Array []}

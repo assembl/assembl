@@ -301,6 +301,8 @@ const Translations = {
         body: "Message"
       },
       voteSession: {
+        votesTotal: "Répartition actuelle des jetons",
+        estimate: "Estimation moyenne",
         noVoteSession: {
           title: "La session de vote n'est pas configurée",
           text: "Un administrateur doit configurer la session de vote"
@@ -308,8 +310,8 @@ const Translations = {
         remainingTokens: "Il vous reste %{count} jetons disponibles.",
         resetTokens: "Supprimer mon vote",
         submit: "Soumettre le vote",
-        showVotesInProgress: "Voir les votes en cours",
-        showLess: "Voir moins",
+        showVotesInProgress: "Ouvrir les votes de la communauté",
+        showLess: "Fermer les votes de la communauté",
         participantsCount: "%{count} participants ont voté !",
         tokenTooltip: "%{count} jetons %{name}",
         totalVotes: "%{count} votes"
@@ -828,6 +830,8 @@ const Translations = {
         body: "Comment"
       },
       voteSession: {
+        votesTotal: "Current distribution of tokens",
+        estimate: "Average estimate",
         noVoteSession: {
           title: "Vote session is not configured",
           text: "An administrator must configure the vote session"
@@ -835,8 +839,8 @@ const Translations = {
         remainingTokens: "You have %{count} tokens remaining.",
         resetTokens: "Reset my vote",
         submit: "Submit vote",
-        showVotesInProgress: "Show votes in progress",
-        showLess: "Show less",
+        showVotesInProgress: "Show votes of the community",
+        showLess: "Close votes of the community",
         participantsCount: "%{count} participants voted!",
         tokenTooltip: "%{count} %{name} tokens",
         totalVotes: "%{count} votes"

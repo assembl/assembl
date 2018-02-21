@@ -43,11 +43,11 @@ const TokenVotesResults = ({ categories, votes }: Props) => {
     })
     .filter(e => e); // remove null items
   return (
-    <div className="box background-grey" style={{ width: 200 }}>
+    <div className="box center tokens-box">
+      <Translate value="debate.voteSession.votesTotal" count={total} />
       <div className="doughnut-container">
         <Doughnut elements={elements} />
       </div>
-      <Translate value="debate.voteSession.votesTotal" count={total} />
     </div>
   );
 };

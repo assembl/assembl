@@ -185,7 +185,7 @@ class DumbVoteSession extends React.Component<void, Props, State> {
     return (
       <div className="votesession-page">
         <Header title={title} subtitle={subTitle} imgUrl={headerImageUrl} additionalHeaderClasses="left" />
-        <Grid fluid>
+        <Grid fluid className="background-light">
           <Section
             title={instructionsSectionTitle}
             containerAdditionalClassNames={this.state.availableTokensSticky ? ['no-margin'] : null}
@@ -212,6 +212,8 @@ class DumbVoteSession extends React.Component<void, Props, State> {
               </Col>
             </Row>
           </Section>
+        </Grid>
+        <Grid fluid className="background-grey">
           <Section title={propositionsSectionTitle} className={this.state.availableTokensSticky ? 'extra-margin-top' : null}>
             <Row>
               <Col mdOffset={1} md={10} smOffset={1} sm={10}>

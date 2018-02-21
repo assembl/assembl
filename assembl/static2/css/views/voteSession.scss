@@ -6,7 +6,9 @@
   }
 
   .vote-instructions {
+    padding: 0 20px;
     font-size: $font-size-sm;
+    font-family: $font-family4;
   }
 
   .content-section {
@@ -21,7 +23,7 @@
   }
 
   .available-tokens {
-    margin-top: 70px;
+    margin: 20px 0 40px;
 
     .category-available-tokens {
       display: flex;
@@ -65,7 +67,7 @@
   }
 
   .proposal.row {
-    margin: 40px 10px;
+    margin: 90px 10px 30px;
     padding: 31px 15px 15px 15px;
 
     .proposal-title {
@@ -83,6 +85,15 @@
     .tokens > button {
       border: none;
       padding: 0;
+      background: none;
+
+      &:focus {
+        outline: none;
+      }
+
+      &:active {
+        box-shadow: none;
+      }
     }
 
     .tokens > .btn-default:hover {
@@ -100,10 +111,20 @@
     font-size: $font-size-xs;
     color: $link-color;
     text-decoration: none;
+    background-color: $grey0;
+    padding: 15px;
 
     &:hover {
       color: $link-hover-color;
       text-decoration: none;
+    }
+
+    &:focus {
+      outline: none;
+    }
+
+    &:active {
+      box-shadow: none;
     }
 
     [class^='assembl-icon-']:before,
@@ -119,11 +140,22 @@
     background-color: transparent;
   }
 
+  .expand-row {
+    margin: 0 40px;
+  }
+
   .votes-in-progress {
-    display: flex;
-    justify-content: space-between;
+    margin: 0 40px;
+    padding: 0 15px 30px;
+
+    .box {
+      margin-top: 30px;
+      height: 160px;
+    }
 
     .participants-count {
+      padding: 40px 0 0;
+
       .assembl-icon-profil:before {
         font-size: 40px;
         margin-bottom: 12px;
@@ -131,8 +163,10 @@
     }
 
     .doughnut-container {
-      height: 140px;
-      width: 140px;
+      margin: 0 auto;
+      height: 80px;
+      width: 80px;
+      padding: 10px 0 0;
 
       .doughnut {
         .circle {
@@ -141,6 +175,18 @@
       }
     }
   }
+
+  .expand-result {
+    padding-bottom: 40px;
+  }
+
+  .gauge-box {
+    padding: 30px 0 0;
+  }
+
+  .tokens-box {
+    padding: 30px 0 0;
+  }
 }
 
 .token-tooltip {
@@ -148,5 +194,13 @@
 
   .tooltip-inner {
     background: none;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .votesession-page {
+    .available-tokens-sticky {
+      display: none;
+    }
   }
 }
