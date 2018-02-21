@@ -419,6 +419,11 @@
       flex-direction: column;
       padding-left: 45px;
       font-size: $font-size-s;
+
+      .timeline-link {
+        font-family: $font-family2;
+        text-decoration: underline;
+      }
     }
 
     .bold {

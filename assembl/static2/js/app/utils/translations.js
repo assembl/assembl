@@ -397,7 +397,8 @@ const Translations = {
       tokenVoteInstructions: "Consigne du vote par jetons",
       proposalsSectionTitle: "Titre de la section",
       voteModulesIntroText1: "Vous avez choisi le dispositif de vote.",
-      voteModulesIntroText2: "Pour modifier votre choix, modifiez la ligne de temps du débat.",
+      voteModulesIntroText2: "Pour modifier votre choix, modifiez la ",
+      timeline: "ligne de temps du débat",
       voteProposals: {
         defineProposal: "Définir proposition %{number}",
         addProposal: "Ajouter une proposition",
@@ -926,9 +927,12 @@ const Translations = {
       instructions: "Instructions",
       voteSessionSuccess: "The vote session is saved with success.",
       exclusive: "Exclusive",
-
       tokenVoteInstructions: "Instructions for the token vote",
       gaugeVoteInstructions: "Instructions for the gauge vote",
+      proposalsSectionTitle: "Title of the section",
+      voteModulesIntroText1: "You chose the vote module",
+      voteModulesIntroText2: "To modify your choice, modify the ",
+      timeline: "timeline of the debate",
       gaugeNumber: "Gauge number",
       defineGaugeNumer: "Define gauges number",
       minValue: "Minimum value",
@@ -949,8 +953,6 @@ const Translations = {
       tokenTitle: "Token title",
       tokenColor: "Color of the token",
       voteProposals: {
-        introText1: "You chose the vote module",
-        introText2: "To modify this choice, modify the timeline of the debate.",
         gauge: "Gauge %{number}",
         defineProposal: "Define proposal %{number}",
         addProposal: "Add a proposal",
