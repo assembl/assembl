@@ -13,13 +13,13 @@ type Props = {
   gauges: Array<Object>
 };
 
-const getNumberBoxToDisplay = (tokens, gauges) => {
+const getNumberBoxToDisplay: Function = (tokens, gauges) => {
   const gaugesLength = gauges ? gauges.length : 0;
   const count = tokens ? 2 : 1;
   return count + gaugesLength;
 };
 
-const getColumnSizes = (numberBoxToDisplay) => {
+const getColumnSizes: Function = (numberBoxToDisplay) => {
   switch (numberBoxToDisplay) {
   case 1:
     return [12];
@@ -39,8 +39,8 @@ const getColumnSizes = (numberBoxToDisplay) => {
 };
 
 const VotesInProgress = ({ participantsCount, tokenCategories, tokenVotes, gauges }: Props) => {
-  const numberBoxToDisplay = getNumberBoxToDisplay(tokenCategories, gauges);
-  const columnSizes = getColumnSizes(numberBoxToDisplay);
+  const numberBoxToDisplay: number = getNumberBoxToDisplay(tokenCategories, gauges);
+  const columnSizes: Array<number> = getColumnSizes(numberBoxToDisplay);
   return (
     <Row className="votes-in-progress background-grey">
       <Col xs={12} md={columnSizes[0]}>
