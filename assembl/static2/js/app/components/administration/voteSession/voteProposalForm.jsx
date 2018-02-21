@@ -2,8 +2,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { I18n, Translate } from 'react-redux-i18n';
-import some from 'lodash/some';
-import includes from 'lodash/includes';
 import { OverlayTrigger, Button, Checkbox } from 'react-bootstrap';
 import FormControlWithLabel from '../../common/formControlWithLabel';
 import { getEntryValueForLocale } from '../../../utils/i18n';
@@ -122,17 +120,17 @@ const DumbVoteProposalForm = ({
         type="rich-text"
         required
       />
-      {tokenModules.map((moduleId) => {
-        const isChecked = proposalModules ? some(proposalModules.toJS(), id => includes(moduleId, id)) : false;
+      {tokenModules.map((moduleTemplateId) => {
+        const isChecked = proposalModules.some(m => m.get('moduleTemplateId') === moduleTemplateId);
         return (
           <Checkbox
-            key={moduleId}
+            key={moduleTemplateId}
             checked={isChecked}
             onChange={() => {
               if (isChecked) {
-                deassociateModuleToProposal(moduleId);
+                deassociateModuleToProposal(moduleTemplateId);
               } else {
-                associateModuleToProposal(moduleId);
+                associateModuleToProposal(moduleTemplateId);
               }
             }}
           >
@@ -140,19 +138,19 @@ const DumbVoteProposalForm = ({
           </Checkbox>
         );
       })}
-      {gaugeModules.map((moduleId, idx) => {
+      {gaugeModules.map((moduleTemplateId, idx) => {
         const number = gaugeModules.size > 1 ? idx + 1 : '';
-        const isChecked = proposalModules ? some(proposalModules.toJS(), id => includes(moduleId, id)) : false;
+        const isChecked = proposalModules.some(m => m.get('moduleTemplateId') === moduleTemplateId);
         return (
-          <div key={moduleId}>
+          <div key={moduleTemplateId}>
             <Checkbox
               className="inline"
               checked={isChecked}
               onChange={() => {
                 if (isChecked) {
-                  deassociateModuleToProposal(moduleId);
+                  deassociateModuleToProposal(moduleTemplateId);
                 } else {
-                  associateModuleToProposal(moduleId);
+                  associateModuleToProposal(moduleTemplateId);
                 }
               }}
             >
@@ -177,14 +175,14 @@ const DumbVoteProposalForm = ({
 
 const mapStateToProps = ({ admin }, { id, editLocale }) => {
   const proposal = admin.voteSession.voteProposalsById.get(id);
-  const { modulesInOrder, modulesById } = admin.voteSession;
+  const { modulesInOrder, modulesById, proposalModulesById } = admin.voteSession;
   const description = getEntryValueForLocale(proposal.get('descriptionEntries'), editLocale);
   return {
     title: getEntryValueForLocale(proposal.get('titleEntries'), editLocale),
     description: description ? description.toJS() : null,
     toDelete: proposal.get('toDelete', false),
     order: proposal.get('order'),
-    proposalModules: proposal.get('modules'),
+    proposalModules: proposal.get('modules').map(moduleId => proposalModulesById.get(moduleId)),
     tokenModules: modulesInOrder.filter(
       moduleId => modulesById.getIn([moduleId, 'type']) === 'tokens' && !modulesById.getIn([id, 'toDelete'])
     ),
@@ -207,7 +205,10 @@ const mapDispatchToProps = (dispatch, { id }) => ({
   },
   handleUpClick: () => dispatch(moveProposalUp(id)),
   handleDownClick: () => dispatch(moveProposalDown(id)),
-  associateModuleToProposal: moduleId => dispatch(addModuleToProposal(id, moduleId)),
+  associateModuleToProposal: (moduleId) => {
+    const newId = Math.round(Math.random() * -1000000).toString();
+    dispatch(addModuleToProposal(newId, id, moduleId));
+  },
   deassociateModuleToProposal: moduleId => dispatch(deleteModuleFromProposal(id, moduleId))
 });
 

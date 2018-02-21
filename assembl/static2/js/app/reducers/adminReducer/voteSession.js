@@ -402,7 +402,7 @@ export const voteProposalsById = (state: Map<string, Map> = Map(), action: Redux
         id: proposal.id,
         titleEntries: proposal.titleEntries,
         descriptionEntries: proposal.descriptionEntries,
-        modules: proposal.modules ? proposal.modules.map(m => m.voteSpecTemplateId) : []
+        modules: proposal.modules ? proposal.modules.map(m => m.id) : []
       });
       newState = newState.set(proposal.id, proposalInfo);
     });
@@ -417,10 +417,10 @@ export const voteProposalsById = (state: Map<string, Map> = Map(), action: Redux
   case UPDATE_VOTE_PROPOSAL_DESCRIPTION:
     return state.updateIn([action.id, 'descriptionEntries'], updateInLangstringEntries(action.locale, fromJS(action.value)));
   case ADD_MODULE_TO_PROPOSAL:
-    return state.updateIn([action.id, 'modules'], modules => modules.push(action.moduleId));
+    return state.updateIn([action.proposalId, 'modules'], modules => modules.push(action.id));
   case DELETE_MODULE_FROM_PROPOSAL: {
-    const index = state.getIn([action.id, 'modules']).indexOf(action.moduleId);
-    return state.updateIn([action.id, 'modules'], modules => modules.delete(index));
+    const index = state.getIn([action.proposalId, 'modules']).indexOf(action.moduleId);
+    return state.updateIn([action.proposalId, 'modules'], modules => modules.delete(index));
   }
   default:
     return state;
@@ -454,6 +454,45 @@ export const gaugeChoicesById = (state: Map<string, Map> = Map(), action: ReduxA
   }
 };
 
+/* modules that are binded to a proposal */
+export const proposalModulesById = (state: Map<string, Map> = Map(), action: ReduxAction<Action>) => {
+  switch (action.type) {
+  case UPDATE_VOTE_PROPOSALS: {
+    let newState = Map();
+    action.voteProposals.forEach((proposal) => {
+      proposal.modules.forEach((pModule) => {
+        const info = fromJS({
+          ...pModule,
+          isNew: false,
+          toDelete: false,
+          proposalId: proposal.id,
+          moduleTemplateId: pModule.voteSpecTemplateId
+        });
+
+        newState = newState.set(pModule.id, info);
+      });
+    });
+    return newState;
+  }
+  case ADD_MODULE_TO_PROPOSAL:
+    return state.set(
+      action.id,
+      fromJS({
+        ...action.moduleInfo,
+        id: action.id,
+        moduleTemplateId: action.moduleTemplateId,
+        proposalId: action.proposalId,
+        isNew: true,
+        toDelete: false
+      })
+    );
+  case DELETE_MODULE_FROM_PROPOSAL:
+    return state.setIn([action.moduleId, 'toDelete'], true);
+  default:
+    return state;
+  }
+};
+
 export default combineReducers({
   page: voteSessionPage,
   modulesInOrder: modulesInOrder,
@@ -465,5 +504,6 @@ export default combineReducers({
   gaugeChoicesById: gaugeChoicesById,
   tokenModulesHaveChanged: tokenModulesHaveChanged,
   textGaugeModulesHaveChanged: textGaugeModulesHaveChanged,
-  numberGaugeModulesHaveChanged: numberGaugeModulesHaveChanged
+  numberGaugeModulesHaveChanged: numberGaugeModulesHaveChanged,
+  proposalModulesById: proposalModulesById
 });

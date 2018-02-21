@@ -240,14 +240,36 @@ export const moveProposalDown = (id: string): actionTypes.MoveProposalDown => ({
   type: actionTypes.MOVE_PROPOSAL_DOWN
 });
 
-export const addModuleToProposal = (id: string, moduleId: string): actionTypes.AddModuleToProposal => ({
+export const baseAddModuleToProposal = (
+  id: string,
+  proposalId: string,
+  moduleTemplateId: string,
+  moduleInfo: { [string]: any }
+): actionTypes.AddModuleToProposal => ({
   id: id,
-  moduleId: moduleId,
+  proposalId: proposalId,
+  moduleInfo: moduleInfo,
+  moduleTemplateId: moduleTemplateId,
   type: actionTypes.ADD_MODULE_TO_PROPOSAL
 });
 
+export const addModuleToProposal = (id: string, proposalId: string, moduleTemplateId: string) => (
+  dispatch: Function,
+  getState: Function
+) => {
+  const { admin: { voteSession: { modulesById } } } = getState();
+  // use redux-thunk to get the moduleInfo in the state and then dispatch the action
+  const moduleInfo = modulesById
+    .get(moduleTemplateId)
+    .delete('proposalId')
+    .delete('toDelete')
+    .delete('isNew')
+    .toJS();
+  dispatch(baseAddModuleToProposal(id, proposalId, moduleTemplateId, moduleInfo));
+};
+
 export const deleteModuleFromProposal = (id: string, moduleId: string): actionTypes.DeleteModuleFromProposal => ({
-  id: id,
   moduleId: moduleId,
+  proposalId: id,
   type: actionTypes.DELETE_MODULE_FROM_PROPOSAL
 });

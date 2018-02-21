@@ -483,13 +483,15 @@ export type UpdateGaugeUnit = {
 
 export type AddModuleToProposal = {
   id: string,
-  moduleId: string,
+  moduleInfo: { [string]: any },
+  moduleTemplateId: string,
+  proposalId: string,
   type: typeof ADD_MODULE_TO_PROPOSAL
 };
 
 export type DeleteModuleFromProposal = {
-  id: string,
   moduleId: string,
+  proposalId: string,
   type: typeof DELETE_MODULE_FROM_PROPOSAL
 };
 

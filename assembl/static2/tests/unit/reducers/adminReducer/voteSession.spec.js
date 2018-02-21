@@ -6,7 +6,9 @@ import {
   UPDATE_VOTE_SESSION_PAGE_INSTRUCTIONS_TITLE,
   UPDATE_VOTE_SESSION_PAGE_INSTRUCTIONS_CONTENT,
   UPDATE_VOTE_SESSION_PAGE_PROPOSITIONS_TITLE,
-  UPDATE_VOTE_SESSION_PAGE_IMAGE
+  UPDATE_VOTE_SESSION_PAGE_IMAGE,
+  ADD_MODULE_TO_PROPOSAL,
+  DELETE_MODULE_FROM_PROPOSAL
 } from '../../../../js/app/actions/actionTypes';
 
 import * as reducers from '../../../../js/app/reducers/adminReducer/voteSession';
@@ -242,6 +244,101 @@ describe('voteSession admin reducers', () => {
         type: UPDATE_VOTE_SESSION_PAGE_IMAGE
       };
       expect(voteSessionPage(oldState, action).toJS()).toEqual(expected);
+    });
+  });
+
+  describe('voteProposalsById reducer', () => {
+    const { voteProposalsById } = reducers;
+    it('should handle ADD_MODULE_TO_PROPOSAL action type', () => {
+      const proposal1 = fromJS({
+        isNew: false,
+        order: 1.0,
+        toDelete: false,
+        id: 'proposal1',
+        titleEntries: [],
+        descriptionEntries: [],
+        modules: []
+      });
+      const state = Map({ proposal1: proposal1 });
+      const action = {
+        id: 'module42',
+        moduleTemplateId: 'template2',
+        proposalId: 'proposal1',
+        type: ADD_MODULE_TO_PROPOSAL
+      };
+      const expectedProposal1 = fromJS({
+        isNew: false,
+        order: 1.0,
+        toDelete: false,
+        id: 'proposal1',
+        titleEntries: [],
+        descriptionEntries: [],
+        modules: ['module42']
+      });
+      const expected = Map({ proposal1: expectedProposal1 });
+      const result = voteProposalsById(state, action);
+      expect(result).toEqual(expected);
+    });
+  });
+
+  describe('proposalModulesById reducer', () => {
+    const { proposalModulesById } = reducers;
+    it('should handle ADD_MODULE_TO_PROPOSAL action type', () => {
+      const state = Map();
+      const action = {
+        id: 'module42',
+        moduleInfo: {
+          tokenCategories: [],
+          voteType: 'tokens'
+        },
+        moduleTemplateId: 'template2',
+        proposalId: 'proposal1',
+        type: ADD_MODULE_TO_PROPOSAL
+      };
+      const expected = {
+        module42: {
+          tokenCategories: [],
+          voteType: 'tokens',
+          id: 'module42',
+          isNew: true,
+          moduleTemplateId: 'template2',
+          proposalId: 'proposal1',
+          toDelete: false
+        }
+      };
+      const actual = proposalModulesById(state, action);
+      expect(actual.toJS()).toEqual(expected);
+    });
+
+    it('should handle DELETE_MODULE_FROM_PROPOSAL action type', () => {
+      const state = fromJS({
+        module42: {
+          tokenCategories: [],
+          voteType: 'tokens',
+          id: 'module42',
+          isNew: false,
+          moduleTemplateId: 'template2',
+          proposalId: 'proposal1',
+          toDelete: false
+        }
+      });
+      const action = {
+        moduleId: 'module42',
+        type: DELETE_MODULE_FROM_PROPOSAL
+      };
+      const expected = {
+        module42: {
+          tokenCategories: [],
+          voteType: 'tokens',
+          id: 'module42',
+          isNew: false,
+          moduleTemplateId: 'template2',
+          proposalId: 'proposal1',
+          toDelete: true
+        }
+      };
+      const actual = proposalModulesById(state, action);
+      expect(actual.toJS()).toEqual(expected);
     });
   });
 });
