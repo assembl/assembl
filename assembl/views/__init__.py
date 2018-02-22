@@ -46,6 +46,7 @@ TEMPLATE_PATH = os.path.join(
 
 
 class HTTPTemporaryRedirect(HTTPTemporaryRedirectP):
+
     def __init__(self, *args, **kwargs):
         kwargs["cache_control"] = "no-cache"
         super(HTTPTemporaryRedirect, self).__init__(*args, **kwargs)
@@ -271,8 +272,8 @@ def get_default_context(request, **kwargs):
         locale: (len(countries_for_locales[get_language(locale)]) > 1)
         for locale in locales}
     jedfilename = os.path.join(
-            os.path.dirname(__file__), '..', 'locale',
-            localizer.locale_name, 'LC_MESSAGES', 'assembl.jed.json')
+        os.path.dirname(__file__), '..', 'locale',
+        localizer.locale_name, 'LC_MESSAGES', 'assembl.jed.json')
     if not os.path.exists(jedfilename) and '_' in localizer.locale_name:
         jedfilename = os.path.join(
             os.path.dirname(__file__), '..', 'locale',
@@ -330,7 +331,7 @@ def get_default_context(request, **kwargs):
 
     theme_name, theme_relative_path = get_theme_info(discussion)
     node_env = os.getenv('NODE_ENV', 'production')
-    return dict(
+    base = dict(
         kwargs,
         request=request,
         application_url=application_url,
@@ -362,8 +363,69 @@ def get_default_context(request, **kwargs):
         providers=providers,
         providers_json=json.dumps(providers),
         translations=io.open(jedfilename, encoding='utf-8').read(),
-        admin_email=admin_email
+        admin_email=admin_email,
     )
+
+    base.update({
+        "opengraph_locale": get_opengraph_locale(request),
+        "get_description": get_description(request),
+        "get_landing_page_image": get_landing_page_image(),
+        "private_social_sharing": private_social_sharing(),
+        "get_topic": get_topic(request)
+    })
+
+    return base
+
+
+def private_social_sharing():
+
+    from ..auth.util import get_current_discussion
+    discussion = get_current_discussion()
+    if discussion:
+        return discussion.preferences["private_social_sharing"]
+    else:
+        return False
+
+
+def get_opengraph_locale(request):
+    from ..auth.util import get_user, get_current_discussion
+    from assembl.lib.locale import strip_country
+    user = get_user(request)
+    discussion = get_current_discussion()
+    if user is None and discussion is None:
+        locale = "fr"
+    elif discussion and user is None:
+        locale = discussion.preferences['preferred_locales'][0]
+    elif user:
+        locale = user.language_preference[0].locale.code
+        locale = strip_country(locale)
+    return locale
+
+
+def get_description(request):
+    """Returns the description corresponding to the locale of the current discussion"""
+    opengraph_locale = get_opengraph_locale(request)
+    from ..auth.util import get_current_discussion
+    discussion = get_current_discussion()
+    if discussion:
+        return discussion.preferences["extra_json"]["objectives"]["descriptionEntries"][opengraph_locale]
+
+
+def get_topic(request):
+    """Returns the topic corresponding to the locale of the current discussion"""
+    opengraph_locale = get_opengraph_locale(request)
+    from ..auth.util import get_current_discussion
+    discussion = get_current_discussion()
+    if discussion:
+        return discussion.preferences["extra_json"]["topic"]["titleEntries"][opengraph_locale]
+
+
+def get_landing_page_image():
+
+    from ..auth.util import get_current_discussion
+    discussion = get_current_discussion()
+    if discussion:
+        return discussion.preferences['extra_json']['headerBackgroundUrl']
 
 
 def process_locale(
