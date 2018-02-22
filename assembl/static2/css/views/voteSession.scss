@@ -7,19 +7,15 @@
 
   .vote-instructions {
     padding: 0 20px;
-    font-size: $font-size-sm;
+    font-size: $font-size-m;
     font-family: $font-family4;
+    max-width: 780px;
+    text-align: justify;
+    line-height: 32px;
   }
 
   .content-section {
     padding: 0;
-  }
-
-  .separator {
-    border-bottom: 1px $btn-dark-border-style $btn-dark-border-color;
-    clear: both;
-    margin: 0 0 15px;
-    padding: 10px 0 10px;
   }
 
   .available-tokens {
@@ -27,10 +23,12 @@
 
     .category-available-tokens {
       display: flex;
-      padding: 30px;
+      padding: 30px 20px;
+      max-width: 780px;
 
       .tokens {
-        padding-left: 70px;
+        padding-left: 50px;
+        padding-top: 22px;
       }
     }
   }
@@ -43,18 +41,20 @@
     display: flex;
     justify-content: space-around;
     box-shadow: 3px 4px 7px #bbb;
-    padding: 12px 20px 0;
+    padding: 0 20px 12px;
+    border-top: 1px solid $grey1;
+
+    .separator {
+      display: none;
+    }
 
     .category-available-tokens {
       display: flex;
 
       .tokens {
         padding-left: 30px;
+        padding-top: 20px;
       }
-    }
-
-    .separator {
-      border: none;
     }
   }
 
@@ -64,13 +64,27 @@
 
   .tokens > * {
     margin: 5px;
+    width: 30px;
+    height: 30px;
+  }
+
+  .theme-box {
+    &:first-child {
+      margin: -70px 0 0;
+    }
   }
 
   .proposal.row {
     margin: 90px 10px 30px;
 
     .proposal-title {
+      font-family: $font-family;
       margin-top: 0;
+    }
+
+    .text {
+      text-align: justify;
+      padding-right: 20px;
     }
 
     .proposal-vote-modules {
@@ -111,7 +125,7 @@
     color: $link-color;
     text-decoration: none;
     background-color: $grey0;
-    padding: 15px;
+    padding: 15px 15px 0;
 
     &:hover {
       color: $link-hover-color;
@@ -167,7 +181,7 @@
 
       .doughnut {
         .circle {
-          stroke-width: 17px;
+          stroke-width: 22px;
         }
       }
     }
@@ -179,6 +193,12 @@
 
   .gauge-box {
     padding: 30px 0 0;
+  }
+
+  .separator {
+    border-bottom: 1px $btn-dark-border-style $grey1;
+    max-width: 745px;
+    margin-left: 18px;
   }
 }
 

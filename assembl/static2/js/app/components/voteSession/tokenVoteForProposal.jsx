@@ -34,7 +34,7 @@ const TokenVoteForProposal = ({
   tokenVotes,
   voteForProposal
 }: Props) => (
-  <div>
+  <div className="margin-m">
     <p>{instructions}</p>
     {tokenCategories &&
       tokenCategories.map((category) => {

@@ -19,20 +19,20 @@ const AvailableTokens = ({ remainingTokensByCategory, sticky, tokenCategories }:
       if (category) {
         const { color, id, title, totalNumber } = category;
         const remaining = remainingTokensByCategory.get(category.id);
-        const divClass = classnames('category-available-tokens', {
-          separator: idx < tokenCategories.length - 1
-        });
         return (
-          <div key={id} className={divClass}>
-            <div className="text">
-              <h4 className="dark-title-4">{title}</h4>
-              <Translate value="debate.voteSession.remainingTokens" count={remaining} />
+          <div key={id}>
+            <div className="category-available-tokens">
+              <div className="text">
+                <h2 className="dark-title-2">{title}</h2>
+                <Translate value="debate.voteSession.remainingTokens" count={remaining} />
+              </div>
+              <div className="tokens">
+                {[...Array(totalNumber).keys()].map(n => (
+                  <Circle key={n + 1} size="32px" strokeColor={color} fillColor={n + 1 <= remaining ? color : undefined} />
+                ))}
+              </div>
             </div>
-            <div className="tokens">
-              {[...Array(totalNumber).keys()].map(n => (
-                <Circle key={n + 1} size="32px" strokeColor={color} fillColor={n + 1 <= remaining ? color : undefined} />
-              ))}
-            </div>
+            {idx % 2 === 0 && <div className="separator" />}
           </div>
         );
       }
