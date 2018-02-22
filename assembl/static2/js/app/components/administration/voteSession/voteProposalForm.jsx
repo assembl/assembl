@@ -15,7 +15,8 @@ import {
   addModuleToProposal,
   deleteModuleFromProposal
 } from '../../../actions/adminActions/voteSession';
-import { displayModal, closeModal } from '../../../utils/utilityManager';
+import { displayModal, displayCustomModal, closeModal } from '../../../utils/utilityManager';
+import GaugeSettingsForm from './gaugeSettingsForm';
 
 type VoteProposalFormProps = {
   index: number,
@@ -74,6 +75,11 @@ const DumbVoteProposalForm = ({
     ];
     const includeFooter = true;
     return displayModal(modalTitle, body, includeFooter, footer);
+  };
+
+  const settingsModal = (id) => {
+    const content = <GaugeSettingsForm gaugeModuleId={id} editLocale={editLocale} />;
+    displayCustomModal(content, true, 'gauge-settings-modal');
   };
 
   return (
@@ -159,7 +165,7 @@ const DumbVoteProposalForm = ({
             <span
               className="inline settings-link"
               onClick={() => {
-                /* OPEN THE SETTINGS MODAL */
+                settingsModal(moduleTemplateId);
               }}
             >
               <i className="assembl-icon-edit" />
