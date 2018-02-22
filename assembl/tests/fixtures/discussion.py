@@ -153,3 +153,13 @@ def discussion_with_permissions(request, test_session, discussion):
         test_session.flush()
     request.addfinalizer(fin)
     return discussion
+
+
+@pytest.fixture(scope="function")
+def discussion_with_2_phase_interface_v2(
+        request, test_session, discussion_with_permissions,
+        timeline_phase2_interface_v2):
+
+    discussion_with_permissions.preferences['landing_page'] = True
+    test_session.commit()
+    return discussion_with_permissions

@@ -23,6 +23,13 @@ def test_route_paths(discussion, test_app, test_adminuser_webrequest):
                 'contextual_login', discussion_slug=slug)
 
 
+def get_response_headers(resp):
+    if not resp:
+        return None
+    header_dict = dict(resp._headerlist)
+    return header_dict
+
+
 def test_route_discussion_root(
         discussion, test_app, test_adminuser_webrequest):
     """/slug"""
@@ -236,7 +243,7 @@ def test_route_discussion_post_legacy(discussion, root_post_1, test_app):
     url_post_id = quote_plus(root_post_1.uri())
     route = discussion_route(slug, "posts", url_post_id)
     resp = test_app.get(route)
-    assert resp.status_int == 200
+    assert resp.status_int == 303
 
 
 def test_route_discussion_post(discussion, root_post_1, test_app):
@@ -248,7 +255,7 @@ def test_route_discussion_post(discussion, root_post_1, test_app):
     url_post_id = quote_plus(root_post_1.uri())
     route = discussion_route(slug, "posts", url_post_id, backbone=True)
     resp = test_app.get(route)
-    assert resp.status_int == 200
+    assert resp.status_int == 303
 
 
 def test_route_discussion_idea_legacy(discussion, root_post_1, subidea_1,
@@ -262,6 +269,20 @@ def test_route_discussion_idea_legacy(discussion, root_post_1, subidea_1,
     route = discussion_route(slug, "idea", url_post_id)
     resp = test_app.get(route)
     assert resp.status_int == 200
+
+
+def test_route_discussion_post_v2(
+        test_app, discussion_with_2_phase_interface_v2,
+        post_related_to_sub_idea_1):
+    from urllib import quote_plus
+    slug = discussion_with_2_phase_interface_v2.slug
+    route = "/%s/posts/%s" % (
+        slug, quote_plus(post_related_to_sub_idea_1.uri()))
+    print route
+    resp = test_app.get(route)
+    assert resp.status_int == 303
+    headers = get_response_headers(resp)
+    assert ('/%s/debate/thread/theme/' % slug) in headers['Location']
 
 
 def test_route_discussion_idea(discussion, root_post_1, subidea_1, test_app):
