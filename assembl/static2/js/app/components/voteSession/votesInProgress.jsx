@@ -34,7 +34,7 @@ const getColumnSizes: Function = (numberBoxToDisplay) => {
   case 6:
     return [4, 4, 4, 4, 4, 4];
   default:
-    return 12;
+    return [12];
   }
 };
 
@@ -67,12 +67,7 @@ const mockData = {
     category1: 112,
     category2: 44
   },
-  gauges: [
-    { id: '1234', estimate: '6 M€' },
-    { id: '5678', estimate: '8 M€' },
-    { id: '9887', estimate: '18 M€' },
-    { id: '6542', estimate: '168 M€' }
-  ]
+  gauges: [{ id: '1234', estimate: '6 M€' }, { id: '5678', estimate: '8 M€' }, { id: '9887', estimate: '18 M€' }]
 };
 
 // $FlowFixMe

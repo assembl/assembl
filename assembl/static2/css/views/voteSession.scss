@@ -68,7 +68,6 @@
 
   .proposal.row {
     margin: 90px 10px 30px;
-    padding: 31px 15px 15px 15px;
 
     .proposal-title {
       margin-top: 0;
@@ -154,8 +153,6 @@
     }
 
     .participants-count {
-      padding: 40px 0 0;
-
       .assembl-icon-profil:before {
         font-size: 40px;
         margin-bottom: 12px;
@@ -183,10 +180,6 @@
   .gauge-box {
     padding: 30px 0 0;
   }
-
-  .tokens-box {
-    padding: 30px 0 0;
-  }
 }
 
 .token-tooltip {
@@ -197,10 +190,43 @@
   }
 }
 
-@media screen and (max-width: 768px) {
+@media screen and (min-width: 768px) {
+  .votesession-page {
+    .proposal.row {
+      padding: 31px 15px 15px 15px;
+    }
+
+    .participants-count {
+      padding: 40px 0 0;
+    }
+
+    .tokens-box {
+      padding: 30px 0 0;
+    }
+  }
+}
+
+@media screen and (max-width: 767px) {
   .votesession-page {
     .available-tokens-sticky {
       display: none;
+    }
+
+    .container {
+      padding: 0;
+      margin: 0;
+    }
+
+    .proposal.row {
+      padding: 15px 0 0;
+    }
+
+    .participants-count {
+      padding: 32px 0 0;
+    }
+
+    .tokens-box {
+      padding: 15px 0 0;
     }
   }
 }
