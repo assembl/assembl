@@ -51,7 +51,6 @@ def test_route_application_root_with_no_discussion(test_app):
     resp = test_app.get(route)
     assert resp.status_int == 200
 
-@pytest.mark.xfail
 def test_route_application_root_with_a_discussion(discussion, test_app):
     """Accessing https://localhost:6543/ (index page of the application) when a discussion exists should not return an error"""
 
