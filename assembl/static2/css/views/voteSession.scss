@@ -93,6 +93,11 @@
 
     .tokens-line {
       margin-top: 14px;
+      margin-bottom: 30px;
+
+      .tokens {
+        margin-left: -5px;
+      }
     }
 
     .tokens > button {
@@ -111,6 +116,15 @@
 
     .tokens > .btn-default:hover {
       background-color: transparent;
+    }
+  }
+
+  .gauge-vote-for-proposal {
+    margin-top: 40px;
+
+    p {
+      margin-bottom: 40px;
+      margin-left: -5px;
     }
   }
 
