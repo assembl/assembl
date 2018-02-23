@@ -1,6 +1,7 @@
+// @flow
 import React from 'react';
 import { connect } from 'react-redux';
-import { SplitButton, MenuItem, Radio, Checkbox } from 'react-bootstrap';
+import { SplitButton, MenuItem, Radio, Checkbox, Button } from 'react-bootstrap';
 import range from 'lodash/range';
 import { Translate, I18n } from 'react-redux-i18n';
 import SectionTitle from '../sectionTitle';
@@ -15,7 +16,18 @@ import {
   deleteGaugeVoteChoice
 } from '../../../actions/adminActions/voteSession';
 import FormControlWithLabel from '../../common/formControlWithLabel';
-import Helper from '../../common/helper';
+
+type GaugeSettingsFormProps = {
+  gaugeModuleId: string,
+  choices: Array<Object>,
+  nbTicks: number,
+  instructions: string,
+  handleInstructionsChange: Function,
+  handleNumberGaugeCheck: Function,
+  handleNbTicksSelectChange: Function,
+  handleNumberGaugeUncheck: Function,
+  isNumberGauge: boolean
+};
 
 const DumbGaugeSettingsForm = ({
   gaugeModuleId,
@@ -27,14 +39,9 @@ const DumbGaugeSettingsForm = ({
   handleNumberGaugeCheck,
   handleNumberGaugeUncheck,
   isNumberGauge
-}) => (
+}: GaugeSettingsFormProps) => (
   <div className="gauge-modal-form-container">
-    <SectionTitle
-      title="Modification des paramètres de jauge"
-      // TRANSLATION
-      annotation="Vous vous aprétez à modifier les paramètres <strong>sur cette jauge uniquement</strong>. Si vous souhaitez répercuter à
-      l'ensemble des jauges. Veuillez cocher la case en bas du formulaire"
-    />
+    <SectionTitle title={I18n.t('administration.gaugeModal.title')} annotation={I18n.t('administration.gaugeModal.subTitle')} />
     <form className="gauge-modal-form">
       <div className="flex margin-m">
         <FormControlWithLabel
@@ -44,15 +51,15 @@ const DumbGaugeSettingsForm = ({
           type="text"
           onChange={handleInstructionsChange}
         />
-        <Helper
-          helperUrl="/static2/img/helpers/helper6.png"
-          helperText={I18n.t('administration.helpers.gaugeVoteInstructions')}
-          additionalTextClasses="helper-text-only"
-        />
+      </div>
+      <div className="flex">
+        <label htmlFor={`dropdown-${gaugeModuleId}`}>
+          <Translate value="administration.nbTicks" />
+        </label>
       </div>
       <SplitButton
         title={nbTicks}
-        id={gaugeModuleId}
+        id={`dropdown-${gaugeModuleId}`}
         required
         onSelect={(eventKey) => {
           handleNbTicksSelectChange(eventKey, isNumberGauge, nbTicks);
@@ -75,7 +82,12 @@ const DumbGaugeSettingsForm = ({
       {isNumberGauge && <NumberGaugeForm id={gaugeModuleId} />}
       {!isNumberGauge &&
         choices.map((cid, idx) => <TextGaugeForm key={`gauge-choice-${idx}`} id={cid} index={idx} editLocale="fr" />)}
-      <Checkbox>Appliquer ces changements à l'ensemble des propositions</Checkbox>
+      <Checkbox>
+        <Translate value="administration.gaugeModal.checkboxLabel" />
+      </Checkbox>
+      <Button className="save-button button-submit button-dark full-size" onClick={() => {}}>
+        <Translate value="administration.saveThemes" />
+      </Button>
     </form>
   </div>
 );

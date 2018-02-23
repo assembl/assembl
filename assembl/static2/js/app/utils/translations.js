@@ -400,6 +400,7 @@ const Translations = {
       voteModulesIntroText2: "Pour modifier votre choix, modifiez la ",
       timeline: "ligne de temps du débat",
       voteProposals: {
+        sectionTitle: "Configurer les propositions associées aux modules de vote",
         defineProposal: "Définir proposition %{number}",
         addProposal: "Ajouter une proposition",
         deleteProposal: "Supprimer la proposition",
@@ -410,6 +411,12 @@ const Translations = {
         tokenVote: "Vote par jetons",
         gauge: "Jauge %{number}",
         gaugeSettings: "Modifier le paramétrage"
+      },
+      gaugeModal: {
+        title: "Modification des paramètres de jauge",
+        subTitle:
+          "Vous vous apprêtez à modifier les paramètres sur cette jauge uniquement. Si vous souhaitez répercuter ces paramètres à l'ensemble des jauges, veuillez cocher la case en bas de formulaire.",
+        checkboxLabel: "Appliquer ces changements à l'ensemble des propositions"
       },
       gaugeVoteInstructions: "Consigne du vote par jauge",
       propositionSectionTitle: "Titre de la section",
@@ -953,6 +960,7 @@ const Translations = {
       tokenTitle: "Token title",
       tokenColor: "Color of the token",
       voteProposals: {
+        sectionTitle: "Configure the proposals associated to the vote modules",
         gauge: "Gauge %{number}",
         defineProposal: "Define proposal %{number}",
         addProposal: "Add a proposal",
@@ -963,6 +971,12 @@ const Translations = {
         description: "Description",
         tokenVote: "Token vote",
         gaugeSettings: "Modify the settings"
+      },
+      gaugeModal: {
+        title: "Modification of the gauge's settings",
+        subTitle:
+          "You are about to modify the settings on this gauge only. If you wish to modify all of the gauges, please check the box at the end of the form.",
+        checkboxLabel: "Apply these changes to all of the proposals"
       },
       sections: {
         addSection: "Add a section",

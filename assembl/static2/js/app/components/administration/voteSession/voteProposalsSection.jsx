@@ -23,8 +23,7 @@ const DumbVoteProposalsSection = ({ voteProposals, editLocale, addVoteProposal }
     <div className="vote-proposals-section">
       <div className="admin-box">
         <SectionTitle
-          title="Configurer les propositions associées aux modules de vote"
-          // TRNASLATION!
+          title={I18n.t('administration.voteProposals.sectionTitle')}
           annotation={I18n.t('administration.annotation')}
         />
         <div className="intro-text">

@@ -32,4 +32,25 @@
   .form-group {
     flex-grow: 1;
   }
+
+  .gauge-modal-form {
+    width: 75%;
+    margin: 0 auto;
+    padding: 10px 0;
+  }
+
+  .save-button {
+    margin-top: 20px;
+  }
+
+  label {
+    font-family: $font-family4;
+    font-size: $font-size-xs;
+    margin: 0 0 5px 5px;
+  }
+
+  .form-control {
+    font-size: $font-size-xs;
+    padding-left: 8px;
+  }
 }

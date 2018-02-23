@@ -9,7 +9,7 @@ exports[`VoteProposalsSection component should render a VoteProposalsSection com
   >
     <SectionTitle
       annotation="Missing translation: administration.annotation"
-      title="Configurer les propositions associées aux modules de vote"
+      title="Missing translation: administration.voteProposals.sectionTitle"
     />
     <div
       className="intro-text"
@@ -87,7 +87,7 @@ exports[`VoteProposalsSection component should render a voteProposalsSection wit
   >
     <SectionTitle
       annotation="Missing translation: administration.annotation"
-      title="Configurer les propositions associées aux modules de vote"
+      title="Missing translation: administration.voteProposals.sectionTitle"
     />
     <div
       className="intro-text"
