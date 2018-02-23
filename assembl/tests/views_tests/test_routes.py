@@ -44,6 +44,20 @@ def test_route_discussion_root(
     discussion.preferences['landing_page'] = original
     discussion.db.commit()
 
+def test_route_application_root_with_no_discussion(test_app):
+    """Accessing https://localhost:6543/ (index page of the application) when there is no discussion yet should not return an error"""
+
+    route = "/"
+    resp = test_app.get(route)
+    assert resp.status_int == 200
+
+@pytest.mark.xfail
+def test_route_application_root_with_a_discussion(discussion, test_app):
+    """Accessing https://localhost:6543/ (index page of the application) when a discussion exists should not return an error"""
+
+    route = "/"
+    resp = test_app.get(route)
+    assert resp.status_int == 200
 
 def test_route_discussion_root_redirector(discussion, test_app):
     """/slug/ redirects to /slug"""
