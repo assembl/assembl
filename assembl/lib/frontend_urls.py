@@ -214,7 +214,6 @@ class FrontendUrls(object):
         Returns the legacy URL route. Currently, /debate/{discussion_slug}
         """
 
-        from assembl.views import create_get_route
         if request is None:
             # Shouldn't do this. Method should only be used in context
             # of a request!
@@ -235,6 +234,7 @@ class FrontendUrls(object):
                 route = self.get_frontend_url(
                     'homeBare', slug=self.discussion.slug)
         else:
+            from assembl.views import create_get_route
             get_route = create_get_route(request, self.discussion)
             if force_v1:
                 route = get_route('oldDebate')
@@ -278,10 +278,7 @@ class FrontendUrls(object):
                 first_idea = ideas[0]
             else:
                 # orphan post, redirect to home
-                from pyramid.threadlocal import get_current_request
-                request = get_current_request()
-                return request.route_url(
-                    'new_home', discussion_slug=self.discussion.slug)
+                return self.get_discussion_url()
 
             if first_idea is not None and first_idea.__class__.__name__ ==\
                     'Question':
