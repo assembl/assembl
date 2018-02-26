@@ -21,8 +21,9 @@ export const DumbSelectModulesForm = ({ hasErrors, modulesByIdentifier, moduleTy
           return (
             <Checkbox
               key={moduleType.identifier}
-              checked={(module && module.get('enabled')) || moduleType.required}
-              onChange={() => (!moduleType.required ? toggleModule(moduleType.identifier) : null)}
+              checked={module && module.get('enabled')}
+              onChange={() => toggleModule(moduleType.identifier)}
+              disabled={moduleType.required}
             >
               <Helper
                 label={moduleType.title}

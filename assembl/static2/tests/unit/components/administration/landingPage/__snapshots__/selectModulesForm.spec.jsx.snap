@@ -10,7 +10,7 @@ exports[`DumbSelectModulesForm component should render a form to select the land
     <Checkbox
       bsClass="checkbox"
       checked={true}
-      disabled={false}
+      disabled={true}
       inline={false}
       onChange={[Function]}
       title=""
@@ -58,7 +58,7 @@ exports[`DumbSelectModulesForm component should render a form to select the land
     <Checkbox
       bsClass="checkbox"
       checked={true}
-      disabled={false}
+      disabled={true}
       inline={false}
       onChange={[Function]}
       title=""
