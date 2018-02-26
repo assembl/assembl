@@ -6,6 +6,7 @@ import { Link } from 'react-router';
 import Search from '../search';
 import Avatar from '../common/avatar';
 import { getConnectedUserId } from '../../utils/globalFunctions';
+import { connectedUserIsExpert } from '../../utils/permissions';
 
 type Props = {
   location: string,
@@ -14,10 +15,22 @@ type Props = {
   remainingWidth?: number
 };
 
-const shouldShow = (remainingWidth, breakPoint) => (typeof remainingWidth === 'number' ? remainingWidth > breakPoint : true);
+const shouldShowUsername = (remainingWidth, breakPoint) =>
+  (typeof remainingWidth === 'number' ? remainingWidth > breakPoint : true);
+
+const shouldShowExpertIcons = connectedUserIsExpert();
+
+const handleHarvestingModeClick = () => {
+  // TODO: activate harvesting mode (which probably means changing a property of application state)
+};
 
 const UserMenu = ({ location, currentPhaseIdentifier, helpUrl, remainingWidth }: Props) => (
   <div className="navbar-icons">
+    {shouldShowExpertIcons && (
+      <span className="assembl-icon-catch" onClick={handleHarvestingModeClick} role="button" tabIndex={0}>
+        &nbsp;
+      </span>
+    )}
     {currentPhaseIdentifier !== 'survey' && (
       <div id="search">
         <Search />
@@ -29,7 +42,7 @@ const UserMenu = ({ location, currentPhaseIdentifier, helpUrl, remainingWidth }:
           <span className="assembl-icon-faq grey" />
         </Link>
       )}
-    <Avatar location={location} showUsername={shouldShow(remainingWidth, 450)} />
+    <Avatar location={location} showUsername={shouldShowUsername(remainingWidth, 450)} />
   </div>
 );
 
