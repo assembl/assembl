@@ -16,7 +16,7 @@ exports[`Proposals component should match Proposals snapshot 1`] = `
         <h3
           className="proposal-title dark-title-3"
         >
-          Foo
+          First proposal
         </h3>
         <p
           className="text"
@@ -464,7 +464,7 @@ exports[`Proposals component should match Proposals snapshot 1`] = `
             />
           </div>
           <input
-            name="vote-for-proposal-foo-vote-specification-ABC"
+            name="vote-for-proposal-proposal-1-vote-specification-text-gauge-module"
             type="hidden"
             value={0}
           />
@@ -509,7 +509,7 @@ exports[`Proposals component should match Proposals snapshot 1`] = `
         <h3
           className="proposal-title dark-title-3"
         >
-          Bar
+          Second proposal
         </h3>
         <p
           className="text"
@@ -957,7 +957,7 @@ exports[`Proposals component should match Proposals snapshot 1`] = `
             />
           </div>
           <input
-            name="vote-for-proposal-bar-vote-specification-ABC"
+            name="vote-for-proposal-proposal-2-vote-specification-text-gauge-module"
             type="hidden"
             value={0}
           />
