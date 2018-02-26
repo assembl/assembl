@@ -1,7 +1,6 @@
 // @flow
 import React from 'react';
 import { withApollo, type ApolloClient } from 'react-apollo';
-import { browserHistory } from 'react-router';
 import { Translate, Localize } from 'react-redux-i18n';
 import { connect } from 'react-redux';
 import classNames from 'classnames';
@@ -9,10 +8,15 @@ import classNames from 'classnames';
 import MenuTable, { prefetchMenuQuery } from './menuTable';
 import { getPhaseStatus, isSeveralIdentifiers, type Timeline } from '../../../utils/timeline';
 import { displayModal } from '../../../utils/utilityManager';
-import { get } from '../../../utils/routeMap';
+import { get, goTo } from '../../../utils/routeMap';
+import { isMobile } from '../../../utils/globalFunctions';
 import { PHASE_STATUS, PHASES } from '../../../constants';
 
 const phasesToIgnore = [PHASES.voteSession];
+
+export type MenuClickEvent = {
+  path: Array<HTMLElement>
+};
 
 export type DebateType = {
   debateData: {
@@ -46,6 +50,7 @@ export class DumbTimelineSegment extends React.Component<*, TimelineSegmentProps
 
   componentWillMount() {
     const { phaseIdentifier, title, startDate, endDate, locale, client } = this.props;
+    this.isTouchScreenDevice = isMobile.any();
     this.phaseStatus = getPhaseStatus(startDate, endDate);
     const inProgress = this.phaseStatus === PHASE_STATUS.inProgress;
     const ignore = phasesToIgnore.includes(phaseIdentifier);
@@ -63,11 +68,29 @@ export class DumbTimelineSegment extends React.Component<*, TimelineSegmentProps
     });
   }
 
+  componentDidMount() {
+    // only if we have a touch screen device, we need to hide the segment if the
+    // user touch outside of the segment block (simulate the onMouseLeave behavior).
+    if (this.isTouchScreenDevice) {
+      document.addEventListener('click', this.handleTouchOutside);
+    }
+  }
+
+  componentWillUnmount() {
+    if (this.isTouchScreenDevice) {
+      document.removeEventListener('click', this.handleTouchOutside);
+    }
+  }
+
   phaseStatus = null;
 
   phaseName = null;
 
   ignoreMenu = false;
+
+  isTouchScreenDevice = false;
+
+  segment = null;
 
   showMenu = () => {
     this.setState({ active: true });
@@ -75,6 +98,12 @@ export class DumbTimelineSegment extends React.Component<*, TimelineSegmentProps
 
   hideMenu = () => {
     this.setState({ active: false });
+  };
+
+  handleTouchOutside = (event: MouseEvent) => {
+    if (this.state.active && this.segment && !this.segment.contains(event.target)) {
+      this.hideMenu();
+    }
   };
 
   renderNotStarted = (className?: string) => {
@@ -88,7 +117,7 @@ export class DumbTimelineSegment extends React.Component<*, TimelineSegmentProps
   };
 
   displayPhase = () => {
-    const { phaseIdentifier } = this.props;
+    const { phaseIdentifier, onMenuItemClick } = this.props;
     const { debateData } = this.props.debate;
     const phase = debateData.timeline.filter(p => p.identifier === phaseIdentifier);
     const isRedirectionToV1 = phase[0].interface_v1;
@@ -102,15 +131,17 @@ export class DumbTimelineSegment extends React.Component<*, TimelineSegmentProps
       }
       if (this.phaseStatus === PHASE_STATUS.inProgress || this.phaseStatus === PHASE_STATUS.completed) {
         if (!isRedirectionToV1) {
-          browserHistory.push(get('debate', params));
+          goTo(get('debate', params));
           this.hideMenu();
+          if (onMenuItemClick) onMenuItemClick();
         } else {
           window.location = get('oldVote', slug);
         }
       }
     } else if (!isRedirectionToV1) {
-      browserHistory.push(get('debate', params));
+      goTo(get('debate', params));
       this.hideMenu();
+      if (onMenuItemClick) onMenuItemClick();
     } else {
       window.location = get('oldVote', slug);
     }
@@ -138,17 +169,22 @@ export class DumbTimelineSegment extends React.Component<*, TimelineSegmentProps
     const { barPercent, title, locale } = this.props;
     const { active } = this.state;
     const inProgress = this.phaseStatus === PHASE_STATUS.inProgress;
-    const timelineClass = classNames('timeline-title', { 'txt-active-bold': inProgress, 'txt-active-light': !inProgress });
+    const timelineClass = 'timeline-title txt-active-light';
+    const touchActive = this.isTouchScreenDevice && !active;
+    const onClick = touchActive ? this.showMenu : this.displayPhase;
     return (
       <div
+        ref={(segment) => {
+          this.segment = segment;
+        }}
         className={classNames('minimized-timeline', {
           active: active
         })}
-        onMouseOver={this.showMenu}
-        onMouseLeave={this.hideMenu}
+        onMouseOver={!this.isTouchScreenDevice && this.showMenu}
+        onMouseLeave={!this.isTouchScreenDevice && this.hideMenu}
       >
         {title.entries.filter(entry => locale === entry['@language']).map((entry, index) => (
-          <div onClick={this.displayPhase} className={timelineClass} key={index}>
+          <div onClick={onClick} className={timelineClass} key={index}>
             {inProgress && <span className="arrow assembl-icon assembl-icon-right-dir" />}
             <div className="timeline-link">{entry.value}</div>
           </div>

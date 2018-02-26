@@ -6,12 +6,9 @@ exports[`DumbMenuItem component should match a not selected menu item 1`] = `
   onMouseLeave={[Function]}
   onMouseOver={[Function]}
 >
-  <Link
+  <div
     className="menu-item"
-    onClick={undefined}
-    onlyActiveOnIndex={false}
-    style={Object {}}
-    to="/slug/debate/survey/theme/fooId"
+    onClick={[Function]}
   >
     <div
       className="thumb-img"
@@ -40,7 +37,7 @@ exports[`DumbMenuItem component should match a not selected menu item 1`] = `
         numPosts={123}
       />
     </div>
-  </Link>
+  </div>
 </div>
 `;
 
@@ -50,12 +47,9 @@ exports[`DumbMenuItem component should match a selected menu item 1`] = `
   onMouseLeave={[Function]}
   onMouseOver={[Function]}
 >
-  <Link
+  <div
     className="menu-item"
-    onClick={undefined}
-    onlyActiveOnIndex={false}
-    style={Object {}}
-    to="/slug/debate/survey/theme/fooId"
+    onClick={[Function]}
   >
     <div
       className="thumb-img"
@@ -87,6 +81,6 @@ exports[`DumbMenuItem component should match a selected menu item 1`] = `
     <span
       className="thumb-arrow assembl-icon assembl-icon-right-dir"
     />
-  </Link>
+  </div>
 </div>
 `;

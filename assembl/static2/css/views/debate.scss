@@ -28,29 +28,41 @@
       right: 0;
       left: 0;
       z-index: -1;
-      height: 65%;
+      height: 75%;
       padding: 10px 0 10px;
       background-color: $white;
       box-shadow: 0 1px 10px rgba(0, 0, 0, 0.45);
 
       @media (min-height: 534px) and (max-height: 549px) {
-        height: calc(65% - 30px);
+        height: calc(75% - 30px);
+      }
+
+      @media (min-height: 640px) and (max-height: 655px) {
+        height: calc(75% - 10px);
+      }
+
+      @media (min-height: 667px) and (max-height: 682px) {
+        height: calc(75% - 30px);
       }
 
       @media (min-height: 720px) and (max-height: 735px) {
-        height: calc(65% - 45px);
+        height: calc(75% - 70px);
       }
 
       @media (min-height: 800px) and (max-height: 815px) {
-        height: calc(65% - 45px);
+        height: calc(75% - 30px);
       }
 
       @media (min-height: 864px) and (max-height: 879px) {
-        height: calc(65% - 30px);
+        height: calc(75% - 30px);
+      }
+
+      @media (min-height: 1024px) and (max-height: 1039px) {
+        height: calc(75% - 15px);
       }
 
       @media (min-height: 1050px) and (max-height: 1065px) {
-        height: calc(65% - 30px);
+        height: calc(75% - 60px);
       }
     }
 
@@ -93,10 +105,11 @@
           max-width: 100%;
           align-items: center;
           color: inherit;
+          cursor: pointer;
 
           .thumb-img {
-            height: 45px;
-            width: 25%;
+            height: 42px;
+            width: 64px;
             background-position: top left;
             background-repeat: no-repeat;
             background-size: cover;
@@ -105,12 +118,12 @@
           }
 
           .thumb-body {
-            padding: 10px 5px 10px 30px;
+            padding: 5px 5px 3px 15px;
             font-size: 10px;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            width: calc(75% - 15px);
+            width: calc(100% - 79px);
             height: 100%;
           }
 
@@ -202,14 +215,6 @@
 
         .menu-item-container .menu-item {
           width: 20vw;
-
-          .thumb-img {
-            width: 20%;
-          }
-
-          .thumb-body {
-            width: calc(80% - 15px);
-          }
         }
       }
     }

@@ -1,9 +1,10 @@
 // @flow
 import React from 'react';
-import { Link } from 'react-router';
 import classNames from 'classnames';
 
 import Timeline from '../navigation/timeline';
+import { isMobile } from '../../../utils/globalFunctions';
+import { goTo } from '../../../utils/routeMap';
 
 type DebateLinkProps = {
   identifier: string,
@@ -43,26 +44,36 @@ class DebateLink extends React.Component<*, DebateLinkProps, DebateLinkState> {
   };
 
   handleClickOutside = (event: MouseEvent) => {
-    if (this.debate && !this.debate.contains(event.target)) {
+    if (this.state.menuActive && this.debate && !this.debate.contains(event.target)) {
       this.hideMenu();
     }
+  };
+
+  onLinkClick = () => {
+    this.hideMenu();
+    goTo(this.props.to);
   };
 
   render() {
     const { identifier, children, to, className, activeClassName, dataText, screenTooSmall } = this.props;
     const { menuActive } = this.state;
+    // The first touch show the menu and the second activate the link
+    const isTouchScreenDevice = isMobile.any();
+    const touchActive = isTouchScreenDevice && !menuActive;
+    const onLinkClick = touchActive ? this.showMenu : this.onLinkClick;
+    const linkActive = window.location.pathname === to;
     return (
       <div
         ref={(debate) => {
           this.debate = debate;
         }}
         className={classNames('debate-link', { active: menuActive })}
-        onMouseOver={!screenTooSmall && this.showMenu}
-        onMouseLeave={!screenTooSmall && this.hideMenu}
+        onMouseOver={!isTouchScreenDevice && !screenTooSmall && this.showMenu}
+        onMouseLeave={!isTouchScreenDevice && !screenTooSmall && this.hideMenu}
       >
-        <Link to={to} className={className} activeClassName={activeClassName} data-text={dataText}>
+        <div onClick={onLinkClick} className={classNames(className, { [activeClassName]: linkActive })} data-text={dataText}>
           {children}
-        </Link>
+        </div>
         {!screenTooSmall && (
           <div className="header-container">
             <section className="timeline-section" id="timeline">

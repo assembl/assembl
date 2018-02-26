@@ -6,18 +6,15 @@ exports[`DebateLink component should match the DebateLink (small screen) 1`] = `
   onMouseLeave={false}
   onMouseOver={false}
 >
-  <Link
-    activeClassName="debate-class-active"
+  <div
     className="debate-class"
     data-text="Debate"
-    onlyActiveOnIndex={false}
-    style={Object {}}
-    to="https://foo.bar"
+    onClick={[Function]}
   >
     <span>
       Debate
     </span>
-  </Link>
+  </div>
 </div>
 `;
 
@@ -27,18 +24,15 @@ exports[`DebateLink component should match the DebateLink 1`] = `
   onMouseLeave={[Function]}
   onMouseOver={[Function]}
 >
-  <Link
-    activeClassName="debate-class-active"
+  <div
     className="debate-class"
     data-text="Debate"
-    onlyActiveOnIndex={false}
-    style={Object {}}
-    to="https://foo.bar"
+    onClick={[Function]}
   >
     <span>
       Debate
     </span>
-  </Link>
+  </div>
   <div
     className="header-container"
   >
