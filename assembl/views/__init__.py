@@ -408,7 +408,11 @@ def get_description(request):
     from ..auth.util import get_current_discussion
     discussion = get_current_discussion()
     if discussion:
-        return discussion.preferences["extra_json"]["objectives"]["descriptionEntries"][opengraph_locale]
+        if discussion.preferences["extra_json"]["objectives"]["descriptionEntries"][opengraph_locale]:
+            return discussion.preferences["extra_json"]["objectives"]["descriptionEntries"][opengraph_locale]
+        else:
+            locale = discussion.preferences['preferred_locales'][0]
+            return discussion.preferences["extra_json"]["objectives"]["descriptionEntries"][locale]
 
 
 def get_topic(request):
@@ -417,7 +421,11 @@ def get_topic(request):
     from ..auth.util import get_current_discussion
     discussion = get_current_discussion()
     if discussion:
-        return discussion.preferences["extra_json"]["topic"]["titleEntries"][opengraph_locale]
+        if discussion.preferences["extra_json"]["topic"]["titleEntries"][opengraph_locale]:
+            return discussion.preferences["extra_json"]["topic"]["titleEntries"][opengraph_locale]
+        else:
+            locale = discussion.preferences['preferred_locales'][0]
+            return discussion.preferences["extra_json"]["topic"]["titleEntries"][opengraph_locale]
 
 
 def get_landing_page_image():
