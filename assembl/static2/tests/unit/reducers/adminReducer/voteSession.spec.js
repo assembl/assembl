@@ -281,8 +281,8 @@ describe('voteSession admin reducers', () => {
     });
   });
 
-  describe('proposalModulesById reducer', () => {
-    const { proposalModulesById } = reducers;
+  describe('modulesById reducer', () => {
+    const { modulesById } = reducers;
     it('should handle ADD_MODULE_TO_PROPOSAL action type', () => {
       const state = Map();
       const action = {
@@ -301,12 +301,12 @@ describe('voteSession admin reducers', () => {
           voteType: 'tokens',
           id: 'module42',
           isNew: true,
-          moduleTemplateId: 'template2',
           proposalId: 'proposal1',
+          voteSpecTemplateId: 'template2',
           toDelete: false
         }
       };
-      const actual = proposalModulesById(state, action);
+      const actual = modulesById(state, action);
       expect(actual.toJS()).toEqual(expected);
     });
 
@@ -337,7 +337,7 @@ describe('voteSession admin reducers', () => {
           toDelete: true
         }
       };
-      const actual = proposalModulesById(state, action);
+      const actual = modulesById(state, action);
       expect(actual.toJS()).toEqual(expected);
     });
   });

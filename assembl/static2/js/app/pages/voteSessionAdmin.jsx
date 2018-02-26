@@ -3,7 +3,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { compose, graphql } from 'react-apollo';
 import { I18n, Translate } from 'react-redux-i18n';
-import type { List, Map } from 'immutable';
+import { List, type Map } from 'immutable';
 import { Button } from 'react-bootstrap';
 import { Link } from 'react-router';
 
@@ -29,32 +29,68 @@ import { get } from '../utils/routeMap';
 import { displayAlert, displayCustomModal, closeModal } from '../utils/utilityManager';
 import { getDiscussionSlug } from '../utils/globalFunctions';
 
-const createVariablesForDeleteMutation = voteModule => ({ id: voteModule.id });
+type VoteModule = {
+  choices?: Array<any>,
+  exclusiveCategories?: boolean,
+  id: string,
+  instructionsEntries?: Array<string>,
+  isNew: boolean,
+  isNumberGauge?: boolean,
+  isNumberGauge?: boolean,
+  labelEntries: Array<string>,
+  maximum?: number,
+  minimum?: number,
+  nbTicks?: number,
+  proposalId?: ?string,
+  toDelete: boolean,
+  tokenCategories?: Array<Object>,
+  type?: string,
+  unit?: string,
+  value: any,
+  voteSpecTemplateId?: ?string,
+  voteSessionId?: string,
+  voteType?: string
+};
 
-const createVariablesForTokenVoteSpecificationMutation = voteModule => ({
+const createVariablesForDeleteMutation = item => ({ id: item.id });
+
+type CreateVariablesForTokenVoteSpecificationMutation = VoteModule => Object;
+const createVariablesForTokenVoteSpecificationMutation: CreateVariablesForTokenVoteSpecificationMutation = voteModule => ({
+  proposalId: voteModule.proposalId,
+  voteSpecTemplateId: voteModule.voteSpecTemplateId,
   voteSessionId: voteModule.voteSessionId,
   exclusiveCategories: voteModule.exclusiveCategories,
   instructionsEntries: voteModule.instructionsEntries,
   titleEntries: [],
-  tokenCategories: voteModule.tokenCategories.map(t => ({
-    id: t.id,
-    titleEntries: t.titleEntries,
-    color: t.color,
-    totalNumber: t.totalNumber
-  }))
+  tokenCategories: voteModule.tokenCategories
+    ? voteModule.tokenCategories.map(t => ({
+      id: t.id,
+      titleEntries: t.titleEntries,
+      color: t.color,
+      totalNumber: t.totalNumber
+    }))
+    : []
 });
 
-const createVariablesForTextGaugeMutation = voteModule => ({
+type CreateVariablesForTextGaugeMutation = VoteModule => Object;
+const createVariablesForTextGaugeMutation: CreateVariablesForTextGaugeMutation = voteModule => ({
+  proposalId: voteModule.proposalId,
+  voteSpecTemplateId: voteModule.voteSpecTemplateId,
   voteSessionId: voteModule.voteSessionId,
   titleEntries: [],
   instructionsEntries: voteModule.instructionsEntries,
-  choices: voteModule.choices.map((c, index) => ({
-    labelEntries: c.labelEntries,
-    value: index.toFixed(2)
-  }))
+  choices: voteModule.choices
+    ? voteModule.choices.map((c, index) => ({
+      labelEntries: c.labelEntries,
+      value: index.toFixed(2)
+    }))
+    : []
 });
 
-const createVariablesForNumberGaugeMutation = voteModule => ({
+type CreateVariablesForNumberGaugeMutation = VoteModule => Object;
+const createVariablesForNumberGaugeMutation: CreateVariablesForNumberGaugeMutation = voteModule => ({
+  proposalId: voteModule.proposalId,
+  voteSpecTemplateId: voteModule.voteSpecTemplateId,
   voteSessionId: voteModule.voteSessionId,
   titleEntries: [],
   instructionsEntries: voteModule.instructionsEntries,
@@ -64,10 +100,10 @@ const createVariablesForNumberGaugeMutation = voteModule => ({
   unit: voteModule.unit
 });
 
-const createVariablesForProposalsMutation = proposals => ({
-  voteSessionId: proposals.voteSessionId,
-  titleEntries: proposals.titleEntries,
-  descriptionEntries: convertEntriesToHTML(proposals.descriptionEntries)
+const createVariablesForProposalsMutation = proposal => ({
+  voteSessionId: proposal.voteSessionId,
+  titleEntries: proposal.titleEntries,
+  descriptionEntries: convertEntriesToHTML(proposal.descriptionEntries)
 });
 
 type VoteSessionAdminProps = {
@@ -102,6 +138,13 @@ type VoteSessionAdminState = {
   firstWarningDisplayed: boolean,
   secondWarningDisplayed: boolean
 };
+
+type TestModuleType = VoteModule => boolean;
+const isTokenVoteModule: TestModuleType = m => m.voteType === 'token_vote_specification' || m.type === 'tokens';
+const isTextGaugeModule: TestModuleType = m =>
+  m.voteType === 'gauge_vote_specification' || (m.type === 'gauge' && !m.isNumberGauge);
+const isNumberGaugeModule: TestModuleType = m =>
+  m.voteType === 'number_gauge_vote_specification' || ((m.type === 'gauge' && m.isNumberGauge) || false);
 
 class VoteSessionAdmin extends React.Component<void, VoteSessionAdminProps, VoteSessionAdminState> {
   props: VoteSessionAdminProps;
@@ -217,77 +260,123 @@ class VoteSessionAdmin extends React.Component<void, VoteSessionAdminProps, Vote
         });
     }
 
+    const getTokenVoteSpecMutationsPromises = items =>
+      getMutationsPromises({
+        items: items,
+        variablesCreator: createVariablesForTokenVoteSpecificationMutation,
+        deleteVariablesCreator: createVariablesForDeleteMutation,
+        createMutation: createTokenVoteSpecification,
+        updateMutation: updateTokenVoteSpecification,
+        deleteMutation: deleteVoteSpecification,
+        lang: i18n.locale
+      });
+
+    const getTextGaugeSpecMutationsPromises = items =>
+      getMutationsPromises({
+        items: items,
+        variablesCreator: createVariablesForTextGaugeMutation,
+        deleteVariablesCreator: createVariablesForDeleteMutation,
+        createMutation: createGaugeVoteSpecification,
+        updateMutation: updateGaugeVoteSpecification,
+        deleteMutation: deleteVoteSpecification,
+        lang: i18n.locale
+      });
+
+    const getNumberGaugeMutationsPromises = items =>
+      getMutationsPromises({
+        items: items,
+        variablesCreator: createVariablesForNumberGaugeMutation,
+        deleteVariablesCreator: createVariablesForDeleteMutation,
+        createMutation: createNumberGaugeVoteSpecification,
+        updateMutation: updateNumberGaugeVoteSpecification,
+        deleteMutation: deleteVoteSpecification,
+        lang: i18n.locale
+      });
+
+    const getMutationsForModules = (modules) => {
+      const tokenVoteModules = modules.filter(isTokenVoteModule);
+      const textGaugeModules = modules.filter(isTextGaugeModule);
+      const numberGaugeModules = modules.filter(isNumberGaugeModule);
+      return getTokenVoteSpecMutationsPromises(tokenVoteModules)
+        .concat(getTextGaugeSpecMutationsPromises(textGaugeModules))
+        .concat(getNumberGaugeMutationsPromises(numberGaugeModules));
+    };
+
     if (voteSessionPage.get('id')) {
+      let allSpecsMutationsPromises = [];
       if (tokenModulesHaveChanged) {
         const tokenModules = voteModules.filter(m => m.get('type') === 'tokens');
-        const items = [];
-        tokenModules.forEach((t) => {
-          items.push({ ...t.toJS(), voteSessionId: voteSessionPage.get('id') });
-        });
-        const mutationsPromises = getMutationsPromises({
-          items: items,
-          variablesCreator: createVariablesForTokenVoteSpecificationMutation,
-          deleteVariablesCreator: createVariablesForDeleteMutation,
-          createMutation: createTokenVoteSpecification,
-          updateMutation: updateTokenVoteSpecification,
-          deleteMutation: deleteVoteSpecification,
-          lang: i18n.locale
-        });
-
-        this.runMutations(mutationsPromises);
+        const items = tokenModules.map(t => ({ ...t.toJS(), voteSessionId: voteSessionPage.get('id') }));
+        const mutationsPromises = getTokenVoteSpecMutationsPromises(items);
+        allSpecsMutationsPromises = allSpecsMutationsPromises.concat(mutationsPromises);
       }
       if (textGaugeModulesHaveChanged) {
         const textGaugeModules = voteModules.filter(m => m.get('type') === 'gauge' && !m.get('isNumberGauge'));
-        const items = [];
-        textGaugeModules.forEach((t) => {
-          items.push({ ...t.toJS(), voteSessionId: voteSessionPage.get('id') });
-        });
-        const mutationsPromises = getMutationsPromises({
-          items: items,
-          variablesCreator: createVariablesForTextGaugeMutation,
-          deleteVariablesCreator: createVariablesForDeleteMutation,
-          createMutation: createGaugeVoteSpecification,
-          updateMutation: updateGaugeVoteSpecification,
-          deleteMutation: deleteVoteSpecification,
-          lang: i18n.locale
-        });
-
-        this.runMutations(mutationsPromises);
+        const items = textGaugeModules.map(t => ({ ...t.toJS(), voteSessionId: voteSessionPage.get('id') }));
+        const mutationsPromises = getTextGaugeSpecMutationsPromises(items);
+        allSpecsMutationsPromises = allSpecsMutationsPromises.concat(mutationsPromises);
       }
       if (numberGaugeModulesHaveChanged) {
         const numberGaugeModules = voteModules.filter(m => m.get('type') === 'gauge' && m.get('isNumberGauge'));
-        const items = [];
-        numberGaugeModules.forEach((t) => {
-          items.push({ ...t.toJS(), voteSessionId: voteSessionPage.get('id') });
-        });
-        const mutationsPromises = getMutationsPromises({
-          items: items,
-          variablesCreator: createVariablesForNumberGaugeMutation,
-          deleteVariablesCreator: createVariablesForDeleteMutation,
-          createMutation: createNumberGaugeVoteSpecification,
-          updateMutation: updateNumberGaugeVoteSpecification,
-          deleteMutation: deleteVoteSpecification,
-          lang: i18n.locale
-        });
-
-        this.runMutations(mutationsPromises);
+        const items = numberGaugeModules.map(t => ({ ...t.toJS(), voteSessionId: voteSessionPage.get('id') }));
+        const mutationsPromises = getNumberGaugeMutationsPromises(items);
+        allSpecsMutationsPromises = allSpecsMutationsPromises.concat(mutationsPromises);
       }
+
+      if (allSpecsMutationsPromises.length > 0) {
+        this.runMutations(allSpecsMutationsPromises);
+      }
+
       if (voteProposalsHaveChanged) {
         const items = [];
         voteProposals.forEach((t) => {
           items.push({ ...t.toJS(), voteSessionId: voteSessionPage.get('id') });
         });
-        const mutationsPromises = getMutationsPromises({
-          items: items,
-          variablesCreator: createVariablesForProposalsMutation,
-          deleteVariablesCreator: createVariablesForDeleteMutation,
-          createMutation: createProposal,
-          updateMutation: updateProposal,
-          deleteMutation: deleteProposal,
-          lang: i18n.locale
-        });
+        const proposalsToDeleteOrUpdate = items.filter(item => !item.isNew);
+        let mutationsPromises: Array<Promise<*>> = [];
+        proposalsToDeleteOrUpdate.forEach((proposal) => {
+          if (proposal.toDelete) {
+            // delete all modules and then delete the proposal
+            mutationsPromises = mutationsPromises.concat(
+              proposal.modules.map(m => deleteVoteSpecification({ variables: createVariablesForDeleteMutation(m) }))
+            );
+            mutationsPromises.push(deleteProposal({ variables: createVariablesForDeleteMutation(proposal) }));
+          }
 
+          const modulesToMutate = proposal.modules.map(m => ({ ...m, voteSessionId: voteSessionPage.get('id') }));
+          const modulesMutations = getMutationsForModules(modulesToMutate);
+          mutationsPromises = mutationsPromises.concat(modulesMutations);
+
+          const updateVariables = {
+            ...createVariablesForProposalsMutation(proposal),
+            id: proposal.id,
+            lang: i18n.locale
+          };
+          mutationsPromises.push(updateProposal({ variables: updateVariables }));
+        });
         this.runMutations(mutationsPromises);
+
+        const proposalsToCreate = items.filter(item => item.isNew && !item.toDelete);
+        proposalsToCreate.forEach((proposal) => {
+          const payload = {
+            variables: createVariablesForProposalsMutation(proposal)
+          };
+
+          let modulesToCreate = proposal.modules.filter(pModule => pModule.isNew && !pModule.toDelete);
+          createProposal(payload).then((res) => {
+            if (res.data) {
+              const proposalId = res.data.createProposal.proposal.id;
+              // create the modules
+              modulesToCreate = modulesToCreate.map(m => ({
+                ...m,
+                proposalId: proposalId,
+                voteSessionId: voteSessionPage.get('id')
+              }));
+
+              this.runMutations(getMutationsForModules(modulesToCreate));
+            }
+          });
+        });
       }
     }
   };
@@ -335,16 +424,22 @@ const mapStateToProps = ({ admin: { editLocale, voteSession }, debate, i18n }) =
     voteProposalsById
   } = voteSession;
 
-  const modules = modulesInOrder.map((id) => {
-    if (modulesById.getIn([id, 'choices'])) {
-      return modulesById.get(id).set('choices', modulesById.getIn([id, 'choices']).map(t => gaugeChoicesById.get(t)));
-    } else if (modulesById.getIn([id, 'tokenCategories'])) {
-      return modulesById
-        .get(id)
-        .set('tokenCategories', modulesById.getIn([id, 'tokenCategories']).map(t => tokenCategoriesById.get(t)));
+  type Module = Map<string, any>;
+  const expandModuleData = (m: Module): Module => {
+    if (m.has('choices')) {
+      return m.set('choices', m.get('choices').map(c => gaugeChoicesById.get(c)));
+    } else if (m.has('tokenCategories')) {
+      return m.set('tokenCategories', m.get('tokenCategories').map(tc => tokenCategoriesById.get(tc)));
     }
-    return modulesById.get(id);
+
+    return m;
+  };
+
+  const voteModules = modulesInOrder.map((id) => {
+    const m = modulesById.get(id);
+    return expandModuleData(m);
   });
+
   return {
     editLocale: editLocale,
     i18n: i18n,
@@ -353,9 +448,17 @@ const mapStateToProps = ({ admin: { editLocale, voteSession }, debate, i18n }) =
     numberGaugeModulesHaveChanged: numberGaugeModulesHaveChanged,
     voteProposalsHaveChanged: voteProposalsHaveChanged,
     timeline: debate.debateData.timeline,
-    voteModules: modules,
+    voteModules: voteModules,
     voteSessionPage: voteSession.page,
-    voteProposals: voteProposalsInOrder.map(id => voteProposalsById.get(id))
+    voteProposals: voteProposalsInOrder.map((id) => {
+      const proposal = voteProposalsById.get(id);
+      const pModules = proposal
+        .get('modules')
+        .map(pmId => modulesById.get(pmId))
+        .map(expandModuleData);
+
+      return proposal.set('modules', pModules);
+    })
   };
 };
 

@@ -127,14 +127,15 @@ const DumbVoteProposalForm = ({
         required
       />
       {tokenModules.map((moduleTemplateId) => {
-        const isChecked = proposalModules.some(m => m.get('moduleTemplateId') === moduleTemplateId);
+        const isChecked = proposalModules.some(m => m.get('voteSpecTemplateId') === moduleTemplateId);
         return (
           <Checkbox
             key={moduleTemplateId}
             checked={isChecked}
             onChange={() => {
               if (isChecked) {
-                deassociateModuleToProposal(moduleTemplateId);
+                const pModule = proposalModules.find(m => m.get('voteSpecTemplateId') === moduleTemplateId);
+                deassociateModuleToProposal(pModule.get('id'));
               } else {
                 associateModuleToProposal(moduleTemplateId);
               }
@@ -145,8 +146,8 @@ const DumbVoteProposalForm = ({
         );
       })}
       {gaugeModules.map((moduleTemplateId, idx) => {
+        const isChecked = proposalModules.some(m => m.get('voteSpecTemplateId') === moduleTemplateId);
         const number = gaugeModules.size > 1 ? idx + 1 : '';
-        const isChecked = proposalModules.some(m => m.get('moduleTemplateId') === moduleTemplateId);
         return (
           <div key={moduleTemplateId}>
             <Checkbox
@@ -154,7 +155,8 @@ const DumbVoteProposalForm = ({
               checked={isChecked}
               onChange={() => {
                 if (isChecked) {
-                  deassociateModuleToProposal(moduleTemplateId);
+                  const pModule = proposalModules.find(m => m.get('voteSpecTemplateId') === moduleTemplateId);
+                  deassociateModuleToProposal(pModule.get('id'));
                 } else {
                   associateModuleToProposal(moduleTemplateId);
                 }
@@ -181,19 +183,28 @@ const DumbVoteProposalForm = ({
 
 const mapStateToProps = ({ admin }, { id, editLocale }) => {
   const proposal = admin.voteSession.voteProposalsById.get(id);
-  const { modulesInOrder, modulesById, proposalModulesById } = admin.voteSession;
+  const { modulesInOrder, modulesById } = admin.voteSession;
   const description = getEntryValueForLocale(proposal.get('descriptionEntries'), editLocale);
   return {
     title: getEntryValueForLocale(proposal.get('titleEntries'), editLocale),
     description: description ? description.toJS() : null,
     toDelete: proposal.get('toDelete', false),
     order: proposal.get('order'),
-    proposalModules: proposal.get('modules').map(moduleId => proposalModulesById.get(moduleId)),
+    proposalModules: proposal
+      .get('modules')
+      .map(moduleId => modulesById.get(moduleId))
+      .filter(m => !m.get('toDelete')),
     tokenModules: modulesInOrder.filter(
-      moduleId => modulesById.getIn([moduleId, 'type']) === 'tokens' && !modulesById.getIn([id, 'toDelete'])
+      voteSpecTemplateId =>
+        !modulesById.getIn([voteSpecTemplateId, 'proposalId']) &&
+        modulesById.getIn([voteSpecTemplateId, 'type']) === 'tokens' &&
+        !modulesById.getIn([voteSpecTemplateId, 'toDelete'])
     ),
     gaugeModules: modulesInOrder.filter(
-      moduleId => modulesById.getIn([moduleId, 'type']) === 'gauge' && !modulesById.getIn([id, 'toDelete'])
+      voteSpecTemplateId =>
+        !modulesById.getIn([voteSpecTemplateId, 'proposalId']) &&
+        modulesById.getIn([voteSpecTemplateId, 'type']) === 'gauge' &&
+        !modulesById.getIn([voteSpecTemplateId, 'toDelete'])
     )
   };
 };
@@ -211,9 +222,9 @@ const mapDispatchToProps = (dispatch, { id }) => ({
   },
   handleUpClick: () => dispatch(moveProposalUp(id)),
   handleDownClick: () => dispatch(moveProposalDown(id)),
-  associateModuleToProposal: (moduleId) => {
+  associateModuleToProposal: (voteSpecTemplateId) => {
     const newId = Math.round(Math.random() * -1000000).toString();
-    dispatch(addModuleToProposal(newId, id, moduleId));
+    dispatch(addModuleToProposal(newId, id, voteSpecTemplateId));
   },
   deassociateModuleToProposal: moduleId => dispatch(deleteModuleFromProposal(id, moduleId))
 });
