@@ -14,10 +14,6 @@ import { PHASE_STATUS, PHASES } from '../../../constants';
 
 const phasesToIgnore = [PHASES.voteSession];
 
-export type MenuClickEvent = {
-  path: Array<HTMLElement>
-};
-
 export type DebateType = {
   debateData: {
     timeline: Timeline,
