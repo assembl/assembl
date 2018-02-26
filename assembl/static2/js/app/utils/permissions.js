@@ -40,7 +40,7 @@ export const expertPermissions = [
 ];
 export const connectedUserIsExpert = () => {
   const permissions = getConnectedUserPermissions();
-  return intersection([permissions, expertPermissions]).length > 0;
+  return intersection(permissions, expertPermissions).length > 0;
 };
 
 export const connectedUserIsAdmin = () => {
