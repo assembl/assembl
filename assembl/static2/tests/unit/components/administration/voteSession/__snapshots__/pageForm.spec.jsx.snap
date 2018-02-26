@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Vote Session DumbPageForm component should render a form to update the vote session page title, subtitle, header, instructions' title, instructions and proposals section title 1`] = `
+exports[`Vote Session DumbPageForm component should render a form to update the vote session page data 1`] = `
 <div
   className="admin-box"
 >

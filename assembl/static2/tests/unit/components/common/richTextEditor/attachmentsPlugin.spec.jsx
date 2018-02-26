@@ -62,12 +62,12 @@ const rcs = {
     }
   ],
   entityMap: {
-    0: {
+    '0': {
       type: 'document',
       mutability: 'IMMUTABLE',
       data: { id: '1234', title: 'Foobar', mimeType: 'application/pdf' }
     },
-    1: {
+    '1': {
       type: 'document',
       mutability: 'IMMUTABLE',
       data: { id: '1236', externalUrl: 'http://www.example.com/foo.png', mimeType: 'image/png' }
@@ -269,7 +269,7 @@ describe('attachmentsPlugin', () => {
           }
         ],
         entityMap: {
-          0: {
+          '0': {
             type: 'document',
             mutability: 'IMMUTABLE',
             data: { id: '1234', title: 'Foobar', mimeType: 'application/pdf' }

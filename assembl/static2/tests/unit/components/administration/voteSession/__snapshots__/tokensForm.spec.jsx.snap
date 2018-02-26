@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`tokensForm component should render a form to configure a tokens vote, the exclusivity, instructions and number of tokens types and 3 TokenTypeForm 1`] = `
+exports[`tokensForm component should render a form to configure a token vote with 3 token types 1`] = `
 <div
   className="token-vote-form"
 >
@@ -168,7 +168,7 @@ exports[`tokensForm component should render a form to configure a tokens vote, t
 </div>
 `;
 
-exports[`tokensForm component should render a form to configure a tokens vote, the exclusivity, instructions and number of tokens types but no TokenTypeForm 1`] = `
+exports[`tokensForm component should render a form to configure a token votewithout token types 1`] = `
 <div
   className="token-vote-form"
 >

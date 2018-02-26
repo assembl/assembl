@@ -130,7 +130,7 @@ describe('resourcesCenter admin reducers', () => {
 
     it('should return the current state for other actions', () => {
       const action = { type: 'FOOBAR' };
-      const oldState = Map({ 1: { id: '1', titleEntries: List() } });
+      const oldState = Map({ '1': { id: '1', titleEntries: List() } });
       expect(resourcesById(oldState, action)).toEqual(oldState);
     });
 
@@ -141,18 +141,18 @@ describe('resourcesCenter admin reducers', () => {
         type: CREATE_RESOURCE
       };
       const oldState = fromJS({
-        0: {
+        '0': {
           id: '0'
         },
-        1: {
+        '1': {
           id: '1'
         }
       });
       const expected = Map({
-        0: Map({
+        '0': Map({
           id: '0'
         }),
-        1: Map({
+        '1': Map({
           id: '1'
         }),
         '-3344789': Map({
@@ -186,11 +186,11 @@ describe('resourcesCenter admin reducers', () => {
           id: '000',
           toDelete: true
         },
-        111: {
+        '111': {
           id: '111',
           toDelete: false
         },
-        333: {
+        '333': {
           id: '333',
           toDelete: false
         }
@@ -200,11 +200,11 @@ describe('resourcesCenter admin reducers', () => {
           id: '000',
           toDelete: true
         },
-        111: {
+        '111': {
           id: '111',
           toDelete: false
         },
-        333: {
+        '333': {
           id: '333',
           toDelete: true
         }
