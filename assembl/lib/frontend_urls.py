@@ -237,8 +237,7 @@ class FrontendUrls(object):
             from assembl.views import create_get_route
             get_route = create_get_route(request, self.discussion)
             if force_v1:
-                route = self.get_frontend_url(
-                    'oldDebate', slug=self.discussion.slug)
+                route = get_route('home')
             else:
                 route = get_route('bare_slug')
         return urljoin(self.discussion.get_base_url(), route)
