@@ -45,8 +45,11 @@ export const getMutationsPromises = (params) => {
   return promises;
 };
 
-export default ({ disabled, saveAction }) => (
-  <Button className="save-button button-submit button-dark right" disabled={disabled} onClick={saveAction}>
-    <Translate value="administration.saveThemes" />
-  </Button>
-);
+export default ({ disabled, saveAction, specificClasses }) => {
+  const buttonClasses = specificClasses || 'save-button button-submit button-dark right';
+  return (
+    <Button className={buttonClasses} disabled={disabled} onClick={saveAction}>
+      <Translate value="administration.saveThemes" />
+    </Button>
+  );
+};

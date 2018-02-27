@@ -301,24 +301,25 @@ class VoteSessionAdmin extends React.Component<void, VoteSessionAdminProps, Vote
         .concat(getTextGaugeSpecMutationsPromises(textGaugeModules))
         .concat(getNumberGaugeMutationsPromises(numberGaugeModules));
     };
+    const voteSessionPageId = voteSessionPage.get('id');
 
     if (voteSessionPage.get('id')) {
       let allSpecsMutationsPromises = [];
       if (tokenModulesHaveChanged) {
         const tokenModules = voteModules.filter(m => m.get('type') === 'tokens');
-        const items = tokenModules.map(t => ({ ...t.toJS(), voteSessionId: voteSessionPage.get('id') }));
+        const items = tokenModules.map(t => ({ ...t.toJS(), voteSessionId: voteSessionPageId }));
         const mutationsPromises = getTokenVoteSpecMutationsPromises(items);
         allSpecsMutationsPromises = allSpecsMutationsPromises.concat(mutationsPromises);
       }
       if (textGaugeModulesHaveChanged) {
         const textGaugeModules = voteModules.filter(m => m.get('type') === 'gauge' && !m.get('isNumberGauge'));
-        const items = textGaugeModules.map(t => ({ ...t.toJS(), voteSessionId: voteSessionPage.get('id') }));
+        const items = textGaugeModules.map(t => ({ ...t.toJS(), voteSessionId: voteSessionPageId }));
         const mutationsPromises = getTextGaugeSpecMutationsPromises(items);
         allSpecsMutationsPromises = allSpecsMutationsPromises.concat(mutationsPromises);
       }
       if (numberGaugeModulesHaveChanged) {
         const numberGaugeModules = voteModules.filter(m => m.get('type') === 'gauge' && m.get('isNumberGauge'));
-        const items = numberGaugeModules.map(t => ({ ...t.toJS(), voteSessionId: voteSessionPage.get('id') }));
+        const items = numberGaugeModules.map(t => ({ ...t.toJS(), voteSessionId: voteSessionPageId }));
         const mutationsPromises = getNumberGaugeMutationsPromises(items);
         allSpecsMutationsPromises = allSpecsMutationsPromises.concat(mutationsPromises);
       }
@@ -330,7 +331,7 @@ class VoteSessionAdmin extends React.Component<void, VoteSessionAdminProps, Vote
       if (voteProposalsHaveChanged) {
         const items = [];
         voteProposals.forEach((t) => {
-          items.push({ ...t.toJS(), voteSessionId: voteSessionPage.get('id') });
+          items.push({ ...t.toJS(), voteSessionId: voteSessionPageId });
         });
         const proposalsToDeleteOrUpdate = items.filter(item => !item.isNew);
         let mutationsPromises: Array<Promise<*>> = [];
@@ -343,7 +344,7 @@ class VoteSessionAdmin extends React.Component<void, VoteSessionAdminProps, Vote
             mutationsPromises.push(deleteProposal({ variables: createVariablesForDeleteMutation(proposal) }));
           }
 
-          const modulesToMutate = proposal.modules.map(m => ({ ...m, voteSessionId: voteSessionPage.get('id') }));
+          const modulesToMutate = proposal.modules.map(m => ({ ...m, voteSessionId: voteSessionPageId }));
           const modulesMutations = getMutationsForModules(modulesToMutate);
           mutationsPromises = mutationsPromises.concat(modulesMutations);
 
@@ -370,7 +371,7 @@ class VoteSessionAdmin extends React.Component<void, VoteSessionAdminProps, Vote
               modulesToCreate = modulesToCreate.map(m => ({
                 ...m,
                 proposalId: proposalId,
-                voteSessionId: voteSessionPage.get('id')
+                voteSessionId: voteSessionPageId
               }));
 
               this.runMutations(getMutationsForModules(modulesToCreate));
