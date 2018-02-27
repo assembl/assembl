@@ -1,6 +1,10 @@
 {% extends 'base.jinja2' %}
 
 {% block content %}
+    {% for error in errors %}
+        <p class="msg-error" style="color:red">{{ error }}</p>
+    {% endfor %}
+
 <table>
   <tr>
     <td>
@@ -43,6 +47,11 @@
 	  <input type="checkbox" name="ssl" id="ssl" />
 	</p>
 
+    <p>
+      <label for="admin_sender">Admin sender</label>
+      <input type="text" name="admin_sender" id="admin_sender"/>
+    </p>
+
 	<p>
 	  <label for="folder">Folder</label>
 	  <input type="text" name="folder" id="folder" value="inbox"/>
@@ -62,7 +71,7 @@
       <label for="mailing_list_address">Mailing list address (if not empty, object will be a Mailing list instead of a mailbox)</label>
       <input type="text" name="mailing_list_address" id="mailing_list_address"/>
     </p>
-    
+
 	<p>
 	  <input type="submit" value="Create"/>
 	</p>

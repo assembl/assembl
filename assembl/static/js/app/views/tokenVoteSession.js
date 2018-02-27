@@ -1795,7 +1795,7 @@ var TokenVoteSessionSubmittedView = Marionette.LayoutView.extend({
   template: false,
   className: 'token-vote-session-submitted',
 
-  initialize(options){
+  initialize: function(options){
     this.editInModal = ("editInModal" in options && options.editInModal == true) ? true : false;
   },
 
