@@ -5,13 +5,13 @@ export const tokenCategories = [
     color: '#226622',
     id: 'positive',
     title: 'Positive',
-    totalNumber: 5
+    totalNumber: 12
   },
   {
     color: '#771122',
     id: 'negative',
     title: 'Negative',
-    totalNumber: 4
+    totalNumber: 10
   }
 ];
 
@@ -44,12 +44,18 @@ export const proposals = [
 
 export const remainingTokensByCategory = Map({
   negative: 4,
-  positive: 2
+  positive: 10
+});
+
+export const proposal1Votes = Map({
+  positive: 2,
+  negative: 0
 });
 
 export const tokenVotes = Map({
-  'proposal-1': Map({
-    positive: 2,
-    negative: 1
+  'proposal-1': proposal1Votes,
+  'proposal-2': Map({
+    positive: 0,
+    negative: 6
   })
 });

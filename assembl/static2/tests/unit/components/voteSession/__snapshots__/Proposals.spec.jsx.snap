@@ -44,7 +44,7 @@ exports[`Proposals component should match Proposals snapshot 1`] = `
             >
               <button
                 className="admin-icons btn btn-default"
-                disabled={true}
+                disabled={false}
                 onBlur={[Function]}
                 onClick={[Function]}
                 onFocus={[Function]}
@@ -79,7 +79,7 @@ exports[`Proposals component should match Proposals snapshot 1`] = `
               </button>
               <button
                 className="admin-icons btn btn-default"
-                disabled={true}
+                disabled={false}
                 onBlur={[Function]}
                 onClick={[Function]}
                 onFocus={[Function]}
@@ -114,7 +114,7 @@ exports[`Proposals component should match Proposals snapshot 1`] = `
               </button>
               <button
                 className="admin-icons btn btn-default"
-                disabled={true}
+                disabled={false}
                 onBlur={[Function]}
                 onClick={[Function]}
                 onFocus={[Function]}
@@ -149,7 +149,7 @@ exports[`Proposals component should match Proposals snapshot 1`] = `
               </button>
               <button
                 className="admin-icons btn btn-default"
-                disabled={true}
+                disabled={false}
                 onBlur={[Function]}
                 onClick={[Function]}
                 onFocus={[Function]}
@@ -184,7 +184,252 @@ exports[`Proposals component should match Proposals snapshot 1`] = `
               </button>
               <button
                 className="admin-icons btn btn-default"
-                disabled={true}
+                disabled={false}
+                onBlur={[Function]}
+                onClick={[Function]}
+                onFocus={[Function]}
+                onMouseOut={[Function]}
+                onMouseOver={[Function]}
+                type="button"
+              >
+                <svg
+                  aria-hidden="true"
+                  height="32px"
+                  role="img"
+                  version="1.1"
+                  viewBox="0 0 20 20"
+                  width="32px"
+                  x="0px"
+                  xmlSpace="preserve"
+                  y="0px"
+                >
+                  <path
+                    className="outer"
+                    d="m 15.59322,11.271187 a 6.2288136,6.3559322 0 1 1 -12.4576271,0 6.2288136,6.3559322 0 1 1 12.4576271,0 z"
+                    fill="none"
+                    id="path2999"
+                    stroke="#226622"
+                    strokeDasharray="none"
+                    strokeMiterlimit="4"
+                    strokeOpacity="1"
+                    strokeWidth="1"
+                    transform="matrix(1.4872568,0,0,1.4575117,-3.9272774,-6.4278868)"
+                  />
+                </svg>
+              </button>
+              <button
+                className="admin-icons btn btn-default"
+                disabled={false}
+                onBlur={[Function]}
+                onClick={[Function]}
+                onFocus={[Function]}
+                onMouseOut={[Function]}
+                onMouseOver={[Function]}
+                type="button"
+              >
+                <svg
+                  aria-hidden="true"
+                  height="32px"
+                  role="img"
+                  version="1.1"
+                  viewBox="0 0 20 20"
+                  width="32px"
+                  x="0px"
+                  xmlSpace="preserve"
+                  y="0px"
+                >
+                  <path
+                    className="outer"
+                    d="m 15.59322,11.271187 a 6.2288136,6.3559322 0 1 1 -12.4576271,0 6.2288136,6.3559322 0 1 1 12.4576271,0 z"
+                    fill="none"
+                    id="path2999"
+                    stroke="#226622"
+                    strokeDasharray="none"
+                    strokeMiterlimit="4"
+                    strokeOpacity="1"
+                    strokeWidth="1"
+                    transform="matrix(1.4872568,0,0,1.4575117,-3.9272774,-6.4278868)"
+                  />
+                </svg>
+              </button>
+              <button
+                className="admin-icons btn btn-default"
+                disabled={false}
+                onBlur={[Function]}
+                onClick={[Function]}
+                onFocus={[Function]}
+                onMouseOut={[Function]}
+                onMouseOver={[Function]}
+                type="button"
+              >
+                <svg
+                  aria-hidden="true"
+                  height="32px"
+                  role="img"
+                  version="1.1"
+                  viewBox="0 0 20 20"
+                  width="32px"
+                  x="0px"
+                  xmlSpace="preserve"
+                  y="0px"
+                >
+                  <path
+                    className="outer"
+                    d="m 15.59322,11.271187 a 6.2288136,6.3559322 0 1 1 -12.4576271,0 6.2288136,6.3559322 0 1 1 12.4576271,0 z"
+                    fill="none"
+                    id="path2999"
+                    stroke="#226622"
+                    strokeDasharray="none"
+                    strokeMiterlimit="4"
+                    strokeOpacity="1"
+                    strokeWidth="1"
+                    transform="matrix(1.4872568,0,0,1.4575117,-3.9272774,-6.4278868)"
+                  />
+                </svg>
+              </button>
+              <button
+                className="admin-icons btn btn-default"
+                disabled={false}
+                onBlur={[Function]}
+                onClick={[Function]}
+                onFocus={[Function]}
+                onMouseOut={[Function]}
+                onMouseOver={[Function]}
+                type="button"
+              >
+                <svg
+                  aria-hidden="true"
+                  height="32px"
+                  role="img"
+                  version="1.1"
+                  viewBox="0 0 20 20"
+                  width="32px"
+                  x="0px"
+                  xmlSpace="preserve"
+                  y="0px"
+                >
+                  <path
+                    className="outer"
+                    d="m 15.59322,11.271187 a 6.2288136,6.3559322 0 1 1 -12.4576271,0 6.2288136,6.3559322 0 1 1 12.4576271,0 z"
+                    fill="none"
+                    id="path2999"
+                    stroke="#226622"
+                    strokeDasharray="none"
+                    strokeMiterlimit="4"
+                    strokeOpacity="1"
+                    strokeWidth="1"
+                    transform="matrix(1.4872568,0,0,1.4575117,-3.9272774,-6.4278868)"
+                  />
+                </svg>
+              </button>
+              <button
+                className="admin-icons btn btn-default"
+                disabled={false}
+                onBlur={[Function]}
+                onClick={[Function]}
+                onFocus={[Function]}
+                onMouseOut={[Function]}
+                onMouseOver={[Function]}
+                type="button"
+              >
+                <svg
+                  aria-hidden="true"
+                  height="32px"
+                  role="img"
+                  version="1.1"
+                  viewBox="0 0 20 20"
+                  width="32px"
+                  x="0px"
+                  xmlSpace="preserve"
+                  y="0px"
+                >
+                  <path
+                    className="outer"
+                    d="m 15.59322,11.271187 a 6.2288136,6.3559322 0 1 1 -12.4576271,0 6.2288136,6.3559322 0 1 1 12.4576271,0 z"
+                    fill="none"
+                    id="path2999"
+                    stroke="#226622"
+                    strokeDasharray="none"
+                    strokeMiterlimit="4"
+                    strokeOpacity="1"
+                    strokeWidth="1"
+                    transform="matrix(1.4872568,0,0,1.4575117,-3.9272774,-6.4278868)"
+                  />
+                </svg>
+              </button>
+              <button
+                className="admin-icons btn btn-default"
+                disabled={false}
+                onBlur={[Function]}
+                onClick={[Function]}
+                onFocus={[Function]}
+                onMouseOut={[Function]}
+                onMouseOver={[Function]}
+                type="button"
+              >
+                <svg
+                  aria-hidden="true"
+                  height="32px"
+                  role="img"
+                  version="1.1"
+                  viewBox="0 0 20 20"
+                  width="32px"
+                  x="0px"
+                  xmlSpace="preserve"
+                  y="0px"
+                >
+                  <path
+                    className="outer"
+                    d="m 15.59322,11.271187 a 6.2288136,6.3559322 0 1 1 -12.4576271,0 6.2288136,6.3559322 0 1 1 12.4576271,0 z"
+                    fill="none"
+                    id="path2999"
+                    stroke="#226622"
+                    strokeDasharray="none"
+                    strokeMiterlimit="4"
+                    strokeOpacity="1"
+                    strokeWidth="1"
+                    transform="matrix(1.4872568,0,0,1.4575117,-3.9272774,-6.4278868)"
+                  />
+                </svg>
+              </button>
+              <button
+                className="admin-icons btn btn-default"
+                disabled={false}
+                onBlur={[Function]}
+                onClick={[Function]}
+                onFocus={[Function]}
+                onMouseOut={[Function]}
+                onMouseOver={[Function]}
+                type="button"
+              >
+                <svg
+                  aria-hidden="true"
+                  height="32px"
+                  role="img"
+                  version="1.1"
+                  viewBox="0 0 20 20"
+                  width="32px"
+                  x="0px"
+                  xmlSpace="preserve"
+                  y="0px"
+                >
+                  <path
+                    className="outer"
+                    d="m 15.59322,11.271187 a 6.2288136,6.3559322 0 1 1 -12.4576271,0 6.2288136,6.3559322 0 1 1 12.4576271,0 z"
+                    fill="none"
+                    id="path2999"
+                    stroke="#226622"
+                    strokeDasharray="none"
+                    strokeMiterlimit="4"
+                    strokeOpacity="1"
+                    strokeWidth="1"
+                    transform="matrix(1.4872568,0,0,1.4575117,-3.9272774,-6.4278868)"
+                  />
+                </svg>
+              </button>
+              <button
+                className="admin-icons btn btn-default"
+                disabled={false}
                 onBlur={[Function]}
                 onClick={[Function]}
                 onFocus={[Function]}
@@ -266,7 +511,217 @@ exports[`Proposals component should match Proposals snapshot 1`] = `
                   <path
                     className="outer"
                     d="m 15.59322,11.271187 a 6.2288136,6.3559322 0 1 1 -12.4576271,0 6.2288136,6.3559322 0 1 1 12.4576271,0 z"
-                    fill="#771122"
+                    fill="none"
+                    id="path2999"
+                    stroke="#771122"
+                    strokeDasharray="none"
+                    strokeMiterlimit="4"
+                    strokeOpacity="1"
+                    strokeWidth="1"
+                    transform="matrix(1.4872568,0,0,1.4575117,-3.9272774,-6.4278868)"
+                  />
+                </svg>
+              </button>
+              <button
+                className="admin-icons btn btn-default"
+                disabled={true}
+                onBlur={[Function]}
+                onClick={[Function]}
+                onFocus={[Function]}
+                onMouseOut={[Function]}
+                onMouseOver={[Function]}
+                type="button"
+              >
+                <svg
+                  aria-hidden="true"
+                  height="32px"
+                  role="img"
+                  version="1.1"
+                  viewBox="0 0 20 20"
+                  width="32px"
+                  x="0px"
+                  xmlSpace="preserve"
+                  y="0px"
+                >
+                  <path
+                    className="outer"
+                    d="m 15.59322,11.271187 a 6.2288136,6.3559322 0 1 1 -12.4576271,0 6.2288136,6.3559322 0 1 1 12.4576271,0 z"
+                    fill="none"
+                    id="path2999"
+                    stroke="#771122"
+                    strokeDasharray="none"
+                    strokeMiterlimit="4"
+                    strokeOpacity="1"
+                    strokeWidth="1"
+                    transform="matrix(1.4872568,0,0,1.4575117,-3.9272774,-6.4278868)"
+                  />
+                </svg>
+              </button>
+              <button
+                className="admin-icons btn btn-default"
+                disabled={true}
+                onBlur={[Function]}
+                onClick={[Function]}
+                onFocus={[Function]}
+                onMouseOut={[Function]}
+                onMouseOver={[Function]}
+                type="button"
+              >
+                <svg
+                  aria-hidden="true"
+                  height="32px"
+                  role="img"
+                  version="1.1"
+                  viewBox="0 0 20 20"
+                  width="32px"
+                  x="0px"
+                  xmlSpace="preserve"
+                  y="0px"
+                >
+                  <path
+                    className="outer"
+                    d="m 15.59322,11.271187 a 6.2288136,6.3559322 0 1 1 -12.4576271,0 6.2288136,6.3559322 0 1 1 12.4576271,0 z"
+                    fill="none"
+                    id="path2999"
+                    stroke="#771122"
+                    strokeDasharray="none"
+                    strokeMiterlimit="4"
+                    strokeOpacity="1"
+                    strokeWidth="1"
+                    transform="matrix(1.4872568,0,0,1.4575117,-3.9272774,-6.4278868)"
+                  />
+                </svg>
+              </button>
+              <button
+                className="admin-icons btn btn-default"
+                disabled={true}
+                onBlur={[Function]}
+                onClick={[Function]}
+                onFocus={[Function]}
+                onMouseOut={[Function]}
+                onMouseOver={[Function]}
+                type="button"
+              >
+                <svg
+                  aria-hidden="true"
+                  height="32px"
+                  role="img"
+                  version="1.1"
+                  viewBox="0 0 20 20"
+                  width="32px"
+                  x="0px"
+                  xmlSpace="preserve"
+                  y="0px"
+                >
+                  <path
+                    className="outer"
+                    d="m 15.59322,11.271187 a 6.2288136,6.3559322 0 1 1 -12.4576271,0 6.2288136,6.3559322 0 1 1 12.4576271,0 z"
+                    fill="none"
+                    id="path2999"
+                    stroke="#771122"
+                    strokeDasharray="none"
+                    strokeMiterlimit="4"
+                    strokeOpacity="1"
+                    strokeWidth="1"
+                    transform="matrix(1.4872568,0,0,1.4575117,-3.9272774,-6.4278868)"
+                  />
+                </svg>
+              </button>
+              <button
+                className="admin-icons btn btn-default"
+                disabled={true}
+                onBlur={[Function]}
+                onClick={[Function]}
+                onFocus={[Function]}
+                onMouseOut={[Function]}
+                onMouseOver={[Function]}
+                type="button"
+              >
+                <svg
+                  aria-hidden="true"
+                  height="32px"
+                  role="img"
+                  version="1.1"
+                  viewBox="0 0 20 20"
+                  width="32px"
+                  x="0px"
+                  xmlSpace="preserve"
+                  y="0px"
+                >
+                  <path
+                    className="outer"
+                    d="m 15.59322,11.271187 a 6.2288136,6.3559322 0 1 1 -12.4576271,0 6.2288136,6.3559322 0 1 1 12.4576271,0 z"
+                    fill="none"
+                    id="path2999"
+                    stroke="#771122"
+                    strokeDasharray="none"
+                    strokeMiterlimit="4"
+                    strokeOpacity="1"
+                    strokeWidth="1"
+                    transform="matrix(1.4872568,0,0,1.4575117,-3.9272774,-6.4278868)"
+                  />
+                </svg>
+              </button>
+              <button
+                className="admin-icons btn btn-default"
+                disabled={true}
+                onBlur={[Function]}
+                onClick={[Function]}
+                onFocus={[Function]}
+                onMouseOut={[Function]}
+                onMouseOver={[Function]}
+                type="button"
+              >
+                <svg
+                  aria-hidden="true"
+                  height="32px"
+                  role="img"
+                  version="1.1"
+                  viewBox="0 0 20 20"
+                  width="32px"
+                  x="0px"
+                  xmlSpace="preserve"
+                  y="0px"
+                >
+                  <path
+                    className="outer"
+                    d="m 15.59322,11.271187 a 6.2288136,6.3559322 0 1 1 -12.4576271,0 6.2288136,6.3559322 0 1 1 12.4576271,0 z"
+                    fill="none"
+                    id="path2999"
+                    stroke="#771122"
+                    strokeDasharray="none"
+                    strokeMiterlimit="4"
+                    strokeOpacity="1"
+                    strokeWidth="1"
+                    transform="matrix(1.4872568,0,0,1.4575117,-3.9272774,-6.4278868)"
+                  />
+                </svg>
+              </button>
+              <button
+                className="admin-icons btn btn-default"
+                disabled={true}
+                onBlur={[Function]}
+                onClick={[Function]}
+                onFocus={[Function]}
+                onMouseOut={[Function]}
+                onMouseOver={[Function]}
+                type="button"
+              >
+                <svg
+                  aria-hidden="true"
+                  height="32px"
+                  role="img"
+                  version="1.1"
+                  viewBox="0 0 20 20"
+                  width="32px"
+                  x="0px"
+                  xmlSpace="preserve"
+                  y="0px"
+                >
+                  <path
+                    className="outer"
+                    d="m 15.59322,11.271187 a 6.2288136,6.3559322 0 1 1 -12.4576271,0 6.2288136,6.3559322 0 1 1 12.4576271,0 z"
+                    fill="none"
                     id="path2999"
                     stroke="#771122"
                     strokeDasharray="none"
@@ -573,7 +1028,7 @@ exports[`Proposals component should match Proposals snapshot 1`] = `
             >
               <button
                 className="admin-icons btn btn-default"
-                disabled={false}
+                disabled={true}
                 onBlur={[Function]}
                 onClick={[Function]}
                 onFocus={[Function]}
@@ -608,7 +1063,252 @@ exports[`Proposals component should match Proposals snapshot 1`] = `
               </button>
               <button
                 className="admin-icons btn btn-default"
-                disabled={false}
+                disabled={true}
+                onBlur={[Function]}
+                onClick={[Function]}
+                onFocus={[Function]}
+                onMouseOut={[Function]}
+                onMouseOver={[Function]}
+                type="button"
+              >
+                <svg
+                  aria-hidden="true"
+                  height="32px"
+                  role="img"
+                  version="1.1"
+                  viewBox="0 0 20 20"
+                  width="32px"
+                  x="0px"
+                  xmlSpace="preserve"
+                  y="0px"
+                >
+                  <path
+                    className="outer"
+                    d="m 15.59322,11.271187 a 6.2288136,6.3559322 0 1 1 -12.4576271,0 6.2288136,6.3559322 0 1 1 12.4576271,0 z"
+                    fill="none"
+                    id="path2999"
+                    stroke="#226622"
+                    strokeDasharray="none"
+                    strokeMiterlimit="4"
+                    strokeOpacity="1"
+                    strokeWidth="1"
+                    transform="matrix(1.4872568,0,0,1.4575117,-3.9272774,-6.4278868)"
+                  />
+                </svg>
+              </button>
+              <button
+                className="admin-icons btn btn-default"
+                disabled={true}
+                onBlur={[Function]}
+                onClick={[Function]}
+                onFocus={[Function]}
+                onMouseOut={[Function]}
+                onMouseOver={[Function]}
+                type="button"
+              >
+                <svg
+                  aria-hidden="true"
+                  height="32px"
+                  role="img"
+                  version="1.1"
+                  viewBox="0 0 20 20"
+                  width="32px"
+                  x="0px"
+                  xmlSpace="preserve"
+                  y="0px"
+                >
+                  <path
+                    className="outer"
+                    d="m 15.59322,11.271187 a 6.2288136,6.3559322 0 1 1 -12.4576271,0 6.2288136,6.3559322 0 1 1 12.4576271,0 z"
+                    fill="none"
+                    id="path2999"
+                    stroke="#226622"
+                    strokeDasharray="none"
+                    strokeMiterlimit="4"
+                    strokeOpacity="1"
+                    strokeWidth="1"
+                    transform="matrix(1.4872568,0,0,1.4575117,-3.9272774,-6.4278868)"
+                  />
+                </svg>
+              </button>
+              <button
+                className="admin-icons btn btn-default"
+                disabled={true}
+                onBlur={[Function]}
+                onClick={[Function]}
+                onFocus={[Function]}
+                onMouseOut={[Function]}
+                onMouseOver={[Function]}
+                type="button"
+              >
+                <svg
+                  aria-hidden="true"
+                  height="32px"
+                  role="img"
+                  version="1.1"
+                  viewBox="0 0 20 20"
+                  width="32px"
+                  x="0px"
+                  xmlSpace="preserve"
+                  y="0px"
+                >
+                  <path
+                    className="outer"
+                    d="m 15.59322,11.271187 a 6.2288136,6.3559322 0 1 1 -12.4576271,0 6.2288136,6.3559322 0 1 1 12.4576271,0 z"
+                    fill="none"
+                    id="path2999"
+                    stroke="#226622"
+                    strokeDasharray="none"
+                    strokeMiterlimit="4"
+                    strokeOpacity="1"
+                    strokeWidth="1"
+                    transform="matrix(1.4872568,0,0,1.4575117,-3.9272774,-6.4278868)"
+                  />
+                </svg>
+              </button>
+              <button
+                className="admin-icons btn btn-default"
+                disabled={true}
+                onBlur={[Function]}
+                onClick={[Function]}
+                onFocus={[Function]}
+                onMouseOut={[Function]}
+                onMouseOver={[Function]}
+                type="button"
+              >
+                <svg
+                  aria-hidden="true"
+                  height="32px"
+                  role="img"
+                  version="1.1"
+                  viewBox="0 0 20 20"
+                  width="32px"
+                  x="0px"
+                  xmlSpace="preserve"
+                  y="0px"
+                >
+                  <path
+                    className="outer"
+                    d="m 15.59322,11.271187 a 6.2288136,6.3559322 0 1 1 -12.4576271,0 6.2288136,6.3559322 0 1 1 12.4576271,0 z"
+                    fill="none"
+                    id="path2999"
+                    stroke="#226622"
+                    strokeDasharray="none"
+                    strokeMiterlimit="4"
+                    strokeOpacity="1"
+                    strokeWidth="1"
+                    transform="matrix(1.4872568,0,0,1.4575117,-3.9272774,-6.4278868)"
+                  />
+                </svg>
+              </button>
+              <button
+                className="admin-icons btn btn-default"
+                disabled={true}
+                onBlur={[Function]}
+                onClick={[Function]}
+                onFocus={[Function]}
+                onMouseOut={[Function]}
+                onMouseOver={[Function]}
+                type="button"
+              >
+                <svg
+                  aria-hidden="true"
+                  height="32px"
+                  role="img"
+                  version="1.1"
+                  viewBox="0 0 20 20"
+                  width="32px"
+                  x="0px"
+                  xmlSpace="preserve"
+                  y="0px"
+                >
+                  <path
+                    className="outer"
+                    d="m 15.59322,11.271187 a 6.2288136,6.3559322 0 1 1 -12.4576271,0 6.2288136,6.3559322 0 1 1 12.4576271,0 z"
+                    fill="none"
+                    id="path2999"
+                    stroke="#226622"
+                    strokeDasharray="none"
+                    strokeMiterlimit="4"
+                    strokeOpacity="1"
+                    strokeWidth="1"
+                    transform="matrix(1.4872568,0,0,1.4575117,-3.9272774,-6.4278868)"
+                  />
+                </svg>
+              </button>
+              <button
+                className="admin-icons btn btn-default"
+                disabled={true}
+                onBlur={[Function]}
+                onClick={[Function]}
+                onFocus={[Function]}
+                onMouseOut={[Function]}
+                onMouseOver={[Function]}
+                type="button"
+              >
+                <svg
+                  aria-hidden="true"
+                  height="32px"
+                  role="img"
+                  version="1.1"
+                  viewBox="0 0 20 20"
+                  width="32px"
+                  x="0px"
+                  xmlSpace="preserve"
+                  y="0px"
+                >
+                  <path
+                    className="outer"
+                    d="m 15.59322,11.271187 a 6.2288136,6.3559322 0 1 1 -12.4576271,0 6.2288136,6.3559322 0 1 1 12.4576271,0 z"
+                    fill="none"
+                    id="path2999"
+                    stroke="#226622"
+                    strokeDasharray="none"
+                    strokeMiterlimit="4"
+                    strokeOpacity="1"
+                    strokeWidth="1"
+                    transform="matrix(1.4872568,0,0,1.4575117,-3.9272774,-6.4278868)"
+                  />
+                </svg>
+              </button>
+              <button
+                className="admin-icons btn btn-default"
+                disabled={true}
+                onBlur={[Function]}
+                onClick={[Function]}
+                onFocus={[Function]}
+                onMouseOut={[Function]}
+                onMouseOver={[Function]}
+                type="button"
+              >
+                <svg
+                  aria-hidden="true"
+                  height="32px"
+                  role="img"
+                  version="1.1"
+                  viewBox="0 0 20 20"
+                  width="32px"
+                  x="0px"
+                  xmlSpace="preserve"
+                  y="0px"
+                >
+                  <path
+                    className="outer"
+                    d="m 15.59322,11.271187 a 6.2288136,6.3559322 0 1 1 -12.4576271,0 6.2288136,6.3559322 0 1 1 12.4576271,0 z"
+                    fill="none"
+                    id="path2999"
+                    stroke="#226622"
+                    strokeDasharray="none"
+                    strokeMiterlimit="4"
+                    strokeOpacity="1"
+                    strokeWidth="1"
+                    transform="matrix(1.4872568,0,0,1.4575117,-3.9272774,-6.4278868)"
+                  />
+                </svg>
+              </button>
+              <button
+                className="admin-icons btn btn-default"
+                disabled={true}
                 onBlur={[Function]}
                 onClick={[Function]}
                 onFocus={[Function]}
@@ -771,6 +1471,216 @@ exports[`Proposals component should match Proposals snapshot 1`] = `
             <div
               className="tokens"
             >
+              <button
+                className="admin-icons btn btn-default"
+                disabled={false}
+                onBlur={[Function]}
+                onClick={[Function]}
+                onFocus={[Function]}
+                onMouseOut={[Function]}
+                onMouseOver={[Function]}
+                type="button"
+              >
+                <svg
+                  aria-hidden="true"
+                  height="32px"
+                  role="img"
+                  version="1.1"
+                  viewBox="0 0 20 20"
+                  width="32px"
+                  x="0px"
+                  xmlSpace="preserve"
+                  y="0px"
+                >
+                  <path
+                    className="outer"
+                    d="m 15.59322,11.271187 a 6.2288136,6.3559322 0 1 1 -12.4576271,0 6.2288136,6.3559322 0 1 1 12.4576271,0 z"
+                    fill="#771122"
+                    id="path2999"
+                    stroke="#771122"
+                    strokeDasharray="none"
+                    strokeMiterlimit="4"
+                    strokeOpacity="1"
+                    strokeWidth="1"
+                    transform="matrix(1.4872568,0,0,1.4575117,-3.9272774,-6.4278868)"
+                  />
+                </svg>
+              </button>
+              <button
+                className="admin-icons btn btn-default"
+                disabled={false}
+                onBlur={[Function]}
+                onClick={[Function]}
+                onFocus={[Function]}
+                onMouseOut={[Function]}
+                onMouseOver={[Function]}
+                type="button"
+              >
+                <svg
+                  aria-hidden="true"
+                  height="32px"
+                  role="img"
+                  version="1.1"
+                  viewBox="0 0 20 20"
+                  width="32px"
+                  x="0px"
+                  xmlSpace="preserve"
+                  y="0px"
+                >
+                  <path
+                    className="outer"
+                    d="m 15.59322,11.271187 a 6.2288136,6.3559322 0 1 1 -12.4576271,0 6.2288136,6.3559322 0 1 1 12.4576271,0 z"
+                    fill="#771122"
+                    id="path2999"
+                    stroke="#771122"
+                    strokeDasharray="none"
+                    strokeMiterlimit="4"
+                    strokeOpacity="1"
+                    strokeWidth="1"
+                    transform="matrix(1.4872568,0,0,1.4575117,-3.9272774,-6.4278868)"
+                  />
+                </svg>
+              </button>
+              <button
+                className="admin-icons btn btn-default"
+                disabled={false}
+                onBlur={[Function]}
+                onClick={[Function]}
+                onFocus={[Function]}
+                onMouseOut={[Function]}
+                onMouseOver={[Function]}
+                type="button"
+              >
+                <svg
+                  aria-hidden="true"
+                  height="32px"
+                  role="img"
+                  version="1.1"
+                  viewBox="0 0 20 20"
+                  width="32px"
+                  x="0px"
+                  xmlSpace="preserve"
+                  y="0px"
+                >
+                  <path
+                    className="outer"
+                    d="m 15.59322,11.271187 a 6.2288136,6.3559322 0 1 1 -12.4576271,0 6.2288136,6.3559322 0 1 1 12.4576271,0 z"
+                    fill="#771122"
+                    id="path2999"
+                    stroke="#771122"
+                    strokeDasharray="none"
+                    strokeMiterlimit="4"
+                    strokeOpacity="1"
+                    strokeWidth="1"
+                    transform="matrix(1.4872568,0,0,1.4575117,-3.9272774,-6.4278868)"
+                  />
+                </svg>
+              </button>
+              <button
+                className="admin-icons btn btn-default"
+                disabled={false}
+                onBlur={[Function]}
+                onClick={[Function]}
+                onFocus={[Function]}
+                onMouseOut={[Function]}
+                onMouseOver={[Function]}
+                type="button"
+              >
+                <svg
+                  aria-hidden="true"
+                  height="32px"
+                  role="img"
+                  version="1.1"
+                  viewBox="0 0 20 20"
+                  width="32px"
+                  x="0px"
+                  xmlSpace="preserve"
+                  y="0px"
+                >
+                  <path
+                    className="outer"
+                    d="m 15.59322,11.271187 a 6.2288136,6.3559322 0 1 1 -12.4576271,0 6.2288136,6.3559322 0 1 1 12.4576271,0 z"
+                    fill="#771122"
+                    id="path2999"
+                    stroke="#771122"
+                    strokeDasharray="none"
+                    strokeMiterlimit="4"
+                    strokeOpacity="1"
+                    strokeWidth="1"
+                    transform="matrix(1.4872568,0,0,1.4575117,-3.9272774,-6.4278868)"
+                  />
+                </svg>
+              </button>
+              <button
+                className="admin-icons btn btn-default"
+                disabled={false}
+                onBlur={[Function]}
+                onClick={[Function]}
+                onFocus={[Function]}
+                onMouseOut={[Function]}
+                onMouseOver={[Function]}
+                type="button"
+              >
+                <svg
+                  aria-hidden="true"
+                  height="32px"
+                  role="img"
+                  version="1.1"
+                  viewBox="0 0 20 20"
+                  width="32px"
+                  x="0px"
+                  xmlSpace="preserve"
+                  y="0px"
+                >
+                  <path
+                    className="outer"
+                    d="m 15.59322,11.271187 a 6.2288136,6.3559322 0 1 1 -12.4576271,0 6.2288136,6.3559322 0 1 1 12.4576271,0 z"
+                    fill="#771122"
+                    id="path2999"
+                    stroke="#771122"
+                    strokeDasharray="none"
+                    strokeMiterlimit="4"
+                    strokeOpacity="1"
+                    strokeWidth="1"
+                    transform="matrix(1.4872568,0,0,1.4575117,-3.9272774,-6.4278868)"
+                  />
+                </svg>
+              </button>
+              <button
+                className="admin-icons btn btn-default"
+                disabled={false}
+                onBlur={[Function]}
+                onClick={[Function]}
+                onFocus={[Function]}
+                onMouseOut={[Function]}
+                onMouseOver={[Function]}
+                type="button"
+              >
+                <svg
+                  aria-hidden="true"
+                  height="32px"
+                  role="img"
+                  version="1.1"
+                  viewBox="0 0 20 20"
+                  width="32px"
+                  x="0px"
+                  xmlSpace="preserve"
+                  y="0px"
+                >
+                  <path
+                    className="outer"
+                    d="m 15.59322,11.271187 a 6.2288136,6.3559322 0 1 1 -12.4576271,0 6.2288136,6.3559322 0 1 1 12.4576271,0 z"
+                    fill="#771122"
+                    id="path2999"
+                    stroke="#771122"
+                    strokeDasharray="none"
+                    strokeMiterlimit="4"
+                    strokeOpacity="1"
+                    strokeWidth="1"
+                    transform="matrix(1.4872568,0,0,1.4575117,-3.9272774,-6.4278868)"
+                  />
+                </svg>
+              </button>
               <button
                 className="admin-icons btn btn-default"
                 disabled={false}

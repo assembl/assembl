@@ -130,7 +130,7 @@ export const resetTokensTooltip = (
   </Tooltip>
 );
 
-export const hiddenTooltip = <Tooltip style={{ display: 'none' }} />;
+export const hiddenTooltip = <Tooltip id="hiddenTooltip" style={{ display: 'none' }} />;
 
 export const notEnoughTokensTooltip = (
   <Tooltip id="notEnoughTokensTooltip">
