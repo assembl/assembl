@@ -129,3 +129,17 @@ export const resetTokensTooltip = (
     <Translate value="debate.voteSession.resetTokens" />
   </Tooltip>
 );
+
+export const hiddenTooltip = <Tooltip style={{ display: 'none' }} />;
+
+export const notEnoughTokensTooltip = (
+  <Tooltip id="notEnoughTokensTooltip">
+    <Translate value="debate.voteSession.notEnoughTokens" />
+  </Tooltip>
+);
+
+export const exclusiveTokensTooltip = (
+  <Tooltip id="exclusiveTokensTooltip">
+    <Translate value="debate.voteSession.exclusiveTokens" />
+  </Tooltip>
+);

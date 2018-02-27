@@ -72,6 +72,7 @@ class Proposal extends React.Component<void, Props, State> {
             {tokenVoteModule && (
               <TokenVoteForProposal
                 key={`${id}-TokenVoteForProposal-${tokenVoteModule.id}`}
+                exclusiveCategories={tokenVoteModule.exclusiveCategories}
                 instructions={tokenVoteModule.instructions}
                 proposalId={id}
                 remainingTokensByCategory={remainingTokensByCategory}

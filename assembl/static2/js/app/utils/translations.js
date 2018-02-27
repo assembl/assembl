@@ -314,6 +314,8 @@ const Translations = {
         showLess: "Fermer les votes de la communauté",
         participantsCount: "%{count} participants ont voté !",
         tokenTooltip: "%{count} jetons %{name}",
+        notEnoughTokens: "Vous n'avez plus assez de jetons",
+        exclusiveTokens: "Vous avez déjà voté pour une autre catégorie pour cette proposition",
         totalVotes: "%{count} votes"
       }
     },
@@ -843,6 +845,8 @@ const Translations = {
         showLess: "Close votes of the community",
         participantsCount: "%{count} participants voted!",
         tokenTooltip: "%{count} %{name} tokens",
+        notEnoughTokens: "You don't have enough tokens",
+        exclusiveTokens: "You already voted for another category for this proposal",
         totalVotes: "%{count} votes"
       }
     },

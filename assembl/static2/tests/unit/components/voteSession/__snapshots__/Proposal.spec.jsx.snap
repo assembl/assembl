@@ -42,7 +42,11 @@ exports[`Proposal component should match Proposal snapshot 1`] = `
             <button
               className="admin-icons btn btn-default"
               disabled={false}
+              onBlur={[Function]}
               onClick={[Function]}
+              onFocus={[Function]}
+              onMouseOut={[Function]}
+              onMouseOver={[Function]}
               type="button"
             >
               <svg
@@ -73,7 +77,11 @@ exports[`Proposal component should match Proposal snapshot 1`] = `
             <button
               className="admin-icons btn btn-default"
               disabled={false}
+              onBlur={[Function]}
               onClick={[Function]}
+              onFocus={[Function]}
+              onMouseOut={[Function]}
+              onMouseOver={[Function]}
               type="button"
             >
               <svg
@@ -104,7 +112,11 @@ exports[`Proposal component should match Proposal snapshot 1`] = `
             <button
               className="admin-icons btn btn-default"
               disabled={true}
+              onBlur={[Function]}
               onClick={[Function]}
+              onFocus={[Function]}
+              onMouseOut={[Function]}
+              onMouseOver={[Function]}
               type="button"
             >
               <svg
@@ -135,7 +147,11 @@ exports[`Proposal component should match Proposal snapshot 1`] = `
             <button
               className="admin-icons btn btn-default"
               disabled={true}
+              onBlur={[Function]}
               onClick={[Function]}
+              onFocus={[Function]}
+              onMouseOut={[Function]}
+              onMouseOver={[Function]}
               type="button"
             >
               <svg
@@ -166,7 +182,11 @@ exports[`Proposal component should match Proposal snapshot 1`] = `
             <button
               className="admin-icons btn btn-default"
               disabled={true}
+              onBlur={[Function]}
               onClick={[Function]}
+              onFocus={[Function]}
+              onMouseOut={[Function]}
+              onMouseOver={[Function]}
               type="button"
             >
               <svg
@@ -222,7 +242,11 @@ exports[`Proposal component should match Proposal snapshot 1`] = `
             <button
               className="admin-icons btn btn-default"
               disabled={false}
+              onBlur={[Function]}
               onClick={[Function]}
+              onFocus={[Function]}
+              onMouseOut={[Function]}
+              onMouseOver={[Function]}
               type="button"
             >
               <svg
@@ -253,7 +277,11 @@ exports[`Proposal component should match Proposal snapshot 1`] = `
             <button
               className="admin-icons btn btn-default"
               disabled={false}
+              onBlur={[Function]}
               onClick={[Function]}
+              onFocus={[Function]}
+              onMouseOut={[Function]}
+              onMouseOver={[Function]}
               type="button"
             >
               <svg
@@ -284,7 +312,11 @@ exports[`Proposal component should match Proposal snapshot 1`] = `
             <button
               className="admin-icons btn btn-default"
               disabled={false}
+              onBlur={[Function]}
               onClick={[Function]}
+              onFocus={[Function]}
+              onMouseOut={[Function]}
+              onMouseOver={[Function]}
               type="button"
             >
               <svg
@@ -315,7 +347,11 @@ exports[`Proposal component should match Proposal snapshot 1`] = `
             <button
               className="admin-icons btn btn-default"
               disabled={false}
+              onBlur={[Function]}
               onClick={[Function]}
+              onFocus={[Function]}
+              onMouseOut={[Function]}
+              onMouseOver={[Function]}
               type="button"
             >
               <svg
