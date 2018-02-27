@@ -378,7 +378,7 @@ def get_default_context(request, **kwargs):
 
 
 def private_social_sharing():
-
+    """Returns true if the preference private_social_sharing is enabled. False otherwise"""
     from ..auth.util import get_current_discussion
     discussion = get_current_discussion()
     if discussion:
@@ -388,52 +388,78 @@ def private_social_sharing():
 
 
 def get_opengraph_locale(request):
+    """
+    If there is a user logged in, returns his preferred locale
+    If not, returns the first preferred locale of the discussion
+    Otherwise, sets locale to fr
+    """
     from ..auth.util import get_user, get_current_discussion
     from assembl.lib.locale import strip_country
     user = get_user(request)
     discussion = get_current_discussion()
-    if user is None and discussion is None:
+    if not user and not discussion:
         locale = "fr"
+    elif user:
+        try:
+            locale = user.language_preference[0].locale.code
+            locale = strip_country(locale)
+        except:
+            if discussion:
+                locale = discussion.preferences['preferred_locales'][0]
+            else:
+                locale = "fr"
     elif discussion and user is None:
         locale = discussion.preferences['preferred_locales'][0]
-    elif user:
-        locale = user.language_preference[0].locale.code
-        locale = strip_country(locale)
     return locale
 
 
 def get_description(request):
-    """Returns the description corresponding to the locale of the current discussion"""
+    """
+    Returns the description corresponding to the locale returned from get_opengraph_locale
+    If the discussion does not have a description corresponding to this locale,
+    returns the description corresponding to the first preferred locale of the discussion
+    """
     opengraph_locale = get_opengraph_locale(request)
     from ..auth.util import get_current_discussion
     discussion = get_current_discussion()
     if discussion:
-        if discussion.preferences["extra_json"]["objectives"]["descriptionEntries"][opengraph_locale]:
-            return discussion.preferences["extra_json"]["objectives"]["descriptionEntries"][opengraph_locale]
+        dict = discussion.preferences["extra_json"]
+        objectives_dict = dict.get("objectives", "default objectives")
+        if type(objectives_dict) == str:
+            return objectives_dict
         else:
+            objectives_dict = objectives_dict["descriptionEntries"]
             locale = discussion.preferences['preferred_locales'][0]
-            return discussion.preferences["extra_json"]["objectives"]["descriptionEntries"][locale]
+            return objectives_dict.get(opengraph_locale, objectives_dict[locale])
 
 
 def get_topic(request):
-    """Returns the topic corresponding to the locale of the current discussion"""
+    """
+    Returns the topic corresponding to the locale returned from get_opengraph_locale
+    If the discussion does not have a topic corresponding to this locale,
+    returns the topic corresponding to the first preferred locale of the discussion
+    """
     opengraph_locale = get_opengraph_locale(request)
     from ..auth.util import get_current_discussion
     discussion = get_current_discussion()
     if discussion:
-        if discussion.preferences["extra_json"]["topic"]["titleEntries"][opengraph_locale]:
-            return discussion.preferences["extra_json"]["topic"]["titleEntries"][opengraph_locale]
+        dict = discussion.preferences["extra_json"]
+        topic_dict = dict.get("topic", "No topic available in the extra json")
+        if type(topic_dict) == str:
+            return topic_dict
         else:
-            locale = discussion.preferences['preferred_locales'][0]
-            return discussion.preferences["extra_json"]["topic"]["titleEntries"][opengraph_locale]
+            topic_dict = topic_dict["titleEntries"]
+            locale = discussion.preferences["preferred_locales"][0]
+            return topic_dict.get(opengraph_locale, topic_dict[locale])
 
 
 def get_landing_page_image():
-
+    """Returns landing page image of the discussion"""
     from ..auth.util import get_current_discussion
     discussion = get_current_discussion()
     if discussion:
-        return discussion.preferences['extra_json']['headerBackgroundUrl']
+        dict = discussion.preferences['extra_json']
+        return dict.get("headerBackgroundUrl", "no image available")
 
 
 def process_locale(

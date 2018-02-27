@@ -15,9 +15,9 @@
             <meta property="og:image" content="{{get_landing_page_image}}" />
             <meta property="og:image:width" content="1600" />
             <meta property="og:image:height" content="222" />
+            <meta property="og:locale" content="{{opengraph_locale}}" />
             <meta name="robots" content="noindex" />
             <meta name="googlebot" content="noindex" />
-            <meta property="og:locale" content="{{opengraph_locale}}" />
 
             <meta name="twitter:card" content="summary_large_image">
             <meta name="twitter:site" content="@bluenove">
@@ -25,12 +25,9 @@
             <meta name="twitter:title" content="Assembl">
             <meta name="twitter:description" content="{{get_description}}">
             <meta name="twitter:image" content="{{get_landing_page_image}}">
-        {% endif %}
-    {% endblock meta_tags_public %}
-    
-    {% block meta_tags_private %}
-        {% if private_social_sharing %}
-            
+        
+        {% else %}
+
             <meta name="description" content="">
             <meta name="og:title" content="{{get_topic}}" />
             <meta property="og:type" content="website" />
@@ -46,8 +43,9 @@
             <meta name="twitter:title" content="Assembl">
             <meta name="twitter:description" content="">
             <meta name="twitter:image" content="{{ application_url }}/static/css/themes/default/img/crowd2.png">
-        {% endif %}
-    {% endblock meta_tags_private %} 
+        {% endif %} 
+    {% endblock meta_tags_public %}
+
 
     {#<link rel="icon" href="/static/img/icon/infinite-1.png" type="image/x-icon">#}
     <link href='//fonts.googleapis.com/css?family=Open+Sans:400,300,600,700' rel='stylesheet' type='text/css'>
