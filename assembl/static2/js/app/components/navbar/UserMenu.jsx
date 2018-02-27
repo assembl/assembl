@@ -18,7 +18,7 @@ type IsHarvestingButtonProps = {
 
 const IsHarvestingButton = ({ isActive, handleClick }: IsHarvestingButtonProps) => (
   <span
-    className={`is-harvesting-button assembl-icon-catch ${isActive ? 'active' : ''}`}
+    className={`is-harvesting-button assembl-icon-expert ${isActive ? 'active' : ''}`}
     onClick={handleClick}
     role="button"
     tabIndex={0}

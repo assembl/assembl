@@ -46,8 +46,14 @@
     align-items: center;
     padding: 0;
 
-    .is-harvesting-button.active {
-      color: $lightgreen;
+    .is-harvesting-button {
+      &:focus {
+        outline: 0;
+      }
+
+      &.active {
+        color: $lightgreen;
+      }
     }
 
     #search {
