@@ -10,3 +10,11 @@ export const addContext = (rootPath, debateId, connectedUserId, connectedUserNam
   function (dispatch) {
     dispatch(resolvedAddContext(rootPath, debateId, connectedUserId, connectedUserName));
   };
+
+export const toggleHarvesting = function () {
+  return function (dispatch) {
+    dispatch({
+      type: 'TOGGLE_HARVESTING'
+    });
+  };
+};

@@ -2,17 +2,39 @@
 
 import React from 'react';
 import { Link } from 'react-router';
+import { connect } from 'react-redux';
+import { I18n } from 'react-redux-i18n';
 
 import Search from '../search';
 import Avatar from '../common/avatar';
 import { getConnectedUserId } from '../../utils/globalFunctions';
 import { connectedUserIsExpert } from '../../utils/permissions';
+import { toggleHarvesting } from '../../actions/contextActions';
 
-type Props = {
+type IsHarvestingButtonProps = {
+  isActive: boolean,
+  handleClick: Function
+};
+
+const IsHarvestingButton = ({ isActive, handleClick }: IsHarvestingButtonProps) => (
+  <span
+    className={`is-harvesting-button assembl-icon-catch ${isActive ? 'active' : ''}`}
+    onClick={handleClick}
+    role="button"
+    tabIndex={0}
+    title={isActive ? I18n.t('harvesting.disableHarvestingMode') : I18n.t('harvesting.enableHarvestingMode')}
+  >
+    &nbsp;
+  </span>
+);
+
+type UserMenuProps = {
   location: string,
   currentPhaseIdentifier: string,
   helpUrl: string,
-  remainingWidth?: number
+  remainingWidth?: number,
+  isHarvesting: boolean,
+  handleIsHarvestingButtonClick: Function
 };
 
 const shouldShowUsername = (remainingWidth, breakPoint) =>
@@ -20,17 +42,16 @@ const shouldShowUsername = (remainingWidth, breakPoint) =>
 
 const shouldShowExpertIcons = connectedUserIsExpert();
 
-const handleHarvestingModeClick = () => {
-  // TODO: activate harvesting mode (which probably means changing a property of application state)
-};
-
-const UserMenu = ({ location, currentPhaseIdentifier, helpUrl, remainingWidth }: Props) => (
+const UserMenu = ({
+  location,
+  currentPhaseIdentifier,
+  helpUrl,
+  remainingWidth,
+  isHarvesting,
+  handleIsHarvestingButtonClick
+}: UserMenuProps) => (
   <div className="navbar-icons">
-    {shouldShowExpertIcons && (
-      <span className="assembl-icon-catch" onClick={handleHarvestingModeClick} role="button" tabIndex={0}>
-        &nbsp;
-      </span>
-    )}
+    {shouldShowExpertIcons && <IsHarvestingButton isActive={isHarvesting} handleClick={handleIsHarvestingButtonClick} />}
     {currentPhaseIdentifier !== 'survey' && (
       <div id="search">
         <Search />
@@ -50,4 +71,14 @@ UserMenu.defaultProps = {
   remainingWidth: null
 };
 
-export default UserMenu;
+const mapStateToProps = state => ({
+  isHarvesting: state.context.isHarvesting
+});
+
+const mapDispatchToProps = dispatch => ({
+  handleIsHarvestingButtonClick: () => {
+    dispatch(toggleHarvesting());
+  }
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(UserMenu);

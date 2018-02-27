@@ -14,6 +14,10 @@ const Translations = {
     conclusion: "Conclusion",
     redirectToV1:
       "Vous allez être redirigé vers la phase %{phaseName} dans quelques secondes. Assembl est en cours d'amélioration, veuillez nous excuser pour le changement d'interface. Si rien ne se produit, cliquez sur le bouton ci-dessous.",
+    harvesting: {
+      enableHarvestingMode: "Activer le mode attrapage",
+      disableHarvestingMode: "Désactiver le mode attrapage"
+    },
     search: {
       reset: {
         clear_all: "Effacer tous les filtres"
@@ -581,6 +585,10 @@ const Translations = {
     },
     redirectToV1:
       "You will be redirected to the %{phaseName} phase in a few seconds. Assembl is being improved, please excuse us for the interface change. If nothing happens, click on the button.",
+    harvesting: {
+      enableHarvestingMode: "Enable harvesting mode",
+      disableHarvestingMode: "Disable harvesting mode"
+    },
     search: {
       reset: {
         clear_all: "Clear All Filters"

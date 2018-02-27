@@ -1,6 +1,6 @@
 const assemblVersionNode = document.getElementById('assemblVersion');
 const assemblVersion = assemblVersionNode ? assemblVersionNode.value : null;
-const initialState = { assemblVersion: assemblVersion };
+const initialState = { assemblVersion: assemblVersion, isHarvesting: false };
 
 const ContextReducer = (state = initialState, action) => {
   switch (action.type) {
@@ -11,6 +11,11 @@ const ContextReducer = (state = initialState, action) => {
       debateId: action.debateId,
       connectedUserId: action.connectedUserId,
       connectedUserName: action.connectedUserName
+    };
+  case 'TOGGLE_HARVESTING':
+    return {
+      ...state,
+      isHarvesting: !state.isHarvesting
     };
   default:
     return state;

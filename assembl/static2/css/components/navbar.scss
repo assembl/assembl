@@ -46,6 +46,10 @@
     align-items: center;
     padding: 0;
 
+    .is-harvesting-button.active {
+      color: $lightgreen;
+    }
+
     #search {
       float: none;
     }
