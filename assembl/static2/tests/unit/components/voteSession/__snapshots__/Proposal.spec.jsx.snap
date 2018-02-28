@@ -15,11 +15,14 @@ exports[`Proposal component should match Proposal snapshot 1`] = `
       >
         Use the online USB transmitter, then you can reboot the cross-platform application!
       </h3>
-      <p
+      <div
         className="text"
-      >
-        Try to override the CSS transmitter, maybe it will program the solid state program!
-      </p>
+        dangerouslySetInnerHTML={
+          Object {
+            "__html": "Try to override the CSS transmitter, maybe it will program the solid state program!",
+          }
+        }
+      />
     </div>
     <div
       className="proposal-vote-modules col-md-6 col-xs-12"

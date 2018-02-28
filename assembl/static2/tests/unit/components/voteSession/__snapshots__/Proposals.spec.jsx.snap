@@ -18,11 +18,14 @@ exports[`Proposals component should match Proposals snapshot 1`] = `
         >
           First proposal
         </h3>
-        <p
+        <div
           className="text"
-        >
-          You can't hack the alarm without connecting the primary AGP microchip!
-        </p>
+          dangerouslySetInnerHTML={
+            Object {
+              "__html": "You can't hack the alarm without connecting the primary AGP microchip!",
+            }
+          }
+        />
       </div>
       <div
         className="proposal-vote-modules col-md-6 col-xs-12"
@@ -1002,11 +1005,14 @@ exports[`Proposals component should match Proposals snapshot 1`] = `
         >
           Second proposal
         </h3>
-        <p
+        <div
           className="text"
-        >
-          I'll input the multi-byte SAS monitor, that should bandwidth the USB microchip!
-        </p>
+          dangerouslySetInnerHTML={
+            Object {
+              "__html": "I'll input the multi-byte SAS monitor, that should bandwidth the USB microchip!",
+            }
+          }
+        />
       </div>
       <div
         className="proposal-vote-modules col-md-6 col-xs-12"

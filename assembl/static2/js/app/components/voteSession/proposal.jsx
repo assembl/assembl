@@ -66,7 +66,7 @@ class Proposal extends React.Component<void, Props, State> {
         <Row className="proposal">
           <Col xs={12} md={6} className="margin-s">
             <h3 className="proposal-title dark-title-3">{title}</h3>
-            <p className="text">{description}</p>
+            <div className="text" dangerouslySetInnerHTML={{ __html: description }} />
           </Col>
           <Col xs={12} md={6} className="proposal-vote-modules">
             {tokenVoteModule && (
