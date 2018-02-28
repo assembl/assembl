@@ -156,6 +156,7 @@ const DumbVoteProposalForm = ({
       ))}
       {gaugeModules.map((moduleTemplateId, idx) => {
         const number = gaugeModules.size > 1 ? idx + 1 : '';
+        const pModule = proposalModules.find(m => m.get('voteSpecTemplateId') === moduleTemplateId);
         return (
           <div key={moduleTemplateId}>
             <Checkbox
@@ -165,15 +166,18 @@ const DumbVoteProposalForm = ({
             >
               <Translate value="administration.voteProposals.gauge" number={number} />
             </Checkbox>
-            <span
-              className="inline settings-link"
-              onClick={() => {
-                settingsModal(moduleTemplateId);
-              }}
-            >
-              <i className="assembl-icon-edit" />
-              <Translate value="administration.voteProposals.gaugeSettings" />
-            </span>
+            {pModule &&
+              pModule.get('id') && (
+                <span
+                  className="inline settings-link"
+                  onClick={() => {
+                    settingsModal(pModule.get('id'));
+                  }}
+                >
+                  <i className="assembl-icon-edit" />
+                  <Translate value="administration.voteProposals.gaugeSettings" />
+                </span>
+              )}
           </div>
         );
       })}
