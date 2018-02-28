@@ -1,15 +1,6 @@
 import { fromJS, List, Map } from 'immutable';
 
-import {
-  UPDATE_VOTE_SESSION_PAGE_TITLE,
-  UPDATE_VOTE_SESSION_PAGE_SUBTITLE,
-  UPDATE_VOTE_SESSION_PAGE_INSTRUCTIONS_TITLE,
-  UPDATE_VOTE_SESSION_PAGE_INSTRUCTIONS_CONTENT,
-  UPDATE_VOTE_SESSION_PAGE_PROPOSITIONS_TITLE,
-  UPDATE_VOTE_SESSION_PAGE_IMAGE,
-  ADD_MODULE_TO_PROPOSAL,
-  DELETE_MODULE_FROM_PROPOSAL
-} from '../../../../js/app/actions/actionTypes';
+import * as actionTypes from '../../../../js/app/actions/actionTypes';
 
 import * as reducers from '../../../../js/app/reducers/adminReducer/voteSession';
 
@@ -72,7 +63,7 @@ describe('voteSession admin reducers', () => {
       const action = {
         locale: 'en',
         value: 'An elaborate title for the vote session page',
-        type: UPDATE_VOTE_SESSION_PAGE_TITLE
+        type: actionTypes.UPDATE_VOTE_SESSION_PAGE_TITLE
       };
       expect(voteSessionPage(oldState, action)).toEqual(expected);
     });
@@ -107,7 +98,7 @@ describe('voteSession admin reducers', () => {
       const action = {
         locale: 'en',
         value: 'Superb subtitle in english',
-        type: UPDATE_VOTE_SESSION_PAGE_SUBTITLE
+        type: actionTypes.UPDATE_VOTE_SESSION_PAGE_SUBTITLE
       };
       expect(voteSessionPage(oldState, action)).toEqual(expected);
     });
@@ -142,7 +133,7 @@ describe('voteSession admin reducers', () => {
       const action = {
         locale: 'en',
         value: 'A much better title for the instructions in english',
-        type: UPDATE_VOTE_SESSION_PAGE_INSTRUCTIONS_TITLE
+        type: actionTypes.UPDATE_VOTE_SESSION_PAGE_INSTRUCTIONS_TITLE
       };
       expect(voteSessionPage(oldState, action)).toEqual(expected);
     });
@@ -177,7 +168,7 @@ describe('voteSession admin reducers', () => {
       const action = {
         locale: 'en',
         value: 'More elaborated instructions in english',
-        type: UPDATE_VOTE_SESSION_PAGE_INSTRUCTIONS_CONTENT
+        type: actionTypes.UPDATE_VOTE_SESSION_PAGE_INSTRUCTIONS_CONTENT
       };
       expect(voteSessionPage(oldState, action)).toEqual(expected);
     });
@@ -212,7 +203,7 @@ describe('voteSession admin reducers', () => {
       const action = {
         locale: 'en',
         value: 'Much better propositions title in english',
-        type: UPDATE_VOTE_SESSION_PAGE_PROPOSITIONS_TITLE
+        type: actionTypes.UPDATE_VOTE_SESSION_PAGE_PROPOSITIONS_TITLE
       };
       expect(voteSessionPage(oldState, action)).toEqual(expected);
     });
@@ -241,7 +232,7 @@ describe('voteSession admin reducers', () => {
       };
       const action = {
         value: file,
-        type: UPDATE_VOTE_SESSION_PAGE_IMAGE
+        type: actionTypes.UPDATE_VOTE_SESSION_PAGE_IMAGE
       };
       expect(voteSessionPage(oldState, action).toJS()).toEqual(expected);
     });
@@ -264,7 +255,7 @@ describe('voteSession admin reducers', () => {
         id: 'module42',
         moduleTemplateId: 'template2',
         proposalId: 'proposal1',
-        type: ADD_MODULE_TO_PROPOSAL
+        type: actionTypes.ADD_MODULE_TO_PROPOSAL
       };
       const expectedProposal1 = fromJS({
         isNew: false,
@@ -293,7 +284,7 @@ describe('voteSession admin reducers', () => {
         },
         moduleTemplateId: 'template2',
         proposalId: 'proposal1',
-        type: ADD_MODULE_TO_PROPOSAL
+        type: actionTypes.ADD_MODULE_TO_PROPOSAL
       };
       const expected = {
         module42: {
@@ -324,7 +315,7 @@ describe('voteSession admin reducers', () => {
       });
       const action = {
         moduleId: 'module42',
-        type: DELETE_MODULE_FROM_PROPOSAL
+        type: actionTypes.DELETE_MODULE_FROM_PROPOSAL
       };
       const expected = {
         module42: {
@@ -335,6 +326,37 @@ describe('voteSession admin reducers', () => {
           moduleTemplateId: 'template2',
           proposalId: 'proposal1',
           toDelete: true
+        }
+      };
+      const actual = modulesById(state, action);
+      expect(actual.toJS()).toEqual(expected);
+    });
+
+    it('should handle UNDELETE_MODULE action type', () => {
+      const state = fromJS({
+        module42: {
+          tokenCategories: [],
+          voteType: 'tokens',
+          id: 'module42',
+          isNew: false,
+          moduleTemplateId: 'template2',
+          proposalId: 'proposal1',
+          toDelete: true
+        }
+      });
+      const action = {
+        id: 'module42',
+        type: actionTypes.UNDELETE_MODULE
+      };
+      const expected = {
+        module42: {
+          tokenCategories: [],
+          voteType: 'tokens',
+          id: 'module42',
+          isNew: false,
+          moduleTemplateId: 'template2',
+          proposalId: 'proposal1',
+          toDelete: false
         }
       };
       const actual = modulesById(state, action);

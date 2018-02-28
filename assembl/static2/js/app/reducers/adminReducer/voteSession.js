@@ -40,7 +40,8 @@ import {
   UPDATE_GAUGE_MAXIMUM,
   UPDATE_GAUGE_UNIT,
   ADD_MODULE_TO_PROPOSAL,
-  DELETE_MODULE_FROM_PROPOSAL
+  DELETE_MODULE_FROM_PROPOSAL,
+  UNDELETE_MODULE
 } from '../../actions/actionTypes';
 import { updateInLangstringEntries } from '../../utils/i18n';
 
@@ -333,6 +334,8 @@ export const modulesById = (state: Map<string, Map> = Map(), action: ReduxAction
     );
   case DELETE_MODULE_FROM_PROPOSAL:
     return state.setIn([action.moduleId, 'toDelete'], true);
+  case UNDELETE_MODULE:
+    return state.setIn([action.id, 'toDelete'], false);
   default:
     return state;
   }

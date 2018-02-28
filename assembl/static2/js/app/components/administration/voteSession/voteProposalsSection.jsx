@@ -5,7 +5,7 @@ import { I18n, Translate } from 'react-redux-i18n';
 import { OverlayTrigger } from 'react-bootstrap';
 import { Link } from 'react-router';
 import { addVoteProposalTooltip } from '../../common/tooltips';
-import { createVoteProposal } from '../../../actions/adminActions/voteSession';
+import { createVoteProposalAndModules } from '../../../actions/adminActions/voteSession';
 import SectionTitle from '../sectionTitle';
 import VoteProposalForm from './voteProposalForm';
 import { getDiscussionSlug } from '../../../utils/globalFunctions';
@@ -64,7 +64,7 @@ const mapStateToProps = ({ admin }) => {
 const mapDispatchToProps = dispatch => ({
   addVoteProposal: () => {
     const newProposalId = Math.round(Math.random() * -1000000).toString();
-    dispatch(createVoteProposal(newProposalId));
+    dispatch(createVoteProposalAndModules(newProposalId));
   }
 });
 

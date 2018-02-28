@@ -1,5 +1,6 @@
 // @flow
 import * as actionTypes from '../actionTypes';
+import { createRandomId } from '../../utils/globalFunctions';
 
 export const updateVoteSessionPageTitle = (locale: string, value: string): actionTypes.UpdateVoteSessionPageTitle => ({
   locale: locale,
@@ -272,4 +273,15 @@ export const deleteModuleFromProposal = (id: string, moduleId: string): actionTy
   moduleId: moduleId,
   proposalId: id,
   type: actionTypes.DELETE_MODULE_FROM_PROPOSAL
+});
+
+export const createVoteProposalAndModules = (id: string) => (dispatch: Function, getState: Function) => {
+  dispatch(createVoteProposal(id));
+  const { modulesInOrder } = getState().admin.voteSession;
+  modulesInOrder.forEach(moduleId => dispatch(addModuleToProposal(createRandomId(), id, moduleId)));
+};
+
+export const undeleteModule = (id: string): actionTypes.UndeleteModule => ({
+  id: id,
+  type: actionTypes.UNDELETE_MODULE
 });

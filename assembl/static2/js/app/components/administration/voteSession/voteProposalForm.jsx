@@ -13,7 +13,8 @@ import {
   moveProposalUp,
   moveProposalDown,
   addModuleToProposal,
-  deleteModuleFromProposal
+  deleteModuleFromProposal,
+  undeleteModule
 } from '../../../actions/adminActions/voteSession';
 import { displayModal, displayCustomModal, closeModal } from '../../../utils/utilityManager';
 import GaugeSettingsForm from './gaugeSettingsForm';
@@ -32,6 +33,7 @@ type VoteProposalFormProps = {
   handleDownClick: Function,
   associateModuleToProposal: Function,
   deassociateModuleToProposal: Function,
+  reactivateModule: Function,
   tokenModules: Object,
   gaugeModules: Object,
   proposalModules: Object
@@ -53,7 +55,8 @@ const DumbVoteProposalForm = ({
   gaugeModules,
   proposalModules,
   associateModuleToProposal,
-  deassociateModuleToProposal
+  deassociateModuleToProposal,
+  reactivateModule
 }: VoteProposalFormProps) => {
   if (toDelete) {
     return null;
@@ -61,6 +64,22 @@ const DumbVoteProposalForm = ({
 
   const handleTitleChange = e => updateTitle(editLocale, e.target.value);
   const handleDescriptionChange = value => updateDescription(editLocale, value);
+
+  const moduleIsSelected = moduleTemplateId =>
+    proposalModules.some(m => m.get('voteSpecTemplateId') === moduleTemplateId && !m.get('toDelete'));
+
+  const toggleModule = (moduleTemplateId) => {
+    const pModule = proposalModules.find(m => m.get('voteSpecTemplateId') === moduleTemplateId);
+    if (pModule) {
+      if (pModule.get('toDelete')) {
+        reactivateModule(pModule.get('id'));
+      } else {
+        deassociateModuleToProposal(pModule.get('id'));
+      }
+    } else {
+      associateModuleToProposal(moduleTemplateId);
+    }
+  };
 
   const confirmModal = () => {
     const modalTitle = <Translate value="administration.voteProposals.deleteModalTitle" />;
@@ -126,41 +145,23 @@ const DumbVoteProposalForm = ({
         type="rich-text"
         required
       />
-      {tokenModules.map((moduleTemplateId) => {
-        const isChecked = proposalModules.some(m => m.get('voteSpecTemplateId') === moduleTemplateId);
-        return (
-          <Checkbox
-            key={moduleTemplateId}
-            checked={isChecked}
-            onChange={() => {
-              if (isChecked) {
-                const pModule = proposalModules.find(m => m.get('voteSpecTemplateId') === moduleTemplateId);
-                deassociateModuleToProposal(pModule.get('id'));
-              } else {
-                associateModuleToProposal(moduleTemplateId);
-              }
-            }}
-          >
-            <Translate value="administration.voteProposals.tokenVote" />
-          </Checkbox>
-        );
-      })}
+      {tokenModules.map(moduleTemplateId => (
+        <Checkbox
+          key={moduleTemplateId}
+          checked={moduleIsSelected(moduleTemplateId)}
+          onChange={() => toggleModule(moduleTemplateId)}
+        >
+          <Translate value="administration.voteProposals.tokenVote" />
+        </Checkbox>
+      ))}
       {gaugeModules.map((moduleTemplateId, idx) => {
-        const isChecked = proposalModules.some(m => m.get('voteSpecTemplateId') === moduleTemplateId);
         const number = gaugeModules.size > 1 ? idx + 1 : '';
         return (
           <div key={moduleTemplateId}>
             <Checkbox
               className="inline"
-              checked={isChecked}
-              onChange={() => {
-                if (isChecked) {
-                  const pModule = proposalModules.find(m => m.get('voteSpecTemplateId') === moduleTemplateId);
-                  deassociateModuleToProposal(pModule.get('id'));
-                } else {
-                  associateModuleToProposal(moduleTemplateId);
-                }
-              }}
+              checked={moduleIsSelected(moduleTemplateId)}
+              onChange={() => toggleModule(moduleTemplateId)}
             >
               <Translate value="administration.voteProposals.gauge" number={number} />
             </Checkbox>
@@ -190,10 +191,7 @@ const mapStateToProps = ({ admin }, { id, editLocale }) => {
     description: description ? description.toJS() : null,
     toDelete: proposal.get('toDelete', false),
     order: proposal.get('order'),
-    proposalModules: proposal
-      .get('modules')
-      .map(moduleId => modulesById.get(moduleId))
-      .filter(m => !m.get('toDelete')),
+    proposalModules: proposal.get('modules').map(moduleId => modulesById.get(moduleId)),
     tokenModules: modulesInOrder.filter(
       voteSpecTemplateId =>
         !modulesById.getIn([voteSpecTemplateId, 'proposalId']) &&
@@ -226,7 +224,8 @@ const mapDispatchToProps = (dispatch, { id }) => ({
     const newId = Math.round(Math.random() * -1000000).toString();
     dispatch(addModuleToProposal(newId, id, voteSpecTemplateId));
   },
-  deassociateModuleToProposal: moduleId => dispatch(deleteModuleFromProposal(id, moduleId))
+  deassociateModuleToProposal: moduleId => dispatch(deleteModuleFromProposal(id, moduleId)),
+  reactivateModule: moduleId => dispatch(undeleteModule(moduleId))
 });
 
 export { DumbVoteProposalForm };
