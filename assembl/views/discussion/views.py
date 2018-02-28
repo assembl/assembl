@@ -467,10 +467,10 @@ def includeme(config):
     config.add_route('bare_slug', '/{discussion_slug}')
     config.add_route('auto_bare_slug', '/{discussion_slug}/')
     config.add_route('react_admin_page', '/{discussion_slug}/administration*extra_path')
-    config.add_route('purl_posts', '/debate/{discussion_slug}/posts/*remainder')
-    config.add_route('legacy_purl_posts', '/{discussion_slug}/posts/*remainder')
     config.add_route('purl_ideas', '/debate/{discussion_slug}/idea/*remainder')
     config.add_route('legacy_purl_ideas', '/{discussion_slug}/idea/*remainder')
+    config.add_route('purl_posts', '/debate/{discussion_slug}/posts/*remainder')
+    config.add_route('legacy_purl_posts', '/{discussion_slug}/posts/*remainder')
     config.add_route('react_general_page', '/{discussion_slug}/*extra_path')
 
     admin_react_routes = [

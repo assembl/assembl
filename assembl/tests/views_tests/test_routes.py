@@ -312,14 +312,16 @@ def test_route_discussion_idea(discussion, root_post_1, subidea_1, test_app):
     assert 'V1' in resp.body
 
 
+@pytest.mark.xfail(reason="The feature is not complete yet")
 def test_route_discussion_idea_v2(
     test_app, discussion_with_2_phase_interface_v2,
     timeline_phase2_interface_v2, post_related_to_sub_idea_1,
     subidea_1):
 
     slug = discussion_with_2_phase_interface_v2.slug
-    route = "/%s/idea/%s" % (
+    route = "/debate/%s/idea/%s" % (
         slug, quote_plus(subidea_1.uri()))
+    print route
     resp = test_app.get(route)
     assert resp.status_int == 303
 
