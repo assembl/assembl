@@ -25,18 +25,19 @@ import updateNumberGaugeVoteSpecificationMutation from '../../../graphql/mutatio
 import createGaugeVoteSpecificationMutation from '../../../graphql/mutations/createGaugeVoteSpecification.graphql';
 import createNumberGaugeVoteSpecificationMutation from '../../../graphql/mutations/createNumberGaugeVoteSpecification.graphql';
 
-type GaugeSettingsFormProps = {
-  gaugeModuleId: string,
-  choices: Array<Object>,
-  nbTicks: number,
-  instructions: string,
-  handleInstructionsChange: Function,
-  handleNumberGaugeCheck: Function,
-  handleNbTicksSelectChange: Function,
-  handleNumberGaugeUncheck: Function,
-  isNumberGauge: boolean
-};
+// type GaugeSettingsFormProps = {
+//   gaugeModuleId: string,
+//   choices: Array<Object>,
+//   nbTicks: number,
+//   instructions: string,
+//   handleInstructionsChange: Function,
+//   handleNumberGaugeCheck: Function,
+//   handleNbTicksSelectChange: Function,
+//   handleNumberGaugeUncheck: Function,
+//   isNumberGauge: boolean
+// };
 
+// FIXME: use GaugeSettingsFormProps for type
 const DumbGaugeSettingsForm = ({
   gaugeModuleId,
   choices,
@@ -49,14 +50,12 @@ const DumbGaugeSettingsForm = ({
   isNumberGauge,
   voteSessionPage,
   textGaugeModulesHaveChanged,
-  numberGaugeModulesHaveChanged,
-  updateNumberGaugeVoteSpecification,
   updateGaugeVoteSpecification,
   createGaugeVoteSpecification,
   deleteVoteSpecification,
   module,
   editLocale
-}: GaugeSettingsFormProps) => {
+}: Object) => {
   const runMutations = (mutationsPromises) => {
     runSerial(mutationsPromises).then(() => {
       // refetchVoteSession() ?
@@ -97,7 +96,6 @@ const DumbGaugeSettingsForm = ({
       if (textGaugeModulesHaveChanged) {
         const items = List([{ ...module.toJS(), voteSessionId: voteSessionPageId }]);
         const mutationsPromises = getTextGaugeSpecMutationsPromises(items);
-        console.log('mutationsPromises', mutationsPromises);
         runMutations(mutationsPromises);
       }
     }
