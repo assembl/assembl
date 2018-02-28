@@ -32,7 +32,7 @@ const AvailableTokens = ({ remainingTokensByCategory, sticky, tokenCategories }:
                 ))}
               </div>
             </div>
-            {idx % 2 === 0 && <div className="separator" />}
+            {idx !== tokenCategories.length - 1 && <div className="separator" />}
           </div>
         );
       }
