@@ -5,6 +5,7 @@ _uses_ngnix = False
 _gitbranch = develop
 _is_production_env = false
 _ini_file = testing.ini
+under_test = true
 pipeline:main__pipeline = assembl
 pyramid.default_locale_name = en
 assembl_handle_exceptions = false

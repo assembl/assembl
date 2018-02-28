@@ -224,6 +224,7 @@ def react_view(request, required_permission=P_READ):
         "assembl_version": pkg_resources.get_distribution("assembl").version,
         "elasticsearch_lang_indexes" : old_context['elasticsearch_lang_indexes'],
         "web_analytics": old_context['web_analytics'],
+        "under_test": old_context['under_test']
     }
 
     if discussion:
