@@ -31,7 +31,7 @@ class App extends React.Component {
   render() {
     const { debateData, debateLoading, debateError } = this.props.debate;
     return (
-      <div className="app">
+      <div className={`${this.props.isHarvesting ? 'app harvesting-mode-on' : 'app'}`}>
         <ChatFrame />
         {debateLoading && <Loader />}
         {debateData && <div className="app-child">{this.props.children}</div>}
@@ -42,7 +42,8 @@ class App extends React.Component {
 }
 
 const mapStateToProps = state => ({
-  debate: state.debate
+  debate: state.debate,
+  isHarvesting: state.context.isHarvesting
 });
 
 const mapDispatchToProps = dispatch => ({
