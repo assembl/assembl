@@ -58,6 +58,7 @@ def token_vote_specification(request, test_session, graphql_request, vote_sessio
             {"value": u"Comprendre les dynamiques et les enjeux", "localeCode": "fr"},
             {"value": u"Understanding the dynamics and issues", "localeCode": "en"}
         ],
+        "isCustom": False,
         "exclusiveCategories": True,
         "tokenCategories": [
             {"titleEntries": [
@@ -98,6 +99,7 @@ def gauge_vote_specification(request, test_session, graphql_request, vote_sessio
             {"value": u"Comprendre les dynamiques et les enjeux", "localeCode": "fr"},
             {"value": u"Understanding the dynamics and issues", "localeCode": "en"}
         ],
+        "isCustom": False,
         "choices": [
             {"labelEntries": [
                 {"value": u"Cran 1", "localeCode": "fr"},
@@ -141,6 +143,7 @@ def number_gauge_vote_specification(request, test_session, graphql_request, vote
             {"value": u"Comprendre les dynamiques et les enjeux", "localeCode": "fr"},
             {"value": u"Understanding the dynamics and issues", "localeCode": "en"}
         ],
+        "isCustom": False,
         "minimum": 0.0,
         "maximum": 60.0,
         "nbTicks": 7,

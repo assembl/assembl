@@ -89,6 +89,9 @@ class AbstractVoteSpecification(DiscussionBoundBase):
     vote_spec_template_id = Column(
         Integer, ForeignKey("vote_specification.id"), nullable=True, index=True)
 
+    # if the module has been customized for a specific proposal
+    is_custom = Column(Boolean, default=False)
+
     ##
     # TODO (MAP):
     #   These and several functions that return a hard-encoded 'local' should

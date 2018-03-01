@@ -4,6 +4,7 @@ mutation updateTokenVoteSpecification(
   $id: ID!
   $titleEntries: [LangStringEntryInput]!
   $instructionsEntries: [LangStringEntryInput]!
+  $isCustom: Boolean!
   $exclusiveCategories: Boolean!
   $tokenCategories: [TokenCategorySpecificationInput]!
 ) {
@@ -11,6 +12,7 @@ mutation updateTokenVoteSpecification(
     id: $id
     titleEntries: $titleEntries
     instructionsEntries: $instructionsEntries
+    isCustom: $isCustom
     exclusiveCategories: $exclusiveCategories
     tokenCategories: $tokenCategories
   ) {
@@ -24,6 +26,7 @@ mutation updateTokenVoteSpecification(
         instructionsEntries {
           ...langStringEntry
         }
+        isCustom
         exclusiveCategories
         tokenCategories {
           id

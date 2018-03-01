@@ -226,6 +226,7 @@ def test_mutation_create_token_vote_specification(graphql_request, vote_session,
             {"value": u"Comprendre les dynamiques et les enjeux", "localeCode": "fr"},
             {"value": u"Understanding the dynamics and issues", "localeCode": "en"}
         ],
+        "isCustom": False,
         "exclusiveCategories": True,
         "tokenCategories": [
             {"titleEntries": [
@@ -254,6 +255,7 @@ u'createTokenVoteSpecification': {u'voteSpecification': {u'exclusiveCategories':
                                                                                  u'value': u'Understanding the dynamics and issues'},
                                                                                 {u'localeCode': u'fr',
                                                                                  u'value': u'Comprendre les dynamiques et les enjeux'}],
+                                                              u"isCustom": False,
                                                               u'tokenCategories': [{u'color': u'red',
                                                                                     u'id': token_category_id,
                                                                                     u'titleEntries': [{u'localeCode': u'en',
@@ -296,6 +298,7 @@ def test_mutation_update_token_vote_specification(graphql_request, vote_session,
             {"value": u"Comprendre les dynamiques et les enjeux (updated)", "localeCode": "fr"},
             {"value": u"Understanding the dynamics and issues (updated)", "localeCode": "en"}
         ],
+        "isCustom": False,
         "exclusiveCategories": True,
         "tokenCategories": [
             {
@@ -323,6 +326,7 @@ u'updateTokenVoteSpecification': {u'voteSpecification': {u'exclusiveCategories':
                                                                             u'value': u'Understanding the dynamics and issues (updated)'},
                                                                            {u'localeCode': u'fr',
                                                                             u'value': u'Comprendre les dynamiques et les enjeux (updated)'}],
+                                                         u"isCustom": False,
                                                          u'tokenCategories': [{u'color': u'blue',
                                                                                u'id': token_category_id,
                                                                                u'titleEntries': [{u'localeCode': u'en',
@@ -362,6 +366,7 @@ def test_mutation_create_gauge_vote_specification(graphql_request, vote_session,
             {"value": u"Comprendre les dynamiques et les enjeux", "localeCode": "fr"},
             {"value": u"Understanding the dynamics and issues", "localeCode": "en"}
         ],
+        "isCustom": False,
         "choices": [
             {"labelEntries": [
                 {"value": u"Cran 1", "localeCode": "fr"},
@@ -394,6 +399,7 @@ u'createGaugeVoteSpecification': {u'voteSpecification': {u'id': vote_spec_id,
                                                                             u'value': u'Understanding the dynamics and issues'},
                                                                            {u'localeCode': u'fr',
                                                                             u'value': u'Comprendre les dynamiques et les enjeux'}],
+                                                         u'isCustom': False,
                                                          u'choices': [
                                                              {u'value': 10.0,
                                                               u'id': choice1_id,
@@ -445,6 +451,7 @@ def test_mutation_update_gauge_vote_specification(graphql_request, vote_session,
             {"value": u"Comprendre les dynamiques et les enjeux (updated)", "localeCode": "fr"},
             {"value": u"Understanding the dynamics and issues (updated)", "localeCode": "en"}
         ],
+        "isCustom": False,
         "choices": [
             {
              "id": choice1_id,
@@ -476,6 +483,7 @@ u'updateGaugeVoteSpecification': {u'voteSpecification': {u'id': gauge_vote_spec_
                                                                             u'value': u'Understanding the dynamics and issues (updated)'},
                                                                            {u'localeCode': u'fr',
                                                                             u'value': u'Comprendre les dynamiques et les enjeux (updated)'}],
+                                                         u"isCustom": False,
                                                          u'choices': [
                                                              {u'value': 20.0,
                                                               u'id': choice1_id,
@@ -509,6 +517,7 @@ def test_mutation_create_number_gauge_vote_specification(graphql_request, vote_s
             {"value": u"Comprendre les dynamiques et les enjeux", "localeCode": "fr"},
             {"value": u"Understanding the dynamics and issues", "localeCode": "en"}
         ],
+        "isCustom": False,
         "minimum": 0.0,
         "maximum": 60.0,
         "nbTicks": 7,
@@ -531,6 +540,7 @@ u'createNumberGaugeVoteSpecification': {
              u'value': u'Understanding the dynamics and issues'},
             {u'localeCode': u'fr',
              u'value': u'Comprendre les dynamiques et les enjeux'}],
+        u"isCustom": False,
         u"minimum": 0.0,
         u"maximum": 60.0,
         u"nbTicks": 7,
@@ -566,6 +576,7 @@ def test_mutation_update_number_gauge_vote_specification(graphql_request, vote_s
             {"value": u"Comprendre les dynamiques et les enjeux (updated)", "localeCode": "fr"},
             {"value": u"Understanding the dynamics and issues (updated)", "localeCode": "en"}
         ],
+        u"isCustom": False,
         u"minimum": 1.0,
         u"maximum": 80.0,
         u"nbTicks": 8,
@@ -588,6 +599,7 @@ u'updateNumberGaugeVoteSpecification': {
              u'value': u'Understanding the dynamics and issues (updated)'},
             {u'localeCode': u'fr',
              u'value': u'Comprendre les dynamiques et les enjeux (updated)'}],
+        u"isCustom": False,
         u"minimum": 1.0,
         u"maximum": 80.0,
         u"nbTicks": 8,
@@ -723,6 +735,7 @@ def test_query_associate_vote_spec_to_proposal(graphql_request, timeline_vote_se
             {"value": u"Comprendre les dynamiques et les enjeux", "localeCode": "fr"},
             {"value": u"Understanding the dynamics and issues", "localeCode": "en"}
         ],
+        "isCustom": True,
         "exclusiveCategories": False,
         "tokenCategories": [
             {"titleEntries": [
@@ -747,6 +760,7 @@ def test_query_associate_vote_spec_to_proposal(graphql_request, timeline_vote_se
     assert len(res.data['voteSession']['proposals'][0]['modules']) == 1
     assert res.data['voteSession']['proposals'][0]['modules'][0]['exclusiveCategories'] == False
     assert res.data['voteSession']['proposals'][0]['modules'][0]['voteSpecTemplateId'] == template_token_vote_spec_id
+    assert res.data['voteSession']['proposals'][0]['modules'][0]['isCustom'] is True
 
     # clean up
     vote_session.vote_specifications[-1].delete()
