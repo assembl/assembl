@@ -161,7 +161,7 @@ class VoteSpecificationInterface(graphene.Interface):
         return resolve_langstring_entries(self, 'instructions')
 
     def resolve_is_custom(self, args, context, info):
-        return self.is_custom
+        return False if self.is_custom is None else self.is_custom
 
     def resolve_vote_session_id(self, args, context, info):
         return Node.to_global_id('VoteSession', self.widget_id)
