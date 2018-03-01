@@ -5,13 +5,17 @@ import ReactDOM from 'react-dom';
 import { I18n } from 'react-redux-i18n';
 
 type LeftSideHarvestingButtonProps = {
+  label: string,
   handleClick: Function,
   children: Array<*>
 };
 
-const LeftSideHarvestingButton = ({ handleClick, children }: LeftSideHarvestingButtonProps) => (
-  <div className="left-side-harvesting-button" role="button" tabIndex={0} onClick={handleClick}>
-    <div className="left-side-harvesting-button-inside">{children}</div>
+const LeftSideHarvestingButton = ({ label, handleClick, children }: LeftSideHarvestingButtonProps) => (
+  <div className="left-side-harvesting-button">
+    <div className="left-side-harvesting-button__label">{label}</div>
+    <div className="left-side-harvesting-button__button" role="button" tabIndex={0} onClick={handleClick}>
+      <div className="left-side-harvesting-button__button__inside">{children}</div>
+    </div>
   </div>
 );
 
@@ -20,10 +24,8 @@ type ConfirmHarvestButtonProps = {
 };
 
 const ConfirmHarvestButton = ({ handleClick }: ConfirmHarvestButtonProps) => (
-  <LeftSideHarvestingButton handleClick={handleClick}>
-    <span className="confirm-harvest-button assembl-icon-catch" title={I18n.t('harvesting.harvestSelection')}>
-      &nbsp;
-    </span>
+  <LeftSideHarvestingButton handleClick={handleClick} label={I18n.t('harvesting.harvestSelection')}>
+    <span className="confirm-harvest-button assembl-icon-catch">&nbsp;</span>
   </LeftSideHarvestingButton>
 );
 
@@ -65,7 +67,11 @@ const handleMouseUpWhileHarvesting = (evt) => {
     document.getElementsByTagName('body')[0].appendChild(element);
   }
 
-  ReactDOM.render(<HarvestingMenu positionY={evt.pageY} positionX={10} />, document.getElementById('annotation'));
+  const iconSize = 44;
+  const positionX = (window.innerWidth - 600) / 2 - iconSize - 50;
+  const positionY = evt.pageY - iconSize / 2;
+
+  ReactDOM.render(<HarvestingMenu positionX={positionX} positionY={positionY} />, document.getElementById('annotation'));
 };
 
 export const enableHarvestingMode = () => {

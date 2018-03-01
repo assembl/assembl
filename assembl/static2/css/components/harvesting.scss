@@ -1,0 +1,47 @@
+.left-side-harvesting-button {
+  &:hover {
+    .assembl-icon-catch:before {
+      font-weight: bold;
+    }
+
+    .left-side-harvesting-button__label {
+      visibility: visible;
+    }
+  }
+
+  .left-side-harvesting-button__label {
+    position: absolute;
+    left: -100px;
+    top: 0;
+    width: 100px;
+    margin-top: 11px;
+    padding-right: 9px;
+    text-align: right;
+    visibility: hidden;
+  }
+
+  .left-side-harvesting-button__button {
+    background: white;
+    border: 1px solid #ccc;
+    border-radius: 50%;
+    width: 44px;
+    height: 44px;
+    box-shadow: 2px 2px 4px 0 #ccc;
+
+    .left-side-harvesting-button__button__inside {
+      text-align: center;
+      margin: 4px;
+      width: calc(100% - 8px);
+      height: calc(100% - 8px);
+      background: #fff7b5;
+      border-radius: 50%;
+      display: flex;
+    }
+  }
+}
+
+.confirm-harvest-button {
+  text-align: center;
+  margin: 4px;
+  padding: 4px 0;
+}
