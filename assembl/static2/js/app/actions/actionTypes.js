@@ -484,7 +484,6 @@ export type UpdateGaugeUnit = {
 
 export type AddModuleToProposal = {
   id: string,
-  moduleInfo: { [string]: any },
   moduleTemplateId: string,
   proposalId: string,
   type: typeof ADD_MODULE_TO_PROPOSAL

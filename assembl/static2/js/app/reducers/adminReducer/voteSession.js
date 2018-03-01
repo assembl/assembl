@@ -216,49 +216,50 @@ const defaultNumberGaugeModule = Map({
 });
 
 const getModuleInfo = (m) => {
-  if (m.voteType === 'token_vote_specification') {
-    return {
-      isNew: false,
-      toDelete: false,
-      type: 'tokens',
-      id: m.id,
-      instructionsEntries: m.instructionsEntries,
-      exclusiveCategories: m.exclusiveCategories,
-      tokenCategories: m.tokenCategories.map(t => t.id),
-      proposalId: m.proposalId,
-      voteSpecTemplateId: m.voteSpecTemplateId
-    };
-  } else if (m.voteType === 'number_gauge_vote_specification') {
-    return {
-      isNew: false,
-      toDelete: false,
-      type: 'gauge',
-      id: m.id,
-      instructionsEntries: m.instructionsEntries,
-      nbTicks: m.nbTicks,
-      isNumberGauge: true,
-      maximum: m.maximum,
-      minimum: m.minimum,
-      unit: m.unit,
-      proposalId: m.proposalId,
-      voteSpecTemplateId: m.voteSpecTemplateId
-    };
-  } else if (m.voteType === 'gauge_vote_specification') {
-    return {
-      isNew: false,
-      toDelete: false,
-      type: 'gauge',
-      id: m.id,
-      instructionsEntries: m.instructionsEntries,
-      nbTicks: m.choices.size,
-      isNumberGauge: false,
-      choices: m.choices.map(c => c.id),
-      proposalId: m.proposalId,
-      voteSpecTemplateId: m.voteSpecTemplateId
-    };
+  const typeMapping = {
+    token_vote_specification: 'tokens',
+    number_gauge_vote_specification: 'gauge',
+    gauge_vote_specification: 'gauge'
+  };
+  const moduleInfo = {
+    isNew: false,
+    toDelete: false,
+    id: m.id,
+    instructionsEntries: m.instructionsEntries,
+    isCustom: m.isCustom,
+    proposalId: m.proposalId,
+    type: typeMapping[m.voteType],
+    voteSpecTemplateId: m.voteSpecTemplateId
+  };
+
+  let customModuleInfo = {};
+  if (m.voteSpecTemplateId === null || m.isCustom) {
+    if (m.voteType === 'token_vote_specification') {
+      customModuleInfo = {
+        exclusiveCategories: m.exclusiveCategories,
+        tokenCategories: m.tokenCategories.map(t => t.id)
+      };
+    } else if (m.voteType === 'number_gauge_vote_specification') {
+      customModuleInfo = {
+        nbTicks: m.nbTicks,
+        isNumberGauge: true,
+        maximum: m.maximum,
+        minimum: m.minimum,
+        unit: m.unit
+      };
+    } else if (m.voteType === 'gauge_vote_specification') {
+      customModuleInfo = {
+        nbTicks: m.choices.size,
+        isNumberGauge: false,
+        choices: m.choices.map(c => c.id)
+      };
+    }
   }
 
-  return {};
+  return {
+    ...customModuleInfo,
+    ...moduleInfo
+  };
 };
 
 export const modulesById = (state: Map<string, Map> = Map(), action: ReduxAction<Action>) => {
@@ -324,8 +325,8 @@ export const modulesById = (state: Map<string, Map> = Map(), action: ReduxAction
     return state.set(
       action.id,
       fromJS({
-        ...action.moduleInfo,
         id: action.id,
+        isCustom: false,
         proposalId: action.proposalId,
         isNew: true,
         toDelete: false,

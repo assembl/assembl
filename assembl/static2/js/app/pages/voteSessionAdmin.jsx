@@ -34,6 +34,7 @@ type VoteModule = {
   exclusiveCategories?: boolean,
   id: string,
   instructionsEntries?: Array<string>,
+  isCustom: boolean,
   isNew: boolean,
   isNumberGauge?: boolean,
   isNumberGauge?: boolean,
@@ -61,6 +62,7 @@ const createVariablesForTokenVoteSpecificationMutation: CreateVariablesForTokenV
   voteSessionId: voteModule.voteSessionId,
   exclusiveCategories: voteModule.exclusiveCategories,
   instructionsEntries: voteModule.instructionsEntries,
+  isCustom: voteModule.isCustom,
   titleEntries: [],
   tokenCategories: voteModule.tokenCategories
     ? voteModule.tokenCategories.map(t => ({
@@ -79,6 +81,7 @@ const createVariablesForTextGaugeMutation: CreateVariablesForTextGaugeMutation =
   voteSessionId: voteModule.voteSessionId,
   titleEntries: [],
   instructionsEntries: voteModule.instructionsEntries,
+  isCustom: voteModule.isCustom,
   choices: voteModule.choices
     ? voteModule.choices.map((c, index) => ({
       labelEntries: c.labelEntries,
@@ -94,6 +97,7 @@ const createVariablesForNumberGaugeMutation: CreateVariablesForNumberGaugeMutati
   voteSessionId: voteModule.voteSessionId,
   titleEntries: [],
   instructionsEntries: voteModule.instructionsEntries,
+  isCustom: voteModule.isCustom,
   nbTicks: voteModule.nbTicks,
   minimum: voteModule.minimum,
   maximum: voteModule.maximum,
@@ -250,6 +254,7 @@ class VoteSessionAdmin extends React.Component<void, VoteSessionAdminProps, Vote
           headerImage: headerImage
         }
       };
+
       updateVoteSession(payload)
         .then(() => {
           refetchVoteSession();
@@ -426,7 +431,24 @@ const mapStateToProps = ({ admin: { editLocale, voteSession }, debate, i18n }) =
   } = voteSession;
 
   type Module = Map<string, any>;
-  const expandModuleData = (m: Module): Module => {
+  const expandModuleData = (initialModule: Module): Module => {
+    let m = initialModule;
+    if (!m.get('isCustom')) {
+      if (m.get('voteSpecTemplateId') !== null) {
+        const template = modulesById
+          .get(m.get('voteSpecTemplateId'))
+          // remove fields that we don't want to override
+          .delete('id')
+          .delete('isCustom')
+          .delete('isNew')
+          .delete('proposalId')
+          .delete('toDelete')
+          .delete('voteSpecTemplateId');
+        // if template toDelete === true => toDelete
+        m = m.merge(template);
+      }
+    }
+
     if (m.has('choices')) {
       return m.set('choices', m.get('choices').map(c => gaugeChoicesById.get(c)));
     } else if (m.has('tokenCategories')) {

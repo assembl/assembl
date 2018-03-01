@@ -288,9 +288,8 @@ describe('voteSession admin reducers', () => {
       };
       const expected = {
         module42: {
-          tokenCategories: [],
-          voteType: 'tokens',
           id: 'module42',
+          isCustom: false,
           isNew: true,
           proposalId: 'proposal1',
           voteSpecTemplateId: 'template2',
