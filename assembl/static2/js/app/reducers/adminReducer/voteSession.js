@@ -147,6 +147,7 @@ export const modulesInOrder = (state: List<number> = List(), action: ReduxAction
 };
 
 const defaultTokenModule = Map({
+  isCustom: false,
   isNew: true,
   toDelete: false,
   type: 'tokens',
@@ -164,6 +165,7 @@ const defaultTextGaugeChoice = Map({
 });
 
 const defaultTextGaugeModule = Map({
+  isCustom: false,
   isNew: true,
   toDelete: false,
   type: 'gauge',
@@ -175,6 +177,7 @@ const defaultTextGaugeModule = Map({
 });
 
 const defaultNumberGaugeModule = Map({
+  isCustom: false,
   isNew: true,
   toDelete: false,
   type: 'gauge',
