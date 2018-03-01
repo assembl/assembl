@@ -38,9 +38,8 @@ export const UPDATE_VOTE_SESSION_PAGE_PROPOSITIONS_TITLE: 'UPDATE_VOTE_SESSION_P
 export const UPDATE_VOTE_SESSION_PAGE_IMAGE: 'UPDATE_VOTE_SESSION_PAGE_IMAGE' = 'UPDATE_VOTE_SESSION_PAGE_IMAGE';
 export const UPDATE_VOTE_MODULES: 'UPDATE_VOTE_MODULES' = 'UPDATE_VOTE_MODULES';
 export const CREATE_TOKEN_VOTE_MODULE: 'CREATE_TOKEN_VOTE_MODULE' = 'CREATE_TOKEN_VOTE_MODULE';
-export const DELETE_TOKEN_VOTE_MODULE: 'DELETE_TOKEN_VOTE_MODULE' = 'DELETE_TOKEN_VOTE_MODULE';
+export const DELETE_VOTE_MODULE: 'DELETE_VOTE_MODULE' = 'DELETE_VOTE_MODULE';
 export const CREATE_GAUGE_VOTE_MODULE: 'CREATE_GAUGE_VOTE_MODULE' = 'CREATE_GAUGE_VOTE_MODULE';
-export const DELETE_GAUGE_VOTE_MODULE: 'DELETE_GAUGE_VOTE_MODULE' = 'DELETE_GAUGE_VOTE_MODULE';
 export const UPDATE_TOKEN_VOTE_INSTRUCTIONS: 'UPDATE_TOKEN_VOTE_INSTRUCTIONS' = 'UPDATE_TOKEN_VOTE_INSTRUCTIONS';
 export const CREATE_TOKEN_VOTE_CATEGORY: 'CREATE_TOKEN_VOTE_CATEGORY' = 'CREATE_TOKEN_VOTE_CATEGORY';
 export const DELETE_TOKEN_VOTE_CATEGORY: 'DELETE_TOKEN_VOTE_CATEGORY' = 'DELETE_TOKEN_VOTE_CATEGORY';
@@ -304,19 +303,14 @@ export type CreateTokenVoteModule = {
   type: typeof CREATE_TOKEN_VOTE_MODULE
 };
 
-export type DeleteTokenVoteModule = {
+export type DeleteVoteModule = {
   id: string,
-  type: typeof DELETE_TOKEN_VOTE_MODULE
+  type: typeof DELETE_VOTE_MODULE
 };
 
 export type CreateGaugeVoteModule = {
   id: string,
   type: typeof CREATE_GAUGE_VOTE_MODULE
-};
-
-export type DeleteGaugeVoteModule = {
-  id: string,
-  type: typeof DELETE_GAUGE_VOTE_MODULE
 };
 
 export type UpdateTokenVoteExclusiveCategory = {
@@ -531,10 +525,9 @@ type VoteSessionActions =
   | UpdateVoteSessionPagePropositionsTitle
   | UpdateVoteSessionHeaderImage
   | UpdateVoteModules
+  | DeleteVoteModule
   | CreateTokenVoteModule
-  | DeleteTokenVoteModule
   | CreateGaugeVoteModule
-  | DeleteGaugeVoteModule
   | UpdateTokenVoteInstructions
   | CreateTokenVoteCategory
   | DeleteTokenVoteCategory

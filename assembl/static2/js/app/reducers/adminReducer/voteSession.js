@@ -12,10 +12,9 @@ import {
   UPDATE_VOTE_SESSION_PAGE_IMAGE,
   UPDATE_VOTE_SESSION_PAGE,
   UPDATE_VOTE_MODULES,
+  DELETE_VOTE_MODULE,
   CREATE_TOKEN_VOTE_MODULE,
-  DELETE_TOKEN_VOTE_MODULE,
   CREATE_GAUGE_VOTE_MODULE,
-  DELETE_GAUGE_VOTE_MODULE,
   UPDATE_TOKEN_VOTE_EXCLUSIVE_CATEGORY,
   UPDATE_TOKEN_VOTE_INSTRUCTIONS,
   CREATE_TOKEN_VOTE_CATEGORY,
@@ -105,10 +104,10 @@ export const voteSessionPage: VoteSessionPageReducer = (state = initialPage, act
   }
 };
 
-export const tokenModulesHaveChanged = (state: boolean = false, action: ReduxAction<Action>) => {
+export const moduleTemplatesHaveChanged = (state: boolean = false, action: ReduxAction<Action>) => {
   switch (action.type) {
+  case DELETE_VOTE_MODULE:
   case CREATE_TOKEN_VOTE_MODULE:
-  case DELETE_TOKEN_VOTE_MODULE:
   case UPDATE_TOKEN_VOTE_EXCLUSIVE_CATEGORY:
   case UPDATE_TOKEN_VOTE_INSTRUCTIONS:
   case CREATE_TOKEN_VOTE_CATEGORY:
@@ -116,39 +115,13 @@ export const tokenModulesHaveChanged = (state: boolean = false, action: ReduxAct
   case UPDATE_TOKEN_VOTE_CATEGORY_TITLE:
   case UPDATE_TOKEN_VOTE_CATEGORY_COLOR:
   case UPDATE_TOKEN_TOTAL_NUMBER:
-    return true;
-  case UPDATE_VOTE_MODULES:
-    return false;
-  default:
-    return state;
-  }
-};
-
-export const textGaugeModulesHaveChanged = (state: boolean = false, action: ReduxAction<Action>) => {
-  switch (action.type) {
   case CREATE_GAUGE_VOTE_MODULE:
-  case DELETE_GAUGE_VOTE_MODULE:
   case UPDATE_GAUGE_VOTE_INSTRUCTIONS:
   case UPDATE_GAUGE_VOTE_NUMBER_TICKS:
   case UPDATE_GAUGE_VOTE_IS_NUMBER:
   case CREATE_GAUGE_VOTE_CHOICE:
   case DELETE_GAUGE_VOTE_CHOICE:
   case UPDATE_GAUGE_VOTE_CHOICE_LABEL:
-    return true;
-  case UPDATE_VOTE_MODULES:
-    return false;
-  default:
-    return state;
-  }
-};
-
-export const numberGaugeModulesHaveChanged = (state: boolean = false, action: ReduxAction<Action>) => {
-  switch (action.type) {
-  case CREATE_GAUGE_VOTE_MODULE:
-  case DELETE_GAUGE_VOTE_MODULE:
-  case UPDATE_GAUGE_VOTE_INSTRUCTIONS:
-  case UPDATE_GAUGE_VOTE_NUMBER_TICKS:
-  case UPDATE_GAUGE_VOTE_IS_NUMBER:
   case UPDATE_GAUGE_MINIMUM:
   case UPDATE_GAUGE_MAXIMUM:
   case UPDATE_GAUGE_UNIT:
@@ -272,10 +245,10 @@ export const modulesById = (state: Map<string, Map> = Map(), action: ReduxAction
     });
     return newState;
   }
+  case DELETE_VOTE_MODULE:
+    return state.setIn([action.id, 'toDelete'], true);
   case CREATE_TOKEN_VOTE_MODULE:
     return state.set(action.id, defaultTokenModule.set('id', action.id));
-  case DELETE_TOKEN_VOTE_MODULE:
-    return state.setIn([action.id, 'toDelete'], true);
   case UPDATE_TOKEN_VOTE_EXCLUSIVE_CATEGORY:
     return state.setIn([action.id, 'exclusiveCategories'], action.value);
   case UPDATE_TOKEN_VOTE_INSTRUCTIONS:
@@ -286,8 +259,6 @@ export const modulesById = (state: Map<string, Map> = Map(), action: ReduxAction
     return state.updateIn([action.id, 'tokenCategories'], tokenCategories => tokenCategories.delete(action.index));
   case CREATE_GAUGE_VOTE_MODULE:
     return state.set(action.id, defaultTextGaugeModule.set('id', action.id));
-  case DELETE_GAUGE_VOTE_MODULE:
-    return state.setIn([action.id, 'toDelete'], true);
   case UPDATE_GAUGE_VOTE_INSTRUCTIONS:
     return state.updateIn([action.id, 'instructionsEntries'], updateInLangstringEntries(action.locale, action.value));
   case UPDATE_GAUGE_VOTE_IS_NUMBER: {
@@ -534,7 +505,5 @@ export default combineReducers({
   voteProposalsById: voteProposalsById,
   voteProposalsHaveChanged: voteProposalsHaveChanged,
   gaugeChoicesById: gaugeChoicesById,
-  tokenModulesHaveChanged: tokenModulesHaveChanged,
-  textGaugeModulesHaveChanged: textGaugeModulesHaveChanged,
-  numberGaugeModulesHaveChanged: numberGaugeModulesHaveChanged
+  moduleTemplatesHaveChanged: moduleTemplatesHaveChanged
 });

@@ -8,12 +8,7 @@ import SectionTitle from '../sectionTitle';
 import Helper from '../../common/helper';
 import TokensForm from './tokensForm';
 import GaugeForm from './gaugeForm';
-import {
-  createTokenVoteModule,
-  deleteTokenVoteModule,
-  createGaugeVoteModule,
-  deleteGaugeVoteModule
-} from '../../../actions/adminActions/voteSession';
+import { createTokenVoteModule, createGaugeVoteModule, deleteVoteModule } from '../../../actions/adminActions/voteSession';
 
 type ModulesSectionProps = {
   tokenModules: Object,
@@ -122,7 +117,7 @@ const mapDispatchToProps = dispatch => ({
     if (!checked) {
       dispatch(createTokenVoteModule(newId));
     } else {
-      dispatch(deleteTokenVoteModule(id));
+      dispatch(deleteVoteModule(id));
     }
   },
   handleGaugeCheckBoxChange: (checked, idArray, newId) => {
@@ -130,7 +125,7 @@ const mapDispatchToProps = dispatch => ({
       dispatch(createGaugeVoteModule(newId));
     } else {
       idArray.forEach((id) => {
-        dispatch(deleteGaugeVoteModule(id));
+        dispatch(deleteVoteModule(id));
       });
     }
   },
@@ -144,7 +139,7 @@ const mapDispatchToProps = dispatch => ({
       idArray.forEach((id, index) => {
         const numberToDelete = gaugeNumber - selectedNumber;
         if (numberToDelete > index) {
-          dispatch(deleteGaugeVoteModule(id));
+          dispatch(deleteVoteModule(id));
         }
       });
     }

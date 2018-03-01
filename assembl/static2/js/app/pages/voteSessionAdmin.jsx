@@ -115,9 +115,7 @@ type VoteSessionAdminProps = {
   i18n: {
     locale: string
   },
-  tokenModulesHaveChanged: boolean,
-  textGaugeModulesHaveChanged: boolean,
-  numberGaugeModulesHaveChanged: boolean,
+  moduleTemplatesHaveChanged: boolean,
   voteProposalsHaveChanged: boolean,
   refetchVoteSession: Function,
   section: string,
@@ -213,9 +211,7 @@ class VoteSessionAdmin extends React.Component<void, VoteSessionAdminProps, Vote
   saveAction = () => {
     const {
       i18n,
-      tokenModulesHaveChanged,
-      numberGaugeModulesHaveChanged,
-      textGaugeModulesHaveChanged,
+      moduleTemplatesHaveChanged,
       voteProposalsHaveChanged,
       refetchVoteSession,
       timeline,
@@ -310,23 +306,9 @@ class VoteSessionAdmin extends React.Component<void, VoteSessionAdminProps, Vote
 
     if (voteSessionPage.get('id')) {
       let allSpecsMutationsPromises = [];
-      if (tokenModulesHaveChanged) {
-        const tokenModules = voteModules.filter(m => m.get('type') === 'tokens');
-        const items = tokenModules.map(t => ({ ...t.toJS(), voteSessionId: voteSessionPageId }));
-        const mutationsPromises = getTokenVoteSpecMutationsPromises(items);
-        allSpecsMutationsPromises = allSpecsMutationsPromises.concat(mutationsPromises);
-      }
-      if (textGaugeModulesHaveChanged) {
-        const textGaugeModules = voteModules.filter(m => m.get('type') === 'gauge' && !m.get('isNumberGauge'));
-        const items = textGaugeModules.map(t => ({ ...t.toJS(), voteSessionId: voteSessionPageId }));
-        const mutationsPromises = getTextGaugeSpecMutationsPromises(items);
-        allSpecsMutationsPromises = allSpecsMutationsPromises.concat(mutationsPromises);
-      }
-      if (numberGaugeModulesHaveChanged) {
-        const numberGaugeModules = voteModules.filter(m => m.get('type') === 'gauge' && m.get('isNumberGauge'));
-        const items = numberGaugeModules.map(t => ({ ...t.toJS(), voteSessionId: voteSessionPageId }));
-        const mutationsPromises = getNumberGaugeMutationsPromises(items);
-        allSpecsMutationsPromises = allSpecsMutationsPromises.concat(mutationsPromises);
+      if (moduleTemplatesHaveChanged) {
+        const modules = voteModules.map(m => ({ ...m.toJS(), voteSessionId: voteSessionPageId })).toArray();
+        allSpecsMutationsPromises = getMutationsForModules(modules);
       }
 
       if (allSpecsMutationsPromises.length > 0) {
@@ -388,21 +370,8 @@ class VoteSessionAdmin extends React.Component<void, VoteSessionAdminProps, Vote
   };
 
   render() {
-    const {
-      editLocale,
-      tokenModulesHaveChanged,
-      textGaugeModulesHaveChanged,
-      numberGaugeModulesHaveChanged,
-      voteProposalsHaveChanged,
-      section,
-      voteSessionPage
-    } = this.props;
-    const saveDisabled =
-      !tokenModulesHaveChanged &&
-      !textGaugeModulesHaveChanged &&
-      !numberGaugeModulesHaveChanged &&
-      !voteProposalsHaveChanged &&
-      !voteSessionPage.get('hasChanged');
+    const { editLocale, moduleTemplatesHaveChanged, voteProposalsHaveChanged, section, voteSessionPage } = this.props;
+    const saveDisabled = !moduleTemplatesHaveChanged && !voteProposalsHaveChanged && !voteSessionPage.get('hasChanged');
     const currentStep = parseInt(section, 10);
     return (
       <div className="token-vote-admin">
@@ -422,9 +391,7 @@ const mapStateToProps = ({ admin: { editLocale, voteSession }, debate, i18n }) =
     modulesInOrder,
     tokenCategoriesById,
     gaugeChoicesById,
-    tokenModulesHaveChanged,
-    textGaugeModulesHaveChanged,
-    numberGaugeModulesHaveChanged,
+    moduleTemplatesHaveChanged,
     voteProposalsHaveChanged,
     voteProposalsInOrder,
     voteProposalsById
@@ -444,7 +411,6 @@ const mapStateToProps = ({ admin: { editLocale, voteSession }, debate, i18n }) =
           .delete('proposalId')
           .delete('toDelete')
           .delete('voteSpecTemplateId');
-        // if template toDelete === true => toDelete
         m = m.merge(template);
       }
     }
@@ -466,9 +432,7 @@ const mapStateToProps = ({ admin: { editLocale, voteSession }, debate, i18n }) =
   return {
     editLocale: editLocale,
     i18n: i18n,
-    tokenModulesHaveChanged: tokenModulesHaveChanged,
-    textGaugeModulesHaveChanged: textGaugeModulesHaveChanged,
-    numberGaugeModulesHaveChanged: numberGaugeModulesHaveChanged,
+    moduleTemplatesHaveChanged: moduleTemplatesHaveChanged,
     voteProposalsHaveChanged: voteProposalsHaveChanged,
     timeline: debate.debateData.timeline,
     voteModules: voteModules,

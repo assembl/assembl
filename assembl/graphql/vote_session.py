@@ -428,12 +428,24 @@ class DeleteVoteSpecification(graphene.Mutation):
     @staticmethod
     @abort_transaction_on_exception
     def mutate(root, args, context, info):
+        cls = models.votes.AbstractVoteSpecification
         vote_spec_id = args.get('id')
         vote_spec_id = int(Node.from_global_id(vote_spec_id)[1])
-        vote_spec = models.AbstractVoteSpecification.get(vote_spec_id)
+        vote_spec = cls.get(vote_spec_id)
         require_instance_permission(CrudPermissions.DELETE, vote_spec, context)
-        vote_spec.db.delete(vote_spec)
-        vote_spec.db.flush()
+
+        # delete all vote specifications that have this spec as template
+        with cls.default_db.no_autoflush as db:
+            children = db.query(models.votes.AbstractVoteSpecification).filter(
+                models.votes.AbstractVoteSpecification.vote_spec_template_id == vote_spec.id
+            ).all()
+            for child in children:
+                db.delete(child)
+
+            db.flush()
+            db.delete(vote_spec)
+            db.flush()
+
         return DeleteVoteSpecification(success=True)
 
 
