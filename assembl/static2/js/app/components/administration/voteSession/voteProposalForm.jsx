@@ -13,7 +13,7 @@ import {
   moveProposalUp,
   moveProposalDown,
   addModuleToProposal,
-  deleteModuleFromProposal,
+  deleteVoteModule,
   undeleteModule
 } from '../../../actions/adminActions/voteSession';
 import { displayModal, closeModal } from '../../../utils/utilityManager';
@@ -231,7 +231,7 @@ const mapDispatchToProps = (dispatch, { id }) => ({
     const newId = Math.round(Math.random() * -1000000).toString();
     dispatch(addModuleToProposal(newId, id, voteSpecTemplateId));
   },
-  deassociateModuleToProposal: moduleId => dispatch(deleteModuleFromProposal(id, moduleId)),
+  deassociateModuleToProposal: moduleId => dispatch(deleteVoteModule(moduleId)),
   reactivateModule: moduleId => dispatch(undeleteModule(moduleId))
 });
 

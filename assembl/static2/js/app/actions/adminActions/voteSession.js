@@ -247,12 +247,6 @@ export const addModuleToProposal = (
   type: actionTypes.ADD_MODULE_TO_PROPOSAL
 });
 
-export const deleteModuleFromProposal = (id: string, moduleId: string): actionTypes.DeleteModuleFromProposal => ({
-  moduleId: moduleId,
-  proposalId: id,
-  type: actionTypes.DELETE_MODULE_FROM_PROPOSAL
-});
-
 export const createVoteProposalAndModules = (id: string) => (dispatch: Function, getState: Function) => {
   dispatch(createVoteProposal(id));
   const { modulesInOrder } = getState().admin.voteSession;

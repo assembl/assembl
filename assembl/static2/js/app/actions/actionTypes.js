@@ -69,7 +69,6 @@ export const UPDATE_VOTE_PROPOSAL_DESCRIPTION: 'UPDATE_VOTE_PROPOSAL_DESCRIPTION
 export const MOVE_PROPOSAL_UP: 'MOVE_PROPOSAL_UP' = 'MOVE_PROPOSAL_UP';
 export const MOVE_PROPOSAL_DOWN: 'MOVE_PROPOSAL_DOWN' = 'MOVE_PROPOSAL_DOWN';
 export const ADD_MODULE_TO_PROPOSAL: 'ADD_MODULE_TO_PROPOSAL' = 'ADD_MODULE_TO_PROPOSAL';
-export const DELETE_MODULE_FROM_PROPOSAL: 'DELETE_MODULE_FROM_PROPOSAL' = 'DELETE_MODULE_FROM_PROPOSAL';
 export const UNDELETE_MODULE: 'UNDELETE_MODULE' = 'UNDELETE_MODULE';
 
 export type UpdateContentLocaleById = {
@@ -483,12 +482,6 @@ export type AddModuleToProposal = {
   type: typeof ADD_MODULE_TO_PROPOSAL
 };
 
-export type DeleteModuleFromProposal = {
-  moduleId: string,
-  proposalId: string,
-  type: typeof DELETE_MODULE_FROM_PROPOSAL
-};
-
 export type UndeleteModule = {
   id: string,
   type: typeof UNDELETE_MODULE
@@ -550,7 +543,6 @@ type VoteSessionActions =
   | UpdateGaugeMaximum
   | UpdateGaugeUnit
   | AddModuleToProposal
-  | DeleteModuleFromProposal
   | UpdateGaugeVoteInstructions
   | UndeleteModule;
 

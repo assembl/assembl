@@ -39,7 +39,6 @@ import {
   UPDATE_GAUGE_MAXIMUM,
   UPDATE_GAUGE_UNIT,
   ADD_MODULE_TO_PROPOSAL,
-  DELETE_MODULE_FROM_PROPOSAL,
   UNDELETE_MODULE
 } from '../../actions/actionTypes';
 import { updateInLangstringEntries } from '../../utils/i18n';
@@ -307,8 +306,6 @@ export const modulesById = (state: Map<string, Map> = Map(), action: ReduxAction
         voteSpecTemplateId: action.moduleTemplateId
       })
     );
-  case DELETE_MODULE_FROM_PROPOSAL:
-    return state.setIn([action.moduleId, 'toDelete'], true);
   case UNDELETE_MODULE:
     return state.setIn([action.id, 'toDelete'], false);
   default:
@@ -382,7 +379,7 @@ export const voteProposalsHaveChanged = (state: boolean = false, action: ReduxAc
   case UPDATE_VOTE_PROPOSAL_TITLE:
   case UPDATE_VOTE_PROPOSAL_DESCRIPTION:
   case ADD_MODULE_TO_PROPOSAL:
-  case DELETE_MODULE_FROM_PROPOSAL:
+  case DELETE_VOTE_MODULE:
     return true;
   case UPDATE_VOTE_PROPOSALS:
     return false;

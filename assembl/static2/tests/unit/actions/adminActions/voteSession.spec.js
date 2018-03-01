@@ -100,4 +100,16 @@ describe('voteSession admin actions', () => {
       expect(actual).toEqual(expected);
     });
   });
+
+  describe('deleteVoteModule', () => {
+    const { deleteVoteModule } = actions;
+    it('should return an DELETE_VOTE_MODULE action type', () => {
+      const actual = deleteVoteModule('module42');
+      const expected = {
+        id: 'module42',
+        type: actionTypes.DELETE_VOTE_MODULE
+      };
+      expect(actual).toEqual(expected);
+    });
+  });
 });

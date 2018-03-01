@@ -300,7 +300,7 @@ describe('voteSession admin reducers', () => {
       expect(actual.toJS()).toEqual(expected);
     });
 
-    it('should handle DELETE_MODULE_FROM_PROPOSAL action type', () => {
+    it('should handle DELETE_VOTE_MODULE action type', () => {
       const state = fromJS({
         module42: {
           tokenCategories: [],
@@ -313,8 +313,8 @@ describe('voteSession admin reducers', () => {
         }
       });
       const action = {
-        moduleId: 'module42',
-        type: actionTypes.DELETE_MODULE_FROM_PROPOSAL
+        id: 'module42',
+        type: actionTypes.DELETE_VOTE_MODULE
       };
       const expected = {
         module42: {
