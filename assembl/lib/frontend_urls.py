@@ -134,7 +134,7 @@ class FrontendUrls(object):
         'sentrytest': '/sentrytest',
         'groupSpec': '/G/*remainder',
         # 'purl_posts': '/posts*remainder',
-        'purl_idea': '/idea*remainder',
+        # 'purl_idea': '/idea*remainder',
         # 'purl_user': '/profile*remainder',
         'purl_widget': '/widget*remainder',
         'purl_vote_from_v2': '/vote*remainder'

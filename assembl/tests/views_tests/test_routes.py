@@ -1,6 +1,6 @@
 import pytest
 
-from urllib import quote_plus
+from urllib import quote_plus, unquote
 
 backbone_prefix = "/debate/"
 react_prefix = "/"
@@ -243,9 +243,17 @@ def test_route_discussion_post_legacy(discussion, root_post_1, test_app):
     from urllib import quote_plus
     # Encode the URL so that it is compatible with URLs
     url_post_id = quote_plus(root_post_1.uri())
-    route = discussion_route(slug, "posts", url_post_id)
+    route = discussion_route(slug, "posts", url_post_id, backbone=True)
     resp = test_app.get(route)
-    assert resp.status_int == 303
+    assert resp.status_int == 200
+
+    from assembl.lib.frontend_urls import FrontendUrls
+    headers = get_response_headers(resp)
+    redirect_url = unquote(headers['Location'])
+    print redirect_url
+    furl = FrontendUrls(discussion)
+    post_url = furl.get_relative_post_url(root_post_1)
+    assert post_url in redirect_url
 
 
 def test_route_discussion_post(discussion, root_post_1, test_app):
@@ -257,7 +265,15 @@ def test_route_discussion_post(discussion, root_post_1, test_app):
     url_post_id = quote_plus(root_post_1.uri())
     route = discussion_route(slug, "posts", url_post_id, backbone=True)
     resp = test_app.get(route)
-    assert resp.status_int == 303
+    assert resp.status_int == 200
+
+    from assembl.lib.frontend_urls import FrontendUrls
+    headers = get_response_headers(resp)
+    redirect_url = unquote(headers['Location'])
+    print redirect_url
+    furl = FrontendUrls(discussion)
+    post_url = furl.get_relative_post_url(root_post_1)
+    assert post_url in redirect_url
 
 
 def test_route_discussion_idea_legacy(discussion, root_post_1, subidea_1,
@@ -265,15 +281,19 @@ def test_route_discussion_idea_legacy(discussion, root_post_1, subidea_1,
     """/slug/idea/%id"""
     slug = discussion.slug
 
-    from urllib import quote_plus
     # Encode the URL so that it is compatible with URLs
-    url_post_id = quote_plus(subidea_1.uri())
+    url_post_id = subidea_1.uri()
     route = discussion_route(slug, "idea", url_post_id)
     resp = test_app.get(route)
     assert resp.status_int == 200
-    # TODO, improve this method of checking for which view shown
-    # TODO: See if possible to put Location header in 20X responses
-    assert 'V1' in resp.body
+
+    from assembl.lib.frontend_urls import FrontendUrls
+    headers = get_response_headers(resp)
+    redirect_url = unquote(headers['Location'])
+    print redirect_url
+    furl = FrontendUrls(discussion)
+    idea_url = furl.get_relative_idea_url(subidea_1)
+    assert idea_url in redirect_url
 
 
 def test_route_discussion_post_v2(
@@ -309,10 +329,18 @@ def test_route_discussion_idea(discussion, root_post_1, subidea_1, test_app):
     route = discussion_route(slug, "idea", url_post_id, backbone=True)
     resp = test_app.get(route)
     assert resp.status_int == 200
-    assert 'V1' in resp.body
+
+    from assembl.lib.frontend_urls import FrontendUrls
+    headers = get_response_headers(resp)
+    redirect_url = headers['Location']
+    print redirect_url
+    redirect_url = unquote(redirect_url)
+    furl = FrontendUrls(discussion)
+    idea_url = furl.get_relative_idea_url(subidea_1)
+    assert idea_url in redirect_url
 
 
-@pytest.mark.xfail(reason="The feature is not complete yet")
+# @pytest.mark.xfail(reason="The feature is not complete yet")
 def test_route_discussion_idea_v2(
     test_app, discussion_with_2_phase_interface_v2,
     timeline_phase2_interface_v2, post_related_to_sub_idea_1,
@@ -328,7 +356,7 @@ def test_route_discussion_idea_v2(
     from assembl.lib.frontend_urls import FrontendUrls
     furl = FrontendUrls(discussion_with_2_phase_interface_v2)
     headers = get_response_headers(resp)
-    phase_id = timeline_phase2_interface_v2.identifier
+    phase_id = timeline_phase2_interface_v2['identifier']
     idea_id = subidea_1.graphene_id()
     expected_path = furl.get_frontend_url(
         'idea', phase=phase_id, themeId=idea_id)

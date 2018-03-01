@@ -5,11 +5,12 @@ import os.path
 import pkg_resources
 
 from pyramid.view import view_config
+from pyramid.request import Request
 from pyramid.response import Response
 from pyramid.renderers import render_to_response
 from pyramid.security import Everyone, forget
 from pyramid.httpexceptions import (
-    HTTPNotFound, HTTPSeeOther, HTTPMovedPermanently)
+    HTTPOk, HTTPNotFound, HTTPSeeOther, HTTPMovedPermanently)
 from pyramid.i18n import TranslationStringFactory
 from sqlalchemy.orm.exc import NoResultFound
 from urllib import quote_plus
@@ -403,7 +404,7 @@ def purl_post(request):
         )
 
     # V1 purl
-    return HTTPSeeOther(
+    return HTTPOk(
         location=request.route_url(
             'purl_posts',
             discussion_slug=discussion.slug,
@@ -420,8 +421,8 @@ def purl_ideas(request):
     if not discussion:
         raise HTTPNotFound()
     furl = FrontendUrls(discussion)
-    post_id = furl.getRequestedPostId(request)
-    idea = get_named_object(post_id)
+    idea_id = furl.getRequestedIdeaId(request)
+    idea = get_named_object(idea_id)
     phase = discussion.current_discussion_phase()
     if (discussion.preferences['landing_page'] and (
             phase is None or not phase.interface_v1)):
@@ -436,12 +437,12 @@ def purl_ideas(request):
                 discussion.get_base_url(),
                 furl.get_frontend_url(
                     'idea',
-                    phase=phase,
+                    phase=phase.identifier,
                     themeId=idea.graphene_id())
             )
         )
     # V1 Idea
-    return HTTPSeeOther(
+    return HTTPOk(
         location=request.route_url(
             'purl_ideas',
             discussion_slug=discussion.slug,
