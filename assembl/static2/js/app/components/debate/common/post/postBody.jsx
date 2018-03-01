@@ -67,11 +67,11 @@ const PostBody = ({
     {translationEnabled ? (
       <PostTranslate contentLocale={contentLocale} id={id} lang={lang} originalLocale={originalLocale} translate={translate} />
     ) : null}
-    {subject && <h3 className="dark-title-3">{subject}</h3>}
+    {subject && <h3 className="post-body-title dark-title-3">{subject}</h3>}
     {body && (
       <Html
         rawHtml={transformLinksInHtml(body)}
-        className={`body ${bodyMimeType === 'text/plain' ? 'pre-wrap' : ''}`}
+        className={`post-body-content body ${bodyMimeType === 'text/plain' ? 'pre-wrap' : ''}`}
         divRef={bodyDivRef}
         replacementComponents={postBodyReplacementComponents}
       />
