@@ -246,7 +246,7 @@ class AbstractVoteSpecification(DiscussionBoundBase):
         return ((cls.widget_id == VotingWidget.id),
                 (VotingWidget.discussion_id == discussion_id))
 
-    crud_permissions = CrudPermissions(P_ADMIN_DISC, P_READ)
+    crud_permissions = CrudPermissions(P_ADMIN_DISC, P_READ, P_ADMIN_DISC, P_ADMIN_DISC)
 
 
 LangString.setup_ownership_load_event(AbstractVoteSpecification, ['title', 'instructions'])
