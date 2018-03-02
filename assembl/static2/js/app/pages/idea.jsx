@@ -145,6 +145,7 @@ class Idea extends React.Component {
         }
         return 0;
       });
+    const topPosts = this.getTopPosts();
     const childProps = {
       identifier: identifier,
       debateData: debateData,
@@ -156,10 +157,10 @@ class Idea extends React.Component {
       lang: lang,
       noRowsRenderer: noRowsRenderer,
       messageColumns: messageColumns,
-      posts: this.getTopPosts(),
+      posts: topPosts,
       initialRowIndex: ideaWithPostsData.loading
         ? undefined
-        : this.getInitialRowIndex(this.getTopPosts(), ideaWithPostsData.idea.posts.edges)
+        : this.getInitialRowIndex(topPosts, ideaWithPostsData.idea.posts.edges)
     };
     const view = isMultiColumns ? <ColumnsView {...childProps} routerParams={routerParams} /> : <ThreadView {...childProps} />;
     return (
