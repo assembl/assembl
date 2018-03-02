@@ -26,6 +26,7 @@ from .types import SecureObjectType, SQLAlchemyInterface
 from .user import AgentProfile
 from .utils import DateTime, abort_transaction_on_exception
 from .synthesis import Synthesis
+from .extract import Extract
 
 
 _ = TranslationStringFactory('assembl')
@@ -33,13 +34,6 @@ _ = TranslationStringFactory('assembl')
 publication_states_enum = PyEnum(
     'PublicationStates', [(k, k) for k in models.PublicationStates.values()])
 PublicationStates = graphene.Enum.from_enum(publication_states_enum)
-
-
-class Extract(SecureObjectType, SQLAlchemyObjectType):
-    class Meta:
-        model = models.Extract
-        interfaces = (Node, )
-        only_fields = ('id', 'body', 'important')
 
 
 class PostAttachment(SecureObjectType, SQLAlchemyObjectType):

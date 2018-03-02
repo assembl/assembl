@@ -140,6 +140,7 @@ exports[`PostView component should render a post in view mode 1`] = `
           bodyDivRef={[Function]}
           bodyMimeType={undefined}
           contentLocale="fr"
+          extracts={Array []}
           id="XYZ333"
           lang="fr"
           originalLocale="fr"

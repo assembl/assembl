@@ -8,8 +8,23 @@ import { transformLinksInHtml } from '../../../../utils/linkify';
 import { youtubeRegexp } from '../../../../utils/globalFunctions';
 import YoutubeTheater from '../../../common/youtubeTheater';
 
+export type TextFragmentIdentifier = {
+  xpathStart: string,
+  xpathEnd: string,
+  offsetStart: number,
+  offsetEnd: number
+};
+
+export type Extract = {
+  textFragmentIdentifiers: Array<TextFragmentIdentifier>,
+  id: string,
+  important: boolean,
+  body: string
+};
+
 type Props = {
   body: string,
+  extracts: Array<Extract>,
   bodyDivRef: ?Function,
   bodyMimeType: string,
   contentLocale: string,
@@ -34,7 +49,7 @@ const postBodyReplacementComponents = {
 };
 
 const Html = (props) => {
-  const { rawHtml, divRef, replacementComponents } = props;
+  const { extracts, rawHtml, divRef, replacementComponents } = props; // eslint-disable-line
   /*
    * The activeHtml() function will parse the raw html,
    * replace specified tags with provided components
@@ -54,6 +69,7 @@ const Html = (props) => {
 
 const PostBody = ({
   body,
+  extracts,
   bodyDivRef,
   bodyMimeType,
   contentLocale,
@@ -77,6 +93,7 @@ const PostBody = ({
           rawHtml={transformLinksInHtml(body)}
           className={htmlClassNames}
           divRef={bodyDivRef}
+          extracts={extracts}
           replacementComponents={postBodyReplacementComponents}
         />
       )}

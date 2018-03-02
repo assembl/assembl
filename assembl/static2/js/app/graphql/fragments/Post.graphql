@@ -35,6 +35,12 @@ fragment Post on Post {
     id
     important
     body
+    textFragmentIdentifiers {
+      xpathStart
+      xpathEnd
+      offsetStart
+      offsetEnd
+    }
   }
   attachments {
     ...Attachment

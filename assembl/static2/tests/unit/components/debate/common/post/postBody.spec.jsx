@@ -11,6 +11,7 @@ describe('PostBody component', () => {
       bodyDivRef: bodyDivRefSpy,
       bodyMimeType: 'text/*',
       contentLocale: 'fr',
+      extracts: [],
       id: 'XYZ333',
       lang: 'fr',
       subject: <span>open-source Associate</span>,

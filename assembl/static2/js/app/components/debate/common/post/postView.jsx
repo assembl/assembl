@@ -138,6 +138,7 @@ class PostView extends React.PureComponent<void, Props, State> {
 
               <PostBody
                 body={body}
+                extracts={extracts}
                 bodyMimeType={bodyMimeType}
                 contentLocale={contentLocale}
                 id={id}
