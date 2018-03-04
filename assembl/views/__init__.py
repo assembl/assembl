@@ -413,6 +413,16 @@ def get_opengraph_locale(request):
     return locale
 
 
+def adapt_to_html_content(base):
+    """Replaces the quotes inside the html content into @quot so that when rendered
+    inside an html tag, it does not break the tag"""
+    base.replace("\"", "&quot;")
+    base.replace("<", "&lt;")
+    base.replace(">", "&gt;")
+    base.replace("&", "&amp;")
+    return base
+
+
 def get_description(request):
     """
     Returns the description corresponding to the locale returned from get_opengraph_locale
@@ -426,11 +436,11 @@ def get_description(request):
         dict = discussion.preferences["extra_json"]
         objectives_dict = dict.get("objectives", "default objectives")
         if type(objectives_dict) == str:
-            return objectives_dict
+            return adapt_to_html_content(objectives_dict)
         else:
             objectives_dict = objectives_dict["descriptionEntries"]
             locale = discussion.preferences['preferred_locales'][0]
-            return objectives_dict.get(opengraph_locale, objectives_dict[locale])
+            return adapt_to_html_content(objectives_dict.get(opengraph_locale, objectives_dict[locale]))
 
 
 def get_topic(request):
@@ -446,11 +456,11 @@ def get_topic(request):
         dict = discussion.preferences["extra_json"]
         topic_dict = dict.get("topic", "No topic available in the extra json")
         if type(topic_dict) == str:
-            return topic_dict
+            return adapt_to_html_content(topic_dict)
         else:
             topic_dict = topic_dict["titleEntries"]
             locale = discussion.preferences["preferred_locales"][0]
-            return topic_dict.get(opengraph_locale, topic_dict[locale])
+            return adapt_to_html_content(topic_dict.get(opengraph_locale, topic_dict[locale]))
 
 
 def get_landing_page_image():
