@@ -10,7 +10,8 @@ import { inviteUserToLogin, displayAlert } from '../../../utils/utilityManager';
 import createPostMutation from '../../../graphql/mutations/createPost.graphql';
 import { SMALL_SCREEN_WIDTH } from '../../../constants';
 import { withScreenDimensions } from '../../common/screenDimensions';
-import TextAreaWithRemainingChars from '../../common/textAreaWithRemainingChars';
+import RichTextEditor from '../../common/richTextEditor';
+import { convertRawContentStateToHTML } from '../../../utils/draftjs';
 
 const MINIMUM_BODY_LENGTH = 10;
 
@@ -19,18 +20,11 @@ class Question extends React.Component {
     super(props);
     this.state = {
       buttonDisabled: false,
-      postBody: ''
+      postBody: '',
+      charCount: 0
     };
-    this.getProposalText = this.getProposalText.bind(this);
     this.createPost = this.createPost.bind(this);
     this.redirectToLogin = this.redirectToLogin.bind(this);
-  }
-
-  getProposalText(e) {
-    const txtValue = e.currentTarget.value;
-    this.setState({
-      postBody: txtValue
-    });
   }
 
   createPost() {
@@ -38,7 +32,7 @@ class Question extends React.Component {
     const body = this.state.postBody;
     this.setState({ buttonDisabled: true }, () =>
       this.props
-        .mutate({ variables: { contentLocale: contentLocale, ideaId: questionId, body: body } })
+        .mutate({ variables: { contentLocale: contentLocale, ideaId: questionId, body: convertRawContentStateToHTML(body) } })
         .then(() => {
           scrollToQuestion(true, index + 1);
           displayAlert('success', I18n.t('debate.survey.postSuccess'));
@@ -57,6 +51,12 @@ class Question extends React.Component {
     );
   }
 
+  updateBody = (newValue) => {
+    this.setState({
+      postBody: newValue
+    });
+  };
+
   redirectToLogin() {
     const isUserConnected = getConnectedUserId();
     const { scrollToQuestion, index } = this.props;
@@ -66,6 +66,10 @@ class Question extends React.Component {
       scrollToQuestion(true, index);
     }
   }
+
+  updateCharCount = (newValue) => {
+    this.setState({ charCount: newValue });
+  };
 
   render() {
     const { index, title, screenWidth, screenHeight } = this.props;
@@ -85,14 +89,16 @@ class Question extends React.Component {
               <h1 className="dark-title-5">{`${index}/ ${title}`}</h1>
             </div>
             <Col xs={12} md={9} className="col-centered">
-              <TextAreaWithRemainingChars
-                domId={`txt${index}`}
+              <RichTextEditor
+                rawContentState={this.state.postBody}
+                maxLength={1000}
+                placeHolder={I18n.t('debate.survey.txtAreaPh')}
+                updateContentState={this.updateBody}
+                handleInputFocus={this.redirectToLogin}
                 onChange={this.getProposalText}
-                onClick={this.redirectToLogin}
-                placeholder={I18n.t('debate.survey.txtAreaPh')}
-                value={this.state.postBody}
+                handleCharCount={this.updateCharCount}
               />
-              {this.state.postBody.length > MINIMUM_BODY_LENGTH && (
+              {this.state.charCount > MINIMUM_BODY_LENGTH && (
                 <Button
                   onClick={this.createPost}
                   disabled={this.state.buttonDisabled}
