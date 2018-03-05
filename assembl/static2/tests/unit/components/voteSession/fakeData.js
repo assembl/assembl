@@ -33,12 +33,14 @@ export const proposals = [
   {
     id: 'proposal-1',
     title: 'First proposal',
-    description: 'You can\'t hack the alarm without connecting the primary AGP microchip!'
+    description: 'You can\'t hack the alarm without connecting the primary AGP microchip!',
+    modules: [tokenVoteModule]
   },
   {
     id: 'proposal-2',
     title: 'Second proposal',
-    description: 'I\'ll input the multi-byte SAS monitor, that should bandwidth the USB microchip!'
+    description: 'I\'ll input the multi-byte SAS monitor, that should bandwidth the USB microchip!',
+    modules: [tokenVoteModule, textGaugeModule]
   }
 ];
 

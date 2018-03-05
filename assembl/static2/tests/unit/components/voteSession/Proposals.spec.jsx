@@ -6,9 +6,8 @@ import * as fakeData from './fakeData';
 
 describe('Proposals component', () => {
   it('should match Proposals snapshot', () => {
-    const { proposals, remainingTokensByCategory, tokenVoteModule, textGaugeModule, tokenVotes } = fakeData;
+    const { proposals, remainingTokensByCategory, tokenVotes } = fakeData;
     const props = {
-      modules: [tokenVoteModule, textGaugeModule],
       proposals: proposals,
       remainingTokensByCategory: remainingTokensByCategory,
       tokenVotes: tokenVotes

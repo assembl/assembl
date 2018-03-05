@@ -107,33 +107,66 @@ exports[`VoteSession component should match VoteSession snapshot 1`] = `
           smOffset={1}
         >
           <Proposals
-            modules={
-              Array [
-                Object {
-                  "tokenCategories": Array [
-                    Object {
-                      "color": "#117711",
-                      "id": "negative",
-                      "title": "Negative",
-                      "totalNumber": 10,
-                    },
-                    Object {
-                      "color": "#881111",
-                      "id": "positive",
-                      "title": "Positive",
-                      "totalNumber": 8,
-                    },
-                  ],
-                  "voteType": "token_vote_specification",
-                },
-              ]
-            }
             proposals={
               Array [
                 Object {
                   "description": "You can't hack the alarm without connecting the primary AGP microchip!",
-                  "id": "foo",
-                  "title": "Foo",
+                  "id": "proposal-1",
+                  "modules": Array [
+                    Object {
+                      "exclusiveCategories": true,
+                      "id": "token-vote-module",
+                      "instructions": "If we generate the feed, we can get to the AGP driver through the primary ADP interface!",
+                      "tokenCategories": Array [
+                        Object {
+                          "color": "#226622",
+                          "id": "positive",
+                          "title": "Positive",
+                          "totalNumber": 12,
+                        },
+                        Object {
+                          "color": "#771122",
+                          "id": "negative",
+                          "title": "Negative",
+                          "totalNumber": 10,
+                        },
+                      ],
+                      "voteType": "token_vote_specification",
+                    },
+                  ],
+                  "title": "First proposal",
+                },
+                Object {
+                  "description": "I'll input the multi-byte SAS monitor, that should bandwidth the USB microchip!",
+                  "id": "proposal-2",
+                  "modules": Array [
+                    Object {
+                      "exclusiveCategories": true,
+                      "id": "token-vote-module",
+                      "instructions": "If we generate the feed, we can get to the AGP driver through the primary ADP interface!",
+                      "tokenCategories": Array [
+                        Object {
+                          "color": "#226622",
+                          "id": "positive",
+                          "title": "Positive",
+                          "totalNumber": 12,
+                        },
+                        Object {
+                          "color": "#771122",
+                          "id": "negative",
+                          "title": "Negative",
+                          "totalNumber": 10,
+                        },
+                      ],
+                      "voteType": "token_vote_specification",
+                    },
+                    Object {
+                      "id": "text-gauge-module",
+                      "instructions": "I'll generate the mobile SMS bus, that should microchip the TCP matrix!",
+                      "voteType": "gauge_vote_specification",
+                    },
+                  ],
+                  "title": "Second proposal",
                 },
               ]
             }
@@ -258,7 +291,6 @@ exports[`VoteSession component should match VoteSession snapshot with empty modu
           smOffset={1}
         >
           <Proposals
-            modules={Array []}
             proposals={Array []}
             remainingTokensByCategory={
               Immutable.Map {

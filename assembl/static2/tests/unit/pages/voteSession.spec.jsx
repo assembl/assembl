@@ -1,6 +1,7 @@
 import React from 'react';
 import ShallowRenderer from 'react-test-renderer/shallow';
 
+import * as fakeData from '../components/voteSession/fakeData';
 import { DumbVoteSession } from '../../../js/app/pages/voteSession';
 
 describe('VoteSession component', () => {
@@ -39,6 +40,7 @@ describe('VoteSession component', () => {
   });
 
   it('should match VoteSession snapshot', () => {
+    const { proposals } = fakeData;
     const props = {
       title: 'Phase de vote à la majorité et estimation multicritère',
       subTitle: 'Maintenant il faut voter.',
@@ -65,9 +67,7 @@ describe('VoteSession component', () => {
         }
       ],
       propositionsSectionTitle: 'Vote sur 10 propositions',
-      proposals: [
-        { id: 'foo', title: 'Foo', description: 'You can\'t hack the alarm without connecting the primary AGP microchip!' }
-      ]
+      proposals: proposals
     };
     const shallowRenderer = new ShallowRenderer();
     shallowRenderer.render(<DumbVoteSession {...props} />);

@@ -218,7 +218,6 @@ class DumbVoteSession extends React.Component<void, Props, State> {
             <Row>
               <Col mdOffset={1} md={10} smOffset={1} sm={10}>
                 <Proposals
-                  modules={modules}
                   proposals={proposals}
                   remainingTokensByCategory={remainingTokensByCategory}
                   tokenVotes={this.state.userTokenVotes}
@@ -290,7 +289,7 @@ export default compose(
         instructionsSectionTitle,
         instructionsSectionContent,
         propositionsSectionTitle,
-        modules, // TODO: remove this and use the modules from proposals
+        modules, // we still need to get templates here for AvailableTokens component
         proposals
       } = data.voteSession;
 

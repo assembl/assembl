@@ -3,15 +3,9 @@ import React from 'react';
 import { Grid } from 'react-bootstrap';
 
 import Proposal from './proposal';
-import {
-  type Proposal as ProposalType,
-  type RemainingTokensByCategory,
-  type UserTokenVotes,
-  type VoteSpecification
-} from '../../pages/voteSession';
+import { type Proposal as ProposalType, type RemainingTokensByCategory, type UserTokenVotes } from '../../pages/voteSession';
 
 type Props = {
-  modules: Array<VoteSpecification>,
   proposals: Array<ProposalType>,
   remainingTokensByCategory: RemainingTokensByCategory,
   tokenVotes: UserTokenVotes,
@@ -25,7 +19,7 @@ const Proposals = (props: Props) => (
       <Proposal
         key={proposal.id}
         {...proposal}
-        modules={props.modules}
+        modules={proposal.modules}
         remainingTokensByCategory={props.remainingTokensByCategory}
         tokenVotes={props.tokenVotes}
         voteForProposal={props.voteForProposal}
