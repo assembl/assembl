@@ -79,4 +79,58 @@ describe('transformPosts function', () => {
     const output = transformPosts(postsInput, messageColumnsInput);
     expect(output).toEqual(expectedOutput);
   });
+
+  it('should transform posts and filter out deleted top post without answers', () => {
+    const postsInput = [
+      { node: { id: '1', subject: 'One', parentId: null, publicationState: 'DELETED_BY_ADMIN' } },
+      { node: { id: '2', subject: 'Two', parentId: null, publicationState: 'DELETED_BY_ADMIN' } },
+      { node: { id: '3', subject: 'Three', parentId: null, publicationState: 'DELETED_BY_USER' } },
+      { node: { id: '4', subject: 'Four', parentId: null, publicationState: 'DELETED_BY_USER' } },
+      { node: { id: '5', subject: 'Five', parentId: null } },
+      { node: { id: '6', subject: 'Six', parentId: null } },
+      { node: { id: '7', subject: 'First child of Two', parentId: '2' } },
+      { node: { id: '8', subject: 'First child of Four', parentId: '4' } },
+      { node: { id: '9', subject: 'First child of Five', parentId: '5', publicationState: 'DELETED_BY_USER' } },
+      { node: { id: '10', subject: 'First child of Six', parentId: '6', publicationState: 'DELETED_BY_USER' } },
+      { node: { id: '11', subject: 'First grandchild of Six', parentId: '10' } }
+    ];
+    const expectedOutput = [
+      {
+        children: [{ children: [], id: '7', parentId: '2', subject: 'First child of Two' }],
+        id: '2',
+        parentId: null,
+        publicationState: 'DELETED_BY_ADMIN',
+        subject: 'Two'
+      },
+      {
+        children: [{ children: [], id: '8', parentId: '4', subject: 'First child of Four' }],
+        id: '4',
+        parentId: null,
+        publicationState: 'DELETED_BY_USER',
+        subject: 'Four'
+      },
+      {
+        children: [{ children: [], id: '9', parentId: '5', publicationState: 'DELETED_BY_USER', subject: 'First child of Five' }],
+        id: '5',
+        parentId: null,
+        subject: 'Five'
+      },
+      {
+        children: [
+          {
+            children: [{ children: [], id: '11', parentId: '10', subject: 'First grandchild of Six' }],
+            id: '10',
+            parentId: '6',
+            publicationState: 'DELETED_BY_USER',
+            subject: 'First child of Six'
+          }
+        ],
+        id: '6',
+        parentId: null,
+        subject: 'Six'
+      }
+    ];
+    const output = transformPosts(postsInput, []);
+    expect(output).toEqual(expectedOutput);
+  });
 });

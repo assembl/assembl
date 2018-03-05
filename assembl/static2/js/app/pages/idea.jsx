@@ -14,6 +14,7 @@ import { getConnectedUserId } from '../utils/globalFunctions';
 import Announcement from './../components/debate/common/announcement';
 import ColumnsView from '../components/debate/multiColumns/columnsView';
 import ThreadView from '../components/debate/thread/threadView';
+import { DeletedPublicationStates } from '../constants';
 
 export const transformPosts = (edges, messageColumns, additionnalProps = {}) => {
   const postsByParent = {};
@@ -39,12 +40,16 @@ export const transformPosts = (edges, messageColumns, additionnalProps = {}) => 
       return newPost;
     });
 
+  const deletedPublicationStates = Object.keys(DeletedPublicationStates);
   // postsByParent.null is the list of top posts
-  return (postsByParent.null || []).map((p) => {
-    const newPost = p;
-    newPost.children = getChildren(p.id);
-    return newPost;
-  });
+  // filter out deleted top post without answers
+  return (postsByParent.null || [])
+    .map((p) => {
+      const newPost = p;
+      newPost.children = getChildren(p.id);
+      return newPost;
+    })
+    .filter(topPost => !(deletedPublicationStates.indexOf(topPost.publicationState) > -1 && topPost.children.length === 0));
 };
 
 const noRowsRenderer = () => (
@@ -145,6 +150,7 @@ class Idea extends React.Component {
         }
         return 0;
       });
+    const topPosts = this.getTopPosts();
     const childProps = {
       identifier: identifier,
       debateData: debateData,
@@ -156,10 +162,10 @@ class Idea extends React.Component {
       lang: lang,
       noRowsRenderer: noRowsRenderer,
       messageColumns: messageColumns,
-      posts: this.getTopPosts(),
+      posts: topPosts,
       initialRowIndex: ideaWithPostsData.loading
         ? undefined
-        : this.getInitialRowIndex(this.getTopPosts(), ideaWithPostsData.idea.posts.edges)
+        : this.getInitialRowIndex(topPosts, ideaWithPostsData.idea.posts.edges)
     };
     const view = isMultiColumns ? <ColumnsView {...childProps} routerParams={routerParams} /> : <ThreadView {...childProps} />;
     return (
