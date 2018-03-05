@@ -16,6 +16,50 @@ import ColumnsView from '../components/debate/multiColumns/columnsView';
 import ThreadView from '../components/debate/thread/threadView';
 import { DeletedPublicationStates } from '../constants';
 
+const deletedPublicationStates = Object.keys(DeletedPublicationStates);
+
+const sortByCreationDateDesc = (a, b) => {
+  if (a.creationDate > b.creationDate) {
+    return -1;
+  }
+  if (a.creationDate === b.creationDate) {
+    return 0;
+  }
+  return 1;
+};
+
+/*
+ * From a post, get the latest creationDate of live descendants and self
+ */
+const getLatest = (post) => {
+  let maxDate = post.creationDate;
+  if (post.children.length === 0) {
+    if (deletedPublicationStates.indexOf(post.publicationState) > -1) {
+      return null;
+    }
+    return maxDate;
+  }
+  post.children.forEach((p) => {
+    const date = getLatest(p);
+    if (date && date > maxDate) {
+      maxDate = date;
+    }
+  });
+  return maxDate;
+};
+
+const sortByCreationDateDescOfLastDescendant = (a, b) => {
+  const firstDate = getLatest(a);
+  const secondDate = getLatest(b);
+  if (firstDate > secondDate) {
+    return -1;
+  }
+  if (firstDate === secondDate) {
+    return 0;
+  }
+  return 1;
+};
+
 export const transformPosts = (edges, messageColumns, additionnalProps = {}) => {
   const postsByParent = {};
 
@@ -32,15 +76,16 @@ export const transformPosts = (edges, messageColumns, additionnalProps = {}) => 
   });
 
   const getChildren = id =>
-    (postsByParent[id] || []).map((post) => {
-      const newPost = post;
-      // We modify the object in place, we are sure it's already a copy from
-      // the forEach edges above.
-      newPost.children = getChildren(post.id);
-      return newPost;
-    });
+    (postsByParent[id] || [])
+      .map((post) => {
+        const newPost = post;
+        // We modify the object in place, we are sure it's already a copy from
+        // the forEach edges above.
+        newPost.children = getChildren(post.id);
+        return newPost;
+      })
+      .sort(sortByCreationDateDesc);
 
-  const deletedPublicationStates = Object.keys(DeletedPublicationStates);
   // postsByParent.null is the list of top posts
   // filter out deleted top post without answers
   return (postsByParent.null || [])
@@ -49,7 +94,8 @@ export const transformPosts = (edges, messageColumns, additionnalProps = {}) => 
       newPost.children = getChildren(p.id);
       return newPost;
     })
-    .filter(topPost => !(deletedPublicationStates.indexOf(topPost.publicationState) > -1 && topPost.children.length === 0));
+    .filter(topPost => !(deletedPublicationStates.indexOf(topPost.publicationState) > -1 && topPost.children.length === 0))
+    .sort(sortByCreationDateDescOfLastDescendant);
 };
 
 const noRowsRenderer = () => (
