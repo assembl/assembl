@@ -171,7 +171,7 @@ class DumbVoteSession extends React.Component<void, Props, State> {
       modules
     } = this.props;
 
-    if (title.length === 0) {
+    if (!title || title.length === 0) {
       return (
         <MessagePage
           title={I18n.t('debate.voteSession.noVoteSession.title')}
