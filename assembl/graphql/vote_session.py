@@ -352,7 +352,6 @@ class UpdateTokenVoteSpecification(graphene.Mutation):
 
     class Input:
         id = graphene.ID(required=True)
-        proposal_id = graphene.ID()
         title_entries = graphene.List(LangStringEntryInput, required=True)
         instructions_entries = graphene.List(LangStringEntryInput, required=True)
         is_custom = graphene.Boolean()
@@ -380,12 +379,6 @@ class UpdateTokenVoteSpecification(graphene.Mutation):
             update_langstring_from_input_entries(
                 vote_spec, 'instructions', instructions_entries)
             vote_spec.is_custom = args.get('is_custom')
-            proposal_id = args.get('proposal_id')
-            if proposal_id:
-                proposal_id = int(Node.from_global_id(proposal_id)[1])
-                proposal = models.Idea.get(proposal_id)
-                vote_spec.criterion_idea = proposal
-
             vote_spec.exclusive_categories = exclusive_categories
             existing_token_categories = {
                 token_category.id: token_category for token_category in vote_spec.token_categories}
@@ -519,7 +512,6 @@ class UpdateGaugeVoteSpecification(graphene.Mutation):
 
     class Input:
         id = graphene.ID(required=True)
-        proposal_id = graphene.ID()
         title_entries = graphene.List(LangStringEntryInput, required=True)
         instructions_entries = graphene.List(LangStringEntryInput, required=True)
         is_custom = graphene.Boolean()
@@ -545,12 +537,6 @@ class UpdateGaugeVoteSpecification(graphene.Mutation):
             update_langstring_from_input_entries(
                 vote_spec, 'instructions', instructions_entries)
             vote_spec.is_custom = args.get('is_custom')
-            proposal_id = args.get('proposal_id')
-            if proposal_id:
-                proposal_id = int(Node.from_global_id(proposal_id)[1])
-                proposal = models.Idea.get(proposal_id)
-                vote_spec.criterion_idea = proposal
-
             existing_choices = {
                 choice.id: choice for choice in vote_spec.choices}
             updated_choices = set()
@@ -642,7 +628,6 @@ class UpdateNumberGaugeVoteSpecification(graphene.Mutation):
 
     class Input:
         id = graphene.ID(required=True)
-        proposal_id = graphene.ID()
         title_entries = graphene.List(LangStringEntryInput, required=True)
         instructions_entries = graphene.List(LangStringEntryInput, required=True)
         is_custom = graphene.Boolean()
@@ -670,12 +655,6 @@ class UpdateNumberGaugeVoteSpecification(graphene.Mutation):
             update_langstring_from_input_entries(
                 vote_spec, 'instructions', instructions_entries)
             vote_spec.is_custom = args.get('is_custom')
-            proposal_id = args.get('proposal_id')
-            if proposal_id:
-                proposal_id = int(Node.from_global_id(proposal_id)[1])
-                proposal = models.Idea.get(proposal_id)
-                vote_spec.criterion_idea = proposal
-
             vote_spec.minimum = args['minimum']
             vote_spec.maximum = args['maximum']
             vote_spec.nb_ticks = args['nb_ticks']
