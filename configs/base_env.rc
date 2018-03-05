@@ -79,6 +79,9 @@ _projectname = assembl
 # _projectpath
 # _dbdumps_dir
 
+# Optional - Path to SSL Stapling certificates, must be single file
+# on server
+oscp_path =
 
 supervisor__autostart_celery_imap = true
 supervisor__autostart_celery_notification_dispatch = true

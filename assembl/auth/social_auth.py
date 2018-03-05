@@ -244,6 +244,7 @@ class AssemblStrategy(PyramidStrategy):
     def get_setting(self, name):
         """Return value for given setting name. May extract from discussion prefs"""
         # TODO: Add WHITELISTED_DOMAINS
+        # TODO: Obsolete code: those preferences are gone.
         if name.split("_")[-1] in ('KEY', 'SECRET', 'SERVER'):
             prefs = self.get_preferences()
             backend = prefs["authorization_server_backend"]
@@ -252,8 +253,8 @@ class AssemblStrategy(PyramidStrategy):
                     r"^(?:SOCIAL_AUTH_)?(?:%s_)?(KEY|SECRET|SERVER)$"
                     % to_setting_name(backend)), name)
                 if m:
-                    val = prefs["authorization_" + m.group(1).lower()]
-                    if val:
+                    val = prefs.get("authorization_" + m.group(1).lower(), None)
+                    if val is not None:
                         return val
         return super(AssemblStrategy, self).get_setting(name)
 

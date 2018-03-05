@@ -6,6 +6,7 @@ from pyramid.renderers import render_to_response
 from pyramid.httpexceptions import (
     HTTPFound, HTTPNotFound, HTTPBadRequest, HTTPUnauthorized)
 import transaction
+from pyisemail import is_email
 
 from .. import get_default_context, get_locale_from_request
 from ...lib.utils import get_global_base_url
@@ -131,10 +132,11 @@ def discussion_admin(request):
 
         g = lambda x: request.POST.get(x, None)
 
-        (topic, slug, name, host, port,
+        (topic, slug, admin_sender, name, host, port,
             ssl, folder, password, username, homepage) = (
             g('topic'),
             g('slug'),
+            g('admin_sender'),
             g('mbox_name'),
             g('host'),
             g('port'),
@@ -145,33 +147,50 @@ def discussion_admin(request):
             g('homepage')
             )
 
-        discussion = Discussion(
-            topic=topic,
-            creator_id=user_id,
-            slug=slug
-        )
+        errors = []
 
-        # Could raise an exception if there is no/incorrect scheme passed
-        discussion.homepage = homepage
-        session.add(discussion)
-        discussion.invoke_callbacks_after_creation()
+        if not admin_sender:
+            errors.append("Please specify the admin_sender")
+        elif not is_email(admin_sender):
+            errors.append("Please specify a valid email for admin_sender")
+        if not slug:
+            errors.append("Please specify a slug")
+        if not username:
+            errors.append("Please specify a user name")
+        if not password:
+            errors.append("Please specify the user's password")
 
-        create_default_discussion_data(discussion)
-        mailbox_class = (
-            MailingList if g('mailing_list_address') else IMAPMailbox)
-        mailbox = mailbox_class(
-            name=name,
-            host=host,
-            port=int(port),
-            username=username,
-            use_ssl=ssl,
-            folder=folder,
-            password=password,
-        )
+        if errors:
+            context['errors'] = errors
+        else:
+            discussion = Discussion(
+                topic=topic,
+                creator_id=user_id,
+                slug=slug
+            )
 
-        if(g('mailing_list_address')):
-            mailbox.post_email_address = g('mailing_list_address')
-        mailbox.discussion = discussion
+            # Could raise an exception if there is no/incorrect scheme passed
+            discussion.homepage = homepage
+            session.add(discussion)
+            discussion.invoke_callbacks_after_creation()
+
+            create_default_discussion_data(discussion)
+            mailbox_class = (
+                MailingList if g('mailing_list_address') else IMAPMailbox)
+            mailbox = mailbox_class(
+                name=name,
+                host=host,
+                port=int(port),
+                username=username,
+                use_ssl=ssl,
+                folder=folder,
+                admin_sender=admin_sender,
+                password=password,
+            )
+
+            if(g('mailing_list_address')):
+                mailbox.post_email_address = g('mailing_list_address')
+            mailbox.discussion = discussion
 
     return render_to_response(
         'admin/discussions.jinja2',
