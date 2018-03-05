@@ -327,19 +327,20 @@ class CreateTokenVoteSpecification(graphene.Mutation):
                 vote_spec_template_id = int(Node.from_global_id(vote_spec_template_id)[1])
                 vote_spec.vote_spec_template_id = vote_spec_template_id
 
-            for idx, token_category in enumerate(token_categories):
-                title_ls = langstring_from_input_entries(
-                    token_category.get('title_entries', None))
-                total_number = token_category.get('total_number')
-                typename = token_category.get('typename', 'category{}'.format(idx + 1))
-                color = token_category.get('color')
+            if token_categories and (not vote_spec.proposal_id or vote_spec.is_custom):
+                for idx, token_category in enumerate(token_categories):
+                    title_ls = langstring_from_input_entries(
+                        token_category.get('title_entries', None))
+                    total_number = token_category.get('total_number')
+                    typename = token_category.get('typename', 'category{}'.format(idx + 1))
+                    color = token_category.get('color')
 
-                vote_spec.token_categories.append(
-                    models.TokenCategorySpecification(
-                        total_number=total_number,
-                        typename=typename, name=title_ls,
-                        color=color)
-                )
+                    vote_spec.token_categories.append(
+                        models.TokenCategorySpecification(
+                            total_number=total_number,
+                            typename=typename, name=title_ls,
+                            color=color)
+                    )
 
             db.add(vote_spec)
             vote_session.vote_specifications.append(vote_spec)
@@ -382,8 +383,9 @@ class UpdateTokenVoteSpecification(graphene.Mutation):
             vote_spec.exclusive_categories = exclusive_categories
             existing_token_categories = {
                 token_category.id: token_category for token_category in vote_spec.token_categories}
+
             updated_token_categories = set()
-            if token_categories:
+            if token_categories and (not vote_spec.proposal_id or vote_spec.is_custom):
                 for idx, token_category_input in enumerate(token_categories):
                     if token_category_input.get('id', None) is not None:
                         id_ = int(Node.from_global_id(token_category_input['id'])[1])
