@@ -33,10 +33,11 @@ def vote_session(request, test_session, discussion, timeline_vote_session,
         print "finalizer vote_session"
         # header_image may have been replaced by another one in a test
         # so be sure to remove attachments, not header_image
-        test_session.delete(vote_session.attachments[0].document)
-        test_session.delete(vote_session.attachments[0])
-        test_session.delete(vote_session)
-        test_session.flush()
+        with test_session.no_autoflush as db:
+            db.delete(vote_session.attachments[0].document)
+            db.delete(vote_session.attachments[0])
+            db.delete(vote_session)
+            db.flush()
 
     request.addfinalizer(fin)
     return vote_session
