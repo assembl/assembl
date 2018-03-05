@@ -2,6 +2,7 @@
 import React from 'react';
 import activeHtml from 'react-active-html';
 import classNames from 'classnames';
+import { Annotator } from 'annotator'; // eslint-disable-line
 
 import PostTranslate from '../../common/translations/postTranslate';
 import { transformLinksInHtml } from '../../../../utils/linkify';
@@ -55,6 +56,7 @@ const Html = (props) => {
    * replace specified tags with provided components
    * and return a list of react elements
   */
+  const a2 = Annotator; // eslint-disable-line
   const nodes = activeHtml(rawHtml, replacementComponents);
   const containerProps = { ...props };
   delete containerProps.rawHtml;

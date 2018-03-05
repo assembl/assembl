@@ -102,7 +102,10 @@ module.exports = {
         ]
     },
     resolve:{
-        extensions:['.js', '.jsx']
+        extensions:['.js', '.jsx'],
+        alias: {
+          annotator$: path.join(__dirname, '../static/js/lib/annotator/annotator-full.js'),
+        },
     },
     plugins: [
         new webpack.DefinePlugin({

@@ -15,3 +15,4 @@ flow/
 [options]
 # map .graphql files to an empty object, see https://github.com/facebook/flow/issues/2852
 module.name_mapper='.*\(.graphql\)' -> 'empty/object'
+module.name_mapper='annotator' -> 'empty/object'
