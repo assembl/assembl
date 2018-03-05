@@ -214,6 +214,7 @@ def token_vote_specification_associated_to_proposal(request, test_session, discu
             {"value": u"Instructions : Comprendre les dynamiques et les enjeux", "localeCode": "fr"},
             {"value": u"Instructions: Understanding the dynamics and issues", "localeCode": "en"}
         ],
+        "isCustom": True,
         "exclusiveCategories": False,
         "tokenCategories": [
             {"titleEntries": [
@@ -258,6 +259,7 @@ def gauge_vote_specification_associated_to_proposal(request, test_session, discu
             {"value": u"Instructions : Comprendre les dynamiques et les enjeux", "localeCode": "fr"},
             {"value": u"Instructions: Understanding the dynamics and issues", "localeCode": "en"}
         ],
+        "isCustom": True,
         "choices": [
             {"labelEntries": [
                 {"value": u"Cran 1", "localeCode": "fr"},
