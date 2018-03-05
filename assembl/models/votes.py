@@ -89,6 +89,8 @@ class AbstractVoteSpecification(DiscussionBoundBase):
     vote_spec_template_id = Column(
         Integer, ForeignKey("vote_specification.id"), nullable=True, index=True)
 
+    vote_spec_template = relationship("AbstractVoteSpecification", remote_side=[id])
+
     # if the module has been customized for a specific proposal
     is_custom = Column(Boolean, default=False)
 

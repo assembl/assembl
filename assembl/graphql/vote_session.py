@@ -206,6 +206,12 @@ class TokenVoteSpecification(SecureObjectType, SQLAlchemyObjectType):
 
     token_categories = graphene.List(TokenCategorySpecification)
 
+    def resolve_token_categories(self, args, context, info):
+        if self.vote_spec_template_id and not self.is_custom:
+            return self.vote_spec_template.token_categories
+
+        return self.token_categories
+
 
 class GaugeChoiceSpecification(SecureObjectType, SQLAlchemyObjectType):
 
