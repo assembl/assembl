@@ -17,7 +17,8 @@
 
 .app.harvesting-mode-on {
   .proposals, .posts {
-    .post-body-title, .post-body-content {
+    /* FIXME: Factorizing these ::selection rules cancels effect on Firefox */
+    .post-body-title {
       ::selection {
         background: #fff8c0;
       }
@@ -25,6 +26,14 @@
       ::-moz-selection {
         background: #fff8c0;
       }
+    }
+
+    .post-body-content::selection {
+      background: #fff8c0;
+    }
+
+    .post-body-content::-moz-selection {
+      background: #fff8c0;
     }
   }
 }
