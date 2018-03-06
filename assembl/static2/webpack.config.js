@@ -110,7 +110,7 @@ module.exports = {
             NODE_ENV: JSON.stringify('production')
           }
         }),
-        new UglifyJSPlugin({ sourceMap: true, parallel: true }),
+        new UglifyJSPlugin({ sourceMap: true, parallel: true, cache: true }),
         new ExtractTextPlugin("[name].css"),
     ]
 };
