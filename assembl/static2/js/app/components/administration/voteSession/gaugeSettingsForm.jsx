@@ -142,7 +142,7 @@ const DumbGaugeSettingsForm = ({
         </div>
         {isNumberGauge && <NumberGaugeForm id={gaugeModuleId} />}
         {!isNumberGauge &&
-          choices.map((cid, idx) => <TextGaugeForm key={`gauge-choice-${idx}`} id={cid} index={idx} editLocale="fr" />)}
+          choices.map((cid, idx) => <TextGaugeForm key={`gauge-choice-${idx}`} id={cid} index={idx} editLocale={editLocale} />)}
         <Checkbox>
           <Translate value="administration.gaugeModal.checkboxLabel" />
         </Checkbox>
