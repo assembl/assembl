@@ -63,7 +63,7 @@ const PostBody = ({
   translate,
   translationEnabled
 }: Props) => (
-  <div className="post-body">
+  <div className={`post-body${translate ? '' : ' post-body--is-harvestable'}`}>
     {translationEnabled ? (
       <PostTranslate contentLocale={contentLocale} id={id} lang={lang} originalLocale={originalLocale} translate={translate} />
     ) : null}

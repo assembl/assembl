@@ -10,7 +10,6 @@ import Avatar from '../common/avatar';
 import { getConnectedUserId } from '../../utils/globalFunctions';
 import { connectedUserIsExpert } from '../../utils/permissions';
 import { toggleHarvesting } from '../../actions/contextActions';
-import { enableHarvestingMode } from '../harvesting/harvestingMenu';
 
 type IsHarvestingButtonProps = {
   isActive: boolean,
@@ -79,7 +78,6 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   handleIsHarvestingButtonClick: () => {
     dispatch(toggleHarvesting());
-    enableHarvestingMode();
   }
 });
 

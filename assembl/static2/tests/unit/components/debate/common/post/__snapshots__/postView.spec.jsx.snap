@@ -61,6 +61,7 @@ exports[`Post component should render a PostView component and pass its props to
         },
       ]
     }
+    isHarvesting={undefined}
     lang="fr"
     level={1}
     modifiedSubject={
@@ -125,6 +126,7 @@ exports[`PostView component should render a post in view mode 1`] = `
     >
       <div
         className="post-left"
+        onMouseUp={null}
       >
         <ProfileLine
           creationDate="11/11/2011"

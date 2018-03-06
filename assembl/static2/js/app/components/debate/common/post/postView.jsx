@@ -10,13 +10,15 @@ import AnswerForm from '../../thread/answerForm';
 import Nuggets from '../../thread/nuggets';
 import RelatedIdeas from './relatedIdeas';
 import PostBody from './postBody';
+import { handleMouseUpWhileHarvesting } from '../../../harvesting/harvestingMenu';
 import type { Props as PostProps } from './index';
 
 type Props = PostProps & {
   body: string,
   subject: string,
   handleEditClick: Function,
-  modifiedSubject: React.Element<*>
+  modifiedSubject: React.Element<*>,
+  isHarvesting: boolean
 };
 
 type State = {
@@ -94,7 +96,8 @@ class PostView extends React.PureComponent<void, Props, State> {
       body,
       subject,
       modifiedSubject,
-      multiColumns
+      multiColumns,
+      isHarvesting
     } = this.props;
     const translate = contentLocale !== originalLocale;
 
@@ -122,7 +125,7 @@ class PostView extends React.PureComponent<void, Props, State> {
 
         <div className="box" style={boxStyle}>
           <div className="post-row">
-            <div className="post-left">
+            <div className="post-left" onMouseUp={isHarvesting && !translate ? handleMouseUpWhileHarvesting : null}>
               {creator && (
                 <ProfileLine
                   userId={creator.userId}

@@ -50,7 +50,7 @@ const HarvestingMenu = ({ positionX, positionY }: HarvestingMenuProps) => {
   );
 };
 
-const handleMouseUpWhileHarvesting = (evt) => {
+export const handleMouseUpWhileHarvesting = (evt: SyntheticMouseEvent) => {
   const selObj = window.getSelection();
   const selectedText = selObj.toString();
   let element = document.getElementById('annotation');
@@ -72,10 +72,4 @@ const handleMouseUpWhileHarvesting = (evt) => {
   const positionY = evt.pageY - iconSize / 2;
 
   ReactDOM.render(<HarvestingMenu positionX={positionX} positionY={positionY} />, document.getElementById('annotation'));
-};
-
-export const enableHarvestingMode = () => {
-  if (document.body) {
-    document.body.onmouseup = handleMouseUpWhileHarvesting;
-  }
 };

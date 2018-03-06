@@ -2,6 +2,7 @@
 import classnames from 'classnames';
 import React from 'react';
 import { compose, graphql } from 'react-apollo';
+import { connect } from 'react-redux';
 import type { OperationComponent } from 'react-apollo';
 
 import EditPostForm from '../editPostForm';
@@ -47,7 +48,8 @@ export type Props = {
   parentId: string,
   refetchIdea: Function,
   routerParams: RouterParams,
-  rowIndex: number
+  rowIndex: number,
+  isHarvesting: boolean
 };
 
 type State = {
@@ -147,7 +149,7 @@ export class DumbPost extends React.PureComponent<DefaultProps, Props, State> {
 
   render() {
     const { publicationState } = this.props.data.post;
-    const { contentLocale, fullLevel, id, multiColumns, originalLocale, parentId, refetchIdea } = this.props;
+    const { contentLocale, fullLevel, id, multiColumns, originalLocale, parentId, refetchIdea, isHarvesting } = this.props;
     const translate = contentLocale !== originalLocale;
     const { body, subject, originalBody, originalSubject } = this.getBodyAndSubject(translate);
 
@@ -197,6 +199,7 @@ export class DumbPost extends React.PureComponent<DefaultProps, Props, State> {
             subject={subject}
             handleEditClick={this.handleEditClick}
             modifiedSubject={modifiedSubject}
+            isHarvesting={isHarvesting}
           />
         )}
       </div>
@@ -206,4 +209,8 @@ export class DumbPost extends React.PureComponent<DefaultProps, Props, State> {
 
 const withData: OperationComponent<Response> = graphql(PostQuery);
 
-export default compose(withData, withLoadingIndicator())(DumbPost);
+const mapStateToProps = state => ({
+  isHarvesting: state.context.isHarvesting
+});
+
+export default compose(connect(mapStateToProps), withData, withLoadingIndicator())(DumbPost);
