@@ -361,10 +361,13 @@ $deleted-post-border: 1px solid $grey1 !default;
 
   .extracts {
     position: absolute;
-    left: 2vw;
-    max-width: 230px;
-    width: 14vw;
-    line-height: 30px;
+
+    &.extracts--is-not-harvesting {
+      left: 2vw;
+      max-width: 230px;
+      width: 14vw;
+      line-height: 30px;
+    }
 
     .badges {
       line-height: 26px;
