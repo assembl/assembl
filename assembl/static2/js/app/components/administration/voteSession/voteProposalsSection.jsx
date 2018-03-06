@@ -30,7 +30,7 @@ const DumbVoteProposalsSection = ({ voteProposals, editLocale, addVoteProposal }
           <Translate className="bold" value="administration.voteModulesIntroText1" />
           <div className="inline">
             <Translate value="administration.voteModulesIntroText2" />
-            <Link to={`${get('oldDebate', slug)}/timeline`} className="timeline-link" target="_blank">
+            <Link to={get('oldTimeline', slug)} className="timeline-link" target="_blank">
               <Translate value="administration.timeline" />
             </Link>.
           </div>

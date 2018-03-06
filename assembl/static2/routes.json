@@ -4,6 +4,7 @@
   "oldDebate": "debate/${slug}",
   "oldVote": "debate/${slug}/vote",
   "oldProfile": "debate/${slug}/user/profile",
+  "oldTimeline": "debate/${slug}/timeline",
   "graphql": "${slug}/graphql",
   "styleguide": "styleguide",
   "root": "",
