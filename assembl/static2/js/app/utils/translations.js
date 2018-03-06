@@ -359,8 +359,8 @@ const Translations = {
       landingpage: "Page d'accueil",
       up: "Remonter",
       down: "Descendre",
-      nextStep: "Etape suivante",
-      previousStep: "Etape précédente",
+      nextStep: "Étape suivante",
+      previousStep: "Étape précédente",
       menu: {
         phase: "Phase %{count} - %{description}",
         language: "Éditer la langue du débat",
