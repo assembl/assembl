@@ -327,7 +327,7 @@ class CreateTokenVoteSpecification(graphene.Mutation):
                 vote_spec_template_id = int(Node.from_global_id(vote_spec_template_id)[1])
                 vote_spec.vote_spec_template_id = vote_spec_template_id
 
-            if token_categories and (not vote_spec.proposal_id or vote_spec.is_custom):
+            if token_categories and (not getattr(vote_spec, 'proposal_id', None) or vote_spec.is_custom):
                 for idx, token_category in enumerate(token_categories):
                     title_ls = langstring_from_input_entries(
                         token_category.get('title_entries', None))
@@ -385,7 +385,7 @@ class UpdateTokenVoteSpecification(graphene.Mutation):
                 token_category.id: token_category for token_category in vote_spec.token_categories}
 
             updated_token_categories = set()
-            if token_categories and (not vote_spec.proposal_id or vote_spec.is_custom):
+            if token_categories and (not getattr(vote_spec, 'proposal_id', None) or vote_spec.is_custom):
                 for idx, token_category_input in enumerate(token_categories):
                     if token_category_input.get('id', None) is not None:
                         id_ = int(Node.from_global_id(token_category_input['id'])[1])
