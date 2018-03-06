@@ -92,7 +92,7 @@
     "prop-types": "^15.5.8",
     "rc-slider": "^8.6.0",
     "react": "^15.4.1",
-    "react-active-html": "^1.1.6",
+    "react-active-html": "https://github.com/maparent/react-active-html.git#allow_dom_input",
     "react-apollo": "^1.4.12",
     "react-bootstrap": "^0.31.2",
     "react-color": "^2.13.8",
