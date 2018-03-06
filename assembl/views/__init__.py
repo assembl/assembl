@@ -371,10 +371,23 @@ def get_default_context(request, **kwargs):
         "get_description": get_description(request),
         "get_landing_page_image": get_landing_page_image(),
         "private_social_sharing": private_social_sharing(),
-        "get_topic": get_topic(request)
+        "get_topic": get_topic(request),
+        "get_discussion_url": get_discussion_url()
     })
 
     return base
+
+
+def get_discussion_url():
+    from ..auth.util import get_current_discussion
+    discussion = get_current_discussion()
+    if discussion:
+        if (len(discussion.get_discussion_urls()) == 2):
+            return discussion.get_discussion_urls()[1]
+        else:
+            return discussion.get_discussion_urls()[0]
+    else:
+        return "bluenove"
 
 
 def private_social_sharing():
