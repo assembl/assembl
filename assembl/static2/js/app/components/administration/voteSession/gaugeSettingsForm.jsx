@@ -133,10 +133,10 @@ const DumbGaugeSettingsForm = ({
           ))}
         </SplitButton>
         <div className="margin-m">
-          <Radio onChange={handleNumberGaugeUncheck} checked={!isNumberGauge} name={'gauge-radio-text'}>
+          <Radio onChange={handleNumberGaugeUncheck} checked={!isNumberGauge} name="gauge-type">
             <Translate value="administration.textValue" />
           </Radio>
-          <Radio onChange={handleNumberGaugeCheck} checked={isNumberGauge} name={'gauge-radio-number'}>
+          <Radio onChange={handleNumberGaugeCheck} checked={isNumberGauge} name="gauge-type">
             <Translate value="administration.numberValue" />
           </Radio>
         </div>

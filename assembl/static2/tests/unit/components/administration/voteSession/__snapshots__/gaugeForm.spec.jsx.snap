@@ -143,7 +143,7 @@ exports[`ModulesSection component should render a form to set up a gauge and a n
       checked={false}
       disabled={false}
       inline={false}
-      name="gauge-radio-text-1234"
+      name="gauge-type-1234"
       onChange={[Function]}
       title=""
     >
@@ -156,7 +156,7 @@ exports[`ModulesSection component should render a form to set up a gauge and a n
       checked={true}
       disabled={false}
       inline={false}
-      name="gauge-radio-number-1234"
+      name="gauge-type-1234"
       onChange={[Function]}
       title=""
     >
@@ -317,7 +317,7 @@ exports[`ModulesSection component should render a form to set up a gauge and a t
       checked={true}
       disabled={false}
       inline={false}
-      name="gauge-radio-text-5678"
+      name="gauge-type-5678"
       onChange={[Function]}
       title=""
     >
@@ -330,7 +330,7 @@ exports[`ModulesSection component should render a form to set up a gauge and a t
       checked={false}
       disabled={false}
       inline={false}
-      name="gauge-radio-number-5678"
+      name="gauge-type-5678"
       onChange={[Function]}
       title=""
     >
