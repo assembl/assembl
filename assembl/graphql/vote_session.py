@@ -147,6 +147,7 @@ class VoteSpecificationInterface(graphene.Interface):
     vote_spec_template_id = graphene.ID()
     vote_type = graphene.String()
     my_votes = graphene.List('assembl.graphql.votes.VoteUnion')
+    num_votes = graphene.Int()
 
     def resolve_title(self, args, context, info):
         return resolve_langstring(self.title, args.get('lang'))
@@ -178,6 +179,15 @@ class VoteSpecificationInterface(graphene.Interface):
         # use votes_of(user_id) instead of votes_of_current_user because
         # request threadlocal is not properly set in tests
         return self.votes_of(user_id)
+
+    def resolve_num_votes(self, args, context, info):
+        res = self.db.query(
+            getattr(self.get_vote_class(), "voter_id")).filter_by(
+            vote_spec_id=self.id,
+            tombstone_date=None).count()
+        # There is no distinct on purpose here.
+        # For a token vote spec, voting on two categories is counted as 2 votes.
+        return res
 
 
 class TokenCategorySpecification(SecureObjectType, SQLAlchemyObjectType):

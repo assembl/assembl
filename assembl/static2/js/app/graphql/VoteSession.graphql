@@ -35,6 +35,7 @@ fragment tokenVoteSpecificationResults on TokenVoteSpecification {
       tokenCategoryId
     }
   }
+  numVotes
 }
 
 fragment numberGaugeVoteSpecification on NumberGaugeVoteSpecification {
@@ -63,6 +64,7 @@ fragment numberGaugeVoteSpecificationResults on NumberGaugeVoteSpecification {
       proposalId
     }
   }
+  numVotes
 }
 
 fragment gaugeVoteSpecification on GaugeVoteSpecification {
@@ -95,6 +97,7 @@ fragment gaugeVoteSpecificationResults on GaugeVoteSpecification {
       proposalId
     }
   }
+  numVotes
 }
 
 query VoteSession($discussionPhaseId: Int!, $lang: String!) {
