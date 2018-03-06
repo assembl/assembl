@@ -380,14 +380,14 @@ def get_default_context(request, **kwargs):
 
 def get_discussion_url():
     from ..auth.util import get_current_discussion
+    from assembl.lib.frontend_urls import FrontendUrls
+    from assembl.lib.utils import get_global_base_url
     discussion = get_current_discussion()
     if discussion:
-        if (len(discussion.get_discussion_urls()) == 2):
-            return discussion.get_discussion_urls()[1]
-        else:
-            return discussion.get_discussion_urls()[0]
+        front_end_urls = FrontendUrls(discussion)
+        return front_end_urls.get_discussion_url()
     else:
-        return "bluenove"
+        return get_global_base_url()
 
 
 def private_social_sharing():
