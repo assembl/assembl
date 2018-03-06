@@ -11,6 +11,9 @@ export const APP_CONTAINER_PADDING = 15;
 export const MIN_WIDTH_COLUMN = 400;
 export const COLUMN_OPACITY_GAIN = 0.5;
 
+// Minimum length for survey answers
+export const MINIMUM_BODY_LENGTH = 10;
+
 export const APOLLO_NETWORK_STATUS = {
   /**
    * The query has never been run before and the query is now currently running. A query will still

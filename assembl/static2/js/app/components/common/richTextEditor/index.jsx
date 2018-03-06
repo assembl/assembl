@@ -20,7 +20,8 @@ type RichTextEditorProps = {
   textareaRef: Function,
   toolbarPosition: string,
   updateContentState: Function,
-  withAttachmentButton: boolean
+  withAttachmentButton: boolean,
+  handleCharCountChange: Function
 };
 
 type RichTextEditorState = {
@@ -52,7 +53,8 @@ export default class RichTextEditor extends React.Component<Object, RichTextEdit
     handleInputFocus: null,
     maxLength: 0,
     toolbarPosition: 'top',
-    withAttachmentButton: false
+    withAttachmentButton: false,
+    handleCharCountChange: () => {}
   };
 
   constructor(props: RichTextEditorProps): void {
@@ -92,6 +94,8 @@ export default class RichTextEditor extends React.Component<Object, RichTextEdit
       },
       throttle(() => {
         this.props.updateContentState(this.getCurrentRawContentState());
+        const charCount = this.getCharCount(newEditorState);
+        this.props.handleCharCountChange(charCount);
       }, 300)
     );
   };
