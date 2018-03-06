@@ -437,12 +437,9 @@ class DeleteVoteSpecification(graphene.Mutation):
 
         # delete all vote specifications that have this spec as template
         with cls.default_db.no_autoflush as db:
-            children = db.query(models.votes.AbstractVoteSpecification).filter(
+            db.query(models.votes.AbstractVoteSpecification).filter(
                 models.votes.AbstractVoteSpecification.vote_spec_template_id == vote_spec.id
-            ).all()
-            for child in children:
-                db.delete(child)
-
+            ).delete()
             db.flush()
             db.delete(vote_spec)
             db.flush()
