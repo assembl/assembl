@@ -6,6 +6,7 @@ import range from 'lodash/range';
 import { SplitButton, MenuItem, Radio } from 'react-bootstrap';
 import Helper from '../../common/helper';
 import { getEntryValueForLocale } from '../../../utils/i18n';
+import { createRandomId } from '../../../utils/globalFunctions';
 import FormControlWithLabel from '../../common/formControlWithLabel';
 import NumberGaugeForm from './numberGaugeForm';
 import TextGaugeForm from './textGaugeForm';
@@ -113,7 +114,7 @@ const mapDispatchToProps = (dispatch, { id, editLocale }) => ({
     } else if (nbTicks < value) {
       const nbChoiceToCreate = value - nbTicks;
       for (let i = 0; i < nbChoiceToCreate; i += 1) {
-        const newId = Math.round(Math.random() * -1000000).toString();
+        const newId = createRandomId();
         dispatch(createGaugeVoteChoice(id, newId));
       }
     } else {
