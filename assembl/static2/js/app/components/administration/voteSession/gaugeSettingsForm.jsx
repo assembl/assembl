@@ -126,7 +126,7 @@ const DumbGaugeSettingsForm = ({
             handleNbTicksSelectChange(eventKey, isNumberGauge, nbTicks);
           }}
         >
-          {range(10).map(value => (
+          {range(nbTicks).map(value => (
             <MenuItem key={`gauge-notch-${value + 1}`} eventKey={value + 1}>
               {value + 1}
             </MenuItem>
