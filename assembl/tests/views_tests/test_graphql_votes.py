@@ -114,5 +114,10 @@ def test_graphql_token_vote_results(graphql_participant1_request, vote_session, 
     assert names == set([u'A. Barking Loon', u'Mr. Administrator'])
     # on token vote spec:
     assert res.data['voteSession']['proposals'][0]['modules'][0]['numVotes'] == 3
+    first_category = res.data['voteSession']['proposals'][0]['modules'][0]['tokenCategories'][0]['id']
+    second_category = res.data['voteSession']['proposals'][0]['modules'][0]['tokenCategories'][1]['id']
+    token_votes = {entry['tokenCategoryId']: entry['numToken'] for entry in res.data['voteSession']['proposals'][0]['modules'][0]['tokenVotes']}
+    assert token_votes[first_category] == 3
+    assert token_votes[second_category] == 3
     # on gauge vote spec:
     assert res.data['voteSession']['proposals'][0]['modules'][1]['numVotes'] == 1

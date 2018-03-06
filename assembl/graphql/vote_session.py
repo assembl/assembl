@@ -3,6 +3,7 @@ import os
 import graphene
 from graphene.relay import Node
 from graphene_sqlalchemy import SQLAlchemyObjectType
+from sqlalchemy.sql import func
 
 from assembl import models
 from assembl.auth import CrudPermissions
@@ -207,6 +208,11 @@ class TokenCategorySpecification(SecureObjectType, SQLAlchemyObjectType):
         return resolve_langstring_entries(self, 'name')
 
 
+class VotesByCategory(graphene.ObjectType):
+    token_category_id = graphene.ID(required=True)
+    num_token = graphene.Int(required=True)
+
+
 class TokenVoteSpecification(SecureObjectType, SQLAlchemyObjectType):
 
     class Meta:
@@ -215,6 +221,27 @@ class TokenVoteSpecification(SecureObjectType, SQLAlchemyObjectType):
         only_fields = ('id', 'exclusive_categories')
 
     token_categories = graphene.List(TokenCategorySpecification)
+    token_votes = graphene.List(VotesByCategory)
+
+    def resolve_token_votes(self, args, context, info):
+        votes = []
+        for token_category in self.token_categories:
+            query = self.db.query(
+                func.sum(getattr(self.get_vote_class(), "vote_value"))).filter_by(
+                vote_spec_id=self.id,
+                tombstone_date=None,
+                token_category_id=token_category.id)
+            # when there is no votes, query.first() equals (None,)
+            # in this case set num_token to 0
+            num_token = query.first()[0] or 0
+            votes.append(
+                VotesByCategory(
+                    token_category_id=token_category.graphene_id(),
+                    num_token=num_token
+                )
+            )
+
+        return votes
 
     def resolve_token_categories(self, args, context, info):
         if self.vote_spec_template_id and not self.is_custom:
