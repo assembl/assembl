@@ -152,6 +152,12 @@ class IdeaMessageColumn(SecureObjectType, SQLAlchemyObjectType):
         return count
 
 
+class VoteResults(graphene.ObjectType):
+
+    num_participants = graphene.Int()
+    participants = graphene.List(AgentProfile)
+
+
 class Idea(SecureObjectType, SQLAlchemyObjectType):
     class Meta:
         model = models.Idea
@@ -173,6 +179,23 @@ class Idea(SecureObjectType, SQLAlchemyObjectType):
     announcement = graphene.Field(lambda: IdeaAnnoucement)
     message_columns = graphene.List(lambda: IdeaMessageColumn)
     ancestors = graphene.List(graphene.ID)
+    vote_results = graphene.Field(VoteResults)
+
+    def resolve_vote_results(self, args, context, info):
+        vote_specifications = self.criterion_for
+        if not vote_specifications:
+            return
+
+        query = vote_specifications[0].get_voter_ids_query()
+        for vote_spec in vote_specifications[1:]:
+            query = query.union(vote_spec.get_voter_ids_query())
+
+        participant_ids = [row[0] for row in query]
+        num_participants = len(participant_ids)
+        participants = [models.AgentProfile.get(participant_id) for participant_id in participant_ids]
+        return VoteResults(
+            num_participants=num_participants,
+            participants=participants)
 
     @classmethod
     def is_type_of(cls, root, context, info):

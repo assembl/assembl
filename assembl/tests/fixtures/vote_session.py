@@ -225,6 +225,14 @@ def token_vote_specification_associated_to_proposal(request, test_session, discu
              "typename": "positive",
              "totalNumber": 9,
              "color": 'green'
+            },
+            {"titleEntries": [
+                {"value": u"Contre", "localeCode": "fr"},
+                {"value": u"Against", "localeCode": "en"}
+             ],
+             "typename": "negative",
+             "totalNumber": 9,
+             "color": 'red'
             }
         ]
     })
@@ -286,3 +294,66 @@ def gauge_vote_specification_associated_to_proposal(request, test_session, discu
 
     request.addfinalizer(fin)
     return vote_spec
+
+
+@pytest.fixture(scope="function")
+def token_vote_spec_with_votes(graphql_request, graphql_participant1_request, vote_session, vote_proposal, token_vote_specification_associated_to_proposal, graphql_registry):
+    proposal_id = to_global_id("Idea", vote_proposal.id)
+    token_category_id = to_global_id("TokenCategorySpecification", token_vote_specification_associated_to_proposal.token_categories[0].id)
+    token_category2_id = to_global_id("TokenCategorySpecification", token_vote_specification_associated_to_proposal.token_categories[1].id)
+    vote_spec_id = to_global_id("TokenVoteSpecification", token_vote_specification_associated_to_proposal.id)
+    from assembl.graphql.schema import Schema as schema
+    # participant1 votes on both categories
+    res = schema.execute(
+        graphql_registry['addTokenVote'],
+        context_value=graphql_participant1_request,
+        variable_values={
+            "proposalId": proposal_id,
+            "tokenCategoryId": token_category_id,
+            "voteSpecId": vote_spec_id,
+            "voteValue": 3
+        }
+    )
+    assert res.errors is None
+    res = schema.execute(
+        graphql_registry['addTokenVote'],
+        context_value=graphql_participant1_request,
+        variable_values={
+            "proposalId": proposal_id,
+            "tokenCategoryId": token_category2_id,
+            "voteSpecId": vote_spec_id,
+            "voteValue": 2
+        }
+    )
+    assert res.errors is None
+    # admin user vote on one category
+    res = schema.execute(
+        graphql_registry['addTokenVote'],
+        context_value=graphql_request,
+        variable_values={
+            "proposalId": proposal_id,
+            "tokenCategoryId": token_category2_id,
+            "voteSpecId": vote_spec_id,
+            "voteValue": 1
+        }
+    )
+    assert res.errors is None
+    return token_vote_specification_associated_to_proposal
+
+
+@pytest.fixture(scope="function")
+def gauge_vote_specification_with_votes(graphql_participant1_request, vote_session, vote_proposal, gauge_vote_specification_associated_to_proposal, graphql_registry):
+    proposal_id = to_global_id("Idea", vote_proposal.id)
+    vote_spec_id = to_global_id("GaugeVoteSpecification", gauge_vote_specification_associated_to_proposal.id)
+    from assembl.graphql.schema import Schema as schema
+    res = schema.execute(
+        graphql_registry['addGaugeVote'],
+        context_value=graphql_participant1_request,
+        variable_values={
+            "proposalId": proposal_id,
+            "voteSpecId": vote_spec_id,
+            "voteValue": 20.0
+        }
+    )
+    assert res.errors is None
+    return gauge_vote_specification_associated_to_proposal

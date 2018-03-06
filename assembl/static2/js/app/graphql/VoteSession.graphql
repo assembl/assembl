@@ -1,4 +1,5 @@
 #import "./fragments/VoteSession.graphql"
+#import "./fragments/AgentProfileInfo.graphql"
 
 fragment tokenVoteSpecification on TokenVoteSpecification {
   id
@@ -109,6 +110,12 @@ query VoteSession($discussionPhaseId: Int!, $lang: String!) {
           ...langStringEntry
         }
         order
+        voteResults {
+          numParticipants
+          participants {
+            ...AgentProfileInfo
+          }
+        }
       }
       modules: voteSpecifications {
         ...tokenVoteSpecification

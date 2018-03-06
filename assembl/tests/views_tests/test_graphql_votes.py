@@ -97,3 +97,18 @@ def test_graphql_delete_gauge_vote(graphql_participant1_request, vote_session, v
     )
     assert res.errors is None
     assert len(res.data['deleteGaugeVote']['voteSpecification']['myVotes']) == 0
+
+
+def test_graphql_token_vote_results(graphql_participant1_request, vote_session, vote_proposal, token_vote_spec_with_votes, gauge_vote_specification_with_votes, graphql_registry):
+    res = schema.execute(
+        graphql_registry['VoteSession'],
+        context_value=graphql_participant1_request,
+        variable_values={
+            "discussionPhaseId": vote_session.discussion_phase_id,
+            "lang": "en"
+        }
+    )
+    assert res.errors is None
+    assert res.data['voteSession']['proposals'][0]['voteResults']['numParticipants'] == 2
+    names = {participant['displayName'] for participant in res.data['voteSession']['proposals'][0]['voteResults']['participants']}
+    assert names == set([u'A. Barking Loon', u'Mr. Administrator'])

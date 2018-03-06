@@ -765,7 +765,8 @@ def test_query_vote_session_proposals(graphql_request, timeline_vote_session, vo
               u'value': u'Description: Understanding the dynamics and issues'},
             {u'localeCode': u'fr',
               u'value': u'Description: Comprendre les dynamiques et les enjeux'}],
-        u'modules': []
+        u'modules': [],
+        u'voteResults': None
         }]
 
 
