@@ -88,11 +88,15 @@ class PostInterface(SQLAlchemyInterface):
     indirect_idea_content_links = graphene.List(IdeaContentLink)
     extracts = graphene.List(Extract)
     parent_id = graphene.ID()
+    db_id = graphene.Int()
     body_mime_type = graphene.String(required=True)
     publication_state = graphene.Field(type=PublicationStates)
     attachments = graphene.List(PostAttachment)
     original_locale = graphene.String()
     publishes_synthesis = graphene.Field(lambda: Synthesis)
+
+    def resolve_db_id(self, args, context, info):
+        return self.id
 
     def resolve_subject(self, args, context, info):
         # Use self.subject and not self.get_subject() because we still

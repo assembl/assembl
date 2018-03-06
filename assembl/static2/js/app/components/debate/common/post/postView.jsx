@@ -67,6 +67,7 @@ class PostView extends React.PureComponent<void, Props, State> {
   render() {
     const {
       bodyMimeType,
+      dbId,
       indirectIdeaContentLinks,
       creator,
       modificationDate,
@@ -138,6 +139,7 @@ class PostView extends React.PureComponent<void, Props, State> {
 
               <PostBody
                 body={body}
+                dbId={dbId}
                 extracts={extracts}
                 bodyMimeType={bodyMimeType}
                 contentLocale={contentLocale}

@@ -5,6 +5,7 @@
 
 fragment Post on Post {
   id
+  dbId
   subjectEntries(lang: $contentLocale) {
     value
     localeCode
