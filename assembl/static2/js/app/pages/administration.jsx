@@ -63,7 +63,8 @@ class Administration extends React.Component {
   }
 
   componentDidMount() {
-    // we need to use the redux store for administration data to be able to use a "global" save button that will do all the mutations "at once"
+    // we need to use the redux store for administration data to be able to use a
+    // "global" save button that will do all the mutations "at once"
     this.putResourcesCenterInStore(this.props.resourcesCenter);
     this.putResourcesInStore(this.props.resources);
     this.putThematicsInStore(this.props.data);
