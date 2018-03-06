@@ -176,7 +176,7 @@ class VoteSessionAdmin extends React.Component<void, VoteSessionAdminProps, Vote
             <p>
               <Translate value={message2} />
             </p>
-            <Link to={`${get('administration', slug)}/voteSession?section=${stepNumber}`}>
+            <Link to={`${get('voteSessionAdmin', slug)}?section=${stepNumber}`}>
               <Button key="cancel" onClick={closeModal} className="button-cancel button-dark button-modal">
                 <Translate value={buttonMessage} number={stepNumber} />
               </Button>
