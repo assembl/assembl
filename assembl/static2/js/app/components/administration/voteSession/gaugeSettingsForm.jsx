@@ -196,7 +196,7 @@ export { DumbGaugeSettingsForm };
 export default compose(
   connect(mapStateToProps, mapDispatchToProps),
   graphql(updateGaugeVoteSpecificationMutation, { name: 'updateGaugeVoteSpecification' }),
-  graphql(updateNumberGaugeVoteSpecificationMutation, { name: 'updateNuùberGaugeVoteSpecification' }),
+  graphql(updateNumberGaugeVoteSpecificationMutation, { name: 'updateNumberGaugeVoteSpecification' }),
   graphql(createGaugeVoteSpecificationMutation, { name: 'createGaugeVoteSpecification' }),
   graphql(createNumberGaugeVoteSpecificationMutation, { name: 'createNumberGaugeVoteSpecification' })
 )(DumbGaugeSettingsForm);
