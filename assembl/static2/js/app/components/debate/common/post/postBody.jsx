@@ -2,6 +2,7 @@
 import React from 'react';
 import activeHtml from 'react-active-html';
 import classNames from 'classnames';
+import jQuery from 'jquery';
 import { Annotator } from 'annotator'; // eslint-disable-line
 
 import PostTranslate from '../../common/translations/postTranslate';
@@ -57,8 +58,33 @@ const Html = (props) => {
    * replace specified tags with provided components
    * and return a list of react elements
   */
-  const a2 = Annotator; // eslint-disable-line
-  const nodes = activeHtml(rawHtml, replacementComponents);
+  // this anchor is shared with marionette code
+  const anchor = `message-body-local:Content/${dbId}`;
+  let html = `<div id="${anchor}">${rawHtml}</div>`;
+
+  if (extracts) {
+    const white = /^\s*$/;
+    const parser = new DOMParser();
+    html = parser.parseFromString(html, 'text/html');
+    if (html.body) {
+      html = html.body;
+    }
+    extracts.forEach((extract) => {
+      const wrapper = jQuery(`<annotation id="${extract.id}"></annotation>`);
+      extract.textFragmentIdentifiers.forEach((tfi) => {
+        const range = new Annotator.Range.SerializedRange({
+          start: tfi.xpathStart,
+          startOffset: tfi.offsetStart,
+          end: tfi.xpathEnd,
+          endOffset: tfi.offsetEnd });
+        const normedRange = range.normalize(html);
+        const nodes = jQuery(normedRange.textNodes()).filter(
+          (idx, node) => !(white.test(node)));
+        nodes.wrap(wrapper);
+      });
+    });
+  }
+  const nodes = activeHtml(html, replacementComponents);
   const containerProps = { ...props };
   delete containerProps.rawHtml;
   delete containerProps.divRef;
