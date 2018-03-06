@@ -17,6 +17,7 @@ import {
   undeleteModule
 } from '../../../actions/adminActions/voteSession';
 import { displayModal, closeModal } from '../../../utils/utilityManager';
+import { createRandomId } from '../../../utils/globalFunctions';
 // import { displayModal, displayCustomModal, closeModal } from '../../../utils/utilityManager';
 // import GaugeSettingsForm from './gaugeSettingsForm';
 
@@ -228,7 +229,7 @@ const mapDispatchToProps = (dispatch, { id }) => ({
   handleUpClick: () => dispatch(moveProposalUp(id)),
   handleDownClick: () => dispatch(moveProposalDown(id)),
   associateModuleToProposal: (voteSpecTemplateId) => {
-    const newId = Math.round(Math.random() * -1000000).toString();
+    const newId = createRandomId();
     dispatch(addModuleToProposal(newId, id, voteSpecTemplateId));
   },
   deassociateModuleToProposal: moduleId => dispatch(deleteVoteModule(moduleId)),
