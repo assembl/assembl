@@ -21,7 +21,7 @@ type RichTextEditorProps = {
   toolbarPosition: string,
   updateContentState: Function,
   withAttachmentButton: boolean,
-  handleCharCount: Function
+  handleCharCountChange: Function
 };
 
 type RichTextEditorState = {
@@ -53,7 +53,8 @@ export default class RichTextEditor extends React.Component<Object, RichTextEdit
     handleInputFocus: null,
     maxLength: 0,
     toolbarPosition: 'top',
-    withAttachmentButton: false
+    withAttachmentButton: false,
+    handleCharCountChange: () => {}
   };
 
   constructor(props: RichTextEditorProps): void {
@@ -93,10 +94,10 @@ export default class RichTextEditor extends React.Component<Object, RichTextEdit
       },
       throttle(() => {
         this.props.updateContentState(this.getCurrentRawContentState());
+        const charCount = this.getCharCount(newEditorState);
+        this.props.handleCharCountChange(charCount);
       }, 300)
     );
-    const charCount = this.getCharCount(this.state.editorState);
-    this.props.handleCharCount(charCount);
   };
 
   handleEditorFocus = (): void => {

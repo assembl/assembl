@@ -16,7 +16,7 @@ import { convertRawContentStateToHTML } from '../../../utils/draftjs';
 
 type QuestionProps = {
   title: string,
-  debate: Object,
+  debate: DebateData,
   contentLocale: string,
   questionId: string,
   scrollToQuestion: Function,
@@ -93,7 +93,7 @@ class Question extends React.Component<void, QuestionProps, QuestionState> {
 
   render() {
     const { index, title, screenWidth, screenHeight } = this.props;
-    let height = 0;
+    let height = screenHeight;
     const timeline = document && document.getElementById('timeline');
     // This is necessary to bypass an issue with Flow
     if (timeline) {
@@ -120,7 +120,7 @@ class Question extends React.Component<void, QuestionProps, QuestionState> {
                 placeHolder={I18n.t('debate.survey.txtAreaPh')}
                 updateContentState={this.updateBody}
                 handleInputFocus={this.redirectToLogin}
-                handleCharCount={this.updateCharCount}
+                handleCharCountChange={this.updateCharCount}
               />
               {this.state.charCount > MINIMUM_BODY_LENGTH && (
                 <Button
