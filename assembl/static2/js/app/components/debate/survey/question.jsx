@@ -1,3 +1,4 @@
+// @flow
 import React from 'react';
 import { graphql, compose } from 'react-apollo';
 import { connect } from 'react-redux';
@@ -8,26 +9,45 @@ import { getConnectedUserId } from '../../../utils/globalFunctions';
 import { getIfPhaseCompletedByIdentifier } from '../../../utils/timeline';
 import { inviteUserToLogin, displayAlert } from '../../../utils/utilityManager';
 import createPostMutation from '../../../graphql/mutations/createPost.graphql';
-import { SMALL_SCREEN_WIDTH } from '../../../constants';
+import { SMALL_SCREEN_WIDTH, MINIMUM_BODY_LENGTH } from '../../../constants';
 import { withScreenDimensions } from '../../common/screenDimensions';
 import RichTextEditor from '../../common/richTextEditor';
 import { convertRawContentStateToHTML } from '../../../utils/draftjs';
 
-const MINIMUM_BODY_LENGTH = 10;
+type QuestionProps = {
+  title: string,
+  debate: Object,
+  contentLocale: string,
+  questionId: string,
+  scrollToQuestion: Function,
+  index: number,
+  refetchTheme: Function,
+  mutate: Function,
+  screenHeight: number,
+  screenWidth: number
+};
 
-class Question extends React.Component {
-  constructor(props) {
+type QuestionState = {
+  buttonDisabled: boolean,
+  postBody: string,
+  charCount: number
+};
+
+class Question extends React.Component<void, QuestionProps, QuestionState> {
+  props: QuestionProps;
+
+  state: QuestionState;
+
+  constructor(props: QuestionProps) {
     super(props);
     this.state = {
       buttonDisabled: false,
       postBody: '',
       charCount: 0
     };
-    this.createPost = this.createPost.bind(this);
-    this.redirectToLogin = this.redirectToLogin.bind(this);
   }
 
-  createPost() {
+  createPost = () => {
     const { contentLocale, questionId, scrollToQuestion, index, refetchTheme } = this.props;
     const body = this.state.postBody;
     this.setState({ buttonDisabled: true }, () =>
@@ -49,7 +69,7 @@ class Question extends React.Component {
           });
         })
     );
-  }
+  };
 
   updateBody = (newValue) => {
     this.setState({
@@ -57,7 +77,7 @@ class Question extends React.Component {
     });
   };
 
-  redirectToLogin() {
+  redirectToLogin = () => {
     const isUserConnected = getConnectedUserId();
     const { scrollToQuestion, index } = this.props;
     if (!isUserConnected) {
@@ -65,7 +85,7 @@ class Question extends React.Component {
     } else {
       scrollToQuestion(true, index);
     }
-  }
+  };
 
   updateCharCount = (newValue) => {
     this.setState({ charCount: newValue });
@@ -73,7 +93,12 @@ class Question extends React.Component {
 
   render() {
     const { index, title, screenWidth, screenHeight } = this.props;
-    const height = screenHeight - document.getElementById('timeline').clientHeight;
+    let height = 0;
+    const timeline = document && document.getElementById('timeline');
+    // This is necessary to bypass an issue with Flow
+    if (timeline) {
+      height = screenHeight - timeline.clientHeight;
+    }
     const { debateData } = this.props.debate;
     const isPhaseCompleted = getIfPhaseCompletedByIdentifier(debateData.timeline, 'survey');
     return (
@@ -95,7 +120,6 @@ class Question extends React.Component {
                 placeHolder={I18n.t('debate.survey.txtAreaPh')}
                 updateContentState={this.updateBody}
                 handleInputFocus={this.redirectToLogin}
-                onChange={this.getProposalText}
                 handleCharCount={this.updateCharCount}
               />
               {this.state.charCount > MINIMUM_BODY_LENGTH && (
