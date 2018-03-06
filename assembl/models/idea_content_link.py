@@ -257,6 +257,7 @@ class ExtractActionVocabulary(AbstractEnumVocabulary):
         display_thread = 8
         display_tokens = 9
         display_open_questions = 10
+        display_bright_mirror = 11
 
     _initial_names = {
         Enum.classify: {
@@ -298,6 +299,10 @@ class ExtractActionVocabulary(AbstractEnumVocabulary):
         Enum.display_open_questions: {
             "fr": "Activer Q° ouvertes",
             "en": "Display Open questions",
+        },
+        Enum.display_bright_mirror: {
+            "fr": "Activer Bright Mirror",
+            "en": "Display Bright Mirror"
         },
     }
 
