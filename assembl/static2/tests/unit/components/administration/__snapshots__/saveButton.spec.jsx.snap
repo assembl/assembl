@@ -1,0 +1,49 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Save button component should render a disabled save button 1`] = `
+<button
+  className="save-button button-submit button-dark right btn btn-default"
+  disabled={true}
+  onClick={[Function]}
+  type="button"
+>
+  <span
+    className={undefined}
+    style={undefined}
+  >
+    Save Themes
+  </span>
+</button>
+`;
+
+exports[`Save button component should render a save button 1`] = `
+<button
+  className="save-button button-submit button-dark right btn btn-default"
+  disabled={false}
+  onClick={[Function]}
+  type="button"
+>
+  <span
+    className={undefined}
+    style={undefined}
+  >
+    Save Themes
+  </span>
+</button>
+`;
+
+exports[`Save button component should render a save button with specific classes 1`] = `
+<button
+  className="my-great-green-save-button btn btn-default"
+  disabled={false}
+  onClick={[Function]}
+  type="button"
+>
+  <span
+    className={undefined}
+    style={undefined}
+  >
+    Save Themes
+  </span>
+</button>
+`;
