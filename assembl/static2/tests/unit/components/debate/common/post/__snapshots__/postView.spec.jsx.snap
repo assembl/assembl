@@ -25,6 +25,7 @@ exports[`Post component should render a PostView component and pass its props to
             "displayName": "Dannie Treutel",
             "userId": "dannietreutel",
           },
+          "dbId": 124,
           "extracts": Array [],
           "id": "XYZ333",
           "modificationDate": "12/12/2012",
@@ -140,6 +141,7 @@ exports[`PostView component should render a post in view mode 1`] = `
           bodyDivRef={[Function]}
           bodyMimeType={undefined}
           contentLocale="fr"
+          dbId={124}
           extracts={Array []}
           id="XYZ333"
           lang="fr"

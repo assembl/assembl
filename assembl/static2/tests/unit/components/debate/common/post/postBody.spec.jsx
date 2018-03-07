@@ -13,6 +13,7 @@ describe('PostBody component', () => {
       contentLocale: 'fr',
       extracts: [],
       id: 'XYZ333',
+      dbId: 124,
       lang: 'fr',
       subject: <span>open-source Associate</span>,
       originalLocale: 'en',
