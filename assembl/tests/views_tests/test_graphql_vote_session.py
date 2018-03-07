@@ -95,7 +95,8 @@ def mutate_and_assert(graphql_request, discussion_phase_id, test_app, graphql_re
             "instructionsSectionTitleEntries": en_entry(new_instructions_section_title),
             "instructionsSectionContentEntries": en_entry(new_instructions_section_content),
             "propositionsSectionTitleEntries": en_entry(new_propositions_section_title),
-            "headerImage": image_var_name
+            "headerImage": image_var_name,
+            "seeCurrentVotes": True
         }
     )
 
@@ -107,6 +108,7 @@ def mutate_and_assert(graphql_request, discussion_phase_id, test_app, graphql_re
     assert graphql_en_value(graphql_vote_session['instructionsSectionTitleEntries']) == new_instructions_section_title
     assert graphql_en_value(graphql_vote_session['instructionsSectionContentEntries']) == new_instructions_section_content
     assert graphql_en_value(graphql_vote_session['propositionsSectionTitleEntries']) == new_propositions_section_title
+    assert graphql_vote_session['seeCurrentVotes'] == True
 
     graphql_image = graphql_vote_session['headerImage']
     assert graphql_image['title'] == new_image_name

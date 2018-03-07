@@ -6,6 +6,7 @@ fragment voteSessionGlobals on VoteSession {
     mimeType
     externalUrl
   }
+  seeCurrentVotes
 }
 
 fragment voteSessionLangstringsEntries on VoteSession {

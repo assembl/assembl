@@ -44,6 +44,7 @@ class VoteSession(SecureObjectType, SQLAlchemyObjectType):
     header_image = graphene.Field(Document)
     vote_specifications = graphene.List(lambda: VoteSpecificationUnion)
     proposals = graphene.List(lambda: Idea)
+    see_current_votes = graphene.Boolean(required=True)
 
     def resolve_header_image(self, args, context, info):
         ATTACHMENT_PURPOSE_IMAGE = models.AttachmentPurpose.IMAGE.value
@@ -70,6 +71,7 @@ class UpdateVoteSession(graphene.Mutation):
     class Input:
         discussion_phase_id = graphene.Int(required=True)
         header_image = graphene.String()
+        see_current_votes = graphene.Boolean()
 
     add_langstrings_input_attrs(Input, langstrings_defs.keys())
 
@@ -97,6 +99,9 @@ class UpdateVoteSession(graphene.Mutation):
             vote_session = models.VoteSession(discussion=discussion, discussion_phase=discussion_phase)
         else:
             require_instance_permission(CrudPermissions.UPDATE, vote_session, context)
+
+        if args.get('see_current_votes', None) is not None:
+            vote_session.see_current_votes = args['see_current_votes']
 
         db = vote_session.db
 
