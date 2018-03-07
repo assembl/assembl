@@ -14,9 +14,9 @@ describe('ModulesSection component', () => {
       editLocale: 'fr',
       handleCheckBoxChange: handleCheckBoxChangeSpy
     };
-    const shallowRender = new ShallowRenderer();
-    shallowRender.render(<DumbModulesSection {...props} />);
-    const result = shallowRender.getRenderOutput();
+    const shallowRenderer = new ShallowRenderer();
+    shallowRenderer.render(<DumbModulesSection {...props} />);
+    const result = shallowRenderer.getRenderOutput();
     expect(result).toMatchSnapshot();
   });
   // TODO: fake a list of token modules to test their rendering

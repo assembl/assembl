@@ -1,0 +1,189 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`VoteProposalsSection component should render a VoteProposalsSection component without any proposal 1`] = `
+<div
+  className="vote-proposals-section"
+>
+  <div
+    className="admin-box"
+  >
+    <SectionTitle
+      annotation="Missing translation: administration.annotation"
+      title="Missing translation: administration.voteProposals.sectionTitle"
+    />
+    <div
+      className="intro-text"
+    >
+      <Translate
+        className="bold"
+        value="administration.voteModulesIntroText1"
+      />
+      <div
+        className="inline"
+      >
+        <Translate
+          value="administration.voteModulesIntroText2"
+        />
+        <Link
+          className="timeline-link"
+          onlyActiveOnIndex={false}
+          style={Object {}}
+          target="_blank"
+          to="/debate/\${slug}/timeline"
+        >
+          <Translate
+            value="administration.timeline"
+          />
+        </Link>
+        .
+      </div>
+    </div>
+    <div
+      className="admin-content"
+    >
+      <form>
+        Immutable.List [
+        ]
+        <OverlayTrigger
+          defaultOverlayShown={false}
+          overlay={
+            <Tooltip
+              bsClass="tooltip"
+              id="addProposalTooltip"
+              placement="right"
+            >
+              <Translate
+                value="administration.voteProposals.addProposal"
+              />
+            </Tooltip>
+          }
+          placement="top"
+          trigger={
+            Array [
+              "hover",
+              "focus",
+            ]
+          }
+        >
+          <div
+            className="plus margin-l"
+            onClick={[Function]}
+          >
+            +
+          </div>
+        </OverlayTrigger>
+      </form>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`VoteProposalsSection component should render a voteProposalsSection with 2 proposals 1`] = `
+<div
+  className="vote-proposals-section"
+>
+  <div
+    className="admin-box"
+  >
+    <SectionTitle
+      annotation="Missing translation: administration.annotation"
+      title="Missing translation: administration.voteProposals.sectionTitle"
+    />
+    <div
+      className="intro-text"
+    >
+      <Translate
+        className="bold"
+        value="administration.voteModulesIntroText1"
+      />
+      <div
+        className="inline"
+      >
+        <Translate
+          value="administration.voteModulesIntroText2"
+        />
+        <Link
+          className="timeline-link"
+          onlyActiveOnIndex={false}
+          style={Object {}}
+          target="_blank"
+          to="/debate/\${slug}/timeline"
+        >
+          <Translate
+            value="administration.timeline"
+          />
+        </Link>
+        .
+      </div>
+    </div>
+    <div
+      className="admin-content"
+    >
+      <form>
+        Immutable.List [
+          <Connect(DumbVoteProposalForm)
+            editLocale="fr"
+            id={
+              Immutable.Map {
+                isNew: false,
+                toDelete: false,
+                id: "1234",
+                titleEntries: Immutable.List [
+                ],
+                descriptionEntries: Immutable.List [
+                ],
+              }
+            }
+            index={1}
+            nbProposals={2}
+          />,
+          <Connect(DumbVoteProposalForm)
+            editLocale="fr"
+            id={
+              Immutable.Map {
+                isNew: false,
+                toDelete: false,
+                id: "5678",
+                titleEntries: Immutable.List [
+                ],
+                descriptionEntries: Immutable.List [
+                ],
+              }
+            }
+            index={2}
+            nbProposals={2}
+          />,
+        ]
+        <OverlayTrigger
+          defaultOverlayShown={false}
+          overlay={
+            <Tooltip
+              bsClass="tooltip"
+              id="addProposalTooltip"
+              placement="right"
+            >
+              <Translate
+                value="administration.voteProposals.addProposal"
+              />
+            </Tooltip>
+          }
+          placement="top"
+          trigger={
+            Array [
+              "hover",
+              "focus",
+            ]
+          }
+        >
+          <div
+            className="plus margin-l"
+            onClick={[Function]}
+          >
+            +
+          </div>
+        </OverlayTrigger>
+      </form>
+    </div>
+  </div>
+</div>
+`;

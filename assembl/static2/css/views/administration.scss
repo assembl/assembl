@@ -2,8 +2,8 @@
   margin: $margin-section + $navbar-height 0;
 
   .checkbox-title {
-    line-height: $font-size-sm;
-    font-size: $font-size-m;
+    line-height: 20px;
+    font-size: $font-size-xs;
     font-family: $font-family;
   }
 
@@ -160,6 +160,7 @@
 
     .form-control {
       font-size: 12px;
+      padding-left: 8px;
     }
   }
 
@@ -347,7 +348,7 @@
     }
   }
 
-  .token-vote-form {
+  .vote-modules-form {
     .flex > .form-group {
       flex-grow: 1;
     }
@@ -417,6 +418,43 @@
             }
           }
         }
+      }
+    }
+  }
+
+  .admin-box {
+    .intro-text {
+      display: flex;
+      flex-direction: column;
+      padding-left: 45px;
+      font-size: $font-size-s;
+
+      .timeline-link {
+        font-family: $font-family2;
+        text-decoration: underline;
+      }
+    }
+
+    .bold {
+      font-family: $font-family5;
+    }
+  }
+
+  .vote-proposal-form {
+    margin-top: 65px;
+
+    .settings-link {
+      margin-left: 20px;
+      font-size: $font-size-xs;
+      color: $purple;
+      font-family: $font-family7;
+
+      &:hover {
+        cursor: pointer;
+      }
+
+      .assembl-icon-edit:before {
+        font-size: $font-size-s;
       }
     }
   }

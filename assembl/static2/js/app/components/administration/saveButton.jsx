@@ -15,21 +15,21 @@ export const getMutationsPromises = (params) => {
   const { items, variablesCreator, deleteVariablesCreator, createMutation, deleteMutation, updateMutation, lang } = params;
   const promises = [];
   items.forEach((item, index) => {
-    if (item.isNew && !item.toDelete) {
+    if (item.isNew && !item.toDelete && createMutation) {
       // create item
       const payload = {
         variables: variablesCreator(item, index)
       };
       const p1 = () => createMutation(payload);
       promises.push(p1);
-    } else if (item.toDelete && !item.isNew) {
+    } else if (item.toDelete && !item.isNew && deleteMutation) {
       // delete item
       const payload = {
         variables: deleteVariablesCreator(item)
       };
       const p3 = () => deleteMutation(payload);
       promises.push(p3);
-    } else {
+    } else if (updateMutation) {
       // update item
       const variables = variablesCreator(item, index);
       variables.id = item.id;
@@ -45,8 +45,11 @@ export const getMutationsPromises = (params) => {
   return promises;
 };
 
-export default ({ disabled, saveAction }) => (
-  <Button className="save-button button-submit button-dark right" disabled={disabled} onClick={saveAction}>
-    <Translate value="administration.saveThemes" />
-  </Button>
-);
+export default ({ disabled, saveAction, specificClasses }) => {
+  const buttonClasses = specificClasses || 'save-button button-submit button-dark right';
+  return (
+    <Button className={buttonClasses} disabled={disabled} onClick={saveAction}>
+      <Translate value="administration.saveThemes" />
+    </Button>
+  );
+};

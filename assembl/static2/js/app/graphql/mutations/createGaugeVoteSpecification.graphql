@@ -4,6 +4,7 @@ mutation createGaugeVoteSpecification(
   $voteSessionId: ID!
   $titleEntries: [LangStringEntryInput]!
   $instructionsEntries: [LangStringEntryInput]!
+  $isCustom: Boolean!
   $choices: [GaugeChoiceSpecificationInput]!
   $proposalId: ID
   $voteSpecTemplateId: ID
@@ -12,6 +13,7 @@ mutation createGaugeVoteSpecification(
     voteSessionId: $voteSessionId
     titleEntries: $titleEntries
     instructionsEntries: $instructionsEntries
+    isCustom: $isCustom
     choices: $choices
     proposalId: $proposalId
     voteSpecTemplateId: $voteSpecTemplateId
@@ -26,6 +28,7 @@ mutation createGaugeVoteSpecification(
         instructionsEntries {
           ...langStringEntry
         }
+        isCustom
         choices {
           id
           value

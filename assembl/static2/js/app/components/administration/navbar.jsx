@@ -1,9 +1,10 @@
 import React from 'react';
 import { browserHistory } from 'react-router';
 import { Translate } from 'react-redux-i18n';
-import { Col } from 'react-bootstrap';
+import { Col, OverlayTrigger } from 'react-bootstrap';
 import { getDiscussionSlug, calculatePercentage } from '../../utils/globalFunctions';
 import { get } from '../../utils/routeMap';
+import { nextStepTooltip, previousStepTooltip } from '../common/tooltips';
 
 class Navbar extends React.Component {
   static defaultProps = {
@@ -57,26 +58,30 @@ class Navbar extends React.Component {
         <Col xs={6} md={6}>
           <div className="arrow-container">
             {this.state.currentStep < this.state.totalSteps && (
-              <div
-                onClick={() => {
-                  beforeChangeSection();
-                  this.goToSection(this.state.currentStep + 1);
-                }}
-                className="arrow right"
-              >
-                <span className="assembl-icon-up-open" />
-              </div>
+              <OverlayTrigger placement="top" overlay={nextStepTooltip}>
+                <div
+                  onClick={() => {
+                    beforeChangeSection();
+                    this.goToSection(this.state.currentStep + 1);
+                  }}
+                  className="arrow right"
+                >
+                  <span className="assembl-icon-up-open" />
+                </div>
+              </OverlayTrigger>
             )}
             {this.state.currentStep > 1 && (
-              <div
-                onClick={() => {
-                  beforeChangeSection();
-                  this.goToSection(this.state.currentStep - 1);
-                }}
-                className="arrow right"
-              >
-                <span className="assembl-icon-down-open" />
-              </div>
+              <OverlayTrigger placement="top" overlay={previousStepTooltip}>
+                <div
+                  onClick={() => {
+                    beforeChangeSection();
+                    this.goToSection(this.state.currentStep - 1);
+                  }}
+                  className="arrow right"
+                >
+                  <span className="assembl-icon-down-open" />
+                </div>
+              </OverlayTrigger>
             )}
           </div>
         </Col>

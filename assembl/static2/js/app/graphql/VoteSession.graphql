@@ -9,6 +9,7 @@ fragment tokenVoteSpecification on TokenVoteSpecification {
   instructionsEntries {
     ...langStringEntry
   }
+  isCustom
   exclusiveCategories
   tokenCategories {
     id
@@ -38,6 +39,7 @@ fragment numberGaugeVoteSpecification on NumberGaugeVoteSpecification {
   instructionsEntries {
     ...langStringEntry
   }
+  isCustom
   minimum
   maximum
   nbTicks
@@ -61,6 +63,7 @@ fragment gaugeVoteSpecification on GaugeVoteSpecification {
   instructionsEntries {
     ...langStringEntry
   }
+  isCustom
   choices {
     id
     value

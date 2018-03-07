@@ -38,9 +38,8 @@ export const UPDATE_VOTE_SESSION_PAGE_PROPOSITIONS_TITLE: 'UPDATE_VOTE_SESSION_P
 export const UPDATE_VOTE_SESSION_PAGE_IMAGE: 'UPDATE_VOTE_SESSION_PAGE_IMAGE' = 'UPDATE_VOTE_SESSION_PAGE_IMAGE';
 export const UPDATE_VOTE_MODULES: 'UPDATE_VOTE_MODULES' = 'UPDATE_VOTE_MODULES';
 export const CREATE_TOKEN_VOTE_MODULE: 'CREATE_TOKEN_VOTE_MODULE' = 'CREATE_TOKEN_VOTE_MODULE';
-export const DELETE_TOKEN_VOTE_MODULE: 'DELETE_TOKEN_VOTE_MODULE' = 'DELETE_TOKEN_VOTE_MODULE';
+export const DELETE_VOTE_MODULE: 'DELETE_VOTE_MODULE' = 'DELETE_VOTE_MODULE';
 export const CREATE_GAUGE_VOTE_MODULE: 'CREATE_GAUGE_VOTE_MODULE' = 'CREATE_GAUGE_VOTE_MODULE';
-export const DELETE_GAUGE_VOTE_MODULE: 'DELETE_GAUGE_VOTE_MODULE' = 'DELETE_GAUGE_VOTE_MODULE';
 export const UPDATE_TOKEN_VOTE_INSTRUCTIONS: 'UPDATE_TOKEN_VOTE_INSTRUCTIONS' = 'UPDATE_TOKEN_VOTE_INSTRUCTIONS';
 export const CREATE_TOKEN_VOTE_CATEGORY: 'CREATE_TOKEN_VOTE_CATEGORY' = 'CREATE_TOKEN_VOTE_CATEGORY';
 export const DELETE_TOKEN_VOTE_CATEGORY: 'DELETE_TOKEN_VOTE_CATEGORY' = 'DELETE_TOKEN_VOTE_CATEGORY';
@@ -62,6 +61,15 @@ export const UPDATE_LANDING_PAGE_MODULES: 'UPDATE_LANDING_PAGE_MODULES' = 'UPDAT
 export const TOGGLE_LANDING_PAGE_MODULE: 'TOGGLE_LANDING_PAGE_MODULE' = 'TOGGLE_LANDING_PAGE_MODULE';
 export const MOVE_LANDING_PAGE_MODULE_UP: 'MOVE_LANDING_PAGE_MODULE_UP' = 'MOVE_LANDING_PAGE_MODULE_UP';
 export const MOVE_LANDING_PAGE_MODULE_DOWN: 'MOVE_LANDING_PAGE_MODULE_DOWN' = 'MOVE_LANDING_PAGE_MODULE_DOWN';
+export const UPDATE_VOTE_PROPOSALS: 'UPDATE_VOTE_PROPOSALS' = 'UPDATE_VOTE_PROPOSALS';
+export const CREATE_VOTE_PROPOSAL: 'CREATE_VOTE_PROPOSAL' = 'CREATE_VOTE_PROPOSAL';
+export const DELETE_VOTE_PROPOSAL: 'DELETE_VOTE_PROPOSAL' = 'DELETE_VOTE_PROPOSAL';
+export const UPDATE_VOTE_PROPOSAL_TITLE: 'UPDATE_VOTE_PROPOSAL_TITLE' = 'UPDATE_VOTE_PROPOSAL_TITLE';
+export const UPDATE_VOTE_PROPOSAL_DESCRIPTION: 'UPDATE_VOTE_PROPOSAL_DESCRIPTION' = 'UPDATE_VOTE_PROPOSAL_DESCRIPTION';
+export const MOVE_PROPOSAL_UP: 'MOVE_PROPOSAL_UP' = 'MOVE_PROPOSAL_UP';
+export const MOVE_PROPOSAL_DOWN: 'MOVE_PROPOSAL_DOWN' = 'MOVE_PROPOSAL_DOWN';
+export const ADD_MODULE_TO_PROPOSAL: 'ADD_MODULE_TO_PROPOSAL' = 'ADD_MODULE_TO_PROPOSAL';
+export const UNDELETE_MODULE: 'UNDELETE_MODULE' = 'UNDELETE_MODULE';
 
 export type UpdateContentLocaleById = {
   type: typeof UPDATE_CONTENT_LOCALE_BY_ID,
@@ -278,6 +286,12 @@ export type ModuleInfo = {
 
 export type VoteModulesArray = Array<ModuleInfo>;
 
+export type VoteProposalInfo = {
+  id: string
+};
+
+export type VoteProposalsArray = Array<VoteProposalInfo>;
+
 export type UpdateVoteModules = {
   voteModules: VoteModulesArray,
   type: typeof UPDATE_VOTE_MODULES
@@ -288,19 +302,14 @@ export type CreateTokenVoteModule = {
   type: typeof CREATE_TOKEN_VOTE_MODULE
 };
 
-export type DeleteTokenVoteModule = {
+export type DeleteVoteModule = {
   id: string,
-  type: typeof DELETE_TOKEN_VOTE_MODULE
+  type: typeof DELETE_VOTE_MODULE
 };
 
 export type CreateGaugeVoteModule = {
   id: string,
   type: typeof CREATE_GAUGE_VOTE_MODULE
-};
-
-export type DeleteGaugeVoteModule = {
-  id: string,
-  type: typeof DELETE_GAUGE_VOTE_MODULE
 };
 
 export type UpdateTokenVoteExclusiveCategory = {
@@ -345,6 +354,45 @@ export type UpdateTokenVoteCategoryColor = {
   id: string,
   value: string,
   type: typeof UPDATE_TOKEN_VOTE_CATEGORY_COLOR
+};
+
+export type UpdateVoteProposals = {
+  voteProposals: VoteProposalsArray,
+  type: typeof UPDATE_VOTE_PROPOSALS
+};
+
+export type CreateVoteProposal = {
+  id: string,
+  type: typeof CREATE_VOTE_PROPOSAL
+};
+
+export type DeleteVoteProposal = {
+  id: string,
+  type: typeof DELETE_VOTE_PROPOSAL
+};
+
+export type UpdateVoteProposalTitle = {
+  id: string,
+  locale: string,
+  value: string,
+  type: typeof UPDATE_VOTE_PROPOSAL_TITLE
+};
+
+export type UpdateVoteProposalDescription = {
+  id: string,
+  locale: string,
+  value: string,
+  type: typeof UPDATE_VOTE_PROPOSAL_DESCRIPTION
+};
+
+export type MoveProposalUp = {
+  id: string,
+  type: typeof MOVE_PROPOSAL_UP
+};
+
+export type MoveProposalDown = {
+  id: string,
+  type: typeof MOVE_PROPOSAL_DOWN
 };
 
 export type toggleLandingPageModule = {
@@ -427,6 +475,18 @@ export type UpdateGaugeUnit = {
   type: typeof UPDATE_GAUGE_UNIT
 };
 
+export type AddModuleToProposal = {
+  id: string,
+  moduleTemplateId: string,
+  proposalId: string,
+  type: typeof ADD_MODULE_TO_PROPOSAL
+};
+
+export type UndeleteModule = {
+  id: string,
+  type: typeof UNDELETE_MODULE
+};
+
 type BasicAction = {
   type: string
 };
@@ -458,16 +518,22 @@ type VoteSessionActions =
   | UpdateVoteSessionPagePropositionsTitle
   | UpdateVoteSessionHeaderImage
   | UpdateVoteModules
+  | DeleteVoteModule
   | CreateTokenVoteModule
-  | DeleteTokenVoteModule
   | CreateGaugeVoteModule
-  | DeleteGaugeVoteModule
   | UpdateTokenVoteInstructions
   | CreateTokenVoteCategory
   | DeleteTokenVoteCategory
   | UpdateTokenVoteCategoryTitle
   | UpdateTokenTotalNumber
   | UpdateTokenVoteCategoryColor
+  | UpdateVoteProposals
+  | CreateVoteProposal
+  | DeleteVoteProposal
+  | UpdateVoteProposalTitle
+  | UpdateVoteProposalDescription
+  | MoveProposalUp
+  | MoveProposalDown
   | UpdateGaugeVoteNbTicks
   | UpdateGaugeVoteIsNumber
   | CreateGaugeVoteChoice
@@ -476,7 +542,9 @@ type VoteSessionActions =
   | UpdateGaugeMinimum
   | UpdateGaugeMaximum
   | UpdateGaugeUnit
-  | UpdateGaugeVoteInstructions;
+  | AddModuleToProposal
+  | UpdateGaugeVoteInstructions
+  | UndeleteModule;
 
 export type Action =
   | UpdateContentLocaleById

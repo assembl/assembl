@@ -33,10 +33,11 @@ def vote_session(request, test_session, discussion, timeline_vote_session,
         print "finalizer vote_session"
         # header_image may have been replaced by another one in a test
         # so be sure to remove attachments, not header_image
-        test_session.delete(vote_session.attachments[0].document)
-        test_session.delete(vote_session.attachments[0])
-        test_session.delete(vote_session)
-        test_session.flush()
+        with test_session.no_autoflush as db:
+            db.delete(vote_session.attachments[0].document)
+            db.delete(vote_session.attachments[0])
+            db.delete(vote_session)
+            db.flush()
 
     request.addfinalizer(fin)
     return vote_session
@@ -58,6 +59,7 @@ def token_vote_specification(request, test_session, graphql_request, vote_sessio
             {"value": u"Comprendre les dynamiques et les enjeux", "localeCode": "fr"},
             {"value": u"Understanding the dynamics and issues", "localeCode": "en"}
         ],
+        "isCustom": False,
         "exclusiveCategories": True,
         "tokenCategories": [
             {"titleEntries": [
@@ -98,6 +100,7 @@ def gauge_vote_specification(request, test_session, graphql_request, vote_sessio
             {"value": u"Comprendre les dynamiques et les enjeux", "localeCode": "fr"},
             {"value": u"Understanding the dynamics and issues", "localeCode": "en"}
         ],
+        "isCustom": False,
         "choices": [
             {"labelEntries": [
                 {"value": u"Cran 1", "localeCode": "fr"},
@@ -141,6 +144,7 @@ def number_gauge_vote_specification(request, test_session, graphql_request, vote
             {"value": u"Comprendre les dynamiques et les enjeux", "localeCode": "fr"},
             {"value": u"Understanding the dynamics and issues", "localeCode": "en"}
         ],
+        "isCustom": False,
         "minimum": 0.0,
         "maximum": 60.0,
         "nbTicks": 7,
@@ -211,6 +215,7 @@ def token_vote_specification_associated_to_proposal(request, test_session, discu
             {"value": u"Instructions : Comprendre les dynamiques et les enjeux", "localeCode": "fr"},
             {"value": u"Instructions: Understanding the dynamics and issues", "localeCode": "en"}
         ],
+        "isCustom": True,
         "exclusiveCategories": False,
         "tokenCategories": [
             {"titleEntries": [
@@ -255,6 +260,7 @@ def gauge_vote_specification_associated_to_proposal(request, test_session, discu
             {"value": u"Instructions : Comprendre les dynamiques et les enjeux", "localeCode": "fr"},
             {"value": u"Instructions: Understanding the dynamics and issues", "localeCode": "en"}
         ],
+        "isCustom": True,
         "choices": [
             {"labelEntries": [
                 {"value": u"Cran 1", "localeCode": "fr"},

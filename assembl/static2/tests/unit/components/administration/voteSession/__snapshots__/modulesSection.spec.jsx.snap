@@ -14,7 +14,9 @@ exports[`ModulesSection component should render a ModulesSection component witho
     <div
       className="form-container"
     >
-      <div>
+      <div
+        className="vote-modules-form"
+      >
         <Checkbox
           bsClass="checkbox"
           checked={false}

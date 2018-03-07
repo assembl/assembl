@@ -4,6 +4,7 @@
   "oldDebate": "debate/${slug}",
   "oldVote": "debate/${slug}/vote",
   "oldProfile": "debate/${slug}/user/profile",
+  "oldTimeline": "debate/${slug}/timeline",
   "graphql": "${slug}/graphql",
   "styleguide": "styleguide",
   "root": "",
@@ -35,5 +36,6 @@
   "post": "${slug}/debate/${phase}/theme/${themeId}/#${element}",
   "themeInPhase": "${slug}/debate/${phase}/theme/${themeId}",
   "resourcesCenter": "${slug}/resourcescenter",
-  "legalNotice": "${slug}/legal-notice"
+  "legalNotice": "${slug}/legal-notice",
+  "voteSessionAdmin": "${slug}/administration/voteSession"
 }

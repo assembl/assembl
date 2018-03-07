@@ -1,7 +1,7 @@
 // @flow
 import React from 'react';
 import { connect } from 'react-redux';
-import { I18n } from 'react-redux-i18n';
+import { I18n, Translate } from 'react-redux-i18n';
 import { BlockPicker as ColorPicker } from 'react-color';
 import { getEntryValueForLocale } from '../../../utils/i18n';
 import FormControlWithLabel from '../../common/formControlWithLabel';
@@ -32,29 +32,32 @@ const DumbTokenCategoryForm = ({
   handleNumberChange
 }: TokenCategoryFormProps) => (
   <div className="token-type-form">
-    <FormControlWithLabel
-      label={I18n.t('administration.tokenTitle')}
-      required
-      type="text"
-      onChange={handleTitleChange}
-      value={title}
-    />
-    <FormControlWithLabel
-      label={I18n.t('administration.tokenNumber')}
-      required
-      type="number"
-      onChange={handleNumberChange}
-      value={totalNumber}
-    />
-    <label htmlFor="color-picker">{I18n.t('administration.tokenColor')}</label>
-    <ColorPicker
-      colors={pickerColors}
-      onChange={handleColorChange}
-      color={color || pickerColors[index]}
-      width="400px"
-      id="color-picker"
-      triangle="hide"
-    />
+    <Translate value="administration.token" number={index + 1} />
+    <div className="margin-m">
+      <FormControlWithLabel
+        label={I18n.t('administration.tokenTitle')}
+        required
+        type="text"
+        onChange={handleTitleChange}
+        value={title}
+      />
+      <FormControlWithLabel
+        label={I18n.t('administration.tokenNumber')}
+        required
+        type="number"
+        onChange={handleNumberChange}
+        value={totalNumber}
+      />
+      <label htmlFor="color-picker">{I18n.t('administration.tokenColor')}</label>
+      <ColorPicker
+        colors={pickerColors}
+        onChange={handleColorChange}
+        color={color || pickerColors[index]}
+        width="400px"
+        id="color-picker"
+        triangle="hide"
+      />
+    </div>
     <div className="separator" />
   </div>
 );

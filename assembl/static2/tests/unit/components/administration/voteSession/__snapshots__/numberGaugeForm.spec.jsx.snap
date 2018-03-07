@@ -1,0 +1,34 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ModulesSection component should render a form to set up a numeral gauge 1`] = `
+<div>
+  <FormGroup
+    bsClass="form-group"
+  >
+    <FormControlWithLabel
+      label="Min Value"
+      labelAlwaysVisible={false}
+      onChange={[Function]}
+      required={true}
+      type="number"
+      value={null}
+    />
+    <FormControlWithLabel
+      label="Max Value"
+      labelAlwaysVisible={false}
+      onChange={[Function]}
+      required={true}
+      type="number"
+      value={null}
+    />
+    <FormControlWithLabel
+      label="Unit"
+      labelAlwaysVisible={false}
+      onChange={[Function]}
+      required={true}
+      type="text"
+      value={null}
+    />
+  </FormGroup>
+</div>
+`;

@@ -8,12 +8,7 @@ import SectionTitle from '../sectionTitle';
 import Helper from '../../common/helper';
 import TokensForm from './tokensForm';
 import GaugeForm from './gaugeForm';
-import {
-  createTokenVoteModule,
-  deleteTokenVoteModule,
-  createGaugeVoteModule,
-  deleteGaugeVoteModule
-} from '../../../actions/adminActions/voteSession';
+import { createTokenVoteModule, createGaugeVoteModule, deleteVoteModule } from '../../../actions/adminActions/voteSession';
 
 type ModulesSectionProps = {
   tokenModules: Object,
@@ -43,7 +38,7 @@ const DumbModulesSection = ({
       <SectionTitle title={I18n.t('administration.voteSession.1')} annotation={I18n.t('administration.annotation')} />
       <div className="admin-content">
         <div className="form-container">
-          <div>
+          <div className="vote-modules-form">
             <Checkbox
               checked={tokenModuleChecked}
               onChange={() => {
@@ -95,7 +90,7 @@ const DumbModulesSection = ({
                 </SplitButton>
               </div>
             ) : null}
-            {gaugeModules.map(id => <GaugeForm key={id} id={id} editLocale={editLocale} />)}
+            {gaugeModules.map((id, index) => <GaugeForm key={id} index={index} id={id} editLocale={editLocale} />)}
           </div>
         </div>
       </div>
@@ -122,7 +117,7 @@ const mapDispatchToProps = dispatch => ({
     if (!checked) {
       dispatch(createTokenVoteModule(newId));
     } else {
-      dispatch(deleteTokenVoteModule(id));
+      dispatch(deleteVoteModule(id));
     }
   },
   handleGaugeCheckBoxChange: (checked, idArray, newId) => {
@@ -130,7 +125,7 @@ const mapDispatchToProps = dispatch => ({
       dispatch(createGaugeVoteModule(newId));
     } else {
       idArray.forEach((id) => {
-        dispatch(deleteGaugeVoteModule(id));
+        dispatch(deleteVoteModule(id));
       });
     }
   },
@@ -144,7 +139,7 @@ const mapDispatchToProps = dispatch => ({
       idArray.forEach((id, index) => {
         const numberToDelete = gaugeNumber - selectedNumber;
         if (numberToDelete > index) {
-          dispatch(deleteGaugeVoteModule(id));
+          dispatch(deleteVoteModule(id));
         }
       });
     }
