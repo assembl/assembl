@@ -37,6 +37,7 @@
     "eol-last": ["error", "never"],
     "linebreak-style": ["warn", "unix"],
     "lines-between-class-members": 2,
+    "quote-props": ["warn", "as-needed", { "numbers": true }],
     "quotes": ["error", "single"],
     "semi": ["error", "always"],
     "object-shorthand": ["error", "never"]

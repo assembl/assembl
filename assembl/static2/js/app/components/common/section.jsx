@@ -1,9 +1,11 @@
 // @flow
 import React from 'react';
 import { Translate } from 'react-redux-i18n';
+import classnames from 'classnames';
 import { SECTION_INDEX_GENERATOR } from '../../utils/section';
 
 type SectionProps = {
+  containerAdditionalClassNames: Array<string> | string,
   title: string,
   index: number,
   displayIndex: boolean,
@@ -51,6 +53,7 @@ class Section extends React.Component<Object, SectionProps, void> {
   props: SectionProps;
 
   static defaultProps = {
+    containerAdditionalClassNames: [],
     index: 1,
     displayIndex: false,
     indexGenerator: SECTION_INDEX_GENERATOR.alphanumericOr,
@@ -73,12 +76,13 @@ class Section extends React.Component<Object, SectionProps, void> {
   };
 
   render() {
-    const { className, children } = this.props;
+    const { className, children, containerAdditionalClassNames } = this.props;
+    const containerClassName = classnames('max-container', containerAdditionalClassNames);
     return (
       <section className={className}>
-        <div className="max-container">
+        <div className={containerClassName}>
           <div className="title-section">{this.getTitle()}</div>
-          <div className="content-section">{children}</div>
+          <div className="content-section margin-l">{children}</div>
         </div>
       </section>
     );

@@ -5,7 +5,7 @@ import { convertToRaw, ContentState } from 'draft-js';
 import { DumbPageForm } from '../../../../../js/app/components/administration/voteSession/pageForm';
 
 describe('Vote Session DumbPageForm component', () => {
-  it('should render a form to update the vote session page title, subtitle, header, instructions\' title, instructions and proposals section title', () => {
+  it('should render a form to update the vote session page data', () => {
     const handleHeaderTitleChangeSpy = jest.fn(() => {});
     const handleHeaderSubtitleChangeSpy = jest.fn(() => {});
     const handleHeaderImageChangeSpy = jest.fn(() => {});

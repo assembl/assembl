@@ -3,21 +3,275 @@
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    margin-left: 100px;
   }
 
   .vote-instructions {
-    font-size: $font-size-sm;
+    padding: 0 20px;
+    font-size: $font-size-m;
+    font-family: $font-family4;
+    max-width: 780px;
+    text-align: justify;
+    line-height: 32px;
   }
 
   .content-section {
     padding: 0;
   }
 
+  .available-tokens {
+    margin: 20px 0 40px;
+
+    .category-available-tokens {
+      display: flex;
+      padding: 30px 20px;
+      max-width: 780px;
+
+      .tokens {
+        padding-left: 50px;
+        padding-top: 22px;
+      }
+    }
+  }
+
+  .available-tokens-sticky {
+    position: fixed;
+    top: 60px;
+    width: 100%;
+    z-index: 100;
+    display: flex;
+    justify-content: space-around;
+    box-shadow: 3px 4px 7px #bbb;
+    padding: 0 20px 12px;
+    border-top: 1px solid $grey1;
+
+    .separator {
+      display: none;
+    }
+
+    .category-available-tokens {
+      display: flex;
+
+      .tokens {
+        padding-left: 30px;
+        padding-top: 20px;
+      }
+    }
+  }
+
+  .extra-margin-top {
+    margin-top: 400px;
+  }
+
+  .tokens > * {
+    margin: 5px;
+    width: 30px;
+    height: 30px;
+  }
+
+  .theme-box {
+    &:first-child {
+      margin: -70px 0 0;
+    }
+  }
+
+  .proposal.row {
+    margin: 90px 10px 30px;
+
+    .proposal-title {
+      font-family: $font-family;
+      margin-top: 0;
+    }
+
+    .text {
+      text-align: justify;
+      padding-right: 20px;
+    }
+
+    .proposal-vote-modules {
+      padding-top: 25px;
+    }
+
+    .tokens-line {
+      margin-top: 14px;
+      margin-bottom: 30px;
+
+      .tokens {
+        margin-left: -5px;
+      }
+    }
+
+    .tokens > button {
+      border: none;
+      padding: 0;
+      background: none;
+
+      &:focus {
+        outline: none;
+      }
+
+      &:active {
+        box-shadow: none;
+      }
+    }
+
+    .tokens > .btn-default:hover {
+      background-color: transparent;
+    }
+  }
+
+  .gauge-vote-for-proposal {
+    margin-top: 40px;
+
+    p {
+      margin-bottom: 40px;
+      margin-left: -5px;
+    }
+  }
+
+  .form-actions {
+    margin-top: 50px;
+    margin-bottom: 100px;
+  }
+
+  .link-button {
+    border: none;
+    font-size: $font-size-xs;
+    color: $link-color;
+    text-decoration: none;
+    background-color: $grey0;
+    padding: 15px;
+
+    &:hover {
+      color: $link-hover-color;
+      text-decoration: none;
+    }
+
+    &:focus {
+      outline: none;
+    }
+
+    &:active {
+      box-shadow: none;
+    }
+
+    [class^='assembl-icon-']:before,
+    [class*=' assembl-icon-']:before {
+      font-size: $font-size-xxs;
+      margin-left: 5px;
+    }
+  }
+
+  .link-button:focus,
+  .link-button:active,
+  .link-button:hover {
+    background-color: transparent;
+  }
+
+  .expand-row {
+    margin: 0 40px;
+  }
+
+  .votes-in-progress {
+    margin: 0 40px;
+    padding: 0 15px 30px;
+
+    .box {
+      margin-top: 30px;
+      height: 160px;
+    }
+
+    .participants-count {
+      .assembl-icon-profil:before {
+        font-size: 40px;
+        margin-bottom: 12px;
+      }
+    }
+
+    .doughnut-container {
+      margin: 0 auto;
+      height: 80px;
+      width: 80px;
+      padding: 10px 0 0;
+
+      .doughnut {
+        .circle {
+          stroke-width: 18px;
+        }
+      }
+    }
+
+    .doughnut-totalCount {
+      margin-top: -44px;
+      font-size: $font-size-xxs;
+
+      .vote-totalCount {
+        font-size: $font-size-xs;
+        font-family: $font-family3;
+        margin-bottom: -3px;
+      }
+    }
+  }
+
+  .expand-result {
+    padding-bottom: 40px;
+  }
+
+  .gauge-box {
+    padding: 30px 0 0;
+  }
+
   .separator {
-    border-bottom: 1px $btn-dark-border-style $btn-dark-border-color;
-    clear: both;
-    margin: 0 0 15px;
-    padding: 10px 0 10px;
+    border-bottom: 1px $btn-dark-border-style $grey1;
+    max-width: 745px;
+    margin-left: 18px;
+  }
+}
+
+.token-tooltip {
+  border-radius: 4px;
+
+  .tooltip-inner {
+    background: none;
+  }
+}
+
+@media screen and (min-width: 768px) {
+  .votesession-page {
+    .proposal.row {
+      padding: 31px 15px 15px 15px;
+    }
+
+    .participants-count {
+      padding: 40px 0 0;
+    }
+
+    .tokens-box {
+      padding: 30px 0 0;
+    }
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .votesession-page {
+    .available-tokens-sticky {
+      display: none;
+    }
+
+    .container {
+      padding: 0;
+      margin: 0;
+    }
+
+    .proposal.row {
+      padding: 15px 0 0;
+    }
+
+    .participants-count {
+      padding: 32px 0 0;
+    }
+
+    .tokens-box {
+      padding: 15px 0 0;
+    }
   }
 }

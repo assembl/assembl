@@ -12,11 +12,13 @@ exports[`VoteSession component should match VoteSession snapshot 1`] = `
   />
   <Grid
     bsClass="container"
+    className="background-light"
     componentClass="div"
     fluid={true}
   >
     <Section
       className="themes-section"
+      containerAdditionalClassNames={null}
       displayIndex={false}
       index={1}
       indexGenerator={[Function]}
@@ -30,6 +32,7 @@ exports[`VoteSession component should match VoteSession snapshot 1`] = `
       >
         <Col
           bsClass="col"
+          className="no-padding"
           componentClass="div"
           md={8}
           mdOffset={3}
@@ -44,11 +47,46 @@ exports[`VoteSession component should match VoteSession snapshot 1`] = `
               }
             }
           />
+          <div>
+            <AvailableTokens
+              remainingTokensByCategory={
+                Immutable.Map {
+                  negative: 10,
+                  positive: 8,
+                }
+              }
+              sticky={false}
+              tokenCategories={
+                Array [
+                  Object {
+                    "color": "#117711",
+                    "id": "negative",
+                    "title": "Negative",
+                    "totalNumber": 10,
+                  },
+                  Object {
+                    "color": "#881111",
+                    "id": "positive",
+                    "title": "Positive",
+                    "totalNumber": 8,
+                  },
+                ]
+              }
+            />
+          </div>
         </Col>
       </Row>
     </Section>
+  </Grid>
+  <Grid
+    bsClass="container"
+    className="background-grey"
+    componentClass="div"
+    fluid={true}
+  >
     <Section
-      className="themes-section"
+      className={null}
+      containerAdditionalClassNames={Array []}
       displayIndex={false}
       index={1}
       indexGenerator={[Function]}
@@ -63,8 +101,220 @@ exports[`VoteSession component should match VoteSession snapshot 1`] = `
         <Col
           bsClass="col"
           componentClass="div"
+          md={10}
+          mdOffset={1}
+          sm={10}
+          smOffset={1}
+        >
+          <Proposals
+            proposals={
+              Array [
+                Object {
+                  "description": "You can't hack the alarm without connecting the primary AGP microchip!",
+                  "id": "proposal-1",
+                  "modules": Array [
+                    Object {
+                      "exclusiveCategories": true,
+                      "id": "token-vote-module",
+                      "instructions": "If we generate the feed, we can get to the AGP driver through the primary ADP interface!",
+                      "tokenCategories": Array [
+                        Object {
+                          "color": "#226622",
+                          "id": "positive",
+                          "title": "Positive",
+                          "totalNumber": 12,
+                        },
+                        Object {
+                          "color": "#771122",
+                          "id": "negative",
+                          "title": "Negative",
+                          "totalNumber": 10,
+                        },
+                      ],
+                      "voteType": "token_vote_specification",
+                    },
+                  ],
+                  "title": "First proposal",
+                },
+                Object {
+                  "description": "I'll input the multi-byte SAS monitor, that should bandwidth the USB microchip!",
+                  "id": "proposal-2",
+                  "modules": Array [
+                    Object {
+                      "exclusiveCategories": true,
+                      "id": "token-vote-module",
+                      "instructions": "If we generate the feed, we can get to the AGP driver through the primary ADP interface!",
+                      "tokenCategories": Array [
+                        Object {
+                          "color": "#226622",
+                          "id": "positive",
+                          "title": "Positive",
+                          "totalNumber": 12,
+                        },
+                        Object {
+                          "color": "#771122",
+                          "id": "negative",
+                          "title": "Negative",
+                          "totalNumber": 10,
+                        },
+                      ],
+                      "voteType": "token_vote_specification",
+                    },
+                    Object {
+                      "id": "text-gauge-module",
+                      "instructions": "I'll generate the mobile SMS bus, that should microchip the TCP matrix!",
+                      "voteType": "gauge_vote_specification",
+                    },
+                  ],
+                  "title": "Second proposal",
+                },
+              ]
+            }
+            remainingTokensByCategory={
+              Immutable.Map {
+                negative: 10,
+                positive: 8,
+              }
+            }
+            tokenVotes={
+              Immutable.Map {
+              }
+            }
+            voteForProposal={[Function]}
+            voteForProposalGauge={[Function]}
+          />
+        </Col>
+      </Row>
+      <Row
+        bsClass="row"
+        className="form-actions center"
+        componentClass="div"
+      >
+        <Col
+          bsClass="col"
+          componentClass="div"
+          md={10}
+          mdOffset={1}
+          sm={10}
+          smOffset={1}
+        />
+      </Row>
+    </Section>
+  </Grid>
+</div>
+`;
+
+exports[`VoteSession component should match VoteSession snapshot when vote session is not configured 1`] = `
+<MessagePage
+  text="Text"
+  title="Title"
+/>
+`;
+
+exports[`VoteSession component should match VoteSession snapshot with empty modules and proposals 1`] = `
+<div
+  className="votesession-page"
+>
+  <Connect(Header)
+    additionalHeaderClasses="left"
+    imgUrl="foo.jpg"
+    subtitle="Maintenant il faut voter."
+    title="Phase de vote à la majorité et estimation multicritère"
+  />
+  <Grid
+    bsClass="container"
+    className="background-light"
+    componentClass="div"
+    fluid={true}
+  >
+    <Section
+      className="themes-section"
+      containerAdditionalClassNames={null}
+      displayIndex={false}
+      index={1}
+      indexGenerator={[Function]}
+      parents={Array []}
+      title="Instructions de la phase de vote"
+      translate={false}
+    >
+      <Row
+        bsClass="row"
+        componentClass="div"
+      >
+        <Col
+          bsClass="col"
+          className="no-padding"
+          componentClass="div"
           md={8}
           mdOffset={3}
+          sm={10}
+          smOffset={1}
+        >
+          <div
+            className="vote-instructions"
+            dangerouslySetInnerHTML={
+              Object {
+                "__html": "",
+              }
+            }
+          />
+        </Col>
+      </Row>
+    </Section>
+  </Grid>
+  <Grid
+    bsClass="container"
+    className="background-grey"
+    componentClass="div"
+    fluid={true}
+  >
+    <Section
+      className={null}
+      containerAdditionalClassNames={Array []}
+      displayIndex={false}
+      index={1}
+      indexGenerator={[Function]}
+      parents={Array []}
+      title="Vote sur 0 propositions"
+      translate={false}
+    >
+      <Row
+        bsClass="row"
+        componentClass="div"
+      >
+        <Col
+          bsClass="col"
+          componentClass="div"
+          md={10}
+          mdOffset={1}
+          sm={10}
+          smOffset={1}
+        >
+          <Proposals
+            proposals={Array []}
+            remainingTokensByCategory={
+              Immutable.Map {
+              }
+            }
+            tokenVotes={
+              Immutable.Map {
+              }
+            }
+            voteForProposal={[Function]}
+            voteForProposalGauge={[Function]}
+          />
+        </Col>
+      </Row>
+      <Row
+        bsClass="row"
+        className="form-actions center"
+        componentClass="div"
+      >
+        <Col
+          bsClass="col"
+          componentClass="div"
+          md={10}
+          mdOffset={1}
           sm={10}
           smOffset={1}
         />

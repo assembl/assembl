@@ -7,7 +7,7 @@ describe('tokensForm component', () => {
   const handleInstructionsChangeSpy = jest.fn(() => {});
   const handleTokenVoteTypeNumberChangeSpy = jest.fn(() => {});
   const handleExclusiveCheckboxChangeSpy = jest.fn(() => {});
-  it('should render a form to configure a tokens vote, the exclusivity, instructions and number of tokens types but no TokenTypeForm', () => {
+  it('should render a form to configure a token votewithout token types', () => {
     const props = {
       instructions: 'Je vous prie de bien vouloir voter.',
       exclusive: true,
@@ -23,7 +23,8 @@ describe('tokensForm component', () => {
     const result = shallowRenderer.getRenderOutput();
     expect(result).toMatchSnapshot();
   });
-  it('should render a form to configure a tokens vote, the exclusivity, instructions and number of tokens types and 3 TokenTypeForm', () => {
+
+  it('should render a form to configure a token vote with 3 token types', () => {
     const props = {
       instructions: 'Je vous prie de bien vouloir voter.',
       exclusive: true,

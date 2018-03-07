@@ -136,6 +136,26 @@ export const deleteResourceTooltip = (
   </Tooltip>
 );
 
+export const resetTokensTooltip = (
+  <Tooltip id="resetTokensTooltip">
+    <Translate value="debate.voteSession.resetTokens" />
+  </Tooltip>
+);
+
+export const hiddenTooltip = <Tooltip id="hiddenTooltip" style={{ display: 'none' }} />;
+
+export const notEnoughTokensTooltip = (
+  <Tooltip id="notEnoughTokensTooltip">
+    <Translate value="debate.voteSession.notEnoughTokens" />
+  </Tooltip>
+);
+
+export const exclusiveTokensTooltip = (
+  <Tooltip id="exclusiveTokensTooltip">
+    <Translate value="debate.voteSession.exclusiveTokens" />
+  </Tooltip>
+);
+
 export const nextStepTooltip = (
   <Tooltip id="nextStepTooltip">
     <Translate value="administration.nextStep" />
