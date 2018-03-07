@@ -4,7 +4,15 @@ import renderer from 'react-test-renderer';
 import * as saveButton from '../../../../js/app/components/administration/saveButton';
 
 describe('runSerial function', () => {
-  it('should run promises in serial');
+  const { runSerial } = saveButton;
+  it('should run promises in serial', async () => {
+    const task1 = jest.fn();
+    const task2 = jest.fn();
+    await runSerial([task1, task2]).then(() => {
+      expect(task1.mock.calls.length).toBe(1);
+      expect(task2.mock.calls.length).toBe(1);
+    });
+  });
 });
 
 describe('getMutationPromises', () => {
