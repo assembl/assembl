@@ -279,12 +279,12 @@ class GaugeVoteSpecification(SecureObjectType, SQLAlchemyObjectType):
 
     def resolve_average_label(self, args, context, info):
         vote_cls = self.get_vote_class()
-        voting_results = self.db.query(vote_cls).filter_by(
+        voting_avg = self.db.query(func.avg(getattr(vote_cls, 'vote_value'))).filter_by(
             vote_spec_id=self.id,
             tombstone_date=None,
-            idea_id=self.criterion_idea_id).all()
-        n = len(voting_results)
-        avg = sum((r.vote_value for r in voting_results)) / n
+            idea_id=self.criterion_idea_id).first()
+        # when there is no votes, query.first() equals (None,)
+        avg = voting_avg[0] or 0
         # take the closest choice
         avg_choice = self.choices[0]
         min_diff = abs(avg_choice.value - avg)
