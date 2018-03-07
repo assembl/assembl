@@ -1,6 +1,7 @@
 // @flow
 /* eslint-disable react/no-multi-comp */
 import React from 'react';
+import { Translate } from 'react-redux-i18n';
 import Slider from 'rc-slider';
 import Pointer from '../svg/pointer';
 
@@ -217,7 +218,7 @@ class NumberGaugeVoteForProposal extends React.Component<*, NumberGaugeVoteForPr
         style: markStyle,
         label: (
           <div>
-            {minimum} {unit}
+            <Translate value={minimum} unit={unit} />
           </div>
         )
       };
@@ -226,7 +227,7 @@ class NumberGaugeVoteForProposal extends React.Component<*, NumberGaugeVoteForPr
         style: markStyle,
         label: (
           <div>
-            {maximum} {unit}
+            <Translate value={maximum} unit={unit} />
           </div>
         )
       };
@@ -240,7 +241,7 @@ class NumberGaugeVoteForProposal extends React.Component<*, NumberGaugeVoteForPr
             style: markStyle,
             label: (
               <div>
-                {value.toFixed(2)} {unit}
+                <Translate value={value.toFixed(2)} unit={unit} />
               </div>
             )
           };

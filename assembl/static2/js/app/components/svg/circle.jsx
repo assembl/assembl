@@ -16,7 +16,7 @@ const Circle = ({ fillColor, strokeColor, size }: Props) => (
     role="img"
     width={size}
     height={size}
-    viewBox="0 0 20 20"
+    viewBox="0 0 22 22"
     version="1.1"
   >
     <path

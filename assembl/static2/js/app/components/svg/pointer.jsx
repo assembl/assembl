@@ -6,7 +6,7 @@ class Pointer extends React.Component {
     const marginLeft = position ? `calc(${position}% - 15px)` : 'initial';
     const width = this.props.width ? this.props.width : '31px';
     const height = this.props.height ? this.props.height : '46px';
-    const style = Object.assign({}, { marginLeft: marginLeft }, this.props.style);
+    const style = Object.assign({ marginLeft: marginLeft, ...this.props.style });
     return (
       <svg
         style={style}

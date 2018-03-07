@@ -319,7 +319,8 @@ const Translations = {
         exclusiveTokens: "Vous avez déjà voté pour une autre catégorie pour cette proposition",
         totalVotes: "%{count} votes",
         votes: "Votes",
-        vote: "Vote"
+        vote: "Vote",
+        valueWithUnit: "%{value} %{unit}"
       }
     },
     profile: {
@@ -884,7 +885,8 @@ const Translations = {
         exclusiveTokens: "You already voted for another category for this proposal",
         totalVotes: "%{count} votes",
         votes: "Votes",
-        vote: "Vote"
+        vote: "Vote",
+        valueWithUnit: "%{unit}%{value}"
       }
     },
     profile: {

@@ -72,7 +72,7 @@ fragment gaugeVoteSpecification on GaugeVoteSpecification {
   choices {
     id
     value
-    label
+    label(lang: $lang)
     labelEntries {
       ...langStringEntry
     }

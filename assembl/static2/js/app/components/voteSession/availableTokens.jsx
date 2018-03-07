@@ -2,6 +2,7 @@
 import React from 'react';
 import { Map } from 'immutable';
 import { Translate } from 'react-redux-i18n';
+import range from 'lodash/range';
 import classnames from 'classnames';
 
 import Circle from '../svg/circle';
@@ -27,7 +28,7 @@ const AvailableTokens = ({ remainingTokensByCategory, sticky, tokenCategories }:
                 <Translate value="debate.voteSession.remainingTokens" count={remaining} />
               </div>
               <div className="tokens">
-                {[...Array(totalNumber).keys()].map(n => (
+                {range(totalNumber).map(n => (
                   <Circle key={n + 1} size="32px" strokeColor={color} fillColor={n + 1 <= remaining ? color : undefined} />
                 ))}
               </div>
