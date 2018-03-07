@@ -96,7 +96,7 @@ class AnswerForm extends React.PureComponent<*, AnswerFormProps, AnswerFormState
         createPost({ variables: variables })
           .then(() => {
             refetchIdea().then(() => {
-              this.setState({ body: null }, hideAnswerForm);
+              this.setState({ submitting: false, body: null }, hideAnswerForm);
             });
             displayAlert('success', I18n.t('debate.thread.postSuccess'));
           })
