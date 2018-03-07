@@ -15,6 +15,7 @@ import RichTextEditor from '../../common/richTextEditor';
 import attachmentsPlugin from '../../common/richTextEditor/attachmentsPlugin';
 import { TEXT_AREA_MAX_LENGTH } from '../common/topPostForm';
 import { getIfPhaseCompletedByIdentifier } from '../../../utils/timeline';
+import { getDomElementOffset } from '../../../utils/globalFunctions';
 
 type AnswerFormProps = {
   contentLocale: string,
@@ -94,9 +95,22 @@ class AnswerForm extends React.PureComponent<*, AnswerFormProps, AnswerFormState
         };
         displayAlert('success', I18n.t('loading.wait'));
         createPost({ variables: variables })
-          .then(() => {
-            refetchIdea().then(() => {
-              this.setState({ submitting: false, body: null }, hideAnswerForm);
+          .then((res) => {
+            const postId = res.data.createPost.post.id;
+            this.setState({ submitting: false, body: null }, () => {
+              hideAnswerForm();
+              // Execute refetchIdea after the setState otherwise we can get a warning setSate called on unmounted component.
+              refetchIdea().then(() => {
+                // The thread may have moved because it became the latest active, we need to scroll to the created post.
+                // Arbitrary wait 200ms to be sure the post is rendered.
+                setTimeout(() => {
+                  const createdPostElement = document.getElementById(postId);
+                  if (createdPostElement) {
+                    const elmOffset = getDomElementOffset(createdPostElement).top - 200;
+                    window.scrollTo({ top: elmOffset, left: 0 });
+                  }
+                }, 200);
+              });
             });
             displayAlert('success', I18n.t('debate.thread.postSuccess'));
           })
