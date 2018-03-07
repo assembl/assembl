@@ -36,7 +36,7 @@ export const DumbManageModules = ({
       annotation={I18n.t('administration.annotation')}
     />
     <div className="admin-content form-container">
-      <p>
+      <p className="admin-paragraph">
         <Translate value="administration.landingPage.manageModules.helper" />
       </p>
       <div className="two-columns-admin">

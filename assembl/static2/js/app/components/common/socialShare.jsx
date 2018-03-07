@@ -55,7 +55,13 @@ export default class SocialShare extends React.Component {
         ) : (
           <div className="social-share-buttons-container">
             <div className="social-share-button">
-              <SuperShareButton Component={EmailShareButton} Icon={generateShareIcon('email')} url={url} onClose={onClose} />
+              <SuperShareButton
+                Component={EmailShareButton}
+                Icon={generateShareIcon('email')}
+                url={url}
+                body={url}
+                onClose={onClose}
+              />
             </div>
           </div>
         )}

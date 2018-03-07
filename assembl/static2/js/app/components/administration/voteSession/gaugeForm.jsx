@@ -6,6 +6,7 @@ import range from 'lodash/range';
 import { SplitButton, MenuItem, Radio } from 'react-bootstrap';
 import Helper from '../../common/helper';
 import { getEntryValueForLocale } from '../../../utils/i18n';
+import { createRandomId } from '../../../utils/globalFunctions';
 import FormControlWithLabel from '../../common/formControlWithLabel';
 import NumberGaugeForm from './numberGaugeForm';
 import TextGaugeForm from './textGaugeForm';
@@ -19,6 +20,7 @@ import {
 
 type GaugeFormProps = {
   id: string,
+  index: number,
   editLocale: string,
   instructions: string,
   nbTicks: number,
@@ -40,9 +42,11 @@ const DumbGaugeForm = ({
   handleInstructionsChange,
   handleNbTicksSelectChange,
   handleNumberGaugeCheck,
-  handleNumberGaugeUncheck
+  handleNumberGaugeUncheck,
+  index
 }: GaugeFormProps) => (
   <div className="gauges-vote-form">
+    <Translate value="administration.gauge" number={index + 1} />
     <div className="flex margin-m">
       <FormControlWithLabel
         value={instructions}
@@ -61,7 +65,6 @@ const DumbGaugeForm = ({
       <label htmlFor={`dropdown-${id}`}>
         <Translate value="administration.nbTicks" />
       </label>
-      <Helper helperUrl="/static2/img/helpers/helper2.png" helperText={'administration.nbTicksHelper'} />
     </div>
     <SplitButton
       title={nbTicks}
@@ -78,16 +81,16 @@ const DumbGaugeForm = ({
       ))}
     </SplitButton>
     <div className="margin-m">
-      <Radio onChange={handleNumberGaugeUncheck} checked={!isNumberGauge} name="gauge-radio">
+      <Radio onChange={handleNumberGaugeUncheck} checked={!isNumberGauge} name={`gauge-type-${id}`}>
         <Translate value="administration.textValue" />
       </Radio>
-      <Radio onChange={handleNumberGaugeCheck} checked={isNumberGauge} name="gauge-radio">
+      <Radio onChange={handleNumberGaugeCheck} checked={isNumberGauge} name={`gauge-type-${id}`}>
         <Translate value="administration.numberValue" />
       </Radio>
     </div>
     {isNumberGauge && <NumberGaugeForm id={id} />}
     {!isNumberGauge &&
-      choices.map((cid, index) => <TextGaugeForm key={`gauge-choice-${index}`} id={cid} index={index} editLocale={editLocale} />)}
+      choices.map((cid, idx) => <TextGaugeForm key={`gauge-choice-${idx}`} id={cid} index={idx} editLocale={editLocale} />)}
     <div className="separator" />
   </div>
 );
@@ -111,7 +114,7 @@ const mapDispatchToProps = (dispatch, { id, editLocale }) => ({
     } else if (nbTicks < value) {
       const nbChoiceToCreate = value - nbTicks;
       for (let i = 0; i < nbChoiceToCreate; i += 1) {
-        const newId = Math.round(Math.random() * -1000000).toString();
+        const newId = createRandomId();
         dispatch(createGaugeVoteChoice(id, newId));
       }
     } else {

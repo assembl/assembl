@@ -308,6 +308,14 @@ def react_view(request, required_permission=P_READ):
         get_route=get_route,
         **common_context
     )
+
+    context.update({
+        "opengraph_locale": old_context['opengraph_locale'],
+        "get_description": old_context['get_description'],
+        "get_landing_page_image": old_context['get_landing_page_image'],
+        "private_social_sharing": old_context['private_social_sharing'],
+        "get_topic": old_context['get_topic']
+    })
     return context
 
 

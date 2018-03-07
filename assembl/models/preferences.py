@@ -501,6 +501,17 @@ class Preferences(MutableMapping, Base, NamedClassMixin):
             "default": True
         },
 
+        # Public or private social Sharing
+        {
+            "id": "private_social_sharing",
+            "name": _("Private social sharing"),
+            "value_type": "bool",
+            "description": _("Publicizing or privatizing social sharing"),
+            "allow_user_override": None,
+            "modification_permission": P_ADMIN_DISC,
+            "default": True,
+        },
+
         # Extra data from social fields to put in CSV reports
         {
             "id": "extra_csv_data",

@@ -46,17 +46,17 @@ class FormControlWithLabel extends React.Component {
   };
 
   renderFormControl = () => {
-    const { type, value, disabled } = this.props;
+    const { type, value, disabled, componentClass, id, label, onChange } = this.props;
     if (type === 'rich-text') {
       return this.renderRichTextEditor();
     }
     return (
       <FormControl
-        componentClass={this.props.componentClass}
-        id={this.props.id}
+        componentClass={componentClass}
+        id={id}
         type={type}
-        placeholder={this.props.label}
-        onChange={this.props.onChange}
+        placeholder={label}
+        onChange={onChange}
         value={value || ''}
         onBlur={this.setValidationState}
         disabled={disabled}

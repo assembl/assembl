@@ -16,6 +16,18 @@ export const deleteSectionTooltip = (
   </Tooltip>
 );
 
+export const addVoteProposalTooltip = (
+  <Tooltip id="addProposalTooltip">
+    <Translate value="administration.voteProposals.addProposal" />
+  </Tooltip>
+);
+
+export const deleteVoteProposalTooltip = (
+  <Tooltip id="deleteProposalTooltip">
+    <Translate value="administration.voteProposals.deleteProposal" />
+  </Tooltip>
+);
+
 export const upTooltip = (
   <Tooltip id="upTooltip">
     <Translate value="administration.up" />
@@ -141,5 +153,17 @@ export const notEnoughTokensTooltip = (
 export const exclusiveTokensTooltip = (
   <Tooltip id="exclusiveTokensTooltip">
     <Translate value="debate.voteSession.exclusiveTokens" />
+  </Tooltip>
+);
+
+export const nextStepTooltip = (
+  <Tooltip id="nextStepTooltip">
+    <Translate value="administration.nextStep" />
+  </Tooltip>
+);
+
+export const previousStepTooltip = (
+  <Tooltip id="previousStepTooltip">
+    <Translate value="administration.previousStep" />
   </Tooltip>
 );

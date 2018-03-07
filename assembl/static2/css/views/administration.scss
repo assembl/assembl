@@ -2,8 +2,8 @@
   margin: $margin-section + $navbar-height 0;
 
   .checkbox-title {
-    line-height: $font-size-sm;
-    font-size: $font-size-m;
+    line-height: 20px;
+    font-size: $font-size-xs;
     font-family: $font-family;
   }
 
@@ -72,12 +72,19 @@
     background-color: $white;
 
     .dark-title-3 {
-      padding: 40px 40px 0;
+      padding: 40px 50px 0;
+      font-weight: bold;
     }
 
     .admin-content {
       padding: 30px 40px 80px;
       text-align: center;
+    }
+
+    .admin-paragraph {
+      font-size: $font-size-xs;
+      font-family: $font-family2;
+      line-height: 1.8;
     }
 
     .admin-language-content {
@@ -104,7 +111,7 @@
     }
 
     .annotation {
-      margin: 0 40px 20px;
+      margin: 0 44px 20px;
     }
   }
 
@@ -153,6 +160,7 @@
 
     .form-control {
       font-size: 12px;
+      padding-left: 8px;
     }
   }
 
@@ -340,7 +348,7 @@
     }
   }
 
-  .token-vote-form {
+  .vote-modules-form {
     .flex > .form-group {
       flex-grow: 1;
     }
@@ -368,12 +376,12 @@
 
       .inner {
         margin: auto;
-        border: 1px solid black;
         width: 70%;
         min-height: 330px;
         display: flex;
         flex-direction: column;
         justify-content: space-between;
+        box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.5);
 
         .module-block:first-child {
           padding: 10px 0;
@@ -381,7 +389,8 @@
 
         .module-block:first-child,
         .module-block:last-child {
-          background-color: $first-color-light;
+          background-color: $first-color;
+          opacity: 0.7;
           color: $white;
           border: 0;
           margin: 0;
@@ -391,6 +400,7 @@
         .other-modules {
           flex: 1;
           justify-content: flex-start;
+          background-color: $white;
 
           .module-block {
             margin: 7px;
@@ -408,6 +418,43 @@
             }
           }
         }
+      }
+    }
+  }
+
+  .admin-box {
+    .intro-text {
+      display: flex;
+      flex-direction: column;
+      padding-left: 45px;
+      font-size: $font-size-s;
+
+      .timeline-link {
+        font-family: $font-family2;
+        text-decoration: underline;
+      }
+    }
+
+    .bold {
+      font-family: $font-family5;
+    }
+  }
+
+  .vote-proposal-form {
+    margin-top: 65px;
+
+    .settings-link {
+      margin-left: 20px;
+      font-size: $font-size-xs;
+      color: $purple;
+      font-family: $font-family7;
+
+      &:hover {
+        cursor: pointer;
+      }
+
+      .assembl-icon-edit:before {
+        font-size: $font-size-s;
       }
     }
   }

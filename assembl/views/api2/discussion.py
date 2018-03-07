@@ -818,18 +818,34 @@ def get_visit_count(request):
              permission=P_DISC_STATS)
 def get_visitors(request):
     discussion = request.context._instance
+    fieldnames = ["time", "name", "email"]
+    extra_columns_info = (None if 'no_extra_columns' in request.GET else
+                          load_social_columns_info(discussion, "en"))
+
+    if extra_columns_info:
+        # insert after email
+        fieldnames.extend([name.encode('utf-8') for (name, path) in extra_columns_info])
+        column_info_per_user = {}
+        provider_id = get_provider_id_for_discussion(discussion)
+
     use_first = asbool(request.GET.get("first", False))
     attribute = "first_visit" if use_first else "last_visit"
-    visitors = [
-        (getattr(st, attribute), st.agent_profile.name,
-            st.agent_profile.get_preferred_email())
-        for st in discussion.agent_status_in_discussion
-        if getattr(st, attribute, None)]
-    visitors.sort()
-    visitors.reverse()
-    body = "\n".join(("%s: %s <%s>" % (x[0].isoformat(), x[1], x[2])
-                      for x in visitors))
-    return Response(body=body, content_type='text/text')
+    visitors = []
+    for st in discussion.agent_status_in_discussion:
+        if not getattr(st, attribute, None):
+            continue
+        data = {"time": getattr(st, attribute),
+                "name": (st.agent_profile.name or '').encode("utf-8"),
+                "email": (st.agent_profile.get_preferred_email() or '').encode("utf-8")}
+        if extra_columns_info:
+            extra_info = get_social_columns_from_user(
+                st.agent_profile, extra_columns_info, provider_id)
+            for num, (name, path) in enumerate(extra_columns_info):
+                data[name] = extra_info[num]
+        visitors.append(data)
+
+    visitors.sort(key=lambda x: x['time'], reverse=True)
+    return csv_response(visitors, CSV_MIMETYPE, fieldnames)
 
 
 pygraphviz_formats = {

@@ -6,9 +6,9 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: assembl 2.8.3\n"
+"Project-Id-Version: assembl 2.8.9\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2018-02-05 17:34+0100\n"
+"POT-Creation-Date: 2018-02-28 14:24+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -63,7 +63,7 @@ msgstr ""
 msgid "SYNTHESIS: "
 msgstr ""
 
-#: assembl/models/preferences.py:114 assembl/models/preferences.py:537
+#: assembl/models/preferences.py:114 assembl/models/preferences.py:548
 msgid "No special authentication"
 msgstr ""
 
@@ -170,160 +170,168 @@ msgid "Show the share button on posts and ideas"
 msgstr ""
 
 #: assembl/models/preferences.py:507
+msgid "Private social sharing"
+msgstr ""
+
+#: assembl/models/preferences.py:509
+msgid "Publicizing or privatizing social sharing"
+msgstr ""
+
+#: assembl/models/preferences.py:518
 msgid "Extra data for CSV reports"
 msgstr ""
 
-#: assembl/models/preferences.py:510
+#: assembl/models/preferences.py:521
 msgid "data taken from social_auth's extra_data to add to CSV reports"
 msgstr ""
 
-#: assembl/models/preferences.py:522
+#: assembl/models/preferences.py:533
 msgid "Require anti-virus check"
 msgstr ""
 
-#: assembl/models/preferences.py:525
+#: assembl/models/preferences.py:536
 msgid "Run an anti-virus on file attachments"
 msgstr ""
 
-#: assembl/models/preferences.py:539
+#: assembl/models/preferences.py:550
 msgid "Authentication service type"
 msgstr ""
 
-#: assembl/models/preferences.py:541
+#: assembl/models/preferences.py:552
 msgid ""
 "A primary authentication server for this discussion, defined as a python-"
 "social-auth backend. Participants will be auto-logged in to that server, and "
 "discussion auto-subscription will require an account from this backend."
 msgstr ""
 
-#: assembl/models/preferences.py:556
+#: assembl/models/preferences.py:567
 msgid "Allow access to moderated text"
 msgstr ""
 
-#: assembl/models/preferences.py:559
+#: assembl/models/preferences.py:570
 msgid "Are moderated posts simply hidden or made inaccessible by default?"
 msgstr ""
 
-#: assembl/models/preferences.py:572
+#: assembl/models/preferences.py:583
 msgid "Idea panel opens automatically"
 msgstr ""
 
-#: assembl/models/preferences.py:575
+#: assembl/models/preferences.py:586
 msgid ""
 "Does the Idea panel automatically open when an idea is clicked ? (and close "
 "when a special section is clicked)"
 msgstr ""
 
-#: assembl/models/preferences.py:587
+#: assembl/models/preferences.py:598
 msgid "Ids of columns in column view"
 msgstr ""
 
-#: assembl/models/preferences.py:589
+#: assembl/models/preferences.py:600
 msgid "What are (ordered) identifiers of columns in multi-column views?"
 msgstr ""
 
-#: assembl/models/preferences.py:602
+#: assembl/models/preferences.py:613
 msgid "Default colors of columns in column view"
 msgstr ""
 
-#: assembl/models/preferences.py:604
+#: assembl/models/preferences.py:615
 msgid "What are (default) theme colors of columns in multi-column views?"
 msgstr ""
 
-#: assembl/models/preferences.py:616
+#: assembl/models/preferences.py:627
 msgid "Names of columns in column view"
 msgstr ""
 
-#: assembl/models/preferences.py:618
+#: assembl/models/preferences.py:629
 msgid ""
 "What are (default) names of columns in multi-column views, in each discussion"
 " language?"
 msgstr ""
 
-#: assembl/models/preferences.py:631
+#: assembl/models/preferences.py:642
 msgid "Default permissions"
 msgstr ""
 
-#: assembl/models/preferences.py:634
+#: assembl/models/preferences.py:645
 msgid "The basic permissions for a new discussion"
 msgstr ""
 
-#: assembl/models/preferences.py:716
+#: assembl/models/preferences.py:727
 msgid "Require Email Domain"
 msgstr ""
 
-#: assembl/models/preferences.py:719
+#: assembl/models/preferences.py:730
 msgid ""
 "List of domain names of user email address required for self-registration. "
 "Only accounts with at least an email from those domains can self-register to "
 "this discussion. Anyone can self-register if this is empty."
 msgstr ""
 
-#: assembl/models/preferences.py:735
+#: assembl/models/preferences.py:746
 msgid "Show CI Dashboard"
 msgstr ""
 
-#: assembl/models/preferences.py:738
+#: assembl/models/preferences.py:749
 msgid "Show the CI Dashboard in the panel group window"
 msgstr ""
 
-#: assembl/models/preferences.py:750
+#: assembl/models/preferences.py:761
 msgid "URL of CI Dashboard"
 msgstr ""
 
-#: assembl/models/preferences.py:752
+#: assembl/models/preferences.py:763
 msgid "Configuration of the visualizations shown in the CI Dashboard"
 msgstr ""
 
-#: assembl/models/preferences.py:770
+#: assembl/models/preferences.py:781
 msgid "Catalyst Visualizations"
 msgstr ""
 
-#: assembl/models/preferences.py:773
+#: assembl/models/preferences.py:784
 msgid "A JSON description of available Catalyst visualizations"
 msgstr ""
 
-#: assembl/models/preferences.py:785
+#: assembl/models/preferences.py:796
 msgid "Navigation sections"
 msgstr ""
 
-#: assembl/models/preferences.py:788
+#: assembl/models/preferences.py:799
 msgid ""
 "A JSON specification of Catalyst visualizations to show in the navigation "
 "section"
 msgstr ""
 
-#: assembl/models/preferences.py:801
+#: assembl/models/preferences.py:812
 msgid "Catalyst translations"
 msgstr ""
 
-#: assembl/models/preferences.py:804
+#: assembl/models/preferences.py:815
 msgid "Translations applicable to Catalyst visualizations, in Jed (JSON) format"
 msgstr ""
 
-#: assembl/models/preferences.py:821
+#: assembl/models/preferences.py:832
 msgid "Default Table of Ideas Collapsed state"
 msgstr ""
 
-#: assembl/models/preferences.py:824
+#: assembl/models/preferences.py:835
 msgid ""
 "Default expanded/collapsed state of each idea in the table of ideas. A user "
 "can override it by opening/closing an idea"
 msgstr ""
 
-#: assembl/models/preferences.py:839
+#: assembl/models/preferences.py:850
 msgid "Preference data"
 msgstr ""
 
-#: assembl/models/preferences.py:842
+#: assembl/models/preferences.py:853
 msgid "The preference configuration; override only with care"
 msgstr ""
 
-#: assembl/models/preferences.py:854
+#: assembl/models/preferences.py:865
 msgid "Cookies banner"
 msgstr ""
 
-#: assembl/models/preferences.py:857
+#: assembl/models/preferences.py:868
 msgid "Show the banner offering to disable Piwik cookies"
 msgstr ""
 
@@ -2102,7 +2110,7 @@ msgstr ""
 msgid "Permissions"
 msgstr ""
 
-#: assembl/templates/admin/discussions.jinja2:77
+#: assembl/templates/admin/discussions.jinja2:86
 #: assembl/templates/discussion_list.jinja2:21
 msgid "There are no discussions on this server yet"
 msgstr ""
@@ -2133,7 +2141,7 @@ msgstr ""
 msgid "Sign out"
 msgstr ""
 
-#: assembl/templates/do_password_change.jinja2:28 assembl/templates/login.jinja2:73
+#: assembl/templates/do_password_change.jinja2:28 assembl/templates/login.jinja2:72
 #: assembl/templates/register.jinja2:28 assembl/templates/views/emailSource.tmpl:74
 msgid "Password"
 msgstr ""
@@ -2153,45 +2161,45 @@ msgstr ""
 msgid "See the conversation around this idea"
 msgstr ""
 
-#: assembl/templates/login.jinja2:31
+#: assembl/templates/login.jinja2:30
 #, python-format
 msgid "Log in to \"%(discussion_title)s\""
 msgstr ""
 
-#: assembl/templates/login.jinja2:31
+#: assembl/templates/login.jinja2:30
 msgid "Log in to Assembl"
 msgstr ""
 
-#: assembl/templates/login.jinja2:38
+#: assembl/templates/login.jinja2:37
 msgid "Log in using one of these social networks"
 msgstr ""
 
-#: assembl/templates/login.jinja2:52 assembl/templates/profile.jinja2:220
+#: assembl/templates/login.jinja2:51 assembl/templates/profile.jinja2:220
 msgid "Login with "
 msgstr ""
 
-#: assembl/templates/login.jinja2:66
+#: assembl/templates/login.jinja2:65
 msgid "Already have an account?"
 msgstr ""
 
-#: assembl/templates/login.jinja2:70
+#: assembl/templates/login.jinja2:69
 #: assembl/templates/request_password_change.jinja2:27
 msgid "Email or username"
 msgstr ""
 
-#: assembl/templates/login.jinja2:79
+#: assembl/templates/login.jinja2:78
 msgid "Log in"
 msgstr ""
 
-#: assembl/templates/login.jinja2:81
+#: assembl/templates/login.jinja2:80
 msgid "Forgot your password?"
 msgstr ""
 
-#: assembl/templates/login.jinja2:85
+#: assembl/templates/login.jinja2:84
 msgid "No account yet?"
 msgstr ""
 
-#: assembl/templates/login.jinja2:88 assembl/templates/register.jinja2:30
+#: assembl/templates/login.jinja2:87 assembl/templates/register.jinja2:30
 msgid "Sign up"
 msgstr ""
 
@@ -4283,7 +4291,7 @@ msgstr ""
 msgid "unsubscribed"
 msgstr ""
 
-#: assembl/views/admin/views.py:373
+#: assembl/views/admin/views.py:392
 msgid "No file given."
 msgstr ""
 

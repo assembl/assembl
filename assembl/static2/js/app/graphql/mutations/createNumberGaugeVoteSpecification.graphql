@@ -4,6 +4,7 @@ mutation createNumberGaugeVoteSpecification(
   $voteSessionId: ID!
   $titleEntries: [LangStringEntryInput]!
   $instructionsEntries: [LangStringEntryInput]!
+  $isCustom: Boolean!
   $minimum: Float!
   $maximum: Float!
   $nbTicks: Int!
@@ -15,6 +16,7 @@ mutation createNumberGaugeVoteSpecification(
     voteSessionId: $voteSessionId
     titleEntries: $titleEntries
     instructionsEntries: $instructionsEntries
+    isCustom: $isCustom
     minimum: $minimum
     maximum: $maximum
     nbTicks: $nbTicks
@@ -32,6 +34,7 @@ mutation createNumberGaugeVoteSpecification(
         instructionsEntries {
           ...langStringEntry
         }
+        isCustom
         minimum
         maximum
         nbTicks

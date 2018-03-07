@@ -1,3 +1,4 @@
+// @flow
 import React from 'react';
 import { graphql, compose } from 'react-apollo';
 import { connect } from 'react-redux';
@@ -8,37 +9,50 @@ import { getConnectedUserId } from '../../../utils/globalFunctions';
 import { getIfPhaseCompletedByIdentifier } from '../../../utils/timeline';
 import { inviteUserToLogin, displayAlert } from '../../../utils/utilityManager';
 import createPostMutation from '../../../graphql/mutations/createPost.graphql';
-import { SMALL_SCREEN_WIDTH } from '../../../constants';
+import { SMALL_SCREEN_WIDTH, MINIMUM_BODY_LENGTH } from '../../../constants';
 import { withScreenDimensions } from '../../common/screenDimensions';
-import TextAreaWithRemainingChars from '../../common/textAreaWithRemainingChars';
+import RichTextEditor from '../../common/richTextEditor';
+import { convertRawContentStateToHTML } from '../../../utils/draftjs';
 
-const MINIMUM_BODY_LENGTH = 10;
+type QuestionProps = {
+  title: string,
+  debate: DebateData,
+  contentLocale: string,
+  questionId: string,
+  scrollToQuestion: Function,
+  index: number,
+  refetchTheme: Function,
+  mutate: Function,
+  screenHeight: number,
+  screenWidth: number
+};
 
-class Question extends React.Component {
-  constructor(props) {
+type QuestionState = {
+  buttonDisabled: boolean,
+  postBody: string,
+  charCount: number
+};
+
+class Question extends React.Component<void, QuestionProps, QuestionState> {
+  props: QuestionProps;
+
+  state: QuestionState;
+
+  constructor(props: QuestionProps) {
     super(props);
     this.state = {
       buttonDisabled: false,
-      postBody: ''
+      postBody: '',
+      charCount: 0
     };
-    this.getProposalText = this.getProposalText.bind(this);
-    this.createPost = this.createPost.bind(this);
-    this.redirectToLogin = this.redirectToLogin.bind(this);
   }
 
-  getProposalText(e) {
-    const txtValue = e.currentTarget.value;
-    this.setState({
-      postBody: txtValue
-    });
-  }
-
-  createPost() {
+  createPost = () => {
     const { contentLocale, questionId, scrollToQuestion, index, refetchTheme } = this.props;
     const body = this.state.postBody;
     this.setState({ buttonDisabled: true }, () =>
       this.props
-        .mutate({ variables: { contentLocale: contentLocale, ideaId: questionId, body: body } })
+        .mutate({ variables: { contentLocale: contentLocale, ideaId: questionId, body: convertRawContentStateToHTML(body) } })
         .then(() => {
           scrollToQuestion(true, index + 1);
           displayAlert('success', I18n.t('debate.survey.postSuccess'));
@@ -55,9 +69,15 @@ class Question extends React.Component {
           });
         })
     );
-  }
+  };
 
-  redirectToLogin() {
+  updateBody = (newValue) => {
+    this.setState({
+      postBody: newValue
+    });
+  };
+
+  redirectToLogin = () => {
     const isUserConnected = getConnectedUserId();
     const { scrollToQuestion, index } = this.props;
     if (!isUserConnected) {
@@ -65,11 +85,20 @@ class Question extends React.Component {
     } else {
       scrollToQuestion(true, index);
     }
-  }
+  };
+
+  updateCharCount = (newValue) => {
+    this.setState({ charCount: newValue });
+  };
 
   render() {
     const { index, title, screenWidth, screenHeight } = this.props;
-    const height = screenHeight - document.getElementById('timeline').clientHeight;
+    let height = screenHeight;
+    const timeline = document && document.getElementById('timeline');
+    // This is necessary to bypass an issue with Flow
+    if (timeline) {
+      height = screenHeight - timeline.clientHeight;
+    }
     const { debateData } = this.props.debate;
     const isPhaseCompleted = getIfPhaseCompletedByIdentifier(debateData.timeline, 'survey');
     return (
@@ -82,17 +111,18 @@ class Question extends React.Component {
           <div className="max-container">
             <div className="question-title">
               <div className="title-hyphen">&nbsp;</div>
-              <h1 className="dark-title-1">{`${index}/ ${title}`}</h1>
+              <h1 className="dark-title-5">{`${index}/ ${title}`}</h1>
             </div>
             <Col xs={12} md={9} className="col-centered">
-              <TextAreaWithRemainingChars
-                domId={`txt${index}`}
-                onChange={this.getProposalText}
-                onClick={this.redirectToLogin}
-                placeholder={I18n.t('debate.survey.txtAreaPh')}
-                value={this.state.postBody}
+              <RichTextEditor
+                rawContentState={this.state.postBody}
+                maxLength={1000}
+                placeHolder={I18n.t('debate.survey.txtAreaPh')}
+                updateContentState={this.updateBody}
+                handleInputFocus={this.redirectToLogin}
+                handleCharCountChange={this.updateCharCount}
               />
-              {this.state.postBody.length > MINIMUM_BODY_LENGTH && (
+              {this.state.charCount > MINIMUM_BODY_LENGTH && (
                 <Button
                   onClick={this.createPost}
                   disabled={this.state.buttonDisabled}

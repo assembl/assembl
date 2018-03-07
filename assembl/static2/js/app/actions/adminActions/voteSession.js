@@ -1,5 +1,6 @@
 // @flow
 import * as actionTypes from '../actionTypes';
+import { createRandomId } from '../../utils/globalFunctions';
 
 export const updateVoteSessionPageTitle = (locale: string, value: string): actionTypes.UpdateVoteSessionPageTitle => ({
   locale: locale,
@@ -55,19 +56,14 @@ export const createTokenVoteModule = (id: string): actionTypes.CreateTokenVoteMo
   type: actionTypes.CREATE_TOKEN_VOTE_MODULE
 });
 
-export const deleteTokenVoteModule = (id: string): actionTypes.DeleteTokenVoteModule => ({
+export const deleteVoteModule = (id: string): actionTypes.DeleteVoteModule => ({
   id: id,
-  type: actionTypes.DELETE_TOKEN_VOTE_MODULE
+  type: actionTypes.DELETE_VOTE_MODULE
 });
 
 export const createGaugeVoteModule = (id: string): actionTypes.CreateGaugeVoteModule => ({
   id: id,
   type: actionTypes.CREATE_GAUGE_VOTE_MODULE
-});
-
-export const deleteGaugeVoteModule = (id: string): actionTypes.DeleteGaugeVoteModule => ({
-  id: id,
-  type: actionTypes.DELETE_GAUGE_VOTE_MODULE
 });
 
 export const updateTokenVoteExclusiveCategory = (id: string, value: boolean): actionTypes.UpdateTokenVoteExclusiveCategory => ({
@@ -195,4 +191,69 @@ export const updateVoteSessionPage = (value: Object): actionTypes.UpdateVoteSess
   propositionsSectionTitleEntries: value.propositionsSectionTitleEntries,
   headerImage: value.headerImage,
   type: actionTypes.UPDATE_VOTE_SESSION_PAGE
+});
+
+export const updateVoteProposals = (voteProposals: actionTypes.VoteProposalsArray): actionTypes.UpdateVoteProposals => ({
+  voteProposals: voteProposals,
+  type: actionTypes.UPDATE_VOTE_PROPOSALS
+});
+
+export const createVoteProposal = (id: string): actionTypes.CreateVoteProposal => ({
+  id: id,
+  type: actionTypes.CREATE_VOTE_PROPOSAL
+});
+
+export const deleteVoteProposal = (id: string): actionTypes.DeleteVoteProposal => ({
+  id: id,
+  type: actionTypes.DELETE_VOTE_PROPOSAL
+});
+
+export const updateVoteProposalTitle = (id: string, locale: string, value: string): actionTypes.UpdateVoteProposalTitle => ({
+  id: id,
+  value: value,
+  locale: locale,
+  type: actionTypes.UPDATE_VOTE_PROPOSAL_TITLE
+});
+
+export const updateVoteProposalDescription = (
+  id: string,
+  locale: string,
+  value: string
+): actionTypes.UpdateVoteProposalDescription => ({
+  id: id,
+  value: value,
+  locale: locale,
+  type: actionTypes.UPDATE_VOTE_PROPOSAL_DESCRIPTION
+});
+
+export const moveProposalUp = (id: string): actionTypes.MoveProposalUp => ({
+  id: id,
+  type: actionTypes.MOVE_PROPOSAL_UP
+});
+
+export const moveProposalDown = (id: string): actionTypes.MoveProposalDown => ({
+  id: id,
+  type: actionTypes.MOVE_PROPOSAL_DOWN
+});
+
+export const addModuleToProposal = (
+  id: string,
+  proposalId: string,
+  moduleTemplateId: string
+): actionTypes.AddModuleToProposal => ({
+  id: id,
+  proposalId: proposalId,
+  moduleTemplateId: moduleTemplateId,
+  type: actionTypes.ADD_MODULE_TO_PROPOSAL
+});
+
+export const createVoteProposalAndModules = (id: string) => (dispatch: Function, getState: Function) => {
+  dispatch(createVoteProposal(id));
+  const { modulesInOrder } = getState().admin.voteSession;
+  modulesInOrder.forEach(moduleId => dispatch(addModuleToProposal(createRandomId(), id, moduleId)));
+};
+
+export const undeleteModule = (id: string): actionTypes.UndeleteModule => ({
+  id: id,
+  type: actionTypes.UNDELETE_MODULE
 });

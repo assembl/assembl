@@ -1,7 +1,8 @@
 // @flow
 import React from 'react';
 import { connect } from 'react-redux';
-import { I18n } from 'react-redux-i18n';
+import { Link } from 'react-router';
+import { I18n, Translate } from 'react-redux-i18n';
 import { FormGroup } from 'react-bootstrap';
 import SectionTitle from '../sectionTitle';
 import FormControlWithLabel from '../../common/formControlWithLabel';
@@ -16,6 +17,8 @@ import {
   updateVoteSessionPageInstructionsContent,
   updateVoteSessionPagePropositionsTitle
 } from '../../../actions/adminActions/voteSession';
+import { getDiscussionSlug } from '../../../utils/globalFunctions';
+import { get } from '../../../utils/routeMap';
 
 type PageFormProps = {
   headerTitle: string,
@@ -57,9 +60,19 @@ const DumbPageForm = ({
   const instructionsContentPh = `${I18n.t('administration.ph.instructionsContent')} ${editLocaleInUppercase}*`;
   const propositionSectionTitlePh = `${I18n.t('administration.ph.propositionSectionTitle')} ${editLocaleInUppercase}*`;
   const headerImageFieldName = 'header-image';
+  const slug = { slug: getDiscussionSlug() };
   return (
     <div className="admin-box">
       <SectionTitle title={I18n.t('administration.voteSession.0')} annotation={I18n.t('administration.annotation')} />
+      <div className="intro-text">
+        <Translate className="bold" value="administration.voteModulesIntroText1" />
+        <div className="inline">
+          <Translate value="administration.voteModulesIntroText2" />
+          <Link to={get('oldTimeline', slug)} className="timeline-link" target="_blank">
+            <Translate value="administration.timeline" />
+          </Link>.
+        </div>
+      </div>
       <div className="admin-content">
         <div className="form-container">
           <form>

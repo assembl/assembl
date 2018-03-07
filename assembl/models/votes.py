@@ -89,6 +89,11 @@ class AbstractVoteSpecification(DiscussionBoundBase):
     vote_spec_template_id = Column(
         Integer, ForeignKey("vote_specification.id"), nullable=True, index=True)
 
+    vote_spec_template = relationship("AbstractVoteSpecification", remote_side=[id])
+
+    # if the module has been customized for a specific proposal
+    is_custom = Column(Boolean, default=False)
+
     ##
     # TODO (MAP):
     #   These and several functions that return a hard-encoded 'local' should
@@ -243,7 +248,7 @@ class AbstractVoteSpecification(DiscussionBoundBase):
         return ((cls.widget_id == VotingWidget.id),
                 (VotingWidget.discussion_id == discussion_id))
 
-    crud_permissions = CrudPermissions(P_ADMIN_DISC, P_READ)
+    crud_permissions = CrudPermissions(P_ADMIN_DISC, P_READ, P_ADMIN_DISC, P_ADMIN_DISC)
 
 
 LangString.setup_ownership_load_event(AbstractVoteSpecification, ['title', 'instructions'])
@@ -265,7 +270,9 @@ class TokenVoteSpecification(AbstractVoteSpecification):
     }
 
     id = Column(
-        Integer, ForeignKey(AbstractVoteSpecification.id), primary_key=True)
+        Integer,
+        ForeignKey(AbstractVoteSpecification.id, ondelete="CASCADE", onupdate="CASCADE"),
+        primary_key=True)
     exclusive_categories = Column(Boolean, default=False)
 
     def results_for(self, voting_results, histogram_size=None):
@@ -623,7 +630,9 @@ class NumberGaugeVoteSpecification(AbstractVoteSpecification):
     }
 
     id = Column(
-        Integer, ForeignKey(AbstractVoteSpecification.id), primary_key=True)
+        Integer,
+        ForeignKey(AbstractVoteSpecification.id, ondelete="CASCADE", onupdate="CASCADE"),
+        primary_key=True)
     minimum = Column(Float, default=1)
     maximum = Column(Float, default=10)
     nb_ticks = Column(Integer, default=10)

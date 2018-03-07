@@ -4,12 +4,14 @@ mutation updateGaugeVoteSpecification(
   $id: ID!
   $titleEntries: [LangStringEntryInput]!
   $instructionsEntries: [LangStringEntryInput]!
+  $isCustom: Boolean!
   $choices: [GaugeChoiceSpecificationInput]!
 ) {
   updateGaugeVoteSpecification(
     id: $id
     titleEntries: $titleEntries
     instructionsEntries: $instructionsEntries
+    isCustom: $isCustom
     choices: $choices
   ) {
     voteSpecification {
@@ -22,6 +24,7 @@ mutation updateGaugeVoteSpecification(
         instructionsEntries {
           ...langStringEntry
         }
+        isCustom
         choices {
           id
           value

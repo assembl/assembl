@@ -114,6 +114,7 @@ def is_using_landing_page(discussion):
 
 class FrontendUrls(object):
     """The set of FrontendUrls."""
+
     def __init__(self, discussion):
         assert isinstance(discussion, Discussion)
         self.discussion = discussion
@@ -237,7 +238,7 @@ class FrontendUrls(object):
             from assembl.views import create_get_route
             get_route = create_get_route(request, self.discussion)
             if force_v1:
-                route = get_route('home')
+                route = self.get_frontend_url('oldDebate', slug=self.discussion.slug)
             else:
                 route = get_route('bare_slug')
         return urljoin(self.discussion.get_base_url(), route)
@@ -272,8 +273,8 @@ class FrontendUrls(object):
                     route)
             first_idea = None
             ideas = [link.idea
-                for link in post.indirect_idea_content_links_without_cache()
-                if link.__class__.__name__ == 'IdeaRelatedPostLink']
+                     for link in post.indirect_idea_content_links_without_cache()
+                     if link.__class__.__name__ == 'IdeaRelatedPostLink']
             if ideas:
                 first_idea = ideas[0]
             else:
@@ -342,4 +343,4 @@ class FrontendUrls(object):
 
     def get_agentprofile_avatar_url(self, profile, pixelSize):
         return urljoin(
-            self.discussion.get_base_url(), profile.external_avatar_url()+str(pixelSize))
+            self.discussion.get_base_url(), profile.external_avatar_url() + str(pixelSize))
