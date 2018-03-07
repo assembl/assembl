@@ -2,6 +2,7 @@ from datetime import datetime
 
 from sqlalchemy.orm import relationship, backref
 from sqlalchemy import (
+    Boolean,
     Column,
     Integer,
     ForeignKey
@@ -54,6 +55,12 @@ class VoteSession(
             cascade="all, delete-orphan"
         ),
     )
+
+    see_current_votes = Column(
+        Boolean,
+        nullable=False,
+        server_default='0',
+        default=False)
 
     @classmethod
     def filter_started(cls, query):
