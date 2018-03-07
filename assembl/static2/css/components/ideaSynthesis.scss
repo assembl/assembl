@@ -16,6 +16,11 @@ $small-margin: 5px;
     border-radius: 3px 0 0 0;
     display: inline-block;
 
+    .idea-link {
+      font-family: $font-family3;
+      font-size: $font-size-s;
+    }
+
     .counters {
       display: inline-block;
       margin-left: $small-margin;
@@ -95,8 +100,8 @@ $small-margin: 5px;
 
         .doughnut-label-count {
           color: $first-color;
-          font-family: $font-family4;
-          font-size: 12px;
+          font-family: $font-family3;
+          font-size: $font-size-s;
           line-height: 26px;
           display: inline;
         }
@@ -104,7 +109,7 @@ $small-margin: 5px;
         .doughnut-label-text {
           color: $first-color;
           font-family: $font-family4;
-          font-size: 12px;
+          font-size: $font-size-s;
           line-height: 26px;
           display: inline;
         }
