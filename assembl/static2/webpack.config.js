@@ -104,7 +104,7 @@ module.exports = {
     resolve:{
         extensions:['.js', '.jsx'],
         alias: {
-          annotator$: path.join(__dirname, '../static/js/lib/annotator/annotator-full.js'),
+          annotator$: path.join(__dirname, '../static/js/lib/annotator/annotator-full.min.js'),
         },
     },
     plugins: [
