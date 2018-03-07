@@ -316,6 +316,7 @@ def number_gauge_vote_specification_associated_to_proposal(request, test_session
             {"value": u"Instructions : Comprendre les dynamiques et les enjeux", "localeCode": "fr"},
             {"value": u"Instructions: Understanding the dynamics and issues", "localeCode": "en"}
         ],
+        "isCustom": True,
         "minimum": 0.0,
         "maximum": 60.0,
         "nbTicks": 7,
