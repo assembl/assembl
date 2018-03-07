@@ -102,6 +102,7 @@ fragment gaugeVoteSpecificationResults on GaugeVoteSpecification {
     }
   }
   numVotes
+  averageLabel(lang: $lang)
 }
 
 query VoteSession($discussionPhaseId: Int!, $lang: String!) {

@@ -121,3 +121,4 @@ def test_graphql_token_vote_results(graphql_participant1_request, vote_session, 
     assert token_votes[second_category] == 3
     # on gauge vote spec:
     assert res.data['voteSession']['proposals'][0]['modules'][1]['numVotes'] == 1
+    assert res.data['voteSession']['proposals'][0]['modules'][1]['averageLabel'] == u'Tick 2'
