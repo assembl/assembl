@@ -13,7 +13,7 @@ class Header extends React.Component {
     const { locale } = this.props.i18n;
     const isPhaseCompleted = getIfPhaseCompletedByIdentifier(debateData.timeline, identifier);
     const closedPhaseName = getPhaseName(debateData.timeline, identifier, locale).toLowerCase();
-    const titleClassNames = classnames([additionalHeaderClasses], 'light-title-1');
+    const titleClassNames = classnames([additionalHeaderClasses], 'light-title-7');
     return (
       <section className="header-section">
         <Grid fluid className="max-container">

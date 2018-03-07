@@ -6,20 +6,44 @@
     <title>{% block page_title %}Assembl{% endblock %}</title>
     <meta name="viewport" content="width=device-width, initial-scale = 1,user-scalable=no,maximum-scale=1.0">
 
-    {% block meta_tags %}
-    <meta name="description" content="">
-    <meta property="og:title" content="Assembl" />
-    <meta property="og:type" content="website" />
-    <meta property="og:url" content="{{ application_url }}" />
-    <meta property="og:image" content="{{ application_url }}/static/css/themes/default/img/crowd2.jpg" />
-    <meta property="og:image:width" content="1600" />
-    <meta property="og:image:height" content="222" />
-    <meta property="og:image" content="{{ application_url }}/static/css/themes/default/img/logo.png" />
-    <meta property="og:image:width" content="111" />
-    <meta property="og:image:height" content="35" />
-    <meta name="robots" content="noindex" />
-    <meta name="googlebot" content="noindex" />
-    {% endblock meta_tags %}
+    {% block meta_tags_public %}
+        {% if not private_social_sharing %}
+            <meta name="description" content="{{get_description}}">
+            <meta property="og:title" content="{{get_topic}}" />
+            <meta property="og:type" content="website" />
+            <meta property="og:url" content="{{ application_url }}" />
+            <meta property="og:image" content="{{get_landing_page_image}}" />
+            <meta property="og:image:width" content="1600" />
+            <meta property="og:image:height" content="222" />
+            <meta property="og:locale" content="{{opengraph_locale}}" />
+            <meta name="robots" content="noindex" />
+            <meta name="googlebot" content="noindex" />
+
+            <meta name="twitter:card" content="summary_large_image">
+            <meta name="twitter:site" content="{{get_discussion_url}}">
+            <meta name="twitter:creator" content="@bluenove">
+            <meta name="twitter:title" content="{{get_topic}}">
+            <meta name="twitter:description" content="{{get_description}}">
+            <meta name="twitter:image" content="{{get_landing_page_image}}">
+        
+        {% else %}
+
+            <meta name="og:title" content="{{get_topic}}" />
+            <meta property="og:type" content="website" />
+            <meta property="og:url" content="{{ application_url }}" />
+            <meta property="og:image" content="{{ application_url }}/static/css/themes/default/img/crowd2.jpg" />
+            <meta property="og:image:width" content="1600" />
+            <meta property="og:image:height" content="222" />
+            <meta property="og:locale" content="{{opengraph_locale}}" />
+
+            <meta name="twitter:card" content="summary_large_image">
+            <meta name="twitter:site" content="{{get_discussion_url}}">
+            <meta name="twitter:creator" content="@bluenove">
+            <meta name="twitter:title" content="{{get_topic}}">
+            <meta name="twitter:image" content="{{ application_url }}/static/css/themes/default/img/crowd2.png">
+        {% endif %} 
+    {% endblock meta_tags_public %}
+
 
     {#<link rel="icon" href="/static/img/icon/infinite-1.png" type="image/x-icon">#}
     <link href='//fonts.googleapis.com/css?family=Open+Sans:400,300,600,700' rel='stylesheet' type='text/css'>

@@ -362,7 +362,7 @@ class Post(Content):
         """Set the publication state to a deleted state
 
         Includes an optimization whereby deleted posts without
-        live descendents are tombstoned.
+        live descendants are tombstoned.
         Should be resilient to deletion order."""
         self.publication_state = cause
         if not self.has_live_child:

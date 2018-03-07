@@ -1,4 +1,5 @@
 node_modules/**
+assembl/static2/js/build/**
 assembl/static/js/build/**
 assembl/static/js/bower/**
 assembl/static/js/lib/**

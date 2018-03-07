@@ -81,7 +81,8 @@ const Translations = {
         display_multi_column: "Activer multi-col.",
         display_thread: "Activer Thread",
         display_tokens: "Activer Tokens",
-        display_open_questions: "Activer Q° ouvertes"
+        display_open_questions: "Activer Q° ouvertes",
+        display_bright_mirror: "Activer Bright Mirror"
       },
       Sort: "Trier",
       "By relevance": "Par pertinence",
@@ -531,7 +532,7 @@ const Translations = {
       landingPage: {
         manageModules: {
           title: "Administrer les modules",
-          helper: "Choisissez les modules que vous souhaitez voir apparaître dans la page d'accueil et leur emplacement"
+          helper: "Choisissez les modules que vous souhaitez voir apparaître dans la page d'accueil et leurs emplacements."
         },
         successSave: "Les modules ont été enregistrés avec succès !"
       }
@@ -626,7 +627,8 @@ const Translations = {
         display_multi_column: "Display Multi-column",
         display_thread: "Display Thread",
         display_tokens: "Display tokens",
-        display_open_questions: "Display Open questions"
+        display_open_questions: "Display Open questions",
+        display_bright_mirror: "Display Bright Mirror"
       },
       Sort: "Sort",
       "By relevance": "By relevance",

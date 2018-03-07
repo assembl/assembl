@@ -28,7 +28,7 @@ class UpdatablePgEnum(ENUM):
             # add missing values
             bind = bind.execution_options(isolation_level="AUTOCOMMIT")
             for i, name in enumerate(value_names):
-                if name != db_names[i]:
+                if i >= len(db_names) or name != db_names[i]:
                     if i == 0:
                         if len(db_names):
                             bind.execute(
@@ -43,6 +43,7 @@ class UpdatablePgEnum(ENUM):
                             "ALTER TYPE %s ADD VALUE '%s' AFTER '%s'" % (
                                 self.name, name, db_names[i - 1]))
                         db_names[i:i] = name
+                    bind.mark_changed()
 
     def create(self, bind=None, checkfirst=True):
         if bind.dialect.has_type(
