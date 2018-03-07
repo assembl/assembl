@@ -282,6 +282,59 @@ def test_mutation_delete_token_vote_specification(graphql_request, token_vote_sp
     assert True == res.data['deleteVoteSpecification']['success']
 
 
+def test_mutation_delete_template_also_deletes_associated_vote_specifications(graphql_request, vote_session, vote_proposal, graphql_registry, test_session):
+    mutation = graphql_registry['createTokenVoteSpecification']
+    vote_session_id = to_global_id("VoteSession", vote_session.id)
+    from assembl.graphql.schema import Schema as schema
+    res = schema.execute(mutation, context_value=graphql_request, variable_values={
+        "voteSessionId": vote_session_id,
+        "titleEntries": [],
+        "instructionsEntries":
+        [
+            {"value": u"Try to copy the TCP feed, maybe it will navigate the mobile system!", "localeCode": "en"}
+        ],
+        "isCustom": False,
+        "exclusiveCategories": False,
+        "tokenCategories": [
+            {
+                "titleEntries": [{"value": u"In favor", "localeCode": "en"}],
+                "typename": "positive",
+                "totalNumber": 9,
+                "color": 'green'
+            }
+        ]
+    })
+    assert res.errors is None
+    template_id = res.data['createTokenVoteSpecification']['voteSpecification']['id']
+    proposal_id = to_global_id("Idea", vote_proposal.id)
+
+    res = schema.execute(mutation, context_value=graphql_request, variable_values={
+        "voteSessionId": vote_session_id,
+        "proposalId": proposal_id,
+        "voteSpecTemplateId": template_id,
+        "titleEntries": [],
+        "instructionsEntries":
+        [
+            {"value": u"I'll compress the multi-byte THX protocol, that should panel the SDD monitor!", "localeCode": "en"}
+        ],
+        "isCustom": True,
+        "exclusiveCategories": False,
+        "tokenCategories": []
+    })
+    assert res.errors is None
+
+    # delete the template
+    mutation = graphql_registry['deleteVoteSpecification']
+    vote_spec_id = res.data['createTokenVoteSpecification']['voteSpecification']['id']
+    res = schema.execute(mutation, context_value=graphql_request, variable_values={
+        "id": template_id
+    })
+    assert res.errors is None
+    assert res.data['deleteVoteSpecification']['success'] is True
+    # the template and the vote spec have been deleted
+    assert test_session.query(models.TokenVoteSpecification).count() == 0
+
+
 def test_mutation_update_token_vote_specification(graphql_request, vote_session, token_vote_specification, graphql_registry):
     mutation = graphql_registry['updateTokenVoteSpecification']
     vote_session_id = to_global_id("VoteSession", vote_session.id)

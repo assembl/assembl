@@ -270,7 +270,9 @@ class TokenVoteSpecification(AbstractVoteSpecification):
     }
 
     id = Column(
-        Integer, ForeignKey(AbstractVoteSpecification.id), primary_key=True)
+        Integer,
+        ForeignKey(AbstractVoteSpecification.id, ondelete="CASCADE", onupdate="CASCADE"),
+        primary_key=True)
     exclusive_categories = Column(Boolean, default=False)
 
     def results_for(self, voting_results, histogram_size=None):
@@ -628,7 +630,9 @@ class NumberGaugeVoteSpecification(AbstractVoteSpecification):
     }
 
     id = Column(
-        Integer, ForeignKey(AbstractVoteSpecification.id), primary_key=True)
+        Integer,
+        ForeignKey(AbstractVoteSpecification.id, ondelete="CASCADE", onupdate="CASCADE"),
+        primary_key=True)
     minimum = Column(Float, default=1)
     maximum = Column(Float, default=10)
     nb_ticks = Column(Integer, default=10)
