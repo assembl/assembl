@@ -303,6 +303,18 @@ class NumberGaugeVoteSpecification(SecureObjectType, SQLAlchemyObjectType):
         interfaces = (Node, VoteSpecificationInterface)
         only_fields = ('id', 'minimum', 'maximum', 'nb_ticks', 'unit')
 
+    average_result = graphene.Float(required=True)
+
+    def resolve_average_result(self, args, context, info):
+        vote_cls = self.get_vote_class()
+        voting_avg = self.db.query(func.avg(getattr(vote_cls, 'vote_value'))).filter_by(
+            vote_spec_id=self.id,
+            tombstone_date=None,
+            idea_id=self.criterion_idea_id).first()
+        # when there is no votes, query.first() equals (None,)
+        avg = voting_avg[0] or 0
+        return avg
+
 
 class VoteSpecificationUnion(SQLAlchemyUnion):
     class Meta:

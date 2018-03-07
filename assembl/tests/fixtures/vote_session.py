@@ -297,6 +297,43 @@ def gauge_vote_specification_associated_to_proposal(request, test_session, discu
 
 
 @pytest.fixture(scope="function")
+def number_gauge_vote_specification_associated_to_proposal(request, test_session, discussion, graphql_request, vote_session, number_gauge_vote_specification, vote_proposal, graphql_registry):
+    mutation = graphql_registry['createNumberGaugeVoteSpecification']
+    vote_session_id = to_global_id("VoteSession", vote_session.id)
+    proposal_id = to_global_id("Idea", vote_proposal.id)
+    template_gauge_vote_spec_id = to_global_id("NumberGaugeVoteSpecification", number_gauge_vote_specification.id)
+    from assembl.graphql.schema import Schema as schema
+    res = schema.execute(mutation, context_value=graphql_request, variable_values={
+        "voteSessionId": vote_session_id,
+        "proposalId": proposal_id,
+        "voteSpecTemplateId": template_gauge_vote_spec_id,
+        "titleEntries": [
+            {"value": u"Comprendre les dynamiques et les enjeux", "localeCode": "fr"},
+            {"value": u"Understanding the dynamics and issues", "localeCode": "en"}
+        ],
+        "instructionsEntries":
+        [
+            {"value": u"Instructions : Comprendre les dynamiques et les enjeux", "localeCode": "fr"},
+            {"value": u"Instructions: Understanding the dynamics and issues", "localeCode": "en"}
+        ],
+        "minimum": 0.0,
+        "maximum": 60.0,
+        "nbTicks": 7,
+        "unit": u"M€"
+    })
+    assert res.errors is None
+    vote_spec = vote_session.vote_specifications[-1]
+
+    def fin():
+        print "finalizer number_gauge_vote_specification_associated_to_proposal"
+        test_session.delete(vote_spec)
+        test_session.flush()
+
+    request.addfinalizer(fin)
+    return vote_spec
+
+
+@pytest.fixture(scope="function")
 def token_vote_spec_with_votes(graphql_request, graphql_participant1_request, vote_session, vote_proposal, token_vote_specification_associated_to_proposal, graphql_registry):
     proposal_id = to_global_id("Idea", vote_proposal.id)
     token_category_id = to_global_id("TokenCategorySpecification", token_vote_specification_associated_to_proposal.token_categories[0].id)
@@ -357,3 +394,21 @@ def gauge_vote_specification_with_votes(graphql_participant1_request, vote_sessi
     )
     assert res.errors is None
     return gauge_vote_specification_associated_to_proposal
+
+
+@pytest.fixture(scope="function")
+def number_gauge_vote_specification_with_votes(graphql_participant1_request, vote_session, vote_proposal, number_gauge_vote_specification_associated_to_proposal, graphql_registry):
+    proposal_id = to_global_id("Idea", vote_proposal.id)
+    vote_spec_id = to_global_id("NumberGaugeVoteSpecification", number_gauge_vote_specification_associated_to_proposal.id)
+    from assembl.graphql.schema import Schema as schema
+    res = schema.execute(
+        graphql_registry['addGaugeVote'],
+        context_value=graphql_participant1_request,
+        variable_values={
+            "proposalId": proposal_id,
+            "voteSpecId": vote_spec_id,
+            "voteValue": 40.0
+        }
+    )
+    assert res.errors is None
+    return number_gauge_vote_specification_associated_to_proposal
