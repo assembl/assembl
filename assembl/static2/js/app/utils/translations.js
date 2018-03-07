@@ -317,7 +317,9 @@ const Translations = {
         tokenTooltip: "%{count} jetons %{name}",
         notEnoughTokens: "Vous n'avez plus assez de jetons",
         exclusiveTokens: "Vous avez déjà voté pour une autre catégorie pour cette proposition",
-        totalVotes: "%{count} votes"
+        totalVotes: "%{count} votes",
+        votes: "Votes",
+        vote: "Vote"
       }
     },
     profile: {
@@ -880,7 +882,9 @@ const Translations = {
         tokenTooltip: "%{count} %{name} tokens",
         notEnoughTokens: "You don't have enough tokens",
         exclusiveTokens: "You already voted for another category for this proposal",
-        totalVotes: "%{count} votes"
+        totalVotes: "%{count} votes",
+        votes: "Votes",
+        vote: "Vote"
       }
     },
     profile: {

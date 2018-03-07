@@ -48,6 +48,10 @@ const TokenVotesResults = ({ categories, votes }: Props) => {
       <div className="doughnut-container">
         <Doughnut elements={elements} />
       </div>
+      <div className="doughnut-totalCount">
+        <div className="vote-totalCount">{total}</div>
+        <div>{total > 1 ? <Translate value="debate.voteSession.votes" /> : <Translate value="debate.voteSession.vote" />}</div>
+      </div>
     </div>
   );
 };
