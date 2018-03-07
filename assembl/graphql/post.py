@@ -8,6 +8,7 @@ from graphene_sqlalchemy import SQLAlchemyObjectType
 from pyramid.httpexceptions import HTTPUnauthorized
 from pyramid.i18n import TranslationStringFactory
 from pyramid.security import Everyone
+from sqlalchemy.orm import joinedload
 
 from assembl import models
 from assembl.auth import P_DELETE_MY_POST, P_DELETE_POST, CrudPermissions
@@ -97,6 +98,12 @@ class PostInterface(SQLAlchemyInterface):
 
     def resolve_db_id(self, args, context, info):
         return self.id
+
+    def resolve_extracts(self, args, context, info):
+        return self.db.query(models.Extract
+            ).join(models.Content, models.Extract.content == self
+            ).options(joinedload(models.Extract.text_fragment_identifiers)
+            ).all()
 
     def resolve_subject(self, args, context, info):
         # Use self.subject and not self.get_subject() because we still
