@@ -287,8 +287,8 @@ describe('voteSession admin reducers', () => {
     it('should handle ADD_MODULE_TO_PROPOSAL action type', () => {
       const proposal1 = fromJS({
         _hasChanged: false,
-        isNew: false,
-        toDelete: false,
+        _isNew: false,
+        _toDelete: false,
         order: 1.0,
         id: 'proposal1',
         titleEntries: [],
@@ -304,8 +304,8 @@ describe('voteSession admin reducers', () => {
       };
       const expectedProposal1 = fromJS({
         _hasChanged: false,
-        isNew: false,
-        toDelete: false,
+        _isNew: false,
+        _toDelete: false,
         order: 1.0,
         id: 'proposal1',
         titleEntries: [],
@@ -335,8 +335,8 @@ describe('voteSession admin reducers', () => {
       const expected = {
         module42: {
           _hasChanged: false,
-          isNew: true,
-          toDelete: false,
+          _isNew: true,
+          _toDelete: false,
           id: 'module42',
           isCustom: false,
           proposalId: 'proposal1',
@@ -351,8 +351,8 @@ describe('voteSession admin reducers', () => {
       const state = fromJS({
         module42: {
           _hasChanged: false,
-          isNew: false,
-          toDelete: false,
+          _isNew: false,
+          _toDelete: false,
           tokenCategories: [],
           voteType: 'tokens',
           id: 'module42',
@@ -367,8 +367,8 @@ describe('voteSession admin reducers', () => {
       const expected = {
         module42: {
           _hasChanged: false,
-          isNew: false,
-          toDelete: true,
+          _isNew: false,
+          _toDelete: true,
           tokenCategories: [],
           voteType: 'tokens',
           id: 'module42',
@@ -384,8 +384,8 @@ describe('voteSession admin reducers', () => {
       const state = fromJS({
         module42: {
           _hasChanged: false,
-          isNew: false,
-          toDelete: true,
+          _isNew: false,
+          _toDelete: true,
           tokenCategories: [],
           voteType: 'tokens',
           id: 'module42',
@@ -400,8 +400,8 @@ describe('voteSession admin reducers', () => {
       const expected = {
         module42: {
           _hasChanged: false,
-          isNew: false,
-          toDelete: false,
+          _isNew: false,
+          _toDelete: false,
           tokenCategories: [],
           voteType: 'tokens',
           id: 'module42',

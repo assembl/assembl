@@ -35,7 +35,7 @@ type VoteModule = {
   id: string,
   instructionsEntries?: Array<string>,
   isCustom: boolean,
-  isNew: boolean,
+  _isNew: boolean,
   isNumberGauge?: boolean,
   isNumberGauge?: boolean,
   labelEntries: Array<string>,
@@ -43,7 +43,7 @@ type VoteModule = {
   minimum?: number,
   nbTicks?: number,
   proposalId?: ?string,
-  toDelete: boolean,
+  _toDelete: boolean,
   tokenCategories?: Array<Object>,
   type?: string,
   unit?: string,
@@ -321,10 +321,10 @@ class VoteSessionAdmin extends React.Component<void, VoteSessionAdminProps, Vote
         voteProposals.forEach((t) => {
           items.push({ ...t.toJS(), voteSessionId: voteSessionPageId });
         });
-        const proposalsToDeleteOrUpdate = items.filter(item => !item.isNew);
+        const proposalsToDeleteOrUpdate = items.filter(item => !item._isNew);
         let mutationsPromises: Array<Promise<*>> = [];
         proposalsToDeleteOrUpdate.forEach((proposal) => {
-          if (proposal.toDelete) {
+          if (proposal._toDelete) {
             // delete all modules and then delete the proposal
             mutationsPromises = mutationsPromises.concat(
               proposal.modules.map(m => deleteVoteSpecification({ variables: createVariablesForDeleteMutation(m) }))
@@ -345,13 +345,13 @@ class VoteSessionAdmin extends React.Component<void, VoteSessionAdminProps, Vote
         });
         this.runMutations(mutationsPromises);
 
-        const proposalsToCreate = items.filter(item => item.isNew && !item.toDelete);
+        const proposalsToCreate = items.filter(item => item._isNew && !item._toDelete);
         proposalsToCreate.forEach((proposal) => {
           const payload = {
             variables: createVariablesForProposalsMutation(proposal)
           };
 
-          let modulesToCreate = proposal.modules.filter(pModule => pModule.isNew && !pModule.toDelete);
+          let modulesToCreate = proposal.modules.filter(pModule => pModule._isNew && !pModule._toDelete);
           createProposal(payload).then((res) => {
             if (res.data) {
               const proposalId = res.data.createProposal.proposal.id;
@@ -408,9 +408,9 @@ const mapStateToProps = ({ admin: { editLocale, voteSession }, debate, i18n }) =
           // remove fields that we don't want to override
           .delete('id')
           .delete('isCustom')
-          .delete('isNew')
+          .delete('_isNew')
           .delete('proposalId')
-          .delete('toDelete')
+          .delete('_toDelete')
           .delete('voteSpecTemplateId');
         m = m.merge(template);
       }

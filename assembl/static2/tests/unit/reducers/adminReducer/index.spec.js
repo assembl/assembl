@@ -128,8 +128,8 @@ describe('Admin reducers', () => {
         },
         '-278290': {
           _hasChanged: false,
-          isNew: true,
-          toDelete: false,
+          _isNew: true,
+          _toDelete: false,
           id: '-278290',
           img: {
             externalUrl: ''

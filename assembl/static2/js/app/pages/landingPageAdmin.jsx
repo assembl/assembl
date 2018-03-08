@@ -52,7 +52,7 @@ const mapStateToProps = ({ admin: { landingPage } }) => ({
     .map((module) => {
       const identifier = module.getIn(['moduleType', 'identifier']);
       const idx = landingPage.enabledModulesInOrder.indexOf(identifier);
-      return module.set('order', idx + 1).set('isNew', !module.get('existsInDatabase'));
+      return module.set('order', idx + 1).set('_isNew', !module.get('existsInDatabase'));
     })
     .valueSeq()
     .toJS()

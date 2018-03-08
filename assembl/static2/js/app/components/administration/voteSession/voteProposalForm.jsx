@@ -25,7 +25,7 @@ type VoteProposalFormProps = {
   index: number,
   title: string,
   description: string,
-  toDelete: boolean,
+  _toDelete: boolean,
   markAsToDelete: Function,
   updateTitle: Function,
   updateDescription: Function,
@@ -45,7 +45,7 @@ const DumbVoteProposalForm = ({
   index,
   title,
   description,
-  toDelete,
+  _toDelete,
   markAsToDelete,
   updateTitle,
   updateDescription,
@@ -60,7 +60,7 @@ const DumbVoteProposalForm = ({
   deassociateModuleToProposal,
   reactivateModule
 }: VoteProposalFormProps) => {
-  if (toDelete) {
+  if (_toDelete) {
     return null;
   }
 
@@ -68,12 +68,12 @@ const DumbVoteProposalForm = ({
   const handleDescriptionChange = value => updateDescription(editLocale, value);
 
   const moduleIsSelected = moduleTemplateId =>
-    proposalModules.some(m => m.get('voteSpecTemplateId') === moduleTemplateId && !m.get('toDelete'));
+    proposalModules.some(m => m.get('voteSpecTemplateId') === moduleTemplateId && !m.get('_toDelete'));
 
   const toggleModule = (moduleTemplateId) => {
     const pModule = proposalModules.find(m => m.get('voteSpecTemplateId') === moduleTemplateId);
     if (pModule) {
-      if (pModule.get('toDelete')) {
+      if (pModule.get('_toDelete')) {
         reactivateModule(pModule.get('id'));
       } else {
         deassociateModuleToProposal(pModule.get('id'));
@@ -197,20 +197,20 @@ const mapStateToProps = ({ admin }, { id, editLocale }) => {
   return {
     title: getEntryValueForLocale(proposal.get('titleEntries'), editLocale),
     description: description ? description.toJS() : null,
-    toDelete: proposal.get('toDelete', false),
+    _toDelete: proposal.get('_toDelete', false),
     order: proposal.get('order'),
     proposalModules: proposal.get('modules').map(moduleId => modulesById.get(moduleId)),
     tokenModules: modulesInOrder.filter(
       voteSpecTemplateId =>
         !modulesById.getIn([voteSpecTemplateId, 'proposalId']) &&
         modulesById.getIn([voteSpecTemplateId, 'type']) === 'tokens' &&
-        !modulesById.getIn([voteSpecTemplateId, 'toDelete'])
+        !modulesById.getIn([voteSpecTemplateId, '_toDelete'])
     ),
     gaugeModules: modulesInOrder.filter(
       voteSpecTemplateId =>
         !modulesById.getIn([voteSpecTemplateId, 'proposalId']) &&
         modulesById.getIn([voteSpecTemplateId, 'type']) === 'gauge' &&
-        !modulesById.getIn([voteSpecTemplateId, 'toDelete'])
+        !modulesById.getIn([voteSpecTemplateId, '_toDelete'])
     )
   };
 };

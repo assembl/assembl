@@ -153,8 +153,8 @@ export const modulesInOrder = (state: List<number> = List(), action: ReduxAction
 const defaultTokenModule = Map({
   _hasChanged: false,
   isCustom: false,
-  isNew: true,
-  toDelete: false,
+  _isNew: true,
+  _toDelete: false,
   type: 'tokens',
   instructionsEntries: List(),
   exclusiveCategories: false,
@@ -172,8 +172,8 @@ const defaultTextGaugeChoice = Map({
 const defaultTextGaugeModule = Map({
   _hasChanged: false,
   isCustom: false,
-  isNew: true,
-  toDelete: false,
+  _isNew: true,
+  _toDelete: false,
   type: 'gauge',
   instructionsEntries: List(),
   isNumberGauge: false,
@@ -185,8 +185,8 @@ const defaultTextGaugeModule = Map({
 const defaultNumberGaugeModule = Map({
   _hasChanged: false,
   isCustom: false,
-  isNew: true,
-  toDelete: false,
+  _isNew: true,
+  _toDelete: false,
   type: 'gauge',
   instructionsEntries: List(),
   nbTicks: 1,
@@ -206,8 +206,8 @@ const getModuleInfo = (m) => {
   };
   const moduleInfo = {
     _hasChanged: false,
-    isNew: false,
-    toDelete: false,
+    _isNew: false,
+    _toDelete: false,
     id: m.id,
     instructionsEntries: m.instructionsEntries,
     isCustom: m.isCustom,
@@ -257,7 +257,7 @@ export const modulesById = (state: Map<string, Map> = Map(), action: ReduxAction
     return newState;
   }
   case DELETE_VOTE_MODULE:
-    return state.setIn([action.id, 'toDelete'], true);
+    return state.setIn([action.id, '_toDelete'], true);
   case CREATE_TOKEN_VOTE_MODULE:
     return state.set(action.id, defaultTokenModule.set('id', action.id));
   case UPDATE_TOKEN_VOTE_EXCLUSIVE_CATEGORY:
@@ -310,14 +310,14 @@ export const modulesById = (state: Map<string, Map> = Map(), action: ReduxAction
         id: action.id,
         isCustom: false,
         proposalId: action.proposalId,
-        isNew: true,
-        toDelete: false,
+        _isNew: true,
+        _toDelete: false,
         _hasChanged: false,
         voteSpecTemplateId: action.moduleTemplateId
       })
     );
   case UNDELETE_MODULE:
-    return state.setIn([action.id, 'toDelete'], false);
+    return state.setIn([action.id, '_toDelete'], false);
   default:
     return state;
   }
@@ -418,8 +418,8 @@ export const voteProposalsInOrder = (state: List<number> = List(), action: Redux
 };
 
 const defaultVoteProposal = Map({
-  isNew: true,
-  toDelete: false,
+  _isNew: true,
+  _toDelete: false,
   _hasChanged: false,
   id: '',
   titleEntries: List(),
@@ -433,8 +433,8 @@ export const voteProposalsById = (state: Map<string, Map> = Map(), action: Redux
     let newState = Map();
     action.voteProposals.forEach((proposal) => {
       const proposalInfo = fromJS({
-        isNew: false,
-        toDelete: false,
+        _isNew: false,
+        _toDelete: false,
         _hasChanged: false,
         order: proposal.order,
         id: proposal.id,
@@ -449,7 +449,7 @@ export const voteProposalsById = (state: Map<string, Map> = Map(), action: Redux
   case CREATE_VOTE_PROPOSAL:
     return state.set(action.id, defaultVoteProposal.set('id', action.id));
   case DELETE_VOTE_PROPOSAL:
-    return state.setIn([action.id, 'toDelete'], true);
+    return state.setIn([action.id, '_toDelete'], true);
   case UPDATE_VOTE_PROPOSAL_TITLE:
     return state.updateIn([action.id, 'titleEntries'], updateInLangstringEntries(action.locale, action.value));
   case UPDATE_VOTE_PROPOSAL_DESCRIPTION:

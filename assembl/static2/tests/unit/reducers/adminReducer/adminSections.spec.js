@@ -84,8 +84,8 @@ describe('sectionsById reducer', () => {
   const oldState = fromJS({
     1: {
       _hasChanged: false,
-      isNew: false,
-      toDelete: false,
+      _isNew: false,
+      _toDelete: false,
       id: '1',
       order: 1,
       titleEntries: [{ localeCode: 'en', value: 'GNU' }],
@@ -103,8 +103,8 @@ describe('sectionsById reducer', () => {
     const expected = fromJS({
       1: {
         _hasChanged: false,
-        isNew: false,
-        toDelete: false,
+        _isNew: false,
+        _toDelete: false,
         id: '1',
         order: 1,
         titleEntries: [{ localeCode: 'en', value: 'GNU' }],
@@ -113,8 +113,8 @@ describe('sectionsById reducer', () => {
       },
       2: {
         _hasChanged: false,
-        isNew: true,
-        toDelete: false,
+        _isNew: true,
+        _toDelete: false,
         titleEntries: [],
         url: '',
         type: 'CUSTOM',
@@ -134,8 +134,8 @@ describe('sectionsById reducer', () => {
     const expected = fromJS({
       1: {
         _hasChanged: false,
-        isNew: false,
-        toDelete: true,
+        _isNew: false,
+        _toDelete: true,
         id: '1',
         order: 1,
         titleEntries: [{ localeCode: 'en', value: 'GNU' }],
@@ -156,8 +156,8 @@ describe('sectionsById reducer', () => {
     const expected = fromJS({
       1: {
         _hasChanged: true,
-        isNew: false,
-        toDelete: false,
+        _isNew: false,
+        _toDelete: false,
         id: '1',
         order: 1,
         titleEntries: [{ localeCode: 'en', value: 'GNU' }],
@@ -177,8 +177,8 @@ describe('sectionsById reducer', () => {
     const expected = fromJS({
       1: {
         _hasChanged: true,
-        isNew: false,
-        toDelete: false,
+        _isNew: false,
+        _toDelete: false,
         id: '1',
         order: 1,
         titleEntries: [{ localeCode: 'en', value: 'GNU' }],
@@ -192,8 +192,8 @@ describe('sectionsById reducer', () => {
     const expected2 = fromJS({
       1: {
         _hasChanged: true,
-        isNew: false,
-        toDelete: false,
+        _isNew: false,
+        _toDelete: false,
         id: '1',
         order: 1,
         titleEntries: [{ localeCode: 'en', value: 'GNU' }],
@@ -215,8 +215,8 @@ describe('sectionsById reducer', () => {
     const expected = fromJS({
       1: {
         _hasChanged: true,
-        isNew: false,
-        toDelete: false,
+        _isNew: false,
+        _toDelete: false,
         id: '1',
         order: 1,
         titleEntries: [{ localeCode: 'en', value: 'GNU is not Unix' }],
@@ -244,8 +244,8 @@ describe('sectionsById reducer', () => {
     const expected = fromJS({
       2: {
         _hasChanged: false,
-        isNew: false,
-        toDelete: false,
+        _isNew: false,
+        _toDelete: false,
         id: '2',
         order: 8,
         titleEntries: [{ localeCode: 'en', value: 'port' }],

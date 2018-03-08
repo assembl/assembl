@@ -30,6 +30,12 @@
     "class-methods-use-this": 0,
     "no-mixed-operators": 0,
     "no-console": 2,
+    "no-underscore-dangle": [
+      "error",
+      {
+        "allow": ["_hasChanged", "_isNew", "_toDelete"]
+      }
+    ],
     "func-names": ["warn", "never"],
     "arrow-body-style": ["error", "as-needed"],
     "comma-dangle": ["warn", "never"],

@@ -16,7 +16,7 @@ describe('VoteProposalForm component', () => {
       index: 1,
       title: null,
       description: null,
-      toDelete: false,
+      _toDelete: false,
       markAsToDelete: markAsToDelete,
       updateTitle: updateTitle,
       updateDescription: updateDescription,

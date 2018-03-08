@@ -16,11 +16,11 @@ export const DumbThemeCreationForm = ({
   markAsToDelete,
   editLocale,
   title,
-  toDelete,
+  _toDelete,
   updateImgUrl,
   updateTitle
 }) => {
-  if (toDelete) {
+  if (_toDelete) {
     return null;
   }
 
@@ -70,7 +70,7 @@ const mapStateToProps = ({ admin: { thematicsById }, i18n }, { id, editLocale })
     imgUrl: thematic.getIn(['img', 'externalUrl']),
     locale: i18n.locale, // for I18n.t()
     title: getEntryValueForLocale(thematic.get('titleEntries'), editLocale, ''),
-    toDelete: thematic.get('toDelete', false)
+    _toDelete: thematic.get('_toDelete', false)
   };
 };
 

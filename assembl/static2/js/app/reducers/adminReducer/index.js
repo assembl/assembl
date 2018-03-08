@@ -54,8 +54,8 @@ export const thematicsById: ThematicsByIdReducer = (state = Map(), action) => {
   case 'CREATE_NEW_THEMATIC': {
     const emptyThematic = Map({
       _hasChanged: false,
-      isNew: true,
-      toDelete: false,
+      _isNew: true,
+      _toDelete: false,
       img: Map({
         externalUrl: ''
       }),
@@ -66,7 +66,7 @@ export const thematicsById: ThematicsByIdReducer = (state = Map(), action) => {
     return state.set(action.id, emptyThematic.set('id', action.id));
   }
   case 'DELETE_THEMATIC':
-    return state.setIn([action.id, 'toDelete'], true);
+    return state.setIn([action.id, '_toDelete'], true);
   case 'REMOVE_QUESTION':
     return state
       .updateIn([action.thematicId, 'questions'], questions => questions.remove(action.index))

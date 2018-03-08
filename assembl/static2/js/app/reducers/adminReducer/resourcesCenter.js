@@ -100,8 +100,8 @@ export const resourcesInOrder: ResourcesInOrderReducer = (state = List(), action
 // };
 //
 // type ResourceItem = {
-//   toDelete: boolean,
-//   isNew: boolean,
+//   _toDelete: boolean,
+//   _isNew: boolean,
 //   doc: { externalUrl: string },
 //   id: string,
 //   img: { externalUrl: string, mimeType: string },
@@ -117,8 +117,8 @@ const defaultResourceImage = Map({
   mimeType: ''
 });
 const defaultResource = Map({
-  toDelete: false,
-  isNew: true,
+  _toDelete: false,
+  _isNew: true,
   _hasChanged: false,
   doc: defaultResourceDoc,
   img: defaultResourceImage,
@@ -133,7 +133,7 @@ export const resourcesById: ResourcesByIdReducer = (state: ResourcesByIdState = 
   case CREATE_RESOURCE:
     return state.set(action.id, defaultResource.set('id', action.id).set('order', action.order));
   case DELETE_RESOURCE:
-    return state.setIn([action.id, 'toDelete'], true);
+    return state.setIn([action.id, '_toDelete'], true);
   case UPDATE_RESOURCE_DOCUMENT:
     return state.setIn([action.id, 'doc', 'externalUrl'], action.value).setIn([action.id, '_hasChanged'], true);
   case UPDATE_RESOURCE_EMBED_CODE:
@@ -156,8 +156,8 @@ export const resourcesById: ResourcesByIdReducer = (state: ResourcesByIdState = 
     action.resources.forEach((resource, idx) => {
       const resourceInfo = Map({
         _hasChanged: false,
-        isNew: false,
-        toDelete: false,
+        _isNew: false,
+        _toDelete: false,
         order: idx + 1,
         doc: resource.doc ? fromJS(resource.doc) : defaultResourceDoc,
         id: resource.id,

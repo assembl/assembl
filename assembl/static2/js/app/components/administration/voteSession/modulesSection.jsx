@@ -136,10 +136,10 @@ const mapStateToProps = ({ admin }) => {
   const { editLocale } = admin;
   return {
     tokenModules: modulesInOrder.filter(
-      id => modulesById.getIn([id, 'type']) === 'tokens' && !modulesById.getIn([id, 'toDelete'])
+      id => modulesById.getIn([id, 'type']) === 'tokens' && !modulesById.getIn([id, '_toDelete'])
     ),
     gaugeModules: modulesInOrder.filter(
-      id => modulesById.getIn([id, 'type']) === 'gauge' && !modulesById.getIn([id, 'toDelete'])
+      id => modulesById.getIn([id, 'type']) === 'gauge' && !modulesById.getIn([id, '_toDelete'])
     ),
     editLocale: editLocale,
     seeCurrentVotes: page.get('seeCurrentVotes')

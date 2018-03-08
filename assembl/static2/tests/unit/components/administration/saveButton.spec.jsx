@@ -33,9 +33,10 @@ describe('getMutationsPromises', () => {
       deleteMutation: deleteMutationSpy,
       items: [
         {
-          isNew: true,
-          title: 'Application',
-          toDelete: false
+          _hasChanged: false,
+          _isNew: true,
+          _toDelete: false,
+          title: 'Application'
         }
       ],
       variablesCreator: (item, idx) => ({
@@ -64,19 +65,22 @@ describe('getMutationsPromises', () => {
       deleteMutation: deleteMutationSpy,
       items: [
         {
-          id: 1,
-          isNew: false,
-          toDelete: true
+          _hasChanged: false,
+          _isNew: false,
+          _toDelete: true,
+          id: 1
         },
         {
-          id: 2,
-          isNew: false,
-          toDelete: false
+          _hasChanged: false,
+          _isNew: false,
+          _toDelete: false,
+          id: 2
         },
         {
-          id: 3,
-          isNew: true,
-          toDelete: true
+          _hasChanged: false,
+          _isNew: true,
+          _toDelete: true,
+          id: 3
         }
       ],
       deleteVariablesCreator: item => ({
@@ -103,14 +107,16 @@ describe('getMutationsPromises', () => {
       updateMutation: updateMutationSpy,
       items: [
         {
-          id: 3,
-          isNew: false,
-          toDelete: false
+          _hasChanged: false,
+          _isNew: false,
+          _toDelete: false,
+          id: 3
         },
         {
-          id: 4,
-          isNew: false,
-          toDelete: false
+          _hasChanged: false,
+          _isNew: false,
+          _toDelete: false,
+          id: 4
         }
       ],
       lang: 'en',

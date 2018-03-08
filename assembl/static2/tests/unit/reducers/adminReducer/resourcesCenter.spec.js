@@ -169,8 +169,8 @@ describe('resourcesCenter admin reducers', () => {
         }),
         '-3344789': Map({
           _hasChanged: false,
-          isNew: true,
-          toDelete: false,
+          _isNew: true,
+          _toDelete: false,
           doc: Map({
             externalUrl: ''
           }),
@@ -197,29 +197,29 @@ describe('resourcesCenter admin reducers', () => {
       const oldState = fromJS({
         '000': {
           id: '000',
-          toDelete: true
+          _toDelete: true
         },
         '111': {
           id: '111',
-          toDelete: false
+          _toDelete: false
         },
         '333': {
           id: '333',
-          toDelete: false
+          _toDelete: false
         }
       });
       const expected = {
         '000': {
           id: '000',
-          toDelete: true
+          _toDelete: true
         },
         '111': {
           id: '111',
-          toDelete: false
+          _toDelete: false
         },
         '333': {
           id: '333',
-          toDelete: true
+          _toDelete: true
         }
       };
       const newState = resourcesById(oldState, action);
@@ -230,8 +230,8 @@ describe('resourcesCenter admin reducers', () => {
       const oldState = fromJS({
         '-3344789': {
           _hasChanged: false,
-          isNew: true,
-          toDelete: false,
+          _isNew: true,
+          _toDelete: false,
           id: '-3344789',
           doc: {
             externalUrl: ''
@@ -250,8 +250,8 @@ describe('resourcesCenter admin reducers', () => {
       const expected = {
         '-3344789': {
           _hasChanged: true,
-          isNew: true,
-          toDelete: false,
+          _isNew: true,
+          _toDelete: false,
           id: '-3344789',
           doc: {
             externalUrl: file
@@ -279,8 +279,8 @@ describe('resourcesCenter admin reducers', () => {
       const oldState = fromJS({
         '-3344789': {
           _hasChanged: false,
-          isNew: true,
-          toDelete: false,
+          _isNew: true,
+          _toDelete: false,
           id: '-3344789',
           titleEntries: [],
           textEntries: [],
@@ -291,8 +291,8 @@ describe('resourcesCenter admin reducers', () => {
       const expected = {
         '-3344789': {
           _hasChanged: true,
-          isNew: true,
-          toDelete: false,
+          _isNew: true,
+          _toDelete: false,
           id: '-3344789',
           titleEntries: [],
           textEntries: [],
@@ -313,8 +313,8 @@ describe('resourcesCenter admin reducers', () => {
       const oldState = fromJS({
         '-3344789': {
           _hasChanged: false,
-          isNew: true,
-          toDelete: false,
+          _isNew: true,
+          _toDelete: false,
           id: '-3344789',
           img: {
             externalUrl: '',
@@ -330,8 +330,8 @@ describe('resourcesCenter admin reducers', () => {
       const expected = {
         '-3344789': {
           _hasChanged: true,
-          isNew: true,
-          toDelete: false,
+          _isNew: true,
+          _toDelete: false,
           id: '-3344789',
           img: {
             externalUrl: file,
@@ -356,8 +356,8 @@ describe('resourcesCenter admin reducers', () => {
       const oldState = fromJS({
         '-3344789': {
           _hasChanged: false,
-          isNew: true,
-          toDelete: false,
+          _isNew: true,
+          _toDelete: false,
           id: '-3344789',
           titleEntries: [],
           textEntries: [{ localeCode: 'fr', value: 'texte en français' }, { localeCode: 'en', value: 'text in english' }],
@@ -368,8 +368,8 @@ describe('resourcesCenter admin reducers', () => {
       const expected = {
         '-3344789': {
           _hasChanged: true,
-          isNew: true,
-          toDelete: false,
+          _isNew: true,
+          _toDelete: false,
           id: '-3344789',
           titleEntries: [],
           textEntries: [{ localeCode: 'fr', value: 'nouvelle valeur' }, { localeCode: 'en', value: 'text in english' }],
@@ -391,8 +391,8 @@ describe('resourcesCenter admin reducers', () => {
       const oldState = fromJS({
         '-3344789': {
           _hasChanged: false,
-          isNew: true,
-          toDelete: false,
+          _isNew: true,
+          _toDelete: false,
           id: '-3344789',
           titleEntries: [{ localeCode: 'fr', value: 'en français' }, { localeCode: 'en', value: 'in english' }],
           textEntries: [],
@@ -403,8 +403,8 @@ describe('resourcesCenter admin reducers', () => {
       const expected = {
         '-3344789': {
           _hasChanged: true,
-          isNew: true,
-          toDelete: false,
+          _isNew: true,
+          _toDelete: false,
           id: '-3344789',
           titleEntries: [{ localeCode: 'fr', value: 'nouvelle valeur' }, { localeCode: 'en', value: 'in english' }],
           textEntries: [],
@@ -445,8 +445,8 @@ describe('resourcesCenter admin reducers', () => {
       const oldState = fromJS({
         '-3344789': {
           _hasChanged: true,
-          isNew: true,
-          toDelete: false,
+          _isNew: true,
+          _toDelete: false,
           id: '-3344789',
           titleEntries: [{ localeCode: 'fr', value: 'en français' }, { localeCode: 'en', value: 'in english' }],
           textEntries: [],
@@ -457,8 +457,8 @@ describe('resourcesCenter admin reducers', () => {
       const expected = fromJS({
         foo: {
           _hasChanged: false,
-          isNew: false,
-          toDelete: false,
+          _isNew: false,
+          _toDelete: false,
           id: 'foo',
           order: 1,
           doc: { externalUrl: 'http://files.com/myfile.pdf' },
@@ -469,8 +469,8 @@ describe('resourcesCenter admin reducers', () => {
         },
         bar: {
           _hasChanged: false,
-          isNew: false,
-          toDelete: false,
+          _isNew: false,
+          _toDelete: false,
           id: 'bar',
           order: 2,
           doc: { externalUrl: '' },

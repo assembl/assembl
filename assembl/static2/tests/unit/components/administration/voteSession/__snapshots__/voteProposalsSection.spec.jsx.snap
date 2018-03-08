@@ -125,8 +125,8 @@ exports[`VoteProposalsSection component should render a voteProposalsSection wit
             editLocale="fr"
             id={
               Immutable.Map {
-                isNew: false,
-                toDelete: false,
+                _isNew: false,
+                _toDelete: false,
                 id: "1234",
                 titleEntries: Immutable.List [
                 ],
@@ -141,8 +141,8 @@ exports[`VoteProposalsSection component should render a voteProposalsSection wit
             editLocale="fr"
             id={
               Immutable.Map {
-                isNew: false,
-                toDelete: false,
+                _isNew: false,
+                _toDelete: false,
                 id: "5678",
                 titleEntries: Immutable.List [
                 ],
