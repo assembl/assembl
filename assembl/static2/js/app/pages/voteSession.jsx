@@ -174,9 +174,13 @@ class DumbVoteSession extends React.Component<void, Props, State> {
             tokenCategoryId: tokenCategoryId,
             voteValue: tokenVotesSum[proposalId][tokenCategoryId]
           }
-        }).then(() => {
-          displayAlert('success', I18n.t('debate.survey.postSuccess'));
-        });
+        })
+          .then(() => {
+            displayAlert('success', I18n.t('debate.survey.postSuccess'));
+          })
+          .catch((error) => {
+            displayAlert('danger', error);
+          });
       });
     });
   };
