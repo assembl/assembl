@@ -18,7 +18,7 @@ import { DeletedPublicationStates } from '../constants';
 
 const deletedPublicationStates = Object.keys(DeletedPublicationStates);
 
-const sortByCreationDateDesc = (a, b) => {
+const creationDateDescComparator = (a, b) => {
   if (a.creationDate > b.creationDate) {
     return -1;
   }
@@ -48,7 +48,7 @@ const getLatest = (post) => {
   return maxDate;
 };
 
-const sortByCreationDateDescOfLastDescendant = (a, b) => {
+const creationDateLastDescendantComparator = (a, b) => {
   const firstDate = getLatest(a);
   const secondDate = getLatest(b);
   if (firstDate > secondDate) {
@@ -84,7 +84,7 @@ export const transformPosts = (edges, messageColumns, additionnalProps = {}) => 
         newPost.children = getChildren(post.id);
         return newPost;
       })
-      .sort(sortByCreationDateDesc);
+      .sort(creationDateDescComparator);
 
   // postsByParent.null is the list of top posts
   // filter out deleted top post without answers
@@ -95,7 +95,7 @@ export const transformPosts = (edges, messageColumns, additionnalProps = {}) => 
       return newPost;
     })
     .filter(topPost => !(deletedPublicationStates.indexOf(topPost.publicationState) > -1 && topPost.children.length === 0))
-    .sort(sortByCreationDateDescOfLastDescendant);
+    .sort(creationDateLastDescendantComparator);
 };
 
 const noRowsRenderer = () => (
