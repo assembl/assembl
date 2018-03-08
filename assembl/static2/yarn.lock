@@ -5447,9 +5447,9 @@ rc@^1.1.7:
     minimist "^1.2.0"
     strip-json-comments "~2.0.1"
 
-"react-active-html@https://github.com/maparent/react-active-html.git#allow_dom_input":
-  version "1.1.6"
-  resolved "https://github.com/maparent/react-active-html.git#16b270395842bb9d75a347969ff3344655235f54"
+react-active-html@~1.2.1:
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/react-active-html/-/react-active-html-1.2.1.tgz#99911f117670b8db3ecd18275c435cfd415d9749"
   dependencies:
     to-camel-case "^1.0.0"
 
