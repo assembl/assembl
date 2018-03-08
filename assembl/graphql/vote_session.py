@@ -283,6 +283,9 @@ class GaugeVoteSpecification(SecureObjectType, SQLAlchemyObjectType):
     average_label = graphene.String(lang=graphene.String())
 
     def resolve_average_label(self, args, context, info):
+        if not self.choices:
+            return None
+
         vote_cls = self.get_vote_class()
         voting_avg = self.db.query(func.avg(getattr(vote_cls, 'vote_value'))).filter_by(
             vote_spec_id=self.id,
@@ -298,7 +301,7 @@ class GaugeVoteSpecification(SecureObjectType, SQLAlchemyObjectType):
             if diff < min_diff:
                 avg_choice = choice
                 min_diff = diff
-        return resolve_langstring(choice.label, args.get('lang'))
+        return resolve_langstring(avg_choice.label, args.get('lang'))
 
 
 class NumberGaugeVoteSpecification(SecureObjectType, SQLAlchemyObjectType):
