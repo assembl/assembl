@@ -62,8 +62,9 @@ export const sectionsInOrder: SectionsInOrderReducer = (state = List(), action) 
 };
 
 const defaultSection = Map({
-  toDelete: false,
+  _hasChanged: false,
   isNew: true,
+  toDelete: false,
   titleEntries: List(),
   url: '',
   type: 'CUSTOM'
@@ -77,23 +78,29 @@ export const sectionsById: SectionsByIdReducer = (state = Map(), action) => {
   case DELETE_SECTION:
     return state.setIn([action.id, 'toDelete'], true);
   case UPDATE_SECTION_URL:
-    return state.setIn([action.id, 'url'], action.value);
+    return state.setIn([action.id, 'url'], action.value).setIn([action.id, '_hasChanged'], true);
   case TOGGLE_EXTERNAL_PAGE:
-    return state.updateIn([action.id, 'url'], (url) => {
-      if (url !== null) {
-        return null;
-      }
-      return '';
-    });
+    return state
+      .updateIn([action.id, 'url'], (url) => {
+        if (url !== null) {
+          return null;
+        }
+        return '';
+      })
+      .setIn([action.id, '_hasChanged'], true);
   case UPDATE_SECTION_TITLE:
-    return state.updateIn([action.id, 'titleEntries'], updateInLangstringEntries(action.locale, action.value));
+    return state
+      .updateIn([action.id, 'titleEntries'], updateInLangstringEntries(action.locale, action.value))
+      .setIn([action.id, '_hasChanged'], true);
   case UPDATE_SECTIONS: {
     let newState = Map();
     action.sections.forEach((section) => {
       const sectionInfo = Map({
+        _hasChanged: false,
         isNew: false,
-        order: section.order,
+        toDelete: false,
         id: section.id,
+        order: section.order,
         titleEntries: fromJS(section.titleEntries),
         url: section.url,
         type: section.sectionType

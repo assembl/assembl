@@ -1,4 +1,4 @@
-import { List } from 'immutable';
+import { fromJS, List } from 'immutable';
 
 import * as actionTypes from '../../../../js/app/actions/actionTypes';
 import * as reducers from '../../../../js/app/reducers/adminReducer/adminSections';
@@ -75,6 +75,185 @@ describe('sectionsInOrder reducer', () => {
     };
     const actual = sectionsInOrder(state, action);
     const expected = List.of('1', '3', '2');
+    expect(actual).toEqual(expected);
+  });
+});
+
+describe('sectionsById reducer', () => {
+  const { sectionsById } = reducers;
+  const oldState = fromJS({
+    1: {
+      _hasChanged: false,
+      isNew: false,
+      toDelete: false,
+      id: '1',
+      order: 1,
+      titleEntries: [{ localeCode: 'en', value: 'GNU' }],
+      url: 'http://www.gnu.com',
+      type: 'CUSTOM'
+    }
+  });
+
+  it('should handle CREATE_SECTION action type', () => {
+    const action = {
+      id: '2',
+      order: 2,
+      type: actionTypes.CREATE_SECTION
+    };
+    const expected = fromJS({
+      1: {
+        _hasChanged: false,
+        isNew: false,
+        toDelete: false,
+        id: '1',
+        order: 1,
+        titleEntries: [{ localeCode: 'en', value: 'GNU' }],
+        url: 'http://www.gnu.com',
+        type: 'CUSTOM'
+      },
+      2: {
+        _hasChanged: false,
+        isNew: true,
+        toDelete: false,
+        titleEntries: [],
+        url: '',
+        type: 'CUSTOM',
+        id: '2',
+        order: 2
+      }
+    });
+    const actual = sectionsById(oldState, action);
+    expect(actual).toEqual(expected);
+  });
+
+  it('should handle DELETE_SECTION action type', () => {
+    const action = {
+      id: '1',
+      type: actionTypes.DELETE_SECTION
+    };
+    const expected = fromJS({
+      1: {
+        _hasChanged: false,
+        isNew: false,
+        toDelete: true,
+        id: '1',
+        order: 1,
+        titleEntries: [{ localeCode: 'en', value: 'GNU' }],
+        url: 'http://www.gnu.com',
+        type: 'CUSTOM'
+      }
+    });
+    const actual = sectionsById(oldState, action);
+    expect(actual).toEqual(expected);
+  });
+
+  it('should handle UPDATE_SECTION_URL action type', () => {
+    const action = {
+      id: '1',
+      value: 'http://www.gnu.org',
+      type: actionTypes.UPDATE_SECTION_URL
+    };
+    const expected = fromJS({
+      1: {
+        _hasChanged: true,
+        isNew: false,
+        toDelete: false,
+        id: '1',
+        order: 1,
+        titleEntries: [{ localeCode: 'en', value: 'GNU' }],
+        url: 'http://www.gnu.org',
+        type: 'CUSTOM'
+      }
+    });
+    const actual = sectionsById(oldState, action);
+    expect(actual).toEqual(expected);
+  });
+
+  it('should handle TOGGLE_EXTERNAL_PAGE action type', () => {
+    const action = {
+      id: '1',
+      type: actionTypes.TOGGLE_EXTERNAL_PAGE
+    };
+    const expected = fromJS({
+      1: {
+        _hasChanged: true,
+        isNew: false,
+        toDelete: false,
+        id: '1',
+        order: 1,
+        titleEntries: [{ localeCode: 'en', value: 'GNU' }],
+        url: null,
+        type: 'CUSTOM'
+      }
+    });
+    const actual = sectionsById(oldState, action);
+    expect(actual).toEqual(expected);
+
+    const expected2 = fromJS({
+      1: {
+        _hasChanged: true,
+        isNew: false,
+        toDelete: false,
+        id: '1',
+        order: 1,
+        titleEntries: [{ localeCode: 'en', value: 'GNU' }],
+        url: '',
+        type: 'CUSTOM'
+      }
+    });
+    const actual2 = sectionsById(expected, action);
+    expect(actual2).toEqual(expected2);
+  });
+
+  it('should handle UPDATE_SECTION_TITLE action type', () => {
+    const action = {
+      id: '1',
+      locale: 'en',
+      value: 'GNU is not Unix',
+      type: actionTypes.UPDATE_SECTION_TITLE
+    };
+    const expected = fromJS({
+      1: {
+        _hasChanged: true,
+        isNew: false,
+        toDelete: false,
+        id: '1',
+        order: 1,
+        titleEntries: [{ localeCode: 'en', value: 'GNU is not Unix' }],
+        url: 'http://www.gnu.com',
+        type: 'CUSTOM'
+      }
+    });
+    const actual = sectionsById(oldState, action);
+    expect(actual).toEqual(expected);
+  });
+
+  it('should handle UPDATE_SECTIONS action type', () => {
+    const action = {
+      sections: [
+        {
+          id: '2',
+          order: 8,
+          titleEntries: [{ localeCode: 'en', value: 'port' }],
+          url: '',
+          sectionType: 'HOMEPAGE'
+        }
+      ],
+      type: actionTypes.UPDATE_SECTIONS
+    };
+    const expected = fromJS({
+      2: {
+        _hasChanged: false,
+        isNew: false,
+        toDelete: false,
+        id: '2',
+        order: 8,
+        titleEntries: [{ localeCode: 'en', value: 'port' }],
+        url: '',
+        type: 'HOMEPAGE'
+      }
+    });
+    const actual = sectionsById(oldState, action);
     expect(actual).toEqual(expected);
   });
 });
