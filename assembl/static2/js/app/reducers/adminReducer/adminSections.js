@@ -61,7 +61,7 @@ export const sectionsInOrder: SectionsInOrderReducer = (state = List(), action) 
   }
 };
 
-const defaultResource = Map({
+const defaultSection = Map({
   toDelete: false,
   isNew: true,
   titleEntries: List(),
@@ -73,7 +73,7 @@ type SectionsByIdReducer = (SectionsById, ReduxAction<Action>) => SectionsById;
 export const sectionsById: SectionsByIdReducer = (state = Map(), action) => {
   switch (action.type) {
   case CREATE_SECTION:
-    return state.set(action.id, defaultResource.set('id', action.id).set('order', action.order));
+    return state.set(action.id, defaultSection.set('id', action.id).set('order', action.order));
   case DELETE_SECTION:
     return state.setIn([action.id, 'toDelete'], true);
   case UPDATE_SECTION_URL:
