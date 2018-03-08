@@ -7,13 +7,14 @@ import { I18n, Translate } from 'react-redux-i18n';
 import { Map } from 'immutable';
 
 import VoteSessionQuery from '../graphql/VoteSession.graphql';
+import AddTokenVoteMutation from '../graphql/mutations/addTokenVote.graphql';
 import Header from '../components/common/header';
 import Section from '../components/common/section';
 import AvailableTokens from '../components/voteSession/availableTokens';
 import Proposals from '../components/voteSession/proposals';
 import { getDomElementOffset, isMobile } from '../utils/globalFunctions';
 import { getPhaseId } from '../utils/timeline';
-import { promptForLoginOr } from '../utils/utilityManager';
+import { promptForLoginOr, displayAlert } from '../utils/utilityManager';
 import withLoadingIndicator from '../components/common/withLoadingIndicator';
 import MessagePage from '../components/common/messagePage';
 
@@ -49,7 +50,8 @@ type Props = {
   instructionsSectionContent: string,
   modules: Array<VoteSpecification>,
   propositionsSectionTitle: string,
-  proposals: Array<Proposal>
+  proposals: Array<Proposal>,
+  addTokenVote: Function
 };
 
 export type RemainingTokensByCategory = Map<string, number>;
@@ -159,6 +161,26 @@ class DumbVoteSession extends React.Component<void, Props, State> {
     return tokenVotesSum > 0;
   };
 
+  submitTokenVote = () => {
+    const tokenVotesSum = this.state.userTokenVotes.toJS();
+    const { modules, addTokenVote } = this.props;
+    const tokenVoteSpecification = modules.filter(module => module.voteType === 'token_vote_specification');
+    Object.keys(tokenVotesSum).forEach((proposalId) => {
+      Object.keys(tokenVotesSum[proposalId]).forEach((tokenCategoryId) => {
+        addTokenVote({
+          variables: {
+            voteSpecId: tokenVoteSpecification[0].id,
+            proposalId: proposalId,
+            tokenCategoryId: tokenCategoryId,
+            voteValue: tokenVotesSum[proposalId][tokenCategoryId]
+          }
+        }).then(() => {
+          displayAlert('success', I18n.t('debate.survey.postSuccess'));
+        });
+      });
+    });
+  };
+
   render() {
     const {
       title,
@@ -229,7 +251,7 @@ class DumbVoteSession extends React.Component<void, Props, State> {
             <Row className="form-actions center">
               <Col mdOffset={1} md={10} smOffset={1} sm={10}>
                 {this.displaySubmitButton() ? (
-                  <Button className="button-submit button-dark">
+                  <Button className="button-submit button-dark" onClick={this.submitTokenVote}>
                     <Translate value="debate.voteSession.submit" />
                   </Button>
                 ) : null}
@@ -306,6 +328,9 @@ export default compose(
         noVoteSession: false
       };
     }
+  }),
+  graphql(AddTokenVoteMutation, {
+    name: 'addTokenVote'
   }),
   withLoadingIndicator()
 )(DumbVoteSession);
