@@ -26,7 +26,7 @@ class ThreadView extends React.Component {
     return (
       <div className="overflow-x">
         {(!isUserConnected || connectedUserCan(Permissions.ADD_POST)) && !isPhaseCompleted ? (
-          <TopPostFormContainer ideaId={ideaId} refetchIdea={refetchIdea} />
+          <TopPostFormContainer ideaId={ideaId} refetchIdea={refetchIdea} topPostsCount={posts.length} />
         ) : null}
         <Grid fluid className="background-grey">
           <div className="max-container background-grey">
