@@ -8,6 +8,7 @@ import {
   UPDATE_RESOURCE_IMAGE,
   UPDATE_RESOURCE_TEXT,
   UPDATE_RESOURCE_TITLE,
+  UPDATE_RESOURCES,
   UPDATE_RC_PAGE_TITLE,
   UPDATE_RC_HEADER_IMAGE
 } from '../../../../js/app/actions/actionTypes';
@@ -119,6 +120,17 @@ describe('resourcesCenter admin reducers', () => {
       const newState = resourcesInOrder(oldState, action);
       expect(newState).toEqual(expected);
     });
+
+    it('should handle UPDATE_RESOURCES action type', () => {
+      const action = {
+        resources: [{ id: 'foo' }, { id: 'bar' }, { id: 'fiz' }],
+        type: UPDATE_RESOURCES
+      };
+      const oldState = List(['0', '1']);
+      const expected = List(['foo', 'bar', 'fiz']);
+      const newState = resourcesInOrder(oldState, action);
+      expect(newState).toEqual(expected);
+    });
   });
 
   describe('resourcesById reducer', () => {
@@ -156,8 +168,9 @@ describe('resourcesCenter admin reducers', () => {
           id: '1'
         }),
         '-3344789': Map({
-          toDelete: false,
+          _hasChanged: false,
           isNew: true,
+          toDelete: false,
           doc: Map({
             externalUrl: ''
           }),
@@ -216,9 +229,10 @@ describe('resourcesCenter admin reducers', () => {
     it('should handle UPDATE_RESOURCE_DOCUMENT action type', () => {
       const oldState = fromJS({
         '-3344789': {
-          id: '-3344789',
+          _hasChanged: false,
           isNew: true,
           toDelete: false,
+          id: '-3344789',
           doc: {
             externalUrl: ''
           },
@@ -235,9 +249,10 @@ describe('resourcesCenter admin reducers', () => {
       const file = new File([''], 'foo.pdf', { type: 'application/pdf' });
       const expected = {
         '-3344789': {
-          id: '-3344789',
+          _hasChanged: true,
           isNew: true,
           toDelete: false,
+          id: '-3344789',
           doc: {
             externalUrl: file
           },
@@ -263,9 +278,10 @@ describe('resourcesCenter admin reducers', () => {
     it('should handle UPDATE_RESOURCE_EMBED_CODE action type', () => {
       const oldState = fromJS({
         '-3344789': {
-          id: '-3344789',
+          _hasChanged: false,
           isNew: true,
           toDelete: false,
+          id: '-3344789',
           titleEntries: [],
           textEntries: [],
           embedCode: '<iframe ... />',
@@ -274,9 +290,10 @@ describe('resourcesCenter admin reducers', () => {
       });
       const expected = {
         '-3344789': {
-          id: '-3344789',
+          _hasChanged: true,
           isNew: true,
           toDelete: false,
+          id: '-3344789',
           titleEntries: [],
           textEntries: [],
           embedCode: '<iframe src="http://www.example.com/greatslides" />',
@@ -295,9 +312,10 @@ describe('resourcesCenter admin reducers', () => {
     it('should handle UPDATE_RESOURCE_IMAGE action type', () => {
       const oldState = fromJS({
         '-3344789': {
-          id: '-3344789',
+          _hasChanged: false,
           isNew: true,
           toDelete: false,
+          id: '-3344789',
           img: {
             externalUrl: '',
             mimeType: ''
@@ -311,9 +329,10 @@ describe('resourcesCenter admin reducers', () => {
       const file = new File([''], 'foo.jpg', { type: 'image/jpeg' });
       const expected = {
         '-3344789': {
-          id: '-3344789',
+          _hasChanged: true,
           isNew: true,
           toDelete: false,
+          id: '-3344789',
           img: {
             externalUrl: file,
             mimeType: 'image/jpeg'
@@ -336,9 +355,10 @@ describe('resourcesCenter admin reducers', () => {
     it('should handle UPDATE_RESOURCE_TEXT action type', () => {
       const oldState = fromJS({
         '-3344789': {
-          id: '-3344789',
+          _hasChanged: false,
           isNew: true,
           toDelete: false,
+          id: '-3344789',
           titleEntries: [],
           textEntries: [{ localeCode: 'fr', value: 'texte en français' }, { localeCode: 'en', value: 'text in english' }],
           embedCode: '',
@@ -347,9 +367,10 @@ describe('resourcesCenter admin reducers', () => {
       });
       const expected = {
         '-3344789': {
-          id: '-3344789',
+          _hasChanged: true,
           isNew: true,
           toDelete: false,
+          id: '-3344789',
           titleEntries: [],
           textEntries: [{ localeCode: 'fr', value: 'nouvelle valeur' }, { localeCode: 'en', value: 'text in english' }],
           embedCode: '',
@@ -369,9 +390,10 @@ describe('resourcesCenter admin reducers', () => {
     it('should handle UPDATE_RESOURCE_TITLE action type', () => {
       const oldState = fromJS({
         '-3344789': {
-          id: '-3344789',
+          _hasChanged: false,
           isNew: true,
           toDelete: false,
+          id: '-3344789',
           titleEntries: [{ localeCode: 'fr', value: 'en français' }, { localeCode: 'en', value: 'in english' }],
           textEntries: [],
           embedCode: '',
@@ -380,9 +402,10 @@ describe('resourcesCenter admin reducers', () => {
       });
       const expected = {
         '-3344789': {
-          id: '-3344789',
+          _hasChanged: true,
           isNew: true,
           toDelete: false,
+          id: '-3344789',
           titleEntries: [{ localeCode: 'fr', value: 'nouvelle valeur' }, { localeCode: 'en', value: 'in english' }],
           textEntries: [],
           embedCode: '',
@@ -397,6 +420,68 @@ describe('resourcesCenter admin reducers', () => {
       };
       const actual = resourcesById(oldState, action);
       expect(actual.toJS()).toEqual(expected);
+    });
+
+    it('should handle UPDATE_RESOURCES action type', () => {
+      const action = {
+        resources: [
+          {
+            id: 'foo',
+            doc: { externalUrl: 'http://files.com/myfile.pdf' },
+            embedCode: 'xyz',
+            textEntries: [],
+            titleEntries: [{ localeCode: 'en', value: 'interface' }, { localeCode: 'fr', value: 'interface' }]
+          },
+          {
+            id: 'bar',
+            embedCode: '<span>nothing here</span>',
+            image: { externalUrl: 'http://myimage.jpg', mimeType: 'image/jpeg' },
+            textEntries: [{ localeCode: 'en', value: 'program' }],
+            titleEntries: [{ localeCode: 'en', value: 'wireless' }]
+          }
+        ],
+        type: UPDATE_RESOURCES
+      };
+      const oldState = fromJS({
+        '-3344789': {
+          _hasChanged: true,
+          isNew: true,
+          toDelete: false,
+          id: '-3344789',
+          titleEntries: [{ localeCode: 'fr', value: 'en français' }, { localeCode: 'en', value: 'in english' }],
+          textEntries: [],
+          embedCode: '',
+          order: 3
+        }
+      });
+      const expected = fromJS({
+        foo: {
+          _hasChanged: false,
+          isNew: false,
+          toDelete: false,
+          id: 'foo',
+          order: 1,
+          doc: { externalUrl: 'http://files.com/myfile.pdf' },
+          img: { externalUrl: '', mimeType: '' },
+          textEntries: [],
+          titleEntries: [{ localeCode: 'en', value: 'interface' }, { localeCode: 'fr', value: 'interface' }],
+          embedCode: 'xyz'
+        },
+        bar: {
+          _hasChanged: false,
+          isNew: false,
+          toDelete: false,
+          id: 'bar',
+          order: 2,
+          doc: { externalUrl: '' },
+          img: { externalUrl: 'http://myimage.jpg', mimeType: 'image/jpeg' },
+          textEntries: [{ localeCode: 'en', value: 'program' }],
+          titleEntries: [{ localeCode: 'en', value: 'wireless' }],
+          embedCode: '<span>nothing here</span>'
+        }
+      });
+      const newState = resourcesById(oldState, action);
+      expect(newState).toEqual(expected);
     });
   });
 });

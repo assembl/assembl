@@ -117,6 +117,7 @@ const defaultResourceImage = Map({
 const defaultResource = Map({
   toDelete: false,
   isNew: true,
+  _hasChanged: false,
   doc: defaultResourceDoc,
   img: defaultResourceImage,
   titleEntries: List(),
@@ -132,23 +133,29 @@ export const resourcesById: ResourcesByIdReducer = (state: ResourcesByIdState = 
   case DELETE_RESOURCE:
     return state.setIn([action.id, 'toDelete'], true);
   case UPDATE_RESOURCE_DOCUMENT:
-    return state.setIn([action.id, 'doc', 'externalUrl'], action.value);
+    return state.setIn([action.id, 'doc', 'externalUrl'], action.value).setIn([action.id, '_hasChanged'], true);
   case UPDATE_RESOURCE_EMBED_CODE:
-    return state.setIn([action.id, 'embedCode'], action.value);
+    return state.setIn([action.id, 'embedCode'], action.value).setIn([action.id, '_hasChanged'], true);
   case UPDATE_RESOURCE_IMAGE:
     return state
       .setIn([action.id, 'img', 'externalUrl'], action.value)
-      .setIn([action.id, 'img', 'mimeType'], action.value.type);
+      .setIn([action.id, 'img', 'mimeType'], action.value.type)
+      .setIn([action.id, '_hasChanged'], true);
   case UPDATE_RESOURCE_TEXT:
-    return state.updateIn([action.id, 'textEntries'], updateInLangstringEntries(action.locale, fromJS(action.value)));
+    return state
+      .updateIn([action.id, 'textEntries'], updateInLangstringEntries(action.locale, fromJS(action.value)))
+      .setIn([action.id, '_hasChanged'], true);
   case UPDATE_RESOURCE_TITLE:
-    return state.updateIn([action.id, 'titleEntries'], updateInLangstringEntries(action.locale, action.value));
+    return state
+      .updateIn([action.id, 'titleEntries'], updateInLangstringEntries(action.locale, action.value))
+      .setIn([action.id, '_hasChanged'], true);
   case UPDATE_RESOURCES: {
     let newState = Map();
     action.resources.forEach((resource, idx) => {
       const resourceInfo = Map({
-        toDelete: false,
+        _hasChanged: false,
         isNew: false,
+        toDelete: false,
         order: idx + 1,
         doc: resource.doc ? fromJS(resource.doc) : defaultResourceDoc,
         id: resource.id,
