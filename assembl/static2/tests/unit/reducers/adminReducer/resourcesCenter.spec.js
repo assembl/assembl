@@ -21,7 +21,7 @@ describe('resourcesCenter admin reducers', () => {
       const action = {};
       expect(page(undefined, action)).toEqual(
         Map({
-          hasChanged: false,
+          _hasChanged: false,
           titleEntries: List(),
           headerImage: Map({ externalUrl: '', mimeType: '', title: '' })
         })
@@ -31,7 +31,7 @@ describe('resourcesCenter admin reducers', () => {
     it('should return the current state for other actions', () => {
       const action = { type: 'FOOBAR' };
       const oldState = Map({
-        hasChanged: false,
+        _hasChanged: false,
         titleEntries: List.of({ locale: 'en', value: 'Resources center' }),
         headerImage: Map({
           externalUrl: '',
@@ -44,7 +44,7 @@ describe('resourcesCenter admin reducers', () => {
 
     it('should handle UPDATE_RC_PAGE_TITLE action type', () => {
       const oldState = fromJS({
-        hasChanged: false,
+        _hasChanged: false,
         titleEntries: [{ localeCode: 'fr', value: 'en français' }, { localeCode: 'en', value: 'in english' }],
         headerImage: {
           externalUrl: '',
@@ -53,7 +53,7 @@ describe('resourcesCenter admin reducers', () => {
         }
       });
       const expected = fromJS({
-        hasChanged: true,
+        _hasChanged: true,
         titleEntries: [{ localeCode: 'fr', value: 'Centre de ressources' }, { localeCode: 'en', value: 'in english' }],
         headerImage: {
           externalUrl: '',
@@ -71,7 +71,7 @@ describe('resourcesCenter admin reducers', () => {
 
     it('should handle UPDATE_RC_HEADER_IMAGE action type', () => {
       const oldState = fromJS({
-        hasChanged: false,
+        _hasChanged: false,
         headerImage: {
           externalUrl: '',
           mimeType: ''
@@ -80,7 +80,7 @@ describe('resourcesCenter admin reducers', () => {
       });
       const file = new File([''], 'foo.jpg', { type: 'image/jpeg' });
       const expected = {
-        hasChanged: true,
+        _hasChanged: true,
         headerImage: {
           externalUrl: file,
           mimeType: 'image/jpeg'

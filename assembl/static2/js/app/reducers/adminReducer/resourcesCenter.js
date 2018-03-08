@@ -20,7 +20,7 @@ import {
 import { updateInLangstringEntries } from '../../utils/i18n';
 
 const initialPage = Map({
-  hasChanged: false,
+  _hasChanged: false,
   titleEntries: List(),
   headerImage: Map({
     externalUrl: '',
@@ -33,12 +33,14 @@ type PageReducer = (PageState, ReduxAction<Action>) => PageState;
 export const page: PageReducer = (state = initialPage, action) => {
   switch (action.type) {
   case UPDATE_RC_PAGE_TITLE:
-    return state.update('titleEntries', updateInLangstringEntries(action.locale, fromJS(action.value))).set('hasChanged', true);
+    return state
+      .update('titleEntries', updateInLangstringEntries(action.locale, fromJS(action.value)))
+      .set('_hasChanged', true);
   case UPDATE_RC_HEADER_IMAGE:
     return state
       .setIn(['headerImage', 'externalUrl'], action.value)
       .setIn(['headerImage', 'mimeType'], action.value.type)
-      .set('hasChanged', true);
+      .set('_hasChanged', true);
   case UPDATE_RC_PAGE: {
     let newState = state;
     if (action.headerImage) {
@@ -51,7 +53,7 @@ export const page: PageReducer = (state = initialPage, action) => {
       newState = newState.set('titleEntries', fromJS(action.titleEntries));
     }
 
-    return newState.set('hasChanged', false);
+    return newState.set('_hasChanged', false);
   }
   default:
     return state;

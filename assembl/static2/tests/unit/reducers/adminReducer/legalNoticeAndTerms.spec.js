@@ -7,7 +7,7 @@ describe('legalNoticeAndTerms admin reducer', () => {
   it('it should return the initial state', () => {
     const action = {};
     const expected = Map({
-      hasChanged: false,
+      _hasChanged: false,
       legalNoticeEntries: List(),
       termsAndConditionsEntries: List()
     });
@@ -27,12 +27,12 @@ describe('legalNoticeAndTerms admin reducer', () => {
       value: 'foobar'
     };
     const oldState = Map({
-      hasChanged: false,
+      _hasChanged: false,
       legalNoticeEntries: List.of(Map({ localeCode: 'en', value: 'my legal notice' })),
       termsAndConditionsEntries: List()
     });
     const expected = Map({
-      hasChanged: true,
+      _hasChanged: true,
       legalNoticeEntries: List.of(Map({ localeCode: 'en', value: 'foobar' })),
       termsAndConditionsEntries: List()
     });
@@ -52,12 +52,12 @@ describe('legalNoticeAndTerms admin reducer', () => {
       )
     };
     const oldState = Map({
-      hasChanged: true,
+      _hasChanged: true,
       legalNoticeEntries: List(),
       termsAndConditionsEntries: List()
     });
     const expected = Map({
-      hasChanged: false,
+      _hasChanged: false,
       legalNoticeEntries: List.of(
         Map({ localeCode: 'en', value: 'My legal notice' }),
         Map({ localeCode: 'fr', value: 'Ma notice légale' })
