@@ -1,8 +1,15 @@
 // @flow
 
+import jQuery from 'jquery';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { I18n } from 'react-redux-i18n';
+
+// Annotator needs this global.
+global.jQuery = jQuery;
+// Use require, which will run in code sequence, rather than import,
+// which runs before any code, incl. the global declaration above.
+const Annotator = require('annotator'); // eslint-disable-line
 
 type LeftSideHarvestingButtonProps = {
   label: string,
@@ -41,7 +48,13 @@ const HarvestingMenu = ({ positionX, positionY }: HarvestingMenuProps) => {
     top: `${positionY}px`
   };
   const handleClick = () => {
-    // TODO in next story
+    // TODO: Currently, the click on the hook clears the selection,
+    // so the selection is invalid by the time we get here.
+    const selection = window.getSelection();
+    const browserRange = Annotator.Annotator.Range.sniff(selection.getRangeAt(0));
+    const serialized = browserRange.serialize(document, 'annotation');
+    console.log(serialized); // eslint-disable-line
+    // elements should be in serialized.{start, end, startOffset, endOffset}
   };
   return (
     <div className="harvesting-menu" style={style}>
