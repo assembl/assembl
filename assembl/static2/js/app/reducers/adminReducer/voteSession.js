@@ -151,6 +151,7 @@ export const modulesInOrder = (state: List<number> = List(), action: ReduxAction
 };
 
 const defaultTokenModule = Map({
+  _hasChanged: false,
   isCustom: false,
   isNew: true,
   toDelete: false,
@@ -169,6 +170,7 @@ const defaultTextGaugeChoice = Map({
 });
 
 const defaultTextGaugeModule = Map({
+  _hasChanged: false,
   isCustom: false,
   isNew: true,
   toDelete: false,
@@ -181,6 +183,7 @@ const defaultTextGaugeModule = Map({
 });
 
 const defaultNumberGaugeModule = Map({
+  _hasChanged: false,
   isCustom: false,
   isNew: true,
   toDelete: false,
@@ -202,6 +205,7 @@ const getModuleInfo = (m) => {
     gauge_vote_specification: 'gauge'
   };
   const moduleInfo = {
+    _hasChanged: false,
     isNew: false,
     toDelete: false,
     id: m.id,
@@ -308,6 +312,7 @@ export const modulesById = (state: Map<string, Map> = Map(), action: ReduxAction
         proposalId: action.proposalId,
         isNew: true,
         toDelete: false,
+        _hasChanged: false,
         voteSpecTemplateId: action.moduleTemplateId
       })
     );
@@ -415,6 +420,7 @@ export const voteProposalsInOrder = (state: List<number> = List(), action: Redux
 const defaultVoteProposal = Map({
   isNew: true,
   toDelete: false,
+  _hasChanged: false,
   id: '',
   titleEntries: List(),
   descriptionEntries: List(),
@@ -428,8 +434,9 @@ export const voteProposalsById = (state: Map<string, Map> = Map(), action: Redux
     action.voteProposals.forEach((proposal) => {
       const proposalInfo = fromJS({
         isNew: false,
-        order: proposal.order,
         toDelete: false,
+        _hasChanged: false,
+        order: proposal.order,
         id: proposal.id,
         titleEntries: proposal.titleEntries,
         descriptionEntries: proposal.descriptionEntries,

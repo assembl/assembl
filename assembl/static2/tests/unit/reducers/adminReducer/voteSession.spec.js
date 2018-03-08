@@ -286,9 +286,10 @@ describe('voteSession admin reducers', () => {
     const { voteProposalsById } = reducers;
     it('should handle ADD_MODULE_TO_PROPOSAL action type', () => {
       const proposal1 = fromJS({
+        _hasChanged: false,
         isNew: false,
-        order: 1.0,
         toDelete: false,
+        order: 1.0,
         id: 'proposal1',
         titleEntries: [],
         descriptionEntries: [],
@@ -302,9 +303,10 @@ describe('voteSession admin reducers', () => {
         type: actionTypes.ADD_MODULE_TO_PROPOSAL
       };
       const expectedProposal1 = fromJS({
+        _hasChanged: false,
         isNew: false,
-        order: 1.0,
         toDelete: false,
+        order: 1.0,
         id: 'proposal1',
         titleEntries: [],
         descriptionEntries: [],
@@ -332,12 +334,13 @@ describe('voteSession admin reducers', () => {
       };
       const expected = {
         module42: {
+          _hasChanged: false,
+          isNew: true,
+          toDelete: false,
           id: 'module42',
           isCustom: false,
-          isNew: true,
           proposalId: 'proposal1',
-          voteSpecTemplateId: 'template2',
-          toDelete: false
+          voteSpecTemplateId: 'template2'
         }
       };
       const actual = modulesById(state, action);
@@ -347,13 +350,14 @@ describe('voteSession admin reducers', () => {
     it('should handle DELETE_VOTE_MODULE action type', () => {
       const state = fromJS({
         module42: {
+          _hasChanged: false,
+          isNew: false,
+          toDelete: false,
           tokenCategories: [],
           voteType: 'tokens',
           id: 'module42',
-          isNew: false,
           moduleTemplateId: 'template2',
-          proposalId: 'proposal1',
-          toDelete: false
+          proposalId: 'proposal1'
         }
       });
       const action = {
@@ -362,13 +366,14 @@ describe('voteSession admin reducers', () => {
       };
       const expected = {
         module42: {
+          _hasChanged: false,
+          isNew: false,
+          toDelete: true,
           tokenCategories: [],
           voteType: 'tokens',
           id: 'module42',
-          isNew: false,
           moduleTemplateId: 'template2',
-          proposalId: 'proposal1',
-          toDelete: true
+          proposalId: 'proposal1'
         }
       };
       const actual = modulesById(state, action);
@@ -378,13 +383,14 @@ describe('voteSession admin reducers', () => {
     it('should handle UNDELETE_MODULE action type', () => {
       const state = fromJS({
         module42: {
+          _hasChanged: false,
+          isNew: false,
+          toDelete: true,
           tokenCategories: [],
           voteType: 'tokens',
           id: 'module42',
-          isNew: false,
           moduleTemplateId: 'template2',
-          proposalId: 'proposal1',
-          toDelete: true
+          proposalId: 'proposal1'
         }
       });
       const action = {
@@ -393,17 +399,20 @@ describe('voteSession admin reducers', () => {
       };
       const expected = {
         module42: {
+          _hasChanged: false,
+          isNew: false,
+          toDelete: false,
           tokenCategories: [],
           voteType: 'tokens',
           id: 'module42',
-          isNew: false,
           moduleTemplateId: 'template2',
-          proposalId: 'proposal1',
-          toDelete: false
+          proposalId: 'proposal1'
         }
       };
       const actual = modulesById(state, action);
       expect(actual.toJS()).toEqual(expected);
     });
+
+    // TODO: add tests for all other action types
   });
 });
