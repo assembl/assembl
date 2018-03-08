@@ -97,23 +97,31 @@ describe('getMutationsPromises', () => {
     });
   });
 
-  it('should return a list with update mutations on non new and non deleted items', () => {
-    const createMutationSpy = jest.fn();
-    const deleteMutationSpy = jest.fn();
+  it('should return a list with update mutations on items that have changed', () => {
     const updateMutationSpy = jest.fn();
     const params = {
-      createMutation: createMutationSpy,
-      deleteMutation: deleteMutationSpy,
       updateMutation: updateMutationSpy,
       items: [
         {
           _hasChanged: false,
           _isNew: false,
           _toDelete: false,
-          id: 3
+          id: 1
         },
         {
           _hasChanged: false,
+          _isNew: true,
+          _toDelete: false,
+          id: 2
+        },
+        {
+          _hasChanged: true,
+          _isNew: false,
+          _toDelete: false,
+          id: 3
+        },
+        {
+          _hasChanged: true,
           _isNew: false,
           _toDelete: false,
           id: 4
@@ -126,8 +134,6 @@ describe('getMutationsPromises', () => {
     const result = getMutationsPromises(params);
     expect(result.length).toBe(2);
     result.forEach(task => task());
-    expect(createMutationSpy.mock.calls.length).toBe(0);
-    expect(deleteMutationSpy.mock.calls.length).toBe(0);
     expect(updateMutationSpy.mock.calls.length).toBe(2);
     expect(updateMutationSpy.mock.calls[0][0]).toEqual({
       variables: { id: 3, lang: 'en' }
@@ -135,6 +141,40 @@ describe('getMutationsPromises', () => {
     expect(updateMutationSpy.mock.calls[1][0]).toEqual({
       variables: { id: 4, lang: 'en' }
     });
+  });
+
+  it('should not create mutations for items that are new and to delete', () => {
+    const createMutationSpy = jest.fn();
+    const deleteMutationSpy = jest.fn();
+    const updateMutationSpy = jest.fn();
+    const params = {
+      createMutation: createMutationSpy,
+      deleteMutation: deleteMutationSpy,
+      updateMutation: updateMutationSpy,
+      items: [
+        {
+          _hasChanged: false,
+          _isNew: true,
+          _toDelete: true,
+          id: 1
+        },
+        {
+          _hasChanged: true,
+          _isNew: true,
+          _toDelete: true,
+          id: 2
+        }
+      ],
+      lang: 'en',
+      deleteVariablesCreator: item => ({ id: item.id }),
+      variablesCreator: item => ({ id: item.id })
+    };
+    const result = getMutationsPromises(params);
+    expect(result.length).toBe(0);
+    result.forEach(task => task());
+    expect(createMutationSpy.mock.calls.length).toBe(0);
+    expect(deleteMutationSpy.mock.calls.length).toBe(0);
+    expect(updateMutationSpy.mock.calls.length).toBe(0);
   });
 });
 
