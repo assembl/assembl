@@ -12,7 +12,7 @@ type TopPostFormContainerProps = {
   isColumnViewInline: boolean,
   ideaId: string,
   refetchIdea: Function,
-  coarsePostsCount: number
+  topPostsCount: number
 };
 
 type TopPostFormContainerState = {
@@ -83,10 +83,10 @@ class TopPostFormContainer extends React.Component<*, TopPostFormContainerProps,
   }
 
   render() {
-    const { ideaId, refetchIdea, messageColumns = [], isColumnViewInline, coarsePostsCount } = this.props;
+    const { ideaId, refetchIdea, messageColumns = [], isColumnViewInline, topPostsCount } = this.props;
     const columnsInfos = this.getColumnsInfos();
     const { sticky } = this.state;
-    const containerClassNames = sticky && messageColumns.length <= 1 && coarsePostsCount >= 1 ? 'top-post-sticky' : '';
+    const containerClassNames = sticky && messageColumns.length <= 1 && topPostsCount >= 1 ? 'top-post-sticky' : '';
     return (
       <div ref={this.setFormContainerRef} className={containerClassNames}>
         <Grid fluid className={messageColumns.length > 1 ? '' : 'background-color'}>
