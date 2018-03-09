@@ -63,7 +63,7 @@ class Question extends React.Component<void, QuestionProps, QuestionState> {
           });
         })
         .catch((error) => {
-          displayAlert('danger', error);
+          displayAlert('danger', error.message);
           this.setState({
             buttonDisabled: false
           });
