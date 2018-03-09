@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { browserHistory } from 'react-router';
+import classNames from 'classnames';
 import { get } from './utils/routeMap';
 import { getDiscussionId, getConnectedUserId, getConnectedUserName } from './utils/globalFunctions';
 import { getCurrentPhaseIdentifier } from './utils/timeline';
@@ -30,8 +31,9 @@ class App extends React.Component {
 
   render() {
     const { debateData, debateLoading, debateError } = this.props.debate;
+    const divClassNames = classNames('app', { 'harvesting-mode-on': this.props.isHarvesting });
     return (
-      <div className={`${this.props.isHarvesting ? 'app harvesting-mode-on' : 'app'}`}>
+      <div className={divClassNames}>
         <ChatFrame />
         {debateLoading && <Loader />}
         {debateData && <div className="app-child">{this.props.children}</div>}

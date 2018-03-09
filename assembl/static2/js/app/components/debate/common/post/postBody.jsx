@@ -1,6 +1,7 @@
 // @flow
 import React from 'react';
 import activeHtml from 'react-active-html';
+import classNames from 'classnames';
 
 import PostTranslate from '../../common/translations/postTranslate';
 import { transformLinksInHtml } from '../../../../utils/linkify';
@@ -62,21 +63,25 @@ const PostBody = ({
   originalLocale,
   translate,
   translationEnabled
-}: Props) => (
-  <div className={`post-body${translate ? '' : ' post-body--is-harvestable'}`}>
-    {translationEnabled ? (
-      <PostTranslate contentLocale={contentLocale} id={id} lang={lang} originalLocale={originalLocale} translate={translate} />
-    ) : null}
-    {subject && <h3 className="post-body-title dark-title-3">{subject}</h3>}
-    {body && (
-      <Html
-        rawHtml={transformLinksInHtml(body)}
-        className={`post-body-content body ${bodyMimeType === 'text/plain' ? 'pre-wrap' : ''}`}
-        divRef={bodyDivRef}
-        replacementComponents={postBodyReplacementComponents}
-      />
-    )}
-  </div>
-);
+}: Props) => {
+  const divClassNames = classNames('post-body', { 'post-body--is-harvestable': !translate });
+  const htmlClassNames = classNames('post-body-content', 'body', { 'pre-wrap': bodyMimeType === 'text/plain' });
+  return (
+    <div className={divClassNames}>
+      {translationEnabled ? (
+        <PostTranslate contentLocale={contentLocale} id={id} lang={lang} originalLocale={originalLocale} translate={translate} />
+      ) : null}
+      {subject && <h3 className="post-body-title dark-title-3">{subject}</h3>}
+      {body && (
+        <Html
+          rawHtml={transformLinksInHtml(body)}
+          className={htmlClassNames}
+          divRef={bodyDivRef}
+          replacementComponents={postBodyReplacementComponents}
+        />
+      )}
+    </div>
+  );
+};
 
 export default PostBody;
