@@ -20,6 +20,7 @@ const Proposals = (props: Props) => (
         key={proposal.id}
         {...proposal}
         modules={proposal.modules}
+        numParticipants={proposal.voteResults.numParticipants}
         remainingTokensByCategory={props.remainingTokensByCategory}
         tokenVotes={props.tokenVotes}
         voteForProposal={props.voteForProposal}

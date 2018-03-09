@@ -27,10 +27,14 @@ export type TokenCategory = {|
   color: ?string
 |};
 
-export type VoteSpecification =
-  | tokenVoteSpecificationFragment
-  | numberGaugeVoteSpecificationFragment
-  | gaugeVoteSpecificationFragment;
+export type TokenVoteSpecification = { ...tokenVoteSpecificationFragment, ...tokenVoteSpecificationResultsFragment };
+export type NumberGaugeVoteSpecification = {
+  ...numberGaugeVoteSpecificationFragment,
+  ...numberGaugeVoteSpecificationResultsFragment
+};
+export type GaugeVoteSpecification = { ...gaugeVoteSpecificationFragment, ...gaugeVoteSpecificationResultsFragment };
+
+export type VoteSpecification = TokenVoteSpecification | NumberGaugeVoteSpecification | GaugeVoteSpecification;
 
 export type Proposal = {|
   id: string,
@@ -39,7 +43,16 @@ export type Proposal = {|
   titleEntries: ?Array<?LangStringEntryInput>,
   descriptionEntries: ?Array<?LangStringEntryInput>,
   order: ?number,
-  modules: ?Array<VoteSpecification>
+  modules: Array<VoteSpecification>,
+  voteResults: {|
+    numParticipants: number,
+    participants: Array<?{|
+      // The ID of the object.
+      id: string,
+      userId: number,
+      displayName: ?string
+    |}>
+  |}
 |};
 
 type Props = {
@@ -68,17 +81,17 @@ type State = {
   availableTokensSticky: boolean
 };
 
-// $FlowFixMe: if voteType === 'token_vote_specification', we know it is a tokenVoteSpecificationFragment
-type FindTokenVoteModule = (Array<VoteSpecification>) => ?tokenVoteSpecificationFragment;
+// $FlowFixMe: if voteType === 'token_vote_specification', we know it is a TokenVoteSpecification
+type FindTokenVoteModule = (Array<VoteSpecification>) => ?TokenVoteSpecification;
 export const findTokenVoteModule: FindTokenVoteModule = modules => modules.find(m => m.voteType === 'token_vote_specification');
 
-// $FlowFixMe: if voteType === 'gauge_vote_specification', we know it is a gaugeVoteSpecificationFragment
-type FilterGaugeVoteModules = (Array<VoteSpecification>) => Array<gaugeVoteSpecificationFragment>;
+// $FlowFixMe: if voteType === 'gauge_vote_specification', we know it is a GaugeVoteSpecification
+type FilterGaugeVoteModules = (Array<VoteSpecification>) => Array<GaugeVoteSpecification>;
 export const filterGaugeVoteModules: FilterGaugeVoteModules = modules =>
   modules.filter(module => module.voteType === 'gauge_vote_specification');
 
-// $FlowFixMe: if voteType === 'number_gauge_vote_specification', we know it is a numberGaugeVoteSpecificationFragment
-type FilterNumberGaugeVoteModules = (Array<VoteSpecification>) => Array<numberGaugeVoteSpecificationFragment>;
+// $FlowFixMe: if voteType === 'number_gauge_vote_specification', we know it is a NumberGaugeVoteSpecification
+type FilterNumberGaugeVoteModules = (Array<VoteSpecification>) => Array<NumberGaugeVoteSpecification>;
 export const filterNumberGaugeVoteModules: FilterNumberGaugeVoteModules = modules =>
   modules.filter(module => module.voteType === 'number_gauge_vote_specification');
 
@@ -133,7 +146,7 @@ class DumbVoteSession extends React.Component<void, Props, State> {
     promptForLoginOr(setVote)();
   };
 
-  getRemainingTokensByCategory: (?tokenVoteSpecificationFragment) => RemainingTokensByCategory = (module) => {
+  getRemainingTokensByCategory: (?TokenVoteSpecification) => RemainingTokensByCategory = (module) => {
     let remainingTokensByCategory = Map();
     if (module && module.tokenCategories) {
       module.tokenCategories.forEach((category) => {

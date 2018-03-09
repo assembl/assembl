@@ -135,6 +135,9 @@ exports[`VoteSession component should match VoteSession snapshot 1`] = `
                     },
                   ],
                   "title": "First proposal",
+                  "voteResults": Object {
+                    "numParticipants": 1,
+                  },
                 },
                 Object {
                   "description": "I'll input the multi-byte SAS monitor, that should bandwidth the USB microchip!",
@@ -167,6 +170,9 @@ exports[`VoteSession component should match VoteSession snapshot 1`] = `
                     },
                   ],
                   "title": "Second proposal",
+                  "voteResults": Object {
+                    "numParticipants": 2,
+                  },
                 },
               ]
             }

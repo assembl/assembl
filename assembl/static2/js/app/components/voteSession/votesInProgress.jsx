@@ -1,16 +1,20 @@
 // @flow
 import React from 'react';
 import { Row, Col } from 'react-bootstrap';
+import { I18n } from 'react-redux-i18n';
 import ParticipantsCount from './participantsCount';
 import TokenVotesResults from './tokenVotesResults';
 import GaugeVotesResults from './gaugeVotesResults';
-import { type TokenCategories } from './tokenVoteForProposal';
+import {
+  findTokenVoteModule,
+  filterGaugeVoteModules,
+  filterNumberGaugeVoteModules,
+  type VoteSpecification
+} from '../../pages/voteSession';
 
 type Props = {
-  participantsCount: number,
-  tokenCategories: TokenCategories,
-  tokenVotes: { [string]: number },
-  gauges: Array<Object>
+  modules: Array<VoteSpecification>,
+  numParticipants: number
 };
 
 const getNumberBoxToDisplay: Function = (tokens, gauges) => {
@@ -38,39 +42,52 @@ const getColumnSizes: Function = (numberBoxToDisplay) => {
   }
 };
 
-const VotesInProgress = ({ participantsCount, tokenCategories, tokenVotes, gauges }: Props) => {
-  const numberBoxToDisplay: number = getNumberBoxToDisplay(tokenCategories, gauges);
+const VotesInProgress = ({ modules, numParticipants }: Props) => {
+  const tokenVoteModule = modules ? findTokenVoteModule(modules) : null;
+  const tokenCategories = tokenVoteModule ? tokenVoteModule.tokenCategories : [];
+  const textGauges = filterGaugeVoteModules(modules);
+  const numberGauges = filterNumberGaugeVoteModules(modules);
+  const allGauges = [...textGauges, ...numberGauges];
+  const numberBoxToDisplay: number = getNumberBoxToDisplay(tokenCategories, allGauges);
   const columnSizes: Array<number> = getColumnSizes(numberBoxToDisplay);
+  let index = tokenVoteModule ? 2 : 0;
   return (
     <Row className="votes-in-progress background-grey">
       <Col xs={12} md={columnSizes[0]}>
-        <ParticipantsCount count={participantsCount} />
+        <ParticipantsCount count={numParticipants} />
       </Col>
-      {tokenCategories && (
-        <Col xs={12} md={columnSizes[1]}>
-          <TokenVotesResults categories={tokenCategories} votes={tokenVotes} />
-        </Col>
-      )}
-      {gauges &&
-        gauges.map((gauge, index) => (
-          <Col xs={12} md={columnSizes[index + 2]} key={gauge.id}>
-            <GaugeVotesResults title={gauge.estimate} />
+      {tokenVoteModule &&
+        tokenCategories.length > 0 && (
+          <Col xs={12} md={columnSizes[1]}>
+            <TokenVotesResults
+              categories={tokenCategories}
+              tokenVotes={tokenVoteModule.tokenVotes}
+              numVotes={tokenVoteModule.numVotes}
+            />
           </Col>
-        ))}
+        )}
+      {textGauges.map((gauge) => {
+        const colSize = columnSizes[index];
+        index += 1;
+        const title = gauge.averageLabel || '';
+        return (
+          <Col xs={12} md={colSize} key={gauge.id}>
+            <GaugeVotesResults title={title} />
+          </Col>
+        );
+      })}
+      {numberGauges.map((gauge) => {
+        const colSize = columnSizes[index];
+        index += 1;
+        const title = I18n.t('debate.voteSession.valueWithUnit', { num: gauge.averageResult, unit: gauge.unit || '' });
+        return (
+          <Col xs={12} md={colSize} key={gauge.id}>
+            <GaugeVotesResults title={title} />
+          </Col>
+        );
+      })}
     </Row>
   );
 };
 
-const mockData = {
-  participantsCount: 125,
-  tokenVotes: {
-    category1: 112,
-    category2: 44
-  },
-  gauges: [{ id: '1234', estimate: '6 M€' }, { id: '5678', estimate: '8 M€' }, { id: '9887', estimate: '18 M€' }]
-};
-
-// $FlowFixMe
-const withMockData = data => Component => props => <Component {...data} {...props} />;
-
-export default withMockData(mockData)(VotesInProgress);
+export default VotesInProgress;

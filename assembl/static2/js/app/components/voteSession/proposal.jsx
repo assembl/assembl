@@ -19,10 +19,11 @@ import {
 type Props = {
   description: ?string,
   id: string,
-  modules: ?Array<VoteSpecification>,
+  modules: Array<VoteSpecification>,
   remainingTokensByCategory: RemainingTokensByCategory,
   title: ?string,
   tokenVotes: UserTokenVotes,
+  numParticipants: number,
   voteForProposal: Function,
   voteForProposalGauge: Function
 };
@@ -54,6 +55,7 @@ class Proposal extends React.Component<void, Props, State> {
       description,
       id,
       modules,
+      numParticipants,
       remainingTokensByCategory,
       title,
       tokenVotes,
@@ -119,7 +121,7 @@ class Proposal extends React.Component<void, Props, State> {
                 </Button>
               </Col>
             </Row>
-            {tokenVoteModule && <VotesInProgress tokenCategories={tokenVoteModule.tokenCategories} />}
+            <VotesInProgress modules={modules} numParticipants={numParticipants} />
           </div>
         ) : (
           <div className="expand-result">

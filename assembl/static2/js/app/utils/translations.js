@@ -325,7 +325,7 @@ const Translations = {
         totalVotes: "%{count} votes",
         votes: "Votes",
         vote: "Vote",
-        valueWithUnit: "%{value} %{unit}"
+        valueWithUnit: "%{num} %{unit}"
       }
     },
     profile: {
@@ -896,7 +896,7 @@ const Translations = {
         totalVotes: "%{count} votes",
         votes: "Votes",
         vote: "Vote",
-        valueWithUnit: "%{unit}%{value}"
+        valueWithUnit: "%{unit}%{num}"
       }
     },
     profile: {

@@ -218,7 +218,7 @@ class NumberGaugeVoteForProposal extends React.Component<*, NumberGaugeVoteForPr
         style: markStyle,
         label: (
           <div>
-            <Translate value={minimum} unit={unit} />
+            <Translate value="debate.voteSession.valueWithUnit" num={minimum} unit={unit} />
           </div>
         )
       };
@@ -227,7 +227,7 @@ class NumberGaugeVoteForProposal extends React.Component<*, NumberGaugeVoteForPr
         style: markStyle,
         label: (
           <div>
-            <Translate value={maximum} unit={unit} />
+            <Translate value="debate.voteSession.valueWithUnit" num={maximum} unit={unit} />
           </div>
         )
       };
@@ -241,7 +241,7 @@ class NumberGaugeVoteForProposal extends React.Component<*, NumberGaugeVoteForPr
             style: markStyle,
             label: (
               <div>
-                <Translate value={value.toFixed(2)} unit={unit} />
+                <Translate value="debate.voteSession.valueWithUnit" num={value.toFixed(2)} unit={unit} />
               </div>
             )
           };
