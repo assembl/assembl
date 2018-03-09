@@ -3,17 +3,17 @@
 //  This file was automatically generated and should not be edited.
 
 export type PublicationStates =
-  | 'MODERATED_TEXT_ON_DEMAND'
-  | 'SUBMITTED_AWAITING_MODERATION'
-  | 'PUBLISHED'
   | 'DELETED_BY_ADMIN'
   | 'DELETED_BY_USER'
   | 'DRAFT'
-  | 'WIDGET_SCOPED'
+  | 'MODERATED_TEXT_NEVER_AVAILABLE'
+  | 'MODERATED_TEXT_ON_DEMAND'
+  | 'PUBLISHED'
+  | 'SUBMITTED_AWAITING_MODERATION'
   | 'SUBMITTED_IN_EDIT_GRACE_PERIOD'
-  | 'MODERATED_TEXT_NEVER_AVAILABLE';
+  | 'WIDGET_SCOPED';
 
-export type SentimentTypes = 'LIKE' | 'DISAGREE' | 'DONT_UNDERSTAND' | 'MORE_INFO';
+export type SentimentTypes = 'DISAGREE' | 'DONT_UNDERSTAND' | 'LIKE' | 'MORE_INFO';
 
 export type LangStringEntryInput = {|
   value?: ?string,
@@ -164,6 +164,8 @@ export type IdeaQuery = {|
     | {}
     | {}
     | {}
+    | {}
+    | {}
     | {})
 |};
 
@@ -226,6 +228,8 @@ export type IdeaWithPostsQuery = {|
           |}>
         |}
       }
+    | {}
+    | {}
     | {}
     | {}
     | {}
@@ -329,6 +333,8 @@ export type PostQuery = {|
     | {}
     | {}
     | {}
+    | {}
+    | {}
     | {
         // The ID of the object.
         id: string,
@@ -417,6 +423,8 @@ export type QuestionPostsQuery = {|
     | {}
     | {}
     | {}
+    | {}
+    | {}
     | {
         // The ID of the object.
         id: string,
@@ -452,6 +460,8 @@ export type QuestionQueryVariables = {|
 export type QuestionQuery = {|
   // The ID of the object
   question: ?(
+    | {}
+    | {}
     | {}
     | {}
     | {}
@@ -653,6 +663,14 @@ export type SynthesisQueryQuery = {|
       }
     | {
         // The ID of the object.
+        id: string
+      }
+    | {
+        // The ID of the object.
+        id: string
+      }
+    | {
+        // The ID of the object.
         id: string,
         publishesSynthesis: ?{|
           // The ID of the object.
@@ -809,6 +827,8 @@ export type ThematicQueryQuery = {|
     | {}
     | {}
     | {}
+    | {}
+    | {}
     | {
         title: ?string,
         img: ?{|
@@ -908,6 +928,7 @@ export type VoteSessionQuery = {|
       mimeType: ?string,
       externalUrl: ?string
     |},
+    seeCurrentVotes: boolean,
     titleEntries: ?Array<?{|
       localeCode: string,
       value: ?string
@@ -933,7 +954,7 @@ export type VoteSessionQuery = {|
     instructionsSectionTitle: ?string,
     instructionsSectionContent: ?string,
     propositionsSectionTitle: ?string,
-    proposals: ?Array<?{|
+    proposals: Array<?{|
       // The ID of the object.
       id: string,
       title: ?string,
@@ -947,7 +968,16 @@ export type VoteSessionQuery = {|
         value: ?string
       |}>,
       order: ?number,
-      modules: ?Array<?(
+      voteResults: {|
+        numParticipants: number,
+        participants: Array<?{|
+          // The ID of the object.
+          id: string,
+          userId: number,
+          displayName: ?string
+        |}>
+      |},
+      modules: Array<?(
         | {
             // The ID of the object.
             id: string,
@@ -961,8 +991,9 @@ export type VoteSessionQuery = {|
               localeCode: string,
               value: ?string
             |}>,
+            isCustom: boolean,
             exclusiveCategories: ?boolean,
-            tokenCategories: ?Array<?{|
+            tokenCategories: Array<?{|
               // The ID of the object.
               id: string,
               totalNumber: number,
@@ -976,7 +1007,19 @@ export type VoteSessionQuery = {|
               color: ?string
             |}>,
             voteSpecTemplateId: ?string,
-            voteType: ?string
+            voteType: ?string,
+            myVotes: ?Array<?(
+              | {
+                  voteValue: number,
+                  proposalId: string,
+                  tokenCategoryId: string
+                }
+              | {})>,
+            numVotes: number,
+            tokenVotes: Array<?{|
+              tokenCategoryId: string,
+              numToken: number
+            |}>
           }
         | {
             // The ID of the object.
@@ -991,17 +1034,27 @@ export type VoteSessionQuery = {|
               localeCode: string,
               value: ?string
             |}>,
+            isCustom: boolean,
             choices: ?Array<?{|
               // The ID of the object.
               id: string,
               value: number,
+              label: ?string,
               labelEntries: ?Array<?{|
                 localeCode: string,
                 value: ?string
               |}>
             |}>,
             voteSpecTemplateId: ?string,
-            voteType: ?string
+            voteType: ?string,
+            myVotes: ?Array<?(
+              | {}
+              | {
+                  selectedValue: number,
+                  proposalId: string
+                })>,
+            numVotes: number,
+            averageLabel: ?string
           }
         | {
             // The ID of the object.
@@ -1016,15 +1069,24 @@ export type VoteSessionQuery = {|
               localeCode: string,
               value: ?string
             |}>,
+            isCustom: boolean,
             minimum: ?number,
             maximum: ?number,
             nbTicks: ?number,
             unit: ?string,
             voteSpecTemplateId: ?string,
-            voteType: ?string
+            voteType: ?string,
+            myVotes: ?Array<?(
+              | {}
+              | {
+                  selectedValue: number,
+                  proposalId: string
+                })>,
+            numVotes: number,
+            averageResult: number
           })>
     |}>,
-    modules: ?Array<?(
+    modules: Array<?(
       | {
           // The ID of the object.
           id: string,
@@ -1038,8 +1100,9 @@ export type VoteSessionQuery = {|
             localeCode: string,
             value: ?string
           |}>,
+          isCustom: boolean,
           exclusiveCategories: ?boolean,
-          tokenCategories: ?Array<?{|
+          tokenCategories: Array<?{|
             // The ID of the object.
             id: string,
             totalNumber: number,
@@ -1068,10 +1131,12 @@ export type VoteSessionQuery = {|
             localeCode: string,
             value: ?string
           |}>,
+          isCustom: boolean,
           choices: ?Array<?{|
             // The ID of the object.
             id: string,
             value: number,
+            label: ?string,
             labelEntries: ?Array<?{|
               localeCode: string,
               value: ?string
@@ -1093,6 +1158,7 @@ export type VoteSessionQuery = {|
             localeCode: string,
             value: ?string
           |}>,
+          isCustom: boolean,
           minimum: ?number,
           maximum: ?number,
           nbTicks: ?number,
@@ -1100,6 +1166,39 @@ export type VoteSessionQuery = {|
           voteSpecTemplateId: ?string,
           voteType: ?string
         })>
+  |}
+|};
+
+export type addGaugeVoteMutationVariables = {|
+  proposalId: string,
+  voteSpecId: string,
+  voteValue: number
+|};
+
+export type addGaugeVoteMutation = {|
+  addGaugeVote: ?{|
+    voteSpecification: ?(
+      | {}
+      | {
+          // The ID of the object.
+          id: string,
+          myVotes: ?Array<?(
+            | {}
+            | {
+                selectedValue: number,
+                proposalId: string
+              })>
+        }
+      | {
+          // The ID of the object.
+          id: string,
+          myVotes: ?Array<?(
+            | {}
+            | {
+                selectedValue: number,
+                proposalId: string
+              })>
+        })
   |}
 |};
 
@@ -1124,10 +1223,34 @@ export type addSentimentMutation = {|
   |}
 |};
 
+export type addTokenVoteMutationVariables = {|
+  proposalId: string,
+  tokenCategoryId: string,
+  voteSpecId: string,
+  voteValue: number
+|};
+
+export type addTokenVoteMutation = {|
+  addTokenVote: ?{|
+    voteSpecification: ?{|
+      // The ID of the object.
+      id: string,
+      myVotes: ?Array<?(
+        | {
+            voteValue: number,
+            proposalId: string,
+            tokenCategoryId: string
+          }
+        | {})>
+    |}
+  |}
+|};
+
 export type createGaugeVoteSpecificationMutationVariables = {|
   voteSessionId: string,
   titleEntries: Array<?LangStringEntryInput>,
   instructionsEntries: Array<?LangStringEntryInput>,
+  isCustom: boolean,
   choices: Array<?GaugeChoiceSpecificationInput>,
   proposalId?: ?string,
   voteSpecTemplateId?: ?string
@@ -1147,6 +1270,7 @@ export type createGaugeVoteSpecificationMutation = {|
         localeCode: string,
         value: ?string
       |}>,
+      isCustom: boolean,
       choices: ?Array<?{|
         // The ID of the object.
         id: string,
@@ -1186,6 +1310,7 @@ export type createNumberGaugeVoteSpecificationMutationVariables = {|
   voteSessionId: string,
   titleEntries: Array<?LangStringEntryInput>,
   instructionsEntries: Array<?LangStringEntryInput>,
+  isCustom: boolean,
   minimum: number,
   maximum: number,
   nbTicks: number,
@@ -1208,6 +1333,7 @@ export type createNumberGaugeVoteSpecificationMutation = {|
         localeCode: string,
         value: ?string
       |}>,
+      isCustom: boolean,
       minimum: ?number,
       maximum: ?number,
       nbTicks: ?number,
@@ -1389,6 +1515,7 @@ export type createTokenVoteSpecificationMutationVariables = {|
   voteSessionId: string,
   titleEntries: Array<?LangStringEntryInput>,
   instructionsEntries: Array<?LangStringEntryInput>,
+  isCustom: boolean,
   exclusiveCategories: boolean,
   tokenCategories: Array<?TokenCategorySpecificationInput>,
   proposalId?: ?string,
@@ -1409,13 +1536,12 @@ export type createTokenVoteSpecificationMutation = {|
         localeCode: string,
         value: ?string
       |}>,
+      isCustom: boolean,
       exclusiveCategories: ?boolean,
-      tokenCategories: ?Array<?{|
+      tokenCategories: Array<?{|
         // The ID of the object.
         id: string,
         totalNumber: number,
-        // categories which have the same typename will be comparable (example: "positive")
-        typename: string,
         titleEntries: ?Array<?{|
           localeCode: string,
           value: ?string
@@ -1424,6 +1550,38 @@ export type createTokenVoteSpecificationMutation = {|
       |}>,
       voteSpecTemplateId: ?string
     |}
+  |}
+|};
+
+export type deleteGaugeVoteMutationVariables = {|
+  proposalId: string,
+  voteSpecId: string
+|};
+
+export type deleteGaugeVoteMutation = {|
+  deleteGaugeVote: ?{|
+    voteSpecification: ?(
+      | {}
+      | {
+          // The ID of the object.
+          id: string,
+          myVotes: ?Array<?(
+            | {}
+            | {
+                selectedValue: number,
+                proposalId: string
+              })>
+        }
+      | {
+          // The ID of the object.
+          id: string,
+          myVotes: ?Array<?(
+            | {}
+            | {
+                selectedValue: number,
+                proposalId: string
+              })>
+        })
   |}
 |};
 
@@ -1501,6 +1659,28 @@ export type deleteThematicMutation = {|
   |}
 |};
 
+export type deleteTokenVoteMutationVariables = {|
+  proposalId: string,
+  tokenCategoryId: string,
+  voteSpecId: string
+|};
+
+export type deleteTokenVoteMutation = {|
+  deleteTokenVote: ?{|
+    voteSpecification: ?{|
+      // The ID of the object.
+      id: string,
+      myVotes: ?Array<?(
+        | {
+            voteValue: number,
+            proposalId: string,
+            tokenCategoryId: string
+          }
+        | {})>
+    |}
+  |}
+|};
+
 export type deleteVoteSpecificationMutationVariables = {|
   id: string
 |};
@@ -1529,6 +1709,7 @@ export type updateGaugeVoteSpecificationMutationVariables = {|
   id: string,
   titleEntries: Array<?LangStringEntryInput>,
   instructionsEntries: Array<?LangStringEntryInput>,
+  isCustom: boolean,
   choices: Array<?GaugeChoiceSpecificationInput>
 |};
 
@@ -1546,6 +1727,7 @@ export type updateGaugeVoteSpecificationMutation = {|
         localeCode: string,
         value: ?string
       |}>,
+      isCustom: boolean,
       choices: ?Array<?{|
         // The ID of the object.
         id: string,
@@ -1604,6 +1786,7 @@ export type updateNumberGaugeVoteSpecificationMutationVariables = {|
   id: string,
   titleEntries: Array<?LangStringEntryInput>,
   instructionsEntries: Array<?LangStringEntryInput>,
+  isCustom: boolean,
   minimum: number,
   maximum: number,
   nbTicks: number,
@@ -1624,6 +1807,7 @@ export type updateNumberGaugeVoteSpecificationMutation = {|
         localeCode: string,
         value: ?string
       |}>,
+      isCustom: boolean,
       minimum: ?number,
       maximum: ?number,
       nbTicks: ?number,
@@ -1823,6 +2007,7 @@ export type updateTokenVoteSpecificationMutationVariables = {|
   id: string,
   titleEntries: Array<?LangStringEntryInput>,
   instructionsEntries: Array<?LangStringEntryInput>,
+  isCustom: boolean,
   exclusiveCategories: boolean,
   tokenCategories: Array<?TokenCategorySpecificationInput>
 |};
@@ -1841,13 +2026,12 @@ export type updateTokenVoteSpecificationMutation = {|
         localeCode: string,
         value: ?string
       |}>,
+      isCustom: boolean,
       exclusiveCategories: ?boolean,
-      tokenCategories: ?Array<?{|
+      tokenCategories: Array<?{|
         // The ID of the object.
         id: string,
         totalNumber: number,
-        // categories which have the same typename will be comparable (example: "positive")
-        typename: string,
         titleEntries: ?Array<?{|
           localeCode: string,
           value: ?string
@@ -1890,7 +2074,8 @@ export type UpdateVoteSessionMutationVariables = {|
   subTitleEntries?: ?Array<?LangStringEntryInput>,
   instructionsSectionTitleEntries?: ?Array<?LangStringEntryInput>,
   instructionsSectionContentEntries?: ?Array<?LangStringEntryInput>,
-  propositionsSectionTitleEntries?: ?Array<?LangStringEntryInput>
+  propositionsSectionTitleEntries?: ?Array<?LangStringEntryInput>,
+  seeCurrentVotes?: ?boolean
 |};
 
 export type UpdateVoteSessionMutation = {|
@@ -1901,6 +2086,7 @@ export type UpdateVoteSessionMutation = {|
         mimeType: ?string,
         externalUrl: ?string
       |},
+      seeCurrentVotes: boolean,
       titleEntries: ?Array<?{|
         localeCode: string,
         value: ?string
@@ -1954,6 +2140,8 @@ export type UserQuery = {|
     | {}
     | {}
     | {}
+    | {}
+    | {}
     | {
         // The ID of the object.
         id: string,
@@ -1990,8 +2178,9 @@ export type tokenVoteSpecificationFragment = {|
     localeCode: string,
     value: ?string
   |}>,
+  isCustom: boolean,
   exclusiveCategories: ?boolean,
-  tokenCategories: ?Array<?{|
+  tokenCategories: Array<?{|
     // The ID of the object.
     id: string,
     totalNumber: number,
@@ -2008,6 +2197,21 @@ export type tokenVoteSpecificationFragment = {|
   voteType: ?string
 |};
 
+export type tokenVoteSpecificationResultsFragment = {|
+  myVotes: ?Array<?(
+    | {
+        voteValue: number,
+        proposalId: string,
+        tokenCategoryId: string
+      }
+    | {})>,
+  numVotes: number,
+  tokenVotes: Array<?{|
+    tokenCategoryId: string,
+    numToken: number
+  |}>
+|};
+
 export type numberGaugeVoteSpecificationFragment = {|
   // The ID of the object.
   id: string,
@@ -2021,12 +2225,24 @@ export type numberGaugeVoteSpecificationFragment = {|
     localeCode: string,
     value: ?string
   |}>,
+  isCustom: boolean,
   minimum: ?number,
   maximum: ?number,
   nbTicks: ?number,
   unit: ?string,
   voteSpecTemplateId: ?string,
   voteType: ?string
+|};
+
+export type numberGaugeVoteSpecificationResultsFragment = {|
+  myVotes: ?Array<?(
+    | {}
+    | {
+        selectedValue: number,
+        proposalId: string
+      })>,
+  numVotes: number,
+  averageResult: number
 |};
 
 export type gaugeVoteSpecificationFragment = {|
@@ -2042,10 +2258,12 @@ export type gaugeVoteSpecificationFragment = {|
     localeCode: string,
     value: ?string
   |}>,
+  isCustom: boolean,
   choices: ?Array<?{|
     // The ID of the object.
     id: string,
     value: number,
+    label: ?string,
     labelEntries: ?Array<?{|
       localeCode: string,
       value: ?string
@@ -2053,6 +2271,17 @@ export type gaugeVoteSpecificationFragment = {|
   |}>,
   voteSpecTemplateId: ?string,
   voteType: ?string
+|};
+
+export type gaugeVoteSpecificationResultsFragment = {|
+  myVotes: ?Array<?(
+    | {}
+    | {
+        selectedValue: number,
+        proposalId: string
+      })>,
+  numVotes: number,
+  averageLabel: ?string
 |};
 
 export type AgentProfileInfoFragment = {|
@@ -2184,7 +2413,8 @@ export type voteSessionGlobalsFragment = {|
     title: ?string,
     mimeType: ?string,
     externalUrl: ?string
-  |}
+  |},
+  seeCurrentVotes: boolean
 |};
 
 export type voteSessionLangstringsEntriesFragment = {|

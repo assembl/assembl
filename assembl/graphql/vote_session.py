@@ -42,8 +42,8 @@ class VoteSession(SecureObjectType, SQLAlchemyObjectType):
         only_fields = ('id', 'discussion_phase_id')
 
     header_image = graphene.Field(Document)
-    vote_specifications = graphene.List(lambda: VoteSpecificationUnion)
-    proposals = graphene.List(lambda: Idea)
+    vote_specifications = graphene.List(lambda: VoteSpecificationUnion, required=True)
+    proposals = graphene.List(lambda: Idea, required=True)
     see_current_votes = graphene.Boolean(required=True)
 
     def resolve_header_image(self, args, context, info):
@@ -153,7 +153,7 @@ class VoteSpecificationInterface(graphene.Interface):
     vote_spec_template_id = graphene.ID()
     vote_type = graphene.String()
     my_votes = graphene.List('assembl.graphql.votes.VoteUnion')
-    num_votes = graphene.Int()
+    num_votes = graphene.Int(required=True)
 
     def resolve_title(self, args, context, info):
         return resolve_langstring(self.title, args.get('lang'))
@@ -225,8 +225,8 @@ class TokenVoteSpecification(SecureObjectType, SQLAlchemyObjectType):
         interfaces = (Node, VoteSpecificationInterface)
         only_fields = ('id', 'exclusive_categories')
 
-    token_categories = graphene.List(TokenCategorySpecification)
-    token_votes = graphene.List(VotesByCategory)
+    token_categories = graphene.List(TokenCategorySpecification, required=True)
+    token_votes = graphene.List(VotesByCategory, required=True)
 
     def resolve_token_votes(self, args, context, info):
         votes = []

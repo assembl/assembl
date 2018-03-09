@@ -51,7 +51,7 @@ class IdeaInterface(graphene.Interface):
     order = graphene.Float()
     live = graphene.Field(lambda: IdeaUnion)
     message_view_override = graphene.String()
-    vote_specifications = graphene.List('assembl.graphql.vote_session.VoteSpecificationUnion')
+    vote_specifications = graphene.List('assembl.graphql.vote_session.VoteSpecificationUnion', required=True)
 
     def resolve_num_total_posts(self, args, context, info):
         if isinstance(self, models.RootIdea):
@@ -154,8 +154,8 @@ class IdeaMessageColumn(SecureObjectType, SQLAlchemyObjectType):
 
 class VoteResults(graphene.ObjectType):
 
-    num_participants = graphene.Int()
-    participants = graphene.List(AgentProfile)
+    num_participants = graphene.Int(required=True)
+    participants = graphene.List(AgentProfile, required=True)
 
 
 class Idea(SecureObjectType, SQLAlchemyObjectType):
@@ -179,12 +179,12 @@ class Idea(SecureObjectType, SQLAlchemyObjectType):
     announcement = graphene.Field(lambda: IdeaAnnoucement)
     message_columns = graphene.List(lambda: IdeaMessageColumn)
     ancestors = graphene.List(graphene.ID)
-    vote_results = graphene.Field(VoteResults)
+    vote_results = graphene.Field(VoteResults, required=True)
 
     def resolve_vote_results(self, args, context, info):
         vote_specifications = self.criterion_for
         if not vote_specifications:
-            return
+            return VoteResults(num_participants=0, participants=[])
 
         query = vote_specifications[0].get_voter_ids_query()
         for vote_spec in vote_specifications[1:]:
