@@ -179,7 +179,7 @@ class DumbVoteSession extends React.Component<void, Props, State> {
             displayAlert('success', I18n.t('debate.survey.postSuccess'));
           })
           .catch((error) => {
-            displayAlert('danger', error);
+            displayAlert('danger', error.message);
           });
       });
     });
