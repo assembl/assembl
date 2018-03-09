@@ -14,24 +14,36 @@ const Annotator = require('annotator'); // eslint-disable-line
 type LeftSideHarvestingButtonProps = {
   label: string,
   handleClick: Function,
+  handleMouseDown: Function,
   children: Array<*>
 };
 
-const LeftSideHarvestingButton = ({ label, handleClick, children }: LeftSideHarvestingButtonProps) => (
+const LeftSideHarvestingButton = ({ label, handleClick, handleMouseDown, children }: LeftSideHarvestingButtonProps) => (
   <div className="left-side-harvesting-button">
     <div className="left-side-harvesting-button__label">{label}</div>
-    <div className="left-side-harvesting-button__button" role="button" tabIndex={0} onClick={handleClick}>
+    <div
+      className="left-side-harvesting-button__button"
+      role="button"
+      tabIndex={0}
+      onClick={handleClick}
+      onMouseDown={handleMouseDown}
+    >
       <div className="left-side-harvesting-button__button__inside">{children}</div>
     </div>
   </div>
 );
 
 type ConfirmHarvestButtonProps = {
-  handleClick: Function
+  handleClick: Function,
+  handleMouseDown: Function
 };
 
-const ConfirmHarvestButton = ({ handleClick }: ConfirmHarvestButtonProps) => (
-  <LeftSideHarvestingButton handleClick={handleClick} label={I18n.t('harvesting.harvestSelection')}>
+const ConfirmHarvestButton = ({ handleClick, handleMouseDown }: ConfirmHarvestButtonProps) => (
+  <LeftSideHarvestingButton
+    handleClick={handleClick}
+    handleMouseDown={handleMouseDown}
+    label={I18n.t('harvesting.harvestSelection')}
+  >
     <span className="confirm-harvest-button assembl-icon-catch">&nbsp;</span>
   </LeftSideHarvestingButton>
 );
@@ -47,9 +59,12 @@ const HarvestingMenu = ({ positionX, positionY }: HarvestingMenuProps) => {
     left: `${positionX}px`,
     top: `${positionY}px`
   };
+  const handleMouseDown = (ev) => {
+    // This would otherwise clear the selection
+    ev.preventDefault();
+    return false;
+  };
   const handleClick = () => {
-    // TODO: Currently, the click on the hook clears the selection,
-    // so the selection is invalid by the time we get here.
     const selection = window.getSelection();
     const browserRange = Annotator.Annotator.Range.sniff(selection.getRangeAt(0));
     const serialized = browserRange.serialize(document, 'annotation');
@@ -58,7 +73,7 @@ const HarvestingMenu = ({ positionX, positionY }: HarvestingMenuProps) => {
   };
   return (
     <div className="harvesting-menu" style={style}>
-      <ConfirmHarvestButton handleClick={handleClick} />
+      <ConfirmHarvestButton handleClick={handleClick} handleMouseDown={handleMouseDown} handle />
     </div>
   );
 };
