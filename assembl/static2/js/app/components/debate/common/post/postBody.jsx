@@ -44,6 +44,24 @@ type Props = {
   translationEnabled: boolean
 };
 
+type ExtractInPostProps = {
+  id: string,
+  children: React.Children
+};
+
+const ExtractInPost = ({ id, children }: ExtractInPostProps) => {
+  const style = {
+    // TODO: set in harvesting.scss when taxonomy part 0 branch is merged
+    display: 'inline',
+    backgroundColor: 'yellow'
+  };
+  return (
+    <div className="extract-in-message" id={id} style={style}>
+      {children}
+    </div>
+  );
+};
+
 const postBodyReplacementComponents = {
   iframe: (attributes) => {
     const { src } = attributes;
@@ -53,7 +71,8 @@ const postBodyReplacementComponents = {
       return <YoutubeTheater videoId={videoId} />;
     }
     return <iframe title="post-embed" {...attributes} />;
-  }
+  },
+  annotation: attributes => <ExtractInPost id={attributes.id}>{attributes.children}</ExtractInPost>
 };
 
 const Html = (props) => {

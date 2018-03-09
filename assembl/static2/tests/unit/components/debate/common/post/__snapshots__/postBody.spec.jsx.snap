@@ -26,6 +26,7 @@ exports[`PostBody component should render a post body 1`] = `
     rawHtml="<p>You can't index the port without programming the wireless HTTP program!</p>"
     replacementComponents={
       Object {
+        "annotation": [Function],
         "iframe": [Function],
       }
     }
