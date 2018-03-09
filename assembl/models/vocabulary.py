@@ -10,6 +10,7 @@ from sqlalchemy.dialects.postgresql import ENUM
 
 from . import Base, DeclarativeAbstractMeta
 from .langstrings import LangString
+from ..lib.logging import getLogger
 
 
 class UpdatablePgEnum(ENUM):
@@ -21,7 +22,11 @@ class UpdatablePgEnum(ENUM):
         db_names = [n for (n,) in bind.execute('select * from unnest(enum_range(null::%s))' % self.name)]
         if value_names != db_names:
             # Check no element was removed. If needed, introduce tombstones to enums.
-            assert not(set(db_names) - set(value_names)), "Do not remove elements from an enum"
+            removed = set(db_names) - set(value_names)
+            if removed:
+                getLogger().warn("Some enum values were removed from type %s: %s" % (
+                    self.name, ', '.join(removed)))
+                db_names = [n for n in db_names if n not in removed]
             # Check no reordering.
             value_names_present = [n for n in value_names if n in db_names]
             assert db_names == value_names_present, "Do not reorder elements in an enum"
@@ -76,7 +81,7 @@ class AbstractVocabulary(Base):
         db = db or cls.default_db
         initial_names = getattr(cls, "_initial_names", None)
         if initial_names:
-            values = db.query(cls).all()
+            values = db.query(cls).filter(cls.id.in_(cls.Enum.__members__.values())).all()
             values = {v.id: v for v in values}
             for id, names in initial_names.items():
                 value = values.get(id, None)
