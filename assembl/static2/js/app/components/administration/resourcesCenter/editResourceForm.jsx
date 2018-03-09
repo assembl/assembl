@@ -21,6 +21,7 @@ import { getEntryValueForLocale } from '../../../utils/i18n';
 type EditResourceFormProps = {
   documentFilename: string,
   documentUrl: string | File,
+  editLocale: string,
   embedCode: string,
   handleDocumentChange: Function,
   handleEmbedCodeChange: Function,
@@ -39,6 +40,7 @@ type EditResourceFormProps = {
 const EditResourceForm = ({
   documentFilename,
   documentUrl,
+  editLocale,
   embedCode,
   handleDocumentChange,
   handleEmbedCodeChange,
@@ -73,7 +75,14 @@ const EditResourceForm = ({
       </div>
       <div className="clear" />
       <FormControlWithLabel label={titleLabel} onChange={handleTitleChange} required type="text" value={title} />
-      <FormControlWithLabel label={textLabel} onChange={handleTextChange} required type="rich-text" value={text} />
+      <FormControlWithLabel
+        label={textLabel}
+        onChange={handleTextChange}
+        required
+        type="rich-text"
+        value={text}
+        key={`${id}-${editLocale}`}
+      />
       <FormControlWithLabel
         componentClass="textarea"
         label={embedCodeLabel}
