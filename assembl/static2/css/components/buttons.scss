@@ -55,7 +55,7 @@
 .button-submit {
   @extend .button-generic;
 
-  padding: 11px 24px;
+  padding: 10px 24px;
 
   &:active {
     box-shadow: none;
@@ -125,9 +125,9 @@
   .button-diamond-dark-back {
     transition: none;
     position: absolute;
-    left: -13px;
-    height: 26px;
-    width: 26px;
+    left: -14px;
+    height: 27px;
+    width: 27px;
     border: $btn-dark-border-style $btn-dark-border-width $btn-dark-border-color;
     transform: rotate(45deg);
     top: 4px;
