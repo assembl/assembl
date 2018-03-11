@@ -112,12 +112,24 @@ module.exports = {
           test: /\.json$/,
           use: 'json-loader'
         },
+        {
+          test: /\.coffee$/,
+          use: [
+            {
+              loader: 'coffee-loader',
+              options: {
+                transpile: true
+              }
+            }
+          ]
+        }
         ]
     },
     resolve:{
-        extensions:['.js', '.jsx'],
+        extensions:['.js', '.jsx', '.coffee'],
         alias: {
-          annotator$: path.join(__dirname, '../static/js/lib/annotator/annotator-full.js'),
+          annotator_range$: path.join(__dirname, 'node_modules/hypothesis/src/annotator/anchoring/range.coffee'),
+          jquery$: path.join(__dirname, 'node_modules/jquery/dist/jquery.slim.min.js'),
         },
     },
     plugins: [

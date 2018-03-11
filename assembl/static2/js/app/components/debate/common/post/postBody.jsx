@@ -3,17 +3,12 @@ import React from 'react';
 import activeHtml from 'react-active-html';
 import classNames from 'classnames';
 import jQuery from 'jquery';
+import ARange from 'annotator_range'; // eslint-disable-line
 
 import PostTranslate from '../../common/translations/postTranslate';
 import { transformLinksInHtml } from '../../../../utils/linkify';
 import { youtubeRegexp } from '../../../../utils/globalFunctions';
 import YoutubeTheater from '../../../common/youtubeTheater';
-
-// Annotator needs this global.
-global.jQuery = jQuery;
-// Use require, which will run in code sequence, rather than import,
-// which runs before any code, incl. the global declaration above.
-const Annotator = require('annotator'); // eslint-disable-line
 
 export type TextFragmentIdentifier = {
   xpathStart: string,
@@ -96,7 +91,7 @@ const Html = (props) => {
     extracts.forEach((extract) => {
       const wrapper = jQuery(`<annotation id="${extract.id}"></annotation>`);
       extract.textFragmentIdentifiers.forEach((tfi) => {
-        const range = new Annotator.Annotator.Range.SerializedRange({
+        const range = new ARange.SerializedRange({
           start: tfi.xpathStart,
           startOffset: tfi.offsetStart,
           end: tfi.xpathEnd,
