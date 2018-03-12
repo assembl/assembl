@@ -52,7 +52,7 @@ const DumbTokenCategoryForm = ({
       <ColorPicker
         colors={pickerColors}
         onChange={handleColorChange}
-        color={color || pickerColors[index]}
+        color={color}
         width="400px"
         id="color-picker"
         triangle="hide"

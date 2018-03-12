@@ -43,6 +43,7 @@ import {
   UNDELETE_MODULE
 } from '../../actions/actionTypes';
 import { updateInLangstringEntries } from '../../utils/i18n';
+import { pickerColors } from '../../constants';
 
 const initialPage = Map({
   hasChanged: false,
@@ -349,8 +350,8 @@ export const modulesById = (state: Map<string, Map> = Map(), action: ReduxAction
 const defaultTokenCategory = Map({
   id: '',
   titleEntries: List(),
-  totalNumber: 0,
-  color: ''
+  totalNumber: 1,
+  color: '#B8E986'
 });
 
 const getTokenCategories = (m) => {
@@ -392,8 +393,10 @@ export const tokenCategoriesById = (state: Map<string, Map> = Map(), action: Red
 
     return newState;
   }
-  case CREATE_TOKEN_VOTE_CATEGORY:
-    return state.set(action.id, defaultTokenCategory.set('id', action.id));
+  case CREATE_TOKEN_VOTE_CATEGORY: {
+    const randomColor = pickerColors[Math.floor(Math.random() * Math.floor(pickerColors.length))];
+    return state.set(action.id, defaultTokenCategory.set('id', action.id).set('color', randomColor));
+  }
   case UPDATE_TOKEN_VOTE_CATEGORY_TITLE:
     return state.updateIn([action.id, 'titleEntries'], updateInLangstringEntries(action.locale, action.value));
   case UPDATE_TOKEN_VOTE_CATEGORY_COLOR:
