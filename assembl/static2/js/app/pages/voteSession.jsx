@@ -8,6 +8,7 @@ import { Map } from 'immutable';
 
 import VoteSessionQuery from '../graphql/VoteSession.graphql';
 import AddTokenVoteMutation from '../graphql/mutations/addTokenVote.graphql';
+import AddGaugeVoteMutation from '../graphql/mutations/addGaugeVote.graphql';
 import Header from '../components/common/header';
 import Section from '../components/common/section';
 import AvailableTokens from '../components/voteSession/availableTokens';
@@ -64,6 +65,7 @@ type Props = {
   modules: Array<VoteSpecification>,
   propositionsSectionTitle: string,
   proposals: Array<Proposal>,
+  addGaugeVote: Function,
   addTokenVote: Function
 };
 
@@ -207,11 +209,16 @@ class DumbVoteSession extends React.Component<void, Props, State> {
       .flatMap(v => v.valueSeq().flatMap(v2 => v2.valueSeq()))
       .reduce((sum, x) => sum + x, 0);
 
-    return tokenVotesSum > 0;
+    const gaugeVotesSum = this.state.userGaugeVotes
+      .valueSeq()
+      .flatMap(v => v.valueSeq())
+      .reduce((sum, x) => sum + x, 0);
+
+    return tokenVotesSum > 0 || gaugeVotesSum > 0;
   };
 
-  submitTokenVote = () => {
-    const { addTokenVote } = this.props;
+  submitVotes = () => {
+    const { addTokenVote, addGaugeVote } = this.props;
     this.state.userTokenVotes.forEach((voteSpecs, proposalId) => {
       voteSpecs.forEach((tokenCategories, voteSpecId) => {
         tokenCategories.forEach((voteValue, tokenCategoryId) => {
@@ -224,12 +231,29 @@ class DumbVoteSession extends React.Component<void, Props, State> {
             }
           })
             .then(() => {
-              displayAlert('success', I18n.t('debate.survey.postSuccess'));
+              displayAlert('success', I18n.t('debate.voteSession.postSuccess'));
             })
             .catch((error) => {
               displayAlert('danger', error.message);
             });
         });
+      });
+    });
+    this.state.userGaugeVotes.forEach((voteSpecs, proposalId) => {
+      voteSpecs.forEach((voteValue, voteSpecId) => {
+        addGaugeVote({
+          variables: {
+            voteSpecId: voteSpecId,
+            proposalId: proposalId,
+            voteValue: voteValue
+          }
+        })
+          .then(() => {
+            displayAlert('success', I18n.t('debate.voteSession.postSuccess'));
+          })
+          .catch((error) => {
+            displayAlert('danger', error.message);
+          });
       });
     });
   };
@@ -305,7 +329,7 @@ class DumbVoteSession extends React.Component<void, Props, State> {
             <Row className="form-actions center">
               <Col mdOffset={1} md={10} smOffset={1} sm={10}>
                 {this.displaySubmitButton() ? (
-                  <Button className="button-submit button-dark" onClick={this.submitTokenVote}>
+                  <Button className="button-submit button-dark" onClick={this.submitVotes}>
                     <Translate value="debate.voteSession.submit" />
                   </Button>
                 ) : null}
@@ -382,6 +406,9 @@ export default compose(
         noVoteSession: false
       };
     }
+  }),
+  graphql(AddGaugeVoteMutation, {
+    name: 'addGaugeVote'
   }),
   graphql(AddTokenVoteMutation, {
     name: 'addTokenVote'

@@ -313,6 +313,7 @@ const Translations = {
           title: "La session de vote n'est pas configurée",
           text: "Un administrateur doit configurer la session de vote"
         },
+        postSuccess: "Merci pour votre participation. Votre vote a bien été envoyé !",
         remainingTokens: "Il vous reste %{count} jetons disponibles.",
         resetTokens: "Supprimer mon vote",
         submit: "Soumettre le vote",
@@ -884,6 +885,7 @@ const Translations = {
           title: "Vote session is not configured",
           text: "An administrator must configure the vote session"
         },
+        postSuccess: "Thanks for your participation. Your vote has been sent!",
         remainingTokens: "You have %{count} tokens remaining.",
         resetTokens: "Reset my vote",
         submit: "Submit vote",
