@@ -14,7 +14,7 @@ describe('TokenVoteForProposal component', () => {
       proposalId: 'proposal-1',
       remainingTokensByCategory: remainingTokensByCategory,
       tokenCategories: tokenCategories,
-      tokenVotes: proposal1Votes,
+      userTokenVotesForProposal: proposal1Votes,
       voteForProposal: voteForProposalSpy
     };
     const shallowRenderer = new ShallowRenderer();
@@ -31,7 +31,7 @@ describe('TokenVoteForProposal component', () => {
       proposalId: 'proposal-1',
       remainingTokensByCategory: remainingTokensByCategory,
       tokenCategories: tokenCategories,
-      tokenVotes: proposal1Votes,
+      userTokenVotesForProposal: proposal1Votes,
       voteForProposal: voteForProposalSpy
     };
     const shallowRenderer = new ShallowRenderer();

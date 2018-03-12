@@ -22,7 +22,7 @@ type Props = {
   modules: Array<VoteSpecification>,
   remainingTokensByCategory: RemainingTokensByCategory,
   title: ?string,
-  tokenVotes: UserTokenVotes,
+  userTokenVotes: UserTokenVotes,
   numParticipants: number,
   voteForProposal: Function,
   voteForProposalGauge: Function
@@ -58,7 +58,7 @@ class Proposal extends React.Component<void, Props, State> {
       numParticipants,
       remainingTokensByCategory,
       title,
-      tokenVotes,
+      userTokenVotes,
       voteForProposal,
       voteForProposalGauge
     } = this.props;
@@ -79,7 +79,7 @@ class Proposal extends React.Component<void, Props, State> {
                 proposalId={id}
                 remainingTokensByCategory={remainingTokensByCategory}
                 tokenCategories={tokenVoteModule.tokenCategories}
-                tokenVotes={tokenVotes.get(id, Map())}
+                userTokenVotesForProposal={userTokenVotes.get(id, Map())}
                 voteForProposal={voteForProposal}
               />
             )}

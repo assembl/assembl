@@ -69,11 +69,11 @@ type Props = {
 
 export type RemainingTokensByCategory = Map<string, number>;
 
-export type TokenVotesForProposal = Map<string, number>;
-export type GaugeVotesForProposal = Map<string, number>;
+export type UserTokenVotesForProposal = Map<string, number>;
+export type UserGaugeVotesForProposal = Map<string, number>;
 
-export type UserTokenVotes = Map<string, TokenVotesForProposal>;
-export type UserGaugeVotes = Map<string, GaugeVotesForProposal>;
+export type UserTokenVotes = Map<string, UserTokenVotesForProposal>;
+export type UserGaugeVotes = Map<string, UserGaugeVotesForProposal>;
 
 type State = {
   userTokenVotes: UserTokenVotes,
@@ -259,7 +259,7 @@ class DumbVoteSession extends React.Component<void, Props, State> {
                 <Proposals
                   proposals={proposals}
                   remainingTokensByCategory={remainingTokensByCategory}
-                  tokenVotes={this.state.userTokenVotes}
+                  userTokenVotes={this.state.userTokenVotes}
                   voteForProposal={this.voteForProposal}
                   voteForProposalGauge={this.voteForProposalGauge}
                 />

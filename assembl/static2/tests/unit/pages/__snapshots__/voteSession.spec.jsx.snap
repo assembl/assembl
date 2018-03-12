@@ -182,7 +182,7 @@ exports[`VoteSession component should match VoteSession snapshot 1`] = `
                 positive: 8,
               }
             }
-            tokenVotes={
+            userTokenVotes={
               Immutable.Map {
               }
             }
@@ -302,7 +302,7 @@ exports[`VoteSession component should match VoteSession snapshot with empty modu
               Immutable.Map {
               }
             }
-            tokenVotes={
+            userTokenVotes={
               Immutable.Map {
               }
             }

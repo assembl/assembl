@@ -4,7 +4,7 @@ import { Button, OverlayTrigger } from 'react-bootstrap';
 
 import Circle from '../svg/circle';
 import { hiddenTooltip, exclusiveTokensTooltip, notEnoughTokensTooltip, resetTokensTooltip } from '../common/tooltips';
-import { type RemainingTokensByCategory, type TokenVotesForProposal } from '../../pages/voteSession';
+import { type RemainingTokensByCategory, type UserTokenVotesForProposal } from '../../pages/voteSession';
 
 export type TokenCategory = {|
   id: string,
@@ -23,7 +23,7 @@ type Props = {
   proposalId: string,
   remainingTokensByCategory: RemainingTokensByCategory,
   tokenCategories: TokenCategories,
-  tokenVotes: TokenVotesForProposal,
+  userTokenVotesForProposal: UserTokenVotesForProposal,
   voteForProposal: Function
 };
 
@@ -33,7 +33,7 @@ const TokenVoteForProposal = ({
   proposalId,
   remainingTokensByCategory,
   tokenCategories,
-  tokenVotes,
+  userTokenVotesForProposal,
   voteForProposal
 }: Props) => (
   <div className="margin-m">
@@ -42,10 +42,10 @@ const TokenVoteForProposal = ({
       tokenCategories.map((category) => {
         if (category) {
           const { color, id, title, totalNumber } = category;
-          const currentVote = tokenVotes.get(category.id, 0);
+          const currentVote = userTokenVotesForProposal.get(category.id, 0);
           let cantVote = false;
           if (exclusiveCategories) {
-            cantVote = tokenVotes.delete(category.id).some(count => count > 0);
+            cantVote = userTokenVotesForProposal.delete(category.id).some(count => count > 0);
           }
 
           return (

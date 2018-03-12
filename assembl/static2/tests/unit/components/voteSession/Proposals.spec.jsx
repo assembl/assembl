@@ -6,11 +6,11 @@ import * as fakeData from './fakeData';
 
 describe('Proposals component', () => {
   it('should match Proposals snapshot', () => {
-    const { proposals, remainingTokensByCategory, tokenVotes } = fakeData;
+    const { proposals, remainingTokensByCategory, userTokenVotes } = fakeData;
     const props = {
       proposals: proposals,
       remainingTokensByCategory: remainingTokensByCategory,
-      tokenVotes: tokenVotes
+      userTokenVotes: userTokenVotes
     };
     const rendered = renderer.create(<Proposals {...props} />).toJSON();
     expect(rendered).toMatchSnapshot();

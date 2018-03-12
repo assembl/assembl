@@ -8,14 +8,14 @@ describe('Proposal component', () => {
   const voteForProposalSpy = jest.fn();
   const voteForProposalGaugeSpy = jest.fn();
   it('should match Proposal snapshot', () => {
-    const { remainingTokensByCategory, tokenVotes, tokenVoteModule, textGaugeModule } = fakeData;
+    const { remainingTokensByCategory, userTokenVotes, tokenVoteModule, textGaugeModule } = fakeData;
     const props = {
       description: 'Try to override the CSS transmitter, maybe it will program the solid state program!',
       id: 'my-proposal',
       modules: [tokenVoteModule, textGaugeModule],
       remainingTokensByCategory: remainingTokensByCategory,
       title: 'Use the online USB transmitter, then you can reboot the cross-platform application!',
-      tokenVotes: tokenVotes,
+      userTokenVotes: userTokenVotes,
       voteForProposal: voteForProposalSpy,
       voteForProposalGauge: voteForProposalGaugeSpy
     };

@@ -8,7 +8,7 @@ import { type Proposal as ProposalType, type RemainingTokensByCategory, type Use
 type Props = {
   proposals: Array<ProposalType>,
   remainingTokensByCategory: RemainingTokensByCategory,
-  tokenVotes: UserTokenVotes,
+  userTokenVotes: UserTokenVotes,
   voteForProposal: Function,
   voteForProposalGauge: Function
 };
@@ -22,7 +22,7 @@ const Proposals = (props: Props) => (
         modules={proposal.modules}
         numParticipants={proposal.voteResults.numParticipants}
         remainingTokensByCategory={props.remainingTokensByCategory}
-        tokenVotes={props.tokenVotes}
+        userTokenVotes={props.userTokenVotes}
         voteForProposal={props.voteForProposal}
         voteForProposalGauge={props.voteForProposalGauge}
       />

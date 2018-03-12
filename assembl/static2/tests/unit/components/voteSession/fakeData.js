@@ -60,7 +60,7 @@ export const proposal1Votes = Map({
   negative: 0
 });
 
-export const tokenVotes = Map({
+export const userTokenVotes = Map({
   'proposal-1': proposal1Votes,
   'proposal-2': Map({
     positive: 0,
