@@ -162,7 +162,7 @@ class DumbVoteSession extends React.Component<void, Props, State> {
     }
   };
 
-  voteForProposal = (proposalId: string, categoryId: string, value: number, tokenVoteModuleId: string): void => {
+  voteForProposalToken = (proposalId: string, tokenVoteModuleId: string, categoryId: string, value: number): void => {
     const setVote = () =>
       this.setState({
         userTokenVotes: this.state.userTokenVotes.setIn([proposalId, tokenVoteModuleId, categoryId], value)
@@ -297,7 +297,7 @@ class DumbVoteSession extends React.Component<void, Props, State> {
                   remainingTokensByCategory={remainingTokensByCategory}
                   userGaugeVotes={this.state.userGaugeVotes}
                   userTokenVotes={this.state.userTokenVotes}
-                  voteForProposal={this.voteForProposal}
+                  voteForProposalToken={this.voteForProposalToken}
                   voteForProposalGauge={this.voteForProposalGauge}
                 />
               </Col>

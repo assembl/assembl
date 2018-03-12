@@ -26,7 +26,7 @@ type Props = {
   userGaugeVotes: UserGaugeVotes,
   userTokenVotes: UserTokenVotes,
   numParticipants: number,
-  voteForProposal: Function,
+  voteForProposalToken: Function,
   voteForProposalGauge: Function
 };
 
@@ -62,7 +62,7 @@ class Proposal extends React.Component<void, Props, State> {
       title,
       userGaugeVotes,
       userTokenVotes,
-      voteForProposal,
+      voteForProposalToken,
       voteForProposalGauge
     } = this.props;
     const tokenVoteModule = modules ? findTokenVoteModule(modules) : null;
@@ -83,7 +83,7 @@ class Proposal extends React.Component<void, Props, State> {
                 remainingTokensByCategory={remainingTokensByCategory}
                 tokenCategories={tokenVoteModule.tokenCategories}
                 userTokenVotesForProposal={userTokenVotes.getIn([id, tokenVoteModule.id], Map())}
-                voteForProposal={voteForProposal}
+                voteForProposal={voteForProposalToken}
                 moduleId={tokenVoteModule.id}
               />
             )}

@@ -193,8 +193,8 @@ exports[`VoteSession component should match VoteSession snapshot 1`] = `
               Immutable.Map {
               }
             }
-            voteForProposal={[Function]}
             voteForProposalGauge={[Function]}
+            voteForProposalToken={[Function]}
           />
         </Col>
       </Row>
@@ -317,8 +317,8 @@ exports[`VoteSession component should match VoteSession snapshot with empty modu
               Immutable.Map {
               }
             }
-            voteForProposal={[Function]}
             voteForProposalGauge={[Function]}
+            voteForProposalToken={[Function]}
           />
         </Col>
       </Row>

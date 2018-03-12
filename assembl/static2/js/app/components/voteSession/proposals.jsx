@@ -15,7 +15,7 @@ type Props = {
   remainingTokensByCategory: RemainingTokensByCategory,
   userGaugeVotes: UserGaugeVotes,
   userTokenVotes: UserTokenVotes,
-  voteForProposal: Function,
+  voteForProposalToken: Function,
   voteForProposalGauge: Function
 };
 
@@ -30,7 +30,7 @@ const Proposals = (props: Props) => (
         remainingTokensByCategory={props.remainingTokensByCategory}
         userTokenVotes={props.userTokenVotes}
         userGaugeVotes={props.userGaugeVotes}
-        voteForProposal={props.voteForProposal}
+        voteForProposalToken={props.voteForProposalToken}
         voteForProposalGauge={props.voteForProposalGauge}
       />
     ))}
