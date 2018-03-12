@@ -213,7 +213,7 @@ const mapDispatchToProps = (dispatch, { id, editLocale }) => ({
   handleMaxChange: value => dispatch(updateGaugeMaximum(id, value)),
   handleUnitChange: value => dispatch(updateGaugeUnit(id, value)),
   // for text gauge
-  handleGaugeChoiceLabelChange: (cid, value) => dispatch(updateGaugeVoteChoiceLabel(cid, editLocale, value))
+  handleGaugeChoiceLabelChange: (cid, value) => dispatch(updateGaugeVoteChoiceLabel(cid, editLocale, value, id))
 });
 
 export { DumbGaugeForm };

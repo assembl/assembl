@@ -16,6 +16,7 @@ import {
 } from '../../../actions/adminActions/voteSession';
 
 type TokensFormProps = {
+  id: string,
   instructions: string,
   exclusiveCategories: boolean,
   tokenCategoryNumber: number,
@@ -27,6 +28,7 @@ type TokensFormProps = {
 };
 
 const DumbTokensForm = ({
+  id,
   instructions,
   exclusiveCategories,
   tokenCategoryNumber,
@@ -88,8 +90,8 @@ const DumbTokensForm = ({
       {tokenCategoryNumber > 0 ? (
         <div>
           <div className="separator" />
-          {tokenCategories.map((id, index) => (
-            <TokenCategoryForm key={`token-type-${index}`} id={id} editLocale={editLocale} index={index} />
+          {tokenCategories.map((categoryId, index) => (
+            <TokenCategoryForm key={`token-type-${index}`} id={categoryId} editLocale={editLocale} index={index} moduleId={id} />
           ))}
         </div>
       ) : null}

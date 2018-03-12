@@ -88,14 +88,14 @@ export const updateTokenVoteInstructions = (
   type: actionTypes.UPDATE_TOKEN_VOTE_INSTRUCTIONS
 });
 
-export const createTokenVoteCategory = (id: string, parentId: string): actionTypes.CreateTokenVoteCategory => ({
+export const createTokenVoteCategory = (id: string, moduleId: string): actionTypes.CreateTokenVoteCategory => ({
   id: id,
-  parentId: parentId,
+  moduleId: moduleId,
   type: actionTypes.CREATE_TOKEN_VOTE_CATEGORY
 });
 
-export const deleteTokenVoteCategory = (id: string, index: number): actionTypes.DeleteTokenVoteCategory => ({
-  id: id,
+export const deleteTokenVoteCategory = (moduleId: string, index: number): actionTypes.DeleteTokenVoteCategory => ({
+  moduleId: moduleId,
   index: index,
   type: actionTypes.DELETE_TOKEN_VOTE_CATEGORY
 });
@@ -103,21 +103,29 @@ export const deleteTokenVoteCategory = (id: string, index: number): actionTypes.
 export const updateTokenVoteCategoryTitle = (
   id: string,
   locale: string,
-  value: string
+  value: string,
+  moduleId: string
 ): actionTypes.UpdateTokenVoteCategoryTitle => ({
+  moduleId: moduleId,
   id: id,
   locale: locale,
   value: value,
   type: actionTypes.UPDATE_TOKEN_VOTE_CATEGORY_TITLE
 });
 
-export const updateTokenTotalNumber = (id: string, value: number): actionTypes.UpdateTokenTotalNumber => ({
+export const updateTokenTotalNumber = (id: string, value: number, moduleId: string): actionTypes.UpdateTokenTotalNumber => ({
+  moduleId: moduleId,
   id: id,
   value: value,
   type: actionTypes.UPDATE_TOKEN_TOTAL_NUMBER
 });
 
-export const updateTokenVoteCategoryColor = (id: string, value: string): actionTypes.UpdateTokenVoteCategoryColor => ({
+export const updateTokenVoteCategoryColor = (
+  id: string,
+  value: string,
+  moduleId: string
+): actionTypes.UpdateTokenVoteCategoryColor => ({
+  moduleId: moduleId,
   id: id,
   value: value,
   type: actionTypes.UPDATE_TOKEN_VOTE_CATEGORY_COLOR
@@ -146,14 +154,14 @@ export const updateGaugeVoteNbTicks = (id: string, value: number): actionTypes.U
   type: actionTypes.UPDATE_GAUGE_VOTE_NUMBER_TICKS
 });
 
-export const createGaugeVoteChoice = (parentId: string, id: string): actionTypes.CreateGaugeVoteChoice => ({
-  parentId: parentId,
+export const createGaugeVoteChoice = (moduleId: string, id: string): actionTypes.CreateGaugeVoteChoice => ({
+  moduleId: moduleId,
   id: id,
   type: actionTypes.CREATE_GAUGE_VOTE_CHOICE
 });
 
-export const deleteGaugeVoteChoice = (id: string, index: number): actionTypes.DeleteGaugeVoteChoice => ({
-  id: id,
+export const deleteGaugeVoteChoice = (moduleId: string, index: number): actionTypes.DeleteGaugeVoteChoice => ({
+  moduleId: moduleId,
   index: index,
   type: actionTypes.DELETE_GAUGE_VOTE_CHOICE
 });
@@ -161,8 +169,10 @@ export const deleteGaugeVoteChoice = (id: string, index: number): actionTypes.De
 export const updateGaugeVoteChoiceLabel = (
   id: string,
   locale: string,
-  value: string
+  value: string,
+  moduleId: string
 ): actionTypes.UpdateGaugeVoteChoiceLabel => ({
+  moduleId: moduleId,
   id: id,
   locale: locale,
   value: value,

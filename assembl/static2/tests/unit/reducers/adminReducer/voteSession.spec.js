@@ -417,8 +417,8 @@ describe('voteSession admin reducers', () => {
       const state = fromJS({
         module42: {
           _hasChanged: false,
-          isNew: false,
-          toDelete: false,
+          _isNew: false,
+          _toDelete: false,
           tokenCategories: [
             fromJS({
               id: 'token1',
@@ -447,9 +447,9 @@ describe('voteSession admin reducers', () => {
       };
       const expected = {
         module42: {
-          _hasChanged: false,
-          isNew: false,
-          toDelete: false,
+          _hasChanged: true,
+          _isNew: false,
+          _toDelete: false,
           tokenCategories: [
             {
               id: 'token1',
@@ -474,12 +474,13 @@ describe('voteSession admin reducers', () => {
       const actual = modulesById(state, action);
       expect(actual.toJS()).toEqual(expected);
     });
+
     it('should handle UPDATE_TOKEN_VOTE_INSTRUCTIONS action type', () => {
       const state = fromJS({
         module42: {
           _hasChanged: false,
-          isNew: false,
-          toDelete: false,
+          _isNew: false,
+          _toDelete: false,
           tokenCategories: [],
           instructionsEntries: fromJS([{ localeCode: 'en', value: 'Please vote guys' }]),
           exclusiveCategories: false,
@@ -497,9 +498,9 @@ describe('voteSession admin reducers', () => {
       };
       const expected = {
         module42: {
-          _hasChanged: false,
-          isNew: false,
-          toDelete: false,
+          _hasChanged: true,
+          _isNew: false,
+          _toDelete: false,
           tokenCategories: [],
           instructionsEntries: [{ localeCode: 'en', value: 'Actually do not vote guys' }],
           exclusiveCategories: false,
@@ -512,12 +513,13 @@ describe('voteSession admin reducers', () => {
       const actual = modulesById(state, action);
       expect(actual.toJS()).toEqual(expected);
     });
+
     it('should handle CREATE_TOKEN_VOTE_CATEGORY action type', () => {
       const state = fromJS({
         module42: {
           _hasChanged: false,
-          isNew: false,
-          toDelete: false,
+          _isNew: false,
+          _toDelete: false,
           tokenCategories: [],
           voteSpecTemplateId: '12345',
           instructionsEntries: [],
@@ -529,14 +531,14 @@ describe('voteSession admin reducers', () => {
       });
       const action = {
         id: 'token1',
-        parentId: 'module42',
+        moduleId: 'module42',
         type: actionTypes.CREATE_TOKEN_VOTE_CATEGORY
       };
       const expected = {
         module42: {
-          _hasChanged: false,
-          isNew: false,
-          toDelete: false,
+          _hasChanged: true,
+          _isNew: false,
+          _toDelete: false,
           tokenCategories: ['token1'],
           voteSpecTemplateId: '12345',
           instructionsEntries: [],
@@ -549,12 +551,13 @@ describe('voteSession admin reducers', () => {
       const actual = modulesById(state, action);
       expect(actual.toJS()).toEqual(expected);
     });
+
     it('should handle DELETE_TOKEN_VOTE_CATEGORY action type', () => {
       const state = fromJS({
         module42: {
           _hasChanged: false,
-          isNew: false,
-          toDelete: false,
+          _isNew: false,
+          _toDelete: false,
           tokenCategories: [
             {
               id: 'token1',
@@ -578,15 +581,15 @@ describe('voteSession admin reducers', () => {
         }
       });
       const action = {
-        id: 'module42',
+        moduleId: 'module42',
         index: 1,
         type: actionTypes.DELETE_TOKEN_VOTE_CATEGORY
       };
       const expected = {
         module42: {
-          _hasChanged: false,
-          isNew: false,
-          toDelete: false,
+          _hasChanged: true,
+          _isNew: false,
+          _toDelete: false,
           tokenCategories: [
             {
               id: 'token1',
@@ -606,59 +609,60 @@ describe('voteSession admin reducers', () => {
       const actual = modulesById(state, action);
       expect(actual.toJS()).toEqual(expected);
     });
-    // THIS ONE IS NOT WORKING YET
 
-    // it('should handle UPDATE_TOKEN_VOTE_CATEGORY_TITLE action type', () => {
-    //   const state = fromJS({
-    //     module42: {
-    //       _hasChanged: false,
-    //       isNew: false,
-    //       toDelete: false,
-    //       tokenCategories: fromJS([
-    //         {
-    //           id: 'token1',
-    //           titleEntries: [{ localeCode: 'en', value: 'The first token' }],
-    //           totalNumber: 10,
-    //           color: 'green'
-    //         }
-    //       ]),
-    //       voteSpecTemplateId: '12345',
-    //       instructionsEntries: ['token1'],
-    //       exclusiveCategories: false,
-    //       votetype: 'tokens',
-    //       id: 'module42',
-    //       proposalId: 'proposal3'
-    //     }
-    //   });
-    //   const action = {
-    //     id: 'token1',
-    //     locale: 'en',
-    //     value: 'The amazing token',
-    //     type: actionTypes.UPDATE_TOKEN_VOTE_CATEGORY_TITLE
-    //   };
-    //   const expected = {
-    //     module42: {
-    //       _hasChanged: false,
-    //       isNew: false,
-    //       toDelete: false,
-    //       tokenCategories: [
-    //         {
-    //           id: 'token1',
-    //           titleEntries: [{ localeCode: 'en', value: 'The amazing token' }],
-    //           totalNumber: 10,
-    //           color: 'green'
-    //         }
-    //       ],
-    //       voteSpecTemplateId: '12345',
-    //       instructionsEntries: ['token1'],
-    //       exclusiveCategories: false,
-    //       votetype: 'tokens',
-    //       id: 'module42',
-    //       proposalId: 'proposal3'
-    //     }
-    //   };
-    //   const actual = modulesById(state, action);
-    //   expect(actual.toJS()).toEqual(expected);
-    // });
+    // FIXME:
+    it.skip('should handle UPDATE_TOKEN_VOTE_CATEGORY_TITLE action type', () => {
+      const state = fromJS({
+        module42: {
+          _hasChanged: false,
+          _isNew: false,
+          _toDelete: false,
+          tokenCategories: fromJS([
+            {
+              id: 'token1',
+              titleEntries: [{ localeCode: 'en', value: 'The first token' }],
+              totalNumber: 10,
+              color: 'green'
+            }
+          ]),
+          voteSpecTemplateId: '12345',
+          instructionsEntries: ['token1'],
+          exclusiveCategories: false,
+          votetype: 'tokens',
+          id: 'module42',
+          proposalId: 'proposal3'
+        }
+      });
+      const action = {
+        moduleId: 'module42',
+        id: 'token1',
+        locale: 'en',
+        value: 'The amazing token',
+        type: actionTypes.UPDATE_TOKEN_VOTE_CATEGORY_TITLE
+      };
+      const expected = {
+        module42: {
+          _hasChanged: false,
+          _isNew: false,
+          _toDelete: false,
+          tokenCategories: [
+            {
+              id: 'token1',
+              titleEntries: [{ localeCode: 'en', value: 'The amazing token' }],
+              totalNumber: 10,
+              color: 'green'
+            }
+          ],
+          voteSpecTemplateId: '12345',
+          instructionsEntries: ['token1'],
+          exclusiveCategories: false,
+          votetype: 'tokens',
+          id: 'module42',
+          proposalId: 'proposal3'
+        }
+      };
+      const actual = modulesById(state, action);
+      expect(actual.toJS()).toEqual(expected);
+    });
   });
 });

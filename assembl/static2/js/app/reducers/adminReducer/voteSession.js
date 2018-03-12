@@ -266,35 +266,53 @@ export const modulesById = (state: Map<string, Map> = Map(), action: ReduxAction
   case CREATE_TOKEN_VOTE_MODULE:
     return state.set(action.id, defaultTokenModule.set('id', action.id));
   case UPDATE_TOKEN_VOTE_EXCLUSIVE_CATEGORY:
-    return state.setIn([action.id, 'exclusiveCategories'], action.value);
+    return state.setIn([action.id, 'exclusiveCategories'], action.value).setIn([action.id, '_hasChanged'], true);
   case UPDATE_TOKEN_VOTE_INSTRUCTIONS:
-    return state.updateIn([action.id, 'instructionsEntries'], updateInLangstringEntries(action.locale, action.value));
+    return state
+      .updateIn([action.id, 'instructionsEntries'], updateInLangstringEntries(action.locale, action.value))
+      .setIn([action.id, '_hasChanged'], true);
   case CREATE_TOKEN_VOTE_CATEGORY:
-    return state.updateIn([action.parentId, 'tokenCategories'], tokenCategories => tokenCategories.push(action.id));
+    return state
+      .updateIn([action.moduleId, 'tokenCategories'], tokenCategories => tokenCategories.push(action.id))
+      .setIn([action.moduleId, '_hasChanged'], true);
   case DELETE_TOKEN_VOTE_CATEGORY:
-    return state.updateIn([action.id, 'tokenCategories'], tokenCategories => tokenCategories.delete(action.index));
+    return state
+      .updateIn([action.moduleId, 'tokenCategories'], tokenCategories => tokenCategories.delete(action.index))
+      .setIn([action.moduleId, '_hasChanged'], true);
+  case UPDATE_TOKEN_VOTE_CATEGORY_TITLE:
+  case UPDATE_TOKEN_VOTE_CATEGORY_COLOR:
+  case UPDATE_TOKEN_TOTAL_NUMBER:
+    return state.setIn([action.moduleId, '_hasChanged'], true);
   case CREATE_GAUGE_VOTE_MODULE:
     return state.set(action.id, defaultTextGaugeModule.set('id', action.id));
   case UPDATE_GAUGE_VOTE_INSTRUCTIONS:
-    return state.updateIn([action.id, 'instructionsEntries'], updateInLangstringEntries(action.locale, action.value));
+    return state
+      .updateIn([action.id, 'instructionsEntries'], updateInLangstringEntries(action.locale, action.value))
+      .setIn([action.id, '_hasChanged'], true);
   case UPDATE_GAUGE_VOTE_IS_NUMBER: {
     if (action.value) {
-      return state.set(action.id, defaultNumberGaugeModule.set('id', action.id));
+      return state.set(action.id, defaultNumberGaugeModule.set('id', action.id)).setIn([action.id, '_hasChanged'], true);
     }
-    return state.set(action.id, defaultTextGaugeModule.set('id', action.id));
+    return state.set(action.id, defaultTextGaugeModule.set('id', action.id)).setIn([action.id, '_hasChanged'], true);
   }
   case UPDATE_GAUGE_VOTE_NUMBER_TICKS:
-    return state.setIn([action.id, 'nbTicks'], action.value);
+    return state.setIn([action.id, 'nbTicks'], action.value).setIn([action.id, '_hasChanged'], true);
   case CREATE_GAUGE_VOTE_CHOICE:
-    return state.updateIn([action.parentId, 'choices'], choices => choices.push(action.id));
+    return state
+      .updateIn([action.moduleId, 'choices'], choices => choices.push(action.id))
+      .setIn([action.moduleId, '_hasChanged'], true);
   case DELETE_GAUGE_VOTE_CHOICE:
-    return state.updateIn([action.id, 'choices'], choices => choices.delete(action.index));
+    return state
+      .updateIn([action.moduleId, 'choices'], choices => choices.delete(action.index))
+      .setIn([action.moduleId, '_hasChanged'], true);
+  case UPDATE_GAUGE_VOTE_CHOICE_LABEL:
+    return state.setIn([action.moduleId, '_hasChanged'], true);
   case UPDATE_GAUGE_MINIMUM:
-    return state.setIn([action.id, 'minimum'], action.value);
+    return state.setIn([action.id, 'minimum'], action.value).setIn([action.id, '_hasChanged'], true);
   case UPDATE_GAUGE_MAXIMUM:
-    return state.setIn([action.id, 'maximum'], action.value);
+    return state.setIn([action.id, 'maximum'], action.value).setIn([action.id, '_hasChanged'], true);
   case UPDATE_GAUGE_UNIT:
-    return state.setIn([action.id, 'unit'], action.value);
+    return state.setIn([action.id, 'unit'], action.value).setIn([action.id, '_hasChanged'], true);
   case UPDATE_VOTE_PROPOSALS: {
     let newState = state;
     action.voteProposals.forEach((proposal) => {
