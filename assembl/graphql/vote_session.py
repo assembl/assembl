@@ -615,7 +615,8 @@ class UpdateGaugeVoteSpecification(graphene.Mutation):
                 choice.id: choice for choice in vote_spec.choices}
             updated_choices = set()
             for idx, choice_input in enumerate(choices):
-                if choice_input.get('id', None) is not None:
+                if not choice_input.get('id', '-1').startswith('-'):
+                    # update the choice
                     id_ = int(Node.from_global_id(choice_input['id'])[1])
                     updated_choices.add(id_)
                     choice = models.GaugeChoiceSpecification.get(id_)
@@ -623,6 +624,7 @@ class UpdateGaugeVoteSpecification(graphene.Mutation):
                         choice, 'label', choice_input['label_entries'])
                     choice.value = choice_input['value']
                 else:
+                    # create a choice
                     label_ls = langstring_from_input_entries(
                         choice_input.get('label_entries', None))
                     value = choice_input.get('value')
