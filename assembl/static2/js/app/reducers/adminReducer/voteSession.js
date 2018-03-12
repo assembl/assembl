@@ -5,6 +5,7 @@ import { fromJS, List, Map } from 'immutable';
 import {
   type Action,
   UPDATE_VOTE_SESSION_PAGE_TITLE,
+  UPDATE_VOTE_SESSION_PAGE_SEECURRENTVOTES,
   UPDATE_VOTE_SESSION_PAGE_SUBTITLE,
   UPDATE_VOTE_SESSION_PAGE_INSTRUCTIONS_TITLE,
   UPDATE_VOTE_SESSION_PAGE_INSTRUCTIONS_CONTENT,
@@ -47,6 +48,7 @@ const initialPage = Map({
   hasChanged: false,
   id: '',
   titleEntries: List(),
+  seeCurrentVotes: false,
   subTitleEntries: List(),
   instructionsSectionTitleEntries: List(),
   instructionsSectionContentEntries: List(),
@@ -62,6 +64,8 @@ export const voteSessionPage: VoteSessionPageReducer = (state = initialPage, act
   switch (action.type) {
   case UPDATE_VOTE_SESSION_PAGE_TITLE:
     return state.update('titleEntries', updateInLangstringEntries(action.locale, fromJS(action.value))).set('hasChanged', true);
+  case UPDATE_VOTE_SESSION_PAGE_SEECURRENTVOTES:
+    return state.set('seeCurrentVotes', action.value).set('hasChanged', true);
   case UPDATE_VOTE_SESSION_PAGE_SUBTITLE:
     return state
       .update('subTitleEntries', updateInLangstringEntries(action.locale, fromJS(action.value)))
@@ -88,6 +92,7 @@ export const voteSessionPage: VoteSessionPageReducer = (state = initialPage, act
       hasChanged: false,
       id: fromJS(action.id),
       titleEntries: fromJS(action.titleEntries),
+      seeCurrentVotes: action.seeCurrentVotes,
       subTitleEntries: fromJS(action.subTitleEntries),
       instructionsSectionTitleEntries: fromJS(action.instructionsSectionTitleEntries),
       instructionsSectionContentEntries: fromJS(action.instructionsSectionContentEntries),

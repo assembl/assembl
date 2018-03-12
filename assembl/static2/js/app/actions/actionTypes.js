@@ -28,6 +28,8 @@ export const UPDATE_TERMS_AND_CONDITIONS_ENTRY: 'UPDATE_TERMS_AND_CONDITIONS_ENT
 export const UPDATE_LEGAL_NOTICE_AND_TERMS: 'UPDATE_LEGAL_NOTICE_AND_TERMS' = 'UPDATE_LEGAL_NOTICE_AND_TERMS';
 export const UPDATE_VOTE_SESSION_PAGE: 'UPDATE_VOTE_SESSION_PAGE' = 'UPDATE_VOTE_SESSION_PAGE';
 export const UPDATE_VOTE_SESSION_PAGE_TITLE: 'UPDATE_VOTE_SESSION_PAGE_TITLE' = 'UPDATE_VOTE_SESSION_PAGE_TITLE';
+export const UPDATE_VOTE_SESSION_PAGE_SEECURRENTVOTES: 'UPDATE_VOTE_SESSION_PAGE_SEECURRENTVOTES' =
+  'UPDATE_VOTE_SESSION_PAGE_SEECURRENTVOTES';
 export const UPDATE_VOTE_SESSION_PAGE_SUBTITLE: 'UPDATE_VOTE_SESSION_PAGE_SUBTITLE' = 'UPDATE_VOTE_SESSION_PAGE_SUBTITLE';
 export const UPDATE_VOTE_SESSION_PAGE_INSTRUCTIONS_TITLE: 'UPDATE_VOTE_SESSION_PAGE_INSTRUCTIONS_TITLE' =
   'UPDATE_VOTE_SESSION_PAGE_INSTRUCTIONS_TITLE';
@@ -241,6 +243,11 @@ export type UpdateVoteSessionPageTitle = {
   type: typeof UPDATE_VOTE_SESSION_PAGE_TITLE
 };
 
+export type UpdateVoteSessionPageSeeCurrentVotes = {
+  value: string,
+  type: typeof UPDATE_VOTE_SESSION_PAGE_SEECURRENTVOTES
+};
+
 export type UpdateVoteSessionPageSubtitle = {
   locale: string,
   value: string,
@@ -272,6 +279,7 @@ export type UpdateVoteSessionHeaderImage = {
 
 export type UpdateVoteSessionPage = {
   titleEntries: Array<LangStringEntryInput>,
+  seeCurrentVotes: boolean,
   subTitleEntries: Array<LangStringEntryInput>,
   instructionsSectionTitleEntries: Array<LangStringEntryInput>,
   instructionsSectionContentEntries: Array<LangStringEntryInput>,
@@ -512,6 +520,7 @@ type SectionActions = CreateSection | DeleteSection | UpSection | DownSection;
 
 type VoteSessionActions =
   | UpdateVoteSessionPageTitle
+  | UpdateVoteSessionPageSeeCurrentVotes
   | UpdateVoteSessionPageSubtitle
   | UpdateVoteSessionPageInstructionsTitle
   | UpdateVoteSessionPageInstructionsContent

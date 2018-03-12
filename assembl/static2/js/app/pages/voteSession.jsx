@@ -375,6 +375,7 @@ export default compose(
         return {
           loading: data.loading,
           title: '',
+          seeCurrentVotes: false,
           subTitle: '',
           headerImageUrl: '',
           instructionsSectionTitle: '',
@@ -388,6 +389,7 @@ export default compose(
       const {
         title,
         subTitle,
+        seeCurrentVotes,
         headerImage,
         instructionsSectionTitle,
         instructionsSectionContent,
@@ -400,6 +402,7 @@ export default compose(
         loading: data.loading,
         headerImageUrl: headerImage ? headerImage.externalUrl : defaultHeaderImage,
         title: title,
+        seeCurrentVotes: seeCurrentVotes,
         subTitle: subTitle,
         instructionsSectionTitle: instructionsSectionTitle,
         instructionsSectionContent: instructionsSectionContent,

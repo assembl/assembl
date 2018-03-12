@@ -12,6 +12,7 @@ describe('voteSession admin reducers', () => {
       expect(voteSessionPage(undefined, action)).toEqual(
         Map({
           hasChanged: false,
+          seeCurrentVotes: false,
           id: '',
           titleEntries: List(),
           subTitleEntries: List(),
@@ -26,6 +27,7 @@ describe('voteSession admin reducers', () => {
       const action = { type: 'WHATEVER' };
       const oldState = Map({
         hasChanged: false,
+        seeCurrentVotes: false,
         id: '',
         titleEntries: List.of({ locale: 'en', value: 'Vote session title' }),
         subTitleEntries: List(),
@@ -39,6 +41,7 @@ describe('voteSession admin reducers', () => {
     it('should handle UPDATE_VOTE_SESSION_PAGE_TITLE action type', () => {
       const oldState = fromJS({
         hasChanged: false,
+        seeCurrentVotes: false,
         id: '',
         titleEntries: [{ localeCode: 'fr', value: 'Titre en français' }, { localeCode: 'en', value: 'Title in english' }],
         subTitleEntries: [],
@@ -49,6 +52,7 @@ describe('voteSession admin reducers', () => {
       });
       const expected = fromJS({
         hasChanged: true,
+        seeCurrentVotes: false,
         id: '',
         titleEntries: [
           { localeCode: 'fr', value: 'Titre en français' },
@@ -71,6 +75,7 @@ describe('voteSession admin reducers', () => {
     it('should handle UPDATE_VOTE_SESSION_PAGE_SUBTITLE action type', () => {
       const oldState = fromJS({
         hasChanged: false,
+        seeCurrentVotes: false,
         id: '',
         titleEntries: [],
         subTitleEntries: [
@@ -84,6 +89,7 @@ describe('voteSession admin reducers', () => {
       });
       const expected = fromJS({
         hasChanged: true,
+        seeCurrentVotes: false,
         id: '',
         titleEntries: [],
         subTitleEntries: [
@@ -106,6 +112,7 @@ describe('voteSession admin reducers', () => {
     it('should handle UPDATE_VOTE_SESSION_PAGE_INSTRUCTIONS_TITLE action type', () => {
       const oldState = fromJS({
         hasChanged: false,
+        seeCurrentVotes: false,
         id: '',
         titleEntries: [],
         subTitleEntries: [],
@@ -119,6 +126,7 @@ describe('voteSession admin reducers', () => {
       });
       const expected = fromJS({
         hasChanged: true,
+        seeCurrentVotes: false,
         id: '',
         titleEntries: [],
         subTitleEntries: [],
@@ -141,6 +149,7 @@ describe('voteSession admin reducers', () => {
     it('should handle UPDATE_VOTE_SESSION_PAGE_INSTRUCTIONS_CONTENT action type', () => {
       const oldState = fromJS({
         hasChanged: false,
+        seeCurrentVotes: false,
         id: '',
         titleEntries: [],
         subTitleEntries: [],
@@ -154,6 +163,7 @@ describe('voteSession admin reducers', () => {
       });
       const expected = fromJS({
         hasChanged: true,
+        seeCurrentVotes: false,
         id: '',
         titleEntries: [],
         subTitleEntries: [],
@@ -176,6 +186,7 @@ describe('voteSession admin reducers', () => {
     it('should handle UPDATE_VOTE_SESSION_PAGE_PROPOSITIONS_TITLE action type', () => {
       const oldState = fromJS({
         hasChanged: false,
+        seeCurrentVotes: false,
         id: '',
         titleEntries: [],
         subTitleEntries: [],
@@ -189,6 +200,7 @@ describe('voteSession admin reducers', () => {
       });
       const expected = fromJS({
         hasChanged: true,
+        seeCurrentVotes: false,
         id: '',
         titleEntries: [],
         subTitleEntries: [],
@@ -208,9 +220,40 @@ describe('voteSession admin reducers', () => {
       expect(voteSessionPage(oldState, action)).toEqual(expected);
     });
 
+    it('should handle UPDATE_VOTE_SESSION_PAGE_SEECURRENTVOTES action type', () => {
+      const oldState = fromJS({
+        hasChanged: false,
+        seeCurrentVotes: false,
+        id: '',
+        titleEntries: [{ localeCode: 'fr', value: 'Titre en français' }, { localeCode: 'en', value: 'Title in english' }],
+        subTitleEntries: [],
+        instructionsSectionTitleEntries: [],
+        instructionsSectionContentEntries: [],
+        propositionsSectionTitleEntries: [],
+        headerImage: { externalUrl: '', mimeType: '', title: '' }
+      });
+      const expected = fromJS({
+        hasChanged: true,
+        seeCurrentVotes: true,
+        id: '',
+        titleEntries: [{ localeCode: 'fr', value: 'Titre en français' }, { localeCode: 'en', value: 'Title in english' }],
+        subTitleEntries: [],
+        instructionsSectionTitleEntries: [],
+        instructionsSectionContentEntries: [],
+        propositionsSectionTitleEntries: [],
+        headerImage: { externalUrl: '', mimeType: '', title: '' }
+      });
+      const action = {
+        value: true,
+        type: actionTypes.UPDATE_VOTE_SESSION_PAGE_SEECURRENTVOTES
+      };
+      expect(voteSessionPage(oldState, action)).toEqual(expected);
+    });
+
     it('should handle UPDATE_VOTE_SESSION_PAGE_IMAGE action type', () => {
       const oldState = fromJS({
         hasChanged: false,
+        seeCurrentVotes: false,
         id: '',
         titleEntries: [],
         subTitleEntries: [],
@@ -222,6 +265,7 @@ describe('voteSession admin reducers', () => {
       const file = new File([''], 'foo.jpg', { type: 'image/jpeg' });
       const expected = {
         hasChanged: true,
+        seeCurrentVotes: false,
         id: '',
         titleEntries: [],
         subTitleEntries: [],

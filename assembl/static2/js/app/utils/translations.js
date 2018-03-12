@@ -1,6 +1,8 @@
 /* eslint max-len: "off", quotes: ["error", "double"] */
 const Translations = {
   fr: {
+    yes: "oui",
+    no: "non",
     "Number of contributions": "Nombre de messages",
     "Number of users": "Nombre de contributeurs",
     cancel: "Annuler",
@@ -463,6 +465,7 @@ const Translations = {
       textValue: "Valeur textuelle",
       numberValue: "Valeur numéraire",
       valueTitle: "Intitulé de la valeur",
+      seeCurrentVotes: "Voulez vous que les participants puissent voir l'évolution des votes en cours ?",
       sections: {
         addSection: "Ajouter une rubrique",
         deleteSection: "Supprimer la rubrique",
@@ -577,6 +580,8 @@ const Translations = {
     }
   },
   en: {
+    yes: "yes",
+    no: "no",
     cancel: "Cancel",
     validate: "Validate",
     introduction: "Introduction",
@@ -1034,6 +1039,7 @@ const Translations = {
           "You are about to modify the settings on this gauge only. If you wish to modify all of the gauges, please check the box at the end of the form.",
         checkboxLabel: "Apply these changes to all of the proposals"
       },
+      seeCurrentVotes: "Do you want participants to see the evolution of the votes in progress?",
       sections: {
         addSection: "Add a section",
         deleteSection: "Delete the section",
