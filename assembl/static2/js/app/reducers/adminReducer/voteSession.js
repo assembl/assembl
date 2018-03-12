@@ -88,6 +88,14 @@ export const voteSessionPage: VoteSessionPageReducer = (state = initialPage, act
       .setIn(['headerImage', 'mimeType'], action.value.type)
       .set('hasChanged', true);
   case UPDATE_VOTE_SESSION_PAGE: {
+    let headerImage = Map({
+      externalUrl: '',
+      mimeType: ''
+    });
+    if (action.headerImage) {
+      headerImage = fromJS(action.headerImage);
+    }
+
     return Map({
       hasChanged: false,
       id: fromJS(action.id),
@@ -97,10 +105,7 @@ export const voteSessionPage: VoteSessionPageReducer = (state = initialPage, act
       instructionsSectionTitleEntries: fromJS(action.instructionsSectionTitleEntries),
       instructionsSectionContentEntries: fromJS(action.instructionsSectionContentEntries),
       propositionsSectionTitleEntries: fromJS(action.propositionsSectionTitleEntries),
-      headerImage: Map({
-        externalUrl: fromJS(action.headerImage.externalUrl),
-        mimeType: fromJS(action.headerImage.mimeType)
-      })
+      headerImage: headerImage
     });
   }
   default:
