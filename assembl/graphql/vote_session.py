@@ -152,7 +152,7 @@ class VoteSpecificationInterface(graphene.Interface):
     vote_session_id = graphene.ID(required=True)
     vote_spec_template_id = graphene.ID()
     vote_type = graphene.String()
-    my_votes = graphene.List('assembl.graphql.votes.VoteUnion')
+    my_votes = graphene.List('assembl.graphql.votes.VoteUnion', required=True)
     num_votes = graphene.Int(required=True)
 
     def resolve_title(self, args, context, info):
@@ -182,9 +182,8 @@ class VoteSpecificationInterface(graphene.Interface):
 
     def resolve_my_votes(self, args, context, info):
         user_id = context.authenticated_userid
-        # use votes_of(user_id) instead of votes_of_current_user because
-        # request threadlocal is not properly set in tests
-        return self.votes_of(user_id)
+        return self.db.query(models.AbstractIdeaVote).filter_by(
+            vote_spec_id=self.id, tombstone_date=None, voter_id=user_id, idea_id=self.criterion_idea_id).all()
 
     def resolve_num_votes(self, args, context, info):
         res = self.db.query(

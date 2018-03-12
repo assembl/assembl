@@ -1008,7 +1008,7 @@ export type VoteSessionQuery = {|
             |}>,
             voteSpecTemplateId: ?string,
             voteType: ?string,
-            myVotes: ?Array<?(
+            myVotes: Array<?(
               | {
                   voteValue: number,
                   proposalId: string,
@@ -1047,7 +1047,7 @@ export type VoteSessionQuery = {|
             |}>,
             voteSpecTemplateId: ?string,
             voteType: ?string,
-            myVotes: ?Array<?(
+            myVotes: Array<?(
               | {}
               | {
                   selectedValue: number,
@@ -1076,7 +1076,7 @@ export type VoteSessionQuery = {|
             unit: ?string,
             voteSpecTemplateId: ?string,
             voteType: ?string,
-            myVotes: ?Array<?(
+            myVotes: Array<?(
               | {}
               | {
                   selectedValue: number,
@@ -1182,7 +1182,7 @@ export type addGaugeVoteMutation = {|
       | {
           // The ID of the object.
           id: string,
-          myVotes: ?Array<?(
+          myVotes: Array<?(
             | {}
             | {
                 selectedValue: number,
@@ -1192,7 +1192,7 @@ export type addGaugeVoteMutation = {|
       | {
           // The ID of the object.
           id: string,
-          myVotes: ?Array<?(
+          myVotes: Array<?(
             | {}
             | {
                 selectedValue: number,
@@ -1235,7 +1235,7 @@ export type addTokenVoteMutation = {|
     voteSpecification: ?{|
       // The ID of the object.
       id: string,
-      myVotes: ?Array<?(
+      myVotes: Array<?(
         | {
             voteValue: number,
             proposalId: string,
@@ -1565,7 +1565,7 @@ export type deleteGaugeVoteMutation = {|
       | {
           // The ID of the object.
           id: string,
-          myVotes: ?Array<?(
+          myVotes: Array<?(
             | {}
             | {
                 selectedValue: number,
@@ -1575,7 +1575,7 @@ export type deleteGaugeVoteMutation = {|
       | {
           // The ID of the object.
           id: string,
-          myVotes: ?Array<?(
+          myVotes: Array<?(
             | {}
             | {
                 selectedValue: number,
@@ -1670,7 +1670,7 @@ export type deleteTokenVoteMutation = {|
     voteSpecification: ?{|
       // The ID of the object.
       id: string,
-      myVotes: ?Array<?(
+      myVotes: Array<?(
         | {
             voteValue: number,
             proposalId: string,
@@ -2198,7 +2198,7 @@ export type tokenVoteSpecificationFragment = {|
 |};
 
 export type tokenVoteSpecificationResultsFragment = {|
-  myVotes: ?Array<?(
+  myVotes: Array<?(
     | {
         voteValue: number,
         proposalId: string,
@@ -2235,7 +2235,7 @@ export type numberGaugeVoteSpecificationFragment = {|
 |};
 
 export type numberGaugeVoteSpecificationResultsFragment = {|
-  myVotes: ?Array<?(
+  myVotes: Array<?(
     | {}
     | {
         selectedValue: number,
@@ -2274,7 +2274,7 @@ export type gaugeVoteSpecificationFragment = {|
 |};
 
 export type gaugeVoteSpecificationResultsFragment = {|
-  myVotes: ?Array<?(
+  myVotes: Array<?(
     | {}
     | {
         selectedValue: number,
