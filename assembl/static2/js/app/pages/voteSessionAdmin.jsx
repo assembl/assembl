@@ -259,7 +259,9 @@ class VoteSessionAdmin extends React.Component<void, VoteSessionAdminProps, Vote
           displayAlert('success', I18n.t('administration.voteSessionSuccess'));
         })
         .catch((error) => {
-          displayAlert('danger', `${error}`, false, 30000);
+          console.error(error); // eslint-disable-line no-console
+          const errorMessage = I18n.t('administration.anErrorOccured');
+          displayAlert('danger', errorMessage, false, 30000);
         });
     }
 

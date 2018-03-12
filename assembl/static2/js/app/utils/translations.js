@@ -379,6 +379,8 @@ const Translations = {
     administration: {
       addThematic: "Ajouter une thématique",
       addQuestion: "Ajouter une question",
+      anErrorOccured:
+        "Il y a eu une erreur lors de la sauvegarde, veuillez vérifier que vous avez bien renseigné tous les champs requis.",
       deleteThematic: "Supprimer la thématique",
       deleteQuestion: "Supprimer la question",
       changeLanguage: "Renseigner une autre langue",
@@ -954,6 +956,7 @@ const Translations = {
     administration: {
       addThematic: "Add a theme",
       addQuestion: "Add a question",
+      anErrorOccured: "An error occured during save. Please check that you filled all the required fields.",
       deleteThematic: "Delete the theme",
       deleteQuestion: "Delete the question",
       changeLanguage: "Set another language",
