@@ -22,6 +22,7 @@ type Props = {
   id: string,
   modules: Array<VoteSpecification>,
   remainingTokensByCategory: RemainingTokensByCategory,
+  seeCurrentVotes: boolean,
   title: ?string,
   userGaugeVotes: UserGaugeVotes,
   userTokenVotes: UserTokenVotes,
@@ -59,6 +60,7 @@ class Proposal extends React.Component<void, Props, State> {
       modules,
       numParticipants,
       remainingTokensByCategory,
+      seeCurrentVotes,
       title,
       userGaugeVotes,
       userTokenVotes,
@@ -116,28 +118,31 @@ class Proposal extends React.Component<void, Props, State> {
               ))}
           </Col>
         </Row>
-        {this.state.showVotesInProgress ? (
-          <div className="expand-result">
-            <Row className="expand-row background-grey">
-              <Col xs={12} md={12} className="center">
-                <Button className="link-button" onClick={this.toggleShowVotesInProgress}>
-                  <Translate value="debate.voteSession.showLess" />
-                </Button>
-              </Col>
-            </Row>
-            <VotesInProgress modules={modules} numParticipants={numParticipants} />
-          </div>
-        ) : (
-          <div className="expand-result">
-            <Row className="expand-row background-grey">
-              <Col xs={12} md={12} className="center">
-                <Button className="link-button" onClick={this.toggleShowVotesInProgress}>
-                  <Translate value="debate.voteSession.showVotesInProgress" />
-                </Button>
-              </Col>
-            </Row>
-          </div>
-        )}
+        {seeCurrentVotes &&
+          this.state.showVotesInProgress && (
+            <div className="expand-result">
+              <Row className="expand-row background-grey">
+                <Col xs={12} md={12} className="center">
+                  <Button className="link-button" onClick={this.toggleShowVotesInProgress}>
+                    <Translate value="debate.voteSession.showLess" />
+                  </Button>
+                </Col>
+              </Row>
+              <VotesInProgress modules={modules} numParticipants={numParticipants} />
+            </div>
+          )}
+        {seeCurrentVotes &&
+          !this.state.showVotesInProgress && (
+            <div className="expand-result">
+              <Row className="expand-row background-grey">
+                <Col xs={12} md={12} className="center">
+                  <Button className="link-button" onClick={this.toggleShowVotesInProgress}>
+                    <Translate value="debate.voteSession.showVotesInProgress" />
+                  </Button>
+                </Col>
+              </Row>
+            </div>
+          )}
       </div>
     );
   }

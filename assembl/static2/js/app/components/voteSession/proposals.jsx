@@ -13,6 +13,7 @@ import {
 type Props = {
   proposals: Array<ProposalType>,
   remainingTokensByCategory: RemainingTokensByCategory,
+  seeCurrentVotes: boolean,
   userGaugeVotes: UserGaugeVotes,
   userTokenVotes: UserTokenVotes,
   voteForProposalToken: Function,
@@ -28,6 +29,7 @@ const Proposals = (props: Props) => (
         modules={proposal.modules}
         numParticipants={proposal.voteResults.numParticipants}
         remainingTokensByCategory={props.remainingTokensByCategory}
+        seeCurrentVotes={props.seeCurrentVotes}
         userTokenVotes={props.userTokenVotes}
         userGaugeVotes={props.userGaugeVotes}
         voteForProposalToken={props.voteForProposalToken}

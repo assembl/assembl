@@ -14,6 +14,7 @@ describe('Proposal component', () => {
       id: 'my-proposal',
       modules: [tokenVoteModule, textGaugeModule],
       remainingTokensByCategory: remainingTokensByCategory,
+      seeCurrentVotes: true,
       title: 'Use the online USB transmitter, then you can reboot the cross-platform application!',
       userGaugeVotes: userGaugeVotes,
       userTokenVotes: userTokenVotes,

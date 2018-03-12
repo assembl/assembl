@@ -59,6 +59,7 @@ export type Proposal = {|
 type Props = {
   title: string,
   subTitle: string,
+  seeCurrentVotes: boolean,
   headerImageUrl: string,
   instructionsSectionTitle: string,
   instructionsSectionContent: string,
@@ -261,6 +262,7 @@ class DumbVoteSession extends React.Component<void, Props, State> {
   render() {
     const {
       title,
+      seeCurrentVotes,
       subTitle,
       headerImageUrl,
       instructionsSectionTitle,
@@ -319,6 +321,7 @@ class DumbVoteSession extends React.Component<void, Props, State> {
                 <Proposals
                   proposals={proposals}
                   remainingTokensByCategory={remainingTokensByCategory}
+                  seeCurrentVotes={seeCurrentVotes}
                   userGaugeVotes={this.state.userGaugeVotes}
                   userTokenVotes={this.state.userTokenVotes}
                   voteForProposalToken={this.voteForProposalToken}

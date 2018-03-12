@@ -185,6 +185,7 @@ exports[`VoteSession component should match VoteSession snapshot 1`] = `
                 positive: 8,
               }
             }
+            seeCurrentVotes={true}
             userGaugeVotes={
               Immutable.Map {
               }
@@ -309,6 +310,7 @@ exports[`VoteSession component should match VoteSession snapshot with empty modu
               Immutable.Map {
               }
             }
+            seeCurrentVotes={true}
             userGaugeVotes={
               Immutable.Map {
               }
