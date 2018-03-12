@@ -67,6 +67,14 @@ exports[`Vote Session DumbPageForm component should render a form to update the 
         <FormGroup
           bsClass="form-group"
         >
+          <label
+            htmlFor="header-image"
+          >
+            <Translate
+              value="administration.voteSessionHeaderLabel"
+            />
+             *
+          </label>
           <FileUploader
             fileOrUrl="http://www.example.com/documents/myimage/data"
             filename=""

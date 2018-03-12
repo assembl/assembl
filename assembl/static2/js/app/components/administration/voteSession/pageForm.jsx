@@ -96,6 +96,9 @@ const DumbPageForm = ({
               value={headerSubtitle}
             />
             <FormGroup>
+              <label htmlFor={headerImageFieldName}>
+                <Translate value="administration.voteSessionHeaderLabel" /> *
+              </label>
               <FileUploader
                 mimeType={headerImgMimeType}
                 name={headerImageFieldName}
