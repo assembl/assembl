@@ -168,7 +168,9 @@ const DumbVoteProposalForm = ({
               <Translate value="administration.voteProposals.gauge" number={number} />
             </Checkbox>
 
-            {pModule &&
+            {/* disable gaugeSettings for now */}
+            {false &&
+              pModule &&
               pModule.get('id') && (
                 <span
                   className="inline settings-link"
