@@ -13,6 +13,7 @@ import {
   filterNumberGaugeVoteModules,
   type RemainingTokensByCategory,
   type UserTokenVotes,
+  type UserGaugeVotes,
   type VoteSpecification
 } from '../../pages/voteSession';
 
@@ -22,6 +23,7 @@ type Props = {
   modules: Array<VoteSpecification>,
   remainingTokensByCategory: RemainingTokensByCategory,
   title: ?string,
+  userGaugeVotes: UserGaugeVotes,
   userTokenVotes: UserTokenVotes,
   numParticipants: number,
   voteForProposal: Function,
@@ -58,6 +60,7 @@ class Proposal extends React.Component<void, Props, State> {
       numParticipants,
       remainingTokensByCategory,
       title,
+      userGaugeVotes,
       userTokenVotes,
       voteForProposal,
       voteForProposalGauge
@@ -79,8 +82,9 @@ class Proposal extends React.Component<void, Props, State> {
                 proposalId={id}
                 remainingTokensByCategory={remainingTokensByCategory}
                 tokenCategories={tokenVoteModule.tokenCategories}
-                userTokenVotesForProposal={userTokenVotes.get(id, Map())}
+                userTokenVotesForProposal={userTokenVotes.getIn([id, tokenVoteModule.id], Map())}
                 voteForProposal={voteForProposal}
+                moduleId={tokenVoteModule.id}
               />
             )}
 
@@ -91,7 +95,7 @@ class Proposal extends React.Component<void, Props, State> {
                   {...module}
                   voteForProposal={voteForProposalGauge}
                   proposalId={id}
-                  value={0} // TODO: use myVotes
+                  value={userGaugeVotes.getIn([id, module.id], 0)}
                 />
               ))}
 
@@ -107,7 +111,7 @@ class Proposal extends React.Component<void, Props, State> {
                   {...module}
                   voteForProposal={voteForProposalGauge}
                   proposalId={id}
-                  value={0} // TODO: use myVotes
+                  value={userGaugeVotes.getIn([id, module.id], 0)}
                 />
               ))}
           </Col>

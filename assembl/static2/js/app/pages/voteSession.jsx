@@ -69,11 +69,12 @@ type Props = {
 
 export type RemainingTokensByCategory = Map<string, number>;
 
-export type UserTokenVotesForProposal = Map<string, number>;
-export type UserGaugeVotesForProposal = Map<string, number>;
+export type UserTokenVotesForVoteSpec = Map<string, number>; // key is tokenCategoryId
+export type UserTokenVotesForProposal = Map<string, UserTokenVotesForVoteSpec>; // key is voteSpecId
+export type UserGaugeVotesForProposal = Map<string, number>; // key is voteSpecId
 
-export type UserTokenVotes = Map<string, UserTokenVotesForProposal>;
-export type UserGaugeVotes = Map<string, UserGaugeVotesForProposal>;
+export type UserTokenVotes = Map<string, UserTokenVotesForProposal>; // key is proposalId
+export type UserGaugeVotes = Map<string, UserGaugeVotesForProposal>; // key is proposalId
 
 type State = {
   userTokenVotes: UserTokenVotes,
@@ -113,10 +114,41 @@ class DumbVoteSession extends React.Component<void, Props, State> {
 
   componentWillMount() {
     window.addEventListener('scroll', this.setAvailableTokensSticky);
+    this.setMyVotes();
   }
 
   componentWillUnmount() {
     window.removeEventListener('scroll', this.setAvailableTokensSticky);
+  }
+
+  setMyVotes() {
+    const { proposals } = this.props;
+    let userTokenVotes = Map();
+    let userGaugeVotes = Map();
+    proposals.forEach((proposal) => {
+      const tokenModules = proposal.modules
+        ? proposal.modules.filter(module => module.voteType === 'token_vote_specification')
+        : [];
+      const gaugeModules = proposal.modules
+        ? proposal.modules.filter(module => module.voteType !== 'token_vote_specification')
+        : [];
+      tokenModules.forEach((tokenModule) => {
+        tokenModule.myVotes.forEach((myVote) => {
+          // $FlowFixMe: issue with generated type, myVote can be {} from the generated type, but not in reality.
+          userTokenVotes = userTokenVotes.setIn([myVote.proposalId, tokenModule.id, myVote.tokenCategoryId], myVote.voteValue);
+        });
+      });
+      gaugeModules.forEach((gaugeModule) => {
+        gaugeModule.myVotes.forEach((myVote) => {
+          // $FlowFixMe: issue with generated type, myVote can be {} from the generated type, but not in reality.
+          userGaugeVotes = userGaugeVotes.setIn([myVote.proposalId, gaugeModule.id], myVote.selectedValue);
+        });
+      });
+    });
+    this.setState({
+      userTokenVotes: userTokenVotes,
+      userGaugeVotes: userGaugeVotes
+    });
   }
 
   setAvailableTokensSticky = () => {
@@ -130,10 +162,10 @@ class DumbVoteSession extends React.Component<void, Props, State> {
     }
   };
 
-  voteForProposal = (proposalId: string, categoryId: string, value: number): void => {
+  voteForProposal = (proposalId: string, categoryId: string, value: number, tokenVoteModuleId: string): void => {
     const setVote = () =>
       this.setState({
-        userTokenVotes: this.state.userTokenVotes.setIn([proposalId, categoryId], value)
+        userTokenVotes: this.state.userTokenVotes.setIn([proposalId, tokenVoteModuleId, categoryId], value)
       });
     promptForLoginOr(setVote)();
   };
@@ -155,9 +187,13 @@ class DumbVoteSession extends React.Component<void, Props, State> {
         }
       });
     }
-    const proposalsVotes = this.state.userTokenVotes.valueSeq().toList();
-    remainingTokensByCategory = remainingTokensByCategory.mergeWith((x, y) => x - y, ...proposalsVotes);
-
+    this.state.userTokenVotes.forEach((voteSpecs) => {
+      voteSpecs.forEach((tokenCategories) => {
+        tokenCategories.forEach((voteValue, tokenCategoryId) => {
+          remainingTokensByCategory = remainingTokensByCategory.updateIn([tokenCategoryId], val => val - voteValue);
+        });
+      });
+    });
     return remainingTokensByCategory;
   };
 
@@ -168,32 +204,32 @@ class DumbVoteSession extends React.Component<void, Props, State> {
   displaySubmitButton: void => boolean = () => {
     const tokenVotesSum = this.state.userTokenVotes
       .valueSeq()
-      .flatMap(v => v.valueSeq())
+      .flatMap(v => v.valueSeq().flatMap(v2 => v2.valueSeq()))
       .reduce((sum, x) => sum + x, 0);
 
     return tokenVotesSum > 0;
   };
 
   submitTokenVote = () => {
-    const tokenVotesSum = this.state.userTokenVotes.toJS();
-    const { modules, addTokenVote } = this.props;
-    const tokenVoteSpecification = modules.filter(module => module.voteType === 'token_vote_specification');
-    Object.keys(tokenVotesSum).forEach((proposalId) => {
-      Object.keys(tokenVotesSum[proposalId]).forEach((tokenCategoryId) => {
-        addTokenVote({
-          variables: {
-            voteSpecId: tokenVoteSpecification[0].id,
-            proposalId: proposalId,
-            tokenCategoryId: tokenCategoryId,
-            voteValue: tokenVotesSum[proposalId][tokenCategoryId]
-          }
-        })
-          .then(() => {
-            displayAlert('success', I18n.t('debate.survey.postSuccess'));
+    const { addTokenVote } = this.props;
+    this.state.userTokenVotes.forEach((voteSpecs, proposalId) => {
+      voteSpecs.forEach((tokenCategories, voteSpecId) => {
+        tokenCategories.forEach((voteValue, tokenCategoryId) => {
+          addTokenVote({
+            variables: {
+              voteSpecId: voteSpecId,
+              proposalId: proposalId,
+              tokenCategoryId: tokenCategoryId,
+              voteValue: voteValue
+            }
           })
-          .catch((error) => {
-            displayAlert('danger', error.message);
-          });
+            .then(() => {
+              displayAlert('success', I18n.t('debate.survey.postSuccess'));
+            })
+            .catch((error) => {
+              displayAlert('danger', error.message);
+            });
+        });
       });
     });
   };
@@ -259,6 +295,7 @@ class DumbVoteSession extends React.Component<void, Props, State> {
                 <Proposals
                   proposals={proposals}
                   remainingTokensByCategory={remainingTokensByCategory}
+                  userGaugeVotes={this.state.userGaugeVotes}
                   userTokenVotes={this.state.userTokenVotes}
                   voteForProposal={this.voteForProposal}
                   voteForProposalGauge={this.voteForProposalGauge}

@@ -117,6 +117,7 @@ exports[`VoteSession component should match VoteSession snapshot 1`] = `
                       "exclusiveCategories": true,
                       "id": "token-vote-module",
                       "instructions": "If we generate the feed, we can get to the AGP driver through the primary ADP interface!",
+                      "myVotes": Array [],
                       "tokenCategories": Array [
                         Object {
                           "color": "#226622",
@@ -147,6 +148,7 @@ exports[`VoteSession component should match VoteSession snapshot 1`] = `
                       "exclusiveCategories": true,
                       "id": "token-vote-module",
                       "instructions": "If we generate the feed, we can get to the AGP driver through the primary ADP interface!",
+                      "myVotes": Array [],
                       "tokenCategories": Array [
                         Object {
                           "color": "#226622",
@@ -166,6 +168,7 @@ exports[`VoteSession component should match VoteSession snapshot 1`] = `
                     Object {
                       "id": "text-gauge-module",
                       "instructions": "I'll generate the mobile SMS bus, that should microchip the TCP matrix!",
+                      "myVotes": Array [],
                       "voteType": "gauge_vote_specification",
                     },
                   ],
@@ -180,6 +183,10 @@ exports[`VoteSession component should match VoteSession snapshot 1`] = `
               Immutable.Map {
                 negative: 10,
                 positive: 8,
+              }
+            }
+            userGaugeVotes={
+              Immutable.Map {
               }
             }
             userTokenVotes={
@@ -299,6 +306,10 @@ exports[`VoteSession component should match VoteSession snapshot with empty modu
           <Proposals
             proposals={Array []}
             remainingTokensByCategory={
+              Immutable.Map {
+              }
+            }
+            userGaugeVotes={
               Immutable.Map {
               }
             }

@@ -20,13 +20,15 @@ export const tokenVoteModule = {
   id: 'token-vote-module',
   instructions: 'If we generate the feed, we can get to the AGP driver through the primary ADP interface!',
   tokenCategories: tokenCategories,
-  voteType: 'token_vote_specification'
+  voteType: 'token_vote_specification',
+  myVotes: []
 };
 
 export const textGaugeModule = {
   id: 'text-gauge-module',
   instructions: 'I\'ll generate the mobile SMS bus, that should microchip the TCP matrix!',
-  voteType: 'gauge_vote_specification'
+  voteType: 'gauge_vote_specification',
+  myVotes: []
 };
 
 export const proposals = [
@@ -61,9 +63,13 @@ export const proposal1Votes = Map({
 });
 
 export const userTokenVotes = Map({
-  'proposal-1': proposal1Votes,
+  'proposal-1': Map({ 'token-vote-module': proposal1Votes }),
   'proposal-2': Map({
-    positive: 0,
-    negative: 6
+    'token-vote-module': Map({
+      positive: 0,
+      negative: 6
+    })
   })
 });
+
+export const userGaugeVotes = Map();
