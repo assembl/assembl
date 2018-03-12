@@ -23,9 +23,12 @@ exports[`DumbTimeline component should match the DumbTimeline 1`] = `
          
       </div>
       <div
-        className="timeline-bar-background"
+        className="timeline-bar-background-container"
       >
          
+        <div
+          className="timeline-bar-background"
+        />
       </div>
     </div>
   </div>

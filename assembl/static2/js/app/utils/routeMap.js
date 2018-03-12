@@ -1,4 +1,6 @@
 import urljoin from 'url-join';
+import { browserHistory } from 'react-router';
+
 import parse from './literalStringParser';
 import { capitalize } from './globalFunctions';
 /*
@@ -45,6 +47,9 @@ export const routeForRouter = (name, isCtx, args) => {
   return get(name, newArgs);
 };
 export const getCurrentView = () => window.location.pathname;
+export const goTo = (to) => {
+  browserHistory.push(to);
+};
 /* Not use for the moment, but maybe later
 
 const slug = getDiscussionSlug();

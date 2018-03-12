@@ -1,10 +1,10 @@
 // @flow
 import React from 'react';
-import { Link } from 'react-router';
 import { connect } from 'react-redux';
 import classNames from 'classnames';
 
-import { get } from '../../../utils/routeMap';
+import { isMobile } from '../../../utils/globalFunctions';
+import { get, goTo } from '../../../utils/routeMap';
 import PostsAndContributorsCount from '../../common/postsAndContributorsCount';
 
 type ItemNode = {
@@ -28,49 +28,41 @@ type MenuItemProps = {
   onMouseLeave: Function
 };
 
-type MenuItemState = {
-  active: boolean
-};
-
-export class DumbMenuItem extends React.Component<*, MenuItemProps, MenuItemState> {
-  state = {
-    active: false
-  };
-
+export class DumbMenuItem extends React.Component<*, MenuItemProps, void> {
   showMenu = () => {
     const { onMouseOver, item } = this.props;
-    this.setState({ active: true }, () => {
-      if (onMouseOver) onMouseOver(item.id);
-    });
+    if (onMouseOver) onMouseOver(item.id);
   };
 
   hideMenu = () => {
     const { onMouseLeave, item } = this.props;
-    this.setState({ active: false }, () => {
-      if (onMouseLeave) onMouseLeave(item.id);
-    });
+    if (onMouseLeave) onMouseLeave(item.id);
+  };
+
+  onLinkClick = () => {
+    const { identifier, item, slug, onClick } = this.props;
+    if (onClick) onClick();
+    goTo(get('themeInPhase', { slug: slug, phase: identifier, themeId: item.id }));
   };
 
   render() {
-    const { identifier, item, selected, hasSubItems, slug, onClick } = this.props;
-    const { id, title, img, numContributors, numPosts } = item;
-    const { active } = this.state;
-    const isSelected = active || selected;
-    const displayArrow = isSelected && hasSubItems;
+    const { item, selected, hasSubItems } = this.props;
+    const { title, img, numContributors, numPosts } = item;
+    // The first touch show the menu and the second activate the link
+    const isTouchScreenDevice = isMobile.any();
+    const displayArrow = selected && hasSubItems;
+    const touchActive = isTouchScreenDevice && hasSubItems && !selected;
+    const onLinkClick = touchActive ? this.showMenu : this.onLinkClick;
     return (
       <div
         className={classNames('menu-item-container', {
-          active: isSelected,
-          empty: isSelected && !displayArrow
+          active: selected,
+          empty: selected && !displayArrow
         })}
-        onMouseOver={this.showMenu}
-        onMouseLeave={this.hideMenu}
+        onMouseOver={!isTouchScreenDevice && this.showMenu}
+        onMouseLeave={!isTouchScreenDevice && this.hideMenu}
       >
-        <Link
-          onClick={onClick}
-          className="menu-item"
-          to={`${get('themeInPhase', { slug: slug, phase: identifier, themeId: id })}`}
-        >
+        <div onClick={onLinkClick} className="menu-item">
           <div className="thumb-img" style={img && img.externalUrl ? { backgroundImage: `url(${img.externalUrl})` } : null}>
             <div className="thumb-img-background" />
           </div>
@@ -81,7 +73,7 @@ export class DumbMenuItem extends React.Component<*, MenuItemProps, MenuItemStat
             <PostsAndContributorsCount className="menu-stats" numContributors={numContributors} numPosts={numPosts} />
           </div>
           {displayArrow && <span className="thumb-arrow assembl-icon assembl-icon-right-dir" />}
-        </Link>
+        </div>
       </div>
     );
   }
