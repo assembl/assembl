@@ -25,7 +25,7 @@ export const DumbSelectModulesForm = ({ hasErrors, modulesByIdentifier, moduleTy
               onChange={() => (!moduleType.required ? toggleModule(moduleType.identifier) : null)}
             >
               <Helper
-                classname="helper"
+                classname="margin-left-20"
                 label={moduleType.title}
                 helperUrl={`/static2/img/helpers/landing_page_admin/${identifierLowerCase}.png`}
                 helperText={I18n.t(`administration.helpers.landingPage.${identifierLowerCase}`)}
