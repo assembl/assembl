@@ -162,7 +162,7 @@ const defaultTokenModule = Map({
   _toDelete: false,
   type: 'tokens',
   instructionsEntries: List(),
-  exclusiveCategories: false,
+  exclusiveCategories: true,
   tokenCategories: List(),
   proposalId: null,
   voteSpecTemplateId: null
