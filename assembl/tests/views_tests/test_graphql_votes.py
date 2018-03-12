@@ -97,3 +97,41 @@ def test_graphql_delete_gauge_vote(graphql_participant1_request, vote_session, v
     )
     assert res.errors is None
     assert len(res.data['deleteGaugeVote']['voteSpecification']['myVotes']) == 0
+
+
+def test_graphql_vote_results(graphql_participant1_request, vote_session, vote_proposal, token_vote_spec_with_votes, gauge_vote_specification_with_votes, graphql_registry):
+    res = schema.execute(
+        graphql_registry['VoteSession'],
+        context_value=graphql_participant1_request,
+        variable_values={
+            "discussionPhaseId": vote_session.discussion_phase_id,
+            "lang": "en"
+        }
+    )
+    assert res.errors is None
+    assert res.data['voteSession']['proposals'][0]['voteResults']['numParticipants'] == 2
+    names = {participant['displayName'] for participant in res.data['voteSession']['proposals'][0]['voteResults']['participants']}
+    assert names == set([u'A. Barking Loon', u'Mr. Administrator'])
+    # on token vote spec:
+    assert res.data['voteSession']['proposals'][0]['modules'][0]['numVotes'] == 3
+    first_category = res.data['voteSession']['proposals'][0]['modules'][0]['tokenCategories'][0]['id']
+    second_category = res.data['voteSession']['proposals'][0]['modules'][0]['tokenCategories'][1]['id']
+    token_votes = {entry['tokenCategoryId']: entry['numToken'] for entry in res.data['voteSession']['proposals'][0]['modules'][0]['tokenVotes']}
+    assert token_votes[first_category] == 3
+    assert token_votes[second_category] == 3
+    # on gauge vote spec:
+    assert res.data['voteSession']['proposals'][0]['modules'][1]['numVotes'] == 1
+    assert res.data['voteSession']['proposals'][0]['modules'][1]['averageLabel'] == u'Tick 2'
+
+
+def test_graphql_vote_results_number_gauge_average(graphql_participant1_request, vote_session, vote_proposal, number_gauge_vote_specification_with_votes, graphql_registry):
+    res = schema.execute(
+        graphql_registry['VoteSession'],
+        context_value=graphql_participant1_request,
+        variable_values={
+            "discussionPhaseId": vote_session.discussion_phase_id,
+            "lang": "en"
+        }
+    )
+    assert res.errors is None
+    assert res.data['voteSession']['proposals'][0]['modules'][0]['averageResult'] == 40.0

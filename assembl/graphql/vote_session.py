@@ -3,6 +3,7 @@ import os
 import graphene
 from graphene.relay import Node
 from graphene_sqlalchemy import SQLAlchemyObjectType
+from sqlalchemy.sql import func
 
 from assembl import models
 from assembl.auth import CrudPermissions
@@ -41,8 +42,9 @@ class VoteSession(SecureObjectType, SQLAlchemyObjectType):
         only_fields = ('id', 'discussion_phase_id')
 
     header_image = graphene.Field(Document)
-    vote_specifications = graphene.List(lambda: VoteSpecificationUnion)
-    proposals = graphene.List(lambda: Idea)
+    vote_specifications = graphene.List(lambda: VoteSpecificationUnion, required=True)
+    proposals = graphene.List(lambda: Idea, required=True)
+    see_current_votes = graphene.Boolean(required=True)
 
     def resolve_header_image(self, args, context, info):
         ATTACHMENT_PURPOSE_IMAGE = models.AttachmentPurpose.IMAGE.value
@@ -69,6 +71,7 @@ class UpdateVoteSession(graphene.Mutation):
     class Input:
         discussion_phase_id = graphene.Int(required=True)
         header_image = graphene.String()
+        see_current_votes = graphene.Boolean()
 
     add_langstrings_input_attrs(Input, langstrings_defs.keys())
 
@@ -96,6 +99,9 @@ class UpdateVoteSession(graphene.Mutation):
             vote_session = models.VoteSession(discussion=discussion, discussion_phase=discussion_phase)
         else:
             require_instance_permission(CrudPermissions.UPDATE, vote_session, context)
+
+        if args.get('see_current_votes', None) is not None:
+            vote_session.see_current_votes = args['see_current_votes']
 
         db = vote_session.db
 
@@ -146,7 +152,8 @@ class VoteSpecificationInterface(graphene.Interface):
     vote_session_id = graphene.ID(required=True)
     vote_spec_template_id = graphene.ID()
     vote_type = graphene.String()
-    my_votes = graphene.List('assembl.graphql.votes.VoteUnion')
+    my_votes = graphene.List('assembl.graphql.votes.VoteUnion', required=True)
+    num_votes = graphene.Int(required=True)
 
     def resolve_title(self, args, context, info):
         return resolve_langstring(self.title, args.get('lang'))
@@ -175,9 +182,17 @@ class VoteSpecificationInterface(graphene.Interface):
 
     def resolve_my_votes(self, args, context, info):
         user_id = context.authenticated_userid
-        # use votes_of(user_id) instead of votes_of_current_user because
-        # request threadlocal is not properly set in tests
-        return self.votes_of(user_id)
+        return self.db.query(models.AbstractIdeaVote).filter_by(
+            vote_spec_id=self.id, tombstone_date=None, voter_id=user_id, idea_id=self.criterion_idea_id).all()
+
+    def resolve_num_votes(self, args, context, info):
+        res = self.db.query(
+            getattr(self.get_vote_class(), "voter_id")).filter_by(
+            vote_spec_id=self.id,
+            tombstone_date=None).count()
+        # There is no distinct on purpose here.
+        # For a token vote spec, voting on two categories is counted as 2 votes.
+        return res
 
 
 class TokenCategorySpecification(SecureObjectType, SQLAlchemyObjectType):
@@ -197,6 +212,11 @@ class TokenCategorySpecification(SecureObjectType, SQLAlchemyObjectType):
         return resolve_langstring_entries(self, 'name')
 
 
+class VotesByCategory(graphene.ObjectType):
+    token_category_id = graphene.ID(required=True)
+    num_token = graphene.Int(required=True)
+
+
 class TokenVoteSpecification(SecureObjectType, SQLAlchemyObjectType):
 
     class Meta:
@@ -204,7 +224,28 @@ class TokenVoteSpecification(SecureObjectType, SQLAlchemyObjectType):
         interfaces = (Node, VoteSpecificationInterface)
         only_fields = ('id', 'exclusive_categories')
 
-    token_categories = graphene.List(TokenCategorySpecification)
+    token_categories = graphene.List(TokenCategorySpecification, required=True)
+    token_votes = graphene.List(VotesByCategory, required=True)
+
+    def resolve_token_votes(self, args, context, info):
+        votes = []
+        for token_category in self.token_categories:
+            query = self.db.query(
+                func.sum(getattr(self.get_vote_class(), "vote_value"))).filter_by(
+                vote_spec_id=self.id,
+                tombstone_date=None,
+                token_category_id=token_category.id)
+            # when there is no votes, query.first() equals (None,)
+            # in this case set num_token to 0
+            num_token = query.first()[0] or 0
+            votes.append(
+                VotesByCategory(
+                    token_category_id=token_category.graphene_id(),
+                    num_token=num_token
+                )
+            )
+
+        return votes
 
     def resolve_token_categories(self, args, context, info):
         if self.vote_spec_template_id and not self.is_custom:
@@ -238,6 +279,28 @@ class GaugeVoteSpecification(SecureObjectType, SQLAlchemyObjectType):
         only_fields = ('id', )
 
     choices = graphene.List(GaugeChoiceSpecification)
+    average_label = graphene.String(lang=graphene.String())
+
+    def resolve_average_label(self, args, context, info):
+        if not self.choices:
+            return None
+
+        vote_cls = self.get_vote_class()
+        voting_avg = self.db.query(func.avg(getattr(vote_cls, 'vote_value'))).filter_by(
+            vote_spec_id=self.id,
+            tombstone_date=None,
+            idea_id=self.criterion_idea_id).first()
+        # when there is no votes, query.first() equals (None,)
+        avg = voting_avg[0] or 0
+        # take the closest choice
+        avg_choice = self.choices[0]
+        min_diff = abs(avg_choice.value - avg)
+        for choice in self.choices[1:]:
+            diff = abs(choice.value - avg)
+            if diff < min_diff:
+                avg_choice = choice
+                min_diff = diff
+        return resolve_langstring(avg_choice.label, args.get('lang'))
 
 
 class NumberGaugeVoteSpecification(SecureObjectType, SQLAlchemyObjectType):
@@ -246,6 +309,18 @@ class NumberGaugeVoteSpecification(SecureObjectType, SQLAlchemyObjectType):
         model = models.NumberGaugeVoteSpecification
         interfaces = (Node, VoteSpecificationInterface)
         only_fields = ('id', 'minimum', 'maximum', 'nb_ticks', 'unit')
+
+    average_result = graphene.Float(required=True)
+
+    def resolve_average_result(self, args, context, info):
+        vote_cls = self.get_vote_class()
+        voting_avg = self.db.query(func.avg(getattr(vote_cls, 'vote_value'))).filter_by(
+            vote_spec_id=self.id,
+            tombstone_date=None,
+            idea_id=self.criterion_idea_id).first()
+        # when there is no votes, query.first() equals (None,)
+        avg = voting_avg[0] or 0
+        return avg
 
 
 class VoteSpecificationUnion(SQLAlchemyUnion):

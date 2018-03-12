@@ -7,13 +7,15 @@ import { I18n, Translate } from 'react-redux-i18n';
 import { Map } from 'immutable';
 
 import VoteSessionQuery from '../graphql/VoteSession.graphql';
+import AddTokenVoteMutation from '../graphql/mutations/addTokenVote.graphql';
+import AddGaugeVoteMutation from '../graphql/mutations/addGaugeVote.graphql';
 import Header from '../components/common/header';
 import Section from '../components/common/section';
 import AvailableTokens from '../components/voteSession/availableTokens';
 import Proposals from '../components/voteSession/proposals';
 import { getDomElementOffset, isMobile } from '../utils/globalFunctions';
 import { getPhaseId } from '../utils/timeline';
-import { promptForLoginOr } from '../utils/utilityManager';
+import { promptForLoginOr, displayAlert } from '../utils/utilityManager';
 import withLoadingIndicator from '../components/common/withLoadingIndicator';
 import MessagePage from '../components/common/messagePage';
 
@@ -26,10 +28,14 @@ export type TokenCategory = {|
   color: ?string
 |};
 
-export type VoteSpecification =
-  | tokenVoteSpecificationFragment
-  | numberGaugeVoteSpecificationFragment
-  | gaugeVoteSpecificationFragment;
+export type TokenVoteSpecification = { ...tokenVoteSpecificationFragment, ...tokenVoteSpecificationResultsFragment };
+export type NumberGaugeVoteSpecification = {
+  ...numberGaugeVoteSpecificationFragment,
+  ...numberGaugeVoteSpecificationResultsFragment
+};
+export type GaugeVoteSpecification = { ...gaugeVoteSpecificationFragment, ...gaugeVoteSpecificationResultsFragment };
+
+export type VoteSpecification = TokenVoteSpecification | NumberGaugeVoteSpecification | GaugeVoteSpecification;
 
 export type Proposal = {|
   id: string,
@@ -38,27 +44,40 @@ export type Proposal = {|
   titleEntries: ?Array<?LangStringEntryInput>,
   descriptionEntries: ?Array<?LangStringEntryInput>,
   order: ?number,
-  modules: ?Array<VoteSpecification>
+  modules: Array<VoteSpecification>,
+  voteResults: {|
+    numParticipants: number,
+    participants: Array<?{|
+      // The ID of the object.
+      id: string,
+      userId: number,
+      displayName: ?string
+    |}>
+  |}
 |};
 
 type Props = {
   title: string,
   subTitle: string,
+  seeCurrentVotes: boolean,
   headerImageUrl: string,
   instructionsSectionTitle: string,
   instructionsSectionContent: string,
   modules: Array<VoteSpecification>,
   propositionsSectionTitle: string,
-  proposals: Array<Proposal>
+  proposals: Array<Proposal>,
+  addGaugeVote: Function,
+  addTokenVote: Function
 };
 
 export type RemainingTokensByCategory = Map<string, number>;
 
-export type TokenVotesForProposal = Map<string, number>;
-export type GaugeVotesForProposal = Map<string, number>;
+export type UserTokenVotesForVoteSpec = Map<string, number>; // key is tokenCategoryId
+export type UserTokenVotesForProposal = Map<string, UserTokenVotesForVoteSpec>; // key is voteSpecId
+export type UserGaugeVotesForProposal = Map<string, number>; // key is voteSpecId
 
-export type UserTokenVotes = Map<string, TokenVotesForProposal>;
-export type UserGaugeVotes = Map<string, GaugeVotesForProposal>;
+export type UserTokenVotes = Map<string, UserTokenVotesForProposal>; // key is proposalId
+export type UserGaugeVotes = Map<string, UserGaugeVotesForProposal>; // key is proposalId
 
 type State = {
   userTokenVotes: UserTokenVotes,
@@ -66,17 +85,17 @@ type State = {
   availableTokensSticky: boolean
 };
 
-// $FlowFixMe: if voteType === 'token_vote_specification', we know it is a tokenVoteSpecificationFragment
-type FindTokenVoteModule = (Array<VoteSpecification>) => ?tokenVoteSpecificationFragment;
+// $FlowFixMe: if voteType === 'token_vote_specification', we know it is a TokenVoteSpecification
+type FindTokenVoteModule = (Array<VoteSpecification>) => ?TokenVoteSpecification;
 export const findTokenVoteModule: FindTokenVoteModule = modules => modules.find(m => m.voteType === 'token_vote_specification');
 
-// $FlowFixMe: if voteType === 'gauge_vote_specification', we know it is a gaugeVoteSpecificationFragment
-type FilterGaugeVoteModules = (Array<VoteSpecification>) => Array<gaugeVoteSpecificationFragment>;
+// $FlowFixMe: if voteType === 'gauge_vote_specification', we know it is a GaugeVoteSpecification
+type FilterGaugeVoteModules = (Array<VoteSpecification>) => Array<GaugeVoteSpecification>;
 export const filterGaugeVoteModules: FilterGaugeVoteModules = modules =>
   modules.filter(module => module.voteType === 'gauge_vote_specification');
 
-// $FlowFixMe: if voteType === 'number_gauge_vote_specification', we know it is a numberGaugeVoteSpecificationFragment
-type FilterNumberGaugeVoteModules = (Array<VoteSpecification>) => Array<numberGaugeVoteSpecificationFragment>;
+// $FlowFixMe: if voteType === 'number_gauge_vote_specification', we know it is a NumberGaugeVoteSpecification
+type FilterNumberGaugeVoteModules = (Array<VoteSpecification>) => Array<NumberGaugeVoteSpecification>;
 export const filterNumberGaugeVoteModules: FilterNumberGaugeVoteModules = modules =>
   modules.filter(module => module.voteType === 'number_gauge_vote_specification');
 
@@ -98,10 +117,41 @@ class DumbVoteSession extends React.Component<void, Props, State> {
 
   componentWillMount() {
     window.addEventListener('scroll', this.setAvailableTokensSticky);
+    this.setMyVotes();
   }
 
   componentWillUnmount() {
     window.removeEventListener('scroll', this.setAvailableTokensSticky);
+  }
+
+  setMyVotes() {
+    const { proposals } = this.props;
+    let userTokenVotes = Map();
+    let userGaugeVotes = Map();
+    proposals.forEach((proposal) => {
+      const tokenModules = proposal.modules
+        ? proposal.modules.filter(module => module.voteType === 'token_vote_specification')
+        : [];
+      const gaugeModules = proposal.modules
+        ? proposal.modules.filter(module => module.voteType !== 'token_vote_specification')
+        : [];
+      tokenModules.forEach((tokenModule) => {
+        tokenModule.myVotes.forEach((myVote) => {
+          // $FlowFixMe: issue with generated type, myVote can be {} from the generated type, but not in reality.
+          userTokenVotes = userTokenVotes.setIn([myVote.proposalId, tokenModule.id, myVote.tokenCategoryId], myVote.voteValue);
+        });
+      });
+      gaugeModules.forEach((gaugeModule) => {
+        gaugeModule.myVotes.forEach((myVote) => {
+          // $FlowFixMe: issue with generated type, myVote can be {} from the generated type, but not in reality.
+          userGaugeVotes = userGaugeVotes.setIn([myVote.proposalId, gaugeModule.id], myVote.selectedValue);
+        });
+      });
+    });
+    this.setState({
+      userTokenVotes: userTokenVotes,
+      userGaugeVotes: userGaugeVotes
+    });
   }
 
   setAvailableTokensSticky = () => {
@@ -115,10 +165,10 @@ class DumbVoteSession extends React.Component<void, Props, State> {
     }
   };
 
-  voteForProposal = (proposalId: string, categoryId: string, value: number): void => {
+  voteForProposalToken = (proposalId: string, tokenVoteModuleId: string, categoryId: string, value: number): void => {
     const setVote = () =>
       this.setState({
-        userTokenVotes: this.state.userTokenVotes.setIn([proposalId, categoryId], value)
+        userTokenVotes: this.state.userTokenVotes.setIn([proposalId, tokenVoteModuleId, categoryId], value)
       });
     promptForLoginOr(setVote)();
   };
@@ -131,7 +181,7 @@ class DumbVoteSession extends React.Component<void, Props, State> {
     promptForLoginOr(setVote)();
   };
 
-  getRemainingTokensByCategory: (?tokenVoteSpecificationFragment) => RemainingTokensByCategory = (module) => {
+  getRemainingTokensByCategory: (?TokenVoteSpecification) => RemainingTokensByCategory = (module) => {
     let remainingTokensByCategory = Map();
     if (module && module.tokenCategories) {
       module.tokenCategories.forEach((category) => {
@@ -140,9 +190,13 @@ class DumbVoteSession extends React.Component<void, Props, State> {
         }
       });
     }
-    const proposalsVotes = this.state.userTokenVotes.valueSeq().toList();
-    remainingTokensByCategory = remainingTokensByCategory.mergeWith((x, y) => x - y, ...proposalsVotes);
-
+    this.state.userTokenVotes.forEach((voteSpecs) => {
+      voteSpecs.forEach((tokenCategories) => {
+        tokenCategories.forEach((voteValue, tokenCategoryId) => {
+          remainingTokensByCategory = remainingTokensByCategory.updateIn([tokenCategoryId], val => val - voteValue);
+        });
+      });
+    });
     return remainingTokensByCategory;
   };
 
@@ -153,15 +207,62 @@ class DumbVoteSession extends React.Component<void, Props, State> {
   displaySubmitButton: void => boolean = () => {
     const tokenVotesSum = this.state.userTokenVotes
       .valueSeq()
+      .flatMap(v => v.valueSeq().flatMap(v2 => v2.valueSeq()))
+      .reduce((sum, x) => sum + x, 0);
+
+    const gaugeVotesSum = this.state.userGaugeVotes
+      .valueSeq()
       .flatMap(v => v.valueSeq())
       .reduce((sum, x) => sum + x, 0);
 
-    return tokenVotesSum > 0;
+    return tokenVotesSum > 0 || gaugeVotesSum > 0;
+  };
+
+  submitVotes = () => {
+    const { addTokenVote, addGaugeVote } = this.props;
+    this.state.userTokenVotes.forEach((voteSpecs, proposalId) => {
+      voteSpecs.forEach((tokenCategories, voteSpecId) => {
+        tokenCategories.forEach((voteValue, tokenCategoryId) => {
+          addTokenVote({
+            variables: {
+              voteSpecId: voteSpecId,
+              proposalId: proposalId,
+              tokenCategoryId: tokenCategoryId,
+              voteValue: voteValue
+            }
+          })
+            .then(() => {
+              displayAlert('success', I18n.t('debate.voteSession.postSuccess'));
+            })
+            .catch((error) => {
+              displayAlert('danger', error.message);
+            });
+        });
+      });
+    });
+    this.state.userGaugeVotes.forEach((voteSpecs, proposalId) => {
+      voteSpecs.forEach((voteValue, voteSpecId) => {
+        addGaugeVote({
+          variables: {
+            voteSpecId: voteSpecId,
+            proposalId: proposalId,
+            voteValue: voteValue
+          }
+        })
+          .then(() => {
+            displayAlert('success', I18n.t('debate.voteSession.postSuccess'));
+          })
+          .catch((error) => {
+            displayAlert('danger', error.message);
+          });
+      });
+    });
   };
 
   render() {
     const {
       title,
+      seeCurrentVotes,
       subTitle,
       headerImageUrl,
       instructionsSectionTitle,
@@ -220,8 +321,10 @@ class DumbVoteSession extends React.Component<void, Props, State> {
                 <Proposals
                   proposals={proposals}
                   remainingTokensByCategory={remainingTokensByCategory}
-                  tokenVotes={this.state.userTokenVotes}
-                  voteForProposal={this.voteForProposal}
+                  seeCurrentVotes={seeCurrentVotes}
+                  userGaugeVotes={this.state.userGaugeVotes}
+                  userTokenVotes={this.state.userTokenVotes}
+                  voteForProposalToken={this.voteForProposalToken}
                   voteForProposalGauge={this.voteForProposalGauge}
                 />
               </Col>
@@ -229,7 +332,7 @@ class DumbVoteSession extends React.Component<void, Props, State> {
             <Row className="form-actions center">
               <Col mdOffset={1} md={10} smOffset={1} sm={10}>
                 {this.displaySubmitButton() ? (
-                  <Button className="button-submit button-dark">
+                  <Button className="button-submit button-dark" onClick={this.submitVotes}>
                     <Translate value="debate.voteSession.submit" />
                   </Button>
                 ) : null}
@@ -272,6 +375,7 @@ export default compose(
         return {
           loading: data.loading,
           title: '',
+          seeCurrentVotes: false,
           subTitle: '',
           headerImageUrl: '',
           instructionsSectionTitle: '',
@@ -285,6 +389,7 @@ export default compose(
       const {
         title,
         subTitle,
+        seeCurrentVotes,
         headerImage,
         instructionsSectionTitle,
         instructionsSectionContent,
@@ -297,6 +402,7 @@ export default compose(
         loading: data.loading,
         headerImageUrl: headerImage ? headerImage.externalUrl : defaultHeaderImage,
         title: title,
+        seeCurrentVotes: seeCurrentVotes,
         subTitle: subTitle,
         instructionsSectionTitle: instructionsSectionTitle,
         instructionsSectionContent: instructionsSectionContent,
@@ -306,6 +412,12 @@ export default compose(
         noVoteSession: false
       };
     }
+  }),
+  graphql(AddGaugeVoteMutation, {
+    name: 'addGaugeVote'
+  }),
+  graphql(AddTokenVoteMutation, {
+    name: 'addTokenVote'
   }),
   withLoadingIndicator()
 )(DumbVoteSession);

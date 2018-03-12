@@ -8,6 +8,11 @@ export const updateVoteSessionPageTitle = (locale: string, value: string): actio
   type: actionTypes.UPDATE_VOTE_SESSION_PAGE_TITLE
 });
 
+export const updateVoteSessionPageSeeCurrentVotes = (value: string): actionTypes.UpdateVoteSessionPageSeeCurrentVotes => ({
+  value: value,
+  type: actionTypes.UPDATE_VOTE_SESSION_PAGE_SEECURRENTVOTES
+});
+
 export const updateVoteSessionPageSubtitle = (locale: string, value: string): actionTypes.UpdateVoteSessionPageSubtitle => ({
   locale: locale,
   value: value,
@@ -185,6 +190,7 @@ export const updateGaugeUnit = (id: string, value: string): actionTypes.UpdateGa
 export const updateVoteSessionPage = (value: Object): actionTypes.UpdateVoteSessionPage => ({
   id: value.id,
   titleEntries: value.titleEntries,
+  seeCurrentVotes: value.seeCurrentVotes,
   subTitleEntries: value.subTitleEntries,
   instructionsSectionTitleEntries: value.instructionsSectionTitleEntries,
   instructionsSectionContentEntries: value.instructionsSectionContentEntries,

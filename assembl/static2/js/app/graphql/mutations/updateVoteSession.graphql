@@ -8,6 +8,7 @@ mutation UpdateVoteSession(
   $instructionsSectionTitleEntries: [LangStringEntryInput]
   $instructionsSectionContentEntries: [LangStringEntryInput]
   $propositionsSectionTitleEntries: [LangStringEntryInput]
+  $seeCurrentVotes: Boolean
 ) {
   updateVoteSession(
     discussionPhaseId: $discussionPhaseId
@@ -17,6 +18,7 @@ mutation UpdateVoteSession(
     instructionsSectionTitleEntries: $instructionsSectionTitleEntries
     instructionsSectionContentEntries: $instructionsSectionContentEntries
     propositionsSectionTitleEntries: $propositionsSectionTitleEntries
+    seeCurrentVotes: $seeCurrentVotes
   ) {
     voteSession {
       ...voteSessionGlobals

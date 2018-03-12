@@ -1,6 +1,8 @@
 /* eslint max-len: "off", quotes: ["error", "double"] */
 const Translations = {
   fr: {
+    yes: "oui",
+    no: "non",
     "Number of contributions": "Nombre de messages",
     "Number of users": "Nombre de contributeurs",
     cancel: "Annuler",
@@ -313,6 +315,7 @@ const Translations = {
           title: "La session de vote n'est pas configurée",
           text: "Un administrateur doit configurer la session de vote"
         },
+        postSuccess: "Merci pour votre participation. Votre vote a bien été envoyé !",
         remainingTokens: "Il vous reste %{count} jetons disponibles.",
         resetTokens: "Supprimer mon vote",
         submit: "Soumettre le vote",
@@ -325,7 +328,7 @@ const Translations = {
         totalVotes: "%{count} votes",
         votes: "Votes",
         vote: "Vote",
-        valueWithUnit: "%{value} %{unit}"
+        valueWithUnit: "%{num} %{unit}"
       }
     },
     profile: {
@@ -462,6 +465,7 @@ const Translations = {
       textValue: "Valeur textuelle",
       numberValue: "Valeur numéraire",
       valueTitle: "Intitulé de la valeur",
+      seeCurrentVotes: "Voulez vous que les participants puissent voir l'évolution des votes en cours ?",
       sections: {
         addSection: "Ajouter une rubrique",
         deleteSection: "Supprimer la rubrique",
@@ -576,6 +580,8 @@ const Translations = {
     }
   },
   en: {
+    yes: "yes",
+    no: "no",
     cancel: "Cancel",
     validate: "Validate",
     introduction: "Introduction",
@@ -884,6 +890,7 @@ const Translations = {
           title: "Vote session is not configured",
           text: "An administrator must configure the vote session"
         },
+        postSuccess: "Thanks for your participation. Your vote has been sent!",
         remainingTokens: "You have %{count} tokens remaining.",
         resetTokens: "Reset my vote",
         submit: "Submit vote",
@@ -896,7 +903,7 @@ const Translations = {
         totalVotes: "%{count} votes",
         votes: "Votes",
         vote: "Vote",
-        valueWithUnit: "%{unit}%{value}"
+        valueWithUnit: "%{unit}%{num}"
       }
     },
     profile: {
@@ -1032,6 +1039,7 @@ const Translations = {
           "You are about to modify the settings on this gauge only. If you wish to modify all of the gauges, please check the box at the end of the form.",
         checkboxLabel: "Apply these changes to all of the proposals"
       },
+      seeCurrentVotes: "Do you want participants to see the evolution of the votes in progress?",
       sections: {
         addSection: "Add a section",
         deleteSection: "Delete the section",

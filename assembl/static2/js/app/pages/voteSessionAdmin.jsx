@@ -247,7 +247,8 @@ class VoteSessionAdmin extends React.Component<void, VoteSessionAdminProps, Vote
           instructionsSectionTitleEntries: instructionsSectionTitleEntries,
           instructionsSectionContentEntries: convertEntriesToHTML(instructionsSectionContentEntries),
           propositionsSectionTitleEntries: propositionsSectionTitleEntries,
-          headerImage: headerImage
+          headerImage: headerImage,
+          seeCurrentVotes: voteSessionPage.get('seeCurrentVotes')
         }
       };
 

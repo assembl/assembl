@@ -3,13 +3,20 @@ import React from 'react';
 import { Grid } from 'react-bootstrap';
 
 import Proposal from './proposal';
-import { type Proposal as ProposalType, type RemainingTokensByCategory, type UserTokenVotes } from '../../pages/voteSession';
+import {
+  type Proposal as ProposalType,
+  type RemainingTokensByCategory,
+  type UserTokenVotes,
+  type UserGaugeVotes
+} from '../../pages/voteSession';
 
 type Props = {
   proposals: Array<ProposalType>,
   remainingTokensByCategory: RemainingTokensByCategory,
-  tokenVotes: UserTokenVotes,
-  voteForProposal: Function,
+  seeCurrentVotes: boolean,
+  userGaugeVotes: UserGaugeVotes,
+  userTokenVotes: UserTokenVotes,
+  voteForProposalToken: Function,
   voteForProposalGauge: Function
 };
 
@@ -20,9 +27,12 @@ const Proposals = (props: Props) => (
         key={proposal.id}
         {...proposal}
         modules={proposal.modules}
+        numParticipants={proposal.voteResults.numParticipants}
         remainingTokensByCategory={props.remainingTokensByCategory}
-        tokenVotes={props.tokenVotes}
-        voteForProposal={props.voteForProposal}
+        seeCurrentVotes={props.seeCurrentVotes}
+        userTokenVotes={props.userTokenVotes}
+        userGaugeVotes={props.userGaugeVotes}
+        voteForProposalToken={props.voteForProposalToken}
         voteForProposalGauge={props.voteForProposalGauge}
       />
     ))}

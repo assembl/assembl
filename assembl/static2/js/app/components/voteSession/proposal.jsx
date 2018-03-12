@@ -13,17 +13,21 @@ import {
   filterNumberGaugeVoteModules,
   type RemainingTokensByCategory,
   type UserTokenVotes,
+  type UserGaugeVotes,
   type VoteSpecification
 } from '../../pages/voteSession';
 
 type Props = {
   description: ?string,
   id: string,
-  modules: ?Array<VoteSpecification>,
+  modules: Array<VoteSpecification>,
   remainingTokensByCategory: RemainingTokensByCategory,
+  seeCurrentVotes: boolean,
   title: ?string,
-  tokenVotes: UserTokenVotes,
-  voteForProposal: Function,
+  userGaugeVotes: UserGaugeVotes,
+  userTokenVotes: UserTokenVotes,
+  numParticipants: number,
+  voteForProposalToken: Function,
   voteForProposalGauge: Function
 };
 
@@ -54,10 +58,13 @@ class Proposal extends React.Component<void, Props, State> {
       description,
       id,
       modules,
+      numParticipants,
       remainingTokensByCategory,
+      seeCurrentVotes,
       title,
-      tokenVotes,
-      voteForProposal,
+      userGaugeVotes,
+      userTokenVotes,
+      voteForProposalToken,
       voteForProposalGauge
     } = this.props;
     const tokenVoteModule = modules ? findTokenVoteModule(modules) : null;
@@ -77,8 +84,9 @@ class Proposal extends React.Component<void, Props, State> {
                 proposalId={id}
                 remainingTokensByCategory={remainingTokensByCategory}
                 tokenCategories={tokenVoteModule.tokenCategories}
-                tokenVotes={tokenVotes.get(id, Map())}
-                voteForProposal={voteForProposal}
+                userTokenVotesForProposal={userTokenVotes.getIn([id, tokenVoteModule.id], Map())}
+                voteForProposal={voteForProposalToken}
+                moduleId={tokenVoteModule.id}
               />
             )}
 
@@ -89,7 +97,7 @@ class Proposal extends React.Component<void, Props, State> {
                   {...module}
                   voteForProposal={voteForProposalGauge}
                   proposalId={id}
-                  value={0} // TODO: use myVotes
+                  value={userGaugeVotes.getIn([id, module.id], 0)}
                 />
               ))}
 
@@ -105,33 +113,36 @@ class Proposal extends React.Component<void, Props, State> {
                   {...module}
                   voteForProposal={voteForProposalGauge}
                   proposalId={id}
-                  value={0} // TODO: use myVotes
+                  value={userGaugeVotes.getIn([id, module.id], 0)}
                 />
               ))}
           </Col>
         </Row>
-        {this.state.showVotesInProgress ? (
-          <div className="expand-result">
-            <Row className="expand-row background-grey">
-              <Col xs={12} md={12} className="center">
-                <Button className="link-button" onClick={this.toggleShowVotesInProgress}>
-                  <Translate value="debate.voteSession.showLess" />
-                </Button>
-              </Col>
-            </Row>
-            {tokenVoteModule && <VotesInProgress tokenCategories={tokenVoteModule.tokenCategories} />}
-          </div>
-        ) : (
-          <div className="expand-result">
-            <Row className="expand-row background-grey">
-              <Col xs={12} md={12} className="center">
-                <Button className="link-button" onClick={this.toggleShowVotesInProgress}>
-                  <Translate value="debate.voteSession.showVotesInProgress" />
-                </Button>
-              </Col>
-            </Row>
-          </div>
-        )}
+        {seeCurrentVotes &&
+          this.state.showVotesInProgress && (
+            <div className="expand-result">
+              <Row className="expand-row background-grey">
+                <Col xs={12} md={12} className="center">
+                  <Button className="link-button" onClick={this.toggleShowVotesInProgress}>
+                    <Translate value="debate.voteSession.showLess" />
+                  </Button>
+                </Col>
+              </Row>
+              <VotesInProgress modules={modules} numParticipants={numParticipants} />
+            </div>
+          )}
+        {seeCurrentVotes &&
+          !this.state.showVotesInProgress && (
+            <div className="expand-result">
+              <Row className="expand-row background-grey">
+                <Col xs={12} md={12} className="center">
+                  <Button className="link-button" onClick={this.toggleShowVotesInProgress}>
+                    <Translate value="debate.voteSession.showVotesInProgress" />
+                  </Button>
+                </Col>
+              </Row>
+            </div>
+          )}
       </div>
     );
   }

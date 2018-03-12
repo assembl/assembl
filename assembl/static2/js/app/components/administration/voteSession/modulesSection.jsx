@@ -2,13 +2,18 @@
 import React from 'react';
 import { I18n, Translate } from 'react-redux-i18n';
 import { connect } from 'react-redux';
-import { Checkbox, SplitButton, MenuItem } from 'react-bootstrap';
+import { Checkbox, SplitButton, MenuItem, Radio } from 'react-bootstrap';
 import range from 'lodash/range';
 import SectionTitle from '../sectionTitle';
 import Helper from '../../common/helper';
 import TokensForm from './tokensForm';
 import GaugeForm from './gaugeForm';
-import { createTokenVoteModule, createGaugeVoteModule, deleteVoteModule } from '../../../actions/adminActions/voteSession';
+import {
+  createTokenVoteModule,
+  createGaugeVoteModule,
+  deleteVoteModule,
+  updateVoteSessionPageSeeCurrentVotes
+} from '../../../actions/adminActions/voteSession';
 
 type ModulesSectionProps = {
   tokenModules: Object,
@@ -16,7 +21,9 @@ type ModulesSectionProps = {
   editLocale: string,
   handleTokenCheckBoxChange: Function,
   handleGaugeCheckBoxChange: Function,
-  handleGaugeSelectChange: Function
+  handleGaugeSelectChange: Function,
+  handleSeeCurrentVotesChange: Function,
+  seeCurrentVotes: boolean
 };
 
 const DumbModulesSection = ({
@@ -25,7 +32,9 @@ const DumbModulesSection = ({
   handleTokenCheckBoxChange,
   gaugeModules,
   handleGaugeCheckBoxChange,
-  handleGaugeSelectChange
+  handleGaugeSelectChange,
+  handleSeeCurrentVotesChange,
+  seeCurrentVotes
 }: ModulesSectionProps) => {
   const tokenModuleChecked = tokenModules.size > 0;
   const gaugeModuleChecked = gaugeModules.size > 0;
@@ -91,6 +100,30 @@ const DumbModulesSection = ({
               </div>
             ) : null}
             {gaugeModules.map((id, index) => <GaugeForm key={id} index={index} id={id} editLocale={editLocale} />)}
+            <div className="margin-m">
+              <label htmlFor="seeCurrentVotes">
+                <Translate value="administration.seeCurrentVotes" />
+              </label>
+              <Radio
+                id="seeCurrentVotes"
+                onChange={() => {
+                  handleSeeCurrentVotesChange(true);
+                }}
+                checked={seeCurrentVotes}
+                name="seeCurrentVotes"
+              >
+                <Translate value="yes" />
+              </Radio>
+              <Radio
+                onChange={() => {
+                  handleSeeCurrentVotesChange(false);
+                }}
+                checked={!seeCurrentVotes}
+                name="seeCurrentVotes"
+              >
+                <Translate value="no" />
+              </Radio>
+            </div>
           </div>
         </div>
       </div>
@@ -99,7 +132,7 @@ const DumbModulesSection = ({
 };
 
 const mapStateToProps = ({ admin }) => {
-  const { modulesInOrder, modulesById } = admin.voteSession;
+  const { modulesInOrder, modulesById, page } = admin.voteSession;
   const { editLocale } = admin;
   return {
     tokenModules: modulesInOrder.filter(
@@ -108,7 +141,8 @@ const mapStateToProps = ({ admin }) => {
     gaugeModules: modulesInOrder.filter(
       id => modulesById.getIn([id, 'type']) === 'gauge' && !modulesById.getIn([id, 'toDelete'])
     ),
-    editLocale: editLocale
+    editLocale: editLocale,
+    seeCurrentVotes: page.get('seeCurrentVotes')
   };
 };
 
@@ -143,7 +177,8 @@ const mapDispatchToProps = dispatch => ({
         }
       });
     }
-  }
+  },
+  handleSeeCurrentVotesChange: checked => dispatch(updateVoteSessionPageSeeCurrentVotes(checked))
 });
 
 export { DumbModulesSection };

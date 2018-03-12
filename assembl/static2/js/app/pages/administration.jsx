@@ -133,6 +133,7 @@ class Administration extends React.Component {
     const emptyVoteSession = {
       id: '',
       titleEntries: [],
+      seeCurrentVotes: false,
       subTitleEntries: [],
       instructionsSectionTitleEntries: [],
       instructionsSectionContentEntries: [],

@@ -16,6 +16,30 @@ describe('voteSession admin actions', () => {
     });
   });
 
+  describe('updateVoteSessionPageSeeCurrentVotes action false', () => {
+    const { updateVoteSessionPageSeeCurrentVotes } = actions;
+    it('should return an UPDATE_VOTE_SESSION_PAGE_SEECURRENTVOTES action type', () => {
+      const actual = updateVoteSessionPageSeeCurrentVotes(false);
+      const expected = {
+        value: false,
+        type: actionTypes.UPDATE_VOTE_SESSION_PAGE_SEECURRENTVOTES
+      };
+      expect(actual).toEqual(expected);
+    });
+  });
+
+  describe('updateVoteSessionPageSeeCurrentVotes action true', () => {
+    const { updateVoteSessionPageSeeCurrentVotes } = actions;
+    it('should return an UPDATE_VOTE_SESSION_PAGE_SEECURRENTVOTES action type', () => {
+      const actual = updateVoteSessionPageSeeCurrentVotes(true);
+      const expected = {
+        value: true,
+        type: actionTypes.UPDATE_VOTE_SESSION_PAGE_SEECURRENTVOTES
+      };
+      expect(actual).toEqual(expected);
+    });
+  });
+
   describe('updateVoteSessionPageSubtitle action', () => {
     const { updateVoteSessionPageSubtitle } = actions;
     it('should return an UPDATE_VOTE_SESSION_PAGE_SUBTITLE action type', () => {

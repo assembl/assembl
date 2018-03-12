@@ -8,6 +8,7 @@ describe('VoteSession component', () => {
   it('should match VoteSession snapshot when vote session is not configured', () => {
     const props = {
       title: '',
+      seeCurrentVotes: true,
       subTitle: '',
       headerImageUrl: '',
       instructionsSectionTitle: '',
@@ -25,6 +26,7 @@ describe('VoteSession component', () => {
   it('should match VoteSession snapshot with empty modules and proposals', () => {
     const props = {
       title: 'Phase de vote à la majorité et estimation multicritère',
+      seeCurrentVotes: true,
       subTitle: 'Maintenant il faut voter.',
       headerImageUrl: 'foo.jpg',
       instructionsSectionTitle: 'Instructions de la phase de vote',
@@ -43,6 +45,7 @@ describe('VoteSession component', () => {
     const { proposals } = fakeData;
     const props = {
       title: 'Phase de vote à la majorité et estimation multicritère',
+      seeCurrentVotes: true,
       subTitle: 'Maintenant il faut voter.',
       headerImageUrl: 'foo.jpg',
       instructionsSectionTitle: 'Instructions de la phase de vote',
