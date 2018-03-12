@@ -84,6 +84,7 @@ const createVariablesForTextGaugeMutation: CreateVariablesForTextGaugeMutation =
   isCustom: voteModule.isCustom,
   choices: voteModule.choices
     ? voteModule.choices.map((c, index) => ({
+      id: c.id,
       labelEntries: c.labelEntries,
       value: index.toFixed(2)
     }))

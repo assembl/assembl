@@ -16,10 +16,9 @@ import {
   deleteVoteModule,
   undeleteModule
 } from '../../../actions/adminActions/voteSession';
-import { displayModal, closeModal } from '../../../utils/utilityManager';
+import { displayCustomModal, displayModal, closeModal } from '../../../utils/utilityManager';
 import { createRandomId } from '../../../utils/globalFunctions';
-// import { displayModal, displayCustomModal, closeModal } from '../../../utils/utilityManager';
-// import GaugeSettingsForm from './gaugeSettingsForm';
+import CustomizeGaugeForm from './customizeGaugeForm';
 
 type VoteProposalFormProps = {
   index: number,
@@ -98,10 +97,10 @@ const DumbVoteProposalForm = ({
     return displayModal(modalTitle, body, includeFooter, footer);
   };
 
-  // const settingsModal = (id) => {
-  //   const content = <GaugeSettingsForm gaugeModuleId={id} editLocale={editLocale} />;
-  //   displayCustomModal(content, true, 'gauge-settings-modal');
-  // };
+  const settingsModal = (id) => {
+    const content = <CustomizeGaugeForm gaugeModuleId={id} editLocale={editLocale} />;
+    displayCustomModal(content, true, 'gauge-settings-modal');
+  };
 
   return (
     <div className="form-container vote-proposal-form">
@@ -158,6 +157,7 @@ const DumbVoteProposalForm = ({
       ))}
       {gaugeModules.map((moduleTemplateId, idx) => {
         const number = gaugeModules.size > 1 ? idx + 1 : '';
+        const pModule = proposalModules.find(m => m.get('voteSpecTemplateId') === moduleTemplateId);
         return (
           <div key={moduleTemplateId}>
             <Checkbox
@@ -167,8 +167,7 @@ const DumbVoteProposalForm = ({
             >
               <Translate value="administration.voteProposals.gauge" number={number} />
             </Checkbox>
-            {/* TODO: uncomment me
-              const pModule = proposalModules.find(m => m.get('voteSpecTemplateId') === moduleTemplateId);
+
             {pModule &&
               pModule.get('id') && (
                 <span
@@ -181,7 +180,6 @@ const DumbVoteProposalForm = ({
                   <Translate value="administration.voteProposals.gaugeSettings" />
                 </span>
               )}
-              */}
           </div>
         );
       })}

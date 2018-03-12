@@ -446,7 +446,7 @@ const Translations = {
         title: "Modification des paramètres de jauge",
         subTitle:
           "Vous vous apprêtez à modifier les paramètres sur cette jauge uniquement. Si vous souhaitez répercuter ces paramètres à l'ensemble des jauges, veuillez cocher la case en bas de formulaire.",
-        checkboxLabel: "Appliquer ces changements à l'ensemble des propositions"
+        applyToAllProposalsCheckboxLabel: "Appliquer ces changements à l'ensemble des propositions"
       },
       gaugeVoteInstructions: "Consigne du vote par jauge",
       propositionSectionTitle: "Titre de la section",
@@ -1037,7 +1037,7 @@ const Translations = {
         title: "Modification of the gauge's settings",
         subTitle:
           "You are about to modify the settings on this gauge only. If you wish to modify all of the gauges, please check the box at the end of the form.",
-        checkboxLabel: "Apply these changes to all of the proposals"
+        applyToAllProposalsCheckboxLabel: "Apply these changes to all of the proposals"
       },
       seeCurrentVotes: "Do you want participants to see the evolution of the votes in progress?",
       sections: {

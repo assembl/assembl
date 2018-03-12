@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`ModulesSection component should render a form to set up a numeral gauge 1`] = `
+exports[`DumbNumberGaugeForm component should render a form to set up a numeral gauge 1`] = `
 <div>
   <FormGroup
     bsClass="form-group"
@@ -11,7 +11,7 @@ exports[`ModulesSection component should render a form to set up a numeral gauge
       onChange={[Function]}
       required={true}
       type="number"
-      value={null}
+      value={2}
     />
     <FormControlWithLabel
       label="Max Value"
@@ -19,7 +19,7 @@ exports[`ModulesSection component should render a form to set up a numeral gauge
       onChange={[Function]}
       required={true}
       type="number"
-      value={null}
+      value={11}
     />
     <FormControlWithLabel
       label="Unit"
@@ -27,7 +27,7 @@ exports[`ModulesSection component should render a form to set up a numeral gauge
       onChange={[Function]}
       required={true}
       type="text"
-      value={null}
+      value="kms"
     />
   </FormGroup>
 </div>

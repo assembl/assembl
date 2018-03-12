@@ -1,14 +1,28 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`ModulesSection component should render a form to set up a textual gauge 1`] = `
+exports[`DumbTextGaugeForm component should render a form to set up a textual gauge 1`] = `
 <div>
-  <FormControlWithLabel
-    label="Missing translation: administration.valueTitle 2"
-    labelAlwaysVisible={false}
-    onChange={[Function]}
-    required={true}
-    type="text"
-    value=""
-  />
+  Immutable.List [
+    <div>
+      <FormControlWithLabel
+        label="Value Title 1"
+        labelAlwaysVisible={false}
+        onChange={[Function]}
+        required={true}
+        type="text"
+        value="contextually-based"
+      />
+    </div>,
+    <div>
+      <FormControlWithLabel
+        label="Value Title 2"
+        labelAlwaysVisible={false}
+        onChange={[Function]}
+        required={true}
+        type="text"
+        value="Savings Account Knoll"
+      />
+    </div>,
+  ]
 </div>
 `;

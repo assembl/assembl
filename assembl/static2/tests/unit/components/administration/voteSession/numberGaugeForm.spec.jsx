@@ -1,18 +1,18 @@
 import React from 'react';
 import ShallowRenderer from 'react-test-renderer/shallow';
 
-import { DumbNumberGaugeForm } from '../../../../../js/app/components/administration/voteSession/numberGaugeForm';
+import DumbNumberGaugeForm from '../../../../../js/app/components/administration/voteSession/numberGaugeForm';
 
-describe('ModulesSection component', () => {
+describe('DumbNumberGaugeForm component', () => {
   const handleMinChange = jest.fn(() => {});
   const handleMaxChange = jest.fn(() => {});
   const handleUnitChange = jest.fn(() => {});
 
   it('should render a form to set up a numeral gauge', () => {
     const props = {
-      minimum: null,
-      maximum: null,
-      unit: null,
+      minimum: 2,
+      maximum: 11,
+      unit: 'kms',
       handleMaxChange: handleMaxChange,
       handleMinChange: handleMinChange,
       handleUnitChange: handleUnitChange
