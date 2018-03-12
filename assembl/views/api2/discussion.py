@@ -26,7 +26,7 @@ from sqlalchemy import (
     desc,
     Float,
 )
-from sqlalchemy.orm import with_polymorphic
+from sqlalchemy.orm import with_polymorphic, subqueryload
 from sqlalchemy.orm.util import aliased
 from sqlalchemy.sql.expression import literal
 import transaction
@@ -1595,7 +1595,7 @@ def convert_to_utf8(rowdict):
              name="phase1_csv_export")
 def phase1_csv_export(request):
     """CSV export for phase 1."""
-    from assembl.models import Locale
+    from assembl.models import Locale, Idea
     has_lang = 'lang' in request.GET
     if has_lang:
         language = request.GET['lang']
@@ -1606,6 +1606,7 @@ def phase1_csv_export(request):
         language = u'fr'
     discussion = request.context._instance
     discussion_id = discussion.id
+    Idea.prepare_counters(discussion_id, True)
     THEMATIC_NAME = u"Nom de la thématique"
     QUESTION_ID = u"Numéro de la question"
     QUESTION_TITLE = u"Intitulé de la question"
@@ -1702,7 +1703,7 @@ def phase1_csv_export(request):
              name="phase2_csv_export")
 def phase2_csv_export(request):
     """CSV export for phase 2."""
-    from assembl.models import Locale
+    from assembl.models import Locale, Idea
     has_lang = 'lang' in request.GET
     if has_lang:
         language = request.GET['lang']
@@ -1714,6 +1715,7 @@ def phase2_csv_export(request):
 
     discussion = request.context._instance
     discussion_id = discussion.id
+    Idea.prepare_counters(discussion_id, True)
 
     IDEA_ID = u"Numéro de l'idée"
     IDEA_NAME = u"Nom de l'idée"

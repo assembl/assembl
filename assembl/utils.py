@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from sqlalchemy import desc
-from sqlalchemy.orm import contains_eager, joinedload
+from sqlalchemy.orm import contains_eager, joinedload, subqueryload
 
 from assembl import models
 
@@ -24,12 +24,14 @@ def get_thematics(discussion_id, phase_id):
 
 def get_published_posts(idea):
     """Get published posts for given idea."""
-    model = models.Post
+    Post = models.Post
     related = idea.get_related_posts_query(True)
-    query = model.query.join(
-        related, model.id == related.c.post_id
-        ).filter(model.publication_state == models.PublicationStates.PUBLISHED
-        ).order_by(desc(model.creation_date), model.id)
+    query = Post.query.join(
+        related, Post.id == related.c.post_id
+        ).filter(Post.publication_state == models.PublicationStates.PUBLISHED
+        ).order_by(desc(Post.creation_date), Post.id
+        ).options(subqueryload(Post.creator),
+                  subqueryload(Post.creator, models.AgentProfile.accounts))
 
     return query
 
