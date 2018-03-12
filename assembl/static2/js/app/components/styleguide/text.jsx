@@ -21,6 +21,8 @@ class Text extends React.Component {
           <h3 className="dark-title-3">Title 3</h3>
           <h4 className="dark-title-4">Title 4</h4>
           <h5 className="dark-title-5">Title 5</h5>
+          <h5 className="dark-title-6">Title 6</h5>
+          <h1 className="dark-title-7">Title 7</h1>
           <h3 className="ellipsis dark-title-3">
           Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut volutpat interdum sem, eget malesuada tortor gravida volutpat. Donec luctus semper tincidunt. Sed vel iaculis libero, eu volutpat ante. Nullam lobortis suscipit lorem, a posuere erat vulputate sed. Integer varius purus diam, nec scelerisque urna vehicula et.
           </h3>
@@ -62,6 +64,12 @@ class Text extends React.Component {
             &lt;h5 className="dark-title-5"&gt;Title 5&lt;/h5&gt;
           </pre>
           <pre>
+            &lt;h5 className="dark-title-6"&gt;Title 6&lt;/h5&gt;
+          </pre>
+          <pre>
+            &lt;h1 className="dark-title-7"&gt;Title 7&lt;/h1&gt;
+          </pre>
+          <pre>
             &lt;h1 className="light-title-1"&gt;Title 1&lt;/h1&gt;
           </pre>
           <pre>
@@ -75,6 +83,15 @@ class Text extends React.Component {
           </pre>
           <pre>
             &lt;h5 className="light-title-5"&gt;Title 5&lt;/h5&gt;
+          </pre>
+          <pre>
+            &lt;h5 className="light-title-5"&gt;Title 5&lt;/h5&gt;
+          </pre>
+          <pre>
+            &lt;h5 className="dark-title-6"&gt;Title 6&lt;/h5&gt;
+          </pre>
+          <pre>
+            &lt;h1 className="dark-title-7"&gt;Title 7&lt;/h1&gt;
           </pre>
           <pre>
             <div>&lt;h3 className="ellipsis dark-title-3"&gt;</div>

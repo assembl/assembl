@@ -82,7 +82,7 @@
     }
 
     .admin-paragraph {
-      font-size: $font-size-xs;
+      font-size: 13px;
       font-family: $font-family2;
       line-height: 1.8;
     }
@@ -112,6 +112,7 @@
 
     .annotation {
       margin: 0 44px 20px;
+      font-family: $font-family7;
     }
   }
 
@@ -328,7 +329,7 @@
   }
 
   label {
-    font-family: $font-family7;
+    font-family: $font-family4;
     font-size: $font-size-xs;
     margin: 0 0 5px 5px;
   }
@@ -472,4 +473,8 @@
   img {
     padding-bottom: 10px;
   }
+}
+
+.margin-left-20 {
+  margin-left: 20px;
 }

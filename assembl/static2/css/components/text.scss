@@ -63,9 +63,17 @@
 }
 
 .dark-title-6 {
-  color: $white;
+  color: $black;
   font-size: $font-size-s;
   font-family: $font-family4;
+}
+
+.dark-title-7 {
+  color: $title1-dark-color;
+  font-family: $font-family4;
+  font-size: $title6-size;
+  letter-spacing: $title-letter-spacing;
+  line-height: $title1-size + 10px;
 }
 
 .light-title-1 {
