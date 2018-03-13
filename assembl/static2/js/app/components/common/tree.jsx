@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { AutoSizer, CellMeasurer, CellMeasurerCache, List, WindowScroller } from 'react-virtualized';
-import { getDomElementOffset } from '../../utils/globalFunctions';
+import { scrollToPost } from '../../utils/hashLinkScroll';
 import NuggetsManager from './nuggetsManager';
 
 class Child extends React.PureComponent {
@@ -73,8 +73,7 @@ class Child extends React.PureComponent {
   }
 
   scrollToElement() {
-    const elmOffset = getDomElementOffset(this.scrollAnchor).top - 80;
-    window.scrollTo({ top: elmOffset, left: 0, behavior: 'smooth' });
+    scrollToPost(this.scrollAnchor);
   }
 
   render() {
