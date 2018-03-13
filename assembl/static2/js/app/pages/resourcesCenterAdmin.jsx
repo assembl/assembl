@@ -99,7 +99,7 @@ const mapStateToProps = ({ admin: { editLocale, resourcesCenter } }) => {
   const { page, resourcesById, resourcesHaveChanged, resourcesInOrder } = resourcesCenter;
   return {
     editLocale: editLocale,
-    pageHasChanged: page.get('hasChanged'),
+    pageHasChanged: page.get('_hasChanged'),
     resourcesCenterPage: page,
     resourcesHaveChanged: resourcesHaveChanged,
     resources: resourcesInOrder.map(id => resourcesById.get(id).toJS())

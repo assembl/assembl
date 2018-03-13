@@ -30,7 +30,7 @@ class ThemeSection extends React.Component {
 }
 
 const mapStateToProps = ({ admin: { thematicsById, thematicsInOrder, editLocale } }) => ({
-  thematics: thematicsInOrder.filter(id => !thematicsById.getIn([id, 'toDelete'])),
+  thematics: thematicsInOrder.filter(id => !thematicsById.getIn([id, '_toDelete'])),
   editLocale: editLocale
 });
 

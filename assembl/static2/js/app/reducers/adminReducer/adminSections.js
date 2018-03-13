@@ -61,9 +61,10 @@ export const sectionsInOrder: SectionsInOrderReducer = (state = List(), action) 
   }
 };
 
-const defaultResource = Map({
-  toDelete: false,
-  isNew: true,
+const defaultSection = Map({
+  _hasChanged: false,
+  _isNew: true,
+  _toDelete: false,
   titleEntries: List(),
   url: '',
   type: 'CUSTOM'
@@ -73,27 +74,33 @@ type SectionsByIdReducer = (SectionsById, ReduxAction<Action>) => SectionsById;
 export const sectionsById: SectionsByIdReducer = (state = Map(), action) => {
   switch (action.type) {
   case CREATE_SECTION:
-    return state.set(action.id, defaultResource.set('id', action.id).set('order', action.order));
+    return state.set(action.id, defaultSection.set('id', action.id).set('order', action.order));
   case DELETE_SECTION:
-    return state.setIn([action.id, 'toDelete'], true);
+    return state.setIn([action.id, '_toDelete'], true);
   case UPDATE_SECTION_URL:
-    return state.setIn([action.id, 'url'], action.value);
+    return state.setIn([action.id, 'url'], action.value).setIn([action.id, '_hasChanged'], true);
   case TOGGLE_EXTERNAL_PAGE:
-    return state.updateIn([action.id, 'url'], (url) => {
-      if (url !== null) {
-        return null;
-      }
-      return '';
-    });
+    return state
+      .updateIn([action.id, 'url'], (url) => {
+        if (url !== null) {
+          return null;
+        }
+        return '';
+      })
+      .setIn([action.id, '_hasChanged'], true);
   case UPDATE_SECTION_TITLE:
-    return state.updateIn([action.id, 'titleEntries'], updateInLangstringEntries(action.locale, action.value));
+    return state
+      .updateIn([action.id, 'titleEntries'], updateInLangstringEntries(action.locale, action.value))
+      .setIn([action.id, '_hasChanged'], true);
   case UPDATE_SECTIONS: {
     let newState = Map();
     action.sections.forEach((section) => {
       const sectionInfo = Map({
-        isNew: false,
-        order: section.order,
+        _hasChanged: false,
+        _isNew: false,
+        _toDelete: false,
         id: section.id,
+        order: section.order,
         titleEntries: fromJS(section.titleEntries),
         url: section.url,
         type: section.sectionType

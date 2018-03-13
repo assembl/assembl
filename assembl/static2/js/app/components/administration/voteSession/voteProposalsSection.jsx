@@ -56,7 +56,7 @@ const mapStateToProps = ({ admin }) => {
   const { voteProposalsInOrder, voteProposalsById } = admin.voteSession;
   const { editLocale } = admin;
   return {
-    voteProposals: voteProposalsInOrder.filter(id => !voteProposalsById.getIn([id, 'toDelete'])),
+    voteProposals: voteProposalsInOrder.filter(id => !voteProposalsById.getIn([id, '_toDelete'])),
     editLocale: editLocale
   };
 };

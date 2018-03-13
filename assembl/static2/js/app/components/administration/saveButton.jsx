@@ -15,21 +15,23 @@ export const getMutationsPromises = (params) => {
   const { items, variablesCreator, deleteVariablesCreator, createMutation, deleteMutation, updateMutation, lang } = params;
   const promises = [];
   items.forEach((item, index) => {
-    if (item.isNew && !item.toDelete && createMutation) {
+    if (item._isNew && item._toDelete) {
+      // do nothing
+    } else if (item._isNew && !item._toDelete && createMutation) {
       // create item
       const payload = {
         variables: variablesCreator(item, index)
       };
       const p1 = () => createMutation(payload);
       promises.push(p1);
-    } else if (item.toDelete && !item.isNew && deleteMutation) {
+    } else if (item._toDelete && !item._isNew && deleteMutation) {
       // delete item
       const payload = {
         variables: deleteVariablesCreator(item)
       };
       const p3 = () => deleteMutation(payload);
       promises.push(p3);
-    } else if (updateMutation) {
+    } else if (item._hasChanged && updateMutation) {
       // update item
       const variables = variablesCreator(item, index);
       variables.id = item.id;

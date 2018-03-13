@@ -52,7 +52,7 @@ const DumbTokenCategoryForm = ({
       <ColorPicker
         colors={pickerColors}
         onChange={handleColorChange}
-        color={color || pickerColors[index]}
+        color={color}
         width="400px"
         id="color-picker"
         triangle="hide"
@@ -73,10 +73,10 @@ const mapStateToProps = (state, { id, editLocale }) => {
   };
 };
 
-const mapDispatchToProps = (dispatch, { id, editLocale }) => ({
-  handleTitleChange: e => dispatch(updateTokenVoteCategoryTitle(id, editLocale, e.target.value)),
-  handleNumberChange: e => dispatch(updateTokenTotalNumber(id, e.target.value)),
-  handleColorChange: color => dispatch(updateTokenVoteCategoryColor(id, color.hex))
+const mapDispatchToProps = (dispatch, { moduleId, id, editLocale }) => ({
+  handleTitleChange: e => dispatch(updateTokenVoteCategoryTitle(id, editLocale, e.target.value, moduleId)),
+  handleNumberChange: e => dispatch(updateTokenTotalNumber(id, e.target.value, moduleId)),
+  handleColorChange: color => dispatch(updateTokenVoteCategoryColor(id, color.hex, moduleId))
 });
 
 export { DumbTokenCategoryForm };

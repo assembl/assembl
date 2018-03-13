@@ -20,7 +20,7 @@ import {
 import { updateInLangstringEntries } from '../../utils/i18n';
 
 const initialPage = Map({
-  hasChanged: false,
+  _hasChanged: false,
   titleEntries: List(),
   headerImage: Map({
     externalUrl: '',
@@ -33,12 +33,14 @@ type PageReducer = (PageState, ReduxAction<Action>) => PageState;
 export const page: PageReducer = (state = initialPage, action) => {
   switch (action.type) {
   case UPDATE_RC_PAGE_TITLE:
-    return state.update('titleEntries', updateInLangstringEntries(action.locale, fromJS(action.value))).set('hasChanged', true);
+    return state
+      .update('titleEntries', updateInLangstringEntries(action.locale, fromJS(action.value)))
+      .set('_hasChanged', true);
   case UPDATE_RC_HEADER_IMAGE:
     return state
       .setIn(['headerImage', 'externalUrl'], action.value)
       .setIn(['headerImage', 'mimeType'], action.value.type)
-      .set('hasChanged', true);
+      .set('_hasChanged', true);
   case UPDATE_RC_PAGE: {
     let newState = state;
     if (action.headerImage) {
@@ -51,7 +53,7 @@ export const page: PageReducer = (state = initialPage, action) => {
       newState = newState.set('titleEntries', fromJS(action.titleEntries));
     }
 
-    return newState.set('hasChanged', false);
+    return newState.set('_hasChanged', false);
   }
   default:
     return state;
@@ -98,8 +100,8 @@ export const resourcesInOrder: ResourcesInOrderReducer = (state = List(), action
 // };
 //
 // type ResourceItem = {
-//   toDelete: boolean,
-//   isNew: boolean,
+//   _toDelete: boolean,
+//   _isNew: boolean,
 //   doc: { externalUrl: string },
 //   id: string,
 //   img: { externalUrl: string, mimeType: string },
@@ -115,8 +117,9 @@ const defaultResourceImage = Map({
   mimeType: ''
 });
 const defaultResource = Map({
-  toDelete: false,
-  isNew: true,
+  _toDelete: false,
+  _isNew: true,
+  _hasChanged: false,
   doc: defaultResourceDoc,
   img: defaultResourceImage,
   titleEntries: List(),
@@ -130,25 +133,31 @@ export const resourcesById: ResourcesByIdReducer = (state: ResourcesByIdState = 
   case CREATE_RESOURCE:
     return state.set(action.id, defaultResource.set('id', action.id).set('order', action.order));
   case DELETE_RESOURCE:
-    return state.setIn([action.id, 'toDelete'], true);
+    return state.setIn([action.id, '_toDelete'], true);
   case UPDATE_RESOURCE_DOCUMENT:
-    return state.setIn([action.id, 'doc', 'externalUrl'], action.value);
+    return state.setIn([action.id, 'doc', 'externalUrl'], action.value).setIn([action.id, '_hasChanged'], true);
   case UPDATE_RESOURCE_EMBED_CODE:
-    return state.setIn([action.id, 'embedCode'], action.value);
+    return state.setIn([action.id, 'embedCode'], action.value).setIn([action.id, '_hasChanged'], true);
   case UPDATE_RESOURCE_IMAGE:
     return state
       .setIn([action.id, 'img', 'externalUrl'], action.value)
-      .setIn([action.id, 'img', 'mimeType'], action.value.type);
+      .setIn([action.id, 'img', 'mimeType'], action.value.type)
+      .setIn([action.id, '_hasChanged'], true);
   case UPDATE_RESOURCE_TEXT:
-    return state.updateIn([action.id, 'textEntries'], updateInLangstringEntries(action.locale, fromJS(action.value)));
+    return state
+      .updateIn([action.id, 'textEntries'], updateInLangstringEntries(action.locale, fromJS(action.value)))
+      .setIn([action.id, '_hasChanged'], true);
   case UPDATE_RESOURCE_TITLE:
-    return state.updateIn([action.id, 'titleEntries'], updateInLangstringEntries(action.locale, action.value));
+    return state
+      .updateIn([action.id, 'titleEntries'], updateInLangstringEntries(action.locale, action.value))
+      .setIn([action.id, '_hasChanged'], true);
   case UPDATE_RESOURCES: {
     let newState = Map();
     action.resources.forEach((resource, idx) => {
       const resourceInfo = Map({
-        toDelete: false,
-        isNew: false,
+        _hasChanged: false,
+        _isNew: false,
+        _toDelete: false,
         order: idx + 1,
         doc: resource.doc ? fromJS(resource.doc) : defaultResourceDoc,
         id: resource.id,

@@ -165,8 +165,14 @@ exports[`ModulesSection component should render a form to set up a gauge and a n
       />
     </Radio>
   </div>
-  <Connect(DumbNumberGaugeForm)
+  <DumbNumberGaugeForm
+    handleMaxChange={[Function]}
+    handleMinChange={[Function]}
+    handleUnitChange={[Function]}
     id="1234"
+    maximum={undefined}
+    minimum={undefined}
+    unit={undefined}
   />
   <div
     className="separator"
@@ -339,32 +345,25 @@ exports[`ModulesSection component should render a form to set up a gauge and a t
       />
     </Radio>
   </div>
-  Immutable.List [
-    <Connect(DumbTextGaugeForm)
-      editLocale="en"
-      id={
+  <DumbTextGaugeForm
+    choices={
+      Immutable.List [
         Immutable.Map {
           id: "2233",
           labelEntries: Immutable.List [
           ],
           value: 1,
-        }
-      }
-      index={0}
-    />,
-    <Connect(DumbTextGaugeForm)
-      editLocale="en"
-      id={
+        },
         Immutable.Map {
           id: "3344",
           labelEntries: Immutable.List [
           ],
           value: 2,
-        }
-      }
-      index={1}
-    />,
-  ]
+        },
+      ]
+    }
+    handleGaugeChoiceLabelChange={undefined}
+  />
   <div
     className="separator"
   />

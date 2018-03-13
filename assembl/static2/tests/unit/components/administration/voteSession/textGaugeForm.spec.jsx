@@ -1,16 +1,26 @@
 import React from 'react';
 import ShallowRenderer from 'react-test-renderer/shallow';
+import { List, Map } from 'immutable';
 
-import { DumbTextGaugeForm } from '../../../../../js/app/components/administration/voteSession/textGaugeForm';
+import DumbTextGaugeForm from '../../../../../js/app/components/administration/voteSession/textGaugeForm';
 
-describe('ModulesSection component', () => {
-  const handleGaugeChoiceLabelChange = jest.fn(() => {});
+describe('DumbTextGaugeForm component', () => {
+  const handleGaugeChoiceLabelChange = jest.fn();
 
   it('should render a form to set up a textual gauge', () => {
+    const choices = List.of(
+      Map({
+        id: 'choice-1',
+        title: 'contextually-based'
+      }),
+      Map({
+        id: 'choice-2',
+        title: 'Savings Account Knoll'
+      })
+    );
     const props = {
-      index: 1,
-      handleGaugeChoiceLabelChange: handleGaugeChoiceLabelChange,
-      title: ''
+      choices: choices,
+      handleGaugeChoiceLabelChange: handleGaugeChoiceLabelChange
     };
     const shallowRenderer = new ShallowRenderer();
     shallowRenderer.render(<DumbTextGaugeForm {...props} />);

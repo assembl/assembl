@@ -47,15 +47,18 @@ export const thematicsById: ThematicsByIdReducer = (state = Map(), action) => {
     const newQuestion = fromJS({
       titleEntries: [{ localeCode: action.locale, value: '' }]
     });
-    return state.updateIn([action.id, 'questions'], questions => questions.push(newQuestion));
+    return state
+      .updateIn([action.id, 'questions'], questions => questions.push(newQuestion))
+      .setIn([action.id, '_hasChanged'], true);
   }
   case 'CREATE_NEW_THEMATIC': {
     const emptyThematic = Map({
-      toDelete: false,
+      _hasChanged: false,
+      _isNew: true,
+      _toDelete: false,
       img: Map({
         externalUrl: ''
       }),
-      isNew: true,
       questions: List(),
       titleEntries: List(),
       video: null
@@ -63,72 +66,86 @@ export const thematicsById: ThematicsByIdReducer = (state = Map(), action) => {
     return state.set(action.id, emptyThematic.set('id', action.id));
   }
   case 'DELETE_THEMATIC':
-    return state.setIn([action.id, 'toDelete'], true);
+    return state.setIn([action.id, '_toDelete'], true);
   case 'REMOVE_QUESTION':
-    return state.updateIn([action.thematicId, 'questions'], questions => questions.remove(action.index));
+    return state
+      .updateIn([action.thematicId, 'questions'], questions => questions.remove(action.index))
+      .setIn([action.thematicId, '_hasChanged'], true);
   case 'UPDATE_QUESTION_TITLE':
-    return state.updateIn([action.thematicId, 'questions', action.index, 'titleEntries'], (titleEntries) => {
-      const titleEntryIndex = titleEntries.findIndex(entry => entry.get('localeCode') === action.locale);
+    return state
+      .updateIn([action.thematicId, 'questions', action.index, 'titleEntries'], (titleEntries) => {
+        const titleEntryIndex = titleEntries.findIndex(entry => entry.get('localeCode') === action.locale);
 
-      if (titleEntryIndex === -1) {
-        return titleEntries.push(Map({ localeCode: action.locale, value: action.value }));
-      }
+        if (titleEntryIndex === -1) {
+          return titleEntries.push(Map({ localeCode: action.locale, value: action.value }));
+        }
 
-      return titleEntries.setIn([titleEntryIndex, 'value'], action.value);
-    });
+        return titleEntries.setIn([titleEntryIndex, 'value'], action.value);
+      })
+      .setIn([action.thematicId, '_hasChanged'], true);
   case 'UPDATE_THEMATIC_IMG_URL': {
     if (state.getIn([action.id, 'img'])) {
       return state
         .setIn([action.id, 'img', 'externalUrl'], action.value)
-        .setIn([action.id, 'img', 'mimeType'], action.value.type);
+        .setIn([action.id, 'img', 'mimeType'], action.value.type)
+        .setIn([action.id, '_hasChanged'], true);
     }
 
-    return state.setIn([action.id, 'img'], Map({ mimeType: action.value.type, externalUrl: action.value }));
+    return state
+      .setIn([action.id, 'img'], Map({ mimeType: action.value.type, externalUrl: action.value }))
+      .setIn([action.id, '_hasChanged'], true);
   }
   case 'UPDATE_THEMATIC_TITLE': {
-    return state.updateIn([action.id, 'titleEntries'], updateInLangstringEntries(action.locale, action.value));
+    return state
+      .updateIn([action.id, 'titleEntries'], updateInLangstringEntries(action.locale, action.value))
+      .setIn([action.id, '_hasChanged'], true);
   }
   case 'UPDATE_THEMATICS': {
     const newState = {};
     action.thematics.forEach((t) => {
       newState[t.id] = {
+        _hasChanged: false,
         ...t
       };
     });
     return fromJS(newState);
   }
   case 'TOGGLE_VIDEO':
-    return state.updateIn([action.id, 'video'], (video) => {
-      if (video) {
-        return null;
-      }
-      return fromJS({
-        descriptionEntriesTop: [],
-        descriptionEntriesBottom: [],
-        descriptionEntriesSide: [],
-        htmlCode: '',
-        titleEntries: []
-      });
-    });
+    return state
+      .updateIn([action.id, 'video'], (video) => {
+        if (video) {
+          return null;
+        }
+        return fromJS({
+          descriptionEntriesTop: [],
+          descriptionEntriesBottom: [],
+          descriptionEntriesSide: [],
+          htmlCode: '',
+          titleEntries: []
+        });
+      })
+      .setIn([action.id, '_hasChanged'], true);
   case 'UPDATE_VIDEO_DESCRIPTION_TOP':
-    return state.updateIn(
-      [action.id, 'video', 'descriptionEntriesTop'],
-      updateInLangstringEntries(action.locale, fromJS(action.value))
-    );
+    return state
+      .updateIn([action.id, 'video', 'descriptionEntriesTop'], updateInLangstringEntries(action.locale, fromJS(action.value)))
+      .setIn([action.id, '_hasChanged'], true);
   case 'UPDATE_VIDEO_DESCRIPTION_BOTTOM':
-    return state.updateIn(
-      [action.id, 'video', 'descriptionEntriesBottom'],
-      updateInLangstringEntries(action.locale, fromJS(action.value))
-    );
+    return state
+      .updateIn(
+        [action.id, 'video', 'descriptionEntriesBottom'],
+        updateInLangstringEntries(action.locale, fromJS(action.value))
+      )
+      .setIn([action.id, '_hasChanged'], true);
   case 'UPDATE_VIDEO_DESCRIPTION_SIDE':
-    return state.updateIn(
-      [action.id, 'video', 'descriptionEntriesSide'],
-      updateInLangstringEntries(action.locale, fromJS(action.value))
-    );
+    return state
+      .updateIn([action.id, 'video', 'descriptionEntriesSide'], updateInLangstringEntries(action.locale, fromJS(action.value)))
+      .setIn([action.id, '_hasChanged'], true);
   case 'UPDATE_VIDEO_HTML_CODE':
-    return state.setIn([action.id, 'video', 'htmlCode'], action.value);
+    return state.setIn([action.id, 'video', 'htmlCode'], action.value).setIn([action.id, '_hasChanged'], true);
   case 'UPDATE_VIDEO_TITLE':
-    return state.updateIn([action.id, 'video', 'titleEntries'], updateInLangstringEntries(action.locale, action.value));
+    return state
+      .updateIn([action.id, 'video', 'titleEntries'], updateInLangstringEntries(action.locale, action.value))
+      .setIn([action.id, '_hasChanged'], true);
   default:
     return state;
   }

@@ -81,6 +81,7 @@ describe('Admin reducers', () => {
       const action = { id: '1', locale: 'fr', type: 'ADD_QUESTION_TO_THEMATIC' };
       const oldState = fromJS({
         '1': {
+          _hasChanged: false,
           questions: [
             {
               titleEntries: [{ localeCode: 'en', value: 'My title' }, { localeCode: 'fr', value: 'Mon titre' }]
@@ -90,6 +91,7 @@ describe('Admin reducers', () => {
       });
       const expected = fromJS({
         '1': {
+          _hasChanged: true,
           questions: [
             {
               titleEntries: [{ localeCode: 'en', value: 'My title' }, { localeCode: 'fr', value: 'Mon titre' }]
@@ -125,9 +127,10 @@ describe('Admin reducers', () => {
           id: '1'
         },
         '-278290': {
+          _hasChanged: false,
+          _isNew: true,
+          _toDelete: false,
           id: '-278290',
-          isNew: true,
-          toDelete: false,
           img: {
             externalUrl: ''
           },
@@ -146,6 +149,7 @@ describe('Admin reducers', () => {
       const action = { thematicId: '1', index: '1', type: 'REMOVE_QUESTION' };
       const oldState = fromJS({
         '1': {
+          _hasChanged: false,
           questions: [
             {
               titleEntries: [{ localeCode: 'en', value: 'Why?' }, { localeCode: 'fr', value: 'Pourquoi?' }]
@@ -161,6 +165,7 @@ describe('Admin reducers', () => {
       });
       const expected = fromJS({
         '1': {
+          _hasChanged: true,
           questions: [
             {
               titleEntries: [{ localeCode: 'en', value: 'Why?' }, { localeCode: 'fr', value: 'Pourquoi?' }]
@@ -180,6 +185,7 @@ describe('Admin reducers', () => {
       const action = { id: '1', value: file, type: 'UPDATE_THEMATIC_IMG_URL' };
       const oldState = fromJS({
         '1': {
+          _hasChanged: false,
           img: {
             externalUrl: ''
           }
@@ -187,6 +193,7 @@ describe('Admin reducers', () => {
       });
       const expected = {
         '1': {
+          _hasChanged: true,
           img: {
             externalUrl: file,
             mimeType: 'image/png'
@@ -202,11 +209,13 @@ describe('Admin reducers', () => {
       const action = { id: '1', value: file, type: 'UPDATE_THEMATIC_IMG_URL' };
       const oldState = fromJS({
         '1': {
+          _hasChanged: false,
           img: null
         }
       });
       const expected = {
         '1': {
+          _hasChanged: true,
           img: {
             mimeType: 'image/png',
             externalUrl: file
@@ -221,6 +230,7 @@ describe('Admin reducers', () => {
       const action = { thematicId: '1', index: '1', locale: 'en', value: 'What?', type: 'UPDATE_QUESTION_TITLE' };
       const oldState = fromJS({
         '1': {
+          _hasChanged: false,
           questions: [
             {
               titleEntries: [{ localeCode: 'en', value: 'Why?' }, { localeCode: 'fr', value: 'Pourquoi?' }]
@@ -236,6 +246,7 @@ describe('Admin reducers', () => {
       });
       const expected = fromJS({
         '1': {
+          _hasChanged: true,
           questions: [
             {
               titleEntries: [{ localeCode: 'en', value: 'Why?' }, { localeCode: 'fr', value: 'Pourquoi?' }]
@@ -253,8 +264,6 @@ describe('Admin reducers', () => {
       expect(newState).toEqual(expected);
     });
 
-    it('should handle UPDATE_THEMATIC_IMG_URL action type');
-
     it('should handle UPDATE_THEMATIC_TITLE action type', () => {
       const action = {
         id: '1',
@@ -265,12 +274,14 @@ describe('Admin reducers', () => {
       const oldState = fromJS({
         '0': {},
         '1': {
+          _hasChanged: false,
           titleEntries: [{ localeCode: 'en', value: 'My title' }, { localeCode: 'fr', value: 'Mon titre' }]
         }
       });
       const expected = fromJS({
         '0': {},
         '1': {
+          _hasChanged: true,
           titleEntries: [{ localeCode: 'en', value: 'My title' }, { localeCode: 'fr', value: 'Nouveau titre' }]
         }
       });
@@ -288,12 +299,14 @@ describe('Admin reducers', () => {
       const oldState = fromJS({
         '0': {},
         '1': {
+          _hasChanged: false,
           titleEntries: [{ localeCode: 'en', value: 'My title' }, { localeCode: 'fr', value: 'Mon titre' }]
         }
       });
       const expected = fromJS({
         '0': {},
         '1': {
+          _hasChanged: true,
           titleEntries: [
             { localeCode: 'en', value: 'My title' },
             { localeCode: 'fr', value: 'Mon titre' },
@@ -315,6 +328,7 @@ describe('Admin reducers', () => {
       };
       const oldState = fromJS({
         '1': {
+          _hasChanged: false,
           video: {
             descriptionEntriesTop: [],
             descriptionEntriesBottom: [],
@@ -326,6 +340,7 @@ describe('Admin reducers', () => {
       });
       const expected = fromJS({
         '1': {
+          _hasChanged: true,
           video: null
         }
       });
@@ -334,6 +349,7 @@ describe('Admin reducers', () => {
 
       const reducedTwiceExpected = fromJS({
         '1': {
+          _hasChanged: true,
           video: {
             descriptionEntriesTop: [],
             descriptionEntriesBottom: [],
@@ -355,6 +371,7 @@ describe('Admin reducers', () => {
       };
       const oldState = fromJS({
         '1': {
+          _hasChanged: false,
           video: {
             descriptionEntriesTop: [],
             descriptionEntriesBottom: [],
@@ -366,6 +383,7 @@ describe('Admin reducers', () => {
       });
       const expected = fromJS({
         '1': {
+          _hasChanged: true,
           video: {
             descriptionEntriesTop: [],
             descriptionEntriesBottom: [],
@@ -388,6 +406,7 @@ describe('Admin reducers', () => {
       };
       const oldState = fromJS({
         '1': {
+          _hasChanged: false,
           video: {
             descriptionEntriesTop: [],
             descriptionEntriesBottom: [],
@@ -399,6 +418,7 @@ describe('Admin reducers', () => {
       });
       const expected = fromJS({
         '1': {
+          _hasChanged: true,
           video: {
             descriptionEntriesTop: [
               {
@@ -426,6 +446,7 @@ describe('Admin reducers', () => {
       };
       const oldState = fromJS({
         '1': {
+          _hasChanged: false,
           video: {
             descriptionEntriesTop: [],
             descriptionEntriesBottom: [],
@@ -437,6 +458,7 @@ describe('Admin reducers', () => {
       });
       const expected = fromJS({
         '1': {
+          _hasChanged: true,
           video: {
             descriptionEntriesTop: [],
             descriptionEntriesBottom: [
@@ -464,6 +486,7 @@ describe('Admin reducers', () => {
       };
       const oldState = fromJS({
         '1': {
+          _hasChanged: false,
           video: {
             descriptionEntriesTop: [],
             descriptionEntriesBottom: [],
@@ -475,6 +498,7 @@ describe('Admin reducers', () => {
       });
       const expected = fromJS({
         '1': {
+          _hasChanged: true,
           video: {
             descriptionEntriesTop: [],
             descriptionEntriesBottom: [],

@@ -16,16 +16,15 @@ import {
   deleteVoteModule,
   undeleteModule
 } from '../../../actions/adminActions/voteSession';
-import { displayModal, closeModal } from '../../../utils/utilityManager';
+import { displayCustomModal, displayModal, closeModal } from '../../../utils/utilityManager';
 import { createRandomId } from '../../../utils/globalFunctions';
-// import { displayModal, displayCustomModal, closeModal } from '../../../utils/utilityManager';
-// import GaugeSettingsForm from './gaugeSettingsForm';
+import CustomizeGaugeForm from './customizeGaugeForm';
 
 type VoteProposalFormProps = {
   index: number,
   title: string,
   description: string,
-  toDelete: boolean,
+  _toDelete: boolean,
   markAsToDelete: Function,
   updateTitle: Function,
   updateDescription: Function,
@@ -45,7 +44,7 @@ const DumbVoteProposalForm = ({
   index,
   title,
   description,
-  toDelete,
+  _toDelete,
   markAsToDelete,
   updateTitle,
   updateDescription,
@@ -60,7 +59,7 @@ const DumbVoteProposalForm = ({
   deassociateModuleToProposal,
   reactivateModule
 }: VoteProposalFormProps) => {
-  if (toDelete) {
+  if (_toDelete) {
     return null;
   }
 
@@ -68,12 +67,12 @@ const DumbVoteProposalForm = ({
   const handleDescriptionChange = value => updateDescription(editLocale, value);
 
   const moduleIsSelected = moduleTemplateId =>
-    proposalModules.some(m => m.get('voteSpecTemplateId') === moduleTemplateId && !m.get('toDelete'));
+    proposalModules.some(m => m.get('voteSpecTemplateId') === moduleTemplateId && !m.get('_toDelete'));
 
   const toggleModule = (moduleTemplateId) => {
     const pModule = proposalModules.find(m => m.get('voteSpecTemplateId') === moduleTemplateId);
     if (pModule) {
-      if (pModule.get('toDelete')) {
+      if (pModule.get('_toDelete')) {
         reactivateModule(pModule.get('id'));
       } else {
         deassociateModuleToProposal(pModule.get('id'));
@@ -98,10 +97,10 @@ const DumbVoteProposalForm = ({
     return displayModal(modalTitle, body, includeFooter, footer);
   };
 
-  // const settingsModal = (id) => {
-  //   const content = <GaugeSettingsForm gaugeModuleId={id} editLocale={editLocale} />;
-  //   displayCustomModal(content, true, 'gauge-settings-modal');
-  // };
+  const settingsModal = (id) => {
+    const content = <CustomizeGaugeForm gaugeModuleId={id} editLocale={editLocale} />;
+    displayCustomModal(content, true, 'gauge-settings-modal');
+  };
 
   return (
     <div className="form-container vote-proposal-form">
@@ -158,6 +157,7 @@ const DumbVoteProposalForm = ({
       ))}
       {gaugeModules.map((moduleTemplateId, idx) => {
         const number = gaugeModules.size > 1 ? idx + 1 : '';
+        const pModule = proposalModules.find(m => m.get('voteSpecTemplateId') === moduleTemplateId);
         return (
           <div key={moduleTemplateId}>
             <Checkbox
@@ -167,9 +167,10 @@ const DumbVoteProposalForm = ({
             >
               <Translate value="administration.voteProposals.gauge" number={number} />
             </Checkbox>
-            {/* TODO: uncomment me
-              const pModule = proposalModules.find(m => m.get('voteSpecTemplateId') === moduleTemplateId);
-            {pModule &&
+
+            {/* disable gaugeSettings for now */}
+            {false &&
+              pModule &&
               pModule.get('id') && (
                 <span
                   className="inline settings-link"
@@ -181,7 +182,6 @@ const DumbVoteProposalForm = ({
                   <Translate value="administration.voteProposals.gaugeSettings" />
                 </span>
               )}
-              */}
           </div>
         );
       })}
@@ -197,20 +197,20 @@ const mapStateToProps = ({ admin }, { id, editLocale }) => {
   return {
     title: getEntryValueForLocale(proposal.get('titleEntries'), editLocale),
     description: description ? description.toJS() : null,
-    toDelete: proposal.get('toDelete', false),
+    _toDelete: proposal.get('_toDelete', false),
     order: proposal.get('order'),
     proposalModules: proposal.get('modules').map(moduleId => modulesById.get(moduleId)),
     tokenModules: modulesInOrder.filter(
       voteSpecTemplateId =>
         !modulesById.getIn([voteSpecTemplateId, 'proposalId']) &&
         modulesById.getIn([voteSpecTemplateId, 'type']) === 'tokens' &&
-        !modulesById.getIn([voteSpecTemplateId, 'toDelete'])
+        !modulesById.getIn([voteSpecTemplateId, '_toDelete'])
     ),
     gaugeModules: modulesInOrder.filter(
       voteSpecTemplateId =>
         !modulesById.getIn([voteSpecTemplateId, 'proposalId']) &&
         modulesById.getIn([voteSpecTemplateId, 'type']) === 'gauge' &&
-        !modulesById.getIn([voteSpecTemplateId, 'toDelete'])
+        !modulesById.getIn([voteSpecTemplateId, '_toDelete'])
     )
   };
 };

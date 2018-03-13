@@ -11,7 +11,7 @@ import {
 import { updateInLangstringEntries } from '../../utils/i18n';
 
 const initialState = Map({
-  hasChanged: false,
+  _hasChanged: false,
   legalNoticeEntries: List(),
   termsAndConditionsEntries: List()
 });
@@ -22,14 +22,14 @@ const legalNoticeAndTerms: LegalNoticeAndTermsReducer = (state = initialState, a
   case UPDATE_LEGAL_NOTICE_ENTRY:
     return state
       .update('legalNoticeEntries', updateInLangstringEntries(action.locale, fromJS(action.value)))
-      .set('hasChanged', true);
+      .set('_hasChanged', true);
   case UPDATE_TERMS_AND_CONDITIONS_ENTRY:
     return state
       .update('termsAndConditionsEntries', updateInLangstringEntries(action.locale, fromJS(action.value)))
-      .set('hasChanged', true);
+      .set('_hasChanged', true);
   case UPDATE_LEGAL_NOTICE_AND_TERMS:
     return Map({
-      hasChanged: false,
+      _hasChanged: false,
       legalNoticeEntries: fromJS(action.legalNoticeEntries),
       termsAndConditionsEntries: fromJS(action.termsAndConditionsEntries)
     });
@@ -39,7 +39,7 @@ const legalNoticeAndTerms: LegalNoticeAndTermsReducer = (state = initialState, a
 };
 
 export type LegalNoticeAndTermsState = {
-  hasChanged: boolean,
+  _hasChanged: boolean,
   legalNoticeEntries: List<LangstringEntry>,
   termsAndConditionsEntries: List<LangstringEntry>
 };

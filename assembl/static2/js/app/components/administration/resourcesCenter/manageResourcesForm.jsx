@@ -20,7 +20,7 @@ const ManageResourcesForm = ({ createResource, resources, editLocale }) => (
 const mapStateToProps = (state) => {
   const { resourcesInOrder, resourcesById } = state.admin.resourcesCenter;
   return {
-    resources: resourcesInOrder.filter(id => !resourcesById.get(id).get('toDelete'))
+    resources: resourcesInOrder.filter(id => !resourcesById.get(id).get('_toDelete'))
   };
 };
 

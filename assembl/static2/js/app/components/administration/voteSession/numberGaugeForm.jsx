@@ -1,10 +1,8 @@
 // @flow
 import React from 'react';
-import { connect } from 'react-redux';
 import { I18n } from 'react-redux-i18n';
 import { FormGroup } from 'react-bootstrap';
 import FormControlWithLabel from '../../common/formControlWithLabel';
-import { updateGaugeMinimum, updateGaugeMaximum, updateGaugeUnit } from '../../../actions/adminActions/voteSession';
 
 type NumberGaugeFormProps = {
   minimum: number,
@@ -44,21 +42,4 @@ const DumbNumberGaugeForm = ({
   </div>
 );
 
-const mapStateToProps = (state, { id }) => {
-  const module = state.admin.voteSession.modulesById.get(id);
-  return {
-    minimum: module.get('minimum'),
-    maximum: module.get('maximum'),
-    unit: module.get('unit')
-  };
-};
-
-const mapDispatchToProps = (dispatch, { id }) => ({
-  handleMinChange: e => dispatch(updateGaugeMinimum(id, e.target.value)),
-  handleMaxChange: e => dispatch(updateGaugeMaximum(id, e.target.value)),
-  handleUnitChange: e => dispatch(updateGaugeUnit(id, e.target.value))
-});
-
-export { DumbNumberGaugeForm };
-
-export default connect(mapStateToProps, mapDispatchToProps)(DumbNumberGaugeForm);
+export default DumbNumberGaugeForm;

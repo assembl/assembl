@@ -335,17 +335,18 @@ export type UpdateTokenVoteInstructions = {
 
 export type CreateTokenVoteCategory = {
   id: string,
-  parentId: string,
+  moduleId: string,
   type: typeof CREATE_TOKEN_VOTE_CATEGORY
 };
 
 export type DeleteTokenVoteCategory = {
-  id: string,
+  moduleId: string,
   index: number,
   type: typeof DELETE_TOKEN_VOTE_CATEGORY
 };
 
 export type UpdateTokenVoteCategoryTitle = {
+  moduleId: string,
   id: string,
   locale: string,
   value: string,
@@ -353,12 +354,14 @@ export type UpdateTokenVoteCategoryTitle = {
 };
 
 export type UpdateTokenTotalNumber = {
+  moduleId: string,
   id: string,
   value: number,
   type: typeof UPDATE_TOKEN_TOTAL_NUMBER
 };
 
 export type UpdateTokenVoteCategoryColor = {
+  moduleId: string,
   id: string,
   value: string,
   type: typeof UPDATE_TOKEN_VOTE_CATEGORY_COLOR
@@ -447,18 +450,19 @@ export type UpdateGaugeVoteIsNumber = {
 };
 
 export type CreateGaugeVoteChoice = {
-  parentId: string,
+  moduleId: string,
   id: string,
   type: typeof CREATE_GAUGE_VOTE_CHOICE
 };
 
 export type DeleteGaugeVoteChoice = {
-  id: string,
+  moduleId: string,
   index: number,
   type: typeof DELETE_GAUGE_VOTE_CHOICE
 };
 
 export type UpdateGaugeVoteChoiceLabel = {
+  moduleId: string,
   id: string,
   locale: string,
   value: string,

@@ -11,7 +11,7 @@ describe('voteSession admin reducers', () => {
       const action = {};
       expect(voteSessionPage(undefined, action)).toEqual(
         Map({
-          hasChanged: false,
+          _hasChanged: false,
           seeCurrentVotes: false,
           id: '',
           titleEntries: List(),
@@ -26,7 +26,7 @@ describe('voteSession admin reducers', () => {
     it('should return the current state for other actions', () => {
       const action = { type: 'WHATEVER' };
       const oldState = Map({
-        hasChanged: false,
+        _hasChanged: false,
         seeCurrentVotes: false,
         id: '',
         titleEntries: List.of({ locale: 'en', value: 'Vote session title' }),
@@ -40,7 +40,7 @@ describe('voteSession admin reducers', () => {
     });
     it('should handle UPDATE_VOTE_SESSION_PAGE_TITLE action type', () => {
       const oldState = fromJS({
-        hasChanged: false,
+        _hasChanged: false,
         seeCurrentVotes: false,
         id: '',
         titleEntries: [{ localeCode: 'fr', value: 'Titre en français' }, { localeCode: 'en', value: 'Title in english' }],
@@ -51,7 +51,7 @@ describe('voteSession admin reducers', () => {
         headerImage: { externalUrl: '', mimeType: '', title: '' }
       });
       const expected = fromJS({
-        hasChanged: true,
+        _hasChanged: true,
         seeCurrentVotes: false,
         id: '',
         titleEntries: [
@@ -74,7 +74,7 @@ describe('voteSession admin reducers', () => {
 
     it('should handle UPDATE_VOTE_SESSION_PAGE_SUBTITLE action type', () => {
       const oldState = fromJS({
-        hasChanged: false,
+        _hasChanged: false,
         seeCurrentVotes: false,
         id: '',
         titleEntries: [],
@@ -88,7 +88,7 @@ describe('voteSession admin reducers', () => {
         headerImage: { externalUrl: '', mimeType: '', title: '' }
       });
       const expected = fromJS({
-        hasChanged: true,
+        _hasChanged: true,
         seeCurrentVotes: false,
         id: '',
         titleEntries: [],
@@ -111,7 +111,7 @@ describe('voteSession admin reducers', () => {
 
     it('should handle UPDATE_VOTE_SESSION_PAGE_INSTRUCTIONS_TITLE action type', () => {
       const oldState = fromJS({
-        hasChanged: false,
+        _hasChanged: false,
         seeCurrentVotes: false,
         id: '',
         titleEntries: [],
@@ -125,7 +125,7 @@ describe('voteSession admin reducers', () => {
         headerImage: { externalUrl: '', mimeType: '', title: '' }
       });
       const expected = fromJS({
-        hasChanged: true,
+        _hasChanged: true,
         seeCurrentVotes: false,
         id: '',
         titleEntries: [],
@@ -148,7 +148,7 @@ describe('voteSession admin reducers', () => {
 
     it('should handle UPDATE_VOTE_SESSION_PAGE_INSTRUCTIONS_CONTENT action type', () => {
       const oldState = fromJS({
-        hasChanged: false,
+        _hasChanged: false,
         seeCurrentVotes: false,
         id: '',
         titleEntries: [],
@@ -162,7 +162,7 @@ describe('voteSession admin reducers', () => {
         headerImage: { externalUrl: '', mimeType: '', title: '' }
       });
       const expected = fromJS({
-        hasChanged: true,
+        _hasChanged: true,
         seeCurrentVotes: false,
         id: '',
         titleEntries: [],
@@ -185,7 +185,7 @@ describe('voteSession admin reducers', () => {
 
     it('should handle UPDATE_VOTE_SESSION_PAGE_PROPOSITIONS_TITLE action type', () => {
       const oldState = fromJS({
-        hasChanged: false,
+        _hasChanged: false,
         seeCurrentVotes: false,
         id: '',
         titleEntries: [],
@@ -199,7 +199,7 @@ describe('voteSession admin reducers', () => {
         headerImage: { externalUrl: '', mimeType: '', title: '' }
       });
       const expected = fromJS({
-        hasChanged: true,
+        _hasChanged: true,
         seeCurrentVotes: false,
         id: '',
         titleEntries: [],
@@ -222,7 +222,7 @@ describe('voteSession admin reducers', () => {
 
     it('should handle UPDATE_VOTE_SESSION_PAGE_SEECURRENTVOTES action type', () => {
       const oldState = fromJS({
-        hasChanged: false,
+        _hasChanged: false,
         seeCurrentVotes: false,
         id: '',
         titleEntries: [{ localeCode: 'fr', value: 'Titre en français' }, { localeCode: 'en', value: 'Title in english' }],
@@ -233,7 +233,7 @@ describe('voteSession admin reducers', () => {
         headerImage: { externalUrl: '', mimeType: '', title: '' }
       });
       const expected = fromJS({
-        hasChanged: true,
+        _hasChanged: true,
         seeCurrentVotes: true,
         id: '',
         titleEntries: [{ localeCode: 'fr', value: 'Titre en français' }, { localeCode: 'en', value: 'Title in english' }],
@@ -252,7 +252,7 @@ describe('voteSession admin reducers', () => {
 
     it('should handle UPDATE_VOTE_SESSION_PAGE_IMAGE action type', () => {
       const oldState = fromJS({
-        hasChanged: false,
+        _hasChanged: false,
         seeCurrentVotes: false,
         id: '',
         titleEntries: [],
@@ -264,7 +264,7 @@ describe('voteSession admin reducers', () => {
       });
       const file = new File([''], 'foo.jpg', { type: 'image/jpeg' });
       const expected = {
-        hasChanged: true,
+        _hasChanged: true,
         seeCurrentVotes: false,
         id: '',
         titleEntries: [],
@@ -286,9 +286,10 @@ describe('voteSession admin reducers', () => {
     const { voteProposalsById } = reducers;
     it('should handle ADD_MODULE_TO_PROPOSAL action type', () => {
       const proposal1 = fromJS({
-        isNew: false,
+        _hasChanged: false,
+        _isNew: false,
+        _toDelete: false,
         order: 1.0,
-        toDelete: false,
         id: 'proposal1',
         titleEntries: [],
         descriptionEntries: [],
@@ -302,9 +303,10 @@ describe('voteSession admin reducers', () => {
         type: actionTypes.ADD_MODULE_TO_PROPOSAL
       };
       const expectedProposal1 = fromJS({
-        isNew: false,
+        _hasChanged: false,
+        _isNew: false,
+        _toDelete: false,
         order: 1.0,
-        toDelete: false,
         id: 'proposal1',
         titleEntries: [],
         descriptionEntries: [],
@@ -318,6 +320,306 @@ describe('voteSession admin reducers', () => {
 
   describe('modulesById reducer', () => {
     const { modulesById } = reducers;
+    it('should handle UPDATE_VOTE_MODULES action type');
+
+    it('should handle DELETE_VOTE_MODULE action type', () => {
+      const state = fromJS({
+        module42: {
+          _hasChanged: false,
+          _isNew: false,
+          _toDelete: false,
+          tokenCategories: [],
+          voteType: 'tokens',
+          id: 'module42',
+          moduleTemplateId: 'template2',
+          proposalId: 'proposal1'
+        }
+      });
+      const action = {
+        id: 'module42',
+        type: actionTypes.DELETE_VOTE_MODULE
+      };
+      const expected = {
+        module42: {
+          _hasChanged: false,
+          _isNew: false,
+          _toDelete: true,
+          tokenCategories: [],
+          voteType: 'tokens',
+          id: 'module42',
+          moduleTemplateId: 'template2',
+          proposalId: 'proposal1'
+        }
+      };
+      const actual = modulesById(state, action);
+      expect(actual.toJS()).toEqual(expected);
+    });
+
+    it('should handle CREATE_TOKEN_VOTE_MODULE action type');
+
+    it('should handle UPDATE_TOKEN_VOTE_EXCLUSIVE_CATEGORY action type', () => {
+      const state = fromJS({
+        module42: {
+          _hasChanged: false,
+          _isNew: false,
+          _toDelete: false,
+          tokenCategories: [
+            {
+              id: 'token1',
+              titleEntries: [],
+              totalNumber: 10,
+              color: 'green'
+            },
+            {
+              id: 'token2',
+              titleEntries: [],
+              totalNumber: 5,
+              color: 'red'
+            }
+          ],
+          exclusiveCategories: false,
+          votetype: 'tokens',
+          id: 'module42',
+          moduleTemplateId: 'template2',
+          proposalId: 'proposal3'
+        }
+      });
+      const action = {
+        id: 'module42',
+        type: actionTypes.UPDATE_TOKEN_VOTE_EXCLUSIVE_CATEGORY,
+        value: true
+      };
+      const expected = {
+        module42: {
+          _hasChanged: true,
+          _isNew: false,
+          _toDelete: false,
+          tokenCategories: [
+            {
+              id: 'token1',
+              titleEntries: [],
+              totalNumber: 10,
+              color: 'green'
+            },
+            {
+              id: 'token2',
+              titleEntries: [],
+              totalNumber: 5,
+              color: 'red'
+            }
+          ],
+          exclusiveCategories: true,
+          votetype: 'tokens',
+          id: 'module42',
+          moduleTemplateId: 'template2',
+          proposalId: 'proposal3'
+        }
+      };
+      const actual = modulesById(state, action);
+      expect(actual.toJS()).toEqual(expected);
+    });
+
+    it('should handle UPDATE_TOKEN_VOTE_INSTRUCTIONS action type', () => {
+      const state = fromJS({
+        module42: {
+          _hasChanged: false,
+          _isNew: false,
+          _toDelete: false,
+          tokenCategories: [],
+          instructionsEntries: [{ localeCode: 'en', value: 'Please vote guys' }],
+          exclusiveCategories: false,
+          votetype: 'tokens',
+          id: 'module42',
+          moduleTemplateId: 'template2',
+          proposalId: 'proposal3'
+        }
+      });
+      const action = {
+        id: 'module42',
+        type: actionTypes.UPDATE_TOKEN_VOTE_INSTRUCTIONS,
+        locale: 'en',
+        value: 'Actually do not vote guys'
+      };
+      const expected = {
+        module42: {
+          _hasChanged: true,
+          _isNew: false,
+          _toDelete: false,
+          tokenCategories: [],
+          instructionsEntries: [{ localeCode: 'en', value: 'Actually do not vote guys' }],
+          exclusiveCategories: false,
+          votetype: 'tokens',
+          id: 'module42',
+          moduleTemplateId: 'template2',
+          proposalId: 'proposal3'
+        }
+      };
+      const actual = modulesById(state, action);
+      expect(actual.toJS()).toEqual(expected);
+    });
+
+    it('should handle CREATE_TOKEN_VOTE_CATEGORY action type', () => {
+      const state = fromJS({
+        module42: {
+          _hasChanged: false,
+          _isNew: false,
+          _toDelete: false,
+          tokenCategories: [],
+          voteSpecTemplateId: '12345',
+          instructionsEntries: [],
+          exclusiveCategories: false,
+          votetype: 'tokens',
+          id: 'module42',
+          proposalId: 'proposal3'
+        }
+      });
+      const action = {
+        id: 'token1',
+        moduleId: 'module42',
+        type: actionTypes.CREATE_TOKEN_VOTE_CATEGORY
+      };
+      const expected = {
+        module42: {
+          _hasChanged: true,
+          _isNew: false,
+          _toDelete: false,
+          tokenCategories: ['token1'],
+          voteSpecTemplateId: '12345',
+          instructionsEntries: [],
+          exclusiveCategories: false,
+          votetype: 'tokens',
+          id: 'module42',
+          proposalId: 'proposal3'
+        }
+      };
+      const actual = modulesById(state, action);
+      expect(actual.toJS()).toEqual(expected);
+    });
+
+    it('should handle DELETE_TOKEN_VOTE_CATEGORY action type', () => {
+      const state = fromJS({
+        module42: {
+          _hasChanged: false,
+          _isNew: false,
+          _toDelete: false,
+          tokenCategories: [
+            {
+              id: 'token1',
+              titleEntries: [],
+              totalNumber: 10,
+              color: 'green'
+            },
+            {
+              id: 'token2',
+              titleEntries: [],
+              totalNumber: 5,
+              color: 'red'
+            }
+          ],
+          voteSpecTemplateId: '12345',
+          instructionsEntries: ['token1'],
+          exclusiveCategories: false,
+          votetype: 'tokens',
+          id: 'module42',
+          proposalId: 'proposal3'
+        }
+      });
+      const action = {
+        moduleId: 'module42',
+        index: 1,
+        type: actionTypes.DELETE_TOKEN_VOTE_CATEGORY
+      };
+      const expected = {
+        module42: {
+          _hasChanged: true,
+          _isNew: false,
+          _toDelete: false,
+          tokenCategories: [
+            {
+              id: 'token1',
+              titleEntries: [],
+              totalNumber: 10,
+              color: 'green'
+            }
+          ],
+          voteSpecTemplateId: '12345',
+          instructionsEntries: ['token1'],
+          exclusiveCategories: false,
+          votetype: 'tokens',
+          id: 'module42',
+          proposalId: 'proposal3'
+        }
+      };
+      const actual = modulesById(state, action);
+      expect(actual.toJS()).toEqual(expected);
+    });
+
+    it('should handle UPDATE_TOKEN_VOTE_CATEGORY_TITLE action type', () => {
+      const state = fromJS({
+        module42: {
+          _hasChanged: false,
+          _isNew: false,
+          _toDelete: false,
+          tokenCategories: ['1', '2'],
+          voteSpecTemplateId: '12345',
+          instructionsEntries: ['token1'],
+          exclusiveCategories: false,
+          votetype: 'tokens',
+          id: 'module42',
+          proposalId: 'proposal3'
+        }
+      });
+      const action = {
+        moduleId: 'module42',
+        id: 'token1',
+        locale: 'en',
+        value: 'The amazing token',
+        type: actionTypes.UPDATE_TOKEN_VOTE_CATEGORY_TITLE
+      };
+      const expected = {
+        module42: {
+          _hasChanged: true,
+          _isNew: false,
+          _toDelete: false,
+          tokenCategories: ['1', '2'],
+          voteSpecTemplateId: '12345',
+          instructionsEntries: ['token1'],
+          exclusiveCategories: false,
+          votetype: 'tokens',
+          id: 'module42',
+          proposalId: 'proposal3'
+        }
+      };
+      const actual = modulesById(state, action);
+      expect(actual.toJS()).toEqual(expected);
+    });
+
+    it('should handle UPDATE_TOKEN_VOTE_CATEGORY_COLOR action type');
+
+    it('should handle UPDATE_TOKEN_TOTAL_NUMBER action type');
+
+    it('should handle CREATE_GAUGE_VOTE_MODULE action type');
+
+    it('should handle UPDATE_GAUGE_VOTE_INSTRUCTIONS action type');
+
+    it('should handle UPDATE_GAUGE_VOTE_IS_NUMBER action type');
+
+    it('should handle UPDATE_GAUGE_VOTE_NUMBER_TICKS action type');
+
+    it('should handle CREATE_GAUGE_VOTE_CHOICE action type');
+
+    it('should handle DELETE_GAUGE_VOTE_CHOICE action type');
+
+    it('should handle UPDATE_GAUGE_VOTE_CHOICE_LABEL action type');
+
+    it('should handle UPDATE_GAUGE_MINIMUM action type');
+
+    it('should handle UPDATE_GAUGE_MAXIMUM action type');
+
+    it('should handle UPDATE_GAUGE_UNIT action type');
+
+    it('should handle UPDATE_VOTE_PROPOSALS action type');
+
     it('should handle ADD_MODULE_TO_PROPOSAL action type', () => {
       const state = Map();
       const action = {
@@ -332,43 +634,13 @@ describe('voteSession admin reducers', () => {
       };
       const expected = {
         module42: {
+          _hasChanged: false,
+          _isNew: true,
+          _toDelete: false,
           id: 'module42',
           isCustom: false,
-          isNew: true,
           proposalId: 'proposal1',
-          voteSpecTemplateId: 'template2',
-          toDelete: false
-        }
-      };
-      const actual = modulesById(state, action);
-      expect(actual.toJS()).toEqual(expected);
-    });
-
-    it('should handle DELETE_VOTE_MODULE action type', () => {
-      const state = fromJS({
-        module42: {
-          tokenCategories: [],
-          voteType: 'tokens',
-          id: 'module42',
-          isNew: false,
-          moduleTemplateId: 'template2',
-          proposalId: 'proposal1',
-          toDelete: false
-        }
-      });
-      const action = {
-        id: 'module42',
-        type: actionTypes.DELETE_VOTE_MODULE
-      };
-      const expected = {
-        module42: {
-          tokenCategories: [],
-          voteType: 'tokens',
-          id: 'module42',
-          isNew: false,
-          moduleTemplateId: 'template2',
-          proposalId: 'proposal1',
-          toDelete: true
+          voteSpecTemplateId: 'template2'
         }
       };
       const actual = modulesById(state, action);
@@ -378,13 +650,14 @@ describe('voteSession admin reducers', () => {
     it('should handle UNDELETE_MODULE action type', () => {
       const state = fromJS({
         module42: {
+          _hasChanged: false,
+          _isNew: false,
+          _toDelete: true,
           tokenCategories: [],
           voteType: 'tokens',
           id: 'module42',
-          isNew: false,
           moduleTemplateId: 'template2',
-          proposalId: 'proposal1',
-          toDelete: true
+          proposalId: 'proposal1'
         }
       });
       const action = {
@@ -393,13 +666,14 @@ describe('voteSession admin reducers', () => {
       };
       const expected = {
         module42: {
+          _hasChanged: false,
+          _isNew: false,
+          _toDelete: false,
           tokenCategories: [],
           voteType: 'tokens',
           id: 'module42',
-          isNew: false,
           moduleTemplateId: 'template2',
-          proposalId: 'proposal1',
-          toDelete: false
+          proposalId: 'proposal1'
         }
       };
       const actual = modulesById(state, action);

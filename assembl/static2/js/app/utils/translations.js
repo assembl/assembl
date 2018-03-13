@@ -379,6 +379,8 @@ const Translations = {
     administration: {
       addThematic: "Ajouter une thématique",
       addQuestion: "Ajouter une question",
+      anErrorOccured:
+        "Il y a eu une erreur lors de la sauvegarde, veuillez vérifier que vous avez bien renseigné tous les champs requis.",
       deleteThematic: "Supprimer la thématique",
       deleteQuestion: "Supprimer la question",
       changeLanguage: "Renseigner une autre langue",
@@ -422,6 +424,7 @@ const Translations = {
       headerTitle: "Bandeau de haut de page",
       ProposalsSectionTitle: "Section propositions",
       instructions: "Instructions",
+      voteSessionHeaderLabel: "Choisir l'image de fond du bandeau",
       voteSessionSuccess: "La session de vote a été enregistrée avec succès.",
       exclusive: "Exclusifs",
       tokenVoteInstructions: "Consigne du vote par jetons",
@@ -446,7 +449,7 @@ const Translations = {
         title: "Modification des paramètres de jauge",
         subTitle:
           "Vous vous apprêtez à modifier les paramètres sur cette jauge uniquement. Si vous souhaitez répercuter ces paramètres à l'ensemble des jauges, veuillez cocher la case en bas de formulaire.",
-        checkboxLabel: "Appliquer ces changements à l'ensemble des propositions"
+        applyToAllProposalsCheckboxLabel: "Appliquer ces changements à l'ensemble des propositions"
       },
       gaugeVoteInstructions: "Consigne du vote par jauge",
       propositionSectionTitle: "Titre de la section",
@@ -954,6 +957,7 @@ const Translations = {
     administration: {
       addThematic: "Add a theme",
       addQuestion: "Add a question",
+      anErrorOccured: "An error occured during save. Please check that you filled all the required fields.",
       deleteThematic: "Delete the theme",
       deleteQuestion: "Delete the question",
       changeLanguage: "Set another language",
@@ -993,6 +997,7 @@ const Translations = {
       headerTitle: "Top page Header",
       propositionSectionTitle: "Proposals section",
       instructions: "Instructions",
+      voteSessionHeaderLabel: "Choose the header background image",
       voteSessionSuccess: "The vote session is saved with success.",
       exclusive: "Exclusive",
       tokenVoteInstructions: "Instructions for the token vote",
@@ -1037,7 +1042,7 @@ const Translations = {
         title: "Modification of the gauge's settings",
         subTitle:
           "You are about to modify the settings on this gauge only. If you wish to modify all of the gauges, please check the box at the end of the form.",
-        checkboxLabel: "Apply these changes to all of the proposals"
+        applyToAllProposalsCheckboxLabel: "Apply these changes to all of the proposals"
       },
       seeCurrentVotes: "Do you want participants to see the evolution of the votes in progress?",
       sections: {

@@ -115,7 +115,7 @@ class DiscussionAdmin extends React.Component<void, Props, void> {
       });
     }
 
-    if (legalNoticeAndTerms.get('hasChanged')) {
+    if (legalNoticeAndTerms.get('_hasChanged')) {
       const legalNoticeEntries = legalNoticeAndTerms.get('legalNoticeEntries').toJS();
       const termsAndConditionsEntries = legalNoticeAndTerms.get('termsAndConditionsEntries').toJS();
       const payload = {
@@ -137,7 +137,7 @@ class DiscussionAdmin extends React.Component<void, Props, void> {
 
   render() {
     const { languagePreferenceHasChanged, legalNoticeAndTerms, section, sectionsHaveChanged } = this.props;
-    const saveDisabled = !languagePreferenceHasChanged && !legalNoticeAndTerms.get('hasChanged') && !sectionsHaveChanged;
+    const saveDisabled = !languagePreferenceHasChanged && !legalNoticeAndTerms.get('_hasChanged') && !sectionsHaveChanged;
     return (
       <div className="discussion-admin">
         <SaveButton disabled={saveDisabled} saveAction={this.saveAction} />

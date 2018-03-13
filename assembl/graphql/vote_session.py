@@ -462,7 +462,7 @@ class UpdateTokenVoteSpecification(graphene.Mutation):
             updated_token_categories = set()
             if token_categories and (not vote_spec.criterion_idea_id or vote_spec.is_custom):
                 for idx, token_category_input in enumerate(token_categories):
-                    if token_category_input.get('id', None) is not None:
+                    if not token_category_input.get('id', '-1').startswith('-'):
                         id_ = int(Node.from_global_id(token_category_input['id'])[1])
                         updated_token_categories.add(id_)
                         token_category = models.TokenCategorySpecification.get(id_)
@@ -615,7 +615,8 @@ class UpdateGaugeVoteSpecification(graphene.Mutation):
                 choice.id: choice for choice in vote_spec.choices}
             updated_choices = set()
             for idx, choice_input in enumerate(choices):
-                if choice_input.get('id', None) is not None:
+                if not choice_input.get('id', '-1').startswith('-'):
+                    # update the choice
                     id_ = int(Node.from_global_id(choice_input['id'])[1])
                     updated_choices.add(id_)
                     choice = models.GaugeChoiceSpecification.get(id_)
@@ -623,6 +624,7 @@ class UpdateGaugeVoteSpecification(graphene.Mutation):
                         choice, 'label', choice_input['label_entries'])
                     choice.value = choice_input['value']
                 else:
+                    # create a choice
                     label_ls = langstring_from_input_entries(
                         choice_input.get('label_entries', None))
                     value = choice_input.get('value')
