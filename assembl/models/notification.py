@@ -236,8 +236,7 @@ class NotificationSubscription(DiscussionBoundBase):
         return (cls.discussion_id == discussion_id,)
 
     def wouldCreateNotification(self, discussion_id, verb, object):
-        discussion = Discussion.get(object.get_discussion_id())
-        return discussion_id == object.get_discussion_id() and discussion in self.user.participant_in_discussion
+        return discussion_id == object.get_discussion_id() and self.user.is_participant(discussion_id)
 
     @classmethod
     def findApplicableInstances(cls, discussion_id, verb, object, user=None):
