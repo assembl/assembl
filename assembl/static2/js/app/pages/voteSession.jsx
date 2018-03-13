@@ -67,7 +67,8 @@ type Props = {
   propositionsSectionTitle: string,
   proposals: Array<Proposal>,
   addGaugeVote: Function,
-  addTokenVote: Function
+  addTokenVote: Function,
+  refetchVoteSession: Function
 };
 
 export type RemainingTokensByCategory = Map<string, number>;
@@ -219,7 +220,7 @@ class DumbVoteSession extends React.Component<void, Props, State> {
   };
 
   submitVotes = () => {
-    const { addTokenVote, addGaugeVote } = this.props;
+    const { addTokenVote, addGaugeVote, refetchVoteSession } = this.props;
     this.state.userTokenVotes.forEach((voteSpecs, proposalId) => {
       voteSpecs.forEach((tokenCategories, voteSpecId) => {
         tokenCategories.forEach((voteValue, tokenCategoryId) => {
@@ -233,6 +234,7 @@ class DumbVoteSession extends React.Component<void, Props, State> {
           })
             .then(() => {
               displayAlert('success', I18n.t('debate.voteSession.postSuccess'));
+              refetchVoteSession();
             })
             .catch((error) => {
               displayAlert('danger', error.message);
@@ -409,7 +411,8 @@ export default compose(
         propositionsSectionTitle: propositionsSectionTitle,
         modules: modules,
         proposals: proposals,
-        noVoteSession: false
+        noVoteSession: false,
+        refetchVoteSession: data.refetch
       };
     }
   }),
