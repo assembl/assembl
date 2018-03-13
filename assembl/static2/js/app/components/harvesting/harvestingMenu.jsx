@@ -50,26 +50,33 @@ const HarvestingMenu = ({ positionX, positionY }: HarvestingMenuProps) => {
   );
 };
 
+const harvestingMenuContainerUniqueId = 'harvesting-menu-container';
+
+export const removeHarvestingMenu = () => {
+  const harvestingMenuContainer = document.getElementById(harvestingMenuContainerUniqueId);
+  if (harvestingMenuContainer && harvestingMenuContainer.parentNode) {
+    harvestingMenuContainer.parentNode.removeChild(harvestingMenuContainer);
+  }
+};
+
 export const handleMouseUpWhileHarvesting = (evt: SyntheticMouseEvent) => {
   const selObj = window.getSelection();
   const selectedText = selObj.toString();
-  let element = document.getElementById('annotation');
   if (!selectedText || selectedText.length === 0) {
-    if (element && element.parentNode) {
-      element.parentNode.removeChild(element);
-    }
+    removeHarvestingMenu();
     return;
   }
 
-  if (!element) {
-    element = document.createElement('div');
-    element.id = 'annotation';
-    document.getElementsByTagName('body')[0].appendChild(element);
+  let harvestingMenuContainer = document.getElementById(harvestingMenuContainerUniqueId);
+  if (!harvestingMenuContainer) {
+    harvestingMenuContainer = document.createElement('div');
+    harvestingMenuContainer.id = harvestingMenuContainerUniqueId;
+    document.getElementsByTagName('body')[0].appendChild(harvestingMenuContainer);
   }
 
   const iconSize = 44;
   const positionX = (window.innerWidth - 600) / 2 - iconSize - 50;
   const positionY = evt.pageY - iconSize / 2;
 
-  ReactDOM.render(<HarvestingMenu positionX={positionX} positionY={positionY} />, document.getElementById('annotation'));
+  ReactDOM.render(<HarvestingMenu positionX={positionX} positionY={positionY} />, harvestingMenuContainer);
 };
