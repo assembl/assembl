@@ -320,32 +320,7 @@ describe('voteSession admin reducers', () => {
 
   describe('modulesById reducer', () => {
     const { modulesById } = reducers;
-    it('should handle ADD_MODULE_TO_PROPOSAL action type', () => {
-      const state = Map();
-      const action = {
-        id: 'module42',
-        moduleInfo: {
-          tokenCategories: [],
-          voteType: 'tokens'
-        },
-        moduleTemplateId: 'template2',
-        proposalId: 'proposal1',
-        type: actionTypes.ADD_MODULE_TO_PROPOSAL
-      };
-      const expected = {
-        module42: {
-          _hasChanged: false,
-          _isNew: true,
-          _toDelete: false,
-          id: 'module42',
-          isCustom: false,
-          proposalId: 'proposal1',
-          voteSpecTemplateId: 'template2'
-        }
-      };
-      const actual = modulesById(state, action);
-      expect(actual.toJS()).toEqual(expected);
-    });
+    it('should handle UPDATE_VOTE_MODULES action type');
 
     it('should handle DELETE_VOTE_MODULE action type', () => {
       const state = fromJS({
@@ -380,38 +355,7 @@ describe('voteSession admin reducers', () => {
       expect(actual.toJS()).toEqual(expected);
     });
 
-    it('should handle UNDELETE_MODULE action type', () => {
-      const state = fromJS({
-        module42: {
-          _hasChanged: false,
-          _isNew: false,
-          _toDelete: true,
-          tokenCategories: [],
-          voteType: 'tokens',
-          id: 'module42',
-          moduleTemplateId: 'template2',
-          proposalId: 'proposal1'
-        }
-      });
-      const action = {
-        id: 'module42',
-        type: actionTypes.UNDELETE_MODULE
-      };
-      const expected = {
-        module42: {
-          _hasChanged: false,
-          _isNew: false,
-          _toDelete: false,
-          tokenCategories: [],
-          voteType: 'tokens',
-          id: 'module42',
-          moduleTemplateId: 'template2',
-          proposalId: 'proposal1'
-        }
-      };
-      const actual = modulesById(state, action);
-      expect(actual.toJS()).toEqual(expected);
-    });
+    it('should handle CREATE_TOKEN_VOTE_MODULE action type');
 
     it('should handle UPDATE_TOKEN_VOTE_EXCLUSIVE_CATEGORY action type', () => {
       const state = fromJS({
@@ -644,6 +588,92 @@ describe('voteSession admin reducers', () => {
           votetype: 'tokens',
           id: 'module42',
           proposalId: 'proposal3'
+        }
+      };
+      const actual = modulesById(state, action);
+      expect(actual.toJS()).toEqual(expected);
+    });
+
+    it('should handle UPDATE_TOKEN_VOTE_CATEGORY_COLOR action type');
+
+    it('should handle UPDATE_TOKEN_TOTAL_NUMBER action type');
+
+    it('should handle CREATE_GAUGE_VOTE_MODULE action type');
+
+    it('should handle UPDATE_GAUGE_VOTE_INSTRUCTIONS action type');
+
+    it('should handle UPDATE_GAUGE_VOTE_IS_NUMBER action type');
+
+    it('should handle UPDATE_GAUGE_VOTE_NUMBER_TICKS action type');
+
+    it('should handle CREATE_GAUGE_VOTE_CHOICE action type');
+
+    it('should handle DELETE_GAUGE_VOTE_CHOICE action type');
+
+    it('should handle UPDATE_GAUGE_VOTE_CHOICE_LABEL action type');
+
+    it('should handle UPDATE_GAUGE_MINIMUM action type');
+
+    it('should handle UPDATE_GAUGE_MAXIMUM action type');
+
+    it('should handle UPDATE_GAUGE_UNIT action type');
+
+    it('should handle UPDATE_VOTE_PROPOSALS action type');
+
+    it('should handle ADD_MODULE_TO_PROPOSAL action type', () => {
+      const state = Map();
+      const action = {
+        id: 'module42',
+        moduleInfo: {
+          tokenCategories: [],
+          voteType: 'tokens'
+        },
+        moduleTemplateId: 'template2',
+        proposalId: 'proposal1',
+        type: actionTypes.ADD_MODULE_TO_PROPOSAL
+      };
+      const expected = {
+        module42: {
+          _hasChanged: false,
+          _isNew: true,
+          _toDelete: false,
+          id: 'module42',
+          isCustom: false,
+          proposalId: 'proposal1',
+          voteSpecTemplateId: 'template2'
+        }
+      };
+      const actual = modulesById(state, action);
+      expect(actual.toJS()).toEqual(expected);
+    });
+
+    it('should handle UNDELETE_MODULE action type', () => {
+      const state = fromJS({
+        module42: {
+          _hasChanged: false,
+          _isNew: false,
+          _toDelete: true,
+          tokenCategories: [],
+          voteType: 'tokens',
+          id: 'module42',
+          moduleTemplateId: 'template2',
+          proposalId: 'proposal1'
+        }
+      });
+      const action = {
+        id: 'module42',
+        type: actionTypes.UNDELETE_MODULE
+      };
+      const expected = {
+        module42: {
+          _hasChanged: false,
+          _isNew: false,
+          _toDelete: false,
+          tokenCategories: [],
+          voteType: 'tokens',
+          id: 'module42',
+          moduleTemplateId: 'template2',
+          proposalId: 'proposal1'
         }
       };
       const actual = modulesById(state, action);
