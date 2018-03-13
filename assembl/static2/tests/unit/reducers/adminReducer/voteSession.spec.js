@@ -364,18 +364,18 @@ describe('voteSession admin reducers', () => {
           _isNew: false,
           _toDelete: false,
           tokenCategories: [
-            fromJS({
+            {
               id: 'token1',
               titleEntries: [],
               totalNumber: 10,
               color: 'green'
-            }),
-            fromJS({
+            },
+            {
               id: 'token2',
               titleEntries: [],
               totalNumber: 5,
               color: 'red'
-            })
+            }
           ],
           exclusiveCategories: false,
           votetype: 'tokens',
@@ -426,7 +426,7 @@ describe('voteSession admin reducers', () => {
           _isNew: false,
           _toDelete: false,
           tokenCategories: [],
-          instructionsEntries: fromJS([{ localeCode: 'en', value: 'Please vote guys' }]),
+          instructionsEntries: [{ localeCode: 'en', value: 'Please vote guys' }],
           exclusiveCategories: false,
           votetype: 'tokens',
           id: 'module42',
