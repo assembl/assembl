@@ -610,21 +610,13 @@ describe('voteSession admin reducers', () => {
       expect(actual.toJS()).toEqual(expected);
     });
 
-    // FIXME:
-    it.skip('should handle UPDATE_TOKEN_VOTE_CATEGORY_TITLE action type', () => {
+    it('should handle UPDATE_TOKEN_VOTE_CATEGORY_TITLE action type', () => {
       const state = fromJS({
         module42: {
           _hasChanged: false,
           _isNew: false,
           _toDelete: false,
-          tokenCategories: fromJS([
-            {
-              id: 'token1',
-              titleEntries: [{ localeCode: 'en', value: 'The first token' }],
-              totalNumber: 10,
-              color: 'green'
-            }
-          ]),
+          tokenCategories: ['1', '2'],
           voteSpecTemplateId: '12345',
           instructionsEntries: ['token1'],
           exclusiveCategories: false,
@@ -642,17 +634,10 @@ describe('voteSession admin reducers', () => {
       };
       const expected = {
         module42: {
-          _hasChanged: false,
+          _hasChanged: true,
           _isNew: false,
           _toDelete: false,
-          tokenCategories: [
-            {
-              id: 'token1',
-              titleEntries: [{ localeCode: 'en', value: 'The amazing token' }],
-              totalNumber: 10,
-              color: 'green'
-            }
-          ],
+          tokenCategories: ['1', '2'],
           voteSpecTemplateId: '12345',
           instructionsEntries: ['token1'],
           exclusiveCategories: false,
