@@ -462,7 +462,7 @@ class UpdateTokenVoteSpecification(graphene.Mutation):
             updated_token_categories = set()
             if token_categories and (not vote_spec.criterion_idea_id or vote_spec.is_custom):
                 for idx, token_category_input in enumerate(token_categories):
-                    if token_category_input.get('id', None) is not None:
+                    if not token_category_input.get('id', '-1').startswith('-'):
                         id_ = int(Node.from_global_id(token_category_input['id'])[1])
                         updated_token_categories.add(id_)
                         token_category = models.TokenCategorySpecification.get(id_)
