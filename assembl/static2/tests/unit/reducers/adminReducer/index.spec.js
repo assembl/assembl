@@ -80,7 +80,7 @@ describe('Admin reducers', () => {
     it('should handle ADD_QUESTION_TO_THEMATIC action type', () => {
       const action = { id: '1', locale: 'fr', type: 'ADD_QUESTION_TO_THEMATIC' };
       const oldState = fromJS({
-        1: {
+        '1': {
           _hasChanged: false,
           questions: [
             {
@@ -90,7 +90,7 @@ describe('Admin reducers', () => {
         }
       });
       const expected = fromJS({
-        1: {
+        '1': {
           _hasChanged: true,
           questions: [
             {
@@ -148,7 +148,7 @@ describe('Admin reducers', () => {
     it('should handle REMOVE_QUESTION action type', () => {
       const action = { thematicId: '1', index: '1', type: 'REMOVE_QUESTION' };
       const oldState = fromJS({
-        1: {
+        '1': {
           _hasChanged: false,
           questions: [
             {
@@ -164,7 +164,7 @@ describe('Admin reducers', () => {
         }
       });
       const expected = fromJS({
-        1: {
+        '1': {
           _hasChanged: true,
           questions: [
             {
@@ -184,7 +184,7 @@ describe('Admin reducers', () => {
       const file = new File([''], 'toto.png', { type: 'image/png' });
       const action = { id: '1', value: file, type: 'UPDATE_THEMATIC_IMG_URL' };
       const oldState = fromJS({
-        1: {
+        '1': {
           _hasChanged: false,
           img: {
             externalUrl: ''
@@ -192,7 +192,7 @@ describe('Admin reducers', () => {
         }
       });
       const expected = {
-        1: {
+        '1': {
           _hasChanged: true,
           img: {
             externalUrl: file,
@@ -208,13 +208,13 @@ describe('Admin reducers', () => {
       const file = new File([''], 'toto.png', { type: 'image/png' });
       const action = { id: '1', value: file, type: 'UPDATE_THEMATIC_IMG_URL' };
       const oldState = fromJS({
-        1: {
+        '1': {
           _hasChanged: false,
           img: null
         }
       });
       const expected = {
-        1: {
+        '1': {
           _hasChanged: true,
           img: {
             mimeType: 'image/png',
@@ -229,7 +229,7 @@ describe('Admin reducers', () => {
     it('should handle UPDATE_QUESTION_TITLE action type', () => {
       const action = { thematicId: '1', index: '1', locale: 'en', value: 'What?', type: 'UPDATE_QUESTION_TITLE' };
       const oldState = fromJS({
-        1: {
+        '1': {
           _hasChanged: false,
           questions: [
             {
@@ -245,7 +245,7 @@ describe('Admin reducers', () => {
         }
       });
       const expected = fromJS({
-        1: {
+        '1': {
           _hasChanged: true,
           questions: [
             {
@@ -272,15 +272,15 @@ describe('Admin reducers', () => {
         type: 'UPDATE_THEMATIC_TITLE'
       };
       const oldState = fromJS({
-        0: {},
-        1: {
+        '0': {},
+        '1': {
           _hasChanged: false,
           titleEntries: [{ localeCode: 'en', value: 'My title' }, { localeCode: 'fr', value: 'Mon titre' }]
         }
       });
       const expected = fromJS({
-        0: {},
-        1: {
+        '0': {},
+        '1': {
           _hasChanged: true,
           titleEntries: [{ localeCode: 'en', value: 'My title' }, { localeCode: 'fr', value: 'Nouveau titre' }]
         }
@@ -297,15 +297,15 @@ describe('Admin reducers', () => {
         type: 'UPDATE_THEMATIC_TITLE'
       };
       const oldState = fromJS({
-        0: {},
-        1: {
+        '0': {},
+        '1': {
           _hasChanged: false,
           titleEntries: [{ localeCode: 'en', value: 'My title' }, { localeCode: 'fr', value: 'Mon titre' }]
         }
       });
       const expected = fromJS({
-        0: {},
-        1: {
+        '0': {},
+        '1': {
           _hasChanged: true,
           titleEntries: [
             { localeCode: 'en', value: 'My title' },
@@ -327,7 +327,7 @@ describe('Admin reducers', () => {
         type: 'TOGGLE_VIDEO'
       };
       const oldState = fromJS({
-        1: {
+        '1': {
           _hasChanged: false,
           video: {
             descriptionEntriesTop: [],
@@ -339,7 +339,7 @@ describe('Admin reducers', () => {
         }
       });
       const expected = fromJS({
-        1: {
+        '1': {
           _hasChanged: true,
           video: null
         }
@@ -348,7 +348,7 @@ describe('Admin reducers', () => {
       expect(newState).toEqual(expected);
 
       const reducedTwiceExpected = fromJS({
-        1: {
+        '1': {
           _hasChanged: true,
           video: {
             descriptionEntriesTop: [],
@@ -370,7 +370,7 @@ describe('Admin reducers', () => {
         type: 'UPDATE_VIDEO_HTML_CODE'
       };
       const oldState = fromJS({
-        1: {
+        '1': {
           _hasChanged: false,
           video: {
             descriptionEntriesTop: [],
@@ -382,7 +382,7 @@ describe('Admin reducers', () => {
         }
       });
       const expected = fromJS({
-        1: {
+        '1': {
           _hasChanged: true,
           video: {
             descriptionEntriesTop: [],
@@ -405,7 +405,7 @@ describe('Admin reducers', () => {
         type: 'UPDATE_VIDEO_DESCRIPTION_TOP'
       };
       const oldState = fromJS({
-        1: {
+        '1': {
           _hasChanged: false,
           video: {
             descriptionEntriesTop: [],
@@ -417,7 +417,7 @@ describe('Admin reducers', () => {
         }
       });
       const expected = fromJS({
-        1: {
+        '1': {
           _hasChanged: true,
           video: {
             descriptionEntriesTop: [
@@ -445,7 +445,7 @@ describe('Admin reducers', () => {
         type: 'UPDATE_VIDEO_DESCRIPTION_BOTTOM'
       };
       const oldState = fromJS({
-        1: {
+        '1': {
           _hasChanged: false,
           video: {
             descriptionEntriesTop: [],
@@ -457,7 +457,7 @@ describe('Admin reducers', () => {
         }
       });
       const expected = fromJS({
-        1: {
+        '1': {
           _hasChanged: true,
           video: {
             descriptionEntriesTop: [],
@@ -485,7 +485,7 @@ describe('Admin reducers', () => {
         type: 'UPDATE_VIDEO_TITLE'
       };
       const oldState = fromJS({
-        1: {
+        '1': {
           _hasChanged: false,
           video: {
             descriptionEntriesTop: [],
@@ -497,7 +497,7 @@ describe('Admin reducers', () => {
         }
       });
       const expected = fromJS({
-        1: {
+        '1': {
           _hasChanged: true,
           video: {
             descriptionEntriesTop: [],
