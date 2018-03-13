@@ -229,7 +229,11 @@ class TokenVoteSpecification(SecureObjectType, SQLAlchemyObjectType):
 
     def resolve_token_votes(self, args, context, info):
         votes = []
-        for token_category in self.token_categories:
+        token_categories = self.token_categories
+        if self.vote_spec_template_id and not self.is_custom:
+            token_categories = self.vote_spec_template.token_categories
+
+        for token_category in token_categories:
             query = self.db.query(
                 func.sum(getattr(self.get_vote_class(), "vote_value"))).filter_by(
                 vote_spec_id=self.id,
