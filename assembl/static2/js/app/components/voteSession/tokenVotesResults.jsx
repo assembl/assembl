@@ -1,5 +1,4 @@
 // @flow
-import fromPairs from 'lodash/fromPairs';
 import React from 'react';
 import { Tooltip } from 'react-bootstrap';
 import { Translate } from 'react-redux-i18n';
@@ -28,10 +27,15 @@ export const createTooltip: CreateTooltip = (category, count) => (
 );
 
 const TokenVotesResults = ({ categories, tokenVotes, numVotes }: Props) => {
-  const votes = fromPairs(tokenVotes);
+  const votes = {};
+  tokenVotes.forEach((vote) => {
+    if (vote) {
+      votes[vote.tokenCategoryId] = vote.numToken;
+    }
+  });
+  console.log(votes);
   const elements = categories
     .map((category) => {
-      // TODO: use the category.id here instead of typename
       if (category) {
         return {
           color: category.color,
