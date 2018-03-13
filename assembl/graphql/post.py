@@ -605,3 +605,51 @@ class DeletePostAttachment(graphene.Mutation):
         post.db.flush()
 
         return DeletePostAttachment(post=post)
+
+
+class AddPostExtract(graphene.Mutation):
+    class Input:
+        post_id = graphene.ID(required=True)
+        body = graphene.String(required=True)
+        important = graphene.Boolean()
+        xpath_start = graphene.String(required=True)
+        xpath_end = graphene.String(required=True)
+        offset_start = graphene.Int(required=True)
+        offset_end = graphene.Int(required=True)
+
+    post = graphene.Field(lambda: Post)
+
+    @staticmethod
+    @abort_transaction_on_exception
+    def mutate(root, args, context, info):
+        discussion_id = context.matchdict['discussion_id']
+
+        user_id = context.authenticated_userid or Everyone
+
+        permissions = get_permissions(user_id, discussion_id)
+        allowed = models.Extract.user_can_cls(
+            user_id, CrudPermissions.CREATE, permissions)
+        if not allowed:
+            raise HTTPUnauthorized()
+
+        post_id = args.get('post_id')
+        post_id = int(Node.from_global_id(post_id)[1])
+        post = models.Post.get(post_id)
+        new_extract = models.Extract(
+            creator_id=user_id,
+            owner_id=user_id,
+            discussion_id=discussion_id,
+            body=args.get('body'),
+            important=args.get('important') or False,
+            content=post
+        )
+        post.db.add(new_extract)
+        range = models.TextFragmentIdentifier(
+            extract=new_extract,
+            xpath_start=args.get('xpath_start'),
+            offset_start=args.get('offset_start'),
+            xpath_end=args.get('xpath_end'),
+            offset_end=args.get('offset_end'))
+        post.db.add(range)
+
+        return AddPostExtract(post=post)

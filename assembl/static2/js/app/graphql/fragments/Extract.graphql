@@ -1,0 +1,13 @@
+fragment Extract on Extract {
+  id
+  important
+  body
+  extractNature
+  extractAction
+  textFragmentIdentifiers {
+    xpathStart
+    xpathEnd
+    offsetStart
+    offsetEnd
+  }
+}

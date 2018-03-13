@@ -2,6 +2,7 @@
 #import "./Attachment.graphql"
 #import "./IdeaContentLink.graphql"
 #import "./SentimentCounts.graphql"
+#import "./Extract.graphql"
 
 fragment Post on Post {
   id
@@ -33,15 +34,7 @@ fragment Post on Post {
   bodyMimeType
   publicationState
   extracts {
-    id
-    important
-    body
-    textFragmentIdentifiers {
-      xpathStart
-      xpathEnd
-      offsetStart
-      offsetEnd
-    }
+    ...Extract
   }
   attachments {
     ...Attachment

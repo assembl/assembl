@@ -21,6 +21,8 @@ export type Extract = {
   textFragmentIdentifiers: Array<TextFragmentIdentifier>,
   id: string,
   important: boolean,
+  extractNature: string,
+  extractAction: string,
   body: string
 };
 

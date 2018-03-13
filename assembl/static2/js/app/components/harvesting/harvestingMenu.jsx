@@ -4,6 +4,9 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { I18n } from 'react-redux-i18n';
 import ARange from 'annotator_range'; // eslint-disable-line
+import addPostExtractMutation from '../../graphql/mutations/addPostExtract.graphql'; // eslint-disable-line
+import updateExtractMutation from '../../graphql/mutations/updateExtract.graphql'; // eslint-disable-line
+import deleteExtractMutation from '../../graphql/mutations/deleteExtract.graphql'; // eslint-disable-line
 
 type LeftSideHarvestingButtonProps = {
   label: string,
