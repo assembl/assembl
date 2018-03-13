@@ -3,10 +3,10 @@
 import React from 'react';
 
 class DontUnderstand extends React.Component {
-  props: { size: number };
+  props: { size: number, color: string, backgroundColor: string };
 
   render() {
-    const { size } = this.props;
+    const { size, color, backgroundColor } = this.props;
     return (
       <svg width={`${size}px`} height={`${size}px`} viewBox="0 0 28 28">
         <g>
@@ -26,10 +26,10 @@ class DontUnderstand extends React.Component {
                 1.48344371 13.9072848,
                 1.48344371 L13.9072848,
                 1.48344371 Z"
-            stroke="#FAAF3F"
-            fill="#FFFFFF"
+            stroke={color || '#FAAF3F'}
+            fill={backgroundColor || '#ffffff'}
           />
-          <g transform="translate(4.821192, 7.231788)" fill="#FBB040">
+          <g transform="translate(4.821192, 7.231788)" fill={color || '#FAAF3F'}>
             <g transform="translate(1.298013, 2.966887)">
               <path d="M1.90993377,
                     0.0556291391 C0.945695364,

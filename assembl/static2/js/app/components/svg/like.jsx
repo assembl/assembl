@@ -3,10 +3,10 @@
 import React from 'react';
 
 class Like extends React.Component {
-  props: { size: number };
+  props: { size: number, color: string, backgroundColor: string };
 
   render() {
-    const { size } = this.props;
+    const { size, color, backgroundColor } = this.props;
     return (
       <svg width={`${size}px`} height={`${size}px`} viewBox="0 0 28 28">
         <g>
@@ -26,8 +26,8 @@ class Like extends React.Component {
             1.39072848 13.9072848,
             1.39072848 L13.9072848,
             1.39072848 Z"
-            stroke="#46D38D"
-            fill="#FFFFFF"
+            stroke={color || '#46D38D'}
+            fill={backgroundColor || '#ffffff'}
           />
           <path
             d="M8.02913907,
@@ -45,7 +45,7 @@ class Like extends React.Component {
             9.86490066 8.02913907,
             9.86490066 L8.02913907,
             9.86490066 Z"
-            fill="#46D38D"
+            fill={color || '#46D38D'}
           />
           <path
             d="M19.7854305,
@@ -63,7 +63,7 @@ class Like extends React.Component {
             9.86490066 19.7854305,
             9.86490066 L19.7854305,
             9.86490066 Z"
-            fill="#46D38D"
+            fill={color || '#46D38D'}
           />
           <path
             d="M20.9350993,
@@ -87,7 +87,7 @@ class Like extends React.Component {
             16.8741722 20.9350993,
             17.189404 L20.9350993,
             17.189404 Z"
-            fill="#46D38D"
+            fill={color || '#46D38D'}
           />
         </g>
       </svg>

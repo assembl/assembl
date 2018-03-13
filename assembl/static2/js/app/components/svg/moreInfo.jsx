@@ -3,8 +3,10 @@
 import React from 'react';
 
 class MoreInfo extends React.Component {
+  props: { size: number, color: string, backgroundColor: string };
+
   render() {
-    const { size } = this.props;
+    const { size, color, backgroundColor } = this.props;
     return (
       <svg width={`${size}px`} height={`${size}px`} viewBox="0 0 28 28">
         <g>
@@ -23,8 +25,8 @@ class MoreInfo extends React.Component {
                 1.39072848 14,
                 1.39072848 L14,1.39072848 Z"
             id="Shape"
-            stroke="#A58EFF"
-            fill="#FFFFFF"
+            stroke={color || '#A58EFF'}
+            fill={backgroundColor || '#ffffff'}
           />
           <path
             d="M8.1218543,
@@ -42,7 +44,7 @@ class MoreInfo extends React.Component {
                 9.86490066 8.1218543,
                 9.86490066 L8.1218543,
                 9.86490066 Z"
-            fill="#A58EFF"
+            fill={color || '#A58EFF'}
           />
           <path
             d="M19.8781457,
@@ -60,7 +62,7 @@ class MoreInfo extends React.Component {
                 9.86490066 19.8781457,
                 9.86490066 L19.8781457,
                 9.86490066 Z"
-            fill="#A58EFF"
+            fill={color || '#A58EFF'}
           />
           <path
             d="M19.581457,
@@ -80,7 +82,7 @@ class MoreInfo extends React.Component {
                 17.4304636 19.581457,
                 17.4304636 L19.581457,
                 17.4304636 Z"
-            fill="#A58EFF"
+            fill={color || '#A58EFF'}
           />
         </g>
       </svg>

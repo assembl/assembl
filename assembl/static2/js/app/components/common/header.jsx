@@ -5,6 +5,7 @@ import { Grid, Row } from 'react-bootstrap';
 import { Translate } from 'react-redux-i18n';
 import { getPhaseName, getIfPhaseCompletedByIdentifier } from '../../utils/timeline';
 import WhatYouNeedToKnow from '../debate/common/whatYouNeedToKnow';
+import HeaderActions from '../debate/common/headerActions';
 
 class Header extends React.Component {
   render() {
@@ -26,6 +27,7 @@ class Header extends React.Component {
               </h6>
             )}
           </div>
+          <HeaderActions />
         </Grid>
         <Grid fluid>
           <Row>
