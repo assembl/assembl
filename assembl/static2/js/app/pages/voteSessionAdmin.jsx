@@ -232,7 +232,7 @@ class VoteSessionAdmin extends React.Component<void, VoteSessionAdminProps, Vote
       deleteProposal
     } = this.props;
 
-    if (voteSessionPage.get('hasChanged')) {
+    if (voteSessionPage.get('_hasChanged')) {
       const titleEntries = voteSessionPage.get('titleEntries').toJS();
       const subTitleEntries = voteSessionPage.get('subTitleEntries').toJS();
       const instructionsSectionTitleEntries = voteSessionPage.get('instructionsSectionTitleEntries').toJS();
@@ -375,7 +375,7 @@ class VoteSessionAdmin extends React.Component<void, VoteSessionAdminProps, Vote
 
   render() {
     const { editLocale, moduleTemplatesHaveChanged, voteProposalsHaveChanged, section, voteSessionPage } = this.props;
-    const saveDisabled = !moduleTemplatesHaveChanged && !voteProposalsHaveChanged && !voteSessionPage.get('hasChanged');
+    const saveDisabled = !moduleTemplatesHaveChanged && !voteProposalsHaveChanged && !voteSessionPage.get('_hasChanged');
     const currentStep = parseInt(section, 10);
     return (
       <div className="token-vote-admin">

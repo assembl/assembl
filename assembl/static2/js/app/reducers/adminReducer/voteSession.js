@@ -46,7 +46,7 @@ import { updateInLangstringEntries } from '../../utils/i18n';
 import { pickerColors } from '../../constants';
 
 const initialPage = Map({
-  hasChanged: false,
+  _hasChanged: false,
   id: '',
   titleEntries: List(),
   seeCurrentVotes: false,
@@ -64,30 +64,32 @@ export type VoteSessionPageReducer = (Map, ReduxAction<Action>) => Map;
 export const voteSessionPage: VoteSessionPageReducer = (state = initialPage, action) => {
   switch (action.type) {
   case UPDATE_VOTE_SESSION_PAGE_TITLE:
-    return state.update('titleEntries', updateInLangstringEntries(action.locale, fromJS(action.value))).set('hasChanged', true);
+    return state
+      .update('titleEntries', updateInLangstringEntries(action.locale, fromJS(action.value)))
+      .set('_hasChanged', true);
   case UPDATE_VOTE_SESSION_PAGE_SEECURRENTVOTES:
-    return state.set('seeCurrentVotes', action.value).set('hasChanged', true);
+    return state.set('seeCurrentVotes', action.value).set('_hasChanged', true);
   case UPDATE_VOTE_SESSION_PAGE_SUBTITLE:
     return state
       .update('subTitleEntries', updateInLangstringEntries(action.locale, fromJS(action.value)))
-      .set('hasChanged', true);
+      .set('_hasChanged', true);
   case UPDATE_VOTE_SESSION_PAGE_INSTRUCTIONS_TITLE:
     return state
       .update('instructionsSectionTitleEntries', updateInLangstringEntries(action.locale, fromJS(action.value)))
-      .set('hasChanged', true);
+      .set('_hasChanged', true);
   case UPDATE_VOTE_SESSION_PAGE_INSTRUCTIONS_CONTENT:
     return state
       .update('instructionsSectionContentEntries', updateInLangstringEntries(action.locale, fromJS(action.value)))
-      .set('hasChanged', true);
+      .set('_hasChanged', true);
   case UPDATE_VOTE_SESSION_PAGE_PROPOSITIONS_TITLE:
     return state
       .update('propositionsSectionTitleEntries', updateInLangstringEntries(action.locale, fromJS(action.value)))
-      .set('hasChanged', true);
+      .set('_hasChanged', true);
   case UPDATE_VOTE_SESSION_PAGE_IMAGE:
     return state
       .setIn(['headerImage', 'externalUrl'], action.value)
       .setIn(['headerImage', 'mimeType'], action.value.type)
-      .set('hasChanged', true);
+      .set('_hasChanged', true);
   case UPDATE_VOTE_SESSION_PAGE: {
     let headerImage = Map({
       externalUrl: '',
@@ -98,7 +100,7 @@ export const voteSessionPage: VoteSessionPageReducer = (state = initialPage, act
     }
 
     return Map({
-      hasChanged: false,
+      _hasChanged: false,
       id: fromJS(action.id),
       titleEntries: fromJS(action.titleEntries),
       seeCurrentVotes: action.seeCurrentVotes,
