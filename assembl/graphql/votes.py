@@ -95,19 +95,27 @@ class AddTokenVote(graphene.Mutation):
         vote_spec_id = int(Node.from_global_id(vote_spec_id)[1])
         vote_spec = models.AbstractVoteSpecification.get(vote_spec_id)
 
-        vote = models.TokenIdeaVote(
-            discussion=discussion,
-            vote_spec=vote_spec,
-            widget=vote_spec.widget,
-            voter_id=user_id,
-            idea=proposal,
-            vote_value=vote_value,
-            token_category=token_category)
+        vote = models.TokenIdeaVote.query.filter_by(
+            vote_spec_id=vote_spec.id, tombstone_date=None, voter_id=user_id,
+            token_category_id=token_category_id).first()
+        if vote_value == 0:
+            if vote is not None:
+                vote.is_tombstone = True
+        else:
+            if vote is None or vote.vote_value != vote_value:
+                vote = models.TokenIdeaVote(
+                    discussion=discussion,
+                    vote_spec=vote_spec,
+                    widget=vote_spec.widget,
+                    voter_id=user_id,
+                    idea=proposal,
+                    vote_value=vote_value,
+                    token_category=token_category)
+                permissions = get_permissions(user_id, discussion_id)
+                vote = vote.handle_duplication(
+                    permissions=permissions, user_id=user_id)
+                vote.db.add(vote)
 
-        permissions = get_permissions(user_id, discussion_id)
-        vote = vote.handle_duplication(
-            permissions=permissions, user_id=user_id)
-        vote.db.add(vote)
         vote.db.flush()
         return AddTokenVote(vote_specification=vote_spec)
 
@@ -170,18 +178,25 @@ class AddGaugeVote(graphene.Mutation):
         vote_spec_id = int(Node.from_global_id(vote_spec_id)[1])
         vote_spec = models.AbstractVoteSpecification.get(vote_spec_id)
 
-        vote = models.GaugeIdeaVote(
-            discussion=discussion,
-            vote_spec=vote_spec,
-            widget=vote_spec.widget,
-            voter_id=user_id,
-            idea=proposal,
-            vote_value=vote_value)
+        vote = models.GaugeIdeaVote.query.filter_by(
+            vote_spec_id=vote_spec.id, tombstone_date=None, voter_id=user_id).first()
+        if vote_value == 0:
+            if vote is not None:
+                vote.is_tombstone = True
+        else:
+            if vote is None or vote.vote_value != vote_value:
+                vote = models.GaugeIdeaVote(
+                    discussion=discussion,
+                    vote_spec=vote_spec,
+                    widget=vote_spec.widget,
+                    voter_id=user_id,
+                    idea=proposal,
+                    vote_value=vote_value)
 
-        permissions = get_permissions(user_id, discussion_id)
-        vote = vote.handle_duplication(
-            permissions=permissions, user_id=user_id)
-        vote.db.add(vote)
+                permissions = get_permissions(user_id, discussion_id)
+                vote = vote.handle_duplication(
+                    permissions=permissions, user_id=user_id)
+                vote.db.add(vote)
         vote.db.flush()
         return AddGaugeVote(vote_specification=vote_spec)
 
