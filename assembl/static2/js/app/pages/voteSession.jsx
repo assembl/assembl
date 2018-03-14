@@ -160,7 +160,7 @@ class DumbVoteSession extends React.Component<void, Props, State> {
   setAvailableTokensSticky = () => {
     if (this.availableTokensContainerRef && !isMobile.any()) {
       const availableTokensDivOffset = getDomElementOffset(this.availableTokensContainerRef).top;
-      if (availableTokensDivOffset <= window.scrollY) {
+      if (availableTokensDivOffset <= window.pageYOffset) {
         this.setState({ availableTokensSticky: true });
       } else {
         this.setState({ availableTokensSticky: false });
