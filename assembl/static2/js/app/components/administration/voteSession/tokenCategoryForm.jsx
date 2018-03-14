@@ -47,6 +47,9 @@ const DumbTokenCategoryForm = ({
         type="number"
         onChange={handleNumberChange}
         value={totalNumber}
+        formControlProps={{
+          min: '1'
+        }}
       />
       <label htmlFor="color-picker">{I18n.t('administration.tokenColor')}</label>
       <ColorPicker
@@ -75,7 +78,11 @@ const mapStateToProps = (state, { id, editLocale }) => {
 
 const mapDispatchToProps = (dispatch, { moduleId, id, editLocale }) => ({
   handleTitleChange: e => dispatch(updateTokenVoteCategoryTitle(id, editLocale, e.target.value, moduleId)),
-  handleNumberChange: e => dispatch(updateTokenTotalNumber(id, e.target.value, moduleId)),
+  handleNumberChange: (e) => {
+    if (e.target.value > 0) {
+      dispatch(updateTokenTotalNumber(id, e.target.value, moduleId));
+    }
+  },
   handleColorChange: color => dispatch(updateTokenVoteCategoryColor(id, color.hex, moduleId))
 });
 

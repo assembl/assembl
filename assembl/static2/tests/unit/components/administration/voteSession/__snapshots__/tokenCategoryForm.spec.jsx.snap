@@ -20,6 +20,11 @@ exports[`tokenTypeForm component should render a TokenCategoryForm component 1`]
       value="En faveur"
     />
     <FormControlWithLabel
+      formControlProps={
+        Object {
+          "min": "1",
+        }
+      }
       label="Missing translation: administration.tokenNumber"
       labelAlwaysVisible={false}
       onChange={undefined}
