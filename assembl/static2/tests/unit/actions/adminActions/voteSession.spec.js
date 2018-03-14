@@ -136,4 +136,16 @@ describe('voteSession admin actions', () => {
       expect(actual).toEqual(expected);
     });
   });
+
+  describe('markAllDependenciesAsChanged', () => {
+    const { markAllDependenciesAsChanged } = actions;
+    it('should return a MARK_ALL_DEPENDENCIES_AS_CHANGED action', () => {
+      const actual = markAllDependenciesAsChanged('myVoteSpecTemplate');
+      const expected = {
+        id: 'myVoteSpecTemplate',
+        type: actionTypes.MARK_ALL_DEPENDENCIES_AS_CHANGED
+      };
+      expect(actual).toEqual(expected);
+    });
+  });
 });

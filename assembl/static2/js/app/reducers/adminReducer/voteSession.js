@@ -40,7 +40,8 @@ import {
   UPDATE_GAUGE_MAXIMUM,
   UPDATE_GAUGE_UNIT,
   ADD_MODULE_TO_PROPOSAL,
-  UNDELETE_MODULE
+  UNDELETE_MODULE,
+  MARK_ALL_DEPENDENCIES_AS_CHANGED
 } from '../../actions/actionTypes';
 import { updateInLangstringEntries } from '../../utils/i18n';
 import { pickerColors } from '../../constants';
@@ -344,6 +345,14 @@ export const modulesById = (state: Map<string, Map> = Map(), action: ReduxAction
     );
   case UNDELETE_MODULE:
     return state.setIn([action.id, '_toDelete'], false);
+  case MARK_ALL_DEPENDENCIES_AS_CHANGED:
+    return state.map((voteSpec) => {
+      if (voteSpec.get('voteSpecTemplateId') === action.id && !voteSpec.get('isCustom')) {
+        return voteSpec.set('_hasChanged', true);
+      }
+
+      return voteSpec;
+    });
   default:
     return state;
   }
@@ -418,6 +427,7 @@ export const voteProposalsHaveChanged = (state: boolean = false, action: ReduxAc
   case UPDATE_VOTE_PROPOSAL_DESCRIPTION:
   case ADD_MODULE_TO_PROPOSAL:
   case DELETE_VOTE_MODULE:
+  case MARK_ALL_DEPENDENCIES_AS_CHANGED:
     return true;
   case UPDATE_VOTE_PROPOSALS:
     return false;

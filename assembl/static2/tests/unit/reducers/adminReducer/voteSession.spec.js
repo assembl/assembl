@@ -679,5 +679,88 @@ describe('voteSession admin reducers', () => {
       const actual = modulesById(state, action);
       expect(actual.toJS()).toEqual(expected);
     });
+
+    it('should handle MARK_ALL_DEPENDENCIES_AS_CHANGED action type', () => {
+      const state = fromJS({
+        dep1: {
+          _hasChanged: false,
+          _isNew: false,
+          _toDelete: false,
+          id: 'dep1',
+          voteSpecTemplateId: 'template',
+          proposalId: 'proposal1'
+        },
+        dep2: {
+          _hasChanged: false,
+          _isNew: false,
+          _toDelete: false,
+          id: 'dep2',
+          voteSpecTemplateId: 'template',
+          proposalId: 'proposal2'
+        },
+        dep3: {
+          _hasChanged: false,
+          _isNew: false,
+          _toDelete: false,
+          isCustom: true,
+          id: 'dep3',
+          voteSpecTemplateId: 'template',
+          proposalId: 'proposal2'
+        },
+        template: {
+          _hasChanged: false,
+          _isNew: false,
+          _toDelete: true,
+          tokenCategories: [],
+          voteType: 'tokens',
+          id: 'template',
+          voteSpecTemplateId: null,
+          proposalId: null
+        }
+      });
+      const action = {
+        id: 'template',
+        type: actionTypes.MARK_ALL_DEPENDENCIES_AS_CHANGED
+      };
+      const expected = {
+        dep1: {
+          _hasChanged: true,
+          _isNew: false,
+          _toDelete: false,
+          id: 'dep1',
+          voteSpecTemplateId: 'template',
+          proposalId: 'proposal1'
+        },
+        dep2: {
+          _hasChanged: true,
+          _isNew: false,
+          _toDelete: false,
+          id: 'dep2',
+          voteSpecTemplateId: 'template',
+          proposalId: 'proposal2'
+        },
+        dep3: {
+          _hasChanged: false,
+          _isNew: false,
+          _toDelete: false,
+          isCustom: true,
+          id: 'dep3',
+          voteSpecTemplateId: 'template',
+          proposalId: 'proposal2'
+        },
+        template: {
+          _hasChanged: false,
+          _isNew: false,
+          _toDelete: true,
+          tokenCategories: [],
+          voteType: 'tokens',
+          id: 'template',
+          voteSpecTemplateId: null,
+          proposalId: null
+        }
+      };
+      const actual = modulesById(state, action);
+      expect(actual.toJS()).toEqual(expected);
+    });
   });
 });

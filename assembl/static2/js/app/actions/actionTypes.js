@@ -72,6 +72,7 @@ export const MOVE_PROPOSAL_UP: 'MOVE_PROPOSAL_UP' = 'MOVE_PROPOSAL_UP';
 export const MOVE_PROPOSAL_DOWN: 'MOVE_PROPOSAL_DOWN' = 'MOVE_PROPOSAL_DOWN';
 export const ADD_MODULE_TO_PROPOSAL: 'ADD_MODULE_TO_PROPOSAL' = 'ADD_MODULE_TO_PROPOSAL';
 export const UNDELETE_MODULE: 'UNDELETE_MODULE' = 'UNDELETE_MODULE';
+export const MARK_ALL_DEPENDENCIES_AS_CHANGED: 'MARK_ALL_DEPENDENCIES_AS_CHANGED' = 'MARK_ALL_DEPENDENCIES_AS_CHANGED';
 
 export type UpdateContentLocaleById = {
   type: typeof UPDATE_CONTENT_LOCALE_BY_ID,
@@ -499,6 +500,11 @@ export type UndeleteModule = {
   type: typeof UNDELETE_MODULE
 };
 
+export type MarkAllDependenciesAsChanged = {
+  id: string,
+  type: typeof MARK_ALL_DEPENDENCIES_AS_CHANGED
+};
+
 type BasicAction = {
   type: string
 };
@@ -557,7 +563,8 @@ type VoteSessionActions =
   | UpdateGaugeUnit
   | AddModuleToProposal
   | UpdateGaugeVoteInstructions
-  | UndeleteModule;
+  | UndeleteModule
+  | MarkAllDependenciesAsChanged;
 
 export type Action =
   | UpdateContentLocaleById

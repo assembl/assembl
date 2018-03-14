@@ -21,7 +21,8 @@ import {
   updateGaugeMinimum,
   updateGaugeMaximum,
   updateGaugeUnit,
-  updateGaugeVoteChoiceLabel
+  updateGaugeVoteChoiceLabel,
+  markAllDependenciesAsChanged
 } from '../../../actions/adminActions/voteSession';
 
 export type VoteChoice = {|
@@ -207,18 +208,48 @@ const mapStateToProps = (state, { id, editLocale }) => {
 };
 
 const mapDispatchToProps = (dispatch, { id, editLocale }) => ({
-  handleInstructionsChange: e => dispatch(updateGaugeVoteInstructions(id, editLocale, e.target.value)),
-  createChoice: newId => dispatch(createGaugeVoteChoice(id, newId)),
-  deleteChoice: idx => dispatch(deleteGaugeVoteChoice(id, idx)),
-  updateNbTicks: value => dispatch(updateGaugeVoteNbTicks(id, value)),
-  handleNumberGaugeCheck: () => dispatch(updateGaugeVoteIsNumber(id, true)),
-  handleNumberGaugeUncheck: () => dispatch(updateGaugeVoteIsNumber(id, false)),
+  handleInstructionsChange: (e) => {
+    dispatch(markAllDependenciesAsChanged(id));
+    dispatch(updateGaugeVoteInstructions(id, editLocale, e.target.value));
+  },
+  createChoice: (newId) => {
+    dispatch(markAllDependenciesAsChanged(id));
+    dispatch(createGaugeVoteChoice(id, newId));
+  },
+  deleteChoice: (idx) => {
+    dispatch(markAllDependenciesAsChanged(id));
+    dispatch(deleteGaugeVoteChoice(id, idx));
+  },
+  updateNbTicks: (value) => {
+    dispatch(markAllDependenciesAsChanged(id));
+    dispatch(updateGaugeVoteNbTicks(id, value));
+  },
+  handleNumberGaugeCheck: () => {
+    dispatch(markAllDependenciesAsChanged(id));
+    dispatch(updateGaugeVoteIsNumber(id, true));
+  },
+  handleNumberGaugeUncheck: () => {
+    dispatch(markAllDependenciesAsChanged(id));
+    dispatch(updateGaugeVoteIsNumber(id, false));
+  },
   // for number gauge
-  handleMinChange: value => dispatch(updateGaugeMinimum(id, value)),
-  handleMaxChange: value => dispatch(updateGaugeMaximum(id, value)),
-  handleUnitChange: value => dispatch(updateGaugeUnit(id, value)),
+  handleMinChange: (value) => {
+    dispatch(markAllDependenciesAsChanged(id));
+    dispatch(updateGaugeMinimum(id, value));
+  },
+  handleMaxChange: (value) => {
+    dispatch(markAllDependenciesAsChanged(id));
+    dispatch(updateGaugeMaximum(id, value));
+  },
+  handleUnitChange: (value) => {
+    dispatch(markAllDependenciesAsChanged(id));
+    dispatch(updateGaugeUnit(id, value));
+  },
   // for text gauge
-  handleGaugeChoiceLabelChange: (cid, value) => dispatch(updateGaugeVoteChoiceLabel(cid, editLocale, value, id))
+  handleGaugeChoiceLabelChange: (cid, value) => {
+    dispatch(markAllDependenciesAsChanged(id));
+    dispatch(updateGaugeVoteChoiceLabel(cid, editLocale, value, id));
+  }
 });
 
 export { DumbGaugeForm };

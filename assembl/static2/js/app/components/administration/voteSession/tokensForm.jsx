@@ -12,7 +12,8 @@ import {
   updateTokenVoteInstructions,
   createTokenVoteCategory,
   deleteTokenVoteCategory,
-  updateTokenVoteExclusiveCategory
+  updateTokenVoteExclusiveCategory,
+  markAllDependenciesAsChanged
 } from '../../../actions/adminActions/voteSession';
 
 type TokensFormProps = {
@@ -112,7 +113,10 @@ const mapStateToProps = (state, { id, editLocale }) => {
 };
 
 const mapDispatchToProps = (dispatch, { id, editLocale }) => ({
-  handleInstructionsChange: e => dispatch(updateTokenVoteInstructions(id, editLocale, e.target.value)),
+  handleInstructionsChange: (e) => {
+    dispatch(updateTokenVoteInstructions(id, editLocale, e.target.value));
+    dispatch(markAllDependenciesAsChanged(id));
+  },
   handleTokenVoteCategoryNumberChange: (value, tokenCategoryNumber) => {
     const newTokenCategoryNumber = value - tokenCategoryNumber;
     if (value > tokenCategoryNumber) {
@@ -127,7 +131,10 @@ const mapDispatchToProps = (dispatch, { id, editLocale }) => ({
       }
     }
   },
-  handleExclusiveCategoriesCheckboxChange: checked => dispatch(updateTokenVoteExclusiveCategory(id, !checked))
+  handleExclusiveCategoriesCheckboxChange: (checked) => {
+    dispatch(updateTokenVoteExclusiveCategory(id, !checked));
+    dispatch(markAllDependenciesAsChanged(id));
+  }
 });
 
 export { DumbTokensForm };

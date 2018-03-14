@@ -273,3 +273,9 @@ export const undeleteModule = (id: string): actionTypes.UndeleteModule => ({
   id: id,
   type: actionTypes.UNDELETE_MODULE
 });
+
+/* if a vote spec template params changes, set _hasChanged to true on all its dependencies */
+export const markAllDependenciesAsChanged = (id: string): actionTypes.MarkAllDependenciesAsChanged => ({
+  id: id,
+  type: actionTypes.MARK_ALL_DEPENDENCIES_AS_CHANGED
+});
