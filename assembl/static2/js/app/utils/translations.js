@@ -228,6 +228,8 @@ const Translations = {
       panelTitle: "Bienvenue dans la communauté d'Assembl"
     },
     debate: {
+      votes: "Votes",
+      vote: "Vote",
       answer: "Je réponds :",
       toAnswer: "Répondre",
       share: "Partager",
@@ -239,8 +241,6 @@ const Translations = {
       insert: "Ecrivez votre message",
       post: "Poster",
       like: "J'aime",
-      neutral: "Neutre",
-      neutralCount: "%{count} neutre",
       agree: "D'accord",
       agreeCount: "%{count} d'accord",
       disagree: "Pas d'accord",
@@ -332,8 +332,6 @@ const Translations = {
         notEnoughTokens: "Vous n'avez plus assez de jetons",
         exclusiveTokens: "Vous avez déjà voté pour une autre catégorie pour cette proposition",
         totalVotes: "%{count} votes",
-        votes: "Votes",
-        vote: "Vote",
         valueWithUnit: "%{num} %{unit}"
       }
     },
@@ -812,6 +810,8 @@ const Translations = {
       noSynthesisYet: "There is no synthesis available yet."
     },
     debate: {
+      votes: "Votes",
+      vote: "Vote",
       answer: "I answer:",
       toAnswer: "Answer",
       share: "Share",
@@ -825,8 +825,6 @@ const Translations = {
       like: "Like",
       agree: "Agree",
       agreeCount: "%{count} agree",
-      neutral: "Neutral",
-      neutralCount: "%{count} neutral",
       disagree: "Disagree",
       disagreeCount: "%{count} disagree",
       dontUnderstand: "Did not get it",
@@ -916,8 +914,6 @@ const Translations = {
         notEnoughTokens: "You don't have enough tokens",
         exclusiveTokens: "You already voted for another category for this proposal",
         totalVotes: "%{count} votes",
-        votes: "Votes",
-        vote: "Vote",
         valueWithUnit: "%{unit}%{num}"
       }
     },

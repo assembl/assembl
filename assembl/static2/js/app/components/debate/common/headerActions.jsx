@@ -4,7 +4,6 @@ import { Translate } from 'react-redux-i18n';
 import { Tooltip } from 'react-bootstrap';
 import Like from '../../svg/like';
 import Disagree from '../../svg/disagree';
-import MoreInfo from '../../svg/moreInfo';
 import Doughnut from '../../svg/doughnut';
 
 const createTooltip = (category, count, color) => (
@@ -24,18 +23,16 @@ const elements = [
     color: '#f75959',
     count: 27,
     Tooltip: createTooltip('disagree', 27, '#f75959')
-  },
-  {
-    color: '#ffb704',
-    count: 8,
-    Tooltip: createTooltip('neutral', 8, '#ffb704')
   }
 ];
 
+const totalCount = elements.reduce((result, element) => result + element.count, 0);
+
+// TODO add action-button class in the styleguide
 const headerActions = () => (
   <div className="header-actions-container">
     <div className="share-button action-button">
-      <div className="share-icon-container">
+      <div className="share-icon-container white">
         <span className="assembl-icon-share" />
       </div>
       <div className="action-button-label">
@@ -54,14 +51,14 @@ const headerActions = () => (
         <Translate value="debate.disagree" />
       </div>
     </div>
-    <div className="info-button action-button">
-      <MoreInfo size={30} color="#ffffff" backgroundColor="none" />
-      <div className="action-button-label">
-        <Translate value="debate.neutral" />
-      </div>
-    </div>
     <div className="doughnut-container">
       <Doughnut elements={elements} />
+      <div className="total-count-container">
+        <div className="total-count">{totalCount}</div>
+        <div className="count-label">
+          {totalCount > 1 ? <Translate value="debate.votes" /> : <Translate value="debate.vote" />}
+        </div>
+      </div>
     </div>
   </div>
 );
