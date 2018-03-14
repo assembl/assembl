@@ -8,7 +8,6 @@ import transaction
 from pyramid_mailer import mailer_factory_from_settings
 from pyramid_mailer.message import Message
 
-from ..lib.sqla import mark_changed
 from ..lib.raven_client import capture_exception
 from . import (config_celery_app, CeleryWithConfig)
 from ..lib.logging import getLogger
@@ -155,7 +154,6 @@ def process_notification(notification):
             NotificationDeliveryStateType.DELIVERY_TEMPORARY_FAILURE
         sys.stderr.write("Unknown Exception!: " + repr(e))
 
-    mark_changed()
     sys.stderr.write(
         "process_notification finished processing %d, state is now %s"
         % (notification.id, notification.delivery_state))

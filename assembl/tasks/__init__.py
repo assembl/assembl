@@ -136,7 +136,7 @@ def init_from_celery(celery_app):
     registry.settings = settings
     setup_raven(config)
     set_config(settings)
-    configure_engine(settings, False)
+    configure_engine(settings, True)
     configure_indexing()
     configure(registry, celery_app.main)
     from .threaded_model_watcher import ThreadDispatcher
