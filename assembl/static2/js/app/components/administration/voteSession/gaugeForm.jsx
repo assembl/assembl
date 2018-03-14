@@ -34,6 +34,7 @@ type GaugeFormProps = {
   index?: number,
   // editLocale: string,
   instructions: string,
+  canChangeType: boolean,
   nbTicks: number,
   minimum: number,
   maximum: number,
@@ -57,6 +58,7 @@ export const getGaugeModuleInfo = (gaugeModule: Map<string, *>, gaugeChoicesById
   const choices = gaugeModule.get('choices', List());
   return {
     instructions: instructions,
+    canChangeType: gaugeModule.get('_isNew'),
     nbTicks: gaugeModule.get('isNumberGauge') ? gaugeModule.get('nbTicks') : choices.size,
     isNumberGauge: gaugeModule.get('isNumberGauge'),
     choices: gaugeModule.get('isNumberGauge')
@@ -108,6 +110,7 @@ const DumbGaugeForm = ({
   id,
   instructions,
   nbTicks,
+  canChangeType,
   isNumberGauge,
   choices,
   minimum,
@@ -167,14 +170,16 @@ const DumbGaugeForm = ({
         </MenuItem>
       ))}
     </SplitButton>
-    <div className="margin-m">
-      <Radio onChange={handleNumberGaugeUncheck} checked={!isNumberGauge} name={`gauge-type-${id}`}>
-        <Translate value="administration.textValue" />
-      </Radio>
-      <Radio onChange={handleNumberGaugeCheck} checked={isNumberGauge} name={`gauge-type-${id}`}>
-        <Translate value="administration.numberValue" />
-      </Radio>
-    </div>
+    {canChangeType && (
+      <div className="margin-m">
+        <Radio onChange={handleNumberGaugeUncheck} checked={!isNumberGauge} name={`gauge-type-${id}`}>
+          <Translate value="administration.textValue" />
+        </Radio>
+        <Radio onChange={handleNumberGaugeCheck} checked={isNumberGauge} name={`gauge-type-${id}`}>
+          <Translate value="administration.numberValue" />
+        </Radio>
+      </div>
+    )}
     {isNumberGauge && (
       <NumberGaugeForm
         id={id}

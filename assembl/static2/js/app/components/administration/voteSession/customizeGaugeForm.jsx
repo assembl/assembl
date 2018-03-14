@@ -166,6 +166,7 @@ class DumbCustomizeGaugeForm extends React.Component<void, Props, State> {
           editLocale={editLocale}
           id={gaugeModuleId}
           {...this.state.gaugeParams}
+          canChangeType={false}
           nbTicks={this.getNbTicks()}
           createChoice={this.createChoice}
           deleteChoice={this.deleteChoice}
