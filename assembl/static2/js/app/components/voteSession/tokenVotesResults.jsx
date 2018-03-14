@@ -12,7 +12,8 @@ type Props = {
     tokenCategoryId: string,
     numToken: number
   |}>,
-  numVotes: number
+  numVotes: number,
+  titleMsgId: string
 };
 
 type CreateTooltip = (TokenCategory, number) => React.Element<*>;
@@ -26,7 +27,7 @@ export const createTooltip: CreateTooltip = (category, count) => (
   </Tooltip>
 );
 
-const TokenVotesResults = ({ categories, tokenVotes, numVotes }: Props) => {
+const TokenVotesResults = ({ categories, tokenVotes, numVotes, titleMsgId }: Props) => {
   const votes = {};
   tokenVotes.forEach((vote) => {
     if (vote) {
@@ -48,13 +49,15 @@ const TokenVotesResults = ({ categories, tokenVotes, numVotes }: Props) => {
     .filter(e => e); // remove null items
   return (
     <div className="box center tokens-box">
-      <Translate value="debate.voteSession.votesTotal" count={numVotes} />
+      <Translate value={titleMsgId} count={numVotes} />
       <div className="doughnut-container">
         <Doughnut elements={elements} />
-      </div>
-      <div className="doughnut-totalCount">
-        <div className="vote-totalCount">{numVotes}</div>
-        <div>{numVotes > 1 ? <Translate value="debate.voteSession.votes" /> : <Translate value="debate.voteSession.vote" />}</div>
+        <div className="doughnut-totalCount">
+          <div className="vote-totalCount">{numVotes}</div>
+          <div>
+            {numVotes > 1 ? <Translate value="debate.voteSession.votes" /> : <Translate value="debate.voteSession.vote" />}
+          </div>
+        </div>
       </div>
     </div>
   );

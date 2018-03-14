@@ -63,6 +63,7 @@ const VotesInProgress = ({ modules, numParticipants }: Props) => {
               categories={tokenCategories}
               tokenVotes={tokenVoteModule.tokenVotes}
               numVotes={tokenVoteModule.numVotes}
+              titleMsgId="debate.voteSession.currentTokenDistribution"
             />
           </Col>
         )}

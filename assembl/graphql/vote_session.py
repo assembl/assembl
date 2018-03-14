@@ -274,6 +274,30 @@ class GaugeChoiceSpecification(SecureObjectType, SQLAlchemyObjectType):
         return resolve_langstring_entries(self, 'label')
 
 
+def get_avg_choice(vote_spec):
+    choices = vote_spec.get_choices()
+    if not choices:
+        return None
+
+    vote_cls = vote_spec.get_vote_class()
+    voting_avg = vote_spec.db.query(func.avg(getattr(vote_cls, 'vote_value'))).filter_by(
+        vote_spec_id=vote_spec.id,
+        tombstone_date=None,
+        idea_id=vote_spec.criterion_idea_id).first()
+    # when there is no votes, query.first() equals (None,)
+    avg = voting_avg[0] or 0
+    # take the closest choice
+    avg_choice = choices[0]
+    min_diff = abs(avg_choice.value - avg)
+    for choice in choices[1:]:
+        diff = abs(choice.value - avg)
+        if diff < min_diff:
+            avg_choice = choice
+            min_diff = diff
+
+    return avg_choice
+
+
 class GaugeVoteSpecification(SecureObjectType, SQLAlchemyObjectType):
 
     class Meta:
@@ -283,29 +307,21 @@ class GaugeVoteSpecification(SecureObjectType, SQLAlchemyObjectType):
 
     choices = graphene.List(GaugeChoiceSpecification)
     average_label = graphene.String(lang=graphene.String())
+    average_result = graphene.Float(required=True)
 
     def resolve_average_label(self, args, context, info):
-        choices = self.get_choices()
-        if not choices:
+        avg_choice = get_avg_choice(self)
+        if avg_choice is None:
             return None
 
-        vote_cls = self.get_vote_class()
-        voting_avg = self.db.query(func.avg(getattr(vote_cls, 'vote_value'))).filter_by(
-            vote_spec_id=self.id,
-            tombstone_date=None,
-            idea_id=self.criterion_idea_id).first()
-        # when there is no votes, query.first() equals (None,)
-        avg = voting_avg[0] or 0
-        # take the closest choice
-        avg_choice = choices[0]
-        min_diff = abs(avg_choice.value - avg)
-        for choice in choices[1:]:
-            diff = abs(choice.value - avg)
-            if diff < min_diff:
-                avg_choice = choice
-                min_diff = diff
-
         return resolve_langstring(avg_choice.label, args.get('lang'))
+
+    def resolve_average_result(self, args, context, info):
+        avg_choice = get_avg_choice(self)
+        if avg_choice is None:
+            return 0
+
+        return avg_choice.value
 
     def resolve_choices(self, args, context, info):
         return self.get_choices()

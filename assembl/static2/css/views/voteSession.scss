@@ -190,6 +190,48 @@
     margin: 0 40px;
   }
 
+  .participants-count {
+    .assembl-icon-profil:before {
+      font-size: 40px;
+      margin-bottom: 12px;
+    }
+  }
+
+  .proposal-results {
+    .participants-count {
+      background-color: $page-bkg-grey;
+      margin: 30px 0;
+      height: 160px;
+    }
+
+    .doughnut-container {
+      margin: 0 auto;
+      height: 150px;
+      width: 150px;
+      padding: 10px 0 0;
+      position: relative;
+
+      .doughnut {
+        .circle {
+          stroke-width: 18px;
+        }
+      }
+
+      .doughnut-totalCount {
+        position: absolute;
+        top: 60px;
+        left: 54px;
+        font-size: $font-size-s;
+
+        .vote-totalCount {
+          font-size: $font-size-sm;
+          font-weight: bold;
+          font-family: $font-family3;
+        }
+      }
+    }
+  }
+
   .votes-in-progress {
     margin: 0 40px;
     padding: 0 15px 30px;
@@ -199,34 +241,29 @@
       height: 160px;
     }
 
-    .participants-count {
-      .assembl-icon-profil:before {
-        font-size: 40px;
-        margin-bottom: 12px;
-      }
-    }
-
     .doughnut-container {
       margin: 0 auto;
       height: 80px;
       width: 80px;
       padding: 10px 0 0;
+      position: relative;
 
       .doughnut {
         .circle {
           stroke-width: 18px;
         }
       }
-    }
 
-    .doughnut-totalCount {
-      margin-top: -44px;
-      font-size: $font-size-xxs;
+      .doughnut-totalCount {
+        position: absolute;
+        top: 33px;
+        left: 24px;
+        font-size: $font-size-xxs;
 
-      .vote-totalCount {
-        font-size: $font-size-xs;
-        font-family: $font-family3;
-        margin-bottom: -3px;
+        .vote-totalCount {
+          font-size: $font-size-xs;
+          font-family: $font-family3;
+        }
       }
     }
   }

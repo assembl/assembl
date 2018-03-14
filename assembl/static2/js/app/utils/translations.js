@@ -309,8 +309,11 @@ const Translations = {
         body: "Message"
       },
       voteSession: {
-        votesTotal: "Répartition actuelle des jetons",
+        currentTokenDistribution: "Répartition actuelle des jetons",
+        tokenDistribution: "Répartition des votes",
         estimate: "Estimation moyenne",
+        isCompleted: "La phase de vote est désormais terminée. Nous vous remercions d'avoir participé !",
+        voteResultsPlusTitle: "Résultats des votes : %{title}",
         noVoteSession: {
           title: "La session de vote n'est pas configurée",
           text: "Un administrateur doit configurer la session de vote"
@@ -898,8 +901,11 @@ const Translations = {
         body: "Comment"
       },
       voteSession: {
-        votesTotal: "Current distribution of tokens",
+        currentTokenDistribution: "Current distribution of tokens",
+        tokenDistribution: "Distribution of votes",
         estimate: "Average estimate",
+        isCompleted: "This vote phase is closed. Thank you for your participation!",
+        voteResultsPlusTitle: "Vote results: %{title}",
         noVoteSession: {
           title: "Vote session is not configured",
           text: "An administrator must configure the vote session"
