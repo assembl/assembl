@@ -48,15 +48,6 @@ exports[`ModulesSection component should render a form to set up a gauge and a n
       bsClass="dropdown"
       disabled={false}
       divider={false}
-      eventKey={1}
-      header={false}
-    >
-      1
-    </MenuItem>
-    <MenuItem
-      bsClass="dropdown"
-      disabled={false}
-      divider={false}
       eventKey={2}
       header={false}
     >
@@ -224,15 +215,6 @@ exports[`ModulesSection component should render a form to set up a gauge and a t
     required={true}
     title={2}
   >
-    <MenuItem
-      bsClass="dropdown"
-      disabled={false}
-      divider={false}
-      eventKey={1}
-      header={false}
-    >
-      1
-    </MenuItem>
     <MenuItem
       bsClass="dropdown"
       disabled={false}
@@ -414,15 +396,6 @@ exports[`ModulesSection component should render a gauge form with no radio if ca
     required={true}
     title={2}
   >
-    <MenuItem
-      bsClass="dropdown"
-      disabled={false}
-      divider={false}
-      eventKey={1}
-      header={false}
-    >
-      1
-    </MenuItem>
     <MenuItem
       bsClass="dropdown"
       disabled={false}

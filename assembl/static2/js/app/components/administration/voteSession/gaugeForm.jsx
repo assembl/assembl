@@ -164,9 +164,9 @@ const DumbGaugeForm = ({
         })
       }
     >
-      {range(10).map(value => (
-        <MenuItem key={`gauge-notch-${value + 1}`} eventKey={value + 1}>
-          {value + 1}
+      {range(2, 11).map(value => (
+        <MenuItem key={`gauge-notch-${value}`} eventKey={value}>
+          {value}
         </MenuItem>
       ))}
     </SplitButton>
