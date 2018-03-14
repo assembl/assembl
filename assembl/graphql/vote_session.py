@@ -473,7 +473,6 @@ class UpdateTokenVoteSpecification(graphene.Mutation):
                         update_langstring_from_input_entries(
                             token_category, 'name', token_category_input['title_entries'])
                         token_category.total_number = token_category_input.get('total_number')
-                        token_category.typename = token_category_input.get('typename', 'category{}'.format(idx + 1))
                         token_category.color = token_category_input.get('color')
                     else:
                         title_ls = langstring_from_input_entries(
