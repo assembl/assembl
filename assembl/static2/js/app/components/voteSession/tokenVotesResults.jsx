@@ -33,7 +33,6 @@ const TokenVotesResults = ({ categories, tokenVotes, numVotes }: Props) => {
       votes[vote.tokenCategoryId] = vote.numToken;
     }
   });
-  console.log(votes);
   const elements = categories
     .map((category) => {
       if (category) {
