@@ -66,11 +66,11 @@ const DumbVoteProposalForm = ({
   const handleTitleChange = e => updateTitle(editLocale, e.target.value);
   const handleDescriptionChange = value => updateDescription(editLocale, value);
 
-  const moduleIsSelected = moduleTemplateId =>
-    proposalModules.some(m => m.get('voteSpecTemplateId') === moduleTemplateId && !m.get('_toDelete'));
+  const moduleIsSelected = voteSpecTemplateId =>
+    proposalModules.some(m => m.get('voteSpecTemplateId') === voteSpecTemplateId && !m.get('_toDelete'));
 
-  const toggleModule = (moduleTemplateId) => {
-    const pModule = proposalModules.find(m => m.get('voteSpecTemplateId') === moduleTemplateId);
+  const toggleModule = (voteSpecTemplateId) => {
+    const pModule = proposalModules.find(m => m.get('voteSpecTemplateId') === voteSpecTemplateId);
     if (pModule) {
       if (pModule.get('_toDelete')) {
         reactivateModule(pModule.get('id'));
@@ -78,7 +78,7 @@ const DumbVoteProposalForm = ({
         deassociateModuleToProposal(pModule.get('id'));
       }
     } else {
-      associateModuleToProposal(moduleTemplateId);
+      associateModuleToProposal(voteSpecTemplateId);
     }
   };
 
@@ -146,24 +146,24 @@ const DumbVoteProposalForm = ({
         type="rich-text"
         required
       />
-      {tokenModules.map(moduleTemplateId => (
+      {tokenModules.map(voteSpecTemplateId => (
         <Checkbox
-          key={moduleTemplateId}
-          checked={moduleIsSelected(moduleTemplateId)}
-          onChange={() => toggleModule(moduleTemplateId)}
+          key={voteSpecTemplateId}
+          checked={moduleIsSelected(voteSpecTemplateId)}
+          onChange={() => toggleModule(voteSpecTemplateId)}
         >
           <Translate value="administration.voteProposals.tokenVote" />
         </Checkbox>
       ))}
-      {gaugeModules.map((moduleTemplateId, idx) => {
+      {gaugeModules.map((voteSpecTemplateId, idx) => {
         const number = gaugeModules.size > 1 ? idx + 1 : '';
-        const pModule = proposalModules.find(m => m.get('voteSpecTemplateId') === moduleTemplateId);
+        const pModule = proposalModules.find(m => m.get('voteSpecTemplateId') === voteSpecTemplateId);
         return (
-          <div key={moduleTemplateId}>
+          <div key={voteSpecTemplateId}>
             <Checkbox
               className="inline"
-              checked={moduleIsSelected(moduleTemplateId)}
-              onChange={() => toggleModule(moduleTemplateId)}
+              checked={moduleIsSelected(voteSpecTemplateId)}
+              onChange={() => toggleModule(voteSpecTemplateId)}
             >
               <Translate value="administration.voteProposals.gauge" number={number} />
             </Checkbox>

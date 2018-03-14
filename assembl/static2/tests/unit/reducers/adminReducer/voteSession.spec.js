@@ -298,7 +298,7 @@ describe('voteSession admin reducers', () => {
       const state = Map({ proposal1: proposal1 });
       const action = {
         id: 'module42',
-        moduleTemplateId: 'template2',
+        voteSpecTemplateId: 'template2',
         proposalId: 'proposal1',
         type: actionTypes.ADD_MODULE_TO_PROPOSAL
       };
@@ -331,7 +331,7 @@ describe('voteSession admin reducers', () => {
           tokenCategories: [],
           voteType: 'tokens',
           id: 'module42',
-          moduleTemplateId: 'template2',
+          voteSpecTemplateId: 'template2',
           proposalId: 'proposal1'
         }
       });
@@ -347,7 +347,7 @@ describe('voteSession admin reducers', () => {
           tokenCategories: [],
           voteType: 'tokens',
           id: 'module42',
-          moduleTemplateId: 'template2',
+          voteSpecTemplateId: 'template2',
           proposalId: 'proposal1'
         }
       };
@@ -380,7 +380,7 @@ describe('voteSession admin reducers', () => {
           exclusiveCategories: false,
           votetype: 'tokens',
           id: 'module42',
-          moduleTemplateId: 'template2',
+          voteSpecTemplateId: 'template2',
           proposalId: 'proposal3'
         }
       });
@@ -411,7 +411,7 @@ describe('voteSession admin reducers', () => {
           exclusiveCategories: true,
           votetype: 'tokens',
           id: 'module42',
-          moduleTemplateId: 'template2',
+          voteSpecTemplateId: 'template2',
           proposalId: 'proposal3'
         }
       };
@@ -430,7 +430,7 @@ describe('voteSession admin reducers', () => {
           exclusiveCategories: false,
           votetype: 'tokens',
           id: 'module42',
-          moduleTemplateId: 'template2',
+          voteSpecTemplateId: 'template2',
           proposalId: 'proposal3'
         }
       });
@@ -450,7 +450,7 @@ describe('voteSession admin reducers', () => {
           exclusiveCategories: false,
           votetype: 'tokens',
           id: 'module42',
-          moduleTemplateId: 'template2',
+          voteSpecTemplateId: 'template2',
           proposalId: 'proposal3'
         }
       };
@@ -628,7 +628,7 @@ describe('voteSession admin reducers', () => {
           tokenCategories: [],
           voteType: 'tokens'
         },
-        moduleTemplateId: 'template2',
+        voteSpecTemplateId: 'template2',
         proposalId: 'proposal1',
         type: actionTypes.ADD_MODULE_TO_PROPOSAL
       };
@@ -656,7 +656,7 @@ describe('voteSession admin reducers', () => {
           tokenCategories: [],
           voteType: 'tokens',
           id: 'module42',
-          moduleTemplateId: 'template2',
+          voteSpecTemplateId: 'template2',
           proposalId: 'proposal1'
         }
       });
@@ -672,7 +672,7 @@ describe('voteSession admin reducers', () => {
           tokenCategories: [],
           voteType: 'tokens',
           id: 'module42',
-          moduleTemplateId: 'template2',
+          voteSpecTemplateId: 'template2',
           proposalId: 'proposal1'
         }
       };

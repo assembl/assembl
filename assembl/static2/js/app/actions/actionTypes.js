@@ -489,7 +489,7 @@ export type UpdateGaugeUnit = {
 
 export type AddModuleToProposal = {
   id: string,
-  moduleTemplateId: string,
+  voteSpecTemplateId: string,
   proposalId: string,
   type: typeof ADD_MODULE_TO_PROPOSAL
 };

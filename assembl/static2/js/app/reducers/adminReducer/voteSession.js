@@ -339,7 +339,7 @@ export const modulesById = (state: Map<string, Map> = Map(), action: ReduxAction
         _isNew: true,
         _toDelete: false,
         _hasChanged: false,
-        voteSpecTemplateId: action.moduleTemplateId
+        voteSpecTemplateId: action.voteSpecTemplateId
       })
     );
   case UNDELETE_MODULE:

@@ -255,11 +255,11 @@ export const moveProposalDown = (id: string): actionTypes.MoveProposalDown => ({
 export const addModuleToProposal = (
   id: string,
   proposalId: string,
-  moduleTemplateId: string
+  voteSpecTemplateId: string
 ): actionTypes.AddModuleToProposal => ({
   id: id,
   proposalId: proposalId,
-  moduleTemplateId: moduleTemplateId,
+  voteSpecTemplateId: voteSpecTemplateId,
   type: actionTypes.ADD_MODULE_TO_PROPOSAL
 });
 
