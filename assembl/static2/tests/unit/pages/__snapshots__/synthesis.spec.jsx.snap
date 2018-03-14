@@ -17,6 +17,29 @@ exports[`Synthesis component should match Synthesis snapshot 1`] = `
       componentClass="div"
       fluid={true}
     >
+      <SideMenu
+        descendants={Array []}
+        rootIdeas={
+          Array [
+            Object {
+              "ancestors": Array [],
+              "id": "barId",
+              "img": Object {
+                "externalUrl": "http://foo.com/bar",
+              },
+              "numContributors": 0,
+              "numPosts": 0,
+              "phaseIdentifier": "paseId",
+              "posts": Object {
+                "edges": Array [],
+              },
+              "synthesisTitle": "Foo",
+              "title": "Bar",
+            },
+          ]
+        }
+        synthesisPostId={undefined}
+      />
       <Row
         bsClass="row"
         className="background-grey synthesis-tree"

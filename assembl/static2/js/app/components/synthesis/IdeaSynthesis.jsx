@@ -96,7 +96,7 @@ const IdeaSynthesis = (props: { idea: SynthesisIdea, hasSiblings: boolean, level
     />
   );
   return (
-    <div className={`${'idea-synthesis idea-synthesis-level-'}${level}`}>
+    <div className={`${'idea-synthesis idea-synthesis-level-'}${level}`} id={idea.id}>
       <SynthesisImage level={level} imgUrl={imgUrl} stats={stats} />
       <SynthesisBody value={idea.synthesisTitle} hasSiblings={hasSiblings} level={level} stats={level >= 3 ? stats : null} />
     </div>

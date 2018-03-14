@@ -10,17 +10,19 @@ import SynthesisQuery from '../graphql/SynthesisQuery.graphql';
 import withLoadingIndicator from '../components/common/withLoadingIndicator';
 import IdeaSynthesisTree from '../components/synthesis/IdeaSynthesisTree';
 import { getPartialTree, getChildren } from '../utils/tree';
+import SideMenu from '../components/common/sideMenu';
 
 type SynthesisProps = {
   synthesis: Object,
-  routeParams: Object
+  routeParams: Object,
+  synthesisPostId: string
 };
 
 export class DumbSynthesis extends React.Component<void, SynthesisProps, void> {
   props: SynthesisProps;
 
   render() {
-    const { synthesis, routeParams } = this.props;
+    const { synthesis, routeParams, synthesisPostId } = this.props;
     const { introduction, conclusion, ideas, subject } = synthesis;
     const sortedIdeas = [...ideas].sort((a, b) => {
       if (a.live.order < b.live.order) {
@@ -38,6 +40,12 @@ export class DumbSynthesis extends React.Component<void, SynthesisProps, void> {
         <div className="background-light">
           <Header title={subject} imgUrl={synthesis.img ? synthesis.img.externalUrl : ''} additionalHeaderClasses="left" />
           <Grid fluid>
+            <SideMenu
+              // TODO: find better names for these props
+              rootIdeas={roots}
+              descendants={descendants}
+              synthesisPostId={synthesisPostId}
+            />
             {introduction && (
               <Section title="introduction" translate className="synthesis-block">
                 <Row>
@@ -93,7 +101,8 @@ export default compose(
         return { loading: true };
       }
       return {
-        synthesis: data.synthesisPost.publishesSynthesis
+        synthesis: data.synthesisPost.publishesSynthesis,
+        synthesisPostId: data.synthesisPost.id
       };
     }
   }),

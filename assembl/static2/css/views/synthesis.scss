@@ -1,4 +1,33 @@
 .synthesis-page {
+  .synthesis-side-menu {
+    position: fixed;
+    background-color: $white;
+    padding: 30px 10px;
+    width: 24%;
+
+    .side-menu-link {
+      overflow: auto;
+    }
+
+    .child-link {
+      margin-left: 20px;
+    }
+
+    .dark-title-2 {
+      font-family: $font-family;
+      font-size: $font-size-m;
+    }
+
+    .dark-title-4 {
+      font-size: $font-size-s;
+      line-height: $line-height;
+    }
+
+    .dark-title-3 {
+      font-size: $font-size-xs;
+    }
+  }
+
   .header-section {
     height: 500px;
   }
