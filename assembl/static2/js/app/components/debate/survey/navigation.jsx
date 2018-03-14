@@ -101,7 +101,10 @@ class Navigation extends React.Component {
   }
 
   displayPagination() {
-    const navbarHeight = document.getElementById('timeline').clientHeight;
+    let navbarHeight = 0;
+    if (document.getElementById('timeline') != null) {
+      navbarHeight = document.getElementById('timeline').clientHeight;
+    }
     const questionsOffset = this.getQuestionsOffset(this.state.questionsLength);
     if (!questionsOffset) {
       return;
@@ -119,7 +122,10 @@ class Navigation extends React.Component {
   }
 
   scrollToQuestion(questionIndex) {
-    const navbarHeight = document.getElementById('timeline').clientHeight;
+    let navbarHeight = 0;
+    if (document.getElementById('timeline') != null) {
+      navbarHeight = document.getElementById('timeline').clientHeight;
+    }
     let target;
     if (questionIndex > this.state.questionsLength) {
       target = document.getElementById('proposals');
