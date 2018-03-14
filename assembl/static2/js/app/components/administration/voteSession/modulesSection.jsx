@@ -91,9 +91,9 @@ const DumbModulesSection = ({
                     handleGaugeSelectChange(eventKey, gaugeModules.size, newId, gModule);
                   }}
                 >
-                  {range(10).map(value => (
-                    <MenuItem key={`gauge-item-${value + 1}`} eventKey={value + 1}>
-                      {value + 1}
+                  {range(1, 11).map(value => (
+                    <MenuItem key={`gauge-item-${value}`} eventKey={value}>
+                      {value}
                     </MenuItem>
                   ))}
                 </SplitButton>
