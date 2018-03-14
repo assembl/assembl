@@ -6,7 +6,7 @@ import { Link, browserHistory } from 'react-router';
 import { NavDropdown, MenuItem } from 'react-bootstrap';
 import { getContextual, get } from '../../utils/routeMap';
 import UserQuery from '../../graphql/userQuery.graphql';
-import withLoadingIndicator from './withLoadingIndicator';
+import withoutLoadingIndicator from './withoutLoadingIndicator';
 
 class ProfileIcon extends React.Component {
   constructor(props) {
@@ -90,5 +90,5 @@ export default compose(
       };
     }
   }),
-  withLoadingIndicator()
+  withoutLoadingIndicator()
 )(ProfileIcon);
