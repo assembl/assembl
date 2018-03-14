@@ -81,9 +81,10 @@ export type UserTokenVotes = Map<string, UserTokenVotesForProposal>; // key is p
 export type UserGaugeVotes = Map<string, UserGaugeVotesForProposal>; // key is proposalId
 
 type State = {
+  submitting: boolean,
+  availableTokensSticky: boolean,
   userTokenVotes: UserTokenVotes,
-  userGaugeVotes: UserGaugeVotes,
-  availableTokensSticky: boolean
+  userGaugeVotes: UserGaugeVotes
 };
 
 // $FlowFixMe: if voteType === 'token_vote_specification', we know it is a TokenVoteSpecification
@@ -110,6 +111,7 @@ class DumbVoteSession extends React.Component<void, Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
+      submitting: true,
       availableTokensSticky: false,
       userTokenVotes: Map(),
       userGaugeVotes: Map()
@@ -169,7 +171,8 @@ class DumbVoteSession extends React.Component<void, Props, State> {
   voteForProposalToken = (proposalId: string, tokenVoteModuleId: string, categoryId: string, value: number): void => {
     const setVote = () =>
       this.setState({
-        userTokenVotes: this.state.userTokenVotes.setIn([proposalId, tokenVoteModuleId, categoryId], value)
+        userTokenVotes: this.state.userTokenVotes.setIn([proposalId, tokenVoteModuleId, categoryId], value),
+        submitting: false
       });
     promptForLoginOr(setVote)();
   };
@@ -177,7 +180,8 @@ class DumbVoteSession extends React.Component<void, Props, State> {
   voteForProposalGauge = (proposalId: string, voteSpecificationId: string, value: number): void => {
     const setVote = () =>
       this.setState({
-        userGaugeVotes: this.state.userGaugeVotes.setIn([proposalId, voteSpecificationId], value)
+        userGaugeVotes: this.state.userGaugeVotes.setIn([proposalId, voteSpecificationId], value),
+        submitting: false
       });
     promptForLoginOr(setVote)();
   };
@@ -221,6 +225,7 @@ class DumbVoteSession extends React.Component<void, Props, State> {
 
   submitVotes = () => {
     const { addTokenVote, addGaugeVote, refetchVoteSession } = this.props;
+    this.setState({ submitting: true });
     this.state.userTokenVotes.forEach((voteSpecs, proposalId) => {
       voteSpecs.forEach((tokenCategories, voteSpecId) => {
         tokenCategories.forEach((voteValue, tokenCategoryId) => {
@@ -334,7 +339,7 @@ class DumbVoteSession extends React.Component<void, Props, State> {
             <Row className="form-actions center">
               <Col mdOffset={1} md={10} smOffset={1} sm={10}>
                 {this.displaySubmitButton() ? (
-                  <Button className="button-submit button-dark" onClick={this.submitVotes}>
+                  <Button className="button-submit button-dark" onClick={this.submitVotes} disabled={this.state.submitting}>
                     <Translate value="debate.voteSession.submit" />
                   </Button>
                 ) : null}
