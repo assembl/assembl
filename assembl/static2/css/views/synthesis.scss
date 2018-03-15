@@ -5,6 +5,14 @@
     padding: 30px 10px;
     width: 24%;
 
+    .caret {
+      margin-top: 8px;
+    }
+
+    .active-caret {
+      transform: rotate(180deg);
+    }
+
     .side-menu-link {
       overflow: auto;
     }
@@ -13,18 +21,24 @@
       margin-left: 20px;
     }
 
-    .dark-title-2 {
+    .dark-title-4 {
       font-family: $font-family;
       font-size: $font-size-m;
     }
 
-    .dark-title-4 {
+    .dark-title-5 {
       font-size: $font-size-s;
-      line-height: $line-height;
+      color: $first-color;
+      line-height: 22px;
+      font-family: $font-family3;
+      letter-spacing: 2px;
+      padding: 4px 0;
     }
 
     .dark-title-3 {
       font-size: $font-size-xs;
+      line-height: 20px;
+      font-family: $font-family3;
     }
   }
 

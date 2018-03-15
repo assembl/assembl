@@ -203,7 +203,8 @@ const Translations = {
     synthesis: {
       title: "synthèse",
       seeConversation: "Voir la conversation",
-      noSynthesisYet: "Il n'y a pas encore de synthèse disponible."
+      noSynthesisYet: "Il n'y a pas encore de synthèse disponible.",
+      summary: "Sommaire"
     },
     common: {
       attachFileForm: {
@@ -794,7 +795,8 @@ const Translations = {
     synthesis: {
       title: "synthesis",
       seeConversation: "See the conversation",
-      noSynthesisYet: "There is no synthesis available yet."
+      noSynthesisYet: "There is no synthesis available yet.",
+      summary: "Summary"
     },
     debate: {
       answer: "I answer:",
