@@ -106,6 +106,7 @@ const DumbPageForm = ({
                 handleChange={handleHeaderImageChange}
                 withPreview
               />
+              <Translate value="administration.imageRequirements" className="file-uploader-warning" />
             </FormGroup>
           </form>
           <div className="separator" />

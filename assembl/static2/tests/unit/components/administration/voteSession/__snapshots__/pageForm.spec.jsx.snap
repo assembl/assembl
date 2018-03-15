@@ -83,6 +83,10 @@ exports[`Vote Session DumbPageForm component should render a form to update the 
             name="header-image"
             withPreview={true}
           />
+          <Translate
+            className="file-uploader-warning"
+            value="administration.imageRequirements"
+          />
         </FormGroup>
       </form>
       <div
