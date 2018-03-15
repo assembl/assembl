@@ -8,7 +8,7 @@ import { addVoteProposalTooltip } from '../../common/tooltips';
 import { createVoteProposalAndModules } from '../../../actions/adminActions/voteSession';
 import SectionTitle from '../sectionTitle';
 import VoteProposalForm from './voteProposalForm';
-import { getDiscussionSlug } from '../../../utils/globalFunctions';
+import { createRandomId, getDiscussionSlug } from '../../../utils/globalFunctions';
 import { get } from '../../../utils/routeMap';
 
 type VoteProposalsSectionProps = {
@@ -63,7 +63,7 @@ const mapStateToProps = ({ admin }) => {
 
 const mapDispatchToProps = dispatch => ({
   addVoteProposal: () => {
-    const newProposalId = Math.round(Math.random() * -1000000).toString();
+    const newProposalId = createRandomId();
     dispatch(createVoteProposalAndModules(newProposalId));
   }
 });

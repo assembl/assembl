@@ -15,6 +15,7 @@ import {
   updateTokenVoteExclusiveCategory,
   markAllDependenciesAsChanged
 } from '../../../actions/adminActions/voteSession';
+import { createRandomId } from '../../../utils/globalFunctions';
 
 type TokensFormProps = {
   id: string,
@@ -121,7 +122,7 @@ const mapDispatchToProps = (dispatch, { id, editLocale }) => ({
     const newTokenCategoryNumber = value - tokenCategoryNumber;
     if (value > tokenCategoryNumber) {
       for (let i = 0; i < newTokenCategoryNumber; i += 1) {
-        const newId = Math.round(Math.random() * -1000000).toString();
+        const newId = createRandomId();
         dispatch(createTokenVoteCategory(newId, id));
       }
     } else {

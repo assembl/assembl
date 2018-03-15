@@ -14,6 +14,7 @@ import {
   deleteVoteModule,
   updateVoteSessionPageSeeCurrentVotes
 } from '../../../actions/adminActions/voteSession';
+import { createRandomId } from '../../../utils/globalFunctions';
 
 type ModulesSectionProps = {
   tokenModules: Object,
@@ -40,7 +41,7 @@ const DumbModulesSection = ({
   const gaugeModuleChecked = gaugeModules.size > 0;
   const tModule = tokenModules.toJS();
   const gModule = gaugeModules.toJS();
-  const newId = Math.round(Math.random() * -1000000).toString();
+  const newId = createRandomId();
 
   return (
     <div className="admin-box">
