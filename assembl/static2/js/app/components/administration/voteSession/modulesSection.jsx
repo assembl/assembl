@@ -39,8 +39,8 @@ const DumbModulesSection = ({
 }: ModulesSectionProps) => {
   const activeTokenModulesIds = tokenModules.filter(m => !m.get('_toDelete')).map(m => m.get('id'));
   const activeGaugeModulesIds = gaugeModules.filter(m => !m.get('_toDelete')).map(m => m.get('id'));
-  const tokenModuleChecked = activeTokenModulesIds.size > 0;
-  const gaugeModuleChecked = activeGaugeModulesIds.size > 0;
+  const tokenModuleChecked = activeTokenModulesIds.size > 0 || false;
+  const gaugeModuleChecked = activeGaugeModulesIds.size > 0 || false;
 
   return (
     <div className="admin-box">
@@ -70,7 +70,7 @@ const DumbModulesSection = ({
             >
               <Helper
                 label={I18n.t('administration.voteWithGauges')}
-                helperUrl="/static2/img/helpers/helper3.png" // TODO: add an actual screenshot
+                helperUrl="/static2/img/helpers/helper3.png"
                 helperText={I18n.t('administration.gaugeVoteCheckbox')}
                 classname="inline checkbox-title"
               />
@@ -100,30 +100,32 @@ const DumbModulesSection = ({
               </div>
             ) : null}
             {activeGaugeModulesIds.map((id, index) => <GaugeForm key={id} index={index} id={id} editLocale={editLocale} />)}
-            <div className="margin-m">
-              <label htmlFor="seeCurrentVotes">
-                <Translate value="administration.seeCurrentVotes" />
-              </label>
-              <Radio
-                id="seeCurrentVotes"
-                onChange={() => {
-                  handleSeeCurrentVotesChange(true);
-                }}
-                checked={seeCurrentVotes}
-                name="seeCurrentVotes"
-              >
-                <Translate value="yes" />
-              </Radio>
-              <Radio
-                onChange={() => {
-                  handleSeeCurrentVotesChange(false);
-                }}
-                checked={!seeCurrentVotes}
-                name="seeCurrentVotes"
-              >
-                <Translate value="no" />
-              </Radio>
-            </div>
+            {(tokenModuleChecked || gaugeModuleChecked) && (
+              <div className="margin-m">
+                <label htmlFor="seeCurrentVotes">
+                  <Translate value="administration.seeCurrentVotes" />
+                </label>
+                <Radio
+                  id="seeCurrentVotes"
+                  onChange={() => {
+                    handleSeeCurrentVotesChange(true);
+                  }}
+                  checked={seeCurrentVotes}
+                  name="seeCurrentVotes"
+                >
+                  <Translate value="yes" />
+                </Radio>
+                <Radio
+                  onChange={() => {
+                    handleSeeCurrentVotesChange(false);
+                  }}
+                  checked={!seeCurrentVotes}
+                  name="seeCurrentVotes"
+                >
+                  <Translate value="no" />
+                </Radio>
+              </div>
+            )}
           </div>
         </div>
       </div>

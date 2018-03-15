@@ -989,7 +989,7 @@ const Translations = {
         "1": "Configure the voting modules",
         "2": "Configure the voting proposals"
       },
-      imageRequirements: "The image must have a height of 480 px and a width of 1280px. Its size has to be under 1 Mo.",
+      imageRequirements: "The image must have a height of 480 px and a width of 1280px. Its size has to be under 1 MB.",
       voteWithTokens: "Tokens vote",
       voteWithGauges: "Gauge(s) vote",
       gauge: "Gauge %{number}",

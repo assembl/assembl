@@ -272,44 +272,6 @@ exports[`ModulesSection component should render a ModulesSection component witho
         </Checkbox>
         Immutable.List [
         ]
-        <div
-          className="margin-m"
-        >
-          <label
-            htmlFor="seeCurrentVotes"
-          >
-            <Translate
-              value="administration.seeCurrentVotes"
-            />
-          </label>
-          <Radio
-            bsClass="radio"
-            checked={false}
-            disabled={false}
-            id="seeCurrentVotes"
-            inline={false}
-            name="seeCurrentVotes"
-            onChange={[Function]}
-            title=""
-          >
-            <Translate
-              value="yes"
-            />
-          </Radio>
-          <Radio
-            bsClass="radio"
-            checked={true}
-            disabled={false}
-            inline={false}
-            name="seeCurrentVotes"
-            onChange={[Function]}
-            title=""
-          >
-            <Translate
-              value="no"
-            />
-          </Radio>
-        </div>
       </div>
     </div>
   </div>
