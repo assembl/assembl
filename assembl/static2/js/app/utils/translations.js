@@ -431,7 +431,7 @@ const Translations = {
       proposalsSectionTitle: "Titre de la section",
       voteModulesIntroText1: "Vous avez choisi le dispositif de vote.",
       voteModulesIntroText2: "Pour modifier votre choix, modifiez la ",
-      timeline: "ligne de temps du débat",
+      timeline: "ligne de temps",
       voteProposals: {
         sectionTitle: "Configurer les propositions associées aux modules de vote",
         defineProposal: "Définir proposition %{number}",
@@ -1005,7 +1005,7 @@ const Translations = {
       proposalsSectionTitle: "Title of the section",
       voteModulesIntroText1: "You chose the vote module",
       voteModulesIntroText2: "To modify your choice, modify the ",
-      timeline: "timeline of the debate",
+      timeline: "timeline",
       gaugeNumber: "Gauge number",
       defineGaugeNumer: "Define gauges number",
       minValue: "Minimum value",
