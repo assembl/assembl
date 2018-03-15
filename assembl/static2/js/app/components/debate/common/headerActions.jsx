@@ -6,12 +6,15 @@ import { Tooltip } from 'react-bootstrap';
 import Like from '../../svg/like';
 import Disagree from '../../svg/disagree';
 import Doughnut from '../../svg/doughnut';
-import { openShareModal } from '../../../utils/utilityManager';
+import { openShareModal, promptForLoginOr, displayModal } from '../../../utils/utilityManager';
+import { getIfPhaseCompletedByIdentifier } from '../../../utils/timeline';
 
 type Props = {
   routerParams: Map<string>,
   ideaId: string,
-  useSocialMedia: boolean
+  useSocialMedia: boolean,
+  timeline: Array<Object>,
+  identifier: string
 };
 
 const createTooltip = (category, count, color) => (
@@ -36,7 +39,24 @@ const elements = [
 
 const totalCount = elements.reduce((result, element) => result + element.count, 0);
 
-const headerActions = ({ routerParams, ideaId, useSocialMedia }: Props) => {
+const voteOnThematic = () => {
+  // TODO add themutation here
+};
+
+const headerActions = ({ routerParams, ideaId, useSocialMedia, timeline, identifier }: Props) => {
+  const handleClick = () => {
+    const isPhaseCompleted = getIfPhaseCompletedByIdentifier(timeline, identifier);
+    if (isPhaseCompleted) {
+      const body = (
+        <div>
+          <Translate value="debate.isCompleted" />
+        </div>
+      );
+      displayModal(null, body, true, null, null, true);
+    } else {
+      promptForLoginOr(voteOnThematic)();
+    }
+  };
   const modalTitle = <Translate value="debate.shareThematic" />;
   return (
     <div className="header-actions-container">
@@ -58,13 +78,23 @@ const headerActions = ({ routerParams, ideaId, useSocialMedia }: Props) => {
           <Translate value="debate.share" />
         </div>
       </div>
-      <div className="like-button action-button">
+      <div
+        className="like-button action-button"
+        onClick={() => {
+          handleClick();
+        }}
+      >
         <Like size={30} color="#ffffff" backgroundColor="none" />
         <div className="action-button-label">
           <Translate value="debate.agree" />
         </div>
       </div>
-      <div className="disagree-button action-button">
+      <div
+        className="disagree-button action-button"
+        onClick={() => {
+          handleClick();
+        }}
+      >
         <Disagree size={30} color="#ffffff" backgroundColor="none" />
         <div className="action-button-label">
           <Translate value="debate.disagree" />
@@ -86,7 +116,8 @@ const headerActions = ({ routerParams, ideaId, useSocialMedia }: Props) => {
 const mapStateToProps = ({ debate }) => {
   const { debateData } = debate;
   return {
-    useSocialMedia: debateData.useSocialMedia
+    useSocialMedia: debateData.useSocialMedia,
+    timeline: debateData.timeline
   };
 };
 

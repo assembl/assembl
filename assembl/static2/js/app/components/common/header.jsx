@@ -27,7 +27,7 @@ class Header extends React.Component {
               </h6>
             )}
           </div>
-          <HeaderActions ideaId={ideaId} routerParams={routerParams} />
+          <HeaderActions ideaId={ideaId} routerParams={routerParams} identifier={identifier} />
         </Grid>
         <Grid fluid>
           <Row>
