@@ -39,8 +39,8 @@ const DumbModulesSection = ({
 }: ModulesSectionProps) => {
   const activeTokenModulesIds = tokenModules.filter(m => !m.get('_toDelete')).map(m => m.get('id'));
   const activeGaugeModulesIds = gaugeModules.filter(m => !m.get('_toDelete')).map(m => m.get('id'));
-  const tokenModuleChecked = activeTokenModulesIds.size > 0 || false;
-  const gaugeModuleChecked = activeGaugeModulesIds.size > 0 || false;
+  const tokenModuleChecked = activeTokenModulesIds.size > 0;
+  const gaugeModuleChecked = activeGaugeModulesIds.size > 0;
 
   return (
     <div className="admin-box">
