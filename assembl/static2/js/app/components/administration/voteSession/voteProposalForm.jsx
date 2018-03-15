@@ -123,8 +123,8 @@ const DumbVoteProposalForm = ({
         </div>
         {nbProposals > 2 && (
           <OverlayTrigger placement="top" overlay={deleteVoteProposalTooltip}>
-            <Button className="admin-icons">
-              <span className="assembl-icon-delete grey" onClick={confirmModal} />
+            <Button className="admin-icons" onClick={confirmModal}>
+              <span className="assembl-icon-delete grey" />
             </Button>
           </OverlayTrigger>
         )}
