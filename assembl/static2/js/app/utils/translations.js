@@ -452,7 +452,7 @@ const Translations = {
         applyToAllProposalsCheckboxLabel: "Appliquer ces changements à l'ensemble des propositions"
       },
       gaugeVoteInstructions: "Consigne du vote par jauge",
-      propositionSectionTitle: "Titre de la section",
+      proposalSectionTitle: "Titre de la section",
       gaugeNumber: "Nombre de jauges",
       defineGaugeNumer: "Définissez le nombre de jauges",
       minValue: "Valeur minimale",
@@ -995,7 +995,7 @@ const Translations = {
         "The token vote module allows you to select propositions proportionnaly. Each participant has a certain amount of tokens et will have to spread them on the different propositions",
       gaugeVoteCheckbox: "You can choose to have one or several gages",
       headerTitle: "Top page Header",
-      propositionSectionTitle: "Proposals section",
+      proposalSectionTitle: "Proposals section",
       instructions: "Instructions",
       voteSessionHeaderLabel: "Choose the header background image",
       voteSessionSuccess: "The vote session is saved with success.",
@@ -1059,7 +1059,7 @@ const Translations = {
       helpers: {
         voteSessionHeader: "The top page header must contain an image and a title. The subtitle is optional.",
         voteSessionInstructions: "The instructions section must contain a title and a description.",
-        voteSessionProposalsSection: "The proposals section must contain a title.",
+        voteSessionProposalSection: "The proposals section must contain a title.",
         tokenCategoryNumber: "Select the number of different token types for this vote",
         exclusive:
           "You can decide wether the participant can distribute a single type of token (exclusive) or several types of token per proposal.",
