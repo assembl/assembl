@@ -216,7 +216,14 @@ class Idea extends React.Component {
     const view = isMultiColumns ? <ColumnsView {...childProps} routerParams={routerParams} /> : <ThreadView {...childProps} />;
     return (
       <div className="idea">
-        <Header title={title} synthesisTitle={synthesisTitle} imgUrl={headerImgUrl} identifier={identifier} />
+        <Header
+          title={title}
+          synthesisTitle={synthesisTitle}
+          imgUrl={headerImgUrl}
+          identifier={identifier}
+          ideaId={id}
+          routerParams={routerParams}
+        />
         <section className="post-section">
           {!ideaWithPostsData.loading &&
             announcement && (

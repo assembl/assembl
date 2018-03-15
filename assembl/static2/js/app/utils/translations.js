@@ -228,6 +228,7 @@ const Translations = {
       panelTitle: "Bienvenue dans la communauté d'Assembl"
     },
     debate: {
+      shareThematic: "Partagez cette thématique",
       votes: "Votes",
       vote: "Vote",
       answer: "Je réponds :",
@@ -810,6 +811,7 @@ const Translations = {
       noSynthesisYet: "There is no synthesis available yet."
     },
     debate: {
+      shareThematic: "Share this thematic",
       votes: "Votes",
       vote: "Vote",
       answer: "I answer:",

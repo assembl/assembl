@@ -9,7 +9,7 @@ import HeaderActions from '../debate/common/headerActions';
 
 class Header extends React.Component {
   render() {
-    const { title, subtitle, imgUrl, identifier, synthesisTitle, additionalHeaderClasses } = this.props;
+    const { title, subtitle, imgUrl, identifier, synthesisTitle, additionalHeaderClasses, ideaId, routerParams } = this.props;
     const { debateData } = this.props.debate;
     const { locale } = this.props.i18n;
     const isPhaseCompleted = getIfPhaseCompletedByIdentifier(debateData.timeline, identifier);
@@ -27,7 +27,7 @@ class Header extends React.Component {
               </h6>
             )}
           </div>
-          <HeaderActions />
+          <HeaderActions ideaId={ideaId} routerParams={routerParams} />
         </Grid>
         <Grid fluid>
           <Row>
