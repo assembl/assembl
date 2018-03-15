@@ -140,6 +140,7 @@ const DumbVoteProposalForm = ({
         type="text"
       />
       <FormControlWithLabel
+        key={`description-${editLocale}`}
         value={description}
         label={I18n.t('administration.voteProposals.description')}
         onChange={handleDescriptionChange}
