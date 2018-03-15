@@ -685,6 +685,7 @@ def test_mutation_create_proposal(graphql_request, discussion, vote_session, gra
 u'createProposal': {
     u'proposal': {
         u'id': proposal_id,
+        u'order': 1.0,
         u'titleEntries': [
             {u'localeCode': u'en',
              u'value': u'Understanding the dynamics and issues'},
@@ -731,6 +732,7 @@ def test_mutation_update_proposal(graphql_request, discussion, vote_proposal, gr
 u'updateProposal': {
     u'proposal': {
         u'id': proposal_id,
+        u'order': 1.0,
         u'titleEntries': [
             {u'localeCode': u'en',
              u'value': u'Understanding the dynamics and issues (updated)'},

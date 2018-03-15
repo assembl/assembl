@@ -106,6 +106,7 @@ const createVariablesForNumberGaugeMutation: CreateVariablesForNumberGaugeMutati
 });
 
 const createVariablesForProposalsMutation = proposal => ({
+  order: proposal.order,
   voteSessionId: proposal.voteSessionId,
   titleEntries: proposal.titleEntries,
   descriptionEntries: convertEntriesToHTML(proposal.descriptionEntries)
