@@ -108,8 +108,7 @@ const mapStateToProps = (state, { id, editLocale }) => {
     instructions: instructions,
     exclusiveCategories: module.get('exclusiveCategories'),
     tokenCategoryNumber: module.get('tokenCategories').size,
-    tokenCategories: module.get('tokenCategories'),
-    editLocale: editLocale
+    tokenCategories: module.get('tokenCategories')
   };
 };
 
