@@ -169,7 +169,7 @@ const mapDispatchToProps = dispatch => ({
       }
     } else {
       const numberToDelete = activeGaugeModulesIds.size - selectedNumber;
-      activeGaugeModulesIds.forEach((id, index) => {
+      activeGaugeModulesIds.reverse().forEach((id, index) => {
         if (numberToDelete > index) {
           dispatch(deleteVoteModule(id));
         }
