@@ -4,6 +4,7 @@ import { I18n, Translate } from 'react-redux-i18n';
 import { connect } from 'react-redux';
 import { Checkbox, SplitButton, MenuItem, Radio } from 'react-bootstrap';
 import range from 'lodash/range';
+
 import SectionTitle from '../sectionTitle';
 import Helper from '../../common/helper';
 import TokensForm from './tokensForm';
@@ -12,6 +13,7 @@ import {
   createTokenVoteModule,
   createGaugeVoteModule,
   deleteVoteModule,
+  undeleteModule,
   updateVoteSessionPageSeeCurrentVotes
 } from '../../../actions/adminActions/voteSession';
 import { createRandomId } from '../../../utils/globalFunctions';
@@ -20,8 +22,7 @@ type ModulesSectionProps = {
   tokenModules: Object,
   gaugeModules: Object,
   editLocale: string,
-  handleTokenCheckBoxChange: Function,
-  handleGaugeCheckBoxChange: Function,
+  toggleModuleCheckbox: Function,
   handleGaugeSelectChange: Function,
   handleSeeCurrentVotesChange: Function,
   seeCurrentVotes: boolean
@@ -30,18 +31,16 @@ type ModulesSectionProps = {
 const DumbModulesSection = ({
   tokenModules,
   editLocale,
-  handleTokenCheckBoxChange,
   gaugeModules,
-  handleGaugeCheckBoxChange,
   handleGaugeSelectChange,
   handleSeeCurrentVotesChange,
-  seeCurrentVotes
+  seeCurrentVotes,
+  toggleModuleCheckbox
 }: ModulesSectionProps) => {
-  const tokenModuleChecked = tokenModules.size > 0;
-  const gaugeModuleChecked = gaugeModules.size > 0;
-  const tModule = tokenModules.toJS();
-  const gModule = gaugeModules.toJS();
-  const newId = createRandomId();
+  const activeTokenModulesIds = tokenModules.filter(m => !m.get('_toDelete')).map(m => m.get('id'));
+  const activeGaugeModulesIds = gaugeModules.filter(m => !m.get('_toDelete')).map(m => m.get('id'));
+  const tokenModuleChecked = activeTokenModulesIds.size > 0;
+  const gaugeModuleChecked = activeGaugeModulesIds.size > 0;
 
   return (
     <div className="admin-box">
@@ -52,7 +51,7 @@ const DumbModulesSection = ({
             <Checkbox
               checked={tokenModuleChecked}
               onChange={() => {
-                handleTokenCheckBoxChange(tokenModuleChecked, tModule[0], newId);
+                toggleModuleCheckbox(tokenModuleChecked, tokenModules, 'tokens');
               }}
             >
               <Helper
@@ -62,11 +61,11 @@ const DumbModulesSection = ({
                 classname="inline checkbox-title"
               />
             </Checkbox>
-            {tokenModules.map(id => <TokensForm key={id} id={id} editLocale={editLocale} />)}
+            {activeTokenModulesIds.map(id => <TokensForm key={id} id={id} editLocale={editLocale} />)}
             <Checkbox
               checked={gaugeModuleChecked}
               onChange={() => {
-                handleGaugeCheckBoxChange(gaugeModuleChecked, gModule, newId);
+                toggleModuleCheckbox(gaugeModuleChecked, gaugeModules, 'gauge');
               }}
             >
               <Helper
@@ -85,11 +84,11 @@ const DumbModulesSection = ({
                   <Helper helperUrl="/static2/img/helpers/helper2.png" helperText={I18n.t('administration.defineGaugeNumer')} />
                 </div>
                 <SplitButton
-                  title={gaugeModules.size}
+                  title={activeGaugeModulesIds.size}
                   id="input-dropdown-addon"
                   required
                   onSelect={(eventKey) => {
-                    handleGaugeSelectChange(eventKey, gaugeModules.size, newId, gModule);
+                    handleGaugeSelectChange(eventKey, activeGaugeModulesIds);
                   }}
                 >
                   {range(1, 11).map(value => (
@@ -100,7 +99,7 @@ const DumbModulesSection = ({
                 </SplitButton>
               </div>
             ) : null}
-            {gaugeModules.map((id, index) => <GaugeForm key={id} index={index} id={id} editLocale={editLocale} />)}
+            {activeGaugeModulesIds.map((id, index) => <GaugeForm key={id} index={index} id={id} editLocale={editLocale} />)}
             <div className="margin-m">
               <label htmlFor="seeCurrentVotes">
                 <Translate value="administration.seeCurrentVotes" />
@@ -136,43 +135,41 @@ const mapStateToProps = ({ admin }) => {
   const { modulesInOrder, modulesById, page } = admin.voteSession;
   const { editLocale } = admin;
   return {
-    tokenModules: modulesInOrder.filter(
-      id => modulesById.getIn([id, 'type']) === 'tokens' && !modulesById.getIn([id, '_toDelete'])
-    ),
-    gaugeModules: modulesInOrder.filter(
-      id => modulesById.getIn([id, 'type']) === 'gauge' && !modulesById.getIn([id, '_toDelete'])
-    ),
+    tokenModules: modulesInOrder.map(id => modulesById.get(id)).filter(m => m.get('type') === 'tokens'),
+    gaugeModules: modulesInOrder.map(id => modulesById.get(id)).filter(m => m.get('type') === 'gauge'),
     editLocale: editLocale,
     seeCurrentVotes: page.get('seeCurrentVotes')
   };
 };
 
 const mapDispatchToProps = dispatch => ({
-  handleTokenCheckBoxChange: (checked, id, newId) => {
+  toggleModuleCheckbox: (checked, tokenModules, moduleType) => {
     if (!checked) {
-      dispatch(createTokenVoteModule(newId));
+      if (tokenModules.size > 0) {
+        tokenModules.forEach((m) => {
+          dispatch(undeleteModule(m.get('id')));
+        });
+      } else {
+        const newId = createRandomId();
+        const createAction = moduleType === 'tokens' ? createTokenVoteModule : createGaugeVoteModule;
+        dispatch(createAction(newId));
+      }
     } else {
-      dispatch(deleteVoteModule(id));
-    }
-  },
-  handleGaugeCheckBoxChange: (checked, idArray, newId) => {
-    if (!checked) {
-      dispatch(createGaugeVoteModule(newId));
-    } else {
-      idArray.forEach((id) => {
-        dispatch(deleteVoteModule(id));
+      tokenModules.forEach((m) => {
+        dispatch(deleteVoteModule(m.get('id')));
       });
     }
   },
-  handleGaugeSelectChange: (selectedNumber, gaugeNumber, newId, idArray) => {
-    if (selectedNumber > gaugeNumber) {
-      const numberToCreate = selectedNumber - gaugeNumber;
+  handleGaugeSelectChange: (selectedNumber, activeGaugeModulesIds) => {
+    if (selectedNumber > activeGaugeModulesIds.size) {
+      const numberToCreate = selectedNumber - activeGaugeModulesIds.size;
       for (let i = 0; i < numberToCreate; i += 1) {
+        const newId = createRandomId();
         dispatch(createGaugeVoteModule(newId + i));
       }
     } else {
-      idArray.forEach((id, index) => {
-        const numberToDelete = gaugeNumber - selectedNumber;
+      const numberToDelete = activeGaugeModulesIds.size - selectedNumber;
+      activeGaugeModulesIds.forEach((id, index) => {
         if (numberToDelete > index) {
           dispatch(deleteVoteModule(id));
         }
