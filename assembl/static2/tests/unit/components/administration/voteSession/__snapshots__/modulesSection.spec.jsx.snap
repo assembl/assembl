@@ -55,7 +55,7 @@ exports[`ModulesSection component should render a ModuleSection component with t
           />
         </Checkbox>
         <div
-          className="module-form-margin"
+          className="module-form"
         >
           <div
             className="flex"
