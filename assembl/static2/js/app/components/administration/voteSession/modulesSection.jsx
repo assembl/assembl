@@ -12,6 +12,7 @@ import GaugeForm from './gaugeForm';
 import {
   createTokenVoteModule,
   createGaugeVoteModule,
+  createGaugeVoteChoice,
   deleteVoteModule,
   undeleteModule,
   updateVoteSessionPageSeeCurrentVotes
@@ -144,42 +145,49 @@ const mapStateToProps = ({ admin }) => {
   };
 };
 
-const mapDispatchToProps = dispatch => ({
-  toggleModuleCheckbox: (checked, tokenModules, moduleType) => {
-    if (!checked) {
-      if (tokenModules.size > 0) {
-        tokenModules.forEach((m) => {
-          dispatch(undeleteModule(m.get('id')));
-        });
-      } else {
-        const newId = createRandomId();
-        const createAction = moduleType === 'tokens' ? createTokenVoteModule : createGaugeVoteModule;
-        dispatch(createAction(newId));
-      }
-    } else {
-      tokenModules.forEach((m) => {
-        dispatch(deleteVoteModule(m.get('id')));
-      });
-    }
-  },
-  handleGaugeSelectChange: (selectedNumber, activeGaugeModulesIds) => {
-    if (selectedNumber > activeGaugeModulesIds.size) {
-      const numberToCreate = selectedNumber - activeGaugeModulesIds.size;
-      for (let i = 0; i < numberToCreate; i += 1) {
-        const newId = createRandomId();
-        dispatch(createGaugeVoteModule(newId + i));
-      }
-    } else {
-      const numberToDelete = activeGaugeModulesIds.size - selectedNumber;
-      activeGaugeModulesIds.reverse().forEach((id, index) => {
-        if (numberToDelete > index) {
-          dispatch(deleteVoteModule(id));
+const mapDispatchToProps = (dispatch) => {
+  const createGaugeVoteModuleWithChoices = (newId) => {
+    dispatch(createGaugeVoteModule(newId));
+    dispatch(createGaugeVoteChoice(newId, createRandomId()));
+    dispatch(createGaugeVoteChoice(newId, createRandomId()));
+  };
+
+  return {
+    toggleModuleCheckbox: (checked, tokenModules, moduleType) => {
+      if (!checked) {
+        if (tokenModules.size > 0) {
+          tokenModules.forEach((m) => {
+            dispatch(undeleteModule(m.get('id')));
+          });
+        } else {
+          const newId = createRandomId();
+          const createAction = moduleType === 'tokens' ? createTokenVoteModule : createGaugeVoteModuleWithChoices;
+          dispatch(createAction(newId));
         }
-      });
-    }
-  },
-  handleSeeCurrentVotesChange: checked => dispatch(updateVoteSessionPageSeeCurrentVotes(checked))
-});
+      } else {
+        tokenModules.forEach((m) => {
+          dispatch(deleteVoteModule(m.get('id')));
+        });
+      }
+    },
+    handleGaugeSelectChange: (selectedNumber, activeGaugeModulesIds) => {
+      if (selectedNumber > activeGaugeModulesIds.size) {
+        const numberToCreate = selectedNumber - activeGaugeModulesIds.size;
+        for (let i = 0; i < numberToCreate; i += 1) {
+          createGaugeVoteModuleWithChoices(createRandomId());
+        }
+      } else {
+        const numberToDelete = activeGaugeModulesIds.size - selectedNumber;
+        activeGaugeModulesIds.reverse().forEach((id, index) => {
+          if (numberToDelete > index) {
+            dispatch(deleteVoteModule(id));
+          }
+        });
+      }
+    },
+    handleSeeCurrentVotesChange: checked => dispatch(updateVoteSessionPageSeeCurrentVotes(checked))
+  };
+};
 
 export { DumbModulesSection };
 

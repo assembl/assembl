@@ -231,6 +231,8 @@ const mapDispatchToProps = (dispatch, { id, editLocale }) => ({
   handleNumberGaugeUncheck: () => {
     dispatch(markAllDependenciesAsChanged(id));
     dispatch(updateGaugeVoteIsNumber(id, false));
+    dispatch(createGaugeVoteChoice(id, createRandomId()));
+    dispatch(createGaugeVoteChoice(id, createRandomId()));
   },
   // for number gauge
   handleMinChange: (value) => {
