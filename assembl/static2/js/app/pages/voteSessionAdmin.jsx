@@ -458,6 +458,7 @@ const mapStateToProps = ({ admin: { editLocale, voteSession }, debate, i18n }) =
           // remove fields that we don't want to override
           .delete('id')
           .delete('isCustom')
+          .delete('_hasChanged')
           .delete('_isNew')
           .delete('proposalId')
           .delete('_toDelete')
