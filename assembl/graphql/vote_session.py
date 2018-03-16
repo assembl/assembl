@@ -306,6 +306,12 @@ class GaugeVoteSpecification(SecureObjectType, SQLAlchemyObjectType):
                 min_diff = diff
         return resolve_langstring(avg_choice.label, args.get('lang'))
 
+    def resolve_choices(self, args, context, info):
+        if self.vote_spec_template_id and not self.is_custom:
+            return self.vote_spec_template.choices
+
+        return self.choices
+
 
 class NumberGaugeVoteSpecification(SecureObjectType, SQLAlchemyObjectType):
 
