@@ -7,6 +7,7 @@ import { List, type Map } from 'immutable';
 import { Button } from 'react-bootstrap';
 import { Link } from 'react-router';
 
+import { setValidationErrors } from '../actions/adminActions/voteSession';
 import PageForm from '../components/administration/voteSession/pageForm';
 import ModulesSection from '../components/administration/voteSession/modulesSection';
 import VoteProposalsSection from '../components/administration/voteSession/voteProposalsSection';
@@ -106,6 +107,7 @@ const createVariablesForNumberGaugeMutation: CreateVariablesForNumberGaugeMutati
 });
 
 const createVariablesForProposalsMutation = proposal => ({
+  order: proposal.order,
   voteSessionId: proposal.voteSessionId,
   titleEntries: proposal.titleEntries,
   descriptionEntries: convertEntriesToHTML(proposal.descriptionEntries)
@@ -134,7 +136,8 @@ type VoteSessionAdminProps = {
   updateNumberGaugeVoteSpecification: Function,
   createProposal: Function,
   updateProposal: Function,
-  deleteProposal: Function
+  deleteProposal: Function,
+  setValidationErrors: (string, ValidationErrors) => Function
 };
 
 type VoteSessionAdminState = {
@@ -142,12 +145,30 @@ type VoteSessionAdminState = {
   secondWarningDisplayed: boolean
 };
 
+type VoteProposal = Map<string, *>;
+
 type TestModuleType = VoteModule => boolean;
 const isTokenVoteModule: TestModuleType = m => m.voteType === 'token_vote_specification' || m.type === 'tokens';
 const isTextGaugeModule: TestModuleType = m =>
   m.voteType === 'gauge_vote_specification' || (m.type === 'gauge' && !m.isNumberGauge);
 const isNumberGaugeModule: TestModuleType = m =>
   m.voteType === 'number_gauge_vote_specification' || ((m.type === 'gauge' && m.isNumberGauge) || false);
+
+export const getProposalValidationErrors = (p: VoteProposal, editLocale: string): ValidationErrors => {
+  const errors = {};
+  if (!p.get('_toDelete')) {
+    const title = p.get('titleEntries').find(e => e.get('localeCode') === editLocale);
+    if (!title || title.get('value').length === 0) {
+      errors.title = [{ code: 'error.required', vars: {} }];
+    }
+
+    if (p.get('modules').filter(m => !m.get('_toDelete')).size < 1) {
+      errors.modules = [{ code: 'atLeastOneModule', vars: {} }];
+    }
+  }
+
+  return errors;
+};
 
 class VoteSessionAdmin extends React.Component<void, VoteSessionAdminProps, VoteSessionAdminState> {
   props: VoteSessionAdminProps;
@@ -208,6 +229,26 @@ class VoteSessionAdmin extends React.Component<void, VoteSessionAdminProps, Vote
       displayAlert('success', I18n.t('administration.voteSessionSuccess'));
     });
   }
+
+  validateProposals = (proposals) => {
+    let isValid = true;
+    proposals.forEach((proposal) => {
+      const errors = getProposalValidationErrors(proposal, this.props.editLocale);
+      // we have to use Object.keys + map instead of Object.values so that flow infers arrays
+      // See: https://github.com/facebook/flow/issues/2221
+      const errorsCount = Object.keys(errors)
+        .map(k => errors[k])
+        .map(arr => arr.length)
+        .reduce((acc, l) => acc + l, 0);
+
+      this.props.setValidationErrors(proposal.get('id'), errors);
+      if (errorsCount > 0) {
+        isValid = false;
+      }
+    });
+
+    return isValid;
+  };
 
   saveAction = () => {
     const {
@@ -320,6 +361,12 @@ class VoteSessionAdmin extends React.Component<void, VoteSessionAdminProps, Vote
       }
 
       if (voteProposalsHaveChanged) {
+        const isValid = this.validateProposals(voteProposals);
+        if (!isValid) {
+          displayAlert('danger', I18n.t('administration.anErrorOccured'));
+          return;
+        }
+
         const items = [];
         voteProposals.forEach((t) => {
           items.push({ ...t.toJS(), voteSessionId: voteSessionPageId });
@@ -453,8 +500,12 @@ const mapStateToProps = ({ admin: { editLocale, voteSession }, debate, i18n }) =
   };
 };
 
+const mapDispatchToProps = dispatch => ({
+  setValidationErrors: (id, errors) => dispatch(setValidationErrors(id, errors))
+});
+
 export default compose(
-  connect(mapStateToProps),
+  connect(mapStateToProps, mapDispatchToProps),
   graphql(updateVoteSessionMutation, {
     name: 'updateVoteSession'
   }),

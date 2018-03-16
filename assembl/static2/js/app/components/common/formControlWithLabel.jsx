@@ -9,17 +9,33 @@ import { ControlLabel, FormGroup, FormControl, HelpBlock } from 'react-bootstrap
 import { I18n } from 'react-redux-i18n';
 
 import RichTextEditor from './richTextEditor';
+import { getValidationState } from '../administration/voteSession/voteProposalForm';
 
 class FormControlWithLabel extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      errorMessage: '',
-      validationState: null
-    };
+    this.state = this.getStateFromProps(props);
     this.setValidationState = this.setValidationState.bind(this);
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.validationErrors !== this.props.validationErrors) {
+      this.setState(this.getStateFromProps(nextProps));
+    }
+  }
+
+  getStateFromProps = (props) => {
+    const errors = props.validationErrors;
+    const validationState = getValidationState(errors);
+    // FIXME: for now, we only treat the first error
+    const errorMessage = errors && errors.length > 0 ? I18n.t(errors[0].code, errors[0].vars) : '';
+    return {
+      errorMessage: errorMessage,
+      validationState: validationState
+    };
+  };
+
+  /* onBlur validation */
   setValidationState() {
     let errorMessage = '';
     let validationState = null;
@@ -46,7 +62,7 @@ class FormControlWithLabel extends React.Component {
   };
 
   renderFormControl = () => {
-    const { type, value, disabled, componentClass, id, label, onChange } = this.props;
+    const { type, value, disabled, componentClass, id, label, onChange, formControlProps } = this.props;
     if (type === 'rich-text') {
       return this.renderRichTextEditor();
     }
@@ -60,6 +76,7 @@ class FormControlWithLabel extends React.Component {
         value={value || ''}
         onBlur={this.setValidationState}
         disabled={disabled}
+        {...formControlProps}
       />
     );
   };

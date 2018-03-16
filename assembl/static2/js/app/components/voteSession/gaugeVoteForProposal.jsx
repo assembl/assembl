@@ -71,6 +71,7 @@ const handleStyle = [
 const Handle = Slider.Handle;
 const handleIcon = (props) => {
   const { value, dragging, ...restProps } = props;
+  delete restProps.index;
   const style = {
     marginTop: '-15px',
     cursor: '-webkit-grab'

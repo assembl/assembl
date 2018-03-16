@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import * as actions from '../../../actions/adminActions/resourcesCenter';
 import { createResourceTooltip } from '../../common/tooltips';
 import EditResourceForm from './editResourceForm';
+import { createRandomId } from '../../../utils/globalFunctions';
 
 const ManageResourcesForm = ({ createResource, resources, editLocale }) => (
   <div style={{ paddingBottom: '50px' }}>
@@ -26,7 +27,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = dispatch => ({
   createResource: (nextOrder) => {
-    const newId = Math.round(Math.random() * -1000000).toString();
+    const newId = createRandomId();
     return dispatch(actions.createResource(newId, nextOrder));
   }
 });

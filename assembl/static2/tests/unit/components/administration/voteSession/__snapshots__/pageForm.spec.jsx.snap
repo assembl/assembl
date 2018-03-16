@@ -83,6 +83,10 @@ exports[`Vote Session DumbPageForm component should render a form to update the 
             name="header-image"
             withPreview={true}
           />
+          <Translate
+            className="file-uploader-warning"
+            value="administration.imageRequirements"
+          />
         </FormGroup>
       </form>
       <div
@@ -130,9 +134,9 @@ exports[`Vote Session DumbPageForm component should render a form to update the 
       <Helper
         additionalTextClasses=""
         classname="title"
-        helperText="Missing translation: administration.helpers.voteSessionPropositionSection"
+        helperText="Missing translation: administration.helpers.voteSessionProposalSection"
         helperUrl="/static2/img/helpers/helper3.png"
-        label="Missing translation: administration.propositionSectionTitle"
+        label="Missing translation: administration.proposalSectionTitle"
       />
       <FormControlWithLabel
         label="Missing translation: administration.ph.propositionSectionTitle FR*"

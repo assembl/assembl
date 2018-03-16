@@ -7,6 +7,7 @@ import SectionTitle from '../sectionTitle';
 import ThemeForm from './themeForm';
 import { createNewThematic } from '../../../actions/adminActions';
 import { addThematicTooltip } from '../../common/tooltips';
+import { createRandomId } from '../../../utils/globalFunctions';
 
 class ThemeSection extends React.Component {
   render() {
@@ -36,7 +37,7 @@ const mapStateToProps = ({ admin: { thematicsById, thematicsInOrder, editLocale 
 
 const mapDispatchToProps = dispatch => ({
   addThematic: () => {
-    const newThemeId = Math.round(Math.random() * -1000000).toString();
+    const newThemeId = createRandomId();
     dispatch(createNewThematic(newThemeId));
   }
 });

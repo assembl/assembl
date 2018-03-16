@@ -48,15 +48,6 @@ exports[`ModulesSection component should render a form to set up a gauge and a n
       bsClass="dropdown"
       disabled={false}
       divider={false}
-      eventKey={1}
-      header={false}
-    >
-      1
-    </MenuItem>
-    <MenuItem
-      bsClass="dropdown"
-      disabled={false}
-      divider={false}
       eventKey={2}
       header={false}
     >
@@ -228,15 +219,6 @@ exports[`ModulesSection component should render a form to set up a gauge and a t
       bsClass="dropdown"
       disabled={false}
       divider={false}
-      eventKey={1}
-      header={false}
-    >
-      1
-    </MenuItem>
-    <MenuItem
-      bsClass="dropdown"
-      disabled={false}
-      divider={false}
       eventKey={2}
       header={false}
     >
@@ -345,6 +327,157 @@ exports[`ModulesSection component should render a form to set up a gauge and a t
       />
     </Radio>
   </div>
+  <DumbTextGaugeForm
+    choices={
+      Immutable.List [
+        Immutable.Map {
+          id: "2233",
+          labelEntries: Immutable.List [
+          ],
+          value: 1,
+        },
+        Immutable.Map {
+          id: "3344",
+          labelEntries: Immutable.List [
+          ],
+          value: 2,
+        },
+      ]
+    }
+    handleGaugeChoiceLabelChange={undefined}
+  />
+  <div
+    className="separator"
+  />
+</div>
+`;
+
+exports[`ModulesSection component should render a gauge form with no radio if canChangeType is false 1`] = `
+<div
+  className="gauges-vote-form"
+>
+  <Translate
+    number={2}
+    value="administration.gauge"
+  />
+  <div
+    className="flex margin-m"
+  >
+    <FormControlWithLabel
+      label="Missing translation: administration.gaugeVoteInstructions"
+      labelAlwaysVisible={false}
+      onChange={[Function]}
+      required={true}
+      type="text"
+      value="Please vote on this textual gauge"
+    />
+    <Helper
+      additionalTextClasses="helper-text-only"
+      classname=""
+      helperText="Missing translation: administration.helpers.gaugeVoteInstructions"
+      helperUrl="/static2/img/helpers/helper6.png"
+      label=""
+    />
+  </div>
+  <div
+    className="flex"
+  >
+    <label
+      htmlFor="dropdown-5678"
+    >
+      <Translate
+        value="administration.nbTicks"
+      />
+    </label>
+  </div>
+  <SplitButton
+    id="dropdown-5678"
+    onSelect={[Function]}
+    required={true}
+    title={2}
+  >
+    <MenuItem
+      bsClass="dropdown"
+      disabled={false}
+      divider={false}
+      eventKey={2}
+      header={false}
+    >
+      2
+    </MenuItem>
+    <MenuItem
+      bsClass="dropdown"
+      disabled={false}
+      divider={false}
+      eventKey={3}
+      header={false}
+    >
+      3
+    </MenuItem>
+    <MenuItem
+      bsClass="dropdown"
+      disabled={false}
+      divider={false}
+      eventKey={4}
+      header={false}
+    >
+      4
+    </MenuItem>
+    <MenuItem
+      bsClass="dropdown"
+      disabled={false}
+      divider={false}
+      eventKey={5}
+      header={false}
+    >
+      5
+    </MenuItem>
+    <MenuItem
+      bsClass="dropdown"
+      disabled={false}
+      divider={false}
+      eventKey={6}
+      header={false}
+    >
+      6
+    </MenuItem>
+    <MenuItem
+      bsClass="dropdown"
+      disabled={false}
+      divider={false}
+      eventKey={7}
+      header={false}
+    >
+      7
+    </MenuItem>
+    <MenuItem
+      bsClass="dropdown"
+      disabled={false}
+      divider={false}
+      eventKey={8}
+      header={false}
+    >
+      8
+    </MenuItem>
+    <MenuItem
+      bsClass="dropdown"
+      disabled={false}
+      divider={false}
+      eventKey={9}
+      header={false}
+    >
+      9
+    </MenuItem>
+    <MenuItem
+      bsClass="dropdown"
+      disabled={false}
+      divider={false}
+      eventKey={10}
+      header={false}
+    >
+      10
+    </MenuItem>
+  </SplitButton>
   <DumbTextGaugeForm
     choices={
       Immutable.List [

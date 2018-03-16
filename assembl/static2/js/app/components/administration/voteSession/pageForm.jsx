@@ -106,6 +106,7 @@ const DumbPageForm = ({
                 handleChange={handleHeaderImageChange}
                 withPreview
               />
+              <Translate value="administration.imageRequirements" className="file-uploader-warning" />
             </FormGroup>
           </form>
           <div className="separator" />
@@ -130,9 +131,9 @@ const DumbPageForm = ({
           />
           <div className="separator" />
           <Helper
-            label={I18n.t('administration.propositionSectionTitle')}
+            label={I18n.t('administration.proposalSectionTitle')}
             helperUrl="/static2/img/helpers/helper3.png"
-            helperText={I18n.t('administration.helpers.voteSessionPropositionSection')}
+            helperText={I18n.t('administration.helpers.voteSessionProposalSection')}
             classname="title"
           />
           <FormControlWithLabel

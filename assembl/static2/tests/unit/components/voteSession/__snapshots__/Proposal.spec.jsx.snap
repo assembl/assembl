@@ -895,7 +895,6 @@ exports[`Proposal component should match Proposal snapshot 1`] = `
           />
           <div
             className="rc-slider-handle"
-            index={0}
             role="slider"
             style={
               Object {

@@ -40,7 +40,9 @@ import {
   UPDATE_GAUGE_MAXIMUM,
   UPDATE_GAUGE_UNIT,
   ADD_MODULE_TO_PROPOSAL,
-  UNDELETE_MODULE
+  UNDELETE_MODULE,
+  MARK_ALL_DEPENDENCIES_AS_CHANGED,
+  SET_VALIDATION_ERRORS
 } from '../../actions/actionTypes';
 import { updateInLangstringEntries } from '../../utils/i18n';
 import { pickerColors } from '../../constants';
@@ -339,11 +341,19 @@ export const modulesById = (state: Map<string, Map> = Map(), action: ReduxAction
         _isNew: true,
         _toDelete: false,
         _hasChanged: false,
-        voteSpecTemplateId: action.moduleTemplateId
+        voteSpecTemplateId: action.voteSpecTemplateId
       })
     );
   case UNDELETE_MODULE:
     return state.setIn([action.id, '_toDelete'], false);
+  case MARK_ALL_DEPENDENCIES_AS_CHANGED:
+    return state.map((voteSpec) => {
+      if (voteSpec.get('voteSpecTemplateId') === action.id && !voteSpec.get('isCustom')) {
+        return voteSpec.set('_hasChanged', true);
+      }
+
+      return voteSpec;
+    });
   default:
     return state;
   }
@@ -414,10 +424,13 @@ export const voteProposalsHaveChanged = (state: boolean = false, action: ReduxAc
   switch (action.type) {
   case CREATE_VOTE_PROPOSAL:
   case DELETE_VOTE_PROPOSAL:
+  case MOVE_PROPOSAL_DOWN:
+  case MOVE_PROPOSAL_UP:
   case UPDATE_VOTE_PROPOSAL_TITLE:
   case UPDATE_VOTE_PROPOSAL_DESCRIPTION:
   case ADD_MODULE_TO_PROPOSAL:
   case DELETE_VOTE_MODULE:
+  case MARK_ALL_DEPENDENCIES_AS_CHANGED:
     return true;
   case UPDATE_VOTE_PROPOSALS:
     return false;
@@ -428,8 +441,12 @@ export const voteProposalsHaveChanged = (state: boolean = false, action: ReduxAc
 
 export const voteProposalsInOrder = (state: List<number> = List(), action: ReduxAction<Action>) => {
   switch (action.type) {
-  case UPDATE_VOTE_PROPOSALS:
-    return List(Object.keys(action.voteProposals).map(key => action.voteProposals[key].id || null));
+  case UPDATE_VOTE_PROPOSALS: {
+    const proposals = action.voteProposals.slice();
+    // sort on a copy, the sort is done in place
+    proposals.sort((a, b) => a.order - b.order);
+    return List(proposals.map(proposal => proposal.id));
+  }
   case CREATE_VOTE_PROPOSAL:
     return state.push(action.id);
   case MOVE_PROPOSAL_UP: {
@@ -449,6 +466,7 @@ const defaultVoteProposal = Map({
   _isNew: true,
   _toDelete: false,
   _hasChanged: false,
+  _validationErrors: [],
   id: '',
   titleEntries: List(),
   descriptionEntries: List(),
@@ -464,6 +482,7 @@ export const voteProposalsById = (state: Map<string, Map> = Map(), action: Redux
         _isNew: false,
         _toDelete: false,
         _hasChanged: false,
+        _validationErrors: [],
         order: proposal.order,
         id: proposal.id,
         titleEntries: proposal.titleEntries,
@@ -474,16 +493,54 @@ export const voteProposalsById = (state: Map<string, Map> = Map(), action: Redux
     });
     return newState;
   }
-  case CREATE_VOTE_PROPOSAL:
-    return state.set(action.id, defaultVoteProposal.set('id', action.id));
+  case CREATE_VOTE_PROPOSAL: {
+    const order = state.size + 1.0;
+    return state.set(action.id, defaultVoteProposal.set('id', action.id)).set('order', order);
+  }
   case DELETE_VOTE_PROPOSAL:
     return state.setIn([action.id, '_toDelete'], true);
+  case MOVE_PROPOSAL_UP: {
+    let newState = state;
+    let proposalsInOrder = state
+      .sortBy(proposal => proposal.get('order'))
+      .map(proposal => proposal.get('id'))
+      .toList();
+    const idx = proposalsInOrder.indexOf(action.id);
+    proposalsInOrder = proposalsInOrder.delete(idx).insert(idx - 1, action.id);
+    let order = 1;
+    proposalsInOrder.forEach((proposalId) => {
+      if (newState.getIn([proposalId, 'order']) !== order) {
+        newState = newState.setIn([proposalId, 'order'], order).setIn([proposalId, '_hasChanged'], true);
+      }
+      order += 1;
+    });
+    return newState;
+  }
+  case MOVE_PROPOSAL_DOWN: {
+    let newState = state;
+    let proposalsInOrder = state
+      .sortBy(proposal => proposal.get('order'))
+      .map(proposal => proposal.get('id'))
+      .toList();
+    const idx = proposalsInOrder.indexOf(action.id);
+    proposalsInOrder = proposalsInOrder.delete(idx).insert(idx + 1, action.id);
+    let order = 1;
+    proposalsInOrder.forEach((proposalId) => {
+      if (newState.getIn([proposalId, 'order']) !== order) {
+        newState = newState.setIn([proposalId, 'order'], order).setIn([proposalId, '_hasChanged'], true);
+      }
+      order += 1;
+    });
+    return newState;
+  }
   case UPDATE_VOTE_PROPOSAL_TITLE:
     return state.updateIn([action.id, 'titleEntries'], updateInLangstringEntries(action.locale, action.value));
   case UPDATE_VOTE_PROPOSAL_DESCRIPTION:
     return state.updateIn([action.id, 'descriptionEntries'], updateInLangstringEntries(action.locale, fromJS(action.value)));
   case ADD_MODULE_TO_PROPOSAL:
     return state.updateIn([action.proposalId, 'modules'], modules => modules.push(action.id));
+  case SET_VALIDATION_ERRORS:
+    return state.setIn([action.id, '_validationErrors'], action.errors);
   default:
     return state;
   }

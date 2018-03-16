@@ -255,11 +255,11 @@ export const moveProposalDown = (id: string): actionTypes.MoveProposalDown => ({
 export const addModuleToProposal = (
   id: string,
   proposalId: string,
-  moduleTemplateId: string
+  voteSpecTemplateId: string
 ): actionTypes.AddModuleToProposal => ({
   id: id,
   proposalId: proposalId,
-  moduleTemplateId: moduleTemplateId,
+  voteSpecTemplateId: voteSpecTemplateId,
   type: actionTypes.ADD_MODULE_TO_PROPOSAL
 });
 
@@ -272,4 +272,16 @@ export const createVoteProposalAndModules = (id: string) => (dispatch: Function,
 export const undeleteModule = (id: string): actionTypes.UndeleteModule => ({
   id: id,
   type: actionTypes.UNDELETE_MODULE
+});
+
+/* if a vote spec template params changes, set _hasChanged to true on all its dependencies */
+export const markAllDependenciesAsChanged = (id: string): actionTypes.MarkAllDependenciesAsChanged => ({
+  id: id,
+  type: actionTypes.MARK_ALL_DEPENDENCIES_AS_CHANGED
+});
+
+export const setValidationErrors = (id: string, errors: ValidationErrors): actionTypes.SetValidationErrors => ({
+  errors: errors,
+  id: id,
+  type: actionTypes.SET_VALIDATION_ERRORS
 });
