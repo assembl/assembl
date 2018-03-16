@@ -35,6 +35,9 @@ exports[`ModulesSection component should render a ModuleSection component with t
         </Checkbox>
         Immutable.List [
         ]
+        <div
+          className="separator"
+        />
         <Checkbox
           bsClass="checkbox"
           checked={true}
@@ -52,7 +55,7 @@ exports[`ModulesSection component should render a ModuleSection component with t
           />
         </Checkbox>
         <div
-          className="margin-left-30"
+          className="module-form-margin"
         >
           <div
             className="flex"

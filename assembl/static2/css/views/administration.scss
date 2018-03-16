@@ -17,10 +17,10 @@
   }
 
   .token-vote-form {
-    margin: 0 0 80px 30px;
+    margin: 0 0 40px 30px;
   }
 
-  .margin-left-30 {
+  .module-form-margin {
     margin-left: 30px;
   }
 
@@ -368,6 +368,10 @@
   .vote-modules-form {
     .flex > .form-group {
       flex-grow: 1;
+    }
+
+    .separator {
+      padding-top: 0;
     }
   }
 
