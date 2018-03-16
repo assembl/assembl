@@ -279,3 +279,9 @@ export const markAllDependenciesAsChanged = (id: string): actionTypes.MarkAllDep
   id: id,
   type: actionTypes.MARK_ALL_DEPENDENCIES_AS_CHANGED
 });
+
+export const setValidationErrors = (id: string, errors: ValidationErrors): actionTypes.SetValidationErrors => ({
+  errors: errors,
+  id: id,
+  type: actionTypes.SET_VALIDATION_ERRORS
+});

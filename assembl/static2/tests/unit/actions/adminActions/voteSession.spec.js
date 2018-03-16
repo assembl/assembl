@@ -148,4 +148,31 @@ describe('voteSession admin actions', () => {
       expect(actual).toEqual(expected);
     });
   });
+
+  describe('setValidationErrors', () => {
+    const { setValidationErrors } = actions;
+    it('should return a SET_VALIDATION_ERRORS action', () => {
+      const errors = {
+        title: [
+          {
+            code: 'titleRequired',
+            vars: {}
+          }
+        ],
+        modules: [
+          {
+            code: 'atLeastOneModule',
+            vars: { proposalIdx: '1' }
+          }
+        ]
+      };
+      const actual = setValidationErrors('my-item', errors);
+      const expected = {
+        errors: errors,
+        id: 'my-item',
+        type: actionTypes.SET_VALIDATION_ERRORS
+      };
+      expect(actual).toEqual(expected);
+    });
+  });
 });

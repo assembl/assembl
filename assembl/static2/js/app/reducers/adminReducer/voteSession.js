@@ -41,7 +41,8 @@ import {
   UPDATE_GAUGE_UNIT,
   ADD_MODULE_TO_PROPOSAL,
   UNDELETE_MODULE,
-  MARK_ALL_DEPENDENCIES_AS_CHANGED
+  MARK_ALL_DEPENDENCIES_AS_CHANGED,
+  SET_VALIDATION_ERRORS
 } from '../../actions/actionTypes';
 import { updateInLangstringEntries } from '../../utils/i18n';
 import { pickerColors } from '../../constants';
@@ -465,6 +466,7 @@ const defaultVoteProposal = Map({
   _isNew: true,
   _toDelete: false,
   _hasChanged: false,
+  _validationErrors: [],
   id: '',
   titleEntries: List(),
   descriptionEntries: List(),
@@ -480,6 +482,7 @@ export const voteProposalsById = (state: Map<string, Map> = Map(), action: Redux
         _isNew: false,
         _toDelete: false,
         _hasChanged: false,
+        _validationErrors: [],
         order: proposal.order,
         id: proposal.id,
         titleEntries: proposal.titleEntries,
@@ -536,6 +539,8 @@ export const voteProposalsById = (state: Map<string, Map> = Map(), action: Redux
     return state.updateIn([action.id, 'descriptionEntries'], updateInLangstringEntries(action.locale, fromJS(action.value)));
   case ADD_MODULE_TO_PROPOSAL:
     return state.updateIn([action.proposalId, 'modules'], modules => modules.push(action.id));
+  case SET_VALIDATION_ERRORS:
+    return state.setIn([action.id, '_validationErrors'], action.errors);
   default:
     return state;
   }

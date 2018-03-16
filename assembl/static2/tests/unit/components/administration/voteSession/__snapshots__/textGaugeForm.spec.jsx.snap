@@ -5,7 +5,7 @@ exports[`DumbTextGaugeForm component should render a form to set up a textual ga
   Immutable.List [
     <div>
       <FormControlWithLabel
-        label="Value Title 1"
+        label="Missing translation: administration.valueTitle 1"
         labelAlwaysVisible={false}
         onChange={[Function]}
         required={true}
@@ -15,7 +15,7 @@ exports[`DumbTextGaugeForm component should render a form to set up a textual ga
     </div>,
     <div>
       <FormControlWithLabel
-        label="Value Title 2"
+        label="Missing translation: administration.valueTitle 2"
         labelAlwaysVisible={false}
         onChange={[Function]}
         required={true}

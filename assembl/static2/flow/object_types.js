@@ -81,3 +81,10 @@ type DebateData = Object & {
     videoUrl: string
   }
 };
+
+type ErrorDef = {
+  code: string,
+  vars: { [string]: any }
+};
+
+type ValidationErrors = { [string]: Array<ErrorDef> };

@@ -445,7 +445,10 @@ const Translations = {
         description: "Description",
         tokenVote: "Vote par jetons",
         gauge: "Jauge %{number}",
-        gaugeSettings: "Modifier le paramétrage"
+        gaugeSettings: "Modifier le paramétrage",
+        validationErrors: {
+          atLeastOneModule: "Vous devez sélectionner au moins un module."
+        }
       },
       gaugeModal: {
         title: "Modification des paramètres de jauge",
@@ -1041,7 +1044,10 @@ const Translations = {
         title: "Title of the proposal",
         description: "Description",
         tokenVote: "Token vote",
-        gaugeSettings: "Modify the settings"
+        gaugeSettings: "Modify the settings",
+        validationErrors: {
+          atLeastOneModule: "You should select at least one module."
+        }
       },
       gaugeModal: {
         title: "Modification of the gauge's settings",

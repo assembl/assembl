@@ -387,6 +387,62 @@ describe('voteSession admin reducers', () => {
       const result = voteProposalsById(state, action);
       expect(result).toEqual(expected);
     });
+
+    it('should handle SET_VALIDATION_ERRORS action type', () => {
+      const proposal1 = Map({
+        _hasChanged: false,
+        _isNew: false,
+        _toDelete: false,
+        id: 'proposal1',
+        titleEntries: List(),
+        modules: List(),
+        _validationErrors: {}
+      });
+      const state = Map({ proposal1: proposal1 });
+      const action = {
+        errors: {
+          title: [
+            {
+              code: 'titleRequired',
+              vars: {}
+            }
+          ],
+          modules: [
+            {
+              code: 'atLeastOneModule',
+              vars: {}
+            }
+          ]
+        },
+        id: 'proposal1',
+        type: actionTypes.SET_VALIDATION_ERRORS
+      };
+      const expectedProposal1 = Map({
+        _hasChanged: false,
+        _isNew: false,
+        _toDelete: false,
+        id: 'proposal1',
+        titleEntries: List(),
+        modules: List(),
+        _validationErrors: {
+          modules: [
+            {
+              code: 'atLeastOneModule',
+              vars: {}
+            }
+          ],
+          title: [
+            {
+              code: 'titleRequired',
+              vars: {}
+            }
+          ]
+        }
+      });
+      const expected = Map({ proposal1: expectedProposal1 });
+      const result = voteProposalsById(state, action);
+      expect(result).toEqual(expected);
+    });
   });
 
   describe('modulesById reducer', () => {
