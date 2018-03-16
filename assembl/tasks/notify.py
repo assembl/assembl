@@ -123,36 +123,42 @@ def process_notification(notification):
         email_was_sent(recipient)
     except UnverifiedEmailException as e:
         capture_exception()
-        sys.stderr.write("Not sending to unverified email: " + repr(e))
+        getLogger().exception("Not sending to unverified email")
+        notification.db.rollback()
         notification.delivery_state = \
             NotificationDeliveryStateType.DELIVERY_TEMPORARY_FAILURE
     except MissingEmailException as e:
+        capture_exception()
+        getLogger().exception("Missing email!")
+        notification.db.rollback()
         notification.delivery_state = \
             NotificationDeliveryStateType.DELIVERY_TEMPORARY_FAILURE
-        capture_exception()
-        sys.stderr.write("Missing email!: " + repr(e))
     except (smtplib.SMTPConnectError,
             socket.timeout, socket.error,
             smtplib.SMTPHeloError) as e:
         capture_exception()
-        sys.stderr.write("Temporary failure: " + repr(e))
+        getLogger().exception("Temporary failure")
+        notification.db.rollback()
         notification.delivery_state = \
             NotificationDeliveryStateType.DELIVERY_TEMPORARY_FAILURE
     except smtplib.SMTPRecipientsRefused as e:
+        getLogger().exception("Recepients refused")
+        notification.db.rollback()
         notification.delivery_state = \
             NotificationDeliveryStateType.DELIVERY_FAILURE
-        sys.stderr.write("Recepients refused: " + repr(e))
     except smtplib.SMTPSenderRefused as e:
+        getLogger().exception("Invalid configuration!")
+        notification.db.rollback()
         notification.delivery_state = \
             NotificationDeliveryStateType.DELIVERY_TEMPORARY_FAILURE
-        sys.stderr.write("Invalid configuration!: " + repr(e))
     except Exception as e:
         capture_exception()
         import traceback
         traceback.print_exc()
+        getLogger().exception("Unknown Exception!")
+        notification.db.rollback()
         notification.delivery_state = \
             NotificationDeliveryStateType.DELIVERY_TEMPORARY_FAILURE
-        sys.stderr.write("Unknown Exception!: " + repr(e))
 
     sys.stderr.write(
         "process_notification finished processing %d, state is now %s"
