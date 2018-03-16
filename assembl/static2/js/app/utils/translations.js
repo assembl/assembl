@@ -457,7 +457,7 @@ const Translations = {
         applyToAllProposalsCheckboxLabel: "Appliquer ces changements à l'ensemble des propositions"
       },
       gaugeVoteInstructions: "Consigne du vote par jauge",
-      proposalSectionTitle: "Titre de la section",
+      proposalSectionTitle: "Configuration du titre de la section",
       gaugeNumber: "Nombre de jauges",
       defineGaugeNumer: "Définissez le nombre de jauges",
       minValue: "Valeur minimale",
@@ -1010,7 +1010,7 @@ const Translations = {
       exclusive: "Exclusive",
       tokenVoteInstructions: "Instructions for the token vote",
       gaugeVoteInstructions: "Instructions for the gauge vote",
-      proposalsSectionTitle: "Title of the section",
+      proposalSectionTitle: "Proposal section title configuration",
       voteModulesIntroText1: "You chose the vote module",
       voteModulesIntroText2: "To modify your choice, modify the ",
       timeline: "timeline",
@@ -1071,7 +1071,7 @@ const Translations = {
         voteSessionHeader: "The top page header must contain an image and a title. The subtitle is optional.",
         voteSessionInstructions:
           "The instructions section must contain a title and a description that will guide the participants for their contribution.",
-        voteSessionProposalsSection:
+        voteSessionProposalSection:
           "The proposals section is introduced by a title. You define the title based on the proposal content.",
         tokenCategoryNumber: "Select the number of different token types for this vote",
         exclusive:
