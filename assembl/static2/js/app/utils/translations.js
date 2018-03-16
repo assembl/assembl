@@ -406,7 +406,7 @@ const Translations = {
         "2": "Exporter les données"
       },
       voteSession: {
-        "0": "Renseigner les instructions",
+        "0": "Configuration de la page",
         "1": "Configurer les modules de vote",
         "2": "Configurer les propositions de vote"
       },
@@ -423,14 +423,14 @@ const Translations = {
       tokenNumber: "Nombre de jetons par personne",
       tokenTitle: "Intitulé du jeton",
       tokenColor: "Couleur du jeton",
-      headerTitle: "Bandeau de haut de page",
-      ProposalsSectionTitle: "Section propositions",
-      instructions: "Instructions",
+      headerTitle: "Configuration du beandeau de haut de page",
+      ProposalsSectionTitle: "Configuration du titre de la section Propositions",
+      instructions: "Configuration de la section Consigne",
       voteSessionHeaderLabel: "Choisir l'image de fond du bandeau",
       voteSessionSuccess: "La session de vote a été enregistrée avec succès.",
       exclusive: "Exclusifs",
       tokenVoteInstructions: "Consigne du vote par jetons",
-      proposalsSectionTitle: "Titre de la section",
+      proposalsSectionTitle: "Configuration du titre de la section Propositions",
       voteModulesIntroText1: "Vous avez choisi le dispositif de vote.",
       voteModulesIntroText2: "Pour modifier votre choix, modifiez la ",
       timeline: "ligne de temps",
@@ -460,7 +460,7 @@ const Translations = {
       minValue: "Valeur minimale",
       maxValue: "Valeur maximale",
       unit: "Unité",
-      saveFirstStep: "Veuillez d'abord revenir à l'étape 1 et sauvegarder les instructions.",
+      saveFirstStep: "Veuillez d'abord revenir à l'étape 1 et sauvegarder la configuration de la page.",
       saveSecondStep: "Veuillez d'abord revenir à l'étape 2 et configurez puis sauvegardez les modules de vote.",
       configureVoteSession: "Vous devez configurer une session de vote.",
       configureVoteModules: "Vous devez avoir configuré au moins un module de vote.",
@@ -484,8 +484,10 @@ const Translations = {
       },
       helpers: {
         voteSessionHeader: "Le bandeau de haut de page doit contenir une image et un titre. Le sous-titre est optionnel.",
-        voteSessionInstructions: "La section des instructions doit contenir un titre et une description.",
-        voteSessionProposalSection: "La section des propositions doit contenir un titre.",
+        voteSessionInstructions:
+          "La section consigne comporte un titre et une consigne qui permettent de guider les participants dans leur contribution.",
+        voteSessionProposalSection:
+          "La partie qui comporte les diverses propositions est introduite par un titre. À vous de définir le titre selon qu'il s'agisse de propositions, d'idées, de projets ou autre...",
         tokenCategoryNumber: "Sélectionnez le nombre de types de jetons différents souhaité pour ce vote",
         exclusive:
           "Vous pouvez décider si le participant peut distributer un seul type de jetons (exclusifs) ou plusieurs types de jetons par proposition.",
@@ -985,7 +987,7 @@ const Translations = {
         "2": "Export data"
       },
       voteSession: {
-        "0": "Fill in the instructions",
+        "0": "Page configuration",
         "1": "Configure the voting modules",
         "2": "Configure the voting proposals"
       },
@@ -997,9 +999,9 @@ const Translations = {
       tokenVoteCheckbox:
         "The token vote module allows you to select propositions proportionnaly. Each participant has a certain amount of tokens et will have to spread them on the different propositions",
       gaugeVoteCheckbox: "You can choose to have one or several gages",
-      headerTitle: "Top page Header",
-      proposalSectionTitle: "Proposals section",
-      instructions: "Instructions",
+      headerTitle: "Top page Header configuration",
+      propositionSectionTitle: "Proposals section title configuration",
+      instructions: "Instructions section configuration",
       voteSessionHeaderLabel: "Choose the header background image",
       voteSessionSuccess: "The vote session is saved with success.",
       exclusive: "Exclusive",
@@ -1061,8 +1063,10 @@ const Translations = {
       },
       helpers: {
         voteSessionHeader: "The top page header must contain an image and a title. The subtitle is optional.",
-        voteSessionInstructions: "The instructions section must contain a title and a description.",
-        voteSessionProposalSection: "The proposals section must contain a title.",
+        voteSessionInstructions:
+          "The instructions section must contain a title and a description that will guide the participants for their contribution.",
+        voteSessionProposalsSection:
+          "The proposals section is introduced by a title. You define the title based on the proposition content.",
         tokenCategoryNumber: "Select the number of different token types for this vote",
         exclusive:
           "You can decide wether the participant can distribute a single type of token (exclusive) or several types of token per proposal.",
