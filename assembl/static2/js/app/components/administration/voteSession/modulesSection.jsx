@@ -78,7 +78,7 @@ const DumbModulesSection = ({
               />
             </Checkbox>
             {gaugeModuleChecked ? (
-              <div>
+              <div className="margin-left-30">
                 <div className="flex">
                   <label htmlFor="input-dropdown-addon">
                     <Translate value="administration.gaugeNumber" />

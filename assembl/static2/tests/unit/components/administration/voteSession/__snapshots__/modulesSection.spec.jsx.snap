@@ -51,7 +51,9 @@ exports[`ModulesSection component should render a ModuleSection component with t
             label="Missing translation: administration.voteWithGauges"
           />
         </Checkbox>
-        <div>
+        <div
+          className="margin-left-30"
+        >
           <div
             className="flex"
           >
