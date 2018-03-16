@@ -62,7 +62,7 @@ const TokenVoteForProposal = ({
                     disabledTooltip = notEnoughTokens ? notEnoughTokensTooltip : exclusiveTokensTooltip;
                   }
                   return (
-                    <OverlayTrigger key={n + 1} placement="top" overlay={disabledTooltip}>
+                    <OverlayTrigger key={n + 1} placement="top" overlay={disabledTooltip} delayHide={0}>
                       <Button
                         className="admin-icons"
                         disabled={disabled}

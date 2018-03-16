@@ -18,6 +18,7 @@ exports[`TokenVoteForProposal component should match TokenVoteForProposal snapsh
     >
       <OverlayTrigger
         defaultOverlayShown={false}
+        delayHide={0}
         overlay={
           <Tooltip
             bsClass="tooltip"
@@ -56,6 +57,7 @@ exports[`TokenVoteForProposal component should match TokenVoteForProposal snapsh
       </OverlayTrigger>
       <OverlayTrigger
         defaultOverlayShown={false}
+        delayHide={0}
         overlay={
           <Tooltip
             bsClass="tooltip"
@@ -94,6 +96,7 @@ exports[`TokenVoteForProposal component should match TokenVoteForProposal snapsh
       </OverlayTrigger>
       <OverlayTrigger
         defaultOverlayShown={false}
+        delayHide={0}
         overlay={
           <Tooltip
             bsClass="tooltip"
@@ -132,6 +135,7 @@ exports[`TokenVoteForProposal component should match TokenVoteForProposal snapsh
       </OverlayTrigger>
       <OverlayTrigger
         defaultOverlayShown={false}
+        delayHide={0}
         overlay={
           <Tooltip
             bsClass="tooltip"
@@ -170,6 +174,7 @@ exports[`TokenVoteForProposal component should match TokenVoteForProposal snapsh
       </OverlayTrigger>
       <OverlayTrigger
         defaultOverlayShown={false}
+        delayHide={0}
         overlay={
           <Tooltip
             bsClass="tooltip"
@@ -208,6 +213,7 @@ exports[`TokenVoteForProposal component should match TokenVoteForProposal snapsh
       </OverlayTrigger>
       <OverlayTrigger
         defaultOverlayShown={false}
+        delayHide={0}
         overlay={
           <Tooltip
             bsClass="tooltip"
@@ -246,6 +252,7 @@ exports[`TokenVoteForProposal component should match TokenVoteForProposal snapsh
       </OverlayTrigger>
       <OverlayTrigger
         defaultOverlayShown={false}
+        delayHide={0}
         overlay={
           <Tooltip
             bsClass="tooltip"
@@ -284,6 +291,7 @@ exports[`TokenVoteForProposal component should match TokenVoteForProposal snapsh
       </OverlayTrigger>
       <OverlayTrigger
         defaultOverlayShown={false}
+        delayHide={0}
         overlay={
           <Tooltip
             bsClass="tooltip"
@@ -322,6 +330,7 @@ exports[`TokenVoteForProposal component should match TokenVoteForProposal snapsh
       </OverlayTrigger>
       <OverlayTrigger
         defaultOverlayShown={false}
+        delayHide={0}
         overlay={
           <Tooltip
             bsClass="tooltip"
@@ -360,6 +369,7 @@ exports[`TokenVoteForProposal component should match TokenVoteForProposal snapsh
       </OverlayTrigger>
       <OverlayTrigger
         defaultOverlayShown={false}
+        delayHide={0}
         overlay={
           <Tooltip
             bsClass="tooltip"
@@ -398,6 +408,7 @@ exports[`TokenVoteForProposal component should match TokenVoteForProposal snapsh
       </OverlayTrigger>
       <OverlayTrigger
         defaultOverlayShown={false}
+        delayHide={0}
         overlay={
           <Tooltip
             bsClass="tooltip"
@@ -436,6 +447,7 @@ exports[`TokenVoteForProposal component should match TokenVoteForProposal snapsh
       </OverlayTrigger>
       <OverlayTrigger
         defaultOverlayShown={false}
+        delayHide={0}
         overlay={
           <Tooltip
             bsClass="tooltip"
@@ -519,6 +531,7 @@ exports[`TokenVoteForProposal component should match TokenVoteForProposal snapsh
     >
       <OverlayTrigger
         defaultOverlayShown={false}
+        delayHide={0}
         overlay={
           <Tooltip
             bsClass="tooltip"
@@ -557,6 +570,7 @@ exports[`TokenVoteForProposal component should match TokenVoteForProposal snapsh
       </OverlayTrigger>
       <OverlayTrigger
         defaultOverlayShown={false}
+        delayHide={0}
         overlay={
           <Tooltip
             bsClass="tooltip"
@@ -595,6 +609,7 @@ exports[`TokenVoteForProposal component should match TokenVoteForProposal snapsh
       </OverlayTrigger>
       <OverlayTrigger
         defaultOverlayShown={false}
+        delayHide={0}
         overlay={
           <Tooltip
             bsClass="tooltip"
@@ -633,6 +648,7 @@ exports[`TokenVoteForProposal component should match TokenVoteForProposal snapsh
       </OverlayTrigger>
       <OverlayTrigger
         defaultOverlayShown={false}
+        delayHide={0}
         overlay={
           <Tooltip
             bsClass="tooltip"
@@ -671,6 +687,7 @@ exports[`TokenVoteForProposal component should match TokenVoteForProposal snapsh
       </OverlayTrigger>
       <OverlayTrigger
         defaultOverlayShown={false}
+        delayHide={0}
         overlay={
           <Tooltip
             bsClass="tooltip"
@@ -708,6 +725,7 @@ exports[`TokenVoteForProposal component should match TokenVoteForProposal snapsh
       </OverlayTrigger>
       <OverlayTrigger
         defaultOverlayShown={false}
+        delayHide={0}
         overlay={
           <Tooltip
             bsClass="tooltip"
@@ -745,6 +763,7 @@ exports[`TokenVoteForProposal component should match TokenVoteForProposal snapsh
       </OverlayTrigger>
       <OverlayTrigger
         defaultOverlayShown={false}
+        delayHide={0}
         overlay={
           <Tooltip
             bsClass="tooltip"
@@ -782,6 +801,7 @@ exports[`TokenVoteForProposal component should match TokenVoteForProposal snapsh
       </OverlayTrigger>
       <OverlayTrigger
         defaultOverlayShown={false}
+        delayHide={0}
         overlay={
           <Tooltip
             bsClass="tooltip"
@@ -819,6 +839,7 @@ exports[`TokenVoteForProposal component should match TokenVoteForProposal snapsh
       </OverlayTrigger>
       <OverlayTrigger
         defaultOverlayShown={false}
+        delayHide={0}
         overlay={
           <Tooltip
             bsClass="tooltip"
@@ -856,6 +877,7 @@ exports[`TokenVoteForProposal component should match TokenVoteForProposal snapsh
       </OverlayTrigger>
       <OverlayTrigger
         defaultOverlayShown={false}
+        delayHide={0}
         overlay={
           <Tooltip
             bsClass="tooltip"
@@ -948,6 +970,7 @@ exports[`TokenVoteForProposal component should match TokenVoteForProposal with e
     >
       <OverlayTrigger
         defaultOverlayShown={false}
+        delayHide={0}
         overlay={
           <Tooltip
             bsClass="tooltip"
@@ -986,6 +1009,7 @@ exports[`TokenVoteForProposal component should match TokenVoteForProposal with e
       </OverlayTrigger>
       <OverlayTrigger
         defaultOverlayShown={false}
+        delayHide={0}
         overlay={
           <Tooltip
             bsClass="tooltip"
@@ -1024,6 +1048,7 @@ exports[`TokenVoteForProposal component should match TokenVoteForProposal with e
       </OverlayTrigger>
       <OverlayTrigger
         defaultOverlayShown={false}
+        delayHide={0}
         overlay={
           <Tooltip
             bsClass="tooltip"
@@ -1062,6 +1087,7 @@ exports[`TokenVoteForProposal component should match TokenVoteForProposal with e
       </OverlayTrigger>
       <OverlayTrigger
         defaultOverlayShown={false}
+        delayHide={0}
         overlay={
           <Tooltip
             bsClass="tooltip"
@@ -1100,6 +1126,7 @@ exports[`TokenVoteForProposal component should match TokenVoteForProposal with e
       </OverlayTrigger>
       <OverlayTrigger
         defaultOverlayShown={false}
+        delayHide={0}
         overlay={
           <Tooltip
             bsClass="tooltip"
@@ -1138,6 +1165,7 @@ exports[`TokenVoteForProposal component should match TokenVoteForProposal with e
       </OverlayTrigger>
       <OverlayTrigger
         defaultOverlayShown={false}
+        delayHide={0}
         overlay={
           <Tooltip
             bsClass="tooltip"
@@ -1176,6 +1204,7 @@ exports[`TokenVoteForProposal component should match TokenVoteForProposal with e
       </OverlayTrigger>
       <OverlayTrigger
         defaultOverlayShown={false}
+        delayHide={0}
         overlay={
           <Tooltip
             bsClass="tooltip"
@@ -1214,6 +1243,7 @@ exports[`TokenVoteForProposal component should match TokenVoteForProposal with e
       </OverlayTrigger>
       <OverlayTrigger
         defaultOverlayShown={false}
+        delayHide={0}
         overlay={
           <Tooltip
             bsClass="tooltip"
@@ -1252,6 +1282,7 @@ exports[`TokenVoteForProposal component should match TokenVoteForProposal with e
       </OverlayTrigger>
       <OverlayTrigger
         defaultOverlayShown={false}
+        delayHide={0}
         overlay={
           <Tooltip
             bsClass="tooltip"
@@ -1290,6 +1321,7 @@ exports[`TokenVoteForProposal component should match TokenVoteForProposal with e
       </OverlayTrigger>
       <OverlayTrigger
         defaultOverlayShown={false}
+        delayHide={0}
         overlay={
           <Tooltip
             bsClass="tooltip"
@@ -1328,6 +1360,7 @@ exports[`TokenVoteForProposal component should match TokenVoteForProposal with e
       </OverlayTrigger>
       <OverlayTrigger
         defaultOverlayShown={false}
+        delayHide={0}
         overlay={
           <Tooltip
             bsClass="tooltip"
@@ -1366,6 +1399,7 @@ exports[`TokenVoteForProposal component should match TokenVoteForProposal with e
       </OverlayTrigger>
       <OverlayTrigger
         defaultOverlayShown={false}
+        delayHide={0}
         overlay={
           <Tooltip
             bsClass="tooltip"
@@ -1449,6 +1483,7 @@ exports[`TokenVoteForProposal component should match TokenVoteForProposal with e
     >
       <OverlayTrigger
         defaultOverlayShown={false}
+        delayHide={0}
         overlay={
           <Tooltip
             bsClass="tooltip"
@@ -1486,6 +1521,7 @@ exports[`TokenVoteForProposal component should match TokenVoteForProposal with e
       </OverlayTrigger>
       <OverlayTrigger
         defaultOverlayShown={false}
+        delayHide={0}
         overlay={
           <Tooltip
             bsClass="tooltip"
@@ -1523,6 +1559,7 @@ exports[`TokenVoteForProposal component should match TokenVoteForProposal with e
       </OverlayTrigger>
       <OverlayTrigger
         defaultOverlayShown={false}
+        delayHide={0}
         overlay={
           <Tooltip
             bsClass="tooltip"
@@ -1560,6 +1597,7 @@ exports[`TokenVoteForProposal component should match TokenVoteForProposal with e
       </OverlayTrigger>
       <OverlayTrigger
         defaultOverlayShown={false}
+        delayHide={0}
         overlay={
           <Tooltip
             bsClass="tooltip"
@@ -1597,6 +1635,7 @@ exports[`TokenVoteForProposal component should match TokenVoteForProposal with e
       </OverlayTrigger>
       <OverlayTrigger
         defaultOverlayShown={false}
+        delayHide={0}
         overlay={
           <Tooltip
             bsClass="tooltip"
@@ -1634,6 +1673,7 @@ exports[`TokenVoteForProposal component should match TokenVoteForProposal with e
       </OverlayTrigger>
       <OverlayTrigger
         defaultOverlayShown={false}
+        delayHide={0}
         overlay={
           <Tooltip
             bsClass="tooltip"
@@ -1671,6 +1711,7 @@ exports[`TokenVoteForProposal component should match TokenVoteForProposal with e
       </OverlayTrigger>
       <OverlayTrigger
         defaultOverlayShown={false}
+        delayHide={0}
         overlay={
           <Tooltip
             bsClass="tooltip"
@@ -1708,6 +1749,7 @@ exports[`TokenVoteForProposal component should match TokenVoteForProposal with e
       </OverlayTrigger>
       <OverlayTrigger
         defaultOverlayShown={false}
+        delayHide={0}
         overlay={
           <Tooltip
             bsClass="tooltip"
@@ -1745,6 +1787,7 @@ exports[`TokenVoteForProposal component should match TokenVoteForProposal with e
       </OverlayTrigger>
       <OverlayTrigger
         defaultOverlayShown={false}
+        delayHide={0}
         overlay={
           <Tooltip
             bsClass="tooltip"
@@ -1782,6 +1825,7 @@ exports[`TokenVoteForProposal component should match TokenVoteForProposal with e
       </OverlayTrigger>
       <OverlayTrigger
         defaultOverlayShown={false}
+        delayHide={0}
         overlay={
           <Tooltip
             bsClass="tooltip"
