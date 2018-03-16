@@ -407,7 +407,7 @@ const Translations = {
       },
       voteSession: {
         "0": "Configuration de la page",
-        "1": "Configurer les modules de vote",
+        "1": "Configurer le ou les modules de vote",
         "2": "Configurer les propositions de vote"
       },
       imageRequirements:
