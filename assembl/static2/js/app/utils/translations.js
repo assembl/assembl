@@ -423,7 +423,7 @@ const Translations = {
       tokenNumber: "Nombre de jetons par personne",
       tokenTitle: "Intitulé du jeton",
       tokenColor: "Couleur du jeton",
-      headerTitle: "Configuration du beandeau de haut de page",
+      headerTitle: "Configuration du bandeau de haut de page",
       ProposalsSectionTitle: "Configuration du titre de la section Propositions",
       instructions: "Configuration de la section Consigne",
       voteSessionHeaderLabel: "Choisir l'image de fond du bandeau",
@@ -1072,7 +1072,7 @@ const Translations = {
         voteSessionInstructions:
           "The instructions section must contain a title and a description that will guide the participants for their contribution.",
         voteSessionProposalsSection:
-          "The proposals section is introduced by a title. You define the title based on the proposition content.",
+          "The proposals section is introduced by a title. You define the title based on the proposal content.",
         tokenCategoryNumber: "Select the number of different token types for this vote",
         exclusive:
           "You can decide wether the participant can distribute a single type of token (exclusive) or several types of token per proposal.",
