@@ -199,7 +199,7 @@ const defaultNumberGaugeModule = Map({
   _toDelete: false,
   type: 'gauge',
   instructionsEntries: List(),
-  nbTicks: 1,
+  nbTicks: 2,
   isNumberGauge: true,
   minimum: Number,
   maximum: Number,
