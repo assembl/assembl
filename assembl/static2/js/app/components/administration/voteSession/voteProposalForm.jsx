@@ -38,6 +38,7 @@ type VoteProposalFormProps = {
   tokenModules: Object,
   gaugeModules: Object,
   proposalModules: Object,
+  refetchVoteSession: Function,
   validationErrors: ValidationErrors
 };
 
@@ -62,6 +63,7 @@ const DumbVoteProposalForm = ({
   associateModuleToProposal,
   deassociateModuleToProposal,
   reactivateModule,
+  refetchVoteSession,
   validationErrors
 }: VoteProposalFormProps) => {
   if (_toDelete) {
@@ -103,7 +105,9 @@ const DumbVoteProposalForm = ({
   };
 
   const settingsModal = (id) => {
-    const content = <CustomizeGaugeForm gaugeModuleId={id} editLocale={editLocale} />;
+    const content = (
+      <CustomizeGaugeForm close={closeModal} gaugeModuleId={id} editLocale={editLocale} refetchVoteSession={refetchVoteSession} />
+    );
     displayCustomModal(content, true, 'gauge-settings-modal');
   };
 
@@ -185,12 +189,14 @@ const DumbVoteProposalForm = ({
                 checked={moduleIsSelected(voteSpecTemplateId)}
                 onChange={() => toggleModule(voteSpecTemplateId)}
               >
-                <Translate value="administration.voteProposals.gauge" number={number} />
+                {pModule && pModule.get('isCustom') ? (
+                  <Translate value="administration.voteProposals.customGauge" number={number} />
+                ) : (
+                  <Translate value="administration.voteProposals.gauge" number={number} />
+                )}
               </Checkbox>
 
-              {/* disable gaugeSettings for now */}
-              {false &&
-                pModule &&
+              {pModule &&
                 pModule.get('id') && (
                   <span
                     className="inline settings-link"

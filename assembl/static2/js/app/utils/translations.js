@@ -448,6 +448,7 @@ const Translations = {
         description: "Description",
         tokenVote: "Vote par jetons",
         gauge: "Jauge %{number}",
+        customGauge: "Jauge %{number} (modifiée pour cette proposition)",
         gaugeSettings: "Modifier le paramétrage",
         validationErrors: {
           atLeastOneModule: "Vous devez sélectionner au moins un module."
@@ -1042,6 +1043,7 @@ const Translations = {
       voteProposals: {
         sectionTitle: "Configure the proposals associated to the vote modules",
         gauge: "Gauge %{number}",
+        customGauge: "Gauge %{number} (customized for this proposal)",
         defineProposal: "Define proposal %{number}",
         addProposal: "Add a proposal",
         deleteProposal: "Delete this proposal",

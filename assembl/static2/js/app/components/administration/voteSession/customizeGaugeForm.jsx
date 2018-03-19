@@ -2,9 +2,8 @@
 import React from 'react';
 import { List, Map } from 'immutable';
 import { connect } from 'react-redux';
-import { Checkbox } from 'react-bootstrap';
 import { compose, graphql } from 'react-apollo';
-import { Translate } from 'react-redux-i18n';
+import { I18n } from 'react-redux-i18n';
 
 import { DumbGaugeForm, getGaugeModuleInfo, type VoteChoice } from './gaugeForm';
 import { createRandomId } from '../../../utils/globalFunctions';
@@ -16,12 +15,18 @@ import {
   deleteGaugeVoteChoice
 } from '../../../actions/adminActions/voteSession';
 import SaveButton from '../../../components/administration/saveButton';
-import updateGaugeVoteSpecificationMutation from '../../../graphql/mutations/updateGaugeVoteSpecification.graphql';
-import updateNumberGaugeVoteSpecificationMutation from '../../../graphql/mutations/updateNumberGaugeVoteSpecification.graphql';
+import { createVariablesForTextGaugeMutation, createVariablesForNumberGaugeMutation } from '../../../pages/voteSessionAdmin';
+import { displayAlert } from '../../../utils/utilityManager';
+
+import createProposalMutation from '../../../graphql/mutations/createProposal.graphql';
 import createGaugeVoteSpecificationMutation from '../../../graphql/mutations/createGaugeVoteSpecification.graphql';
 import createNumberGaugeVoteSpecificationMutation from '../../../graphql/mutations/createNumberGaugeVoteSpecification.graphql';
+import updateGaugeVoteSpecificationMutation from '../../../graphql/mutations/updateGaugeVoteSpecification.graphql';
+import updateNumberGaugeVoteSpecificationMutation from '../../../graphql/mutations/updateNumberGaugeVoteSpecification.graphql';
+import deleteVoteSpecificationMutation from '../../../graphql/mutations/deleteVoteSpecification.graphql';
 
 type Props = {
+  close: Function,
   gaugeModuleId: string,
   editLocale: string,
   choices: List<VoteChoice>,
@@ -30,10 +35,21 @@ type Props = {
   maximum: number,
   minimum: number,
   nbTicks: number,
-  unit: string
+  unit: string,
+  isCustom: boolean,
+  originalModule: Map<string, any>,
+  proposalId: string,
+  voteSessionId: string,
+  voteSpecTemplateId: string,
+  createGaugeVoteSpecification: Function,
+  createNumberGaugeVoteSpecification: Function,
+  updateGaugeVoteSpecification: Function,
+  updateNumberGaugeVoteSpecification: Function,
+  refetchVoteSession: Function
 };
 
 type State = {
+  _hasChanged: boolean,
   applyToAllProposals: boolean,
   gaugeParams: {
     choices: List<VoteChoice>,
@@ -46,7 +62,9 @@ type State = {
   }
 };
 
-class DumbCustomizeGaugeForm extends React.Component<void, Props, State> {
+const convertToLangstringEntries = (s: string, localeCode: string): LangstringEntries => [{ localeCode: localeCode, value: s }];
+
+export class DumbCustomizeGaugeForm extends React.Component<void, Props, State> {
   props: Props;
 
   state: State;
@@ -54,6 +72,7 @@ class DumbCustomizeGaugeForm extends React.Component<void, Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
+      _hasChanged: false,
       applyToAllProposals: false,
       gaugeParams: {
         choices: props.choices,
@@ -68,9 +87,64 @@ class DumbCustomizeGaugeForm extends React.Component<void, Props, State> {
   }
 
   handleSave = () => {
-    // TODO:
-    // if apply to all proposals is checked, apply changes to template, then save
-    // else, apply to module, with isCustom = true, then save
+    const {
+      close,
+      createGaugeVoteSpecification,
+      createNumberGaugeVoteSpecification,
+      updateGaugeVoteSpecification,
+      updateNumberGaugeVoteSpecification,
+      editLocale,
+      originalModule,
+      proposalId,
+      refetchVoteSession,
+      voteSessionId,
+      voteSpecTemplateId
+    } = this.props;
+    const { gaugeParams } = this.state;
+
+    const gaugeModule = {
+      ...gaugeParams, // don't move this line to avoid to override choices
+      instructionsEntries: convertToLangstringEntries(gaugeParams.instructions, editLocale),
+      isCustom: true,
+      proposalId: proposalId,
+      titleEntries: [],
+      voteSessionId: voteSessionId,
+      voteSpecTemplateId: voteSpecTemplateId
+    };
+
+    let promise;
+    if (gaugeParams.isNumberGauge) {
+      const variables = createVariablesForNumberGaugeMutation(gaugeModule);
+      if (originalModule.get('_isNew')) {
+        promise = createNumberGaugeVoteSpecification({ variables: variables });
+      } else if (this.state._hasChanged) {
+        promise = updateNumberGaugeVoteSpecification({ variables: { ...variables, id: originalModule.get('id') } });
+      }
+    } else {
+      const choices = gaugeParams.choices
+        .map(c => ({
+          id: c.get('id'),
+          labelEntries: convertToLangstringEntries(c.get('title'), editLocale)
+        }))
+        .toArray();
+      gaugeModule.choices = choices;
+
+      const variables = createVariablesForTextGaugeMutation(gaugeModule);
+      if (originalModule.get('_isNew')) {
+        promise = createGaugeVoteSpecification({ variables: variables });
+      } else if (this.state._hasChanged) {
+        promise = updateGaugeVoteSpecification({ variables: { ...variables, id: originalModule.get('id') } });
+      }
+    }
+
+    if (promise) {
+      promise.then(() => {
+        refetchVoteSession();
+        displayAlert('success', I18n.t('administration.voteSessionSuccess'));
+      });
+    }
+
+    close();
   };
 
   toggleApplyToAllProposals = () => {
@@ -81,6 +155,7 @@ class DumbCustomizeGaugeForm extends React.Component<void, Props, State> {
 
   updateInstructions = (value: string): void => {
     this.setState(prevState => ({
+      _hasChanged: true,
       gaugeParams: {
         ...prevState.gaugeParams,
         instructions: value
@@ -90,6 +165,7 @@ class DumbCustomizeGaugeForm extends React.Component<void, Props, State> {
 
   createChoice = (newId: string): void => {
     this.setState(prevState => ({
+      _hasChanged: true,
       gaugeParams: {
         ...prevState.gaugeParams,
         choices: prevState.gaugeParams.choices.push(Map({ id: newId, title: '' }))
@@ -99,6 +175,7 @@ class DumbCustomizeGaugeForm extends React.Component<void, Props, State> {
 
   deleteChoice = (idx: number): void => {
     this.setState(prevState => ({
+      _hasChanged: true,
       gaugeParams: {
         ...prevState.gaugeParams,
         choices: prevState.gaugeParams.choices.delete(idx)
@@ -108,6 +185,7 @@ class DumbCustomizeGaugeForm extends React.Component<void, Props, State> {
 
   updateNbTicks = (value: number): void => {
     this.setState(prevState => ({
+      _hasChanged: true,
       gaugeParams: {
         ...prevState.gaugeParams,
         nbTicks: value
@@ -116,10 +194,11 @@ class DumbCustomizeGaugeForm extends React.Component<void, Props, State> {
   };
 
   updateIsNumberGauge = (value: boolean): void =>
-    this.setState(prevState => ({ gaugeParams: { ...prevState.gaugeParams, isNumberGauge: value } }));
+    this.setState(prevState => ({ _hasChanged: true, gaugeParams: { ...prevState.gaugeParams, isNumberGauge: value } }));
 
   handleMinChange = (value: number): void =>
     this.setState(prevState => ({
+      _hasChanged: true,
       gaugeParams: {
         ...prevState.gaugeParams,
         minimum: value
@@ -128,6 +207,7 @@ class DumbCustomizeGaugeForm extends React.Component<void, Props, State> {
 
   handleMaxChange = (value: number): void =>
     this.setState(prevState => ({
+      _hasChanged: true,
       gaugeParams: {
         ...prevState.gaugeParams,
         maximum: value
@@ -136,6 +216,7 @@ class DumbCustomizeGaugeForm extends React.Component<void, Props, State> {
 
   handleUnitChange = (value: string): void =>
     this.setState(prevState => ({
+      _hasChanged: true,
       gaugeParams: {
         ...prevState.gaugeParams,
         unit: value
@@ -147,6 +228,7 @@ class DumbCustomizeGaugeForm extends React.Component<void, Props, State> {
       const idxToUpdate = prevState.gaugeParams.choices.findIndex(choice => choice.get('id') === choiceId);
 
       return {
+        _hasChanged: true,
         gaugeParams: {
           ...prevState.gaugeParams,
           choices: prevState.gaugeParams.choices.update(idxToUpdate, choice => choice.set('title', value))
@@ -159,11 +241,10 @@ class DumbCustomizeGaugeForm extends React.Component<void, Props, State> {
     (this.state.gaugeParams.isNumberGauge ? this.state.gaugeParams.nbTicks : this.state.gaugeParams.choices.size);
 
   render() {
-    const { gaugeModuleId, editLocale } = this.props;
+    const { gaugeModuleId } = this.props;
     return (
       <div className="gauge-modal-form-container">
         <DumbGaugeForm
-          editLocale={editLocale}
           id={gaugeModuleId}
           {...this.state.gaugeParams}
           canChangeType={false}
@@ -179,11 +260,11 @@ class DumbCustomizeGaugeForm extends React.Component<void, Props, State> {
           handleUnitChange={this.handleUnitChange}
           handleGaugeChoiceLabelChange={this.handleGaugeChoiceLabelChange}
         />
-        <Checkbox onClick={this.toggleApplyToAllProposals}>
+        {/* <Checkbox onClick={this.toggleApplyToAllProposals}>
           <Translate value="administration.gaugeModal.applyToAllProposalsCheckboxLabel" />
-        </Checkbox>
+        </Checkbox> */}
         <SaveButton
-          disabled={false}
+          disabled={!this.state._hasChanged}
           saveAction={this.handleSave}
           specificClasses="save-button button-submit button-dark full-size"
         />
@@ -193,10 +274,17 @@ class DumbCustomizeGaugeForm extends React.Component<void, Props, State> {
 }
 
 const mapStateToProps = (state, { gaugeModuleId, editLocale }) => {
-  const { gaugeChoicesById, modulesById } = state.admin.voteSession;
+  const { gaugeChoicesById, modulesById, page } = state.admin.voteSession;
   const pModule = modulesById.get(gaugeModuleId);
   const moduleTemplate = modulesById.get(pModule.get('voteSpecTemplateId'));
-  return getGaugeModuleInfo(moduleTemplate.merge(pModule), gaugeChoicesById, editLocale);
+  return {
+    ...getGaugeModuleInfo(moduleTemplate.merge(pModule), gaugeChoicesById, editLocale),
+    isCustom: pModule.get('isCustom'),
+    proposalId: pModule.get('proposalId'),
+    voteSessionId: page.get('id'),
+    voteSpecTemplateId: pModule.get('voteSpecTemplateId'),
+    originalModule: pModule
+  };
 };
 
 const mapDispatchToProps = (dispatch, { gaugeModuleId, editLocale }) => ({
@@ -221,12 +309,12 @@ const mapDispatchToProps = (dispatch, { gaugeModuleId, editLocale }) => ({
   handleNumberGaugeUncheck: () => dispatch(updateGaugeVoteIsNumber(gaugeModuleId, false))
 });
 
-export { DumbCustomizeGaugeForm };
-
 export default compose(
   connect(mapStateToProps, mapDispatchToProps),
+  graphql(createGaugeVoteSpecificationMutation, { name: 'createGaugeVoteSpecification' }),
+  graphql(createNumberGaugeVoteSpecificationMutation, { name: 'createNumberGaugeVoteSpecification' }),
+  graphql(createProposalMutation, { name: 'createProposal' }),
   graphql(updateGaugeVoteSpecificationMutation, { name: 'updateGaugeVoteSpecification' }),
   graphql(updateNumberGaugeVoteSpecificationMutation, { name: 'updateNumberGaugeVoteSpecification' }),
-  graphql(createGaugeVoteSpecificationMutation, { name: 'createGaugeVoteSpecification' }),
-  graphql(createNumberGaugeVoteSpecificationMutation, { name: 'createNumberGaugeVoteSpecification' })
+  graphql(deleteVoteSpecificationMutation, { name: 'deleteVoteSpecification' })
 )(DumbCustomizeGaugeForm);

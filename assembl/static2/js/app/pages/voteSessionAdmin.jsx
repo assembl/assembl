@@ -9,6 +9,7 @@ import { Link } from 'react-router';
 
 import { setValidationErrors } from '../actions/adminActions/voteSession';
 import PageForm from '../components/administration/voteSession/pageForm';
+import { type VoteChoice } from '../components/administration/voteSession/gaugeForm';
 import ModulesSection from '../components/administration/voteSession/modulesSection';
 import VoteProposalsSection from '../components/administration/voteSession/voteProposalsSection';
 import Navbar from '../components/administration/navbar';
@@ -31,10 +32,10 @@ import { displayAlert, displayCustomModal, closeModal } from '../utils/utilityMa
 import { getDiscussionSlug } from '../utils/globalFunctions';
 
 type VoteModule = {
-  choices?: Array<any>,
+  choices?: Array<VoteChoice>,
   exclusiveCategories?: boolean,
   id: string,
-  instructionsEntries?: Array<string>,
+  instructionsEntries?: LangstringEntries,
   isCustom: boolean,
   _isNew: boolean,
   isNumberGauge?: boolean,
@@ -54,9 +55,19 @@ type VoteModule = {
   voteType?: string
 };
 
-const createVariablesForDeleteMutation = item => ({ id: item.id });
+type ItemWithId = { id: string } & Object;
+export const createVariablesForDeleteMutation = (item: ItemWithId): { id: string } => ({ id: item.id });
 
-type CreateVariablesForTokenVoteSpecificationMutation = VoteModule => Object;
+type TokenInfo = {
+  instructionsEntries?: LangstringEntries,
+  isCustom: boolean,
+  proposalId?: ?string,
+  voteSpecTemplateId: ?string,
+  voteSessionId: string,
+  exclusiveCategories: boolean,
+  tokenCategories?: Array<Object>
+};
+type CreateVariablesForTokenVoteSpecificationMutation = TokenInfo => Object;
 const createVariablesForTokenVoteSpecificationMutation: CreateVariablesForTokenVoteSpecificationMutation = voteModule => ({
   proposalId: voteModule.proposalId,
   voteSpecTemplateId: voteModule.voteSpecTemplateId,
@@ -75,8 +86,16 @@ const createVariablesForTokenVoteSpecificationMutation: CreateVariablesForTokenV
     : []
 });
 
-type CreateVariablesForTextGaugeMutation = VoteModule => Object;
-const createVariablesForTextGaugeMutation: CreateVariablesForTextGaugeMutation = voteModule => ({
+type TextGaugeInfo = {
+  instructionsEntries?: LangstringEntries,
+  isCustom: boolean,
+  proposalId?: ?string,
+  voteSpecTemplateId: ?string,
+  voteSessionId: string,
+  choices?: Array<{ id: string, labelEntries: LangstringEntries }>
+};
+type CreateVariablesForTextGaugeMutation = TextGaugeInfo => Object;
+export const createVariablesForTextGaugeMutation: CreateVariablesForTextGaugeMutation = voteModule => ({
   proposalId: voteModule.proposalId,
   voteSpecTemplateId: voteModule.voteSpecTemplateId,
   voteSessionId: voteModule.voteSessionId,
@@ -92,8 +111,19 @@ const createVariablesForTextGaugeMutation: CreateVariablesForTextGaugeMutation =
     : []
 });
 
-type CreateVariablesForNumberGaugeMutation = VoteModule => Object;
-const createVariablesForNumberGaugeMutation: CreateVariablesForNumberGaugeMutation = voteModule => ({
+type NumberGaugeInfo = {
+  instructionsEntries?: LangstringEntries,
+  isCustom: boolean,
+  proposalId?: ?string,
+  voteSpecTemplateId: ?string,
+  voteSessionId: string,
+  maximum: number,
+  minimum: number,
+  nbTicks: number,
+  unit: string
+};
+type CreateVariablesForNumberGaugeMutation = NumberGaugeInfo => Object;
+export const createVariablesForNumberGaugeMutation: CreateVariablesForNumberGaugeMutation = voteModule => ({
   proposalId: voteModule.proposalId,
   voteSpecTemplateId: voteModule.voteSpecTemplateId,
   voteSessionId: voteModule.voteSessionId,
@@ -149,9 +179,9 @@ type VoteProposal = Map<string, *>;
 
 type TestModuleType = VoteModule => boolean;
 const isTokenVoteModule: TestModuleType = m => m.voteType === 'token_vote_specification' || m.type === 'tokens';
-const isTextGaugeModule: TestModuleType = m =>
+export const isTextGaugeModule: TestModuleType = m =>
   m.voteType === 'gauge_vote_specification' || (m.type === 'gauge' && !m.isNumberGauge);
-const isNumberGaugeModule: TestModuleType = m =>
+export const isNumberGaugeModule: TestModuleType = m =>
   m.voteType === 'number_gauge_vote_specification' || ((m.type === 'gauge' && m.isNumberGauge) || false);
 
 export const getProposalValidationErrors = (p: VoteProposal, editLocale: string): ValidationErrors => {
@@ -421,7 +451,14 @@ class VoteSessionAdmin extends React.Component<void, VoteSessionAdminProps, Vote
   };
 
   render() {
-    const { editLocale, moduleTemplatesHaveChanged, voteProposalsHaveChanged, section, voteSessionPage } = this.props;
+    const {
+      editLocale,
+      moduleTemplatesHaveChanged,
+      voteProposalsHaveChanged,
+      refetchVoteSession,
+      section,
+      voteSessionPage
+    } = this.props;
     const saveDisabled = !moduleTemplatesHaveChanged && !voteProposalsHaveChanged && !voteSessionPage.get('_hasChanged');
     const currentStep = parseInt(section, 10);
     return (
@@ -429,7 +466,7 @@ class VoteSessionAdmin extends React.Component<void, VoteSessionAdminProps, Vote
         <SaveButton disabled={saveDisabled} saveAction={this.saveAction} />
         {section === '1' && <PageForm editLocale={editLocale} />}
         {section === '2' && <ModulesSection />}
-        {section === '3' && <VoteProposalsSection />}
+        {section === '3' && <VoteProposalsSection refetchVoteSession={refetchVoteSession} />}
         {!isNaN(currentStep) && <Navbar currentStep={currentStep} totalSteps={3} phaseIdentifier="voteSession" />}
       </div>
     );

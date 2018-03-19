@@ -33,7 +33,6 @@ export type VoteChoice = {|
 type GaugeFormProps = {
   id: string,
   index?: number,
-  // editLocale: string,
   instructions: string,
   canChangeType: boolean,
   nbTicks: number,
