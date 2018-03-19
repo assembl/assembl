@@ -42,21 +42,23 @@ const DumbTokensForm = ({
 }: TokensFormProps) => (
   <div className="token-vote-form">
     <form>
-      <div className="flex">
-        <Checkbox
-          checked={exclusiveCategories}
-          onChange={() => {
-            handleExclusiveCategoriesCheckboxChange(exclusiveCategories);
-          }}
-        >
-          <Helper
-            label={I18n.t('administration.exclusive')}
-            helperText={I18n.t('administration.helpers.exclusive')}
-            classname="inline"
-            additionalTextClasses="helper-text-only"
-          />
-        </Checkbox>
-      </div>
+      {tokenCategoryNumber >= 2 && (
+        <div className="flex">
+          <Checkbox
+            checked={exclusiveCategories}
+            onChange={() => {
+              handleExclusiveCategoriesCheckboxChange(exclusiveCategories);
+            }}
+          >
+            <Helper
+              label={I18n.t('administration.exclusive')}
+              helperText={I18n.t('administration.helpers.exclusive')}
+              classname="inline"
+              additionalTextClasses="helper-text-only"
+            />
+          </Checkbox>
+        </div>
+      )}
       <div className="flex">
         <FormControlWithLabel
           label={I18n.t('administration.tokenVoteInstructions')}
@@ -83,7 +85,7 @@ const DumbTokensForm = ({
         id="input-dropdown-addon"
         required
       >
-        {range(11).map(value => (
+        {range(1, 11).map(value => (
           <MenuItem key={`item-${value}`} eventKey={value}>
             {value}
           </MenuItem>

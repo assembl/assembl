@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`tokensForm component should render a form to configure a token vote with 3 token types 1`] = `
+exports[`tokensForm component should render a form to configure a token vote with 3 token categories 1`] = `
 <div
   className="token-vote-form"
 >
@@ -10,7 +10,7 @@ exports[`tokensForm component should render a form to configure a token vote wit
     >
       <Checkbox
         bsClass="checkbox"
-        checked={undefined}
+        checked={false}
         disabled={false}
         inline={false}
         onChange={[Function]}
@@ -64,15 +64,8 @@ exports[`tokensForm component should render a form to configure a token vote wit
       id="input-dropdown-addon"
       onSelect={[Function]}
       required={true}
-      title={undefined}
+      title={3}
     >
-      <MenuItem
-        bsClass="dropdown"
-        disabled={false}
-        divider={false}
-        eventKey={0}
-        header={false}
-      />
       <MenuItem
         bsClass="dropdown"
         disabled={false}
@@ -164,35 +157,38 @@ exports[`tokensForm component should render a form to configure a token vote wit
         10
       </MenuItem>
     </SplitButton>
+    <div>
+      <div
+        className="separator"
+      />
+      <Connect(DumbTokenCategoryForm)
+        editLocale="fr"
+        id="1234"
+        index={0}
+        moduleId="my-tokens-form"
+      />
+      <Connect(DumbTokenCategoryForm)
+        editLocale="fr"
+        id="5678"
+        index={1}
+        moduleId="my-tokens-form"
+      />
+      <Connect(DumbTokenCategoryForm)
+        editLocale="fr"
+        id="9874"
+        index={2}
+        moduleId="my-tokens-form"
+      />
+    </div>
   </form>
 </div>
 `;
 
-exports[`tokensForm component should render a form to configure a token votewithout token types 1`] = `
+exports[`tokensForm component should render a form to configure a token vote with one token category 1`] = `
 <div
   className="token-vote-form"
 >
   <form>
-    <div
-      className="flex"
-    >
-      <Checkbox
-        bsClass="checkbox"
-        checked={undefined}
-        disabled={false}
-        inline={false}
-        onChange={[Function]}
-        title=""
-      >
-        <Helper
-          additionalTextClasses="helper-text-only"
-          classname="inline"
-          helperText="Missing translation: administration.helpers.exclusive"
-          helperUrl=""
-          label="Missing translation: administration.exclusive"
-        />
-      </Checkbox>
-    </div>
     <div
       className="flex"
     >
@@ -232,15 +228,8 @@ exports[`tokensForm component should render a form to configure a token votewith
       id="input-dropdown-addon"
       onSelect={[Function]}
       required={true}
-      title={undefined}
+      title={1}
     >
-      <MenuItem
-        bsClass="dropdown"
-        disabled={false}
-        divider={false}
-        eventKey={0}
-        header={false}
-      />
       <MenuItem
         bsClass="dropdown"
         disabled={false}
@@ -332,6 +321,17 @@ exports[`tokensForm component should render a form to configure a token votewith
         10
       </MenuItem>
     </SplitButton>
+    <div>
+      <div
+        className="separator"
+      />
+      <Connect(DumbTokenCategoryForm)
+        editLocale="fr"
+        id="1234"
+        index={0}
+        moduleId="my-tokens-form"
+      />
+    </div>
   </form>
 </div>
 `;
