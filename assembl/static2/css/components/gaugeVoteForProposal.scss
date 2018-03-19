@@ -22,6 +22,10 @@
       margin-left: 0;
     }
 
+    .rc-slider-dot:first-child, .rc-slider-dot:last-child {
+      display: none;
+    }
+
     .rc-slider-mark-text {
       margin-top: 7px;
 
@@ -34,22 +38,6 @@
 
     svg.pointer {
       fill: $first-color;
-    }
-  }
-}
-
-.number-gauge-vote-for-proposal {
-  .rc-slider {
-    .rc-slider-dot:first-child, .rc-slider-dot:nth-child(2) {
-      display: none;
-    }
-  }
-}
-
-.gauge-vote-for-proposal {
-  .rc-slider {
-    .rc-slider-dot:first-child, .rc-slider-dot:last-child() {
-      display: none;
     }
   }
 }
