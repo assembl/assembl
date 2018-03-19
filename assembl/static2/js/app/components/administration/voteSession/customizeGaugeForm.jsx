@@ -140,10 +140,14 @@ export class DumbCustomizeGaugeForm extends React.Component<void, Props, State> 
     }
 
     if (promise) {
-      promise.then(() => {
-        refetchVoteSession();
-        displayAlert('success', I18n.t('administration.voteSessionSuccess'));
-      });
+      promise
+        .then(() => {
+          refetchVoteSession();
+          displayAlert('success', I18n.t('administration.voteSessionSuccess'));
+        })
+        .catch(() => {
+          displayAlert('danger', I18n.t('administration.anErrorOccured'));
+        });
     }
 
     close();
