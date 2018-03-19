@@ -1,6 +1,5 @@
 // @flow
 import React from 'react';
-import { Grid } from 'react-bootstrap';
 
 import Proposal from './proposal';
 import {
@@ -21,7 +20,7 @@ type Props = {
 };
 
 const Proposals = (props: Props) => (
-  <Grid>
+  <div>
     {props.proposals.map(proposal => (
       <Proposal
         key={proposal.id}
@@ -36,7 +35,7 @@ const Proposals = (props: Props) => (
         voteForProposalGauge={props.voteForProposalGauge}
       />
     ))}
-  </Grid>
+  </div>
 );
 
 export default Proposals;
