@@ -64,6 +64,7 @@ const DumbModulesSection = ({
               />
             </Checkbox>
             {activeTokenModulesIds.map(id => <TokensForm key={id} id={id} editLocale={editLocale} />)}
+            {(tokenModuleChecked || gaugeModuleChecked) && <div className="separator" />}
             <Checkbox
               checked={gaugeModuleChecked}
               onChange={() => {
@@ -78,7 +79,7 @@ const DumbModulesSection = ({
               />
             </Checkbox>
             {gaugeModuleChecked ? (
-              <div>
+              <div className="module-form">
                 <div className="flex">
                   <label htmlFor="input-dropdown-addon">
                     <Translate value="administration.gaugeNumber" />

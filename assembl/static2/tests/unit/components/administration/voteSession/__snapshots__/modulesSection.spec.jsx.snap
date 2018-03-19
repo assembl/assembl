@@ -35,6 +35,9 @@ exports[`ModulesSection component should render a ModuleSection component with t
         </Checkbox>
         Immutable.List [
         ]
+        <div
+          className="separator"
+        />
         <Checkbox
           bsClass="checkbox"
           checked={true}
@@ -51,7 +54,9 @@ exports[`ModulesSection component should render a ModuleSection component with t
             label="Missing translation: administration.voteWithGauges"
           />
         </Checkbox>
-        <div>
+        <div
+          className="module-form"
+        >
           <div
             className="flex"
           >
