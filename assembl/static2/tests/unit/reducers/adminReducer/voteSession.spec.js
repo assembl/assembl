@@ -283,7 +283,52 @@ describe('voteSession admin reducers', () => {
   });
 
   describe('voteProposalsById reducer', () => {
-    const { voteProposalsById } = reducers;
+    const { voteProposalsById, voteProposalsHaveChanged } = reducers;
+
+    it('should handle CREATE_VOTE_PROPOSAL action type', () => {
+      const proposal1 = fromJS({
+        _hasChanged: false,
+        _isNew: false,
+        _toDelete: false,
+        order: 1.0,
+        id: 'proposal1',
+        titleEntries: [],
+        descriptionEntries: [],
+        modules: []
+      });
+      const state = Map({ proposal1: proposal1 });
+      const action = {
+        id: 'proposal2',
+        type: actionTypes.CREATE_VOTE_PROPOSAL
+      };
+      const expectedProposal1 = fromJS({
+        _hasChanged: false,
+        _isNew: false,
+        _toDelete: false,
+        order: 1.0,
+        id: 'proposal1',
+        titleEntries: [],
+        descriptionEntries: [],
+        modules: []
+      });
+      let expectedProposal2 = fromJS({
+        _hasChanged: false,
+        _isNew: true,
+        _toDelete: false,
+        order: 2.0,
+        id: 'proposal2',
+        titleEntries: [],
+        descriptionEntries: [],
+        modules: []
+      });
+      expectedProposal2 = expectedProposal2.set('_validationErrors', []);
+      const expected = Map({ proposal1: expectedProposal1, proposal2: expectedProposal2 });
+      let result = voteProposalsById(state, action);
+      expect(result).toEqual(expected);
+      result = voteProposalsHaveChanged(false, action);
+      expect(result).toEqual(true);
+    });
+
     it('should handle MOVE_PROPOSAL_UP action type', () => {
       const proposal1 = fromJS({
         _hasChanged: false,
@@ -351,8 +396,229 @@ describe('voteSession admin reducers', () => {
         modules: []
       });
       const expected = Map({ proposal1: expectedProposal1, proposal2: expectedProposal2, proposal3: expectedProposal3 });
-      const result = voteProposalsById(state, action);
+      let result = voteProposalsById(state, action);
       expect(result).toEqual(expected);
+      result = voteProposalsHaveChanged(false, action);
+      expect(result).toEqual(true);
+    });
+
+    it('should handle MOVE_PROPOSAL_DOWN action type', () => {
+      const proposal1 = fromJS({
+        _hasChanged: false,
+        _isNew: false,
+        _toDelete: false,
+        order: 1.0,
+        id: 'proposal1',
+        titleEntries: [],
+        descriptionEntries: [],
+        modules: []
+      });
+      const proposal2 = fromJS({
+        _hasChanged: false,
+        _isNew: false,
+        _toDelete: false,
+        order: 2.0,
+        id: 'proposal2',
+        titleEntries: [],
+        descriptionEntries: [],
+        modules: []
+      });
+      const proposal3 = fromJS({
+        _hasChanged: false,
+        _isNew: false,
+        _toDelete: false,
+        order: 3.0,
+        id: 'proposal3',
+        titleEntries: [],
+        descriptionEntries: [],
+        modules: []
+      });
+      const state = Map({ proposal1: proposal1, proposal2: proposal2, proposal3: proposal3 });
+      const action = {
+        id: 'proposal2',
+        type: actionTypes.MOVE_PROPOSAL_DOWN
+      };
+      const expectedProposal1 = fromJS({
+        _hasChanged: false,
+        _isNew: false,
+        _toDelete: false,
+        order: 1.0,
+        id: 'proposal1',
+        titleEntries: [],
+        descriptionEntries: [],
+        modules: []
+      });
+      const expectedProposal2 = fromJS({
+        _hasChanged: true,
+        _isNew: false,
+        _toDelete: false,
+        order: 3.0,
+        id: 'proposal2',
+        titleEntries: [],
+        descriptionEntries: [],
+        modules: []
+      });
+      const expectedProposal3 = fromJS({
+        _hasChanged: true,
+        _isNew: false,
+        _toDelete: false,
+        order: 2.0,
+        id: 'proposal3',
+        titleEntries: [],
+        descriptionEntries: [],
+        modules: []
+      });
+      const expected = Map({ proposal1: expectedProposal1, proposal2: expectedProposal2, proposal3: expectedProposal3 });
+      let result = voteProposalsById(state, action);
+      expect(result).toEqual(expected);
+      result = voteProposalsHaveChanged(false, action);
+      expect(result).toEqual(true);
+    });
+
+    it('should handle MOVE_PROPOSAL_UP action type (deleted proposal in between)', () => {
+      const proposal1 = fromJS({
+        _hasChanged: false,
+        _isNew: false,
+        _toDelete: false,
+        order: 1.0,
+        id: 'proposal1',
+        titleEntries: [],
+        descriptionEntries: [],
+        modules: []
+      });
+      const proposal2 = fromJS({
+        _hasChanged: false,
+        _isNew: false,
+        _toDelete: true,
+        order: 2.0,
+        id: 'proposal2',
+        titleEntries: [],
+        descriptionEntries: [],
+        modules: []
+      });
+      const proposal3 = fromJS({
+        _hasChanged: false,
+        _isNew: false,
+        _toDelete: false,
+        order: 3.0,
+        id: 'proposal3',
+        titleEntries: [],
+        descriptionEntries: [],
+        modules: []
+      });
+      const state = Map({ proposal1: proposal1, proposal2: proposal2, proposal3: proposal3 });
+      const action = {
+        id: 'proposal3',
+        type: actionTypes.MOVE_PROPOSAL_UP
+      };
+      const expectedProposal1 = fromJS({
+        _hasChanged: true,
+        _isNew: false,
+        _toDelete: false,
+        order: 2.0,
+        id: 'proposal1',
+        titleEntries: [],
+        descriptionEntries: [],
+        modules: []
+      });
+      const expectedProposal2 = fromJS({
+        _hasChanged: false,
+        _isNew: false,
+        _toDelete: true,
+        order: 2.0,
+        id: 'proposal2',
+        titleEntries: [],
+        descriptionEntries: [],
+        modules: []
+      });
+      const expectedProposal3 = fromJS({
+        _hasChanged: true,
+        _isNew: false,
+        _toDelete: false,
+        order: 1.0,
+        id: 'proposal3',
+        titleEntries: [],
+        descriptionEntries: [],
+        modules: []
+      });
+      const expected = Map({ proposal1: expectedProposal1, proposal2: expectedProposal2, proposal3: expectedProposal3 });
+      let result = voteProposalsById(state, action);
+      expect(result).toEqual(expected);
+      result = voteProposalsHaveChanged(false, action);
+      expect(result).toEqual(true);
+    });
+
+    it('should handle MOVE_PROPOSAL_DOWN action type (deleted proposal in between)', () => {
+      const proposal1 = fromJS({
+        _hasChanged: false,
+        _isNew: false,
+        _toDelete: false,
+        order: 1.0,
+        id: 'proposal1',
+        titleEntries: [],
+        descriptionEntries: [],
+        modules: []
+      });
+      const proposal2 = fromJS({
+        _hasChanged: false,
+        _isNew: false,
+        _toDelete: true,
+        order: 2.0,
+        id: 'proposal2',
+        titleEntries: [],
+        descriptionEntries: [],
+        modules: []
+      });
+      const proposal3 = fromJS({
+        _hasChanged: false,
+        _isNew: false,
+        _toDelete: false,
+        order: 3.0,
+        id: 'proposal3',
+        titleEntries: [],
+        descriptionEntries: [],
+        modules: []
+      });
+      const state = Map({ proposal1: proposal1, proposal2: proposal2, proposal3: proposal3 });
+      const action = {
+        id: 'proposal1',
+        type: actionTypes.MOVE_PROPOSAL_DOWN
+      };
+      const expectedProposal1 = fromJS({
+        _hasChanged: true,
+        _isNew: false,
+        _toDelete: false,
+        order: 2.0,
+        id: 'proposal1',
+        titleEntries: [],
+        descriptionEntries: [],
+        modules: []
+      });
+      const expectedProposal2 = fromJS({
+        _hasChanged: false,
+        _isNew: false,
+        _toDelete: true,
+        order: 2.0,
+        id: 'proposal2',
+        titleEntries: [],
+        descriptionEntries: [],
+        modules: []
+      });
+      const expectedProposal3 = fromJS({
+        _hasChanged: true,
+        _isNew: false,
+        _toDelete: false,
+        order: 1.0,
+        id: 'proposal3',
+        titleEntries: [],
+        descriptionEntries: [],
+        modules: []
+      });
+      const expected = Map({ proposal1: expectedProposal1, proposal2: expectedProposal2, proposal3: expectedProposal3 });
+      let result = voteProposalsById(state, action);
+      expect(result).toEqual(expected);
+      result = voteProposalsHaveChanged(false, action);
+      expect(result).toEqual(true);
     });
 
     it('should handle ADD_MODULE_TO_PROPOSAL action type', () => {

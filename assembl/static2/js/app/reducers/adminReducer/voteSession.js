@@ -495,13 +495,14 @@ export const voteProposalsById = (state: Map<string, Map> = Map(), action: Redux
   }
   case CREATE_VOTE_PROPOSAL: {
     const order = state.size + 1.0;
-    return state.set(action.id, defaultVoteProposal.set('id', action.id)).set('order', order);
+    return state.set(action.id, defaultVoteProposal.set('id', action.id).set('order', order));
   }
   case DELETE_VOTE_PROPOSAL:
     return state.setIn([action.id, '_toDelete'], true);
   case MOVE_PROPOSAL_UP: {
     let newState = state;
     let proposalsInOrder = state
+      .filter(proposal => !proposal.get('_toDelete'))
       .sortBy(proposal => proposal.get('order'))
       .map(proposal => proposal.get('id'))
       .toList();
@@ -519,6 +520,7 @@ export const voteProposalsById = (state: Map<string, Map> = Map(), action: Redux
   case MOVE_PROPOSAL_DOWN: {
     let newState = state;
     let proposalsInOrder = state
+      .filter(proposal => !proposal.get('_toDelete'))
       .sortBy(proposal => proposal.get('order'))
       .map(proposal => proposal.get('id'))
       .toList();
