@@ -258,6 +258,8 @@
 
       .assembl-icon-up-open {
         color: $first-color;
+        display: block;
+        margin-bottom: 2px;
 
         &:before {
           font-size: 8px;
@@ -266,6 +268,8 @@
 
       .assembl-icon-down-open {
         color: $first-color;
+        display: block;
+        margin-top: 2px;
 
         &:before {
           font-size: 8px;
