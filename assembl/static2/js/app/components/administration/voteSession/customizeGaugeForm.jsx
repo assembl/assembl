@@ -60,7 +60,8 @@ type State = {
     minimum: number,
     nbTicks: number,
     unit: string
-  }
+  },
+  saving: boolean
 };
 
 export class DumbCustomizeGaugeForm extends React.Component<void, Props, State> {
@@ -81,7 +82,8 @@ export class DumbCustomizeGaugeForm extends React.Component<void, Props, State> 
         minimum: props.minimum,
         nbTicks: props.nbTicks,
         unit: props.unit
-      }
+      },
+      saving: false
     };
   }
 
@@ -100,6 +102,7 @@ export class DumbCustomizeGaugeForm extends React.Component<void, Props, State> 
       voteSpecTemplateId
     } = this.props;
     const { gaugeParams } = this.state;
+    this.setState({ saving: true });
 
     const gaugeModule = {
       ...gaugeParams, // don't move this line to avoid to override choices
@@ -263,7 +266,7 @@ export class DumbCustomizeGaugeForm extends React.Component<void, Props, State> 
           <Translate value="administration.gaugeModal.applyToAllProposalsCheckboxLabel" />
         </Checkbox> */}
         <SaveButton
-          disabled={!this.state._hasChanged}
+          disabled={!this.state._hasChanged || this.state.saving}
           saveAction={this.handleSave}
           specificClasses="save-button button-submit button-dark full-size"
         />
