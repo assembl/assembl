@@ -11,6 +11,7 @@ import TokensForm from './tokensForm';
 import GaugeForm from './gaugeForm';
 import {
   createTokenVoteModule,
+  createTokenVoteCategory,
   createGaugeVoteModule,
   createGaugeVoteChoice,
   deleteVoteModule,
@@ -152,6 +153,11 @@ const mapDispatchToProps = (dispatch) => {
     dispatch(createGaugeVoteChoice(newId, createRandomId()));
   };
 
+  const createTokenVoteModuleWithCategories = (newId) => {
+    dispatch(createTokenVoteModule(newId));
+    dispatch(createTokenVoteCategory(createRandomId(), newId));
+  };
+
   return {
     toggleModuleCheckbox: (checked, tokenModules, moduleType) => {
       if (!checked) {
@@ -161,7 +167,7 @@ const mapDispatchToProps = (dispatch) => {
           });
         } else {
           const newId = createRandomId();
-          const createAction = moduleType === 'tokens' ? createTokenVoteModule : createGaugeVoteModuleWithChoices;
+          const createAction = moduleType === 'tokens' ? createTokenVoteModuleWithCategories : createGaugeVoteModuleWithChoices;
           dispatch(createAction(newId));
         }
       } else {
