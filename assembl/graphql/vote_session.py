@@ -229,11 +229,7 @@ class TokenVoteSpecification(SecureObjectType, SQLAlchemyObjectType):
 
     def resolve_token_votes(self, args, context, info):
         votes = []
-        token_categories = self.token_categories
-        if self.vote_spec_template_id and not self.is_custom:
-            token_categories = self.vote_spec_template.token_categories
-
-        for token_category in token_categories:
+        for token_category in self.get_token_categories():
             query = self.db.query(
                 func.sum(getattr(self.get_vote_class(), "vote_value"))).filter_by(
                 vote_spec_id=self.id,
@@ -252,10 +248,7 @@ class TokenVoteSpecification(SecureObjectType, SQLAlchemyObjectType):
         return votes
 
     def resolve_token_categories(self, args, context, info):
-        if self.vote_spec_template_id and not self.is_custom:
-            return self.vote_spec_template.token_categories
-
-        return self.token_categories
+        return self.get_token_categories()
 
 
 class GaugeChoiceSpecification(SecureObjectType, SQLAlchemyObjectType):

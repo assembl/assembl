@@ -337,6 +337,12 @@ class TokenVoteSpecification(AbstractVoteSpecification):
         else:
             return True  # TODO: post-validate
 
+    def get_token_categories(self):
+        if self.vote_spec_template_id and not self.is_custom:
+            return self.vote_spec_template.token_categories
+
+        return self.token_categories
+
 
 class TokenCategorySpecification(DiscussionBoundBase):
     "This represents a token type, with its constraints"
