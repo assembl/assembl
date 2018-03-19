@@ -53,10 +53,14 @@ const DumbVoteProposalsSection = ({ voteProposals, editLocale, addVoteProposal }
 };
 
 const mapStateToProps = ({ admin }) => {
-  const { voteProposalsInOrder, voteProposalsById } = admin.voteSession;
+  const { voteProposalsById } = admin.voteSession;
   const { editLocale } = admin;
   return {
-    voteProposals: voteProposalsInOrder.filter(id => !voteProposalsById.getIn([id, '_toDelete'])),
+    voteProposals: voteProposalsById
+      .filter(proposal => !proposal.get('_toDelete'))
+      .sortBy(proposal => proposal.get('order'))
+      .map(proposal => proposal.get('id'))
+      .toList(),
     editLocale: editLocale
   };
 };

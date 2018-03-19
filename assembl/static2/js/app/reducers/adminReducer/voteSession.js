@@ -439,29 +439,6 @@ export const voteProposalsHaveChanged = (state: boolean = false, action: ReduxAc
   }
 };
 
-export const voteProposalsInOrder = (state: List<number> = List(), action: ReduxAction<Action>) => {
-  switch (action.type) {
-  case UPDATE_VOTE_PROPOSALS: {
-    const proposals = action.voteProposals.slice();
-    // sort on a copy, the sort is done in place
-    proposals.sort((a, b) => a.order - b.order);
-    return List(proposals.map(proposal => proposal.id));
-  }
-  case CREATE_VOTE_PROPOSAL:
-    return state.push(action.id);
-  case MOVE_PROPOSAL_UP: {
-    const idx = state.indexOf(action.id);
-    return state.delete(idx).insert(idx - 1, action.id);
-  }
-  case MOVE_PROPOSAL_DOWN: {
-    const idx = state.indexOf(action.id);
-    return state.delete(idx).insert(idx + 1, action.id);
-  }
-  default:
-    return state;
-  }
-};
-
 const defaultVoteProposal = Map({
   _isNew: true,
   _toDelete: false,
@@ -600,7 +577,6 @@ export default combineReducers({
   modulesInOrder: modulesInOrder,
   modulesById: modulesById,
   tokenCategoriesById: tokenCategoriesById,
-  voteProposalsInOrder: voteProposalsInOrder,
   voteProposalsById: voteProposalsById,
   voteProposalsHaveChanged: voteProposalsHaveChanged,
   gaugeChoicesById: gaugeChoicesById,

@@ -444,7 +444,6 @@ const mapStateToProps = ({ admin: { editLocale, voteSession }, debate, i18n }) =
     gaugeChoicesById,
     moduleTemplatesHaveChanged,
     voteProposalsHaveChanged,
-    voteProposalsInOrder,
     voteProposalsById
   } = voteSession;
 
@@ -489,15 +488,16 @@ const mapStateToProps = ({ admin: { editLocale, voteSession }, debate, i18n }) =
     timeline: debate.debateData.timeline,
     voteModules: voteModules,
     voteSessionPage: voteSession.page,
-    voteProposals: voteProposalsInOrder.map((id) => {
-      const proposal = voteProposalsById.get(id);
-      const pModules = proposal
-        .get('modules')
-        .map(pmId => modulesById.get(pmId))
-        .map(expandModuleData);
+    voteProposals: voteProposalsById
+      .map((proposal) => {
+        const pModules = proposal
+          .get('modules')
+          .map(pmId => modulesById.get(pmId))
+          .map(expandModuleData);
 
-      return proposal.set('modules', pModules);
-    })
+        return proposal.set('modules', pModules);
+      })
+      .sortBy(proposal => proposal.get('order'))
   };
 };
 
