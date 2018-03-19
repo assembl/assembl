@@ -4,7 +4,7 @@ import ShallowRenderer from 'react-test-renderer/shallow';
 import { DumbGaugeForm } from '../../../../../js/app/components/administration/voteSession/gaugeForm';
 import { textChoices } from './fakeData';
 
-describe('ModulesSection component', () => {
+describe('GaugeForm component', () => {
   const handleInstructionsChange = jest.fn(() => {});
   const handleNbTicksSelectChange = jest.fn(() => {});
   const handleNumberGaugeCheck = jest.fn(() => {});

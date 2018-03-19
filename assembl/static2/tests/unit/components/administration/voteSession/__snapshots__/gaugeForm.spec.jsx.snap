@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`ModulesSection component should render a form to set up a gauge and a numberGaugeForm below 1`] = `
+exports[`GaugeForm component should render a form to set up a gauge and a numberGaugeForm below 1`] = `
 <div
   className="gauges-vote-form"
 >
@@ -172,7 +172,7 @@ exports[`ModulesSection component should render a form to set up a gauge and a n
 </div>
 `;
 
-exports[`ModulesSection component should render a form to set up a gauge and a textGaugeForm below 1`] = `
+exports[`GaugeForm component should render a form to set up a gauge and a textGaugeForm below 1`] = `
 <div
   className="gauges-vote-form"
 >
@@ -354,7 +354,7 @@ exports[`ModulesSection component should render a form to set up a gauge and a t
 </div>
 `;
 
-exports[`ModulesSection component should render a gauge form with no radio if canChangeType is false 1`] = `
+exports[`GaugeForm component should render a gauge form with no radio if canChangeType is false 1`] = `
 <div
   className="gauges-vote-form"
 >
