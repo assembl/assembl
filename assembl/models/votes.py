@@ -580,6 +580,12 @@ class GaugeVoteSpecification(AbstractVoteSpecification):
     def csv_results(self, csv_file, histogram_size=None):
         raise NotImplementedError
 
+    def get_choices(self):
+        if self.vote_spec_template_id and not self.is_custom:
+            return self.vote_spec_template.choices
+
+        return self.choices
+
 
 class GaugeChoiceSpecification(DiscussionBoundBase):
     "This represents a choice in the gauge"
