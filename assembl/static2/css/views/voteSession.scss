@@ -56,8 +56,11 @@
       display: flex;
 
       .tokens {
-        padding-left: 30px;
-        padding-top: 20px;
+        padding: 28px 15px 0 0;
+
+        svg {
+          display: inline;
+        }
       }
     }
   }
