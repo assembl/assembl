@@ -3,6 +3,8 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { I18n, Translate } from 'react-redux-i18n';
 import { OverlayTrigger, Button, Checkbox, FormGroup, HelpBlock } from 'react-bootstrap';
+import { type RawContentState } from 'draft-js';
+
 import FormControlWithLabel from '../../common/formControlWithLabel';
 import { getEntryValueForLocale } from '../../../utils/i18n';
 import { deleteVoteProposalTooltip, upTooltip, downTooltip } from '../../common/tooltips';
@@ -23,7 +25,7 @@ import CustomizeGaugeForm from './customizeGaugeForm';
 type VoteProposalFormProps = {
   index: number,
   title: string,
-  description: string,
+  description: RawContentState,
   _toDelete: boolean,
   markAsToDelete: Function,
   updateTitle: Function,
@@ -225,7 +227,7 @@ const mapStateToProps = ({ admin }, { id, editLocale }) => {
     _toDelete: proposal.get('_toDelete', false),
     validationErrors: proposal.get('_validationErrors'),
     title: getEntryValueForLocale(proposal.get('titleEntries'), editLocale),
-    description: description ? description.toJS() : null,
+    description: description && typeof description !== 'string' ? description.toJS() : null,
     order: proposal.get('order'),
     proposalModules: proposal.get('modules').map(moduleId => modulesById.get(moduleId)),
     tokenModules: modulesInOrder.filter(

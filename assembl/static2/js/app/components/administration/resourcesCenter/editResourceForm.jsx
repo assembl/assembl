@@ -4,6 +4,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { I18n, Translate } from 'react-redux-i18n';
 import { Button, FormGroup, OverlayTrigger } from 'react-bootstrap';
+import { type RawContentState } from 'draft-js';
 
 import {
   deleteResource,
@@ -33,7 +34,7 @@ type EditResourceFormProps = {
   imgUrl: string | File,
   markAsToDelete: Function,
   order: number,
-  text: string,
+  text: RawContentState,
   title: string
 };
 
@@ -125,7 +126,7 @@ const mapStateToProps = (state, { id, editLocale }) => {
     imgUrl: resource.getIn(['img', 'externalUrl']),
     locale: state.i18n.locale, // for I18n.t()
     order: resource.get('order'),
-    text: text ? text.toJS() : null,
+    text: text && typeof text !== 'string' ? text.toJS() : null,
     title: getEntryValueForLocale(resource.get('titleEntries'), editLocale, '')
   };
 };

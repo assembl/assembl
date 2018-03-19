@@ -3,6 +3,7 @@ import React from 'react';
 import { Row } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { I18n } from 'react-redux-i18n';
+import { type RawContentState } from 'draft-js';
 
 import SectionTitle from '../sectionTitle';
 import FormControlWithLabel from '../../common/formControlWithLabel';
@@ -11,9 +12,9 @@ import type { State } from '../../../reducers/rootReducer';
 import { getEntryValueForLocale } from '../../../utils/i18n';
 
 type LegalNoticeAndTermsFormProps = {
-  legalNotice: string,
+  legalNotice: ?RawContentState,
   editLocale: string,
-  termsAndConditions: string,
+  termsAndConditions: ?RawContentState,
   updateLegalNotice: Function,
   updateTermsAndConditions: Function
 };
@@ -34,8 +35,8 @@ export const DumbLegalNoticeAndTermsForm = ({
         <Row>
           <div className="form-container">
             <FormControlWithLabel
-              key={`tac-${editLocale}-${termsAndConditions}`}
-              label={tacLabel}
+              key={`tac-${editLocale}`}
+              label={`${tacLabel}*`}
               onChange={updateTermsAndConditions}
               required
               type="rich-text"
@@ -43,8 +44,8 @@ export const DumbLegalNoticeAndTermsForm = ({
             />
             <div className="separator" />
             <FormControlWithLabel
-              key={`legal-notice-${editLocale}-${legalNotice}`}
-              label={legalNoticeLabel}
+              key={`legal-notice-${editLocale}`}
+              label={`${legalNoticeLabel}*`}
               onChange={updateLegalNotice}
               required
               type="rich-text"
@@ -62,8 +63,8 @@ const mapStateToProps = (state: State, { editLocale }: LegalNoticeAndTermsFormPr
   const legalNotice = getEntryValueForLocale(legalNoticeAndTerms.get('legalNoticeEntries'), editLocale);
   const termsAndConditions = getEntryValueForLocale(legalNoticeAndTerms.get('termsAndConditionsEntries'), editLocale);
   return {
-    legalNotice: legalNotice ? legalNotice.toJS() : '',
-    termsAndConditions: termsAndConditions ? termsAndConditions.toJS() : ''
+    legalNotice: legalNotice && typeof legalNotice !== 'string' ? legalNotice.toJS() : null,
+    termsAndConditions: termsAndConditions && typeof termsAndConditions !== 'string' ? termsAndConditions.toJS() : null
   };
 };
 

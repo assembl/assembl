@@ -4,6 +4,8 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import { I18n, Translate } from 'react-redux-i18n';
 import { FormGroup } from 'react-bootstrap';
+import { type RawContentState } from 'draft-js';
+
 import SectionTitle from '../sectionTitle';
 import FormControlWithLabel from '../../common/formControlWithLabel';
 import FileUploader from '../../common/fileUploader';
@@ -26,7 +28,7 @@ type PageFormProps = {
   headerImgUrl: string,
   headerImgMimeType: string,
   instructionsTitle: string,
-  instructionsContent: string,
+  instructionsContent: RawContentState,
   propositionSectionTitle: string,
   editLocale: string,
   handleHeaderTitleChange: Function,
@@ -158,7 +160,7 @@ const mapStateToProps = (state, { editLocale }) => {
     headerTitle: getEntryValueForLocale(voteSession.get('titleEntries'), editLocale),
     headerSubtitle: getEntryValueForLocale(voteSession.get('subTitleEntries'), editLocale),
     instructionsTitle: getEntryValueForLocale(voteSession.get('instructionsSectionTitleEntries'), editLocale),
-    instructionsContent: instructionsContent ? instructionsContent.toJS() : null,
+    instructionsContent: instructionsContent && typeof instructionsContent !== 'string' ? instructionsContent.toJS() : null,
     propositionSectionTitle: getEntryValueForLocale(voteSession.get('propositionsSectionTitleEntries'), editLocale),
     headerImgUrl: voteSession.getIn(['headerImage', 'externalUrl']),
     headerImgMimeType: voteSession.getIn(['headerImage', 'mimeType'])

@@ -17,6 +17,7 @@ import {
 import SaveButton from '../../../components/administration/saveButton';
 import { createVariablesForTextGaugeMutation, createVariablesForNumberGaugeMutation } from '../../../pages/voteSessionAdmin';
 import { displayAlert } from '../../../utils/utilityManager';
+import { convertToLangstringEntries } from '../../../utils/i18n';
 
 import createProposalMutation from '../../../graphql/mutations/createProposal.graphql';
 import createGaugeVoteSpecificationMutation from '../../../graphql/mutations/createGaugeVoteSpecification.graphql';
@@ -61,8 +62,6 @@ type State = {
     unit: string
   }
 };
-
-const convertToLangstringEntries = (s: string, localeCode: string): LangstringEntries => [{ localeCode: localeCode, value: s }];
 
 export class DumbCustomizeGaugeForm extends React.Component<void, Props, State> {
   props: Props;
