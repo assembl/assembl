@@ -19,7 +19,7 @@ exports[`LegalNoticeAndTermsForm dumb component should render a form to edit leg
         className="form-container"
       >
         <FormControlWithLabel
-          label="Missing translation: administration.legalNoticeAndTerms.termsAndConditionsLabel*"
+          label="Missing translation: administration.legalNoticeAndTerms.termsAndConditionsLabel"
           labelAlwaysVisible={false}
           onChange={[Function]}
           required={true}
@@ -31,7 +31,7 @@ exports[`LegalNoticeAndTermsForm dumb component should render a form to edit leg
           className="separator"
         />
         <FormControlWithLabel
-          label="Missing translation: administration.legalNoticeAndTerms.legalNoticeLabel*"
+          label="Missing translation: administration.legalNoticeAndTerms.legalNoticeLabel"
           labelAlwaysVisible={false}
           onChange={[Function]}
           required={true}

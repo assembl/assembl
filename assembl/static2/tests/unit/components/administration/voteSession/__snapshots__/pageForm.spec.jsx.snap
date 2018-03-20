@@ -50,7 +50,7 @@ exports[`Vote Session DumbPageForm component should render a form to update the 
           label="Missing translation: administration.headerTitle"
         />
         <FormControlWithLabel
-          label="Missing translation: administration.ph.headerTitle FR*"
+          label="Missing translation: administration.ph.headerTitle FR"
           labelAlwaysVisible={false}
           onChange={[Function]}
           required={true}
@@ -103,19 +103,19 @@ exports[`Vote Session DumbPageForm component should render a form to update the 
         label="Missing translation: administration.instructions"
       />
       <FormControlWithLabel
-        label="Missing translation: administration.ph.instructionsTitle FR*"
+        label="Missing translation: administration.ph.instructionsTitle FR"
         labelAlwaysVisible={false}
         onChange={[Function]}
-        required={false}
+        required={true}
         type="text"
         validationErrors={null}
         value="Votez pour elire les 3 meilleures proppositions et leur alouer une estimation de cout!"
       />
       <FormControlWithLabel
-        label="Missing translation: administration.ph.instructionsContent FR*"
+        label="Missing translation: administration.ph.instructionsContent FR"
         labelAlwaysVisible={false}
         onChange={[Function]}
-        required={false}
+        required={true}
         type="rich-text"
         validationErrors={null}
         value={
@@ -146,7 +146,7 @@ exports[`Vote Session DumbPageForm component should render a form to update the 
         label="Missing translation: administration.proposalSectionTitle"
       />
       <FormControlWithLabel
-        label="Missing translation: administration.ph.propositionSectionTitle FR*"
+        label="Missing translation: administration.ph.propositionSectionTitle FR"
         labelAlwaysVisible={false}
         onChange={[Function]}
         required={true}

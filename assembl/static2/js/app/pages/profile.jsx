@@ -137,14 +137,14 @@ class Profile extends React.PureComponent<*, ProfileProps, ProfileState> {
                       value={username}
                     />
                     <FormControlWithLabel
-                      label={`${fullNameLabel}*`}
+                      label={fullNameLabel}
                       onChange={this.handleFullnameChange}
                       type="text"
                       value={name}
                       required
                     />
                     <FormControlWithLabel
-                      label={`${emailLabel}*`}
+                      label={emailLabel}
                       onChange={this.handleEmailChange}
                       type="email"
                       value={email}
