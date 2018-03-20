@@ -15,7 +15,7 @@ import AvailableTokens from '../components/voteSession/availableTokens';
 import Proposals from '../components/voteSession/proposals';
 import { getDomElementOffset, isMobile } from '../utils/globalFunctions';
 import { getPhaseId } from '../utils/timeline';
-import { promptForLoginOr, displayAlert } from '../utils/utilityManager';
+import { promptForLoginOr, displayAlert, displayModal } from '../utils/utilityManager';
 import withLoadingIndicator from '../components/common/withLoadingIndicator';
 import MessagePage from '../components/common/messagePage';
 
@@ -238,7 +238,7 @@ class DumbVoteSession extends React.Component<void, Props, State> {
             }
           })
             .then(() => {
-              displayAlert('success', I18n.t('debate.voteSession.postSuccess'));
+              displayModal(null, I18n.t('debate.voteSession.postSuccess'), true, null, null);
               refetchVoteSession();
             })
             .catch((error) => {
@@ -257,7 +257,7 @@ class DumbVoteSession extends React.Component<void, Props, State> {
           }
         })
           .then(() => {
-            displayAlert('success', I18n.t('debate.voteSession.postSuccess'));
+            displayModal(null, I18n.t('debate.voteSession.postSuccess'), true, null, null);
           })
           .catch((error) => {
             displayAlert('danger', error.message);
