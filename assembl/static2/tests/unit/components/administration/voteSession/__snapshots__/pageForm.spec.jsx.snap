@@ -61,6 +61,7 @@ exports[`Vote Session DumbPageForm component should render a form to update the 
           label="Missing translation: administration.ph.headerSubtitle FR"
           labelAlwaysVisible={false}
           onChange={[Function]}
+          required={false}
           type="text"
           value="La phase de vote est ouverte !"
         />
@@ -103,6 +104,7 @@ exports[`Vote Session DumbPageForm component should render a form to update the 
         label="Missing translation: administration.ph.instructionsTitle FR*"
         labelAlwaysVisible={false}
         onChange={[Function]}
+        required={false}
         type="text"
         value="Votez pour elire les 3 meilleures proppositions et leur alouer une estimation de cout!"
       />
@@ -110,6 +112,7 @@ exports[`Vote Session DumbPageForm component should render a form to update the 
         label="Missing translation: administration.ph.instructionsContent FR*"
         labelAlwaysVisible={false}
         onChange={[Function]}
+        required={false}
         type="rich-text"
         value={
           Object {

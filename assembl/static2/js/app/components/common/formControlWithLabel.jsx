@@ -37,10 +37,11 @@ class FormControlWithLabel extends React.Component {
 
   /* onBlur validation */
   setValidationState() {
+    const { value, required } = this.props;
     let errorMessage = '';
     let validationState = null;
-    const valueSize = this.props.value ? this.props.value.length : 0;
-    if (this.props.required && valueSize === 0) {
+    const valueSize = value ? value.length : 0;
+    if (required && valueSize === 0) {
       errorMessage = I18n.t('error.required');
       validationState = 'error';
     }
@@ -48,12 +49,18 @@ class FormControlWithLabel extends React.Component {
     this.setState({ errorMessage: errorMessage, validationState: validationState });
   }
 
+  getLabel = () => {
+    const { label, required } = this.props;
+    const placeHolder = required ? `${label}*` : label;
+    return placeHolder;
+  };
+
   renderRichTextEditor = () => {
-    const { label, onChange, value } = this.props;
+    const { onChange, value } = this.props;
     return (
       <RichTextEditor
         rawContentState={value}
-        placeholder={label}
+        placeholder={this.getLabel()}
         toolbarPosition="bottom"
         updateContentState={cs => onChange(cs)}
         withAttachmentButton={false}
@@ -62,7 +69,7 @@ class FormControlWithLabel extends React.Component {
   };
 
   renderFormControl = () => {
-    const { type, value, disabled, componentClass, id, label, onChange, formControlProps } = this.props;
+    const { type, value, disabled, componentClass, id, onChange, formControlProps } = this.props;
     if (type === 'rich-text') {
       return this.renderRichTextEditor();
     }
@@ -71,7 +78,7 @@ class FormControlWithLabel extends React.Component {
         componentClass={componentClass}
         id={id}
         type={type}
-        placeholder={label}
+        placeholder={this.getLabel()}
         onChange={onChange}
         value={value || ''}
         onBlur={this.setValidationState}
@@ -82,11 +89,11 @@ class FormControlWithLabel extends React.Component {
   };
 
   render() {
-    const { id, label, labelAlwaysVisible, type, value } = this.props;
+    const { id, labelAlwaysVisible, type, value } = this.props;
     const displayLabel = labelAlwaysVisible || type !== 'rich-text' ? value : false;
     return (
       <FormGroup validationState={this.state.validationState}>
-        {displayLabel ? <ControlLabel htmlFor={id}>{label}</ControlLabel> : null}
+        {displayLabel ? <ControlLabel htmlFor={id}>{this.getLabel()}</ControlLabel> : null}
         {this.renderFormControl()}
         {this.state.errorMessage ? <HelpBlock>{this.state.errorMessage}</HelpBlock> : null}
       </FormGroup>
@@ -97,7 +104,8 @@ class FormControlWithLabel extends React.Component {
 FormControlWithLabel.defaultProps = {
   labelAlwaysVisible: false,
   type: 'text',
-  value: undefined
+  value: undefined,
+  required: false
 };
 
 export default FormControlWithLabel;
