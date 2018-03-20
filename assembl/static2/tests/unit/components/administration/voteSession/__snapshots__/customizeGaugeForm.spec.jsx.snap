@@ -2,37 +2,55 @@
 
 exports[`DumbCustomizeGaugeForm component should render a form to customize a gauge 1`] = `
 <div
-  className="gauge-modal-form-container"
+  className="gauge-modal"
 >
-  <DumbGaugeForm
-    canChangeType={false}
-    choices={
-      Immutable.List [
-      ]
-    }
-    createChoice={[Function]}
-    deleteChoice={[Function]}
-    handleGaugeChoiceLabelChange={[Function]}
-    handleInstructionsChange={[Function]}
-    handleMaxChange={[Function]}
-    handleMinChange={[Function]}
-    handleNumberGaugeCheck={[Function]}
-    handleNumberGaugeUncheck={[Function]}
-    handleUnitChange={[Function]}
-    id="my-gauge"
-    index={null}
-    instructions="The IB monitor is down, quantify the 1080p application so we can bypass the SMS hard drive!"
-    isNumberGauge={true}
-    maximum={10}
-    minimum={1}
-    nbTicks={5}
-    unit="k€"
-    updateNbTicks={[Function]}
-  />
-  <Unknown
-    disabled={true}
-    saveAction={[Function]}
-    specificClasses="save-button button-submit button-dark full-size"
-  />
+  <h3
+    className="dark-title-3 center"
+  >
+    <Translate
+      value="administration.gaugeModal.title"
+    />
+  </h3>
+  <div
+    className="ellipsis-content"
+  >
+    <Translate
+      value="administration.gaugeModal.subTitle"
+    />
+  </div>
+  <div
+    className="form"
+  >
+    <DumbGaugeForm
+      canChangeType={false}
+      choices={
+        Immutable.List [
+        ]
+      }
+      createChoice={[Function]}
+      deleteChoice={[Function]}
+      handleGaugeChoiceLabelChange={[Function]}
+      handleInstructionsChange={[Function]}
+      handleMaxChange={[Function]}
+      handleMinChange={[Function]}
+      handleNumberGaugeCheck={[Function]}
+      handleNumberGaugeUncheck={[Function]}
+      handleUnitChange={[Function]}
+      id="my-gauge"
+      index={null}
+      instructions="The IB monitor is down, quantify the 1080p application so we can bypass the SMS hard drive!"
+      isNumberGauge={true}
+      maximum={10}
+      minimum={1}
+      nbTicks={5}
+      unit="k€"
+      updateNbTicks={[Function]}
+    />
+    <Unknown
+      disabled={true}
+      saveAction={[Function]}
+      specificClasses="save-button button-submit button-dark full-size"
+    />
+  </div>
 </div>
 `;

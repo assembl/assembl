@@ -3,7 +3,7 @@ import React from 'react';
 import { List, Map } from 'immutable';
 import { connect } from 'react-redux';
 import { compose, graphql } from 'react-apollo';
-import { I18n } from 'react-redux-i18n';
+import { I18n, Translate } from 'react-redux-i18n';
 
 import { DumbGaugeForm, getGaugeModuleInfo, type VoteChoice } from './gaugeForm';
 import { createRandomId } from '../../../utils/globalFunctions';
@@ -249,31 +249,40 @@ export class DumbCustomizeGaugeForm extends React.Component<void, Props, State> 
   render() {
     const { gaugeModuleId } = this.props;
     return (
-      <div className="gauge-modal-form-container">
-        <DumbGaugeForm
-          id={gaugeModuleId}
-          {...this.state.gaugeParams}
-          canChangeType={false}
-          nbTicks={this.getNbTicks()}
-          createChoice={this.createChoice}
-          deleteChoice={this.deleteChoice}
-          updateNbTicks={this.updateNbTicks}
-          handleInstructionsChange={e => this.updateInstructions(e.target.value)}
-          handleNumberGaugeCheck={() => this.updateIsNumberGauge(true)}
-          handleNumberGaugeUncheck={() => this.updateIsNumberGauge(false)}
-          handleMinChange={this.handleMinChange}
-          handleMaxChange={this.handleMaxChange}
-          handleUnitChange={this.handleUnitChange}
-          handleGaugeChoiceLabelChange={this.handleGaugeChoiceLabelChange}
-        />
-        {/* <Checkbox onClick={this.toggleApplyToAllProposals}>
-          <Translate value="administration.gaugeModal.applyToAllProposalsCheckboxLabel" />
-        </Checkbox> */}
-        <SaveButton
-          disabled={!this.state._hasChanged || this.state.saving}
-          saveAction={this.handleSave}
-          specificClasses="save-button button-submit button-dark full-size"
-        />
+      <div className="gauge-modal">
+        <h3 className="dark-title-3 center">
+          <Translate value="administration.gaugeModal.title" />
+        </h3>
+        <div className="ellipsis-content">
+          <Translate value="administration.gaugeModal.subTitle" />
+        </div>
+
+        <div className="form">
+          <DumbGaugeForm
+            id={gaugeModuleId}
+            {...this.state.gaugeParams}
+            canChangeType={false}
+            nbTicks={this.getNbTicks()}
+            createChoice={this.createChoice}
+            deleteChoice={this.deleteChoice}
+            updateNbTicks={this.updateNbTicks}
+            handleInstructionsChange={e => this.updateInstructions(e.target.value)}
+            handleNumberGaugeCheck={() => this.updateIsNumberGauge(true)}
+            handleNumberGaugeUncheck={() => this.updateIsNumberGauge(false)}
+            handleMinChange={this.handleMinChange}
+            handleMaxChange={this.handleMaxChange}
+            handleUnitChange={this.handleUnitChange}
+            handleGaugeChoiceLabelChange={this.handleGaugeChoiceLabelChange}
+          />
+          {/* <Checkbox onClick={this.toggleApplyToAllProposals}>
+            <Translate value="administration.gaugeModal.applyToAllProposalsCheckboxLabel" />
+          </Checkbox> */}
+          <SaveButton
+            disabled={!this.state._hasChanged || this.state.saving}
+            saveAction={this.handleSave}
+            specificClasses="save-button button-submit button-dark full-size"
+          />
+        </div>
       </div>
     );
   }

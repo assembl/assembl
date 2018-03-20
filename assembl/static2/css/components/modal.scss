@@ -33,14 +33,16 @@
     flex-grow: 1;
   }
 
-  .gauge-modal-form {
-    width: 75%;
-    margin: 0 auto;
-    padding: 10px 0;
-  }
+  .gauge-modal {
+    .form {
+      width: 75%;
+      margin: 0 auto;
+      padding: 10px 0;
+    }
 
-  .save-button {
-    margin-top: 20px;
+    .save-button {
+      margin-top: 30px;
+    }
   }
 
   label {
