@@ -129,7 +129,7 @@ const DumbGaugeForm = ({
   index
 }: GaugeFormProps) => (
   <div className="gauges-vote-form">
-    <Translate value="administration.gauge" number={index + 1} />
+    {index !== null && <Translate value="administration.gauge" number={index + 1} />}
     <div className="flex margin-m">
       <FormControlWithLabel
         value={instructions}
