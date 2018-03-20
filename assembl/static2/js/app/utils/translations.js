@@ -1052,7 +1052,7 @@ const Translations = {
         title: "Title of the proposal*",
         description: "Description*",
         tokenVote: "Token vote",
-        gaugeSettings: "Modify the settings",
+        gaugeSettings: "Edit settings",
         validationErrors: {
           atLeastOneModule: "You should select at least one module."
         }
