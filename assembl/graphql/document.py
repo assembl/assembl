@@ -49,14 +49,11 @@ class UploadDocument(graphene.Mutation):
         if uploaded_file is not None:
             filename = os.path.basename(context.POST[uploaded_file].filename)
             mime_type = context.POST[uploaded_file].type
-            uploaded_file = context.POST[uploaded_file].file
-            uploaded_file.seek(0)
-            data = uploaded_file.read()
             document = models.File(
                 discussion=discussion,
                 mime_type=mime_type,
-                title=filename,
-                data=data)
+                title=filename)
+            document.add_file_data(context.POST[uploaded_file].file)
             discussion.db.add(document)
             document.db.flush()
 

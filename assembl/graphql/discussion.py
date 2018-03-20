@@ -172,14 +172,11 @@ class UpdateResourcesCenter(graphene.Mutation):
             if image is not None:
                 filename = os.path.basename(context.POST[image].filename)
                 mime_type = context.POST[image].type
-                uploaded_file = context.POST[image].file
-                uploaded_file.seek(0)
-                data = uploaded_file.read()
                 document = models.File(
                     discussion=discussion,
                     mime_type=mime_type,
-                    title=filename,
-                    data=data)
+                    title=filename)
+                document.add_file_data(context.POST[image].file)
 
                 # if there is already an IMAGE, remove it with the
                 # associated document
@@ -189,6 +186,7 @@ class UpdateResourcesCenter(graphene.Mutation):
                 ]
                 if header_images:
                     header_image = header_images[0]
+                    header_image.document.delete_file()
                     db.delete(header_image.document)
                     discussion.attachments.remove(header_image)
 

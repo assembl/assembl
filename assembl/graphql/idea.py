@@ -594,14 +594,11 @@ class CreateIdea(graphene.Mutation):
             if image is not None:
                 filename = os.path.basename(context.POST[image].filename)
                 mime_type = context.POST[image].type
-                uploaded_file = context.POST[image].file
-                uploaded_file.seek(0)
-                data = uploaded_file.read()
                 document = models.File(
                     discussion=discussion,
                     mime_type=mime_type,
-                    title=filename,
-                    data=data)
+                    title=filename)
+                document.add_file_data(context.POST[image].file)
                 db.add(models.IdeaAttachment(
                     document=document,
                     idea=saobj,
@@ -728,14 +725,11 @@ class CreateThematic(graphene.Mutation):
             if image is not None:
                 filename = os.path.basename(context.POST[image].filename)
                 mime_type = context.POST[image].type
-                uploaded_file = context.POST[image].file
-                uploaded_file.seek(0)
-                data = uploaded_file.read()
                 document = models.File(
                     discussion=discussion,
                     mime_type=mime_type,
-                    title=filename,
-                    data=data)
+                    title=filename)
+                document.add_file_data(context.POST[image].file)
                 db.add(models.IdeaAttachment(
                     document=document,
                     idea=saobj,
@@ -846,17 +840,15 @@ class UpdateThematic(graphene.Mutation):
             if image is not None:
                 filename = os.path.basename(context.POST[image].filename)
                 mime_type = context.POST[image].type
-                uploaded_file = context.POST[image].file
-                uploaded_file.seek(0)
-                data = uploaded_file.read()
                 document = models.File(
                     discussion=discussion,
                     mime_type=mime_type,
-                    title=filename,
-                    data=data)
+                    title=filename)
+                document.add_file_data(context.POST[image].file)
                 # if there is already an attachment, remove it with the
                 # associated document (image)
                 if thematic.attachments:
+                    thematic.attachments[0].document.delete_file()
                     db.delete(thematic.attachments[0].document)
                     thematic.attachments.remove(thematic.attachments[0])
 

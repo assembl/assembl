@@ -137,14 +137,11 @@ class UpdateUser(graphene.Mutation):
             if image is not None:
                 filename = os.path.basename(context.POST[image].filename)
                 mime_type = context.POST[image].type
-                uploaded_file = context.POST[image].file
-                uploaded_file.seek(0)
-                data = uploaded_file.read()
                 document = models.File(
                     discussion=discussion,
                     mime_type=mime_type,
-                    title=filename,
-                    data=data)
+                    title=filename)
+                document.add_file_data(context.POST[image].file)
                 # if there is already an PROFILE_PICTURE, remove it with the
                 # associated document
                 images = [
@@ -157,6 +154,7 @@ class UpdateUser(graphene.Mutation):
                     if not allowed:
                         raise HTTPUnauthorized("The authenticated user can't delete the existing AgentProfileAttachment")
 
+                    image.document.delete_file()
                     db.delete(image.document)
                     user.profile_attachments.remove(image)
 

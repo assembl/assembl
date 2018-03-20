@@ -437,6 +437,7 @@ class UpdatePost(graphene.Mutation):
                         discussion_id=discussion_id, post_id=post_id,
                         document_id=document_id
                     ).first()
+                    document.delete_file()
                     post.db.delete(document)
                     post.attachments.remove(post_attachment)
                     post.db.flush()
@@ -547,14 +548,11 @@ class AddPostAttachment(graphene.Mutation):
         if attachment is not None:
             filename = os.path.basename(context.POST[attachment].filename)
             mime_type = context.POST[attachment].type
-            uploaded_file = context.POST[attachment].file
-            uploaded_file.seek(0)
-            data = uploaded_file.read()
             document = models.File(
                 discussion=discussion,
                 mime_type=mime_type,
-                title=filename,
-                data=data)
+                title=filename)
+            document.add_file_data(context.POST[attachment].file)
 
             attachment = models.PostAttachment(
                 document=document,
@@ -595,6 +593,7 @@ class DeletePostAttachment(graphene.Mutation):
 
         cls = models.Post
         with cls.default_db.no_autoflush:
+            post_attachment.document.delete_file()
             post.db.delete(post_attachment.document)
             post.attachments.remove(post_attachment)
 

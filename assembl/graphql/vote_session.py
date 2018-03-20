@@ -111,22 +111,20 @@ class UpdateVoteSession(graphene.Mutation):
         if image is not None:
             filename = os.path.basename(context.POST[image].filename)
             mime_type = context.POST[image].type
-            uploaded_file = context.POST[image].file
-            uploaded_file.seek(0)
-            data = uploaded_file.read()
             ATTACHMENT_PURPOSE_IMAGE = models.AttachmentPurpose.IMAGE.value
+            document = models.File(
+                discussion=discussion,
+                mime_type=mime_type,
+                title=filename)
+            document.add_file_data(context.POST[image].file)
             images = [
                 att for att in vote_session.attachments
                 if att.attachmentPurpose == ATTACHMENT_PURPOSE_IMAGE]
             if images:
                 image = images[0]
+                image.document.delete_file()
                 db.delete(image.document)
                 vote_session.attachments.remove(image)
-            document = models.File(
-                discussion=discussion,
-                mime_type=mime_type,
-                title=filename,
-                data=data)
             db.add(models.VoteSessionAttachment(
                 document=document,
                 vote_session=vote_session,
