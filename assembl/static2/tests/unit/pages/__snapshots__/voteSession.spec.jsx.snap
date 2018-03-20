@@ -5,7 +5,6 @@ exports[`VoteSession component should match VoteSession snapshot 1`] = `
   className="votesession-page"
 >
   <Connect(Header)
-    additionalHeaderClasses="left"
     imgUrl="foo.jpg"
     subtitle="Maintenant il faut voter."
     title="Phase de vote à la majorité et estimation multicritère"
@@ -230,7 +229,6 @@ exports[`VoteSession component should match VoteSession snapshot with empty modu
   className="votesession-page"
 >
   <Connect(Header)
-    additionalHeaderClasses="left"
     imgUrl="foo.jpg"
     subtitle="Maintenant il faut voter."
     title="Phase de vote à la majorité et estimation multicritère"

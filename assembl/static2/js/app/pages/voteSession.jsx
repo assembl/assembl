@@ -292,7 +292,7 @@ class DumbVoteSession extends React.Component<void, Props, State> {
     const remainingTokensByCategory = this.getRemainingTokensByCategory(tokenVoteModule);
     return (
       <div className="votesession-page">
-        <Header title={title} subtitle={subTitle} imgUrl={headerImageUrl} additionalHeaderClasses="left" />
+        <Header title={title} subtitle={subTitle} imgUrl={headerImageUrl} />
         <Grid fluid className="background-light">
           <Section
             title={instructionsSectionTitle}
