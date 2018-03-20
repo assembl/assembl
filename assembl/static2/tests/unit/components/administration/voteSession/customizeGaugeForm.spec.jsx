@@ -13,6 +13,14 @@ describe('DumbCustomizeGaugeForm component', () => {
   const refetchVoteSessionSpy = jest.fn();
 
   it('should render a form to customize a gauge', () => {
+    const proposalMap = Map({
+      _isNew: true,
+      _hasChanged: false,
+      _toDelete: false,
+      id: 'my-proposal',
+      title: 'we need to calculate the bluetooth SQL application!',
+      description: 'Earum porro dolor et laboriosam sequi laudantium ullam necessitatibus. Blanditiis harum sed.'
+    });
     const props = {
       gaugeModuleId: 'my-gauge',
       editLocale: 'fr',
@@ -25,7 +33,7 @@ describe('DumbCustomizeGaugeForm component', () => {
       unit: 'k€',
       isCustom: false,
       originalModule: Map({ id: '1234' }),
-      proposalId: 'my-proposal',
+      proposal: proposalMap,
       voteSessionId: 'my-vote-session',
       voteSpecTemplateId: 'my-template',
       close: closeSpy,

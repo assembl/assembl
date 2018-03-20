@@ -15,7 +15,12 @@ import {
   deleteGaugeVoteChoice
 } from '../../../actions/adminActions/voteSession';
 import SaveButton from '../../../components/administration/saveButton';
-import { createVariablesForTextGaugeMutation, createVariablesForNumberGaugeMutation } from '../../../pages/voteSessionAdmin';
+import {
+  createVariablesForProposalsMutation,
+  createVariablesForTextGaugeMutation,
+  createVariablesForNumberGaugeMutation,
+  type VoteProposalMap
+} from '../../../pages/voteSessionAdmin';
 import { displayAlert } from '../../../utils/utilityManager';
 import { convertToLangstringEntries } from '../../../utils/i18n';
 
@@ -39,9 +44,10 @@ type Props = {
   unit: string,
   isCustom: boolean,
   originalModule: Map<string, any>,
-  proposalId: string,
+  proposal: VoteProposalMap,
   voteSessionId: string,
   voteSpecTemplateId: string,
+  createProposal: Function,
   createGaugeVoteSpecification: Function,
   createNumberGaugeVoteSpecification: Function,
   updateGaugeVoteSpecification: Function,
@@ -87,22 +93,19 @@ export class DumbCustomizeGaugeForm extends React.Component<void, Props, State> 
     };
   }
 
-  handleSave = () => {
+  createOrUpdateModule = (proposalId: string): void => {
+    const { gaugeParams } = this.state;
     const {
-      close,
       createGaugeVoteSpecification,
       createNumberGaugeVoteSpecification,
       updateGaugeVoteSpecification,
       updateNumberGaugeVoteSpecification,
       editLocale,
       originalModule,
-      proposalId,
       refetchVoteSession,
       voteSessionId,
       voteSpecTemplateId
     } = this.props;
-    const { gaugeParams } = this.state;
-    this.setState({ saving: true });
 
     const gaugeModule = {
       ...gaugeParams, // don't move this line to avoid to override choices
@@ -148,6 +151,27 @@ export class DumbCustomizeGaugeForm extends React.Component<void, Props, State> 
         .catch(() => {
           displayAlert('danger', I18n.t('administration.anErrorOccured'));
         });
+    }
+  };
+
+  handleSave = () => {
+    const { close, createProposal, proposal, voteSessionId } = this.props;
+    this.setState({ saving: true });
+    if (proposal.get('_isNew')) {
+      const payload = {
+        variables: createVariablesForProposalsMutation({
+          ...proposal.toJS(),
+          voteSessionId: voteSessionId
+        })
+      };
+
+      createProposal(payload).then((res) => {
+        if (res.data) {
+          this.createOrUpdateModule(res.data.createProposal.proposal.id);
+        }
+      });
+    } else {
+      this.createOrUpdateModule(proposal.get('id'));
     }
 
     close();
@@ -289,12 +313,13 @@ export class DumbCustomizeGaugeForm extends React.Component<void, Props, State> 
 }
 
 const mapStateToProps = (state, { gaugeModuleId, editLocale }) => {
-  const { gaugeChoicesById, modulesById, page } = state.admin.voteSession;
+  const { gaugeChoicesById, modulesById, page, voteProposalsById } = state.admin.voteSession;
   const pModule = modulesById.get(gaugeModuleId);
   const moduleTemplate = modulesById.get(pModule.get('voteSpecTemplateId'));
   return {
     ...getGaugeModuleInfo(moduleTemplate.merge(pModule), gaugeChoicesById, editLocale),
     isCustom: pModule.get('isCustom'),
+    proposal: voteProposalsById.get(pModule.get('proposalId')),
     proposalId: pModule.get('proposalId'),
     voteSessionId: page.get('id'),
     voteSpecTemplateId: pModule.get('voteSpecTemplateId'),

@@ -58,7 +58,7 @@ type VoteModule = {
 type ItemWithId = { id: string } & Object;
 export const createVariablesForDeleteMutation = (item: ItemWithId): { id: string } => ({ id: item.id });
 
-type VoteProposalMap = Map<string, *>;
+export type VoteProposalMap = Map<string, *>;
 
 type TokenInfo = {
   instructionsEntries?: LangstringEntries,
