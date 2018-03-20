@@ -2,6 +2,8 @@
 import enum
 from datetime import datetime
 from mimetypes import guess_all_extensions
+from os import path
+from io import BytesIO
 
 from sqlalchemy import (
     Column,
@@ -12,7 +14,6 @@ from sqlalchemy import (
     String,
     ForeignKey,
     Enum,
-    LargeBinary,
     event
 )
 from sqlalchemy.orm import relationship, backref
@@ -21,6 +22,8 @@ from ..lib.antivirus import get_antivirus
 from ..lib.sqla_types import CoerceUnicode
 from ..lib.sqla import DuplicateHandling
 from ..lib.sqla_types import URLString
+from ..lib.hash_fs import get_hashfs
+from ..lib.abc import classproperty
 from ..semantic.virtuoso_mapping import QuadMapPatternS
 from ..semantic.namespaces import DCTERMS
 from . import DiscussionBoundBase
@@ -177,11 +180,58 @@ class File(Document):
                 onupdate='CASCADE'), primary_key=True)
 
     # Should we defer this?
-    data = Column(LargeBinary, nullable=False)
+    # data = Column(LargeBinary, nullable=False)
+    file_identity = Column(String(64), index=True)
     # Note: use SQLA 1.1 for a better Enum behaviour
     av_checked = Column(Enum(*AntiVirusStatus.__members__.keys(),
                              name="anti_virus_status"),
                         server_default='unchecked')
+
+    @classproperty
+    def hashfs(self):
+        return get_hashfs()
+
+    @classmethod
+    def path_of(cls, id):
+        return cls.hashfs.get(id).abspath.encode('ascii')
+
+    @property
+    def path(self):
+        return self.path_of(self.file_identity)
+
+    @property
+    def handoff_url(self):
+        return b'/private_uploads' + self.path[len(self.hashfs.root):]
+
+    @property
+    def size(self):
+        return path.getsize(self.path)
+
+    def add_file_data(self, dataf):
+        # dataf may be a file-like object or a file path
+        address = self.hashfs.put(dataf)
+        self.file_identity = address.id
+
+    def add_raw_data(self, data):
+        dataf = BytesIO(data)
+        dataf.seek(0)
+        self.add_file_data(dataf)
+
+    @classmethod
+    def delete_file_by_id(cls, id):
+        cls.hashfs.delete(id)
+
+    def count_other_files(self):
+        return self.db.query(File).filter(
+            File.file_identity == self.file_identity,
+            File.id != self.id).count()
+
+    def delete_file(self, check_uniqueness=True):
+        count = 0
+        if check_uniqueness:
+            count = self.count_other_files()
+        if not count:
+            self.delete_file_by_id(self.file_identity)
 
     def guess_extension(self):
         extensions = guess_all_extensions(self.mime_type)

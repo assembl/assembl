@@ -62,3 +62,5 @@ saml_org = Bluenove
 saml_email = testing@assembl.net
 mail.tls = false
 pyramid.debug_routematch = true
+handoff_to_nginx = false
+upload_root = var/test_uploads
