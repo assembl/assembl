@@ -8,13 +8,13 @@
 import React from 'react';
 import { ControlLabel, FormGroup, FormControl, HelpBlock } from 'react-bootstrap';
 import { I18n } from 'react-redux-i18n';
-import { type rawContentState } from 'draft-js';
+import { type RawContentState } from 'draft-js';
 
 import RichTextEditor from './richTextEditor';
 import { getValidationState } from '../administration/voteSession/voteProposalForm';
 
 type FormControlWithLabelProps = {
-  value: string | rawContentState,
+  value: string | RawContentState,
   required: boolean,
   onChange: Function,
   type: string,
@@ -33,10 +33,18 @@ type FormControlWithLabelState = {
   validationState: ?string
 };
 
-class FormControlWithLabel extends React.Component<*, FormControlWithLabelProps, FormControlWithLabelState> {
+class FormControlWithLabel extends React.Component<Object, FormControlWithLabelProps, FormControlWithLabelState> {
   props: FormControlWithLabelProps;
 
   state: FormControlWithLabelState;
+
+  static defaultProps = {
+    labelAlwaysVisible: false,
+    type: 'text',
+    value: undefined,
+    required: false,
+    validationErrors: null
+  };
 
   constructor(props: FormControlWithLabelProps) {
     super(props);
@@ -126,13 +134,5 @@ class FormControlWithLabel extends React.Component<*, FormControlWithLabelProps,
     );
   }
 }
-
-FormControlWithLabel.defaultProps = {
-  labelAlwaysVisible: false,
-  type: 'text',
-  value: undefined,
-  required: false,
-  validationErrors: null
-};
 
 export default FormControlWithLabel;
