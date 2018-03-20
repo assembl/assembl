@@ -58,6 +58,8 @@ type VoteModule = {
 type ItemWithId = { id: string } & Object;
 export const createVariablesForDeleteMutation = (item: ItemWithId): { id: string } => ({ id: item.id });
 
+type VoteProposalMap = Map<string, *>;
+
 type TokenInfo = {
   instructionsEntries?: LangstringEntries,
   isCustom: boolean,
@@ -136,7 +138,19 @@ export const createVariablesForNumberGaugeMutation: CreateVariablesForNumberGaug
   unit: voteModule.unit
 });
 
-const createVariablesForProposalsMutation = proposal => ({
+type VoteProposal = {
+  order: number,
+  voteSessionId: string,
+  titleEntries: LangstringEntries,
+  descriptionEntries: RichTextLangstringEntries
+};
+type VariablesForProposalMutation = {
+  order: number,
+  voteSessionId: string,
+  titleEntries: LangstringEntries,
+  descriptionEntries: LangstringEntries
+};
+export const createVariablesForProposalsMutation = (proposal: VoteProposal): VariablesForProposalMutation => ({
   order: proposal.order,
   voteSessionId: proposal.voteSessionId,
   titleEntries: proposal.titleEntries,
@@ -153,7 +167,7 @@ type VoteSessionAdminProps = {
   refetchVoteSession: Function,
   section: string,
   timeline: Timeline,
-  voteProposals: List,
+  voteProposals: List<VoteProposalMap>,
   voteModules: List,
   voteSessionPage: Map<string, *>,
   updateVoteSession: Function,
@@ -175,8 +189,6 @@ type VoteSessionAdminState = {
   secondWarningDisplayed: boolean
 };
 
-type VoteProposal = Map<string, *>;
-
 type TestModuleType = VoteModule => boolean;
 const isTokenVoteModule: TestModuleType = m => m.voteType === 'token_vote_specification' || m.type === 'tokens';
 export const isTextGaugeModule: TestModuleType = m =>
@@ -184,7 +196,7 @@ export const isTextGaugeModule: TestModuleType = m =>
 export const isNumberGaugeModule: TestModuleType = m =>
   m.voteType === 'number_gauge_vote_specification' || ((m.type === 'gauge' && m.isNumberGauge) || false);
 
-export const getProposalValidationErrors = (p: VoteProposal, editLocale: string): ValidationErrors => {
+export const getProposalValidationErrors = (p: VoteProposalMap, editLocale: string): ValidationErrors => {
   const errors = {};
   if (!p.get('_toDelete')) {
     const title = p.get('titleEntries').find(e => e.get('localeCode') === editLocale);
