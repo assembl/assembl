@@ -55,6 +55,7 @@ exports[`Vote Session DumbPageForm component should render a form to update the 
           onChange={[Function]}
           required={true}
           type="text"
+          validationErrors={null}
           value="Phase de vote a la majorite et estimation multicritere"
         />
         <FormControlWithLabel
@@ -63,6 +64,7 @@ exports[`Vote Session DumbPageForm component should render a form to update the 
           onChange={[Function]}
           required={false}
           type="text"
+          validationErrors={null}
           value="La phase de vote est ouverte !"
         />
         <FormGroup
@@ -106,6 +108,7 @@ exports[`Vote Session DumbPageForm component should render a form to update the 
         onChange={[Function]}
         required={false}
         type="text"
+        validationErrors={null}
         value="Votez pour elire les 3 meilleures proppositions et leur alouer une estimation de cout!"
       />
       <FormControlWithLabel
@@ -114,6 +117,7 @@ exports[`Vote Session DumbPageForm component should render a form to update the 
         onChange={[Function]}
         required={false}
         type="rich-text"
+        validationErrors={null}
         value={
           Object {
             "blocks": Array [
@@ -147,6 +151,7 @@ exports[`Vote Session DumbPageForm component should render a form to update the 
         onChange={[Function]}
         required={true}
         type="text"
+        validationErrors={null}
         value="Vote sur 8 propositions"
       />
     </div>

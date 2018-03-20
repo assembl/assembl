@@ -10,6 +10,7 @@ exports[`DumbTextGaugeForm component should render a form to set up a textual ga
         onChange={[Function]}
         required={true}
         type="text"
+        validationErrors={null}
         value="contextually-based"
       />
     </div>,
@@ -20,6 +21,7 @@ exports[`DumbTextGaugeForm component should render a form to set up a textual ga
         onChange={[Function]}
         required={true}
         type="text"
+        validationErrors={null}
         value="Savings Account Knoll"
       />
     </div>,

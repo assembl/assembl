@@ -17,6 +17,7 @@ exports[`tokenTypeForm component should render a TokenCategoryForm component 1`]
       onChange={[Function]}
       required={true}
       type="text"
+      validationErrors={null}
       value="En faveur"
     />
     <FormControlWithLabel
@@ -30,6 +31,7 @@ exports[`tokenTypeForm component should render a TokenCategoryForm component 1`]
       onChange={undefined}
       required={true}
       type="number"
+      validationErrors={null}
       value={12}
     />
     <label

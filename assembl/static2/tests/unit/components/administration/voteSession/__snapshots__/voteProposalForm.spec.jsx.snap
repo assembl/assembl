@@ -43,6 +43,7 @@ exports[`VoteProposalForm component should render an empty form to create a vote
     onChange={[Function]}
     required={true}
     type="rich-text"
+    validationErrors={null}
     value={null}
   />
   <FormGroup
@@ -87,7 +88,7 @@ exports[`VoteProposalForm component should render an empty form to create a vote
     onChange={[Function]}
     required={true}
     type="text"
-    validationErrors={undefined}
+    validationErrors={null}
     value={null}
   />
   <FormControlWithLabel
@@ -96,6 +97,7 @@ exports[`VoteProposalForm component should render an empty form to create a vote
     onChange={[Function]}
     required={true}
     type="rich-text"
+    validationErrors={null}
     value={null}
   />
   <FormGroup

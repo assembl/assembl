@@ -11,6 +11,7 @@ exports[`DumbNumberGaugeForm component should render a form to set up a numeral 
       onChange={[Function]}
       required={true}
       type="number"
+      validationErrors={null}
       value={2}
     />
     <FormControlWithLabel
@@ -19,6 +20,7 @@ exports[`DumbNumberGaugeForm component should render a form to set up a numeral 
       onChange={[Function]}
       required={true}
       type="number"
+      validationErrors={null}
       value={11}
     />
     <FormControlWithLabel
@@ -27,6 +29,7 @@ exports[`DumbNumberGaugeForm component should render a form to set up a numeral 
       onChange={[Function]}
       required={true}
       type="text"
+      validationErrors={null}
       value="kms"
     />
   </FormGroup>

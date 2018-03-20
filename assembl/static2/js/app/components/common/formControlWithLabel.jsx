@@ -1,3 +1,4 @@
+// @flow
 /* eslint-disable no-nested-ternary */
 /*
   FormGroup that contains a FormControl for which:
@@ -7,25 +8,49 @@
 import React from 'react';
 import { ControlLabel, FormGroup, FormControl, HelpBlock } from 'react-bootstrap';
 import { I18n } from 'react-redux-i18n';
+import { type rawContentState } from 'draft-js';
 
 import RichTextEditor from './richTextEditor';
 import { getValidationState } from '../administration/voteSession/voteProposalForm';
 
-class FormControlWithLabel extends React.Component {
-  constructor(props) {
+type FormControlWithLabelProps = {
+  value: string | rawContentState,
+  required: boolean,
+  onChange: Function,
+  type: string,
+  disabled: boolean,
+  label: string,
+  labelAlwaysVisible: boolean,
+  componentClass: string,
+  formControlProps: Object,
+  id: string,
+  validationErrors?: Array<ErrorDef>
+};
+
+type FormControlWithLabelState = {
+  errorMessage?: string,
+  validationErrors?: Array<ErrorDef>,
+  validationState: ?string
+};
+
+class FormControlWithLabel extends React.Component<*, FormControlWithLabelProps, FormControlWithLabelState> {
+  props: FormControlWithLabelProps;
+
+  state: FormControlWithLabelState;
+
+  constructor(props: FormControlWithLabelProps) {
     super(props);
     this.state = this.getStateFromProps(props);
-    this.setValidationState = this.setValidationState.bind(this);
   }
 
-  componentWillReceiveProps(nextProps) {
+  componentWillReceiveProps(nextProps: FormControlWithLabelProps) {
     if (nextProps.validationErrors !== this.props.validationErrors) {
       this.setState(this.getStateFromProps(nextProps));
     }
   }
 
-  getStateFromProps = (props) => {
-    const errors = props.validationErrors;
+  getStateFromProps = ({ validationErrors }: FormControlWithLabelProps) => {
+    const errors = validationErrors && validationErrors;
     const validationState = getValidationState(errors);
     // FIXME: for now, we only treat the first error
     const errorMessage = errors && errors.length > 0 ? I18n.t(errors[0].code, errors[0].vars) : '';
@@ -36,7 +61,7 @@ class FormControlWithLabel extends React.Component {
   };
 
   /* onBlur validation */
-  setValidationState() {
+  setValidationState = () => {
     const { value, required } = this.props;
     let errorMessage = '';
     let validationState = null;
@@ -47,7 +72,7 @@ class FormControlWithLabel extends React.Component {
     }
 
     this.setState({ errorMessage: errorMessage, validationState: validationState });
-  }
+  };
 
   getLabel = () => {
     const { label, required } = this.props;
@@ -73,6 +98,7 @@ class FormControlWithLabel extends React.Component {
     if (type === 'rich-text') {
       return this.renderRichTextEditor();
     }
+
     return (
       <FormControl
         componentClass={componentClass}
@@ -105,7 +131,8 @@ FormControlWithLabel.defaultProps = {
   labelAlwaysVisible: false,
   type: 'text',
   value: undefined,
-  required: false
+  required: false,
+  validationErrors: null
 };
 
 export default FormControlWithLabel;
