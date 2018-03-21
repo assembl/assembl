@@ -54,11 +54,11 @@ const DumbPageForm = ({
   handlePropositionSectionTitleChange
 }: PageFormProps) => {
   const editLocaleInUppercase = editLocale.toUpperCase();
-  const headerTitlePh = `${I18n.t('administration.ph.headerTitle')} ${editLocaleInUppercase}*`;
+  const headerTitlePh = `${I18n.t('administration.ph.headerTitle')} ${editLocaleInUppercase}`;
   const headerSubtitlePh = `${I18n.t('administration.ph.headerSubtitle')} ${editLocaleInUppercase}`;
-  const instructionsTitlePh = `${I18n.t('administration.ph.instructionsTitle')} ${editLocaleInUppercase}*`;
-  const instructionsContentPh = `${I18n.t('administration.ph.instructionsContent')} ${editLocaleInUppercase}*`;
-  const propositionSectionTitlePh = `${I18n.t('administration.ph.propositionSectionTitle')} ${editLocaleInUppercase}*`;
+  const instructionsTitlePh = `${I18n.t('administration.ph.instructionsTitle')} ${editLocaleInUppercase}`;
+  const instructionsContentPh = `${I18n.t('administration.ph.instructionsContent')} ${editLocaleInUppercase}`;
+  const propositionSectionTitlePh = `${I18n.t('administration.ph.propositionSectionTitle')} ${editLocaleInUppercase}`;
   const headerImageFieldName = 'header-image';
   const slug = { slug: getDiscussionSlug() };
   return (
@@ -121,6 +121,7 @@ const DumbPageForm = ({
             onChange={handleInstructionsTitleChange}
             type="text"
             value={instructionsTitle}
+            required
           />
           <FormControlWithLabel
             key={`instructions-${editLocale}`}
@@ -128,6 +129,7 @@ const DumbPageForm = ({
             onChange={handleInstructionsContentChange}
             type="rich-text"
             value={instructionsContent}
+            required
           />
           <div className="separator" />
           <Helper

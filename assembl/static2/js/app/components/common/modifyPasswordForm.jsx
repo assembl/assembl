@@ -93,21 +93,21 @@ class ModifyPasswordForm extends React.Component<void, Props, State> {
     return (
       <div>
         <FormControlWithLabel
-          label={`${oldPasswordLabel}*`}
+          label={oldPasswordLabel}
           onChange={this.handleOldPasswordChange}
           type="password"
           required
           value={oldPassword}
         />
         <FormControlWithLabel
-          label={`${newPasswordLabel}*`}
+          label={newPasswordLabel}
           onChange={this.handleNewPasswordChange}
           type="password"
           required
           value={newPassword}
         />
         <FormControlWithLabel
-          label={`${newPassword2Label}*`}
+          label={newPassword2Label}
           onChange={this.handleNewPassword2Change}
           type="password"
           required

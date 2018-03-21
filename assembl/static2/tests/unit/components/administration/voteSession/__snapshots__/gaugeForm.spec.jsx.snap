@@ -17,6 +17,7 @@ exports[`ModulesSection component should render a form to set up a gauge and a n
       onChange={[Function]}
       required={true}
       type="text"
+      validationErrors={null}
       value="Please vote on this numeral gauge"
     />
     <Helper
@@ -188,6 +189,7 @@ exports[`ModulesSection component should render a form to set up a gauge and a t
       onChange={[Function]}
       required={true}
       type="text"
+      validationErrors={null}
       value="Please vote on this textual gauge"
     />
     <Helper
@@ -369,6 +371,7 @@ exports[`ModulesSection component should render a gauge form with no radio if ca
       onChange={[Function]}
       required={true}
       type="text"
+      validationErrors={null}
       value="Please vote on this textual gauge"
     />
     <Helper

@@ -34,6 +34,7 @@ exports[`tokensForm component should render a form to configure a token vote wit
         onChange={[Function]}
         required={true}
         type="text"
+        validationErrors={null}
         value="Je vous prie de bien vouloir voter."
       />
       <Helper
@@ -198,6 +199,7 @@ exports[`tokensForm component should render a form to configure a token vote wit
         onChange={[Function]}
         required={true}
         type="text"
+        validationErrors={null}
         value="Je vous prie de bien vouloir voter."
       />
       <Helper
