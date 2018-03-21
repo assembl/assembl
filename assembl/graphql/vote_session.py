@@ -137,8 +137,14 @@ class UpdateVoteSession(graphene.Mutation):
             ))
 
         db.add(vote_session)
-        db.flush()
 
+        # create the root thematic on which we will attach all proposals for this vote session
+        identifier = 'voteSession{}'.format(vote_session.id)
+        root_thematic = get_root_thematic_for_phase(discussion, identifier)
+        if root_thematic is None:
+            root_thematic = create_root_thematic(discussion, identifier)
+
+        db.flush()
         return UpdateVoteSession(vote_session=vote_session)
 
 
@@ -775,7 +781,8 @@ class CreateProposal(graphene.Mutation):
             identifier = 'voteSession{}'.format(vote_session_id)
             root_thematic = get_root_thematic_for_phase(discussion, identifier)
             if root_thematic is None:
-                root_thematic = create_root_thematic(discussion, identifier)
+                raise Exception(
+                    "There is no root thematic for this vote session.")
 
             order = len(root_thematic.get_children()) + 1.0
             db.add(
