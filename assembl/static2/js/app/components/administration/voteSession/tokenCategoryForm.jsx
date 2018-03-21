@@ -19,7 +19,8 @@ type TokenCategoryFormProps = {
   index: number,
   handleTitleChange: Function,
   handleColorChange: Function,
-  handleNumberChange: Function
+  handleNumberChange: Function,
+  tokenCategoryNumber: number
 };
 
 const DumbTokenCategoryForm = ({
@@ -29,7 +30,8 @@ const DumbTokenCategoryForm = ({
   index,
   handleTitleChange,
   handleColorChange,
-  handleNumberChange
+  handleNumberChange,
+  tokenCategoryNumber
 }: TokenCategoryFormProps) => (
   <div className="token-type-form">
     <Translate value="administration.token" number={index + 1} />
@@ -61,7 +63,7 @@ const DumbTokenCategoryForm = ({
         triangle="hide"
       />
     </div>
-    <div className="separator" />
+    {index + 1 !== tokenCategoryNumber && <div className="separator" />}
   </div>
 );
 

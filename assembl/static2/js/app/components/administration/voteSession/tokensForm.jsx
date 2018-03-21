@@ -95,7 +95,14 @@ const DumbTokensForm = ({
         <div>
           <div className="separator" />
           {tokenCategories.map((categoryId, index) => (
-            <TokenCategoryForm key={`token-type-${index}`} id={categoryId} editLocale={editLocale} index={index} moduleId={id} />
+            <TokenCategoryForm
+              key={`token-type-${index}`}
+              id={categoryId}
+              editLocale={editLocale}
+              index={index}
+              moduleId={id}
+              tokenCategoryNumber={tokenCategoryNumber}
+            />
           ))}
         </div>
       ) : null}
