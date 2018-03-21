@@ -17,16 +17,18 @@
 
     .category-available-tokens {
       display: flex;
-      padding: 30px 20px;
+      padding: 0 0 30px;
       max-width: 780px;
+      margin-left: -5px;
 
       .tokens {
-        padding-left: 20px;
-        padding-top: 22px;
+        padding-left: 10px;
+        padding-top: 25px;
       }
 
       .text {
-        min-width: 340px;
+        width: 340px;
+        padding: 0 0 0 10px;
       }
     }
   }
@@ -34,26 +36,42 @@
   .available-tokens-sticky {
     position: fixed;
     top: 60px;
-    width: 100%;
+    left: 0;
+    right: 0;
     z-index: 100;
-    display: flex;
-    justify-content: space-around;
-    box-shadow: 3px 4px 7px #bbb;
-    padding: 0 20px 12px;
     border-top: 1px solid $grey1;
+    box-shadow: 3px 4px 7px $grey1;
 
     .separator {
       display: none;
     }
 
     .category-available-tokens {
-      display: flex;
-
       .tokens {
-        padding: 28px 15px 0 0;
+        padding: 20px 0 0 0;
+        display: inline-block;
+        vertical-align: top;
+        text-align: left;
 
         svg {
-          display: inline;
+          width: 26px;
+          height: 26px;
+          margin: 0 3px;
+        }
+      }
+
+      .text {
+        line-height: 20px;
+        margin: 0 0 5px;
+        display: inline-block;
+        text-align: left;
+
+        .dark-title-2 {
+          font-size: $font-size-s;
+        }
+
+        span {
+          font-size: $font-size-xs;
         }
       }
     }
@@ -224,7 +242,6 @@
   .separator {
     border-bottom: 1px $btn-dark-border-style $grey1;
     max-width: 745px;
-    margin-left: 18px;
   }
 }
 
