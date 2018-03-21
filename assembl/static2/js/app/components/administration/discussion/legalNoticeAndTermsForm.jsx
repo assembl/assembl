@@ -36,7 +36,7 @@ export const DumbLegalNoticeAndTermsForm = ({
           <div className="form-container">
             <FormControlWithLabel
               key={`tac-${editLocale}`}
-              label={`${tacLabel}*`}
+              label={tacLabel}
               onChange={updateTermsAndConditions}
               required
               type="rich-text"
@@ -45,7 +45,7 @@ export const DumbLegalNoticeAndTermsForm = ({
             <div className="separator" />
             <FormControlWithLabel
               key={`legal-notice-${editLocale}`}
-              label={`${legalNoticeLabel}*`}
+              label={legalNoticeLabel}
               onChange={updateLegalNotice}
               required
               type="rich-text"
