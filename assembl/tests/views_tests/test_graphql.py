@@ -2475,16 +2475,15 @@ def test_query_user_language_preference(graphql_request,
                                         admin_user,
                                         user_language_preference_fr_cookie):
 
-    idea_id = to_global_id("User", admin_user.id)
     res = schema.execute("""
         query {
-            userLanguagePreferences(userId: "%s") {
+            userLanguagePreferences {
                 locale {
                     localeCode
                 }
                 source
             }
-        }""" % idea_id, graphql_request)
+        }""", context_value=graphql_request)
     assert len(res.data['userLanguagePreferences']) == 1
     assert res.data['userLanguagePreferences'][0]['locale']['localeCode'] == u'fr'
     assert res.data['userLanguagePreferences'][0]['source'] == u'Cookie'
@@ -2495,16 +2494,15 @@ def test_query_user_language_preference_sorted_by_source(
         user_language_preference_fr_cookie,
         user_language_preference_en_explicit):
 
-    idea_id = to_global_id("User", admin_user.id)
     res = schema.execute("""
         query {
-            userLanguagePreferences(userId: "%s") {
+            userLanguagePreferences {
                 locale {
                     localeCode
                 }
                 source
             }
-        }""" % idea_id, graphql_request)
+        }""", context_value=graphql_request)
     assert len(res.data['userLanguagePreferences']) == 2
     assert res.data['userLanguagePreferences'][0]['locale']['localeCode'] == \
         en_locale.base_locale
@@ -2521,16 +2519,15 @@ def test_query_user_language_preference_sorted_by_order(
     user_language_preference_en_explicit.preferred_order = 1
     test_session.flush()
 
-    idea_id = to_global_id("User", admin_user.id)
     res = schema.execute("""
         query {
-            userLanguagePreferences(userId: "%s") {
+            userLanguagePreferences {
                 locale {
                     localeCode
                 }
                 source
             }
-        }""" % idea_id, graphql_request)
+        }""", context_value=graphql_request)
     assert len(res.data['userLanguagePreferences']) == 2
     assert res.data['userLanguagePreferences'][0]['locale']['localeCode'] == \
         fr_locale.base_locale
@@ -2538,18 +2535,26 @@ def test_query_user_language_preference_sorted_by_order(
         en_locale.base_locale
 
 
-@pytest.mark.skip
 def test_mutation_create_user_language_preference(
-        graphql_request, admin_user, fr_locale):
-    source = "Cookie"
+        graphql_request, test_session, admin_user, fr_locale):
+    from assembl.models.auth import LanguagePreferenceOrder
+    source = LanguagePreferenceOrder.Cookie._name_
     res = schema.execute("""
-        mutation {
-            createUserLanguagePreference(locale: "%s", source: "%s") {
-                languagePreference(userId: "%s") {
+        mutation myMutation($locale: String!, $source: String!  ){
+            createOrUpdateUserLanguagePreference(locale: $locale, source: $source) {
+                userLanguagePreference {
                     locale {
                         localeCode
                     }
                     source
                 }
             }
-        }""" % (fr_locale.code, source), context_value=graphql_request)
+        }""", context_value=graphql_request, variable_values={'locale': fr_locale.code, 'source': source})
+
+    assert res.data['createOrUpdateUserLanguagePreference']['userLanguagePreference']['locale']['localeCode'] == fr_locale.code
+    assert res.data['createOrUpdateUserLanguagePreference']['userLanguagePreference']['source'] == source
+    ulp = test_session.query(
+        models.UserLanguagePreference).filter(models.UserLanguagePreference.user_id==admin_user.id).all()
+    assert ulp
+    test_session.query(models.UserLanguagePreference).delete()
+    test_session.flush()

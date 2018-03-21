@@ -27,6 +27,8 @@ from sqlalchemy import (
     UniqueConstraint
 )
 from pyramid.httpexceptions import HTTPBadRequest, HTTPUnauthorized
+from pyramid.security import Everyone
+from pyramid.threadlocal import get_current_request
 from sqlalchemy.orm import (
     relationship, backref, deferred)
 from sqlalchemy.orm.attributes import NO_VALUE
@@ -1719,6 +1721,10 @@ class LanguagePreferenceOrder(IntEnum):
     OS_Default = 4
     Discussion = 5
 
+    @classmethod
+    def get_name_from_order(cls, order):
+        return cls._value2member_map_[order]
+
 
 LanguagePreferenceOrder.unique_prefs = (
     LanguagePreferenceOrder.Cookie,
@@ -1736,8 +1742,6 @@ class LanguagePreferenceCollection(object):
 
     @classmethod
     def getCurrent(cls, req=None):
-        from pyramid.threadlocal import get_current_request
-        from pyramid.security import Everyone
         # Very very hackish, but this call is costly and frequent.
         # Let's cache it in the request. Useful for view_def use.
         if req is None:
@@ -1764,6 +1768,26 @@ class LanguagePreferenceCollection(object):
     def known_languages(self):
         return []
 
+    def add_locale(self, locale, db, **kwargs):
+        ulp = self.find_locale(locale, db)
+        assert ulp
+        if not ulp.user:
+            if 'user' in self.__dict__:
+                ulp.user = self.user
+            else:
+                user_id = kwargs.get('user_id', None)
+                if not user_id:
+                    raise Exception("A user MUST be passed in order to create a user language preference")
+        ulp.__dict__.update(kwargs)
+        db.add(ulp)
+        db.flush()
+        self.recalculate_locale(db)
+        return ulp
+
+    @abstractmethod
+    def recalculate_locale(self, db=None):
+        pass
+
 
 class LanguagePreferenceCollectionWithDefault(LanguagePreferenceCollection):
     """A LanguagePreferenceCollection with a fallback language."""
@@ -1787,6 +1811,19 @@ class LanguagePreferenceCollectionWithDefault(LanguagePreferenceCollection):
                 translate_to=self.default_locale.id,
                 source_of_evidence=LanguagePreferenceOrder.Cookie.value)
 
+    def add_locale(self, locale, db, **kwargs):
+        user_id = kwargs.get('user_id', None)
+        if user_id is None:
+            request = get_current_request()
+            user_id = request.authenticated_userid or Everyone
+            if user_id == Everyone:
+                raise Exception("Cannot set a user language based for an unauthorized user")
+            kwargs.update({'user_id': user_id})
+        return super(LanguagePreferenceCollectionWithDefault, self).add_locale(locale, db, **kwargs)
+
+    def recalculate_locale(self, db):
+        pass
+
     def known_languages(self):
         return [self.default_locale]
 
@@ -1795,8 +1832,15 @@ class UserLanguagePreferenceCollection(LanguagePreferenceCollection):
     """A LanguagePreferenceCollection that represent one user's preferences."""
 
     def __init__(self, user_id):
-        user = User.get(user_id)
-        user_prefs = user.language_preference
+        self.user = User.get(user_id)
+        db = User.default_db
+        self.calculate_locale_prefs(db)
+
+    def recalculate_locale(self, db):
+        self.calculate_locale_prefs(db)
+
+    def calculate_locale_prefs(self, db):
+        user_prefs = db.query(UserLanguagePreference).filter_by(user=self.user).all()
         assert user_prefs
         user_prefs.sort(reverse=True)
         prefs_by_locale = {
@@ -1866,6 +1910,12 @@ class UserLanguagePreferenceCollection(LanguagePreferenceCollection):
             source_of_evidence=self.default_pref.source_of_evidence,
             user=None)  # Do not give the user or this gets added to session
 
+    def has_locale(self, locale):
+        for locale in Locale.decompose_locale(locale):
+            if locale in self.user_prefs:
+                return True
+        return False
+
     def known_languages(self):
         return list({pref.translate_to_code or pref.locale_code
                      for pref in self.user_prefs.itervalues()})
@@ -1910,8 +1960,7 @@ class UserLanguagePreference(Base):
                         order_by=source_of_evidence))
 
     crud_permissions = CrudPermissions(
-            P_READ, P_READ, P_READ, P_READ,
-            P_READ, P_READ, P_READ)
+        P_READ, P_READ, P_READ, P_READ, P_READ, P_READ, P_READ)
 
     def is_owner(self, user_id):
         return user_id == self.user_id
@@ -1929,16 +1978,6 @@ class UserLanguagePreference(Base):
         if s:
             return s
         return id(self) - id(other)
-
-    # def set_priority_order(self, code):
-    #     # code can be ignored. This value should be updated for each user
-    #     # as each preferred language is committed
-    #     current_languages = self.db.query(UserLanguagePreference).\
-    #                         filter_by(user=self.user).\
-    #                         order_by(self.preferred_order).all()
-
-    #     if self.source_of_evidence == 0:
-    #         pass
 
     @property
     def locale_code(self):
