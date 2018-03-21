@@ -7,7 +7,8 @@ from graphql_relay.node.node import to_global_id
 @pytest.fixture(scope="function")
 def vote_session(request, test_session, discussion, timeline_vote_session,
                  simple_file, admin_user):
-    from assembl.models import VoteSession, VoteSessionAttachment, LangString
+    from assembl.graphql.utils import create_root_thematic
+    from assembl.models import Thematic, VoteSession, VoteSessionAttachment, LangString
     vote_session = VoteSession(
         discussion=discussion,
         discussion_phase=timeline_vote_session,
@@ -30,6 +31,10 @@ def vote_session(request, test_session, discussion, timeline_vote_session,
     test_session.add(attachment)
     test_session.flush()
 
+    identifier = 'voteSession{}'.format(vote_session.id)
+    root_thematic = create_root_thematic(discussion, identifier)
+    test_session.flush()
+
     def fin():
         print "finalizer vote_session"
         # header_image may have been replaced by another one in a test
@@ -39,6 +44,8 @@ def vote_session(request, test_session, discussion, timeline_vote_session,
                 if attachment.document != simple_file:
                     attachment.document.delete()
                 attachment.delete()
+
+            db.delete(root_thematic)
             db.delete(vote_session)
             db.flush()
 
