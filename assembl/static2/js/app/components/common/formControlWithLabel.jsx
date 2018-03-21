@@ -14,7 +14,7 @@ import RichTextEditor from './richTextEditor';
 import { getValidationState } from '../administration/voteSession/voteProposalForm';
 
 type FormControlWithLabelProps = {
-  value: string | RawContentState,
+  value: ?(string | RawContentState),
   required: boolean,
   onChange: Function,
   type: string,
@@ -58,10 +58,10 @@ class FormControlWithLabel extends React.Component<Object, FormControlWithLabelP
   }
 
   getStateFromProps = ({ validationErrors }: FormControlWithLabelProps) => {
-    const errors = validationErrors && validationErrors;
-    const validationState = getValidationState(errors);
+    const validationState = getValidationState(validationErrors);
     // FIXME: for now, we only treat the first error
-    const errorMessage = errors && errors.length > 0 ? I18n.t(errors[0].code, errors[0].vars) : '';
+    const errorMessage =
+      validationErrors && validationErrors.length > 0 ? I18n.t(validationErrors[0].code, validationErrors[0].vars) : '';
     return {
       errorMessage: errorMessage,
       validationState: validationState
@@ -84,8 +84,7 @@ class FormControlWithLabel extends React.Component<Object, FormControlWithLabelP
 
   getLabel = () => {
     const { label, required } = this.props;
-    const placeHolder = required ? `${label}*` : label;
-    return placeHolder;
+    return required ? `${label}*` : label;
   };
 
   renderRichTextEditor = () => {
