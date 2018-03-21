@@ -124,14 +124,14 @@ class CreateResource(graphene.Mutation):
                     mime_type=mime_type,
                     title=filename,
                     data=data)
-                models.ResourceAttachment(
+                db.add(models.ResourceAttachment(
                     document=document,
                     resource=saobj,
                     discussion=discussion,
                     creator_id=context.authenticated_userid,
                     title=filename,
                     attachmentPurpose=ATTACHMENT_PURPOSE_IMAGE
-                )
+                ))
 
             doc = args.get('doc')
             if doc is not None:
@@ -145,14 +145,14 @@ class CreateResource(graphene.Mutation):
                     mime_type=mime_type,
                     title=filename,
                     data=data)
-                models.ResourceAttachment(
+                db.add(models.ResourceAttachment(
                     document=document,
                     resource=saobj,
                     discussion=discussion,
                     creator_id=context.authenticated_userid,
                     title=filename,
                     attachmentPurpose=ATTACHMENT_PURPOSE_DOCUMENT
-                )
+                ))
 
             db.flush()
 
@@ -260,14 +260,14 @@ class UpdateResource(graphene.Mutation):
                     db.delete(image.document)
                     resource.attachments.remove(image)
 
-                models.ResourceAttachment(
+                db.add(models.ResourceAttachment(
                     document=document,
                     discussion=discussion,
                     resource=resource,
                     creator_id=context.authenticated_userid,
                     title=filename,
                     attachmentPurpose=ATTACHMENT_PURPOSE_IMAGE
-                )
+                ))
 
         # add uploaded doc as an attachment to the resource
         doc = args.get('doc')
@@ -292,14 +292,14 @@ class UpdateResource(graphene.Mutation):
                 db.delete(doc.document)
                 resource.attachments.remove(doc)
 
-            models.ResourceAttachment(
+            resource.db.add(models.ResourceAttachment(
                 document=document,
                 discussion=discussion,
                 resource=resource,
                 creator_id=context.authenticated_userid,
                 title=filename,
                 attachmentPurpose=ATTACHMENT_PURPOSE_DOCUMENT
-            )
+            ))
 
             db.flush()
 

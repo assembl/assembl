@@ -57,6 +57,7 @@ class UploadDocument(graphene.Mutation):
                 mime_type=mime_type,
                 title=filename,
                 data=data)
+            discussion.db.add(document)
             document.db.flush()
 
         return UploadDocument(document=document)

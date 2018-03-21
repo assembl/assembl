@@ -192,13 +192,13 @@ class UpdateResourcesCenter(graphene.Mutation):
                     db.delete(header_image.document)
                     discussion.attachments.remove(header_image)
 
-                models.DiscussionAttachment(
+                db.add(models.DiscussionAttachment(
                     document=document,
                     discussion=discussion,
                     creator_id=context.authenticated_userid,
                     title=filename,
                     attachmentPurpose=RESOURCES_CENTER_HEADER_IMAGE
-                )
+                ))
 
         db.flush()
         resources_center = ResourcesCenter()

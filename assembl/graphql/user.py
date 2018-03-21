@@ -165,14 +165,14 @@ class UpdateUser(graphene.Mutation):
                 if not allowed:
                     raise HTTPUnauthorized("The authenticated user can't create an AgentProfileAttachment")
 
-                models.AgentProfileAttachment(
+                discussion.db.add(models.AgentProfileAttachment(
                     document=document,
                     discussion=discussion,
                     user=user,
                     creator_id=context.authenticated_userid,
                     title=filename,
                     attachmentPurpose=PROFILE_PICTURE
-                )
+                ))
 
             db.flush()
 

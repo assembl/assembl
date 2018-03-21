@@ -564,6 +564,7 @@ class AddPostAttachment(graphene.Mutation):
                 title=filename,
                 attachmentPurpose=EMBED_ATTACHMENT
             )
+            post.db.add(attachment)
             post.db.flush()
 
         return AddPostAttachment(post=post)

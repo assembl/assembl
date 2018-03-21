@@ -34,8 +34,10 @@ def vote_session(request, test_session, discussion, timeline_vote_session,
         # header_image may have been replaced by another one in a test
         # so be sure to remove attachments, not header_image
         with test_session.no_autoflush as db:
-            db.delete(vote_session.attachments[0].document)
-            db.delete(vote_session.attachments[0])
+            for attachment in list(vote_session.attachments):
+                if attachment.document != simple_file:
+                    attachment.document.delete()
+                attachment.delete()
             db.delete(vote_session)
             db.flush()
 

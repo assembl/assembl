@@ -127,14 +127,14 @@ class UpdateVoteSession(graphene.Mutation):
                 mime_type=mime_type,
                 title=filename,
                 data=data)
-            models.VoteSessionAttachment(
+            db.add(models.VoteSessionAttachment(
                 document=document,
                 vote_session=vote_session,
                 discussion=discussion,
                 creator_id=context.authenticated_userid,
                 title=filename,
                 attachmentPurpose=ATTACHMENT_PURPOSE_IMAGE
-            )
+            ))
 
         db.add(vote_session)
         db.flush()

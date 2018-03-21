@@ -602,14 +602,14 @@ class CreateIdea(graphene.Mutation):
                     mime_type=mime_type,
                     title=filename,
                     data=data)
-                models.IdeaAttachment(
+                db.add(models.IdeaAttachment(
                     document=document,
                     idea=saobj,
                     discussion=discussion,
                     creator_id=context.authenticated_userid,
                     title=filename,
                     attachmentPurpose=EMBED_ATTACHMENT
-                )
+                ))
 
             db.flush()
 
@@ -736,14 +736,14 @@ class CreateThematic(graphene.Mutation):
                     mime_type=mime_type,
                     title=filename,
                     data=data)
-                models.IdeaAttachment(
+                db.add(models.IdeaAttachment(
                     document=document,
                     idea=saobj,
                     discussion=discussion,
                     creator_id=context.authenticated_userid,
                     title=filename,
                     attachmentPurpose=EMBED_ATTACHMENT
-                )
+                ))
 
             db.flush()
 
