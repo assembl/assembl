@@ -140,6 +140,9 @@ def delete_vote_session(vote_session):
 
 def test_graphql_update_vote_session(graphql_request, vote_session, test_app, graphql_registry):
     mutate_and_assert(graphql_request, vote_session.discussion_phase_id, test_app, graphql_registry)
+    identifier = 'voteSession{}'.format(vote_session.id)
+    root_thematic = get_root_thematic_for_phase(vote_session.discussion, identifier)
+    assert root_thematic is not None
 
 
 def test_graphql_delete_vote_session_cascade(graphql_request, vote_session, test_app, graphql_registry):
@@ -699,8 +702,31 @@ u'createProposal': {
         }}}
     # remove created proposal
     proposal.delete()
-    root_thematic.delete()
     proposal.db.flush()
+
+
+def test_mutation_create_proposal_no_root_thematic(graphql_request, discussion, vote_session, graphql_registry):
+    mutation = graphql_registry['createProposal']
+    vote_session_id = to_global_id("VoteSession", vote_session.id)
+    identifier = 'voteSession{}'.format(vote_session.id)
+    root_thematic = get_root_thematic_for_phase(discussion, identifier)
+    root_thematic.delete()
+    root_thematic.db.flush()
+
+    res = schema.execute(mutation, context_value=graphql_request, variable_values={
+        "voteSessionId": vote_session_id,
+        "titleEntries": [
+            {"value": u"Comprendre les dynamiques et les enjeux", "localeCode": "fr"},
+            {"value": u"Understanding the dynamics and issues", "localeCode": "en"}
+        ],
+        "descriptionEntries": [
+            {"value": u"Description: Comprendre les dynamiques et les enjeux", "localeCode": "fr"},
+            {"value": u"Description: Understanding the dynamics and issues", "localeCode": "en"}
+        ]
+    })
+
+    assert len(res.errors) == 1
+    assert 'no root thematic' in res.errors[0].message
 
 
 def test_mutation_delete_proposal(graphql_request, vote_proposal, graphql_registry):
