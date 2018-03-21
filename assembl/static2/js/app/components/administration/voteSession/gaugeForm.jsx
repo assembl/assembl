@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { I18n, Translate } from 'react-redux-i18n';
 import { List, Map } from 'immutable';
 import range from 'lodash/range';
-import { SplitButton, MenuItem, Radio } from 'react-bootstrap';
+import { SplitButton, MenuItem, Radio, FormGroup } from 'react-bootstrap';
 
 import Helper from '../../common/helper';
 import { getEntryValueForLocale } from '../../../utils/i18n';
@@ -33,7 +33,6 @@ export type VoteChoice = {|
 type GaugeFormProps = {
   id: string,
   index?: number,
-  // editLocale: string,
   instructions: string,
   canChangeType: boolean,
   nbTicks: number,
@@ -130,7 +129,7 @@ const DumbGaugeForm = ({
   index
 }: GaugeFormProps) => (
   <div className="gauges-vote-form">
-    <Translate value="administration.gauge" number={index + 1} />
+    {index !== null && <Translate value="administration.gauge" number={index + 1} />}
     <div className="flex margin-m">
       <FormControlWithLabel
         value={instructions}
@@ -145,32 +144,34 @@ const DumbGaugeForm = ({
         additionalTextClasses="helper-text-only"
       />
     </div>
-    <div className="flex">
-      <label htmlFor={`dropdown-${id}`}>
-        <Translate value="administration.nbTicks" />
-      </label>
-    </div>
-    <SplitButton
-      title={nbTicks}
-      id={`dropdown-${id}`}
-      required
-      onSelect={eventKey =>
-        changeNbTicks({
-          isNumberGauge: isNumberGauge,
-          nbTicks: nbTicks,
-          value: eventKey,
-          createChoice: createChoice,
-          deleteChoice: deleteChoice,
-          updateNbTicks: updateNbTicks
-        })
-      }
-    >
-      {range(2, 11).map(value => (
-        <MenuItem key={`gauge-notch-${value}`} eventKey={value}>
-          {value}
-        </MenuItem>
-      ))}
-    </SplitButton>
+    <FormGroup>
+      <div className="flex">
+        <label htmlFor={`dropdown-${id}`}>
+          <Translate value="administration.nbTicks" />
+        </label>
+      </div>
+      <SplitButton
+        title={nbTicks}
+        id={`dropdown-${id}`}
+        required
+        onSelect={eventKey =>
+          changeNbTicks({
+            isNumberGauge: isNumberGauge,
+            nbTicks: nbTicks,
+            value: eventKey,
+            createChoice: createChoice,
+            deleteChoice: deleteChoice,
+            updateNbTicks: updateNbTicks
+          })
+        }
+      >
+        {range(2, 11).map(value => (
+          <MenuItem key={`gauge-notch-${value}`} eventKey={value}>
+            {value}
+          </MenuItem>
+        ))}
+      </SplitButton>
+    </FormGroup>
     {canChangeType && (
       <div className="margin-m">
         <Radio onChange={handleNumberGaugeUncheck} checked={!isNumberGauge} name={`gauge-type-${id}`}>

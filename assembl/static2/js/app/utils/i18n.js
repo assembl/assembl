@@ -1,5 +1,6 @@
+// @flow
 import { I18n } from 'react-redux-i18n';
-import { Map } from 'immutable';
+import { type List, Map } from 'immutable';
 
 import deepen from './deepen';
 import Translations from './translations';
@@ -26,7 +27,7 @@ I18n.setHandleMissingTranslation(myHandleMissingTranslation);
 
 export const getTranslations = () => Translations;
 
-export const getLocale = (browserLanguage) => {
+export const getLocale = (browserLanguage: string): string => {
   let locale;
   if (browserLanguage === 'zh' || browserLanguage === 'zh-CN') {
     locale = 'zh_CN';
@@ -39,7 +40,7 @@ export const getLocale = (browserLanguage) => {
   return locale;
 };
 
-export const getAvailableLocales = (locale, translations) => {
+export const getAvailableLocales = (locale: string, translations: { [string]: any }): Array<string> => {
   const locArray = [];
   Object.keys(translations).map((key) => {
     if (key !== locale) locArray.push(key);
@@ -69,7 +70,12 @@ export const getAvailableLocales = (locale, translations) => {
     @returns {function} Updater function (see immutable-js) that updates the value of the
     entry with given locale by the given value
 */
-export const updateInLangstringEntries = (locale, value) => (entries) => {
+// Map<string, any> in case of rich text (raw content state converted to immutable)
+type LangstringValue = string | Map<string, any>;
+type LangstringEntriesList = List<Map<string, LangstringValue>>;
+export const updateInLangstringEntries = (locale: string, value: LangstringValue) => (
+  entries: LangstringEntriesList
+): LangstringEntriesList => {
   const entryIndex = entries.findIndex(entry => entry.get('localeCode') === locale);
 
   if (entryIndex === -1) {
@@ -79,7 +85,11 @@ export const updateInLangstringEntries = (locale, value) => (entries) => {
   return entries.setIn([entryIndex, 'value'], value);
 };
 
-export const getEntryValueForLocale = (entries, locale, defaultValue = null) => {
+export const getEntryValueForLocale = (
+  entries: LangstringEntriesList,
+  locale: string,
+  defaultValue: ?LangstringValue = null
+): ?LangstringValue => {
   if (!entries) {
     return defaultValue;
   }
@@ -88,3 +98,7 @@ export const getEntryValueForLocale = (entries, locale, defaultValue = null) => 
 
   return entry ? entry.get('value') : defaultValue;
 };
+
+export const convertToLangstringEntries = (s: string, localeCode: string): LangstringEntries => [
+  { localeCode: localeCode, value: s }
+];

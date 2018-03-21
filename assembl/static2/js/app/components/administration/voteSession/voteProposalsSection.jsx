@@ -1,9 +1,11 @@
 // @flow
 import React from 'react';
+import { type List } from 'immutable';
 import { connect } from 'react-redux';
 import { I18n, Translate } from 'react-redux-i18n';
 import { OverlayTrigger } from 'react-bootstrap';
 import { Link } from 'react-router';
+
 import { addVoteProposalTooltip } from '../../common/tooltips';
 import { createVoteProposalAndModules } from '../../../actions/adminActions/voteSession';
 import SectionTitle from '../sectionTitle';
@@ -12,12 +14,18 @@ import { createRandomId, getDiscussionSlug } from '../../../utils/globalFunction
 import { get } from '../../../utils/routeMap';
 
 type VoteProposalsSectionProps = {
-  voteProposals: Object,
+  addVoteProposal: Function,
   editLocale: string,
-  addVoteProposal: Function
+  refetchVoteSession: Function,
+  voteProposals: List<string>
 };
 
-const DumbVoteProposalsSection = ({ voteProposals, editLocale, addVoteProposal }: VoteProposalsSectionProps) => {
+const DumbVoteProposalsSection = ({
+  addVoteProposal,
+  editLocale,
+  refetchVoteSession,
+  voteProposals
+}: VoteProposalsSectionProps) => {
   const slug = { slug: getDiscussionSlug() };
   return (
     <div className="vote-proposals-section">
@@ -38,7 +46,14 @@ const DumbVoteProposalsSection = ({ voteProposals, editLocale, addVoteProposal }
         <div className="admin-content">
           <form>
             {voteProposals.map((id, index) => (
-              <VoteProposalForm key={id} id={id} index={index + 1} editLocale={editLocale} nbProposals={voteProposals.size} />
+              <VoteProposalForm
+                key={id}
+                id={id}
+                index={index + 1}
+                editLocale={editLocale}
+                nbProposals={voteProposals.size}
+                refetchVoteSession={refetchVoteSession}
+              />
             ))}
             <OverlayTrigger placement="top" overlay={addVoteProposalTooltip}>
               <div onClick={addVoteProposal} className="plus margin-l">

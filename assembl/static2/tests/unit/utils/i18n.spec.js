@@ -1,4 +1,4 @@
-import { getLocale, getAvailableLocales } from '../../../js/app/utils/i18n';
+import { convertToLangstringEntries, getLocale, getAvailableLocales } from '../../../js/app/utils/i18n';
 
 describe('i18n util module', () => {
   describe('getLocale function', () => {
@@ -36,5 +36,13 @@ describe('i18n util module', () => {
 
   describe('getEntryValueForLocale function', () => {
     it('should return the value for the langstring entry with given locale');
+  });
+
+  describe('convertToLangstringEntries function', () => {
+    it('should convert a string to a list of langstring entries', () => {
+      const actual = convertToLangstringEntries('bypassing the interface', 'en');
+      const expected = [{ localeCode: 'en', value: 'bypassing the interface' }];
+      expect(actual).toEqual(expected);
+    });
   });
 });

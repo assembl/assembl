@@ -136,6 +136,7 @@ exports[`VoteProposalsSection component should render a voteProposalsSection wit
             }
             index={1}
             nbProposals={2}
+            refetchVoteSession={[Function]}
           />,
           <Connect(DumbVoteProposalForm)
             editLocale="fr"
@@ -152,6 +153,7 @@ exports[`VoteProposalsSection component should render a voteProposalsSection wit
             }
             index={2}
             nbProposals={2}
+            refetchVoteSession={[Function]}
           />,
         ]
         <OverlayTrigger
