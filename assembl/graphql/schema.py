@@ -34,7 +34,7 @@ from assembl.graphql.section import (CreateSection, DeleteSection, Section,
                                      UpdateSection)
 from assembl.graphql.sentiment import AddSentiment, DeleteSentiment
 from assembl.graphql.synthesis import Synthesis
-from assembl.graphql.user import UpdateUser, AgentProfile
+from assembl.graphql.user import UpdateUser
 from assembl.graphql.votes import AddTokenVote, DeleteTokenVote, AddGaugeVote, DeleteGaugeVote
 from assembl.graphql.vote_session import (
     VoteSession, UpdateVoteSession, CreateTokenVoteSpecification,
@@ -43,7 +43,6 @@ from assembl.graphql.vote_session import (
     UpdateTokenVoteSpecification, DeleteVoteSpecification,
     CreateProposal, UpdateProposal, DeleteProposal
 )
-from assembl.graphql.user_language_preference import UserLanguagePreference
 from assembl.graphql.utils import get_fields, get_root_thematic_for_phase
 from assembl.lib.locale import strip_country
 from assembl.lib.sqla_types import EmailString
@@ -54,8 +53,7 @@ from assembl.graphql.permissions_helpers import require_instance_permission
 from assembl.auth import CrudPermissions
 from assembl.graphql.user_language_preference import (
     UserLanguagePreference,
-    CreateUserLanguagePreference,
-    UpdateUserLanguagePreference
+    CreateOrUpdateUserLanguagePreference
 )
 
 convert_sqlalchemy_type.register(EmailString)(convert_column_to_string)
@@ -98,8 +96,7 @@ class Query(graphene.ObjectType):
     discussion = graphene.Field(Discussion)
     landing_page_module_types = graphene.List(LandingPageModuleType)
     landing_page_modules = graphene.List(LandingPageModule)
-    user_language_preferences = graphene.List(
-        UserLanguagePreference, user_id=graphene.String(required=True))
+    user_language_preferences = graphene.List(UserLanguagePreference)
 
     def resolve_resources(self, args, context, info):
         model = models.Resource
@@ -312,19 +309,15 @@ class Query(graphene.ObjectType):
         return sorted(modules, key=attrgetter('order'))
 
     def resolve_user_language_preferences(self, args, context, info):
-        user_id = Node.from_global_id(args.get('user_id'))[1]
+        from pyramid.security import Everyone
+        user_id = context.authenticated_userid or Everyone
+        if user_id == Everyone:
+            return []
         user = models.User.get(user_id)
         prefs = user.language_preference
         prefs.sort(key=lambda ulp: (ulp.preferred_order,
                                     ulp.source_of_evidence))
-        ulps = [UserLanguagePreference(
-            user=AgentProfile(user_id=p.user_id),
-            locale=Locale(locale_code=p.locale.base_locale),
-            source=p.source_of_evidence,
-            translation_locale=p.translate_to_locale.base_locale if
-                p.translate_to_locale is not None else None,
-                order=p.preferred_order) for p in prefs]
-        return ulps
+        return prefs
 
 
 class Mutations(graphene.ObjectType):
@@ -372,8 +365,7 @@ class Mutations(graphene.ObjectType):
     add_post_extract = AddPostExtract.Field()
     update_extract = UpdateExtract.Field()
     delete_extract = DeleteExtract.Field()
-    create_user_language_preference = CreateUserLanguagePreference.Field()
-    update_user_language_preference = UpdateUserLanguagePreference.Field()
+    create_or_update_user_language_preference = CreateOrUpdateUserLanguagePreference.Field()
 
 
 Schema = graphene.Schema(query=Query, mutation=Mutations)
