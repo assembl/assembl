@@ -8,7 +8,7 @@ const ParticipantsCount = ({ count }: Props) => (
   <div className="participants-count box center">
     <div className="assembl-icon-profil black" />
     <div className="margin-m">
-      <Translate value="debate.voteSession.participantsCount" count={count} />
+      <Translate value={'debate.voteSession.participantsCount'} count={count} />
     </div>
   </div>
 );
