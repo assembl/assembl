@@ -7,6 +7,7 @@ from graphql_relay.node.node import to_global_id
 @pytest.fixture(scope="function")
 def vote_session(request, test_session, discussion, timeline_vote_session,
                  simple_file, admin_user):
+    from assembl.graphql.utils import create_root_thematic
     from assembl.models import Thematic, VoteSession, VoteSessionAttachment, LangString
     vote_session = VoteSession(
         discussion=discussion,
@@ -31,13 +32,7 @@ def vote_session(request, test_session, discussion, timeline_vote_session,
     test_session.flush()
 
     identifier = 'voteSession{}'.format(vote_session.id)
-    short_title = u'Phase {}'.format(identifier)
-    root_thematic = Thematic(
-        discussion_id=discussion.id,
-        title=LangString.create(short_title, "en"),
-        identifier=identifier,
-        hidden=True)
-    discussion.root_idea.children.append(root_thematic)
+    root_thematic = create_root_thematic(discussion, identifier)
     test_session.flush()
 
     def fin():
