@@ -17,7 +17,7 @@ def vote_session(request, test_session, discussion, timeline_vote_session,
         instructions_section_content=LangString.create(u"vote session instructions fixture. Lorem ipsum dolor sit amet", "en"),
         propositions_section_title=LangString.create(u"vote session propositions section title fixture", "en")
     )
-    VoteSessionAttachment(
+    attachment = VoteSessionAttachment(
         discussion=discussion,
         document=simple_file,
         vote_session=vote_session,
@@ -27,6 +27,7 @@ def vote_session(request, test_session, discussion, timeline_vote_session,
     )
 
     test_session.add(vote_session)
+    test_session.add(attachment)
     test_session.flush()
 
     def fin():
