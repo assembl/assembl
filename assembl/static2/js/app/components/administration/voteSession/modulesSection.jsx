@@ -168,8 +168,9 @@ const mapDispatchToProps = (dispatch) => {
           });
         } else {
           const newId = createRandomId();
-          const createAction = moduleType === 'tokens' ? createTokenVoteModuleWithCategories : createGaugeVoteModuleWithChoices;
-          dispatch(createAction(newId));
+          const dispatchCreateActions =
+            moduleType === 'tokens' ? createTokenVoteModuleWithCategories : createGaugeVoteModuleWithChoices;
+          dispatchCreateActions(newId);
         }
       } else {
         tokenModules.forEach((m) => {
