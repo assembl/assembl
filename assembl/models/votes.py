@@ -925,7 +925,9 @@ class AbstractIdeaVote(HistoryMixin, DiscussionBoundBase):
         idea_id = self.idea_id or (self.idea.id if self.idea else None)
         widget_id = self.widget_id or (self.widget.id if self.widget else None)
         voter_id = self.voter_id or (self.voter.id if self.voter else None)
+        vote_spec_id = self.vote_spec_id or (self.vote_spec.id if self.vote_spec else None)
         return (query.filter_by(
+            vote_spec_id=vote_spec_id,
             idea_id=idea_id, widget_id=widget_id, voter_id=voter_id), True)
 
     crud_permissions = CrudPermissions(
