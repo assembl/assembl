@@ -21,6 +21,7 @@ const icons = [
   'assembl-icon-add',
   'assembl-icon-catch',
   'assembl-icon-checked',
+  'assembl-icon-check',
   'assembl-icon-discussion',
   'assembl-icon-edit',
   'assembl-icon-cancel',

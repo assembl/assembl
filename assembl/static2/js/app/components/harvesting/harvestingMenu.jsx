@@ -7,6 +7,7 @@ import ARange from 'annotator_range'; // eslint-disable-line
 import addPostExtractMutation from '../../graphql/mutations/addPostExtract.graphql'; // eslint-disable-line
 import updateExtractMutation from '../../graphql/mutations/updateExtract.graphql'; // eslint-disable-line
 import deleteExtractMutation from '../../graphql/mutations/deleteExtract.graphql'; // eslint-disable-line
+import HarvestingBox from './HarvestingBox';
 
 type LeftSideHarvestingButtonProps = {
   label: string,
@@ -50,32 +51,39 @@ type HarvestingMenuProps = {
   positionY: number
 };
 
+const harvestingMenuContainerUniqueId = 'harvesting-menu-container';
+
 const HarvestingMenu = ({ positionX, positionY }: HarvestingMenuProps) => {
   const style = {
     position: 'absolute',
     left: `${positionX}px`,
     top: `${positionY}px`
   };
+
   const handleMouseDown = (ev) => {
     // This would otherwise clear the selection
     ev.preventDefault();
     return false;
   };
+
   const handleClick = () => {
     const selection = window.getSelection();
     const browserRange = ARange.sniff(selection.getRangeAt(0));
     const serialized = browserRange.serialize(document, 'annotation');
-    console.log(serialized); // eslint-disable-line
     // elements should be in serialized.{start, end, startOffset, endOffset}
+    const harvestingMenuContainer = document.getElementById(harvestingMenuContainerUniqueId);
+    ReactDOM.render(
+      <HarvestingBox positionX={positionX - 120} positionY={positionY} serialized={serialized} />,
+      harvestingMenuContainer
+    );
   };
+
   return (
     <div className="harvesting-menu" style={style}>
       <ConfirmHarvestButton handleClick={handleClick} handleMouseDown={handleMouseDown} handle />
     </div>
   );
 };
-
-const harvestingMenuContainerUniqueId = 'harvesting-menu-container';
 
 export const removeHarvestingMenu = () => {
   const harvestingMenuContainer = document.getElementById(harvestingMenuContainerUniqueId);
