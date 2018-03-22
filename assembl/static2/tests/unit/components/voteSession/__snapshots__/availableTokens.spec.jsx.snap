@@ -4,109 +4,169 @@ exports[`AvailableTokens component should match AvailableTokens snapshot (non st
 <div
   className="available-tokens"
 >
-  <div>
+  <div
+    className="container-fluid"
+  >
     <div
-      className="category-available-tokens"
+      className="max-container"
     >
       <div
-        className="text"
+        className="row"
       >
-        <h2
-          className="dark-title-2"
+        <div
+          className="col-md-12 col-xs-12"
         >
-          One
-        </h2>
-        <span
-          className={undefined}
-          style={undefined}
+          <div
+            className="category-available-tokens"
+          >
+            <div
+              className="text"
+              style={
+                Object {
+                  "minWidth": "250px",
+                }
+              }
+            >
+              <h2
+                className="dark-title-2"
+              >
+                One
+              </h2>
+              <span
+                className={undefined}
+                style={undefined}
+              >
+                Remaining Tokens
+              </span>
+            </div>
+            <div
+              className="tokens"
+              style={
+                Object {
+                  "minWidth": "330px",
+                }
+              }
+            />
+          </div>
+          <div
+            className="separator"
+          />
+        </div>
+        <div
+          className="col-md-12 col-xs-12"
         >
-          Remaining Tokens
-        </span>
+          <div
+            className="category-available-tokens"
+          >
+            <div
+              className="text"
+              style={
+                Object {
+                  "minWidth": "250px",
+                }
+              }
+            >
+              <h2
+                className="dark-title-2"
+              >
+                Two
+              </h2>
+              <span
+                className={undefined}
+                style={undefined}
+              >
+                Remaining Tokens
+              </span>
+            </div>
+            <div
+              className="tokens"
+              style={
+                Object {
+                  "minWidth": "330px",
+                }
+              }
+            />
+          </div>
+          <div
+            className="separator"
+          />
+        </div>
+        <div
+          className="col-md-12 col-xs-12"
+        >
+          <div
+            className="category-available-tokens"
+          >
+            <div
+              className="text"
+              style={
+                Object {
+                  "minWidth": "250px",
+                }
+              }
+            >
+              <h2
+                className="dark-title-2"
+              >
+                Three
+              </h2>
+              <span
+                className={undefined}
+                style={undefined}
+              >
+                Remaining Tokens
+              </span>
+            </div>
+            <div
+              className="tokens"
+              style={
+                Object {
+                  "minWidth": "330px",
+                }
+              }
+            />
+          </div>
+          <div
+            className="separator"
+          />
+        </div>
+        <div
+          className="col-md-12 col-xs-12"
+        >
+          <div
+            className="category-available-tokens"
+          >
+            <div
+              className="text"
+              style={
+                Object {
+                  "minWidth": "250px",
+                }
+              }
+            >
+              <h2
+                className="dark-title-2"
+              >
+                Four
+              </h2>
+              <span
+                className={undefined}
+                style={undefined}
+              >
+                Remaining Tokens
+              </span>
+            </div>
+            <div
+              className="tokens"
+              style={
+                Object {
+                  "minWidth": "330px",
+                }
+              }
+            />
+          </div>
+        </div>
       </div>
-      <div
-        className="tokens"
-      />
-    </div>
-    <div
-      className="separator"
-    />
-  </div>
-  <div>
-    <div
-      className="category-available-tokens"
-    >
-      <div
-        className="text"
-      >
-        <h2
-          className="dark-title-2"
-        >
-          Two
-        </h2>
-        <span
-          className={undefined}
-          style={undefined}
-        >
-          Remaining Tokens
-        </span>
-      </div>
-      <div
-        className="tokens"
-      />
-    </div>
-    <div
-      className="separator"
-    />
-  </div>
-  <div>
-    <div
-      className="category-available-tokens"
-    >
-      <div
-        className="text"
-      >
-        <h2
-          className="dark-title-2"
-        >
-          Three
-        </h2>
-        <span
-          className={undefined}
-          style={undefined}
-        >
-          Remaining Tokens
-        </span>
-      </div>
-      <div
-        className="tokens"
-      />
-    </div>
-    <div
-      className="separator"
-    />
-  </div>
-  <div>
-    <div
-      className="category-available-tokens"
-    >
-      <div
-        className="text"
-      >
-        <h2
-          className="dark-title-2"
-        >
-          Four
-        </h2>
-        <span
-          className={undefined}
-          style={undefined}
-        >
-          Remaining Tokens
-        </span>
-      </div>
-      <div
-        className="tokens"
-      />
     </div>
   </div>
 </div>
@@ -116,584 +176,620 @@ exports[`AvailableTokens component should match AvailableTokens snapshot (non st
 <div
   className="available-tokens"
 >
-  <div>
+  <div
+    className="container-fluid"
+  >
     <div
-      className="category-available-tokens"
+      className="max-container"
     >
       <div
-        className="text"
+        className="row"
       >
-        <h2
-          className="dark-title-2"
+        <div
+          className="col-md-12 col-xs-12"
         >
-          Positive
-        </h2>
-        <span
-          className={undefined}
-          style={undefined}
-        >
-          Remaining Tokens
-        </span>
-      </div>
-      <div
-        className="tokens"
-      >
-        <svg
-          aria-hidden="true"
-          height="32px"
-          role="img"
-          version="1.1"
-          viewBox="0 0 22 22"
-          width="32px"
-          x="0px"
-          xmlSpace="preserve"
-          y="0px"
-        >
-          <path
-            className="outer"
-            d="m 15.59322,11.271187 a 6.2288136,6.3559322 0 1 1 -12.4576271,0 6.2288136,6.3559322 0 1 1 12.4576271,0 z"
-            fill="#226622"
-            id="path2999"
-            stroke="#226622"
-            strokeDasharray="none"
-            strokeMiterlimit="4"
-            strokeOpacity="1"
-            strokeWidth="1"
-            transform="matrix(1.4872568,0,0,1.4575117,-3.9272774,-6.4278868)"
+          <div
+            className="category-available-tokens"
+          >
+            <div
+              className="text"
+              style={
+                Object {
+                  "minWidth": "250px",
+                }
+              }
+            >
+              <h2
+                className="dark-title-2"
+              >
+                Positive
+              </h2>
+              <span
+                className={undefined}
+                style={undefined}
+              >
+                Remaining Tokens
+              </span>
+            </div>
+            <div
+              className="tokens"
+              style={
+                Object {
+                  "minWidth": "330px",
+                }
+              }
+            >
+              <svg
+                aria-hidden="true"
+                height="32px"
+                role="img"
+                version="1.1"
+                viewBox="0 0 22 22"
+                width="32px"
+                x="0px"
+                xmlSpace="preserve"
+                y="0px"
+              >
+                <path
+                  className="outer"
+                  d="m 15.59322,11.271187 a 6.2288136,6.3559322 0 1 1 -12.4576271,0 6.2288136,6.3559322 0 1 1 12.4576271,0 z"
+                  fill="#226622"
+                  id="path2999"
+                  stroke="#226622"
+                  strokeDasharray="none"
+                  strokeMiterlimit="4"
+                  strokeOpacity="1"
+                  strokeWidth="1"
+                  transform="matrix(1.4872568,0,0,1.4575117,-3.9272774,-6.4278868)"
+                />
+              </svg>
+              <svg
+                aria-hidden="true"
+                height="32px"
+                role="img"
+                version="1.1"
+                viewBox="0 0 22 22"
+                width="32px"
+                x="0px"
+                xmlSpace="preserve"
+                y="0px"
+              >
+                <path
+                  className="outer"
+                  d="m 15.59322,11.271187 a 6.2288136,6.3559322 0 1 1 -12.4576271,0 6.2288136,6.3559322 0 1 1 12.4576271,0 z"
+                  fill="#226622"
+                  id="path2999"
+                  stroke="#226622"
+                  strokeDasharray="none"
+                  strokeMiterlimit="4"
+                  strokeOpacity="1"
+                  strokeWidth="1"
+                  transform="matrix(1.4872568,0,0,1.4575117,-3.9272774,-6.4278868)"
+                />
+              </svg>
+              <svg
+                aria-hidden="true"
+                height="32px"
+                role="img"
+                version="1.1"
+                viewBox="0 0 22 22"
+                width="32px"
+                x="0px"
+                xmlSpace="preserve"
+                y="0px"
+              >
+                <path
+                  className="outer"
+                  d="m 15.59322,11.271187 a 6.2288136,6.3559322 0 1 1 -12.4576271,0 6.2288136,6.3559322 0 1 1 12.4576271,0 z"
+                  fill="#226622"
+                  id="path2999"
+                  stroke="#226622"
+                  strokeDasharray="none"
+                  strokeMiterlimit="4"
+                  strokeOpacity="1"
+                  strokeWidth="1"
+                  transform="matrix(1.4872568,0,0,1.4575117,-3.9272774,-6.4278868)"
+                />
+              </svg>
+              <svg
+                aria-hidden="true"
+                height="32px"
+                role="img"
+                version="1.1"
+                viewBox="0 0 22 22"
+                width="32px"
+                x="0px"
+                xmlSpace="preserve"
+                y="0px"
+              >
+                <path
+                  className="outer"
+                  d="m 15.59322,11.271187 a 6.2288136,6.3559322 0 1 1 -12.4576271,0 6.2288136,6.3559322 0 1 1 12.4576271,0 z"
+                  fill="none"
+                  id="path2999"
+                  stroke="#226622"
+                  strokeDasharray="none"
+                  strokeMiterlimit="4"
+                  strokeOpacity="1"
+                  strokeWidth="1"
+                  transform="matrix(1.4872568,0,0,1.4575117,-3.9272774,-6.4278868)"
+                />
+              </svg>
+              <svg
+                aria-hidden="true"
+                height="32px"
+                role="img"
+                version="1.1"
+                viewBox="0 0 22 22"
+                width="32px"
+                x="0px"
+                xmlSpace="preserve"
+                y="0px"
+              >
+                <path
+                  className="outer"
+                  d="m 15.59322,11.271187 a 6.2288136,6.3559322 0 1 1 -12.4576271,0 6.2288136,6.3559322 0 1 1 12.4576271,0 z"
+                  fill="none"
+                  id="path2999"
+                  stroke="#226622"
+                  strokeDasharray="none"
+                  strokeMiterlimit="4"
+                  strokeOpacity="1"
+                  strokeWidth="1"
+                  transform="matrix(1.4872568,0,0,1.4575117,-3.9272774,-6.4278868)"
+                />
+              </svg>
+              <svg
+                aria-hidden="true"
+                height="32px"
+                role="img"
+                version="1.1"
+                viewBox="0 0 22 22"
+                width="32px"
+                x="0px"
+                xmlSpace="preserve"
+                y="0px"
+              >
+                <path
+                  className="outer"
+                  d="m 15.59322,11.271187 a 6.2288136,6.3559322 0 1 1 -12.4576271,0 6.2288136,6.3559322 0 1 1 12.4576271,0 z"
+                  fill="none"
+                  id="path2999"
+                  stroke="#226622"
+                  strokeDasharray="none"
+                  strokeMiterlimit="4"
+                  strokeOpacity="1"
+                  strokeWidth="1"
+                  transform="matrix(1.4872568,0,0,1.4575117,-3.9272774,-6.4278868)"
+                />
+              </svg>
+              <svg
+                aria-hidden="true"
+                height="32px"
+                role="img"
+                version="1.1"
+                viewBox="0 0 22 22"
+                width="32px"
+                x="0px"
+                xmlSpace="preserve"
+                y="0px"
+              >
+                <path
+                  className="outer"
+                  d="m 15.59322,11.271187 a 6.2288136,6.3559322 0 1 1 -12.4576271,0 6.2288136,6.3559322 0 1 1 12.4576271,0 z"
+                  fill="none"
+                  id="path2999"
+                  stroke="#226622"
+                  strokeDasharray="none"
+                  strokeMiterlimit="4"
+                  strokeOpacity="1"
+                  strokeWidth="1"
+                  transform="matrix(1.4872568,0,0,1.4575117,-3.9272774,-6.4278868)"
+                />
+              </svg>
+              <svg
+                aria-hidden="true"
+                height="32px"
+                role="img"
+                version="1.1"
+                viewBox="0 0 22 22"
+                width="32px"
+                x="0px"
+                xmlSpace="preserve"
+                y="0px"
+              >
+                <path
+                  className="outer"
+                  d="m 15.59322,11.271187 a 6.2288136,6.3559322 0 1 1 -12.4576271,0 6.2288136,6.3559322 0 1 1 12.4576271,0 z"
+                  fill="none"
+                  id="path2999"
+                  stroke="#226622"
+                  strokeDasharray="none"
+                  strokeMiterlimit="4"
+                  strokeOpacity="1"
+                  strokeWidth="1"
+                  transform="matrix(1.4872568,0,0,1.4575117,-3.9272774,-6.4278868)"
+                />
+              </svg>
+              <svg
+                aria-hidden="true"
+                height="32px"
+                role="img"
+                version="1.1"
+                viewBox="0 0 22 22"
+                width="32px"
+                x="0px"
+                xmlSpace="preserve"
+                y="0px"
+              >
+                <path
+                  className="outer"
+                  d="m 15.59322,11.271187 a 6.2288136,6.3559322 0 1 1 -12.4576271,0 6.2288136,6.3559322 0 1 1 12.4576271,0 z"
+                  fill="none"
+                  id="path2999"
+                  stroke="#226622"
+                  strokeDasharray="none"
+                  strokeMiterlimit="4"
+                  strokeOpacity="1"
+                  strokeWidth="1"
+                  transform="matrix(1.4872568,0,0,1.4575117,-3.9272774,-6.4278868)"
+                />
+              </svg>
+              <svg
+                aria-hidden="true"
+                height="32px"
+                role="img"
+                version="1.1"
+                viewBox="0 0 22 22"
+                width="32px"
+                x="0px"
+                xmlSpace="preserve"
+                y="0px"
+              >
+                <path
+                  className="outer"
+                  d="m 15.59322,11.271187 a 6.2288136,6.3559322 0 1 1 -12.4576271,0 6.2288136,6.3559322 0 1 1 12.4576271,0 z"
+                  fill="none"
+                  id="path2999"
+                  stroke="#226622"
+                  strokeDasharray="none"
+                  strokeMiterlimit="4"
+                  strokeOpacity="1"
+                  strokeWidth="1"
+                  transform="matrix(1.4872568,0,0,1.4575117,-3.9272774,-6.4278868)"
+                />
+              </svg>
+              <svg
+                aria-hidden="true"
+                height="32px"
+                role="img"
+                version="1.1"
+                viewBox="0 0 22 22"
+                width="32px"
+                x="0px"
+                xmlSpace="preserve"
+                y="0px"
+              >
+                <path
+                  className="outer"
+                  d="m 15.59322,11.271187 a 6.2288136,6.3559322 0 1 1 -12.4576271,0 6.2288136,6.3559322 0 1 1 12.4576271,0 z"
+                  fill="none"
+                  id="path2999"
+                  stroke="#226622"
+                  strokeDasharray="none"
+                  strokeMiterlimit="4"
+                  strokeOpacity="1"
+                  strokeWidth="1"
+                  transform="matrix(1.4872568,0,0,1.4575117,-3.9272774,-6.4278868)"
+                />
+              </svg>
+              <svg
+                aria-hidden="true"
+                height="32px"
+                role="img"
+                version="1.1"
+                viewBox="0 0 22 22"
+                width="32px"
+                x="0px"
+                xmlSpace="preserve"
+                y="0px"
+              >
+                <path
+                  className="outer"
+                  d="m 15.59322,11.271187 a 6.2288136,6.3559322 0 1 1 -12.4576271,0 6.2288136,6.3559322 0 1 1 12.4576271,0 z"
+                  fill="none"
+                  id="path2999"
+                  stroke="#226622"
+                  strokeDasharray="none"
+                  strokeMiterlimit="4"
+                  strokeOpacity="1"
+                  strokeWidth="1"
+                  transform="matrix(1.4872568,0,0,1.4575117,-3.9272774,-6.4278868)"
+                />
+              </svg>
+            </div>
+          </div>
+          <div
+            className="separator"
           />
-        </svg>
-        <svg
-          aria-hidden="true"
-          height="32px"
-          role="img"
-          version="1.1"
-          viewBox="0 0 22 22"
-          width="32px"
-          x="0px"
-          xmlSpace="preserve"
-          y="0px"
+        </div>
+        <div
+          className="col-md-12 col-xs-12"
         >
-          <path
-            className="outer"
-            d="m 15.59322,11.271187 a 6.2288136,6.3559322 0 1 1 -12.4576271,0 6.2288136,6.3559322 0 1 1 12.4576271,0 z"
-            fill="#226622"
-            id="path2999"
-            stroke="#226622"
-            strokeDasharray="none"
-            strokeMiterlimit="4"
-            strokeOpacity="1"
-            strokeWidth="1"
-            transform="matrix(1.4872568,0,0,1.4575117,-3.9272774,-6.4278868)"
-          />
-        </svg>
-        <svg
-          aria-hidden="true"
-          height="32px"
-          role="img"
-          version="1.1"
-          viewBox="0 0 22 22"
-          width="32px"
-          x="0px"
-          xmlSpace="preserve"
-          y="0px"
-        >
-          <path
-            className="outer"
-            d="m 15.59322,11.271187 a 6.2288136,6.3559322 0 1 1 -12.4576271,0 6.2288136,6.3559322 0 1 1 12.4576271,0 z"
-            fill="#226622"
-            id="path2999"
-            stroke="#226622"
-            strokeDasharray="none"
-            strokeMiterlimit="4"
-            strokeOpacity="1"
-            strokeWidth="1"
-            transform="matrix(1.4872568,0,0,1.4575117,-3.9272774,-6.4278868)"
-          />
-        </svg>
-        <svg
-          aria-hidden="true"
-          height="32px"
-          role="img"
-          version="1.1"
-          viewBox="0 0 22 22"
-          width="32px"
-          x="0px"
-          xmlSpace="preserve"
-          y="0px"
-        >
-          <path
-            className="outer"
-            d="m 15.59322,11.271187 a 6.2288136,6.3559322 0 1 1 -12.4576271,0 6.2288136,6.3559322 0 1 1 12.4576271,0 z"
-            fill="none"
-            id="path2999"
-            stroke="#226622"
-            strokeDasharray="none"
-            strokeMiterlimit="4"
-            strokeOpacity="1"
-            strokeWidth="1"
-            transform="matrix(1.4872568,0,0,1.4575117,-3.9272774,-6.4278868)"
-          />
-        </svg>
-        <svg
-          aria-hidden="true"
-          height="32px"
-          role="img"
-          version="1.1"
-          viewBox="0 0 22 22"
-          width="32px"
-          x="0px"
-          xmlSpace="preserve"
-          y="0px"
-        >
-          <path
-            className="outer"
-            d="m 15.59322,11.271187 a 6.2288136,6.3559322 0 1 1 -12.4576271,0 6.2288136,6.3559322 0 1 1 12.4576271,0 z"
-            fill="none"
-            id="path2999"
-            stroke="#226622"
-            strokeDasharray="none"
-            strokeMiterlimit="4"
-            strokeOpacity="1"
-            strokeWidth="1"
-            transform="matrix(1.4872568,0,0,1.4575117,-3.9272774,-6.4278868)"
-          />
-        </svg>
-        <svg
-          aria-hidden="true"
-          height="32px"
-          role="img"
-          version="1.1"
-          viewBox="0 0 22 22"
-          width="32px"
-          x="0px"
-          xmlSpace="preserve"
-          y="0px"
-        >
-          <path
-            className="outer"
-            d="m 15.59322,11.271187 a 6.2288136,6.3559322 0 1 1 -12.4576271,0 6.2288136,6.3559322 0 1 1 12.4576271,0 z"
-            fill="none"
-            id="path2999"
-            stroke="#226622"
-            strokeDasharray="none"
-            strokeMiterlimit="4"
-            strokeOpacity="1"
-            strokeWidth="1"
-            transform="matrix(1.4872568,0,0,1.4575117,-3.9272774,-6.4278868)"
-          />
-        </svg>
-        <svg
-          aria-hidden="true"
-          height="32px"
-          role="img"
-          version="1.1"
-          viewBox="0 0 22 22"
-          width="32px"
-          x="0px"
-          xmlSpace="preserve"
-          y="0px"
-        >
-          <path
-            className="outer"
-            d="m 15.59322,11.271187 a 6.2288136,6.3559322 0 1 1 -12.4576271,0 6.2288136,6.3559322 0 1 1 12.4576271,0 z"
-            fill="none"
-            id="path2999"
-            stroke="#226622"
-            strokeDasharray="none"
-            strokeMiterlimit="4"
-            strokeOpacity="1"
-            strokeWidth="1"
-            transform="matrix(1.4872568,0,0,1.4575117,-3.9272774,-6.4278868)"
-          />
-        </svg>
-        <svg
-          aria-hidden="true"
-          height="32px"
-          role="img"
-          version="1.1"
-          viewBox="0 0 22 22"
-          width="32px"
-          x="0px"
-          xmlSpace="preserve"
-          y="0px"
-        >
-          <path
-            className="outer"
-            d="m 15.59322,11.271187 a 6.2288136,6.3559322 0 1 1 -12.4576271,0 6.2288136,6.3559322 0 1 1 12.4576271,0 z"
-            fill="none"
-            id="path2999"
-            stroke="#226622"
-            strokeDasharray="none"
-            strokeMiterlimit="4"
-            strokeOpacity="1"
-            strokeWidth="1"
-            transform="matrix(1.4872568,0,0,1.4575117,-3.9272774,-6.4278868)"
-          />
-        </svg>
-        <svg
-          aria-hidden="true"
-          height="32px"
-          role="img"
-          version="1.1"
-          viewBox="0 0 22 22"
-          width="32px"
-          x="0px"
-          xmlSpace="preserve"
-          y="0px"
-        >
-          <path
-            className="outer"
-            d="m 15.59322,11.271187 a 6.2288136,6.3559322 0 1 1 -12.4576271,0 6.2288136,6.3559322 0 1 1 12.4576271,0 z"
-            fill="none"
-            id="path2999"
-            stroke="#226622"
-            strokeDasharray="none"
-            strokeMiterlimit="4"
-            strokeOpacity="1"
-            strokeWidth="1"
-            transform="matrix(1.4872568,0,0,1.4575117,-3.9272774,-6.4278868)"
-          />
-        </svg>
-        <svg
-          aria-hidden="true"
-          height="32px"
-          role="img"
-          version="1.1"
-          viewBox="0 0 22 22"
-          width="32px"
-          x="0px"
-          xmlSpace="preserve"
-          y="0px"
-        >
-          <path
-            className="outer"
-            d="m 15.59322,11.271187 a 6.2288136,6.3559322 0 1 1 -12.4576271,0 6.2288136,6.3559322 0 1 1 12.4576271,0 z"
-            fill="none"
-            id="path2999"
-            stroke="#226622"
-            strokeDasharray="none"
-            strokeMiterlimit="4"
-            strokeOpacity="1"
-            strokeWidth="1"
-            transform="matrix(1.4872568,0,0,1.4575117,-3.9272774,-6.4278868)"
-          />
-        </svg>
-        <svg
-          aria-hidden="true"
-          height="32px"
-          role="img"
-          version="1.1"
-          viewBox="0 0 22 22"
-          width="32px"
-          x="0px"
-          xmlSpace="preserve"
-          y="0px"
-        >
-          <path
-            className="outer"
-            d="m 15.59322,11.271187 a 6.2288136,6.3559322 0 1 1 -12.4576271,0 6.2288136,6.3559322 0 1 1 12.4576271,0 z"
-            fill="none"
-            id="path2999"
-            stroke="#226622"
-            strokeDasharray="none"
-            strokeMiterlimit="4"
-            strokeOpacity="1"
-            strokeWidth="1"
-            transform="matrix(1.4872568,0,0,1.4575117,-3.9272774,-6.4278868)"
-          />
-        </svg>
-        <svg
-          aria-hidden="true"
-          height="32px"
-          role="img"
-          version="1.1"
-          viewBox="0 0 22 22"
-          width="32px"
-          x="0px"
-          xmlSpace="preserve"
-          y="0px"
-        >
-          <path
-            className="outer"
-            d="m 15.59322,11.271187 a 6.2288136,6.3559322 0 1 1 -12.4576271,0 6.2288136,6.3559322 0 1 1 12.4576271,0 z"
-            fill="none"
-            id="path2999"
-            stroke="#226622"
-            strokeDasharray="none"
-            strokeMiterlimit="4"
-            strokeOpacity="1"
-            strokeWidth="1"
-            transform="matrix(1.4872568,0,0,1.4575117,-3.9272774,-6.4278868)"
-          />
-        </svg>
-      </div>
-    </div>
-    <div
-      className="separator"
-    />
-  </div>
-  <div>
-    <div
-      className="category-available-tokens"
-    >
-      <div
-        className="text"
-      >
-        <h2
-          className="dark-title-2"
-        >
-          Negative
-        </h2>
-        <span
-          className={undefined}
-          style={undefined}
-        >
-          Remaining Tokens
-        </span>
-      </div>
-      <div
-        className="tokens"
-      >
-        <svg
-          aria-hidden="true"
-          height="32px"
-          role="img"
-          version="1.1"
-          viewBox="0 0 22 22"
-          width="32px"
-          x="0px"
-          xmlSpace="preserve"
-          y="0px"
-        >
-          <path
-            className="outer"
-            d="m 15.59322,11.271187 a 6.2288136,6.3559322 0 1 1 -12.4576271,0 6.2288136,6.3559322 0 1 1 12.4576271,0 z"
-            fill="#771122"
-            id="path2999"
-            stroke="#771122"
-            strokeDasharray="none"
-            strokeMiterlimit="4"
-            strokeOpacity="1"
-            strokeWidth="1"
-            transform="matrix(1.4872568,0,0,1.4575117,-3.9272774,-6.4278868)"
-          />
-        </svg>
-        <svg
-          aria-hidden="true"
-          height="32px"
-          role="img"
-          version="1.1"
-          viewBox="0 0 22 22"
-          width="32px"
-          x="0px"
-          xmlSpace="preserve"
-          y="0px"
-        >
-          <path
-            className="outer"
-            d="m 15.59322,11.271187 a 6.2288136,6.3559322 0 1 1 -12.4576271,0 6.2288136,6.3559322 0 1 1 12.4576271,0 z"
-            fill="#771122"
-            id="path2999"
-            stroke="#771122"
-            strokeDasharray="none"
-            strokeMiterlimit="4"
-            strokeOpacity="1"
-            strokeWidth="1"
-            transform="matrix(1.4872568,0,0,1.4575117,-3.9272774,-6.4278868)"
-          />
-        </svg>
-        <svg
-          aria-hidden="true"
-          height="32px"
-          role="img"
-          version="1.1"
-          viewBox="0 0 22 22"
-          width="32px"
-          x="0px"
-          xmlSpace="preserve"
-          y="0px"
-        >
-          <path
-            className="outer"
-            d="m 15.59322,11.271187 a 6.2288136,6.3559322 0 1 1 -12.4576271,0 6.2288136,6.3559322 0 1 1 12.4576271,0 z"
-            fill="#771122"
-            id="path2999"
-            stroke="#771122"
-            strokeDasharray="none"
-            strokeMiterlimit="4"
-            strokeOpacity="1"
-            strokeWidth="1"
-            transform="matrix(1.4872568,0,0,1.4575117,-3.9272774,-6.4278868)"
-          />
-        </svg>
-        <svg
-          aria-hidden="true"
-          height="32px"
-          role="img"
-          version="1.1"
-          viewBox="0 0 22 22"
-          width="32px"
-          x="0px"
-          xmlSpace="preserve"
-          y="0px"
-        >
-          <path
-            className="outer"
-            d="m 15.59322,11.271187 a 6.2288136,6.3559322 0 1 1 -12.4576271,0 6.2288136,6.3559322 0 1 1 12.4576271,0 z"
-            fill="#771122"
-            id="path2999"
-            stroke="#771122"
-            strokeDasharray="none"
-            strokeMiterlimit="4"
-            strokeOpacity="1"
-            strokeWidth="1"
-            transform="matrix(1.4872568,0,0,1.4575117,-3.9272774,-6.4278868)"
-          />
-        </svg>
-        <svg
-          aria-hidden="true"
-          height="32px"
-          role="img"
-          version="1.1"
-          viewBox="0 0 22 22"
-          width="32px"
-          x="0px"
-          xmlSpace="preserve"
-          y="0px"
-        >
-          <path
-            className="outer"
-            d="m 15.59322,11.271187 a 6.2288136,6.3559322 0 1 1 -12.4576271,0 6.2288136,6.3559322 0 1 1 12.4576271,0 z"
-            fill="#771122"
-            id="path2999"
-            stroke="#771122"
-            strokeDasharray="none"
-            strokeMiterlimit="4"
-            strokeOpacity="1"
-            strokeWidth="1"
-            transform="matrix(1.4872568,0,0,1.4575117,-3.9272774,-6.4278868)"
-          />
-        </svg>
-        <svg
-          aria-hidden="true"
-          height="32px"
-          role="img"
-          version="1.1"
-          viewBox="0 0 22 22"
-          width="32px"
-          x="0px"
-          xmlSpace="preserve"
-          y="0px"
-        >
-          <path
-            className="outer"
-            d="m 15.59322,11.271187 a 6.2288136,6.3559322 0 1 1 -12.4576271,0 6.2288136,6.3559322 0 1 1 12.4576271,0 z"
-            fill="#771122"
-            id="path2999"
-            stroke="#771122"
-            strokeDasharray="none"
-            strokeMiterlimit="4"
-            strokeOpacity="1"
-            strokeWidth="1"
-            transform="matrix(1.4872568,0,0,1.4575117,-3.9272774,-6.4278868)"
-          />
-        </svg>
-        <svg
-          aria-hidden="true"
-          height="32px"
-          role="img"
-          version="1.1"
-          viewBox="0 0 22 22"
-          width="32px"
-          x="0px"
-          xmlSpace="preserve"
-          y="0px"
-        >
-          <path
-            className="outer"
-            d="m 15.59322,11.271187 a 6.2288136,6.3559322 0 1 1 -12.4576271,0 6.2288136,6.3559322 0 1 1 12.4576271,0 z"
-            fill="#771122"
-            id="path2999"
-            stroke="#771122"
-            strokeDasharray="none"
-            strokeMiterlimit="4"
-            strokeOpacity="1"
-            strokeWidth="1"
-            transform="matrix(1.4872568,0,0,1.4575117,-3.9272774,-6.4278868)"
-          />
-        </svg>
-        <svg
-          aria-hidden="true"
-          height="32px"
-          role="img"
-          version="1.1"
-          viewBox="0 0 22 22"
-          width="32px"
-          x="0px"
-          xmlSpace="preserve"
-          y="0px"
-        >
-          <path
-            className="outer"
-            d="m 15.59322,11.271187 a 6.2288136,6.3559322 0 1 1 -12.4576271,0 6.2288136,6.3559322 0 1 1 12.4576271,0 z"
-            fill="#771122"
-            id="path2999"
-            stroke="#771122"
-            strokeDasharray="none"
-            strokeMiterlimit="4"
-            strokeOpacity="1"
-            strokeWidth="1"
-            transform="matrix(1.4872568,0,0,1.4575117,-3.9272774,-6.4278868)"
-          />
-        </svg>
-        <svg
-          aria-hidden="true"
-          height="32px"
-          role="img"
-          version="1.1"
-          viewBox="0 0 22 22"
-          width="32px"
-          x="0px"
-          xmlSpace="preserve"
-          y="0px"
-        >
-          <path
-            className="outer"
-            d="m 15.59322,11.271187 a 6.2288136,6.3559322 0 1 1 -12.4576271,0 6.2288136,6.3559322 0 1 1 12.4576271,0 z"
-            fill="#771122"
-            id="path2999"
-            stroke="#771122"
-            strokeDasharray="none"
-            strokeMiterlimit="4"
-            strokeOpacity="1"
-            strokeWidth="1"
-            transform="matrix(1.4872568,0,0,1.4575117,-3.9272774,-6.4278868)"
-          />
-        </svg>
-        <svg
-          aria-hidden="true"
-          height="32px"
-          role="img"
-          version="1.1"
-          viewBox="0 0 22 22"
-          width="32px"
-          x="0px"
-          xmlSpace="preserve"
-          y="0px"
-        >
-          <path
-            className="outer"
-            d="m 15.59322,11.271187 a 6.2288136,6.3559322 0 1 1 -12.4576271,0 6.2288136,6.3559322 0 1 1 12.4576271,0 z"
-            fill="#771122"
-            id="path2999"
-            stroke="#771122"
-            strokeDasharray="none"
-            strokeMiterlimit="4"
-            strokeOpacity="1"
-            strokeWidth="1"
-            transform="matrix(1.4872568,0,0,1.4575117,-3.9272774,-6.4278868)"
-          />
-        </svg>
+          <div
+            className="category-available-tokens"
+          >
+            <div
+              className="text"
+              style={
+                Object {
+                  "minWidth": "250px",
+                }
+              }
+            >
+              <h2
+                className="dark-title-2"
+              >
+                Negative
+              </h2>
+              <span
+                className={undefined}
+                style={undefined}
+              >
+                Remaining Tokens
+              </span>
+            </div>
+            <div
+              className="tokens"
+              style={
+                Object {
+                  "minWidth": "330px",
+                }
+              }
+            >
+              <svg
+                aria-hidden="true"
+                height="32px"
+                role="img"
+                version="1.1"
+                viewBox="0 0 22 22"
+                width="32px"
+                x="0px"
+                xmlSpace="preserve"
+                y="0px"
+              >
+                <path
+                  className="outer"
+                  d="m 15.59322,11.271187 a 6.2288136,6.3559322 0 1 1 -12.4576271,0 6.2288136,6.3559322 0 1 1 12.4576271,0 z"
+                  fill="#771122"
+                  id="path2999"
+                  stroke="#771122"
+                  strokeDasharray="none"
+                  strokeMiterlimit="4"
+                  strokeOpacity="1"
+                  strokeWidth="1"
+                  transform="matrix(1.4872568,0,0,1.4575117,-3.9272774,-6.4278868)"
+                />
+              </svg>
+              <svg
+                aria-hidden="true"
+                height="32px"
+                role="img"
+                version="1.1"
+                viewBox="0 0 22 22"
+                width="32px"
+                x="0px"
+                xmlSpace="preserve"
+                y="0px"
+              >
+                <path
+                  className="outer"
+                  d="m 15.59322,11.271187 a 6.2288136,6.3559322 0 1 1 -12.4576271,0 6.2288136,6.3559322 0 1 1 12.4576271,0 z"
+                  fill="#771122"
+                  id="path2999"
+                  stroke="#771122"
+                  strokeDasharray="none"
+                  strokeMiterlimit="4"
+                  strokeOpacity="1"
+                  strokeWidth="1"
+                  transform="matrix(1.4872568,0,0,1.4575117,-3.9272774,-6.4278868)"
+                />
+              </svg>
+              <svg
+                aria-hidden="true"
+                height="32px"
+                role="img"
+                version="1.1"
+                viewBox="0 0 22 22"
+                width="32px"
+                x="0px"
+                xmlSpace="preserve"
+                y="0px"
+              >
+                <path
+                  className="outer"
+                  d="m 15.59322,11.271187 a 6.2288136,6.3559322 0 1 1 -12.4576271,0 6.2288136,6.3559322 0 1 1 12.4576271,0 z"
+                  fill="#771122"
+                  id="path2999"
+                  stroke="#771122"
+                  strokeDasharray="none"
+                  strokeMiterlimit="4"
+                  strokeOpacity="1"
+                  strokeWidth="1"
+                  transform="matrix(1.4872568,0,0,1.4575117,-3.9272774,-6.4278868)"
+                />
+              </svg>
+              <svg
+                aria-hidden="true"
+                height="32px"
+                role="img"
+                version="1.1"
+                viewBox="0 0 22 22"
+                width="32px"
+                x="0px"
+                xmlSpace="preserve"
+                y="0px"
+              >
+                <path
+                  className="outer"
+                  d="m 15.59322,11.271187 a 6.2288136,6.3559322 0 1 1 -12.4576271,0 6.2288136,6.3559322 0 1 1 12.4576271,0 z"
+                  fill="#771122"
+                  id="path2999"
+                  stroke="#771122"
+                  strokeDasharray="none"
+                  strokeMiterlimit="4"
+                  strokeOpacity="1"
+                  strokeWidth="1"
+                  transform="matrix(1.4872568,0,0,1.4575117,-3.9272774,-6.4278868)"
+                />
+              </svg>
+              <svg
+                aria-hidden="true"
+                height="32px"
+                role="img"
+                version="1.1"
+                viewBox="0 0 22 22"
+                width="32px"
+                x="0px"
+                xmlSpace="preserve"
+                y="0px"
+              >
+                <path
+                  className="outer"
+                  d="m 15.59322,11.271187 a 6.2288136,6.3559322 0 1 1 -12.4576271,0 6.2288136,6.3559322 0 1 1 12.4576271,0 z"
+                  fill="#771122"
+                  id="path2999"
+                  stroke="#771122"
+                  strokeDasharray="none"
+                  strokeMiterlimit="4"
+                  strokeOpacity="1"
+                  strokeWidth="1"
+                  transform="matrix(1.4872568,0,0,1.4575117,-3.9272774,-6.4278868)"
+                />
+              </svg>
+              <svg
+                aria-hidden="true"
+                height="32px"
+                role="img"
+                version="1.1"
+                viewBox="0 0 22 22"
+                width="32px"
+                x="0px"
+                xmlSpace="preserve"
+                y="0px"
+              >
+                <path
+                  className="outer"
+                  d="m 15.59322,11.271187 a 6.2288136,6.3559322 0 1 1 -12.4576271,0 6.2288136,6.3559322 0 1 1 12.4576271,0 z"
+                  fill="#771122"
+                  id="path2999"
+                  stroke="#771122"
+                  strokeDasharray="none"
+                  strokeMiterlimit="4"
+                  strokeOpacity="1"
+                  strokeWidth="1"
+                  transform="matrix(1.4872568,0,0,1.4575117,-3.9272774,-6.4278868)"
+                />
+              </svg>
+              <svg
+                aria-hidden="true"
+                height="32px"
+                role="img"
+                version="1.1"
+                viewBox="0 0 22 22"
+                width="32px"
+                x="0px"
+                xmlSpace="preserve"
+                y="0px"
+              >
+                <path
+                  className="outer"
+                  d="m 15.59322,11.271187 a 6.2288136,6.3559322 0 1 1 -12.4576271,0 6.2288136,6.3559322 0 1 1 12.4576271,0 z"
+                  fill="#771122"
+                  id="path2999"
+                  stroke="#771122"
+                  strokeDasharray="none"
+                  strokeMiterlimit="4"
+                  strokeOpacity="1"
+                  strokeWidth="1"
+                  transform="matrix(1.4872568,0,0,1.4575117,-3.9272774,-6.4278868)"
+                />
+              </svg>
+              <svg
+                aria-hidden="true"
+                height="32px"
+                role="img"
+                version="1.1"
+                viewBox="0 0 22 22"
+                width="32px"
+                x="0px"
+                xmlSpace="preserve"
+                y="0px"
+              >
+                <path
+                  className="outer"
+                  d="m 15.59322,11.271187 a 6.2288136,6.3559322 0 1 1 -12.4576271,0 6.2288136,6.3559322 0 1 1 12.4576271,0 z"
+                  fill="#771122"
+                  id="path2999"
+                  stroke="#771122"
+                  strokeDasharray="none"
+                  strokeMiterlimit="4"
+                  strokeOpacity="1"
+                  strokeWidth="1"
+                  transform="matrix(1.4872568,0,0,1.4575117,-3.9272774,-6.4278868)"
+                />
+              </svg>
+              <svg
+                aria-hidden="true"
+                height="32px"
+                role="img"
+                version="1.1"
+                viewBox="0 0 22 22"
+                width="32px"
+                x="0px"
+                xmlSpace="preserve"
+                y="0px"
+              >
+                <path
+                  className="outer"
+                  d="m 15.59322,11.271187 a 6.2288136,6.3559322 0 1 1 -12.4576271,0 6.2288136,6.3559322 0 1 1 12.4576271,0 z"
+                  fill="#771122"
+                  id="path2999"
+                  stroke="#771122"
+                  strokeDasharray="none"
+                  strokeMiterlimit="4"
+                  strokeOpacity="1"
+                  strokeWidth="1"
+                  transform="matrix(1.4872568,0,0,1.4575117,-3.9272774,-6.4278868)"
+                />
+              </svg>
+              <svg
+                aria-hidden="true"
+                height="32px"
+                role="img"
+                version="1.1"
+                viewBox="0 0 22 22"
+                width="32px"
+                x="0px"
+                xmlSpace="preserve"
+                y="0px"
+              >
+                <path
+                  className="outer"
+                  d="m 15.59322,11.271187 a 6.2288136,6.3559322 0 1 1 -12.4576271,0 6.2288136,6.3559322 0 1 1 12.4576271,0 z"
+                  fill="#771122"
+                  id="path2999"
+                  stroke="#771122"
+                  strokeDasharray="none"
+                  strokeMiterlimit="4"
+                  strokeOpacity="1"
+                  strokeWidth="1"
+                  transform="matrix(1.4872568,0,0,1.4575117,-3.9272774,-6.4278868)"
+                />
+              </svg>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -704,584 +800,620 @@ exports[`AvailableTokens component should match AvailableTokens snapshot (sticky
 <div
   className="available-tokens-sticky box"
 >
-  <div>
+  <div
+    className="container-fluid"
+  >
     <div
-      className="category-available-tokens"
+      className="max-container"
     >
       <div
-        className="text"
+        className="row"
       >
-        <h2
-          className="dark-title-2"
+        <div
+          className="col-md-6 col-xs-12"
         >
-          Positive
-        </h2>
-        <span
-          className={undefined}
-          style={undefined}
-        >
-          Remaining Tokens
-        </span>
-      </div>
-      <div
-        className="tokens"
-      >
-        <svg
-          aria-hidden="true"
-          height="32px"
-          role="img"
-          version="1.1"
-          viewBox="0 0 22 22"
-          width="32px"
-          x="0px"
-          xmlSpace="preserve"
-          y="0px"
-        >
-          <path
-            className="outer"
-            d="m 15.59322,11.271187 a 6.2288136,6.3559322 0 1 1 -12.4576271,0 6.2288136,6.3559322 0 1 1 12.4576271,0 z"
-            fill="#226622"
-            id="path2999"
-            stroke="#226622"
-            strokeDasharray="none"
-            strokeMiterlimit="4"
-            strokeOpacity="1"
-            strokeWidth="1"
-            transform="matrix(1.4872568,0,0,1.4575117,-3.9272774,-6.4278868)"
+          <div
+            className="category-available-tokens left"
+          >
+            <div
+              className="text"
+              style={
+                Object {
+                  "minWidth": "250px",
+                }
+              }
+            >
+              <h2
+                className="dark-title-2"
+              >
+                Positive
+              </h2>
+              <span
+                className={undefined}
+                style={undefined}
+              >
+                Remaining Tokens
+              </span>
+            </div>
+            <div
+              className="tokens"
+              style={
+                Object {
+                  "minWidth": "330px",
+                }
+              }
+            >
+              <svg
+                aria-hidden="true"
+                height="32px"
+                role="img"
+                version="1.1"
+                viewBox="0 0 22 22"
+                width="32px"
+                x="0px"
+                xmlSpace="preserve"
+                y="0px"
+              >
+                <path
+                  className="outer"
+                  d="m 15.59322,11.271187 a 6.2288136,6.3559322 0 1 1 -12.4576271,0 6.2288136,6.3559322 0 1 1 12.4576271,0 z"
+                  fill="#226622"
+                  id="path2999"
+                  stroke="#226622"
+                  strokeDasharray="none"
+                  strokeMiterlimit="4"
+                  strokeOpacity="1"
+                  strokeWidth="1"
+                  transform="matrix(1.4872568,0,0,1.4575117,-3.9272774,-6.4278868)"
+                />
+              </svg>
+              <svg
+                aria-hidden="true"
+                height="32px"
+                role="img"
+                version="1.1"
+                viewBox="0 0 22 22"
+                width="32px"
+                x="0px"
+                xmlSpace="preserve"
+                y="0px"
+              >
+                <path
+                  className="outer"
+                  d="m 15.59322,11.271187 a 6.2288136,6.3559322 0 1 1 -12.4576271,0 6.2288136,6.3559322 0 1 1 12.4576271,0 z"
+                  fill="#226622"
+                  id="path2999"
+                  stroke="#226622"
+                  strokeDasharray="none"
+                  strokeMiterlimit="4"
+                  strokeOpacity="1"
+                  strokeWidth="1"
+                  transform="matrix(1.4872568,0,0,1.4575117,-3.9272774,-6.4278868)"
+                />
+              </svg>
+              <svg
+                aria-hidden="true"
+                height="32px"
+                role="img"
+                version="1.1"
+                viewBox="0 0 22 22"
+                width="32px"
+                x="0px"
+                xmlSpace="preserve"
+                y="0px"
+              >
+                <path
+                  className="outer"
+                  d="m 15.59322,11.271187 a 6.2288136,6.3559322 0 1 1 -12.4576271,0 6.2288136,6.3559322 0 1 1 12.4576271,0 z"
+                  fill="#226622"
+                  id="path2999"
+                  stroke="#226622"
+                  strokeDasharray="none"
+                  strokeMiterlimit="4"
+                  strokeOpacity="1"
+                  strokeWidth="1"
+                  transform="matrix(1.4872568,0,0,1.4575117,-3.9272774,-6.4278868)"
+                />
+              </svg>
+              <svg
+                aria-hidden="true"
+                height="32px"
+                role="img"
+                version="1.1"
+                viewBox="0 0 22 22"
+                width="32px"
+                x="0px"
+                xmlSpace="preserve"
+                y="0px"
+              >
+                <path
+                  className="outer"
+                  d="m 15.59322,11.271187 a 6.2288136,6.3559322 0 1 1 -12.4576271,0 6.2288136,6.3559322 0 1 1 12.4576271,0 z"
+                  fill="none"
+                  id="path2999"
+                  stroke="#226622"
+                  strokeDasharray="none"
+                  strokeMiterlimit="4"
+                  strokeOpacity="1"
+                  strokeWidth="1"
+                  transform="matrix(1.4872568,0,0,1.4575117,-3.9272774,-6.4278868)"
+                />
+              </svg>
+              <svg
+                aria-hidden="true"
+                height="32px"
+                role="img"
+                version="1.1"
+                viewBox="0 0 22 22"
+                width="32px"
+                x="0px"
+                xmlSpace="preserve"
+                y="0px"
+              >
+                <path
+                  className="outer"
+                  d="m 15.59322,11.271187 a 6.2288136,6.3559322 0 1 1 -12.4576271,0 6.2288136,6.3559322 0 1 1 12.4576271,0 z"
+                  fill="none"
+                  id="path2999"
+                  stroke="#226622"
+                  strokeDasharray="none"
+                  strokeMiterlimit="4"
+                  strokeOpacity="1"
+                  strokeWidth="1"
+                  transform="matrix(1.4872568,0,0,1.4575117,-3.9272774,-6.4278868)"
+                />
+              </svg>
+              <svg
+                aria-hidden="true"
+                height="32px"
+                role="img"
+                version="1.1"
+                viewBox="0 0 22 22"
+                width="32px"
+                x="0px"
+                xmlSpace="preserve"
+                y="0px"
+              >
+                <path
+                  className="outer"
+                  d="m 15.59322,11.271187 a 6.2288136,6.3559322 0 1 1 -12.4576271,0 6.2288136,6.3559322 0 1 1 12.4576271,0 z"
+                  fill="none"
+                  id="path2999"
+                  stroke="#226622"
+                  strokeDasharray="none"
+                  strokeMiterlimit="4"
+                  strokeOpacity="1"
+                  strokeWidth="1"
+                  transform="matrix(1.4872568,0,0,1.4575117,-3.9272774,-6.4278868)"
+                />
+              </svg>
+              <svg
+                aria-hidden="true"
+                height="32px"
+                role="img"
+                version="1.1"
+                viewBox="0 0 22 22"
+                width="32px"
+                x="0px"
+                xmlSpace="preserve"
+                y="0px"
+              >
+                <path
+                  className="outer"
+                  d="m 15.59322,11.271187 a 6.2288136,6.3559322 0 1 1 -12.4576271,0 6.2288136,6.3559322 0 1 1 12.4576271,0 z"
+                  fill="none"
+                  id="path2999"
+                  stroke="#226622"
+                  strokeDasharray="none"
+                  strokeMiterlimit="4"
+                  strokeOpacity="1"
+                  strokeWidth="1"
+                  transform="matrix(1.4872568,0,0,1.4575117,-3.9272774,-6.4278868)"
+                />
+              </svg>
+              <svg
+                aria-hidden="true"
+                height="32px"
+                role="img"
+                version="1.1"
+                viewBox="0 0 22 22"
+                width="32px"
+                x="0px"
+                xmlSpace="preserve"
+                y="0px"
+              >
+                <path
+                  className="outer"
+                  d="m 15.59322,11.271187 a 6.2288136,6.3559322 0 1 1 -12.4576271,0 6.2288136,6.3559322 0 1 1 12.4576271,0 z"
+                  fill="none"
+                  id="path2999"
+                  stroke="#226622"
+                  strokeDasharray="none"
+                  strokeMiterlimit="4"
+                  strokeOpacity="1"
+                  strokeWidth="1"
+                  transform="matrix(1.4872568,0,0,1.4575117,-3.9272774,-6.4278868)"
+                />
+              </svg>
+              <svg
+                aria-hidden="true"
+                height="32px"
+                role="img"
+                version="1.1"
+                viewBox="0 0 22 22"
+                width="32px"
+                x="0px"
+                xmlSpace="preserve"
+                y="0px"
+              >
+                <path
+                  className="outer"
+                  d="m 15.59322,11.271187 a 6.2288136,6.3559322 0 1 1 -12.4576271,0 6.2288136,6.3559322 0 1 1 12.4576271,0 z"
+                  fill="none"
+                  id="path2999"
+                  stroke="#226622"
+                  strokeDasharray="none"
+                  strokeMiterlimit="4"
+                  strokeOpacity="1"
+                  strokeWidth="1"
+                  transform="matrix(1.4872568,0,0,1.4575117,-3.9272774,-6.4278868)"
+                />
+              </svg>
+              <svg
+                aria-hidden="true"
+                height="32px"
+                role="img"
+                version="1.1"
+                viewBox="0 0 22 22"
+                width="32px"
+                x="0px"
+                xmlSpace="preserve"
+                y="0px"
+              >
+                <path
+                  className="outer"
+                  d="m 15.59322,11.271187 a 6.2288136,6.3559322 0 1 1 -12.4576271,0 6.2288136,6.3559322 0 1 1 12.4576271,0 z"
+                  fill="none"
+                  id="path2999"
+                  stroke="#226622"
+                  strokeDasharray="none"
+                  strokeMiterlimit="4"
+                  strokeOpacity="1"
+                  strokeWidth="1"
+                  transform="matrix(1.4872568,0,0,1.4575117,-3.9272774,-6.4278868)"
+                />
+              </svg>
+              <svg
+                aria-hidden="true"
+                height="32px"
+                role="img"
+                version="1.1"
+                viewBox="0 0 22 22"
+                width="32px"
+                x="0px"
+                xmlSpace="preserve"
+                y="0px"
+              >
+                <path
+                  className="outer"
+                  d="m 15.59322,11.271187 a 6.2288136,6.3559322 0 1 1 -12.4576271,0 6.2288136,6.3559322 0 1 1 12.4576271,0 z"
+                  fill="none"
+                  id="path2999"
+                  stroke="#226622"
+                  strokeDasharray="none"
+                  strokeMiterlimit="4"
+                  strokeOpacity="1"
+                  strokeWidth="1"
+                  transform="matrix(1.4872568,0,0,1.4575117,-3.9272774,-6.4278868)"
+                />
+              </svg>
+              <svg
+                aria-hidden="true"
+                height="32px"
+                role="img"
+                version="1.1"
+                viewBox="0 0 22 22"
+                width="32px"
+                x="0px"
+                xmlSpace="preserve"
+                y="0px"
+              >
+                <path
+                  className="outer"
+                  d="m 15.59322,11.271187 a 6.2288136,6.3559322 0 1 1 -12.4576271,0 6.2288136,6.3559322 0 1 1 12.4576271,0 z"
+                  fill="none"
+                  id="path2999"
+                  stroke="#226622"
+                  strokeDasharray="none"
+                  strokeMiterlimit="4"
+                  strokeOpacity="1"
+                  strokeWidth="1"
+                  transform="matrix(1.4872568,0,0,1.4575117,-3.9272774,-6.4278868)"
+                />
+              </svg>
+            </div>
+          </div>
+          <div
+            className="separator"
           />
-        </svg>
-        <svg
-          aria-hidden="true"
-          height="32px"
-          role="img"
-          version="1.1"
-          viewBox="0 0 22 22"
-          width="32px"
-          x="0px"
-          xmlSpace="preserve"
-          y="0px"
+        </div>
+        <div
+          className="center col-md-6 col-xs-12"
         >
-          <path
-            className="outer"
-            d="m 15.59322,11.271187 a 6.2288136,6.3559322 0 1 1 -12.4576271,0 6.2288136,6.3559322 0 1 1 12.4576271,0 z"
-            fill="#226622"
-            id="path2999"
-            stroke="#226622"
-            strokeDasharray="none"
-            strokeMiterlimit="4"
-            strokeOpacity="1"
-            strokeWidth="1"
-            transform="matrix(1.4872568,0,0,1.4575117,-3.9272774,-6.4278868)"
-          />
-        </svg>
-        <svg
-          aria-hidden="true"
-          height="32px"
-          role="img"
-          version="1.1"
-          viewBox="0 0 22 22"
-          width="32px"
-          x="0px"
-          xmlSpace="preserve"
-          y="0px"
-        >
-          <path
-            className="outer"
-            d="m 15.59322,11.271187 a 6.2288136,6.3559322 0 1 1 -12.4576271,0 6.2288136,6.3559322 0 1 1 12.4576271,0 z"
-            fill="#226622"
-            id="path2999"
-            stroke="#226622"
-            strokeDasharray="none"
-            strokeMiterlimit="4"
-            strokeOpacity="1"
-            strokeWidth="1"
-            transform="matrix(1.4872568,0,0,1.4575117,-3.9272774,-6.4278868)"
-          />
-        </svg>
-        <svg
-          aria-hidden="true"
-          height="32px"
-          role="img"
-          version="1.1"
-          viewBox="0 0 22 22"
-          width="32px"
-          x="0px"
-          xmlSpace="preserve"
-          y="0px"
-        >
-          <path
-            className="outer"
-            d="m 15.59322,11.271187 a 6.2288136,6.3559322 0 1 1 -12.4576271,0 6.2288136,6.3559322 0 1 1 12.4576271,0 z"
-            fill="none"
-            id="path2999"
-            stroke="#226622"
-            strokeDasharray="none"
-            strokeMiterlimit="4"
-            strokeOpacity="1"
-            strokeWidth="1"
-            transform="matrix(1.4872568,0,0,1.4575117,-3.9272774,-6.4278868)"
-          />
-        </svg>
-        <svg
-          aria-hidden="true"
-          height="32px"
-          role="img"
-          version="1.1"
-          viewBox="0 0 22 22"
-          width="32px"
-          x="0px"
-          xmlSpace="preserve"
-          y="0px"
-        >
-          <path
-            className="outer"
-            d="m 15.59322,11.271187 a 6.2288136,6.3559322 0 1 1 -12.4576271,0 6.2288136,6.3559322 0 1 1 12.4576271,0 z"
-            fill="none"
-            id="path2999"
-            stroke="#226622"
-            strokeDasharray="none"
-            strokeMiterlimit="4"
-            strokeOpacity="1"
-            strokeWidth="1"
-            transform="matrix(1.4872568,0,0,1.4575117,-3.9272774,-6.4278868)"
-          />
-        </svg>
-        <svg
-          aria-hidden="true"
-          height="32px"
-          role="img"
-          version="1.1"
-          viewBox="0 0 22 22"
-          width="32px"
-          x="0px"
-          xmlSpace="preserve"
-          y="0px"
-        >
-          <path
-            className="outer"
-            d="m 15.59322,11.271187 a 6.2288136,6.3559322 0 1 1 -12.4576271,0 6.2288136,6.3559322 0 1 1 12.4576271,0 z"
-            fill="none"
-            id="path2999"
-            stroke="#226622"
-            strokeDasharray="none"
-            strokeMiterlimit="4"
-            strokeOpacity="1"
-            strokeWidth="1"
-            transform="matrix(1.4872568,0,0,1.4575117,-3.9272774,-6.4278868)"
-          />
-        </svg>
-        <svg
-          aria-hidden="true"
-          height="32px"
-          role="img"
-          version="1.1"
-          viewBox="0 0 22 22"
-          width="32px"
-          x="0px"
-          xmlSpace="preserve"
-          y="0px"
-        >
-          <path
-            className="outer"
-            d="m 15.59322,11.271187 a 6.2288136,6.3559322 0 1 1 -12.4576271,0 6.2288136,6.3559322 0 1 1 12.4576271,0 z"
-            fill="none"
-            id="path2999"
-            stroke="#226622"
-            strokeDasharray="none"
-            strokeMiterlimit="4"
-            strokeOpacity="1"
-            strokeWidth="1"
-            transform="matrix(1.4872568,0,0,1.4575117,-3.9272774,-6.4278868)"
-          />
-        </svg>
-        <svg
-          aria-hidden="true"
-          height="32px"
-          role="img"
-          version="1.1"
-          viewBox="0 0 22 22"
-          width="32px"
-          x="0px"
-          xmlSpace="preserve"
-          y="0px"
-        >
-          <path
-            className="outer"
-            d="m 15.59322,11.271187 a 6.2288136,6.3559322 0 1 1 -12.4576271,0 6.2288136,6.3559322 0 1 1 12.4576271,0 z"
-            fill="none"
-            id="path2999"
-            stroke="#226622"
-            strokeDasharray="none"
-            strokeMiterlimit="4"
-            strokeOpacity="1"
-            strokeWidth="1"
-            transform="matrix(1.4872568,0,0,1.4575117,-3.9272774,-6.4278868)"
-          />
-        </svg>
-        <svg
-          aria-hidden="true"
-          height="32px"
-          role="img"
-          version="1.1"
-          viewBox="0 0 22 22"
-          width="32px"
-          x="0px"
-          xmlSpace="preserve"
-          y="0px"
-        >
-          <path
-            className="outer"
-            d="m 15.59322,11.271187 a 6.2288136,6.3559322 0 1 1 -12.4576271,0 6.2288136,6.3559322 0 1 1 12.4576271,0 z"
-            fill="none"
-            id="path2999"
-            stroke="#226622"
-            strokeDasharray="none"
-            strokeMiterlimit="4"
-            strokeOpacity="1"
-            strokeWidth="1"
-            transform="matrix(1.4872568,0,0,1.4575117,-3.9272774,-6.4278868)"
-          />
-        </svg>
-        <svg
-          aria-hidden="true"
-          height="32px"
-          role="img"
-          version="1.1"
-          viewBox="0 0 22 22"
-          width="32px"
-          x="0px"
-          xmlSpace="preserve"
-          y="0px"
-        >
-          <path
-            className="outer"
-            d="m 15.59322,11.271187 a 6.2288136,6.3559322 0 1 1 -12.4576271,0 6.2288136,6.3559322 0 1 1 12.4576271,0 z"
-            fill="none"
-            id="path2999"
-            stroke="#226622"
-            strokeDasharray="none"
-            strokeMiterlimit="4"
-            strokeOpacity="1"
-            strokeWidth="1"
-            transform="matrix(1.4872568,0,0,1.4575117,-3.9272774,-6.4278868)"
-          />
-        </svg>
-        <svg
-          aria-hidden="true"
-          height="32px"
-          role="img"
-          version="1.1"
-          viewBox="0 0 22 22"
-          width="32px"
-          x="0px"
-          xmlSpace="preserve"
-          y="0px"
-        >
-          <path
-            className="outer"
-            d="m 15.59322,11.271187 a 6.2288136,6.3559322 0 1 1 -12.4576271,0 6.2288136,6.3559322 0 1 1 12.4576271,0 z"
-            fill="none"
-            id="path2999"
-            stroke="#226622"
-            strokeDasharray="none"
-            strokeMiterlimit="4"
-            strokeOpacity="1"
-            strokeWidth="1"
-            transform="matrix(1.4872568,0,0,1.4575117,-3.9272774,-6.4278868)"
-          />
-        </svg>
-        <svg
-          aria-hidden="true"
-          height="32px"
-          role="img"
-          version="1.1"
-          viewBox="0 0 22 22"
-          width="32px"
-          x="0px"
-          xmlSpace="preserve"
-          y="0px"
-        >
-          <path
-            className="outer"
-            d="m 15.59322,11.271187 a 6.2288136,6.3559322 0 1 1 -12.4576271,0 6.2288136,6.3559322 0 1 1 12.4576271,0 z"
-            fill="none"
-            id="path2999"
-            stroke="#226622"
-            strokeDasharray="none"
-            strokeMiterlimit="4"
-            strokeOpacity="1"
-            strokeWidth="1"
-            transform="matrix(1.4872568,0,0,1.4575117,-3.9272774,-6.4278868)"
-          />
-        </svg>
-      </div>
-    </div>
-    <div
-      className="separator"
-    />
-  </div>
-  <div>
-    <div
-      className="category-available-tokens"
-    >
-      <div
-        className="text"
-      >
-        <h2
-          className="dark-title-2"
-        >
-          Negative
-        </h2>
-        <span
-          className={undefined}
-          style={undefined}
-        >
-          Remaining Tokens
-        </span>
-      </div>
-      <div
-        className="tokens"
-      >
-        <svg
-          aria-hidden="true"
-          height="32px"
-          role="img"
-          version="1.1"
-          viewBox="0 0 22 22"
-          width="32px"
-          x="0px"
-          xmlSpace="preserve"
-          y="0px"
-        >
-          <path
-            className="outer"
-            d="m 15.59322,11.271187 a 6.2288136,6.3559322 0 1 1 -12.4576271,0 6.2288136,6.3559322 0 1 1 12.4576271,0 z"
-            fill="#771122"
-            id="path2999"
-            stroke="#771122"
-            strokeDasharray="none"
-            strokeMiterlimit="4"
-            strokeOpacity="1"
-            strokeWidth="1"
-            transform="matrix(1.4872568,0,0,1.4575117,-3.9272774,-6.4278868)"
-          />
-        </svg>
-        <svg
-          aria-hidden="true"
-          height="32px"
-          role="img"
-          version="1.1"
-          viewBox="0 0 22 22"
-          width="32px"
-          x="0px"
-          xmlSpace="preserve"
-          y="0px"
-        >
-          <path
-            className="outer"
-            d="m 15.59322,11.271187 a 6.2288136,6.3559322 0 1 1 -12.4576271,0 6.2288136,6.3559322 0 1 1 12.4576271,0 z"
-            fill="#771122"
-            id="path2999"
-            stroke="#771122"
-            strokeDasharray="none"
-            strokeMiterlimit="4"
-            strokeOpacity="1"
-            strokeWidth="1"
-            transform="matrix(1.4872568,0,0,1.4575117,-3.9272774,-6.4278868)"
-          />
-        </svg>
-        <svg
-          aria-hidden="true"
-          height="32px"
-          role="img"
-          version="1.1"
-          viewBox="0 0 22 22"
-          width="32px"
-          x="0px"
-          xmlSpace="preserve"
-          y="0px"
-        >
-          <path
-            className="outer"
-            d="m 15.59322,11.271187 a 6.2288136,6.3559322 0 1 1 -12.4576271,0 6.2288136,6.3559322 0 1 1 12.4576271,0 z"
-            fill="#771122"
-            id="path2999"
-            stroke="#771122"
-            strokeDasharray="none"
-            strokeMiterlimit="4"
-            strokeOpacity="1"
-            strokeWidth="1"
-            transform="matrix(1.4872568,0,0,1.4575117,-3.9272774,-6.4278868)"
-          />
-        </svg>
-        <svg
-          aria-hidden="true"
-          height="32px"
-          role="img"
-          version="1.1"
-          viewBox="0 0 22 22"
-          width="32px"
-          x="0px"
-          xmlSpace="preserve"
-          y="0px"
-        >
-          <path
-            className="outer"
-            d="m 15.59322,11.271187 a 6.2288136,6.3559322 0 1 1 -12.4576271,0 6.2288136,6.3559322 0 1 1 12.4576271,0 z"
-            fill="#771122"
-            id="path2999"
-            stroke="#771122"
-            strokeDasharray="none"
-            strokeMiterlimit="4"
-            strokeOpacity="1"
-            strokeWidth="1"
-            transform="matrix(1.4872568,0,0,1.4575117,-3.9272774,-6.4278868)"
-          />
-        </svg>
-        <svg
-          aria-hidden="true"
-          height="32px"
-          role="img"
-          version="1.1"
-          viewBox="0 0 22 22"
-          width="32px"
-          x="0px"
-          xmlSpace="preserve"
-          y="0px"
-        >
-          <path
-            className="outer"
-            d="m 15.59322,11.271187 a 6.2288136,6.3559322 0 1 1 -12.4576271,0 6.2288136,6.3559322 0 1 1 12.4576271,0 z"
-            fill="#771122"
-            id="path2999"
-            stroke="#771122"
-            strokeDasharray="none"
-            strokeMiterlimit="4"
-            strokeOpacity="1"
-            strokeWidth="1"
-            transform="matrix(1.4872568,0,0,1.4575117,-3.9272774,-6.4278868)"
-          />
-        </svg>
-        <svg
-          aria-hidden="true"
-          height="32px"
-          role="img"
-          version="1.1"
-          viewBox="0 0 22 22"
-          width="32px"
-          x="0px"
-          xmlSpace="preserve"
-          y="0px"
-        >
-          <path
-            className="outer"
-            d="m 15.59322,11.271187 a 6.2288136,6.3559322 0 1 1 -12.4576271,0 6.2288136,6.3559322 0 1 1 12.4576271,0 z"
-            fill="#771122"
-            id="path2999"
-            stroke="#771122"
-            strokeDasharray="none"
-            strokeMiterlimit="4"
-            strokeOpacity="1"
-            strokeWidth="1"
-            transform="matrix(1.4872568,0,0,1.4575117,-3.9272774,-6.4278868)"
-          />
-        </svg>
-        <svg
-          aria-hidden="true"
-          height="32px"
-          role="img"
-          version="1.1"
-          viewBox="0 0 22 22"
-          width="32px"
-          x="0px"
-          xmlSpace="preserve"
-          y="0px"
-        >
-          <path
-            className="outer"
-            d="m 15.59322,11.271187 a 6.2288136,6.3559322 0 1 1 -12.4576271,0 6.2288136,6.3559322 0 1 1 12.4576271,0 z"
-            fill="#771122"
-            id="path2999"
-            stroke="#771122"
-            strokeDasharray="none"
-            strokeMiterlimit="4"
-            strokeOpacity="1"
-            strokeWidth="1"
-            transform="matrix(1.4872568,0,0,1.4575117,-3.9272774,-6.4278868)"
-          />
-        </svg>
-        <svg
-          aria-hidden="true"
-          height="32px"
-          role="img"
-          version="1.1"
-          viewBox="0 0 22 22"
-          width="32px"
-          x="0px"
-          xmlSpace="preserve"
-          y="0px"
-        >
-          <path
-            className="outer"
-            d="m 15.59322,11.271187 a 6.2288136,6.3559322 0 1 1 -12.4576271,0 6.2288136,6.3559322 0 1 1 12.4576271,0 z"
-            fill="#771122"
-            id="path2999"
-            stroke="#771122"
-            strokeDasharray="none"
-            strokeMiterlimit="4"
-            strokeOpacity="1"
-            strokeWidth="1"
-            transform="matrix(1.4872568,0,0,1.4575117,-3.9272774,-6.4278868)"
-          />
-        </svg>
-        <svg
-          aria-hidden="true"
-          height="32px"
-          role="img"
-          version="1.1"
-          viewBox="0 0 22 22"
-          width="32px"
-          x="0px"
-          xmlSpace="preserve"
-          y="0px"
-        >
-          <path
-            className="outer"
-            d="m 15.59322,11.271187 a 6.2288136,6.3559322 0 1 1 -12.4576271,0 6.2288136,6.3559322 0 1 1 12.4576271,0 z"
-            fill="#771122"
-            id="path2999"
-            stroke="#771122"
-            strokeDasharray="none"
-            strokeMiterlimit="4"
-            strokeOpacity="1"
-            strokeWidth="1"
-            transform="matrix(1.4872568,0,0,1.4575117,-3.9272774,-6.4278868)"
-          />
-        </svg>
-        <svg
-          aria-hidden="true"
-          height="32px"
-          role="img"
-          version="1.1"
-          viewBox="0 0 22 22"
-          width="32px"
-          x="0px"
-          xmlSpace="preserve"
-          y="0px"
-        >
-          <path
-            className="outer"
-            d="m 15.59322,11.271187 a 6.2288136,6.3559322 0 1 1 -12.4576271,0 6.2288136,6.3559322 0 1 1 12.4576271,0 z"
-            fill="#771122"
-            id="path2999"
-            stroke="#771122"
-            strokeDasharray="none"
-            strokeMiterlimit="4"
-            strokeOpacity="1"
-            strokeWidth="1"
-            transform="matrix(1.4872568,0,0,1.4575117,-3.9272774,-6.4278868)"
-          />
-        </svg>
+          <div
+            className="category-available-tokens right"
+          >
+            <div
+              className="text"
+              style={
+                Object {
+                  "minWidth": "250px",
+                }
+              }
+            >
+              <h2
+                className="dark-title-2"
+              >
+                Negative
+              </h2>
+              <span
+                className={undefined}
+                style={undefined}
+              >
+                Remaining Tokens
+              </span>
+            </div>
+            <div
+              className="tokens"
+              style={
+                Object {
+                  "minWidth": "330px",
+                }
+              }
+            >
+              <svg
+                aria-hidden="true"
+                height="32px"
+                role="img"
+                version="1.1"
+                viewBox="0 0 22 22"
+                width="32px"
+                x="0px"
+                xmlSpace="preserve"
+                y="0px"
+              >
+                <path
+                  className="outer"
+                  d="m 15.59322,11.271187 a 6.2288136,6.3559322 0 1 1 -12.4576271,0 6.2288136,6.3559322 0 1 1 12.4576271,0 z"
+                  fill="#771122"
+                  id="path2999"
+                  stroke="#771122"
+                  strokeDasharray="none"
+                  strokeMiterlimit="4"
+                  strokeOpacity="1"
+                  strokeWidth="1"
+                  transform="matrix(1.4872568,0,0,1.4575117,-3.9272774,-6.4278868)"
+                />
+              </svg>
+              <svg
+                aria-hidden="true"
+                height="32px"
+                role="img"
+                version="1.1"
+                viewBox="0 0 22 22"
+                width="32px"
+                x="0px"
+                xmlSpace="preserve"
+                y="0px"
+              >
+                <path
+                  className="outer"
+                  d="m 15.59322,11.271187 a 6.2288136,6.3559322 0 1 1 -12.4576271,0 6.2288136,6.3559322 0 1 1 12.4576271,0 z"
+                  fill="#771122"
+                  id="path2999"
+                  stroke="#771122"
+                  strokeDasharray="none"
+                  strokeMiterlimit="4"
+                  strokeOpacity="1"
+                  strokeWidth="1"
+                  transform="matrix(1.4872568,0,0,1.4575117,-3.9272774,-6.4278868)"
+                />
+              </svg>
+              <svg
+                aria-hidden="true"
+                height="32px"
+                role="img"
+                version="1.1"
+                viewBox="0 0 22 22"
+                width="32px"
+                x="0px"
+                xmlSpace="preserve"
+                y="0px"
+              >
+                <path
+                  className="outer"
+                  d="m 15.59322,11.271187 a 6.2288136,6.3559322 0 1 1 -12.4576271,0 6.2288136,6.3559322 0 1 1 12.4576271,0 z"
+                  fill="#771122"
+                  id="path2999"
+                  stroke="#771122"
+                  strokeDasharray="none"
+                  strokeMiterlimit="4"
+                  strokeOpacity="1"
+                  strokeWidth="1"
+                  transform="matrix(1.4872568,0,0,1.4575117,-3.9272774,-6.4278868)"
+                />
+              </svg>
+              <svg
+                aria-hidden="true"
+                height="32px"
+                role="img"
+                version="1.1"
+                viewBox="0 0 22 22"
+                width="32px"
+                x="0px"
+                xmlSpace="preserve"
+                y="0px"
+              >
+                <path
+                  className="outer"
+                  d="m 15.59322,11.271187 a 6.2288136,6.3559322 0 1 1 -12.4576271,0 6.2288136,6.3559322 0 1 1 12.4576271,0 z"
+                  fill="#771122"
+                  id="path2999"
+                  stroke="#771122"
+                  strokeDasharray="none"
+                  strokeMiterlimit="4"
+                  strokeOpacity="1"
+                  strokeWidth="1"
+                  transform="matrix(1.4872568,0,0,1.4575117,-3.9272774,-6.4278868)"
+                />
+              </svg>
+              <svg
+                aria-hidden="true"
+                height="32px"
+                role="img"
+                version="1.1"
+                viewBox="0 0 22 22"
+                width="32px"
+                x="0px"
+                xmlSpace="preserve"
+                y="0px"
+              >
+                <path
+                  className="outer"
+                  d="m 15.59322,11.271187 a 6.2288136,6.3559322 0 1 1 -12.4576271,0 6.2288136,6.3559322 0 1 1 12.4576271,0 z"
+                  fill="#771122"
+                  id="path2999"
+                  stroke="#771122"
+                  strokeDasharray="none"
+                  strokeMiterlimit="4"
+                  strokeOpacity="1"
+                  strokeWidth="1"
+                  transform="matrix(1.4872568,0,0,1.4575117,-3.9272774,-6.4278868)"
+                />
+              </svg>
+              <svg
+                aria-hidden="true"
+                height="32px"
+                role="img"
+                version="1.1"
+                viewBox="0 0 22 22"
+                width="32px"
+                x="0px"
+                xmlSpace="preserve"
+                y="0px"
+              >
+                <path
+                  className="outer"
+                  d="m 15.59322,11.271187 a 6.2288136,6.3559322 0 1 1 -12.4576271,0 6.2288136,6.3559322 0 1 1 12.4576271,0 z"
+                  fill="#771122"
+                  id="path2999"
+                  stroke="#771122"
+                  strokeDasharray="none"
+                  strokeMiterlimit="4"
+                  strokeOpacity="1"
+                  strokeWidth="1"
+                  transform="matrix(1.4872568,0,0,1.4575117,-3.9272774,-6.4278868)"
+                />
+              </svg>
+              <svg
+                aria-hidden="true"
+                height="32px"
+                role="img"
+                version="1.1"
+                viewBox="0 0 22 22"
+                width="32px"
+                x="0px"
+                xmlSpace="preserve"
+                y="0px"
+              >
+                <path
+                  className="outer"
+                  d="m 15.59322,11.271187 a 6.2288136,6.3559322 0 1 1 -12.4576271,0 6.2288136,6.3559322 0 1 1 12.4576271,0 z"
+                  fill="#771122"
+                  id="path2999"
+                  stroke="#771122"
+                  strokeDasharray="none"
+                  strokeMiterlimit="4"
+                  strokeOpacity="1"
+                  strokeWidth="1"
+                  transform="matrix(1.4872568,0,0,1.4575117,-3.9272774,-6.4278868)"
+                />
+              </svg>
+              <svg
+                aria-hidden="true"
+                height="32px"
+                role="img"
+                version="1.1"
+                viewBox="0 0 22 22"
+                width="32px"
+                x="0px"
+                xmlSpace="preserve"
+                y="0px"
+              >
+                <path
+                  className="outer"
+                  d="m 15.59322,11.271187 a 6.2288136,6.3559322 0 1 1 -12.4576271,0 6.2288136,6.3559322 0 1 1 12.4576271,0 z"
+                  fill="#771122"
+                  id="path2999"
+                  stroke="#771122"
+                  strokeDasharray="none"
+                  strokeMiterlimit="4"
+                  strokeOpacity="1"
+                  strokeWidth="1"
+                  transform="matrix(1.4872568,0,0,1.4575117,-3.9272774,-6.4278868)"
+                />
+              </svg>
+              <svg
+                aria-hidden="true"
+                height="32px"
+                role="img"
+                version="1.1"
+                viewBox="0 0 22 22"
+                width="32px"
+                x="0px"
+                xmlSpace="preserve"
+                y="0px"
+              >
+                <path
+                  className="outer"
+                  d="m 15.59322,11.271187 a 6.2288136,6.3559322 0 1 1 -12.4576271,0 6.2288136,6.3559322 0 1 1 12.4576271,0 z"
+                  fill="#771122"
+                  id="path2999"
+                  stroke="#771122"
+                  strokeDasharray="none"
+                  strokeMiterlimit="4"
+                  strokeOpacity="1"
+                  strokeWidth="1"
+                  transform="matrix(1.4872568,0,0,1.4575117,-3.9272774,-6.4278868)"
+                />
+              </svg>
+              <svg
+                aria-hidden="true"
+                height="32px"
+                role="img"
+                version="1.1"
+                viewBox="0 0 22 22"
+                width="32px"
+                x="0px"
+                xmlSpace="preserve"
+                y="0px"
+              >
+                <path
+                  className="outer"
+                  d="m 15.59322,11.271187 a 6.2288136,6.3559322 0 1 1 -12.4576271,0 6.2288136,6.3559322 0 1 1 12.4576271,0 z"
+                  fill="#771122"
+                  id="path2999"
+                  stroke="#771122"
+                  strokeDasharray="none"
+                  strokeMiterlimit="4"
+                  strokeOpacity="1"
+                  strokeWidth="1"
+                  transform="matrix(1.4872568,0,0,1.4575117,-3.9272774,-6.4278868)"
+                />
+              </svg>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
