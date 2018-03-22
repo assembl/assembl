@@ -12,10 +12,11 @@ type Choice = {
 };
 
 type GaugeVoteForProposalProps = {
+  disabled: boolean,
   id: string, // the vote specification id
   proposalId: string,
   voteForProposal: Function,
-  instructions: string,
+  instructions: ?string,
   choices: ?Array<Choice>,
   value: number
 };
@@ -142,10 +143,12 @@ class GaugeVoteForProposal extends React.Component<*, GaugeVoteForProposalProps,
   }
 
   render() {
+    const { instructions, disabled } = this.props;
     return (
       <div className="gauge-vote-for-proposal">
-        <p>{this.props.instructions}</p>
+        {instructions ? <p>{instructions}</p> : null}
         <Slider
+          disabled={disabled}
           min={this.minimum}
           max={this.maximum}
           marks={this.marks}
@@ -172,6 +175,7 @@ class GaugeVoteForProposal extends React.Component<*, GaugeVoteForProposalProps,
 }
 
 type NumberGaugeVoteForProposalProps = {
+  disabled: boolean,
   id: string, // the vote specification id
   instructions: ?string,
   minimum: ?number,
@@ -262,10 +266,12 @@ class NumberGaugeVoteForProposal extends React.Component<*, NumberGaugeVoteForPr
   }
 
   render() {
+    const { instructions, disabled } = this.props;
     return (
       <div className="number-gauge-vote-for-proposal">
-        <p>{this.props.instructions}</p>
+        {instructions ? <p>{instructions}</p> : null}
         <Slider
+          disabled={disabled}
           min={this.props.minimum}
           max={this.props.maximum}
           marks={this.marks}

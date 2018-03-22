@@ -122,6 +122,7 @@ def test_graphql_vote_results(graphql_participant1_request, vote_session, vote_p
     # on gauge vote spec:
     assert res.data['voteSession']['proposals'][0]['modules'][1]['numVotes'] == 1
     assert res.data['voteSession']['proposals'][0]['modules'][1]['averageLabel'] == u'Tick 2'
+    assert res.data['voteSession']['proposals'][0]['modules'][1]['averageResult'] == 20.0
 
 
 def test_graphql_vote_results_number_gauge_average(graphql_participant1_request, vote_session, vote_proposal, number_gauge_vote_specification_with_votes, graphql_registry):

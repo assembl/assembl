@@ -13,8 +13,9 @@ import Header from '../components/common/header';
 import Section from '../components/common/section';
 import AvailableTokens from '../components/voteSession/availableTokens';
 import Proposals from '../components/voteSession/proposals';
+import ProposalsResults from '../components/voteSession/proposalsResults';
 import { getDomElementOffset, isMobile } from '../utils/globalFunctions';
-import { getPhaseId } from '../utils/timeline';
+import { getPhaseId, getIfPhaseCompletedByIdentifier } from '../utils/timeline';
 import { promptForLoginOr, displayAlert, displayModal } from '../utils/utilityManager';
 import withLoadingIndicator from '../components/common/withLoadingIndicator';
 import MessagePage from '../components/common/messagePage';
@@ -63,6 +64,7 @@ type Props = {
   headerImageUrl: string,
   instructionsSectionTitle: string,
   instructionsSectionContent: string,
+  isPhaseCompleted: boolean,
   modules: Array<VoteSpecification>,
   propositionsSectionTitle: string,
   proposals: Array<Proposal>,
@@ -119,12 +121,16 @@ class DumbVoteSession extends React.Component<void, Props, State> {
   }
 
   componentWillMount() {
-    window.addEventListener('scroll', this.setAvailableTokensSticky);
-    this.setMyVotes();
+    if (!this.props.isPhaseCompleted) {
+      window.addEventListener('scroll', this.setAvailableTokensSticky);
+      this.setMyVotes();
+    }
   }
 
   componentWillUnmount() {
-    window.removeEventListener('scroll', this.setAvailableTokensSticky);
+    if (!this.props.isPhaseCompleted) {
+      window.removeEventListener('scroll', this.setAvailableTokensSticky);
+    }
   }
 
   setMyVotes() {
@@ -161,8 +167,11 @@ class DumbVoteSession extends React.Component<void, Props, State> {
     if (this.availableTokensContainerRef && !isMobile.any()) {
       const availableTokensDivOffset = getDomElementOffset(this.availableTokensContainerRef).top;
       if (availableTokensDivOffset <= window.pageYOffset) {
-        this.setState({ availableTokensSticky: true });
-      } else {
+        if (!this.state.availableTokensSticky) {
+          // setting setState triggers a rerender even if the state doesn't change
+          this.setState({ availableTokensSticky: true });
+        }
+      } else if (this.state.availableTokensSticky) {
         this.setState({ availableTokensSticky: false });
       }
     }
@@ -276,7 +285,8 @@ class DumbVoteSession extends React.Component<void, Props, State> {
       instructionsSectionContent,
       propositionsSectionTitle,
       proposals,
-      modules
+      modules,
+      isPhaseCompleted
     } = this.props;
 
     if (!title || title.length === 0) {
@@ -290,61 +300,76 @@ class DumbVoteSession extends React.Component<void, Props, State> {
 
     const tokenVoteModule = findTokenVoteModule(modules);
     const remainingTokensByCategory = this.getRemainingTokensByCategory(tokenVoteModule);
+    const subTitleToShow = !isPhaseCompleted ? subTitle : I18n.t('debate.voteSession.isCompleted');
+    const propositionsSectionTitleToShow = !isPhaseCompleted
+      ? propositionsSectionTitle
+      : I18n.t('debate.voteSession.voteResultsPlusTitle', { title: propositionsSectionTitle });
     return (
       <div className="votesession-page">
-        <Header title={title} subtitle={subTitle} imgUrl={headerImageUrl} />
-        <Grid fluid className="background-light">
+        <Header title={title} subtitle={subTitleToShow} imgUrl={headerImageUrl} />
+        {!isPhaseCompleted ? (
+          <Grid fluid className="background-light">
+            <Section
+              title={instructionsSectionTitle}
+              containerAdditionalClassNames={this.state.availableTokensSticky ? ['no-margin'] : null}
+            >
+              <Row>
+                <Col
+                  mdOffset={!this.state.availableTokensSticky ? 3 : null}
+                  smOffset={!this.state.availableTokensSticky ? 1 : null}
+                  md={8}
+                  sm={10}
+                  className="no-padding"
+                >
+                  <div dangerouslySetInnerHTML={{ __html: instructionsSectionContent }} className="vote-instructions" />
+                  {tokenVoteModule &&
+                    tokenVoteModule.tokenCategories && (
+                      <div ref={this.setAvailableTokensRef}>
+                        <AvailableTokens
+                          sticky={this.state.availableTokensSticky}
+                          remainingTokensByCategory={remainingTokensByCategory}
+                          tokenCategories={tokenVoteModule.tokenCategories}
+                        />
+                      </div>
+                    )}
+                </Col>
+              </Row>
+            </Section>
+          </Grid>
+        ) : null}
+        <Grid fluid className="background-grey">
           <Section
-            title={instructionsSectionTitle}
-            containerAdditionalClassNames={this.state.availableTokensSticky ? ['no-margin'] : null}
+            title={propositionsSectionTitleToShow}
+            className={this.state.availableTokensSticky ? 'extra-margin-top' : null}
           >
             <Row>
-              <Col
-                mdOffset={!this.state.availableTokensSticky ? 3 : null}
-                smOffset={!this.state.availableTokensSticky ? 1 : null}
-                md={8}
-                sm={10}
-                className="no-padding"
-              >
-                <div dangerouslySetInnerHTML={{ __html: instructionsSectionContent }} className="vote-instructions" />
-                {tokenVoteModule &&
-                  tokenVoteModule.tokenCategories && (
-                    <div ref={this.setAvailableTokensRef}>
-                      <AvailableTokens
-                        sticky={this.state.availableTokensSticky}
-                        remainingTokensByCategory={remainingTokensByCategory}
-                        tokenCategories={tokenVoteModule.tokenCategories}
-                      />
-                    </div>
-                  )}
-              </Col>
-            </Row>
-          </Section>
-        </Grid>
-        <Grid fluid className="background-grey">
-          <Section title={propositionsSectionTitle} className={this.state.availableTokensSticky ? 'extra-margin-top' : null}>
-            <Row>
               <Col mdOffset={1} md={10} smOffset={1} sm={10}>
-                <Proposals
-                  proposals={proposals}
-                  remainingTokensByCategory={remainingTokensByCategory}
-                  seeCurrentVotes={seeCurrentVotes}
-                  userGaugeVotes={this.state.userGaugeVotes}
-                  userTokenVotes={this.state.userTokenVotes}
-                  voteForProposalToken={this.voteForProposalToken}
-                  voteForProposalGauge={this.voteForProposalGauge}
-                />
+                {!isPhaseCompleted ? (
+                  <Proposals
+                    proposals={proposals}
+                    remainingTokensByCategory={remainingTokensByCategory}
+                    seeCurrentVotes={seeCurrentVotes}
+                    userGaugeVotes={this.state.userGaugeVotes}
+                    userTokenVotes={this.state.userTokenVotes}
+                    voteForProposalToken={this.voteForProposalToken}
+                    voteForProposalGauge={this.voteForProposalGauge}
+                  />
+                ) : (
+                  <ProposalsResults proposals={proposals} />
+                )}
               </Col>
             </Row>
-            <Row className="form-actions center">
-              <Col mdOffset={1} md={10} smOffset={1} sm={10}>
-                {this.displaySubmitButton() ? (
-                  <Button className="button-submit button-dark" onClick={this.submitVotes} disabled={this.state.submitting}>
-                    <Translate value="debate.voteSession.submit" />
-                  </Button>
-                ) : null}
-              </Col>
-            </Row>
+            {!isPhaseCompleted ? (
+              <Row className="form-actions center">
+                <Col mdOffset={1} md={10} smOffset={1} sm={10}>
+                  {this.displaySubmitButton() ? (
+                    <Button className="button-submit button-dark" onClick={this.submitVotes} disabled={this.state.submitting}>
+                      <Translate value="debate.voteSession.submit" />
+                    </Button>
+                  ) : null}
+                </Col>
+              </Row>
+            ) : null}
           </Section>
         </Grid>
       </div>
@@ -354,7 +379,8 @@ class DumbVoteSession extends React.Component<void, Props, State> {
 
 const mapStateToProps = state => ({
   debate: state.debate,
-  lang: state.i18n.locale
+  lang: state.i18n.locale,
+  isPhaseCompleted: getIfPhaseCompletedByIdentifier(state.debate.debateData.timeline, 'voteSession')
 });
 
 export { DumbVoteSession };
