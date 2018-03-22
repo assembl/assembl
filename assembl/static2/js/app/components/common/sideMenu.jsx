@@ -30,6 +30,8 @@ class SideMenu extends React.Component<*, SideMenuProps, SideMenuState> {
     };
   }
 
+  getLinkContainerClassNames = (id: string) => (location.hash === `#${id}` ? 'link-container active' : 'link-container');
+
   render() {
     const { rootIdeas, descendants, synthesisPostId } = this.props;
     const { activeKey, show } = this.state;
@@ -37,6 +39,7 @@ class SideMenu extends React.Component<*, SideMenuProps, SideMenuState> {
     return (
       <div className="synthesis-side-menu">
         <Translate value="synthesis.summary" className="dark-title-4" />
+        <div className="title-hyphen block">&nbsp;</div>
         {rootIdeas.map((rootIdea, index) => {
           const children = getChildren(rootIdea, descendants);
           const hasChildren = children.length > 0;
@@ -44,7 +47,7 @@ class SideMenu extends React.Component<*, SideMenuProps, SideMenuState> {
           const url = slug && `/${slug}/syntheses/${synthesisPostId}#${rootIdeaId}`;
           return (
             <div key={`idea-${rootIdeaId}`}>
-              <div className="flex">
+              <div className={this.getLinkContainerClassNames(rootIdeaId)}>
                 <Link to={url} className="dark-title-5 side-menu-link">
                   {rootIdea.title}
                 </Link>
@@ -63,9 +66,11 @@ class SideMenu extends React.Component<*, SideMenuProps, SideMenuState> {
                 children.map((child, idx) => {
                   const childUrl = slug && `/${slug}/syntheses/${synthesisPostId}#${child.id}`;
                   return (
-                    <Link to={childUrl} className="dark-title-3 side-menu-link child-link shown" key={`child-${idx}`}>
-                      {child.title}
-                    </Link>
+                    <div className={this.getLinkContainerClassNames(child.id)}>
+                      <Link to={childUrl} className="dark-title-3 side-menu-link child-link shown" key={`child-${idx}`}>
+                        {child.title}
+                      </Link>
+                    </div>
                   );
                 })}
             </div>

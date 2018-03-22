@@ -1,16 +1,29 @@
 .synthesis-page {
   .synthesis-side-menu {
     position: fixed;
+    top: 15%;
+    left: 2.5%;
     background-color: $white;
     padding: 30px 10px;
-    width: 24%;
+    width: 20%;
 
-    .caret {
-      margin-top: 8px;
+    .title-hyphen {
+      display: block;
+      width: 50px;
+      margin: 10px 0 10px -35px;
     }
 
     .active-caret {
       transform: rotate(180deg);
+    }
+
+    .link-container {
+      display: flex;
+      align-items: center;
+    }
+
+    .active {
+      background: rgba($first-color, 0.15);
     }
 
     .side-menu-link {
