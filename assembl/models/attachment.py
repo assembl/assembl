@@ -245,19 +245,18 @@ class File(Document):
         # Lock row to avoid multiple antivirus processes
         (status,) = self.db.query(File.av_checked).filter_by(id=self.id).with_for_update().first()
         if status == AntiVirusStatus.failed.unchecked.name:
-            safe = antivirus.check(self.data, self.guess_extension())
+            safe = antivirus.check(self.path)
             status = AntiVirusStatus.passed.name if safe else AntiVirusStatus.failed.name
             self.av_checked = status
         return status
 
-    def safe_data(self):
+    @property
+    def infected(self):
         if self.av_checked == AntiVirusStatus.unchecked.name:
             needs_check = self.discussion.preferences['requires_virus_check']
             if needs_check:
                 self.ensure_virus_checked()
-        if self.av_checked == AntiVirusStatus.failed.name:
-            return ''
-        return self.data
+        return self.av_checked == AntiVirusStatus.failed.name
 
     @Document.external_url.getter
     def external_url(self):
