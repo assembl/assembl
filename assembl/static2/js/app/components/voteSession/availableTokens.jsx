@@ -25,10 +25,6 @@ const getColumnSizes: Function = (numberCategoriesToDisplay) => {
     return [4, 4, 4];
   case 4:
     return [6, 6, 6, 6];
-  case 5:
-    return [6, 6, 4, 4, 4];
-  case 6:
-    return [4, 4, 4, 4, 4, 4];
   default:
     return [12];
   }
@@ -44,10 +40,6 @@ const getClassNames: Function = (numberCategoriesToDisplay) => {
     return ['left', '', 'right'];
   case 4:
     return ['left', 'right', 'left', 'right'];
-  case 5:
-    return ['left', 'right', 'left', '', 'right'];
-  case 6:
-    return ['left', '', 'right', 'left', '', 'right'];
   default:
     return [12];
   }
@@ -61,7 +53,8 @@ const AvailableTokens = ({ remainingTokensByCategory, sticky, tokenCategories }:
       className={classnames({
         'available-tokens-sticky': sticky,
         box: sticky,
-        'available-tokens': !sticky
+        'available-tokens': !sticky,
+        hidden: tokenCategories.length > 4 && sticky
       })}
     >
       <Grid fluid>
