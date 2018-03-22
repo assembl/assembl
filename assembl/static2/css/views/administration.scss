@@ -16,6 +16,10 @@
     position: relative;
   }
 
+  .no-box-shadow {
+    box-shadow: none !important;
+  }
+
   .token-vote-form {
     margin: 0 0 40px 30px;
   }

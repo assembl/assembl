@@ -167,18 +167,21 @@ exports[`tokensForm component should render a form to configure a token vote wit
         id="1234"
         index={0}
         moduleId="my-tokens-form"
+        tokenCategoryNumber={3}
       />
       <Connect(DumbTokenCategoryForm)
         editLocale="fr"
         id="5678"
         index={1}
         moduleId="my-tokens-form"
+        tokenCategoryNumber={3}
       />
       <Connect(DumbTokenCategoryForm)
         editLocale="fr"
         id="9874"
         index={2}
         moduleId="my-tokens-form"
+        tokenCategoryNumber={3}
       />
     </div>
   </form>
@@ -332,6 +335,7 @@ exports[`tokensForm component should render a form to configure a token vote wit
         id="1234"
         index={0}
         moduleId="my-tokens-form"
+        tokenCategoryNumber={1}
       />
     </div>
   </form>
