@@ -41,7 +41,7 @@ const getClassNames: Function = (numberCategoriesToDisplay) => {
   case 4:
     return ['left', 'right', 'left', 'right'];
   default:
-    return [12];
+    return ['left'];
   }
 };
 
