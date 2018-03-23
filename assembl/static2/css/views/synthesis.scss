@@ -1,4 +1,10 @@
 .synthesis-page {
+  @media screen and (max-width: 1000px) {
+    .synthesis-side-menu {
+      display: none;
+    }
+  }
+
   .synthesis-side-menu {
     position: fixed;
     top: 15%;
