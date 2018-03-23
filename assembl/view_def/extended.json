@@ -351,6 +351,10 @@
         "@extends": "Widget",
         "criteria_url": true
     },
+    "VoteSession": {
+        "@extends": "VotingWidget",
+        "discussion_phase": true
+    },
     "AbstractIdeaVote": {
         "idea": true,
         "criterion": true,

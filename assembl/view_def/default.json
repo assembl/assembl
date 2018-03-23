@@ -496,6 +496,10 @@
     "TokenVotingWidget": {
         "@extends": "VotingWidget"
     },
+    "VoteSession": {
+        "@extends": "VotingWidget",
+        "discussion_phase": true
+    },
     "AbstractIdeaVote": {
         "idea": true,
         "criterion": true,

@@ -467,6 +467,10 @@
         "votable_ideas": ":id_only",
         "vote_specifications": ":"
     },
+    "VoteSession": {
+        "@extends": "VotingWidget",
+        "discussion_phase": true
+    },
     "MultiCriterionVotingWidget": {
         "@extends": "VotingWidget"
     },
