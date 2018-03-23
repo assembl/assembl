@@ -127,12 +127,16 @@
   }
 }
 
+.active-box {
+  border-left-color: $green;
+}
+
 .harvesting-box {
   position: absolute;
   box-shadow: 2px 2px 4px 0 $grey1;
   max-width: 400px;
   left: 0;
-  z-index: 100;
+  z-index: 99;
   margin-top: 50px;
 
   .harvesting-box-header {
@@ -159,6 +163,11 @@
 
     .btn[disabled] {
       opacity: 1;
+      border-color: $grey5;
+
+      span {
+        color: $grey5;
+      }
 
       &:hover {
         background-color: $white;

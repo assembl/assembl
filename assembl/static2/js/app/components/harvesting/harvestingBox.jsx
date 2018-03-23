@@ -38,7 +38,7 @@ class HarvestingBox extends React.Component<void, Props, State> {
     const { extract, cancelHarvesting } = this.props;
     const { disabled, checkIsActive } = this.state;
     return (
-      <div className="theme-box harvesting-box">
+      <div className={classnames('theme-box', 'harvesting-box', { 'active-box': checkIsActive })}>
         <div className="harvesting-box-header">
           <div className="profil">
             <span className="assembl-icon-profil grey" />
@@ -75,14 +75,16 @@ class HarvestingBox extends React.Component<void, Props, State> {
           </div>
           <div>{extract}</div>
         </div>
-        <div className="harvesting-box-footer">
-          <Button className="button-submit button-dark" onClick={this.validateHarvesting}>
-            <Translate value="common.attachFileForm.submit" />
-          </Button>
-          <Button className="button-cancel button-dark" onClick={cancelHarvesting}>
-            <Translate value="debate.confirmDeletionButtonCancel" />
-          </Button>
-        </div>
+        {disabled && (
+          <div className="harvesting-box-footer">
+            <Button className="button-submit button-dark" onClick={this.validateHarvesting}>
+              <Translate value="common.attachFileForm.submit" />
+            </Button>
+            <Button className="button-cancel button-dark" onClick={cancelHarvesting}>
+              <Translate value="debate.confirmDeletionButtonCancel" />
+            </Button>
+          </div>
+        )}
       </div>
     );
   }
