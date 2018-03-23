@@ -5,7 +5,8 @@ import { Translate } from 'react-redux-i18n';
 import classnames from 'classnames';
 
 type Props = {
-  extract: ?string
+  extract: ?string,
+  cancelHarvesting: Function
 };
 
 type State = {
@@ -33,12 +34,8 @@ class HarvestingBox extends React.Component<void, Props, State> {
     });
   };
 
-  cancelHarvesting = (): void => {
-    this.setState({ disabled: true });
-  };
-
   render() {
-    const { extract } = this.props;
+    const { extract, cancelHarvesting } = this.props;
     const { disabled, checkIsActive } = this.state;
     return (
       <div className="theme-box harvesting-box">
@@ -82,7 +79,7 @@ class HarvestingBox extends React.Component<void, Props, State> {
           <Button className="button-submit button-dark" onClick={this.validateHarvesting}>
             <Translate value="common.attachFileForm.submit" />
           </Button>
-          <Button className="button-cancel button-dark" onClick={this.cancelHarvesting}>
+          <Button className="button-cancel button-dark" onClick={cancelHarvesting}>
             <Translate value="debate.confirmDeletionButtonCancel" />
           </Button>
         </div>

@@ -105,7 +105,7 @@
 }
 
 .app.harvesting-mode-on {
-  .proposals, .posts .post-body--is-harvestable {
+  .post-body--is-harvestable {
     /* FIXME: Factorizing these ::selection rules cancels effect on Firefox */
     .post-body-title {
       ::selection {
@@ -117,11 +117,11 @@
       }
     }
 
-    .post-body-content::selection {
+    .post-body-content > div::selection {
       background: #fff8c0;
     }
 
-    .post-body-content::-moz-selection {
+    .post-body-content > div::-moz-selection {
       background: #fff8c0;
     }
   }
