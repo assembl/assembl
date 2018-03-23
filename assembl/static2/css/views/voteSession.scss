@@ -54,8 +54,6 @@
         text-align: left;
 
         svg {
-          width: 26px;
-          height: 26px;
           margin: 0 3px;
         }
       }
@@ -82,9 +80,9 @@
   }
 
   .tokens > * {
-    margin: 5px;
-    width: 30px;
-    height: 30px;
+    margin: 5px 3px;
+    width: 28px;
+    height: 28px;
   }
 
   .theme-box {

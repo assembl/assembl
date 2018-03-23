@@ -68,7 +68,7 @@ const TokenVoteForProposal = ({
                         disabled={disabled}
                         onClick={() => voteForProposal(proposalId, moduleId, id, n + 1)}
                       >
-                        <Circle size="32px" strokeColor={color} fillColor={n + 1 <= currentVote ? color : undefined} />
+                        <Circle size="28px" strokeColor={color} fillColor={n + 1 <= currentVote ? color : undefined} />
                       </Button>
                     </OverlayTrigger>
                   );
