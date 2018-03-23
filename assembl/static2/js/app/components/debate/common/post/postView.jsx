@@ -76,6 +76,11 @@ class PostView extends React.PureComponent<void, Props, State> {
     }
   };
 
+  cancelHarvesting = (): void => {
+    this.setState({ displayHarvestingMenu: false });
+    window.getSelection().removeAllRanges();
+  };
+
   render() {
     const {
       bodyMimeType,
@@ -109,7 +114,8 @@ class PostView extends React.PureComponent<void, Props, State> {
       body,
       subject,
       modifiedSubject,
-      multiColumns
+      multiColumns,
+      isHarvesting
     } = this.props;
     const translate = contentLocale !== originalLocale;
 
@@ -135,7 +141,7 @@ class PostView extends React.PureComponent<void, Props, State> {
         {!multiColumns && (
           <Nuggets extracts={extracts} postId={id} nuggetsManager={nuggetsManager} completeLevel={completeLevelArray.join('-')} />
         )}
-        {displayHarvestingMenu && <HarvestingMenu />}
+        {displayHarvestingMenu && <HarvestingMenu cancelHarvesting={this.cancelHarvesting} isHarvesting={isHarvesting} />}
         <div className="box" style={boxStyle}>
           <div className="post-row">
             <div className="post-left" onMouseUp={this.handleMouseUpWhileHarvesting}>
