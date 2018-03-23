@@ -49,7 +49,7 @@ class HarvestingMenu extends React.Component<void, Props, State> {
     const extract = window.getSelection().toString();
     return (
       <div>
-        {showHarvestingBox && <HarvestingBox extract={extract} cancelHarvesting={this.cancelHarvesting} />}
+        {showHarvestingBox && extract.length > 0 && <HarvestingBox extract={extract} cancelHarvesting={this.cancelHarvesting} />}
         {isHarvestingMode && <HarvestingAnchor handleClick={this.handleClick} handleMouseDown={this.handleMouseDown} />}
       </div>
     );
