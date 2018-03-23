@@ -242,11 +242,16 @@ class NumberGaugeVoteForProposal extends React.Component<*, NumberGaugeVoteForPr
         for (let i = 1; i < nbTicks - 1; i += 1) {
           // minimum and maximum are already shown as ticks
           const value = minimum + i * this.step;
+          // don't show decimals if .00
+          let valueStr = value.toFixed(2);
+          if (valueStr.slice(valueStr.length - 3) === '.00') {
+            valueStr = valueStr.slice(0, valueStr.length - 3);
+          }
           this.marks[`${value}`] = {
             style: markStyle,
             label: (
               <div>
-                <Translate value="debate.voteSession.valueWithUnit" num={value.toFixed(2)} unit={unit} />
+                <Translate value="debate.voteSession.valueWithUnit" num={valueStr} unit={unit} />
               </div>
             )
           };
