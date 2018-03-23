@@ -6,7 +6,7 @@ import { Translate } from 'react-redux-i18n';
 type Props = {
   positionX: number,
   positionY: number,
-  serialized: Object
+  selection: string
 };
 
 type State = {
@@ -33,19 +33,9 @@ class HarvestingBox extends React.Component<void, Props, State> {
     this.setState({ disabled: true });
   };
 
-  getHarvestingContent() {
-    const { serialized } = this.props;
-    const postId = serialized.start.split('@id=\'')[1].split('\']/')[0];
-    const elm = document.getElementById(postId);
-    const postText = elm ? elm.textContent : '';
-
-    return postText.substring(serialized.startOffset, serialized.endOffset);
-  }
-
   render() {
-    const { positionX, positionY } = this.props;
+    const { positionX, positionY, selection } = this.props;
     const { disabled } = this.state;
-    const harvestingContent = this.getHarvestingContent();
     return (
       <div style={{ top: positionY, left: positionX }} className="theme-box harvesting-box">
         <div className="harvesting-box-header">
@@ -68,7 +58,7 @@ class HarvestingBox extends React.Component<void, Props, State> {
             </Button>
           </div>
         </div>
-        <div className="harvesting-box-body">{harvestingContent}</div>
+        <div className="harvesting-box-body">{selection}</div>
         <div className="harvesting-box-footer">
           <Button className="button-submit button-dark" onClick={this.validateHarvesting}>
             <Translate value="common.attachFileForm.submit" />

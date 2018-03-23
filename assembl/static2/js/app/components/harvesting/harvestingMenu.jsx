@@ -70,10 +70,11 @@ const HarvestingMenu = ({ positionX, positionY }: HarvestingMenuProps) => {
     const selection = window.getSelection();
     const browserRange = ARange.sniff(selection.getRangeAt(0));
     const serialized = browserRange.serialize(document, 'annotation');
+    console.log(serialized); // eslint-disable-line
     // elements should be in serialized.{start, end, startOffset, endOffset}
     const harvestingMenuContainer = document.getElementById(harvestingMenuContainerUniqueId);
     ReactDOM.render(
-      <HarvestingBox positionX={positionX - 120} positionY={positionY} serialized={serialized} />,
+      <HarvestingBox positionX={positionX} positionY={positionY} selection={selection.toString()} />,
       harvestingMenuContainer
     );
   };
