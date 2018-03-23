@@ -3,8 +3,8 @@ import React from 'react';
 import addPostExtractMutation from '../../graphql/mutations/addPostExtract.graphql'; // eslint-disable-line
 import updateExtractMutation from '../../graphql/mutations/updateExtract.graphql'; // eslint-disable-line
 import deleteExtractMutation from '../../graphql/mutations/deleteExtract.graphql'; // eslint-disable-line
-import HarvestingAnchor from './HarvestingAnchor';
-import HarvestingBox from './HarvestingBox';
+import HarvestingAnchor from './harvestingAnchor';
+import HarvestingBox from './harvestingBox';
 
 type State = {
   showHarvestingBox: boolean
@@ -34,9 +34,10 @@ class HarvestingMenu extends React.Component<void, *, State> {
 
   render() {
     const { showHarvestingBox } = this.state;
+    const extract = window.getSelection().toString();
     return (
       <div>
-        {showHarvestingBox && <HarvestingBox extract={window.getSelection().toString()} />}
+        {showHarvestingBox && <HarvestingBox extract={extract} />}
         <HarvestingAnchor handleClick={this.handleClick} handleMouseDown={this.handleMouseDown} />
       </div>
     );

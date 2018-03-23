@@ -2,13 +2,15 @@
 import React from 'react';
 import { Button } from 'react-bootstrap';
 import { Translate } from 'react-redux-i18n';
+import classnames from 'classnames';
 
 type Props = {
-  extract: string
+  extract: ?string
 };
 
 type State = {
-  disabled: boolean
+  disabled: boolean,
+  checkIsActive: boolean
 };
 
 class HarvestingBox extends React.Component<void, Props, State> {
@@ -19,12 +21,16 @@ class HarvestingBox extends React.Component<void, Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
-      disabled: true
+      disabled: true,
+      checkIsActive: false
     };
   }
 
   validateHarvesting = (): void => {
-    this.setState({ disabled: false });
+    this.setState({
+      disabled: false,
+      checkIsActive: true
+    });
   };
 
   cancelHarvesting = (): void => {
@@ -33,7 +39,7 @@ class HarvestingBox extends React.Component<void, Props, State> {
 
   render() {
     const { extract } = this.props;
-    const { disabled } = this.state;
+    const { disabled, checkIsActive } = this.state;
     return (
       <div className="theme-box harvesting-box">
         <div className="harvesting-box-header">
@@ -42,7 +48,7 @@ class HarvestingBox extends React.Component<void, Props, State> {
             <span className="username">Pauline Thomas</span>
           </div>
           <div className="button-bar">
-            <Button disabled={disabled}>
+            <Button disabled={disabled} className={classnames({ active: checkIsActive })}>
               <span className="assembl-icon-check grey" />
             </Button>
             <Button disabled={disabled}>
@@ -56,7 +62,22 @@ class HarvestingBox extends React.Component<void, Props, State> {
             </Button>
           </div>
         </div>
-        <div className="harvesting-box-body">{extract}</div>
+        <div className="harvesting-box-body">
+          <div>
+            {disabled ? (
+              <div className="harvesting-in-progress">
+                <span className="confirm-harvest-button assembl-icon-catch" />&nbsp;<Translate value="harvesting.inProgress" />
+              </div>
+            ) : (
+              <div className="validated-harvesting">
+                <span className="confirm-harvest-button assembl-icon-catch" />
+                &nbsp;
+                <Translate value="harvesting.validatedHarvesting" />
+              </div>
+            )}
+          </div>
+          <div>{extract}</div>
+        </div>
         <div className="harvesting-box-footer">
           <Button className="button-submit button-dark" onClick={this.validateHarvesting}>
             <Translate value="common.attachFileForm.submit" />

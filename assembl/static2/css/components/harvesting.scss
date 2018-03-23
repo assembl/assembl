@@ -136,7 +136,7 @@
   margin-top: 50px;
 
   .harvesting-box-header {
-    padding: 30px;
+    padding: 20px;
     border-bottom: 1px solid $grey1;
   }
 
@@ -167,6 +167,16 @@
         span {
           color: $grey2;
         }
+      }
+    }
+
+    .btn.active {
+      background-color: $white;
+      border-color: $second-color;
+      box-shadow: none;
+
+      span {
+        color: $second-color;
       }
     }
 
@@ -217,14 +227,26 @@
   }
 
   .harvesting-box-body {
-    padding: 30px;
+    padding: 10px 30px 20px;
     font-size: $font-size-xs;
     color: $grey2;
+
+    .harvesting-in-progress {
+      color: $black;
+      margin-left: -12px;
+      padding: 0 0 20px;
+    }
+
+    .validated-harvesting {
+      color: $green;
+      margin-left: -12px;
+      padding: 0 0 15px;
+    }
   }
 
   .harvesting-box-footer {
     text-align: center;
-    padding: 30px 0;
+    padding: 20px 0;
     background-color: $grey1;
 
     .btn-default {

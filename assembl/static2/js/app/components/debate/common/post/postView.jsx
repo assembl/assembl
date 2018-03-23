@@ -10,7 +10,7 @@ import AnswerForm from '../../thread/answerForm';
 import Nuggets from '../../thread/nuggets';
 import RelatedIdeas from './relatedIdeas';
 import PostBody from './postBody';
-import HarvestingMenu from '../../../harvesting/HarvestingMenu';
+import HarvestingMenu from '../../../harvesting/harvestingMenu';
 import type { Props as PostProps } from './index';
 
 type Props = PostProps & {

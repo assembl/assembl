@@ -19,7 +19,9 @@ const Translations = {
     harvesting: {
       enableHarvestingMode: "Activer le mode attrapage",
       disableHarvestingMode: "Désactiver le mode attrapage",
-      harvestSelection: "Attrapage"
+      harvestSelection: "Attrapage",
+      inProgress: "Attrapage en cours",
+      validatedHarvesting: "Attrapage validé"
     },
     search: {
       reset: {
@@ -617,7 +619,9 @@ const Translations = {
     harvesting: {
       enableHarvestingMode: "Enable harvesting mode",
       disableHarvestingMode: "Disable harvesting mode",
-      harvestSelection: "Harvest"
+      harvestSelection: "Harvest",
+      inProgress: "Harvesting in progress",
+      validatedHarvesting: "Harvesting validate"
     },
     search: {
       reset: {
