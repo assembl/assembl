@@ -2,7 +2,8 @@ from datetime import datetime, timedelta
 
 from pyramid.view import view_config
 from pyramid.response import Response, FileIter, _BLOCK_SIZE
-from pyramid.httpexceptions import HTTPServerError, HTTPNotAcceptable
+from pyramid.httpexceptions import (
+    HTTPServerError, HTTPNotAcceptable, HTTPRequestRangeNotSatisfiable)
 from pyramid.security import Everyone
 from pyramid.settings import asbool
 from pyramid.compat import url_quote
@@ -44,6 +45,26 @@ def delete_file(request):
     return {}
 
 
+@view_config(context=InstanceContext, request_method='HEAD',
+             permission=P_READ, ctx_instance_class=File,
+             name='data')
+def get_file_header(request):
+    ctx = request.context
+    document = ctx._instance
+    f = File.get(document.id)
+    if f.infected:
+        raise HTTPNotAcceptable("Infected with a virus")
+    handoff_to_nginx = asbool(config.get('handoff_to_nginx', False))
+
+    return Response(
+        content_length=f.size,
+        content_type=str(f.mime_type),
+        last_modified=f.creation_date,
+        expires=datetime.now()+timedelta(days=365),
+        accept_ranges="bytes" if handoff_to_nginx else "none",
+    )
+
+
 @view_config(context=InstanceContext, request_method='GET',
              permission=P_READ, ctx_instance_class=File,
              name='data')
@@ -65,6 +86,8 @@ def get_file(request):
     if handoff_to_nginx:
         kwargs = dict(body='')
     else:
+        if 'Range' in request.headers:
+            raise HTTPRequestRangeNotSatisfiable()
         fs = open(f.path, 'rb')
         app_iter = None
         environ = request.environ
@@ -79,6 +102,7 @@ def get_file(request):
         content_type=str(f.mime_type),
         last_modified=f.creation_date,
         expires=datetime.now()+timedelta(days=365),
+        accept_ranges="bytes" if handoff_to_nginx else "none",
         content_disposition=
             'attachment; filename="%s"; filename*=utf-8\'\'%s' # RFC 6266
             % (escaped_double_quotes_filename, url_quoted_utf8_filename),
