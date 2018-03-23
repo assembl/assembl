@@ -861,7 +861,7 @@ exports[`Proposals component should match Proposals snapshot 1`] = `
       className="expand-result"
     >
       <div
-        className="expand-row background-grey row"
+        className="expand-row row"
       >
         <div
           className="center col-md-12 col-xs-12"
@@ -1847,7 +1847,7 @@ exports[`Proposals component should match Proposals snapshot 1`] = `
       className="expand-result"
     >
       <div
-        className="expand-row background-grey row"
+        className="expand-row row"
       >
         <div
           className="center col-md-12 col-xs-12"

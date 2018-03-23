@@ -157,8 +157,7 @@
     font-size: $font-size-xs;
     color: $link-color;
     text-decoration: none;
-    background-color: $grey0;
-    padding: 15px;
+    padding: 0;
 
     &:hover {
       color: $link-hover-color;
@@ -193,19 +192,23 @@
   .participants-count {
     .assembl-icon-profil:before {
       font-size: 40px;
-      margin-bottom: 12px;
+      margin-bottom: 8px;
     }
+  }
+
+  .participants-count__text {
+    color: $first-color;
   }
 
   .proposal-results {
     .participants-count {
-      background-color: $page-bkg-grey;
+      border: 1px solid $grey5;
       margin: 30px 0;
-      height: 160px;
+      height: 120px;
     }
 
     .doughnut-container {
-      margin: 0 auto;
+      text-align: center;
       height: 150px;
       width: 150px;
       padding: 10px 0 0;
@@ -237,15 +240,19 @@
     padding: 0 15px 30px;
 
     .box {
+      border: 1px solid $grey5;
       margin-top: 30px;
-      height: 160px;
+      height: 120px;
+    }
+
+    .tokens-box {
+      text-align: center;
     }
 
     .doughnut-container {
       margin: 0 auto;
       height: 80px;
       width: 80px;
-      padding: 10px 0 0;
       position: relative;
 
       .doughnut {
@@ -256,7 +263,7 @@
 
       .doughnut-totalCount {
         position: absolute;
-        top: 33px;
+        top: 23px;
         left: 24px;
         font-size: $font-size-xxs;
 
@@ -273,11 +280,19 @@
   }
 
   .gauge-box {
-    padding: 30px 0 0;
+    padding: 20px 0 0;
+  }
+
+  .gauge-box__instructions {
+    font-size: $font-size-xs;
+  }
+
+  .gauge-box__estimate {
+    color: $first-color;
   }
 
   .separator {
-    border-bottom: 1px $btn-dark-border-style $grey1;
+    border-bottom: 1px $btn-dark-border-style $grey5;
     max-width: 745px;
   }
 }
@@ -297,11 +312,11 @@
     }
 
     .participants-count {
-      padding: 40px 0 0;
+      padding: 20px 0 0;
     }
 
     .tokens-box {
-      padding: 30px 0 0;
+      padding: 10px 0 0;
     }
 
     .header-content {
@@ -334,7 +349,7 @@
     }
 
     .tokens-box {
-      padding: 15px 0 0;
+      padding: 10px 0 0;
     }
 
     .section-title {

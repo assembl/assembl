@@ -121,7 +121,7 @@ class Proposal extends React.Component<void, Props, State> {
         {seeCurrentVotes &&
           this.state.showVotesInProgress && (
             <div className="expand-result">
-              <Row className="expand-row background-grey">
+              <Row className="expand-row">
                 <Col xs={12} md={12} className="center">
                   <Button className="link-button" onClick={this.toggleShowVotesInProgress}>
                     <Translate value="debate.voteSession.showLess" />
@@ -134,7 +134,7 @@ class Proposal extends React.Component<void, Props, State> {
         {seeCurrentVotes &&
           !this.state.showVotesInProgress && (
             <div className="expand-result">
-              <Row className="expand-row background-grey">
+              <Row className="expand-row">
                 <Col xs={12} md={12} className="center">
                   <Button className="link-button" onClick={this.toggleShowVotesInProgress}>
                     <Translate value="debate.voteSession.showVotesInProgress" />

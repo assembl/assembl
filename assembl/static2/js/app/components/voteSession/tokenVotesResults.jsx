@@ -48,7 +48,7 @@ const TokenVotesResults = ({ categories, tokenVotes, numVotes, titleMsgId }: Pro
     })
     .filter(e => e); // remove null items
   return (
-    <div className="box center tokens-box">
+    <div className="box tokens-box">
       <Translate value={titleMsgId} count={numVotes} />
       <div className="doughnut-container">
         <Doughnut elements={elements} />
