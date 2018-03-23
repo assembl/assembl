@@ -63,19 +63,24 @@ const SectionLink = ({ section, options }) => {
       </a>
     );
   }
+  const sectionName = sectionType
+    .toString()
+    .toLowerCase()
+    .replace('_', '');
+  const isActiveUrl = location.href.includes(sectionName);
+  const linkClassNames = isActiveUrl ? 'navbar-menu-item pointer active' : 'navbar-menu-item pointer';
   return sectionType === 'DEBATE' ? (
     <DebateLink
       to={sectionURL(section, options)}
       identifier={options.phase}
-      className="navbar-menu-item pointer"
-      activeClassName="active"
+      className={linkClassNames}
       dataText={title}
       screenTooSmall={options.screenTooSmall}
     >
       {title}
     </DebateLink>
   ) : (
-    <Link to={sectionURL(section, options)} className="navbar-menu-item pointer" activeClassName="active" data-text={title}>
+    <Link to={sectionURL(section, options)} className={linkClassNames} data-text={title}>
       {title}
     </Link>
   );
