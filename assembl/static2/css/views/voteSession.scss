@@ -104,7 +104,6 @@
     .text {
       line-height: 24px;
       text-align: justify;
-      padding-right: 20px;
     }
 
     .proposal-vote-modules {
@@ -309,7 +308,7 @@
 @media screen and (min-width: 768px) {
   .votesession-page {
     .proposal.row {
-      padding: 31px 15px 15px 15px;
+      padding: 30px 25px 0 25px;
     }
 
     .participants-count {
