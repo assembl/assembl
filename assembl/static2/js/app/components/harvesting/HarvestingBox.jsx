@@ -4,9 +4,7 @@ import { Button } from 'react-bootstrap';
 import { Translate } from 'react-redux-i18n';
 
 type Props = {
-  positionX: number,
-  positionY: number,
-  selection: string
+  extract: string
 };
 
 type State = {
@@ -34,10 +32,10 @@ class HarvestingBox extends React.Component<void, Props, State> {
   };
 
   render() {
-    const { positionX, positionY, selection } = this.props;
+    const { extract } = this.props;
     const { disabled } = this.state;
     return (
-      <div style={{ top: positionY, left: positionX }} className="theme-box harvesting-box">
+      <div className="theme-box harvesting-box">
         <div className="harvesting-box-header">
           <div className="profil">
             <span className="assembl-icon-profil grey" />
@@ -58,7 +56,7 @@ class HarvestingBox extends React.Component<void, Props, State> {
             </Button>
           </div>
         </div>
-        <div className="harvesting-box-body">{selection}</div>
+        <div className="harvesting-box-body">{extract}</div>
         <div className="harvesting-box-footer">
           <Button className="button-submit button-dark" onClick={this.validateHarvesting}>
             <Translate value="common.attachFileForm.submit" />

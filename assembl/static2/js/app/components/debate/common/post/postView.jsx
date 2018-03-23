@@ -10,7 +10,7 @@ import AnswerForm from '../../thread/answerForm';
 import Nuggets from '../../thread/nuggets';
 import RelatedIdeas from './relatedIdeas';
 import PostBody from './postBody';
-import { handleMouseUpWhileHarvesting } from '../../../harvesting/harvestingMenu';
+import HarvestingMenu from '../../../harvesting/HarvestingMenu';
 import type { Props as PostProps } from './index';
 
 type Props = PostProps & {
@@ -22,7 +22,8 @@ type Props = PostProps & {
 };
 
 type State = {
-  showAnswerForm: boolean
+  showAnswerForm: boolean,
+  displayHarvestingAnchor: boolean
 };
 
 class PostView extends React.PureComponent<void, Props, State> {
@@ -35,7 +36,8 @@ class PostView extends React.PureComponent<void, Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
-      showAnswerForm: false
+      showAnswerForm: false,
+      displayHarvestingAnchor: false
     };
   }
 
@@ -61,6 +63,13 @@ class PostView extends React.PureComponent<void, Props, State> {
           this.props.measureTreeHeight(400);
         })
       );
+    }
+  };
+
+  handleMouseUpWhileHarvesting = (): void => {
+    const { isHarvesting, translate } = this.props;
+    if (isHarvesting && !translate) {
+      this.setState({ displayHarvestingAnchor: true });
     }
   };
 
@@ -97,8 +106,7 @@ class PostView extends React.PureComponent<void, Props, State> {
       body,
       subject,
       modifiedSubject,
-      multiColumns,
-      isHarvesting
+      multiColumns
     } = this.props;
     const translate = contentLocale !== originalLocale;
 
@@ -118,15 +126,16 @@ class PostView extends React.PureComponent<void, Props, State> {
       canReply = indirectIdeaContentLinks[0].idea.messageViewOverride !== 'messageColumns';
     }
 
+    const { displayHarvestingAnchor } = this.state;
     return (
       <div>
         {!multiColumns && (
           <Nuggets extracts={extracts} postId={id} nuggetsManager={nuggetsManager} completeLevel={completeLevelArray.join('-')} />
         )}
-
+        {displayHarvestingAnchor && <HarvestingMenu />}
         <div className="box" style={boxStyle}>
           <div className="post-row">
-            <div className="post-left" onMouseUp={isHarvesting && !translate ? handleMouseUpWhileHarvesting : null}>
+            <div className="post-left" onMouseUp={this.handleMouseUpWhileHarvesting}>
               {creator && (
                 <ProfileLine
                   userId={creator.userId}
@@ -136,7 +145,6 @@ class PostView extends React.PureComponent<void, Props, State> {
                   modified={modificationDate !== null}
                 />
               )}
-
               <PostBody
                 body={body}
                 dbId={dbId}
