@@ -1110,12 +1110,10 @@ def install_builddeps():
         # glibtoolize, bison, flex, gperf are on osx by default.
         # brew does not know aclocal, autoheader...
         # They exist on macports, but do we want to install that?
-        if not exists('/usr/local/bin/gfortran'):
-            run('brew install gcc isl')
     else:
         sudo('apt-get install -y build-essential python-dev pandoc')
         sudo('apt-get install -y automake bison flex gperf gawk')
-        sudo('apt-get install -y graphviz pkg-config gfortran')
+        sudo('apt-get install -y graphviz pkg-config')
         release_info = run("lsb_release -i")
         if "Debian" in release_info:
             sudo('apt-get install -y chromedriver', warn_only=True)  # jessie
@@ -1137,13 +1135,7 @@ def update_python_package_builddeps():
             'Installing/Updating python package native binary dependencies'))
         sudo('apt-get install -y libpq-dev libmemcached-dev libzmq3-dev '
              'libxslt1-dev libffi-dev libhiredis-dev libxml2-dev libssl-dev '
-             'libreadline-dev liblapack-dev libblas-dev '
-             'libgraphviz-dev libxmlsec1-dev')
-        sudo('apt-get install -y libatlas-base-dev', warn_only=True)  # ubuntu >= 17.10
-        sudo('apt-get install -y libatlas-dev', warn_only=True)  # others
-        print ("We are still trying to get some requirements right for linux, "
-               "See http://www.scipy.org/scipylib/building/linux.html "
-               "for details.")
+             'libreadline-dev libgraphviz-dev libxmlsec1-dev')
 
 
 @task

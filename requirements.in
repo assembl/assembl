@@ -30,7 +30,6 @@ enum34==1.1.6
 Fabric==1.13.2
 flaky==3.1.1
 future==0.15.2
-gensim==0.12.3
 graphene-sqlalchemy==1.1.1
 graphene==1.4.1
 graphql-core==1.1.0
@@ -73,7 +72,6 @@ requests==2.10.0
 rotate-backups==4.4
 simplejson==3.8.2
 six==1.10.0
-scikit-learn==0.17.1
 social-auth-core==1.7.0
 social-auth-app-pyramid==1.0.0
 social-auth-storage-sqlalchemy==1.1.0
