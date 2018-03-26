@@ -40,12 +40,6 @@ export class DumbSynthesis extends React.Component<void, SynthesisProps, void> {
         <div className="background-light">
           <Header title={subject} imgUrl={synthesis.img ? synthesis.img.externalUrl : ''} additionalHeaderClasses="left" />
           <Grid fluid>
-            <SideMenu
-              // TODO: find better names for these props
-              rootIdeas={roots}
-              descendants={descendants}
-              synthesisPostId={synthesisPostId}
-            />
             {introduction && (
               <Section title="introduction" translate className="synthesis-block">
                 <Row>
@@ -56,7 +50,10 @@ export class DumbSynthesis extends React.Component<void, SynthesisProps, void> {
               </Section>
             )}
             <Row className="background-grey synthesis-tree">
-              <Col mdOffset={3} md={7} smOffset={1} sm={10}>
+              <Col md={3}>
+                <SideMenu rootIdeas={roots} descendants={descendants} synthesisPostId={synthesisPostId} />
+              </Col>
+              <Col md={8} sm={11}>
                 {roots.map((rootIdea, index) => (
                   <IdeaSynthesisTree
                     hasSiblings={hasSiblings}
