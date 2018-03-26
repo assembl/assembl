@@ -175,6 +175,7 @@ const Translations = {
       accessButton: "Je participe",
       sentiments: "votes",
       contribution: "contributions",
+      messages: "messages",
       participant: "participants",
       visit: "visites",
       pageViews: "pages vues",
@@ -772,6 +773,7 @@ const Translations = {
     home: {
       accessButton: "I want to participate",
       contribution: "contributions",
+      messages: "messages",
       participant: "participants",
       sentiments: "votes",
       visit: "visits",

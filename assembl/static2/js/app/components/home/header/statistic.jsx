@@ -41,7 +41,7 @@ class Statistic extends React.Component {
       elementsProps.push({
         iconName: 'message',
         metricValue: rootIdea.numPosts,
-        metricNameTranslateKey: 'home.contribution'
+        metricNameTranslateKey: 'home.messages'
       });
     }
 
