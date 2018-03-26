@@ -23,7 +23,6 @@ from pyramid_beaker import session_factory_from_settings
 from pyramid.settings import asbool
 from pyramid.path import DottedNameResolver
 from zope.component import getGlobalSiteManager
-import sqltap.wsgi
 
 from .lib.sqla import (
     configure_engine, session_maker_is_initialized)
@@ -118,5 +117,6 @@ def main(global_config, **settings):
 
     wsgi_app = config.make_wsgi_app()
     if asbool(settings.get('sqltap', False)):
+        import sqltap.wsgi
         wsgi_app = sqltap.wsgi.SQLTapMiddleware(wsgi_app)
     return wsgi_app
