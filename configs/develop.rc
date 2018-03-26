@@ -16,6 +16,8 @@ public_port = 6543
 # public_port = 9991
 # public_port = 8080
 
+requirement_inputs = requirements.in requirements-chrouter.in requirements-dev.in requirements-doc.in requirements-tests.in
+
 # If not proxied by nginx or something, public_port in app:main needs to match
 # this value
 # UNIQUE_PER_SERVER

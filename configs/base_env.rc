@@ -28,6 +28,8 @@ elasticsearch_version=5.6.2
 elasticsearch_host=localhost
 elasticsearch_index=assembl
 
+requirement_inputs = requirements.in requirements-chrouter.in
+
 # External hostname: Will almost always be overridden in a host-specific rc file.
 # Note that unlike _hosts, the DNS for public_hostname need not exist at time of creation.
 public_hostname =

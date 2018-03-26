@@ -240,6 +240,11 @@ def get_random_templates():
 
 
 @task
+def generate_requirements():
+    venvcmd("pip-compile --output-file requirements.txt " + env.requirement_inputs)
+
+
+@task
 def migrate_local_ini():
     """Generate a .rc file to match the existing local.ini file.
     (requires a base .rc file)
