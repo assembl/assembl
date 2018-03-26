@@ -458,6 +458,7 @@ const Translations = {
         gauge: "Jauge %{number}",
         customGauge: "Jauge %{number} (modifiée pour cette proposition)",
         gaugeSettings: "Modifier le paramétrage",
+        cancelCustomization: "Annuler le paramétrage",
         validationErrors: {
           atLeastOneModule: "Vous devez sélectionner au moins un module."
         }
@@ -1069,6 +1070,7 @@ const Translations = {
         description: "Description*",
         tokenVote: "Token vote",
         gaugeSettings: "Edit settings",
+        cancelCustomization: "Cancel settings",
         validationErrors: {
           atLeastOneModule: "You should select at least one module."
         }

@@ -15,6 +15,7 @@ import {
   moveProposalUp,
   moveProposalDown,
   addModuleToProposal,
+  cancelModuleCustomization,
   deleteVoteModule,
   undeleteModule
 } from '../../../actions/adminActions/voteSession';
@@ -35,6 +36,7 @@ type VoteProposalFormProps = {
   handleUpClick: Function,
   handleDownClick: Function,
   associateModuleToProposal: Function,
+  cancelCustomization: Function,
   deassociateModuleToProposal: Function,
   reactivateModule: Function,
   tokenModules: Object,
@@ -63,6 +65,7 @@ const DumbVoteProposalForm = ({
   gaugeModules,
   proposalModules,
   associateModuleToProposal,
+  cancelCustomization,
   deassociateModuleToProposal,
   reactivateModule,
   refetchVoteSession,
@@ -200,15 +203,29 @@ const DumbVoteProposalForm = ({
 
               {pModule &&
                 pModule.get('id') && (
-                  <span
-                    className="inline settings-link"
-                    onClick={() => {
-                      settingsModal(pModule.get('id'));
-                    }}
-                  >
-                    <i className="assembl-icon-edit" />
-                    <Translate value="administration.voteProposals.gaugeSettings" />
-                  </span>
+                  <div>
+                    <span
+                      className="inline settings-link"
+                      onClick={() => {
+                        settingsModal(pModule.get('id'));
+                      }}
+                    >
+                      <i className="assembl-icon-edit" />
+                      <Translate value="administration.voteProposals.gaugeSettings" />
+                    </span>
+
+                    {pModule.get('isCustom') && (
+                      <span
+                        className="inline settings-link"
+                        onClick={() => {
+                          cancelCustomization(pModule.get('id'));
+                        }}
+                      >
+                        <i className="assembl-icon-cancel" />
+                        <Translate value="administration.voteProposals.cancelCustomization" />
+                      </span>
+                    )}
+                  </div>
                 )}
             </div>
           );
@@ -246,6 +263,7 @@ const mapStateToProps = ({ admin }, { id, editLocale }) => {
 };
 
 const mapDispatchToProps = (dispatch, { id }) => ({
+  cancelCustomization: moduleId => dispatch(cancelModuleCustomization(moduleId)),
   markAsToDelete: () => {
     dispatch(deleteVoteProposal(id));
     closeModal();

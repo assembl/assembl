@@ -282,6 +282,125 @@ describe('voteSession admin reducers', () => {
     });
   });
 
+  describe('voteProposalsHaveChanged reducer', () => {
+    const { voteProposalsHaveChanged } = reducers;
+    it('should handle CREATE_VOTE_PROPOSAL action', () => {
+      const action = {
+        id: 'my-proposal',
+        type: actionTypes.CREATE_VOTE_PROPOSAL
+      };
+      const expected = true;
+      const actual = voteProposalsHaveChanged(false, action);
+      expect(actual).toEqual(expected);
+    });
+
+    it('should handle DELETE_VOTE_PROPOSAL action', () => {
+      const action = {
+        id: 'my-proposal',
+        type: actionTypes.DELETE_VOTE_PROPOSAL
+      };
+      const expected = true;
+      const actual = voteProposalsHaveChanged(false, action);
+      expect(actual).toEqual(expected);
+    });
+
+    it('should handle MOVE_PROPOSAL_DOWN action', () => {
+      const action = {
+        id: 'my-proposal',
+        type: actionTypes.MOVE_PROPOSAL_DOWN
+      };
+      const expected = true;
+      const actual = voteProposalsHaveChanged(false, action);
+      expect(actual).toEqual(expected);
+    });
+
+    it('should handle MOVE_PROPOSAL_UP action', () => {
+      const action = {
+        id: 'my-proposal',
+        type: actionTypes.MOVE_PROPOSAL_UP
+      };
+      const expected = true;
+      const actual = voteProposalsHaveChanged(false, action);
+      expect(actual).toEqual(expected);
+    });
+
+    it('should handle UPDATE_VOTE_PROPOSAL_TITLE action', () => {
+      const action = {
+        id: 'my-proposal',
+        locale: 'en',
+        value: 'The XML interface is down, override the virtual alarm so we can parse the SAS firewall!',
+        type: actionTypes.UPDATE_VOTE_PROPOSAL_TITLE
+      };
+      const expected = true;
+      const actual = voteProposalsHaveChanged(false, action);
+      expect(actual).toEqual(expected);
+    });
+
+    it('should handle UPDATE_VOTE_PROPOSAL_DESCRIPTION action', () => {
+      const action = {
+        id: 'my-proposal',
+        locale: 'en',
+        value: 'We need to transmit the open-source PNG bus!',
+        type: actionTypes.UPDATE_VOTE_PROPOSAL_DESCRIPTION
+      };
+      const expected = true;
+      const actual = voteProposalsHaveChanged(false, action);
+      expect(actual).toEqual(expected);
+    });
+
+    it('should handle ADD_MODULE_TO_PROPOSAL action', () => {
+      const action = {
+        id: 'my-module',
+        voteSpecTemplateId: 'my-template',
+        proposalId: 'my-proposal',
+        type: actionTypes.ADD_MODULE_TO_PROPOSAL
+      };
+      const expected = true;
+      const actual = voteProposalsHaveChanged(false, action);
+      expect(actual).toEqual(expected);
+    });
+
+    it('should handle DELETE_VOTE_MODULE action', () => {
+      const action = {
+        id: 'my-module',
+        type: actionTypes.DELETE_VOTE_MODULE
+      };
+      const expected = true;
+      const actual = voteProposalsHaveChanged(false, action);
+      expect(actual).toEqual(expected);
+    });
+
+    it('should handle MARK_ALL_DEPENDENCIES_AS_CHANGED action', () => {
+      const action = {
+        id: 'my-module',
+        type: actionTypes.MARK_ALL_DEPENDENCIES_AS_CHANGED
+      };
+      const expected = true;
+      const actual = voteProposalsHaveChanged(false, action);
+      expect(actual).toEqual(expected);
+    });
+
+    it('should handle CANCEL_MODULE_CUSTOMIZATION action', () => {
+      const action = {
+        id: 'my-module',
+        type: actionTypes.CANCEL_MODULE_CUSTOMIZATION
+      };
+      const expected = true;
+      const actual = voteProposalsHaveChanged(false, action);
+      expect(actual).toEqual(expected);
+    });
+
+    it('should handle UPDATE_VOTE_PROPOSALS action', () => {
+      const action = {
+        voteProposals: [],
+        type: actionTypes.UPDATE_VOTE_PROPOSALS
+      };
+      const expected = false;
+      const actual = voteProposalsHaveChanged(true, action);
+      expect(actual).toEqual(expected);
+    });
+  });
+
   describe('voteProposalsById reducer', () => {
     const { voteProposalsById, voteProposalsHaveChanged } = reducers;
 
@@ -1150,6 +1269,265 @@ describe('voteSession admin reducers', () => {
           id: 'template',
           voteSpecTemplateId: null,
           proposalId: null
+        }
+      };
+      const actual = modulesById(state, action);
+      expect(actual.toJS()).toEqual(expected);
+    });
+
+    it('should handle CANCEL_MODULE_CUSTOMIZATION action type (choice gauge)', () => {
+      const state = fromJS({
+        customGauge: {
+          _hasChanged: false,
+          _isNew: false,
+          _toDelete: false,
+          isCustom: true,
+          isNumberGauge: false,
+          id: 'customGauge',
+          voteSpecTemplateId: 'template',
+          proposalId: 'proposal1',
+          instructionsEntries: [
+            {
+              localeCode: 'en',
+              value: 'My custom instructions'
+            }
+          ],
+          choices: ['custom-choice1', 'custom-choice2']
+        },
+        template: {
+          _hasChanged: false,
+          _isNew: false,
+          _toDelete: true,
+          isNumberGauge: false,
+          tokenCategories: [],
+          voteType: 'tokens',
+          id: 'template',
+          voteSpecTemplateId: null,
+          proposalId: null,
+          instructionsEntries: [
+            {
+              localeCode: 'en',
+              value: 'My template instructions'
+            }
+          ],
+          choices: ['template-choice1']
+        }
+      });
+      const action = {
+        id: 'customGauge',
+        type: actionTypes.CANCEL_MODULE_CUSTOMIZATION
+      };
+      const expected = {
+        customGauge: {
+          _hasChanged: true,
+          _isNew: false,
+          _toDelete: false,
+          isCustom: false,
+          isNumberGauge: false,
+          id: 'customGauge',
+          voteSpecTemplateId: 'template',
+          proposalId: 'proposal1',
+          instructionsEntries: [
+            {
+              localeCode: 'en',
+              value: 'My template instructions'
+            }
+          ],
+          choices: ['template-choice1']
+        },
+        template: {
+          _hasChanged: false,
+          _isNew: false,
+          _toDelete: true,
+          isNumberGauge: false,
+          tokenCategories: [],
+          voteType: 'tokens',
+          id: 'template',
+          voteSpecTemplateId: null,
+          proposalId: null,
+          instructionsEntries: [
+            {
+              localeCode: 'en',
+              value: 'My template instructions'
+            }
+          ],
+          choices: ['template-choice1']
+        }
+      };
+      const actual = modulesById(state, action);
+      expect(actual.toJS()).toEqual(expected);
+    });
+
+    it('should handle CANCEL_MODULE_CUSTOMIZATION action type (number gauge)', () => {
+      const state = fromJS({
+        customGauge: {
+          _hasChanged: false,
+          _isNew: false,
+          _toDelete: false,
+          isCustom: true,
+          isNumberGauge: true,
+          id: 'customGauge',
+          voteSpecTemplateId: 'template',
+          proposalId: 'proposal1',
+          instructionsEntries: [
+            {
+              localeCode: 'en',
+              value: 'My custom instructions'
+            }
+          ],
+          unit: 'custom unit',
+          min: 0,
+          max: 10
+        },
+        template: {
+          _hasChanged: false,
+          _isNew: false,
+          _toDelete: true,
+          isNumberGauge: true,
+          tokenCategories: [],
+          voteType: 'tokens',
+          id: 'template',
+          voteSpecTemplateId: null,
+          proposalId: null,
+          instructionsEntries: [
+            {
+              localeCode: 'en',
+              value: 'My template instructions'
+            }
+          ],
+          unit: 'template unit',
+          min: 100,
+          max: 1000
+        }
+      });
+      const action = {
+        id: 'customGauge',
+        type: actionTypes.CANCEL_MODULE_CUSTOMIZATION
+      };
+      const expected = {
+        customGauge: {
+          _hasChanged: true,
+          _isNew: false,
+          _toDelete: false,
+          isCustom: false,
+          isNumberGauge: true,
+          id: 'customGauge',
+          voteSpecTemplateId: 'template',
+          proposalId: 'proposal1',
+          instructionsEntries: [
+            {
+              localeCode: 'en',
+              value: 'My template instructions'
+            }
+          ],
+          unit: 'template unit',
+          min: 100,
+          max: 1000
+        },
+        template: {
+          _hasChanged: false,
+          _isNew: false,
+          _toDelete: true,
+          isNumberGauge: true,
+          tokenCategories: [],
+          voteType: 'tokens',
+          id: 'template',
+          voteSpecTemplateId: null,
+          proposalId: null,
+          instructionsEntries: [
+            {
+              localeCode: 'en',
+              value: 'My template instructions'
+            }
+          ],
+          unit: 'template unit',
+          min: 100,
+          max: 1000
+        }
+      };
+      const actual = modulesById(state, action);
+      expect(actual.toJS()).toEqual(expected);
+    });
+
+    it('should handle CANCEL_MODULE_CUSTOMIZATION action type (change gauge type)', () => {
+      const state = fromJS({
+        customGauge: {
+          _hasChanged: false,
+          _isNew: false,
+          _toDelete: false,
+          isCustom: true,
+          isNumberGauge: true,
+          id: 'customGauge',
+          voteSpecTemplateId: 'template',
+          proposalId: 'proposal1',
+          instructionsEntries: [
+            {
+              localeCode: 'en',
+              value: 'My custom instructions'
+            }
+          ],
+          unit: 'custom unit',
+          min: 0,
+          max: 10
+        },
+        template: {
+          _hasChanged: false,
+          _isNew: false,
+          _toDelete: true,
+          isNumberGauge: false,
+          tokenCategories: [],
+          voteType: 'tokens',
+          id: 'template',
+          voteSpecTemplateId: null,
+          proposalId: null,
+          instructionsEntries: [
+            {
+              localeCode: 'en',
+              value: 'My template instructions'
+            }
+          ],
+          choices: ['template-choice1']
+        }
+      });
+      const action = {
+        id: 'customGauge',
+        type: actionTypes.CANCEL_MODULE_CUSTOMIZATION
+      };
+      const expected = {
+        customGauge: {
+          _hasChanged: true,
+          _isNew: false,
+          _toDelete: false,
+          isCustom: false,
+          isNumberGauge: false,
+          id: 'customGauge',
+          voteSpecTemplateId: 'template',
+          proposalId: 'proposal1',
+          instructionsEntries: [
+            {
+              localeCode: 'en',
+              value: 'My template instructions'
+            }
+          ],
+          choices: ['template-choice1']
+        },
+        template: {
+          _hasChanged: false,
+          _isNew: false,
+          _toDelete: true,
+          isNumberGauge: false,
+          tokenCategories: [],
+          voteType: 'tokens',
+          id: 'template',
+          voteSpecTemplateId: null,
+          proposalId: null,
+          instructionsEntries: [
+            {
+              localeCode: 'en',
+              value: 'My template instructions'
+            }
+          ],
+          choices: ['template-choice1']
         }
       };
       const actual = modulesById(state, action);

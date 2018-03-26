@@ -175,4 +175,16 @@ describe('voteSession admin actions', () => {
       expect(actual).toEqual(expected);
     });
   });
+
+  describe('cancelModuleCustomization', () => {
+    const { cancelModuleCustomization } = actions;
+    it('should return a CANCEL_MODULE_CUSTOMIZATION action', () => {
+      const actual = cancelModuleCustomization('my-module');
+      const expected = {
+        id: 'my-module',
+        type: actionTypes.CANCEL_MODULE_CUSTOMIZATION
+      };
+      expect(actual).toEqual(expected);
+    });
+  });
 });
