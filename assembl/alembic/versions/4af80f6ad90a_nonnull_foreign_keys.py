@@ -14,9 +14,6 @@ down_revision = '4ea8eee4b157'
 def upgrade(pyramid_env):
     from assembl import models as m
     from assembl.scripts.rebuild_tables import rebuild_table
-    from assembl.semantic.virtuoso_mapping import AssemblQuadStorageManager
-    aqsm = AssemblQuadStorageManager()
-    aqsm.drop_all()
     # These tables had a nullable changed in d5204c294082bfa97284fcec273e3f53a464db51
     # except post was done in previous migration
     rebuild = [

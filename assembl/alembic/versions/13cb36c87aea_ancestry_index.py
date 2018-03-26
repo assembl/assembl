@@ -16,15 +16,10 @@ import transaction
 
 
 from assembl.lib import config
-from assembl.lib.sqla import using_virtuoso
 
 
 def schema_prefix():
-    if using_virtuoso():
-        return "_".join([
-            config.get('db_schema'), config.get('db_user')])
-    else:
-        return config.get('db_schema')
+    return config.get('db_schema')
 
 
 def upgrade(pyramid_env):

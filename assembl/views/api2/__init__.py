@@ -56,7 +56,6 @@ from ..traversal import (
 from assembl.auth import (
     P_READ, P_SYSADMIN, IF_OWNED, CrudPermissions)
 from assembl.auth.util import get_permissions
-from assembl.semantic.virtuoso_mapping import get_virtuoso
 from assembl.models import (
     User, Discussion, TombstonableMixin)
 from assembl.lib.decl_enums import DeclEnumType
@@ -111,40 +110,6 @@ def class_view(request):
     else:
         r = [i.generic_json(view, user_id, permissions) for i in q.all()]
         return [x for x in r if x is not None]
-
-
-@view_config(context=InstanceContext, renderer='json', name="jsonld",
-             request_method='GET', permission=P_READ,
-             accept="application/ld+json")
-@view_config(context=InstanceContext, renderer='json',
-             request_method='GET', permission=P_READ,
-             accept="application/ld+json")
-def instance_view_jsonld(request):
-    from assembl.semantic.virtuoso_mapping import AssemblQuadStorageManager
-    from rdflib import URIRef, ConjunctiveGraph
-    ctx = request.context
-    user_id = request.authenticated_userid or Everyone
-    permissions = get_permissions(
-        user_id, ctx.get_discussion_id())
-    instance = ctx._instance
-    if not instance.user_can(user_id, CrudPermissions.READ, permissions):
-        return HTTPUnauthorized()
-    discussion = ctx.get_instance_of_class(Discussion)
-    if not discussion:
-        raise HTTPNotFound()
-    aqsm = AssemblQuadStorageManager()
-    uri = URIRef(aqsm.local_uri() + instance.uri()[6:])
-    d_storage_name = aqsm.discussion_storage_name(discussion.id)
-    v = get_virtuoso(instance.db, d_storage_name)
-    cg = ConjunctiveGraph(v, d_storage_name)
-    result = cg.triples((uri, None, None))
-    #result = v.query('select ?p ?o ?g where {graph ?g {<%s> ?p ?o}}' % uri)
-    # Something is wrong here.
-    triples = '\n'.join([
-        '%s %s %s.' % (uri.n3(), p.n3(), o.n3())
-        for (s, p, o) in result
-        if '_with_no_name_entry' not in o])
-    return aqsm.quads_to_jsonld(triples)
 
 
 @view_config(context=InstanceContext, renderer='json',

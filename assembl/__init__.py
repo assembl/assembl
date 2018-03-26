@@ -26,7 +26,7 @@ from zope.component import getGlobalSiteManager
 import sqltap.wsgi
 
 from .lib.sqla import (
-    configure_engine, session_maker_is_initialized, using_virtuoso)
+    configure_engine, session_maker_is_initialized)
 from .lib.locale import locale_negotiator as my_locale_negotiator
 from .lib.config import set_config
 
@@ -66,10 +66,6 @@ def main(global_config, **settings):
     config.add_translation_dirs('assembl:locale/')
 
     config.set_locale_negotiator(my_locale_negotiator)
-    if using_virtuoso():
-        config.add_tween(
-            'assembl.tweens.virtuoso_deadlock.transient_deadlock_tween_factory',
-            under="pyramid_tm.tm_tween_factory")
     config.add_tween(
         'assembl.tweens.logging.logging_tween_factory',
         over="pyramid_tm.tm_tween_factory")
@@ -81,7 +77,6 @@ def main(global_config, **settings):
     # Tasks first, because it includes ZCA registration (for now)
     config.include('.tasks')
 
-    config.include('pyramid_dogpile_cache')
     config.include('.lib.zmqlib')
     session_factory = session_factory_from_settings(settings)
     config.set_session_factory(session_factory)

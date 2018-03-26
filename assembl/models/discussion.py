@@ -25,8 +25,6 @@ from ..auth import (P_ADMIN_DISC, P_READ, P_SYSADMIN, R_PARTICIPANT,
 from ..lib.discussion_creation import IDiscussionCreationCallback
 from ..lib.locale import strip_country
 from ..lib.sqla_types import CoerceUnicode, URLString
-from ..semantic.namespaces import ASSEMBL, CATALYST, DCTERMS
-from ..semantic.virtuoso_mapping import QuadMapPatternS
 from .auth import (DiscussionPermission, LocalUserRole, Permission, Role, User,
                    UserRole, UserTemplate)
 from .langstrings import LangString
@@ -44,18 +42,14 @@ class Discussion(DiscussionBoundBase, NamedClassMixin):
     :py:class:`assembl.models.DiscussionBoundBase`.
     """
     __tablename__ = "discussion"
-    rdf_class = CATALYST.Conversation
 
-    id = Column(Integer, primary_key=True,
-                info={'rdf': QuadMapPatternS(None, ASSEMBL.db_id)})
+    id = Column(Integer, primary_key=True)
 
-    topic = Column(UnicodeText, nullable=False,
-                   info={'rdf': QuadMapPatternS(None, DCTERMS.title)})
+    topic = Column(UnicodeText, nullable=False)
 
     slug = Column(CoerceUnicode, nullable=False, unique=True, index=True)
 
-    creation_date = Column(DateTime, nullable=False, default=datetime.utcnow,
-                           info={'rdf': QuadMapPatternS(None, DCTERMS.created)})
+    creation_date = Column(DateTime, nullable=False, default=datetime.utcnow)
     objectives = Column(UnicodeText)
     instigator = Column(UnicodeText)
     introduction = Column(UnicodeText)

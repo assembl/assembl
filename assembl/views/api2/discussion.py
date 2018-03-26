@@ -37,7 +37,6 @@ from pyramid.view import view_config
 from pyramid.httpexceptions import (
     HTTPOk, HTTPBadRequest, HTTPUnauthorized, HTTPNotAcceptable, HTTPFound,
     HTTPServerError, HTTPConflict)
-from pyramid_dogpile_cache import get_region
 from pyramid.security import Everyone
 from pyramid.renderers import JSONP_VALID_CALLBACK
 from pyramid.settings import asbool
@@ -84,185 +83,12 @@ def discussion_settings_put(request):
     request.context._instance.settings_json = request.json_body
     return HTTPOk()
 
-dogpile_fname = join(
-    dirname(dirname(dirname(dirname(__file__)))),
-    get_config().get('dogpile_cache.arguments.filename'))
-
-discussion_jsonld_cache = get_region(
-    'discussion_jsonld', **{"arguments.filename": dogpile_fname})
-userprivate_jsonld_cache = get_region(
-    'userprivate_jsonld', **{"arguments.filename": dogpile_fname})
-
-
-@discussion_jsonld_cache.cache_on_arguments()
-def discussion_jsonld(discussion_id):
-    from assembl.semantic.virtuoso_mapping import AssemblQuadStorageManager
-    aqsm = AssemblQuadStorageManager()
-    return aqsm.as_jsonld(discussion_id)
-
-
-@userprivate_jsonld_cache.cache_on_arguments()
-def userprivate_jsonld(discussion_id):
-    from assembl.semantic.virtuoso_mapping import AssemblQuadStorageManager
-    aqsm = AssemblQuadStorageManager()
-    cg = aqsm.participants_private_as_graph(discussion_id)
-    return aqsm.graph_as_jsonld(cg)
-
-
-def read_user_token(request):
-    salt = None
-    user_id = request.authenticated_userid or Everyone
-    discussion_id = request.context.get_discussion_id()
-    permissions = get_permissions(user_id, discussion_id)
-    if P_READ in permissions:
-        permissions.append(P_READ_PUBLIC_CIF)
-
-    if 'token' in request.GET:
-        token = request.GET['token'].encode('ascii')
-        data, valid = verify_data_token(token, max_age=timedelta(hours=1))
-        if valid != Validity.VALID:
-            raise HTTPBadRequest("Invalid token")
-        try:
-            data, salt = data.split('.', 1)
-            salt = base64.urlsafe_b64decode(salt)
-            data = [int(i) for i in data.split(',')]
-            t_user_id, t_discussion_id = data[:2]
-            req_permissions = data[2:]
-            if len(req_permissions):
-                req_permissions = [x for (x,) in Permission.default_db.query(
-                    Permission.name).filter(
-                    Permission.id.in_(req_permissions)).all()]
-        except (ValueError, IndexError):
-            raise HTTPBadRequest("Invalid token")
-        if discussion_id is not None and t_discussion_id != discussion_id:
-            raise HTTPUnauthorized("Token for another discussion")
-        if user_id == Everyone:
-            permissions = get_permissions(t_user_id, discussion_id)
-            if P_READ in permissions:
-                permissions.append(P_READ_PUBLIC_CIF)
-        elif t_user_id != user_id:
-            raise HTTPUnauthorized("Token for another user")
-        user_id = t_user_id
-        permissions = set(permissions).intersection(set(req_permissions))
-    return user_id, permissions, salt
-
 
 def handle_jsonp(callback_fn, json):
     # TODO: Use an augmented JSONP renderer with ld content-type
     if not JSONP_VALID_CALLBACK.match(callback_fn):
         raise HTTPBadRequest("invalid callback name")
     return "/**/{0}({1});".format(callback_fn.encode('ascii'), json)
-
-
-def permission_token(
-        user_id, discussion_id, req_permissions, random_str=None):
-    random_str = random_str or urandom(8)
-    if isinstance(req_permissions, list):
-        req_permissions = set(req_permissions)
-    else:
-        req_permissions = set((req_permissions,))
-    permissions = get_permissions(user_id, discussion_id)
-    if not req_permissions:
-        req_permissions = permissions
-    elif P_SYSADMIN not in permissions:
-        req_permissions = req_permissions.intersection(set(permissions))
-    req_permissions = list(req_permissions)
-    user_id = 0 if user_id == Everyone else user_id
-    data = [str(user_id), str(discussion_id)]
-    data.extend([str(x) for (x,) in Permission.default_db.query(
-            Permission.id).filter(Permission.name.in_(req_permissions)).all()])
-    data = ','.join(data) + '.' + base64.urlsafe_b64encode(random_str)
-    return data_token(data)
-
-
-@view_config(context=InstanceContext, name="perm_token",
-             ctx_instance_class=Discussion, request_method='GET',
-             accept="application/ld+json", renderer="json")
-def get_token(request):
-    user_id = request.authenticated_userid
-    if not user_id:
-        raise HTTPUnauthorized()
-    discussion_id = request.context.get_discussion_id()
-    permission_sets = request.GET.getall('permissions')
-    if permission_sets:
-        permission_sets = [s.split(',') for s in permission_sets]
-        for permissions in permission_sets:
-            if P_READ in permissions:
-                permissions.append(P_READ_PUBLIC_CIF)
-        permission_sets = [sorted(set(permissions))
-                           for permissions in permission_sets]
-    else:
-        permission_sets = [[P_READ, P_READ_PUBLIC_CIF]]
-    random_str = urandom(8)
-    data = {','.join(permissions): permission_token(
-        user_id, discussion_id, permissions, random_str)
-        for permissions in permission_sets}
-    user_ids = request.GET.getall("user_id")
-    if user_ids:
-        from assembl.semantic.virtuoso_mapping import (
-            AssemblQuadStorageManager, AESObfuscator)
-        obfuscator = AESObfuscator(random_str)
-        user_ids = "\n".join(user_ids)
-        data["user_ids"] = AssemblQuadStorageManager.obfuscate(
-            user_ids, obfuscator.encrypt).split("\n")
-    return data
-
-
-@view_config(context=InstanceContext, name="jsonld",
-             ctx_instance_class=Discussion, request_method='GET',
-             accept="application/ld+json")
-@view_config(context=InstanceContext,
-             ctx_instance_class=Discussion, request_method='GET',
-             accept="application/ld+json")
-def discussion_instance_view_jsonld(request):
-    discussion = request.context._instance
-    user_id, permissions, salt = read_user_token(request)
-    if not (P_READ in permissions or P_READ_PUBLIC_CIF in permissions):
-        raise HTTPUnauthorized()
-    if not salt and P_ADMIN_DISC not in permissions:
-        salt = base64.urlsafe_b64encode(urandom(6))
-
-    jdata = discussion_jsonld(discussion.id)
-    if salt:
-        from assembl.semantic.virtuoso_mapping import (
-            AssemblQuadStorageManager, AESObfuscator)
-        obfuscator = AESObfuscator(salt)
-        jdata = AssemblQuadStorageManager.obfuscate(jdata, obfuscator.encrypt)
-    # TODO: Add age
-    if "callback" in request.GET:
-        jdata = handle_jsonp(request.GET['callback'], jdata)
-        content_type = "application/json-p"
-    else:
-        content_type = "application/ld+json"
-    return Response(body=jdata, content_type=content_type)
-
-
-@view_config(context=InstanceContext, name="private_jsonld",
-             ctx_instance_class=Discussion, request_method='GET',
-             accept="application/ld+json")
-def user_private_view_jsonld(request):
-    if request.scheme == "http" and asbool(request.registry.settings.get(
-            'accept_secure_connection', False)):
-        return HTTPFound(get_global_base_url(True) + request.path_qs)
-    discussion_id = request.context.get_discussion_id()
-    user_id, permissions, salt = read_user_token(request)
-    if P_READ not in permissions:
-        raise HTTPUnauthorized()
-    if not salt and P_ADMIN_DISC not in permissions:
-        salt = base64.urlsafe_b64encode(urandom(6))
-
-    jdata = userprivate_jsonld(discussion_id)
-    if salt:
-        from assembl.semantic.virtuoso_mapping import (
-            AssemblQuadStorageManager, AESObfuscator)
-        obfuscator = AESObfuscator(salt)
-        jdata = AssemblQuadStorageManager.obfuscate(jdata, obfuscator.encrypt)
-    if "callback" in request.GET:
-        jdata = handle_jsonp(request.GET['callback'], jdata)
-        content_type = "application/json-p"
-    else:
-        content_type = "application/ld+json"
-    return Response(body=jdata, content_type=content_type)
 
 
 JSON_MIMETYPE = 'application/json'
@@ -349,7 +175,7 @@ def get_time_series_analytics(request):
             Column('interval_id', Integer, primary_key=True),
             Column('interval_start', DateTime, nullable=False),
             Column('interval_end', DateTime, nullable=False),
-            prefixes=None if discussion.using_virtuoso else ['TEMPORARY']
+            prefixes=['TEMPORARY']
         )
         intervals_table.drop(bind=bind, checkfirst=True)
         intervals_table.create(bind=bind)
@@ -848,50 +674,6 @@ def get_visitors(request):
     return csv_response(visitors, CSV_MIMETYPE, fieldnames)
 
 
-def get_analytics_alerts(discussion, user_id, types, all_users=False):
-    from assembl.semantic.virtuoso_mapping import (
-        AssemblQuadStorageManager, AESObfuscator)
-    settings = get_config()
-    metrics_server_endpoint = settings.get(
-        'metrics_server_endpoint',
-        'https://discussions.bluenove.com/analytics/accept')
-    verify_metrics = False  # weird SNI bug on some platforms
-    secure = asbool(settings.get(
-        'accept_secure_connection', False))
-    protocol = 'https' if secure else 'http'
-    host = settings.get('public_hostname')
-    port = settings.get('public_port', '80')
-    if secure and port == '80':
-        # old misconfiguration
-        port = '443'
-    if (secure and port != '443') or (not secure and port != '80'):
-        host += ':' + port
-    seed = urandom(8)
-    obfuscator = AESObfuscator(seed)
-    token = permission_token(user_id, discussion.id, [P_READ_PUBLIC_CIF], seed)
-    metrics_requests = [{
-        "metric": "alerts",
-        "types": types}]
-    if user_id != Everyone and not all_users:
-        obfuscated_userid = "local:AgentProfile/" + obfuscator.encrypt(
-            str(user_id))
-        metrics_requests[0]['users'] = [obfuscated_userid]
-    mapurl = '%s://%s/data/Discussion/%d/jsonld?token=%s' % (
-        protocol,
-        host,
-        discussion.id,
-        token
-        )
-    alerts = requests.post(metrics_server_endpoint, data=dict(
-        mapurl=mapurl, requests=json.dumps(metrics_requests), recency=60),
-        verify=verify_metrics)
-    result = AssemblQuadStorageManager.deobfuscate(
-        alerts.text, obfuscator.decrypt)
-    # AgentAccount is a pseudo for AgentProfile
-    result = re.sub(r'local:AgentAccount\\/', r'local:AgentProfile\\/', result)
-    return result
-
-
 @view_config(context=InstanceContext, name="activity_alerts",
              ctx_instance_class=Discussion, request_method='GET',
              permission=P_DISC_STATS)
@@ -1099,7 +881,7 @@ def get_participant_time_series_analytics(request):
             Column('interval_id', Integer, primary_key=True),
             Column('interval_start', DateTime, nullable=False),
             Column('interval_end', DateTime, nullable=False),
-            prefixes=None if discussion.using_virtuoso else ['TEMPORARY']
+            prefixes=['TEMPORARY']
         )
         # In case there is a leftover from a previous crash
         intervals_table.drop(bind=bind, checkfirst=True)
