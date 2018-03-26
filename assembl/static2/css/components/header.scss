@@ -117,6 +117,70 @@
     left: 0;
     width: 100%;
   }
+
+  .statistic {
+    background-color: $opacity-color;
+    bottom: 0;
+    left: 0;
+    margin: 0 auto;
+    position: absolute;
+    text-align: center;
+    display: flex;
+    width: 100%;
+    z-index: 10;
+
+    .intermediary-container {
+      padding: 8px 0;
+      display: inline-block;
+      vertical-align: middle;
+      width: 100%;
+      margin: 0 auto;
+
+      .stat-container {
+        padding: 0 40px;
+        display: inline-block;
+        border-right: 1px solid $white;
+
+        &:last-child {
+          border-right: none;
+        }
+
+        .stat-box {
+          display: flex;
+          align-items: center;
+          vertical-align: middle;
+          margin: auto;
+
+          .stat-icon {
+            padding-top: 3px;
+          }
+        }
+      }
+
+      .stat-loader {
+        margin-top: -20px;
+      }
+
+      .stat {
+        display: inline-block;
+        font-family: $font-family2;
+        text-align: left;
+        text-transform: uppercase;
+        padding-left: 8px;
+      }
+
+      .stat-nb {
+        color: $white;
+        font-family: $font-family4;
+        font-size: $font-size-xxs;
+        letter-spacing: $text-letter-spacing;
+      }
+
+      img {
+        vertical-align: baseline;
+      }
+    }
+  }
 }
 
 .sentiment-header-tooltip {

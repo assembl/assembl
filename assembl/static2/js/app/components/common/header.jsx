@@ -1,3 +1,4 @@
+// @flow
 import React from 'react';
 import classnames from 'classnames';
 import { connect } from 'react-redux';
@@ -10,6 +11,7 @@ import HeaderActions from '../debate/common/headerActions';
 class Header extends React.Component {
   render() {
     const {
+      children,
       title,
       subtitle,
       imgUrl,
@@ -47,6 +49,7 @@ class Header extends React.Component {
         </Grid>
         <Grid fluid>
           <Row>
+            {children}
             <div className="header-bkg" style={imgUrl ? { backgroundImage: `url(${imgUrl})` } : null}>
               &nbsp;
             </div>
