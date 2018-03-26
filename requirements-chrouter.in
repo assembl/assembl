@@ -1,0 +1,15 @@
+# Requirements for the change_router, very distinct from assembl as a whole.
+-e git+https://github.com/assembl/sockjs-tornado.git@conflicting_localhost#egg=sockjs_tornado
+tornado==4.3
+
+# Those repeat requirements in requirements.in, keep in sync.
+
+PyJWT==1.4.0
+pytz==2016.4
+pyzmq==15.2.0
+raven==5.21.0
+requests==2.10.0
+simplejson==3.8.2
+
+# is this really needed by tornado?
+# greenlet==0.4.10

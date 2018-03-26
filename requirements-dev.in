@@ -1,3 +1,4 @@
+-e git+https://github.com/assembl/sqltap.git@assembl#egg=sqltap
 PdbSublimeTextSupport==0.2
 pyramid-debugtoolbar-ajax==0.0.4
 pyramid-debugtoolbar==3.0.1

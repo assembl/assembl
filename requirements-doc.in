@@ -2,3 +2,4 @@ pyramid-autodoc==1.0.0
 Sphinx==1.4.4
 sphinxcontrib-httpdomain==1.5.0
 sphinxcontrib-zopeext==0.2.1
+sqlalchemy-schemadisplay==1.3
