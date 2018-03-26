@@ -848,44 +848,6 @@ def get_visitors(request):
     return csv_response(visitors, CSV_MIMETYPE, fieldnames)
 
 
-pygraphviz_formats = {
-    'text/vnd.graphviz': 'dot',
-    'image/gif': 'gif',
-    'application/vnd.hp-hpgl': 'hpgl',
-    'image/jpeg': 'jpeg',
-    'application/vnd.mif': 'mif',
-    'application/vnd.hp-pcl': 'pcl',
-    'application/pdf': 'pdf',
-    'image/x-pict': 'pic',
-    'image/png': 'png',
-    'application/postscript': 'ps',
-    'image/svg+xml': 'svg',
-    'model/vrml': 'vrml',
-}
-
-
-@view_config(context=InstanceContext, name="mindmap",
-             ctx_instance_class=Discussion, request_method='GET',
-             permission=P_READ)
-def as_mind_map(request):
-    """Provide a mind-map like representation of the table of ideas"""
-    for mimetype in request.GET.getall('mimetype'):
-        mimetype = mimetype.encode('utf-8')
-        if mimetype in pygraphviz_formats:
-            break
-    else:
-        mimetype = request.accept.best_match(pygraphviz_formats.keys())
-        if not mimetype:
-            raise HTTPNotAcceptable("Not known to pygraphviz: "+mimetype)
-    discussion = request.context._instance
-    G = discussion.as_mind_map()
-    G.layout(prog='twopi')
-    io = StringIO()
-    G.draw(io, format=pygraphviz_formats[mimetype])
-    io.seek(0)
-    return Response(body_file=io, content_type=mimetype)
-
-
 def get_analytics_alerts(discussion, user_id, types, all_users=False):
     from assembl.semantic.virtuoso_mapping import (
         AssemblQuadStorageManager, AESObfuscator)

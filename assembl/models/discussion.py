@@ -864,59 +864,6 @@ class Discussion(DiscussionBoundBase, NamedClassMixin):
             query = query.filter(ViewPost.creation_date < end_date)
         return query.first()[0]
 
-    def as_mind_map(self):
-        import pygraphviz
-        from colors import hsv
-        from datetime import datetime
-        from assembl.models import Idea, IdeaLink, RootIdea
-        ideas = self.db.query(Idea).filter_by(
-            tombstone_date=None, discussion_id=self.id).all()
-        links = self.db.query(IdeaLink).filter_by(
-            tombstone_date=None).join(Idea, IdeaLink.source_id == Idea.id).filter(
-            Idea.discussion_id == self.id).all()
-        G = pygraphviz.AGraph()
-        G.graph_attr['overlap'] = 'prism'
-        G.node_attr['penwidth'] = 0
-        G.node_attr['shape'] = 'rect'
-        G.node_attr['style'] = 'filled'
-        G.node_attr['fillcolor'] = '#efefef'
-        start_time = min((idea.creation_date for idea in ideas))
-        end_time = max((idea.last_modified for idea in ideas))
-        end_time = min(datetime.now(), end_time + (end_time - start_time))
-
-        root_id = self.root_idea.id
-        parent_ids = {l.target_id: l.source_id for l in links}
-
-        def node_level(node_id):
-            if node_id == root_id:
-                return 0
-            return 1 + node_level(parent_ids[node_id])
-
-        for idea in ideas:
-            if isinstance(idea, RootIdea):
-                root_id = idea.id
-                G.add_node(idea.id, label="", style="invis")
-            else:
-                level = node_level(idea.id)
-                age = (end_time - idea.last_modified).total_seconds() / \
-                    (end_time - start_time).total_seconds()
-                print idea.id, start_time, idea.last_modified, end_time
-                print (end_time - idea.last_modified).total_seconds(), (end_time -
-                                                                        start_time).total_seconds()
-                # empirical
-                color = hsv(180 - (135.0 * age), 0.15, 0.85)
-                G.add_node(idea.id,
-                           label=idea.short_title or "",
-                           fontsize=18 - (1.5 * level),
-                           height=(20 - (1.5 * level)) / 72.0,
-                           fillcolor="#%s" % color.hex)
-        for link in links:
-            if link.source_id == root_id:
-                G.add_edge(link.source_id, link.target_id, style="invis")
-            else:
-                G.add_edge(link.source_id, link.target_id)
-        return G
-
     crud_permissions = CrudPermissions(
         P_SYSADMIN, P_READ, P_ADMIN_DISC, P_SYSADMIN)
 
