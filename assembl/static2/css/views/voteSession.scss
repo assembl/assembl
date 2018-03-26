@@ -146,7 +146,8 @@
     font-size: $font-size-xs;
     color: $link-color;
     text-decoration: none;
-    padding: 0;
+    background-color: $grey0;
+    padding: 15px;
 
     &:hover {
       color: $link-hover-color;

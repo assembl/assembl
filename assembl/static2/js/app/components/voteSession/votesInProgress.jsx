@@ -52,7 +52,7 @@ const VotesInProgress = ({ modules, numParticipants }: Props) => {
   const columnSizes: Array<number> = getColumnSizes(numberBoxToDisplay);
   let index = tokenVoteModule ? 2 : 0;
   return (
-    <Row className="votes-in-progress">
+    <Row className="votes-in-progress background-grey">
       <Col xs={12} md={columnSizes[0]}>
         <ParticipantsCount count={numParticipants} />
       </Col>

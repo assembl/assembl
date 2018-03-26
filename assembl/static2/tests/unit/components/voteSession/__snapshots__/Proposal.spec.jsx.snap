@@ -965,7 +965,7 @@ exports[`Proposal component should match Proposal snapshot 1`] = `
     className="expand-result"
   >
     <div
-      className="expand-row row"
+      className="expand-row background-grey row"
     >
       <div
         className="center col-md-12 col-xs-12"
