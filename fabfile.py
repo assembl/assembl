@@ -1100,8 +1100,6 @@ def install_builddeps():
             run('brew install autoconf')
         if not exists('/usr/local/bin/automake'):
             run('brew install automake')
-        if not exists('/usr/local/bin/pandoc'):
-            run('brew install pandoc')
         if not exists('/usr/local/bin/twopi'):
             run('brew install graphviz')
             # may require a sudo
@@ -1111,7 +1109,7 @@ def install_builddeps():
         # brew does not know aclocal, autoheader...
         # They exist on macports, but do we want to install that?
     else:
-        sudo('apt-get install -y build-essential python-dev pandoc')
+        sudo('apt-get install -y build-essential python-dev')
         sudo('apt-get install -y automake bison flex gperf gawk')
         sudo('apt-get install -y graphviz pkg-config')
         release_info = run("lsb_release -i")
