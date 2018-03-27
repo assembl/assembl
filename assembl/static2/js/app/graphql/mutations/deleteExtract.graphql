@@ -1,7 +1,7 @@
 #import "../fragments/Extract.graphql"
 
-mutation deleteExtract($extract_id: ID!) {
-  deleteExtract(extract_id: $extract_id) {
+mutation deleteExtract($extractId: ID!) {
+  deleteExtract(extractId: $extractId) {
     extract {
       ...Extract
     }
