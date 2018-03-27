@@ -56,8 +56,7 @@ class SideMenuTree extends React.Component<*, SideMenuTreeProps, SideMenuTreeSta
         }}
         className={`side-menu-link-${level}`}
       >
-        {indexGenerator(this.getIndexes())}
-        {title}
+        {indexGenerator(this.getIndexes())} {title}
       </Link>
     );
   };
@@ -92,16 +91,17 @@ class SideMenuTree extends React.Component<*, SideMenuTreeProps, SideMenuTreeSta
       <div>
         <div className={this.getLinkContainerClassNames(id)}>
           {this.getTitle(title, level, rootIdeaUrl, id)}
-          {hasChildren && (
-            <span
-              className={classNames('caret pointer', { 'active-caret': show && activeKey === id })}
-              onClick={() => {
-                this.setState({ activeKey: id, show: !show });
-              }}
-            />
-          )}
+          {hasChildren &&
+            level === 1 && (
+              <span
+                className={classNames('caret pointer', { 'active-caret': show && activeKey === id })}
+                onClick={() => {
+                  this.setState({ activeKey: id, show: !show });
+                }}
+              />
+            )}
         </div>
-        <div>{hasChildren && show && activeKey === id && tree}</div>
+        <div>{((show && activeKey === id) || level > 1) && tree}</div>
       </div>
     );
   }
