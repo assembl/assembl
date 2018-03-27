@@ -3,7 +3,10 @@ from graphene.relay import Node
 from graphene_sqlalchemy import SQLAlchemyObjectType
 
 from assembl import models
-from assembl.models.auth import LanguagePreferenceOrder, UserLanguagePreferenceCollection
+from assembl.models.auth import (
+    LanguagePreferenceOrder,
+    PostUserLanguagePreference,
+    UserLanguagePreferenceCollection)
 from assembl.auth import CrudPermissions
 from assembl.graphql.types import SecureObjectType
 from assembl.graphql.user import AgentProfile
@@ -25,6 +28,7 @@ class UserLanguagePreference(SecureObjectType, SQLAlchemyObjectType):
     translation_locale = graphene.Field(lambda: Locale)
     order = graphene.Int()
     source = graphene.Field(PreferenceSourceEnum)
+    post_id = graphene.ID()
 
     def resolve_locale(self, args, context, info):
         lang = args.get('lang')
@@ -40,6 +44,11 @@ class UserLanguagePreference(SecureObjectType, SQLAlchemyObjectType):
 
     def resolve_source(self, args, context, info):
         return LanguagePreferenceOrder.get_name_from_order(self.source_of_evidence)
+
+    def resolve_post_id(self, args, context, info):
+        if not self.__class__ == PostUserLanguagePreference:
+            return None
+        return self.graphene_id()
 
 
 class CreateOrUpdateUserLanguagePreference(graphene.Mutation):
@@ -62,7 +71,8 @@ class CreateOrUpdateUserLanguagePreference(graphene.Mutation):
         source_of_evidence = LanguagePreferenceOrder[source]
         translation_locale = args.get('translation_locale', None)
         order = int(args.get('order', 0))
-        # post_id = args.get('post_id')
+        post_id = args.get('post_id', None)
+        post_id = Node.from_global_id(post_id)[1] if post_id else post_id
 
         db = models.UserLanguagePreference.default_db
         lang_prefs = UserLanguagePreferenceCollection.getCurrent(req=context)
@@ -71,7 +81,8 @@ class CreateOrUpdateUserLanguagePreference(graphene.Mutation):
             db,
             source_of_evidence=source_of_evidence.value,
             preferred_order=order,
-            translate_to_locale=models.Locale.get_or_create(translation_locale) if translation_locale else None
+            translate_to_locale=models.Locale.get_or_create(translation_locale) if translation_locale else None,
+            post_id=post_id if post_id else None
         )
         db.flush()
 

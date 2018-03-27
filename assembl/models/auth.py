@@ -1720,6 +1720,7 @@ class LanguagePreferenceOrder(IntEnum):
     DeducedFromTranslation = 3
     OS_Default = 4
     Discussion = 5
+    Server = 6
 
     @classmethod
     def get_name_from_order(cls, order):
@@ -1768,26 +1769,6 @@ class LanguagePreferenceCollection(object):
     def known_languages(self):
         return []
 
-    def add_locale(self, locale, db, **kwargs):
-        ulp = self.find_locale(locale, db)
-        assert ulp
-        if not ulp.user:
-            if 'user' in self.__dict__:
-                ulp.user = self.user
-            else:
-                user_id = kwargs.get('user_id', None)
-                if not user_id:
-                    raise Exception("A user MUST be passed in order to create a user language preference")
-        ulp.__dict__.update(kwargs)
-        db.add(ulp)
-        db.flush()
-        self.recalculate_locale(db)
-        return ulp
-
-    @abstractmethod
-    def recalculate_locale(self, db=None):
-        pass
-
 
 class LanguagePreferenceCollectionWithDefault(LanguagePreferenceCollection):
     """A LanguagePreferenceCollection with a fallback language."""
@@ -1811,19 +1792,6 @@ class LanguagePreferenceCollectionWithDefault(LanguagePreferenceCollection):
                 translate_to=self.default_locale.id,
                 source_of_evidence=LanguagePreferenceOrder.Cookie.value)
 
-    def add_locale(self, locale, db, **kwargs):
-        user_id = kwargs.get('user_id', None)
-        if user_id is None:
-            request = get_current_request()
-            user_id = request.authenticated_userid or Everyone
-            if user_id == Everyone:
-                raise Exception("Cannot set a user language based for an unauthorized user")
-            kwargs.update({'user_id': user_id})
-        return super(LanguagePreferenceCollectionWithDefault, self).add_locale(locale, db, **kwargs)
-
-    def recalculate_locale(self, db):
-        pass
-
     def known_languages(self):
         return [self.default_locale]
 
@@ -1839,54 +1807,81 @@ class UserLanguagePreferenceCollection(LanguagePreferenceCollection):
     def recalculate_locale(self, db):
         self.calculate_locale_prefs(db)
 
-    def calculate_locale_prefs(self, db):
+    def calculate_locale_prefs(self, db, discussion=None):
         user_prefs = db.query(UserLanguagePreference).filter_by(user=self.user).all()
-        assert user_prefs
-        user_prefs.sort(reverse=True)
-        prefs_by_locale = {
-            user_pref.locale_code: user_pref
-            for user_pref in user_prefs
-        }
-        user_prefs.reverse()
-        prefs_with_trans = [up for up in user_prefs if up.translate_to]
-        prefs_without_trans = [
-            up for up in user_prefs if not up.translate_to]
-        prefs_without_trans_by_loc = {
-            up.locale_code: up for up in prefs_without_trans}
-        # First look for translation targets
-        for (loc, pref) in prefs_by_locale.items():
-            for n, l in enumerate(Locale.decompose_locale(loc)):
-                if n == 0:
-                    continue
-                if l in prefs_by_locale:
-                    break
-                prefs_by_locale[l] = pref
-        for pref in prefs_with_trans:
-            for l in Locale.decompose_locale(pref.translate_to_code):
-                if l in prefs_without_trans_by_loc:
-                    break
-                locale = Locale.get_or_create(l)
-                new_pref = UserLanguagePreference(
-                    locale=locale, locale_id=locale.id,
-                    source_of_evidence=LanguagePreferenceOrder.DeducedFromTranslation.value,
-                    preferred_order=pref.preferred_order)
-                prefs_without_trans.append(new_pref)
-                prefs_without_trans_by_loc[l] = new_pref
-                if l not in prefs_by_locale:
-                    prefs_by_locale[l] = new_pref
-        default_pref = None
-        if prefs_with_trans:
-            prefs_with_trans.sort()
-            target_lang_code = prefs_with_trans[0].translate_to_code
-            default_pref = prefs_without_trans_by_loc.get(
-                target_lang_code, None)
-        if not default_pref:
-            # using the untranslated locales, if any.
-            prefs_without_trans.sort()
-            # TODO: Or use discussion locales otherwise?
-            # As it stands, the cookie is the fallback.
-            default_pref = (
-                prefs_without_trans[0] if prefs_without_trans else None)
+        if user_prefs:
+            user_prefs.sort(reverse=True)
+            prefs_by_locale = {
+                user_pref.locale_code: user_pref
+                for user_pref in user_prefs
+            }
+            user_prefs.reverse()
+            prefs_with_trans = [up for up in user_prefs if up.translate_to]
+            prefs_without_trans = [
+                up for up in user_prefs if not up.translate_to]
+            prefs_without_trans_by_loc = {
+                up.locale_code: up for up in prefs_without_trans}
+            # First look for translation targets
+            for (loc, pref) in prefs_by_locale.items():
+                for n, l in enumerate(Locale.decompose_locale(loc)):
+                    if n == 0:
+                        continue
+                    if l in prefs_by_locale:
+                        break
+                    prefs_by_locale[l] = pref
+            for pref in prefs_with_trans:
+                for l in Locale.decompose_locale(pref.translate_to_code):
+                    if l in prefs_without_trans_by_loc:
+                        break
+                    locale = Locale.get_or_create(l)
+                    new_pref = UserLanguagePreference(
+                        locale=locale, locale_id=locale.id,
+                        source_of_evidence=LanguagePreferenceOrder.DeducedFromTranslation.value,
+                        preferred_order=pref.preferred_order)
+                    prefs_without_trans.append(new_pref)
+                    prefs_without_trans_by_loc[l] = new_pref
+                    if l not in prefs_by_locale:
+                        prefs_by_locale[l] = new_pref
+            default_pref = None
+            if prefs_with_trans:
+                prefs_with_trans.sort()
+                target_lang_code = prefs_with_trans[0].translate_to_code
+                default_pref = prefs_without_trans_by_loc.get(
+                    target_lang_code, None)
+            if not default_pref:
+                # using the untranslated locales, if any.
+                prefs_without_trans.sort()
+                # TODO: Or use discussion locales otherwise?
+                # As it stands, the cookie is the fallback.
+                default_pref = (
+                    prefs_without_trans[0] if prefs_without_trans else None)
+        else:
+            # Create one from the request
+            def make_preference(locale, order, source):
+                from assembl.models.langstrings import Locale
+                return UserLanguagePreference(
+                    user=self.user,
+                    locale=Locale.get_or_create(locale),
+                    source_of_evidence=source.value,
+                    preferred_order=order
+                )
+
+            request = get_current_request()
+            if not request:
+                if discussion:
+                    discussion_prefs = discussion.preferences
+                    if 'preferred_locales' in discussion_prefs:
+                        prefs_by_locale = {l: make_preference(l, 0, LanguagePreferenceOrder.Discussion)
+                                           for l in discussion_prefs['preferred_locales']}
+                else:
+                    config_pref = config.get('pyramid.default_locale_name')
+                    prefs_by_locale = {config_pref: make_preference(config_pref, 0, LanguagePreferenceOrder.Server)}
+            else:
+                from assembl.views import get_locale_from_request
+                # This creates a user language preference according to request
+                pref = get_locale_from_request(request)
+                lang_pref = self.user.language_preference
+                prefs_by_locale = {pref: lang_pref}
         self.user_prefs = prefs_by_locale
         self.default_pref = default_pref
 
@@ -1919,6 +1914,23 @@ class UserLanguagePreferenceCollection(LanguagePreferenceCollection):
     def known_languages(self):
         return list({pref.translate_to_code or pref.locale_code
                      for pref in self.user_prefs.itervalues()})
+
+    def add_locale(self, locale, db, **kwargs):
+        ulp = self.find_locale(locale, db, post=False)
+        assert ulp
+        if not ulp.user:
+            if 'user' in self.__dict__:
+                ulp.user = self.user
+            else:
+                user_id = kwargs.get('user_id', None)
+                if not user_id:
+                    raise Exception("A user MUST be passed in order to create a user language preference")
+        # Use setattr here instead
+        ulp.__dict__.update(kwargs)
+        db.add(ulp)
+        db.flush()
+        self.recalculate_locale(db)
+        return ulp
 
 
 class UserLanguagePreference(Base):
@@ -2029,3 +2041,34 @@ class UserLanguagePreference(Base):
                 LanguagePreferenceOrder(self.source_of_evidence).name,
                 self.preferred_order or 0
             )
+
+
+class PostUserLanguagePreference(UserLanguagePreference):
+    """Does this user wants data in this language to be displayed or translated?"""
+    __tablename__ = 'post_user_language_preference'
+
+    id = Column(Integer, ForeignKey(
+        UserLanguagePreference.id, ondelete='CASCADE', onupdate='CASCADE'),
+        primary_key=True)
+
+    __mapper_args__ = {
+        'polymorphic_identity': 'post_user_language_preference'
+    }
+
+    post_id = Column(Integer, ForeignKey("content.id",
+                     ondelete='CASCADE', onupdate='CASCADE'),
+                     nullable=False, index=False)
+
+    post = relationship("Content",
+                        backref=backref('user_language_preferences'))
+
+    def unique_query(self):
+        query, _ = super(PostUserLanguagePreference, self).unique_query()
+        query = query.filter_by(post_id=self.post_id)
+        return query, True
+
+    # Query a property for fetching a user's preferences on a post
+    def __repr__(self):
+        string_rep = super(PostUserLanguagePreference, self).__repr__()
+        string_rep['post_id'] = self.post_id or -1
+        return string_rep
