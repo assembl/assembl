@@ -11,7 +11,6 @@ from pyramid.httpexceptions import HTTPUnauthorized
 from pyramid.security import Everyone
 from sqlalchemy import desc, func, join, select
 from sqlalchemy.orm import joinedload
-from sqlalchemy.sql.functions import count
 
 from assembl import models
 from assembl.auth import IF_OWNED, CrudPermissions
@@ -286,7 +285,7 @@ class Idea(SecureObjectType, SQLAlchemyObjectType):
         # instead of doing one query for each post
         if 'sentimentCounts' in fields.get('edges', {}).get('node', {}):
             sentiment_counts = discussion.db.query(
-                models.Post.id, models.SentimentOfPost.type, count(
+                models.Post.id, models.SentimentOfPost.type, func.count(
                     models.SentimentOfPost.id)
             ).join(models.SentimentOfPost).filter(
                 models.Post.id.in_(post_ids),
