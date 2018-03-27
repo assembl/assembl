@@ -3,6 +3,7 @@ import React from 'react';
 import { Link } from 'react-router';
 import classNames from 'classnames';
 import { getPartialTree, getChildren } from '../../utils/tree';
+import { SECTION_INDEX_GENERATOR } from '../../utils/section';
 
 type SideMenuTreeState = {
   activeKey: ?string,
@@ -15,13 +16,18 @@ type SideMenuTreeProps = {
   subIdeas: Array<Object>,
   index: number,
   slug: string,
-  parents: Array<number>
+  parents: Array<number>,
+  indexGenerator: Function
 };
 
 class SideMenuTree extends React.Component<*, SideMenuTreeProps, SideMenuTreeState> {
   props: SideMenuTreeProps;
 
   state: SideMenuTreeState;
+
+  static defaultProps = {
+    indexGenerator: SECTION_INDEX_GENERATOR.alphanumericOr
+  };
 
   constructor(props: SideMenuTreeProps) {
     super(props);
@@ -32,6 +38,29 @@ class SideMenuTree extends React.Component<*, SideMenuTreeProps, SideMenuTreeSta
   }
 
   getLinkContainerClassNames = (id: string) => (location.hash === `#${id}` ? 'link-container active' : 'link-container');
+
+  getIndexes = () => {
+    const { index, parents } = this.props;
+    const indexes = parents.slice();
+    indexes.push(index);
+    return indexes;
+  };
+
+  getTitle = (title: string, level: number, url: string, id: string) => {
+    const { indexGenerator } = this.props;
+    return (
+      <Link
+        to={url}
+        onClick={() => {
+          this.setState({ show: true, activeKey: id });
+        }}
+        className={`side-menu-link-${level}`}
+      >
+        {indexGenerator(this.getIndexes())}
+        {title}
+      </Link>
+    );
+  };
 
   render() {
     const { rootIdea, subIdeas, parents, index, synthesisPostId, slug } = this.props;
@@ -62,15 +91,7 @@ class SideMenuTree extends React.Component<*, SideMenuTreeProps, SideMenuTreeSta
     return (
       <div>
         <div className={this.getLinkContainerClassNames(id)}>
-          <Link
-            to={rootIdeaUrl}
-            onClick={() => {
-              this.setState({ show: true, activeKey: id });
-            }}
-            className={`side-menu-link-${level}`}
-          >
-            {title}
-          </Link>
+          {this.getTitle(title, level, rootIdeaUrl, id)}
           {hasChildren && (
             <span
               className={classNames('caret pointer', { 'active-caret': show && activeKey === id })}
