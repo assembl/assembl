@@ -579,9 +579,6 @@ def update_pip_requirements(force_reinstall=False):
         run("egrep '^dm.xmlsec.binding' %(projectpath)s/requirements.txt | xargs %(venvpath)s/bin/pip install --install-option='-q'" % env)
         cmd = "%(venvpath)s/bin/pip install -r %(projectpath)s/requirements.txt" % env
         run("yes w | %s" % cmd)
-        if env.wsginame == 'dev.wsgi':
-            venvcmd("pip install pre-commit flake8")
-            venvcmd("pre-commit install")
 
 
 @task
@@ -735,6 +732,11 @@ def app_setup():
     if not exists(env.ini_file):
         execute(create_local_ini)
     venvcmd('assembl-ini-files populate %s' % (env.ini_file))
+    with cd(env.projectpath):
+        has_pre_commit = run('cat requirements.txt|grep pre-commit', warn_only=True)
+        if has_pre_commit and not exists(join(
+                env.projectpath, '.git/hooks/pre-commit')):
+            venvcmd("pre-commit install")
 
 
 @task
