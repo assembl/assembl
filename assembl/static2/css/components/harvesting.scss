@@ -109,20 +109,20 @@
     /* FIXME: Factorizing these ::selection rules cancels effect on Firefox */
     .post-body-title {
       ::selection {
-        background: #fff8c0;
+        background: $harvesting-yellow;
       }
 
       ::-moz-selection {
-        background: #fff8c0;
+        background: $harvesting-yellow;
       }
     }
 
     .post-body-content > div::selection {
-      background: #fff8c0;
+      background: $harvesting-yellow;
     }
 
     .post-body-content > div::-moz-selection {
-      background: #fff8c0;
+      background: $harvesting-yellow;
     }
   }
 }
@@ -137,7 +137,6 @@
   max-width: 400px;
   left: 0;
   z-index: 99;
-  margin-top: 50px;
 
   .harvesting-box-header {
     padding: 20px;
@@ -261,5 +260,12 @@
     .btn-default {
       margin: 0 20px;
     }
+  }
+}
+
+.is-harvesting {
+  .extract-in-message {
+    display: inline;
+    background-color: $harvesting-green;
   }
 }

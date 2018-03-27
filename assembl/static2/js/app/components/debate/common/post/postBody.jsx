@@ -38,7 +38,8 @@ type Props = {
   subject: ?React.Element<*>,
   originalLocale: string,
   translate: boolean,
-  translationEnabled: boolean
+  translationEnabled: boolean,
+  isHarvesting: boolean
 };
 
 type ExtractInPostProps = {
@@ -46,18 +47,11 @@ type ExtractInPostProps = {
   children: React.Children
 };
 
-const ExtractInPost = ({ id, children }: ExtractInPostProps) => {
-  const style = {
-    // TODO: set in harvesting.scss when taxonomy part 0 branch is merged
-    display: 'inline',
-    backgroundColor: 'yellow'
-  };
-  return (
-    <div className="extract-in-message" id={id} style={style}>
-      {children}
-    </div>
-  );
-};
+const ExtractInPost = ({ id, children }: ExtractInPostProps) => (
+  <div className="extract-in-message" id={id}>
+    {children}
+  </div>
+);
 
 const postBodyReplacementComponents = {
   iframe: (attributes) => {
@@ -132,10 +126,14 @@ const PostBody = ({
   subject,
   originalLocale,
   translate,
-  translationEnabled
+  translationEnabled,
+  isHarvesting
 }: Props) => {
   const divClassNames = classNames('post-body', { 'post-body--is-harvestable': !translate });
-  const htmlClassNames = classNames('post-body-content', 'body', { 'pre-wrap': bodyMimeType === 'text/plain' });
+  const htmlClassNames = classNames('post-body-content', 'body', {
+    'pre-wrap': bodyMimeType === 'text/plain',
+    'is-harvesting': isHarvesting
+  });
   return (
     <div className={divClassNames}>
       {translationEnabled ? (

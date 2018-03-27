@@ -35,9 +35,11 @@ class PostView extends React.PureComponent<void, Props, State> {
 
   constructor(props: Props) {
     super(props);
+    const { extracts } = this.props.data.post;
+    const isExtracts = extracts.length > 0;
     this.state = {
       showAnswerForm: false,
-      displayHarvestingMenu: false
+      displayHarvestingMenu: isExtracts
     };
   }
 
@@ -68,8 +70,7 @@ class PostView extends React.PureComponent<void, Props, State> {
 
   handleMouseUpWhileHarvesting = (): void => {
     const { isHarvesting, translate } = this.props;
-    const isEmptySelection = window.getSelection().toString().length === 0;
-    if (isHarvesting && !translate && !isEmptySelection) {
+    if (isHarvesting && !translate) {
       this.setState({ displayHarvestingMenu: true });
     } else {
       this.setState({ displayHarvestingMenu: false });
@@ -139,9 +140,17 @@ class PostView extends React.PureComponent<void, Props, State> {
     return (
       <div>
         {!multiColumns && (
-          <Nuggets extracts={extracts} postId={id} nuggetsManager={nuggetsManager} completeLevel={completeLevelArray.join('-')} />
+          <Nuggets
+            extracts={extracts}
+            postId={id}
+            nuggetsManager={nuggetsManager}
+            completeLevel={completeLevelArray.join('-')}
+            isHarvesting={isHarvesting}
+          />
         )}
-        {displayHarvestingMenu && <HarvestingMenu cancelHarvesting={this.cancelHarvesting} isHarvesting={isHarvesting} />}
+        {displayHarvestingMenu && (
+          <HarvestingMenu cancelHarvesting={this.cancelHarvesting} isHarvesting={isHarvesting} extracts={extracts} />
+        )}
         <div className="box" style={boxStyle}>
           <div className="post-row">
             <div className="post-left" onMouseUp={this.handleMouseUpWhileHarvesting}>
@@ -167,6 +176,7 @@ class PostView extends React.PureComponent<void, Props, State> {
                 translate={translate}
                 translationEnabled={debateData.translationEnabled}
                 bodyDivRef={this.recomputeTreeHeightOnImagesLoad}
+                isHarvesting={isHarvesting}
               />
 
               <Attachments attachments={attachments} />

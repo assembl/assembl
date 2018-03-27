@@ -108,9 +108,10 @@ exports[`Post component should render a deleted post 1`] = `
 
 exports[`PostView component should render a post in view mode 1`] = `
 <div>
-  <Connect(Nuggets)
+  <Nuggets
     completeLevel="0-0"
     extracts={Array []}
+    isHarvesting={undefined}
     nuggetsManager={null}
     postId="XYZ333"
   />
@@ -144,6 +145,7 @@ exports[`PostView component should render a post in view mode 1`] = `
           dbId={124}
           extracts={Array []}
           id="XYZ333"
+          isHarvesting={undefined}
           lang="fr"
           originalLocale="fr"
           subject={
