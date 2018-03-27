@@ -52,9 +52,7 @@ from assembl.nlp.translation_service import DummyGoogleTranslationService
 from assembl.graphql.permissions_helpers import require_instance_permission
 from assembl.auth import CrudPermissions
 from assembl.graphql.user_language_preference import (
-    UserLanguagePreference,
-    CreateOrUpdateUserLanguagePreference
-)
+    UserLanguagePreference, UpdateUserLanguagePreference)
 
 convert_sqlalchemy_type.register(EmailString)(convert_column_to_string)
 models.Base.query = models.Base.default_db.query_property()
@@ -365,7 +363,7 @@ class Mutations(graphene.ObjectType):
     add_post_extract = AddPostExtract.Field()
     update_extract = UpdateExtract.Field()
     delete_extract = DeleteExtract.Field()
-    create_or_update_user_language_preference = CreateOrUpdateUserLanguagePreference.Field()
+    update_user_language_preference = UpdateUserLanguagePreference.Field()
 
 
 Schema = graphene.Schema(query=Query, mutation=Mutations)

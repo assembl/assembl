@@ -51,7 +51,7 @@ class UserLanguagePreference(SecureObjectType, SQLAlchemyObjectType):
         return self.graphene_id()
 
 
-class CreateOrUpdateUserLanguagePreference(graphene.Mutation):
+class UpdateUserLanguagePreference(graphene.Mutation):
     class Input:
         locale = graphene.String(required=True)
         order = graphene.Int()
@@ -86,4 +86,4 @@ class CreateOrUpdateUserLanguagePreference(graphene.Mutation):
         )
         db.flush()
 
-        return CreateOrUpdateUserLanguagePreference(user_language_preference=pref)
+        return UpdateUserLanguagePreference(user_language_preference=pref)

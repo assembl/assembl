@@ -2541,7 +2541,7 @@ def test_mutation_create_user_language_preference(
     source = LanguagePreferenceOrder.Cookie._name_
     res = schema.execute("""
         mutation myMutation($locale: String!, $source: String!  ){
-            createOrUpdateUserLanguagePreference(locale: $locale, source: $source) {
+            updateUserLanguagePreference(locale: $locale, source: $source) {
                 userLanguagePreference {
                     locale {
                         localeCode
@@ -2551,8 +2551,8 @@ def test_mutation_create_user_language_preference(
             }
         }""", context_value=graphql_request, variable_values={'locale': fr_locale.code, 'source': source})
 
-    assert res.data['createOrUpdateUserLanguagePreference']['userLanguagePreference']['locale']['localeCode'] == fr_locale.code
-    assert res.data['createOrUpdateUserLanguagePreference']['userLanguagePreference']['source'] == source
+    assert res.data['updateUserLanguagePreference']['userLanguagePreference']['locale']['localeCode'] == fr_locale.code
+    assert res.data['updateUserLanguagePreference']['userLanguagePreference']['source'] == source
     ulp = test_session.query(
         models.UserLanguagePreference).filter(models.UserLanguagePreference.user_id==admin_user.id).all()
     assert ulp
