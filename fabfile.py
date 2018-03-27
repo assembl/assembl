@@ -239,9 +239,39 @@ def get_random_templates():
     return templates[0].split(':')[1:]
 
 
+def ensure_pip_compile():
+    if not exists(env.venvpath + "/bin/pip-compile"):
+        separate_pip_install('pip-tools')
+
+
 @task
-def generate_requirements():
-    venvcmd("pip-compile --output-file requirements.txt " + env.requirement_inputs)
+def generate_new_requirements():
+    ensure_pip_compile()
+    target = env.frozen_requirements or 'requirements.txt'
+    venvcmd(" ".join(("pip-compile --output-file", target, env.requirement_inputs)))
+
+
+@task
+def ensure_requirements():
+    target = env.frozen_requirements
+    if target:
+        with cd(env.projectpath):
+            run("cp %s requirements.txt" % target)
+    else:
+        # TODO: Compare a hash in the generated requirements
+        # with the hash of the input files, to avoid regeneration
+        generate_new_requirements()
+
+
+@task
+def generate_frozen_requirements():
+    local_venv = env.get("local_venv", "./venv")
+    with settings(host_string="localhost", venvpath=local_venv,
+                  user=getuser(), projectpath=os.getcwd()):
+        venvcmd("fab -c configs/local_prod.rc generate_new_requirements")
+        venvcmd("fab -c configs/testing.rc generate_new_requirements")
+        venvcmd("fab -c configs/develop.rc generate_new_requirements")
+        # TODO: Check that no package has different versions in different files.
 
 
 @task
@@ -561,6 +591,14 @@ def build_virtualenv():
                     venv_config.write(f)
 
 
+def separate_pip_install(package, wrapper=None):
+    template = "egrep '^%%s' %(projectpath)s/requirements-prod.frozen.txt | sed -e 's/#.*//' | xargs %(venvpath)s/bin/pip install" % env
+    cmd = template % (package,)
+    if wrapper:
+        cmd = wrapper % (cmd,)
+    run(cmd)
+
+
 @task
 def update_pip_requirements(force_reinstall=False):
     """
@@ -570,13 +608,17 @@ def update_pip_requirements(force_reinstall=False):
     venvcmd('pip install -U "pip>=6" ')
 
     if force_reinstall:
-        cmd = "%(venvpath)s/bin/pip install --ignore-installed -r %(projectpath)s/requirements.txt" % env
+        run("%(venvpath)s/bin/pip install --ignore-installed -r %(projectpath)s/requirements.txt" % env)
     else:
-        # Thanks to https://github.com/pypa/pip/issues/4453 disable wheel separately.
-        run("egrep '^setuptools' %(projectpath)s/requirements.txt | xargs %(venvpath)s/bin/pip install" % env)
-        # setuptools needs to be installed before compiling dm.xmlsec.binding
-        run("egrep '^lxml' %(projectpath)s/requirements.txt | xargs %(venvpath)s/bin/pip install" % env)
-        run("egrep '^dm.xmlsec.binding' %(projectpath)s/requirements.txt | xargs %(venvpath)s/bin/pip install --install-option='-q'" % env)
+        specials = [
+            # setuptools and lxml need to be installed before compiling dm.xmlsec.binding
+            ("setuptools", None),
+            ("lxml", None),
+            # Thanks to https://github.com/pypa/pip/issues/4453 disable wheel separately.
+            ("dm.xmlsec.binding", "%s --install-option='-q'"),
+        ]
+        for package, wrapper in specials:
+            separate_pip_install(package, wrapper)
         cmd = "%(venvpath)s/bin/pip install -r %(projectpath)s/requirements.txt" % env
         run("yes w | %s" % cmd)
 
@@ -770,6 +812,7 @@ def app_update_dependencies(force_reinstall=False):
     """
     execute(update_vendor_themes_1)
     execute(update_vendor_themes_2)
+    execute(ensure_requirements)
     execute(update_pip_requirements, force_reinstall=force_reinstall)
     # Nodeenv is installed by python , so this must be after update_pip_requirements
     execute(update_node, force_reinstall=force_reinstall)

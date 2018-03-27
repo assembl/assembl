@@ -64,4 +64,5 @@ mail.tls = false
 pyramid.debug_routematch = true
 handoff_to_nginx = false
 upload_root = var/test_uploads
-requirement_inputs = requirements.in requirements-doc.in requirements-tests.in
+_requirement_inputs = requirements.in requirements-doc.in requirements-tests.in
+frozen_requirements = requirements-tests.frozen.txt

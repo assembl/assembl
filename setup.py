@@ -1,4 +1,6 @@
+from __future__ import print_function
 import os
+import sys
 
 from pip.download import PipSession
 from pip.req import parse_requirements
@@ -9,6 +11,10 @@ README = open(os.path.join(here, 'README.md')).read()
 CHANGES = open(os.path.join(here, 'CHANGES.txt')).read()
 
 # parse_requirements() returns generator of pip.req.InstallRequirement objects
+if not os.path.exists('requirements.txt'):
+    print("Please run first: fab -c configs/develop.rc ensure_requirements")
+    sys.exit(0)
+
 install_reqs = parse_requirements('requirements.txt', session=PipSession())
 
 # requires is a list of requirement
