@@ -79,11 +79,13 @@ export const closeModal = () => {
 const getPathForModal = (type, slug, phase, themeId, elementId) => {
   switch (type) {
   case 'post':
-    return { url: getFullPath(type, { slug: slug, phase: phase, themeId: themeId, element: elementId }) };
+    return { url: getFullPath('post', { slug: slug, phase: phase, themeId: themeId, element: elementId }) };
   case 'idea':
-    return { url: getFullPath(type, { slug: slug, phase: phase, themeId: themeId }) };
+    return { url: getFullPath('idea', { slug: slug, phase: phase, themeId: themeId }) };
+  case 'survey':
+    return { url: getFullPath('idea', { slug: slug, phase: phase, themeId: themeId }) };
   case 'voteSession':
-    return { url: getFullPath(type, { slug: slug, phase: phase }) };
+    return { url: getFullPath('voteSession', { slug: slug, phase: phase }) };
   default:
     return { url: getFullPath('post', { slug: slug, phase: phase, themeId: themeId, element: elementId }) };
   }

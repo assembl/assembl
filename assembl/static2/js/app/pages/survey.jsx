@@ -50,7 +50,8 @@ type SurveyProps = {
   title: string,
   id: string,
   slug: string,
-  updateContentLocaleMapping: Function
+  updateContentLocaleMapping: Function,
+  routerParams: RouterParams
 };
 
 type SurveyState = {
@@ -122,14 +123,14 @@ class Survey extends React.Component<*, SurveyProps, SurveyState> {
       displayAlert('danger', I18n.t('error.loading'));
       return null;
     }
-    const { imgUrl, media, questions, refetchThematic, title, slug } = this.props;
+    const { imgUrl, media, questions, refetchThematic, title, slug, routerParams } = this.props;
     const { debateData } = this.props.debate;
     const isPhaseCompleted = getIfPhaseCompletedByIdentifier(debateData.timeline, 'survey');
     const phaseUrl = `${getRoute('debate', { slug: slug, phase: 'survey' })}`;
     return (
       <div className="survey">
         <div className="relative">
-          <Header title={title} imgUrl={imgUrl} identifier="survey" />
+          <Header title={title} imgUrl={imgUrl} identifier="survey" type="survey" routerParams={routerParams} />
           {media && <Media {...media} />}
           <div className="questions">
             {questions &&

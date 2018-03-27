@@ -52,7 +52,7 @@ const DebateHome = (props) => {
 const DebateChild = (props) => {
   switch (props.params.phase) {
   case 'survey':
-    return <Survey id={props.id} identifier={props.identifier} />;
+    return <Survey id={props.id} identifier={props.identifier} routerParams={props.params} />;
   case 'thread':
     return <Idea id={props.id} identifier={props.identifier} routerParams={props.params} />;
   case 'multiColumns':
