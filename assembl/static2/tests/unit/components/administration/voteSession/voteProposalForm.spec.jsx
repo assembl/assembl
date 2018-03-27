@@ -25,7 +25,38 @@ describe('VoteProposalForm component', () => {
       handleUpClick: handleUpClick,
       handleDownClick: handleDownClick,
       tokenModules: List(),
-      gaugeModules: List()
+      gaugeModules: List(),
+      validationErrors: {}
+    };
+    const shallowRenderer = new ShallowRenderer();
+    shallowRenderer.render(<DumbVoteProposalForm {...props} />);
+    const result = shallowRenderer.getRenderOutput();
+    expect(result).toMatchSnapshot();
+  });
+
+  it('should render an empty form to create a vote proposal with validation errors', () => {
+    const props = {
+      index: 1,
+      title: null,
+      description: null,
+      _toDelete: false,
+      markAsToDelete: markAsToDelete,
+      updateTitle: updateTitle,
+      updateDescription: updateDescription,
+      editLocale: 'fr',
+      nbProposals: 1,
+      handleUpClick: handleUpClick,
+      handleDownClick: handleDownClick,
+      tokenModules: List(),
+      gaugeModules: List(),
+      validationErrors: {
+        title: [
+          {
+            code: 'error.required',
+            vars: {}
+          }
+        ]
+      }
     };
     const shallowRenderer = new ShallowRenderer();
     shallowRenderer.render(<DumbVoteProposalForm {...props} />);

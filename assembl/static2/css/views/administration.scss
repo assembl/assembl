@@ -8,7 +8,7 @@
   }
 
   .gauges-vote-form {
-    margin-top: 30px;
+    margin: 30px 0 0 30px;
   }
 
   .admin-menu-container {
@@ -16,8 +16,21 @@
     position: relative;
   }
 
+  .no-box-shadow {
+    box-shadow: none !important;
+  }
+
   .token-vote-form {
-    margin-bottom: 80px;
+    margin: 0 0 40px 30px;
+  }
+
+  .module-form {
+    margin-left: 30px;
+  }
+
+  .file-uploader-warning {
+    font-family: $font-family7;
+    font-size: $font-size-xxs;
   }
 
   .admin-menu {
@@ -72,6 +85,7 @@
     background-color: $white;
 
     .dark-title-3 {
+      font-size: 20px;
       padding: 40px 50px 0;
       font-weight: bold;
     }
@@ -154,7 +168,8 @@
     text-align: left;
 
     .title {
-      font-size: 16px;
+      font-size: 13px;
+      font-family: $font-family2;
       margin: 0 0 25px;
       text-align: left;
     }
@@ -251,6 +266,8 @@
 
       .assembl-icon-up-open {
         color: $first-color;
+        display: block;
+        margin-bottom: 2px;
 
         &:before {
           font-size: 8px;
@@ -259,6 +276,8 @@
 
       .assembl-icon-down-open {
         color: $first-color;
+        display: block;
+        margin-top: 2px;
 
         &:before {
           font-size: 8px;
@@ -335,13 +354,14 @@
   }
 
   .help-block {
-    font-size: $font-size-xs;
+    font-size: $font-size-xxs;
     margin: 5px 0 0 5px;
+    font-family: $font-family6;
   }
 
   .assembl-icon-faq {
     &:before {
-      font-size: 12px;
+      font-size: $font-size-xxs;
     }
 
     &:hover {
@@ -352,6 +372,10 @@
   .vote-modules-form {
     .flex > .form-group {
       flex-grow: 1;
+    }
+
+    .separator {
+      padding-top: 0;
     }
   }
 

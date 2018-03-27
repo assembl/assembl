@@ -101,7 +101,6 @@ class Navigation extends React.Component {
   }
 
   displayPagination() {
-    const navbarHeight = document.getElementById('timeline').clientHeight;
     const questionsOffset = this.getQuestionsOffset(this.state.questionsLength);
     if (!questionsOffset) {
       return;
@@ -109,7 +108,7 @@ class Navigation extends React.Component {
     const windowOffset = window.pageYOffset + this.props.screenHeight;
     let currentQuestionNumber = 0;
     for (let i = 0; i < this.state.questionsLength; i += 1) {
-      if (windowOffset > questionsOffset[i] + navbarHeight) {
+      if (windowOffset > questionsOffset[i]) {
         currentQuestionNumber = i + 1;
       }
     }
@@ -119,14 +118,13 @@ class Navigation extends React.Component {
   }
 
   scrollToQuestion(questionIndex) {
-    const navbarHeight = document.getElementById('timeline').clientHeight;
     let target;
     if (questionIndex > this.state.questionsLength) {
       target = document.getElementById('proposals');
     } else {
       target = document.getElementById(`q${questionIndex}`);
     }
-    const targetOffset = Number(getDomElementOffset(target).top) + navbarHeight;
+    const targetOffset = Number(getDomElementOffset(target).top);
     window.scrollTo({ top: targetOffset - 80, left: 0, behavior: 'smooth' });
     this.props.scrollToQuestion(false);
   }

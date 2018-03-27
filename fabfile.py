@@ -1469,6 +1469,17 @@ def database_download():
         local('rm %s' % (destination))
     execute(database_dump)
     get(remote_db_path(), destination)
+    remote_path = env.get('upload_root', 'var/uploads')
+    if remote_path != '/':
+        remote_path = join(env.projectpath, remote_path)
+    rsync_path = "%s@%s:%s" % (env.user, env.host_string, remote_path)
+    local_venv = env.get("local_venv", "./venv")
+    with settings(host_string="localhost", venvpath=local_venv,
+                  user=getuser(), projectpath=os.getcwd()):
+        # TODO: I should check the local upload_path. But in practice
+        # it's a developer's machine, probably uses standard.
+        local_path = join(env.projectpath, 'var', 'uploads')
+        run("rsync -a %s/ %s" % (rsync_path, local_path))
 
 
 @task
@@ -1478,6 +1489,17 @@ def database_upload():
     """
     if(env.wsginame != 'dev.wsgi'):
         put(get_db_dump_name(), remote_db_path())
+        remote_path = env.get('upload_root', 'var/uploads')
+        if remote_path != '/':
+            remote_path = join(env.projectpath, remote_path)
+        rsync_path = "%s@%s:%s/" % (env.user, env.host_string, remote_path)
+        local_venv = env.get("local_venv", "./venv")
+        with settings(host_string="localhost", venvpath=local_venv,
+                      user=getuser(), projectpath=os.getcwd()):
+            # TODO: I should check the local upload_path. But in practice
+            # it's a developer's machine, probably uses standard.
+            local_path = join(env.projectpath, 'var', 'uploads')
+            run("rsync -a %s/ %s" % (local_path, rsync_path))
 
 
 @task

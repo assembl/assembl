@@ -13,51 +13,32 @@ resolver = DottedNameResolver(__package__)
 
 
 class AntiVirus(object):
-    def check(self, data, suffix=None):
+    def check(self, path):
         return NotImplementedError()
 
 
 class MockPositiveAntiVirus(AntiVirus):
     "A Mock antivirus for testing. Reports no file infected."
-    def check(self, data, suffix=None):
+    def check(self, path):
         return True
 
 
 class MockRandomAntiVirus(AntiVirus):
     "A Mock antivirus for testing. Reports 10%% files infected."
-    def check(self, data, suffix=None):
+    def check(self, path):
         return random() > 0.1
 
 
-class FileAntiVirus(AntiVirus):
-    def check(self, data, suffix=None):
-        fname = 'temp' + (suffix or '')
-        directory = mkdtemp()
-        full_name = join(directory, fname)
-        try:
-            with open(full_name, 'wb') as f:
-                f.write(data)
-            return self.check_file(full_name)
-        except Exception as e:
-            return False
-        finally:
-            unlink(full_name)
-            rmdir(directory)
-
-    def check_file(self, fname):
-        return NotImplementedError()
-
-
-class MockRandomFileAntiVirus(FileAntiVirus):
+class MockRandomFileAntiVirus(AntiVirus):
     "A Mock antivirus for testing. Reports 10%% files infected."
-    def check_file(self, fname):
+    def check(self, path):
         return random() > 0.1
 
 
-class SophosAntiVirus(FileAntiVirus):
-    def check_file(self, fname):
+class SophosAntiVirus(AntiVirus):
+    def check(self, path):
         try:
-            return call(['savscan', '-f', fname]) == 0
+            return call(['savscan', '-f', path]) == 0
         except Exception as e:
             return False
 

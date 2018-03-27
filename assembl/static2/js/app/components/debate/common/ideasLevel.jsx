@@ -297,7 +297,7 @@ class IdeasLevel extends React.Component {
                   numPosts={idea.numPosts}
                   numContributors={idea.numContributors}
                   numChildren={idea.numChildren}
-                  link={`${getRoute('debate', { slug: slug, phase: identifier })}${getRoute('theme', { themeId: idea.id })}`}
+                  link={`${getRoute('idea', { slug: slug, phase: identifier, themeId: idea.id })}`}
                   title={truncate(idea.title, {
                     length: stringMaxLength(ideaLevel),
                     separator: ' ',

@@ -19,7 +19,8 @@ type TokenCategoryFormProps = {
   index: number,
   handleTitleChange: Function,
   handleColorChange: Function,
-  handleNumberChange: Function
+  handleNumberChange: Function,
+  tokenCategoryNumber: number
 };
 
 const DumbTokenCategoryForm = ({
@@ -29,7 +30,8 @@ const DumbTokenCategoryForm = ({
   index,
   handleTitleChange,
   handleColorChange,
-  handleNumberChange
+  handleNumberChange,
+  tokenCategoryNumber
 }: TokenCategoryFormProps) => (
   <div className="token-type-form">
     <Translate value="administration.token" number={index + 1} />
@@ -47,6 +49,9 @@ const DumbTokenCategoryForm = ({
         type="number"
         onChange={handleNumberChange}
         value={totalNumber}
+        formControlProps={{
+          min: '1'
+        }}
       />
       <label htmlFor="color-picker">{I18n.t('administration.tokenColor')}</label>
       <ColorPicker
@@ -56,9 +61,10 @@ const DumbTokenCategoryForm = ({
         width="400px"
         id="color-picker"
         triangle="hide"
+        className="no-box-shadow"
       />
     </div>
-    <div className="separator" />
+    {index + 1 !== tokenCategoryNumber && <div className="separator" />}
   </div>
 );
 
@@ -75,7 +81,11 @@ const mapStateToProps = (state, { id, editLocale }) => {
 
 const mapDispatchToProps = (dispatch, { moduleId, id, editLocale }) => ({
   handleTitleChange: e => dispatch(updateTokenVoteCategoryTitle(id, editLocale, e.target.value, moduleId)),
-  handleNumberChange: e => dispatch(updateTokenTotalNumber(id, e.target.value, moduleId)),
+  handleNumberChange: (e) => {
+    if (e.target.value > 0) {
+      dispatch(updateTokenTotalNumber(id, e.target.value, moduleId));
+    }
+  },
   handleColorChange: color => dispatch(updateTokenVoteCategoryColor(id, color.hex, moduleId))
 });
 

@@ -116,43 +116,37 @@ class CreateResource(graphene.Mutation):
             if image is not None:
                 filename = os.path.basename(context.POST[image].filename)
                 mime_type = context.POST[image].type
-                uploaded_file = context.POST[image].file
-                uploaded_file.seek(0)
-                data = uploaded_file.read()
                 document = models.File(
                     discussion=discussion,
                     mime_type=mime_type,
-                    title=filename,
-                    data=data)
-                models.ResourceAttachment(
+                    title=filename)
+                document.add_file_data(context.POST[image].file)
+                db.add(models.ResourceAttachment(
                     document=document,
                     resource=saobj,
                     discussion=discussion,
                     creator_id=context.authenticated_userid,
                     title=filename,
                     attachmentPurpose=ATTACHMENT_PURPOSE_IMAGE
-                )
+                ))
 
             doc = args.get('doc')
             if doc is not None:
                 filename = os.path.basename(context.POST[doc].filename)
                 mime_type = context.POST[doc].type
-                uploaded_file = context.POST[doc].file
-                uploaded_file.seek(0)
-                data = uploaded_file.read()
                 document = models.File(
                     discussion=discussion,
                     mime_type=mime_type,
-                    title=filename,
-                    data=data)
-                models.ResourceAttachment(
+                    title=filename)
+                document.add_file_data(context.POST[doc].file)
+                db.add(models.ResourceAttachment(
                     document=document,
                     resource=saobj,
                     discussion=discussion,
                     creator_id=context.authenticated_userid,
                     title=filename,
                     attachmentPurpose=ATTACHMENT_PURPOSE_DOCUMENT
-                )
+                ))
 
             db.flush()
 
@@ -242,14 +236,11 @@ class UpdateResource(graphene.Mutation):
             if image is not None:
                 filename = os.path.basename(context.POST[image].filename)
                 mime_type = context.POST[image].type
-                uploaded_file = context.POST[image].file
-                uploaded_file.seek(0)
-                data = uploaded_file.read()
                 document = models.File(
                     discussion=discussion,
                     mime_type=mime_type,
-                    title=filename,
-                    data=data)
+                    title=filename)
+                document.add_file_data(context.POST[image].file)
                 # if there is already an IMAGE, remove it with the
                 # associated document
                 images = [
@@ -257,31 +248,29 @@ class UpdateResource(graphene.Mutation):
                     if att.attachmentPurpose == ATTACHMENT_PURPOSE_IMAGE]
                 if images:
                     image = images[0]
+                    image.document.delete_file()
                     db.delete(image.document)
                     resource.attachments.remove(image)
 
-                models.ResourceAttachment(
+                db.add(models.ResourceAttachment(
                     document=document,
                     discussion=discussion,
                     resource=resource,
                     creator_id=context.authenticated_userid,
                     title=filename,
                     attachmentPurpose=ATTACHMENT_PURPOSE_IMAGE
-                )
+                ))
 
         # add uploaded doc as an attachment to the resource
         doc = args.get('doc')
         if doc is not None:
             filename = os.path.basename(context.POST[doc].filename)
             mime_type = context.POST[doc].type
-            uploaded_file = context.POST[doc].file
-            uploaded_file.seek(0)
-            data = uploaded_file.read()
             document = models.File(
                 discussion=discussion,
                 mime_type=mime_type,
-                title=filename,
-                data=data)
+                title=filename)
+            document.add_file_data(context.POST[doc].file)
             # if there is already a DOCUMENT, remove it with the
             # associated document
             docs = [
@@ -289,17 +278,18 @@ class UpdateResource(graphene.Mutation):
                 if att.attachmentPurpose == ATTACHMENT_PURPOSE_DOCUMENT]
             if docs:
                 doc = docs[0]
+                doc.document.delete_file()
                 db.delete(doc.document)
                 resource.attachments.remove(doc)
 
-            models.ResourceAttachment(
+            resource.db.add(models.ResourceAttachment(
                 document=document,
                 discussion=discussion,
                 resource=resource,
                 creator_id=context.authenticated_userid,
                 title=filename,
                 attachmentPurpose=ATTACHMENT_PURPOSE_DOCUMENT
-            )
+            ))
 
             db.flush()
 

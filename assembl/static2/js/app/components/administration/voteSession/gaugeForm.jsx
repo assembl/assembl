@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { I18n, Translate } from 'react-redux-i18n';
 import { List, Map } from 'immutable';
 import range from 'lodash/range';
-import { SplitButton, MenuItem, Radio } from 'react-bootstrap';
+import { SplitButton, MenuItem, Radio, FormGroup } from 'react-bootstrap';
 
 import Helper from '../../common/helper';
 import { getEntryValueForLocale } from '../../../utils/i18n';
@@ -21,7 +21,8 @@ import {
   updateGaugeMinimum,
   updateGaugeMaximum,
   updateGaugeUnit,
-  updateGaugeVoteChoiceLabel
+  updateGaugeVoteChoiceLabel,
+  markAllDependenciesAsChanged
 } from '../../../actions/adminActions/voteSession';
 
 export type VoteChoice = {|
@@ -32,8 +33,8 @@ export type VoteChoice = {|
 type GaugeFormProps = {
   id: string,
   index?: number,
-  // editLocale: string,
   instructions: string,
+  canChangeType: boolean,
   nbTicks: number,
   minimum: number,
   maximum: number,
@@ -57,6 +58,7 @@ export const getGaugeModuleInfo = (gaugeModule: Map<string, *>, gaugeChoicesById
   const choices = gaugeModule.get('choices', List());
   return {
     instructions: instructions,
+    canChangeType: gaugeModule.get('_isNew'),
     nbTicks: gaugeModule.get('isNumberGauge') ? gaugeModule.get('nbTicks') : choices.size,
     isNumberGauge: gaugeModule.get('isNumberGauge'),
     choices: gaugeModule.get('isNumberGauge')
@@ -108,6 +110,7 @@ const DumbGaugeForm = ({
   id,
   instructions,
   nbTicks,
+  canChangeType,
   isNumberGauge,
   choices,
   minimum,
@@ -126,7 +129,7 @@ const DumbGaugeForm = ({
   index
 }: GaugeFormProps) => (
   <div className="gauges-vote-form">
-    <Translate value="administration.gauge" number={index + 1} />
+    {index !== null && <Translate value="administration.gauge" number={index + 1} />}
     <div className="flex margin-m">
       <FormControlWithLabel
         value={instructions}
@@ -141,40 +144,44 @@ const DumbGaugeForm = ({
         additionalTextClasses="helper-text-only"
       />
     </div>
-    <div className="flex">
-      <label htmlFor={`dropdown-${id}`}>
-        <Translate value="administration.nbTicks" />
-      </label>
-    </div>
-    <SplitButton
-      title={nbTicks}
-      id={`dropdown-${id}`}
-      required
-      onSelect={eventKey =>
-        changeNbTicks({
-          isNumberGauge: isNumberGauge,
-          nbTicks: nbTicks,
-          value: eventKey,
-          createChoice: createChoice,
-          deleteChoice: deleteChoice,
-          updateNbTicks: updateNbTicks
-        })
-      }
-    >
-      {range(10).map(value => (
-        <MenuItem key={`gauge-notch-${value + 1}`} eventKey={value + 1}>
-          {value + 1}
-        </MenuItem>
-      ))}
-    </SplitButton>
-    <div className="margin-m">
-      <Radio onChange={handleNumberGaugeUncheck} checked={!isNumberGauge} name={`gauge-type-${id}`}>
-        <Translate value="administration.textValue" />
-      </Radio>
-      <Radio onChange={handleNumberGaugeCheck} checked={isNumberGauge} name={`gauge-type-${id}`}>
-        <Translate value="administration.numberValue" />
-      </Radio>
-    </div>
+    <FormGroup>
+      <div className="flex">
+        <label htmlFor={`dropdown-${id}`}>
+          <Translate value="administration.nbTicks" />
+        </label>
+      </div>
+      <SplitButton
+        title={nbTicks}
+        id={`dropdown-${id}`}
+        required
+        onSelect={eventKey =>
+          changeNbTicks({
+            isNumberGauge: isNumberGauge,
+            nbTicks: nbTicks,
+            value: eventKey,
+            createChoice: createChoice,
+            deleteChoice: deleteChoice,
+            updateNbTicks: updateNbTicks
+          })
+        }
+      >
+        {range(2, 11).map(value => (
+          <MenuItem key={`gauge-notch-${value}`} eventKey={value}>
+            {value}
+          </MenuItem>
+        ))}
+      </SplitButton>
+    </FormGroup>
+    {canChangeType && (
+      <div className="margin-m">
+        <Radio onChange={handleNumberGaugeUncheck} checked={!isNumberGauge} name={`gauge-type-${id}`}>
+          <Translate value="administration.textValue" />
+        </Radio>
+        <Radio onChange={handleNumberGaugeCheck} checked={isNumberGauge} name={`gauge-type-${id}`}>
+          <Translate value="administration.numberValue" />
+        </Radio>
+      </div>
+    )}
     {isNumberGauge && (
       <NumberGaugeForm
         id={id}
@@ -202,18 +209,50 @@ const mapStateToProps = (state, { id, editLocale }) => {
 };
 
 const mapDispatchToProps = (dispatch, { id, editLocale }) => ({
-  handleInstructionsChange: e => dispatch(updateGaugeVoteInstructions(id, editLocale, e.target.value)),
-  createChoice: newId => dispatch(createGaugeVoteChoice(id, newId)),
-  deleteChoice: idx => dispatch(deleteGaugeVoteChoice(id, idx)),
-  updateNbTicks: value => dispatch(updateGaugeVoteNbTicks(id, value)),
-  handleNumberGaugeCheck: () => dispatch(updateGaugeVoteIsNumber(id, true)),
-  handleNumberGaugeUncheck: () => dispatch(updateGaugeVoteIsNumber(id, false)),
+  handleInstructionsChange: (e) => {
+    dispatch(markAllDependenciesAsChanged(id));
+    dispatch(updateGaugeVoteInstructions(id, editLocale, e.target.value));
+  },
+  createChoice: (newId) => {
+    dispatch(markAllDependenciesAsChanged(id));
+    dispatch(createGaugeVoteChoice(id, newId));
+  },
+  deleteChoice: (idx) => {
+    dispatch(markAllDependenciesAsChanged(id));
+    dispatch(deleteGaugeVoteChoice(id, idx));
+  },
+  updateNbTicks: (value) => {
+    dispatch(markAllDependenciesAsChanged(id));
+    dispatch(updateGaugeVoteNbTicks(id, value));
+  },
+  handleNumberGaugeCheck: () => {
+    dispatch(markAllDependenciesAsChanged(id));
+    dispatch(updateGaugeVoteIsNumber(id, true));
+  },
+  handleNumberGaugeUncheck: () => {
+    dispatch(markAllDependenciesAsChanged(id));
+    dispatch(updateGaugeVoteIsNumber(id, false));
+    dispatch(createGaugeVoteChoice(id, createRandomId()));
+    dispatch(createGaugeVoteChoice(id, createRandomId()));
+  },
   // for number gauge
-  handleMinChange: value => dispatch(updateGaugeMinimum(id, value)),
-  handleMaxChange: value => dispatch(updateGaugeMaximum(id, value)),
-  handleUnitChange: value => dispatch(updateGaugeUnit(id, value)),
+  handleMinChange: (value) => {
+    dispatch(markAllDependenciesAsChanged(id));
+    dispatch(updateGaugeMinimum(id, value));
+  },
+  handleMaxChange: (value) => {
+    dispatch(markAllDependenciesAsChanged(id));
+    dispatch(updateGaugeMaximum(id, value));
+  },
+  handleUnitChange: (value) => {
+    dispatch(markAllDependenciesAsChanged(id));
+    dispatch(updateGaugeUnit(id, value));
+  },
   // for text gauge
-  handleGaugeChoiceLabelChange: (cid, value) => dispatch(updateGaugeVoteChoiceLabel(cid, editLocale, value, id))
+  handleGaugeChoiceLabelChange: (cid, value) => {
+    dispatch(markAllDependenciesAsChanged(id));
+    dispatch(updateGaugeVoteChoiceLabel(cid, editLocale, value, id));
+  }
 });
 
 export { DumbGaugeForm };

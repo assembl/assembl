@@ -4,6 +4,8 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import { I18n, Translate } from 'react-redux-i18n';
 import { FormGroup } from 'react-bootstrap';
+import { type RawContentState } from 'draft-js';
+
 import SectionTitle from '../sectionTitle';
 import FormControlWithLabel from '../../common/formControlWithLabel';
 import FileUploader from '../../common/fileUploader';
@@ -26,7 +28,7 @@ type PageFormProps = {
   headerImgUrl: string,
   headerImgMimeType: string,
   instructionsTitle: string,
-  instructionsContent: string,
+  instructionsContent: RawContentState,
   propositionSectionTitle: string,
   editLocale: string,
   handleHeaderTitleChange: Function,
@@ -54,11 +56,11 @@ const DumbPageForm = ({
   handlePropositionSectionTitleChange
 }: PageFormProps) => {
   const editLocaleInUppercase = editLocale.toUpperCase();
-  const headerTitlePh = `${I18n.t('administration.ph.headerTitle')} ${editLocaleInUppercase}*`;
+  const headerTitlePh = `${I18n.t('administration.ph.headerTitle')} ${editLocaleInUppercase}`;
   const headerSubtitlePh = `${I18n.t('administration.ph.headerSubtitle')} ${editLocaleInUppercase}`;
-  const instructionsTitlePh = `${I18n.t('administration.ph.instructionsTitle')} ${editLocaleInUppercase}*`;
-  const instructionsContentPh = `${I18n.t('administration.ph.instructionsContent')} ${editLocaleInUppercase}*`;
-  const propositionSectionTitlePh = `${I18n.t('administration.ph.propositionSectionTitle')} ${editLocaleInUppercase}*`;
+  const instructionsTitlePh = `${I18n.t('administration.ph.instructionsTitle')} ${editLocaleInUppercase}`;
+  const instructionsContentPh = `${I18n.t('administration.ph.instructionsContent')} ${editLocaleInUppercase}`;
+  const propositionSectionTitlePh = `${I18n.t('administration.ph.propositionSectionTitle')} ${editLocaleInUppercase}`;
   const headerImageFieldName = 'header-image';
   const slug = { slug: getDiscussionSlug() };
   return (
@@ -106,6 +108,7 @@ const DumbPageForm = ({
                 handleChange={handleHeaderImageChange}
                 withPreview
               />
+              <Translate value="administration.imageRequirements" className="file-uploader-warning" />
             </FormGroup>
           </form>
           <div className="separator" />
@@ -120,6 +123,7 @@ const DumbPageForm = ({
             onChange={handleInstructionsTitleChange}
             type="text"
             value={instructionsTitle}
+            required
           />
           <FormControlWithLabel
             key={`instructions-${editLocale}`}
@@ -127,12 +131,13 @@ const DumbPageForm = ({
             onChange={handleInstructionsContentChange}
             type="rich-text"
             value={instructionsContent}
+            required
           />
           <div className="separator" />
           <Helper
-            label={I18n.t('administration.propositionSectionTitle')}
+            label={I18n.t('administration.proposalSectionTitle')}
             helperUrl="/static2/img/helpers/helper3.png"
-            helperText={I18n.t('administration.helpers.voteSessionPropositionSection')}
+            helperText={I18n.t('administration.helpers.voteSessionProposalSection')}
             classname="title"
           />
           <FormControlWithLabel
@@ -155,7 +160,7 @@ const mapStateToProps = (state, { editLocale }) => {
     headerTitle: getEntryValueForLocale(voteSession.get('titleEntries'), editLocale),
     headerSubtitle: getEntryValueForLocale(voteSession.get('subTitleEntries'), editLocale),
     instructionsTitle: getEntryValueForLocale(voteSession.get('instructionsSectionTitleEntries'), editLocale),
-    instructionsContent: instructionsContent ? instructionsContent.toJS() : null,
+    instructionsContent: instructionsContent && typeof instructionsContent !== 'string' ? instructionsContent.toJS() : null,
     propositionSectionTitle: getEntryValueForLocale(voteSession.get('propositionsSectionTitleEntries'), editLocale),
     headerImgUrl: voteSession.getIn(['headerImage', 'externalUrl']),
     headerImgMimeType: voteSession.getIn(['headerImage', 'mimeType'])

@@ -23,7 +23,7 @@ def test_mocha(browser, test_server, discussion, test_session,
     # print browser.driver.get_log('browser')
     assert not extractor.failures_number
 
-
+@pytest.mark.skip(reason="test_app_no_login_real_policy has security side-effect")
 @pytest.mark.xfail
 def test_private_discussion_log_in_form_exists_and_works(test_server_no_login_real_policy, browser, test_session, discussion, participant1_user, test_webrequest):
     url = test_server_no_login_real_policy.url + test_webrequest.route_path(

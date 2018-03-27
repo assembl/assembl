@@ -1,3 +1,4 @@
+/* eslint-disable quote-props */
 import { fromJS, List } from 'immutable';
 
 import * as actionTypes from '../../../../js/app/actions/actionTypes';

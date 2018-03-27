@@ -5,13 +5,16 @@ import os.path
 import pkg_resources
 
 from pyramid.view import view_config
+from pyramid.request import Request
 from pyramid.response import Response
 from pyramid.renderers import render_to_response
 from pyramid.security import Everyone, forget
 from pyramid.httpexceptions import (
-    HTTPNotFound, HTTPSeeOther, HTTPMovedPermanently)
+    HTTPOk, HTTPNotFound, HTTPSeeOther, HTTPMovedPermanently)
 from pyramid.i18n import TranslationStringFactory
 from sqlalchemy.orm.exc import NoResultFound
+from urllib import quote_plus
+from urlparse import urljoin
 
 from ...lib.utils import path_qs
 from ...lib.sqla import get_named_object
@@ -23,6 +26,7 @@ from ...models import (
     User,
     Role,
     Post,
+    PropositionPost,
     Idea,
     Locale,
 )
@@ -221,6 +225,7 @@ def react_view(request, required_permission=P_READ):
         "assembl_version": pkg_resources.get_distribution("assembl").version,
         "elasticsearch_lang_indexes" : old_context['elasticsearch_lang_indexes'],
         "web_analytics": old_context['web_analytics'],
+        "under_test": old_context['under_test']
     }
 
     if discussion:
@@ -361,26 +366,89 @@ def frontend_test_view(request):
 @view_config(route_name='purl_posts', request_method='GET')
 def purl_post(request):
     slug = request.matchdict['discussion_slug']
-    discussion = Discussion.default_db.query(Discussion).filter_by(slug=slug).first()
+    discussion = Discussion.default_db.query(Discussion).\
+        filter_by(slug=slug).first()
     if not discussion:
+        raise HTTPNotFound()
+    furl = FrontendUrls(discussion)
+    post_id = furl.getRequestedPostId(request)
+    post = get_named_object(post_id)
+    if not post:
         raise HTTPNotFound()
     phase = discussion.current_discussion_phase()
     if (discussion.preferences['landing_page'] and (
             phase is None or not phase.interface_v1)):
-        # Only for a discussion currently in phase 1 for now.
-        # Shortly: look at the phase's interface_v1 flag
-        post_id = FrontendUrls.getRequestedPostId(request)
-        post = get_named_object(post_id)
-        if not post:
-            raise HTTPNotFound()
-        thematic = post.get_closest_thematic()
-        if not thematic:
+        if post.__class__ == PropositionPost:
+            idea = post.get_closest_thematic()
+        else:
+            # Assumption V2: The post is only under one idea
+            # TODO: Fix assumption when posts in multiple ideas
+            # are supported in V2.
+            idcs = post.idea_links_of_content
+            if not idcs:
+                idea = None
+            else:
+                idc = post.idea_links_of_content[0]
+                idea = idc.idea
+        if not idea:
             return HTTPSeeOther(location=request.route_url(
                 'new_home', discussion_slug=discussion.slug))
-        # Temporary: assume phase 1
-        return HTTPSeeOther(location=discussion.get_base_url() +
-            "/" + discussion.slug + "/debate/survey/theme/" + thematic.graphene_id())
-    return home_view(request)
+        return HTTPSeeOther(
+            location=urljoin(
+                discussion.get_base_url(),
+                furl.get_frontend_url(
+                    'post',
+                    phase=phase.identifier,
+                    themeId=idea.graphene_id(),
+                    element=post.graphene_id()))
+        )
+
+    # V1 purl
+    return HTTPOk(
+        location=request.route_url(
+            'purl_posts',
+            discussion_slug=discussion.slug,
+            remainder=quote_plus(type(post).uri_generic(post.id)))
+    )
+
+
+@view_config(route_name='legacy_purl_ideas', request_method='GET')
+@view_config(route_name='purl_ideas', request_method='GET')
+def purl_ideas(request):
+    slug = request.matchdict['discussion_slug']
+    discussion = Discussion.default_db.query(Discussion)\
+        .filter_by(slug=slug).first()
+    if not discussion:
+        raise HTTPNotFound()
+    furl = FrontendUrls(discussion)
+    idea_id = furl.getRequestedIdeaId(request)
+    idea = get_named_object(idea_id)
+    phase = discussion.current_discussion_phase()
+    if (discussion.preferences['landing_page'] and (
+            phase is None or not phase.interface_v1)):
+        if not idea:
+            # If no idea is found, redirect to new home instead of 404
+            # TODO: Determine if this is acceptable practice
+            return HTTPSeeOther(location=request.route_url(
+                'new_home', discussion_slug=discussion.slug))
+
+        return HTTPSeeOther(
+            location=urljoin(
+                discussion.get_base_url(),
+                furl.get_frontend_url(
+                    'idea',
+                    phase=phase.identifier,
+                    themeId=idea.graphene_id())
+            )
+        )
+    # V1 Idea
+    return HTTPOk(
+        location=request.route_url(
+            'purl_ideas',
+            discussion_slug=discussion.slug,
+            remainder=quote_plus(type(idea).uri_generic(idea.id))
+        )
+    )
 
 
 def register_react_views(config, routes, view=react_view):
@@ -400,6 +468,8 @@ def includeme(config):
     config.add_route('bare_slug', '/{discussion_slug}')
     config.add_route('auto_bare_slug', '/{discussion_slug}/')
     config.add_route('react_admin_page', '/{discussion_slug}/administration*extra_path')
+    config.add_route('purl_ideas', '/debate/{discussion_slug}/idea/*remainder')
+    config.add_route('legacy_purl_ideas', '/{discussion_slug}/idea/*remainder')
     config.add_route('purl_posts', '/debate/{discussion_slug}/posts/*remainder')
     config.add_route('legacy_purl_posts', '/{discussion_slug}/posts/*remainder')
     config.add_route('react_general_page', '/{discussion_slug}/*extra_path')

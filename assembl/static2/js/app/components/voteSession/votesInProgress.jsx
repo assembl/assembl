@@ -63,6 +63,7 @@ const VotesInProgress = ({ modules, numParticipants }: Props) => {
               categories={tokenCategories}
               tokenVotes={tokenVoteModule.tokenVotes}
               numVotes={tokenVoteModule.numVotes}
+              titleMsgId="debate.voteSession.currentTokenDistribution"
             />
           </Col>
         )}
@@ -72,7 +73,7 @@ const VotesInProgress = ({ modules, numParticipants }: Props) => {
         const title = gauge.averageLabel || '';
         return (
           <Col xs={12} md={colSize} key={gauge.id}>
-            <GaugeVotesResults title={title} />
+            <GaugeVotesResults title={title} instructions={gauge.instructions} />
           </Col>
         );
       })}
@@ -82,7 +83,7 @@ const VotesInProgress = ({ modules, numParticipants }: Props) => {
         const title = I18n.t('debate.voteSession.valueWithUnit', { num: gauge.averageResult, unit: gauge.unit || '' });
         return (
           <Col xs={12} md={colSize} key={gauge.id}>
-            <GaugeVotesResults title={title} />
+            <GaugeVotesResults title={title} instructions={gauge.instructions} />
           </Col>
         );
       })}

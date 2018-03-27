@@ -9,6 +9,7 @@ import SectionTitle from '../sectionTitle';
 import EditSectionForm from './editSectionForm';
 import { addSectionTooltip } from '../../common/tooltips';
 import * as actions from '../../../actions/adminActions/adminSections';
+import { createRandomId } from '../../../utils/globalFunctions';
 
 type ManageSectionFormProps = {
   sections: List<string>,
@@ -45,7 +46,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = dispatch => ({
   createSection: (nextOrder) => {
-    const newId = Math.round(Math.random() * -1000000).toString();
+    const newId = createRandomId();
     return dispatch(actions.createSection(newId, nextOrder));
   }
 });

@@ -18,6 +18,7 @@ exports[`TokenVoteForProposal component should match TokenVoteForProposal snapsh
     >
       <OverlayTrigger
         defaultOverlayShown={false}
+        delayHide={0}
         overlay={
           <Tooltip
             bsClass="tooltip"
@@ -49,13 +50,14 @@ exports[`TokenVoteForProposal component should match TokenVoteForProposal snapsh
         >
           <Circle
             fillColor="#226622"
-            size="32px"
+            size="28px"
             strokeColor="#226622"
           />
         </Button>
       </OverlayTrigger>
       <OverlayTrigger
         defaultOverlayShown={false}
+        delayHide={0}
         overlay={
           <Tooltip
             bsClass="tooltip"
@@ -87,13 +89,14 @@ exports[`TokenVoteForProposal component should match TokenVoteForProposal snapsh
         >
           <Circle
             fillColor="#226622"
-            size="32px"
+            size="28px"
             strokeColor="#226622"
           />
         </Button>
       </OverlayTrigger>
       <OverlayTrigger
         defaultOverlayShown={false}
+        delayHide={0}
         overlay={
           <Tooltip
             bsClass="tooltip"
@@ -125,13 +128,14 @@ exports[`TokenVoteForProposal component should match TokenVoteForProposal snapsh
         >
           <Circle
             fillColor="none"
-            size="32px"
+            size="28px"
             strokeColor="#226622"
           />
         </Button>
       </OverlayTrigger>
       <OverlayTrigger
         defaultOverlayShown={false}
+        delayHide={0}
         overlay={
           <Tooltip
             bsClass="tooltip"
@@ -163,13 +167,14 @@ exports[`TokenVoteForProposal component should match TokenVoteForProposal snapsh
         >
           <Circle
             fillColor="none"
-            size="32px"
+            size="28px"
             strokeColor="#226622"
           />
         </Button>
       </OverlayTrigger>
       <OverlayTrigger
         defaultOverlayShown={false}
+        delayHide={0}
         overlay={
           <Tooltip
             bsClass="tooltip"
@@ -201,13 +206,14 @@ exports[`TokenVoteForProposal component should match TokenVoteForProposal snapsh
         >
           <Circle
             fillColor="none"
-            size="32px"
+            size="28px"
             strokeColor="#226622"
           />
         </Button>
       </OverlayTrigger>
       <OverlayTrigger
         defaultOverlayShown={false}
+        delayHide={0}
         overlay={
           <Tooltip
             bsClass="tooltip"
@@ -239,13 +245,14 @@ exports[`TokenVoteForProposal component should match TokenVoteForProposal snapsh
         >
           <Circle
             fillColor="none"
-            size="32px"
+            size="28px"
             strokeColor="#226622"
           />
         </Button>
       </OverlayTrigger>
       <OverlayTrigger
         defaultOverlayShown={false}
+        delayHide={0}
         overlay={
           <Tooltip
             bsClass="tooltip"
@@ -277,13 +284,14 @@ exports[`TokenVoteForProposal component should match TokenVoteForProposal snapsh
         >
           <Circle
             fillColor="none"
-            size="32px"
+            size="28px"
             strokeColor="#226622"
           />
         </Button>
       </OverlayTrigger>
       <OverlayTrigger
         defaultOverlayShown={false}
+        delayHide={0}
         overlay={
           <Tooltip
             bsClass="tooltip"
@@ -315,13 +323,14 @@ exports[`TokenVoteForProposal component should match TokenVoteForProposal snapsh
         >
           <Circle
             fillColor="none"
-            size="32px"
+            size="28px"
             strokeColor="#226622"
           />
         </Button>
       </OverlayTrigger>
       <OverlayTrigger
         defaultOverlayShown={false}
+        delayHide={0}
         overlay={
           <Tooltip
             bsClass="tooltip"
@@ -353,13 +362,14 @@ exports[`TokenVoteForProposal component should match TokenVoteForProposal snapsh
         >
           <Circle
             fillColor="none"
-            size="32px"
+            size="28px"
             strokeColor="#226622"
           />
         </Button>
       </OverlayTrigger>
       <OverlayTrigger
         defaultOverlayShown={false}
+        delayHide={0}
         overlay={
           <Tooltip
             bsClass="tooltip"
@@ -391,13 +401,14 @@ exports[`TokenVoteForProposal component should match TokenVoteForProposal snapsh
         >
           <Circle
             fillColor="none"
-            size="32px"
+            size="28px"
             strokeColor="#226622"
           />
         </Button>
       </OverlayTrigger>
       <OverlayTrigger
         defaultOverlayShown={false}
+        delayHide={0}
         overlay={
           <Tooltip
             bsClass="tooltip"
@@ -429,13 +440,14 @@ exports[`TokenVoteForProposal component should match TokenVoteForProposal snapsh
         >
           <Circle
             fillColor="none"
-            size="32px"
+            size="28px"
             strokeColor="#226622"
           />
         </Button>
       </OverlayTrigger>
       <OverlayTrigger
         defaultOverlayShown={false}
+        delayHide={0}
         overlay={
           <Tooltip
             bsClass="tooltip"
@@ -467,7 +479,7 @@ exports[`TokenVoteForProposal component should match TokenVoteForProposal snapsh
         >
           <Circle
             fillColor="none"
-            size="32px"
+            size="28px"
             strokeColor="#226622"
           />
         </Button>
@@ -519,6 +531,7 @@ exports[`TokenVoteForProposal component should match TokenVoteForProposal snapsh
     >
       <OverlayTrigger
         defaultOverlayShown={false}
+        delayHide={0}
         overlay={
           <Tooltip
             bsClass="tooltip"
@@ -550,13 +563,14 @@ exports[`TokenVoteForProposal component should match TokenVoteForProposal snapsh
         >
           <Circle
             fillColor="none"
-            size="32px"
+            size="28px"
             strokeColor="#771122"
           />
         </Button>
       </OverlayTrigger>
       <OverlayTrigger
         defaultOverlayShown={false}
+        delayHide={0}
         overlay={
           <Tooltip
             bsClass="tooltip"
@@ -588,13 +602,14 @@ exports[`TokenVoteForProposal component should match TokenVoteForProposal snapsh
         >
           <Circle
             fillColor="none"
-            size="32px"
+            size="28px"
             strokeColor="#771122"
           />
         </Button>
       </OverlayTrigger>
       <OverlayTrigger
         defaultOverlayShown={false}
+        delayHide={0}
         overlay={
           <Tooltip
             bsClass="tooltip"
@@ -626,13 +641,14 @@ exports[`TokenVoteForProposal component should match TokenVoteForProposal snapsh
         >
           <Circle
             fillColor="none"
-            size="32px"
+            size="28px"
             strokeColor="#771122"
           />
         </Button>
       </OverlayTrigger>
       <OverlayTrigger
         defaultOverlayShown={false}
+        delayHide={0}
         overlay={
           <Tooltip
             bsClass="tooltip"
@@ -664,13 +680,14 @@ exports[`TokenVoteForProposal component should match TokenVoteForProposal snapsh
         >
           <Circle
             fillColor="none"
-            size="32px"
+            size="28px"
             strokeColor="#771122"
           />
         </Button>
       </OverlayTrigger>
       <OverlayTrigger
         defaultOverlayShown={false}
+        delayHide={0}
         overlay={
           <Tooltip
             bsClass="tooltip"
@@ -701,13 +718,14 @@ exports[`TokenVoteForProposal component should match TokenVoteForProposal snapsh
         >
           <Circle
             fillColor="none"
-            size="32px"
+            size="28px"
             strokeColor="#771122"
           />
         </Button>
       </OverlayTrigger>
       <OverlayTrigger
         defaultOverlayShown={false}
+        delayHide={0}
         overlay={
           <Tooltip
             bsClass="tooltip"
@@ -738,13 +756,14 @@ exports[`TokenVoteForProposal component should match TokenVoteForProposal snapsh
         >
           <Circle
             fillColor="none"
-            size="32px"
+            size="28px"
             strokeColor="#771122"
           />
         </Button>
       </OverlayTrigger>
       <OverlayTrigger
         defaultOverlayShown={false}
+        delayHide={0}
         overlay={
           <Tooltip
             bsClass="tooltip"
@@ -775,13 +794,14 @@ exports[`TokenVoteForProposal component should match TokenVoteForProposal snapsh
         >
           <Circle
             fillColor="none"
-            size="32px"
+            size="28px"
             strokeColor="#771122"
           />
         </Button>
       </OverlayTrigger>
       <OverlayTrigger
         defaultOverlayShown={false}
+        delayHide={0}
         overlay={
           <Tooltip
             bsClass="tooltip"
@@ -812,13 +832,14 @@ exports[`TokenVoteForProposal component should match TokenVoteForProposal snapsh
         >
           <Circle
             fillColor="none"
-            size="32px"
+            size="28px"
             strokeColor="#771122"
           />
         </Button>
       </OverlayTrigger>
       <OverlayTrigger
         defaultOverlayShown={false}
+        delayHide={0}
         overlay={
           <Tooltip
             bsClass="tooltip"
@@ -849,13 +870,14 @@ exports[`TokenVoteForProposal component should match TokenVoteForProposal snapsh
         >
           <Circle
             fillColor="none"
-            size="32px"
+            size="28px"
             strokeColor="#771122"
           />
         </Button>
       </OverlayTrigger>
       <OverlayTrigger
         defaultOverlayShown={false}
+        delayHide={0}
         overlay={
           <Tooltip
             bsClass="tooltip"
@@ -886,7 +908,7 @@ exports[`TokenVoteForProposal component should match TokenVoteForProposal snapsh
         >
           <Circle
             fillColor="none"
-            size="32px"
+            size="28px"
             strokeColor="#771122"
           />
         </Button>
@@ -948,6 +970,7 @@ exports[`TokenVoteForProposal component should match TokenVoteForProposal with e
     >
       <OverlayTrigger
         defaultOverlayShown={false}
+        delayHide={0}
         overlay={
           <Tooltip
             bsClass="tooltip"
@@ -979,13 +1002,14 @@ exports[`TokenVoteForProposal component should match TokenVoteForProposal with e
         >
           <Circle
             fillColor="#226622"
-            size="32px"
+            size="28px"
             strokeColor="#226622"
           />
         </Button>
       </OverlayTrigger>
       <OverlayTrigger
         defaultOverlayShown={false}
+        delayHide={0}
         overlay={
           <Tooltip
             bsClass="tooltip"
@@ -1017,13 +1041,14 @@ exports[`TokenVoteForProposal component should match TokenVoteForProposal with e
         >
           <Circle
             fillColor="#226622"
-            size="32px"
+            size="28px"
             strokeColor="#226622"
           />
         </Button>
       </OverlayTrigger>
       <OverlayTrigger
         defaultOverlayShown={false}
+        delayHide={0}
         overlay={
           <Tooltip
             bsClass="tooltip"
@@ -1055,13 +1080,14 @@ exports[`TokenVoteForProposal component should match TokenVoteForProposal with e
         >
           <Circle
             fillColor="none"
-            size="32px"
+            size="28px"
             strokeColor="#226622"
           />
         </Button>
       </OverlayTrigger>
       <OverlayTrigger
         defaultOverlayShown={false}
+        delayHide={0}
         overlay={
           <Tooltip
             bsClass="tooltip"
@@ -1093,13 +1119,14 @@ exports[`TokenVoteForProposal component should match TokenVoteForProposal with e
         >
           <Circle
             fillColor="none"
-            size="32px"
+            size="28px"
             strokeColor="#226622"
           />
         </Button>
       </OverlayTrigger>
       <OverlayTrigger
         defaultOverlayShown={false}
+        delayHide={0}
         overlay={
           <Tooltip
             bsClass="tooltip"
@@ -1131,13 +1158,14 @@ exports[`TokenVoteForProposal component should match TokenVoteForProposal with e
         >
           <Circle
             fillColor="none"
-            size="32px"
+            size="28px"
             strokeColor="#226622"
           />
         </Button>
       </OverlayTrigger>
       <OverlayTrigger
         defaultOverlayShown={false}
+        delayHide={0}
         overlay={
           <Tooltip
             bsClass="tooltip"
@@ -1169,13 +1197,14 @@ exports[`TokenVoteForProposal component should match TokenVoteForProposal with e
         >
           <Circle
             fillColor="none"
-            size="32px"
+            size="28px"
             strokeColor="#226622"
           />
         </Button>
       </OverlayTrigger>
       <OverlayTrigger
         defaultOverlayShown={false}
+        delayHide={0}
         overlay={
           <Tooltip
             bsClass="tooltip"
@@ -1207,13 +1236,14 @@ exports[`TokenVoteForProposal component should match TokenVoteForProposal with e
         >
           <Circle
             fillColor="none"
-            size="32px"
+            size="28px"
             strokeColor="#226622"
           />
         </Button>
       </OverlayTrigger>
       <OverlayTrigger
         defaultOverlayShown={false}
+        delayHide={0}
         overlay={
           <Tooltip
             bsClass="tooltip"
@@ -1245,13 +1275,14 @@ exports[`TokenVoteForProposal component should match TokenVoteForProposal with e
         >
           <Circle
             fillColor="none"
-            size="32px"
+            size="28px"
             strokeColor="#226622"
           />
         </Button>
       </OverlayTrigger>
       <OverlayTrigger
         defaultOverlayShown={false}
+        delayHide={0}
         overlay={
           <Tooltip
             bsClass="tooltip"
@@ -1283,13 +1314,14 @@ exports[`TokenVoteForProposal component should match TokenVoteForProposal with e
         >
           <Circle
             fillColor="none"
-            size="32px"
+            size="28px"
             strokeColor="#226622"
           />
         </Button>
       </OverlayTrigger>
       <OverlayTrigger
         defaultOverlayShown={false}
+        delayHide={0}
         overlay={
           <Tooltip
             bsClass="tooltip"
@@ -1321,13 +1353,14 @@ exports[`TokenVoteForProposal component should match TokenVoteForProposal with e
         >
           <Circle
             fillColor="none"
-            size="32px"
+            size="28px"
             strokeColor="#226622"
           />
         </Button>
       </OverlayTrigger>
       <OverlayTrigger
         defaultOverlayShown={false}
+        delayHide={0}
         overlay={
           <Tooltip
             bsClass="tooltip"
@@ -1359,13 +1392,14 @@ exports[`TokenVoteForProposal component should match TokenVoteForProposal with e
         >
           <Circle
             fillColor="none"
-            size="32px"
+            size="28px"
             strokeColor="#226622"
           />
         </Button>
       </OverlayTrigger>
       <OverlayTrigger
         defaultOverlayShown={false}
+        delayHide={0}
         overlay={
           <Tooltip
             bsClass="tooltip"
@@ -1397,7 +1431,7 @@ exports[`TokenVoteForProposal component should match TokenVoteForProposal with e
         >
           <Circle
             fillColor="none"
-            size="32px"
+            size="28px"
             strokeColor="#226622"
           />
         </Button>
@@ -1449,6 +1483,7 @@ exports[`TokenVoteForProposal component should match TokenVoteForProposal with e
     >
       <OverlayTrigger
         defaultOverlayShown={false}
+        delayHide={0}
         overlay={
           <Tooltip
             bsClass="tooltip"
@@ -1479,13 +1514,14 @@ exports[`TokenVoteForProposal component should match TokenVoteForProposal with e
         >
           <Circle
             fillColor="none"
-            size="32px"
+            size="28px"
             strokeColor="#771122"
           />
         </Button>
       </OverlayTrigger>
       <OverlayTrigger
         defaultOverlayShown={false}
+        delayHide={0}
         overlay={
           <Tooltip
             bsClass="tooltip"
@@ -1516,13 +1552,14 @@ exports[`TokenVoteForProposal component should match TokenVoteForProposal with e
         >
           <Circle
             fillColor="none"
-            size="32px"
+            size="28px"
             strokeColor="#771122"
           />
         </Button>
       </OverlayTrigger>
       <OverlayTrigger
         defaultOverlayShown={false}
+        delayHide={0}
         overlay={
           <Tooltip
             bsClass="tooltip"
@@ -1553,13 +1590,14 @@ exports[`TokenVoteForProposal component should match TokenVoteForProposal with e
         >
           <Circle
             fillColor="none"
-            size="32px"
+            size="28px"
             strokeColor="#771122"
           />
         </Button>
       </OverlayTrigger>
       <OverlayTrigger
         defaultOverlayShown={false}
+        delayHide={0}
         overlay={
           <Tooltip
             bsClass="tooltip"
@@ -1590,13 +1628,14 @@ exports[`TokenVoteForProposal component should match TokenVoteForProposal with e
         >
           <Circle
             fillColor="none"
-            size="32px"
+            size="28px"
             strokeColor="#771122"
           />
         </Button>
       </OverlayTrigger>
       <OverlayTrigger
         defaultOverlayShown={false}
+        delayHide={0}
         overlay={
           <Tooltip
             bsClass="tooltip"
@@ -1627,13 +1666,14 @@ exports[`TokenVoteForProposal component should match TokenVoteForProposal with e
         >
           <Circle
             fillColor="none"
-            size="32px"
+            size="28px"
             strokeColor="#771122"
           />
         </Button>
       </OverlayTrigger>
       <OverlayTrigger
         defaultOverlayShown={false}
+        delayHide={0}
         overlay={
           <Tooltip
             bsClass="tooltip"
@@ -1664,13 +1704,14 @@ exports[`TokenVoteForProposal component should match TokenVoteForProposal with e
         >
           <Circle
             fillColor="none"
-            size="32px"
+            size="28px"
             strokeColor="#771122"
           />
         </Button>
       </OverlayTrigger>
       <OverlayTrigger
         defaultOverlayShown={false}
+        delayHide={0}
         overlay={
           <Tooltip
             bsClass="tooltip"
@@ -1701,13 +1742,14 @@ exports[`TokenVoteForProposal component should match TokenVoteForProposal with e
         >
           <Circle
             fillColor="none"
-            size="32px"
+            size="28px"
             strokeColor="#771122"
           />
         </Button>
       </OverlayTrigger>
       <OverlayTrigger
         defaultOverlayShown={false}
+        delayHide={0}
         overlay={
           <Tooltip
             bsClass="tooltip"
@@ -1738,13 +1780,14 @@ exports[`TokenVoteForProposal component should match TokenVoteForProposal with e
         >
           <Circle
             fillColor="none"
-            size="32px"
+            size="28px"
             strokeColor="#771122"
           />
         </Button>
       </OverlayTrigger>
       <OverlayTrigger
         defaultOverlayShown={false}
+        delayHide={0}
         overlay={
           <Tooltip
             bsClass="tooltip"
@@ -1775,13 +1818,14 @@ exports[`TokenVoteForProposal component should match TokenVoteForProposal with e
         >
           <Circle
             fillColor="none"
-            size="32px"
+            size="28px"
             strokeColor="#771122"
           />
         </Button>
       </OverlayTrigger>
       <OverlayTrigger
         defaultOverlayShown={false}
+        delayHide={0}
         overlay={
           <Tooltip
             bsClass="tooltip"
@@ -1812,7 +1856,7 @@ exports[`TokenVoteForProposal component should match TokenVoteForProposal with e
         >
           <Circle
             fillColor="none"
-            size="32px"
+            size="28px"
             strokeColor="#771122"
           />
         </Button>

@@ -47,7 +47,7 @@ class Home extends React.Component {
         <Header />
         <ScrollOnePageButton hidden={this.state.scrollOnePageButtonHidden} />
         {debateData.objectives && <Objectives />}
-        {debateData.timeline && debateData.timeline.length > 1 && <Phases />}
+        {debateData.timeline && <Phases />}
         {debateData.video && <Video />}
         {debateData.twitter && <Twitter />}
         {debateData.chatbot && <Chatbot chatbot={debateData.chatbot} locale={locale} />}

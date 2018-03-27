@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`ModulesSection component should render a form to set up a gauge and a numberGaugeForm below 1`] = `
+exports[`GaugeForm component should render a form to set up a gauge and a numberGaugeForm below 1`] = `
 <div
   className="gauges-vote-form"
 >
@@ -17,6 +17,7 @@ exports[`ModulesSection component should render a form to set up a gauge and a n
       onChange={[Function]}
       required={true}
       type="text"
+      validationErrors={null}
       value="Please vote on this numeral gauge"
     />
     <Helper
@@ -27,114 +28,109 @@ exports[`ModulesSection component should render a form to set up a gauge and a n
       label=""
     />
   </div>
-  <div
-    className="flex"
+  <FormGroup
+    bsClass="form-group"
   >
-    <label
-      htmlFor="dropdown-1234"
+    <div
+      className="flex"
     >
-      <Translate
-        value="administration.nbTicks"
-      />
-    </label>
-  </div>
-  <SplitButton
-    id="dropdown-1234"
-    onSelect={[Function]}
-    required={true}
-    title={10}
-  >
-    <MenuItem
-      bsClass="dropdown"
-      disabled={false}
-      divider={false}
-      eventKey={1}
-      header={false}
+      <label
+        htmlFor="dropdown-1234"
+      >
+        <Translate
+          value="administration.nbTicks"
+        />
+      </label>
+    </div>
+    <SplitButton
+      id="dropdown-1234"
+      onSelect={[Function]}
+      required={true}
+      title={10}
     >
-      1
-    </MenuItem>
-    <MenuItem
-      bsClass="dropdown"
-      disabled={false}
-      divider={false}
-      eventKey={2}
-      header={false}
-    >
-      2
-    </MenuItem>
-    <MenuItem
-      bsClass="dropdown"
-      disabled={false}
-      divider={false}
-      eventKey={3}
-      header={false}
-    >
-      3
-    </MenuItem>
-    <MenuItem
-      bsClass="dropdown"
-      disabled={false}
-      divider={false}
-      eventKey={4}
-      header={false}
-    >
-      4
-    </MenuItem>
-    <MenuItem
-      bsClass="dropdown"
-      disabled={false}
-      divider={false}
-      eventKey={5}
-      header={false}
-    >
-      5
-    </MenuItem>
-    <MenuItem
-      bsClass="dropdown"
-      disabled={false}
-      divider={false}
-      eventKey={6}
-      header={false}
-    >
-      6
-    </MenuItem>
-    <MenuItem
-      bsClass="dropdown"
-      disabled={false}
-      divider={false}
-      eventKey={7}
-      header={false}
-    >
-      7
-    </MenuItem>
-    <MenuItem
-      bsClass="dropdown"
-      disabled={false}
-      divider={false}
-      eventKey={8}
-      header={false}
-    >
-      8
-    </MenuItem>
-    <MenuItem
-      bsClass="dropdown"
-      disabled={false}
-      divider={false}
-      eventKey={9}
-      header={false}
-    >
-      9
-    </MenuItem>
-    <MenuItem
-      bsClass="dropdown"
-      disabled={false}
-      divider={false}
-      eventKey={10}
-      header={false}
-    >
-      10
-    </MenuItem>
-  </SplitButton>
+      <MenuItem
+        bsClass="dropdown"
+        disabled={false}
+        divider={false}
+        eventKey={2}
+        header={false}
+      >
+        2
+      </MenuItem>
+      <MenuItem
+        bsClass="dropdown"
+        disabled={false}
+        divider={false}
+        eventKey={3}
+        header={false}
+      >
+        3
+      </MenuItem>
+      <MenuItem
+        bsClass="dropdown"
+        disabled={false}
+        divider={false}
+        eventKey={4}
+        header={false}
+      >
+        4
+      </MenuItem>
+      <MenuItem
+        bsClass="dropdown"
+        disabled={false}
+        divider={false}
+        eventKey={5}
+        header={false}
+      >
+        5
+      </MenuItem>
+      <MenuItem
+        bsClass="dropdown"
+        disabled={false}
+        divider={false}
+        eventKey={6}
+        header={false}
+      >
+        6
+      </MenuItem>
+      <MenuItem
+        bsClass="dropdown"
+        disabled={false}
+        divider={false}
+        eventKey={7}
+        header={false}
+      >
+        7
+      </MenuItem>
+      <MenuItem
+        bsClass="dropdown"
+        disabled={false}
+        divider={false}
+        eventKey={8}
+        header={false}
+      >
+        8
+      </MenuItem>
+      <MenuItem
+        bsClass="dropdown"
+        disabled={false}
+        divider={false}
+        eventKey={9}
+        header={false}
+      >
+        9
+      </MenuItem>
+      <MenuItem
+        bsClass="dropdown"
+        disabled={false}
+        divider={false}
+        eventKey={10}
+        header={false}
+      >
+        10
+      </MenuItem>
+    </SplitButton>
+  </FormGroup>
   <div
     className="margin-m"
   >
@@ -180,7 +176,7 @@ exports[`ModulesSection component should render a form to set up a gauge and a n
 </div>
 `;
 
-exports[`ModulesSection component should render a form to set up a gauge and a textGaugeForm below 1`] = `
+exports[`GaugeForm component should render a form to set up a gauge and a textGaugeForm below 1`] = `
 <div
   className="gauges-vote-form"
 >
@@ -197,6 +193,7 @@ exports[`ModulesSection component should render a form to set up a gauge and a t
       onChange={[Function]}
       required={true}
       type="text"
+      validationErrors={null}
       value="Please vote on this textual gauge"
     />
     <Helper
@@ -207,114 +204,109 @@ exports[`ModulesSection component should render a form to set up a gauge and a t
       label=""
     />
   </div>
-  <div
-    className="flex"
+  <FormGroup
+    bsClass="form-group"
   >
-    <label
-      htmlFor="dropdown-5678"
+    <div
+      className="flex"
     >
-      <Translate
-        value="administration.nbTicks"
-      />
-    </label>
-  </div>
-  <SplitButton
-    id="dropdown-5678"
-    onSelect={[Function]}
-    required={true}
-    title={2}
-  >
-    <MenuItem
-      bsClass="dropdown"
-      disabled={false}
-      divider={false}
-      eventKey={1}
-      header={false}
+      <label
+        htmlFor="dropdown-5678"
+      >
+        <Translate
+          value="administration.nbTicks"
+        />
+      </label>
+    </div>
+    <SplitButton
+      id="dropdown-5678"
+      onSelect={[Function]}
+      required={true}
+      title={2}
     >
-      1
-    </MenuItem>
-    <MenuItem
-      bsClass="dropdown"
-      disabled={false}
-      divider={false}
-      eventKey={2}
-      header={false}
-    >
-      2
-    </MenuItem>
-    <MenuItem
-      bsClass="dropdown"
-      disabled={false}
-      divider={false}
-      eventKey={3}
-      header={false}
-    >
-      3
-    </MenuItem>
-    <MenuItem
-      bsClass="dropdown"
-      disabled={false}
-      divider={false}
-      eventKey={4}
-      header={false}
-    >
-      4
-    </MenuItem>
-    <MenuItem
-      bsClass="dropdown"
-      disabled={false}
-      divider={false}
-      eventKey={5}
-      header={false}
-    >
-      5
-    </MenuItem>
-    <MenuItem
-      bsClass="dropdown"
-      disabled={false}
-      divider={false}
-      eventKey={6}
-      header={false}
-    >
-      6
-    </MenuItem>
-    <MenuItem
-      bsClass="dropdown"
-      disabled={false}
-      divider={false}
-      eventKey={7}
-      header={false}
-    >
-      7
-    </MenuItem>
-    <MenuItem
-      bsClass="dropdown"
-      disabled={false}
-      divider={false}
-      eventKey={8}
-      header={false}
-    >
-      8
-    </MenuItem>
-    <MenuItem
-      bsClass="dropdown"
-      disabled={false}
-      divider={false}
-      eventKey={9}
-      header={false}
-    >
-      9
-    </MenuItem>
-    <MenuItem
-      bsClass="dropdown"
-      disabled={false}
-      divider={false}
-      eventKey={10}
-      header={false}
-    >
-      10
-    </MenuItem>
-  </SplitButton>
+      <MenuItem
+        bsClass="dropdown"
+        disabled={false}
+        divider={false}
+        eventKey={2}
+        header={false}
+      >
+        2
+      </MenuItem>
+      <MenuItem
+        bsClass="dropdown"
+        disabled={false}
+        divider={false}
+        eventKey={3}
+        header={false}
+      >
+        3
+      </MenuItem>
+      <MenuItem
+        bsClass="dropdown"
+        disabled={false}
+        divider={false}
+        eventKey={4}
+        header={false}
+      >
+        4
+      </MenuItem>
+      <MenuItem
+        bsClass="dropdown"
+        disabled={false}
+        divider={false}
+        eventKey={5}
+        header={false}
+      >
+        5
+      </MenuItem>
+      <MenuItem
+        bsClass="dropdown"
+        disabled={false}
+        divider={false}
+        eventKey={6}
+        header={false}
+      >
+        6
+      </MenuItem>
+      <MenuItem
+        bsClass="dropdown"
+        disabled={false}
+        divider={false}
+        eventKey={7}
+        header={false}
+      >
+        7
+      </MenuItem>
+      <MenuItem
+        bsClass="dropdown"
+        disabled={false}
+        divider={false}
+        eventKey={8}
+        header={false}
+      >
+        8
+      </MenuItem>
+      <MenuItem
+        bsClass="dropdown"
+        disabled={false}
+        divider={false}
+        eventKey={9}
+        header={false}
+      >
+        9
+      </MenuItem>
+      <MenuItem
+        bsClass="dropdown"
+        disabled={false}
+        divider={false}
+        eventKey={10}
+        header={false}
+      >
+        10
+      </MenuItem>
+    </SplitButton>
+  </FormGroup>
   <div
     className="margin-m"
   >
@@ -345,6 +337,162 @@ exports[`ModulesSection component should render a form to set up a gauge and a t
       />
     </Radio>
   </div>
+  <DumbTextGaugeForm
+    choices={
+      Immutable.List [
+        Immutable.Map {
+          id: "2233",
+          labelEntries: Immutable.List [
+          ],
+          value: 1,
+        },
+        Immutable.Map {
+          id: "3344",
+          labelEntries: Immutable.List [
+          ],
+          value: 2,
+        },
+      ]
+    }
+    handleGaugeChoiceLabelChange={undefined}
+  />
+  <div
+    className="separator"
+  />
+</div>
+`;
+
+exports[`GaugeForm component should render a gauge form with no radio if canChangeType is false 1`] = `
+<div
+  className="gauges-vote-form"
+>
+  <Translate
+    number={2}
+    value="administration.gauge"
+  />
+  <div
+    className="flex margin-m"
+  >
+    <FormControlWithLabel
+      label="Missing translation: administration.gaugeVoteInstructions"
+      labelAlwaysVisible={false}
+      onChange={[Function]}
+      required={true}
+      type="text"
+      validationErrors={null}
+      value="Please vote on this textual gauge"
+    />
+    <Helper
+      additionalTextClasses="helper-text-only"
+      classname=""
+      helperText="Missing translation: administration.helpers.gaugeVoteInstructions"
+      helperUrl="/static2/img/helpers/helper6.png"
+      label=""
+    />
+  </div>
+  <FormGroup
+    bsClass="form-group"
+  >
+    <div
+      className="flex"
+    >
+      <label
+        htmlFor="dropdown-5678"
+      >
+        <Translate
+          value="administration.nbTicks"
+        />
+      </label>
+    </div>
+    <SplitButton
+      id="dropdown-5678"
+      onSelect={[Function]}
+      required={true}
+      title={2}
+    >
+      <MenuItem
+        bsClass="dropdown"
+        disabled={false}
+        divider={false}
+        eventKey={2}
+        header={false}
+      >
+        2
+      </MenuItem>
+      <MenuItem
+        bsClass="dropdown"
+        disabled={false}
+        divider={false}
+        eventKey={3}
+        header={false}
+      >
+        3
+      </MenuItem>
+      <MenuItem
+        bsClass="dropdown"
+        disabled={false}
+        divider={false}
+        eventKey={4}
+        header={false}
+      >
+        4
+      </MenuItem>
+      <MenuItem
+        bsClass="dropdown"
+        disabled={false}
+        divider={false}
+        eventKey={5}
+        header={false}
+      >
+        5
+      </MenuItem>
+      <MenuItem
+        bsClass="dropdown"
+        disabled={false}
+        divider={false}
+        eventKey={6}
+        header={false}
+      >
+        6
+      </MenuItem>
+      <MenuItem
+        bsClass="dropdown"
+        disabled={false}
+        divider={false}
+        eventKey={7}
+        header={false}
+      >
+        7
+      </MenuItem>
+      <MenuItem
+        bsClass="dropdown"
+        disabled={false}
+        divider={false}
+        eventKey={8}
+        header={false}
+      >
+        8
+      </MenuItem>
+      <MenuItem
+        bsClass="dropdown"
+        disabled={false}
+        divider={false}
+        eventKey={9}
+        header={false}
+      >
+        9
+      </MenuItem>
+      <MenuItem
+        bsClass="dropdown"
+        disabled={false}
+        divider={false}
+        eventKey={10}
+        header={false}
+      >
+        10
+      </MenuItem>
+    </SplitButton>
+  </FormGroup>
   <DumbTextGaugeForm
     choices={
       Immutable.List [

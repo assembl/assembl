@@ -1,9 +1,14 @@
+from datetime import datetime, timedelta
+
 from pyramid.view import view_config
-from pyramid.response import Response
-from pyramid.httpexceptions import HTTPServerError, HTTPBadRequest
+from pyramid.response import Response, FileIter, _BLOCK_SIZE
+from pyramid.httpexceptions import (
+    HTTPServerError, HTTPNotAcceptable, HTTPRequestRangeNotSatisfiable)
 from pyramid.security import Everyone
+from pyramid.settings import asbool
 from pyramid.compat import url_quote
 
+from assembl.lib import config
 from assembl.auth import P_READ, P_ADD_POST
 from assembl.models import File, Document, Discussion
 from assembl.auth.util import get_permissions
@@ -23,6 +28,10 @@ def delete_file(request):
     db = Document.default_db
     document = ctx._instance
     attachments = document.attachments
+    identity = None
+    if isinstance(document, File):
+        identity = document.file_identity
+        count = document.count_other_files()
     try:
         if not attachments:
             db.delete(document)
@@ -30,7 +39,30 @@ def delete_file(request):
     except:
         capture_message("[HTTP DELETE] Failed to delete Document %d" %
                         document.id)
+    if identity and not count:
+        document.delete_file_by_id(identity)
+
     return {}
+
+
+@view_config(context=InstanceContext, request_method='HEAD',
+             permission=P_READ, ctx_instance_class=File,
+             name='data')
+def get_file_header(request):
+    ctx = request.context
+    document = ctx._instance
+    f = File.get(document.id)
+    if f.infected:
+        raise HTTPNotAcceptable("Infected with a virus")
+    handoff_to_nginx = asbool(config.get('handoff_to_nginx', False))
+
+    return Response(
+        content_length=f.size,
+        content_type=str(f.mime_type),
+        last_modified=f.creation_date,
+        expires=datetime.now()+timedelta(days=365),
+        accept_ranges="bytes" if handoff_to_nginx else "none",
+    )
 
 
 @view_config(context=InstanceContext, request_method='GET',
@@ -44,17 +76,42 @@ def get_file(request):
     ctx = request.context
     document = ctx._instance
     f = File.get(document.id)
+    if f.infected:
+        raise HTTPNotAcceptable("Infected with a virus")
     escaped_double_quotes_filename = (f.title
         .replace(u'"', u'\\"')
         .encode('iso-8859-1', 'replace'))
     url_quoted_utf8_filename = url_quote(f.title.encode('utf-8'))
-    return Response(
-        body=f.safe_data(),
+    handoff_to_nginx = asbool(config.get('handoff_to_nginx', False))
+    if handoff_to_nginx:
+        kwargs = dict(body='')
+    else:
+        if 'Range' in request.headers:
+            raise HTTPRequestRangeNotSatisfiable()
+        fs = open(f.path, 'rb')
+        app_iter = None
+        environ = request.environ
+        if 'wsgi.file_wrapper' in environ:
+            app_iter = environ['wsgi.file_wrapper'](fs, _BLOCK_SIZE)
+        if app_iter is None:
+            app_iter = FileIter(fs, _BLOCK_SIZE)
+        kwargs=dict(app_iter=app_iter)
+
+    r = Response(
+        content_length=f.size,
         content_type=str(f.mime_type),
+        last_modified=f.creation_date,
+        expires=datetime.now()+timedelta(days=365),
+        accept_ranges="bytes" if handoff_to_nginx else "none",
         content_disposition=
             'attachment; filename="%s"; filename*=utf-8\'\'%s' # RFC 6266
-            % (escaped_double_quotes_filename, url_quoted_utf8_filename)
+            % (escaped_double_quotes_filename, url_quoted_utf8_filename),
+        **kwargs
     )
+    if handoff_to_nginx:
+        r.headers[b'X-Accel-Redirect'] = f.handoff_url
+    return r
+
 
 # Maybe have a permission for uploading content??
 
@@ -81,8 +138,6 @@ def upload_file(request):
 
     mime = request.POST['mime_type']
     file_name = request.POST['name']
-    with request.POST['file'].file as f:
-        data = f.read()
 
     # Check if the file has previously existed, if so, change the name by appending "(n)"
     # to it's name
@@ -90,12 +145,13 @@ def upload_file(request):
     try:
         blob = File(discussion=discussion,
                     mime_type=mime,
-                    title=file_name,
-                    data=data)
+                    title=file_name)
         db.add(blob)
+        with request.POST['file'].file as f:
+            blob.add_file_data(f)
         db.flush()
-    except:
-        raise HTTPServerError
+    except Exception as e:
+        raise HTTPServerError(e)
 
     view = 'default'
     return blob.generic_json(view, user_id, permissions)

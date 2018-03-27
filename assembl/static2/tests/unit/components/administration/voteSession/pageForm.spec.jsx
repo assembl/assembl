@@ -1,3 +1,4 @@
+/* eslint max-len: ["error", { "code": 130, "ignoreStrings": true }] */
 import React from 'react';
 import ShallowRenderer from 'react-test-renderer/shallow';
 import { convertToRaw, ContentState } from 'draft-js';

@@ -1,5 +1,66 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`VoteProposalForm component should render an empty form to create a vote proposal with validation errors 1`] = `
+<div
+  className="form-container vote-proposal-form"
+>
+  <div
+    className="pointer right"
+  >
+    <div
+      className="inline"
+    >
+      
+    </div>
+  </div>
+  <div
+    className="title"
+  >
+    <Translate
+      number={1}
+      value="administration.voteProposals.defineProposal"
+    />
+  </div>
+  <FormControlWithLabel
+    label="Missing translation: administration.voteProposals.title"
+    labelAlwaysVisible={false}
+    onChange={[Function]}
+    required={true}
+    type="text"
+    validationErrors={
+      Array [
+        Object {
+          "code": "error.required",
+          "vars": Object {},
+        },
+      ]
+    }
+    value={null}
+  />
+  <FormControlWithLabel
+    label="Missing translation: administration.voteProposals.description"
+    labelAlwaysVisible={false}
+    onChange={[Function]}
+    required={true}
+    type="rich-text"
+    validationErrors={null}
+    value={null}
+  />
+  <FormGroup
+    bsClass="form-group"
+    validationState={null}
+  >
+    Immutable.List [
+    ]
+    Immutable.List [
+    ]
+  </FormGroup>
+  <div
+    className="separator"
+  />
+</div>
+`;
+
 exports[`VoteProposalForm component should render an empty form to create a vote proposal without any checkbox below 1`] = `
 <div
   className="form-container vote-proposal-form"
@@ -27,6 +88,7 @@ exports[`VoteProposalForm component should render an empty form to create a vote
     onChange={[Function]}
     required={true}
     type="text"
+    validationErrors={null}
     value={null}
   />
   <FormControlWithLabel
@@ -35,12 +97,18 @@ exports[`VoteProposalForm component should render an empty form to create a vote
     onChange={[Function]}
     required={true}
     type="rich-text"
+    validationErrors={null}
     value={null}
   />
-  Immutable.List [
-  ]
-  Immutable.List [
-  ]
+  <FormGroup
+    bsClass="form-group"
+    validationState={null}
+  >
+    Immutable.List [
+    ]
+    Immutable.List [
+    ]
+  </FormGroup>
   <div
     className="separator"
   />

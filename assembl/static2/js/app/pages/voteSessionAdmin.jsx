@@ -7,7 +7,9 @@ import { List, type Map } from 'immutable';
 import { Button } from 'react-bootstrap';
 import { Link } from 'react-router';
 
+import { setValidationErrors } from '../actions/adminActions/voteSession';
 import PageForm from '../components/administration/voteSession/pageForm';
+import { type VoteChoice } from '../components/administration/voteSession/gaugeForm';
 import ModulesSection from '../components/administration/voteSession/modulesSection';
 import VoteProposalsSection from '../components/administration/voteSession/voteProposalsSection';
 import Navbar from '../components/administration/navbar';
@@ -30,10 +32,10 @@ import { displayAlert, displayCustomModal, closeModal } from '../utils/utilityMa
 import { getDiscussionSlug } from '../utils/globalFunctions';
 
 type VoteModule = {
-  choices?: Array<any>,
+  choices?: Array<VoteChoice>,
   exclusiveCategories?: boolean,
   id: string,
-  instructionsEntries?: Array<string>,
+  instructionsEntries?: LangstringEntries,
   isCustom: boolean,
   _isNew: boolean,
   isNumberGauge?: boolean,
@@ -53,9 +55,21 @@ type VoteModule = {
   voteType?: string
 };
 
-const createVariablesForDeleteMutation = item => ({ id: item.id });
+type ItemWithId = { id: string } & Object;
+export const createVariablesForDeleteMutation = (item: ItemWithId): { id: string } => ({ id: item.id });
 
-type CreateVariablesForTokenVoteSpecificationMutation = VoteModule => Object;
+export type VoteProposalMap = Map<string, *>;
+
+type TokenInfo = {
+  instructionsEntries?: LangstringEntries,
+  isCustom: boolean,
+  proposalId?: ?string,
+  voteSpecTemplateId: ?string,
+  voteSessionId: string,
+  exclusiveCategories: boolean,
+  tokenCategories?: Array<Object>
+};
+type CreateVariablesForTokenVoteSpecificationMutation = TokenInfo => Object;
 const createVariablesForTokenVoteSpecificationMutation: CreateVariablesForTokenVoteSpecificationMutation = voteModule => ({
   proposalId: voteModule.proposalId,
   voteSpecTemplateId: voteModule.voteSpecTemplateId,
@@ -74,8 +88,16 @@ const createVariablesForTokenVoteSpecificationMutation: CreateVariablesForTokenV
     : []
 });
 
-type CreateVariablesForTextGaugeMutation = VoteModule => Object;
-const createVariablesForTextGaugeMutation: CreateVariablesForTextGaugeMutation = voteModule => ({
+type TextGaugeInfo = {
+  instructionsEntries?: LangstringEntries,
+  isCustom: boolean,
+  proposalId?: ?string,
+  voteSpecTemplateId: ?string,
+  voteSessionId: string,
+  choices?: Array<{ id: string, labelEntries: LangstringEntries }>
+};
+type CreateVariablesForTextGaugeMutation = TextGaugeInfo => Object;
+export const createVariablesForTextGaugeMutation: CreateVariablesForTextGaugeMutation = voteModule => ({
   proposalId: voteModule.proposalId,
   voteSpecTemplateId: voteModule.voteSpecTemplateId,
   voteSessionId: voteModule.voteSessionId,
@@ -91,8 +113,19 @@ const createVariablesForTextGaugeMutation: CreateVariablesForTextGaugeMutation =
     : []
 });
 
-type CreateVariablesForNumberGaugeMutation = VoteModule => Object;
-const createVariablesForNumberGaugeMutation: CreateVariablesForNumberGaugeMutation = voteModule => ({
+type NumberGaugeInfo = {
+  instructionsEntries?: LangstringEntries,
+  isCustom: boolean,
+  proposalId?: ?string,
+  voteSpecTemplateId: ?string,
+  voteSessionId: string,
+  maximum: number,
+  minimum: number,
+  nbTicks: number,
+  unit: string
+};
+type CreateVariablesForNumberGaugeMutation = NumberGaugeInfo => Object;
+export const createVariablesForNumberGaugeMutation: CreateVariablesForNumberGaugeMutation = voteModule => ({
   proposalId: voteModule.proposalId,
   voteSpecTemplateId: voteModule.voteSpecTemplateId,
   voteSessionId: voteModule.voteSessionId,
@@ -105,7 +138,20 @@ const createVariablesForNumberGaugeMutation: CreateVariablesForNumberGaugeMutati
   unit: voteModule.unit
 });
 
-const createVariablesForProposalsMutation = proposal => ({
+type VoteProposal = {
+  order: number,
+  voteSessionId: string,
+  titleEntries: LangstringEntries,
+  descriptionEntries: RichTextLangstringEntries
+};
+type VariablesForProposalMutation = {
+  order: number,
+  voteSessionId: string,
+  titleEntries: LangstringEntries,
+  descriptionEntries: LangstringEntries
+};
+export const createVariablesForProposalsMutation = (proposal: VoteProposal): VariablesForProposalMutation => ({
+  order: proposal.order,
   voteSessionId: proposal.voteSessionId,
   titleEntries: proposal.titleEntries,
   descriptionEntries: convertEntriesToHTML(proposal.descriptionEntries)
@@ -121,7 +167,7 @@ type VoteSessionAdminProps = {
   refetchVoteSession: Function,
   section: string,
   timeline: Timeline,
-  voteProposals: List,
+  voteProposals: List<VoteProposalMap>,
   voteModules: List,
   voteSessionPage: Map<string, *>,
   updateVoteSession: Function,
@@ -134,7 +180,8 @@ type VoteSessionAdminProps = {
   updateNumberGaugeVoteSpecification: Function,
   createProposal: Function,
   updateProposal: Function,
-  deleteProposal: Function
+  deleteProposal: Function,
+  setValidationErrors: (string, ValidationErrors) => Function
 };
 
 type VoteSessionAdminState = {
@@ -144,10 +191,26 @@ type VoteSessionAdminState = {
 
 type TestModuleType = VoteModule => boolean;
 const isTokenVoteModule: TestModuleType = m => m.voteType === 'token_vote_specification' || m.type === 'tokens';
-const isTextGaugeModule: TestModuleType = m =>
+export const isTextGaugeModule: TestModuleType = m =>
   m.voteType === 'gauge_vote_specification' || (m.type === 'gauge' && !m.isNumberGauge);
-const isNumberGaugeModule: TestModuleType = m =>
+export const isNumberGaugeModule: TestModuleType = m =>
   m.voteType === 'number_gauge_vote_specification' || ((m.type === 'gauge' && m.isNumberGauge) || false);
+
+export const getProposalValidationErrors = (p: VoteProposalMap, editLocale: string): ValidationErrors => {
+  const errors = {};
+  if (!p.get('_toDelete')) {
+    const title = p.get('titleEntries').find(e => e.get('localeCode') === editLocale);
+    if (!title || title.get('value').length === 0) {
+      errors.title = [{ code: 'error.required', vars: {} }];
+    }
+
+    if (p.get('modules').filter(m => !m.get('_toDelete')).size < 1) {
+      errors.modules = [{ code: 'atLeastOneModule', vars: {} }];
+    }
+  }
+
+  return errors;
+};
 
 class VoteSessionAdmin extends React.Component<void, VoteSessionAdminProps, VoteSessionAdminState> {
   props: VoteSessionAdminProps;
@@ -208,6 +271,26 @@ class VoteSessionAdmin extends React.Component<void, VoteSessionAdminProps, Vote
       displayAlert('success', I18n.t('administration.voteSessionSuccess'));
     });
   }
+
+  validateProposals = (proposals) => {
+    let isValid = true;
+    proposals.forEach((proposal) => {
+      const errors = getProposalValidationErrors(proposal, this.props.editLocale);
+      // we have to use Object.keys + map instead of Object.values so that flow infers arrays
+      // See: https://github.com/facebook/flow/issues/2221
+      const errorsCount = Object.keys(errors)
+        .map(k => errors[k])
+        .map(arr => arr.length)
+        .reduce((acc, l) => acc + l, 0);
+
+      this.props.setValidationErrors(proposal.get('id'), errors);
+      if (errorsCount > 0) {
+        isValid = false;
+      }
+    });
+
+    return isValid;
+  };
 
   saveAction = () => {
     const {
@@ -320,6 +403,12 @@ class VoteSessionAdmin extends React.Component<void, VoteSessionAdminProps, Vote
       }
 
       if (voteProposalsHaveChanged) {
+        const isValid = this.validateProposals(voteProposals);
+        if (!isValid) {
+          displayAlert('danger', I18n.t('administration.anErrorOccured'));
+          return;
+        }
+
         const items = [];
         voteProposals.forEach((t) => {
           items.push({ ...t.toJS(), voteSessionId: voteSessionPageId });
@@ -374,7 +463,14 @@ class VoteSessionAdmin extends React.Component<void, VoteSessionAdminProps, Vote
   };
 
   render() {
-    const { editLocale, moduleTemplatesHaveChanged, voteProposalsHaveChanged, section, voteSessionPage } = this.props;
+    const {
+      editLocale,
+      moduleTemplatesHaveChanged,
+      voteProposalsHaveChanged,
+      refetchVoteSession,
+      section,
+      voteSessionPage
+    } = this.props;
     const saveDisabled = !moduleTemplatesHaveChanged && !voteProposalsHaveChanged && !voteSessionPage.get('_hasChanged');
     const currentStep = parseInt(section, 10);
     return (
@@ -382,7 +478,7 @@ class VoteSessionAdmin extends React.Component<void, VoteSessionAdminProps, Vote
         <SaveButton disabled={saveDisabled} saveAction={this.saveAction} />
         {section === '1' && <PageForm editLocale={editLocale} />}
         {section === '2' && <ModulesSection />}
-        {section === '3' && <VoteProposalsSection />}
+        {section === '3' && <VoteProposalsSection refetchVoteSession={refetchVoteSession} />}
         {!isNaN(currentStep) && <Navbar currentStep={currentStep} totalSteps={3} phaseIdentifier="voteSession" />}
       </div>
     );
@@ -397,7 +493,6 @@ const mapStateToProps = ({ admin: { editLocale, voteSession }, debate, i18n }) =
     gaugeChoicesById,
     moduleTemplatesHaveChanged,
     voteProposalsHaveChanged,
-    voteProposalsInOrder,
     voteProposalsById
   } = voteSession;
 
@@ -411,6 +506,7 @@ const mapStateToProps = ({ admin: { editLocale, voteSession }, debate, i18n }) =
           // remove fields that we don't want to override
           .delete('id')
           .delete('isCustom')
+          .delete('_hasChanged')
           .delete('_isNew')
           .delete('proposalId')
           .delete('_toDelete')
@@ -441,20 +537,25 @@ const mapStateToProps = ({ admin: { editLocale, voteSession }, debate, i18n }) =
     timeline: debate.debateData.timeline,
     voteModules: voteModules,
     voteSessionPage: voteSession.page,
-    voteProposals: voteProposalsInOrder.map((id) => {
-      const proposal = voteProposalsById.get(id);
-      const pModules = proposal
-        .get('modules')
-        .map(pmId => modulesById.get(pmId))
-        .map(expandModuleData);
+    voteProposals: voteProposalsById
+      .map((proposal) => {
+        const pModules = proposal
+          .get('modules')
+          .map(pmId => modulesById.get(pmId))
+          .map(expandModuleData);
 
-      return proposal.set('modules', pModules);
-    })
+        return proposal.set('modules', pModules);
+      })
+      .sortBy(proposal => proposal.get('order'))
   };
 };
 
+const mapDispatchToProps = dispatch => ({
+  setValidationErrors: (id, errors) => dispatch(setValidationErrors(id, errors))
+});
+
 export default compose(
-  connect(mapStateToProps),
+  connect(mapStateToProps, mapDispatchToProps),
   graphql(updateVoteSessionMutation, {
     name: 'updateVoteSession'
   }),

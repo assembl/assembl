@@ -17,14 +17,21 @@ exports[`tokenTypeForm component should render a TokenCategoryForm component 1`]
       onChange={[Function]}
       required={true}
       type="text"
+      validationErrors={null}
       value="En faveur"
     />
     <FormControlWithLabel
+      formControlProps={
+        Object {
+          "min": "1",
+        }
+      }
       label="Missing translation: administration.tokenNumber"
       labelAlwaysVisible={false}
       onChange={undefined}
       required={true}
       type="number"
+      validationErrors={null}
       value={12}
     />
     <label
@@ -33,6 +40,7 @@ exports[`tokenTypeForm component should render a TokenCategoryForm component 1`]
       Missing translation: administration.tokenColor
     </label>
     <ColorPicker
+      className="no-box-shadow"
       color="#00AA7B"
       colors={
         Array [

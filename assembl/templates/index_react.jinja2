@@ -44,5 +44,11 @@
                 <script src="{{REACT_URL}}/build/theme_{{theme_name}}_web.js"></script>
             {% endif %}
         {% endblock %}
+
+        {% block for_testing %}
+            {% if under_test %}
+                <div id="under-test" class="hidden">V2</div>
+            {%- endif %}
+        {% endblock %}
     </body>
 {% endblock%}

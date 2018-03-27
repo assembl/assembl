@@ -12,10 +12,11 @@ type Choice = {
 };
 
 type GaugeVoteForProposalProps = {
+  disabled: boolean,
   id: string, // the vote specification id
   proposalId: string,
   voteForProposal: Function,
-  instructions: string,
+  instructions: ?string,
   choices: ?Array<Choice>,
   value: number
 };
@@ -71,6 +72,7 @@ const handleStyle = [
 const Handle = Slider.Handle;
 const handleIcon = (props) => {
   const { value, dragging, ...restProps } = props;
+  delete restProps.index;
   const style = {
     marginTop: '-15px',
     cursor: '-webkit-grab'
@@ -141,10 +143,12 @@ class GaugeVoteForProposal extends React.Component<*, GaugeVoteForProposalProps,
   }
 
   render() {
+    const { instructions, disabled } = this.props;
     return (
       <div className="gauge-vote-for-proposal">
-        <p>{this.props.instructions}</p>
+        {instructions ? <p>{instructions}</p> : null}
         <Slider
+          disabled={disabled}
           min={this.minimum}
           max={this.maximum}
           marks={this.marks}
@@ -171,6 +175,7 @@ class GaugeVoteForProposal extends React.Component<*, GaugeVoteForProposalProps,
 }
 
 type NumberGaugeVoteForProposalProps = {
+  disabled: boolean,
   id: string, // the vote specification id
   instructions: ?string,
   minimum: ?number,
@@ -237,11 +242,16 @@ class NumberGaugeVoteForProposal extends React.Component<*, NumberGaugeVoteForPr
         for (let i = 1; i < nbTicks - 1; i += 1) {
           // minimum and maximum are already shown as ticks
           const value = minimum + i * this.step;
+          // don't show decimals if .00
+          let valueStr = value.toFixed(2);
+          if (valueStr.slice(valueStr.length - 3) === '.00') {
+            valueStr = valueStr.slice(0, valueStr.length - 3);
+          }
           this.marks[`${value}`] = {
             style: markStyle,
             label: (
               <div>
-                <Translate value="debate.voteSession.valueWithUnit" num={value.toFixed(2)} unit={unit} />
+                <Translate value="debate.voteSession.valueWithUnit" num={valueStr} unit={unit} />
               </div>
             )
           };
@@ -261,10 +271,12 @@ class NumberGaugeVoteForProposal extends React.Component<*, NumberGaugeVoteForPr
   }
 
   render() {
+    const { instructions, disabled } = this.props;
     return (
       <div className="number-gauge-vote-for-proposal">
-        <p>{this.props.instructions}</p>
+        {instructions ? <p>{instructions}</p> : null}
         <Slider
+          disabled={disabled}
           min={this.props.minimum}
           max={this.props.maximum}
           marks={this.marks}

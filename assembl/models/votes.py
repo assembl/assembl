@@ -337,6 +337,12 @@ class TokenVoteSpecification(AbstractVoteSpecification):
         else:
             return True  # TODO: post-validate
 
+    def get_token_categories(self):
+        if self.vote_spec_template_id and not self.is_custom:
+            return self.vote_spec_template.token_categories
+
+        return self.token_categories
+
 
 class TokenCategorySpecification(DiscussionBoundBase):
     "This represents a token type, with its constraints"
@@ -579,6 +585,12 @@ class GaugeVoteSpecification(AbstractVoteSpecification):
 
     def csv_results(self, csv_file, histogram_size=None):
         raise NotImplementedError
+
+    def get_choices(self):
+        if self.vote_spec_template_id and not self.is_custom:
+            return self.vote_spec_template.choices
+
+        return self.choices
 
 
 class GaugeChoiceSpecification(DiscussionBoundBase):
@@ -913,7 +925,9 @@ class AbstractIdeaVote(HistoryMixin, DiscussionBoundBase):
         idea_id = self.idea_id or (self.idea.id if self.idea else None)
         widget_id = self.widget_id or (self.widget.id if self.widget else None)
         voter_id = self.voter_id or (self.voter.id if self.voter else None)
+        vote_spec_id = self.vote_spec_id or (self.vote_spec.id if self.vote_spec else None)
         return (query.filter_by(
+            vote_spec_id=vote_spec_id,
             idea_id=idea_id, widget_id=widget_id, voter_id=voter_id), True)
 
     crud_permissions = CrudPermissions(

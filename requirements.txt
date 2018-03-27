@@ -53,6 +53,7 @@ graphene-sqlalchemy==1.1.1
 graphene==1.4.1
 -e git+https://github.com/ecreall/graphql-wsgi.git@7d7a2cf0a56f7303cc4508f8b7a464820b046293#egg=graphql-wsgi
 greenlet==0.4.10
+-e git+https://github.com/maparent/hashfs.git@use_makedirs#egg=hashfs
 hiredis==0.2.0
 html5lib==0.999999999
 httplib2==0.9.2

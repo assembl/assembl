@@ -150,3 +150,9 @@
         {% include 'includes/fb.jinja2' %}
     {% endif%}
 {% endblock%}
+
+{% block for_testing %}
+    {% if under_test %}
+        <div id="under-test" class="hidden">V1</div>
+    {%- endif %}
+{% endblock %}

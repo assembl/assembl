@@ -1,6 +1,8 @@
 """Utility APIs"""
 import re
 from urlparse import urlparse
+from os import path
+
 import requests
 from pyramid.httpexceptions import HTTPBadRequest
 from pyramid.response import Response
@@ -28,9 +30,10 @@ def mime_type(request):
         if r:
             document_id = r.groups(0)[0]
             from sqlalchemy.sql.functions import func
-            mimetype, create_date, size = File.default_db.query(
-                File.mime_type, File.creation_date, func.length(File.data)
+            mimetype, create_date, file_identity = File.default_db.query(
+                File.mime_type, File.creation_date, file.file_identity
                 ).filter_by(id=int(document_id)).first()
+            size = path.getsize(File.path_of(file_identity))
             return Response(
                 body=None, content_type=str(mimetype),
                 content_length=size, last_modified=create_date)

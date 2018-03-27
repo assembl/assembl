@@ -13,9 +13,10 @@ import Header from '../components/common/header';
 import Section from '../components/common/section';
 import AvailableTokens from '../components/voteSession/availableTokens';
 import Proposals from '../components/voteSession/proposals';
+import ProposalsResults from '../components/voteSession/proposalsResults';
 import { getDomElementOffset, isMobile } from '../utils/globalFunctions';
-import { getPhaseId } from '../utils/timeline';
-import { promptForLoginOr, displayAlert } from '../utils/utilityManager';
+import { getPhaseId, getIfPhaseCompletedByIdentifier } from '../utils/timeline';
+import { promptForLoginOr, displayAlert, displayModal } from '../utils/utilityManager';
 import withLoadingIndicator from '../components/common/withLoadingIndicator';
 import MessagePage from '../components/common/messagePage';
 
@@ -63,11 +64,13 @@ type Props = {
   headerImageUrl: string,
   instructionsSectionTitle: string,
   instructionsSectionContent: string,
+  isPhaseCompleted: boolean,
   modules: Array<VoteSpecification>,
   propositionsSectionTitle: string,
   proposals: Array<Proposal>,
   addGaugeVote: Function,
-  addTokenVote: Function
+  addTokenVote: Function,
+  refetchVoteSession: Function
 };
 
 export type RemainingTokensByCategory = Map<string, number>;
@@ -80,24 +83,39 @@ export type UserTokenVotes = Map<string, UserTokenVotesForProposal>; // key is p
 export type UserGaugeVotes = Map<string, UserGaugeVotesForProposal>; // key is proposalId
 
 type State = {
+  submitting: boolean,
+  availableTokensSticky: boolean,
   userTokenVotes: UserTokenVotes,
-  userGaugeVotes: UserGaugeVotes,
-  availableTokensSticky: boolean
+  userGaugeVotes: UserGaugeVotes
 };
 
 // $FlowFixMe: if voteType === 'token_vote_specification', we know it is a TokenVoteSpecification
 type FindTokenVoteModule = (Array<VoteSpecification>) => ?TokenVoteSpecification;
 export const findTokenVoteModule: FindTokenVoteModule = modules => modules.find(m => m.voteType === 'token_vote_specification');
 
+// We sort the proposal modules by their voteSpecTemplateId to have the same order between proposals.
+const moduleComparator = (module1, module2) => {
+  if (!module1.voteSpecTemplateId || !module2.voteSpecTemplateId) {
+    return -1;
+  }
+  if (module1.voteSpecTemplateId < module2.voteSpecTemplateId) {
+    return -1;
+  }
+  if (module1.voteSpecTemplateId === module2.voteSpecTemplateId) {
+    return 0;
+  }
+  return 1;
+};
+
 // $FlowFixMe: if voteType === 'gauge_vote_specification', we know it is a GaugeVoteSpecification
 type FilterGaugeVoteModules = (Array<VoteSpecification>) => Array<GaugeVoteSpecification>;
 export const filterGaugeVoteModules: FilterGaugeVoteModules = modules =>
-  modules.filter(module => module.voteType === 'gauge_vote_specification');
+  modules.filter(module => module.voteType === 'gauge_vote_specification').sort(moduleComparator);
 
 // $FlowFixMe: if voteType === 'number_gauge_vote_specification', we know it is a NumberGaugeVoteSpecification
 type FilterNumberGaugeVoteModules = (Array<VoteSpecification>) => Array<NumberGaugeVoteSpecification>;
 export const filterNumberGaugeVoteModules: FilterNumberGaugeVoteModules = modules =>
-  modules.filter(module => module.voteType === 'number_gauge_vote_specification');
+  modules.filter(module => module.voteType === 'number_gauge_vote_specification').sort(moduleComparator);
 
 class DumbVoteSession extends React.Component<void, Props, State> {
   props: Props;
@@ -109,6 +127,7 @@ class DumbVoteSession extends React.Component<void, Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
+      submitting: true,
       availableTokensSticky: false,
       userTokenVotes: Map(),
       userGaugeVotes: Map()
@@ -116,12 +135,16 @@ class DumbVoteSession extends React.Component<void, Props, State> {
   }
 
   componentWillMount() {
-    window.addEventListener('scroll', this.setAvailableTokensSticky);
-    this.setMyVotes();
+    if (!this.props.isPhaseCompleted) {
+      window.addEventListener('scroll', this.setAvailableTokensSticky);
+      this.setMyVotes();
+    }
   }
 
   componentWillUnmount() {
-    window.removeEventListener('scroll', this.setAvailableTokensSticky);
+    if (!this.props.isPhaseCompleted) {
+      window.removeEventListener('scroll', this.setAvailableTokensSticky);
+    }
   }
 
   setMyVotes() {
@@ -157,9 +180,12 @@ class DumbVoteSession extends React.Component<void, Props, State> {
   setAvailableTokensSticky = () => {
     if (this.availableTokensContainerRef && !isMobile.any()) {
       const availableTokensDivOffset = getDomElementOffset(this.availableTokensContainerRef).top;
-      if (availableTokensDivOffset <= window.scrollY) {
-        this.setState({ availableTokensSticky: true });
-      } else {
+      if (availableTokensDivOffset <= window.pageYOffset) {
+        if (!this.state.availableTokensSticky) {
+          // setting setState triggers a rerender even if the state doesn't change
+          this.setState({ availableTokensSticky: true });
+        }
+      } else if (this.state.availableTokensSticky) {
         this.setState({ availableTokensSticky: false });
       }
     }
@@ -168,7 +194,8 @@ class DumbVoteSession extends React.Component<void, Props, State> {
   voteForProposalToken = (proposalId: string, tokenVoteModuleId: string, categoryId: string, value: number): void => {
     const setVote = () =>
       this.setState({
-        userTokenVotes: this.state.userTokenVotes.setIn([proposalId, tokenVoteModuleId, categoryId], value)
+        userTokenVotes: this.state.userTokenVotes.setIn([proposalId, tokenVoteModuleId, categoryId], value),
+        submitting: false
       });
     promptForLoginOr(setVote)();
   };
@@ -176,7 +203,8 @@ class DumbVoteSession extends React.Component<void, Props, State> {
   voteForProposalGauge = (proposalId: string, voteSpecificationId: string, value: number): void => {
     const setVote = () =>
       this.setState({
-        userGaugeVotes: this.state.userGaugeVotes.setIn([proposalId, voteSpecificationId], value)
+        userGaugeVotes: this.state.userGaugeVotes.setIn([proposalId, voteSpecificationId], value),
+        submitting: false
       });
     promptForLoginOr(setVote)();
   };
@@ -219,7 +247,8 @@ class DumbVoteSession extends React.Component<void, Props, State> {
   };
 
   submitVotes = () => {
-    const { addTokenVote, addGaugeVote } = this.props;
+    const { addTokenVote, addGaugeVote, refetchVoteSession } = this.props;
+    this.setState({ submitting: true });
     this.state.userTokenVotes.forEach((voteSpecs, proposalId) => {
       voteSpecs.forEach((tokenCategories, voteSpecId) => {
         tokenCategories.forEach((voteValue, tokenCategoryId) => {
@@ -232,7 +261,8 @@ class DumbVoteSession extends React.Component<void, Props, State> {
             }
           })
             .then(() => {
-              displayAlert('success', I18n.t('debate.voteSession.postSuccess'));
+              displayModal(null, I18n.t('debate.voteSession.postSuccess'), true, null, null);
+              refetchVoteSession();
             })
             .catch((error) => {
               displayAlert('danger', error.message);
@@ -250,7 +280,7 @@ class DumbVoteSession extends React.Component<void, Props, State> {
           }
         })
           .then(() => {
-            displayAlert('success', I18n.t('debate.voteSession.postSuccess'));
+            displayModal(null, I18n.t('debate.voteSession.postSuccess'), true, null, null);
           })
           .catch((error) => {
             displayAlert('danger', error.message);
@@ -269,7 +299,8 @@ class DumbVoteSession extends React.Component<void, Props, State> {
       instructionsSectionContent,
       propositionsSectionTitle,
       proposals,
-      modules
+      modules,
+      isPhaseCompleted
     } = this.props;
 
     if (!title || title.length === 0) {
@@ -283,61 +314,76 @@ class DumbVoteSession extends React.Component<void, Props, State> {
 
     const tokenVoteModule = findTokenVoteModule(modules);
     const remainingTokensByCategory = this.getRemainingTokensByCategory(tokenVoteModule);
+    const subTitleToShow = !isPhaseCompleted ? subTitle : I18n.t('debate.voteSession.isCompleted');
+    const propositionsSectionTitleToShow = !isPhaseCompleted
+      ? propositionsSectionTitle
+      : I18n.t('debate.voteSession.voteResultsPlusTitle', { title: propositionsSectionTitle });
     return (
       <div className="votesession-page">
-        <Header title={title} subtitle={subTitle} imgUrl={headerImageUrl} additionalHeaderClasses="left" />
-        <Grid fluid className="background-light">
+        <Header title={title} subtitle={subTitleToShow} imgUrl={headerImageUrl} />
+        {!isPhaseCompleted ? (
+          <Grid fluid className="background-light">
+            <Section
+              title={instructionsSectionTitle}
+              containerAdditionalClassNames={this.state.availableTokensSticky ? ['no-margin'] : null}
+            >
+              <Row>
+                <Col
+                  mdOffset={!this.state.availableTokensSticky ? 3 : null}
+                  smOffset={!this.state.availableTokensSticky ? 1 : null}
+                  md={8}
+                  sm={10}
+                  className="no-padding"
+                >
+                  <div dangerouslySetInnerHTML={{ __html: instructionsSectionContent }} className="vote-instructions" />
+                  {tokenVoteModule &&
+                    tokenVoteModule.tokenCategories && (
+                      <div ref={this.setAvailableTokensRef}>
+                        <AvailableTokens
+                          sticky={this.state.availableTokensSticky}
+                          remainingTokensByCategory={remainingTokensByCategory}
+                          tokenCategories={tokenVoteModule.tokenCategories}
+                        />
+                      </div>
+                    )}
+                </Col>
+              </Row>
+            </Section>
+          </Grid>
+        ) : null}
+        <Grid fluid className="background-grey">
           <Section
-            title={instructionsSectionTitle}
-            containerAdditionalClassNames={this.state.availableTokensSticky ? ['no-margin'] : null}
+            title={propositionsSectionTitleToShow}
+            className={this.state.availableTokensSticky ? 'extra-margin-top' : null}
           >
             <Row>
-              <Col
-                mdOffset={!this.state.availableTokensSticky ? 3 : null}
-                smOffset={!this.state.availableTokensSticky ? 1 : null}
-                md={8}
-                sm={10}
-                className="no-padding"
-              >
-                <div dangerouslySetInnerHTML={{ __html: instructionsSectionContent }} className="vote-instructions" />
-                {tokenVoteModule &&
-                  tokenVoteModule.tokenCategories && (
-                    <div ref={this.setAvailableTokensRef}>
-                      <AvailableTokens
-                        sticky={this.state.availableTokensSticky}
-                        remainingTokensByCategory={remainingTokensByCategory}
-                        tokenCategories={tokenVoteModule.tokenCategories}
-                      />
-                    </div>
-                  )}
-              </Col>
-            </Row>
-          </Section>
-        </Grid>
-        <Grid fluid className="background-grey">
-          <Section title={propositionsSectionTitle} className={this.state.availableTokensSticky ? 'extra-margin-top' : null}>
-            <Row>
               <Col mdOffset={1} md={10} smOffset={1} sm={10}>
-                <Proposals
-                  proposals={proposals}
-                  remainingTokensByCategory={remainingTokensByCategory}
-                  seeCurrentVotes={seeCurrentVotes}
-                  userGaugeVotes={this.state.userGaugeVotes}
-                  userTokenVotes={this.state.userTokenVotes}
-                  voteForProposalToken={this.voteForProposalToken}
-                  voteForProposalGauge={this.voteForProposalGauge}
-                />
+                {!isPhaseCompleted ? (
+                  <Proposals
+                    proposals={proposals}
+                    remainingTokensByCategory={remainingTokensByCategory}
+                    seeCurrentVotes={seeCurrentVotes}
+                    userGaugeVotes={this.state.userGaugeVotes}
+                    userTokenVotes={this.state.userTokenVotes}
+                    voteForProposalToken={this.voteForProposalToken}
+                    voteForProposalGauge={this.voteForProposalGauge}
+                  />
+                ) : (
+                  <ProposalsResults proposals={proposals} />
+                )}
               </Col>
             </Row>
-            <Row className="form-actions center">
-              <Col mdOffset={1} md={10} smOffset={1} sm={10}>
-                {this.displaySubmitButton() ? (
-                  <Button className="button-submit button-dark" onClick={this.submitVotes}>
-                    <Translate value="debate.voteSession.submit" />
-                  </Button>
-                ) : null}
-              </Col>
-            </Row>
+            {!isPhaseCompleted ? (
+              <Row className="form-actions center">
+                <Col mdOffset={1} md={10} smOffset={1} sm={10}>
+                  {this.displaySubmitButton() ? (
+                    <Button className="button-submit button-dark" onClick={this.submitVotes} disabled={this.state.submitting}>
+                      <Translate value="debate.voteSession.submit" />
+                    </Button>
+                  ) : null}
+                </Col>
+              </Row>
+            ) : null}
           </Section>
         </Grid>
       </div>
@@ -347,7 +393,8 @@ class DumbVoteSession extends React.Component<void, Props, State> {
 
 const mapStateToProps = state => ({
   debate: state.debate,
-  lang: state.i18n.locale
+  lang: state.i18n.locale,
+  isPhaseCompleted: getIfPhaseCompletedByIdentifier(state.debate.debateData.timeline, 'voteSession')
 });
 
 export { DumbVoteSession };
@@ -409,7 +456,8 @@ export default compose(
         propositionsSectionTitle: propositionsSectionTitle,
         modules: modules,
         proposals: proposals,
-        noVoteSession: false
+        noVoteSession: false,
+        refetchVoteSession: data.refetch
       };
     }
   }),

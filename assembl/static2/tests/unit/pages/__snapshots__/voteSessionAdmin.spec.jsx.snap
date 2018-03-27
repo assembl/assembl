@@ -1,0 +1,34 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`getProposalValidationErrors should return at least one module validation error 1`] = `
+Object {
+  "modules": Array [
+    Object {
+      "code": "atLeastOneModule",
+      "vars": Object {},
+    },
+  ],
+}
+`;
+
+exports[`getProposalValidationErrors should return title is required validation error if there is no value for editLocale 1`] = `
+Object {
+  "title": Array [
+    Object {
+      "code": "error.required",
+      "vars": Object {},
+    },
+  ],
+}
+`;
+
+exports[`getProposalValidationErrors should return title is required validation error if titleEntries is empty 1`] = `
+Object {
+  "title": Array [
+    Object {
+      "code": "error.required",
+      "vars": Object {},
+    },
+  ],
+}
+`;

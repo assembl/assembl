@@ -1,23 +1,31 @@
 // @flow
 import React from 'react';
+import { type List } from 'immutable';
 import { connect } from 'react-redux';
 import { I18n, Translate } from 'react-redux-i18n';
 import { OverlayTrigger } from 'react-bootstrap';
 import { Link } from 'react-router';
+
 import { addVoteProposalTooltip } from '../../common/tooltips';
 import { createVoteProposalAndModules } from '../../../actions/adminActions/voteSession';
 import SectionTitle from '../sectionTitle';
 import VoteProposalForm from './voteProposalForm';
-import { getDiscussionSlug } from '../../../utils/globalFunctions';
+import { createRandomId, getDiscussionSlug } from '../../../utils/globalFunctions';
 import { get } from '../../../utils/routeMap';
 
 type VoteProposalsSectionProps = {
-  voteProposals: Object,
+  addVoteProposal: Function,
   editLocale: string,
-  addVoteProposal: Function
+  refetchVoteSession: Function,
+  voteProposals: List<string>
 };
 
-const DumbVoteProposalsSection = ({ voteProposals, editLocale, addVoteProposal }: VoteProposalsSectionProps) => {
+const DumbVoteProposalsSection = ({
+  addVoteProposal,
+  editLocale,
+  refetchVoteSession,
+  voteProposals
+}: VoteProposalsSectionProps) => {
   const slug = { slug: getDiscussionSlug() };
   return (
     <div className="vote-proposals-section">
@@ -38,7 +46,14 @@ const DumbVoteProposalsSection = ({ voteProposals, editLocale, addVoteProposal }
         <div className="admin-content">
           <form>
             {voteProposals.map((id, index) => (
-              <VoteProposalForm key={id} id={id} index={index + 1} editLocale={editLocale} nbProposals={voteProposals.size} />
+              <VoteProposalForm
+                key={id}
+                id={id}
+                index={index + 1}
+                editLocale={editLocale}
+                nbProposals={voteProposals.size}
+                refetchVoteSession={refetchVoteSession}
+              />
             ))}
             <OverlayTrigger placement="top" overlay={addVoteProposalTooltip}>
               <div onClick={addVoteProposal} className="plus margin-l">
@@ -53,17 +68,21 @@ const DumbVoteProposalsSection = ({ voteProposals, editLocale, addVoteProposal }
 };
 
 const mapStateToProps = ({ admin }) => {
-  const { voteProposalsInOrder, voteProposalsById } = admin.voteSession;
+  const { voteProposalsById } = admin.voteSession;
   const { editLocale } = admin;
   return {
-    voteProposals: voteProposalsInOrder.filter(id => !voteProposalsById.getIn([id, '_toDelete'])),
+    voteProposals: voteProposalsById
+      .filter(proposal => !proposal.get('_toDelete'))
+      .sortBy(proposal => proposal.get('order'))
+      .map(proposal => proposal.get('id'))
+      .toList(),
     editLocale: editLocale
   };
 };
 
 const mapDispatchToProps = dispatch => ({
   addVoteProposal: () => {
-    const newProposalId = Math.round(Math.random() * -1000000).toString();
+    const newProposalId = createRandomId();
     dispatch(createVoteProposalAndModules(newProposalId));
   }
 });

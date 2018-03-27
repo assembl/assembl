@@ -262,7 +262,7 @@ def get_default_context(request, **kwargs):
     first_login_after_auto_subscribe_to_notifications = False
     if (user and discussion and discussion.id and user.is_first_visit
             and discussion.subscribe_to_notifications_on_signup
-            and user.has_role_in(discussion, R_PARTICIPANT)):
+            and user.is_participant(discussion.id)):
         first_login_after_auto_subscribe_to_notifications = True
     locales = config.get('available_languages').split()
     countries_for_locales = defaultdict(set)
@@ -331,6 +331,7 @@ def get_default_context(request, **kwargs):
 
     theme_name, theme_relative_path = get_theme_info(discussion)
     node_env = os.getenv('NODE_ENV', 'production')
+    under_test = bool(config.get('under_test') or False)
     base = dict(
         kwargs,
         request=request,
@@ -364,6 +365,7 @@ def get_default_context(request, **kwargs):
         providers_json=json.dumps(providers),
         translations=io.open(jedfilename, encoding='utf-8').read(),
         admin_email=admin_email,
+        under_test=under_test
     )
 
     base.update({

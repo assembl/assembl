@@ -1,9 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Proposals component should match Proposals snapshot 1`] = `
-<div
-  className="container"
->
+<div>
   <div
     className="theme-box"
   >
@@ -11,7 +9,7 @@ exports[`Proposals component should match Proposals snapshot 1`] = `
       className="proposal row"
     >
       <div
-        className="margin-s col-md-6 col-xs-12"
+        className="margin-s col-md-5 col-xs-12"
       >
         <h3
           className="proposal-title dark-title-3"
@@ -28,7 +26,7 @@ exports[`Proposals component should match Proposals snapshot 1`] = `
         />
       </div>
       <div
-        className="proposal-vote-modules col-md-6 col-xs-12"
+        className="proposal-vote-modules col-md-6 col-md-offset-1 col-xs-12"
       >
         <div
           className="margin-m"
@@ -57,11 +55,11 @@ exports[`Proposals component should match Proposals snapshot 1`] = `
               >
                 <svg
                   aria-hidden="true"
-                  height="32px"
+                  height="28px"
                   role="img"
                   version="1.1"
                   viewBox="0 0 22 22"
-                  width="32px"
+                  width="28px"
                   x="0px"
                   xmlSpace="preserve"
                   y="0px"
@@ -92,11 +90,11 @@ exports[`Proposals component should match Proposals snapshot 1`] = `
               >
                 <svg
                   aria-hidden="true"
-                  height="32px"
+                  height="28px"
                   role="img"
                   version="1.1"
                   viewBox="0 0 22 22"
-                  width="32px"
+                  width="28px"
                   x="0px"
                   xmlSpace="preserve"
                   y="0px"
@@ -127,11 +125,11 @@ exports[`Proposals component should match Proposals snapshot 1`] = `
               >
                 <svg
                   aria-hidden="true"
-                  height="32px"
+                  height="28px"
                   role="img"
                   version="1.1"
                   viewBox="0 0 22 22"
-                  width="32px"
+                  width="28px"
                   x="0px"
                   xmlSpace="preserve"
                   y="0px"
@@ -162,11 +160,11 @@ exports[`Proposals component should match Proposals snapshot 1`] = `
               >
                 <svg
                   aria-hidden="true"
-                  height="32px"
+                  height="28px"
                   role="img"
                   version="1.1"
                   viewBox="0 0 22 22"
-                  width="32px"
+                  width="28px"
                   x="0px"
                   xmlSpace="preserve"
                   y="0px"
@@ -197,11 +195,11 @@ exports[`Proposals component should match Proposals snapshot 1`] = `
               >
                 <svg
                   aria-hidden="true"
-                  height="32px"
+                  height="28px"
                   role="img"
                   version="1.1"
                   viewBox="0 0 22 22"
-                  width="32px"
+                  width="28px"
                   x="0px"
                   xmlSpace="preserve"
                   y="0px"
@@ -232,11 +230,11 @@ exports[`Proposals component should match Proposals snapshot 1`] = `
               >
                 <svg
                   aria-hidden="true"
-                  height="32px"
+                  height="28px"
                   role="img"
                   version="1.1"
                   viewBox="0 0 22 22"
-                  width="32px"
+                  width="28px"
                   x="0px"
                   xmlSpace="preserve"
                   y="0px"
@@ -267,11 +265,11 @@ exports[`Proposals component should match Proposals snapshot 1`] = `
               >
                 <svg
                   aria-hidden="true"
-                  height="32px"
+                  height="28px"
                   role="img"
                   version="1.1"
                   viewBox="0 0 22 22"
-                  width="32px"
+                  width="28px"
                   x="0px"
                   xmlSpace="preserve"
                   y="0px"
@@ -302,11 +300,11 @@ exports[`Proposals component should match Proposals snapshot 1`] = `
               >
                 <svg
                   aria-hidden="true"
-                  height="32px"
+                  height="28px"
                   role="img"
                   version="1.1"
                   viewBox="0 0 22 22"
-                  width="32px"
+                  width="28px"
                   x="0px"
                   xmlSpace="preserve"
                   y="0px"
@@ -337,11 +335,11 @@ exports[`Proposals component should match Proposals snapshot 1`] = `
               >
                 <svg
                   aria-hidden="true"
-                  height="32px"
+                  height="28px"
                   role="img"
                   version="1.1"
                   viewBox="0 0 22 22"
-                  width="32px"
+                  width="28px"
                   x="0px"
                   xmlSpace="preserve"
                   y="0px"
@@ -372,11 +370,11 @@ exports[`Proposals component should match Proposals snapshot 1`] = `
               >
                 <svg
                   aria-hidden="true"
-                  height="32px"
+                  height="28px"
                   role="img"
                   version="1.1"
                   viewBox="0 0 22 22"
-                  width="32px"
+                  width="28px"
                   x="0px"
                   xmlSpace="preserve"
                   y="0px"
@@ -407,11 +405,11 @@ exports[`Proposals component should match Proposals snapshot 1`] = `
               >
                 <svg
                   aria-hidden="true"
-                  height="32px"
+                  height="28px"
                   role="img"
                   version="1.1"
                   viewBox="0 0 22 22"
-                  width="32px"
+                  width="28px"
                   x="0px"
                   xmlSpace="preserve"
                   y="0px"
@@ -442,11 +440,11 @@ exports[`Proposals component should match Proposals snapshot 1`] = `
               >
                 <svg
                   aria-hidden="true"
-                  height="32px"
+                  height="28px"
                   role="img"
                   version="1.1"
                   viewBox="0 0 22 22"
-                  width="32px"
+                  width="28px"
                   x="0px"
                   xmlSpace="preserve"
                   y="0px"
@@ -502,11 +500,11 @@ exports[`Proposals component should match Proposals snapshot 1`] = `
               >
                 <svg
                   aria-hidden="true"
-                  height="32px"
+                  height="28px"
                   role="img"
                   version="1.1"
                   viewBox="0 0 22 22"
-                  width="32px"
+                  width="28px"
                   x="0px"
                   xmlSpace="preserve"
                   y="0px"
@@ -537,11 +535,11 @@ exports[`Proposals component should match Proposals snapshot 1`] = `
               >
                 <svg
                   aria-hidden="true"
-                  height="32px"
+                  height="28px"
                   role="img"
                   version="1.1"
                   viewBox="0 0 22 22"
-                  width="32px"
+                  width="28px"
                   x="0px"
                   xmlSpace="preserve"
                   y="0px"
@@ -572,11 +570,11 @@ exports[`Proposals component should match Proposals snapshot 1`] = `
               >
                 <svg
                   aria-hidden="true"
-                  height="32px"
+                  height="28px"
                   role="img"
                   version="1.1"
                   viewBox="0 0 22 22"
-                  width="32px"
+                  width="28px"
                   x="0px"
                   xmlSpace="preserve"
                   y="0px"
@@ -607,11 +605,11 @@ exports[`Proposals component should match Proposals snapshot 1`] = `
               >
                 <svg
                   aria-hidden="true"
-                  height="32px"
+                  height="28px"
                   role="img"
                   version="1.1"
                   viewBox="0 0 22 22"
-                  width="32px"
+                  width="28px"
                   x="0px"
                   xmlSpace="preserve"
                   y="0px"
@@ -642,11 +640,11 @@ exports[`Proposals component should match Proposals snapshot 1`] = `
               >
                 <svg
                   aria-hidden="true"
-                  height="32px"
+                  height="28px"
                   role="img"
                   version="1.1"
                   viewBox="0 0 22 22"
-                  width="32px"
+                  width="28px"
                   x="0px"
                   xmlSpace="preserve"
                   y="0px"
@@ -677,11 +675,11 @@ exports[`Proposals component should match Proposals snapshot 1`] = `
               >
                 <svg
                   aria-hidden="true"
-                  height="32px"
+                  height="28px"
                   role="img"
                   version="1.1"
                   viewBox="0 0 22 22"
-                  width="32px"
+                  width="28px"
                   x="0px"
                   xmlSpace="preserve"
                   y="0px"
@@ -712,11 +710,11 @@ exports[`Proposals component should match Proposals snapshot 1`] = `
               >
                 <svg
                   aria-hidden="true"
-                  height="32px"
+                  height="28px"
                   role="img"
                   version="1.1"
                   viewBox="0 0 22 22"
-                  width="32px"
+                  width="28px"
                   x="0px"
                   xmlSpace="preserve"
                   y="0px"
@@ -747,11 +745,11 @@ exports[`Proposals component should match Proposals snapshot 1`] = `
               >
                 <svg
                   aria-hidden="true"
-                  height="32px"
+                  height="28px"
                   role="img"
                   version="1.1"
                   viewBox="0 0 22 22"
-                  width="32px"
+                  width="28px"
                   x="0px"
                   xmlSpace="preserve"
                   y="0px"
@@ -782,11 +780,11 @@ exports[`Proposals component should match Proposals snapshot 1`] = `
               >
                 <svg
                   aria-hidden="true"
-                  height="32px"
+                  height="28px"
                   role="img"
                   version="1.1"
                   viewBox="0 0 22 22"
-                  width="32px"
+                  width="28px"
                   x="0px"
                   xmlSpace="preserve"
                   y="0px"
@@ -817,11 +815,11 @@ exports[`Proposals component should match Proposals snapshot 1`] = `
               >
                 <svg
                   aria-hidden="true"
-                  height="32px"
+                  height="28px"
                   role="img"
                   version="1.1"
                   viewBox="0 0 22 22"
-                  width="32px"
+                  width="28px"
                   x="0px"
                   xmlSpace="preserve"
                   y="0px"
@@ -892,7 +890,7 @@ exports[`Proposals component should match Proposals snapshot 1`] = `
       className="proposal row"
     >
       <div
-        className="margin-s col-md-6 col-xs-12"
+        className="margin-s col-md-5 col-xs-12"
       >
         <h3
           className="proposal-title dark-title-3"
@@ -909,7 +907,7 @@ exports[`Proposals component should match Proposals snapshot 1`] = `
         />
       </div>
       <div
-        className="proposal-vote-modules col-md-6 col-xs-12"
+        className="proposal-vote-modules col-md-6 col-md-offset-1 col-xs-12"
       >
         <div
           className="margin-m"
@@ -938,11 +936,11 @@ exports[`Proposals component should match Proposals snapshot 1`] = `
               >
                 <svg
                   aria-hidden="true"
-                  height="32px"
+                  height="28px"
                   role="img"
                   version="1.1"
                   viewBox="0 0 22 22"
-                  width="32px"
+                  width="28px"
                   x="0px"
                   xmlSpace="preserve"
                   y="0px"
@@ -973,11 +971,11 @@ exports[`Proposals component should match Proposals snapshot 1`] = `
               >
                 <svg
                   aria-hidden="true"
-                  height="32px"
+                  height="28px"
                   role="img"
                   version="1.1"
                   viewBox="0 0 22 22"
-                  width="32px"
+                  width="28px"
                   x="0px"
                   xmlSpace="preserve"
                   y="0px"
@@ -1008,11 +1006,11 @@ exports[`Proposals component should match Proposals snapshot 1`] = `
               >
                 <svg
                   aria-hidden="true"
-                  height="32px"
+                  height="28px"
                   role="img"
                   version="1.1"
                   viewBox="0 0 22 22"
-                  width="32px"
+                  width="28px"
                   x="0px"
                   xmlSpace="preserve"
                   y="0px"
@@ -1043,11 +1041,11 @@ exports[`Proposals component should match Proposals snapshot 1`] = `
               >
                 <svg
                   aria-hidden="true"
-                  height="32px"
+                  height="28px"
                   role="img"
                   version="1.1"
                   viewBox="0 0 22 22"
-                  width="32px"
+                  width="28px"
                   x="0px"
                   xmlSpace="preserve"
                   y="0px"
@@ -1078,11 +1076,11 @@ exports[`Proposals component should match Proposals snapshot 1`] = `
               >
                 <svg
                   aria-hidden="true"
-                  height="32px"
+                  height="28px"
                   role="img"
                   version="1.1"
                   viewBox="0 0 22 22"
-                  width="32px"
+                  width="28px"
                   x="0px"
                   xmlSpace="preserve"
                   y="0px"
@@ -1113,11 +1111,11 @@ exports[`Proposals component should match Proposals snapshot 1`] = `
               >
                 <svg
                   aria-hidden="true"
-                  height="32px"
+                  height="28px"
                   role="img"
                   version="1.1"
                   viewBox="0 0 22 22"
-                  width="32px"
+                  width="28px"
                   x="0px"
                   xmlSpace="preserve"
                   y="0px"
@@ -1148,11 +1146,11 @@ exports[`Proposals component should match Proposals snapshot 1`] = `
               >
                 <svg
                   aria-hidden="true"
-                  height="32px"
+                  height="28px"
                   role="img"
                   version="1.1"
                   viewBox="0 0 22 22"
-                  width="32px"
+                  width="28px"
                   x="0px"
                   xmlSpace="preserve"
                   y="0px"
@@ -1183,11 +1181,11 @@ exports[`Proposals component should match Proposals snapshot 1`] = `
               >
                 <svg
                   aria-hidden="true"
-                  height="32px"
+                  height="28px"
                   role="img"
                   version="1.1"
                   viewBox="0 0 22 22"
-                  width="32px"
+                  width="28px"
                   x="0px"
                   xmlSpace="preserve"
                   y="0px"
@@ -1218,11 +1216,11 @@ exports[`Proposals component should match Proposals snapshot 1`] = `
               >
                 <svg
                   aria-hidden="true"
-                  height="32px"
+                  height="28px"
                   role="img"
                   version="1.1"
                   viewBox="0 0 22 22"
-                  width="32px"
+                  width="28px"
                   x="0px"
                   xmlSpace="preserve"
                   y="0px"
@@ -1253,11 +1251,11 @@ exports[`Proposals component should match Proposals snapshot 1`] = `
               >
                 <svg
                   aria-hidden="true"
-                  height="32px"
+                  height="28px"
                   role="img"
                   version="1.1"
                   viewBox="0 0 22 22"
-                  width="32px"
+                  width="28px"
                   x="0px"
                   xmlSpace="preserve"
                   y="0px"
@@ -1288,11 +1286,11 @@ exports[`Proposals component should match Proposals snapshot 1`] = `
               >
                 <svg
                   aria-hidden="true"
-                  height="32px"
+                  height="28px"
                   role="img"
                   version="1.1"
                   viewBox="0 0 22 22"
-                  width="32px"
+                  width="28px"
                   x="0px"
                   xmlSpace="preserve"
                   y="0px"
@@ -1323,11 +1321,11 @@ exports[`Proposals component should match Proposals snapshot 1`] = `
               >
                 <svg
                   aria-hidden="true"
-                  height="32px"
+                  height="28px"
                   role="img"
                   version="1.1"
                   viewBox="0 0 22 22"
-                  width="32px"
+                  width="28px"
                   x="0px"
                   xmlSpace="preserve"
                   y="0px"
@@ -1383,11 +1381,11 @@ exports[`Proposals component should match Proposals snapshot 1`] = `
               >
                 <svg
                   aria-hidden="true"
-                  height="32px"
+                  height="28px"
                   role="img"
                   version="1.1"
                   viewBox="0 0 22 22"
-                  width="32px"
+                  width="28px"
                   x="0px"
                   xmlSpace="preserve"
                   y="0px"
@@ -1418,11 +1416,11 @@ exports[`Proposals component should match Proposals snapshot 1`] = `
               >
                 <svg
                   aria-hidden="true"
-                  height="32px"
+                  height="28px"
                   role="img"
                   version="1.1"
                   viewBox="0 0 22 22"
-                  width="32px"
+                  width="28px"
                   x="0px"
                   xmlSpace="preserve"
                   y="0px"
@@ -1453,11 +1451,11 @@ exports[`Proposals component should match Proposals snapshot 1`] = `
               >
                 <svg
                   aria-hidden="true"
-                  height="32px"
+                  height="28px"
                   role="img"
                   version="1.1"
                   viewBox="0 0 22 22"
-                  width="32px"
+                  width="28px"
                   x="0px"
                   xmlSpace="preserve"
                   y="0px"
@@ -1488,11 +1486,11 @@ exports[`Proposals component should match Proposals snapshot 1`] = `
               >
                 <svg
                   aria-hidden="true"
-                  height="32px"
+                  height="28px"
                   role="img"
                   version="1.1"
                   viewBox="0 0 22 22"
-                  width="32px"
+                  width="28px"
                   x="0px"
                   xmlSpace="preserve"
                   y="0px"
@@ -1523,11 +1521,11 @@ exports[`Proposals component should match Proposals snapshot 1`] = `
               >
                 <svg
                   aria-hidden="true"
-                  height="32px"
+                  height="28px"
                   role="img"
                   version="1.1"
                   viewBox="0 0 22 22"
-                  width="32px"
+                  width="28px"
                   x="0px"
                   xmlSpace="preserve"
                   y="0px"
@@ -1558,11 +1556,11 @@ exports[`Proposals component should match Proposals snapshot 1`] = `
               >
                 <svg
                   aria-hidden="true"
-                  height="32px"
+                  height="28px"
                   role="img"
                   version="1.1"
                   viewBox="0 0 22 22"
-                  width="32px"
+                  width="28px"
                   x="0px"
                   xmlSpace="preserve"
                   y="0px"
@@ -1593,11 +1591,11 @@ exports[`Proposals component should match Proposals snapshot 1`] = `
               >
                 <svg
                   aria-hidden="true"
-                  height="32px"
+                  height="28px"
                   role="img"
                   version="1.1"
                   viewBox="0 0 22 22"
-                  width="32px"
+                  width="28px"
                   x="0px"
                   xmlSpace="preserve"
                   y="0px"
@@ -1628,11 +1626,11 @@ exports[`Proposals component should match Proposals snapshot 1`] = `
               >
                 <svg
                   aria-hidden="true"
-                  height="32px"
+                  height="28px"
                   role="img"
                   version="1.1"
                   viewBox="0 0 22 22"
-                  width="32px"
+                  width="28px"
                   x="0px"
                   xmlSpace="preserve"
                   y="0px"
@@ -1663,11 +1661,11 @@ exports[`Proposals component should match Proposals snapshot 1`] = `
               >
                 <svg
                   aria-hidden="true"
-                  height="32px"
+                  height="28px"
                   role="img"
                   version="1.1"
                   viewBox="0 0 22 22"
-                  width="32px"
+                  width="28px"
                   x="0px"
                   xmlSpace="preserve"
                   y="0px"
@@ -1698,11 +1696,11 @@ exports[`Proposals component should match Proposals snapshot 1`] = `
               >
                 <svg
                   aria-hidden="true"
-                  height="32px"
+                  height="28px"
                   role="img"
                   version="1.1"
                   viewBox="0 0 22 22"
-                  width="32px"
+                  width="28px"
                   x="0px"
                   xmlSpace="preserve"
                   y="0px"
@@ -1779,7 +1777,6 @@ exports[`Proposals component should match Proposals snapshot 1`] = `
             />
             <div
               className="rc-slider-handle"
-              index={0}
               role="slider"
               style={
                 Object {

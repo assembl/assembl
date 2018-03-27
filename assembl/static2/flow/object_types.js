@@ -1,5 +1,7 @@
 /* @flow */
 /* eslint-disable */
+import { type RawContentState } from 'draft-js';
+
 export type IdeaMessageColumns = Array<IdeaMessageColumnFragment>;
 
 type Post = PostFragment & {
@@ -18,6 +20,12 @@ type LangstringEntry = {
 };
 
 type LangstringEntries = Array<LangstringEntry>;
+
+type RichTextLangstringEntry = {
+  localeCode: string,
+  value: RawContentState
+};
+type RichTextLangstringEntries = Array<RichTextLangstringEntry>;
 
 type TitleEntries = {
   titleEntries: LangstringEntries
@@ -81,3 +89,10 @@ type DebateData = Object & {
     videoUrl: string
   }
 };
+
+type ErrorDef = {
+  code: string,
+  vars: { [string]: any }
+};
+
+type ValidationErrors = { [string]: Array<ErrorDef> };

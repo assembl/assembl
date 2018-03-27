@@ -1054,7 +1054,8 @@ export type VoteSessionQuery = {|
                   proposalId: string
                 })>,
             numVotes: number,
-            averageLabel: ?string
+            averageLabel: ?string,
+            averageResult: number
           }
         | {
             // The ID of the object.
@@ -1415,7 +1416,8 @@ export type createPostMutation = {|
 export type createProposalMutationVariables = {|
   voteSessionId: string,
   titleEntries: Array<?LangStringEntryInput>,
-  descriptionEntries: Array<?LangStringEntryInput>
+  descriptionEntries: Array<?LangStringEntryInput>,
+  order?: ?number
 |};
 
 export type createProposalMutation = {|
@@ -1423,6 +1425,7 @@ export type createProposalMutation = {|
     proposal: ?{|
       // The ID of the object.
       id: string,
+      order: ?number,
       titleEntries: ?Array<?{|
         localeCode: string,
         value: ?string
@@ -1884,7 +1887,8 @@ export type updatePostMutation = {|
 export type updateProposalMutationVariables = {|
   id: string,
   titleEntries: Array<?LangStringEntryInput>,
-  descriptionEntries: Array<?LangStringEntryInput>
+  descriptionEntries: Array<?LangStringEntryInput>,
+  order?: ?number
 |};
 
 export type updateProposalMutation = {|
@@ -1892,6 +1896,7 @@ export type updateProposalMutation = {|
     proposal: ?{|
       // The ID of the object.
       id: string,
+      order: ?number,
       titleEntries: ?Array<?{|
         localeCode: string,
         value: ?string
@@ -2281,7 +2286,8 @@ export type gaugeVoteSpecificationResultsFragment = {|
         proposalId: string
       })>,
   numVotes: number,
-  averageLabel: ?string
+  averageLabel: ?string,
+  averageResult: number
 |};
 
 export type AgentProfileInfoFragment = {|

@@ -34,7 +34,7 @@ export function DumbQuestion(props: QuestionProps) {
     return null;
   }
   const { imgUrl, title, thematicTitle, thematicId, params, slug } = props;
-  const link = `${getRoute('debate', { slug: slug, phase: 'survey' })}${getRoute('theme', { themeId: thematicId })}`;
+  const link = `${getRoute('idea', { slug: slug, phase: 'survey', themeId: thematicId })}`;
   return (
     <div className="question">
       <div className="relative">

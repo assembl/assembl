@@ -53,7 +53,7 @@ class TopPostFormContainer extends React.Component<*, TopPostFormContainerProps,
 
   setFormPosition() {
     if (!this.state.expanded) {
-      if (this.state.topPostFormOffset <= window.scrollY) {
+      if (this.state.topPostFormOffset <= window.pageYOffset) {
         this.setState({ sticky: true });
       } else {
         this.setState({ sticky: false });

@@ -6,27 +6,30 @@ exports[`DumbNumberGaugeForm component should render a form to set up a numeral 
     bsClass="form-group"
   >
     <FormControlWithLabel
-      label="Min Value"
+      label="Missing translation: administration.minValue"
       labelAlwaysVisible={false}
       onChange={[Function]}
       required={true}
       type="number"
+      validationErrors={null}
       value={2}
     />
     <FormControlWithLabel
-      label="Max Value"
+      label="Missing translation: administration.maxValue"
       labelAlwaysVisible={false}
       onChange={[Function]}
       required={true}
       type="number"
+      validationErrors={null}
       value={11}
     />
     <FormControlWithLabel
-      label="Unit"
+      label="Missing translation: administration.unit"
       labelAlwaysVisible={false}
       onChange={[Function]}
       required={true}
       type="text"
+      validationErrors={null}
       value="kms"
     />
   </FormGroup>

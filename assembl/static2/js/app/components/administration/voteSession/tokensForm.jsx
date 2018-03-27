@@ -12,8 +12,10 @@ import {
   updateTokenVoteInstructions,
   createTokenVoteCategory,
   deleteTokenVoteCategory,
-  updateTokenVoteExclusiveCategory
+  updateTokenVoteExclusiveCategory,
+  markAllDependenciesAsChanged
 } from '../../../actions/adminActions/voteSession';
+import { createRandomId } from '../../../utils/globalFunctions';
 
 type TokensFormProps = {
   id: string,
@@ -40,21 +42,23 @@ const DumbTokensForm = ({
 }: TokensFormProps) => (
   <div className="token-vote-form">
     <form>
-      <div className="flex">
-        <Checkbox
-          checked={exclusiveCategories}
-          onChange={() => {
-            handleExclusiveCategoriesCheckboxChange(exclusiveCategories);
-          }}
-        >
-          <Helper
-            label={I18n.t('administration.exclusive')}
-            helperText={I18n.t('administration.helpers.exclusive')}
-            classname="inline"
-            additionalTextClasses="helper-text-only"
-          />
-        </Checkbox>
-      </div>
+      {tokenCategoryNumber >= 2 && (
+        <div className="flex">
+          <Checkbox
+            checked={exclusiveCategories}
+            onChange={() => {
+              handleExclusiveCategoriesCheckboxChange(exclusiveCategories);
+            }}
+          >
+            <Helper
+              label={I18n.t('administration.exclusive')}
+              helperText={I18n.t('administration.helpers.exclusive')}
+              classname="inline"
+              additionalTextClasses="helper-text-only"
+            />
+          </Checkbox>
+        </div>
+      )}
       <div className="flex">
         <FormControlWithLabel
           label={I18n.t('administration.tokenVoteInstructions')}
@@ -81,7 +85,7 @@ const DumbTokensForm = ({
         id="input-dropdown-addon"
         required
       >
-        {range(11).map(value => (
+        {range(1, 11).map(value => (
           <MenuItem key={`item-${value}`} eventKey={value}>
             {value}
           </MenuItem>
@@ -91,7 +95,14 @@ const DumbTokensForm = ({
         <div>
           <div className="separator" />
           {tokenCategories.map((categoryId, index) => (
-            <TokenCategoryForm key={`token-type-${index}`} id={categoryId} editLocale={editLocale} index={index} moduleId={id} />
+            <TokenCategoryForm
+              key={`token-type-${index}`}
+              id={categoryId}
+              editLocale={editLocale}
+              index={index}
+              moduleId={id}
+              tokenCategoryNumber={tokenCategoryNumber}
+            />
           ))}
         </div>
       ) : null}
@@ -106,18 +117,20 @@ const mapStateToProps = (state, { id, editLocale }) => {
     instructions: instructions,
     exclusiveCategories: module.get('exclusiveCategories'),
     tokenCategoryNumber: module.get('tokenCategories').size,
-    tokenCategories: module.get('tokenCategories'),
-    editLocale: editLocale
+    tokenCategories: module.get('tokenCategories')
   };
 };
 
 const mapDispatchToProps = (dispatch, { id, editLocale }) => ({
-  handleInstructionsChange: e => dispatch(updateTokenVoteInstructions(id, editLocale, e.target.value)),
+  handleInstructionsChange: (e) => {
+    dispatch(updateTokenVoteInstructions(id, editLocale, e.target.value));
+    dispatch(markAllDependenciesAsChanged(id));
+  },
   handleTokenVoteCategoryNumberChange: (value, tokenCategoryNumber) => {
     const newTokenCategoryNumber = value - tokenCategoryNumber;
     if (value > tokenCategoryNumber) {
       for (let i = 0; i < newTokenCategoryNumber; i += 1) {
-        const newId = Math.round(Math.random() * -1000000).toString();
+        const newId = createRandomId();
         dispatch(createTokenVoteCategory(newId, id));
       }
     } else {
@@ -127,7 +140,10 @@ const mapDispatchToProps = (dispatch, { id, editLocale }) => ({
       }
     }
   },
-  handleExclusiveCategoriesCheckboxChange: checked => dispatch(updateTokenVoteExclusiveCategory(id, !checked))
+  handleExclusiveCategoriesCheckboxChange: (checked) => {
+    dispatch(updateTokenVoteExclusiveCategory(id, !checked));
+    dispatch(markAllDependenciesAsChanged(id));
+  }
 });
 
 export { DumbTokensForm };

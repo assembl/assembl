@@ -1,5 +1,4 @@
 // @flow
-import fromPairs from 'lodash/fromPairs';
 import React from 'react';
 import { Tooltip } from 'react-bootstrap';
 import { Translate } from 'react-redux-i18n';
@@ -13,7 +12,8 @@ type Props = {
     tokenCategoryId: string,
     numToken: number
   |}>,
-  numVotes: number
+  numVotes: number,
+  titleMsgId: string
 };
 
 type CreateTooltip = (TokenCategory, number) => React.Element<*>;
@@ -27,11 +27,15 @@ export const createTooltip: CreateTooltip = (category, count) => (
   </Tooltip>
 );
 
-const TokenVotesResults = ({ categories, tokenVotes, numVotes }: Props) => {
-  const votes = fromPairs(tokenVotes);
+const TokenVotesResults = ({ categories, tokenVotes, numVotes, titleMsgId }: Props) => {
+  const votes = {};
+  tokenVotes.forEach((vote) => {
+    if (vote) {
+      votes[vote.tokenCategoryId] = vote.numToken;
+    }
+  });
   const elements = categories
     .map((category) => {
-      // TODO: use the category.id here instead of typename
       if (category) {
         return {
           color: category.color,
@@ -44,8 +48,8 @@ const TokenVotesResults = ({ categories, tokenVotes, numVotes }: Props) => {
     })
     .filter(e => e); // remove null items
   return (
-    <div className="box center tokens-box">
-      <Translate value="debate.voteSession.votesTotal" count={numVotes} />
+    <div className="box tokens-box">
+      <Translate value={titleMsgId} count={numVotes} />
       <div className="doughnut-container">
         <Doughnut elements={elements} />
       </div>

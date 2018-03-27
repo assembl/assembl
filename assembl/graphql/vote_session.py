@@ -111,34 +111,38 @@ class UpdateVoteSession(graphene.Mutation):
         if image is not None:
             filename = os.path.basename(context.POST[image].filename)
             mime_type = context.POST[image].type
-            uploaded_file = context.POST[image].file
-            uploaded_file.seek(0)
-            data = uploaded_file.read()
             ATTACHMENT_PURPOSE_IMAGE = models.AttachmentPurpose.IMAGE.value
+            document = models.File(
+                discussion=discussion,
+                mime_type=mime_type,
+                title=filename)
+            document.add_file_data(context.POST[image].file)
             images = [
                 att for att in vote_session.attachments
                 if att.attachmentPurpose == ATTACHMENT_PURPOSE_IMAGE]
             if images:
                 image = images[0]
+                image.document.delete_file()
                 db.delete(image.document)
                 vote_session.attachments.remove(image)
-            document = models.File(
-                discussion=discussion,
-                mime_type=mime_type,
-                title=filename,
-                data=data)
-            models.VoteSessionAttachment(
+            db.add(models.VoteSessionAttachment(
                 document=document,
                 vote_session=vote_session,
                 discussion=discussion,
                 creator_id=context.authenticated_userid,
                 title=filename,
                 attachmentPurpose=ATTACHMENT_PURPOSE_IMAGE
-            )
+            ))
 
         db.add(vote_session)
-        db.flush()
 
+        # create the root thematic on which we will attach all proposals for this vote session
+        identifier = 'voteSession{}'.format(vote_session.id)
+        root_thematic = get_root_thematic_for_phase(discussion, identifier)
+        if root_thematic is None:
+            root_thematic = create_root_thematic(discussion, identifier)
+
+        db.flush()
         return UpdateVoteSession(vote_session=vote_session)
 
 
@@ -229,7 +233,7 @@ class TokenVoteSpecification(SecureObjectType, SQLAlchemyObjectType):
 
     def resolve_token_votes(self, args, context, info):
         votes = []
-        for token_category in self.token_categories:
+        for token_category in self.get_token_categories():
             query = self.db.query(
                 func.sum(getattr(self.get_vote_class(), "vote_value"))).filter_by(
                 vote_spec_id=self.id,
@@ -248,10 +252,7 @@ class TokenVoteSpecification(SecureObjectType, SQLAlchemyObjectType):
         return votes
 
     def resolve_token_categories(self, args, context, info):
-        if self.vote_spec_template_id and not self.is_custom:
-            return self.vote_spec_template.token_categories
-
-        return self.token_categories
+        return self.get_token_categories()
 
 
 class GaugeChoiceSpecification(SecureObjectType, SQLAlchemyObjectType):
@@ -271,6 +272,30 @@ class GaugeChoiceSpecification(SecureObjectType, SQLAlchemyObjectType):
         return resolve_langstring_entries(self, 'label')
 
 
+def get_avg_choice(vote_spec):
+    choices = vote_spec.get_choices()
+    if not choices:
+        return None
+
+    vote_cls = vote_spec.get_vote_class()
+    voting_avg = vote_spec.db.query(func.avg(getattr(vote_cls, 'vote_value'))).filter_by(
+        vote_spec_id=vote_spec.id,
+        tombstone_date=None,
+        idea_id=vote_spec.criterion_idea_id).first()
+    # when there is no votes, query.first() equals (None,)
+    avg = voting_avg[0] or 0
+    # take the closest choice
+    avg_choice = choices[0]
+    min_diff = abs(avg_choice.value - avg)
+    for choice in choices[1:]:
+        diff = abs(choice.value - avg)
+        if diff < min_diff:
+            avg_choice = choice
+            min_diff = diff
+
+    return avg_choice
+
+
 class GaugeVoteSpecification(SecureObjectType, SQLAlchemyObjectType):
 
     class Meta:
@@ -280,27 +305,24 @@ class GaugeVoteSpecification(SecureObjectType, SQLAlchemyObjectType):
 
     choices = graphene.List(GaugeChoiceSpecification)
     average_label = graphene.String(lang=graphene.String())
+    average_result = graphene.Float(required=True)
 
     def resolve_average_label(self, args, context, info):
-        if not self.choices:
+        avg_choice = get_avg_choice(self)
+        if avg_choice is None:
             return None
 
-        vote_cls = self.get_vote_class()
-        voting_avg = self.db.query(func.avg(getattr(vote_cls, 'vote_value'))).filter_by(
-            vote_spec_id=self.id,
-            tombstone_date=None,
-            idea_id=self.criterion_idea_id).first()
-        # when there is no votes, query.first() equals (None,)
-        avg = voting_avg[0] or 0
-        # take the closest choice
-        avg_choice = self.choices[0]
-        min_diff = abs(avg_choice.value - avg)
-        for choice in self.choices[1:]:
-            diff = abs(choice.value - avg)
-            if diff < min_diff:
-                avg_choice = choice
-                min_diff = diff
         return resolve_langstring(avg_choice.label, args.get('lang'))
+
+    def resolve_average_result(self, args, context, info):
+        avg_choice = get_avg_choice(self)
+        if avg_choice is None:
+            return 0
+
+        return avg_choice.value
+
+    def resolve_choices(self, args, context, info):
+        return self.get_choices()
 
 
 class NumberGaugeVoteSpecification(SecureObjectType, SQLAlchemyObjectType):
@@ -469,7 +491,6 @@ class UpdateTokenVoteSpecification(graphene.Mutation):
                         update_langstring_from_input_entries(
                             token_category, 'name', token_category_input['title_entries'])
                         token_category.total_number = token_category_input.get('total_number')
-                        token_category.typename = token_category_input.get('typename', 'category{}'.format(idx + 1))
                         token_category.color = token_category_input.get('color')
                     else:
                         title_ls = langstring_from_input_entries(
@@ -774,7 +795,8 @@ class CreateProposal(graphene.Mutation):
             identifier = 'voteSession{}'.format(vote_session_id)
             root_thematic = get_root_thematic_for_phase(discussion, identifier)
             if root_thematic is None:
-                root_thematic = create_root_thematic(discussion, identifier)
+                raise Exception(
+                    "There is no root thematic for this vote session.")
 
             order = len(root_thematic.get_children()) + 1.0
             db.add(

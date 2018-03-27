@@ -1,10 +1,4 @@
 .votesession-page {
-  .header-content {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
   .vote-instructions {
     padding: 0 20px;
     font-size: $font-size-m;
@@ -23,12 +17,18 @@
 
     .category-available-tokens {
       display: flex;
-      padding: 30px 20px;
+      padding: 0 0 30px;
       max-width: 780px;
+      margin-left: -5px;
 
       .tokens {
-        padding-left: 50px;
-        padding-top: 22px;
+        padding-left: 10px;
+        padding-top: 25px;
+      }
+
+      .text {
+        width: 340px;
+        padding: 0 0 0 10px;
       }
     }
   }
@@ -36,24 +36,41 @@
   .available-tokens-sticky {
     position: fixed;
     top: 60px;
-    width: 100%;
+    left: 0;
+    right: 0;
     z-index: 100;
-    display: flex;
-    justify-content: space-around;
-    box-shadow: 3px 4px 7px #bbb;
-    padding: 0 20px 12px;
     border-top: 1px solid $grey1;
+    box-shadow: 3px 4px 7px $grey1;
 
     .separator {
       display: none;
     }
 
     .category-available-tokens {
-      display: flex;
-
       .tokens {
-        padding-left: 30px;
-        padding-top: 20px;
+        padding: 20px 0 0 0;
+        display: inline-block;
+        vertical-align: top;
+        text-align: left;
+
+        svg {
+          margin: 0 3px;
+        }
+      }
+
+      .text {
+        line-height: 20px;
+        margin: 0 0 5px;
+        display: inline-block;
+        text-align: left;
+
+        .dark-title-2 {
+          font-size: $font-size-s;
+        }
+
+        span {
+          font-size: $font-size-xs;
+        }
       }
     }
   }
@@ -63,9 +80,9 @@
   }
 
   .tokens > * {
-    margin: 5px;
-    width: 30px;
-    height: 30px;
+    margin: 5px 3px;
+    width: 28px;
+    height: 28px;
   }
 
   .theme-box {
@@ -83,8 +100,8 @@
     }
 
     .text {
+      line-height: 24px;
       text-align: justify;
-      padding-right: 20px;
     }
 
     .proposal-vote-modules {
@@ -116,15 +133,6 @@
 
     .tokens > .btn-default:hover {
       background-color: transparent;
-    }
-  }
-
-  .gauge-vote-for-proposal {
-    margin-top: 40px;
-
-    p {
-      margin-bottom: 40px;
-      margin-left: -5px;
     }
   }
 
@@ -171,43 +179,88 @@
     margin: 0 40px;
   }
 
-  .votes-in-progress {
-    margin: 0 40px;
-    padding: 0 15px 30px;
-
-    .box {
-      margin-top: 30px;
-      height: 160px;
+  .participants-count {
+    .assembl-icon-profil:before {
+      font-size: 40px;
+      margin-bottom: 8px;
     }
+  }
 
+  .participants-count__text {
+    color: $first-color;
+  }
+
+  .proposal-results {
     .participants-count {
-      .assembl-icon-profil:before {
-        font-size: 40px;
-        margin-bottom: 12px;
-      }
+      border: 1px solid $grey5;
+      margin: 30px 0;
+      height: 120px;
     }
 
     .doughnut-container {
-      margin: 0 auto;
-      height: 80px;
-      width: 80px;
+      text-align: center;
+      height: 150px;
+      width: 150px;
       padding: 10px 0 0;
+      position: relative;
 
       .doughnut {
         .circle {
           stroke-width: 18px;
         }
       }
+
+      .doughnut-totalCount {
+        position: absolute;
+        top: 60px;
+        left: 54px;
+        font-size: $font-size-s;
+
+        .vote-totalCount {
+          font-size: $font-size-sm;
+          font-weight: bold;
+          font-family: $font-family3;
+        }
+      }
+    }
+  }
+
+  .votes-in-progress {
+    margin: 0 40px;
+    padding: 0 15px 30px;
+
+    .box {
+      border: 1px solid $grey5;
+      margin-top: 30px;
+      height: 120px;
     }
 
-    .doughnut-totalCount {
-      margin-top: -44px;
-      font-size: $font-size-xxs;
+    .tokens-box {
+      text-align: center;
+    }
 
-      .vote-totalCount {
-        font-size: $font-size-xs;
-        font-family: $font-family3;
-        margin-bottom: -3px;
+    .doughnut-container {
+      margin: 0 auto;
+      height: 80px;
+      width: 80px;
+      position: relative;
+
+      .doughnut {
+        .circle {
+          stroke-width: 18px;
+        }
+      }
+
+      .doughnut-totalCount {
+        position: absolute;
+        top: 23px;
+        left: 24px;
+        font-size: $font-size-xxs;
+
+        .vote-totalCount {
+          font-size: $font-size-xs;
+          font-family: $font-family3;
+        }
       }
     }
   }
@@ -217,13 +270,20 @@
   }
 
   .gauge-box {
-    padding: 30px 0 0;
+    padding: 20px 0 0;
+  }
+
+  .gauge-box__instructions {
+    font-size: $font-size-xs;
+  }
+
+  .gauge-box__estimate {
+    color: $first-color;
   }
 
   .separator {
-    border-bottom: 1px $btn-dark-border-style $grey1;
+    border-bottom: 1px $btn-dark-border-style $grey5;
     max-width: 745px;
-    margin-left: 18px;
   }
 }
 
@@ -238,15 +298,23 @@
 @media screen and (min-width: 768px) {
   .votesession-page {
     .proposal.row {
-      padding: 31px 15px 15px 15px;
+      padding: 30px 25px 0 25px;
     }
 
     .participants-count {
-      padding: 40px 0 0;
+      padding: 20px 0 0;
     }
 
     .tokens-box {
-      padding: 30px 0 0;
+      padding: 10px 0 0;
+    }
+
+    .header-content {
+      text-align: left;
+
+      .light-title-2 {
+        padding-left: 4px;
+      }
     }
   }
 }
@@ -271,7 +339,48 @@
     }
 
     .tokens-box {
-      padding: 15px 0 0;
+      padding: 10px 0 0;
+    }
+
+    .section-title {
+      display: block;
+    }
+
+    .header-content {
+      text-align: left;
+      padding: 75px 15px 150px;
+
+      .light-title-2 {
+        padding-left: 4px;
+      }
+    }
+
+    .max-container {
+      padding-left: 15px;
+      padding-right: 15px;
+    }
+  }
+}
+
+@media screen and (max-width: 660px) {
+  .votesession-page {
+    .available-tokens {
+      .category-available-tokens {
+        display: block;
+
+        .tokens {
+          padding-left: 10px;
+          margin-left: -5px;
+        }
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 420px) {
+  .votesession-page {
+    .title-section .dark-title-1 {
+      margin: 0 5px;
     }
   }
 }

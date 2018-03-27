@@ -4,11 +4,18 @@ mutation createProposal(
   $voteSessionId: ID!
   $titleEntries: [LangStringEntryInput]!
   $descriptionEntries: [LangStringEntryInput]!
+  $order: Float
 ) {
-  createProposal(voteSessionId: $voteSessionId, titleEntries: $titleEntries, descriptionEntries: $descriptionEntries) {
+  createProposal(
+    voteSessionId: $voteSessionId
+    titleEntries: $titleEntries
+    descriptionEntries: $descriptionEntries
+    order: $order
+  ) {
     proposal {
       ... on Idea {
         id
+        order
         titleEntries {
           ...langStringEntry
         }

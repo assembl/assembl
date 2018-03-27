@@ -71,6 +71,11 @@ server {
         alias /home/assembl_user/assembl/assembl/static2;
     }
 
+    location /private_uploads {
+      internal;
+      alias /home/assembl_user/assembl/var/uploads;
+    }
+
     location / {
 
         include uwsgi_params;

@@ -42,7 +42,7 @@ export class DumbMenuItem extends React.Component<*, MenuItemProps, void> {
   onLinkClick = () => {
     const { identifier, item, slug, onClick } = this.props;
     if (onClick) onClick();
-    goTo(get('themeInPhase', { slug: slug, phase: identifier, themeId: item.id }));
+    goTo(get('idea', { slug: slug, phase: identifier, themeId: item.id }));
   };
 
   render() {

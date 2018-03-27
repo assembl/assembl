@@ -33,8 +33,8 @@
   "administration": "${slug}/administration",
   "unauthorizedAdministration": "${slug}/unauthorizedAdministration",
   "adminPhase": "${phase}",
+  "idea": "${slug}/debate/${phase}/theme/${themeId}",
   "post": "${slug}/debate/${phase}/theme/${themeId}/#${element}",
-  "themeInPhase": "${slug}/debate/${phase}/theme/${themeId}",
   "resourcesCenter": "${slug}/resourcescenter",
   "legalNotice": "${slug}/legal-notice",
   "voteSessionAdmin": "${slug}/administration/voteSession"

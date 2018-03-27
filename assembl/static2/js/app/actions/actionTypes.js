@@ -72,6 +72,8 @@ export const MOVE_PROPOSAL_UP: 'MOVE_PROPOSAL_UP' = 'MOVE_PROPOSAL_UP';
 export const MOVE_PROPOSAL_DOWN: 'MOVE_PROPOSAL_DOWN' = 'MOVE_PROPOSAL_DOWN';
 export const ADD_MODULE_TO_PROPOSAL: 'ADD_MODULE_TO_PROPOSAL' = 'ADD_MODULE_TO_PROPOSAL';
 export const UNDELETE_MODULE: 'UNDELETE_MODULE' = 'UNDELETE_MODULE';
+export const MARK_ALL_DEPENDENCIES_AS_CHANGED: 'MARK_ALL_DEPENDENCIES_AS_CHANGED' = 'MARK_ALL_DEPENDENCIES_AS_CHANGED';
+export const SET_VALIDATION_ERRORS: 'SET_VALIDATION_ERRORS' = 'SET_VALIDATION_ERRORS';
 
 export type UpdateContentLocaleById = {
   type: typeof UPDATE_CONTENT_LOCALE_BY_ID,
@@ -489,7 +491,7 @@ export type UpdateGaugeUnit = {
 
 export type AddModuleToProposal = {
   id: string,
-  moduleTemplateId: string,
+  voteSpecTemplateId: string,
   proposalId: string,
   type: typeof ADD_MODULE_TO_PROPOSAL
 };
@@ -497,6 +499,17 @@ export type AddModuleToProposal = {
 export type UndeleteModule = {
   id: string,
   type: typeof UNDELETE_MODULE
+};
+
+export type MarkAllDependenciesAsChanged = {
+  id: string,
+  type: typeof MARK_ALL_DEPENDENCIES_AS_CHANGED
+};
+
+export type SetValidationErrors = {
+  errors: ValidationErrors,
+  id: string,
+  type: typeof SET_VALIDATION_ERRORS
 };
 
 type BasicAction = {
@@ -557,7 +570,9 @@ type VoteSessionActions =
   | UpdateGaugeUnit
   | AddModuleToProposal
   | UpdateGaugeVoteInstructions
-  | UndeleteModule;
+  | UndeleteModule
+  | MarkAllDependenciesAsChanged
+  | SetValidationErrors;
 
 export type Action =
   | UpdateContentLocaleById

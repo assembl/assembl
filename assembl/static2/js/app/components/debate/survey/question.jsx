@@ -29,7 +29,7 @@ type QuestionProps = {
 
 type QuestionState = {
   buttonDisabled: boolean,
-  postBody: string,
+  postBody: ?string,
   charCount: number
 };
 
@@ -58,7 +58,7 @@ class Question extends React.Component<void, QuestionProps, QuestionState> {
           displayAlert('success', I18n.t('debate.survey.postSuccess'));
           refetchTheme();
           this.setState({
-            postBody: '',
+            postBody: null,
             buttonDisabled: false
           });
         })
