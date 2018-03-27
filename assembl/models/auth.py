@@ -1752,7 +1752,8 @@ class LanguagePreferenceCollection(object):
             user_id = req.authenticated_userid
             if user_id and user_id != Everyone:
                 try:
-                    req.lang_prefs = UserLanguagePreferenceCollection(user_id)
+                    discussion_id = req.matchdict['discussion_id']
+                    req.lang_prefs = UserLanguagePreferenceCollection(user_id, discussion_id)
                     return req.lang_prefs
                 except Exception:
                     capture_exception()
@@ -1800,16 +1801,21 @@ class LanguagePreferenceCollectionWithDefault(LanguagePreferenceCollection):
 class UserLanguagePreferenceCollection(LanguagePreferenceCollection):
     """A LanguagePreferenceCollection that represent one user's preferences."""
 
-    def __init__(self, user_id):
+    def __init__(self, user_id, discussion_id=None):
         self.user = User.get(user_id)
+        if discussion_id:
+            from assembl.models import Discussion
+            self.discussion = Discussion.get(discussion_id)
         db = User.default_db
         self.calculate_locale_prefs(db)
 
     def recalculate_locale(self, db):
         self.calculate_locale_prefs(db)
 
-    def calculate_locale_prefs(self, db, discussion=None):
+    def calculate_locale_prefs(self, db):
         user_prefs = db.query(UserLanguagePreference).filter_by(user=self.user).all()
+        default_pref = None
+        prefs_by_locale = {}
         if user_prefs:
             user_prefs.sort(reverse=True)
             prefs_by_locale = {
@@ -1843,7 +1849,6 @@ class UserLanguagePreferenceCollection(LanguagePreferenceCollection):
                     prefs_without_trans_by_loc[l] = new_pref
                     if l not in prefs_by_locale:
                         prefs_by_locale[l] = new_pref
-            default_pref = None
             if prefs_with_trans:
                 prefs_with_trans.sort()
                 target_lang_code = prefs_with_trans[0].translate_to_code
@@ -1869,8 +1874,8 @@ class UserLanguagePreferenceCollection(LanguagePreferenceCollection):
 
             request = get_current_request()
             if not request:
-                if discussion:
-                    discussion_prefs = discussion.preferences
+                if self.discussion:
+                    discussion_prefs = self.discussion.preferences
                     if 'preferred_locales' in discussion_prefs:
                         prefs_by_locale = {l: make_preference(l, 0, LanguagePreferenceOrder.Discussion)
                                            for l in discussion_prefs['preferred_locales']}
@@ -1880,9 +1885,9 @@ class UserLanguagePreferenceCollection(LanguagePreferenceCollection):
             else:
                 from assembl.views import get_locale_from_request
                 # This creates a user language preference according to request
-                pref = get_locale_from_request(request)
+                pref_locale = get_locale_from_request(request)
                 lang_pref = self.user.language_preference
-                prefs_by_locale = {pref: lang_pref}
+                prefs_by_locale = {pref_locale.code: lang_pref}
         self.user_prefs = prefs_by_locale
         self.default_pref = default_pref
 
@@ -1895,20 +1900,18 @@ class UserLanguagePreferenceCollection(LanguagePreferenceCollection):
         for locale in Locale.decompose_locale(locale):
             if locale in self.user_prefs:
                 return self.user_prefs[locale]
-        if self.default_pref is None:
-            # this should never actually happen
-            return None
         db = kwargs.get('db', User.default_db)
         locale = Locale.get_or_create(locale, db)
         args = {
             'locale': locale,
             'locale_id': locale.id,
-            'translate_to_locale': self.default_pref.locale,
-            'source_of_evidence': self.default_pref.source_of_evidence,
-            'post_id': kwargs.get('post_id', None),
+            'translate_to_locale': self.default_pref.locale if self.default_pref else None,
+            'source_of_evidence': self.default_pref.source_of_evidence if self.default_pref else LanguagePreferenceOrder.Server.value,
+            'preferred_order': 0,
             'user': None
-        }  # Do not give the user or this gets added to session
-        if 'post_id' in kwargs:
+        }  # Do not give the user or this gets added to session (TODO: Still valid?)
+        if kwargs.get('post_id', None):
+            args['post_id'] = kwargs.get('post_id')
             return PostUserLanguagePreference(**args)
         else:
             return UserLanguagePreference(**args)
@@ -1924,24 +1927,23 @@ class UserLanguagePreferenceCollection(LanguagePreferenceCollection):
                      for pref in self.user_prefs.itervalues()})
 
     def add_locale(self, locale, **kwargs):
-        db = kwargs.get('db', User.default_db)
+        db = kwargs.get('db', None)
+        if db:
+            kwargs.pop('db', None)
+        else:
+            db = User.default_db
         post_id = kwargs.get('post_id', None)
-        ulp = self.find_locale(locale, db, post_id=post_id)
-        assert ulp
-        if not ulp.user:
-            ulp.user = self.user
-        # Use setattr here instead
-        if 'translate_to_locale' in kwargs:
-            ulp.translate_to_locale = kwargs.get('translate_to_locale')
-        if 'source_of_evidence' in kwargs:
-            ulp.source_of_evidence = kwargs.get('source_of_evidence')
-        if 'preferred_order' in kwargs:
-            ulp.preferred_order = kwargs.get('preferred_order')
-        db.add(ulp)
+        preference = self.find_locale(locale, db=db, post_id=post_id)
+        assert preference
+        if not preference.user:
+            preference.user = self.user
+        for k, v in kwargs.iteritems():
+            setattr(preference, k, v)
+        db.add(preference)
         db.flush()
         # Update the cache of preferences
-        self.prefs_by_locale[locale] = ulp
-        return ulp
+        self.user_prefs[locale] = preference
+        return preference
 
 
 class UserLanguagePreference(Base):
