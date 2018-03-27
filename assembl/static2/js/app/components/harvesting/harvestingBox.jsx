@@ -110,3 +110,48 @@ class HarvestingBox extends React.Component<void, Props, State> {
 }
 
 export default HarvestingBox;
+
+// mutation addPostExtract(
+//  $postId: ID!
+//  $body: String!
+//  $important: Boolean
+//  $xpathStart: String!
+//  $xpathEnd: String!
+//  $offsetStart: Int!
+//  $offsetEnd: Int!
+// ) {
+//  addPostExtract(
+//    postId: $postId
+//    body: $body
+//    important: $important
+//    xpathStart: $xpathStart
+//    xpathEnd: $xpathEnd
+//    offsetStart: $offsetStart
+//    offsetEnd: $offsetEnd
+//  ) {
+//    post {
+//      ... on Post {
+//        extracts {
+//  important:important
+//  body: body
+//  textFragmentIdentifiers {
+//    xpathStart: xpathStart
+//    xpathEnd: xpathEnd
+//    offsetStart: offsetStart
+//    offsetEnd: offsetEnd
+//  }
+//        }
+//      }
+//    }
+//  }
+// }
+
+// {
+//   "postId": "UG9zdDozMDEz",
+//   "body": "xvcvcxvcxcvxxcv",
+//   "important": false,
+//   "xpathStart": "//div[@id='message-body-local:Content/3013']/",
+//   "xpathEnd": "//div[@id='message-body-local:Content/3013']/",
+//   "offsetStart": 0,
+//   "offsetEnd": 15
+// }

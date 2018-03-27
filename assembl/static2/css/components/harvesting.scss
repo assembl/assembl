@@ -124,6 +124,14 @@
     .post-body-content > div::-moz-selection {
       background: $harvesting-yellow;
     }
+
+    .post-body-content > div > p::selection {
+      background: $harvesting-yellow;
+    }
+
+    .post-body-content > div > p::-moz-selection {
+      background: $harvesting-yellow;
+    }
   }
 }
 
