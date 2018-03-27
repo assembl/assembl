@@ -10,6 +10,9 @@ describe('Question page', () => {
       title: 'Foo',
       thematicTitle: 'Bar',
       thematicId: 'ThematicId',
+      numPosts: 2,
+      numContributors: 2,
+      totalSentiments: 1,
       params: {
         questionIndex: 'Index',
         questionId: 'FooInd'

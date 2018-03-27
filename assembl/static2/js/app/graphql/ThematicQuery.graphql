@@ -7,6 +7,9 @@ query ThematicQuery($lang: String!, $id: ID!) {
         mimeType
       }
       id
+      numPosts
+      numContributors
+      totalSentiments
       video(lang: $lang) {
         title
         descriptionTop
