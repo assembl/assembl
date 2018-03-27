@@ -64,7 +64,11 @@ const SectionLink = ({ section, options }) => {
     );
   }
   const sectionName = sectionType.toLowerCase().replace('_', '');
-  const isActiveUrl = location.href.includes(sectionName);
+  const isActiveUrl = location.pathname
+    .split('/')
+    .slice(2)
+    .join('/')
+    .includes(sectionName);
   const linkClassNames = isActiveUrl ? 'navbar-menu-item pointer active' : 'navbar-menu-item pointer';
   return sectionType === 'DEBATE' ? (
     <DebateLink
