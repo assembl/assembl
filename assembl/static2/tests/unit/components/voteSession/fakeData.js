@@ -21,14 +21,16 @@ export const tokenVoteModule = {
   instructions: 'If we generate the feed, we can get to the AGP driver through the primary ADP interface!',
   tokenCategories: tokenCategories,
   voteType: 'token_vote_specification',
-  myVotes: []
+  myVotes: [],
+  numVotes: 42
 };
 
 export const textGaugeModule = {
   id: 'text-gauge-module',
   instructions: 'I\'ll generate the mobile SMS bus, that should microchip the TCP matrix!',
   voteType: 'gauge_vote_specification',
-  myVotes: []
+  myVotes: [],
+  numVotes: 20
 };
 
 export const proposals = [
@@ -38,7 +40,12 @@ export const proposals = [
     description: 'You can\'t hack the alarm without connecting the primary AGP microchip!',
     modules: [tokenVoteModule],
     voteResults: {
-      numParticipants: 1
+      numParticipants: 1,
+      participants: [
+        {
+          id: 'john.doe'
+        }
+      ]
     }
   },
   {
@@ -47,7 +54,8 @@ export const proposals = [
     description: 'I\'ll input the multi-byte SAS monitor, that should bandwidth the USB microchip!',
     modules: [tokenVoteModule, textGaugeModule],
     voteResults: {
-      numParticipants: 2
+      numParticipants: 2,
+      participants: [{ id: 'john.doe' }, { id: 'jane.doe' }]
     }
   }
 ];

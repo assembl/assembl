@@ -34,6 +34,12 @@ export const statSentiments = (totalSentiments: number) => ({
   metricNameTranslateKey: 'home.sentiments'
 });
 
+export const statParticipations = (numParticipations: number) => ({
+  iconName: 'sentiment-neutral',
+  metricValue: numParticipations,
+  metricNameTranslateKey: 'home.participations'
+});
+
 const StatisticElement = (props: StatisticElementProps) => (
   <div className="stat-container">
     <div className="stat-box">
@@ -41,7 +47,7 @@ const StatisticElement = (props: StatisticElementProps) => (
       <div className="stat">
         <div className="stat-nb">{props.metricValue}</div>
         <div className="stat-nb stat-label">
-          <Translate value={props.metricNameTranslateKey} />
+          <Translate value={props.metricNameTranslateKey} count={props.metricValue} />
         </div>
       </div>
     </div>

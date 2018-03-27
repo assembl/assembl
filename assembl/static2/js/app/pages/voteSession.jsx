@@ -11,6 +11,7 @@ import VoteSessionQuery from '../graphql/VoteSession.graphql';
 import AddTokenVoteMutation from '../graphql/mutations/addTokenVote.graphql';
 import AddGaugeVoteMutation from '../graphql/mutations/addGaugeVote.graphql';
 import Header from '../components/common/header';
+import HeaderStatistics, { statParticipants, statParticipations } from '../components/common/headerStatistics';
 import Section from '../components/common/section';
 import AvailableTokens from '../components/voteSession/availableTokens';
 import Proposals from '../components/voteSession/proposals';
@@ -293,6 +294,28 @@ class DumbVoteSession extends React.Component<void, Props, State> {
     });
   };
 
+  getStatElements = () => {
+    let numParticipations = 0;
+    let participantsIds = [];
+    this.props.proposals.forEach((p) => {
+      participantsIds = participantsIds
+        .concat(
+          p.voteResults.participants.map((participant) => {
+            if (participant) {
+              return participant.id;
+            }
+
+            return null;
+          })
+        )
+        .filter(item => item !== null);
+      numParticipations += p.modules.reduce((acc, m) => acc + m.numVotes, 0);
+    });
+
+    const numParticipants = new Set(participantsIds).size;
+    return [statParticipations(numParticipations), statParticipants(numParticipants)];
+  };
+
   render() {
     const {
       title,
@@ -324,9 +347,12 @@ class DumbVoteSession extends React.Component<void, Props, State> {
     const propositionsSectionTitleToShow = !isPhaseCompleted
       ? propositionsSectionTitle
       : I18n.t('debate.voteSession.voteResultsPlusTitle', { title: propositionsSectionTitle });
+
     return (
       <div className="votesession-page">
-        <Header title={title} subtitle={subTitleToShow} imgUrl={headerImageUrl} routerParams={routerParams} type="voteSession" />
+        <Header title={title} subtitle={subTitleToShow} imgUrl={headerImageUrl} routerParams={routerParams} type="voteSession">
+          <HeaderStatistics statElements={this.getStatElements()} />
+        </Header>
         {!isPhaseCompleted ? (
           <Grid fluid className="background-light">
             <Section

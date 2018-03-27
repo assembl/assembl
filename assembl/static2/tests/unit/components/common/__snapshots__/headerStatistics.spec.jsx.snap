@@ -97,6 +97,36 @@ exports[`HeaderStatistics component should match HeaderStatistics snapshot 1`] =
         </div>
       </div>
     </div>
+    <div
+      className="stat-container"
+    >
+      <div
+        className="stat-box"
+      >
+        <div
+          className="stat-icon assembl-icon-sentiment-neutral white"
+        />
+        <div
+          className="stat"
+        >
+          <div
+            className="stat-nb"
+          >
+            27
+          </div>
+          <div
+            className="stat-nb stat-label"
+          >
+            <span
+              className={undefined}
+              style={undefined}
+            >
+              participations
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 `;
