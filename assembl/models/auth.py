@@ -1738,7 +1738,7 @@ class LanguagePreferenceCollection(object):
     allowing to decide on which languages to display."""
 
     @abstractmethod
-    def find_locale(self, locale, db=None):
+    def find_locale(self, locale, **kwargs):
         pass
 
     @classmethod
@@ -1779,12 +1779,13 @@ class LanguagePreferenceCollectionWithDefault(LanguagePreferenceCollection):
     def default_locale_code(self):
         return self.default_locale
 
-    def find_locale(self, locale, db=None):
+    def find_locale(self, locale, **kwargs):
         if Locale.compatible(locale, self.default_locale.code):
             return UserLanguagePreference(
                 locale=self.default_locale, locale_id=self.default_locale.id,
                 source_of_evidence=LanguagePreferenceOrder.Cookie.value)
         else:
+            db = kwargs.get('db', User.default_db)
             locale = Locale.get_or_create(locale, db)
             return UserLanguagePreference(
                 locale=locale, locale_id=locale.id,
@@ -1888,7 +1889,7 @@ class UserLanguagePreferenceCollection(LanguagePreferenceCollection):
     def default_locale_code(self):
         return self.default_pref.locale.code
 
-    def find_locale(self, locale, db=None):
+    def find_locale(self, locale, **kwargs):
         # This code needs to mirror
         # LanguagePreferenceCollection.getPreferenceForLocale
         for locale in Locale.decompose_locale(locale):
@@ -1897,13 +1898,20 @@ class UserLanguagePreferenceCollection(LanguagePreferenceCollection):
         if self.default_pref is None:
             # this should never actually happen
             return None
+        db = kwargs.get('db', User.default_db)
         locale = Locale.get_or_create(locale, db)
-        return UserLanguagePreference(
-            locale=locale, locale_id=locale.id,
-            translate_to_locale=self.default_pref.locale,
-            translate_to=self.default_pref.locale.id,
-            source_of_evidence=self.default_pref.source_of_evidence,
-            user=None)  # Do not give the user or this gets added to session
+        args = {
+            'locale': locale,
+            'locale_id': locale.id,
+            'translate_to_locale': self.default_pref.locale,
+            'source_of_evidence': self.default_pref.source_of_evidence,
+            'post_id': kwargs.get('post_id', None),
+            'user': None
+        }  # Do not give the user or this gets added to session
+        if 'post_id' in kwargs:
+            return PostUserLanguagePreference(**args)
+        else:
+            return UserLanguagePreference(**args)
 
     def has_locale(self, locale):
         for locale in Locale.decompose_locale(locale):
@@ -1915,21 +1923,24 @@ class UserLanguagePreferenceCollection(LanguagePreferenceCollection):
         return list({pref.translate_to_code or pref.locale_code
                      for pref in self.user_prefs.itervalues()})
 
-    def add_locale(self, locale, db, **kwargs):
-        ulp = self.find_locale(locale, db, post=False)
+    def add_locale(self, locale, **kwargs):
+        db = kwargs.get('db', User.default_db)
+        post_id = kwargs.get('post_id', None)
+        ulp = self.find_locale(locale, db, post_id=post_id)
         assert ulp
         if not ulp.user:
-            if 'user' in self.__dict__:
-                ulp.user = self.user
-            else:
-                user_id = kwargs.get('user_id', None)
-                if not user_id:
-                    raise Exception("A user MUST be passed in order to create a user language preference")
+            ulp.user = self.user
         # Use setattr here instead
-        ulp.__dict__.update(kwargs)
+        if 'translate_to_locale' in kwargs:
+            ulp.translate_to_locale = kwargs.get('translate_to_locale')
+        if 'source_of_evidence' in kwargs:
+            ulp.source_of_evidence = kwargs.get('source_of_evidence')
+        if 'preferred_order' in kwargs:
+            ulp.preferred_order = kwargs.get('preferred_order')
         db.add(ulp)
         db.flush()
-        self.recalculate_locale(db)
+        # Update the cache of preferences
+        self.prefs_by_locale[locale] = ulp
         return ulp
 
 
