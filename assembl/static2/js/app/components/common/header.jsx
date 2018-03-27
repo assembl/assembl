@@ -5,10 +5,11 @@ import { Grid, Row } from 'react-bootstrap';
 import { Translate } from 'react-redux-i18n';
 import { getPhaseName, getIfPhaseCompletedByIdentifier } from '../../utils/timeline';
 import WhatYouNeedToKnow from '../debate/common/whatYouNeedToKnow';
+import HeaderActions from '../debate/common/headerActions';
 
 class Header extends React.Component {
   render() {
-    const { title, subtitle, imgUrl, identifier, synthesisTitle, additionalHeaderClasses } = this.props;
+    const { title, subtitle, imgUrl, identifier, synthesisTitle, additionalHeaderClasses, ideaId, routerParams } = this.props;
     const { debateData } = this.props.debate;
     const { locale } = this.props.i18n;
     const isPhaseCompleted = getIfPhaseCompletedByIdentifier(debateData.timeline, identifier);
@@ -26,6 +27,12 @@ class Header extends React.Component {
               </h6>
             )}
           </div>
+          <HeaderActions
+            ideaId={ideaId}
+            routerParams={routerParams}
+            identifier={identifier}
+            useSocialMedia={debateData.useSocialMedia}
+          />
         </Grid>
         <Grid fluid>
           <Row>

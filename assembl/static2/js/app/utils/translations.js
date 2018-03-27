@@ -228,8 +228,12 @@ const Translations = {
       panelTitle: "Bienvenue dans la communauté d'Assembl"
     },
     debate: {
+      shareThematic: "Partagez cette thématique",
+      votes: "Votes",
+      vote: "Vote",
       answer: "Je réponds :",
       toAnswer: "Répondre",
+      share: "Partager",
       sharePost: "Partager ce message",
       shareSynthesis: "Partager cette synthèse",
       copyLink: "Copier le lien dans le presse-papier",
@@ -238,7 +242,10 @@ const Translations = {
       insert: "Ecrivez votre message",
       post: "Poster",
       like: "J'aime",
+      agree: "D'accord",
+      agreeCount: "%{count} d'accord",
       disagree: "Pas d'accord",
+      disagreeCount: "%{count} pas d'accord",
       dontUnderstand: "Pas tout compris",
       moreInfo: "SVP + d'infos",
       remaining_x_characters: "Il vous reste %{nbCharacters} caractères",
@@ -332,8 +339,6 @@ const Translations = {
         notEnoughTokens: "Vous n'avez plus assez de jetons",
         exclusiveTokens: "Vous avez déjà voté pour une autre catégorie pour cette proposition",
         totalVotes: "%{count} votes",
-        votes: "Votes",
-        vote: "Vote",
         valueWithUnit: "%{num} %{unit}"
       }
     },
@@ -820,8 +825,12 @@ const Translations = {
       noSynthesisYet: "There is no synthesis available yet."
     },
     debate: {
+      shareThematic: "Share this thematic",
+      votes: "Votes",
+      vote: "Vote",
       answer: "I answer:",
       toAnswer: "Answer",
+      share: "Share",
       sharePost: "Share this message",
       shareSynthesis: "Share this synthesis",
       copyLink: "Copy the link to the clipboard",
@@ -830,7 +839,10 @@ const Translations = {
       insert: "Post a comment",
       post: "Post",
       like: "Like",
+      agree: "Agree",
+      agreeCount: "%{count} agree",
       disagree: "Disagree",
+      disagreeCount: "%{count} disagree",
       dontUnderstand: "Did not get it",
       moreInfo: "More info please",
       remaining_x_characters: "You have %{nbCharacters} characters left",
@@ -924,8 +936,6 @@ const Translations = {
         notEnoughTokens: "You don't have enough tokens",
         exclusiveTokens: "You already voted for another category for this proposal",
         totalVotes: "%{count} votes",
-        votes: "Votes",
-        vote: "Vote",
         valueWithUnit: "%{unit}%{num}"
       }
     },

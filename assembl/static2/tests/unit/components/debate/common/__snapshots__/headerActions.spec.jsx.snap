@@ -1,0 +1,30 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`headerActions component should render a headerActions component 1`] = `
+<div
+  className="header-actions-container"
+>
+  <div
+    className="share-button action-button"
+    onClick={[Function]}
+  >
+    <div
+      className="share-icon-container white"
+    >
+      <span
+        className="assembl-icon-share"
+      />
+    </div>
+    <div
+      className="action-button-label"
+    >
+      <span
+        className={undefined}
+        style={undefined}
+      >
+        Share
+      </span>
+    </div>
+  </div>
+</div>
+`;

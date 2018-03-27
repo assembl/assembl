@@ -3,6 +3,42 @@
   position: relative;
   z-index: 10;
 
+  .header-actions-container {
+    z-index: 2;
+    color: $white;
+    position: relative;
+    padding: 40px 0 0 40px;
+
+    .doughnut-container {
+      width: 130px;
+      height: 130px;
+      display: inline-block;
+      vertical-align: middle;
+
+      svg {
+        path {
+          stroke-width: 15px;
+        }
+      }
+
+      .total-count-container {
+        text-align: center;
+        margin-top: -90px;
+
+        .total-count {
+          font-size: 20px;
+          font-family: $font-family3;
+        }
+
+        .count-label {
+          font-size: $font-size-xs;
+          font-family: $font-family4;
+          margin-top: -3px;
+        }
+      }
+    }
+  }
+
   .wyntk-box {
     top: calc(50% - 175px);
     height: 350px;
@@ -80,5 +116,14 @@
     top: 0;
     left: 0;
     width: 100%;
+  }
+}
+
+.sentiment-header-tooltip {
+  border-radius: 4px;
+  padding: 0 !important;
+
+  .tooltip-inner {
+    background: none !important;
   }
 }
