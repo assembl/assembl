@@ -26,7 +26,8 @@ from assembl.graphql.langstring import resolve_langstring
 from assembl.graphql.locale import Locale
 from assembl.graphql.post import (AddPostAttachment, CreatePost, DeletePost,
                                   DeletePostAttachment, UndeletePost,
-                                  UpdatePost)
+                                  UpdatePost, AddPostExtract)
+from assembl.graphql.extract import (UpdateExtract, DeleteExtract)
 from assembl.graphql.resource import (CreateResource, DeleteResource, Resource,
                                       UpdateResource)
 from assembl.graphql.section import (CreateSection, DeleteSection, Section,
@@ -316,6 +317,9 @@ class Mutations(graphene.ObjectType):
     add_sentiment = AddSentiment.Field()
     delete_sentiment = DeleteSentiment.Field()
     add_post_attachment = AddPostAttachment.Field()
+    add_post_extract = AddPostExtract.Field()
+    update_extract = UpdateExtract.Field()
+    delete_extract = DeleteExtract.Field()
     upload_document = UploadDocument.Field()
     delete_post_attachment = DeletePostAttachment.Field()
     update_discussion_preferences = UpdateDiscussionPreferences.Field()
