@@ -27,7 +27,12 @@ class Header extends React.Component {
               </h6>
             )}
           </div>
-          <HeaderActions ideaId={ideaId} routerParams={routerParams} identifier={identifier} />
+          <HeaderActions
+            ideaId={ideaId}
+            routerParams={routerParams}
+            identifier={identifier}
+            useSocialMedia={debateData.useSocialMedia}
+          />
         </Grid>
         <Grid fluid>
           <Row>

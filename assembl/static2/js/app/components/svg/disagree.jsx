@@ -5,6 +5,11 @@ import React from 'react';
 class Disagree extends React.Component {
   props: { size: number, color: string, backgroundColor: string };
 
+  static defaultProps = {
+    color: '#f75959',
+    backgroundColor: '#ffffff'
+  };
+
   render() {
     const { size, color, backgroundColor } = this.props;
     return (
@@ -26,8 +31,8 @@ class Disagree extends React.Component {
             1.39072848 14,
             1.39072848 L14,
             1.39072848 Z"
-            stroke={color || '#F75959'}
-            fill={backgroundColor || '#ffffff'}
+            stroke={color}
+            fill={backgroundColor}
           />
           <path
             d="M8.1218543,
@@ -45,7 +50,7 @@ class Disagree extends React.Component {
             9.86490066 8.1218543,
             9.86490066 L8.1218543,
             9.86490066 Z"
-            fill={color || '#F75959'}
+            fill={color}
           />
           <path
             d="M19.8781457,
@@ -63,7 +68,7 @@ class Disagree extends React.Component {
             9.86490066 19.8781457,
             9.86490066 L19.8781457,
             9.86490066 Z"
-            fill={color || '#F75959'}
+            fill={color}
           />
           <path
             d="M21.0278146,
@@ -87,7 +92,7 @@ class Disagree extends React.Component {
             19.210596 21.0278146,
             18.8953642 L21.0278146,
             18.8953642 Z"
-            fill={color || '#F75959'}
+            fill={color}
           />
         </g>
       </svg>

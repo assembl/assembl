@@ -5,6 +5,11 @@ import React from 'react';
 class MoreInfo extends React.Component {
   props: { size: number, color: string, backgroundColor: string };
 
+  static defaultProps = {
+    color: '#a58eff',
+    backgroundColor: '#ffffff'
+  };
+
   render() {
     const { size, color, backgroundColor } = this.props;
     return (
@@ -25,8 +30,8 @@ class MoreInfo extends React.Component {
                 1.39072848 14,
                 1.39072848 L14,1.39072848 Z"
             id="Shape"
-            stroke={color || '#A58EFF'}
-            fill={backgroundColor || '#ffffff'}
+            stroke={color}
+            fill={backgroundColor}
           />
           <path
             d="M8.1218543,
@@ -44,7 +49,7 @@ class MoreInfo extends React.Component {
                 9.86490066 8.1218543,
                 9.86490066 L8.1218543,
                 9.86490066 Z"
-            fill={color || '#A58EFF'}
+            fill={color}
           />
           <path
             d="M19.8781457,
@@ -62,7 +67,7 @@ class MoreInfo extends React.Component {
                 9.86490066 19.8781457,
                 9.86490066 L19.8781457,
                 9.86490066 Z"
-            fill={color || '#A58EFF'}
+            fill={color}
           />
           <path
             d="M19.581457,
@@ -82,7 +87,7 @@ class MoreInfo extends React.Component {
                 17.4304636 19.581457,
                 17.4304636 L19.581457,
                 17.4304636 Z"
-            fill={color || '#A58EFF'}
+            fill={color}
           />
         </g>
       </svg>

@@ -5,6 +5,11 @@ import React from 'react';
 class DontUnderstand extends React.Component {
   props: { size: number, color: string, backgroundColor: string };
 
+  static defaultProps = {
+    color: '#faaf3f',
+    backgroundColor: '#ffffff'
+  };
+
   render() {
     const { size, color, backgroundColor } = this.props;
     return (
@@ -26,10 +31,10 @@ class DontUnderstand extends React.Component {
                 1.48344371 13.9072848,
                 1.48344371 L13.9072848,
                 1.48344371 Z"
-            stroke={color || '#FAAF3F'}
-            fill={backgroundColor || '#ffffff'}
+            stroke={color}
+            fill={backgroundColor}
           />
-          <g transform="translate(4.821192, 7.231788)" fill={color || '#FAAF3F'}>
+          <g transform="translate(4.821192, 7.231788)" fill={color}>
             <g transform="translate(1.298013, 2.966887)">
               <path d="M1.90993377,
                     0.0556291391 C0.945695364,

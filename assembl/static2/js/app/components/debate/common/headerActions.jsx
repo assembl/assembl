@@ -1,11 +1,10 @@
 // @flow
 import React from 'react';
-import { connect } from 'react-redux';
 import { Translate } from 'react-redux-i18n';
 import { openShareModal } from '../../../utils/utilityManager';
 
 type Props = {
-  routerParams: Map<string>,
+  routerParams: RouterParams,
   ideaId: string,
   useSocialMedia: boolean
 };
@@ -36,11 +35,4 @@ const headerActions = ({ routerParams, ideaId, useSocialMedia }: Props) => {
   );
 };
 
-const mapStateToProps = ({ debate }) => {
-  const { debateData } = debate;
-  return {
-    useSocialMedia: debateData.useSocialMedia
-  };
-};
-
-export default connect(mapStateToProps)(headerActions);
+export default headerActions;
