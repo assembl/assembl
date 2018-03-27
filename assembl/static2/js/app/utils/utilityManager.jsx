@@ -76,11 +76,24 @@ export const closeModal = () => {
   modalManager.component.setState({ showModal: false });
 };
 
+const getPathForModal = (type, slug, phase, themeId, elementId) => {
+  switch (type) {
+  case 'post':
+    return { url: getFullPath(type, { slug: slug, phase: phase, themeId: themeId, element: elementId }) };
+  case 'idea':
+    return { url: getFullPath(type, { slug: slug, phase: phase, themeId: themeId }) };
+  case 'voteSession':
+    return { url: getFullPath(type, { slug: slug, phase: phase }) };
+  default:
+    return { url: getFullPath('post', { slug: slug, phase: phase, themeId: themeId, element: elementId }) };
+  }
+};
+
 export const openShareModal = (options) => {
-  const { title, routerParams, elementId, social, isFooter, footer } = options;
+  const { type, title, routerParams, elementId, social, isFooter, footer } = options;
   const { slug, phase, themeId } = routerParams;
-  const url = getFullPath('post', { slug: slug, phase: phase, themeId: themeId, element: elementId });
-  const modalBody = <SocialShare url={url} onClose={closeModal} social={social} />;
+  const pathForModal = getPathForModal(type, slug, phase, themeId, elementId);
+  const modalBody = <SocialShare url={pathForModal.url} onClose={closeModal} social={social} />;
   return displayModal(title, modalBody, isFooter, footer);
 };
 

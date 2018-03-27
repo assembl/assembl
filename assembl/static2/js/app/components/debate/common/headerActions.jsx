@@ -4,12 +4,13 @@ import { Translate } from 'react-redux-i18n';
 import { openShareModal } from '../../../utils/utilityManager';
 
 type Props = {
+  type: string,
   routerParams: RouterParams,
   ideaId: string,
   useSocialMedia: boolean
 };
 
-const headerActions = ({ routerParams, ideaId, useSocialMedia }: Props) => {
+const headerActions = ({ type, routerParams, ideaId, useSocialMedia }: Props) => {
   const modalTitle = <Translate value="debate.shareThematic" />;
   return (
     <div className="header-actions-container">
@@ -17,6 +18,7 @@ const headerActions = ({ routerParams, ideaId, useSocialMedia }: Props) => {
         className="share-button action-button"
         onClick={() =>
           openShareModal({
+            type: type,
             title: modalTitle,
             routerParams: routerParams,
             elementId: ideaId,

@@ -6,8 +6,10 @@ exports[`VoteSession component should match VoteSession snapshot 1`] = `
 >
   <Connect(Header)
     imgUrl="foo.jpg"
+    routerParams={undefined}
     subtitle="Maintenant il faut voter."
     title="Phase de vote à la majorité et estimation multicritère"
+    type="voteSession"
   />
   <Grid
     bsClass="container"
@@ -230,8 +232,10 @@ exports[`VoteSession component should match VoteSession snapshot with empty modu
 >
   <Connect(Header)
     imgUrl="foo.jpg"
+    routerParams={undefined}
     subtitle="Maintenant il faut voter."
     title="Phase de vote à la majorité et estimation multicritère"
+    type="voteSession"
   />
   <Grid
     bsClass="container"

@@ -43,7 +43,7 @@ const DebateHome = (props) => {
   case 'multiColumns':
     return <DebateThread {...props} />;
   case 'voteSession':
-    return <VoteSession />;
+    return <VoteSession routerParams={props.params} />;
   default:
     return <Debate {...props} />;
   }

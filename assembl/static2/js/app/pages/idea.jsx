@@ -223,6 +223,7 @@ class Idea extends React.Component {
           identifier={identifier}
           ideaId={id}
           routerParams={routerParams}
+          type="idea"
         />
         <section className="post-section">
           {!ideaWithPostsData.loading &&

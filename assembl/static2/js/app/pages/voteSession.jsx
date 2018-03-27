@@ -70,7 +70,8 @@ type Props = {
   proposals: Array<Proposal>,
   addGaugeVote: Function,
   addTokenVote: Function,
-  refetchVoteSession: Function
+  refetchVoteSession: Function,
+  routerParams: RouterParams
 };
 
 export type RemainingTokensByCategory = Map<string, number>;
@@ -151,7 +152,8 @@ class DumbVoteSession extends React.Component<void, Props, State> {
     const { proposals } = this.props;
     let userTokenVotes = Map();
     let userGaugeVotes = Map();
-    proposals.forEach((proposal) => {
+    const propos = proposals || [];
+    propos.forEach((proposal) => {
       const tokenModules = proposal.modules
         ? proposal.modules.filter(module => module.voteType === 'token_vote_specification')
         : [];
@@ -300,7 +302,8 @@ class DumbVoteSession extends React.Component<void, Props, State> {
       propositionsSectionTitle,
       proposals,
       modules,
-      isPhaseCompleted
+      isPhaseCompleted,
+      routerParams
     } = this.props;
 
     if (!title || title.length === 0) {
@@ -320,7 +323,7 @@ class DumbVoteSession extends React.Component<void, Props, State> {
       : I18n.t('debate.voteSession.voteResultsPlusTitle', { title: propositionsSectionTitle });
     return (
       <div className="votesession-page">
-        <Header title={title} subtitle={subTitleToShow} imgUrl={headerImageUrl} />
+        <Header title={title} subtitle={subTitleToShow} imgUrl={headerImageUrl} routerParams={routerParams} type="voteSession" />
         {!isPhaseCompleted ? (
           <Grid fluid className="background-light">
             <Section
