@@ -59,6 +59,11 @@
   text-align: center;
   padding: 2px 0 0 3px;
   font-size: 20px;
+
+  &:before {
+    margin-right: 2px;
+    font-size: $font-size-sm;
+  }
 }
 
 .extracts.extracts--is-harvesting {
@@ -136,13 +141,13 @@
 }
 
 .active-box {
-  border-left-color: $green;
+  border-left-color: $harvesting-green;
 }
 
 .harvesting-box {
   position: absolute;
   box-shadow: 2px 2px 4px 0 $grey1;
-  max-width: 400px;
+  max-width: 310px;
   left: 0;
   z-index: 99;
 
@@ -151,22 +156,56 @@
     border-bottom: 1px solid $grey1;
   }
 
-  .profil {
-    padding: 0 20px 0 0;
-    font-size: $font-size-s;
+  .harvesting-status {
     display: inline-block;
+    font-size: $font-size-xs;
+
+    .harvesting-in-progress {
+      color: $black;
+      margin-left: -12px;
+      padding: 0 0 20px;
+    }
+
+    .validated-harvesting {
+      color: $harvesting-green;
+      margin-left: -12px;
+      padding: 0 0 15px;
+    }
+
+    .harvesting-status-label {
+      display: inline-block;
+      vertical-align: bottom;
+    }
+  }
+
+  .profil {
+    font-size: $font-size-xs;
+    color: $grey2;
+    margin-left: -8px;
 
     .assembl-icon-profil {
-      vertical-align: sub;
+      vertical-align: bottom;
 
       &:before {
-        font-size: 25px;
+        font-size: 30px;
+        margin-right: 10px;
       }
+    }
+
+    .harvesting-date {
+      font-size: $font-size-xxs;
+    }
+
+    .harvesting-infos {
+      display: inline-block;
+      vertical-align: bottom;
     }
   }
 
   .button-bar {
     display: inline-block;
+    margin-left: 10px;
+    vertical-align: top;
 
     .btn[disabled] {
       opacity: 1;
@@ -197,10 +236,10 @@
     }
 
     .btn-default {
-      margin: 0 5px;
-      border-radius: 8px;
-      width: 30px;
-      height: 30px;
+      margin: 0 3px;
+      border-radius: 5px;
+      width: 26px;
+      height: 26px;
       border-color: $grey2;
 
       span {
@@ -228,36 +267,24 @@
 
       span {
         &:before {
-          font-size: 15px;
+          font-size: 12px;
           display: block;
-          margin: 0 0 0 -5px;
+          margin: 0 0 0 -6px;
         }
       }
 
       .assembl-icon-check {
         &:before {
-          font-size: 18px;
+          font-size: 15px;
         }
       }
     }
   }
 
   .harvesting-box-body {
-    padding: 10px 30px 20px;
+    padding: 10px 20px 20px;
     font-size: $font-size-xs;
     color: $grey2;
-
-    .harvesting-in-progress {
-      color: $black;
-      margin-left: -12px;
-      padding: 0 0 20px;
-    }
-
-    .validated-harvesting {
-      color: $green;
-      margin-left: -12px;
-      padding: 0 0 15px;
-    }
   }
 
   .harvesting-box-footer {
@@ -274,6 +301,6 @@
 .is-harvesting {
   .extract-in-message {
     display: inline;
-    background-color: $harvesting-green;
+    background-color: $harvesting-green-light;
   }
 }

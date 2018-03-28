@@ -97,9 +97,22 @@ class HarvestingBox extends React.Component<void, Props, State> {
         style={{ marginTop: `${20 + 180 * index}px` }} // TODO fix the position
       >
         <div className="harvesting-box-header">
-          <div className="profil">
-            <span className="assembl-icon-profil grey" />
-            <span className="username">Pauline Thomas</span>
+          <div className="harvesting-status">
+            {disabled ? (
+              <div className="harvesting-in-progress">
+                <span className="confirm-harvest-button assembl-icon-catch" />
+                <div className="harvesting-status-label">
+                  <Translate value="harvesting.inProgress" />
+                </div>
+              </div>
+            ) : (
+              <div className="validated-harvesting">
+                <span className="confirm-harvest-button assembl-icon-catch" />
+                <div className="harvesting-status-label">
+                  <Translate value="harvesting.validatedHarvesting" />
+                </div>
+              </div>
+            )}
           </div>
           <div className="button-bar">
             <Button disabled={disabled} className={classnames({ active: checkIsActive })}>
@@ -115,21 +128,15 @@ class HarvestingBox extends React.Component<void, Props, State> {
               <span className="assembl-icon-pepite grey" />
             </Button>
           </div>
+          <div className="profil">
+            <span className="assembl-icon-profil grey" />
+            <div className="harvesting-infos">
+              <div className="username">Pauline Thomas</div>
+              <div className="harvesting-date">2 days ago</div>
+            </div>
+          </div>
         </div>
         <div className="harvesting-box-body">
-          <div>
-            {disabled ? (
-              <div className="harvesting-in-progress">
-                <span className="confirm-harvest-button assembl-icon-catch" />&nbsp;<Translate value="harvesting.inProgress" />
-              </div>
-            ) : (
-              <div className="validated-harvesting">
-                <span className="confirm-harvest-button assembl-icon-catch" />
-                &nbsp;
-                <Translate value="harvesting.validatedHarvesting" />
-              </div>
-            )}
-          </div>
           {isExtract && extract && <div>{extract.body}</div>}
           {!isExtract && <div>{selectionText}</div>}
         </div>
