@@ -37,12 +37,13 @@ def test_get_thematics_no_video(discussion, graphql_request, test_session):
     thematic_gid = to_global_id('Thematic', thematic.id)
 
     res = schema.execute(
-        u'query { thematics(identifier: "survey") { id, title, description, numPosts, numContributors, questions { title }, video {title, descriptionTop, descriptionBottom, descriptionSide, htmlCode} } }', context_value=graphql_request)
+        u'query { thematics(identifier: "survey") { id, title, description, numPosts, numContributors, totalSentiments, questions { title }, video {title, descriptionTop, descriptionBottom, descriptionSide, htmlCode} } }', context_value=graphql_request)
     assert json.loads(json.dumps(res.data)) == {
         u'thematics': [{u'description': None,
                         u'id': thematic_gid,
                         u'numContributors': 0,
                         u'numPosts': 0,
+                        u'totalSentiments': 0,
                         u'questions': [],
                         u'title': u'Comprendre les dynamiques et les enjeux',
                         u'video': None}]}
@@ -537,12 +538,19 @@ def test_get_question_via_node_query(graphql_request, thematic_and_question):
             __typename,
             ... on Question {
                 title
+                numPosts
+                numContributors
+                totalSentiments
             }
         }
     }""" % first_question_id, context_value=graphql_request)
     assert json.loads(json.dumps(res.data)) == {
-        u'node': {u"__typename": u"Question",
-                  u"title": u"Comment qualifiez-vous l'emergence de l'Intelligence Artificielle dans notre société ?"}}
+        u'node': {
+            u"__typename": u"Question",
+            u"numPosts": 0,
+            u"numContributors": 0,
+            u"totalSentiments": 0,
+            u"title": u"Comment qualifiez-vous l'emergence de l'Intelligence Artificielle dans notre société ?"}}
 
 
 def test_get_proposition_post_via_node_query(graphql_request, proposition_id):
