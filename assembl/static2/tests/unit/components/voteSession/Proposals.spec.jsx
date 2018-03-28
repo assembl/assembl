@@ -9,6 +9,7 @@ describe('Proposals component', () => {
     const { proposals, remainingTokensByCategory, userGaugeVotes, userTokenVotes } = fakeData;
     const props = {
       proposals: proposals,
+      randomProposals: proposals,
       seeCurrentVotes: true,
       remainingTokensByCategory: remainingTokensByCategory,
       userGaugeVotes: userGaugeVotes,

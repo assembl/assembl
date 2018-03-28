@@ -69,6 +69,7 @@ type Props = {
   modules: Array<VoteSpecification>,
   propositionsSectionTitle: string,
   proposals: Array<Proposal>,
+  randomProposals: Array<Proposal>,
   addGaugeVote: Function,
   addTokenVote: Function,
   refetchVoteSession: Function
@@ -300,6 +301,7 @@ class DumbVoteSession extends React.Component<void, Props, State> {
       instructionsSectionContent,
       propositionsSectionTitle,
       proposals,
+      randomProposals,
       modules,
       isPhaseCompleted
     } = this.props;
@@ -361,7 +363,7 @@ class DumbVoteSession extends React.Component<void, Props, State> {
               <Col mdOffset={1} md={10} smOffset={1} sm={10}>
                 {!isPhaseCompleted ? (
                   <Proposals
-                    proposals={shuffle(proposals)}
+                    proposals={randomProposals}
                     remainingTokensByCategory={remainingTokensByCategory}
                     seeCurrentVotes={seeCurrentVotes}
                     userGaugeVotes={this.state.userGaugeVotes}
@@ -457,6 +459,7 @@ export default compose(
         propositionsSectionTitle: propositionsSectionTitle,
         modules: modules,
         proposals: proposals,
+        randomProposals: shuffle(proposals),
         noVoteSession: false,
         refetchVoteSession: data.refetch
       };
