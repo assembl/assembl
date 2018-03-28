@@ -96,3 +96,19 @@ type ErrorDef = {
 };
 
 type ValidationErrors = { [string]: Array<ErrorDef> };
+
+type TextFragmentIdentifier = {
+  xpathStart: string,
+  xpathEnd: string,
+  offsetStart: number,
+  offsetEnd: number
+};
+
+type Extract = {
+  textFragmentIdentifiers: Array<TextFragmentIdentifier>,
+  id: string,
+  important: boolean,
+  extractNature: string,
+  extractAction: string,
+  body: string
+};

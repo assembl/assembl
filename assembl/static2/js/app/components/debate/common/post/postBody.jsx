@@ -10,22 +10,6 @@ import { transformLinksInHtml } from '../../../../utils/linkify';
 import { youtubeRegexp } from '../../../../utils/globalFunctions';
 import YoutubeTheater from '../../../common/youtubeTheater';
 
-export type TextFragmentIdentifier = {
-  xpathStart: string,
-  xpathEnd: string,
-  offsetStart: number,
-  offsetEnd: number
-};
-
-export type Extract = {
-  textFragmentIdentifiers: Array<TextFragmentIdentifier>,
-  id: string,
-  important: boolean,
-  extractNature: string,
-  extractAction: string,
-  body: string
-};
-
 type Props = {
   body: string,
   dbId: number,

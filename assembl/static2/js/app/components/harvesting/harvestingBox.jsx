@@ -4,20 +4,22 @@ import ARange from 'annotator_range'; // eslint-disable-line
 import { connect } from 'react-redux';
 import { compose, graphql } from 'react-apollo';
 import { Button } from 'react-bootstrap';
-import { Translate, I18n } from 'react-redux-i18n';
+import { Translate } from 'react-redux-i18n';
 import classnames from 'classnames';
 
 import addPostExtractMutation from '../../graphql/mutations/addPostExtract.graphql';
+import withLoadingIndicator from '../../components/common/withLoadingIndicator';
 import { displayAlert } from '../../utils/utilityManager';
 
 type Props = {
-  extract: ?Object, // TODO change type
+  extract: ?Extract,
   index: number,
   postId: string,
   contentLocale: string,
   selection: ?Object,
   cancelHarvesting: Function,
-  addPostExtract: Function
+  addPostExtract: Function,
+  displayHarvestingBox: Function
 };
 
 type State = {
@@ -44,23 +46,19 @@ class HarvestingBox extends React.Component<void, Props, State> {
   }
 
   validateHarvesting = (): void => {
-    const { postId, selection, contentLocale, addPostExtract } = this.props;
+    const { postId, selection, contentLocale, addPostExtract, displayHarvestingBox } = this.props;
     if (!selection) {
       return;
     }
-    // console.log('selection', selection);
     const selectionText = selection.toString();
-    // console.log('ARange', ARange);
     const annotatorRange = ARange.sniff(selection.getRangeAt(0));
     if (!annotatorRange) {
       return;
     }
-    // console.log('annotatorRange', annotatorRange);
     const serializedAnnotatorRange = annotatorRange.serialize(document, 'annotation');
     if (!serializedAnnotatorRange) {
       return;
     }
-    // console.log('serializedAnnotatorRange', serializedAnnotatorRange);
 
     const variables = {
       contentLocale: contentLocale,
@@ -72,17 +70,15 @@ class HarvestingBox extends React.Component<void, Props, State> {
       offsetStart: serializedAnnotatorRange.startOffset,
       offsetEnd: serializedAnnotatorRange.endOffset
     };
-    // console.log('variables', variables);
 
     addPostExtract({ variables: variables })
       .then(() => {
-        displayAlert('success', I18n.t('debate.thread.postSuccess')); // TODO: use another i18n key
         this.setState({
           disabled: false,
           checkIsActive: true
         });
+        displayHarvestingBox();
         window.getSelection().removeAllRanges();
-        // TODO: should we refresh the view of the harvested message?
       })
       .catch((error) => {
         displayAlert('danger', `${error}`);
@@ -156,4 +152,10 @@ const mapStateToProps = state => ({
   contentLocale: state.i18n.locale
 });
 
-export default compose(connect(mapStateToProps), graphql(addPostExtractMutation, { name: 'addPostExtract' }))(HarvestingBox);
+export default compose(
+  connect(mapStateToProps),
+  graphql(addPostExtractMutation, {
+    name: 'addPostExtract'
+  }),
+  withLoadingIndicator()
+)(HarvestingBox);
