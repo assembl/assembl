@@ -35,7 +35,7 @@ export const statSentiments = (totalSentiments: number) => ({
 });
 
 export const statParticipations = (numParticipations: number) => ({
-  iconName: 'sentiment-neutral',
+  iconName: 'participation-vote',
   metricValue: numParticipations,
   metricNameTranslateKey: 'home.participations'
 });

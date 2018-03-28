@@ -104,7 +104,7 @@ exports[`HeaderStatistics component should match HeaderStatistics snapshot 1`] =
         className="stat-box"
       >
         <div
-          className="stat-icon assembl-icon-sentiment-neutral white"
+          className="stat-icon assembl-icon-participation-vote white"
         />
         <div
           className="stat"

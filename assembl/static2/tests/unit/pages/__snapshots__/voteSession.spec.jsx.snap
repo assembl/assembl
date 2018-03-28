@@ -15,7 +15,7 @@ exports[`VoteSession component should match VoteSession snapshot 1`] = `
       statElements={
         Array [
           Object {
-            "iconName": "sentiment-neutral",
+            "iconName": "participation-vote",
             "metricNameTranslateKey": "home.participations",
             "metricValue": 104,
           },
@@ -274,7 +274,7 @@ exports[`VoteSession component should match VoteSession snapshot with empty modu
       statElements={
         Array [
           Object {
-            "iconName": "sentiment-neutral",
+            "iconName": "participation-vote",
             "metricNameTranslateKey": "home.participations",
             "metricValue": 0,
           },
