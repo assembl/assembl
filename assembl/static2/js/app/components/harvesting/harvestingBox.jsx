@@ -11,6 +11,8 @@ import moment from 'moment';
 import addPostExtractMutation from '../../graphql/mutations/addPostExtract.graphql';
 import withLoadingIndicator from '../../components/common/withLoadingIndicator';
 import { displayAlert } from '../../utils/utilityManager';
+import { getConnectedUserId, getConnectedUserName } from '../../utils/globalFunctions';
+import AvatarImage from '../common/avatarImage';
 
 type Props = {
   extract: ?Extract,
@@ -91,6 +93,9 @@ class HarvestingBox extends React.Component<void, Props, State> {
     const { disabled, checkIsActive, isNugget } = this.state;
     const isExtract = extract !== null;
     const selectionText = selection ? selection.toString() : '';
+    const harvesterUserName =
+      extract && extract.creator && extract.creator.displayName ? extract.creator.displayName : getConnectedUserName();
+    const harvesterUserId = extract && extract.creator && extract.creator.userId ? extract.creator.userId : getConnectedUserId();
 
     return (
       <div
@@ -130,9 +135,9 @@ class HarvestingBox extends React.Component<void, Props, State> {
             </Button>
           </div>
           <div className="profil">
-            <span className="assembl-icon-profil grey" />
+            <AvatarImage userId={harvesterUserId} userName={harvesterUserName} />
             <div className="harvesting-infos">
-              <div className="username">Pauline Thomas</div>
+              <div className="username">{harvesterUserName}</div>
               {isExtract &&
                 extract &&
                 extract.creationDate && (

@@ -1,3 +1,5 @@
+#import "./AgentProfileInfo.graphql"
+
 fragment Extract on Extract {
   id
   creationDate
@@ -10,5 +12,8 @@ fragment Extract on Extract {
     xpathEnd
     offsetStart
     offsetEnd
+  }
+  creator {
+    ...AgentProfileInfo
   }
 }

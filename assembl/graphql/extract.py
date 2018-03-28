@@ -11,6 +11,7 @@ from assembl import models
 
 from .types import SecureObjectType, SQLAlchemyInterface
 from .utils import abort_transaction_on_exception, DateTime
+from .user import AgentProfile
 
 
 class TextFragmentIdentifier(SecureObjectType, SQLAlchemyObjectType):
@@ -37,6 +38,12 @@ class Extract(SecureObjectType, SQLAlchemyObjectType):
         only_fields = ('id')
 
     creation_date = DateTime()
+    creator_id = graphene.Int()
+    creator = graphene.Field(lambda: AgentProfile)
+
+    def resolve_creator(self, args, context, info):
+        if self.creator_id is not None:
+            return models.AgentProfile.get(self.creator_id)
 
 
 class UpdateExtract(graphene.Mutation):
