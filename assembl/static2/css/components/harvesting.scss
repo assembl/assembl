@@ -147,9 +147,9 @@
 .harvesting-box {
   position: absolute;
   box-shadow: 2px 2px 4px 0 $grey1;
-  max-width: 310px;
   left: 0;
   z-index: 99;
+  width: 310px;
 
   .harvesting-box-header {
     padding: 20px;
@@ -163,7 +163,7 @@
     .harvesting-in-progress {
       color: $black;
       margin-left: -12px;
-      padding: 0 0 20px;
+      padding: 0 0 15px;
     }
 
     .validated-harvesting {
@@ -203,9 +203,17 @@
   }
 
   .button-bar {
-    display: inline-block;
-    margin-left: 10px;
-    vertical-align: top;
+    padding-top: 5px;
+    float: right;
+    margin-right: -12px;
+
+    .assembl-icon-ellipsis-vert {
+      &:before {
+        font-size: 20px;
+        vertical-align: middle;
+        padding: 2px 0 0;
+      }
+    }
 
     .btn[disabled] {
       opacity: 1;
@@ -282,7 +290,7 @@
   }
 
   .harvesting-box-body {
-    padding: 10px 20px 20px;
+    padding: 20px;
     font-size: $font-size-xs;
     color: $grey2;
   }

@@ -108,14 +108,24 @@ class HarvestingBox extends React.Component<void, Props, State> {
               <div className="harvesting-in-progress">
                 <span className="confirm-harvest-button assembl-icon-catch" />
                 <div className="harvesting-status-label">
-                  <Translate value="harvesting.inProgress" />
+                  <div>
+                    <Translate value="harvesting.harvestSelection" />
+                  </div>
+                  <div>
+                    <Translate value="harvesting.inProgress" />
+                  </div>
                 </div>
               </div>
             ) : (
               <div className="validated-harvesting">
                 <span className="confirm-harvest-button assembl-icon-catch" />
                 <div className="harvesting-status-label">
-                  <Translate value="harvesting.validatedHarvesting" />
+                  <div>
+                    <Translate value="harvesting.harvestSelection" />
+                  </div>
+                  <div>
+                    <Translate value="harvesting.validated" />
+                  </div>
                 </div>
               </div>
             )}
@@ -133,6 +143,7 @@ class HarvestingBox extends React.Component<void, Props, State> {
             <Button disabled={disabled} className={classnames({ active: isNugget })}>
               <span className="assembl-icon-pepite grey" />
             </Button>
+            <span className="assembl-icon-ellipsis-vert grey" />
           </div>
           <div className="profil">
             <AvatarImage userId={harvesterUserId} userName={harvesterUserName} />
