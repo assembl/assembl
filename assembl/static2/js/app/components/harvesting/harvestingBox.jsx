@@ -16,10 +16,10 @@ import AvatarImage from '../common/avatarImage';
 
 type Props = {
   extract: ?Extract,
-  index: number,
   postId: string,
   contentLocale: string,
   selection: ?Object,
+  previousExtractId: ?string,
   cancelHarvesting: Function,
   addPostExtract: Function,
   displayHarvestingBox: Function
@@ -46,6 +46,21 @@ class HarvestingBox extends React.Component<void, Props, State> {
       checkIsActive: isExtract,
       isNugget: isNugget
     };
+  }
+
+  componentDidMount() {
+    // Set the box position if there are several extract for the same post
+    const { previousExtractId, extract, postId } = this.props;
+    const previousHarvestingBoxHtmlId = previousExtractId ? document.getElementById(`harvesting-box-${previousExtractId}`) : null;
+    const previousHarvestingBoxHeight = previousHarvestingBoxHtmlId ? previousHarvestingBoxHtmlId.offsetHeight : 20;
+    const harvestingBoxHtmlId = extract
+      ? document.getElementById(`harvesting-box-${extract.id}`)
+      : document.getElementById(`harvesting-box-${postId}`);
+    if (harvestingBoxHtmlId && previousHarvestingBoxHtmlId) {
+      harvestingBoxHtmlId.style.marginTop = `${previousHarvestingBoxHeight + 40}px`;
+    } else if (harvestingBoxHtmlId) {
+      harvestingBoxHtmlId.style.marginTop = '20px';
+    }
   }
 
   validateHarvesting = (): void => {
@@ -89,7 +104,7 @@ class HarvestingBox extends React.Component<void, Props, State> {
   };
 
   render() {
-    const { selection, cancelHarvesting, extract, index, contentLocale } = this.props;
+    const { selection, cancelHarvesting, extract, contentLocale, postId } = this.props;
     const { disabled, checkIsActive, isNugget } = this.state;
     const isExtract = extract !== null;
     const selectionText = selection ? selection.toString() : '';
@@ -100,7 +115,7 @@ class HarvestingBox extends React.Component<void, Props, State> {
     return (
       <div
         className={classnames('theme-box', 'harvesting-box', { 'active-box': checkIsActive })}
-        style={{ marginTop: `${20 + 180 * index}px` }} // TODO fix the position
+        id={extract ? `harvesting-box-${extract.id}` : `harvesting-box-${postId}`}
       >
         <div className="harvesting-box-header">
           <div className="harvesting-status">

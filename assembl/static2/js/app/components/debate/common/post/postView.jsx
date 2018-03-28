@@ -149,7 +149,13 @@ class PostView extends React.PureComponent<void, Props, State> {
           />
         )}
         {displayHarvestingMenu && (
-          <HarvestingMenu postId={id} cancelHarvesting={this.cancelHarvesting} isHarvesting={isHarvesting} extracts={extracts} />
+          <HarvestingMenu
+            postId={id}
+            cancelHarvesting={this.cancelHarvesting}
+            isHarvesting={isHarvesting}
+            extracts={extracts}
+            dbId={dbId}
+          />
         )}
         <div className="box" style={boxStyle}>
           <div className="post-row">
