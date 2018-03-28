@@ -19,11 +19,12 @@
     margin-top: $margin-section-xxxxs;
     margin-bottom: 3em;
     position: relative;
-    left: 7%;
+    left: 20%;
 
     .announcement-doughnut {
       width: 140px;
       height: 140px;
+      margin-left: 40px;
 
       .circle {
         stroke-width: 17px;
@@ -113,7 +114,7 @@
 
     .announcement-statistics {
       margin-top: 0;
-      left: 0;
+      left: -15px;
     }
 
     .announcement-media {
