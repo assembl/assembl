@@ -952,7 +952,7 @@ mutation myMutation($postId: ID!) {
             }}}
 
 
-def test_mutation_add_sentiment(graphql_request, proposition_id):
+def test_mutation_add_sentiment(graphql_request, thematic_and_question, proposition_id):
     res = schema.execute(u"""
 mutation myFirstMutation {
     addSentiment(
@@ -982,9 +982,37 @@ mutation myFirstMutation {
             }
         }
     }
+    res = schema.execute(u"""
+query {
+  node(id: "%s") {
+    ... on Question {
+      numPosts
+      numContributors
+      totalSentiments
+    }
+  }
+}
+""" % thematic_and_question[1], context_value=graphql_request)
+    assert res.data['node']['numPosts'] == 1
+    assert res.data['node']['numContributors'] == 1
+    assert res.data['node']['totalSentiments'] == 1
+    res = schema.execute(u"""
+query {
+  node(id: "%s") {
+    ... on Thematic {
+      numPosts
+      numContributors
+      totalSentiments
+    }
+  }
+}
+""" % thematic_and_question[0], context_value=graphql_request)
+    assert res.data['node']['numPosts'] == 1
+    assert res.data['node']['numContributors'] == 1
+    assert res.data['node']['totalSentiments'] == 1
 
 
-def test_mutation_add_sentiment_like_then_disagree(graphql_request, proposition_id):
+def test_mutation_add_sentiment_like_then_disagree(graphql_request, thematic_and_question, proposition_id):
     res = schema.execute(u"""
 mutation myFirstMutation {
     addSentiment(
@@ -1023,9 +1051,37 @@ mutation myFirstMutation {
             }
         }
     }
+    res = schema.execute(u"""
+query {
+  node(id: "%s") {
+    ... on Question {
+      numPosts
+      numContributors
+      totalSentiments
+    }
+  }
+}
+""" % thematic_and_question[1], context_value=graphql_request)
+    assert res.data['node']['numPosts'] == 1
+    assert res.data['node']['numContributors'] == 1
+    assert res.data['node']['totalSentiments'] == 1
+    res = schema.execute(u"""
+query {
+  node(id: "%s") {
+    ... on Thematic {
+      numPosts
+      numContributors
+      totalSentiments
+    }
+  }
+}
+""" % thematic_and_question[0], context_value=graphql_request)
+    assert res.data['node']['numPosts'] == 1
+    assert res.data['node']['numContributors'] == 1
+    assert res.data['node']['totalSentiments'] == 1
 
 
-def test_mutation_add_sentiment_like_twice(graphql_request, proposition_id):
+def test_mutation_add_sentiment_like_twice(graphql_request, thematic_and_question, proposition_id):
     res = schema.execute(u"""
 mutation myFirstMutation {
     addSentiment(
@@ -1064,9 +1120,37 @@ mutation myFirstMutation {
             }
         }
     }
+    res = schema.execute(u"""
+query {
+  node(id: "%s") {
+    ... on Question {
+      numPosts
+      numContributors
+      totalSentiments
+    }
+  }
+}
+""" % thematic_and_question[1], context_value=graphql_request)
+    assert res.data['node']['numPosts'] == 1
+    assert res.data['node']['numContributors'] == 1
+    assert res.data['node']['totalSentiments'] == 1
+    res = schema.execute(u"""
+query {
+  node(id: "%s") {
+    ... on Thematic {
+      numPosts
+      numContributors
+      totalSentiments
+    }
+  }
+}
+""" % thematic_and_question[0], context_value=graphql_request)
+    assert res.data['node']['numPosts'] == 1
+    assert res.data['node']['numContributors'] == 1
+    assert res.data['node']['totalSentiments'] == 1
 
 
-def test_mutation_delete_sentiment(graphql_request, proposition_id):
+def test_mutation_delete_sentiment(graphql_request, thematic_and_question, proposition_id):
     res = schema.execute(u"""
 mutation myFirstMutation {
     addSentiment(
@@ -1113,6 +1197,34 @@ mutation myFirstMutation {
             }
         }
     }
+    res = schema.execute(u"""
+query {
+  node(id: "%s") {
+    ... on Question {
+      numPosts
+      numContributors
+      totalSentiments
+    }
+  }
+}
+""" % thematic_and_question[1], context_value=graphql_request)
+    assert res.data['node']['numPosts'] == 1
+    assert res.data['node']['numContributors'] == 1
+    assert res.data['node']['totalSentiments'] == 0
+    res = schema.execute(u"""
+query {
+  node(id: "%s") {
+    ... on Thematic {
+      numPosts
+      numContributors
+      totalSentiments
+    }
+  }
+}
+""" % thematic_and_question[0], context_value=graphql_request)
+    assert res.data['node']['numPosts'] == 1
+    assert res.data['node']['numContributors'] == 1
+    assert res.data['node']['totalSentiments'] == 0
 
 
 def test_mutation_create_top_post(graphql_request, idea_in_thread_phase):
