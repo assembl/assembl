@@ -11,6 +11,7 @@ import withLoadingIndicator from '../components/common/withLoadingIndicator';
 import IdeaSynthesisTree from '../components/synthesis/IdeaSynthesisTree';
 import { getPartialTree, getChildren } from '../utils/tree';
 import SideMenu from '../components/common/sideMenu';
+import { getDomElementOffset } from '../utils/globalFunctions';
 
 type SynthesisProps = {
   synthesis: Object,
@@ -18,11 +19,68 @@ type SynthesisProps = {
   synthesisPostId: string
 };
 
-export class DumbSynthesis extends React.Component<void, SynthesisProps, void> {
+type SynthesisState = {
+  sideMenuTop: number,
+  node: ?HTMLElement,
+  isHidden: boolean
+};
+
+export class DumbSynthesis extends React.Component<void, SynthesisProps, SynthesisState> {
   props: SynthesisProps;
+
+  state: SynthesisState;
+
+  constructor(props: SynthesisProps) {
+    super(props);
+    this.state = {
+      sideMenuTop: 20,
+      node: null,
+      isHidden: false
+    };
+  }
+
+  componentWillMount() {
+    window.addEventListener('scroll', this.updateTopOnScroll);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('scroll', this.updateTopOnScroll);
+  }
+
+  updateTop = (node: HTMLElement) => {
+    this.setState({ node: node });
+  };
+
+  updateTopOnScroll = () => {
+    const { node } = this.state;
+    if (node) {
+      const nodeTop = getDomElementOffset(node).top;
+      const nodeHeight = node.getBoundingClientRect().height;
+      const total = nodeTop + nodeHeight;
+      const scroll = window.pageYOffset;
+      this.setState({ sideMenuTop: total - scroll + 50 });
+      // 50 is an extra gap between the introduction block and first Idea for aesthetic purposes
+      const footer = document.getElementById('footer');
+      const { body } = document;
+      const threshold = footer && body && body.scrollHeight - screen.height - footer.offsetHeight;
+      if (scroll >= total) {
+        let newTop = screen.height - total;
+        if (screen.height < 1000) {
+          newTop += 1000 - screen.height;
+        }
+        this.setState({ sideMenuTop: newTop });
+      }
+      if (scroll >= threshold) {
+        this.setState({ isHidden: true });
+      } else {
+        this.setState({ isHidden: false });
+      }
+    }
+  };
 
   render() {
     const { synthesis, routeParams, synthesisPostId } = this.props;
+    const { isHidden, sideMenuTop } = this.state;
     const { introduction, conclusion, ideas, subject } = synthesis;
     const sortedIdeas = [...ideas].sort((a, b) => {
       if (a.live.order < b.live.order) {
@@ -41,7 +99,7 @@ export class DumbSynthesis extends React.Component<void, SynthesisProps, void> {
           <Header title={subject} imgUrl={synthesis.img ? synthesis.img.externalUrl : ''} additionalHeaderClasses="left" />
           <Grid fluid>
             {introduction && (
-              <Section title="introduction" translate className="synthesis-block">
+              <Section title="introduction" translate className="synthesis-block" innerRef={this.updateTop}>
                 <Row>
                   <Col mdOffset={3} md={8} smOffset={1} sm={10}>
                     <div dangerouslySetInnerHTML={{ __html: introduction }} />
@@ -50,10 +108,10 @@ export class DumbSynthesis extends React.Component<void, SynthesisProps, void> {
               </Section>
             )}
             <Row className="background-grey synthesis-tree">
-              <Col md={3}>
-                <SideMenu rootIdeas={roots} descendants={descendants} synthesisPostId={synthesisPostId} />
+              <Col md={3} className="affix" style={{ top: sideMenuTop }}>
+                {!isHidden && <SideMenu rootIdeas={roots} descendants={descendants} synthesisPostId={synthesisPostId} />}
               </Col>
-              <Col md={8} sm={11}>
+              <Col mdOffset={3} md={8} sm={11}>
                 {roots.map((rootIdea, index) => (
                   <IdeaSynthesisTree
                     hasSiblings={hasSiblings}
@@ -68,7 +126,7 @@ export class DumbSynthesis extends React.Component<void, SynthesisProps, void> {
               </Col>
             </Row>
             {conclusion && (
-              <Section title="conclusion" translate className="synthesis-block">
+              <Section title="conclusion" translate className="synthesis-block" id="conclusion">
                 <Row>
                   <Col mdOffset={3} md={8} smOffset={1} sm={10}>
                     <div dangerouslySetInnerHTML={{ __html: conclusion }} />

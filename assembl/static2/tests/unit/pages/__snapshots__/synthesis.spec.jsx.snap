@@ -24,8 +24,14 @@ exports[`Synthesis component should match Synthesis snapshot 1`] = `
       >
         <Col
           bsClass="col"
+          className="affix"
           componentClass="div"
           md={3}
+          style={
+            Object {
+              "top": 20,
+            }
+          }
         >
           <SideMenu
             descendants={Array []}
@@ -55,6 +61,7 @@ exports[`Synthesis component should match Synthesis snapshot 1`] = `
           bsClass="col"
           componentClass="div"
           md={8}
+          mdOffset={3}
           sm={11}
         >
           <IdeaSynthesisTree

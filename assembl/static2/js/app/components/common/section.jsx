@@ -13,7 +13,8 @@ type SectionProps = {
   parents: Array<number>,
   children: Array<*>,
   className: string,
-  translate: boolean
+  translate: boolean,
+  innerRef?: Function
 };
 
 const level1 = (title, index, translate) => (
@@ -59,7 +60,8 @@ class Section extends React.Component<Object, SectionProps, void> {
     indexGenerator: SECTION_INDEX_GENERATOR.alphanumericOr,
     parents: [],
     className: 'themes-section',
-    translate: false
+    translate: false,
+    innerRef: null
   };
 
   getIndexes = () => {
@@ -79,7 +81,7 @@ class Section extends React.Component<Object, SectionProps, void> {
     const { className, children, containerAdditionalClassNames } = this.props;
     const containerClassName = classnames('max-container', containerAdditionalClassNames);
     return (
-      <section className={className}>
+      <section className={className} ref={this.props.innerRef}>
         <div className={containerClassName}>
           <div className="title-section">{this.getTitle()}</div>
           <div className="content-section margin-l">{children}</div>
