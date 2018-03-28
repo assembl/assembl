@@ -10,7 +10,7 @@ from assembl.auth.util import get_permissions
 from assembl import models
 
 from .types import SecureObjectType, SQLAlchemyInterface
-from .utils import abort_transaction_on_exception
+from .utils import abort_transaction_on_exception, DateTime
 
 
 class TextFragmentIdentifier(SecureObjectType, SQLAlchemyObjectType):
@@ -35,6 +35,8 @@ class Extract(SecureObjectType, SQLAlchemyObjectType):
         model = models.Extract
         interfaces = (Node, ExtractInterface)
         only_fields = ('id')
+
+    creation_date = DateTime()
 
 
 class UpdateExtract(graphene.Mutation):

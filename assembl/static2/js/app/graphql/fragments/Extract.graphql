@@ -1,5 +1,6 @@
 fragment Extract on Extract {
   id
+  creationDate
   important
   body
   extractNature

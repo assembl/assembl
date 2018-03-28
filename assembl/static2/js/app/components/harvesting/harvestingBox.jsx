@@ -6,6 +6,7 @@ import { compose, graphql } from 'react-apollo';
 import { Button } from 'react-bootstrap';
 import { Translate } from 'react-redux-i18n';
 import classnames from 'classnames';
+import moment from 'moment';
 
 import addPostExtractMutation from '../../graphql/mutations/addPostExtract.graphql';
 import withLoadingIndicator from '../../components/common/withLoadingIndicator';
@@ -86,7 +87,7 @@ class HarvestingBox extends React.Component<void, Props, State> {
   };
 
   render() {
-    const { selection, cancelHarvesting, extract, index } = this.props;
+    const { selection, cancelHarvesting, extract, index, contentLocale } = this.props;
     const { disabled, checkIsActive, isNugget } = this.state;
     const isExtract = extract !== null;
     const selectionText = selection ? selection.toString() : '';
@@ -132,7 +133,15 @@ class HarvestingBox extends React.Component<void, Props, State> {
             <span className="assembl-icon-profil grey" />
             <div className="harvesting-infos">
               <div className="username">Pauline Thomas</div>
-              <div className="harvesting-date">2 days ago</div>
+              {isExtract &&
+                extract &&
+                extract.creationDate && (
+                  <div className="harvesting-date" title={extract.creationDate}>
+                    {moment(extract.creationDate)
+                      .locale(contentLocale)
+                      .fromNow()}
+                  </div>
+                )}
             </div>
           </div>
         </div>
