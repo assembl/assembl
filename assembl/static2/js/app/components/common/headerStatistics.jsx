@@ -10,31 +10,31 @@ type StatisticElementProps = {
 
 type StatElements = Array<StatisticElementProps>;
 
-export const statContributions = (numContributions: number) => ({
+export const statContributions = (numContributions: number): StatisticElementProps => ({
   iconName: 'sentiment-neutral',
   metricValue: numContributions,
   metricNameTranslateKey: 'home.contribution'
 });
 
-export const statMessages = (numPosts: number) => ({
+export const statMessages = (numPosts: number): StatisticElementProps => ({
   iconName: 'message',
   metricValue: numPosts,
   metricNameTranslateKey: 'home.messages'
 });
 
-export const statParticipants = (numParticipants: number) => ({
+export const statParticipants = (numParticipants: number): StatisticElementProps => ({
   iconName: 'profil',
   metricValue: numParticipants,
   metricNameTranslateKey: 'home.participant'
 });
 
-export const statSentiments = (totalSentiments: number) => ({
+export const statSentiments = (totalSentiments: number): StatisticElementProps => ({
   iconName: 'sentiment-neutral',
   metricValue: totalSentiments,
   metricNameTranslateKey: 'home.sentiments'
 });
 
-export const statParticipations = (numParticipations: number) => ({
+export const statParticipations = (numParticipations: number): StatisticElementProps => ({
   iconName: 'participation-vote',
   metricValue: numParticipations,
   metricNameTranslateKey: 'home.participations'
