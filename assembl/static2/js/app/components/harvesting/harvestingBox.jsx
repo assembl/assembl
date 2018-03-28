@@ -1,14 +1,23 @@
 // @flow
 import React from 'react';
 import ARange from 'annotator_range'; // eslint-disable-line
+import { connect } from 'react-redux';
+import { compose, graphql } from 'react-apollo';
 import { Button } from 'react-bootstrap';
-import { Translate } from 'react-redux-i18n';
+import { Translate, I18n } from 'react-redux-i18n';
 import classnames from 'classnames';
+
+import addPostExtractMutation from '../../graphql/mutations/addPostExtract.graphql';
+import { displayAlert } from '../../utils/utilityManager';
 
 type Props = {
   extract: ?Object, // TODO change type
   index: number,
-  cancelHarvesting: Function
+  postId: string,
+  contentLocale: string,
+  selection: ?Object,
+  cancelHarvesting: Function,
+  addPostExtract: Function
 };
 
 type State = {
@@ -35,22 +44,56 @@ class HarvestingBox extends React.Component<void, Props, State> {
   }
 
   validateHarvesting = (): void => {
-    this.setState({
-      disabled: false,
-      checkIsActive: true
-    });
+    const { postId, selection, contentLocale, addPostExtract } = this.props;
+    if (!selection) {
+      return;
+    }
+    // console.log('selection', selection);
+    const selectionText = selection.toString();
+    // console.log('ARange', ARange);
+    const annotatorRange = ARange.sniff(selection.getRangeAt(0));
+    if (!annotatorRange) {
+      return;
+    }
+    // console.log('annotatorRange', annotatorRange);
+    const serializedAnnotatorRange = annotatorRange.serialize(document, 'annotation');
+    if (!serializedAnnotatorRange) {
+      return;
+    }
+    // console.log('serializedAnnotatorRange', serializedAnnotatorRange);
+
+    const variables = {
+      contentLocale: contentLocale,
+      postId: postId,
+      body: selectionText,
+      important: false,
+      xpathStart: serializedAnnotatorRange.start,
+      xpathEnd: serializedAnnotatorRange.end,
+      offsetStart: serializedAnnotatorRange.startOffset,
+      offsetEnd: serializedAnnotatorRange.endOffset
+    };
+    // console.log('variables', variables);
+
+    addPostExtract({ variables: variables })
+      .then(() => {
+        displayAlert('success', I18n.t('debate.thread.postSuccess')); // TODO: use another i18n key
+        this.setState({
+          disabled: false,
+          checkIsActive: true
+        });
+        window.getSelection().removeAllRanges();
+        // TODO: should we refresh the view of the harvested message?
+      })
+      .catch((error) => {
+        displayAlert('danger', `${error}`);
+      });
   };
 
   render() {
-    const selection = window.getSelection().toString();
-    const { cancelHarvesting, extract, index } = this.props;
+    const { selection, cancelHarvesting, extract, index } = this.props;
     const { disabled, checkIsActive, isNugget } = this.state;
     const isExtract = extract !== null;
-
-    // const selection = window.getSelection();
-    // const browserRange = ARange.sniff(selection.getRangeAt(0));
-    // const serialized = browserRange.serialize(document, 'annotation');
-    // console.log(serialized); // eslint-disable-line
+    const selectionText = selection ? selection.toString() : '';
 
     return (
       <div
@@ -92,7 +135,7 @@ class HarvestingBox extends React.Component<void, Props, State> {
             )}
           </div>
           {isExtract && extract && <div>{extract.body}</div>}
-          {!isExtract && <div>{selection}</div>}
+          {!isExtract && <div>{selectionText}</div>}
         </div>
         {disabled && (
           <div className="harvesting-box-footer">
@@ -109,49 +152,8 @@ class HarvestingBox extends React.Component<void, Props, State> {
   }
 }
 
-export default HarvestingBox;
+const mapStateToProps = state => ({
+  contentLocale: state.i18n.locale
+});
 
-// mutation addPostExtract(
-//  $postId: ID!
-//  $body: String!
-//  $important: Boolean
-//  $xpathStart: String!
-//  $xpathEnd: String!
-//  $offsetStart: Int!
-//  $offsetEnd: Int!
-// ) {
-//  addPostExtract(
-//    postId: $postId
-//    body: $body
-//    important: $important
-//    xpathStart: $xpathStart
-//    xpathEnd: $xpathEnd
-//    offsetStart: $offsetStart
-//    offsetEnd: $offsetEnd
-//  ) {
-//    post {
-//      ... on Post {
-//        extracts {
-//  important:important
-//  body: body
-//  textFragmentIdentifiers {
-//    xpathStart: xpathStart
-//    xpathEnd: xpathEnd
-//    offsetStart: offsetStart
-//    offsetEnd: offsetEnd
-//  }
-//        }
-//      }
-//    }
-//  }
-// }
-
-// {
-//   "postId": "UG9zdDozMDEz",
-//   "body": "xvcvcxvcxcvxxcv",
-//   "important": false,
-//   "xpathStart": "//div[@id='message-body-local:Content/3013']/",
-//   "xpathEnd": "//div[@id='message-body-local:Content/3013']/",
-//   "offsetStart": 0,
-//   "offsetEnd": 15
-// }
+export default compose(connect(mapStateToProps), graphql(addPostExtractMutation, { name: 'addPostExtract' }))(HarvestingBox);

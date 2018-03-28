@@ -2,6 +2,7 @@
 #import "../fragments/Extract.graphql"
 
 mutation addPostExtract(
+  $contentLocale: String!
   $postId: ID!
   $body: String!
   $important: Boolean

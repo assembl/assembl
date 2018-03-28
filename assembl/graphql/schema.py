@@ -349,6 +349,9 @@ class Mutations(graphene.ObjectType):
     delete_token_vote = DeleteTokenVote.Field()
     add_gauge_vote = AddGaugeVote.Field()
     delete_gauge_vote = DeleteGaugeVote.Field()
+    add_post_extract = AddPostExtract.Field()
+    update_extract = UpdateExtract.Field()
+    delete_extract = DeleteExtract.Field()
 
 
 Schema = graphene.Schema(query=Query, mutation=Mutations)

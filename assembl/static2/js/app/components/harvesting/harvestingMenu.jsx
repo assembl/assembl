@@ -8,6 +8,7 @@ import HarvestingBox from './harvestingBox';
 
 type Props = {
   extracts: Object, // TODO change type
+  postId: string,
   isHarvesting: boolean,
   cancelHarvesting: Function
 };
@@ -41,16 +42,26 @@ class HarvestingMenu extends React.Component<void, Props, State> {
   };
 
   render() {
-    const { cancelHarvesting, isHarvesting, extracts } = this.props;
+    const { postId, cancelHarvesting, isHarvesting, extracts } = this.props;
     const { showHarvestingBox } = this.state;
+    const selection = window.getSelection();
     return (
       <div>
         {extracts && extracts.length > 0 && isHarvesting
           ? extracts.map((extract, index) => (
-            <HarvestingBox key={extract.id} cancelHarvesting={cancelHarvesting} extract={extract} index={index} />
+            <HarvestingBox
+              postId={postId}
+              key={extract.id}
+              cancelHarvesting={cancelHarvesting}
+              extract={extract}
+              index={index}
+            />
           ))
           : null}
-        {showHarvestingBox && isHarvesting && <HarvestingBox cancelHarvesting={cancelHarvesting} extract={null} index={0} />}
+        {showHarvestingBox &&
+          isHarvesting && (
+            <HarvestingBox postId={postId} selection={selection} cancelHarvesting={cancelHarvesting} extract={null} index={0} />
+          )}
         {isHarvesting && <HarvestingAnchor handleClick={this.handleClick} handleMouseDown={this.handleMouseDown} />}
       </div>
     );
