@@ -5,6 +5,7 @@ import { graphql, compose } from 'react-apollo';
 import { connect } from 'react-redux';
 import { I18n, Translate } from 'react-redux-i18n';
 import { Map } from 'immutable';
+import shuffle from 'lodash/shuffle';
 
 import VoteSessionQuery from '../graphql/VoteSession.graphql';
 import AddTokenVoteMutation from '../graphql/mutations/addTokenVote.graphql';
@@ -360,7 +361,7 @@ class DumbVoteSession extends React.Component<void, Props, State> {
               <Col mdOffset={1} md={10} smOffset={1} sm={10}>
                 {!isPhaseCompleted ? (
                   <Proposals
-                    proposals={proposals}
+                    proposals={shuffle(proposals)}
                     remainingTokensByCategory={remainingTokensByCategory}
                     seeCurrentVotes={seeCurrentVotes}
                     userGaugeVotes={this.state.userGaugeVotes}
