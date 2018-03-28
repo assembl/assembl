@@ -145,7 +145,7 @@ class HarvestingBox extends React.Component<void, Props, State> {
             </Button>
             <span className="assembl-icon-ellipsis-vert grey" />
           </div>
-          <div className="profil">
+          <div className="profile">
             <AvatarImage userId={harvesterUserId} userName={harvesterUserName} />
             <div className="harvesting-infos">
               <div className="username">{harvesterUserName}</div>
@@ -158,6 +158,11 @@ class HarvestingBox extends React.Component<void, Props, State> {
                       .fromNow()}
                   </div>
                 )}
+              {!isExtract && (
+                <div className="harvesting-date">
+                  <Translate value="harvesting.now" />
+                </div>
+              )}
             </div>
           </div>
         </div>

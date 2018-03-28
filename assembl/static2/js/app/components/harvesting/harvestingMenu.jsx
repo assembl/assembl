@@ -70,9 +70,11 @@ class HarvestingMenu extends React.Component<void, Props, State> {
               displayHarvestingBox={this.displayHarvestingBox}
             />
           )}
-        {isHarvesting && (
-          <HarvestingAnchor displayHarvestingBox={this.displayHarvestingBox} handleMouseDown={this.handleMouseDown} />
-        )}
+        {isHarvesting &&
+          !showHarvestingBox &&
+          extracts.length === 0 && (
+            <HarvestingAnchor displayHarvestingBox={this.displayHarvestingBox} handleMouseDown={this.handleMouseDown} />
+          )}
       </div>
     );
   }

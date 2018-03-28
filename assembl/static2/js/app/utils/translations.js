@@ -21,7 +21,8 @@ const Translations = {
       disableHarvestingMode: "Désactiver le mode attrapage",
       harvestSelection: "Attrapage",
       inProgress: "en cours",
-      validated: "validé"
+      validated: "validé",
+      now: "Maintenant"
     },
     search: {
       reset: {
@@ -621,7 +622,8 @@ const Translations = {
       disableHarvestingMode: "Disable harvesting mode",
       harvestSelection: "Harvesting",
       inProgress: "in progress",
-      validated: "validated"
+      validated: "validated",
+      now: "Now"
     },
     search: {
       reset: {

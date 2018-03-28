@@ -57,7 +57,7 @@
 
 .confirm-harvest-button {
   text-align: center;
-  padding: 2px 0 0 3px;
+  padding: 1px 0 0 6px;
   font-size: 20px;
 
   &:before {
@@ -178,10 +178,15 @@
     }
   }
 
-  .profil {
+  .profile {
     font-size: $font-size-xs;
     color: $grey2;
     margin-left: -8px;
+
+    img {
+      border-radius: 50%;
+      margin: 0 10px 0 6px;
+    }
 
     .assembl-icon-profil {
       vertical-align: bottom;
@@ -301,7 +306,7 @@
     background-color: $grey1;
 
     .btn-default {
-      margin: 0 20px;
+      margin: 0 10px;
     }
   }
 }
