@@ -8,8 +8,8 @@ from pyramid.httpexceptions import (
 import transaction
 from pyisemail import is_email
 
-from .. import get_default_context, get_locale_from_request
-from ...lib.utils import get_global_base_url
+from .. import get_default_context
+from ...lib.utils import get_global_base_url, get_locale_from_request
 from ...auth import (
     R_PARTICIPANT, R_SYSADMIN, R_ADMINISTRATOR, SYSTEM_ROLES,
     P_SYSADMIN, P_ADMIN_DISC, Everyone)
@@ -53,7 +53,7 @@ def base_admin_view(request):
     context = get_default_context(request)
 
     session = Discussion.default_db
-    preferences = Preferences.get_default_preferences(session)
+    # preferences = Preferences.get_default_preferences(session)
     user = User.get(user_id)
 
     target_locale = get_locale_from_request(request, session, user)

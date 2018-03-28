@@ -15,8 +15,7 @@ from pyramid.response import Response
 from pyramid.httpexceptions import (
     HTTPException, HTTPInternalServerError, HTTPMovedPermanently, HTTPError,
     HTTPBadRequest, HTTPFound, HTTPTemporaryRedirect as HTTPTemporaryRedirectP)
-from pyramid.i18n import (TranslationStringFactory, negotiate_locale_name)
-from pyramid.security import authenticated_userid, Everyone
+from pyramid.i18n import TranslationStringFactory
 from pyramid.settings import asbool, aslist
 from social_core.exceptions import AuthMissingParameter
 
@@ -24,14 +23,12 @@ from assembl.lib.json import json_renderer_factory
 from assembl.lib import config
 from assembl.lib.frontend_urls import FrontendUrls
 from assembl.lib.locale import (
-    get_language, get_country, to_posix_string, strip_country)
+    get_language, get_country, to_posix_string)
 from assembl.lib.utils import get_global_base_url
 from assembl.lib.raven_client import capture_exception
-from assembl.auth import R_PARTICIPANT
 from assembl.models.auth import (
     UserLanguagePreference,
     LanguagePreferenceOrder,
-    User,
     Locale,
 )
 
@@ -485,66 +482,6 @@ def get_landing_page_image():
     if discussion:
         dict = discussion.preferences['extra_json']
         return dict.get("headerBackgroundUrl", "no image available")
-
-
-def process_locale(
-        locale_code, user, session, source_of_evidence):
-    locale_code = to_posix_string(locale_code)
-    # Updated: Now Locale is a model. Converting posix_string into its
-    # equivalent model. Creates it if it does not exist
-    locale = Locale.get_or_create(locale_code, session)
-
-    if source_of_evidence in LanguagePreferenceOrder.unique_prefs:
-        lang_pref_signatures = defaultdict(list)
-        for lp in user.language_preference:
-            lang_pref_signatures[lp.source_of_evidence].append(lp)
-        while len(lang_pref_signatures[source_of_evidence]) > 1:
-            # legacy multiple values
-            lp = lang_pref_signatures[source_of_evidence].pop()
-            lp.delete()
-        if len(lang_pref_signatures[source_of_evidence]) == 1:
-            lang_pref_signatures[source_of_evidence][0].locale = locale
-            session.flush()
-            return
-        # else creation below
-    else:
-        lang_pref_signatures = {
-            (lp.locale_id, lp.source_of_evidence)
-            for lp in user.language_preference
-        }
-        if (locale.id, source_of_evidence) in lang_pref_signatures:
-            return
-    lang = UserLanguagePreference(
-        user=user, source_of_evidence=source_of_evidence.value, locale=locale)
-    session.add(lang)
-    session.flush()
-
-
-def get_locale_from_request(request, session=None, user=None):
-    if user is None:
-        user_id = request.authenticated_userid or Everyone
-        if user_id != Everyone:
-            user = User.get(user_id)
-    session = session or User.default_db
-    if user:
-        if '_LOCALE_' in request.params:
-            locale = request.params['_LOCALE_']
-            process_locale(locale, user, session,
-                           LanguagePreferenceOrder.Parameter)
-        elif '_LOCALE_' in request.cookies:
-            locale = request.cookies['_LOCALE_']
-            process_locale(locale, user, session,
-                           LanguagePreferenceOrder.Cookie)
-        else:
-            # uses my locale negotiator
-            locale = negotiate_locale_name(request)
-            process_locale(locale, user, session,
-                           LanguagePreferenceOrder.OS_Default)
-    else:
-        locale = request.localizer.locale_name
-    target_locale = Locale.get_or_create(
-        strip_country(locale), session)
-    return target_locale
 
 
 def get_template_views():

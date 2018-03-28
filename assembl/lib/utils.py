@@ -6,10 +6,13 @@ from time import sleep
 from StringIO import StringIO
 
 from pyramid.settings import asbool
+from pyramid.security import Everyone
+from pyramid.i18n import negotiate_locale_name
 from urlparse import urlparse
 from bs4 import UnicodeDammit
 
 from . import config
+from assembl.lib.locale import strip_country
 
 
 def get_eol(text):
@@ -134,3 +137,35 @@ def snake_to_camel(string):
     # We capitalize the first letter of each component except the first one
     # with the 'title' method and join them together.
     return components[0] + "".join(x.title() for x in components[1:])
+
+
+def get_locale_from_request(request, session=None, user=None):
+    from assembl.models.auth import (
+        LanguagePreferenceOrder,
+        LanguagePreferenceCollection,
+        User
+    )
+    from assembl.models.langstrings import Locale
+    if user is None:
+        user_id = request.authenticated_userid or Everyone
+        if user_id != Everyone:
+            user = User.get(user_id)
+    session = session or User.default_db
+    if user:
+        discussion_id = request.matchdict['discussion_id'] if 'discussion_id' in request.matchdict else None
+        prefs = LanguagePreferenceCollection(user.id, discussion_id=discussion_id, session=session)
+        if '_LOCALE_' in request.params:
+            locale = request.params['_LOCALE_']
+            prefs.process_locale(locale, user, session, LanguagePreferenceOrder.Parameter)
+        elif '_LOCALE_' in request.cookies:
+            locale = request.cookies['_LOCALE_']
+            prefs.process_locale(locale, user, session, LanguagePreferenceOrder.Cookie)
+        else:
+            # uses my locale negotiator
+            locale = negotiate_locale_name(request)
+            prefs.process_locale(locale, user, session, LanguagePreferenceOrder.OS_Default)
+    else:
+        locale = request.localizer.locale_name
+    target_locale = Locale.get_or_create(
+        strip_country(locale), session)
+    return target_locale

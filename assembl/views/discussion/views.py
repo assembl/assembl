@@ -16,7 +16,7 @@ from sqlalchemy.orm.exc import NoResultFound
 from urllib import quote_plus
 from urlparse import urljoin
 
-from ...lib.utils import path_qs
+from ...lib.utils import path_qs, get_locale_from_request
 from ...lib.sqla import get_named_object
 from ...lib.frontend_urls import FrontendUrls
 from ...auth import P_READ, P_ADD_EXTRACT, P_ADMIN_DISC
@@ -32,8 +32,7 @@ from ...models import (
 )
 
 from .. import (
-    HTTPTemporaryRedirect, get_default_context as base_default_context,
-    get_locale_from_request, get_theme_info)
+    HTTPTemporaryRedirect, get_default_context as base_default_context, get_theme_info)
 from ...nlp.translation_service import DummyGoogleTranslationService
 from ..auth.views import get_social_autologin, get_login_context
 
