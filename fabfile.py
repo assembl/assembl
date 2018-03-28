@@ -866,7 +866,8 @@ def app_compile():
     """
     execute(app_update_dependencies)
     execute(app_compile_noupdate)
-    execute(build_doc)
+    if env.get('build_docs', False):
+        execute(build_doc)
 
 
 @task

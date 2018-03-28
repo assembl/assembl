@@ -66,3 +66,4 @@ handoff_to_nginx = false
 upload_root = var/test_uploads
 _requirement_inputs = requirements.in requirements-doc.in requirements-tests.in
 frozen_requirements = requirements-tests.frozen.txt
+_build_docs = true
