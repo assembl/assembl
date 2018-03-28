@@ -90,7 +90,8 @@ def sanitize_env():
     for name in (
             "uses_memcache", "uses_uwsgi", "uses_apache",
             "uses_global_supervisor", "uses_apache",
-            "uses_ngnix", "mac", "is_production_env"):
+            "uses_ngnix", "mac", "is_production_env",
+            "build_docs", "can_test"):
         # Note that we use as_bool() instead of bool(),
         # so that a variable valued "False" in the .ini
         # file is recognized as boolean False
@@ -866,7 +867,7 @@ def app_compile():
     """
     execute(app_update_dependencies)
     execute(app_compile_noupdate)
-    if env.get('build_docs', False):
+    if env.build_docs:
         execute(build_doc)
 
 
@@ -1137,24 +1138,27 @@ def install_builddeps():
             run('brew install autoconf')
         if not exists('/usr/local/bin/automake'):
             run('brew install automake')
-        if not exists('/usr/local/bin/twopi'):
-            run('brew install graphviz')
-            # may require a sudo
-            if not run('brew link graphviz', quiet=True):
-                sudo('brew link graphviz')
+        if env.build_docs:
+            if not exists('/usr/local/bin/twopi'):
+                run('brew install graphviz')
+                # may require a sudo
+                if not run('brew link graphviz', quiet=True):
+                    sudo('brew link graphviz')
         # glibtoolize, bison, flex, gperf are on osx by default.
         # brew does not know aclocal, autoheader...
         # They exist on macports, but do we want to install that?
     else:
-        sudo('apt-get install -y build-essential python-dev')
+        sudo('apt-get install -y build-essential python-dev pkg-config')
         sudo('apt-get install -y automake bison flex gperf gawk')
-        sudo('apt-get install -y graphviz pkg-config')
-        release_info = run("lsb_release -i")
-        if "Debian" in release_info:
-            sudo('apt-get install -y chromedriver', warn_only=True)  # jessie
-            sudo('apt-get install -y chromium-driver', warn_only=True)  # stretch
-        if "Ubuntu" in release_info:
-            sudo('apt-get install -y chromium-chromedriver', warn_only=True)
+        if env.build_docs:
+            sudo('apt-get install -y graphviz')
+        if env.can_test:
+            release_info = run("lsb_release -i")
+            if "Debian" in release_info:
+                sudo('apt-get install -y chromedriver', warn_only=True)  # jessie
+                sudo('apt-get install -y chromium-driver', warn_only=True)  # stretch
+            if "Ubuntu" in release_info:
+                sudo('apt-get install -y chromium-chromedriver', warn_only=True)
     execute(update_python_package_builddeps)
 
 
@@ -1170,7 +1174,9 @@ def update_python_package_builddeps():
             'Installing/Updating python package native binary dependencies'))
         sudo('apt-get install -y libpq-dev libmemcached-dev libzmq3-dev '
              'libxslt1-dev libffi-dev libhiredis-dev libxml2-dev libssl-dev '
-             'libreadline-dev libgraphviz-dev libxmlsec1-dev')
+             'libreadline-dev libxmlsec1-dev')
+        if env.can_test:
+            sudo('apt-get install -y libgraphviz-dev')
 
 
 @task

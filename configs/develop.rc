@@ -19,6 +19,7 @@ public_port = 6543
 _requirement_inputs = requirements.in requirements-chrouter.in requirements-dev.in requirements-doc.in requirements-tests.in
 frozen_requirements = requirements-dev.frozen.txt
 _build_docs = true
+_can_test = true
 
 # If not proxied by nginx or something, public_port in app:main needs to match
 # this value
