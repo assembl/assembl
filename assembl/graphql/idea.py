@@ -96,8 +96,7 @@ class IdeaInterface(graphene.Interface):
         return self.criterion_for
 
     def resolve_total_sentiments(self, args, context, info):
-        # TODO query
-        return 0
+        return self.get_total_sentiments()
 
 
 class IdeaAnnoucement(SecureObjectType, SQLAlchemyObjectType):
@@ -430,8 +429,7 @@ class Question(SecureObjectType, SQLAlchemyObjectType):
         return query
 
     def resolve_total_sentiments(self, args, context, info):
-        # TODO query
-        return 0
+        return self.get_total_sentiments()
 
 
 class Thematic(SecureObjectType, SQLAlchemyObjectType):
