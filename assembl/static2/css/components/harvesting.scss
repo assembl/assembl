@@ -306,9 +306,12 @@
   }
 }
 
+.extract-in-message {
+  display: inline;
+}
+
 .is-harvesting {
   .extract-in-message {
-    display: inline;
     background-color: $harvesting-green-light;
   }
 }
