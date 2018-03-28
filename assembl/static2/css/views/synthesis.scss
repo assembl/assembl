@@ -27,6 +27,7 @@
 
     .active {
       background: rgba($first-color, 0.15);
+      pointer-events: none;
     }
 
     .side-menu-link-1 {
