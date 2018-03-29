@@ -3,7 +3,9 @@ import React from 'react';
 import { Link } from 'react-router';
 import classNames from 'classnames';
 import { getPartialTree, getChildren } from '../../utils/tree';
-import { SECTION_INDEX_GENERATOR } from '../../utils/section';
+import { getFullPath } from '../../utils/routeMap';
+import { SECTION_INDEX_GENERATOR, getIndexesForIdeas } from '../../utils/section';
+import type { SynthesisIdea } from './IdeaSynthesis';
 
 type SideMenuTreeState = {
   activeKey: ?string,
@@ -11,9 +13,9 @@ type SideMenuTreeState = {
 };
 
 type SideMenuTreeProps = {
-  rootIdea: Object,
+  rootIdea: SynthesisIdea,
   synthesisPostId: string,
-  subIdeas: Array<Object>,
+  subIdeas: Array<SynthesisIdea>,
   index: number,
   slug: string,
   parents: Array<number>,
@@ -37,17 +39,11 @@ class SideMenuTree extends React.Component<*, SideMenuTreeProps, SideMenuTreeSta
     };
   }
 
-  getLinkContainerClassNames = (id: string) => (location.hash === `#${id}` ? 'link-container active' : 'link-container');
-
-  getIndexes = () => {
-    const { index, parents } = this.props;
-    const indexes = parents.slice();
-    indexes.push(index);
-    return indexes;
-  };
+  getLinkContainerClassNames = (id: string) => classNames('link-container', { active: location.hash === `#${id}` });
 
   getTitle = (title: string, level: number, url: string, id: string) => {
-    const { indexGenerator } = this.props;
+    const { indexGenerator, parents, index } = this.props;
+    const indexes = getIndexesForIdeas(parents, index);
     return (
       <Link
         to={url}
@@ -56,7 +52,7 @@ class SideMenuTree extends React.Component<*, SideMenuTreeProps, SideMenuTreeSta
         }}
         className={`side-menu-link-${level}`}
       >
-        {indexGenerator(this.getIndexes())} {title}
+        {indexGenerator(indexes)} {title}
       </Link>
     );
   };
@@ -64,13 +60,14 @@ class SideMenuTree extends React.Component<*, SideMenuTreeProps, SideMenuTreeSta
   render() {
     const { rootIdea, subIdeas, parents, index, synthesisPostId, slug } = this.props;
     const { roots, descendants } = getPartialTree(subIdeas);
-    const newParents = parents.slice();
+    const newParents = [...parents];
     newParents.push(index);
     const level = parents.length + 1;
     const { activeKey, show } = this.state;
     const tree = roots.map((idea, subIndex) => {
       const { id } = idea;
-      const url = `/${slug}/syntheses/${synthesisPostId}#${id}`;
+      const url = getFullPath('synthesisIdea', { slug: slug, synthesisId: synthesisPostId, ideaId: id });
+      // `/${slug}/syntheses/${synthesisPostId}#${id}`;
       return (
         <SideMenuTree
           key={id}
@@ -85,7 +82,7 @@ class SideMenuTree extends React.Component<*, SideMenuTreeProps, SideMenuTreeSta
       );
     });
     const { id, title } = rootIdea;
-    const rootIdeaUrl = `/${slug}/syntheses/${synthesisPostId}#${id}`;
+    const rootIdeaUrl = getFullPath('synthesisIdea', { slug: slug, synthesisId: synthesisPostId, ideaId: id });
     const hasChildren = subIdeas.length > 0;
     return (
       <div>

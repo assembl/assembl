@@ -5,9 +5,11 @@ import { getChildren } from '../../utils/tree';
 import { getDiscussionSlug } from '../../utils/globalFunctions';
 import SideMenuTree from './sideMenuTree';
 
+import type { SynthesisIdea } from './IdeaSynthesis';
+
 type SideMenuProps = {
-  rootIdeas: Array<Object>,
-  descendants: Array<Object>,
+  rootIdeas: Array<SynthesisIdea>,
+  descendants: Array<SynthesisIdea>,
   synthesisPostId: string
 };
 

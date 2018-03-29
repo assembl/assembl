@@ -24,6 +24,7 @@
   "ideas": "${slug}/ideas",
   "syntheses": "${slug}/syntheses",
   "synthesis": "${slug}/syntheses/${synthesisId}",
+  "synthesisIdea": "${slug}/syntheses/${synthesisId}/#${ideaId}",
   "debate": "${slug}/debate/${phase}",
   "rootDebate": "${slug}/debate",
   "community": "${slug}/community",
