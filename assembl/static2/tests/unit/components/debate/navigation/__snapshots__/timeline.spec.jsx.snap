@@ -5,16 +5,16 @@ exports[`DumbTimeline component should match the DumbTimeline 1`] = `
   className="timeline-container"
 >
   <Connect(withApollo(DumbTimelineSegment))
-    barPercent={0}
-    endDate="date2"
+    barPercent={100}
+    endDate="2000-01-01T00:00:00Z"
     identifier="survey"
     index={0}
     isCurrentPhase={false}
-    isStepCompleted={false}
+    isStepCompleted={true}
     onMenuItemClick={undefined}
     phaseIdentifier="foo"
     showNavigation={true}
-    startDate="date1"
+    startDate="1900-01-01T02:00:00Z"
     title={
       Object {
         "entries": Array [
@@ -26,16 +26,16 @@ exports[`DumbTimeline component should match the DumbTimeline 1`] = `
     }
   />
   <Connect(withApollo(DumbTimelineSegment))
-    barPercent={0}
-    endDate="date2Bar"
+    barPercent={100}
+    endDate="2010-01-01T00:00:00Z"
     identifier="survey"
     index={1}
     isCurrentPhase={false}
-    isStepCompleted={false}
+    isStepCompleted={true}
     onMenuItemClick={undefined}
     phaseIdentifier="bar"
     showNavigation={true}
-    startDate="date1Bar"
+    startDate="2001-01-01T02:00:00Z"
     title={
       Object {
         "entries": Array [

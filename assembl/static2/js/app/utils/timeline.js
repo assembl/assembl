@@ -12,6 +12,16 @@ type Phase = {
 };
 export type Timeline = Array<Phase>;
 
+const dateComparator = (phase1, phase2) => {
+  if (phase1.end === phase2.end) {
+    return 0;
+  }
+  if (phase1.end < phase2.end) {
+    return -1;
+  }
+  return 1;
+};
+
 export const getCurrentPhaseIdentifier = (_timeline: Timeline) => {
   let timeline = _timeline;
   if (!timeline) {
@@ -27,7 +37,12 @@ export const getCurrentPhaseIdentifier = (_timeline: Timeline) => {
       identifier = phase.identifier;
     }
   });
-  return identifier || 'thread';
+  if (identifier) {
+    return identifier;
+  }
+  // if all phases are closed, take the last closed phase
+  const sortedTimeline = [...timeline].sort(dateComparator);
+  return sortedTimeline.length === 0 ? 'thread' : sortedTimeline[sortedTimeline.length - 1].identifier;
 };
 
 export const isPhaseStarted = (_timeline: Timeline, _identifier: string) => {
