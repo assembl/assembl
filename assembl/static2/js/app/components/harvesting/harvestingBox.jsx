@@ -37,6 +37,8 @@ class HarvestingBox extends React.Component<void, Props, State> {
 
   state: State;
 
+  harvestingBox: HTMLElement;
+
   constructor(props: Props) {
     super(props);
     const { extract } = this.props;
@@ -50,25 +52,19 @@ class HarvestingBox extends React.Component<void, Props, State> {
   }
 
   componentDidMount() {
-    const { harvestingBoxPosition, previousExtractId, extract, postId } = this.props;
+    const { harvestingBoxPosition, previousExtractId } = this.props;
     if (harvestingBoxPosition) {
-      const harvestingBoxHtmlId = document.getElementById(`harvesting-box-${postId}`);
-      if (harvestingBoxHtmlId) {
-        harvestingBoxHtmlId.style.marginTop = `${harvestingBoxPosition}px`;
-      }
+      this.harvestingBox.style.marginTop = `${harvestingBoxPosition}px`;
     } else {
       // Set the box position if there are several extract for the same post
       const previousHarvestingBoxHtmlId = previousExtractId
         ? document.getElementById(`harvesting-box-${previousExtractId}`)
         : null;
       const previousHarvestingBoxHeight = previousHarvestingBoxHtmlId ? previousHarvestingBoxHtmlId.offsetHeight : 20;
-      const harvestingBoxHtmlId = extract
-        ? document.getElementById(`harvesting-box-${extract.id}`)
-        : document.getElementById(`harvesting-box-${postId}`);
-      if (harvestingBoxHtmlId && previousHarvestingBoxHtmlId) {
-        harvestingBoxHtmlId.style.marginTop = `${previousHarvestingBoxHeight + 40}px`;
-      } else if (harvestingBoxHtmlId) {
-        harvestingBoxHtmlId.style.marginTop = '20px';
+      if (previousHarvestingBoxHtmlId) {
+        this.harvestingBox.style.marginTop = `${previousHarvestingBoxHeight + 20}px`;
+      } else {
+        this.harvestingBox.style.marginTop = '0px';
       }
     }
   }
@@ -126,6 +122,9 @@ class HarvestingBox extends React.Component<void, Props, State> {
       <div
         className={classnames('theme-box', 'harvesting-box', { 'active-box': checkIsActive })}
         id={extract ? `harvesting-box-${extract.id}` : `harvesting-box-${postId}`}
+        ref={(b) => {
+          this.harvestingBox = b;
+        }}
       >
         <div className="harvesting-box-header">
           <div className="harvesting-status">

@@ -34,6 +34,8 @@ class PostView extends React.PureComponent<void, Props, State> {
 
   answerTextarea: HTMLTextAreaElement;
 
+  postView: HTMLElement;
+
   constructor(props: Props) {
     super(props);
     const { extracts } = this.props.data.post;
@@ -70,19 +72,18 @@ class PostView extends React.PureComponent<void, Props, State> {
     }
   };
 
-  getAnchorPosition(id: string) {
+  getAnchorPosition() {
     const selection = document.getSelection();
     const selectionRange = selection ? selection.getRangeAt(0) : null;
     const selectionPosition = selectionRange ? selectionRange.getBoundingClientRect().top : 0;
-    const postId = document.getElementById(`post-view-${id}`);
-    const postPosition = postId ? postId.getBoundingClientRect().top : 0;
+    const postPosition = this.postView.getBoundingClientRect().top;
     return selectionPosition - postPosition;
   }
 
   handleMouseUpWhileHarvesting = (): void => {
-    const { isHarvesting, translate, id } = this.props;
+    const { isHarvesting, translate } = this.props;
     if (isHarvesting && !translate) {
-      const harvestingMenuPosition = this.getAnchorPosition(id);
+      const harvestingMenuPosition = this.getAnchorPosition();
       this.setState({ displayHarvestingMenu: true, harvestingMenuPosition: harvestingMenuPosition });
     } else {
       this.setState({ displayHarvestingMenu: false });
@@ -150,7 +151,11 @@ class PostView extends React.PureComponent<void, Props, State> {
 
     const { displayHarvestingMenu, harvestingMenuPosition } = this.state;
     return (
-      <div id={`post-view-${id}`}>
+      <div
+        ref={(p) => {
+          this.postView = p;
+        }}
+      >
         {!multiColumns && (
           <Nuggets
             extracts={extracts}

@@ -107,9 +107,7 @@ exports[`Post component should render a deleted post 1`] = `
 `;
 
 exports[`PostView component should render a post in view mode 1`] = `
-<div
-  id="post-view-XYZ333"
->
+<div>
   <Nuggets
     completeLevel="0-0"
     extracts={Array []}
