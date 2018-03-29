@@ -23,7 +23,8 @@ type Props = PostProps & {
 
 type State = {
   showAnswerForm: boolean,
-  displayHarvestingMenu: boolean
+  displayHarvestingMenu: boolean,
+  anchorPosition: number
 };
 
 class PostView extends React.PureComponent<void, Props, State> {
@@ -39,7 +40,8 @@ class PostView extends React.PureComponent<void, Props, State> {
     const isExtracts = extracts.length > 0;
     this.state = {
       showAnswerForm: false,
-      displayHarvestingMenu: isExtracts
+      displayHarvestingMenu: isExtracts,
+      anchorPosition: 0
     };
   }
 
@@ -68,10 +70,20 @@ class PostView extends React.PureComponent<void, Props, State> {
     }
   };
 
+  getAnchorPosition(id: string) {
+    const selection = document.getSelection();
+    const selectionRange = selection ? selection.getRangeAt(0) : null;
+    const selectionPosition = selectionRange ? selectionRange.getBoundingClientRect().top : 0;
+    const postId = document.getElementById(`post-view-${id}`);
+    const postPosition = postId ? postId.getBoundingClientRect().top : 0;
+    return selectionPosition - postPosition;
+  }
+
   handleMouseUpWhileHarvesting = (): void => {
-    const { isHarvesting, translate } = this.props;
+    const { isHarvesting, translate, id } = this.props;
     if (isHarvesting && !translate) {
-      this.setState({ displayHarvestingMenu: true });
+      const anchorPosition = this.getAnchorPosition(id);
+      this.setState({ displayHarvestingMenu: true, anchorPosition: anchorPosition });
     } else {
       this.setState({ displayHarvestingMenu: false });
     }
@@ -136,9 +148,9 @@ class PostView extends React.PureComponent<void, Props, State> {
       canReply = indirectIdeaContentLinks[0].idea.messageViewOverride !== 'messageColumns';
     }
 
-    const { displayHarvestingMenu } = this.state;
+    const { displayHarvestingMenu, anchorPosition } = this.state;
     return (
-      <div>
+      <div id={`post-view-${id}`}>
         {!multiColumns && (
           <Nuggets
             extracts={extracts}
@@ -154,7 +166,7 @@ class PostView extends React.PureComponent<void, Props, State> {
             cancelHarvesting={this.cancelHarvesting}
             isHarvesting={isHarvesting}
             extracts={extracts}
-            dbId={dbId}
+            anchorPosition={anchorPosition}
           />
         )}
         <div className="box" style={boxStyle}>
