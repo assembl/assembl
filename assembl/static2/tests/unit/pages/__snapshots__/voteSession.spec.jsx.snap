@@ -10,7 +10,24 @@ exports[`VoteSession component should match VoteSession snapshot 1`] = `
     subtitle="Maintenant il faut voter."
     title="Phase de vote à la majorité et estimation multicritère"
     type="voteSession"
-  />
+  >
+    <HeaderStatistics
+      statElements={
+        Array [
+          Object {
+            "iconName": "participation-vote",
+            "metricNameTranslateKey": "home.participations",
+            "metricValue": 104,
+          },
+          Object {
+            "iconName": "profil",
+            "metricNameTranslateKey": "home.participant",
+            "metricValue": 2,
+          },
+        ]
+      }
+    />
+  </Connect(Header)>
   <Grid
     bsClass="container"
     className="background-light"
@@ -119,6 +136,7 @@ exports[`VoteSession component should match VoteSession snapshot 1`] = `
                       "id": "token-vote-module",
                       "instructions": "If we generate the feed, we can get to the AGP driver through the primary ADP interface!",
                       "myVotes": Array [],
+                      "numVotes": 42,
                       "tokenCategories": Array [
                         Object {
                           "color": "#226622",
@@ -139,6 +157,11 @@ exports[`VoteSession component should match VoteSession snapshot 1`] = `
                   "title": "First proposal",
                   "voteResults": Object {
                     "numParticipants": 1,
+                    "participants": Array [
+                      Object {
+                        "id": "john.doe",
+                      },
+                    ],
                   },
                 },
                 Object {
@@ -150,6 +173,7 @@ exports[`VoteSession component should match VoteSession snapshot 1`] = `
                       "id": "token-vote-module",
                       "instructions": "If we generate the feed, we can get to the AGP driver through the primary ADP interface!",
                       "myVotes": Array [],
+                      "numVotes": 42,
                       "tokenCategories": Array [
                         Object {
                           "color": "#226622",
@@ -170,12 +194,21 @@ exports[`VoteSession component should match VoteSession snapshot 1`] = `
                       "id": "text-gauge-module",
                       "instructions": "I'll generate the mobile SMS bus, that should microchip the TCP matrix!",
                       "myVotes": Array [],
+                      "numVotes": 20,
                       "voteType": "gauge_vote_specification",
                     },
                   ],
                   "title": "Second proposal",
                   "voteResults": Object {
                     "numParticipants": 2,
+                    "participants": Array [
+                      Object {
+                        "id": "john.doe",
+                      },
+                      Object {
+                        "id": "jane.doe",
+                      },
+                    ],
                   },
                 },
               ]
@@ -236,7 +269,24 @@ exports[`VoteSession component should match VoteSession snapshot with empty modu
     subtitle="Maintenant il faut voter."
     title="Phase de vote à la majorité et estimation multicritère"
     type="voteSession"
-  />
+  >
+    <HeaderStatistics
+      statElements={
+        Array [
+          Object {
+            "iconName": "participation-vote",
+            "metricNameTranslateKey": "home.participations",
+            "metricValue": 0,
+          },
+          Object {
+            "iconName": "profil",
+            "metricNameTranslateKey": "home.participant",
+            "metricValue": 0,
+          },
+        ]
+      }
+    />
+  </Connect(Header)>
   <Grid
     bsClass="container"
     className="background-light"

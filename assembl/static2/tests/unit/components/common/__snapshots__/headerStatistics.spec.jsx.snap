@@ -1,0 +1,132 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`HeaderStatistics component should match HeaderStatistics snapshot 1`] = `
+<div
+  className="statistic"
+>
+  <div
+    className="intermediary-container"
+  >
+    <div
+      className="stat-container"
+    >
+      <div
+        className="stat-box"
+      >
+        <div
+          className="stat-icon assembl-icon-message white"
+        />
+        <div
+          className="stat"
+        >
+          <div
+            className="stat-nb"
+          >
+            3
+          </div>
+          <div
+            className="stat-nb stat-label"
+          >
+            <span
+              className={undefined}
+              style={undefined}
+            >
+              messages
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      className="stat-container"
+    >
+      <div
+        className="stat-box"
+      >
+        <div
+          className="stat-icon assembl-icon-sentiment-neutral white"
+        />
+        <div
+          className="stat"
+        >
+          <div
+            className="stat-nb"
+          >
+            5
+          </div>
+          <div
+            className="stat-nb stat-label"
+          >
+            <span
+              className={undefined}
+              style={undefined}
+            >
+              contributions
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      className="stat-container"
+    >
+      <div
+        className="stat-box"
+      >
+        <div
+          className="stat-icon assembl-icon-profil white"
+        />
+        <div
+          className="stat"
+        >
+          <div
+            className="stat-nb"
+          >
+            2
+          </div>
+          <div
+            className="stat-nb stat-label"
+          >
+            <span
+              className={undefined}
+              style={undefined}
+            >
+              participants
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      className="stat-container"
+    >
+      <div
+        className="stat-box"
+      >
+        <div
+          className="stat-icon assembl-icon-participation-vote white"
+        />
+        <div
+          className="stat"
+        >
+          <div
+            className="stat-nb"
+          >
+            27
+          </div>
+          <div
+            className="stat-nb stat-label"
+          >
+            <span
+              className={undefined}
+              style={undefined}
+            >
+              participations
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;

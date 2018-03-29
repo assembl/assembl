@@ -3,6 +3,9 @@ query Question($lang: String!, $id: ID!) {
     ... on Question {
       title(lang: $lang)
       id
+      numPosts
+      numContributors
+      totalSentiments
       thematic {
         id
         title(lang: $lang)

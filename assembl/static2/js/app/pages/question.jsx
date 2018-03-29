@@ -12,6 +12,7 @@ import Posts from '../components/debate/survey/posts';
 import Question from '../graphql/QuestionQuery.graphql';
 import { displayAlert } from '../utils/utilityManager';
 import { get as getRoute } from '../utils/routeMap';
+import HeaderStatistics, { statContributions, statMessages, statParticipants } from '../components/common/headerStatistics';
 
 type NavigationParams = {
   questionIndex: string,
@@ -21,11 +22,14 @@ type NavigationParams = {
 type QuestionProps = {
   hasErrors: boolean,
   title: string,
+  numContributors: number,
+  numPosts: number,
   params: NavigationParams,
   thematicTitle: string,
   thematicId: string,
   imgUrl: string,
-  slug: string
+  slug: string,
+  totalSentiments: number
 };
 
 export function DumbQuestion(props: QuestionProps) {
@@ -33,12 +37,17 @@ export function DumbQuestion(props: QuestionProps) {
     displayAlert('danger', I18n.t('error.loading'));
     return null;
   }
-  const { imgUrl, title, thematicTitle, thematicId, params, slug } = props;
+  const { imgUrl, title, numContributors, numPosts, thematicTitle, thematicId, params, slug, totalSentiments } = props;
   const link = `${getRoute('idea', { slug: slug, phase: 'survey', themeId: thematicId })}`;
+  let statElements = [];
+  const numContributions = numPosts + totalSentiments;
+  statElements = [statMessages(numPosts), statContributions(numContributions), statParticipants(numContributors)];
   return (
     <div className="question">
       <div className="relative">
-        <Header title={thematicTitle} imgUrl={imgUrl} identifier="survey" />
+        <Header title={thematicTitle} imgUrl={imgUrl} identifier="survey">
+          <HeaderStatistics statElements={statElements} />
+        </Header>
         <div className="background-light proposals">
           <Grid fluid className="background-light">
             <div className="max-container">
@@ -94,15 +103,18 @@ export default compose(
         };
       }
 
-      const { question: { thematic: { img, title, id } } } = data;
+      const { question: { numContributors, numPosts, totalSentiments, thematic: { img, title, id } } } = data;
 
       return {
         hasErrors: false,
         loading: false,
         title: data.question.title,
         imgUrl: img.externalUrl,
+        numContributors: numContributors,
+        numPosts: numPosts,
         thematicTitle: title,
-        thematicId: id
+        thematicId: id,
+        totalSentiments: totalSentiments
       };
     }
   }),
