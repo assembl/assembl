@@ -43,7 +43,7 @@ const ResourceBlock = (props: ResourceBlockProps) => {
             !image && (
               <div className="resource-video-container">
                 <div className={videoClassNames}>
-                  <iframe title="resource-video" src={embedCode} className="resource-iframe" />
+                  <iframe title="resource-video" src={embedCode} className="resource-iframe" frameBorder="0" allowFullScreen />
                 </div>
               </div>
             )}
