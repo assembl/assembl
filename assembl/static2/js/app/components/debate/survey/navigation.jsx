@@ -67,7 +67,7 @@ class Navigation extends React.Component {
       return;
     }
     const proposalsOffset = getDomElementOffset(proposals).top;
-    const firstTextarea = document.getElementsByClassName('txt-area')[0];
+    const firstTextarea = document.getElementsByClassName('rich-text-editor')[0];
     if (!firstTextarea) {
       return;
     }
