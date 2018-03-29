@@ -33,6 +33,7 @@ type UserMenuProps = {
   helpUrl: string,
   remainingWidth?: number,
   isHarvesting: boolean,
+  themeId: ?string,
   handleIsHarvestingButtonClick: Function
 };
 
@@ -47,10 +48,12 @@ const UserMenu = ({
   helpUrl,
   remainingWidth,
   isHarvesting,
-  handleIsHarvestingButtonClick
+  handleIsHarvestingButtonClick,
+  themeId
 }: UserMenuProps) => (
   <div className="navbar-icons">
-    {shouldShowExpertIcons && <IsHarvestingButton isActive={isHarvesting} handleClick={handleIsHarvestingButtonClick} />}
+    {shouldShowExpertIcons &&
+      themeId && <IsHarvestingButton isActive={isHarvesting} handleClick={handleIsHarvestingButtonClick} />}
     {currentPhaseIdentifier !== 'survey' && (
       <div id="search">
         <Search />

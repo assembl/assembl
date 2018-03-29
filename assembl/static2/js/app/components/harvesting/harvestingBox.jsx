@@ -52,6 +52,10 @@ class HarvestingBox extends React.Component<void, Props, State> {
   }
 
   componentDidMount() {
+    this.getHarvestingBoxPosition();
+  }
+
+  getHarvestingBoxPosition() {
     const { harvestingBoxPosition, previousExtractId } = this.props;
     if (harvestingBoxPosition) {
       this.harvestingBox.style.marginTop = `${harvestingBoxPosition}px`;
