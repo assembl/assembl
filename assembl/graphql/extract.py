@@ -108,4 +108,4 @@ class DeleteExtract(graphene.Mutation):
             fragment.delete()
         extract.delete()
 
-        return DeleteExtract(extract=extract)
+        return DeleteExtract(success=True)

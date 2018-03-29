@@ -640,7 +640,7 @@ class AddPostExtract(graphene.Mutation):
             owner_id=user_id,
             discussion_id=discussion_id,
             body=args.get('body'),
-            important=args.get('important') or False,
+            important=args.get('important', False),
             content=post
         )
         post.db.add(new_extract)
