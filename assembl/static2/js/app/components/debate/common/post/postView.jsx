@@ -24,7 +24,7 @@ type Props = PostProps & {
 type State = {
   showAnswerForm: boolean,
   displayHarvestingMenu: boolean,
-  anchorPosition: number
+  harvestingMenuPosition: number
 };
 
 class PostView extends React.PureComponent<void, Props, State> {
@@ -41,7 +41,7 @@ class PostView extends React.PureComponent<void, Props, State> {
     this.state = {
       showAnswerForm: false,
       displayHarvestingMenu: isExtracts,
-      anchorPosition: 0
+      harvestingMenuPosition: 0
     };
   }
 
@@ -82,8 +82,8 @@ class PostView extends React.PureComponent<void, Props, State> {
   handleMouseUpWhileHarvesting = (): void => {
     const { isHarvesting, translate, id } = this.props;
     if (isHarvesting && !translate) {
-      const anchorPosition = this.getAnchorPosition(id);
-      this.setState({ displayHarvestingMenu: true, anchorPosition: anchorPosition });
+      const harvestingMenuPosition = this.getAnchorPosition(id);
+      this.setState({ displayHarvestingMenu: true, harvestingMenuPosition: harvestingMenuPosition });
     } else {
       this.setState({ displayHarvestingMenu: false });
     }
@@ -148,7 +148,7 @@ class PostView extends React.PureComponent<void, Props, State> {
       canReply = indirectIdeaContentLinks[0].idea.messageViewOverride !== 'messageColumns';
     }
 
-    const { displayHarvestingMenu, anchorPosition } = this.state;
+    const { displayHarvestingMenu, harvestingMenuPosition } = this.state;
     return (
       <div id={`post-view-${id}`}>
         {!multiColumns && (
@@ -166,7 +166,7 @@ class PostView extends React.PureComponent<void, Props, State> {
             cancelHarvesting={this.cancelHarvesting}
             isHarvesting={isHarvesting}
             extracts={extracts}
-            anchorPosition={anchorPosition}
+            harvestingMenuPosition={harvestingMenuPosition}
           />
         )}
         <div className="box" style={boxStyle}>

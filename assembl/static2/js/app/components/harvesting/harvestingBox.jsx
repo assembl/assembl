@@ -20,6 +20,7 @@ type Props = {
   contentLocale: string,
   selection: ?Object,
   previousExtractId: ?string,
+  harvestingBoxPosition: ?number,
   cancelHarvesting: Function,
   addPostExtract: Function,
   displayHarvestingBox: Function
@@ -49,17 +50,26 @@ class HarvestingBox extends React.Component<void, Props, State> {
   }
 
   componentDidMount() {
-    // Set the box position if there are several extract for the same post
-    const { previousExtractId, extract, postId } = this.props;
-    const previousHarvestingBoxHtmlId = previousExtractId ? document.getElementById(`harvesting-box-${previousExtractId}`) : null;
-    const previousHarvestingBoxHeight = previousHarvestingBoxHtmlId ? previousHarvestingBoxHtmlId.offsetHeight : 20;
-    const harvestingBoxHtmlId = extract
-      ? document.getElementById(`harvesting-box-${extract.id}`)
-      : document.getElementById(`harvesting-box-${postId}`);
-    if (harvestingBoxHtmlId && previousHarvestingBoxHtmlId) {
-      harvestingBoxHtmlId.style.marginTop = `${previousHarvestingBoxHeight + 40}px`;
-    } else if (harvestingBoxHtmlId) {
-      harvestingBoxHtmlId.style.marginTop = '20px';
+    const { harvestingBoxPosition, previousExtractId, extract, postId } = this.props;
+    if (harvestingBoxPosition) {
+      const harvestingBoxHtmlId = document.getElementById(`harvesting-box-${postId}`);
+      if (harvestingBoxHtmlId) {
+        harvestingBoxHtmlId.style.marginTop = `${harvestingBoxPosition}px`;
+      }
+    } else {
+      // Set the box position if there are several extract for the same post
+      const previousHarvestingBoxHtmlId = previousExtractId
+        ? document.getElementById(`harvesting-box-${previousExtractId}`)
+        : null;
+      const previousHarvestingBoxHeight = previousHarvestingBoxHtmlId ? previousHarvestingBoxHtmlId.offsetHeight : 20;
+      const harvestingBoxHtmlId = extract
+        ? document.getElementById(`harvesting-box-${extract.id}`)
+        : document.getElementById(`harvesting-box-${postId}`);
+      if (harvestingBoxHtmlId && previousHarvestingBoxHtmlId) {
+        harvestingBoxHtmlId.style.marginTop = `${previousHarvestingBoxHeight + 40}px`;
+      } else if (harvestingBoxHtmlId) {
+        harvestingBoxHtmlId.style.marginTop = '20px';
+      }
     }
   }
 
