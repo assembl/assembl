@@ -6,7 +6,6 @@
 -e git+https://github.com/maparent/hashfs.git@use_makedirs#egg=hashfs
 -e git+https://github.com/benoitg/jwzthreading.git@master#egg=jwzthreading
 -e git+https://github.com/maparent/langdetect.git@no_sample#egg=langdetect
--e git+https://github.com/ekalinin/nodeenv.git@master#egg=nodeenv
 -e git+https://github.com/assembl/pyramid_beaker.git@assembl#egg=pyramid_beaker
 pycrypto==2.6.1
 PyStemmer==1.3.0
@@ -43,6 +42,7 @@ kombu==3.0.35
 lingua==4.9
 lxml==3.6.0
 ndg_httpsclient==0.4.1
+nodeenv==1.3.0
 openpyxl==2.4.1
 pip-tools==1.11.0
 polib==1.0.7
