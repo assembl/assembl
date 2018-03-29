@@ -17,7 +17,7 @@ const StatisticsDoughnut = ({ elements, placement }) => {
           <div className="doughnut-label-count">{totalCount}</div>
           {placeAfter ? ' ' : ''}
           <div className="doughnut-label-text">
-            <Translate value="debate.survey.reactions" />
+            <Translate value="debate.survey.reactions" count={totalCount} />
           </div>
         </div>
       </div>
