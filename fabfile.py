@@ -1196,11 +1196,14 @@ def set_file_permissions():
             sudo('{usermod} -a -G {webgrp} {user}'.format(
                 usermod=usermod_path, webgrp=webgrp, user=env.user))
     with cd(env.projectpath):
+        upload_dir = get_upload_dir()
         run('chmod -R o-rwx .')
         run('chmod -R g-rw .')
         run('chgrp {webgrp} . assembl var var/run'.format(webgrp=webgrp))
         run('chgrp -R {webgrp} assembl/static assembl/static2'.format(webgrp=webgrp))
+        run('chgrp -R {webgrp} {uploads}'.format(webgrp=webgrp, uploads=upload_dir))
         run('chmod -R g+rxs var/run')
+        run('chmod -R g+rxs ' + upload_dir)
         run('find assembl/static -type d -print0 |xargs -0 chmod g+rxs')
         run('find assembl/static -type f -print0 |xargs -0 chmod g+r')
         run('find assembl/static2 -type d -print0 |xargs -0 chmod g+rxs')
@@ -1458,6 +1461,13 @@ def database_dump():
     # TODO: Maybe do a rotation?
 
 
+def get_upload_dir(path=None):
+    path = path or env.get('upload_root', 'var/uploads')
+    if path != '/':
+        path = join(env.projectpath, path)
+    return path
+
+
 @task
 def database_download():
     """
@@ -1469,16 +1479,14 @@ def database_download():
         local('rm %s' % (destination))
     execute(database_dump)
     get(remote_db_path(), destination)
-    remote_path = env.get('upload_root', 'var/uploads')
-    if remote_path != '/':
-        remote_path = join(env.projectpath, remote_path)
+    remote_path = get_upload_dir()
     rsync_path = "%s@%s:%s" % (env.user, env.host_string, remote_path)
     local_venv = env.get("local_venv", "./venv")
     with settings(host_string="localhost", venvpath=local_venv,
                   user=getuser(), projectpath=os.getcwd()):
         # TODO: I should check the local upload_path. But in practice
         # it's a developer's machine, probably uses standard.
-        local_path = join(env.projectpath, 'var', 'uploads')
+        local_path = get_upload_dir('var/uploads')
         run("rsync -a %s/ %s" % (rsync_path, local_path))
 
 
@@ -1489,16 +1497,14 @@ def database_upload():
     """
     if(env.wsginame != 'dev.wsgi'):
         put(get_db_dump_name(), remote_db_path())
-        remote_path = env.get('upload_root', 'var/uploads')
-        if remote_path != '/':
-            remote_path = join(env.projectpath, remote_path)
+        remote_path = get_upload_dir()
         rsync_path = "%s@%s:%s/" % (env.user, env.host_string, remote_path)
         local_venv = env.get("local_venv", "./venv")
         with settings(host_string="localhost", venvpath=local_venv,
                       user=getuser(), projectpath=os.getcwd()):
             # TODO: I should check the local upload_path. But in practice
             # it's a developer's machine, probably uses standard.
-            local_path = join(env.projectpath, 'var', 'uploads')
+            local_path = get_upload_dir('var/uploads')
             run("rsync -a %s/ %s" % (local_path, rsync_path))
 
 
@@ -1619,6 +1625,7 @@ def setup_var_directory():
     run('mkdir -p %s' % normpath(join(env.projectpath, 'var', 'log')))
     run('mkdir -p %s' % normpath(join(env.projectpath, 'var', 'run')))
     run('mkdir -p %s' % normpath(join(env.projectpath, 'var', 'db')))
+    run('mkdir -p %s' % get_upload_dir())
 
 
 def get_supervisord_conf():
