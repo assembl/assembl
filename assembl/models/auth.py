@@ -1913,23 +1913,30 @@ class UserLanguagePreferenceCollection(LanguagePreferenceCollection):
             if not request:
                 if self.discussion:
                     discussion_prefs = self.discussion.preferences
-                    if 'preferred_locales' in discussion_prefs:
+                    if 'preferred_locales' in discussion_prefs and discussion_prefs['preferred_locales']:
                         prefs_by_locale = {l: make_preference(l, 0, LanguagePreferenceOrder.Discussion)
                                            for l in discussion_prefs['preferred_locales']}
+                        default_pref = make_preference(discussion_prefs['preferred_locales'][0], 0, LanguagePreferenceOrder.Discussion)
                 else:
                     from assembl.models import Preferences
                     server_prefs = Preferences.get_default_preferences(db)
-                    if server_prefs['preferred_locales']:
+                    if 'preferred_locales' in server_prefs and server_prefs['preferred_locales']:
                         # same as above, update the default pref with the server pref
-                        pass
-                    config_pref = config.get('pyramid.default_locale_name')
-                    prefs_by_locale = {config_pref: make_preference(config_pref, 0, LanguagePreferenceOrder.Server)}
+                        prefs_by_locale = {l: make_preference(l, 0, LanguagePreferenceOrder.Server) for l in server_prefs['preferred_locales']}
+                        default_pref = make_preference(server_prefs['preferred_locales'][0], 0, LanguagePreferenceOrder.Server)
+                    else:
+                        config_locale = config.get('pyramid.default_locale_name')
+                        prefs_by_locale = {config_locale: make_preference(config_locale, 0, LanguagePreferenceOrder.Server)}
+                        default_pref = make_preference(config_locale, 0, LanguagePreferenceOrder.Server)
             else:
-                from assembl.lib.utils import get_locale_from_request
+                from assembl.lib.utils import process_locale_from_request
                 # This creates a user language preference according to request
-                pref_locale = get_locale_from_request(request)
-                lang_pref = self.user.language_preference
-                prefs_by_locale = {pref_locale.code: lang_pref}
+                pref_locale, level = process_locale_from_request(request)
+                preference = make_preference(pref_locale, 0, level)
+                db.add(preference)
+                db.flush()
+                prefs_by_locale = {pref_locale: preference}
+                default_pref = preference
         self.post_prefs = {p.post_id: p for p in post_prefs}
         self.user_prefs = prefs_by_locale
         self.default_pref = default_pref
@@ -1954,10 +1961,8 @@ class UserLanguagePreferenceCollection(LanguagePreferenceCollection):
             'user': None
         }  # Do not give the user or this gets added to session (TODO: Still valid?)
         if kwargs.get('post_id', None):
-            args['post_id'] = kwargs.get('post_id')
-            return PostUserLanguagePreference(**args)
-        else:
-            return UserLanguagePreference(**args)
+            kwargs.pop('post_id')  # cannot pass this for UserLanguagePreference
+        return UserLanguagePreference(**args)
 
     def has_locale(self, locale):
         for locale in Locale.decompose_locale(locale):
