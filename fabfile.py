@@ -1182,6 +1182,7 @@ def install_memcached():
 @task
 def set_file_permissions():
     """Set file permissions for an isolated platform environment"""
+    execute(setup_var_directory)
     webgrp = '_www' if env.mac else 'www-data'
     # This should cover most cases.
     if webgrp not in run('groups').split():
