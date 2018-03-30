@@ -312,6 +312,15 @@
 
 @media screen and (max-width: 767px) {
   .votesession-page {
+    .votes-in-progress {
+      padding: 0 0 15px 0;
+
+      .box {
+        margin-top: 15px;
+        height: 160px;
+      }
+    }
+
     .available-tokens-sticky {
       display: none;
     }
