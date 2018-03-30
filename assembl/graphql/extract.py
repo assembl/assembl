@@ -66,7 +66,9 @@ class UpdateExtract(graphene.Mutation):
             models.ExtractActionVocabulary.Enum, args.get('extract_action', ''), None)
         extract.extract_nature = getattr(
             models.ExtractNatureVocabulary.Enum, args.get('extract_nature', ''), None)
-        extract.body = args.get('body', None)
+        body = args.get('body', None)
+        if body:
+            extract.body = body
         if args.get('idea_id'):
             idea_id = int(Node.from_global_id(args.get('idea_id'))[1])
             extract.idea_id = idea_id
