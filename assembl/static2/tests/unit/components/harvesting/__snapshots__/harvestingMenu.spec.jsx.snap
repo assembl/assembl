@@ -2,7 +2,7 @@
 
 exports[`harvestingMenu component should match harvestingMenu snapshot 1`] = `
 <div>
-  <Connect(Apollo(Component))
+  <Connect(Apollo(Apollo(Component)))
     cancelHarvesting={undefined}
     displayHarvestingBox={[Function]}
     extract={
@@ -29,10 +29,11 @@ exports[`harvestingMenu component should match harvestingMenu snapshot 1`] = `
       }
     }
     harvestingBoxPosition={null}
+    ideaId={undefined}
     postId="1234"
     previousExtractId={null}
   />
-  <Connect(Apollo(Component))
+  <Connect(Apollo(Apollo(Component)))
     cancelHarvesting={undefined}
     displayHarvestingBox={[Function]}
     extract={
@@ -59,6 +60,7 @@ exports[`harvestingMenu component should match harvestingMenu snapshot 1`] = `
       }
     }
     harvestingBoxPosition={null}
+    ideaId={undefined}
     postId="1234"
     previousExtractId="987643"
   />

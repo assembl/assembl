@@ -172,6 +172,7 @@ class PostView extends React.PureComponent<void, Props, State> {
             isHarvesting={isHarvesting}
             extracts={extracts}
             harvestingMenuPosition={harvestingMenuPosition}
+            ideaId={ideaId}
           />
         )}
         <div className="box" style={boxStyle}>

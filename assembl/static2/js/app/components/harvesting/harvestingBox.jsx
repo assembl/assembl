@@ -9,10 +9,12 @@ import classnames from 'classnames';
 import moment from 'moment';
 
 import addPostExtractMutation from '../../graphql/mutations/addPostExtract.graphql';
+import updateExtractMutation from '../../graphql/mutations/updateExtract.graphql';
 import withLoadingIndicator from '../../components/common/withLoadingIndicator';
 import { displayAlert } from '../../utils/utilityManager';
 import { getConnectedUserId, getConnectedUserName } from '../../utils/globalFunctions';
 import AvatarImage from '../common/avatarImage';
+import FormControlWithLabel from '../common/formControlWithLabel';
 
 type Props = {
   extract: ?Extract,
@@ -21,15 +23,19 @@ type Props = {
   selection: ?Object,
   previousExtractId: ?string,
   harvestingBoxPosition: ?number,
+  ideaId: string,
   cancelHarvesting: Function,
   addPostExtract: Function,
-  displayHarvestingBox: Function
+  displayHarvestingBox: Function,
+  updateExtract: Function
 };
 
 type State = {
   disabled: boolean,
   checkIsActive: boolean,
-  isNugget: boolean
+  isNugget: boolean,
+  isEditable: boolean,
+  editableExtract: string
 };
 
 class DumbHarvestingBox extends React.Component<void, Props, State> {
@@ -47,7 +53,9 @@ class DumbHarvestingBox extends React.Component<void, Props, State> {
     this.state = {
       disabled: !isExtract,
       checkIsActive: isExtract,
-      isNugget: isNugget
+      isNugget: isNugget,
+      isEditable: false,
+      editableExtract: extract ? extract.body : ''
     };
   }
 
@@ -72,6 +80,43 @@ class DumbHarvestingBox extends React.Component<void, Props, State> {
       }
     }
   }
+
+  setEditMode = (): void => {
+    const { isEditable } = this.state;
+    this.setState({ isEditable: !isEditable });
+  };
+
+  editExtract = (value: string): void => {
+    this.setState({ editableExtract: value });
+  };
+
+  setExtractAsNugget = (): void => {
+    const { isNugget } = this.state;
+    this.setState({ isNugget: !isNugget });
+    this.updateHarvesting();
+  };
+
+  updateHarvesting = (): void => {
+    const { extract, ideaId, updateExtract } = this.props;
+    const { isNugget } = this.state;
+    const variables = {
+      extractId: extract ? extract.id : null,
+      ideaId: ideaId,
+      important: isNugget,
+      extractNature: 'knowledge', // TODO replace later by the nature list
+      extractAction: 'argument' // TODO replace later by the action list
+    };
+
+    updateExtract({ variables: variables })
+      .then(() => {
+        this.setState({
+          isEditable: false
+        });
+      })
+      .catch((error) => {
+        displayAlert('danger', `${error}`);
+      });
+  };
 
   validateHarvesting = (): void => {
     const { postId, selection, contentLocale, addPostExtract, displayHarvestingBox } = this.props;
@@ -115,7 +160,7 @@ class DumbHarvestingBox extends React.Component<void, Props, State> {
 
   render() {
     const { selection, cancelHarvesting, extract, contentLocale, postId } = this.props;
-    const { disabled, checkIsActive, isNugget } = this.state;
+    const { disabled, checkIsActive, isNugget, isEditable, editableExtract } = this.state;
     const isExtract = extract !== null;
     const selectionText = selection ? selection.toString() : '';
     const harvesterUserName =
@@ -162,13 +207,13 @@ class DumbHarvestingBox extends React.Component<void, Props, State> {
             <Button disabled={disabled} className={classnames({ active: checkIsActive })}>
               <span className="assembl-icon-check grey" />
             </Button>
-            <Button disabled={disabled}>
+            <Button disabled={disabled} onClick={this.setEditMode} className={classnames({ active: isEditable })}>
               <span className="assembl-icon-edit grey" />
             </Button>
             <Button disabled={disabled}>
               <span className="assembl-icon-delete grey" />
             </Button>
-            <Button disabled={disabled} className={classnames({ active: isNugget })}>
+            <Button disabled={disabled} onClick={this.setExtractAsNugget} className={classnames({ active: isNugget })}>
               <span className="assembl-icon-pepite grey" />
             </Button>
             <span className="assembl-icon-ellipsis-vert grey" />
@@ -195,15 +240,25 @@ class DumbHarvestingBox extends React.Component<void, Props, State> {
           </div>
         </div>
         <div className="harvesting-box-body">
-          {isExtract && extract && <div>{extract.body}</div>}
+          {isExtract && extract && !isEditable && <div>{extract.body}</div>}
+          {isExtract &&
+            extract &&
+            isEditable && (
+              <FormControlWithLabel
+                componentClass="textarea"
+                className="text-area"
+                value={editableExtract}
+                onChange={e => this.editExtract(e.target.value)}
+              />
+            )}
           {!isExtract && <div>{selectionText}</div>}
         </div>
-        {disabled && (
+        {(disabled || isEditable) && (
           <div className="harvesting-box-footer">
-            <Button className="button-submit button-dark" onClick={this.validateHarvesting}>
+            <Button className="button-submit button-dark" onClick={isEditable ? this.updateHarvesting : this.validateHarvesting}>
               <Translate value="common.attachFileForm.submit" />
             </Button>
-            <Button className="button-cancel button-dark" onClick={cancelHarvesting}>
+            <Button className="button-cancel button-dark" onClick={isEditable ? this.setEditMode : cancelHarvesting}>
               <Translate value="debate.confirmDeletionButtonCancel" />
             </Button>
           </div>
@@ -223,6 +278,9 @@ export default compose(
   connect(mapStateToProps),
   graphql(addPostExtractMutation, {
     name: 'addPostExtract'
+  }),
+  graphql(updateExtractMutation, {
+    name: 'updateExtract'
   }),
   withLoadingIndicator()
 )(DumbHarvestingBox);

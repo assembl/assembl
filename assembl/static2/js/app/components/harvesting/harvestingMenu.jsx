@@ -11,6 +11,7 @@ type Props = {
   postId: string,
   isHarvesting: boolean,
   harvestingMenuPosition: number,
+  ideaId: string,
   cancelHarvesting: Function
 };
 
@@ -43,7 +44,7 @@ class HarvestingMenu extends React.Component<void, Props, State> {
   };
 
   render() {
-    const { postId, cancelHarvesting, isHarvesting, extracts, harvestingMenuPosition } = this.props;
+    const { postId, cancelHarvesting, isHarvesting, extracts, harvestingMenuPosition, ideaId } = this.props;
     const { showHarvestingBox } = this.state;
     const selection = window.getSelection();
     return (
@@ -58,6 +59,7 @@ class HarvestingMenu extends React.Component<void, Props, State> {
               displayHarvestingBox={this.displayHarvestingBox}
               previousExtractId={extracts[index - 1] ? extracts[index - 1].id : null}
               harvestingBoxPosition={null}
+              ideaId={ideaId}
             />
           ))
           : null}
