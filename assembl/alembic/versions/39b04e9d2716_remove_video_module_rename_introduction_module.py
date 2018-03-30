@@ -1,5 +1,5 @@
 # -*- coding=utf-8 -*-
-"""Remove_video_module
+"""Remove_video_module_rename_introduction_module
 
 Revision ID: 39b04e9d2716
 Revises: e7b56b85b1f5
@@ -25,13 +25,19 @@ def upgrade(pyramid_env):
     from assembl import models as m
     db = m.get_session_maker()()
     with transaction.manager:
-        db.delete(db.query(m.LandingPageModuleType).filter(m.LandingPageModuleType.identifier == u"VIDEO").first())
+        video_module_type = db.query(m.LandingPageModuleType).filter(m.LandingPageModuleType.identifier == u"VIDEO").first()
+        if video_module_type:
+            db.delete(video_module_type)
+        video_modules = db.query(m.LandingPageModule.module_type_id).join(
+            m.LandingPageModuleType).filter(m.LandingPageModuleType.identifier == u"VIDEO").all()
+        if video_modules:
+            for video_module in video_modules:
+                db.delete(video_module)
         lpmt = db.query(m.LandingPageModuleType).filter(m.LandingPageModuleType.identifier == u"INTRODUCTION").first()
-        ls = lpmt.title
-        ls.add_value(u"Text & Multi-Media", "en")
-
-        # ls.add_entry(m.LangStringEntry(langstring=ls, value=u"Text & Multi-Media", locale_id=m.Locale.get_id_of("en")))
-        ls.add_value(u"Texte & Multi-Médias", "fr")
+        if lpmt:
+            ls = lpmt.title
+            ls.add_value(u"Text & Multi-Media", "en")
+            ls.add_value(u"Texte & Multi-Médias", "fr")
         db.flush()
 
 
@@ -49,7 +55,8 @@ def downgrade(pyramid_env):
             editable_order=True,
             required=False))
         lpmt = db.query(m.LandingPageModuleType).filter(m.LandingPageModuleType.identifier == u"INTRODUCTION").first()
-        ls = lpmt.title
-        ls.add_entry(m.LangStringEntry(langstring=ls, value=u"Introduction", locale_id=m.Locale.get_id_of("en")))
-        ls.add_entry(m.LangStringEntry(langstring=ls, value=u"Introduction", locale_id=m.Locale.get_id_of("fr")))
+        if lpmt:
+            ls = lpmt.title
+            ls.add_entry(m.LangStringEntry(langstring=ls, value=u"Introduction", locale_id=m.Locale.get_id_of("en")))
+            ls.add_entry(m.LangStringEntry(langstring=ls, value=u"Introduction", locale_id=m.Locale.get_id_of("fr")))
         db.flush()

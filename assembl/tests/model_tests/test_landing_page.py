@@ -1,4 +1,4 @@
-MODULES_COUNT = 12
+MODULES_COUNT = 11
 
 
 def test_create_landing_page_module_type(test_session):
