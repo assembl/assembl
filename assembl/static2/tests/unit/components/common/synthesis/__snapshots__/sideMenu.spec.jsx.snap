@@ -6,7 +6,7 @@ exports[`SideMenu component should render a SideMenu component 1`] = `
 >
   <Translate
     className="dark-title-4"
-    value="synthesis.summary"
+    value="synthesis.tableOfContents"
   />
   <div
     className="title-hyphen block"

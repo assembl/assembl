@@ -67,7 +67,6 @@ class SideMenuTree extends React.Component<*, SideMenuTreeProps, SideMenuTreeSta
     const tree = roots.map((idea, subIndex) => {
       const { id } = idea;
       const url = getFullPath('synthesisIdea', { slug: slug, synthesisId: synthesisPostId, ideaId: id });
-      // `/${slug}/syntheses/${synthesisPostId}#${id}`;
       return (
         <SideMenuTree
           key={id}

@@ -18,7 +18,7 @@ const SideMenu = (props: SideMenuProps) => {
   const slug = getDiscussionSlug();
   return (
     <div className="synthesis-side-menu">
-      <Translate value="synthesis.summary" className="dark-title-4" />
+      <Translate value="synthesis.tableOfContents" className="dark-title-4" />
       <div className="title-hyphen block">&nbsp;</div>
       {rootIdeas.map((rootIdea, index) => (
         <SideMenuTree
