@@ -50,6 +50,7 @@ class UpdateExtract(graphene.Mutation):
         important = graphene.Boolean()
         extract_nature = graphene.String()
         extract_action = graphene.String()
+        body = graphene.String()
 
     extract = graphene.Field(lambda: Extract)
 
@@ -65,6 +66,7 @@ class UpdateExtract(graphene.Mutation):
             models.ExtractActionVocabulary.Enum, args.get('extract_action', ''), None)
         extract.extract_nature = getattr(
             models.ExtractNatureVocabulary.Enum, args.get('extract_nature', ''), None)
+        extract.body = args.get('body', None)
         if args.get('idea_id'):
             idea_id = int(Node.from_global_id(args.get('idea_id'))[1])
             extract.idea_id = idea_id
