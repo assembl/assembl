@@ -23,7 +23,7 @@ const Translations = {
       inProgress: "en cours",
       validated: "validé",
       now: "Maintenant",
-      harvestingSucces: "L'extrait a été mis à jour avec succès."
+      harvestingSuccess: "L'extrait a été mis à jour avec succès."
     },
     search: {
       reset: {
@@ -641,7 +641,7 @@ const Translations = {
       inProgress: "in progress",
       validated: "validated",
       now: "Now",
-      harvestingSucces: "The extract is updated with success."
+      harvestingSuccess: "The extract is updated with success."
     },
     search: {
       reset: {

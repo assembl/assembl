@@ -90,13 +90,14 @@ class DumbHarvestingBox extends React.Component<void, Props, State> {
     this.setState({ editableExtract: value });
   };
 
-  setExtractAsNugget = (): void => {
+  updateHarvestingNugget = (): void => {
     const { extract, ideaId, updateExtract } = this.props;
-    const { isNugget } = this.state;
+    const { isNugget, editableExtract } = this.state;
     const variables = {
       extractId: extract ? extract.id : null,
       ideaId: ideaId,
-      important: isNugget,
+      body: editableExtract,
+      important: !isNugget,
       extractNature: 'knowledge', // TODO replace later by the nature list
       extractAction: 'argument' // TODO replace later by the action list
     };
@@ -104,22 +105,22 @@ class DumbHarvestingBox extends React.Component<void, Props, State> {
     updateExtract({ variables: variables })
       .then(() => {
         this.setState({
-          isEditable: false,
           isNugget: !isNugget
         });
-        displayAlert('success', I18n.t('harvesting.harvetingSuccess'));
+        displayAlert('success', I18n.t('harvesting.harvestingSuccess'));
       })
       .catch((error) => {
         displayAlert('danger', `${error}`);
       });
   };
 
-  updateHarvesting = (): void => {
+  updateHarvestingBody = (): void => {
     const { extract, ideaId, updateExtract } = this.props;
-    const { isNugget } = this.state;
+    const { isNugget, editableExtract } = this.state;
     const variables = {
       extractId: extract ? extract.id : null,
       ideaId: ideaId,
+      body: editableExtract,
       important: isNugget,
       extractNature: 'knowledge', // TODO replace later by the nature list
       extractAction: 'argument' // TODO replace later by the action list
@@ -130,6 +131,7 @@ class DumbHarvestingBox extends React.Component<void, Props, State> {
         this.setState({
           isEditable: false
         });
+        displayAlert('success', I18n.t('harvesting.harvestingSuccess'));
       })
       .catch((error) => {
         displayAlert('danger', `${error}`);
@@ -231,7 +233,7 @@ class DumbHarvestingBox extends React.Component<void, Props, State> {
             <Button disabled={disabled}>
               <span className="assembl-icon-delete grey" />
             </Button>
-            <Button disabled={disabled} onClick={this.setExtractAsNugget} className={classnames({ active: isNugget })}>
+            <Button disabled={disabled} onClick={this.updateHarvestingNugget} className={classnames({ active: isNugget })}>
               <span className="assembl-icon-pepite grey" />
             </Button>
             <span className="assembl-icon-ellipsis-vert grey" />
@@ -273,7 +275,10 @@ class DumbHarvestingBox extends React.Component<void, Props, State> {
         </div>
         {(disabled || isEditable) && (
           <div className="harvesting-box-footer">
-            <Button className="button-submit button-dark" onClick={isEditable ? this.updateHarvesting : this.validateHarvesting}>
+            <Button
+              className="button-submit button-dark"
+              onClick={isEditable ? this.updateHarvestingBody : this.validateHarvesting}
+            >
               <Translate value="common.attachFileForm.submit" />
             </Button>
             <Button className="button-cancel button-dark" onClick={isEditable ? this.setEditMode : cancelHarvesting}>

@@ -270,12 +270,7 @@
 
       &:focus {
         background-color: $white;
-        border-color: $second-color;
         outline: none;
-
-        span {
-          color: $second-color;
-        }
       }
 
       span {
