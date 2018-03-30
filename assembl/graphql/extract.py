@@ -61,8 +61,10 @@ class UpdateExtract(graphene.Mutation):
         extract = models.Extract.get(extract_id)
         require_instance_permission(CrudPermissions.UPDATE, extract, context)
         extract.important = args.get('important', False)
-        extract.extract_action = args.get('extract_action')
-        extract.extract_nature = args.get('extract_nature')
+        extract.extract_action = getattr(
+            models.ExtractActionVocabulary.Enum, args.get('extract_action', ''), None)
+        extract.extract_nature = getattr(
+            models.ExtractNatureVocabulary.Enum, args.get('extract_nature', ''), None)
         if args.get('idea_id'):
             idea_id = int(Node.from_global_id(args.get('idea_id'))[1])
             extract.idea_id = idea_id
