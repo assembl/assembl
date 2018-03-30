@@ -68,6 +68,7 @@ def test_graphql_get_all_ideas(graphql_request,
                 messageViewOverride
                 numPosts
                 numContributors
+                totalSentiments
                 numChildren(identifier: $identifier)
                 parentId
                 order
@@ -98,6 +99,9 @@ def test_graphql_get_all_ideas(graphql_request,
     assert first_idea['parentId'] == root_idea['id']
     assert first_idea['order'] == 0.0
     assert first_idea['numChildren'] == 1
+    assert first_idea['numPosts'] == 0
+    assert first_idea['numContributors'] == 0
+    assert first_idea['totalSentiments'] == 0
     assert first_idea['messageViewOverride'] is None
     assert second_idea['title'] == u'Lower taxes'
     assert second_idea['parentId'] == first_idea['id']

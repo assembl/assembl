@@ -18,6 +18,7 @@ import ThematicQuery from '../graphql/ThematicQuery.graphql';
 import { displayAlert } from '../utils/utilityManager';
 import type { Timeline } from '../utils/timeline';
 import { get as getRoute } from '../utils/routeMap';
+import HeaderStatistics, { statContributions, statMessages, statParticipants } from '../components/common/headerStatistics';
 
 type PostNode = {
   node: {
@@ -45,11 +46,14 @@ type SurveyProps = {
   imgUrl: string,
   loading: boolean,
   media: Object, // TODO: we should add a type for media/video and use it everywhere
+  numContributors: number,
+  numPosts: number,
   questions: Array<QuestionType>,
   refetchThematic: Function,
   title: string,
   id: string,
   slug: string,
+  totalSentiments: number,
   updateContentLocaleMapping: Function,
   routerParams: RouterParams
 };
@@ -123,14 +127,30 @@ class Survey extends React.Component<*, SurveyProps, SurveyState> {
       displayAlert('danger', I18n.t('error.loading'));
       return null;
     }
-    const { imgUrl, media, questions, refetchThematic, title, slug, routerParams } = this.props;
+    const {
+      imgUrl,
+      media,
+      numPosts,
+      numContributors,
+      questions,
+      refetchThematic,
+      title,
+      slug,
+      routerParams,
+      totalSentiments
+    } = this.props;
     const { debateData } = this.props.debate;
     const isPhaseCompleted = getIfPhaseCompletedByIdentifier(debateData.timeline, 'survey');
     const phaseUrl = `${getRoute('debate', { slug: slug, phase: 'survey' })}`;
+    let statElements = [];
+    const numContributions = numPosts + totalSentiments;
+    statElements = [statMessages(numPosts), statContributions(numContributions), statParticipants(numContributors)];
     return (
       <div className="survey">
         <div className="relative">
-          <Header title={title} imgUrl={imgUrl} identifier="survey" type="survey" routerParams={routerParams} />
+          <Header title={title} imgUrl={imgUrl} identifier="survey" type="survey" routerParams={routerParams}>
+            <HeaderStatistics statElements={statElements} />
+          </Header>
           {media && <Media {...media} />}
           <div className="questions">
             {questions &&
@@ -216,16 +236,19 @@ export default compose(
         };
       }
 
-      const { thematic: { img, questions, title, video: media }, refetch } = data;
+      const { thematic: { img, questions, title, video: media, numContributors, numPosts, totalSentiments }, refetch } = data;
 
       return {
         hasErrors: false,
         imgUrl: img.externalUrl,
         loading: false,
         media: media,
+        numContributors: numContributors,
+        numPosts: numPosts,
         questions: questions,
         refetchThematic: refetch,
-        title: title
+        title: title,
+        totalSentiments: totalSentiments
       };
     }
   }),

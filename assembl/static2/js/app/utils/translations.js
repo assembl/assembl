@@ -176,9 +176,21 @@ const Translations = {
     },
     home: {
       accessButton: "Je participe",
+      sentiments_0: "vote",
+      sentiments_1: "vote",
       sentiments: "votes",
+      contribution_0: "contribution",
+      contribution_1: "contribution",
       contribution: "contributions",
+      messages_0: "message",
+      messages_1: "message",
+      messages: "messages",
+      participant_0: "participant",
+      participant_1: "participant",
       participant: "participants",
+      participations_0: "participation",
+      participations_1: "participation",
+      participations: "participations",
       visit: "visites",
       pageViews: "pages vues",
       sumVisitsLength: "temps passé global",
@@ -208,7 +220,8 @@ const Translations = {
     synthesis: {
       title: "synthèse",
       seeConversation: "Voir la conversation",
-      noSynthesisYet: "Il n'y a pas encore de synthèse disponible."
+      noSynthesisYet: "Il n'y a pas encore de synthèse disponible.",
+      tableOfContents: "Sommaire"
     },
     common: {
       attachFileForm: {
@@ -266,6 +279,8 @@ const Translations = {
         question_x_on_total: "Question %{current} sur %{total}",
         titleVideo: "Une vidéo pour mieux comprendre le sujet...",
         proposalsTitle: "Êtes-vous d'accord avec les propositions exprimées ?",
+        reactions_0: "Réaction",
+        reactions_1: "Réaction",
         reactions: "Réactions",
         react: "Réagissez :",
         moreProposals: "Voir plus de propositions",
@@ -461,6 +476,7 @@ const Translations = {
         gauge: "Jauge %{number}",
         customGauge: "Jauge %{number} (modifiée pour cette proposition)",
         gaugeSettings: "Modifier le paramétrage",
+        cancelCustomization: "Annuler le paramétrage",
         validationErrors: {
           atLeastOneModule: "Vous devez sélectionner au moins un module."
         }
@@ -776,9 +792,21 @@ const Translations = {
     },
     home: {
       accessButton: "I want to participate",
-      contribution: "contributions",
-      participant: "participants",
+      sentiments_0: "vote",
+      sentiments_1: "vote",
       sentiments: "votes",
+      contribution_0: "contribution",
+      contribution_1: "contribution",
+      contribution: "contributions",
+      messages_0: "message",
+      messages_1: "message",
+      messages: "messages",
+      participant_0: "participant",
+      participant_1: "participant",
+      participant: "participants",
+      participations_0: "participation",
+      participations_1: "participation",
+      participations: "participations",
       visit: "visits",
       pageViews: "page views",
       sumVisitsLength: "global time spent",
@@ -828,7 +856,8 @@ const Translations = {
     synthesis: {
       title: "synthesis",
       seeConversation: "See the conversation",
-      noSynthesisYet: "There is no synthesis available yet."
+      noSynthesisYet: "There is no synthesis available yet.",
+      tableOfContents: "Table of contents"
     },
     debate: {
       shareThematic: "Share this thematic",
@@ -866,6 +895,8 @@ const Translations = {
         question_x_on_total: "Question %{current} on %{total}",
         titleVideo: "A video to better understand the subject...",
         proposalsTitle: "Do you agree with these points of view?",
+        reactions_0: "Reaction",
+        reactions_1: "Reaction",
         reactions: "Reactions",
         react: "React:",
         moreProposals: "More points of view",
@@ -1075,6 +1106,7 @@ const Translations = {
         description: "Description*",
         tokenVote: "Token vote",
         gaugeSettings: "Edit settings",
+        cancelCustomization: "Cancel settings",
         validationErrors: {
           atLeastOneModule: "You should select at least one module."
         }

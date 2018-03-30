@@ -285,3 +285,8 @@ export const setValidationErrors = (id: string, errors: ValidationErrors): actio
   id: id,
   type: actionTypes.SET_VALIDATION_ERRORS
 });
+
+export const cancelModuleCustomization = (id: string): actionTypes.CancelModuleCustomization => ({
+  id: id,
+  type: actionTypes.CANCEL_MODULE_CUSTOMIZATION
+});

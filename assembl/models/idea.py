@@ -1093,6 +1093,29 @@ class Idea(HistoryMixin, DiscussionBoundBase):
         return [Widget.uri_generic(l.widget_id)
                 for l in self.active_showing_widget_links]
 
+    def get_total_sentiments(self):
+        from .action import SentimentOfPost
+        from .post import Post, countable_publication_states
+        from .generic import Content
+
+        related = self.get_related_posts_query(
+            partial=True, include_deleted=False)
+        post_ids = Post.query.join(
+            related, Post.id == related.c.post_id
+        ).with_entities(Post.id).subquery()
+
+        discussion_id = self.discussion_id
+        discussion = Discussion.get(discussion_id)
+        query = discussion.db.query(SentimentOfPost).filter(
+            SentimentOfPost.tombstone_condition(),
+            Content.tombstone_condition(),
+            Post.id == Content.id,
+            Post.publication_state.in_(countable_publication_states),
+            *SentimentOfPost.get_discussion_conditions(discussion_id)
+        )
+        query = query.filter(Post.id.in_(post_ids))
+        return query.count()
+
     crud_permissions = CrudPermissions(
         P_ADD_IDEA, P_READ, P_EDIT_IDEA, P_ADMIN_DISC, P_ADMIN_DISC,
         P_ADMIN_DISC)

@@ -8,14 +8,14 @@ describe('DumbTimeline component', () => {
     const timeline = [
       {
         identifier: 'foo',
-        start: 'date1',
-        end: 'date2',
+        start: '1900-01-01T02:00:00Z',
+        end: '2000-01-01T00:00:00Z',
         title: { entries: [{ en: 'Foo' }] }
       },
       {
         identifier: 'bar',
-        start: 'date1Bar',
-        end: 'date2Bar',
+        start: '2001-01-01T02:00:00Z',
+        end: '2010-01-01T00:00:00Z',
         title: { entries: [{ en: 'Bar' }] }
       }
     ];

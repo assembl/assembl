@@ -1,12 +1,12 @@
 @font-face {
   font-family: 'assembl-glyph';
-  src: url('#{$fonts-dir}/assembl-glyph.eot?42197098');
+  src: url('#{$fonts-dir}/assembl-glyph.eot?80046335');
   src:
-    url('#{$fonts-dir}/assembl-glyph.eot?42197098#iefix') format('embedded-opentype'),
-    url('#{$fonts-dir}/assembl-glyph.woff2?42197098') format('woff2'),
-    url('#{$fonts-dir}/assembl-glyph.woff?42197098') format('woff'),
-    url('#{$fonts-dir}/assembl-glyph.ttf?42197098') format('truetype'),
-    url('#{$fonts-dir}/assembl-glyph.svg?42197098#assembl-glyph') format('svg');
+    url('#{$fonts-dir}/assembl-glyph.eot?80046335#iefix') format('embedded-opentype'),
+    url('#{$fonts-dir}/assembl-glyph.woff2?80046335') format('woff2'),
+    url('#{$fonts-dir}/assembl-glyph.woff?80046335') format('woff'),
+    url('#{$fonts-dir}/assembl-glyph.ttf?80046335') format('truetype'),
+    url('#{$fonts-dir}/assembl-glyph.svg?80046335#assembl-glyph') format('svg');
   font-weight: normal;
   font-style: normal;
 }
@@ -19,7 +19,7 @@
 @media screen and (-webkit-min-device-pixel-ratio:0) {
   @font-face {
     font-family: 'assembl-glyph';
-    src: url('../font/assembl-glyph.svg?42197098#assembl-glyph') format('svg');
+    src: url('../font/assembl-glyph.svg?80046335#assembl-glyph') format('svg');
   }
 }
 */
@@ -48,6 +48,7 @@
   /* Animation center compensation - margins should be symmetric */
 
   /* remove if not needed */
+
   margin-left: .2em;
 
   /* you can be more comfortable with increased icons size */
@@ -83,9 +84,7 @@
 .assembl-icon-expert:before { content: '\e811'; } /* '' */
 .assembl-icon-menu-on:before { content: '\e812'; } /* '' */
 .assembl-icon-message:before { content: '\e813'; } /* '' */
-.assembl-icon-expert-1:before { content: '\e814'; } /* '' */
 .assembl-icon-right-dir:before { content: '\e815'; } /* '' */
-.assembl-icon-check:before { content: '\e816'; } /* '' */
 .assembl-icon-down-small:before { content: '\e817'; } /* '' */
 .assembl-icon-up-small:before { content: '\e818'; } /* '' */
 .assembl-icon-pepite:before { content: '\e81b'; } /* '' */
@@ -106,6 +105,7 @@
 .assembl-icon-text-attachment:before { content: '\e831'; } /* '' */
 .assembl-icon-text-align-left:before { content: '\e832'; } /* '' */
 .assembl-icon-text-align-right:before { content: '\e833'; } /* '' */
+.assembl-icon-participation-vote:before { content: '\e839'; } /* '' */
 .assembl-icon-back-arrow:before { content: '\e856'; } /* '' */
 .assembl-icon-double-page:before { content: '\e869'; } /* '' */
 .assembl-icon-timer:before { content: '\e86a'; } /* '' */

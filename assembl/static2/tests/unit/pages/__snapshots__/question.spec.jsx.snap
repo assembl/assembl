@@ -11,7 +11,29 @@ exports[`Question page should match Question with data snapshot 1`] = `
       identifier="survey"
       imgUrl="https://foo.bar/umgurl"
       title="Bar"
-    />
+    >
+      <HeaderStatistics
+        statElements={
+          Array [
+            Object {
+              "iconName": "message",
+              "metricNameTranslateKey": "home.messages",
+              "metricValue": 2,
+            },
+            Object {
+              "iconName": "sentiment-neutral",
+              "metricNameTranslateKey": "home.contribution",
+              "metricValue": 3,
+            },
+            Object {
+              "iconName": "profil",
+              "metricNameTranslateKey": "home.participant",
+              "metricValue": 2,
+            },
+          ]
+        }
+      />
+    </Connect(Header)>
     <div
       className="background-light proposals"
     >

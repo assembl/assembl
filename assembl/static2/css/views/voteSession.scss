@@ -80,9 +80,7 @@
   }
 
   .tokens > * {
-    margin: 5px 3px;
-    width: 28px;
-    height: 28px;
+    margin: 7px 3px;
   }
 
   .theme-box {
@@ -351,9 +349,13 @@
       display: block;
     }
 
+    .header-section {
+      height: 500px;
+    }
+
     .header-content {
       text-align: left;
-      padding: 75px 15px 150px;
+      padding: 20px 0 0 40px;
 
       .light-title-2 {
         padding-left: 4px;

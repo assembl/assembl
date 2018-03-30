@@ -11,7 +11,6 @@ from pyramid.httpexceptions import HTTPUnauthorized
 from pyramid.security import Everyone
 from sqlalchemy import desc, func, join, select
 from sqlalchemy.orm import joinedload
-from sqlalchemy.sql.functions import count
 
 from assembl import models
 from assembl.auth import IF_OWNED, CrudPermissions
@@ -51,6 +50,7 @@ class IdeaInterface(graphene.Interface):
     order = graphene.Float()
     live = graphene.Field(lambda: IdeaUnion)
     message_view_override = graphene.String()
+    total_sentiments = graphene.Int(required=True)
     vote_specifications = graphene.List('assembl.graphql.vote_session.VoteSpecificationUnion', required=True)
 
     def resolve_num_total_posts(self, args, context, info):
@@ -94,6 +94,9 @@ class IdeaInterface(graphene.Interface):
 
     def resolve_vote_specifications(self, args, context, info):
         return self.criterion_for
+
+    def resolve_total_sentiments(self, args, context, info):
+        return self.get_total_sentiments()
 
 
 class IdeaAnnoucement(SecureObjectType, SQLAlchemyObjectType):
@@ -286,7 +289,7 @@ class Idea(SecureObjectType, SQLAlchemyObjectType):
         # instead of doing one query for each post
         if 'sentimentCounts' in fields.get('edges', {}).get('node', {}):
             sentiment_counts = discussion.db.query(
-                models.Post.id, models.SentimentOfPost.type, count(
+                models.Post.id, models.SentimentOfPost.type, func.count(
                     models.SentimentOfPost.id)
             ).join(models.SentimentOfPost).filter(
                 models.Post.id.in_(post_ids),
@@ -329,12 +332,15 @@ class Question(SecureObjectType, SQLAlchemyObjectType):
         interfaces = (Node, )
         only_fields = ('id', )
 
+    num_posts = graphene.Int()
+    num_contributors = graphene.Int()
     title = graphene.String(lang=graphene.String())
     title_entries = graphene.List(LangStringEntry)
     posts = SQLAlchemyConnectionField(
         'assembl.graphql.post.PostConnection',  # use dotted name to avoid circular import  # noqa: E501
         random=graphene.Boolean())
     thematic = graphene.Field(lambda: Thematic)
+    total_sentiments = graphene.Int(required=True)
 
     def resolve_thematic(self, args, context, info):
         parents = self.get_parents()
@@ -421,6 +427,9 @@ class Question(SecureObjectType, SQLAlchemyObjectType):
 
         # pagination is done after that, no need to do it ourself
         return query
+
+    def resolve_total_sentiments(self, args, context, info):
+        return self.get_total_sentiments()
 
 
 class Thematic(SecureObjectType, SQLAlchemyObjectType):

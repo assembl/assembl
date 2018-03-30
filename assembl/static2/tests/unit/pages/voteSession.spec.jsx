@@ -15,7 +15,8 @@ describe('VoteSession component', () => {
       instructionsSectionContent: '',
       modules: [],
       propositionsSectionTitle: '',
-      proposals: []
+      proposals: [],
+      randomProposals: []
     };
     const shallowRenderer = new ShallowRenderer();
     shallowRenderer.render(<DumbVoteSession {...props} />);
@@ -33,7 +34,8 @@ describe('VoteSession component', () => {
       instructionsSectionContent: '',
       modules: [],
       propositionsSectionTitle: 'Vote sur 0 propositions',
-      proposals: []
+      proposals: [],
+      randomProposals: []
     };
     const shallowRenderer = new ShallowRenderer();
     shallowRenderer.render(<DumbVoteSession {...props} />);
@@ -70,7 +72,8 @@ describe('VoteSession component', () => {
         }
       ],
       propositionsSectionTitle: 'Vote sur 10 propositions',
-      proposals: proposals
+      proposals: proposals,
+      randomProposals: proposals
     };
     const shallowRenderer = new ShallowRenderer();
     shallowRenderer.render(<DumbVoteSession {...props} />);

@@ -2,7 +2,7 @@
 import React from 'react';
 import { Translate } from 'react-redux-i18n';
 import classnames from 'classnames';
-import { SECTION_INDEX_GENERATOR } from '../../utils/section';
+import { SECTION_INDEX_GENERATOR, getIndexesForIdeas } from '../../utils/section';
 
 type SectionProps = {
   containerAdditionalClassNames: Array<string> | string,
@@ -13,7 +13,8 @@ type SectionProps = {
   parents: Array<number>,
   children: Array<*>,
   className: string,
-  translate: boolean
+  translate: boolean,
+  innerRef?: Function
 };
 
 const level1 = (title, index, translate) => (
@@ -59,7 +60,8 @@ class Section extends React.Component<Object, SectionProps, void> {
     indexGenerator: SECTION_INDEX_GENERATOR.alphanumericOr,
     parents: [],
     className: 'themes-section',
-    translate: false
+    translate: false,
+    innerRef: null
   };
 
   getIndexes = () => {
@@ -70,16 +72,17 @@ class Section extends React.Component<Object, SectionProps, void> {
   };
 
   getTitle = () => {
-    const { title, parents, indexGenerator, displayIndex, translate } = this.props;
+    const { title, parents, indexGenerator, displayIndex, translate, index } = this.props;
+    const indexes = getIndexesForIdeas(parents, index);
     const titleRenderer = LEVELS[parents.length] || levelN;
-    return titleRenderer(title, displayIndex && indexGenerator(this.getIndexes()), translate);
+    return titleRenderer(title, displayIndex && indexGenerator(indexes), translate);
   };
 
   render() {
-    const { className, children, containerAdditionalClassNames } = this.props;
+    const { className, children, containerAdditionalClassNames, innerRef } = this.props;
     const containerClassName = classnames('max-container', containerAdditionalClassNames);
     return (
-      <section className={className}>
+      <section className={className} ref={innerRef}>
         <div className={containerClassName}>
           <div className="title-section">{this.getTitle()}</div>
           <div className="content-section margin-l">{children}</div>
