@@ -22,7 +22,8 @@ const Translations = {
       harvestSelection: "Attrapage",
       inProgress: "en cours",
       validated: "validé",
-      now: "Maintenant"
+      now: "Maintenant",
+      harvestingSucces: "L'extrait a été mis à jour avec succès."
     },
     search: {
       reset: {
@@ -639,7 +640,8 @@ const Translations = {
       harvestSelection: "Harvesting",
       inProgress: "in progress",
       validated: "validated",
-      now: "Now"
+      now: "Now",
+      harvestingSucces: "The extract is updated with success."
     },
     search: {
       reset: {

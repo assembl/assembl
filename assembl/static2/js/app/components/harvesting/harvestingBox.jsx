@@ -4,7 +4,7 @@ import ARange from 'annotator_range'; // eslint-disable-line
 import { connect } from 'react-redux';
 import { compose, graphql } from 'react-apollo';
 import { Button } from 'react-bootstrap';
-import { Translate } from 'react-redux-i18n';
+import { Translate, I18n } from 'react-redux-i18n';
 import classnames from 'classnames';
 import moment from 'moment';
 
@@ -91,9 +91,27 @@ class DumbHarvestingBox extends React.Component<void, Props, State> {
   };
 
   setExtractAsNugget = (): void => {
+    const { extract, ideaId, updateExtract } = this.props;
     const { isNugget } = this.state;
-    this.setState({ isNugget: !isNugget });
-    this.updateHarvesting();
+    const variables = {
+      extractId: extract ? extract.id : null,
+      ideaId: ideaId,
+      important: isNugget,
+      extractNature: 'knowledge', // TODO replace later by the nature list
+      extractAction: 'argument' // TODO replace later by the action list
+    };
+
+    updateExtract({ variables: variables })
+      .then(() => {
+        this.setState({
+          isEditable: false,
+          isNugget: !isNugget
+        });
+        displayAlert('success', I18n.t('harvesting.harvetingSuccess'));
+      })
+      .catch((error) => {
+        displayAlert('danger', `${error}`);
+      });
   };
 
   updateHarvesting = (): void => {
