@@ -99,7 +99,6 @@
 
     .text {
       line-height: 24px;
-      text-align: justify;
     }
 
     .proposal-vote-modules {
@@ -212,6 +211,7 @@
         position: absolute;
         top: 60px;
         left: 54px;
+        width: 45px;
         font-size: $font-size-s;
 
         .vote-totalCount {
@@ -253,6 +253,7 @@
         position: absolute;
         top: 23px;
         left: 24px;
+        width: 34px;
         font-size: $font-size-xxs;
 
         .vote-totalCount {
@@ -306,24 +307,20 @@
     .tokens-box {
       padding: 10px 0 0;
     }
-
-    .header-content {
-      text-align: left;
-
-      .light-title-2 {
-        padding-left: 4px;
-      }
-    }
-
-    .header-actions-container {
-      padding-bottom: 90px;
-      margin-left: -35px;
-    }
   }
 }
 
 @media screen and (max-width: 767px) {
   .votesession-page {
+    .votes-in-progress {
+      padding: 0 0 15px 0;
+
+      .box {
+        margin-top: 15px;
+        height: 160px;
+      }
+    }
+
     .available-tokens-sticky {
       display: none;
     }
@@ -347,19 +344,6 @@
 
     .section-title {
       display: block;
-    }
-
-    .header-section {
-      height: 500px;
-    }
-
-    .header-content {
-      text-align: left;
-      padding: 20px 0 0 40px;
-
-      .light-title-2 {
-        padding-left: 4px;
-      }
     }
 
     .max-container {

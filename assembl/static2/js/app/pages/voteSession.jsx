@@ -73,8 +73,7 @@ type Props = {
   randomProposals: Array<Proposal>,
   addGaugeVote: Function,
   addTokenVote: Function,
-  refetchVoteSession: Function,
-  routerParams: RouterParams
+  refetchVoteSession: Function
 };
 
 export type RemainingTokensByCategory = Map<string, number>;
@@ -328,8 +327,7 @@ class DumbVoteSession extends React.Component<void, Props, State> {
       proposals,
       randomProposals,
       modules,
-      isPhaseCompleted,
-      routerParams
+      isPhaseCompleted
     } = this.props;
 
     if (!title || title.length === 0) {
@@ -350,7 +348,7 @@ class DumbVoteSession extends React.Component<void, Props, State> {
 
     return (
       <div className="votesession-page">
-        <Header title={title} subtitle={subTitleToShow} imgUrl={headerImageUrl} routerParams={routerParams} type="voteSession">
+        <Header title={title} subtitle={subTitleToShow} imgUrl={headerImageUrl} type="voteSession">
           <HeaderStatistics statElements={this.getStatElements()} />
         </Header>
         {!isPhaseCompleted ? (

@@ -470,6 +470,16 @@
   }
 }
 
+@media screen and (min-width: 1100px) {
+  .home {
+    .header-section {
+      .header-content {
+        max-width: 100%;
+      }
+    }
+  }
+}
+
 @media screen and (min-width: 421px) {
   .twitter-section {
     .tweet-section {

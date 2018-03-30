@@ -3,7 +3,7 @@ import React from 'react';
 import { Link } from 'react-router';
 import classNames from 'classnames';
 import { getPartialTree, getChildren } from '../../utils/tree';
-import { getFullPath } from '../../utils/routeMap';
+import { get } from '../../utils/routeMap';
 import { SECTION_INDEX_GENERATOR, getIndexesForIdeas } from '../../utils/section';
 import type { SynthesisIdea } from './IdeaSynthesis';
 
@@ -66,7 +66,7 @@ class SideMenuTree extends React.Component<*, SideMenuTreeProps, SideMenuTreeSta
     const { activeKey, show } = this.state;
     const tree = roots.map((idea, subIndex) => {
       const { id } = idea;
-      const url = getFullPath('synthesisIdea', { slug: slug, synthesisId: synthesisPostId, ideaId: id });
+      const url = get('synthesisIdea', { slug: slug, synthesisId: synthesisPostId, ideaId: id });
       return (
         <SideMenuTree
           key={id}
@@ -81,7 +81,7 @@ class SideMenuTree extends React.Component<*, SideMenuTreeProps, SideMenuTreeSta
       );
     });
     const { id, title } = rootIdea;
-    const rootIdeaUrl = getFullPath('synthesisIdea', { slug: slug, synthesisId: synthesisPostId, ideaId: id });
+    const rootIdeaUrl = get('synthesisIdea', { slug: slug, synthesisId: synthesisPostId, ideaId: id });
     const hasChildren = subIdeas.length > 0;
     return (
       <div>

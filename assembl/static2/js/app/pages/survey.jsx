@@ -54,8 +54,7 @@ type SurveyProps = {
   id: string,
   slug: string,
   totalSentiments: number,
-  updateContentLocaleMapping: Function,
-  routerParams: RouterParams
+  updateContentLocaleMapping: Function
 };
 
 type SurveyState = {
@@ -127,18 +126,7 @@ class Survey extends React.Component<*, SurveyProps, SurveyState> {
       displayAlert('danger', I18n.t('error.loading'));
       return null;
     }
-    const {
-      imgUrl,
-      media,
-      numPosts,
-      numContributors,
-      questions,
-      refetchThematic,
-      title,
-      slug,
-      routerParams,
-      totalSentiments
-    } = this.props;
+    const { imgUrl, media, numPosts, numContributors, questions, refetchThematic, title, slug, totalSentiments } = this.props;
     const { debateData } = this.props.debate;
     const isPhaseCompleted = getIfPhaseCompletedByIdentifier(debateData.timeline, 'survey');
     const phaseUrl = `${getRoute('debate', { slug: slug, phase: 'survey' })}`;
@@ -148,7 +136,7 @@ class Survey extends React.Component<*, SurveyProps, SurveyState> {
     return (
       <div className="survey">
         <div className="relative">
-          <Header title={title} imgUrl={imgUrl} identifier="survey" type="survey" routerParams={routerParams}>
+          <Header title={title} imgUrl={imgUrl} identifier="survey" type="idea">
             <HeaderStatistics statElements={statElements} />
           </Header>
           {media && <Media {...media} />}

@@ -1,15 +1,6 @@
 .idea {
   position: relative;
 
-  .header-section {
-    .header-content {
-      width: auto;
-      margin-left: 0;
-      margin-right: auto;
-      text-align: left;
-    }
-  }
-
   .subject-prefix {
     color: $first-color-opacity-70;
     font-family: 'LatoLight';
@@ -175,32 +166,6 @@
 
     .padding-right {
       padding-right: 0;
-    }
-  }
-}
-
-@media screen and (min-width: 1100px) {
-  .idea {
-    .header-content {
-      max-width: 70%;
-    }
-  }
-}
-
-@media screen and (max-width: 1099px) {
-  .idea {
-    .header-content {
-      padding-left: 40px;
-      padding-right: 40px;
-      max-width: 100%;
-    }
-  }
-}
-
-@media screen and (max-width: 768px) {
-  .idea {
-    .header-content {
-      padding-top: $margin-section;
     }
   }
 }

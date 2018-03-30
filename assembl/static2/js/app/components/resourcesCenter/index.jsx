@@ -24,7 +24,7 @@ type ResourcesCenterProps = {
 
 const ResourcesCenter = ({ resources, headerBackgroundUrl, headerTitle }: ResourcesCenterProps) => (
   <div className="resources-center">
-    <Header title={headerTitle} imgUrl={headerBackgroundUrl} />
+    <Header title={headerTitle} imgUrl={headerBackgroundUrl} type="resourcesCenter" />
     <section>
       {resources.map((resource, index) => {
         const { title, text, embedCode, image, doc } = resource;

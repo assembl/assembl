@@ -43,7 +43,7 @@ const DebateHome = (props) => {
   case 'multiColumns':
     return <DebateThread {...props} />;
   case 'voteSession':
-    return <VoteSession routerParams={props.params} />;
+    return <VoteSession />;
   default:
     return <Debate {...props} />;
   }
@@ -52,7 +52,7 @@ const DebateHome = (props) => {
 const DebateChild = (props) => {
   switch (props.params.phase) {
   case 'survey':
-    return <Survey id={props.id} identifier={props.identifier} routerParams={props.params} />;
+    return <Survey id={props.id} identifier={props.identifier} />;
   case 'thread':
     return <Idea id={props.id} identifier={props.identifier} routerParams={props.params} />;
   case 'multiColumns':
@@ -60,7 +60,7 @@ const DebateChild = (props) => {
   case 'voteSession':
     return <NotFound />;
   default:
-    return <Idea id={props.id} identifier={props.identifier} />;
+    return <Idea id={props.id} identifier={props.identifier} routerParams={props.params} />;
   }
 };
 

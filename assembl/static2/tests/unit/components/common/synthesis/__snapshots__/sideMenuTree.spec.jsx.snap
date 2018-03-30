@@ -10,7 +10,7 @@ exports[`SideMenuTree component should render a 1 level SideMenuTree component 1
       onClick={[Function]}
       onlyActiveOnIndex={false}
       style={Object {}}
-      to="about://felixdebate/syntheses/12345#2222222"
+      to="/felixdebate/syntheses/12345/#2222222"
     >
        
       Cool story
@@ -34,7 +34,7 @@ exports[`SideMenuTree component should render a 2 level SideMenuTree 1`] = `
       onClick={[Function]}
       onlyActiveOnIndex={false}
       style={Object {}}
-      to="about://felixdebate/syntheses/12345#2222222"
+      to="/felixdebate/syntheses/12345/#2222222"
     >
        
       Cool story
@@ -70,7 +70,7 @@ exports[`SideMenuTree component should render a 2 level SideMenuTree 1`] = `
       slug="felixdebate"
       subIdeas={Array []}
       synthesisPostId="12345"
-      url="about://felixdebate/syntheses/12345#2222222"
+      url="/felixdebate/syntheses/12345/#2222222"
     />
     <SideMenuTree
       index={2}
@@ -101,7 +101,7 @@ exports[`SideMenuTree component should render a 2 level SideMenuTree 1`] = `
       slug="felixdebate"
       subIdeas={Array []}
       synthesisPostId="12345"
-      url="about://felixdebate/syntheses/12345#33333"
+      url="/felixdebate/syntheses/12345/#33333"
     />
   </div>
 </div>
