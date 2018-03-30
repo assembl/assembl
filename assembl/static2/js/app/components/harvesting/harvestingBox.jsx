@@ -32,7 +32,7 @@ type State = {
   isNugget: boolean
 };
 
-class HarvestingBox extends React.Component<void, Props, State> {
+class DumbHarvestingBox extends React.Component<void, Props, State> {
   props: Props;
 
   state: State;
@@ -213,6 +213,8 @@ class HarvestingBox extends React.Component<void, Props, State> {
   }
 }
 
+export { DumbHarvestingBox };
+
 const mapStateToProps = state => ({
   contentLocale: state.i18n.locale
 });
@@ -223,4 +225,4 @@ export default compose(
     name: 'addPostExtract'
   }),
   withLoadingIndicator()
-)(HarvestingBox);
+)(DumbHarvestingBox);
