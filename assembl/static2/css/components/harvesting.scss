@@ -287,6 +287,18 @@
     padding: 20px;
     font-size: $font-size-xs;
     color: $grey2;
+
+    textarea {
+      border: 1px solid $grey1;
+      border-radius: 4px;
+      color: $grey2;
+      font-family: $font-family;
+      font-size: $font-size-xs;
+
+      &:focus {
+        border: 1px solid $grey1;
+      }
+    }
   }
 
   .harvesting-box-footer {

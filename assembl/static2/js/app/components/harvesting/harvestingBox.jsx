@@ -10,11 +10,12 @@ import moment from 'moment';
 
 import addPostExtractMutation from '../../graphql/mutations/addPostExtract.graphql';
 import updateExtractMutation from '../../graphql/mutations/updateExtract.graphql';
+import deleteExtractMutation from '../../graphql/mutations/deleteExtract.graphql';
 import withLoadingIndicator from '../../components/common/withLoadingIndicator';
-import { displayAlert } from '../../utils/utilityManager';
 import { getConnectedUserId, getConnectedUserName } from '../../utils/globalFunctions';
 import AvatarImage from '../common/avatarImage';
 import FormControlWithLabel from '../common/formControlWithLabel';
+import { displayAlert, displayModal, closeModal } from '../../utils/utilityManager';
 
 type Props = {
   extract: ?Extract,
@@ -27,7 +28,8 @@ type Props = {
   cancelHarvesting: Function,
   addPostExtract: Function,
   displayHarvestingBox: Function,
-  updateExtract: Function
+  updateExtract: Function,
+  deleteExtract: Function
 };
 
 type State = {
@@ -101,7 +103,6 @@ class DumbHarvestingBox extends React.Component<void, Props, State> {
       extractNature: 'knowledge', // TODO replace later by the nature list
       extractAction: 'argument' // TODO replace later by the action list
     };
-
     updateExtract({ variables: variables })
       .then(() => {
         this.setState({
@@ -125,13 +126,42 @@ class DumbHarvestingBox extends React.Component<void, Props, State> {
       extractNature: 'knowledge', // TODO replace later by the nature list
       extractAction: 'argument' // TODO replace later by the action list
     };
-
     updateExtract({ variables: variables })
       .then(() => {
         this.setState({
           isEditable: false
         });
         displayAlert('success', I18n.t('harvesting.harvestingSuccess'));
+      })
+      .catch((error) => {
+        displayAlert('danger', `${error}`);
+      });
+  };
+
+  confirmHarvestingDeletion = (): void => {
+    const modalTitle = <Translate value="harvesting.deleteExtract" />;
+    const body = <Translate value="harvesting.confirmDeleteExtract" />;
+    const footer = [
+      <Button key="delete" onClick={this.deleteHarvesting} className="button-submit button-dark">
+        <Translate value="debate.confirmDeletionButtonDelete" />
+      </Button>,
+      <Button key="cancel" onClick={closeModal} className="button-cancel button-dark">
+        <Translate value="debate.confirmDeletionButtonCancel" />
+      </Button>
+    ];
+    const includeFooter = true;
+    return displayModal(modalTitle, body, includeFooter, footer);
+  };
+
+  deleteHarvesting = (): void => {
+    const { extract, deleteExtract } = this.props;
+    const variables = {
+      extractId: extract ? extract.id : null
+    };
+    closeModal();
+    deleteExtract({ variables: variables })
+      .then(() => {
+        displayAlert('success', I18n.t('harvesting.harvestingDeleted'));
       })
       .catch((error) => {
         displayAlert('danger', `${error}`);
@@ -230,7 +260,7 @@ class DumbHarvestingBox extends React.Component<void, Props, State> {
             <Button disabled={disabled} onClick={this.setEditMode} className={classnames({ active: isEditable })}>
               <span className="assembl-icon-edit grey" />
             </Button>
-            <Button disabled={disabled}>
+            <Button disabled={disabled} onClick={this.confirmHarvestingDeletion}>
               <span className="assembl-icon-delete grey" />
             </Button>
             <Button disabled={disabled} onClick={this.updateHarvestingNugget} className={classnames({ active: isNugget })}>
@@ -304,6 +334,9 @@ export default compose(
   }),
   graphql(updateExtractMutation, {
     name: 'updateExtract'
+  }),
+  graphql(deleteExtractMutation, {
+    name: 'deleteExtract'
   }),
   withLoadingIndicator()
 )(DumbHarvestingBox);

@@ -23,7 +23,10 @@ const Translations = {
       inProgress: "en cours",
       validated: "validé",
       now: "Maintenant",
-      harvestingSuccess: "L'extrait a été mis à jour avec succès."
+      harvestingSuccess: "L'extrait a été mis à jour avec succès.",
+      harvestingDeleted: "L'extrait a été supprimé avec succès.",
+      deleteExtract: "Supprimer l'extrait",
+      confirmDeleteExtract: "Etes-vous certain de vouloir supprimer cet extrait ?"
     },
     search: {
       reset: {
@@ -641,7 +644,10 @@ const Translations = {
       inProgress: "in progress",
       validated: "validated",
       now: "Now",
-      harvestingSuccess: "The extract is updated with success."
+      harvestingSuccess: "The extract is updated with success.",
+      harvestingDeleted: "The extract has been deleted with success.",
+      deleteExtract: "Delete the extract",
+      confirmDeleteExtract: "Are you sure you want to delete this extract?"
     },
     search: {
       reset: {

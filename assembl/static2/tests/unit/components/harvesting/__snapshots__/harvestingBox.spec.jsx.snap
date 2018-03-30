@@ -67,6 +67,7 @@ exports[`harvestingBox component should match harvestingBox snapshot 1`] = `
         bsClass="btn"
         bsStyle="default"
         disabled={false}
+        onClick={[Function]}
       >
         <span
           className="assembl-icon-delete grey"
