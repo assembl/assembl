@@ -52,10 +52,10 @@ class DumbHarvestingBox extends React.Component<void, Props, State> {
   }
 
   componentDidMount() {
-    this.getHarvestingBoxPosition();
+    this.setHarvestingBoxPosition();
   }
 
-  getHarvestingBoxPosition() {
+  setHarvestingBoxPosition() {
     const { harvestingBoxPosition, previousExtractId } = this.props;
     if (harvestingBoxPosition) {
       this.harvestingBox.style.marginTop = `${harvestingBoxPosition}px`;

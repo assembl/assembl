@@ -74,15 +74,13 @@ class HarvestingMenu extends React.Component<void, Props, State> {
               harvestingBoxPosition={harvestingMenuPosition}
             />
           )}
-        {isHarvesting &&
-          !showHarvestingBox &&
-          extracts.length === 0 && (
-            <HarvestingAnchor
-              displayHarvestingBox={this.displayHarvestingBox}
-              handleMouseDown={this.handleMouseDown}
-              anchorPosition={harvestingMenuPosition}
-            />
-          )}
+        {isHarvesting && (
+          <HarvestingAnchor
+            displayHarvestingBox={this.displayHarvestingBox}
+            handleMouseDown={this.handleMouseDown}
+            anchorPosition={harvestingMenuPosition}
+          />
+        )}
       </div>
     );
   }

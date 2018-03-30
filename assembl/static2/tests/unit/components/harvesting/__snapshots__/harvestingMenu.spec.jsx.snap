@@ -62,5 +62,10 @@ exports[`harvestingMenu component should match harvestingMenu snapshot 1`] = `
     postId="1234"
     previousExtractId="987643"
   />
+  <HarvestingAnchor
+    anchorPosition={100}
+    displayHarvestingBox={[Function]}
+    handleMouseDown={[Function]}
+  />
 </div>
 `;
