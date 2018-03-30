@@ -3277,7 +3277,7 @@ https-browserify@^1.0.0:
 
 "hypothesis@https://github.com/conversence/client.git#anchor_range_on_fragment":
   version "1.72.0"
-  resolved "https://github.com/conversence/client.git#7b493b6f369d2e3f547943075de4460a9e44cb1e"
+  resolved "https://github.com/conversence/client.git#2857a2a657b89e469f1814a1b6910e6fea5bf587"
 
 iconv-lite@0.4.13:
   version "0.4.13"
