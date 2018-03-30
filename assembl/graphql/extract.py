@@ -81,7 +81,7 @@ class DeleteExtract(graphene.Mutation):
     class Input:
         extract_id = graphene.ID(required=True)
 
-    extract = graphene.Field(lambda: Extract)
+    success = graphene.Boolean()
 
     @staticmethod
     @abort_transaction_on_exception
