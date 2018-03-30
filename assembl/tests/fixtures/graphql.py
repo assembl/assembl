@@ -48,6 +48,27 @@ mutation myFirstMutation {
     idea_id = res.data['createIdea']['idea']['id']
     return idea_id
 
+@pytest.fixture(scope="function")
+def another_idea_in_thread_phase(graphql_request):
+    from assembl.graphql.schema import Schema as schema
+    res = schema.execute(u"""
+mutation myFirstMutation {
+    createIdea(
+        titleEntries:[
+            {value:"Manger des pâtes", localeCode:"fr"},
+            {value:"Eating pasta", localeCode:"en"}
+        ],
+    ) {
+        idea {
+            id,
+            titleEntries { localeCode value }
+        }
+    }
+}
+""", context_value=graphql_request)
+    idea_id = res.data['createIdea']['idea']['id']
+    return idea_id
+
 
 @pytest.fixture(scope="function")
 def top_post_in_thread_phase(graphql_request, idea_in_thread_phase):
