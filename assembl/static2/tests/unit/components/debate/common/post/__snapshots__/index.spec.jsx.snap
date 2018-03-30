@@ -25,6 +25,7 @@ exports[`Post component should render a PostView component and pass its props to
             "displayName": "Dannie Treutel",
             "userId": "dannietreutel",
           },
+          "dbId": 124,
           "extracts": Array [],
           "id": "XYZ333",
           "modificationDate": "12/12/2012",

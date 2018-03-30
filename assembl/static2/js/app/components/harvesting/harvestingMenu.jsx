@@ -1,82 +1,91 @@
 // @flow
-
 import React from 'react';
-import ReactDOM from 'react-dom';
-import { I18n } from 'react-redux-i18n';
+import addPostExtractMutation from '../../graphql/mutations/addPostExtract.graphql'; // eslint-disable-line
+import updateExtractMutation from '../../graphql/mutations/updateExtract.graphql'; // eslint-disable-line
+import deleteExtractMutation from '../../graphql/mutations/deleteExtract.graphql'; // eslint-disable-line
+import HarvestingAnchor from './harvestingAnchor';
+import HarvestingBox from './harvestingBox';
 
-type LeftSideHarvestingButtonProps = {
-  label: string,
-  handleClick: Function,
-  children: Array<*>
+type Props = {
+  extracts: Array<Extract>,
+  postId: string,
+  isHarvesting: boolean,
+  harvestingMenuPosition: number,
+  cancelHarvesting: Function
 };
 
-const LeftSideHarvestingButton = ({ label, handleClick, children }: LeftSideHarvestingButtonProps) => (
-  <div className="left-side-harvesting-button">
-    <div className="left-side-harvesting-button__label">{label}</div>
-    <div className="left-side-harvesting-button__button" role="button" tabIndex={0} onClick={handleClick}>
-      <div className="left-side-harvesting-button__button__inside">{children}</div>
-    </div>
-  </div>
-);
-
-type ConfirmHarvestButtonProps = {
-  handleClick: Function
+type State = {
+  showHarvestingBox: boolean
 };
 
-const ConfirmHarvestButton = ({ handleClick }: ConfirmHarvestButtonProps) => (
-  <LeftSideHarvestingButton handleClick={handleClick} label={I18n.t('harvesting.harvestSelection')}>
-    <span className="confirm-harvest-button assembl-icon-catch">&nbsp;</span>
-  </LeftSideHarvestingButton>
-);
+class HarvestingMenu extends React.Component<void, Props, State> {
+  props: Props;
 
-type HarvestingMenuProps = {
-  positionX: number,
-  positionY: number
-};
+  state: State;
 
-const HarvestingMenu = ({ positionX, positionY }: HarvestingMenuProps) => {
-  const style = {
-    position: 'absolute',
-    left: `${positionX}px`,
-    top: `${positionY}px`
+  constructor(props: Props) {
+    super(props);
+    this.state = {
+      showHarvestingBox: false
+    };
+  }
+
+  displayHarvestingBox = (): void => {
+    this.setState({
+      showHarvestingBox: !this.state.showHarvestingBox
+    });
   };
-  const handleClick = () => {
-    // TODO in next story
+
+  handleMouseDown = (event: SyntheticMouseEvent) => {
+    // This would otherwise clear the selection
+    event.preventDefault();
+    return false;
   };
-  return (
-    <div className="harvesting-menu" style={style}>
-      <ConfirmHarvestButton handleClick={handleClick} />
-    </div>
-  );
-};
 
-const harvestingMenuContainerUniqueId = 'harvesting-menu-container';
-
-export const removeHarvestingMenu = () => {
-  const harvestingMenuContainer = document.getElementById(harvestingMenuContainerUniqueId);
-  if (harvestingMenuContainer && harvestingMenuContainer.parentNode) {
-    harvestingMenuContainer.parentNode.removeChild(harvestingMenuContainer);
+  render() {
+    const { postId, cancelHarvesting, isHarvesting, extracts, harvestingMenuPosition } = this.props;
+    const { showHarvestingBox } = this.state;
+    const selection = window.getSelection();
+    return (
+      <div>
+        {extracts && extracts.length > 0 && isHarvesting
+          ? extracts.map((extract, index) => (
+            <HarvestingBox
+              postId={postId}
+              key={extract.id}
+              cancelHarvesting={cancelHarvesting}
+              extract={extract}
+              displayHarvestingBox={this.displayHarvestingBox}
+              previousExtractId={extracts[index - 1] ? extracts[index - 1].id : null}
+              harvestingBoxPosition={null}
+            />
+          ))
+          : null}
+        {showHarvestingBox &&
+          isHarvesting && (
+            <HarvestingBox
+              postId={postId}
+              selection={selection}
+              cancelHarvesting={cancelHarvesting}
+              extract={null}
+              index={0}
+              displayHarvestingBox={this.displayHarvestingBox}
+              previousExtractId={null}
+              harvestingBoxPosition={harvestingMenuPosition}
+            />
+          )}
+        {isHarvesting &&
+          !showHarvestingBox &&
+          extracts.length === 0 && (
+            <HarvestingAnchor
+              displayHarvestingBox={this.displayHarvestingBox}
+              handleMouseDown={this.handleMouseDown}
+              anchorPosition={harvestingMenuPosition}
+            />
+          )}
+      </div>
+    );
   }
-};
+}
 
-export const handleMouseUpWhileHarvesting = (evt: SyntheticMouseEvent) => {
-  const selObj = window.getSelection();
-  const selectedText = selObj.toString();
-  if (!selectedText || selectedText.length === 0) {
-    removeHarvestingMenu();
-    return;
-  }
-
-  let harvestingMenuContainer = document.getElementById(harvestingMenuContainerUniqueId);
-  if (!harvestingMenuContainer) {
-    harvestingMenuContainer = document.createElement('div');
-    harvestingMenuContainer.id = harvestingMenuContainerUniqueId;
-    document.getElementsByTagName('body')[0].appendChild(harvestingMenuContainer);
-  }
-
-  const iconSize = 44;
-  const positionX = (window.innerWidth - 600) / 2 - iconSize - 50;
-  const positionY = evt.pageY - iconSize / 2;
-
-  ReactDOM.render(<HarvestingMenu positionX={positionX} positionY={positionY} />, harvestingMenuContainer);
-};
+export default HarvestingMenu;

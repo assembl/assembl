@@ -1,0 +1,15 @@
+#import "../fragments/Extract.graphql"
+
+mutation updateExtract($extractId: ID!, $ideaId: ID, $important: Boolean, $extractNature: String, $extractAction: String) {
+  updateExtract(
+    extractId: $extractId
+    ideaId: $ideaId
+    important: $important
+    extractNature: $extractNature
+    extractAction: $extractAction
+  ) {
+    extract {
+      ...Extract
+    }
+  }
+}

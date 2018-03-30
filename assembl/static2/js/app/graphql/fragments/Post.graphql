@@ -2,9 +2,11 @@
 #import "./Attachment.graphql"
 #import "./IdeaContentLink.graphql"
 #import "./SentimentCounts.graphql"
+#import "./Extract.graphql"
 
 fragment Post on Post {
   id
+  dbId
   subjectEntries(lang: $contentLocale) {
     value
     localeCode
@@ -32,9 +34,7 @@ fragment Post on Post {
   bodyMimeType
   publicationState
   extracts {
-    id
-    important
-    body
+    ...Extract
   }
   attachments {
     ...Attachment

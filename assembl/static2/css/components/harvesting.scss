@@ -1,3 +1,9 @@
+.harvesting-anchor {
+  position: absolute;
+  left: 250px;
+  z-index: 1000;
+}
+
 .left-side-harvesting-button {
   &:hover {
     .assembl-icon-catch:before {
@@ -35,6 +41,7 @@
     width: 44px;
     height: 44px;
     box-shadow: 2px 2px 4px 0 #ccc;
+    cursor: pointer;
 
     .left-side-harvesting-button__button__inside {
       text-align: center;
@@ -50,8 +57,13 @@
 
 .confirm-harvest-button {
   text-align: center;
-  margin: 4px;
-  padding: 4px 0;
+  padding: 1px 0 0 6px;
+  font-size: 20px;
+
+  &:before {
+    margin-right: 2px;
+    font-size: $font-size-sm;
+  }
 }
 
 .extracts.extracts--is-harvesting {
@@ -98,24 +110,207 @@
 }
 
 .app.harvesting-mode-on {
-  .proposals, .posts .post-body--is-harvestable {
+  .post-body--is-harvestable {
     /* FIXME: Factorizing these ::selection rules cancels effect on Firefox */
     .post-body-title {
       ::selection {
-        background: #fff8c0;
+        background: $harvesting-yellow;
       }
 
       ::-moz-selection {
-        background: #fff8c0;
+        background: $harvesting-yellow;
       }
     }
 
-    .post-body-content::selection {
-      background: #fff8c0;
+    .post-body-content > div::selection {
+      background: $harvesting-yellow;
     }
 
-    .post-body-content::-moz-selection {
-      background: #fff8c0;
+    .post-body-content > div::-moz-selection {
+      background: $harvesting-yellow;
     }
+
+    .post-body-content > div > p::selection {
+      background: $harvesting-yellow;
+    }
+
+    .post-body-content > div > p::-moz-selection {
+      background: $harvesting-yellow;
+    }
+  }
+}
+
+.active-box {
+  border-left-color: $harvesting-green;
+}
+
+.harvesting-box {
+  position: absolute;
+  box-shadow: 2px 2px 4px 0 $grey1;
+  left: 0;
+  z-index: 99;
+  width: 310px;
+
+  .harvesting-box-header {
+    padding: 20px;
+    border-bottom: 1px solid $grey1;
+  }
+
+  .harvesting-status {
+    display: inline-block;
+    font-size: $font-size-xs;
+
+    .harvesting-in-progress {
+      color: $black;
+      margin-left: -12px;
+      padding: 0 0 15px;
+    }
+
+    .validated-harvesting {
+      color: $harvesting-green;
+      margin-left: -12px;
+      padding: 0 0 15px;
+    }
+
+    .harvesting-status-label {
+      display: inline-block;
+      vertical-align: bottom;
+    }
+  }
+
+  .profile {
+    font-size: $font-size-xs;
+    color: $grey2;
+    margin-left: -8px;
+
+    img {
+      border-radius: 50%;
+      margin: 0 10px 0 6px;
+    }
+
+    .assembl-icon-profil {
+      vertical-align: bottom;
+
+      &:before {
+        font-size: 30px;
+        margin-right: 10px;
+      }
+    }
+
+    .harvesting-date {
+      font-size: $font-size-xxs;
+    }
+
+    .harvesting-infos {
+      display: inline-block;
+      vertical-align: bottom;
+    }
+  }
+
+  .button-bar {
+    padding-top: 5px;
+    float: right;
+    margin-right: -12px;
+
+    .assembl-icon-ellipsis-vert {
+      &:before {
+        font-size: 20px;
+        vertical-align: middle;
+        padding: 2px 0 0;
+      }
+    }
+
+    .btn[disabled] {
+      opacity: 1;
+      border-color: $grey5;
+
+      span {
+        color: $grey5;
+      }
+
+      &:hover {
+        background-color: $white;
+        border-color: $grey5;
+
+        span {
+          color: $grey5;
+        }
+      }
+    }
+
+    .btn.active {
+      background-color: $white;
+      border-color: $second-color;
+      box-shadow: none;
+
+      span {
+        color: $second-color;
+      }
+    }
+
+    .btn-default {
+      margin: 0 3px;
+      border-radius: 5px;
+      width: 26px;
+      height: 26px;
+      border-color: $grey2;
+
+      span {
+        color: $grey2;
+      }
+
+      &:hover {
+        background-color: $white;
+        border-color: $second-color;
+
+        span {
+          color: $second-color;
+        }
+      }
+
+      &:focus {
+        background-color: $white;
+        border-color: $second-color;
+        outline: none;
+
+        span {
+          color: $second-color;
+        }
+      }
+
+      span {
+        &:before {
+          font-size: 12px;
+          display: block;
+          margin: 0 0 0 -6px;
+        }
+      }
+    }
+  }
+
+  .harvesting-box-body {
+    padding: 20px;
+    font-size: $font-size-xs;
+    color: $grey2;
+  }
+
+  .harvesting-box-footer {
+    text-align: center;
+    padding: 20px 0;
+    background-color: $grey1;
+
+    .btn-default {
+      margin: 0 10px;
+    }
+  }
+}
+
+.extract-in-message {
+  display: inline;
+}
+
+.is-harvesting {
+  .extract-in-message {
+    background-color: $harvesting-green-light;
   }
 }

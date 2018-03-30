@@ -10,7 +10,7 @@ import AnswerForm from '../../thread/answerForm';
 import Nuggets from '../../thread/nuggets';
 import RelatedIdeas from './relatedIdeas';
 import PostBody from './postBody';
-import { handleMouseUpWhileHarvesting } from '../../../harvesting/harvestingMenu';
+import HarvestingMenu from '../../../harvesting/harvestingMenu';
 import type { Props as PostProps } from './index';
 
 type Props = PostProps & {
@@ -22,7 +22,9 @@ type Props = PostProps & {
 };
 
 type State = {
-  showAnswerForm: boolean
+  showAnswerForm: boolean,
+  displayHarvestingMenu: boolean,
+  harvestingMenuPosition: number
 };
 
 class PostView extends React.PureComponent<void, Props, State> {
@@ -32,10 +34,16 @@ class PostView extends React.PureComponent<void, Props, State> {
 
   answerTextarea: HTMLTextAreaElement;
 
+  postView: HTMLElement;
+
   constructor(props: Props) {
     super(props);
+    const { extracts } = this.props.data.post;
+    const isExtracts = extracts.length > 0;
     this.state = {
-      showAnswerForm: false
+      showAnswerForm: false,
+      displayHarvestingMenu: isExtracts,
+      harvestingMenuPosition: 0
     };
   }
 
@@ -64,9 +72,33 @@ class PostView extends React.PureComponent<void, Props, State> {
     }
   };
 
+  getAnchorPosition() {
+    const selection = document.getSelection();
+    const selectionRange = selection ? selection.getRangeAt(0) : null;
+    const selectionPosition = selectionRange ? selectionRange.getBoundingClientRect().top : 0;
+    const postPosition = this.postView.getBoundingClientRect().top;
+    return selectionPosition - postPosition;
+  }
+
+  handleMouseUpWhileHarvesting = (): void => {
+    const { isHarvesting, translate } = this.props;
+    if (isHarvesting && !translate) {
+      const harvestingMenuPosition = this.getAnchorPosition();
+      this.setState({ displayHarvestingMenu: true, harvestingMenuPosition: harvestingMenuPosition });
+    } else {
+      this.setState({ displayHarvestingMenu: false });
+    }
+  };
+
+  cancelHarvesting = (): void => {
+    this.setState({ displayHarvestingMenu: false });
+    window.getSelection().removeAllRanges();
+  };
+
   render() {
     const {
       bodyMimeType,
+      dbId,
       indirectIdeaContentLinks,
       creator,
       modificationDate,
@@ -117,15 +149,34 @@ class PostView extends React.PureComponent<void, Props, State> {
       canReply = indirectIdeaContentLinks[0].idea.messageViewOverride !== 'messageColumns';
     }
 
+    const { displayHarvestingMenu, harvestingMenuPosition } = this.state;
     return (
-      <div>
+      <div
+        ref={(p) => {
+          this.postView = p;
+        }}
+      >
         {!multiColumns && (
-          <Nuggets extracts={extracts} postId={id} nuggetsManager={nuggetsManager} completeLevel={completeLevelArray.join('-')} />
+          <Nuggets
+            extracts={extracts}
+            postId={id}
+            nuggetsManager={nuggetsManager}
+            completeLevel={completeLevelArray.join('-')}
+            isHarvesting={isHarvesting}
+          />
         )}
-
+        {displayHarvestingMenu && (
+          <HarvestingMenu
+            postId={id}
+            cancelHarvesting={this.cancelHarvesting}
+            isHarvesting={isHarvesting}
+            extracts={extracts}
+            harvestingMenuPosition={harvestingMenuPosition}
+          />
+        )}
         <div className="box" style={boxStyle}>
           <div className="post-row">
-            <div className="post-left" onMouseUp={isHarvesting && !translate ? handleMouseUpWhileHarvesting : null}>
+            <div className="post-left" onMouseUp={this.handleMouseUpWhileHarvesting}>
               {creator && (
                 <ProfileLine
                   userId={creator.userId}
@@ -135,9 +186,10 @@ class PostView extends React.PureComponent<void, Props, State> {
                   modified={modificationDate !== null}
                 />
               )}
-
               <PostBody
                 body={body}
+                dbId={dbId}
+                extracts={extracts}
                 bodyMimeType={bodyMimeType}
                 contentLocale={contentLocale}
                 id={id}
@@ -147,6 +199,7 @@ class PostView extends React.PureComponent<void, Props, State> {
                 translate={translate}
                 translationEnabled={debateData.translationEnabled}
                 bodyDivRef={this.recomputeTreeHeightOnImagesLoad}
+                isHarvesting={isHarvesting}
               />
 
               <Attachments attachments={attachments} />

@@ -1,0 +1,121 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`harvestingBox component should match harvestingBox snapshot 1`] = `
+<div
+  className="theme-box harvesting-box active-box"
+  id="harvesting-box-987643"
+>
+  <div
+    className="harvesting-box-header"
+  >
+    <div
+      className="harvesting-status"
+    >
+      <div
+        className="validated-harvesting"
+      >
+        <span
+          className="confirm-harvest-button assembl-icon-catch"
+        />
+        <div
+          className="harvesting-status-label"
+        >
+          <div>
+            <Translate
+              value="harvesting.harvestSelection"
+            />
+          </div>
+          <div>
+            <Translate
+              value="harvesting.validated"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      className="button-bar"
+    >
+      <Button
+        active={false}
+        block={false}
+        bsClass="btn"
+        bsStyle="default"
+        className="active"
+        disabled={false}
+      >
+        <span
+          className="assembl-icon-check grey"
+        />
+      </Button>
+      <Button
+        active={false}
+        block={false}
+        bsClass="btn"
+        bsStyle="default"
+        disabled={false}
+      >
+        <span
+          className="assembl-icon-edit grey"
+        />
+      </Button>
+      <Button
+        active={false}
+        block={false}
+        bsClass="btn"
+        bsStyle="default"
+        disabled={false}
+      >
+        <span
+          className="assembl-icon-delete grey"
+        />
+      </Button>
+      <Button
+        active={false}
+        block={false}
+        bsClass="btn"
+        bsStyle="default"
+        className=""
+        disabled={false}
+      >
+        <span
+          className="assembl-icon-pepite grey"
+        />
+      </Button>
+      <span
+        className="assembl-icon-ellipsis-vert grey"
+      />
+    </div>
+    <div
+      className="profile"
+    >
+      <AvatarImage
+        userId={31}
+        userName="John Doe"
+      />
+      <div
+        className="harvesting-infos"
+      >
+        <div
+          className="username"
+        >
+          John Doe
+        </div>
+        <div
+          className="harvesting-date"
+          title="2018-03-29T16:28:27.324276+00:00"
+        >
+          il y a un jour
+        </div>
+      </div>
+    </div>
+  </div>
+  <div
+    className="harvesting-box-body"
+  >
+    <div>
+      Hello world!
+    </div>
+  </div>
+</div>
+`;

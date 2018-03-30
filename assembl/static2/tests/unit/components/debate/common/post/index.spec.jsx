@@ -18,6 +18,7 @@ export const postProps = {
         displayName: 'Dannie Treutel'
       },
       id: 'XYZ333',
+      dbId: 124,
       modificationDate: '12/12/2012',
       sentimentCounts: 3,
       mySentiment: 'like',

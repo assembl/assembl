@@ -1,0 +1,9 @@
+#import "../fragments/Extract.graphql"
+
+mutation deleteExtract($extractId: ID!) {
+  deleteExtract(extractId: $extractId) {
+    extract {
+      ...Extract
+    }
+  }
+}
