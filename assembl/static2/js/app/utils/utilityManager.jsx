@@ -76,25 +76,26 @@ export const closeModal = () => {
   modalManager.component.setState({ showModal: false });
 };
 
-const getPathForModal = (type, slug, phase, themeId, elementId) => {
+const getPathForModal = (type, params, elementId) => {
   switch (type) {
   case 'post':
-    return { url: getFullPath('post', { slug: slug, phase: phase, themeId: themeId, element: elementId }) };
+    return { url: getFullPath('post', { ...params, element: elementId }) };
   case 'idea':
-    return { url: getFullPath('idea', { slug: slug, phase: phase, themeId: themeId }) };
-  case 'survey':
-    return { url: getFullPath('idea', { slug: slug, phase: phase, themeId: themeId }) };
+    return { url: getFullPath('idea', params) };
   case 'voteSession':
-    return { url: getFullPath('voteSession', { slug: slug, phase: phase }) };
+    return { url: getFullPath('voteSession', params) };
+  case 'resourcesCenter':
+    return { url: getFullPath('resourcesCenter', params) };
+  case 'synthesis':
+    return { url: getFullPath('synthesis', params) };
   default:
-    return { url: getFullPath('post', { slug: slug, phase: phase, themeId: themeId, element: elementId }) };
+    return { url: getFullPath('post', { ...params, element: elementId }) };
   }
 };
 
 export const openShareModal = (options) => {
   const { type, title, routerParams, elementId, social, isFooter, footer } = options;
-  const { slug, phase, themeId } = routerParams;
-  const pathForModal = getPathForModal(type, slug, phase, themeId, elementId);
+  const pathForModal = getPathForModal(type, routerParams, elementId);
   const modalBody = <SocialShare url={pathForModal.url} onClose={closeModal} social={social} />;
   return displayModal(title, modalBody, isFooter, footer);
 };

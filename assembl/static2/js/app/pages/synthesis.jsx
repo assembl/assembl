@@ -93,7 +93,7 @@ export class DumbSynthesis extends React.Component<void, SynthesisProps, Synthes
     return (
       <div className="synthesis-page">
         <div className="background-light">
-          <Header title={subject} imgUrl={synthesis.img ? synthesis.img.externalUrl : ''} additionalHeaderClasses="left" />
+          <Header title={subject} imgUrl={synthesis.img ? synthesis.img.externalUrl : ''} type="synthesis" />
           <Grid fluid>
             {introduction && (
               <Section title="introduction" translate className="synthesis-block" innerRef={this.updateTop}>

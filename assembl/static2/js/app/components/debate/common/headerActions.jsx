@@ -1,16 +1,16 @@
 // @flow
 import React from 'react';
+import { withRouter } from 'react-router';
 import { Translate } from 'react-redux-i18n';
 import { openShareModal } from '../../../utils/utilityManager';
 
 type Props = {
+  params: RouterParams,
   type: string,
-  routerParams: RouterParams,
-  ideaId: string,
   useSocialMedia: boolean
 };
 
-const headerActions = ({ type, routerParams, ideaId, useSocialMedia }: Props) => {
+const headerActions = ({ type, params, useSocialMedia }: Props) => {
   const modalTitle = <Translate value="debate.shareThematic" />;
   return (
     <div className="header-actions-container">
@@ -20,8 +20,7 @@ const headerActions = ({ type, routerParams, ideaId, useSocialMedia }: Props) =>
           openShareModal({
             type: type,
             title: modalTitle,
-            routerParams: routerParams,
-            elementId: ideaId,
+            routerParams: params,
             social: useSocialMedia
           })
         }
@@ -37,4 +36,4 @@ const headerActions = ({ type, routerParams, ideaId, useSocialMedia }: Props) =>
   );
 };
 
-export default headerActions;
+export default withRouter(headerActions);
