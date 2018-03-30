@@ -78,7 +78,6 @@ class UpdateUserLanguagePreference(graphene.Mutation):
         lang_prefs = UserLanguagePreferenceCollection.getCurrent(req=context)
         pref = lang_prefs.add_locale(
             locale,
-            db=db,
             source_of_evidence=source_of_evidence.value,
             preferred_order=order,
             translate_to_locale=models.Locale.get_or_create(translation_locale) if translation_locale else None,

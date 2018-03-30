@@ -1811,8 +1811,7 @@ class UserLanguagePreferenceCollection(LanguagePreferenceCollection):
     def recalculate_locale(self, db):
         self.calculate_locale_prefs(db)
 
-    # The real add_locale
-    def process_locale(self, locale_code, source_of_evidence):
+    def process_locale(self, locale_code, source_of_evidence, **kwargs):
         session = self.user.db
         locale_code = to_posix_string(locale_code)
         # Updated: Now Locale is a model. Converting posix_string into its
@@ -1830,7 +1829,7 @@ class UserLanguagePreferenceCollection(LanguagePreferenceCollection):
             if len(lang_pref_signatures[source_of_evidence]) == 1:
                 lang_pref_signatures[source_of_evidence][0].locale = locale
                 session.flush()
-                return
+                return lang_pref_signatures[source_of_evidence][0]
             # else creation below
         else:
             lang_pref_signatures = {
@@ -1838,12 +1837,29 @@ class UserLanguagePreferenceCollection(LanguagePreferenceCollection):
                 for lp in self.user.language_preference
             }
             if (locale.id, source_of_evidence) in lang_pref_signatures:
-                return
+                return filter(
+                    lambda x: x.locale_id == locale.id and x.source_of_evidence == source_of_evidence, self.user.language_preference)[0]
         lang = UserLanguagePreference(
             user=self.user, source_of_evidence=source_of_evidence.value, locale=locale)
         session.add(lang)
         session.flush()
         self.calculate_locale_prefs(session)
+        return lang
+
+    def process_post_locale(self, post_id, **kwargs):
+        if post_id in self.post_prefs:
+            pref = self.post_prefs[post_id]
+            for k, v in kwargs.iteritems():
+                setattr(pref, k, v)
+        else:
+            pref = PostUserLanguagePreference(
+                post_id=post_id,
+                user=self.user,
+                **kwargs
+            )
+            self.user.db.add(pref)
+            self.user.db.flush()
+        return pref
 
     def calculate_locale_prefs(self, db):
         # create another dictionary for posts
@@ -1975,23 +1991,15 @@ class UserLanguagePreferenceCollection(LanguagePreferenceCollection):
                      for pref in self.user_prefs.itervalues()})
 
     def add_locale(self, locale, **kwargs):
-        db = kwargs.get('db', None)
-        if db:
-            kwargs.pop('db', None)
-        else:
-            db = User.default_db
         post_id = kwargs.get('post_id', None)
-        preference = self.find_locale(locale, db=db, post_id=post_id)
-        assert preference
-        if not preference.user:
-            preference.user = self.user
-        for k, v in kwargs.iteritems():
-            setattr(preference, k, v)
-        db.add(preference)
-        db.flush()
-        # Update the cache of preferences
-        self.user_prefs[locale] = preference
-        return preference
+        pref = None
+        if post_id:
+            pref = self.process_post_locale(locale, post_id, kwargs)
+        else:
+            source_of_evidence = kwargs.get('source_of_evidence', None)
+            assert source_of_evidence, "A source of evidence MUST be passed in order to create a preference"
+            pref = self.process_locale(locale, source_of_evidence)
+        return pref
 
 
 class UserLanguagePreference(Base):
