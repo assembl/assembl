@@ -1827,7 +1827,9 @@ class UserLanguagePreferenceCollection(LanguagePreferenceCollection):
                 lp = lang_pref_signatures[source_of_evidence].pop()
                 lp.delete()
             if len(lang_pref_signatures[source_of_evidence]) == 1:
-                lang_pref_signatures[source_of_evidence][0].locale = locale
+                pref = lang_pref_signatures[source_of_evidence][0]
+                for k, v in kwargs.iteritems():
+                    setattr(pref, k, v)
                 session.flush()
                 return lang_pref_signatures[source_of_evidence][0]
             # else creation below
@@ -1837,10 +1839,10 @@ class UserLanguagePreferenceCollection(LanguagePreferenceCollection):
                 for lp in self.user.language_preference
             }
             if (locale.id, source_of_evidence) in lang_pref_signatures:
-                return filter(
-                    lambda x: x.locale_id == locale.id and x.source_of_evidence == source_of_evidence, self.user.language_preference)[0]
-        lang = UserLanguagePreference(
-            user=self.user, source_of_evidence=source_of_evidence.value, locale=locale)
+                pref = filter(
+                    lambda x: x.locale_id == locale.id and x.source_of_evidence == source_of_evidence, self.user.language_preference)
+                return pref[0] if pref else None
+        lang = UserLanguagePreference(user=self.user, **kwargs)
         session.add(lang)
         session.flush()
         self.calculate_locale_prefs(session)
