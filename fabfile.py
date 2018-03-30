@@ -195,7 +195,7 @@ def create_local_ini():
 
     if running_locally([env.host_string]):
         # The easy case: create a local.ini locally.
-        venvcmd("python2 assembl/scripts/ini_files.py compose -o %s %s" % (
+        venvcmd("python2 -m assembl.scripts.ini_files compose -o %s %s" % (
             env.ini_file, env.rcfile))
     else:
         # Create a local.ini file on the remote server
@@ -219,7 +219,7 @@ def create_local_ini():
             # create the local.ini in a temp file
             with settings(host_string="localhost", venvpath=local_venv,
                           user=getuser(), projectpath=os.getcwd()):
-                venvcmd("python2 assembl/scripts/ini_files.py compose -o %s -r %s %s" % (
+                venvcmd("python2 -m assembl.scripts.ini_files compose -o %s -r %s %s" % (
                     local_file_name, random_file_name, env.rcfile))
             # send the random file if changed
             if rt != os.path.getmtime(random_file_name):
@@ -257,13 +257,13 @@ def migrate_local_ini():
         if not exists(random_ini_path):
             # Create a random.ini from specified random*.tmpl files.
             templates = get_random_templates()
-            venvcmd("python2 assembl/scripts/ini_files.py combine -o " +
+            venvcmd("python2 -m assembl.scripts.ini_files combine -o " +
                     random_ini_path + " " + " ".join(templates))
         # Note: we do not handle the case of an existing but incomplete
         # random.ini file. migrate is designed to be run only once.
-        venvcmd("python2 assembl/scripts/ini_files.py diff -e -o %s %s %s" % (
+        venvcmd("python2 -m assembl.scripts.ini_files diff -e -o %s %s %s" % (
                 random_ini_path, random_ini_path, local_ini_path))
-        venvcmd("python2 assembl/scripts/ini_files.py migrate -o %s %s " % (
+        venvcmd("python2 -m assembl.scripts.ini_files migrate -o %s %s " % (
             dest_path, env.rcfile))
     else:
         # OK, this is horrid because I need the local venv.
@@ -293,14 +293,14 @@ def migrate_local_ini():
                           user=getuser(), projectpath=os.getcwd()):
                 if not has_random:
                     templates = get_random_templates()
-                    venvcmd("python2 assembl/scripts/ini_files.py combine -o " +
+                    venvcmd("python2 -m assembl.scripts.ini_files combine -o " +
                             base_random_file_name + " " + " ".join(templates))
                 # Create the new random file with the local.ini data
-                venvcmd("python2 assembl/scripts/ini_files.py diff -e -o %s %s %s" % (
+                venvcmd("python2 -m assembl.scripts.ini_files diff -e -o %s %s %s" % (
                         dest_random_file_name, base_random_file_name,
                         local_file_name))
                 # Create the new rc file.
-                venvcmd("python2 assembl/scripts/ini_files.py migrate -o %s -i %s -r %s %s" % (
+                venvcmd("python2 -m assembl.scripts.ini_files migrate -o %s -i %s -r %s %s" % (
                         dest_path, local_file_name, dest_random_file_name,
                         env.rcfile))
             # Overwrite the random file
