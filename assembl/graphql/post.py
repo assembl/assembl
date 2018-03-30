@@ -18,6 +18,7 @@ from assembl.models.auth import (LanguagePreferenceCollection,
                                  LanguagePreferenceCollectionWithDefault)
 from jwzthreading import restrip_pat
 
+from .permissions_helpers import require_cls_permission
 from .document import Document
 from .idea import Idea
 from .langstring import (LangStringEntry, resolve_best_langstring_entries,
@@ -622,15 +623,10 @@ class AddPostExtract(graphene.Mutation):
     @staticmethod
     @abort_transaction_on_exception
     def mutate(root, args, context, info):
+        require_cls_permission(CrudPermissions.CREATE, models.Extract, context)
         discussion_id = context.matchdict['discussion_id']
 
         user_id = context.authenticated_userid or Everyone
-
-        permissions = get_permissions(user_id, discussion_id)
-        allowed = models.Extract.user_can_cls(
-            user_id, CrudPermissions.CREATE, permissions)
-        if not allowed:
-            raise HTTPUnauthorized()
 
         post_id = args.get('post_id')
         post_id = int(Node.from_global_id(post_id)[1])
@@ -651,5 +647,6 @@ class AddPostExtract(graphene.Mutation):
             xpath_end=args.get('xpath_end'),
             offset_end=args.get('offset_end'))
         post.db.add(range)
+        post.db.flush()
 
         return AddPostExtract(post=post)

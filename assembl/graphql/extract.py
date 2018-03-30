@@ -2,13 +2,10 @@ import graphene
 from graphene.relay import Node
 from graphene_sqlalchemy import SQLAlchemyObjectType
 
-from pyramid.httpexceptions import HTTPUnauthorized
-from pyramid.security import Everyone
-
 from assembl.auth import CrudPermissions
-from assembl.auth.util import get_permissions
 from assembl import models
 
+from .permissions_helpers import require_instance_permission
 from .types import SecureObjectType, SQLAlchemyInterface
 from .utils import abort_transaction_on_exception, DateTime
 from .user import AgentProfile
@@ -59,25 +56,17 @@ class UpdateExtract(graphene.Mutation):
     @staticmethod
     @abort_transaction_on_exception
     def mutate(root, args, context, info):
-        discussion_id = context.matchdict['discussion_id']
-
-        user_id = context.authenticated_userid or Everyone
-
-        permissions = get_permissions(user_id, discussion_id)
-        allowed = models.Extract.user_can_cls(
-            user_id, CrudPermissions.UPDATE, permissions)
-        if not allowed:
-            raise HTTPUnauthorized()
-
         extract_id = args.get('extract_id')
         extract_id = int(Node.from_global_id(extract_id)[1])
         extract = models.Extract.get(extract_id)
+        require_instance_permission(CrudPermissions.UPDATE, extract, context)
         extract.important = args.get('important')
         extract.extract_action = args.get('extract_action')
         extract.extract_nature = args.get('extract_nature')
         if args.get('idea_id'):
             idea_id = int(Node.from_global_id(args.get('idea_id'))[1])
             extract.idea_id = idea_id
+        extract.db.flush()
 
         return UpdateExtract(extract=extract)
 
@@ -91,21 +80,13 @@ class DeleteExtract(graphene.Mutation):
     @staticmethod
     @abort_transaction_on_exception
     def mutate(root, args, context, info):
-        discussion_id = context.matchdict['discussion_id']
-
-        user_id = context.authenticated_userid or Everyone
-
-        permissions = get_permissions(user_id, discussion_id)
-        allowed = models.Extract.user_can_cls(
-            user_id, CrudPermissions.DELETE, permissions)
-        if not allowed:
-            raise HTTPUnauthorized()
-
         extract_id = args.get('extract_id')
         extract_id = int(Node.from_global_id(extract_id)[1])
         extract = models.Extract.get(extract_id)
+        require_instance_permission(CrudPermissions.DELETE, extract, context)
         for fragment in extract.text_fragment_identifiers:
             fragment.delete()
         extract.delete()
+        extract.db.flush()
 
         return DeleteExtract(success=True)
