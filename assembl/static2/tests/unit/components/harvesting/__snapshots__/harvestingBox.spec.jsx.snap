@@ -36,59 +36,169 @@ exports[`harvestingBox component should match harvestingBox snapshot 1`] = `
     <div
       className="button-bar"
     >
-      <Button
-        active={false}
-        block={false}
-        bsClass="btn"
-        bsStyle="default"
-        className="active"
-        disabled={false}
+      <OverlayTrigger
+        defaultOverlayShown={false}
+        overlay={
+          <Tooltip
+            bsClass="tooltip"
+            id="validateExtractTooltip"
+            placement="right"
+          >
+            <Translate
+              value="harvesting.validateExtract"
+            />
+          </Tooltip>
+        }
+        placement="top"
+        trigger={
+          Array [
+            "hover",
+            "focus",
+          ]
+        }
+      >
+        <Button
+          active={false}
+          block={false}
+          bsClass="btn"
+          bsStyle="default"
+          className="active"
+          disabled={false}
+        >
+          <span
+            className="assembl-icon-check grey"
+          />
+        </Button>
+      </OverlayTrigger>
+      <OverlayTrigger
+        defaultOverlayShown={false}
+        overlay={
+          <Tooltip
+            bsClass="tooltip"
+            id="editExtractTooltip"
+            placement="right"
+          >
+            <Translate
+              value="harvesting.editExtract"
+            />
+          </Tooltip>
+        }
+        placement="top"
+        trigger={
+          Array [
+            "hover",
+            "focus",
+          ]
+        }
+      >
+        <Button
+          active={false}
+          block={false}
+          bsClass="btn"
+          bsStyle="default"
+          className=""
+          disabled={false}
+          onClick={[Function]}
+        >
+          <span
+            className="assembl-icon-edit grey"
+          />
+        </Button>
+      </OverlayTrigger>
+      <OverlayTrigger
+        defaultOverlayShown={false}
+        overlay={
+          <Tooltip
+            bsClass="tooltip"
+            id="deleteExtractTooltip"
+            placement="right"
+          >
+            <Translate
+              value="harvesting.deleteExtract"
+            />
+          </Tooltip>
+        }
+        placement="top"
+        trigger={
+          Array [
+            "hover",
+            "focus",
+          ]
+        }
+      >
+        <Button
+          active={false}
+          block={false}
+          bsClass="btn"
+          bsStyle="default"
+          disabled={false}
+          onClick={[Function]}
+        >
+          <span
+            className="assembl-icon-delete grey"
+          />
+        </Button>
+      </OverlayTrigger>
+      <OverlayTrigger
+        defaultOverlayShown={false}
+        overlay={
+          <Tooltip
+            bsClass="tooltip"
+            id="nuggetExtractTooltip"
+            placement="right"
+          >
+            <Translate
+              value="harvesting.nuggetExtract"
+            />
+          </Tooltip>
+        }
+        placement="top"
+        trigger={
+          Array [
+            "hover",
+            "focus",
+          ]
+        }
+      >
+        <Button
+          active={false}
+          block={false}
+          bsClass="btn"
+          bsStyle="default"
+          className=""
+          disabled={false}
+          onClick={[Function]}
+        >
+          <span
+            className="assembl-icon-pepite grey"
+          />
+        </Button>
+      </OverlayTrigger>
+      <OverlayTrigger
+        defaultOverlayShown={false}
+        overlay={
+          <Tooltip
+            bsClass="tooltip"
+            id="qualifyExtractTooltip"
+            placement="right"
+          >
+            <Translate
+              value="harvesting.qualifyExtract"
+            />
+          </Tooltip>
+        }
+        placement="top"
+        trigger={
+          Array [
+            "hover",
+            "focus",
+          ]
+        }
       >
         <span
-          className="assembl-icon-check grey"
+          className="assembl-icon-ellipsis-vert grey"
         />
-      </Button>
-      <Button
-        active={false}
-        block={false}
-        bsClass="btn"
-        bsStyle="default"
-        className=""
-        disabled={false}
-        onClick={[Function]}
-      >
-        <span
-          className="assembl-icon-edit grey"
-        />
-      </Button>
-      <Button
-        active={false}
-        block={false}
-        bsClass="btn"
-        bsStyle="default"
-        disabled={false}
-        onClick={[Function]}
-      >
-        <span
-          className="assembl-icon-delete grey"
-        />
-      </Button>
-      <Button
-        active={false}
-        block={false}
-        bsClass="btn"
-        bsStyle="default"
-        className=""
-        disabled={false}
-        onClick={[Function]}
-      >
-        <span
-          className="assembl-icon-pepite grey"
-        />
-      </Button>
-      <span
-        className="assembl-icon-ellipsis-vert grey"
-      />
+      </OverlayTrigger>
     </div>
     <div
       className="profile"

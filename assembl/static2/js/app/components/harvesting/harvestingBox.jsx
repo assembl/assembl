@@ -3,7 +3,7 @@ import React from 'react';
 import ARange from 'annotator_range'; // eslint-disable-line
 import { connect } from 'react-redux';
 import { compose, graphql } from 'react-apollo';
-import { Button } from 'react-bootstrap';
+import { Button, OverlayTrigger } from 'react-bootstrap';
 import { Translate, I18n } from 'react-redux-i18n';
 import classnames from 'classnames';
 import moment from 'moment';
@@ -16,6 +16,13 @@ import { getConnectedUserId, getConnectedUserName } from '../../utils/globalFunc
 import AvatarImage from '../common/avatarImage';
 import FormControlWithLabel from '../common/formControlWithLabel';
 import { displayAlert, displayModal, closeModal } from '../../utils/utilityManager';
+import {
+  validateExtractTooltip,
+  editExtractTooltip,
+  deleteExtractTooltip,
+  nuggetExtractTooltip,
+  qualifyExtractTooltip
+} from '../common/tooltips';
 
 type Props = {
   extract: ?Extract,
@@ -254,19 +261,29 @@ class DumbHarvestingBox extends React.Component<void, Props, State> {
             )}
           </div>
           <div className="button-bar">
-            <Button disabled={disabled} className={classnames({ active: checkIsActive })}>
-              <span className="assembl-icon-check grey" />
-            </Button>
-            <Button disabled={disabled} onClick={this.setEditMode} className={classnames({ active: isEditable })}>
-              <span className="assembl-icon-edit grey" />
-            </Button>
-            <Button disabled={disabled} onClick={this.confirmHarvestingDeletion}>
-              <span className="assembl-icon-delete grey" />
-            </Button>
-            <Button disabled={disabled} onClick={this.updateHarvestingNugget} className={classnames({ active: isNugget })}>
-              <span className="assembl-icon-pepite grey" />
-            </Button>
-            <span className="assembl-icon-ellipsis-vert grey" />
+            <OverlayTrigger placement="top" overlay={validateExtractTooltip}>
+              <Button disabled={disabled} className={classnames({ active: checkIsActive })}>
+                <span className="assembl-icon-check grey" />
+              </Button>
+            </OverlayTrigger>
+            <OverlayTrigger placement="top" overlay={editExtractTooltip}>
+              <Button disabled={disabled} onClick={this.setEditMode} className={classnames({ active: isEditable })}>
+                <span className="assembl-icon-edit grey" />
+              </Button>
+            </OverlayTrigger>
+            <OverlayTrigger placement="top" overlay={deleteExtractTooltip}>
+              <Button disabled={disabled} onClick={this.confirmHarvestingDeletion}>
+                <span className="assembl-icon-delete grey" />
+              </Button>
+            </OverlayTrigger>
+            <OverlayTrigger placement="top" overlay={nuggetExtractTooltip}>
+              <Button disabled={disabled} onClick={this.updateHarvestingNugget} className={classnames({ active: isNugget })}>
+                <span className="assembl-icon-pepite grey" />
+              </Button>
+            </OverlayTrigger>
+            <OverlayTrigger placement="top" overlay={qualifyExtractTooltip}>
+              <span className="assembl-icon-ellipsis-vert grey" />
+            </OverlayTrigger>
           </div>
           <div className="profile">
             <AvatarImage userId={harvesterUserId} userName={harvesterUserName} />

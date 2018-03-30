@@ -25,8 +25,12 @@ const Translations = {
       now: "Maintenant",
       harvestingSuccess: "L'extrait a été mis à jour avec succès.",
       harvestingDeleted: "L'extrait a été supprimé avec succès.",
-      deleteExtract: "Supprimer l'extrait",
-      confirmDeleteExtract: "Etes-vous certain de vouloir supprimer cet extrait ?"
+      deleteExtract: "Supprimer l'extrait attrapé",
+      confirmDeleteExtract: "Etes-vous certain de vouloir supprimer cet extrait ?",
+      validateExtract: "Extrait validé",
+      editExtract: "Modifier l'extrait attrapé",
+      nuggetExtract: "Pépiter l'extrait attrapé",
+      qualifyExtract: "Qualifier l'extrait attrapé"
     },
     search: {
       reset: {
@@ -647,7 +651,11 @@ const Translations = {
       harvestingSuccess: "The extract is updated with success.",
       harvestingDeleted: "The extract has been deleted with success.",
       deleteExtract: "Delete the extract",
-      confirmDeleteExtract: "Are you sure you want to delete this extract?"
+      confirmDeleteExtract: "Are you sure you want to delete this extract?",
+      validateExtract: "Extract validated",
+      editExtract: "Edit the extract",
+      nuggetExtract: "Mark as nugget",
+      qualifyExtract: "Qualify the extract"
     },
     search: {
       reset: {
