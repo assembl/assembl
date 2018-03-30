@@ -42,3 +42,10 @@ export const SECTION_INDEX_GENERATOR = {
   alphanumeric: alphanumeric,
   alphanumericOr: alphanumericOr
 };
+
+export const getIndexesForIdeas = (parents: Array<number>, index: number) => {
+  const indexes = [...parents];
+  // copy the parents array
+  indexes.push(index);
+  return indexes;
+};

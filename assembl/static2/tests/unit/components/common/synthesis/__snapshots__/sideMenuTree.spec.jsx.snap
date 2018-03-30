@@ -1,0 +1,108 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`SideMenuTree component should render a 1 level SideMenuTree component 1`] = `
+<div>
+  <div
+    className="link-container"
+  >
+    <Link
+      className="side-menu-link-1"
+      onClick={[Function]}
+      onlyActiveOnIndex={false}
+      style={Object {}}
+      to="about://felixdebate/syntheses/12345#2222222"
+    >
+       
+      Cool story
+    </Link>
+    <span
+      className="caret pointer"
+      onClick={[Function]}
+    />
+  </div>
+  <div />
+</div>
+`;
+
+exports[`SideMenuTree component should render a 2 level SideMenuTree 1`] = `
+<div>
+  <div
+    className="link-container"
+  >
+    <Link
+      className="side-menu-link-2"
+      onClick={[Function]}
+      onlyActiveOnIndex={false}
+      style={Object {}}
+      to="about://felixdebate/syntheses/12345#2222222"
+    >
+       
+      Cool story
+    </Link>
+  </div>
+  <div>
+    <SideMenuTree
+      index={1}
+      indexGenerator={[Function]}
+      parents={
+        Array [
+          1,
+          1,
+        ]
+      }
+      rootIdea={
+        Object {
+          "ancestors": Array [],
+          "id": "2222222",
+          "img": Object {
+            "externalUrl": "http://foo.com/bar",
+          },
+          "numContributors": 10,
+          "numPosts": 100,
+          "phaseIdentifier": "phaseId",
+          "posts": Object {
+            "edges": Array [],
+          },
+          "synthesisTitle": "Intersting idea",
+          "title": "Cool story",
+        }
+      }
+      slug="felixdebate"
+      subIdeas={Array []}
+      synthesisPostId="12345"
+      url="about://felixdebate/syntheses/12345#2222222"
+    />
+    <SideMenuTree
+      index={2}
+      indexGenerator={[Function]}
+      parents={
+        Array [
+          1,
+          1,
+        ]
+      }
+      rootIdea={
+        Object {
+          "ancestors": Array [],
+          "id": "33333",
+          "img": Object {
+            "externalUrl": "http://foo.com/bar",
+          },
+          "numContributors": 5,
+          "numPosts": 50,
+          "phaseIdentifier": "phaseId",
+          "posts": Object {
+            "edges": Array [],
+          },
+          "synthesisTitle": "Okay idea",
+          "title": "Very nice story",
+        }
+      }
+      slug="felixdebate"
+      subIdeas={Array []}
+      synthesisPostId="12345"
+      url="about://felixdebate/syntheses/12345#33333"
+    />
+  </div>
+</div>
+`;
