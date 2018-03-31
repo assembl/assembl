@@ -2,8 +2,6 @@
 
 mutation deleteExtract($extractId: ID!) {
   deleteExtract(extractId: $extractId) {
-    extract {
-      ...Extract
-    }
+    success
   }
 }
