@@ -1,5 +1,3 @@
-#import "../fragments/Extract.graphql"
-
 mutation deleteExtract($extractId: ID!) {
   deleteExtract(extractId: $extractId) {
     success
