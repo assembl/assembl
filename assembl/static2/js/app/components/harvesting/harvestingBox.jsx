@@ -14,6 +14,7 @@ import deleteExtractMutation from '../../graphql/mutations/deleteExtract.graphql
 import withLoadingIndicator from '../../components/common/withLoadingIndicator';
 import { getConnectedUserId, getConnectedUserName } from '../../utils/globalFunctions';
 import AvatarImage from '../common/avatarImage';
+import TaxonomyOverflowMenu from './taxonomyOverflowMenu';
 import FormControlWithLabel from '../common/formControlWithLabel';
 import { displayAlert, displayModal, closeModal } from '../../utils/utilityManager';
 import {
@@ -43,7 +44,9 @@ type State = {
   checkIsActive: boolean,
   isNugget: boolean,
   isEditable: boolean,
-  editableExtract: string
+  editableExtract: string,
+  nature: ?string,
+  action: ?string
 };
 
 class DumbHarvestingBox extends React.Component<void, Props, State> {
@@ -51,7 +54,7 @@ class DumbHarvestingBox extends React.Component<void, Props, State> {
 
   state: State;
 
-  harvestingBox: HTMLElement;
+  menu: any;
 
   constructor(props: Props) {
     super(props);
@@ -63,7 +66,9 @@ class DumbHarvestingBox extends React.Component<void, Props, State> {
       checkIsActive: isExtract,
       isNugget: isNugget,
       isEditable: false,
-      editableExtract: extract ? extract.body : ''
+      editableExtract: extract ? extract.body : '',
+      nature: null,
+      action: null
     };
   }
 
@@ -76,16 +81,21 @@ class DumbHarvestingBox extends React.Component<void, Props, State> {
     this.setState({ editableExtract: value });
   };
 
+  qualifyExtract = (category: string, qualifier: string): void => {
+    this.menu.hide();
+    console.log(category, qualifier); // eslint-disable-line
+  };
+
   updateHarvestingNugget = (): void => {
     const { extract, ideaId, updateExtract } = this.props;
-    const { isNugget, editableExtract } = this.state;
+    const { isNugget, editableExtract, nature, action } = this.state;
     const variables = {
       extractId: extract ? extract.id : null,
       ideaId: ideaId,
       body: editableExtract,
       important: !isNugget,
-      extractNature: 'knowledge', // TODO replace later by the nature list
-      extractAction: 'argument' // TODO replace later by the action list
+      extractNature: nature,
+      extractAction: action
     };
     displayAlert('success', I18n.t('loading.wait'));
     updateExtract({ variables: variables })
@@ -102,14 +112,14 @@ class DumbHarvestingBox extends React.Component<void, Props, State> {
 
   updateHarvestingBody = (): void => {
     const { extract, ideaId, updateExtract } = this.props;
-    const { isNugget, editableExtract } = this.state;
+    const { isNugget, editableExtract, nature, action } = this.state;
     const variables = {
       extractId: extract ? extract.id : null,
       ideaId: ideaId,
       body: editableExtract,
       important: isNugget,
-      extractNature: 'knowledge', // TODO replace later by the nature list
-      extractAction: 'argument' // TODO replace later by the action list
+      extractNature: nature,
+      extractAction: action
     };
     displayAlert('success', I18n.t('loading.wait'));
     updateExtract({ variables: variables })
@@ -255,8 +265,18 @@ class DumbHarvestingBox extends React.Component<void, Props, State> {
                 <span className="assembl-icon-pepite grey" />
               </Button>
             </OverlayTrigger>
-            <OverlayTrigger placement="top" overlay={qualifyExtractTooltip}>
-              <span className="assembl-icon-ellipsis-vert grey" />
+            <OverlayTrigger
+              ref={(m) => {
+                this.menu = m;
+              }}
+              trigger="click"
+              rootClose
+              placement="right"
+              overlay={TaxonomyOverflowMenu(this.qualifyExtract)}
+            >
+              <OverlayTrigger placement="top" overlay={qualifyExtractTooltip}>
+                <span className="assembl-icon-ellipsis-vert grey pointer" />
+              </OverlayTrigger>
             </OverlayTrigger>
           </div>
           <div className="profile">

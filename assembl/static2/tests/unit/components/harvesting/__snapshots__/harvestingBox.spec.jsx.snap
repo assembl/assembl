@@ -176,27 +176,136 @@ exports[`harvestingBox component should match harvestingBox snapshot 1`] = `
       <OverlayTrigger
         defaultOverlayShown={false}
         overlay={
-          <Tooltip
-            bsClass="tooltip"
-            id="qualifyExtractTooltip"
+          <Popover
+            bsClass="popover"
+            className="overflow-menu"
+            id="taxonomy-menu"
             placement="right"
           >
-            <Translate
-              value="harvesting.qualifyExtract"
-            />
-          </Tooltip>
+            <div
+              className="pointer"
+            >
+              <div
+                onClick={[Function]}
+              >
+                Missing translation: search.taxonomy_nature.issue
+              </div>
+              <div
+                onClick={[Function]}
+              >
+                Missing translation: search.taxonomy_nature.actionable_solution
+              </div>
+              <div
+                onClick={[Function]}
+              >
+                Missing translation: search.taxonomy_nature.knowledge
+              </div>
+              <div
+                onClick={[Function]}
+              >
+                Missing translation: search.taxonomy_nature.example
+              </div>
+              <div
+                onClick={[Function]}
+              >
+                Missing translation: search.taxonomy_nature.concept
+              </div>
+              <div
+                onClick={[Function]}
+              >
+                Missing translation: search.taxonomy_nature.argument
+              </div>
+            </div>
+            <div
+              className="pointer"
+            >
+              <div
+                onClick={[Function]}
+              >
+                Missing translation: search.taxonomy_action.classify
+              </div>
+              <div
+                onClick={[Function]}
+              >
+                Missing translation: search.taxonomy_action.make_generic
+              </div>
+              <div
+                onClick={[Function]}
+              >
+                Missing translation: search.taxonomy_action.argument
+              </div>
+              <div
+                onClick={[Function]}
+              >
+                Missing translation: search.taxonomy_action.give_examples
+              </div>
+              <div
+                onClick={[Function]}
+              >
+                Missing translation: search.taxonomy_action.more_specific
+              </div>
+              <div
+                onClick={[Function]}
+              >
+                Missing translation: search.taxonomy_action.mix_match
+              </div>
+              <div
+                onClick={[Function]}
+              >
+                Missing translation: search.taxonomy_action.display_multi_column
+              </div>
+              <div
+                onClick={[Function]}
+              >
+                Missing translation: search.taxonomy_action.display_thread
+              </div>
+              <div
+                onClick={[Function]}
+              >
+                Missing translation: search.taxonomy_action.display_tokens
+              </div>
+              <div
+                onClick={[Function]}
+              >
+                Missing translation: search.taxonomy_action.display_open_questions
+              </div>
+              <div
+                onClick={[Function]}
+              >
+                Missing translation: search.taxonomy_action.display_bright_mirror
+              </div>
+            </div>
+          </Popover>
         }
-        placement="top"
-        trigger={
-          Array [
-            "hover",
-            "focus",
-          ]
-        }
+        placement="right"
+        rootClose={true}
+        trigger="click"
       >
-        <span
-          className="assembl-icon-ellipsis-vert grey"
-        />
+        <OverlayTrigger
+          defaultOverlayShown={false}
+          overlay={
+            <Tooltip
+              bsClass="tooltip"
+              id="qualifyExtractTooltip"
+              placement="right"
+            >
+              <Translate
+                value="harvesting.qualifyExtract"
+              />
+            </Tooltip>
+          }
+          placement="top"
+          trigger={
+            Array [
+              "hover",
+              "focus",
+            ]
+          }
+        >
+          <span
+            className="assembl-icon-ellipsis-vert grey pointer"
+          />
+        </OverlayTrigger>
       </OverlayTrigger>
     </div>
     <div

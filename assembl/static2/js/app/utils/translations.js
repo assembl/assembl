@@ -96,7 +96,7 @@ const Translations = {
         give_examples: "Donner des exemples",
         more_specific: "Rendre plus opérationnel",
         mix_match: "Croiser avec un autre extrait",
-        display_multi_column: "Activer multi-col.",
+        display_multi_column: "Activer multi-col",
         display_thread: "Activer Thread",
         display_tokens: "Activer Tokens",
         display_open_questions: "Activer Q° ouvertes",
