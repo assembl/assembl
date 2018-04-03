@@ -12,7 +12,7 @@ describe('harvestingBox component', () => {
       extract: extract,
       index: 0,
       previousExtractId: '876876876',
-      harvestingBoxPosition: 100,
+      harvestingAnchorPosition: { x: 100, y: 200 },
       contentLocale: 'fr'
     };
     const shallowRenderer = new ShallowRenderer();

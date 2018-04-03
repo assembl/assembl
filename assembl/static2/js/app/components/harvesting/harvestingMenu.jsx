@@ -10,7 +10,7 @@ type Props = {
   extracts: Array<Extract>,
   postId: string,
   isHarvesting: boolean,
-  harvestingMenuPosition: number,
+  harvestingAnchorPosition: Object,
   ideaId: string,
   cancelHarvesting: Function,
   refetchPost: Function
@@ -45,20 +45,19 @@ class HarvestingMenu extends React.Component<void, Props, State> {
   };
 
   render() {
-    const { postId, cancelHarvesting, isHarvesting, extracts, harvestingMenuPosition, ideaId, refetchPost } = this.props;
+    const { postId, cancelHarvesting, isHarvesting, extracts, harvestingAnchorPosition, ideaId, refetchPost } = this.props;
     const { showHarvestingBox } = this.state;
     const selection = window.getSelection();
     return (
-      <div>
+      <div className="harvesting-container">
         {extracts && extracts.length > 0 && isHarvesting
-          ? extracts.map((extract, index) => (
+          ? extracts.map(extract => (
             <HarvestingBox
               postId={postId}
               key={extract.id}
               cancelHarvesting={cancelHarvesting}
               extract={extract}
               displayHarvestingBox={this.displayHarvestingBox}
-              previousExtractId={extracts[index - 1] ? extracts[index - 1].id : null}
               harvestingBoxPosition={null}
               ideaId={ideaId}
               refetchPost={refetchPost}
@@ -72,10 +71,7 @@ class HarvestingMenu extends React.Component<void, Props, State> {
               selection={selection}
               cancelHarvesting={cancelHarvesting}
               extract={null}
-              index={0}
               displayHarvestingBox={this.displayHarvestingBox}
-              previousExtractId={null}
-              harvestingBoxPosition={harvestingMenuPosition}
               refetchPost={refetchPost}
             />
           )}
@@ -83,7 +79,7 @@ class HarvestingMenu extends React.Component<void, Props, State> {
           <HarvestingAnchor
             displayHarvestingBox={this.displayHarvestingBox}
             handleMouseDown={this.handleMouseDown}
-            anchorPosition={harvestingMenuPosition}
+            anchorPosition={harvestingAnchorPosition}
           />
         )}
       </div>

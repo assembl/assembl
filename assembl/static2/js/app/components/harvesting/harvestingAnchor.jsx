@@ -3,13 +3,13 @@ import React from 'react';
 import { Translate } from 'react-redux-i18n';
 
 type Props = {
-  anchorPosition: number,
+  anchorPosition: Object,
   displayHarvestingBox: Function,
   handleMouseDown: Function
 };
 
 const HarvestingAnchor = ({ displayHarvestingBox, handleMouseDown, anchorPosition }: Props) => (
-  <div className="harvesting-anchor" style={{ marginTop: `${anchorPosition}px` }}>
+  <div className="harvesting-anchor" style={{ top: `${anchorPosition.y}px`, left: `${anchorPosition.x}px` }}>
     <div className="left-side-harvesting-button">
       <div className="left-side-harvesting-button__label">
         <Translate value="harvesting.harvestSelection" />

@@ -24,7 +24,7 @@ type Props = PostProps & {
 type State = {
   showAnswerForm: boolean,
   displayHarvestingMenu: boolean,
-  harvestingMenuPosition: number
+  harvestingAnchorPosition: Object
 };
 
 class PostView extends React.PureComponent<void, Props, State> {
@@ -43,7 +43,7 @@ class PostView extends React.PureComponent<void, Props, State> {
     this.state = {
       showAnswerForm: false,
       displayHarvestingMenu: isExtracts,
-      harvestingMenuPosition: 0
+      harvestingAnchorPosition: { x: 0, y: 0 }
     };
   }
 
@@ -75,16 +75,17 @@ class PostView extends React.PureComponent<void, Props, State> {
   getAnchorPosition() {
     const selection = document.getSelection();
     const selectionRange = selection ? selection.getRangeAt(0) : null;
-    const selectionPosition = selectionRange ? selectionRange.getBoundingClientRect().top : 0;
-    const postPosition = this.postView.getBoundingClientRect().top;
-    return selectionPosition - postPosition;
+    const selectionPositionY = selectionRange ? selectionRange.getBoundingClientRect().top : 0;
+    const anchorPositionX = selectionRange ? selectionRange.getBoundingClientRect().left : 0;
+    const anchorPositionY = selectionPositionY - this.postView.getBoundingClientRect().top;
+    return { x: anchorPositionX, y: anchorPositionY };
   }
 
   handleMouseUpWhileHarvesting = (): void => {
     const { isHarvesting, translate } = this.props;
     if (isHarvesting && !translate) {
-      const harvestingMenuPosition = this.getAnchorPosition();
-      this.setState({ displayHarvestingMenu: true, harvestingMenuPosition: harvestingMenuPosition });
+      const harvestingAnchorPosition = this.getAnchorPosition();
+      this.setState({ displayHarvestingMenu: true, harvestingAnchorPosition: harvestingAnchorPosition });
     } else {
       this.setState({ displayHarvestingMenu: false });
     }
@@ -149,7 +150,7 @@ class PostView extends React.PureComponent<void, Props, State> {
       canReply = indirectIdeaContentLinks[0].idea.messageViewOverride !== 'messageColumns';
     }
 
-    const { displayHarvestingMenu, harvestingMenuPosition } = this.state;
+    const { displayHarvestingMenu, harvestingAnchorPosition } = this.state;
 
     const { refetch } = this.props.data;
 
@@ -174,7 +175,7 @@ class PostView extends React.PureComponent<void, Props, State> {
             cancelHarvesting={this.cancelHarvesting}
             isHarvesting={isHarvesting}
             extracts={extracts}
-            harvestingMenuPosition={harvestingMenuPosition}
+            harvestingAnchorPosition={harvestingAnchorPosition}
             ideaId={ideaId}
             refetchPost={refetch}
           />

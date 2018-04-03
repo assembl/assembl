@@ -5,7 +5,8 @@ exports[`harvestingAnchor component should match harvestingAnchor snapshot 1`] =
   className="harvesting-anchor"
   style={
     Object {
-      "marginTop": "undefinedpx",
+      "left": "100px",
+      "top": "200px",
     }
   }
 >

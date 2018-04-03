@@ -29,8 +29,6 @@ type Props = {
   postId: string,
   contentLocale: string,
   selection: ?Object,
-  previousExtractId: ?string,
-  harvestingBoxPosition: ?number,
   ideaId: string,
   cancelHarvesting: Function,
   addPostExtract: Function,
@@ -66,28 +64,6 @@ class DumbHarvestingBox extends React.Component<void, Props, State> {
       isEditable: false,
       editableExtract: extract ? extract.body : ''
     };
-  }
-
-  componentDidMount() {
-    this.setHarvestingBoxPosition();
-  }
-
-  setHarvestingBoxPosition() {
-    const { harvestingBoxPosition, previousExtractId } = this.props;
-    if (harvestingBoxPosition) {
-      this.harvestingBox.style.marginTop = `${harvestingBoxPosition}px`;
-    } else {
-      // Set the box position if there are several extract for the same post
-      const previousHarvestingBoxHtmlId = previousExtractId
-        ? document.getElementById(`harvesting-box-${previousExtractId}`)
-        : null;
-      const previousHarvestingBoxHeight = previousHarvestingBoxHtmlId ? previousHarvestingBoxHtmlId.offsetHeight : 20;
-      if (previousHarvestingBoxHtmlId) {
-        this.harvestingBox.style.marginTop = `${previousHarvestingBoxHeight + 20}px`;
-      } else {
-        this.harvestingBox.style.marginTop = '0px';
-      }
-    }
   }
 
   setEditMode = (): void => {
@@ -208,7 +184,6 @@ class DumbHarvestingBox extends React.Component<void, Props, State> {
           disabled: false,
           checkIsActive: true
         });
-        this.setHarvestingBoxPosition();
         window.getSelection().removeAllRanges();
       })
       .catch((error) => {
@@ -217,7 +192,7 @@ class DumbHarvestingBox extends React.Component<void, Props, State> {
   };
 
   render() {
-    const { selection, cancelHarvesting, extract, contentLocale, postId } = this.props;
+    const { selection, cancelHarvesting, extract, contentLocale } = this.props;
     const { disabled, checkIsActive, isNugget, isEditable, editableExtract } = this.state;
     const isExtract = extract !== null;
     const selectionText = selection ? selection.toString() : '';
@@ -226,13 +201,7 @@ class DumbHarvestingBox extends React.Component<void, Props, State> {
     const harvesterUserId = extract && extract.creator && extract.creator.userId ? extract.creator.userId : getConnectedUserId();
 
     return (
-      <div
-        className={classnames('theme-box', 'harvesting-box', { 'active-box': checkIsActive })}
-        id={extract ? `harvesting-box-${extract.id}` : `harvesting-box-${postId}`}
-        ref={(b) => {
-          this.harvestingBox = b;
-        }}
-      >
+      <div className={classnames('theme-box', 'harvesting-box', { 'active-box': checkIsActive })}>
         <div className="harvesting-box-header">
           <div className="harvesting-status">
             {disabled ? (

@@ -3,7 +3,6 @@
 exports[`harvestingBox component should match harvestingBox snapshot 1`] = `
 <div
   className="theme-box harvesting-box active-box"
-  id="harvesting-box-987643"
 >
   <div
     className="harvesting-box-header"

@@ -1,7 +1,11 @@
 .harvesting-anchor {
   position: absolute;
-  left: 250px;
   z-index: 1000;
+}
+
+.harvesting-container {
+  position: absolute;
+  left: 0;
 }
 
 .left-side-harvesting-button {
@@ -145,9 +149,8 @@
 }
 
 .harvesting-box {
-  position: absolute;
   box-shadow: 2px 2px 4px 0 $grey1;
-  left: 0;
+  margin: 0 0 20px;
   z-index: 99;
   width: 310px;
 

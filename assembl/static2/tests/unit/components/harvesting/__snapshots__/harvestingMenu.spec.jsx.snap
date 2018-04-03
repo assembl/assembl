@@ -1,7 +1,9 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`harvestingMenu component should match harvestingMenu snapshot 1`] = `
-<div>
+<div
+  className="harvesting-container"
+>
   <Connect(Apollo(Apollo(Apollo(Component))))
     cancelHarvesting={undefined}
     displayHarvestingBox={[Function]}
@@ -31,7 +33,6 @@ exports[`harvestingMenu component should match harvestingMenu snapshot 1`] = `
     harvestingBoxPosition={null}
     ideaId={undefined}
     postId="1234"
-    previousExtractId={null}
     refetchPost={undefined}
   />
   <Connect(Apollo(Apollo(Apollo(Component))))
@@ -63,11 +64,15 @@ exports[`harvestingMenu component should match harvestingMenu snapshot 1`] = `
     harvestingBoxPosition={null}
     ideaId={undefined}
     postId="1234"
-    previousExtractId="987643"
     refetchPost={undefined}
   />
   <HarvestingAnchor
-    anchorPosition={100}
+    anchorPosition={
+      Object {
+        "x": 100,
+        "y": 200,
+      }
+    }
     displayHarvestingBox={[Function]}
     handleMouseDown={[Function]}
   />
