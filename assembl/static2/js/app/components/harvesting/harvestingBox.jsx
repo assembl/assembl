@@ -30,6 +30,7 @@ type Props = {
   contentLocale: string,
   selection: ?Object,
   ideaId: string,
+  setHarvestingBoxDisplay: Function,
   cancelHarvesting: Function,
   addPostExtract: Function,
   updateExtract: Function,
@@ -86,6 +87,7 @@ class DumbHarvestingBox extends React.Component<void, Props, State> {
       extractNature: 'knowledge', // TODO replace later by the nature list
       extractAction: 'argument' // TODO replace later by the action list
     };
+    displayAlert('success', I18n.t('loading.wait'));
     updateExtract({ variables: variables })
       .then(() => {
         this.setState({
@@ -109,6 +111,7 @@ class DumbHarvestingBox extends React.Component<void, Props, State> {
       extractNature: 'knowledge', // TODO replace later by the nature list
       extractAction: 'argument' // TODO replace later by the action list
     };
+    displayAlert('success', I18n.t('loading.wait'));
     updateExtract({ variables: variables })
       .then(() => {
         this.setState({
@@ -142,6 +145,7 @@ class DumbHarvestingBox extends React.Component<void, Props, State> {
       extractId: extract ? extract.id : null
     };
     closeModal();
+    displayAlert('success', I18n.t('loading.wait'));
     deleteExtract({ variables: variables })
       .then(() => {
         refetchPost();
@@ -153,7 +157,7 @@ class DumbHarvestingBox extends React.Component<void, Props, State> {
   };
 
   validateHarvesting = (): void => {
-    const { postId, selection, contentLocale, addPostExtract } = this.props;
+    const { postId, selection, contentLocale, addPostExtract, setHarvestingBoxDisplay } = this.props;
     if (!selection) {
       return;
     }
@@ -166,7 +170,6 @@ class DumbHarvestingBox extends React.Component<void, Props, State> {
     if (!serializedAnnotatorRange) {
       return;
     }
-
     const variables = {
       contentLocale: contentLocale,
       postId: postId,
@@ -177,13 +180,14 @@ class DumbHarvestingBox extends React.Component<void, Props, State> {
       offsetStart: serializedAnnotatorRange.startOffset,
       offsetEnd: serializedAnnotatorRange.endOffset
     };
-
+    displayAlert('success', I18n.t('loading.wait'));
     addPostExtract({ variables: variables })
       .then(() => {
         this.setState({
           disabled: false,
           checkIsActive: true
         });
+        setHarvestingBoxDisplay();
         window.getSelection().removeAllRanges();
       })
       .catch((error) => {

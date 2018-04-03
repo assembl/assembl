@@ -6,6 +6,7 @@
 .harvesting-container {
   position: absolute;
   left: 0;
+  z-index: 99;
 }
 
 .left-side-harvesting-button {
@@ -132,7 +133,6 @@
 .harvesting-box {
   box-shadow: 2px 2px 4px 0 $grey1;
   margin: 0 0 20px;
-  z-index: 99;
   width: 310px;
 
   .harvesting-box-header {
@@ -272,12 +272,17 @@
     font-size: $font-size-xs;
     color: $grey2;
 
+    .form-group {
+      margin: 0;
+    }
+
     textarea {
       border: 1px solid $grey1;
-      border-radius: 4px;
+      margin: -20px 0 0;
       color: $grey2;
       font-family: $font-family;
       font-size: $font-size-xs;
+      min-height: 100px;
 
       &:focus {
         border: 1px solid $grey1;

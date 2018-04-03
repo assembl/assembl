@@ -23,7 +23,8 @@ type Props = PostProps & {
 
 type State = {
   showAnswerForm: boolean,
-  displayHarvestingMenu: boolean,
+  displayHarvestingAnchor: boolean,
+  displayHarvestingBox: boolean,
   harvestingAnchorPosition: Object
 };
 
@@ -38,11 +39,10 @@ class PostView extends React.PureComponent<void, Props, State> {
 
   constructor(props: Props) {
     super(props);
-    const { extracts } = this.props.data.post;
-    const isExtracts = extracts.length > 0;
     this.state = {
       showAnswerForm: false,
-      displayHarvestingMenu: isExtracts,
+      displayHarvestingAnchor: false,
+      displayHarvestingBox: false,
       harvestingAnchorPosition: { x: 0, y: 0 }
     };
   }
@@ -76,7 +76,7 @@ class PostView extends React.PureComponent<void, Props, State> {
     const selection = document.getSelection();
     const selectionRange = selection ? selection.getRangeAt(0) : null;
     const selectionPositionY = selectionRange ? selectionRange.getBoundingClientRect().top : 0;
-    const anchorPositionX = selectionRange ? selectionRange.getBoundingClientRect().left : 0;
+    const anchorPositionX = this.postView.offsetLeft + this.postView.clientWidth / 2;
     const anchorPositionY = selectionPositionY - this.postView.getBoundingClientRect().top;
     return { x: anchorPositionX, y: anchorPositionY };
   }
@@ -85,14 +85,24 @@ class PostView extends React.PureComponent<void, Props, State> {
     const { isHarvesting, translate } = this.props;
     if (isHarvesting && !translate) {
       const harvestingAnchorPosition = this.getAnchorPosition();
-      this.setState({ displayHarvestingMenu: true, harvestingAnchorPosition: harvestingAnchorPosition });
+      this.setState({ displayHarvestingAnchor: true, harvestingAnchorPosition: harvestingAnchorPosition });
     } else {
-      this.setState({ displayHarvestingMenu: false });
+      this.setState({ displayHarvestingAnchor: false });
     }
   };
 
+  handleClickAnchor = (): void => {
+    const { displayHarvestingAnchor, displayHarvestingBox } = this.state;
+    this.setState({ displayHarvestingAnchor: !displayHarvestingAnchor, displayHarvestingBox: !displayHarvestingBox });
+  };
+
+  setHarvestingBoxDisplay = (): void => {
+    const { displayHarvestingBox } = this.state;
+    this.setState({ displayHarvestingBox: !displayHarvestingBox });
+  };
+
   cancelHarvesting = (): void => {
-    this.setState({ displayHarvestingMenu: false });
+    this.setState({ displayHarvestingBox: false });
     window.getSelection().removeAllRanges();
   };
 
@@ -150,7 +160,7 @@ class PostView extends React.PureComponent<void, Props, State> {
       canReply = indirectIdeaContentLinks[0].idea.messageViewOverride !== 'messageColumns';
     }
 
-    const { displayHarvestingMenu, harvestingAnchorPosition } = this.state;
+    const { displayHarvestingAnchor, displayHarvestingBox, harvestingAnchorPosition } = this.state;
 
     const { refetch } = this.props.data;
 
@@ -169,15 +179,18 @@ class PostView extends React.PureComponent<void, Props, State> {
             isHarvesting={isHarvesting}
           />
         )}
-        {displayHarvestingMenu && (
+        {isHarvesting && (
           <HarvestingMenu
             postId={id}
-            cancelHarvesting={this.cancelHarvesting}
-            isHarvesting={isHarvesting}
             extracts={extracts}
             harvestingAnchorPosition={harvestingAnchorPosition}
             ideaId={ideaId}
             refetchPost={refetch}
+            displayHarvestingAnchor={displayHarvestingAnchor}
+            displayHarvestingBox={displayHarvestingBox}
+            setHarvestingBoxDisplay={this.setHarvestingBoxDisplay}
+            handleClickAnchor={this.handleClickAnchor}
+            cancelHarvesting={this.cancelHarvesting}
           />
         )}
         <div className="box" style={boxStyle}>

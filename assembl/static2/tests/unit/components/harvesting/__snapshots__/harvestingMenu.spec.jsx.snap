@@ -6,7 +6,7 @@ exports[`harvestingMenu component should match harvestingMenu snapshot 1`] = `
 >
   <Connect(Apollo(Apollo(Apollo(Component))))
     cancelHarvesting={undefined}
-    displayHarvestingBox={[Function]}
+    displayHarvestingBox={undefined}
     extract={
       Object {
         "body": "Hello world!",
@@ -34,10 +34,11 @@ exports[`harvestingMenu component should match harvestingMenu snapshot 1`] = `
     ideaId={undefined}
     postId="1234"
     refetchPost={undefined}
+    setHarvestingBoxDisplay={undefined}
   />
   <Connect(Apollo(Apollo(Apollo(Component))))
     cancelHarvesting={undefined}
-    displayHarvestingBox={[Function]}
+    displayHarvestingBox={undefined}
     extract={
       Object {
         "body": "Hello everybody!",
@@ -65,16 +66,7 @@ exports[`harvestingMenu component should match harvestingMenu snapshot 1`] = `
     ideaId={undefined}
     postId="1234"
     refetchPost={undefined}
-  />
-  <HarvestingAnchor
-    anchorPosition={
-      Object {
-        "x": 100,
-        "y": 200,
-      }
-    }
-    displayHarvestingBox={[Function]}
-    handleMouseDown={[Function]}
+    setHarvestingBoxDisplay={undefined}
   />
 </div>
 `;

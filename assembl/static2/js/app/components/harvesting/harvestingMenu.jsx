@@ -9,34 +9,18 @@ import HarvestingBox from './harvestingBox';
 type Props = {
   extracts: Array<Extract>,
   postId: string,
-  isHarvesting: boolean,
+  displayHarvestingBox: boolean,
+  displayHarvestingAnchor: boolean,
   harvestingAnchorPosition: Object,
   ideaId: string,
+  setHarvestingBoxDisplay: Function,
+  handleClickAnchor: Function,
   cancelHarvesting: Function,
   refetchPost: Function
 };
 
-type State = {
-  showHarvestingBox: boolean
-};
-
-class HarvestingMenu extends React.Component<void, Props, State> {
+class HarvestingMenu extends React.Component<void, Props, *> {
   props: Props;
-
-  state: State;
-
-  constructor(props: Props) {
-    super(props);
-    this.state = {
-      showHarvestingBox: false
-    };
-  }
-
-  displayHarvestingBox = (): void => {
-    this.setState({
-      showHarvestingBox: !this.state.showHarvestingBox
-    });
-  };
 
   handleMouseDown = (event: SyntheticMouseEvent) => {
     // This would otherwise clear the selection
@@ -45,42 +29,54 @@ class HarvestingMenu extends React.Component<void, Props, State> {
   };
 
   render() {
-    const { postId, cancelHarvesting, isHarvesting, extracts, harvestingAnchorPosition, ideaId, refetchPost } = this.props;
-    const { showHarvestingBox } = this.state;
+    const {
+      setHarvestingBoxDisplay,
+      displayHarvestingBox,
+      displayHarvestingAnchor,
+      postId,
+      handleClickAnchor,
+      extracts,
+      harvestingAnchorPosition,
+      ideaId,
+      refetchPost,
+      cancelHarvesting
+    } = this.props;
     const selection = window.getSelection();
     return (
       <div className="harvesting-container">
-        {extracts && extracts.length > 0 && isHarvesting
+        {extracts && extracts.length > 0
           ? extracts.map(extract => (
             <HarvestingBox
               postId={postId}
               key={extract.id}
-              cancelHarvesting={cancelHarvesting}
               extract={extract}
-              displayHarvestingBox={this.displayHarvestingBox}
+              displayHarvestingBox={displayHarvestingBox}
               harvestingBoxPosition={null}
               ideaId={ideaId}
               refetchPost={refetchPost}
+              cancelHarvesting={cancelHarvesting}
+              setHarvestingBoxDisplay={setHarvestingBoxDisplay}
             />
           ))
           : null}
-        {showHarvestingBox &&
-          isHarvesting && (
-            <HarvestingBox
-              postId={postId}
-              selection={selection}
-              cancelHarvesting={cancelHarvesting}
-              extract={null}
-              displayHarvestingBox={this.displayHarvestingBox}
-              refetchPost={refetchPost}
-            />
-          )}
-        {isHarvesting &&
+        {displayHarvestingBox && (
+          <HarvestingBox
+            postId={postId}
+            selection={selection}
+            extract={null}
+            displayHarvestingBox={displayHarvestingBox}
+            refetchPost={refetchPost}
+            cancelHarvesting={cancelHarvesting}
+            setHarvestingBoxDisplay={setHarvestingBoxDisplay}
+          />
+        )}
+        {displayHarvestingAnchor &&
           selection.toString().length > 0 && (
             <HarvestingAnchor
-              displayHarvestingBox={this.displayHarvestingBox}
+              displayHarvestingBox={displayHarvestingBox}
               handleMouseDown={this.handleMouseDown}
               anchorPosition={harvestingAnchorPosition}
+              handleClickAnchor={handleClickAnchor}
             />
           )}
       </div>
