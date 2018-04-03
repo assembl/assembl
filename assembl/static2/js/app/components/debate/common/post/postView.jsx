@@ -184,7 +184,6 @@ class PostView extends React.PureComponent<void, Props, State> {
             postId={id}
             extracts={extracts}
             harvestingAnchorPosition={harvestingAnchorPosition}
-            ideaId={ideaId}
             refetchPost={refetch}
             displayHarvestingAnchor={displayHarvestingAnchor}
             displayHarvestingBox={displayHarvestingBox}

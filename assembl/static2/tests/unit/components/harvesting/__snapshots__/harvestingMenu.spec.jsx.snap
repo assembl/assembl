@@ -31,7 +31,6 @@ exports[`harvestingMenu component should match harvestingMenu snapshot 1`] = `
       }
     }
     harvestingBoxPosition={null}
-    ideaId={undefined}
     postId="1234"
     refetchPost={undefined}
     setHarvestingBoxDisplay={undefined}
@@ -63,7 +62,6 @@ exports[`harvestingMenu component should match harvestingMenu snapshot 1`] = `
       }
     }
     harvestingBoxPosition={null}
-    ideaId={undefined}
     postId="1234"
     refetchPost={undefined}
     setHarvestingBoxDisplay={undefined}

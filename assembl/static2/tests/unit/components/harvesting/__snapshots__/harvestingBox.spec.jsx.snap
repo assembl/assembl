@@ -178,101 +178,173 @@ exports[`harvestingBox component should match harvestingBox snapshot 1`] = `
         overlay={
           <Popover
             bsClass="popover"
-            className="overflow-menu"
-            id="taxonomy-menu"
+            className="taxonomy-menu overflow-menu"
+            id="taxonomy"
             placement="right"
           >
             <div
-              className="pointer"
+              className="pointer taxonomy-label taxonomy-label-border"
             >
-              <div
-                onClick={[Function]}
-              >
-                Missing translation: search.taxonomy_nature.issue
-              </div>
-              <div
-                onClick={[Function]}
-              >
-                Missing translation: search.taxonomy_nature.actionable_solution
-              </div>
-              <div
-                onClick={[Function]}
-              >
-                Missing translation: search.taxonomy_nature.knowledge
-              </div>
-              <div
-                onClick={[Function]}
-              >
-                Missing translation: search.taxonomy_nature.example
-              </div>
-              <div
-                onClick={[Function]}
-              >
-                Missing translation: search.taxonomy_nature.concept
-              </div>
-              <div
-                onClick={[Function]}
-              >
-                Missing translation: search.taxonomy_nature.argument
-              </div>
+              <Translate
+                value="harvesting.move"
+              />
+            </div>
+            <div
+              className="taxonomy-category"
+            >
+              <Translate
+                value="harvesting.qualifyNature"
+              />
             </div>
             <div
               className="pointer"
             >
               <div
+                className="taxonomy-label"
                 onClick={[Function]}
               >
-                Missing translation: search.taxonomy_action.classify
+                <Translate
+                  value="search.taxonomy_nature.issue"
+                />
               </div>
               <div
+                className="taxonomy-label"
                 onClick={[Function]}
               >
-                Missing translation: search.taxonomy_action.make_generic
+                <Translate
+                  value="search.taxonomy_nature.actionable_solution"
+                />
               </div>
               <div
+                className="taxonomy-label"
                 onClick={[Function]}
               >
-                Missing translation: search.taxonomy_action.argument
+                <Translate
+                  value="search.taxonomy_nature.knowledge"
+                />
               </div>
               <div
+                className="taxonomy-label"
                 onClick={[Function]}
               >
-                Missing translation: search.taxonomy_action.give_examples
+                <Translate
+                  value="search.taxonomy_nature.example"
+                />
               </div>
               <div
+                className="taxonomy-label"
                 onClick={[Function]}
               >
-                Missing translation: search.taxonomy_action.more_specific
+                <Translate
+                  value="search.taxonomy_nature.concept"
+                />
               </div>
               <div
+                className="taxonomy-label"
                 onClick={[Function]}
               >
-                Missing translation: search.taxonomy_action.mix_match
+                <Translate
+                  value="search.taxonomy_nature.argument"
+                />
+              </div>
+            </div>
+            <div
+              className="taxonomy-category"
+            >
+              <Translate
+                value="harvesting.qualifyAction"
+              />
+            </div>
+            <div
+              className="pointer"
+            >
+              <div
+                className="taxonomy-label"
+                onClick={[Function]}
+              >
+                <Translate
+                  value="search.taxonomy_action.classify"
+                />
               </div>
               <div
+                className="taxonomy-label"
                 onClick={[Function]}
               >
-                Missing translation: search.taxonomy_action.display_multi_column
+                <Translate
+                  value="search.taxonomy_action.make_generic"
+                />
               </div>
               <div
+                className="taxonomy-label"
                 onClick={[Function]}
               >
-                Missing translation: search.taxonomy_action.display_thread
+                <Translate
+                  value="search.taxonomy_action.argument"
+                />
               </div>
               <div
+                className="taxonomy-label"
                 onClick={[Function]}
               >
-                Missing translation: search.taxonomy_action.display_tokens
+                <Translate
+                  value="search.taxonomy_action.give_examples"
+                />
               </div>
               <div
+                className="taxonomy-label"
                 onClick={[Function]}
               >
-                Missing translation: search.taxonomy_action.display_open_questions
+                <Translate
+                  value="search.taxonomy_action.more_specific"
+                />
               </div>
               <div
+                className="taxonomy-label"
                 onClick={[Function]}
               >
-                Missing translation: search.taxonomy_action.display_bright_mirror
+                <Translate
+                  value="search.taxonomy_action.mix_match"
+                />
+              </div>
+              <div
+                className="taxonomy-label"
+                onClick={[Function]}
+              >
+                <Translate
+                  value="search.taxonomy_action.display_multi_column"
+                />
+              </div>
+              <div
+                className="taxonomy-label"
+                onClick={[Function]}
+              >
+                <Translate
+                  value="search.taxonomy_action.display_thread"
+                />
+              </div>
+              <div
+                className="taxonomy-label"
+                onClick={[Function]}
+              >
+                <Translate
+                  value="search.taxonomy_action.display_tokens"
+                />
+              </div>
+              <div
+                className="taxonomy-label"
+                onClick={[Function]}
+              >
+                <Translate
+                  value="search.taxonomy_action.display_open_questions"
+                />
+              </div>
+              <div
+                className="taxonomy-label"
+                onClick={[Function]}
+              >
+                <Translate
+                  value="search.taxonomy_action.display_bright_mirror"
+                />
               </div>
             </div>
           </Popover>

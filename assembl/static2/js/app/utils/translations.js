@@ -30,7 +30,10 @@ const Translations = {
       validateExtract: "Extrait validé",
       editExtract: "Modifier l'extrait attrapé",
       nuggetExtract: "Pépiter l'extrait attrapé",
-      qualifyExtract: "Qualifier l'extrait attrapé"
+      qualifyExtract: "Qualifier l'extrait attrapé",
+      move: "Déplacer",
+      qualifyNature: "Qualifier par nature",
+      qualifyAction: "Qualifier par action"
     },
     search: {
       reset: {
@@ -96,11 +99,11 @@ const Translations = {
         give_examples: "Donner des exemples",
         more_specific: "Rendre plus opérationnel",
         mix_match: "Croiser avec un autre extrait",
-        display_multi_column: "Activer multi-col",
-        display_thread: "Activer Thread",
-        display_tokens: "Activer Tokens",
-        display_open_questions: "Activer Q° ouvertes",
-        display_bright_mirror: "Activer Bright Mirror"
+        display_multi_column: "Activer le multi-colonne",
+        display_thread: "Activer le thread",
+        display_tokens: "Activer le vote",
+        display_open_questions: "Activer les questions ouvertes",
+        display_bright_mirror: "Activer le Bright Mirror"
       },
       Sort: "Trier",
       "By relevance": "Par pertinence",
@@ -655,7 +658,10 @@ const Translations = {
       validateExtract: "Extract validated",
       editExtract: "Edit the extract",
       nuggetExtract: "Mark as nugget",
-      qualifyExtract: "Qualify the extract"
+      qualifyExtract: "Qualify the extract",
+      move: "Move",
+      qualifyNature: "Qualify by nature",
+      qualifyAction: "Qualify by action"
     },
     search: {
       reset: {

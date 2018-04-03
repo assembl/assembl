@@ -9,6 +9,46 @@
   z-index: 99;
 }
 
+.taxonomy-menu {
+  font-size: $font-size-xs;
+  letter-spacing: 1.3px;
+  line-height: 30px;
+  border: 1px solid $grey1;
+  border-radius: 0;
+
+  .arrow {
+    display: none;
+  }
+
+  .popover-content {
+    padding: 0;
+  }
+
+  .taxonomy-label {
+    color: $grey2;
+    padding: 0 10px;
+    font-family: $font-family4;
+
+    &:hover {
+      background-color: $first-color-light;
+    }
+  }
+
+  .taxonomy-label-border {
+    padding: 5px 10px;
+    border-bottom: 1px solid $grey1;
+  }
+
+  .taxonomy-category {
+    font-family: $font-family3;
+    padding: 12px 10px 0;
+  }
+
+  .taxonomy-label.active {
+    background-color: $first-color-light;
+  }
+}
+
 .left-side-harvesting-button {
   &:hover {
     .assembl-icon-catch:before {
@@ -201,6 +241,10 @@
         font-size: 20px;
         vertical-align: middle;
         padding: 2px 0 0;
+      }
+
+      &:hover {
+        color: $harvesting-green;
       }
     }
 

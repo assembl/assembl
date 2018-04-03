@@ -1,10 +1,18 @@
+// @flow
 import React from 'react';
 import { Popover } from 'react-bootstrap';
-import { I18n } from 'react-redux-i18n';
+import { Translate } from 'react-redux-i18n';
+import classnames from 'classnames';
 import { extractNatures, extractActions } from '../../utils/extractQualifier';
 
-const TaxonomyOverflowMenu = handleClick => (
-  <Popover id="taxonomy-menu" className="overflow-menu">
+const TaxonomyOverflowMenu = (handleClick: Function, extractNature: ?string, extractAction: ?string) => (
+  <Popover id="taxonomy" className="taxonomy-menu overflow-menu">
+    <div className="pointer taxonomy-label taxonomy-label-border">
+      <Translate value="harvesting.move" />
+    </div>
+    <div className="taxonomy-category">
+      <Translate value="harvesting.qualifyNature" />
+    </div>
     <div className="pointer">
       {extractNatures.map(n => (
         <div
@@ -12,10 +20,14 @@ const TaxonomyOverflowMenu = handleClick => (
             handleClick('nature', n.qualifier);
           }}
           key={n.qualifier}
+          className={classnames('taxonomy-label', { active: extractNature === n.qualifier })}
         >
-          {I18n.t(n.label)}
+          <Translate value={n.label} />
         </div>
       ))}
+    </div>
+    <div className="taxonomy-category">
+      <Translate value="harvesting.qualifyAction" />
     </div>
     <div className="pointer">
       {extractActions.map(a => (
@@ -24,8 +36,9 @@ const TaxonomyOverflowMenu = handleClick => (
             handleClick('action', a.qualifier);
           }}
           key={a.qualifier}
+          className={classnames('taxonomy-label', { active: extractAction === a.qualifier })}
         >
-          {I18n.t(a.label)}
+          <Translate value={a.label} />
         </div>
       ))}
     </div>

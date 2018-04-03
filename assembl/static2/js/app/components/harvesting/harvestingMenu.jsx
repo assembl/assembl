@@ -12,7 +12,6 @@ type Props = {
   displayHarvestingBox: boolean,
   displayHarvestingAnchor: boolean,
   harvestingAnchorPosition: Object,
-  ideaId: string,
   setHarvestingBoxDisplay: Function,
   handleClickAnchor: Function,
   cancelHarvesting: Function,
@@ -37,7 +36,6 @@ class HarvestingMenu extends React.Component<void, Props, *> {
       handleClickAnchor,
       extracts,
       harvestingAnchorPosition,
-      ideaId,
       refetchPost,
       cancelHarvesting
     } = this.props;
@@ -52,7 +50,6 @@ class HarvestingMenu extends React.Component<void, Props, *> {
               extract={extract}
               displayHarvestingBox={displayHarvestingBox}
               harvestingBoxPosition={null}
-              ideaId={ideaId}
               refetchPost={refetchPost}
               cancelHarvesting={cancelHarvesting}
               setHarvestingBoxDisplay={setHarvestingBoxDisplay}

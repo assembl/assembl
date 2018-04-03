@@ -30,7 +30,6 @@ type Props = {
   postId: string,
   contentLocale: string,
   selection: ?Object,
-  ideaId: string,
   setHarvestingBoxDisplay: Function,
   cancelHarvesting: Function,
   addPostExtract: Function,
@@ -45,8 +44,8 @@ type State = {
   isNugget: boolean,
   isEditable: boolean,
   editableExtract: string,
-  nature: ?string,
-  action: ?string
+  extractNature: ?string,
+  extractAction: ?string
 };
 
 class DumbHarvestingBox extends React.Component<void, Props, State> {
@@ -67,8 +66,8 @@ class DumbHarvestingBox extends React.Component<void, Props, State> {
       isNugget: isNugget,
       isEditable: false,
       editableExtract: extract ? extract.body : '',
-      nature: null,
-      action: null
+      extractNature: extract && extract.extractNature ? extract.extractNature.split('.')[1] : null,
+      extractAction: extract && extract.extractAction ? extract.extractAction.split('.')[1] : null
     };
   }
 
@@ -83,19 +82,33 @@ class DumbHarvestingBox extends React.Component<void, Props, State> {
 
   qualifyExtract = (category: string, qualifier: string): void => {
     this.menu.hide();
-    console.log(category, qualifier); // eslint-disable-line
+    const { extract, updateExtract } = this.props;
+    const variables = {
+      extractId: extract ? extract.id : null,
+      extractNature: category === 'nature' ? qualifier : null,
+      extractAction: category === 'action' ? qualifier : null
+    };
+    displayAlert('success', I18n.t('loading.wait'));
+    updateExtract({ variables: variables })
+      .then(() => {
+        if (category === 'nature') {
+          this.setState({ extractNature: qualifier, extractAction: null });
+        } else if (category === 'action') {
+          this.setState({ extractNature: null, extractAction: qualifier });
+        }
+        displayAlert('success', I18n.t('harvesting.harvestingSuccess'));
+      })
+      .catch((error) => {
+        displayAlert('danger', `${error}`);
+      });
   };
 
   updateHarvestingNugget = (): void => {
-    const { extract, ideaId, updateExtract } = this.props;
-    const { isNugget, editableExtract, nature, action } = this.state;
+    const { extract, updateExtract } = this.props;
+    const { isNugget } = this.state;
     const variables = {
       extractId: extract ? extract.id : null,
-      ideaId: ideaId,
-      body: editableExtract,
-      important: !isNugget,
-      extractNature: nature,
-      extractAction: action
+      important: !isNugget
     };
     displayAlert('success', I18n.t('loading.wait'));
     updateExtract({ variables: variables })
@@ -111,15 +124,12 @@ class DumbHarvestingBox extends React.Component<void, Props, State> {
   };
 
   updateHarvestingBody = (): void => {
-    const { extract, ideaId, updateExtract } = this.props;
-    const { isNugget, editableExtract, nature, action } = this.state;
+    const { extract, updateExtract } = this.props;
+    const { editableExtract, isNugget } = this.state;
     const variables = {
       extractId: extract ? extract.id : null,
-      ideaId: ideaId,
       body: editableExtract,
-      important: isNugget,
-      extractNature: nature,
-      extractAction: action
+      important: isNugget
     };
     displayAlert('success', I18n.t('loading.wait'));
     updateExtract({ variables: variables })
@@ -207,7 +217,7 @@ class DumbHarvestingBox extends React.Component<void, Props, State> {
 
   render() {
     const { selection, cancelHarvesting, extract, contentLocale } = this.props;
-    const { disabled, checkIsActive, isNugget, isEditable, editableExtract } = this.state;
+    const { disabled, checkIsActive, isNugget, isEditable, editableExtract, extractNature, extractAction } = this.state;
     const isExtract = extract !== null;
     const selectionText = selection ? selection.toString() : '';
     const harvesterUserName =
@@ -272,7 +282,7 @@ class DumbHarvestingBox extends React.Component<void, Props, State> {
               trigger="click"
               rootClose
               placement="right"
-              overlay={TaxonomyOverflowMenu(this.qualifyExtract)}
+              overlay={TaxonomyOverflowMenu(this.qualifyExtract, extractNature, extractAction)}
             >
               <OverlayTrigger placement="top" overlay={qualifyExtractTooltip}>
                 <span className="assembl-icon-ellipsis-vert grey pointer" />
