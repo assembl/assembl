@@ -197,3 +197,9 @@ export const qualifyExtractTooltip = (
     <Translate value="harvesting.qualifyExtract" />
   </Tooltip>
 );
+
+export const harvestingTooltip = (
+  <Tooltip id="harvestingTooltip">
+    <Translate value="harvesting.harvestSelection" />
+  </Tooltip>
+);

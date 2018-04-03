@@ -14,28 +14,9 @@
       font-weight: bold;
     }
 
-    .left-side-harvesting-button__label {
-      visibility: visible;
-    }
-
     .left-side-harvesting-button__button__inside {
       background-color: #ffed5b;
     }
-  }
-
-  .left-side-harvesting-button__label {
-    position: absolute;
-    left: -100px;
-    top: 0;
-    width: 100px;
-    margin-top: 11px;
-    padding-right: 9px;
-    text-align: right;
-    visibility: hidden;
-    font-size: 12px;
-    opacity: 0.55;
-    font-weight: bold;
-    letter-spacing: 0.1em;
   }
 
   .left-side-harvesting-button__button {
