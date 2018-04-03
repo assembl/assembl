@@ -150,6 +150,9 @@ class PostView extends React.PureComponent<void, Props, State> {
     }
 
     const { displayHarvestingMenu, harvestingMenuPosition } = this.state;
+
+    const { refetch } = this.props.data;
+
     return (
       <div
         ref={(p) => {
@@ -173,6 +176,7 @@ class PostView extends React.PureComponent<void, Props, State> {
             extracts={extracts}
             harvestingMenuPosition={harvestingMenuPosition}
             ideaId={ideaId}
+            refetchPost={refetch}
           />
         )}
         <div className="box" style={boxStyle}>

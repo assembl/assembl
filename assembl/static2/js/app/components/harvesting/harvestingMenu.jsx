@@ -12,7 +12,8 @@ type Props = {
   isHarvesting: boolean,
   harvestingMenuPosition: number,
   ideaId: string,
-  cancelHarvesting: Function
+  cancelHarvesting: Function,
+  refetchPost: Function
 };
 
 type State = {
@@ -44,7 +45,7 @@ class HarvestingMenu extends React.Component<void, Props, State> {
   };
 
   render() {
-    const { postId, cancelHarvesting, isHarvesting, extracts, harvestingMenuPosition, ideaId } = this.props;
+    const { postId, cancelHarvesting, isHarvesting, extracts, harvestingMenuPosition, ideaId, refetchPost } = this.props;
     const { showHarvestingBox } = this.state;
     const selection = window.getSelection();
     return (
@@ -60,6 +61,7 @@ class HarvestingMenu extends React.Component<void, Props, State> {
               previousExtractId={extracts[index - 1] ? extracts[index - 1].id : null}
               harvestingBoxPosition={null}
               ideaId={ideaId}
+              refetchPost={refetchPost}
             />
           ))
           : null}
@@ -74,17 +76,16 @@ class HarvestingMenu extends React.Component<void, Props, State> {
               displayHarvestingBox={this.displayHarvestingBox}
               previousExtractId={null}
               harvestingBoxPosition={harvestingMenuPosition}
+              refetchPost={refetchPost}
             />
           )}
-        {isHarvesting &&
-          !showHarvestingBox &&
-          extracts.length === 0 && (
-            <HarvestingAnchor
-              displayHarvestingBox={this.displayHarvestingBox}
-              handleMouseDown={this.handleMouseDown}
-              anchorPosition={harvestingMenuPosition}
-            />
-          )}
+        {isHarvesting && (
+          <HarvestingAnchor
+            displayHarvestingBox={this.displayHarvestingBox}
+            handleMouseDown={this.handleMouseDown}
+            anchorPosition={harvestingMenuPosition}
+          />
+        )}
       </div>
     );
   }

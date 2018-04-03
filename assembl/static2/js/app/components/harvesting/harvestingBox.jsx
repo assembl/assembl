@@ -34,9 +34,9 @@ type Props = {
   ideaId: string,
   cancelHarvesting: Function,
   addPostExtract: Function,
-  displayHarvestingBox: Function,
   updateExtract: Function,
-  deleteExtract: Function
+  deleteExtract: Function,
+  refetchPost: Function
 };
 
 type State = {
@@ -161,13 +161,14 @@ class DumbHarvestingBox extends React.Component<void, Props, State> {
   };
 
   deleteHarvesting = (): void => {
-    const { extract, deleteExtract } = this.props;
+    const { extract, deleteExtract, refetchPost } = this.props;
     const variables = {
       extractId: extract ? extract.id : null
     };
     closeModal();
     deleteExtract({ variables: variables })
       .then(() => {
+        refetchPost();
         displayAlert('success', I18n.t('harvesting.harvestingDeleted'));
       })
       .catch((error) => {
@@ -176,7 +177,7 @@ class DumbHarvestingBox extends React.Component<void, Props, State> {
   };
 
   validateHarvesting = (): void => {
-    const { postId, selection, contentLocale, addPostExtract, displayHarvestingBox } = this.props;
+    const { postId, selection, contentLocale, addPostExtract } = this.props;
     if (!selection) {
       return;
     }
@@ -207,7 +208,7 @@ class DumbHarvestingBox extends React.Component<void, Props, State> {
           disabled: false,
           checkIsActive: true
         });
-        displayHarvestingBox();
+        this.setHarvestingBoxPosition();
         window.getSelection().removeAllRanges();
       })
       .catch((error) => {

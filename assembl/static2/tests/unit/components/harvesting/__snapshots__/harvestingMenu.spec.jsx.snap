@@ -32,6 +32,7 @@ exports[`harvestingMenu component should match harvestingMenu snapshot 1`] = `
     ideaId={undefined}
     postId="1234"
     previousExtractId={null}
+    refetchPost={undefined}
   />
   <Connect(Apollo(Apollo(Apollo(Component))))
     cancelHarvesting={undefined}
@@ -63,6 +64,12 @@ exports[`harvestingMenu component should match harvestingMenu snapshot 1`] = `
     ideaId={undefined}
     postId="1234"
     previousExtractId="987643"
+    refetchPost={undefined}
+  />
+  <HarvestingAnchor
+    anchorPosition={100}
+    displayHarvestingBox={[Function]}
+    handleMouseDown={[Function]}
   />
 </div>
 `;
