@@ -411,7 +411,7 @@ const Translations = {
       anErrorOccured:
         "Il y a eu une erreur lors de la sauvegarde, veuillez vérifier que vous avez bien renseigné tous les champs requis.",
       deleteThematic: "Supprimer la thématique",
-      confirmDeleteThematicTitle: "Cpnfirmer la suppression",
+      confirmDeleteThematicTitle: "Confirmer la suppression",
       confirmDeleteThematic: "Êtes-vous sûr de vouloir supprimer cette thématique ?",
       deleteQuestion: "Supprimer la question",
       changeLanguage: "Renseigner une autre langue",
