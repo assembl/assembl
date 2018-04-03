@@ -411,6 +411,8 @@ const Translations = {
       anErrorOccured:
         "Il y a eu une erreur lors de la sauvegarde, veuillez vérifier que vous avez bien renseigné tous les champs requis.",
       deleteThematic: "Supprimer la thématique",
+      confirmDeleteThematicTitle: "Cpnfirmer la suppression",
+      confirmDeleteThematic: "Êtes-vous sûr de vouloir supprimer cette thématique ?",
       deleteQuestion: "Supprimer la question",
       changeLanguage: "Renseigner une autre langue",
       question_label: "Question",
@@ -1026,6 +1028,8 @@ const Translations = {
       addQuestion: "Add a question",
       anErrorOccured: "An error occured during save. Please check that you filled all the required fields.",
       deleteThematic: "Delete the theme",
+      confirmDeleteThematicTitle: "Confirm deletion",
+      confirmDeleteThematic: "Are you sure you want to delete this theme?",
       deleteQuestion: "Delete the question",
       changeLanguage: "Set another language",
       question_label: "Question",

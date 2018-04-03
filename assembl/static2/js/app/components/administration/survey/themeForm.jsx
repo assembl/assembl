@@ -36,8 +36,8 @@ export const DumbThemeCreationForm = ({
   const num = (Number(index) + 1).toString();
 
   const confirmModal = () => {
-    const modalTitle = 'Confirm deletion';
-    const body = 'Are you sure you want to delete this thematic ?';
+    const modalTitle = <Translate value="administration.confirmDeleteThematicTitle" />;
+    const body = <Translate value="administration.confirmDeleteThematic" />;
     const footer = [
       <Button key="cancel" onClick={closeModal} className="button-cancel button-dark">
         <Translate value="debate.confirmDeletionButtonCancel" />
