@@ -104,6 +104,7 @@ class PostInterface(SQLAlchemyInterface):
         return self.db.query(models.Extract
             ).join(models.Content, models.Extract.content == self
             ).options(joinedload(models.Extract.text_fragment_identifiers)
+            ).order_by(models.Extract.creation_date
             ).all()
 
     def resolve_subject(self, args, context, info):
