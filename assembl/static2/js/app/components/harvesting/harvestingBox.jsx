@@ -23,7 +23,8 @@ type Props = {
   harvestingBoxPosition: ?number,
   cancelHarvesting: Function,
   addPostExtract: Function,
-  displayHarvestingBox: Function
+  displayHarvestingBox: Function,
+  harvestingDate?: string
 };
 
 type State = {
@@ -32,12 +33,16 @@ type State = {
   isNugget: boolean
 };
 
-class DumbHarvestingBox extends React.Component<void, Props, State> {
+class DumbHarvestingBox extends React.Component<Object, Props, State> {
   props: Props;
 
   state: State;
 
   harvestingBox: HTMLElement;
+
+  static defaultProps = {
+    harvestingDate: null
+  };
 
   constructor(props: Props) {
     super(props);
@@ -114,7 +119,7 @@ class DumbHarvestingBox extends React.Component<void, Props, State> {
   };
 
   render() {
-    const { selection, cancelHarvesting, extract, contentLocale, postId } = this.props;
+    const { selection, cancelHarvesting, extract, contentLocale, postId, harvestingDate } = this.props;
     const { disabled, checkIsActive, isNugget } = this.state;
     const isExtract = extract !== null;
     const selectionText = selection ? selection.toString() : '';
@@ -181,9 +186,10 @@ class DumbHarvestingBox extends React.Component<void, Props, State> {
                 extract &&
                 extract.creationDate && (
                   <div className="harvesting-date" title={extract.creationDate}>
-                    {moment(extract.creationDate)
-                      .locale(contentLocale)
-                      .fromNow()}
+                    {harvestingDate ||
+                      moment(extract.creationDate)
+                        .locale(contentLocale)
+                        .fromNow()}
                   </div>
                 )}
               {!isExtract && (
