@@ -83,8 +83,10 @@ class DumbHarvestingBox extends React.Component<void, Props, State> {
   qualifyExtract = (category: string, qualifier: string): void => {
     this.menu.hide();
     const { extract, updateExtract } = this.props;
+    const { isNugget } = this.state;
     const variables = {
       extractId: extract ? extract.id : null,
+      important: isNugget,
       extractNature: category === 'nature' ? qualifier : null,
       extractAction: category === 'action' ? qualifier : null
     };
@@ -105,10 +107,12 @@ class DumbHarvestingBox extends React.Component<void, Props, State> {
 
   updateHarvestingNugget = (): void => {
     const { extract, updateExtract } = this.props;
-    const { isNugget } = this.state;
+    const { isNugget, extractNature, extractAction } = this.state;
     const variables = {
       extractId: extract ? extract.id : null,
-      important: !isNugget
+      important: !isNugget,
+      extractNature: extractNature,
+      extractAction: extractAction
     };
     displayAlert('success', I18n.t('loading.wait'));
     updateExtract({ variables: variables })
@@ -125,11 +129,13 @@ class DumbHarvestingBox extends React.Component<void, Props, State> {
 
   updateHarvestingBody = (): void => {
     const { extract, updateExtract } = this.props;
-    const { editableExtract, isNugget } = this.state;
+    const { editableExtract, isNugget, extractNature, extractAction } = this.state;
     const variables = {
       extractId: extract ? extract.id : null,
       body: editableExtract,
-      important: isNugget
+      important: isNugget,
+      extractNature: extractNature,
+      extractAction: extractAction
     };
     displayAlert('success', I18n.t('loading.wait'));
     updateExtract({ variables: variables })
