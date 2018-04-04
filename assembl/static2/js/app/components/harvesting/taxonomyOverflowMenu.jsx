@@ -3,7 +3,7 @@ import React from 'react';
 import { Popover } from 'react-bootstrap';
 import { Translate } from 'react-redux-i18n';
 import classnames from 'classnames';
-import { extractNatures, extractActions } from '../../utils/extractQualifier';
+import { extractNatures, extractActions, NatureIcons, ActionIcons } from '../../utils/extractQualifier';
 
 const TaxonomyOverflowMenu = (handleClick: Function, extractNature: ?string, extractAction: ?string) => (
   <Popover id="taxonomy" className="taxonomy-menu overflow-menu">
@@ -22,7 +22,10 @@ const TaxonomyOverflowMenu = (handleClick: Function, extractNature: ?string, ext
           key={n.qualifier}
           className={classnames('taxonomy-label', { active: extractNature === n.qualifier })}
         >
-          <Translate value={n.label} />
+          <NatureIcons qualifier={n.qualifier} />
+          <div className="nature-label">
+            <Translate value={n.label} />
+          </div>
         </div>
       ))}
     </div>
@@ -38,7 +41,10 @@ const TaxonomyOverflowMenu = (handleClick: Function, extractNature: ?string, ext
           key={a.qualifier}
           className={classnames('taxonomy-label', { active: extractAction === a.qualifier })}
         >
-          <Translate value={a.label} />
+          <ActionIcons qualifier={a.qualifier} />
+          <div className="action-label">
+            <Translate value={a.label} />
+          </div>
         </div>
       ))}
     </div>
