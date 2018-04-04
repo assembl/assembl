@@ -115,3 +115,25 @@ mutation addPostExtract(
       }
     }
   }
+
+
+def test_mutation_delete_extract(graphql_request, extract_with_range_in_reply_post_1):
+  extract_graphql_db_id = to_global_id('Extract',extract_with_range_in_reply_post_1.id)
+
+  variable_values = {
+    "extractId": extract_graphql_db_id
+  }
+
+  res = schema.execute(u"""
+mutation deleteExtract($extractId: ID!) {
+  deleteExtract(extractId: $extractId) {
+    success
+  }
+}
+""", context_value=graphql_request, variable_values=variable_values)
+
+  assert json.loads(json.dumps(res.data)) == {
+    u'deleteExtract': {
+      u'success': True
+    }
+  }
