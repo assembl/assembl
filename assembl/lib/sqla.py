@@ -38,6 +38,7 @@ from zope.sqlalchemy.datamanager import mark_changed as z_mark_changed
 from zope.component import getGlobalSiteManager
 from pyramid.httpexceptions import HTTPUnauthorized, HTTPBadRequest
 import transaction
+from graphene.relay import Node
 
 from .parsedatetime import parse_datetime
 from ..view_def import get_view_def
@@ -513,7 +514,9 @@ class BaseOps(object):
 
     @classmethod
     def get_instance(cls, identifier, session=None):
-        """Get an instance of this class using a numeric ID or URI."""
+        """Get an instance of this class using a numeric ID or URI.
+        Will try a few schemes and may return None.
+        Code defensively downstream."""
         try:
             # temporary hack
             num = int(identifier)
@@ -526,11 +529,17 @@ class BaseOps(object):
 
     @classmethod
     def get_database_id(cls, uri):
-        """Parse a URI to extract the database ID"""
+        """Parse a URI to extract the database ID
+        Will try a few schemes and may return None.
+        Code defensively downstream."""
         if isinstance(uri, types.StringTypes):
-            if not uri.startswith('local:') or '/' not in uri:
-                return
-            uriclsname, num = uri[6:].split('/', 1)
+            if uri.startswith('local:') and '/' in uri:
+                uriclsname, num = uri[6:].split('/', 1)
+            else:
+                try:
+                    uriclsname, num = Node.from_global_id(uri)
+                except Exception as e:
+                    return
             uricls = get_named_class(uriclsname)
             if not uricls:
                 return

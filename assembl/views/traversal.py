@@ -204,14 +204,7 @@ class ClassContext(TraversalContext):
 
     def __getitem__(self, key):
         from assembl.models import NamedClassMixin, Preferences
-        num_key = None
-        instance = None
-        try:
-            num_key = int(key)
-        except ValueError:
-            pass
-        if num_key is not None:
-            instance = self._class.get_instance(num_key)
+        instance = self._class.get_instance(key)
         if instance is None and issubclass(self._class, NamedClassMixin):
             instance = self._class.getByName(key)
         if not instance:
