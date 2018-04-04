@@ -1,0 +1,5 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ExportSection component should render an ExportSection component with languages options 1`] = `null`;
+
+exports[`ExportSection component should render an ExportSection component without languages options 1`] = `null`;

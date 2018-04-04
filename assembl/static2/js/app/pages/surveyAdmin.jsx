@@ -5,7 +5,7 @@ import { I18n } from 'react-redux-i18n';
 
 import ThemeSection from '../components/administration/survey/themeSection';
 import QuestionSection from '../components/administration/survey/questionSection';
-import ExportSection from '../components/administration/survey/exportSection';
+import ExportSection from '../components/administration/exportSection';
 import Navbar from '../components/administration/navbar';
 import SaveButton, { getMutationsPromises, runSerial } from '../components/administration/saveButton';
 import createThematicMutation from '../graphql/mutations/createThematic.graphql';
@@ -73,7 +73,7 @@ class SurveyAdmin extends React.Component {
         <SaveButton disabled={saveDisabled} saveAction={this.saveAction} />
         {section === '1' && <ThemeSection {...this.props} />}
         {section === '2' && <QuestionSection {...this.props} />}
-        {section === '3' && <ExportSection {...this.props} />}
+        {section === '3' && <ExportSection exportType="survey" />}
         {!isNaN(currentStep) && (
           <Navbar currentStep={currentStep} totalSteps={3} phaseIdentifier="survey" beforeChangeSection={this.saveAction} />
         )}

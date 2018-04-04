@@ -12,6 +12,7 @@ import PageForm from '../components/administration/voteSession/pageForm';
 import { type VoteChoice } from '../components/administration/voteSession/gaugeForm';
 import ModulesSection from '../components/administration/voteSession/modulesSection';
 import VoteProposalsSection from '../components/administration/voteSession/voteProposalsSection';
+import ExportSection from '../components/administration/exportSection';
 import Navbar from '../components/administration/navbar';
 import SaveButton, { getMutationsPromises, runSerial } from '../components/administration/saveButton';
 import updateVoteSessionMutation from '../graphql/mutations/updateVoteSession.graphql';
@@ -479,7 +480,8 @@ class VoteSessionAdmin extends React.Component<void, VoteSessionAdminProps, Vote
         {section === '1' && <PageForm editLocale={editLocale} />}
         {section === '2' && <ModulesSection />}
         {section === '3' && <VoteProposalsSection refetchVoteSession={refetchVoteSession} />}
-        {!isNaN(currentStep) && <Navbar currentStep={currentStep} totalSteps={3} phaseIdentifier="voteSession" />}
+        {section === '4' && <ExportSection />}
+        {!isNaN(currentStep) && <Navbar currentStep={currentStep} totalSteps={4} phaseIdentifier="voteSession" />}
       </div>
     );
   }

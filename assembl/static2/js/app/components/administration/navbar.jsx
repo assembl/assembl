@@ -40,14 +40,15 @@ class Navbar extends React.Component {
   }
 
   render() {
+    const { currentStep, totalSteps } = this.state;
     const { beforeChangeSection } = this.props;
-    const barWidth = calculatePercentage(this.state.currentStep, this.state.totalSteps);
+    const barWidth = calculatePercentage(currentStep, totalSteps);
     return (
       <div className="admin-navbar">
         <Col xs={6} md={6}>
           <div className="step-numbers">
             <div className="txt">
-              <Translate value="administration.step_x_total" num={this.state.currentStep} total={this.state.totalSteps} />
+              <Translate value="administration.step_x_total" num={currentStep} total={totalSteps} />
             </div>
             <div className="bar" style={{ width: `${barWidth}%` }}>
               &nbsp;
@@ -57,12 +58,12 @@ class Navbar extends React.Component {
         </Col>
         <Col xs={6} md={6}>
           <div className="arrow-container">
-            {this.state.currentStep < this.state.totalSteps && (
+            {currentStep < totalSteps && (
               <OverlayTrigger placement="top" overlay={nextStepTooltip}>
                 <div
                   onClick={() => {
                     beforeChangeSection();
-                    this.goToSection(this.state.currentStep + 1);
+                    this.goToSection(currentStep + 1);
                   }}
                   className="arrow right"
                 >
@@ -70,12 +71,12 @@ class Navbar extends React.Component {
                 </div>
               </OverlayTrigger>
             )}
-            {this.state.currentStep > 1 && (
+            {currentStep > 1 && (
               <OverlayTrigger placement="top" overlay={previousStepTooltip}>
                 <div
                   onClick={() => {
                     beforeChangeSection();
-                    this.goToSection(this.state.currentStep - 1);
+                    this.goToSection(currentStep - 1);
                   }}
                   className="arrow right"
                 >
