@@ -170,7 +170,7 @@ def extract_with_range_in_reply_post_1(
         xpath_end=xpathEnd,
         offset_end=offsetEnd
     )
-    reply_post_1.db.add(new_range)
+    test_session.add(new_range)
     test_session.flush()
 
     def fin():
