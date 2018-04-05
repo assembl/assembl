@@ -228,7 +228,7 @@ export default compose(
 
       return {
         hasErrors: false,
-        imgUrl: img.externalUrl,
+        imgUrl: img ? img.externalUrl : '',
         loading: false,
         media: media,
         numContributors: numContributors,
