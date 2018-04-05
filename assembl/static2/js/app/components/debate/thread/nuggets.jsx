@@ -7,7 +7,7 @@ class Nuggets extends React.Component {
   static topToStyle(top) {
     switch (top) {
     case undefined:
-      return { display: 'none' };
+      return {};
     case null:
       return {};
     default:
@@ -49,29 +49,34 @@ class Nuggets extends React.Component {
     const { extracts, isHarvesting } = this.props;
     const { top } = this.state;
     const importantExtracts = Array.isArray(extracts) && extracts.filter(({ important }) => important);
-    return importantExtracts && importantExtracts.length > 0 ? (
-      <div
-        ref={(node) => {
-          this.node = node;
-        }}
-        className={classnames('extracts', 'extracts--is-not-harvesting', { hidden: isHarvesting })}
-        style={Nuggets.topToStyle(top)}
-      >
-        <div className="badges">
-          <div className="nugget-img">
-            <span className="assembl-icon-pepite color2" />
-          </div>
-          <div>
-            {importantExtracts.map(extract => (
-              <div key={extract.id} className="nugget">
-                <div className="nugget-txt">{extract.body}</div>
-                <div className="box-hyphen" />
+    return (
+      <div>
+        {importantExtracts &&
+          importantExtracts.length > 0 && (
+            <div
+              ref={(node) => {
+                this.node = node;
+              }}
+              className={classnames('extracts', 'extracts--is-not-harvesting', { hidden: isHarvesting })}
+              style={Nuggets.topToStyle(top)}
+            >
+              <div className="badges">
+                <div className="nugget-img">
+                  <span className="assembl-icon-pepite color2" />
+                </div>
+                <div>
+                  {importantExtracts.map(extract => (
+                    <div key={extract.id} className="nugget">
+                      <div className="nugget-txt">{extract.body}</div>
+                      <div className="box-hyphen" />
+                    </div>
+                  ))}
+                </div>
               </div>
-            ))}
-          </div>
-        </div>
+            </div>
+          )}
       </div>
-    ) : null;
+    );
   }
 }
 
