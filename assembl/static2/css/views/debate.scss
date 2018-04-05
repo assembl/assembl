@@ -293,7 +293,13 @@
 
       .dark-title-1 {
         padding: 15px 0 0;
+        margin: 0 0 60px 50px;
         width: calc(100% - 75px);
+        max-width: 1400px;
+      }
+
+      .dark-title-5 {
+        margin: 20px 0 10px 60px;
       }
     }
   }
