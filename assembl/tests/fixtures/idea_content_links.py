@@ -161,7 +161,7 @@ def extract_with_range_in_reply_post_1(
         important=True,
         content=reply_post_1
     )
-    reply_post_1.db.add(new_extract)
+    test_session.add(new_extract)
 
     new_range = TextFragmentIdentifier(
         extract=new_extract,

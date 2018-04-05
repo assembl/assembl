@@ -17,13 +17,7 @@ import AvatarImage from '../common/avatarImage';
 import TaxonomyOverflowMenu from './taxonomyOverflowMenu';
 import FormControlWithLabel from '../common/formControlWithLabel';
 import { displayAlert, displayModal, closeModal } from '../../utils/utilityManager';
-import {
-  validateExtractTooltip,
-  editExtractTooltip,
-  deleteExtractTooltip,
-  nuggetExtractTooltip,
-  qualifyExtractTooltip
-} from '../common/tooltips';
+import { editExtractTooltip, deleteExtractTooltip, nuggetExtractTooltip, qualifyExtractTooltip } from '../common/tooltips';
 import { NatureIcons, ActionIcons } from '../../utils/extractQualifier';
 
 type Props = {
@@ -41,7 +35,7 @@ type Props = {
 
 type State = {
   disabled: boolean,
-  checkIsActive: boolean,
+  extractIsValidated: boolean,
   isNugget: boolean,
   isEditable: boolean,
   editableExtract: string,
@@ -67,7 +61,7 @@ class DumbHarvestingBox extends React.Component<Object, Props, State> {
     const isNugget = extract ? extract.important : false;
     this.state = {
       disabled: !isExtract,
-      checkIsActive: isExtract,
+      extractIsValidated: isExtract,
       isNugget: isNugget,
       isEditable: false,
       editableExtract: extract ? extract.body : '',
@@ -162,11 +156,11 @@ class DumbHarvestingBox extends React.Component<Object, Props, State> {
     const modalTitle = <Translate value="harvesting.deleteExtract" />;
     const body = <Translate value="harvesting.confirmDeleteExtract" />;
     const footer = [
-      <Button key="delete" onClick={this.deleteHarvesting} className="button-submit button-dark">
-        <Translate value="debate.confirmDeletionButtonDelete" />
-      </Button>,
       <Button key="cancel" onClick={closeModal} className="button-cancel button-dark">
         <Translate value="debate.confirmDeletionButtonCancel" />
+      </Button>,
+      <Button key="delete" onClick={this.deleteHarvesting} className="button-submit button-dark">
+        <Translate value="validate" />
       </Button>
     ];
     const includeFooter = true;
@@ -219,7 +213,7 @@ class DumbHarvestingBox extends React.Component<Object, Props, State> {
       .then(() => {
         this.setState({
           disabled: false,
-          checkIsActive: true
+          extractIsValidated: true
         });
         setHarvestingBoxDisplay();
         window.getSelection().removeAllRanges();
@@ -232,56 +226,51 @@ class DumbHarvestingBox extends React.Component<Object, Props, State> {
 
   render() {
     const { selection, cancelHarvesting, extract, contentLocale } = this.props;
-    const { disabled, checkIsActive, isNugget, isEditable, editableExtract, extractNature, extractAction } = this.state;
+    const { disabled, extractIsValidated, isNugget, isEditable, editableExtract, extractNature, extractAction } = this.state;
     const isExtract = extract !== null;
     const selectionText = selection ? selection.toString() : '';
     const harvesterUserName =
       extract && extract.creator && extract.creator.displayName ? extract.creator.displayName : getConnectedUserName();
     const harvesterUserId = extract && extract.creator && extract.creator.userId ? extract.creator.userId : getConnectedUserId();
-
     return (
       <div>
         {(extractNature || extractAction) && (
           <div className="box-icon">
             {extractNature ? <NatureIcons qualifier={extractNature} /> : null}
-            {extractAction ? <ActionIcons qualifier={extractAction} backgroundColor="#fff" color="#666" /> : null}
+            {extractAction ? <ActionIcons qualifier={extractAction} backgroundColor="#fff" color="#000" /> : null}
           </div>
         )}
-        <div className={classnames('theme-box', 'harvesting-box', { 'active-box': checkIsActive })}>
+        <div className={classnames('theme-box', 'harvesting-box', { 'active-box': extractIsValidated })}>
           <div className="harvesting-box-header">
             <div className="harvesting-status">
               {disabled ? (
                 <div className="harvesting-in-progress">
-                  <span className="confirm-harvest-button assembl-icon-catch" />
                   <div className="harvesting-status-label">
-                    <div>
-                      <Translate value="harvesting.harvestSelection" />
-                    </div>
-                    <div>
-                      <Translate value="harvesting.inProgress" />
-                    </div>
+                    <Translate value="harvesting.inProgress" />
                   </div>
                 </div>
               ) : (
-                <div className="validated-harvesting">
-                  <span className="confirm-harvest-button assembl-icon-catch" />
-                  <div className="harvesting-status-label">
-                    <div>
-                      <Translate value="harvesting.harvestSelection" />
+                <div>
+                  {extractNature || extractAction ? (
+                    <div className="validated-harvesting">
+                      {extractNature && (
+                        <div className="harvesting-taxonomy-label">{I18n.t(`search.taxonomy_nature.${extractNature}`)}</div>
+                      )}
+                      {extractAction && (
+                        <div className="harvesting-taxonomy-label">{I18n.t(`search.taxonomy_action.${extractAction}`)}</div>
+                      )}
                     </div>
-                    <div>
-                      <Translate value="harvesting.validated" />
+                  ) : (
+                    <div className="validated-harvesting">
+                      <div className="harvesting-status-label">
+                        <Translate value="harvesting.validated" />
+                      </div>
                     </div>
-                  </div>
+                  )}
                 </div>
               )}
             </div>
             <div className="button-bar">
-              <OverlayTrigger placement="top" overlay={validateExtractTooltip}>
-                <Button disabled={disabled} className={classnames({ active: checkIsActive })}>
-                  <span className="assembl-icon-check grey" />
-                </Button>
-              </OverlayTrigger>
               <OverlayTrigger placement="top" overlay={editExtractTooltip}>
                 <Button disabled={disabled} onClick={this.setEditMode} className={classnames({ active: isEditable })}>
                   <span className="assembl-icon-edit grey" />
@@ -307,7 +296,9 @@ class DumbHarvestingBox extends React.Component<Object, Props, State> {
                 overlay={TaxonomyOverflowMenu(this.qualifyExtract, extractNature, extractAction)}
               >
                 <OverlayTrigger placement="top" overlay={qualifyExtractTooltip}>
-                  <span className="assembl-icon-ellipsis-vert grey pointer" />
+                  <Button disabled={disabled} className="taxonomy-menu-btn">
+                    <span className="assembl-icon-ellipsis-vert grey" />
+                  </Button>
                 </OverlayTrigger>
               </OverlayTrigger>
             </div>
@@ -348,14 +339,14 @@ class DumbHarvestingBox extends React.Component<Object, Props, State> {
           </div>
           {(disabled || isEditable) && (
             <div className="harvesting-box-footer">
+              <Button className="button-cancel button-dark" onClick={isEditable ? this.setEditMode : cancelHarvesting}>
+                <Translate value="debate.confirmDeletionButtonCancel" />
+              </Button>
               <Button
                 className="button-submit button-dark"
                 onClick={isEditable ? this.updateHarvestingBody : this.validateHarvesting}
               >
                 <Translate value="common.attachFileForm.submit" />
-              </Button>
-              <Button className="button-cancel button-dark" onClick={isEditable ? this.setEditMode : cancelHarvesting}>
-                <Translate value="debate.confirmDeletionButtonCancel" />
               </Button>
             </div>
           )}

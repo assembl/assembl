@@ -130,8 +130,8 @@ exports[`taxonomyOverflowMenu component should match harvestingMenu snapshot 1`]
       onClick={[Function]}
     >
       <Unknown
-        backgroundColor="#f3f3f3"
-        color="#666"
+        backgroundColor="#fff"
+        color="#000"
         qualifier="classify"
       />
       <div
@@ -147,8 +147,8 @@ exports[`taxonomyOverflowMenu component should match harvestingMenu snapshot 1`]
       onClick={[Function]}
     >
       <Unknown
-        backgroundColor="#f3f3f3"
-        color="#666"
+        backgroundColor="#fff"
+        color="#000"
         qualifier="make_generic"
       />
       <div
@@ -164,8 +164,8 @@ exports[`taxonomyOverflowMenu component should match harvestingMenu snapshot 1`]
       onClick={[Function]}
     >
       <Unknown
-        backgroundColor="#f3f3f3"
-        color="#666"
+        backgroundColor="#fff"
+        color="#000"
         qualifier="argument"
       />
       <div
@@ -181,8 +181,8 @@ exports[`taxonomyOverflowMenu component should match harvestingMenu snapshot 1`]
       onClick={[Function]}
     >
       <Unknown
-        backgroundColor="#f3f3f3"
-        color="#666"
+        backgroundColor="#fff"
+        color="#000"
         qualifier="give_examples"
       />
       <div
@@ -198,8 +198,8 @@ exports[`taxonomyOverflowMenu component should match harvestingMenu snapshot 1`]
       onClick={[Function]}
     >
       <Unknown
-        backgroundColor="#f3f3f3"
-        color="#666"
+        backgroundColor="#fff"
+        color="#000"
         qualifier="more_specific"
       />
       <div
@@ -215,8 +215,8 @@ exports[`taxonomyOverflowMenu component should match harvestingMenu snapshot 1`]
       onClick={[Function]}
     >
       <Unknown
-        backgroundColor="#f3f3f3"
-        color="#666"
+        backgroundColor="#fff"
+        color="#000"
         qualifier="mix_match"
       />
       <div
@@ -232,8 +232,8 @@ exports[`taxonomyOverflowMenu component should match harvestingMenu snapshot 1`]
       onClick={[Function]}
     >
       <Unknown
-        backgroundColor="#f3f3f3"
-        color="#666"
+        backgroundColor="#fff"
+        color="#000"
         qualifier="display_multi_column"
       />
       <div
@@ -249,8 +249,8 @@ exports[`taxonomyOverflowMenu component should match harvestingMenu snapshot 1`]
       onClick={[Function]}
     >
       <Unknown
-        backgroundColor="#f3f3f3"
-        color="#666"
+        backgroundColor="#fff"
+        color="#000"
         qualifier="display_thread"
       />
       <div
@@ -266,8 +266,8 @@ exports[`taxonomyOverflowMenu component should match harvestingMenu snapshot 1`]
       onClick={[Function]}
     >
       <Unknown
-        backgroundColor="#f3f3f3"
-        color="#666"
+        backgroundColor="#fff"
+        color="#000"
         qualifier="display_tokens"
       />
       <div
@@ -283,8 +283,8 @@ exports[`taxonomyOverflowMenu component should match harvestingMenu snapshot 1`]
       onClick={[Function]}
     >
       <Unknown
-        backgroundColor="#f3f3f3"
-        color="#666"
+        backgroundColor="#fff"
+        color="#000"
         qualifier="display_open_questions"
       />
       <div
@@ -300,8 +300,8 @@ exports[`taxonomyOverflowMenu component should match harvestingMenu snapshot 1`]
       onClick={[Function]}
     >
       <Unknown
-        backgroundColor="#f3f3f3"
-        color="#666"
+        backgroundColor="#fff"
+        color="#000"
         qualifier="display_bright_mirror"
       />
       <div

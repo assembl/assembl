@@ -10,7 +10,7 @@ exports[`harvestingAnchor component should match harvestingAnchor snapshot 1`] =
       placement="right"
     >
       <Translate
-        value="harvesting.harvestSelection"
+        value="harvesting.harvesting"
       />
     </Tooltip>
   }

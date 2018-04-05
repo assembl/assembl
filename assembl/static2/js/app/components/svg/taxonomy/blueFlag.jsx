@@ -1,16 +1,14 @@
 import React from 'react';
 
-class BlueFlag extends React.Component {
-  render() {
-    return (
-      <svg width="20px" height="20px" viewBox="0 0 20 20">
-        <defs />
-        <g id="flag-bleu" stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
-          <g transform="translate(4.000000, 3.000000)" id="Capa_1">
-            <g>
-              <polygon id="Shape" fill="#00B6FF" points="12 9 0.5 9 0.5 1 12 1 9.5 5" />
-              <path
-                d="M0.25,
+const BlueFlag = () => (
+  <svg width="20px" height="20px" viewBox="0 0 20 20">
+    <defs />
+    <g id="flag-bleu" stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
+      <g transform="translate(4.000000, 3.000000)" id="Capa_1">
+        <g>
+          <polygon id="Shape" fill="#00B6FF" points="12 9 0.5 9 0.5 1 12 1 9.5 5" />
+          <path
+            d="M0.25,
                 0 C0.112,
                 0 0,
                 0.11175 0,
@@ -29,16 +27,14 @@ class BlueFlag extends React.Component {
                 0 0.25,
                 0 L0.25,
                 0 Z"
-                id="Shape"
-                stroke="#979797"
-                fill="#9B9B9B"
-              />
-            </g>
-          </g>
+            id="Shape"
+            stroke="#979797"
+            fill="#9B9B9B"
+          />
         </g>
-      </svg>
-    );
-  }
-}
+      </g>
+    </g>
+  </svg>
+);
 
 export default BlueFlag;

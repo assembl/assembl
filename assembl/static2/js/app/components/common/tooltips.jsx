@@ -200,6 +200,6 @@ export const qualifyExtractTooltip = (
 
 export const harvestingTooltip = (
   <Tooltip id="harvestingTooltip">
-    <Translate value="harvesting.harvestSelection" />
+    <Translate value="harvesting.harvesting" />
   </Tooltip>
 );
