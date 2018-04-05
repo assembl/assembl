@@ -7,7 +7,6 @@ import { compose, graphql } from 'react-apollo';
 import { FormGroup, Radio, FormControl } from 'react-bootstrap';
 import withLoadingIndicator from '../../components/common/withLoadingIndicator';
 
-
 import { getDiscussionId } from '../../utils/globalFunctions';
 import SectionTitle from './sectionTitle';
 import DiscussionPreferenceLanguage from '../../graphql/DiscussionPreferenceLanguage.graphql';
@@ -32,7 +31,6 @@ class DumbExportSection extends React.Component<Object, Props, State> {
     languages: null,
     voteSessionId: null
   };
-
 
   static ExportLanguageDropDown = ({ languages, onSelect, activeKey }) => {
     const activeLanguage = languages.filter(language => language.locale === activeKey)[0];
@@ -62,7 +60,6 @@ class DumbExportSection extends React.Component<Object, Props, State> {
     };
   }
 
-
   selectExportLocale = (locale: string) => {
     this.setState({ exportLocale: locale });
   };
@@ -77,40 +74,44 @@ class DumbExportSection extends React.Component<Object, Props, State> {
     const { translate } = this.state;
     const debateId = getDiscussionId();
     if (!debateId) return null;
-    const exportLocale = this.state.exportLocale || languages && languages[0].locale;
+    const exportLocale = this.state.exportLocale || (languages && languages[0].locale);
     let exportLink;
-    if (isSurveyExport) { exportLink = `/data/Discussion/${debateId}/phase1_csv_export${translate ? `?lang=${exportLocale}` : ''}`; } else {
+    if (isSurveyExport) {
+      exportLink = `/data/Discussion/${debateId}/phase1_csv_export${translate && exportLocale ? `?lang=${exportLocale}` : ''}`;
+    } else if (!isSurveyExport && voteSessionId) {
       exportLink = `/data/Discussion/${debateId}/widgets/${voteSessionId}/vote_results_csv`;
     }
     return (
       <div className="admin-box survey-admin-export-section">
         <SectionTitle title={I18n.t('administration.survey.2')} annotation={I18n.t('administration.surveyExport.annotation')} />
         <div className="admin-content">
-          {isSurveyExport && <FormGroup>
-            <Radio
-              checked={!translate}
-              onChange={() => {
-                this.toggleTranslation(false);
-              }}
-            >
-              <Translate value="administration.surveyExport.noExportLanguage" />
-            </Radio>
-            <Radio
-              checked={translate}
-              onChange={() => {
-                this.toggleTranslation(true);
-              }}
-            >
-              <Translate value="administration.surveyExport.translateTheMessagesIn" />
-              {translate && (
-                <DumbExportSection.ExportLanguageDropDown
-                  languages={languages}
-                  onSelect={this.selectExportLocale}
-                  activeKey={exportLocale}
-                />
-              )}
-            </Radio>
-          </FormGroup>}
+          {isSurveyExport && (
+            <FormGroup>
+              <Radio
+                checked={!translate}
+                onChange={() => {
+                  this.toggleTranslation(false);
+                }}
+              >
+                <Translate value="administration.surveyExport.noExportLanguage" />
+              </Radio>
+              <Radio
+                checked={translate}
+                onChange={() => {
+                  this.toggleTranslation(true);
+                }}
+              >
+                <Translate value="administration.surveyExport.translateTheMessagesIn" />
+                {translate && (
+                  <DumbExportSection.ExportLanguageDropDown
+                    languages={languages}
+                    onSelect={this.selectExportLocale}
+                    activeKey={exportLocale}
+                  />
+                )}
+              </Radio>
+            </FormGroup>
+          )}
 
           <br />
           <Link className="button-link button-dark margin-l" href={exportLink}>
@@ -152,7 +153,9 @@ export default compose(
       }
       return {
         hasErrors: false,
-        languages: data.discussionPreferences.languages };
-    } }),
+        languages: data.discussionPreferences.languages
+      };
+    }
+  }),
   withLoadingIndicator()
 )(DumbExportSection);

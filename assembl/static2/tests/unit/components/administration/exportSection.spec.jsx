@@ -5,7 +5,7 @@ import { DumbExportSection } from '../../../../js/app/components/administration/
 describe('ExportSection component', () => {
   it('should render an ExportSection component without languages options', () => {
     const props = {
-      exporttype: 'voteSession',
+      exportType: 'voteSession',
       voteSessionId: '123'
     };
     const renderer = new ShallowRenderer();
@@ -15,9 +15,10 @@ describe('ExportSection component', () => {
   });
   it('should render an ExportSection component with languages options', () => {
     const props = {
-      exporttype: 'survey',
+      exportType: 'survey',
       voteSessionId: '123',
-      languages: [{ locale: 'fr', name: 'French', nativeName: 'français', __typename: 'LocalePreference' },
+      languages: [
+        { locale: 'fr', name: 'French', nativeName: 'français', __typename: 'LocalePreference' },
         { locale: 'en', name: 'English', nativeName: 'English', __typename: 'LocalePreference' }
       ]
     };
