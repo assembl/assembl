@@ -16,7 +16,7 @@ describe('harvestingMenu component', () => {
       extracts: extracts,
       postId: '1234',
       isHarvesting: true,
-      harvestingMenuPosition: 100
+      harvestingAnchorPosition: { x: 100, y: 200 }
     };
     const shallowRenderer = new ShallowRenderer();
     shallowRenderer.render(<HarvestingMenu {...props} />);
