@@ -137,3 +137,82 @@ mutation deleteExtract($extractId: ID!) {
       u'success': True
     }
   }
+
+
+def test_mutation_update_extract(graphql_request, extract_with_range_in_reply_post_1, reply_post_1):
+  extract_graphql_db_id = to_global_id('Extract',extract_with_range_in_reply_post_1.id)
+  post_db_id = reply_post_1.id
+  
+  extract_body = u"For the V-doped phases, an oxide-ion conduction mechanism is observed that involves oxygen exchange between the Bi-O sublattice and rapidly rotating VO4 tetrahedral units."
+  xpathStart = u"//div[@id='message-body-local:Content/%s']/" % post_db_id
+  xpathEnd = xpathStart
+  # maybe TODO later if needed: expand updateExtract backend mutation so that it enables to modify offsetStart and offsetEnd
+  offsetStart = 314 # a new value could be 486
+  offsetEnd = 958 # a new value could be 1301
+  important = True
+  extractAction = "classify"
+  extractNature = None
+
+  variable_values = {
+    "extractId": extract_graphql_db_id,
+    "important": important,
+    "extractNature": extractNature,
+    "extractAction": extractAction,
+    "body": extract_body
+  }
+
+  res = schema.execute(u"""
+mutation updateExtract(
+  $extractId: ID!
+  $ideaId: ID
+  $important: Boolean
+  $extractNature: String
+  $extractAction: String
+  $body: String
+) {
+  updateExtract(
+    extractId: $extractId
+    ideaId: $ideaId
+    body: $body
+    important: $important
+    extractNature: $extractNature
+    extractAction: $extractAction
+  ) {
+    extract {
+      important
+      body
+      extractNature
+      extractAction
+      textFragmentIdentifiers {
+        xpathStart
+        xpathEnd
+        offsetStart
+        offsetEnd
+      }
+      creator { name }
+    }
+  }
+}
+""", context_value=graphql_request, variable_values=variable_values)
+
+  assert json.loads(json.dumps(res.data)) == {
+    u'updateExtract': {
+      u'extract': {
+        u'body': extract_body,
+        u'creator': {
+          u'name': u'Maximilien de Robespierre'
+        },
+        u'textFragmentIdentifiers': [
+          {
+            u'offsetStart': offsetStart,
+            u'offsetEnd': offsetEnd,
+            u'xpathEnd': xpathEnd,
+            u'xpathStart': xpathStart
+          }
+        ],
+        u'extractAction': u'Enum.classify',
+        u'extractNature': extractNature,
+        u'important': important
+      }
+    }
+  }
