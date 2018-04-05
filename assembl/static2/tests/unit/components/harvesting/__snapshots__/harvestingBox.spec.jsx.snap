@@ -306,6 +306,8 @@ exports[`harvestingBox component should match harvestingBox snapshot 1`] = `
                   onClick={[Function]}
                 >
                   <Unknown
+                    backgroundColor="#f3f3f3"
+                    color="#666"
                     qualifier="classify"
                   />
                   <div
@@ -321,6 +323,8 @@ exports[`harvestingBox component should match harvestingBox snapshot 1`] = `
                   onClick={[Function]}
                 >
                   <Unknown
+                    backgroundColor="#f3f3f3"
+                    color="#666"
                     qualifier="make_generic"
                   />
                   <div
@@ -336,6 +340,8 @@ exports[`harvestingBox component should match harvestingBox snapshot 1`] = `
                   onClick={[Function]}
                 >
                   <Unknown
+                    backgroundColor="#f3f3f3"
+                    color="#666"
                     qualifier="argument"
                   />
                   <div
@@ -351,6 +357,8 @@ exports[`harvestingBox component should match harvestingBox snapshot 1`] = `
                   onClick={[Function]}
                 >
                   <Unknown
+                    backgroundColor="#f3f3f3"
+                    color="#666"
                     qualifier="give_examples"
                   />
                   <div
@@ -366,6 +374,8 @@ exports[`harvestingBox component should match harvestingBox snapshot 1`] = `
                   onClick={[Function]}
                 >
                   <Unknown
+                    backgroundColor="#f3f3f3"
+                    color="#666"
                     qualifier="more_specific"
                   />
                   <div
@@ -381,6 +391,8 @@ exports[`harvestingBox component should match harvestingBox snapshot 1`] = `
                   onClick={[Function]}
                 >
                   <Unknown
+                    backgroundColor="#f3f3f3"
+                    color="#666"
                     qualifier="mix_match"
                   />
                   <div
@@ -396,6 +408,8 @@ exports[`harvestingBox component should match harvestingBox snapshot 1`] = `
                   onClick={[Function]}
                 >
                   <Unknown
+                    backgroundColor="#f3f3f3"
+                    color="#666"
                     qualifier="display_multi_column"
                   />
                   <div
@@ -411,6 +425,8 @@ exports[`harvestingBox component should match harvestingBox snapshot 1`] = `
                   onClick={[Function]}
                 >
                   <Unknown
+                    backgroundColor="#f3f3f3"
+                    color="#666"
                     qualifier="display_thread"
                   />
                   <div
@@ -426,6 +442,8 @@ exports[`harvestingBox component should match harvestingBox snapshot 1`] = `
                   onClick={[Function]}
                 >
                   <Unknown
+                    backgroundColor="#f3f3f3"
+                    color="#666"
                     qualifier="display_tokens"
                   />
                   <div
@@ -441,6 +459,8 @@ exports[`harvestingBox component should match harvestingBox snapshot 1`] = `
                   onClick={[Function]}
                 >
                   <Unknown
+                    backgroundColor="#f3f3f3"
+                    color="#666"
                     qualifier="display_open_questions"
                   />
                   <div
@@ -456,6 +476,8 @@ exports[`harvestingBox component should match harvestingBox snapshot 1`] = `
                   onClick={[Function]}
                 >
                   <Unknown
+                    backgroundColor="#f3f3f3"
+                    color="#666"
                     qualifier="display_bright_mirror"
                   />
                   <div
@@ -519,7 +541,7 @@ exports[`harvestingBox component should match harvestingBox snapshot 1`] = `
             className="harvesting-date"
             title="2018-03-29T16:28:27.324276+00:00"
           >
-            il y a 6 jours
+            il y a 7 jours
           </div>
         </div>
       </div>

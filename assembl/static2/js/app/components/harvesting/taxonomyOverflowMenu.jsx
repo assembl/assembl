@@ -41,7 +41,7 @@ const TaxonomyOverflowMenu = (handleClick: Function, extractNature: ?string, ext
           key={a.qualifier}
           className={classnames('taxonomy-label', { active: extractAction === a.qualifier })}
         >
-          <ActionIcons qualifier={a.qualifier} />
+          <ActionIcons qualifier={a.qualifier} backgroundColor="#f3f3f3" color="#666" />
           <div className="action-label">
             <Translate value={a.label} />
           </div>
