@@ -31,8 +31,8 @@ module_types = [
     {
         u'identifier': 'INTRODUCTION',
         u'title': {
-            u'en': u'Introduction',
-            u'fr': u'Introduction'
+            u'en': u'Text & Multi-media',
+            u'fr': u'Texte & Multi-média'
         },
         u'default_order': 2.0,
         u'editable_order': True,
@@ -73,14 +73,6 @@ module_types = [
             u'fr': u'Tweets'
         },
         u'default_order': 5.0
-    },
-    {
-        u'identifier': 'VIDEO',
-        u'title': {
-            u'en': u'Video',
-            u'fr': u'Vidéo'
-        },
-        u'default_order': 6.0
     },
     {
         u'identifier': 'CHATBOT',

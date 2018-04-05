@@ -49,12 +49,16 @@ type State = {
   extractAction: ?string
 };
 
-class DumbHarvestingBox extends React.Component<void, Props, State> {
+class DumbHarvestingBox extends React.Component<Object, Props, State> {
   props: Props;
 
   state: State;
 
   menu: any;
+
+  static defaultProps = {
+    harvestingDate: null
+  };
 
   constructor(props: Props) {
     super(props);
