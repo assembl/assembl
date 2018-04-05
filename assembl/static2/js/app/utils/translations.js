@@ -565,8 +565,8 @@ const Translations = {
         orAttachPicture: "Ou téléchargez une image depuis votre ordinateur",
         headerTitle: "Titre du bandeau",
         headerSubtitle: "Sous-titre du bandeau",
-        instructionsTitle: "Titre des instructions",
-        instructionsContent: "Instructions",
+        instructionsTitle: "Titre de la consigne",
+        instructionsContent: "Contenu de la consigne",
         propositionSectionTitle: "Titre de la section"
       },
       resourcesCenter: {
@@ -1175,7 +1175,7 @@ const Translations = {
         headerTitle: "Header title",
         headerSubtitle: "Header subtitle",
         instructionsTitle: "Instructions title",
-        instructionsContent: "Instructions",
+        instructionsContent: "Instructions content",
         propositionSectionTitle: "Section title"
       },
       resourcesCenter: {
