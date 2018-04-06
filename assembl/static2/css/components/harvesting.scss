@@ -169,29 +169,11 @@
 .app.harvesting-mode-on {
   .post-body--is-harvestable {
     /* FIXME: Factorizing these ::selection rules cancels effect on Firefox */
-    .post-body-title {
-      ::selection {
-        background: $harvesting-yellow;
-      }
-
-      ::-moz-selection {
-        background: $harvesting-yellow;
-      }
-    }
-
-    .post-body-content > div::selection {
+    .post-body-content *::selection {
       background: $harvesting-yellow;
     }
 
-    .post-body-content > div::-moz-selection {
-      background: $harvesting-yellow;
-    }
-
-    .post-body-content > div > p::selection {
-      background: $harvesting-yellow;
-    }
-
-    .post-body-content > div > p::-moz-selection {
+    .post-body-content *::-moz-selection {
       background: $harvesting-yellow;
     }
   }

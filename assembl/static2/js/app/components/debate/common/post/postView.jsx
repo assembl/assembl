@@ -194,7 +194,7 @@ class PostView extends React.PureComponent<void, Props, State> {
         )}
         <div className="box" style={boxStyle}>
           <div className="post-row">
-            <div className="post-left" onMouseUp={this.handleMouseUpWhileHarvesting}>
+            <div className="post-left">
               {creator && (
                 <ProfileLine
                   userId={creator.userId}
@@ -205,6 +205,7 @@ class PostView extends React.PureComponent<void, Props, State> {
                 />
               )}
               <PostBody
+                handleMouseUpWhileHarvesting={this.handleMouseUpWhileHarvesting}
                 body={body}
                 dbId={dbId}
                 extracts={extracts}
