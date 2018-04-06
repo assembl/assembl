@@ -26,7 +26,7 @@ borg create \
     --exclude $ASSEMBL_PATH/var/log \
     --exclude $ASSEMBL_PATH/var/sessions \
     --exclude $ASSEMBL_PATH/var/esdata \
-    --exclude $ASSEMBL_PATH/var/elasticsearch* \
+    --exclude $ASSEMBL_PATH'/var/elasticsearch*' \
     --exclude $ASSEMBL_PATH/assembl/static/js/bower \
     --exclude $ASSEMBL_PATH'/assembl/static/widget/*/bower_components' \
     --exclude $ASSEMBL_PATH/assembl/static/js/node_modules \
