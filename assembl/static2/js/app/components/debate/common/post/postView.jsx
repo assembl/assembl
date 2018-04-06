@@ -2,7 +2,7 @@
 import React from 'react';
 import { Translate } from 'react-redux-i18n';
 
-import { getDomElementOffset } from '../../../../utils/globalFunctions';
+import { getDomElementOffset, elementContainsSelection } from '../../../../utils/globalFunctions';
 import Attachments from '../../../common/attachments';
 import ProfileLine from '../../../common/profileLine';
 import PostActions from '../../common/postActions';
@@ -83,7 +83,9 @@ class PostView extends React.PureComponent<void, Props, State> {
 
   handleMouseUpWhileHarvesting = (): void => {
     const { isHarvesting, translate } = this.props;
-    if (isHarvesting && !translate) {
+    const { dbId } = this.props.data.post;
+    const isSelectionInBody = elementContainsSelection(document.getElementById(`message-body-local:Content/${dbId}`));
+    if (isHarvesting && !translate && isSelectionInBody) {
       const harvestingAnchorPosition = this.getAnchorPosition();
       this.setState({ displayHarvestingAnchor: true, harvestingAnchorPosition: harvestingAnchorPosition });
     } else {
