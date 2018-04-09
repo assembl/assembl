@@ -5,7 +5,6 @@ import ExportSection from '../../../../js/app/components/administration/exportSe
 describe('ExportSection component', () => {
   it('should render an ExportSection component without languages options', () => {
     const props = {
-      exportType: 'voteSession',
       voteSessionId: '123',
       debateId: '7',
       exportLink: 'foo.com'
@@ -19,7 +18,6 @@ describe('ExportSection component', () => {
     const handleExportLocaleChangeSpy = jest.fn(() => {});
     const handleTranslationChangeSpy = jest.fn(() => {});
     const props = {
-      exportType: 'survey',
       voteSessionId: '123',
       debateId: '7',
       withLanguageOptions: true,
