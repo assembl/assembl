@@ -470,12 +470,13 @@ const Translations = {
       instructions: "Configuration de la section Consigne",
       voteSessionHeaderLabel: "Choisir l'image de fond du bandeau",
       voteSessionSuccess: "La session de vote a été enregistrée avec succès.",
-      exclusive: "Exclusifs",
+      exclusive: "Exclusif",
       tokenVoteInstructions: "Consigne du vote par jetons",
       proposalsSectionTitle: "Configuration du titre de la section Propositions",
       voteModulesIntroText1: "Vous avez choisi le dispositif de vote.",
       voteModulesIntroText2: "Pour modifier votre choix, modifiez la ",
       timeline: "ligne de temps",
+      notExclusive: "Non exclusif",
       voteProposals: {
         sectionTitle: "Configurer les propositions associées aux modules de vote",
         defineProposal: "Définir proposition %{number}",
@@ -539,7 +540,7 @@ const Translations = {
           "La partie qui comporte les diverses propositions est introduite par un titre. À vous de définir le titre selon qu'il s'agisse de propositions, d'idées, de projets ou autre...",
         tokenCategoryNumber: "Sélectionnez le nombre de types de jetons différents souhaité pour ce vote",
         exclusive:
-          "Vous pouvez décider si le participant peut distributer un seul type de jetons (exclusifs) ou plusieurs types de jetons par proposition.",
+          "Vous pouvez décider si le participant peut distributer un seul type de jetons (exclusif) ou plusieurs types de jetons par proposition (non exclusif).",
         tokenVoteInstructions: "En fonction de l'objectif du module de jetons, incitez les participants à passer à l'action.",
         gaugeVoteInstructions: "En fonction de l'objectif du module jauge, incitez les participants à passer à l'action.",
         landingPage: {
@@ -1121,6 +1122,7 @@ const Translations = {
       tokenNumber: "Number of tokens per participant",
       tokenTitle: "Token title",
       tokenColor: "Color of the token",
+      notExclusive: "Not exclusive",
       voteProposals: {
         sectionTitle: "Configure the proposals associated to the vote modules",
         gauge: "Gauge %{number}",

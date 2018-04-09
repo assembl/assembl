@@ -1,8 +1,8 @@
 // @flow
 import React from 'react';
 import { connect } from 'react-redux';
-import { I18n } from 'react-redux-i18n';
-import { Checkbox, SplitButton, MenuItem } from 'react-bootstrap';
+import { I18n, Translate } from 'react-redux-i18n';
+import { SplitButton, MenuItem } from 'react-bootstrap';
 import range from 'lodash/range';
 import FormControlWithLabel from '../../common/formControlWithLabel';
 import { getEntryValueForLocale } from '../../../utils/i18n';
@@ -26,7 +26,7 @@ type TokensFormProps = {
   editLocale: string,
   handleInstructionsChange: Function,
   handleTokenVoteCategoryNumberChange: Function,
-  handleExclusiveCategoriesCheckboxChange: Function
+  handleExclusiveCategoriesDropdownChange: Function
 };
 
 const DumbTokensForm = ({
@@ -38,7 +38,7 @@ const DumbTokensForm = ({
   editLocale,
   handleInstructionsChange,
   handleTokenVoteCategoryNumberChange,
-  handleExclusiveCategoriesCheckboxChange
+  handleExclusiveCategoriesDropdownChange
 }: TokensFormProps) => (
   <div className="token-vote-form">
     <form>
@@ -75,22 +75,31 @@ const DumbTokensForm = ({
         ))}
       </SplitButton>
       {tokenCategoryNumber >= 2 && (
-        <div className="flex margin-m">
-          <Checkbox
-            checked={exclusiveCategories}
-            onChange={() => {
-              handleExclusiveCategoriesCheckboxChange(exclusiveCategories);
+        <div style={{ marginTop: '30px' }}>
+          <SplitButton
+            title={exclusiveCategories ? I18n.t('administration.exclusive') : I18n.t('administration.notExclusive')}
+            onSelect={(e) => {
+              handleExclusiveCategoriesDropdownChange(e);
             }}
+            id="input-dropdown-exclusive"
           >
+            <MenuItem eventKey={exclusiveCategories}>
+              <Translate value="administration.exclusive" />
+            </MenuItem>
+            <MenuItem eventKey={exclusiveCategories}>
+              <Translate value="administration.notExclusive" />
+            </MenuItem>
+          </SplitButton>
+          <div className="inline">
             <Helper
-              label={I18n.t('administration.exclusive')}
               helperText={I18n.t('administration.helpers.exclusive')}
               classname="inline"
               additionalTextClasses="helper-text-only"
             />
-          </Checkbox>
+          </div>
         </div>
       )}
+
       {tokenCategoryNumber > 0 ? (
         <div>
           <div className="separator" />
@@ -140,8 +149,8 @@ const mapDispatchToProps = (dispatch, { id, editLocale }) => ({
       }
     }
   },
-  handleExclusiveCategoriesCheckboxChange: (checked) => {
-    dispatch(updateTokenVoteExclusiveCategory(id, !checked));
+  handleExclusiveCategoriesDropdownChange: (isExclusive) => {
+    dispatch(updateTokenVoteExclusiveCategory(id, !isExclusive));
     dispatch(markAllDependenciesAsChanged(id));
   }
 });

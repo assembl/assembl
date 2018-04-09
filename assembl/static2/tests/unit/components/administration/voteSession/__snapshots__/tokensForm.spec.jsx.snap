@@ -139,24 +139,51 @@ exports[`tokensForm component should render a form to configure a token vote wit
       </MenuItem>
     </SplitButton>
     <div
-      className="flex margin-m"
+      style={
+        Object {
+          "marginTop": "30px",
+        }
+      }
     >
-      <Checkbox
-        bsClass="checkbox"
-        checked={false}
-        disabled={false}
-        inline={false}
-        onChange={[Function]}
-        title=""
+      <SplitButton
+        id="input-dropdown-exclusive"
+        onSelect={[Function]}
+        title="Missing translation: administration.notExclusive"
+      >
+        <MenuItem
+          bsClass="dropdown"
+          disabled={false}
+          divider={false}
+          eventKey={false}
+          header={false}
+        >
+          <Translate
+            value="administration.exclusive"
+          />
+        </MenuItem>
+        <MenuItem
+          bsClass="dropdown"
+          disabled={false}
+          divider={false}
+          eventKey={false}
+          header={false}
+        >
+          <Translate
+            value="administration.notExclusive"
+          />
+        </MenuItem>
+      </SplitButton>
+      <div
+        className="inline"
       >
         <Helper
           additionalTextClasses="helper-text-only"
           classname="inline"
           helperText="Missing translation: administration.helpers.exclusive"
           helperUrl=""
-          label="Missing translation: administration.exclusive"
+          label=""
         />
-      </Checkbox>
+      </div>
     </div>
     <div>
       <div
