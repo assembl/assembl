@@ -450,7 +450,8 @@ const Translations = {
       voteSession: {
         "0": "Configuration de la page",
         "1": "Configurer le ou les modules de vote",
-        "2": "Configurer les propositions de vote"
+        "2": "Configurer les propositions de vote",
+        "3": "Exporter les données"
       },
       imageRequirements:
         "L'image doit avoir une hauteur de 480 px et une largeur de 1280 px. Le poids ne doit pas dépasser 1 Mo.",
@@ -1081,7 +1082,8 @@ const Translations = {
       voteSession: {
         "0": "Page configuration",
         "1": "Configure the voting modules",
-        "2": "Configure the voting proposals"
+        "2": "Configure the voting proposals",
+        "3": "Export data"
       },
       imageRequirements: "The image must have a height of 480 px and a width of 1280px. Its size has to be under 1 MB.",
       voteWithTokens: "Tokens vote",
