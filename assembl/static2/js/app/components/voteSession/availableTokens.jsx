@@ -83,7 +83,7 @@ const AvailableTokens = ({ remainingTokensByCategory, sticky, tokenCategories }:
                         style={
                           sticky && tokenCategories.length % 2 !== 0 && tokenCategories.length > 2
                             ? { maxWidth: '160px' }
-                            : { minWidth: '330px' }
+                            : { minWidth: '360px' }
                         }
                       >
                         {range(totalNumber).map(n => (

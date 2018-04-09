@@ -43,7 +43,7 @@ exports[`AvailableTokens component should match AvailableTokens snapshot (non st
               className="tokens"
               style={
                 Object {
-                  "minWidth": "330px",
+                  "minWidth": "360px",
                 }
               }
             />
@@ -82,7 +82,7 @@ exports[`AvailableTokens component should match AvailableTokens snapshot (non st
               className="tokens"
               style={
                 Object {
-                  "minWidth": "330px",
+                  "minWidth": "360px",
                 }
               }
             />
@@ -121,7 +121,7 @@ exports[`AvailableTokens component should match AvailableTokens snapshot (non st
               className="tokens"
               style={
                 Object {
-                  "minWidth": "330px",
+                  "minWidth": "360px",
                 }
               }
             />
@@ -160,7 +160,7 @@ exports[`AvailableTokens component should match AvailableTokens snapshot (non st
               className="tokens"
               style={
                 Object {
-                  "minWidth": "330px",
+                  "minWidth": "360px",
                 }
               }
             />
@@ -215,7 +215,7 @@ exports[`AvailableTokens component should match AvailableTokens snapshot (non st
               className="tokens"
               style={
                 Object {
-                  "minWidth": "330px",
+                  "minWidth": "360px",
                 }
               }
             >
@@ -495,7 +495,7 @@ exports[`AvailableTokens component should match AvailableTokens snapshot (non st
               className="tokens"
               style={
                 Object {
-                  "minWidth": "330px",
+                  "minWidth": "360px",
                 }
               }
             >
@@ -751,7 +751,7 @@ exports[`AvailableTokens component should match AvailableTokens snapshot (sticky
               className="tokens"
               style={
                 Object {
-                  "minWidth": "330px",
+                  "minWidth": "360px",
                 }
               }
             >
@@ -1031,7 +1031,7 @@ exports[`AvailableTokens component should match AvailableTokens snapshot (sticky
               className="tokens"
               style={
                 Object {
-                  "minWidth": "330px",
+                  "minWidth": "360px",
                 }
               }
             >
