@@ -39,5 +39,7 @@
   "resourcesCenter": "${slug}/resourcescenter",
   "legalNotice": "${slug}/legal-notice",
   "voteSessionAdmin": "${slug}/administration/voteSession",
-  "voteSession": "${slug}/debate/voteSession"
+  "voteSession": "${slug}/debate/voteSession",
+  "exportSurveyData": "data/Discussion/${debateId}/phase1_csv_export${translation}",
+  "exportVoteSessionData": "data/Discussion/${debateId}/widgets/${voteSessionId}/vote_results_csv"
 }

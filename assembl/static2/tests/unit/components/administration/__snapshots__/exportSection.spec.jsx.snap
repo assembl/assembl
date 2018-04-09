@@ -1,5 +1,81 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`ExportSection component should render an ExportSection component with languages options 1`] = `null`;
+exports[`ExportSection component should render an ExportSection component with languages options 1`] = `
+<div
+  className="admin-box survey-admin-export-section"
+>
+  <SectionTitle
+    annotation="Annotation"
+    title="2"
+  />
+  <div
+    className="admin-content"
+  >
+    <FormGroup
+      bsClass="form-group"
+    >
+      <Radio
+        bsClass="radio"
+        checked={true}
+        disabled={false}
+        inline={false}
+        onChange={[Function]}
+        title=""
+      >
+        <Translate
+          value="administration.surveyExport.noExportLanguage"
+        />
+      </Radio>
+      <Radio
+        bsClass="radio"
+        checked={false}
+        disabled={false}
+        inline={false}
+        onChange={[Function]}
+        title=""
+      >
+        <Translate
+          value="administration.surveyExport.translateTheMessagesIn"
+        />
+      </Radio>
+    </FormGroup>
+    <br />
+    <Link
+      className="button-link button-dark margin-l"
+      href="foo.com"
+      onlyActiveOnIndex={false}
+      style={Object {}}
+    >
+      <Translate
+        value="administration.surveyExport.link"
+      />
+    </Link>
+  </div>
+</div>
+`;
 
-exports[`ExportSection component should render an ExportSection component without languages options 1`] = `null`;
+exports[`ExportSection component should render an ExportSection component without languages options 1`] = `
+<div
+  className="admin-box survey-admin-export-section"
+>
+  <SectionTitle
+    annotation="Annotation"
+    title="2"
+  />
+  <div
+    className="admin-content"
+  >
+    <br />
+    <Link
+      className="button-link button-dark margin-l"
+      href="foo.com"
+      onlyActiveOnIndex={false}
+      style={Object {}}
+    >
+      <Translate
+        value="administration.surveyExport.link"
+      />
+    </Link>
+  </div>
+</div>
+`;
