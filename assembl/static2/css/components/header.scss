@@ -209,3 +209,47 @@
     background: none !important;
   }
 }
+
+@media screen and (max-width: 1019px) {
+  .intermediary-container {
+    .stat-container {
+      padding: 0 20px !important;
+    }
+  }
+}
+
+@media screen and (max-width: 820px) {
+  .statistic {
+    .intermediary-container {
+      .stat-container {
+        padding: 0 15px !important;
+
+        .stat-label {
+          display: none;
+        }
+
+        .stat-box {
+          display: block !important;
+          text-align: center;
+
+          .stat-icon {
+            padding-top: 0;
+            display: block;
+            float: none;
+          }
+
+          .stat {
+            padding-left: 0;
+            display: block;
+            text-align: center;
+            word-break: break-word;
+          }
+
+          .stat-nb {
+            padding-top: 3px;
+          }
+        }
+      }
+    }
+  }
+}
