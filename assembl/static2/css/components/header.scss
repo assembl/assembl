@@ -41,7 +41,9 @@
   }
 
   .wyntk-box {
-    top: calc(50% - 175px);
+    position: absolute;
+    right: 0;
+    top: calc(50% - 175px - 22px); // center the box: 50% of container - half this block height - half the statistic block height
     height: 350px;
     width: 350px;
     padding: 30px;

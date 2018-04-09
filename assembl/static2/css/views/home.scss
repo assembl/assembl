@@ -272,7 +272,7 @@
 }
 
 @media screen and (max-width: 1100px) {
-  .header-section {
+  .home .header-section {
     .insert-box {
       display: none;
     }
@@ -284,7 +284,8 @@
 }
 
 @media screen and (min-width: 1100px) {
-  .header-section {
+  .home .header-section {
+    /* synthesis block */
     .insert-box {
       position: absolute;
       right: 0;
@@ -292,6 +293,7 @@
       width: 270px;
     }
 
+    /* synthesis block content */
     .insert-content {
       -webkit-box-orient: vertical;
       -webkit-line-clamp: $lines-to-show;
@@ -446,7 +448,7 @@
 }
 
 @media screen and (max-width: 500px) {
-  .header-section {
+  .home .header-section {
     .header-content {
       padding: 60px 5px 120px;
     }
