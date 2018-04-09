@@ -117,6 +117,8 @@
   transition: none;
   color: $btn-dark-border-color;
   margin-left: 18px;
+  display: inline-block;
+  height: 40px;
 
   &:before {
     transition: none;
@@ -125,9 +127,9 @@
   .button-diamond-dark-back {
     transition: none;
     position: absolute;
-    left: -13px;
-    height: 25px;
-    width: 25px;
+    left: -14px;
+    height: 28px;
+    width: 28px;
     border: $btn-dark-border-style $btn-dark-border-width $btn-dark-border-color;
     transform: rotate(45deg);
     top: 4px;
