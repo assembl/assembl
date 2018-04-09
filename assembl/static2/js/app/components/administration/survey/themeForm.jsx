@@ -34,6 +34,7 @@ export const DumbThemeCreationForm = ({
   const trsl = I18n.t('administration.ph.title');
   const ph = `${trsl} ${editLocale.toUpperCase()}`;
   const num = (Number(index) + 1).toString();
+  const headerImageFieldName = 'header-image';
 
   const confirmModal = () => {
     const modalTitle = <Translate value="administration.confirmDeleteThematicTitle" />;
@@ -68,7 +69,10 @@ export const DumbThemeCreationForm = ({
       <div className="clear" />
       <FormControlWithLabel label={ph} onChange={handleTitleChange} required type="text" value={title} />
       <FormGroup>
-        <FileUploader fileOrUrl={imgUrl} handleChange={handleImageChange} mimeType={imgMimeType} />
+        <label htmlFor={headerImageFieldName}>
+          <Translate value="administration.voteSessionHeaderLabel" />
+        </label>
+        <FileUploader fileOrUrl={imgUrl} handleChange={handleImageChange} mimeType={imgMimeType} name={headerImageFieldName} />
       </FormGroup>
       <div className="separator" />
     </div>
