@@ -13,7 +13,8 @@ describe('harvestingBox component', () => {
       index: 0,
       previousExtractId: '876876876',
       harvestingAnchorPosition: { x: 100, y: 200 },
-      contentLocale: 'fr'
+      contentLocale: 'fr',
+      harvestingDate: 'il y a 5 jours'
     };
     const shallowRenderer = new ShallowRenderer();
     shallowRenderer.render(<DumbHarvestingBox {...props} />);

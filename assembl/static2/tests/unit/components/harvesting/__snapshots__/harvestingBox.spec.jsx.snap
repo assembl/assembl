@@ -508,7 +508,7 @@ exports[`harvestingBox component should match harvestingBox snapshot 1`] = `
             className="harvesting-date"
             title="2018-03-29T16:28:27.324276+00:00"
           >
-            il y a 8 jours
+            il y a 5 jours
           </div>
         </div>
       </div>

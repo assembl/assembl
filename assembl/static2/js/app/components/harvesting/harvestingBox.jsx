@@ -30,7 +30,8 @@ type Props = {
   addPostExtract: Function,
   updateExtract: Function,
   deleteExtract: Function,
-  refetchPost: Function
+  refetchPost: Function,
+  harvestingDate?: string
 };
 
 type State = {
@@ -225,7 +226,7 @@ class DumbHarvestingBox extends React.Component<Object, Props, State> {
   };
 
   render() {
-    const { selection, cancelHarvesting, extract, contentLocale } = this.props;
+    const { selection, cancelHarvesting, extract, contentLocale, harvestingDate } = this.props;
     const { disabled, extractIsValidated, isNugget, isEditable, editableExtract, extractNature, extractAction } = this.state;
     const isExtract = extract !== null;
     const selectionText = selection ? selection.toString() : '';
@@ -310,9 +311,10 @@ class DumbHarvestingBox extends React.Component<Object, Props, State> {
                   extract &&
                   extract.creationDate && (
                     <div className="harvesting-date" title={extract.creationDate}>
-                      {moment(extract.creationDate)
-                        .locale(contentLocale)
-                        .fromNow()}
+                      {harvestingDate ||
+                        moment(extract.creationDate)
+                          .locale(contentLocale)
+                          .fromNow()}
                     </div>
                   )}
                 {!isExtract && (
