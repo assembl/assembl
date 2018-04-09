@@ -17,30 +17,32 @@ class Header extends React.Component {
     const closedPhaseName = getPhaseName(debateData.timeline, identifier, locale).toLowerCase();
     const titleClassNames = classnames([additionalHeaderClasses], 'light-title-7');
     return (
-      <section className="header-section">
-        <Grid fluid className="max-container">
-          <div className="header-content">
-            <h1 className={titleClassNames}>{title}</h1>
-            <h3 className="light-title-2">{subtitle}</h3>
-            {isPhaseCompleted && (
-              <h6 className="light-title-4">
-                <Translate value="debate.survey.endPhase" closedPhaseName={closedPhaseName} />
-              </h6>
-            )}
-          </div>
-          {type ? <HeaderActions identifier={identifier} useSocialMedia={debateData.useSocialMedia} type={type} /> : null}
-        </Grid>
-        <Grid fluid>
-          <Row>
-            {children}
-            <div className="header-bkg" style={imgUrl ? { backgroundImage: `url(${imgUrl})` } : null}>
-              &nbsp;
+      <div className="header-section-container">
+        <section className="header-section">
+          <Grid fluid className="max-container">
+            <div className="header-content">
+              <h1 className={titleClassNames}>{title}</h1>
+              <h3 className="light-title-2">{subtitle}</h3>
+              {isPhaseCompleted && (
+                <h6 className="light-title-4">
+                  <Translate value="debate.survey.endPhase" closedPhaseName={closedPhaseName} />
+                </h6>
+              )}
             </div>
-            <div className="header-bkg-mask">&nbsp;</div>
-          </Row>
-        </Grid>
+            {type ? <HeaderActions identifier={identifier} useSocialMedia={debateData.useSocialMedia} type={type} /> : null}
+          </Grid>
+          <Grid fluid>
+            <Row>
+              {children}
+              <div className="header-bkg" style={imgUrl ? { backgroundImage: `url(${imgUrl})` } : null}>
+                &nbsp;
+              </div>
+              <div className="header-bkg-mask">&nbsp;</div>
+            </Row>
+          </Grid>
+        </section>
         {synthesisTitle && <WhatYouNeedToKnow synthesisTitle={synthesisTitle} />}
-      </section>
+      </div>
     );
   }
 }
