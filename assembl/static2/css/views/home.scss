@@ -58,6 +58,7 @@
   .header-section {
     background-color: $first-color;
     min-height: 380px;
+    height: auto; // override the 500px from common header component
     overflow: hidden;
     position: relative;
 

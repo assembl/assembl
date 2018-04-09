@@ -23,6 +23,7 @@ exports[`PostBody component should render a post body 1`] = `
     dbId={124}
     divRef={[Function]}
     extracts={Array []}
+    onMouseUp={undefined}
     rawHtml="<p>You can't index the port without programming the wireless HTTP program!</p>"
     replacementComponents={
       Object {

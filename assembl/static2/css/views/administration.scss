@@ -487,8 +487,8 @@
 
 .helper-popover {
   width: auto;
-  min-width: 332px;
-  padding-top: 8px;
+  min-width: 350px;
+  padding: 20px 11px;
 
   .arrow {
     display: none;
@@ -496,6 +496,10 @@
 
   img {
     padding-bottom: 10px;
+  }
+
+  .helper-text {
+    padding-top: 10px;
   }
 }
 

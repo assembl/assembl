@@ -23,7 +23,8 @@ type Props = {
   originalLocale: string,
   translate: boolean,
   translationEnabled: boolean,
-  isHarvesting: boolean
+  isHarvesting: boolean,
+  handleMouseUpWhileHarvesting: ?Function
 };
 
 type ExtractInPostProps = {
@@ -111,7 +112,8 @@ const PostBody = ({
   originalLocale,
   translate,
   translationEnabled,
-  isHarvesting
+  isHarvesting,
+  handleMouseUpWhileHarvesting
 }: Props) => {
   const divClassNames = classNames('post-body', { 'post-body--is-harvestable': !translate });
   const htmlClassNames = classNames('post-body-content', 'body', {
@@ -126,6 +128,7 @@ const PostBody = ({
       {subject && <h3 className="post-body-title dark-title-3">{subject}</h3>}
       {body && (
         <Html
+          onMouseUp={handleMouseUpWhileHarvesting}
           rawHtml={transformLinksInHtml(body)}
           className={htmlClassNames}
           divRef={bodyDivRef}

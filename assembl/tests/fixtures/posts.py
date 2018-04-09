@@ -299,7 +299,7 @@ def reply_post_1(request, participant2_user, discussion,
     p = Post(
         discussion=discussion, creator=participant2_user,
         subject=LangString.create(u"re1: root post"),
-        body=LangString.create(u"post body"),
+        body=LangString.create(u"post body with some text so we can test harvesting features. I'm writing a very topical comment with an unrelated source, hoping it would make people angry and make them write answers. I have read in '17O Solid-State NMR Spectroscopy of Functional Oxides for Energy Conversion' thesis by Halat, D. M. (2018) that variable-temperature spectra indicate the onset of oxide-ion motion involving the interstitials at 130 °C, which is linked to an orthorhombic−tetragonal phase transition. For the V-doped phases, an oxide-ion conduction mechanism is observed that involves oxygen exchange between the Bi-O sublattice and rapidly rotating VO4 tetrahedral units. The more poorly conducting P-doped phase exhibits only vacancy conduction with no evidence of sublattice exchange, a result ascribed to the differing propensities of the dopants to undergo variable oxygen coordination. So I think it would be a very bad idea to allow hot beverages in coworking spaces. But it looks like people don't really care about scientific evidence around here."),
         creation_date=datetime(year=2000, month=1, day=4),
         type="post", message_id="msg2@example.com")
     test_session.add(p)

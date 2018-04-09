@@ -1,7 +1,83 @@
 .harvesting-anchor {
   position: absolute;
-  left: 250px;
   z-index: 1000;
+}
+
+.harvesting-container {
+  position: absolute;
+  left: 0;
+  z-index: 99;
+}
+
+.taxonomy-menu {
+  font-size: $font-size-xs;
+  letter-spacing: 1.3px;
+  line-height: 1;
+  border: 1px solid $grey1;
+  border-radius: 0;
+
+  .arrow {
+    display: none;
+  }
+
+  .popover-content {
+    padding: 7px 0;
+    width: 245px;
+  }
+
+  .taxonomy-label {
+    color: $black;
+    padding: 5px 10px 10px 8px;
+    font-family: $font-family4;
+
+    .nature-label {
+      display: contents;
+      position: absolute;
+      margin-top: 5px;
+      padding-left: 10px;
+
+      span {
+        display: block;
+        margin: -20px 0 0 32px;
+      }
+    }
+
+    .action-label {
+      display: contents;
+      position: absolute;
+      margin-top: 5px;
+
+      span {
+        display: block;
+        margin: -19px 0 0 32px;
+      }
+    }
+
+    svg {
+      width: 22px;
+      height: 22px;
+    }
+
+    &:hover {
+      background-color: $first-color-light;
+      font-family: $font-family;
+    }
+  }
+
+  .taxonomy-label-border {
+    padding: 5px 10px 10px;
+    border-bottom: 1px solid $grey1;
+  }
+
+  .taxonomy-category {
+    font-family: $font-family3;
+    padding: 25px 10px 10px;
+  }
+
+  .taxonomy-label.active {
+    background-color: $first-color-light;
+    font-family: $font-family;
+  }
 }
 
 .left-side-harvesting-button {
@@ -10,28 +86,9 @@
       font-weight: bold;
     }
 
-    .left-side-harvesting-button__label {
-      visibility: visible;
-    }
-
     .left-side-harvesting-button__button__inside {
       background-color: #ffed5b;
     }
-  }
-
-  .left-side-harvesting-button__label {
-    position: absolute;
-    left: -100px;
-    top: 0;
-    width: 100px;
-    margin-top: 11px;
-    padding-right: 9px;
-    text-align: right;
-    visibility: hidden;
-    font-size: 12px;
-    opacity: 0.55;
-    font-weight: bold;
-    letter-spacing: 0.1em;
   }
 
   .left-side-harvesting-button__button {
@@ -112,29 +169,11 @@
 .app.harvesting-mode-on {
   .post-body--is-harvestable {
     /* FIXME: Factorizing these ::selection rules cancels effect on Firefox */
-    .post-body-title {
-      ::selection {
-        background: $harvesting-yellow;
-      }
-
-      ::-moz-selection {
-        background: $harvesting-yellow;
-      }
-    }
-
-    .post-body-content > div::selection {
+    .post-body-content *::selection {
       background: $harvesting-yellow;
     }
 
-    .post-body-content > div::-moz-selection {
-      background: $harvesting-yellow;
-    }
-
-    .post-body-content > div > p::selection {
-      background: $harvesting-yellow;
-    }
-
-    .post-body-content > div > p::-moz-selection {
+    .post-body-content *::-moz-selection {
       background: $harvesting-yellow;
     }
   }
@@ -144,15 +183,28 @@
   border-left-color: $harvesting-green;
 }
 
-.harvesting-box {
+.box-icon {
+  width: 35px;
+  height: 35px;
+  border: 4px solid $harvesting-green;
+  border-radius: 50%;
   position: absolute;
+  background-color: $white;
+  margin-top: 15px;
+  margin-left: 3px;
+
+  svg {
+    margin: 4px 0 0 4px;
+  }
+}
+
+.harvesting-box {
   box-shadow: 2px 2px 4px 0 $grey1;
-  left: 0;
-  z-index: 99;
-  width: 310px;
+  margin: 0 0 20px 18px;
+  width: 295px;
 
   .harvesting-box-header {
-    padding: 20px;
+    padding: 16px 20px 15px 20px;
     border-bottom: 1px solid $grey1;
   }
 
@@ -174,14 +226,37 @@
 
     .harvesting-status-label {
       display: inline-block;
-      vertical-align: bottom;
+      vertical-align: sub;
+      margin-left: 15px;
+      font-size: $font-size-xxs;
+      margin-top: 2px;
+      width: 145px;
+      height: 30px;
+      line-height: 30px;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      overflow: hidden;
+    }
+
+    .harvesting-taxonomy-label {
+      display: inline-block;
+      vertical-align: sub;
+      margin-left: 15px;
+      font-size: $font-size-xxs;
+      margin-top: 2px;
+      width: 145px;
+      height: 30px;
+      line-height: 30px;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      overflow: hidden;
     }
   }
 
   .profile {
-    font-size: $font-size-xs;
-    color: $grey2;
-    margin-left: -8px;
+    font-size: 11px;
+    color: $grey3;
+    margin-left: -5px;
 
     img {
       border-radius: 50%;
@@ -198,25 +273,47 @@
     }
 
     .harvesting-date {
+      font-family: $font-family4;
       font-size: $font-size-xxs;
     }
 
     .harvesting-infos {
       display: inline-block;
       vertical-align: bottom;
+
+      .username {
+        width: 208px;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+      }
     }
   }
 
   .button-bar {
     padding-top: 5px;
     float: right;
-    margin-right: -12px;
+    margin-right: -25px;
 
-    .assembl-icon-ellipsis-vert {
-      &:before {
-        font-size: 20px;
-        vertical-align: middle;
-        padding: 2px 0 0;
+    .taxonomy-menu-btn {
+      border: none;
+      padding: 0 0 0 2px;
+      background: none;
+
+      &:hover, &:focus {
+        background: none !important;
+      }
+
+      .assembl-icon-ellipsis-vert {
+        &:before {
+          font-size: 20px;
+          vertical-align: middle;
+          padding: 2px 0 0;
+        }
+
+        &:hover {
+          color: $harvesting-green;
+        }
       }
     }
 
@@ -253,10 +350,10 @@
       border-radius: 5px;
       width: 26px;
       height: 26px;
-      border-color: $grey2;
+      border-color: $grey3;
 
       span {
-        color: $grey2;
+        color: $grey3;
       }
 
       &:hover {
@@ -270,12 +367,11 @@
 
       &:focus {
         background-color: $white;
-        border-color: $second-color;
         outline: none;
+      }
 
-        span {
-          color: $second-color;
-        }
+      &:active {
+        box-shadow: none;
       }
 
       span {
@@ -291,7 +387,25 @@
   .harvesting-box-body {
     padding: 20px;
     font-size: $font-size-xs;
-    color: $grey2;
+    color: $grey3;
+    word-wrap: break-word;
+
+    .form-group {
+      margin: 0;
+    }
+
+    textarea {
+      border: 1px solid $grey1;
+      margin: -20px 0 0;
+      color: $grey2;
+      font-family: $font-family;
+      font-size: $font-size-xs;
+      min-height: 100px;
+
+      &:focus {
+        border: 1px solid $grey1;
+      }
+    }
   }
 
   .harvesting-box-footer {
@@ -300,7 +414,15 @@
     background-color: $grey1;
 
     .btn-default {
-      margin: 0 10px;
+      margin: 0 22px;
+    }
+
+    .button-submit {
+      padding: 8px 16px;
+    }
+
+    .button-cancel {
+      padding: 8px 16px;
     }
   }
 }

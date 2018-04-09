@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { I18n } from 'react-redux-i18n';
 import { Row, Col } from 'react-bootstrap';
+import { getEntryValueForLocale } from '../../../utils/i18n';
 
 import MediaForm from './mediaForm';
 import QuestionsForm from './questionsForm';
@@ -24,7 +25,8 @@ class QuestionSection extends React.Component {
   }
 
   render() {
-    const { editLocale, thematics } = this.props;
+    const { editLocale, thematics, thematicsById } = this.props;
+
     const selectedThematicId = this.state.selectedThematicId;
     return (
       <div className="admin-box">
@@ -32,6 +34,8 @@ class QuestionSection extends React.Component {
         <div className="admin-content">
           <Row>
             {thematics.map((thematicId, index) => {
+              const thematic = thematicsById.get(thematicId);
+              const thematicTitle = getEntryValueForLocale(thematic.get('titleEntries'), editLocale);
               const linkClassName = selectedThematicId === thematicId ? 'tab-title-active ellipsis' : 'tab-title ellipsis';
               return (
                 <Col xs={12} md={Math.round(12 / thematics.length)} key={index}>
@@ -42,7 +46,7 @@ class QuestionSection extends React.Component {
                       this.setState({ selectedThematicId: thematicId });
                     }}
                   >
-                    {`${I18n.t('administration.thematic')} ${index + 1}`}
+                    {thematicTitle}
                   </a>
                 </Col>
               );
@@ -70,6 +74,7 @@ class QuestionSection extends React.Component {
 
 const mapStateToProps = ({ admin: { thematicsById, thematicsInOrder, editLocale } }) => ({
   thematics: thematicsInOrder.filter(id => !thematicsById.getIn([id, '_toDelete'])).toArray(),
+  thematicsById: thematicsById,
   editLocale: editLocale
 });
 

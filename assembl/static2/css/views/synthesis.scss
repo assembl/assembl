@@ -8,6 +8,7 @@
   .synthesis-side-menu {
     background-color: $white;
     padding: 30px 10px 30px 30px;
+    margin: 0 10px;
 
     .title-hyphen {
       display: block;
@@ -15,8 +16,14 @@
       margin: 10px 0 10px -35px;
     }
 
-    .active-caret {
-      transform: rotate(180deg);
+    .assembl-icon-down-open {
+      font-size: $font-size-xxs;
+      color: $first-color;
+      margin-bottom: 1px;
+    }
+
+    .active-arrow {
+      transform: rotateX(180deg);
     }
 
     .link-container {

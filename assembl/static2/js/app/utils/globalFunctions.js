@@ -173,3 +173,33 @@ export const getCookieItem = (sKey: string) => {
 };
 
 export const createRandomId = (): string => Math.round(Math.random() * -1000000).toString();
+
+export const isOrContains = (n: any, c: any) => {
+  const container = c;
+  let node = n;
+  while (node) {
+    if (node === container) {
+      return true;
+    }
+    node = node.parentNode;
+  }
+  return false;
+};
+
+export const elementContainsSelection = (el: any) => {
+  let sel;
+  if (window.getSelection) {
+    sel = window.getSelection();
+    if (sel.rangeCount > 0) {
+      for (let i = 0; i < sel.rangeCount; i += 1) {
+        if (!isOrContains(sel.getRangeAt(i).commonAncestorContainer, el)) {
+          return false;
+        }
+      }
+      return true;
+    }
+  } else if (sel && sel === document.selection && sel.type !== 'Control') {
+    return isOrContains(sel.createRange().parentElement(), el);
+  }
+  return false;
+};

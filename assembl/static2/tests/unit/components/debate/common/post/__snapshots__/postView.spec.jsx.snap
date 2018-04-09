@@ -128,7 +128,6 @@ exports[`PostView component should render a post in view mode 1`] = `
     >
       <div
         className="post-left"
-        onMouseUp={[Function]}
       >
         <ProfileLine
           creationDate="11/11/2011"
@@ -144,6 +143,7 @@ exports[`PostView component should render a post in view mode 1`] = `
           contentLocale="fr"
           dbId={124}
           extracts={Array []}
+          handleMouseUpWhileHarvesting={[Function]}
           id="XYZ333"
           isHarvesting={undefined}
           lang="fr"

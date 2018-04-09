@@ -38,7 +38,14 @@ const IdeaSynthesisTree = (props: {
     </Row>
   ));
   return (
-    <Section displayIndex title={rootIdea.title} index={index} parents={parents} className="idea-synthesis-section">
+    <Section
+      displayIndex
+      title={rootIdea.title}
+      index={index}
+      parents={parents}
+      className="idea-synthesis-section"
+      id={rootIdea.id}
+    >
       <IdeaSynthesis hasSiblings={hasSiblings} level={level} idea={rootIdea} slug={slug} />
       {tree}
     </Section>

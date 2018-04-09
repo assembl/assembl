@@ -14,7 +14,8 @@ type SectionProps = {
   children: Array<*>,
   className: string,
   translate: boolean,
-  innerRef?: Function
+  innerRef?: Function,
+  id: string
 };
 
 const level1 = (title, index, translate) => (
@@ -79,10 +80,10 @@ class Section extends React.Component<Object, SectionProps, void> {
   };
 
   render() {
-    const { className, children, containerAdditionalClassNames, innerRef } = this.props;
+    const { className, children, containerAdditionalClassNames, innerRef, id } = this.props;
     const containerClassName = classnames('max-container', containerAdditionalClassNames);
     return (
-      <section className={className} ref={innerRef}>
+      <section className={className} ref={innerRef} id={id}>
         <div className={containerClassName}>
           <div className="title-section">{this.getTitle()}</div>
           <div className="content-section margin-l">{children}</div>

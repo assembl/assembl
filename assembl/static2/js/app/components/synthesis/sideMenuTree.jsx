@@ -90,7 +90,7 @@ class SideMenuTree extends React.Component<*, SideMenuTreeProps, SideMenuTreeSta
           {hasChildren &&
             level === 1 && (
               <span
-                className={classNames('caret pointer', { 'active-caret': show && activeKey === id })}
+                className={classNames('assembl-icon-down-open pointer', { 'active-arrow': show && activeKey === id })}
                 onClick={() => {
                   this.setState({ activeKey: id, show: !show });
                 }}

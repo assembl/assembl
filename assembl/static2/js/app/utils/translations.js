@@ -19,10 +19,21 @@ const Translations = {
     harvesting: {
       enableHarvestingMode: "Activer le mode attrapage",
       disableHarvestingMode: "Désactiver le mode attrapage",
-      harvestSelection: "Attrapage",
-      inProgress: "en cours",
-      validated: "validé",
-      now: "Maintenant"
+      harvesting: "Attrapage",
+      inProgress: "Attrapage en cours",
+      validated: "Attrapage validé",
+      now: "Maintenant",
+      harvestingSuccess: "L'extrait a été mis à jour avec succès.",
+      harvestingDeleted: "L'extrait a été supprimé avec succès.",
+      deleteExtract: "Supprimer l'extrait attrapé",
+      confirmDeleteExtract: "Etes-vous certain de vouloir supprimer cet extrait ?",
+      validateExtract: "Extrait validé",
+      editExtract: "Modifier l'extrait attrapé",
+      nuggetExtract: "Pépiter l'extrait attrapé",
+      qualifyExtract: "Qualifier l'extrait attrapé",
+      move: "Déplacer",
+      qualifyNature: "Qualifier par nature",
+      qualifyAction: "Qualifier par action"
     },
     search: {
       reset: {
@@ -88,11 +99,11 @@ const Translations = {
         give_examples: "Donner des exemples",
         more_specific: "Rendre plus opérationnel",
         mix_match: "Croiser avec un autre extrait",
-        display_multi_column: "Activer multi-col.",
-        display_thread: "Activer Thread",
-        display_tokens: "Activer Tokens",
-        display_open_questions: "Activer Q° ouvertes",
-        display_bright_mirror: "Activer Bright Mirror"
+        display_multi_column: "Activer le multi-colonne",
+        display_thread: "Activer le thread",
+        display_tokens: "Activer le vote",
+        display_open_questions: "Activer les questions ouvertes",
+        display_bright_mirror: "Activer le Bright Mirror"
       },
       Sort: "Trier",
       "By relevance": "Par pertinence",
@@ -411,6 +422,8 @@ const Translations = {
       anErrorOccured:
         "Il y a eu une erreur lors de la sauvegarde, veuillez vérifier que vous avez bien renseigné tous les champs requis.",
       deleteThematic: "Supprimer la thématique",
+      confirmDeleteThematicTitle: "Confirmer la suppression",
+      confirmDeleteThematic: "Êtes-vous sûr de vouloir supprimer cette thématique ?",
       deleteQuestion: "Supprimer la question",
       changeLanguage: "Renseigner une autre langue",
       question_label: "Question",
@@ -565,8 +578,8 @@ const Translations = {
         orAttachPicture: "Ou téléchargez une image depuis votre ordinateur",
         headerTitle: "Titre du bandeau",
         headerSubtitle: "Sous-titre du bandeau",
-        instructionsTitle: "Titre des instructions",
-        instructionsContent: "Instructions",
+        instructionsTitle: "Titre de la consigne",
+        instructionsContent: "Contenu de la consigne",
         propositionSectionTitle: "Titre de la section"
       },
       resourcesCenter: {
@@ -636,10 +649,21 @@ const Translations = {
     harvesting: {
       enableHarvestingMode: "Enable harvesting mode",
       disableHarvestingMode: "Disable harvesting mode",
-      harvestSelection: "Harvesting",
-      inProgress: "in progress",
-      validated: "validated",
-      now: "Now"
+      inProgress: "Harvesting in progress",
+      validated: "Harvesting validated",
+      now: "Now",
+      harvesting: "Harvesting",
+      harvestingSuccess: "The extract was updated successfully.",
+      harvestingDeleted: "The extract was deleted successfully.",
+      deleteExtract: "Delete the extract",
+      confirmDeleteExtract: "Are you sure that you wish to delete this extract?",
+      validateExtract: "Extract validated",
+      editExtract: "Edit the extract",
+      nuggetExtract: "Mark as nugget",
+      qualifyExtract: "Qualify the extract",
+      move: "Move",
+      qualifyNature: "Qualify by nature",
+      qualifyAction: "Qualify by action"
     },
     search: {
       reset: {
@@ -1026,6 +1050,8 @@ const Translations = {
       addQuestion: "Add a question",
       anErrorOccured: "An error occured during save. Please check that you filled all the required fields.",
       deleteThematic: "Delete the theme",
+      confirmDeleteThematicTitle: "Confirm deletion",
+      confirmDeleteThematic: "Are you sure you want to delete this theme?",
       deleteQuestion: "Delete the question",
       changeLanguage: "Set another language",
       question_label: "Question",
@@ -1102,8 +1128,8 @@ const Translations = {
         deleteProposal: "Delete this proposal",
         deleteModalTitle: "Confirm deletion",
         deleteModalBody: "Are you sure you want to delete this proposal?",
-        title: "Title of the proposal*",
-        description: "Description*",
+        title: "Title of the proposal",
+        description: "Description",
         tokenVote: "Token vote",
         gaugeSettings: "Edit settings",
         cancelCustomization: "Cancel settings",
@@ -1175,7 +1201,7 @@ const Translations = {
         headerTitle: "Header title",
         headerSubtitle: "Header subtitle",
         instructionsTitle: "Instructions title",
-        instructionsContent: "Instructions",
+        instructionsContent: "Instructions content",
         propositionSectionTitle: "Section title"
       },
       resourcesCenter: {

@@ -6,7 +6,7 @@ import HarvestingAnchor from '../../../../js/app/components/harvesting/harvestin
 describe('harvestingAnchor component', () => {
   it('should match harvestingAnchor snapshot', () => {
     const props = {
-      harvestingMenuPosition: 100
+      anchorPosition: { x: 100, y: 200 }
     };
     const shallowRenderer = new ShallowRenderer();
     shallowRenderer.render(<HarvestingAnchor {...props} />);
