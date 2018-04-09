@@ -8,26 +8,6 @@ exports[`tokensForm component should render a form to configure a token vote wit
     <div
       className="flex"
     >
-      <Checkbox
-        bsClass="checkbox"
-        checked={false}
-        disabled={false}
-        inline={false}
-        onChange={[Function]}
-        title=""
-      >
-        <Helper
-          additionalTextClasses="helper-text-only"
-          classname="inline"
-          helperText="Missing translation: administration.helpers.exclusive"
-          helperUrl=""
-          label="Missing translation: administration.exclusive"
-        />
-      </Checkbox>
-    </div>
-    <div
-      className="flex"
-    >
       <FormControlWithLabel
         label="Missing translation: administration.tokenVoteInstructions"
         labelAlwaysVisible={false}
@@ -158,6 +138,26 @@ exports[`tokensForm component should render a form to configure a token vote wit
         10
       </MenuItem>
     </SplitButton>
+    <div
+      className="flex margin-m"
+    >
+      <Checkbox
+        bsClass="checkbox"
+        checked={false}
+        disabled={false}
+        inline={false}
+        onChange={[Function]}
+        title=""
+      >
+        <Helper
+          additionalTextClasses="helper-text-only"
+          classname="inline"
+          helperText="Missing translation: administration.helpers.exclusive"
+          helperUrl=""
+          label="Missing translation: administration.exclusive"
+        />
+      </Checkbox>
+    </div>
     <div>
       <div
         className="separator"

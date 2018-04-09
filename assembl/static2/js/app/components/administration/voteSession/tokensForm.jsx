@@ -42,23 +42,6 @@ const DumbTokensForm = ({
 }: TokensFormProps) => (
   <div className="token-vote-form">
     <form>
-      {tokenCategoryNumber >= 2 && (
-        <div className="flex">
-          <Checkbox
-            checked={exclusiveCategories}
-            onChange={() => {
-              handleExclusiveCategoriesCheckboxChange(exclusiveCategories);
-            }}
-          >
-            <Helper
-              label={I18n.t('administration.exclusive')}
-              helperText={I18n.t('administration.helpers.exclusive')}
-              classname="inline"
-              additionalTextClasses="helper-text-only"
-            />
-          </Checkbox>
-        </div>
-      )}
       <div className="flex">
         <FormControlWithLabel
           label={I18n.t('administration.tokenVoteInstructions')}
@@ -91,6 +74,23 @@ const DumbTokensForm = ({
           </MenuItem>
         ))}
       </SplitButton>
+      {tokenCategoryNumber >= 2 && (
+        <div className="flex margin-m">
+          <Checkbox
+            checked={exclusiveCategories}
+            onChange={() => {
+              handleExclusiveCategoriesCheckboxChange(exclusiveCategories);
+            }}
+          >
+            <Helper
+              label={I18n.t('administration.exclusive')}
+              helperText={I18n.t('administration.helpers.exclusive')}
+              classname="inline"
+              additionalTextClasses="helper-text-only"
+            />
+          </Checkbox>
+        </div>
+      )}
       {tokenCategoryNumber > 0 ? (
         <div>
           <div className="separator" />
