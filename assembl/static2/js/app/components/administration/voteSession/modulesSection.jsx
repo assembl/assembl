@@ -116,7 +116,7 @@ const DumbModulesSection = ({
                   checked={seeCurrentVotes}
                   name="seeCurrentVotes"
                 >
-                  <Translate value="yes" />
+                  <Translate value="administration.resultsVisible" />
                 </Radio>
                 <Radio
                   onChange={() => {
@@ -125,7 +125,7 @@ const DumbModulesSection = ({
                   checked={!seeCurrentVotes}
                   name="seeCurrentVotes"
                 >
-                  <Translate value="no" />
+                  <Translate value="administration.resultsNotVisible" />
                 </Radio>
               </div>
             )}

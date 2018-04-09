@@ -517,7 +517,9 @@ const Translations = {
       textValue: "Valeur textuelle",
       numberValue: "Valeur numéraire",
       valueTitle: "Intitulé de la valeur",
-      seeCurrentVotes: "Voulez vous que les participants puissent voir l'évolution des votes en cours ?",
+      seeCurrentVotes: "Voulez-vous que les participants puissent voir l'évolution des votes en cours ?",
+      resultsVisible: "Oui, avant même d'avoir voté.",
+      resultsNotVisible: "Non, n'afficher le résultat qu'une fois le vote clos.",
       sections: {
         addSection: "Ajouter une rubrique",
         deleteSection: "Supprimer la rubrique",
@@ -1144,6 +1146,8 @@ const Translations = {
         applyToAllProposalsCheckboxLabel: "Apply these changes to all of the proposals"
       },
       seeCurrentVotes: "Do you want participants to see the evolution of the votes in progress?",
+      resultsVisible: "Yes, even before having voted.",
+      resultsNotVisible: "No, only show the results once the vote is closed.",
       sections: {
         addSection: "Add a section",
         deleteSection: "Delete the section",

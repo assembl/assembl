@@ -201,7 +201,7 @@ exports[`ModulesSection component should render a ModuleSection component with t
             title=""
           >
             <Translate
-              value="yes"
+              value="administration.resultsVisible"
             />
           </Radio>
           <Radio
@@ -214,7 +214,7 @@ exports[`ModulesSection component should render a ModuleSection component with t
             title=""
           >
             <Translate
-              value="no"
+              value="administration.resultsNotVisible"
             />
           </Radio>
         </div>
