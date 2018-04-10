@@ -1,6 +1,14 @@
 .administration {
   margin: $margin-section + $navbar-height 0;
 
+  .help-block {
+    color: #f00 !important;
+  }
+
+  .has-error > input {
+    border-color: #f00 !important;
+  }
+
   .block-picker {
     input {
       height: 34px !important;
