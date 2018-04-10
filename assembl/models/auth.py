@@ -1812,6 +1812,10 @@ class UserLanguagePreferenceCollection(LanguagePreferenceCollection):
         self.calculate_locale_prefs(db)
 
     def process_locale(self, locale_code, source_of_evidence, **kwargs):
+        """
+        How the locales are procssed for a user language preference. This method SHOULD
+        not be used in conjunction with post user language preference
+        """
         session = self.user.db
         locale_code = to_posix_string(locale_code)
         # Updated: Now Locale is a model. Converting posix_string into its
@@ -1839,9 +1843,15 @@ class UserLanguagePreferenceCollection(LanguagePreferenceCollection):
                 for lp in self.user.language_preference
             }
             if (locale.id, source_of_evidence) in lang_pref_signatures:
-                pref = filter(
+                prefs = filter(
                     lambda x: x.locale_id == locale.id and x.source_of_evidence == source_of_evidence, self.user.language_preference)
-                return pref[0] if pref else None
+                pref = prefs[0] if prefs else None
+                if pref:
+                    # Updating the translation
+                    for k, v in kwargs.iteritems():
+                        setattr(pref, k, v)
+                    session.flush()
+                    return pref
         lang = UserLanguagePreference(user=self.user, **kwargs)
         session.add(lang)
         session.flush()
