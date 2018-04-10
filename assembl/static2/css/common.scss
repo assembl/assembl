@@ -251,6 +251,10 @@ input.placeholder, textarea.placeholder {
   cursor: pointer;
 }
 
+.no-pointer-events {
+  pointer-events: none;
+}
+
 .form-label {
   color: $grey3;
   font-family: $font-family;

@@ -20,7 +20,6 @@ type SynthesisProps = {
 };
 
 type SynthesisState = {
-  sideMenuTop: number,
   node: ?HTMLElement,
   sideMenuIsHidden: boolean,
   ideaOnScroll?: string
@@ -34,7 +33,6 @@ export class DumbSynthesis extends React.Component<void, SynthesisProps, Synthes
   constructor(props: SynthesisProps) {
     super(props);
     this.state = {
-      sideMenuTop: 20,
       node: null,
       sideMenuIsHidden: false
     };
@@ -59,16 +57,11 @@ export class DumbSynthesis extends React.Component<void, SynthesisProps, Synthes
       const nodeHeight = node.getBoundingClientRect().height;
       const total = nodeTop + nodeHeight;
       const scroll = window.pageYOffset;
-      let sideMenuTop = scroll >= total ? screen.height - total : total - scroll + 50;
-      // 50 is an extra gap between the introduction block and first Idea for aesthetic purposes
-      if (screen.height < 1000) {
-        sideMenuTop += 1050 - screen.height;
-      }
-      this.setState({ sideMenuTop: sideMenuTop });
       const footer = document.getElementById('footer');
       const { body } = document;
       const threshold = footer && body && body.scrollHeight - screen.height - footer.offsetHeight;
-      if (scroll >= threshold) {
+      if (scroll >= threshold || scroll + 50 < total) {
+        // 50 corresponds to the gap between the first Idea and the introduction
         this.setState({ sideMenuIsHidden: true });
       } else {
         this.setState({ sideMenuIsHidden: false });
@@ -82,7 +75,7 @@ export class DumbSynthesis extends React.Component<void, SynthesisProps, Synthes
 
   render() {
     const { synthesis, routeParams, synthesisPostId } = this.props;
-    const { sideMenuIsHidden, sideMenuTop, ideaOnScroll } = this.state;
+    const { sideMenuIsHidden, ideaOnScroll } = this.state;
     const { introduction, conclusion, ideas, subject } = synthesis;
     const sortedIdeas = [...ideas].sort((a, b) => {
       if (a.live.order < b.live.order) {
@@ -110,7 +103,7 @@ export class DumbSynthesis extends React.Component<void, SynthesisProps, Synthes
               </Section>
             )}
             <Row className="background-grey synthesis-tree">
-              <Col md={3} className="affix" style={{ top: sideMenuTop }}>
+              <Col md={3} className="affix">
                 {!sideMenuIsHidden && (
                   <SideMenu
                     rootIdeas={roots}

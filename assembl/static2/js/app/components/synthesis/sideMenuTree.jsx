@@ -91,6 +91,9 @@ class SideMenuTree extends React.Component<Object, SideMenuTreeProps, SideMenuTr
       );
     });
     const { id, title } = rootIdea;
+    const isIdeaOnScroll = ideaOnScroll === id;
+    const isChildOnScroll = subIdeas.some(subIdea => ideaOnScroll === subIdea.id);
+    const showSubIdeasTree = (show && activeKey === id) || level > 1 || isIdeaOnScroll || isChildOnScroll;
     const rootIdeaUrl = get('synthesisIdea', { slug: slug, synthesisId: synthesisPostId, ideaId: id });
     const hasChildren = subIdeas.length > 0;
     return (
@@ -100,14 +103,17 @@ class SideMenuTree extends React.Component<Object, SideMenuTreeProps, SideMenuTr
           {hasChildren &&
             level === 1 && (
               <span
-                className={classNames('assembl-icon-down-open pointer', { 'active-arrow': show && activeKey === id })}
+                className={classNames('assembl-icon-down-open pointer', {
+                  'active-arrow': showSubIdeasTree,
+                  'no-pointer-events': isIdeaOnScroll || isChildOnScroll
+                })}
                 onClick={() => {
                   this.setState({ activeKey: id, show: !show });
                 }}
               />
             )}
         </div>
-        <div>{((show && activeKey === id) || level > 1) && tree}</div>
+        <div>{showSubIdeasTree && tree}</div>
       </div>
     );
   }

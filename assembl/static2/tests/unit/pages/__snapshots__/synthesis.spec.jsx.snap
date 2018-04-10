@@ -27,11 +27,6 @@ exports[`Synthesis component should match Synthesis snapshot 1`] = `
           className="affix"
           componentClass="div"
           md={3}
-          style={
-            Object {
-              "top": 20,
-            }
-          }
         >
           <SideMenu
             descendants={Array []}
