@@ -14,6 +14,7 @@ exports[`SideMenu component should render a SideMenu component 1`] = `
      
   </div>
   <SideMenuTree
+    ideaOnScroll={null}
     index={1}
     indexGenerator={[Function]}
     parents={Array []}

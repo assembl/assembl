@@ -22,7 +22,8 @@ type SynthesisProps = {
 type SynthesisState = {
   sideMenuTop: number,
   node: ?HTMLElement,
-  sideMenuIsHidden: boolean
+  sideMenuIsHidden: boolean,
+  ideaOnScroll?: string
 };
 
 export class DumbSynthesis extends React.Component<void, SynthesisProps, SynthesisState> {
@@ -75,9 +76,13 @@ export class DumbSynthesis extends React.Component<void, SynthesisProps, Synthes
     }
   };
 
+  handleScrollForMenu = (node: HTMLElement) => {
+    this.setState({ ideaOnScroll: node.id });
+  };
+
   render() {
     const { synthesis, routeParams, synthesisPostId } = this.props;
-    const { sideMenuIsHidden, sideMenuTop } = this.state;
+    const { sideMenuIsHidden, sideMenuTop, ideaOnScroll } = this.state;
     const { introduction, conclusion, ideas, subject } = synthesis;
     const sortedIdeas = [...ideas].sort((a, b) => {
       if (a.live.order < b.live.order) {
@@ -106,7 +111,14 @@ export class DumbSynthesis extends React.Component<void, SynthesisProps, Synthes
             )}
             <Row className="background-grey synthesis-tree">
               <Col md={3} className="affix" style={{ top: sideMenuTop }}>
-                {!sideMenuIsHidden && <SideMenu rootIdeas={roots} descendants={descendants} synthesisPostId={synthesisPostId} />}
+                {!sideMenuIsHidden && (
+                  <SideMenu
+                    rootIdeas={roots}
+                    descendants={descendants}
+                    synthesisPostId={synthesisPostId}
+                    ideaOnScroll={ideaOnScroll}
+                  />
+                )}
               </Col>
               <Col mdOffset={3} md={8} sm={11}>
                 {roots.map((rootIdea, index) => (
@@ -118,6 +130,7 @@ export class DumbSynthesis extends React.Component<void, SynthesisProps, Synthes
                     parents={[]}
                     subIdeas={getChildren(rootIdea, descendants)}
                     slug={routeParams.slug}
+                    handleScrollForMenu={this.handleScrollForMenu}
                   />
                 ))}
               </Col>

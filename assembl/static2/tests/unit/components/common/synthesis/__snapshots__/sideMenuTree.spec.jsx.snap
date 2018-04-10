@@ -42,6 +42,7 @@ exports[`SideMenuTree component should render a 2 level SideMenuTree 1`] = `
   </div>
   <div>
     <SideMenuTree
+      ideaOnScroll={undefined}
       index={1}
       indexGenerator={[Function]}
       parents={
@@ -73,6 +74,7 @@ exports[`SideMenuTree component should render a 2 level SideMenuTree 1`] = `
       url="/felixdebate/syntheses/12345/#2222222"
     />
     <SideMenuTree
+      ideaOnScroll={undefined}
       index={2}
       indexGenerator={[Function]}
       parents={

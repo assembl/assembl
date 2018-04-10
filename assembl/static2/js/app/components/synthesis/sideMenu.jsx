@@ -10,11 +10,12 @@ import type { SynthesisIdea } from './IdeaSynthesis';
 type SideMenuProps = {
   rootIdeas: Array<SynthesisIdea>,
   descendants: Array<SynthesisIdea>,
-  synthesisPostId: string
+  synthesisPostId: string,
+  ideaOnScroll?: string
 };
 
 const SideMenu = (props: SideMenuProps) => {
-  const { rootIdeas, descendants, synthesisPostId } = props;
+  const { rootIdeas, descendants, synthesisPostId, ideaOnScroll } = props;
   const slug = getDiscussionSlug();
   return (
     <div className="synthesis-side-menu">
@@ -22,6 +23,7 @@ const SideMenu = (props: SideMenuProps) => {
       <div className="title-hyphen block">&nbsp;</div>
       {rootIdeas.map((rootIdea, index) => (
         <SideMenuTree
+          ideaOnScroll={ideaOnScroll}
           key={rootIdea.id}
           rootIdea={rootIdea}
           index={index + 1}
@@ -33,6 +35,10 @@ const SideMenu = (props: SideMenuProps) => {
       ))}
     </div>
   );
+};
+
+SideMenu.defaultProps = {
+  ideaOnScroll: null
 };
 
 export default SideMenu;
