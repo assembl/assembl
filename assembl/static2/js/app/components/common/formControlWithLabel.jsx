@@ -12,6 +12,7 @@ import { type RawContentState } from 'draft-js';
 
 import RichTextEditor from './richTextEditor';
 import { getValidationState } from '../administration/voteSession/voteProposalForm';
+import Helper from './helper';
 
 type FormControlWithLabelProps = {
   value: ?(string | RawContentState),
@@ -24,7 +25,9 @@ type FormControlWithLabelProps = {
   componentClass: string,
   formControlProps: Object,
   id: string,
-  validationErrors?: Array<ErrorDef>
+  validationErrors?: Array<ErrorDef>,
+  helperUrl?: string,
+  helperText: string
 };
 
 type FormControlWithLabelState = {
@@ -43,7 +46,8 @@ class FormControlWithLabel extends React.Component<Object, FormControlWithLabelP
     type: 'text',
     value: undefined,
     required: false,
-    validationErrors: null
+    validationErrors: null,
+    helperUrl: ''
   };
 
   constructor(props: FormControlWithLabelProps) {
@@ -121,12 +125,22 @@ class FormControlWithLabel extends React.Component<Object, FormControlWithLabelP
     );
   };
 
+  renderHelper = () => {
+    const { helperUrl, helperText } = this.props;
+    return (
+      <div className="inline">
+        <Helper helperUrl={helperUrl} helperText={helperText} />
+      </div>
+    );
+  };
+
   render() {
-    const { id, labelAlwaysVisible, type, value } = this.props;
+    const { id, labelAlwaysVisible, type, value, helperText } = this.props;
     const displayLabel = labelAlwaysVisible || type !== 'rich-text' ? value : false;
     return (
       <FormGroup validationState={this.state.validationState}>
         {displayLabel ? <ControlLabel htmlFor={id}>{this.getLabel()}</ControlLabel> : null}
+        {helperText ? this.renderHelper() : null}
         {this.renderFormControl()}
         {this.state.errorMessage ? <HelpBlock>{this.state.errorMessage}</HelpBlock> : null}
       </FormGroup>

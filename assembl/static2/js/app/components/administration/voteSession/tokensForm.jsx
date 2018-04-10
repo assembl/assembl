@@ -42,46 +42,51 @@ const DumbTokensForm = ({
 }: TokensFormProps) => (
   <div className="token-vote-form">
     <form>
-      <div className="flex">
-        <FormControlWithLabel
-          label={I18n.t('administration.tokenVoteInstructions')}
-          required
-          type="text"
-          onChange={handleInstructionsChange}
-          value={instructions}
-        />
-        <Helper
-          helperUrl="/static2/img/helpers/helper5.png"
-          helperText={I18n.t('administration.helpers.tokenVoteInstructions')}
-          additionalTextClasses="helper-text-only"
-        />
-      </div>
-      <div className="flex">
-        <label htmlFor="input-dropdown-addon">{I18n.t('administration.tokenCategoryNumber')}</label>
+      <FormControlWithLabel
+        label={I18n.t('administration.tokenVoteInstructions')}
+        required
+        type="text"
+        onChange={handleInstructionsChange}
+        value={instructions}
+        helperUrl="/static2/img/helpers/helper5.png"
+        helperText={I18n.t('administration.helpers.tokenVoteInstructions')}
+      />
+      <label htmlFor="input-dropdown-addon">{I18n.t('administration.tokenCategoryNumber')}</label>
+      <div className="inline">
         <Helper helperUrl="/static2/img/helpers/helper2.png" helperText={I18n.t('administration.helpers.tokenCategoryNumber')} />
       </div>
-      <SplitButton
-        title={tokenCategoryNumber}
-        onSelect={(e) => {
-          handleTokenVoteCategoryNumberChange(e, tokenCategoryNumber);
-        }}
-        id="input-dropdown-addon"
-        required
-      >
-        {range(1, 11).map(value => (
-          <MenuItem key={`item-${value}`} eventKey={value}>
-            {value}
-          </MenuItem>
-        ))}
-      </SplitButton>
+      <div>
+        <SplitButton
+          title={tokenCategoryNumber}
+          onSelect={(e) => {
+            handleTokenVoteCategoryNumberChange(e, tokenCategoryNumber);
+          }}
+          id="input-dropdown-addon"
+          required
+          className="admin-dropdown"
+        >
+          {range(1, 11).map(value => (
+            <MenuItem key={`item-${value}`} eventKey={value}>
+              {value}
+            </MenuItem>
+          ))}
+        </SplitButton>
+      </div>
       {tokenCategoryNumber >= 2 && (
-        <div style={{ marginTop: '30px' }}>
+        <div style={{ marginTop: '25px' }}>
+          <label htmlFor="input-dropdown-exclusive">{I18n.t('administration.exclusive')}</label>
+          <Helper
+            helperText={I18n.t('administration.helpers.exclusive')}
+            classname="inline"
+            additionalTextClasses="helper-text-only"
+          />
           <SplitButton
             title={exclusiveCategories ? I18n.t('administration.exclusive') : I18n.t('administration.notExclusive')}
             onSelect={(e) => {
               handleExclusiveCategoriesDropdownChange(e);
             }}
             id="input-dropdown-exclusive"
+            className="admin-dropdown"
           >
             <MenuItem eventKey={exclusiveCategories}>
               <Translate value="administration.exclusive" />
@@ -90,13 +95,6 @@ const DumbTokensForm = ({
               <Translate value="administration.notExclusive" />
             </MenuItem>
           </SplitButton>
-          <div className="inline">
-            <Helper
-              helperText={I18n.t('administration.helpers.exclusive')}
-              classname="inline"
-              additionalTextClasses="helper-text-only"
-            />
-          </div>
         </div>
       )}
 

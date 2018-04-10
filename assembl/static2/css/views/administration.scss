@@ -1,6 +1,12 @@
 .administration {
   margin: $margin-section + $navbar-height 0;
 
+  .block-picker {
+    input {
+      height: 34px !important;
+    }
+  }
+
   .checkbox-title {
     line-height: 20px;
     font-size: $font-size-xs;
@@ -18,10 +24,6 @@
 
   .no-box-shadow {
     box-shadow: none !important;
-  }
-
-  .token-vote-form {
-    margin: 0 0 40px 30px;
   }
 
   .module-form {
@@ -370,12 +372,21 @@
   }
 
   .vote-modules-form {
-    .flex > .form-group {
-      flex-grow: 1;
+    .dropdown {
+      width: 100%;
+
+      .admin-dropdown {
+        width: 92%;
+        text-align: left;
+      }
+
+      .dropdown-toggle {
+        width: 8%;
+      }
     }
 
-    .separator {
-      padding-top: 0;
+    .flex > .form-group {
+      flex-grow: 1;
     }
   }
 

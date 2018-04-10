@@ -12,6 +12,7 @@ exports[`GaugeForm component should render a form to set up a gauge and a number
     className="flex margin-m"
   >
     <FormControlWithLabel
+      helperUrl=""
       label="Missing translation: administration.gaugeVoteInstructions"
       labelAlwaysVisible={false}
       onChange={[Function]}
@@ -188,6 +189,7 @@ exports[`GaugeForm component should render a form to set up a gauge and a textGa
     className="flex margin-m"
   >
     <FormControlWithLabel
+      helperUrl=""
       label="Missing translation: administration.gaugeVoteInstructions"
       labelAlwaysVisible={false}
       onChange={[Function]}
@@ -374,6 +376,7 @@ exports[`GaugeForm component should render a gauge form with no radio if canChan
     className="flex margin-m"
   >
     <FormControlWithLabel
+      helperUrl=""
       label="Missing translation: administration.gaugeVoteInstructions"
       labelAlwaysVisible={false}
       onChange={[Function]}
