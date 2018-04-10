@@ -193,7 +193,7 @@ $column-synthesis-height: 320px;
     height: $column-synthesis-height;
 
     .insert-content {
-      overflow-y: scroll;
+      overflow-y: auto;
       height: calc(#{$column-synthesis-height} - 140px);
     }
   }
