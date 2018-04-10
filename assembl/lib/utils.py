@@ -154,17 +154,17 @@ def process_locale_from_request(request):
 
 
 def get_locale_from_request(request, session=None, user=None):
-    from assembl.models.auth import User, UserLanguagePreferenceCollection
+    from assembl.models.auth import User, LanguagePreferenceCollection
     from assembl.models.langstrings import Locale
     if user is None:
         user_id = request.authenticated_userid or Everyone
         if user_id != Everyone:
             user = User.get(user_id)
     session = session or User.default_db
-    if user:
+    # This will ensure that a default language collection will be put on the request
+    language_preferences = LanguagePreferenceCollection.getCurrent(req=request, session=session)
+    if user and user != Everyone:
         locale, level = process_locale_from_request(request)
-        discussion_id = request.matchdict['discussion_id'] if (request.matchdict and 'discussion_id' in request.matchdict) else None
-        language_preferences = UserLanguagePreferenceCollection(user.id, discussion_id=discussion_id, session=session)
         language_preferences.process_locale(locale, level)
     else:
         locale = request.localizer.locale_name

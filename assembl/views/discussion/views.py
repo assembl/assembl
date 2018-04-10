@@ -146,9 +146,8 @@ def home_view(request):
     if user_id != Everyone:
         # TODO: user may not exist. Case of session with BD change.
         user = User.get(user_id)
-        target_locale = get_locale_from_request(request, session=session, user=user)
         user.is_visiting_discussion(discussion.id)
-
+    target_locale = get_locale_from_request(request, session=session, user=user)
     translation_service_data = {}
     try:
         service = discussion.translation_service()

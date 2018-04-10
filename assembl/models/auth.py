@@ -1752,8 +1752,8 @@ class LanguagePreferenceCollection(object):
             user_id = req.authenticated_userid
             if user_id and user_id != Everyone:
                 try:
-                    discussion_id = req.matchdict['discussion_id']
-                    req.lang_prefs = UserLanguagePreferenceCollection(user_id, discussion_id, session=session)
+                    discussion_id = req.matchdict['discussion_id'] if (req.matchdict and 'discussion_id' in req.matchdict) else None
+                    req.lang_prefs = UserLanguagePreferenceCollection(user_id, discussion_id=discussion_id, session=session)
                     return req.lang_prefs
                 except Exception:
                     capture_exception()
@@ -1970,16 +1970,16 @@ class UserLanguagePreferenceCollection(LanguagePreferenceCollection):
                 return self.user_prefs[locale]
         db = self.user.db
         locale = Locale.get_or_create(locale, db)
+        # The default pref should NEVER be None
+        assert self.default_pref
         args = {
             'locale': locale,
             'locale_id': locale.id,
-            'translate_to_locale': self.default_pref.locale if self.default_pref else None,
+            'translate_to_locale': self.default_pref.locale,
             'source_of_evidence': self.default_pref.source_of_evidence if self.default_pref else LanguagePreferenceOrder.Server.value,
             'preferred_order': 0,
             'user': None
         }  # Do not give the user or this gets added to session (TODO: Still valid?)
-        if kwargs.get('post_id', None):
-            kwargs.pop('post_id')  # cannot pass this for UserLanguagePreference
         return UserLanguagePreference(**args)
 
     def has_locale(self, locale):
