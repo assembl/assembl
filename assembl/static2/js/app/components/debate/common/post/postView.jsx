@@ -82,9 +82,10 @@ class PostView extends React.PureComponent<void, Props, State> {
   }
 
   handleMouseUpWhileHarvesting = (): void => {
-    const { isHarvesting, translate } = this.props;
+    const { isHarvesting, contentLocale, originalLocale } = this.props;
     const { dbId } = this.props.data.post;
     const isSelectionInBody = elementContainsSelection(document.getElementById(`message-body-local:Content/${dbId}`));
+    const translate = contentLocale !== originalLocale;
     if (isHarvesting && !translate && isSelectionInBody) {
       const harvestingAnchorPosition = this.getAnchorPosition();
       this.setState({ displayHarvestingAnchor: true, harvestingAnchorPosition: harvestingAnchorPosition });
