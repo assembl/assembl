@@ -130,7 +130,7 @@ exports[`Section component should match Section with translate prop 1`] = `
             className={undefined}
             style={undefined}
           >
-            Missing translation: FooBar
+            home
           </span>
         </h1>
       </div>

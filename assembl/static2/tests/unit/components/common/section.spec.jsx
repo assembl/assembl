@@ -41,7 +41,7 @@ describe('Section component', () => {
   it('should match Section with translate prop', () => {
     const rendered = renderer
       .create(
-        <Section title="FooBar" displayIndex translate>
+        <Section title="navbar.home" displayIndex translate>
           <div>Section content</div>
         </Section>
       )
