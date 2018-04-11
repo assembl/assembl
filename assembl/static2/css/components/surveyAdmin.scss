@@ -1,15 +1,21 @@
 .survey-admin {
   .survey-admin-export-section {
-    text-align: center;
+    .admin-content {
+      text-align: center;
 
-    .form-group {
-      text-align: left;
-      display: inline-block;
+      .form-group {
+        text-align: left;
+        display: inline-block;
 
-      .export-language-dropdown {
-        margin-top: 20px;
-        position: absolute;
+        .export-language-dropdown {
+          margin-top: 20px;
+          position: absolute;
+        }
       }
+    }
+
+    .margin-l {
+      margin-top: 70px;
     }
   }
 }

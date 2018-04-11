@@ -48,8 +48,6 @@ $highlightColor: $first-color-light;
   height: 20px;
   margin: 0 0 0 -14px;
   padding: 2px 0 0 6px;
-  border-radius: 50%;
-  background-color: $highlightColor;
 }
 
 .sk-tag-filter {
@@ -76,10 +74,12 @@ $highlightColor: $first-color-light;
 
   .profileLine {
     display: inline;
+    margin-top: 10px;
   }
 
   .profileLine .user {
     vertical-align: middle;
+    margin-bottom: 2px;
   }
 }
 
@@ -181,6 +181,8 @@ $highlightColor: $first-color-light;
 
 .sk-panel__header {
   font-size: 16px;
+  margin-top: 30px;
+  margin-bottom: 15px;
 }
 
 .sk-item-list-option {
@@ -191,7 +193,9 @@ $highlightColor: $first-color-light;
 
 .sk-item-list-option__text,
 .sk-item-list-option__count {
-  color: #777;
+  color: $grey3;
+  font-family: $font-family4;
+  margin-bottom: 0.5em;
 }
 
 .sk-item-list-option input.sk-item-list-option__checkbox {
@@ -311,9 +315,9 @@ $highlightColor: $first-color-light;
   }
 }
 
-$imgtypeWidth: 50px;
+$imgtypeWidth: 20px;
 $imgtypeMargin: 30px;
-$marginLeft: $imgtypeWidth + 2 * $imgtypeMargin;
+$marginLeft: 80px;
 
 .sk-hits-list-hit {
   padding-bottom: 1em;
@@ -323,22 +327,28 @@ $marginLeft: $imgtypeWidth + 2 * $imgtypeMargin;
   position: relative;
 
   &__title {
+    font-family: $font-family4;
     line-height: 20px;
+    letter-spacing: 1.7px;
     margin: 0 0 5px $marginLeft;
     font-size: 18px;
   }
 
   &__content {
+    font-family: $font-family4;
     margin-left: $marginLeft;
+    margin-top: 1em;
     margin-bottom: 3em;
-    max-width: 800px;
+    max-width: 85%;
   }
 
   &__info {
-    color: $first-color;
+    color: $grey3;
+    font-size: 12px;
+    font-family: $font-family4;
     margin-left: $marginLeft;
     position: absolute;
-    bottom: 1em;
+    bottom: 2em;
   }
 
   &__assembl-icon-message, &__assembl-icon-avatar {
@@ -348,7 +358,6 @@ $marginLeft: $imgtypeWidth + 2 * $imgtypeMargin;
 
   &__imgtype {
     float: left;
-    margin: $imgtypeMargin;
 
     &:before {
       color: $first-color;

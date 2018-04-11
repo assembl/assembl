@@ -38,6 +38,8 @@
     "babel-plugin-transform-runtime": "^6.23.0",
     "babel-preset-env": "^1.6.0",
     "babel-preset-react": "^6.16.0",
+    "coffee-loader": "^0.9.0",
+    "coffeescript": "^1.12.5",
     "css-loader": "0.14.5",
     "empty": "^0.10.1",
     "eslint": "^4.6.1",
@@ -54,6 +56,7 @@
     "graphql-tools": "^1.1.0",
     "identity-obj-proxy": "^3.0.0",
     "jest": "^20.0.4",
+    "jest-coffee-preprocessor": "^1.0.0",
     "jest-transform-graphql": "^2.1.0",
     "node-sass": "^4.5.3",
     "prettier": "^1.8.2",
@@ -81,8 +84,10 @@
     "graphql": "^0.10.5",
     "graphql-anywhere": "^3.1.0",
     "history": "^3.0.0",
+    "hypothesis": "https://github.com/conversence/client.git#anchor_range_on_fragment",
     "immutable": "~3.7.4",
     "isomorphic-fetch": "^2.2.1",
+    "jquery": "^3.3.1",
     "json-loader": "^0.5.4",
     "linkifyjs": "^2.1.5",
     "lodash": "^4.17.4",
@@ -92,7 +97,7 @@
     "prop-types": "^15.5.8",
     "rc-slider": "^8.6.0",
     "react": "^15.4.1",
-    "react-active-html": "^1.1.6",
+    "react-active-html": "~1.2.1",
     "react-apollo": "^1.4.12",
     "react-bootstrap": "^0.31.2",
     "react-color": "^2.13.8",
@@ -118,10 +123,24 @@
   "//": "See https://facebook.github.io/jest/docs/webpack.html for more info",
   "jest": {
     "moduleNameMapper": {
-      "\\.(css|less|scss)$": "identity-obj-proxy"
+      "\\.(css|less|scss)$": "identity-obj-proxy",
+      "jquery": "<rootDir>/node_modules/jquery/dist/jquery.slim.min.js",
+      "annotator_range": "<rootDir>/node_modules/hypothesis/src/annotator/anchoring/range.coffee"
     },
+    "moduleFileExtensions": [
+      "coffee",
+      "gql",
+      "graphql",
+      "js",
+      "json",
+      "jsx"
+    ],
+    "transformIgnorePatterns": [
+        "/node_modules/[^h][^y][^p]"
+    ],
     "transform": {
       "\\.(gql|graphql)$": "jest-transform-graphql",
+      "\\.coffee$": "jest-coffee-preprocessor",
       "\\.(js|jsx)$": "babel-jest"
     }
   }

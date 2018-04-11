@@ -5,54 +5,25 @@ exports[`tokensForm component should render a form to configure a token vote wit
   className="token-vote-form"
 >
   <form>
-    <div
-      className="flex"
+    <FormControlWithLabel
+      helperText="Missing translation: administration.helpers.tokenVoteInstructions"
+      helperUrl="/static2/img/helpers/helper5.png"
+      label="Missing translation: administration.tokenVoteInstructions"
+      labelAlwaysVisible={false}
+      onChange={[Function]}
+      required={true}
+      type="text"
+      validationErrors={null}
+      value="Je vous prie de bien vouloir voter."
+    />
+    <label
+      htmlFor="input-dropdown-addon"
     >
-      <Checkbox
-        bsClass="checkbox"
-        checked={false}
-        disabled={false}
-        inline={false}
-        onChange={[Function]}
-        title=""
-      >
-        <Helper
-          additionalTextClasses="helper-text-only"
-          classname="inline"
-          helperText="Missing translation: administration.helpers.exclusive"
-          helperUrl=""
-          label="Missing translation: administration.exclusive"
-        />
-      </Checkbox>
-    </div>
+      Missing translation: administration.tokenCategoryNumber
+    </label>
     <div
-      className="flex"
+      className="inline"
     >
-      <FormControlWithLabel
-        label="Missing translation: administration.tokenVoteInstructions"
-        labelAlwaysVisible={false}
-        onChange={[Function]}
-        required={true}
-        type="text"
-        validationErrors={null}
-        value="Je vous prie de bien vouloir voter."
-      />
-      <Helper
-        additionalTextClasses="helper-text-only"
-        classname=""
-        helperText="Missing translation: administration.helpers.tokenVoteInstructions"
-        helperUrl="/static2/img/helpers/helper5.png"
-        label=""
-      />
-    </div>
-    <div
-      className="flex"
-    >
-      <label
-        htmlFor="input-dropdown-addon"
-      >
-        Missing translation: administration.tokenCategoryNumber
-      </label>
       <Helper
         additionalTextClasses=""
         classname=""
@@ -61,103 +32,155 @@ exports[`tokensForm component should render a form to configure a token vote wit
         label=""
       />
     </div>
-    <SplitButton
-      id="input-dropdown-addon"
-      onSelect={[Function]}
-      required={true}
-      title={3}
+    <div>
+      <SplitButton
+        className="admin-dropdown"
+        id="input-dropdown-addon"
+        onSelect={[Function]}
+        required={true}
+        title={3}
+      >
+        <MenuItem
+          bsClass="dropdown"
+          disabled={false}
+          divider={false}
+          eventKey={1}
+          header={false}
+        >
+          1
+        </MenuItem>
+        <MenuItem
+          bsClass="dropdown"
+          disabled={false}
+          divider={false}
+          eventKey={2}
+          header={false}
+        >
+          2
+        </MenuItem>
+        <MenuItem
+          bsClass="dropdown"
+          disabled={false}
+          divider={false}
+          eventKey={3}
+          header={false}
+        >
+          3
+        </MenuItem>
+        <MenuItem
+          bsClass="dropdown"
+          disabled={false}
+          divider={false}
+          eventKey={4}
+          header={false}
+        >
+          4
+        </MenuItem>
+        <MenuItem
+          bsClass="dropdown"
+          disabled={false}
+          divider={false}
+          eventKey={5}
+          header={false}
+        >
+          5
+        </MenuItem>
+        <MenuItem
+          bsClass="dropdown"
+          disabled={false}
+          divider={false}
+          eventKey={6}
+          header={false}
+        >
+          6
+        </MenuItem>
+        <MenuItem
+          bsClass="dropdown"
+          disabled={false}
+          divider={false}
+          eventKey={7}
+          header={false}
+        >
+          7
+        </MenuItem>
+        <MenuItem
+          bsClass="dropdown"
+          disabled={false}
+          divider={false}
+          eventKey={8}
+          header={false}
+        >
+          8
+        </MenuItem>
+        <MenuItem
+          bsClass="dropdown"
+          disabled={false}
+          divider={false}
+          eventKey={9}
+          header={false}
+        >
+          9
+        </MenuItem>
+        <MenuItem
+          bsClass="dropdown"
+          disabled={false}
+          divider={false}
+          eventKey={10}
+          header={false}
+        >
+          10
+        </MenuItem>
+      </SplitButton>
+    </div>
+    <div
+      style={
+        Object {
+          "marginTop": "25px",
+        }
+      }
     >
-      <MenuItem
-        bsClass="dropdown"
-        disabled={false}
-        divider={false}
-        eventKey={1}
-        header={false}
+      <label
+        htmlFor="input-dropdown-exclusive"
       >
-        1
-      </MenuItem>
-      <MenuItem
-        bsClass="dropdown"
-        disabled={false}
-        divider={false}
-        eventKey={2}
-        header={false}
+        Missing translation: administration.exclusive
+      </label>
+      <Helper
+        additionalTextClasses="helper-text-only"
+        classname="inline"
+        helperText="Missing translation: administration.helpers.exclusive"
+        helperUrl=""
+        label=""
+      />
+      <SplitButton
+        className="admin-dropdown"
+        id="input-dropdown-exclusive"
+        onSelect={[Function]}
+        title="Missing translation: administration.notExclusive"
       >
-        2
-      </MenuItem>
-      <MenuItem
-        bsClass="dropdown"
-        disabled={false}
-        divider={false}
-        eventKey={3}
-        header={false}
-      >
-        3
-      </MenuItem>
-      <MenuItem
-        bsClass="dropdown"
-        disabled={false}
-        divider={false}
-        eventKey={4}
-        header={false}
-      >
-        4
-      </MenuItem>
-      <MenuItem
-        bsClass="dropdown"
-        disabled={false}
-        divider={false}
-        eventKey={5}
-        header={false}
-      >
-        5
-      </MenuItem>
-      <MenuItem
-        bsClass="dropdown"
-        disabled={false}
-        divider={false}
-        eventKey={6}
-        header={false}
-      >
-        6
-      </MenuItem>
-      <MenuItem
-        bsClass="dropdown"
-        disabled={false}
-        divider={false}
-        eventKey={7}
-        header={false}
-      >
-        7
-      </MenuItem>
-      <MenuItem
-        bsClass="dropdown"
-        disabled={false}
-        divider={false}
-        eventKey={8}
-        header={false}
-      >
-        8
-      </MenuItem>
-      <MenuItem
-        bsClass="dropdown"
-        disabled={false}
-        divider={false}
-        eventKey={9}
-        header={false}
-      >
-        9
-      </MenuItem>
-      <MenuItem
-        bsClass="dropdown"
-        disabled={false}
-        divider={false}
-        eventKey={10}
-        header={false}
-      >
-        10
-      </MenuItem>
-    </SplitButton>
+        <MenuItem
+          bsClass="dropdown"
+          disabled={false}
+          divider={false}
+          eventKey={false}
+          header={false}
+        >
+          <Translate
+            value="administration.exclusive"
+          />
+        </MenuItem>
+        <MenuItem
+          bsClass="dropdown"
+          disabled={false}
+          divider={false}
+          eventKey={false}
+          header={false}
+        >
+          <Translate
+            value="administration.notExclusive"
+          />
+        </MenuItem>
+      </SplitButton>
+    </div>
     <div>
       <div
         className="separator"
@@ -193,34 +216,25 @@ exports[`tokensForm component should render a form to configure a token vote wit
   className="token-vote-form"
 >
   <form>
-    <div
-      className="flex"
+    <FormControlWithLabel
+      helperText="Missing translation: administration.helpers.tokenVoteInstructions"
+      helperUrl="/static2/img/helpers/helper5.png"
+      label="Missing translation: administration.tokenVoteInstructions"
+      labelAlwaysVisible={false}
+      onChange={[Function]}
+      required={true}
+      type="text"
+      validationErrors={null}
+      value="Je vous prie de bien vouloir voter."
+    />
+    <label
+      htmlFor="input-dropdown-addon"
     >
-      <FormControlWithLabel
-        label="Missing translation: administration.tokenVoteInstructions"
-        labelAlwaysVisible={false}
-        onChange={[Function]}
-        required={true}
-        type="text"
-        validationErrors={null}
-        value="Je vous prie de bien vouloir voter."
-      />
-      <Helper
-        additionalTextClasses="helper-text-only"
-        classname=""
-        helperText="Missing translation: administration.helpers.tokenVoteInstructions"
-        helperUrl="/static2/img/helpers/helper5.png"
-        label=""
-      />
-    </div>
+      Missing translation: administration.tokenCategoryNumber
+    </label>
     <div
-      className="flex"
+      className="inline"
     >
-      <label
-        htmlFor="input-dropdown-addon"
-      >
-        Missing translation: administration.tokenCategoryNumber
-      </label>
       <Helper
         additionalTextClasses=""
         classname=""
@@ -229,103 +243,106 @@ exports[`tokensForm component should render a form to configure a token vote wit
         label=""
       />
     </div>
-    <SplitButton
-      id="input-dropdown-addon"
-      onSelect={[Function]}
-      required={true}
-      title={1}
-    >
-      <MenuItem
-        bsClass="dropdown"
-        disabled={false}
-        divider={false}
-        eventKey={1}
-        header={false}
+    <div>
+      <SplitButton
+        className="admin-dropdown"
+        id="input-dropdown-addon"
+        onSelect={[Function]}
+        required={true}
+        title={1}
       >
-        1
-      </MenuItem>
-      <MenuItem
-        bsClass="dropdown"
-        disabled={false}
-        divider={false}
-        eventKey={2}
-        header={false}
-      >
-        2
-      </MenuItem>
-      <MenuItem
-        bsClass="dropdown"
-        disabled={false}
-        divider={false}
-        eventKey={3}
-        header={false}
-      >
-        3
-      </MenuItem>
-      <MenuItem
-        bsClass="dropdown"
-        disabled={false}
-        divider={false}
-        eventKey={4}
-        header={false}
-      >
-        4
-      </MenuItem>
-      <MenuItem
-        bsClass="dropdown"
-        disabled={false}
-        divider={false}
-        eventKey={5}
-        header={false}
-      >
-        5
-      </MenuItem>
-      <MenuItem
-        bsClass="dropdown"
-        disabled={false}
-        divider={false}
-        eventKey={6}
-        header={false}
-      >
-        6
-      </MenuItem>
-      <MenuItem
-        bsClass="dropdown"
-        disabled={false}
-        divider={false}
-        eventKey={7}
-        header={false}
-      >
-        7
-      </MenuItem>
-      <MenuItem
-        bsClass="dropdown"
-        disabled={false}
-        divider={false}
-        eventKey={8}
-        header={false}
-      >
-        8
-      </MenuItem>
-      <MenuItem
-        bsClass="dropdown"
-        disabled={false}
-        divider={false}
-        eventKey={9}
-        header={false}
-      >
-        9
-      </MenuItem>
-      <MenuItem
-        bsClass="dropdown"
-        disabled={false}
-        divider={false}
-        eventKey={10}
-        header={false}
-      >
-        10
-      </MenuItem>
-    </SplitButton>
+        <MenuItem
+          bsClass="dropdown"
+          disabled={false}
+          divider={false}
+          eventKey={1}
+          header={false}
+        >
+          1
+        </MenuItem>
+        <MenuItem
+          bsClass="dropdown"
+          disabled={false}
+          divider={false}
+          eventKey={2}
+          header={false}
+        >
+          2
+        </MenuItem>
+        <MenuItem
+          bsClass="dropdown"
+          disabled={false}
+          divider={false}
+          eventKey={3}
+          header={false}
+        >
+          3
+        </MenuItem>
+        <MenuItem
+          bsClass="dropdown"
+          disabled={false}
+          divider={false}
+          eventKey={4}
+          header={false}
+        >
+          4
+        </MenuItem>
+        <MenuItem
+          bsClass="dropdown"
+          disabled={false}
+          divider={false}
+          eventKey={5}
+          header={false}
+        >
+          5
+        </MenuItem>
+        <MenuItem
+          bsClass="dropdown"
+          disabled={false}
+          divider={false}
+          eventKey={6}
+          header={false}
+        >
+          6
+        </MenuItem>
+        <MenuItem
+          bsClass="dropdown"
+          disabled={false}
+          divider={false}
+          eventKey={7}
+          header={false}
+        >
+          7
+        </MenuItem>
+        <MenuItem
+          bsClass="dropdown"
+          disabled={false}
+          divider={false}
+          eventKey={8}
+          header={false}
+        >
+          8
+        </MenuItem>
+        <MenuItem
+          bsClass="dropdown"
+          disabled={false}
+          divider={false}
+          eventKey={9}
+          header={false}
+        >
+          9
+        </MenuItem>
+        <MenuItem
+          bsClass="dropdown"
+          disabled={false}
+          divider={false}
+          eventKey={10}
+          header={false}
+        >
+          10
+        </MenuItem>
+      </SplitButton>
+    </div>
     <div>
       <div
         className="separator"

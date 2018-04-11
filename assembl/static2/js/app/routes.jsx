@@ -60,7 +60,7 @@ const DebateChild = (props) => {
   case 'voteSession':
     return <NotFound />;
   default:
-    return <Idea id={props.id} identifier={props.identifier} />;
+    return <Idea id={props.id} identifier={props.identifier} routerParams={props.params} />;
   }
 };
 

@@ -54,9 +54,7 @@ const TokenVotesResults = ({ categories, tokenVotes, numVotes, titleMsgId }: Pro
         <Doughnut elements={elements} />
         <div className="doughnut-totalCount">
           <div className="vote-totalCount">{numVotes}</div>
-          <div>
-            {numVotes > 1 ? <Translate value="debate.voteSession.votes" /> : <Translate value="debate.voteSession.vote" />}
-          </div>
+          <div>{numVotes > 1 ? <Translate value="debate.votes" /> : <Translate value="debate.vote" />}</div>
         </div>
       </div>
     </div>

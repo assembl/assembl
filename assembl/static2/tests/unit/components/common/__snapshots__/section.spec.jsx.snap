@@ -3,6 +3,7 @@
 exports[`Section component should match Section snapshot 1`] = `
 <section
   className="themes-section"
+  id={undefined}
 >
   <div
     className="max-container "
@@ -37,6 +38,7 @@ exports[`Section component should match Section snapshot 1`] = `
 exports[`Section component should match Section with 1 parent snapshot 1`] = `
 <section
   className="themes-section"
+  id={undefined}
 >
   <div
     className="max-container "
@@ -69,6 +71,7 @@ exports[`Section component should match Section with 1 parent snapshot 1`] = `
 exports[`Section component should match Section with 2 parents snapshot 1`] = `
 <section
   className="themes-section"
+  id={undefined}
 >
   <div
     className="max-container "
@@ -101,6 +104,7 @@ exports[`Section component should match Section with 2 parents snapshot 1`] = `
 exports[`Section component should match Section with translate prop 1`] = `
 <section
   className="themes-section"
+  id={undefined}
 >
   <div
     className="max-container "

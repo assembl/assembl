@@ -1,0 +1,5 @@
+mutation deleteExtract($extractId: ID!) {
+  deleteExtract(extractId: $extractId) {
+    success
+  }
+}

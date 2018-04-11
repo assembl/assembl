@@ -117,6 +117,8 @@
   transition: none;
   color: $btn-dark-border-color;
   margin-left: 18px;
+  display: inline-block;
+  height: 40px;
 
   &:before {
     transition: none;
@@ -126,8 +128,8 @@
     transition: none;
     position: absolute;
     left: -14px;
-    height: 27px;
-    width: 27px;
+    height: 28px;
+    width: 28px;
     border: $btn-dark-border-style $btn-dark-border-width $btn-dark-border-color;
     transform: rotate(45deg);
     top: 4px;
@@ -154,4 +156,67 @@
       right: 0;
     }
   }
+}
+
+.action-button {
+  display: inline-block;
+  padding: 10px 0 8px;
+  margin-right: 30px;
+  cursor: pointer;
+  min-width: 165px;
+  text-align: center;
+
+  &:hover {
+    .action-button-label {
+      font-family: $font-family3;
+    }
+
+    svg {
+      stroke-width: 2.3;
+    }
+
+    span {
+      &:before {
+        font-weight: 700;
+      }
+    }
+  }
+
+  svg {
+    vertical-align: middle;
+  }
+
+  .action-button-label {
+    color: $white;
+    display: inline-block;
+    vertical-align: middle;
+    margin-left: 8px;
+    text-transform: uppercase;
+    font-size: $font-size-xs;
+    font-family: $font-family4;
+  }
+}
+
+.share-button {
+  background-color: $first-color;
+
+  .share-icon-container {
+    display: inline-block;
+    width: 30px;
+    height: 30px;
+    vertical-align: middle;
+    padding-top: 5px;
+  }
+}
+
+.like-button {
+  background-color: $like-color;
+}
+
+.disagree-button {
+  background-color: $disagree-color;
+}
+
+.info-button {
+  background-color: $more-info-color;
 }

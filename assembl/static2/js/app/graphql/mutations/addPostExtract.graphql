@@ -1,0 +1,32 @@
+#import "../fragments/Post.graphql"
+#import "../fragments/Extract.graphql"
+
+mutation addPostExtract(
+  $contentLocale: String!
+  $postId: ID!
+  $body: String!
+  $important: Boolean
+  $xpathStart: String!
+  $xpathEnd: String!
+  $offsetStart: Int!
+  $offsetEnd: Int!
+) {
+  addPostExtract(
+    postId: $postId
+    body: $body
+    important: $important
+    xpathStart: $xpathStart
+    xpathEnd: $xpathEnd
+    offsetStart: $offsetStart
+    offsetEnd: $offsetEnd
+  ) {
+    post {
+      ...Post
+      ... on Post {
+        extracts {
+          ...Extract
+        }
+      }
+    }
+  }
+}

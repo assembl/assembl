@@ -74,6 +74,7 @@ export const ADD_MODULE_TO_PROPOSAL: 'ADD_MODULE_TO_PROPOSAL' = 'ADD_MODULE_TO_P
 export const UNDELETE_MODULE: 'UNDELETE_MODULE' = 'UNDELETE_MODULE';
 export const MARK_ALL_DEPENDENCIES_AS_CHANGED: 'MARK_ALL_DEPENDENCIES_AS_CHANGED' = 'MARK_ALL_DEPENDENCIES_AS_CHANGED';
 export const SET_VALIDATION_ERRORS: 'SET_VALIDATION_ERRORS' = 'SET_VALIDATION_ERRORS';
+export const CANCEL_MODULE_CUSTOMIZATION: 'CANCEL_MODULE_CUSTOMIZATION' = 'CANCEL_MODULE_CUSTOMIZATION';
 
 export type UpdateContentLocaleById = {
   type: typeof UPDATE_CONTENT_LOCALE_BY_ID,
@@ -510,6 +511,11 @@ export type SetValidationErrors = {
   errors: ValidationErrors,
   id: string,
   type: typeof SET_VALIDATION_ERRORS
+};
+
+export type CancelModuleCustomization = {
+  id: string,
+  type: typeof CANCEL_MODULE_CUSTOMIZATION
 };
 
 type BasicAction = {

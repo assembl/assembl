@@ -21,6 +21,7 @@ const icons = [
   'assembl-icon-add',
   'assembl-icon-catch',
   'assembl-icon-checked',
+  'assembl-icon-check',
   'assembl-icon-discussion',
   'assembl-icon-edit',
   'assembl-icon-cancel',
@@ -64,7 +65,8 @@ const icons = [
   'assembl-icon-up-bold',
   'assembl-icon-down-bold',
   'assembl-icon-down-small',
-  'assembl-icon-up-small'
+  'assembl-icon-up-small',
+  'assembl-icon-participation-vote'
 ];
 
 class Icons extends React.Component {

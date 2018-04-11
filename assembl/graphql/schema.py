@@ -26,7 +26,8 @@ from assembl.graphql.langstring import resolve_langstring
 from assembl.graphql.locale import Locale
 from assembl.graphql.post import (AddPostAttachment, CreatePost, DeletePost,
                                   DeletePostAttachment, UndeletePost,
-                                  UpdatePost)
+                                  UpdatePost, AddPostExtract)
+from assembl.graphql.extract import (UpdateExtract, DeleteExtract)
 from assembl.graphql.resource import (CreateResource, DeleteResource, Resource,
                                       UpdateResource)
 from assembl.graphql.section import (CreateSection, DeleteSection, Section,
@@ -345,6 +346,9 @@ class Mutations(graphene.ObjectType):
     delete_token_vote = DeleteTokenVote.Field()
     add_gauge_vote = AddGaugeVote.Field()
     delete_gauge_vote = DeleteGaugeVote.Field()
+    add_post_extract = AddPostExtract.Field()
+    update_extract = UpdateExtract.Field()
+    delete_extract = DeleteExtract.Field()
 
 
 Schema = graphene.Schema(query=Query, mutation=Mutations)

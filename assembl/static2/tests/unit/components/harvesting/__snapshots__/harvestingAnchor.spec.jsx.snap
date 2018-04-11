@@ -1,0 +1,53 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`harvestingAnchor component should match harvestingAnchor snapshot 1`] = `
+<OverlayTrigger
+  defaultOverlayShown={false}
+  overlay={
+    <Tooltip
+      bsClass="tooltip"
+      id="harvestingTooltip"
+      placement="right"
+    >
+      <Translate
+        value="harvesting.harvesting"
+      />
+    </Tooltip>
+  }
+  placement="top"
+  trigger={
+    Array [
+      "hover",
+      "focus",
+    ]
+  }
+>
+  <div
+    className="harvesting-anchor"
+    style={
+      Object {
+        "left": "56px",
+        "top": "156px",
+      }
+    }
+  >
+    <div
+      className="left-side-harvesting-button"
+    >
+      <div
+        className="left-side-harvesting-button__button"
+        onClick={undefined}
+        onMouseDown={undefined}
+      >
+        <div
+          className="left-side-harvesting-button__button__inside"
+        >
+          <span
+            className="confirm-harvest-button assembl-icon-catch"
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+</OverlayTrigger>
+`;

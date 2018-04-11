@@ -83,16 +83,11 @@ const AvailableTokens = ({ remainingTokensByCategory, sticky, tokenCategories }:
                         style={
                           sticky && tokenCategories.length % 2 !== 0 && tokenCategories.length > 2
                             ? { maxWidth: '160px' }
-                            : { minWidth: '330px' }
+                            : { minWidth: '360px' }
                         }
                       >
                         {range(totalNumber).map(n => (
-                          <Circle
-                            key={n + 1}
-                            size="28px"
-                            strokeColor={color}
-                            fillColor={n + 1 <= remaining ? color : undefined}
-                          />
+                          <Circle key={n + 1} size={28} strokeColor={color} fillColor={n + 1 <= remaining ? color : undefined} />
                         ))}
                       </div>
                     </div>

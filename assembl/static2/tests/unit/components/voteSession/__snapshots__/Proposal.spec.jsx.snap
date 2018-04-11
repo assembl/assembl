@@ -54,26 +54,22 @@ exports[`Proposal component should match Proposal snapshot 1`] = `
             >
               <svg
                 aria-hidden="true"
-                height="28px"
+                height={28}
                 role="img"
                 version="1.1"
-                viewBox="0 0 22 22"
-                width="28px"
-                x="0px"
+                viewBox="0 0 28 28"
+                width={28}
+                x="0"
                 xmlSpace="preserve"
-                y="0px"
+                y="0"
               >
-                <path
-                  className="outer"
-                  d="m 15.59322,11.271187 a 6.2288136,6.3559322 0 1 1 -12.4576271,0 6.2288136,6.3559322 0 1 1 12.4576271,0 z"
+                <circle
+                  cx={14}
+                  cy={14}
                   fill="none"
-                  id="path2999"
+                  r={13}
                   stroke="#226622"
-                  strokeDasharray="none"
-                  strokeMiterlimit="4"
-                  strokeOpacity="1"
-                  strokeWidth="1"
-                  transform="matrix(1.4872568,0,0,1.4575117,-3.9272774,-6.4278868)"
+                  strokeWidth={2}
                 />
               </svg>
             </button>
@@ -89,26 +85,22 @@ exports[`Proposal component should match Proposal snapshot 1`] = `
             >
               <svg
                 aria-hidden="true"
-                height="28px"
+                height={28}
                 role="img"
                 version="1.1"
-                viewBox="0 0 22 22"
-                width="28px"
-                x="0px"
+                viewBox="0 0 28 28"
+                width={28}
+                x="0"
                 xmlSpace="preserve"
-                y="0px"
+                y="0"
               >
-                <path
-                  className="outer"
-                  d="m 15.59322,11.271187 a 6.2288136,6.3559322 0 1 1 -12.4576271,0 6.2288136,6.3559322 0 1 1 12.4576271,0 z"
+                <circle
+                  cx={14}
+                  cy={14}
                   fill="none"
-                  id="path2999"
+                  r={13}
                   stroke="#226622"
-                  strokeDasharray="none"
-                  strokeMiterlimit="4"
-                  strokeOpacity="1"
-                  strokeWidth="1"
-                  transform="matrix(1.4872568,0,0,1.4575117,-3.9272774,-6.4278868)"
+                  strokeWidth={2}
                 />
               </svg>
             </button>
@@ -124,26 +116,22 @@ exports[`Proposal component should match Proposal snapshot 1`] = `
             >
               <svg
                 aria-hidden="true"
-                height="28px"
+                height={28}
                 role="img"
                 version="1.1"
-                viewBox="0 0 22 22"
-                width="28px"
-                x="0px"
+                viewBox="0 0 28 28"
+                width={28}
+                x="0"
                 xmlSpace="preserve"
-                y="0px"
+                y="0"
               >
-                <path
-                  className="outer"
-                  d="m 15.59322,11.271187 a 6.2288136,6.3559322 0 1 1 -12.4576271,0 6.2288136,6.3559322 0 1 1 12.4576271,0 z"
+                <circle
+                  cx={14}
+                  cy={14}
                   fill="none"
-                  id="path2999"
+                  r={13}
                   stroke="#226622"
-                  strokeDasharray="none"
-                  strokeMiterlimit="4"
-                  strokeOpacity="1"
-                  strokeWidth="1"
-                  transform="matrix(1.4872568,0,0,1.4575117,-3.9272774,-6.4278868)"
+                  strokeWidth={2}
                 />
               </svg>
             </button>
@@ -159,26 +147,22 @@ exports[`Proposal component should match Proposal snapshot 1`] = `
             >
               <svg
                 aria-hidden="true"
-                height="28px"
+                height={28}
                 role="img"
                 version="1.1"
-                viewBox="0 0 22 22"
-                width="28px"
-                x="0px"
+                viewBox="0 0 28 28"
+                width={28}
+                x="0"
                 xmlSpace="preserve"
-                y="0px"
+                y="0"
               >
-                <path
-                  className="outer"
-                  d="m 15.59322,11.271187 a 6.2288136,6.3559322 0 1 1 -12.4576271,0 6.2288136,6.3559322 0 1 1 12.4576271,0 z"
+                <circle
+                  cx={14}
+                  cy={14}
                   fill="none"
-                  id="path2999"
+                  r={13}
                   stroke="#226622"
-                  strokeDasharray="none"
-                  strokeMiterlimit="4"
-                  strokeOpacity="1"
-                  strokeWidth="1"
-                  transform="matrix(1.4872568,0,0,1.4575117,-3.9272774,-6.4278868)"
+                  strokeWidth={2}
                 />
               </svg>
             </button>
@@ -194,26 +178,22 @@ exports[`Proposal component should match Proposal snapshot 1`] = `
             >
               <svg
                 aria-hidden="true"
-                height="28px"
+                height={28}
                 role="img"
                 version="1.1"
-                viewBox="0 0 22 22"
-                width="28px"
-                x="0px"
+                viewBox="0 0 28 28"
+                width={28}
+                x="0"
                 xmlSpace="preserve"
-                y="0px"
+                y="0"
               >
-                <path
-                  className="outer"
-                  d="m 15.59322,11.271187 a 6.2288136,6.3559322 0 1 1 -12.4576271,0 6.2288136,6.3559322 0 1 1 12.4576271,0 z"
+                <circle
+                  cx={14}
+                  cy={14}
                   fill="none"
-                  id="path2999"
+                  r={13}
                   stroke="#226622"
-                  strokeDasharray="none"
-                  strokeMiterlimit="4"
-                  strokeOpacity="1"
-                  strokeWidth="1"
-                  transform="matrix(1.4872568,0,0,1.4575117,-3.9272774,-6.4278868)"
+                  strokeWidth={2}
                 />
               </svg>
             </button>
@@ -229,26 +209,22 @@ exports[`Proposal component should match Proposal snapshot 1`] = `
             >
               <svg
                 aria-hidden="true"
-                height="28px"
+                height={28}
                 role="img"
                 version="1.1"
-                viewBox="0 0 22 22"
-                width="28px"
-                x="0px"
+                viewBox="0 0 28 28"
+                width={28}
+                x="0"
                 xmlSpace="preserve"
-                y="0px"
+                y="0"
               >
-                <path
-                  className="outer"
-                  d="m 15.59322,11.271187 a 6.2288136,6.3559322 0 1 1 -12.4576271,0 6.2288136,6.3559322 0 1 1 12.4576271,0 z"
+                <circle
+                  cx={14}
+                  cy={14}
                   fill="none"
-                  id="path2999"
+                  r={13}
                   stroke="#226622"
-                  strokeDasharray="none"
-                  strokeMiterlimit="4"
-                  strokeOpacity="1"
-                  strokeWidth="1"
-                  transform="matrix(1.4872568,0,0,1.4575117,-3.9272774,-6.4278868)"
+                  strokeWidth={2}
                 />
               </svg>
             </button>
@@ -264,26 +240,22 @@ exports[`Proposal component should match Proposal snapshot 1`] = `
             >
               <svg
                 aria-hidden="true"
-                height="28px"
+                height={28}
                 role="img"
                 version="1.1"
-                viewBox="0 0 22 22"
-                width="28px"
-                x="0px"
+                viewBox="0 0 28 28"
+                width={28}
+                x="0"
                 xmlSpace="preserve"
-                y="0px"
+                y="0"
               >
-                <path
-                  className="outer"
-                  d="m 15.59322,11.271187 a 6.2288136,6.3559322 0 1 1 -12.4576271,0 6.2288136,6.3559322 0 1 1 12.4576271,0 z"
+                <circle
+                  cx={14}
+                  cy={14}
                   fill="none"
-                  id="path2999"
+                  r={13}
                   stroke="#226622"
-                  strokeDasharray="none"
-                  strokeMiterlimit="4"
-                  strokeOpacity="1"
-                  strokeWidth="1"
-                  transform="matrix(1.4872568,0,0,1.4575117,-3.9272774,-6.4278868)"
+                  strokeWidth={2}
                 />
               </svg>
             </button>
@@ -299,26 +271,22 @@ exports[`Proposal component should match Proposal snapshot 1`] = `
             >
               <svg
                 aria-hidden="true"
-                height="28px"
+                height={28}
                 role="img"
                 version="1.1"
-                viewBox="0 0 22 22"
-                width="28px"
-                x="0px"
+                viewBox="0 0 28 28"
+                width={28}
+                x="0"
                 xmlSpace="preserve"
-                y="0px"
+                y="0"
               >
-                <path
-                  className="outer"
-                  d="m 15.59322,11.271187 a 6.2288136,6.3559322 0 1 1 -12.4576271,0 6.2288136,6.3559322 0 1 1 12.4576271,0 z"
+                <circle
+                  cx={14}
+                  cy={14}
                   fill="none"
-                  id="path2999"
+                  r={13}
                   stroke="#226622"
-                  strokeDasharray="none"
-                  strokeMiterlimit="4"
-                  strokeOpacity="1"
-                  strokeWidth="1"
-                  transform="matrix(1.4872568,0,0,1.4575117,-3.9272774,-6.4278868)"
+                  strokeWidth={2}
                 />
               </svg>
             </button>
@@ -334,26 +302,22 @@ exports[`Proposal component should match Proposal snapshot 1`] = `
             >
               <svg
                 aria-hidden="true"
-                height="28px"
+                height={28}
                 role="img"
                 version="1.1"
-                viewBox="0 0 22 22"
-                width="28px"
-                x="0px"
+                viewBox="0 0 28 28"
+                width={28}
+                x="0"
                 xmlSpace="preserve"
-                y="0px"
+                y="0"
               >
-                <path
-                  className="outer"
-                  d="m 15.59322,11.271187 a 6.2288136,6.3559322 0 1 1 -12.4576271,0 6.2288136,6.3559322 0 1 1 12.4576271,0 z"
+                <circle
+                  cx={14}
+                  cy={14}
                   fill="none"
-                  id="path2999"
+                  r={13}
                   stroke="#226622"
-                  strokeDasharray="none"
-                  strokeMiterlimit="4"
-                  strokeOpacity="1"
-                  strokeWidth="1"
-                  transform="matrix(1.4872568,0,0,1.4575117,-3.9272774,-6.4278868)"
+                  strokeWidth={2}
                 />
               </svg>
             </button>
@@ -369,26 +333,22 @@ exports[`Proposal component should match Proposal snapshot 1`] = `
             >
               <svg
                 aria-hidden="true"
-                height="28px"
+                height={28}
                 role="img"
                 version="1.1"
-                viewBox="0 0 22 22"
-                width="28px"
-                x="0px"
+                viewBox="0 0 28 28"
+                width={28}
+                x="0"
                 xmlSpace="preserve"
-                y="0px"
+                y="0"
               >
-                <path
-                  className="outer"
-                  d="m 15.59322,11.271187 a 6.2288136,6.3559322 0 1 1 -12.4576271,0 6.2288136,6.3559322 0 1 1 12.4576271,0 z"
+                <circle
+                  cx={14}
+                  cy={14}
                   fill="none"
-                  id="path2999"
+                  r={13}
                   stroke="#226622"
-                  strokeDasharray="none"
-                  strokeMiterlimit="4"
-                  strokeOpacity="1"
-                  strokeWidth="1"
-                  transform="matrix(1.4872568,0,0,1.4575117,-3.9272774,-6.4278868)"
+                  strokeWidth={2}
                 />
               </svg>
             </button>
@@ -404,26 +364,22 @@ exports[`Proposal component should match Proposal snapshot 1`] = `
             >
               <svg
                 aria-hidden="true"
-                height="28px"
+                height={28}
                 role="img"
                 version="1.1"
-                viewBox="0 0 22 22"
-                width="28px"
-                x="0px"
+                viewBox="0 0 28 28"
+                width={28}
+                x="0"
                 xmlSpace="preserve"
-                y="0px"
+                y="0"
               >
-                <path
-                  className="outer"
-                  d="m 15.59322,11.271187 a 6.2288136,6.3559322 0 1 1 -12.4576271,0 6.2288136,6.3559322 0 1 1 12.4576271,0 z"
+                <circle
+                  cx={14}
+                  cy={14}
                   fill="none"
-                  id="path2999"
+                  r={13}
                   stroke="#226622"
-                  strokeDasharray="none"
-                  strokeMiterlimit="4"
-                  strokeOpacity="1"
-                  strokeWidth="1"
-                  transform="matrix(1.4872568,0,0,1.4575117,-3.9272774,-6.4278868)"
+                  strokeWidth={2}
                 />
               </svg>
             </button>
@@ -439,26 +395,22 @@ exports[`Proposal component should match Proposal snapshot 1`] = `
             >
               <svg
                 aria-hidden="true"
-                height="28px"
+                height={28}
                 role="img"
                 version="1.1"
-                viewBox="0 0 22 22"
-                width="28px"
-                x="0px"
+                viewBox="0 0 28 28"
+                width={28}
+                x="0"
                 xmlSpace="preserve"
-                y="0px"
+                y="0"
               >
-                <path
-                  className="outer"
-                  d="m 15.59322,11.271187 a 6.2288136,6.3559322 0 1 1 -12.4576271,0 6.2288136,6.3559322 0 1 1 12.4576271,0 z"
+                <circle
+                  cx={14}
+                  cy={14}
                   fill="none"
-                  id="path2999"
+                  r={13}
                   stroke="#226622"
-                  strokeDasharray="none"
-                  strokeMiterlimit="4"
-                  strokeOpacity="1"
-                  strokeWidth="1"
-                  transform="matrix(1.4872568,0,0,1.4575117,-3.9272774,-6.4278868)"
+                  strokeWidth={2}
                 />
               </svg>
             </button>
@@ -499,26 +451,22 @@ exports[`Proposal component should match Proposal snapshot 1`] = `
             >
               <svg
                 aria-hidden="true"
-                height="28px"
+                height={28}
                 role="img"
                 version="1.1"
-                viewBox="0 0 22 22"
-                width="28px"
-                x="0px"
+                viewBox="0 0 28 28"
+                width={28}
+                x="0"
                 xmlSpace="preserve"
-                y="0px"
+                y="0"
               >
-                <path
-                  className="outer"
-                  d="m 15.59322,11.271187 a 6.2288136,6.3559322 0 1 1 -12.4576271,0 6.2288136,6.3559322 0 1 1 12.4576271,0 z"
+                <circle
+                  cx={14}
+                  cy={14}
                   fill="none"
-                  id="path2999"
+                  r={13}
                   stroke="#771122"
-                  strokeDasharray="none"
-                  strokeMiterlimit="4"
-                  strokeOpacity="1"
-                  strokeWidth="1"
-                  transform="matrix(1.4872568,0,0,1.4575117,-3.9272774,-6.4278868)"
+                  strokeWidth={2}
                 />
               </svg>
             </button>
@@ -534,26 +482,22 @@ exports[`Proposal component should match Proposal snapshot 1`] = `
             >
               <svg
                 aria-hidden="true"
-                height="28px"
+                height={28}
                 role="img"
                 version="1.1"
-                viewBox="0 0 22 22"
-                width="28px"
-                x="0px"
+                viewBox="0 0 28 28"
+                width={28}
+                x="0"
                 xmlSpace="preserve"
-                y="0px"
+                y="0"
               >
-                <path
-                  className="outer"
-                  d="m 15.59322,11.271187 a 6.2288136,6.3559322 0 1 1 -12.4576271,0 6.2288136,6.3559322 0 1 1 12.4576271,0 z"
+                <circle
+                  cx={14}
+                  cy={14}
                   fill="none"
-                  id="path2999"
+                  r={13}
                   stroke="#771122"
-                  strokeDasharray="none"
-                  strokeMiterlimit="4"
-                  strokeOpacity="1"
-                  strokeWidth="1"
-                  transform="matrix(1.4872568,0,0,1.4575117,-3.9272774,-6.4278868)"
+                  strokeWidth={2}
                 />
               </svg>
             </button>
@@ -569,26 +513,22 @@ exports[`Proposal component should match Proposal snapshot 1`] = `
             >
               <svg
                 aria-hidden="true"
-                height="28px"
+                height={28}
                 role="img"
                 version="1.1"
-                viewBox="0 0 22 22"
-                width="28px"
-                x="0px"
+                viewBox="0 0 28 28"
+                width={28}
+                x="0"
                 xmlSpace="preserve"
-                y="0px"
+                y="0"
               >
-                <path
-                  className="outer"
-                  d="m 15.59322,11.271187 a 6.2288136,6.3559322 0 1 1 -12.4576271,0 6.2288136,6.3559322 0 1 1 12.4576271,0 z"
+                <circle
+                  cx={14}
+                  cy={14}
                   fill="none"
-                  id="path2999"
+                  r={13}
                   stroke="#771122"
-                  strokeDasharray="none"
-                  strokeMiterlimit="4"
-                  strokeOpacity="1"
-                  strokeWidth="1"
-                  transform="matrix(1.4872568,0,0,1.4575117,-3.9272774,-6.4278868)"
+                  strokeWidth={2}
                 />
               </svg>
             </button>
@@ -604,26 +544,22 @@ exports[`Proposal component should match Proposal snapshot 1`] = `
             >
               <svg
                 aria-hidden="true"
-                height="28px"
+                height={28}
                 role="img"
                 version="1.1"
-                viewBox="0 0 22 22"
-                width="28px"
-                x="0px"
+                viewBox="0 0 28 28"
+                width={28}
+                x="0"
                 xmlSpace="preserve"
-                y="0px"
+                y="0"
               >
-                <path
-                  className="outer"
-                  d="m 15.59322,11.271187 a 6.2288136,6.3559322 0 1 1 -12.4576271,0 6.2288136,6.3559322 0 1 1 12.4576271,0 z"
+                <circle
+                  cx={14}
+                  cy={14}
                   fill="none"
-                  id="path2999"
+                  r={13}
                   stroke="#771122"
-                  strokeDasharray="none"
-                  strokeMiterlimit="4"
-                  strokeOpacity="1"
-                  strokeWidth="1"
-                  transform="matrix(1.4872568,0,0,1.4575117,-3.9272774,-6.4278868)"
+                  strokeWidth={2}
                 />
               </svg>
             </button>
@@ -639,26 +575,22 @@ exports[`Proposal component should match Proposal snapshot 1`] = `
             >
               <svg
                 aria-hidden="true"
-                height="28px"
+                height={28}
                 role="img"
                 version="1.1"
-                viewBox="0 0 22 22"
-                width="28px"
-                x="0px"
+                viewBox="0 0 28 28"
+                width={28}
+                x="0"
                 xmlSpace="preserve"
-                y="0px"
+                y="0"
               >
-                <path
-                  className="outer"
-                  d="m 15.59322,11.271187 a 6.2288136,6.3559322 0 1 1 -12.4576271,0 6.2288136,6.3559322 0 1 1 12.4576271,0 z"
+                <circle
+                  cx={14}
+                  cy={14}
                   fill="none"
-                  id="path2999"
+                  r={13}
                   stroke="#771122"
-                  strokeDasharray="none"
-                  strokeMiterlimit="4"
-                  strokeOpacity="1"
-                  strokeWidth="1"
-                  transform="matrix(1.4872568,0,0,1.4575117,-3.9272774,-6.4278868)"
+                  strokeWidth={2}
                 />
               </svg>
             </button>
@@ -674,26 +606,22 @@ exports[`Proposal component should match Proposal snapshot 1`] = `
             >
               <svg
                 aria-hidden="true"
-                height="28px"
+                height={28}
                 role="img"
                 version="1.1"
-                viewBox="0 0 22 22"
-                width="28px"
-                x="0px"
+                viewBox="0 0 28 28"
+                width={28}
+                x="0"
                 xmlSpace="preserve"
-                y="0px"
+                y="0"
               >
-                <path
-                  className="outer"
-                  d="m 15.59322,11.271187 a 6.2288136,6.3559322 0 1 1 -12.4576271,0 6.2288136,6.3559322 0 1 1 12.4576271,0 z"
+                <circle
+                  cx={14}
+                  cy={14}
                   fill="none"
-                  id="path2999"
+                  r={13}
                   stroke="#771122"
-                  strokeDasharray="none"
-                  strokeMiterlimit="4"
-                  strokeOpacity="1"
-                  strokeWidth="1"
-                  transform="matrix(1.4872568,0,0,1.4575117,-3.9272774,-6.4278868)"
+                  strokeWidth={2}
                 />
               </svg>
             </button>
@@ -709,26 +637,22 @@ exports[`Proposal component should match Proposal snapshot 1`] = `
             >
               <svg
                 aria-hidden="true"
-                height="28px"
+                height={28}
                 role="img"
                 version="1.1"
-                viewBox="0 0 22 22"
-                width="28px"
-                x="0px"
+                viewBox="0 0 28 28"
+                width={28}
+                x="0"
                 xmlSpace="preserve"
-                y="0px"
+                y="0"
               >
-                <path
-                  className="outer"
-                  d="m 15.59322,11.271187 a 6.2288136,6.3559322 0 1 1 -12.4576271,0 6.2288136,6.3559322 0 1 1 12.4576271,0 z"
+                <circle
+                  cx={14}
+                  cy={14}
                   fill="none"
-                  id="path2999"
+                  r={13}
                   stroke="#771122"
-                  strokeDasharray="none"
-                  strokeMiterlimit="4"
-                  strokeOpacity="1"
-                  strokeWidth="1"
-                  transform="matrix(1.4872568,0,0,1.4575117,-3.9272774,-6.4278868)"
+                  strokeWidth={2}
                 />
               </svg>
             </button>
@@ -744,26 +668,22 @@ exports[`Proposal component should match Proposal snapshot 1`] = `
             >
               <svg
                 aria-hidden="true"
-                height="28px"
+                height={28}
                 role="img"
                 version="1.1"
-                viewBox="0 0 22 22"
-                width="28px"
-                x="0px"
+                viewBox="0 0 28 28"
+                width={28}
+                x="0"
                 xmlSpace="preserve"
-                y="0px"
+                y="0"
               >
-                <path
-                  className="outer"
-                  d="m 15.59322,11.271187 a 6.2288136,6.3559322 0 1 1 -12.4576271,0 6.2288136,6.3559322 0 1 1 12.4576271,0 z"
+                <circle
+                  cx={14}
+                  cy={14}
                   fill="none"
-                  id="path2999"
+                  r={13}
                   stroke="#771122"
-                  strokeDasharray="none"
-                  strokeMiterlimit="4"
-                  strokeOpacity="1"
-                  strokeWidth="1"
-                  transform="matrix(1.4872568,0,0,1.4575117,-3.9272774,-6.4278868)"
+                  strokeWidth={2}
                 />
               </svg>
             </button>
@@ -779,26 +699,22 @@ exports[`Proposal component should match Proposal snapshot 1`] = `
             >
               <svg
                 aria-hidden="true"
-                height="28px"
+                height={28}
                 role="img"
                 version="1.1"
-                viewBox="0 0 22 22"
-                width="28px"
-                x="0px"
+                viewBox="0 0 28 28"
+                width={28}
+                x="0"
                 xmlSpace="preserve"
-                y="0px"
+                y="0"
               >
-                <path
-                  className="outer"
-                  d="m 15.59322,11.271187 a 6.2288136,6.3559322 0 1 1 -12.4576271,0 6.2288136,6.3559322 0 1 1 12.4576271,0 z"
+                <circle
+                  cx={14}
+                  cy={14}
                   fill="none"
-                  id="path2999"
+                  r={13}
                   stroke="#771122"
-                  strokeDasharray="none"
-                  strokeMiterlimit="4"
-                  strokeOpacity="1"
-                  strokeWidth="1"
-                  transform="matrix(1.4872568,0,0,1.4575117,-3.9272774,-6.4278868)"
+                  strokeWidth={2}
                 />
               </svg>
             </button>
@@ -814,26 +730,22 @@ exports[`Proposal component should match Proposal snapshot 1`] = `
             >
               <svg
                 aria-hidden="true"
-                height="28px"
+                height={28}
                 role="img"
                 version="1.1"
-                viewBox="0 0 22 22"
-                width="28px"
-                x="0px"
+                viewBox="0 0 28 28"
+                width={28}
+                x="0"
                 xmlSpace="preserve"
-                y="0px"
+                y="0"
               >
-                <path
-                  className="outer"
-                  d="m 15.59322,11.271187 a 6.2288136,6.3559322 0 1 1 -12.4576271,0 6.2288136,6.3559322 0 1 1 12.4576271,0 z"
+                <circle
+                  cx={14}
+                  cy={14}
                   fill="none"
-                  id="path2999"
+                  r={13}
                   stroke="#771122"
-                  strokeDasharray="none"
-                  strokeMiterlimit="4"
-                  strokeOpacity="1"
-                  strokeWidth="1"
-                  transform="matrix(1.4872568,0,0,1.4575117,-3.9272774,-6.4278868)"
+                  strokeWidth={2}
                 />
               </svg>
             </button>

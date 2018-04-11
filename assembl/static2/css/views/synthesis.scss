@@ -1,6 +1,75 @@
 .synthesis-page {
-  .header-section {
-    height: 500px;
+  @media screen and (max-width: 1000px) {
+    .synthesis-side-menu {
+      display: none;
+    }
+  }
+
+  .synthesis-side-menu {
+    background-color: $white;
+    padding: 30px 10px 30px 30px;
+    margin: 0 10px;
+
+    .title-hyphen {
+      display: block;
+      width: 50px;
+      margin: 10px 0 10px -35px;
+    }
+
+    .assembl-icon-down-open {
+      font-size: $font-size-xxs;
+      color: $first-color;
+      margin-bottom: 1px;
+    }
+
+    .active-arrow {
+      transform: rotateX(180deg);
+    }
+
+    .link-container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .active {
+      background: rgba($first-color, 0.15);
+
+      a {
+        pointer-events: none;
+      }
+    }
+
+    .side-menu-link-1 {
+      overflow: auto;
+      font-size: $font-size-s;
+      color: $first-color;
+      line-height: 22px;
+      font-family: $font-family3;
+      letter-spacing: 2px;
+      padding: 4px 0;
+    }
+
+    .side-menu-link-2 {
+      overflow: auto;
+      margin-left: 20px;
+      font-size: $font-size-xs;
+      line-height: 20px;
+      font-family: $font-family3;
+    }
+
+    .side-menu-link-3 {
+      overflow: auto;
+      margin-left: 40px;
+      font-size: $font-size-xs;
+      line-height: 20px;
+      font-family: $font-family3;
+    }
+
+    .dark-title-4 {
+      font-family: $font-family;
+      font-size: $font-size-m;
+    }
   }
 
   .synthesis-block .content-section {

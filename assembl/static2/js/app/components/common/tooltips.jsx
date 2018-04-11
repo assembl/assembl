@@ -167,3 +167,39 @@ export const previousStepTooltip = (
     <Translate value="administration.previousStep" />
   </Tooltip>
 );
+
+export const validateExtractTooltip = (
+  <Tooltip id="validateExtractTooltip">
+    <Translate value="harvesting.validateExtract" />
+  </Tooltip>
+);
+
+export const editExtractTooltip = (
+  <Tooltip id="editExtractTooltip">
+    <Translate value="harvesting.editExtract" />
+  </Tooltip>
+);
+
+export const deleteExtractTooltip = (
+  <Tooltip id="deleteExtractTooltip">
+    <Translate value="harvesting.deleteExtract" />
+  </Tooltip>
+);
+
+export const nuggetExtractTooltip = (
+  <Tooltip id="nuggetExtractTooltip">
+    <Translate value="harvesting.nuggetExtract" />
+  </Tooltip>
+);
+
+export const qualifyExtractTooltip = (
+  <Tooltip id="qualifyExtractTooltip">
+    <Translate value="harvesting.qualifyExtract" />
+  </Tooltip>
+);
+
+export const harvestingTooltip = (
+  <Tooltip id="harvestingTooltip">
+    <Translate value="harvesting.harvesting" />
+  </Tooltip>
+);

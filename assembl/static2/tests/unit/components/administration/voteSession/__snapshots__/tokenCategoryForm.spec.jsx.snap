@@ -12,6 +12,7 @@ exports[`tokenTypeForm component should render a TokenCategoryForm component 1`]
     className="margin-m"
   >
     <FormControlWithLabel
+      helperUrl=""
       label="Missing translation: administration.tokenTitle"
       labelAlwaysVisible={false}
       onChange={[Function]}
@@ -26,6 +27,7 @@ exports[`tokenTypeForm component should render a TokenCategoryForm component 1`]
           "min": "1",
         }
       }
+      helperUrl=""
       label="Missing translation: administration.tokenNumber"
       labelAlwaysVisible={false}
       onChange={undefined}
@@ -59,7 +61,7 @@ exports[`tokenTypeForm component should render a TokenCategoryForm component 1`]
       id="color-picker"
       onChange={[Function]}
       triangle="hide"
-      width="400px"
+      width="100%"
     />
   </div>
   <div

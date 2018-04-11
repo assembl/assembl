@@ -8,6 +8,7 @@ from graphene_sqlalchemy import SQLAlchemyObjectType
 from pyramid.httpexceptions import HTTPUnauthorized
 from pyramid.i18n import TranslationStringFactory
 from pyramid.security import Everyone
+from sqlalchemy.orm import joinedload
 
 from assembl import models
 from assembl.auth import P_DELETE_MY_POST, P_DELETE_POST, CrudPermissions
@@ -17,6 +18,7 @@ from assembl.models.auth import (LanguagePreferenceCollection,
                                  LanguagePreferenceCollectionWithDefault)
 from jwzthreading import restrip_pat
 
+from .permissions_helpers import require_cls_permission
 from .document import Document
 from .idea import Idea
 from .langstring import (LangStringEntry, resolve_best_langstring_entries,
@@ -26,6 +28,7 @@ from .types import SecureObjectType, SQLAlchemyInterface
 from .user import AgentProfile
 from .utils import DateTime, abort_transaction_on_exception
 from .synthesis import Synthesis
+from .extract import Extract
 
 
 _ = TranslationStringFactory('assembl')
@@ -33,13 +36,6 @@ _ = TranslationStringFactory('assembl')
 publication_states_enum = PyEnum(
     'PublicationStates', [(k, k) for k in models.PublicationStates.values()])
 PublicationStates = graphene.Enum.from_enum(publication_states_enum)
-
-
-class Extract(SecureObjectType, SQLAlchemyObjectType):
-    class Meta:
-        model = models.Extract
-        interfaces = (Node, )
-        only_fields = ('id', 'body', 'important')
 
 
 class PostAttachment(SecureObjectType, SQLAlchemyObjectType):
@@ -94,11 +90,22 @@ class PostInterface(SQLAlchemyInterface):
     indirect_idea_content_links = graphene.List(IdeaContentLink)
     extracts = graphene.List(Extract)
     parent_id = graphene.ID()
+    db_id = graphene.Int()
     body_mime_type = graphene.String(required=True)
     publication_state = graphene.Field(type=PublicationStates)
     attachments = graphene.List(PostAttachment)
     original_locale = graphene.String()
     publishes_synthesis = graphene.Field(lambda: Synthesis)
+
+    def resolve_db_id(self, args, context, info):
+        return self.id
+
+    def resolve_extracts(self, args, context, info):
+        return self.db.query(models.Extract
+            ).join(models.Content, models.Extract.content == self
+            ).options(joinedload(models.Extract.text_fragment_identifiers)
+            ).order_by(models.Extract.creation_date
+            ).all()
 
     def resolve_subject(self, args, context, info):
         # Use self.subject and not self.get_subject() because we still
@@ -600,3 +607,47 @@ class DeletePostAttachment(graphene.Mutation):
         post.db.flush()
 
         return DeletePostAttachment(post=post)
+
+
+class AddPostExtract(graphene.Mutation):
+    class Input:
+        post_id = graphene.ID(required=True)
+        body = graphene.String(required=True)
+        important = graphene.Boolean()
+        xpath_start = graphene.String(required=True)
+        xpath_end = graphene.String(required=True)
+        offset_start = graphene.Int(required=True)
+        offset_end = graphene.Int(required=True)
+
+    post = graphene.Field(lambda: Post)
+
+    @staticmethod
+    @abort_transaction_on_exception
+    def mutate(root, args, context, info):
+        require_cls_permission(CrudPermissions.CREATE, models.Extract, context)
+        discussion_id = context.matchdict['discussion_id']
+
+        user_id = context.authenticated_userid or Everyone
+
+        post_id = args.get('post_id')
+        post_id = int(Node.from_global_id(post_id)[1])
+        post = models.Post.get(post_id)
+        new_extract = models.Extract(
+            creator_id=user_id,
+            owner_id=user_id,
+            discussion_id=discussion_id,
+            body=args.get('body'),
+            important=args.get('important', False),
+            content=post
+        )
+        post.db.add(new_extract)
+        range = models.TextFragmentIdentifier(
+            extract=new_extract,
+            xpath_start=args.get('xpath_start'),
+            offset_start=args.get('offset_start'),
+            xpath_end=args.get('xpath_end'),
+            offset_end=args.get('offset_end'))
+        post.db.add(range)
+        post.db.flush()
+
+        return AddPostExtract(post=post)

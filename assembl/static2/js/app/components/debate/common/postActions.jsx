@@ -115,6 +115,7 @@ class PostActions extends React.Component<DefaultProps, Props, void> {
             className="post-action"
             onClick={() =>
               openShareModal({
+                type: 'post',
                 title: modalTitle,
                 routerParams: routerParams,
                 elementId: postId,

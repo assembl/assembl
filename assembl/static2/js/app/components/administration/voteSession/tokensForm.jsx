@@ -1,8 +1,8 @@
 // @flow
 import React from 'react';
 import { connect } from 'react-redux';
-import { I18n } from 'react-redux-i18n';
-import { Checkbox, SplitButton, MenuItem } from 'react-bootstrap';
+import { I18n, Translate } from 'react-redux-i18n';
+import { SplitButton, MenuItem } from 'react-bootstrap';
 import range from 'lodash/range';
 import FormControlWithLabel from '../../common/formControlWithLabel';
 import { getEntryValueForLocale } from '../../../utils/i18n';
@@ -26,7 +26,7 @@ type TokensFormProps = {
   editLocale: string,
   handleInstructionsChange: Function,
   handleTokenVoteCategoryNumberChange: Function,
-  handleExclusiveCategoriesCheckboxChange: Function
+  handleExclusiveCategoriesDropdownChange: Function
 };
 
 const DumbTokensForm = ({
@@ -38,59 +38,66 @@ const DumbTokensForm = ({
   editLocale,
   handleInstructionsChange,
   handleTokenVoteCategoryNumberChange,
-  handleExclusiveCategoriesCheckboxChange
+  handleExclusiveCategoriesDropdownChange
 }: TokensFormProps) => (
   <div className="token-vote-form">
     <form>
-      {tokenCategoryNumber >= 2 && (
-        <div className="flex">
-          <Checkbox
-            checked={exclusiveCategories}
-            onChange={() => {
-              handleExclusiveCategoriesCheckboxChange(exclusiveCategories);
-            }}
-          >
-            <Helper
-              label={I18n.t('administration.exclusive')}
-              helperText={I18n.t('administration.helpers.exclusive')}
-              classname="inline"
-              additionalTextClasses="helper-text-only"
-            />
-          </Checkbox>
-        </div>
-      )}
-      <div className="flex">
-        <FormControlWithLabel
-          label={I18n.t('administration.tokenVoteInstructions')}
-          required
-          type="text"
-          onChange={handleInstructionsChange}
-          value={instructions}
-        />
-        <Helper
-          helperUrl="/static2/img/helpers/helper5.png"
-          helperText={I18n.t('administration.helpers.tokenVoteInstructions')}
-          additionalTextClasses="helper-text-only"
-        />
-      </div>
-      <div className="flex">
-        <label htmlFor="input-dropdown-addon">{I18n.t('administration.tokenCategoryNumber')}</label>
+      <FormControlWithLabel
+        label={I18n.t('administration.tokenVoteInstructions')}
+        required
+        type="text"
+        onChange={handleInstructionsChange}
+        value={instructions}
+        helperUrl="/static2/img/helpers/helper5.png"
+        helperText={I18n.t('administration.helpers.tokenVoteInstructions')}
+      />
+      <label htmlFor="input-dropdown-addon">{I18n.t('administration.tokenCategoryNumber')}</label>
+      <div className="inline">
         <Helper helperUrl="/static2/img/helpers/helper2.png" helperText={I18n.t('administration.helpers.tokenCategoryNumber')} />
       </div>
-      <SplitButton
-        title={tokenCategoryNumber}
-        onSelect={(e) => {
-          handleTokenVoteCategoryNumberChange(e, tokenCategoryNumber);
-        }}
-        id="input-dropdown-addon"
-        required
-      >
-        {range(1, 11).map(value => (
-          <MenuItem key={`item-${value}`} eventKey={value}>
-            {value}
-          </MenuItem>
-        ))}
-      </SplitButton>
+      <div>
+        <SplitButton
+          title={tokenCategoryNumber}
+          onSelect={(e) => {
+            handleTokenVoteCategoryNumberChange(e, tokenCategoryNumber);
+          }}
+          id="input-dropdown-addon"
+          required
+          className="admin-dropdown"
+        >
+          {range(1, 11).map(value => (
+            <MenuItem key={`item-${value}`} eventKey={value}>
+              {value}
+            </MenuItem>
+          ))}
+        </SplitButton>
+      </div>
+      {tokenCategoryNumber >= 2 && (
+        <div style={{ marginTop: '25px' }}>
+          <label htmlFor="input-dropdown-exclusive">{I18n.t('administration.exclusive')}</label>
+          <Helper
+            helperText={I18n.t('administration.helpers.exclusive')}
+            classname="inline"
+            additionalTextClasses="helper-text-only"
+          />
+          <SplitButton
+            title={exclusiveCategories ? I18n.t('administration.exclusive') : I18n.t('administration.notExclusive')}
+            onSelect={(e) => {
+              handleExclusiveCategoriesDropdownChange(e);
+            }}
+            id="input-dropdown-exclusive"
+            className="admin-dropdown"
+          >
+            <MenuItem eventKey={exclusiveCategories}>
+              <Translate value="administration.exclusive" />
+            </MenuItem>
+            <MenuItem eventKey={exclusiveCategories}>
+              <Translate value="administration.notExclusive" />
+            </MenuItem>
+          </SplitButton>
+        </div>
+      )}
+
       {tokenCategoryNumber > 0 ? (
         <div>
           <div className="separator" />
@@ -140,8 +147,8 @@ const mapDispatchToProps = (dispatch, { id, editLocale }) => ({
       }
     }
   },
-  handleExclusiveCategoriesCheckboxChange: (checked) => {
-    dispatch(updateTokenVoteExclusiveCategory(id, !checked));
+  handleExclusiveCategoriesDropdownChange: (isExclusive) => {
+    dispatch(updateTokenVoteExclusiveCategory(id, !isExclusive));
     dispatch(markAllDependenciesAsChanged(id));
   }
 });

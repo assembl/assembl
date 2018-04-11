@@ -338,7 +338,7 @@ class Extract(IdeaContentPositiveLink):
     # TODO: body was misused to contain the extract fragment content,
     # which should belong in the TextFragmentIdentifier,
     # whereas it was meant to be a comment on the extract
-    # if used from the Web annotator. I'll have to migrate it.
+    # if used from the Web annotator. It seems like a fait accompli now.
     body = Column(UnicodeText, nullable=False)
     # info={'rdf': QuadMapPatternS(None, OA.hasBody)})
 

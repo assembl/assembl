@@ -8,6 +8,7 @@ import FormControlWithLabel from '../../common/formControlWithLabel';
 import FileUploader from '../../common/fileUploader';
 import { deleteThematicTooltip } from '../../common/tooltips';
 import { getEntryValueForLocale } from '../../../utils/i18n';
+import { displayModal, closeModal } from '../../../utils/utilityManager';
 
 export const DumbThemeCreationForm = ({
   imgMimeType,
@@ -33,6 +34,22 @@ export const DumbThemeCreationForm = ({
   const trsl = I18n.t('administration.ph.title');
   const ph = `${trsl} ${editLocale.toUpperCase()}`;
   const num = (Number(index) + 1).toString();
+  const headerImageFieldName = 'header-image';
+
+  const confirmModal = () => {
+    const modalTitle = <Translate value="administration.confirmDeleteThematicTitle" />;
+    const body = <Translate value="administration.confirmDeleteThematic" />;
+    const footer = [
+      <Button key="cancel" onClick={closeModal} className="button-cancel button-dark">
+        <Translate value="debate.confirmDeletionButtonCancel" />
+      </Button>,
+      <Button key="delete" onClick={markAsToDelete} className="button-submit button-dark">
+        <Translate value="debate.confirmDeletionButtonDelete" />
+      </Button>
+    ];
+    const includeFooter = true;
+    return displayModal(modalTitle, body, includeFooter, footer);
+  };
   return (
     <div className="form-container">
       <div>
@@ -42,7 +59,7 @@ export const DumbThemeCreationForm = ({
         <div className="pointer right">
           <div className="inline">
             <OverlayTrigger placement="top" overlay={deleteThematicTooltip}>
-              <Button onClick={markAsToDelete} className="admin-icons">
+              <Button onClick={confirmModal} className="admin-icons">
                 <span className="assembl-icon-delete grey" />
               </Button>
             </OverlayTrigger>
@@ -52,7 +69,10 @@ export const DumbThemeCreationForm = ({
       <div className="clear" />
       <FormControlWithLabel label={ph} onChange={handleTitleChange} required type="text" value={title} />
       <FormGroup>
-        <FileUploader fileOrUrl={imgUrl} handleChange={handleImageChange} mimeType={imgMimeType} />
+        <label htmlFor={headerImageFieldName}>
+          <Translate value="administration.voteSessionHeaderLabel" />
+        </label>
+        <FileUploader fileOrUrl={imgUrl} handleChange={handleImageChange} mimeType={imgMimeType} name={headerImageFieldName} />
       </FormGroup>
       <div className="separator" />
     </div>
@@ -77,6 +97,7 @@ const mapStateToProps = ({ admin: { thematicsById }, i18n }, { id, editLocale })
 const mapDispatchToProps = (dispatch, { id }) => ({
   markAsToDelete: () => {
     dispatch(deleteThematic(id));
+    closeModal();
   },
   updateImgUrl: (value) => {
     dispatch(updateThematicImgUrl(id, value));

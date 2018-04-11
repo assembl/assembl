@@ -15,7 +15,7 @@ class Main extends React.Component {
 
   constructor(props: {
     debate: Debate,
-    params: { phase: string },
+    params: { phase: string, themeId: ?string },
     location: { query: { phase: string }, pathname: string },
     addRedirectionToV1: boolean => {},
     children: React.Children
@@ -58,6 +58,7 @@ class Main extends React.Component {
   }
 
   render() {
+    const { themeId } = this.props.params;
     const that = this;
     const children = React.Children.map(this.props.children, child =>
       React.cloneElement(child, {
@@ -66,7 +67,7 @@ class Main extends React.Component {
     );
     return (
       <div className="main">
-        <Navbar location={this.state.location} />
+        <Navbar location={this.state.location} themeId={themeId} />
         <div className="app-content">{children}</div>
         <Footer />
       </div>

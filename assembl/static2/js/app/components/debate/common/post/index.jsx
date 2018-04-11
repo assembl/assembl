@@ -37,6 +37,7 @@ export type Props = {
   editable: boolean,
   fullLevel: string,
   id: string,
+  dbId: number,
   ideaId: string,
   identifier: string,
   lang: string,

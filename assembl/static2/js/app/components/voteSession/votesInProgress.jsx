@@ -19,7 +19,7 @@ type Props = {
 
 const getNumberBoxToDisplay: Function = (tokens, gauges) => {
   const gaugesLength = gauges ? gauges.length : 0;
-  const count = tokens ? 2 : 1;
+  const count = tokens.length ? 2 : 1;
   return count + gaugesLength;
 };
 

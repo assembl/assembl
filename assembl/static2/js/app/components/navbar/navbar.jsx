@@ -63,19 +63,25 @@ const SectionLink = ({ section, options }) => {
       </a>
     );
   }
+  const sectionName = sectionType.toLowerCase().replace('_', '');
+  const isActiveUrl = location.pathname
+    .split('/')
+    .slice(2)
+    .join('/')
+    .includes(sectionName);
+  const linkClassNames = isActiveUrl ? 'navbar-menu-item pointer active' : 'navbar-menu-item pointer';
   return sectionType === 'DEBATE' ? (
     <DebateLink
       to={sectionURL(section, options)}
       identifier={options.phase}
-      className="navbar-menu-item pointer"
-      activeClassName="active"
+      className={linkClassNames}
       dataText={title}
       screenTooSmall={options.screenTooSmall}
     >
       {title}
     </DebateLink>
   ) : (
-    <Link to={sectionURL(section, options)} className="navbar-menu-item pointer" activeClassName="active" data-text={title}>
+    <Link to={sectionURL(section, options)} className={linkClassNames} data-text={title}>
       {title}
     </Link>
   );
@@ -175,6 +181,7 @@ export class AssemblNavbar extends React.PureComponent {
       location: location,
       logoLink: sections.length > 0 && sections.find(section => section && section.sectionType === 'HOMEPAGE').url
     };
+    const { themeId } = this.props;
     return (
       <div className="background-light">
         <Navbar fixedTop fluid>
@@ -185,6 +192,7 @@ export class AssemblNavbar extends React.PureComponent {
               setWidth={this.setFlatWidth}
               style={screenTooSmall ? { opacity: 0, position: 'absolute', top: '-200px' } : {}}
               maxWidth={maxAppWidth}
+              themeId={themeId}
             />
           </div>
         </Navbar>

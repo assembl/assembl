@@ -11,10 +11,11 @@ import IdeaWithPostsQuery from '../graphql/IdeaWithPostsQuery.graphql';
 import GoUp from '../components/common/goUp';
 import Loader from '../components/common/loader';
 import { getConnectedUserId } from '../utils/globalFunctions';
-import Announcement from './../components/debate/common/announcement';
+import Announcement, { getSentimentsCount } from './../components/debate/common/announcement';
 import ColumnsView from '../components/debate/multiColumns/columnsView';
 import ThreadView from '../components/debate/thread/threadView';
 import { DeletedPublicationStates } from '../constants';
+import HeaderStatistics, { statContributions, statMessages, statParticipants } from '../components/common/headerStatistics';
 
 const deletedPublicationStates = Object.keys(DeletedPublicationStates);
 
@@ -214,9 +215,31 @@ class Idea extends React.Component {
         : this.getInitialRowIndex(topPosts, ideaWithPostsData.idea.posts.edges)
     };
     const view = isMultiColumns ? <ColumnsView {...childProps} routerParams={routerParams} /> : <ThreadView {...childProps} />;
+    let statElements = [];
+    if (ideaWithPostsData.idea) {
+      const numPosts = ideaWithPostsData.idea.numPosts;
+      const counters = getSentimentsCount(ideaWithPostsData.idea.posts);
+      let totalSentiments = 0;
+      Object.keys(counters).forEach((key) => {
+        totalSentiments += counters[key].count;
+      });
+      const numContributions = numPosts + totalSentiments;
+      const numParticipants = ideaWithPostsData.idea.numContributors;
+      statElements = [statMessages(numPosts), statContributions(numContributions), statParticipants(numParticipants)];
+    }
     return (
       <div className="idea">
-        <Header title={title} synthesisTitle={synthesisTitle} imgUrl={headerImgUrl} identifier={identifier} />
+        <Header
+          title={title}
+          synthesisTitle={synthesisTitle}
+          imgUrl={headerImgUrl}
+          identifier={identifier}
+          ideaId={id}
+          routerParams={routerParams}
+          type="idea"
+        >
+          <HeaderStatistics statElements={statElements} />
+        </Header>
         <section className="post-section">
           {!ideaWithPostsData.loading &&
             announcement && (

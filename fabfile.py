@@ -195,7 +195,7 @@ def create_local_ini():
 
     if running_locally([env.host_string]):
         # The easy case: create a local.ini locally.
-        venvcmd("python2 assembl/scripts/ini_files.py compose -o %s %s" % (
+        venvcmd("python2 -m assembl.scripts.ini_files compose -o %s %s" % (
             env.ini_file, env.rcfile))
     else:
         # Create a local.ini file on the remote server
@@ -219,7 +219,7 @@ def create_local_ini():
             # create the local.ini in a temp file
             with settings(host_string="localhost", venvpath=local_venv,
                           user=getuser(), projectpath=os.getcwd()):
-                venvcmd("python2 assembl/scripts/ini_files.py compose -o %s -r %s %s" % (
+                venvcmd("python2 -m assembl.scripts.ini_files compose -o %s -r %s %s" % (
                     local_file_name, random_file_name, env.rcfile))
             # send the random file if changed
             if rt != os.path.getmtime(random_file_name):
@@ -257,13 +257,13 @@ def migrate_local_ini():
         if not exists(random_ini_path):
             # Create a random.ini from specified random*.tmpl files.
             templates = get_random_templates()
-            venvcmd("python2 assembl/scripts/ini_files.py combine -o " +
+            venvcmd("python2 -m assembl.scripts.ini_files combine -o " +
                     random_ini_path + " " + " ".join(templates))
         # Note: we do not handle the case of an existing but incomplete
         # random.ini file. migrate is designed to be run only once.
-        venvcmd("python2 assembl/scripts/ini_files.py diff -e -o %s %s %s" % (
+        venvcmd("python2 -m assembl.scripts.ini_files diff -e -o %s %s %s" % (
                 random_ini_path, random_ini_path, local_ini_path))
-        venvcmd("python2 assembl/scripts/ini_files.py migrate -o %s %s " % (
+        venvcmd("python2 -m assembl.scripts.ini_files migrate -o %s %s " % (
             dest_path, env.rcfile))
     else:
         # OK, this is horrid because I need the local venv.
@@ -293,14 +293,14 @@ def migrate_local_ini():
                           user=getuser(), projectpath=os.getcwd()):
                 if not has_random:
                     templates = get_random_templates()
-                    venvcmd("python2 assembl/scripts/ini_files.py combine -o " +
+                    venvcmd("python2 -m assembl.scripts.ini_files combine -o " +
                             base_random_file_name + " " + " ".join(templates))
                 # Create the new random file with the local.ini data
-                venvcmd("python2 assembl/scripts/ini_files.py diff -e -o %s %s %s" % (
+                venvcmd("python2 -m assembl.scripts.ini_files diff -e -o %s %s %s" % (
                         dest_random_file_name, base_random_file_name,
                         local_file_name))
                 # Create the new rc file.
-                venvcmd("python2 assembl/scripts/ini_files.py migrate -o %s -i %s -r %s %s" % (
+                venvcmd("python2 -m assembl.scripts.ini_files migrate -o %s -i %s -r %s %s" % (
                         dest_path, local_file_name, dest_random_file_name,
                         env.rcfile))
             # Overwrite the random file
@@ -1182,6 +1182,7 @@ def install_memcached():
 @task
 def set_file_permissions():
     """Set file permissions for an isolated platform environment"""
+    execute(setup_var_directory)
     webgrp = '_www' if env.mac else 'www-data'
     # This should cover most cases.
     if webgrp not in run('groups').split():
@@ -1196,11 +1197,14 @@ def set_file_permissions():
             sudo('{usermod} -a -G {webgrp} {user}'.format(
                 usermod=usermod_path, webgrp=webgrp, user=env.user))
     with cd(env.projectpath):
+        upload_dir = get_upload_dir()
         run('chmod -R o-rwx .')
         run('chmod -R g-rw .')
         run('chgrp {webgrp} . assembl var var/run'.format(webgrp=webgrp))
         run('chgrp -R {webgrp} assembl/static assembl/static2'.format(webgrp=webgrp))
+        run('chgrp -R {webgrp} {uploads}'.format(webgrp=webgrp, uploads=upload_dir))
         run('chmod -R g+rxs var/run')
+        run('chmod -R g+rxs ' + upload_dir)
         run('find assembl/static -type d -print0 |xargs -0 chmod g+rxs')
         run('find assembl/static -type f -print0 |xargs -0 chmod g+r')
         run('find assembl/static2 -type d -print0 |xargs -0 chmod g+rxs')
@@ -1458,6 +1462,13 @@ def database_dump():
     # TODO: Maybe do a rotation?
 
 
+def get_upload_dir(path=None):
+    path = path or env.get('upload_root', 'var/uploads')
+    if path != '/':
+        path = join(env.projectpath, path)
+    return path
+
+
 @task
 def database_download():
     """
@@ -1469,16 +1480,14 @@ def database_download():
         local('rm %s' % (destination))
     execute(database_dump)
     get(remote_db_path(), destination)
-    remote_path = env.get('upload_root', 'var/uploads')
-    if remote_path != '/':
-        remote_path = join(env.projectpath, remote_path)
+    remote_path = get_upload_dir()
     rsync_path = "%s@%s:%s" % (env.user, env.host_string, remote_path)
     local_venv = env.get("local_venv", "./venv")
     with settings(host_string="localhost", venvpath=local_venv,
                   user=getuser(), projectpath=os.getcwd()):
         # TODO: I should check the local upload_path. But in practice
         # it's a developer's machine, probably uses standard.
-        local_path = join(env.projectpath, 'var', 'uploads')
+        local_path = get_upload_dir('var/uploads')
         run("rsync -a %s/ %s" % (rsync_path, local_path))
 
 
@@ -1489,16 +1498,14 @@ def database_upload():
     """
     if(env.wsginame != 'dev.wsgi'):
         put(get_db_dump_name(), remote_db_path())
-        remote_path = env.get('upload_root', 'var/uploads')
-        if remote_path != '/':
-            remote_path = join(env.projectpath, remote_path)
+        remote_path = get_upload_dir()
         rsync_path = "%s@%s:%s/" % (env.user, env.host_string, remote_path)
         local_venv = env.get("local_venv", "./venv")
         with settings(host_string="localhost", venvpath=local_venv,
                       user=getuser(), projectpath=os.getcwd()):
             # TODO: I should check the local upload_path. But in practice
             # it's a developer's machine, probably uses standard.
-            local_path = join(env.projectpath, 'var', 'uploads')
+            local_path = get_upload_dir('var/uploads')
             run("rsync -a %s/ %s" % (local_path, rsync_path))
 
 
@@ -1619,6 +1626,7 @@ def setup_var_directory():
     run('mkdir -p %s' % normpath(join(env.projectpath, 'var', 'log')))
     run('mkdir -p %s' % normpath(join(env.projectpath, 'var', 'run')))
     run('mkdir -p %s' % normpath(join(env.projectpath, 'var', 'db')))
+    run('mkdir -p %s' % get_upload_dir())
 
 
 def get_supervisord_conf():

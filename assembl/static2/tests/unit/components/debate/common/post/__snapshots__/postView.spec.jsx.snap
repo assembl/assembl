@@ -25,6 +25,7 @@ exports[`Post component should render a PostView component and pass its props to
             "displayName": "Dannie Treutel",
             "userId": "dannietreutel",
           },
+          "dbId": 124,
           "extracts": Array [],
           "id": "XYZ333",
           "modificationDate": "12/12/2012",
@@ -107,9 +108,10 @@ exports[`Post component should render a deleted post 1`] = `
 
 exports[`PostView component should render a post in view mode 1`] = `
 <div>
-  <Connect(Nuggets)
+  <Nuggets
     completeLevel="0-0"
     extracts={Array []}
+    isHarvesting={undefined}
     nuggetsManager={null}
     postId="XYZ333"
   />
@@ -126,7 +128,6 @@ exports[`PostView component should render a post in view mode 1`] = `
     >
       <div
         className="post-left"
-        onMouseUp={null}
       >
         <ProfileLine
           creationDate="11/11/2011"
@@ -140,7 +141,11 @@ exports[`PostView component should render a post in view mode 1`] = `
           bodyDivRef={[Function]}
           bodyMimeType={undefined}
           contentLocale="fr"
+          dbId={124}
+          extracts={Array []}
+          handleMouseUpWhileHarvesting={[Function]}
           id="XYZ333"
+          isHarvesting={undefined}
           lang="fr"
           originalLocale="fr"
           subject={

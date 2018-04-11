@@ -8,9 +8,9 @@ exports[`Synthesis component should match Synthesis snapshot 1`] = `
     className="background-light"
   >
     <Connect(Header)
-      additionalHeaderClasses="left"
       imgUrl="http://foo.com/foo"
       title="Foo"
+      type="synthesis"
     />
     <Grid
       bsClass="container"
@@ -24,11 +24,45 @@ exports[`Synthesis component should match Synthesis snapshot 1`] = `
       >
         <Col
           bsClass="col"
+          className="affix"
           componentClass="div"
-          md={7}
+          md={3}
+          style={
+            Object {
+              "top": 20,
+            }
+          }
+        >
+          <SideMenu
+            descendants={Array []}
+            rootIdeas={
+              Array [
+                Object {
+                  "ancestors": Array [],
+                  "id": "barId",
+                  "img": Object {
+                    "externalUrl": "http://foo.com/bar",
+                  },
+                  "numContributors": 0,
+                  "numPosts": 0,
+                  "phaseIdentifier": "paseId",
+                  "posts": Object {
+                    "edges": Array [],
+                  },
+                  "synthesisTitle": "Foo",
+                  "title": "Bar",
+                },
+              ]
+            }
+            synthesisPostId={undefined}
+          />
+        </Col>
+        <Col
+          bsClass="col"
+          componentClass="div"
+          md={8}
           mdOffset={3}
-          sm={10}
-          smOffset={1}
+          sm={11}
         >
           <IdeaSynthesisTree
             hasSiblings={false}

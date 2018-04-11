@@ -1,0 +1,42 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`SideMenu component should render a SideMenu component 1`] = `
+<div
+  className="synthesis-side-menu"
+>
+  <Translate
+    className="dark-title-4"
+    value="synthesis.tableOfContents"
+  />
+  <div
+    className="title-hyphen block"
+  >
+     
+  </div>
+  <SideMenuTree
+    index={1}
+    indexGenerator={[Function]}
+    parents={Array []}
+    rootIdea={
+      Object {
+        "ancestors": Array [],
+        "id": "2222222",
+        "img": Object {
+          "externalUrl": "http://foo.com/bar",
+        },
+        "numContributors": 10,
+        "numPosts": 100,
+        "phaseIdentifier": "phaseId",
+        "posts": Object {
+          "edges": Array [],
+        },
+        "synthesisTitle": "Intersting idea",
+        "title": "Cool story",
+      }
+    }
+    slug={null}
+    subIdeas={Array []}
+    synthesisPostId="5667"
+  />
+</div>
+`;

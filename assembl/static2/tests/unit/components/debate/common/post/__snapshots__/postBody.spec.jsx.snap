@@ -20,10 +20,14 @@ exports[`PostBody component should render a post body 1`] = `
   </h3>
   <Html
     className="post-body-content body"
+    dbId={124}
     divRef={[Function]}
+    extracts={Array []}
+    onMouseUp={undefined}
     rawHtml="<p>You can't index the port without programming the wireless HTTP program!</p>"
     replacementComponents={
       Object {
+        "annotation": [Function],
         "iframe": [Function],
       }
     }

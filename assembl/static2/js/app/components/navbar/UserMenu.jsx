@@ -1,5 +1,4 @@
 // @flow
-
 import React from 'react';
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
@@ -10,7 +9,6 @@ import Avatar from '../common/avatar';
 import { getConnectedUserId } from '../../utils/globalFunctions';
 import { connectedUserIsExpert } from '../../utils/permissions';
 import { toggleHarvesting } from '../../actions/contextActions';
-import { removeHarvestingMenu } from '../harvesting/harvestingMenu';
 
 type IsHarvestingButtonProps = {
   isActive: boolean,
@@ -35,6 +33,7 @@ type UserMenuProps = {
   helpUrl: string,
   remainingWidth?: number,
   isHarvesting: boolean,
+  themeId: ?string,
   handleIsHarvestingButtonClick: Function
 };
 
@@ -49,10 +48,12 @@ const UserMenu = ({
   helpUrl,
   remainingWidth,
   isHarvesting,
-  handleIsHarvestingButtonClick
+  handleIsHarvestingButtonClick,
+  themeId
 }: UserMenuProps) => (
   <div className="navbar-icons">
-    {shouldShowExpertIcons && <IsHarvestingButton isActive={isHarvesting} handleClick={handleIsHarvestingButtonClick} />}
+    {shouldShowExpertIcons &&
+      themeId && <IsHarvestingButton isActive={isHarvesting} handleClick={handleIsHarvestingButtonClick} />}
     {currentPhaseIdentifier !== 'survey' && (
       <div id="search">
         <Search />
@@ -79,7 +80,6 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   handleIsHarvestingButtonClick: () => {
     dispatch(toggleHarvesting());
-    removeHarvestingMenu();
   }
 });
 

@@ -19,7 +19,21 @@ const Translations = {
     harvesting: {
       enableHarvestingMode: "Activer le mode attrapage",
       disableHarvestingMode: "Désactiver le mode attrapage",
-      harvestSelection: "Attrapage"
+      harvesting: "Attrapage",
+      inProgress: "Attrapage en cours",
+      validated: "Attrapage validé",
+      now: "Maintenant",
+      harvestingSuccess: "L'extrait a été mis à jour avec succès.",
+      harvestingDeleted: "L'extrait a été supprimé avec succès.",
+      deleteExtract: "Supprimer l'extrait attrapé",
+      confirmDeleteExtract: "Etes-vous certain de vouloir supprimer cet extrait ?",
+      validateExtract: "Extrait validé",
+      editExtract: "Modifier l'extrait attrapé",
+      nuggetExtract: "Pépiter l'extrait attrapé",
+      qualifyExtract: "Qualifier l'extrait attrapé",
+      move: "Déplacer",
+      qualifyNature: "Qualifier par nature",
+      qualifyAction: "Qualifier par action"
     },
     search: {
       reset: {
@@ -85,11 +99,11 @@ const Translations = {
         give_examples: "Donner des exemples",
         more_specific: "Rendre plus opérationnel",
         mix_match: "Croiser avec un autre extrait",
-        display_multi_column: "Activer multi-col.",
-        display_thread: "Activer Thread",
-        display_tokens: "Activer Tokens",
-        display_open_questions: "Activer Q° ouvertes",
-        display_bright_mirror: "Activer Bright Mirror"
+        display_multi_column: "Activer le multi-colonne",
+        display_thread: "Activer le thread",
+        display_tokens: "Activer le vote",
+        display_open_questions: "Activer les questions ouvertes",
+        display_bright_mirror: "Activer le Bright Mirror"
       },
       Sort: "Trier",
       "By relevance": "Par pertinence",
@@ -173,9 +187,21 @@ const Translations = {
     },
     home: {
       accessButton: "Je participe",
+      sentiments_0: "vote",
+      sentiments_1: "vote",
       sentiments: "votes",
+      contribution_0: "contribution",
+      contribution_1: "contribution",
       contribution: "contributions",
+      messages_0: "message",
+      messages_1: "message",
+      messages: "messages",
+      participant_0: "participant",
+      participant_1: "participant",
       participant: "participants",
+      participations_0: "participation",
+      participations_1: "participation",
+      participations: "participations",
       visit: "visites",
       pageViews: "pages vues",
       sumVisitsLength: "temps passé global",
@@ -205,7 +231,8 @@ const Translations = {
     synthesis: {
       title: "synthèse",
       seeConversation: "Voir la conversation",
-      noSynthesisYet: "Il n'y a pas encore de synthèse disponible."
+      noSynthesisYet: "Il n'y a pas encore de synthèse disponible.",
+      tableOfContents: "Sommaire"
     },
     common: {
       attachFileForm: {
@@ -228,8 +255,12 @@ const Translations = {
       panelTitle: "Bienvenue dans la communauté d'Assembl"
     },
     debate: {
+      shareThematic: "Partagez cette thématique",
+      votes: "Votes",
+      vote: "Vote",
       answer: "Je réponds :",
       toAnswer: "Répondre",
+      share: "Partager",
       sharePost: "Partager ce message",
       shareSynthesis: "Partager cette synthèse",
       copyLink: "Copier le lien dans le presse-papier",
@@ -238,7 +269,10 @@ const Translations = {
       insert: "Ecrivez votre message",
       post: "Poster",
       like: "J'aime",
+      agree: "D'accord",
+      agreeCount: "%{count} d'accord",
       disagree: "Pas d'accord",
+      disagreeCount: "%{count} pas d'accord",
       dontUnderstand: "Pas tout compris",
       moreInfo: "SVP + d'infos",
       remaining_x_characters: "Il vous reste %{nbCharacters} caractères",
@@ -256,6 +290,8 @@ const Translations = {
         question_x_on_total: "Question %{current} sur %{total}",
         titleVideo: "Une vidéo pour mieux comprendre le sujet...",
         proposalsTitle: "Êtes-vous d'accord avec les propositions exprimées ?",
+        reactions_0: "Réaction",
+        reactions_1: "Réaction",
         reactions: "Réactions",
         react: "Réagissez :",
         moreProposals: "Voir plus de propositions",
@@ -332,8 +368,6 @@ const Translations = {
         notEnoughTokens: "Vous n'avez plus assez de jetons",
         exclusiveTokens: "Vous avez déjà voté pour une autre catégorie pour cette proposition",
         totalVotes: "%{count} votes",
-        votes: "Votes",
-        vote: "Vote",
         valueWithUnit: "%{num} %{unit}"
       }
     },
@@ -388,6 +422,8 @@ const Translations = {
       anErrorOccured:
         "Il y a eu une erreur lors de la sauvegarde, veuillez vérifier que vous avez bien renseigné tous les champs requis.",
       deleteThematic: "Supprimer la thématique",
+      confirmDeleteThematicTitle: "Confirmer la suppression",
+      confirmDeleteThematic: "Êtes-vous sûr de vouloir supprimer cette thématique ?",
       deleteQuestion: "Supprimer la question",
       changeLanguage: "Renseigner une autre langue",
       question_label: "Question",
@@ -434,12 +470,13 @@ const Translations = {
       instructions: "Configuration de la section Consigne",
       voteSessionHeaderLabel: "Choisir l'image de fond du bandeau",
       voteSessionSuccess: "La session de vote a été enregistrée avec succès.",
-      exclusive: "Exclusifs",
+      exclusive: "Exclusif",
       tokenVoteInstructions: "Consigne du vote par jetons",
       proposalsSectionTitle: "Configuration du titre de la section Propositions",
       voteModulesIntroText1: "Vous avez choisi le dispositif de vote.",
       voteModulesIntroText2: "Pour modifier votre choix, modifiez la ",
       timeline: "ligne de temps",
+      notExclusive: "Non exclusif",
       voteProposals: {
         sectionTitle: "Configurer les propositions associées aux modules de vote",
         defineProposal: "Définir proposition %{number}",
@@ -453,6 +490,7 @@ const Translations = {
         gauge: "Jauge %{number}",
         customGauge: "Jauge %{number} (modifiée pour cette proposition)",
         gaugeSettings: "Modifier le paramétrage",
+        cancelCustomization: "Annuler le paramétrage",
         validationErrors: {
           atLeastOneModule: "Vous devez sélectionner au moins un module."
         }
@@ -480,7 +518,9 @@ const Translations = {
       textValue: "Valeur textuelle",
       numberValue: "Valeur numéraire",
       valueTitle: "Intitulé de la valeur",
-      seeCurrentVotes: "Voulez vous que les participants puissent voir l'évolution des votes en cours ?",
+      seeCurrentVotes: "Voulez-vous que les participants puissent voir l'évolution des votes en cours ?",
+      resultsVisible: "Oui, avant même d'avoir voté.",
+      resultsNotVisible: "Non, n'afficher le résultat qu'une fois le vote clos.",
       sections: {
         addSection: "Ajouter une rubrique",
         deleteSection: "Supprimer la rubrique",
@@ -500,7 +540,7 @@ const Translations = {
           "La partie qui comporte les diverses propositions est introduite par un titre. À vous de définir le titre selon qu'il s'agisse de propositions, d'idées, de projets ou autre...",
         tokenCategoryNumber: "Sélectionnez le nombre de types de jetons différents souhaité pour ce vote",
         exclusive:
-          "Vous pouvez décider si le participant peut distributer un seul type de jetons (exclusifs) ou plusieurs types de jetons par proposition.",
+          "Vous pouvez décider si le participant peut distributer un seul type de jetons (exclusif) ou plusieurs types de jetons par proposition (non exclusif).",
         tokenVoteInstructions: "En fonction de l'objectif du module de jetons, incitez les participants à passer à l'action.",
         gaugeVoteInstructions: "En fonction de l'objectif du module jauge, incitez les participants à passer à l'action.",
         landingPage: {
@@ -541,8 +581,8 @@ const Translations = {
         orAttachPicture: "Ou téléchargez une image depuis votre ordinateur",
         headerTitle: "Titre du bandeau",
         headerSubtitle: "Sous-titre du bandeau",
-        instructionsTitle: "Titre des instructions",
-        instructionsContent: "Instructions",
+        instructionsTitle: "Titre de la consigne",
+        instructionsContent: "Contenu de la consigne",
         propositionSectionTitle: "Titre de la section"
       },
       resourcesCenter: {
@@ -612,7 +652,21 @@ const Translations = {
     harvesting: {
       enableHarvestingMode: "Enable harvesting mode",
       disableHarvestingMode: "Disable harvesting mode",
-      harvestSelection: "Harvest"
+      inProgress: "Harvesting in progress",
+      validated: "Harvesting validated",
+      now: "Now",
+      harvesting: "Harvesting",
+      harvestingSuccess: "The extract was updated successfully.",
+      harvestingDeleted: "The extract was deleted successfully.",
+      deleteExtract: "Delete the extract",
+      confirmDeleteExtract: "Are you sure that you wish to delete this extract?",
+      validateExtract: "Extract validated",
+      editExtract: "Edit the extract",
+      nuggetExtract: "Mark as nugget",
+      qualifyExtract: "Qualify the extract",
+      move: "Move",
+      qualifyNature: "Qualify by nature",
+      qualifyAction: "Qualify by action"
     },
     search: {
       reset: {
@@ -765,9 +819,21 @@ const Translations = {
     },
     home: {
       accessButton: "I want to participate",
-      contribution: "contributions",
-      participant: "participants",
+      sentiments_0: "vote",
+      sentiments_1: "vote",
       sentiments: "votes",
+      contribution_0: "contribution",
+      contribution_1: "contribution",
+      contribution: "contributions",
+      messages_0: "message",
+      messages_1: "message",
+      messages: "messages",
+      participant_0: "participant",
+      participant_1: "participant",
+      participant: "participants",
+      participations_0: "participation",
+      participations_1: "participation",
+      participations: "participations",
       visit: "visits",
       pageViews: "page views",
       sumVisitsLength: "global time spent",
@@ -817,11 +883,16 @@ const Translations = {
     synthesis: {
       title: "synthesis",
       seeConversation: "See the conversation",
-      noSynthesisYet: "There is no synthesis available yet."
+      noSynthesisYet: "There is no synthesis available yet.",
+      tableOfContents: "Table of contents"
     },
     debate: {
+      shareThematic: "Share this thematic",
+      votes: "Votes",
+      vote: "Vote",
       answer: "I answer:",
       toAnswer: "Answer",
+      share: "Share",
       sharePost: "Share this message",
       shareSynthesis: "Share this synthesis",
       copyLink: "Copy the link to the clipboard",
@@ -830,7 +901,10 @@ const Translations = {
       insert: "Post a comment",
       post: "Post",
       like: "Like",
+      agree: "Agree",
+      agreeCount: "%{count} agree",
       disagree: "Disagree",
+      disagreeCount: "%{count} disagree",
       dontUnderstand: "Did not get it",
       moreInfo: "More info please",
       remaining_x_characters: "You have %{nbCharacters} characters left",
@@ -848,6 +922,8 @@ const Translations = {
         question_x_on_total: "Question %{current} on %{total}",
         titleVideo: "A video to better understand the subject...",
         proposalsTitle: "Do you agree with these points of view?",
+        reactions_0: "Reaction",
+        reactions_1: "Reaction",
         reactions: "Reactions",
         react: "React:",
         moreProposals: "More points of view",
@@ -924,8 +1000,6 @@ const Translations = {
         notEnoughTokens: "You don't have enough tokens",
         exclusiveTokens: "You already voted for another category for this proposal",
         totalVotes: "%{count} votes",
-        votes: "Votes",
-        vote: "Vote",
         valueWithUnit: "%{unit}%{num}"
       }
     },
@@ -979,6 +1053,8 @@ const Translations = {
       addQuestion: "Add a question",
       anErrorOccured: "An error occured during save. Please check that you filled all the required fields.",
       deleteThematic: "Delete the theme",
+      confirmDeleteThematicTitle: "Confirm deletion",
+      confirmDeleteThematic: "Are you sure you want to delete this theme?",
       deleteQuestion: "Delete the question",
       changeLanguage: "Set another language",
       question_label: "Question",
@@ -1046,6 +1122,7 @@ const Translations = {
       tokenNumber: "Number of tokens per participant",
       tokenTitle: "Token title",
       tokenColor: "Color of the token",
+      notExclusive: "Not exclusive",
       voteProposals: {
         sectionTitle: "Configure the proposals associated to the vote modules",
         gauge: "Gauge %{number}",
@@ -1055,10 +1132,11 @@ const Translations = {
         deleteProposal: "Delete this proposal",
         deleteModalTitle: "Confirm deletion",
         deleteModalBody: "Are you sure you want to delete this proposal?",
-        title: "Title of the proposal*",
-        description: "Description*",
+        title: "Title of the proposal",
+        description: "Description",
         tokenVote: "Token vote",
         gaugeSettings: "Edit settings",
+        cancelCustomization: "Cancel settings",
         validationErrors: {
           atLeastOneModule: "You should select at least one module."
         }
@@ -1070,6 +1148,8 @@ const Translations = {
         applyToAllProposalsCheckboxLabel: "Apply these changes to all of the proposals"
       },
       seeCurrentVotes: "Do you want participants to see the evolution of the votes in progress?",
+      resultsVisible: "Yes, even before having voted.",
+      resultsNotVisible: "No, only show the results once the vote is closed.",
       sections: {
         addSection: "Add a section",
         deleteSection: "Delete the section",
@@ -1127,7 +1207,7 @@ const Translations = {
         headerTitle: "Header title",
         headerSubtitle: "Header subtitle",
         instructionsTitle: "Instructions title",
-        instructionsContent: "Instructions",
+        instructionsContent: "Instructions content",
         propositionSectionTitle: "Section title"
       },
       resourcesCenter: {

@@ -59,8 +59,9 @@
 .dark-title-5 {
   color: $title5-dark-color;
   font-family: $font-family4;
-  font-size: $title5-size;
+  font-size: $title5-size + 2px;
   letter-spacing: $title-letter-spacing;
+  line-height: $title1-size;
 }
 
 .dark-title-6 {
@@ -110,7 +111,9 @@
 .light-title-5 {
   color: $title5-light-color;
   font-family: $font-family4;
-  font-size: $title5-size;
+  font-size: $title5-size + 2px;
+  letter-spacing: $title-letter-spacing;
+  line-height: $title1-size;
 }
 
 .light-title-6 {

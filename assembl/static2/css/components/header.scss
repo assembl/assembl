@@ -1,46 +1,68 @@
+.header-section-container {
+  position: relative;
+}
+
 .header-section {
   background-color: $first-color;
+  height: 500px;
   position: relative;
-  z-index: 10;
 
-  .wyntk-box {
-    top: calc(50% - 175px);
-    height: 350px;
-    width: 350px;
-    padding: 30px;
-    padding-right: 0;
-    z-index: 3;
+  .header-actions-container {
+    z-index: 2;
+    color: $white;
+    position: relative;
+    padding: 40px 0 0 40px;
 
-    .wyntk-title {
-      text-transform: uppercase;
-      margin: 0;
-      padding: 0;
-      font-family: $font-family3;
-    }
+    .doughnut-container {
+      width: 130px;
+      height: 130px;
+      display: inline-block;
+      vertical-align: middle;
 
-    .box-hyphen {
-      margin-top: 12px;
-      margin-bottom: 23px;
-    }
+      svg {
+        path {
+          stroke-width: 15px;
+        }
+      }
 
-    .wyntk-text-container {
-      overflow-y: scroll;
-      padding-right: 10px;
-      margin-right: 10px;
-      height: 234px;
+      .total-count-container {
+        text-align: center;
+        margin-top: -90px;
 
-      .wyntk-text {
-        line-height: 2;
-        font-size: 12px;
-        padding-right: 10px;
+        .total-count {
+          font-size: 20px;
+          font-family: $font-family3;
+        }
+
+        .count-label {
+          font-size: $font-size-xs;
+          font-family: $font-family4;
+          margin-top: -3px;
+        }
       }
     }
   }
 
   .header-content {
+    padding: 20px 0 0 40px;
     position: relative;
-    text-align: center;
+    text-align: left;
     z-index: 2;
+    margin: $margin-section 0 0;
+
+    @media screen and (min-width: 1100px) {
+      max-width: 70%;
+    }
+
+    @media screen and (max-width: 1099px) {
+      padding-left: 40px;
+      padding-right: 40px;
+      max-width: 100%;
+    }
+
+    .light-title-2 {
+      padding-left: 4px;
+    }
 
     .max-text-width {
       margin: 0 auto;
@@ -53,12 +75,6 @@
       &:hover {
         text-decoration: underline;
       }
-    }
-  }
-
-  @media screen and (min-width: 500px) {
-    .header-content {
-      margin: $margin-section 0 0;
     }
   }
 
@@ -80,5 +96,164 @@
     top: 0;
     left: 0;
     width: 100%;
+  }
+
+  .statistic {
+    background-color: $opacity-color;
+    bottom: 0;
+    left: 0;
+    margin: 0 auto;
+    position: absolute;
+    text-align: center;
+    display: flex;
+    width: 100%;
+    z-index: 10;
+
+    .intermediary-container {
+      padding: 8px 0;
+      display: inline-block;
+      vertical-align: middle;
+      width: 100%;
+      margin: 0 auto;
+
+      .stat-container {
+        padding: 0 40px;
+        display: inline-block;
+        border-right: 1px solid $white;
+
+        &:last-child {
+          border-right: none;
+        }
+
+        .stat-box {
+          display: flex;
+          align-items: center;
+          vertical-align: middle;
+          margin: auto;
+
+          .stat-icon {
+            padding-top: 3px;
+          }
+        }
+      }
+
+      .stat-loader {
+        margin-top: -20px;
+      }
+
+      .stat {
+        display: inline-block;
+        font-family: $font-family2;
+        text-align: left;
+        text-transform: uppercase;
+        padding-left: 8px;
+      }
+
+      .stat-nb {
+        color: $white;
+        font-family: $font-family4;
+        font-size: $font-size-xxs;
+        letter-spacing: $text-letter-spacing;
+      }
+
+      img {
+        vertical-align: baseline;
+      }
+    }
+  }
+}
+
+.wyntk-box {
+  position: absolute;
+  right: 0;
+  top: calc(50% - 175px - 22px); // center the box: 50% of container - half this block height - half the statistic block height
+  height: 350px;
+  width: 350px;
+  padding: 30px;
+  padding-right: 0;
+  z-index: 3;
+
+  .wyntk-title {
+    text-transform: uppercase;
+    margin: 0;
+    padding: 0;
+    font-family: $font-family3;
+  }
+
+  .box-hyphen {
+    margin-top: 12px;
+    margin-bottom: 23px;
+  }
+
+  .wyntk-text-container {
+    overflow-y: auto;
+    padding-right: 10px;
+    margin-right: 10px;
+    height: 234px;
+
+    .wyntk-text {
+      line-height: 2;
+      font-size: 12px;
+      padding-right: 10px;
+    }
+  }
+
+  @media screen and (max-width: 1100px) {
+    position: static;
+    margin: 15px;
+    width: auto;
+  }
+}
+
+.sentiment-header-tooltip {
+  border-radius: 4px;
+  padding: 0 !important;
+
+  .tooltip-inner {
+    background: none !important;
+  }
+}
+
+@media screen and (max-width: 1019px) {
+  .intermediary-container {
+    .stat-container {
+      padding: 0 20px !important;
+    }
+  }
+}
+
+@media screen and (max-width: 820px) {
+  .statistic {
+    .intermediary-container {
+      .stat-container {
+        padding: 0 15px !important;
+
+        .stat-label {
+          display: none;
+        }
+
+        .stat-box {
+          display: block !important;
+          text-align: center;
+
+          .stat-icon {
+            padding-top: 0;
+            display: block;
+            float: none;
+          }
+
+          .stat {
+            padding-left: 0;
+            display: block;
+            text-align: center;
+            word-break: break-word;
+          }
+
+          .stat-nb {
+            padding-top: 3px;
+          }
+        }
+      }
+    }
   }
 }

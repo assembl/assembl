@@ -58,6 +58,7 @@
   .header-section {
     background-color: $first-color;
     min-height: 380px;
+    height: auto; // override the 500px from common header component
     overflow: hidden;
     position: relative;
 
@@ -88,70 +89,6 @@
       position: absolute;
       top: 0;
       width: 100%;
-    }
-
-    .statistic {
-      background-color: $opacity-color;
-      bottom: 0;
-      left: 0;
-      margin: 0 auto;
-      position: absolute;
-      text-align: center;
-      display: flex;
-      width: 100%;
-      z-index: 10;
-
-      .intermediary-container {
-        padding: 8px 0;
-        display: inline-block;
-        vertical-align: middle;
-        width: 100%;
-        margin: 0 auto;
-
-        .stat-container {
-          padding: 0 40px;
-          display: inline-block;
-          border-right: 1px solid $white;
-
-          &:last-child {
-            border-right: none;
-          }
-
-          .stat-box {
-            display: flex;
-            align-items: center;
-            vertical-align: middle;
-            margin: auto;
-
-            .stat-icon {
-              padding-top: 3px;
-            }
-          }
-        }
-
-        .stat-loader {
-          margin-top: -20px;
-        }
-
-        .stat {
-          display: inline-block;
-          font-family: $font-family2;
-          text-align: left;
-          text-transform: uppercase;
-          padding-left: 8px;
-        }
-
-        .stat-nb {
-          color: $white;
-          font-family: $font-family4;
-          font-size: $font-size-xxs;
-          letter-spacing: $text-letter-spacing;
-        }
-
-        img {
-          vertical-align: baseline;
-        }
-      }
     }
   }
 
@@ -335,7 +272,7 @@
 }
 
 @media screen and (max-width: 1100px) {
-  .header-section {
+  .home .header-section {
     .insert-box {
       display: none;
     }
@@ -347,7 +284,8 @@
 }
 
 @media screen and (min-width: 1100px) {
-  .header-section {
+  .home .header-section {
+    /* synthesis block */
     .insert-box {
       position: absolute;
       right: 0;
@@ -355,6 +293,7 @@
       width: 270px;
     }
 
+    /* synthesis block content */
     .insert-content {
       -webkit-box-orient: vertical;
       -webkit-line-clamp: $lines-to-show;
@@ -365,50 +304,6 @@
       max-width: 250px;
       overflow: hidden;
       text-overflow: ellipsis;
-    }
-  }
-}
-
-@media screen and (max-width: 1019px) {
-  .intermediary-container {
-    .stat-container {
-      padding: 0 20px !important;
-    }
-  }
-}
-
-@media screen and (max-width: 820px) {
-  .statistic {
-    .intermediary-container {
-      .stat-container {
-        padding: 0 15px !important;
-
-        .stat-label {
-          display: none;
-        }
-
-        .stat-box {
-          display: block !important;
-          text-align: center;
-
-          .stat-icon {
-            padding-top: 0;
-            display: block;
-            float: none;
-          }
-
-          .stat {
-            padding-left: 0;
-            display: block;
-            text-align: center;
-            word-break: break-word;
-          }
-
-          .stat-nb {
-            padding-top: 3px;
-          }
-        }
-      }
     }
   }
 }
@@ -525,9 +420,21 @@
 }
 
 @media screen and (min-width: 768px) {
-  .header-section {
-    .header-content {
-      padding: 75px 40px 150px;
+  .home {
+    .header-section {
+      .header-content {
+        padding: 75px 40px 150px;
+      }
+    }
+  }
+}
+
+@media screen and (min-width: 1100px) {
+  .home {
+    .header-section {
+      .header-content {
+        max-width: 100%;
+      }
     }
   }
 }
@@ -541,7 +448,7 @@
 }
 
 @media screen and (max-width: 500px) {
-  .header-section {
+  .home .header-section {
     .header-content {
       padding: 60px 5px 120px;
     }

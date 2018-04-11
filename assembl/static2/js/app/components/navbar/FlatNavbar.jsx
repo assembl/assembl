@@ -38,7 +38,8 @@ export default class FlatNavbar extends React.PureComponent {
       location,
       style,
       logoLink,
-      maxWidth
+      maxWidth,
+      themeId
     } = this.props;
     return (
       <div className="flat-navbar" style={style}>
@@ -53,6 +54,7 @@ export default class FlatNavbar extends React.PureComponent {
             connectedUserId={connectedUserId}
             currentPhaseIdentifier={currentPhaseIdentifier}
             remainingWidth={maxWidth - (lodashGet(this, 'state.leftWidth', 0) + lodashGet(this, 'state.languageMenuWidth', 0))}
+            themeId={themeId}
           />
           <LanguageMenu size="xs" className="navbar-language" setWidth={this.setLanguageMenuWidth} />
         </div>

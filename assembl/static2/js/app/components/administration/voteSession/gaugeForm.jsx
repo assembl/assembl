@@ -6,7 +6,6 @@ import { List, Map } from 'immutable';
 import range from 'lodash/range';
 import { SplitButton, MenuItem, Radio, FormGroup } from 'react-bootstrap';
 
-import Helper from '../../common/helper';
 import { getEntryValueForLocale } from '../../../utils/i18n';
 import { createRandomId } from '../../../utils/globalFunctions';
 import FormControlWithLabel from '../../common/formControlWithLabel';
@@ -137,11 +136,8 @@ const DumbGaugeForm = ({
         required
         type="text"
         onChange={handleInstructionsChange}
-      />
-      <Helper
         helperUrl="/static2/img/helpers/helper6.png"
         helperText={I18n.t('administration.helpers.gaugeVoteInstructions')}
-        additionalTextClasses="helper-text-only"
       />
     </div>
     <FormGroup>
@@ -154,6 +150,7 @@ const DumbGaugeForm = ({
         title={nbTicks}
         id={`dropdown-${id}`}
         required
+        className="admin-dropdown"
         onSelect={eventKey =>
           changeNbTicks({
             isNumberGauge: isNumberGauge,

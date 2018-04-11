@@ -87,6 +87,7 @@ const DumbModulesSection = ({
                   <Helper helperUrl="/static2/img/helpers/helper2.png" helperText={I18n.t('administration.defineGaugeNumer')} />
                 </div>
                 <SplitButton
+                  className="admin-dropdown"
                   title={activeGaugeModulesIds.size}
                   id="input-dropdown-addon"
                   required
@@ -116,7 +117,7 @@ const DumbModulesSection = ({
                   checked={seeCurrentVotes}
                   name="seeCurrentVotes"
                 >
-                  <Translate value="yes" />
+                  <Translate value="administration.resultsVisible" />
                 </Radio>
                 <Radio
                   onChange={() => {
@@ -125,7 +126,7 @@ const DumbModulesSection = ({
                   checked={!seeCurrentVotes}
                   name="seeCurrentVotes"
                 >
-                  <Translate value="no" />
+                  <Translate value="administration.resultsNotVisible" />
                 </Radio>
               </div>
             )}

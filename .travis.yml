@@ -20,7 +20,9 @@ cache:
 before_install:
  # Remove mongodb repo that has an expired GPG key which gives a travis errored because
  # fabric is doing an apt-get update.
+ - ls /etc/apt/sources.list.d/
  - sudo rm -f /etc/apt/sources.list.d/mongodb-3.4.list
+ - sudo rm -f /etc/apt/sources.list.d/cassandra.list
  # The following line is needed, otherwise the set_file_permissions fab command yells error "Operation not permitted"
  - sudo usermod -a -G www-data $USER
  - sudo apt-get install -y fabric git openssh-server
@@ -59,7 +61,7 @@ script:
   - if [ "$TO_TEST" = "FRONTEND" ]; then npm run eslint; fi
   - if [ "$TO_TEST" = "FRONTEND" ]; then npm run flow; fi
   - if [ "$TO_TEST" = "FRONTEND" ]; then npm run stylelint; fi
-  - if [ "$TO_TEST" = "FRONTEND" ]; then bash -c "npm run build >/dev/null && test `ls -l build/bundle.js|awk '{print $5}'` -gt 2936012 && echo 'build/bundle.js size exceed 2.8 MB, is this normal? It was previously around 2.6 MB. If this is normal, please update this check in .travis.yml (2.8 MB = 2.8*1024*1024 = 2936012)' && exit 1 || exit 0"; fi
+  - if [ "$TO_TEST" = "FRONTEND" ]; then bash -c "npm run build >/dev/null && test `ls -l build/bundle.js|awk '{print $5}'` -gt 3145728 && echo 'build/bundle.js size exceed 3 MB, is this normal? It was previously around 2.8 MB. If this is normal, please update this check in .travis.yml (3 MB = 3*1024*1024 = 3145728)' && exit 1 || exit 0"; fi
   - ls -l build/bundle.js
 notifications:
   slack:

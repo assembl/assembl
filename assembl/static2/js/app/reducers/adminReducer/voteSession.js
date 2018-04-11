@@ -42,7 +42,8 @@ import {
   ADD_MODULE_TO_PROPOSAL,
   UNDELETE_MODULE,
   MARK_ALL_DEPENDENCIES_AS_CHANGED,
-  SET_VALIDATION_ERRORS
+  SET_VALIDATION_ERRORS,
+  CANCEL_MODULE_CUSTOMIZATION
 } from '../../actions/actionTypes';
 import { updateInLangstringEntries } from '../../utils/i18n';
 import { pickerColors } from '../../constants';
@@ -354,6 +355,32 @@ export const modulesById = (state: Map<string, Map> = Map(), action: ReduxAction
 
       return voteSpec;
     });
+  case CANCEL_MODULE_CUSTOMIZATION: {
+    const template = state.get(state.getIn([action.id, 'voteSpecTemplateId']));
+    return state
+      .update(action.id, m => m.set('isNumberGauge', template.get('isNumberGauge')))
+      .update(action.id, m =>
+        m
+          .set('instructionsEntries', template.get('instructionsEntries'))
+          .set('isCustom', false)
+          .set('_hasChanged', true)
+      )
+      .update(action.id, (m) => {
+        if (m.get('isNumberGauge')) {
+          return m
+            .delete('choices')
+            .set('unit', template.get('unit'))
+            .set('max', template.get('max'))
+            .set('min', template.get('min'));
+        }
+
+        return m
+          .set('choices', template.get('choices'))
+          .delete('max')
+          .delete('min')
+          .delete('unit');
+      });
+  }
   default:
     return state;
   }
@@ -431,6 +458,7 @@ export const voteProposalsHaveChanged = (state: boolean = false, action: ReduxAc
   case ADD_MODULE_TO_PROPOSAL:
   case DELETE_VOTE_MODULE:
   case MARK_ALL_DEPENDENCIES_AS_CHANGED:
+  case CANCEL_MODULE_CUSTOMIZATION:
     return true;
   case UPDATE_VOTE_PROPOSALS:
     return false;

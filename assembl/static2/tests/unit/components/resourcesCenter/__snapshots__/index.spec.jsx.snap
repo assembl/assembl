@@ -7,6 +7,7 @@ exports[`ResourcesCenter component should render the list of resources 1`] = `
   <Connect(Header)
     imgUrl="https://framapic.org/OXN2uadCiz5c/LtgDfpT5JnNV.png"
     title="Centre de ressources en ligne"
+    type="resourcesCenter"
   />
   <section>
     <ResourceBlock
