@@ -3,6 +3,7 @@ import ShallowRenderer from 'react-test-renderer/shallow';
 
 import { DumbHarvestingBox } from '../../../../js/app/components/harvesting/harvestingBox';
 import * as fakeData from './fakeData';
+import '../../../helpers/setupTranslations';
 
 describe('harvestingBox component', () => {
   it('should match harvestingBox snapshot', () => {

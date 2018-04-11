@@ -2,6 +2,7 @@ import React from 'react';
 import renderer from 'react-test-renderer';
 
 import DocumentExtensionIcon, { getExtension, getIconPath } from '../../../../js/app/components/common/documentExtensionIcon';
+import '../../../helpers/setupTranslations';
 
 describe('getExtension function', () => {
   it('should return the extension from filename', () => {

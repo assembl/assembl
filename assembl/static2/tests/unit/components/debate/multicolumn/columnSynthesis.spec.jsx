@@ -2,6 +2,7 @@ import React from 'react';
 import ShallowRenderer from 'react-test-renderer/shallow';
 
 import ColumnSynthesis from '../../../../../js/app/components/debate/multiColumns/columnSynthesis';
+import '../../../../helpers/setupTranslations';
 
 describe('ColumnSynthesis component', () => {
   it('should render a folded post', () => {

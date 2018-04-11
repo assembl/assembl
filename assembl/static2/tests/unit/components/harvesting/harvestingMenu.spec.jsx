@@ -3,6 +3,7 @@ import ShallowRenderer from 'react-test-renderer/shallow';
 
 import HarvestingMenu from '../../../../js/app/components/harvesting/harvestingMenu';
 import * as fakeData from './fakeData';
+import '../../../helpers/setupTranslations';
 
 describe('harvestingMenu component', () => {
   beforeAll(() => {

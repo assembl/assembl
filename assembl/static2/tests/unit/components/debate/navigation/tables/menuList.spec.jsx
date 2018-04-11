@@ -2,6 +2,7 @@ import React from 'react';
 import ShallowRenderer from 'react-test-renderer/shallow';
 
 import MenuList from '../../../../../../js/app/components/debate/navigation/tables/menuList';
+import '../../../../../helpers/setupTranslations';
 
 describe('MenuList component', () => {
   it('should match the MenuList', () => {

@@ -2,6 +2,7 @@ import React from 'react';
 import ShallowRenderer from 'react-test-renderer/shallow';
 
 import { DumbQuestion } from '../../../js/app/pages/question';
+import '../../helpers/setupTranslations';
 
 describe('Question page', () => {
   it('should match Question with data snapshot', () => {

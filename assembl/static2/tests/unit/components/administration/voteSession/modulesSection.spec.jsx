@@ -3,6 +3,7 @@ import ShallowRenderer from 'react-test-renderer/shallow';
 import { List, Map } from 'immutable';
 
 import { DumbModulesSection } from '../../../../../js/app/components/administration/voteSession/modulesSection';
+import '../../../../helpers/setupTranslations';
 
 describe('ModulesSection component', () => {
   const toggleModuleCheckboxSpy = jest.fn();

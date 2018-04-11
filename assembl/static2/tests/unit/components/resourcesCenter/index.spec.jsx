@@ -2,6 +2,7 @@ import React from 'react';
 import ShallowRenderer from 'react-test-renderer/shallow';
 
 import ResourcesCenter from '../../../../js/app/components/resourcesCenter';
+import '../../../helpers/setupTranslations';
 
 describe('ResourcesCenter component', () => {
   it('should render the list of resources', () => {

@@ -2,6 +2,7 @@ import React from 'react';
 import ShallowRenderer from 'react-test-renderer/shallow';
 
 import { DumbTextWithHeaderPage } from '../../../../js/app/components/common/textWithHeaderPage';
+import '../../../helpers/setupTranslations';
 
 describe('TextWithHeaderPage component', () => {
   it('should render the header with a title and a block of text', () => {

@@ -2,6 +2,7 @@ import React from 'react';
 import renderer from 'react-test-renderer';
 
 import { DumbScrollOnePageButton } from '../../../../js/app/components/common/scrollOnePageButton';
+import '../../../helpers/setupTranslations';
 
 describe('DumbScrollOnePageButton component', () => {
   it('should render a button to scroll one page down', () => {

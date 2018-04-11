@@ -2,6 +2,7 @@ import React from 'react';
 import ShallowRenderer from 'react-test-renderer/shallow';
 
 import HarvestingAnchor from '../../../../js/app/components/harvesting/harvestingAnchor';
+import '../../../helpers/setupTranslations';
 
 describe('harvestingAnchor component', () => {
   it('should match harvestingAnchor snapshot', () => {

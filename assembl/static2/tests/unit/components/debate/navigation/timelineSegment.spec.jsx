@@ -2,6 +2,7 @@ import React from 'react';
 import ShallowRenderer from 'react-test-renderer/shallow';
 
 import { DumbTimelineSegment } from '../../../../../js/app/components/debate/navigation/timelineSegment';
+import '../../../../helpers/setupTranslations';
 
 describe('DumbTimeline component', () => {
   it('should match the DumbTimeline', () => {

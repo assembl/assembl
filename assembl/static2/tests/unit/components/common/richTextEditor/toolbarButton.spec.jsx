@@ -2,6 +2,7 @@ import React from 'react';
 import renderer from 'react-test-renderer';
 
 import ToolbarButton from '../../../../../js/app/components/common/richTextEditor/toolbarButton';
+import '../../../../helpers/setupTranslations';
 
 describe('ToolbarButton component', () => {
   const onToggleSpy = jest.fn(() => {});

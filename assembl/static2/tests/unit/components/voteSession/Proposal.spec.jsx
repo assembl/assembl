@@ -3,6 +3,7 @@ import renderer from 'react-test-renderer';
 
 import Proposal from '../../../../js/app/components/voteSession/proposal';
 import * as fakeData from './fakeData';
+import '../../../helpers/setupTranslations';
 
 describe('Proposal component', () => {
   const voteForProposalSpy = jest.fn();

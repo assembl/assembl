@@ -3,6 +3,7 @@ import renderer from 'react-test-renderer';
 import { EditorState } from 'draft-js';
 
 import Toolbar from '../../../../../js/app/components/common/richTextEditor/toolbar';
+import '../../../../helpers/setupTranslations';
 
 describe('Toolbar component', () => {
   it('should render a toolbar', () => {

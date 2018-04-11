@@ -2,6 +2,7 @@ import React from 'react';
 import ShallowRenderer from 'react-test-renderer/shallow';
 
 import FlatList from '../../../../js/app/components/common/flatList';
+import '../../../helpers/setupTranslations';
 
 describe('FlatList component', () => {
   it('should match FlatList loading snapshot', () => {

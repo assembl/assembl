@@ -4,6 +4,7 @@ import ShallowRenderer from 'react-test-renderer/shallow';
 import { convertToRaw, ContentState } from 'draft-js';
 
 import { DumbPageForm } from '../../../../../js/app/components/administration/voteSession/pageForm';
+import '../../../../helpers/setupTranslations';
 
 describe('Vote Session DumbPageForm component', () => {
   it('should render a form to update the vote session page data', () => {

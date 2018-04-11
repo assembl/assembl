@@ -3,6 +3,7 @@ import ShallowRenderer from 'react-test-renderer/shallow';
 
 import * as fakeData from '../components/voteSession/fakeData';
 import { DumbVoteSession } from '../../../js/app/pages/voteSession';
+import '../../helpers/setupTranslations';
 
 describe('VoteSession component', () => {
   it('should match VoteSession snapshot when vote session is not configured', () => {

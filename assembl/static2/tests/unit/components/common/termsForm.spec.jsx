@@ -4,6 +4,7 @@ import ShallowRenderer from 'react-test-renderer/shallow';
 import { DumbTermsForm, mapDataToProps } from '../../../../js/app/components/common/termsForm';
 
 import { closeModal } from '../../../../js/app/utils/utilityManager';
+import '../../../helpers/setupTranslations';
 
 jest.mock('../../../../js/app/utils/utilityManager');
 

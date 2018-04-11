@@ -3,6 +3,7 @@ import renderer from 'react-test-renderer';
 
 import CardList from '../../../../js/app/components/common/cardList';
 import { CLASS_NAME_GENERATOR } from '../../../../js/app/utils/cardList';
+import '../../../helpers/setupTranslations';
 
 describe('CardList component', () => {
   it('should match CardList snapshot', () => {

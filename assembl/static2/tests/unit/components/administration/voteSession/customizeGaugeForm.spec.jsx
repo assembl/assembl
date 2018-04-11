@@ -3,6 +3,7 @@ import ShallowRenderer from 'react-test-renderer/shallow';
 import { List, Map } from 'immutable';
 
 import { DumbCustomizeGaugeForm } from '../../../../../js/app/components/administration/voteSession/customizeGaugeForm';
+import '../../../../helpers/setupTranslations';
 
 describe('DumbCustomizeGaugeForm component', () => {
   const closeSpy = jest.fn();

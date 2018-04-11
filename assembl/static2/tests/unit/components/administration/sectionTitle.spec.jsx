@@ -2,6 +2,7 @@ import React from 'react';
 import renderer from 'react-test-renderer';
 
 import SectionTitle from '../../../../js/app/components/administration/sectionTitle';
+import '../../../helpers/setupTranslations';
 
 describe('SectionTitle component', () => {
   it('should render an admin section title', () => {

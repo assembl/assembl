@@ -2,6 +2,7 @@ import React from 'react';
 import renderer from 'react-test-renderer';
 
 import { DumbSyntheses } from '../../../js/app/pages/syntheses';
+import '../../helpers/setupTranslations';
 
 describe('Syntheses component', () => {
   it('should match Syntheses snapshot', () => {

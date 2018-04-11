@@ -2,6 +2,7 @@ import React from 'react';
 import ShallowRenderer from 'react-test-renderer/shallow';
 
 import { DumbSurveyTable } from '../../../../../../js/app/components/debate/navigation/tables/surveyTable';
+import '../../../../../helpers/setupTranslations';
 
 describe('SurveyTable component', () => {
   it('should match the SurveyTable', () => {

@@ -2,6 +2,7 @@ import React from 'react';
 import renderer from 'react-test-renderer';
 
 import * as saveButton from '../../../../js/app/components/administration/saveButton';
+import '../../../helpers/setupTranslations';
 
 describe('runSerial function', () => {
   const { runSerial } = saveButton;

@@ -2,6 +2,7 @@ import React from 'react';
 import renderer from 'react-test-renderer';
 
 import Section from '../../../../js/app/components/common/section';
+import '../../../helpers/setupTranslations';
 
 describe('Section component', () => {
   it('should match Section snapshot', () => {

@@ -2,6 +2,7 @@ import React from 'react';
 import ShallowRenderer from 'react-test-renderer/shallow';
 
 import MenuTable from '../../../../../js/app/components/debate/navigation/menuTable';
+import '../../../../helpers/setupTranslations';
 
 describe('MenuTable component', () => {
   it('should match the survey table', () => {

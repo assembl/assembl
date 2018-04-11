@@ -2,6 +2,7 @@ import React from 'react';
 import ShallowRenderer from 'react-test-renderer/shallow';
 
 import { DumbIdeasTable } from '../../../../../../js/app/components/debate/navigation/tables/ideasTable';
+import '../../../../../helpers/setupTranslations';
 
 describe('IdeasTable component', () => {
   it('should match the IdeasTable', () => {

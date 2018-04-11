@@ -2,6 +2,7 @@ import React from 'react';
 import renderer from 'react-test-renderer';
 
 import MessagePage from '../../../../js/app/components/common/messagePage';
+import '../../../helpers/setupTranslations';
 
 describe('MessagePage component', () => {
   it('should render a MessagePage component', () => {

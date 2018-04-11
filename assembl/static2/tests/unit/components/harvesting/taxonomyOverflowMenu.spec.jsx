@@ -2,6 +2,7 @@ import React from 'react';
 import ShallowRenderer from 'react-test-renderer/shallow';
 
 import TaxonomyOverflowMenu from '../../../../js/app/components/harvesting/taxonomyOverflowMenu';
+import '../../../helpers/setupTranslations';
 
 describe('taxonomyOverflowMenu component', () => {
   it('should match harvestingMenu snapshot', () => {

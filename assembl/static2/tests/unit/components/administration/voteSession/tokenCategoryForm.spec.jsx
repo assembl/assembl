@@ -2,6 +2,7 @@ import React from 'react';
 import ShallowRenderer from 'react-test-renderer/shallow';
 
 import { DumbTokenCategoryForm } from '../../../../../js/app/components/administration/voteSession/tokenCategoryForm';
+import '../../../../helpers/setupTranslations';
 
 describe('tokenTypeForm component', () => {
   it('should render a TokenCategoryForm component', () => {

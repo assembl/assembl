@@ -2,6 +2,7 @@ import React from 'react';
 import renderer from 'react-test-renderer';
 
 import { DumbEditSectionForm } from '../../../../../js/app/components/administration/discussion/editSectionForm';
+import '../../../../helpers/setupTranslations';
 
 describe('DumbEditSectionForm component', () => {
   it('should render a form to edit a section of Assembl', () => {

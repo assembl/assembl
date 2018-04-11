@@ -3,6 +3,7 @@ import React from 'react';
 import ShallowRenderer from 'react-test-renderer/shallow';
 
 import { DumbTokensForm } from '../../../../../js/app/components/administration/voteSession/tokensForm';
+import '../../../../helpers/setupTranslations';
 
 describe('tokensForm component', () => {
   const handleInstructionsChangeSpy = jest.fn();

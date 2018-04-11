@@ -2,6 +2,7 @@ import React from 'react';
 import renderer from 'react-test-renderer';
 
 import AtomicBlockRenderer from '../../../../../js/app/components/common/richTextEditor/atomicBlockRenderer';
+import '../../../../helpers/setupTranslations';
 
 function Entity(data, type) {
   this.data = data;

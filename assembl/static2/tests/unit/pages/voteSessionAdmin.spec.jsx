@@ -1,6 +1,7 @@
 import { List, Map } from 'immutable';
 
 import * as voteSessionAdmin from '../../../js/app/pages/voteSessionAdmin';
+import '../../helpers/setupTranslations';
 
 describe('getProposalValidationErrors', () => {
   const { getProposalValidationErrors } = voteSessionAdmin;

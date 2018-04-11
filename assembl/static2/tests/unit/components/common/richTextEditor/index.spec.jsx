@@ -3,6 +3,7 @@ import ShallowRenderer from 'react-test-renderer/shallow';
 import { ContentState, convertToRaw, RichUtils } from 'draft-js';
 
 import RichTextEditor from '../../../../../js/app/components/common/richTextEditor';
+import '../../../../helpers/setupTranslations';
 
 describe('RichTextEditor component', () => {
   it.skip('should render a rich text editor', () => {

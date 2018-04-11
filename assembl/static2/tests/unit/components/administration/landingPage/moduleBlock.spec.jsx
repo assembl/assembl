@@ -2,6 +2,7 @@ import React from 'react';
 import renderer from 'react-test-renderer';
 
 import ModuleBlock from '../../../../../js/app/components/administration/landingPage/moduleBlock';
+import '../../../../helpers/setupTranslations';
 
 describe('ModuleBlock component', () => {
   it('should render a block that represents the module', () => {
