@@ -75,7 +75,7 @@ exports[`AvailableTokens component should match AvailableTokens snapshot (non st
                 className={undefined}
                 style={undefined}
               >
-                You have , tokens remaining.
+                You have 6 tokens remaining.
               </span>
             </div>
             <div
@@ -114,7 +114,7 @@ exports[`AvailableTokens component should match AvailableTokens snapshot (non st
                 className={undefined}
                 style={undefined}
               >
-                You have , tokens remaining.
+                You have 4 tokens remaining.
               </span>
             </div>
             <div

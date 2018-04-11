@@ -46,6 +46,8 @@ describe('AvailableTokens component', () => {
     const props = {
       remainingTokensByCategory: Map({
         category1: 3,
+        category2: 6,
+        category3: 4,
         category4: 10
       }),
       sticky: false,
