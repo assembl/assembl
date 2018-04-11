@@ -34,7 +34,7 @@ exports[`DumbSelectModulesForm component should render a form to select the land
       <Helper
         additionalTextClasses=""
         classname="margin-left-20"
-        helperText="Missing translation: administration.helpers.landingPage.introduction"
+        helperText=" "
         helperUrl="/static2/img/helpers/landing_page_admin/introduction.png"
         label="Introduction"
       />
@@ -50,7 +50,7 @@ exports[`DumbSelectModulesForm component should render a form to select the land
       <Helper
         additionalTextClasses=""
         classname="margin-left-20"
-        helperText="Missing translation: administration.helpers.landingPage.video"
+        helperText=" "
         helperUrl="/static2/img/helpers/landing_page_admin/video.png"
         label="Video"
       />
@@ -66,7 +66,7 @@ exports[`DumbSelectModulesForm component should render a form to select the land
       <Helper
         additionalTextClasses=""
         classname="margin-left-20"
-        helperText="Missing translation: administration.helpers.landingPage.footer"
+        helperText=" "
         helperUrl="/static2/img/helpers/landing_page_admin/footer.png"
         label="Footer"
       />

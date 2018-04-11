@@ -555,13 +555,13 @@ const Translations = {
             "Il s'agit d'un bandeau de redirection vers un module chatbot messenger dédié à la consultation. Vous devez renseigner le titre, l'url du chatbot messenger et l'intitulé du bouton de redirection.",
           news:
             "Permet de mettre en avant une ou plusieurs actualités en rapport avec la consultation (publication d'une nouvelle synthèse, création d'une nouvelle thématique, …) avec des liens de redirection.",
-          introduction: "",
-          data: "",
-          footer: "",
-          video: "",
-          contact: "",
-          top_thematics: "",
-          partners: ""
+          introduction: " ",
+          data: " ",
+          footer: " ",
+          video: " ",
+          contact: " ",
+          top_thematics: " ",
+          partners: " "
         }
       },
       videoHelp:
@@ -1177,17 +1177,17 @@ const Translations = {
         landingPage: {
           header:
             "Top page header. It contains the consultation's title and subtitle and a button to access to the consultation.",
-          timeline: "",
-          tweets: "",
-          chatbot: "",
-          news: "",
-          introduction: "",
-          data: "",
-          footer: "",
-          video: "",
-          contact: "",
-          top_thematics: "",
-          partners: ""
+          timeline: " ",
+          tweets: " ",
+          chatbot: " ",
+          news: " ",
+          introduction: " ",
+          data: " ",
+          footer: " ",
+          video: " ",
+          contact: " ",
+          top_thematics: " ",
+          partners: " "
         }
       },
       videoHelp:
