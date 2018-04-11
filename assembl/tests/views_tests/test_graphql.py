@@ -2558,3 +2558,56 @@ def test_mutation_create_user_language_preference(
     assert ulp
     test_session.query(models.UserLanguagePreference).delete()
     test_session.flush()
+
+
+def test_mutation_update_user_language_preference_unique(
+        graphql_request, test_session, admin_user, user_language_preference_en_cookie, fr_locale):
+
+    from assembl.models.auth import LanguagePreferenceOrder
+    source = LanguagePreferenceOrder.Cookie._name_
+    res = schema.execute("""
+        mutation myMutation($locale: String!, $source: String!  ){
+            updateUserLanguagePreference(locale: $locale, source: $source) {
+                userLanguagePreference {
+                    locale {
+                        localeCode
+                    }
+                    source
+                }
+            }
+        }""", context_value=graphql_request, variable_values={'locale': fr_locale.code, 'source': source})
+
+    assert res.data['updateUserLanguagePreference']['userLanguagePreference']['locale']['localeCode'] == fr_locale.code
+    assert res.data['updateUserLanguagePreference']['userLanguagePreference']['source'] == source
+    ulp = test_session.query(
+        models.UserLanguagePreference).filter(models.UserLanguagePreference.user_id==admin_user.id).all()
+    assert ulp
+    test_session.query(models.UserLanguagePreference).delete()
+    test_session.flush()
+
+
+def test_mutation_update_user_language_preference_non_unique(
+        graphql_request, test_session, admin_user, user_language_preference_en_server, fr_locale):
+
+    from assembl.models.auth import LanguagePreferenceOrder
+    source = LanguagePreferenceOrder.Server._name_
+    res = schema.execute("""
+        mutation myMutation($locale: String!, $source: String!  ){
+            updateUserLanguagePreference(locale: $locale, source: $source) {
+                userLanguagePreference {
+                    locale {
+                        localeCode
+                    }
+                    source
+                }
+            }
+        }""", context_value=graphql_request, variable_values={'locale': fr_locale.code, 'source': source})
+
+    assert res.data['updateUserLanguagePreference']['userLanguagePreference']['locale']['localeCode'] == fr_locale.code
+    assert res.data['updateUserLanguagePreference']['userLanguagePreference']['source'] == source
+    ulp = test_session.query(
+        models.UserLanguagePreference).filter(models.UserLanguagePreference.user_id==admin_user.id).all()
+    assert ulp
+    assert len(ulp) == 2
+    test_session.query(models.UserLanguagePreference).delete()
+    test_session.flush()

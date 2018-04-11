@@ -204,6 +204,7 @@ def test_adminuser_webrequest(request, admin_user, test_app_no_perm):
     """A Pyramid request fixture with an ADMIN user authorized"""
     req = PyramidWebTestRequest.blank('/', method="GET")
     req.authenticated_userid = admin_user.id
+    req.matchdict = {'discussion_id': None}
 
     def fin():
         # The request was not called

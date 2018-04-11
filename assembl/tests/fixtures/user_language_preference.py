@@ -1,5 +1,6 @@
 import pytest
 
+
 @pytest.fixture(scope="function")
 def participant1_user_language_preference_en_cookie(request, test_session, en_locale,
                                                     participant1_user):
@@ -72,6 +73,34 @@ def user_language_preference_en_cookie(request, test_session, en_locale,
         locale=locale_from,
         preferred_order=0,
         source_of_evidence=LanguagePreferenceOrder.Cookie.value)
+
+    def fin():
+        print "finalizer user_language_preference_en_cookie"
+        test_session.delete(ulp)
+        test_session.flush()
+
+    test_session.add(ulp)
+    test_session.flush()
+    request.addfinalizer(fin)
+    return ulp
+
+
+@pytest.fixture(scope="function")
+def user_language_preference_en_server(request, test_session, en_locale,
+                                       admin_user):
+    """User Language Preference fixture with English (en) cookie level"""
+
+    from assembl.models.auth import (
+        UserLanguagePreference,
+        LanguagePreferenceOrder
+    )
+
+    locale_from = en_locale
+    ulp = UserLanguagePreference(
+        user=admin_user,
+        locale=locale_from,
+        preferred_order=0,
+        source_of_evidence=LanguagePreferenceOrder.Server.value)
 
     def fin():
         print "finalizer user_language_preference_en_cookie"

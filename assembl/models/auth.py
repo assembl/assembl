@@ -1752,7 +1752,8 @@ class LanguagePreferenceCollection(object):
             user_id = req.authenticated_userid
             if user_id and user_id != Everyone:
                 try:
-                    discussion_id = req.matchdict['discussion_id'] if (req.matchdict and 'discussion_id' in req.matchdict) else None
+                    discussion_id = req.matchdict['discussion_id'] if (
+                        'matchdict' in req.__dict__ and req.matchdict and 'discussion_id' in req.matchdict) else None
                     req.lang_prefs = UserLanguagePreferenceCollection(user_id, discussion_id=discussion_id, session=session)
                     return req.lang_prefs
                 except Exception:
@@ -1806,10 +1807,9 @@ class UserLanguagePreferenceCollection(LanguagePreferenceCollection):
         if discussion_id:
             from assembl.models import Discussion
             self.discussion = Discussion.get(discussion_id, session)
+        else:
+            self.discussion = None
         self.calculate_locale_prefs(self.user.db)
-
-    def recalculate_locale(self, db):
-        self.calculate_locale_prefs(db)
 
     def process_locale(self, locale_code, source_of_evidence, **kwargs):
         """
@@ -1832,6 +1832,7 @@ class UserLanguagePreferenceCollection(LanguagePreferenceCollection):
                 lp.delete()
             if len(lang_pref_signatures[source_of_evidence]) == 1:
                 pref = lang_pref_signatures[source_of_evidence][0]
+                pref.locale = locale
                 for k, v in kwargs.iteritems():
                     setattr(pref, k, v)
                 session.flush()
@@ -1852,20 +1853,28 @@ class UserLanguagePreferenceCollection(LanguagePreferenceCollection):
                         setattr(pref, k, v)
                     session.flush()
                     return pref
-        lang = UserLanguagePreference(user=self.user, **kwargs)
+        lang = UserLanguagePreference(
+            user=self.user,
+            locale=locale,
+            source_of_evidence=source_of_evidence,
+            **kwargs
+        )
         session.add(lang)
         session.flush()
         self.calculate_locale_prefs(session)
         return lang
 
-    def process_post_locale(self, post_id, **kwargs):
+    def process_post_locale(self, locale_code, post_id, **kwargs):
+        locale = Locale.get_or_create(locale_code)
         if post_id in self.post_prefs:
             pref = self.post_prefs[post_id]
+            pref.locale = locale
             for k, v in kwargs.iteritems():
                 setattr(pref, k, v)
         else:
             pref = PostUserLanguagePreference(
                 post_id=post_id,
+                locale=locale,
                 user=self.user,
                 **kwargs
             )
@@ -1972,25 +1981,22 @@ class UserLanguagePreferenceCollection(LanguagePreferenceCollection):
     def default_locale_code(self):
         return self.default_pref.locale.code
 
-    def find_locale(self, locale, **kwargs):
+    def find_locale(self, locale, db=None):
         # This code needs to mirror
         # LanguagePreferenceCollection.getPreferenceForLocale
         for locale in Locale.decompose_locale(locale):
             if locale in self.user_prefs:
                 return self.user_prefs[locale]
-        db = self.user.db
+        if self.default_pref is None:
+            # this should never actually happen
+            return None
         locale = Locale.get_or_create(locale, db)
-        # The default pref should NEVER be None
-        assert self.default_pref
-        args = {
-            'locale': locale,
-            'locale_id': locale.id,
-            'translate_to_locale': self.default_pref.locale,
-            'source_of_evidence': self.default_pref.source_of_evidence if self.default_pref else LanguagePreferenceOrder.Server.value,
-            'preferred_order': 0,
-            'user': None
-        }  # Do not give the user or this gets added to session (TODO: Still valid?)
-        return UserLanguagePreference(**args)
+        return UserLanguagePreference(
+            locale=locale, locale_id=locale.id,
+            translate_to_locale=self.default_pref.locale,
+            translate_to=self.default_pref.locale.id,
+            source_of_evidence=self.default_pref.source_of_evidence,
+            user=None)  # Do not give the user or this gets added to session
 
     def has_locale(self, locale):
         for locale in Locale.decompose_locale(locale):
@@ -2003,14 +2009,14 @@ class UserLanguagePreferenceCollection(LanguagePreferenceCollection):
                      for pref in self.user_prefs.itervalues()})
 
     def add_locale(self, locale, **kwargs):
-        post_id = kwargs.get('post_id', None)
+        post_id = kwargs.pop('post_id', None)
         pref = None
         if post_id:
-            pref = self.process_post_locale(locale, post_id, kwargs)
+            pref = self.process_post_locale(locale, post_id, **kwargs)
         else:
-            source_of_evidence = kwargs.get('source_of_evidence', None)
+            source_of_evidence = kwargs.pop('source_of_evidence', None)
             assert source_of_evidence, "A source of evidence MUST be passed in order to create a preference"
-            pref = self.process_locale(locale, source_of_evidence)
+            pref = self.process_locale(locale, source_of_evidence, **kwargs)
         return pref
 
 
