@@ -15,15 +15,8 @@ type Props = {
   translate?: boolean
 };
 
-type State = {
-  exportLocale: ?string,
-  translate: boolean
-};
-
-class ExportSection extends React.Component<Object, Props, State> {
+class ExportSection extends React.Component<Object, Props, void> {
   props: Props;
-
-  state: State;
 
   static defaultProps = {
     languages: null,
