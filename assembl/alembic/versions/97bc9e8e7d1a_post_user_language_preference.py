@@ -1,14 +1,14 @@
 """post_user_language_preference
 
 Revision ID: 97bc9e8e7d1a
-Revises: 57c8fb47480b
+Revises: 39b04e9d2716
 Create Date: 2017-12-07 10:50:10.358418
 
 """
 
 # revision identifiers, used by Alembic.
 revision = '97bc9e8e7d1a'
-down_revision = '57c8fb47480b'
+down_revision = '39b04e9d2716'
 
 from alembic import context, op
 import sqlalchemy as sa
