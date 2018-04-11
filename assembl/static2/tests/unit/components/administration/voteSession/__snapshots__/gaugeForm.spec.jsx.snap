@@ -12,7 +12,8 @@ exports[`GaugeForm component should render a form to set up a gauge and a number
     className="flex margin-m"
   >
     <FormControlWithLabel
-      helperUrl=""
+      helperText="Missing translation: administration.helpers.gaugeVoteInstructions"
+      helperUrl="/static2/img/helpers/helper6.png"
       label="Missing translation: administration.gaugeVoteInstructions"
       labelAlwaysVisible={false}
       onChange={[Function]}
@@ -20,13 +21,6 @@ exports[`GaugeForm component should render a form to set up a gauge and a number
       type="text"
       validationErrors={null}
       value="Please vote on this numeral gauge"
-    />
-    <Helper
-      additionalTextClasses="helper-text-only"
-      classname=""
-      helperText="Missing translation: administration.helpers.gaugeVoteInstructions"
-      helperUrl="/static2/img/helpers/helper6.png"
-      label=""
     />
   </div>
   <FormGroup
@@ -44,6 +38,7 @@ exports[`GaugeForm component should render a form to set up a gauge and a number
       </label>
     </div>
     <SplitButton
+      className="admin-dropdown"
       id="dropdown-1234"
       onSelect={[Function]}
       required={true}
@@ -189,7 +184,8 @@ exports[`GaugeForm component should render a form to set up a gauge and a textGa
     className="flex margin-m"
   >
     <FormControlWithLabel
-      helperUrl=""
+      helperText="Missing translation: administration.helpers.gaugeVoteInstructions"
+      helperUrl="/static2/img/helpers/helper6.png"
       label="Missing translation: administration.gaugeVoteInstructions"
       labelAlwaysVisible={false}
       onChange={[Function]}
@@ -197,13 +193,6 @@ exports[`GaugeForm component should render a form to set up a gauge and a textGa
       type="text"
       validationErrors={null}
       value="Please vote on this textual gauge"
-    />
-    <Helper
-      additionalTextClasses="helper-text-only"
-      classname=""
-      helperText="Missing translation: administration.helpers.gaugeVoteInstructions"
-      helperUrl="/static2/img/helpers/helper6.png"
-      label=""
     />
   </div>
   <FormGroup
@@ -221,6 +210,7 @@ exports[`GaugeForm component should render a form to set up a gauge and a textGa
       </label>
     </div>
     <SplitButton
+      className="admin-dropdown"
       id="dropdown-5678"
       onSelect={[Function]}
       required={true}
@@ -376,7 +366,8 @@ exports[`GaugeForm component should render a gauge form with no radio if canChan
     className="flex margin-m"
   >
     <FormControlWithLabel
-      helperUrl=""
+      helperText="Missing translation: administration.helpers.gaugeVoteInstructions"
+      helperUrl="/static2/img/helpers/helper6.png"
       label="Missing translation: administration.gaugeVoteInstructions"
       labelAlwaysVisible={false}
       onChange={[Function]}
@@ -384,13 +375,6 @@ exports[`GaugeForm component should render a gauge form with no radio if canChan
       type="text"
       validationErrors={null}
       value="Please vote on this textual gauge"
-    />
-    <Helper
-      additionalTextClasses="helper-text-only"
-      classname=""
-      helperText="Missing translation: administration.helpers.gaugeVoteInstructions"
-      helperUrl="/static2/img/helpers/helper6.png"
-      label=""
     />
   </div>
   <FormGroup
@@ -408,6 +392,7 @@ exports[`GaugeForm component should render a gauge form with no radio if canChan
       </label>
     </div>
     <SplitButton
+      className="admin-dropdown"
       id="dropdown-5678"
       onSelect={[Function]}
       required={true}

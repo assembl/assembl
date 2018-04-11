@@ -76,6 +76,7 @@ exports[`ModulesSection component should render a ModuleSection component with t
             />
           </div>
           <SplitButton
+            className="admin-dropdown"
             id="input-dropdown-addon"
             onSelect={[Function]}
             required={true}
