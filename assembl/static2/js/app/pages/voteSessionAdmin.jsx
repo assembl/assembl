@@ -40,7 +40,6 @@ type VoteModule = {
   isCustom: boolean,
   _isNew: boolean,
   isNumberGauge?: boolean,
-  isNumberGauge?: boolean,
   labelEntries: Array<string>,
   maximum?: number,
   minimum?: number,
