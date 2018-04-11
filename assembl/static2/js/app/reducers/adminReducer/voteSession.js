@@ -2,6 +2,7 @@
 import { combineReducers } from 'redux';
 import type ReduxAction from 'redux';
 import { fromJS, List, Map } from 'immutable';
+import { createRandomId } from '../../utils/globalFunctions';
 import {
   type Action,
   UPDATE_VOTE_SESSION_PAGE_TITLE,
@@ -495,6 +496,14 @@ export const voteProposalsById = (state: Map<string, Map> = Map(), action: Redux
         modules: proposal.modules ? proposal.modules.map(m => m.id) : []
       });
       newState = newState.set(proposal.id, proposalInfo);
+      // Create at least 3 empty propositions
+      if (action.voteProposals.length < 3) {
+        for (let i = 1; i <= 3 - action.voteProposals.length; i += 1) {
+          const order = action.voteProposals.length + 1;
+          const newProposalId = createRandomId();
+          newState = newState.set(newProposalId, defaultVoteProposal.set('id', newProposalId).set('order', order));
+        }
+      }
     });
     return newState;
   }
