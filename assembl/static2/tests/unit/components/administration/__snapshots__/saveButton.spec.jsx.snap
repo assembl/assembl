@@ -11,7 +11,7 @@ exports[`Save button component should render a disabled save button 1`] = `
     className={undefined}
     style={undefined}
   >
-    Save Themes
+    Save
   </span>
 </button>
 `;
@@ -27,7 +27,7 @@ exports[`Save button component should render a save button 1`] = `
     className={undefined}
     style={undefined}
   >
-    Save Themes
+    Save
   </span>
 </button>
 `;
@@ -43,7 +43,7 @@ exports[`Save button component should render a save button with specific classes
     className={undefined}
     style={undefined}
   >
-    Save Themes
+    Save
   </span>
 </button>
 `;

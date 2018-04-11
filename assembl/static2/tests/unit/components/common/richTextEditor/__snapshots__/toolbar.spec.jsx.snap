@@ -28,7 +28,7 @@ exports[`Toolbar component should render a toolbar 1`] = `
       disabled={false}
       onClick={[Function]}
       onMouseDown={[Function]}
-      title="Attachment"
+      title="Add a file"
       type="button"
     >
       <span

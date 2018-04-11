@@ -11,7 +11,7 @@ exports[`DumbPageForm component should render a form to update the resources cen
       className="control-label"
       htmlFor={undefined}
     >
-      Missing translation: administration.resourcesCenter.pageTitleLabel
+      Page title
     </label>
     <input
       className="form-control"
@@ -19,7 +19,7 @@ exports[`DumbPageForm component should render a form to update the resources cen
       id={undefined}
       onBlur={[Function]}
       onChange={[Function]}
-      placeholder="Missing translation: administration.resourcesCenter.pageTitleLabel"
+      placeholder="Page title"
       type="text"
       value="Centre de ressources"
     />
@@ -34,7 +34,7 @@ exports[`DumbPageForm component should render a form to update the resources cen
         className={undefined}
         style={undefined}
       >
-        Missing translation: administration.resourcesCenter.headerImageLabel
+        Header image
       </span>
     </label>
     <div>
@@ -48,7 +48,7 @@ exports[`DumbPageForm component should render a form to update the resources cen
           className={undefined}
           style={undefined}
         >
-          Missing translation: common.uploadButton
+          Choose a file to upload
         </span>
       </button>
       <div

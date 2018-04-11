@@ -6,9 +6,9 @@ exports[`tokensForm component should render a form to configure a token vote wit
 >
   <form>
     <FormControlWithLabel
-      helperText="Missing translation: administration.helpers.tokenVoteInstructions"
+      helperText="Depending on the objective of the token module, incite the participants to take action."
       helperUrl="/static2/img/helpers/helper5.png"
-      label="Missing translation: administration.tokenVoteInstructions"
+      label="Instructions for the token vote"
       labelAlwaysVisible={false}
       onChange={[Function]}
       required={true}
@@ -19,7 +19,7 @@ exports[`tokensForm component should render a form to configure a token vote wit
     <label
       htmlFor="input-dropdown-addon"
     >
-      Missing translation: administration.tokenCategoryNumber
+      Number of token types
     </label>
     <div
       className="inline"
@@ -27,7 +27,7 @@ exports[`tokensForm component should render a form to configure a token vote wit
       <Helper
         additionalTextClasses=""
         classname=""
-        helperText="Missing translation: administration.helpers.tokenCategoryNumber"
+        helperText="Select the number of different token types for this vote"
         helperUrl="/static2/img/helpers/helper2.png"
         label=""
       />
@@ -142,12 +142,12 @@ exports[`tokensForm component should render a form to configure a token vote wit
       <label
         htmlFor="input-dropdown-exclusive"
       >
-        Missing translation: administration.exclusive
+        Exclusive
       </label>
       <Helper
         additionalTextClasses="helper-text-only"
         classname="inline"
-        helperText="Missing translation: administration.helpers.exclusive"
+        helperText="You can decide wether the participant can distribute a single type of token (exclusive) or several types of token per proposal."
         helperUrl=""
         label=""
       />
@@ -155,7 +155,7 @@ exports[`tokensForm component should render a form to configure a token vote wit
         className="admin-dropdown"
         id="input-dropdown-exclusive"
         onSelect={[Function]}
-        title="Missing translation: administration.notExclusive"
+        title="Not exclusive"
       >
         <MenuItem
           bsClass="dropdown"
@@ -217,9 +217,9 @@ exports[`tokensForm component should render a form to configure a token vote wit
 >
   <form>
     <FormControlWithLabel
-      helperText="Missing translation: administration.helpers.tokenVoteInstructions"
+      helperText="Depending on the objective of the token module, incite the participants to take action."
       helperUrl="/static2/img/helpers/helper5.png"
-      label="Missing translation: administration.tokenVoteInstructions"
+      label="Instructions for the token vote"
       labelAlwaysVisible={false}
       onChange={[Function]}
       required={true}
@@ -230,7 +230,7 @@ exports[`tokensForm component should render a form to configure a token vote wit
     <label
       htmlFor="input-dropdown-addon"
     >
-      Missing translation: administration.tokenCategoryNumber
+      Number of token types
     </label>
     <div
       className="inline"
@@ -238,7 +238,7 @@ exports[`tokensForm component should render a form to configure a token vote wit
       <Helper
         additionalTextClasses=""
         classname=""
-        helperText="Missing translation: administration.helpers.tokenCategoryNumber"
+        helperText="Select the number of different token types for this vote"
         helperUrl="/static2/img/helpers/helper2.png"
         label=""
       />

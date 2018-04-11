@@ -5,8 +5,8 @@ exports[`ManageModules component should render a form to manage the landing page
   className="admin-box"
 >
   <SectionTitle
-    annotation="Annotation"
-    title="Title"
+    annotation="* Fields are required."
+    title="Manage the modules"
   />
   <div
     className="admin-content form-container"

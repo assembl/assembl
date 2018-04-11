@@ -13,7 +13,7 @@ exports[`tokenTypeForm component should render a TokenCategoryForm component 1`]
   >
     <FormControlWithLabel
       helperUrl=""
-      label="Missing translation: administration.tokenTitle"
+      label="Token title"
       labelAlwaysVisible={false}
       onChange={[Function]}
       required={true}
@@ -28,7 +28,7 @@ exports[`tokenTypeForm component should render a TokenCategoryForm component 1`]
         }
       }
       helperUrl=""
-      label="Missing translation: administration.tokenNumber"
+      label="Number of tokens per participant"
       labelAlwaysVisible={false}
       onChange={undefined}
       required={true}
@@ -39,7 +39,7 @@ exports[`tokenTypeForm component should render a TokenCategoryForm component 1`]
     <label
       htmlFor="color-picker"
     >
-      Missing translation: administration.tokenColor
+      Color of the token
     </label>
     <ColorPicker
       className="no-box-shadow"

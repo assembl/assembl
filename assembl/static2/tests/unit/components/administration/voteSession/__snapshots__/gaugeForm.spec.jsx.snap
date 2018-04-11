@@ -12,9 +12,9 @@ exports[`GaugeForm component should render a form to set up a gauge and a number
     className="flex margin-m"
   >
     <FormControlWithLabel
-      helperText="Missing translation: administration.helpers.gaugeVoteInstructions"
+      helperText="Depending on the objective of the gauge module, incite the participants to take action."
       helperUrl="/static2/img/helpers/helper6.png"
-      label="Missing translation: administration.gaugeVoteInstructions"
+      label="Instructions for the gauge vote"
       labelAlwaysVisible={false}
       onChange={[Function]}
       required={true}
@@ -184,9 +184,9 @@ exports[`GaugeForm component should render a form to set up a gauge and a textGa
     className="flex margin-m"
   >
     <FormControlWithLabel
-      helperText="Missing translation: administration.helpers.gaugeVoteInstructions"
+      helperText="Depending on the objective of the gauge module, incite the participants to take action."
       helperUrl="/static2/img/helpers/helper6.png"
-      label="Missing translation: administration.gaugeVoteInstructions"
+      label="Instructions for the gauge vote"
       labelAlwaysVisible={false}
       onChange={[Function]}
       required={true}
@@ -366,9 +366,9 @@ exports[`GaugeForm component should render a gauge form with no radio if canChan
     className="flex margin-m"
   >
     <FormControlWithLabel
-      helperText="Missing translation: administration.helpers.gaugeVoteInstructions"
+      helperText="Depending on the objective of the gauge module, incite the participants to take action."
       helperUrl="/static2/img/helpers/helper6.png"
-      label="Missing translation: administration.gaugeVoteInstructions"
+      label="Instructions for the gauge vote"
       labelAlwaysVisible={false}
       onChange={[Function]}
       required={true}

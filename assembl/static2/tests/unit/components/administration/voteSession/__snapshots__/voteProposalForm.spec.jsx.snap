@@ -23,7 +23,7 @@ exports[`VoteProposalForm component should render an empty form to create a vote
   </div>
   <FormControlWithLabel
     helperUrl=""
-    label="Missing translation: administration.voteProposals.title"
+    label="Title of the proposal"
     labelAlwaysVisible={false}
     onChange={[Function]}
     required={true}
@@ -40,7 +40,7 @@ exports[`VoteProposalForm component should render an empty form to create a vote
   />
   <FormControlWithLabel
     helperUrl=""
-    label="Missing translation: administration.voteProposals.description"
+    label="Description"
     labelAlwaysVisible={false}
     onChange={[Function]}
     required={true}
@@ -86,7 +86,7 @@ exports[`VoteProposalForm component should render an empty form to create a vote
   </div>
   <FormControlWithLabel
     helperUrl=""
-    label="Missing translation: administration.voteProposals.title"
+    label="Title of the proposal"
     labelAlwaysVisible={false}
     onChange={[Function]}
     required={true}
@@ -96,7 +96,7 @@ exports[`VoteProposalForm component should render an empty form to create a vote
   />
   <FormControlWithLabel
     helperUrl=""
-    label="Missing translation: administration.voteProposals.description"
+    label="Description"
     labelAlwaysVisible={false}
     onChange={[Function]}
     required={true}

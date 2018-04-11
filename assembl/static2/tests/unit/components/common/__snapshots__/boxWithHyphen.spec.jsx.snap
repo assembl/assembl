@@ -36,7 +36,7 @@ exports[`BoxWithHyphen component should not render a link that wraps the box if 
         className={undefined}
         style={undefined}
       >
-        For5pmt2
+        2017-01-01
       </span>
     </div>
     <div
@@ -93,7 +93,7 @@ exports[`BoxWithHyphen component should render a box with hyphen with its data 1
           className={undefined}
           style={undefined}
         >
-          For5pmt2
+          2017-01-01
         </span>
       </div>
       <div

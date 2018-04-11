@@ -892,7 +892,7 @@ exports[`Proposal component should match Proposal snapshot 1`] = `
             className={undefined}
             style={undefined}
           >
-            Show Votes In Progress
+            Show votes of the community
           </span>
         </button>
       </div>

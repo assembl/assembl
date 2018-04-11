@@ -8,8 +8,8 @@ exports[`VoteProposalsSection component should render a VoteProposalsSection com
     className="admin-box"
   >
     <SectionTitle
-      annotation="Missing translation: administration.annotation"
-      title="Missing translation: administration.voteProposals.sectionTitle"
+      annotation="* Fields are required."
+      title="Configure the proposals associated to the vote modules"
     />
     <div
       className="admin-content"
@@ -59,8 +59,8 @@ exports[`VoteProposalsSection component should render a voteProposalsSection wit
     className="admin-box"
   >
     <SectionTitle
-      annotation="Missing translation: administration.annotation"
-      title="Missing translation: administration.voteProposals.sectionTitle"
+      annotation="* Fields are required."
+      title="Configure the proposals associated to the vote modules"
     />
     <div
       className="admin-content"

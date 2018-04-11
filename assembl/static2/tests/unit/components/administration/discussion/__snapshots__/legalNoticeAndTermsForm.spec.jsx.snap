@@ -5,8 +5,8 @@ exports[`LegalNoticeAndTermsForm dumb component should render a form to edit leg
   className="admin-box"
 >
   <SectionTitle
-    annotation="Missing translation: administration.annotation"
-    title="Missing translation: administration.discussion.3"
+    annotation="* Fields are required."
+    title="Terms & Conditions and Legal Notice"
   />
   <div
     className="admin-content"
@@ -20,7 +20,7 @@ exports[`LegalNoticeAndTermsForm dumb component should render a form to edit leg
       >
         <FormControlWithLabel
           helperUrl=""
-          label="Missing translation: administration.legalNoticeAndTerms.termsAndConditionsLabel"
+          label="Terms and conditions"
           labelAlwaysVisible={false}
           onChange={[Function]}
           required={true}
@@ -33,7 +33,7 @@ exports[`LegalNoticeAndTermsForm dumb component should render a form to edit leg
         />
         <FormControlWithLabel
           helperUrl=""
-          label="Missing translation: administration.legalNoticeAndTerms.legalNoticeLabel"
+          label="Legal notice"
           labelAlwaysVisible={false}
           onChange={[Function]}
           required={true}

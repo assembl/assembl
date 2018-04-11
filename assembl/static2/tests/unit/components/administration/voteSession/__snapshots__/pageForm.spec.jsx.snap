@@ -5,8 +5,8 @@ exports[`Vote Session DumbPageForm component should render a form to update the 
   className="admin-box"
 >
   <SectionTitle
-    annotation="Missing translation: administration.annotation"
-    title="Missing translation: administration.voteSession.0"
+    annotation="* Fields are required."
+    title="Page configuration"
   />
   <div
     className="intro-text"
@@ -45,13 +45,13 @@ exports[`Vote Session DumbPageForm component should render a form to update the 
         <Helper
           additionalTextClasses=""
           classname="title"
-          helperText="Missing translation: administration.helpers.voteSessionHeader"
+          helperText="The top page header must contain an image and a title. The subtitle is optional."
           helperUrl="/static2/img/helpers/helper1.png"
-          label="Missing translation: administration.headerTitle"
+          label="Top page Header configuration"
         />
         <FormControlWithLabel
           helperUrl=""
-          label="Missing translation: administration.ph.headerTitle FR"
+          label="Header title FR"
           labelAlwaysVisible={false}
           onChange={[Function]}
           required={true}
@@ -61,7 +61,7 @@ exports[`Vote Session DumbPageForm component should render a form to update the 
         />
         <FormControlWithLabel
           helperUrl=""
-          label="Missing translation: administration.ph.headerSubtitle FR"
+          label="Header subtitle FR"
           labelAlwaysVisible={false}
           onChange={[Function]}
           required={false}
@@ -100,13 +100,13 @@ exports[`Vote Session DumbPageForm component should render a form to update the 
       <Helper
         additionalTextClasses=""
         classname="title"
-        helperText="Missing translation: administration.helpers.voteSessionInstructions"
+        helperText="The instructions section must contain a title and a description that will guide the participants for their contribution."
         helperUrl="/static2/img/helpers/helper2.png"
-        label="Missing translation: administration.instructions"
+        label="Instructions section configuration"
       />
       <FormControlWithLabel
         helperUrl=""
-        label="Missing translation: administration.ph.instructionsTitle FR"
+        label="Instructions title FR"
         labelAlwaysVisible={false}
         onChange={[Function]}
         required={true}
@@ -116,7 +116,7 @@ exports[`Vote Session DumbPageForm component should render a form to update the 
       />
       <FormControlWithLabel
         helperUrl=""
-        label="Missing translation: administration.ph.instructionsContent FR"
+        label="Instructions content FR"
         labelAlwaysVisible={false}
         onChange={[Function]}
         required={true}
@@ -145,13 +145,13 @@ exports[`Vote Session DumbPageForm component should render a form to update the 
       <Helper
         additionalTextClasses=""
         classname="title"
-        helperText="Missing translation: administration.helpers.voteSessionProposalSection"
+        helperText="The proposals section is introduced by a title. You define the title based on the proposal content."
         helperUrl="/static2/img/helpers/helper3.png"
-        label="Missing translation: administration.proposalSectionTitle"
+        label="Proposal section title configuration"
       />
       <FormControlWithLabel
         helperUrl=""
-        label="Missing translation: administration.ph.propositionSectionTitle FR"
+        label="Section title FR"
         labelAlwaysVisible={false}
         onChange={[Function]}
         required={true}

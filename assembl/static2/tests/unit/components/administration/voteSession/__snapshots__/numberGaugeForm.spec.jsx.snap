@@ -7,7 +7,7 @@ exports[`DumbNumberGaugeForm component should render a form to set up a numeral 
   >
     <FormControlWithLabel
       helperUrl=""
-      label="Missing translation: administration.minValue"
+      label="Minimum value"
       labelAlwaysVisible={false}
       onChange={[Function]}
       required={true}
@@ -17,7 +17,7 @@ exports[`DumbNumberGaugeForm component should render a form to set up a numeral 
     />
     <FormControlWithLabel
       helperUrl=""
-      label="Missing translation: administration.maxValue"
+      label="Maximum value"
       labelAlwaysVisible={false}
       onChange={[Function]}
       required={true}
@@ -27,7 +27,7 @@ exports[`DumbNumberGaugeForm component should render a form to set up a numeral 
     />
     <FormControlWithLabel
       helperUrl=""
-      label="Missing translation: administration.unit"
+      label="Unit"
       labelAlwaysVisible={false}
       onChange={[Function]}
       required={true}

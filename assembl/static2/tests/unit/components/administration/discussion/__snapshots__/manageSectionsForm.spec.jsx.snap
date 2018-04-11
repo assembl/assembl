@@ -5,8 +5,8 @@ exports[`DumbManageSectionsForm component should render a list of forms to edit 
   className="admin-box"
 >
   <SectionTitle
-    annotation="Missing translation: administration.annotation"
-    title="Missing translation: administration.sections.sectionsTitle"
+    annotation="* Fields are required."
+    title="Set sections"
   />
   <div
     className="admin-content"

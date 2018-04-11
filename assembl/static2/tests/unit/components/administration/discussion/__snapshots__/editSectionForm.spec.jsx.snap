@@ -40,7 +40,7 @@ exports[`DumbEditSectionForm component should render a form to edit a section of
             }
           }
         >
-          Missing translation: administration.sections.externalPage
+          Use external page
         </span>
       </label>
     </div>
@@ -52,7 +52,7 @@ exports[`DumbEditSectionForm component should render a form to edit a section of
       className="control-label"
       htmlFor={undefined}
     >
-      Missing translation: administration.sections.urlPh
+      URL
     </label>
     <input
       className="form-control"
@@ -60,7 +60,7 @@ exports[`DumbEditSectionForm component should render a form to edit a section of
       id={undefined}
       onBlur={[Function]}
       onChange={[Function]}
-      placeholder="Missing translation: administration.sections.urlPh"
+      placeholder="URL"
       type="text"
       value="www.google.fr"
     />

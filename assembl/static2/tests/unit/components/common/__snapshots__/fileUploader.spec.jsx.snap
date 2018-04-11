@@ -12,7 +12,7 @@ exports[`FileUploader component should render a file uploader for an image file 
       className={undefined}
       style={undefined}
     >
-      Upload Button
+      Choose a file to upload
     </span>
   </button>
   <div
@@ -44,7 +44,7 @@ exports[`FileUploader component should render a file uploader with the filename 
       className={undefined}
       style={undefined}
     >
-      Upload Button
+      Choose a file to upload
     </span>
   </button>
   <div
@@ -73,7 +73,7 @@ exports[`FileUploader component should render a file uploader with the filename 
       className={undefined}
       style={undefined}
     >
-      Upload Button
+      Choose a file to upload
     </span>
   </button>
   <div
@@ -102,7 +102,7 @@ exports[`FileUploader component should render a file uploader without preview 1`
       className={undefined}
       style={undefined}
     >
-      Upload Button
+      Choose a file to upload
     </span>
   </button>
   <div

@@ -788,7 +788,7 @@ exports[`Proposals component should match Proposals snapshot 1`] = `
               className={undefined}
               style={undefined}
             >
-              Show Votes In Progress
+              Show votes of the community
             </span>
           </button>
         </div>
@@ -1686,7 +1686,7 @@ exports[`Proposals component should match Proposals snapshot 1`] = `
               className={undefined}
               style={undefined}
             >
-              Show Votes In Progress
+              Show votes of the community
             </span>
           </button>
         </div>

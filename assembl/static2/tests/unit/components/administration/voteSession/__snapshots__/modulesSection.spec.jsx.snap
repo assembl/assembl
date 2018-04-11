@@ -5,8 +5,8 @@ exports[`ModulesSection component should render a ModuleSection component with t
   className="admin-box"
 >
   <SectionTitle
-    annotation="Missing translation: administration.annotation"
-    title="Missing translation: administration.voteSession.1"
+    annotation="* Fields are required."
+    title="Configure the voting modules"
   />
   <div
     className="admin-content"
@@ -28,9 +28,9 @@ exports[`ModulesSection component should render a ModuleSection component with t
           <Helper
             additionalTextClasses=""
             classname="inline checkbox-title"
-            helperText="Missing translation: administration.tokenVoteCheckbox"
+            helperText="The token vote module allows you to select propositions proportionnaly. Each participant has a certain amount of tokens et will have to spread them on the different propositions"
             helperUrl="/static2/img/helpers/helper4.png"
-            label="Missing translation: administration.voteWithTokens"
+            label="Tokens vote"
           />
         </Checkbox>
         Immutable.List [
@@ -49,9 +49,9 @@ exports[`ModulesSection component should render a ModuleSection component with t
           <Helper
             additionalTextClasses=""
             classname="inline checkbox-title"
-            helperText="Missing translation: administration.gaugeVoteCheckbox"
+            helperText="You can choose to have one or several gages"
             helperUrl="/static2/img/helpers/helper3.png"
-            label="Missing translation: administration.voteWithGauges"
+            label="Gauge(s) vote"
           />
         </Checkbox>
         <div
@@ -70,7 +70,7 @@ exports[`ModulesSection component should render a ModuleSection component with t
             <Helper
               additionalTextClasses=""
               classname=""
-              helperText="Missing translation: administration.defineGaugeNumer"
+              helperText="Define gauges number"
               helperUrl="/static2/img/helpers/helper2.png"
               label=""
             />
@@ -230,8 +230,8 @@ exports[`ModulesSection component should render a ModulesSection component witho
   className="admin-box"
 >
   <SectionTitle
-    annotation="Missing translation: administration.annotation"
-    title="Missing translation: administration.voteSession.1"
+    annotation="* Fields are required."
+    title="Configure the voting modules"
   />
   <div
     className="admin-content"
@@ -253,9 +253,9 @@ exports[`ModulesSection component should render a ModulesSection component witho
           <Helper
             additionalTextClasses=""
             classname="inline checkbox-title"
-            helperText="Missing translation: administration.tokenVoteCheckbox"
+            helperText="The token vote module allows you to select propositions proportionnaly. Each participant has a certain amount of tokens et will have to spread them on the different propositions"
             helperUrl="/static2/img/helpers/helper4.png"
-            label="Missing translation: administration.voteWithTokens"
+            label="Tokens vote"
           />
         </Checkbox>
         Immutable.List [
@@ -271,9 +271,9 @@ exports[`ModulesSection component should render a ModulesSection component witho
           <Helper
             additionalTextClasses=""
             classname="inline checkbox-title"
-            helperText="Missing translation: administration.gaugeVoteCheckbox"
+            helperText="You can choose to have one or several gages"
             helperUrl="/static2/img/helpers/helper3.png"
-            label="Missing translation: administration.voteWithGauges"
+            label="Gauge(s) vote"
           />
         </Checkbox>
         Immutable.List [

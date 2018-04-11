@@ -69,7 +69,7 @@ exports[`Syntheses component should match Syntheses snapshot 1`] = `
                     className={undefined}
                     style={undefined}
                   >
-                    For15amt2
+                    2017-02-10
                   </span>
                 </h4>
               </div>
@@ -125,7 +125,7 @@ exports[`Syntheses component should match Syntheses snapshot 1`] = `
                     className={undefined}
                     style={undefined}
                   >
-                    For15amt2
+                    2017-02-10
                   </span>
                 </h4>
               </div>
@@ -192,7 +192,7 @@ exports[`Syntheses component should match empty Syntheses snapshot 1`] = `
           className={undefined}
           style={undefined}
         >
-          No Synthesis Yet
+          There is no synthesis available yet.
         </span>
       </h2>
     </div>
