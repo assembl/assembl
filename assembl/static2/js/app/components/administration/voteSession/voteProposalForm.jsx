@@ -116,6 +116,10 @@ const DumbVoteProposalForm = ({
     displayCustomModal(content, true, 'gauge-settings-modal');
   };
 
+  const isTitleEmpty = title === '' || title === null;
+  const isDescriptionEmpty = description === null || description.blocks.every(block => block.text === '');
+  const areFieldsEmpty = isDescriptionEmpty && isTitleEmpty;
+
   return (
     <div className="form-container vote-proposal-form">
       <div className="pointer right">
@@ -137,7 +141,7 @@ const DumbVoteProposalForm = ({
         </div>
         {nbProposals > 2 && (
           <OverlayTrigger placement="top" overlay={deleteVoteProposalTooltip}>
-            <Button className="admin-icons" onClick={confirmModal}>
+            <Button className="admin-icons" onClick={areFieldsEmpty ? markAsToDelete : confirmModal}>
               <span className="assembl-icon-delete grey" />
             </Button>
           </OverlayTrigger>
