@@ -46,49 +46,42 @@ type VoteProposalFormProps = {
   validationErrors: ValidationErrors
 };
 
-type VoteProposalFormState = {
-  titleContent: string,
-  descriptionContent: string
-};
-
 export const getValidationState = (validationErrors: ?Array<ErrorDef>): ?string =>
   (validationErrors && validationErrors.length > 0 ? 'error' : null);
 
-class DumbVoteProposalForm extends React.Component<void, VoteProposalFormProps, VoteProposalFormState> {
-  props: VoteProposalFormProps;
-
-  state: VoteProposalFormState;
-
-  constructor(props: VoteProposalFormProps) {
-    super(props);
-    this.state = {
-      titleContent: '',
-      descriptionContent: ''
-    };
+const DumbVoteProposalForm = ({
+  index,
+  title,
+  description,
+  _toDelete,
+  markAsToDelete,
+  updateTitle,
+  updateDescription,
+  editLocale,
+  nbProposals,
+  handleUpClick,
+  handleDownClick,
+  tokenModules,
+  gaugeModules,
+  proposalModules,
+  associateModuleToProposal,
+  cancelCustomization,
+  deassociateModuleToProposal,
+  reactivateModule,
+  refetchVoteSession,
+  validationErrors
+}: VoteProposalFormProps) => {
+  if (_toDelete) {
+    return null;
   }
 
-  handleTitleChange = (e: Event) => {
-    if (e.target instanceof HTMLInputElement) {
-      const { value } = e.target;
-      const { updateTitle, editLocale } = this.props;
-      this.setState({ titleContent: value });
-      updateTitle(editLocale, value);
-    }
-  };
+  const handleTitleChange = e => updateTitle(editLocale, e.target.value);
+  const handleDescriptionChange = value => updateDescription(editLocale, value);
 
-  handleDescriptionChange = (value: string) => {
-    const { editLocale, updateDescription } = this.props;
-    this.setState({ descriptionContent: value });
-    return updateDescription(editLocale, value);
-  };
+  const moduleIsSelected = voteSpecTemplateId =>
+    proposalModules.some(m => m.get('voteSpecTemplateId') === voteSpecTemplateId && !m.get('_toDelete'));
 
-  moduleIsSelected = (voteSpecTemplateId: string) => {
-    const { proposalModules } = this.props;
-    return proposalModules.some(m => m.get('voteSpecTemplateId') === voteSpecTemplateId && !m.get('_toDelete'));
-  };
-
-  toggleModule = (voteSpecTemplateId: string) => {
-    const { reactivateModule, deassociateModuleToProposal, associateModuleToProposal, proposalModules } = this.props;
+  const toggleModule = (voteSpecTemplateId) => {
     const pModule = proposalModules.find(m => m.get('voteSpecTemplateId') === voteSpecTemplateId);
     if (pModule) {
       if (pModule.get('_toDelete')) {
@@ -101,8 +94,7 @@ class DumbVoteProposalForm extends React.Component<void, VoteProposalFormProps, 
     }
   };
 
-  confirmModal = () => {
-    const { markAsToDelete } = this.props;
+  const confirmModal = () => {
     const modalTitle = <Translate value="administration.voteProposals.deleteModalTitle" />;
     const body = <Translate value="administration.voteProposals.deleteModalBody" />;
     const footer = [
@@ -117,157 +109,132 @@ class DumbVoteProposalForm extends React.Component<void, VoteProposalFormProps, 
     return displayModal(modalTitle, body, includeFooter, footer);
   };
 
-  settingsModal = (id: string) => {
-    const { editLocale, refetchVoteSession } = this.props;
+  const settingsModal = (id) => {
     const content = (
       <CustomizeGaugeForm close={closeModal} gaugeModuleId={id} editLocale={editLocale} refetchVoteSession={refetchVoteSession} />
     );
     displayCustomModal(content, true, 'gauge-settings-modal');
   };
 
-  render() {
-    const {
-      index,
-      title,
-      description,
-      _toDelete,
-      editLocale,
-      nbProposals,
-      handleUpClick,
-      handleDownClick,
-      tokenModules,
-      gaugeModules,
-      proposalModules,
-      cancelCustomization,
-      validationErrors,
-      markAsToDelete
-    } = this.props;
-    const { titleContent, descriptionContent } = this.state;
-    const areFieldsEmpty = titleContent === '' && descriptionContent === '';
-    const deleteProposal = areFieldsEmpty ? markAsToDelete : this.confirmModal;
-    if (_toDelete) {
-      return null;
-    }
-    return (
-      <div className="form-container vote-proposal-form">
-        <div className="pointer right">
-          <div className="inline">
-            {index < nbProposals ? (
-              <OverlayTrigger placement="top" overlay={downTooltip}>
-                <Button onClick={handleDownClick} className="admin-icons">
-                  <span className="assembl-icon-down-bold grey" />
-                </Button>
-              </OverlayTrigger>
-            ) : null}
-            {index > 1 ? (
-              <OverlayTrigger placement="top" overlay={upTooltip}>
-                <Button onClick={handleUpClick} className="admin-icons">
-                  <span className="assembl-icon-up-bold grey" />
-                </Button>
-              </OverlayTrigger>
-            ) : null}
-          </div>
-          {nbProposals > 2 && (
-            <OverlayTrigger placement="top" overlay={deleteVoteProposalTooltip}>
-              <Button className="admin-icons" onClick={deleteProposal}>
-                <span className="assembl-icon-delete grey" />
+  return (
+    <div className="form-container vote-proposal-form">
+      <div className="pointer right">
+        <div className="inline">
+          {index < nbProposals ? (
+            <OverlayTrigger placement="top" overlay={downTooltip}>
+              <Button onClick={handleDownClick} className="admin-icons">
+                <span className="assembl-icon-down-bold grey" />
               </Button>
             </OverlayTrigger>
-          )}
+          ) : null}
+          {index > 1 ? (
+            <OverlayTrigger placement="top" overlay={upTooltip}>
+              <Button onClick={handleUpClick} className="admin-icons">
+                <span className="assembl-icon-up-bold grey" />
+              </Button>
+            </OverlayTrigger>
+          ) : null}
         </div>
+        {nbProposals > 2 && (
+          <OverlayTrigger placement="top" overlay={deleteVoteProposalTooltip}>
+            <Button className="admin-icons" onClick={confirmModal}>
+              <span className="assembl-icon-delete grey" />
+            </Button>
+          </OverlayTrigger>
+        )}
+      </div>
 
-        <div className="title">
-          <Translate value="administration.voteProposals.defineProposal" number={index} />
-        </div>
+      <div className="title">
+        <Translate value="administration.voteProposals.defineProposal" number={index} />
+      </div>
 
-        <FormControlWithLabel
-          value={title}
-          label={I18n.t('administration.voteProposals.title')}
-          onChange={this.handleTitleChange}
-          required
-          type="text"
-          validationErrors={validationErrors.title}
-        />
+      <FormControlWithLabel
+        value={title}
+        label={I18n.t('administration.voteProposals.title')}
+        onChange={handleTitleChange}
+        required
+        type="text"
+        validationErrors={validationErrors.title}
+      />
 
-        <FormControlWithLabel
-          key={`description-${editLocale}`}
-          value={description}
-          label={I18n.t('administration.voteProposals.description')}
-          onChange={this.handleDescriptionChange}
-          type="rich-text"
-          required
-        />
+      <FormControlWithLabel
+        key={`description-${editLocale}`}
+        value={description}
+        label={I18n.t('administration.voteProposals.description')}
+        onChange={handleDescriptionChange}
+        type="rich-text"
+        required
+      />
 
-        <FormGroup validationState={getValidationState(validationErrors.modules)}>
-          {validationErrors.modules &&
-            validationErrors.modules.length > 0 &&
-            validationErrors.modules.map((error, idx) => (
-              <HelpBlock key={idx}>
-                <Translate value={`administration.voteProposals.validationErrors.${error.code}`} {...error.vars} />
-              </HelpBlock>
-            ))}
-
-          {tokenModules.map(voteSpecTemplateId => (
-            <Checkbox
-              key={voteSpecTemplateId}
-              checked={this.moduleIsSelected(voteSpecTemplateId)}
-              onChange={() => this.toggleModule(voteSpecTemplateId)}
-            >
-              <Translate value="administration.voteProposals.tokenVote" />
-            </Checkbox>
+      <FormGroup validationState={getValidationState(validationErrors.modules)}>
+        {validationErrors.modules &&
+          validationErrors.modules.length > 0 &&
+          validationErrors.modules.map((error, idx) => (
+            <HelpBlock key={idx}>
+              <Translate value={`administration.voteProposals.validationErrors.${error.code}`} {...error.vars} />
+            </HelpBlock>
           ))}
-          {gaugeModules.map((voteSpecTemplateId, idx) => {
-            const number = gaugeModules.size > 1 ? idx + 1 : '';
-            const pModule = proposalModules.find(m => m.get('voteSpecTemplateId') === voteSpecTemplateId);
-            return (
-              <div key={voteSpecTemplateId}>
-                <Checkbox
-                  className="inline"
-                  checked={this.moduleIsSelected(voteSpecTemplateId)}
-                  onChange={() => this.toggleModule(voteSpecTemplateId)}
-                >
-                  {pModule && pModule.get('isCustom') ? (
-                    <Translate value="administration.voteProposals.customGauge" number={number} />
-                  ) : (
-                    <Translate value="administration.voteProposals.gauge" number={number} />
-                  )}
-                </Checkbox>
 
-                {pModule &&
-                  pModule.get('id') && (
-                    <div>
+        {tokenModules.map(voteSpecTemplateId => (
+          <Checkbox
+            key={voteSpecTemplateId}
+            checked={moduleIsSelected(voteSpecTemplateId)}
+            onChange={() => toggleModule(voteSpecTemplateId)}
+          >
+            <Translate value="administration.voteProposals.tokenVote" />
+          </Checkbox>
+        ))}
+        {gaugeModules.map((voteSpecTemplateId, idx) => {
+          const number = gaugeModules.size > 1 ? idx + 1 : '';
+          const pModule = proposalModules.find(m => m.get('voteSpecTemplateId') === voteSpecTemplateId);
+          return (
+            <div key={voteSpecTemplateId}>
+              <Checkbox
+                className="inline"
+                checked={moduleIsSelected(voteSpecTemplateId)}
+                onChange={() => toggleModule(voteSpecTemplateId)}
+              >
+                {pModule && pModule.get('isCustom') ? (
+                  <Translate value="administration.voteProposals.customGauge" number={number} />
+                ) : (
+                  <Translate value="administration.voteProposals.gauge" number={number} />
+                )}
+              </Checkbox>
+
+              {pModule &&
+                pModule.get('id') && (
+                  <div>
+                    <span
+                      className="inline settings-link"
+                      onClick={() => {
+                        settingsModal(pModule.get('id'));
+                      }}
+                    >
+                      <i className="assembl-icon-edit" />
+                      <Translate value="administration.voteProposals.gaugeSettings" />
+                    </span>
+
+                    {pModule.get('isCustom') && (
                       <span
                         className="inline settings-link"
                         onClick={() => {
-                          this.settingsModal(pModule.get('id'));
+                          cancelCustomization(pModule.get('id'));
                         }}
                       >
-                        <i className="assembl-icon-edit" />
-                        <Translate value="administration.voteProposals.gaugeSettings" />
+                        <i className="assembl-icon-cancel" />
+                        <Translate value="administration.voteProposals.cancelCustomization" />
                       </span>
-
-                      {pModule.get('isCustom') && (
-                        <span
-                          className="inline settings-link"
-                          onClick={() => {
-                            cancelCustomization(pModule.get('id'));
-                          }}
-                        >
-                          <i className="assembl-icon-cancel" />
-                          <Translate value="administration.voteProposals.cancelCustomization" />
-                        </span>
-                      )}
-                    </div>
-                  )}
-              </div>
-            );
-          })}
-        </FormGroup>
-        <div className="separator" />
-      </div>
-    );
-  }
-}
+                    )}
+                  </div>
+                )}
+            </div>
+          );
+        })}
+      </FormGroup>
+      <div className="separator" />
+    </div>
+  );
+};
 
 const mapStateToProps = ({ admin }, { id, editLocale }) => {
   const proposal = admin.voteSession.voteProposalsById.get(id);
