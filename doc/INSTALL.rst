@@ -332,6 +332,7 @@ If you do not have an SSL certificate, then you have to set ``accept_secure_conn
     exit  # this logs out from the assembl_user user, back to the initial sudoer account
     cd /home/assembl_user/assembl
     fab -c configs/develop.rc install_single_server
+    fab -c configs/develop.rc check_and_create_database_user
     sudo -u assembl_user -i  # back to the assembl user
     cd /home/assembl_user/assembl
     fab -c configs/develop.rc bootstrap_from_checkout
