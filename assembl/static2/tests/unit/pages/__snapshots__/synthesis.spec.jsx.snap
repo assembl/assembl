@@ -27,32 +27,7 @@ exports[`Synthesis component should match Synthesis snapshot 1`] = `
           className="affix"
           componentClass="div"
           md={3}
-        >
-          <SideMenu
-            descendants={Array []}
-            ideaOnScroll={null}
-            rootIdeas={
-              Array [
-                Object {
-                  "ancestors": Array [],
-                  "id": "barId",
-                  "img": Object {
-                    "externalUrl": "http://foo.com/bar",
-                  },
-                  "numContributors": 0,
-                  "numPosts": 0,
-                  "phaseIdentifier": "paseId",
-                  "posts": Object {
-                    "edges": Array [],
-                  },
-                  "synthesisTitle": "Foo",
-                  "title": "Bar",
-                },
-              ]
-            }
-            synthesisPostId={undefined}
-          />
-        </Col>
+        />
         <Col
           bsClass="col"
           componentClass="div"

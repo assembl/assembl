@@ -34,7 +34,7 @@ export class DumbSynthesis extends React.Component<void, SynthesisProps, Synthes
     super(props);
     this.state = {
       node: null,
-      sideMenuIsHidden: false
+      sideMenuIsHidden: true
     };
   }
 
