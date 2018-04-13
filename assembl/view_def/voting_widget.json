@@ -389,7 +389,7 @@
         "criteria_url": true,
         "votespecs_url": true,
         "votables_url": true,
-        "vote_specifications": ":",
+        "vote_specifications": "specification_templates:",
         "voting_results_by_spec_url": "&get_voting_results_by_spec_url",
         "votable_ideas": ":id_only"
     },
@@ -508,6 +508,9 @@
         "widget": true,
         "criterion_idea": true,
         "question_id": true,
+        "title": ":extended",
+        "instructions": ":extended",
+        "subspecifications": ":",
         "settings": "settings_json",
         "voting_urls": "&get_voting_urls",
         "voting_url": "&get_generic_voting_url",
@@ -526,6 +529,21 @@
     },
     "BinaryVoteSpecification": {
         "@extends": "AbstractVoteSpecification"
+    },
+    "GaugeVoteSpecification": {
+        "@extends": "AbstractVoteSpecification",
+        "choices": [":"]
+    },
+    "GaugeChoiceSpecification": {
+        "label": ":extended",
+        "value": true
+    },
+    "NumberGaugeVoteSpecification": {
+        "@extends": "AbstractVoteSpecification",
+        "minimum": true,
+        "maximum": true,
+        "nb_ticks": true,
+        "unit": true
     },
     "TokenVoteSpecification": {
         "@extends": "AbstractVoteSpecification",

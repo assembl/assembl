@@ -942,6 +942,12 @@ class VotingWidget(BaseIdeaWidget):
     #     return [cl.idea for cl in self.criteria_links]
 
 
+VotingWidget.specification_templates = relationship(
+    AbstractVoteSpecification, primaryjoin=(
+        (AbstractVoteSpecification.widget_id == VotingWidget.id) &
+        (AbstractVoteSpecification.vote_spec_template_id == None)))  # noqa: E711
+
+
 class MultiCriterionVotingWidget(VotingWidget):
     __mapper_args__ = {
         'polymorphic_identity': 'multicriterion_voting_widget',
