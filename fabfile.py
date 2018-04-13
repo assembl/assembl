@@ -1694,16 +1694,16 @@ def docker_compose():
 
 @task
 def set_ssl_certificates():
-    if env.oscp_path:
+    if env.ocsp_path:
         root_certificate = run('curl https://letsencrypt.org/certs/isrgrootx1.pem.txt')
         intermediate_certificate_1 = run('curl https://letsencrypt.org/certs/lets-encrypt-x3-cross-signed.pem.txt')
         intermediate_certificate_2 = run('curl https://letsencrypt.org/certs/letsencryptauthorityx3.pem.txt')
-        with open(env.oscp_path, 'w') as certificates_file:
+        with open(env.ocsp_path, 'w') as certificates_file:
             for certificate_file in (root_certificate, intermediate_certificate_1, intermediate_certificate_2):
                 certificates_file.write(certificate_file)
                 certificates_file.write('\n')
     else:
-        print(yellow("Can't set ssl certificates, env.oscp_path is not set"))
+        print(yellow("Can't set ssl certificates, env.ocsp_path is not set"))
 
 
 @task

@@ -28,8 +28,8 @@ server {
     add_header Strict-Transport-Security max-age=15768000;
     ssl_stapling on;
     ssl_stapling_verify on;
-    {% if oscp_path %}
-    ssl_trusted_certificate {{ oscp_path }};
+    {% if ocsp_path %}
+    ssl_trusted_certificate {{ ocsp_path }};
     {% endif %}
 
   {% else %}
