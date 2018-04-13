@@ -3,20 +3,19 @@ import React from 'react';
 import { browserHistory } from 'react-router';
 import { connect } from 'react-redux';
 import { compose, graphql } from 'react-apollo';
-import { Translate, I18n } from 'react-redux-i18n';
+import { Translate } from 'react-redux-i18n';
 import { Grid, Col, Button } from 'react-bootstrap';
-import FormControlWithLabel from '../components/common/formControlWithLabel';
-import ModifyPasswordForm from '../components/common/modifyPasswordForm';
+import Avatar from '../components/profile/avatar';
+import PersonnalData from '../components/profile/personnalData';
+import ModifyPasswordForm from '../components/profile/modifyPasswordForm';
 import { get, getContextual } from '../utils/routeMap';
-import { displayAlert } from '../utils/utilityManager';
 import withLoadingIndicator from '../components/common/withLoadingIndicator';
 import UserQuery from '../graphql/userQuery.graphql';
-import UpdateUserMutation from '../graphql/mutations/updateUser.graphql';
 
 type ProfileProps = {
-  username: string,
-  name: string,
   email: string,
+  name: string,
+  username: string,
   connectedUserId: string,
   creationDate: ?string,
   lang: string,
@@ -25,14 +24,11 @@ type ProfileProps = {
   id: string,
   hasPassword: boolean,
   params: Object,
-  location: Object,
-  updateUser: Function
+  location: Object
 };
 
 type ProfileState = {
-  username: string,
   name: string,
-  email: string,
   passwordEditionOpen: boolean
 };
 
@@ -47,11 +43,9 @@ class Profile extends React.PureComponent<*, ProfileProps, ProfileState> {
 
   constructor(props) {
     super(props);
-    const { username, name, email } = this.props;
+    const { name } = this.props;
     this.state = {
-      username: username,
       name: name,
-      email: email,
       passwordEditionOpen: false
     };
   }
@@ -67,93 +61,23 @@ class Profile extends React.PureComponent<*, ProfileProps, ProfileState> {
     }
   }
 
-  handleUsernameChange = (e) => {
-    this.setState({ username: e.target.value });
-  };
-
-  handleFullnameChange = (e) => {
-    this.setState({ name: e.target.value });
-  };
-
-  handleEmailChange = (e) => {
-    this.setState({ email: e.target.value });
-  };
-
-  handleSaveClick = () => {
-    const { updateUser, id } = this.props;
-    const { name, username } = this.state;
-    const variables = {
-      id: id,
-      name: name,
-      username: username
-    };
-    updateUser({ variables: variables })
-      .then(() => {
-        displayAlert('success', I18n.t('profile.saveSuccess'));
-      })
-      .catch((error) => {
-        displayAlert('danger', error.message.replace('GraphQL error: ', ''));
-      });
-  };
-
   handlePasswordClick = () => {
     this.setState({ passwordEditionOpen: true });
   };
 
   render() {
-    const { username, name, email } = this.state;
-    const { creationDate, hasPassword, lang, id } = this.props;
-    const fullNameLabel = I18n.t('profile.fullname');
-    const emailLabel = I18n.t('profile.email');
+    const { creationDate, hasPassword, lang, id, name, username, email } = this.props;
     return (
       <div className="profile background-dark-grey">
         <div className="content-section">
           <Grid fluid>
             <div className="max-container">
               <Col xs={12} sm={3}>
-                <div className="center">
-                  <span className="assembl-icon-profil" />
-                </div>
-                <h2 className="dark-title-2 capitalized center">{this.props.name}</h2>
-                {creationDate && (
-                  <div className={`center member-since lang-${lang}`}>
-                    <Translate value="profile.memberSince" date={I18n.l(creationDate, { dateFormat: 'date.format2' })} />
-                  </div>
-                )}
+                <Avatar creationDate={creationDate} lang={lang} name={name} />
               </Col>
               <Col xs={12} sm={9}>
                 <div className="border-left">
-                  <h1 className="dark-title-1">
-                    <Translate value="profile.panelTitle" />
-                  </h1>
-                  <h2 className="dark-title-2 margin-l">
-                    <Translate value="profile.personalInfos" />
-                  </h2>
-                  <div className="profile-form center">
-                    <FormControlWithLabel
-                      label={I18n.t('profile.userName')}
-                      onChange={this.handleUsernameChange}
-                      type="text"
-                      value={username}
-                    />
-                    <FormControlWithLabel
-                      label={fullNameLabel}
-                      onChange={this.handleFullnameChange}
-                      type="text"
-                      value={name}
-                      required
-                    />
-                    <FormControlWithLabel
-                      label={emailLabel}
-                      onChange={this.handleEmailChange}
-                      type="email"
-                      value={email}
-                      disabled
-                    />
-                    <Button disabled={!name} className="button-submit button-dark margin-l" onClick={this.handleSaveClick}>
-                      <Translate value="profile.save" />
-                    </Button>
-                  </div>
+                  <PersonnalData id={id} username={username} name={name} email={email} />
                   {hasPassword && (
                     <div>
                       <h2 className="dark-title-2 margin-l">
@@ -203,13 +127,12 @@ export default compose(
       }
       return {
         username: data.user.username,
-        name: data.user.name,
         email: data.user.email,
+        name: data.user.name,
         creationDate: data.user.creationDate,
         hasPassword: data.user.hasPassword
       };
     }
   }),
-  graphql(UpdateUserMutation, { name: 'updateUser' }),
   withLoadingIndicator()
 )(Profile);
