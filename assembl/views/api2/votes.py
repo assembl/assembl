@@ -1,6 +1,7 @@
 from datetime import datetime
 from cStringIO import StringIO
 import csv
+from collections import defaultdict
 
 from pyramid.view import view_config
 from pyramid.httpexceptions import (
@@ -218,45 +219,66 @@ def global_vote_results_csv(request):
     user_prefs = LanguagePreferenceCollection.getCurrent()
     # first fetch the ideas voted on
     ideas = widget.db.query(Idea
-        ).join(AbstractIdeaVote, AbstractIdeaVote.idea_id==Idea.id
         ).join(AbstractVoteSpecification
         ).filter(AbstractVoteSpecification.widget_id==widget.id
         ).distinct().all()
     idea_ids = [i.id for i in ideas]
-    titles = [(idea.safe_title(user_prefs, request.localizer), idea.id) for idea in ideas]
-    titles.sort()
+    rowtitles = [(idea.safe_title(user_prefs, request.localizer), idea.id) for idea in ideas]
+    rowtitles.sort()
+    specs = widget.vote_specifications
+    templates = widget.specification_templates
     q = widget.db.query(Idea.id).filter(Idea.id.in_(idea_ids))
+    # specs and their templaes
+    ids_by_specid = defaultdict(list)
+    for spec in specs:
+        ids_by_specid[spec.vote_spec_template_id or spec.id].append(spec.id)
     # then get the vote specs
     specs = [(spec.title.best_lang(user_prefs).value if spec.title else str(spec.id), spec)
-             for spec in widget.vote_specifications]
+             for spec in widget.specification_templates]
     specs.sort()
-    # construct a query with each votespec creating two columns:
-    # sum of vote values, and count of votes.
+    coltitles = [""]
+
+    # construct a query with each votespec creating columns for:
+    # either each token count (for token votes) OR
+    # sum of vote values, and count of votes otherwise.
     # Ideas are rows (and Idea.id is column 0)
     for (t, spec) in specs:
-        a = aliased(spec.get_vote_class(), name="votes_%d"%spec.id)
-        q = q.outerjoin(a, (a.idea_id==Idea.id) & (a.vote_spec_id==spec.id))
-        q = q.add_columns(func.sum(a.vote_value).label('vsum_%d' % spec.id),
-                          func.count(a.id).label('vcount_%d' % spec.id))
+        if isinstance(spec, TokenVoteSpecification):
+            for tokencat in spec.token_categories:
+                coltitles.append(tokencat.name.best_lang(user_prefs).value.encode('utf-8'))
+                a = aliased(spec.get_vote_class(), name="votes_%d_%d"%(spec.id, tokencat.id))
+                q = q.outerjoin(
+                    a, (a.idea_id==Idea.id) &
+                       (a.vote_spec_id.in_(ids_by_specid[spec.id]))
+                       & (a.token_category_id==tokencat.id))
+                q = q.add_columns(func.sum(a.vote_value).label('vsum_%d_%d' % (spec.id, tokencat.id)))
+        else:
+            coltitles.append(t.encode('utf-8'))
+            a = aliased(spec.get_vote_class(), name="votes_%d"%spec.id)
+            q = q.outerjoin(a, (a.idea_id==Idea.id) & (a.vote_spec_id.in_(ids_by_specid[spec.id])))
+            q = q.add_columns(func.sum(a.vote_value).label('vsum_%d' % spec.id),
+                              func.count(a.id).label('vcount_%d' % spec.id))
     q = q.group_by(Idea.id)
     r = q.all()
     r = {x[0]: x for x in r}
     output = StringIO()
     csvw = csv.writer(output)
-    csvw.writerow([""]+[t.encode('utf-8') for (t, spec) in specs])
-    for title, idea_id in titles:
+    csvw.writerow(coltitles)
+    for title, idea_id in rowtitles:
         row = [title.encode('utf-8')]
-        sourcerow = r[idea_id][1:]
-        for i, (t, spec) in enumerate(specs):
-            num = sourcerow[1+i*2]
-            if num:
-                if isinstance(spec, TokenVoteSpecification):
-                    # we want total number of tokens
-                    num = 1
-                # otherwise we want average vote value
-                row.append(sourcerow[i*2]/num)
+        sourcerow = r[idea_id]
+        counter = 1
+        for t, spec in specs:
+            if isinstance(spec, TokenVoteSpecification):
+                for tokencat in spec.token_categories:
+                    row.append(sourcerow[counter] or "-")
+                    counter += 1
+                    continue
+            elif sourcerow[counter+1]:
+                row.append(sourcerow[counter]/sourcerow[counter+1])
             else:
-                row.append("")
+                row.append("-")
+            counter += 2
         csvw.writerow(row)
     output.seek(0)
     return Response(body_file=output, content_type='text/csv')
