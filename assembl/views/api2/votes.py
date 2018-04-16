@@ -175,6 +175,7 @@ def vote_results(request):
             raise HTTPUnauthorized()
     return ctx._instance.voting_results(histogram)
 
+
 @view_config(context=InstanceContext, request_method='GET',
              ctx_instance_class=AbstractVoteSpecification,
              name="vote_results_csv", permission=P_DISC_STATS)
@@ -228,9 +229,9 @@ def global_vote_results_csv(request):
     user_prefs = LanguagePreferenceCollection.getCurrent()
     # first fetch the ideas voted on
     ideas = widget.db.query(Idea
-        ).join(AbstractVoteSpecification
-        ).filter(AbstractVoteSpecification.widget_id==widget.id
-        ).distinct().all()
+                            ).join(AbstractVoteSpecification
+                                   ).filter(AbstractVoteSpecification.widget_id == widget.id
+                                            ).distinct().all()
     rowtitles = [(idea.safe_title(user_prefs, request.localizer), idea.id) for idea in ideas]
     rowtitles.sort()
     specs = widget.vote_specifications
@@ -242,7 +243,7 @@ def global_vote_results_csv(request):
         spec_by_idea_id_and_template_specid[(spec.criterion_idea_id, (spec.vote_spec_template_id or spec.id))] = spec
     # then get the vote specs templates only
     template_specs = [(spec.title.best_lang(user_prefs).value if spec.title else str(spec.id), spec)
-             for spec in widget.specification_templates]
+                      for spec in widget.specification_templates]
     template_specs.sort()
     coltitles = ["Proposition", "Nombre de participants sur la proposition"]
 
@@ -254,7 +255,6 @@ def global_vote_results_csv(request):
         for vote_spec in vote_specifications[1:]:
             query = query.union(vote_spec.get_voter_ids_query())
         num_participants_by_idea_id[idea.id] = query.count()
-
 
     # construct a query with each votespec creating columns for:
     # either each token count (for token votes) OR
