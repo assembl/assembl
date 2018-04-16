@@ -18,7 +18,7 @@ from assembl.auth import (
 from assembl.auth.util import get_permissions
 from assembl.models import (
     Idea, AbstractIdeaVote, User, AbstractVoteSpecification, VotingWidget,
-    TokenVoteSpecification, LanguagePreferenceCollection)
+    NumberGaugeVoteSpecification, TokenVoteSpecification, LanguagePreferenceCollection)
 from assembl.lib.sqla import get_named_class
 from . import (FORM_HEADER, JSON_HEADER, check_permissions)
 
@@ -228,9 +228,11 @@ def global_vote_results_csv(request):
     specs = widget.vote_specifications
     q = widget.db.query(Idea.id).filter(Idea.id.in_(idea_ids))
     # specs and their templates
-    ids_by_specid = defaultdict(list)
+    specids_by_template_specid = defaultdict(list)
+    specid_by_idea_id_and_template_specid = defaultdict(int)
     for spec in specs:
-        ids_by_specid[spec.vote_spec_template_id or spec.id].append(spec.id)
+        specids_by_template_specid[spec.vote_spec_template_id or spec.id].append(spec.id)
+        specid_by_idea_id_and_template_specid[(spec.criterion_idea_id, (spec.vote_spec_template_id or spec.id))] = spec
     # then get the vote specs templates only
     template_specs = [(spec.title.best_lang(user_prefs).value if spec.title else str(spec.id), spec)
              for spec in widget.specification_templates]
@@ -251,18 +253,18 @@ def global_vote_results_csv(request):
                 q = q.outerjoin(
                     a, (a.idea_id==Idea.id) &
                        (a.tombstone_date==None) &
-                       (a.vote_spec_id.in_(ids_by_specid[spec.id]))
+                       (a.vote_spec_id.in_(specids_by_template_specid[spec.id]))
                        & (a.token_category_id==tokencat.id))
                 q = q.add_columns(func.sum(a.vote_value).label('vsum_%d_%d' % (spec.id, tokencat.id)))
         else:
             coltitles.append(t.encode('utf-8'))
             a = aliased(spec.get_vote_class(), name="votes_%d"%spec.id)
-            q = q.outerjoin(a, (a.idea_id==Idea.id) & (a.tombstone_date==None) & (a.vote_spec_id.in_(ids_by_specid[spec.id])))
+            q = q.outerjoin(a, (a.idea_id==Idea.id) & (a.tombstone_date==None) & (a.vote_spec_id.in_(specids_by_template_specid[spec.id])))
             q = q.add_columns(func.sum(a.vote_value).label('vsum_%d' % spec.id),
                               func.count(a.id).label('vcount_%d' % spec.id))
     q = q.group_by(Idea.id)
     r = q.all()
-    r = {x[0]: x for x in r}
+    r = {x[0]: x for x in r}  # x[0] is the idea title
     output = StringIO()
     csvw = csv.writer(output)
     csvw.writerow(coltitles)
@@ -270,16 +272,26 @@ def global_vote_results_csv(request):
         row = [title.encode('utf-8')]
         sourcerow = r[idea_id]
         counter = 1
-        for t, spec in template_specs:
-            if isinstance(spec, TokenVoteSpecification):
-                for tokencat in spec.token_categories:
+        for t, template_spec in template_specs:
+            if isinstance(template_spec, TokenVoteSpecification):
+                for tokencat in template_spec.token_categories:
                     row.append(sourcerow[counter] or "-")
                     counter += 1
             else:  # this is a number or text gauge
                 if sourcerow[counter+1]:  # do not do a division by zero
                     # calculate average with vsum_specId / vcount_specId
-                    row.append(sourcerow[counter]/sourcerow[counter+1])
-                    # TODO for text gauge, we want the label of the closest choice related of the vote spec (not the template)
+                    avg = sourcerow[counter]/sourcerow[counter+1]
+                    if isinstance(template_spec, NumberGaugeVoteSpecification):
+                        row.append(avg)
+                    else:
+                        # for text gauge, we want the label of the closest choice related to the vote spec (not the template)
+                        spec = specid_by_idea_id_and_template_specid[(idea_id, template_spec.id)]
+                        choice = spec.get_closest_choice(avg)
+                        if not choice:
+                            label_avg = avg
+                        else:
+                            label_avg = choice.label.best_lang(user_prefs).value.encode('utf-8')
+                        row.append(label_avg)
                 else:
                     row.append("-")
                 counter += 2
