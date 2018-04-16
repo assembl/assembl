@@ -81,7 +81,7 @@ _projectname = assembl
 
 # Optional - Path to SSL Stapling certificates, must be single file
 # on server
-oscp_path =
+ocsp_path =
 
 supervisor__autostart_celery_imap = true
 supervisor__autostart_celery_notification_dispatch = true
