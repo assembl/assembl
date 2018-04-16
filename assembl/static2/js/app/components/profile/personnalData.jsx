@@ -72,9 +72,6 @@ class PersonnalData extends React.PureComponent<*, PersonnalDataProps, Personnal
     const emailLabel = I18n.t('profile.email');
     return (
       <div>
-        <h1 className="dark-title-1">
-          <Translate value="profile.panelTitle" />
-        </h1>
         <h2 className="dark-title-2 margin-l">
           <Translate value="profile.personalInfos" />
         </h2>

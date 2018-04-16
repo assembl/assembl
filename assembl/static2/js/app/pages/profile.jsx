@@ -8,6 +8,7 @@ import { Grid, Col, Button } from 'react-bootstrap';
 import Avatar from '../components/profile/avatar';
 import PersonnalData from '../components/profile/personnalData';
 import ModifyPasswordForm from '../components/profile/modifyPasswordForm';
+import DeleteMyAccount from '../components/profile/deleteMyAccount';
 import { get, getContextual } from '../utils/routeMap';
 import withLoadingIndicator from '../components/common/withLoadingIndicator';
 import UserQuery from '../graphql/userQuery.graphql';
@@ -77,6 +78,9 @@ class Profile extends React.PureComponent<*, ProfileProps, ProfileState> {
               </Col>
               <Col xs={12} sm={9}>
                 <div className="border-left">
+                  <h1 className="dark-title-1">
+                    <Translate value="profile.panelTitle" />
+                  </h1>
                   <PersonnalData id={id} username={username} name={name} email={email} />
                   {hasPassword && (
                     <div>
@@ -94,6 +98,7 @@ class Profile extends React.PureComponent<*, ProfileProps, ProfileState> {
                       </div>
                     </div>
                   )}
+                  <DeleteMyAccount />
                 </div>
               </Col>
             </div>
