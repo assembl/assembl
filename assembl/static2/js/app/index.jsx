@@ -2,7 +2,9 @@ import 'babel-polyfill';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { AppContainer } from 'react-hot-loader';
-import { Router, browserHistory } from 'react-router';
+import { Router, useRouterHistory } from 'react-router';
+import { createHistory, useBeforeUnload } from 'history';
+
 import PiwikReactRouter from 'piwik-react-router';
 import { ApolloProvider } from 'react-apollo';
 import get from 'lodash/get';
@@ -15,15 +17,9 @@ import { ScreenDimensionsProvider } from './components/common/screenDimensions';
 
 require('smoothscroll-polyfill').polyfill();
 
-/*
-`piwik-react-router` expects that we provide it with a browser history.
-We provide it with `react-router`'s `browserHistory`.
-This is not the official way of doing it.
-The official way is using the `history` library, called with `import history from './utils/history';`.
-For details, see
-https://github.com/ReactTraining/react-router/blob/master/FAQ.md#how-do-i-access-the-history-object-outside-of-components
-*/
-const history = browserHistory;
+// tweak browser history to display a message if user triggers a hard transition but has unsaved changes
+// see https://github.com/ReactTraining/react-router/issues/3147#issuecomment-200572190
+const history = useBeforeUnload(useRouterHistory(createHistory))();
 
 const store = createAppStore();
 
