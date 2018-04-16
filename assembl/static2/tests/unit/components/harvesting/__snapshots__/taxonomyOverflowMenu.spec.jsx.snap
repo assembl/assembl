@@ -317,13 +317,13 @@ exports[`taxonomyOverflowMenu component should match harvestingMenu snapshot 1`]
       <Unknown
         backgroundColor="#fff"
         color="#000"
-        qualifier="display_design_fiction"
+        qualifier="display_bright_mirror"
       />
       <div
         className="action-label"
       >
         <Translate
-          value="search.taxonomy_action.display_design_fiction"
+          value="search.taxonomy_action.display_bright_mirror"
         />
       </div>
     </div>

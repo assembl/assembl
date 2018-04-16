@@ -104,7 +104,7 @@ const Translations = {
         display_thread: "Activer le thread",
         display_tokens: "Activer le vote",
         display_open_questions: "Activer les questions ouvertes",
-        display_design_fiction: "Activer le Design Fiction"
+        display_bright_mirror: "Activer le Design Fiction"
       },
       Sort: "Trier",
       "By relevance": "Par pertinence",
@@ -739,7 +739,7 @@ const Translations = {
         display_thread: "Display Thread",
         display_tokens: "Display tokens",
         display_open_questions: "Display Open questions",
-        display_design_fiction: "Display Design Fiction"
+        display_bright_mirror: "Display Design Fiction"
       },
       Sort: "Sort",
       "By relevance": "By relevance",

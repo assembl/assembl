@@ -91,14 +91,14 @@ export const extractActions = [
     label: 'search.taxonomy_action.display_open_questions'
   },
   {
-    qualifier: 'display_design_fiction',
-    label: 'search.taxonomy_action.display_design_fiction'
+    qualifier: 'display_bright_mirror',
+    label: 'search.taxonomy_action.display_bright_mirror'
   }
 ];
 
 export const ActionIcons = ({ qualifier, backgroundColor, color }) => {
   switch (qualifier) {
-  case 'display_design_fiction':
+  case 'display_bright_mirror':
     return <DesignFiction backgroundColor={backgroundColor} color={color} />;
   case 'display_multi_column':
     return <MultiColumn backgroundColor={backgroundColor} color={color} />;
