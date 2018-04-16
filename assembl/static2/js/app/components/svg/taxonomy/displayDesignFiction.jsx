@@ -6,7 +6,7 @@ type Props = {
   color: ?string
 };
 
-const DisplayBrightMirror = ({ backgroundColor, color }: Props) => (
+const DisplayDesignFiction = ({ backgroundColor, color }: Props) => (
   <svg width="20px" height="20px" viewBox="0 0 20 20">
     <g id="icone-Activer-fiction-design" stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
       <g id="activer-Fiction-design-Copy-2">
@@ -22,9 +22,9 @@ const DisplayBrightMirror = ({ backgroundColor, color }: Props) => (
   </svg>
 );
 
-DisplayBrightMirror.defaultProps = {
+DisplayDesignFiction.defaultProps = {
   color: '#5404d7',
   backgroundColor: '#f2f1fa'
 };
 
-export default DisplayBrightMirror;
+export default DisplayDesignFiction;

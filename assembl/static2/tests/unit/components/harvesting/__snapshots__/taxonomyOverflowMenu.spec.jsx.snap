@@ -114,6 +114,21 @@ exports[`taxonomyOverflowMenu component should match harvestingMenu snapshot 1`]
         />
       </div>
     </div>
+    <div
+      className="taxonomy-label"
+      onClick={[Function]}
+    >
+      <Unknown
+        qualifier="cognitive_bias"
+      />
+      <div
+        className="nature-label"
+      >
+        <Translate
+          value="search.taxonomy_nature.cognitive_bias"
+        />
+      </div>
+    </div>
   </div>
   <div
     className="taxonomy-category"
