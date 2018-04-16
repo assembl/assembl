@@ -20,6 +20,7 @@ import {
   undeleteModule
 } from '../../../actions/adminActions/voteSession';
 import { displayCustomModal, displayModal, closeModal } from '../../../utils/utilityManager';
+import { rawContentStateIsEmpty } from '../../../utils/draftjs';
 import { createRandomId } from '../../../utils/globalFunctions';
 import CustomizeGaugeForm from './customizeGaugeForm';
 
@@ -117,7 +118,8 @@ const DumbVoteProposalForm = ({
   };
 
   const isTitleEmpty = title === '' || title === null;
-  const isDescriptionEmpty = description === null || description.blocks.every(block => block.text === '');
+
+  const isDescriptionEmpty = description === null || rawContentStateIsEmpty(description);
   const areFieldsEmpty = isDescriptionEmpty && isTitleEmpty;
 
   return (
