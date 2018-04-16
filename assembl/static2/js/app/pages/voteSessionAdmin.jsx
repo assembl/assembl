@@ -275,6 +275,10 @@ class VoteSessionAdmin extends React.Component<void, VoteSessionAdminProps, Vote
     }
   }
 
+  componentWillUnmount() {
+    this.props.router.setRouteLeaveHook(this.props.route, null);
+  }
+
   routerWillLeave = () => {
     if (this.dataHaveChanged() && !this.state.refetching) {
       return I18n.t('administration.confirmUnsavedChanges');
