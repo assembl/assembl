@@ -5,7 +5,7 @@ import { compose, graphql } from 'react-apollo';
 import { I18n, Translate } from 'react-redux-i18n';
 import { List, type Map } from 'immutable';
 import { Button } from 'react-bootstrap';
-import { Link } from 'react-router';
+import { Link, type Route, type Router } from 'react-router';
 
 import { setValidationErrors } from '../actions/adminActions/voteSession';
 import PageForm from '../components/administration/voteSession/pageForm';
@@ -184,12 +184,15 @@ type VoteSessionAdminProps = {
   deleteProposal: Function,
   setValidationErrors: (string, ValidationErrors) => Function,
   voteSessionId: string,
-  debateId: string
+  debateId: string,
+  route: Route,
+  router: Router
 };
 
 type VoteSessionAdminState = {
   firstWarningDisplayed: boolean,
-  secondWarningDisplayed: boolean
+  secondWarningDisplayed: boolean,
+  refetching: boolean
 };
 
 type TestModuleType = VoteModule => boolean;
@@ -224,8 +227,13 @@ class VoteSessionAdmin extends React.Component<void, VoteSessionAdminProps, Vote
     super(props);
     this.state = {
       firstWarningDisplayed: false,
-      secondWarningDisplayed: false
+      secondWarningDisplayed: false,
+      refetching: false
     };
+  }
+
+  componentDidMount() {
+    this.props.router.setRouteLeaveHook(this.props.route, this.routerWillLeave);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -267,9 +275,18 @@ class VoteSessionAdmin extends React.Component<void, VoteSessionAdminProps, Vote
     }
   }
 
+  routerWillLeave = () => {
+    if (this.dataHaveChanged() && !this.state.refetching) {
+      return I18n.t('administration.confirmUnsavedChanges');
+    }
+
+    return null;
+  };
+
   runMutations(mutationsPromises) {
     const { refetchVoteSession } = this.props;
     runSerial(mutationsPromises).then(() => {
+      this.setState({ refetching: true });
       refetchVoteSession();
       displayAlert('success', I18n.t('administration.voteSessionSuccess'));
     });
@@ -341,6 +358,7 @@ class VoteSessionAdmin extends React.Component<void, VoteSessionAdminProps, Vote
 
       updateVoteSession(payload)
         .then(() => {
+          this.setState({ refetching: true });
           refetchVoteSession();
           displayAlert('success', I18n.t('administration.voteSessionSuccess'));
         })
@@ -465,19 +483,13 @@ class VoteSessionAdmin extends React.Component<void, VoteSessionAdminProps, Vote
     }
   };
 
+  dataHaveChanged = (): boolean =>
+    this.props.moduleTemplatesHaveChanged || this.props.voteProposalsHaveChanged || this.props.voteSessionPage.get('_hasChanged');
+
   render() {
-    const {
-      editLocale,
-      moduleTemplatesHaveChanged,
-      voteProposalsHaveChanged,
-      refetchVoteSession,
-      section,
-      voteSessionPage,
-      debateId,
-      voteSessionId
-    } = this.props;
+    const { editLocale, refetchVoteSession, section, debateId, voteSessionId } = this.props;
     const exportLink = get('exportVoteSessionData', { debateId: debateId, voteSessionId: voteSessionId });
-    const saveDisabled = !moduleTemplatesHaveChanged && !voteProposalsHaveChanged && !voteSessionPage.get('_hasChanged');
+    const saveDisabled = !this.dataHaveChanged();
     const currentStep = parseInt(section, 10);
     return (
       <div className="token-vote-admin">
