@@ -14,16 +14,10 @@ import { createRandomId } from '../../../utils/globalFunctions';
 type VoteProposalsSectionProps = {
   addVoteProposal: Function,
   editLocale: string,
-  refetchVoteSession: Function,
   voteProposals: List<string>
 };
 
-const DumbVoteProposalsSection = ({
-  addVoteProposal,
-  editLocale,
-  refetchVoteSession,
-  voteProposals
-}: VoteProposalsSectionProps) => (
+const DumbVoteProposalsSection = ({ addVoteProposal, editLocale, voteProposals }: VoteProposalsSectionProps) => (
   <div className="vote-proposals-section">
     <div className="admin-box">
       <SectionTitle
@@ -33,14 +27,7 @@ const DumbVoteProposalsSection = ({
       <div className="admin-content">
         <form>
           {voteProposals.map((id, index) => (
-            <VoteProposalForm
-              key={id}
-              id={id}
-              index={index + 1}
-              editLocale={editLocale}
-              nbProposals={voteProposals.size}
-              refetchVoteSession={refetchVoteSession}
-            />
+            <VoteProposalForm key={id} id={id} index={index + 1} editLocale={editLocale} nbProposals={voteProposals.size} />
           ))}
           <OverlayTrigger placement="top" overlay={addVoteProposalTooltip}>
             <div onClick={addVoteProposal} className="plus margin-l">

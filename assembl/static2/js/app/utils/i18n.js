@@ -1,6 +1,6 @@
 // @flow
 import { I18n } from 'react-redux-i18n';
-import { type List, Map } from 'immutable';
+import { List, Map } from 'immutable';
 
 import deepen from './deepen';
 import Translations from './translations';
@@ -74,7 +74,7 @@ export const getAvailableLocales = (locale: string, translations: { [string]: an
 type LangstringValue = string | Map<string, any>;
 type LangstringEntriesList = List<Map<string, LangstringValue>>;
 export const updateInLangstringEntries = (locale: string, value: LangstringValue) => (
-  entries: LangstringEntriesList
+  entries: LangstringEntriesList = List()
 ): LangstringEntriesList => {
   const entryIndex = entries.findIndex(entry => entry.get('localeCode') === locale);
 

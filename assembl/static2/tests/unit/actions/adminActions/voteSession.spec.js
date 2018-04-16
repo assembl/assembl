@@ -187,4 +187,33 @@ describe('voteSession admin actions', () => {
       expect(actual).toEqual(expected);
     });
   });
+
+  describe('customizeVoteModule', () => {
+    const { customizeVoteModule } = actions;
+    it('should return a CUSTOMIZE_VOTE_MODULE action', () => {
+      const info = {
+        instructions: 'My updated title',
+        minimum: 0,
+        maximum: 20,
+        nbTicks: 10,
+        unit: 'kms',
+        type: 'gauge'
+      };
+      const actual = customizeVoteModule('my-module', 'en', info);
+      const expected = {
+        id: 'my-module',
+        info: {
+          instructions: 'My updated title',
+          minimum: 0,
+          maximum: 20,
+          nbTicks: 10,
+          unit: 'kms',
+          type: 'gauge'
+        },
+        locale: 'en',
+        type: actionTypes.CUSTOMIZE_VOTE_MODULE
+      };
+      expect(actual).toEqual(expected);
+    });
+  });
 });

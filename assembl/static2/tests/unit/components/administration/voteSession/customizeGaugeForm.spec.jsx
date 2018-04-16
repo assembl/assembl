@@ -11,7 +11,6 @@ describe('DumbCustomizeGaugeForm component', () => {
   const createNumberGaugeVoteSpecificationSpy = jest.fn();
   const updateGaugeVoteSpecificationSpy = jest.fn();
   const updateNumberGaugeVoteSpecificationSpy = jest.fn();
-  const refetchVoteSessionSpy = jest.fn();
 
   it('should render a form to customize a gauge', () => {
     const proposalMap = Map({
@@ -31,6 +30,7 @@ describe('DumbCustomizeGaugeForm component', () => {
       maximum: 10,
       minimum: 1,
       nbTicks: 5,
+      type: 'gauge',
       unit: 'k€',
       isCustom: false,
       originalModule: Map({ id: '1234' }),
@@ -41,8 +41,7 @@ describe('DumbCustomizeGaugeForm component', () => {
       createGaugeVoteSpecification: createGaugeVoteSpecificationSpy,
       createNumberGaugeVoteSpecification: createNumberGaugeVoteSpecificationSpy,
       updateGaugeVoteSpecification: updateGaugeVoteSpecificationSpy,
-      updateNumberGaugeVoteSpecification: updateNumberGaugeVoteSpecificationSpy,
-      refetchVoteSession: refetchVoteSessionSpy
+      updateNumberGaugeVoteSpecification: updateNumberGaugeVoteSpecificationSpy
     };
     const shallowRenderer = new ShallowRenderer();
     shallowRenderer.render(<DumbCustomizeGaugeForm {...props} />);
