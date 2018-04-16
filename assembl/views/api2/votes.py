@@ -226,36 +226,38 @@ def global_vote_results_csv(request):
     rowtitles = [(idea.safe_title(user_prefs, request.localizer), idea.id) for idea in ideas]
     rowtitles.sort()
     specs = widget.vote_specifications
-    templates = widget.specification_templates
     q = widget.db.query(Idea.id).filter(Idea.id.in_(idea_ids))
-    # specs and their templaes
+    # specs and their templates
     ids_by_specid = defaultdict(list)
     for spec in specs:
         ids_by_specid[spec.vote_spec_template_id or spec.id].append(spec.id)
-    # then get the vote specs
-    specs = [(spec.title.best_lang(user_prefs).value if spec.title else str(spec.id), spec)
+    # then get the vote specs templates only
+    template_specs = [(spec.title.best_lang(user_prefs).value if spec.title else str(spec.id), spec)
              for spec in widget.specification_templates]
-    specs.sort()
+    template_specs.sort()
     coltitles = [""]
+
+    # TODO as 2nd column, number of participants for a proposal (distinct voter_id from all specs related to the proposal)
 
     # construct a query with each votespec creating columns for:
     # either each token count (for token votes) OR
     # sum of vote values, and count of votes otherwise.
     # Ideas are rows (and Idea.id is column 0)
-    for (t, spec) in specs:
+    for (t, spec) in template_specs:
         if isinstance(spec, TokenVoteSpecification):
             for tokencat in spec.token_categories:
                 coltitles.append(tokencat.name.best_lang(user_prefs).value.encode('utf-8'))
                 a = aliased(spec.get_vote_class(), name="votes_%d_%d"%(spec.id, tokencat.id))
                 q = q.outerjoin(
                     a, (a.idea_id==Idea.id) &
+                       (a.tombstone_date==None) &
                        (a.vote_spec_id.in_(ids_by_specid[spec.id]))
                        & (a.token_category_id==tokencat.id))
                 q = q.add_columns(func.sum(a.vote_value).label('vsum_%d_%d' % (spec.id, tokencat.id)))
         else:
             coltitles.append(t.encode('utf-8'))
             a = aliased(spec.get_vote_class(), name="votes_%d"%spec.id)
-            q = q.outerjoin(a, (a.idea_id==Idea.id) & (a.vote_spec_id.in_(ids_by_specid[spec.id])))
+            q = q.outerjoin(a, (a.idea_id==Idea.id) & (a.tombstone_date==None) & (a.vote_spec_id.in_(ids_by_specid[spec.id])))
             q = q.add_columns(func.sum(a.vote_value).label('vsum_%d' % spec.id),
                               func.count(a.id).label('vcount_%d' % spec.id))
     q = q.group_by(Idea.id)
@@ -268,17 +270,19 @@ def global_vote_results_csv(request):
         row = [title.encode('utf-8')]
         sourcerow = r[idea_id]
         counter = 1
-        for t, spec in specs:
+        for t, spec in template_specs:
             if isinstance(spec, TokenVoteSpecification):
                 for tokencat in spec.token_categories:
                     row.append(sourcerow[counter] or "-")
                     counter += 1
-                    continue
-            elif sourcerow[counter+1]:
-                row.append(sourcerow[counter]/sourcerow[counter+1])
-            else:
-                row.append("-")
-            counter += 2
+            else:  # this is a number or text gauge
+                if sourcerow[counter+1]:  # do not do a division by zero
+                    # calculate average with vsum_specId / vcount_specId
+                    row.append(sourcerow[counter]/sourcerow[counter+1])
+                    # TODO for text gauge, we want the label of the closest choice related of the vote spec (not the template)
+                else:
+                    row.append("-")
+                counter += 2
         csvw.writerow(row)
     output.seek(0)
-    return Response(body_file=output, content_type='text/csv')
+    return Response(body_file=output, content_type='text/csv', content_disposition='attachment; filename="vote_results.csv')
