@@ -89,7 +89,8 @@ const Translations = {
         knowledge: "Connaissance",
         example: "Exemple",
         concept: "Concept",
-        argument: "Argument"
+        argument: "Argument",
+        cognitive_bias: "Biais cognitif"
       },
       Action: "Action",
       taxonomy_action: {
@@ -103,7 +104,7 @@ const Translations = {
         display_thread: "Activer le thread",
         display_tokens: "Activer le vote",
         display_open_questions: "Activer les questions ouvertes",
-        display_bright_mirror: "Activer le Bright Mirror"
+        display_design_fiction: "Activer le Design Fiction"
       },
       Sort: "Trier",
       "By relevance": "Par pertinence",
@@ -723,7 +724,8 @@ const Translations = {
         knowledge: "Knowledge",
         example: "Example",
         concept: "Concept",
-        argument: "Argument"
+        argument: "Argument",
+        cognitive_bias: "Cognitive bias"
       },
       Action: "Action",
       taxonomy_action: {
@@ -737,7 +739,7 @@ const Translations = {
         display_thread: "Display Thread",
         display_tokens: "Display tokens",
         display_open_questions: "Display Open questions",
-        display_bright_mirror: "Display Bright Mirror"
+        display_design_fiction: "Display Design Fiction"
       },
       Sort: "Sort",
       "By relevance": "By relevance",

@@ -114,6 +114,21 @@ exports[`taxonomyOverflowMenu component should match harvestingMenu snapshot 1`]
         />
       </div>
     </div>
+    <div
+      className="taxonomy-label"
+      onClick={[Function]}
+    >
+      <Unknown
+        qualifier="cognitive_bias"
+      />
+      <div
+        className="nature-label"
+      >
+        <Translate
+          value="search.taxonomy_nature.cognitive_bias"
+        />
+      </div>
+    </div>
   </div>
   <div
     className="taxonomy-category"
@@ -302,13 +317,13 @@ exports[`taxonomyOverflowMenu component should match harvestingMenu snapshot 1`]
       <Unknown
         backgroundColor="#fff"
         color="#000"
-        qualifier="display_bright_mirror"
+        qualifier="display_design_fiction"
       />
       <div
         className="action-label"
       >
         <Translate
-          value="search.taxonomy_action.display_bright_mirror"
+          value="search.taxonomy_action.display_design_fiction"
         />
       </div>
     </div>

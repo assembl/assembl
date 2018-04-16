@@ -211,6 +211,7 @@ class ExtractNatureVocabulary(AbstractEnumVocabulary):
         example = 4
         concept = 5
         argument = 6
+        cognitive_bias = 7
 
     _initial_names = {
         Enum.issue: {
@@ -237,6 +238,10 @@ class ExtractNatureVocabulary(AbstractEnumVocabulary):
             "en": "argument",
             "fr": "Argument",
             },
+        Enum.cognitive_bias: {
+            "en": "Cognitive bias",
+            "fr": "Biais cognitif",
+            },
     }
 
 # Note: Do not call setup_ownership_load_event, as the IDs are not integers.
@@ -257,7 +262,7 @@ class ExtractActionVocabulary(AbstractEnumVocabulary):
         display_thread = 8
         display_tokens = 9
         display_open_questions = 10
-        display_bright_mirror = 11
+        display_design_fiction = 11
 
     _initial_names = {
         Enum.classify: {
@@ -300,9 +305,9 @@ class ExtractActionVocabulary(AbstractEnumVocabulary):
             "fr": "Activer Q° ouvertes",
             "en": "Display Open questions",
         },
-        Enum.display_bright_mirror: {
-            "fr": "Activer Bright Mirror",
-            "en": "Display Bright Mirror"
+        Enum.display_design_fiction: {
+            "fr": "Activer Design Fiction",
+            "en": "Display Design Fiction"
         },
     }
 
