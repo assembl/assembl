@@ -237,9 +237,17 @@ def global_vote_results_csv(request):
     template_specs = [(spec.title.best_lang(user_prefs).value if spec.title else str(spec.id), spec)
              for spec in widget.specification_templates]
     template_specs.sort()
-    coltitles = [""]
+    coltitles = ["", "Nombre de participants"]
 
-    # TODO as 2nd column, number of participants for a proposal (distinct voter_id from all specs related to the proposal)
+    # number of participants for a proposal (distinct voter_id from all specs related to the proposal)
+    num_participants_by_idea_id = {}
+    for idea in ideas:
+        vote_specifications = idea.criterion_for
+        query = vote_specifications[0].get_voter_ids_query()
+        for vote_spec in vote_specifications[1:]:
+            query = query.union(vote_spec.get_voter_ids_query())
+        num_participants_by_idea_id[idea.id] = query.count()
+
 
     # construct a query with each votespec creating columns for:
     # either each token count (for token votes) OR
@@ -269,7 +277,7 @@ def global_vote_results_csv(request):
     csvw = csv.writer(output)
     csvw.writerow(coltitles)
     for title, idea_id in rowtitles:
-        row = [title.encode('utf-8')]
+        row = [title.encode('utf-8'), num_participants_by_idea_id[idea_id]]
         sourcerow = r[idea_id]
         counter = 1
         for t, template_spec in template_specs:
