@@ -238,11 +238,10 @@
 
     .partner-logo {
       display: inline-block;
-      margin: 20px;
+      margin: 70px;
     }
 
     img {
-      filter: grayscale(100%);
       height: auto;
       max-height: $partner-logo-height;
       max-width: $partner-logo-width;
