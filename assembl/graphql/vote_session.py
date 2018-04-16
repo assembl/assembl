@@ -273,10 +273,6 @@ class GaugeChoiceSpecification(SecureObjectType, SQLAlchemyObjectType):
 
 
 def get_avg_choice(vote_spec):
-    choices = vote_spec.get_choices()
-    if not choices:
-        return None
-
     vote_cls = vote_spec.get_vote_class()
     voting_avg = vote_spec.db.query(func.avg(getattr(vote_cls, 'vote_value'))).filter_by(
         vote_spec_id=vote_spec.id,
@@ -284,16 +280,7 @@ def get_avg_choice(vote_spec):
         idea_id=vote_spec.criterion_idea_id).first()
     # when there is no votes, query.first() equals (None,)
     avg = voting_avg[0] or 0
-    # take the closest choice
-    avg_choice = choices[0]
-    min_diff = abs(avg_choice.value - avg)
-    for choice in choices[1:]:
-        diff = abs(choice.value - avg)
-        if diff < min_diff:
-            avg_choice = choice
-            min_diff = diff
-
-    return avg_choice
+    return vote_spec.get_closest_choice(avg)
 
 
 class GaugeVoteSpecification(SecureObjectType, SQLAlchemyObjectType):

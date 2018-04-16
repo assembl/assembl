@@ -89,7 +89,9 @@ class AbstractVoteSpecification(DiscussionBoundBase):
     vote_spec_template_id = Column(
         Integer, ForeignKey("vote_specification.id"), nullable=True, index=True)
 
-    vote_spec_template = relationship("AbstractVoteSpecification", remote_side=[id])
+    vote_spec_template = relationship(
+        "AbstractVoteSpecification", remote_side=[id],
+        backref="subspecifications")
 
     # if the module has been customized for a specific proposal
     is_custom = Column(Boolean, default=False)
@@ -591,6 +593,22 @@ class GaugeVoteSpecification(AbstractVoteSpecification):
             return self.vote_spec_template.choices
 
         return self.choices
+
+    def get_closest_choice(self, value):
+        choices = self.get_choices()
+        if not choices:
+            return None
+
+        # take the closest choice
+        avg_choice = choices[0]
+        min_diff = abs(avg_choice.value - value)
+        for choice in choices[1:]:
+            diff = abs(choice.value - value)
+            if diff < min_diff:
+                avg_choice = choice
+                min_diff = diff
+
+        return avg_choice
 
 
 class GaugeChoiceSpecification(DiscussionBoundBase):

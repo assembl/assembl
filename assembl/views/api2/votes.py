@@ -1,6 +1,7 @@
 from datetime import datetime
 from cStringIO import StringIO
 import csv
+from collections import defaultdict
 
 from pyramid.view import view_config
 from pyramid.httpexceptions import (
@@ -17,7 +18,7 @@ from assembl.auth import (
 from assembl.auth.util import get_permissions
 from assembl.models import (
     Idea, AbstractIdeaVote, User, AbstractVoteSpecification, VotingWidget,
-    TokenVoteSpecification, LanguagePreferenceCollection)
+    NumberGaugeVoteSpecification, TokenVoteSpecification, LanguagePreferenceCollection)
 from assembl.lib.sqla import get_named_class
 from . import (FORM_HEADER, JSON_HEADER, check_permissions)
 
@@ -218,45 +219,90 @@ def global_vote_results_csv(request):
     user_prefs = LanguagePreferenceCollection.getCurrent()
     # first fetch the ideas voted on
     ideas = widget.db.query(Idea
-        ).join(AbstractIdeaVote, AbstractIdeaVote.idea_id==Idea.id
         ).join(AbstractVoteSpecification
         ).filter(AbstractVoteSpecification.widget_id==widget.id
         ).distinct().all()
     idea_ids = [i.id for i in ideas]
-    titles = [(idea.safe_title(user_prefs, request.localizer), idea.id) for idea in ideas]
-    titles.sort()
+    rowtitles = [(idea.safe_title(user_prefs, request.localizer), idea.id) for idea in ideas]
+    rowtitles.sort()
+    specs = widget.vote_specifications
     q = widget.db.query(Idea.id).filter(Idea.id.in_(idea_ids))
-    # then get the vote specs
-    specs = [(spec.title.best_lang(user_prefs).value if spec.title else str(spec.id), spec)
-             for spec in widget.vote_specifications]
-    specs.sort()
-    # construct a query with each votespec creating two columns:
-    # sum of vote values, and count of votes.
+    # specs and their templates
+    specids_by_template_specid = defaultdict(list)
+    specid_by_idea_id_and_template_specid = defaultdict(int)
+    for spec in specs:
+        specids_by_template_specid[spec.vote_spec_template_id or spec.id].append(spec.id)
+        specid_by_idea_id_and_template_specid[(spec.criterion_idea_id, (spec.vote_spec_template_id or spec.id))] = spec
+    # then get the vote specs templates only
+    template_specs = [(spec.title.best_lang(user_prefs).value if spec.title else str(spec.id), spec)
+             for spec in widget.specification_templates]
+    template_specs.sort()
+    coltitles = ["", "Nombre de participants"]
+
+    # number of participants for a proposal (distinct voter_id from all specs related to the proposal)
+    num_participants_by_idea_id = {}
+    for idea in ideas:
+        vote_specifications = idea.criterion_for
+        query = vote_specifications[0].get_voter_ids_query()
+        for vote_spec in vote_specifications[1:]:
+            query = query.union(vote_spec.get_voter_ids_query())
+        num_participants_by_idea_id[idea.id] = query.count()
+
+
+    # construct a query with each votespec creating columns for:
+    # either each token count (for token votes) OR
+    # sum of vote values, and count of votes otherwise.
     # Ideas are rows (and Idea.id is column 0)
-    for (t, spec) in specs:
-        a = aliased(spec.get_vote_class(), name="votes_%d"%spec.id)
-        q = q.outerjoin(a, (a.idea_id==Idea.id) & (a.vote_spec_id==spec.id))
-        q = q.add_columns(func.sum(a.vote_value).label('vsum_%d' % spec.id),
-                          func.count(a.id).label('vcount_%d' % spec.id))
+    for (t, spec) in template_specs:
+        if isinstance(spec, TokenVoteSpecification):
+            for tokencat in spec.token_categories:
+                coltitles.append(tokencat.name.best_lang(user_prefs).value.encode('utf-8'))
+                a = aliased(spec.get_vote_class(), name="votes_%d_%d"%(spec.id, tokencat.id))
+                q = q.outerjoin(
+                    a, (a.idea_id==Idea.id) &
+                       (a.tombstone_date==None) &
+                       (a.vote_spec_id.in_(specids_by_template_specid[spec.id]))
+                       & (a.token_category_id==tokencat.id))
+                q = q.add_columns(func.sum(a.vote_value).label('vsum_%d_%d' % (spec.id, tokencat.id)))
+        else:
+            coltitles.append(t.encode('utf-8'))
+            a = aliased(spec.get_vote_class(), name="votes_%d"%spec.id)
+            q = q.outerjoin(a, (a.idea_id==Idea.id) & (a.tombstone_date==None) & (a.vote_spec_id.in_(specids_by_template_specid[spec.id])))
+            q = q.add_columns(func.sum(a.vote_value).label('vsum_%d' % spec.id),
+                              func.count(a.id).label('vcount_%d' % spec.id))
     q = q.group_by(Idea.id)
     r = q.all()
-    r = {x[0]: x for x in r}
+    r = {x[0]: x for x in r}  # x[0] is the idea title
     output = StringIO()
     csvw = csv.writer(output)
-    csvw.writerow([""]+[t.encode('utf-8') for (t, spec) in specs])
-    for title, idea_id in titles:
-        row = [title.encode('utf-8')]
-        sourcerow = r[idea_id][1:]
-        for i, (t, spec) in enumerate(specs):
-            num = sourcerow[1+i*2]
-            if num:
-                if isinstance(spec, TokenVoteSpecification):
-                    # we want total number of tokens
-                    num = 1
-                # otherwise we want average vote value
-                row.append(sourcerow[i*2]/num)
-            else:
-                row.append("")
+    csvw.writerow(coltitles)
+    for title, idea_id in rowtitles:
+        row = [title.encode('utf-8'), num_participants_by_idea_id[idea_id]]
+        sourcerow = r[idea_id]
+        counter = 1
+        for t, template_spec in template_specs:
+            if isinstance(template_spec, TokenVoteSpecification):
+                for tokencat in template_spec.token_categories:
+                    row.append(sourcerow[counter] or "-")
+                    counter += 1
+            else:  # this is a number or text gauge
+                if sourcerow[counter+1]:  # do not do a division by zero
+                    # calculate average with vsum_specId / vcount_specId
+                    avg = sourcerow[counter]/sourcerow[counter+1]
+                    if isinstance(template_spec, NumberGaugeVoteSpecification):
+                        row.append(avg)
+                    else:
+                        # for text gauge, we want the label of the closest choice related to the vote spec (not the template)
+                        spec = specid_by_idea_id_and_template_specid[(idea_id, template_spec.id)]
+                        choice = spec.get_closest_choice(avg)
+                        if not choice:
+                            label_avg = avg
+                        else:
+                            label_avg = choice.label.best_lang(user_prefs).value.encode('utf-8')
+                        row.append(label_avg)
+                else:
+                    row.append("-")
+                counter += 2
         csvw.writerow(row)
     output.seek(0)
-    return Response(body_file=output, content_type='text/csv')
+    return Response(body_file=output, content_type='text/csv', content_disposition='attachment; filename="vote_results.csv')
