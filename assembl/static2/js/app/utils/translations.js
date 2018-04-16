@@ -213,7 +213,7 @@ const Translations = {
       topContributor: "Top contributeur",
       recentDiscussion: "Discussion récente",
       objectivesTitle: "Pourquoi un tel débat ?",
-      timelineTitle: "La timeline en %{count} phases",
+      timelineTitle: "Echéancier de la concertation en %{count} phases",
       video: "La vidéo du débat",
       twitterTitle: "Tweet",
       contact: "Besoin d'échanger au sujet de la plateforme ?",
