@@ -1,9 +1,7 @@
 import { useRouterHistory } from 'react-router';
 import { createHistory, useBeforeUnload } from 'history';
-
 import PiwikReactRouter from 'piwik-react-router';
 import get from 'lodash/get';
-import 'bootstrap/dist/css/bootstrap.css';
 
 // tweak browser history to display a message if user triggers a hard transition but has unsaved changes
 // see https://github.com/ReactTraining/react-router/issues/3147#issuecomment-200572190
