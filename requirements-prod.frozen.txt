@@ -7,12 +7,10 @@
 -e git+https://github.com/assembl/Beaker.git@assembl#egg=Beaker
 -e git+https://github.com/maparent/cornice.git@master#egg=cornice
 -e git+https://github.com/pythonforfacebook/facebook-sdk.git@ddc911f54d6136e149c03d145fd3760751a7d50d#egg=facebook_sdk
--e git+https://github.com/kurtmckee/feedparser.git@5.2.0#egg=feedparser
 -e git+https://github.com/ecreall/graphql-wsgi.git@7d7a2cf0a56f7303cc4508f8b7a464820b046293#egg=graphql-wsgi
--e git+https://github.com/maparent/hashfs.git@use_makedirs#egg=hashfs
+-e git+https://github.com/dgilland/hashfs.git@386ce3b8c69576007549ddf5122282099b87fe42#egg=hashfs
 -e git+https://github.com/benoitg/jwzthreading.git@master#egg=jwzthreading
 -e git+https://github.com/maparent/langdetect.git@no_sample#egg=langdetect
--e git+https://github.com/ekalinin/nodeenv.git@master#egg=nodeenv
 -e git+https://github.com/assembl/pyramid_beaker.git@assembl#egg=pyramid_beaker
 -e git+https://github.com/assembl/sockjs-tornado.git@conflicting_localhost#egg=sockjs_tornado
 alembic==0.8.6
@@ -50,6 +48,7 @@ et-xmlfile==1.0.1         # via openpyxl
 executor==19.1            # via rotate-backups
 fabric==1.13.2
 fasteners==0.14.1         # via executor
+feedparser==5.2.1
 first==2.0.1              # via pip-tools
 flaky==3.1.1
 funcsigs==1.0.2
@@ -83,6 +82,7 @@ meld3==1.0.2              # via supervisor
 monotonic==1.4            # via fasteners, humanfriendly
 naturalsort==1.5.1        # via rotate-backups
 ndg_httpsclient==0.4.1
+nodeenv==1.3.0
 oauth2client==4.1.2       # via google-api-python-client
 oauthlib==2.0.7           # via requests-oauthlib, social-auth-core
 openpyxl==2.4.1

@@ -606,14 +606,13 @@ def update_pip_requirements(force_reinstall=False):
     update external dependencies on remote host
     """
     print(cyan('Updating requirements using PIP'))
-    venvcmd('pip install -U "pip>=6" ')
+    venvcmd('pip install -U setuptools "pip<10" ')
 
     if force_reinstall:
         run("%(venvpath)s/bin/pip install --ignore-installed -r %(projectpath)s/requirements.txt" % env)
     else:
         specials = [
             # setuptools and lxml need to be installed before compiling dm.xmlsec.binding
-            ("setuptools", None),
             ("lxml", None),
             # Thanks to https://github.com/pypa/pip/issues/4453 disable wheel separately.
             ("dm.xmlsec.binding", "%s --install-option='-q'"),
