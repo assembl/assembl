@@ -53,7 +53,7 @@ const DumbTokensForm = ({
       />
       <label htmlFor="input-dropdown-addon">{I18n.t('administration.tokenCategoryNumber')}</label>
       <div className="inline">
-        <Helper helperUrl="/static2/img/helpers/helper2.png" helperText={I18n.t('administration.helpers.tokenCategoryNumber')} />
+        <Helper helperUrl="/static2/img/helpers/helper2.jpg" helperText={I18n.t('administration.helpers.tokenCategoryNumber')} />
       </div>
       <div>
         <SplitButton

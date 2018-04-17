@@ -84,7 +84,7 @@ const DumbModulesSection = ({
                   <label htmlFor="input-dropdown-addon">
                     <Translate value="administration.gaugeNumber" />
                   </label>
-                  <Helper helperUrl="/static2/img/helpers/helper2.png" helperText={I18n.t('administration.defineGaugeNumer')} />
+                  <Helper helperUrl="/static2/img/helpers/helper2.jpg" helperText={I18n.t('administration.defineGaugeNumer')} />
                 </div>
                 <SplitButton
                   className="admin-dropdown"

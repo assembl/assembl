@@ -114,7 +114,7 @@ const DumbPageForm = ({
           <div className="separator" />
           <Helper
             label={I18n.t('administration.instructions')}
-            helperUrl="/static2/img/helpers/helper2.png"
+            helperUrl="/static2/img/helpers/helper2.jpg"
             helperText={I18n.t('administration.helpers.voteSessionInstructions')}
             classname="title"
           />

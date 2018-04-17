@@ -101,7 +101,7 @@ exports[`Vote Session DumbPageForm component should render a form to update the 
         additionalTextClasses=""
         classname="title"
         helperText="The instructions section must contain a title and a description that will guide the participants for their contribution."
-        helperUrl="/static2/img/helpers/helper2.png"
+        helperUrl="/static2/img/helpers/helper2.jpg"
         label="Instructions section configuration"
       />
       <FormControlWithLabel
