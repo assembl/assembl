@@ -1,7 +1,9 @@
+// @flow
 import React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { connect } from 'react-redux';
 import { I18n } from 'react-redux-i18n';
+import { type Route, type Router } from 'react-router';
 
 import SectionTitle from '../components/administration/sectionTitle';
 import PageForm from '../components/administration/resourcesCenter/pageForm';
@@ -24,7 +26,57 @@ const createVariablesForResourceMutation = resource => ({
 
 const createVariablesForDeleteResourceMutation = resource => ({ resourceId: resource.id });
 
-class ResourcesCenterAdmin extends React.Component {
+type Props = {
+  editLocale: string,
+  pageHasChanged: boolean,
+  resourcesHaveChanged: boolean,
+  resources: Array<Object>,
+  resourcesCenterPage: Object,
+  createResource: Function,
+  deleteResource: Function,
+  updateResource: Function,
+  updateResourcesCenter: Function,
+  refetchTabsConditions: Function,
+  refetchResources: Function,
+  refetchResourcesCenter: Function,
+  route: Route,
+  router: Router
+};
+
+type State = {
+  refetching: boolean
+};
+
+class ResourcesCenterAdmin extends React.Component<void, Props, State> {
+  props: Props;
+
+  state: State;
+
+  constructor() {
+    super();
+    this.state = {
+      refetching: false
+    };
+  }
+
+  componentDidMount() {
+    this.props.router.setRouteLeaveHook(this.props.route, this.routerWillLeave);
+  }
+
+  componentWillUnmount() {
+    this.props.router.setRouteLeaveHook(this.props.route, null);
+  }
+
+  routerWillLeave = () => {
+    if (this.dataHaveChanged() && !this.state.refetching) {
+      return I18n.t('administration.confirmUnsavedChanges');
+    }
+
+    return null;
+  };
+
+  dataHaveChanged = () => this.props.pageHasChanged || this.props.resourcesHaveChanged;
+
   saveAction = () => {
     const {
       pageHasChanged,
@@ -82,8 +134,8 @@ class ResourcesCenterAdmin extends React.Component {
   };
 
   render() {
-    const { editLocale, pageHasChanged, resourcesHaveChanged } = this.props;
-    const saveDisabled = !pageHasChanged && !resourcesHaveChanged;
+    const { editLocale } = this.props;
+    const saveDisabled = !this.dataHaveChanged();
     return (
       <div className="resources-center-admin admin-box admin-content">
         <SaveButton disabled={saveDisabled} saveAction={this.saveAction} />
