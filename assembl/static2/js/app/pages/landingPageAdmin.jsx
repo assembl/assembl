@@ -65,7 +65,7 @@ class LandingPageAdmin extends React.Component<void, Props, State> {
 
       runSerial(mutationsPromises)
         .then(() => {
-          refetchLandingPageModules();
+          refetchLandingPageModules().then(() => this.setState({ refetching: false }));
           displayAlert('success', I18n.t('administration.landingPage.successSave'));
         })
         .catch((error) => {

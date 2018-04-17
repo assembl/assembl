@@ -149,7 +149,8 @@ class DiscussionAdmin extends React.Component<void, Props, State> {
       });
 
       runSerial(mutationsPromises).then(() => {
-        refetchSections();
+        this.setState({ refetching: true });
+        refetchSections().then(() => this.setState({ refetching: false }));
         displayAlert('success', I18n.t('administration.sections.successSave'));
       });
     }
@@ -165,7 +166,8 @@ class DiscussionAdmin extends React.Component<void, Props, State> {
       };
       updateLegalNoticeAndTerms(payload)
         .then(() => {
-          refetchLegalNoticeAndTerms();
+          this.setState({ refetching: true });
+          refetchLegalNoticeAndTerms().then(() => this.setState({ refetching: false }));
           displayAlert('success', I18n.t('administration.legalNoticeAndTerms.successSave'));
         })
         .catch((error) => {

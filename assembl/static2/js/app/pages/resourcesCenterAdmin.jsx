@@ -103,7 +103,8 @@ class ResourcesCenterAdmin extends React.Component<void, Props, State> {
       };
       updateResourcesCenter(payload)
         .then(() => {
-          refetchResourcesCenter();
+          this.setState({ refetching: true });
+          refetchResourcesCenter().then(() => this.setState({ refetching: false }));
           displayAlert('success', I18n.t('administration.resourcesCenter.successSave'));
         })
         .catch((error) => {
@@ -123,8 +124,9 @@ class ResourcesCenterAdmin extends React.Component<void, Props, State> {
 
       runSerial(mutationsPromises)
         .then(() => {
-          refetchTabsConditions();
-          refetchResources();
+          this.setState({ refetching: true });
+          refetchTabsConditions().then(() => refetchResources().then(() => this.setState({ refetching: false })));
+
           displayAlert('success', I18n.t('administration.resourcesCenter.successSave'));
         })
         .catch((error) => {

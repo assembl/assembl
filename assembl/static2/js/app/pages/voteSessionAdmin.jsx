@@ -291,7 +291,7 @@ class VoteSessionAdmin extends React.Component<void, VoteSessionAdminProps, Vote
     const { refetchVoteSession } = this.props;
     runSerial(mutationsPromises).then(() => {
       this.setState({ refetching: true });
-      refetchVoteSession();
+      refetchVoteSession().then(() => this.setState({ refetching: false }));
       displayAlert('success', I18n.t('administration.voteSessionSuccess'));
     });
   }
@@ -363,7 +363,7 @@ class VoteSessionAdmin extends React.Component<void, VoteSessionAdminProps, Vote
       updateVoteSession(payload)
         .then(() => {
           this.setState({ refetching: true });
-          refetchVoteSession();
+          refetchVoteSession().then(() => this.setState({ refetching: false }));
           displayAlert('success', I18n.t('administration.voteSessionSuccess'));
         })
         .catch((error) => {

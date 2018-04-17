@@ -83,7 +83,7 @@ class SurveyAdmin extends React.Component {
       runSerial(mutationsPromises)
         .then(() => {
           this.setState({ refetching: true });
-          refetchThematics();
+          refetchThematics().then(() => this.setState({ refetching: false }));
           displayAlert('success', I18n.t('administration.successThemeCreation'));
         })
         .catch((error) => {
