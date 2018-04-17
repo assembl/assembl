@@ -1,12 +1,13 @@
 import React from 'react';
-import { browserHistory } from 'react-router';
 import { Translate, I18n } from 'react-redux-i18n';
 import { connect } from 'react-redux';
 import { Grid, Row, Button } from 'react-bootstrap';
+
 import Statistic from './header/statistic';
 import { get } from '../../utils/routeMap';
 import { getCurrentPhaseIdentifier } from '../../utils/timeline';
 import { getDiscussionSlug } from '../../utils/globalFunctions';
+import { browserHistory } from '../../router';
 
 class Header extends React.Component {
   constructor(props) {

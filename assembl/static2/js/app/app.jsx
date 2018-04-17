@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { browserHistory } from 'react-router';
 import classNames from 'classnames';
+
 import { get } from './utils/routeMap';
 import { getDiscussionId, getConnectedUserId, getConnectedUserName } from './utils/globalFunctions';
 import { getCurrentPhaseIdentifier } from './utils/timeline';
@@ -10,6 +10,7 @@ import { addContext } from './actions/contextActions';
 import Loader from './components/common/loader';
 import Error from './components/common/error';
 import ChatFrame from './components/common/ChatFrame';
+import { browserHistory } from './router';
 
 class App extends React.Component {
   constructor(props) {
