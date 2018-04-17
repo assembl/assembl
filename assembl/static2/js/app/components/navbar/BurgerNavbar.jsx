@@ -1,13 +1,13 @@
 // @flow
 
 import React from 'react';
-import { browserHistory } from 'react-router';
 import classNames from 'classnames';
 
 import Logo from './Logo';
 import NavigationMenu from './navigationMenu';
 import LanguageMenu from './languageMenu';
 import UserMenu from './UserMenu';
+import { browserHistory } from '../../router';
 
 export default class BurgerNavbar extends React.PureComponent {
   unlisten: () => void;

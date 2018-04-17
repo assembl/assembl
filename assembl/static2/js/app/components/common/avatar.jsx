@@ -2,11 +2,13 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { compose, graphql } from 'react-apollo';
 import { Translate } from 'react-redux-i18n';
-import { Link, browserHistory } from 'react-router';
+import { Link } from 'react-router';
 import { NavDropdown, MenuItem } from 'react-bootstrap';
+
 import { getContextual, get } from '../../utils/routeMap';
 import UserQuery from '../../graphql/userQuery.graphql';
 import withoutLoadingIndicator from './withoutLoadingIndicator';
+import { browserHistory } from '../../router';
 
 class ProfileIcon extends React.Component {
   constructor(props) {

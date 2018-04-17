@@ -46,9 +46,26 @@ class SurveyAdmin extends React.Component {
     super(props);
     this.state = {
       exportLocale: null,
+      refetching: false,
       translate: false
     };
   }
+
+  componentDidMount() {
+    this.props.router.setRouteLeaveHook(this.props.route, this.routerWillLeave);
+  }
+
+  componentWillUnmount() {
+    this.props.router.setRouteLeaveHook(this.props.route, null);
+  }
+
+  routerWillLeave = () => {
+    if (this.props.thematicsHaveChanged && !this.state.refetching) {
+      return I18n.t('administration.confirmUnsavedChanges');
+    }
+
+    return null;
+  };
 
   saveAction = () => {
     const { refetchThematics, thematics, thematicsHaveChanged, createThematic, deleteThematic, updateThematic } = this.props;
@@ -65,7 +82,8 @@ class SurveyAdmin extends React.Component {
 
       runSerial(mutationsPromises)
         .then(() => {
-          refetchThematics();
+          this.setState({ refetching: true });
+          refetchThematics().then(() => this.setState({ refetching: false }));
           displayAlert('success', I18n.t('administration.successThemeCreation'));
         })
         .catch((error) => {

@@ -1,10 +1,11 @@
 import React from 'react';
-import { browserHistory } from 'react-router';
 import { Translate } from 'react-redux-i18n';
 import { Col, OverlayTrigger } from 'react-bootstrap';
+
 import { getDiscussionSlug, calculatePercentage } from '../../utils/globalFunctions';
 import { get } from '../../utils/routeMap';
 import { nextStepTooltip, previousStepTooltip } from '../common/tooltips';
+import { browserHistory } from '../../router';
 
 class Navbar extends React.Component {
   static defaultProps = {

@@ -1,11 +1,12 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Translate } from 'react-redux-i18n';
-import { browserHistory } from 'react-router';
 import { Grid, Row, Col, Button } from 'react-bootstrap';
+
 import { get } from '../../utils/routeMap';
 import { getDiscussionSlug } from '../../utils/globalFunctions';
 import { getCurrentPhaseIdentifier } from '../../utils/timeline';
+import { browserHistory } from '../../router';
 
 class Objectives extends React.Component {
   constructor(props) {

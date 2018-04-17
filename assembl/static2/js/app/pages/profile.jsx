@@ -1,10 +1,10 @@
 // @flow
 import React from 'react';
-import { browserHistory } from 'react-router';
 import { connect } from 'react-redux';
 import { compose, graphql } from 'react-apollo';
 import { Translate, I18n } from 'react-redux-i18n';
 import { Grid, Col, Button } from 'react-bootstrap';
+
 import FormControlWithLabel from '../components/common/formControlWithLabel';
 import ModifyPasswordForm from '../components/common/modifyPasswordForm';
 import { get, getContextual } from '../utils/routeMap';
@@ -12,6 +12,7 @@ import { displayAlert } from '../utils/utilityManager';
 import withLoadingIndicator from '../components/common/withLoadingIndicator';
 import UserQuery from '../graphql/userQuery.graphql';
 import UpdateUserMutation from '../graphql/mutations/updateUser.graphql';
+import { browserHistory } from '../router';
 
 type ProfileProps = {
   username: string,

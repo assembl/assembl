@@ -1,6 +1,7 @@
 // @flow
 import React from 'react';
 import { connect, type Dispatch, type MapStateToProps } from 'react-redux';
+import { type Route, type Router } from 'react-router';
 import { type ApolloClient, compose, graphql, withApollo } from 'react-apollo';
 import { I18n } from 'react-redux-i18n';
 import { type Map } from 'immutable';
@@ -19,7 +20,7 @@ import updateLegalNoticeAndTermsMutation from '../graphql/mutations/updateLegalN
 import updateDiscussionPreferenceQuery from '../graphql/mutations/updateDiscussionPreference.graphql';
 import getDiscussionPreferenceLanguage from '../graphql/DiscussionPreferenceLanguage.graphql';
 import { type LanguagePreferencesState } from '../reducers/adminReducer';
-import { type State } from '../reducers/rootReducer';
+import { type State as ReduxState } from '../reducers/rootReducer';
 
 type Section = Object;
 
@@ -48,6 +49,8 @@ type Props = {
   refetchLegalNoticeAndTerms: Function,
   refetchSections: Function,
   resetLanguagePreferenceChanged: Function,
+  route: Route,
+  router: Router,
   section: string,
   sections: Array<Section>,
   sectionsHaveChanged: boolean,
@@ -56,7 +59,43 @@ type Props = {
   updateSection: Function
 };
 
-class DiscussionAdmin extends React.Component<void, Props, void> {
+type State = {
+  refetching: boolean
+};
+
+class DiscussionAdmin extends React.Component<void, Props, State> {
+  props: Props;
+
+  state: State;
+
+  constructor() {
+    super();
+    this.state = {
+      refetching: false
+    };
+  }
+
+  componentDidMount() {
+    this.props.router.setRouteLeaveHook(this.props.route, this.routerWillLeave);
+  }
+
+  componentWillUnmount() {
+    this.props.router.setRouteLeaveHook(this.props.route, null);
+  }
+
+  routerWillLeave = () => {
+    if (this.dataHaveChanged() && !this.state.refetching) {
+      return I18n.t('administration.confirmUnsavedChanges');
+    }
+
+    return null;
+  };
+
+  dataHaveChanged = () =>
+    this.props.languagePreferenceHasChanged ||
+    this.props.sectionsHaveChanged ||
+    this.props.legalNoticeAndTerms.get('_hasChanged');
+
   saveAction = () => {
     const {
       changeLocale,
@@ -110,7 +149,8 @@ class DiscussionAdmin extends React.Component<void, Props, void> {
       });
 
       runSerial(mutationsPromises).then(() => {
-        refetchSections();
+        this.setState({ refetching: true });
+        refetchSections().then(() => this.setState({ refetching: false }));
         displayAlert('success', I18n.t('administration.sections.successSave'));
       });
     }
@@ -126,7 +166,8 @@ class DiscussionAdmin extends React.Component<void, Props, void> {
       };
       updateLegalNoticeAndTerms(payload)
         .then(() => {
-          refetchLegalNoticeAndTerms();
+          this.setState({ refetching: true });
+          refetchLegalNoticeAndTerms().then(() => this.setState({ refetching: false }));
           displayAlert('success', I18n.t('administration.legalNoticeAndTerms.successSave'));
         })
         .catch((error) => {
@@ -136,8 +177,8 @@ class DiscussionAdmin extends React.Component<void, Props, void> {
   };
 
   render() {
-    const { languagePreferenceHasChanged, legalNoticeAndTerms, section, sectionsHaveChanged } = this.props;
-    const saveDisabled = !languagePreferenceHasChanged && !legalNoticeAndTerms.get('_hasChanged') && !sectionsHaveChanged;
+    const { section } = this.props;
+    const saveDisabled = !this.dataHaveChanged();
     return (
       <div className="discussion-admin">
         <SaveButton disabled={saveDisabled} saveAction={this.saveAction} />
@@ -149,7 +190,7 @@ class DiscussionAdmin extends React.Component<void, Props, void> {
   }
 }
 
-const mapStateToProps: MapStateToProps<State, *, *> = ({
+const mapStateToProps: MapStateToProps<ReduxState, *, *> = ({
   admin: { discussionLanguagePreferences, discussionLanguagePreferencesHasChanged, editLocale, legalNoticeAndTerms, sections },
   i18n
 }) => {
