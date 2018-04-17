@@ -237,7 +237,7 @@ def global_vote_results_csv(request):
     template_specs = [(spec.title.best_lang(user_prefs).value if spec.title else str(spec.id), spec)
              for spec in widget.specification_templates]
     template_specs.sort()
-    coltitles = ["", "Nombre de participants"]
+    coltitles = ["Proposition", "Nombre de participants"]
 
     # number of participants for a proposal (distinct voter_id from all specs related to the proposal)
     num_participants_by_idea_id = {}
