@@ -133,7 +133,8 @@ def generate_ini_files(config, config_fname):
     webpack_port = 8080
     if config.has_option(SECTION, 'webpack_port'):
         webpack_port = config.getint(SECTION, 'webpack_port')
-    webpack_url = "http://%s:%d" % (public_hostname, webpack_port)
+    webpack_host = config.get(SECTION, 'webpack_host', public_hostname)
+    webpack_url = "http://%s:%d" % (webpack_host, webpack_port)
     vars = {
         'IMAP_CELERY_BROKER': imap_celery_broker,
         'NOTIF_DISPATCH_CELERY_BROKER': notif_dispatch_celery_broker,
