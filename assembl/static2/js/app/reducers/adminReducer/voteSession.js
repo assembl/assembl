@@ -622,11 +622,6 @@ export const gaugeChoicesById = (state: Map<string, Map> = Map(), action: ReduxA
       });
 
       return newState;
-      //   .filter(c => !state.has(c.get('id')))
-      //   .map(id => List(id, defaultTextGaugeChoice.set('id', id)))
-
-      // console.log(choicesToCreate, choicesToCreate.toJS());
-      // return state.merge(Map(choicesToCreate));
     }
 
     return state;
