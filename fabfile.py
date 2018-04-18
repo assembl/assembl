@@ -90,7 +90,7 @@ def sanitize_env():
     for name in (
             "uses_memcache", "uses_uwsgi", "uses_apache",
             "uses_global_supervisor", "uses_apache",
-            "uses_ngnix", "mac", "is_production_env",
+            "uses_nginx", "mac", "is_production_env",
             "build_docs", "can_test"):
         # Note that we use as_bool() instead of bool(),
         # so that a variable valued "False" in the .ini
@@ -897,7 +897,7 @@ def webservers_reload():
     """
     Reload the webserver stack.
     """
-    if env.uses_ngnix:
+    if env.uses_nginx:
         # Nginx (sudo is part of command line here because we don't have full
         # sudo access
         print(cyan("Reloading nginx"))
@@ -911,7 +911,7 @@ def webservers_stop():
     """
     Stop all webservers
     """
-    if env.uses_ngnix:
+    if env.uses_nginx:
         # Nginx
         if exists('/etc/init.d/nginx'):
             run('sudo /etc/init.d/nginx stop')
@@ -923,7 +923,7 @@ def webservers_start():
     """
     Start all webservers
     """
-    if env.uses_ngnix:
+    if env.uses_nginx:
         # Nginx
         if exists('/etc/init.d/nginx'):
             run('sudo /etc/init.d/nginx start')

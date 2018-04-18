@@ -65,7 +65,7 @@ _mac = false
 # We now use systemd instead of a global supervisor
 _uses_global_supervisor = false
 _uses_memcache = true
-_uses_ngnix = true
+_uses_nginx = true
 _uses_uwsgi = true
 _gitrepo = https://github.com/assembl/assembl.git
 _gitbranch = master
