@@ -7,7 +7,6 @@ from pyramid.response import Response
 from assembl.auth import (
     P_READ, IF_OWNED, Everyone, CrudPermissions)
 from assembl.auth.util import get_permissions
-from assembl.semantic.virtuoso_mapping import get_virtuoso
 from assembl.models import (
     User, Discussion, TombstonableMixin)
 from assembl.models.user_key_values import *

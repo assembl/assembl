@@ -15,7 +15,6 @@ import sqlalchemy as sa
 import transaction
 
 from assembl.lib import config
-from assembl.lib.sqla import using_virtuoso
 
 
 foreign_keys = [
@@ -118,9 +117,6 @@ def index_name(schema, table, column):
 
 
 def upgrade(pyramid_env):
-    if using_virtuoso():
-        # Virtuoso implicitly indexes foreign keys
-        return
     schema = config.get("db_schema")
     with context.begin_transaction():
         for index in foreign_keys:
@@ -132,9 +128,6 @@ def upgrade(pyramid_env):
 
 
 def downgrade(pyramid_env):
-    if using_virtuoso():
-        # Virtuoso implicitly indexes foreign keys
-        return
     schema = config.get("db_schema")
     with context.begin_transaction():
         for index in foreign_keys:

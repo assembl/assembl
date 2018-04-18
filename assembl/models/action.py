@@ -15,15 +15,11 @@ from sqlalchemy import (
     event,
 )
 from sqlalchemy.orm import relationship, backref, column_property
-from sqla_rdfbridge.mapping import IriClass
 from abc import abstractproperty
 
 from . import DiscussionBoundBase, DiscussionBoundTombstone, TombstonableMixin, Post
 from ..lib.sqla import DuplicateHandling
-from ..semantic.namespaces import (
-    ASSEMBL, QUADNAMES, VERSION, RDF, VirtRDF)
-from ..semantic.virtuoso_mapping import QuadMapPatternS
-from .auth import User, AgentProfile
+from .auth import User
 from .generic import Content
 from .discussion import Discussion
 from .idea import Idea
@@ -42,7 +38,7 @@ class Action(TombstonableMixin, DiscussionBoundBase):
 
     id = Column(Integer, primary_key=True)
     type = Column(String(255), nullable=False)
-    creation_date = Column(DateTime, nullable=False, default=datetime.utcnow, info={'rdf': QuadMapPatternS(None, VERSION.when)})
+    creation_date = Column(DateTime, nullable=False, default=datetime.utcnow)
 
     __mapper_args__ = {
         'polymorphic_identity': 'action',
@@ -53,9 +49,7 @@ class Action(TombstonableMixin, DiscussionBoundBase):
     actor_id = Column(
         Integer,
         ForeignKey('user.id', ondelete='CASCADE', onupdate='CASCADE'),
-        nullable=False, index=True,
-        info={'rdf': QuadMapPatternS(
-            None, VERSION.who, AgentProfile.agent_as_account_iri.apply(None))}
+        nullable=False, index=True
     )
 
     actor = relationship(
@@ -64,13 +58,6 @@ class Action(TombstonableMixin, DiscussionBoundBase):
     )
 
     verb = 'did something to'
-
-    # Because abstract, do in concrete subclasses
-    # @classmethod
-    # def special_quad_patterns(cls, alias_maker, discussion_id):
-    #     return [QuadMapPatternS(None,
-    #         RDF.type, IriClass(VirtRDF.QNAME_ID).apply(Action.type),
-    #         name=QUADNAMES.class_Action_class)]
 
     def __repr__(self):
         return "%s %s %s %s>" % (
@@ -104,8 +91,7 @@ class ActionOnPost(Action):
     post_id = Column(
         Integer,
         ForeignKey('content.id', ondelete="CASCADE", onupdate='CASCADE'),
-        nullable=False, index=True,
-        info={'rdf': QuadMapPatternS(None, VERSION.what)}
+        nullable=False, index=True
     )
 
     post_ts = relationship(
@@ -128,10 +114,6 @@ class ActionOnPost(Action):
         return post.get_discussion_id()
 
     @classmethod
-    def special_quad_patterns(cls, alias_maker, discussion_id):
-        return [QuadMapPatternS(None, RDF.type, IriClass(VirtRDF.QNAME_ID_SUFFIX).apply(Action.type), name=QUADNAMES.class_ActionOnPost_class)]
-
-    @classmethod
     def get_discussion_conditions(cls, discussion_id, alias_maker=None):
         from .generic import Content
         return ((cls.id == Action.id),
@@ -139,8 +121,7 @@ class ActionOnPost(Action):
                 (Content.discussion_id == discussion_id))
 
     discussion = relationship(
-        Discussion, viewonly=True, secondary=Content.__table__, uselist=False,
-        info={'rdf': QuadMapPatternS(None, ASSEMBL.in_conversation)})
+        Discussion, viewonly=True, secondary=Content.__table__, uselist=False)
 
 
 class UniqueActionOnPost(ActionOnPost):
@@ -332,8 +313,7 @@ class ActionOnIdea(Action):
     idea_id = Column(
         Integer,
         ForeignKey(Idea.id, ondelete="CASCADE", onupdate='CASCADE'),
-        nullable=False, index=True,
-        info={'rdf': QuadMapPatternS(None, VERSION.what)}
+        nullable=False, index=True
     )
 
     idea_ts = relationship(
@@ -351,11 +331,6 @@ class ActionOnIdea(Action):
 
     object_type = 'idea'
 
-    # This should not be necessary, but is.
-    @classmethod
-    def special_quad_patterns(cls, alias_maker, discussion_id):
-        return [QuadMapPatternS(None, RDF.type, IriClass(VirtRDF.QNAME_ID_SUFFIX).apply(Action.type), name=QUADNAMES.class_ActionOnIdea_class)]
-
     def get_discussion_id(self):
         idea = self.idea or Idea.get(self.idea_id)
         return idea.get_discussion_id()
@@ -367,8 +342,7 @@ class ActionOnIdea(Action):
                 (Idea.discussion_id == discussion_id))
 
     discussion = relationship(
-        Discussion, viewonly=True, secondary=Idea.__table__, uselist=False,
-        info={'rdf': QuadMapPatternS(None, ASSEMBL.in_conversation)})
+        Discussion, viewonly=True, secondary=Idea.__table__, uselist=False)
 
 
 class UniqueActionOnIdea(ActionOnIdea):

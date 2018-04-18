@@ -16,11 +16,9 @@ import transaction
 
 
 from assembl.lib import config
-from assembl.lib.sqla import using_virtuoso
 
 
 def upgrade(pyramid_env):
-    if not using_virtuoso():
         with context.begin_transaction():
             op.drop_index(
                 'ix_public_abstract_agent_account_email',
@@ -31,7 +29,6 @@ def upgrade(pyramid_env):
 
 
 def downgrade(pyramid_env):
-    if not using_virtuoso():
         with context.begin_transaction():
             op.drop_index(
                 'ix_public_abstract_agent_account_email_ci',

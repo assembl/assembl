@@ -26,11 +26,9 @@ from sqlalchemy.orm import (
 
 from ..lib.sqla import CrudOperation
 from ..lib.decl_enums import DeclEnum
-from ..semantic.virtuoso_mapping import QuadMapPatternS
 from ..lib.sqla_types import CoerceUnicode
 from .generic import Content, ContentSource
 from .auth import AgentProfile
-from ..semantic.namespaces import SIOC, ASSEMBL, QUADNAMES
 from ..lib import config
 from .langstrings import LangString, LangStringEntry
 from assembl.views.traversal import AbstractCollectionDefinition
@@ -106,8 +104,7 @@ class Post(Content):
     message_id = Column(CoerceUnicode,
                         nullable=False,
                         index=True,
-                        doc="The email-compatible message-id for the post.",
-                        info={'rdf': QuadMapPatternS(None, SIOC.id)})
+                        doc="The email-compatible message-id for the post.")
 
     ancestry = Column(String, default="")
 
@@ -155,22 +152,8 @@ class Post(Content):
         func.idea_content_links_above_post(id),
         deferred=True, expire_on_flush=False)
 
-    @classmethod
-    def special_quad_patterns(cls, alias_maker, discussion_id):
-        # Don't we need a recursive alias for this? It seems not.
-        return [
-            QuadMapPatternS(
-                Post.iri_class().apply(cls.id),
-                SIOC.reply_of,
-                cls.iri_class().apply(cls.parent_id),
-                name=QUADNAMES.post_parent,
-                conditions=(cls.parent_id != None,)),  # noqa: E711
-        ]
-
     creator_id = Column(
-        Integer, ForeignKey('agent_profile.id'), nullable=False, index=True,
-        info={'rdf': QuadMapPatternS(
-            None, SIOC.has_creator, AgentProfile.agent_as_account_iri.apply(None))})
+        Integer, ForeignKey('agent_profile.id'), nullable=False, index=True)
     creator = relationship(AgentProfile, foreign_keys=[creator_id], backref="posts_created")
 
     __mapper_args__ = {
@@ -818,8 +801,7 @@ class ImportedPost(Post):
         doc="The source-specific unique id of the imported post.  A listener keeps the message_id in the post class in sync")
 
     source_id = Column('source_id', Integer, ForeignKey(
-        'post_source.id', ondelete='CASCADE'), nullable=False,
-        info={'rdf': QuadMapPatternS(None, ASSEMBL.has_origin)})
+        'post_source.id', ondelete='CASCADE'), nullable=False)
 
     source = relationship(
         "PostSource",

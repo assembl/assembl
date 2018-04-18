@@ -24,8 +24,6 @@ from ..lib.sqla import DuplicateHandling
 from ..lib.sqla_types import URLString
 from ..lib.hash_fs import get_hashfs
 from ..lib.abc import classproperty
-from ..semantic.virtuoso_mapping import QuadMapPatternS
-from ..semantic.namespaces import DCTERMS
 from . import DiscussionBoundBase
 from .post import Post
 from .idea import Idea
@@ -70,9 +68,7 @@ class Document(DiscussionBoundBase):
     __table_args__ = (UniqueConstraint('discussion_id', 'uri_id'), )
 
     uri_id = Column(URLString)
-    creation_date = Column(DateTime, nullable=False, default=datetime.utcnow,
-                           info={'rdf': QuadMapPatternS(None,
-                                                        DCTERMS.created)})
+    creation_date = Column(DateTime, nullable=False, default=datetime.utcnow)
     discussion_id = Column(Integer, ForeignKey(
         'discussion.id',
         ondelete='CASCADE',
@@ -90,13 +86,11 @@ class Document(DiscussionBoundBase):
     oembed_type = Column(String(1024), server_default="")
     mime_type = Column(String(1024), server_default="")
     # From metadata, not the user
-    title = Column(CoerceUnicode(1024), server_default="",
-                   info={'rdf': QuadMapPatternS(None, DCTERMS.title)})
+    title = Column(CoerceUnicode(1024), server_default="")
 
     # From metadata, not the user
     description = Column(
-        UnicodeText,
-        info={'rdf': QuadMapPatternS(None, DCTERMS.description)})
+        UnicodeText)
 
     # From metadata, not the user
     author_name = Column(
@@ -278,9 +272,7 @@ class Attachment(DiscussionBoundBase):
         Integer, primary_key=True)
 
     type = Column(String(60), nullable=False)
-    creation_date = Column(DateTime, nullable=False, default=datetime.utcnow,
-                           info={'rdf': QuadMapPatternS(None,
-                                                        DCTERMS.created)})
+    creation_date = Column(DateTime, nullable=False, default=datetime.utcnow)
     discussion_id = Column(Integer, ForeignKey(
         'discussion.id',
         ondelete='CASCADE',
@@ -311,11 +303,8 @@ class Attachment(DiscussionBoundBase):
     creator_id = Column(Integer, ForeignKey('agent_profile.id'),
                         nullable=False)
     creator = relationship(AgentProfile, backref="attachments")
-    title = Column(CoerceUnicode(1024), server_default="",
-                   info={'rdf': QuadMapPatternS(None, DCTERMS.title)})
-    description = Column(
-        UnicodeText,
-        info={'rdf': QuadMapPatternS(None, DCTERMS.description)})
+    title = Column(CoerceUnicode(1024), server_default="")
+    description = Column(UnicodeText)
 
     attachmentPurpose = Column(
         CoerceUnicode(256), nullable=False, index=True)

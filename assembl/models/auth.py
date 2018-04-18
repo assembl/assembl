@@ -31,11 +31,8 @@ from sqlalchemy.orm import (
     relationship, backref, deferred)
 from sqlalchemy.orm.attributes import NO_VALUE
 from sqlalchemy.sql.functions import count
-from rdflib import URIRef
-from sqla_rdfbridge.mapping import PatternIriClass
 
 from ..lib import config
-from ..lib.utils import get_global_base_url
 from ..lib.locale import to_posix_string
 from ..lib.sqla import CrudOperation, get_model_watcher, PrivateObjectMixin
 from ..lib.sqla_types import (
@@ -56,11 +53,6 @@ from ..auth import (
     SYSTEM_ROLES
 )
 from .langstrings import Locale
-from ..semantic.namespaces import (
-    SIOC, ASSEMBL, QUADNAMES, FOAF, DCTERMS, RDF)
-from ..semantic.virtuoso_mapping import (
-    QuadMapPatternS, USER_SECTION, PRIVATE_USER_SECTION,
-    AssemblQuadStorageManager)
 
 log = logging.getLogger('assembl')
 
@@ -90,16 +82,10 @@ class AgentProfile(Base):
     Agents have at least one :py:class:`AbstractAgentAccount`.
     """
     __tablename__ = "agent_profile"
-    rdf_class = FOAF.Agent
-    rdf_sections = (USER_SECTION,)
-    # This is very hackish. We need Posts to point to accounts vs users,
-    # but right now they do not know the accounts.
-    agent_as_account_iri = PatternIriClass(
-        QUADNAMES.agent_as_account_iri, get_global_base_url() + '/data/AgentAccount/%d', None, ('id', Integer, False))
 
     id = Column(Integer, primary_key=True)
-    name = Column(CoerceUnicode(1024), info={'rdf': QuadMapPatternS(None, FOAF.name, sections=(PRIVATE_USER_SECTION,))})
-    description = Column(UnicodeText, info={'rdf': QuadMapPatternS(None, DCTERMS.description, sections=(PRIVATE_USER_SECTION,))})
+    name = Column(CoerceUnicode(1024))
+    description = Column(UnicodeText)
     type = Column(String(60))
 
     __mapper_args__ = {
@@ -300,13 +286,6 @@ class AgentProfile(Base):
         d = Discussion.get(discussion_id)
         self.update_agent_status_last_visit(d)
 
-    @classmethod
-    def special_quad_patterns(cls, alias_maker, discussion_id):
-        return [
-            QuadMapPatternS(cls.agent_as_account_iri.apply(cls.id), SIOC.account_of, cls.iri_class().apply(cls.id), name=QUADNAMES.account_of_self),
-            QuadMapPatternS(cls.agent_as_account_iri.apply(cls.id), RDF.type, SIOC.UserAccount, name=QUADNAMES.pseudo_account_type)
-        ]
-
     # True iff the user visits current discussion for the first time
     @property
     def is_first_visit(self):
@@ -429,8 +408,6 @@ class AbstractAgentAccount(Base):
     The main subclasses are :py:class:`EmailAccount` and
     :py:class:`.social_auth.SocialAuthAccount`."""
     __tablename__ = "abstract_agent_account"
-    rdf_class = SIOC.UserAccount
-    rdf_sections = (PRIVATE_USER_SECTION,)
     prefer_newest_info_on_merge = True
 
     id = Column(Integer, primary_key=True)
@@ -440,8 +417,7 @@ class AbstractAgentAccount(Base):
     profile_id = Column(
         Integer,
         ForeignKey('agent_profile.id', ondelete='CASCADE', onupdate='CASCADE'),
-        nullable=False, index=True,
-        info={'rdf': QuadMapPatternS(None, SIOC.account_of, sections=(USER_SECTION,))})
+        nullable=False, index=True)
 
     profile = relationship('AgentProfile', backref=backref(
         'accounts', cascade="all, delete-orphan"))
@@ -461,13 +437,7 @@ class AbstractAgentAccount(Base):
         return CaseInsensitiveWord(self.email)
 
     __table_args__ = (
-        Index("ix_abstract_agent_account_email", email)  # nigh useless
-        if Base.using_virtuoso else
         Index("ix_public_abstract_agent_account_email_ci", func.lower(email)),)
-
-    # info={'rdf': QuadMapPatternS(None, SIOC.email)}
-    # Note: we could also have a FOAF.mbox, but we'd have to make
-    # them into URLs with mailto:
 
     full_name = Column(CoerceUnicode(512))
 
@@ -589,12 +559,10 @@ class IdentityProvider(Base):
     This is a service that provides online identities, expressed as
     :py:class:`.social_auth.SocialAuthAccount`."""
     __tablename__ = "identity_provider"
-    rdf_class = SIOC.Usergroup
-    rdf_sections = (PRIVATE_USER_SECTION,)
 
     id = Column(Integer, primary_key=True)
     provider_type = Column(String(32), nullable=False)
-    name = Column(String(60), nullable=False, info={'rdf': QuadMapPatternS(None, SIOC.name)})
+    name = Column(String(60), nullable=False)
     # TODO: More complicated model, where trust also depends on realm.
     trust_emails = Column(Boolean, default=True)
 
@@ -697,7 +665,6 @@ class User(AgentProfile):
     )
 
     preferred_email = Column(EmailUnicode(100))
-    #    info={'rdf': QuadMapPatternS(None, FOAF.mbox)})
     verified = Column(Boolean(), default=False)
     password = deferred(Column(Binary(115)))
     timezone = Column(Time(True))
@@ -705,7 +672,7 @@ class User(AgentProfile):
     last_assembl_login = Column(DateTime)
     login_failures = Column(Integer, default=0)
     creation_date = Column(
-        DateTime, nullable=False, default=datetime.utcnow, info={'rdf': QuadMapPatternS(None, DCTERMS.created, sections=(PRIVATE_USER_SECTION,))})
+        DateTime, nullable=False, default=datetime.utcnow)
     social_accounts = relationship('SocialAuthAccount')
 
     def __init__(self, **kwargs):
@@ -1199,12 +1166,6 @@ class Username(Base):
     def get_id_as_str(self):
         return str(self.user_id)
 
-    # @classmethod
-    # def special_quad_patterns(cls, alias_maker, discussion_id):
-    #     return [QuadMapPatternS(User.iri_class().apply(Username.user_id),
-    #         SIOC.name, Username.username,
-    #         name=QUADNAMES.class_User_username, sections=(PRIVATE_USER_SECTION,))]
-
 
 class OldPassword(Base):
     """Table to keep the old passwords of the user.
@@ -1244,15 +1205,11 @@ class Role(Base):
 class UserRole(Base, PrivateObjectMixin):
     """roles that a user has globally (eg admin.)"""
     __tablename__ = 'user_role'
-    rdf_sections = (USER_SECTION,)
-    rdf_class = SIOC.Role
 
     id = Column(Integer, primary_key=True)
     user_id = Column(
         Integer, ForeignKey('user.id', ondelete='CASCADE', onupdate='CASCADE'),
-        nullable=False, index=True, info={'rdf': QuadMapPatternS(
-            None, SIOC.function_of,
-            AgentProfile.agent_as_account_iri.apply(None))})
+        nullable=False, index=True)
     user = relationship(
         User, backref=backref("roles", cascade="all, delete-orphan"))
     role_id = Column(
@@ -1265,18 +1222,6 @@ class UserRole(Base, PrivateObjectMixin):
 
     def get_role_name(self):
         return self.role.name
-
-    @classmethod
-    def special_quad_patterns(cls, alias_maker, discussion_id):
-        role_alias = alias_maker.alias_from_relns(cls.role)
-        return [
-            QuadMapPatternS(cls.iri_class().apply(cls.id), SIOC.name, role_alias.name, name=QUADNAMES.class_UserRole_rolename, sections=(USER_SECTION,)),
-            QuadMapPatternS(AgentProfile.agent_as_account_iri.apply(cls.user_id), SIOC.has_function,
-                            cls.iri_class().apply(cls.id), name=QUADNAMES.class_UserRole_global, sections=(USER_SECTION,)),
-            # Note: The IRIs need to distinguish UserRole from LocalUserRole
-            QuadMapPatternS(cls.iri_class().apply(cls.id), SIOC.has_scope, URIRef(AssemblQuadStorageManager.local_uri()),
-                            name=QUADNAMES.class_UserRole_globalscope, sections=(USER_SECTION,)),
-        ]
 
 
 @event.listens_for(UserRole, 'after_insert', propagate=True)
@@ -1292,21 +1237,17 @@ def send_user_to_socket_for_user_role(mapper, connection, target):
 class LocalUserRole(DiscussionBoundBase, PrivateObjectMixin):
     """The role that a user has in the context of a discussion"""
     __tablename__ = 'local_user_role'
-    rdf_sections = (USER_SECTION,)
-    rdf_class = SIOC.Role
 
     id = Column(Integer, primary_key=True)
     user_id = Column(
         Integer, ForeignKey('user.id', ondelete='CASCADE', onupdate='CASCADE'),
-        nullable=False, index=True, info={'rdf': QuadMapPatternS(None, SIOC.function_of, AgentProfile.agent_as_account_iri.apply(None))})
+        nullable=False, index=True)
     user = relationship(User, backref=backref("local_roles", cascade="all, delete-orphan"))
     discussion_id = Column(Integer, ForeignKey(
-        'discussion.id', ondelete='CASCADE'), nullable=False, index=True,
-        info={'rdf': QuadMapPatternS(None, SIOC.has_scope)})
+        'discussion.id', ondelete='CASCADE'), nullable=False, index=True)
     discussion = relationship(
         'Discussion', backref=backref(
-            "local_user_roles", cascade="all, delete-orphan"),
-        info={'rdf': QuadMapPatternS(None, ASSEMBL.in_conversation)})
+            "local_user_roles", cascade="all, delete-orphan"))
     role_id = Column(Integer, ForeignKey(
         'role.id', ondelete='CASCADE', onupdate='CASCADE'),
         index=True, nullable=False)
@@ -1389,23 +1330,6 @@ class LocalUserRole(DiscussionBoundBase, PrivateObjectMixin):
         cls = alias or cls
         return (cls.requested == False,)  # noqa: E711
 
-    @classmethod
-    def special_quad_patterns(cls, alias_maker, discussion_id):
-        role_alias = alias_maker.alias_from_relns(cls.role)
-        return [
-            QuadMapPatternS(
-                AgentProfile.agent_as_account_iri.apply(cls.user_id),
-                SIOC.has_function, cls.iri_class().apply(cls.id),
-                name=QUADNAMES.class_LocalUserRole_global,
-                conditions=(cls.requested == False,),  # noqa: E711
-                sections=(USER_SECTION,)),
-            QuadMapPatternS(
-                cls.iri_class().apply(cls.id),
-                SIOC.name, role_alias.name,
-                conditions=(cls.requested == False,),  # noqa: E711
-                sections=(USER_SECTION,),
-                name=QUADNAMES.class_LocalUserRole_rolename)]
-
     crud_permissions = CrudPermissions(
         P_SELF_REGISTER, P_READ, P_ADMIN_DISC, P_ADMIN_DISC,
         P_SELF_REGISTER, P_SELF_REGISTER, P_READ)
@@ -1457,8 +1381,7 @@ class DiscussionPermission(DiscussionBoundBase):
         nullable=False, index=True)
     discussion = relationship(
         'Discussion', backref=backref(
-            "acls", cascade="all, delete-orphan"),
-        info={'rdf': QuadMapPatternS(None, ASSEMBL.in_conversation)})
+            "acls", cascade="all, delete-orphan"))
     role_id = Column(Integer, ForeignKey(
         'role.id', ondelete='CASCADE', onupdate='CASCADE'),
         nullable=False, index=True)
@@ -1564,8 +1487,7 @@ class UserTemplate(DiscussionBoundBase, User):
         nullable=False, index=True)
     discussion = relationship(
         "Discussion", backref=backref(
-            "user_templates", cascade="all, delete-orphan"),
-        info={'rdf': QuadMapPatternS(None, ASSEMBL.in_conversation)})
+            "user_templates", cascade="all, delete-orphan"))
 
     role_id = Column(Integer, ForeignKey(
         Role.id, ondelete='CASCADE', onupdate='CASCADE'),
@@ -1677,23 +1599,21 @@ Index("user_template", "discussion_id", "role_id")
 class PartnerOrganization(DiscussionBoundBase):
     """A corporate entity that we want to display in the discussion's page"""
     __tablename__ = "partner_organization"
-    id = Column(Integer, primary_key=True, info={'rdf': QuadMapPatternS(None, ASSEMBL.db_id)})
+    id = Column(Integer, primary_key=True)
 
     discussion_id = Column(Integer, ForeignKey(
-        "discussion.id", ondelete='CASCADE'), nullable=False, index=True,
-        info={'rdf': QuadMapPatternS(None, DCTERMS.contributor)})
+        "discussion.id", ondelete='CASCADE'), nullable=False, index=True)
     discussion = relationship(
         'Discussion', backref=backref(
-            'partner_organizations', cascade="all, delete-orphan"),
-        info={'rdf': QuadMapPatternS(None, ASSEMBL.in_conversation)})
+            'partner_organizations', cascade="all, delete-orphan"))
 
-    name = Column(CoerceUnicode(256), info={'rdf': QuadMapPatternS(None, FOAF.name)})
+    name = Column(CoerceUnicode(256))
 
-    description = Column(UnicodeText, info={'rdf': QuadMapPatternS(None, DCTERMS.description)})
+    description = Column(UnicodeText)
 
-    logo = Column(URLString(), info={'rdf': QuadMapPatternS(None, FOAF.logo)})
+    logo = Column(URLString())
 
-    homepage = Column(URLString(), info={'rdf': QuadMapPatternS(None, FOAF.homepage)})
+    homepage = Column(URLString())
 
     is_initiator = Column(Boolean)
 

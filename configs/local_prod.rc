@@ -1,0 +1,3 @@
+# Allows to work on production settings in the abstract. Do not use except in fab tasks.
+_extends = base_env.rc
+public_hostname = localhost

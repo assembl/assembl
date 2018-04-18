@@ -17,13 +17,9 @@ from sqlalchemy import (
     ForeignKey,
     event,
 )
-from rdflib import URIRef
-from sqla_rdfbridge.mapping import PatternIriClass
 
 from . import DiscussionBoundBase
-from ..semantic.virtuoso_mapping import QuadMapPatternS
 from ..lib.sqla import (CrudOperation, get_model_watcher)
-from ..lib.utils import get_global_base_url
 from ..lib.clean_input import sanitize_html
 from .discussion import Discussion
 from .idea import Idea
@@ -34,8 +30,6 @@ from ..auth import (
     CrudPermissions, P_READ, P_EDIT_IDEA,
     P_EDIT_EXTRACT, P_ADD_IDEA, P_ADD_EXTRACT,
     P_EDIT_MY_EXTRACT)
-from ..semantic.namespaces import (
-    CATALYST, ASSEMBL, DCTERMS, OA, QUADNAMES, RDF, SIOC)
 
 
 class IdeaContentLink(DiscussionBoundBase):
@@ -46,8 +40,7 @@ class IdeaContentLink(DiscussionBoundBase):
     __tablename__ = 'idea_content_link'
     # TODO: How to express the implied link as RDF? Remember not reified, unless extract.
 
-    id = Column(Integer, primary_key=True,
-                info={'rdf': QuadMapPatternS(None, ASSEMBL.db_id)})
+    id = Column(Integer, primary_key=True)
     type = Column(String(60))
 
     # This is nullable, because in the case of extracts, the idea can be
@@ -65,13 +58,12 @@ class IdeaContentLink(DiscussionBoundBase):
     order = Column(Float, nullable=False, default=0.0)
 
     creation_date = Column(
-        DateTime, nullable=False, default=datetime.utcnow, info={'rdf': QuadMapPatternS(None, DCTERMS.created)})
+        DateTime, nullable=False, default=datetime.utcnow)
 
     creator_id = Column(
         Integer,
         ForeignKey('agent_profile.id'),
-        nullable=False,
-        info={'rdf': QuadMapPatternS(None, SIOC.has_creator)}
+        nullable=False
     )
 
     creator = relationship(
@@ -94,8 +86,7 @@ class IdeaContentLink(DiscussionBoundBase):
                 (Content.discussion_id == discussion_id))
 
     discussion = relationship(
-        Discussion, viewonly=True, uselist=False, secondary=Content.__table__,
-        info={'rdf': QuadMapPatternS(None, ASSEMBL.in_conversation)})
+        Discussion, viewonly=True, uselist=False, secondary=Content.__table__)
 
     @classmethod
     def base_conditions(cls, alias=None, alias_maker=None):
@@ -139,15 +130,6 @@ class IdeaContentPositiveLink(IdeaContentLink):
         ondelete='CASCADE', onupdate='CASCADE'
     ), primary_key=True)
 
-    @classmethod
-    def special_quad_patterns(cls, alias_maker, discussion_id):
-        return [QuadMapPatternS(
-            Content.iri_class().apply(cls.content_id),
-            ASSEMBL.postLinkedToIdea,
-            Idea.iri_class().apply(cls.idea_id),
-            name=QUADNAMES.assembl_postLinkedToIdea,
-            conditions=(cls.idea_id != None,))]  # noqa: E711
-
     __mapper_args__ = {
         'polymorphic_identity': 'assembl:postLinkedToIdea_abstract',
     }
@@ -186,15 +168,6 @@ class IdeaRelatedPostLink(IdeaContentPositiveLink):
         'idea_content_positive_link.id',
         ondelete='CASCADE', onupdate='CASCADE'
     ), primary_key=True)
-
-    @classmethod
-    def special_quad_patterns(cls, alias_maker, discussion_id):
-        return [QuadMapPatternS(
-            Content.iri_class().apply(cls.content_id),
-            ASSEMBL.postRelatedToIdea,
-            Idea.iri_class().apply(cls.idea_id),
-            name=QUADNAMES.assembl_postRelatedToIdea,
-            conditions=(cls.idea_id != None,))]  # noqa: E711
 
     __mapper_args__ = {
         'polymorphic_identity': 'assembl:postLinkedToIdea',
@@ -320,40 +293,23 @@ class Extract(IdeaContentPositiveLink):
     An extracted part of a Content. A quotation to be referenced by an `Idea`.
     """
     __tablename__ = 'extract'
-    rdf_class = CATALYST.Excerpt
-    # Extract ID represents both the oa:Annotation and the oa:SpecificResource
-    # TODO: This iri is not yet dereferencable.
-    specific_resource_iri = PatternIriClass(
-        QUADNAMES.oa_specific_resource_iri,
-        get_global_base_url() + '/data/SpecificResource/%d', None,
-        ('id', Integer, False))
 
     id = Column(
         Integer,
         ForeignKey('idea_content_positive_link.id', ondelete='CASCADE', onupdate='CASCADE'),
-        primary_key=True,
-        info={'rdf': QuadMapPatternS(None, ASSEMBL.db_id)})
-
-    graph_iri_class = PatternIriClass(
-        QUADNAMES.ExcerptGraph_iri,
-        get_global_base_url() + '/data/ExcerptGraph/%d',
-        None,
-        ('id', Integer, False))
+        primary_key=True)
 
     # TODO: body was misused to contain the extract fragment content,
     # which should belong in the TextFragmentIdentifier,
     # whereas it was meant to be a comment on the extract
     # if used from the Web annotator. It seems like a fait accompli now.
     body = Column(UnicodeText, nullable=False)
-    # info={'rdf': QuadMapPatternS(None, OA.hasBody)})
 
     discussion_id = Column(Integer, ForeignKey(
         'discussion.id', ondelete="CASCADE", onupdate="CASCADE"),
-        nullable=False, index=True,
-        info={'rdf': QuadMapPatternS(None, CATALYST.relevantToConversation)})
+        nullable=False, index=True)
     discussion = relationship(
-        Discussion, backref=backref('extracts', cascade="all, delete-orphan"),
-        info={'rdf': QuadMapPatternS(None, ASSEMBL.in_conversation)})
+        Discussion, backref=backref('extracts', cascade="all, delete-orphan"))
 
     important = Column('important', Boolean, server_default='0')
 
@@ -377,61 +333,6 @@ class Extract(IdeaContentPositiveLink):
     def extract_action_name(self):
         if self.extract_action is not None:
             return self.extract_action.name
-
-    def extract_graph_name(self):
-        from pyramid.threadlocal import get_current_registry
-        reg = get_current_registry()
-        host = reg.settings['public_hostname']
-        return URIRef('http://%s/data/ExcerptGraph/%d' % (host, self.id))
-
-    def extract_graph_iri(self):
-        return getattr(QUADNAMES, 'extract_%d_iri' % self.id)
-
-    @classmethod
-    def special_quad_patterns(cls, alias_maker, discussion_id):
-        return [
-            QuadMapPatternS(
-                None, OA.hasBody,
-                cls.graph_iri_class.apply(cls.id),
-                name=QUADNAMES.oa_hasBody,
-                conditions=((cls.idea_id != None),  # noqa: E711
-                            (Idea.tombstone_date == None))),
-            QuadMapPatternS(
-                # Content.iri_class().apply(cls.content_id),
-                cls.specific_resource_iri.apply(cls.id),
-                # It would be better to use CATALYST.expressesIdea,
-                # but Virtuoso hates the redundancy.
-                ASSEMBL.resourceExpressesIdea,
-                Idea.iri_class().apply(cls.idea_id),
-                name=QUADNAMES.assembl_postExtractRelatedToIdea,
-                conditions=((cls.idea_id != None),
-                            (Idea.tombstone_date == None)
-                   # and it's a post extract... treat webpages separately.
-                )),
-            QuadMapPatternS(
-                None, OA.hasTarget, cls.specific_resource_iri.apply(cls.id),
-                name=QUADNAMES.oa_hasTarget),
-            QuadMapPatternS(
-                cls.specific_resource_iri.apply(cls.id),
-                RDF.type, OA.SpecificResource,
-                name=QUADNAMES.oa_SpecificResource_type),
-            QuadMapPatternS(
-                cls.specific_resource_iri.apply(cls.id),
-                ASSEMBL.in_conversation,
-                Discussion.iri_class().apply(cls.discussion_id),
-                name=QUADNAMES.oa_SpecificResource_in_conversation),
-            QuadMapPatternS(
-                cls.specific_resource_iri.apply(cls.id), OA.hasSource,
-                Content.iri_class().apply(cls.content_id),
-                name=QUADNAMES.oa_hasSource),
-            # TODO: Paths
-            # QuadMapPatternS(
-            #     AgentProfile.iri_class().apply((cls.content_id, Post.creator_id)),
-            #     DCTERMS.contributor,
-            #     Idea.iri_class().apply(cls.idea_id),
-            #     name=QUADNAMES.assembl_idea_contributor,
-            #     conditions=(cls.idea_id != None,)),
-            ]
 
     annotation_text = Column(UnicodeText)
 
@@ -580,10 +481,8 @@ class IdeaThreadContextBreakLink(IdeaContentNegativeLink):
 
 class TextFragmentIdentifier(DiscussionBoundBase):
     __tablename__ = 'text_fragment_identifier'
-    rdf_class = OA.FragmentSelector
 
-    id = Column(Integer, primary_key=True,
-                info={'rdf': QuadMapPatternS(None, ASSEMBL.db_id)})
+    id = Column(Integer, primary_key=True)
     extract_id = Column(Integer, ForeignKey(
         Extract.id, ondelete="CASCADE"), nullable=False, index=True)
     xpath_start = Column(String)
@@ -592,22 +491,6 @@ class TextFragmentIdentifier(DiscussionBoundBase):
     offset_end = Column(Integer)
     extract = relationship(Extract, backref=backref(
         'text_fragment_identifiers', cascade="all, delete-orphan"))
-
-    @classmethod
-    def special_quad_patterns(cls, alias_maker, discussion_id):
-        return [
-            QuadMapPatternS(
-                Extract.specific_resource_iri.apply(cls.extract_id),
-                OA.hasSelector,
-                cls.iri_class().apply(cls.id),
-                name=QUADNAMES.oa_hasSelector,
-                conditions=(cls.extract_id != None,)),  # noqa: E711
-            QuadMapPatternS(
-                None, DCTERMS.conformsTo,
-                URIRef("http://tools.ietf.org/rfc/rfc3023")),  # XPointer
-            # TODO: add rdf:value for the XPointer. May have to construct within Virtuoso.
-            # Optional: Add a OA.exact with the Extract.body. (WHY is the body in the extract?)
-            ]
 
     xpath_re = re.compile(
         r'xpointer\(start-point\(string-range\(([^,]+),([^,]+),([^,]+)\)\)'
@@ -654,8 +537,7 @@ class TextFragmentIdentifier(DiscussionBoundBase):
                 (Extract.discussion_id == discussion_id))
 
     discussion = relationship(
-        Discussion, viewonly=True, uselist=False, secondary=Extract.__table__,
-        info={'rdf': QuadMapPatternS(None, ASSEMBL.in_conversation)})
+        Discussion, viewonly=True, uselist=False, secondary=Extract.__table__)
 
     crud_permissions = CrudPermissions(
         P_ADD_EXTRACT, P_READ, P_EDIT_EXTRACT, P_EDIT_EXTRACT, P_EDIT_MY_EXTRACT, P_EDIT_MY_EXTRACT)

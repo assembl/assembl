@@ -10,7 +10,6 @@ from assembl.lib.sqla import (
     get_session_maker, configure_engine, get_metadata)
 from assembl.lib.zmqlib import configure_zmq
 from assembl.lib.config import set_config
-from assembl.semantic import upgrade_semantic_mapping
 from assembl.indexing.changes import configure_indexing
 from assembl.lib.migration import bootstrap_db_data
 
@@ -74,4 +73,3 @@ if context.is_offline_mode():
     run_migrations_offline()
 else:
     run_migrations_online()
-upgrade_semantic_mapping()

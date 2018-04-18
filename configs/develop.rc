@@ -16,6 +16,11 @@ public_port = 6543
 # public_port = 9991
 # public_port = 8080
 
+_requirement_inputs = requirements.in requirements-chrouter.in requirements-dev.in requirements-doc.in requirements-tests.in
+frozen_requirements = requirements-dev.frozen.txt
+_build_docs = true
+_can_test = true
+
 # If not proxied by nginx or something, public_port in app:main needs to match
 # this value
 # UNIQUE_PER_SERVER
@@ -50,7 +55,7 @@ supervisor__autostart_webpack = true
 supervisor__autostart_uwsgi = false
 supervisor__autostart_celery_imap = false
 supervisor__autostart_source_reader = false
-_uses_ngnix = false
+_uses_nginx = false
 _uses_uwsgi = false
 _is_production_env = false
 _wsginame = dev.wsgi

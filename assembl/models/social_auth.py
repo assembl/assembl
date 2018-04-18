@@ -30,8 +30,6 @@ from ..lib.sqla_types import URLString, JSONType
 from .auth import AbstractAgentAccount, IdentityProvider, AgentProfile, User, Username
 from ..auth.generic_auth_backend import GenericAuth
 from . import Base
-from ..semantic.namespaces import SIOC
-from ..semantic.virtuoso_mapping import QuadMapPatternS
 
 
 log = logging.getLogger('assembl')
@@ -106,14 +104,11 @@ class SocialAuthAccount(
         Integer,
         ForeignKey('identity_provider.id',
                    ondelete='CASCADE', onupdate='CASCADE'),
-        nullable=False,
-        info={'rdf': QuadMapPatternS(None, SIOC.member_of)})
+        nullable=False)
     identity_provider = relationship(IdentityProvider)
     username = Column(Unicode(200))
-    #    info={'rdf': QuadMapPatternS(None, SIOC.name)})
     provider_domain = Column(String(255))
     uid = Column(String(UID_LENGTH), nullable=False)
-    #    info={'rdf': QuadMapPatternS(None, SIOC.id)})
     extra_data = Column(MutableDict.as_mutable(JSONType))
     picture_url = Column(URLString)
     user = relationship(AgentProfile, backref='identity_accounts')
@@ -397,15 +392,6 @@ class SocialAuthAccount(
                 if size <= name_size:
                     break
             return size_name.join(picture_url.split('_normal'))
-
-    # @classmethod
-    # def special_quad_patterns(cls, alias_maker, discussion_id):
-    #     return [QuadMapPatternS(AgentProfile.iri_class().apply(
-    #             SocialAuthAccount.profile_id),
-    #         FOAF.img, SocialAuthAccount.picture_url,
-    #         name=QUADNAMES.foaf_image,
-    #         conditions=(SocialAuthAccount.picture_url != None),
-    #         sections=(PRIVATE_USER_SECTION,))]
 
     def unique_query(self):
         query, _ = super(SocialAuthAccount, self).unique_query()
