@@ -203,6 +203,15 @@ def vote_results_csv(request):
     return Response(body_file=output, content_type='text/csv')
 
 
+def range_float(minimum, maximum, nb_ticks):
+    step = (maximum - minimum) / (nb_ticks - 1)
+    i = minimum
+    yield i
+    while i < maximum:
+        i += step
+        yield i
+
+
 @view_config(context=InstanceContext, request_method='GET',
              ctx_instance_class=VotingWidget,
              name="vote_results_csv", permission=P_DISC_STATS)
@@ -222,22 +231,20 @@ def global_vote_results_csv(request):
         ).join(AbstractVoteSpecification
         ).filter(AbstractVoteSpecification.widget_id==widget.id
         ).distinct().all()
-    idea_ids = [i.id for i in ideas]
     rowtitles = [(idea.safe_title(user_prefs, request.localizer), idea.id) for idea in ideas]
     rowtitles.sort()
     specs = widget.vote_specifications
-    q = widget.db.query(Idea.id).filter(Idea.id.in_(idea_ids))
     # specs and their templates
     specids_by_template_specid = defaultdict(list)
-    specid_by_idea_id_and_template_specid = defaultdict(int)
+    spec_by_idea_id_and_template_specid = {}
     for spec in specs:
         specids_by_template_specid[spec.vote_spec_template_id or spec.id].append(spec.id)
-        specid_by_idea_id_and_template_specid[(spec.criterion_idea_id, (spec.vote_spec_template_id or spec.id))] = spec
+        spec_by_idea_id_and_template_specid[(spec.criterion_idea_id, (spec.vote_spec_template_id or spec.id))] = spec
     # then get the vote specs templates only
     template_specs = [(spec.title.best_lang(user_prefs).value if spec.title else str(spec.id), spec)
              for spec in widget.specification_templates]
     template_specs.sort()
-    coltitles = ["Proposition", "Nombre de participants"]
+    coltitles = ["Proposition", "Nombre de participants sur la proposition"]
 
     # number of participants for a proposal (distinct voter_id from all specs related to the proposal)
     num_participants_by_idea_id = {}
@@ -253,56 +260,92 @@ def global_vote_results_csv(request):
     # either each token count (for token votes) OR
     # sum of vote values, and count of votes otherwise.
     # Ideas are rows (and Idea.id is column 0)
-    for (t, spec) in template_specs:
-        if isinstance(spec, TokenVoteSpecification):
-            for tokencat in spec.token_categories:
+    for title, template_spec in template_specs:
+        if isinstance(template_spec, TokenVoteSpecification):
+            for tokencat in template_spec.token_categories:
                 coltitles.append(tokencat.name.best_lang(user_prefs).value.encode('utf-8'))
-                a = aliased(spec.get_vote_class(), name="votes_%d_%d"%(spec.id, tokencat.id))
-                q = q.outerjoin(
-                    a, (a.idea_id==Idea.id) &
-                       (a.tombstone_date==None) &
-                       (a.vote_spec_id.in_(specids_by_template_specid[spec.id]))
-                       & (a.token_category_id==tokencat.id))
-                q = q.add_columns(func.sum(a.vote_value).label('vsum_%d_%d' % (spec.id, tokencat.id)))
         else:
-            coltitles.append(t.encode('utf-8'))
-            a = aliased(spec.get_vote_class(), name="votes_%d"%spec.id)
-            q = q.outerjoin(a, (a.idea_id==Idea.id) & (a.tombstone_date==None) & (a.vote_spec_id.in_(specids_by_template_specid[spec.id])))
-            q = q.add_columns(func.sum(a.vote_value).label('vsum_%d' % spec.id),
-                              func.count(a.id).label('vcount_%d' % spec.id))
-    q = q.group_by(Idea.id)
-    r = q.all()
-    r = {x[0]: x for x in r}  # x[0] is the idea title
+            coltitles.append(u'{title} - moyenne'.format(title=title).encode('utf-8'))
+            if isinstance(template_spec, NumberGaugeVoteSpecification):
+                for choice_value in range_float(template_spec.minimum, spec.maximum, spec.nb_ticks):
+                    coltitles.append(u'{value} {unit}'.format(value=choice_value, unit=template_spec.unit).encode('utf-8'))
+            else:
+                for choice in template_spec.get_choices():
+                    coltitles.append(choice.label.best_lang(user_prefs).value.encode('utf-8'))
+        coltitles.append('Total votes')
+
     output = StringIO()
     csvw = csv.writer(output)
     csvw.writerow(coltitles)
+    from assembl.graphql.vote_session import get_avg_choice
     for title, idea_id in rowtitles:
         row = [title.encode('utf-8'), num_participants_by_idea_id[idea_id]]
-        sourcerow = r[idea_id]
-        counter = 1
         for t, template_spec in template_specs:
+            spec = spec_by_idea_id_and_template_specid.get((idea_id, template_spec.id), None)
             if isinstance(template_spec, TokenVoteSpecification):
-                for tokencat in template_spec.token_categories:
-                    row.append(sourcerow[counter] or "-")
-                    counter += 1
-            else:  # this is a number or text gauge
-                if sourcerow[counter+1]:  # do not do a division by zero
-                    # calculate average with vsum_specId / vcount_specId
-                    avg = sourcerow[counter]/sourcerow[counter+1]
-                    if isinstance(template_spec, NumberGaugeVoteSpecification):
-                        row.append(avg)
+                for token_category in template_spec.token_categories:
+                    if spec is None:
+                        row.append('-')
                     else:
-                        # for text gauge, we want the label of the closest choice related to the vote spec (not the template)
-                        spec = specid_by_idea_id_and_template_specid[(idea_id, template_spec.id)]
-                        choice = spec.get_closest_choice(avg)
-                        if not choice:
-                            label_avg = avg
-                        else:
-                            label_avg = choice.label.best_lang(user_prefs).value.encode('utf-8')
-                        row.append(label_avg)
+                        query = spec.db.query(
+                            func.sum(getattr(spec.get_vote_class(), "vote_value"))).filter_by(
+                            vote_spec_id=spec.id,
+                            tombstone_date=None,
+                            token_category_id=token_category.id)
+                        # when there is no votes, query.first() equals (None,)
+                        # in this case set num_token to 0
+                        num_token = query.first()[0]
+                        row.append(num_token or "-")
+            else:  # this is a number or text gauge
+                if spec is None:
+                    row.append('-')
+                    if isinstance(template_spec, NumberGaugeVoteSpecification):
+                        for choice_value in range_float(template_spec.minimum, template_spec.maximum, template_spec.nb_ticks):
+                            row.append('-')
+                    else:
+                        for choice in template_spec.get_choices():
+                            row.append('-')
+                elif isinstance(template_spec, NumberGaugeVoteSpecification):
+                    vote_cls = spec.get_vote_class()
+                    voting_avg = spec.db.query(func.avg(getattr(vote_cls, 'vote_value'))).filter_by(
+                        vote_spec_id=spec.id,
+                        tombstone_date=None,
+                        idea_id=spec.criterion_idea_id).first()
+                    # when there is no votes, query.first() equals (None,)
+                    avg = voting_avg[0] or '-'
+                    row.append(avg)
+
+                    q_histogram = spec.db.query(getattr(vote_cls, 'vote_value'), func.count(getattr(vote_cls, 'voter_id'))).filter_by(
+                        vote_spec_id=spec.id,
+                        tombstone_date=None,
+                        idea_id=spec.criterion_idea_id).group_by(getattr(vote_cls, 'vote_value'))
+                    histogram = dict(q_histogram.all())
+                    for choice_value in range_float(template_spec.minimum, template_spec.maximum, template_spec.nb_ticks):
+                        row.append(histogram.get(choice_value, 0))
                 else:
-                    row.append("-")
-                counter += 2
+                    vote_cls = spec.get_vote_class()
+                    avg_choice = get_avg_choice(spec)
+                    if not avg_choice:
+                        label_avg = avg
+                    else:
+                        label_avg = avg_choice.label.best_lang(user_prefs).value.encode('utf-8')
+                    row.append(label_avg)
+
+                    q_histogram = spec.db.query(getattr(vote_cls, 'vote_value'), func.count(getattr(vote_cls, 'voter_id'))).filter_by(
+                        vote_spec_id=spec.id,
+                        tombstone_date=None,
+                        idea_id=spec.criterion_idea_id).group_by(getattr(vote_cls, 'vote_value'))
+                    histogram = dict(q_histogram.all())
+                    for choice in template_spec.get_choices():
+                        row.append(histogram.get(choice.value, 0))
+            if spec is None:
+                row.append('-')
+            else:
+                num_votes = spec.db.query(
+                    getattr(spec.get_vote_class(), "voter_id")).filter_by(
+                    vote_spec_id=spec.id,
+                    tombstone_date=None).count()
+                row.append(num_votes)
         csvw.writerow(row)
     output.seek(0)
     return Response(body_file=output, content_type='text/csv', content_disposition='attachment; filename="vote_results.csv')
