@@ -3,7 +3,7 @@ import { PropTypes } from 'prop-types';
 import { connect } from 'react-redux';
 import { compose, graphql } from 'react-apollo';
 import Loader from '../components/common/loader';
-import Ideas from '../components/debate/common/ideas';
+import Ideas from '../components/debate/tableOfIdeas/ideas';
 import AllIdeasQuery from '../graphql/AllIdeasQuery.graphql';
 
 const DebateThread = ({ identifier, data, params, children }) => {
