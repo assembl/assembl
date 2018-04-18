@@ -78,9 +78,13 @@ const Html = (props) => {
           end: tfi.xpathEnd,
           endOffset: tfi.offsetEnd
         });
-        const normedRange = range.normalize(html);
-        const nodes = jQuery(normedRange.textNodes()).filter((idx, node) => !white.test(node));
-        nodes.wrap(wrapper);
+        try {
+          const normedRange = range.normalize(html);
+          const nodes = jQuery(normedRange.textNodes()).filter((idx, node) => !white.test(node));
+          nodes.wrap(wrapper);
+        } catch (error) {
+          console.error(error); // eslint-disable-line no-console
+        }
       });
     });
     html = html.children;
