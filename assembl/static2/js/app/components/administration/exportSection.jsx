@@ -12,7 +12,8 @@ type Props = {
   withLanguageOptions?: boolean,
   exportLink: string,
   exportLocale?: string,
-  translate?: boolean
+  translate?: boolean,
+  annotation: string
 };
 
 class ExportSection extends React.Component<Object, Props, void> {
@@ -22,7 +23,8 @@ class ExportSection extends React.Component<Object, Props, void> {
     languages: null,
     withLanguageOptions: false,
     exportLocale: null,
-    translate: false
+    translate: false,
+    annotation: 'defaultAnnotation'
   };
 
   static ExportLanguageDropDown = ({ languages, onSelect, activeKey }) => {
@@ -61,11 +63,15 @@ class ExportSection extends React.Component<Object, Props, void> {
       withLanguageOptions,
       exportLink,
       translate,
-      exportLocale
+      exportLocale,
+      annotation
     } = this.props;
     return (
       <div className="admin-box survey-admin-export-section">
-        <SectionTitle title={I18n.t('administration.survey.2')} annotation={I18n.t('administration.surveyExport.annotation')} />
+        <SectionTitle
+          title={I18n.t('administration.export.sectionTitle')}
+          annotation={I18n.t(`administration.export.${annotation}`)}
+        />
         <div className="admin-content">
           {withLanguageOptions && (
             <FormGroup>
@@ -75,7 +81,7 @@ class ExportSection extends React.Component<Object, Props, void> {
                   handleTranslationChange(false);
                 }}
               >
-                <Translate value="administration.surveyExport.noExportLanguage" />
+                <Translate value="administration.export.noExportLanguage" />
               </Radio>
               <Radio
                 checked={translate}
@@ -83,7 +89,7 @@ class ExportSection extends React.Component<Object, Props, void> {
                   handleTranslationChange(true);
                 }}
               >
-                <Translate value="administration.surveyExport.translateTheMessagesIn" />
+                <Translate value="administration.export.translateTheMessagesIn" />
                 {translate && (
                   <ExportSection.ExportLanguageDropDown
                     languages={languages}
@@ -97,7 +103,7 @@ class ExportSection extends React.Component<Object, Props, void> {
 
           <br />
           <Link className="button-link button-dark margin-l" href={exportLink}>
-            <Translate value="administration.surveyExport.link" />
+            <Translate value="administration.export.link" />
           </Link>
         </div>
       </div>

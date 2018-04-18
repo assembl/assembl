@@ -5,8 +5,8 @@ exports[`ExportSection component should render an ExportSection component with l
   className="admin-box survey-admin-export-section"
 >
   <SectionTitle
-    annotation="Annotation"
-    title="2"
+    annotation="Default Annotation"
+    title="Section Title"
   />
   <div
     className="admin-content"
@@ -23,7 +23,7 @@ exports[`ExportSection component should render an ExportSection component with l
         title=""
       >
         <Translate
-          value="administration.surveyExport.noExportLanguage"
+          value="administration.export.noExportLanguage"
         />
       </Radio>
       <Radio
@@ -35,7 +35,7 @@ exports[`ExportSection component should render an ExportSection component with l
         title=""
       >
         <Translate
-          value="administration.surveyExport.translateTheMessagesIn"
+          value="administration.export.translateTheMessagesIn"
         />
       </Radio>
     </FormGroup>
@@ -47,7 +47,7 @@ exports[`ExportSection component should render an ExportSection component with l
       style={Object {}}
     >
       <Translate
-        value="administration.surveyExport.link"
+        value="administration.export.link"
       />
     </Link>
   </div>
@@ -59,8 +59,8 @@ exports[`ExportSection component should render an ExportSection component withou
   className="admin-box survey-admin-export-section"
 >
   <SectionTitle
-    annotation="Annotation"
-    title="2"
+    annotation="Default Annotation"
+    title="Section Title"
   />
   <div
     className="admin-content"
@@ -73,7 +73,7 @@ exports[`ExportSection component should render an ExportSection component withou
       style={Object {}}
     >
       <Translate
-        value="administration.surveyExport.link"
+        value="administration.export.link"
       />
     </Link>
   </div>

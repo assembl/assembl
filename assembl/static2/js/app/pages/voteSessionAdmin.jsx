@@ -501,7 +501,7 @@ class VoteSessionAdmin extends React.Component<void, VoteSessionAdminProps, Vote
         {section === '1' && <PageForm editLocale={editLocale} />}
         {section === '2' && <ModulesSection />}
         {section === '3' && <VoteProposalsSection refetchVoteSession={refetchVoteSession} />}
-        {section === '4' && <ExportSection exportLink={exportLink} />}
+        {section === '4' && <ExportSection exportLink={exportLink} annotation="voteSessionAnnotation" />}
         {!isNaN(currentStep) && <Navbar currentStep={currentStep} totalSteps={4} phaseIdentifier="voteSession" />}
       </div>
     );
