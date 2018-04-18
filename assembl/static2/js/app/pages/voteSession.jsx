@@ -19,6 +19,7 @@ import ProposalsResults from '../components/voteSession/proposalsResults';
 import { getDomElementOffset, isMobile } from '../utils/globalFunctions';
 import { getPhaseId, getIfPhaseCompletedByIdentifier } from '../utils/timeline';
 import { promptForLoginOr, displayAlert, displayModal } from '../utils/utilityManager';
+import { transformLinksInHtml } from '../utils/linkify';
 import withLoadingIndicator from '../components/common/withLoadingIndicator';
 import MessagePage from '../components/common/messagePage';
 
@@ -365,7 +366,10 @@ class DumbVoteSession extends React.Component<void, Props, State> {
                   sm={10}
                   className="no-padding"
                 >
-                  <div dangerouslySetInnerHTML={{ __html: instructionsSectionContent }} className="vote-instructions" />
+                  <div
+                    dangerouslySetInnerHTML={{ __html: transformLinksInHtml(instructionsSectionContent) }}
+                    className="vote-instructions"
+                  />
                   {tokenVoteModule &&
                     tokenVoteModule.tokenCategories && (
                       <div ref={this.setAvailableTokensRef}>
