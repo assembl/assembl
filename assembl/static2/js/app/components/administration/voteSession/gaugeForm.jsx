@@ -35,11 +35,11 @@ type GaugeFormProps = {
   instructions: string,
   canChangeType: boolean,
   nbTicks: number,
-  minimum: number,
-  maximum: number,
-  unit: string,
+  minimum: ?number,
+  maximum: ?number,
+  unit: ?string,
   isNumberGauge: boolean,
-  choices: List<VoteChoice>,
+  choices: ?List<VoteChoice>,
   handleInstructionsChange: Function,
   createChoice: string => void,
   deleteChoice: number => void,
@@ -65,10 +65,12 @@ export const getGaugeModuleInfo = (gaugeModule: Map<string, *>, gaugeChoicesById
       : choices.map((cid) => {
         const gaugeChoice = gaugeChoicesById.get(cid);
         const title = getEntryValueForLocale(gaugeChoice.get('labelEntries'), editLocale);
-        return Map({ id: cid, title: title });
+        const value = gaugeChoice.get('value');
+        return Map({ id: cid, title: title, value: value });
       }),
     minimum: gaugeModule.get('minimum'),
     maximum: gaugeModule.get('maximum'),
+    type: gaugeModule.get('type'),
     unit: gaugeModule.get('unit')
   };
 };
@@ -179,17 +181,20 @@ const DumbGaugeForm = ({
         </Radio>
       </div>
     )}
-    {isNumberGauge && (
-      <NumberGaugeForm
-        id={id}
-        minimum={minimum}
-        maximum={maximum}
-        unit={unit}
-        handleMinChange={e => handleMinChange(e.target.value)}
-        handleMaxChange={e => handleMaxChange(e.target.value)}
-        handleUnitChange={e => handleUnitChange(e.target.value)}
-      />
-    )}
+    {isNumberGauge &&
+      minimum &&
+      maximum &&
+      unit && (
+        <NumberGaugeForm
+          id={id}
+          minimum={minimum}
+          maximum={maximum}
+          unit={unit}
+          handleMinChange={e => handleMinChange(e.target.value)}
+          handleMaxChange={e => handleMaxChange(e.target.value)}
+          handleUnitChange={e => handleUnitChange(e.target.value)}
+        />
+      )}
     {!isNumberGauge && <TextGaugeForm choices={choices} handleGaugeChoiceLabelChange={handleGaugeChoiceLabelChange} />}
     <div className="separator" />
   </div>

@@ -43,7 +43,6 @@ type VoteProposalFormProps = {
   tokenModules: Object,
   gaugeModules: Object,
   proposalModules: Object,
-  refetchVoteSession: Function,
   validationErrors: ValidationErrors
 };
 
@@ -69,7 +68,6 @@ const DumbVoteProposalForm = ({
   cancelCustomization,
   deassociateModuleToProposal,
   reactivateModule,
-  refetchVoteSession,
   validationErrors
 }: VoteProposalFormProps) => {
   if (_toDelete) {
@@ -111,9 +109,7 @@ const DumbVoteProposalForm = ({
   };
 
   const settingsModal = (id) => {
-    const content = (
-      <CustomizeGaugeForm close={closeModal} gaugeModuleId={id} editLocale={editLocale} refetchVoteSession={refetchVoteSession} />
-    );
+    const content = <CustomizeGaugeForm close={closeModal} gaugeModuleId={id} editLocale={editLocale} />;
     displayCustomModal(content, true, 'gauge-settings-modal');
   };
 

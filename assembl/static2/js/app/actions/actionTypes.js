@@ -75,6 +75,7 @@ export const UNDELETE_MODULE: 'UNDELETE_MODULE' = 'UNDELETE_MODULE';
 export const MARK_ALL_DEPENDENCIES_AS_CHANGED: 'MARK_ALL_DEPENDENCIES_AS_CHANGED' = 'MARK_ALL_DEPENDENCIES_AS_CHANGED';
 export const SET_VALIDATION_ERRORS: 'SET_VALIDATION_ERRORS' = 'SET_VALIDATION_ERRORS';
 export const CANCEL_MODULE_CUSTOMIZATION: 'CANCEL_MODULE_CUSTOMIZATION' = 'CANCEL_MODULE_CUSTOMIZATION';
+export const CUSTOMIZE_VOTE_MODULE: 'CUSTOMIZE_VOTE_MODULE' = 'CUSTOMIZE_VOTE_MODULE';
 
 export type UpdateContentLocaleById = {
   type: typeof UPDATE_CONTENT_LOCALE_BY_ID,
@@ -518,6 +519,13 @@ export type CancelModuleCustomization = {
   type: typeof CANCEL_MODULE_CUSTOMIZATION
 };
 
+export type CustomizeVoteModule = {
+  id: string,
+  info: { [string]: any },
+  locale: string,
+  type: typeof CUSTOMIZE_VOTE_MODULE
+};
+
 type BasicAction = {
   type: string
 };
@@ -578,7 +586,8 @@ type VoteSessionActions =
   | UpdateGaugeVoteInstructions
   | UndeleteModule
   | MarkAllDependenciesAsChanged
-  | SetValidationErrors;
+  | SetValidationErrors
+  | CustomizeVoteModule;
 
 export type Action =
   | UpdateContentLocaleById

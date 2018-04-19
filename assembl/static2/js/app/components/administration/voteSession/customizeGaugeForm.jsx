@@ -2,78 +2,61 @@
 import React from 'react';
 import { List, Map } from 'immutable';
 import { connect } from 'react-redux';
-import { compose, graphql } from 'react-apollo';
-import { I18n, Translate } from 'react-redux-i18n';
+import { Button } from 'react-bootstrap';
+import { Translate } from 'react-redux-i18n';
 
 import { DumbGaugeForm, getGaugeModuleInfo, type VoteChoice } from './gaugeForm';
 import { createRandomId } from '../../../utils/globalFunctions';
-import {
-  updateGaugeVoteInstructions,
-  updateGaugeVoteNbTicks,
-  updateGaugeVoteIsNumber,
-  createGaugeVoteChoice,
-  deleteGaugeVoteChoice
-} from '../../../actions/adminActions/voteSession';
-import SaveButton from '../../../components/administration/saveButton';
-import {
-  createVariablesForProposalsMutation,
-  createVariablesForTextGaugeMutation,
-  createVariablesForNumberGaugeMutation,
-  type VoteProposalMap
-} from '../../../pages/voteSessionAdmin';
-import { displayAlert } from '../../../utils/utilityManager';
-import { convertToLangstringEntries } from '../../../utils/i18n';
+import { customizeVoteModule } from '../../../actions/adminActions/voteSession';
 
-import createProposalMutation from '../../../graphql/mutations/createProposal.graphql';
-import createGaugeVoteSpecificationMutation from '../../../graphql/mutations/createGaugeVoteSpecification.graphql';
-import createNumberGaugeVoteSpecificationMutation from '../../../graphql/mutations/createNumberGaugeVoteSpecification.graphql';
-import updateGaugeVoteSpecificationMutation from '../../../graphql/mutations/updateGaugeVoteSpecification.graphql';
-import updateNumberGaugeVoteSpecificationMutation from '../../../graphql/mutations/updateNumberGaugeVoteSpecification.graphql';
-import deleteVoteSpecificationMutation from '../../../graphql/mutations/deleteVoteSpecification.graphql';
+type DefaultProps = {
+  choices: List
+};
 
 type Props = {
-  close: Function,
-  gaugeModuleId: string,
-  editLocale: string,
   choices: List<VoteChoice>,
-  instructions: string,
-  isNumberGauge: boolean,
-  maximum: number,
-  minimum: number,
-  nbTicks: number,
-  unit: string,
-  isCustom: boolean,
-  originalModule: Map<string, any>,
-  proposal: VoteProposalMap,
-  voteSessionId: string,
-  voteSpecTemplateId: string,
+  close: Function,
+  createChoice: Function,
   createProposal: Function,
-  createGaugeVoteSpecification: Function,
-  createNumberGaugeVoteSpecification: Function,
+  customizeModule: Function,
+  editLocale: string,
+  gaugeModuleId: string,
+  instructions: string,
+  isCustom: boolean,
+  isNumberGauge: boolean,
+  maximum: ?number,
+  minimum: ?number,
+  nbTicks: number,
+  type: string,
+  unit: ?string,
   updateGaugeVoteSpecification: Function,
-  updateNumberGaugeVoteSpecification: Function,
-  refetchVoteSession: Function
+  updateInstructions: Function,
+  updateNumberGaugeVoteSpecification: Function
 };
 
 type State = {
   _hasChanged: boolean,
   applyToAllProposals: boolean,
   gaugeParams: {
-    choices: List<VoteChoice>,
+    choices: List<Map<string, string>>,
     instructions: string,
     isNumberGauge: boolean,
-    maximum: number,
-    minimum: number,
+    maximum: ?number,
+    minimum: ?number,
     nbTicks: number,
-    unit: string
+    unit: ?string
   },
   saving: boolean
 };
 
-export class DumbCustomizeGaugeForm extends React.Component<void, Props, State> {
+export class DumbCustomizeGaugeForm extends React.Component<DefaultProps, Props, State> {
   props: Props;
 
   state: State;
+
+  static defaultProps = {
+    choices: List()
+  };
 
   constructor(props: Props) {
     super(props);
@@ -87,93 +70,19 @@ export class DumbCustomizeGaugeForm extends React.Component<void, Props, State> 
         maximum: props.maximum,
         minimum: props.minimum,
         nbTicks: props.nbTicks,
+        type: props.type,
         unit: props.unit
       },
       saving: false
     };
   }
 
-  createOrUpdateModule = (proposalId: string): void => {
+  handleSubmit = () => {
+    const { close, customizeModule } = this.props;
     const { gaugeParams } = this.state;
-    const {
-      createGaugeVoteSpecification,
-      createNumberGaugeVoteSpecification,
-      updateGaugeVoteSpecification,
-      updateNumberGaugeVoteSpecification,
-      editLocale,
-      originalModule,
-      refetchVoteSession,
-      voteSessionId,
-      voteSpecTemplateId
-    } = this.props;
-
-    const gaugeModule = {
-      ...gaugeParams, // don't move this line to avoid to override choices
-      instructionsEntries: convertToLangstringEntries(gaugeParams.instructions, editLocale),
-      isCustom: true,
-      proposalId: proposalId,
-      titleEntries: [],
-      voteSessionId: voteSessionId,
-      voteSpecTemplateId: voteSpecTemplateId
-    };
-
-    let promise;
-    if (gaugeParams.isNumberGauge) {
-      const variables = createVariablesForNumberGaugeMutation(gaugeModule);
-      if (originalModule.get('_isNew')) {
-        promise = createNumberGaugeVoteSpecification({ variables: variables });
-      } else if (this.state._hasChanged) {
-        promise = updateNumberGaugeVoteSpecification({ variables: { ...variables, id: originalModule.get('id') } });
-      }
-    } else {
-      const choices = gaugeParams.choices
-        .map(c => ({
-          id: c.get('id'),
-          labelEntries: convertToLangstringEntries(c.get('title'), editLocale)
-        }))
-        .toArray();
-      gaugeModule.choices = choices;
-
-      const variables = createVariablesForTextGaugeMutation(gaugeModule);
-      if (originalModule.get('_isNew')) {
-        promise = createGaugeVoteSpecification({ variables: variables });
-      } else if (this.state._hasChanged) {
-        promise = updateGaugeVoteSpecification({ variables: { ...variables, id: originalModule.get('id') } });
-      }
-    }
-
-    if (promise) {
-      promise
-        .then(() => {
-          refetchVoteSession();
-          displayAlert('success', I18n.t('administration.voteSessionSuccess'));
-        })
-        .catch(() => {
-          displayAlert('danger', I18n.t('administration.anErrorOccured'));
-        });
-    }
-  };
-
-  handleSave = () => {
-    const { close, createProposal, proposal, voteSessionId } = this.props;
     this.setState({ saving: true });
-    if (proposal.get('_isNew')) {
-      const payload = {
-        variables: createVariablesForProposalsMutation({
-          ...proposal.toJS(),
-          voteSessionId: voteSessionId
-        })
-      };
-
-      createProposal(payload).then((res) => {
-        if (res.data) {
-          this.createOrUpdateModule(res.data.createProposal.proposal.id);
-        }
-      });
-    } else {
-      this.createOrUpdateModule(proposal.get('id'));
-    }
-
+    customizeModule(gaugeParams);
+    this.setState({ saving: false });
     close();
   };
 
@@ -301,11 +210,13 @@ export class DumbCustomizeGaugeForm extends React.Component<void, Props, State> 
           {/* <Checkbox onClick={this.toggleApplyToAllProposals}>
             <Translate value="administration.gaugeModal.applyToAllProposalsCheckboxLabel" />
           </Checkbox> */}
-          <SaveButton
+          <Button
+            className="button-submit button-dark full-size"
             disabled={!this.state._hasChanged || this.state.saving}
-            saveAction={this.handleSave}
-            specificClasses="save-button button-submit button-dark full-size"
-          />
+            onClick={this.handleSubmit}
+          >
+            <Translate value="administration.voteProposals.edit" />
+          </Button>
         </div>
       </div>
     );
@@ -313,48 +224,32 @@ export class DumbCustomizeGaugeForm extends React.Component<void, Props, State> 
 }
 
 const mapStateToProps = (state, { gaugeModuleId, editLocale }) => {
-  const { gaugeChoicesById, modulesById, page, voteProposalsById } = state.admin.voteSession;
+  const { gaugeChoicesById, modulesById } = state.admin.voteSession;
   const pModule = modulesById.get(gaugeModuleId);
   const moduleTemplate = modulesById.get(pModule.get('voteSpecTemplateId'));
+  let moduleInfo = getGaugeModuleInfo(moduleTemplate.merge(pModule), gaugeChoicesById, editLocale);
+  // replace ids for choices that come from template to be sure to recreate them
+  moduleInfo = {
+    ...moduleInfo,
+    choices:
+      moduleInfo.choices &&
+      moduleInfo.choices.map((c) => {
+        if (moduleTemplate.has('choices') && moduleTemplate.get('choices').includes(c.get('id'))) {
+          return c.set('id', createRandomId());
+        }
+
+        return c;
+      })
+  };
+
   return {
-    ...getGaugeModuleInfo(moduleTemplate.merge(pModule), gaugeChoicesById, editLocale),
-    isCustom: pModule.get('isCustom'),
-    proposal: voteProposalsById.get(pModule.get('proposalId')),
-    proposalId: pModule.get('proposalId'),
-    voteSessionId: page.get('id'),
-    voteSpecTemplateId: pModule.get('voteSpecTemplateId'),
-    originalModule: pModule
+    ...moduleInfo,
+    isCustom: pModule.get('isCustom')
   };
 };
 
 const mapDispatchToProps = (dispatch, { gaugeModuleId, editLocale }) => ({
-  handleInstructionsChange: e => dispatch(updateGaugeVoteInstructions(gaugeModuleId, editLocale, e.target.value)),
-  handleNbTicksSelectChange: (value, isNumberGauge, nbTicks) => {
-    if (isNumberGauge) {
-      dispatch(updateGaugeVoteNbTicks(gaugeModuleId, value));
-    } else if (nbTicks < value) {
-      const nbChoiceToCreate = value - nbTicks;
-      for (let i = 0; i < nbChoiceToCreate; i += 1) {
-        const newId = createRandomId();
-        dispatch(createGaugeVoteChoice(gaugeModuleId, newId));
-      }
-    } else {
-      const nbChoiceToDelete = nbTicks - value;
-      for (let i = 0; i < nbChoiceToDelete; i += 1) {
-        dispatch(deleteGaugeVoteChoice(gaugeModuleId, nbTicks - 1 - i));
-      }
-    }
-  },
-  handleNumberGaugeCheck: () => dispatch(updateGaugeVoteIsNumber(gaugeModuleId, true)),
-  handleNumberGaugeUncheck: () => dispatch(updateGaugeVoteIsNumber(gaugeModuleId, false))
+  customizeModule: params => dispatch(customizeVoteModule(gaugeModuleId, editLocale, params))
 });
 
-export default compose(
-  connect(mapStateToProps, mapDispatchToProps),
-  graphql(createGaugeVoteSpecificationMutation, { name: 'createGaugeVoteSpecification' }),
-  graphql(createNumberGaugeVoteSpecificationMutation, { name: 'createNumberGaugeVoteSpecification' }),
-  graphql(createProposalMutation, { name: 'createProposal' }),
-  graphql(updateGaugeVoteSpecificationMutation, { name: 'updateGaugeVoteSpecification' }),
-  graphql(updateNumberGaugeVoteSpecificationMutation, { name: 'updateNumberGaugeVoteSpecification' }),
-  graphql(deleteVoteSpecificationMutation, { name: 'deleteVoteSpecification' })
-)(DumbCustomizeGaugeForm);
+export default connect(mapStateToProps, mapDispatchToProps)(DumbCustomizeGaugeForm);

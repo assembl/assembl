@@ -290,3 +290,10 @@ export const cancelModuleCustomization = (id: string): actionTypes.CancelModuleC
   id: id,
   type: actionTypes.CANCEL_MODULE_CUSTOMIZATION
 });
+
+export const customizeVoteModule = (id: string, locale: string, info: { [string]: any }): actionTypes.CustomizeVoteModule => ({
+  id: id,
+  info: info,
+  locale: locale,
+  type: actionTypes.CUSTOMIZE_VOTE_MODULE
+});
