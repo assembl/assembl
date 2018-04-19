@@ -14,12 +14,15 @@ from assembl.auth.util import get_permissions
 from .document import Document
 from .types import SecureObjectType
 from .utils import DateTime, abort_transaction_on_exception
+from assembl.auth.password import random_string
+from datetime import datetime
 
 
 _ = TranslationStringFactory('assembl')
 
 
 class AgentProfile(SecureObjectType, SQLAlchemyObjectType):
+
     class Meta:
         model = models.AgentProfile
         interfaces = (Node, )
@@ -175,3 +178,43 @@ class UpdateUser(graphene.Mutation):
             db.flush()
 
         return UpdateUser(user=user)
+
+
+class DeleteUserInformation(graphene.Mutation):
+
+    class Input:
+        id = graphene.ID(required=True)
+
+    user = graphene.Field(lambda: AgentProfile)
+
+    @staticmethod
+    @abort_transaction_on_exception
+    def mutate(root, args, context, info):
+        cls = models.User
+        discussion_id = context.matchdict['discussion_id']
+        user_id = context.authenticated_userid or Everyone
+
+        global_id = args.get('id')
+        id_ = int(Node.from_global_id(global_id)[1])
+        user = cls.get(id_)
+
+        permissions = get_permissions(user_id, discussion_id)
+        allowed = user.user_can(
+            user_id, CrudPermissions.READ, permissions)
+        if not allowed:
+            raise HTTPUnauthorized("The authenticated user can't update this user")
+
+        with cls.default_db.no_autoflush as db:
+            user.is_deleted = True
+            user.password_p = random_string()
+            user.username_p = random_string()
+            user.password = random_string()
+            user.preferred_email = random_string() + "@" + random_string()
+            user.last_assembl_login = datetime(1900, 1, 1, 1, 1, 1, 1)
+            user.last_login = datetime(1900, 1, 1, 1, 1, 1, 1)
+            user.name = random_string()
+            user.username.username = random_string()
+            for p in user.old_passwords:
+                p.password = random_string()
+            db.flush()
+        return DeleteUserInformation(user=user)
