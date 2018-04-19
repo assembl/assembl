@@ -10,8 +10,10 @@ import { languagePreferencesHasChanged, updateEditLocale } from '../actions/admi
 import ManageSectionsForm from '../components/administration/discussion/manageSectionsForm';
 import LegalNoticeAndTermsForm from '../components/administration/discussion/legalNoticeAndTermsForm';
 import LanguageSection from '../components/administration/discussion/languageSection';
+import ExportSection from '../components/administration/exportSection';
 import { displayAlert } from '../utils/utilityManager';
 import { convertEntriesToHTML } from '../utils/draftjs';
+import { get } from '../utils/routeMap';
 import SaveButton, { getMutationsPromises, runSerial } from '../components/administration/saveButton';
 import createSectionMutation from '../graphql/mutations/createSection.graphql';
 import updateSectionMutation from '../graphql/mutations/updateSection.graphql';
@@ -56,7 +58,8 @@ type Props = {
   sectionsHaveChanged: boolean,
   updateDiscussionPreference: Function,
   updateLegalNoticeAndTerms: Function,
-  updateSection: Function
+  updateSection: Function,
+  debateId: string
 };
 
 type State = {
@@ -177,14 +180,17 @@ class DiscussionAdmin extends React.Component<void, Props, State> {
   };
 
   render() {
-    const { section } = this.props;
-    const saveDisabled = !this.dataHaveChanged();
+
+    const { languagePreferenceHasChanged, legalNoticeAndTerms, section, sectionsHaveChanged, debateId } = this.props;
+    const saveDisabled = !languagePreferenceHasChanged && !legalNoticeAndTerms.get('_hasChanged') && !sectionsHaveChanged;
+    const exportLink = get('exportTaxonomiesData', { debateId: debateId });
     return (
       <div className="discussion-admin">
         <SaveButton disabled={saveDisabled} saveAction={this.saveAction} />
         {section === '1' && <LanguageSection {...this.props} />}
         {section === '2' && <ManageSectionsForm {...this.props} />}
         {section === '3' && <LegalNoticeAndTermsForm {...this.props} />}
+        {section === '4' && <ExportSection exportLink={exportLink} />}
       </div>
     );
   }
@@ -192,7 +198,8 @@ class DiscussionAdmin extends React.Component<void, Props, State> {
 
 const mapStateToProps: MapStateToProps<ReduxState, *, *> = ({
   admin: { discussionLanguagePreferences, discussionLanguagePreferencesHasChanged, editLocale, legalNoticeAndTerms, sections },
-  i18n
+  i18n,
+  context
 }) => {
   const { sectionsById, sectionsHaveChanged, sectionsInOrder } = sections;
   return {
@@ -201,6 +208,7 @@ const mapStateToProps: MapStateToProps<ReduxState, *, *> = ({
     preferences: discussionLanguagePreferences,
     languagePreferenceHasChanged: discussionLanguagePreferencesHasChanged,
     sectionsHaveChanged: sectionsHaveChanged,
+    debateId: context.debateId,
     sections: sectionsById
       .map((section) => {
         const id = section.get('id');

@@ -38,6 +38,13 @@ class Menu extends React.Component {
                 </span>
               </Link>
             </li>
+            <li>
+              <Link to={`${get('administration', slug)}/discussion?section=4`} activeClassName="active">
+                <span>
+                  <Translate value="administration.menu.exportTaxonomies" />
+                </span>
+              </Link>
+            </li>
           </ul>
         </li>
         <li className="menu-item">

@@ -441,7 +441,8 @@ const Translations = {
         phase: "Phase %{count} - %{description}",
         language: "Éditer la langue du débat",
         sections: "Éditer les rubriques du débat",
-        legalNoticeAndTerms: "CGU & Mentions légales"
+        legalNoticeAndTerms: "CGU & Mentions légales",
+        exportTaxonomies: "Exporter les taxonomies"
       },
       noTimeline: "Aucune timeline n'a été configurée pour ce débat.",
       survey: {
@@ -1080,7 +1081,8 @@ const Translations = {
         phase: "Phase %{count} - %{description}",
         language: "Discussion language",
         sections: "Edit debate sections",
-        legalNoticeAndTerms: "T&C and legal notice"
+        legalNoticeAndTerms: "T&C and legal notice",
+        exportTaxonomies: "Export taxonomies"
       },
       noTimeline: "No timeline has been configured yet",
       survey: {
