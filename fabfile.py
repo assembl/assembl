@@ -765,7 +765,6 @@ def updatemaincode():
         run('git fetch')
         run('git checkout %s' % env.gitbranch)
         run('git pull %s %s' % (env.gitrepo, env.gitbranch))
-        run('git submodule update --init')
 
 
 def app_setup():
