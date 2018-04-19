@@ -35,7 +35,7 @@ def upgrade(pyramid_env):
                 SET xpath_start=:xstart, xpath_end=:xend
                 WHERE id=:id""")
         for p in params:
-            db.execute(query, **p)
+            db.execute(query, p)
 
         mark_changed()
 
