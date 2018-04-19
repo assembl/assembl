@@ -47,11 +47,11 @@ export class DumbSynthesis extends React.Component<void, SynthesisProps, Synthes
   }
 
   componentWillMount() {
-    window.addEventListener('scroll', this.updateTopOnScroll);
+    window.addEventListener('scroll', this.updateSideMenuVisibility);
   }
 
   componentWillUnmount() {
-    window.removeEventListener('scroll', this.updateTopOnScroll);
+    window.removeEventListener('scroll', this.updateSideMenuVisibility);
   }
 
   updateIntroBlock = (node: HTMLElement) => {
@@ -66,7 +66,7 @@ export class DumbSynthesis extends React.Component<void, SynthesisProps, Synthes
     this.setState({ sideMenuNode: node });
   };
 
-  updateTopOnScroll = () => {
+  updateSideMenuVisibility = () => {
     const { introBlock, conclusionBlock, sideMenuNode } = this.state;
     if (introBlock && conclusionBlock) {
       const introNodeTop = getDomElementOffset(introBlock).top;
