@@ -75,8 +75,6 @@ export class DumbSynthesis extends React.Component<void, SynthesisProps, Synthes
       if (sideMenuHeight && sideMenuHeight > 0) {
         this.setState({ sideMenuHeight: sideMenuHeight });
       }
-      // 500 is a default height so that bottomIsReached doesn't set back to false
-      // when the sideMenu is hidden since at this point sideMenuHeight is set to 0
       const conclusionBlockTopOffset = getDomElementOffset(conclusionBlock).top;
       const firstIdeaTopOffset = introNodeTop + introNodeHeight;
       const scroll = window.pageYOffset;
