@@ -24,7 +24,8 @@ type SynthesisState = {
   sideMenuNode: ?HTMLElement,
   conclusionBlock: ?HTMLElement,
   sideMenuIsHidden: boolean,
-  ideaOnScroll?: string
+  ideaOnScroll?: string,
+  sideMenuHeight: number
 };
 
 const sideMenuTopPercentage = 15;
@@ -40,7 +41,8 @@ export class DumbSynthesis extends React.Component<void, SynthesisProps, Synthes
       introBlock: null,
       conclusionBlock: null,
       sideMenuNode: null,
-      sideMenuIsHidden: true
+      sideMenuIsHidden: true,
+      sideMenuHeight: 0
     };
   }
 
@@ -52,11 +54,11 @@ export class DumbSynthesis extends React.Component<void, SynthesisProps, Synthes
     window.removeEventListener('scroll', this.updateTopOnScroll);
   }
 
-  updateTop = (node: HTMLElement) => {
+  updateIntroBlock = (node: HTMLElement) => {
     this.setState({ introBlock: node });
   };
 
-  updateBottom = (node: HTMLElement) => {
+  updateConclusionBlock = (node: HTMLElement) => {
     this.setState({ conclusionBlock: node });
   };
 
@@ -69,7 +71,10 @@ export class DumbSynthesis extends React.Component<void, SynthesisProps, Synthes
     if (introBlock && conclusionBlock) {
       const introNodeTop = getDomElementOffset(introBlock).top;
       const introNodeHeight = introBlock.getBoundingClientRect().height;
-      const sideMenuHeight = (sideMenuNode && sideMenuNode.getBoundingClientRect().height) || 500;
+      const sideMenuHeight = sideMenuNode && sideMenuNode.getBoundingClientRect().height;
+      if (sideMenuHeight && sideMenuHeight > 0) {
+        this.setState({ sideMenuHeight: sideMenuHeight });
+      }
       // 500 is a default height so that bottomIsReached doesn't set back to false
       // when the sideMenu is hidden since at this point sideMenuHeight is set to 0
       const conclusionBlockTopOffset = getDomElementOffset(conclusionBlock).top;
@@ -77,10 +82,11 @@ export class DumbSynthesis extends React.Component<void, SynthesisProps, Synthes
       const scroll = window.pageYOffset;
       const windowHeight = window.innerHeight;
 
-      const hasScrollReachedSynthesis = scroll + 50 > firstIdeaTopOffset;
-      // 50 corresponds to the gap between the first Idea and the introduction block (synthesis-tree's padding)
+      const hasScrollReachedSynthesis = scroll + 60 > firstIdeaTopOffset;
+      // 60 corresponds to the gap between the first Idea and the introduction block (synthesis-tree's padding)
       const isBottomReached =
-        scroll + sideMenuTopPercentage / 100 * windowHeight + sideMenuHeight + 90 >= conclusionBlockTopOffset;
+        scroll + windowHeight * sideMenuTopPercentage / 100 + this.state.sideMenuHeight + 90 >= conclusionBlockTopOffset;
+      // windowHeight * sideMenuTopPercentage / 100 is the gap between the top of sideMenu and the top of the window
       // 90 corresponds to the gap between the top of the conclusion block and the top of its div (padding)
 
       if (isBottomReached || !hasScrollReachedSynthesis) {
@@ -116,7 +122,7 @@ export class DumbSynthesis extends React.Component<void, SynthesisProps, Synthes
           <Header title={subject} imgUrl={synthesis.img ? synthesis.img.externalUrl : ''} type="synthesis" />
           <Grid fluid>
             {introduction && (
-              <Section title="introduction" translate className="synthesis-block" innerRef={this.updateTop}>
+              <Section title="introduction" translate className="synthesis-block" innerRef={this.updateIntroBlock}>
                 <Row>
                   <Col mdOffset={3} md={8} smOffset={1} sm={10}>
                     <div dangerouslySetInnerHTML={{ __html: introduction }} />
@@ -151,7 +157,13 @@ export class DumbSynthesis extends React.Component<void, SynthesisProps, Synthes
               </Col>
             </Row>
             {conclusion && (
-              <Section title="conclusion" translate className="synthesis-block" id="conclusion" innerRef={this.updateBottom}>
+              <Section
+                title="conclusion"
+                translate
+                className="synthesis-block"
+                id="conclusion"
+                innerRef={this.updateConclusionBlock}
+              >
                 <Row>
                   <Col mdOffset={3} md={8} smOffset={1} sm={10}>
                     <div dangerouslySetInnerHTML={{ __html: conclusion }} />
