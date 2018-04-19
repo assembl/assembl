@@ -44,6 +44,7 @@ Developing and contributing to Assembl
    new_class
    fontello
    flow
+   storybook
 
 APIs
 ----
