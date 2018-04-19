@@ -11,14 +11,16 @@ type SideMenuProps = {
   rootIdeas: Array<SynthesisIdea>,
   descendants: Array<SynthesisIdea>,
   synthesisPostId: string,
-  ideaOnScroll?: string
+  ideaOnScroll?: string,
+  show: boolean,
+  innerRef?: Function
 };
 
 const SideMenu = (props: SideMenuProps) => {
-  const { rootIdeas, descendants, synthesisPostId, ideaOnScroll, innerRef } = props;
+  const { rootIdeas, descendants, synthesisPostId, ideaOnScroll, innerRef, show } = props;
   const slug = getDiscussionSlug();
   return (
-    <div className="synthesis-side-menu" ref={innerRef}>
+    <div className="synthesis-side-menu" ref={innerRef} style={{ display: show ? 'block' : 'none' }}>
       <Translate value="synthesis.tableOfContents" className="dark-title-4" />
       <div className="title-hyphen block">&nbsp;</div>
       {rootIdeas.map((rootIdea, index) => (
@@ -38,7 +40,8 @@ const SideMenu = (props: SideMenuProps) => {
 };
 
 SideMenu.defaultProps = {
-  ideaOnScroll: null
+  ideaOnScroll: null,
+  innerRef: null
 };
 
 export default SideMenu;

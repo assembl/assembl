@@ -20,10 +20,14 @@ type SynthesisProps = {
 };
 
 type SynthesisState = {
-  node: ?HTMLElement,
+  introBlock: ?HTMLElement,
+  sideMenuNode: ?HTMLElement,
+  conclusionBlock: ?HTMLElement,
   sideMenuIsHidden: boolean,
   ideaOnScroll?: string
 };
+
+const sideMenuTopPercentage = 15;
 
 export class DumbSynthesis extends React.Component<void, SynthesisProps, SynthesisState> {
   props: SynthesisProps;
@@ -33,8 +37,8 @@ export class DumbSynthesis extends React.Component<void, SynthesisProps, Synthes
   constructor(props: SynthesisProps) {
     super(props);
     this.state = {
-      introNode: null,
-      conclusionNode: null,
+      introBlock: null,
+      conclusionBlock: null,
       sideMenuNode: null,
       sideMenuIsHidden: true
     };
@@ -49,38 +53,37 @@ export class DumbSynthesis extends React.Component<void, SynthesisProps, Synthes
   }
 
   updateTop = (node: HTMLElement) => {
-    this.setState({ introNode: node });
+    this.setState({ introBlock: node });
   };
 
   updateBottom = (node: HTMLElement) => {
-    this.setState({ conclusionNode: node });
-  }
+    this.setState({ conclusionBlock: node });
+  };
 
   updateSideMenuNode = (node: HTMLElement) => {
-    console.log('node', node);
     this.setState({ sideMenuNode: node });
-  }
+  };
 
   updateTopOnScroll = () => {
-    const { introNode, conclusionNode, sideMenuNode } = this.state;
-    console.log('sideMenuNode', sideMenuNode);
-    if (introNode && conclusionNode) {
-      const introNodeTop = getDomElementOffset(introNode).top;
-      const introNodeHeight = introNode.getBoundingClientRect().height;
-      const sideMenuHeight = sideMenuNode && sideMenuNode.getBoundingClientRect().height;
-
-      const conclusionNodeTopOffset = getDomElementOffset(conclusionNode).top;
-
-      const total = introNodeTop + introNodeHeight;
+    const { introBlock, conclusionBlock, sideMenuNode } = this.state;
+    if (introBlock && conclusionBlock) {
+      const introNodeTop = getDomElementOffset(introBlock).top;
+      const introNodeHeight = introBlock.getBoundingClientRect().height;
+      const sideMenuHeight = (sideMenuNode && sideMenuNode.getBoundingClientRect().height) || 500;
+      // 500 is a default height so that bottomIsReached doesn't set back to false
+      // when the sideMenu is hidden since at this point sideMenuHeight is set to 0
+      const conclusionBlockTopOffset = getDomElementOffset(conclusionBlock).top;
+      const firstIdeaTopOffset = introNodeTop + introNodeHeight;
       const scroll = window.pageYOffset;
       const windowHeight = window.innerHeight;
-      const sideMenuTop = ((1800 - windowHeight) / 50);
-      this.setState({ sideMenuTop: sideMenuTop });
-      // console.log('scroll: ', scroll, '| body.scrollHeight: ', body.scrollHeight, '| screen.height: ', screen.height, '| windowHeight: ', window.innerHeight, '| footer.offsetHeight: ', footer.offsetHeight, '| conclusionHeight: ', conclusionHeight);
 
-      if ((scroll + (sideMenuTop / 100) * windowHeight + sideMenuHeight + 90) >= (conclusionNodeTopOffset) || scroll + 50 < total) {
-        // 50 corresponds to the gap between the first Idea and the introduction
-        // 90 corresponds to the gap between the top of the conclusion node and the top of its div
+      const hasScrollReachedSynthesis = scroll + 50 > firstIdeaTopOffset;
+      // 50 corresponds to the gap between the first Idea and the introduction block (synthesis-tree's padding)
+      const isBottomReached =
+        scroll + sideMenuTopPercentage / 100 * windowHeight + sideMenuHeight + 90 >= conclusionBlockTopOffset;
+      // 90 corresponds to the gap between the top of the conclusion block and the top of its div (padding)
+
+      if (isBottomReached || !hasScrollReachedSynthesis) {
         this.setState({ sideMenuIsHidden: true });
       } else {
         this.setState({ sideMenuIsHidden: false });
@@ -94,7 +97,7 @@ export class DumbSynthesis extends React.Component<void, SynthesisProps, Synthes
 
   render() {
     const { synthesis, routeParams, synthesisPostId } = this.props;
-    const { sideMenuIsHidden, ideaOnScroll, sideMenuTop } = this.state;
+    const { sideMenuIsHidden, ideaOnScroll } = this.state;
     const { introduction, conclusion, ideas, subject } = synthesis;
     const sortedIdeas = [...ideas].sort((a, b) => {
       if (a.live.order < b.live.order) {
@@ -122,16 +125,15 @@ export class DumbSynthesis extends React.Component<void, SynthesisProps, Synthes
               </Section>
             )}
             <Row className="background-grey synthesis-tree">
-              <Col md={3} className="affix" style={{ top: `${sideMenuTop}%` }}>
-                {!sideMenuIsHidden && (
-                  <SideMenu
-                    rootIdeas={roots}
-                    descendants={descendants}
-                    synthesisPostId={synthesisPostId}
-                    ideaOnScroll={ideaOnScroll}
-                    innerRef={this.updateSideMenuNode}
-                  />
-                )}
+              <Col md={3} className="affix" style={{ top: `${sideMenuTopPercentage} %` }}>
+                <SideMenu
+                  rootIdeas={roots}
+                  descendants={descendants}
+                  synthesisPostId={synthesisPostId}
+                  ideaOnScroll={ideaOnScroll}
+                  innerRef={this.updateSideMenuNode}
+                  show={!sideMenuIsHidden}
+                />
               </Col>
               <Col mdOffset={3} md={8} sm={11}>
                 {roots.map((rootIdea, index) => (

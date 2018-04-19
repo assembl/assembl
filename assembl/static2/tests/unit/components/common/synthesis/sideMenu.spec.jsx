@@ -41,7 +41,8 @@ describe('SideMenu component', () => {
           title: 'Super cool story'
         }
       ],
-      synthesisPostId: '5667'
+      synthesisPostId: '5667',
+      show: true
     };
     const shallowRenderer = new ShallowRenderer();
     shallowRenderer.render(<SideMenu {...props} />);
