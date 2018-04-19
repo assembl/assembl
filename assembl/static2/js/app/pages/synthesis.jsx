@@ -25,7 +25,9 @@ type SynthesisState = {
   conclusionBlock: ?HTMLElement,
   sideMenuIsHidden: boolean,
   ideaOnScroll?: string,
-  sideMenuHeight: number
+  sideMenuHeight: number,
+  sideMenuOverflow: string,
+  setSideMenuHeight: string
 };
 
 const sideMenuTopPercentage = 15;
@@ -42,7 +44,9 @@ export class DumbSynthesis extends React.Component<void, SynthesisProps, Synthes
       conclusionBlock: null,
       sideMenuNode: null,
       sideMenuIsHidden: true,
-      sideMenuHeight: 0
+      sideMenuHeight: 0,
+      sideMenuOverflow: 'auto',
+      setSideMenuHeight: '100%'
     };
   }
 
@@ -79,11 +83,14 @@ export class DumbSynthesis extends React.Component<void, SynthesisProps, Synthes
       const firstIdeaTopOffset = introNodeTop + introNodeHeight;
       const scroll = window.pageYOffset;
       const windowHeight = window.innerHeight;
+      const sideMenuTopOffset = windowHeight * sideMenuTopPercentage / 100;
+      if (sideMenuHeight && sideMenuHeight + sideMenuTopOffset > windowHeight) {
+        this.setState({ sideMenuOverflow: 'scroll', setSideMenuHeight: '80%' });
+      }
 
       const hasScrollReachedSynthesis = scroll + 60 > firstIdeaTopOffset;
       // 60 corresponds to the gap between the first Idea and the introduction block (synthesis-tree's padding)
-      const isBottomReached =
-        scroll + windowHeight * sideMenuTopPercentage / 100 + this.state.sideMenuHeight + 90 >= conclusionBlockTopOffset;
+      const isBottomReached = scroll + sideMenuTopOffset + this.state.sideMenuHeight + 90 >= conclusionBlockTopOffset;
       // windowHeight * sideMenuTopPercentage / 100 is the gap between the top of sideMenu and the top of the window
       // 90 corresponds to the gap between the top of the conclusion block and the top of its div (padding)
 
@@ -101,7 +108,7 @@ export class DumbSynthesis extends React.Component<void, SynthesisProps, Synthes
 
   render() {
     const { synthesis, routeParams, synthesisPostId } = this.props;
-    const { sideMenuIsHidden, ideaOnScroll } = this.state;
+    const { sideMenuIsHidden, ideaOnScroll, sideMenuOverflow, setSideMenuHeight } = this.state;
     const { introduction, conclusion, ideas, subject } = synthesis;
     const sortedIdeas = [...ideas].sort((a, b) => {
       if (a.live.order < b.live.order) {
@@ -129,7 +136,15 @@ export class DumbSynthesis extends React.Component<void, SynthesisProps, Synthes
               </Section>
             )}
             <Row className="background-grey synthesis-tree">
-              <Col md={3} className="affix" style={{ top: `${sideMenuTopPercentage} %` }}>
+              <Col
+                md={3}
+                className="affix"
+                style={{
+                  top: `${sideMenuTopPercentage} %`,
+                  overflow: sideMenuOverflow,
+                  height: setSideMenuHeight
+                }}
+              >
                 <SideMenu
                   rootIdeas={roots}
                   descendants={descendants}

@@ -29,6 +29,8 @@ exports[`Synthesis component should match Synthesis snapshot 1`] = `
           md={3}
           style={
             Object {
+              "height": "100%",
+              "overflow": "auto",
               "top": "15 %",
             }
           }
