@@ -10,12 +10,11 @@ Create Date: 2018-04-18 18:29:07.240836
 revision = '9dfb584793b1'
 down_revision = '083c79582c91'
 
-from alembic import context, op
-import sqlalchemy as sa
+from sqlalchemy.sql import text
 import transaction
 
 
-from assembl.lib import config
+from assembl.lib.sqla import mark_changed
 
 
 def upgrade(pyramid_env):
@@ -32,9 +31,13 @@ def upgrade(pyramid_env):
             'xstart': ']/'.join(xstart.split(']//')),
             'xend': ']/'.join(xend.split(']//')),
             } for (id, xstart, xend) in r]
-        db.execute("""UPDATE text_fragment_identifier
-            SET xpath_start=:xstart, xpath_end=:xend
-            WHERE id=:id""", params)
+        query = text("""UPDATE text_fragment_identifier
+                SET xpath_start=:xstart, xpath_end=:xend
+                WHERE id=:id""")
+        for p in params:
+            db.execute(query, **p)
+
+        mark_changed()
 
 
 def downgrade(pyramid_env):
