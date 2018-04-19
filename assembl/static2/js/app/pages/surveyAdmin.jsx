@@ -122,6 +122,7 @@ class SurveyAdmin extends React.Component {
             translate={translate}
             exportLocale={exportLocale}
             languages={languages}
+            annotation="surveyAnnotation"
           />
         )}
         {!isNaN(currentStep) && (
