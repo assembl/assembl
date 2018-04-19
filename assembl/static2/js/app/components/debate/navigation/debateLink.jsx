@@ -68,8 +68,8 @@ class DebateLink extends React.Component<*, DebateLinkProps, DebateLinkState> {
           this.debate = debate;
         }}
         className={classNames('debate-link', { active: menuActive })}
-        onMouseOver={!isTouchScreenDevice && !screenTooSmall && this.showMenu}
-        onMouseLeave={!isTouchScreenDevice && !screenTooSmall && this.hideMenu}
+        onMouseOver={!isTouchScreenDevice && !screenTooSmall ? this.showMenu : null}
+        onMouseLeave={!isTouchScreenDevice && !screenTooSmall ? this.hideMenu : null}
       >
         <div onClick={onLinkClick} className={classNames(className, { [activeClassName]: linkActive })} data-text={dataText}>
           {children}

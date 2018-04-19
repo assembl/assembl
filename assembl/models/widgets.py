@@ -25,8 +25,6 @@ from .auth import User
 from assembl.models import AbstractVoteSpecification, AbstractIdeaVote
 from ..views.traversal import (
     CollectionDefinition, AbstractCollectionDefinition)
-from ..semantic.virtuoso_mapping import QuadMapPatternS
-from ..semantic.namespaces import ASSEMBL
 
 
 class Widget(DiscussionBoundBase):
@@ -51,8 +49,7 @@ class Widget(DiscussionBoundBase):
         nullable=False, index=True
     )
     discussion = relationship(
-        Discussion, backref=backref("widgets", cascade="all, delete-orphan"),
-        info={'rdf': QuadMapPatternS(None, ASSEMBL.in_conversation)})
+        Discussion, backref=backref("widgets", cascade="all, delete-orphan"))
 
     start_date = Column(DateTime, server_default=None)
     end_date = Column(DateTime, server_default=None)
@@ -214,8 +211,7 @@ class Widget(DiscussionBoundBase):
 class IdeaWidgetLink(DiscussionBoundBase):
     __tablename__ = 'idea_widget_link'
 
-    id = Column(Integer, primary_key=True,
-                info={'rdf': QuadMapPatternS(None, ASSEMBL.db_id)})
+    id = Column(Integer, primary_key=True)
     type = Column(String(60))
 
     idea_id = Column(Integer, ForeignKey(Idea.id),
@@ -248,8 +244,7 @@ class IdeaWidgetLink(DiscussionBoundBase):
                 (Idea.discussion_id == discussion_id))
 
     discussion = relationship(
-        Discussion, viewonly=True, uselist=False, secondary=Idea.__table__,
-        info={'rdf': QuadMapPatternS(None, ASSEMBL.in_conversation)})
+        Discussion, viewonly=True, uselist=False, secondary=Idea.__table__)
 
     crud_permissions = CrudPermissions(
         P_ADD_IDEA, P_READ, P_EDIT_IDEA, P_EDIT_IDEA,
@@ -1002,8 +997,7 @@ class WidgetUserConfig(DiscussionBoundBase):
                 (Widget.discussion_id == discussion_id))
 
     discussion = relationship(
-        Discussion, viewonly=True, uselist=False, secondary=Widget.__table__,
-        info={'rdf': QuadMapPatternS(None, ASSEMBL.in_conversation)})
+        Discussion, viewonly=True, uselist=False, secondary=Widget.__table__)
 
     crud_permissions = CrudPermissions(P_ADD_POST)  # all participants...
 

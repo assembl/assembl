@@ -40,7 +40,6 @@ type VoteModule = {
   isCustom: boolean,
   _isNew: boolean,
   isNumberGauge?: boolean,
-  isNumberGauge?: boolean,
   labelEntries: Array<string>,
   maximum?: number,
   minimum?: number,
@@ -491,7 +490,7 @@ class VoteSessionAdmin extends React.Component<void, VoteSessionAdminProps, Vote
     this.props.moduleTemplatesHaveChanged || this.props.voteProposalsHaveChanged || this.props.voteSessionPage.get('_hasChanged');
 
   render() {
-    const { editLocale, refetchVoteSession, section, debateId, voteSessionId } = this.props;
+    const { editLocale, section, debateId, voteSessionId } = this.props;
     const exportLink = get('exportVoteSessionData', { debateId: debateId, voteSessionId: voteSessionId });
     const saveDisabled = !this.dataHaveChanged();
     const currentStep = parseInt(section, 10);
@@ -500,7 +499,7 @@ class VoteSessionAdmin extends React.Component<void, VoteSessionAdminProps, Vote
         <SaveButton disabled={saveDisabled} saveAction={this.saveAction} />
         {section === '1' && <PageForm editLocale={editLocale} />}
         {section === '2' && <ModulesSection />}
-        {section === '3' && <VoteProposalsSection refetchVoteSession={refetchVoteSession} />}
+        {section === '3' && <VoteProposalsSection />}
         {section === '4' && <ExportSection exportLink={exportLink} annotation="voteSessionAnnotation" />}
         {!isNaN(currentStep) && <Navbar currentStep={currentStep} totalSteps={4} phaseIdentifier="voteSession" />}
       </div>

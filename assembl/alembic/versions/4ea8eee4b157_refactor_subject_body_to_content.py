@@ -16,10 +16,6 @@ import sqlalchemy as sa
 #quadnames:col_pattern_Post_subject
 
 def upgrade(pyramid_env):
-    from assembl.semantic.virtuoso_mapping import get_session
-    dbsession = get_session()
-    dbsession.execute("SPARQL drop quad map quadnames:col_pattern_Post_subject")
-    dbsession.commit()
     with context.begin_transaction():
         op.add_column('content', sa.Column('subject', sa.Unicode, server_default=""))
         op.add_column('content', sa.Column('body', sa.UnicodeText, server_default=""))
@@ -42,16 +38,9 @@ def upgrade(pyramid_env):
 
 
 def downgrade(pyramid_env):
-    from assembl.semantic.virtuoso_mapping import get_session
     from assembl.models import Content
     assert not ('body' in Content.__table__.c or 'subject' in Content.__table__.c), \
         "Comment out the body and subject from Content to run the back migration"
-    dbsession = get_session()
-    try:
-        dbsession.execute("SPARQL drop quad map quadnames:col_pattern_Content_subject")
-        dbsession.commit()
-    except:
-        dbsession.rollback()
     op.add_column('post', sa.Column('subject', sa.Unicode, server_default=""))
     op.add_column('post', sa.Column('body', sa.UnicodeText, server_default=""))
     with context.begin_transaction():

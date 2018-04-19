@@ -21,8 +21,6 @@ from .discussion import Discussion
 from .idea import Idea, AppendingVisitor
 from .auth import User
 from ..auth import CrudPermissions, P_VOTE, P_SYSADMIN, P_ADMIN_DISC, P_READ
-from ..semantic.virtuoso_mapping import QuadMapPatternS
-from ..semantic.namespaces import (VOTE, ASSEMBL, DCTERMS, QUADNAMES)
 from ..views.traversal import AbstractCollectionDefinition
 from .langstrings import LangString
 
@@ -418,7 +416,6 @@ LangString.setup_ownership_load_event(TokenCategorySpecification, ['name'])
 
 class LickertVoteSpecification(AbstractVoteSpecification):
     __tablename__ = "lickert_vote_specification"
-    rdf_class = VOTE.LickertRange
     __mapper_args__ = {
         'polymorphic_identity': 'lickert_vote_specification'
     }
@@ -426,10 +423,8 @@ class LickertVoteSpecification(AbstractVoteSpecification):
     id = Column(
         Integer, ForeignKey(AbstractVoteSpecification.id), primary_key=True)
 
-    minimum = Column(Integer, default=1,
-                     info={'rdf': QuadMapPatternS(None, VOTE.min)})
-    maximum = Column(Integer, default=10,
-                     info={'rdf': QuadMapPatternS(None, VOTE.max)})
+    minimum = Column(Integer, default=1)
+    maximum = Column(Integer, default=10)
 
     @classmethod
     def get_vote_class(cls):
@@ -798,8 +793,7 @@ class AbstractIdeaVote(HistoryMixin, DiscussionBoundBase):
     idea_id = Column(
         Integer,
         ForeignKey(Idea.id, ondelete="CASCADE", onupdate="CASCADE"),
-        nullable=False, index=True,
-        info={'rdf': QuadMapPatternS(None, VOTE.subject_node)}
+        nullable=False, index=True
     )
     idea_ts = relationship(
         Idea, foreign_keys=(idea_id,),
@@ -834,17 +828,6 @@ class AbstractIdeaVote(HistoryMixin, DiscussionBoundBase):
         nullable=True, index=True
     )
 
-    @classmethod
-    def special_quad_patterns(cls, alias_maker, discussion_id):
-        return [
-            QuadMapPatternS(
-                cls.iri_class().apply(cls.id),
-                VOTE.voting_criterion,
-                Idea.iri_class().apply(cls.idea_id),
-                name=QUADNAMES.voting_criterion,
-                conditions=(cls.idea_id != None,)),  # noqa: E711
-        ]
-
     # This dies and becomes indirect through vote_spec
     criterion_ts = relationship(
         Idea, foreign_keys=(criterion_id,))
@@ -857,14 +840,12 @@ class AbstractIdeaVote(HistoryMixin, DiscussionBoundBase):
             primaryjoin="and_(Idea.id == AbstractIdeaVote.criterion_id, AbstractIdeaVote.tombstone_date == None)",
             ))
 
-    vote_date = Column(DateTime, default=datetime.utcnow,
-                       info={'rdf': QuadMapPatternS(None, DCTERMS.created)})
+    vote_date = Column(DateTime, default=datetime.utcnow)
 
     voter_id = Column(
         Integer,
         ForeignKey(User.id, ondelete="CASCADE", onupdate="CASCADE"),
-        nullable=False, index=True,
-        info={'rdf': QuadMapPatternS(None, VOTE.voter)}
+        nullable=False, index=True
     )
     voter_ts = relationship(
         User, backref=backref("votes_ts", cascade="all, delete-orphan"))
@@ -910,8 +891,7 @@ class AbstractIdeaVote(HistoryMixin, DiscussionBoundBase):
 
     discussion = relationship(
         Discussion, viewonly=True, uselist=False,
-        secondary=Idea.__table__, primaryjoin=(idea_id == Idea.id),
-        info={'rdf': QuadMapPatternS(None, ASSEMBL.in_conversation)})
+        secondary=Idea.__table__, primaryjoin=(idea_id == Idea.id))
 
     @classmethod
     def external_typename(cls):
@@ -955,7 +935,6 @@ class AbstractIdeaVote(HistoryMixin, DiscussionBoundBase):
 class LickertIdeaVote(AbstractIdeaVote):
     __tablename__ = "lickert_idea_vote"
     __table_args__ = ()
-    rdf_class = VOTE.LickertVote
     __mapper_args__ = {
         'polymorphic_identity': 'lickert_idea_vote',
     }
@@ -966,7 +945,6 @@ class LickertIdeaVote(AbstractIdeaVote):
     ), primary_key=True)
 
     vote_value = Column(Float, nullable=False)
-    # info={'rdf': QuadMapPatternS(None, VOTE.lickert_value)}) private!
 
     def __init__(self, **kwargs):
         super(LickertIdeaVote, self).__init__(**kwargs)
@@ -1060,7 +1038,6 @@ class MultipleChoiceIdeaVote(AbstractIdeaVote):
 
 
 class BinaryIdeaVote(AbstractIdeaVote):
-    rdf_class = VOTE.BinaryVote
     __tablename__ = "binary_idea_vote"
     __table_args__ = ()
     __mapper_args__ = {
@@ -1074,8 +1051,7 @@ class BinaryIdeaVote(AbstractIdeaVote):
     ), primary_key=True)
 
     vote_value = Column(
-        Boolean, nullable=False,
-        info={'rdf': QuadMapPatternS(None, VOTE.positive)})
+        Boolean, nullable=False)
 
     @classmethod
     def external_typename(cls):

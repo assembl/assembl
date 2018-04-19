@@ -13,7 +13,7 @@ from webob.request import environ_from_url
 from pyramid.threadlocal import manager
 
 from assembl.lib.sqla import (
-    configure_engine, get_session_maker, using_virtuoso,
+    configure_engine, get_session_maker,
     get_metadata, is_zopish, mark_changed)
 
 
@@ -121,8 +121,7 @@ def clear_rows(app_settings, session):
 
 def drop_tables(app_settings, session):
     log.info('Dropping all tables.')
-    if not using_virtuoso():
-        session.close()
+    session.close()
 
     try:
         get_metadata().drop_all(session.connection())

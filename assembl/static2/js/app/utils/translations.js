@@ -214,7 +214,7 @@ const Translations = {
       topContributor: "Top contributeur",
       recentDiscussion: "Discussion récente",
       objectivesTitle: "Pourquoi un tel débat ?",
-      timelineTitle: "Echéancier de la concertation en %{count} phases",
+      timelineTitle: "Les %{count} étapes de la concertation",
       video: "La vidéo du débat",
       twitterTitle: "Tweet",
       contact: "Besoin d'échanger au sujet de la plateforme ?",
@@ -493,6 +493,7 @@ const Translations = {
         gauge: "Jauge %{number}",
         customGauge: "Jauge %{number} (modifiée pour cette proposition)",
         gaugeSettings: "Modifier le paramétrage",
+        edit: "Modifier",
         cancelCustomization: "Annuler le paramétrage",
         validationErrors: {
           atLeastOneModule: "Vous devez sélectionner au moins un module."

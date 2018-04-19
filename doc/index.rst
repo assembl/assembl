@@ -15,6 +15,7 @@ Installation and administration
    configuration
    backups
    howtoupgrade
+   python_requirements
 
 Stack and architecture
 ----------------------

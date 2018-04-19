@@ -1,4 +1,5 @@
 // @flow
+import pick from 'lodash/pick';
 import { combineReducers } from 'redux';
 import type ReduxAction from 'redux';
 import { fromJS, List, Map } from 'immutable';
@@ -12,6 +13,7 @@ import {
   UPDATE_VOTE_SESSION_PAGE_PROPOSITIONS_TITLE,
   UPDATE_VOTE_SESSION_PAGE_IMAGE,
   UPDATE_VOTE_SESSION_PAGE,
+  CUSTOMIZE_VOTE_MODULE,
   UPDATE_VOTE_MODULES,
   DELETE_VOTE_MODULE,
   CREATE_TOKEN_VOTE_MODULE,
@@ -176,8 +178,8 @@ const defaultTokenModule = Map({
 
 const defaultTextGaugeChoice = Map({
   id: String,
-  labelEntries: List(),
-  value: Number
+  labelEntries: List()
+  // value: Number
 });
 
 const defaultTextGaugeModule = Map({
@@ -255,6 +257,33 @@ const getModuleInfo = (m) => {
     ...customModuleInfo,
     ...moduleInfo
   };
+};
+
+const specificKeys = ['choices', 'maximum', 'minimum', 'nbTicks', 'unit'];
+type SpecificInfo = {
+  maximum?: Number,
+  minimum?: Number,
+  nbTicks?: Number,
+  unit?: string,
+  choices?: List<string>
+};
+const updateGaugeSpecificInfo = (info: SpecificInfo) => (m: Map<string, any>) => {
+  if (m.get('isNumberGauge')) {
+    const { maximum, minimum, nbTicks, unit } = info;
+    return m
+      .delete('choices')
+      .set('maximum', maximum)
+      .set('minimum', minimum)
+      .set('nbTicks', nbTicks)
+      .set('unit', unit);
+  }
+
+  return m
+    .set('choices', info.choices)
+    .delete('maximum')
+    .delete('minimum')
+    .delete('nbTicks')
+    .delete('unit');
 };
 
 export const modulesById = (state: Map<string, Map> = Map(), action: ReduxAction<Action>) => {
@@ -357,6 +386,7 @@ export const modulesById = (state: Map<string, Map> = Map(), action: ReduxAction
     });
   case CANCEL_MODULE_CUSTOMIZATION: {
     const template = state.get(state.getIn([action.id, 'voteSpecTemplateId']));
+    const specificInfo = template.filter((v, k) => specificKeys.includes(k)).toJS();
     return state
       .update(action.id, m => m.set('isNumberGauge', template.get('isNumberGauge')))
       .update(action.id, m =>
@@ -365,21 +395,25 @@ export const modulesById = (state: Map<string, Map> = Map(), action: ReduxAction
           .set('isCustom', false)
           .set('_hasChanged', true)
       )
-      .update(action.id, (m) => {
-        if (m.get('isNumberGauge')) {
-          return m
-            .delete('choices')
-            .set('unit', template.get('unit'))
-            .set('max', template.get('max'))
-            .set('min', template.get('min'));
-        }
-
-        return m
-          .set('choices', template.get('choices'))
-          .delete('max')
-          .delete('min')
-          .delete('unit');
-      });
+      .update(action.id, updateGaugeSpecificInfo(specificInfo));
+  }
+  case CUSTOMIZE_VOTE_MODULE: {
+    const { instructions, isNumberGauge, type } = action.info;
+    let specificInfo = pick(action.info, specificKeys);
+    specificInfo = {
+      ...specificInfo,
+      choices: specificInfo.choices && specificInfo.choices.map(c => c.get('id'))
+    };
+    return state
+      .update(action.id, m =>
+        m
+          .set('isNumberGauge', isNumberGauge)
+          .set('isCustom', true)
+          .set('type', type)
+          .set('_hasChanged', true)
+          .update('instructionsEntries', updateInLangstringEntries(action.locale, instructions))
+      )
+      .update(action.id, updateGaugeSpecificInfo(specificInfo));
   }
   default:
     return state;
@@ -459,6 +493,7 @@ export const voteProposalsHaveChanged = (state: boolean = false, action: ReduxAc
   case DELETE_VOTE_MODULE:
   case MARK_ALL_DEPENDENCIES_AS_CHANGED:
   case CANCEL_MODULE_CUSTOMIZATION:
+  case CUSTOMIZE_VOTE_MODULE:
     return true;
   case UPDATE_VOTE_PROPOSALS:
     return false;
@@ -569,6 +604,28 @@ const getGaugeChoices = (m) => {
 
 export const gaugeChoicesById = (state: Map<string, Map> = Map(), action: ReduxAction<Action>) => {
   switch (action.type) {
+  case CUSTOMIZE_VOTE_MODULE: {
+    if (action.info.choices) {
+      let newState = state;
+      action.info.choices.forEach((choice) => {
+        const cid = choice.get('id');
+        if (state.has(cid)) {
+          newState = newState.updateIn([cid, 'labelEntries'], updateInLangstringEntries(action.locale, choice.get('title')));
+        } else {
+          newState = newState.set(
+            cid,
+            defaultTextGaugeChoice
+              .set('id', cid)
+              .update('labelEntries', updateInLangstringEntries(action.locale, choice.get('title')))
+          );
+        }
+      });
+
+      return newState;
+    }
+
+    return state;
+  }
   case UPDATE_VOTE_MODULES: {
     let newState = Map();
     action.voteModules.forEach((m) => {

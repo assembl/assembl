@@ -15,25 +15,19 @@ from sqlalchemy import (
     Boolean,
     UnicodeText,
     String,
-    Unicode,
     DateTime,
     ForeignKey,
 )
 from sqlalchemy.orm import relationship, backref, aliased
 from sqlalchemy.sql.functions import count
-from sqla_rdfbridge.mapping import PatternIriClass
 
 from ..lib.sqla import (CrudOperation, get_model_watcher, Base)
-from ..lib.utils import get_global_base_url
 from . import DiscussionBoundBase
 from .langstrings import (LangString, LangStringEntry)
-from ..semantic.virtuoso_mapping import QuadMapPatternS
 from ..auth import (
     CrudPermissions, P_ADD_POST, P_READ, P_ADMIN_DISC, P_EDIT_POST,
     P_EDIT_MY_POST, P_DELETE_POST, P_DELETE_MY_POST)
 from ..auth.util import get_current_user_id
-from ..semantic.namespaces import (
-    SIOC, CATALYST, ASSEMBL, DCTERMS, QUADNAMES, FOAF)
 from .discussion import Discussion
 from ..lib.history_mixin import TombstonableMixin
 from ..lib.clean_input import sanitize_text, sanitize_html
@@ -47,15 +41,11 @@ class ContentSource(DiscussionBoundBase):
     A ContentSource is where any outside content comes from. .
     """
     __tablename__ = "content_source"
-    rdf_class = SIOC.Container
-
-    id = Column(Integer, primary_key=True,
-                info={'rdf': QuadMapPatternS(None, ASSEMBL.db_id)})
+    id = Column(Integer, primary_key=True)
     name = Column(UnicodeText, nullable=False)
     type = Column(String(60), nullable=False)
 
-    creation_date = Column(DateTime, nullable=False, default=datetime.utcnow,
-                           info={'rdf': QuadMapPatternS(None, DCTERMS.created)})
+    creation_date = Column(DateTime, nullable=False, default=datetime.utcnow)
 
     discussion_id = Column(Integer, ForeignKey(
         'discussion.id',
@@ -66,23 +56,11 @@ class ContentSource(DiscussionBoundBase):
     error_description = Column(String)
     error_backoff_until = Column(DateTime)
 
-    @classmethod
-    def special_quad_patterns(cls, alias_maker, discussion_id):
-        return [
-            QuadMapPatternS(
-                Discussion.iri_class().apply(cls.discussion_id),
-                CATALYST.uses_source,
-                cls.iri_class().apply(cls.id),
-                name=QUADNAMES.uses_source,
-                conditions=(cls.discussion_id != None,)),  # noqa: E711
-        ]
-
     discussion = relationship(
         "Discussion",
         backref=backref(
             'sources', order_by=creation_date,
-            cascade="all, delete-orphan"),
-        info={'rdf': QuadMapPatternS(None, ASSEMBL.in_conversation)})
+            cascade="all, delete-orphan"))
 
     __mapper_args__ = {
         'polymorphic_identity': 'content_source',
@@ -166,7 +144,6 @@ class PostSource(ContentSource):
     be `source.import()`.
     """
     __tablename__ = "post_source"
-    rdf_class = ASSEMBL.PostSource
 
     id = Column(Integer, ForeignKey(
         'content_source.id',
@@ -263,13 +240,9 @@ class Content(TombstonableMixin, DiscussionBoundBase):
     __tablename__ = "content"
     # __table_cls__ = TableWithTextIndex
 
-    rdf_class = SIOC.Post
-
-    id = Column(Integer, primary_key=True,
-                info={'rdf': QuadMapPatternS(None, ASSEMBL.db_id)})
+    id = Column(Integer, primary_key=True)
     type = Column(String(60), nullable=False)
-    creation_date = Column(DateTime, nullable=False, default=datetime.utcnow,
-                           info={'rdf': QuadMapPatternS(None, DCTERMS.created)})
+    creation_date = Column(DateTime, nullable=False, default=datetime.utcnow)
 
     discussion_id = Column(Integer, ForeignKey(
         'discussion.id',
@@ -282,8 +255,7 @@ class Content(TombstonableMixin, DiscussionBoundBase):
         "Discussion",
         backref=backref(
             'posts', order_by=creation_date,
-            cascade="all, delete-orphan"),
-        info={'rdf': QuadMapPatternS(None, ASSEMBL.in_conversation)}
+            cascade="all, delete-orphan")
     )
 
     subject_id = Column(Integer, ForeignKey(LangString.id), index=True)
@@ -343,13 +315,6 @@ class Content(TombstonableMixin, DiscussionBoundBase):
             subject_ls, cls.subject_id == subject_ls.id).join(
             best_subject_sq).join(
             body_ls, cls.body_id == body_ls.id).join(best_body_sq)
-
-    # old_subject = Column("subject", CoerceUnicode(), server_default="",
-    #     info={'rdf': QuadMapPatternS(None, DCTERMS.title)})
-    # TODO: check HTML or text? SIOC.content should be text.
-    # Do not give it for now, privacy reasons
-    # old_body = Column("body", UnicodeText, server_default="")
-    #    info={'rdf': QuadMapPatternS(None, SIOC.content)})
 
     # TODO: Refactor hidden into PublicationStates.WIDGET_SCOPED
     hidden = Column(Boolean, server_default='0')
@@ -518,22 +483,6 @@ class Content(TombstonableMixin, DiscussionBoundBase):
     @classmethod
     def get_discussion_conditions(cls, discussion_id, alias_maker=None):
         return (cls.discussion_id == discussion_id,)
-
-    @classmethod
-    def special_quad_patterns(cls, alias_maker, discussion_id):
-        discussion_alias = alias_maker.get_reln_alias(cls.discussion)
-        return [
-            QuadMapPatternS(
-                None, FOAF.homepage,
-                PatternIriClass(
-                    QUADNAMES.post_external_link_iri,
-                    # TODO: Use discussion.get_base_url.
-                    # This should be computed outside the DB.
-                    get_global_base_url() + '/%s/posts/local:Content/%d', None,
-                    ('slug', Unicode, False), ('id', Integer, False)).apply(
-                    discussion_alias.slug, cls.id),
-                name=QUADNAMES.post_external_link_map)
-        ]
 
     @property
     def sentiment_counts(self):

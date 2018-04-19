@@ -11,8 +11,6 @@ from sqlalchemy import (
 from sqlalchemy.orm import relationship, backref
 
 from datetime import datetime
-from ..semantic.virtuoso_mapping import QuadMapPatternS
-from ..semantic.namespaces import DCTERMS
 from . import DiscussionBoundBase
 from .idea import Idea
 from .langstrings import LangString
@@ -50,9 +48,7 @@ class Announcement(DiscussionBoundBase):
             cascade="all, delete-orphan"),
     )
 
-    creation_date = Column(DateTime, nullable=False, default=datetime.utcnow,
-                           info={'rdf': QuadMapPatternS(None,
-                                                        DCTERMS.created)})
+    creation_date = Column(DateTime, nullable=False, default=datetime.utcnow)
 
     modification_date = Column(DateTime, nullable=False, default=datetime.utcnow)
 

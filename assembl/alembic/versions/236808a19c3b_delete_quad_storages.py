@@ -14,12 +14,8 @@ from alembic import context
 
 
 def upgrade(pyramid_env):
-    from assembl.semantic.virtuoso_mapping import AssemblQuadStorageManager
-    with context.begin_transaction():
-        aqsm = AssemblQuadStorageManager()
-        aqsm.drop_all_discussion_storages_but(-1)
+    pass
 
 
 def downgrade(pyramid_env):
-    with context.begin_transaction():
-        pass
+    pass

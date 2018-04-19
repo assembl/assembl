@@ -390,6 +390,18 @@ describe('voteSession admin reducers', () => {
       expect(actual).toEqual(expected);
     });
 
+    it('should handle CUSTOMIZE_VOTE_MODULE action', () => {
+      const action = {
+        id: 'my-module',
+        locale: 'en',
+        info: {},
+        type: actionTypes.CUSTOMIZE_VOTE_MODULE
+      };
+      const expected = true;
+      const actual = voteProposalsHaveChanged(false, action);
+      expect(actual).toEqual(expected);
+    });
+
     it('should handle UPDATE_VOTE_PROPOSALS action', () => {
       const action = {
         voteProposals: [],
@@ -1376,8 +1388,8 @@ describe('voteSession admin reducers', () => {
             }
           ],
           unit: 'custom unit',
-          min: 0,
-          max: 10
+          minimum: 0,
+          maximum: 10
         },
         template: {
           _hasChanged: false,
@@ -1396,8 +1408,8 @@ describe('voteSession admin reducers', () => {
             }
           ],
           unit: 'template unit',
-          min: 100,
-          max: 1000
+          minimum: 100,
+          maximum: 1000
         }
       });
       const action = {
@@ -1421,8 +1433,8 @@ describe('voteSession admin reducers', () => {
             }
           ],
           unit: 'template unit',
-          min: 100,
-          max: 1000
+          minimum: 100,
+          maximum: 1000
         },
         template: {
           _hasChanged: false,
@@ -1441,8 +1453,8 @@ describe('voteSession admin reducers', () => {
             }
           ],
           unit: 'template unit',
-          min: 100,
-          max: 1000
+          minimum: 100,
+          maximum: 1000
         }
       };
       const actual = modulesById(state, action);
@@ -1467,8 +1479,8 @@ describe('voteSession admin reducers', () => {
             }
           ],
           unit: 'custom unit',
-          min: 0,
-          max: 10
+          minimum: 0,
+          maximum: 10
         },
         template: {
           _hasChanged: false,
@@ -1532,6 +1544,212 @@ describe('voteSession admin reducers', () => {
       };
       const actual = modulesById(state, action);
       expect(actual.toJS()).toEqual(expected);
+    });
+
+    it('should handle CUSTOMIZE_VOTE_MODULE action type (number gauge)', () => {
+      const state = fromJS({
+        customGauge: {
+          _hasChanged: false,
+          _isNew: false,
+          _toDelete: false,
+          isCustom: true,
+          isNumberGauge: true,
+          id: 'customGauge',
+          voteSpecTemplateId: 'template',
+          proposalId: 'proposal1',
+          instructionsEntries: [
+            {
+              localeCode: 'en',
+              value: 'My custom instructions'
+            }
+          ],
+          maximum: 10,
+          minimum: 0,
+          nbTicks: 8,
+          unit: 'km',
+          type: 'gauge'
+        }
+      });
+      const action = {
+        id: 'customGauge',
+        info: {
+          isNumberGauge: true,
+          instructions: 'New instructions',
+          maximum: 2,
+          minimum: 1,
+          nbTicks: 9,
+          type: 'gauge',
+          unit: 'kms'
+        },
+        locale: 'en',
+        type: actionTypes.CUSTOMIZE_VOTE_MODULE
+      };
+      const expected = {
+        customGauge: {
+          _hasChanged: true,
+          _isNew: false,
+          _toDelete: false,
+          isCustom: true,
+          isNumberGauge: true,
+          id: 'customGauge',
+          voteSpecTemplateId: 'template',
+          proposalId: 'proposal1',
+          instructionsEntries: [
+            {
+              localeCode: 'en',
+              value: 'New instructions'
+            }
+          ],
+          maximum: 2,
+          minimum: 1,
+          unit: 'kms',
+          nbTicks: 9,
+          type: 'gauge'
+        }
+      };
+      const actual = modulesById(state, action);
+      expect(actual.toJS()).toEqual(expected);
+    });
+
+    it('should handle CUSTOMIZE_VOTE_MODULE action type (text gauge)', () => {
+      const state = fromJS({
+        customGauge: {
+          _hasChanged: false,
+          _isNew: true,
+          _toDelete: false,
+          isCustom: false,
+          isNumberGauge: false,
+          id: 'customGauge',
+          voteSpecTemplateId: 'template',
+          proposalId: 'proposal1',
+          type: 'gauge'
+        }
+      });
+      const action = {
+        id: 'customGauge',
+        info: {
+          isNumberGauge: false,
+          instructions: 'New instructions',
+          choices: List.of(Map({ id: 'choice1', title: 'sensor' }), Map({ id: 'choice2', title: 'protocol' })),
+          type: 'gauge'
+        },
+        locale: 'en',
+        type: actionTypes.CUSTOMIZE_VOTE_MODULE
+      };
+      const expected = {
+        customGauge: {
+          _hasChanged: true,
+          _isNew: true,
+          _toDelete: false,
+          isCustom: true,
+          isNumberGauge: false,
+          id: 'customGauge',
+          voteSpecTemplateId: 'template',
+          proposalId: 'proposal1',
+          instructionsEntries: [
+            {
+              localeCode: 'en',
+              value: 'New instructions'
+            }
+          ],
+          type: 'gauge',
+          choices: ['choice1', 'choice2']
+        }
+      };
+      const actual = modulesById(state, action);
+      expect(actual.toJS()).toEqual(expected);
+    });
+  });
+
+  describe('gaugeChoicesById reducer', () => {
+    const { gaugeChoicesById } = reducers;
+    it('should handle CUSTOMIZE_VOTE_MODULE action', () => {
+      const state = Map({
+        m1Choice1: Map({
+          id: 'm1Choice1',
+          labelEntries: List(
+            Map({
+              localeCode: 'en',
+              value: 'First choice'
+            })
+          )
+        }),
+        m1Choice2: Map({
+          id: 'm1Choice2',
+          labelEntries: List()
+        }),
+        m2Choice1: Map({
+          id: 'm2Choice1',
+          labelEntries: List()
+        }),
+        m3Choice1: Map({
+          id: 'm3Choice1',
+          labelEntries: List()
+        })
+      });
+      const action = {
+        id: 'm4',
+        info: {
+          isNumberGauge: false,
+          instructions: 'Module 4 instructions',
+          choices: List.of(
+            Map({
+              id: 'm4Choice1',
+              title: 'If we calculate the system, we can get to the XSS panel through the virtual CSS circuit!'
+            }),
+            Map({
+              id: 'm4Choice2',
+              title: 'Try to quantify the PCI matrix, maybe it will compress the 1080p monitor!'
+            })
+          ),
+          type: 'gauge'
+        },
+        locale: 'en',
+        type: actionTypes.CUSTOMIZE_VOTE_MODULE
+      };
+      const expected = Map({
+        m1Choice1: Map({
+          id: 'm1Choice1',
+          labelEntries: List(
+            Map({
+              localeCode: 'en',
+              value: 'First choice'
+            })
+          )
+        }),
+        m1Choice2: Map({
+          id: 'm1Choice2',
+          labelEntries: List()
+        }),
+        m2Choice1: Map({
+          id: 'm2Choice1',
+          labelEntries: List()
+        }),
+        m3Choice1: Map({
+          id: 'm3Choice1',
+          labelEntries: List()
+        }),
+        m4Choice1: Map({
+          id: 'm4Choice1',
+          labelEntries: List.of(
+            Map({
+              localeCode: 'en',
+              value: 'If we calculate the system, we can get to the XSS panel through the virtual CSS circuit!'
+            })
+          )
+        }),
+        m4Choice2: Map({
+          id: 'm4Choice2',
+          labelEntries: List.of(
+            Map({
+              localeCode: 'en',
+              value: 'Try to quantify the PCI matrix, maybe it will compress the 1080p monitor!'
+            })
+          )
+        })
+      });
+      const actual = gaugeChoicesById(state, action);
+      expect(actual).toEqual(expected);
     });
   });
 });

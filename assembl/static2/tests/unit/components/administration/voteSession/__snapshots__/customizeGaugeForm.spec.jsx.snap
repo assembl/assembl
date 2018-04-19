@@ -43,14 +43,23 @@ exports[`DumbCustomizeGaugeForm component should render a form to customize a ga
       maximum={10}
       minimum={1}
       nbTicks={5}
+      type="gauge"
       unit="k€"
       updateNbTicks={[Function]}
     />
-    <Unknown
+    <Button
+      active={false}
+      block={false}
+      bsClass="btn"
+      bsStyle="default"
+      className="button-submit button-dark full-size"
       disabled={true}
-      saveAction={[Function]}
-      specificClasses="save-button button-submit button-dark full-size"
-    />
+      onClick={[Function]}
+    >
+      <Translate
+        value="administration.voteProposals.edit"
+      />
+    </Button>
   </div>
 </div>
 `;

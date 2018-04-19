@@ -32,7 +32,6 @@ from sqlalchemy.orm.util import has_identity
 from sqlalchemy.util import classproperty
 from sqlalchemy.orm.session import object_session, Session
 from sqlalchemy.engine import strategies
-from sqla_rdfbridge.mapping import PatternIriClass
 from zope.sqlalchemy import ZopeTransactionExtension
 from zope.sqlalchemy.datamanager import mark_changed as z_mark_changed
 from zope.component import getGlobalSiteManager
@@ -43,7 +42,6 @@ from graphene.relay import Node
 from .parsedatetime import parse_datetime
 from ..view_def import get_view_def
 from .zmqlib import get_pub_socket, send_changes
-from ..semantic.namespaces import QUADNAMES
 from ..auth import *
 from .decl_enums import EnumSymbol, DeclEnumType
 from .utils import get_global_base_url
@@ -120,17 +118,6 @@ def get_target_class(column):
     for cls in class_registry.itervalues():
         if cls.__mapper__.__table__ == target_table:
             return cls
-
-
-_using_virtuoso = None
-
-
-def using_virtuoso():
-    global _using_virtuoso
-    if _using_virtuoso is None:
-        _using_virtuoso = get_config(
-            )["sqlalchemy.url"].startswith('virtuoso:')
-    return _using_virtuoso
 
 
 class DummyContext(object):
@@ -260,17 +247,9 @@ class BaseOps(object):
         return object_session(self)
 
     @classproperty
-    def using_virtuoso(cls):
-        return using_virtuoso()
-
-    @classproperty
     def full_schema(cls):
         config = get_config()
-        if using_virtuoso():
-            return "_".join([
-                config.get('db_schema'), config.get('db_user')])
-        else:
-            return config.get('db_schema')
+        return config.get('db_schema')
 
     def __iter__(self, **kwargs):
         """Return a generator that iterates through model columns."""
@@ -477,25 +456,6 @@ class BaseOps(object):
         return base_uri + cls.external_typename_with_inheritance() + "/" + str(id)
 
     @classmethod
-    def iri_class(cls):
-        """Return an IRI pattern for instances of this class.
-
-        The :py:meth:`uri_generic` will follow this pattern.
-        Used for Virtuoso RDF-Relational mapping; disabled for now."""
-        if getattr(cls, '_iri_class', 0) is 0:
-            id_column = getattr(cls, 'id', None)
-            if id_column is None:
-                cls._iri_class = None
-                return
-            clsname = cls.external_typename_with_inheritance()
-            iri_name = clsname + "_iri"
-            cls._iri_class = PatternIriClass(
-                getattr(QUADNAMES, iri_name),
-                get_global_base_url() + '/data/'+clsname+'/%d',
-                None, ('id', Integer, False))
-        return cls._iri_class
-
-    @classmethod
     def base_conditions(cls, alias=None, alias_maker=None):
         """Return a list of SQLA expressions that will filter out
         instances of this class
@@ -503,14 +463,6 @@ class BaseOps(object):
         Mostly used to exclude archived versions; see :py:mod:`assembl.lib.history_mixin`
         The exclusion pattern is used by the traversal API, and by the RDF mapping."""
         return None
-
-    @classmethod
-    def special_quad_patterns(cls, alias_maker, discussion_id):
-        """Returns a list of quad map patterns for RDF mapping,
-        beyond those defined by introspection.
-
-        Important: If defined somewhere, override in subclasses to avoid inheritance."""
-        return []
 
     @classmethod
     def get_instance(cls, identifier, session=None):

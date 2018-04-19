@@ -1,3 +1,0 @@
-[submodule "assembl/semantic/ontology"]
-	path = assembl/semantic/ontology
-	url = git://github.com/catalyst-fp7/ontology.git

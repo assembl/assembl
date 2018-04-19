@@ -2,7 +2,7 @@ import React from 'react';
 import { Translate } from 'react-redux-i18n';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { connect } from 'react-redux';
-import lodashGet from 'lodash/get';
+import get from 'lodash/get';
 
 const ChatFrameModal = ({ src }) => (
   <div className="chatframe-modal">
@@ -31,12 +31,14 @@ const ChatFrameButton = ({ isOpen, toggle }) =>
   ));
 
 class DumbChatFrame extends React.Component {
+  state = { isOpen: false };
+
   toggle = () => this.setState(({ isOpen }) => ({ isOpen: !isOpen }));
 
   render = () => {
     const { src } = this.props;
     if (!src) return null;
-    const isOpen = lodashGet(this, 'state.isOpen');
+    const isOpen = this.state.isOpen;
     return (
       <div className={`chatframe ${isOpen ? 'open' : ''}`}>
         {isOpen && <ChatFrameModal src={src} />}
@@ -47,7 +49,7 @@ class DumbChatFrame extends React.Component {
 }
 
 const ChatFrame = connect(state => ({
-  src: lodashGet(state, 'debate.debateData.chatframe.src')
+  src: get(state, 'debate.debateData.chatframe.src')
 }))(DumbChatFrame);
 
 export default ChatFrame;

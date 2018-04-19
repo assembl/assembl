@@ -1,0 +1,1 @@
+import 'raf/polyfill'; // eslint-disable-line import/no-extraneous-dependencies
