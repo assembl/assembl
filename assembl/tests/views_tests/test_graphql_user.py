@@ -304,17 +304,13 @@ def test_graphql_update_user_modify_password_can_reuse_the_old_6th_password_set(
     assert res.errors is None
 
 
-def test_graphql_delete_user_information(graphql_request, participant1_user):
+def test_graphql_delete_user_information(participant1_user, graphql_request):
     from assembl.auth.password import random_string
     user_password = participant1_user.password_p
     user_username = participant1_user.username_p
     user_preferred_email = participant1_user.preferred_email
     user_last_assembl_login = participant1_user.last_assembl_login
     user_name = participant1_user.name
-    if participant1_user.username:
-        user_username_username = participant1_user.username.username
-    else:
-        user_username_username = random_string()
     user_old_passwords = participant1_user.old_passwords
     res = schema.execute(DELETE_USER_INFORMATION_MUTATION, context_value=graphql_request, variable_values={
         "id": to_global_id('AgentProfile', participant1_user.id)
@@ -322,11 +318,9 @@ def test_graphql_delete_user_information(graphql_request, participant1_user):
     assert res.errors is None
     assert participant1_user.is_deleted is True
     assert participant1_user.password != user_password
-    assert participant1_user.username != user_username
     assert participant1_user.preferred_email != user_preferred_email
     assert participant1_user.last_assembl_login != user_last_assembl_login
     assert participant1_user.name != user_name
-    assert participant1_user.username.username != user_username_username
     for p in participant1_user.old_passwords:
         for pa in user_old_passwords:
             assert pa != p.password
