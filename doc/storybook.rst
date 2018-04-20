@@ -19,7 +19,7 @@ Run storybook::
 
 Access the storybook at `http://localhost:9001`_
 
-When you create a new component, please add stories for it in ``assembl/js/app/stories``.
+When you create a new component, please add stories for it in ``assembl/static2/js/app/stories/``.
 
 Write a story
 -------------
