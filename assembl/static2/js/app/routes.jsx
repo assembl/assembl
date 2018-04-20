@@ -32,6 +32,7 @@ import MultiColumnsAdmin from './pages/multiColumnsAdmin';
 import VoteSessionAdmin from './pages/voteSessionAdmin';
 import ResourcesCenter from './pages/resourcesCenter';
 import LandingPageAdmin from './pages/landingPageAdmin';
+import ExportTaxonomies from './pages/exportTaxonomies';
 import { routeForRouter } from './utils/routeMap';
 
 const DebateHome = (props) => {
@@ -80,6 +81,8 @@ const AdminChild = (props) => {
     return <ResourcesCenterAdmin {...props} />;
   case 'landingPage':
     return <LandingPageAdmin {...props} section={props.location.query.section} />;
+  case 'exportTaxonomies':
+    return <ExportTaxonomies />;
   default:
     return <ThreadAdmin {...props} />;
   }
