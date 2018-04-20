@@ -63,6 +63,7 @@ from assembl.models.social_data_extraction import (
 from ..traversal import InstanceContext, ClassContext
 from . import (JSON_HEADER, FORM_HEADER, CreationResponse)
 from ..api.discussion import etalab_discussions, API_ETALAB_DISCUSSIONS_PREFIX
+from assembl.models import LanguagePreferenceCollection
 
 
 @view_config(context=InstanceContext, request_method='GET',
@@ -513,17 +514,19 @@ def extract_taxonomy_csv(request):
     db = discussion.db
     extracts = db.query(m.Extract).all()
     extract_list = []
+    user_prefs = LanguagePreferenceCollection.getCurrent()
     fieldnames = ["Thematic", "Message", "Content harvested", "Qualify by nature", "Qualify by action",
                   "Owner of the message", "Published on", "Harvester", "Harvested on", "Nugget"]
     for extract in extracts:
-        thematic = db.query(m.Idea).filter(m.Idea.id == extract.idea_id).first()
-        if thematic:
-            if thematic.title:
-                thematic = thematic.title.entries[0].value
+        if extract.idea_id:
+            thematic = db.query(m.Idea).get(extract.idea_id)
+            if thematic:
+                if thematic.title:
+                    thematic = thematic.title.best_lang(user_prefs).value
+                else:
+                    thematic = "no thematic associated"
             else:
                 thematic = "no thematic associated"
-        else:
-            thematic = "no thematic associated"
         query = db.query(m.Post).filter(m.Post.id == extract.content_id).first()
         if query:
             if query.body:
