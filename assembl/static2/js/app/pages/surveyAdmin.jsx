@@ -104,7 +104,7 @@ class SurveyAdmin extends React.Component {
     const { section, thematicsHaveChanged, debateId, languages } = this.props;
     const { translate } = this.state;
     const exportLocale = this.state.exportLocale || (languages && languages[0].locale);
-    const translation = translate && exportLocale ? `?lang=${exportLocale}` : '';
+    const translation = translate && exportLocale ? `?lang=${exportLocale}` : '?'; // FIXME: using '' instead of '?' does not work
     const exportLink = get('exportSurveyData', { debateId: debateId, translation: translation });
     const currentStep = parseInt(section, 10);
     const saveDisabled = !thematicsHaveChanged;
