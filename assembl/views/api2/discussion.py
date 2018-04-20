@@ -512,7 +512,7 @@ def extract_taxonomy_csv(request):
     import assembl.models as m
     discussion = request.context._instance
     db = discussion.db
-    extracts = db.query(m.Extract).all()
+    extracts = db.query(m.Extract).filter(m.Extract.discussion_id == discussion.id)
     extract_list = []
     user_prefs = LanguagePreferenceCollection.getCurrent()
     fieldnames = ["Thematic", "Message", "Content harvested", "Qualify by nature", "Qualify by action",
@@ -527,10 +527,12 @@ def extract_taxonomy_csv(request):
                     thematic = "no thematic associated"
             else:
                 thematic = "no thematic associated"
+        else:
+            thematic = "no thematic associated"
         query = db.query(m.Post).filter(m.Post.id == extract.content_id).first()
         if query:
             if query.body:
-                message = query.body.entries[0].value
+                message = query.body.best_lang(user_prefs).value
             else:
                 message = "no message"
         else:
