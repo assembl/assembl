@@ -511,37 +511,56 @@ def extract_taxonomy_csv(request):
     import assembl.models as m
     discussion = request.context._instance
     db = discussion.db
-    format = get_format(request)
     extracts = db.query(m.Extract).all()
     extract_list = []
-    fieldnames = ["Thematic", "Message", "Content Harvested", "Qualify by nature", "Qualify by action",
+    fieldnames = ["Thematic", "Message", "Content harvested", "Qualify by nature", "Qualify by action",
                   "Owner of the message", "Published on", "Harvester", "Harvested on", "Nugget"]
     for extract in extracts:
         thematic = db.query(m.Idea).filter(m.Idea.id == extract.idea_id).first()
+        if thematic:
+            if thematic.title:
+                thematic = thematic.title.entries[0].value
+            else:
+                thematic = "no thematic associated"
+        else:
+            thematic = "no thematic associated"
         query = db.query(m.Post).filter(m.Post.id == extract.content_id).first()
-        message = query.body
+        if query:
+            if query.body:
+                message = query.body.entries[0].value
+            else:
+                message = "no message"
+        else:
+            message = "no message"
         content_harvested = extract.body
-        qualify_by_nature = extract.extract_nature
-        qualify_by_action = extract.extract_action
+        if extract.extract_nature:
+            qualify_by_nature = extract.extract_nature
+        else:
+            qualify_by_nature = "no qualify by nature"
+        if extract.extract_action:
+            qualify_by_action = extract.extract_action
+        else:
+            qualify_by_action = "no qualify by action"
         owner_of_the_message = db.query(m.User).filter(m.User.id == query.creator_id).first().name
         published_on = str(query.creation_date)
         harvester = db.query(m.User).filter(m.User.id == extract.owner_id).first().name
         harvested_on = str(extract.creation_date)
         nugget = "Yes" if extract.important else "No"
         extract_info = {
-            "thematic": thematic,
-            "message": message,
-            "content_harvested": content_harvested,
-            "qualify_by_nature": qualify_by_nature,
-            "qualify_by_action": qualify_by_action,
-            "owner_of_the_message": owner_of_the_message,
-            "published_on": published_on,
-            "harvester": harvester,
-            "harvested_on": harvested_on,
-            "nugget": nugget,
+            "Thematic": thematic,
+            "Message": message,
+            "Content harvested": content_harvested,
+            "Qualify by nature": qualify_by_nature,
+            "Qualify by action": qualify_by_action,
+            "Owner of the message": owner_of_the_message,
+            "Published on": published_on,
+            "Harvester": harvester,
+            "Harvested on": harvested_on,
+            "Nugget": nugget,
         }
         extract_list.append(extract_info)
-    return csv_response(extract_list, format, fieldnames)
+
+    return csv_response(extract_list, XSLX_MIMETYPE, fieldnames)
 
 
 def csv_response(results, format, fieldnames=None):
