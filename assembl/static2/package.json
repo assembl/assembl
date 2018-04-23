@@ -21,11 +21,13 @@
     "flow": "flow",
     "format": "prettier-eslint --write 'js/**/*.js?' 'tests/**/*.js?' '*.js'",
     "i18n:export": "node ./scripts/translations2messages.js && rip json2pot messages.json -k id -o ../locale/assembl-v2.pot && ./scripts/merge_po_files.bash",
-    "i18n:import": "rip po2json '../locale/assembl-v2/*.po' -m messages.json -k id -o './translations'"
+    "i18n:import": "rip po2json '../locale/assembl-v2/*.po' -m messages.json -k id -o './translations'",
+    "storybook": "start-storybook -p 9001 -c .storybook"
   },
   "author": "Bluenove",
   "license": "AGPL-3.0",
   "devDependencies": {
+    "@storybook/react": "^3.4.2",
     "apollo-test-utils": "^0.3.0",
     "babel-core": "^6.26.0",
     "babel-eslint": "^7.1.1",

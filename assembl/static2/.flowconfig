@@ -4,6 +4,8 @@
 <PROJECT_ROOT>/node_modules/config-chain
 <PROJECT_ROOT>/node_modules/npm/node_modules/config-chain
 <PROJECT_ROOT>/node_modules/stylelint
+<PROJECT_ROOT>/node_modules/babel-plugin-react-docgen
+<PROJECT_ROOT>/node_modules/radium
 
 [include]
 
