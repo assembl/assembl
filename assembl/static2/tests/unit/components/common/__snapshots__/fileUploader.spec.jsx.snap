@@ -48,6 +48,14 @@ exports[`FileUploader component should render a file uploader with the filename 
     </span>
   </button>
   <div
+    className="hidden"
+  >
+    <img
+      alt="preview"
+      src={undefined}
+    />
+  </div>
+  <div
     className="preview-title"
   >
     
@@ -77,6 +85,14 @@ exports[`FileUploader component should render a file uploader with the filename 
     </span>
   </button>
   <div
+    className="hidden"
+  >
+    <img
+      alt="preview"
+      src="http:/www.example.com/myfile"
+    />
+  </div>
+  <div
     className="preview-title"
   >
     myfile.pdf
@@ -105,6 +121,14 @@ exports[`FileUploader component should render a file uploader without preview 1`
       Choose a file to upload
     </span>
   </button>
+  <div
+    className="hidden"
+  >
+    <img
+      alt="preview"
+      src={undefined}
+    />
+  </div>
   <div
     className="preview-title"
   >

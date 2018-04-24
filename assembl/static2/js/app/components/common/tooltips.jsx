@@ -203,3 +203,9 @@ export const harvestingTooltip = (
     <Translate value="harvesting.harvesting" />
   </Tooltip>
 );
+
+export const deleteThematicImageTooltip = (
+  <Tooltip id="deleteThematicImageTooltip">
+    <Translate value="administration.deleteThematicImage" />
+  </Tooltip>
+);

@@ -25,13 +25,22 @@ function convertVideoDescriptionsToHTML(video) {
   };
 }
 
+const getImageVariable = (item) => {
+  // item can be a thematic or any sort of object containing an img key
+  const { img: { externalUrl } } = item;
+  if (externalUrl === 'TO_DELETE') {
+    return externalUrl;
+  }
+  return typeof externalUrl === 'object' ? externalUrl : null;
+};
+
 /* Create variables for createThematic and updateThematic mutations */
 const createVariablesForThematicMutation = thematic => ({
   identifier: 'survey',
   titleEntries: thematic.titleEntries,
   // If thematic.img.externalUrl is an object, it means it's a File.
   // We need to send image: null if we didn't change the image.
-  image: thematic.img && typeof thematic.img.externalUrl === 'object' ? thematic.img.externalUrl : null,
+  image: getImageVariable(thematic),
   // if video is null, pass {} to remove all video fields on server side
   video: thematic.video === null ? {} : convertVideoDescriptionsToHTML(thematic.video),
   questions: thematic.questions

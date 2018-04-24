@@ -1,7 +1,8 @@
 // @flow
 import React from 'react';
 import { Translate } from 'react-redux-i18n';
-import { Button } from 'react-bootstrap';
+import { Button, OverlayTrigger } from 'react-bootstrap';
+import { deleteThematicImageTooltip } from '../common/tooltips';
 
 type FileUploaderProps = {
   filename: string,
@@ -9,7 +10,10 @@ type FileUploaderProps = {
   mimeType: string,
   name: string,
   handleChange: Function,
-  withPreview: boolean
+  withPreview: boolean,
+  isAdminUploader: boolean,
+  imgTitle?: string,
+  onDeleteClick: Function
 };
 
 type FileUploaderState = {
@@ -36,7 +40,9 @@ class FileUploader extends React.Component<Object, FileUploaderProps, FileUpload
     filename: '',
     mimeType: '',
     name: 'file-uploader',
-    withPreview: true
+    withPreview: true,
+    isAdminUploader: false,
+    imgTitle: null
   };
 
   constructor(props: FileUploaderProps) {
@@ -96,18 +102,20 @@ class FileUploader extends React.Component<Object, FileUploaderProps, FileUpload
   };
 
   render() {
-    const { mimeType, name, withPreview } = this.props;
+    const { mimeType, name, withPreview, imgTitle, isAdminUploader, onDeleteClick } = this.props;
+    const { fileName } = this.state;
     const fileSrc = this.state.fileSrc;
     const fileIsImage =
       fileSrc && (typeof fileSrc === 'string' || fileSrc instanceof String) && fileSrc.startsWith('data:image/');
     const mimeTypeIsImage = mimeType.startsWith('image/');
-    const isImage = fileIsImage || mimeTypeIsImage;
+    const isToDelete = fileSrc === 'TO_DELETE';
+    const isImage = fileIsImage || (mimeTypeIsImage && !isToDelete);
     return (
       <div>
         <Button onClick={this.handleUploadButtonClick}>
           <Translate value="common.uploadButton" />
         </Button>
-        {withPreview && isImage ? (
+        {withPreview && isImage && isAdminUploader ? (
           <div className={fileSrc ? 'preview' : 'hidden'}>
             <img
               src={fileSrc}
@@ -116,9 +124,28 @@ class FileUploader extends React.Component<Object, FileUploaderProps, FileUpload
               }}
               alt="preview"
             />
+            <div className="preview-title">
+              <span className="assembl-icon-text-attachment" />
+              {imgTitle}
+            </div>
+            <OverlayTrigger placement="top" overlay={deleteThematicImageTooltip}>
+              <Button onClick={onDeleteClick} className="admin-icons">
+                <span className="assembl-icon-delete grey" />
+              </Button>
+            </OverlayTrigger>
           </div>
-        ) : null}
-        {!isImage && <div className="preview-title">{this.state.fileName}</div>}
+        ) : (
+          <div className={fileSrc && isImage ? 'preview' : 'hidden'}>
+            <img
+              src={fileSrc}
+              ref={(p) => {
+                this.preview = p;
+              }}
+              alt="preview"
+            />
+          </div>
+        )}
+        {!isImage && <div className="preview-title">{fileName}</div>}
         <input
           name={name}
           type="file"
