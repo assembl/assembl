@@ -33,9 +33,9 @@ type ExtractInPostProps = {
 };
 
 const ExtractInPost = ({ id, children }: ExtractInPostProps) => (
-  <div className="extract-in-message" id={id}>
+  <span className="extract-in-message" id={id}>
     {children}
-  </div>
+  </span>
 );
 
 const postBodyReplacementComponents = {
