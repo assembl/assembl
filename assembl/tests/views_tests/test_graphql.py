@@ -763,6 +763,32 @@ mutation secondMutation {
             }}}
 
 
+def test_update_thematic_delete_image(graphql_request, discussion, thematic_with_image):
+    thematic_id = thematic_with_image
+    res = schema.execute(u"""
+mutation updateThematic($thematicId: ID!, $file: String!) {
+    updateThematic(
+        id:$thematicId,
+        identifier:"survey",
+        image:$file
+    ) {
+        thematic {
+            identifier
+            img {
+                externalUrl
+            }
+        }
+    }
+}
+""", context_value=graphql_request, variable_values={ 'thematicId': thematic_id, "file": "TO_DELETE" })
+
+    assert json.loads(json.dumps(res.data)) == {
+        u'updateThematic': {
+            u'thematic': {
+                u'identifier': u'survey',
+                u'img': None
+            }}}
+
 def test_mutation_create_post(graphql_request, thematic_and_question):
     thematic_id, first_question_id = thematic_and_question
     res = schema.execute(u"""
