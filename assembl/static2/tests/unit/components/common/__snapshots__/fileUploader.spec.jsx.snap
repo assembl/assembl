@@ -122,14 +122,6 @@ exports[`FileUploader component should render a file uploader without preview 1`
     </span>
   </button>
   <div
-    className="hidden"
-  >
-    <img
-      alt="preview"
-      src={undefined}
-    />
-  </div>
-  <div
     className="preview-title"
   >
     

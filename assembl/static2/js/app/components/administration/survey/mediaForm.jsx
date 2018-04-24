@@ -117,7 +117,6 @@ class MediaForm extends React.Component {
                 handleChange={this.onFileChange}
                 fileOrUrl={isLocalURL ? htmlCode : ''}
                 mimeType={this.state.mediaMimeType}
-                isAdminUploader
               />
               {htmlCode &&
                 isLocalURL && (

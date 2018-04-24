@@ -2,7 +2,7 @@
 import React from 'react';
 import { Translate } from 'react-redux-i18n';
 import { Button, OverlayTrigger } from 'react-bootstrap';
-import { deleteThematicImageTooltip } from '../common/tooltips';
+import { deleteThematicImageTooltip, fileNameTooltip } from '../common/tooltips';
 
 type FileUploaderProps = {
   filename: string,
@@ -101,40 +101,67 @@ class FileUploader extends React.Component<Object, FileUploaderProps, FileUpload
     }
   };
 
+  getFilePreview = (isImage: ?boolean, title: string, src: String | string | ArrayBuffer) => (
+    <div className="preview">
+      {isImage && (
+        <img
+          src={src}
+          ref={(p) => {
+            this.preview = p;
+          }}
+          alt="preview"
+        />
+      )}
+      <OverlayTrigger placement="top" overlay={fileNameTooltip(title)}>
+        <div className="preview-title">
+          <span className="assembl-icon-text-attachment" />
+          {title}
+        </div>
+      </OverlayTrigger>
+      <OverlayTrigger placement="top" overlay={deleteThematicImageTooltip}>
+        <Button onClick={this.props.onDeleteClick} className="admin-icons">
+          <span className="assembl-icon-delete grey" />
+        </Button>
+      </OverlayTrigger>
+    </div>
+  );
+
   render() {
-    const { mimeType, name, withPreview, imgTitle, isAdminUploader, onDeleteClick } = this.props;
-    const { fileName } = this.state;
-    const fileSrc = this.state.fileSrc;
-    const fileIsImage =
-      fileSrc && (typeof fileSrc === 'string' || fileSrc instanceof String) && fileSrc.startsWith('data:image/');
+    const { mimeType, name, withPreview, imgTitle, isAdminUploader } = this.props;
+    const { fileName, fileSrc } = this.state;
+    const fileIsImage = fileSrc && !(fileSrc instanceof ArrayBuffer) && fileSrc.startsWith('data:image/');
     const mimeTypeIsImage = mimeType.startsWith('image/');
     const isToDelete = fileSrc === 'TO_DELETE';
     const isImage = fileIsImage || (mimeTypeIsImage && !isToDelete);
+    const title = isImage ? imgTitle : fileName;
+    if (isAdminUploader) {
+      return (
+        <div>
+          {withPreview && !isToDelete ? (
+            title && fileSrc && this.getFilePreview(isImage, title, fileSrc)
+          ) : (
+            <Button onClick={this.handleUploadButtonClick}>
+              <Translate value="common.uploadButton" />
+            </Button>
+          )}
+          <input
+            name={name}
+            type="file"
+            onChange={this.handleChangePreview}
+            className="hidden"
+            ref={(p) => {
+              this.fileInput = p;
+            }}
+          />
+        </div>
+      );
+    }
     return (
       <div>
         <Button onClick={this.handleUploadButtonClick}>
           <Translate value="common.uploadButton" />
         </Button>
-        {withPreview && isImage && isAdminUploader ? (
-          <div className={fileSrc ? 'preview' : 'hidden'}>
-            <img
-              src={fileSrc}
-              ref={(p) => {
-                this.preview = p;
-              }}
-              alt="preview"
-            />
-            <div className="preview-title">
-              <span className="assembl-icon-text-attachment" />
-              {imgTitle}
-            </div>
-            <OverlayTrigger placement="top" overlay={deleteThematicImageTooltip}>
-              <Button onClick={onDeleteClick} className="admin-icons">
-                <span className="assembl-icon-delete grey" />
-              </Button>
-            </OverlayTrigger>
-          </div>
-        ) : (
+        {withPreview && (
           <div className={fileSrc && isImage ? 'preview' : 'hidden'}>
             <img
               src={fileSrc}

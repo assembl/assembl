@@ -58,27 +58,6 @@ exports[`DumbPageForm component should render a form to update the resources cen
           alt="preview"
           src="http://www.example.com/documents/myimage/data"
         />
-        <div
-          className="preview-title"
-        >
-          <span
-            className="assembl-icon-text-attachment"
-          />
-        </div>
-        <button
-          className="admin-icons btn btn-default"
-          disabled={false}
-          onBlur={[Function]}
-          onClick={null}
-          onFocus={[Function]}
-          onMouseOut={[Function]}
-          onMouseOver={[Function]}
-          type="button"
-        >
-          <span
-            className="assembl-icon-delete grey"
-          />
-        </button>
       </div>
       <input
         className="hidden"

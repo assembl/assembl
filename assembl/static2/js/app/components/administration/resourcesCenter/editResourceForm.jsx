@@ -96,13 +96,7 @@ const EditResourceForm = ({
         <label htmlFor={imageFieldName}>
           <Translate value="administration.resourcesCenter.imageLabel" />
         </label>
-        <FileUploader
-          name={imageFieldName}
-          fileOrUrl={imgUrl}
-          handleChange={handleImageChange}
-          mimeType={imgMimeType}
-          isAdminUploader
-        />
+        <FileUploader name={imageFieldName} fileOrUrl={imgUrl} handleChange={handleImageChange} mimeType={imgMimeType} />
       </FormGroup>
       <FormGroup>
         <label htmlFor={documentFieldName}>
@@ -114,7 +108,6 @@ const EditResourceForm = ({
           fileOrUrl={documentUrl}
           handleChange={handleDocumentChange}
           withPreview={false}
-          isAdminUploader
         />
       </FormGroup>
       <div className="separator" />

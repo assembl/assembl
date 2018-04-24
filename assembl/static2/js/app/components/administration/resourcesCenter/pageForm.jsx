@@ -46,7 +46,6 @@ const DumbPageForm = ({
           name={headerImageFieldName}
           fileOrUrl={headerUrl}
           handleChange={handleHeaderImageChange}
-          isAdminUploader
         />
       </FormGroup>
       <div className="separator" />

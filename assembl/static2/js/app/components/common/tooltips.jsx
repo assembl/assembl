@@ -209,3 +209,5 @@ export const deleteThematicImageTooltip = (
     <Translate value="administration.deleteThematicImage" />
   </Tooltip>
 );
+
+export const fileNameTooltip = (fileName?: string) => <Tooltip id="fileNameTooltip">{fileName}</Tooltip>;
