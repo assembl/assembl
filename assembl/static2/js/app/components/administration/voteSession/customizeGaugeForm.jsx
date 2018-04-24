@@ -16,8 +16,6 @@ type DefaultProps = {
 type Props = {
   choices: List<VoteChoice>,
   close: Function,
-  createChoice: Function,
-  createProposal: Function,
   customizeModule: Function,
   editLocale: string,
   gaugeModuleId: string,
@@ -28,10 +26,7 @@ type Props = {
   minimum: ?number,
   nbTicks: number,
   type: string,
-  unit: ?string,
-  updateGaugeVoteSpecification: Function,
-  updateInstructions: Function,
-  updateNumberGaugeVoteSpecification: Function
+  unit: ?string
 };
 
 type State = {
