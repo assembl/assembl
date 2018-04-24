@@ -133,12 +133,12 @@ class FileUploader extends React.Component<Object, FileUploaderProps, FileUpload
     const mimeTypeIsImage = mimeType.startsWith('image/');
     const isToDelete = fileSrc === 'TO_DELETE';
     const isImage = fileIsImage || (mimeTypeIsImage && !isToDelete);
-    const title = isImage ? imgTitle : fileName;
+    const title = isImage && imgTitle ? imgTitle : fileName;
     if (isAdminUploader) {
       return (
         <div>
-          {withPreview && !isToDelete ? (
-            title && fileSrc && this.getFilePreview(isImage, title, fileSrc)
+          {withPreview && !isToDelete && fileSrc && title ? (
+            this.getFilePreview(isImage, title, fileSrc)
           ) : (
             <Button onClick={this.handleUploadButtonClick}>
               <Translate value="common.uploadButton" />
