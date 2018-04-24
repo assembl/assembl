@@ -16,6 +16,7 @@ Installation and administration
    backups
    howtoupgrade
    python_requirements
+   preprod_update
 
 Stack and architecture
 ----------------------
