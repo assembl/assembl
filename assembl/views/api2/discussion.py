@@ -537,7 +537,10 @@ def extract_taxonomy_csv(request):
                 message = "no message"
         else:
             message = "no message"
-        content_harvested = extract.body
+        if extract.body:
+            content_harvested = extract.body
+        else:
+            content_harvested = "no content harvested"
         if extract.extract_nature:
             qualify_by_nature = extract.extract_nature
         else:
@@ -565,7 +568,7 @@ def extract_taxonomy_csv(request):
         }
         extract_list.append(extract_info)
 
-    return csv_response(extract_list, CSV_MIMETYPE, fieldnames)
+    return csv_response(extract_list, XSLX_MIMETYPE, fieldnames)
 
 
 def csv_response(results, format, fieldnames=None):
