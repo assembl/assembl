@@ -191,12 +191,24 @@ class DeleteUserInformation(graphene.Mutation):
     @abort_transaction_on_exception
     def mutate(root, args, context, info):
         cls = models.User
+        db = cls.default_db
         discussion_id = context.matchdict['discussion_id']
         user_id = context.authenticated_userid or Everyone
 
         global_id = args.get('id')
         id_ = int(Node.from_global_id(global_id)[1])
         user = cls.get(id_)
+        from assembl import models as m
+        local_user_roles = db.query(m.LocalUserRole).filter(m.LocalUserRole.user_id == user.id).all()
+        for lur in local_user_roles:
+            if lur.role.name == u'r:sysadmin':
+                raise Exception(u"User can't delete his account if he is sysadmin")
+
+        number_of_admin_users = db.query(m.LocalUserRole).filter(models.LocalUserRole.role_id == 5).count()
+        import pdb
+        pdb.set_trace()
+        if int(number_of_admin_users) <= 1:
+            raise Exception(u"User can't delete his account because this is the only admin account")
 
         permissions = get_permissions(user_id, discussion_id)
         allowed = user.user_can(

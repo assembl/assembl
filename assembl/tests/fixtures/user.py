@@ -110,8 +110,61 @@ def discussion_admin_user(request, test_app, test_session, discussion):
 
 
 @pytest.fixture(scope="function")
-def moderator_user(request, test_session, discussion):
+def discussion_admin_user_2(request, test_app, test_session, discussion):
+    """A User fixture with R_ADMINISTRATOR role in a discussion"""
+    from datetime import datetime
+    from assembl.auth import R_ADMINISTRATOR
+    from assembl.models import User
+    from assembl.models.auth import Role, LocalUserRole
 
+    u = User(name=u"Maximilien de Robespierre 2", type="user",
+             last_assembl_login=datetime.utcnow())
+    test_session.add(u)
+
+    u.update_agent_status_last_visit(discussion)
+    role = Role.get_role(R_ADMINISTRATOR, test_session)
+    test_session.add(
+        LocalUserRole(user=u, discussion=discussion, role=role))
+    test_session.flush()
+
+    def fin():
+        print "finalizer discussion_admin_user_2"
+        test_session.delete(u)
+        test_session.flush()
+    request.addfinalizer(fin)
+
+    return u
+
+
+@pytest.fixture(scope="function")
+def discussion_sysadmin_user(request, test_app, test_session, discussion):
+    """A User fixture with R_SYSADMIN role in a discussion"""
+    from datetime import datetime
+    from assembl.auth import R_SYSADMIN
+    from assembl.models import User
+    from assembl.models.auth import Role, LocalUserRole
+
+    u = User(name=u"Maximilien de Robespierre 3", type="user",
+             last_assembl_login=datetime.utcnow())
+    test_session.add(u)
+
+    u.update_agent_status_last_visit(discussion)
+    role = Role.get_role(R_SYSADMIN, test_session)
+    test_session.add(
+        LocalUserRole(user=u, discussion=discussion, role=role))
+    test_session.flush()
+
+    def fin():
+        print "finalizer discussion_sysadmin_user"
+        test_session.delete(u)
+        test_session.flush()
+    request.addfinalizer(fin)
+
+    return u
+
+
+@pytest.fixture(scope="function")
+def moderator_user(request, test_session, discussion):
     """A User fixture with R_MODERATOR role"""
 
     from assembl.models import User, UserRole, Role, EmailAccount
