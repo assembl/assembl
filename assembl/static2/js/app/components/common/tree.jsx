@@ -19,6 +19,7 @@ class Child extends React.PureComponent {
     // This function will be called by each post rendered, so we delay the
     // recomputation until no post are rendered in 200ms to avoid unnecessary lag.
     const { listRef, cache, rowIndex, nuggetsManager } = this.props;
+    const pageYOffset = window.pageYOffset;
     cache.clear(rowIndex, 0);
     if (listRef) {
       let delayedRecomputeRowHeights = listRef.delayedRecomputeRowHeights;
@@ -34,6 +35,7 @@ class Child extends React.PureComponent {
         // if listRef.Grid is null, it means it has been unmounted, so we are now on a new List
         if (listRef.Grid) {
           listRef.recomputeRowHeights(delayedRecomputeRowHeights[1]);
+          window.scrollTo({ top: pageYOffset, left: 0 });
           nuggetsManager.update();
           // recompute height only for rows (top post) starting at rowIndex
         }
