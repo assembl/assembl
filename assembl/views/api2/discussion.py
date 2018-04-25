@@ -537,6 +537,8 @@ def extract_taxonomy_csv(request):
                 message = "no message"
         else:
             message = "no message"
+        if not message:
+            message = "no message"
         if extract.body:
             content_harvested = extract.body
         else:
