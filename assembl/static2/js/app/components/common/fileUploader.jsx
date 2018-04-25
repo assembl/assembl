@@ -106,9 +106,6 @@ class FileUploader extends React.Component<Object, FileUploaderProps, FileUpload
       {isImage && (
         <img
           src={src}
-          ref={(p) => {
-            this.preview = p;
-          }}
           alt="preview"
         />
       )}
@@ -149,9 +146,6 @@ class FileUploader extends React.Component<Object, FileUploaderProps, FileUpload
             type="file"
             onChange={this.handleChangePreview}
             className="hidden"
-            ref={(p) => {
-              this.fileInput = p;
-            }}
           />
         </div>
       );
