@@ -121,29 +121,40 @@ export const voteSessionPage: VoteSessionPageReducer = (state = initialPage, act
   }
 };
 
-export const moduleTemplatesHaveChanged = (state: boolean = false, action: ReduxAction<Action>) => {
+export const modulesOrProposalsHaveChanged = (state: boolean = false, action: ReduxAction<Action>) => {
   switch (action.type) {
-  case DELETE_VOTE_MODULE:
+  case ADD_MODULE_TO_PROPOSAL:
+  case CANCEL_MODULE_CUSTOMIZATION:
+  case CREATE_GAUGE_VOTE_CHOICE:
+  case CREATE_GAUGE_VOTE_MODULE:
+  case CREATE_TOKEN_VOTE_CATEGORY:
   case CREATE_TOKEN_VOTE_MODULE:
+  case CREATE_VOTE_PROPOSAL:
+  case CUSTOMIZE_VOTE_MODULE:
+  case DELETE_GAUGE_VOTE_CHOICE:
+  case DELETE_TOKEN_VOTE_CATEGORY:
+  case DELETE_VOTE_MODULE:
+  case DELETE_VOTE_PROPOSAL:
+  case MARK_ALL_DEPENDENCIES_AS_CHANGED:
+  case MOVE_PROPOSAL_DOWN:
+  case MOVE_PROPOSAL_UP:
+  case UPDATE_GAUGE_MAXIMUM:
+  case UPDATE_GAUGE_MINIMUM:
+  case UPDATE_GAUGE_UNIT:
+  case UPDATE_GAUGE_VOTE_CHOICE_LABEL:
+  case UPDATE_GAUGE_VOTE_INSTRUCTIONS:
+  case UPDATE_GAUGE_VOTE_IS_NUMBER:
+  case UPDATE_GAUGE_VOTE_NUMBER_TICKS:
+  case UPDATE_TOKEN_TOTAL_NUMBER:
+  case UPDATE_TOKEN_VOTE_CATEGORY_COLOR:
+  case UPDATE_TOKEN_VOTE_CATEGORY_TITLE:
   case UPDATE_TOKEN_VOTE_EXCLUSIVE_CATEGORY:
   case UPDATE_TOKEN_VOTE_INSTRUCTIONS:
-  case CREATE_TOKEN_VOTE_CATEGORY:
-  case DELETE_TOKEN_VOTE_CATEGORY:
-  case UPDATE_TOKEN_VOTE_CATEGORY_TITLE:
-  case UPDATE_TOKEN_VOTE_CATEGORY_COLOR:
-  case UPDATE_TOKEN_TOTAL_NUMBER:
-  case CREATE_GAUGE_VOTE_MODULE:
-  case UPDATE_GAUGE_VOTE_INSTRUCTIONS:
-  case UPDATE_GAUGE_VOTE_NUMBER_TICKS:
-  case UPDATE_GAUGE_VOTE_IS_NUMBER:
-  case CREATE_GAUGE_VOTE_CHOICE:
-  case DELETE_GAUGE_VOTE_CHOICE:
-  case UPDATE_GAUGE_VOTE_CHOICE_LABEL:
-  case UPDATE_GAUGE_MINIMUM:
-  case UPDATE_GAUGE_MAXIMUM:
-  case UPDATE_GAUGE_UNIT:
+  case UPDATE_VOTE_PROPOSAL_DESCRIPTION:
+  case UPDATE_VOTE_PROPOSAL_TITLE:
     return true;
   case UPDATE_VOTE_MODULES:
+  case UPDATE_VOTE_PROPOSALS:
     return false;
   default:
     return state;
@@ -481,27 +492,6 @@ export const tokenCategoriesById = (state: Map<string, Map> = Map(), action: Red
   }
 };
 
-export const voteProposalsHaveChanged = (state: boolean = false, action: ReduxAction<Action>) => {
-  switch (action.type) {
-  case CREATE_VOTE_PROPOSAL:
-  case DELETE_VOTE_PROPOSAL:
-  case MOVE_PROPOSAL_DOWN:
-  case MOVE_PROPOSAL_UP:
-  case UPDATE_VOTE_PROPOSAL_TITLE:
-  case UPDATE_VOTE_PROPOSAL_DESCRIPTION:
-  case ADD_MODULE_TO_PROPOSAL:
-  case DELETE_VOTE_MODULE:
-  case MARK_ALL_DEPENDENCIES_AS_CHANGED:
-  case CANCEL_MODULE_CUSTOMIZATION:
-  case CUSTOMIZE_VOTE_MODULE:
-    return true;
-  case UPDATE_VOTE_PROPOSALS:
-    return false;
-  default:
-    return state;
-  }
-};
-
 const defaultVoteProposal = Map({
   _isNew: true,
   _toDelete: false,
@@ -663,7 +653,6 @@ export default combineReducers({
   modulesById: modulesById,
   tokenCategoriesById: tokenCategoriesById,
   voteProposalsById: voteProposalsById,
-  voteProposalsHaveChanged: voteProposalsHaveChanged,
   gaugeChoicesById: gaugeChoicesById,
-  moduleTemplatesHaveChanged: moduleTemplatesHaveChanged
+  modulesOrProposalsHaveChanged: modulesOrProposalsHaveChanged
 });
