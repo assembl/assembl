@@ -17,7 +17,9 @@ class ThemeSection extends React.Component {
         <SectionTitle title={I18n.t('administration.survey.0')} annotation={I18n.t('administration.annotation')} />
         <div className="admin-content">
           <form>
-            {thematics.map((id, idx) => <ThemeForm key={id} id={id} index={idx} editLocale={editLocale} />)}
+            {thematics.map((id, idx) => (
+              <ThemeForm key={id} id={id} index={idx + 1} editLocale={editLocale} nbThematics={thematics.size} />
+            ))}
             <OverlayTrigger placement="top" overlay={addThematicTooltip}>
               <div onClick={addThematic} className="plus margin-l">
                 +
