@@ -20,10 +20,17 @@ type SynthesisProps = {
 };
 
 type SynthesisState = {
-  node: ?HTMLElement,
+  introBlock: ?HTMLElement,
+  sideMenuNode: ?HTMLElement,
+  conclusionBlock: ?HTMLElement,
   sideMenuIsHidden: boolean,
-  ideaOnScroll?: string
+  ideaOnScroll?: string,
+  sideMenuHeight: number,
+  sideMenuOverflow: string,
+  setSideMenuHeight: string
 };
+
+const sideMenuTopPercentage = 15;
 
 export class DumbSynthesis extends React.Component<void, SynthesisProps, SynthesisState> {
   props: SynthesisProps;
@@ -33,35 +40,61 @@ export class DumbSynthesis extends React.Component<void, SynthesisProps, Synthes
   constructor(props: SynthesisProps) {
     super(props);
     this.state = {
-      node: null,
-      sideMenuIsHidden: true
+      introBlock: null,
+      conclusionBlock: null,
+      sideMenuNode: null,
+      sideMenuIsHidden: true,
+      sideMenuHeight: 0,
+      sideMenuOverflow: 'auto',
+      setSideMenuHeight: '100%'
     };
   }
 
   componentWillMount() {
-    window.addEventListener('scroll', this.updateTopOnScroll);
+    window.addEventListener('scroll', this.updateSideMenuVisibility);
   }
 
   componentWillUnmount() {
-    window.removeEventListener('scroll', this.updateTopOnScroll);
+    window.removeEventListener('scroll', this.updateSideMenuVisibility);
   }
 
-  updateTop = (node: HTMLElement) => {
-    this.setState({ node: node });
+  updateIntroBlock = (node: HTMLElement) => {
+    this.setState({ introBlock: node });
   };
 
-  updateTopOnScroll = () => {
-    const { node } = this.state;
-    if (node) {
-      const nodeTop = getDomElementOffset(node).top;
-      const nodeHeight = node.getBoundingClientRect().height;
-      const total = nodeTop + nodeHeight;
+  updateConclusionBlock = (node: HTMLElement) => {
+    this.setState({ conclusionBlock: node });
+  };
+
+  updateSideMenuNode = (node: HTMLElement) => {
+    this.setState({ sideMenuNode: node });
+  };
+
+  updateSideMenuVisibility = () => {
+    const { introBlock, conclusionBlock, sideMenuNode } = this.state;
+    if (introBlock && conclusionBlock) {
+      const introNodeTop = getDomElementOffset(introBlock).top;
+      const introNodeHeight = introBlock.getBoundingClientRect().height;
+      const sideMenuHeight = sideMenuNode && sideMenuNode.getBoundingClientRect().height;
+      if (sideMenuHeight && sideMenuHeight > 0) {
+        this.setState({ sideMenuHeight: sideMenuHeight });
+      }
+      const conclusionBlockTopOffset = getDomElementOffset(conclusionBlock).top;
+      const firstIdeaTopOffset = introNodeTop + introNodeHeight;
       const scroll = window.pageYOffset;
-      const footer = document.getElementById('footer');
-      const { body } = document;
-      const threshold = footer && body && body.scrollHeight - screen.height - footer.offsetHeight;
-      if (scroll >= threshold || scroll + 50 < total) {
-        // 50 corresponds to the gap between the first Idea and the introduction
+      const windowHeight = window.innerHeight;
+      const sideMenuTopOffset = windowHeight * sideMenuTopPercentage / 100;
+      // this value is the gap between the top of sideMenu and the top of the window set by the css 'top' property
+      if (sideMenuHeight && sideMenuHeight + sideMenuTopOffset > windowHeight) {
+        this.setState({ sideMenuOverflow: 'scroll', setSideMenuHeight: '80%' });
+      }
+
+      const hasScrollReachedSynthesis = scroll + 60 > firstIdeaTopOffset;
+      // 60 corresponds to the gap between the first Idea and the introduction block (synthesis-tree's padding)
+      const isBottomReached = scroll + sideMenuTopOffset + this.state.sideMenuHeight + 90 >= conclusionBlockTopOffset;
+      // 90 corresponds to the gap between the top of the conclusion block and the top of its div (padding)
+
+      if (isBottomReached || !hasScrollReachedSynthesis) {
         this.setState({ sideMenuIsHidden: true });
       } else {
         this.setState({ sideMenuIsHidden: false });
@@ -75,7 +108,7 @@ export class DumbSynthesis extends React.Component<void, SynthesisProps, Synthes
 
   render() {
     const { synthesis, routeParams, synthesisPostId } = this.props;
-    const { sideMenuIsHidden, ideaOnScroll } = this.state;
+    const { sideMenuIsHidden, ideaOnScroll, sideMenuOverflow, setSideMenuHeight } = this.state;
     const { introduction, conclusion, ideas, subject } = synthesis;
     const sortedIdeas = [...ideas].sort((a, b) => {
       if (a.live.order < b.live.order) {
@@ -94,7 +127,7 @@ export class DumbSynthesis extends React.Component<void, SynthesisProps, Synthes
           <Header title={subject} imgUrl={synthesis.img ? synthesis.img.externalUrl : ''} type="synthesis" />
           <Grid fluid>
             {introduction && (
-              <Section title="introduction" translate className="synthesis-block" innerRef={this.updateTop}>
+              <Section title="introduction" translate className="synthesis-block" innerRef={this.updateIntroBlock}>
                 <Row>
                   <Col mdOffset={3} md={8} smOffset={1} sm={10}>
                     <div dangerouslySetInnerHTML={{ __html: introduction }} />
@@ -103,15 +136,23 @@ export class DumbSynthesis extends React.Component<void, SynthesisProps, Synthes
               </Section>
             )}
             <Row className="background-grey synthesis-tree">
-              <Col md={3} className="affix">
-                {!sideMenuIsHidden && (
-                  <SideMenu
-                    rootIdeas={roots}
-                    descendants={descendants}
-                    synthesisPostId={synthesisPostId}
-                    ideaOnScroll={ideaOnScroll}
-                  />
-                )}
+              <Col
+                md={3}
+                className="affix"
+                style={{
+                  top: `${sideMenuTopPercentage} %`,
+                  overflow: sideMenuOverflow,
+                  height: setSideMenuHeight
+                }}
+              >
+                <SideMenu
+                  rootIdeas={roots}
+                  descendants={descendants}
+                  synthesisPostId={synthesisPostId}
+                  ideaOnScroll={ideaOnScroll}
+                  innerRef={this.updateSideMenuNode}
+                  show={!sideMenuIsHidden}
+                />
               </Col>
               <Col mdOffset={3} md={8} sm={11}>
                 {roots.map((rootIdea, index) => (
@@ -129,7 +170,13 @@ export class DumbSynthesis extends React.Component<void, SynthesisProps, Synthes
               </Col>
             </Row>
             {conclusion && (
-              <Section title="conclusion" translate className="synthesis-block" id="conclusion">
+              <Section
+                title="conclusion"
+                translate
+                className="synthesis-block"
+                id="conclusion"
+                innerRef={this.updateConclusionBlock}
+              >
                 <Row>
                   <Col mdOffset={3} md={8} smOffset={1} sm={10}>
                     <div dangerouslySetInnerHTML={{ __html: conclusion }} />
