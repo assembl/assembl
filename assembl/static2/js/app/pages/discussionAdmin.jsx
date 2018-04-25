@@ -178,8 +178,8 @@ class DiscussionAdmin extends React.Component<void, Props, State> {
   };
 
   render() {
-    const { languagePreferenceHasChanged, legalNoticeAndTerms, section, sectionsHaveChanged } = this.props;
-    const saveDisabled = !languagePreferenceHasChanged && !legalNoticeAndTerms.get('_hasChanged') && !sectionsHaveChanged;
+    const { section } = this.props;
+    const saveDisabled = !this.dataHaveChanged();
     return (
       <div className="discussion-admin">
         <SaveButton disabled={saveDisabled} saveAction={this.saveAction} />
