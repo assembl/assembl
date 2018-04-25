@@ -82,10 +82,10 @@ export class DumbSynthesis extends React.Component<void, SynthesisProps, Synthes
       const conclusionBlockTopOffset = getDomElementOffset(conclusionBlock).top;
       const firstIdeaTopOffset = introNodeTop + introNodeHeight;
       const scroll = window.pageYOffset;
-      const windowHeight = window.innerHeight;
-      const sideMenuTopOffset = windowHeight * sideMenuTopPercentage / 100;
+      const { innerHeight, innerWidth } = window;
+      const sideMenuTopOffset = innerHeight * sideMenuTopPercentage / 100;
       // this value is the gap between the top of sideMenu and the top of the window set by the css 'top' property
-      if (sideMenuHeight && sideMenuHeight + sideMenuTopOffset > windowHeight) {
+      if (sideMenuHeight && sideMenuHeight + sideMenuTopOffset > innerHeight) {
         this.setState({ sideMenuOverflow: 'scroll', setSideMenuHeight: '80%' });
       }
 
@@ -94,7 +94,7 @@ export class DumbSynthesis extends React.Component<void, SynthesisProps, Synthes
       const isBottomReached = scroll + sideMenuTopOffset + this.state.sideMenuHeight + 90 >= conclusionBlockTopOffset;
       // 90 corresponds to the gap between the top of the conclusion block and the top of its div (padding)
 
-      if (isBottomReached || !hasScrollReachedSynthesis) {
+      if (isBottomReached || !hasScrollReachedSynthesis || innerWidth < 1000) {
         this.setState({ sideMenuIsHidden: true });
       } else {
         this.setState({ sideMenuIsHidden: false });
