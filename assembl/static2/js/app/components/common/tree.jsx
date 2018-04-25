@@ -19,6 +19,10 @@ class Child extends React.PureComponent {
     // This function will be called by each post rendered, so we delay the
     // recomputation until no post are rendered in 200ms to avoid unnecessary lag.
     const { listRef, cache, rowIndex, nuggetsManager } = this.props;
+    // In Firefox (tested on version 59), recomputing row heights can jump back the page scroll
+    // to the same post (The scrollTop from the Grid component is fine.),
+    // potentially a post with a youtube video, but may be a coincidence.
+    // Saving pageYOffset and restoring it after recomputeRowHeights fixes the issue.
     const pageYOffset = window.pageYOffset;
     cache.clear(rowIndex, 0);
     if (listRef) {
