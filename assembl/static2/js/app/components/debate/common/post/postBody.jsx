@@ -98,7 +98,7 @@ const Html = (props) => {
   delete containerProps.dbId;
   // add a key to to fix a render issue with react 16 with duplicate texts after harvesting
   return (
-    <div ref={divRef} {...containerProps} key={extracts.length}>
+    <div ref={divRef} {...containerProps} key={extracts ? extracts.length : 0}>
       {nodes}
     </div>
   );
