@@ -542,11 +542,11 @@ def extract_taxonomy_csv(request):
         else:
             content_harvested = "no content harvested"
         if extract.extract_nature:
-            qualify_by_nature = extract.extract_nature
+            qualify_by_nature = extract.extract_nature.name
         else:
             qualify_by_nature = "no qualify by nature"
         if extract.extract_action:
-            qualify_by_action = extract.extract_action
+            qualify_by_action = extract.extract_action.name
         else:
             qualify_by_action = "no qualify by action"
         owner_of_the_message = db.query(m.User).filter(m.User.id == query.creator_id).first().name
@@ -555,20 +555,20 @@ def extract_taxonomy_csv(request):
         harvested_on = str(extract.creation_date)
         nugget = "Yes" if extract.important else "No"
         extract_info = {
-            "Thematic": thematic,
-            "Message": message,
-            "Content harvested": content_harvested,
-            "Qualify by nature": qualify_by_nature,
-            "Qualify by action": qualify_by_action,
-            "Owner of the message": owner_of_the_message,
-            "Published on": published_on,
-            "Harvester": harvester,
-            "Harvested on": harvested_on,
-            "Nugget": nugget,
+            "Thematic": thematic.encode('utf-8'),
+            "Message": message.encode('utf-8'),
+            "Content harvested": content_harvested.encode('utf-8'),
+            "Qualify by nature": qualify_by_nature.encode('utf-8'),
+            "Qualify by action": qualify_by_action.encode('utf-8'),
+            "Owner of the message": owner_of_the_message.encode('utf-8'),
+            "Published on": published_on.encode('utf-8'),
+            "Harvester": harvester.encode('utf-8'),
+            "Harvested on": harvested_on.encode('utf-8'),
+            "Nugget": nugget.encode('utf-8'),
         }
         extract_list.append(extract_info)
 
-    return csv_response(extract_list, XSLX_MIMETYPE, fieldnames)
+    return csv_response(extract_list, CSV_MIMETYPE, fieldnames)
 
 
 def csv_response(results, format, fieldnames=None):
@@ -586,7 +586,7 @@ def csv_response(results, format, fieldnames=None):
         archive = ZipFile(output, 'w', ZIP_DEFLATED, allowZip64=True)
         worksheet = workbook.create_sheet()
         writerow = worksheet.append
-        empty = ''
+        empty = None
 
     if fieldnames:
         # TODO: i18n
