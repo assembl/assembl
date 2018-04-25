@@ -5,7 +5,7 @@ import { Translate } from 'react-redux-i18n';
 import classNames from 'classnames';
 import TopPostForm from './topPostForm';
 import { hexToRgb } from '../../../utils/globalFunctions';
-import { MIN_WIDTH_COLUMN } from '../../../constants';
+import { MIN_WIDTH_COLUMN, SMALL_SCREEN_HEIGHT } from '../../../constants';
 
 type TopPostFormContainerProps = {
   messageColumns: Object,
@@ -53,7 +53,7 @@ class TopPostFormContainer extends React.Component<*, TopPostFormContainerProps,
 
   setFormPosition() {
     if (!this.state.expanded) {
-      if (this.state.topPostFormOffset <= window.pageYOffset) {
+      if (this.state.topPostFormOffset <= window.pageYOffset && window.innerHeight > SMALL_SCREEN_HEIGHT) {
         this.setState({ sticky: true });
       } else {
         this.setState({ sticky: false });
