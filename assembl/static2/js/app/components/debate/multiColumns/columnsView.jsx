@@ -23,6 +23,7 @@ class ColumnsView extends React.Component {
     const {
       messageColumns,
       posts,
+      isHarvesting,
       ideaId,
       lang,
       contentLocaleMapping,
@@ -73,6 +74,7 @@ class ColumnsView extends React.Component {
                 data={columnsArray[classifier]}
                 initialRowIndex={initialRowIndex}
                 noRowsRenderer={noRowsRenderer}
+                isHarvesting={isHarvesting}
                 ideaId={ideaId}
                 refetchIdea={refetchIdea}
                 identifier={identifier}

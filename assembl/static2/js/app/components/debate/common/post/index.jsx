@@ -2,7 +2,6 @@
 import classnames from 'classnames';
 import React from 'react';
 import { compose, graphql } from 'react-apollo';
-import { connect } from 'react-redux';
 import type { OperationComponent } from 'react-apollo';
 
 import EditPostForm from '../editPostForm';
@@ -210,8 +209,6 @@ export class DumbPost extends React.PureComponent<DefaultProps, Props, State> {
 
 const withData: OperationComponent<Response> = graphql(PostQuery);
 
-const mapStateToProps = state => ({
-  isHarvesting: state.context.isHarvesting
-});
-
-export default compose(connect(mapStateToProps), withData, withLoadingIndicator())(DumbPost);
+// Absolutely don't use redux connect here to avoid performance issue.
+// Please pass the needed props from Tree component.
+export default compose(withData, withLoadingIndicator())(DumbPost);

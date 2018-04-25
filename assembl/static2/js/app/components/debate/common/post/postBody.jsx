@@ -33,9 +33,9 @@ type ExtractInPostProps = {
 };
 
 const ExtractInPost = ({ id, children }: ExtractInPostProps) => (
-  <div className="extract-in-message" id={id}>
+  <span className="extract-in-message" id={id}>
     {children}
-  </div>
+  </span>
 );
 
 const postBodyReplacementComponents = {
@@ -96,8 +96,9 @@ const Html = (props) => {
   delete containerProps.replacementComponents;
   delete containerProps.extracts;
   delete containerProps.dbId;
+  // add a key to to fix a render issue with react 16 with duplicate texts after harvesting
   return (
-    <div ref={divRef} {...containerProps}>
+    <div ref={divRef} {...containerProps} key={extracts.length}>
       {nodes}
     </div>
   );
