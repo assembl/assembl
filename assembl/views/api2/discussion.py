@@ -586,7 +586,7 @@ def csv_response(results, format, fieldnames=None):
         archive = ZipFile(output, 'w', ZIP_DEFLATED, allowZip64=True)
         worksheet = workbook.create_sheet()
         writerow = worksheet.append
-        empty = None
+        empty = ''
 
     if fieldnames:
         # TODO: i18n
