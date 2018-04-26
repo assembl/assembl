@@ -13,7 +13,7 @@ import {
   UPDATE_VOTE_SESSION_PAGE_PROPOSITIONS_TITLE,
   UPDATE_VOTE_SESSION_PAGE_IMAGE,
   UPDATE_VOTE_SESSION_PAGE,
-  CUSTOMIZE_VOTE_MODULE,
+  UPDATE_VOTE_MODULE,
   UPDATE_VOTE_MODULES,
   DELETE_VOTE_MODULE,
   CREATE_TOKEN_VOTE_MODULE,
@@ -130,7 +130,7 @@ export const modulesOrProposalsHaveChanged = (state: boolean = false, action: Re
   case CREATE_TOKEN_VOTE_CATEGORY:
   case CREATE_TOKEN_VOTE_MODULE:
   case CREATE_VOTE_PROPOSAL:
-  case CUSTOMIZE_VOTE_MODULE:
+  case UPDATE_VOTE_MODULE:
   case DELETE_GAUGE_VOTE_CHOICE:
   case DELETE_TOKEN_VOTE_CATEGORY:
   case DELETE_VOTE_MODULE:
@@ -402,14 +402,15 @@ export const modulesById = (state: Map<string, Map> = Map(), action: ReduxAction
       .update(action.id, m => m.set('isNumberGauge', template.get('isNumberGauge')))
       .update(action.id, m =>
         m
-          .set('instructionsEntries', template.get('instructionsEntries'))
           .set('isCustom', false)
           .set('_hasChanged', true)
       )
-      .update(action.id, updateGaugeSpecificInfo(specificInfo));
+      .update(action.id, updateGaugeSpecificInfo(specificInfo))
+      .deleteIn([action.id, 'instructionsEntries'])
+      .deleteIn([action.id, 'choices']);
   }
-  case CUSTOMIZE_VOTE_MODULE: {
-    const { instructions, isNumberGauge, type } = action.info;
+  case UPDATE_VOTE_MODULE: {
+    const { instructions, isCustom, isNumberGauge, type } = action.info;
     let specificInfo = pick(action.info, specificKeys);
     specificInfo = {
       ...specificInfo,
@@ -419,7 +420,7 @@ export const modulesById = (state: Map<string, Map> = Map(), action: ReduxAction
       .update(action.id, m =>
         m
           .set('isNumberGauge', isNumberGauge)
-          .set('isCustom', true)
+          .set('isCustom', isCustom)
           .set('type', type)
           .set('_hasChanged', true)
           .update('instructionsEntries', updateInLangstringEntries(action.locale, instructions))
@@ -594,7 +595,7 @@ const getGaugeChoices = (m) => {
 
 export const gaugeChoicesById = (state: Map<string, Map> = Map(), action: ReduxAction<Action>) => {
   switch (action.type) {
-  case CUSTOMIZE_VOTE_MODULE: {
+  case UPDATE_VOTE_MODULE: {
     if (action.info.choices) {
       let newState = state;
       action.info.choices.forEach((choice) => {

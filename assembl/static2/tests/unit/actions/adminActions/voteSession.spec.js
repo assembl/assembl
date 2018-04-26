@@ -188,9 +188,9 @@ describe('voteSession admin actions', () => {
     });
   });
 
-  describe('customizeVoteModule', () => {
-    const { customizeVoteModule } = actions;
-    it('should return a CUSTOMIZE_VOTE_MODULE action', () => {
+  describe('updateVoteModule', () => {
+    const { updateVoteModule } = actions;
+    it('should return a UPDATE_VOTE_MODULE action', () => {
       const info = {
         instructions: 'My updated title',
         minimum: 0,
@@ -199,7 +199,7 @@ describe('voteSession admin actions', () => {
         unit: 'kms',
         type: 'gauge'
       };
-      const actual = customizeVoteModule('my-module', 'en', info);
+      const actual = updateVoteModule('my-module', 'en', info);
       const expected = {
         id: 'my-module',
         info: {
@@ -211,7 +211,7 @@ describe('voteSession admin actions', () => {
           type: 'gauge'
         },
         locale: 'en',
-        type: actionTypes.CUSTOMIZE_VOTE_MODULE
+        type: actionTypes.UPDATE_VOTE_MODULE
       };
       expect(actual).toEqual(expected);
     });

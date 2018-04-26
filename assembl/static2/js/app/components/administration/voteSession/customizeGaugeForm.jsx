@@ -2,12 +2,12 @@
 import React from 'react';
 import { List, Map } from 'immutable';
 import { connect } from 'react-redux';
-import { Button } from 'react-bootstrap';
+import { Button, Checkbox } from 'react-bootstrap';
 import { Translate } from 'react-redux-i18n';
 
 import { DumbGaugeForm, getGaugeModuleInfo, type VoteChoice } from './gaugeForm';
 import { createRandomId } from '../../../utils/globalFunctions';
-import { customizeVoteModule } from '../../../actions/adminActions/voteSession';
+import { cancelAllDependenciesCustomization, updateVoteModule } from '../../../actions/adminActions/voteSession';
 
 type DefaultProps = {
   choices: List
@@ -16,7 +16,8 @@ type DefaultProps = {
 type Props = {
   choices: List<VoteChoice>,
   close: Function,
-  customizeModule: Function,
+  cancelAllCustomizations: Function,
+  updateModule: Function,
   editLocale: string,
   gaugeModuleId: string,
   instructions: string,
@@ -26,7 +27,8 @@ type Props = {
   minimum: ?number,
   nbTicks: number,
   type: string,
-  unit: ?string
+  unit: ?string,
+  voteSpecTemplateId: string
 };
 
 type State = {
@@ -73,17 +75,30 @@ export class DumbCustomizeGaugeForm extends React.Component<DefaultProps, Props,
   }
 
   handleSubmit = () => {
-    const { close, customizeModule } = this.props;
+    const { cancelAllCustomizations, close, gaugeModuleId, updateModule } = this.props;
     const { gaugeParams } = this.state;
     this.setState({ saving: true });
-    customizeModule(gaugeParams);
+    if (this.state.applyToAllProposals) {
+      const { voteSpecTemplateId } = this.props;
+      const params = {
+        ...gaugeParams,
+        isCustom: false,
+        // set random ids to create new choices
+        choices: gaugeParams.choices && gaugeParams.choices.map(c => c.set('id', createRandomId()))
+      };
+      // ensure that the template is updated before to cancel the customizations
+      Promise.resolve(updateModule(voteSpecTemplateId, params)).then(() => cancelAllCustomizations(voteSpecTemplateId));
+    } else {
+      updateModule(gaugeModuleId, { ...gaugeParams, isCustom: true });
+    }
     this.setState({ saving: false });
     close();
   };
 
   toggleApplyToAllProposals = () => {
     this.setState({
-      applyToAllProposals: !this.state.applyToAllProposals
+      applyToAllProposals: !this.state.applyToAllProposals,
+      _hasChanged: true
     });
   };
 
@@ -202,9 +217,9 @@ export class DumbCustomizeGaugeForm extends React.Component<DefaultProps, Props,
             handleUnitChange={this.handleUnitChange}
             handleGaugeChoiceLabelChange={this.handleGaugeChoiceLabelChange}
           />
-          {/* <Checkbox onClick={this.toggleApplyToAllProposals}>
+          <Checkbox onClick={this.toggleApplyToAllProposals} checked={this.state.applyToAllProposals}>
             <Translate value="administration.gaugeModal.applyToAllProposalsCheckboxLabel" />
-          </Checkbox> */}
+          </Checkbox>
           <Button
             className="button-submit button-dark full-size"
             disabled={!this.state._hasChanged || this.state.saving}
@@ -226,6 +241,7 @@ const mapStateToProps = (state, { gaugeModuleId, editLocale }) => {
   // replace ids for choices that come from template to be sure to recreate them
   moduleInfo = {
     ...moduleInfo,
+    voteSpecTemplateId: pModule.get('voteSpecTemplateId'),
     choices:
       moduleInfo.choices &&
       moduleInfo.choices.map((c) => {
@@ -243,8 +259,9 @@ const mapStateToProps = (state, { gaugeModuleId, editLocale }) => {
   };
 };
 
-const mapDispatchToProps = (dispatch, { gaugeModuleId, editLocale }) => ({
-  customizeModule: params => dispatch(customizeVoteModule(gaugeModuleId, editLocale, params))
+const mapDispatchToProps = (dispatch, { editLocale }) => ({
+  cancelAllCustomizations: id => dispatch(cancelAllDependenciesCustomization(id)),
+  updateModule: (id, params) => dispatch(updateVoteModule(id, editLocale, params))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(DumbCustomizeGaugeForm);

@@ -47,6 +47,18 @@ exports[`DumbCustomizeGaugeForm component should render a form to customize a ga
       unit="k€"
       updateNbTicks={[Function]}
     />
+    <Checkbox
+      bsClass="checkbox"
+      checked={false}
+      disabled={false}
+      inline={false}
+      onClick={[Function]}
+      title=""
+    >
+      <Translate
+        value="administration.gaugeModal.applyToAllProposalsCheckboxLabel"
+      />
+    </Checkbox>
     <Button
       active={false}
       block={false}

@@ -354,12 +354,12 @@ describe('voteSession admin reducers', () => {
       expect(actual).toEqual(expected);
     });
 
-    it('should handle CUSTOMIZE_VOTE_MODULE action', () => {
+    it('should handle UPDATE_VOTE_MODULE action', () => {
       const action = {
         id: 'my-module',
         locale: 'en',
         info: {},
-        type: actionTypes.CUSTOMIZE_VOTE_MODULE
+        type: actionTypes.UPDATE_VOTE_MODULE
       };
       const expected = true;
       const actual = modulesOrProposalsHaveChanged(false, action);
@@ -1491,14 +1491,7 @@ describe('voteSession admin reducers', () => {
           isNumberGauge: false,
           id: 'customGauge',
           voteSpecTemplateId: 'template',
-          proposalId: 'proposal1',
-          instructionsEntries: [
-            {
-              localeCode: 'en',
-              value: 'My template instructions'
-            }
-          ],
-          choices: ['template-choice1']
+          proposalId: 'proposal1'
         },
         template: {
           _hasChanged: false,
@@ -1579,12 +1572,6 @@ describe('voteSession admin reducers', () => {
           id: 'customGauge',
           voteSpecTemplateId: 'template',
           proposalId: 'proposal1',
-          instructionsEntries: [
-            {
-              localeCode: 'en',
-              value: 'My template instructions'
-            }
-          ],
           unit: 'template unit',
           minimum: 100,
           maximum: 1000
@@ -1667,14 +1654,7 @@ describe('voteSession admin reducers', () => {
           isNumberGauge: false,
           id: 'customGauge',
           voteSpecTemplateId: 'template',
-          proposalId: 'proposal1',
-          instructionsEntries: [
-            {
-              localeCode: 'en',
-              value: 'My template instructions'
-            }
-          ],
-          choices: ['template-choice1']
+          proposalId: 'proposal1'
         },
         template: {
           _hasChanged: false,
@@ -1699,7 +1679,7 @@ describe('voteSession admin reducers', () => {
       expect(actual.toJS()).toEqual(expected);
     });
 
-    it('should handle CUSTOMIZE_VOTE_MODULE action type (number gauge)', () => {
+    it('should handle UPDATE_VOTE_MODULE action type (number gauge)', () => {
       const state = fromJS({
         customGauge: {
           _hasChanged: false,
@@ -1726,6 +1706,7 @@ describe('voteSession admin reducers', () => {
       const action = {
         id: 'customGauge',
         info: {
+          isCustom: true,
           isNumberGauge: true,
           instructions: 'New instructions',
           maximum: 2,
@@ -1735,7 +1716,7 @@ describe('voteSession admin reducers', () => {
           unit: 'kms'
         },
         locale: 'en',
-        type: actionTypes.CUSTOMIZE_VOTE_MODULE
+        type: actionTypes.UPDATE_VOTE_MODULE
       };
       const expected = {
         customGauge: {
@@ -1764,7 +1745,7 @@ describe('voteSession admin reducers', () => {
       expect(actual.toJS()).toEqual(expected);
     });
 
-    it('should handle CUSTOMIZE_VOTE_MODULE action type (text gauge)', () => {
+    it('should handle UPDATE_VOTE_MODULE action type (text gauge)', () => {
       const state = fromJS({
         customGauge: {
           _hasChanged: false,
@@ -1781,13 +1762,14 @@ describe('voteSession admin reducers', () => {
       const action = {
         id: 'customGauge',
         info: {
+          isCustom: true,
           isNumberGauge: false,
           instructions: 'New instructions',
           choices: List.of(Map({ id: 'choice1', title: 'sensor' }), Map({ id: 'choice2', title: 'protocol' })),
           type: 'gauge'
         },
         locale: 'en',
-        type: actionTypes.CUSTOMIZE_VOTE_MODULE
+        type: actionTypes.UPDATE_VOTE_MODULE
       };
       const expected = {
         customGauge: {
@@ -1816,7 +1798,7 @@ describe('voteSession admin reducers', () => {
 
   describe('gaugeChoicesById reducer', () => {
     const { gaugeChoicesById } = reducers;
-    it('should handle CUSTOMIZE_VOTE_MODULE action', () => {
+    it('should handle UPDATE_VOTE_MODULE action', () => {
       const state = Map({
         m1Choice1: Map({
           id: 'm1Choice1',
@@ -1843,6 +1825,7 @@ describe('voteSession admin reducers', () => {
       const action = {
         id: 'm4',
         info: {
+          isCustom: true,
           isNumberGauge: false,
           instructions: 'Module 4 instructions',
           choices: List.of(
@@ -1858,7 +1841,7 @@ describe('voteSession admin reducers', () => {
           type: 'gauge'
         },
         locale: 'en',
-        type: actionTypes.CUSTOMIZE_VOTE_MODULE
+        type: actionTypes.UPDATE_VOTE_MODULE
       };
       const expected = Map({
         m1Choice1: Map({
