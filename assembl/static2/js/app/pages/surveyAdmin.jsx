@@ -27,7 +27,8 @@ function convertVideoDescriptionsToHTML(video) {
 
 const getImageVariable = (item) => {
   // item can be a thematic or any sort of object containing an img key
-  const { img: { externalUrl } } = item;
+  const { img } = item;
+  const externalUrl = img ? img.externalUrl : null;
   if (externalUrl === 'TO_DELETE') {
     return externalUrl;
   }
