@@ -73,7 +73,7 @@ def _clean_html(html_value, cleaner):
     for f in fragments:
         if isinstance(f, html.HtmlElement):
             cleaner(f)
-            yield html.tostring(f)
+            yield html.tostring(f, encoding="utf-8")
         else:
             yield f
 
@@ -129,12 +129,12 @@ def _sanitize_html_frags(html_value, valid_tags, valid_attributes):
             _sanitize_html_rec(f, valid_tags, valid_attributes)
             if f.tag in valid_tags:
                 _clean_attributes(f, valid_attributes)
-                yield html.tostring(f)
+                yield html.tostring(f, encoding="utf-8")
             else:
                 if f.text:
                     yield f.text
                 for sub in f:
-                    yield html.tostring(sub)
+                    yield html.tostring(sub, encoding="utf-8")
                 if f.tail:
                     yield f.tail
                 if f.tag in ('p', 'br'):
