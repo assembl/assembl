@@ -73,7 +73,7 @@ def _clean_html(html_value, cleaner):
     for f in fragments:
         if isinstance(f, html.HtmlElement):
             cleaner(f)
-            yield html.tostring(f, encoding="utf-8")
+            yield html.tostring(f, encoding="unicode")
         else:
             yield f
 
@@ -129,22 +129,22 @@ def _sanitize_html_frags(html_value, valid_tags, valid_attributes):
             _sanitize_html_rec(f, valid_tags, valid_attributes)
             if f.tag in valid_tags:
                 _clean_attributes(f, valid_attributes)
-                yield html.tostring(f, encoding="utf-8")
+                yield html.tostring(f, encoding="unicode")
             else:
                 if f.text:
                     yield f.text
                 for sub in f:
-                    yield html.tostring(sub, encoding="utf-8")
+                    yield html.tostring(sub, encoding="unicode")
                 if f.tail:
                     yield f.tail
                 if f.tag in ('p', 'br'):
-                    yield '\n'
+                    yield u'\n'
         else:
             yield f
 
 
 def _sanitize_html_keep(html_value, valid_tags=VALID_TAGS, valid_attributes=VALID_ATTRIBUTES):
-    return ''.join(_sanitize_html_frags(html_value, valid_tags, valid_attributes))
+    return u''.join(_sanitize_html_frags(html_value, valid_tags, valid_attributes))
 
 
 def sanitize_html(html_value, valid_tags=VALID_TAGS,
@@ -162,7 +162,7 @@ def sanitize_html(html_value, valid_tags=VALID_TAGS,
         cleaner = _make_cleaner(valid_tags)
     else:
         cleaner = _BASE_CLEANER
-    return ''.join(_clean_html(html_value, cleaner))
+    return u''.join(_clean_html(html_value, cleaner))
 
 
 def sanitize_text(text):
