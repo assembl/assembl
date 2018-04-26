@@ -56,7 +56,8 @@ type Props = {
   sectionsHaveChanged: boolean,
   updateDiscussionPreference: Function,
   updateLegalNoticeAndTerms: Function,
-  updateSection: Function
+  updateSection: Function,
+  debateId: string
 };
 
 type State = {

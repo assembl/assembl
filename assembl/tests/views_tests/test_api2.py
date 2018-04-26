@@ -23,6 +23,11 @@ from assembl.models import (
 JSON_HEADER = {"Content-Type": "application/json"}
 
 
+def test_extract_taxonomy_csv(test_session, test_app, discussion, extract_post_1_to_subidea_1_1, extract_with_range_in_reply_post_1, test_webrequest):
+    taxonomy_csv = test_app.get('/data/Discussion/%d/extract_csv_taxonomy' % (discussion.id))
+    assert taxonomy_csv.status_code == 200
+
+
 def local_to_absolute(uri):
     if uri.startswith('local:'):
         return '/data/' + uri[6:]

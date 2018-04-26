@@ -40,6 +40,13 @@ class Menu extends React.Component {
             </li>
           </ul>
         </li>
+        <li>
+          <Link to={`${get('administration', slug)}/exportTaxonomies`} activeClassName="active">
+            <span>
+              <Translate value="administration.menu.exportTaxonomies" />
+            </span>
+          </Link>
+        </li>
         <li className="menu-item">
           <Link to={`${get('administration', slug)}/landingPage?section=1`} activeClassName="active">
             <Translate value="administration.landingpage" />
