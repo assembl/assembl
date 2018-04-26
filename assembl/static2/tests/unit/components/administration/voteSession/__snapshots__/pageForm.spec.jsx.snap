@@ -84,6 +84,8 @@ exports[`Vote Session DumbPageForm component should render a form to update the 
             fileOrUrl="http://www.example.com/documents/myimage/data"
             filename=""
             handleChange={[Function]}
+            imgTitle={null}
+            isAdminUploader={false}
             mimeType="image/jpeg"
             name="header-image"
             withPreview={true}

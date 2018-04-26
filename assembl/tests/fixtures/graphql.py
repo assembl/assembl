@@ -224,6 +224,39 @@ mutation myMutation {
 
 
 @pytest.fixture(scope="function")
+def thematic_with_image(graphql_request):
+    from assembl.graphql.schema import Schema as schema
+    import os
+    from io import BytesIO
+
+    class FieldStorage(object):
+        file = BytesIO(os.urandom(16))
+        filename = u'path/to/image.png'
+        type = 'image/png'
+
+    graphql_request.POST['variables.file'] = FieldStorage()
+    res = schema.execute(u"""
+mutation createThematicWithImage($file: String!) {
+    createThematic(
+        titleEntries:[
+            {value:"You can't program the card without transmitting the wireless AGP card!", localeCode:"en"}
+        ],
+        identifier:"survey",
+        image: $file
+    ) {
+        thematic {
+            id,
+            identifier,
+            img { externalUrl }
+        }
+    }
+}
+""", context_value=graphql_request, variable_values={ "file": "variables.file" })
+    thematic_id = res.data['createThematic']['thematic']['id']
+    return thematic_id
+
+
+@pytest.fixture(scope="function")
 def proposition_id(graphql_request, thematic_and_question):
     from assembl.graphql.schema import Schema as schema
     thematic_id, first_question_id = thematic_and_question

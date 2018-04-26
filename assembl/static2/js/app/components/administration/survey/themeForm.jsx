@@ -17,6 +17,7 @@ export const DumbThemeCreationForm = ({
   markAsToDelete,
   editLocale,
   title,
+  imgTitle,
   _toDelete,
   updateImgUrl,
   updateTitle
@@ -72,7 +73,15 @@ export const DumbThemeCreationForm = ({
         <label htmlFor={headerImageFieldName}>
           <Translate value="administration.voteSessionHeaderLabel" />
         </label>
-        <FileUploader fileOrUrl={imgUrl} handleChange={handleImageChange} mimeType={imgMimeType} name={headerImageFieldName} />
+        <FileUploader
+          fileOrUrl={imgUrl}
+          imgTitle={imgTitle}
+          handleChange={handleImageChange}
+          mimeType={imgMimeType}
+          name={headerImageFieldName}
+          isAdminUploader
+          onDeleteClick={() => updateImgUrl('TO_DELETE')}
+        />
       </FormGroup>
       <div className="separator" />
     </div>
@@ -88,6 +97,7 @@ const mapStateToProps = ({ admin: { thematicsById }, i18n }, { id, editLocale })
   return {
     imgMimeType: thematic.getIn(['img', 'mimeType']),
     imgUrl: thematic.getIn(['img', 'externalUrl']),
+    imgTitle: thematic.getIn(['img', 'title']),
     locale: i18n.locale, // for I18n.t()
     title: getEntryValueForLocale(thematic.get('titleEntries'), editLocale, ''),
     _toDelete: thematic.get('_toDelete', false)

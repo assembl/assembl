@@ -847,28 +847,36 @@ class UpdateThematic(graphene.Mutation):
             # add uploaded image as an attachment to the idea
             image = args.get('image')
             if image is not None:
-                filename = os.path.basename(context.POST[image].filename)
-                mime_type = context.POST[image].type
-                document = models.File(
-                    discussion=discussion,
-                    mime_type=mime_type,
-                    title=filename)
-                document.add_file_data(context.POST[image].file)
-                # if there is already an attachment, remove it with the
-                # associated document (image)
-                if thematic.attachments:
-                    thematic.attachments[0].document.delete_file()
-                    db.delete(thematic.attachments[0].document)
-                    thematic.attachments.remove(thematic.attachments[0])
+                if image == 'TO_DELETE' and thematic.attachments:
+                    # delete the image
+                    attachment = thematic.attachments[0]
+                    attachment.document.delete_file()
+                    db.delete(attachment.document)
+                    db.delete(attachment)
+                    thematic.attachments.remove(attachment)
+                else:
+                    filename = os.path.basename(context.POST[image].filename)
+                    mime_type = context.POST[image].type
+                    document = models.File(
+                        discussion=discussion,
+                        mime_type=mime_type,
+                        title=filename)
+                    document.add_file_data(context.POST[image].file)
+                    # if there is already an attachment, remove it with the
+                    # associated document (image)
+                    if thematic.attachments:
+                        thematic.attachments[0].document.delete_file()
+                        db.delete(thematic.attachments[0].document)
+                        thematic.attachments.remove(thematic.attachments[0])
 
-                attachment = models.IdeaAttachment(
-                    document=document,
-                    discussion=discussion,
-                    creator_id=context.authenticated_userid,
-                    title=filename,
-                    attachmentPurpose=EMBED_ATTACHMENT
-                )
-                thematic.attachments.append(attachment)
+                    attachment = models.IdeaAttachment(
+                        document=document,
+                        discussion=discussion,
+                        creator_id=context.authenticated_userid,
+                        title=filename,
+                        attachmentPurpose=EMBED_ATTACHMENT
+                    )
+                    thematic.attachments.append(attachment)
             db.flush()
 
             questions_input = args.get('questions')
