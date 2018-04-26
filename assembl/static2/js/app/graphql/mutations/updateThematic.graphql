@@ -5,6 +5,7 @@ mutation updateThematic(
   $titleEntries: [LangStringEntryInput]!
   $questions: [QuestionInput]
   $video: VideoInput
+  $order: Float
 ) {
   updateThematic(
     id: $id
@@ -13,8 +14,10 @@ mutation updateThematic(
     titleEntries: $titleEntries
     questions: $questions
     video: $video
+    order: $order
   ) {
     thematic {
+      order
       title
       img {
         externalUrl

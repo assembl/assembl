@@ -43,7 +43,8 @@ const createVariablesForThematicMutation = thematic => ({
   image: getImageVariable(thematic),
   // if video is null, pass {} to remove all video fields on server side
   video: thematic.video === null ? {} : convertVideoDescriptionsToHTML(thematic.video),
-  questions: thematic.questions
+  questions: thematic.questions,
+  order: thematic.order
 });
 
 const createVariablesForDeleteThematicMutation = thematic => ({
@@ -142,9 +143,12 @@ class SurveyAdmin extends React.Component {
   }
 }
 
-const mapStateToProps = ({ admin: { thematicsById, thematicsHaveChanged, thematicsInOrder }, context, i18n }) => ({
+const mapStateToProps = ({ admin: { thematicsById, thematicsHaveChanged }, context, i18n }) => ({
   thematicsHaveChanged: thematicsHaveChanged,
-  thematics: thematicsInOrder.toArray().map(id => thematicsById.get(id).toJS()),
+  thematics: thematicsById
+    .sortBy(thematic => thematic.get('order'))
+    .toList()
+    .toJS(),
   debateId: context.debateId,
   i18n: i18n
 });

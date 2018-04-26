@@ -25,20 +25,6 @@ export const editLocale: EditLocaleReducer = (state = 'fr', action) => {
   }
 };
 
-type ThematicsInOrderState = List;
-type ThematicsInOrderReducer = (ThematicsInOrderState, ReduxAction<Action>) => ThematicsInOrderState;
-export const thematicsInOrder: ThematicsInOrderReducer = (state = List(), action) => {
-  switch (action.type) {
-  case 'CREATE_NEW_THEMATIC':
-    return state.push(action.id);
-  case 'UPDATE_THEMATICS': {
-    return List(action.thematics.map(t => t.id));
-  }
-  default:
-    return state;
-  }
-};
-
 type ThematicsByIdState = Map;
 type ThematicsByIdReducer = (ThematicsByIdState, ReduxAction<Action>) => ThematicsByIdState;
 export const thematicsById: ThematicsByIdReducer = (state = Map(), action) => {
@@ -63,10 +49,47 @@ export const thematicsById: ThematicsByIdReducer = (state = Map(), action) => {
       titleEntries: List(),
       video: null
     });
-    return state.set(action.id, emptyThematic.set('id', action.id));
+    const order = state.size + 1.0;
+    return state.set(action.id, emptyThematic.set('id', action.id).set('order', order));
   }
   case 'DELETE_THEMATIC':
     return state.setIn([action.id, '_toDelete'], true);
+  case 'MOVE_THEMATIC_UP': {
+    let newState = state;
+    let thematicsInOrder = state
+      .filter(thematic => !thematic.get('_toDelete'))
+      .sortBy(thematic => thematic.get('order'))
+      .map(thematic => thematic.get('id'))
+      .toList();
+    const idx = thematicsInOrder.indexOf(action.id);
+    thematicsInOrder = thematicsInOrder.delete(idx).insert(idx - 1, action.id);
+    let order = 1;
+    thematicsInOrder.forEach((thematicId) => {
+      if (newState.getIn([thematicId, 'order']) !== order) {
+        newState = newState.setIn([thematicId, 'order'], order).setIn([thematicId, '_hasChanged'], true);
+      }
+      order += 1;
+    });
+    return newState;
+  }
+  case 'MOVE_THEMATIC_DOWN': {
+    let newState = state;
+    let thematicsInOrder = state
+      .filter(thematic => !thematic.get('_toDelete'))
+      .sortBy(thematic => thematic.get('order'))
+      .map(thematic => thematic.get('id'))
+      .toList();
+    const idx = thematicsInOrder.indexOf(action.id);
+    thematicsInOrder = thematicsInOrder.delete(idx).insert(idx + 1, action.id);
+    let order = 1;
+    thematicsInOrder.forEach((thematicId) => {
+      if (newState.getIn([thematicId, 'order']) !== order) {
+        newState = newState.setIn([thematicId, 'order'], order).setIn([thematicId, '_hasChanged'], true);
+      }
+      order += 1;
+    });
+    return newState;
+  }
   case 'REMOVE_QUESTION':
     return state
       .updateIn([action.thematicId, 'questions'], questions => questions.remove(action.index))
@@ -159,6 +182,8 @@ export const thematicsHaveChanged: ThematicsHaveChangedReducer = (state = false,
   case 'ADD_QUESTION_TO_THEMATIC':
   case 'CREATE_NEW_THEMATIC':
   case 'DELETE_THEMATIC':
+  case 'MOVE_THEMATIC_DOWN':
+  case 'MOVE_THEMATIC_UP':
   case 'REMOVE_QUESTION':
   case 'UPDATE_QUESTION_TITLE':
   case 'UPDATE_THEMATIC_IMG_URL':
@@ -228,7 +253,6 @@ export const displayLanguageMenu: DisplayLanguageMenuReducer = (state = false, a
 const reducers = {
   editLocale: editLocale,
   thematicsHaveChanged: thematicsHaveChanged,
-  thematicsInOrder: thematicsInOrder,
   thematicsById: thematicsById,
   discussionLanguagePreferences: languagePreferences,
   discussionLanguagePreferencesHasChanged: discussionLanguagePreferencesHasChanged,

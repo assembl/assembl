@@ -1,6 +1,7 @@
 query ThematicsQuery($identifier: String!) {
   thematics(identifier: $identifier) {
     id
+    order
     titleEntries {
       localeCode
       value

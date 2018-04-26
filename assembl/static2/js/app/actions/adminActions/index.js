@@ -31,6 +31,16 @@ export const createNewThematic = id => ({
   type: 'CREATE_NEW_THEMATIC'
 });
 
+export const moveThematicUp = id => ({
+  id: id,
+  type: 'MOVE_THEMATIC_UP'
+});
+
+export const moveThematicDown = id => ({
+  id: id,
+  type: 'MOVE_THEMATIC_DOWN'
+});
+
 export const addQuestionToThematic = (id, locale) => ({
   id: id,
   locale: locale,

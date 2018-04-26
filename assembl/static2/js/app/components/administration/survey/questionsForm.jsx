@@ -23,8 +23,7 @@ const QuestionsForm = ({ addQuestion, editLocale, thematicId, questions }) => (
   </div>
 );
 
-export const mapStateToProps = ({ admin: { thematicsById, thematicsInOrder } }, { thematicId }) => ({
-  thematics: thematicsInOrder,
+export const mapStateToProps = ({ admin: { thematicsById } }, { thematicId }) => ({
   questions: thematicsById
     .get(thematicId)
     .get('questions')
