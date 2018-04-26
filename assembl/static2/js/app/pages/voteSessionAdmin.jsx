@@ -261,16 +261,19 @@ class VoteSessionAdmin extends React.Component<void, VoteSessionAdminProps, Vote
         displayCustomModal(content, true, 'modal-centered');
       }, 500);
     };
-    if ((currentStep === 2 || currentStep === 3) && !voteSessionPage.get('id') && !firstWarningDisplayed) {
-      showModal('administration.configureVoteSession', 'administration.saveFirstStep', 'administration.backToPreviousStep', 1);
-      this.setState({ firstWarningDisplayed: true });
-    }
-    if (currentStep === 3 && !voteSessionPage.get('id') && !secondWarningDisplayed) {
-      showModal('administration.configureVoteSession', 'administration.saveFirstStep', 'administration.backToPreviousStep', 1);
-      this.setState({ secondWarningDisplayed: true });
-    } else if (currentStep === 3 && voteModules.size < 1 && !secondWarningDisplayed) {
-      showModal('administration.configureVoteModules', 'administration.saveSecondStep', 'administration.backToPreviousStep', 2);
-      this.setState({ secondWarningDisplayed: true });
+
+    if (!this.state.refetching) {
+      if ((currentStep === 2 || currentStep === 3) && !voteSessionPage.get('id') && !firstWarningDisplayed) {
+        showModal('administration.configureVoteSession', 'administration.saveFirstStep', 'administration.backToPreviousStep', 1);
+        this.setState({ firstWarningDisplayed: true });
+      }
+      if (currentStep === 3 && !voteSessionPage.get('id') && !secondWarningDisplayed) {
+        showModal('administration.configureVoteSession', 'administration.saveFirstStep', 'administration.backToPreviousStep', 1);
+        this.setState({ secondWarningDisplayed: true });
+      } else if (currentStep === 3 && voteModules.size < 1 && !secondWarningDisplayed) {
+        showModal('administration.configureVoteModules', 'administration.saveSecondStep', 'administration.backToPreviousStep', 2);
+        this.setState({ secondWarningDisplayed: true });
+      }
     }
   }
 
