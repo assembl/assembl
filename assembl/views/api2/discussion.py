@@ -9,6 +9,7 @@ from os.path import join, dirname
 from collections import defaultdict
 from datetime import timedelta, datetime
 import isodate
+from assembl.lib.clean_input import sanitize_html
 #import pprint
 
 from sqlalchemy import (
@@ -558,7 +559,7 @@ def extract_taxonomy_csv(request):
         nugget = "Yes" if extract.important else "No"
         extract_info = {
             "Thematic": thematic.encode('utf-8'),
-            "Message": message.encode('utf-8'),
+            "Message": sanitize_html(message).encode('utf-8'),
             "Content harvested": content_harvested.encode('utf-8'),
             "Qualify by nature": qualify_by_nature.encode('utf-8'),
             "Qualify by action": qualify_by_action.encode('utf-8'),
