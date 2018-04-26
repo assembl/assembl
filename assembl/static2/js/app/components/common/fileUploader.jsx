@@ -146,6 +146,9 @@ class FileUploader extends React.Component<Object, FileUploaderProps, FileUpload
             type="file"
             onChange={this.handleChangePreview}
             className="hidden"
+            ref={(p) => {
+              this.fileInput = p;
+            }}
           />
         </div>
       );
