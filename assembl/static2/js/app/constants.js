@@ -1,6 +1,7 @@
 // @flow
 export const EXTRA_SMALL_SCREEN_WIDTH = 600;
 export const SMALL_SCREEN_WIDTH = 768;
+export const SMALL_SCREEN_HEIGHT = 812;
 export const MEDIUM_SCREEN_WIDTH = 992;
 export const APP_CONTAINER_MAX_WIDTH = 1400;
 export const IDEA_PREVIEW_MAX_WIDTH = 350;
