@@ -43,6 +43,21 @@
     }
   }
 
+  @media screen and (max-width: 500px) {
+    .light-title-7 {
+      font-size: 30px;
+      line-height: 38px;
+    }
+
+    .header-actions-container {
+      padding: 0 0 0 40px;
+    }
+
+    .action-button {
+      padding: 10px 0 8px;
+    }
+  }
+
   .header-content {
     padding: 20px 0 0 40px;
     position: relative;
