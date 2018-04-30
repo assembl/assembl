@@ -123,6 +123,8 @@ from .auth import (  # noqa: E402, F401
     UserRole,
     UserTemplate,
     Username,
+    TextField,
+    ProfileTextField
 )
 from .social_auth import (  # noqa: E402, F401
     Nonce,

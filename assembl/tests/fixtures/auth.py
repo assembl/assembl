@@ -230,3 +230,23 @@ def participant1_social_account(request, participant1_user, google_identity_prov
         test_session.flush()
     request.addfinalizer(fin)
     return sap
+
+@pytest.fixture(scope="function")
+def text_field(request, test_session, discussion):
+    from assembl.models import LangString, TextField
+    saobj = TextField(
+        discussion=discussion,
+        order=1.0,
+        title=LangString.create('My text field', 'en'),
+        required=True
+    )
+    test_session.add(saobj)
+    test_session.flush()
+
+    def fin():
+        print "Finalizer text_field"
+        test_session.delete(saobj)
+        test_session.flush()
+
+    request.addfinalizer(fin)
+    return saobj
