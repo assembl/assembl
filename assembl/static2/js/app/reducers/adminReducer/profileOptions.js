@@ -9,6 +9,11 @@ import { updateInLangstringEntries } from '../../utils/i18n';
 type ProfileOptionsHasChangedReducer = (boolean, ReduxAction<Action>) => boolean;
 export const profileOptionsHasChanged: ProfileOptionsHasChangedReducer = (state = false, action) => {
   switch (action.type) {
+  case actionTypes.ADD_TEXT_FIELD:
+  case actionTypes.DELETE_TEXT_FIELD:
+  case actionTypes.UPDATE_TEXT_FIELD_TITLE:
+  case actionTypes.TOGGLE_TEXT_FIELD_REQUIRED:
+    return true;
   case actionTypes.UPDATE_TEXT_FIELDS:
     return false;
   default:

@@ -16,6 +16,18 @@ describe('profileOptionsHasChanged reducer', () => {
     };
     expect(reducer(true, action)).toEqual(false);
   });
+
+  [
+    actionTypes.ADD_TEXT_FIELD,
+    actionTypes.UPDATE_TEXT_FIELD_TITLE,
+    actionTypes.DELETE_TEXT_FIELD,
+    actionTypes.TOGGLE_TEXT_FIELD_REQUIRED
+  ].forEach((actionType) => {
+    it(`should handle ${actionType} action`, () => {
+      const action = { type: actionType };
+      expect(reducer(false, action)).toEqual(true);
+    });
+  });
 });
 
 describe('textFieldsById reducer', () => {
