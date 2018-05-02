@@ -14,6 +14,8 @@ const ManageProfileOptionsForm = ({
   addTextField,
   deleteTextField,
   editLocale,
+  moveTextFieldDown,
+  moveTextFieldUp,
   textFields,
   toggleTextFieldRequired,
   updateTextFieldTitle
@@ -34,6 +36,8 @@ const ManageProfileOptionsForm = ({
                 id={tf.get('id')}
                 isFirst={idx === 0}
                 isLast={idx === textFields.size - 1}
+                moveDown={moveTextFieldDown}
+                moveUp={moveTextFieldUp}
                 required={tf.get('required')}
                 title={getEntryValueForLocale(tf.get('titleEntries'), editLocale, '')}
                 toggleRequired={() => {
@@ -66,7 +70,9 @@ const mapDispatchToProps = dispatch => ({
   addTextField: () => dispatch(actions.addTextField(createRandomId())),
   deleteTextField: id => dispatch(actions.deleteTextField(id)),
   updateTextFieldTitle: (id, locale, value) => dispatch(actions.updateTextFieldTitle(id, locale, value)),
-  toggleTextFieldRequired: id => dispatch(actions.toggleTextFieldRequired(id))
+  toggleTextFieldRequired: id => dispatch(actions.toggleTextFieldRequired(id)),
+  moveTextFieldDown: id => dispatch(actions.moveTextFieldDown(id)),
+  moveTextFieldUp: id => dispatch(actions.moveTextFieldUp(id))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ManageProfileOptionsForm);

@@ -11,6 +11,7 @@ import voteSession from './voteSession';
 import landingPage from './landingPage';
 import profileOptions from './profileOptions';
 import { updateInLangstringEntries } from '../../utils/i18n';
+import { moveItemDown, moveItemUp } from '../../utils/globalFunctions';
 
 type EditLocaleState = string;
 type EditLocaleReducer = (EditLocaleState, ReduxAction<Action>) => EditLocaleState;
@@ -55,42 +56,10 @@ export const thematicsById: ThematicsByIdReducer = (state = Map(), action) => {
   }
   case 'DELETE_THEMATIC':
     return state.setIn([action.id, '_toDelete'], true);
-  case 'MOVE_THEMATIC_UP': {
-    let newState = state;
-    let thematicsInOrder = state
-      .filter(thematic => !thematic.get('_toDelete'))
-      .sortBy(thematic => thematic.get('order'))
-      .map(thematic => thematic.get('id'))
-      .toList();
-    const idx = thematicsInOrder.indexOf(action.id);
-    thematicsInOrder = thematicsInOrder.delete(idx).insert(idx - 1, action.id);
-    let order = 1;
-    thematicsInOrder.forEach((thematicId) => {
-      if (newState.getIn([thematicId, 'order']) !== order) {
-        newState = newState.setIn([thematicId, 'order'], order).setIn([thematicId, '_hasChanged'], true);
-      }
-      order += 1;
-    });
-    return newState;
-  }
-  case 'MOVE_THEMATIC_DOWN': {
-    let newState = state;
-    let thematicsInOrder = state
-      .filter(thematic => !thematic.get('_toDelete'))
-      .sortBy(thematic => thematic.get('order'))
-      .map(thematic => thematic.get('id'))
-      .toList();
-    const idx = thematicsInOrder.indexOf(action.id);
-    thematicsInOrder = thematicsInOrder.delete(idx).insert(idx + 1, action.id);
-    let order = 1;
-    thematicsInOrder.forEach((thematicId) => {
-      if (newState.getIn([thematicId, 'order']) !== order) {
-        newState = newState.setIn([thematicId, 'order'], order).setIn([thematicId, '_hasChanged'], true);
-      }
-      order += 1;
-    });
-    return newState;
-  }
+  case 'MOVE_THEMATIC_UP':
+    return moveItemUp(state, action.id);
+  case 'MOVE_THEMATIC_DOWN':
+    return moveItemDown(state, action.id);
   case 'REMOVE_QUESTION':
     return state
       .updateIn([action.thematicId, 'questions'], questions => questions.remove(action.index))

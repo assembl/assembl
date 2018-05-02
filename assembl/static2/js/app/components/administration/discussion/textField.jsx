@@ -16,13 +16,26 @@ type Props = {
   id: string,
   isFirst: boolean,
   isLast: boolean,
+  moveDown: Function,
+  moveUp: Function,
   title: string,
   required: boolean,
   toggleRequired: Function,
   updateTitle: Function
 };
 
-const TextField = ({ deleteField, id, isFirst, isLast, title, required, toggleRequired, updateTitle }: Props) => (
+const TextField = ({
+  deleteField,
+  id,
+  isFirst,
+  isLast,
+  moveDown,
+  moveUp,
+  title,
+  required,
+  toggleRequired,
+  updateTitle
+}: Props) => (
   <FormGroup bsClass="flex">
     <FormControl type="text" onChange={e => updateTitle(e.target.value)} value={title} />
     <OverlayTrigger placement="top" overlay={required ? textFieldToggleOptionalTooltip : textFieldToggleRequiredTooltip}>
@@ -33,14 +46,14 @@ const TextField = ({ deleteField, id, isFirst, isLast, title, required, toggleRe
     </OverlayTrigger>
     {!isLast ? (
       <OverlayTrigger placement="top" overlay={downTooltip}>
-        <Button className="admin-icons">
+        <Button onClick={() => moveDown(id)} className="admin-icons">
           <span className="assembl-icon-down-bold grey" />
         </Button>
       </OverlayTrigger>
     ) : null}
     {!isFirst ? (
       <OverlayTrigger placement="top" overlay={upTooltip}>
-        <Button className="admin-icons">
+        <Button onClick={() => moveUp(id)} className="admin-icons">
           <span className="assembl-icon-up-bold grey" />
         </Button>
       </OverlayTrigger>

@@ -2,9 +2,11 @@
 import { combineReducers } from 'redux';
 import type ReduxAction from 'redux';
 import { fromJS, List, Map } from 'immutable';
+
 import { type Action } from '../../actions/actionTypes';
 import * as actionTypes from '../../actions/actionTypes/admin/profileOptions';
 import { updateInLangstringEntries } from '../../utils/i18n';
+import { moveItemDown, moveItemUp } from '../../utils/globalFunctions';
 
 type ProfileOptionsHasChangedReducer = (boolean, ReduxAction<Action>) => boolean;
 export const profileOptionsHasChanged: ProfileOptionsHasChangedReducer = (state = false, action) => {
@@ -13,6 +15,8 @@ export const profileOptionsHasChanged: ProfileOptionsHasChangedReducer = (state 
   case actionTypes.DELETE_TEXT_FIELD:
   case actionTypes.UPDATE_TEXT_FIELD_TITLE:
   case actionTypes.TOGGLE_TEXT_FIELD_REQUIRED:
+  case actionTypes.MOVE_TEXT_FIELD_DOWN:
+  case actionTypes.MOVE_TEXT_FIELD_UP:
     return true;
   case actionTypes.UPDATE_TEXT_FIELDS:
     return false;
@@ -56,6 +60,10 @@ export const textFieldsById: TextFieldsByIdReducer = (state = initialTextFields,
     return state.updateIn([action.id, 'titleEntries'], updateInLangstringEntries(action.locale, action.value));
   case actionTypes.TOGGLE_TEXT_FIELD_REQUIRED:
     return state.updateIn([action.id, 'required'], value => !value);
+  case actionTypes.MOVE_TEXT_FIELD_DOWN:
+    return moveItemDown(state, action.id);
+  case actionTypes.MOVE_TEXT_FIELD_UP:
+    return moveItemUp(state, action.id);
   default:
     return state;
   }

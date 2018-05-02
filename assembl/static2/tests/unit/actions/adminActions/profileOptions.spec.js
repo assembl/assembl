@@ -60,4 +60,22 @@ describe('profileOptions admin actions', () => {
       expect(actual).toEqual(expected);
     });
   });
+
+  describe('moveTextFieldUp action', () => {
+    const { moveTextFieldUp } = actions;
+    it('should return a MOVE_TEXT_FIELD_UP action type', () => {
+      const actual = moveTextFieldUp('my-field');
+      const expected = { id: 'my-field', type: actionTypes.MOVE_TEXT_FIELD_UP };
+      expect(actual).toEqual(expected);
+    });
+  });
+
+  describe('moveTextFieldDown action', () => {
+    const { moveTextFieldDown } = actions;
+    it('should return a MOVE_TEXT_FIELD_DOWN action type', () => {
+      const actual = moveTextFieldDown('my-field');
+      const expected = { id: 'my-field', type: actionTypes.MOVE_TEXT_FIELD_DOWN };
+      expect(actual).toEqual(expected);
+    });
+  });
 });

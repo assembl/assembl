@@ -21,7 +21,9 @@ describe('profileOptionsHasChanged reducer', () => {
     actionTypes.ADD_TEXT_FIELD,
     actionTypes.UPDATE_TEXT_FIELD_TITLE,
     actionTypes.DELETE_TEXT_FIELD,
-    actionTypes.TOGGLE_TEXT_FIELD_REQUIRED
+    actionTypes.TOGGLE_TEXT_FIELD_REQUIRED,
+    actionTypes.MOVE_TEXT_FIELD_DOWN,
+    actionTypes.MOVE_TEXT_FIELD_UP
   ].forEach((actionType) => {
     it(`should handle ${actionType} action`, () => {
       const action = { type: actionType };
@@ -233,5 +235,309 @@ describe('textFieldsById reducer', () => {
 
     const actual2 = reducer(actual, action);
     expect(actual2).toEqual(state);
+  });
+
+  it('should handle the MOVE_TEXT_FIELD_UP action', () => {
+    const action = {
+      id: '189387',
+      type: actionTypes.MOVE_TEXT_FIELD_UP
+    };
+    const state = Map({
+      '111111': Map({
+        _hasChanged: false,
+        _isNew: true,
+        _toDelete: false,
+        id: '111111',
+        order: 1.0,
+        required: true,
+        titleEntries: List.of(Map({ localeCode: 'en', value: 'First field' }))
+      }),
+      '189387': Map({
+        _hasChanged: false,
+        _isNew: true,
+        _toDelete: false,
+        id: '189387',
+        order: 2.0,
+        required: true,
+        titleEntries: List.of(Map({ localeCode: 'en', value: 'Second field' }))
+      }),
+      '999999': Map({
+        _hasChanged: false,
+        _isNew: true,
+        _toDelete: false,
+        id: '999999',
+        order: 3.0,
+        required: true,
+        titleEntries: List.of(Map({ localeCode: 'en', value: 'Third field' }))
+      })
+    });
+    const expected = Map({
+      '111111': Map({
+        _hasChanged: true,
+        _isNew: true,
+        _toDelete: false,
+        id: '111111',
+        order: 2.0,
+        required: true,
+        titleEntries: List.of(Map({ localeCode: 'en', value: 'First field' }))
+      }),
+      '189387': Map({
+        _hasChanged: true,
+        _isNew: true,
+        _toDelete: false,
+        id: '189387',
+        order: 1.0,
+        required: true,
+        titleEntries: List.of(Map({ localeCode: 'en', value: 'Second field' }))
+      }),
+      '999999': Map({
+        _hasChanged: false,
+        _isNew: true,
+        _toDelete: false,
+        id: '999999',
+        order: 3.0,
+        required: true,
+        titleEntries: List.of(Map({ localeCode: 'en', value: 'Third field' }))
+      })
+    });
+    const actual = reducer(state, action);
+    expect(actual).toEqual(expected);
+  });
+
+  it('should handle the MOVE_TEXT_FIELD_UP action (deleted text field in between)', () => {
+    const action = {
+      id: '189387',
+      type: actionTypes.MOVE_TEXT_FIELD_UP
+    };
+    const state = Map({
+      '111111': Map({
+        _hasChanged: false,
+        _isNew: true,
+        _toDelete: false,
+        id: '111111',
+        order: 1.0,
+        required: true,
+        titleEntries: List.of(Map({ localeCode: 'en', value: 'First field' }))
+      }),
+      '222222': Map({
+        _hasChanged: true,
+        _isNew: false,
+        _toDelete: true,
+        id: '222222',
+        order: 2.0,
+        required: true,
+        titleEntries: List.of(Map({ localeCode: 'en', value: 'First field' }))
+      }),
+      '189387': Map({
+        _hasChanged: false,
+        _isNew: true,
+        _toDelete: false,
+        id: '189387',
+        order: 2.0,
+        required: true,
+        titleEntries: List.of(Map({ localeCode: 'en', value: 'Second field' }))
+      }),
+      '999999': Map({
+        _hasChanged: false,
+        _isNew: true,
+        _toDelete: false,
+        id: '999999',
+        order: 3.0,
+        required: true,
+        titleEntries: List.of(Map({ localeCode: 'en', value: 'Third field' }))
+      })
+    });
+    const expected = Map({
+      '111111': Map({
+        _hasChanged: true,
+        _isNew: true,
+        _toDelete: false,
+        id: '111111',
+        order: 2.0,
+        required: true,
+        titleEntries: List.of(Map({ localeCode: 'en', value: 'First field' }))
+      }),
+      '222222': Map({
+        _hasChanged: true,
+        _isNew: false,
+        _toDelete: true,
+        id: '222222',
+        order: 2.0,
+        required: true,
+        titleEntries: List.of(Map({ localeCode: 'en', value: 'First field' }))
+      }),
+      '189387': Map({
+        _hasChanged: true,
+        _isNew: true,
+        _toDelete: false,
+        id: '189387',
+        order: 1.0,
+        required: true,
+        titleEntries: List.of(Map({ localeCode: 'en', value: 'Second field' }))
+      }),
+      '999999': Map({
+        _hasChanged: false,
+        _isNew: true,
+        _toDelete: false,
+        id: '999999',
+        order: 3.0,
+        required: true,
+        titleEntries: List.of(Map({ localeCode: 'en', value: 'Third field' }))
+      })
+    });
+    const actual = reducer(state, action);
+    expect(actual).toEqual(expected);
+  });
+
+  it('should handle the MOVE_TEXT_FIELD_DOWN action', () => {
+    const action = {
+      id: '189387',
+      type: actionTypes.MOVE_TEXT_FIELD_DOWN
+    };
+    const state = Map({
+      '111111': Map({
+        _hasChanged: false,
+        _isNew: true,
+        _toDelete: false,
+        id: '111111',
+        order: 1.0,
+        required: true,
+        titleEntries: List.of(Map({ localeCode: 'en', value: 'First field' }))
+      }),
+      '189387': Map({
+        _hasChanged: false,
+        _isNew: true,
+        _toDelete: false,
+        id: '189387',
+        order: 2.0,
+        required: true,
+        titleEntries: List.of(Map({ localeCode: 'en', value: 'Second field' }))
+      }),
+      '888888': Map({
+        _hasChanged: true,
+        _isNew: false,
+        _toDelete: true,
+        id: '888888',
+        order: 3.0,
+        required: true,
+        titleEntries: List.of(Map({ localeCode: 'en', value: 'First field' }))
+      }),
+      '999999': Map({
+        _hasChanged: false,
+        _isNew: true,
+        _toDelete: false,
+        id: '999999',
+        order: 4.0,
+        required: true,
+        titleEntries: List.of(Map({ localeCode: 'en', value: 'Third field' }))
+      })
+    });
+    const expected = Map({
+      '111111': Map({
+        _hasChanged: false,
+        _isNew: true,
+        _toDelete: false,
+        id: '111111',
+        order: 1.0,
+        required: true,
+        titleEntries: List.of(Map({ localeCode: 'en', value: 'First field' }))
+      }),
+      '189387': Map({
+        _hasChanged: true,
+        _isNew: true,
+        _toDelete: false,
+        id: '189387',
+        order: 3.0,
+        required: true,
+        titleEntries: List.of(Map({ localeCode: 'en', value: 'Second field' }))
+      }),
+      '888888': Map({
+        _hasChanged: true,
+        _isNew: false,
+        _toDelete: true,
+        id: '888888',
+        order: 3.0,
+        required: true,
+        titleEntries: List.of(Map({ localeCode: 'en', value: 'First field' }))
+      }),
+      '999999': Map({
+        _hasChanged: true,
+        _isNew: true,
+        _toDelete: false,
+        id: '999999',
+        order: 2.0,
+        required: true,
+        titleEntries: List.of(Map({ localeCode: 'en', value: 'Third field' }))
+      })
+    });
+    const actual = reducer(state, action);
+    expect(actual).toEqual(expected);
+  });
+
+  it('should handle the MOVE_TEXT_FIELD_DOWN action (deleted text field in between)', () => {
+    const action = {
+      id: '189387',
+      type: actionTypes.MOVE_TEXT_FIELD_DOWN
+    };
+    const state = Map({
+      '111111': Map({
+        _hasChanged: false,
+        _isNew: true,
+        _toDelete: false,
+        id: '111111',
+        order: 1.0,
+        required: true,
+        titleEntries: List.of(Map({ localeCode: 'en', value: 'First field' }))
+      }),
+      '189387': Map({
+        _hasChanged: false,
+        _isNew: true,
+        _toDelete: false,
+        id: '189387',
+        order: 2.0,
+        required: true,
+        titleEntries: List.of(Map({ localeCode: 'en', value: 'Second field' }))
+      }),
+      '999999': Map({
+        _hasChanged: false,
+        _isNew: true,
+        _toDelete: false,
+        id: '999999',
+        order: 3.0,
+        required: true,
+        titleEntries: List.of(Map({ localeCode: 'en', value: 'Third field' }))
+      })
+    });
+    const expected = Map({
+      '111111': Map({
+        _hasChanged: false,
+        _isNew: true,
+        _toDelete: false,
+        id: '111111',
+        order: 1.0,
+        required: true,
+        titleEntries: List.of(Map({ localeCode: 'en', value: 'First field' }))
+      }),
+      '189387': Map({
+        _hasChanged: true,
+        _isNew: true,
+        _toDelete: false,
+        id: '189387',
+        order: 3.0,
+        required: true,
+        titleEntries: List.of(Map({ localeCode: 'en', value: 'Second field' }))
+      }),
+      '999999': Map({
+        _hasChanged: true,
+        _isNew: true,
+        _toDelete: false,
+        id: '999999',
+        order: 2.0,
+        required: true,
+        titleEntries: List.of(Map({ localeCode: 'en', value: 'Third field' }))
+      })
+    });
+    const actual = reducer(state, action);
+    expect(actual).toEqual(expected);
   });
 });
