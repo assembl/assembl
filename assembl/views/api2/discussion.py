@@ -557,11 +557,11 @@ def extract_taxonomy_csv(request):
         if extract.extract_nature:
             qualify_by_nature = extract.extract_nature.name
         else:
-            qualify_by_nature = "no qualify by nature"
+            qualify_by_nature = " "
         if extract.extract_action:
             qualify_by_action = extract.extract_action.name
         else:
-            qualify_by_action = "no qualify by action"
+            qualify_by_action = " "
         owner_of_the_message = db.query(m.User).filter(m.User.id == query.creator_id).first().name
         published_on = unicode(query.creation_date.replace(microsecond=0))
         harvester = db.query(m.User).filter(m.User.id == extract.owner_id).first().name
