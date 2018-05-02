@@ -5,10 +5,12 @@ import { I18n, Translate } from 'react-redux-i18n';
 
 import SectionTitle from '../sectionTitle';
 import TextField from './textField';
+import { createRandomId } from '../../../utils/globalFunctions';
 import { getEntryValueForLocale } from '../../../utils/i18n';
 import { addTextFieldTooltip } from '../../common/tooltips';
+import * as actions from '../../../actions/adminActions/profileOptions';
 
-const ManageProfileOptionsForm = ({ editLocale, textFields }) => (
+const ManageProfileOptionsForm = ({ addTextField, editLocale, textFields }) => (
   <div className="admin-box">
     <SectionTitle title={I18n.t('administration.discussion.3')} annotation={I18n.t('administration.annotation')} />
     <div className="intro-text">
@@ -29,7 +31,9 @@ const ManageProfileOptionsForm = ({ editLocale, textFields }) => (
               />
             ))}
             <OverlayTrigger placement="top" overlay={addTextFieldTooltip}>
-              <div className="plus margin-l">+</div>
+              <div onClick={addTextField} className="plus margin-l">
+                +
+              </div>
             </OverlayTrigger>
           </form>
         </div>
@@ -46,4 +50,8 @@ const mapStateToProps = ({ admin: { editLocale, profileOptions: { textFieldsById
     .toList()
 });
 
-export default connect(mapStateToProps)(ManageProfileOptionsForm);
+const mapDispatchToProps = dispatch => ({
+  addTextField: () => dispatch(actions.addTextField(createRandomId()))
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(ManageProfileOptionsForm);

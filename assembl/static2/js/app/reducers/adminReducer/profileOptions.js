@@ -30,6 +30,19 @@ export const textFieldsById: TextFieldsByIdReducer = (state = initialTextFields,
     ]);
     return Map(textFieldsTuples);
   }
+  case actionTypes.ADD_TEXT_FIELD:
+    return state.set(
+      action.id,
+      Map({
+        _hasChanged: false,
+        _isNew: true,
+        _toDelete: false,
+        id: action.id,
+        order: state.size + 1.0,
+        required: false,
+        title: ''
+      })
+    );
   default:
     return state;
   }

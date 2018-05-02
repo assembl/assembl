@@ -5,3 +5,8 @@ export const updateTextFields = (textFields: actionTypes.TextFields): actionType
   textFields: textFields,
   type: actionTypes.UPDATE_TEXT_FIELDS
 });
+
+export const addTextField = (id: string): actionTypes.AddTextField => ({
+  id: id,
+  type: actionTypes.ADD_TEXT_FIELD
+});

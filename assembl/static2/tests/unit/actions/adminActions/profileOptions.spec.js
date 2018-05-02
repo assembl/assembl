@@ -24,4 +24,13 @@ describe('profileOptions admin actions', () => {
       expect(actual).toEqual(expected);
     });
   });
+
+  describe('addTextField action', () => {
+    const { addTextField } = actions;
+    it('should return a ADD_TEXT_FIELD action type', () => {
+      const actual = addTextField('foobar');
+      const expected = { id: 'foobar', type: actionTypes.ADD_TEXT_FIELD };
+      expect(actual).toEqual(expected);
+    });
+  });
 });

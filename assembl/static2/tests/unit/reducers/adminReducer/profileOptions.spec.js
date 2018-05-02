@@ -84,4 +84,44 @@ describe('textFieldsById reducer', () => {
     });
     expect(reducer(Map(), action)).toEqual(expected);
   });
+
+  it('should handle the ADD_TEXT_FIELD action', () => {
+    const action = {
+      id: '-134582',
+      type: actionTypes.ADD_TEXT_FIELD
+    };
+    const state = Map({
+      '189387': Map({
+        _hasChanged: false,
+        _isNew: true,
+        _toDelete: false,
+        id: '189387',
+        order: 1.0,
+        required: true,
+        title: 'First field'
+      })
+    });
+    const expected = Map({
+      '189387': Map({
+        _hasChanged: false,
+        _isNew: true,
+        _toDelete: false,
+        id: '189387',
+        order: 1.0,
+        required: true,
+        title: 'First field'
+      }),
+      '-134582': Map({
+        _hasChanged: false,
+        _isNew: true,
+        _toDelete: false,
+        id: '-134582',
+        order: 2.0,
+        required: false,
+        title: ''
+      })
+    });
+    const actual = reducer(state, action);
+    expect(actual).toEqual(expected);
+  });
 });
