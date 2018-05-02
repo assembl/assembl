@@ -1,0 +1,12 @@
+query TextFields($lang: String!) {
+  textFields {
+    id
+    titleEntries {
+      localeCode
+      value
+    }
+    title(lang: $lang)
+    order
+    required
+  }
+}
