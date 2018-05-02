@@ -69,3 +69,14 @@ or simply:
     pip install -r requirements.txt
 
 which is quicker.
+
+
+When I run flow, it never finishes and re-initializes infinitely
+----------------------------------------------------------------
+
+If you have local code changes, you may have to edit `assembl/static2/flow/object_types.js` accordingly.
+
+For the moment, we use flow version 0.52 which has this issue https://github.com/facebook/flow/issues/3528 . As of today, latest version is 0.67, but we have not updated it yet, because 0.53 introduces some breaking changes.
+
+Sometimes the issue is also fixed after a `fab -c configs/local.rc app_compile` or a reboot.
+
