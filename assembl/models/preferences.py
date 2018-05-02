@@ -872,7 +872,33 @@ class Preferences(MutableMapping, Base, NamedClassMixin):
             # "frontend_validator_function": func_name...?,
             # "backend_validator_function": func_name...?,
             "default": True  # this should be recursive...
+        },
+
+        # Custom HTML code that will be integrated on the landing page of the debate, right after the <body> tag
+        {
+            "id": "custom_html_code_landing_page",
+            "name": _("Custom HTML code on the landing page"),
+            "value_type": "text",
+            "show_in_preferences": True,
+            "description": _(
+                "Custom HTML code that will be integrated on the landing page of the debate, right after the <body> tag"),
+            "allow_user_override": None,
+            "modification_permission": P_ADMIN_DISC,
+            "default": None
         }
+
+        # TODO Custom HTML code that will be integrated on the user registration page of the debate, right after the <body> tag
+        # {
+        #     "id": "custom_html_code_user_registration_page",
+        #     "name": _("Custom HTML code on the user registration page"),
+        #     "value_type": "text",
+        #     "show_in_preferences": True,
+        #     "description": _(
+        #         "Custom HTML code that will be integrated on the user registration page of the debate, right after the <body> tag"),
+        #     "allow_user_override": None,
+        #     "modification_permission": P_ADMIN_DISC,
+        #     "default": None
+        # }
     ]
 
     # Precompute, this is not mutable.

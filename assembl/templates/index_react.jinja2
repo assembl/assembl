@@ -11,6 +11,11 @@
 
 {% block body %}
     <body>
+        {% if discussion %}
+            {% set custom_html_code_landing_page = discussion.preferences["custom_html_code_landing_page"] or "" %}
+            {{ custom_html_code_landing_page|safe }}
+        {% endif %}
+
         {% if user %}
           {% set userId = user.id %}
         {% else %}
