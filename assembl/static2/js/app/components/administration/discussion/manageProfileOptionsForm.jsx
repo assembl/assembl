@@ -10,7 +10,14 @@ import { getEntryValueForLocale } from '../../../utils/i18n';
 import { addTextFieldTooltip } from '../../common/tooltips';
 import * as actions from '../../../actions/adminActions/profileOptions';
 
-const ManageProfileOptionsForm = ({ addTextField, deleteTextField, editLocale, textFields, updateTextFieldTitle }) => (
+const ManageProfileOptionsForm = ({
+  addTextField,
+  deleteTextField,
+  editLocale,
+  textFields,
+  toggleTextFieldRequired,
+  updateTextFieldTitle
+}) => (
   <div className="admin-box">
     <SectionTitle title={I18n.t('administration.discussion.3')} annotation={I18n.t('administration.annotation')} />
     <div className="intro-text">
@@ -29,6 +36,9 @@ const ManageProfileOptionsForm = ({ addTextField, deleteTextField, editLocale, t
                 isLast={idx === textFields.size - 1}
                 required={tf.get('required')}
                 title={getEntryValueForLocale(tf.get('titleEntries'), editLocale, '')}
+                toggleRequired={() => {
+                  toggleTextFieldRequired(tf.get('id'));
+                }}
                 updateTitle={value => updateTextFieldTitle(tf.get('id'), editLocale, value)}
               />
             ))}
@@ -55,7 +65,8 @@ const mapStateToProps = ({ admin: { editLocale, profileOptions: { textFieldsById
 const mapDispatchToProps = dispatch => ({
   addTextField: () => dispatch(actions.addTextField(createRandomId())),
   deleteTextField: id => dispatch(actions.deleteTextField(id)),
-  updateTextFieldTitle: (id, locale, value) => dispatch(actions.updateTextFieldTitle(id, locale, value))
+  updateTextFieldTitle: (id, locale, value) => dispatch(actions.updateTextFieldTitle(id, locale, value)),
+  toggleTextFieldRequired: id => dispatch(actions.toggleTextFieldRequired(id))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ManageProfileOptionsForm);

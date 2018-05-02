@@ -22,3 +22,8 @@ export const updateTextFieldTitle = (id: string, locale: string, value: string):
   value: value,
   type: actionTypes.UPDATE_TEXT_FIELD_TITLE
 });
+
+export const toggleTextFieldRequired = (id: string): actionTypes.ToggleTextFieldRequired => ({
+  id: id,
+  type: actionTypes.TOGGLE_TEXT_FIELD_REQUIRED
+});

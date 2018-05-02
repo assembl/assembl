@@ -3,6 +3,7 @@ export const UPDATE_TEXT_FIELDS: 'UPDATE_TEXT_FIELDS' = 'UPDATE_TEXT_FIELDS';
 export const ADD_TEXT_FIELD: 'ADD_TEXT_FIELD' = 'ADD_TEXT_FIELD';
 export const DELETE_TEXT_FIELD: 'DELETE_TEXT_FIELD' = 'DELETE_TEXT_FIELD';
 export const UPDATE_TEXT_FIELD_TITLE: 'UPDATE_TEXT_FIELD_TITLE' = 'UPDATE_TEXT_FIELD_TITLE';
+export const TOGGLE_TEXT_FIELD_REQUIRED: 'TOGGLE_TEXT_FIELD_REQUIRED' = 'TOGGLE_TEXT_FIELD_REQUIRED';
 
 export type TextFields = Array<Object>; // TODO: use generated type
 export type UpdateTextFields = {
@@ -25,6 +26,11 @@ export type UpdateTextFieldTitle = {
   locale: string,
   value: string,
   type: typeof UPDATE_TEXT_FIELD_TITLE
+};
+
+export type ToggleTextFieldRequired = {
+  id: string,
+  type: typeof TOGGLE_TEXT_FIELD_REQUIRED
 };
 
 export type ProfileOptionsActions = UpdateTextFields | AddTextField | DeleteTextField | UpdateTextFieldTitle;

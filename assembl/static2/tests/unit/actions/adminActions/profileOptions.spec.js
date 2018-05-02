@@ -51,4 +51,13 @@ describe('profileOptions admin actions', () => {
       expect(actual).toEqual(expected);
     });
   });
+
+  describe('toggleTextFieldRequired action', () => {
+    const { toggleTextFieldRequired } = actions;
+    it('should return a TOGGLE_TEXT_FIELD_REQUIRED action type', () => {
+      const actual = toggleTextFieldRequired('my-field');
+      const expected = { id: 'my-field', type: actionTypes.TOGGLE_TEXT_FIELD_REQUIRED };
+      expect(actual).toEqual(expected);
+    });
+  });
 });

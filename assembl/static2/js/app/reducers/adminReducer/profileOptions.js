@@ -49,6 +49,8 @@ export const textFieldsById: TextFieldsByIdReducer = (state = initialTextFields,
     return state.setIn([action.id, '_toDelete'], true);
   case actionTypes.UPDATE_TEXT_FIELD_TITLE:
     return state.updateIn([action.id, 'titleEntries'], updateInLangstringEntries(action.locale, action.value));
+  case actionTypes.TOGGLE_TEXT_FIELD_REQUIRED:
+    return state.updateIn([action.id, 'required'], value => !value);
   default:
     return state;
   }

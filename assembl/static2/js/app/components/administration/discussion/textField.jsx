@@ -18,16 +18,17 @@ type Props = {
   isLast: boolean,
   title: string,
   required: boolean,
+  toggleRequired: Function,
   updateTitle: Function
 };
 
-const TextField = ({ deleteField, id, isFirst, isLast, title, required, updateTitle }: Props) => (
+const TextField = ({ deleteField, id, isFirst, isLast, title, required, toggleRequired, updateTitle }: Props) => (
   <FormGroup bsClass="flex">
     <FormControl type="text" onChange={e => updateTitle(e.target.value)} value={title} />
     <OverlayTrigger placement="top" overlay={required ? textFieldToggleOptionalTooltip : textFieldToggleRequiredTooltip}>
       {/* overlaytrigger does not seem to work with SwitchButton so we add a span... */}
       <span>
-        <SwitchButton id={`required-switch-${id}`} checked={required} />
+        <SwitchButton name={`required-switch-${id}`} checked={required} onChange={toggleRequired} />
       </span>
     </OverlayTrigger>
     {!isLast ? (

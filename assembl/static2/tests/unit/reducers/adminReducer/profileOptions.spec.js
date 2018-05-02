@@ -188,4 +188,38 @@ describe('textFieldsById reducer', () => {
     const actual = reducer(state, action);
     expect(actual).toEqual(expected);
   });
+
+  it('should handle the TOGGLE_TEXT_FIELD_REQUIRED action', () => {
+    const action = {
+      id: '189387',
+      type: actionTypes.TOGGLE_TEXT_FIELD_REQUIRED
+    };
+    const state = Map({
+      '189387': Map({
+        _hasChanged: false,
+        _isNew: true,
+        _toDelete: false,
+        id: '189387',
+        order: 1.0,
+        required: true,
+        titleEntries: List.of(Map({ localeCode: 'en', value: 'First field' }), Map({ localeCode: 'fr', value: 'Premier champ' }))
+      })
+    });
+    const expected = Map({
+      '189387': Map({
+        _hasChanged: false,
+        _isNew: true,
+        _toDelete: false,
+        id: '189387',
+        order: 1.0,
+        required: false,
+        titleEntries: List.of(Map({ localeCode: 'en', value: 'First field' }), Map({ localeCode: 'fr', value: 'Premier champ' }))
+      })
+    });
+    const actual = reducer(state, action);
+    expect(actual).toEqual(expected);
+
+    const actual2 = reducer(actual, action);
+    expect(actual2).toEqual(state);
+  });
 });
