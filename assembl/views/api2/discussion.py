@@ -540,6 +540,13 @@ def extract_taxonomy_csv(request):
             message = "no message"
         if not message:
             message = "no message"
+
+        if thematic == "no thematic associated":
+            idea_ids = m.Idea.get_idea_ids_showing_post(query.id)
+            for thematic_id in reversed(idea_ids):
+                if db.query(m.Idea).filter(m.Idea.id == thematic_id).first().title:
+                    thematic = db.query(m.Idea).filter(m.Idea.id == thematic_id).first().title.best_lang(user_prefs).value
+                    break
         if extract.body:
             content_harvested = extract.body
         else:
@@ -553,13 +560,13 @@ def extract_taxonomy_csv(request):
         else:
             qualify_by_action = "no qualify by action"
         owner_of_the_message = db.query(m.User).filter(m.User.id == query.creator_id).first().name
-        published_on = str(query.creation_date)
+        published_on = str(query.creation_date)[:19]
         harvester = db.query(m.User).filter(m.User.id == extract.owner_id).first().name
-        harvested_on = str(extract.creation_date)
+        harvested_on = str(extract.creation_date)[:19]
         nugget = "Yes" if extract.important else "No"
         extract_info = {
             "Thematic": thematic.encode('utf-8'),
-            "Message": sanitize_html(message).encode('utf-8'),
+            "Message": sanitize_html(message).strip("<p>").encode('utf-8'),
             "Content harvested": content_harvested.encode('utf-8'),
             "Qualify by nature": qualify_by_nature.encode('utf-8'),
             "Qualify by action": qualify_by_action.encode('utf-8'),
