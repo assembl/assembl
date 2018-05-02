@@ -7,6 +7,7 @@ import { Link } from 'react-router';
 
 import Card from '../components/common/card';
 import Loader from '../components/common/loader';
+import SwitchButton from '../components/common/switchButton';
 
 const cardContent = (
   <Link className="content-box">
@@ -32,3 +33,8 @@ storiesOf('Loader', module)
   .add('with text and color', () => <Loader color="#891" />)
   .add('with text hidden', () => <Loader textHidden />)
   .add('with text hidden and color', () => <Loader color="#933" textHidden />);
+
+storiesOf('SwitchButton', module)
+  .add('default', () => <SwitchButton />)
+  .add('checked by default', () => <SwitchButton defaultChecked />)
+  .add('with label', () => <SwitchButton label="Please toggle me" />);
