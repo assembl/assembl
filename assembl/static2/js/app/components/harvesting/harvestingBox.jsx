@@ -41,7 +41,8 @@ type State = {
   isEditable: boolean,
   editableExtract: string,
   extractNature: ?string,
-  extractAction: ?string
+  extractAction: ?string,
+  showOverflowMenu: boolean
 };
 
 class DumbHarvestingBox extends React.Component<Object, Props, State> {
@@ -67,7 +68,8 @@ class DumbHarvestingBox extends React.Component<Object, Props, State> {
       isEditable: false,
       editableExtract: extract ? extract.body : '',
       extractNature: extract && extract.extractNature ? extract.extractNature.split('.')[1] : null,
-      extractAction: extract && extract.extractAction ? extract.extractAction.split('.')[1] : null
+      extractAction: extract && extract.extractAction ? extract.extractAction.split('.')[1] : null,
+      showOverflowMenu: false
     };
   }
 
@@ -80,24 +82,21 @@ class DumbHarvestingBox extends React.Component<Object, Props, State> {
     this.setState({ editableExtract: value });
   };
 
-  qualifyExtract = (category: string, qualifier: string): void => {
-    this.menu.hide();
+  qualifyExtract = (taxonomies: Object): void => {
+    this.setState({ showOverflowMenu: false });
+    const { nature, action } = taxonomies;
     const { extract, updateExtract, refetchPost } = this.props;
     const { isNugget } = this.state;
     const variables = {
       extractId: extract ? extract.id : null,
       important: isNugget,
-      extractNature: category === 'nature' ? qualifier : null,
-      extractAction: category === 'action' ? qualifier : null
+      extractNature: nature,
+      extractAction: action
     };
     displayAlert('success', I18n.t('loading.wait'));
     updateExtract({ variables: variables })
       .then(() => {
-        if (category === 'nature') {
-          this.setState({ extractNature: qualifier, extractAction: null });
-        } else if (category === 'action') {
-          this.setState({ extractNature: null, extractAction: qualifier });
-        }
+        this.setState({ extractNature: nature, extractAction: action });
         displayAlert('success', I18n.t('harvesting.harvestingSuccess'));
         refetchPost();
       })
@@ -225,9 +224,10 @@ class DumbHarvestingBox extends React.Component<Object, Props, State> {
       });
   };
 
+
   render() {
     const { selection, cancelHarvesting, extract, contentLocale, harvestingDate } = this.props;
-    const { disabled, extractIsValidated, isNugget, isEditable, editableExtract, extractNature, extractAction } = this.state;
+    const { disabled, extractIsValidated, isNugget, isEditable, editableExtract, extractNature, extractAction, showOverflowMenu } = this.state;
     const isExtract = extract !== null;
     const selectionText = selection ? selection.toString() : '';
     const harvesterUserName =
@@ -287,21 +287,17 @@ class DumbHarvestingBox extends React.Component<Object, Props, State> {
                   <span className="assembl-icon-pepite grey" />
                 </Button>
               </OverlayTrigger>
-              <OverlayTrigger
-                ref={(m) => {
-                  this.menu = m;
-                }}
-                trigger="click"
-                rootClose
-                placement="right"
-                overlay={TaxonomyOverflowMenu(this.qualifyExtract, extractNature, extractAction)}
-              >
-                <OverlayTrigger placement="top" overlay={qualifyExtractTooltip}>
-                  <Button disabled={disabled} className="taxonomy-menu-btn">
-                    <span className="assembl-icon-ellipsis-vert grey" />
-                  </Button>
-                </OverlayTrigger>
+              <OverlayTrigger placement="top" overlay={qualifyExtractTooltip}>
+                <Button disabled={disabled} className="taxonomy-menu-btn" onClick={() => { this.setState({ showOverflowMenu: !showOverflowMenu }); }}>
+                  <span className="assembl-icon-ellipsis-vert grey" />
+                </Button>
               </OverlayTrigger>
+              {showOverflowMenu &&
+                <TaxonomyOverflowMenu
+                  handleClick={this.qualifyExtract}
+                  extractNature={extractNature}
+                  extractAction={extractAction}
+                />}
             </div>
             <div className="profile">
               <AvatarImage userId={harvesterUserId} userName={harvesterUserName} />
