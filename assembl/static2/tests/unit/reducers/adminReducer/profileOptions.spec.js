@@ -124,4 +124,35 @@ describe('textFieldsById reducer', () => {
     const actual = reducer(state, action);
     expect(actual).toEqual(expected);
   });
+
+  it('should handle the DELETE_TEXT_FIELD action', () => {
+    const action = {
+      id: '189387',
+      type: actionTypes.DELETE_TEXT_FIELD
+    };
+    const state = Map({
+      '189387': Map({
+        _hasChanged: false,
+        _isNew: true,
+        _toDelete: false,
+        id: '189387',
+        order: 1.0,
+        required: true,
+        title: 'First field'
+      })
+    });
+    const expected = Map({
+      '189387': Map({
+        _hasChanged: false,
+        _isNew: true,
+        _toDelete: true,
+        id: '189387',
+        order: 1.0,
+        required: true,
+        title: 'First field'
+      })
+    });
+    const actual = reducer(state, action);
+    expect(actual).toEqual(expected);
+  });
 });

@@ -33,4 +33,13 @@ describe('profileOptions admin actions', () => {
       expect(actual).toEqual(expected);
     });
   });
+
+  describe('deleteTextField action', () => {
+    const { deleteTextField } = actions;
+    it('should return a DELETE_TEXT_FIELD action type', () => {
+      const actual = deleteTextField('foobar');
+      const expected = { id: 'foobar', type: actionTypes.DELETE_TEXT_FIELD };
+      expect(actual).toEqual(expected);
+    });
+  });
 });

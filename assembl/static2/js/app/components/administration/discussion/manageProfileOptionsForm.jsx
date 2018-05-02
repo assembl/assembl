@@ -10,7 +10,7 @@ import { getEntryValueForLocale } from '../../../utils/i18n';
 import { addTextFieldTooltip } from '../../common/tooltips';
 import * as actions from '../../../actions/adminActions/profileOptions';
 
-const ManageProfileOptionsForm = ({ addTextField, editLocale, textFields }) => (
+const ManageProfileOptionsForm = ({ addTextField, deleteTextField, editLocale, textFields }) => (
   <div className="admin-box">
     <SectionTitle title={I18n.t('administration.discussion.3')} annotation={I18n.t('administration.annotation')} />
     <div className="intro-text">
@@ -23,6 +23,7 @@ const ManageProfileOptionsForm = ({ addTextField, editLocale, textFields }) => (
             {textFields.map((tf, idx) => (
               <TextField
                 key={tf.get('id')}
+                deleteField={() => deleteTextField(tf.get('id'))}
                 id={tf.get('id')}
                 isFirst={idx === 0}
                 isLast={idx === textFields.size - 1}
@@ -51,7 +52,8 @@ const mapStateToProps = ({ admin: { editLocale, profileOptions: { textFieldsById
 });
 
 const mapDispatchToProps = dispatch => ({
-  addTextField: () => dispatch(actions.addTextField(createRandomId()))
+  addTextField: () => dispatch(actions.addTextField(createRandomId())),
+  deleteTextField: id => dispatch(actions.deleteTextField(id))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ManageProfileOptionsForm);

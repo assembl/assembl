@@ -12,6 +12,7 @@ import {
 import SwitchButton from '../../common/switchButton';
 
 type Props = {
+  deleteField: Function,
   id: string,
   isFirst: boolean,
   isLast: boolean,
@@ -19,7 +20,7 @@ type Props = {
   required: boolean
 };
 
-const TextField = ({ id, isFirst, isLast, title, required }: Props) => (
+const TextField = ({ deleteField, id, isFirst, isLast, title, required }: Props) => (
   <FormGroup bsClass="flex">
     <FormControl value={title} />
     <OverlayTrigger placement="top" overlay={required ? textFieldToggleOptionalTooltip : textFieldToggleRequiredTooltip}>
@@ -43,7 +44,7 @@ const TextField = ({ id, isFirst, isLast, title, required }: Props) => (
       </OverlayTrigger>
     ) : null}
     <OverlayTrigger placement="top" overlay={deleteTextFieldTooltip}>
-      <Button className="admin-icons">
+      <Button onClick={deleteField} className="admin-icons">
         <span className="assembl-icon-delete grey" />
       </Button>
     </OverlayTrigger>

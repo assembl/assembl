@@ -10,3 +10,8 @@ export const addTextField = (id: string): actionTypes.AddTextField => ({
   id: id,
   type: actionTypes.ADD_TEXT_FIELD
 });
+
+export const deleteTextField = (id: string): actionTypes.DeleteTextField => ({
+  id: id,
+  type: actionTypes.DELETE_TEXT_FIELD
+});

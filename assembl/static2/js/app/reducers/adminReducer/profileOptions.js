@@ -43,6 +43,9 @@ export const textFieldsById: TextFieldsByIdReducer = (state = initialTextFields,
         title: ''
       })
     );
+
+  case actionTypes.DELETE_TEXT_FIELD:
+    return state.setIn([action.id, '_toDelete'], true);
   default:
     return state;
   }
