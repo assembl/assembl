@@ -9,6 +9,7 @@ import resourcesCenter from './resourcesCenter';
 import sections from './adminSections';
 import voteSession from './voteSession';
 import landingPage from './landingPage';
+import profileOptions from './profileOptions';
 import { updateInLangstringEntries } from '../../utils/i18n';
 
 type EditLocaleState = string;
@@ -261,7 +262,8 @@ const reducers = {
   sections: sections,
   voteSession: voteSession,
   legalNoticeAndTerms: legalNoticeAndTerms,
-  landingPage: landingPage
+  landingPage: landingPage,
+  profileOptions: profileOptions
 };
 
 export default combineReducers(reducers);

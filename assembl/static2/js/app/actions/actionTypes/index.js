@@ -1,5 +1,7 @@
 /* redux action types */
 // @flow
+import { type AdminActions } from './admin';
+
 export const UPDATE_CONTENT_LOCALE_BY_ID: 'UPDATE_CONTENT_LOCALE_BY_ID' = 'UPDATE_CONTENT_LOCALE_BY_ID';
 export const UPDATE_CONTENT_LOCALE_BY_ORIGINAL_LOCALE: 'UPDATE_CONTENT_LOCALE_BY_ORIGINAL_LOCALE' =
   'UPDATE_CONTENT_LOCALE_BY_ORIGINAL_LOCALE';
@@ -596,4 +598,5 @@ export type Action =
   | LegalNoticeAndTermsActions
   | SectionActions
   | VoteSessionActions
+  | AdminActions
   | BasicAction;

@@ -10,6 +10,7 @@ import { languagePreferencesHasChanged, updateEditLocale } from '../actions/admi
 import ManageSectionsForm from '../components/administration/discussion/manageSectionsForm';
 import LegalNoticeAndTermsForm from '../components/administration/discussion/legalNoticeAndTermsForm';
 import LanguageSection from '../components/administration/discussion/languageSection';
+import ManageProfileOptionsForm from '../components/administration/discussion/manageProfileOptionsForm';
 import { displayAlert } from '../utils/utilityManager';
 import { convertEntriesToHTML } from '../utils/draftjs';
 import SaveButton, { getMutationsPromises, runSerial } from '../components/administration/saveButton';
@@ -185,7 +186,8 @@ class DiscussionAdmin extends React.Component<void, Props, State> {
         <SaveButton disabled={saveDisabled} saveAction={this.saveAction} />
         {section === '1' && <LanguageSection {...this.props} />}
         {section === '2' && <ManageSectionsForm {...this.props} />}
-        {section === '3' && <LegalNoticeAndTermsForm {...this.props} />}
+        {section === '3' && <ManageProfileOptionsForm />}
+        {section === '4' && <LegalNoticeAndTermsForm {...this.props} />}
       </div>
     );
   }
