@@ -42,4 +42,13 @@ describe('profileOptions admin actions', () => {
       expect(actual).toEqual(expected);
     });
   });
+
+  describe('updateTextFieldTitle action', () => {
+    const { updateTextFieldTitle } = actions;
+    it('should return a UPDATE_TEXT_FIELD_TITLE action type', () => {
+      const actual = updateTextFieldTitle('my-field', 'en', 'New title');
+      const expected = { id: 'my-field', locale: 'en', value: 'New title', type: actionTypes.UPDATE_TEXT_FIELD_TITLE };
+      expect(actual).toEqual(expected);
+    });
+  });
 });

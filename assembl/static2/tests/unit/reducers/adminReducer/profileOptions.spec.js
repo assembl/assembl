@@ -98,7 +98,7 @@ describe('textFieldsById reducer', () => {
         id: '189387',
         order: 1.0,
         required: true,
-        title: 'First field'
+        titleEntries: List.of(Map({ localeCode: 'en', value: 'First field' }), Map({ localeCode: 'fr', value: 'Premier champ' }))
       })
     });
     const expected = Map({
@@ -109,7 +109,7 @@ describe('textFieldsById reducer', () => {
         id: '189387',
         order: 1.0,
         required: true,
-        title: 'First field'
+        titleEntries: List.of(Map({ localeCode: 'en', value: 'First field' }), Map({ localeCode: 'fr', value: 'Premier champ' }))
       }),
       '-134582': Map({
         _hasChanged: false,
@@ -118,7 +118,7 @@ describe('textFieldsById reducer', () => {
         id: '-134582',
         order: 2.0,
         required: false,
-        title: ''
+        titleEntries: List()
       })
     });
     const actual = reducer(state, action);
@@ -138,7 +138,7 @@ describe('textFieldsById reducer', () => {
         id: '189387',
         order: 1.0,
         required: true,
-        title: 'First field'
+        titleEntries: List.of(Map({ localeCode: 'en', value: 'First field' }), Map({ localeCode: 'fr', value: 'Premier champ' }))
       })
     });
     const expected = Map({
@@ -149,7 +149,40 @@ describe('textFieldsById reducer', () => {
         id: '189387',
         order: 1.0,
         required: true,
-        title: 'First field'
+        titleEntries: List.of(Map({ localeCode: 'en', value: 'First field' }), Map({ localeCode: 'fr', value: 'Premier champ' }))
+      })
+    });
+    const actual = reducer(state, action);
+    expect(actual).toEqual(expected);
+  });
+
+  it('should handle the UPDATE_TEXT_FIELD_TITLE action', () => {
+    const action = {
+      id: '189387',
+      locale: 'en',
+      value: 'New title',
+      type: actionTypes.UPDATE_TEXT_FIELD_TITLE
+    };
+    const state = Map({
+      '189387': Map({
+        _hasChanged: false,
+        _isNew: true,
+        _toDelete: false,
+        id: '189387',
+        order: 1.0,
+        required: true,
+        titleEntries: List.of(Map({ localeCode: 'en', value: 'First field' }), Map({ localeCode: 'fr', value: 'Premier champ' }))
+      })
+    });
+    const expected = Map({
+      '189387': Map({
+        _hasChanged: false,
+        _isNew: true,
+        _toDelete: false,
+        id: '189387',
+        order: 1.0,
+        required: true,
+        titleEntries: List.of(Map({ localeCode: 'en', value: 'New title' }), Map({ localeCode: 'fr', value: 'Premier champ' }))
       })
     });
     const actual = reducer(state, action);

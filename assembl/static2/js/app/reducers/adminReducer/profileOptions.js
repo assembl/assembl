@@ -1,9 +1,10 @@
 // @flow
 import { combineReducers } from 'redux';
 import type ReduxAction from 'redux';
-import { fromJS, Map } from 'immutable';
+import { fromJS, List, Map } from 'immutable';
 import { type Action } from '../../actions/actionTypes';
 import * as actionTypes from '../../actions/actionTypes/admin/profileOptions';
+import { updateInLangstringEntries } from '../../utils/i18n';
 
 type ProfileOptionsHasChangedReducer = (boolean, ReduxAction<Action>) => boolean;
 export const profileOptionsHasChanged: ProfileOptionsHasChangedReducer = (state = false, action) => {
@@ -40,12 +41,14 @@ export const textFieldsById: TextFieldsByIdReducer = (state = initialTextFields,
         id: action.id,
         order: state.size + 1.0,
         required: false,
-        title: ''
+        titleEntries: List()
       })
     );
 
   case actionTypes.DELETE_TEXT_FIELD:
     return state.setIn([action.id, '_toDelete'], true);
+  case actionTypes.UPDATE_TEXT_FIELD_TITLE:
+    return state.updateIn([action.id, 'titleEntries'], updateInLangstringEntries(action.locale, action.value));
   default:
     return state;
   }
