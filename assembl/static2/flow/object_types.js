@@ -87,7 +87,9 @@ type DebateData = Object & {
   video: {
     descriptionEntriesTop: LangstringEntries,
     videoUrl: string
-  }
+  },
+  customHtmlCodeLandingPage: ?string,
+  customHtmlCodeRegistrationPage: ?string
 };
 
 type ErrorDef = {

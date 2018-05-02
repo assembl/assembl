@@ -11,10 +11,18 @@
 
 {% block body %}
     <body>
-        {% if discussion %}
-            {% set custom_html_code_landing_page = discussion.preferences["custom_html_code_landing_page"] or "" %}
-            {{ custom_html_code_landing_page|safe }}
+        {# for reference
+        {% if discussion and request and request.matched_route and request.matched_route.name %}
+            {% set matched_route = request.matched_route.name %}
+            {% set custom_html_code = "" %}
+            {% if matched_route == "new_home" or matched_route == "bare_slug" %}
+                {% set custom_html_code = discussion.preferences["custom_html_code_landing_page"] or "" %}
+            {% elif matched_route == "contextual_react_register" %}
+                {% set custom_html_code = discussion.preferences["custom_html_code_user_registration_page"] or "" %}
+            {% endif %}
+            {{ custom_html_code|safe }}
         {% endif %}
+        #}
 
         {% if user %}
           {% set userId = user.id %}

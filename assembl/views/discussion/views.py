@@ -16,6 +16,7 @@ from sqlalchemy.orm.exc import NoResultFound
 from urllib import quote_plus
 from urlparse import urljoin
 
+from ...lib.clean_input import escape_html
 from ...lib.utils import path_qs
 from ...lib.sqla import get_named_object
 from ...lib.frontend_urls import FrontendUrls
@@ -167,7 +168,7 @@ def home_view(request):
         DummyGoogleTranslationService.target_locale_labels_cls(target_locale))
     context['translation_locale_names_json'] = locale_labels
 
-    context['preferences_json'] = json.dumps(dict(preferences))
+    context['preferences_json'] = escape_html(json.dumps(dict(preferences)))
     role_names = [x for (x) in session.query(Role.name).all()]
     context['role_names'] = json.dumps(role_names)
 
@@ -358,7 +359,7 @@ def frontend_test_view(request):
         DummyGoogleTranslationService.target_locale_labels_cls(target_locale))
     context['translation_locale_names_json'] = locale_labels
     context['translation_service_data_json'] = '{}'
-    context['preferences_json'] = json.dumps(dict(discussion.preferences))
+    context['preferences_json'] = escape_html(json.dumps(dict(discussion.preferences)))
     return context
 
 

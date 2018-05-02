@@ -170,3 +170,8 @@ def sanitize_text(text):
     if text is not None and '<' in text:
         return html.fromstring(text).text_content()
     return unescape(text)
+
+def escape_html(text):
+  """Converts "<" to "&lt;", etc. See https://wiki.python.org/moin/EscapingHtml"""
+  import cgi
+  return cgi.escape(text)
