@@ -66,6 +66,8 @@ from . import (JSON_HEADER, FORM_HEADER, CreationResponse)
 from ..api.discussion import etalab_discussions, API_ETALAB_DISCUSSIONS_PREFIX
 from assembl.models import LanguagePreferenceCollection
 
+no_thematic_associated = "no thematic associated"
+
 
 @view_config(context=InstanceContext, request_method='GET',
              ctx_instance_class=Discussion, permission=P_READ,
@@ -525,11 +527,11 @@ def extract_taxonomy_csv(request):
                 if thematic.title:
                     thematic = thematic.title.best_lang(user_prefs).value
                 else:
-                    thematic = "no thematic associated"
+                    thematic = no_thematic_associated
             else:
-                thematic = "no thematic associated"
+                thematic = no_thematic_associated
         else:
-            thematic = "no thematic associated"
+            thematic = no_thematic_associated
         query = db.query(m.Post).filter(m.Post.id == extract.content_id).first()
         if query:
             if query.body:
@@ -541,11 +543,12 @@ def extract_taxonomy_csv(request):
         if not message:
             message = "no message"
 
-        if thematic == "no thematic associated":
+        if thematic == no_thematic_associated:
             idea_ids = m.Idea.get_idea_ids_showing_post(query.id)
             for thematic_id in reversed(idea_ids):
-                if db.query(m.Idea).filter(m.Idea.id == thematic_id).first().title:
-                    thematic = db.query(m.Idea).filter(m.Idea.id == thematic_id).first().title.best_lang(user_prefs).value
+                thematic_title = db.query(m.Idea).filter(m.Idea.id == thematic_id).first().title
+                if thematic_title:
+                    thematic = thematic_title.best_lang(user_prefs).value
                     break
         if extract.body:
             content_harvested = extract.body
@@ -560,9 +563,9 @@ def extract_taxonomy_csv(request):
         else:
             qualify_by_action = "no qualify by action"
         owner_of_the_message = db.query(m.User).filter(m.User.id == query.creator_id).first().name
-        published_on = str(query.creation_date)[:19]
+        published_on = unicode(query.creation_date.replace(microsecond=0))
         harvester = db.query(m.User).filter(m.User.id == extract.owner_id).first().name
-        harvested_on = str(extract.creation_date)[:19]
+        harvested_on = unicode(extract.creation_date.replace(microsecond=0))
         nugget = "Yes" if extract.important else "No"
         extract_info = {
             "Thematic": thematic.encode('utf-8'),
