@@ -34,7 +34,7 @@ from assembl.graphql.section import (CreateSection, DeleteSection, Section,
                                      UpdateSection)
 from assembl.graphql.sentiment import AddSentiment, DeleteSentiment
 from assembl.graphql.synthesis import Synthesis
-from assembl.graphql.user import UpdateUser
+from assembl.graphql.user import UpdateUser, TextField
 from assembl.graphql.votes import AddTokenVote, DeleteTokenVote, AddGaugeVote, DeleteGaugeVote
 from assembl.graphql.vote_session import (
     VoteSession, UpdateVoteSession, CreateTokenVoteSpecification,
@@ -92,6 +92,7 @@ class Query(graphene.ObjectType):
     discussion = graphene.Field(Discussion)
     landing_page_module_types = graphene.List(LandingPageModuleType)
     landing_page_modules = graphene.List(LandingPageModule)
+    text_fields = graphene.List(TextField)
 
     def resolve_resources(self, args, context, info):
         model = models.Resource
@@ -303,6 +304,12 @@ class Query(graphene.ObjectType):
             modules.append(module)
 
         return sorted(modules, key=attrgetter('order'))
+
+    def resolve_text_fields(self, args, context, info):
+        model = models.TextField
+        query = get_query(model, context)
+        discussion_id = context.matchdict['discussion_id']
+        return query.filter(model.discussion_id == discussion_id).order_by(model.order)
 
 
 class Mutations(graphene.ObjectType):

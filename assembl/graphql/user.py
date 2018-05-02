@@ -12,6 +12,7 @@ from assembl.auth import Everyone, P_SYSADMIN, P_ADMIN_DISC
 from assembl.auth.util import get_permissions
 
 from .document import Document
+from .langstring import LangStringEntry, resolve_langstring, resolve_langstring_entries
 from .types import SecureObjectType
 from .utils import DateTime, abort_transaction_on_exception
 
@@ -175,3 +176,19 @@ class UpdateUser(graphene.Mutation):
             db.flush()
 
         return UpdateUser(user=user)
+
+
+class TextField(SecureObjectType, SQLAlchemyObjectType):
+    class Meta:
+        model = models.TextField
+        interfaces = (Node, )
+        only_fields = ('id', 'order', 'required')
+
+    title = graphene.String(lang=graphene.String())
+    title_entries = graphene.List(LangStringEntry)
+
+    def resolve_title(self, args, context, info):
+        return resolve_langstring(self.title, args.get('lang'))
+
+    def resolve_title_entries(self, args, context, info):
+        return resolve_langstring_entries(self, 'title')
