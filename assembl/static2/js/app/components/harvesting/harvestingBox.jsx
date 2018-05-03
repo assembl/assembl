@@ -242,7 +242,16 @@ class DumbHarvestingBox extends React.Component<Object, Props, State> {
 
   render() {
     const { selection, cancelHarvesting, extract, contentLocale, harvestingDate } = this.props;
-    const { disabled, extractIsValidated, isNugget, isEditable, editableExtract, extractNature, extractAction, showOverflowMenu } = this.state;
+    const {
+      disabled,
+      extractIsValidated,
+      isNugget,
+      isEditable,
+      editableExtract,
+      extractNature,
+      extractAction,
+      showOverflowMenu
+    } = this.state;
     const isExtract = extract !== null;
     const selectionText = selection ? selection.toString() : '';
     const harvesterUserName =
@@ -298,7 +307,11 @@ class DumbHarvestingBox extends React.Component<Object, Props, State> {
                 </Button>
               </OverlayTrigger>
               <OverlayTrigger placement="top" overlay={qualifyExtractTooltip}>
-                <Button disabled={disabled} className="taxonomy-menu-btn" onClick={() => { this.setState({ showOverflowMenu: !showOverflowMenu }); }}>
+                <Button
+                  disabled={disabled}
+                  className="taxonomy-menu-btn"
+                  onClick={() => { this.setState({ showOverflowMenu: !showOverflowMenu }); }}
+                >
                   <span className="assembl-icon-ellipsis-vert grey" />
                 </Button>
               </OverlayTrigger>
@@ -307,6 +320,7 @@ class DumbHarvestingBox extends React.Component<Object, Props, State> {
                   handleClick={this.qualifyExtract}
                   extractNature={extractNature}
                   extractAction={extractAction}
+                  onCloseClick={() => { this.setState({ showOverflowMenu: false }); }}
                 />}
             </div>
             <div className="profile">

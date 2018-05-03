@@ -6,7 +6,10 @@ import classnames from 'classnames';
 import { extractNatures, extractActions, NatureIcons, ActionIcons } from '../../utils/extractQualifier';
 
 type TaxonomyOverflowMenuProps = {
-  handleClick: Function, extractNature?: string, extractAction?: string
+  handleClick: Function,
+  extractNature?: string,
+  extractAction?: string,
+  onCloseClick: Function
 }
 
 type taxonomyOverflowMenuState = {
@@ -47,6 +50,7 @@ class TaxonomyOverflowMenu extends React.Component<*, TaxonomyOverflowMenuProps,
         <div className="pointer taxonomy-label taxonomy-label-border">
           <Translate value="harvesting.move" />
         </div>
+        <div className="assembl-icon-cancel" onClick={this.props.onCloseClick} />
         <div className="taxonomy-category">
           <Translate value="harvesting.qualifyNature" />
         </div>

@@ -15,6 +15,10 @@ exports[`taxonomyOverflowMenu component should match harvestingMenu snapshot 1`]
     />
   </div>
   <div
+    className="assembl-icon-cancel"
+    onClick={undefined}
+  />
+  <div
     className="taxonomy-category"
   >
     <Translate
