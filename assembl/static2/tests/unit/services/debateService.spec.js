@@ -293,7 +293,10 @@ describe('This test concern debate Service', () => {
           logo: '',
           name: ''
         }
-      ]
+      ],
+      useSocialMedia: undefined,
+      customHtmlCodeLandingPage: null,
+      customHtmlCodeRegistrationPage: null,
     };
     const result = buildDebateData(mockDiscussion, mockPreferences, getSortedArrayByKey(mockTimeline));
     expect(result).toEqual(expectedResult);
