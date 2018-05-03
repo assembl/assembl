@@ -162,8 +162,7 @@ type VoteSessionAdminProps = {
   i18n: {
     locale: string
   },
-  moduleTemplatesHaveChanged: boolean,
-  voteProposalsHaveChanged: boolean,
+  modulesOrProposalsHaveChanged: boolean,
   refetchVoteSession: Function,
   section: string,
   timeline: Timeline,
@@ -291,11 +290,13 @@ class VoteSessionAdmin extends React.Component<void, VoteSessionAdminProps, Vote
 
   runMutations(mutationsPromises) {
     const { refetchVoteSession } = this.props;
-    runSerial(mutationsPromises).then(() => {
-      this.setState({ refetching: true });
-      refetchVoteSession().then(() => this.setState({ refetching: false }));
-      displayAlert('success', I18n.t('administration.voteSessionSuccess'));
-    });
+    if (mutationsPromises.length > 0) {
+      runSerial(mutationsPromises).then(() => {
+        this.setState({ refetching: true });
+        refetchVoteSession().then(() => this.setState({ refetching: false }));
+        displayAlert('success', I18n.t('administration.voteSessionSuccess'));
+      });
+    }
   }
 
   validateProposals = (proposals) => {
@@ -321,8 +322,7 @@ class VoteSessionAdmin extends React.Component<void, VoteSessionAdminProps, Vote
   saveAction = () => {
     const {
       i18n,
-      moduleTemplatesHaveChanged,
-      voteProposalsHaveChanged,
+      modulesOrProposalsHaveChanged,
       refetchVoteSession,
       timeline,
       voteModules,
@@ -419,17 +419,13 @@ class VoteSessionAdmin extends React.Component<void, VoteSessionAdminProps, Vote
     const voteSessionPageId = voteSessionPage.get('id');
 
     if (voteSessionPage.get('id')) {
-      let allSpecsMutationsPromises = [];
-      if (moduleTemplatesHaveChanged) {
+      if (modulesOrProposalsHaveChanged) {
+        // mutations for modules templates
         const modules = voteModules.map(m => ({ ...m.toJS(), voteSessionId: voteSessionPageId })).toArray();
-        allSpecsMutationsPromises = getMutationsForModules(modules);
-      }
-
-      if (allSpecsMutationsPromises.length > 0) {
+        const allSpecsMutationsPromises = getMutationsForModules(modules);
         this.runMutations(allSpecsMutationsPromises);
-      }
 
-      if (voteProposalsHaveChanged) {
+        // mutations for proposals and their modules
         const isValid = this.validateProposals(voteProposals);
         if (!isValid) {
           displayAlert('danger', I18n.t('administration.anErrorOccured'));
@@ -490,7 +486,7 @@ class VoteSessionAdmin extends React.Component<void, VoteSessionAdminProps, Vote
   };
 
   dataHaveChanged = (): boolean =>
-    this.props.moduleTemplatesHaveChanged || this.props.voteProposalsHaveChanged || this.props.voteSessionPage.get('_hasChanged');
+    this.props.modulesOrProposalsHaveChanged || this.props.voteSessionPage.get('_hasChanged');
 
   render() {
     const { editLocale, section, debateId, voteSessionId } = this.props;
@@ -516,8 +512,7 @@ const mapStateToProps = ({ admin: { editLocale, voteSession }, debate, i18n, con
     modulesInOrder,
     tokenCategoriesById,
     gaugeChoicesById,
-    moduleTemplatesHaveChanged,
-    voteProposalsHaveChanged,
+    modulesOrProposalsHaveChanged,
     voteProposalsById,
     page
   } = voteSession;
@@ -558,8 +553,7 @@ const mapStateToProps = ({ admin: { editLocale, voteSession }, debate, i18n, con
   return {
     editLocale: editLocale,
     i18n: i18n,
-    moduleTemplatesHaveChanged: moduleTemplatesHaveChanged,
-    voteProposalsHaveChanged: voteProposalsHaveChanged,
+    modulesOrProposalsHaveChanged: modulesOrProposalsHaveChanged,
     timeline: debate.debateData.timeline,
     voteModules: voteModules,
     voteSessionPage: voteSession.page,

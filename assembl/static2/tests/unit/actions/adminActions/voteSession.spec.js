@@ -1,5 +1,6 @@
-import * as actions from '../../../../js/app/actions/adminActions/voteSession';
+import { Map } from 'immutable';
 
+import * as actions from '../../../../js/app/actions/adminActions/voteSession';
 import * as actionTypes from '../../../../js/app/actions/actionTypes';
 
 describe('voteSession admin actions', () => {
@@ -188,9 +189,61 @@ describe('voteSession admin actions', () => {
     });
   });
 
-  describe('customizeVoteModule', () => {
-    const { customizeVoteModule } = actions;
-    it('should return a CUSTOMIZE_VOTE_MODULE action', () => {
+  describe('cancelAllDependenciesCustomization action', () => {
+    const { cancelAllDependenciesCustomization } = actions;
+    it('should dispatch CANCEL_MODULE_CUSTOMIZATION action for each dependents of this template', () => {
+      const actual = cancelAllDependenciesCustomization('myTemplate');
+      const state = {
+        admin: {
+          voteSession: {
+            modulesById: Map({
+              myTemplate: Map({
+                id: 'myTemplate',
+                isCustom: false,
+                voteSpecTemplateId: null
+              }),
+              otherTemplate: Map({
+                id: 'otherTemplate',
+                isCustom: false,
+                voteSpecTemplateId: null
+              }),
+              dep1: Map({
+                id: 'dep1',
+                isCustom: true,
+                voteSpecTemplateId: 'myTemplate'
+              }),
+              dep2: Map({
+                id: 'dep2',
+                isCustom: true,
+                voteSpecTemplateId: 'myTemplate'
+              }),
+              otherCustom: Map({
+                id: 'otherCustom',
+                isCustom: true,
+                voteSpecTemplateId: 'otherTemplate'
+              }),
+              nonCustom: Map({
+                id: 'nonCustom',
+                isCustom: false,
+                voteSpecTemplateId: 'myTemplate'
+              })
+            })
+          }
+        }
+      };
+      const getState = () => state;
+      const dispatchMock = jest.fn();
+      actual(dispatchMock, getState);
+      expect(dispatchMock.mock.calls.length).toEqual(2);
+      expect(dispatchMock.mock.calls[0].length).toEqual(1);
+      expect(dispatchMock.mock.calls[0][0]).toEqual({ id: 'dep1', type: 'CANCEL_MODULE_CUSTOMIZATION' });
+      expect(dispatchMock.mock.calls[1][0]).toEqual({ id: 'dep2', type: 'CANCEL_MODULE_CUSTOMIZATION' });
+    });
+  });
+
+  describe('updateVoteModule', () => {
+    const { updateVoteModule } = actions;
+    it('should return a UPDATE_VOTE_MODULE action', () => {
       const info = {
         instructions: 'My updated title',
         minimum: 0,
@@ -199,7 +252,7 @@ describe('voteSession admin actions', () => {
         unit: 'kms',
         type: 'gauge'
       };
-      const actual = customizeVoteModule('my-module', 'en', info);
+      const actual = updateVoteModule('my-module', 'en', info);
       const expected = {
         id: 'my-module',
         info: {
@@ -211,7 +264,7 @@ describe('voteSession admin actions', () => {
           type: 'gauge'
         },
         locale: 'en',
-        type: actionTypes.CUSTOMIZE_VOTE_MODULE
+        type: actionTypes.UPDATE_VOTE_MODULE
       };
       expect(actual).toEqual(expected);
     });
