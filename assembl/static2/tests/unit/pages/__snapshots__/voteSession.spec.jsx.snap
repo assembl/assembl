@@ -90,6 +90,7 @@ exports[`VoteSession component should match VoteSession snapshot 1`] = `
                   },
                 ]
               }
+              windowWidth={1024}
             />
           </div>
         </Col>

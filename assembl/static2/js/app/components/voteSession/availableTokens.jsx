@@ -12,7 +12,8 @@ import { type TokenCategory } from '../../pages/voteSession';
 type Props = {
   remainingTokensByCategory: Map<string, number>,
   sticky: boolean,
-  tokenCategories: Array<?TokenCategory>
+  tokenCategories: Array<?TokenCategory>,
+  windowWidth: number
 };
 
 const getColumnSizes: Function = (numberCategoriesToDisplay) => {
@@ -45,7 +46,7 @@ const getClassNames: Function = (numberCategoriesToDisplay) => {
   }
 };
 
-const AvailableTokens = ({ remainingTokensByCategory, sticky, tokenCategories }: Props) => {
+const AvailableTokens = ({ remainingTokensByCategory, sticky, tokenCategories, windowWidth }: Props) => {
   const columnSizes: Array<number> = getColumnSizes(tokenCategories.length);
   const columnClass: Array<string> = getClassNames(tokenCategories.length);
   return (
@@ -70,7 +71,7 @@ const AvailableTokens = ({ remainingTokensByCategory, sticky, tokenCategories }:
                       <div
                         className="text"
                         style={
-                          sticky && tokenCategories.length % 2 !== 0 && tokenCategories.length > 2
+                          sticky && tokenCategories.length % 2 !== 0 && tokenCategories.length > 2 || windowWidth < 400
                             ? { maxWidth: '210px' }
                             : { minWidth: '250px' }
                         }
@@ -81,7 +82,7 @@ const AvailableTokens = ({ remainingTokensByCategory, sticky, tokenCategories }:
                       <div
                         className="tokens"
                         style={
-                          sticky && tokenCategories.length % 2 !== 0 && tokenCategories.length > 2
+                          sticky && tokenCategories.length % 2 !== 0 && tokenCategories.length > 2 || windowWidth < 400
                             ? { maxWidth: '160px' }
                             : { minWidth: '360px' }
                         }
