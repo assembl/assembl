@@ -41,8 +41,6 @@ export class DumbDebateLink extends React.Component<*, DebateLinkProps, DebateLi
 
   debateNode = null;
 
-  wormholes = null;
-
   showMenu = () => {
     this.setState({ timeLineActive: true });
   };
