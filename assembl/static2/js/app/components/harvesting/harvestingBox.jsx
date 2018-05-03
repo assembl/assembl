@@ -45,6 +45,11 @@ type State = {
   showOverflowMenu: boolean
 };
 
+type Taxonomies = {
+  nature: ?string,
+  action: ?string
+}
+
 class DumbHarvestingBox extends React.Component<Object, Props, State> {
   props: Props;
 
@@ -82,7 +87,7 @@ class DumbHarvestingBox extends React.Component<Object, Props, State> {
     this.setState({ editableExtract: value });
   };
 
-  qualifyExtract = (taxonomies: Object): void => {
+  qualifyExtract = (taxonomies: Taxonomies): void => {
     this.setState({ showOverflowMenu: false });
     const { nature, action } = taxonomies;
     const { extract, updateExtract, refetchPost } = this.props;
@@ -224,6 +229,16 @@ class DumbHarvestingBox extends React.Component<Object, Props, State> {
       });
   };
 
+  showValidatedHarvesting = (nature: ?string, action: ?string) => {
+    if (nature && action) {
+      return <div className="harvesting-taxonomy-label">{`${I18n.t(`search.taxonomy_nature.${nature}`)} + ${I18n.t(`search.taxonomy_action.${action}`)}`}</div>;
+    } else if (nature) {
+      return <div className="harvesting-taxonomy-label">{I18n.t(`search.taxonomy_nature.${nature}`)}</div>;
+    }
+    return action ? <div className="harvesting-taxonomy-label">{I18n.t(`search.taxonomy_action.${action}`)}</div> : null;
+    // the ternary is simply there to satisfy flow
+  }
+
 
   render() {
     const { selection, cancelHarvesting, extract, contentLocale, harvestingDate } = this.props;
@@ -254,12 +269,7 @@ class DumbHarvestingBox extends React.Component<Object, Props, State> {
                 <div>
                   {extractNature || extractAction ? (
                     <div className="validated-harvesting">
-                      {extractNature && (
-                        <div className="harvesting-taxonomy-label">{I18n.t(`search.taxonomy_nature.${extractNature}`)}</div>
-                      )}
-                      {extractAction && (
-                        <div className="harvesting-taxonomy-label">{I18n.t(`search.taxonomy_action.${extractAction}`)}</div>
-                      )}
+                      {this.showValidatedHarvesting(extractNature, extractAction)}
                     </div>
                   ) : (
                     <div className="validated-harvesting">

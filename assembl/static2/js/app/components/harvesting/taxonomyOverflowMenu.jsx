@@ -10,8 +10,8 @@ type TaxonomyOverflowMenuProps = {
 }
 
 type taxonomyOverflowMenuState = {
-  nature?: string,
-  action?: string
+  nature: ?string,
+  action: ?string
 }
 
 class TaxonomyOverflowMenu extends React.Component<*, TaxonomyOverflowMenuProps, taxonomyOverflowMenuState> {
@@ -35,17 +35,15 @@ class TaxonomyOverflowMenu extends React.Component<*, TaxonomyOverflowMenuProps,
 
   handleTaxonomySelection = (category: string, qualifier: string) => {
     if (category === 'nature') {
-      this.setState({ nature: qualifier });
+      return this.state.nature === qualifier ? this.setState({ nature: null }) : this.setState({ nature: qualifier });
     }
-    if (category === 'action') {
-      this.setState({ action: qualifier });
-    }
+    return this.state.action === qualifier ? this.setState({ action: null }) : this.setState({ action: qualifier });
   }
 
   render() {
     const { nature, action } = this.state;
     return (
-      <Popover id="taxonomy" className="taxonomy-menu overflow-menu fade in">
+      <Popover id="taxonomy" className="taxonomy-menu overflow-menu">
         <div className="pointer taxonomy-label taxonomy-label-border">
           <Translate value="harvesting.move" />
         </div>
@@ -85,9 +83,11 @@ class TaxonomyOverflowMenu extends React.Component<*, TaxonomyOverflowMenuProps,
             </div>
           ))}
         </div>
-        <Button key="validate" onClick={() => this.props.handleClick(this.state)} className="button-submit button-dark">
-          <Translate value="validate" />
-        </Button>
+        <div className="center-flex">
+          <Button key="validate" onClick={() => this.props.handleClick(this.state)} className="button-taxonomy button-dark">
+            <Translate value="validate" />
+          </Button>
+        </div>
       </Popover>
     );
   }

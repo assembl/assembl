@@ -25,7 +25,7 @@ exports[`taxonomyOverflowMenu component should match harvestingMenu snapshot 1`]
     className="pointer"
   >
     <div
-      className="taxonomy-label"
+      className="taxonomy-label active"
       onClick={[Function]}
     >
       <Unknown
@@ -141,7 +141,7 @@ exports[`taxonomyOverflowMenu component should match harvestingMenu snapshot 1`]
     className="pointer"
   >
     <div
-      className="taxonomy-label"
+      className="taxonomy-label active"
       onClick={[Function]}
     >
       <Unknown
@@ -327,6 +327,23 @@ exports[`taxonomyOverflowMenu component should match harvestingMenu snapshot 1`]
         />
       </div>
     </div>
+  </div>
+  <div
+    className="center-flex"
+  >
+    <Button
+      active={false}
+      block={false}
+      bsClass="btn"
+      bsStyle="default"
+      className="button-taxonomy button-dark"
+      disabled={false}
+      onClick={[Function]}
+    >
+      <Translate
+        value="validate"
+      />
+    </Button>
   </div>
 </Popover>
 `;
