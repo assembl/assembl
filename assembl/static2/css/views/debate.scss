@@ -24,7 +24,6 @@
 
     .menu-container {
       position: fixed;
-      top: calc(#{$navbar-height} + 63px);
       right: 0;
       left: 0;
       z-index: -1;
