@@ -201,8 +201,10 @@ class Administration extends React.Component {
   }
 
   putTextFieldsInStore(textFields) {
-    const filtered = filter(TextFields, { textFields: textFields });
-    this.props.updateTextFields(filtered.textFields);
+    if (textFields) {
+      const filtered = filter(TextFields, { textFields: textFields });
+      this.props.updateTextFields(filtered.textFields);
+    }
   }
 
   render() {
