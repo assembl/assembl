@@ -724,35 +724,43 @@ def bootstrap(projectpath):
 
 
 @task
-def bootstrap_from_checkout():
+def bootstrap_from_checkout(backup=False):
     """
     Creates the virtualenv and install the app from git checkout
     """
-    execute(updatemaincode)
+    execute(updatemaincode, backup=backup)
     execute(build_virtualenv)
-    execute(app_update_dependencies)
+    execute(app_update_dependencies, backup=backup)
     execute(app_setup)
     execute(check_and_create_database_user)
     execute(app_compile_nodbupdate)
     execute(set_file_permissions)
-    execute(app_db_install)
+    if not backup:
+        execute(app_db_install)
+    else:
+        execute(database_restore, backup=backup)
     execute(app_reload)
     execute(webservers_reload)
 
 
 @task
-def bootstrap_from_backup():
+def bootstrap_from_backup(backup=True):
     """
     Creates the virtualenv and install the app from the backup files
     """
-    execute(app_update_dependencies_for_backup)
-    execute(app_setup)
-    execute(check_and_create_database_user)
-    execute(app_compile_nodbupdate)
-    execute(set_file_permissions)
-    execute(backup_database_restore)
-    execute(app_reload)
-    execute(webservers_reload)
+    execute(bootstrap_from_checkout, backup=backup)
+
+
+@task
+def install_assembl_requirements():
+    """Updates the environment and installs prerequisites for assembl installation"""
+    run('sudo apt-get update')
+    run('sudo apt-get upgrade')
+    run('sudo apt-get install fabric git openssh-server')
+    run('sudo apt-get install nginx uwsgi uwsgi-plugin-python')
+    run('sudo addgroup assembl_group')
+    run('sudo adduser assembl_user')
+    run('sudo usermod -G www-data -G assembl_group assembl_user')
 
 
 def clone_repository():
@@ -771,15 +779,16 @@ def clone_repository():
                                                 env.projectpath))
 
 
-def updatemaincode():
+def updatemaincode(backup=False):
     """
     Update code and/or switch branch
     """
-    print(cyan('Updating Git repository'))
-    with cd(join(env.projectpath)):
-        run('git fetch')
-        run('git checkout %s' % env.gitbranch)
-        run('git pull %s %s' % (env.gitrepo, env.gitbranch))
+    if not backup:
+        print(cyan('Updating Git repository'))
+        with cd(join(env.projectpath)):
+            run('git fetch')
+            run('git checkout %s' % env.gitbranch)
+            run('git pull %s %s' % (env.gitrepo, env.gitbranch))
 
 
 @task
@@ -820,14 +829,15 @@ def app_update():
 
 
 @task
-def app_update_dependencies(force_reinstall=False):
+def app_update_dependencies(force_reinstall=False, backup=False):
     """
     Updates all python and javascript dependencies.  Everything that requires a
     network connection to update
     """
-    execute(update_vendor_themes_1)
-    execute(update_vendor_themes_2)
-    execute(ensure_requirements)
+    if not backup:
+        execute(update_vendor_themes_1)
+        execute(update_vendor_themes_2)
+        execute(ensure_requirements)
     execute(update_pip_requirements, force_reinstall=force_reinstall)
     # Nodeenv is installed by python , so this must be after update_pip_requirements
     execute(update_node, force_reinstall=force_reinstall)
@@ -1623,55 +1633,20 @@ def postgres_user_detach():
 
 
 @task
-def backup_database_restore():
-    """Restores the backup database on backup server"""
-
-    processes = filter_autostart_processes([
-        "dev:pserve" "celery_imap", "changes_router", "celery_notify",
-        "celery_notification_dispatch", "source_reader"])
-
-    for process in processes:
-        supervisor_process_stop(process)
-
-    # Drop db
-    with settings(warn_only=True):
-        dropped = run('PGPASSWORD=%s dropdb --host=%s --username=%s --no-password %s' % (
-            env.db_password,
-            env.db_host,
-            env.db_user,
-            env.db_database))
-
-        assert dropped.succeeded or "does not exist" in dropped, \
-            "Could not drop the database"
-
-    # Create db
-    execute(database_create)
-
-    # Restore data
-    with prefix(venv_prefix()), cd(env.projectpath):
-        run('PGPASSWORD=%s pg_restore --no-owner --role=%s --host=%s --dbname=%s -U%s --schema=public %s' % (
-            env.db_password,
-            env.db_user,
-            env.db_host,
-            env.db_database,
-            env.db_user,
-            remote_db_path())
-            )
-
-    for process in processes:
-        supervisor_process_start(process)
-
-
-@task
-def database_restore():
+def database_restore(backup=False):
     """
     Restores the database backed up on the remote server
     """
-    assert(env.wsginame in ('staging.wsgi', 'dev.wsgi'))
-
-    processes = filter_autostart_processes([
-        "dev:pserve" "celery_imap", "changes_router", "celery_notify",
-        "celery_notification_dispatch", "source_reader"])
+    if not backup:
+        assert(env.wsginame in ('staging.wsgi', 'dev.wsgi'))
+        processes = filter_autostart_processes([
+            "dev:pserve" "celery_imap", "changes_router", "celery_notify",
+            "celery_notification_dispatch", "source_reader"])
+    else:
+        processes = filter_autostart_processes([
+            "dev:pserve", "dev:gulp", "dev:webpack", "edgesense", "elasticsearch", "celery_imap", "changes_router", "celery_notify",
+            "celery_notification_dispatch", "celery_notify_beat", "celery_translate", "source_reader", "maintenance_uwsgi", "metrics",
+            "metrics_py", "prod:uwsgi"])
 
     if(env.wsginame != 'dev.wsgi'):
         execute(webservers_stop)
