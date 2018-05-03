@@ -8,20 +8,27 @@ import { modalManager, alertManager } from './utils/utilityManager';
   Some debate initiators want to embed their own tracking code.
   Note that HTML added via dangerouslySetInnerHTML does not execute <script> tags.
 */
-const DebateCustomHTMLCode = ({currentRoute, debateData}) => {
-  if (currentRoute && debateData){
+const DebateCustomHTMLCode = ({ currentRoute, debateData }) => {
+  if (currentRoute && debateData) {
     let customHtml = null;
-    switch (currentRoute){
-      case ":slug/home": // for backend routes "new_home" and "bare_slug"
-        customHtml = debateData && "customHtmlCodeLandingPage" in debateData ? debateData.customHtmlCodeLandingPage : null;
+    switch (currentRoute) {
+    case ':slug/home': // for backend routes "new_home" and "bare_slug"
+      if (debateData && 'customHtmlCodeLandingPage' in debateData) {
+        customHtml = debateData.customHtmlCodeLandingPage;
+      }
       break;
 
-      case ":slug/signup": // for backend route "contextual_react_register"
-        customHtml = debateData && "customHtmlCodeRegistrationPage" in debateData ? debateData.customHtmlCodeRegistrationPage : null;
+    case ':slug/signup': // for backend route "contextual_react_register"
+      if (debateData && 'customHtmlCodeRegistrationPage' in debateData) {
+        customHtml = debateData.customHtmlCodeRegistrationPage;
+      }
+      break;
+
+    default:
       break;
     }
 
-    if (customHtml){
+    if (customHtml) {
       return <div className="debate-custom-html-code" dangerouslySetInnerHTML={{ __html: customHtml }} />;
     }
   }
@@ -33,25 +40,23 @@ const DebateCustomHTMLCode = ({currentRoute, debateData}) => {
   Parent class of all of Assembl. All high level components that require
   to exist in every context should be placed here. Eg. Alert, Modal, etc.
 */
-const Root = ({children, routes, debateData}) => {
-  return (
-    <div>
-      <DebateCustomHTMLCode currentRoute={routes[routes.length-1].path} debateData={debateData} />
-      <Modal
-        ref={(modalComponent) => {
-          modalManager.setComponent(modalComponent);
-        }}
-      />
-      <Alert
-        isBase
-        ref={(alertComponent) => {
-          alertManager.setComponent(alertComponent);
-        }}
-      />
-      <div className="root-child">{children}</div>
-    </div>
-  );
-};
+const Root = ({ children, routes, debateData }) => (
+  <div>
+    <DebateCustomHTMLCode currentRoute={routes[routes.length - 1].path} debateData={debateData} />
+    <Modal
+      ref={(modalComponent) => {
+        modalManager.setComponent(modalComponent);
+      }}
+    />
+    <Alert
+      isBase
+      ref={(alertComponent) => {
+        alertManager.setComponent(alertComponent);
+      }}
+    />
+    <div className="root-child">{children}</div>
+  </div>
+);
 
 const mapStateToProps = state => ({
   debateData: state.debate.debateData

@@ -34,8 +34,10 @@ export const buildDebateData = (debateData, prefs, timeline, socialShare) => {
     });
   }
 
-  const customHtmlCodeLandingPage = prefs.custom_html_code_landing_page ? prefs.custom_html_code_landing_page : null;
-  const customHtmlCodeRegistrationPage = prefs.custom_html_code_user_registration_page ? prefs.custom_html_code_user_registration_page : null;
+  const customHtmlCodeLandingPage = prefs.custom_html_code_landing_page ?
+    prefs.custom_html_code_landing_page : null;
+  const customHtmlCodeRegistrationPage = prefs.custom_html_code_user_registration_page ?
+    prefs.custom_html_code_user_registration_page : null;
 
   return {
     translationEnabled: !!debateData.translation_service_class,
