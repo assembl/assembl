@@ -11,8 +11,8 @@ from assembl.auth import CrudPermissions
 from assembl.auth import Everyone, P_SYSADMIN, P_ADMIN_DISC
 from assembl.auth.util import get_permissions
 from .document import Document
-from .langstring import LangStringEntry, LangStringEntryInput, resolve_langstring, resolve_langstring_entries, langstring_from_input_entries
-from .permissions_helpers import require_cls_permission
+from .langstring import LangStringEntry, LangStringEntryInput, resolve_langstring, resolve_langstring_entries, langstring_from_input_entries, update_langstring_from_input_entries
+from .permissions_helpers import require_cls_permission, require_instance_permission
 from .types import SecureObjectType
 from .utils import DateTime, abort_transaction_on_exception
 
@@ -229,3 +229,58 @@ class CreateTextField(graphene.Mutation):
             db.flush()
 
         return CreateTextField(text_field=saobj)
+
+
+class UpdateTextField(graphene.Mutation):
+    class Input:
+        id = graphene.ID(required=True)
+        lang = graphene.String(required=True)
+        title_entries = graphene.List(LangStringEntryInput, required=True)
+        order = graphene.Float(required=True)
+        required = graphene.Boolean(required=True)
+
+    text_field = graphene.Field(lambda: TextField)
+
+    @staticmethod
+    @abort_transaction_on_exception
+    def mutate(root, args, context, info):
+        cls = models.TextField
+        text_field_id = args.get('id')
+        text_field_id = int(Node.from_global_id(text_field_id)[1])
+        text_field = cls.get(text_field_id)
+        require_instance_permission(CrudPermissions.UPDATE, text_field, context)
+        with cls.default_db.no_autoflush as db:
+            title_entries = args.get('title_entries')
+            if len(title_entries) == 0:
+                raise Exception(
+                    'TextField titleEntries needs at least one entry')
+                # Better to have this message than
+                # 'NoneType' object has no attribute 'owner_object'
+                # when creating the saobj below if title=None
+
+            update_langstring_from_input_entries(text_field, 'title', title_entries)
+            text_field.order = args['order']
+            text_field.required = args['required']
+
+            db.flush()
+
+        return UpdateTextField(text_field=text_field)
+
+
+class DeleteTextField(graphene.Mutation):
+
+    class Input:
+        id = graphene.ID(required=True)
+
+    success = graphene.Boolean()
+
+    @staticmethod
+    @abort_transaction_on_exception
+    def mutate(root, args, context, info):
+        text_field_id = args.get('id')
+        text_field_id = int(Node.from_global_id(text_field_id)[1])
+        text_field = models.Idea.get(text_field_id)
+        require_instance_permission(CrudPermissions.DELETE, text_field, context)
+        text_field.db.delete(text_field)
+        text_field.db.flush()
+        return DeleteTextField(success=True)
