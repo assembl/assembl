@@ -326,3 +326,32 @@ def test_mutation_create_text_field(graphql_request, graphql_registry):
     title_entries = new_field['titleEntries']
     assert title_entries[0]['localeCode'] == u'en'
     assert title_entries[0]['value'] == u'My new field'
+
+
+import pytest
+@pytest.mark.xfail
+def test_mutation_update_text_field(graphql_request, graphql_registry, text_field):
+    text_field_id = to_global_id('TextField', text_field.id)
+    res = schema.execute(
+        graphql_registry['updateTextField'],
+        context_value=graphql_request,
+        variable_values={
+            "id": text_field_id,
+            "lang": u"en",
+            "titleEntries": [
+                { "localeCode": "en", "value": u"My new title" },
+                { "localeCode": "be", "value": u"Mon nouveau titre" },
+            ],
+            "order": 8.0,
+            "required": False
+        })
+    assert res.errors is None
+    assert 'updateTextField' in res.data
+    field = res.data['updateTextField']['textField']
+    assert field[u'required'] is False
+    assert field[u'order'] == 8.0
+    title_entries = field['titleEntries']
+    assert title_entries[0]['localeCode'] == u'en'
+    assert title_entries[0]['value'] == u'My new title'
+    assert title_entries[1]['localeCode'] == u'be'
+    assert title_entries[1]['value'] == u'Mon nouveau titre'
