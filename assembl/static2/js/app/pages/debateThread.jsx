@@ -16,6 +16,7 @@ const DebateThread = ({ identifier, data, params, children }) => {
       identifier: identifier
     })
   );
+
   return (
     <div className="debate">
       {loading && isParentRoute && <Loader color="black" />}

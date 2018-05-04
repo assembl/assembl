@@ -4,6 +4,18 @@ import { type RawContentState } from 'draft-js';
 
 export type IdeaMessageColumns = Array<IdeaMessageColumnFragment>;
 
+export type Idea = {
+  id: string,
+  parentId: string,
+  title: string,
+  description: string,
+  img: Object,
+  numChildren: number,
+  numContributors: number,
+  numPosts: number,
+  order: number
+};
+
 type Post = PostFragment & {
   messageClassifier: ?string,
   creationDate: string,

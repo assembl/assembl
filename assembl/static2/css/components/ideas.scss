@@ -1,4 +1,22 @@
 .themes-section {
+  .idea-preview-thumbnails {
+    .access-discussion {
+      display: none;
+    }
+
+    .box-hyphen {
+      display: none;
+    }
+
+    .light-title-3 {
+      top: 25px;
+    }
+
+    .stats {
+      display: none;
+    }
+  }
+
   margin: 120px 0 0;
 
   .slider-container {
@@ -55,6 +73,21 @@
     }
   }
 
+  .mobile-slider-container {
+    margin-bottom: 15px !important;
+    overflow-x: scroll;
+  }
+
+  .ideas-back-arrow {
+    width: 100%;
+    position: absolute;
+    left: 0;
+    right: 0;
+    background-color: $grey1;
+    height: 40px;
+    padding-top: 5px;
+  }
+
   .theme-first-row-0 {
     margin-top: 80px;
   }
@@ -88,8 +121,6 @@
   }
 
   .theme-inline {
-    min-width: 280px;
-    max-width: 350px;
     margin-top: 0;
   }
 
@@ -112,10 +143,21 @@
   }
 }
 
+.mobile-ideas-section {
+  margin: 0 !important;
+}
+
 @media screen and (max-width: 991px) {
   .themes-section {
     .theme {
       margin: 2px 0 0;
     }
+  }
+}
+
+@media screen and (min-width: 768px) {
+  .theme-inline {
+    min-width: 280px;
+    max-width: 350px;
   }
 }
