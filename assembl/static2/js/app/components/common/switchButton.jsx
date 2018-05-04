@@ -1,5 +1,5 @@
-// @flow
-import React from 'react';
+// @noflow
+import * as React from 'react';
 
 type Props = {
   checked: boolean,
@@ -15,9 +15,7 @@ type Props = {
   onChange: Function
 };
 
-class SwitchButton extends React.Component<Object, Props, any> {
-  static defaultProps: Object;
-
+class SwitchButton extends React.Component<Props> {
   static defaultProps = {
     id: '',
     name: 'switch-button',

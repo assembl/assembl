@@ -22,10 +22,15 @@ exports[`VoteProposalForm component should render an empty form to create a vote
     />
   </div>
   <FormControlWithLabel
+    componentClass={undefined}
+    disabled={undefined}
+    formControlProps={undefined}
+    helperText={undefined}
     helperUrl=""
+    id={undefined}
     label="Title of the proposal"
     labelAlwaysVisible={false}
-    name={null}
+    name={undefined}
     onChange={[Function]}
     required={true}
     type="text"
@@ -40,14 +45,19 @@ exports[`VoteProposalForm component should render an empty form to create a vote
     value={null}
   />
   <FormControlWithLabel
+    componentClass={undefined}
+    disabled={undefined}
+    formControlProps={undefined}
+    helperText={undefined}
     helperUrl=""
+    id={undefined}
     label="Description"
     labelAlwaysVisible={false}
-    name={null}
+    name={undefined}
     onChange={[Function]}
     required={true}
     type="rich-text"
-    validationErrors={null}
+    validationErrors={undefined}
     value={null}
   />
   <FormGroup
@@ -87,25 +97,35 @@ exports[`VoteProposalForm component should render an empty form to create a vote
     />
   </div>
   <FormControlWithLabel
+    componentClass={undefined}
+    disabled={undefined}
+    formControlProps={undefined}
+    helperText={undefined}
     helperUrl=""
+    id={undefined}
     label="Title of the proposal"
     labelAlwaysVisible={false}
-    name={null}
+    name={undefined}
     onChange={[Function]}
     required={true}
     type="text"
-    validationErrors={null}
+    validationErrors={undefined}
     value={null}
   />
   <FormControlWithLabel
+    componentClass={undefined}
+    disabled={undefined}
+    formControlProps={undefined}
+    helperText={undefined}
     helperUrl=""
+    id={undefined}
     label="Description"
     labelAlwaysVisible={false}
-    name={null}
+    name={undefined}
     onChange={[Function]}
     required={true}
     type="rich-text"
-    validationErrors={null}
+    validationErrors={undefined}
     value={null}
   />
   <FormGroup

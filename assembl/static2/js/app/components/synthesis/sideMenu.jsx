@@ -1,5 +1,5 @@
 // @flow
-import React from 'react';
+import * as React from 'react';
 import { Translate } from 'react-redux-i18n';
 import { getChildren } from '../../utils/tree';
 import { getDiscussionSlug } from '../../utils/globalFunctions';

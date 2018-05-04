@@ -1,4 +1,4 @@
-// @flow
+// @noflow
 import React from 'react';
 import { connect, type Dispatch, type MapStateToProps } from 'react-redux';
 import { type Route, type Router } from 'react-router';
@@ -85,11 +85,7 @@ type State = {
   refetching: boolean
 };
 
-class DiscussionAdmin extends React.Component<void, Props, State> {
-  props: Props;
-
-  state: State;
-
+class DiscussionAdmin extends React.Component<Props, State> {
   constructor() {
     super();
     this.state = {

@@ -1,5 +1,5 @@
 // @flow
-import React from 'react';
+import * as React from 'react';
 import { Popover, Button } from 'react-bootstrap';
 import { Translate } from 'react-redux-i18n';
 import classnames from 'classnames';
@@ -11,27 +11,23 @@ type TaxonomyOverflowMenuProps = {
   extractAction?: string,
   onCloseClick: Function,
   top: number
-}
+};
 
 type taxonomyOverflowMenuState = {
   nature: ?string,
   action: ?string
-}
+};
 
-class TaxonomyOverflowMenu extends React.Component<Object, TaxonomyOverflowMenuProps, taxonomyOverflowMenuState> {
-  props: TaxonomyOverflowMenuProps;
-
-  state: taxonomyOverflowMenuState;
+class TaxonomyOverflowMenu extends React.Component<TaxonomyOverflowMenuProps, taxonomyOverflowMenuState> {
+  static defaultProps = {
+    extractNature: null,
+    extractAction: null
+  };
 
   static defaultProps = {
     extractNature: null,
     extractAction: null
-  }
-
-  static defaultProps = {
-    extractNature: null,
-    extractAction: null
-  }
+  };
 
   constructor(props: TaxonomyOverflowMenuProps) {
     super(props);
@@ -55,14 +51,14 @@ class TaxonomyOverflowMenu extends React.Component<Object, TaxonomyOverflowMenuP
       return nature === qualifier ? this.setState({ nature: null }) : this.setState({ nature: qualifier });
     }
     return action === qualifier ? this.setState({ action: null }) : this.setState({ action: qualifier });
-  }
+  };
 
   render() {
     const { nature, action } = this.state;
     const { top } = this.props;
     return (
       <Popover id="taxonomy" className="taxonomy-menu overflow-menu" style={{ top: `${top}px` }}>
-        { /* $FlowFixMe */ }
+        {/* $FlowFixMe */}
         <div ref={this.menuRef}>
           <div className="pointer taxonomy-label taxonomy-label-border">
             <Translate value="harvesting.move" />
@@ -91,9 +87,7 @@ class TaxonomyOverflowMenu extends React.Component<Object, TaxonomyOverflowMenuP
           <div className="pointer">
             {extractActions.map(a => (
               <div
-                onClick={
-                  () => this.handleTaxonomySelection('action', a.qualifier)
-                }
+                onClick={() => this.handleTaxonomySelection('action', a.qualifier)}
                 key={a.qualifier}
                 className={classnames('taxonomy-label', { active: action === a.qualifier })}
               >

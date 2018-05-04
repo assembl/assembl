@@ -1,6 +1,6 @@
-// @flow
+// @noflow
 
-import React from 'react';
+import * as React from 'react';
 import { connect } from 'react-redux';
 import { setLocale } from 'react-redux-i18n';
 import { compose, graphql } from 'react-apollo';
@@ -16,12 +16,13 @@ export const refWidthUpdate = (setWidth: (width: number) => void) => (ref: ?HTML
   if (ref) setWidth(ref.getBoundingClientRect().width);
 };
 
-class LanguageMenu extends React.Component {
-  state: {
+class LanguageMenu extends React.Component<
+  $FlowFixMeProps,
+  {
     availableLocales: Array<string>,
     preferencesMapByLocale: { [string]: { nativeName: string, name: string, locale: string } }
-  };
-
+  }
+> {
   static defaultProps = {
     className: ''
   };

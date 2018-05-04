@@ -1,5 +1,5 @@
 // @flow
-import React from 'react';
+import * as React from 'react';
 import addPostExtractMutation from '../../graphql/mutations/addPostExtract.graphql'; // eslint-disable-line
 import updateExtractMutation from '../../graphql/mutations/updateExtract.graphql'; // eslint-disable-line
 import deleteExtractMutation from '../../graphql/mutations/deleteExtract.graphql'; // eslint-disable-line
@@ -19,10 +19,8 @@ type Props = {
   isAuthorAccountDeleted: boolean
 };
 
-class HarvestingMenu extends React.Component<void, Props, *> {
-  props: Props;
-
-  handleMouseDown = (event: SyntheticMouseEvent) => {
+class HarvestingMenu extends React.Component<Props> {
+  handleMouseDown = (event: SyntheticMouseEvent<>) => {
     // This would otherwise clear the selection
     event.preventDefault();
     return false;

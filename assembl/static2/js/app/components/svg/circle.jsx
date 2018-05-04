@@ -1,5 +1,5 @@
 // @flow
-import React from 'react';
+import * as React from 'react';
 
 type Props = {
   fillColor: ?string,
@@ -8,7 +8,7 @@ type Props = {
 };
 
 // need to stay a class for flow to understand defaultProps
-class Circle extends React.Component<Props, Props, void> {
+class Circle extends React.Component<Props> {
   static defaultProps = {
     fillColor: 'none',
     size: 28,

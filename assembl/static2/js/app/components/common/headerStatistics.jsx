@@ -1,5 +1,5 @@
 // @flow
-import React from 'react';
+import * as React from 'react';
 import { Translate, Localize } from 'react-redux-i18n';
 
 type StatisticElementProps = {

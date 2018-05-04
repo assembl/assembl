@@ -1,4 +1,4 @@
-// @flow
+// @noflow
 import React from 'react';
 import { connect } from 'react-redux';
 import { compose, graphql } from 'react-apollo';
@@ -63,11 +63,7 @@ type SurveyState = {
   showModal: boolean
 };
 
-class Survey extends React.Component<*, SurveyProps, SurveyState> {
-  props: SurveyProps;
-
-  state: SurveyState;
-
+class Survey extends React.Component<SurveyProps, SurveyState> {
   constructor(props) {
     super(props);
     this.state = {

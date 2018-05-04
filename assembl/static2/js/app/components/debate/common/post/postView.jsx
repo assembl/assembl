@@ -1,7 +1,6 @@
-// @flow
-import React from 'react';
+// @noflow
+import * as React from 'react';
 import { Translate, I18n } from 'react-redux-i18n';
-
 import { getDomElementOffset, elementContainsSelection } from '../../../../utils/globalFunctions';
 import Attachments from '../../../common/attachments';
 import ProfileLine from '../../../common/profileLine';
@@ -17,7 +16,7 @@ type Props = PostProps & {
   body: string,
   subject: string,
   handleEditClick: Function,
-  modifiedSubject: React.Element<*>,
+  modifiedSubject: React.Element<any>,
   isHarvesting: boolean
 };
 
@@ -28,11 +27,7 @@ type State = {
   harvestingAnchorPosition: Object
 };
 
-class PostView extends React.PureComponent<void, Props, State> {
-  props: Props;
-
-  state: State;
-
+class PostView extends React.PureComponent<Props, State> {
   answerTextarea: HTMLTextAreaElement;
 
   postView: HTMLElement;

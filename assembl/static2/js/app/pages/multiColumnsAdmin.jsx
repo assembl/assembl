@@ -54,9 +54,7 @@ class MultiColumnsAdmin extends React.Component {
             annotation="multicolumnAnnotation"
           />
         )}
-        {!isNaN(currentStep) && (
-          <Navbar currentStep={currentStep} totalSteps={1} phaseIdentifier="multiColumn" />
-        )}
+        {!isNaN(currentStep) && <Navbar currentStep={currentStep} totalSteps={1} phaseIdentifier="multiColumn" />}
       </div>
     );
   }

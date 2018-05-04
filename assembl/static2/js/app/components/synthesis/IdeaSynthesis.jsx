@@ -1,6 +1,6 @@
 // @flow
 
-import React from 'react';
+import * as React from 'react';
 import { Translate } from 'react-redux-i18n';
 import { Link } from 'react-router';
 

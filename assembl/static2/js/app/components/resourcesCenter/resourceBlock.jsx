@@ -1,5 +1,5 @@
 // @flow
-import React from 'react';
+import * as React from 'react';
 import classnames from 'classnames';
 import { Grid } from 'react-bootstrap';
 import { Translate } from 'react-redux-i18n';

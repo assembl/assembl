@@ -1,5 +1,5 @@
 // @flow
-import React from 'react';
+import * as React from 'react';
 import { connect } from 'react-redux';
 import { compose, graphql } from 'react-apollo';
 import { I18n, Translate } from 'react-redux-i18n';
@@ -216,11 +216,7 @@ export const getProposalValidationErrors = (p: VoteProposalMap, editLocale: stri
   return errors;
 };
 
-class VoteSessionAdmin extends React.Component<void, VoteSessionAdminProps, VoteSessionAdminState> {
-  props: VoteSessionAdminProps;
-
-  state: VoteSessionAdminState;
-
+class VoteSessionAdmin extends React.Component<VoteSessionAdminProps, VoteSessionAdminState> {
   constructor(props: VoteSessionAdminProps) {
     super(props);
     this.state = {
@@ -485,8 +481,7 @@ class VoteSessionAdmin extends React.Component<void, VoteSessionAdminProps, Vote
     }
   };
 
-  dataHaveChanged = (): boolean =>
-    this.props.modulesOrProposalsHaveChanged || this.props.voteSessionPage.get('_hasChanged');
+  dataHaveChanged = (): boolean => this.props.modulesOrProposalsHaveChanged || this.props.voteSessionPage.get('_hasChanged');
 
   render() {
     const { editLocale, section, debateId, voteSessionId } = this.props;

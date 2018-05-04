@@ -1,6 +1,6 @@
-// @flow
+// @noflow
 
-import React from 'react';
+import * as React from 'react';
 import { connect } from 'react-redux';
 
 import { getCurrentPhaseIdentifier, type Timeline } from './utils/timeline';
@@ -10,16 +10,18 @@ import Footer from './components/common/footer';
 
 type Debate = { debateData: { timeline: Timeline } };
 
-class Main extends React.Component {
-  state: { identifier: string, location: string };
+type Props = {
+  debate: Debate,
+  params: { phase: string, themeId: ?string },
+  location: { query: { phase: string }, pathname: string },
+  addRedirectionToV1: boolean => {},
+  children: React.Node
+};
 
-  constructor(props: {
-    debate: Debate,
-    params: { phase: string, themeId: ?string },
-    location: { query: { phase: string }, pathname: string },
-    addRedirectionToV1: boolean => {},
-    children: React.Children
-  }) {
+type State = { identifier: string, location: string };
+
+class Main extends React.Component<Props, State> {
+  constructor(props: Props) {
     super(props);
     const { debateData } = this.props.debate;
     const paramsIdentifier = this.props.params.phase || getCurrentPhaseIdentifier(debateData.timeline);

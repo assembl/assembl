@@ -1,5 +1,5 @@
 // @flow
-import React from 'react';
+import * as React from 'react';
 import { Button, FormGroup, Modal, Radio } from 'react-bootstrap';
 import { Translate, I18n } from 'react-redux-i18n';
 
@@ -18,11 +18,7 @@ type CancelTranslationFormState = {
   scope: Scope
 };
 
-class CancelTranslationForm extends React.Component<*, CancelTranslationFormProps, CancelTranslationFormState> {
-  props: CancelTranslationFormProps;
-
-  state: CancelTranslationFormState;
-
+class CancelTranslationForm extends React.Component<CancelTranslationFormProps, CancelTranslationFormState> {
   constructor() {
     super();
     this.state = {

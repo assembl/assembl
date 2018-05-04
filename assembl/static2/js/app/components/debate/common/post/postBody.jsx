@@ -1,5 +1,5 @@
-// @flow
-import React from 'react';
+// @noflow
+import * as React from 'react';
 import activeHtml from 'react-active-html';
 import classNames from 'classnames';
 import jQuery from 'jquery';
@@ -19,7 +19,7 @@ type Props = {
   contentLocale: string,
   id: string,
   lang: string,
-  subject: ?React.Element<*>,
+  subject: ?React.Element<any>,
   originalLocale: string,
   translate: boolean,
   translationEnabled: boolean,

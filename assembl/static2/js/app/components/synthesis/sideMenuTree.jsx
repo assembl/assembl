@@ -1,5 +1,5 @@
-// @flow
-import React from 'react';
+// @noflow
+import * as React from 'react';
 import { Link } from 'react-router';
 import classNames from 'classnames';
 import { getPartialTree, getChildren } from '../../utils/tree';
@@ -23,11 +23,7 @@ type SideMenuTreeProps = {
   ideaOnScroll?: string
 };
 
-class SideMenuTree extends React.Component<Object, SideMenuTreeProps, SideMenuTreeState> {
-  props: SideMenuTreeProps;
-
-  state: SideMenuTreeState;
-
+class SideMenuTree extends React.Component<SideMenuTreeProps, SideMenuTreeState> {
   static defaultProps = {
     ideaOnScroll: null
   };

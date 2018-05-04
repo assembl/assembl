@@ -1,5 +1,5 @@
-// @flow
-import React from 'react';
+// @noflow
+import * as React from 'react';
 import classnames from 'classnames';
 import { connect } from 'react-redux';
 import { Grid, Row } from 'react-bootstrap';
@@ -8,7 +8,7 @@ import { getPhaseName, getIfPhaseCompletedByIdentifier } from '../../utils/timel
 import WhatYouNeedToKnow from '../debate/common/whatYouNeedToKnow';
 import HeaderActions from '../debate/common/headerActions';
 
-class Header extends React.Component {
+class Header extends React.Component<$FlowFixMeProps> {
   render() {
     const { children, title, subtitle, imgUrl, identifier, synthesisTitle, additionalHeaderClasses, type } = this.props;
     const { debateData } = this.props.debate;

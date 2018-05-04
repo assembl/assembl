@@ -1,5 +1,5 @@
-// @flow
-import React from 'react';
+// @noflow
+import * as React from 'react';
 import { Translate } from 'react-redux-i18n';
 import classnames from 'classnames';
 import { SECTION_INDEX_GENERATOR, getIndexesForIdeas } from '../../utils/section';
@@ -51,9 +51,7 @@ const levelN = (title, index, translate) => (
 
 const LEVELS = [level1, level2, level3];
 
-class Section extends React.Component<Object, SectionProps, void> {
-  props: SectionProps;
-
+class Section extends React.Component<SectionProps> {
   static defaultProps = {
     containerAdditionalClassNames: [],
     index: 1,

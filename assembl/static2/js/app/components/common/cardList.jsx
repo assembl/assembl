@@ -1,17 +1,15 @@
 // @flow
-import React from 'react';
+import * as React from 'react';
 import { Row, Col } from 'react-bootstrap';
 
 type CardListProps = {
   data: Array<Object>,
   itemClassName: string,
   classNameGenerator: Function,
-  CardItem: Function | ReactClass<*>
+  CardItem: Function | React.ComponentType<*>
 };
 
-class CardList extends React.Component<void, CardListProps, void> {
-  props: CardListProps;
-
+class CardList extends React.Component<CardListProps> {
   render() {
     const { data, CardItem, itemClassName, classNameGenerator } = this.props;
     return (

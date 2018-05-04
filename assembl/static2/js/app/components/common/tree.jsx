@@ -6,6 +6,10 @@ import { scrollToPost } from '../../utils/hashLinkScroll';
 import NuggetsManager from './nuggetsManager';
 
 class Child extends React.PureComponent {
+  static defaultProps = {
+    InnerComponentFolded: () => null
+  };
+
   constructor(props) {
     super(props);
     this.renderToggleLink = this.renderToggleLink.bind(this);
@@ -319,9 +323,5 @@ class Tree extends React.Component {
     );
   }
 }
-
-Tree.defaultProps = {
-  InnerComponentFolded: () => null
-};
 
 export default Tree;

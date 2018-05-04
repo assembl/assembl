@@ -1,5 +1,5 @@
 // @flow
-import React from 'react';
+import * as React from 'react';
 import { Button } from 'react-bootstrap';
 import { Translate } from 'react-redux-i18n';
 
@@ -13,11 +13,7 @@ type AttachFileFormState = {
   file: File | null
 };
 
-class AttachFileForm extends React.Component<*, AttachFileFormProps, AttachFileFormState> {
-  props: AttachFileFormProps;
-
-  state: AttachFileFormState;
-
+class AttachFileForm extends React.Component<AttachFileFormProps, AttachFileFormState> {
   fileInput: HTMLInputElement;
 
   constructor() {

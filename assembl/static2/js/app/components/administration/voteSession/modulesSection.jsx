@@ -1,5 +1,5 @@
 // @flow
-import React from 'react';
+import * as React from 'react';
 import { I18n, Translate } from 'react-redux-i18n';
 import { connect } from 'react-redux';
 import { Checkbox, SplitButton, MenuItem, Radio } from 'react-bootstrap';

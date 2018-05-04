@@ -1,5 +1,5 @@
 // @flow
-import React from 'react';
+import * as React from 'react';
 import { OverlayTrigger, Button } from 'react-bootstrap';
 
 import { upTooltip, downTooltip } from '../../common/tooltips';

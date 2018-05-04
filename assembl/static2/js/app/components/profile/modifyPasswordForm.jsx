@@ -1,5 +1,5 @@
 // @flow
-import React from 'react';
+import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { Translate, I18n } from 'react-redux-i18n';
 import { Button } from 'react-bootstrap';
@@ -23,11 +23,7 @@ type State = {
 
 const isEmpty = value => value.length === 0;
 
-class ModifyPasswordForm extends React.Component<void, Props, State> {
-  props: Props;
-
-  state: State;
-
+class ModifyPasswordForm extends React.Component<Props, State> {
   state = {
     disabled: false,
     oldPassword: '',
@@ -35,7 +31,7 @@ class ModifyPasswordForm extends React.Component<void, Props, State> {
     newPassword2: ''
   };
 
-  handleOldPasswordChange = (e: SyntheticEvent) => {
+  handleOldPasswordChange = (e: SyntheticEvent<>) => {
     if (e.target instanceof HTMLInputElement) {
       const value = e.target.value;
       const disabled = isEmpty(value) || isEmpty(this.state.newPassword) || isEmpty(this.state.newPassword2);
@@ -43,7 +39,7 @@ class ModifyPasswordForm extends React.Component<void, Props, State> {
     }
   };
 
-  handleNewPasswordChange = (e: SyntheticEvent) => {
+  handleNewPasswordChange = (e: SyntheticEvent<>) => {
     if (e.target instanceof HTMLInputElement) {
       const value = e.target.value;
       const disabled = isEmpty(this.state.oldPassword) || isEmpty(value) || isEmpty(this.state.newPassword2);
@@ -51,7 +47,7 @@ class ModifyPasswordForm extends React.Component<void, Props, State> {
     }
   };
 
-  handleNewPassword2Change = (e: SyntheticEvent) => {
+  handleNewPassword2Change = (e: SyntheticEvent<>) => {
     if (e.target instanceof HTMLInputElement) {
       const value = e.target.value;
       const disabled = isEmpty(this.state.oldPassword) || isEmpty(this.state.newPassword) || isEmpty(value);

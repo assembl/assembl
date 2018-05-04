@@ -1,5 +1,5 @@
-// @flow
-import React from 'react';
+// @noflow
+import * as React from 'react';
 import { Translate } from 'react-redux-i18n';
 import { Col, Tooltip } from 'react-bootstrap';
 
@@ -77,7 +77,7 @@ const dirtySplitHack = (announcementContent) => {
     };
 };
 
-class Announcement extends React.Component {
+class Announcement extends React.Component<$FlowFixMeProps> {
   render = () => {
     const { ideaWithPostsData: { idea }, announcementContent, isMultiColumns } = this.props;
     const { numContributors, numPosts, posts, messageColumns } = idea;

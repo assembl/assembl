@@ -1,5 +1,5 @@
-// @flow
-import React from 'react';
+// @noflow
+import * as React from 'react';
 import { Translate } from 'react-redux-i18n';
 import { Button, OverlayTrigger } from 'react-bootstrap';
 import { deleteThematicImageTooltip, fileNameTooltip } from '../common/tooltips';
@@ -27,11 +27,7 @@ type FileUploaderState = {
   when this component receives an url and that we want to render the preview of this image,
   we need to give it a mimeType prop that starts with 'image/'
 */
-class FileUploader extends React.Component<Object, FileUploaderProps, FileUploaderState> {
-  props: FileUploaderProps;
-
-  state: FileUploaderState;
-
+class FileUploader extends React.Component<FileUploaderProps, FileUploaderState> {
   fileInput: HTMLInputElement;
 
   preview: HTMLImageElement;
@@ -103,12 +99,7 @@ class FileUploader extends React.Component<Object, FileUploaderProps, FileUpload
 
   getFilePreview = (isImage: ?boolean, title: string, src: String | string | ArrayBuffer) => (
     <div className="preview">
-      {isImage && (
-        <img
-          src={src}
-          alt="preview"
-        />
-      )}
+      {isImage && <img src={src} alt="preview" />}
       <OverlayTrigger placement="top" overlay={fileNameTooltip(title)}>
         <div className="preview-title">
           <span className="assembl-icon-text-attachment" />

@@ -1,10 +1,10 @@
-// @flow
+// @noflow
 
 import * as React from 'react';
 import { connect } from 'react-redux';
 
 // Context Provider
-class ResizeListener extends React.Component {
+class ResizeListener extends React.Component<$FlowFixMeProps> {
   componentDidMount() {
     const { updateScreenDimensions } = this.props;
     updateScreenDimensions();
@@ -40,7 +40,7 @@ type StatelessFunctionalComponent<Props> = {
   contextTypes?: any
 };
 
-type ComponentType<Props> = StatelessFunctionalComponent<Props> | Class<React.Component<Props, any, any>>;
+type ComponentType<Props> = StatelessFunctionalComponent<Props> | Class<React.Component<any, any>>;
 
 type AnyComponent = ComponentType<any>;
 

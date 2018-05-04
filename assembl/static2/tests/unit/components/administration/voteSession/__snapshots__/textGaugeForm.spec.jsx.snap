@@ -5,27 +5,37 @@ exports[`DumbTextGaugeForm component should render a form to set up a textual ga
   Immutable.List [
     <div>
       <FormControlWithLabel
+        componentClass={undefined}
+        disabled={undefined}
+        formControlProps={undefined}
+        helperText={undefined}
         helperUrl=""
+        id={undefined}
         label="Value title 1"
         labelAlwaysVisible={false}
-        name={null}
+        name={undefined}
         onChange={[Function]}
         required={true}
         type="text"
-        validationErrors={null}
+        validationErrors={undefined}
         value="contextually-based"
       />
     </div>,
     <div>
       <FormControlWithLabel
+        componentClass={undefined}
+        disabled={undefined}
+        formControlProps={undefined}
+        helperText={undefined}
         helperUrl=""
+        id={undefined}
         label="Value title 2"
         labelAlwaysVisible={false}
-        name={null}
+        name={undefined}
         onChange={[Function]}
         required={true}
         type="text"
-        validationErrors={null}
+        validationErrors={undefined}
         value="Savings Account Knoll"
       />
     </div>,

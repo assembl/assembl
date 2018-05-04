@@ -1,5 +1,5 @@
-// @flow
-import React from 'react';
+// @noflow
+import * as React from 'react';
 import { Translate, I18n } from 'react-redux-i18n';
 import { convertFromRaw, convertToRaw, Editor, EditorState, RawContentState, RichUtils } from 'draft-js';
 import classNames from 'classnames';
@@ -40,14 +40,8 @@ function customBlockRenderer(block) {
   return null;
 }
 
-export default class RichTextEditor extends React.Component<Object, RichTextEditorProps, RichTextEditorState> {
+export default class RichTextEditor extends React.Component<RichTextEditorProps, RichTextEditorState> {
   editor: HTMLDivElement;
-
-  props: RichTextEditorProps;
-
-  state: RichTextEditorState;
-
-  static defaultProps: Object;
 
   static defaultProps = {
     handleInputFocus: null,
@@ -167,7 +161,7 @@ export default class RichTextEditor extends React.Component<Object, RichTextEdit
     setTimeout(() => this.editor.focus(), 50);
   };
 
-  renderRemainingChars = (): React.Element<*> => {
+  renderRemainingChars = (): React.Element<any> => {
     const { maxLength } = this.props;
     const editorState = this.state.editorState;
     const charCount = this.getCharCount(editorState);

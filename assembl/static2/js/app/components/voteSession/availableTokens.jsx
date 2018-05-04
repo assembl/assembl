@@ -1,5 +1,5 @@
 // @flow
-import React from 'react';
+import * as React from 'react';
 import { Map } from 'immutable';
 import { Translate } from 'react-redux-i18n';
 import range from 'lodash/range';
@@ -71,7 +71,7 @@ const AvailableTokens = ({ remainingTokensByCategory, sticky, tokenCategories, w
                       <div
                         className="text"
                         style={
-                          sticky && tokenCategories.length % 2 !== 0 && tokenCategories.length > 2 || windowWidth < 400
+                          (sticky && tokenCategories.length % 2 !== 0 && tokenCategories.length > 2) || windowWidth < 400
                             ? { maxWidth: '210px' }
                             : { minWidth: '250px' }
                         }
@@ -82,7 +82,7 @@ const AvailableTokens = ({ remainingTokensByCategory, sticky, tokenCategories, w
                       <div
                         className="tokens"
                         style={
-                          sticky && tokenCategories.length % 2 !== 0 && tokenCategories.length > 2 || windowWidth < 400
+                          (sticky && tokenCategories.length % 2 !== 0 && tokenCategories.length > 2) || windowWidth < 400
                             ? { maxWidth: '160px' }
                             : { minWidth: '360px' }
                         }

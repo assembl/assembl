@@ -1,5 +1,5 @@
-// @flow
-import React from 'react';
+// @noflow
+import * as React from 'react';
 import ARange from 'annotator_range'; // eslint-disable-line
 import { connect } from 'react-redux';
 import { compose, graphql } from 'react-apollo';
@@ -51,13 +51,9 @@ type State = {
 type Taxonomies = {
   nature: ?string,
   action: ?string
-}
+};
 
-class DumbHarvestingBox extends React.Component<Object, Props, State> {
-  props: Props;
-
-  state: State;
-
+class DumbHarvestingBox extends React.Component<Props, State> {
   menu: any;
 
   static defaultProps = {
@@ -83,7 +79,6 @@ class DumbHarvestingBox extends React.Component<Object, Props, State> {
       overflowMenuTop: 25
     };
   }
-
 
   componentDidMount() {
     window.addEventListener('scroll', this.updateOverflowMenuPosition);
@@ -246,22 +241,22 @@ class DumbHarvestingBox extends React.Component<Object, Props, State> {
 
   showValidatedHarvesting = (nature: ?string, action: ?string) => {
     if (nature && action) {
-      return (<div className="harvesting-taxonomy-label">
-        {`${I18n.t(`search.taxonomy_nature.${nature}`)} + ${I18n.t(`search.taxonomy_action.${action}`)}`}
-      </div>);
+      return (
+        <div className="harvesting-taxonomy-label">
+          {`${I18n.t(`search.taxonomy_nature.${nature}`)} + ${I18n.t(`search.taxonomy_action.${action}`)}`}
+        </div>
+      );
     } else if (nature) {
-      return (<div className="harvesting-taxonomy-label">
-        {I18n.t(`search.taxonomy_nature.${nature}`)}
-      </div>);
+      return <div className="harvesting-taxonomy-label">{I18n.t(`search.taxonomy_nature.${nature}`)}</div>;
     }
     return action ? <div className="harvesting-taxonomy-label">{I18n.t(`search.taxonomy_action.${action}`)}</div> : null;
-  }
+  };
 
   updateOverflowMenu = (node: HTMLElement) => {
     if (node) {
       this.setState({ overflowMenu: node });
     }
-  }
+  };
 
   updateOverflowMenuPosition = () => {
     const { overflowMenu } = this.state;
@@ -276,8 +271,7 @@ class DumbHarvestingBox extends React.Component<Object, Props, State> {
         this.setState({ overflowMenuTop: 25 });
       }
     }
-  }
-
+  };
 
   render() {
     const { selection, cancelHarvesting, extract, contentLocale, harvestingDate, isAuthorAccountDeleted } = this.props;
@@ -306,10 +300,12 @@ class DumbHarvestingBox extends React.Component<Object, Props, State> {
               {extractNature && <NatureIcons qualifier={extractNature} />}
               {extractAction && !extractNature && <ActionIcons qualifier={extractAction} backgroundColor="#fff" color="#000" />}
             </div>
-            {extractNature && extractAction &&
-              <div className="box-icon box-icon-2">
-                <ActionIcons qualifier={extractAction} backgroundColor="#fff" color="#000" />
-              </div>}
+            {extractNature &&
+              extractAction && (
+                <div className="box-icon box-icon-2">
+                  <ActionIcons qualifier={extractAction} backgroundColor="#fff" color="#000" />
+                </div>
+              )}
           </div>
         )}
         <div className={classnames('theme-box', 'harvesting-box', { 'active-box': extractIsValidated })}>
@@ -324,9 +320,7 @@ class DumbHarvestingBox extends React.Component<Object, Props, State> {
               ) : (
                 <div>
                   {extractNature || extractAction ? (
-                    <div className="validated-harvesting">
-                      {this.showValidatedHarvesting(extractNature, extractAction)}
-                    </div>
+                    <div className="validated-harvesting">{this.showValidatedHarvesting(extractNature, extractAction)}</div>
                   ) : (
                     <div className="validated-harvesting">
                       <div className="harvesting-status-label">
@@ -357,20 +351,25 @@ class DumbHarvestingBox extends React.Component<Object, Props, State> {
                 <Button
                   disabled={disabled}
                   className="taxonomy-menu-btn"
-                  onClick={() => { this.setState({ showOverflowMenu: !showOverflowMenu }); }}
+                  onClick={() => {
+                    this.setState({ showOverflowMenu: !showOverflowMenu });
+                  }}
                 >
                   <span className="assembl-icon-ellipsis-vert grey" />
                 </Button>
               </OverlayTrigger>
-              {showOverflowMenu &&
+              {showOverflowMenu && (
                 <TaxonomyOverflowMenu
                   innerRef={this.updateOverflowMenu}
                   handleClick={this.qualifyExtract}
                   extractNature={extractNature}
                   extractAction={extractAction}
-                  onCloseClick={() => { this.setState({ showOverflowMenu: false }); }}
+                  onCloseClick={() => {
+                    this.setState({ showOverflowMenu: false });
+                  }}
                   top={overflowMenuTop}
-                />}
+                />
+              )}
             </div>
             <div className="profile">
               <AvatarImage userId={harvesterUserId} userName={userName} />

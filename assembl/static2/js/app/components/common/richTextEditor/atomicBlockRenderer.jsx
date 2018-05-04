@@ -1,5 +1,5 @@
 // @flow
-import React from 'react';
+import * as React from 'react';
 import { ContentState } from 'draft-js';
 import type { ContentBlock } from 'draft-js';
 

@@ -1,5 +1,5 @@
 // @flow
-import React from 'react';
+import * as React from 'react';
 import { Tooltip } from 'react-bootstrap';
 import { Translate } from 'react-redux-i18n';
 
@@ -16,7 +16,7 @@ type Props = {
   titleMsgId: string
 };
 
-type CreateTooltip = (TokenCategory, number) => React.Element<*>;
+type CreateTooltip = (TokenCategory, number) => React.Element<any>;
 export const createTooltip: CreateTooltip = (category, count) => (
   <Tooltip
     id={`${category.typename}-token-tooltip`}

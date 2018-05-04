@@ -1,4 +1,4 @@
-// @flow
+// @noflow
 /* draft-js plugin for attachment management */
 import { convertFromRaw, convertToRaw, Entity, Modifier, RawContentState, SelectionState } from 'draft-js';
 import type { ContentBlock, ContentState } from 'draft-js';

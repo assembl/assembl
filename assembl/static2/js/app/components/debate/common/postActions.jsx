@@ -1,6 +1,6 @@
 // @flow
 import get from 'lodash/get';
-import React from 'react';
+import * as React from 'react';
 import { ApolloClient, withApollo } from 'react-apollo';
 import { Translate } from 'react-redux-i18n';
 import { OverlayTrigger } from 'react-bootstrap';
@@ -33,16 +33,7 @@ type Props = {
   sentimentCounts: SentimentCountsFragment
 };
 
-type DefaultProps = {
-  editable: boolean,
-  numChildren: number
-};
-
-class PostActions extends React.Component<DefaultProps, Props, void> {
-  props: Props;
-
-  defaultProps: DefaultProps;
-
+class PostActions extends React.Component<Props> {
   static defaultProps = {
     editable: true,
     numChildren: 0

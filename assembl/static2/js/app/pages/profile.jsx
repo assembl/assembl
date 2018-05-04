@@ -1,4 +1,4 @@
-// @flow
+// @noflow
 import React from 'react';
 import { connect } from 'react-redux';
 import { compose, graphql } from 'react-apollo';
@@ -41,12 +41,8 @@ type ProfileState = {
   }
 };
 
-class Profile extends React.PureComponent<*, ProfileProps, ProfileState> {
-  props: ProfileProps;
-
-  state: ProfileState;
-
-  defaultProps: {
+class Profile extends React.PureComponent<ProfileProps, ProfileState> {
+  static defaultProps = {
     creationDate: null
   };
 

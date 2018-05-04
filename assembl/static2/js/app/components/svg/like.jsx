@@ -1,10 +1,8 @@
 // @flow
 
-import React from 'react';
+import * as React from 'react';
 
-class Like extends React.Component {
-  props: { size: number, color: string, backgroundColor: string };
-
+class Like extends React.Component<{ size: number, color: string, backgroundColor: string }> {
   static defaultProps = {
     color: '#46d38d',
     backgroundColor: '#ffffff'

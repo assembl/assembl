@@ -1,5 +1,5 @@
-// @flow
-import React from 'react';
+// @noflow
+import * as React from 'react';
 import { graphql } from 'react-apollo';
 import { AtomicBlockUtils, DraftBlockType, DraftInlineStyle, RichUtils } from 'draft-js';
 import { I18n } from 'react-redux-i18n';
@@ -24,11 +24,7 @@ type ToolbarState = {
   showAttachFileForm: boolean
 };
 
-class Toolbar extends React.Component<void, ToolbarProps, ToolbarState> {
-  props: ToolbarProps;
-
-  state: ToolbarState;
-
+class Toolbar extends React.Component<ToolbarProps, ToolbarState> {
   currentStyle: DraftInlineStyle;
 
   currentBlockType: DraftBlockType;
@@ -68,7 +64,7 @@ class Toolbar extends React.Component<void, ToolbarProps, ToolbarState> {
     focusEditor();
   }
 
-  renderButton = (config: ButtonConfigType): React.Element<*> => {
+  renderButton = (config: ButtonConfigType): React.Element<any> => {
     let isActive;
     let onToggle;
     switch (config.type) {

@@ -1,5 +1,5 @@
-// @flow
-import React from 'react';
+// @noflow
+import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { I18n } from 'react-redux-i18n';
 import moment from 'moment';
@@ -8,7 +8,7 @@ import RootIdeaStats from '../../../graphql/RootIdeaStats.graphql';
 import withLoadingIndicator from '../../../components/common/withLoadingIndicator';
 import HeaderStatistics, { statMessages, statParticipants, statSentiments } from '../../../components/common/headerStatistics';
 
-class Statistic extends React.Component {
+class Statistic extends React.Component<$FlowFixMeProps> {
   render() {
     const { rootIdea, numParticipants, totalSentiments, visitsAnalytics } = this.props.data;
     const statElements = [statSentiments(totalSentiments), statParticipants(numParticipants)];

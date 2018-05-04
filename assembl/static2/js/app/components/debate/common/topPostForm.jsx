@@ -1,5 +1,5 @@
-// @flow
-import React from 'react';
+// @noflow
+import * as React from 'react';
 import { connect } from 'react-redux';
 import { compose, graphql } from 'react-apollo';
 import { FormGroup, Button } from 'react-bootstrap';
@@ -38,11 +38,7 @@ type TopPostFormState = {
   submitting: boolean
 };
 
-class TopPostForm extends React.Component<*, TopPostFormProps, TopPostFormState> {
-  props: TopPostFormProps;
-
-  state: TopPostFormState;
-
+class TopPostForm extends React.Component<TopPostFormProps, TopPostFormState> {
   formContainer: HTMLDivElement | void;
 
   static defaultProps = {

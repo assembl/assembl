@@ -1,4 +1,4 @@
-// @flow
+// @noflow
 import React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { connect } from 'react-redux';
@@ -47,11 +47,7 @@ type State = {
   refetching: boolean
 };
 
-class ResourcesCenterAdmin extends React.Component<void, Props, State> {
-  props: Props;
-
-  state: State;
-
+class ResourcesCenterAdmin extends React.Component<Props, State> {
   constructor() {
     super();
     this.state = {

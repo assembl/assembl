@@ -1,5 +1,5 @@
-// @flow
-import React from 'react';
+// @noflow
+import * as React from 'react';
 import classNames from 'classnames';
 import { connect } from 'react-redux';
 
@@ -25,7 +25,7 @@ type DebateLinkState = {
   activeSegment: number
 };
 
-export class DumbDebateLink extends React.Component<*, DebateLinkProps, DebateLinkState> {
+export class DumbDebateLink extends React.Component<DebateLinkProps, DebateLinkState> {
   state = {
     timeLineActive: false,
     activeSegment: -1

@@ -6,15 +6,19 @@ exports[`tokensForm component should render a form to configure a token vote wit
 >
   <form>
     <FormControlWithLabel
+      componentClass={undefined}
+      disabled={undefined}
+      formControlProps={undefined}
       helperText="Depending on the objective of the token module, incite the participants to take action."
       helperUrl="/static2/img/helpers/helper5.png"
+      id={undefined}
       label="Instructions for the token vote"
       labelAlwaysVisible={false}
-      name={null}
+      name={undefined}
       onChange={[Function]}
       required={true}
       type="text"
-      validationErrors={null}
+      validationErrors={undefined}
       value="Je vous prie de bien vouloir voter."
     />
     <label
@@ -218,15 +222,19 @@ exports[`tokensForm component should render a form to configure a token vote wit
 >
   <form>
     <FormControlWithLabel
+      componentClass={undefined}
+      disabled={undefined}
+      formControlProps={undefined}
       helperText="Depending on the objective of the token module, incite the participants to take action."
       helperUrl="/static2/img/helpers/helper5.png"
+      id={undefined}
       label="Instructions for the token vote"
       labelAlwaysVisible={false}
-      name={null}
+      name={undefined}
       onChange={[Function]}
       required={true}
       type="text"
-      validationErrors={null}
+      validationErrors={undefined}
       value="Je vous prie de bien vouloir voter."
     />
     <label

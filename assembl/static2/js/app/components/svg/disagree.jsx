@@ -1,10 +1,8 @@
 // @flow
 
-import React from 'react';
+import * as React from 'react';
 
-class Disagree extends React.Component {
-  props: { size: number, color: string, backgroundColor: string };
-
+class Disagree extends React.Component<{ size: number, color: string, backgroundColor: string }> {
   static defaultProps = {
     color: '#f75959',
     backgroundColor: '#ffffff'

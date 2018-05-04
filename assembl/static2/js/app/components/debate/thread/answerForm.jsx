@@ -1,5 +1,5 @@
 // @flow
-import React from 'react';
+import * as React from 'react';
 import { connect } from 'react-redux';
 import { compose, graphql } from 'react-apollo';
 import { Row, Col, FormGroup, Button } from 'react-bootstrap';
@@ -37,11 +37,7 @@ type AnswerFormState = {
   isHidden: boolean
 };
 
-class AnswerForm extends React.PureComponent<*, AnswerFormProps, AnswerFormState> {
-  props: AnswerFormProps;
-
-  state: AnswerFormState;
-
+class AnswerForm extends React.PureComponent<AnswerFormProps, AnswerFormState> {
   constructor() {
     super();
     this.state = {

@@ -1,11 +1,7 @@
-// @flow
-import React from 'react';
+// @noflow
+import * as React from 'react';
 
-export default class YoutubeTheater extends React.Component {
-  state: {
-    open: boolean
-  };
-
+export default class YoutubeTheater extends React.Component<$FlowFixMeProps, $FlowFixMeState> {
   timeout: number;
 
   state = {

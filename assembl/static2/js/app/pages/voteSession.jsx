@@ -1,4 +1,4 @@
-// @flow
+// @noflow
 import React from 'react';
 import { Button, Grid, Row, Col } from 'react-bootstrap';
 import { graphql, compose } from 'react-apollo';
@@ -122,11 +122,7 @@ type FilterNumberGaugeVoteModules = (Array<VoteSpecification>) => Array<NumberGa
 export const filterNumberGaugeVoteModules: FilterNumberGaugeVoteModules = modules =>
   modules.filter(module => module.voteType === 'number_gauge_vote_specification').sort(moduleComparator);
 
-class DumbVoteSession extends React.Component<void, Props, State> {
-  props: Props;
-
-  state: State;
-
+class DumbVoteSession extends React.Component<Props, State> {
   availableTokensContainerRef: HTMLDivElement;
 
   constructor(props: Props) {
@@ -157,7 +153,7 @@ class DumbVoteSession extends React.Component<void, Props, State> {
 
   updateWindowWidth = () => {
     this.setState({ windowWidth: window.innerWidth });
-  }
+  };
 
   setMyVotes() {
     const { proposals } = this.props;
@@ -397,10 +393,7 @@ class DumbVoteSession extends React.Component<void, Props, State> {
           </Grid>
         ) : null}
         <Grid fluid className="background-grey">
-          <Section
-            title={propositionsSectionTitleToShow}
-            className={availableTokensSticky ? 'extra-margin-top' : null}
-          >
+          <Section title={propositionsSectionTitleToShow} className={availableTokensSticky ? 'extra-margin-top' : null}>
             <Row>
               <Col mdOffset={1} md={10} smOffset={1} sm={10}>
                 {!isPhaseCompleted ? (

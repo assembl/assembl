@@ -1,5 +1,5 @@
 // @flow
-import React from 'react';
+import * as React from 'react';
 
 const PropositionSection = () => <div>Configure the voting proposals</div>;
 

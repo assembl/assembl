@@ -1,5 +1,5 @@
 // @flow
-import React from 'react';
+import * as React from 'react';
 import { Col, Row } from 'react-bootstrap';
 
 import { GaugeVoteForProposal, NumberGaugeVoteForProposal } from './gaugeVoteForProposal';
@@ -20,9 +20,7 @@ type Props = {
   title: ?string
 };
 
-class ProposalResults extends React.Component<void, Props, void> {
-  props: Props;
-
+class ProposalResults extends React.Component<Props> {
   render() {
     const { description, id, modules, numParticipants, title } = this.props;
     const tokenVoteModule = modules ? findTokenVoteModule(modules) : null;
@@ -50,6 +48,7 @@ class ProposalResults extends React.Component<void, Props, void> {
               filterGaugeVoteModules(modules).map(module => (
                 <div key={`${id}-GaugeVoteForProposal-${module.id}`}>
                   <GaugeVoteForProposal
+                    id={module.id}
                     disabled
                     instructions={module.instructions}
                     choices={module.choices}
@@ -63,6 +62,7 @@ class ProposalResults extends React.Component<void, Props, void> {
               filterNumberGaugeVoteModules(modules).map(module => (
                 <div key={`${id}-NumberGaugeVoteForProposal-${module.id}`}>
                   <NumberGaugeVoteForProposal
+                    id={module.id}
                     disabled
                     instructions={module.instructions}
                     minimum={module.minimum}

@@ -1,11 +1,12 @@
-// @flow
-import React from 'react';
+// @noflow
+/* eslint-disable  react/no-unused-prop-types */
+import * as React from 'react';
 import { I18n, Translate } from 'react-redux-i18n';
 import { Link } from 'react-router';
 import { FormGroup, Radio, FormControl } from 'react-bootstrap';
 import SectionTitle from './sectionTitle';
 
-type Props = {
+type ExportSectionProps = {
   languages?: Array<Object>,
   handleTranslationChange: Function,
   handleExportLocaleChange: Function,
@@ -16,9 +17,13 @@ type Props = {
   annotation: string
 };
 
-class ExportSection extends React.Component<Object, Props, void> {
-  props: Props;
+type ExportLanguageDropDownProps = {
+  languages?: Array<Object>,
+  onSelect: Function,
+  activeKey?: string
+};
 
+class ExportSection extends React.Component<ExportSectionProps> {
   static defaultProps = {
     languages: null,
     withLanguageOptions: false,
@@ -27,8 +32,8 @@ class ExportSection extends React.Component<Object, Props, void> {
     annotation: 'defaultAnnotation'
   };
 
-  static ExportLanguageDropDown = ({ languages, onSelect, activeKey }) => {
-    const activeLanguage = languages.filter(language => language.locale === activeKey)[0];
+  static ExportLanguageDropDown = ({ languages, onSelect, activeKey }: ExportLanguageDropDownProps) => {
+    const activeLanguage = languages ? languages.filter(language => language.locale === activeKey)[0] : null;
     return (
       <FormControl
         className="export-language-dropdown"
@@ -36,13 +41,14 @@ class ExportSection extends React.Component<Object, Props, void> {
         onChange={({ target: { value } }) => {
           onSelect(value);
         }}
-        value={activeLanguage.locale}
+        value={activeLanguage ? activeLanguage.locale : null}
       >
-        {languages.map(lang => (
-          <option key={`locale-${lang.locale}`} value={lang.locale}>
-            {lang.name}
-          </option>
-        ))}
+        {languages &&
+          languages.map(lang => (
+            <option key={`locale-${lang.locale}`} value={lang.locale}>
+              {lang.name}
+            </option>
+          ))}
       </FormControl>
     );
   };

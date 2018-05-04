@@ -1,6 +1,6 @@
 /* eslint-disable  react/no-unused-prop-types */
 // @flow
-import React from 'react';
+import * as React from 'react';
 import { I18n } from 'react-redux-i18n';
 import { connect } from 'react-redux';
 import { compose, graphql } from 'react-apollo';
@@ -32,9 +32,7 @@ type PostsProps = {
   updateContentLocaleMapping: Function
 };
 
-export class DumbPosts extends React.Component<*, PostsProps, void> {
-  props: PostsProps;
-
+export class DumbPosts extends React.Component<PostsProps> {
   componentWillMount() {
     this.updateContentLocaleMappingFromProps(this.props);
   }

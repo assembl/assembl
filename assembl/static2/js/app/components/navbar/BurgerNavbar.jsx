@@ -1,6 +1,6 @@
-// @flow
+// @noflow
 
-import React from 'react';
+import * as React from 'react';
 import classNames from 'classnames';
 
 import Logo from './Logo';
@@ -9,12 +9,13 @@ import LanguageMenu from './languageMenu';
 import UserMenu from './UserMenu';
 import { browserHistory } from '../../router';
 
-export default class BurgerNavbar extends React.PureComponent {
-  unlisten: () => void;
-
-  state: {
+export default class BurgerNavbar extends React.PureComponent<
+  $FlowFixMeProps,
+  {
     shouldDisplayMenu: boolean
-  };
+  }
+> {
+  unlisten: () => void;
 
   componentWillMount() {
     this.setState({ shouldDisplayMenu: false });

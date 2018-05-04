@@ -1,18 +1,12 @@
-// @flow
-import React from 'react';
+// @noflow
+import * as React from 'react';
 
 import Logo from './Logo';
 import NavigationMenu from './navigationMenu';
 import LanguageMenu, { refWidthUpdate } from './languageMenu';
 import UserMenu from './UserMenu';
 
-export default class FlatNavbar extends React.PureComponent {
-  state: {
-    leftWidth: number,
-    rightWidth: number,
-    languageMenuWidth: number
-  };
-
+export default class FlatNavbar extends React.PureComponent<$FlowFixMeProps, $FlowFixMeState> {
   static defaultProps = {
     style: {}
   };
