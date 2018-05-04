@@ -157,7 +157,9 @@ export const isMobile = {
 // works for SCREAMING_SNAKE_CASE, snake_case or cRazY_SNAKE_case
 export const snakeToCamel = (string: string) => string.toLowerCase().replace(/_[a-z]/g, match => match[1].toUpperCase());
 
-export const youtubeRegexp = /(?:youtube\.com\/(?:[^/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?/ ]{11})/i;
+export const EMBED_REGEXP = {
+  youtube: /(?:youtube\.com\/(?:[^/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?/ ]{11})/i
+};
 
 export const getCookieItem = (sKey: string) => {
   if (!sKey) {

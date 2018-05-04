@@ -2,7 +2,7 @@
 import linkifyHtml from 'linkifyjs/html';
 import * as linkify from 'linkifyjs';
 
-import { youtubeRegexp } from './globalFunctions';
+import { EMBED_REGEXP } from './globalFunctions';
 
 type LinkToReplace = {
   dest: string,
@@ -22,7 +22,7 @@ export function transformLinksInHtml(html: string): string {
     .find(htmlForLinkify)
     .map((link: LinkifyLink) => {
       const url = link.href;
-      const result = url.match(youtubeRegexp);
+      const result = url.match(EMBED_REGEXP.youtube);
 
       if (result) {
         const videoId = result[1];

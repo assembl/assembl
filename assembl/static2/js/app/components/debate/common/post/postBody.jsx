@@ -7,8 +7,7 @@ import ARange from 'annotator_range'; // eslint-disable-line
 
 import PostTranslate from '../../common/translations/postTranslate';
 import { transformLinksInHtml } from '../../../../utils/linkify';
-import { youtubeRegexp } from '../../../../utils/globalFunctions';
-import YoutubeTheater from '../../../common/youtubeTheater';
+import Embed from '../../../common/embed';
 
 type Props = {
   body: string,
@@ -41,12 +40,7 @@ const ExtractInPost = ({ id, children }: ExtractInPostProps) => (
 const postBodyReplacementComponents = {
   iframe: (attributes) => {
     const { src } = attributes;
-    const regexpMatch = src.match(youtubeRegexp);
-    if (regexpMatch) {
-      const videoId = regexpMatch[1];
-      return <YoutubeTheater videoId={videoId} />;
-    }
-    return <iframe title="post-embed" {...attributes} />;
+    return <Embed url={src} defaultEmbed={<iframe title="post-embed" {...attributes} />} />;
   },
   annotation: attributes => <ExtractInPost id={attributes.id}>{attributes.children}</ExtractInPost>
 };
