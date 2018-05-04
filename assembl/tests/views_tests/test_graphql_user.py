@@ -304,3 +304,25 @@ def test_query_text_fields(graphql_request, graphql_registry, text_field):
     assert tf['titleEntries'][0]['value'] == u'My text field'
     assert tf['order'] == 1.0
     assert tf['required'] is True
+
+
+def test_mutation_create_text_field(graphql_request, graphql_registry):
+    res = schema.execute(
+        graphql_registry['createTextField'],
+        context_value=graphql_request,
+        variable_values={
+            "lang": u"en",
+            "titleEntries": [
+                { "localeCode": "en", "value": u"My new field" }
+            ],
+            "order": 4.0,
+            "required": False
+        })
+    assert res.errors is None
+    assert 'createTextField' in res.data
+    new_field = res.data['createTextField']['textField']
+    assert new_field[u'required'] is False
+    assert new_field[u'order'] == 4.0
+    title_entries = new_field['titleEntries']
+    assert title_entries[0]['localeCode'] == u'en'
+    assert title_entries[0]['value'] == u'My new field'

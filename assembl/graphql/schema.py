@@ -34,7 +34,7 @@ from assembl.graphql.section import (CreateSection, DeleteSection, Section,
                                      UpdateSection)
 from assembl.graphql.sentiment import AddSentiment, DeleteSentiment
 from assembl.graphql.synthesis import Synthesis
-from assembl.graphql.user import UpdateUser, TextField
+from assembl.graphql.user import UpdateUser, TextField, CreateTextField
 from assembl.graphql.votes import AddTokenVote, DeleteTokenVote, AddGaugeVote, DeleteGaugeVote
 from assembl.graphql.vote_session import (
     VoteSession, UpdateVoteSession, CreateTokenVoteSpecification,
@@ -357,6 +357,7 @@ class Mutations(graphene.ObjectType):
     add_post_extract = AddPostExtract.Field()
     update_extract = UpdateExtract.Field()
     delete_extract = DeleteExtract.Field()
+    create_text_field = CreateTextField.Field()
 
 
 Schema = graphene.Schema(query=Query, mutation=Mutations)
