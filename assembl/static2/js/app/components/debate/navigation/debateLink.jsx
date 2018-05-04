@@ -41,12 +41,14 @@ export class DumbDebateLink extends React.Component<*, DebateLinkProps, DebateLi
 
   debateNode = null;
 
+  wormholes = null;
+
   showMenu = () => {
     this.setState({ timeLineActive: true });
   };
 
   hideMenu = () => {
-    this.setState({ timeLineActive: false, activeSegment: -1 });
+    // this.setState({ timeLineActive: false, activeSegment: -1 });
   };
 
   handleClickOutside = (event: MouseEvent) => {

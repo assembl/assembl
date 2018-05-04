@@ -27,60 +27,28 @@
       right: 0;
       left: 0;
       z-index: -1;
-      height: 75%;
       padding: 10px 0 10px;
       background-color: $white;
       box-shadow: 0 1px 10px rgba(0, 0, 0, 0.45);
-
-      @media (min-height: 534px) and (max-height: 549px) {
-        height: calc(75% - 30px);
-      }
-
-      @media (min-height: 640px) and (max-height: 655px) {
-        height: calc(75% - 10px);
-      }
-
-      @media (min-height: 667px) and (max-height: 682px) {
-        height: calc(75% - 30px);
-      }
-
-      @media (min-height: 720px) and (max-height: 735px) {
-        height: calc(75% - 70px);
-      }
-
-      @media (min-height: 800px) and (max-height: 815px) {
-        height: calc(75% - 30px);
-      }
-
-      @media (min-height: 864px) and (max-height: 879px) {
-        height: calc(75% - 30px);
-      }
-
-      @media (min-height: 1024px) and (max-height: 1039px) {
-        height: calc(75% - 15px);
-      }
-
-      @media (min-height: 1050px) and (max-height: 1065px) {
-        height: calc(75% - 60px);
-      }
     }
 
     .menu-table-col {
       width: 100%;
-      height: 100%;
+      min-height: 100%;
       display: flex;
       flex: 1;
 
+      .sub-menu-separator {
+        width: 1px;
+        background: rgba(0, 0, 0, 0.15);
+        min-height: 100%;
+      }
+
       &.sub-menu {
         .menu-table {
-          border-left: solid 1px rgba(0, 0, 0, 0.15);
           max-width: 24vw;
         }
       }
-    }
-
-    .menu-table:first-child {
-      border-left: none;
     }
 
     .menu-table {
@@ -90,6 +58,39 @@
       padding: 0 5px;
       overflow-y: auto;
       overflow-x: hidden;
+      max-height: 72vh;
+
+      @media (min-height: 534px) and (max-height: 549px) {
+        max-height: calc(72vh - 30px);
+      }
+
+      @media (min-height: 640px) and (max-height: 655px) {
+        max-height: calc(72vh - 10px);
+      }
+
+      @media (min-height: 667px) and (max-height: 682px) {
+        max-height: calc(72vh - 30px);
+      }
+
+      @media (min-height: 720px) and (max-height: 735px) {
+        max-height: calc(72vh - 70px);
+      }
+
+      @media (min-height: 800px) and (max-height: 815px) {
+        max-height: calc(72vh - 30px);
+      }
+
+      @media (min-height: 864px) and (max-height: 879px) {
+        max-height: calc(72vh - 30px);
+      }
+
+      @media (min-height: 1024px) and (max-height: 1039px) {
+        max-height: calc(72vh - 25px);
+      }
+
+      @media (min-height: 1050px) and (max-height: 1065px) {
+        max-height: calc(72vh - 60px);
+      }
 
       .menu-item-container {
         display: flex;
