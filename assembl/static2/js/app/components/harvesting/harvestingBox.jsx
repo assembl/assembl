@@ -260,9 +260,15 @@ class DumbHarvestingBox extends React.Component<Object, Props, State> {
     return (
       <div>
         {(extractNature || extractAction) && (
-          <div className="box-icon">
-            {extractNature ? <NatureIcons qualifier={extractNature} /> : null}
-            {extractAction ? <ActionIcons qualifier={extractAction} backgroundColor="#fff" color="#000" /> : null}
+          <div>
+            <div className="box-icon">
+              {extractNature && <NatureIcons qualifier={extractNature} />}
+              {extractAction && !extractNature && <ActionIcons qualifier={extractAction} backgroundColor="#fff" color="#000" />}
+            </div>
+            {extractNature && extractAction &&
+            <div className="box-icon box-icon-2">
+              <ActionIcons qualifier={extractAction} backgroundColor="#fff" color="#000" />
+            </div>}
           </div>
         )}
         <div className={classnames('theme-box', 'harvesting-box', { 'active-box': extractIsValidated })}>
