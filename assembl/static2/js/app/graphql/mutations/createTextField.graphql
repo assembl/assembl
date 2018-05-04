@@ -1,4 +1,4 @@
-mutation createTextField($lang: String!, $titleEntries: [LangStringEntryInput]!, $order: Float!, $required: Boolean!) {
+mutation createTextField($lang: String, $titleEntries: [LangStringEntryInput]!, $order: Float!, $required: Boolean!) {
   createTextField(lang: $lang, titleEntries: $titleEntries, order: $order, required: $required) {
     textField {
       id

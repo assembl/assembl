@@ -57,13 +57,15 @@ export const textFieldsById: TextFieldsByIdReducer = (state = initialTextFields,
   case actionTypes.DELETE_TEXT_FIELD:
     return state.setIn([action.id, '_toDelete'], true);
   case actionTypes.UPDATE_TEXT_FIELD_TITLE:
-    return state.updateIn([action.id, 'titleEntries'], updateInLangstringEntries(action.locale, action.value));
+    return state
+      .updateIn([action.id, 'titleEntries'], updateInLangstringEntries(action.locale, action.value))
+      .setIn([action.id, '_hasChanged'], true);
   case actionTypes.TOGGLE_TEXT_FIELD_REQUIRED:
-    return state.updateIn([action.id, 'required'], value => !value);
+    return state.updateIn([action.id, 'required'], value => !value).setIn([action.id, '_hasChanged'], true);
   case actionTypes.MOVE_TEXT_FIELD_DOWN:
-    return moveItemDown(state, action.id);
+    return moveItemDown(state, action.id).setIn([action.id, '_hasChanged'], true);
   case actionTypes.MOVE_TEXT_FIELD_UP:
-    return moveItemUp(state, action.id);
+    return moveItemUp(state, action.id).setIn([action.id, '_hasChanged'], true);
   default:
     return state;
   }

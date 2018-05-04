@@ -20,6 +20,9 @@ import deleteSectionMutation from '../graphql/mutations/deleteSection.graphql';
 import updateLegalNoticeAndTermsMutation from '../graphql/mutations/updateLegalNoticeAndTerms.graphql';
 import updateDiscussionPreferenceQuery from '../graphql/mutations/updateDiscussionPreference.graphql';
 import getDiscussionPreferenceLanguage from '../graphql/DiscussionPreferenceLanguage.graphql';
+import createTextFieldMutation from '../graphql/mutations/createTextField.graphql';
+import updateTextFieldMutation from '../graphql/mutations/updateTextField.graphql';
+import deleteTextFieldMutation from '../graphql/mutations/deleteTextField.graphql';
 import { type LanguagePreferencesState } from '../reducers/adminReducer';
 import { type State as ReduxState } from '../reducers/rootReducer';
 
@@ -32,7 +35,16 @@ const createVariablesForSectionMutation = section => ({
   titleEntries: section.titleEntries
 });
 
+const createVariablesForTextFieldMutation = textField => ({
+  id: textField.id,
+  order: textField.order,
+  required: textField.required,
+  titleEntries: textField.titleEntries
+});
+
 const createVariablesForDeleteSectionMutation = section => ({ sectionId: section.id });
+
+const createVariablesForDeleteTextFieldMutation = textField => ({ id: textField.id });
 
 type Props = {
   changeLocale: Function,
@@ -58,7 +70,13 @@ type Props = {
   updateDiscussionPreference: Function,
   updateLegalNoticeAndTerms: Function,
   updateSection: Function,
-  debateId: string
+  debateId: string,
+  createTextField: Function,
+  updateTextField: Function,
+  deleteTextField: Function,
+  profileOptionsHasChanged: boolean,
+  refetchTextFields: Function,
+  textFields: string
 };
 
 type State = {
@@ -96,6 +114,7 @@ class DiscussionAdmin extends React.Component<void, Props, State> {
   dataHaveChanged = () =>
     this.props.languagePreferenceHasChanged ||
     this.props.sectionsHaveChanged ||
+    this.props.profileOptionsHasChanged ||
     this.props.legalNoticeAndTerms.get('_hasChanged');
 
   saveAction = () => {
@@ -115,7 +134,13 @@ class DiscussionAdmin extends React.Component<void, Props, State> {
       sectionsHaveChanged,
       updateDiscussionPreference,
       updateLegalNoticeAndTerms,
-      updateSection
+      updateSection,
+      createTextField,
+      updateTextField,
+      deleteTextField,
+      profileOptionsHasChanged,
+      textFields,
+      refetchTextFields
     } = this.props;
     displayAlert('success', `${I18n.t('loading.wait')}...`);
 
@@ -149,7 +174,6 @@ class DiscussionAdmin extends React.Component<void, Props, State> {
         deleteMutation: deleteSection,
         lang: i18n.locale
       });
-
       runSerial(mutationsPromises).then(() => {
         this.setState({ refetching: true });
         refetchSections().then(() => this.setState({ refetching: false }));
@@ -176,6 +200,24 @@ class DiscussionAdmin extends React.Component<void, Props, State> {
           displayAlert('danger', `${error}`, false, 30000);
         });
     }
+
+    if (profileOptionsHasChanged) {
+      const mutationsPromises = getMutationsPromises({
+        items: textFields,
+        variablesCreator: createVariablesForTextFieldMutation,
+        deleteVariablesCreator: createVariablesForDeleteTextFieldMutation,
+        createMutation: createTextField,
+        updateMutation: updateTextField,
+        deleteMutation: deleteTextField,
+        lang: i18n.locale
+      });
+
+      runSerial(mutationsPromises).then(() => {
+        this.setState({ refetching: true });
+        refetchTextFields().then(() => this.setState({ refetching: false }));
+        displayAlert('success', I18n.t('Les champs sont mis à jour'));
+      });
+    }
   };
 
   render() {
@@ -194,10 +236,18 @@ class DiscussionAdmin extends React.Component<void, Props, State> {
 }
 
 const mapStateToProps: MapStateToProps<ReduxState, *, *> = ({
-  admin: { discussionLanguagePreferences, discussionLanguagePreferencesHasChanged, editLocale, legalNoticeAndTerms, sections },
+  admin: {
+    discussionLanguagePreferences,
+    discussionLanguagePreferencesHasChanged,
+    editLocale,
+    legalNoticeAndTerms,
+    sections,
+    profileOptions
+  },
   i18n
 }) => {
   const { sectionsById, sectionsHaveChanged, sectionsInOrder } = sections;
+  const { profileOptionsHasChanged, textFieldsById } = profileOptions;
   return {
     editLocale: editLocale,
     i18n: i18n,
@@ -211,7 +261,12 @@ const mapStateToProps: MapStateToProps<ReduxState, *, *> = ({
       }) // fix order of sections
       .valueSeq() // convert to array of Map
       .toJS(), // convert to array of objects
-    legalNoticeAndTerms: legalNoticeAndTerms
+    legalNoticeAndTerms: legalNoticeAndTerms,
+    profileOptionsHasChanged: profileOptionsHasChanged,
+    textFields: textFieldsById
+      .map(textField => textField)
+      .valueSeq()
+      .toJS()
   };
 };
 
@@ -240,6 +295,15 @@ export default compose(
   }),
   graphql(updateLegalNoticeAndTermsMutation, {
     name: 'updateLegalNoticeAndTerms'
+  }),
+  graphql(createTextFieldMutation, {
+    name: 'createTextField'
+  }),
+  graphql(deleteTextFieldMutation, {
+    name: 'deleteTextField'
+  }),
+  graphql(updateTextFieldMutation, {
+    name: 'updateTextField'
   }),
   connect(mapStateToProps, mapDispatchToProps),
   withApollo

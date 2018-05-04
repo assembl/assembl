@@ -220,7 +220,8 @@ class Administration extends React.Component {
       refetchSections,
       refetchLegalNoticeAndTerms,
       refetchVoteSession,
-      refetchLandingPageModules
+      refetchLandingPageModules,
+      refetchTextFields
     } = this.props;
     const { phase } = params;
     const { timeline } = this.props.debate.debateData;
@@ -234,7 +235,8 @@ class Administration extends React.Component {
         refetchSections: refetchSections,
         refetchResourcesCenter: refetchResourcesCenter,
         refetchLandingPageModules: refetchLandingPageModules,
-        refetchLegalNoticeAndTerms: refetchLegalNoticeAndTerms
+        refetchLegalNoticeAndTerms: refetchLegalNoticeAndTerms,
+        refetchTextFields: refetchTextFields
       })
     );
 

@@ -279,7 +279,7 @@ class DeleteTextField(graphene.Mutation):
     def mutate(root, args, context, info):
         text_field_id = args.get('id')
         text_field_id = int(Node.from_global_id(text_field_id)[1])
-        text_field = models.Idea.get(text_field_id)
+        text_field = models.TextField.get(text_field_id)
         require_instance_permission(CrudPermissions.DELETE, text_field, context)
         text_field.db.delete(text_field)
         text_field.db.flush()
