@@ -86,3 +86,8 @@ I want to change the title which shows on a tab of a debate
 On staging or production instances, you should change the `index_react.jinja2` file to set `block page_title` to the value you want for your debate.
 
 Afterwards you should restart `prod:uwsgi`
+
+I modified a .jinja2 file but the server still shows the old version
+--------------------------------------------------------------------
+
+Changes in a .jinja2 file are not visible until you restart the web server process (if `supervisorctl status` shows that `dev:pserve` is running, run `supervisorctl restart dev:pserve`, or same thing for `prod:uwsgi`).
