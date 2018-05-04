@@ -25,8 +25,6 @@ def upgrade(pyramid_env):
     from assembl import models as m
     db = m.get_session_maker()()
     with transaction.manager:
-        op.drop_table('profile_text_field')
-        op.drop_table('text_field')
         op.create_table(
             'text_field',
             sa.Column('id', sa.Integer, primary_key=True),
