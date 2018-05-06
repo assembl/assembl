@@ -362,4 +362,4 @@ def test_mutation_delete_text_field(graphql_request, text_field, graphql_registr
         "id": text_field_id
     })
     assert res.errors is None
-    assert True == res.data['deleteTextField']['success']
+    assert res.data['deleteTextField']['success'] is True
