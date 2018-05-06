@@ -190,7 +190,7 @@ describe('textFieldsById reducer', () => {
     });
     const expected = Map({
       '189387': Map({
-        _hasChanged: false,
+        _hasChanged: true,
         _isNew: true,
         _toDelete: false,
         id: '189387',
@@ -221,7 +221,7 @@ describe('textFieldsById reducer', () => {
     });
     const expected = Map({
       '189387': Map({
-        _hasChanged: false,
+        _hasChanged: true,
         _isNew: true,
         _toDelete: false,
         id: '189387',
@@ -234,7 +234,7 @@ describe('textFieldsById reducer', () => {
     expect(actual).toEqual(expected);
 
     const actual2 = reducer(actual, action);
-    expect(actual2).toEqual(state);
+    expect(actual2).toEqual(state.setIn(['189387', '_hasChanged'], true));
   });
 
   it('should handle the MOVE_TEXT_FIELD_UP action', () => {
