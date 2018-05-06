@@ -421,7 +421,7 @@ const Translations = {
       addThematic: "Ajouter une thématique",
       addQuestion: "Ajouter une question",
       anErrorOccured:
-      "Il y a eu une erreur lors de la sauvegarde, veuillez vérifier que vous avez bien renseigné tous les champs requis.",
+        "Il y a eu une erreur lors de la sauvegarde, veuillez vérifier que vous avez bien renseigné tous les champs requis.",
       deleteThematic: "Supprimer la thématique",
       confirmDeleteThematicTitle: "Confirmer la suppression",
       confirmDeleteThematic: "Êtes-vous sûr de vouloir supprimer cette thématique ?",
@@ -638,9 +638,11 @@ const Translations = {
       profileOptions: {
         addTextField: "Ajouter un champ",
         deleteTextField: "Supprimer le champ",
-        introText: "Configurez les champs que vous souhaitez afficher dans le formulaire d'inscription. Renseignez les noms ainsi que la mention obligatoire/non obligatoire.",
+        introText:
+          "Configurez les champs que vous souhaitez afficher dans le formulaire d'inscription. Renseignez les noms ainsi que la mention obligatoire/non obligatoire.",
         textFieldToggleOptional: "Rendre ce champ optionnel",
-        textFieldToggleRequired: "Rendre ce champ obligatoire"
+        textFieldToggleRequired: "Rendre ce champ obligatoire",
+        successSave: "Les options de profils ont été enregistrées avec succès !"
       }
     },
     unauthorizedAdministration: {
@@ -1280,9 +1282,11 @@ const Translations = {
       profileOptions: {
         addTextField: "Add a field",
         deleteTextField: "Delete the field",
-        introText: "Configure the fields that you want to display in the registration form. Fill in the names and whether the fields are required or optional.",
+        introText:
+          "Configure the fields that you want to display in the registration form. Fill in the names and whether the fields are required or optional.",
         textFieldToggleOptional: "Make this field optional",
-        textFieldToggleRequired: "Make this field required"
+        textFieldToggleRequired: "Make this field required",
+        successSave: "The profile options has been saved with success!"
       }
     },
     unauthorizedAdministration: {

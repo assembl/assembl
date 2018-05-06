@@ -215,7 +215,7 @@ class DiscussionAdmin extends React.Component<void, Props, State> {
       runSerial(mutationsPromises).then(() => {
         this.setState({ refetching: true });
         refetchTextFields().then(() => this.setState({ refetching: false }));
-        displayAlert('success', I18n.t('Les champs sont mis à jour'));
+        displayAlert('success', I18n.t('administration.profileOptions.successSave'));
       });
     }
   };
