@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from graphql_relay.node.node import to_global_id
+from graphql_relay.node.node import from_global_id, to_global_id
 
 from assembl.graphql.schema import Schema as schema
 
@@ -365,3 +365,29 @@ def test_mutation_delete_text_field(graphql_request, text_field, graphql_registr
     })
     assert res.errors is None
     assert res.data['deleteTextField']['success'] is True
+
+
+def test_query_profile_fields(graphql_request, graphql_registry, text_field, profile_text_field):
+    from assembl.models.auth import TextFieldsTypesEnum
+    res = schema.execute(
+        graphql_registry['ProfileFields'],
+        context_value=graphql_request,
+        variable_values={"lang": u"en"})
+    assert res.errors is None
+    assert len(res.data['profileFields']) == 2
+
+    generated_tf = res.data['profileFields'][0]
+    assert int(from_global_id(generated_tf['id'])[1]) < 0
+    assert generated_tf['textField']['fieldType'] == TextFieldsTypesEnum.TEXT.value
+    assert generated_tf['textField']['title'] == u'My text field'
+    assert generated_tf['textField']['order'] == 1.0
+    assert generated_tf['textField']['required'] is True
+    assert generated_tf['value'] is None
+
+    tf_with_value = res.data['profileFields'][1]
+    assert int(from_global_id(tf_with_value['id'])[1]) == profile_text_field.id
+    assert tf_with_value['textField']['title'] == u'My other text field'
+    assert tf_with_value['textField']['fieldType'] == TextFieldsTypesEnum.EMAIL.value
+    assert tf_with_value['textField']['order'] == 2.0
+    assert tf_with_value['textField']['required'] is False
+    assert tf_with_value['value'] == u'Shayna_Howe@gmail.com'

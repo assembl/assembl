@@ -11,6 +11,7 @@ import { get, getContextual } from '../utils/routeMap';
 import { displayAlert } from '../utils/utilityManager';
 import withLoadingIndicator from '../components/common/withLoadingIndicator';
 import UserQuery from '../graphql/userQuery.graphql';
+import ProfileFieldsQuery from '../graphql/ProfileFields.graphql';
 import UpdateUserMutation from '../graphql/mutations/updateUser.graphql';
 import { browserHistory } from '../router';
 
@@ -212,5 +213,6 @@ export default compose(
     }
   }),
   graphql(UpdateUserMutation, { name: 'updateUser' }),
+  graphql(ProfileFieldsQuery),
   withLoadingIndicator()
 )(Profile);

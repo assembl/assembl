@@ -289,3 +289,26 @@ class DeleteTextField(graphene.Mutation):
             db.flush()
 
         return DeleteTextField(success=True)
+
+
+class ProfileField(SecureObjectType, SQLAlchemyObjectType):
+    class Meta:
+        model = models.ProfileTextField
+        interfaces = (Node, )
+        only_fields = ('id', 'value')
+
+    agent_profile = graphene.Field(lambda: AgentProfile)
+    text_field = graphene.Field(lambda: TextField)
+
+    def resolve_id(self, args, context, info):
+        if self.id < 0:
+            # this is a temporary object we created manually in resolve_profile_fields
+            return self.id
+        else:
+            # this is a SQLAlchemy object
+            # we can't use super here, so we just copy/paste resolve_id method from SQLAlchemyObjectType class
+            from graphene.relay import is_node
+            graphene_type = info.parent_type.graphene_type
+            if is_node(graphene_type):
+                return self.__mapper__.primary_key_from_instance(self)[0]
+            return getattr(self, graphene_type._meta.id, None)

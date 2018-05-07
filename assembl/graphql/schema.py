@@ -34,7 +34,7 @@ from assembl.graphql.section import (CreateSection, DeleteSection, Section,
                                      UpdateSection)
 from assembl.graphql.sentiment import AddSentiment, DeleteSentiment
 from assembl.graphql.synthesis import Synthesis
-from assembl.graphql.user import UpdateUser, TextField, CreateTextField, UpdateTextField, DeleteTextField
+from assembl.graphql.user import UpdateUser, TextField, CreateTextField, UpdateTextField, DeleteTextField, ProfileField
 from assembl.graphql.votes import AddTokenVote, DeleteTokenVote, AddGaugeVote, DeleteGaugeVote
 from assembl.graphql.vote_session import (
     VoteSession, UpdateVoteSession, CreateTokenVoteSpecification,
@@ -93,6 +93,7 @@ class Query(graphene.ObjectType):
     landing_page_module_types = graphene.List(LandingPageModuleType)
     landing_page_modules = graphene.List(LandingPageModule)
     text_fields = graphene.List(TextField)
+    profile_fields = graphene.List(ProfileField)
 
     def resolve_resources(self, args, context, info):
         model = models.Resource
@@ -310,6 +311,41 @@ class Query(graphene.ObjectType):
         query = get_query(model, context)
         discussion_id = context.matchdict['discussion_id']
         return query.filter(model.discussion_id == discussion_id).order_by(model.order)
+
+    def resolve_profile_fields(self, args, context, info):
+        model = models.ProfileTextField
+        query = get_query(model, context)
+        discussion_id = context.matchdict['discussion_id']
+        user_id = context.authenticated_userid
+        fields = get_query(
+            models.TextField, context).filter(
+                models.TextField.discussion_id == discussion_id
+            ).order_by(models.TextField.order).all()
+        profile_fields = []
+        if user_id is None:
+            raise Exception('No user id')
+
+        for field in fields:
+            saobj = query.filter(
+                model.discussion_id == discussion_id
+            ).filter(
+                models.ProfileTextField.text_field == field
+            ).filter(
+                models.ProfileTextField.agent_profile_id == user_id
+            ).first()
+
+            if saobj:
+                profile_field = saobj
+            else:
+                profile_field = ProfileField(
+                    agent_profile=models.AgentProfile.get(user_id),
+                    id=randint(-100000, 0),
+                    text_field=field,
+                )
+
+            profile_fields.append(profile_field)
+
+        return profile_fields
 
 
 class Mutations(graphene.ObjectType):

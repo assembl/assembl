@@ -1,0 +1,16 @@
+query ProfileFields($lang: String!) {
+  profileFields {
+    id
+    textField {
+      fieldType
+      order
+      required
+      title(lang: $lang)
+      titleEntries {
+        localeCode
+        value
+      }
+    }
+    value
+  }
+}
