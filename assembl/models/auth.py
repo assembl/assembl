@@ -1965,7 +1965,7 @@ class TextField(DiscussionBoundBase):
     required = Column(Boolean(), default=False)
 
     field_type = Column(
-        Enum(*field_types, name='field_types'),
+        Enum(*field_types, name='text_field_types'),
         nullable=False,
         default=TextFieldsTypesEnum.TEXT.value,
         server_default=TextFieldsTypesEnum.TEXT.value

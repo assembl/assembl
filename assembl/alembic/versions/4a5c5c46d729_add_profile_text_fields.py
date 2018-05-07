@@ -38,7 +38,7 @@ def upgrade(pyramid_env):
                     onupdate="CASCADE"),
                 nullable=False, index=False),
             sa.Column('field_type',
-                sa.Enum(*field_types, name='field_types'),
+                sa.Enum(*field_types, name='text_field_types'),
                 nullable=False,
                 default=TextFieldsTypesEnum.TEXT.value,
                 server_default=TextFieldsTypesEnum.TEXT.value
