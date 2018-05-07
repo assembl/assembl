@@ -66,6 +66,7 @@ def upgrade(pyramid_env):
                 sa.Integer,
                 sa.ForeignKey('agent_profile.id', ondelete="CASCADE", onupdate="CASCADE"),
                 nullable=False, index=False),
+            sa.Column('value', sa.String(100)),
         )
 
         # insert default text fields
