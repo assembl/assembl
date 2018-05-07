@@ -276,10 +276,16 @@ class DeleteTextField(graphene.Mutation):
     @staticmethod
     @abort_transaction_on_exception
     def mutate(root, args, context, info):
+        cls = models.TextField
         text_field_id = args.get('id')
         text_field_id = int(Node.from_global_id(text_field_id)[1])
         text_field = models.TextField.get(text_field_id)
         require_instance_permission(CrudPermissions.DELETE, text_field, context)
-        text_field.db.delete(text_field)
-        text_field.db.flush()
+        with cls.default_db.no_autoflush as db:
+            db.query(models.ProfileTextField).filter(
+                models.ProfileTextField.text_field_id == text_field_id).delete()
+            db.flush()
+            db.delete(text_field)
+            db.flush()
+
         return DeleteTextField(success=True)
