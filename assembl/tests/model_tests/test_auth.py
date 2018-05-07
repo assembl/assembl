@@ -73,14 +73,18 @@ def test_restricted_discussion_expiry_override(
 
 def test_create_text_field(test_session, admin_user, discussion):
     from assembl.models import LangString
+    from assembl.models.auth import TextFieldsTypesEnum
+    import pdb; pdb.set_trace()
     text_field = TextField(
         discussion=discussion,
+        field_type=TextFieldsTypesEnum.TEXT.value,
         order=1.0,
         title=LangString.create('Firstname', 'en'),
-        required=True
+        required=True,
     )
     test_session.add(text_field)
     test_session.flush()
+    assert text_field.field_type == TextFieldsTypesEnum.TEXT.value
     assert text_field.title.entries[0].locale_code == 'en'
     assert text_field.title.entries[0].value == 'Firstname'
     assert text_field.order == 1.0

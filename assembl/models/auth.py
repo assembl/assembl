@@ -9,11 +9,13 @@ from collections import defaultdict
 from enum import IntEnum
 import logging
 from abc import abstractmethod
+import enum
 
 from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy import (
     Boolean,
     Column,
+    Enum,
     String,
     Float,
     ForeignKey,
@@ -1913,6 +1915,16 @@ class UserLanguagePreference(Base):
             )
 
 
+class TextFieldsTypesEnum(enum.Enum):
+
+    TEXT = 'TEXT'
+    EMAIL = 'EMAIL'
+    PASSWORD = 'PASSWORD'
+
+
+field_types = [t.value for t in TextFieldsTypesEnum.__members__.values()]
+
+
 class TextField(DiscussionBoundBase):
 
     """Configurable text field."""
@@ -1951,6 +1963,13 @@ class TextField(DiscussionBoundBase):
         Float, nullable=False, default=0.0)
 
     required = Column(Boolean(), default=False)
+
+    field_type = Column(
+        Enum(*field_types, name='field_types'),
+        nullable=False,
+        default=TextFieldsTypesEnum.TEXT.value,
+        server_default=TextFieldsTypesEnum.TEXT.value
+    )
 
     def get_discussion_id(self):
         return self.discussion_id or self.discussion.id

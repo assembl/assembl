@@ -23,6 +23,7 @@ def upgrade(pyramid_env):
     """Create text_field and profile_text_field tables,
     then add default text fields for each discussion."""
     from assembl import models as m
+    from assembl.models.auth import TextFieldsTypesEnum, field_types
     db = m.get_session_maker()()
     with transaction.manager:
         op.create_table(
@@ -36,6 +37,12 @@ def upgrade(pyramid_env):
                     ondelete="CASCADE",
                     onupdate="CASCADE"),
                 nullable=False, index=False),
+            sa.Column('field_type',
+                sa.Enum(*field_types, name='field_types'),
+                nullable=False,
+                default=TextFieldsTypesEnum.TEXT.value,
+                server_default=TextFieldsTypesEnum.TEXT.value
+            ),
             sa.Column('title_id', sa.Integer, sa.ForeignKey('langstring.id')),
             sa.Column('order', sa.Float, default=0.0, nullable=False),
             sa.Column('required', sa.Boolean),
@@ -99,6 +106,7 @@ def upgrade(pyramid_env):
                 title.add_value(u'Courriel', 'fr')
                 saobj = m.TextField(
                     discussion_id=discussion_id,
+                    field_type=TextFieldsTypesEnum.EMAIL.value,
                     order=4.0,
                     title=title,
                     required=True
@@ -109,6 +117,7 @@ def upgrade(pyramid_env):
                 title.add_value(u'Mot de passe', 'fr')
                 saobj = m.TextField(
                     discussion_id=discussion_id,
+                    field_type=TextFieldsTypesEnum.PASSWORD.value,
                     order=5.0,
                     title=title,
                     required=True
