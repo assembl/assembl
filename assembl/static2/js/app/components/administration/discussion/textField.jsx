@@ -13,6 +13,7 @@ import SwitchButton from '../../common/switchButton';
 
 type Props = {
   deleteField: Function,
+  fieldType: string,
   id: string,
   isFirst: boolean,
   isLast: boolean,
@@ -24,8 +25,11 @@ type Props = {
   updateTitle: Function
 };
 
+const undeletableFieldTypes = ['EMAIL', 'PASSWORD'];
+
 const TextField = ({
   deleteField,
+  fieldType,
   id,
   isFirst,
   isLast,
@@ -59,7 +63,7 @@ const TextField = ({
       </OverlayTrigger>
     ) : null}
     <OverlayTrigger placement="top" overlay={deleteTextFieldTooltip}>
-      <Button onClick={deleteField} className="admin-icons">
+      <Button onClick={deleteField} className="admin-icons" disabled={undeletableFieldTypes.includes(fieldType)}>
         <span className="assembl-icon-delete grey" />
       </Button>
     </OverlayTrigger>

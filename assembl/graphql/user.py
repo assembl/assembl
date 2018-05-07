@@ -182,7 +182,7 @@ class TextField(SecureObjectType, SQLAlchemyObjectType):
     class Meta:
         model = models.TextField
         interfaces = (Node, )
-        only_fields = ('id', 'order', 'required')
+        only_fields = ('field_type', 'id', 'order', 'required')
 
     title = graphene.String(lang=graphene.String())
     title_entries = graphene.List(LangStringEntry)
@@ -261,7 +261,6 @@ class UpdateTextField(graphene.Mutation):
             update_langstring_from_input_entries(text_field, 'title', title_entries)
             text_field.order = args['order']
             text_field.required = args['required']
-
             db.flush()
 
         return UpdateTextField(text_field=text_field)

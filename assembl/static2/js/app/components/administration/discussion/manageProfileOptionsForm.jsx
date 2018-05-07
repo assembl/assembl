@@ -33,6 +33,7 @@ const ManageProfileOptionsForm = ({
               <TextField
                 key={tf.get('id')}
                 deleteField={() => deleteTextField(tf.get('id'))}
+                fieldType={tf.get('fieldType')}
                 id={tf.get('id')}
                 isFirst={idx === 0}
                 isLast={idx === textFields.size - 1}

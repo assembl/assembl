@@ -291,6 +291,7 @@ def test_graphql_update_user_modify_password_can_reuse_the_old_6th_password_set(
 
 
 def test_query_text_fields(graphql_request, graphql_registry, text_field):
+    from assembl.models.auth import TextFieldsTypesEnum
     res = schema.execute(
         graphql_registry['TextFields'],
         context_value=graphql_request,
@@ -299,6 +300,7 @@ def test_query_text_fields(graphql_request, graphql_registry, text_field):
     assert len(res.data['textFields']) == 1
 
     tf = res.data['textFields'][0]
+    assert tf['fieldType'] == TextFieldsTypesEnum.TEXT.value
     assert tf['title'] == u'My text field'
     assert tf['titleEntries'][0]['localeCode'] == u'en'
     assert tf['titleEntries'][0]['value'] == u'My text field'
