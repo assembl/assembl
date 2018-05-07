@@ -132,3 +132,4 @@ def downgrade(pyramid_env):
     with context.begin_transaction():
         op.drop_table('profile_text_field')
         op.drop_table('text_field')
+        sa.Enum(name='text_field_types').drop(op.get_bind(), checkfirst=False)
