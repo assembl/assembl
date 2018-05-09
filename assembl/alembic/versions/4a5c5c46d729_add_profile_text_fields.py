@@ -15,7 +15,6 @@ from alembic import context, op
 import sqlalchemy as sa
 import transaction
 
-
 from assembl.lib import config
 
 
@@ -23,7 +22,7 @@ def upgrade(pyramid_env):
     """Create text_field and profile_text_field tables,
     then add default text fields for each discussion."""
     from assembl import models as m
-    from assembl.models.auth import TextFieldsTypesEnum, field_types
+    from assembl.models.configurable_fields import TextFieldsTypesEnum, field_types
     db = m.get_session_maker()()
     with transaction.manager:
         op.create_table(

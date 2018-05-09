@@ -34,7 +34,8 @@ from assembl.graphql.section import (CreateSection, DeleteSection, Section,
                                      UpdateSection)
 from assembl.graphql.sentiment import AddSentiment, DeleteSentiment
 from assembl.graphql.synthesis import Synthesis
-from assembl.graphql.user import UpdateUser, TextField, CreateTextField, UpdateTextField, DeleteTextField, ProfileField
+from assembl.graphql.user import UpdateUser
+from .configurable_fields import TextField, CreateTextField, UpdateTextField, DeleteTextField, ProfileField
 from assembl.graphql.votes import AddTokenVote, DeleteTokenVote, AddGaugeVote, DeleteGaugeVote
 from assembl.graphql.vote_session import (
     VoteSession, UpdateVoteSession, CreateTokenVoteSpecification,
