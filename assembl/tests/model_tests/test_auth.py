@@ -74,7 +74,6 @@ def test_restricted_discussion_expiry_override(
 def test_create_text_field(test_session, admin_user, discussion):
     from assembl.models import LangString
     from assembl.models.auth import TextFieldsTypesEnum
-    import pdb; pdb.set_trace()
     text_field = TextField(
         discussion=discussion,
         field_type=TextFieldsTypesEnum.TEXT.value,
