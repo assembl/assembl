@@ -82,57 +82,47 @@ def upgrade(pyramid_env):
         with m.TextField.default_db.no_autoflush as db:
             discussions = db.query(m.Discussion.id).all()
             for discussion_id in discussions:
-                title = m.LangString.create('Firstname', 'en')
-                title.add_value(u'Prénom', 'fr')
-                saobj = m.TextField(
+                title = m.LangString.create('Fullname', 'en')
+                title.add_value(u'Nom complet', 'fr')
+                fullname_field = m.TextField(
                     discussion_id=discussion_id,
                     order=1.0,
                     title=title,
                     required=True
                 )
-                db.add(saobj)
+                db.add(fullname_field)
 
-                title = m.LangString.create('Lastname', 'en')
-                title.add_value(u'Nom', 'fr')
-                saobj = m.TextField(
+                title = m.LangString.create('Username', 'en')
+                title.add_value(u"Nom d'utilisateur", 'fr')
+                username_field = m.TextField(
                     discussion_id=discussion_id,
                     order=2.0,
                     title=title,
                     required=True
                 )
-                db.add(saobj)
+                db.add(username_field)
 
-                title = m.LangString.create('Nickname', 'en')
-                title.add_value(u'Pseudo', 'fr')
-                saobj = m.TextField(
+                title = m.LangString.create('Email', 'en')
+                title.add_value(u'Courriel', 'fr')
+                email_field = m.TextField(
                     discussion_id=discussion_id,
+                    field_type=TextFieldsTypesEnum.EMAIL.value,
                     order=3.0,
                     title=title,
                     required=True
                 )
-                db.add(saobj)
+                db.add(email_field)
 
-                title = m.LangString.create('Email', 'en')
-                title.add_value(u'Courriel', 'fr')
-                saobj = m.TextField(
+                title = m.LangString.create('Password', 'en')
+                title.add_value(u'Mot de passe', 'fr')
+                password_field = m.TextField(
                     discussion_id=discussion_id,
-                    field_type=TextFieldsTypesEnum.EMAIL.value,
+                    field_type=TextFieldsTypesEnum.PASSWORD.value,
                     order=4.0,
                     title=title,
                     required=True
                 )
-                db.add(saobj)
-
-                title = m.LangString.create('Password', 'en')
-                title.add_value(u'Mot de passe', 'fr')
-                saobj = m.TextField(
-                    discussion_id=discussion_id,
-                    field_type=TextFieldsTypesEnum.PASSWORD.value,
-                    order=5.0,
-                    title=title,
-                    required=True
-                )
-                db.add(saobj)
+                db.add(password_field)
 
             db.flush()
 
