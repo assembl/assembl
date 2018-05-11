@@ -26,7 +26,7 @@ def upgrade(pyramid_env):
     db = m.get_session_maker()()
     with transaction.manager:
         op.create_table(
-            'text_field',
+            "configurable_field",
             sa.Column('id', sa.Integer, primary_key=True),
             sa.Column('type', sa.String(60), nullable=False),
             sa.Column('discussion_id',
@@ -36,17 +36,26 @@ def upgrade(pyramid_env):
                     ondelete="CASCADE",
                     onupdate="CASCADE"),
                 nullable=False, index=False),
+            sa.Column('title_id', sa.Integer, sa.ForeignKey('langstring.id')),
+            sa.Column('order', sa.Float, default=0.0, nullable=False),
+            sa.Column('required', sa.Boolean),
+            sa.schema.UniqueConstraint('title_id')
+        )
+
+        op.create_table(
+            'text_field',
+            sa.Column(
+                "id", sa.Integer,
+                sa.ForeignKey("configurable_field.id"),
+                primary_key=True),
             sa.Column('field_type',
                 sa.Enum(*field_types, name='text_field_types'),
                 nullable=False,
                 default=TextFieldsTypesEnum.TEXT.value,
                 server_default=TextFieldsTypesEnum.TEXT.value
             ),
-            sa.Column('title_id', sa.Integer, sa.ForeignKey('langstring.id')),
-            sa.Column('order', sa.Float, default=0.0, nullable=False),
-            sa.Column('required', sa.Boolean),
-            sa.schema.UniqueConstraint('title_id')
         )
+
         op.create_table(
             'profile_text_field',
             sa.Column('id', sa.Integer, primary_key=True),
@@ -131,4 +140,5 @@ def downgrade(pyramid_env):
     with context.begin_transaction():
         op.drop_table('profile_text_field')
         op.drop_table('text_field')
+        op.drop_table('configurable_field')
         sa.Enum(name='text_field_types').drop(op.get_bind(), checkfirst=False)

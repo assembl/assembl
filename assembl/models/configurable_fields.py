@@ -18,22 +18,19 @@ from ..auth import CrudPermissions, P_ADMIN_DISC, P_READ
 from .langstrings import LangString
 
 
-class TextFieldsTypesEnum(enum.Enum):
+class AbstractConfigurableField(DiscussionBoundBase):
 
-    TEXT = 'TEXT'
-    EMAIL = 'EMAIL'
-    PASSWORD = 'PASSWORD'
+    """Abstract configurable field."""
 
+    __tablename__ = "configurable_field"
 
-field_types = [t.value for t in TextFieldsTypesEnum.__members__.values()]
-
-
-class TextField(DiscussionBoundBase):
-
-    """Configurable text field."""
-
-    __tablename__ = "text_field"
     type = Column(String(60), nullable=False)
+
+    __mapper_args__ = {
+        'polymorphic_identity': 'abstract_configurable_field',
+        'polymorphic_on': 'type',
+        'with_polymorphic': '*'
+    }
 
     id = Column(Integer, primary_key=True)
 
@@ -67,13 +64,6 @@ class TextField(DiscussionBoundBase):
 
     required = Column(Boolean(), default=False)
 
-    field_type = Column(
-        Enum(*field_types, name='text_field_types'),
-        nullable=False,
-        default=TextFieldsTypesEnum.TEXT.value,
-        server_default=TextFieldsTypesEnum.TEXT.value
-    )
-
     def get_discussion_id(self):
         return self.discussion_id or self.discussion.id
 
@@ -81,17 +71,43 @@ class TextField(DiscussionBoundBase):
     def get_discussion_conditions(cls, discussion_id, alias_maker=None):
         return (cls.discussion_id == discussion_id,)
 
-    __mapper_args__ = {
-        'polymorphic_identity': 'text_field',
-        'polymorphic_on': type,
-        'with_polymorphic': '*'
-    }
-
     crud_permissions = CrudPermissions(
         P_ADMIN_DISC, P_READ, P_ADMIN_DISC, P_ADMIN_DISC)
 
 
-LangString.setup_ownership_load_event(TextField, ['title'])
+LangString.setup_ownership_load_event(AbstractConfigurableField, ['title'])
+
+
+class TextFieldsTypesEnum(enum.Enum):
+
+    TEXT = 'TEXT'
+    EMAIL = 'EMAIL'
+    PASSWORD = 'PASSWORD'
+
+
+field_types = [t.value for t in TextFieldsTypesEnum.__members__.values()]
+
+
+class TextField(AbstractConfigurableField):
+
+    """Configurable text field."""
+
+    __tablename__ = "text_field"
+    __mapper_args__ = {
+        'polymorphic_identity': 'text_field'
+    }
+
+    id = Column(
+        Integer,
+        ForeignKey(AbstractConfigurableField.id, ondelete="CASCADE", onupdate="CASCADE"),
+        primary_key=True)
+
+    field_type = Column(
+        Enum(*field_types, name='text_field_types'),
+        nullable=False,
+        default=TextFieldsTypesEnum.TEXT.value,
+        server_default=TextFieldsTypesEnum.TEXT.value
+    )
 
 
 class ProfileTextField(DiscussionBoundBase):
