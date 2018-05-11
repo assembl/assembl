@@ -124,6 +124,39 @@ def upgrade(pyramid_env):
                 )
                 db.add(password_field)
 
+                # create profile fields for each user with current values for email, username and fullname
+                for user in db.query(m.AgentProfile):
+                    saobj = m.ProfileField(
+                        discussion_id=discussion_id,
+                        agent_profile=user,
+                        configurable_field=email_field,
+                        value_data={
+                            u'value': user.get_preferred_email()
+                        }
+                    )
+                    db.add(saobj)
+
+                    saobj = m.ProfileField(
+                        discussion_id=discussion_id,
+                        agent_profile=user,
+                        configurable_field=fullname_field,
+                        value_data={
+                            u'value': user.real_name()
+                        }
+                    )
+                    db.add(saobj)
+
+                    if user.username:
+                        saobj = m.ProfileField(
+                            discussion_id=discussion_id,
+                            agent_profile=user,
+                            configurable_field=username_field,
+                            value_data={
+                                u'value': user.username.username
+                            }
+                        )
+                        db.add(saobj)
+
             db.flush()
 
 
