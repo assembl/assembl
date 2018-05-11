@@ -13,6 +13,7 @@ down_revision = '9dfb584793b1'
 
 from alembic import context, op
 import sqlalchemy as sa
+from sqlalchemy.dialects.postgresql.json import JSONB
 import transaction
 
 from assembl.lib import config
@@ -57,7 +58,7 @@ def upgrade(pyramid_env):
         )
 
         op.create_table(
-            'profile_text_field',
+            'profile_field',
             sa.Column('id', sa.Integer, primary_key=True),
             sa.Column('type', sa.String(60), nullable=False),
             sa.Column(
@@ -66,15 +67,15 @@ def upgrade(pyramid_env):
                 sa.ForeignKey('discussion.id', ondelete="CASCADE", onupdate="CASCADE"),
                 nullable=False, index=False),
             sa.Column(
-                'text_field_id',
+                'configurable_field_id',
                 sa.Integer,
-                sa.ForeignKey('text_field.id', ondelete="CASCADE", onupdate="CASCADE"),
+                sa.ForeignKey('configurable_field.id', ondelete="CASCADE", onupdate="CASCADE"),
                 nullable=False, index=False),
             sa.Column('agent_profile_id',
                 sa.Integer,
                 sa.ForeignKey('agent_profile.id', ondelete="CASCADE", onupdate="CASCADE"),
                 nullable=False, index=False),
-            sa.Column('value', sa.String(100)),
+            sa.Column('value_data', JSONB),
         )
 
         # insert default text fields
@@ -138,7 +139,7 @@ def upgrade(pyramid_env):
 
 def downgrade(pyramid_env):
     with context.begin_transaction():
-        op.drop_table('profile_text_field')
+        op.drop_table('profile_field')
         op.drop_table('text_field')
         op.drop_table('configurable_field')
         sa.Enum(name='text_field_types').drop(op.get_bind(), checkfirst=False)

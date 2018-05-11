@@ -1,13 +1,7 @@
+#import "./fragments/TextField.graphql"
+
 query TextFields($lang: String!) {
   textFields {
-    fieldType
-    id
-    titleEntries {
-      localeCode
-      value
-    }
-    title(lang: $lang)
-    order
-    required
+    ...textField
   }
 }

@@ -11,6 +11,7 @@ from sqlalchemy import (
     ForeignKey,
     Integer
 )
+from sqlalchemy.dialects.postgresql.json import JSONB
 from sqlalchemy.orm import relationship, backref
 
 from . import DiscussionBoundBase
@@ -110,11 +111,11 @@ class TextField(AbstractConfigurableField):
     )
 
 
-class ProfileTextField(DiscussionBoundBase):
+class ProfileField(DiscussionBoundBase):
 
-    """Text field for profile page."""
+    """Field for profile page."""
 
-    __tablename__ = "profile_text_field"
+    __tablename__ = "profile_field"
     type = Column(String(60), nullable=False)
 
     id = Column(Integer, primary_key=True)
@@ -130,19 +131,19 @@ class ProfileTextField(DiscussionBoundBase):
 
     discussion = relationship(
         "Discussion",
-        backref=backref('profile_text_fields', cascade="all, delete-orphan")
+        backref=backref('profile_fields', cascade="all, delete-orphan")
     )
 
-    text_field_id = Column(
+    configurable_field_id = Column(
         Integer,
         ForeignKey(
-            'text_field.id', ondelete='CASCADE', onupdate='CASCADE'
+            'configurable_field.id', ondelete='CASCADE', onupdate='CASCADE'
         ),
         nullable=False, index=True
     )
-    text_field = relationship(
-        "TextField",
-        backref=backref('profile_text_field', cascade="all, delete-orphan")
+    configurable_field = relationship(
+        "AbstractConfigurableField",
+        backref=backref('profile_field', cascade="all, delete-orphan")
     )
 
     agent_profile_id = Column(
@@ -154,10 +155,10 @@ class ProfileTextField(DiscussionBoundBase):
     )
     agent_profile = relationship(
         "AgentProfile",
-        backref=backref('profile_text_field', cascade="all, delete-orphan")
+        backref=backref('profile_field', cascade="all, delete-orphan")
     )
 
-    value = Column(String(60))
+    value_data = Column(JSONB)
 
     def get_discussion_id(self):
         return self.discussion_id or self.discussion.id
@@ -167,7 +168,7 @@ class ProfileTextField(DiscussionBoundBase):
         return (cls.discussion_id == discussion_id,)
 
     __mapper_args__ = {
-        'polymorphic_identity': 'profile_text_field',
+        'polymorphic_identity': 'profile_field',
         'polymorphic_on': type,
         'with_polymorphic': '*'
     }

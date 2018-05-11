@@ -1,5 +1,5 @@
 # -*- coding=utf-8 -*-
-from assembl.models.configurable_fields import TextField, TextFieldsTypesEnum, ProfileTextField
+from assembl.models.configurable_fields import TextField, TextFieldsTypesEnum, ProfileField
 
 
 def test_create_text_field(test_session, admin_user, discussion):
@@ -21,15 +21,16 @@ def test_create_text_field(test_session, admin_user, discussion):
     test_session.delete(text_field)
 
 
-def test_create_profile_text_field(test_session, discussion, participant1_user, text_field):
-    profile_text_field = ProfileTextField(
+def test_create_profile_field(test_session, discussion, participant1_user, text_field):
+    profile_field = ProfileField(
         discussion=discussion,
         agent_profile=participant1_user,
-        text_field=text_field,
+        configurable_field=text_field,
     )
-    test_session.add(profile_text_field)
+    test_session.add(profile_field)
     test_session.flush()
-    assert profile_text_field.discussion_id == discussion.id
-    assert profile_text_field.text_field_id == text_field.id
-    assert profile_text_field.agent_profile_id == participant1_user.id
-    test_session.delete(profile_text_field)
+    assert profile_field.discussion_id == discussion.id
+    assert profile_field.configurable_field_id == text_field.id
+    assert profile_field.agent_profile_id == participant1_user.id
+    assert profile_field.value_data is None
+    test_session.delete(profile_field)

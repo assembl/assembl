@@ -7,7 +7,7 @@ from assembl import models
 from assembl.auth import CrudPermissions
 from .langstring import LangStringEntry, LangStringEntryInput, resolve_langstring, resolve_langstring_entries, langstring_from_input_entries, update_langstring_from_input_entries
 from .permissions_helpers import require_cls_permission, require_instance_permission
-from .types import SecureObjectType
+from .types import SecureObjectType, SQLAlchemyUnion
 from .user import AgentProfile
 from .utils import abort_transaction_on_exception
 
@@ -15,12 +15,10 @@ from .utils import abort_transaction_on_exception
 _ = TranslationStringFactory('assembl')
 
 
-class TextField(SecureObjectType, SQLAlchemyObjectType):
-    class Meta:
-        model = models.TextField
-        interfaces = (Node, )
-        only_fields = ('field_type', 'id', 'order', 'required')
+class ConfigurableFieldInterface(graphene.Interface):
 
+    order = graphene.Float()
+    required = graphene.Boolean()
     title = graphene.String(lang=graphene.String())
     title_entries = graphene.List(LangStringEntry)
 
@@ -29,6 +27,13 @@ class TextField(SecureObjectType, SQLAlchemyObjectType):
 
     def resolve_title_entries(self, args, context, info):
         return resolve_langstring_entries(self, 'title')
+
+
+class TextField(SecureObjectType, SQLAlchemyObjectType):
+    class Meta:
+        model = models.TextField
+        interfaces = (Node, ConfigurableFieldInterface)
+        only_fields = ('field_type', 'id')
 
 
 class CreateTextField(graphene.Mutation):
@@ -119,8 +124,8 @@ class DeleteTextField(graphene.Mutation):
         text_field = models.TextField.get(text_field_id)
         require_instance_permission(CrudPermissions.DELETE, text_field, context)
         with cls.default_db.no_autoflush as db:
-            db.query(models.ProfileTextField).filter(
-                models.ProfileTextField.text_field_id == text_field_id).delete()
+            db.query(models.ProfileField).filter(
+                models.ProfileField.configurable_field_id == text_field_id).delete()
             db.flush()
             db.delete(text_field)
             db.flush()
@@ -128,14 +133,27 @@ class DeleteTextField(graphene.Mutation):
         return DeleteTextField(success=True)
 
 
+class ConfigurableFieldUnion(SQLAlchemyUnion):
+    class Meta:
+        types = (TextField, )
+        model = models.AbstractConfigurableField
+
+    @classmethod
+    def resolve_type(cls, instance, context, info):
+        if isinstance(instance, graphene.ObjectType):
+            return type(instance)
+        elif isinstance(instance, models.TextField):
+            return TextField
+
+
 class ProfileField(SecureObjectType, SQLAlchemyObjectType):
     class Meta:
-        model = models.ProfileTextField
+        model = models.ProfileField
         interfaces = (Node, )
-        only_fields = ('id', 'value')
+        only_fields = ('id', 'value_data')
 
     agent_profile = graphene.Field(lambda: AgentProfile)
-    text_field = graphene.Field(lambda: TextField)
+    configurable_field = graphene.Field(lambda: ConfigurableFieldUnion, required=True)
 
     def resolve_id(self, args, context, info):
         if self.id < 0:

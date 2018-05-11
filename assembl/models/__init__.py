@@ -125,8 +125,9 @@ from .auth import (  # noqa: E402, F401
     Username
 )
 from .configurable_fields import (  # noqa: E402, F401
+    AbstractConfigurableField,
     TextField,
-    ProfileTextField
+    ProfileField
 )
 from .social_auth import (  # noqa: E402, F401
     Nonce,

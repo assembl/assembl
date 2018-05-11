@@ -314,14 +314,14 @@ class Query(graphene.ObjectType):
         return query.filter(model.discussion_id == discussion_id).order_by(model.order)
 
     def resolve_profile_fields(self, args, context, info):
-        model = models.ProfileTextField
+        model = models.ProfileField
         query = get_query(model, context)
         discussion_id = context.matchdict['discussion_id']
         user_id = context.authenticated_userid
         fields = get_query(
-            models.TextField, context).filter(
-                models.TextField.discussion_id == discussion_id
-            ).order_by(models.TextField.order).all()
+            models.AbstractConfigurableField, context).filter(
+                models.AbstractConfigurableField.discussion_id == discussion_id
+            ).order_by(models.AbstractConfigurableField.order).all()
         profile_fields = []
         if user_id is None:
             raise Exception('No user id')
@@ -330,9 +330,9 @@ class Query(graphene.ObjectType):
             saobj = query.filter(
                 model.discussion_id == discussion_id
             ).filter(
-                models.ProfileTextField.text_field == field
+                models.ProfileField.configurable_field == field
             ).filter(
-                models.ProfileTextField.agent_profile_id == user_id
+                models.ProfileField.agent_profile_id == user_id
             ).first()
 
             if saobj:
@@ -341,7 +341,7 @@ class Query(graphene.ObjectType):
                 profile_field = ProfileField(
                     agent_profile=models.AgentProfile.get(user_id),
                     id=randint(-100000, 0),
-                    text_field=field,
+                    configurable_field=field,
                 )
 
             profile_fields.append(profile_field)

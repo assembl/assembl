@@ -44,20 +44,23 @@ def text_field2(request, test_session, discussion):
     request.addfinalizer(fin)
     return saobj
 
+
 @pytest.fixture(scope="function")
-def profile_text_field(request, test_session, admin_user, text_field2, discussion):
-    from assembl.models import ProfileTextField
-    saobj = ProfileTextField(
+def profile_field(request, test_session, admin_user, text_field2, discussion):
+    from assembl.models import ProfileField
+    saobj = ProfileField(
         discussion=discussion,
         agent_profile=admin_user,
-        text_field=text_field2,
-        value=u'Shayna_Howe@gmail.com'
+        configurable_field=text_field2,
+        value_data={
+            u'value': u'Shayna_Howe@gmail.com'
+        }
     )
     test_session.add(saobj)
     test_session.flush()
 
     def fin():
-        print "Finalizer profile_text_field"
+        print "Finalizer profile_field"
         test_session.delete(saobj)
         test_session.flush()
 
