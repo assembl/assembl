@@ -87,7 +87,7 @@ def piwik_SitesManager_getSitesIdFromSiteUrl(piwik_url, piwik_api_token, url):
     return content
 
 
-def piwik_SitesManager_addSite(piwik_url, piwik_api_token, siteName, urls, ecommerce = '', siteSearch = '', searchKeywordParameters = '', searchCategoryParameters = '', excludedIps = '', excludedQueryParameters = '', timezone = '', currency = '', group = '', startDate = '', excludedUserAgents = '', keepURLFragments = '', param_type = '', settings = '', excludeUnknownUrls = ''):
+def piwik_SitesManager_addSite(piwik_url, piwik_api_token, siteName, urls, ecommerce = 1, siteSearch = False, searchKeywordParameters = '', searchCategoryParameters = '', excludedIps = '', excludedQueryParameters = '', timezone = '', currency = '', group = '', startDate = '', excludedUserAgents = '', keepURLFragments = '', param_type = '', settings = '', excludeUnknownUrls = ''):
     """Returns the Piwik id_site of the created website
     Warning: A new Piwik site is created everytime this method is called, even if another Piwik website already exists with the same name and URLs"""
     params = {
