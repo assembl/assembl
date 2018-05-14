@@ -7,7 +7,8 @@ export type ConfigurableField = {
   fieldType: string,
   id: string,
   required: boolean,
-  title: string
+  title: string,
+  __typename: string
 };
 
 export type ConfiguredFieldType = {
@@ -26,6 +27,7 @@ const ConfiguredField = ({ configurableField, handleValueChange, value }: Props)
   if (configurableField.__typename === 'TextField' && configurableField.fieldType !== 'PASSWORD') {
     return (
       <FormControlWithLabel
+        id={configurableField.id}
         label={configurableField.title}
         onChange={e => handleValueChange(e.target.value)}
         type="text"
