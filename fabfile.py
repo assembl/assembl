@@ -751,18 +751,6 @@ def bootstrap_from_backup(backup=True):
     execute(bootstrap_from_checkout, backup=backup)
 
 
-@task
-def install_assembl_requirements():
-    """Updates the environment and installs prerequisites for assembl installation"""
-    run('sudo apt-get update')
-    run('sudo apt-get upgrade')
-    run('sudo apt-get install fabric git openssh-server')
-    run('sudo apt-get install nginx uwsgi uwsgi-plugin-python')
-    run('sudo addgroup assembl_group')
-    run('sudo adduser assembl_user')
-    run('sudo usermod -G www-data -G assembl_group assembl_user')
-
-
 def clone_repository():
     """
     Clone repository
