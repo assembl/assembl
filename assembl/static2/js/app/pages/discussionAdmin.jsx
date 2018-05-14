@@ -99,6 +99,10 @@ class DiscussionAdmin extends React.Component<void, Props, State> {
     this.props.router.setRouteLeaveHook(this.props.route, this.routerWillLeave);
   }
 
+  shouldComponentUpdate() {
+    return !this.state.refetching;
+  }
+
   componentWillUnmount() {
     this.props.router.setRouteLeaveHook(this.props.route, null);
   }
@@ -174,11 +178,18 @@ class DiscussionAdmin extends React.Component<void, Props, State> {
         deleteMutation: deleteSection,
         lang: i18n.locale
       });
-      runSerial(mutationsPromises).then(() => {
-        this.setState({ refetching: true });
-        refetchSections().then(() => this.setState({ refetching: false }));
-        displayAlert('success', I18n.t('administration.sections.successSave'));
-      });
+      runSerial(mutationsPromises)
+        .then(() => {
+          this.setState({ refetching: true }, () => {
+            refetchSections().then(() => {
+              displayAlert('success', I18n.t('administration.sections.successSave'));
+              this.setState({ refetching: false });
+            });
+          });
+        })
+        .catch((error) => {
+          displayAlert('danger', `${error}`, false, 30000);
+        });
     }
 
     if (legalNoticeAndTerms.get('_hasChanged')) {
@@ -192,9 +203,12 @@ class DiscussionAdmin extends React.Component<void, Props, State> {
       };
       updateLegalNoticeAndTerms(payload)
         .then(() => {
-          this.setState({ refetching: true });
-          refetchLegalNoticeAndTerms().then(() => this.setState({ refetching: false }));
-          displayAlert('success', I18n.t('administration.legalNoticeAndTerms.successSave'));
+          this.setState({ refetching: true }, () => {
+            refetchLegalNoticeAndTerms().then(() => {
+              displayAlert('success', I18n.t('administration.legalNoticeAndTerms.successSave'));
+              this.setState({ refetching: false });
+            });
+          });
         })
         .catch((error) => {
           displayAlert('danger', `${error}`, false, 30000);
@@ -213,9 +227,12 @@ class DiscussionAdmin extends React.Component<void, Props, State> {
       });
 
       runSerial(mutationsPromises).then(() => {
-        this.setState({ refetching: true });
-        refetchTextFields().then(() => this.setState({ refetching: false }));
-        displayAlert('success', I18n.t('administration.profileOptions.successSave'));
+        this.setState({ refetching: true }, () => {
+          refetchTextFields().then(() => {
+            displayAlert('success', I18n.t('administration.profileOptions.successSave'));
+            this.setState({ refetching: false });
+          });
+        });
       });
     }
   };

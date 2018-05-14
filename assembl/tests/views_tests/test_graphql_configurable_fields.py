@@ -105,4 +105,22 @@ def test_query_profile_fields(graphql_request, graphql_registry, text_field, pro
     assert tf_with_value['configurableField']['fieldType'] == TextFieldsTypesEnum.EMAIL.value
     assert tf_with_value['configurableField']['order'] == 2.0
     assert tf_with_value['configurableField']['required'] is False
-    assert json.loads(tf_with_value['valueData'])[u'value'] == u'Shayna_Howe@gmail.com'
+    assert tf_with_value['valueData'][u'value'] == u'Shayna_Howe@gmail.com'
+
+
+def test_mutation_update_profile_field(graphql_request, graphql_registry, profile_field):
+    profile_field_id = to_global_id('ProfileField', profile_field.id)
+    res = schema.execute(
+        graphql_registry['updateProfileField'],
+        context_value=graphql_request,
+        variable_values={
+            u"id": profile_field_id,
+            u"valueData": {
+                u"value": u"New value"
+            }
+        })
+    assert res.errors is None
+    assert 'updateProfileField' in res.data
+    pf = res.data[u'updateProfileField'][u'profileField']
+    assert pf[u'id'] == profile_field_id
+    assert pf[u'valueData'] == { u'value': u'New value' }

@@ -34,7 +34,7 @@
     "no-underscore-dangle": [
       "error",
       {
-        "allow": ["_hasChanged", "_isNew", "_toDelete"]
+        "allow": ["_hasChanged", "_isNew", "_toDelete", "__typename"]
       }
     ],
     "func-names": ["warn", "never"],
