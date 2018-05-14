@@ -22,7 +22,8 @@ def test_query_text_fields(graphql_request, graphql_registry, text_field):
     assert tf['required'] is True
 
 
-def test_mutation_create_text_field(graphql_request, graphql_registry):
+def test_mutation_create_text_field(graphql_request, graphql_registry, test_session):
+    from assembl.models.configurable_fields import TextField
     res = schema.execute(
         graphql_registry['createTextField'],
         context_value=graphql_request,
@@ -42,6 +43,8 @@ def test_mutation_create_text_field(graphql_request, graphql_registry):
     title_entries = new_field['titleEntries']
     assert title_entries[0]['localeCode'] == u'en'
     assert title_entries[0]['value'] == u'My new field'
+    saobj = TextField.get(from_global_id(new_field[u'id'])[1])
+    test_session.delete(saobj)
 
 
 def test_mutation_update_text_field(graphql_request, graphql_registry, text_field):
@@ -97,7 +100,7 @@ def test_query_profile_fields(graphql_request, graphql_registry, text_field, pro
     assert generated_tf['configurableField']['title'] == u'My text field'
     assert generated_tf['configurableField']['order'] == 1.0
     assert generated_tf['configurableField']['required'] is True
-    assert generated_tf['valueData'] is None
+    assert generated_tf['valueData'][u'value'] is None
 
     tf_with_value = res.data['profileFields'][1]
     assert int(from_global_id(tf_with_value['id'])[1]) == profile_field.id
@@ -108,12 +111,36 @@ def test_query_profile_fields(graphql_request, graphql_registry, text_field, pro
     assert tf_with_value['valueData'][u'value'] == u'Shayna_Howe@gmail.com'
 
 
-def test_mutation_update_profile_field(graphql_request, graphql_registry, profile_field):
-    profile_field_id = to_global_id('ProfileField', profile_field.id)
+def test_mutation_create_profile_field(graphql_request, graphql_registry, text_field, test_session):
+    from assembl.models.configurable_fields import ProfileField
+    profile_field_id = to_global_id('ProfileField', '-18982938')
+    configurable_field_id = to_global_id('TextField', text_field.id)
     res = schema.execute(
         graphql_registry['updateProfileField'],
         context_value=graphql_request,
         variable_values={
+            u"configurableFieldId": configurable_field_id,
+            u"id": profile_field_id,
+            u"valueData": {
+                u"value": u"New value"
+            }
+        })
+    assert res.errors is None
+    assert 'updateProfileField' in res.data
+    pf = res.data[u'updateProfileField'][u'profileField']
+    assert pf[u'valueData'] == { u'value': u'New value' }
+    saobj = ProfileField.get(from_global_id(pf[u'id'])[1])
+    test_session.delete(saobj)
+
+
+def test_mutation_update_profile_field(graphql_request, graphql_registry, profile_field):
+    profile_field_id = to_global_id('ProfileField', profile_field.id)
+    configurable_field_id = to_global_id('TextField', profile_field.configurable_field.id)
+    res = schema.execute(
+        graphql_registry['updateProfileField'],
+        context_value=graphql_request,
+        variable_values={
+            u"configurableFieldId": configurable_field_id,
             u"id": profile_field_id,
             u"valueData": {
                 u"value": u"New value"
