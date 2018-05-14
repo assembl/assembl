@@ -200,11 +200,11 @@ $rsbc-theme-flat-color-disabled-border : darken($rsbc-theme-flat-color-disabled,
         width: 8px;
         margin-top: -1px;
         background-color: $white;
-        margin-left: 12px;
+        margin-left: -1px;
       }
 
       &:before {
-        background-color: $harvesting-green;
+        background-color: $grey5;
       }
     }
 
@@ -216,12 +216,12 @@ $rsbc-theme-flat-color-disabled-border : darken($rsbc-theme-flat-color-disabled,
       }
 
       &:after {
-        margin-left: -1px;
+        margin-left: 12px;
         background-color: $white;
       }
 
       &:before {
-        background-color: $grey5;
+        background-color: $harvesting-green;
       }
     }
   }
