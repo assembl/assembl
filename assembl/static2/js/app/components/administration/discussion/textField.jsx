@@ -40,7 +40,7 @@ const TextField = ({
   toggleRequired,
   updateTitle
 }: Props) => (
-  <FormGroup bsClass="flex">
+  <FormGroup bsClass="flex profile-options-field margin-s">
     <FormControl type="text" onChange={e => updateTitle(e.target.value)} value={title} />
     <OverlayTrigger placement="top" overlay={required ? textFieldToggleOptionalTooltip : textFieldToggleRequiredTooltip}>
       {/* overlaytrigger does not seem to work with SwitchButton so we add a span... */}
@@ -48,25 +48,27 @@ const TextField = ({
         <SwitchButton name={`required-switch-${id}`} checked={required} onChange={toggleRequired} />
       </span>
     </OverlayTrigger>
-    {!isLast ? (
-      <OverlayTrigger placement="top" overlay={downTooltip}>
-        <Button onClick={() => moveDown(id)} className="admin-icons">
-          <span className="assembl-icon-down-bold grey" />
+    <div className="flex">
+      {!isLast ? (
+        <OverlayTrigger placement="top" overlay={downTooltip}>
+          <Button onClick={() => moveDown(id)} className={isFirst ? 'admin-icons end-items' : 'admin-icons'}>
+            <span className="assembl-icon-down-small grey" />
+          </Button>
+        </OverlayTrigger>
+      ) : null}
+      {!isFirst ? (
+        <OverlayTrigger placement="top" overlay={upTooltip}>
+          <Button onClick={() => moveUp(id)} className={isLast ? 'admin-icons end-items' : 'admin-icons'}>
+            <span className="assembl-icon-up-small grey" />
+          </Button>
+        </OverlayTrigger>
+      ) : null}
+      <OverlayTrigger placement="top" overlay={deleteTextFieldTooltip}>
+        <Button onClick={deleteField} className="admin-icons" disabled={undeletableFieldTypes.includes(fieldType)}>
+          <span className="assembl-icon-delete grey" />
         </Button>
       </OverlayTrigger>
-    ) : null}
-    {!isFirst ? (
-      <OverlayTrigger placement="top" overlay={upTooltip}>
-        <Button onClick={() => moveUp(id)} className="admin-icons">
-          <span className="assembl-icon-up-bold grey" />
-        </Button>
-      </OverlayTrigger>
-    ) : null}
-    <OverlayTrigger placement="top" overlay={deleteTextFieldTooltip}>
-      <Button onClick={deleteField} className="admin-icons" disabled={undeletableFieldTypes.includes(fieldType)}>
-        <span className="assembl-icon-delete grey" />
-      </Button>
-    </OverlayTrigger>
+    </div>
   </FormGroup>
 );
 

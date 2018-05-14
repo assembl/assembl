@@ -27,7 +27,7 @@ const ManageProfileOptionsForm = ({
     </div>
     <div className="admin-content">
       <Row>
-        <div className="form-container">
+        <div className="form-container profile-options">
           <form>
             {textFields.map((tf, idx) => (
               <TextField
