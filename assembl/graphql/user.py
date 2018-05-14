@@ -16,6 +16,8 @@ from .types import SecureObjectType
 from .utils import DateTime, abort_transaction_on_exception
 from assembl.auth.password import random_string
 from datetime import datetime
+from .permissions_helpers import require_cls_permission
+from sqlalchemy import or_
 
 
 _ = TranslationStringFactory('assembl')
@@ -69,6 +71,7 @@ class AgentProfile(SecureObjectType, SQLAlchemyObjectType):
 
 
 class UpdateUser(graphene.Mutation):
+
     class Input:
         id = graphene.ID(required=True)
         name = graphene.String()
@@ -192,12 +195,11 @@ class DeleteUserInformation(graphene.Mutation):
     def mutate(root, args, context, info):
         cls = models.User
         db = cls.default_db
-        discussion_id = context.matchdict['discussion_id']
-        user_id = context.authenticated_userid or Everyone
 
         global_id = args.get('id')
         id_ = int(Node.from_global_id(global_id)[1])
         user = cls.get(id_)
+        require_cls_permission(CrudPermissions.READ, cls, context)
         from assembl import models as m
         local_user_roles = db.query(m.LocalUserRole).filter(m.LocalUserRole.user_id == user.id).all()
         for lur in local_user_roles:
@@ -205,25 +207,44 @@ class DeleteUserInformation(graphene.Mutation):
                 raise Exception(u"User can't delete his account if he is sysadmin")
 
         number_of_admin_users = db.query(m.LocalUserRole).filter(models.LocalUserRole.role_id == 5).count()
-        import pdb
-        pdb.set_trace()
-        if int(number_of_admin_users) <= 1:
+
+        user_is_admin = False
+        for lur in local_user_roles:
+            if lur.role.name == u'r:admin':
+                user_is_admin = True
+
+        if int(number_of_admin_users) <= 1 and user_is_admin:
             raise Exception(u"User can't delete his account because this is the only admin account")
 
-        permissions = get_permissions(user_id, discussion_id)
-        allowed = user.user_can(
-            user_id, CrudPermissions.READ, permissions)
-        if not allowed:
-            raise HTTPUnauthorized("The authenticated user can't update this user")
         db = cls.default_db
         user.is_deleted = True
         user.password_p = random_string()
-        user.password = random_string()
         user.preferred_email = random_string() + "@" + random_string()
         user.last_assembl_login = datetime(1900, 1, 1, 1, 1, 1, 1)
         user.last_login = datetime(1900, 1, 1, 1, 1, 1, 1)
         user.real_name_p = random_string()
         for p in user.old_passwords:
-            p.password = random_string()
+            p.password_p = ""
+
+        # Notifications
+        # First, we will make sure that the user has no notification with status
+        # If there are, we will put them in the state obsoleted
+        # Then the notification state will be unsubscribed by user
+        ids = db.query(models.Notification.id).join(models.NotificationSubscription).filter(models.NotificationSubscription.user_id ==
+                                                                                            user.id, or_(models.Notification.delivery_state == models.NotificationDeliveryStateType.QUEUED, models.Notification.delivery_state == models.NotificationDeliveryStateType.DELIVERY_FAILURE)).all()
+
+        ids = [id for (id,) in ids]
+        db.query(models.Notification).filter(models.Notification.id.in_(ids)).update(
+            {models.Notification.delivery_state: models.NotificationDeliveryStateType.OBSOLETED}, synchronize_session=False)
+
+        # Social Accounts
+        if user.social_accounts:
+            for social_account in range(len(user.social_accounts)):
+                user.social_accounts[social_account].username = ""
+                user.social_accounts[social_account].provider_domain = ""
+                user.social_accounts[social_account].extra_data = {}
+                user.social_accounts[social_account].picture_url = ""
+                user.social_accounts[social_account].last_checked = datetime(1900, 1, 1, 1, 1, 1, 1)
+
         db.flush()
         return DeleteUserInformation(user=user)
