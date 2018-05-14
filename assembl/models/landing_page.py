@@ -225,7 +225,7 @@ class LandingPageModule(DiscussionBoundBase):
         return (cls.discussion_id == discussion_id,)
 
     __mapper_args__ = {
-        'polymorphic_identity': 'landing_page_module_type',
+        'polymorphic_identity': 'landing_page_module',
         'polymorphic_on': type,
         'with_polymorphic': '*'
     }
