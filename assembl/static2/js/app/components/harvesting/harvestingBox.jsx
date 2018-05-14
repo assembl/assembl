@@ -42,7 +42,9 @@ type State = {
   editableExtract: string,
   extractNature: ?string,
   extractAction: ?string,
-  showOverflowMenu: boolean
+  showOverflowMenu: boolean,
+  overflowMenu: ?HTMLElement,
+  overflowMenuTop: number
 };
 
 type Taxonomies = {
@@ -74,7 +76,9 @@ class DumbHarvestingBox extends React.Component<Object, Props, State> {
       editableExtract: extract ? extract.body : '',
       extractNature: extract && extract.extractNature ? extract.extractNature.split('.')[1] : null,
       extractAction: extract && extract.extractAction ? extract.extractAction.split('.')[1] : null,
-      showOverflowMenu: false
+      showOverflowMenu: false,
+      overflowMenu: null,
+      overflowMenuTop: 25
     };
   }
 
@@ -239,6 +243,36 @@ class DumbHarvestingBox extends React.Component<Object, Props, State> {
     // the ternary is simply there to satisfy flow
   }
 
+  componentWillMount() {
+    window.addEventListener('scroll', this.updateOverflowMenuPosition);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('scroll', this.updateOverflowMenuPosition);
+  }
+
+  updateOverflowMenu = (node: HTMLElement) => {
+    if (node) {
+      this.setState({ overflowMenu: node });
+    }
+  }
+
+  updateOverflowMenuPosition = () => {
+    const { overflowMenu } = this.state;
+    if (overflowMenu) {
+      const height = overflowMenu.clientHeight;
+      const bottomScroll = window.pageYOffset + height;
+      const windowHeight = document.body && document.body.scrollHeight;
+      // $FlowFixMe
+      const isBottomReached = bottomScroll >= windowHeight - window.innerHeight;
+      if (isBottomReached) {
+        this.setState({ overflowMenuTop: -320 });
+      } else {
+        this.setState({ overflowMenuTop: 25 });
+      }
+    }
+  }
+
 
   render() {
     const { selection, cancelHarvesting, extract, contentLocale, harvestingDate } = this.props;
@@ -250,7 +284,8 @@ class DumbHarvestingBox extends React.Component<Object, Props, State> {
       editableExtract,
       extractNature,
       extractAction,
-      showOverflowMenu
+      showOverflowMenu,
+      overflowMenuTop
     } = this.state;
     const isExtract = extract !== null;
     const selectionText = selection ? selection.toString() : '';
@@ -323,10 +358,12 @@ class DumbHarvestingBox extends React.Component<Object, Props, State> {
               </OverlayTrigger>
               {showOverflowMenu &&
                 <TaxonomyOverflowMenu
+                  innerRef={this.updateOverflowMenu}
                   handleClick={this.qualifyExtract}
                   extractNature={extractNature}
                   extractAction={extractAction}
                   onCloseClick={() => { this.setState({ showOverflowMenu: false }); }}
+                  top={overflowMenuTop}
                 />}
             </div>
             <div className="profile">
