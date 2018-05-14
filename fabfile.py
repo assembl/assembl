@@ -777,6 +777,8 @@ def updatemaincode(backup=False):
             run('git fetch')
             run('git checkout %s' % env.gitbranch)
             run('git pull %s %s' % (env.gitrepo, env.gitbranch))
+    else:
+        run('git rev-parse HEAD > .git_commit')
 
 
 @task
@@ -826,21 +828,6 @@ def app_update_dependencies(force_reinstall=False, backup=False):
         execute(update_vendor_themes_1)
         execute(update_vendor_themes_2)
         execute(ensure_requirements)
-    execute(update_pip_requirements, force_reinstall=force_reinstall)
-    # Nodeenv is installed by python , so this must be after update_pip_requirements
-    execute(update_node, force_reinstall=force_reinstall)
-    # bower is installed by node, so this must be after update_node
-    execute(update_bower)
-    execute(update_bower_requirements, force_reinstall=force_reinstall)
-    execute(update_npm_requirements, force_reinstall=force_reinstall)
-
-
-@task
-def app_update_dependencies_for_backup(force_reinstall=False):
-    """
-    Updates dependencies for restore_from_backup. Copied from app_update_dependencies
-    but without the updating vendor themes
-    """
     execute(update_pip_requirements, force_reinstall=force_reinstall)
     # Nodeenv is installed by python , so this must be after update_pip_requirements
     execute(update_node, force_reinstall=force_reinstall)
@@ -964,7 +951,6 @@ def install_bower():
         venvcmd('npm install bower po2json requirejs', chdir=False)
 
 
-@task
 def update_bower():
     with cd(get_node_base_path()):
         venvcmd('npm update bower po2json', chdir=False)
