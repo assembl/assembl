@@ -110,6 +110,10 @@ class Administration extends React.Component {
 
     const isHidden = nextProps.identifier === 'discussion' && nextProps.location.query.section === '1';
     this.props.displayLanguageMenu(isHidden);
+
+    if (nextProps.textFields !== this.props.textFields) {
+      this.putTextFieldsInStore(nextProps.textFields);
+    }
   }
 
   putThematicsInStore(data) {

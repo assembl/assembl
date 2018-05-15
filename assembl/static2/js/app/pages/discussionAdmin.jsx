@@ -20,6 +20,7 @@ import deleteSectionMutation from '../graphql/mutations/deleteSection.graphql';
 import updateLegalNoticeAndTermsMutation from '../graphql/mutations/updateLegalNoticeAndTerms.graphql';
 import updateDiscussionPreferenceQuery from '../graphql/mutations/updateDiscussionPreference.graphql';
 import getDiscussionPreferenceLanguage from '../graphql/DiscussionPreferenceLanguage.graphql';
+import ProfileFieldsQuery from '../graphql/ProfileFields.graphql';
 import createTextFieldMutation from '../graphql/mutations/createTextField.graphql';
 import updateTextFieldMutation from '../graphql/mutations/updateTextField.graphql';
 import deleteTextFieldMutation from '../graphql/mutations/deleteTextField.graphql';
@@ -97,10 +98,6 @@ class DiscussionAdmin extends React.Component<void, Props, State> {
 
   componentDidMount() {
     this.props.router.setRouteLeaveHook(this.props.route, this.routerWillLeave);
-  }
-
-  shouldComponentUpdate() {
-    return !this.state.refetching;
   }
 
   componentWillUnmount() {
@@ -223,7 +220,15 @@ class DiscussionAdmin extends React.Component<void, Props, State> {
         createMutation: createTextField,
         updateMutation: updateTextField,
         deleteMutation: deleteTextField,
-        lang: i18n.locale
+        lang: i18n.locale,
+        refetchQueries: [
+          {
+            query: ProfileFieldsQuery,
+            variables: {
+              lang: i18n.locale
+            }
+          }
+        ]
       });
 
       runSerial(mutationsPromises).then(() => {
