@@ -27,7 +27,7 @@ class AgentProfile(SecureObjectType, SQLAlchemyObjectType):
     class Meta:
         model = models.AgentProfile
         interfaces = (Node, )
-        only_fields = ('id', )
+        only_fields = ('id', 'is_deleted')
 
     user_id = graphene.Int(required=True)
     name = graphene.String()
@@ -37,6 +37,7 @@ class AgentProfile(SecureObjectType, SQLAlchemyObjectType):
     image = graphene.Field(Document)
     creation_date = DateTime()  # creation_date only exists on User, not AgentProfile
     has_password = graphene.Boolean()
+    is_deleted = graphene.Boolean()
 
     def resolve_user_id(self, args, context, info):
         return self.id

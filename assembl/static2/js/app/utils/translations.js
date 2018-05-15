@@ -8,6 +8,7 @@ const Translations = {
     cancel: "Annuler",
     validate: "Valider",
     delete: "Supprimer",
+    accountDeleted: "Votre compte a été supprimé avec succès",
     chatframe: {
       title: "Fenêtre de discussion instantanée",
       tooltip: "Assemb'Bot"
@@ -650,6 +651,8 @@ const Translations = {
     validate: "Validate",
     introduction: "Introduction",
     conclusion: "Conclusion",
+    delete: "Delete",
+    accountDeleted: "Your account has been successfuly deleted",
     chatframe: {
       title: "Instant discussion window",
       tooltip: "Assemb'Bot"

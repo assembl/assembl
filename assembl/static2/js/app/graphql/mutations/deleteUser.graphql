@@ -1,0 +1,9 @@
+mutation DeleteUserInformation($id: ID!) {
+  DeleteUserInformation(id: $id) {
+    user {
+      ... on AgentProfile {
+        id
+      }
+    }
+  }
+}
