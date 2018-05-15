@@ -195,7 +195,6 @@ class DeleteUserInformation(graphene.Mutation):
     def mutate(root, args, context, info):
         cls = models.User
         db = cls.default_db
-
         global_id = args.get('id')
         id_ = int(Node.from_global_id(global_id)[1])
         user = cls.get(id_)
@@ -215,40 +214,39 @@ class DeleteUserInformation(graphene.Mutation):
         if int(number_of_admin_users) <= 1 and user_is_admin:
             raise Exception(u"User can't delete his account because this is the only admin account")
 
-        db = cls.default_db
-        user.is_deleted = True
-        user.password_p = random_string()
-        user.preferred_email = random_string() + "@" + random_string()
-        user.last_assembl_login = datetime(1900, 1, 1, 1, 1, 1, 1)
-        user.last_login = datetime(1900, 1, 1, 1, 1, 1, 1)
-        user.real_name_p = random_string()
-        for p in user.old_passwords:
-            p.password_p = ""
+        with cls.default_db.no_autoflush as db:
+            user.is_deleted = True
+            user.password_p = random_string()
+            user.preferred_email = random_string() + "@" + random_string()
+            user.last_assembl_login = datetime(1900, 1, 1, 1, 1, 1, 1)
+            user.last_login = datetime(1900, 1, 1, 1, 1, 1, 1)
+            user.real_name_p = random_string()
+            for p in user.old_passwords:
+                p.password_p = ""
 
-        # Delete Email Accounts
-        email_account_ids = db.query(m.EmailAccount.id).join(m.User).filter(m.User.id == user.id).all()
-        email_account_ids = [id for (id,) in email_account_ids]
-        email_accounts = db.query(m.EmailAccount).filter(m.EmailAccount.id.in_(email_account_ids)).all()
-        for email_account in email_accounts:
-            db.delete(email_account)
-            db.commit()
+            # Delete Email Accounts
+            email_account_ids = db.query(m.EmailAccount.id).join(m.User).filter(m.User.id == user.id).all()
+            email_account_ids = [id for (id,) in email_account_ids]
+            email_accounts = db.query(m.EmailAccount).filter(m.EmailAccount.id.in_(email_account_ids)).all()
+            for email_account in email_accounts:
+                db.delete(email_account)
 
-        # Notifications
-        # First, we will make sure that the user has no notification with status
-        # If there are, we will put them in the state obsoleted
-        # Then the notification state will be unsubscribed by user
-        ids = db.query(models.Notification.id).join(models.NotificationSubscription).filter(models.NotificationSubscription.user_id ==
-                                                                                            user.id, models.Notification.delivery_state == models.NotificationDeliveryStateType.getRetryableDeliveryStates()).all()
+            # Notifications
+            # First, we will make sure that the user has no notification with status
+            # If there are, we will put them in the state obsoleted
+            # Then the notification state will be unsubscribed by user
+            ids = db.query(models.Notification.id).join(models.NotificationSubscription).filter(models.NotificationSubscription.user_id ==
+                                                                                                user.id, models.Notification.delivery_state == models.NotificationDeliveryStateType.getRetryableDeliveryStates()).all()
 
-        ids = [id for (id,) in ids]
-        db.query(models.Notification).filter(models.Notification.id.in_(ids)).update(
-            {models.Notification.delivery_state: models.NotificationDeliveryStateType.OBSOLETED}, synchronize_session=False)
+            ids = [id for (id,) in ids]
+            db.query(models.Notification).filter(models.Notification.id.in_(ids)).update(
+                {models.Notification.delivery_state: models.NotificationDeliveryStateType.OBSOLETED}, synchronize_session=False)
 
-        # Social Accounts
-        if user.social_accounts:
-            for social_account in user.social_accounts:
-                db.delete(social_account)
-            db.commit()
+            # Social Accounts
+            if user.social_accounts:
+                for social_account in user.social_accounts:
+                    db.delete(social_account)
+                db.commit()
 
-        db.flush()
+            db.flush()
         return DeleteUserInformation(user=user)
