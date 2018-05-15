@@ -19,6 +19,19 @@ from ..auth import CrudPermissions, P_ADMIN_DISC, P_READ
 from .langstrings import LangString
 
 
+class ConfigurableFieldIdentifiersEnum(enum.Enum):
+
+    EMAIL = 'EMAIL'
+    FULLNAME = 'FULLNAME'
+    PASSWORD = 'PASSWORD'
+    PASSWORD2 = 'PASSWORD2'
+    USERNAME = 'USERNAME'
+    CUSTOM = 'CUSTOM'
+
+
+identifiers = [t.value for t in ConfigurableFieldIdentifiersEnum.__members__.values()]
+
+
 class AbstractConfigurableField(DiscussionBoundBase):
 
     """Abstract configurable field."""
@@ -49,6 +62,13 @@ class AbstractConfigurableField(DiscussionBoundBase):
         backref=backref(
             'text_fields',
             cascade="all, delete-orphan"),
+    )
+
+    identifier = Column(
+        Enum(*identifiers, name='configurable_field_identifiers'),
+        nullable=False,
+        default=ConfigurableFieldIdentifiersEnum.CUSTOM.value,
+        server_default=ConfigurableFieldIdentifiersEnum.CUSTOM.value
     )
 
     title_id = Column(

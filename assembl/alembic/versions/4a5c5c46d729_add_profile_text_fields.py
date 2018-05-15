@@ -23,12 +23,18 @@ def upgrade(pyramid_env):
     """Create text_field and profile_text_field tables,
     then add default text fields for each discussion."""
     from assembl import models as m
-    from assembl.models.configurable_fields import TextFieldsTypesEnum, field_types
+    from assembl.models.configurable_fields import ConfigurableFieldIdentifiersEnum, TextFieldsTypesEnum, identifiers, field_types
     db = m.get_session_maker()()
     with transaction.manager:
         op.create_table(
             "configurable_field",
             sa.Column('id', sa.Integer, primary_key=True),
+            sa.Column('identifier',
+                sa.Enum(*identifiers, name='configurable_field_identifiers'),
+                nullable=False,
+                default=ConfigurableFieldIdentifiersEnum.CUSTOM.value,
+                server_default=ConfigurableFieldIdentifiersEnum.CUSTOM.value
+            ),
             sa.Column('type', sa.String(60), nullable=False),
             sa.Column('discussion_id',
                 sa.Integer,
@@ -86,6 +92,7 @@ def upgrade(pyramid_env):
                 title.add_value(u'Nom complet', 'fr')
                 fullname_field = m.TextField(
                     discussion_id=discussion_id,
+                    identifier=ConfigurableFieldIdentifiersEnum.FULLNAME.value,
                     order=1.0,
                     title=title,
                     required=True
@@ -96,6 +103,7 @@ def upgrade(pyramid_env):
                 title.add_value(u"Nom d'utilisateur", 'fr')
                 username_field = m.TextField(
                     discussion_id=discussion_id,
+                    identifier=ConfigurableFieldIdentifiersEnum.USERNAME.value,
                     order=2.0,
                     title=title,
                     required=True
@@ -107,6 +115,7 @@ def upgrade(pyramid_env):
                 email_field = m.TextField(
                     discussion_id=discussion_id,
                     field_type=TextFieldsTypesEnum.EMAIL.value,
+                    identifier=ConfigurableFieldIdentifiersEnum.EMAIL.value,
                     order=3.0,
                     title=title,
                     required=True
@@ -118,44 +127,24 @@ def upgrade(pyramid_env):
                 password_field = m.TextField(
                     discussion_id=discussion_id,
                     field_type=TextFieldsTypesEnum.PASSWORD.value,
+                    identifier=ConfigurableFieldIdentifiersEnum.PASSWORD.value,
                     order=4.0,
                     title=title,
                     required=True
                 )
                 db.add(password_field)
 
-                # create profile fields for each user with current values for email, username and fullname
-                for user in db.query(m.AgentProfile):
-                    saobj = m.ProfileField(
-                        discussion_id=discussion_id,
-                        agent_profile=user,
-                        configurable_field=email_field,
-                        value_data={
-                            u'value': user.get_preferred_email()
-                        }
-                    )
-                    db.add(saobj)
-
-                    saobj = m.ProfileField(
-                        discussion_id=discussion_id,
-                        agent_profile=user,
-                        configurable_field=fullname_field,
-                        value_data={
-                            u'value': user.real_name()
-                        }
-                    )
-                    db.add(saobj)
-
-                    if user.username:
-                        saobj = m.ProfileField(
-                            discussion_id=discussion_id,
-                            agent_profile=user,
-                            configurable_field=username_field,
-                            value_data={
-                                u'value': user.username.username
-                            }
-                        )
-                        db.add(saobj)
+                title = m.LangString.create('Password (confirm)', 'en')
+                title.add_value(u'Confirmation de mot de passe', 'fr')
+                password2_field = m.TextField(
+                    discussion_id=discussion_id,
+                    field_type=TextFieldsTypesEnum.PASSWORD.value,
+                    identifier=ConfigurableFieldIdentifiersEnum.PASSWORD2.value,
+                    order=5.0,
+                    title=title,
+                    required=True
+                )
+                db.add(password2_field)
 
             db.flush()
 
@@ -166,3 +155,4 @@ def downgrade(pyramid_env):
         op.drop_table('text_field')
         op.drop_table('configurable_field')
         sa.Enum(name='text_field_types').drop(op.get_bind(), checkfirst=False)
+        sa.Enum(name='configurable_field_identifiers').drop(op.get_bind(), checkfirst=False)

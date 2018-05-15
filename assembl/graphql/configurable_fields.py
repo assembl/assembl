@@ -18,6 +18,7 @@ _ = TranslationStringFactory('assembl')
 
 class ConfigurableFieldInterface(graphene.Interface):
 
+    identifier = graphene.String()
     order = graphene.Float()
     required = graphene.Boolean()
     title = graphene.String(lang=graphene.String())

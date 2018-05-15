@@ -5,7 +5,7 @@ from assembl.graphql.schema import Schema as schema
 
 
 def test_query_text_fields(graphql_request, graphql_registry, text_field):
-    from assembl.models.configurable_fields import TextFieldsTypesEnum
+    from assembl.models.configurable_fields import ConfigurableFieldIdentifiersEnum, TextFieldsTypesEnum
     res = schema.execute(
         graphql_registry['TextFields'],
         context_value=graphql_request,
@@ -15,6 +15,7 @@ def test_query_text_fields(graphql_request, graphql_registry, text_field):
 
     tf = res.data['textFields'][0]
     assert tf['fieldType'] == TextFieldsTypesEnum.TEXT.value
+    assert tf['identifier'] == ConfigurableFieldIdentifiersEnum.CUSTOM.value
     assert tf['title'] == u'My text field'
     assert tf['titleEntries'][0]['localeCode'] == u'en'
     assert tf['titleEntries'][0]['value'] == u'My text field'
