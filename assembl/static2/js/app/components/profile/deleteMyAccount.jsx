@@ -1,7 +1,6 @@
 // @flow
 import React from 'react';
 import { Translate, I18n } from 'react-redux-i18n';
-import { browserHistory } from 'react-router';
 import { FormGroup, Checkbox, Button } from 'react-bootstrap';
 import { compose, graphql } from 'react-apollo';
 import { connect } from 'react-redux';
@@ -49,7 +48,7 @@ class DeleteMyAccount extends React.Component<void, *, DeleteMyAccountState> {
     const slug = getDiscussionSlug();
     deleteUser({ variables: variables })
       .then(() => {
-        browserHistory.push(`${getContextual('oldLogout', { slug: slug })}?next=${get('home', { slug: slug })}`);
+        window.location.href = `${getContextual('oldLogout', { slug: slug })}?next=${get('home', { slug: slug })}`;
         displayAlert('success', I18n.t('accountDeleted'));
       })
       .catch((error) => {

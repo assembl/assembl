@@ -652,7 +652,7 @@ const Translations = {
     introduction: "Introduction",
     conclusion: "Conclusion",
     delete: "Delete",
-    accountDeleted: "Your account has been successfuly deleted",
+    accountDeleted: "Your account has been successfully deleted",
     chatframe: {
       title: "Instant discussion window",
       tooltip: "Assemb'Bot"
