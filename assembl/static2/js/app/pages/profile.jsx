@@ -13,48 +13,64 @@ import withLoadingIndicator from '../components/common/withLoadingIndicator';
 import UserQuery from '../graphql/userQuery.graphql';
 import ProfileFieldsQuery from '../graphql/ProfileFields.graphql';
 import UpdateUserMutation from '../graphql/mutations/updateUser.graphql';
-import UpdateProfileFieldMutation from '../graphql/mutations/updateProfileField.graphql';
+import UpdateProfileFieldsMutation from '../graphql/mutations/updateProfileFields.graphql';
 import { browserHistory } from '../router';
 
-type ProfileProps = {
+type Props = {
   connectedUserId: string,
   creationDate: ?string,
+  email: string, // eslint-disable-line react/no-unused-prop-types
   lang: string,
   slug: string,
   userId: string,
+  username: string, // eslint-disable-line react/no-unused-prop-types
   id: string,
   hasPassword: boolean,
   name: string,
   params: Object,
   profileFields: Array<ConfiguredFieldType>,
   location: Object,
-  updateProfileField: Function
+  updateProfileFields: Function
 };
 
-type ProfileState = {
+type State = {
   passwordEditionOpen: boolean,
   values: {
     [string]: Object
   }
 };
 
-class Profile extends React.PureComponent<*, ProfileProps, ProfileState> {
-  props: ProfileProps;
+class Profile extends React.PureComponent<*, Props, State> {
+  props: Props;
 
-  state: ProfileState;
+  state: State;
 
   defaultProps: {
     creationDate: null
   };
 
-  static getDerivedStateFromProps(nextProps) {
-    const values = nextProps.profileFields.filter(pf => pf.valueData).reduce(
-      (result, pf) => ({
-        ...result,
-        [pf.id]: pf.valueData.value
-      }),
-      {}
-    );
+  static getDerivedStateFromProps(nextProps: Props) {
+    const email = nextProps.profileFields.find(pf => pf.configurableField.identifier === 'EMAIL');
+    const fullname = nextProps.profileFields.find(pf => pf.configurableField.identifier === 'FULLNAME');
+    const username = nextProps.profileFields.find(pf => pf.configurableField.identifier === 'USERNAME');
+    const defaultValues =
+      email && fullname && username
+        ? {
+          [email.id]: nextProps.email,
+          [fullname.id]: nextProps.name,
+          [username.id]: nextProps.username
+        }
+        : {};
+    const values = nextProps.profileFields
+      .filter(pf => pf.configurableField.identifier === 'CUSTOM')
+      .filter(pf => pf.valueData)
+      .reduce(
+        (result, pf) => ({
+          ...result,
+          [pf.id]: pf.valueData.value
+        }),
+        defaultValues
+      );
 
     return { values: values };
   }
@@ -79,24 +95,33 @@ class Profile extends React.PureComponent<*, ProfileProps, ProfileState> {
   }
 
   handleSaveClick = () => {
-    const { profileFields, updateProfileField } = this.props;
-    profileFields.forEach((pf) => {
-      const newValue = this.state.values[pf.id];
-      if (newValue !== pf.valueData.value) {
-        const variables = {
-          configurableFieldId: pf.configurableField.id,
-          id: pf.id,
-          valueData: { value: newValue }
-        };
-        updateProfileField({ variables: variables })
-          .then(() => {
-            displayAlert('success', I18n.t('profile.saveSuccess'));
-          })
-          .catch((error) => {
-            displayAlert('danger', error.message.replace('GraphQL error: ', ''));
-          });
+    const { id, lang, profileFields, updateProfileFields } = this.props;
+    const data = profileFields.map(pf => ({
+      configurableFieldId: pf.configurableField.id,
+      id: pf.id,
+      valueData: {
+        value: this.state.values[pf.id]
       }
-    });
+    }));
+    const variables = { lang: lang, data: data };
+    const payload = {
+      refetchQueries: [
+        {
+          query: UserQuery,
+          variables: {
+            id: id
+          }
+        }
+      ],
+      variables: variables
+    };
+    updateProfileFields(payload)
+      .then(() => {
+        displayAlert('success', I18n.t('profile.saveSuccess'));
+      })
+      .catch((error) => {
+        displayAlert('danger', error.message.replace('GraphQL error: ', ''));
+      });
   };
 
   handlePasswordClick = () => {
@@ -218,12 +243,14 @@ export default compose(
       }
       return {
         creationDate: data.user.creationDate,
+        email: data.user.email,
+        hasPassword: data.user.hasPassword,
         name: data.user.name,
-        hasPassword: data.user.hasPassword
+        username: data.user.username
       };
     }
   }),
   graphql(UpdateUserMutation, { name: 'updateUser' }),
-  graphql(UpdateProfileFieldMutation, { name: 'updateProfileField' }),
+  graphql(UpdateProfileFieldsMutation, { name: 'updateProfileFields' }),
   withLoadingIndicator()
 )(Profile);

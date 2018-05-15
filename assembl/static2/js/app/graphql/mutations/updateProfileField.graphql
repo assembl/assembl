@@ -1,8 +1,0 @@
-mutation updateProfileField($configurableFieldId: ID!, $id: ID!, $valueData: GenericScalar!) {
-  updateProfileField(configurableFieldId: $configurableFieldId, id: $id, valueData: $valueData) {
-    profileField {
-      id
-      valueData
-    }
-  }
-}

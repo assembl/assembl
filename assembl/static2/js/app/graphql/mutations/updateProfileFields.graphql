@@ -1,0 +1,13 @@
+#import "../fragments/TextField.graphql"
+
+mutation updateProfileFields($data: [FieldDataInput]!, $lang: String!) {
+  updateProfileFields(data: $data, lang: $lang) {
+    profileFields {
+      id
+      configurableField {
+        ...textField
+      }
+      valueData
+    }
+  }
+}

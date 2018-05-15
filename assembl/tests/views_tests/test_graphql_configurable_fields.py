@@ -112,43 +112,51 @@ def test_query_profile_fields(graphql_request, graphql_registry, text_field, pro
     assert tf_with_value['valueData'][u'value'] == u'Shayna_Howe@gmail.com'
 
 
-def test_mutation_create_profile_field(graphql_request, graphql_registry, text_field, test_session):
-    from assembl.models.configurable_fields import ProfileField
-    profile_field_id = to_global_id('ProfileField', '-18982938')
-    configurable_field_id = to_global_id('TextField', text_field.id)
-    res = schema.execute(
-        graphql_registry['updateProfileField'],
-        context_value=graphql_request,
-        variable_values={
-            u"configurableFieldId": configurable_field_id,
-            u"id": profile_field_id,
-            u"valueData": {
-                u"value": u"New value"
-            }
-        })
-    assert res.errors is None
-    assert 'updateProfileField' in res.data
-    pf = res.data[u'updateProfileField'][u'profileField']
-    assert pf[u'valueData'] == { u'value': u'New value' }
-    saobj = ProfileField.get(from_global_id(pf[u'id'])[1])
-    test_session.delete(saobj)
-
-
-def test_mutation_update_profile_field(graphql_request, graphql_registry, profile_field):
+def test_mutation_update_profile_fields(admin_user, graphql_request, graphql_registry, text_field2, profile_field, fullname_text_field):
+    fullname_configurable_field_id = to_global_id('TextField', fullname_text_field.id)
     profile_field_id = to_global_id('ProfileField', profile_field.id)
     configurable_field_id = to_global_id('TextField', profile_field.configurable_field.id)
-    res = schema.execute(
-        graphql_registry['updateProfileField'],
-        context_value=graphql_request,
-        variable_values={
+    text_field2_id = to_global_id('TextField', text_field2.id)
+    data = [
+        # create custom field
+        {
+            u"configurableFieldId": text_field2_id,
+            u"id": to_global_id('ProfileField', -664453),
+            u"valueData": {
+                u"value": u"Creative Saint Kitts and Nevis time-frame"
+            }
+        },
+        # update custom field
+        {
             u"configurableFieldId": configurable_field_id,
             u"id": profile_field_id,
             u"valueData": {
                 u"value": u"New value"
             }
-        })
+        },
+        # non custom field:
+        {
+            u"configurableFieldId": fullname_configurable_field_id,
+            u"id": to_global_id('ProfileField', -8278763),
+            u"valueData": {
+                u"value": u"Chad D'Amore"
+            }
+        }
+    ]
+    res = schema.execute(
+        graphql_registry['updateProfileFields'],
+        context_value=graphql_request,
+        variable_values={
+            u'data': data,
+            u'lang': u"en"
+        }
+    )
     assert res.errors is None
-    assert 'updateProfileField' in res.data
-    pf = res.data[u'updateProfileField'][u'profileField']
-    assert pf[u'id'] == profile_field_id
-    assert pf[u'valueData'] == { u'value': u'New value' }
+    assert 'updateProfileFields' in res.data
+    fields = res.data[u'updateProfileFields'][u'profileFields']
+    assert len(fields) == 2
+    assert fields[0][u'id'] == profile_field_id
+    assert fields[0][u'valueData'][u'value'] == u'New value'
+    assert fields[1][u'configurableField'][u'id'] == text_field2_id
+    assert fields[1][u'valueData'][u'value'] == u'Creative Saint Kitts and Nevis time-frame'
+    assert admin_user.real_name() == u"Chad D'Amore"
