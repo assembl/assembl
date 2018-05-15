@@ -777,8 +777,6 @@ def updatemaincode(backup=False):
             run('git fetch')
             run('git checkout %s' % env.gitbranch)
             run('git pull %s %s' % (env.gitrepo, env.gitbranch))
-    else:
-        run('git rev-parse HEAD > .git_commit')
 
 
 @task
