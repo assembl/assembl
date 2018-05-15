@@ -15,6 +15,7 @@ type Props = {
   deleteField: Function,
   fieldType: string,
   id: string,
+  identifier: string,
   isFirst: boolean,
   isLast: boolean,
   moveDown: Function,
@@ -31,6 +32,7 @@ const TextField = ({
   deleteField,
   fieldType,
   id,
+  identifier,
   isFirst,
   isLast,
   moveDown,
@@ -42,12 +44,14 @@ const TextField = ({
 }: Props) => (
   <FormGroup bsClass="flex profile-options-field margin-s">
     <FormControl type="text" onChange={e => updateTitle(e.target.value)} value={title} />
-    <OverlayTrigger placement="top" overlay={required ? textFieldToggleOptionalTooltip : textFieldToggleRequiredTooltip}>
-      {/* overlaytrigger does not seem to work with SwitchButton so we add a span... */}
-      <span>
-        <SwitchButton name={`required-switch-${id}`} checked={required} onChange={toggleRequired} />
-      </span>
-    </OverlayTrigger>
+    {identifier === 'CUSTOM' && (
+      <OverlayTrigger placement="top" overlay={required ? textFieldToggleOptionalTooltip : textFieldToggleRequiredTooltip}>
+        {/* overlaytrigger does not seem to work with SwitchButton so we add a span... */}
+        <span>
+          <SwitchButton name={`required-switch-${id}`} checked={required} onChange={toggleRequired} />
+        </span>
+      </OverlayTrigger>
+    )}
     <div className="flex">
       {!isLast ? (
         <OverlayTrigger placement="top" overlay={downTooltip}>
@@ -63,11 +67,13 @@ const TextField = ({
           </Button>
         </OverlayTrigger>
       ) : null}
-      <OverlayTrigger placement="top" overlay={deleteTextFieldTooltip}>
-        <Button onClick={deleteField} className="admin-icons" disabled={undeletableFieldTypes.includes(fieldType)}>
-          <span className="assembl-icon-delete grey" />
-        </Button>
-      </OverlayTrigger>
+      {identifier === 'CUSTOM' && (
+        <OverlayTrigger placement="top" overlay={deleteTextFieldTooltip}>
+          <Button onClick={deleteField} className="admin-icons" disabled={undeletableFieldTypes.includes(fieldType)}>
+            <span className="assembl-icon-delete grey" />
+          </Button>
+        </OverlayTrigger>
+      )}
     </div>
   </FormGroup>
 );
