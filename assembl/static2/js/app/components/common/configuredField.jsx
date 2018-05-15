@@ -3,14 +3,6 @@ import React from 'react';
 
 import FormControlWithLabel from './formControlWithLabel';
 
-export type ConfigurableField = {
-  fieldType: string,
-  id: string,
-  required: boolean,
-  title: string,
-  __typename: string
-};
-
 export type ConfiguredFieldType = {
   configurableField: ConfigurableField,
   id: string,

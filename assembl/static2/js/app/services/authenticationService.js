@@ -3,7 +3,7 @@ import { PasswordMismatchError } from '../utils/errors';
 
 export const postChangePassword = (payload) => {
   const route = '/data/AgentProfile/do_password_change';
-  if (payload.password1 !== payload.password2) {
+  if (payload.password !== payload.password2) {
     return Promise.reject(new PasswordMismatchError('Passwords do not match!'));
   }
 
@@ -16,7 +16,7 @@ export const postChangePassword = (payload) => {
 };
 
 export const signUp = (payload) => {
-  if (payload.password1 !== payload.password2) {
+  if (payload.password !== payload.password2) {
     return Promise.reject(new PasswordMismatchError('Passwords do not match!'));
   }
 
@@ -27,9 +27,10 @@ export const signUp = (payload) => {
     route = `/data/Discussion/${payload.discussionSlug}/all_users`;
   }
   const newPayload = {
+    ...payload,
     username: payload.username || null,
-    real_name: payload.name,
-    password: payload.password1,
+    real_name: payload.fullname,
+    password: payload.password,
     accounts: [
       {
         email: payload.email,

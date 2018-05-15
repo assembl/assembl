@@ -13,19 +13,17 @@ import { displayAlert, displayCustomModal } from '../../utils/utilityManager';
 import TermsForm from '../common/termsForm';
 import withoutLoadingIndicator from '../../components/common/withoutLoadingIndicator';
 import TabsConditionQuery from '../../graphql/TabsConditionQuery.graphql';
+import TextFieldsQuery from '../../graphql/TextFields.graphql';
 
 type SignupFormProps = {
   hasTermsAndConditions: boolean,
   signUp: Function,
   lang: string,
-  auth: Object
+  auth: Object,
+  textFields: Array<ConfigurableField>
 };
 
 type SignupFormState = {
-  name: ?string,
-  email: ?string,
-  password1: ?string,
-  password2: ?string,
   checked: boolean
 };
 
@@ -45,10 +43,6 @@ class SignupForm extends React.Component<void, SignupFormProps, SignupFormState>
   constructor(props) {
     super(props);
     this.state = {
-      name: null,
-      email: null,
-      password1: null,
-      password2: null,
       checked: false
     };
 
@@ -106,41 +100,23 @@ class SignupForm extends React.Component<void, SignupFormProps, SignupFormState>
 
   render() {
     const slug = getDiscussionSlug();
-    const { hasTermsAndConditions, lang } = this.props;
+    const { hasTermsAndConditions, lang, textFields } = this.props;
     return (
       <div className="login-view">
         <div className="box-title">{I18n.t('login.createAccount')}</div>
         <div className="box">
           <form className="signup" onSubmit={this.signupHandler}>
-            <FormGroup className="margin-m">
-              <FormControl type="text" name="name" required placeholder={I18n.t('login.fullName')} onChange={this.handleInput} />
-            </FormGroup>
-            <FormGroup>
-              <FormControl type="text" name="username" placeholder={I18n.t('login.userName')} onChange={this.handleInput} />
-            </FormGroup>
-
-            <FormGroup>
-              <FormControl type="email" name="email" required placeholder={I18n.t('login.email')} onChange={this.handleInput} />
-            </FormGroup>
-            <FormGroup>
-              <FormControl
-                type="password"
-                name="password1"
-                required
-                placeholder={I18n.t('login.password')}
-                onChange={this.handleInput}
-              />
-            </FormGroup>
-            <FormGroup>
-              <FormControl
-                type="password"
-                name="password2"
-                required
-                placeholder={I18n.t('login.password2')}
-                onChange={this.handleInput}
-              />
-            </FormGroup>
-
+            {textFields &&
+              textFields.map(tf => (
+                <FormGroup key={tf.id}>
+                  <FormControl
+                    type={tf.fieldType.toLowerCase()}
+                    name={tf.identifier === 'CUSTOM' ? tf.id : tf.identifier.toLowerCase()}
+                    placeholder={tf.title}
+                    onChange={this.handleInput}
+                  />
+                </FormGroup>
+              ))}
             {hasTermsAndConditions && (
               <FormGroup className="left margin-left-2">
                 <Checkbox checked={this.state.checked} type="checkbox" onChange={this.toggleCheck} required inline>
@@ -196,4 +172,23 @@ const withData = graphql(TabsConditionQuery, {
   })
 });
 
-export default compose(connect(mapStateToProps, mapDispatchToProps), withData, withoutLoadingIndicator())(SignupForm);
+export default compose(
+  connect(mapStateToProps, mapDispatchToProps),
+  graphql(TextFieldsQuery, {
+    props: ({ data }) => {
+      if (data.loading) {
+        return { loading: true, textFields: [] };
+      }
+      if (data.error) {
+        // this is needed to properly redirect to home page in case of error
+        return { error: data.error, textFields: [] };
+      }
+
+      return {
+        textFields: data.textFields
+      };
+    }
+  }),
+  withData,
+  withoutLoadingIndicator()
+)(SignupForm);
