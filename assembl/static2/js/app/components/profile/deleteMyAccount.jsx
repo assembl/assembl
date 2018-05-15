@@ -46,11 +46,10 @@ class DeleteMyAccount extends React.Component<void, *, DeleteMyAccountState> {
     const variables = {
       id: id
     };
-    const slug = { slug: getDiscussionSlug() };
+    const slug = getDiscussionSlug();
     deleteUser({ variables: variables })
       .then(() => {
-        const homePath = get('home', { slug: slug });
-        browserHistory.push(`${getContextual('oldLogout', { slug: slug })}?next=${homePath}`);
+        browserHistory.push(`${getContextual('oldLogout', { slug: slug })}?next=${get('home', { slug: slug })}`);
         displayAlert('success', I18n.t('accountDeleted'));
       })
       .catch((error) => {
@@ -64,7 +63,6 @@ class DeleteMyAccount extends React.Component<void, *, DeleteMyAccountState> {
 
   render() {
     const { checked } = this.state;
-    const slug = { slug: getDiscussionSlug() };
     return (
       <div>
         <h2 className="dark-title-2 margin-l">
@@ -87,7 +85,7 @@ class DeleteMyAccount extends React.Component<void, *, DeleteMyAccountState> {
               <Button
                 disabled={!checked}
                 className="button-submit button-dark"
-                onClick={browserHistory.push(`${getContextual('oldLogout', { slug: slug })}?next=${get('home', { slug: slug })}`)}
+                onClick={this.handleDeleteClick}
                 style={!checked ? { opacity: '0.5' } : null}
               >
                 <Translate value="delete" />
