@@ -17,7 +17,6 @@ from .utils import DateTime, abort_transaction_on_exception
 from assembl.auth.password import random_string
 from datetime import datetime
 from .permissions_helpers import require_cls_permission
-from sqlalchemy import or_
 
 
 _ = TranslationStringFactory('assembl')
@@ -204,13 +203,12 @@ class DeleteUserInformation(graphene.Mutation):
         local_user_roles = db.query(m.LocalUserRole).filter(m.LocalUserRole.user_id == user.id).all()
         for lur in local_user_roles:
             if lur.role.name == u'r:sysadmin':
-                raise Exception(u"User can't delete his account if he is sysadmin")
+                raise Exception(u"Can't delete a user with sysadmin rights.")
 
-        number_of_admin_users = db.query(m.LocalUserRole).filter(models.LocalUserRole.role_id == 5).count()
-
+        number_of_admin_users = db.query(m.LocalUserRole.role_id).join(m.Role).filter(m.Role.name == u"r:administrator").count()
         user_is_admin = False
         for lur in local_user_roles:
-            if lur.role.name == u'r:admin':
+            if lur.role.name == u'r:administrator':
                 user_is_admin = True
 
         if int(number_of_admin_users) <= 1 and user_is_admin:
@@ -226,12 +224,20 @@ class DeleteUserInformation(graphene.Mutation):
         for p in user.old_passwords:
             p.password_p = ""
 
+        # Delete Email Accounts
+        email_account_ids = db.query(m.EmailAccount.id).join(m.User).filter(m.User.id == user.id).all()
+        email_account_ids = [id for (id,) in email_account_ids]
+        email_accounts = db.query(m.EmailAccount).filter(m.EmailAccount.id.in_(email_account_ids)).all()
+        for email_account in email_accounts:
+            db.delete(email_account)
+            db.commit()
+
         # Notifications
         # First, we will make sure that the user has no notification with status
         # If there are, we will put them in the state obsoleted
         # Then the notification state will be unsubscribed by user
         ids = db.query(models.Notification.id).join(models.NotificationSubscription).filter(models.NotificationSubscription.user_id ==
-                                                                                            user.id, or_(models.Notification.delivery_state == models.NotificationDeliveryStateType.QUEUED, models.Notification.delivery_state == models.NotificationDeliveryStateType.DELIVERY_FAILURE)).all()
+                                                                                            user.id, models.Notification.delivery_state == models.NotificationDeliveryStateType.getRetryableDeliveryStates()).all()
 
         ids = [id for (id,) in ids]
         db.query(models.Notification).filter(models.Notification.id.in_(ids)).update(
@@ -239,12 +245,9 @@ class DeleteUserInformation(graphene.Mutation):
 
         # Social Accounts
         if user.social_accounts:
-            for social_account in range(len(user.social_accounts)):
-                user.social_accounts[social_account].username = ""
-                user.social_accounts[social_account].provider_domain = ""
-                user.social_accounts[social_account].extra_data = {}
-                user.social_accounts[social_account].picture_url = ""
-                user.social_accounts[social_account].last_checked = datetime(1900, 1, 1, 1, 1, 1, 1)
+            for social_account in user.social_accounts:
+                db.delete(social_account)
+            db.commit()
 
         db.flush()
         return DeleteUserInformation(user=user)

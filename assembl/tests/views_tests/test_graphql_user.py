@@ -371,26 +371,6 @@ def test_graphql_delete_admin_user_not_alone(discussion_admin_user, discussion_a
         for pa in user_old_passwords:
             assert pa != p.password
 
-    # Testing if I can delete the last admin account
-    user_password = discussion_admin_user_2.password_p
-    user_username = discussion_admin_user_2.username_p
-    user_preferred_email = discussion_admin_user_2.preferred_email
-    user_last_assembl_login = discussion_admin_user_2.last_assembl_login
-    user_name = discussion_admin_user_2.name
-    user_old_passwords = discussion_admin_user_2.old_passwords
-    res = schema.execute(DELETE_USER_INFORMATION_MUTATION, context_value=graphql_request, variable_values={
-        "id": to_global_id('AgentProfile', discussion_admin_user_2.id)
-    })
-    assert res.errors is None
-    assert discussion_admin_user_2.is_deleted is True
-    assert discussion_admin_user_2.password != user_password
-    assert discussion_admin_user_2.preferred_email != user_preferred_email
-    assert discussion_admin_user_2.last_assembl_login != user_last_assembl_login
-    assert discussion_admin_user_2.name != user_name
-    for p in discussion_admin_user.old_passwords:
-        for pa in user_old_passwords:
-            assert pa != p.password
-
 
 def test_graphql_delete_user_with_social_account(graphql_request, participant1_user, participant1_social_account):
     """
@@ -404,7 +384,4 @@ def test_graphql_delete_user_with_social_account(graphql_request, participant1_u
         "id": to_global_id('AgentProfile', participant1_user.id)
     })
     assert res.errors is None
-    assert participant1_user.social_accounts[0].username != social_account_username
-    assert participant1_user.social_accounts[0].provider_domain != social_account_provider_domain
-    assert participant1_user.social_accounts[0].picture_url != social_account_picture_url
-    assert participant1_user.social_accounts[0].last_checked != social_account_last_checked
+    assert len(participant1_user.social_accounts) == 0
