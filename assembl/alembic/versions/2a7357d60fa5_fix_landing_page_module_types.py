@@ -15,7 +15,7 @@ import sqlalchemy as sa
 import transaction
 
 from assembl.lib import config
-from assembl.lib.sqla import mark_changedc
+from assembl.lib.sqla import mark_changed
 
 
 def upgrade(pyramid_env):
