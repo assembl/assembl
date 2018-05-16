@@ -1,6 +1,6 @@
 // @flow
 import React from 'react';
-import { connect } from 'react-redux';
+
 import { isCurrentPhase, getBarPercent, isStepCompleted } from '../../../utils/timeline';
 import TimelineSegment, { type DebateType } from './timelineSegment';
 
@@ -8,12 +8,13 @@ type TimelineProps = {
   debate: DebateType,
   showNavigation: boolean,
   identifier: string,
-  onMenuItemClick: Function
+  activeSegment: number,
+  onItemSelect: Function,
+  onItemDeselect: Function
 };
 
-export function DumbTimeline(props: TimelineProps) {
-  const { debateData } = props.debate;
-  const { showNavigation, identifier, onMenuItemClick } = props;
+export function DumbTimeline({ debate, activeSegment, showNavigation, identifier, onItemSelect, onItemDeselect }: TimelineProps) {
+  const { debateData } = debate;
   return (
     <div className="timeline-container">
       {debateData.timeline &&
@@ -21,6 +22,7 @@ export function DumbTimeline(props: TimelineProps) {
           <TimelineSegment
             title={phase.title}
             index={index}
+            active={index === activeSegment}
             key={index}
             barPercent={getBarPercent(debateData.timeline[index])}
             isCurrentPhase={isCurrentPhase(debateData.timeline[index])}
@@ -30,15 +32,12 @@ export function DumbTimeline(props: TimelineProps) {
             startDate={phase.start}
             endDate={phase.end}
             isStepCompleted={isStepCompleted(phase)}
-            onMenuItemClick={onMenuItemClick}
+            onSelect={onItemSelect}
+            onDeselect={onItemDeselect}
           />
         ))}
     </div>
   );
 }
 
-const mapStateToProps = state => ({
-  debate: state.debate
-});
-
-export default connect(mapStateToProps)(DumbTimeline);
+export default DumbTimeline;

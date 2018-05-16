@@ -1,0 +1,12 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`DumbTimelineSegmentMenu component should match the DumbTimelineSegmentMenu 1`] = `
+<div
+  className="menu-container"
+>
+  <MenuTable
+    identifier="foo"
+    onMenuItemClick={undefined}
+  />
+</div>
+`;

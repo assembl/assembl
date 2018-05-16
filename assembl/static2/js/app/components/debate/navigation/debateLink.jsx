@@ -1,12 +1,16 @@
 // @flow
 import React from 'react';
 import classNames from 'classnames';
+import { connect } from 'react-redux';
 
-import Timeline from '../navigation/timeline';
+import Timeline from './timeline';
+import TimelineSegmentMenu from './timelineSegmentMenu';
 import { isMobile } from '../../../utils/globalFunctions';
 import { goTo } from '../../../utils/routeMap';
+import { type DebateType } from './timelineSegment';
 
 type DebateLinkProps = {
+  debate: DebateType,
   identifier: string,
   className: string,
   activeClassName: string,
@@ -17,12 +21,14 @@ type DebateLinkProps = {
 };
 
 type DebateLinkState = {
-  menuActive: boolean
+  timeLineActive: boolean,
+  activeSegment: number
 };
 
-class DebateLink extends React.Component<*, DebateLinkProps, DebateLinkState> {
+export class DumbDebateLink extends React.Component<*, DebateLinkProps, DebateLinkState> {
   state = {
-    menuActive: false
+    timeLineActive: false,
+    activeSegment: -1
   };
 
   componentDidMount() {
@@ -33,18 +39,18 @@ class DebateLink extends React.Component<*, DebateLinkProps, DebateLinkState> {
     document.removeEventListener('click', this.handleClickOutside);
   }
 
-  debate = null;
+  debateNode = null;
 
   showMenu = () => {
-    this.setState({ menuActive: true });
+    this.setState({ timeLineActive: true });
   };
 
   hideMenu = () => {
-    this.setState({ menuActive: false });
+    this.setState({ timeLineActive: false, activeSegment: -1 });
   };
 
   handleClickOutside = (event: MouseEvent) => {
-    if (this.state.menuActive && this.debate && !this.debate.contains(event.target)) {
+    if (this.state.timeLineActive && this.debateNode && !this.debateNode.contains(event.target)) {
       this.hideMenu();
     }
   };
@@ -54,20 +60,25 @@ class DebateLink extends React.Component<*, DebateLinkProps, DebateLinkState> {
     goTo(this.props.to);
   };
 
+  showSegmentMenu = (index: number) => {
+    this.setState({ activeSegment: index });
+  };
+
   render() {
-    const { identifier, children, to, className, activeClassName, dataText, screenTooSmall } = this.props;
-    const { menuActive } = this.state;
+    const { identifier, children, to, className, activeClassName, dataText, screenTooSmall, debate } = this.props;
+    const { timeLineActive, activeSegment } = this.state;
+    const activeSegmentPhase = debate.debateData.timeline[activeSegment];
     // The first touch show the menu and the second activate the link
     const isTouchScreenDevice = isMobile.any();
-    const touchActive = isTouchScreenDevice && !menuActive;
+    const touchActive = isTouchScreenDevice && !timeLineActive;
     const onLinkClick = touchActive ? this.showMenu : this.onLinkClick;
     const linkActive = window.location.pathname === to;
     return (
       <div
-        ref={(debate) => {
-          this.debate = debate;
+        ref={(debateNode) => {
+          this.debateNode = debateNode;
         }}
-        className={classNames('debate-link', { active: menuActive })}
+        className={classNames('debate-link', { active: timeLineActive })}
         onMouseOver={!isTouchScreenDevice && !screenTooSmall ? this.showMenu : null}
         onMouseLeave={!isTouchScreenDevice && !screenTooSmall ? this.hideMenu : null}
       >
@@ -78,9 +89,25 @@ class DebateLink extends React.Component<*, DebateLinkProps, DebateLinkState> {
           <div className="header-container">
             <section className="timeline-section" id="timeline">
               <div className="max-container">
-                <Timeline showNavigation identifier={identifier} onMenuItemClick={this.hideMenu} />
+                <Timeline
+                  debate={debate}
+                  activeSegment={activeSegment}
+                  showNavigation
+                  identifier={identifier}
+                  onItemSelect={this.showSegmentMenu}
+                  onItemDeselect={this.hideMenu}
+                />
               </div>
             </section>
+            {activeSegmentPhase && (
+              <TimelineSegmentMenu
+                phaseIdentifier={activeSegmentPhase.identifier}
+                title={activeSegmentPhase.title}
+                onMenuItemClick={this.hideMenu}
+                startDate={activeSegmentPhase.start}
+                endDate={activeSegmentPhase.end}
+              />
+            )}
           </div>
         )}
       </div>
@@ -88,4 +115,8 @@ class DebateLink extends React.Component<*, DebateLinkProps, DebateLinkState> {
   }
 }
 
-export default DebateLink;
+const mapStateToProps = state => ({
+  debate: state.debate
+});
+
+export default connect(mapStateToProps)(DumbDebateLink);

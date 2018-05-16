@@ -43,9 +43,18 @@ exports[`DebateLink component should match the DebateLink 1`] = `
       <div
         className="max-container"
       >
-        <Connect(DumbTimeline)
+        <DumbTimeline
+          activeSegment={-1}
+          debate={
+            Object {
+              "debateData": Object {
+                "timeline": Array [],
+              },
+            }
+          }
           identifier="survey"
-          onMenuItemClick={[Function]}
+          onItemDeselect={[Function]}
+          onItemSelect={[Function]}
           showNavigation={true}
         />
       </div>
