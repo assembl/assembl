@@ -85,8 +85,7 @@ def test_mutation_delete_text_field(graphql_request, text_field, graphql_registr
     assert res.data['deleteTextField']['success'] is True
 
 
-def test_query_profile_fields(graphql_request, graphql_registry, text_field, profile_field):
-    import json
+def test_query_profile_fields(graphql_request, graphql_registry, text_field2, profile_field):
     from assembl.models.configurable_fields import TextFieldsTypesEnum
     res = schema.execute(
         graphql_registry['ProfileFields'],
@@ -95,21 +94,21 @@ def test_query_profile_fields(graphql_request, graphql_registry, text_field, pro
     assert res.errors is None
     assert len(res.data['profileFields']) == 2
 
-    generated_tf = res.data['profileFields'][0]
-    assert int(from_global_id(generated_tf['id'])[1]) < 0
-    assert generated_tf['configurableField']['fieldType'] == TextFieldsTypesEnum.TEXT.value
-    assert generated_tf['configurableField']['title'] == u'My text field'
-    assert generated_tf['configurableField']['order'] == 1.0
-    assert generated_tf['configurableField']['required'] is True
-    assert generated_tf['valueData'][u'value'] is None
-
-    tf_with_value = res.data['profileFields'][1]
+    tf_with_value = res.data['profileFields'][0]
     assert int(from_global_id(tf_with_value['id'])[1]) == profile_field.id
-    assert tf_with_value['configurableField']['title'] == u'My other text field'
-    assert tf_with_value['configurableField']['fieldType'] == TextFieldsTypesEnum.EMAIL.value
-    assert tf_with_value['configurableField']['order'] == 2.0
-    assert tf_with_value['configurableField']['required'] is False
+    assert tf_with_value['configurableField']['title'] == u'My text field'
+    assert tf_with_value['configurableField']['fieldType'] == TextFieldsTypesEnum.TEXT.value
+    assert tf_with_value['configurableField']['order'] == 1.0
+    assert tf_with_value['configurableField']['required'] is True
     assert tf_with_value['valueData'][u'value'] == u'Shayna_Howe@gmail.com'
+
+    generated_tf = res.data['profileFields'][1]
+    assert int(from_global_id(generated_tf['id'])[1]) < 0
+    assert generated_tf['configurableField']['fieldType'] == TextFieldsTypesEnum.EMAIL.value
+    assert generated_tf['configurableField']['title'] == u'My other custom text field'
+    assert generated_tf['configurableField']['order'] == 2.0
+    assert generated_tf['configurableField']['required'] is False
+    assert generated_tf['valueData'][u'value'] is None
 
 
 def test_mutation_update_profile_fields(admin_user, graphql_request, graphql_registry, text_field2, profile_field, fullname_text_field):
