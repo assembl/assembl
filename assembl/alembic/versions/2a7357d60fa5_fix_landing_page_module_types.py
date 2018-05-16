@@ -18,18 +18,26 @@ from assembl.lib import config
 from assembl.lib.sqla import mark_changed
 
 
+update_string = 'UPDATE landing_page_module SET "type"=:val WHERE landing_page_module.type=:old_type'
+
+
 def upgrade(pyramid_env):
     from assembl import models as m
     db = m.get_session_maker()()
     with transaction.manager:
         db.execute(
-            sa.text(
-                'UPDATE landing_page_module SET "type"=:val WHERE landing_page_module.type=:old_type'
-            ).bindparams(old_type='resource', val='landing_page_module')
+            sa.text(update_string).bindparams(
+                old_type='resource', val='landing_page_module')
         )
         mark_changed()
 
 
 def downgrade(pyramid_env):
-    with context.begin_transaction():
-        pass
+    with transaction.manager:
+        from assembl import models as m
+        db = m.get_session_maker()()
+        db.execute(
+            sa.text(update_string).bindparams(
+                old_type='landing_page_module', val='resource')
+        )
+        mark_changed()
