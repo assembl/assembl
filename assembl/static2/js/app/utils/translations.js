@@ -9,6 +9,7 @@ const Translations = {
     validate: "Valider",
     delete: "Supprimer",
     accountDeleted: "Votre compte a été supprimé avec succès",
+    deletedUser: "Compte utilisateur supprimé",
     chatframe: {
       title: "Fenêtre de discussion instantanée",
       tooltip: "Assemb'Bot"
@@ -391,7 +392,7 @@ const Translations = {
       deleteMyAccountConfirmation: "Supprimer mon compte et l'ensemble de mes données",
       deleteMyAccountText:
         "En supprimant votre compte, vous supprimez définitivement l'ensemble de vos données personnelles ainsi que votre compte. Vous ne pourrez plus contribuer à la consultation sans compte.",
-      deleteMyAccountModale:
+      deleteMyAccountModal:
         "Êtes-vous certain de vouloir supprimer définitivement votre compte ainsi que l'ensemble de vos données personnelles ? En validant, vous ne pourrez plus contribuer à la consultation.",
       updateUser: {
         errorMessage: {
@@ -653,6 +654,7 @@ const Translations = {
     conclusion: "Conclusion",
     delete: "Delete",
     accountDeleted: "Your account has been successfully deleted",
+    deletedUser: "Deleted user account",
     chatframe: {
       title: "Instant discussion window",
       tooltip: "Assemb'Bot"
@@ -1032,7 +1034,7 @@ const Translations = {
       deleteMyAccountConfirmation: "Delete my account and my data",
       deleteMyAccountText:
         "By deleting your account, you permanently delete all of your personal data and your account. You will no longer be able to contribute to the debate without an account.",
-      deleteMyAccountModale:
+      deleteMyAccountModal:
         "Are you sure you want to permanently delete your account and all of your personal data? By validating, you will no longer be able to contribute to the consultation.",
       updateUser: {
         errorMessage: {

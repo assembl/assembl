@@ -1,6 +1,6 @@
 // @flow
 import React from 'react';
-import { Translate } from 'react-redux-i18n';
+import { Translate, I18n } from 'react-redux-i18n';
 
 import { getDomElementOffset, elementContainsSelection } from '../../../../utils/globalFunctions';
 import Attachments from '../../../common/attachments';
@@ -201,7 +201,7 @@ class PostView extends React.PureComponent<void, Props, State> {
               {creator && (
                 <ProfileLine
                   userId={creator.userId}
-                  userName={creator.displayName}
+                  userName={creator.isDeleted ? I18n.t('deletedUser') : creator.displayName}
                   creationDate={creationDate}
                   locale={lang}
                   modified={modificationDate !== null}
