@@ -85,7 +85,13 @@
     right: 0;
     background-color: $grey1;
     height: 40px;
-    padding-top: 5px;
+    padding-top: 3px;
+
+    span {
+      transform: rotate(90deg);
+      display: inline-block;
+      font-size: 25px;
+    }
   }
 
   .theme-first-row-0 {
@@ -145,6 +151,15 @@
 
 .mobile-ideas-section {
   margin: 0 !important;
+
+  .title-section {
+    margin-top: 55px;
+
+    .dark-title-1 {
+      font-size: 26px;
+      margin: -5px 0 0 15px;
+    }
+  }
 }
 
 @media screen and (max-width: 991px) {
