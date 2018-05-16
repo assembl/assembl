@@ -15,7 +15,8 @@ type Props = {
   setHarvestingBoxDisplay: Function,
   handleClickAnchor: Function,
   cancelHarvesting: Function,
-  refetchPost: Function
+  refetchPost: Function,
+  isAuthorAccountDeleted: boolean
 };
 
 class HarvestingMenu extends React.Component<void, Props, *> {
@@ -37,7 +38,8 @@ class HarvestingMenu extends React.Component<void, Props, *> {
       extracts,
       harvestingAnchorPosition,
       refetchPost,
-      cancelHarvesting
+      cancelHarvesting,
+      isAuthorAccountDeleted
     } = this.props;
     const selection = window.getSelection();
     return (
@@ -48,6 +50,7 @@ class HarvestingMenu extends React.Component<void, Props, *> {
               postId={postId}
               key={extract.id}
               extract={extract}
+              isAuthorAccountDeleted={isAuthorAccountDeleted}
               displayHarvestingBox={displayHarvestingBox}
               harvestingBoxPosition={null}
               refetchPost={refetchPost}

@@ -31,7 +31,8 @@ type Props = {
   updateExtract: Function,
   deleteExtract: Function,
   refetchPost: Function,
-  harvestingDate?: string
+  harvestingDate?: string,
+  isAuthorAccountDeleted?: boolean
 };
 
 type State = {
@@ -52,7 +53,8 @@ class DumbHarvestingBox extends React.Component<Object, Props, State> {
   menu: any;
 
   static defaultProps = {
-    harvestingDate: null
+    harvestingDate: null,
+    isAuthorAccountDeleted: false
   };
 
   constructor(props: Props) {
@@ -226,12 +228,13 @@ class DumbHarvestingBox extends React.Component<Object, Props, State> {
   };
 
   render() {
-    const { selection, cancelHarvesting, extract, contentLocale, harvestingDate } = this.props;
+    const { selection, cancelHarvesting, extract, contentLocale, harvestingDate, isAuthorAccountDeleted } = this.props;
     const { disabled, extractIsValidated, isNugget, isEditable, editableExtract, extractNature, extractAction } = this.state;
     const isExtract = extract !== null;
     const selectionText = selection ? selection.toString() : '';
     const harvesterUserName =
       extract && extract.creator && extract.creator.displayName ? extract.creator.displayName : getConnectedUserName();
+    const userName = isAuthorAccountDeleted ? I18n.t('deletedUser') : harvesterUserName;
     const harvesterUserId = extract && extract.creator && extract.creator.userId ? extract.creator.userId : getConnectedUserId();
     return (
       <div>
@@ -304,9 +307,9 @@ class DumbHarvestingBox extends React.Component<Object, Props, State> {
               </OverlayTrigger>
             </div>
             <div className="profile">
-              <AvatarImage userId={harvesterUserId} userName={harvesterUserName} />
+              <AvatarImage userId={harvesterUserId} userName={userName} />
               <div className="harvesting-infos">
-                <div className="username">{harvesterUserName}</div>
+                <div className="username">{userName}</div>
                 {isExtract &&
                   extract &&
                   extract.creationDate && (
