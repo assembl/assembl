@@ -10,6 +10,7 @@ import { languagePreferencesHasChanged, updateEditLocale } from '../actions/admi
 import ManageSectionsForm from '../components/administration/discussion/manageSectionsForm';
 import LegalNoticeAndTermsForm from '../components/administration/discussion/legalNoticeAndTermsForm';
 import LanguageSection from '../components/administration/discussion/languageSection';
+import ManageProfileOptionsForm from '../components/administration/discussion/manageProfileOptionsForm';
 import { displayAlert } from '../utils/utilityManager';
 import { convertEntriesToHTML } from '../utils/draftjs';
 import SaveButton, { getMutationsPromises, runSerial } from '../components/administration/saveButton';
@@ -19,6 +20,10 @@ import deleteSectionMutation from '../graphql/mutations/deleteSection.graphql';
 import updateLegalNoticeAndTermsMutation from '../graphql/mutations/updateLegalNoticeAndTerms.graphql';
 import updateDiscussionPreferenceQuery from '../graphql/mutations/updateDiscussionPreference.graphql';
 import getDiscussionPreferenceLanguage from '../graphql/DiscussionPreferenceLanguage.graphql';
+import ProfileFieldsQuery from '../graphql/ProfileFields.graphql';
+import createTextFieldMutation from '../graphql/mutations/createTextField.graphql';
+import updateTextFieldMutation from '../graphql/mutations/updateTextField.graphql';
+import deleteTextFieldMutation from '../graphql/mutations/deleteTextField.graphql';
 import { type LanguagePreferencesState } from '../reducers/adminReducer';
 import { type State as ReduxState } from '../reducers/rootReducer';
 
@@ -31,7 +36,16 @@ const createVariablesForSectionMutation = section => ({
   titleEntries: section.titleEntries
 });
 
+const createVariablesForTextFieldMutation = textField => ({
+  id: textField.id,
+  order: textField.order,
+  required: textField.required,
+  titleEntries: textField.titleEntries
+});
+
 const createVariablesForDeleteSectionMutation = section => ({ sectionId: section.id });
+
+const createVariablesForDeleteTextFieldMutation = textField => ({ id: textField.id });
 
 type Props = {
   changeLocale: Function,
@@ -57,7 +71,13 @@ type Props = {
   updateDiscussionPreference: Function,
   updateLegalNoticeAndTerms: Function,
   updateSection: Function,
-  debateId: string
+  debateId: string,
+  createTextField: Function,
+  updateTextField: Function,
+  deleteTextField: Function,
+  profileOptionsHasChanged: boolean,
+  refetchTextFields: Function,
+  textFields: string
 };
 
 type State = {
@@ -95,6 +115,7 @@ class DiscussionAdmin extends React.Component<void, Props, State> {
   dataHaveChanged = () =>
     this.props.languagePreferenceHasChanged ||
     this.props.sectionsHaveChanged ||
+    this.props.profileOptionsHasChanged ||
     this.props.legalNoticeAndTerms.get('_hasChanged');
 
   saveAction = () => {
@@ -114,7 +135,13 @@ class DiscussionAdmin extends React.Component<void, Props, State> {
       sectionsHaveChanged,
       updateDiscussionPreference,
       updateLegalNoticeAndTerms,
-      updateSection
+      updateSection,
+      createTextField,
+      updateTextField,
+      deleteTextField,
+      profileOptionsHasChanged,
+      textFields,
+      refetchTextFields
     } = this.props;
     displayAlert('success', `${I18n.t('loading.wait')}...`);
 
@@ -148,12 +175,18 @@ class DiscussionAdmin extends React.Component<void, Props, State> {
         deleteMutation: deleteSection,
         lang: i18n.locale
       });
-
-      runSerial(mutationsPromises).then(() => {
-        this.setState({ refetching: true });
-        refetchSections().then(() => this.setState({ refetching: false }));
-        displayAlert('success', I18n.t('administration.sections.successSave'));
-      });
+      runSerial(mutationsPromises)
+        .then(() => {
+          this.setState({ refetching: true }, () => {
+            refetchSections().then(() => {
+              displayAlert('success', I18n.t('administration.sections.successSave'));
+              this.setState({ refetching: false });
+            });
+          });
+        })
+        .catch((error) => {
+          displayAlert('danger', `${error}`, false, 30000);
+        });
     }
 
     if (legalNoticeAndTerms.get('_hasChanged')) {
@@ -167,13 +200,45 @@ class DiscussionAdmin extends React.Component<void, Props, State> {
       };
       updateLegalNoticeAndTerms(payload)
         .then(() => {
-          this.setState({ refetching: true });
-          refetchLegalNoticeAndTerms().then(() => this.setState({ refetching: false }));
-          displayAlert('success', I18n.t('administration.legalNoticeAndTerms.successSave'));
+          this.setState({ refetching: true }, () => {
+            refetchLegalNoticeAndTerms().then(() => {
+              displayAlert('success', I18n.t('administration.legalNoticeAndTerms.successSave'));
+              this.setState({ refetching: false });
+            });
+          });
         })
         .catch((error) => {
           displayAlert('danger', `${error}`, false, 30000);
         });
+    }
+
+    if (profileOptionsHasChanged) {
+      const mutationsPromises = getMutationsPromises({
+        items: textFields,
+        variablesCreator: createVariablesForTextFieldMutation,
+        deleteVariablesCreator: createVariablesForDeleteTextFieldMutation,
+        createMutation: createTextField,
+        updateMutation: updateTextField,
+        deleteMutation: deleteTextField,
+        lang: i18n.locale,
+        refetchQueries: [
+          {
+            query: ProfileFieldsQuery,
+            variables: {
+              lang: i18n.locale
+            }
+          }
+        ]
+      });
+
+      runSerial(mutationsPromises).then(() => {
+        this.setState({ refetching: true }, () => {
+          refetchTextFields().then(() => {
+            displayAlert('success', I18n.t('administration.profileOptions.successSave'));
+            this.setState({ refetching: false });
+          });
+        });
+      });
     }
   };
 
@@ -185,17 +250,26 @@ class DiscussionAdmin extends React.Component<void, Props, State> {
         <SaveButton disabled={saveDisabled} saveAction={this.saveAction} />
         {section === '1' && <LanguageSection {...this.props} />}
         {section === '2' && <ManageSectionsForm {...this.props} />}
-        {section === '3' && <LegalNoticeAndTermsForm {...this.props} />}
+        {section === '3' && <ManageProfileOptionsForm />}
+        {section === '4' && <LegalNoticeAndTermsForm {...this.props} />}
       </div>
     );
   }
 }
 
 const mapStateToProps: MapStateToProps<ReduxState, *, *> = ({
-  admin: { discussionLanguagePreferences, discussionLanguagePreferencesHasChanged, editLocale, legalNoticeAndTerms, sections },
+  admin: {
+    discussionLanguagePreferences,
+    discussionLanguagePreferencesHasChanged,
+    editLocale,
+    legalNoticeAndTerms,
+    sections,
+    profileOptions
+  },
   i18n
 }) => {
   const { sectionsById, sectionsHaveChanged, sectionsInOrder } = sections;
+  const { profileOptionsHasChanged, textFieldsById } = profileOptions;
   return {
     editLocale: editLocale,
     i18n: i18n,
@@ -209,7 +283,12 @@ const mapStateToProps: MapStateToProps<ReduxState, *, *> = ({
       }) // fix order of sections
       .valueSeq() // convert to array of Map
       .toJS(), // convert to array of objects
-    legalNoticeAndTerms: legalNoticeAndTerms
+    legalNoticeAndTerms: legalNoticeAndTerms,
+    profileOptionsHasChanged: profileOptionsHasChanged,
+    textFields: textFieldsById
+      .map(textField => textField)
+      .valueSeq()
+      .toJS()
   };
 };
 
@@ -238,6 +317,15 @@ export default compose(
   }),
   graphql(updateLegalNoticeAndTermsMutation, {
     name: 'updateLegalNoticeAndTerms'
+  }),
+  graphql(createTextFieldMutation, {
+    name: 'createTextField'
+  }),
+  graphql(deleteTextFieldMutation, {
+    name: 'deleteTextField'
+  }),
+  graphql(updateTextFieldMutation, {
+    name: 'updateTextField'
   }),
   connect(mapStateToProps, mapDispatchToProps),
   withApollo

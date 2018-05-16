@@ -418,6 +418,8 @@ const Translations = {
       headerTitle: "Mentions légales"
     },
     administration: {
+      confirmTextFieldDeletionTitle: "Supprimer le champ",
+      confirmTextFieldDeletion: "Êtes-vous certain de vouloir supprimer ce champ ?",
       addThematic: "Ajouter une thématique",
       addQuestion: "Ajouter une question",
       anErrorOccured:
@@ -443,7 +445,8 @@ const Translations = {
         language: "Éditer la langue du débat",
         sections: "Éditer les rubriques du débat",
         legalNoticeAndTerms: "CGU & Mentions légales",
-        exportTaxonomies: "Exporter les taxonomies"
+        exportTaxonomies: "Exporter les taxonomies",
+        manageProfileOptions: "Options d'inscription"
       },
       noTimeline: "Aucune timeline n'a été configurée pour ce débat.",
       survey: {
@@ -575,7 +578,8 @@ const Translations = {
       themeNum: "Thématique %{index}",
       discussion: {
         "0": "Langues utilisées",
-        "3": "Conditions générales d'utilisation & mentions légales"
+        "3": "Options d'inscription",
+        "4": "Conditions générales d'utilisation & mentions légales"
       },
       languageChoice: "Sélection des langues du débat",
       ph: {
@@ -632,6 +636,15 @@ const Translations = {
           helper: "Choisissez les modules que vous souhaitez voir apparaître dans la page d'accueil et leurs emplacements."
         },
         successSave: "Les modules ont été enregistrés avec succès !"
+      },
+      profileOptions: {
+        addTextField: "Ajouter un champ",
+        deleteTextField: "Supprimer le champ",
+        introText:
+          "Configurez les champs que vous souhaitez afficher dans le formulaire d'inscription. Renseignez les noms ainsi que la mention obligatoire/non obligatoire.",
+        textFieldToggleOptional: "Rendre ce champ optionnel",
+        textFieldToggleRequired: "Rendre ce champ obligatoire",
+        successSave: "Les options de profils ont été enregistrées avec succès !"
       }
     },
     unauthorizedAdministration: {
@@ -1060,6 +1073,8 @@ const Translations = {
       headerTitle: "Legal Notice"
     },
     administration: {
+      confirmTextFieldDeletionTitle: "Delete the text field",
+      confirmTextFieldDeletion: "Are you sure that you want to delete this text field?",
       addThematic: "Add a theme",
       addQuestion: "Add a question",
       anErrorOccured: "An error occured during save. Please check that you filled all the required fields.",
@@ -1084,7 +1099,8 @@ const Translations = {
         language: "Discussion language",
         sections: "Edit debate sections",
         legalNoticeAndTerms: "T&C and legal notice",
-        exportTaxonomies: "Export taxonomies"
+        exportTaxonomies: "Export taxonomies",
+        manageProfileOptions: "Registration options"
       },
       noTimeline: "No timeline has been configured yet",
       survey: {
@@ -1209,7 +1225,8 @@ const Translations = {
       themeNum: "Theme %{index}",
       discussion: {
         "0": "Languages of the Discussion",
-        "3": "Terms & Conditions and Legal Notice"
+        "3": "Registration options",
+        "4": "Terms & Conditions and Legal Notice"
       },
       languageChoice: "Select desired languages below",
       ph: {
@@ -1265,6 +1282,15 @@ const Translations = {
           helper: "Choose the modules you want to see in the landing page and their position."
         },
         successSave: "The modules have been saved with success!"
+      },
+      profileOptions: {
+        addTextField: "Add a field",
+        deleteTextField: "Delete the field",
+        introText:
+          "Configure the fields that you want to display in the registration form. Fill in the names and whether the fields are required or optional.",
+        textFieldToggleOptional: "Make this field optional",
+        textFieldToggleRequired: "Make this field required",
+        successSave: "The profile options has been saved with success!"
       }
     },
     unauthorizedAdministration: {

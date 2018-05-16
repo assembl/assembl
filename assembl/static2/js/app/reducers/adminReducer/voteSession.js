@@ -49,6 +49,7 @@ import {
 } from '../../actions/actionTypes';
 import { updateInLangstringEntries } from '../../utils/i18n';
 import { pickerColors } from '../../constants';
+import { moveItemUp, moveItemDown } from '../../utils/globalFunctions';
 
 const initialPage = Map({
   _hasChanged: false,
@@ -530,42 +531,10 @@ export const voteProposalsById = (state: Map<string, Map> = Map(), action: Redux
   }
   case DELETE_VOTE_PROPOSAL:
     return state.setIn([action.id, '_toDelete'], true);
-  case MOVE_PROPOSAL_UP: {
-    let newState = state;
-    let proposalsInOrder = state
-      .filter(proposal => !proposal.get('_toDelete'))
-      .sortBy(proposal => proposal.get('order'))
-      .map(proposal => proposal.get('id'))
-      .toList();
-    const idx = proposalsInOrder.indexOf(action.id);
-    proposalsInOrder = proposalsInOrder.delete(idx).insert(idx - 1, action.id);
-    let order = 1;
-    proposalsInOrder.forEach((proposalId) => {
-      if (newState.getIn([proposalId, 'order']) !== order) {
-        newState = newState.setIn([proposalId, 'order'], order).setIn([proposalId, '_hasChanged'], true);
-      }
-      order += 1;
-    });
-    return newState;
-  }
-  case MOVE_PROPOSAL_DOWN: {
-    let newState = state;
-    let proposalsInOrder = state
-      .filter(proposal => !proposal.get('_toDelete'))
-      .sortBy(proposal => proposal.get('order'))
-      .map(proposal => proposal.get('id'))
-      .toList();
-    const idx = proposalsInOrder.indexOf(action.id);
-    proposalsInOrder = proposalsInOrder.delete(idx).insert(idx + 1, action.id);
-    let order = 1;
-    proposalsInOrder.forEach((proposalId) => {
-      if (newState.getIn([proposalId, 'order']) !== order) {
-        newState = newState.setIn([proposalId, 'order'], order).setIn([proposalId, '_hasChanged'], true);
-      }
-      order += 1;
-    });
-    return newState;
-  }
+  case MOVE_PROPOSAL_UP:
+    return moveItemUp(state, action.id);
+  case MOVE_PROPOSAL_DOWN:
+    return moveItemDown(state, action.id);
   case UPDATE_VOTE_PROPOSAL_TITLE:
     return state.updateIn([action.id, 'titleEntries'], updateInLangstringEntries(action.locale, action.value));
   case UPDATE_VOTE_PROPOSAL_DESCRIPTION:

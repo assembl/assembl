@@ -40,6 +40,7 @@ describe('getMutationsPromises', () => {
           title: 'Application'
         }
       ],
+      refetchQueries: ['fake', 'refetch', 'queries'],
       variablesCreator: (item, idx) => ({
         title: item.title,
         idx: idx
@@ -51,6 +52,7 @@ describe('getMutationsPromises', () => {
     expect(deleteMutationSpy.mock.calls.length).toBe(0);
     expect(createMutationSpy.mock.calls.length).toBe(1);
     expect(createMutationSpy.mock.calls[0][0]).toEqual({
+      refetchQueries: ['fake', 'refetch', 'queries'],
       variables: {
         title: 'Application',
         idx: 0
@@ -94,6 +96,7 @@ describe('getMutationsPromises', () => {
     expect(createMutationSpy.mock.calls.length).toBe(0);
     expect(deleteMutationSpy.mock.calls.length).toBe(1);
     expect(deleteMutationSpy.mock.calls[0][0]).toEqual({
+      refetchQueries: [],
       variables: { id: 1 }
     });
   });
@@ -137,9 +140,11 @@ describe('getMutationsPromises', () => {
     result.forEach(task => task());
     expect(updateMutationSpy.mock.calls.length).toBe(2);
     expect(updateMutationSpy.mock.calls[0][0]).toEqual({
+      refetchQueries: [],
       variables: { id: 3, lang: 'en' }
     });
     expect(updateMutationSpy.mock.calls[1][0]).toEqual({
+      refetchQueries: [],
       variables: { id: 4, lang: 'en' }
     });
   });

@@ -35,6 +35,7 @@ from assembl.graphql.section import (CreateSection, DeleteSection, Section,
 from assembl.graphql.sentiment import AddSentiment, DeleteSentiment
 from assembl.graphql.synthesis import Synthesis
 from assembl.graphql.user import UpdateUser
+from .configurable_fields import TextField, CreateTextField, UpdateTextField, DeleteTextField, ProfileField, UpdateProfileFields
 from assembl.graphql.votes import AddTokenVote, DeleteTokenVote, AddGaugeVote, DeleteGaugeVote
 from assembl.graphql.vote_session import (
     VoteSession, UpdateVoteSession, CreateTokenVoteSpecification,
@@ -92,6 +93,8 @@ class Query(graphene.ObjectType):
     discussion = graphene.Field(Discussion)
     landing_page_module_types = graphene.List(LandingPageModuleType)
     landing_page_modules = graphene.List(LandingPageModule)
+    text_fields = graphene.List(TextField)
+    profile_fields = graphene.List(ProfileField)
 
     def resolve_resources(self, args, context, info):
         model = models.Resource
@@ -304,6 +307,47 @@ class Query(graphene.ObjectType):
 
         return sorted(modules, key=attrgetter('order'))
 
+    def resolve_text_fields(self, args, context, info):
+        model = models.TextField
+        query = get_query(model, context)
+        discussion_id = context.matchdict['discussion_id']
+        return query.filter(model.discussion_id == discussion_id).order_by(model.order)
+
+    def resolve_profile_fields(self, args, context, info):
+        model = models.ProfileField
+        query = get_query(model, context)
+        discussion_id = context.matchdict['discussion_id']
+        user_id = context.authenticated_userid
+        fields = get_query(
+            models.AbstractConfigurableField, context).filter(
+                models.AbstractConfigurableField.discussion_id == discussion_id
+            ).order_by(models.AbstractConfigurableField.order).all()
+        profile_fields = []
+        if user_id is None:
+            raise Exception('No user id')
+
+        for field in fields:
+            saobj = query.filter(
+                model.discussion_id == discussion_id
+            ).filter(
+                models.ProfileField.configurable_field == field
+            ).filter(
+                models.ProfileField.agent_profile_id == user_id
+            ).first()
+
+            if saobj:
+                profile_field = saobj
+            else:
+                profile_field = ProfileField(
+                    agent_profile=models.AgentProfile.get(user_id),
+                    id=randint(-100000, 0),
+                    configurable_field=field,
+                )
+
+            profile_fields.append(profile_field)
+
+        return profile_fields
+
 
 class Mutations(graphene.ObjectType):
 
@@ -350,6 +394,10 @@ class Mutations(graphene.ObjectType):
     add_post_extract = AddPostExtract.Field()
     update_extract = UpdateExtract.Field()
     delete_extract = DeleteExtract.Field()
+    create_text_field = CreateTextField.Field()
+    update_text_field = UpdateTextField.Field()
+    delete_text_field = DeleteTextField.Field()
+    update_profile_fields = UpdateProfileFields.Field()
 
 
 Schema = graphene.Schema(query=Query, mutation=Mutations)

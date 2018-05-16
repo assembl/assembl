@@ -11,6 +11,7 @@ import { updateVoteSessionPage, updateVoteModules, updateVoteProposals } from '.
 import { updateSections } from '../actions/adminActions/adminSections';
 import { updateLegalNoticeAndTerms } from '../actions/adminActions/legalNoticeAndTerms';
 import { updateLandingPageModules } from '../actions/adminActions/landingPage';
+import { updateTextFields } from '../actions/adminActions/profileOptions';
 import withLoadingIndicator from '../components/common/withLoadingIndicator';
 import Menu from '../components/administration/menu';
 import LanguageMenu from '../components/administration/languageMenu';
@@ -19,6 +20,7 @@ import ResourcesQuery from '../graphql/ResourcesQuery.graphql';
 import ResourcesCenterPage from '../graphql/ResourcesCenterPage.graphql';
 import SectionsQuery from '../graphql/SectionsQuery.graphql';
 import TabsConditionQuery from '../graphql/TabsConditionQuery.graphql';
+import TextFields from '../graphql/TextFields.graphql';
 import LegalNoticeAndTermsQuery from '../graphql/LegalNoticeAndTerms.graphql';
 import VoteSessionQuery from '../graphql/VoteSession.graphql';
 import { convertEntriesToRawContentState } from '../utils/draftjs';
@@ -57,6 +59,7 @@ class Administration extends React.Component {
     this.putLegalNoticeAndTermsInStore = this.putLegalNoticeAndTermsInStore.bind(this);
     this.putVoteSessionInStore = this.putVoteSessionInStore.bind(this);
     this.putLandingPageModulesInStore = this.putLandingPageModulesInStore.bind(this);
+    this.putTextFieldsInStore = this.putTextFieldsInStore.bind(this);
     this.state = {
       showLanguageMenu: true
     };
@@ -76,6 +79,7 @@ class Administration extends React.Component {
     const isHidden = this.props.identifier === 'discussion' && this.props.location.query.section === '1';
     this.props.displayLanguageMenu(isHidden);
     this.putLandingPageModulesInStore(this.props.landingPageModules);
+    this.putTextFieldsInStore(this.props.textFields);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -106,6 +110,10 @@ class Administration extends React.Component {
 
     const isHidden = nextProps.identifier === 'discussion' && nextProps.location.query.section === '1';
     this.props.displayLanguageMenu(isHidden);
+
+    if (nextProps.textFields !== this.props.textFields) {
+      this.putTextFieldsInStore(nextProps.textFields);
+    }
   }
 
   putThematicsInStore(data) {
@@ -196,6 +204,13 @@ class Administration extends React.Component {
     this.props.updateLandingPageModules(filtered.landingPageModules);
   }
 
+  putTextFieldsInStore(textFields) {
+    if (textFields) {
+      const filtered = filter(TextFields, { textFields: textFields });
+      this.props.updateTextFields(filtered.textFields);
+    }
+  }
+
   render() {
     const {
       children,
@@ -209,7 +224,8 @@ class Administration extends React.Component {
       refetchSections,
       refetchLegalNoticeAndTerms,
       refetchVoteSession,
-      refetchLandingPageModules
+      refetchLandingPageModules,
+      refetchTextFields
     } = this.props;
     const { phase } = params;
     const { timeline } = this.props.debate.debateData;
@@ -223,7 +239,8 @@ class Administration extends React.Component {
         refetchSections: refetchSections,
         refetchResourcesCenter: refetchResourcesCenter,
         refetchLandingPageModules: refetchLandingPageModules,
-        refetchLegalNoticeAndTerms: refetchLegalNoticeAndTerms
+        refetchLegalNoticeAndTerms: refetchLegalNoticeAndTerms,
+        refetchTextFields: refetchTextFields
       })
     );
 
@@ -286,7 +303,8 @@ const mapDispatchToProps = dispatch => ({
   updateVoteProposals: voteProposals => dispatch(updateVoteProposals(voteProposals)),
   updateLegalNoticeAndTerms: legalNoticeAndTerms => dispatch(updateLegalNoticeAndTerms(legalNoticeAndTerms)),
   displayLanguageMenu: isHidden => dispatch(displayLanguageMenu(isHidden)),
-  updateLandingPageModules: landingPageModules => dispatch(updateLandingPageModules(landingPageModules))
+  updateLandingPageModules: landingPageModules => dispatch(updateLandingPageModules(landingPageModules)),
+  updateTextFields: textFields => dispatch(updateTextFields(textFields))
 });
 
 const mergeLoadingAndHasErrors = WrappedComponent => (props) => {
@@ -303,7 +321,9 @@ const mergeLoadingAndHasErrors = WrappedComponent => (props) => {
     tabsConditionsLoading,
     tabsConditionsHasErrors,
     legalNoticeAndTermsLoading,
-    legalNoticeAndTermsHasErrors
+    legalNoticeAndTermsHasErrors,
+    textFieldsLoading,
+    textFieldsHasErrors
   } = props;
 
   const hasErrors =
@@ -314,6 +334,7 @@ const mergeLoadingAndHasErrors = WrappedComponent => (props) => {
     legalNoticeAndTermsHasErrors ||
     sectionsHasErrors ||
     props[landingPagePlugin.hasErrors] ||
+    textFieldsHasErrors ||
     (data && data.error);
   const loading =
     voteSessionLoading ||
@@ -323,6 +344,7 @@ const mergeLoadingAndHasErrors = WrappedComponent => (props) => {
     legalNoticeAndTermsLoading ||
     sectionsLoading ||
     props[landingPagePlugin.loading] ||
+    textFieldsLoading ||
     (data && data.loading);
 
   return <WrappedComponent {...props} hasErrors={hasErrors} loading={loading} />;
@@ -470,6 +492,35 @@ export default compose(
     }
   }),
   graphql(landingPagePlugin.graphqlQuery, { options: landingPagePlugin.queryOptions, props: landingPagePlugin.dataToProps }),
+  graphql(TextFields, {
+    options: ({ i18n }) => ({
+      variables: { lang: i18n.locale }
+    }),
+    props: ({ data }) => {
+      if (data.loading) {
+        return {
+          textFieldsLoading: true
+        };
+      }
+
+      if (data.error) {
+        return {
+          textFieldsHasErrors: true
+        };
+      }
+
+      return {
+        textFieldsLoading: data.loading,
+        textFieldsHasErrors: data.error,
+        refetchTextFields: data.refetch,
+        textFields: data.textFields
+      };
+    },
+    skip: (props) => {
+      const currentLocation = props.router.getCurrentLocation();
+      return !currentLocation.pathname.endsWith('discussion') || currentLocation.search !== '?section=3';
+    }
+  }),
   mergeLoadingAndHasErrors,
   withLoadingIndicator()
 )(Administration);

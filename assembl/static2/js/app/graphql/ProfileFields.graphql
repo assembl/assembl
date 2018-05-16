@@ -1,0 +1,11 @@
+#import "./fragments/TextField.graphql"
+
+query ProfileFields($lang: String!) {
+  profileFields {
+    id
+    configurableField {
+      ...textField
+    }
+    valueData
+  }
+}

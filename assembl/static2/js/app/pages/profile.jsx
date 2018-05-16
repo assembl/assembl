@@ -5,59 +5,85 @@ import { compose, graphql } from 'react-apollo';
 import { Translate, I18n } from 'react-redux-i18n';
 import { Grid, Col, Button } from 'react-bootstrap';
 
-import FormControlWithLabel from '../components/common/formControlWithLabel';
+import ConfiguredField, { type ConfiguredFieldType } from '../components/common/configuredField';
 import ModifyPasswordForm from '../components/common/modifyPasswordForm';
 import { get, getContextual } from '../utils/routeMap';
 import { displayAlert } from '../utils/utilityManager';
 import withLoadingIndicator from '../components/common/withLoadingIndicator';
 import UserQuery from '../graphql/userQuery.graphql';
+import ProfileFieldsQuery from '../graphql/ProfileFields.graphql';
 import UpdateUserMutation from '../graphql/mutations/updateUser.graphql';
+import UpdateProfileFieldsMutation from '../graphql/mutations/updateProfileFields.graphql';
 import { browserHistory } from '../router';
 
-type ProfileProps = {
-  username: string,
-  name: string,
-  email: string,
+type Props = {
   connectedUserId: string,
   creationDate: ?string,
+  email: string, // eslint-disable-line react/no-unused-prop-types
   lang: string,
   slug: string,
   userId: string,
+  username: string, // eslint-disable-line react/no-unused-prop-types
   id: string,
   hasPassword: boolean,
-  params: Object,
-  location: Object,
-  updateUser: Function
-};
-
-type ProfileState = {
-  username: string,
   name: string,
-  email: string,
-  passwordEditionOpen: boolean
+  params: Object,
+  profileFields: Array<ConfiguredFieldType>,
+  location: Object,
+  updateProfileFields: Function
 };
 
-class Profile extends React.PureComponent<*, ProfileProps, ProfileState> {
-  props: ProfileProps;
+type State = {
+  passwordEditionOpen: boolean,
+  values: {
+    [string]: Object
+  }
+};
 
-  state: ProfileState;
+class Profile extends React.PureComponent<*, Props, State> {
+  props: Props;
+
+  state: State;
 
   defaultProps: {
     creationDate: null
   };
 
+  static getDerivedStateFromProps(nextProps: Props) {
+    const email = nextProps.profileFields.find(pf => pf.configurableField.identifier === 'EMAIL');
+    const fullname = nextProps.profileFields.find(pf => pf.configurableField.identifier === 'FULLNAME');
+    const username = nextProps.profileFields.find(pf => pf.configurableField.identifier === 'USERNAME');
+    const defaultValues =
+      email && fullname && username
+        ? {
+          [email.id]: nextProps.email,
+          [fullname.id]: nextProps.name,
+          [username.id]: nextProps.username
+        }
+        : {};
+    const values = nextProps.profileFields
+      .filter(pf => pf.configurableField.identifier === 'CUSTOM')
+      .filter(pf => pf.valueData)
+      .reduce(
+        (result, pf) => ({
+          ...result,
+          [pf.id]: pf.valueData.value
+        }),
+        defaultValues
+      );
+
+    return { values: values };
+  }
+
   constructor(props) {
     super(props);
-    const { username, name, email } = this.props;
     this.state = {
-      username: username,
-      name: name,
-      email: email,
+      values: {},
       passwordEditionOpen: false
     };
   }
 
-  componentWillMount() {
+  componentDidMount() {
     const { connectedUserId, slug } = this.props;
     const { userId } = this.props.params;
     const { location } = this.props;
@@ -68,27 +94,28 @@ class Profile extends React.PureComponent<*, ProfileProps, ProfileState> {
     }
   }
 
-  handleUsernameChange = (e) => {
-    this.setState({ username: e.target.value });
-  };
-
-  handleFullnameChange = (e) => {
-    this.setState({ name: e.target.value });
-  };
-
-  handleEmailChange = (e) => {
-    this.setState({ email: e.target.value });
-  };
-
   handleSaveClick = () => {
-    const { updateUser, id } = this.props;
-    const { name, username } = this.state;
-    const variables = {
-      id: id,
-      name: name,
-      username: username
+    const { id, lang, profileFields, updateProfileFields } = this.props;
+    const data = profileFields.map(pf => ({
+      configurableFieldId: pf.configurableField.id,
+      id: pf.id,
+      valueData: {
+        value: this.state.values[pf.id]
+      }
+    }));
+    const variables = { lang: lang, data: data };
+    const payload = {
+      refetchQueries: [
+        {
+          query: UserQuery,
+          variables: {
+            id: id
+          }
+        }
+      ],
+      variables: variables
     };
-    updateUser({ variables: variables })
+    updateProfileFields(payload)
       .then(() => {
         displayAlert('success', I18n.t('profile.saveSuccess'));
       })
@@ -101,11 +128,19 @@ class Profile extends React.PureComponent<*, ProfileProps, ProfileState> {
     this.setState({ passwordEditionOpen: true });
   };
 
+  handleFieldValueChange = (id, value) => {
+    this.setState(prevState => ({
+      ...prevState,
+      values: {
+        ...prevState.values,
+        [id]: value
+      }
+    }));
+  };
+
   render() {
-    const { username, name, email } = this.state;
-    const { creationDate, hasPassword, lang, id } = this.props;
-    const fullNameLabel = I18n.t('profile.fullname');
-    const emailLabel = I18n.t('profile.email');
+    const { creationDate, hasPassword, lang, id, name } = this.props;
+    const profileFields = this.props.profileFields;
     return (
       <div className="profile background-dark-grey">
         <div className="content-section">
@@ -115,7 +150,7 @@ class Profile extends React.PureComponent<*, ProfileProps, ProfileState> {
                 <div className="center">
                   <span className="assembl-icon-profil" />
                 </div>
-                <h2 className="dark-title-2 capitalized center">{this.props.name}</h2>
+                <h2 className="dark-title-2 capitalized center">{name}</h2>
                 {creationDate && (
                   <div className={`center member-since lang-${lang}`}>
                     <Translate value="profile.memberSince" date={I18n.l(creationDate, { dateFormat: 'date.format2' })} />
@@ -131,27 +166,16 @@ class Profile extends React.PureComponent<*, ProfileProps, ProfileState> {
                     <Translate value="profile.personalInfos" />
                   </h2>
                   <div className="profile-form center">
-                    <FormControlWithLabel
-                      label={I18n.t('profile.userName')}
-                      onChange={this.handleUsernameChange}
-                      type="text"
-                      value={username}
-                    />
-                    <FormControlWithLabel
-                      label={fullNameLabel}
-                      onChange={this.handleFullnameChange}
-                      type="text"
-                      value={name}
-                      required
-                    />
-                    <FormControlWithLabel
-                      label={emailLabel}
-                      onChange={this.handleEmailChange}
-                      type="email"
-                      value={email}
-                      disabled
-                    />
-                    <Button disabled={!name} className="button-submit button-dark margin-l" onClick={this.handleSaveClick}>
+                    {profileFields &&
+                      profileFields.map(pf => (
+                        <ConfiguredField
+                          key={pf.id}
+                          configurableField={pf.configurableField}
+                          handleValueChange={value => this.handleFieldValueChange(pf.id, value)}
+                          value={this.state.values[pf.id]}
+                        />
+                      ))}
+                    <Button className="button-submit button-dark margin-l" onClick={this.handleSaveClick}>
                       <Translate value="profile.save" />
                     </Button>
                   </div>
@@ -193,6 +217,21 @@ const mapStateToProps = ({ context, debate, i18n }, ownProps) => {
 
 export default compose(
   connect(mapStateToProps),
+  graphql(ProfileFieldsQuery, {
+    props: ({ data }) => {
+      if (data.loading) {
+        return { loading: true, profileFields: [] };
+      }
+      if (data.error) {
+        // this is needed to properly redirect to home page in case of error
+        return { error: data.error, profileFields: [] };
+      }
+
+      return {
+        profileFields: data.profileFields
+      };
+    }
+  }),
   graphql(UserQuery, {
     props: ({ data }) => {
       if (data.loading) {
@@ -203,14 +242,15 @@ export default compose(
         return { error: data.error };
       }
       return {
-        username: data.user.username,
-        name: data.user.name,
-        email: data.user.email,
         creationDate: data.user.creationDate,
-        hasPassword: data.user.hasPassword
+        email: data.user.email,
+        hasPassword: data.user.hasPassword,
+        name: data.user.name,
+        username: data.user.username
       };
     }
   }),
   graphql(UpdateUserMutation, { name: 'updateUser' }),
+  graphql(UpdateProfileFieldsMutation, { name: 'updateProfileFields' }),
   withLoadingIndicator()
 )(Profile);

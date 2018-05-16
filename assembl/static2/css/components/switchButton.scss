@@ -182,3 +182,47 @@ $rsbc-theme-flat-color-disabled-border : darken($rsbc-theme-flat-color-disabled,
     }
   }
 }
+
+// switchButton style for the administration
+.administration {
+  .rsbc-switch-button-flat-round {
+    input[type="checkbox"] + label {
+      height: 14px;
+      width: 27px;
+      background-color: $white;
+
+      &:hover {
+        background-color: $white;
+      }
+
+      &:after {
+        height: 8px;
+        width: 8px;
+        margin-top: -1px;
+        background-color: $white;
+        margin-left: -1px;
+      }
+
+      &:before {
+        background-color: $grey5;
+      }
+    }
+
+    input[type="checkbox"]:checked + label {
+      background-color: $white;
+
+      &:hover {
+        background-color: $white;
+      }
+
+      &:after {
+        margin-left: 12px;
+        background-color: $white;
+      }
+
+      &:before {
+        background-color: $harvesting-green;
+      }
+    }
+  }
+}

@@ -115,3 +115,13 @@ type Extract = {
   extractAction: string,
   body: string
 };
+
+type ConfigurableField = {
+  fieldType: string,
+  id: string,
+  identifier: string,
+  order: number,
+  required: boolean,
+  title: string,
+  __typename: string
+};

@@ -34,6 +34,13 @@ class Menu extends React.Component {
             <li>
               <Link to={`${get('administration', slug)}/discussion?section=3`} activeClassName="active">
                 <span>
+                  <Translate value="administration.menu.manageProfileOptions" />
+                </span>
+              </Link>
+            </li>
+            <li>
+              <Link to={`${get('administration', slug)}/discussion?section=4`} activeClassName="active">
+                <span>
                   <Translate value="administration.menu.legalNoticeAndTerms" />
                 </span>
               </Link>

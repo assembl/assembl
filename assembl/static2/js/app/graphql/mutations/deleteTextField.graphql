@@ -1,0 +1,5 @@
+mutation deleteTextField($id: ID!) {
+  deleteTextField(id: $id) {
+    success
+  }
+}

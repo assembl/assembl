@@ -10,7 +10,6 @@ from assembl import models
 from assembl.auth import CrudPermissions
 from assembl.auth import Everyone, P_SYSADMIN, P_ADMIN_DISC
 from assembl.auth.util import get_permissions
-
 from .document import Document
 from .types import SecureObjectType
 from .utils import DateTime, abort_transaction_on_exception

@@ -1,3 +1,4 @@
+# -*- coding=utf-8 -*-
 """All classes relative to users and their online identities."""
 from datetime import datetime, timedelta
 from itertools import chain, permutations
@@ -53,6 +54,7 @@ from ..auth import (
     SYSTEM_ROLES
 )
 from .langstrings import Locale
+
 
 log = logging.getLogger('assembl')
 
