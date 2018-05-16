@@ -8,6 +8,7 @@ exports[`DumbTextGaugeForm component should render a form to set up a textual ga
         helperUrl=""
         label="Value title 1"
         labelAlwaysVisible={false}
+        name={null}
         onChange={[Function]}
         required={true}
         type="text"
@@ -20,6 +21,7 @@ exports[`DumbTextGaugeForm component should render a form to set up a textual ga
         helperUrl=""
         label="Value title 2"
         labelAlwaysVisible={false}
+        name={null}
         onChange={[Function]}
         required={true}
         type="text"

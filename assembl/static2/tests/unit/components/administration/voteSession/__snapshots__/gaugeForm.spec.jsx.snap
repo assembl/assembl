@@ -16,6 +16,7 @@ exports[`GaugeForm component should render a form to set up a gauge and a number
       helperUrl="/static2/img/helpers/helper6.png"
       label="Instructions for the gauge vote"
       labelAlwaysVisible={false}
+      name={null}
       onChange={[Function]}
       required={true}
       type="text"
@@ -188,6 +189,7 @@ exports[`GaugeForm component should render a form to set up a gauge and a textGa
       helperUrl="/static2/img/helpers/helper6.png"
       label="Instructions for the gauge vote"
       labelAlwaysVisible={false}
+      name={null}
       onChange={[Function]}
       required={true}
       type="text"
@@ -370,6 +372,7 @@ exports[`GaugeForm component should render a gauge form with no radio if canChan
       helperUrl="/static2/img/helpers/helper6.png"
       label="Instructions for the gauge vote"
       labelAlwaysVisible={false}
+      name={null}
       onChange={[Function]}
       required={true}
       type="text"

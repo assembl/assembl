@@ -15,6 +15,7 @@ exports[`tokenTypeForm component should render a TokenCategoryForm component 1`]
       helperUrl=""
       label="Token title"
       labelAlwaysVisible={false}
+      name={null}
       onChange={[Function]}
       required={true}
       type="text"
@@ -30,6 +31,7 @@ exports[`tokenTypeForm component should render a TokenCategoryForm component 1`]
       helperUrl=""
       label="Number of tokens per participant"
       labelAlwaysVisible={false}
+      name={null}
       onChange={undefined}
       required={true}
       type="number"

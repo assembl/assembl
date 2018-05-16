@@ -53,6 +53,7 @@ exports[`Vote Session DumbPageForm component should render a form to update the 
           helperUrl=""
           label="Header title FR"
           labelAlwaysVisible={false}
+          name={null}
           onChange={[Function]}
           required={true}
           type="text"
@@ -63,6 +64,7 @@ exports[`Vote Session DumbPageForm component should render a form to update the 
           helperUrl=""
           label="Header subtitle FR"
           labelAlwaysVisible={false}
+          name={null}
           onChange={[Function]}
           required={false}
           type="text"
@@ -110,6 +112,7 @@ exports[`Vote Session DumbPageForm component should render a form to update the 
         helperUrl=""
         label="Instructions title FR"
         labelAlwaysVisible={false}
+        name={null}
         onChange={[Function]}
         required={true}
         type="text"
@@ -120,6 +123,7 @@ exports[`Vote Session DumbPageForm component should render a form to update the 
         helperUrl=""
         label="Instructions content FR"
         labelAlwaysVisible={false}
+        name={null}
         onChange={[Function]}
         required={true}
         type="rich-text"
@@ -155,6 +159,7 @@ exports[`Vote Session DumbPageForm component should render a form to update the 
         helperUrl=""
         label="Section title FR"
         labelAlwaysVisible={false}
+        name={null}
         onChange={[Function]}
         required={true}
         type="text"

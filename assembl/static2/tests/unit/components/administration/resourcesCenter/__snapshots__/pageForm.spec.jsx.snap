@@ -17,6 +17,7 @@ exports[`DumbPageForm component should render a form to update the resources cen
       className="form-control"
       disabled={undefined}
       id={undefined}
+      name={undefined}
       onBlur={[Function]}
       onChange={[Function]}
       placeholder="Page title"
