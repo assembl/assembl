@@ -14,15 +14,17 @@ from pyramid.httpexceptions import (
     HTTPPreconditionFailed, HTTPConflict, HTTPInternalServerError)
 from pyisemail import is_email
 
+from graphql_relay.node.node import from_global_id
 from assembl.lib.sqla_types import EmailString
 from ...lib import config
 from assembl.auth import (
     P_ADMIN_DISC, P_SELF_REGISTER, P_SELF_REGISTER_REQUEST,
     R_PARTICIPANT, P_READ, CrudPermissions)
 from assembl.auth.social_auth import maybe_social_logout
-from assembl.models import (
+from assembl.models import
     User, Discussion, LocalUserRole, AbstractAgentAccount, AgentProfile,
-    UserLanguagePreference, EmailAccount, AgentStatusInDiscussion, Username)
+    UserLanguagePreference, EmailAccount, AgentStatusInDiscussion, Username,
+    AbstractConfigurableField, ProfileField)
 from assembl.auth.password import (
     verify_password_change_token, get_data_token_time, Validity)
 from assembl.auth.util import get_permissions, discussion_from_request
@@ -36,6 +38,7 @@ from assembl.lib.sqla import ObjectNotUniqueError
 from ..auth.views import (
     send_change_password_email, from_identifier, send_confirmation_email,
     maybe_auto_subscribe)
+
 
 _ = TranslationStringFactory('assembl')
 
@@ -500,6 +503,20 @@ def assembl_register_user(request):
                 first_visit=now, last_visit=now,
                 user_created_on_this_discussion=True)
             session.add(agent_status)
+        session.flush()
+
+        # create the profile fields for custom fields
+        for global_id, value in json.get('profileFields', {}).iteritems():
+            configurable_field_id = from_global_id(global_id)[1]
+            configurable_field = AbstractConfigurableField.get(configurable_field_id)
+            profile_field = ProfileField(
+                agent_profile=user,
+                configurable_field=configurable_field,
+                discussion=configurable_field.discussion,
+                value_data={ u'value': value }
+            )
+            session.add(profile_field)
+
         session.flush()
 
         if validate_registration:

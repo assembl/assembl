@@ -16,27 +16,30 @@ export const postChangePassword = (payload) => {
 };
 
 export const signUp = (payload) => {
-  if (payload.password !== payload.password2) {
+  const { checked, discussionSlug, email, fullname, password, password2, username, ...rest } = payload;
+
+  if (password !== password2) {
     return Promise.reject(new PasswordMismatchError('Passwords do not match!'));
   }
 
   let route;
-  if (!payload.discussionSlug) {
+  if (!discussionSlug) {
     route = '/data/User';
   } else {
-    route = `/data/Discussion/${payload.discussionSlug}/all_users`;
+    route = `/data/Discussion/${discussionSlug}/all_users`;
   }
+
   const newPayload = {
-    ...payload,
-    username: payload.username || null,
-    real_name: payload.fullname,
-    password: payload.password,
+    username: username || null,
+    real_name: fullname,
+    password: password,
     accounts: [
       {
-        email: payload.email,
+        email: email,
         '@type': 'EmailAccount'
       }
-    ]
+    ],
+    profileFields: rest
   };
 
   return xmlHttpRequest({
