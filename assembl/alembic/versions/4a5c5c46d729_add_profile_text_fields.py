@@ -46,7 +46,7 @@ def upgrade(pyramid_env):
             sa.Column('title_id', sa.Integer, sa.ForeignKey('langstring.id')),
             sa.Column('order', sa.Float, default=0.0, nullable=False),
             sa.Column('required', sa.Boolean),
-            sa.schema.UniqueConstraint('title_id')
+            sa.schema.UniqueConstraint('title_id', name='uq_configurable_field_title_id')
         )
 
         op.create_table(
