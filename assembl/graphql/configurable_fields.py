@@ -2,6 +2,7 @@ import graphene
 from graphene.relay import Node
 from graphene.types.generic import GenericScalar
 from graphene_sqlalchemy import SQLAlchemyObjectType
+from graphene_sqlalchemy.utils import get_query
 from pyramid.i18n import TranslationStringFactory
 
 from assembl import models
@@ -190,7 +191,6 @@ class UpdateProfileFields(graphene.Mutation):
     @staticmethod
     @abort_transaction_on_exception
     def mutate(root, args, context, info):
-        from graphene_sqlalchemy.utils import get_query
         cls = models.ProfileField
         discussion_id = context.matchdict['discussion_id']
         user_id = context.authenticated_userid
