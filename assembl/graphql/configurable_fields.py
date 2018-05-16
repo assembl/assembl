@@ -59,9 +59,6 @@ class CreateTextField(graphene.Mutation):
             if len(title_entries) == 0:
                 raise Exception(
                     'TextField titleEntries needs at least one entry')
-                # Better to have this message than
-                # 'NoneType' object has no attribute 'owner_object'
-                # when creating the saobj below if title=None
 
             title_langstring = langstring_from_input_entries(title_entries)
 
@@ -99,9 +96,6 @@ class UpdateTextField(graphene.Mutation):
             if len(title_entries) == 0:
                 raise Exception(
                     'TextField titleEntries needs at least one entry')
-                # Better to have this message than
-                # 'NoneType' object has no attribute 'owner_object'
-                # when creating the saobj below if title=None
 
             update_langstring_from_input_entries(text_field, 'title', title_entries)
             text_field.order = args['order']
