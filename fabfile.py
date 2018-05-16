@@ -724,20 +724,31 @@ def bootstrap(projectpath):
 
 
 @task
-def bootstrap_from_checkout():
+def bootstrap_from_checkout(backup=False):
     """
     Creates the virtualenv and install the app from git checkout
     """
-    execute(updatemaincode)
+    execute(updatemaincode, backup=backup)
     execute(build_virtualenv)
-    execute(app_update_dependencies)
+    execute(app_update_dependencies, backup=backup)
     execute(app_setup)
     execute(check_and_create_database_user)
     execute(app_compile_nodbupdate)
     execute(set_file_permissions)
-    execute(app_db_install)
+    if not backup:
+        execute(app_db_install)
+    else:
+        execute(database_restore, backup=backup)
     execute(app_reload)
     execute(webservers_reload)
+
+
+@task
+def bootstrap_from_backup(backup=True):
+    """
+    Creates the virtualenv and install the app from the backup files
+    """
+    execute(bootstrap_from_checkout, backup=backup)
 
 
 def clone_repository():
@@ -756,17 +767,19 @@ def clone_repository():
                                                 env.projectpath))
 
 
-def updatemaincode():
+def updatemaincode(backup=False):
     """
     Update code and/or switch branch
     """
-    print(cyan('Updating Git repository'))
-    with cd(join(env.projectpath)):
-        run('git fetch')
-        run('git checkout %s' % env.gitbranch)
-        run('git pull %s %s' % (env.gitrepo, env.gitbranch))
+    if not backup:
+        print(cyan('Updating Git repository'))
+        with cd(join(env.projectpath)):
+            run('git fetch')
+            run('git checkout %s' % env.gitbranch)
+            run('git pull %s %s' % (env.gitrepo, env.gitbranch))
 
 
+@task
 def app_setup():
     venvcmd('pip install -e ./')
     execute(setup_var_directory)
@@ -804,14 +817,15 @@ def app_update():
 
 
 @task
-def app_update_dependencies(force_reinstall=False):
+def app_update_dependencies(force_reinstall=False, backup=False):
     """
     Updates all python and javascript dependencies.  Everything that requires a
     network connection to update
     """
-    execute(update_vendor_themes_1)
-    execute(update_vendor_themes_2)
-    execute(ensure_requirements)
+    if not backup:
+        execute(update_vendor_themes_1)
+        execute(update_vendor_themes_2)
+        execute(ensure_requirements)
     execute(update_pip_requirements, force_reinstall=force_reinstall)
     # Nodeenv is installed by python , so this must be after update_pip_requirements
     execute(update_node, force_reinstall=force_reinstall)
@@ -1591,15 +1605,20 @@ def postgres_user_detach():
 
 
 @task
-def database_restore():
+def database_restore(backup=False):
     """
     Restores the database backed up on the remote server
     """
-    assert(env.wsginame in ('staging.wsgi', 'dev.wsgi'))
-
-    processes = filter_autostart_processes([
-        "dev:pserve" "celery_imap", "changes_router", "celery_notify",
-        "celery_notification_dispatch", "source_reader"])
+    if not backup:
+        assert(env.wsginame in ('staging.wsgi', 'dev.wsgi'))
+        processes = filter_autostart_processes([
+            "dev:pserve" "celery_imap", "changes_router", "celery_notify",
+            "celery_notification_dispatch", "source_reader"])
+    else:
+        processes = filter_autostart_processes([
+            "dev:pserve", "dev:gulp", "dev:webpack", "edgesense", "elasticsearch", "celery_imap", "changes_router", "celery_notify",
+            "celery_notification_dispatch", "celery_notify_beat", "celery_translate", "source_reader", "maintenance_uwsgi", "metrics",
+            "metrics_py", "prod:uwsgi"])
 
     if(env.wsginame != 'dev.wsgi'):
         execute(webservers_stop)
