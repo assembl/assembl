@@ -21,7 +21,7 @@ from assembl.auth import (
     P_ADMIN_DISC, P_SELF_REGISTER, P_SELF_REGISTER_REQUEST,
     R_PARTICIPANT, P_READ, CrudPermissions)
 from assembl.auth.social_auth import maybe_social_logout
-from assembl.models import
+from assembl.models import (
     User, Discussion, LocalUserRole, AbstractAgentAccount, AgentProfile,
     UserLanguagePreference, EmailAccount, AgentStatusInDiscussion, Username,
     AbstractConfigurableField, ProfileField)
