@@ -18,10 +18,15 @@ type taxonomyOverflowMenuState = {
   action: ?string
 }
 
-class TaxonomyOverflowMenu extends React.Component<*, TaxonomyOverflowMenuProps, taxonomyOverflowMenuState> {
+class TaxonomyOverflowMenu extends React.Component<Object, TaxonomyOverflowMenuProps, taxonomyOverflowMenuState> {
   props: TaxonomyOverflowMenuProps;
 
   state: taxonomyOverflowMenuState;
+
+  static defaultProps = {
+    extractNature: null,
+    extractAction: null
+  }
 
   static defaultProps = {
     extractNature: null,

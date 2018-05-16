@@ -240,10 +240,9 @@ class DumbHarvestingBox extends React.Component<Object, Props, State> {
       return <div className="harvesting-taxonomy-label">{I18n.t(`search.taxonomy_nature.${nature}`)}</div>;
     }
     return action ? <div className="harvesting-taxonomy-label">{I18n.t(`search.taxonomy_action.${action}`)}</div> : null;
-    // the ternary is simply there to satisfy flow
   }
 
-  componentWillMount() {
+  componentDidMount() {
     window.addEventListener('scroll', this.updateOverflowMenuPosition);
   }
 
@@ -263,8 +262,7 @@ class DumbHarvestingBox extends React.Component<Object, Props, State> {
       const height = overflowMenu.clientHeight;
       const bottomScroll = window.pageYOffset + height;
       const windowHeight = document.body && document.body.scrollHeight;
-      // $FlowFixMe
-      const isBottomReached = bottomScroll >= windowHeight - window.innerHeight;
+      const isBottomReached = windowHeight && bottomScroll >= windowHeight - window.innerHeight;
       if (isBottomReached) {
         this.setState({ overflowMenuTop: -320 });
       } else {
@@ -301,9 +299,9 @@ class DumbHarvestingBox extends React.Component<Object, Props, State> {
               {extractAction && !extractNature && <ActionIcons qualifier={extractAction} backgroundColor="#fff" color="#000" />}
             </div>
             {extractNature && extractAction &&
-            <div className="box-icon box-icon-2">
-              <ActionIcons qualifier={extractAction} backgroundColor="#fff" color="#000" />
-            </div>}
+              <div className="box-icon box-icon-2">
+                <ActionIcons qualifier={extractAction} backgroundColor="#fff" color="#000" />
+              </div>}
           </div>
         )}
         <div className={classnames('theme-box', 'harvesting-box', { 'active-box': extractIsValidated })}>
