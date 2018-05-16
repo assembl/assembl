@@ -418,6 +418,9 @@ const Translations = {
       headerTitle: "Mentions légales"
     },
     administration: {
+      confirmTextFieldDeletionTitle: "Supprimer le champ",
+      confirmTextFieldDeletion:
+        "Êtes-vous certain de vouloir supprimer ce champ ? La modification ne sera prise en compte qu'au moment de la sauvegarde.",
       addThematic: "Ajouter une thématique",
       addQuestion: "Ajouter une question",
       anErrorOccured:
@@ -1071,6 +1074,9 @@ const Translations = {
       headerTitle: "Legal Notice"
     },
     administration: {
+      confirmTextFieldDeletionTitle: "Delete the text field",
+      confirmTextFieldDeletion:
+        "Are you sure that you want to delete this text field? The modification will be apply after saving.",
       addThematic: "Add a theme",
       addQuestion: "Add a question",
       anErrorOccured: "An error occured during save. Please check that you filled all the required fields.",
