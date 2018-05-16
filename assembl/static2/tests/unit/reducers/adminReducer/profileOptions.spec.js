@@ -130,6 +130,7 @@ describe('textFieldsById reducer', () => {
         _isNew: true,
         _toDelete: false,
         id: '-134582',
+        identifier: 'CUSTOM',
         order: 2.0,
         required: false,
         titleEntries: List()

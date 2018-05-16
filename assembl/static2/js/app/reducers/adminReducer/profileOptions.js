@@ -48,6 +48,7 @@ export const textFieldsById: TextFieldsByIdReducer = (state = initialTextFields,
         _isNew: true,
         _toDelete: false,
         id: action.id,
+        identifier: 'CUSTOM',
         order: state.size + 1.0,
         required: false,
         titleEntries: List()
