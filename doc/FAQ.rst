@@ -80,6 +80,18 @@ For the moment, we use flow version 0.52 which has this issue https://github.com
 
 Sometimes the issue is also fixed after a `fab -c configs/local.rc app_compile` or a reboot.
 
+A working solution is to run flow from a docker container:
+
+```
+docker pull node:6
+cd assembl/static2
+git checkout develop
+yarn install # si on était sur une branche qui avait d'autres versions des dépendances (notamment de flow)
+docker run --rm -v $PWD:/app node:6 bash -c "cd /app; npm run flow"
+```
+
+And then adapt your `.pre-commit-config.yaml` file.
+
 
 I want to change the title which shows on a tab of a debate
 ------------------------------------------------------------
