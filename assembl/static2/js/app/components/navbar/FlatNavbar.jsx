@@ -43,30 +43,34 @@ export default class FlatNavbar extends React.PureComponent {
       style,
       logoLink,
       maxWidth,
-      themeId
+      themeId,
+      isLargeLogo
     } = this.props;
     return (
-      <div className="flat-navbar" style={style}>
-        <div
-          className="left-part"
-          ref={refWidthUpdate(newWidth => this.setState(() => ({ leftWidth: newWidth }), this.updateWidth))}
-        >
-          <Logo slug={slug} src={logoSrc} url={logoLink} />
-          <NavigationMenu elements={elements} />
-        </div>
-        <div
-          className="right-part"
-          ref={refWidthUpdate(newWidth => this.setState(() => ({ rightWidth: newWidth }), this.updateWidth))}
-        >
-          <UserMenu
-            helpUrl={helpUrl}
-            location={location}
-            connectedUserId={connectedUserId}
-            currentPhaseIdentifier={currentPhaseIdentifier}
-            remainingWidth={maxWidth - this.state.leftWidth + this.state.languageMenuWidth}
-            themeId={themeId}
-          />
-          <LanguageMenu size="xs" className="navbar-language" setWidth={this.setLanguageMenuWidth} />
+      <div>
+        {isLargeLogo && <Logo slug={slug} src={logoSrc} url={logoLink} />}
+        <div className="flat-navbar" style={style}>
+          <div
+            className="left-part"
+            ref={refWidthUpdate(newWidth => this.setState(() => ({ leftWidth: newWidth }), this.updateWidth))}
+          >
+            {!isLargeLogo && <Logo slug={slug} src={logoSrc} url={logoLink} />}
+            <NavigationMenu elements={elements} />
+          </div>
+          <div
+            className="right-part"
+            ref={refWidthUpdate(newWidth => this.setState(() => ({ rightWidth: newWidth }), this.updateWidth))}
+          >
+            <UserMenu
+              helpUrl={helpUrl}
+              location={location}
+              connectedUserId={connectedUserId}
+              currentPhaseIdentifier={currentPhaseIdentifier}
+              remainingWidth={maxWidth - this.state.leftWidth + this.state.languageMenuWidth}
+              themeId={themeId}
+            />
+            <LanguageMenu size="xs" className="navbar-language" setWidth={this.setLanguageMenuWidth} />
+          </div>
         </div>
       </div>
     );

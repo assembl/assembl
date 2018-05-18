@@ -161,7 +161,7 @@ export class AssemblNavbar extends React.PureComponent {
     const { screenWidth, debate, data, location, phase } = this.props;
     const sections = data.sections;
     const { debateData } = debate;
-    const { timeline, logo, slug, helpUrl } = debateData;
+    const { timeline, logo, slug, helpUrl, isLargeLogo } = debateData;
     const flatWidth = (this.state && this.state.flatWidth) || 0;
     const maxAppWidth = Math.min(APP_CONTAINER_MAX_WIDTH, screenWidth) - APP_CONTAINER_PADDING * 2;
     const screenTooSmall = flatWidth > maxAppWidth;
@@ -193,6 +193,7 @@ export class AssemblNavbar extends React.PureComponent {
               style={screenTooSmall ? { opacity: 0, position: 'absolute', top: '-200px' } : {}}
               maxWidth={maxAppWidth}
               themeId={themeId}
+              isLargeLogo={isLargeLogo}
             />
           </div>
         </Navbar>

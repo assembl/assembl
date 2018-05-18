@@ -11,6 +11,7 @@ const mockDiscussion = {
 const mockPreferences = {
   terms_of_use_url: 'terms.fr',
   extra_json: {
+    isLargeLogo: true,
     headerLogoUrl: '',
     topic: {
       titleEntries: {
@@ -254,6 +255,7 @@ describe('This test concern debate Service', () => {
           en: ''
         }
       },
+      isLargeLogo: true,
       headerLogoUrl: null,
       headerBackgroundUrl: null,
       timeline: expectedTimeline,
