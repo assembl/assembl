@@ -625,7 +625,7 @@ const Translations = {
         surveyAnnotation:
           "Vous pouvez exporter l'ensemble des données du module de questions ouvertes en cliquant sur le bouton Exporter",
         threadAnnotation: "Vous pouvez exporter l'ensemble des données du module de thread en cliquant sur le bouton Exporter",
-        multicolumnAnnotation: "Vous pouvez exporter l'ensmeble des données du module de multi-colonne en cliquant sur le bouton Exporter",
+        multicolumnAnnotation: "Vous pouvez exporter l'ensmeble des données du module de multi-colonnes en cliquant sur le bouton Exporter",
         voteSessionAnnotation: "Vous pouvez exporter l'ensemble des données du module de vote en cliquant sur le bouton Exporter",
         link: "Exporter",
         noExportLanguage: "Conserver les messages dans leurs langues d'origine",

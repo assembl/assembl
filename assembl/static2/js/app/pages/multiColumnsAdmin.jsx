@@ -1,5 +1,6 @@
 import React from 'react';
 import ExportSection from '../components/administration/exportSection';
+import { get } from '../utils/routeMap';
 
 class MulticolumnAdmin extends React.Component {
   constructor(props) {
@@ -20,7 +21,7 @@ class MulticolumnAdmin extends React.Component {
     const { translate } = this.state;
     const exportLocale = this.state.exportLocale || (languages && languages[0].locale);
     const translation = translate && exportLocale ? `?lang=${exportLocale}` : '?'; // FIXME: using '' instead of '?' does not work
-    const exportLink = '#';
+    const exportLink = get('exportThreadMulticolumnData', { debateId: debateId, translation: translation });
     return (
       <div className="multicolumn-admin">
         {section === '1' && (
