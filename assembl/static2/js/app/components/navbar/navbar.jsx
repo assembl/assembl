@@ -18,6 +18,7 @@ import { APP_CONTAINER_MAX_WIDTH, APP_CONTAINER_PADDING } from '../../constants'
 import { getDiscussionSlug, snakeToCamel } from '../../utils/globalFunctions';
 import withoutLoadingIndicator from '../common/withoutLoadingIndicator';
 import DebateLink from '../debate/navigation/debateLink';
+import Logo from './Logo';
 
 const filterSection = ({ sectionType }, { hasResourcesCenter, hasSyntheses }) => {
   switch (sectionType) {
@@ -179,12 +180,18 @@ export class AssemblNavbar extends React.PureComponent {
       logoSrc: logo,
       helpUrl: helpUrl,
       location: location,
-      logoLink: sections.length > 0 && sections.find(section => section && section.sectionType === 'HOMEPAGE').url
+      logoLink: sections.length > 0 ? sections.find(section => section && section.sectionType === 'HOMEPAGE').url : ''
     };
     const { themeId } = this.props;
     return (
       <div className="background-light">
-        <Navbar fixedTop fluid>
+        <Navbar fixedTop fluid className="no-padding">
+          {isLargeLogo &&
+            !screenTooSmall && (
+              <div className="large-logo max-container">
+                <Logo slug={slug} src={commonProps.logoSrc} url={commonProps.logoLink} />
+              </div>
+            )}
           <div className="nav-bar max-container" id="navbar">
             {screenTooSmall && <BurgerNavbar {...commonProps} />}
             <FlatNavbar

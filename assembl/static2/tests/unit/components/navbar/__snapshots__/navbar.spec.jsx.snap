@@ -6,6 +6,7 @@ exports[`AssemblNavbar component should render a BurgerNavbar and a hidden FlatN
 >
   <Uncontrolled(Navbar)
     bsStyle="default"
+    className="no-padding"
     fixedTop={true}
     fluid={true}
   >
@@ -95,6 +96,7 @@ exports[`AssemblNavbar component should render a FlatNavbar with a big screenWid
 >
   <Uncontrolled(Navbar)
     bsStyle="default"
+    className="no-padding"
     fixedTop={true}
     fluid={true}
   >
