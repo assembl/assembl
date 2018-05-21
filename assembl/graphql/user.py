@@ -37,7 +37,6 @@ class AgentProfile(SecureObjectType, SQLAlchemyObjectType):
     image = graphene.Field(Document)
     creation_date = DateTime()  # creation_date only exists on User, not AgentProfile
     has_password = graphene.Boolean()
-    is_deleted = graphene.Boolean()
 
     def resolve_user_id(self, args, context, info):
         return self.id
@@ -200,18 +199,25 @@ class DeleteUserInformation(graphene.Mutation):
         user = cls.get(id_)
         require_cls_permission(CrudPermissions.READ, cls, context)
         from assembl import models as m
-        local_user_roles = db.query(m.LocalUserRole).filter(m.LocalUserRole.user_id == user.id).all()
-        for lur in local_user_roles:
-            if lur.role.name == u'r:sysadmin':
+        user_roles = db.query(m.UserRole).filter(m.UserRole.user_id == user.id).all()
+
+        for ur in user_roles:
+            if ur.role.name == u"r:sysadmin":
                 raise Exception(u"Can't delete a user with sysadmin rights.")
 
-        number_of_admin_users = db.query(m.LocalUserRole.role_id).join(m.Role).filter(m.Role.name == u"r:administrator").count()
+        ids_of_admin_users = db.query(m.User.id).join(m.LocalUserRole).join(
+            m.Role).filter(m.Role.name == "r:administrator").all()
+
+        ids_of_admin_users = [id for (id,) in ids_of_admin_users]
+        number_of_not_deleted_admin_users = db.query(m.User).filter(m.User.id.in_(ids_of_admin_users)).filter(m.User.is_deleted is not True).count()
+
+        local_user_roles = db.query(m.LocalUserRole).filter(m.LocalUserRole.user_id == user.id).all()
         user_is_admin = False
         for lur in local_user_roles:
             if lur.role.name == u'r:administrator':
                 user_is_admin = True
 
-        if int(number_of_admin_users) <= 1 and user_is_admin:
+        if int(number_of_not_deleted_admin_users) <= 1 and user_is_admin:
             raise Exception(u"User can't delete his account because this is the only admin account")
 
         with cls.default_db.no_autoflush as db:
@@ -228,8 +234,9 @@ class DeleteUserInformation(graphene.Mutation):
             email_account_ids = db.query(m.EmailAccount.id).join(m.User).filter(m.User.id == user.id).all()
             email_account_ids = [id for (id,) in email_account_ids]
             email_accounts = db.query(m.EmailAccount).filter(m.EmailAccount.id.in_(email_account_ids)).all()
-            for email_account in email_accounts:
-                db.delete(email_account)
+            if email_accounts:
+                for email_account in email_accounts[:]:
+                    db.delete(email_account)
 
             # Notifications
             # First, we will make sure that the user has no notification with status
@@ -244,9 +251,10 @@ class DeleteUserInformation(graphene.Mutation):
 
             # Social Accounts
             if user.social_accounts:
-                for social_account in user.social_accounts:
+                # user.social_accounts = []
+                for social_account in user.social_accounts[:]:
                     db.delete(social_account)
-                db.commit()
+                    user.social_accounts.remove(social_account)
 
             db.flush()
         return DeleteUserInformation(user=user)

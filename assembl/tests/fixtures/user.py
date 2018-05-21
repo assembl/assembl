@@ -142,7 +142,7 @@ def discussion_sysadmin_user(request, test_app, test_session, discussion):
     from datetime import datetime
     from assembl.auth import R_SYSADMIN
     from assembl.models import User
-    from assembl.models.auth import Role, LocalUserRole
+    from assembl.models.auth import Role, LocalUserRole, UserRole
 
     u = User(name=u"Maximilien de Robespierre 3", type="user",
              last_assembl_login=datetime.utcnow())
@@ -151,7 +151,7 @@ def discussion_sysadmin_user(request, test_app, test_session, discussion):
     u.update_agent_status_last_visit(discussion)
     role = Role.get_role(R_SYSADMIN, test_session)
     test_session.add(
-        LocalUserRole(user=u, discussion=discussion, role=role))
+        UserRole(user=u, role=role))
     test_session.flush()
 
     def fin():
