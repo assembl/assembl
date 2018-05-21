@@ -193,6 +193,9 @@ class ProfileField(DiscussionBoundBase):
         'with_polymorphic': '*'
     }
 
+    def is_owner(self, user_id):
+        return self.agent_profile_id == user_id
+
     crud_permissions = CrudPermissions(
         P_READ, P_READ, P_ADMIN_DISC, P_ADMIN_DISC,
         # owned:
