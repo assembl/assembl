@@ -1339,7 +1339,10 @@ def install_builddeps():
         # may require a sudo
         if not run('brew link libevent', quiet=True):
             sudo('brew link libevent')
-        run('brew install zeromq libtool libmemcached gawk libxmlsec1')
+        # Requirement for jobtastic
+        if not run('xcode-select -p'):
+            sudo('xcode-select --install')
+        run('brew install zeromq rabbitmq libtool libmemcached gawk libxmlsec1')
         if not exists('/usr/local/bin/pkg-config'):
             run('brew install pkg-config')
         if not exists('/usr/local/bin/autoconf'):
@@ -1358,6 +1361,8 @@ def install_builddeps():
     else:
         sudo('apt-get install -y build-essential python-dev pkg-config')
         sudo('apt-get install -y automake bison flex gperf gawk')
+        # Required for jobtastic
+        sudo('apt-get install -y python2.7-dev python3.5-dev rabbitmq-server')
         if env.build_docs:
             sudo('apt-get install -y graphviz')
         if env.can_test:

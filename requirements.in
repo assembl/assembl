@@ -36,6 +36,7 @@ ipython==4.2.0
 iso639==0.1.4
 isodate==0.5.4
 Jinja2==2.8
+jobtastic==2.0.0
 jsonpath-ng==1.4.3
 PyJWT==1.4.0
 lingua==4.9
