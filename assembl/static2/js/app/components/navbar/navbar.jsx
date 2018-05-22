@@ -18,6 +18,7 @@ import { APP_CONTAINER_MAX_WIDTH, APP_CONTAINER_PADDING } from '../../constants'
 import { getDiscussionSlug, snakeToCamel } from '../../utils/globalFunctions';
 import withoutLoadingIndicator from '../common/withoutLoadingIndicator';
 import DebateLink from '../debate/navigation/debateLink';
+import Logo from './Logo';
 
 const filterSection = ({ sectionType }, { hasResourcesCenter, hasSyntheses }) => {
   switch (sectionType) {
@@ -161,7 +162,7 @@ export class AssemblNavbar extends React.PureComponent {
     const { screenWidth, debate, data, location, phase } = this.props;
     const sections = data.sections;
     const { debateData } = debate;
-    const { timeline, logo, slug, helpUrl } = debateData;
+    const { timeline, logo, slug, helpUrl, isLargeLogo } = debateData;
     const flatWidth = (this.state && this.state.flatWidth) || 0;
     const maxAppWidth = Math.min(APP_CONTAINER_MAX_WIDTH, screenWidth) - APP_CONTAINER_PADDING * 2;
     const screenTooSmall = flatWidth > maxAppWidth;
@@ -179,12 +180,18 @@ export class AssemblNavbar extends React.PureComponent {
       logoSrc: logo,
       helpUrl: helpUrl,
       location: location,
-      logoLink: sections.length > 0 && sections.find(section => section && section.sectionType === 'HOMEPAGE').url
+      logoLink: sections.length > 0 ? sections.find(section => section && section.sectionType === 'HOMEPAGE').url : ''
     };
     const { themeId } = this.props;
     return (
       <div className="background-light">
-        <Navbar fixedTop fluid>
+        <Navbar fixedTop fluid className="no-padding">
+          {isLargeLogo &&
+            !screenTooSmall && (
+              <div className="large-logo max-container">
+                <Logo slug={slug} src={commonProps.logoSrc} url={commonProps.logoLink} />
+              </div>
+            )}
           <div className="nav-bar max-container" id="navbar">
             {screenTooSmall && <BurgerNavbar {...commonProps} />}
             <FlatNavbar
@@ -193,6 +200,7 @@ export class AssemblNavbar extends React.PureComponent {
               style={screenTooSmall ? { opacity: 0, position: 'absolute', top: '-200px' } : {}}
               maxWidth={maxAppWidth}
               themeId={themeId}
+              isLargeLogo={isLargeLogo}
             />
           </div>
         </Navbar>

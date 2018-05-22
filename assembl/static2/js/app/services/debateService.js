@@ -17,6 +17,7 @@ export const buildDebateData = (debateData, prefs, timeline, socialShare) => {
   const chatframe = prefs.extra_json && prefs.extra_json.chatframe ? prefs.extra_json.chatframe : null;
   const partners = prefs.extra_json && prefs.extra_json.partners ? prefs.extra_json.partners : null;
   const socialMedias = prefs.extra_json && prefs.extra_json.socialMedias ? prefs.extra_json.socialMedias : null;
+  const isLargeLogo = prefs.extra_json && prefs.extra_json.isLargeLogo ? prefs.extra_json.isLargeLogo : null;
 
   const sortedTimeline = timeline.length > 0 ? getSortedArrayByKey(timeline, 'start') : null;
   if (sortedTimeline) {
@@ -34,10 +35,10 @@ export const buildDebateData = (debateData, prefs, timeline, socialShare) => {
     });
   }
 
-  const customHtmlCodeLandingPage = prefs.custom_html_code_landing_page ?
-    prefs.custom_html_code_landing_page : null;
-  const customHtmlCodeRegistrationPage = prefs.custom_html_code_user_registration_page ?
-    prefs.custom_html_code_user_registration_page : null;
+  const customHtmlCodeLandingPage = prefs.custom_html_code_landing_page ? prefs.custom_html_code_landing_page : null;
+  const customHtmlCodeRegistrationPage = prefs.custom_html_code_user_registration_page
+    ? prefs.custom_html_code_user_registration_page
+    : null;
 
   return {
     translationEnabled: !!debateData.translation_service_class,
@@ -54,6 +55,7 @@ export const buildDebateData = (debateData, prefs, timeline, socialShare) => {
     helpUrl: debateData.help_url,
     termsOfUseUrl: prefs.terms_of_use_url,
     socialMedias: socialMedias,
+    isLargeLogo: isLargeLogo,
     twitter: twitter,
     chatbot: chatbot,
     chatframe: chatframe,
