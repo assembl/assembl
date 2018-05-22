@@ -5,9 +5,9 @@ import { FormGroup } from 'react-bootstrap';
 import FormControlWithLabel from '../../common/formControlWithLabel';
 
 type NumberGaugeFormProps = {
-  minimum: number,
-  maximum: number,
-  unit: string,
+  minimum: ?number,
+  maximum: ?number,
+  unit: ?string,
   handleMinChange: Function,
   handleMaxChange: Function,
   handleUnitChange: Function

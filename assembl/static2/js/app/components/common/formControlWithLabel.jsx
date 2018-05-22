@@ -112,6 +112,8 @@ class FormControlWithLabel extends React.Component<Object, FormControlWithLabelP
       return this.renderRichTextEditor();
     }
 
+    const valueToShow = value || (value === 0 ? value : '');
+
     const name = this.props.name ? this.props.name : id;
     return (
       <FormControl
@@ -121,7 +123,7 @@ class FormControlWithLabel extends React.Component<Object, FormControlWithLabelP
         type={type}
         placeholder={this.getLabel()}
         onChange={onChange}
-        value={value || ''}
+        value={valueToShow}
         onBlur={this.setValidationState}
         disabled={disabled}
         {...formControlProps}
