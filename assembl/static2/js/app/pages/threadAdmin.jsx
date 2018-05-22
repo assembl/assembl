@@ -1,6 +1,10 @@
 import React from 'react';
-import ExportSection from '../components/administration/exportSection';
+import { compose, graphql } from 'react-apollo';
+import { connect } from 'react-redux';
 import { get } from '../utils/routeMap';
+import ExportSection from '../components/administration/exportSection';
+import Navbar from '../components/administration/navbar';
+import DiscussionPreferenceLanguage from '../graphql/DiscussionPreferenceLanguage.graphql';
 
 class ThreadAdmin extends React.Component {
   constructor(props) {
@@ -12,8 +16,20 @@ class ThreadAdmin extends React.Component {
     };
   }
 
+  componentDidMount() {
+    this.props.router.setRouteLeaveHook(this.props.route, this.routerWillLeave);
+  }
+
+  componentWillUnmount() {
+    this.props.router.setRouteLeaveHook(this.props.route, null);
+  }
+
   handleExportLocaleChange = (locale) => {
     this.setState({ exportLocale: locale });
+  };
+
+  handleTranslationChange = (shouldTranslate) => {
+    this.setState({ translate: shouldTranslate });
   };
 
   render() {
@@ -22,6 +38,7 @@ class ThreadAdmin extends React.Component {
     const exportLocale = this.state.exportLocale || (languages && languages[0].locale);
     const translation = translate && exportLocale ? `?lang=${exportLocale}` : '?'; // FIXME: using '' instead of '?' does not work
     const exportLink = get('exportThreadMulticolumnData', { debateId: debateId, translation: translation });
+    const currentStep = parseInt(section, 10);
     return (
       <div className="thread-admin">
         {section === '1' && (
@@ -37,10 +54,44 @@ class ThreadAdmin extends React.Component {
             annotation="threadAnnotation"
           />
         )}
-      )
+        {!isNaN(currentStep) && (
+          <Navbar currentStep={currentStep} totalSteps={1} phaseIdentifier="thread" />
+        )}
       </div>
     );
   }
 }
 
-export default ThreadAdmin;
+const mapStateToProps = ({ context, i18n }) => ({
+  debateId: context.debateId,
+  i18n: i18n
+});
+
+export default compose(
+  connect(mapStateToProps),
+  graphql(DiscussionPreferenceLanguage, {
+    options: ({ i18n: { locale } }) => ({
+      variables: {
+        inLocale: locale
+      }
+    }),
+    props: ({ data }) => {
+      if (data.loading) {
+        return {
+          loading: true
+        };
+      }
+
+      if (data.error) {
+        return {
+          hasErrors: true,
+          loading: false
+        };
+      }
+      return {
+        hasErrors: false,
+        languages: data.discussionPreferences.languages
+      };
+    }
+  })
+)(ThreadAdmin);

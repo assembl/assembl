@@ -67,7 +67,7 @@ class ExportSection extends React.Component<Object, Props, void> {
       annotation
     } = this.props;
     return (
-      <div className="admin-box survey-admin-export-section">
+      <div className="admin-box admin-export-section">
         <SectionTitle
           title={I18n.t('administration.export.sectionTitle')}
           annotation={I18n.t(`administration.export.${annotation}`)}
