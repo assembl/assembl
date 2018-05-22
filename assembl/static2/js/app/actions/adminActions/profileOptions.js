@@ -6,9 +6,10 @@ export const updateTextFields = (textFields: actionTypes.TextFields): actionType
   type: actionTypes.UPDATE_TEXT_FIELDS
 });
 
-export const addTextField = (id: string): actionTypes.AddTextField => ({
+export const addTextField = (id: string, fieldType: string = 'text'): actionTypes.AddTextField => ({
   id: id,
-  type: actionTypes.ADD_TEXT_FIELD
+  type: actionTypes.ADD_TEXT_FIELD,
+  fieldType: fieldType
 });
 
 export const deleteTextField = (id: string): actionTypes.DeleteTextField => ({

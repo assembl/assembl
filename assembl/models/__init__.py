@@ -126,6 +126,8 @@ from .auth import (  # noqa: E402, F401
 )
 from .configurable_fields import (  # noqa: E402, F401
     AbstractConfigurableField,
+    SelectField,
+    SelectFieldOption,
     TextField,
     ProfileField
 )

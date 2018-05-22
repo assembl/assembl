@@ -40,8 +40,8 @@ export const textFieldsById: TextFieldsByIdReducer = (state = initialTextFields,
     ]);
     return Map(textFieldsTuples);
   }
-  case actionTypes.ADD_TEXT_FIELD:
-    return state.set(
+  case actionTypes.ADD_TEXT_FIELD: {
+    const newState = state.set(
       action.id,
       Map({
         _hasChanged: false,
@@ -54,7 +54,11 @@ export const textFieldsById: TextFieldsByIdReducer = (state = initialTextFields,
         titleEntries: List()
       })
     );
-
+    if (action.fieldType === 'select') {
+      newState.set('options', List());
+    }
+    return newState;
+  }
   case actionTypes.DELETE_TEXT_FIELD:
     return state.setIn([action.id, '_toDelete'], true);
   case actionTypes.UPDATE_TEXT_FIELD_TITLE:

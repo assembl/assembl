@@ -40,7 +40,8 @@ const createVariablesForTextFieldMutation = textField => ({
   id: textField.id,
   order: textField.order,
   required: textField.required,
-  titleEntries: textField.titleEntries
+  titleEntries: textField.titleEntries,
+  options: textField.options
 });
 
 const createVariablesForDeleteSectionMutation = section => ({ sectionId: section.id });

@@ -15,7 +15,8 @@ export type UpdateTextFields = {
 
 export type AddTextField = {
   id: string,
-  type: typeof ADD_TEXT_FIELD
+  type: typeof ADD_TEXT_FIELD,
+  fieldType: string
 };
 
 export type DeleteTextField = {
