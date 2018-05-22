@@ -6,8 +6,9 @@ import jQuery from 'jquery';
 import ARange from 'annotator_range'; // eslint-disable-line
 
 import PostTranslate from '../../common/translations/postTranslate';
-import { transformLinksInHtml } from '../../../../utils/linkify';
+import { transformLinksInHtml, getUrls } from '../../../../utils/linkify';
 import Embed from '../../../common/embed';
+import URLMetadataLoader from '../../../common/urlMetadataLoader';
 
 type Props = {
   body: string,
@@ -119,6 +120,7 @@ const PostBody = ({
     'pre-wrap': bodyMimeType === 'text/plain',
     'is-harvesting': isHarvesting
   });
+  const urls = body && [...getUrls(body.replace(/<\/p>/gi, ' </p>'))];
   return (
     <div className={divClassNames}>
       {translationEnabled ? (
@@ -126,15 +128,17 @@ const PostBody = ({
       ) : null}
       {subject && <h3 className="post-body-title dark-title-3">{subject}</h3>}
       {body && (
-        <Html
-          onMouseUp={handleMouseUpWhileHarvesting}
-          rawHtml={transformLinksInHtml(body)}
-          className={htmlClassNames}
-          divRef={bodyDivRef}
-          extracts={extracts}
-          dbId={dbId}
-          replacementComponents={postBodyReplacementComponents}
-        />
+        <div className={htmlClassNames}>
+          <Html
+            onMouseUp={handleMouseUpWhileHarvesting}
+            rawHtml={transformLinksInHtml(body)}
+            divRef={bodyDivRef}
+            extracts={extracts}
+            dbId={dbId}
+            replacementComponents={postBodyReplacementComponents}
+          />
+          {urls && urls.map(url => <URLMetadataLoader url={url} />)}
+        </div>
       )}
     </div>
   );

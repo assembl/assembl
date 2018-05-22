@@ -15,6 +15,12 @@ type LinkifyLink = {
   value: string
 };
 
+export function getUrls(html: string): Array<LinkifyLink> {
+  // first, we add spaces before </p> to help linkify
+  const htmlForLinkify = html.replace(/<\/p>/gi, ' </p>');
+  return linkify.find(htmlForLinkify).map((link: LinkifyLink) => link.href);
+}
+
 export function transformLinksInHtml(html: string): string {
   // first, we add spaces before </p> to help linkify
   const htmlForLinkify = html.replace(/<\/p>/gi, ' </p>');
