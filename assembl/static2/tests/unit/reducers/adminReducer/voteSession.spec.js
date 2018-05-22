@@ -282,15 +282,115 @@ describe('voteSession admin reducers', () => {
     });
   });
 
-  describe('voteProposalsHaveChanged reducer', () => {
-    const { voteProposalsHaveChanged } = reducers;
+  describe('modulesOrProposalsHaveChanged reducer', () => {
+    const { modulesOrProposalsHaveChanged } = reducers;
+
+    it('should handle ADD_MODULE_TO_PROPOSAL action', () => {
+      const action = {
+        id: 'my-module',
+        voteSpecTemplateId: 'my-template',
+        proposalId: 'my-proposal',
+        type: actionTypes.ADD_MODULE_TO_PROPOSAL
+      };
+      const expected = true;
+      const actual = modulesOrProposalsHaveChanged(false, action);
+      expect(actual).toEqual(expected);
+    });
+
+    it('should handle CANCEL_MODULE_CUSTOMIZATION action', () => {
+      const action = {
+        id: 'my-module',
+        type: actionTypes.CANCEL_MODULE_CUSTOMIZATION
+      };
+      const expected = true;
+      const actual = modulesOrProposalsHaveChanged(false, action);
+      expect(actual).toEqual(expected);
+    });
+
+    it('should handle CREATE_GAUGE_VOTE_CHOICE action', () => {
+      const action = {
+        id: 'my-module',
+        type: actionTypes.CREATE_GAUGE_VOTE_CHOICE
+      };
+      const expected = true;
+      const actual = modulesOrProposalsHaveChanged(false, action);
+      expect(actual).toEqual(expected);
+    });
+
+    it('should handle CREATE_GAUGE_VOTE_MODULE action', () => {
+      const action = {
+        type: actionTypes.CREATE_GAUGE_VOTE_MODULE
+      };
+      const expected = true;
+      const actual = modulesOrProposalsHaveChanged(false, action);
+      expect(actual).toEqual(expected);
+    });
+
+    it('should handle CREATE_TOKEN_VOTE_CATEGORY action', () => {
+      const action = {
+        type: actionTypes.CREATE_TOKEN_VOTE_CATEGORY
+      };
+      const expected = true;
+      const actual = modulesOrProposalsHaveChanged(false, action);
+      expect(actual).toEqual(expected);
+    });
+
+    it('should handle CREATE_TOKEN_VOTE_MODULE action', () => {
+      const action = {
+        type: actionTypes.CREATE_TOKEN_VOTE_MODULE
+      };
+      const expected = true;
+      const actual = modulesOrProposalsHaveChanged(false, action);
+      expect(actual).toEqual(expected);
+    });
+
     it('should handle CREATE_VOTE_PROPOSAL action', () => {
       const action = {
         id: 'my-proposal',
         type: actionTypes.CREATE_VOTE_PROPOSAL
       };
       const expected = true;
-      const actual = voteProposalsHaveChanged(false, action);
+      const actual = modulesOrProposalsHaveChanged(false, action);
+      expect(actual).toEqual(expected);
+    });
+
+    it('should handle UPDATE_VOTE_MODULE action', () => {
+      const action = {
+        id: 'my-module',
+        locale: 'en',
+        info: {},
+        type: actionTypes.UPDATE_VOTE_MODULE
+      };
+      const expected = true;
+      const actual = modulesOrProposalsHaveChanged(false, action);
+      expect(actual).toEqual(expected);
+    });
+
+    it('should handle DELETE_GAUGE_VOTE_CHOICE action', () => {
+      const action = {
+        type: actionTypes.DELETE_GAUGE_VOTE_CHOICE
+      };
+      const expected = true;
+      const actual = modulesOrProposalsHaveChanged(false, action);
+      expect(actual).toEqual(expected);
+    });
+
+    it('should handle DELETE_TOKEN_VOTE_CATEGORY action', () => {
+      const action = {
+        type: actionTypes.DELETE_TOKEN_VOTE_CATEGORY
+      };
+      const expected = true;
+      const actual = modulesOrProposalsHaveChanged(false, action);
+      expect(actual).toEqual(expected);
+    });
+
+    it('should handle DELETE_VOTE_MODULE action', () => {
+      const action = {
+        id: 'my-module',
+        type: actionTypes.DELETE_VOTE_MODULE
+      };
+      const expected = true;
+      const actual = modulesOrProposalsHaveChanged(false, action);
       expect(actual).toEqual(expected);
     });
 
@@ -300,7 +400,17 @@ describe('voteSession admin reducers', () => {
         type: actionTypes.DELETE_VOTE_PROPOSAL
       };
       const expected = true;
-      const actual = voteProposalsHaveChanged(false, action);
+      const actual = modulesOrProposalsHaveChanged(false, action);
+      expect(actual).toEqual(expected);
+    });
+
+    it('should handle MARK_ALL_DEPENDENCIES_AS_CHANGED action', () => {
+      const action = {
+        id: 'my-module',
+        type: actionTypes.MARK_ALL_DEPENDENCIES_AS_CHANGED
+      };
+      const expected = true;
+      const actual = modulesOrProposalsHaveChanged(false, action);
       expect(actual).toEqual(expected);
     });
 
@@ -310,7 +420,7 @@ describe('voteSession admin reducers', () => {
         type: actionTypes.MOVE_PROPOSAL_DOWN
       };
       const expected = true;
-      const actual = voteProposalsHaveChanged(false, action);
+      const actual = modulesOrProposalsHaveChanged(false, action);
       expect(actual).toEqual(expected);
     });
 
@@ -320,19 +430,104 @@ describe('voteSession admin reducers', () => {
         type: actionTypes.MOVE_PROPOSAL_UP
       };
       const expected = true;
-      const actual = voteProposalsHaveChanged(false, action);
+      const actual = modulesOrProposalsHaveChanged(false, action);
       expect(actual).toEqual(expected);
     });
 
-    it('should handle UPDATE_VOTE_PROPOSAL_TITLE action', () => {
+    it('should handle UPDATE_GAUGE_MAXIMUM action', () => {
       const action = {
-        id: 'my-proposal',
-        locale: 'en',
-        value: 'The XML interface is down, override the virtual alarm so we can parse the SAS firewall!',
-        type: actionTypes.UPDATE_VOTE_PROPOSAL_TITLE
+        type: actionTypes.UPDATE_GAUGE_MAXIMUM
       };
       const expected = true;
-      const actual = voteProposalsHaveChanged(false, action);
+      const actual = modulesOrProposalsHaveChanged(false, action);
+      expect(actual).toEqual(expected);
+    });
+    it('should handle UPDATE_GAUGE_MINIMUM action', () => {
+      const action = {
+        type: actionTypes.UPDATE_GAUGE_MINIMUM
+      };
+      const expected = true;
+      const actual = modulesOrProposalsHaveChanged(false, action);
+      expect(actual).toEqual(expected);
+    });
+    it('should handle UPDATE_GAUGE_UNIT action', () => {
+      const action = {
+        type: actionTypes.UPDATE_GAUGE_UNIT
+      };
+      const expected = true;
+      const actual = modulesOrProposalsHaveChanged(false, action);
+      expect(actual).toEqual(expected);
+    });
+    it('should handle UPDATE_GAUGE_VOTE_CHOICE_LABEL action', () => {
+      const action = {
+        type: actionTypes.UPDATE_GAUGE_VOTE_CHOICE_LABEL
+      };
+      const expected = true;
+      const actual = modulesOrProposalsHaveChanged(false, action);
+      expect(actual).toEqual(expected);
+    });
+    it('should handle UPDATE_GAUGE_VOTE_INSTRUCTIONS action', () => {
+      const action = {
+        type: actionTypes.UPDATE_GAUGE_VOTE_INSTRUCTIONS
+      };
+      const expected = true;
+      const actual = modulesOrProposalsHaveChanged(false, action);
+      expect(actual).toEqual(expected);
+    });
+    it('should handle UPDATE_GAUGE_VOTE_IS_NUMBER action', () => {
+      const action = {
+        type: actionTypes.UPDATE_GAUGE_VOTE_IS_NUMBER
+      };
+      const expected = true;
+      const actual = modulesOrProposalsHaveChanged(false, action);
+      expect(actual).toEqual(expected);
+    });
+    it('should handle UPDATE_GAUGE_VOTE_NUMBER_TICKS action', () => {
+      const action = {
+        type: actionTypes.UPDATE_GAUGE_VOTE_NUMBER_TICKS
+      };
+      const expected = true;
+      const actual = modulesOrProposalsHaveChanged(false, action);
+      expect(actual).toEqual(expected);
+    });
+    it('should handle UPDATE_TOKEN_TOTAL_NUMBER action', () => {
+      const action = {
+        type: actionTypes.UPDATE_TOKEN_TOTAL_NUMBER
+      };
+      const expected = true;
+      const actual = modulesOrProposalsHaveChanged(false, action);
+      expect(actual).toEqual(expected);
+    });
+    it('should handle UPDATE_TOKEN_VOTE_CATEGORY_COLOR action', () => {
+      const action = {
+        type: actionTypes.UPDATE_TOKEN_VOTE_CATEGORY_COLOR
+      };
+      const expected = true;
+      const actual = modulesOrProposalsHaveChanged(false, action);
+      expect(actual).toEqual(expected);
+    });
+    it('should handle UPDATE_TOKEN_VOTE_CATEGORY_TITLE action', () => {
+      const action = {
+        type: actionTypes.UPDATE_TOKEN_VOTE_CATEGORY_TITLE
+      };
+      const expected = true;
+      const actual = modulesOrProposalsHaveChanged(false, action);
+      expect(actual).toEqual(expected);
+    });
+    it('should handle UPDATE_TOKEN_VOTE_EXCLUSIVE_CATEGORY action', () => {
+      const action = {
+        type: actionTypes.UPDATE_TOKEN_VOTE_EXCLUSIVE_CATEGORY
+      };
+      const expected = true;
+      const actual = modulesOrProposalsHaveChanged(false, action);
+      expect(actual).toEqual(expected);
+    });
+    it('should handle UPDATE_TOKEN_VOTE_INSTRUCTIONS action', () => {
+      const action = {
+        type: actionTypes.UPDATE_TOKEN_VOTE_INSTRUCTIONS
+      };
+      const expected = true;
+      const actual = modulesOrProposalsHaveChanged(false, action);
       expect(actual).toEqual(expected);
     });
 
@@ -344,49 +539,29 @@ describe('voteSession admin reducers', () => {
         type: actionTypes.UPDATE_VOTE_PROPOSAL_DESCRIPTION
       };
       const expected = true;
-      const actual = voteProposalsHaveChanged(false, action);
+      const actual = modulesOrProposalsHaveChanged(false, action);
       expect(actual).toEqual(expected);
     });
 
-    it('should handle ADD_MODULE_TO_PROPOSAL action', () => {
+    it('should handle UPDATE_VOTE_PROPOSAL_TITLE action', () => {
       const action = {
-        id: 'my-module',
-        voteSpecTemplateId: 'my-template',
-        proposalId: 'my-proposal',
-        type: actionTypes.ADD_MODULE_TO_PROPOSAL
+        id: 'my-proposal',
+        locale: 'en',
+        value: 'The XML interface is down, override the virtual alarm so we can parse the SAS firewall!',
+        type: actionTypes.UPDATE_VOTE_PROPOSAL_TITLE
       };
       const expected = true;
-      const actual = voteProposalsHaveChanged(false, action);
+      const actual = modulesOrProposalsHaveChanged(false, action);
       expect(actual).toEqual(expected);
     });
 
-    it('should handle DELETE_VOTE_MODULE action', () => {
+    it('should handle UPDATE_VOTE_MODULES action', () => {
       const action = {
-        id: 'my-module',
-        type: actionTypes.DELETE_VOTE_MODULE
+        voteModules: [],
+        type: actionTypes.UPDATE_VOTE_MODULES
       };
-      const expected = true;
-      const actual = voteProposalsHaveChanged(false, action);
-      expect(actual).toEqual(expected);
-    });
-
-    it('should handle MARK_ALL_DEPENDENCIES_AS_CHANGED action', () => {
-      const action = {
-        id: 'my-module',
-        type: actionTypes.MARK_ALL_DEPENDENCIES_AS_CHANGED
-      };
-      const expected = true;
-      const actual = voteProposalsHaveChanged(false, action);
-      expect(actual).toEqual(expected);
-    });
-
-    it('should handle CANCEL_MODULE_CUSTOMIZATION action', () => {
-      const action = {
-        id: 'my-module',
-        type: actionTypes.CANCEL_MODULE_CUSTOMIZATION
-      };
-      const expected = true;
-      const actual = voteProposalsHaveChanged(false, action);
+      const expected = false;
+      const actual = modulesOrProposalsHaveChanged(true, action);
       expect(actual).toEqual(expected);
     });
 
@@ -396,13 +571,13 @@ describe('voteSession admin reducers', () => {
         type: actionTypes.UPDATE_VOTE_PROPOSALS
       };
       const expected = false;
-      const actual = voteProposalsHaveChanged(true, action);
+      const actual = modulesOrProposalsHaveChanged(true, action);
       expect(actual).toEqual(expected);
     });
   });
 
   describe('voteProposalsById reducer', () => {
-    const { voteProposalsById, voteProposalsHaveChanged } = reducers;
+    const { voteProposalsById } = reducers;
 
     it('should handle CREATE_VOTE_PROPOSAL action type', () => {
       const proposal1 = fromJS({
@@ -442,10 +617,8 @@ describe('voteSession admin reducers', () => {
       });
       expectedProposal2 = expectedProposal2.set('_validationErrors', []);
       const expected = Map({ proposal1: expectedProposal1, proposal2: expectedProposal2 });
-      let result = voteProposalsById(state, action);
+      const result = voteProposalsById(state, action);
       expect(result).toEqual(expected);
-      result = voteProposalsHaveChanged(false, action);
-      expect(result).toEqual(true);
     });
 
     it('should handle MOVE_PROPOSAL_UP action type', () => {
@@ -515,10 +688,8 @@ describe('voteSession admin reducers', () => {
         modules: []
       });
       const expected = Map({ proposal1: expectedProposal1, proposal2: expectedProposal2, proposal3: expectedProposal3 });
-      let result = voteProposalsById(state, action);
+      const result = voteProposalsById(state, action);
       expect(result).toEqual(expected);
-      result = voteProposalsHaveChanged(false, action);
-      expect(result).toEqual(true);
     });
 
     it('should handle MOVE_PROPOSAL_DOWN action type', () => {
@@ -588,10 +759,8 @@ describe('voteSession admin reducers', () => {
         modules: []
       });
       const expected = Map({ proposal1: expectedProposal1, proposal2: expectedProposal2, proposal3: expectedProposal3 });
-      let result = voteProposalsById(state, action);
+      const result = voteProposalsById(state, action);
       expect(result).toEqual(expected);
-      result = voteProposalsHaveChanged(false, action);
-      expect(result).toEqual(true);
     });
 
     it('should handle MOVE_PROPOSAL_UP action type (deleted proposal in between)', () => {
@@ -661,10 +830,8 @@ describe('voteSession admin reducers', () => {
         modules: []
       });
       const expected = Map({ proposal1: expectedProposal1, proposal2: expectedProposal2, proposal3: expectedProposal3 });
-      let result = voteProposalsById(state, action);
+      const result = voteProposalsById(state, action);
       expect(result).toEqual(expected);
-      result = voteProposalsHaveChanged(false, action);
-      expect(result).toEqual(true);
     });
 
     it('should handle MOVE_PROPOSAL_DOWN action type (deleted proposal in between)', () => {
@@ -734,10 +901,8 @@ describe('voteSession admin reducers', () => {
         modules: []
       });
       const expected = Map({ proposal1: expectedProposal1, proposal2: expectedProposal2, proposal3: expectedProposal3 });
-      let result = voteProposalsById(state, action);
+      const result = voteProposalsById(state, action);
       expect(result).toEqual(expected);
-      result = voteProposalsHaveChanged(false, action);
-      expect(result).toEqual(true);
     });
 
     it('should handle ADD_MODULE_TO_PROPOSAL action type', () => {
@@ -1326,14 +1491,7 @@ describe('voteSession admin reducers', () => {
           isNumberGauge: false,
           id: 'customGauge',
           voteSpecTemplateId: 'template',
-          proposalId: 'proposal1',
-          instructionsEntries: [
-            {
-              localeCode: 'en',
-              value: 'My template instructions'
-            }
-          ],
-          choices: ['template-choice1']
+          proposalId: 'proposal1'
         },
         template: {
           _hasChanged: false,
@@ -1376,8 +1534,8 @@ describe('voteSession admin reducers', () => {
             }
           ],
           unit: 'custom unit',
-          min: 0,
-          max: 10
+          minimum: 0,
+          maximum: 10
         },
         template: {
           _hasChanged: false,
@@ -1396,8 +1554,8 @@ describe('voteSession admin reducers', () => {
             }
           ],
           unit: 'template unit',
-          min: 100,
-          max: 1000
+          minimum: 100,
+          maximum: 1000
         }
       });
       const action = {
@@ -1414,15 +1572,9 @@ describe('voteSession admin reducers', () => {
           id: 'customGauge',
           voteSpecTemplateId: 'template',
           proposalId: 'proposal1',
-          instructionsEntries: [
-            {
-              localeCode: 'en',
-              value: 'My template instructions'
-            }
-          ],
           unit: 'template unit',
-          min: 100,
-          max: 1000
+          minimum: 100,
+          maximum: 1000
         },
         template: {
           _hasChanged: false,
@@ -1441,8 +1593,8 @@ describe('voteSession admin reducers', () => {
             }
           ],
           unit: 'template unit',
-          min: 100,
-          max: 1000
+          minimum: 100,
+          maximum: 1000
         }
       };
       const actual = modulesById(state, action);
@@ -1467,8 +1619,8 @@ describe('voteSession admin reducers', () => {
             }
           ],
           unit: 'custom unit',
-          min: 0,
-          max: 10
+          minimum: 0,
+          maximum: 10
         },
         template: {
           _hasChanged: false,
@@ -1502,14 +1654,7 @@ describe('voteSession admin reducers', () => {
           isNumberGauge: false,
           id: 'customGauge',
           voteSpecTemplateId: 'template',
-          proposalId: 'proposal1',
-          instructionsEntries: [
-            {
-              localeCode: 'en',
-              value: 'My template instructions'
-            }
-          ],
-          choices: ['template-choice1']
+          proposalId: 'proposal1'
         },
         template: {
           _hasChanged: false,
@@ -1532,6 +1677,215 @@ describe('voteSession admin reducers', () => {
       };
       const actual = modulesById(state, action);
       expect(actual.toJS()).toEqual(expected);
+    });
+
+    it('should handle UPDATE_VOTE_MODULE action type (number gauge)', () => {
+      const state = fromJS({
+        customGauge: {
+          _hasChanged: false,
+          _isNew: false,
+          _toDelete: false,
+          isCustom: true,
+          isNumberGauge: true,
+          id: 'customGauge',
+          voteSpecTemplateId: 'template',
+          proposalId: 'proposal1',
+          instructionsEntries: [
+            {
+              localeCode: 'en',
+              value: 'My custom instructions'
+            }
+          ],
+          maximum: 10,
+          minimum: 0,
+          nbTicks: 8,
+          unit: 'km',
+          type: 'gauge'
+        }
+      });
+      const action = {
+        id: 'customGauge',
+        info: {
+          isCustom: true,
+          isNumberGauge: true,
+          instructions: 'New instructions',
+          maximum: 2,
+          minimum: 1,
+          nbTicks: 9,
+          type: 'gauge',
+          unit: 'kms'
+        },
+        locale: 'en',
+        type: actionTypes.UPDATE_VOTE_MODULE
+      };
+      const expected = {
+        customGauge: {
+          _hasChanged: true,
+          _isNew: false,
+          _toDelete: false,
+          isCustom: true,
+          isNumberGauge: true,
+          id: 'customGauge',
+          voteSpecTemplateId: 'template',
+          proposalId: 'proposal1',
+          instructionsEntries: [
+            {
+              localeCode: 'en',
+              value: 'New instructions'
+            }
+          ],
+          maximum: 2,
+          minimum: 1,
+          unit: 'kms',
+          nbTicks: 9,
+          type: 'gauge'
+        }
+      };
+      const actual = modulesById(state, action);
+      expect(actual.toJS()).toEqual(expected);
+    });
+
+    it('should handle UPDATE_VOTE_MODULE action type (text gauge)', () => {
+      const state = fromJS({
+        customGauge: {
+          _hasChanged: false,
+          _isNew: true,
+          _toDelete: false,
+          isCustom: false,
+          isNumberGauge: false,
+          id: 'customGauge',
+          voteSpecTemplateId: 'template',
+          proposalId: 'proposal1',
+          type: 'gauge'
+        }
+      });
+      const action = {
+        id: 'customGauge',
+        info: {
+          isCustom: true,
+          isNumberGauge: false,
+          instructions: 'New instructions',
+          choices: List.of(Map({ id: 'choice1', title: 'sensor' }), Map({ id: 'choice2', title: 'protocol' })),
+          type: 'gauge'
+        },
+        locale: 'en',
+        type: actionTypes.UPDATE_VOTE_MODULE
+      };
+      const expected = {
+        customGauge: {
+          _hasChanged: true,
+          _isNew: true,
+          _toDelete: false,
+          isCustom: true,
+          isNumberGauge: false,
+          id: 'customGauge',
+          voteSpecTemplateId: 'template',
+          proposalId: 'proposal1',
+          instructionsEntries: [
+            {
+              localeCode: 'en',
+              value: 'New instructions'
+            }
+          ],
+          type: 'gauge',
+          choices: ['choice1', 'choice2']
+        }
+      };
+      const actual = modulesById(state, action);
+      expect(actual.toJS()).toEqual(expected);
+    });
+  });
+
+  describe('gaugeChoicesById reducer', () => {
+    const { gaugeChoicesById } = reducers;
+    it('should handle UPDATE_VOTE_MODULE action', () => {
+      const state = Map({
+        m1Choice1: Map({
+          id: 'm1Choice1',
+          labelEntries: List(
+            Map({
+              localeCode: 'en',
+              value: 'First choice'
+            })
+          )
+        }),
+        m1Choice2: Map({
+          id: 'm1Choice2',
+          labelEntries: List()
+        }),
+        m2Choice1: Map({
+          id: 'm2Choice1',
+          labelEntries: List()
+        }),
+        m3Choice1: Map({
+          id: 'm3Choice1',
+          labelEntries: List()
+        })
+      });
+      const action = {
+        id: 'm4',
+        info: {
+          isCustom: true,
+          isNumberGauge: false,
+          instructions: 'Module 4 instructions',
+          choices: List.of(
+            Map({
+              id: 'm4Choice1',
+              title: 'If we calculate the system, we can get to the XSS panel through the virtual CSS circuit!'
+            }),
+            Map({
+              id: 'm4Choice2',
+              title: 'Try to quantify the PCI matrix, maybe it will compress the 1080p monitor!'
+            })
+          ),
+          type: 'gauge'
+        },
+        locale: 'en',
+        type: actionTypes.UPDATE_VOTE_MODULE
+      };
+      const expected = Map({
+        m1Choice1: Map({
+          id: 'm1Choice1',
+          labelEntries: List(
+            Map({
+              localeCode: 'en',
+              value: 'First choice'
+            })
+          )
+        }),
+        m1Choice2: Map({
+          id: 'm1Choice2',
+          labelEntries: List()
+        }),
+        m2Choice1: Map({
+          id: 'm2Choice1',
+          labelEntries: List()
+        }),
+        m3Choice1: Map({
+          id: 'm3Choice1',
+          labelEntries: List()
+        }),
+        m4Choice1: Map({
+          id: 'm4Choice1',
+          labelEntries: List.of(
+            Map({
+              localeCode: 'en',
+              value: 'If we calculate the system, we can get to the XSS panel through the virtual CSS circuit!'
+            })
+          )
+        }),
+        m4Choice2: Map({
+          id: 'm4Choice2',
+          labelEntries: List.of(
+            Map({
+              localeCode: 'en',
+              value: 'Try to quantify the PCI matrix, maybe it will compress the 1080p monitor!'
+            })
+          )
+        })
+      });
+      const actual = gaugeChoicesById(state, action);
+      expect(actual).toEqual(expected);
     });
   });
 });

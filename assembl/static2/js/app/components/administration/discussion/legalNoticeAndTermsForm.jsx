@@ -30,7 +30,7 @@ export const DumbLegalNoticeAndTermsForm = ({
   const tacLabel = I18n.t('administration.legalNoticeAndTerms.termsAndConditionsLabel');
   return (
     <div className="admin-box">
-      <SectionTitle title={I18n.t('administration.discussion.3')} annotation={I18n.t('administration.annotation')} />
+      <SectionTitle title={I18n.t('administration.discussion.4')} annotation={I18n.t('administration.annotation')} />
       <div className="admin-content">
         <Row>
           <div className="form-container">

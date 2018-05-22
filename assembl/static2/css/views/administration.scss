@@ -1,6 +1,32 @@
 .administration {
   margin: $margin-section + $navbar-height 0;
 
+  .profile-options {
+    .profile-options-field {
+      margin-bottom: 25px;
+
+      input[type='text'] {
+        border-radius: 0;
+        min-width: 350px;
+      }
+
+      .rsbc-switch-button-flat-round {
+        margin-top: 9px;
+        margin-right: 5px;
+        margin-left: 6px;
+      }
+
+      .admin-icons {
+        padding: 0;
+        width: 18px;
+      }
+
+      .form-control {
+        width: 350px;
+      }
+    }
+  }
+
   .help-block {
     color: #f00 !important;
   }
@@ -343,10 +369,29 @@
   .preview {
     border-radius: 5px;
     margin: 25px 0 0;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
 
     img {
       border-radius: 5px;
-      max-width: 390px;
+      width: 50%;
+      max-height: 300px;
+    }
+
+    .preview-title {
+      margin: 0 0 0 10px;
+      white-space: pre;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .assembl-icon-text-attachment {
+      margin-right: 5px;
+    }
+
+    .admin-icons {
+      padding: 0;
     }
   }
 
@@ -474,8 +519,10 @@
     .intro-text {
       display: flex;
       flex-direction: column;
-      padding-left: 45px;
-      font-size: $font-size-s;
+      padding: 0 45px;
+      font-size: $font-size-xs;
+      color: $grey3;
+      font-family: $font-family4;
 
       .timeline-link {
         font-family: $font-family2;

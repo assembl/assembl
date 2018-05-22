@@ -10,6 +10,7 @@ exports[`tokensForm component should render a form to configure a token vote wit
       helperUrl="/static2/img/helpers/helper5.png"
       label="Instructions for the token vote"
       labelAlwaysVisible={false}
+      name={null}
       onChange={[Function]}
       required={true}
       type="text"
@@ -28,7 +29,7 @@ exports[`tokensForm component should render a form to configure a token vote wit
         additionalTextClasses=""
         classname=""
         helperText="Select the number of different token types for this vote"
-        helperUrl="/static2/img/helpers/helper2.png"
+        helperUrl="/static2/img/helpers/helper2.jpg"
         label=""
       />
     </div>
@@ -221,6 +222,7 @@ exports[`tokensForm component should render a form to configure a token vote wit
       helperUrl="/static2/img/helpers/helper5.png"
       label="Instructions for the token vote"
       labelAlwaysVisible={false}
+      name={null}
       onChange={[Function]}
       required={true}
       type="text"
@@ -239,7 +241,7 @@ exports[`tokensForm component should render a form to configure a token vote wit
         additionalTextClasses=""
         classname=""
         helperText="Select the number of different token types for this vote"
-        helperUrl="/static2/img/helpers/helper2.png"
+        helperUrl="/static2/img/helpers/helper2.jpg"
         label=""
       />
     </div>

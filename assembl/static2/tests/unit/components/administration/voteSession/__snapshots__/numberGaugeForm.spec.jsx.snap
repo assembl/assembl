@@ -9,6 +9,7 @@ exports[`DumbNumberGaugeForm component should render a form to set up a numeral 
       helperUrl=""
       label="Minimum value"
       labelAlwaysVisible={false}
+      name={null}
       onChange={[Function]}
       required={true}
       type="number"
@@ -19,6 +20,7 @@ exports[`DumbNumberGaugeForm component should render a form to set up a numeral 
       helperUrl=""
       label="Maximum value"
       labelAlwaysVisible={false}
+      name={null}
       onChange={[Function]}
       required={true}
       type="number"
@@ -29,6 +31,7 @@ exports[`DumbNumberGaugeForm component should render a form to set up a numeral 
       helperUrl=""
       label="Unit"
       labelAlwaysVisible={false}
+      name={null}
       onChange={[Function]}
       required={true}
       type="text"

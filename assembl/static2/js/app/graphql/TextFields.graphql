@@ -1,0 +1,7 @@
+#import "./fragments/TextField.graphql"
+
+query TextFields($lang: String!) {
+  textFields {
+    ...textField
+  }
+}

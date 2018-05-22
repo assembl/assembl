@@ -71,7 +71,7 @@ exports[`ModulesSection component should render a ModuleSection component with t
               additionalTextClasses=""
               classname=""
               helperText="Define gauges number"
-              helperUrl="/static2/img/helpers/helper2.png"
+              helperUrl="/static2/img/helpers/helper2.jpg"
               label=""
             />
           </div>

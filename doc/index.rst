@@ -15,6 +15,8 @@ Installation and administration
    configuration
    backups
    howtoupgrade
+   python_requirements
+   preprod_update
 
 Stack and architecture
 ----------------------
@@ -43,6 +45,7 @@ Developing and contributing to Assembl
    new_class
    fontello
    flow
+   storybook
 
 APIs
 ----

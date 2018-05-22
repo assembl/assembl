@@ -20,6 +20,7 @@ import {
   undeleteModule
 } from '../../../actions/adminActions/voteSession';
 import { displayCustomModal, displayModal, closeModal } from '../../../utils/utilityManager';
+import { rawContentStateIsEmpty } from '../../../utils/draftjs';
 import { createRandomId } from '../../../utils/globalFunctions';
 import CustomizeGaugeForm from './customizeGaugeForm';
 
@@ -42,7 +43,6 @@ type VoteProposalFormProps = {
   tokenModules: Object,
   gaugeModules: Object,
   proposalModules: Object,
-  refetchVoteSession: Function,
   validationErrors: ValidationErrors
 };
 
@@ -68,7 +68,6 @@ const DumbVoteProposalForm = ({
   cancelCustomization,
   deassociateModuleToProposal,
   reactivateModule,
-  refetchVoteSession,
   validationErrors
 }: VoteProposalFormProps) => {
   if (_toDelete) {
@@ -110,11 +109,14 @@ const DumbVoteProposalForm = ({
   };
 
   const settingsModal = (id) => {
-    const content = (
-      <CustomizeGaugeForm close={closeModal} gaugeModuleId={id} editLocale={editLocale} refetchVoteSession={refetchVoteSession} />
-    );
+    const content = <CustomizeGaugeForm close={closeModal} gaugeModuleId={id} editLocale={editLocale} />;
     displayCustomModal(content, true, 'gauge-settings-modal');
   };
+
+  const isTitleEmpty = title === '' || title === null;
+
+  const isDescriptionEmpty = description === null || rawContentStateIsEmpty(description);
+  const areFieldsEmpty = isDescriptionEmpty && isTitleEmpty;
 
   return (
     <div className="form-container vote-proposal-form">
@@ -137,7 +139,7 @@ const DumbVoteProposalForm = ({
         </div>
         {nbProposals > 2 && (
           <OverlayTrigger placement="top" overlay={deleteVoteProposalTooltip}>
-            <Button className="admin-icons" onClick={confirmModal}>
+            <Button className="admin-icons" onClick={areFieldsEmpty ? markAsToDelete : confirmModal}>
               <span className="assembl-icon-delete grey" />
             </Button>
           </OverlayTrigger>

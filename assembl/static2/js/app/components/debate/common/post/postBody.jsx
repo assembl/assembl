@@ -33,9 +33,9 @@ type ExtractInPostProps = {
 };
 
 const ExtractInPost = ({ id, children }: ExtractInPostProps) => (
-  <div className="extract-in-message" id={id}>
+  <span className="extract-in-message" id={id}>
     {children}
-  </div>
+  </span>
 );
 
 const postBodyReplacementComponents = {
@@ -78,9 +78,13 @@ const Html = (props) => {
           end: tfi.xpathEnd,
           endOffset: tfi.offsetEnd
         });
-        const normedRange = range.normalize(html);
-        const nodes = jQuery(normedRange.textNodes()).filter((idx, node) => !white.test(node));
-        nodes.wrap(wrapper);
+        try {
+          const normedRange = range.normalize(html);
+          const nodes = jQuery(normedRange.textNodes()).filter((idx, node) => !white.test(node));
+          nodes.wrap(wrapper);
+        } catch (error) {
+          console.error(error); // eslint-disable-line no-console
+        }
       });
     });
     html = html.children;
@@ -92,8 +96,9 @@ const Html = (props) => {
   delete containerProps.replacementComponents;
   delete containerProps.extracts;
   delete containerProps.dbId;
+  // add a key to to fix a render issue with react 16 with duplicate texts after harvesting
   return (
-    <div ref={divRef} {...containerProps}>
+    <div ref={divRef} {...containerProps} key={extracts ? extracts.length : 0}>
       {nodes}
     </div>
   );

@@ -22,6 +22,7 @@ exports[`LegalNoticeAndTermsForm dumb component should render a form to edit leg
           helperUrl=""
           label="Terms and conditions"
           labelAlwaysVisible={false}
+          name={null}
           onChange={[Function]}
           required={true}
           type="rich-text"
@@ -35,6 +36,7 @@ exports[`LegalNoticeAndTermsForm dumb component should render a form to edit leg
           helperUrl=""
           label="Legal notice"
           labelAlwaysVisible={false}
+          name={null}
           onChange={[Function]}
           required={true}
           type="rich-text"

@@ -1,6 +1,8 @@
+// @flow
 import React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { connect } from 'react-redux';
+import { type Route, type Router } from 'react-router';
 import { I18n } from 'react-redux-i18n';
 
 import ManageModules from '../components/administration/landingPage/manageModules';
@@ -9,7 +11,47 @@ import { displayAlert } from '../utils/utilityManager';
 import SaveButton, { getMutationsPromises, runSerial } from '../components/administration/saveButton';
 import landingPagePlugin from '../utils/administration/landingPage';
 
-class LandingPageAdmin extends React.Component {
+type Props = {
+  landingPageModules: Array<Object>,
+  landingPageModulesHasChanged: boolean,
+  refetchLandingPageModules: Function,
+  route: Route,
+  router: Router,
+  section: string
+};
+
+type State = {
+  refetching: boolean
+};
+
+class LandingPageAdmin extends React.Component<void, Props, State> {
+  props: Props;
+
+  state: State;
+
+  constructor() {
+    super();
+    this.state = {
+      refetching: false
+    };
+  }
+
+  componentDidMount() {
+    this.props.router.setRouteLeaveHook(this.props.route, this.routerWillLeave);
+  }
+
+  componentWillUnmount() {
+    this.props.router.setRouteLeaveHook(this.props.route, null);
+  }
+
+  routerWillLeave = () => {
+    if (this.props.landingPageModulesHasChanged && !this.state.refetching) {
+      return I18n.t('administration.confirmUnsavedChanges');
+    }
+
+    return null;
+  };
+
   saveAction = () => {
     displayAlert('success', `${I18n.t('loading.wait')}...`);
     if (this.props.landingPageModulesHasChanged) {
@@ -23,7 +65,7 @@ class LandingPageAdmin extends React.Component {
 
       runSerial(mutationsPromises)
         .then(() => {
-          refetchLandingPageModules();
+          refetchLandingPageModules().then(() => this.setState({ refetching: false }));
           displayAlert('success', I18n.t('administration.landingPage.successSave'));
         })
         .catch((error) => {

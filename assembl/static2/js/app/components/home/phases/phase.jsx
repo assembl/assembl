@@ -1,10 +1,11 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { browserHistory } from 'react-router';
 import { Translate, Localize } from 'react-redux-i18n';
+
 import { get } from '../../../utils/routeMap';
 import { getPhaseStatus, isSeveralIdentifiers } from '../../../utils/timeline';
 import { displayModal } from '../../../utils/utilityManager';
+import { browserHistory } from '../../../router';
 
 class Phase extends React.Component {
   constructor(props) {

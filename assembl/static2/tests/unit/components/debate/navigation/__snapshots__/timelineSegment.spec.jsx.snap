@@ -1,9 +1,45 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`DumbTimeline component should match the DumbTimeline 1`] = `
+exports[`DumbTimeline component should match an active TimelineSegment 1`] = `
+<div
+  className="minimized-timeline active"
+  onMouseOver={[Function]}
+>
+  <div
+    className="timeline-graph"
+  >
+    <div
+      className="timeline-bars"
+    >
+      <div
+        className="timeline-bar-filler"
+        style={
+          Object {
+            "width": "20%",
+          }
+        }
+      >
+         
+      </div>
+      <div
+        className="timeline-bar-background-container"
+      >
+         
+        <div
+          className="timeline-bar-background"
+        />
+      </div>
+    </div>
+  </div>
+  <span
+    className="timeline-arrow"
+  />
+</div>
+`;
+
+exports[`DumbTimeline component should match the TimelineSegment 1`] = `
 <div
   className="minimized-timeline"
-  onMouseLeave={[Function]}
   onMouseOver={[Function]}
 >
   <div

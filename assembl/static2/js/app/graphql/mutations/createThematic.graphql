@@ -4,9 +4,18 @@ mutation createThematic(
   $titleEntries: [LangStringEntryInput]!
   $questions: [QuestionInput]
   $video: VideoInput
+  $order: Float
 ) {
-  createThematic(identifier: $identifier, image: $image, titleEntries: $titleEntries, questions: $questions, video: $video) {
+  createThematic(
+    identifier: $identifier
+    image: $image
+    titleEntries: $titleEntries
+    questions: $questions
+    video: $video
+    order: $order
+  ) {
     thematic {
+      order
       title
       img {
         externalUrl

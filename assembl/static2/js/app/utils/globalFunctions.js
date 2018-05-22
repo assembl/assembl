@@ -1,4 +1,5 @@
 // @flow
+import { type Map } from 'immutable';
 
 const getInputValue = (id: string) => {
   const elem = document.getElementById(id);
@@ -202,4 +203,46 @@ export const elementContainsSelection = (el: any) => {
     return isOrContains(sel.createRange().parentElement(), el);
   }
   return false;
+};
+
+type ItemsById = Map<string, any>;
+/* move item up (i.e. change its order) in a *ById state */
+export const moveItemUp = (itemsById: ItemsById, id: string): ItemsById => {
+  let newItemsById = itemsById;
+  let itemsInOrder = itemsById
+    .filter(item => !item.get('_toDelete'))
+    .sortBy(item => item.get('order'))
+    .map(item => item.get('id'))
+    .toList();
+  const idx = itemsInOrder.indexOf(id);
+  itemsInOrder = itemsInOrder.delete(idx).insert(idx - 1, id);
+  let order = 1;
+  itemsInOrder.forEach((itemId) => {
+    if (newItemsById.getIn([itemId, 'order']) !== order) {
+      newItemsById = newItemsById.setIn([itemId, 'order'], order).setIn([itemId, '_hasChanged'], true);
+    }
+    order += 1;
+  });
+
+  return newItemsById;
+};
+
+/* move item down (i.e. change its order) in a *ById state */
+export const moveItemDown = (itemsById: ItemsById, id: string): ItemsById => {
+  let newItemsById = itemsById;
+  let itemsInOrder = itemsById
+    .filter(item => !item.get('_toDelete'))
+    .sortBy(item => item.get('order'))
+    .map(item => item.get('id'))
+    .toList();
+  const idx = itemsInOrder.indexOf(id);
+  itemsInOrder = itemsInOrder.delete(idx).insert(idx + 1, id);
+  let order = 1;
+  itemsInOrder.forEach((itemId) => {
+    if (newItemsById.getIn([itemId, 'order']) !== order) {
+      newItemsById = newItemsById.setIn([itemId, 'order'], order).setIn([itemId, '_hasChanged'], true);
+    }
+    order += 1;
+  });
+  return newItemsById;
 };

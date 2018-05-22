@@ -16,16 +16,13 @@ import transaction
 
 
 from assembl.lib import config
-from assembl.lib.sqla import using_virtuoso
 
 
 def upgrade(pyramid_env):
     with context.begin_transaction():
-        if not using_virtuoso():
-            op.alter_column('user', 'preferred_email', type_=sa.String(100))
+        op.alter_column('user', 'preferred_email', type_=sa.String(100))
 
 
 def downgrade(pyramid_env):
     with context.begin_transaction():
-        if not using_virtuoso():
-            op.alter_column('user', 'preferred_email', type_=sa.String(50))
+        op.alter_column('user', 'preferred_email', type_=sa.String(50))

@@ -42,8 +42,6 @@ from .discussion import Discussion
 from .generic import Content
 from .post import Post, SynthesisPost
 from .auth import UserLanguagePreferenceCollection
-from assembl.semantic.virtuoso_mapping import QuadMapPatternS
-from assembl.semantic.namespaces import ASSEMBL
 
 
 _ = TranslationStringFactory('assembl')
@@ -142,8 +140,7 @@ class NotificationSubscription(DiscussionBoundBase):
     discussion = relationship(
         Discussion,
         backref=backref('notificationSubscriptions',
-                        cascade="all, delete-orphan"),
-        info={'rdf': QuadMapPatternS(None, ASSEMBL.in_conversation)}
+                        cascade="all, delete-orphan")
     )
     creation_date = Column(
         DateTime,

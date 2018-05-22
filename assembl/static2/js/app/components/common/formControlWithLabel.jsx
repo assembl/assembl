@@ -20,6 +20,7 @@ type FormControlWithLabelProps = {
   onChange: Function,
   type: string,
   disabled: boolean,
+  name?: string,
   label: string,
   labelAlwaysVisible: boolean,
   componentClass: string,
@@ -42,6 +43,7 @@ class FormControlWithLabel extends React.Component<Object, FormControlWithLabelP
   state: FormControlWithLabelState;
 
   static defaultProps = {
+    name: null,
     labelAlwaysVisible: false,
     type: 'text',
     value: undefined,
@@ -110,10 +112,12 @@ class FormControlWithLabel extends React.Component<Object, FormControlWithLabelP
       return this.renderRichTextEditor();
     }
 
+    const name = this.props.name ? this.props.name : id;
     return (
       <FormControl
         componentClass={componentClass}
         id={id}
+        name={name}
         type={type}
         placeholder={this.getLabel()}
         onChange={onChange}

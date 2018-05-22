@@ -10,7 +10,6 @@ from assembl import models
 from assembl.auth import CrudPermissions
 from assembl.auth import Everyone, P_SYSADMIN, P_ADMIN_DISC
 from assembl.auth.util import get_permissions
-
 from .document import Document
 from .types import SecureObjectType
 from .utils import DateTime, abort_transaction_on_exception
@@ -27,7 +26,7 @@ class AgentProfile(SecureObjectType, SQLAlchemyObjectType):
     class Meta:
         model = models.AgentProfile
         interfaces = (Node, )
-        only_fields = ('id', 'is_deleted')
+        only_fields = ('id',)
 
     user_id = graphene.Int(required=True)
     name = graphene.String()
@@ -37,6 +36,10 @@ class AgentProfile(SecureObjectType, SQLAlchemyObjectType):
     image = graphene.Field(Document)
     creation_date = DateTime()  # creation_date only exists on User, not AgentProfile
     has_password = graphene.Boolean()
+    is_deleted = graphene.Boolean()
+
+    def resolve_is_deleted(self, args, context, info):
+        return self.is_deleted or False
 
     def resolve_user_id(self, args, context, info):
         return self.id
@@ -251,7 +254,6 @@ class DeleteUserInformation(graphene.Mutation):
 
             # Social Accounts
             if user.social_accounts:
-                # user.social_accounts = []
                 for social_account in user.social_accounts[:]:
                     db.delete(social_account)
                     user.social_accounts.remove(social_account)

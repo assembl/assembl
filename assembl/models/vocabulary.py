@@ -48,7 +48,6 @@ class UpdatablePgEnum(ENUM):
                             "ALTER TYPE %s ADD VALUE '%s' AFTER '%s'" % (
                                 self.name, name, db_names[i - 1]))
                         db_names[i:i] = name
-                    bind.mark_changed()
 
     def create(self, bind=None, checkfirst=True):
         if bind.dialect.has_type(

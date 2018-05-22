@@ -3,8 +3,8 @@
 exports[`DebateLink component should match the DebateLink (small screen) 1`] = `
 <div
   className="debate-link"
-  onMouseLeave={false}
-  onMouseOver={false}
+  onMouseLeave={null}
+  onMouseOver={null}
 >
   <div
     className="debate-class"
@@ -43,9 +43,18 @@ exports[`DebateLink component should match the DebateLink 1`] = `
       <div
         className="max-container"
       >
-        <Connect(DumbTimeline)
+        <DumbTimeline
+          activeSegment={-1}
+          debate={
+            Object {
+              "debateData": Object {
+                "timeline": Array [],
+              },
+            }
+          }
           identifier="survey"
-          onMenuItemClick={[Function]}
+          onItemDeselect={[Function]}
+          onItemSelect={[Function]}
           showNavigation={true}
         />
       </div>

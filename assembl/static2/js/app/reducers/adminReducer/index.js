@@ -9,7 +9,9 @@ import resourcesCenter from './resourcesCenter';
 import sections from './adminSections';
 import voteSession from './voteSession';
 import landingPage from './landingPage';
+import profileOptions from './profileOptions';
 import { updateInLangstringEntries } from '../../utils/i18n';
+import { moveItemDown, moveItemUp } from '../../utils/globalFunctions';
 
 type EditLocaleState = string;
 type EditLocaleReducer = (EditLocaleState, ReduxAction<Action>) => EditLocaleState;
@@ -20,20 +22,6 @@ export const editLocale: EditLocaleReducer = (state = 'fr', action) => {
   switch (action.type) {
   case 'UPDATE_EDIT_LOCALE':
     return action.newLocale;
-  default:
-    return state;
-  }
-};
-
-type ThematicsInOrderState = List;
-type ThematicsInOrderReducer = (ThematicsInOrderState, ReduxAction<Action>) => ThematicsInOrderState;
-export const thematicsInOrder: ThematicsInOrderReducer = (state = List(), action) => {
-  switch (action.type) {
-  case 'CREATE_NEW_THEMATIC':
-    return state.push(action.id);
-  case 'UPDATE_THEMATICS': {
-    return List(action.thematics.map(t => t.id));
-  }
   default:
     return state;
   }
@@ -63,10 +51,15 @@ export const thematicsById: ThematicsByIdReducer = (state = Map(), action) => {
       titleEntries: List(),
       video: null
     });
-    return state.set(action.id, emptyThematic.set('id', action.id));
+    const order = state.size + 1.0;
+    return state.set(action.id, emptyThematic.set('id', action.id).set('order', order));
   }
   case 'DELETE_THEMATIC':
     return state.setIn([action.id, '_toDelete'], true);
+  case 'MOVE_THEMATIC_UP':
+    return moveItemUp(state, action.id);
+  case 'MOVE_THEMATIC_DOWN':
+    return moveItemDown(state, action.id);
   case 'REMOVE_QUESTION':
     return state
       .updateIn([action.thematicId, 'questions'], questions => questions.remove(action.index))
@@ -159,6 +152,8 @@ export const thematicsHaveChanged: ThematicsHaveChangedReducer = (state = false,
   case 'ADD_QUESTION_TO_THEMATIC':
   case 'CREATE_NEW_THEMATIC':
   case 'DELETE_THEMATIC':
+  case 'MOVE_THEMATIC_DOWN':
+  case 'MOVE_THEMATIC_UP':
   case 'REMOVE_QUESTION':
   case 'UPDATE_QUESTION_TITLE':
   case 'UPDATE_THEMATIC_IMG_URL':
@@ -228,7 +223,6 @@ export const displayLanguageMenu: DisplayLanguageMenuReducer = (state = false, a
 const reducers = {
   editLocale: editLocale,
   thematicsHaveChanged: thematicsHaveChanged,
-  thematicsInOrder: thematicsInOrder,
   thematicsById: thematicsById,
   discussionLanguagePreferences: languagePreferences,
   discussionLanguagePreferencesHasChanged: discussionLanguagePreferencesHasChanged,
@@ -237,7 +231,8 @@ const reducers = {
   sections: sections,
   voteSession: voteSession,
   legalNoticeAndTerms: legalNoticeAndTerms,
-  landingPage: landingPage
+  landingPage: landingPage,
+  profileOptions: profileOptions
 };
 
 export default combineReducers(reducers);

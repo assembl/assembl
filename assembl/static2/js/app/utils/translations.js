@@ -91,7 +91,8 @@ const Translations = {
         knowledge: "Connaissance",
         example: "Exemple",
         concept: "Concept",
-        argument: "Argument"
+        argument: "Argument",
+        cognitive_bias: "Biais cognitif"
       },
       Action: "Action",
       taxonomy_action: {
@@ -105,7 +106,7 @@ const Translations = {
         display_thread: "Activer le thread",
         display_tokens: "Activer le vote",
         display_open_questions: "Activer les questions ouvertes",
-        display_bright_mirror: "Activer le Bright Mirror"
+        display_bright_mirror: "Activer le Design Fiction"
       },
       Sort: "Trier",
       "By relevance": "Par pertinence",
@@ -215,7 +216,7 @@ const Translations = {
       topContributor: "Top contributeur",
       recentDiscussion: "Discussion récente",
       objectivesTitle: "Pourquoi un tel débat ?",
-      timelineTitle: "La timeline en %{count} phases",
+      timelineTitle: "Les %{count} étapes de la concertation",
       video: "La vidéo du débat",
       twitterTitle: "Tweet",
       contact: "Besoin d'échanger au sujet de la plateforme ?",
@@ -425,6 +426,8 @@ const Translations = {
       headerTitle: "Mentions légales"
     },
     administration: {
+      confirmTextFieldDeletionTitle: "Supprimer le champ",
+      confirmTextFieldDeletion: "Êtes-vous certain de vouloir supprimer ce champ ?",
       addThematic: "Ajouter une thématique",
       addQuestion: "Ajouter une question",
       anErrorOccured:
@@ -432,11 +435,13 @@ const Translations = {
       deleteThematic: "Supprimer la thématique",
       confirmDeleteThematicTitle: "Confirmer la suppression",
       confirmDeleteThematic: "Êtes-vous sûr de vouloir supprimer cette thématique ?",
+      confirmUnsavedChanges: "Vous avez des changements non sauvegardés. Êtes-vous sûr de vouloir quitter cette page ?",
       deleteQuestion: "Supprimer la question",
       changeLanguage: "Renseigner une autre langue",
       question_label: "Question",
       announcementModule: "Option module consigne",
       thematic: "Thématique",
+      deleteThematicImage: "Supprimer l'image associée à cette thématique",
       edition: "Éditer la discussion",
       landingpage: "Page d'accueil",
       up: "Remonter",
@@ -447,7 +452,9 @@ const Translations = {
         phase: "Phase %{count} - %{description}",
         language: "Éditer la langue du débat",
         sections: "Éditer les rubriques du débat",
-        legalNoticeAndTerms: "CGU & Mentions légales"
+        legalNoticeAndTerms: "CGU & Mentions légales",
+        exportTaxonomies: "Exporter les taxonomies",
+        manageProfileOptions: "Options d'inscription"
       },
       noTimeline: "Aucune timeline n'a été configurée pour ce débat.",
       survey: {
@@ -499,6 +506,7 @@ const Translations = {
         gauge: "Jauge %{number}",
         customGauge: "Jauge %{number} (modifiée pour cette proposition)",
         gaugeSettings: "Modifier le paramétrage",
+        edit: "Modifier",
         cancelCustomization: "Annuler le paramétrage",
         validationErrors: {
           atLeastOneModule: "Vous devez sélectionner au moins un module."
@@ -578,7 +586,8 @@ const Translations = {
       themeNum: "Thématique %{index}",
       discussion: {
         "0": "Langues utilisées",
-        "3": "Conditions générales d'utilisation & mentions légales"
+        "3": "Options d'inscription",
+        "4": "Conditions générales d'utilisation & mentions légales"
       },
       languageChoice: "Sélection des langues du débat",
       ph: {
@@ -609,11 +618,15 @@ const Translations = {
         pageTitleLabel: "Titre de la page",
         headerImageLabel: "Image de fond du bandeau"
       },
-      surveyExport: {
-        annotation: "Vous pouvez exporter l'ensemble des données du débat en cliquant simplement sur le bouton Exporter",
+      export: {
+        defaultAnnotation: "Vous pouvez exporter l'ensemble des données en cliquant sur le bouton exporter",
+        surveyAnnotation:
+          "Vous pouvez exporter l'ensemble des données du module de questions ouvertes en cliquant sur le bouton Exporter",
+        voteSessionAnnotation: "Vous pouvez exporter l'ensemble des données du module de vote en cliquant sur le bouton Exporter",
         link: "Exporter",
         noExportLanguage: "Conserver les messages dans leurs langues d'origine",
         title: "Exporter les données du débat",
+        sectionTitle: "Exporter les données",
         translateTheMessagesIn: "Traduire l'ensemble des messages en:"
       },
       step_x_total: "Section %{num} sur %{total}",
@@ -631,6 +644,15 @@ const Translations = {
           helper: "Choisissez les modules que vous souhaitez voir apparaître dans la page d'accueil et leurs emplacements."
         },
         successSave: "Les modules ont été enregistrés avec succès !"
+      },
+      profileOptions: {
+        addTextField: "Ajouter un champ",
+        deleteTextField: "Supprimer le champ",
+        introText:
+          "Configurez les champs que vous souhaitez afficher dans le formulaire d'inscription. Renseignez les noms ainsi que la mention obligatoire/non obligatoire.",
+        textFieldToggleOptional: "Rendre ce champ optionnel",
+        textFieldToggleRequired: "Rendre ce champ obligatoire",
+        successSave: "Les options de profils ont été enregistrées avec succès !"
       }
     },
     unauthorizedAdministration: {
@@ -734,7 +756,8 @@ const Translations = {
         knowledge: "Knowledge",
         example: "Example",
         concept: "Concept",
-        argument: "Argument"
+        argument: "Argument",
+        cognitive_bias: "Cognitive bias"
       },
       Action: "Action",
       taxonomy_action: {
@@ -748,7 +771,7 @@ const Translations = {
         display_thread: "Display Thread",
         display_tokens: "Display tokens",
         display_open_questions: "Display Open questions",
-        display_bright_mirror: "Display Bright Mirror"
+        display_bright_mirror: "Display Design Fiction"
       },
       Sort: "Sort",
       "By relevance": "By relevance",
@@ -1067,17 +1090,21 @@ const Translations = {
       headerTitle: "Legal Notice"
     },
     administration: {
+      confirmTextFieldDeletionTitle: "Delete the text field",
+      confirmTextFieldDeletion: "Are you sure that you want to delete this text field?",
       addThematic: "Add a theme",
       addQuestion: "Add a question",
       anErrorOccured: "An error occured during save. Please check that you filled all the required fields.",
       deleteThematic: "Delete the theme",
       confirmDeleteThematicTitle: "Confirm deletion",
       confirmDeleteThematic: "Are you sure you want to delete this theme?",
+      confirmUnsavedChanges: "You have unsaved changes. Are you sure you want to leave this page?",
       deleteQuestion: "Delete the question",
       changeLanguage: "Set another language",
       question_label: "Question",
       announcementModule: "Announcement module",
       thematic: "Theme",
+      deleteThematicImage: "Delete the image associated to this thematic",
       edition: "Edit the discussion",
       landingpage: "Landing page",
       up: "Up",
@@ -1088,7 +1115,9 @@ const Translations = {
         phase: "Phase %{count} - %{description}",
         language: "Discussion language",
         sections: "Edit debate sections",
-        legalNoticeAndTerms: "T&C and legal notice"
+        legalNoticeAndTerms: "T&C and legal notice",
+        exportTaxonomies: "Export taxonomies",
+        manageProfileOptions: "Registration options"
       },
       noTimeline: "No timeline has been configured yet",
       survey: {
@@ -1213,7 +1242,8 @@ const Translations = {
       themeNum: "Theme %{index}",
       discussion: {
         "0": "Languages of the Discussion",
-        "3": "Terms & Conditions and Legal Notice"
+        "3": "Registration options",
+        "4": "Terms & Conditions and Legal Notice"
       },
       languageChoice: "Select desired languages below",
       ph: {
@@ -1244,11 +1274,14 @@ const Translations = {
         pageTitleLabel: "Page title",
         headerImageLabel: "Header image"
       },
-      surveyExport: {
-        annotation: "You can export all the debate data by clicking on the Export button",
+      export: {
+        defaultAnnotation: "You can export all of the data by clicking on the export button",
+        surveyAnnotation: "You can export all the survey module data by clicking on the Export button",
+        voteSessionAnnotation: "You can export all the vote session data by clicking on the Export button",
         link: "Export",
         noExportLanguage: "Keep the messages in their original languages",
         title: "Export the debate data",
+        sectionTitle: "Export data",
         translateTheMessagesIn: "Translate the messages in:"
       },
       step_x_total: "Section %{num} on %{total}",
@@ -1266,6 +1299,15 @@ const Translations = {
           helper: "Choose the modules you want to see in the landing page and their position."
         },
         successSave: "The modules have been saved with success!"
+      },
+      profileOptions: {
+        addTextField: "Add a field",
+        deleteTextField: "Delete the field",
+        introText:
+          "Configure the fields that you want to display in the registration form. Fill in the names and whether the fields are required or optional.",
+        textFieldToggleOptional: "Make this field optional",
+        textFieldToggleRequired: "Make this field required",
+        successSave: "The profile options has been saved with success!"
       }
     },
     unauthorizedAdministration: {

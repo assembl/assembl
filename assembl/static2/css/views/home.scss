@@ -69,7 +69,7 @@
 
       .max-text-width {
         margin: -5px auto 0;
-        max-width: 600px;
+        max-width: 1000px;
       }
 
       .header-logo {
@@ -238,11 +238,10 @@
 
     .partner-logo {
       display: inline-block;
-      margin: 20px;
+      margin: 70px;
     }
 
     img {
-      filter: grayscale(100%);
       height: auto;
       max-height: $partner-logo-height;
       max-width: $partner-logo-width;

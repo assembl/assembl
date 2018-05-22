@@ -12,10 +12,8 @@ from sqlalchemy import (
 )
 
 from . import DiscussionBoundBase
-from ..semantic.virtuoso_mapping import QuadMapPatternS
 from ..auth import CrudPermissions, P_READ, P_ADMIN_DISC
 from ..lib.sqla_types import URLString
-from ..semantic.namespaces import TIME, DCTERMS, ASSEMBL
 from .discussion import Discussion
 from .langstrings import LangString
 
@@ -24,8 +22,7 @@ class TimelineEvent(DiscussionBoundBase):
     """Abstract event that will be shown in the timeline."""
     __tablename__ = 'timeline_event'
 
-    id = Column(Integer, primary_key=True,
-                info={'rdf': QuadMapPatternS(None, ASSEMBL.db_id)})
+    id = Column(Integer, primary_key=True)
 
     discussion_id = Column(Integer, ForeignKey(
         'discussion.id',
@@ -45,12 +42,10 @@ class TimelineEvent(DiscussionBoundBase):
                         doc="An identifier for front-end semantics")
 
     title_id = Column(
-        Integer(), ForeignKey(LangString.id), nullable=False,
-        info={'rdf': QuadMapPatternS(None, DCTERMS.title)})
+        Integer(), ForeignKey(LangString.id), nullable=False)
 
     description_id = Column(
-        Integer(), ForeignKey(LangString.id),
-        info={'rdf': QuadMapPatternS(None, DCTERMS.description)})
+        Integer(), ForeignKey(LangString.id))
 
     title = relationship(
         LangString,
@@ -68,14 +63,9 @@ class TimelineEvent(DiscussionBoundBase):
 
     image_url = Column(URLString())
 
-    start = Column(
-        DateTime,
-        # Formally, TIME.hasBeginning o TIME.inXSDDateTime
-        info={'rdf': QuadMapPatternS(None, TIME.hasBeginning)})
+    start = Column(DateTime)
 
-    end = Column(
-        DateTime,
-        info={'rdf': QuadMapPatternS(None, TIME.hasEnd)})
+    end = Column(DateTime)
 
     # Since dates are optional, the previous event pointer allows
     # dateless events to form a linked list.
@@ -109,8 +99,7 @@ class TimelineEvent(DiscussionBoundBase):
         Discussion,
         backref=backref(
             'timeline_events', order_by=start,
-            cascade="all, delete-orphan"),
-        info={'rdf': QuadMapPatternS(None, ASSEMBL.in_conversation)}
+            cascade="all, delete-orphan")
     )
 
     def set_previous_event(self, previous_event):

@@ -203,3 +203,34 @@ export const harvestingTooltip = (
     <Translate value="harvesting.harvesting" />
   </Tooltip>
 );
+
+export const deleteThematicImageTooltip = (
+  <Tooltip id="deleteThematicImageTooltip">
+    <Translate value="administration.deleteThematicImage" />
+  </Tooltip>
+);
+
+export const addTextFieldTooltip = (
+  <Tooltip id="addTextFieldTooltip">
+    <Translate value="administration.profileOptions.addTextField" />
+  </Tooltip>
+);
+
+export const deleteTextFieldTooltip = (
+  <Tooltip id="deleteTextFieldTooltip">
+    <Translate value="administration.profileOptions.deleteTextField" />
+  </Tooltip>
+);
+
+export const textFieldToggleOptionalTooltip = (
+  <Tooltip id="textFieldToggleOptionalTooltip">
+    <Translate value="administration.profileOptions.textFieldToggleOptional" />
+  </Tooltip>
+);
+export const textFieldToggleRequiredTooltip = (
+  <Tooltip id="textFieldToggleRequiredTooltip">
+    <Translate value="administration.profileOptions.textFieldToggleRequired" />
+  </Tooltip>
+);
+
+export const fileNameTooltip = (fileName?: string) => <Tooltip id="fileNameTooltip">{fileName}</Tooltip>;

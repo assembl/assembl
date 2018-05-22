@@ -19,6 +19,7 @@ import ProposalsResults from '../components/voteSession/proposalsResults';
 import { getDomElementOffset, isMobile } from '../utils/globalFunctions';
 import { getPhaseId, getIfPhaseCompletedByIdentifier } from '../utils/timeline';
 import { promptForLoginOr, displayAlert, displayModal } from '../utils/utilityManager';
+import { transformLinksInHtml } from '../utils/linkify';
 import withLoadingIndicator from '../components/common/withLoadingIndicator';
 import MessagePage from '../components/common/messagePage';
 
@@ -89,7 +90,8 @@ type State = {
   submitting: boolean,
   availableTokensSticky: boolean,
   userTokenVotes: UserTokenVotes,
-  userGaugeVotes: UserGaugeVotes
+  userGaugeVotes: UserGaugeVotes,
+  windowWidth: number
 };
 
 // $FlowFixMe: if voteType === 'token_vote_specification', we know it is a TokenVoteSpecification
@@ -133,11 +135,13 @@ class DumbVoteSession extends React.Component<void, Props, State> {
       submitting: true,
       availableTokensSticky: false,
       userTokenVotes: Map(),
-      userGaugeVotes: Map()
+      userGaugeVotes: Map(),
+      windowWidth: window.innerWidth
     };
   }
 
   componentWillMount() {
+    window.addEventListener('resize', this.updateWindowWidth);
     if (!this.props.isPhaseCompleted) {
       window.addEventListener('scroll', this.setAvailableTokensSticky);
       this.setMyVotes();
@@ -145,9 +149,14 @@ class DumbVoteSession extends React.Component<void, Props, State> {
   }
 
   componentWillUnmount() {
+    window.removeEventListener('resize', this.updateWindowWidth);
     if (!this.props.isPhaseCompleted) {
       window.removeEventListener('scroll', this.setAvailableTokensSticky);
     }
+  }
+
+  updateWindowWidth = () => {
+    this.setState({ windowWidth: window.innerWidth });
   }
 
   setMyVotes() {
@@ -330,6 +339,8 @@ class DumbVoteSession extends React.Component<void, Props, State> {
       isPhaseCompleted
     } = this.props;
 
+    const { availableTokensSticky, windowWidth } = this.state;
+
     if (!title || title.length === 0) {
       return (
         <MessagePage
@@ -355,24 +366,28 @@ class DumbVoteSession extends React.Component<void, Props, State> {
           <Grid fluid className="background-light">
             <Section
               title={instructionsSectionTitle}
-              containerAdditionalClassNames={this.state.availableTokensSticky ? ['no-margin'] : null}
+              containerAdditionalClassNames={availableTokensSticky ? ['no-margin'] : null}
             >
               <Row>
                 <Col
-                  mdOffset={!this.state.availableTokensSticky ? 3 : null}
-                  smOffset={!this.state.availableTokensSticky ? 1 : null}
+                  mdOffset={!availableTokensSticky ? 3 : null}
+                  smOffset={!availableTokensSticky ? 1 : null}
                   md={8}
                   sm={10}
                   className="no-padding"
                 >
-                  <div dangerouslySetInnerHTML={{ __html: instructionsSectionContent }} className="vote-instructions" />
+                  <div
+                    dangerouslySetInnerHTML={{ __html: transformLinksInHtml(instructionsSectionContent) }}
+                    className="vote-instructions"
+                  />
                   {tokenVoteModule &&
                     tokenVoteModule.tokenCategories && (
                       <div ref={this.setAvailableTokensRef}>
                         <AvailableTokens
-                          sticky={this.state.availableTokensSticky}
+                          sticky={availableTokensSticky}
                           remainingTokensByCategory={remainingTokensByCategory}
                           tokenCategories={tokenVoteModule.tokenCategories}
+                          windowWidth={windowWidth}
                         />
                       </div>
                     )}
@@ -384,7 +399,7 @@ class DumbVoteSession extends React.Component<void, Props, State> {
         <Grid fluid className="background-grey">
           <Section
             title={propositionsSectionTitleToShow}
-            className={this.state.availableTokensSticky ? 'extra-margin-top' : null}
+            className={availableTokensSticky ? 'extra-margin-top' : null}
           >
             <Row>
               <Col mdOffset={1} md={10} smOffset={1} sm={10}>

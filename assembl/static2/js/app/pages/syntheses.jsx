@@ -2,10 +2,11 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { compose, graphql } from 'react-apollo';
-import { Link, browserHistory } from 'react-router';
+import { Link } from 'react-router';
 import { Localize, Translate } from 'react-redux-i18n';
 
 import { get } from '../utils/routeMap';
+import { browserHistory } from '../router';
 import { CLASS_NAME_GENERATOR } from '../utils/cardList';
 import Section from '../components/common/section';
 import Card from '../components/common/card';

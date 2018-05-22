@@ -80,6 +80,30 @@ describe('Admin actions', () => {
     });
   });
 
+  describe('moveThematicUp action', () => {
+    const { moveThematicUp } = actions;
+    it('should return a MOVE_THEMATIC_UP action type', () => {
+      const actual = moveThematicUp('1');
+      const expected = {
+        id: '1',
+        type: 'MOVE_THEMATIC_UP'
+      };
+      expect(actual).toEqual(expected);
+    });
+  });
+
+  describe('moveThematicDown action', () => {
+    const { moveThematicDown } = actions;
+    it('should return a MOVE_THEMATIC_DOWNaction type', () => {
+      const actual = moveThematicDown('1');
+      const expected = {
+        id: '1',
+        type: 'MOVE_THEMATIC_DOWN'
+      };
+      expect(actual).toEqual(expected);
+    });
+  });
+
   describe('addQuestionToThematic action', () => {
     const { addQuestionToThematic } = actions;
     it('should return a ADD_QUESTION_TO_THEMATIC action type', () => {

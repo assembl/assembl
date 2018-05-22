@@ -53,6 +53,7 @@ exports[`Vote Session DumbPageForm component should render a form to update the 
           helperUrl=""
           label="Header title FR"
           labelAlwaysVisible={false}
+          name={null}
           onChange={[Function]}
           required={true}
           type="text"
@@ -63,6 +64,7 @@ exports[`Vote Session DumbPageForm component should render a form to update the 
           helperUrl=""
           label="Header subtitle FR"
           labelAlwaysVisible={false}
+          name={null}
           onChange={[Function]}
           required={false}
           type="text"
@@ -84,6 +86,8 @@ exports[`Vote Session DumbPageForm component should render a form to update the 
             fileOrUrl="http://www.example.com/documents/myimage/data"
             filename=""
             handleChange={[Function]}
+            imgTitle={null}
+            isAdminUploader={false}
             mimeType="image/jpeg"
             name="header-image"
             withPreview={true}
@@ -101,13 +105,14 @@ exports[`Vote Session DumbPageForm component should render a form to update the 
         additionalTextClasses=""
         classname="title"
         helperText="The instructions section must contain a title and a description that will guide the participants for their contribution."
-        helperUrl="/static2/img/helpers/helper2.png"
+        helperUrl="/static2/img/helpers/helper2.jpg"
         label="Instructions section configuration"
       />
       <FormControlWithLabel
         helperUrl=""
         label="Instructions title FR"
         labelAlwaysVisible={false}
+        name={null}
         onChange={[Function]}
         required={true}
         type="text"
@@ -118,6 +123,7 @@ exports[`Vote Session DumbPageForm component should render a form to update the 
         helperUrl=""
         label="Instructions content FR"
         labelAlwaysVisible={false}
+        name={null}
         onChange={[Function]}
         required={true}
         type="rich-text"
@@ -153,6 +159,7 @@ exports[`Vote Session DumbPageForm component should render a form to update the 
         helperUrl=""
         label="Section title FR"
         labelAlwaysVisible={false}
+        name={null}
         onChange={[Function]}
         required={true}
         type="text"

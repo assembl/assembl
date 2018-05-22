@@ -27,4 +27,27 @@ describe('MenuList component', () => {
     const rendered = renderer.getRenderOutput();
     expect(rendered).toMatchSnapshot();
   });
+  it('should match the sub-MenuList', () => {
+    const items = [
+      {
+        id: 'foo',
+        parentId: 'root'
+      },
+      {
+        id: 'bar',
+        parentId: 'root'
+      }
+    ];
+    const props = {
+      subMenu: true,
+      identifier: 'survey',
+      className: 'debate-class',
+      rootItem: 'root',
+      items: items
+    };
+    const renderer = new ShallowRenderer();
+    renderer.render(<MenuList {...props} />);
+    const rendered = renderer.getRenderOutput();
+    expect(rendered).toMatchSnapshot();
+  });
 });

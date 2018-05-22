@@ -41,7 +41,7 @@ DEFAULT_SECTION = "DEFAULT"
 
 def running_locally(hosts=None):
     hosts = hosts or env.hosts
-    return set(env.hosts) - set(['localhost', '127.0.0.1']) == set()
+    return set(hosts) - set(['localhost', '127.0.0.1']) == set()
 
 
 def combine_rc(rc_filename, overlay=None):
@@ -90,7 +90,8 @@ def sanitize_env():
     for name in (
             "uses_memcache", "uses_uwsgi", "uses_apache",
             "uses_global_supervisor", "uses_apache",
-            "uses_ngnix", "mac", "is_production_env"):
+            "uses_nginx", "mac", "is_production_env",
+            "build_docs", "can_test"):
         # Note that we use as_bool() instead of bool(),
         # so that a variable valued "False" in the .ini
         # file is recognized as boolean False
@@ -237,6 +238,41 @@ def get_random_templates():
     assert len(templates) == 1, \
         "Please define a RANDOM phase in ini_files"
     return templates[0].split(':')[1:]
+
+
+def ensure_pip_compile():
+    if not exists(env.venvpath + "/bin/pip-compile"):
+        separate_pip_install('pip-tools')
+
+
+@task
+def generate_new_requirements():
+    ensure_pip_compile()
+    target = env.frozen_requirements or 'requirements.txt'
+    venvcmd(" ".join(("pip-compile --output-file", target, env.requirement_inputs)))
+
+
+@task
+def ensure_requirements():
+    target = env.frozen_requirements
+    if target:
+        with cd(env.projectpath):
+            run("cp %s requirements.txt" % target)
+    else:
+        # TODO: Compare a hash in the generated requirements
+        # with the hash of the input files, to avoid regeneration
+        generate_new_requirements()
+
+
+@task
+def generate_frozen_requirements():
+    local_venv = env.get("local_venv", "./venv")
+    with settings(host_string="localhost", venvpath=local_venv,
+                  user=getuser(), projectpath=os.getcwd()):
+        venvcmd("fab -c configs/local_prod.rc generate_new_requirements")
+        venvcmd("fab -c configs/testing.rc generate_new_requirements")
+        venvcmd("fab -c configs/develop.rc generate_new_requirements")
+        # TODO: Check that no package has different versions in different files.
 
 
 @task
@@ -556,27 +592,35 @@ def build_virtualenv():
                     venv_config.write(f)
 
 
+def separate_pip_install(package, wrapper=None):
+    template = "egrep '^%%s' %(projectpath)s/requirements-prod.frozen.txt | sed -e 's/#.*//' | xargs %(venvpath)s/bin/pip install" % env
+    cmd = template % (package,)
+    if wrapper:
+        cmd = wrapper % (cmd,)
+    run(cmd)
+
+
 @task
 def update_pip_requirements(force_reinstall=False):
     """
     update external dependencies on remote host
     """
     print(cyan('Updating requirements using PIP'))
-    venvcmd('pip install -U "pip>=6" ')
+    venvcmd('pip install -U setuptools "pip<10" ')
 
     if force_reinstall:
-        cmd = "%(venvpath)s/bin/pip install --ignore-installed -r %(projectpath)s/requirements.txt" % env
+        run("%(venvpath)s/bin/pip install --ignore-installed -r %(projectpath)s/requirements.txt" % env)
     else:
-        # Thanks to https://github.com/pypa/pip/issues/4453 disable wheel separately.
-        run("egrep '^setuptools' %(projectpath)s/requirements.txt | xargs %(venvpath)s/bin/pip install" % env)
-        # setuptools needs to be installed before compiling dm.xmlsec.binding
-        run("egrep '^lxml' %(projectpath)s/requirements.txt | xargs %(venvpath)s/bin/pip install" % env)
-        run("egrep '^dm.xmlsec.binding' %(projectpath)s/requirements.txt | xargs %(venvpath)s/bin/pip install --install-option='-q'" % env)
+        specials = [
+            # setuptools and lxml need to be installed before compiling dm.xmlsec.binding
+            ("lxml", None),
+            # Thanks to https://github.com/pypa/pip/issues/4453 disable wheel separately.
+            ("dm.xmlsec.binding", "%s --install-option='-q'"),
+        ]
+        for package, wrapper in specials:
+            separate_pip_install(package, wrapper)
         cmd = "%(venvpath)s/bin/pip install -r %(projectpath)s/requirements.txt" % env
         run("yes w | %s" % cmd)
-        if env.wsginame == 'dev.wsgi':
-            venvcmd("pip install pre-commit flake8")
-            venvcmd("pre-commit install")
 
 
 @task
@@ -586,15 +630,6 @@ def app_db_update():
     """
     print(cyan('Migrating database'))
     venvcmd('alembic -c %s upgrade head' % (env.ini_file))
-
-
-@task
-def reset_semantic_mappings():
-    """
-    Reset semantic mappings after a database restore
-    """
-    print(cyan('Resetting semantic mappings'))
-    venvcmd("echo 'import assembl.semantic ; assembl.semantic.reset_semantic_mapping()'|pshell %s" % env.ini_file)
 
 
 def app_db_install():
@@ -689,20 +724,31 @@ def bootstrap(projectpath):
 
 
 @task
-def bootstrap_from_checkout():
+def bootstrap_from_checkout(backup=False):
     """
     Creates the virtualenv and install the app from git checkout
     """
-    execute(updatemaincode)
+    execute(updatemaincode, backup=backup)
     execute(build_virtualenv)
-    execute(app_update_dependencies)
+    execute(app_update_dependencies, backup=backup)
     execute(app_setup)
     execute(check_and_create_database_user)
     execute(app_compile_nodbupdate)
     execute(set_file_permissions)
-    execute(app_db_install)
+    if not backup:
+        execute(app_db_install)
+    else:
+        execute(database_restore, backup=backup)
     execute(app_reload)
     execute(webservers_reload)
+
+
+@task
+def bootstrap_from_backup(backup=True):
+    """
+    Creates the virtualenv and install the app from the backup files
+    """
+    execute(bootstrap_from_checkout, backup=backup)
 
 
 def clone_repository():
@@ -721,24 +767,30 @@ def clone_repository():
                                                 env.projectpath))
 
 
-def updatemaincode():
+def updatemaincode(backup=False):
     """
     Update code and/or switch branch
     """
-    print(cyan('Updating Git repository'))
-    with cd(join(env.projectpath)):
-        run('git fetch')
-        run('git checkout %s' % env.gitbranch)
-        run('git pull %s %s' % (env.gitrepo, env.gitbranch))
-        run('git submodule update --init')
+    if not backup:
+        print(cyan('Updating Git repository'))
+        with cd(join(env.projectpath)):
+            run('git fetch')
+            run('git checkout %s' % env.gitbranch)
+            run('git pull %s %s' % (env.gitrepo, env.gitbranch))
 
 
+@task
 def app_setup():
     venvcmd('pip install -e ./')
     execute(setup_var_directory)
     if not exists(env.ini_file):
         execute(create_local_ini)
     venvcmd('assembl-ini-files populate %s' % (env.ini_file))
+    with cd(env.projectpath):
+        has_pre_commit = run('cat requirements.txt|grep pre-commit', warn_only=True)
+        if has_pre_commit and not exists(join(
+                env.projectpath, '.git/hooks/pre-commit')):
+            venvcmd("pre-commit install")
 
 
 @task
@@ -765,13 +817,15 @@ def app_update():
 
 
 @task
-def app_update_dependencies(force_reinstall=False):
+def app_update_dependencies(force_reinstall=False, backup=False):
     """
     Updates all python and javascript dependencies.  Everything that requires a
     network connection to update
     """
-    execute(update_vendor_themes_1)
-    execute(update_vendor_themes_2)
+    if not backup:
+        execute(update_vendor_themes_1)
+        execute(update_vendor_themes_2)
+        execute(ensure_requirements)
     execute(update_pip_requirements, force_reinstall=force_reinstall)
     # Nodeenv is installed by python , so this must be after update_pip_requirements
     execute(update_node, force_reinstall=force_reinstall)
@@ -825,7 +879,8 @@ def app_compile():
     """
     execute(app_update_dependencies)
     execute(app_compile_noupdate)
-    execute(build_doc)
+    if env.build_docs:
+        execute(build_doc)
 
 
 @task
@@ -855,7 +910,7 @@ def webservers_reload():
     """
     Reload the webserver stack.
     """
-    if env.uses_ngnix:
+    if env.uses_nginx:
         # Nginx (sudo is part of command line here because we don't have full
         # sudo access
         print(cyan("Reloading nginx"))
@@ -869,7 +924,7 @@ def webservers_stop():
     """
     Stop all webservers
     """
-    if env.uses_ngnix:
+    if env.uses_nginx:
         # Nginx
         if exists('/etc/init.d/nginx'):
             run('sudo /etc/init.d/nginx stop')
@@ -881,7 +936,7 @@ def webservers_start():
     """
     Start all webservers
     """
-    if env.uses_ngnix:
+    if env.uses_nginx:
         # Nginx
         if exists('/etc/init.d/nginx'):
             run('sudo /etc/init.d/nginx start')
@@ -1095,28 +1150,27 @@ def install_builddeps():
             run('brew install autoconf')
         if not exists('/usr/local/bin/automake'):
             run('brew install automake')
-        if not exists('/usr/local/bin/pandoc'):
-            run('brew install pandoc')
-        if not exists('/usr/local/bin/twopi'):
-            run('brew install graphviz')
-            # may require a sudo
-            if not run('brew link graphviz', quiet=True):
-                sudo('brew link graphviz')
+        if env.build_docs:
+            if not exists('/usr/local/bin/twopi'):
+                run('brew install graphviz')
+                # may require a sudo
+                if not run('brew link graphviz', quiet=True):
+                    sudo('brew link graphviz')
         # glibtoolize, bison, flex, gperf are on osx by default.
         # brew does not know aclocal, autoheader...
         # They exist on macports, but do we want to install that?
-        if not exists('/usr/local/bin/gfortran'):
-            run('brew install gcc isl')
     else:
-        sudo('apt-get install -y build-essential python-dev pandoc')
+        sudo('apt-get install -y build-essential python-dev pkg-config')
         sudo('apt-get install -y automake bison flex gperf gawk')
-        sudo('apt-get install -y graphviz pkg-config gfortran')
-        release_info = run("lsb_release -i")
-        if "Debian" in release_info:
-            sudo('apt-get install -y chromedriver', warn_only=True)  # jessie
-            sudo('apt-get install -y chromium-driver', warn_only=True)  # stretch
-        if "Ubuntu" in release_info:
-            sudo('apt-get install -y chromium-chromedriver', warn_only=True)
+        if env.build_docs:
+            sudo('apt-get install -y graphviz')
+        if env.can_test:
+            release_info = run("lsb_release -i")
+            if "Debian" in release_info:
+                sudo('apt-get install -y chromedriver', warn_only=True)  # jessie
+                sudo('apt-get install -y chromium-driver', warn_only=True)  # stretch
+            if "Ubuntu" in release_info:
+                sudo('apt-get install -y chromium-chromedriver', warn_only=True)
     execute(update_python_package_builddeps)
 
 
@@ -1132,13 +1186,9 @@ def update_python_package_builddeps():
             'Installing/Updating python package native binary dependencies'))
         sudo('apt-get install -y libpq-dev libmemcached-dev libzmq3-dev '
              'libxslt1-dev libffi-dev libhiredis-dev libxml2-dev libssl-dev '
-             'libreadline-dev liblapack-dev libblas-dev '
-             'libgraphviz-dev libxmlsec1-dev')
-        sudo('apt-get install -y libatlas-base-dev', warn_only=True)  # ubuntu >= 17.10
-        sudo('apt-get install -y libatlas-dev', warn_only=True)  # others
-        print ("We are still trying to get some requirements right for linux, "
-               "See http://www.scipy.org/scipylib/building/linux.html "
-               "for details.")
+             'libreadline-dev libxmlsec1-dev')
+        if env.can_test:
+            sudo('apt-get install -y libgraphviz-dev')
 
 
 @task
@@ -1269,14 +1319,15 @@ def check_and_create_database_user(host=None, user=None, password=None):
     host = host or env.db_host
     user = user or env.db_user
     password = password or env.db_password
+    pypsql = join(env.projectpath, 'assembl', 'scripts', 'pypsql.py')
     with settings(warn_only=True):
-        checkUser = venvcmd('assembl-pypsql -1 -u {user} -p {password} -n {host} "{command}"'.format(
+        checkUser = run('python2 {pypsql} -1 -u {user} -p {password} -n {host} "{command}"'.format(
             command="SELECT 1 FROM pg_roles WHERE rolname='%s'" % (user),
-            password=password, host=host, user=user, projectpath=env.projectpath))
+            pypsql=pypsql, password=password, host=host, user=user))
     if checkUser.failed:
         print(yellow("User does not exist, let's try to create it. (The error above is not problematic if the next command which is going to be run now will be successful. This next command tries to create the missing Postgres user.)"))
         db_user = system_db_user()
-        if running_locally([host]) and db_user:
+        if (running_locally([host]) or env.host_string == host) and db_user:
             db_password_string = ''
             sudo_user = db_user
         else:
@@ -1287,8 +1338,7 @@ def check_and_create_database_user(host=None, user=None, password=None):
         run_db_command('python2 {pypsql} -u {db_user} -n {host} {db_password_string} "{command}"'.format(
             command="CREATE USER %s WITH CREATEDB ENCRYPTED PASSWORD '%s'; COMMIT;" % (
                 user, password),
-            pypsql=join(env.projectpath, 'assembl', 'scripts', 'pypsql.py'),
-            db_user=db_user, host=host, db_password_string=db_password_string),
+            pypsql=pypsql, db_user=db_user, host=host, db_password_string=db_password_string),
             sudo_user)
     else:
         print(green("User exists and can connect"))
@@ -1555,15 +1605,20 @@ def postgres_user_detach():
 
 
 @task
-def database_restore():
+def database_restore(backup=False):
     """
     Restores the database backed up on the remote server
     """
-    assert(env.wsginame in ('staging.wsgi', 'dev.wsgi'))
-
-    processes = filter_autostart_processes([
-        "dev:pserve" "celery_imap", "changes_router", "celery_notify",
-        "celery_notification_dispatch", "source_reader"])
+    if not backup:
+        assert(env.wsginame in ('staging.wsgi', 'dev.wsgi'))
+        processes = filter_autostart_processes([
+            "dev:pserve" "celery_imap", "changes_router", "celery_notify",
+            "celery_notification_dispatch", "source_reader"])
+    else:
+        processes = filter_autostart_processes([
+            "dev:pserve", "dev:gulp", "dev:webpack", "edgesense", "elasticsearch", "celery_imap", "changes_router", "celery_notify",
+            "celery_notification_dispatch", "celery_notify_beat", "celery_translate", "source_reader", "maintenance_uwsgi", "metrics",
+            "metrics_py", "prod:uwsgi"])
 
     if(env.wsginame != 'dev.wsgi'):
         execute(webservers_stop)

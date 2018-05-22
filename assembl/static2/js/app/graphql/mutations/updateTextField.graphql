@@ -1,0 +1,14 @@
+mutation updateTextField($id: ID!, $lang: String!, $titleEntries: [LangStringEntryInput]!, $order: Float!, $required: Boolean!) {
+  updateTextField(id: $id, lang: $lang, titleEntries: $titleEntries, order: $order, required: $required) {
+    textField {
+      id
+      titleEntries {
+        localeCode
+        value
+      }
+      title(lang: $lang)
+      order
+      required
+    }
+  }
+}

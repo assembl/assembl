@@ -1,4 +1,5 @@
 // @flow
+import pick from 'lodash/pick';
 import { combineReducers } from 'redux';
 import type ReduxAction from 'redux';
 import { fromJS, List, Map } from 'immutable';
@@ -12,6 +13,7 @@ import {
   UPDATE_VOTE_SESSION_PAGE_PROPOSITIONS_TITLE,
   UPDATE_VOTE_SESSION_PAGE_IMAGE,
   UPDATE_VOTE_SESSION_PAGE,
+  UPDATE_VOTE_MODULE,
   UPDATE_VOTE_MODULES,
   DELETE_VOTE_MODULE,
   CREATE_TOKEN_VOTE_MODULE,
@@ -47,6 +49,7 @@ import {
 } from '../../actions/actionTypes';
 import { updateInLangstringEntries } from '../../utils/i18n';
 import { pickerColors } from '../../constants';
+import { moveItemUp, moveItemDown } from '../../utils/globalFunctions';
 
 const initialPage = Map({
   _hasChanged: false,
@@ -119,29 +122,40 @@ export const voteSessionPage: VoteSessionPageReducer = (state = initialPage, act
   }
 };
 
-export const moduleTemplatesHaveChanged = (state: boolean = false, action: ReduxAction<Action>) => {
+export const modulesOrProposalsHaveChanged = (state: boolean = false, action: ReduxAction<Action>) => {
   switch (action.type) {
-  case DELETE_VOTE_MODULE:
+  case ADD_MODULE_TO_PROPOSAL:
+  case CANCEL_MODULE_CUSTOMIZATION:
+  case CREATE_GAUGE_VOTE_CHOICE:
+  case CREATE_GAUGE_VOTE_MODULE:
+  case CREATE_TOKEN_VOTE_CATEGORY:
   case CREATE_TOKEN_VOTE_MODULE:
+  case CREATE_VOTE_PROPOSAL:
+  case UPDATE_VOTE_MODULE:
+  case DELETE_GAUGE_VOTE_CHOICE:
+  case DELETE_TOKEN_VOTE_CATEGORY:
+  case DELETE_VOTE_MODULE:
+  case DELETE_VOTE_PROPOSAL:
+  case MARK_ALL_DEPENDENCIES_AS_CHANGED:
+  case MOVE_PROPOSAL_DOWN:
+  case MOVE_PROPOSAL_UP:
+  case UPDATE_GAUGE_MAXIMUM:
+  case UPDATE_GAUGE_MINIMUM:
+  case UPDATE_GAUGE_UNIT:
+  case UPDATE_GAUGE_VOTE_CHOICE_LABEL:
+  case UPDATE_GAUGE_VOTE_INSTRUCTIONS:
+  case UPDATE_GAUGE_VOTE_IS_NUMBER:
+  case UPDATE_GAUGE_VOTE_NUMBER_TICKS:
+  case UPDATE_TOKEN_TOTAL_NUMBER:
+  case UPDATE_TOKEN_VOTE_CATEGORY_COLOR:
+  case UPDATE_TOKEN_VOTE_CATEGORY_TITLE:
   case UPDATE_TOKEN_VOTE_EXCLUSIVE_CATEGORY:
   case UPDATE_TOKEN_VOTE_INSTRUCTIONS:
-  case CREATE_TOKEN_VOTE_CATEGORY:
-  case DELETE_TOKEN_VOTE_CATEGORY:
-  case UPDATE_TOKEN_VOTE_CATEGORY_TITLE:
-  case UPDATE_TOKEN_VOTE_CATEGORY_COLOR:
-  case UPDATE_TOKEN_TOTAL_NUMBER:
-  case CREATE_GAUGE_VOTE_MODULE:
-  case UPDATE_GAUGE_VOTE_INSTRUCTIONS:
-  case UPDATE_GAUGE_VOTE_NUMBER_TICKS:
-  case UPDATE_GAUGE_VOTE_IS_NUMBER:
-  case CREATE_GAUGE_VOTE_CHOICE:
-  case DELETE_GAUGE_VOTE_CHOICE:
-  case UPDATE_GAUGE_VOTE_CHOICE_LABEL:
-  case UPDATE_GAUGE_MINIMUM:
-  case UPDATE_GAUGE_MAXIMUM:
-  case UPDATE_GAUGE_UNIT:
+  case UPDATE_VOTE_PROPOSAL_DESCRIPTION:
+  case UPDATE_VOTE_PROPOSAL_TITLE:
     return true;
   case UPDATE_VOTE_MODULES:
+  case UPDATE_VOTE_PROPOSALS:
     return false;
   default:
     return state;
@@ -176,8 +190,8 @@ const defaultTokenModule = Map({
 
 const defaultTextGaugeChoice = Map({
   id: String,
-  labelEntries: List(),
-  value: Number
+  labelEntries: List()
+  // value: Number
 });
 
 const defaultTextGaugeModule = Map({
@@ -255,6 +269,33 @@ const getModuleInfo = (m) => {
     ...customModuleInfo,
     ...moduleInfo
   };
+};
+
+const specificKeys = ['choices', 'maximum', 'minimum', 'nbTicks', 'unit'];
+type SpecificInfo = {
+  maximum?: Number,
+  minimum?: Number,
+  nbTicks?: Number,
+  unit?: string,
+  choices?: List<string>
+};
+const updateGaugeSpecificInfo = (info: SpecificInfo) => (m: Map<string, any>) => {
+  if (m.get('isNumberGauge')) {
+    const { maximum, minimum, nbTicks, unit } = info;
+    return m
+      .delete('choices')
+      .set('maximum', maximum)
+      .set('minimum', minimum)
+      .set('nbTicks', nbTicks)
+      .set('unit', unit);
+  }
+
+  return m
+    .set('choices', info.choices)
+    .delete('maximum')
+    .delete('minimum')
+    .delete('nbTicks')
+    .delete('unit');
 };
 
 export const modulesById = (state: Map<string, Map> = Map(), action: ReduxAction<Action>) => {
@@ -357,29 +398,35 @@ export const modulesById = (state: Map<string, Map> = Map(), action: ReduxAction
     });
   case CANCEL_MODULE_CUSTOMIZATION: {
     const template = state.get(state.getIn([action.id, 'voteSpecTemplateId']));
+    const specificInfo = template.filter((v, k) => specificKeys.includes(k)).toJS();
     return state
       .update(action.id, m => m.set('isNumberGauge', template.get('isNumberGauge')))
       .update(action.id, m =>
         m
-          .set('instructionsEntries', template.get('instructionsEntries'))
           .set('isCustom', false)
           .set('_hasChanged', true)
       )
-      .update(action.id, (m) => {
-        if (m.get('isNumberGauge')) {
-          return m
-            .delete('choices')
-            .set('unit', template.get('unit'))
-            .set('max', template.get('max'))
-            .set('min', template.get('min'));
-        }
-
-        return m
-          .set('choices', template.get('choices'))
-          .delete('max')
-          .delete('min')
-          .delete('unit');
-      });
+      .update(action.id, updateGaugeSpecificInfo(specificInfo))
+      .deleteIn([action.id, 'instructionsEntries'])
+      .deleteIn([action.id, 'choices']);
+  }
+  case UPDATE_VOTE_MODULE: {
+    const { instructions, isCustom, isNumberGauge, type } = action.info;
+    let specificInfo = pick(action.info, specificKeys);
+    specificInfo = {
+      ...specificInfo,
+      choices: specificInfo.choices && specificInfo.choices.map(c => c.get('id'))
+    };
+    return state
+      .update(action.id, m =>
+        m
+          .set('isNumberGauge', isNumberGauge)
+          .set('isCustom', isCustom)
+          .set('type', type)
+          .set('_hasChanged', true)
+          .update('instructionsEntries', updateInLangstringEntries(action.locale, instructions))
+      )
+      .update(action.id, updateGaugeSpecificInfo(specificInfo));
   }
   default:
     return state;
@@ -447,26 +494,6 @@ export const tokenCategoriesById = (state: Map<string, Map> = Map(), action: Red
   }
 };
 
-export const voteProposalsHaveChanged = (state: boolean = false, action: ReduxAction<Action>) => {
-  switch (action.type) {
-  case CREATE_VOTE_PROPOSAL:
-  case DELETE_VOTE_PROPOSAL:
-  case MOVE_PROPOSAL_DOWN:
-  case MOVE_PROPOSAL_UP:
-  case UPDATE_VOTE_PROPOSAL_TITLE:
-  case UPDATE_VOTE_PROPOSAL_DESCRIPTION:
-  case ADD_MODULE_TO_PROPOSAL:
-  case DELETE_VOTE_MODULE:
-  case MARK_ALL_DEPENDENCIES_AS_CHANGED:
-  case CANCEL_MODULE_CUSTOMIZATION:
-    return true;
-  case UPDATE_VOTE_PROPOSALS:
-    return false;
-  default:
-    return state;
-  }
-};
-
 const defaultVoteProposal = Map({
   _isNew: true,
   _toDelete: false,
@@ -504,42 +531,10 @@ export const voteProposalsById = (state: Map<string, Map> = Map(), action: Redux
   }
   case DELETE_VOTE_PROPOSAL:
     return state.setIn([action.id, '_toDelete'], true);
-  case MOVE_PROPOSAL_UP: {
-    let newState = state;
-    let proposalsInOrder = state
-      .filter(proposal => !proposal.get('_toDelete'))
-      .sortBy(proposal => proposal.get('order'))
-      .map(proposal => proposal.get('id'))
-      .toList();
-    const idx = proposalsInOrder.indexOf(action.id);
-    proposalsInOrder = proposalsInOrder.delete(idx).insert(idx - 1, action.id);
-    let order = 1;
-    proposalsInOrder.forEach((proposalId) => {
-      if (newState.getIn([proposalId, 'order']) !== order) {
-        newState = newState.setIn([proposalId, 'order'], order).setIn([proposalId, '_hasChanged'], true);
-      }
-      order += 1;
-    });
-    return newState;
-  }
-  case MOVE_PROPOSAL_DOWN: {
-    let newState = state;
-    let proposalsInOrder = state
-      .filter(proposal => !proposal.get('_toDelete'))
-      .sortBy(proposal => proposal.get('order'))
-      .map(proposal => proposal.get('id'))
-      .toList();
-    const idx = proposalsInOrder.indexOf(action.id);
-    proposalsInOrder = proposalsInOrder.delete(idx).insert(idx + 1, action.id);
-    let order = 1;
-    proposalsInOrder.forEach((proposalId) => {
-      if (newState.getIn([proposalId, 'order']) !== order) {
-        newState = newState.setIn([proposalId, 'order'], order).setIn([proposalId, '_hasChanged'], true);
-      }
-      order += 1;
-    });
-    return newState;
-  }
+  case MOVE_PROPOSAL_UP:
+    return moveItemUp(state, action.id);
+  case MOVE_PROPOSAL_DOWN:
+    return moveItemDown(state, action.id);
   case UPDATE_VOTE_PROPOSAL_TITLE:
     return state.updateIn([action.id, 'titleEntries'], updateInLangstringEntries(action.locale, action.value));
   case UPDATE_VOTE_PROPOSAL_DESCRIPTION:
@@ -569,6 +564,28 @@ const getGaugeChoices = (m) => {
 
 export const gaugeChoicesById = (state: Map<string, Map> = Map(), action: ReduxAction<Action>) => {
   switch (action.type) {
+  case UPDATE_VOTE_MODULE: {
+    if (action.info.choices) {
+      let newState = state;
+      action.info.choices.forEach((choice) => {
+        const cid = choice.get('id');
+        if (state.has(cid)) {
+          newState = newState.updateIn([cid, 'labelEntries'], updateInLangstringEntries(action.locale, choice.get('title')));
+        } else {
+          newState = newState.set(
+            cid,
+            defaultTextGaugeChoice
+              .set('id', cid)
+              .update('labelEntries', updateInLangstringEntries(action.locale, choice.get('title')))
+          );
+        }
+      });
+
+      return newState;
+    }
+
+    return state;
+  }
   case UPDATE_VOTE_MODULES: {
     let newState = Map();
     action.voteModules.forEach((m) => {
@@ -606,7 +623,6 @@ export default combineReducers({
   modulesById: modulesById,
   tokenCategoriesById: tokenCategoriesById,
   voteProposalsById: voteProposalsById,
-  voteProposalsHaveChanged: voteProposalsHaveChanged,
   gaugeChoicesById: gaugeChoicesById,
-  moduleTemplatesHaveChanged: moduleTemplatesHaveChanged
+  modulesOrProposalsHaveChanged: modulesOrProposalsHaveChanged
 });

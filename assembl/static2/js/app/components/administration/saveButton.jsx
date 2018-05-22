@@ -20,6 +20,7 @@ export const getMutationsPromises = (params) => {
     } else if (item._isNew && !item._toDelete && createMutation) {
       // create item
       const payload = {
+        refetchQueries: params.refetchQueries || [],
         variables: variablesCreator(item, index)
       };
       const p1 = () => createMutation(payload);
@@ -27,6 +28,7 @@ export const getMutationsPromises = (params) => {
     } else if (item._toDelete && !item._isNew && deleteMutation) {
       // delete item
       const payload = {
+        refetchQueries: params.refetchQueries || [],
         variables: deleteVariablesCreator(item)
       };
       const p3 = () => deleteMutation(payload);
@@ -37,6 +39,7 @@ export const getMutationsPromises = (params) => {
       variables.id = item.id;
       variables.lang = lang;
       const payload = {
+        refetchQueries: params.refetchQueries || [],
         variables: variables
       };
       const p2 = () => updateMutation(payload);

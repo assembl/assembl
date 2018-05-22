@@ -1,0 +1,51 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ConfiguredField component should match ConfiguredField snapshot (EMAIL) 1`] = `
+<div
+  className="form-group"
+>
+  <label
+    className="control-label"
+    htmlFor="my-field"
+  >
+    My email field
+  </label>
+  <input
+    className="form-control"
+    disabled={true}
+    id="my-field"
+    name="my-field"
+    onBlur={[Function]}
+    onChange={[Function]}
+    placeholder="My email field"
+    type="text"
+    value="foobar"
+  />
+</div>
+`;
+
+exports[`ConfiguredField component should match ConfiguredField snapshot (PASSWORD) 1`] = `null`;
+
+exports[`ConfiguredField component should match ConfiguredField snapshot (TEXT) 1`] = `
+<div
+  className="form-group"
+>
+  <label
+    className="control-label"
+    htmlFor="my-field"
+  >
+    My field*
+  </label>
+  <input
+    className="form-control"
+    disabled={false}
+    id="my-field"
+    name="my-field"
+    onBlur={[Function]}
+    onChange={[Function]}
+    placeholder="My field*"
+    type="text"
+    value="foobar"
+  />
+</div>
+`;

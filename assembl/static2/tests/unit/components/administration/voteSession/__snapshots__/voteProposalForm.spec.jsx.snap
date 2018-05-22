@@ -25,6 +25,7 @@ exports[`VoteProposalForm component should render an empty form to create a vote
     helperUrl=""
     label="Title of the proposal"
     labelAlwaysVisible={false}
+    name={null}
     onChange={[Function]}
     required={true}
     type="text"
@@ -42,6 +43,7 @@ exports[`VoteProposalForm component should render an empty form to create a vote
     helperUrl=""
     label="Description"
     labelAlwaysVisible={false}
+    name={null}
     onChange={[Function]}
     required={true}
     type="rich-text"
@@ -88,6 +90,7 @@ exports[`VoteProposalForm component should render an empty form to create a vote
     helperUrl=""
     label="Title of the proposal"
     labelAlwaysVisible={false}
+    name={null}
     onChange={[Function]}
     required={true}
     type="text"
@@ -98,6 +101,7 @@ exports[`VoteProposalForm component should render an empty form to create a vote
     helperUrl=""
     label="Description"
     labelAlwaysVisible={false}
+    name={null}
     onChange={[Function]}
     required={true}
     type="rich-text"

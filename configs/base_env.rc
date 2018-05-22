@@ -28,6 +28,9 @@ elasticsearch_version=5.6.2
 elasticsearch_host=localhost
 elasticsearch_index=assembl
 
+_requirement_inputs = requirements.in requirements-chrouter.in
+frozen_requirements = requirements-prod.frozen.txt
+
 # External hostname: Will almost always be overridden in a host-specific rc file.
 # Note that unlike _hosts, the DNS for public_hostname need not exist at time of creation.
 public_hostname =
@@ -62,7 +65,7 @@ _mac = false
 # We now use systemd instead of a global supervisor
 _uses_global_supervisor = false
 _uses_memcache = true
-_uses_ngnix = true
+_uses_nginx = true
 _uses_uwsgi = true
 _gitrepo = https://github.com/assembl/assembl.git
 _gitbranch = master

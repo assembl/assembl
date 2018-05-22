@@ -8,8 +8,6 @@ from sqlalchemy.ext.declarative import declared_attr
 from sqlalchemy.sql.expression import join
 from sqlalchemy.orm import relationship
 
-from ..semantic.virtuoso_mapping import QuadMapPatternS
-from ..semantic.namespaces import ASSEMBL
 from . import config
 
 
@@ -107,8 +105,7 @@ class HistoryMixin(TombstonableMixin):
     def base_id(cls):
         return Column(Integer,
             ForeignKey(cls.idtable_name + ".id"),
-            nullable=False,
-            info={'rdf': QuadMapPatternS(None, ASSEMBL.db_id)})
+            nullable=False)
 
     @classmethod
     def identity_join(cls):
@@ -127,14 +124,6 @@ class HistoryMixin(TombstonableMixin):
             uselist=False, viewonly=True, **kwargs)
 
     def _before_insert(self):
-        if self.using_virtuoso:
-            (id,) = self.db.execute(
-                self.id_sequence.next_value().select()).first()
-            self.id = id
-            if not self.base_id:
-                self.db.execute(self.identity_table.insert().values(id=id))
-                self.base_id = id
-        else:
             if self.base_id:
                 (id,) = self.db.execute(
                     self.id_sequence.next_value().select()).first()

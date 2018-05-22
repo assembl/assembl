@@ -420,14 +420,6 @@ class LangString(Base):
 
     id = Column(Integer, primary_key=True)
 
-    def _before_insert(self):
-        if self.using_virtuoso:
-            # This is a virtuoso workaround: virtuoso does not like
-            # empty inserts.
-            (id,) = self.db.execute(
-                self.id_sequence.next_value().select()).first()
-            self.id = id
-
     def add_entry(self, entry, allow_replacement=True):
         """Add a LangStringEntry to the langstring.
         Previous versions with the same language will be tombstoned,
@@ -845,12 +837,6 @@ class LangString(Base):
 
     # Those permissions are for an ownerless object. Accept Create before ownership.
     crud_permissions = CrudPermissions(P_READ, P_SYSADMIN, P_SYSADMIN, P_SYSADMIN)
-
-
-if LangString.using_virtuoso:
-    @event.listens_for(LangString, 'before_insert', propagate=True)
-    def receive_before_insert(mapper, connection, target):
-        target._before_insert()
 
 
 class LangStringEntry(TombstonableMixin, Base):

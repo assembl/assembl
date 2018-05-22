@@ -453,7 +453,7 @@ export class SearchComponent extends React.Component {
     let messagesSelected = false;
     let usersSelected = false;
     let selectedCategory = 'All';
-    if (this.searchkit.state) {
+    if (this.searchkit.state && this.searchkit.state.type) {
       messagesSelected = this.searchkit.state.type.indexOf('post') >= 0;
       usersSelected = this.searchkit.state.type.indexOf('user') >= 0;
       if (this.searchkit.state.type.length > 0) {

@@ -5,6 +5,12 @@ var _ = require('lodash');
 
 var webpackPort = parseInt(process.env.WEBPACK_URL.split(':')[2]);
 var webpackHost = process.env.WEBPACK_URL.split('://')[1].split(':')[0];
+var disableHostCheck = false;
+if (true) {
+  // allow access from outside
+  webpackHost = "0.0.0.0";
+  disableHostCheck = true;
+}
 
 function theme_entries() {
     var entries = {},
@@ -41,6 +47,7 @@ module.exports = {
         },
         port: webpackPort,
         host: webpackHost,
+        disableHostCheck: disableHostCheck,
         proxy: {
           '/static2': {
             target: process.env.ASSEMBL_URL

@@ -175,7 +175,16 @@ class Idea extends React.Component {
   }
 
   render() {
-    const { contentLocaleMapping, debateData, lang, ideaLoading, ideaWithPostsData, identifier, routerParams } = this.props;
+    const {
+      contentLocaleMapping,
+      debateData,
+      isHarvesting,
+      lang,
+      ideaLoading,
+      ideaWithPostsData,
+      identifier,
+      routerParams
+    } = this.props;
     const refetchIdea = ideaWithPostsData.refetch;
     if (ideaLoading) {
       return (
@@ -204,6 +213,7 @@ class Idea extends React.Component {
       ideaId: id,
       ideaWithPostsData: ideaWithPostsData,
       isUserConnected: getConnectedUserId(),
+      isHarvesting: isHarvesting,
       contentLocaleMapping: contentLocaleMapping,
       refetchIdea: refetchIdea,
       lang: lang,
@@ -267,6 +277,7 @@ const mapStateToProps = state => ({
   contentLocaleMapping: state.contentLocale,
   debateData: state.debate.debateData,
   defaultContentLocaleMapping: state.defaultContentLocaleMapping,
+  isHarvesting: state.context.isHarvesting,
   lang: state.i18n.locale
 });
 

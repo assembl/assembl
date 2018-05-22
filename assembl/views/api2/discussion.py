@@ -9,6 +9,7 @@ from os.path import join, dirname
 from collections import defaultdict
 from datetime import timedelta, datetime
 import isodate
+from assembl.lib.clean_input import sanitize_text
 #import pprint
 
 from sqlalchemy import (
@@ -37,7 +38,6 @@ from pyramid.view import view_config
 from pyramid.httpexceptions import (
     HTTPOk, HTTPBadRequest, HTTPUnauthorized, HTTPNotAcceptable, HTTPFound,
     HTTPServerError, HTTPConflict)
-from pyramid_dogpile_cache import get_region
 from pyramid.security import Everyone
 from pyramid.renderers import JSONP_VALID_CALLBACK
 from pyramid.settings import asbool
@@ -64,6 +64,9 @@ from assembl.models.social_data_extraction import (
 from ..traversal import InstanceContext, ClassContext
 from . import (JSON_HEADER, FORM_HEADER, CreationResponse)
 from ..api.discussion import etalab_discussions, API_ETALAB_DISCUSSIONS_PREFIX
+from assembl.models import LanguagePreferenceCollection
+
+no_thematic_associated = "no thematic associated"
 
 
 @view_config(context=InstanceContext, request_method='GET',
@@ -84,185 +87,12 @@ def discussion_settings_put(request):
     request.context._instance.settings_json = request.json_body
     return HTTPOk()
 
-dogpile_fname = join(
-    dirname(dirname(dirname(dirname(__file__)))),
-    get_config().get('dogpile_cache.arguments.filename'))
-
-discussion_jsonld_cache = get_region(
-    'discussion_jsonld', **{"arguments.filename": dogpile_fname})
-userprivate_jsonld_cache = get_region(
-    'userprivate_jsonld', **{"arguments.filename": dogpile_fname})
-
-
-@discussion_jsonld_cache.cache_on_arguments()
-def discussion_jsonld(discussion_id):
-    from assembl.semantic.virtuoso_mapping import AssemblQuadStorageManager
-    aqsm = AssemblQuadStorageManager()
-    return aqsm.as_jsonld(discussion_id)
-
-
-@userprivate_jsonld_cache.cache_on_arguments()
-def userprivate_jsonld(discussion_id):
-    from assembl.semantic.virtuoso_mapping import AssemblQuadStorageManager
-    aqsm = AssemblQuadStorageManager()
-    cg = aqsm.participants_private_as_graph(discussion_id)
-    return aqsm.graph_as_jsonld(cg)
-
-
-def read_user_token(request):
-    salt = None
-    user_id = request.authenticated_userid or Everyone
-    discussion_id = request.context.get_discussion_id()
-    permissions = get_permissions(user_id, discussion_id)
-    if P_READ in permissions:
-        permissions.append(P_READ_PUBLIC_CIF)
-
-    if 'token' in request.GET:
-        token = request.GET['token'].encode('ascii')
-        data, valid = verify_data_token(token, max_age=timedelta(hours=1))
-        if valid != Validity.VALID:
-            raise HTTPBadRequest("Invalid token")
-        try:
-            data, salt = data.split('.', 1)
-            salt = base64.urlsafe_b64decode(salt)
-            data = [int(i) for i in data.split(',')]
-            t_user_id, t_discussion_id = data[:2]
-            req_permissions = data[2:]
-            if len(req_permissions):
-                req_permissions = [x for (x,) in Permission.default_db.query(
-                    Permission.name).filter(
-                    Permission.id.in_(req_permissions)).all()]
-        except (ValueError, IndexError):
-            raise HTTPBadRequest("Invalid token")
-        if discussion_id is not None and t_discussion_id != discussion_id:
-            raise HTTPUnauthorized("Token for another discussion")
-        if user_id == Everyone:
-            permissions = get_permissions(t_user_id, discussion_id)
-            if P_READ in permissions:
-                permissions.append(P_READ_PUBLIC_CIF)
-        elif t_user_id != user_id:
-            raise HTTPUnauthorized("Token for another user")
-        user_id = t_user_id
-        permissions = set(permissions).intersection(set(req_permissions))
-    return user_id, permissions, salt
-
 
 def handle_jsonp(callback_fn, json):
     # TODO: Use an augmented JSONP renderer with ld content-type
     if not JSONP_VALID_CALLBACK.match(callback_fn):
         raise HTTPBadRequest("invalid callback name")
     return "/**/{0}({1});".format(callback_fn.encode('ascii'), json)
-
-
-def permission_token(
-        user_id, discussion_id, req_permissions, random_str=None):
-    random_str = random_str or urandom(8)
-    if isinstance(req_permissions, list):
-        req_permissions = set(req_permissions)
-    else:
-        req_permissions = set((req_permissions,))
-    permissions = get_permissions(user_id, discussion_id)
-    if not req_permissions:
-        req_permissions = permissions
-    elif P_SYSADMIN not in permissions:
-        req_permissions = req_permissions.intersection(set(permissions))
-    req_permissions = list(req_permissions)
-    user_id = 0 if user_id == Everyone else user_id
-    data = [str(user_id), str(discussion_id)]
-    data.extend([str(x) for (x,) in Permission.default_db.query(
-            Permission.id).filter(Permission.name.in_(req_permissions)).all()])
-    data = ','.join(data) + '.' + base64.urlsafe_b64encode(random_str)
-    return data_token(data)
-
-
-@view_config(context=InstanceContext, name="perm_token",
-             ctx_instance_class=Discussion, request_method='GET',
-             accept="application/ld+json", renderer="json")
-def get_token(request):
-    user_id = request.authenticated_userid
-    if not user_id:
-        raise HTTPUnauthorized()
-    discussion_id = request.context.get_discussion_id()
-    permission_sets = request.GET.getall('permissions')
-    if permission_sets:
-        permission_sets = [s.split(',') for s in permission_sets]
-        for permissions in permission_sets:
-            if P_READ in permissions:
-                permissions.append(P_READ_PUBLIC_CIF)
-        permission_sets = [sorted(set(permissions))
-                           for permissions in permission_sets]
-    else:
-        permission_sets = [[P_READ, P_READ_PUBLIC_CIF]]
-    random_str = urandom(8)
-    data = {','.join(permissions): permission_token(
-        user_id, discussion_id, permissions, random_str)
-        for permissions in permission_sets}
-    user_ids = request.GET.getall("user_id")
-    if user_ids:
-        from assembl.semantic.virtuoso_mapping import (
-            AssemblQuadStorageManager, AESObfuscator)
-        obfuscator = AESObfuscator(random_str)
-        user_ids = "\n".join(user_ids)
-        data["user_ids"] = AssemblQuadStorageManager.obfuscate(
-            user_ids, obfuscator.encrypt).split("\n")
-    return data
-
-
-@view_config(context=InstanceContext, name="jsonld",
-             ctx_instance_class=Discussion, request_method='GET',
-             accept="application/ld+json")
-@view_config(context=InstanceContext,
-             ctx_instance_class=Discussion, request_method='GET',
-             accept="application/ld+json")
-def discussion_instance_view_jsonld(request):
-    discussion = request.context._instance
-    user_id, permissions, salt = read_user_token(request)
-    if not (P_READ in permissions or P_READ_PUBLIC_CIF in permissions):
-        raise HTTPUnauthorized()
-    if not salt and P_ADMIN_DISC not in permissions:
-        salt = base64.urlsafe_b64encode(urandom(6))
-
-    jdata = discussion_jsonld(discussion.id)
-    if salt:
-        from assembl.semantic.virtuoso_mapping import (
-            AssemblQuadStorageManager, AESObfuscator)
-        obfuscator = AESObfuscator(salt)
-        jdata = AssemblQuadStorageManager.obfuscate(jdata, obfuscator.encrypt)
-    # TODO: Add age
-    if "callback" in request.GET:
-        jdata = handle_jsonp(request.GET['callback'], jdata)
-        content_type = "application/json-p"
-    else:
-        content_type = "application/ld+json"
-    return Response(body=jdata, content_type=content_type)
-
-
-@view_config(context=InstanceContext, name="private_jsonld",
-             ctx_instance_class=Discussion, request_method='GET',
-             accept="application/ld+json")
-def user_private_view_jsonld(request):
-    if request.scheme == "http" and asbool(request.registry.settings.get(
-            'accept_secure_connection', False)):
-        return HTTPFound(get_global_base_url(True) + request.path_qs)
-    discussion_id = request.context.get_discussion_id()
-    user_id, permissions, salt = read_user_token(request)
-    if P_READ not in permissions:
-        raise HTTPUnauthorized()
-    if not salt and P_ADMIN_DISC not in permissions:
-        salt = base64.urlsafe_b64encode(urandom(6))
-
-    jdata = userprivate_jsonld(discussion_id)
-    if salt:
-        from assembl.semantic.virtuoso_mapping import (
-            AssemblQuadStorageManager, AESObfuscator)
-        obfuscator = AESObfuscator(salt)
-        jdata = AssemblQuadStorageManager.obfuscate(jdata, obfuscator.encrypt)
-    if "callback" in request.GET:
-        jdata = handle_jsonp(request.GET['callback'], jdata)
-        content_type = "application/json-p"
-    else:
-        content_type = "application/ld+json"
-    return Response(body=jdata, content_type=content_type)
 
 
 JSON_MIMETYPE = 'application/json'
@@ -346,11 +176,11 @@ def get_time_series_analytics(request):
         metadata = MetaData(discussion.db.get_bind())  # make sure we are using the same connexion
 
         intervals_table = Table('temp_table_intervals_' + str(user_id), metadata,
-            Column('interval_id', Integer, primary_key=True),
-            Column('interval_start', DateTime, nullable=False),
-            Column('interval_end', DateTime, nullable=False),
-            prefixes=None if discussion.using_virtuoso else ['TEMPORARY']
-        )
+                                Column('interval_id', Integer, primary_key=True),
+                                Column('interval_start', DateTime, nullable=False),
+                                Column('interval_end', DateTime, nullable=False),
+                                prefixes=['TEMPORARY']
+                                )
         intervals_table.drop(bind=bind, checkfirst=True)
         intervals_table.create(bind=bind)
         interval_start = start
@@ -359,7 +189,7 @@ def get_time_series_analytics(request):
             interval_end = min(interval_start + interval, end)
             intervals.append({'interval_start': interval_start, 'interval_end': interval_end})
             interval_start = interval_start + interval
-        #pprint.pprint(intervals)
+        # pprint.pprint(intervals)
         discussion.db.execute(intervals_table.insert(), intervals)
 
         from assembl.models import (
@@ -368,11 +198,11 @@ def get_time_series_analytics(request):
 
         # The posters
         post_subquery = discussion.db.query(intervals_table.c.interval_id,
-            func.count(distinct(Post.id)).label('count_posts'),
-            func.count(distinct(Post.creator_id)).label('count_post_authors'),
-            # func.DB.DBA.BAG_AGG(Post.creator_id).label('post_authors'),
-            # func.DB.DBA.BAG_AGG(Post.id).label('post_ids'),
-            )
+                                            func.count(distinct(Post.id)).label('count_posts'),
+                                            func.count(distinct(Post.creator_id)).label('count_post_authors'),
+                                            # func.DB.DBA.BAG_AGG(Post.creator_id).label('post_authors'),
+                                            # func.DB.DBA.BAG_AGG(Post.id).label('post_ids'),
+                                            )
         post_subquery = post_subquery.outerjoin(Post, and_(
             Post.creation_date >= intervals_table.c.interval_start,
             Post.creation_date < intervals_table.c.interval_end,
@@ -383,10 +213,10 @@ def get_time_series_analytics(request):
         # The cumulative posters
         cumulative_posts_aliased = aliased(Post)
         cumulative_posts_subquery = discussion.db.query(intervals_table.c.interval_id,
-            func.count(distinct(cumulative_posts_aliased.id)).label('count_cumulative_posts'),
-            func.count(distinct(cumulative_posts_aliased.creator_id)).label('count_cumulative_post_authors')
-            # func.DB.DBA.BAG_AGG(cumulative_posts_aliased.id).label('cumulative_post_ids')
-            )
+                                                        func.count(distinct(cumulative_posts_aliased.id)).label('count_cumulative_posts'),
+                                                        func.count(distinct(cumulative_posts_aliased.creator_id)).label('count_cumulative_post_authors')
+                                                        # func.DB.DBA.BAG_AGG(cumulative_posts_aliased.id).label('cumulative_post_ids')
+                                                        )
         cumulative_posts_subquery = cumulative_posts_subquery.outerjoin(cumulative_posts_aliased, and_(
             cumulative_posts_aliased.creation_date < intervals_table.c.interval_end,
             cumulative_posts_aliased.discussion_id == discussion.id))
@@ -395,11 +225,11 @@ def get_time_series_analytics(request):
 
         # The top posters
         top_post_subquery = discussion.db.query(intervals_table.c.interval_id,
-            func.count(distinct(Post.id)).label('count_top_posts'),
-            func.count(distinct(Post.creator_id)).label('count_top_post_authors'),
-            # func.DB.DBA.BAG_AGG(Post.creator_id).label('post_authors'),
-            # func.DB.DBA.BAG_AGG(Post.id).label('post_ids'),
-            )
+                                                func.count(distinct(Post.id)).label('count_top_posts'),
+                                                func.count(distinct(Post.creator_id)).label('count_top_post_authors'),
+                                                # func.DB.DBA.BAG_AGG(Post.creator_id).label('post_authors'),
+                                                # func.DB.DBA.BAG_AGG(Post.id).label('post_ids'),
+                                                )
         top_post_subquery = top_post_subquery.outerjoin(Post, and_(
             Post.creation_date >= intervals_table.c.interval_start,
             Post.creation_date < intervals_table.c.interval_end,
@@ -411,10 +241,11 @@ def get_time_series_analytics(request):
         # The cumulative posters
         cumulative_top_posts_aliased = aliased(Post)
         cumulative_top_posts_subquery = discussion.db.query(intervals_table.c.interval_id,
-            func.count(distinct(cumulative_top_posts_aliased.id)).label('count_cumulative_top_posts'),
-            func.count(distinct(cumulative_top_posts_aliased.creator_id)).label('count_cumulative_top_post_authors')
-            # func.DB.DBA.BAG_AGG(cumulative_top_posts_aliased.id).label('cumulative_post_ids')
-            )
+                                                            func.count(distinct(cumulative_top_posts_aliased.id)).label('count_cumulative_top_posts'),
+                                                            func.count(distinct(cumulative_top_posts_aliased.creator_id)
+                                                                       ).label('count_cumulative_top_post_authors')
+                                                            # func.DB.DBA.BAG_AGG(cumulative_top_posts_aliased.id).label('cumulative_post_ids')
+                                                            )
         cumulative_top_posts_subquery = cumulative_top_posts_subquery.outerjoin(cumulative_top_posts_aliased, and_(
             cumulative_top_posts_aliased.creation_date < intervals_table.c.interval_end,
             cumulative_top_posts_aliased.parent_id == None,
@@ -426,8 +257,8 @@ def get_time_series_analytics(request):
         postViewers = aliased(ViewPost)
         viewedPosts = aliased(Post)
         post_viewers_subquery = discussion.db.query(intervals_table.c.interval_id,
-            func.count(distinct(postViewers.actor_id)).label('UNRELIABLE_count_post_viewers')
-            )
+                                                    func.count(distinct(postViewers.actor_id)).label('UNRELIABLE_count_post_viewers')
+                                                    )
         post_viewers_subquery = post_viewers_subquery.outerjoin(postViewers, and_(
             postViewers.creation_date >= intervals_table.c.interval_start,
             postViewers.creation_date < intervals_table.c.interval_end)
@@ -440,9 +271,9 @@ def get_time_series_analytics(request):
         # The cumulative visitors
         cumulativeVisitorAgent = aliased(AgentStatusInDiscussion)
         cumulative_visitors_query = discussion.db.query(intervals_table.c.interval_id,
-            func.count(distinct(cumulativeVisitorAgent.id)).label('count_cumulative_logged_in_visitors'),
-            # func.DB.DBA.BAG_AGG(cumulativeVisitorAgent.id).label('first_time_visitors')
-            )
+                                                        func.count(distinct(cumulativeVisitorAgent.id)).label('count_cumulative_logged_in_visitors'),
+                                                        # func.DB.DBA.BAG_AGG(cumulativeVisitorAgent.id).label('first_time_visitors')
+                                                        )
         cumulative_visitors_query = cumulative_visitors_query.outerjoin(cumulativeVisitorAgent, and_(
             cumulativeVisitorAgent.first_visit < intervals_table.c.interval_end,
             cumulativeVisitorAgent.discussion_id == discussion.id))
@@ -453,44 +284,45 @@ def get_time_series_analytics(request):
         # The members (can go up and down...)  Assumes that first_subscribed is available
         memberAgentStatus = aliased(AgentStatusInDiscussion)
         members_subquery = discussion.db.query(intervals_table.c.interval_id,
-            func.count(memberAgentStatus.id).label('count_approximate_members')
-            )
-        members_subquery = members_subquery.outerjoin(memberAgentStatus, ((memberAgentStatus.last_unsubscribed >= intervals_table.c.interval_end) | (memberAgentStatus.last_unsubscribed.is_(None))) & ((memberAgentStatus.first_subscribed < intervals_table.c.interval_end) | (memberAgentStatus.first_subscribed.is_(None))) & (memberAgentStatus.discussion_id==discussion.id))
+                                               func.count(memberAgentStatus.id).label('count_approximate_members')
+                                               )
+        members_subquery = members_subquery.outerjoin(memberAgentStatus, ((memberAgentStatus.last_unsubscribed >= intervals_table.c.interval_end) | (memberAgentStatus.last_unsubscribed.is_(
+            None))) & ((memberAgentStatus.first_subscribed < intervals_table.c.interval_end) | (memberAgentStatus.first_subscribed.is_(None))) & (memberAgentStatus.discussion_id == discussion.id))
         members_subquery = members_subquery.group_by(intervals_table.c.interval_id)
         members_subquery = members_subquery.subquery()
 
         subscribersAgentStatus = aliased(AgentStatusInDiscussion)
         subscribers_query = discussion.db.query(intervals_table.c.interval_id,
-            func.sum(
-                case([
-                      (subscribersAgentStatus.last_visit == None, 0),
-                      (and_(subscribersAgentStatus.last_visit < intervals_table.c.interval_end,
-                        subscribersAgentStatus.last_visit >= intervals_table.c.interval_start), 1)
-                      ], else_=0)
-                     ).label('retention_count_last_visit_in_period'),
-            func.sum(
-                case([
-                      (subscribersAgentStatus.first_visit == None, 0),
-                      (and_(subscribersAgentStatus.first_visit < intervals_table.c.interval_end,
-                        subscribersAgentStatus.first_visit >= intervals_table.c.interval_start), 1)
-                      ], else_=0)
-                     ).label('recruitment_count_first_visit_in_period'),
-            func.sum(
-                case([
-                      (subscribersAgentStatus.first_subscribed == None, 0),
-                      (and_(subscribersAgentStatus.first_subscribed < intervals_table.c.interval_end,
-                        subscribersAgentStatus.first_subscribed >= intervals_table.c.interval_start), 1)
-                      ], else_=0)
-                     ).label('recruitment_count_first_subscribed_in_period'),
-            func.sum(
-                case([
-                      (subscribersAgentStatus.last_unsubscribed == None, 0),
-                      (and_(subscribersAgentStatus.last_unsubscribed < intervals_table.c.interval_end,
-                        subscribersAgentStatus.last_unsubscribed >= intervals_table.c.interval_start), 1)
-                      ], else_=0)
-                     ).label('retention_count_last_unsubscribed_in_period'),
-        )
-        subscribers_query = subscribers_query.outerjoin(subscribersAgentStatus, subscribersAgentStatus.discussion_id==discussion.id)
+                                                func.sum(
+                                                    case([
+                                                        (subscribersAgentStatus.last_visit == None, 0),
+                                                        (and_(subscribersAgentStatus.last_visit < intervals_table.c.interval_end,
+                                                              subscribersAgentStatus.last_visit >= intervals_table.c.interval_start), 1)
+                                                    ], else_=0)
+                                                ).label('retention_count_last_visit_in_period'),
+                                                func.sum(
+                                                    case([
+                                                        (subscribersAgentStatus.first_visit == None, 0),
+                                                        (and_(subscribersAgentStatus.first_visit < intervals_table.c.interval_end,
+                                                              subscribersAgentStatus.first_visit >= intervals_table.c.interval_start), 1)
+                                                    ], else_=0)
+                                                ).label('recruitment_count_first_visit_in_period'),
+                                                func.sum(
+                                                    case([
+                                                        (subscribersAgentStatus.first_subscribed == None, 0),
+                                                        (and_(subscribersAgentStatus.first_subscribed < intervals_table.c.interval_end,
+                                                              subscribersAgentStatus.first_subscribed >= intervals_table.c.interval_start), 1)
+                                                    ], else_=0)
+                                                ).label('recruitment_count_first_subscribed_in_period'),
+                                                func.sum(
+                                                    case([
+                                                        (subscribersAgentStatus.last_unsubscribed == None, 0),
+                                                        (and_(subscribersAgentStatus.last_unsubscribed < intervals_table.c.interval_end,
+                                                              subscribersAgentStatus.last_unsubscribed >= intervals_table.c.interval_start), 1)
+                                                    ], else_=0)
+                                                ).label('retention_count_last_unsubscribed_in_period'),
+                                                )
+        subscribers_query = subscribers_query.outerjoin(subscribersAgentStatus, subscribersAgentStatus.discussion_id == discussion.id)
         subscribers_query = subscribers_query.group_by(intervals_table.c.interval_id)
         subscribers_subquery = subscribers_query.subquery()
         #query = subscribers_query
@@ -498,9 +330,9 @@ def get_time_series_analytics(request):
         # The votes
         votes_aliased = aliased(AbstractIdeaVote)
         votes_subquery = discussion.db.query(intervals_table.c.interval_id,
-            func.count(distinct(votes_aliased.id)).label('count_votes'),
-            func.count(distinct(votes_aliased.voter_id)).label('count_voters'),
-            )
+                                             func.count(distinct(votes_aliased.id)).label('count_votes'),
+                                             func.count(distinct(votes_aliased.voter_id)).label('count_voters'),
+                                             )
         votes_subquery = votes_subquery.outerjoin(Idea, Idea.discussion_id == discussion.id)
         votes_subquery = votes_subquery.outerjoin(votes_aliased, and_(
             votes_aliased.vote_date >= intervals_table.c.interval_start,
@@ -512,9 +344,9 @@ def get_time_series_analytics(request):
         # The cumulative posters
         cumulative_votes_aliased = aliased(AbstractIdeaVote)
         cumulative_votes_subquery = discussion.db.query(intervals_table.c.interval_id,
-            func.count(cumulative_votes_aliased.id).label('count_cumulative_votes'),
-            func.count(distinct(cumulative_votes_aliased.voter_id)).label('count_cumulative_voters')
-            )
+                                                        func.count(cumulative_votes_aliased.id).label('count_cumulative_votes'),
+                                                        func.count(distinct(cumulative_votes_aliased.voter_id)).label('count_cumulative_voters')
+                                                        )
         cumulative_votes_subquery = cumulative_votes_subquery.outerjoin(Idea, Idea.discussion_id == discussion.id)
         cumulative_votes_subquery = cumulative_votes_subquery.outerjoin(cumulative_votes_aliased, and_(
             cumulative_votes_aliased.vote_date < intervals_table.c.interval_end,
@@ -523,8 +355,8 @@ def get_time_series_analytics(request):
         cumulative_votes_subquery = cumulative_votes_subquery.subquery()
 
         content = with_polymorphic(
-                    Content, [], Content.__table__,
-                    aliased=False, flat=True)
+            Content, [], Content.__table__,
+            aliased=False, flat=True)
 
         # The actions
         actions_on_post = discussion.db.query(
@@ -533,8 +365,8 @@ def get_time_series_analytics(request):
         actions_on_post = actions_on_post.join(ActionOnPost, and_(
             ActionOnPost.post_id == content.id,
             or_(and_(
-                    ActionOnPost.creation_date >= intervals_table.c.interval_start,
-                    ActionOnPost.creation_date < intervals_table.c.interval_end),
+                ActionOnPost.creation_date >= intervals_table.c.interval_start,
+                ActionOnPost.creation_date < intervals_table.c.interval_end),
                 and_(
                     ActionOnPost.tombstone_date >= intervals_table.c.interval_start,
                     ActionOnPost.tombstone_date < intervals_table.c.interval_end))))
@@ -545,8 +377,8 @@ def get_time_series_analytics(request):
         actions_on_idea = actions_on_idea.join(ActionOnIdea, and_(
             ActionOnIdea.idea_id == Idea.id,
             or_(and_(
-                    ActionOnIdea.creation_date >= intervals_table.c.interval_start,
-                    ActionOnIdea.creation_date < intervals_table.c.interval_end),
+                ActionOnIdea.creation_date >= intervals_table.c.interval_start,
+                ActionOnIdea.creation_date < intervals_table.c.interval_end),
                 and_(
                     ActionOnIdea.tombstone_date >= intervals_table.c.interval_start,
                     ActionOnIdea.tombstone_date < intervals_table.c.interval_end))))
@@ -561,9 +393,9 @@ def get_time_series_analytics(request):
 
         actions_union_subquery = actions_on_post.union(actions_on_idea, posts).subquery()
         actions_subquery = discussion.db.query(intervals_table.c.interval_id,
-            func.count(distinct(actions_union_subquery.c.actor_id)).label('count_actors')
-            ).outerjoin(actions_union_subquery, actions_union_subquery.c.interval_id == intervals_table.c.interval_id
-            ).group_by(intervals_table.c.interval_id).subquery()
+                                               func.count(distinct(actions_union_subquery.c.actor_id)).label('count_actors')
+                                               ).outerjoin(actions_union_subquery, actions_union_subquery.c.interval_id == intervals_table.c.interval_id
+                                                           ).group_by(intervals_table.c.interval_id).subquery()
 
         # The actions
         cumulative_actions_on_post = discussion.db.query(
@@ -591,10 +423,9 @@ def get_time_series_analytics(request):
 
         cumulative_actions_union_subquery = cumulative_actions_on_post.union(cumulative_actions_on_idea, posts).subquery()
         cumulative_actions_subquery = discussion.db.query(intervals_table.c.interval_id,
-            func.count(distinct(cumulative_actions_union_subquery.c.actor_id)).label('count_cumulative_actors')
-            ).outerjoin(cumulative_actions_union_subquery, cumulative_actions_union_subquery.c.interval_id == intervals_table.c.interval_id
-            ).group_by(intervals_table.c.interval_id).subquery()
-
+                                                          func.count(distinct(cumulative_actions_union_subquery.c.actor_id)).label('count_cumulative_actors')
+                                                          ).outerjoin(cumulative_actions_union_subquery, cumulative_actions_union_subquery.c.interval_id == intervals_table.c.interval_id
+                                                                      ).group_by(intervals_table.c.interval_id).subquery()
 
         combined_query = discussion.db.query(intervals_table,
                                              post_subquery,
@@ -609,13 +440,15 @@ def get_time_series_analytics(request):
                                              actions_subquery,
                                              cumulative_actions_subquery,
                                              case([
-                                                   (cumulative_posts_subquery.c.count_cumulative_post_authors == 0, None),
-                                                   (cumulative_posts_subquery.c.count_cumulative_post_authors != 0, (cast(post_subquery.c.count_post_authors, Float) / cast(cumulative_posts_subquery.c.count_cumulative_post_authors, Float)))
-                                                   ]).label('fraction_cumulative_authors_who_posted_in_period'),
+                                                 (cumulative_posts_subquery.c.count_cumulative_post_authors == 0, None),
+                                                 (cumulative_posts_subquery.c.count_cumulative_post_authors != 0, (cast(post_subquery.c.count_post_authors,
+                                                                                                                        Float) / cast(cumulative_posts_subquery.c.count_cumulative_post_authors, Float)))
+                                             ]).label('fraction_cumulative_authors_who_posted_in_period'),
                                              case([
-                                                   (cumulative_visitors_subquery.c.count_cumulative_logged_in_visitors == 0, None),
-                                                   (cumulative_visitors_subquery.c.count_cumulative_logged_in_visitors != 0, (cast(post_subquery.c.count_post_authors, Float) / cast(cumulative_visitors_subquery.c.count_cumulative_logged_in_visitors, Float)))
-                                                   ]).label('fraction_cumulative_logged_in_visitors_who_posted_in_period'),
+                                                 (cumulative_visitors_subquery.c.count_cumulative_logged_in_visitors == 0, None),
+                                                 (cumulative_visitors_subquery.c.count_cumulative_logged_in_visitors != 0, (cast(
+                                                     post_subquery.c.count_post_authors, Float) / cast(cumulative_visitors_subquery.c.count_cumulative_logged_in_visitors, Float)))
+                                             ]).label('fraction_cumulative_logged_in_visitors_who_posted_in_period'),
                                              subscribers_subquery,
                                              )
         combined_query = combined_query.join(post_subquery, post_subquery.c.interval_id == intervals_table.c.interval_id)
@@ -624,8 +457,8 @@ def get_time_series_analytics(request):
         combined_query = combined_query.join(cumulative_top_posts_subquery, cumulative_top_posts_subquery.c.interval_id == intervals_table.c.interval_id)
         combined_query = combined_query.join(post_viewers_subquery, post_viewers_subquery.c.interval_id == intervals_table.c.interval_id)
         combined_query = combined_query.join(cumulative_visitors_subquery, cumulative_visitors_subquery.c.interval_id == intervals_table.c.interval_id)
-        combined_query = combined_query.join(members_subquery, members_subquery.c.interval_id==intervals_table.c.interval_id)
-        combined_query = combined_query.join(subscribers_subquery, subscribers_subquery.c.interval_id==intervals_table.c.interval_id)
+        combined_query = combined_query.join(members_subquery, members_subquery.c.interval_id == intervals_table.c.interval_id)
+        combined_query = combined_query.join(subscribers_subquery, subscribers_subquery.c.interval_id == intervals_table.c.interval_id)
         combined_query = combined_query.join(votes_subquery, votes_subquery.c.interval_id == intervals_table.c.interval_id)
         combined_query = combined_query.join(cumulative_votes_subquery, cumulative_votes_subquery.c.interval_id == intervals_table.c.interval_id)
         combined_query = combined_query.join(actions_subquery, actions_subquery.c.interval_id == intervals_table.c.interval_id)
@@ -675,13 +508,89 @@ def get_time_series_analytics(request):
     return csv_response([r._asdict() for r in results], format, fieldnames)
 
 
+@view_config(context=InstanceContext, name="extract_csv_taxonomy",
+             ctx_instance_class=Discussion, request_method='GET',
+             permission=P_DISC_STATS)
+def extract_taxonomy_csv(request):
+    import assembl.models as m
+    discussion = request.context._instance
+    db = discussion.db
+    extracts = db.query(m.Extract).filter(m.Extract.discussion_id == discussion.id)
+    extract_list = []
+    user_prefs = LanguagePreferenceCollection.getCurrent()
+    fieldnames = ["Thematic", "Message", "Content harvested", "Qualify by nature", "Qualify by action",
+                  "Owner of the message", "Published on", "Harvester", "Harvested on", "Nugget"]
+    for extract in extracts:
+        if extract.idea_id:
+            thematic = db.query(m.Idea).get(extract.idea_id)
+            if thematic:
+                if thematic.title:
+                    thematic = thematic.title.best_lang(user_prefs).value
+                else:
+                    thematic = no_thematic_associated
+            else:
+                thematic = no_thematic_associated
+        else:
+            thematic = no_thematic_associated
+        query = db.query(m.Post).filter(m.Post.id == extract.content_id).first()
+        if query:
+            if query.body:
+                message = query.body.best_lang(user_prefs).value
+            else:
+                message = "no message"
+        else:
+            message = "no message"
+        if not message:
+            message = "no message"
+
+        if thematic == no_thematic_associated:
+            idea_ids = m.Idea.get_idea_ids_showing_post(query.id)
+            for thematic_id in reversed(idea_ids):
+                thematic_title = db.query(m.Idea).filter(m.Idea.id == thematic_id).first().title
+                if thematic_title:
+                    thematic = thematic_title.best_lang(user_prefs).value
+                    break
+        if extract.body:
+            content_harvested = extract.body
+        else:
+            content_harvested = "no content harvested"
+        if extract.extract_nature:
+            qualify_by_nature = extract.extract_nature.name
+        else:
+            qualify_by_nature = " "
+        if extract.extract_action:
+            qualify_by_action = extract.extract_action.name
+        else:
+            qualify_by_action = " "
+        owner_of_the_message = db.query(m.User).filter(m.User.id == query.creator_id).first().name
+        published_on = unicode(query.creation_date.replace(microsecond=0))
+        harvester = db.query(m.User).filter(m.User.id == extract.owner_id).first().name
+        harvested_on = unicode(extract.creation_date.replace(microsecond=0))
+        nugget = "Yes" if extract.important else "No"
+        extract_info = {
+            "Thematic": thematic.encode('utf-8'),
+            "Message": sanitize_text(message).encode('utf-8'),
+            "Content harvested": content_harvested.encode('utf-8'),
+            "Qualify by nature": qualify_by_nature.encode('utf-8'),
+            "Qualify by action": qualify_by_action.encode('utf-8'),
+            "Owner of the message": owner_of_the_message.encode('utf-8'),
+            "Published on": published_on.encode('utf-8'),
+            "Harvester": harvester.encode('utf-8'),
+            "Harvested on": harvested_on.encode('utf-8'),
+            "Nugget": nugget.encode('utf-8'),
+        }
+        extract_list.append(extract_info)
+
+    return csv_response(extract_list, CSV_MIMETYPE, fieldnames)
+
+
 def csv_response(results, format, fieldnames=None):
     output = StringIO()
 
     if format == CSV_MIMETYPE:
         from csv import writer
         csv = writer(output, dialect='excel', delimiter=';')
-        writerow =  csv.writerow
+        writerow = csv.writerow
         empty = ''
     elif format == XSLX_MIMETYPE:
         from zipfile import ZipFile, ZIP_DEFLATED
@@ -720,7 +629,7 @@ def get_contribution_count(request):
     results = []
     if interval < (end - start):
         while start < end:
-            this_end = min(start+interval, end)
+            this_end = min(start + interval, end)
             results.append(dict(
                 start=start, end=this_end,
                 count=discussion.count_contributions_per_agent(
@@ -744,7 +653,7 @@ def get_contribution_count(request):
             v['count'] = {agent.display_name(): count
                           for (agent, count) in v['count']}
         return Response(json.dumps(results, cls=DateJSONEncoder),
-            content_type='application/json')
+                        content_type='application/json')
 
     total_count = defaultdict(int)
     agents = {}
@@ -758,9 +667,9 @@ def get_contribution_count(request):
     count_list = total_count.items()
     count_list.sort(key=lambda (a, c): c, reverse=True)
     rows = []
-    rows.append(['Start']+[
+    rows.append(['Start'] + [
         x['start'] for x in results] + ['Total'])
-    rows.append(['End']+[
+    rows.append(['End'] + [
         x['end'] for x in results] + [''])
     for agent_id, total_count in count_list:
         agent = agents[agent_id]
@@ -782,7 +691,7 @@ def get_visit_count(request):
     results = []
     if interval < (end - start):
         while start < end:
-            this_end = min(start+interval, end)
+            this_end = min(start + interval, end)
             results.append(dict(
                 start=start, end=this_end,
                 readers=discussion.count_post_viewers(
@@ -807,9 +716,9 @@ def get_visit_count(request):
     if format == JSON_MIMETYPE:
         # json default
         return Response(json.dumps(results, cls=DateJSONEncoder),
-            content_type='application/json')
+                        content_type='application/json')
     # otherwise assume csv
-    fieldnames=['start', 'end', 'first_visitors', 'readers']
+    fieldnames = ['start', 'end', 'first_visitors', 'readers']
     return csv_response(results, format, fieldnames)
 
 
@@ -848,88 +757,6 @@ def get_visitors(request):
     return csv_response(visitors, CSV_MIMETYPE, fieldnames)
 
 
-pygraphviz_formats = {
-    'text/vnd.graphviz': 'dot',
-    'image/gif': 'gif',
-    'application/vnd.hp-hpgl': 'hpgl',
-    'image/jpeg': 'jpeg',
-    'application/vnd.mif': 'mif',
-    'application/vnd.hp-pcl': 'pcl',
-    'application/pdf': 'pdf',
-    'image/x-pict': 'pic',
-    'image/png': 'png',
-    'application/postscript': 'ps',
-    'image/svg+xml': 'svg',
-    'model/vrml': 'vrml',
-}
-
-
-@view_config(context=InstanceContext, name="mindmap",
-             ctx_instance_class=Discussion, request_method='GET',
-             permission=P_READ)
-def as_mind_map(request):
-    """Provide a mind-map like representation of the table of ideas"""
-    for mimetype in request.GET.getall('mimetype'):
-        mimetype = mimetype.encode('utf-8')
-        if mimetype in pygraphviz_formats:
-            break
-    else:
-        mimetype = request.accept.best_match(pygraphviz_formats.keys())
-        if not mimetype:
-            raise HTTPNotAcceptable("Not known to pygraphviz: "+mimetype)
-    discussion = request.context._instance
-    G = discussion.as_mind_map()
-    G.layout(prog='twopi')
-    io = StringIO()
-    G.draw(io, format=pygraphviz_formats[mimetype])
-    io.seek(0)
-    return Response(body_file=io, content_type=mimetype)
-
-
-def get_analytics_alerts(discussion, user_id, types, all_users=False):
-    from assembl.semantic.virtuoso_mapping import (
-        AssemblQuadStorageManager, AESObfuscator)
-    settings = get_config()
-    metrics_server_endpoint = settings.get(
-        'metrics_server_endpoint',
-        'https://discussions.bluenove.com/analytics/accept')
-    verify_metrics = False  # weird SNI bug on some platforms
-    secure = asbool(settings.get(
-        'accept_secure_connection', False))
-    protocol = 'https' if secure else 'http'
-    host = settings.get('public_hostname')
-    port = settings.get('public_port', '80')
-    if secure and port == '80':
-        # old misconfiguration
-        port = '443'
-    if (secure and port != '443') or (not secure and port != '80'):
-        host += ':' + port
-    seed = urandom(8)
-    obfuscator = AESObfuscator(seed)
-    token = permission_token(user_id, discussion.id, [P_READ_PUBLIC_CIF], seed)
-    metrics_requests = [{
-        "metric": "alerts",
-        "types": types}]
-    if user_id != Everyone and not all_users:
-        obfuscated_userid = "local:AgentProfile/" + obfuscator.encrypt(
-            str(user_id))
-        metrics_requests[0]['users'] = [obfuscated_userid]
-    mapurl = '%s://%s/data/Discussion/%d/jsonld?token=%s' % (
-        protocol,
-        host,
-        discussion.id,
-        token
-        )
-    alerts = requests.post(metrics_server_endpoint, data=dict(
-        mapurl=mapurl, requests=json.dumps(metrics_requests), recency=60),
-        verify=verify_metrics)
-    result = AssemblQuadStorageManager.deobfuscate(
-        alerts.text, obfuscator.decrypt)
-    # AgentAccount is a pseudo for AgentProfile
-    result = re.sub(r'local:AgentAccount\\/', r'local:AgentProfile\\/', result)
-    return result
-
-
 @view_config(context=InstanceContext, name="activity_alerts",
              ctx_instance_class=Discussion, request_method='GET',
              permission=P_DISC_STATS)
@@ -956,71 +783,6 @@ def get_interest_alerts(request):
     return Response(body=result, content_type='application/json')
 
 
-@view_config(context=InstanceContext, name="clusters",
-             ctx_instance_class=Discussion, request_method='GET',
-             permission=P_DISC_STATS)
-def show_cluster(request):
-    discussion = request.context._instance
-    output = StringIO()
-    from assembl.nlp.clusters import SKLearnClusteringSemanticAnalysis
-    analysis = SKLearnClusteringSemanticAnalysis(discussion)
-    analysis.as_html(output)
-    output.seek(0)
-    return Response(body_file=output, content_type='text/html')
-
-
-@view_config(context=InstanceContext, name="optics",
-             ctx_instance_class=Discussion, request_method='GET',
-             permission=P_READ)
-def show_optics_cluster(request):
-    discussion = request.context._instance
-    eps = float(request.GET.get("eps", "0.02"))
-    min_samples = int(request.GET.get("min_samples", "3"))
-    test_code = request.GET.get("test_code", None)
-    suggestions = request.GET.get("suggestions", True)
-    discussion = request.context._instance
-    output = StringIO()
-    user_id = request.authenticated_userid or Everyone
-    from assembl.nlp.clusters import (
-        OpticsSemanticsAnalysis, OpticsSemanticsAnalysisWithSuggestions)
-    if asbool(suggestions):
-        analysis = OpticsSemanticsAnalysisWithSuggestions(
-            discussion, min_samples=min_samples, eps=eps,
-            user_id=user_id, test_code=test_code)
-    else:
-        analysis = OpticsSemanticsAnalysis(
-            discussion, min_samples=min_samples, eps=eps,
-            user_id=user_id, test_code=test_code)
-    from pyramid_jinja2 import IJinja2Environment
-    jinja_env = request.registry.queryUtility(
-        IJinja2Environment, name='.jinja2')
-    analysis.as_html(output, jinja_env)
-    output.seek(0)
-    return Response(body_file=output, content_type='text/html')
-
-
-@view_config(context=InstanceContext, name="suggestions_test",
-             ctx_instance_class=Discussion, request_method='GET',
-             permission=P_READ)
-def show_suggestions_test(request):
-    discussion = request.context._instance
-    user_id = request.authenticated_userid
-    if not user_id:
-        from urllib import quote
-        return HTTPFound(location="/login?next="+quote(request.path))
-    discussion = request.context._instance
-    output = StringIO()
-    from assembl.nlp.clusters import OpticsSemanticsAnalysisWithSuggestions
-    analysis = OpticsSemanticsAnalysisWithSuggestions(
-        discussion, user_id=user_id, min_samples=3, test_code=str(user_id))
-    from pyramid_jinja2 import IJinja2Environment
-    jinja_env = request.registry.queryUtility(
-        IJinja2Environment, name='.jinja2')
-    analysis.as_html(output, jinja_env)
-    output.seek(0)
-    return Response(body_file=output, content_type='text/html')
-
-
 @view_config(context=InstanceContext, name="test_results",
              ctx_instance_class=Discussion, request_method='POST',
              header=FORM_HEADER, permission=P_READ)
@@ -1041,7 +803,6 @@ def test_results(request):
              permission=P_READ)
 def test_sentry(request):
     raise RuntimeError("Let's test sentry")
-
 
 
 @etalab_discussions.post(permission=P_SYSADMIN)
@@ -1116,13 +877,14 @@ def post_discussion(request):
 
 class defaultdict_of_dict(defaultdict):
     """A defaultdict of dicts."""
+
     def __init__(self):
         super(defaultdict_of_dict, self).__init__(dict)
 
 
 @view_config(context=InstanceContext, name="visits_time_series_analytics",
              ctx_instance_class=Discussion, request_method='GET',
-             permission=P_READ, renderer='json') # TODO: What permission should this require? Do all debate initiators want this data to be accessible?
+             permission=P_READ, renderer='json')  # TODO: What permission should this require? Do all debate initiators want this data to be accessible?
 def get_visits_time_series_analytics(request):
     """
     Fetches visits analytics from bound piwik site.
@@ -1182,8 +944,8 @@ def get_participant_time_series_analytics(request):
     ]
     for sentiment_in, sentiment_out, sentiment_class in sentiments:
         default_data_descriptors.extend([
-            sentiment_in, 'cumulative_'+sentiment_in,
-            sentiment_out, 'cumulative_'+sentiment_out])
+            sentiment_in, 'cumulative_' + sentiment_in,
+            sentiment_out, 'cumulative_' + sentiment_out])
     data_descriptors = data_descriptors or default_data_descriptors
     # Impose data_descriptors order
     data_descriptors = [s for s in default_data_descriptors if s in data_descriptors]
@@ -1199,11 +961,11 @@ def get_participant_time_series_analytics(request):
         metadata = MetaData(discussion.db.get_bind())  # make sure we are using the same connexion
 
         intervals_table = Table('temp_table_intervals_' + str(user_id), metadata,
-            Column('interval_id', Integer, primary_key=True),
-            Column('interval_start', DateTime, nullable=False),
-            Column('interval_end', DateTime, nullable=False),
-            prefixes=None if discussion.using_virtuoso else ['TEMPORARY']
-        )
+                                Column('interval_id', Integer, primary_key=True),
+                                Column('interval_start', DateTime, nullable=False),
+                                Column('interval_end', DateTime, nullable=False),
+                                prefixes=['TEMPORARY']
+                                )
         # In case there is a leftover from a previous crash
         intervals_table.drop(bind=bind, checkfirst=True)
         intervals_table.create(bind=bind)
@@ -1213,12 +975,12 @@ def get_participant_time_series_analytics(request):
             interval_end = min(interval_start + interval, end)
             intervals.append({'interval_start': interval_start, 'interval_end': interval_end})
             interval_start = interval_start + interval
-        #pprint.pprint(intervals)
+        # pprint.pprint(intervals)
         discussion.db.execute(intervals_table.insert(), intervals)
 
         content = with_polymorphic(
-                    Content, [], Content.__table__,
-                    aliased=False, flat=True)
+            Content, [], Content.__table__,
+            aliased=False, flat=True)
         # post = with_polymorphic(Post, [])
 
         query_components = []
@@ -1231,7 +993,7 @@ def get_participant_time_series_analytics(request):
                 AgentProfile.name.label('participant'),
                 literal('posts').label('key'),
                 func.count(distinct(Post.id)).label('value'),
-                )
+            )
             post_query = post_query.join(Post, and_(
                 Post.creation_date >= intervals_table.c.interval_start,
                 Post.creation_date < intervals_table.c.interval_end,
@@ -1248,7 +1010,7 @@ def get_participant_time_series_analytics(request):
                 AgentProfile.name.label('participant'),
                 literal('cumulative_posts').label('key'),
                 func.count(distinct(Post.id)).label('value'),
-                )
+            )
             cumulative_post_query = cumulative_post_query.join(Post, and_(
                 Post.creation_date < intervals_table.c.interval_end,
                 Post.publication_state == PublicationStates.PUBLISHED,
@@ -1265,7 +1027,7 @@ def get_participant_time_series_analytics(request):
                 AgentProfile.name.label('participant'),
                 literal('top_posts').label('key'),
                 func.count(distinct(Post.id)).label('value'),
-                )
+            )
             top_post_query = top_post_query.join(Post, and_(
                 Post.creation_date >= intervals_table.c.interval_start,
                 Post.creation_date < intervals_table.c.interval_end,
@@ -1285,7 +1047,7 @@ def get_participant_time_series_analytics(request):
                 AgentProfile.name.label('participant'),
                 literal('cumulative_top_posts').label('key'),
                 func.count(distinct(Post.id)).label('value'),
-                )
+            )
             cumulative_top_post_query = cumulative_top_post_query.join(Post, and_(
                 Post.creation_date < intervals_table.c.interval_end,
                 Post.publication_state == PublicationStates.PUBLISHED,
@@ -1308,7 +1070,7 @@ def get_participant_time_series_analytics(request):
                     AgentProfile.name.label('participant'),
                     literal(sentiment_out).label('key'),
                     func.count(distinct(sentiment_class.id)).label('value'),
-                    )
+                )
                 query = query.join(Post, Post.discussion_id == discussion.id)
                 query = query.join(sentiment_class, and_(
                     sentiment_class.creation_date >= intervals_table.c.interval_start,
@@ -1326,7 +1088,7 @@ def get_participant_time_series_analytics(request):
                     AgentProfile.name.label('participant'),
                     literal(c_sentiment_out).label('key'),
                     func.count(distinct(sentiment_class.id)).label('value'),
-                    )
+                )
                 query = query.join(Post, Post.discussion_id == discussion.id)
                 query = query.join(sentiment_class, and_(
                     sentiment_class.tombstone_date == None,
@@ -1344,7 +1106,7 @@ def get_participant_time_series_analytics(request):
                     AgentProfile.name.label('participant'),
                     literal(sentiment_in).label('key'),
                     func.count(distinct(sentiment_class.id)).label('value'),
-                    )
+                )
                 query = query.join(Post, Post.discussion_id == discussion.id)
                 query = query.join(sentiment_class, and_(
                     sentiment_class.creation_date >= intervals_table.c.interval_start,
@@ -1362,7 +1124,7 @@ def get_participant_time_series_analytics(request):
                     AgentProfile.name.label('participant'),
                     literal(c_sentiment_in).label('key'),
                     func.count(distinct(sentiment_class.id)).label('value'),
-                    )
+                )
                 query = query.outerjoin(Post, Post.discussion_id == discussion.id)
                 query = query.outerjoin(sentiment_class, and_(
                     sentiment_class.tombstone_date == None,
@@ -1382,13 +1144,13 @@ def get_participant_time_series_analytics(request):
                 AgentProfile.name.label('participant'),
                 literal('replies_received').label('key'),
                 func.count(distinct(reply_post.id)).label('value'),
-                ).join(reply_post, and_(
-                    reply_post.creation_date >= intervals_table.c.interval_start,
-                    reply_post.creation_date < intervals_table.c.interval_end,
-                    reply_post.discussion_id == discussion.id)
-                ).join(original_post, original_post.id == reply_post.parent_id
-                ).join(AgentProfile, original_post.creator_id == AgentProfile.id
-                ).group_by(intervals_table.c.interval_id, AgentProfile.id)
+            ).join(reply_post, and_(
+                reply_post.creation_date >= intervals_table.c.interval_start,
+                reply_post.creation_date < intervals_table.c.interval_end,
+                reply_post.discussion_id == discussion.id)
+            ).join(original_post, original_post.id == reply_post.parent_id
+                   ).join(AgentProfile, original_post.creator_id == AgentProfile.id
+                          ).group_by(intervals_table.c.interval_id, AgentProfile.id)
             query_components.append(reply_post_query)
 
         if 'cumulative_replies_received' in data_descriptors:
@@ -1401,15 +1163,15 @@ def get_participant_time_series_analytics(request):
                 AgentProfile.name.label('participant'),
                 literal('cumulative_replies_received').label('key'),
                 func.count(distinct(reply_post.id)).label('value'),
-                ).join(reply_post, and_(
-                    reply_post.creation_date < intervals_table.c.interval_end,
-                    reply_post.publication_state == PublicationStates.PUBLISHED,
-                    reply_post.discussion_id == discussion.id)
-                ).join(original_post, and_(
-                    original_post.id == reply_post.parent_id,
-                    original_post.publication_state == PublicationStates.PUBLISHED)
-                ).join(AgentProfile, original_post.creator_id == AgentProfile.id
-                ).group_by(intervals_table.c.interval_id, AgentProfile.id)
+            ).join(reply_post, and_(
+                reply_post.creation_date < intervals_table.c.interval_end,
+                reply_post.publication_state == PublicationStates.PUBLISHED,
+                reply_post.discussion_id == discussion.id)
+            ).join(original_post, and_(
+                original_post.id == reply_post.parent_id,
+                original_post.publication_state == PublicationStates.PUBLISHED)
+            ).join(AgentProfile, original_post.creator_id == AgentProfile.id
+                   ).group_by(intervals_table.c.interval_id, AgentProfile.id)
             query_components.append(cumulative_reply_post_query)
 
         if "active" in data_descriptors:
@@ -1421,8 +1183,8 @@ def get_participant_time_series_analytics(request):
             actions_on_post = actions_on_post.join(ActionOnPost, and_(
                 ActionOnPost.post_id == content.id,
                 or_(and_(
-                        ActionOnPost.creation_date >= intervals_table.c.interval_start,
-                        ActionOnPost.creation_date < intervals_table.c.interval_end),
+                    ActionOnPost.creation_date >= intervals_table.c.interval_start,
+                    ActionOnPost.creation_date < intervals_table.c.interval_end),
                     and_(
                         ActionOnPost.tombstone_date >= intervals_table.c.interval_start,
                         ActionOnPost.tombstone_date < intervals_table.c.interval_end))))
@@ -1435,8 +1197,8 @@ def get_participant_time_series_analytics(request):
             actions_on_idea = actions_on_idea.join(ActionOnIdea, and_(
                 ActionOnIdea.idea_id == Idea.id,
                 or_(and_(
-                        ActionOnIdea.creation_date >= intervals_table.c.interval_start,
-                        ActionOnIdea.creation_date < intervals_table.c.interval_end),
+                    ActionOnIdea.creation_date >= intervals_table.c.interval_start,
+                    ActionOnIdea.creation_date < intervals_table.c.interval_end),
                     and_(
                         ActionOnIdea.tombstone_date >= intervals_table.c.interval_start,
                         ActionOnIdea.tombstone_date < intervals_table.c.interval_end))))
@@ -1457,9 +1219,9 @@ def get_participant_time_series_analytics(request):
                 AgentProfile.name.label('participant'),
                 literal('active').label('key'),
                 cast(func.count(actions_union_subquery.c.id) > 0, Integer).label('value')
-                ).join(actions_union_subquery, actions_union_subquery.c.interval_id == intervals_table.c.interval_id
-                ).join(AgentProfile, actions_union_subquery.c.actor_id == AgentProfile.id
-                ).group_by(intervals_table.c.interval_id, AgentProfile.id)
+            ).join(actions_union_subquery, actions_union_subquery.c.interval_id == intervals_table.c.interval_id
+                   ).join(AgentProfile, actions_union_subquery.c.actor_id == AgentProfile.id
+                          ).group_by(intervals_table.c.interval_id, AgentProfile.id)
             query_components.append(active_query)
 
         combined_subquery = query_components.pop(0)
@@ -1468,7 +1230,7 @@ def get_participant_time_series_analytics(request):
         combined_subquery = combined_subquery.subquery('combined')
         query = discussion.db.query(intervals_table, combined_subquery).outerjoin(
             combined_subquery, combined_subquery.c.interval_id_q == intervals_table.c.interval_id
-            ).order_by(intervals_table.c.interval_id)
+        ).order_by(intervals_table.c.interval_id)
         results = query.all()
         intervals_table.drop(bind=bind)
         # pprint.pprint(results)
@@ -1479,10 +1241,10 @@ def get_participant_time_series_analytics(request):
         # this is somewhat arbitrary...
         participant_emails = dict(
             discussion.db.query(AbstractAgentAccount.profile_id, AbstractAgentAccount.email
-                ).filter(AbstractAgentAccount.profile_id.in_(participant_ids),
-                         AbstractAgentAccount.verified == True,
-                         AbstractAgentAccount.email != None
-                ).order_by(AbstractAgentAccount.preferred))
+                                ).filter(AbstractAgentAccount.profile_id.in_(participant_ids),
+                                         AbstractAgentAccount.verified == True,
+                                         AbstractAgentAccount.email != None
+                                         ).order_by(AbstractAgentAccount.preferred))
 
     if format == JSON_MIMETYPE:
         from assembl.lib.json import DateJSONEncoder
@@ -1538,7 +1300,7 @@ def get_participant_time_series_analytics(request):
             by_participant[pid][interval_id][key] = value
     interval_ids = list(interval_ids)
     interval_ids.sort()
-    num_cols = 2 + email_column + len(interval_ids)*len(data_descriptors)
+    num_cols = 2 + email_column + len(interval_ids) * len(data_descriptors)
     interval_starts = [interval_starts[id] for id in interval_ids]
     interval_ends = [interval_ends[id] for id in interval_ids]
     rows = []
@@ -1751,7 +1513,6 @@ def phase2_csv_export(request):
         fieldnames[8:8] = [name.encode('utf-8') for (name, path) in extra_columns_info]
         column_info_per_user = {}
         provider_id = get_provider_id_for_discussion(discussion)
-
 
     output = tempfile.NamedTemporaryFile('w+b', delete=True)
     # include BOM for Excel to open the file in UTF-8 properly

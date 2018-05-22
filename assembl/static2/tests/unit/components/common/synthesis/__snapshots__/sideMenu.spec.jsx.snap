@@ -3,6 +3,11 @@
 exports[`SideMenu component should render a SideMenu component 1`] = `
 <div
   className="synthesis-side-menu"
+  style={
+    Object {
+      "display": "block",
+    }
+  }
 >
   <Translate
     className="dark-title-4"

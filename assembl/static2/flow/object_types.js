@@ -87,7 +87,9 @@ type DebateData = Object & {
   video: {
     descriptionEntriesTop: LangstringEntries,
     videoUrl: string
-  }
+  },
+  customHtmlCodeLandingPage: ?string,
+  customHtmlCodeRegistrationPage: ?string
 };
 
 type ErrorDef = {
@@ -112,4 +114,14 @@ type Extract = {
   extractNature: string,
   extractAction: string,
   body: string
+};
+
+type ConfigurableField = {
+  fieldType: string,
+  id: string,
+  identifier: string,
+  order: number,
+  required: boolean,
+  title: string,
+  __typename: string
 };

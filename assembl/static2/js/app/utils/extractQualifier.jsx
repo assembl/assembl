@@ -1,5 +1,5 @@
 import React from 'react';
-import BrightMirror from '../components/svg/taxonomy/displayBrightMirror';
+import DesignFiction from '../components/svg/taxonomy/displayDesignFiction';
 import MultiColumn from '../components/svg/taxonomy/displayMultiColumn';
 import OpenQuestions from '../components/svg/taxonomy/displayOpenQuestions';
 import Thread from '../components/svg/taxonomy/displayThread';
@@ -16,6 +16,7 @@ import PurpleFlag from '../components/svg/taxonomy/purpleFlag';
 import Classify from '../components/svg/taxonomy/classify';
 import MoreSpecific from '../components/svg/taxonomy/moreSpecific';
 import MakeGeneric from '../components/svg/taxonomy/makeGeneric';
+import BlackFlag from '../components/svg/taxonomy/blackFlag';
 
 export const extractNatures = [
   {
@@ -41,6 +42,10 @@ export const extractNatures = [
   {
     qualifier: 'argument',
     label: 'search.taxonomy_nature.argument'
+  },
+  {
+    qualifier: 'cognitive_bias',
+    label: 'search.taxonomy_nature.cognitive_bias'
   }
 ];
 
@@ -94,7 +99,7 @@ export const extractActions = [
 export const ActionIcons = ({ qualifier, backgroundColor, color }) => {
   switch (qualifier) {
   case 'display_bright_mirror':
-    return <BrightMirror backgroundColor={backgroundColor} color={color} />;
+    return <DesignFiction backgroundColor={backgroundColor} color={color} />;
   case 'display_multi_column':
     return <MultiColumn backgroundColor={backgroundColor} color={color} />;
   case 'display_open_questions':
@@ -134,6 +139,8 @@ export const NatureIcons = ({ qualifier }) => {
     return <GreenFlag />;
   case 'knowledge':
     return <PurpleFlag />;
+  case 'cognitive_bias':
+    return <BlackFlag />;
   default:
     return <span>{qualifier}</span>;
   }

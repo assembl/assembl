@@ -25,16 +25,27 @@ function convertVideoDescriptionsToHTML(video) {
   };
 }
 
+const getImageVariable = (item) => {
+  // item can be a thematic or any sort of object containing an img key
+  const { img } = item;
+  const externalUrl = img ? img.externalUrl : null;
+  if (externalUrl === 'TO_DELETE') {
+    return externalUrl;
+  }
+  return typeof externalUrl === 'object' ? externalUrl : null;
+};
+
 /* Create variables for createThematic and updateThematic mutations */
 const createVariablesForThematicMutation = thematic => ({
   identifier: 'survey',
   titleEntries: thematic.titleEntries,
   // If thematic.img.externalUrl is an object, it means it's a File.
   // We need to send image: null if we didn't change the image.
-  image: thematic.img && typeof thematic.img.externalUrl === 'object' ? thematic.img.externalUrl : null,
+  image: getImageVariable(thematic),
   // if video is null, pass {} to remove all video fields on server side
   video: thematic.video === null ? {} : convertVideoDescriptionsToHTML(thematic.video),
-  questions: thematic.questions
+  questions: thematic.questions,
+  order: thematic.order
 });
 
 const createVariablesForDeleteThematicMutation = thematic => ({
@@ -46,9 +57,26 @@ class SurveyAdmin extends React.Component {
     super(props);
     this.state = {
       exportLocale: null,
+      refetching: false,
       translate: false
     };
   }
+
+  componentDidMount() {
+    this.props.router.setRouteLeaveHook(this.props.route, this.routerWillLeave);
+  }
+
+  componentWillUnmount() {
+    this.props.router.setRouteLeaveHook(this.props.route, null);
+  }
+
+  routerWillLeave = () => {
+    if (this.props.thematicsHaveChanged && !this.state.refetching) {
+      return I18n.t('administration.confirmUnsavedChanges');
+    }
+
+    return null;
+  };
 
   saveAction = () => {
     const { refetchThematics, thematics, thematicsHaveChanged, createThematic, deleteThematic, updateThematic } = this.props;
@@ -65,7 +93,8 @@ class SurveyAdmin extends React.Component {
 
       runSerial(mutationsPromises)
         .then(() => {
-          refetchThematics();
+          this.setState({ refetching: true });
+          refetchThematics().then(() => this.setState({ refetching: false }));
           displayAlert('success', I18n.t('administration.successThemeCreation'));
         })
         .catch((error) => {
@@ -86,7 +115,7 @@ class SurveyAdmin extends React.Component {
     const { section, thematicsHaveChanged, debateId, languages } = this.props;
     const { translate } = this.state;
     const exportLocale = this.state.exportLocale || (languages && languages[0].locale);
-    const translation = translate && exportLocale ? `?lang=${exportLocale}` : '';
+    const translation = translate && exportLocale ? `?lang=${exportLocale}` : '?'; // FIXME: using '' instead of '?' does not work
     const exportLink = get('exportSurveyData', { debateId: debateId, translation: translation });
     const currentStep = parseInt(section, 10);
     const saveDisabled = !thematicsHaveChanged;
@@ -104,6 +133,7 @@ class SurveyAdmin extends React.Component {
             translate={translate}
             exportLocale={exportLocale}
             languages={languages}
+            annotation="surveyAnnotation"
           />
         )}
         {!isNaN(currentStep) && (
@@ -114,9 +144,12 @@ class SurveyAdmin extends React.Component {
   }
 }
 
-const mapStateToProps = ({ admin: { thematicsById, thematicsHaveChanged, thematicsInOrder }, context, i18n }) => ({
+const mapStateToProps = ({ admin: { thematicsById, thematicsHaveChanged }, context, i18n }) => ({
   thematicsHaveChanged: thematicsHaveChanged,
-  thematics: thematicsInOrder.toArray().map(id => thematicsById.get(id).toJS()),
+  thematics: thematicsById
+    .sortBy(thematic => thematic.get('order'))
+    .toList()
+    .toJS(),
   debateId: context.debateId,
   i18n: i18n
 });

@@ -1,4 +1,4 @@
-import { fromJS, List, Map } from 'immutable';
+import { fromJS, Map } from 'immutable';
 
 import * as reducers from '../../../../js/app/reducers/adminReducer';
 
@@ -28,44 +28,8 @@ describe('Admin reducers', () => {
     });
   });
 
-  describe('thematicsInOrder reducer', () => {
-    const { thematicsInOrder } = reducers;
-    it('should return the initial state', () => {
-      const action = {};
-      expect(thematicsInOrder(undefined, action)).toEqual(List());
-    });
-
-    it('should return the current state for other actions', () => {
-      const action = { type: 'FOOBAR' };
-      const oldState = List(['0', '1']);
-      expect(thematicsInOrder(oldState, action)).toEqual(oldState);
-    });
-
-    it('should handle CREATE_NEW_THEMATIC action type', () => {
-      const action = {
-        id: '-278290',
-        type: 'CREATE_NEW_THEMATIC'
-      };
-      const oldState = List(['0', '1']);
-      const expected = List(['0', '1', '-278290']);
-      const newState = thematicsInOrder(oldState, action);
-      expect(newState).toEqual(expected);
-    });
-
-    it('should handle UPDATE_THEMATICS action type', () => {
-      const action = {
-        thematics: [{ id: '42' }, { id: '27' }],
-        type: 'UPDATE_THEMATICS'
-      };
-      const oldState = List(['0', '1']);
-      const expected = List(['42', '27']);
-      const newState = thematicsInOrder(oldState, action);
-      expect(newState).toEqual(expected);
-    });
-  });
-
   describe('thematicsById reducer', () => {
-    const { thematicsById } = reducers;
+    const { thematicsById, thematicsHaveChanged } = reducers;
     it('should return the initial state', () => {
       const action = {};
       expect(thematicsById(undefined, action)).toEqual(Map());
@@ -130,6 +94,7 @@ describe('Admin reducers', () => {
           _hasChanged: false,
           _isNew: true,
           _toDelete: false,
+          order: 3,
           id: '-278290',
           img: {
             externalUrl: ''
@@ -141,6 +106,370 @@ describe('Admin reducers', () => {
       };
       const newState = thematicsById(oldState, action);
       expect(newState.toJS()).toEqual(expected);
+    });
+
+    it('should handle MOVE_THEMATIC_UP action type', () => {
+      const thematic1 = fromJS({
+        _hasChanged: false,
+        _isNew: false,
+        _toDelete: false,
+        order: 1.0,
+        id: 'thematic1',
+        img: {
+          externalUrl: ''
+        },
+        questions: [],
+        titleEntries: [],
+        video: null
+      });
+      const thematic2 = fromJS({
+        _hasChanged: false,
+        _isNew: false,
+        _toDelete: false,
+        order: 2.0,
+        id: 'thematic2',
+        img: {
+          externalUrl: ''
+        },
+        questions: [],
+        titleEntries: [],
+        video: null
+      });
+      const thematic3 = fromJS({
+        _hasChanged: false,
+        _isNew: false,
+        _toDelete: false,
+        order: 3.0,
+        id: 'thematic3',
+        img: {
+          externalUrl: ''
+        },
+        questions: [],
+        titleEntries: [],
+        video: null
+      });
+      const state = Map({ thematic1: thematic1, thematic2: thematic2, thematic3: thematic3 });
+      const action = {
+        id: 'thematic3',
+        type: 'MOVE_THEMATIC_UP'
+      };
+      const expectedThematic1 = fromJS({
+        _hasChanged: false,
+        _isNew: false,
+        _toDelete: false,
+        order: 1.0,
+        id: 'thematic1',
+        img: {
+          externalUrl: ''
+        },
+        questions: [],
+        titleEntries: [],
+        video: null
+      });
+      const expectedThematic2 = fromJS({
+        _hasChanged: true,
+        _isNew: false,
+        _toDelete: false,
+        order: 3.0,
+        id: 'thematic2',
+        img: {
+          externalUrl: ''
+        },
+        questions: [],
+        titleEntries: [],
+        video: null
+      });
+      const expectedThematic3 = fromJS({
+        _hasChanged: true,
+        _isNew: false,
+        _toDelete: false,
+        order: 2.0,
+        id: 'thematic3',
+        img: {
+          externalUrl: ''
+        },
+        questions: [],
+        titleEntries: [],
+        video: null
+      });
+      const expected = Map({ thematic1: expectedThematic1, thematic2: expectedThematic2, thematic3: expectedThematic3 });
+      let result = thematicsById(state, action);
+      expect(result).toEqual(expected);
+      result = thematicsHaveChanged(false, action);
+      expect(result).toEqual(true);
+    });
+
+    it('should handle MOVE_THEMATIC_DOWN action type', () => {
+      const thematic1 = fromJS({
+        _hasChanged: false,
+        _isNew: false,
+        _toDelete: false,
+        order: 1.0,
+        id: 'thematic1',
+        img: {
+          externalUrl: ''
+        },
+        questions: [],
+        titleEntries: [],
+        video: null
+      });
+      const thematic2 = fromJS({
+        _hasChanged: false,
+        _isNew: false,
+        _toDelete: false,
+        order: 2.0,
+        id: 'thematic2',
+        img: {
+          externalUrl: ''
+        },
+        questions: [],
+        titleEntries: [],
+        video: null
+      });
+      const thematic3 = fromJS({
+        _hasChanged: false,
+        _isNew: false,
+        _toDelete: false,
+        order: 3.0,
+        id: 'thematic3',
+        img: {
+          externalUrl: ''
+        },
+        questions: [],
+        titleEntries: [],
+        video: null
+      });
+      const state = Map({ thematic1: thematic1, thematic2: thematic2, thematic3: thematic3 });
+      const action = {
+        id: 'thematic2',
+        type: 'MOVE_THEMATIC_DOWN'
+      };
+      const expectedThematic1 = fromJS({
+        _hasChanged: false,
+        _isNew: false,
+        _toDelete: false,
+        order: 1.0,
+        id: 'thematic1',
+        img: {
+          externalUrl: ''
+        },
+        questions: [],
+        titleEntries: [],
+        video: null
+      });
+      const expectedThematic2 = fromJS({
+        _hasChanged: true,
+        _isNew: false,
+        _toDelete: false,
+        order: 3.0,
+        id: 'thematic2',
+        img: {
+          externalUrl: ''
+        },
+        questions: [],
+        titleEntries: [],
+        video: null
+      });
+      const expectedThematic3 = fromJS({
+        _hasChanged: true,
+        _isNew: false,
+        _toDelete: false,
+        order: 2.0,
+        id: 'thematic3',
+        img: {
+          externalUrl: ''
+        },
+        questions: [],
+        titleEntries: [],
+        video: null
+      });
+      const expected = Map({ thematic1: expectedThematic1, thematic2: expectedThematic2, thematic3: expectedThematic3 });
+      let result = thematicsById(state, action);
+      expect(result).toEqual(expected);
+      result = thematicsHaveChanged(false, action);
+      expect(result).toEqual(true);
+    });
+
+    it('should handle MOVE_THEMATIC_UP action type (deleted thematic in between)', () => {
+      const thematic1 = fromJS({
+        _hasChanged: false,
+        _isNew: false,
+        _toDelete: false,
+        order: 1.0,
+        id: 'thematic1',
+        img: {
+          externalUrl: ''
+        },
+        questions: [],
+        titleEntries: [],
+        video: null
+      });
+      const thematic2 = fromJS({
+        _hasChanged: false,
+        _isNew: false,
+        _toDelete: true,
+        order: 2.0,
+        id: 'thematic2',
+        img: {
+          externalUrl: ''
+        },
+        questions: [],
+        titleEntries: [],
+        video: null
+      });
+      const thematic3 = fromJS({
+        _hasChanged: false,
+        _isNew: false,
+        _toDelete: false,
+        order: 3.0,
+        id: 'thematic3',
+        img: {
+          externalUrl: ''
+        },
+        questions: [],
+        titleEntries: [],
+        video: null
+      });
+      const state = Map({ thematic1: thematic1, thematic2: thematic2, thematic3: thematic3 });
+      const action = {
+        id: 'thematic3',
+        type: 'MOVE_THEMATIC_UP'
+      };
+      const expectedThematic1 = fromJS({
+        _hasChanged: true,
+        _isNew: false,
+        _toDelete: false,
+        order: 2.0,
+        id: 'thematic1',
+        img: {
+          externalUrl: ''
+        },
+        questions: [],
+        titleEntries: [],
+        video: null
+      });
+      const expectedThematic2 = fromJS({
+        _hasChanged: false,
+        _isNew: false,
+        _toDelete: true,
+        order: 2.0,
+        id: 'thematic2',
+        img: {
+          externalUrl: ''
+        },
+        questions: [],
+        titleEntries: [],
+        video: null
+      });
+      const expectedThematic3 = fromJS({
+        _hasChanged: true,
+        _isNew: false,
+        _toDelete: false,
+        order: 1.0,
+        id: 'thematic3',
+        img: {
+          externalUrl: ''
+        },
+        questions: [],
+        titleEntries: [],
+        video: null
+      });
+      const expected = Map({ thematic1: expectedThematic1, thematic2: expectedThematic2, thematic3: expectedThematic3 });
+      let result = thematicsById(state, action);
+      expect(result).toEqual(expected);
+      result = thematicsHaveChanged(false, action);
+      expect(result).toEqual(true);
+    });
+
+    it('should handle MOVE_THEMATIC_DOWN action type (deleted thematic in between)', () => {
+      const thematic1 = fromJS({
+        _hasChanged: false,
+        _isNew: false,
+        _toDelete: false,
+        order: 1.0,
+        id: 'thematic1',
+        img: {
+          externalUrl: ''
+        },
+        questions: [],
+        titleEntries: [],
+        video: null
+      });
+      const thematic2 = fromJS({
+        _hasChanged: false,
+        _isNew: false,
+        _toDelete: true,
+        order: 2.0,
+        id: 'thematic2',
+        img: {
+          externalUrl: ''
+        },
+        questions: [],
+        titleEntries: [],
+        video: null
+      });
+      const thematic3 = fromJS({
+        _hasChanged: false,
+        _isNew: false,
+        _toDelete: false,
+        order: 3.0,
+        id: 'thematic3',
+        img: {
+          externalUrl: ''
+        },
+        questions: [],
+        titleEntries: [],
+        video: null
+      });
+      const state = Map({ thematic1: thematic1, thematic2: thematic2, thematic3: thematic3 });
+      const action = {
+        id: 'thematic1',
+        type: 'MOVE_THEMATIC_DOWN'
+      };
+      const expectedThematic1 = fromJS({
+        _hasChanged: true,
+        _isNew: false,
+        _toDelete: false,
+        order: 2.0,
+        id: 'thematic1',
+        img: {
+          externalUrl: ''
+        },
+        questions: [],
+        titleEntries: [],
+        video: null
+      });
+      const expectedThematic2 = fromJS({
+        _hasChanged: false,
+        _isNew: false,
+        _toDelete: true,
+        order: 2.0,
+        id: 'thematic2',
+        img: {
+          externalUrl: ''
+        },
+        questions: [],
+        titleEntries: [],
+        video: null
+      });
+      const expectedThematic3 = fromJS({
+        _hasChanged: true,
+        _isNew: false,
+        _toDelete: false,
+        order: 1.0,
+        id: 'thematic3',
+        img: {
+          externalUrl: ''
+        },
+        questions: [],
+        titleEntries: [],
+        video: null
+      });
+      const expected = Map({ thematic1: expectedThematic1, thematic2: expectedThematic2, thematic3: expectedThematic3 });
+      let result = thematicsById(state, action);
+      expect(result).toEqual(expected);
+      result = thematicsHaveChanged(false, action);
+      expect(result).toEqual(true);
     });
 
     it('should handle DELETE_THEMATIC action type');

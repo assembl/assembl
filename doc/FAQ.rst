@@ -69,3 +69,37 @@ or simply:
     pip install -r requirements.txt
 
 which is quicker.
+
+
+When I run flow, it never finishes and re-initializes infinitely
+----------------------------------------------------------------
+
+If you have local code changes, you may have to edit `assembl/static2/flow/object_types.js` accordingly.
+
+For the moment, we use flow version 0.52 which has this issue https://github.com/facebook/flow/issues/3528 . As of today, latest version is 0.67, but we have not updated it yet, because 0.53 introduces some breaking changes.
+
+Sometimes the issue is also fixed after a `fab -c configs/local.rc app_compile` or a reboot.
+
+A working solution is to run flow from a docker container:
+
+```
+docker pull node:6
+cd assembl/static2
+git checkout develop
+yarn install # si on était sur une branche qui avait d'autres versions des dépendances (notamment de flow)
+docker run --rm -v $PWD:/app node:6 bash -c "cd /app; npm run flow"
+```
+
+And then adapt your `.pre-commit-config.yaml` file.
+
+
+I want to change the title which shows on a tab of a debate
+------------------------------------------------------------
+On staging or production instances, you should change the `index_react.jinja2` file to set `block page_title` to the value you want for your debate.
+
+Afterwards you should restart `prod:uwsgi`
+
+I modified a .jinja2 file but the server still shows the old version
+--------------------------------------------------------------------
+
+Changes in a .jinja2 file are not visible until you restart the web server process (if `supervisorctl status` shows that `dev:pserve` is running, run `supervisorctl restart dev:pserve`, or same thing for `prod:uwsgi`).

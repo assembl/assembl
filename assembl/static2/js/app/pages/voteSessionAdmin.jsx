@@ -5,7 +5,7 @@ import { compose, graphql } from 'react-apollo';
 import { I18n, Translate } from 'react-redux-i18n';
 import { List, type Map } from 'immutable';
 import { Button } from 'react-bootstrap';
-import { Link } from 'react-router';
+import { Link, type Route, type Router } from 'react-router';
 
 import { setValidationErrors } from '../actions/adminActions/voteSession';
 import PageForm from '../components/administration/voteSession/pageForm';
@@ -39,7 +39,6 @@ type VoteModule = {
   instructionsEntries?: LangstringEntries,
   isCustom: boolean,
   _isNew: boolean,
-  isNumberGauge?: boolean,
   isNumberGauge?: boolean,
   labelEntries: Array<string>,
   maximum?: number,
@@ -163,8 +162,7 @@ type VoteSessionAdminProps = {
   i18n: {
     locale: string
   },
-  moduleTemplatesHaveChanged: boolean,
-  voteProposalsHaveChanged: boolean,
+  modulesOrProposalsHaveChanged: boolean,
   refetchVoteSession: Function,
   section: string,
   timeline: Timeline,
@@ -184,12 +182,15 @@ type VoteSessionAdminProps = {
   deleteProposal: Function,
   setValidationErrors: (string, ValidationErrors) => Function,
   voteSessionId: string,
-  debateId: string
+  debateId: string,
+  route: Route,
+  router: Router
 };
 
 type VoteSessionAdminState = {
   firstWarningDisplayed: boolean,
-  secondWarningDisplayed: boolean
+  secondWarningDisplayed: boolean,
+  refetching: boolean
 };
 
 type TestModuleType = VoteModule => boolean;
@@ -224,8 +225,13 @@ class VoteSessionAdmin extends React.Component<void, VoteSessionAdminProps, Vote
     super(props);
     this.state = {
       firstWarningDisplayed: false,
-      secondWarningDisplayed: false
+      secondWarningDisplayed: false,
+      refetching: false
     };
+  }
+
+  componentDidMount() {
+    this.props.router.setRouteLeaveHook(this.props.route, this.routerWillLeave);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -254,25 +260,43 @@ class VoteSessionAdmin extends React.Component<void, VoteSessionAdminProps, Vote
         displayCustomModal(content, true, 'modal-centered');
       }, 500);
     };
-    if ((currentStep === 2 || currentStep === 3) && !voteSessionPage.get('id') && !firstWarningDisplayed) {
-      showModal('administration.configureVoteSession', 'administration.saveFirstStep', 'administration.backToPreviousStep', 1);
-      this.setState({ firstWarningDisplayed: true });
-    }
-    if (currentStep === 3 && !voteSessionPage.get('id') && !secondWarningDisplayed) {
-      showModal('administration.configureVoteSession', 'administration.saveFirstStep', 'administration.backToPreviousStep', 1);
-      this.setState({ secondWarningDisplayed: true });
-    } else if (currentStep === 3 && voteModules.size < 1 && !secondWarningDisplayed) {
-      showModal('administration.configureVoteModules', 'administration.saveSecondStep', 'administration.backToPreviousStep', 2);
-      this.setState({ secondWarningDisplayed: true });
+
+    if (!this.state.refetching) {
+      if ((currentStep === 2 || currentStep === 3) && !voteSessionPage.get('id') && !firstWarningDisplayed) {
+        showModal('administration.configureVoteSession', 'administration.saveFirstStep', 'administration.backToPreviousStep', 1);
+        this.setState({ firstWarningDisplayed: true });
+      }
+      if (currentStep === 3 && !voteSessionPage.get('id') && !secondWarningDisplayed) {
+        showModal('administration.configureVoteSession', 'administration.saveFirstStep', 'administration.backToPreviousStep', 1);
+        this.setState({ secondWarningDisplayed: true });
+      } else if (currentStep === 3 && voteModules.size < 1 && !secondWarningDisplayed) {
+        showModal('administration.configureVoteModules', 'administration.saveSecondStep', 'administration.backToPreviousStep', 2);
+        this.setState({ secondWarningDisplayed: true });
+      }
     }
   }
 
+  componentWillUnmount() {
+    this.props.router.setRouteLeaveHook(this.props.route, null);
+  }
+
+  routerWillLeave = () => {
+    if (this.dataHaveChanged() && !this.state.refetching) {
+      return I18n.t('administration.confirmUnsavedChanges');
+    }
+
+    return null;
+  };
+
   runMutations(mutationsPromises) {
     const { refetchVoteSession } = this.props;
-    runSerial(mutationsPromises).then(() => {
-      refetchVoteSession();
-      displayAlert('success', I18n.t('administration.voteSessionSuccess'));
-    });
+    if (mutationsPromises.length > 0) {
+      runSerial(mutationsPromises).then(() => {
+        this.setState({ refetching: true });
+        refetchVoteSession().then(() => this.setState({ refetching: false }));
+        displayAlert('success', I18n.t('administration.voteSessionSuccess'));
+      });
+    }
   }
 
   validateProposals = (proposals) => {
@@ -298,8 +322,7 @@ class VoteSessionAdmin extends React.Component<void, VoteSessionAdminProps, Vote
   saveAction = () => {
     const {
       i18n,
-      moduleTemplatesHaveChanged,
-      voteProposalsHaveChanged,
+      modulesOrProposalsHaveChanged,
       refetchVoteSession,
       timeline,
       voteModules,
@@ -341,7 +364,8 @@ class VoteSessionAdmin extends React.Component<void, VoteSessionAdminProps, Vote
 
       updateVoteSession(payload)
         .then(() => {
-          refetchVoteSession();
+          this.setState({ refetching: true });
+          refetchVoteSession().then(() => this.setState({ refetching: false }));
           displayAlert('success', I18n.t('administration.voteSessionSuccess'));
         })
         .catch((error) => {
@@ -395,17 +419,13 @@ class VoteSessionAdmin extends React.Component<void, VoteSessionAdminProps, Vote
     const voteSessionPageId = voteSessionPage.get('id');
 
     if (voteSessionPage.get('id')) {
-      let allSpecsMutationsPromises = [];
-      if (moduleTemplatesHaveChanged) {
+      if (modulesOrProposalsHaveChanged) {
+        // mutations for modules templates
         const modules = voteModules.map(m => ({ ...m.toJS(), voteSessionId: voteSessionPageId })).toArray();
-        allSpecsMutationsPromises = getMutationsForModules(modules);
-      }
-
-      if (allSpecsMutationsPromises.length > 0) {
+        const allSpecsMutationsPromises = getMutationsForModules(modules);
         this.runMutations(allSpecsMutationsPromises);
-      }
 
-      if (voteProposalsHaveChanged) {
+        // mutations for proposals and their modules
         const isValid = this.validateProposals(voteProposals);
         if (!isValid) {
           displayAlert('danger', I18n.t('administration.anErrorOccured'));
@@ -465,27 +485,21 @@ class VoteSessionAdmin extends React.Component<void, VoteSessionAdminProps, Vote
     }
   };
 
+  dataHaveChanged = (): boolean =>
+    this.props.modulesOrProposalsHaveChanged || this.props.voteSessionPage.get('_hasChanged');
+
   render() {
-    const {
-      editLocale,
-      moduleTemplatesHaveChanged,
-      voteProposalsHaveChanged,
-      refetchVoteSession,
-      section,
-      voteSessionPage,
-      debateId,
-      voteSessionId
-    } = this.props;
+    const { editLocale, section, debateId, voteSessionId } = this.props;
     const exportLink = get('exportVoteSessionData', { debateId: debateId, voteSessionId: voteSessionId });
-    const saveDisabled = !moduleTemplatesHaveChanged && !voteProposalsHaveChanged && !voteSessionPage.get('_hasChanged');
+    const saveDisabled = !this.dataHaveChanged();
     const currentStep = parseInt(section, 10);
     return (
       <div className="token-vote-admin">
         <SaveButton disabled={saveDisabled} saveAction={this.saveAction} />
         {section === '1' && <PageForm editLocale={editLocale} />}
         {section === '2' && <ModulesSection />}
-        {section === '3' && <VoteProposalsSection refetchVoteSession={refetchVoteSession} />}
-        {section === '4' && <ExportSection exportLink={exportLink} />}
+        {section === '3' && <VoteProposalsSection />}
+        {section === '4' && <ExportSection exportLink={exportLink} annotation="voteSessionAnnotation" />}
         {!isNaN(currentStep) && <Navbar currentStep={currentStep} totalSteps={4} phaseIdentifier="voteSession" />}
       </div>
     );
@@ -498,8 +512,7 @@ const mapStateToProps = ({ admin: { editLocale, voteSession }, debate, i18n, con
     modulesInOrder,
     tokenCategoriesById,
     gaugeChoicesById,
-    moduleTemplatesHaveChanged,
-    voteProposalsHaveChanged,
+    modulesOrProposalsHaveChanged,
     voteProposalsById,
     page
   } = voteSession;
@@ -540,8 +553,7 @@ const mapStateToProps = ({ admin: { editLocale, voteSession }, debate, i18n, con
   return {
     editLocale: editLocale,
     i18n: i18n,
-    moduleTemplatesHaveChanged: moduleTemplatesHaveChanged,
-    voteProposalsHaveChanged: voteProposalsHaveChanged,
+    modulesOrProposalsHaveChanged: modulesOrProposalsHaveChanged,
     timeline: debate.debateData.timeline,
     voteModules: voteModules,
     voteSessionPage: voteSession.page,

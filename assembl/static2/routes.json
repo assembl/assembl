@@ -41,5 +41,6 @@
   "voteSessionAdmin": "${slug}/administration/voteSession",
   "voteSession": "${slug}/debate/voteSession",
   "exportSurveyData": "data/Discussion/${debateId}/phase1_csv_export${translation}",
-  "exportVoteSessionData": "data/Discussion/${debateId}/widgets/${voteSessionId}/vote_results_csv"
+  "exportVoteSessionData": "data/Discussion/${debateId}/widgets/${voteSessionId}/vote_results_csv",
+  "exportTaxonomiesData": "data/Discussion/${debateId}/extract_csv_taxonomy"
 }

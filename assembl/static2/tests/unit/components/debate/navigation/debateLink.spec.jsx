@@ -1,7 +1,7 @@
 import React from 'react';
 import ShallowRenderer from 'react-test-renderer/shallow';
 
-import DebateLink from '../../../../../js/app/components/debate/navigation/debateLink';
+import { DumbDebateLink } from '../../../../../js/app/components/debate/navigation/debateLink';
 import '../../../../helpers/setupTranslations';
 
 describe('DebateLink component', () => {
@@ -12,10 +12,15 @@ describe('DebateLink component', () => {
       to: 'https://foo.bar',
       className: 'debate-class',
       activeClassName: 'debate-class-active',
-      dataText: 'Debate'
+      dataText: 'Debate',
+      debate: {
+        debateData: {
+          timeline: []
+        }
+      }
     };
     const renderer = new ShallowRenderer();
-    renderer.render(<DebateLink {...props} />);
+    renderer.render(<DumbDebateLink {...props} />);
     const rendered = renderer.getRenderOutput();
     expect(rendered).toMatchSnapshot();
   });
@@ -27,10 +32,15 @@ describe('DebateLink component', () => {
       className: 'debate-class',
       activeClassName: 'debate-class-active',
       dataText: 'Debate',
-      screenTooSmall: true
+      screenTooSmall: true,
+      debate: {
+        debateData: {
+          timeline: []
+        }
+      }
     };
     const renderer = new ShallowRenderer();
-    renderer.render(<DebateLink {...props} />);
+    renderer.render(<DumbDebateLink {...props} />);
     const rendered = renderer.getRenderOutput();
     expect(rendered).toMatchSnapshot();
   });

@@ -1,0 +1,12 @@
+fragment textField on TextField {
+  fieldType
+  id
+  identifier
+  titleEntries {
+    localeCode
+    value
+  }
+  title(lang: $lang)
+  order
+  required
+}

@@ -13,6 +13,7 @@ export type ItemNode = {
 };
 
 type MenuListProps = {
+  subMenu: boolean,
   items: Array<ItemNode>,
   rootItem: string,
   identifier: string,
@@ -23,6 +24,10 @@ type MenuListProps = {
 type MenuListState = {
   selected: string
 };
+
+const menuItemHeight = 52;
+
+const menuItemMargin = 10;
 
 class MenuList extends React.Component<*, MenuListProps, MenuListState> {
   props: MenuListProps;
@@ -52,13 +57,15 @@ class MenuList extends React.Component<*, MenuListProps, MenuListState> {
   };
 
   render() {
-    const { items, rootItem, identifier, className, onMenuItemClick } = this.props;
+    const { subMenu, items, rootItem, identifier, className, onMenuItemClick } = this.props;
     const { selected } = this.state;
     const rootItems = this.getItemChildren(rootItem);
     if (rootItems.length === 0) return null;
-    return (
-      <div className={classNames('menu-table-col', className)} onMouseLeave={this.onMenuleave}>
-        <div className="menu-table">
+    const estimatedMenuHeight = rootItems.length * menuItemHeight + menuItemMargin;
+    return [
+      subMenu ? <div className="sub-menu-separator" /> : '',
+      <div className={classNames('menu-table-col', className, { 'sub-menu': subMenu })} onMouseLeave={this.onMenuleave}>
+        <div className="menu-table" style={{ height: `${estimatedMenuHeight}px` }}>
           <Scrollbars
             // we hide the scrollbar
             renderTrackVertical={props => <div {...props} className="hidden" />}
@@ -78,16 +85,10 @@ class MenuList extends React.Component<*, MenuListProps, MenuListState> {
           </Scrollbars>
         </div>
         {selected && (
-          <MenuList
-            onMenuItemClick={onMenuItemClick}
-            className="sub-menu"
-            items={items}
-            rootItem={selected}
-            identifier={identifier}
-          />
+          <MenuList subMenu onMenuItemClick={onMenuItemClick} items={items} rootItem={selected} identifier={identifier} />
         )}
       </div>
-    );
+    ];
   }
 }
 

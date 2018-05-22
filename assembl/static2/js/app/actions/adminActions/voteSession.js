@@ -290,3 +290,19 @@ export const cancelModuleCustomization = (id: string): actionTypes.CancelModuleC
   id: id,
   type: actionTypes.CANCEL_MODULE_CUSTOMIZATION
 });
+
+export const cancelAllDependenciesCustomization = (id: string) => (dispatch: Function, getState: Function) => {
+  getState()
+    .admin.voteSession.modulesById.filter(voteSpec => voteSpec.get('voteSpecTemplateId') === id && voteSpec.get('isCustom'))
+    .forEach((voteSpec) => {
+      const voteSpecId = voteSpec.get('id');
+      dispatch(cancelModuleCustomization(voteSpecId));
+    });
+};
+
+export const updateVoteModule = (id: string, locale: string, info: { [string]: any }): actionTypes.CustomizeVoteModule => ({
+  id: id,
+  info: info,
+  locale: locale,
+  type: actionTypes.UPDATE_VOTE_MODULE
+});

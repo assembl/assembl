@@ -8,7 +8,6 @@ from datetime import datetime
 
 from ..lib.clean_input import sanitize_text
 from sqlalchemy.orm import relationship, backref, aliased, contains_eager, column_property, with_polymorphic
-from sqlalchemy.sql import text, column
 from sqlalchemy.sql.expression import bindparam, literal_column
 
 from sqlalchemy import (
@@ -16,7 +15,6 @@ from sqlalchemy import (
     Boolean,
     Integer,
     String,
-    Unicode,
     Float,
     DateTime,
     ForeignKey,
@@ -24,28 +22,20 @@ from sqlalchemy import (
     func,
 )
 from sqlalchemy.ext.associationproxy import association_proxy
-from sqla_rdfbridge.mapping import IriClass, PatternIriClass
 from pyramid.i18n import TranslationStringFactory
 
-from ..lib.utils import get_global_base_url
 from ..nlp.wordcounter import WordCounter
 from . import DiscussionBoundBase, HistoryMixin
 from .discussion import Discussion
 from .langstrings import LangString
-from ..semantic.virtuoso_mapping import QuadMapPatternS
 from ..auth import (
     CrudPermissions, P_READ, P_ADMIN_DISC, P_EDIT_IDEA,
     P_ADD_IDEA)
-from ..semantic.namespaces import (
-    SIOC, IDEA, ASSEMBL, DCTERMS, QUADNAMES, FOAF, RDF, VirtRDF)
 from ..lib.sqla import (CrudOperation, get_model_watcher)
 from assembl.views.traversal import (
     AbstractCollectionDefinition, CollectionDefinition)
 
-if DiscussionBoundBase.using_virtuoso:
-    from virtuoso.alchemy import Timestamp
-else:
-    from sqlalchemy.types import TIMESTAMP as Timestamp
+from sqlalchemy.types import TIMESTAMP as Timestamp
 
 
 _ = TranslationStringFactory('assembl')
@@ -205,24 +195,21 @@ class Idea(HistoryMixin, DiscussionBoundBase):
         String(100), doc="Use a non-standard view for this idea")
 
     creation_date = Column(
-        DateTime, nullable=False, default=datetime.utcnow,
-        info={'rdf': QuadMapPatternS(None, DCTERMS.created)})
+        DateTime, nullable=False, default=datetime.utcnow)
 
     discussion_id = Column(Integer, ForeignKey(
         'discussion.id',
         ondelete='CASCADE',
         onupdate='CASCADE'),
         nullable=False,
-        index=True,
-        info={'rdf': QuadMapPatternS(None, SIOC.has_container)})
+        index=True)
 
     discussion = relationship(
         Discussion,
         backref=backref(
             'ideas', order_by=creation_date,
             primaryjoin="and_(Idea.discussion_id==Discussion.id, "
-                        "Idea.tombstone_date == None)"),
-        info={'rdf': QuadMapPatternS(None, ASSEMBL.in_conversation)}
+                        "Idea.tombstone_date == None)")
     )
 
     discussion_ts = relationship(
@@ -242,26 +229,6 @@ class Idea(HistoryMixin, DiscussionBoundBase):
         # is only one per discussion - benoitg 2013-12-23
         # 'with_polymorphic': '*'
     }
-
-    @classmethod
-    def special_quad_patterns(cls, alias_maker, discussion_id):
-        discussion_alias = alias_maker.get_reln_alias(cls.discussion)
-        return [
-            QuadMapPatternS(
-                None, RDF.type,
-                IriClass(VirtRDF.QNAME_ID).apply(Idea.rdf_type),
-                name=QUADNAMES.class_Idea_class),
-            QuadMapPatternS(
-                None, FOAF.homepage,
-                PatternIriClass(
-                    QUADNAMES.idea_external_link_iri,
-                    # TODO: Use discussion.get_base_url.
-                    # This should be computed outside the DB.
-                    get_global_base_url() + '/%s/idea/local:Idea/%d', None,
-                    ('slug', Unicode, False), ('id', Integer, False)).apply(
-                    discussion_alias.slug, cls.id),
-                name=QUADNAMES.idea_external_link_map)
-        ]
 
     parents = association_proxy(
         'source_links', 'source',
@@ -349,39 +316,28 @@ class Idea(HistoryMixin, DiscussionBoundBase):
     def get_ancestors_query_cls(
             cls, target_id=bindparam('root_id', type_=Integer),
             inclusive=True, tombstone_date=None):
-        if cls.using_virtuoso:
-            if isinstance(target_id, list):
-                raise NotImplemented()
-            sql = text(
-                """SELECT transitive t_in (1) t_out (2) T_DISTINCT T_NO_CYCLES
-                    source_id, target_id FROM idea_idea_link
-                    WHERE tombstone_date IS NULL"""
-                ).columns(column('source_id'), column('target_id')).alias()
-            select_exp = select([sql.c.source_id.label('id')]
-                ).select_from(sql).where(sql.c.target_id == target_id)
+        if isinstance(target_id, list):
+            root_condition = IdeaLink.target_id.in_(target_id)
         else:
-            if isinstance(target_id, list):
-                root_condition = IdeaLink.target_id.in_(target_id)
-            else:
-                root_condition = (IdeaLink.target_id == target_id)
-            link = select(
-                [IdeaLink.source_id, IdeaLink.target_id]
-                ).select_from(
-                    IdeaLink
-                ).where(
-                    (IdeaLink.tombstone_date == tombstone_date) &
-                    (root_condition)
-                ).cte(recursive=True)
-            target_alias = aliased(link)
-            sources_alias = aliased(IdeaLink)
-            parent_link = sources_alias.target_id == target_alias.c.source_id
-            parents = select(
-                [sources_alias.source_id, sources_alias.target_id]
-                ).select_from(sources_alias).where(
-                    parent_link & (sources_alias.tombstone_date == tombstone_date))
-            with_parents = link.union(parents)
-            select_exp = select([with_parents.c.source_id.label('id')]
-                ).select_from(with_parents)
+            root_condition = (IdeaLink.target_id == target_id)
+        link = select(
+            [IdeaLink.source_id, IdeaLink.target_id]
+            ).select_from(
+                IdeaLink
+            ).where(
+                (IdeaLink.tombstone_date == tombstone_date) &
+                (root_condition)
+            ).cte(recursive=True)
+        target_alias = aliased(link)
+        sources_alias = aliased(IdeaLink)
+        parent_link = sources_alias.target_id == target_alias.c.source_id
+        parents = select(
+            [sources_alias.source_id, sources_alias.target_id]
+            ).select_from(sources_alias).where(
+                parent_link & (sources_alias.tombstone_date == tombstone_date))
+        with_parents = link.union(parents)
+        select_exp = select([with_parents.c.source_id.label('id')]
+            ).select_from(with_parents)
         if inclusive:
             if isinstance(target_id, (int, long)):
                 target_id = literal_column(str(target_id), Integer)
@@ -426,31 +382,22 @@ class Idea(HistoryMixin, DiscussionBoundBase):
     def get_descendants_query_cls(
             cls, root_idea_id=bindparam('root_idea_id', type_=Integer),
             inclusive=True):
-        if cls.using_virtuoso:
-            sql = text(
-                """SELECT transitive t_in (1) t_out (2) T_DISTINCT T_NO_CYCLES
-                    source_id, target_id FROM idea_idea_link
-                    WHERE tombstone_date IS NULL"""
-                ).columns(column('source_id'), column('target_id')).alias()
-            select_exp = select([sql.c.target_id.label('id')]
-                ).select_from(sql).where(sql.c.source_id == root_idea_id)
-        else:
-            link = select(
-                [IdeaLink.source_id, IdeaLink.target_id]
-                ).select_from(
-                    IdeaLink
-                ).where(
-                    (IdeaLink.tombstone_date == None) & (IdeaLink.source_id == root_idea_id)  # noqa: E711
-                ).cte(recursive=True)
-            source_alias = aliased(link)
-            targets_alias = aliased(IdeaLink)
-            parent_link = targets_alias.source_id == source_alias.c.target_id
-            children = select(
-                [targets_alias.source_id, targets_alias.target_id]
-                ).select_from(targets_alias).where(parent_link & (targets_alias.tombstone_date == None))  # noqa: E711
-            with_children = link.union(children)
-            select_exp = select([with_children.c.target_id.label('id')]
-                ).select_from(with_children)
+        link = select(
+            [IdeaLink.source_id, IdeaLink.target_id]
+            ).select_from(
+                IdeaLink
+            ).where(
+                (IdeaLink.tombstone_date == None) & (IdeaLink.source_id == root_idea_id)  # noqa: E711
+            ).cte(recursive=True)
+        source_alias = aliased(link)
+        targets_alias = aliased(IdeaLink)
+        parent_link = targets_alias.source_id == source_alias.c.target_id
+        children = select(
+            [targets_alias.source_id, targets_alias.target_id]
+            ).select_from(targets_alias).where(parent_link & (targets_alias.tombstone_date == None))  # noqa: E711
+        with_children = link.union(children)
+        select_exp = select([with_children.c.target_id.label('id')]
+            ).select_from(with_children)
         if inclusive:
             if isinstance(root_idea_id, int):
                 root_idea_id = literal_column(str(root_idea_id), Integer)
@@ -1222,14 +1169,12 @@ class IdeaLink(HistoryMixin, DiscussionBoundBase):
     Note: it's reversed in the RDF model.
     """
     __tablename__ = 'idea_idea_link'
-    rdf_class = IDEA.InclusionRelation
     rdf_type = Column(
         String(60), nullable=False, server_default='idea:InclusionRelation')
     source_id = Column(
         Integer, ForeignKey(
             'idea.id', ondelete="CASCADE", onupdate="CASCADE"),
         nullable=False, index=True)
-    # info={'rdf': QuadMapPatternS(None, IDEA.target_idea)})
     target_id = Column(Integer, ForeignKey(
         'idea.id', ondelete="CASCADE", onupdate="CASCADE"),
         nullable=False, index=True)
@@ -1262,8 +1207,7 @@ class IdeaLink(HistoryMixin, DiscussionBoundBase):
         backref=backref('source_links_ts', cascade="all, delete-orphan"),
         foreign_keys=(target_id))
     order = Column(
-        Float, nullable=False, default=0.0,
-        info={'rdf': QuadMapPatternS(None, ASSEMBL.link_order)})
+        Float, nullable=False, default=0.0)
 
     @classmethod
     def base_conditions(cls, alias=None, alias_maker=None):
@@ -1278,41 +1222,6 @@ class IdeaLink(HistoryMixin, DiscussionBoundBase):
         return ((idea_link.tombstone_date == None),  # noqa: E711
                 (idea_link.source_id == source_idea.id),
                 (source_idea.tombstone_date == None))
-
-    @classmethod
-    def special_quad_patterns(cls, alias_maker, discussion_id):
-        idea_link = alias_maker.alias_from_class(cls)
-        target_alias = alias_maker.alias_from_relns(cls.target)
-        # Assume tombstone status of target is similar to source, for now.
-        conditions = [(idea_link.target_id == target_alias.id),
-                      (target_alias.tombstone_date == None)]  # noqa: E711
-        if discussion_id:
-            conditions.append((target_alias.discussion_id == discussion_id))
-        return [
-            QuadMapPatternS(
-                Idea.iri_class().apply(idea_link.source_id),
-                IDEA.includes,
-                Idea.iri_class().apply(idea_link.target_id),
-                conditions=conditions,
-                name=QUADNAMES.idea_inclusion_reln),
-            QuadMapPatternS(
-                cls.iri_class().apply(idea_link.id),
-                IDEA.source_idea,  # Note that RDF is inverted
-                Idea.iri_class().apply(idea_link.target_id),
-                conditions=conditions,
-                name=QUADNAMES.col_pattern_IdeaLink_target_id
-                # exclude_base_condition=True
-                ),
-            QuadMapPatternS(
-                cls.iri_class().apply(idea_link.id),
-                IDEA.target_idea,
-                Idea.iri_class().apply(idea_link.source_id),
-                name=QUADNAMES.col_pattern_IdeaLink_source_id
-                ),
-            QuadMapPatternS(
-                None, RDF.type, IriClass(VirtRDF.QNAME_ID).apply(IdeaLink.rdf_type),
-                name=QUADNAMES.class_IdeaLink_class),
-        ]
 
     def copy(self, tombstone=None, db=None, **kwargs):
         kwargs.update(
@@ -1350,11 +1259,6 @@ class IdeaLink(HistoryMixin, DiscussionBoundBase):
     crud_permissions = CrudPermissions(
         P_ADD_IDEA, P_READ, P_EDIT_IDEA, P_EDIT_IDEA, P_EDIT_IDEA, P_EDIT_IDEA)
 
-    # discussion = relationship(
-    #     Discussion, viewonly=True, uselist=False, backref="idea_links",
-    #     secondary=Idea.__table__, primaryjoin=(source_id == Idea.id),
-    #     info={'rdf': QuadMapPatternS(None, ASSEMBL.in_conversation)})
-
     discussion = relationship(
         Discussion,
         viewonly=True,
@@ -1367,8 +1271,7 @@ class IdeaLink(HistoryMixin, DiscussionBoundBase):
             primaryjoin=(Idea.discussion_id == Discussion.id),
             secondaryjoin="""and_(IdeaLink.source_id==Idea.id,
                              Idea.tombstone_date == None,
-                             IdeaLink.tombstone_date == None)"""),
-        info={'rdf': QuadMapPatternS(None, ASSEMBL.in_conversation)}
+                             IdeaLink.tombstone_date == None)""")
     )
 
     discussion_ts = relationship(
@@ -1377,8 +1280,7 @@ class IdeaLink(HistoryMixin, DiscussionBoundBase):
         uselist=False,
         secondary=Idea.__table__,
         primaryjoin=(source_id == Idea.id),
-        backref='idea_links_ts',
-        info={'rdf': QuadMapPatternS(None, ASSEMBL.in_conversation)}
+        backref='idea_links_ts'
     )
 
 

@@ -17,7 +17,7 @@
     files: ".*/static2/.*jsx?$"
   - id: flow
     name: flow
-    entry: bash -c "cd assembl/static2/; npm run flow"
+    entry: bash -c "cd assembl/static2/; if [[ $USE_FLOW_FROM_DOCKER ]]; then docker run --rm -v $PWD:/app node:6 bash -c 'cd /app; npm run flow'; else npm run flow; fi"
     language: system
     files: ".*/static2/.*jsx?$"
   - id: jest

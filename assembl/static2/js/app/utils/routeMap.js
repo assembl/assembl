@@ -1,8 +1,8 @@
 import urljoin from 'url-join';
-import { browserHistory } from 'react-router';
 
 import parse from './literalStringParser';
 import { capitalize } from './globalFunctions';
+import { browserHistory } from '../router';
 /*
   A global map of routes managed by React front-end.
 */

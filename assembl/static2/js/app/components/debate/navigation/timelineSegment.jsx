@@ -5,14 +5,14 @@ import { Translate, Localize } from 'react-redux-i18n';
 import { connect } from 'react-redux';
 import classNames from 'classnames';
 
-import MenuTable, { prefetchMenuQuery } from './menuTable';
+import { prefetchMenuQuery } from './menuTable';
 import { getPhaseStatus, isSeveralIdentifiers, type Timeline } from '../../../utils/timeline';
 import { displayModal } from '../../../utils/utilityManager';
 import { get, goTo } from '../../../utils/routeMap';
 import { isMobile } from '../../../utils/globalFunctions';
 import { PHASE_STATUS, PHASES } from '../../../constants';
 
-const phasesToIgnore = [PHASES.voteSession];
+export const phasesToIgnore = [PHASES.voteSession];
 
 export type DebateType = {
   debateData: {
@@ -22,6 +22,7 @@ export type DebateType = {
 };
 
 type TimelineSegmentProps = {
+  index: number,
   client: ApolloClient,
   title: {
     entries: Array<*>
@@ -32,18 +33,12 @@ type TimelineSegmentProps = {
   debate: DebateType,
   barPercent: number,
   locale: string,
-  onMenuItemClick: Function
+  active: boolean,
+  onSelect: Function,
+  onDeselect: Function
 };
 
-type TimelineSegmentState = {
-  active: boolean
-};
-
-export class DumbTimelineSegment extends React.Component<*, TimelineSegmentProps, TimelineSegmentState> {
-  state = {
-    active: false
-  };
-
+export class DumbTimelineSegment extends React.Component<*, TimelineSegmentProps, *> {
   componentWillMount() {
     const { phaseIdentifier, title, startDate, endDate, locale, client } = this.props;
     this.isTouchScreenDevice = isMobile.any();
@@ -64,20 +59,6 @@ export class DumbTimelineSegment extends React.Component<*, TimelineSegmentProps
     });
   }
 
-  componentDidMount() {
-    // only if we have a touch screen device, we need to hide the segment if the
-    // user touch outside of the segment block (simulate the onMouseLeave behavior).
-    if (this.isTouchScreenDevice) {
-      document.addEventListener('click', this.handleTouchOutside);
-    }
-  }
-
-  componentWillUnmount() {
-    if (this.isTouchScreenDevice) {
-      document.removeEventListener('click', this.handleTouchOutside);
-    }
-  }
-
   phaseStatus = null;
 
   phaseName = null;
@@ -88,24 +69,15 @@ export class DumbTimelineSegment extends React.Component<*, TimelineSegmentProps
 
   segment = null;
 
-  showMenu = () => {
-    this.setState({ active: true });
+  select = () => {
+    const { onSelect, index } = this.props;
+    onSelect(index);
   };
 
-  hideMenu = () => {
-    this.setState({ active: false });
-  };
-
-  handleTouchOutside = (event: MouseEvent) => {
-    if (this.state.active && this.segment && !this.segment.contains(event.target)) {
-      this.hideMenu();
-    }
-  };
-
-  renderNotStarted = (className?: string) => {
+  renderNotStarted = () => {
     const { startDate } = this.props;
     return (
-      <div className={className}>
+      <div>
         <Translate value="debate.notStarted" phaseName={this.phaseName} />
         <Localize value={startDate} dateFormat="date.format" />
       </div>
@@ -113,7 +85,7 @@ export class DumbTimelineSegment extends React.Component<*, TimelineSegmentProps
   };
 
   displayPhase = () => {
-    const { phaseIdentifier, onMenuItemClick } = this.props;
+    const { phaseIdentifier, onDeselect } = this.props;
     const { debateData } = this.props.debate;
     const phase = debateData.timeline.filter(p => p.identifier === phaseIdentifier);
     const isRedirectionToV1 = phase[0].interface_v1;
@@ -122,52 +94,31 @@ export class DumbTimelineSegment extends React.Component<*, TimelineSegmentProps
     const isSeveralPhases = isSeveralIdentifiers(debateData.timeline);
     if (isSeveralPhases) {
       if (this.phaseStatus === PHASE_STATUS.notStarted) {
-        const body = this.renderNotStarted();
-        displayModal(null, body, true, null, null, true);
+        displayModal(null, this.renderNotStarted(), true, null, null, true);
+        onDeselect();
       }
       if (this.phaseStatus === PHASE_STATUS.inProgress || this.phaseStatus === PHASE_STATUS.completed) {
         if (!isRedirectionToV1) {
           goTo(get('debate', params));
-          this.hideMenu();
-          if (onMenuItemClick) onMenuItemClick();
+          onDeselect();
         } else {
           window.location = get('oldVote', slug);
         }
       }
     } else if (!isRedirectionToV1) {
       goTo(get('debate', params));
-      this.hideMenu();
-      if (onMenuItemClick) onMenuItemClick();
+      onDeselect();
     } else {
       window.location = get('oldVote', slug);
     }
   };
 
-  renderMenu = () => {
-    const { active } = this.state;
-    if (!active) return null;
-    const { phaseIdentifier, onMenuItemClick } = this.props;
-    const isNotStarted = this.phaseStatus === PHASE_STATUS.notStarted;
-    if (isNotStarted) {
-      return <div className="menu-container">{this.renderNotStarted('not-started')}</div>;
-    }
-    if (!this.ignoreMenu) {
-      return (
-        <div className="menu-container">
-          <MenuTable identifier={phaseIdentifier} onMenuItemClick={onMenuItemClick} />
-        </div>
-      );
-    }
-    return null;
-  };
-
   render() {
-    const { barPercent, title, locale } = this.props;
-    const { active } = this.state;
+    const { barPercent, title, locale, active } = this.props;
     const inProgress = this.phaseStatus === PHASE_STATUS.inProgress;
     const timelineClass = 'timeline-title txt-active-light';
     const touchActive = this.isTouchScreenDevice && !active;
-    const onClick = touchActive ? this.showMenu : this.displayPhase;
+    const onClick = touchActive ? this.select : this.displayPhase;
     return (
       <div
         ref={(segment) => {
@@ -176,8 +127,7 @@ export class DumbTimelineSegment extends React.Component<*, TimelineSegmentProps
         className={classNames('minimized-timeline', {
           active: active
         })}
-        onMouseOver={!this.isTouchScreenDevice && this.showMenu}
-        onMouseLeave={!this.isTouchScreenDevice && this.hideMenu}
+        onMouseOver={!this.isTouchScreenDevice && this.select}
       >
         {title.entries.filter(entry => locale === entry['@language']).map((entry, index) => (
           <div onClick={onClick} className={timelineClass} key={index}>
@@ -199,7 +149,6 @@ export class DumbTimelineSegment extends React.Component<*, TimelineSegmentProps
           </div>
         </div>
         {!this.ignoreMenu && active && <span className="timeline-arrow" />}
-        {this.renderMenu()}
       </div>
     );
   }
