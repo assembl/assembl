@@ -428,6 +428,8 @@ const Translations = {
     administration: {
       confirmTextFieldDeletionTitle: "Supprimer le champ",
       confirmTextFieldDeletion: "Êtes-vous certain de vouloir supprimer ce champ ?",
+      confirmSelectFieldOptionDeletionTitle: "Supprimer cet item",
+      confirmSelectFieldOptionDeletion: "Êtes-vous certain de vouloir supprimer cet item ?",
       addThematic: "Ajouter une thématique",
       addQuestion: "Ajouter une question",
       anErrorOccured:
@@ -646,8 +648,11 @@ const Translations = {
         successSave: "Les modules ont été enregistrés avec succès !"
       },
       profileOptions: {
-        addTextField: "Ajouter un champ",
+        addTextField: "Ajouter un champ texte",
+        addSelectField: "Ajouter un champ de type menu déroulant",
+        addSelectFieldOption: "Ajouter un nouvel item",
         deleteTextField: "Supprimer le champ",
+        deleteSelectFieldOption: "Supprimer l'item",
         introText:
           "Configurez les champs que vous souhaitez afficher dans le formulaire d'inscription. Renseignez les noms ainsi que la mention obligatoire/non obligatoire.",
         textFieldToggleOptional: "Rendre ce champ optionnel",
@@ -1090,8 +1095,10 @@ const Translations = {
       headerTitle: "Legal Notice"
     },
     administration: {
-      confirmTextFieldDeletionTitle: "Delete the text field",
-      confirmTextFieldDeletion: "Are you sure that you want to delete this text field?",
+      confirmTextFieldDeletionTitle: "Delete the field",
+      confirmTextFieldDeletion: "Are you sure that you want to delete this field?",
+      confirmSelectFieldOptionDeletionTitle: "Delete this item",
+      confirmSelectFieldOptionDeletion: "Are you sure that you want to delete this item?",
       addThematic: "Add a theme",
       addQuestion: "Add a question",
       anErrorOccured: "An error occured during save. Please check that you filled all the required fields.",
@@ -1301,8 +1308,11 @@ const Translations = {
         successSave: "The modules have been saved with success!"
       },
       profileOptions: {
-        addTextField: "Add a field",
+        addTextField: "Add a text field",
+        addSelectField: "Add a dropdown field",
+        addSelectFieldOption: "Add a new item",
         deleteTextField: "Delete the field",
+        deleteSelectFieldOption: "Delete this item",
         introText:
           "Configure the fields that you want to display in the registration form. Fill in the names and whether the fields are required or optional.",
         textFieldToggleOptional: "Make this field optional",

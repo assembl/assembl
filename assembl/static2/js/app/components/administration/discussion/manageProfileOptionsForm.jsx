@@ -7,11 +7,12 @@ import SectionTitle from '../sectionTitle';
 import TextField from './textField';
 import { createRandomId } from '../../../utils/globalFunctions';
 import { getEntryValueForLocale } from '../../../utils/i18n';
-import { addTextFieldTooltip } from '../../common/tooltips';
+import { addTextFieldTooltip, addSelectFieldTooltip } from '../../common/tooltips';
 import * as actions from '../../../actions/adminActions/profileOptions';
 import { displayModal, closeModal } from '../../../utils/utilityManager';
 
 const ManageProfileOptionsForm = ({
+  addSelectField,
   addTextField,
   deleteTextField,
   editLocale,
@@ -68,10 +69,16 @@ const ManageProfileOptionsForm = ({
                     toggleTextFieldRequired(tf.get('id'));
                   }}
                   updateTitle={value => updateTextFieldTitle(tf.get('id'), editLocale, value)}
+                  isSelectField={!!tf.get('options')}
                 />
               ))}
               <OverlayTrigger placement="top" overlay={addTextFieldTooltip}>
                 <div onClick={addTextField} className="plus margin-l">
+                  +
+                </div>
+              </OverlayTrigger>
+              <OverlayTrigger placement="top" overlay={addSelectFieldTooltip}>
+                <div onClick={addSelectField} className="plus margin-l">
                   +
                 </div>
               </OverlayTrigger>
@@ -92,7 +99,8 @@ const mapStateToProps = ({ admin: { editLocale, profileOptions: { textFieldsById
 });
 
 const mapDispatchToProps = dispatch => ({
-  addTextField: () => dispatch(actions.addTextField(createRandomId())),
+  addSelectField: () => dispatch(actions.addTextField(createRandomId(), 'select')),
+  addTextField: () => dispatch(actions.addTextField(createRandomId(), 'text')),
   deleteTextField: (id) => {
     closeModal();
     dispatch(actions.deleteTextField(id));

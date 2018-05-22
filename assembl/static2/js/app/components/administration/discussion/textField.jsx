@@ -10,6 +10,7 @@ import {
   textFieldToggleRequiredTooltip
 } from '../../common/tooltips';
 import SwitchButton from '../../common/switchButton';
+import SelectFieldOptions from './selectFieldOptions';
 
 type Props = {
   deleteField: Function,
@@ -20,6 +21,7 @@ type Props = {
   isLast: boolean,
   moveDown: Function,
   moveUp: Function,
+  isSelectField: boolean,
   title: string,
   required: boolean,
   toggleRequired: Function,
@@ -37,13 +39,17 @@ const TextField = ({
   isLast,
   moveDown,
   moveUp,
+  isSelectField,
   title,
   required,
   toggleRequired,
   updateTitle
 }: Props) => (
   <FormGroup bsClass="flex profile-options-field margin-s">
-    <FormControl type="text" onChange={e => updateTitle(e.target.value)} value={title} />
+    <div>
+      <FormControl type="text" onChange={e => updateTitle(e.target.value)} value={title} />
+      {isSelectField ? <SelectFieldOptions fieldId={id} /> : null}
+    </div>
     {identifier === 'CUSTOM' && (
       <OverlayTrigger placement="top" overlay={required ? textFieldToggleOptionalTooltip : textFieldToggleRequiredTooltip}>
         {/* overlaytrigger does not seem to work with SwitchButton so we add a span... */}

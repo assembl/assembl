@@ -99,10 +99,11 @@ describe('textFieldsById reducer', () => {
     expect(reducer(Map(), action)).toEqual(expected);
   });
 
-  it('should handle the ADD_TEXT_FIELD action', () => {
+  it('should handle the ADD_TEXT_FIELD fieldType text action', () => {
     const action = {
       id: '-134582',
-      type: actionTypes.ADD_TEXT_FIELD
+      type: actionTypes.ADD_TEXT_FIELD,
+      fieldType: 'text'
     };
     const state = Map({
       '189387': Map({
@@ -134,6 +135,30 @@ describe('textFieldsById reducer', () => {
         order: 2.0,
         required: false,
         titleEntries: List()
+      })
+    });
+    const actual = reducer(state, action);
+    expect(actual).toEqual(expected);
+  });
+
+  it('should handle the ADD_TEXT_FIELD fieldType select action', () => {
+    const action = {
+      id: '-134582',
+      type: actionTypes.ADD_TEXT_FIELD,
+      fieldType: 'select'
+    };
+    const state = Map({});
+    const expected = Map({
+      '-134582': Map({
+        _hasChanged: false,
+        _isNew: true,
+        _toDelete: false,
+        id: '-134582',
+        identifier: 'CUSTOM',
+        order: 1.0,
+        required: false,
+        titleEntries: List(),
+        options: Map()
       })
     });
     const actual = reducer(state, action);
