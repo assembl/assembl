@@ -46,6 +46,12 @@ exports[`FormControlWithLabel component should render a form control with label 
 <div
   className="form-group"
 >
+  <label
+    className="control-label"
+    htmlFor="my-input"
+  >
+    Foobar
+  </label>
   <my-class
     className="form-control"
     disabled={false}
