@@ -17,6 +17,7 @@ export const buildDebateData = (debateData, prefs, timeline, socialShare) => {
   const chatframe = prefs.extra_json && prefs.extra_json.chatframe ? prefs.extra_json.chatframe : null;
   const partners = prefs.extra_json && prefs.extra_json.partners ? prefs.extra_json.partners : null;
   const socialMedias = prefs.extra_json && prefs.extra_json.socialMedias ? prefs.extra_json.socialMedias : null;
+  const footerLinks = prefs.extra_json && prefs.extra_json.footerLinks ? prefs.extra_json.footerLinks : null;
 
   const sortedTimeline = timeline.length > 0 ? getSortedArrayByKey(timeline, 'start') : null;
   if (sortedTimeline) {
@@ -34,10 +35,10 @@ export const buildDebateData = (debateData, prefs, timeline, socialShare) => {
     });
   }
 
-  const customHtmlCodeLandingPage = prefs.custom_html_code_landing_page ?
-    prefs.custom_html_code_landing_page : null;
-  const customHtmlCodeRegistrationPage = prefs.custom_html_code_user_registration_page ?
-    prefs.custom_html_code_user_registration_page : null;
+  const customHtmlCodeLandingPage = prefs.custom_html_code_landing_page ? prefs.custom_html_code_landing_page : null;
+  const customHtmlCodeRegistrationPage = prefs.custom_html_code_user_registration_page
+    ? prefs.custom_html_code_user_registration_page
+    : null;
 
   return {
     translationEnabled: !!debateData.translation_service_class,
@@ -60,7 +61,8 @@ export const buildDebateData = (debateData, prefs, timeline, socialShare) => {
     partners: partners,
     useSocialMedia: socialShare,
     customHtmlCodeLandingPage: customHtmlCodeLandingPage,
-    customHtmlCodeRegistrationPage: customHtmlCodeRegistrationPage
+    customHtmlCodeRegistrationPage: customHtmlCodeRegistrationPage,
+    footerLinks: footerLinks
   };
 };
 

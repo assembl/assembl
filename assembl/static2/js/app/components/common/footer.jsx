@@ -11,13 +11,13 @@ import TabsConditionQuery from '../../graphql/TabsConditionQuery.graphql';
 
 class Footer extends React.Component {
   render() {
-    const { assemblVersion, debateData, hasLegalNotice, hasTermsAndConditions } = this.props;
-    const { socialMedias } = debateData;
+    const { assemblVersion, debateData, hasLegalNotice, hasTermsAndConditions, lang } = this.props;
+    const { socialMedias, footerLinks } = debateData;
     const slug = { slug: debateData.slug };
     return (
       <Grid fluid className="background-dark relative" id="footer">
         <div className="max-container">
-          <div className={socialMedias ? 'footer' : 'footer margin-xl'}>
+          <div className={socialMedias ? 'footer' : 'footer margin-l'}>
             {socialMedias && (
               <div>
                 <p>
@@ -32,6 +32,15 @@ class Footer extends React.Component {
                 </div>
               </div>
             )}
+            <div className="custom-links">
+              {footerLinks.map((footerLink, index) => (
+                <div className="inline margin-m" key={`fl-${index}`}>
+                  <Link to={footerLink.url} target="_blank">
+                    {footerLink.titleEntries[lang]}
+                  </Link>
+                </div>
+              ))}
+            </div>
             <div className="footer-links">
               <div className="copyright">
                 ©{' '}
