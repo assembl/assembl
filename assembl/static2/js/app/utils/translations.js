@@ -667,6 +667,10 @@ const Translations = {
           title: "Administrer les modules",
           helper: "Choisissez les modules que vous souhaitez voir apparaître dans la page d'accueil et leurs emplacements."
         },
+        header: {
+          title: "Header",
+          helper: "Personnalisez l'apparence du header de la page d'accueil."
+        },
         successSave: "Les modules ont été enregistrés avec succès !"
       },
       profileOptions: {
@@ -1349,6 +1353,10 @@ const Translations = {
         manageModules: {
           title: "Manage the modules",
           helper: "Choose the modules you want to see in the landing page and their position."
+        },
+        header: {
+          title: "Header",
+          helper: "Customize appearance of the header."
         },
         successSave: "The modules have been saved with success!"
       },

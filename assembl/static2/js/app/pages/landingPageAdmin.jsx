@@ -6,6 +6,7 @@ import { type Route, type Router } from 'react-router';
 import { I18n } from 'react-redux-i18n';
 
 import ManageModules from '../components/administration/landingPage/manageModules';
+import CustomizeHeader from '../components/administration/landingPage/customizeHeader';
 import Navbar from '../components/administration/navbar';
 import { displayAlert } from '../utils/utilityManager';
 import SaveButton, { getMutationsPromises, runSerial } from '../components/administration/saveButton';
@@ -78,7 +79,8 @@ class LandingPageAdmin extends React.Component<Props, State> {
       <div className="landing-page-admin">
         <SaveButton disabled={saveDisabled} saveAction={this.saveAction} />
         {section === '1' && <ManageModules {...this.props} />}
-        {!isNaN(currentStep) && <Navbar currentStep={currentStep} totalSteps={1} phaseIdentifier="landingPage" />}
+        {section === '2' && <CustomizeHeader {...this.props} />}
+        {!isNaN(currentStep) && <Navbar currentStep={currentStep} totalSteps={2} phaseIdentifier="landingPage" />}
       </div>
     );
   }
