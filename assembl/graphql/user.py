@@ -13,16 +13,20 @@ from assembl.auth.util import get_permissions
 from .document import Document
 from .types import SecureObjectType
 from .utils import DateTime, abort_transaction_on_exception
+from assembl.auth.password import random_string
+from datetime import datetime
+from .permissions_helpers import require_cls_permission
 
 
 _ = TranslationStringFactory('assembl')
 
 
 class AgentProfile(SecureObjectType, SQLAlchemyObjectType):
+
     class Meta:
         model = models.AgentProfile
         interfaces = (Node, )
-        only_fields = ('id', )
+        only_fields = ('id',)
 
     user_id = graphene.Int(required=True)
     name = graphene.String()
@@ -32,6 +36,10 @@ class AgentProfile(SecureObjectType, SQLAlchemyObjectType):
     image = graphene.Field(Document)
     creation_date = DateTime()  # creation_date only exists on User, not AgentProfile
     has_password = graphene.Boolean()
+    is_deleted = graphene.Boolean()
+
+    def resolve_is_deleted(self, args, context, info):
+        return self.is_deleted or False
 
     def resolve_user_id(self, args, context, info):
         return self.id
@@ -65,6 +73,7 @@ class AgentProfile(SecureObjectType, SQLAlchemyObjectType):
 
 
 class UpdateUser(graphene.Mutation):
+
     class Input:
         id = graphene.ID(required=True)
         name = graphene.String()
@@ -174,3 +183,80 @@ class UpdateUser(graphene.Mutation):
             db.flush()
 
         return UpdateUser(user=user)
+
+
+class DeleteUserInformation(graphene.Mutation):
+
+    class Input:
+        id = graphene.ID(required=True)
+
+    user = graphene.Field(lambda: AgentProfile)
+
+    @staticmethod
+    @abort_transaction_on_exception
+    def mutate(root, args, context, info):
+        cls = models.User
+        db = cls.default_db
+        global_id = args.get('id')
+        id_ = int(Node.from_global_id(global_id)[1])
+        user = cls.get(id_)
+        require_cls_permission(CrudPermissions.READ, cls, context)
+        from assembl import models as m
+        user_roles = db.query(m.UserRole).filter(m.UserRole.user_id == user.id).all()
+
+        for ur in user_roles:
+            if ur.role.name == u"r:sysadmin":
+                raise Exception(u"Can't delete a user with sysadmin rights.")
+
+        ids_of_admin_users = db.query(m.User.id).join(m.LocalUserRole).join(
+            m.Role).filter(m.Role.name == "r:administrator").all()
+
+        ids_of_admin_users = [id for (id,) in ids_of_admin_users]
+        number_of_not_deleted_admin_users = db.query(m.User).filter(m.User.id.in_(ids_of_admin_users)).filter(m.User.is_deleted is not True).count()
+
+        local_user_roles = db.query(m.LocalUserRole).filter(m.LocalUserRole.user_id == user.id).all()
+        user_is_admin = False
+        for lur in local_user_roles:
+            if lur.role.name == u'r:administrator':
+                user_is_admin = True
+
+        if int(number_of_not_deleted_admin_users) <= 1 and user_is_admin:
+            raise Exception(u"User can't delete his account because this is the only admin account")
+
+        with cls.default_db.no_autoflush as db:
+            user.is_deleted = True
+            user.password_p = random_string()
+            user.preferred_email = random_string() + "@" + random_string()
+            user.last_assembl_login = datetime(1900, 1, 1, 1, 1, 1, 1)
+            user.last_login = datetime(1900, 1, 1, 1, 1, 1, 1)
+            user.real_name_p = random_string()
+            for p in user.old_passwords:
+                p.password_p = ""
+
+            # Delete Email Accounts
+            email_account_ids = db.query(m.EmailAccount.id).join(m.User).filter(m.User.id == user.id).all()
+            email_account_ids = [id for (id,) in email_account_ids]
+            email_accounts = db.query(m.EmailAccount).filter(m.EmailAccount.id.in_(email_account_ids)).all()
+            if email_accounts:
+                for email_account in email_accounts[:]:
+                    db.delete(email_account)
+
+            # Notifications
+            # First, we will make sure that the user has no notification with status
+            # If there are, we will put them in the state obsoleted
+            # Then the notification state will be unsubscribed by user
+            ids = db.query(models.Notification.id).join(models.NotificationSubscription).filter(models.NotificationSubscription.user_id ==
+                                                                                                user.id, models.Notification.delivery_state == models.NotificationDeliveryStateType.getRetryableDeliveryStates()).all()
+
+            ids = [id for (id,) in ids]
+            db.query(models.Notification).filter(models.Notification.id.in_(ids)).update(
+                {models.Notification.delivery_state: models.NotificationDeliveryStateType.OBSOLETED}, synchronize_session=False)
+
+            # Social Accounts
+            if user.social_accounts:
+                for social_account in user.social_accounts[:]:
+                    db.delete(social_account)
+                    user.social_accounts.remove(social_account)
+
+            db.flush()
+        return DeleteUserInformation(user=user)

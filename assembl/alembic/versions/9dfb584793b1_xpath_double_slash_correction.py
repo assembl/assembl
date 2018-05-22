@@ -8,7 +8,7 @@ Create Date: 2018-04-18 18:29:07.240836
 
 # revision identifiers, used by Alembic.
 revision = '9dfb584793b1'
-down_revision = '083c79582c91'
+down_revision = '42219c2029ba'
 
 from sqlalchemy.sql import text
 import transaction
@@ -30,7 +30,7 @@ def upgrade(pyramid_env):
             'id': id,
             'xstart': ']/'.join(xstart.split(']//')),
             'xend': ']/'.join(xend.split(']//')),
-            } for (id, xstart, xend) in r]
+        } for (id, xstart, xend) in r]
         query = text("""UPDATE text_fragment_identifier
                 SET xpath_start=:xstart, xpath_end=:xend
                 WHERE id=:id""")

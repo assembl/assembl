@@ -3,6 +3,8 @@
 from os import urandom
 from binascii import hexlify, unhexlify
 import hashlib
+import random
+import string
 from datetime import datetime, timedelta
 from base64 import urlsafe_b64encode, urlsafe_b64decode
 from urllib import unquote
@@ -27,6 +29,10 @@ class Validity(IntEnum):
     BAD_HASH = 2
     DATA_NOT_FOUND = 3
     INVALID_FORMAT = 4
+
+
+def random_string(size=12, chars=string.ascii_uppercase + string.digits + string.ascii_lowercase):
+    return ''.join(random.choice(chars) for _ in range(size))
 
 
 def hash_password(password, encoding=HashEncoding.BINARY, salt_size=SALT_SIZE):

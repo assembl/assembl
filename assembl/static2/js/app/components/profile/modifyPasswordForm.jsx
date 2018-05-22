@@ -6,7 +6,7 @@ import { Button } from 'react-bootstrap';
 
 import { displayAlert } from '../../utils/utilityManager';
 import UpdateUserMutation from '../../graphql/mutations/updateUser.graphql';
-import FormControlWithLabel from './formControlWithLabel';
+import FormControlWithLabel from '../common/formControlWithLabel';
 
 type Props = {
   id: string,
