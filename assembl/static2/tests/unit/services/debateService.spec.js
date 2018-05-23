@@ -13,6 +13,15 @@ const mockPreferences = {
   extra_json: {
     isLargeLogo: true,
     headerLogoUrl: '',
+    footerLinks: [
+      {
+        titleEntries: {
+          fr: 'Jaime le chocolat',
+          en: 'I like chocolate'
+        },
+        url: 'www.google.fr'
+      }
+    ],
     topic: {
       titleEntries: {
         fr: '',
@@ -221,6 +230,15 @@ describe('This test concern debate Service', () => {
           en: ''
         }
       },
+      footerLinks: [
+        {
+          titleEntries: {
+            fr: 'Jaime le chocolat',
+            en: 'I like chocolate'
+          },
+          url: 'www.google.fr'
+        }
+      ],
       dates: {
         startDate: '',
         endDate: ''

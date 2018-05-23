@@ -17,6 +17,7 @@ export const buildDebateData = (debateData, prefs, timeline, socialShare) => {
   const chatframe = prefs.extra_json && prefs.extra_json.chatframe ? prefs.extra_json.chatframe : null;
   const partners = prefs.extra_json && prefs.extra_json.partners ? prefs.extra_json.partners : null;
   const socialMedias = prefs.extra_json && prefs.extra_json.socialMedias ? prefs.extra_json.socialMedias : null;
+  const footerLinks = prefs.extra_json && prefs.extra_json.footerLinks ? prefs.extra_json.footerLinks : null;
   const isLargeLogo = prefs.extra_json && prefs.extra_json.isLargeLogo ? prefs.extra_json.isLargeLogo : null;
 
   const sortedTimeline = timeline.length > 0 ? getSortedArrayByKey(timeline, 'start') : null;
@@ -62,7 +63,8 @@ export const buildDebateData = (debateData, prefs, timeline, socialShare) => {
     partners: partners,
     useSocialMedia: socialShare,
     customHtmlCodeLandingPage: customHtmlCodeLandingPage,
-    customHtmlCodeRegistrationPage: customHtmlCodeRegistrationPage
+    customHtmlCodeRegistrationPage: customHtmlCodeRegistrationPage,
+    footerLinks: footerLinks
   };
 };
 
