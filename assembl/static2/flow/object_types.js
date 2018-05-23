@@ -116,6 +116,8 @@ type Extract = {
   body: string
 };
 
+type SelectFieldOption = { label: string, id: string };
+
 type ConfigurableField = {
   fieldType: string,
   id: string,
@@ -123,5 +125,6 @@ type ConfigurableField = {
   order: number,
   required: boolean,
   title: string,
+  options?: Array<SelectFieldOption>,
   __typename: string
 };
