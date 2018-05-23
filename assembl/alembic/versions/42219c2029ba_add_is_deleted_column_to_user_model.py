@@ -1,7 +1,7 @@
 """Add_is_deleted_column_to_user_model
 
 Revision ID: 42219c2029ba
-Revises: 39b04e9d2716
+Revises: 083c79582c91
 Create Date: 2018-04-18 10:39:09.772934
 
 """
