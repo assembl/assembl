@@ -387,11 +387,14 @@ def test_graphql_delete_user_with_social_account(graphql_request, participant1_u
     assert len(participant1_user.social_accounts) == 0
 
 
-def test_graphql_delete_user_with_configurable_fields(graphql_request, participant1_user, profile_field_for_participant_user):
+def test_graphql_delete_user_with_configurable_fields(graphql_request, participant1_user, profile_field_for_participant_user, test_session):
     """
     Testing deletion of user with extra configurable text fields
     """
+    from assembl import models as m
     res = schema.execute(DELETE_USER_INFORMATION_MUTATION, context_value=graphql_request, variable_values={
         "id": to_global_id('AgentProfile', participant1_user.id)
     })
     assert res.errors is None
+    extra_fields = test_session.query(m.ProfileField).filter(m.ProfileField.agent_profile_id == participant1_user.id).all()
+    assert len(extra_fields) == 0

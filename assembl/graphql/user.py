@@ -212,7 +212,7 @@ class DeleteUserInformation(graphene.Mutation):
             m.Role).filter(m.Role.name == "r:administrator").all()
 
         ids_of_admin_users = [id for (id,) in ids_of_admin_users]
-        number_of_not_deleted_admin_users = db.query(m.User).filter(m.User.id.in_(ids_of_admin_users)).filter(m.User.is_deleted is not True).count()
+        number_of_not_deleted_admin_users = db.query(m.User).filter(m.User.id.in_(ids_of_admin_users)).filter(m.User.is_deleted != True).count()  # noqa: F712
 
         local_user_roles = db.query(m.LocalUserRole).filter(m.LocalUserRole.user_id == user.id).all()
         user_is_admin = False
@@ -260,7 +260,7 @@ class DeleteUserInformation(graphene.Mutation):
 
             # Remove extra fields
             extra_fields = db.query(m.ProfileField).filter(m.ProfileField.agent_profile_id == user.id).all()
-            for extra_field in extra_fields[:]:
+            for extra_field in extra_fields:
                 db.delete(extra_field)
 
             db.flush()
