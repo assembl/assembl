@@ -32,15 +32,17 @@ class Footer extends React.Component {
                 </div>
               </div>
             )}
-            <div className="custom-links">
-              {footerLinks.map((footerLink, index) => (
-                <div className="inline margin-m" key={`fl-${index}`}>
-                  <Link to={footerLink.url} target="_blank">
-                    {footerLink.titleEntries[lang]}
-                  </Link>
-                </div>
-              ))}
-            </div>
+            {footerLinks && (
+              <div className="custom-links">
+                {footerLinks.map((footerLink, index) => (
+                  <div className="inline margin-m" key={`fl-${index}`}>
+                    <Link to={footerLink.url} target="_blank">
+                      {footerLink.titleEntries[lang]}
+                    </Link>
+                  </div>
+                ))}
+              </div>
+            )}
             <div className="footer-links">
               <div className="copyright">
                 ©{' '}
