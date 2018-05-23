@@ -240,8 +240,10 @@ export default compose(
       }
       return {
         creationDate: data.user.creationDate,
+        email: data.user.email,
         hasPassword: data.user.hasPassword,
-        name: data.user.name
+        name: data.user.name,
+        username: data.user.username
       };
     }
   }),
