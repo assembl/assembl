@@ -20,7 +20,7 @@ def upgrade(pyramid_env):
             'select_field',
             sa.Column(
                 "id", sa.Integer,
-                sa.ForeignKey("configurable_field.id"),
+                sa.ForeignKey("configurable_field.id", ondelete='CASCADE', onupdate='CASCADE'),
                 primary_key=True),
             sa.Column(
                 "multivalued", sa.Boolean)
@@ -36,6 +36,9 @@ def upgrade(pyramid_env):
                 sa.ForeignKey('select_field.id', ondelete='CASCADE', onupdate='CASCADE'),
                 nullable=False, index=True)
         )
+        op.drop_constraint(u'text_field_id_fkey', 'text_field', type_='foreignkey')
+        op.create_foreign_key(None, 'text_field', 'configurable_field', ['id'], ['id'], ondelete='CASCADE', onupdate='CASCADE')
+
 
 def downgrade(pyramid_env):
     with context.begin_transaction():
