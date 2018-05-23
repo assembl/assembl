@@ -258,5 +258,10 @@ class DeleteUserInformation(graphene.Mutation):
                     db.delete(social_account)
                     user.social_accounts.remove(social_account)
 
+            # Remove extra fields
+            extra_fields = db.query(m.ProfileField).filter(m.ProfileField.agent_profile_id == user.id).all()
+            for extra_field in extra_fields[:]:
+                db.delete(extra_field)
+
             db.flush()
         return DeleteUserInformation(user=user)
