@@ -43,7 +43,8 @@ export default class FlatNavbar extends React.PureComponent {
       style,
       logoLink,
       maxWidth,
-      themeId
+      themeId,
+      isLargeLogo
     } = this.props;
     return (
       <div className="flat-navbar" style={style}>
@@ -51,7 +52,7 @@ export default class FlatNavbar extends React.PureComponent {
           className="left-part"
           ref={refWidthUpdate(newWidth => this.setState(() => ({ leftWidth: newWidth }), this.updateWidth))}
         >
-          <Logo slug={slug} src={logoSrc} url={logoLink} />
+          {!isLargeLogo && <Logo slug={slug} src={logoSrc} url={logoLink} />}
           <NavigationMenu elements={elements} />
         </div>
         <div

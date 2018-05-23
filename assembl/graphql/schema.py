@@ -34,7 +34,7 @@ from assembl.graphql.section import (CreateSection, DeleteSection, Section,
                                      UpdateSection)
 from assembl.graphql.sentiment import AddSentiment, DeleteSentiment
 from assembl.graphql.synthesis import Synthesis
-from assembl.graphql.user import UpdateUser
+from assembl.graphql.user import UpdateUser, DeleteUserInformation
 from .configurable_fields import TextField, CreateTextField, UpdateTextField, DeleteTextField, ProfileField, UpdateProfileFields
 from assembl.graphql.votes import AddTokenVote, DeleteTokenVote, AddGaugeVote, DeleteGaugeVote
 from assembl.graphql.vote_session import (
@@ -43,7 +43,7 @@ from assembl.graphql.vote_session import (
     CreateNumberGaugeVoteSpecification, UpdateNumberGaugeVoteSpecification,
     UpdateTokenVoteSpecification, DeleteVoteSpecification,
     CreateProposal, UpdateProposal, DeleteProposal
-    )
+)
 from assembl.graphql.utils import get_fields, get_root_thematic_for_phase
 from assembl.lib.locale import strip_country
 from assembl.lib.sqla_types import EmailString
@@ -321,7 +321,7 @@ class Query(graphene.ObjectType):
         fields = get_query(
             models.AbstractConfigurableField, context).filter(
                 models.AbstractConfigurableField.discussion_id == discussion_id
-            ).order_by(models.AbstractConfigurableField.order).all()
+        ).order_by(models.AbstractConfigurableField.order).all()
         profile_fields = []
         if user_id is None:
             raise Exception('No user id')
@@ -374,6 +374,7 @@ class Mutations(graphene.ObjectType):
     update_section = UpdateSection.Field()
     update_legal_notice_and_terms = UpdateLegalNoticeAndTerms.Field()
     update_user = UpdateUser.Field()
+    DeleteUserInformation = DeleteUserInformation.Field()
     update_vote_session = UpdateVoteSession.Field()
     create_token_vote_specification = CreateTokenVoteSpecification.Field()
     update_token_vote_specification = UpdateTokenVoteSpecification.Field()

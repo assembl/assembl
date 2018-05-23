@@ -18,6 +18,7 @@ export const buildDebateData = (debateData, prefs, timeline, socialShare) => {
   const partners = prefs.extra_json && prefs.extra_json.partners ? prefs.extra_json.partners : null;
   const socialMedias = prefs.extra_json && prefs.extra_json.socialMedias ? prefs.extra_json.socialMedias : null;
   const footerLinks = prefs.extra_json && prefs.extra_json.footerLinks ? prefs.extra_json.footerLinks : null;
+  const isLargeLogo = prefs.extra_json && prefs.extra_json.isLargeLogo ? prefs.extra_json.isLargeLogo : null;
 
   const sortedTimeline = timeline.length > 0 ? getSortedArrayByKey(timeline, 'start') : null;
   if (sortedTimeline) {
@@ -55,6 +56,7 @@ export const buildDebateData = (debateData, prefs, timeline, socialShare) => {
     helpUrl: debateData.help_url,
     termsOfUseUrl: prefs.terms_of_use_url,
     socialMedias: socialMedias,
+    isLargeLogo: isLargeLogo,
     twitter: twitter,
     chatbot: chatbot,
     chatframe: chatframe,

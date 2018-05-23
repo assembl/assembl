@@ -2,7 +2,7 @@ import React from 'react';
 import { PropTypes } from 'prop-types';
 import { connect } from 'react-redux';
 import { compose, graphql } from 'react-apollo';
-import { Translate } from 'react-redux-i18n';
+import { Translate, I18n } from 'react-redux-i18n';
 import { getConnectedUserId } from '../../../utils/globalFunctions';
 import { getIfPhaseCompletedByIdentifier } from '../../../utils/timeline';
 import PostCreator from './postCreator';
@@ -144,10 +144,13 @@ class Post extends React.Component {
         <Disagree size={25} />
       </div>
     );
+
+    const { displayName, isDeleted } = post.creator;
+
     return (
       <div className="shown box">
         <div className="content">
-          <PostCreator name={post.creator.displayName} />
+          <PostCreator name={isDeleted ? I18n.t('deletedUser') : displayName} />
           <PostBody
             translationEnabled={debateData.translationEnabled}
             contentLocale={contentLocale}
