@@ -141,7 +141,7 @@ class SignupForm extends React.Component<void, SignupFormProps, SignupFormState>
                       required={field.required}
                       labelAlwaysVisible
                     >
-                      <option key="0" value="" />
+                      {!field.required ? <option key="0" value="" /> : null}
                       {field.options.map(option => (
                         <option key={option.id} value={option.id}>
                           {option.label}
