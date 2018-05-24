@@ -40,19 +40,57 @@ class TextField(SecureObjectType, SQLAlchemyObjectType):
         only_fields = ('field_type', 'id')
 
 
+class SelectFieldOption(SecureObjectType, SQLAlchemyObjectType):
+
+    class Meta:
+        model = models.SelectFieldOption
+        interfaces = (Node,)
+        only_fields = ('id', 'order')
+
+    label = graphene.String(lang=graphene.String())
+    label_entries = graphene.List(LangStringEntry)
+
+    def resolve_label(self, args, context, info):
+        return resolve_langstring(self.label, args.get('lang'))
+
+    def resolve_label_entries(self, args, context, info):
+        return resolve_langstring_entries(self, 'label')
+
+
+class SelectFieldOptionInput(graphene.InputObjectType):
+    id = graphene.ID()
+    label_entries = graphene.List(LangStringEntryInput, required=True)
+    order = graphene.Float(required=True)
+
+
+class SelectField(SecureObjectType, SQLAlchemyObjectType):
+    class Meta:
+        model = models.SelectField
+        interfaces = (Node, ConfigurableFieldInterface)
+        only_fields = ('id', 'multivalued')
+
+    options = graphene.List(SelectFieldOption)
+
+
 class CreateTextField(graphene.Mutation):
     class Input:
         lang = graphene.String()
         title_entries = graphene.List(LangStringEntryInput, required=True)
         order = graphene.Float()
         required = graphene.Boolean()
+        options = graphene.List(SelectFieldOptionInput, required=False)
 
-    text_field = graphene.Field(lambda: TextField)
+    field = graphene.Field(lambda: ConfigurableFieldUnion)
 
     @staticmethod
     @abort_transaction_on_exception
     def mutate(root, args, context, info):
-        cls = models.TextField
+        options = args.get('options')
+        if options is not None:
+            cls = models.SelectField
+        else:
+            cls = models.TextField
+
         require_cls_permission(CrudPermissions.CREATE, cls, context)
         discussion_id = context.matchdict['discussion_id']
         with cls.default_db.no_autoflush as db:
@@ -62,16 +100,26 @@ class CreateTextField(graphene.Mutation):
                     'TextField titleEntries needs at least one entry')
 
             title_langstring = langstring_from_input_entries(title_entries)
-
             saobj = cls(
                 discussion_id=discussion_id,
                 title=title_langstring,
                 order=args.get('order'),
                 required=args.get('required'))
+
+            if options is not None:
+                for option in options:
+                    label_ls = langstring_from_input_entries(
+                        option['label_entries'])
+                    order = option['order']
+                    saobj.options.append(
+                        models.SelectFieldOption(
+                            label=label_ls, order=order)
+                    )
+
             db.add(saobj)
             db.flush()
 
-        return CreateTextField(text_field=saobj)
+        return CreateTextField(field=saobj)
 
 
 class UpdateTextField(graphene.Mutation):
@@ -81,29 +129,64 @@ class UpdateTextField(graphene.Mutation):
         title_entries = graphene.List(LangStringEntryInput, required=True)
         order = graphene.Float(required=True)
         required = graphene.Boolean(required=True)
+        options = graphene.List(SelectFieldOptionInput, required=False)
 
-    text_field = graphene.Field(lambda: TextField)
+    field = graphene.Field(lambda: ConfigurableFieldUnion)
 
     @staticmethod
     @abort_transaction_on_exception
     def mutate(root, args, context, info):
-        cls = models.TextField
-        text_field_id = args.get('id')
-        text_field_id = int(Node.from_global_id(text_field_id)[1])
-        text_field = cls.get(text_field_id)
-        require_instance_permission(CrudPermissions.UPDATE, text_field, context)
+        options = args.get('options')
+        if options is not None:
+            cls = models.SelectField
+        else:
+            cls = models.TextField
+
+        field_id = args.get('id')
+        field_id = int(Node.from_global_id(field_id)[1])
+        field = cls.get(field_id)
+        require_instance_permission(CrudPermissions.UPDATE, field, context)
         with cls.default_db.no_autoflush as db:
             title_entries = args.get('title_entries')
             if len(title_entries) == 0:
                 raise Exception(
-                    'TextField titleEntries needs at least one entry')
+                    'field titleEntries needs at least one entry')
 
-            update_langstring_from_input_entries(text_field, 'title', title_entries)
-            text_field.order = args['order']
-            text_field.required = args['required']
+            update_langstring_from_input_entries(field, 'title', title_entries)
+            field.order = args['order']
+            field.required = args['required']
+
+            if options is not None:
+                existing_options = {
+                    option.id: option for option in field.options}
+                updated_options = set()
+                for option_input in options:
+                    if not option_input.get('id', '-1').startswith('-'):
+                        # update the option
+                        id_ = int(Node.from_global_id(option_input['id'])[1])
+                        updated_options.add(id_)
+                        option = models.SelectFieldOption.get(id_)
+                        update_langstring_from_input_entries(
+                            option, 'label', option_input['label_entries'])
+                        option.order = option_input['order']
+                    else:
+                        # create the option
+                        label_ls = langstring_from_input_entries(
+                            option_input.get('label_entries', None))
+                        order = option_input.get('order')
+                        field.options.append(
+                            models.SelectFieldOption(
+                                label=label_ls, order=order)
+                        )
+
+                # remove options that are not in options input
+                for option_id in set(existing_options.keys()
+                                       ).difference(updated_options):
+                    db.delete(existing_options[option_id])
+
             db.flush()
 
-        return UpdateTextField(text_field=text_field)
+        return UpdateTextField(field=field)
 
 
 class DeleteTextField(graphene.Mutation):
@@ -116,16 +199,16 @@ class DeleteTextField(graphene.Mutation):
     @staticmethod
     @abort_transaction_on_exception
     def mutate(root, args, context, info):
-        cls = models.TextField
-        text_field_id = args.get('id')
-        text_field_id = int(Node.from_global_id(text_field_id)[1])
-        text_field = models.TextField.get(text_field_id)
-        require_instance_permission(CrudPermissions.DELETE, text_field, context)
+        cls = models.AbstractConfigurableField
+        field_id = args.get('id')
+        field_id = int(Node.from_global_id(field_id)[1])
+        field = cls.get(field_id)
+        require_instance_permission(CrudPermissions.DELETE, field, context)
         with cls.default_db.no_autoflush as db:
             db.query(models.ProfileField).filter(
-                models.ProfileField.configurable_field_id == text_field_id).delete()
+                models.ProfileField.configurable_field_id == field_id).delete()
             db.flush()
-            db.delete(text_field)
+            db.delete(field)
             db.flush()
 
         return DeleteTextField(success=True)
@@ -133,7 +216,7 @@ class DeleteTextField(graphene.Mutation):
 
 class ConfigurableFieldUnion(SQLAlchemyUnion):
     class Meta:
-        types = (TextField, )
+        types = (TextField, SelectField)
         model = models.AbstractConfigurableField
 
     @classmethod
@@ -142,6 +225,8 @@ class ConfigurableFieldUnion(SQLAlchemyUnion):
             return type(instance)
         elif isinstance(instance, models.TextField):
             return TextField
+        elif isinstance(instance, models.SelectField):
+            return SelectField
 
 
 class ProfileField(SecureObjectType, SQLAlchemyObjectType):

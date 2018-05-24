@@ -216,9 +216,21 @@ export const addTextFieldTooltip = (
   </Tooltip>
 );
 
+export const addSelectFieldOptionTooltip = (
+  <Tooltip id="addSelectFieldTooltip">
+    <Translate value="administration.profileOptions.addSelectFieldOption" />
+  </Tooltip>
+);
+
 export const deleteTextFieldTooltip = (
   <Tooltip id="deleteTextFieldTooltip">
     <Translate value="administration.profileOptions.deleteTextField" />
+  </Tooltip>
+);
+
+export const deleteSelectFieldOptionTooltip = (
+  <Tooltip id="deleteSelectFieldOptionTooltip">
+    <Translate value="administration.profileOptions.deleteSelectFieldOption" />
   </Tooltip>
 );
 

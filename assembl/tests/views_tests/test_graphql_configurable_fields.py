@@ -38,13 +38,55 @@ def test_mutation_create_text_field(graphql_request, graphql_registry, test_sess
         })
     assert res.errors is None
     assert 'createTextField' in res.data
-    new_field = res.data['createTextField']['textField']
+    new_field = res.data['createTextField']['field']
     assert new_field[u'required'] is False
     assert new_field[u'order'] == 4.0
     title_entries = new_field['titleEntries']
     assert title_entries[0]['localeCode'] == u'en'
     assert title_entries[0]['value'] == u'My new field'
     saobj = TextField.get(from_global_id(new_field[u'id'])[1])
+    test_session.delete(saobj)
+
+
+def test_mutation_create_select_field(graphql_request, graphql_registry, test_session):
+    from assembl.models.configurable_fields import SelectField
+    res = schema.execute(
+        graphql_registry['createTextField'],
+        context_value=graphql_request,
+        variable_values={
+            "lang": u"en",
+            "titleEntries": [
+                { "localeCode": "en", "value": u"My new field" }
+            ],
+            "order": 4.0,
+            "required": False,
+            "options": [
+                {"labelEntries": [
+                    {"value": u"Option un", "localeCode": "fr"},
+                    {"value": u"Option one", "localeCode": "en"}
+                 ],
+                 "order": 1.0,
+                },
+                {"labelEntries": [
+                    {"value": u"Option deux", "localeCode": "fr"},
+                    {"value": u"Option two", "localeCode": "en"}
+                 ],
+                 "order": 2.0,
+                }
+            ]
+        })
+    assert res.errors is None
+    assert 'createTextField' in res.data
+    new_field = res.data['createTextField']['field']
+    assert new_field[u'required'] is False
+    assert new_field[u'order'] == 4.0
+    assert len(new_field[u'options']) == 2
+    assert new_field[u'options'][0]['label'] == u'Option one'
+    assert new_field[u'options'][1]['label'] == u'Option two'
+    title_entries = new_field['titleEntries']
+    assert title_entries[0]['localeCode'] == u'en'
+    assert title_entries[0]['value'] == u'My new field'
+    saobj = SelectField.get(from_global_id(new_field[u'id'])[1])
     test_session.delete(saobj)
 
 
@@ -65,9 +107,51 @@ def test_mutation_update_text_field(graphql_request, graphql_registry, text_fiel
         })
     assert res.errors is None
     assert 'updateTextField' in res.data
-    field = res.data['updateTextField']['textField']
+    field = res.data['updateTextField']['field']
     assert field[u'required'] is False
     assert field[u'order'] == 8.0
+    title_entries = field['titleEntries']
+    assert title_entries[0]['localeCode'] == u'be'
+    assert title_entries[0]['value'] == u'Mon nouveau titre'
+    assert title_entries[1]['localeCode'] == u'en'
+    assert title_entries[1]['value'] == u'My new title'
+
+
+def test_mutation_update_select_field(graphql_request, graphql_registry, select_field):
+    field_id = to_global_id('SelectField', select_field.id)
+    res = schema.execute(
+        graphql_registry['updateTextField'],
+        context_value=graphql_request,
+        variable_values={
+            "id": field_id,
+            "lang": u"en",
+            "titleEntries": [
+                { "localeCode": "en", "value": u"My new title" },
+                { "localeCode": "be", "value": u"Mon nouveau titre" },
+            ],
+            "order": 8.0,
+            "required": False,
+            "options": [
+                {"labelEntries": [
+                    {"value": u"Option un", "localeCode": "fr"},
+                    {"value": u"Option one", "localeCode": "en"}
+                 ],
+                 "order": 1.0,
+                },
+                {"labelEntries": [
+                    {"value": u"Option deux", "localeCode": "fr"},
+                    {"value": u"Option two", "localeCode": "en"}
+                 ],
+                 "order": 2.0,
+                }
+            ]
+        })
+    assert res.errors is None
+    assert 'updateTextField' in res.data
+    field = res.data['updateTextField']['field']
+    assert field[u'required'] is False
+    assert field[u'order'] == 8.0
+    assert len(field[u'options']) == 2
     title_entries = field['titleEntries']
     assert title_entries[0]['localeCode'] == u'be'
     assert title_entries[0]['value'] == u'Mon nouveau titre'
@@ -78,6 +162,16 @@ def test_mutation_update_text_field(graphql_request, graphql_registry, text_fiel
 def test_mutation_delete_text_field(graphql_request, text_field, graphql_registry):
     mutation = graphql_registry['deleteTextField']
     text_field_id = to_global_id("TextField", text_field.id)
+    res = schema.execute(mutation, context_value=graphql_request, variable_values={
+        "id": text_field_id
+    })
+    assert res.errors is None
+    assert res.data['deleteTextField']['success'] is True
+
+
+def test_mutation_delete_select_field(graphql_request, select_field, graphql_registry):
+    mutation = graphql_registry['deleteTextField']
+    text_field_id = to_global_id("SelectField", select_field.id)
     res = schema.execute(mutation, context_value=graphql_request, variable_values={
         "id": text_field_id
     })

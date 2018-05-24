@@ -1,7 +1,9 @@
 #import "./fragments/TextField.graphql"
+#import "./fragments/SelectField.graphql"
 
 query TextFields($lang: String!) {
   textFields {
     ...textField
+    ...selectField
   }
 }

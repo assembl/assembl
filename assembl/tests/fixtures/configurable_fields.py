@@ -70,6 +70,28 @@ def fullname_text_field(request, test_session, discussion):
 
 
 @pytest.fixture(scope="function")
+def select_field(request, test_session, discussion):
+    from assembl.models import LangString, SelectField
+    saobj = SelectField(
+        discussion=discussion,
+        order=1.0,
+        title=LangString.create('My select field', 'en'),
+        required=True,
+        options=[]
+    )
+    test_session.add(saobj)
+    test_session.flush()
+
+    def fin():
+        print "Finalizer select_field"
+        test_session.delete(saobj)
+        test_session.flush()
+
+    request.addfinalizer(fin)
+    return saobj
+
+
+@pytest.fixture(scope="function")
 def profile_field(request, test_session, admin_user, text_field, discussion):
     from assembl.models import ProfileField
     saobj = ProfileField(

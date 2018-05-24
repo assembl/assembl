@@ -15,7 +15,7 @@ class Signup extends React.Component {
     }
     return (
       <Grid fluid className="login-container">
-        <Row className="max-container center">
+        <Row className="max-container">
           <Col xs={12} md={7} className="col-centered">
             {signupConfirm ? <SignUpConfirm /> : <SignupForm />}
           </Col>

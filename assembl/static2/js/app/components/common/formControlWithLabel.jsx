@@ -28,7 +28,8 @@ type FormControlWithLabelProps = {
   id: string,
   validationErrors?: Array<ErrorDef>,
   helperUrl?: string,
-  helperText: string
+  helperText: string,
+  children: Array<HTMLOptionElement>
 };
 
 type FormControlWithLabelState = {
@@ -107,7 +108,7 @@ class FormControlWithLabel extends React.Component<Object, FormControlWithLabelP
   };
 
   renderFormControl = () => {
-    const { type, value, disabled, componentClass, id, onChange, formControlProps } = this.props;
+    const { type, value, disabled, componentClass, id, onChange, formControlProps, children } = this.props;
     if (type === 'rich-text') {
       return this.renderRichTextEditor();
     }
@@ -125,7 +126,9 @@ class FormControlWithLabel extends React.Component<Object, FormControlWithLabelP
         onBlur={this.setValidationState}
         disabled={disabled}
         {...formControlProps}
-      />
+      >
+        {children}
+      </FormControl>
     );
   };
 
@@ -140,7 +143,7 @@ class FormControlWithLabel extends React.Component<Object, FormControlWithLabelP
 
   render() {
     const { id, labelAlwaysVisible, type, value, helperText } = this.props;
-    const displayLabel = labelAlwaysVisible || type !== 'rich-text' ? value : false;
+    const displayLabel = labelAlwaysVisible || (type !== 'rich-text' ? value : false);
     return (
       <FormGroup validationState={this.state.validationState}>
         {displayLabel ? <ControlLabel htmlFor={id}>{this.getLabel()}</ControlLabel> : null}

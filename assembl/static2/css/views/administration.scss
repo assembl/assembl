@@ -24,6 +24,18 @@
       .form-control {
         width: 350px;
       }
+
+      .select-field-options {
+        padding-left: 20px;
+
+        input[type='text'] {
+          min-width: 330px;
+        }
+
+        .form-control {
+          width: 330px;
+        }
+      }
     }
   }
 

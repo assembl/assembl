@@ -40,7 +40,8 @@ const createVariablesForTextFieldMutation = textField => ({
   id: textField.id,
   order: textField.order,
   required: textField.required,
-  titleEntries: textField.titleEntries
+  titleEntries: textField.titleEntries,
+  options: textField.options
 });
 
 const createVariablesForDeleteSectionMutation = section => ({ sectionId: section.id });
@@ -270,6 +271,24 @@ const mapStateToProps: MapStateToProps<ReduxState, *, *> = ({
 }) => {
   const { sectionsById, sectionsHaveChanged, sectionsInOrder } = sections;
   const { profileOptionsHasChanged, textFieldsById } = profileOptions;
+  const textFields = textFieldsById
+    .map(textField => textField)
+    .valueSeq()
+    .toJS();
+  textFields.forEach((field) => {
+    const newField = field;
+    if (field.options) {
+      // convert options to array, and remove _hasChanged on option that is set by moveItemUp/Down.
+      newField.options = Object.values(field.options).map(option => ({
+        // $FlowFixMe error because option is typed mixed
+        id: option.id,
+        // $FlowFixMe error because option is typed mixed
+        labelEntries: option.labelEntries,
+        // $FlowFixMe error because option is typed mixed
+        order: option.order
+      }));
+    }
+  });
   return {
     editLocale: editLocale,
     i18n: i18n,
@@ -285,10 +304,7 @@ const mapStateToProps: MapStateToProps<ReduxState, *, *> = ({
       .toJS(), // convert to array of objects
     legalNoticeAndTerms: legalNoticeAndTerms,
     profileOptionsHasChanged: profileOptionsHasChanged,
-    textFields: textFieldsById
-      .map(textField => textField)
-      .valueSeq()
-      .toJS()
+    textFields: textFields
   };
 };
 
