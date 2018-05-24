@@ -75,14 +75,16 @@ export const textFieldsById: TextFieldsByIdReducer = (state = initialTextFields,
     return newState;
   }
   case actionTypes.ADD_SELECT_FIELD_OPTION: {
-    return state.setIn(
-      [action.fieldId, 'options', action.id],
-      Map({
-        id: action.id,
-        order: state.getIn([action.fieldId, 'options']).size + 1.0,
-        labelEntries: List()
-      })
-    );
+    return state
+      .setIn(
+        [action.fieldId, 'options', action.id],
+        Map({
+          id: action.id,
+          order: state.getIn([action.fieldId, 'options']).size + 1.0,
+          labelEntries: List()
+        })
+      )
+      .setIn([action.fieldId, '_hasChanged'], true);
   }
   case actionTypes.DELETE_TEXT_FIELD:
     return state.setIn([action.id, '_toDelete'], true);
