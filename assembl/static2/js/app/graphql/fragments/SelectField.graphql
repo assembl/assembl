@@ -1,7 +1,6 @@
 #import "./LangString.graphql"
 
 fragment selectField on SelectField {
-  # fieldType
   id
   identifier
   titleEntries {
