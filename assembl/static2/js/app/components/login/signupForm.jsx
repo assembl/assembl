@@ -121,8 +121,9 @@ class SignupForm extends React.Component<void, SignupFormProps, SignupFormState>
                       <FormControl
                         type={field.fieldType.toLowerCase()}
                         name={field.identifier === 'CUSTOM' ? field.id : field.identifier.toLowerCase()}
-                        placeholder={field.title}
+                        placeholder={field.required ? `${field.title}*` : field.title}
                         onChange={this.handleInput}
+                        required={field.required}
                       />
                     </FormGroup>
                   );
