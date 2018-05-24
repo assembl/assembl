@@ -26,6 +26,9 @@ class DeleteMyAccount extends React.Component<void, *, DeleteMyAccountState> {
   displayConfirmationModal() {
     const body = <Translate value="profile.deleteMyAccountModal" />;
     const footer = [
+      <Button key="cancel" onClick={closeModal} className="button-cancel button-dark">
+        <Translate value="cancel" />
+      </Button>,
       <Button key="delete" onClick={this.deleteMyAccount} className="button-submit button-dark">
         <Translate value="validate" />
       </Button>
