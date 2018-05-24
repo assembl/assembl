@@ -170,18 +170,25 @@ class SignupForm extends React.Component<void, SignupFormProps, SignupFormState>
                 </Checkbox>
               </FormGroup>
             )}
-            <FormGroup>
-              <Button type="submit" name="register" value={I18n.t('login.signUp')} className="button-submit button-dark margin-m">
-                <Translate value="login.signUp" />
-              </Button>
-            </FormGroup>
-            <FormGroup>
-              <Translate value="login.alreadyAccount" />
-              <span>&nbsp;</span>
-              <Link to={slug ? getContextual('login', { slug: slug }) : get('login')}>
-                <Translate value="login.login" />
-              </Link>
-            </FormGroup>
+            <div className="center">
+              <FormGroup>
+                <Button
+                  type="submit"
+                  name="register"
+                  value={I18n.t('login.signUp')}
+                  className="button-submit button-dark margin-m"
+                >
+                  <Translate value="login.signUp" />
+                </Button>
+              </FormGroup>
+              <FormGroup>
+                <Translate value="login.alreadyAccount" />
+                <span>&nbsp;</span>
+                <Link to={slug ? getContextual('login', { slug: slug }) : get('login')}>
+                  <Translate value="login.login" />
+                </Link>
+              </FormGroup>
+            </div>
           </form>
         </div>
       </div>
