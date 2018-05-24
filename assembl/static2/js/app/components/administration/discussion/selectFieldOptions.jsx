@@ -54,24 +54,26 @@ const SelectFieldOptions = ({
     return displayModal(modalTitle, body, includeFooter, footer);
   };
   return (
-    <div style={{ paddingLeft: '20px' }}>
-      {options.map((option, idx) => (
-        <SelectFieldOption
-          key={option.get('id')}
-          deleteOption={() => confirmOptionDeletion(option.get('id'))}
-          id={option.get('id')}
-          fieldId={fieldId}
-          isFirst={idx === 0}
-          // $FlowFixMe options is typed as Array, not immutable List
-          isLast={idx === options.size - 1}
-          moveDown={moveOptionDown}
-          moveUp={moveOptionUp}
-          label={getEntryValueForLocale(option.get('labelEntries'), editLocale, '')}
-          updateLabel={value => updateLabel(fieldId, option.get('id'), editLocale, value)}
-        />
-      ))}
+    <div>
+      <div className="select-field-options">
+        {options.map((option, idx) => (
+          <SelectFieldOption
+            key={option.get('id')}
+            deleteOption={() => confirmOptionDeletion(option.get('id'))}
+            id={option.get('id')}
+            fieldId={fieldId}
+            isFirst={idx === 0}
+            // $FlowFixMe options is typed as Array, not immutable List
+            isLast={idx === options.size - 1}
+            moveDown={moveOptionDown}
+            moveUp={moveOptionUp}
+            label={getEntryValueForLocale(option.get('labelEntries'), editLocale, '')}
+            updateLabel={value => updateLabel(fieldId, option.get('id'), editLocale, value)}
+          />
+        ))}
+      </div>
       <OverlayTrigger placement="top" overlay={addSelectFieldOptionTooltip}>
-        <div onClick={() => addOption(fieldId)} className="plus margin-l">
+        <div onClick={() => addOption(fieldId)} className="plus margin-s">
           +
         </div>
       </OverlayTrigger>

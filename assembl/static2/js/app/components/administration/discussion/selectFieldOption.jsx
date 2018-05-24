@@ -17,7 +17,7 @@ type Props = {
 };
 
 const SelectFieldOption = ({ deleteOption, fieldId, id, isFirst, isLast, moveDown, moveUp, label, updateLabel }: Props) => (
-  <FormGroup bsClass="flex profile-options-field margin-s">
+  <FormGroup bsClass="flex margin-s">
     <FormControl type="text" onChange={e => updateLabel(e.target.value)} value={label} />
     <div className="flex">
       {!isLast ? (
