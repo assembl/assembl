@@ -37,7 +37,7 @@ const ConfiguredField = ({ configurableField, handleValueChange, value }: Props)
         id={configurableField.id}
         label={configurableField.title}
         onChange={e => handleValueChange(e.target.value ? [e.target.value] : null)}
-        value={value}
+        value={value ? value[0] : value}
         required={configurableField.required}
         labelAlwaysVisible
       >
