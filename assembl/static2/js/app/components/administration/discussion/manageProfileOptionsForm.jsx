@@ -99,7 +99,13 @@ const mapStateToProps = ({ admin: { editLocale, profileOptions: { textFieldsById
 });
 
 const mapDispatchToProps = dispatch => ({
-  addSelectField: () => dispatch(actions.addTextField(createRandomId(), 'select')),
+  addSelectField: () => {
+    const fieldId = createRandomId();
+    dispatch(actions.addTextField(fieldId, 'select'));
+    dispatch(actions.addSelectFieldOption(fieldId, createRandomId()));
+    dispatch(actions.addSelectFieldOption(fieldId, createRandomId()));
+    dispatch(actions.addSelectFieldOption(fieldId, createRandomId()));
+  },
   addTextField: () => dispatch(actions.addTextField(createRandomId(), 'text')),
   deleteTextField: (id) => {
     closeModal();
