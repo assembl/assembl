@@ -648,8 +648,11 @@ const Translations = {
         successSave: "Les modules ont été enregistrés avec succès !"
       },
       profileOptions: {
-        addTextField: "Ajouter un champ texte",
-        addSelectField: "Ajouter un champ de type menu déroulant",
+        addTextField: "Ajouter un champ",
+        addSelectField: "Add a dropdown field",
+        createNewFieldModalBody: "Choisissez le type de champ que vous souhaitez afficher dans le formulaire d'inscription :",
+        choiceTextField: "Champ texte",
+        choiceSelectField: "Menu déroulant",
         addSelectFieldOption: "Ajouter un nouvel item",
         deleteTextField: "Supprimer le champ",
         deleteSelectFieldOption: "Supprimer l'item",
@@ -1308,8 +1311,10 @@ const Translations = {
         successSave: "The modules have been saved with success!"
       },
       profileOptions: {
-        addTextField: "Add a text field",
-        addSelectField: "Add a dropdown field",
+        addTextField: "Add a field",
+        createNewFieldModalBody: "Select the field type you want to add to the register page:",
+        choiceTextField: "Text field",
+        choiceSelectField: "Dropdown field",
         addSelectFieldOption: "Add a new item",
         deleteTextField: "Delete the field",
         deleteSelectFieldOption: "Delete this item",

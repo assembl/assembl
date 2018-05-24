@@ -7,7 +7,7 @@ import SectionTitle from '../sectionTitle';
 import TextField from './textField';
 import { createRandomId } from '../../../utils/globalFunctions';
 import { getEntryValueForLocale } from '../../../utils/i18n';
-import { addTextFieldTooltip, addSelectFieldTooltip } from '../../common/tooltips';
+import { addTextFieldTooltip } from '../../common/tooltips';
 import * as actions from '../../../actions/adminActions/profileOptions';
 import { displayModal, closeModal } from '../../../utils/utilityManager';
 
@@ -42,6 +42,42 @@ const ManageProfileOptionsForm = ({
     const includeFooter = true;
     return displayModal(modalTitle, body, includeFooter, footer);
   };
+
+  const showAddFieldModal = () => {
+    // const modalTitle = <Translate value="administration.profileOptions.addTextField" />;
+    const modalTitle = '';
+    // const body = <Translate value="administration.confirmTextFieldDeletion" />;
+    const body = (
+      <div>
+        <Translate value="administration.profileOptions.createNewFieldModalBody" />
+      </div>
+    );
+    const footer = [
+      <Button
+        key="textField"
+        className="button-cancel button-generic"
+        onClick={() => {
+          closeModal();
+          addTextField();
+        }}
+      >
+        <Translate value="administration.profileOptions.choiceTextField" />
+      </Button>,
+      <Button
+        key="selectField"
+        className="button-cancel button-generic"
+        onClick={() => {
+          closeModal();
+          addSelectField();
+        }}
+      >
+        <Translate value="administration.profileOptions.choiceSelectField" />
+      </Button>
+    ];
+    const includeFooter = true;
+    return displayModal(modalTitle, body, includeFooter, footer);
+  };
+
   return (
     <div className="admin-box">
       <SectionTitle title={I18n.t('administration.discussion.3')} annotation={I18n.t('administration.annotation')} />
@@ -73,12 +109,7 @@ const ManageProfileOptionsForm = ({
                 />
               ))}
               <OverlayTrigger placement="top" overlay={addTextFieldTooltip}>
-                <div onClick={addTextField} className="plus margin-l">
-                  +
-                </div>
-              </OverlayTrigger>
-              <OverlayTrigger placement="top" overlay={addSelectFieldTooltip}>
-                <div onClick={addSelectField} className="plus margin-l">
+                <div onClick={showAddFieldModal} className="plus margin-l">
                   +
                 </div>
               </OverlayTrigger>

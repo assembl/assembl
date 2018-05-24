@@ -216,12 +216,6 @@ export const addTextFieldTooltip = (
   </Tooltip>
 );
 
-export const addSelectFieldTooltip = (
-  <Tooltip id="addSelectFieldTooltip">
-    <Translate value="administration.profileOptions.addSelectField" />
-  </Tooltip>
-);
-
 export const addSelectFieldOptionTooltip = (
   <Tooltip id="addSelectFieldTooltip">
     <Translate value="administration.profileOptions.addSelectFieldOption" />
