@@ -116,12 +116,15 @@ type Extract = {
   body: string
 };
 
+
+type FieldIdentifier = 'EMAIL' | 'FULLNAME' | 'PASSWORD' | 'PASSWORD2' | 'USERNAME' | 'CUSTOM';
+
 type SelectFieldOption = { label: string, id: string };
 
 type ConfigurableField = {
   fieldType: string,
   id: string,
-  identifier: string,
+  identifier: FieldIdentifier,
   order: number,
   required: boolean,
   title: string,

@@ -16,7 +16,7 @@ type Props = {
   deleteField: Function,
   fieldType: string,
   id: string,
-  identifier: string,
+  identifier: FieldIdentifier,
   isFirst: boolean,
   isLast: boolean,
   moveDown: Function,
