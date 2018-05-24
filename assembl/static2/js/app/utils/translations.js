@@ -649,7 +649,6 @@ const Translations = {
       },
       profileOptions: {
         addTextField: "Ajouter un champ",
-        addSelectField: "Add a dropdown field",
         createNewFieldModalBody: "Choisissez le type de champ que vous souhaitez afficher dans le formulaire d'inscription :",
         choiceTextField: "Champ texte",
         choiceSelectField: "Menu déroulant",
