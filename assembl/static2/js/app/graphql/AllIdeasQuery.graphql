@@ -12,6 +12,7 @@ query AllIdeasQuery($lang: String!, $identifier: String!) {
       }
       order
       parentId
+      ancestors
     }
   }
   rootIdea {

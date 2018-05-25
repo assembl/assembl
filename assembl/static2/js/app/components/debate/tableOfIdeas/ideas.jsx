@@ -79,11 +79,7 @@ class Ideas extends React.Component {
             {isMobile && this.state.ideaLevel === 0 && <PageTitle />}
             {isMobile &&
               this.state.ideaLevel > 0 && (
-<<<<<<< HEAD
                 <div className="ideas-back-arrow" onClick={this.goBackToParents}>
-=======
-                <div className="ideas-back-arrow">
->>>>>>> Finish to style
                   <span className="assembl-icon-down-small color" />
                 </div>
               )}
