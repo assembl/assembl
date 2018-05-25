@@ -1062,7 +1062,7 @@ def finish_password_change(request):
         title=title, token=token, error=error)
 
 
-def send_confirmation_email(request, email):
+def send_confirmation_email(request, email, immediate=False):
     mailer = get_mailer(request)
     localizer = request.localizer
     confirm_what = localizer.translate(_('email'))
@@ -1109,7 +1109,10 @@ on your {assembl} account.</p>
         recipients=["%s <%s>" % (email.profile.name, email.email)],
         body=text_message.format(**data),
         html=html_message.format(**data))
-    mailer.send(message)
+    if immediate:
+        mailer.send_immediately(message)
+    else:
+        mailer.send(message)
 
 
 def send_change_password_email(
