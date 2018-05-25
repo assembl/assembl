@@ -617,8 +617,11 @@ def build_virtualenv():
 @task
 def build_virtualenv_python3():
     """
-    Build the virtualenv wth Python 3
+    Build the virtualenv with Python 3
     """
+    # Don't install this on travis
+    if getenv('TRAVIS_COMMIT', None):
+        return
     print(cyan('Creating a fresh virtualenv with Python 3'))
     assert env.venvpath
     # This relies on env.venvpath

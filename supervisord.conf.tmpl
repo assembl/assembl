@@ -140,7 +140,7 @@ autorestart = true
 [program:urlmetadata]
 directory = %(here)s/../url_metadata
 command = %(VIRTUAL_ENV)spy3/bin/python main.py
-autostart = true
+autostart = %(autostart_urlmetadata)s
 autorestart = true
 
 [program:maintenance_uwsgi]
