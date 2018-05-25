@@ -1,0 +1,173 @@
+/* eslint-disable no-param-reassign, guard-for-in, no-restricted-syntax */
+// @flow
+import React from 'react';
+import type { Node } from 'react';
+import YoutubeEmbed from '../components/common/urlPreview/youtubeTheater';
+
+const urlMetadataWebServiceUrl = 'http://0.0.0.0:5000';
+
+type MetadataResponsProps = {
+  code: string,
+  metadata: Object
+};
+
+type URLMetadataProps = {
+  providerName: string,
+  html: string,
+  id: string
+};
+
+export type Script = {
+  src: string,
+  type: 'url' | 'js'
+};
+
+export const EMBED_PROVIDERS = {
+  youtube: {
+    scheme: /(?:youtube\.com\/(?:[^/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?/ ]{11})/i,
+    match: (url: string) => url.match(EMBED_PROVIDERS.youtube.scheme),
+    getMetadata: (url: string): URLMetadataProps | null => {
+      const result = EMBED_PROVIDERS.youtube.match(url);
+      if (result) {
+        const id = result[1];
+        const embedUrl = `https://www.youtube.com/embed/${id}`;
+        return {
+          providerName: 'Youtube',
+          html: `<div><iframe title="" src="${embedUrl}" frameborder="0" class="embedded-video" allowfullscreen></iframe></div>`,
+          id: id
+        };
+      }
+      return null;
+    },
+    getComponent: (url: string): Node | null => {
+      const result = EMBED_PROVIDERS.youtube.match(url);
+      return result ? <YoutubeEmbed videoId={result[1]} /> : null;
+    }
+  }
+  // add SketchFab
+};
+
+/**
+ * @param {dict: Object | null} The dict to format
+ * @returns {Object} Returns a copy of the dict with formatted keys (ex: {first_name: value} -> {firstName: value}).
+ */
+function formatDict(dict: Object | null): Object {
+  const result = {};
+  if (!dict) return result;
+  const reducer = (accumulator, key) => {
+    // key to camelcase
+    const newKey = key.replace(/_([a-z])/g, g => g[1].toUpperCase());
+    accumulator[newKey] = dict && dict[key];
+    return accumulator;
+  };
+  Object.keys(dict).reduce(reducer, result);
+  return result;
+}
+
+/**
+ * Recuperate the metadata of an URL
+ * @param {url: string} The source URL
+ * @param {onLoad: Function} The function to call when the metadata are loaded successfully
+ * @param {onError: ?Function} The function to call when we have an error
+ */
+export const fetchURLMetadata = (url: string, onLoad: Function, onError: ?Function): void => {
+  const reqUrl = `${urlMetadataWebServiceUrl}/?url=${url}`;
+  fetch(reqUrl)
+    .then((response) => {
+      if (response.ok) {
+        return response.json();
+      }
+      return null;
+    })
+    .then((response: MetadataResponsProps | null) => {
+      const ok = response && response.code === 'SUCCESS';
+      if (ok) {
+        onLoad(formatDict(response && response.metadata));
+      } else if (onError) onError();
+    });
+};
+
+/**
+ * Resize the iframe height when her content is changed
+ * @param {id: string} The iframe id
+ * @param {callback: ?Function} Called when the iframe is resized
+ */
+export function resizeIframe(id: string, callback: ?Function): void {
+  const ifrm = document.getElementById(id);
+  if (ifrm && ifrm instanceof HTMLIFrameElement) {
+    const doc = ifrm.contentDocument ? ifrm.contentDocument : ifrm.contentWindow && ifrm.contentWindow.document;
+    if (doc && doc.body) {
+      const body = doc.body;
+      const height = Math.max(body.scrollHeight, body.offsetHeight);
+      ifrm.style.height = `${height + 50}px`;
+      // callback after resize
+      if (callback) callback();
+      // call resizeIframe again if the subtree of the iframe document is changed
+      const resizeIframeCall = () => {
+        resizeIframe(id, callback);
+        body.removeEventListener('DOMSubtreeModified', resizeIframeCall);
+      };
+      body.addEventListener('DOMSubtreeModified', resizeIframeCall);
+    }
+  }
+}
+
+/**
+ * Return the scripts URLs present in an HTML
+ * @param {html: string} The HTML code
+ * @returns {Array<string>} List of the scripts URLs
+ */
+export function getScripts(html: string): Array<Script> {
+  const d = document.createElement('div');
+  d.innerHTML = html;
+  return Array.from(d.getElementsByTagName('script')).map((script: HTMLScriptElement) => {
+    const src = script.getAttribute('src');
+    return src ? { src: src, type: 'url' } : { src: script.innerHTML, type: 'js' };
+  });
+}
+
+/**
+ * Return a HTML document structure
+ * @param {header: string} The HTML header to include to the document
+ * @returns {string} The HTML document
+ */
+export function getIframeDocument(header: string): string {
+  return `<!DOCTYPE html><html>
+          <head>${header} <style type='text/css'>iframe { width: 100% !important} </style></head>
+          <body><div id='htmlmount'></div></body></html>`;
+}
+
+/**
+ * URLs found in EMBED_PROVIDERS are considered special
+ * @param {url: string} The source URL
+ * @returns {boolean} True if the URL is matched in the providers False otherwise
+ */
+export function isSpecialURL(url: string): boolean {
+  return Object.keys(EMBED_PROVIDERS).some(key => EMBED_PROVIDERS[key].match(url));
+}
+
+/**
+ * @param {url: string} The source URL
+ * @returns {URLMetadataProps|null} The URL metadata or null
+ */
+export function getURLMetadata(url: string): URLMetadataProps | null {
+  for (const key in EMBED_PROVIDERS) {
+    const provider = EMBED_PROVIDERS[key];
+    const metadata = provider.getMetadata(url);
+    if (metadata) return metadata;
+  }
+  return null;
+}
+
+/**
+ * @param {url: string} The source URL
+ * @returns {Node|null} The component to be displayed or null
+ */
+export function getURLComponent(url: string): Node | null {
+  for (const key in EMBED_PROVIDERS) {
+    const provider = EMBED_PROVIDERS[key];
+    const component = provider.getComponent(url);
+    if (component) return component;
+  }
+  return null;
+}

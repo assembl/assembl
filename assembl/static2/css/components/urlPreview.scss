@@ -1,7 +1,17 @@
+.urls-container {
+  margin-top: 15px;
+  margin-bottom: 15px;
+
+  .url-container:last-child {
+    margin-bottom: 0;
+  }
+}
+
 .url-container {
   border-left: solid 3px #e8e8e8;
   padding-left: 10px;
   margin-bottom: 15px;
+  margin-top: 15px;
 
   .url-header,
   .url-footer {
@@ -25,7 +35,7 @@
   .url-footer-title {
     display: flex;
     font-size: 15px;
-    color: #717274;
+    color: #505050;
     justify-content: space-around;
     padding-left: 5px;
   }
@@ -36,11 +46,15 @@
     font-weight: bold;
     padding-left: 5px;
     text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
   }
 
   .url-contribution-avatar {
-    width: 15px;
-    height: 15px;
+    width: 20px;
+    height: 20px;
     border-radius: 3px;
   }
 
@@ -49,11 +63,15 @@
     font-weight: bold;
     text-decoration: none;
     display: block;
+
+    &:hover {
+      text-decoration: underline;
+    }
   }
 
   .url-content-container {
     .url-description {
-      color: gray;
+      color: #505050;
       padding-left: 5px;
       font-size: 12px;
     }
@@ -63,7 +81,7 @@
       margin-bottom: 10px;
 
       .url-img-preview {
-        min-height: 150px;
+        min-height: 250px;
         border-radius: 3px;
         border-width: 0.5px;
         border-color: #d6d7da;
@@ -79,7 +97,7 @@
   }
 
   .url-author-name {
-    color: gray;
+    color: #505050;
     font-size: 11px;
     padding-left: 5px;
   }

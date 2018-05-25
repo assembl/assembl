@@ -1,6 +1,14 @@
+// @flow
 import React from 'react';
 import ReactFrame from 'react-frame-component';
-import { resizeIframe, getScripts } from '../../utils/urlPreview';
+
+import { resizeIframe, getScripts, getIframeDocument, type Script } from '../../../utils/urlPreview';
+
+type FrameProps = {
+  id: string,
+  html: string,
+  afterLoad: ?Function
+};
 
 const styles = {
   border: 'none',
@@ -11,30 +19,31 @@ const styles = {
   padding: 0
 };
 
-class Frame extends React.Component {
-  constructor(props) {
+class Frame extends React.Component<*, FrameProps, void> {
+  constructor(props: FrameProps) {
     super(props);
-    const { id } = props;
-    this.id = `iframe-${id}`;
+    this.id = `iframe-${props.id}`;
   }
 
   id = 'iframe';
 
   frameContentDidMount = () => {
+    const { afterLoad } = this.props;
     // when the iframe content is loaded, we need to resize the iframe container
-    resizeIframe(this.id);
+    resizeIframe(this.id, afterLoad);
   };
 
   getDocument = () => {
     const { html } = this.props;
     // getDocument: get the iframe document with the scripts specified in the html
     // to execute the scripts we must add them to the header
-    // getScripts: extract the scripts from th html
-    const scripts = getScripts(html).map(script => `<script src='${script}' async='' charset='utf-8'></script>`);
+    // getScripts: extract the scripts from the html
+    const scripts = getScripts(html).map((script: Script) => {
+      if (script.type === 'url') return `<script src='${script.src}' async='' charset='utf-8'></script>`;
+      return `<script>${script.src}</script>`;
+    });
     // add the scripts to the header
-    return `<!DOCTYPE html><html><head>${scripts.join(
-      ''
-    )} <style type='text/css'>iframe { width: 100% !important} </style></head><body><div id='htmlmount'></div></body></html>`;
+    return getIframeDocument(scripts.join(''));
   };
 
   render() {
