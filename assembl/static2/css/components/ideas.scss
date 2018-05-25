@@ -76,6 +76,25 @@
   .mobile-slider-container {
     margin-bottom: 15px !important;
     overflow-x: scroll;
+
+    .color-box {
+      height: 100%;
+    }
+  }
+
+  .thumbnails-mobile-slider {
+    padding: 15px 0;
+    background-color: $grey5;
+  }
+
+  .thumbnails-slider {
+    .theme {
+      margin-right: 15px !important;
+
+      &:last-child {
+        margin-right: 0 !important;
+      }
+    }
   }
 
   .ideas-back-arrow {
@@ -83,7 +102,7 @@
     position: absolute;
     left: 0;
     right: 0;
-    background-color: $grey1;
+    background-color: $grey10;
     height: 40px;
     padding-top: 3px;
 
@@ -153,7 +172,8 @@
   margin: 0 !important;
 
   .title-section {
-    margin-top: 55px;
+    margin-top: 40px;
+    margin-left: 15px;
 
     .dark-title-1 {
       font-size: 26px;
