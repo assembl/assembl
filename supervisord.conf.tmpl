@@ -137,6 +137,12 @@ autostart = %(autostart_uwsgi)s
 autorestart = true
 #user=www-data
 
+[program:urlmetadata]
+directory = %(here)s/../url_metadata
+command = %(VIRTUAL_ENV)spy3/bin/python main.py
+autostart = true
+autorestart = true
+
 [program:maintenance_uwsgi]
 directory = %(here)s
 command=uwsgi --die-on-term --ini maintenance.ini

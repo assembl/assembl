@@ -545,6 +545,19 @@ def venvcmd(cmd, chdir=True, user=None, pty=False, **kwargs):
     return run(as_venvcmd(cmd, chdir), pty=pty, **kwargs)
 
 
+def as_venvcmd_py3(cmd, chdir=False):
+    cmd = '. %s/bin/activate && %s' % (env.venvpath + 'py3', cmd)
+    if chdir:
+        cmd = 'cd %s && %s' % (env.projectpath, cmd)
+    return cmd
+
+
+def venvcmd_py3(cmd, chdir=True, user=None, pty=False, **kwargs):
+    if not user:
+        user = env.user
+    return run(as_venvcmd_py3(cmd, chdir), pty=pty, **kwargs)
+
+
 def venv_prefix():
     return '. %(venvpath)s/bin/activate' % env
 
@@ -599,6 +612,27 @@ def build_virtualenv():
                     venv_config.set(sec, option, val)
                 with open(vefile, 'w') as f:
                     venv_config.write(f)
+
+
+@task
+def build_virtualenv_python3():
+    """
+    Build the virtualenv wth Python 3
+    """
+    print(cyan('Creating a fresh virtualenv with Python 3'))
+    assert env.venvpath
+    # This relies on env.venvpath
+    venv3 = env.venvpath + 'py3'
+    if exists(join(venv3, "bin/activate")):
+        print(cyan('The virtualenv seems to already exist, so we don\'t try to create it again'))
+        print(cyan('(otherwise the virtualenv command would produce an error)'))
+        return
+    run('python3 -mvirtualenv --python python3 %s' % venv3)
+    if not exists("%(projectpath)s/../url_metadata" % env):
+        print cyan("Cloning git repository")
+        with cd("%(projectpath)s/.." % env):
+            run('git clone git@github.com:assembl/url_metadata.git')
+    venvcmd_py3('pip install -r ../url_metadata/requirements.txt')
 
 
 def separate_pip_install(package, wrapper=None):
@@ -739,6 +773,7 @@ def bootstrap_from_checkout(backup=False):
     """
     execute(updatemaincode, backup=backup)
     execute(build_virtualenv)
+    execute(build_virtualenv_python3)
     execute(app_update_dependencies, backup=backup)
     execute(app_setup)
     execute(check_and_create_database_user)
