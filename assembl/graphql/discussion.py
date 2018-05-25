@@ -23,11 +23,64 @@ class Discussion(SecureObjectType, SQLAlchemyObjectType):
         only_fields = ('id',)
 
     homepage_url = graphene.String()
+    title = graphene.String(lang=graphene.String())
+    title_entries = graphene.List(LangStringEntry)
 
     def resolve_homepage_url(self, args, context, info):
         # TODO: Remove this resolver and add URLString to
         # the Graphene SQLA converters list
         return self.homepage_url
+
+    def resolve_title(self, args, context, info):
+        """Title value in given locale."""
+        discussion_id = context.matchdict['discussion_id']
+        discussion = models.Discussion.get(discussion_id)
+        return resolve_langstring(discussion.title, args.get('lang'))
+
+    def resolve_title_entries(self, args, context, info):
+        discussion_id = context.matchdict['discussion_id']
+        discussion = models.Discussion.get(discussion_id)
+        if discussion.title:
+            return resolve_langstring_entries(discussion, 'title')
+
+        return []
+
+
+class UpdateDiscussion(graphene.Mutation):
+    class Input:
+        title_entries = graphene.List(LangStringEntryInput)
+
+    discussion = graphene.Field(lambda: Discussion)
+
+    @staticmethod
+    @abort_transaction_on_exception
+    def mutate(root, args, context, info):
+        cls = models.Discussion
+        discussion_id = context.matchdict['discussion_id']
+        discussion = cls.get(discussion_id)
+        user_id = context.authenticated_userid or Everyone
+
+        permissions = get_permissions(user_id, discussion_id)
+        allowed = discussion.user_can(
+            user_id, CrudPermissions.UPDATE, permissions)
+        if not allowed:
+            raise HTTPUnauthorized()
+
+        with cls.default_db.no_autoflush as db:
+            title_entries = args.get('title_entries')
+            if title_entries is not None and len(title_entries) == 0:
+                raise Exception(
+                    'Title entries needs at least one entry')
+                # Better to have this message than
+                # 'NoneType' object has no attribute 'owner_object'
+                # when creating the saobj below if title=None
+
+            update_langstring_from_input_entries(
+                discussion, 'title', title_entries)
+
+        db.flush()
+        discussion = cls.get(discussion_id)
+        return UpdateDiscussion(discussion=discussion)
 
 
 class LocalePreference(graphene.ObjectType):

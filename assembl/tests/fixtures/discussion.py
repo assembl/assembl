@@ -24,6 +24,13 @@ def discussion(request, test_session, default_preferences):
         tac.add_value(
             u"Vous ne pouvez pas mesurer le driver sans mesurer le protocole JSON en 1080p", u"fr")
         d.terms_and_conditions = tac
+
+        title = LangString.create(
+            u"Faut-il manger des bananes ?", u"fr")
+        title.add_value(
+            u"Should we eat bananas?", u"en")
+        d.title = title
+
         test_session.add(d)
         # create_default_discussion_data(d)
         # Don't create default discussion data (permissions, sections) here

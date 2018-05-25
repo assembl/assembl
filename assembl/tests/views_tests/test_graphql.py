@@ -2594,3 +2594,66 @@ query { discussion { homepageUrl }  }
 """
     res = schema.execute(query, context_value=graphql_request)
     assert res.data['discussion']['homepageUrl'] == url
+
+
+def test_query_discussion_title(discussion, graphql_request):
+    res = schema.execute(u"""query {
+        discussion {
+            id
+            title
+            titleEntries {
+                value
+                localeCode
+            }
+        }
+    }""", context_value=graphql_request)
+    assert res.errors is None
+    res_data = json.loads(json.dumps(res.data))
+
+    assert res_data == {
+        u'discussion': {
+            u'id': u'1',
+            u'titleEntries': [
+                {
+                    u'value': u'Should we eat bananas?',
+                    u'localeCode': u'en'
+                },
+                {
+                    u'value': u'Faut-il manger des bananes ?',
+                    u'localeCode': u'fr'
+                }
+            ],
+            u'title': u'Should we eat bananas?'
+        }
+    }
+
+def test_mutation_update_discussion(graphql_request, discussion):
+    title_entries = [
+        {u"value": u"Should we eat tomatoes?", u"localeCode": u"en"},
+        {u"value": u"Faut-il manger des tomates ?", u"localeCode": u"fr"}
+    ]
+    variables = {
+        "titleEntries": title_entries
+    }
+    res = schema.execute(u"""
+mutation myFirstMutation($titleEntries: [LangStringEntryInput!]!) {
+    updateDiscussion(
+        titleEntries: $titleEntries
+    ) {
+        discussion {
+            id
+            title
+            titleEntries {
+                value
+                localeCode
+            }
+        }
+    }
+}
+""", context_value=graphql_request, variable_values=variables)
+    result = res.data
+    assert result is not None
+    assert result['updateDiscussion'] is not None
+    discussion = result['updateDiscussion']['discussion']
+    assert discussion['title'] == u"Should we eat tomatoes?"
+    assert discussion['titleEntries'] == title_entries

@@ -45,7 +45,12 @@ class Discussion(DiscussionBoundBase, NamedClassMixin):
 
     id = Column(Integer, primary_key=True)
 
-    topic = Column(UnicodeText, nullable=False)
+    topic = Column(UnicodeText, nullable=False)  # deprecated field that was used as debate title
+
+    title_id = Column(Integer(), ForeignKey(LangString.id))
+    title = relationship(
+        LangString, lazy="select", single_parent=True, primaryjoin=title_id == LangString.id,
+        backref=backref("discussion_from_title", lazy="dynamic"), cascade="all, delete-orphan")
 
     slug = Column(CoerceUnicode, nullable=False, unique=True, index=True)
 
@@ -1066,4 +1071,4 @@ def slugify_topic_if_slug_is_empty(discussion, topic, oldvalue, initiator):
 
 event.listen(Discussion.topic, 'set', slugify_topic_if_slug_is_empty)
 LangString.setup_ownership_load_event(Discussion, [
-    'resources_center_title', 'terms_and_conditions', 'legal_notice', 'cookies_policy', 'privacy_policy'])
+    'resources_center_title', 'terms_and_conditions', 'legal_notice', 'cookies_policy', 'privacy_policy', 'title'])
