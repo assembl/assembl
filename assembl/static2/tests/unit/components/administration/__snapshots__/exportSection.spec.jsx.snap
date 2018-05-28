@@ -2,7 +2,7 @@
 
 exports[`ExportSection component should render an ExportSection component with languages options 1`] = `
 <div
-  className="admin-box survey-admin-export-section"
+  className="admin-box admin-export-section"
 >
   <SectionTitle
     annotation="Default Annotation"
@@ -56,7 +56,7 @@ exports[`ExportSection component should render an ExportSection component with l
 
 exports[`ExportSection component should render an ExportSection component without languages options 1`] = `
 <div
-  className="admin-box survey-admin-export-section"
+  className="admin-box admin-export-section"
 >
   <SectionTitle
     annotation="Default Annotation"
