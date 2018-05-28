@@ -10,6 +10,7 @@ import { getDiscussionSlug } from '../../utils/globalFunctions';
 import { get, getContextual } from '../../utils/routeMap';
 import inputHandler from '../../utils/inputHandler';
 import { displayAlert, displayCustomModal } from '../../utils/utilityManager';
+import FormControlWithLabel from '../common/formControlWithLabel';
 import TermsForm from '../common/termsForm';
 import withoutLoadingIndicator from '../../components/common/withoutLoadingIndicator';
 import TabsConditionQuery from '../../graphql/TabsConditionQuery.graphql';
@@ -80,6 +81,12 @@ class SignupForm extends React.Component<void, SignupFormProps, SignupFormState>
     inputHandler(this, e);
   }
 
+  handleSelectChange = (e) => {
+    const name = e.target.name;
+    const value = e.target.value ? [e.target.value] : null;
+    this.setState(() => ({ [name]: value }));
+  };
+
   signupHandler(e) {
     e.preventDefault();
     const slug = getDiscussionSlug();
@@ -107,16 +114,44 @@ class SignupForm extends React.Component<void, SignupFormProps, SignupFormState>
         <div className="box">
           <form className="signup" onSubmit={this.signupHandler}>
             {textFields &&
-              textFields.map(tf => (
-                <FormGroup key={tf.id}>
-                  <FormControl
-                    type={tf.fieldType.toLowerCase()}
-                    name={tf.identifier === 'CUSTOM' ? tf.id : tf.identifier.toLowerCase()}
-                    placeholder={tf.title}
-                    onChange={this.handleInput}
-                  />
-                </FormGroup>
-              ))}
+              textFields.map((field) => {
+                if (field.__typename === 'TextField') {
+                  return (
+                    <FormGroup key={field.id}>
+                      <FormControl
+                        type={field.fieldType.toLowerCase()}
+                        name={field.identifier === 'CUSTOM' ? field.id : field.identifier.toLowerCase()}
+                        placeholder={field.required ? `${field.title}*` : field.title}
+                        onChange={this.handleInput}
+                        required={field.required}
+                      />
+                    </FormGroup>
+                  );
+                }
+
+                if (field.__typename === 'SelectField' && field.options) {
+                  return (
+                    <FormControlWithLabel
+                      componentClass="select"
+                      id={field.id}
+                      key={field.id}
+                      label={field.title}
+                      onChange={this.handleSelectChange}
+                      value={this.state[field.id]}
+                      required={field.required}
+                      labelAlwaysVisible
+                    >
+                      {!field.required ? <option key="0" value="" /> : null}
+                      {field.options.map(option => (
+                        <option key={option.id} value={option.id}>
+                          {option.label}
+                        </option>
+                      ))}
+                    </FormControlWithLabel>
+                  );
+                }
+                return null;
+              })}
             {hasTermsAndConditions && (
               <FormGroup className="left margin-left-2">
                 <Checkbox checked={this.state.checked} type="checkbox" onChange={this.toggleCheck} required inline>
@@ -135,18 +170,25 @@ class SignupForm extends React.Component<void, SignupFormProps, SignupFormState>
                 </Checkbox>
               </FormGroup>
             )}
-            <FormGroup>
-              <Button type="submit" name="register" value={I18n.t('login.signUp')} className="button-submit button-dark margin-m">
-                <Translate value="login.signUp" />
-              </Button>
-            </FormGroup>
-            <FormGroup>
-              <Translate value="login.alreadyAccount" />
-              <span>&nbsp;</span>
-              <Link to={slug ? getContextual('login', { slug: slug }) : get('login')}>
-                <Translate value="login.login" />
-              </Link>
-            </FormGroup>
+            <div className="center">
+              <FormGroup>
+                <Button
+                  type="submit"
+                  name="register"
+                  value={I18n.t('login.signUp')}
+                  className="button-submit button-dark margin-m"
+                >
+                  <Translate value="login.signUp" />
+                </Button>
+              </FormGroup>
+              <FormGroup>
+                <Translate value="login.alreadyAccount" />
+                <span>&nbsp;</span>
+                <Link to={slug ? getContextual('login', { slug: slug }) : get('login')}>
+                  <Translate value="login.login" />
+                </Link>
+              </FormGroup>
+            </div>
           </form>
         </div>
       </div>

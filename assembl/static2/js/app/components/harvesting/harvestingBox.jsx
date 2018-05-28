@@ -31,7 +31,8 @@ type Props = {
   updateExtract: Function,
   deleteExtract: Function,
   refetchPost: Function,
-  harvestingDate?: string
+  harvestingDate?: string,
+  isAuthorAccountDeleted?: boolean
 };
 
 type State = {
@@ -60,7 +61,8 @@ class DumbHarvestingBox extends React.Component<Object, Props, State> {
   menu: any;
 
   static defaultProps = {
-    harvestingDate: null
+    harvestingDate: null,
+    isAuthorAccountDeleted: false
   };
 
   constructor(props: Props) {
@@ -80,6 +82,15 @@ class DumbHarvestingBox extends React.Component<Object, Props, State> {
       overflowMenu: null,
       overflowMenuTop: 25
     };
+  }
+
+
+  componentDidMount() {
+    window.addEventListener('scroll', this.updateOverflowMenuPosition);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('scroll', this.updateOverflowMenuPosition);
   }
 
   setEditMode = (): void => {
@@ -235,19 +246,15 @@ class DumbHarvestingBox extends React.Component<Object, Props, State> {
 
   showValidatedHarvesting = (nature: ?string, action: ?string) => {
     if (nature && action) {
-      return <div className="harvesting-taxonomy-label">{`${I18n.t(`search.taxonomy_nature.${nature}`)} + ${I18n.t(`search.taxonomy_action.${action}`)}`}</div>;
+      return (<div className="harvesting-taxonomy-label">
+        {`${I18n.t(`search.taxonomy_nature.${nature}`)} + ${I18n.t(`search.taxonomy_action.${action}`)}`}
+      </div>);
     } else if (nature) {
-      return <div className="harvesting-taxonomy-label">{I18n.t(`search.taxonomy_nature.${nature}`)}</div>;
+      return (<div className="harvesting-taxonomy-label">
+        {I18n.t(`search.taxonomy_nature.${nature}`)}
+      </div>);
     }
     return action ? <div className="harvesting-taxonomy-label">{I18n.t(`search.taxonomy_action.${action}`)}</div> : null;
-  }
-
-  componentDidMount() {
-    window.addEventListener('scroll', this.updateOverflowMenuPosition);
-  }
-
-  componentWillUnmount() {
-    window.removeEventListener('scroll', this.updateOverflowMenuPosition);
   }
 
   updateOverflowMenu = (node: HTMLElement) => {
@@ -273,7 +280,7 @@ class DumbHarvestingBox extends React.Component<Object, Props, State> {
 
 
   render() {
-    const { selection, cancelHarvesting, extract, contentLocale, harvestingDate } = this.props;
+    const { selection, cancelHarvesting, extract, contentLocale, harvestingDate, isAuthorAccountDeleted } = this.props;
     const {
       disabled,
       extractIsValidated,
@@ -289,6 +296,7 @@ class DumbHarvestingBox extends React.Component<Object, Props, State> {
     const selectionText = selection ? selection.toString() : '';
     const harvesterUserName =
       extract && extract.creator && extract.creator.displayName ? extract.creator.displayName : getConnectedUserName();
+    const userName = isAuthorAccountDeleted ? I18n.t('deletedUser') : harvesterUserName;
     const harvesterUserId = extract && extract.creator && extract.creator.userId ? extract.creator.userId : getConnectedUserId();
     return (
       <div>
@@ -365,9 +373,9 @@ class DumbHarvestingBox extends React.Component<Object, Props, State> {
                 />}
             </div>
             <div className="profile">
-              <AvatarImage userId={harvesterUserId} userName={harvesterUserName} />
+              <AvatarImage userId={harvesterUserId} userName={userName} />
               <div className="harvesting-infos">
-                <div className="username">{harvesterUserName}</div>
+                <div className="username">{userName}</div>
                 {isExtract &&
                   extract &&
                   extract.creationDate && (

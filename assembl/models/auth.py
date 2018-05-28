@@ -676,6 +676,7 @@ class User(AgentProfile):
     creation_date = Column(
         DateTime, nullable=False, default=datetime.utcnow)
     social_accounts = relationship('SocialAuthAccount')
+    is_deleted = Column(Boolean(), default=False)
 
     def __init__(self, **kwargs):
         if kwargs.get('password', None) is not None:

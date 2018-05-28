@@ -1,14 +1,37 @@
-mutation createTextField($lang: String, $titleEntries: [LangStringEntryInput]!, $order: Float!, $required: Boolean!) {
-  createTextField(lang: $lang, titleEntries: $titleEntries, order: $order, required: $required) {
-    textField {
-      id
-      titleEntries {
-        localeCode
-        value
+#import "../fragments/LangString.graphql"
+
+mutation createTextField(
+  $lang: String
+  $titleEntries: [LangStringEntryInput]!
+  $order: Float!
+  $required: Boolean!
+  $options: [SelectFieldOptionInput]
+) {
+  createTextField(lang: $lang, titleEntries: $titleEntries, order: $order, required: $required, options: $options) {
+    field {
+      ... on ConfigurableFieldInterface {
+        titleEntries {
+          localeCode
+          value
+        }
+        title(lang: $lang)
+        order
+        required
       }
-      title(lang: $lang)
-      order
-      required
+      ... on SelectField {
+        id
+        options {
+          id
+          order
+          label(lang: $lang)
+          labelEntries {
+            ...langStringEntry
+          }
+        }
+      }
+      ... on TextField {
+        id
+      }
     }
   }
 }

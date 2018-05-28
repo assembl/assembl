@@ -30,7 +30,7 @@ def upgrade(pyramid_env):
             'id': id,
             'xstart': ']/'.join(xstart.split(']//')),
             'xend': ']/'.join(xend.split(']//')),
-            } for (id, xstart, xend) in r]
+        } for (id, xstart, xend) in r]
         query = text("""UPDATE text_fragment_identifier
                 SET xpath_start=:xstart, xpath_end=:xend
                 WHERE id=:id""")

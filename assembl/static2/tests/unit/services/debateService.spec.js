@@ -11,7 +11,17 @@ const mockDiscussion = {
 const mockPreferences = {
   terms_of_use_url: 'terms.fr',
   extra_json: {
+    isLargeLogo: true,
     headerLogoUrl: '',
+    footerLinks: [
+      {
+        titleEntries: {
+          fr: 'Jaime le chocolat',
+          en: 'I like chocolate'
+        },
+        url: 'www.google.fr'
+      }
+    ],
     topic: {
       titleEntries: {
         fr: '',
@@ -220,6 +230,15 @@ describe('This test concern debate Service', () => {
           en: ''
         }
       },
+      footerLinks: [
+        {
+          titleEntries: {
+            fr: 'Jaime le chocolat',
+            en: 'I like chocolate'
+          },
+          url: 'www.google.fr'
+        }
+      ],
       dates: {
         startDate: '',
         endDate: ''
@@ -254,6 +273,7 @@ describe('This test concern debate Service', () => {
           en: ''
         }
       },
+      isLargeLogo: true,
       headerLogoUrl: null,
       headerBackgroundUrl: null,
       timeline: expectedTimeline,

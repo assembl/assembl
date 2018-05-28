@@ -2,6 +2,8 @@
 // Copy/paste into "../debate/sandbox/discussion_preferences > Extra JSON parameters" and use your own data.
 
 {
+  // Header section: Manage the display of the logo on 1 or 2 lines
+  "isLargeLogo": true,
   // Header section: URL of the logo
   "headerLogoUrl": "http://www.grdf.fr/documents/10184/6812d0ec-df0c-4acc-89e1-1493d3e8712e",
   // Header section: Topic of the debate
@@ -32,8 +34,10 @@
       "en": "What is the objective of the debate?"
     },
     "descriptionEntries": {
-      "fr": "Movin'On Continues prend une approche collaborative pour relever les défis de la mobilité. Il vise à être la continuation des discussions tenues à Movin'On. Il vise à créer une communauté engagée d'acteurs de la mobilité de demain. L'objectif de ce projet est de créer collectivement la mobilité de demain, de l'ambition à l'action. Nous utilisons l'intelligence collective pour confronter les idées et co-construire un plan pour les transformer en action. Comme Michelin, un fier commanditaire de la coopération mondiale permanente et permanente, encourage constamment la créativité et l'innovation dans la mobilité durable, notamment avec Think and Do Tank: Open Lab Challenge Bibendum. Un écosystème collaboratif axé sur les défis de l'avenir de la mobilité, il est organisé autour des communautés des parties prenantes et place le citoyen individuel au cœur de ses préoccupations. En tant que tel, Michelin, Open Lab et Bluenove ont uni leurs forces pour que vous, les citoyens, puissiez construire l'avenir de la mobilité et devenir des acteurs actifs de ce processus de réflexion et de création, grâce au débat Movin'On Continues qui aura lieu En ligne du 12 juin au septembre 2017.",
-      "en": "Movin'On Continues takes on a collaborative approach to tackle the challenges of mobility. It aims to be the continuation of the discussions held at Movin'On. It aims to create an engaged community of tomorrow's mobility actors. The objective of this project is to collectively create tomorrow's mobility, from ambition to action. We are using collective intelligence to confront ideas and co-construct a plan to turn them into action. As Michelin, a proud sponsor of permanent and ongoing global cooperation, is constantly encouraging creativity and innovation in sustainable mobility, notably with its Think and Do Tank: Open Lab Challenge Bibendum. A collaborative ecosystem focused on the challenges of the future of mobility, it is organized around stakeholders’ communities, and places the individual citizen at the heart of its preoccupation. As such, Michelin, Open Lab and bluenove have joined forces so that you, the citizens, can co-construct the future of mobility and become active players in this process of reflection and creation, thanks to the Movin’On Continues debate, taking place online from June 12 to September, 2017."
+      "fr":
+        "Movin'On Continues prend une approche collaborative pour relever les défis de la mobilité. Il vise à être la continuation des discussions tenues à Movin'On. Il vise à créer une communauté engagée d'acteurs de la mobilité de demain. L'objectif de ce projet est de créer collectivement la mobilité de demain, de l'ambition à l'action. Nous utilisons l'intelligence collective pour confronter les idées et co-construire un plan pour les transformer en action. Comme Michelin, un fier commanditaire de la coopération mondiale permanente et permanente, encourage constamment la créativité et l'innovation dans la mobilité durable, notamment avec Think and Do Tank: Open Lab Challenge Bibendum. Un écosystème collaboratif axé sur les défis de l'avenir de la mobilité, il est organisé autour des communautés des parties prenantes et place le citoyen individuel au cœur de ses préoccupations. En tant que tel, Michelin, Open Lab et Bluenove ont uni leurs forces pour que vous, les citoyens, puissiez construire l'avenir de la mobilité et devenir des acteurs actifs de ce processus de réflexion et de création, grâce au débat Movin'On Continues qui aura lieu En ligne du 12 juin au septembre 2017.",
+      "en":
+        "Movin'On Continues takes on a collaborative approach to tackle the challenges of mobility. It aims to be the continuation of the discussions held at Movin'On. It aims to create an engaged community of tomorrow's mobility actors. The objective of this project is to collectively create tomorrow's mobility, from ambition to action. We are using collective intelligence to confront ideas and co-construct a plan to turn them into action. As Michelin, a proud sponsor of permanent and ongoing global cooperation, is constantly encouraging creativity and innovation in sustainable mobility, notably with its Think and Do Tank: Open Lab Challenge Bibendum. A collaborative ecosystem focused on the challenges of the future of mobility, it is organized around stakeholders’ communities, and places the individual citizen at the heart of its preoccupation. As such, Michelin, Open Lab and bluenove have joined forces so that you, the citizens, can co-construct the future of mobility and become active players in this process of reflection and creation, thanks to the Movin’On Continues debate, taking place online from June 12 to September, 2017."
     },
     "images": {
       "img1Url": "https://framapic.org/ibX9g8rDKkId/fHbo8OgaSvuW.jpg",
@@ -44,12 +48,16 @@
   "video": {
     "videoUrl": "https://www.youtube.com/embed/pLexuHxOphg",
     "descriptionEntriesTop": {
-      "fr": "The end result of this debate will be a series of recommendations for the future of mobility. It will be published by Michelin and available to all. If you participate in the debate you will be cited in the document as co-writer. You will co-create a roadmap for the future of mobility. It will be a short, concise document showcasing the next steps to solve mobility issues from ambition to action.",
-      "en": "The end result of this debate will be a series of recommendations for the future of mobility. It will be published by Michelin and available to all. If you participate in the debate you will be cited in the document as co-writer. You will co-create a roadmap for the future of mobility. It will be a short, concise document showcasing the next steps to solve mobility issues from ambition to action."
+      "fr":
+        "The end result of this debate will be a series of recommendations for the future of mobility. It will be published by Michelin and available to all. If you participate in the debate you will be cited in the document as co-writer. You will co-create a roadmap for the future of mobility. It will be a short, concise document showcasing the next steps to solve mobility issues from ambition to action.",
+      "en":
+        "The end result of this debate will be a series of recommendations for the future of mobility. It will be published by Michelin and available to all. If you participate in the debate you will be cited in the document as co-writer. You will co-create a roadmap for the future of mobility. It will be a short, concise document showcasing the next steps to solve mobility issues from ambition to action."
     },
     "descriptionEntriesBottom": {
-      "fr": "The end result of this debate will be a series of recommendations for the future of mobility. It will be published by Michelin and available to all. If you participate in the debate you will be cited in the document as co-writer. You will co-create a roadmap for the future of mobility. It will be a short, concise document showcasing the next steps to solve mobility issues from ambition to action.",
-      "en": "The end result of this debate will be a series of recommendations for the future of mobility. It will be published by Michelin and available to all. If you participate in the debate you will be cited in the document as co-writer. You will co-create a roadmap for the future of mobility. It will be a short, concise document showcasing the next steps to solve mobility issues from ambition to action."
+      "fr":
+        "The end result of this debate will be a series of recommendations for the future of mobility. It will be published by Michelin and available to all. If you participate in the debate you will be cited in the document as co-writer. You will co-create a roadmap for the future of mobility. It will be a short, concise document showcasing the next steps to solve mobility issues from ambition to action.",
+      "en":
+        "The end result of this debate will be a series of recommendations for the future of mobility. It will be published by Michelin and available to all. If you participate in the debate you will be cited in the document as co-writer. You will co-create a roadmap for the future of mobility. It will be a short, concise document showcasing the next steps to solve mobility issues from ambition to action."
     },
     "titleEntries": {
       "fr": "What will be the outcome?",
@@ -62,7 +70,7 @@
     "id": "808390464667721728"
   },
   // Chatbot section: link to the chatbot tool, name of the chatbot, titles
- "chatbot": {
+  "chatbot": {
     "link": "https://www.messenger.com/t/VoxeBot",
     "name": "Barbara27",
     "titleEntries": {
@@ -136,6 +144,17 @@
     {
       "url": "https://www.linkedin.com/in/citiesflife/",
       "name": "linkedin"
+    }
+  ],
+  // Footer section: add here custom links that you want display in the footer
+  "footerLinks": [
+    {
+      "url": "http://www.google.fr",
+      "titleEntries": { "fr": "Les défis de la mobilité", "en": "Challenges of mobility" }
+    },
+    {
+      "url": "http://www.gmail.com",
+      "titleEntries": { "fr": "j'aime le chocolat", "en": "I love chocolate" }
     }
   ]
 }

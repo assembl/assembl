@@ -4,19 +4,20 @@ import { connect } from 'react-redux';
 import { compose, graphql } from 'react-apollo';
 import { Translate, I18n } from 'react-redux-i18n';
 import { Grid, Col, Button } from 'react-bootstrap';
-
+import Avatar from '../components/profile/avatar';
+import ModifyPasswordForm from '../components/profile/modifyPasswordForm';
+import DeleteMyAccount from '../components/profile/deleteMyAccount';
 import ConfiguredField, { type ConfiguredFieldType } from '../components/common/configuredField';
-import ModifyPasswordForm from '../components/common/modifyPasswordForm';
 import { get, getContextual } from '../utils/routeMap';
-import { displayAlert } from '../utils/utilityManager';
 import withLoadingIndicator from '../components/common/withLoadingIndicator';
 import UserQuery from '../graphql/userQuery.graphql';
 import ProfileFieldsQuery from '../graphql/ProfileFields.graphql';
 import UpdateUserMutation from '../graphql/mutations/updateUser.graphql';
 import UpdateProfileFieldsMutation from '../graphql/mutations/updateProfileFields.graphql';
 import { browserHistory } from '../router';
+import { displayAlert } from '../utils/utilityManager';
 
-type Props = {
+type ProfileProps = {
   connectedUserId: string,
   creationDate: ?string,
   email: string, // eslint-disable-line react/no-unused-prop-types
@@ -28,28 +29,28 @@ type Props = {
   hasPassword: boolean,
   name: string,
   params: Object,
-  profileFields: Array<ConfiguredFieldType>,
   location: Object,
+  profileFields: Array<ConfiguredFieldType>,
   updateProfileFields: Function
 };
 
-type State = {
+type ProfileState = {
   passwordEditionOpen: boolean,
   values: {
     [string]: Object
   }
 };
 
-class Profile extends React.PureComponent<*, Props, State> {
-  props: Props;
+class Profile extends React.PureComponent<*, ProfileProps, ProfileState> {
+  props: ProfileProps;
 
-  state: State;
+  state: ProfileState;
 
   defaultProps: {
     creationDate: null
   };
 
-  static getDerivedStateFromProps(nextProps: Props) {
+  static getDerivedStateFromProps(nextProps: ProfileProps) {
     const email = nextProps.profileFields.find(pf => pf.configurableField.identifier === 'EMAIL');
     const fullname = nextProps.profileFields.find(pf => pf.configurableField.identifier === 'FULLNAME');
     const username = nextProps.profileFields.find(pf => pf.configurableField.identifier === 'USERNAME');
@@ -77,7 +78,9 @@ class Profile extends React.PureComponent<*, Props, State> {
 
   constructor(props) {
     super(props);
+    const { name } = this.props;
     this.state = {
+      name: name,
       values: {},
       passwordEditionOpen: false
     };
@@ -141,21 +144,14 @@ class Profile extends React.PureComponent<*, Props, State> {
   render() {
     const { creationDate, hasPassword, lang, id, name } = this.props;
     const profileFields = this.props.profileFields;
+
     return (
       <div className="profile background-dark-grey">
         <div className="content-section">
           <Grid fluid>
             <div className="max-container">
               <Col xs={12} sm={3}>
-                <div className="center">
-                  <span className="assembl-icon-profil" />
-                </div>
-                <h2 className="dark-title-2 capitalized center">{name}</h2>
-                {creationDate && (
-                  <div className={`center member-since lang-${lang}`}>
-                    <Translate value="profile.memberSince" date={I18n.l(creationDate, { dateFormat: 'date.format2' })} />
-                  </div>
-                )}
+                <Avatar creationDate={creationDate} lang={lang} name={name} />
               </Col>
               <Col xs={12} sm={9}>
                 <div className="border-left">
@@ -195,6 +191,7 @@ class Profile extends React.PureComponent<*, Props, State> {
                       </div>
                     </div>
                   )}
+                  <DeleteMyAccount />
                 </div>
               </Col>
             </div>

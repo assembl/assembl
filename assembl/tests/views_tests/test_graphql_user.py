@@ -28,6 +28,20 @@ mutation UpdateUser($id: ID!, $name: String, $username: String, $img: String, $o
 }
 """
 
+DELETE_USER_INFORMATION_MUTATION = u"""
+mutation DeleteUserInformation($id: ID!) {
+    DeleteUserInformation(
+    id: $id
+  ) {
+    user{
+    ... on AgentProfile {
+      id
+      }
+    }
+  }
+}
+"""
+
 
 def test_graphql_get_profile(graphql_request, participant1_user):
     res = schema.execute(u"""
@@ -282,9 +296,105 @@ def test_graphql_update_user_modify_password_can_reuse_the_old_6th_password_set(
     participant1_user.db.flush()
     res = schema.execute(UPDATE_USER_MUTATION,
                          context_value=graphql_request, variable_values={
-        "id": to_global_id('AgentProfile', participant1_user.id),
-        "oldPassword": "password6",
-        "newPassword": "password",
-        "newPassword2": "password"
+                             "id": to_global_id('AgentProfile', participant1_user.id),
+                             "oldPassword": "password6",
+                             "newPassword": "password",
+                             "newPassword2": "password"
+                         })
+    assert res.errors is None
+
+
+def test_graphql_delete_user_information(participant1_user, graphql_request):
+    from assembl.auth.password import random_string
+    user_password = participant1_user.password_p
+    user_username = participant1_user.username_p
+    user_preferred_email = participant1_user.preferred_email
+    user_last_assembl_login = participant1_user.last_assembl_login
+    user_name = participant1_user.name
+    user_old_passwords = participant1_user.old_passwords
+    res = schema.execute(DELETE_USER_INFORMATION_MUTATION, context_value=graphql_request, variable_values={
+        "id": to_global_id('AgentProfile', participant1_user.id)
     })
     assert res.errors is None
+    assert participant1_user.is_deleted is True
+    assert participant1_user.password != user_password
+    assert participant1_user.preferred_email != user_preferred_email
+    assert participant1_user.last_assembl_login != user_last_assembl_login
+    assert participant1_user.name != user_name
+    for p in participant1_user.old_passwords:
+        for pa in user_old_passwords:
+            assert pa != p.password
+
+
+def test_graphql_delete_sysadmin_user(discussion_sysadmin_user, graphql_request):
+    res = schema.execute(DELETE_USER_INFORMATION_MUTATION, context_value=graphql_request, variable_values={
+        "id": to_global_id('AgentProfile', discussion_sysadmin_user.id)
+    })
+    assert res.errors is not None
+    assert res.errors[0].message == u"Can't delete a user with sysadmin rights."
+
+
+def test_graphql_delete_admin_user_alone(discussion_admin_user, graphql_request):
+    """
+    Testing if it is possible to delete an admin user 
+    if he is the only admin user
+    """
+    res = schema.execute(DELETE_USER_INFORMATION_MUTATION, context_value=graphql_request, variable_values={
+        "id": to_global_id('AgentProfile', discussion_admin_user.id)
+    })
+    assert res.errors is not None
+    assert res.errors[0].message == u"User can't delete his account because this is the only admin account"
+
+
+def test_graphql_delete_admin_user_not_alone(discussion_admin_user, discussion_admin_user_2, graphql_request):
+    """
+    Testing if is possible to delete an admin user when he is not the only admin 
+    """
+    from assembl.auth.password import random_string
+    user_password = discussion_admin_user.password_p
+    user_username = discussion_admin_user.username_p
+    user_preferred_email = discussion_admin_user.preferred_email
+    user_last_assembl_login = discussion_admin_user.last_assembl_login
+    user_name = discussion_admin_user.name
+    user_old_passwords = discussion_admin_user.old_passwords
+    res = schema.execute(DELETE_USER_INFORMATION_MUTATION, context_value=graphql_request, variable_values={
+        "id": to_global_id('AgentProfile', discussion_admin_user.id)
+    })
+
+    assert res.errors is None
+    assert discussion_admin_user.is_deleted is True
+    assert discussion_admin_user.password != user_password
+    assert discussion_admin_user.preferred_email != user_preferred_email
+    assert discussion_admin_user.last_assembl_login != user_last_assembl_login
+    assert discussion_admin_user.name != user_name
+    for p in discussion_admin_user.old_passwords:
+        for pa in user_old_passwords:
+            assert pa != p.password
+
+
+def test_graphql_delete_user_with_social_account(graphql_request, participant1_user, participant1_social_account):
+    """
+    Testing deletion of user social Accounts
+    """
+    social_account_username = participant1_user.social_accounts[0].username
+    social_account_provider_domain = participant1_user.social_accounts[0].provider_domain
+    social_account_picture_url = participant1_user.social_accounts[0].picture_url
+    social_account_last_checked = participant1_user.social_accounts[0].last_checked
+    res = schema.execute(DELETE_USER_INFORMATION_MUTATION, context_value=graphql_request, variable_values={
+        "id": to_global_id('AgentProfile', participant1_user.id)
+    })
+    assert res.errors is None
+    assert len(participant1_user.social_accounts) == 0
+
+
+def test_graphql_delete_user_with_configurable_fields(graphql_request, participant1_user, profile_field_for_participant_user, test_session):
+    """
+    Testing deletion of user with extra configurable text fields
+    """
+    from assembl import models as m
+    res = schema.execute(DELETE_USER_INFORMATION_MUTATION, context_value=graphql_request, variable_values={
+        "id": to_global_id('AgentProfile', participant1_user.id)
+    })
+    assert res.errors is None
+    extra_fields = test_session.query(m.ProfileField).filter(m.ProfileField.agent_profile_id == participant1_user.id).all()
+    assert len(extra_fields) == 0

@@ -1,4 +1,5 @@
 #import "../fragments/TextField.graphql"
+#import "../fragments/SelectField.graphql"
 
 mutation updateProfileFields($data: [FieldDataInput]!, $lang: String!) {
   updateProfileFields(data: $data, lang: $lang) {
@@ -6,6 +7,7 @@ mutation updateProfileFields($data: [FieldDataInput]!, $lang: String!) {
       id
       configurableField {
         ...textField
+        ...selectField
       }
       valueData
     }

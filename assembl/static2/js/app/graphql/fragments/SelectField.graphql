@@ -1,0 +1,21 @@
+#import "./LangString.graphql"
+
+fragment selectField on SelectField {
+  id
+  identifier
+  titleEntries {
+    localeCode
+    value
+  }
+  title(lang: $lang)
+  order
+  required
+  options {
+    id
+    order
+    label(lang: $lang)
+    labelEntries {
+      ...langStringEntry
+    }
+  }
+}

@@ -8,6 +8,8 @@ const Translations = {
     cancel: "Annuler",
     validate: "Valider",
     delete: "Supprimer",
+    accountDeleted: "Votre compte a été supprimé avec succès",
+    deletedUser: "Compte utilisateur supprimé",
     chatframe: {
       title: "Fenêtre de discussion instantanée",
       tooltip: "Assemb'Bot"
@@ -387,6 +389,12 @@ const Translations = {
       changePassword: "Modifier mon mot de passe",
       passwordModifiedSuccess: "Votre mot de passe a été modifié avec succès",
       saveSuccess: "Votre profil a été mis à jour avec succès",
+      deleteMyAccount: "Supprimer mon compte",
+      deleteMyAccountConfirmation: "Supprimer mon compte et l'ensemble de mes données",
+      deleteMyAccountText:
+        "En supprimant votre compte, vous supprimez définitivement l'ensemble de vos données personnelles ainsi que votre compte. Vous ne pourrez plus contribuer à la consultation sans compte.",
+      deleteMyAccountModal:
+        "Êtes-vous certain de vouloir supprimer définitivement votre compte ainsi que l'ensemble de vos données personnelles ? En validant, vous ne pourrez plus contribuer à la consultation.",
       updateUser: {
         errorMessage: {
           "1": "Nous avons déjà un utilisateur ayant ce nom d'utilisateur.",
@@ -420,6 +428,8 @@ const Translations = {
     administration: {
       confirmTextFieldDeletionTitle: "Supprimer le champ",
       confirmTextFieldDeletion: "Êtes-vous certain de vouloir supprimer ce champ ?",
+      confirmSelectFieldOptionDeletionTitle: "Supprimer cet item",
+      confirmSelectFieldOptionDeletion: "Êtes-vous certain de vouloir supprimer cet item ?",
       addThematic: "Ajouter une thématique",
       addQuestion: "Ajouter une question",
       anErrorOccured:
@@ -639,7 +649,12 @@ const Translations = {
       },
       profileOptions: {
         addTextField: "Ajouter un champ",
+        createNewFieldModalBody: "Choisissez le type de champ que vous souhaitez afficher dans le formulaire d'inscription :",
+        choiceTextField: "Champ texte",
+        choiceSelectField: "Menu déroulant",
+        addSelectFieldOption: "Ajouter un nouvel item",
         deleteTextField: "Supprimer le champ",
+        deleteSelectFieldOption: "Supprimer l'item",
         introText:
           "Configurez les champs que vous souhaitez afficher dans le formulaire d'inscription. Renseignez les noms ainsi que la mention obligatoire/non obligatoire.",
         textFieldToggleOptional: "Rendre ce champ optionnel",
@@ -666,6 +681,9 @@ const Translations = {
     validate: "Validate",
     introduction: "Introduction",
     conclusion: "Conclusion",
+    delete: "Delete",
+    accountDeleted: "Your account has been successfully deleted",
+    deletedUser: "Deleted user account",
     chatframe: {
       title: "Instant discussion window",
       tooltip: "Assemb'Bot"
@@ -1042,6 +1060,12 @@ const Translations = {
       changePassword: "Change my password",
       passwordModifiedSuccess: "Your password has been changed with success",
       saveSuccess: "Your profile is updated",
+      deleteMyAccount: "Delete my account",
+      deleteMyAccountConfirmation: "Delete my account and my data",
+      deleteMyAccountText:
+        "By deleting your account, you permanently delete all of your personal data and your account. You will no longer be able to contribute to the debate without an account.",
+      deleteMyAccountModal:
+        "Are you sure you want to permanently delete your account and all of your personal data? By validating, you will no longer be able to contribute to the consultation.",
       updateUser: {
         errorMessage: {
           "1": "We already have a user with this username.",
@@ -1073,8 +1097,10 @@ const Translations = {
       headerTitle: "Legal Notice"
     },
     administration: {
-      confirmTextFieldDeletionTitle: "Delete the text field",
-      confirmTextFieldDeletion: "Are you sure that you want to delete this text field?",
+      confirmTextFieldDeletionTitle: "Delete the field",
+      confirmTextFieldDeletion: "Are you sure that you want to delete this field?",
+      confirmSelectFieldOptionDeletionTitle: "Delete this item",
+      confirmSelectFieldOptionDeletion: "Are you sure that you want to delete this item?",
       addThematic: "Add a theme",
       addQuestion: "Add a question",
       anErrorOccured: "An error occured during save. Please check that you filled all the required fields.",
@@ -1285,7 +1311,12 @@ const Translations = {
       },
       profileOptions: {
         addTextField: "Add a field",
+        createNewFieldModalBody: "Select the field type you want to add to the register page:",
+        choiceTextField: "Text field",
+        choiceSelectField: "Dropdown field",
+        addSelectFieldOption: "Add a new item",
         deleteTextField: "Delete the field",
+        deleteSelectFieldOption: "Delete this item",
         introText:
           "Configure the fields that you want to display in the registration form. Fill in the names and whether the fields are required or optional.",
         textFieldToggleOptional: "Make this field optional",

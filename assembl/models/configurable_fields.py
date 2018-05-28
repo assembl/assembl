@@ -131,6 +131,72 @@ class TextField(AbstractConfigurableField):
     )
 
 
+class SelectField(AbstractConfigurableField):
+
+    """Configurable select field."""
+
+    __tablename__ = "select_field"
+    __mapper_args__ = {
+        'polymorphic_identity': 'select_field'
+    }
+
+    id = Column(
+        Integer,
+        ForeignKey(AbstractConfigurableField.id, ondelete="CASCADE", onupdate="CASCADE"),
+        primary_key=True)
+
+    multivalued = Column(Boolean, default=False)
+
+    crud_permissions = CrudPermissions(
+        P_ADMIN_DISC, P_READ, P_ADMIN_DISC, P_ADMIN_DISC)
+
+
+class SelectFieldOption(DiscussionBoundBase):
+
+    """This represents an option in a select field."""
+
+    __tablename__ = "select_field_option"
+
+    id = Column(Integer, primary_key=True)
+    order = Column(Float, nullable=False, default=0.0)
+    label_id = Column(Integer, ForeignKey(LangString.id), nullable=False, index=True)
+    select_field_id = Column(
+        Integer, ForeignKey(
+            SelectField.id, ondelete='CASCADE', onupdate='CASCADE'),
+        nullable=False, index=True)
+
+    select_field = relationship(
+        SelectField, foreign_keys=(select_field_id,),
+        backref=backref("options", order_by="SelectFieldOption.order", cascade="all, delete-orphan"))
+    label = relationship(
+        LangString, foreign_keys=(label_id,),
+        backref=backref("label_of_option", lazy="dynamic"),
+        single_parent=True,
+        lazy="joined",
+        cascade="all, delete-orphan")
+
+    def get_discussion_id(self):
+        field = self.select_field or SelectField.get(self.select_field_id)
+        return field.get_discussion_id()
+
+    @classmethod
+    def get_discussion_conditions(cls, discussion_id, alias_maker=None):
+        if alias_maker is None:
+            option = cls
+            field = SelectField
+        else:
+            option = alias_maker.alias_from_class(cls)
+            field = alias_maker.alias_from_relns(option.select_field)
+        return ((option.select_field_id == field.id),
+                (field.discussion_id == discussion_id))
+
+    crud_permissions = CrudPermissions(
+        P_ADMIN_DISC, P_READ, P_ADMIN_DISC, P_ADMIN_DISC)
+
+
+LangString.setup_ownership_load_event(SelectFieldOption, ['label'])
+
+
 class ProfileField(DiscussionBoundBase):
 
     """Field for profile page."""

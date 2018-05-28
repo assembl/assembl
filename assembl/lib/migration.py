@@ -169,10 +169,74 @@ def create_default_discussion_sections(discussion):
     db.add(administration_section)
 
 
+def create_default_discussion_profile_fields(discussion):
+    from assembl import models as m
+    from assembl.models.configurable_fields import ConfigurableFieldIdentifiersEnum, TextFieldsTypesEnum
+    db = discussion.db
+    title = m.LangString.create('Fullname', 'en')
+    title.add_value(u'Nom complet', 'fr')
+    fullname_field = m.TextField(
+        discussion=discussion,
+        identifier=ConfigurableFieldIdentifiersEnum.FULLNAME.value,
+        order=1.0,
+        title=title,
+        required=True
+    )
+    db.add(fullname_field)
+
+    title = m.LangString.create('Username', 'en')
+    title.add_value(u"Nom d'utilisateur", 'fr')
+    username_field = m.TextField(
+        discussion=discussion,
+        identifier=ConfigurableFieldIdentifiersEnum.USERNAME.value,
+        order=2.0,
+        title=title,
+        required=True
+    )
+    db.add(username_field)
+
+    title = m.LangString.create('Email', 'en')
+    title.add_value(u'Courriel', 'fr')
+    email_field = m.TextField(
+        discussion=discussion,
+        field_type=TextFieldsTypesEnum.EMAIL.value,
+        identifier=ConfigurableFieldIdentifiersEnum.EMAIL.value,
+        order=3.0,
+        title=title,
+        required=True
+    )
+    db.add(email_field)
+
+    title = m.LangString.create('Password', 'en')
+    title.add_value(u'Mot de passe', 'fr')
+    password_field = m.TextField(
+        discussion=discussion,
+        field_type=TextFieldsTypesEnum.PASSWORD.value,
+        identifier=ConfigurableFieldIdentifiersEnum.PASSWORD.value,
+        order=4.0,
+        title=title,
+        required=True
+    )
+    db.add(password_field)
+
+    title = m.LangString.create('Password (confirm)', 'en')
+    title.add_value(u'Confirmation de mot de passe', 'fr')
+    password2_field = m.TextField(
+        discussion=discussion,
+        field_type=TextFieldsTypesEnum.PASSWORD.value,
+        identifier=ConfigurableFieldIdentifiersEnum.PASSWORD2.value,
+        order=5.0,
+        title=title,
+        required=True
+    )
+    db.add(password2_field)
+
+
 def create_default_discussion_data(discussion):
     from ..models.auth import create_default_permissions
     create_default_permissions(discussion)
     create_default_discussion_sections(discussion)
+    create_default_discussion_profile_fields(discussion)
 
 
 def includeme(config):
