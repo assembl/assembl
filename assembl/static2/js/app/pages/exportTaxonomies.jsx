@@ -6,7 +6,7 @@ import ExportSection from '../components/administration/exportSection';
 
 const ExportTaxonomies = ({ debateId }) => {
   const exportLink = get('exportTaxonomiesData', { debateId: debateId });
-  return <ExportSection exportLink={exportLink} />;
+  return <ExportSection sectionTitle="taxonomySectionTitle" annotation="taxonomyAnnotation" exportLink={exportLink} />;
 };
 
 const mapStateToProps = ({ context }) => ({

@@ -14,7 +14,8 @@ type ExportSectionProps = {
   exportLink: string,
   exportLocale?: string,
   translate?: boolean,
-  annotation: string
+  annotation: string,
+  sectionTitle: string
 };
 
 type ExportLanguageDropDownProps = {
@@ -31,7 +32,8 @@ class ExportSection extends React.Component<ExportSectionProps> {
     withLanguageOptions: false,
     exportLocale: undefined,
     translate: false,
-    annotation: 'defaultAnnotation'
+    annotation: 'defaultAnnotation',
+    sectionTitle: 'defaultSectionTitle'
   };
 
   static ExportLanguageDropDown = ({ languages, onSelect, activeKey }: ExportLanguageDropDownProps) => {
@@ -64,12 +66,14 @@ class ExportSection extends React.Component<ExportSectionProps> {
       exportLink,
       translate,
       exportLocale,
-      annotation
+      annotation,
+      sectionTitle
     } = this.props;
+
     return (
       <div className="admin-box admin-export-section">
         <SectionTitle
-          title={I18n.t('administration.export.sectionTitle')}
+          title={I18n.t(`administration.export.${sectionTitle}`)}
           annotation={I18n.t(`administration.export.${annotation}`)}
         />
         <div className="admin-content">

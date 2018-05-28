@@ -6,7 +6,7 @@ exports[`ExportSection component should render an ExportSection component with l
 >
   <SectionTitle
     annotation="Default Annotation"
-    title="Section Title"
+    title="Default Section Title"
   />
   <div
     className="admin-content"
@@ -60,7 +60,7 @@ exports[`ExportSection component should render an ExportSection component withou
 >
   <SectionTitle
     annotation="Default Annotation"
-    title="Section Title"
+    title="Default Section Title"
   />
   <div
     className="admin-content"

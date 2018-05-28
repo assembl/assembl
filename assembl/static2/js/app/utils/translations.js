@@ -627,10 +627,12 @@ const Translations = {
         threadAnnotation: "Vous pouvez exporter l'ensemble des données du module de thread en cliquant sur le bouton Exporter",
         multicolumnAnnotation: "Vous pouvez exporter l'ensmeble des données du module de multi-colonnes en cliquant sur le bouton Exporter",
         voteSessionAnnotation: "Vous pouvez exporter l'ensemble des données du module de vote en cliquant sur le bouton Exporter",
+        taxonomyAnnotation: "Vous pouvez exporter l'ensemble des taxonomies en cliquant sur le bouton exporter",
         link: "Exporter",
         noExportLanguage: "Conserver les messages dans leurs langues d'origine",
         title: "Exporter les données du débat",
-        sectionTitle: "Exporter les données",
+        defaultSectionTitle: "Exporter les données",
+        taxonomySectionTitle: "Exporter les taxonomies",
         translateTheMessagesIn: "Traduire l'ensemble des messages en:"
       },
       step_x_total: "Section %{num} sur %{total}",
@@ -1287,6 +1289,7 @@ const Translations = {
       },
       export: {
         defaultAnnotation: "You can export all of the data by clicking on the export button",
+        taxonomyAnnotation: "You can export all of the taxonomies by clicking on the export button",
         surveyAnnotation: "You can export all the survey module data by clicking on the Export button",
         threadAnnotation: "You can export all the thread module data by clicking on the Export butotn",
         multicolumnAnnotation: "You can export all the Multi Column data by clicking on the Export button",
@@ -1294,7 +1297,8 @@ const Translations = {
         link: "Export",
         noExportLanguage: "Keep the messages in their original languages",
         title: "Export the debate data",
-        sectionTitle: "Export data",
+        defaultSectionTitle: "Export data",
+        taxonomySectionTitle: "Export taxonomy",
         translateTheMessagesIn: "Translate the messages in:"
       },
       step_x_total: "Section %{num} on %{total}",
