@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { get } from '../utils/routeMap';
 import ExportSection from '../components/administration/exportSection';
 import Navbar from '../components/administration/navbar';
-import DiscussionPreferenceLanguage from '../graphql/DiscussionPreferenceLanguage.graphql';
+import DiscussionPreferenceLanguageQuery from '../graphql/DiscussionPreferenceLanguage.graphql';
 
 class ThreadAdmin extends React.Component {
   constructor(props) {
@@ -69,7 +69,7 @@ const mapStateToProps = ({ context, i18n }) => ({
 
 export default compose(
   connect(mapStateToProps),
-  graphql(DiscussionPreferenceLanguage, {
+  graphql(DiscussionPreferenceLanguageQuery, {
     options: ({ i18n: { locale } }) => ({
       variables: {
         inLocale: locale
