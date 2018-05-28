@@ -216,8 +216,8 @@ const defaultNumberGaugeModule = Map({
   instructionsEntries: List(),
   nbTicks: 2,
   isNumberGauge: true,
-  minimum: Number,
-  maximum: Number,
+  minimum: 0,
+  maximum: 10,
   unit: '',
   proposalId: null,
   voteSpecTemplateId: null

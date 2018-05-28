@@ -38,5 +38,22 @@ describe('FormControlWithLabel component', () => {
     expect(tree).toMatchSnapshot();
   });
 
+  it('should render a form control with label with a value of 0', () => {
+    const value = 0;
+    const component = renderer.create(
+      <FormControlWithLabel
+        componentClass="my-class"
+        id="my-input"
+        label="Foobar"
+        onChange={onChangeSpy}
+        type="text"
+        value={value}
+        disabled={false}
+      />
+    );
+    const tree = component.toJSON();
+    expect(tree).toMatchSnapshot();
+  });
+
   it('should validate the input if its required prop is true');
 });

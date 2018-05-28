@@ -181,27 +181,26 @@ const DumbGaugeForm = ({
         </Radio>
       </div>
     )}
-    {isNumberGauge &&
-      minimum &&
-      maximum &&
-      unit && (
-        <NumberGaugeForm
-          id={id}
-          minimum={minimum}
-          maximum={maximum}
-          unit={unit}
-          handleMinChange={e => handleMinChange(e.target.value)}
-          handleMaxChange={e => handleMaxChange(e.target.value)}
-          handleUnitChange={e => handleUnitChange(e.target.value)}
-        />
-      )}
+    {isNumberGauge && (
+      <NumberGaugeForm
+        id={id}
+        minimum={minimum}
+        maximum={maximum}
+        unit={unit}
+        handleMinChange={e => handleMinChange(e.target.value)}
+        handleMaxChange={e => handleMaxChange(e.target.value)}
+        handleUnitChange={e => handleUnitChange(e.target.value)}
+      />
+    )}
     {!isNumberGauge && <TextGaugeForm choices={choices} handleGaugeChoiceLabelChange={handleGaugeChoiceLabelChange} />}
     <div className="separator" />
   </div>
 );
 
 DumbGaugeForm.defaultProps = {
-  index: null
+  index: null,
+  minimum: 0,
+  maximum: 10
 };
 
 const mapStateToProps = (state, { id, editLocale }) => {

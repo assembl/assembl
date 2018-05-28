@@ -41,3 +41,27 @@ exports[`FormControlWithLabel component should render a form control with label 
   />
 </div>
 `;
+
+exports[`FormControlWithLabel component should render a form control with label with a value of 0 1`] = `
+<div
+  className="form-group"
+>
+  <label
+    className="control-label"
+    htmlFor="my-input"
+  >
+    Foobar
+  </label>
+  <my-class
+    className="form-control"
+    disabled={false}
+    id="my-input"
+    name="my-input"
+    onBlur={[Function]}
+    onChange={[Function]}
+    placeholder="Foobar"
+    type="text"
+    value={0}
+  />
+</div>
+`;

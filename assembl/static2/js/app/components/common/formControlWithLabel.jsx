@@ -113,6 +113,8 @@ class FormControlWithLabel extends React.Component<Object, FormControlWithLabelP
       return this.renderRichTextEditor();
     }
 
+    const valueToShow = value || (value === 0 ? value : '');
+
     const name = this.props.name ? this.props.name : id;
     return (
       <FormControl
@@ -122,7 +124,7 @@ class FormControlWithLabel extends React.Component<Object, FormControlWithLabelP
         type={type}
         placeholder={this.getLabel()}
         onChange={onChange}
-        value={value || ''}
+        value={valueToShow}
         onBlur={this.setValidationState}
         disabled={disabled}
         {...formControlProps}
@@ -143,7 +145,7 @@ class FormControlWithLabel extends React.Component<Object, FormControlWithLabelP
 
   render() {
     const { id, labelAlwaysVisible, type, value, helperText } = this.props;
-    const displayLabel = labelAlwaysVisible || (type !== 'rich-text' ? value : false);
+    const displayLabel = labelAlwaysVisible || (type !== 'rich-text' ? (value || (value === 0)) : false);
     return (
       <FormGroup validationState={this.state.validationState}>
         {displayLabel ? <ControlLabel htmlFor={id}>{this.getLabel()}</ControlLabel> : null}
