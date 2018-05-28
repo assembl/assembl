@@ -1289,7 +1289,7 @@ const Translations = {
         defaultAnnotation: "You can export all of the data by clicking on the export button",
         surveyAnnotation: "You can export all the survey module data by clicking on the Export button",
         threadAnnotation: "You can export all the thread module data by clicking on the Export butotn",
-        multicolumnAnnotation: "You can export all the multicolumn data by clicking on the Export button",
+        multicolumnAnnotation: "You can export all the Multi Column data by clicking on the Export button",
         voteSessionAnnotation: "You can export all the vote session data by clicking on the Export button",
         link: "Export",
         noExportLanguage: "Keep the messages in their original languages",
