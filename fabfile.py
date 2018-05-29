@@ -18,7 +18,7 @@ from functools import wraps
 from tempfile import NamedTemporaryFile
 
 from fabric.operations import (
-    local, put, get, sudo, run)
+    local, put, get, sudo as fabsudo, run)
 from fabric.contrib.files import (exists, is_link, append)
 from fabric.api import (
     abort, cd, env, execute, hide, prefix, settings, task as fab_task)
@@ -42,6 +42,15 @@ DEFAULT_SECTION = "DEFAULT"
 def running_locally(hosts=None):
     hosts = hosts or env.hosts
     return set(hosts) - set(['localhost', '127.0.0.1']) == set()
+
+
+def sudo(*args, **kwargs):
+    sudoer = env.get("sudoer", "root")
+    with settings(user=sudoer):
+        if sudoer == "root":
+            run(*args, **kwargs)
+        else:
+            fabsudo(*args, **kwargs)
 
 
 def combine_rc(rc_filename, overlay=None):
