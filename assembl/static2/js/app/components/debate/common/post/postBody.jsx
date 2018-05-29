@@ -1,4 +1,4 @@
-// @noflow
+// @flow
 import * as React from 'react';
 import activeHtml from 'react-active-html';
 import classNames from 'classnames';
@@ -29,7 +29,7 @@ type Props = {
 
 type ExtractInPostProps = {
   id: string,
-  children: React.Children
+  children: React.Node
 };
 
 const ExtractInPost = ({ id, children }: ExtractInPostProps) => (

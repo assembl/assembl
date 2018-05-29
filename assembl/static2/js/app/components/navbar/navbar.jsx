@@ -149,12 +149,13 @@ const phaseContext = (timeline, phase) => {
   return 'new';
 };
 
-export class AssemblNavbar extends React.PureComponent<
-  $FlowFixMeProps,
-  {
-    flatWidth: number
-  }
-> {
+type AssemblNavbarProps = {};
+
+type AssemblNavbarState = {
+  flatWidth: number
+};
+
+export class AssemblNavbar extends React.PureComponent<AssemblNavbarProps, AssemblNavbarState> {
   setFlatWidth = (newWidth: number) => {
     this.setState({ flatWidth: newWidth });
   };

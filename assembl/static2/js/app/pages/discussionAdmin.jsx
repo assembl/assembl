@@ -1,4 +1,4 @@
-// @noflow
+// @flow
 import React from 'react';
 import { connect, type Dispatch, type MapStateToProps } from 'react-redux';
 import { type Route, type Router } from 'react-router';

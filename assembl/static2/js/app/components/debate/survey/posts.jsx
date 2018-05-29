@@ -67,6 +67,7 @@ export class DumbPosts extends React.Component<PostsProps> {
     const { networkStatus, fetchMore, refetch, posts } = this.props;
     return (
       <FlatList
+        // $FlowFixMe
         items={posts}
         ListItem={Post}
         onEndReachedThreshold={0.6}

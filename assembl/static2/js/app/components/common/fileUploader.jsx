@@ -28,9 +28,9 @@ type FileUploaderState = {
   we need to give it a mimeType prop that starts with 'image/'
 */
 class FileUploader extends React.Component<FileUploaderProps, FileUploaderState> {
-  fileInput: HTMLInputElement;
+  fileInput: ?HTMLInputElement;
 
-  preview: HTMLImageElement;
+  preview: ?HTMLImageElement;
 
   static defaultProps = {
     filename: '',

@@ -1,4 +1,4 @@
-// @noflow
+// @flow
 import * as React from 'react';
 import { withApollo, type ApolloClient } from 'react-apollo';
 import { Translate, Localize } from 'react-redux-i18n';
@@ -17,7 +17,8 @@ export const phasesToIgnore = [PHASES.voteSession];
 export type DebateType = {
   debateData: {
     timeline: Timeline,
-    slug: string
+    slug: string,
+    useSocialMedia: boolean
   }
 };
 

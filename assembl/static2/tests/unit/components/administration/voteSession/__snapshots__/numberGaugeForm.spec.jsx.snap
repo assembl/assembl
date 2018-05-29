@@ -9,7 +9,7 @@ exports[`DumbNumberGaugeForm component should render a form to set up a numeral 
       componentClass={undefined}
       disabled={undefined}
       formControlProps={undefined}
-      helperText={undefined}
+      helperText=""
       helperUrl=""
       id={undefined}
       label="Minimum value"
@@ -25,7 +25,7 @@ exports[`DumbNumberGaugeForm component should render a form to set up a numeral 
       componentClass={undefined}
       disabled={undefined}
       formControlProps={undefined}
-      helperText={undefined}
+      helperText=""
       helperUrl=""
       id={undefined}
       label="Maximum value"
@@ -41,7 +41,7 @@ exports[`DumbNumberGaugeForm component should render a form to set up a numeral 
       componentClass={undefined}
       disabled={undefined}
       formControlProps={undefined}
-      helperText={undefined}
+      helperText=""
       helperUrl=""
       id={undefined}
       label="Unit"

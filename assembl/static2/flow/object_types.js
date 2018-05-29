@@ -126,7 +126,8 @@ type Extract = {
   important: boolean,
   extractNature: string,
   extractAction: string,
-  body: string
+  body: string,
+  creator: AgentProfileInfoFragment
 };
 
 type FieldIdentifier = 'EMAIL' | 'FULLNAME' | 'PASSWORD' | 'PASSWORD2' | 'USERNAME' | 'CUSTOM';

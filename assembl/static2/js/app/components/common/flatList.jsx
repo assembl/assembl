@@ -1,5 +1,5 @@
 /* eslint-disable no-undef */
-// @noflow
+// @flow
 import * as React from 'react';
 import { I18n } from 'react-redux-i18n';
 
@@ -20,7 +20,7 @@ type FlatListProps = {
     edges: Array<ItemNode>
   },
   ListItem: Function | React.ComponentType<*>,
-  className: string,
+  className?: string,
   networkStatus: number,
   onEndReachedThreshold: number,
   itemData: Function,

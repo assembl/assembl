@@ -1,4 +1,4 @@
-// @noflow
+// @flow
 import * as React from 'react';
 import ARange from 'annotator_range'; // eslint-disable-line
 import { connect } from 'react-redux';
@@ -399,6 +399,7 @@ class DumbHarvestingBox extends React.Component<Props, State> {
               extract &&
               isEditable && (
                 <FormControlWithLabel
+                  label=""
                   componentClass="textarea"
                   className="text-area"
                   value={editableExtract}

@@ -1,4 +1,4 @@
-// @noflow
+// @flow
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { I18n, Translate } from 'react-redux-i18n';
@@ -198,7 +198,7 @@ const DumbGaugeForm = ({
 );
 
 DumbGaugeForm.defaultProps = {
-  index: null,
+  index: undefined,
   minimum: 0,
   maximum: 10
 };

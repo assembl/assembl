@@ -1,4 +1,4 @@
-// @noflow
+// @flow
 import * as React from 'react';
 import { OverlayTrigger, Popover } from 'react-bootstrap';
 import classnames from 'classnames';

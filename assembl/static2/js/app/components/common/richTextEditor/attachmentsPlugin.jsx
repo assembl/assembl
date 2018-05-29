@@ -1,4 +1,4 @@
-// @noflow
+// @flow
 /* draft-js plugin for attachment management */
 import { convertFromRaw, convertToRaw, Entity, Modifier, RawContentState, SelectionState } from 'draft-js';
 import type { ContentBlock, ContentState } from 'draft-js';
@@ -20,6 +20,7 @@ const plugin = {
     return undefined;
   },
   entityToHTML: (entity: { data: DocumentFragment }, originalText: string): string => {
+    // $FlowFixMe property `type` is missing in object type
     if (entity.type === ENTITY_TYPE) {
       const { id } = entity.data;
       const externalUrl = entity.data.externalUrl ? entity.data.externalUrl : '';

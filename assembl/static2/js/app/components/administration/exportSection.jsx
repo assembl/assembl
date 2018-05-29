@@ -1,4 +1,4 @@
-// @noflow
+// @flow
 /* eslint-disable  react/no-unused-prop-types */
 import * as React from 'react';
 import { I18n, Translate } from 'react-redux-i18n';
@@ -8,8 +8,8 @@ import SectionTitle from './sectionTitle';
 
 type ExportSectionProps = {
   languages?: Array<Object>,
-  handleTranslationChange: Function,
-  handleExportLocaleChange: Function,
+  handleTranslationChange?: (shouldTranslate: boolean) => void,
+  handleExportLocaleChange?: (locale: string) => void,
   withLanguageOptions?: boolean,
   exportLink: string,
   exportLocale?: string,
@@ -25,9 +25,11 @@ type ExportLanguageDropDownProps = {
 
 class ExportSection extends React.Component<ExportSectionProps> {
   static defaultProps = {
-    languages: null,
+    handleTranslationChange: undefined,
+    handleExportLocaleChange: undefined,
+    languages: undefined,
     withLanguageOptions: false,
-    exportLocale: null,
+    exportLocale: undefined,
     translate: false,
     annotation: 'defaultAnnotation'
   };
@@ -53,14 +55,6 @@ class ExportSection extends React.Component<ExportSectionProps> {
     );
   };
 
-  selectExportLocale = (locale: string) => {
-    this.props.handleExportLocaleChange(locale);
-  };
-
-  toggleTranslation = (shouldTranslate: boolean) => {
-    this.props.handleTranslationChange(shouldTranslate);
-  };
-
   render() {
     const {
       languages,
@@ -79,33 +73,35 @@ class ExportSection extends React.Component<ExportSectionProps> {
           annotation={I18n.t(`administration.export.${annotation}`)}
         />
         <div className="admin-content">
-          {withLanguageOptions && (
-            <FormGroup>
-              <Radio
-                checked={!translate}
-                onChange={() => {
-                  handleTranslationChange(false);
-                }}
-              >
-                <Translate value="administration.export.noExportLanguage" />
-              </Radio>
-              <Radio
-                checked={translate}
-                onChange={() => {
-                  handleTranslationChange(true);
-                }}
-              >
-                <Translate value="administration.export.translateTheMessagesIn" />
-                {translate && (
-                  <ExportSection.ExportLanguageDropDown
-                    languages={languages}
-                    onSelect={handleExportLocaleChange}
-                    activeKey={exportLocale}
-                  />
-                )}
-              </Radio>
-            </FormGroup>
-          )}
+          {withLanguageOptions &&
+            handleTranslationChange &&
+            handleExportLocaleChange && (
+              <FormGroup>
+                <Radio
+                  checked={!translate}
+                  onChange={() => {
+                    handleTranslationChange(false);
+                  }}
+                >
+                  <Translate value="administration.export.noExportLanguage" />
+                </Radio>
+                <Radio
+                  checked={translate}
+                  onChange={() => {
+                    handleTranslationChange(true);
+                  }}
+                >
+                  <Translate value="administration.export.translateTheMessagesIn" />
+                  {translate && (
+                    <ExportSection.ExportLanguageDropDown
+                      languages={languages}
+                      onSelect={handleExportLocaleChange}
+                      activeKey={exportLocale}
+                    />
+                  )}
+                </Radio>
+              </FormGroup>
+            )}
 
           <br />
           <Link className="button-link button-dark margin-l" href={exportLink}>

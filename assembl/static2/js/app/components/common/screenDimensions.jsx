@@ -1,10 +1,15 @@
-// @noflow
+// @flow
 
 import * as React from 'react';
 import { connect } from 'react-redux';
 
+type Props = {
+  updateScreenDimensions: () => void,
+  children: React.Node
+};
+
 // Context Provider
-class ResizeListener extends React.Component<$FlowFixMeProps> {
+class ResizeListener extends React.Component<Props> {
   componentDidMount() {
     const { updateScreenDimensions } = this.props;
     updateScreenDimensions();
@@ -31,20 +36,7 @@ export const ScreenDimensionsProvider = connect(null, dispatch => ({
   }
 }))(ResizeListener);
 
-/* remove this block when we update flow */
-
-type StatelessFunctionalComponent<Props> = {
-  (props: Props, context: any): React.Node,
-  displayName?: ?string,
-  propTypes?: $Subtype<{ [_: $Keys<Props>]: any }>,
-  contextTypes?: any
-};
-
-type ComponentType<Props> = StatelessFunctionalComponent<Props> | Class<React.Component<any, any>>;
-
-type AnyComponent = ComponentType<any>;
-
-/* end of block to be removed */
+type AnyComponent = React.ComponentType<any>;
 
 // HOC
 export const withScreenWidth = (WrappedComponent: AnyComponent) =>

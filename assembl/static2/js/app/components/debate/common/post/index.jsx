@@ -1,4 +1,4 @@
-// @noflow
+// @flow
 import classnames from 'classnames';
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
@@ -24,7 +24,8 @@ const getSubjectPrefixString = fullLevel =>
   );
 
 export type Response = {
-  post: PostQuery
+  post: PostQuery,
+  refetch: () => void
 };
 
 export type Props = {

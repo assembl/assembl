@@ -29,11 +29,7 @@ const PageTitle = () => (
   </div>
 );
 
-class Ideas extends React.Component {
-  props: Props;
-
-  state: State;
-
+class Ideas extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
     const { rootIdeaId } = this.props;

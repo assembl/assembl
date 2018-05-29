@@ -1,4 +1,4 @@
-// @noflow
+// @flow
 import * as React from 'react';
 
 type Props = {
@@ -8,7 +8,6 @@ type Props = {
   title: string,
   label: string,
   labelRight: string,
-  defaultChecked: boolean,
   disabled: boolean,
   theme: string,
   mode: string,
@@ -52,7 +51,6 @@ class SwitchButton extends React.Component<Props> {
 
     const props = {
       checked: this.props.checked,
-      defaultChecked: this.props.defaultChecked,
       disabled: this.props.disabled,
       onChange: this.props.onChange,
       name: this.props.name,

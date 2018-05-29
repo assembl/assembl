@@ -8,7 +8,7 @@ exports[`DumbTextGaugeForm component should render a form to set up a textual ga
         componentClass={undefined}
         disabled={undefined}
         formControlProps={undefined}
-        helperText={undefined}
+        helperText=""
         helperUrl=""
         id={undefined}
         label="Value title 1"
@@ -26,7 +26,7 @@ exports[`DumbTextGaugeForm component should render a form to set up a textual ga
         componentClass={undefined}
         disabled={undefined}
         formControlProps={undefined}
-        helperText={undefined}
+        helperText=""
         helperUrl=""
         id={undefined}
         label="Value title 2"

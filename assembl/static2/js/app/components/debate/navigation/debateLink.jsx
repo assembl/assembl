@@ -1,4 +1,4 @@
-// @noflow
+// @flow
 import * as React from 'react';
 import classNames from 'classnames';
 import { connect } from 'react-redux';
@@ -14,7 +14,7 @@ type DebateLinkProps = {
   identifier: string,
   className: string,
   activeClassName: string,
-  children: Array<*>,
+  children: React.Node,
   to: string,
   dataText: string,
   screenTooSmall: boolean
@@ -50,6 +50,9 @@ export class DumbDebateLink extends React.Component<DebateLinkProps, DebateLinkS
   };
 
   handleClickOutside = (event: MouseEvent) => {
+    // Cannot call `this.debateNode.contains` with `event.target` bound to `other`
+    // because `EventTarget` [1] is incompatible with `Node`
+    // $FlowFixMe
     if (this.state.timeLineActive && this.debateNode && !this.debateNode.contains(event.target)) {
       this.hideMenu();
     }

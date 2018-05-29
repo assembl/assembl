@@ -1,4 +1,4 @@
-// @noflow
+// @flow
 import * as React from 'react';
 import classnames from 'classnames';
 import { connect } from 'react-redux';
@@ -7,8 +7,22 @@ import { Translate } from 'react-redux-i18n';
 import { getPhaseName, getIfPhaseCompletedByIdentifier } from '../../utils/timeline';
 import WhatYouNeedToKnow from '../debate/common/whatYouNeedToKnow';
 import HeaderActions from '../debate/common/headerActions';
+import { type DebateType } from '../debate/navigation/timelineSegment';
 
-class Header extends React.Component<$FlowFixMeProps> {
+type Props = {
+  children: React.Node,
+  title: string,
+  subtitle: string,
+  imgUrl: ?string,
+  identifier: string,
+  synthesisTitle?: string,
+  additionalHeaderClasses: string,
+  type: string,
+  debate: DebateType,
+  i18n: { locale: string }
+};
+
+class Header extends React.Component<Props> {
   render() {
     const { children, title, subtitle, imgUrl, identifier, synthesisTitle, additionalHeaderClasses, type } = this.props;
     const { debateData } = this.props.debate;

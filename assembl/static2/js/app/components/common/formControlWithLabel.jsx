@@ -28,7 +28,7 @@ type FormControlWithLabelProps = {
   id?: string,
   validationErrors?: Array<ErrorDef>,
   helperUrl?: string,
-  helperText?: string,
+  helperText: string,
   children?: React.Node
 };
 
@@ -50,7 +50,7 @@ class FormControlWithLabel extends React.Component<FormControlWithLabelProps, Fo
     componentClass: undefined,
     formControlProps: undefined,
     id: undefined,
-    helperText: undefined,
+    helperText: '',
     disabled: undefined,
     children: undefined
   };

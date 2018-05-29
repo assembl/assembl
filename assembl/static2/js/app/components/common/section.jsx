@@ -1,4 +1,4 @@
-// @noflow
+// @flow
 import * as React from 'react';
 import { Translate } from 'react-redux-i18n';
 import classnames from 'classnames';
@@ -11,11 +11,11 @@ type SectionProps = {
   displayIndex: boolean,
   indexGenerator: Function,
   parents: Array<number>,
-  children: Array<*>,
+  children: React.Node,
   className: string,
   translate: boolean,
   innerRef?: Function,
-  id: string
+  id?: string
 };
 
 const level1 = (title, index, translate) => (
@@ -60,7 +60,7 @@ class Section extends React.Component<SectionProps> {
     parents: [],
     className: 'themes-section',
     translate: false,
-    innerRef: null
+    innerRef: undefined
   };
 
   getIndexes = () => {

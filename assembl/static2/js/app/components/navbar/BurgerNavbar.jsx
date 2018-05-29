@@ -1,4 +1,4 @@
-// @noflow
+// @flow
 
 import * as React from 'react';
 import classNames from 'classnames';
@@ -9,12 +9,22 @@ import LanguageMenu from './languageMenu';
 import UserMenu from './UserMenu';
 import { browserHistory } from '../../router';
 
-export default class BurgerNavbar extends React.PureComponent<
-  $FlowFixMeProps,
-  {
-    shouldDisplayMenu: boolean
-  }
-> {
+type Props = {
+  elements: React.Node,
+  slug: string,
+  logoSrc: string,
+  connectedUserId: string,
+  currentPhaseIdentifier: string,
+  helpUrl: string,
+  location: string,
+  logoLink: string
+};
+
+type State = {
+  shouldDisplayMenu: boolean
+};
+
+export default class BurgerNavbar extends React.PureComponent<Props, State> {
   unlisten: () => void;
 
   componentWillMount() {
@@ -35,9 +45,8 @@ export default class BurgerNavbar extends React.PureComponent<
   };
 
   render() {
-    const { state, props, toggleMenu } = this;
-    const { elements, slug, logoSrc, connectedUserId, currentPhaseIdentifier, helpUrl, location, logoLink } = props;
-    const { shouldDisplayMenu } = state;
+    const { elements, slug, logoSrc, connectedUserId, currentPhaseIdentifier, helpUrl, location, logoLink } = this.props;
+    const { shouldDisplayMenu } = this.state;
     return (
       <div className="burger-navbar">
         {shouldDisplayMenu && (
@@ -47,7 +56,7 @@ export default class BurgerNavbar extends React.PureComponent<
           </div>
         )}
         <span
-          onClick={toggleMenu}
+          onClick={this.toggleMenu}
           className={classNames([`assembl-icon-${shouldDisplayMenu ? 'cancel' : 'menu-on'}`, 'burgermenu-icon', 'black'])}
         />
         <Logo slug={slug} src={logoSrc} url={logoLink} />

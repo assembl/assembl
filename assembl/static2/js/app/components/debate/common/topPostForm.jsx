@@ -1,4 +1,4 @@
-// @noflow
+// @flow
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { compose, graphql } from 'react-apollo';
@@ -39,7 +39,7 @@ type TopPostFormState = {
 };
 
 class TopPostForm extends React.Component<TopPostFormProps, TopPostFormState> {
-  formContainer: HTMLDivElement | void;
+  formContainer: ?HTMLDivElement;
 
   static defaultProps = {
     scrollOffset: 125,
@@ -147,7 +147,7 @@ class TopPostForm extends React.Component<TopPostFormProps, TopPostFormState> {
     ]);
   }
 
-  setFormContainerRef = (el: HTMLDivElement): void => {
+  setFormContainerRef = (el: ?HTMLDivElement): void => {
     this.formContainer = el;
   };
 

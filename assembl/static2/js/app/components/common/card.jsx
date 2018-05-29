@@ -4,7 +4,7 @@ import * as React from 'react';
 type CardProps = {
   className: string,
   imgUrl: string,
-  children: Array<*>
+  children: React.Node
 };
 
 class Card extends React.Component<CardProps> {

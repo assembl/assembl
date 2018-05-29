@@ -22,7 +22,7 @@ exports[`LegalNoticeAndTermsForm dumb component should render a form to edit leg
           componentClass={undefined}
           disabled={undefined}
           formControlProps={undefined}
-          helperText={undefined}
+          helperText=""
           helperUrl=""
           id={undefined}
           label="Terms and conditions"
@@ -41,7 +41,7 @@ exports[`LegalNoticeAndTermsForm dumb component should render a form to edit leg
           componentClass={undefined}
           disabled={undefined}
           formControlProps={undefined}
-          helperText={undefined}
+          helperText=""
           helperUrl=""
           id={undefined}
           label="Legal notice"

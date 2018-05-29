@@ -24,7 +24,7 @@ type AnswerFormProps = {
   ideaId: string,
   parentId: string,
   refetchIdea: Function,
-  textareaRef: HTMLDivElement,
+  textareaRef: Function,
   uploadDocument: Function,
   debateData: Object,
   identifier: string,

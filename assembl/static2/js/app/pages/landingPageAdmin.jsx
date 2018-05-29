@@ -1,4 +1,4 @@
-// @noflow
+// @flow
 import React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { connect } from 'react-redux';

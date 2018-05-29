@@ -7,8 +7,8 @@ import { extractNatures, extractActions, NatureIcons, ActionIcons } from '../../
 
 type TaxonomyOverflowMenuProps = {
   handleClick: Function,
-  extractNature?: string,
-  extractAction?: string,
+  extractNature: ?string,
+  extractAction: ?string,
   onCloseClick: Function,
   top: number
 };

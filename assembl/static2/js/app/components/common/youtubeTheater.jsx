@@ -1,7 +1,15 @@
-// @noflow
+// @flow
 import * as React from 'react';
 
-export default class YoutubeTheater extends React.Component<$FlowFixMeProps, $FlowFixMeState> {
+type Props = {
+  videoId: string
+};
+
+type State = {
+  open: boolean
+};
+
+export default class YoutubeTheater extends React.Component<Props, State> {
   timeout: number;
 
   state = {

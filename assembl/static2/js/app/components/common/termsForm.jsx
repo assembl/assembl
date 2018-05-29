@@ -21,7 +21,7 @@ type TermsFormState = {
 };
 
 class DumbTermsForm extends React.Component<TermsFormProps, TermsFormState> {
-  box: HTMLElement;
+  box: ?HTMLElement;
 
   handleSubmit: () => void;
 

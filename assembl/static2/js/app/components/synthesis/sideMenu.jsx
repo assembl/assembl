@@ -31,6 +31,7 @@ const SideMenu = (props: SideMenuProps) => {
           index={index + 1}
           parents={[]}
           subIdeas={getChildren(rootIdea, descendants)}
+          // $FlowFixMe slug can be null if retrieve via getDiscussionSlug()
           slug={slug}
           synthesisPostId={synthesisPostId}
         />
