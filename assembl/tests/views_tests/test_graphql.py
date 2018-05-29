@@ -2596,7 +2596,7 @@ query { discussion { homepageUrl }  }
     assert res.data['discussion']['homepageUrl'] == url
 
 
-def test_query_discussion_title_and_subtitle(discussion, graphql_request):
+def test_query_discussion_langstring_fields(discussion, graphql_request):
     res = schema.execute(u"""query {
         discussion {
             id
@@ -2607,6 +2607,11 @@ def test_query_discussion_title_and_subtitle(discussion, graphql_request):
             }
             subtitle
             subtitleEntries {
+                value
+                localeCode
+            }
+            buttonLabel
+            buttonLabelEntries {
                 value
                 localeCode
             }
@@ -2639,6 +2644,17 @@ def test_query_discussion_title_and_subtitle(discussion, graphql_request):
                     u'value': u'Dis-moi ce que tu manges et je te dirai qui tu es',
                     u'localeCode': u'fr'
                 }
+            ],
+            u'buttonLabel': u'Discuss bananas',
+            u'buttonLabelEntries': [
+                {
+                    u'value': u'Discuss bananas',
+                    u'localeCode': u'en'
+                },
+                {
+                    u'value': u'Discuter des bananes',
+                    u'localeCode': u'fr'
+                }
             ]
         }
     }
@@ -2650,21 +2666,36 @@ def test_mutation_update_discussion(graphql_request, discussion):
         {u"value": title_entry_en, u"localeCode": u"en"},
         {u"value": title_entry_fr, u"localeCode": u"fr"}
     ]
+
     subtitle_entry_en = u"By the way is it a fruit or a vegetable?"
     subtitle_entry_fr = u"D'ailleurs c'est un fruit ou un légume ?"
     subtitle_entries = [
         {u"value": subtitle_entry_en, u"localeCode": u"en"},
         {u"value": subtitle_entry_fr, u"localeCode": u"fr"}
     ]
+
+    button_label_entry_en = u"Discuss tomatoes"
+    button_label_entry_fr = u"Discuter des tomates"
+    button_label_entries = [
+        {u"value": button_label_entry_en, u"localeCode": u"en"},
+        {u"value": button_label_entry_fr, u"localeCode": u"fr"}
+    ]
+
     variables = {
         "titleEntries": title_entries,
-        "subtitleEntries": subtitle_entries
+        "subtitleEntries": subtitle_entries,
+        "buttonLabelEntries": button_label_entries
     }
     res = schema.execute(u"""
-mutation myFirstMutation($titleEntries: [LangStringEntryInput!]!, $subtitleEntries: [LangStringEntryInput!]!) {
+mutation myFirstMutation(
+    $titleEntries: [LangStringEntryInput!]!,
+    $subtitleEntries: [LangStringEntryInput!]!,
+    $buttonLabelEntries: [LangStringEntryInput!]!
+) {
     updateDiscussion(
         titleEntries: $titleEntries
         subtitleEntries: $subtitleEntries
+        buttonLabelEntries: $buttonLabelEntries
     ) {
         discussion {
             id
@@ -2678,6 +2709,11 @@ mutation myFirstMutation($titleEntries: [LangStringEntryInput!]!, $subtitleEntri
                 value
                 localeCode
             }
+            buttonLabel
+            buttonLabelEntries {
+                value
+                localeCode
+            }
         }
     }
 }
@@ -2686,7 +2722,12 @@ mutation myFirstMutation($titleEntries: [LangStringEntryInput!]!, $subtitleEntri
     assert result is not None
     assert result['updateDiscussion'] is not None
     discussion = result['updateDiscussion']['discussion']
+
     assert discussion['title'] == title_entry_en
     assert discussion['titleEntries'] == title_entries
+
     assert discussion['subtitle'] == subtitle_entry_en
     assert discussion['subtitleEntries'] == subtitle_entries
+
+    assert discussion['buttonLabel'] == button_label_entry_en
+    assert discussion['buttonLabelEntries'] == button_label_entries

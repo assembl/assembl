@@ -57,6 +57,11 @@ class Discussion(DiscussionBoundBase, NamedClassMixin):
         LangString, lazy="select", single_parent=True, primaryjoin=subtitle_id == LangString.id,
         backref=backref("discussion_from_subtitle", lazy="dynamic"), cascade="all, delete-orphan")
 
+    button_label_id = Column(Integer(), ForeignKey(LangString.id))
+    button_label = relationship(
+        LangString, lazy="select", single_parent=True, primaryjoin=button_label_id == LangString.id,
+        backref=backref("discussion_from_button_label", lazy="dynamic"), cascade="all, delete-orphan")
+
     slug = Column(CoerceUnicode, nullable=False, unique=True, index=True)
 
     creation_date = Column(DateTime, nullable=False, default=datetime.utcnow)
@@ -1076,4 +1081,4 @@ def slugify_topic_if_slug_is_empty(discussion, topic, oldvalue, initiator):
 
 event.listen(Discussion.topic, 'set', slugify_topic_if_slug_is_empty)
 LangString.setup_ownership_load_event(Discussion, [
-    'resources_center_title', 'terms_and_conditions', 'legal_notice', 'cookies_policy', 'privacy_policy', 'title'])
+    'resources_center_title', 'terms_and_conditions', 'legal_notice', 'cookies_policy', 'privacy_policy', 'title', 'subtitle', 'button_label'])

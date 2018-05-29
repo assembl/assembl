@@ -25,8 +25,13 @@ def upgrade(pyramid_env):
             'discussion', sa.Column('subtitle_id', sa.Integer(), sa.ForeignKey('langstring.id')))
         sa.schema.UniqueConstraint("subtitle_id")
 
+        op.add_column(
+            'discussion', sa.Column('button_label_id', sa.Integer(), sa.ForeignKey('langstring.id')))
+        sa.schema.UniqueConstraint("button_label_id")
+
 
 def downgrade(pyramid_env):
     with context.begin_transaction():
         op.drop_column('discussion', 'title_id')
         op.drop_column('discussion', 'subtitle_id')
+        op.drop_column('discussion', 'button_label_id')

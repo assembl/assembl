@@ -27,6 +27,8 @@ class Discussion(SecureObjectType, SQLAlchemyObjectType):
     title_entries = graphene.List(LangStringEntry)
     subtitle = graphene.String(lang=graphene.String())
     subtitle_entries = graphene.List(LangStringEntry)
+    button_label = graphene.String(lang=graphene.String())
+    button_label_entries = graphene.List(LangStringEntry)
 
     def resolve_homepage_url(self, args, context, info):
         # TODO: Remove this resolver and add URLString to
@@ -61,11 +63,26 @@ class Discussion(SecureObjectType, SQLAlchemyObjectType):
 
         return []
 
+    def resolve_button_label(self, args, context, info):
+        """Button label value in given locale."""
+        discussion_id = context.matchdict['discussion_id']
+        discussion = models.Discussion.get(discussion_id)
+        return resolve_langstring(discussion.button_label, args.get('lang'))
+
+    def resolve_button_label_entries(self, args, context, info):
+        discussion_id = context.matchdict['discussion_id']
+        discussion = models.Discussion.get(discussion_id)
+        if discussion.subtitle:
+            return resolve_langstring_entries(discussion, 'button_label')
+
+        return []
+
 
 class UpdateDiscussion(graphene.Mutation):
     class Input:
         title_entries = graphene.List(LangStringEntryInput)
         subtitle_entries = graphene.List(LangStringEntryInput)
+        button_label_entries = graphene.List(LangStringEntryInput)
 
     discussion = graphene.Field(lambda: Discussion)
 
@@ -98,6 +115,10 @@ class UpdateDiscussion(graphene.Mutation):
             subtitle_entries = args.get('subtitle_entries')
             update_langstring_from_input_entries(
                 discussion, 'subtitle', subtitle_entries)
+
+            button_label_entries = args.get('button_label_entries')
+            update_langstring_from_input_entries(
+                discussion, 'button_label', button_label_entries)
 
         db.flush()
         discussion = cls.get(discussion_id)
