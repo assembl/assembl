@@ -31,7 +31,7 @@ type SignupFormState = {
 class SignupForm extends React.Component<SignupFormProps, SignupFormState> {
   signupHandler: (SyntheticEvent<>) => void;
 
-  handleInput: (SyntheticEvent<>) => void;
+  handleInput: (SyntheticInputEvent<HTMLInputElement>) => void;
 
   toggleCheck: () => void;
 

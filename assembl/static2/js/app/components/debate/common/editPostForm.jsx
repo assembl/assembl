@@ -45,10 +45,8 @@ class EditPostForm extends React.PureComponent<EditPostFormProps, EditPostFormSt
     };
   }
 
-  updateSubject = (e: SyntheticEvent<>): void => {
-    if (e.target instanceof HTMLInputElement) {
-      this.setState({ subject: e.target.value });
-    }
+  updateSubject = (e: SyntheticInputEvent<HTMLInputElement>): void => {
+    this.setState({ subject: e.target.value });
   };
 
   updateBody = (rawBody: RawContentState): void => {
