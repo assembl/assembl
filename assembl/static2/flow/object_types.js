@@ -13,7 +13,8 @@ export type Idea = {
   numChildren: number,
   numContributors: number,
   numPosts: number,
-  order: number
+  order: number,
+  ancestors: Array<string>
 };
 
 type Post = PostFragment & {
@@ -127,7 +128,6 @@ type Extract = {
   extractAction: string,
   body: string
 };
-
 
 type FieldIdentifier = 'EMAIL' | 'FULLNAME' | 'PASSWORD' | 'PASSWORD2' | 'USERNAME' | 'CUSTOM';
 

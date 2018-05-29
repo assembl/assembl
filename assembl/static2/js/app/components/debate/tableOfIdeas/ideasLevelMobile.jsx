@@ -12,12 +12,13 @@ type Props = {
   identifier: string,
   ideaLevel: number,
   nbLevel: number,
-  selectedIdeasId: string,
+  selectedIdeasId: Array<string>,
   setSelectedIdeas: Function
 };
 
 const IdeasLevelMobile = ({ ideas, identifier, ideaLevel, nbLevel, selectedIdeasId, setSelectedIdeas }: Props) => {
   const slug = getDiscussionSlug();
+  const isSubLevel = nbLevel > 1 && ideaLevel < nbLevel;
   const stringMaxLength = (level) => {
     switch (level) {
     case 1:
@@ -33,25 +34,21 @@ const IdeasLevelMobile = ({ ideas, identifier, ideaLevel, nbLevel, selectedIdeas
   return (
     <div
       className={classnames('slider-container', 'mobile-slider-container', {
-        'thumbnails-mobile-slider': nbLevel > 1 && ideaLevel < nbLevel
+        'thumbnails-mobile-slider': isSubLevel
       })}
-      style={nbLevel > 1 && ideaLevel < nbLevel ? { height: '160px' } : null}
+      style={isSubLevel ? { height: '160px' } : null}
     >
       <div
-        className={classnames('slider', { 'thumbnails-slider': nbLevel > 1 && ideaLevel < nbLevel })}
+        className={classnames('slider', { 'thumbnails-slider': isSubLevel })}
         style={
-          nbLevel > 1 && ideaLevel < nbLevel
+          isSubLevel
             ? { width: (window.innerWidth * 0.6 + 15) * ideas.length - 15 }
             : { width: window.innerWidth * 0.8 * ideas.length }
         }
       >
         {ideas.map((idea, index) => (
           <Col
-            style={
-              nbLevel > 1 && ideaLevel < nbLevel
-                ? { width: window.innerWidth * 0.6, height: '130px' }
-                : { width: window.innerWidth * 0.8 }
-            }
+            style={isSubLevel ? { width: window.innerWidth * 0.6, height: '130px' } : { width: window.innerWidth * 0.8 }}
             className="theme theme-inline"
             xs={12}
             md={12}

@@ -1,3 +1,4 @@
+// @flow
 import React from 'react';
 import { Translate } from 'react-redux-i18n';
 import classnames from 'classnames';
@@ -5,6 +6,19 @@ import { Grid } from 'react-bootstrap';
 import IdeasLevel from './ideasLevel';
 import IdeasLevelMobile from './ideasLevelMobile';
 import { SMALL_SCREEN_WIDTH } from '../../../constants';
+
+type Props = {
+  rootIdeaId: string,
+  ideas: Array<Idea>,
+  identifier: string
+};
+
+type State = {
+  selectedIdeasId: Array<string>,
+  selectedIdeaIndex: number,
+  ideaLevel: number,
+  goBack: boolean
+};
 
 const PageTitle = () => (
   <div className="title-section">
@@ -16,19 +30,20 @@ const PageTitle = () => (
 );
 
 class Ideas extends React.Component {
-  constructor(props) {
+  props: Props;
+
+  state: State;
+
+  constructor(props: Props) {
     super(props);
     const { rootIdeaId } = this.props;
     this.state = { selectedIdeasId: [rootIdeaId], selectedIdeaIndex: 0, ideaLevel: 0, goBack: false };
-    this.getIdeaChildren = this.getIdeaChildren.bind(this);
-    this.setSelectedIdeas = this.setSelectedIdeas.bind(this);
-    this.getIdeaParents = this.getIdeaParents.bind(this);
-    this.goBackToParents = this.goBackToParents.bind(this);
   }
 
-  setSelectedIdeas(selectedIdeaId, ideaLevel, ideaIndex) {
-    const nbLevel = this.state.selectedIdeasId.length;
-    const ideasArray = this.state.selectedIdeasId;
+  setSelectedIdeas = (selectedIdeaId: string, ideaLevel: number, ideaIndex: number) => {
+    const { selectedIdeasId } = this.state;
+    const nbLevel = selectedIdeasId.length;
+    const ideasArray = selectedIdeasId;
     this.setState({ selectedIdeaIndex: ideaIndex, ideaLevel: ideaLevel });
     if (ideasArray.indexOf(selectedIdeaId) <= -1 && ideaLevel === nbLevel) {
       ideasArray.push(selectedIdeaId);
@@ -36,27 +51,27 @@ class Ideas extends React.Component {
         selectedIdeasId: ideasArray
       });
     } else if (ideaLevel < nbLevel) {
-      const nbToRemove = this.state.selectedIdeasId.length - ideaLevel;
+      const nbToRemove = selectedIdeasId.length - ideaLevel;
       ideasArray.splice(ideaLevel, nbToRemove, selectedIdeaId);
       this.setState({
         selectedIdeasId: ideasArray
       });
     }
-  }
+  };
 
-  getIdeaChildren(selectedIdeaId) {
+  getIdeaChildren = (selectedIdeaId: string) => {
     const { ideas } = this.props;
     return ideas.filter(idea => idea.parentId === selectedIdeaId);
-  }
+  };
 
-  getIdeaParents(ideaLevel) {
+  getIdeaParents = (ideaLevel: number) => {
     const { ideas } = this.props;
     const { selectedIdeasId } = this.state;
     const ancestor = selectedIdeasId[ideaLevel];
     return ideas.filter(idea => ancestor === idea.ancestors[0]);
-  }
+  };
 
-  goBackToParents() {
+  goBackToParents = () => {
     const { selectedIdeasId, ideaLevel } = this.state;
     const ideasArray = selectedIdeasId;
     ideasArray.pop();
@@ -66,46 +81,46 @@ class Ideas extends React.Component {
       ideaLevel: ideaLevel - 1,
       selectedIdeaIndex: 0
     });
-  }
+  };
 
   render() {
     const isMobile = window.innerWidth < SMALL_SCREEN_WIDTH;
     const { identifier } = this.props;
+    const { ideaLevel, selectedIdeasId, selectedIdeaIndex, goBack } = this.state;
     return (
       <section className={classnames('themes-section', 'ideas-section', { 'mobile-ideas-section': isMobile })}>
         <Grid fluid className={classnames('background-grey', { 'no-padding': isMobile })}>
           <div className="max-container">
-            {!isMobile && <PageTitle />}
-            {isMobile && this.state.ideaLevel === 0 && <PageTitle />}
+            {!isMobile || (isMobile && ideaLevel === 0 && <PageTitle />)}
             {isMobile &&
-              this.state.ideaLevel > 0 && (
+              ideaLevel > 0 && (
                 <div className="ideas-back-arrow" onClick={this.goBackToParents}>
                   <span className="assembl-icon-down-small color" />
                 </div>
               )}
             <div className={classnames('content-section', { 'mobile-content-section': isMobile })}>
               {!isMobile
-                ? this.state.selectedIdeasId.map((ideaId, index) => (
+                ? selectedIdeasId.map((ideaId, index) => (
                   <IdeasLevel
                     key={`ideas-level-${index}`}
                     ideas={this.getIdeaChildren(ideaId)}
                     identifier={identifier}
                     setSelectedIdeas={this.setSelectedIdeas}
-                    nbLevel={this.state.selectedIdeasId.length}
+                    nbLevel={selectedIdeasId.length}
                     ideaLevel={index + 1}
-                    selectedIdeasId={this.state.selectedIdeasId}
-                    selectedIdeaIndex={this.state.selectedIdeaIndex}
+                    selectedIdeasId={selectedIdeasId}
+                    selectedIdeaIndex={selectedIdeaIndex}
                   />
                 ))
-                : this.state.selectedIdeasId.map((ideaId, index) => (
+                : selectedIdeasId.map((ideaId, index) => (
                   <IdeasLevelMobile
                     key={`ideas-level-${index}`}
-                    ideas={this.state.goBack ? this.getIdeaParents(index) : this.getIdeaChildren(ideaId)}
+                    ideas={goBack ? this.getIdeaParents(index) : this.getIdeaChildren(ideaId)}
                     identifier={identifier}
                     setSelectedIdeas={this.setSelectedIdeas}
                     ideaLevel={index + 1}
-                    selectedIdeasId={this.state.selectedIdeasId}
-                    nbLevel={this.state.selectedIdeasId.length}
+                    selectedIdeasId={selectedIdeasId}
+                    nbLevel={selectedIdeasId.length}
                   />
                 ))}
             </div>

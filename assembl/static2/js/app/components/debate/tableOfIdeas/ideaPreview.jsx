@@ -7,7 +7,7 @@ import classnames from 'classnames';
 import Statistic from '../../common/statistic';
 
 type Props = {
-  selectedIdeasId: string,
+  selectedIdeasId: Array<string>,
   imgUrl: string,
   link: string,
   title: string,
