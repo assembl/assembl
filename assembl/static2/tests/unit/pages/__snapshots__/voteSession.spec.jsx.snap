@@ -10,7 +10,7 @@ exports[`VoteSession component should match VoteSession snapshot 1`] = `
     title="Phase de vote à la majorité et estimation multicritère"
     type="voteSession"
   >
-    <HeaderStatistics
+    <Connect(Component)
       statElements={
         Array [
           Object {
@@ -271,7 +271,7 @@ exports[`VoteSession component should match VoteSession snapshot with empty modu
     title="Phase de vote à la majorité et estimation multicritère"
     type="voteSession"
   >
-    <HeaderStatistics
+    <Connect(Component)
       statElements={
         Array [
           Object {
