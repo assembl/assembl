@@ -6,6 +6,7 @@ import classnames from 'classnames';
 import IdeaPreview from './ideaPreview';
 import { get as getRoute } from '../../../utils/routeMap';
 import { getDiscussionSlug } from '../../../utils/globalFunctions';
+import { APP_CONTAINER_PADDING } from '../../../constants';
 
 type Props = {
   ideas: Array<Idea>,
@@ -37,12 +38,13 @@ const IdeasLevelMobile = ({ ideas, identifier, ideaLevel, nbLevel, selectedIdeas
         'thumbnails-mobile-slider': isSubLevel
       })}
       style={isSubLevel ? { height: '160px' } : null}
+      id={`slider-${ideaLevel}`}
     >
       <div
         className={classnames('slider', { 'thumbnails-slider': isSubLevel })}
         style={
           isSubLevel
-            ? { width: (window.innerWidth * 0.6 + 15) * ideas.length - 15 }
+            ? { width: (window.innerWidth * 0.6 + APP_CONTAINER_PADDING) * ideas.length - APP_CONTAINER_PADDING }
             : { width: window.innerWidth * 0.8 * ideas.length }
         }
       >
@@ -75,6 +77,7 @@ const IdeasLevelMobile = ({ ideas, identifier, ideaLevel, nbLevel, selectedIdeas
                 setSelectedIdeas={setSelectedIdeas}
                 nbLevel={nbLevel}
                 isMobile
+                ideaPreviewWidth={window.innerWidth * 0.6}
               />
             </div>
           </Col>

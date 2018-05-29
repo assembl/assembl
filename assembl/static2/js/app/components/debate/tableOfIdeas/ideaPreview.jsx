@@ -5,6 +5,7 @@ import { Link } from 'react-router';
 import { Translate } from 'react-redux-i18n';
 import classnames from 'classnames';
 import Statistic from '../../common/statistic';
+import { APP_CONTAINER_PADDING } from '../../../constants';
 
 type Props = {
   selectedIdeasId: Array<string>,
@@ -19,6 +20,7 @@ type Props = {
   ideaIndex: number,
   nbLevel?: number,
   isMobile: boolean,
+  ideaPreviewWidth: number,
   setSelectedIdeas: Function
 };
 
@@ -35,11 +37,14 @@ const IdeaPreview = ({
   ideaIndex,
   nbLevel,
   setSelectedIdeas,
-  isMobile
+  isMobile,
+  ideaPreviewWidth
 }: Props) => {
-  const previewClasses = classnames('illustration-box', 'idea-preview', `idea-preview-level-${ideaLevel}`, {
+  const previewClasses = classnames('idea-preview', `idea-preview-level-${ideaLevel}`, {
     'idea-preview-selected': selectedIdeasId.indexOf(ideaId) > -1,
-    'idea-preview-thumbnails': nbLevel && nbLevel > 1 && ideaLevel < nbLevel
+    'idea-preview-thumbnails': nbLevel && nbLevel > 1 && ideaLevel < nbLevel,
+    'illustration-box': !isMobile,
+    'mobile-illustration-box': isMobile
   });
   return (
     <div className={previewClasses}>
@@ -56,6 +61,15 @@ const IdeaPreview = ({
                 onClick={() => {
                   if (isMobile) {
                     setSelectedIdeas(ideaId, ideaLevel, ideaIndex);
+                    const slider = document.getElementById(`slider-${ideaLevel}`);
+                    if (slider) {
+                      slider.scrollLeft =
+                        (ideaPreviewWidth + APP_CONTAINER_PADDING) * ideaIndex -
+                        (ideaPreviewWidth + APP_CONTAINER_PADDING * 2 - window.innerWidth / 2);
+                    }
+                    setTimeout(() => {
+                      window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
+                    }, 500);
                   } else {
                     setSelectedIdeas(ideaId, ideaLevel, ideaIndex);
                     const dScrollTop = document.documentElement ? document.documentElement.scrollTop : null;

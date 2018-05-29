@@ -76,6 +76,7 @@
   .mobile-slider-container {
     margin-bottom: 15px !important;
     overflow-x: scroll;
+    -webkit-overflow-scrolling: touch;
 
     .color-box {
       height: 100%;

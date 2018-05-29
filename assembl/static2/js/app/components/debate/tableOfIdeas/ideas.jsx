@@ -81,6 +81,8 @@ class Ideas extends React.Component {
       ideaLevel: ideaLevel - 1,
       selectedIdeaIndex: 0
     });
+    const slider = document.getElementById(`slider-${ideaLevel}`);
+    if (slider) slider.scrollLeft = 0;
   };
 
   render() {
