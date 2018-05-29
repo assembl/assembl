@@ -15,7 +15,7 @@ type URLMetadataLoaderState = {
   metadata: URLPreviewProps | null
 };
 
-class URLMetadataLoader extends React.Component<*, URLMetadataLoaderProps, URLMetadataLoaderState> {
+class URLMetadataLoader extends React.Component<URLMetadataLoaderProps, URLMetadataLoaderState> {
   state = {
     loading: true,
     error: false,

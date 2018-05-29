@@ -41,7 +41,10 @@ const ExtractInPost = ({ id, children }: ExtractInPostProps) => (
 );
 
 const postBodyReplacementComponents = afterLoad => ({
-  iframe: attributes => <Embed url={attributes.src} defaultEmbed={<iframe title="post-embed" {...attributes} />} />,
+  iframe: attributes => (
+    // the src iframe url is different from the resource url
+    <Embed url={attributes['data-source-url'] || attributes.src} defaultEmbed={<iframe title="post-embed" {...attributes} />} />
+  ),
   a: (attributes) => {
     const embeddedUrl = isSpecialURL(attributes.href);
     const origin = (

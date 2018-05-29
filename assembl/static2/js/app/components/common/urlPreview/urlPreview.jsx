@@ -19,7 +19,7 @@ export type URLPreviewProps = {
   afterLoad: ?Function
 };
 
-class URLPreview extends React.Component<*, URLPreviewProps, void> {
+class URLPreview extends React.Component<URLPreviewProps> {
   componentDidMount() {
     const { html, afterLoad } = this.props;
     if (!html && afterLoad) afterLoad();

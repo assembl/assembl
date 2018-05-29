@@ -2,7 +2,9 @@
 // @flow
 import React from 'react';
 import type { Node } from 'react';
+
 import YoutubeEmbed from '../components/common/urlPreview/youtubeTheater';
+import SketchFabEmbed from '../components/common/urlPreview/sketchFabTheater';
 
 const urlMetadataWebServiceUrl = 'http://0.0.0.0:5000';
 
@@ -33,7 +35,8 @@ export const EMBED_PROVIDERS = {
         const embedUrl = `https://www.youtube.com/embed/${id}`;
         return {
           providerName: 'Youtube',
-          html: `<div><iframe title="" src="${embedUrl}" frameborder="0" class="embedded-video" allowfullscreen></iframe></div>`,
+          html: `<div><iframe title="" src="${embedUrl}" frameborder="0" class="embedded-video"
+                              allowfullscreen data-source-url="${url}"></iframe></div>`,
           id: id
         };
       }
@@ -41,10 +44,36 @@ export const EMBED_PROVIDERS = {
     },
     getComponent: (url: string): Node | null => {
       const result = EMBED_PROVIDERS.youtube.match(url);
-      return result ? <YoutubeEmbed videoId={result[1]} /> : null;
+      return result ? <YoutubeEmbed id={result[1]} /> : null;
+    }
+  },
+  sketchfab: {
+    scheme: /(?:((sketchfab\.com\/show|models)|skfb\.ly)\/(.*))/i,
+    match: (url: string) => url.match(EMBED_PROVIDERS.sketchfab.scheme),
+    getMetadata: (url: string): URLMetadataProps | null => {
+      const result = EMBED_PROVIDERS.sketchfab.match(url);
+      if (result) {
+        const isSkfb = result[1] === 'skfb.ly';
+        const id = result[3];
+        const embedUrl = isSkfb
+          ? `${url}?autostart=1&autospin=0.5`
+          : `https://sketchfab.com/models/${id}/embed?autostart=1&autospin=0.5`;
+
+        return {
+          providerName: 'Sketchfab',
+          html: `<div><iframe title="" src="${embedUrl}" frameborder="0" class="embedded-video"
+                              allowfullscreen data-source-url="${url}"></iframe></div>`,
+          id: id
+        };
+      }
+      return null;
+    },
+    getComponent: (url: string): Node | null => {
+      const result = EMBED_PROVIDERS.sketchfab.match(url);
+      return result ? <SketchFabEmbed url={url} /> : null;
     }
   }
-  // add SketchFab
+  // add ...
 };
 
 /**

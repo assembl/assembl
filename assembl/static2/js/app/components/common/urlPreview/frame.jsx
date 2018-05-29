@@ -20,7 +20,7 @@ const styles = {
   padding: 0
 };
 
-class Frame extends React.Component<*, FrameProps, void> {
+class Frame extends React.Component<FrameProps, void> {
   constructor(props: FrameProps) {
     super(props);
     this.id = `iframe-${props.id}`;

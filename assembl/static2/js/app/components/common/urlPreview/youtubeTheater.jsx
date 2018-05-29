@@ -2,7 +2,7 @@
 import * as React from 'react';
 
 type Props = {
-  videoId: string
+  id: string
 };
 
 type State = {
@@ -10,8 +10,6 @@ type State = {
 };
 
 export default class YoutubeTheater extends React.Component<Props, State> {
-  timeout: number;
-
   state = {
     open: false
   };
@@ -21,28 +19,28 @@ export default class YoutubeTheater extends React.Component<Props, State> {
   openTheater = () => this.setState({ open: true });
 
   render = () => {
-    const { videoId } = this.props;
+    const { id } = this.props;
     const { open } = this.state;
     return (
-      <div className={`youtube-theater ${open ? 'open' : ''}`}>
+      <div className={`embed-theater ${open ? 'open' : ''}`}>
         {open ? (
           <div className="theater-content">
-            <div className="youtube-video">
+            <div className="embed-video">
               <iframe
                 title="YouTube video"
                 id="ytplayer"
                 type="text/html"
                 width="640"
                 height="360"
-                src={`https://www.youtube.com/embed/${videoId}?autoplay=1`}
+                src={`https://www.youtube.com/embed/${id}?autoplay=1`}
                 frameBorder="0"
               />
               <button onClick={this.closeTheater} className="close-theater-button assembl-icon-cancel" />
             </div>
           </div>
         ) : (
-          <div className="youtube-thumbnail-container" onClick={this.openTheater}>
-            <img src={`https://img.youtube.com/vi/${videoId}/mqdefault.jpg`} className="youtube-thumbnail" alt="youtube video" />
+          <div className="embed-thumbnail-container" onClick={this.openTheater}>
+            <img src={`https://img.youtube.com/vi/${id}/mqdefault.jpg`} className="embed-thumbnail" alt="youtube video" />
             <span className="play-button" />
           </div>
         )}

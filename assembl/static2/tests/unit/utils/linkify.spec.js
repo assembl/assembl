@@ -17,7 +17,8 @@ describe('transformLinksInHtml function', () => {
       '<p>Foobar: <a href="https://www.youtube.com/watch?v=lnhB-y_WJSk" class="linkified"' +
       ' target="_blank">https://www.youtube.com/watch?v=lnhB-y_WJSk</a>' +
       '<div><iframe title="" src="https://www.youtube.com/embed/lnhB-y_WJSk" ' +
-      'frameborder="0" class="embedded-video" allowfullscreen=""></iframe></div></p>';
+      'frameborder="0" class="embedded-video" allowfullscreen="" ' +
+      'data-source-url="https://www.youtube.com/watch?v=lnhB-y_WJSk"></iframe></div></p>';
     expect(actual).toEqual(expected);
   });
 
@@ -28,7 +29,8 @@ describe('transformLinksInHtml function', () => {
       'Foobar: <a href="https://youtube.com/watch?v=lnhB-y_WJSk" class="linkified"' +
       ' target="_blank">https://youtube.com/watch?v=lnhB-y_WJSk</a>' +
       '<div><iframe title="" src="https://www.youtube.com/embed/lnhB-y_WJSk" frameborder="0" ' +
-      'class="embedded-video" allowfullscreen=""></iframe></div>';
+      'class="embedded-video" allowfullscreen="" ' +
+      'data-source-url="https://youtube.com/watch?v=lnhB-y_WJSk"></iframe></div>';
     expect(actual).toEqual(expected);
   });
 
@@ -39,7 +41,8 @@ describe('transformLinksInHtml function', () => {
       '<p>Foobar: <a href="https://youtu.be/lnhB-y_WJSk" class="linkified"' +
       ' target="_blank">https://youtu.be/lnhB-y_WJSk</a>' +
       '<div><iframe title="" src="https://www.youtube.com/embed/lnhB-y_WJSk" ' +
-      'frameborder="0" class="embedded-video" allowfullscreen=""></iframe></div></p>';
+      'frameborder="0" class="embedded-video" allowfullscreen="" ' +
+      'data-source-url="https://youtu.be/lnhB-y_WJSk"></iframe></div></p>';
     expect(actual).toEqual(expected);
   });
 
@@ -50,11 +53,13 @@ describe('transformLinksInHtml function', () => {
       '<p><a href="https://www.youtube.com/watch?v=EfJ_pMWpNyM" class="linkified" ' +
       'target="_blank">https://www.youtube.com/watch?v=EfJ_pMWpNyM</a>' +
       '<div><iframe title="" src="https://www.youtube.com/embed/EfJ_pMWpNyM" ' +
-      'frameborder="0" class="embedded-video" allowfullscreen=""></iframe></div></p>' +
+      'frameborder="0" class="embedded-video" allowfullscreen="" ' +
+      'data-source-url="https://www.youtube.com/watch?v=EfJ_pMWpNyM"></iframe></div></p>' +
       '<p>…p><a href="https://www.youtube.com/watch?v=n4gmjJ_aPHU" class="linkified" ' +
       'target="_blank">https://www.youtube.com/watch?v=n4gmjJ_aPHU</a>' +
       '<div><iframe title="" src="https://www.youtube.com/embed/n4gmjJ_aPHU" ' +
-      'frameborder="0" class="embedded-video" allowfullscreen=""></iframe></div></p>';
+      'frameborder="0" class="embedded-video" allowfullscreen="" ' +
+      'data-source-url="https://www.youtube.com/watch?v=n4gmjJ_aPHU"></iframe></div></p>';
     expect(actual).toEqual(expected);
   });
 });

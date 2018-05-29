@@ -13,5 +13,5 @@ const url = 'https://foo.bar';
 const defaultEmbed = <div>Default component</div>;
 
 storiesOf('Embed', module)
-  .add('default', () => <Embed url={youtubeUrl} defaultEmbed={defaultEmbed} />)
-  .add('with default', () => <Embed url={url} defaultEmbed={defaultEmbed} />);
+  .add('default', () => <Embed url={url} defaultEmbed={defaultEmbed} />)
+  .add('youtube', () => <Embed url={youtubeUrl} defaultEmbed={defaultEmbed} />);
