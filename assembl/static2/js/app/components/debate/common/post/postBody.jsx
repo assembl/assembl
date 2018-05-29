@@ -134,7 +134,7 @@ const PostBody = ({
   // We need to add the URLs previews to the end of each post (See URLMetadataLoader)
   // const urls = body && [...getUrls(body.replace(/<\/p>/gi, ' </p>'))].filter(url => !isSpecialURL(url));
   const afterLoad = () => {
-    if (measureTreeHeight) measureTreeHeight(300);
+    if (measureTreeHeight) measureTreeHeight(400);
   };
   return (
     <div className={divClassNames}>

@@ -1,4 +1,5 @@
 // @flow
+// For a future development (integration of graphs ...)
 import React from 'react';
 import ReactFrame from 'react-frame-component';
 

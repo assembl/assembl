@@ -6,9 +6,6 @@ type EmbedProps = {
   defaultEmbed: *
 };
 
-const Embed = ({ url, defaultEmbed }: EmbedProps) => {
-  const component = getURLComponent(url);
-  return component || defaultEmbed;
-};
+const Embed = ({ url, defaultEmbed }: EmbedProps) => getURLComponent(url) || defaultEmbed;
 
 export default Embed;

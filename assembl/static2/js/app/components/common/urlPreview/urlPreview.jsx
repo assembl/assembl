@@ -2,6 +2,7 @@
 import React from 'react';
 
 import Embed from './embed';
+// For a future development (integration of graphs ...)
 // import Frame from './frame';
 
 export type URLPreviewProps = {
@@ -26,7 +27,8 @@ class URLPreview extends React.Component<*, URLPreviewProps, void> {
 
   render() {
     const { id } = this.props;
-    // If we have an integration HTML code, we need to include it into an iframe
+    // For a future development (integration of graphs ...)
+    // If we have an integration HTML code, we need to include it into an iframe (the Frame component)
     // if (html) return <Frame id={id} html={html} afterLoad={afterLoad} />;
     const { authorName, authorAvatar, url, title, description, thumbnailUrl, providerName, faviconUrl } = this.props;
     // isContribution like a twitter post
