@@ -31,6 +31,12 @@ def discussion(request, test_session, default_preferences):
             u"Should we eat bananas?", u"en")
         d.title = title
 
+        subtitle = LangString.create(
+            u"Dis-moi ce que tu manges et je te dirai qui tu es", u"fr")
+        subtitle.add_value(
+            u"Tell me what you eat and I will tell you who you are", u"en")
+        d.subtitle = subtitle
+
         test_session.add(d)
         # create_default_discussion_data(d)
         # Don't create default discussion data (permissions, sections) here

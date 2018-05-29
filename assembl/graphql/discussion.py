@@ -25,6 +25,8 @@ class Discussion(SecureObjectType, SQLAlchemyObjectType):
     homepage_url = graphene.String()
     title = graphene.String(lang=graphene.String())
     title_entries = graphene.List(LangStringEntry)
+    subtitle = graphene.String(lang=graphene.String())
+    subtitle_entries = graphene.List(LangStringEntry)
 
     def resolve_homepage_url(self, args, context, info):
         # TODO: Remove this resolver and add URLString to
@@ -45,10 +47,25 @@ class Discussion(SecureObjectType, SQLAlchemyObjectType):
 
         return []
 
+    def resolve_subtitle(self, args, context, info):
+        """Subtitle value in given locale."""
+        discussion_id = context.matchdict['discussion_id']
+        discussion = models.Discussion.get(discussion_id)
+        return resolve_langstring(discussion.subtitle, args.get('lang'))
+
+    def resolve_subtitle_entries(self, args, context, info):
+        discussion_id = context.matchdict['discussion_id']
+        discussion = models.Discussion.get(discussion_id)
+        if discussion.subtitle:
+            return resolve_langstring_entries(discussion, 'subtitle')
+
+        return []
+
 
 class UpdateDiscussion(graphene.Mutation):
     class Input:
         title_entries = graphene.List(LangStringEntryInput)
+        subtitle_entries = graphene.List(LangStringEntryInput)
 
     discussion = graphene.Field(lambda: Discussion)
 
@@ -77,6 +94,10 @@ class UpdateDiscussion(graphene.Mutation):
 
             update_langstring_from_input_entries(
                 discussion, 'title', title_entries)
+
+            subtitle_entries = args.get('subtitle_entries')
+            update_langstring_from_input_entries(
+                discussion, 'subtitle', subtitle_entries)
 
         db.flush()
         discussion = cls.get(discussion_id)
