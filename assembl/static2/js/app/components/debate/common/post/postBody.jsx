@@ -142,7 +142,14 @@ const PostBody = ({
   return (
     <div className={divClassNames}>
       {translationEnabled ? (
-        <PostTranslate contentLocale={contentLocale} id={id} lang={lang} originalLocale={originalLocale} translate={translate} />
+        <PostTranslate
+          contentLocale={contentLocale}
+          id={id}
+          lang={lang}
+          originalLocale={originalLocale}
+          translate={translate}
+          afterLoad={afterLoad}
+        />
       ) : null}
       {subject && <h3 className="post-body-title dark-title-3">{subject}</h3>}
       {body && (

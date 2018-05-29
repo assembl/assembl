@@ -5,6 +5,7 @@ exports[`PostBody component should render a post body 1`] = `
   className="post-body"
 >
   <Apollo(Connect(Component))
+    afterLoad={[Function]}
     contentLocale="fr"
     id="XYZ333"
     lang="fr"
