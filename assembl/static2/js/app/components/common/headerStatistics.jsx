@@ -46,7 +46,7 @@ const StatisticElement = ({ metricNameTranslateKey, iconName, metricValue }: Sta
       <div className={`stat-icon assembl-icon-${iconName} white`} />
       <div className="stat">
         <div className="stat-nb">
-          <Localize value={10000} />
+          <Localize value={metricValue} />
         </div>
         <div className="stat-nb stat-label">
           <Translate value={metricNameTranslateKey} count={metricValue} />
