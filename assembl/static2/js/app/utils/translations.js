@@ -669,7 +669,8 @@ const Translations = {
         },
         header: {
           title: "Header",
-          helper: "Personnalisez l'apparence du header de la page d'accueil."
+          helper: "Personnalisez l'apparence du header de la page d'accueil.",
+          titleLabel: "Titre du débat"
         },
         successSave: "Les modules ont été enregistrés avec succès !"
       },
@@ -1356,7 +1357,8 @@ const Translations = {
         },
         header: {
           title: "Header",
-          helper: "Customize appearance of the header."
+          helper: "Customize appearance of the header.",
+          titleLabel: "Debate title"
         },
         successSave: "The modules have been saved with success!"
       },
