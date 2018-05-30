@@ -42,6 +42,7 @@ class AttachmentPurpose(enum.Enum):
     IMAGE = 'IMAGE'  # used for resources center
     PROFILE_PICTURE = 'PROFILE_PICTURE'
     RESOURCES_CENTER_HEADER_IMAGE = 'RESOURCES_CENTER_HEADER_IMAGE'
+    LANDING_PAGE_HEADER_IMAGE = 'LANDING_PAGE_HEADER_IMAGE'
 
 
 class AntiVirusStatus(enum.Enum):

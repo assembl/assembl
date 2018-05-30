@@ -17,6 +17,7 @@ from .langstring import (
 from .utils import abort_transaction_on_exception
 
 
+# Mostly fields related to the discussion title and landing page
 class Discussion(SecureObjectType, SQLAlchemyObjectType):
     class Meta:
         model = models.Discussion
@@ -29,6 +30,7 @@ class Discussion(SecureObjectType, SQLAlchemyObjectType):
     subtitle_entries = graphene.List(LangStringEntry)
     button_label = graphene.String(lang=graphene.String())
     button_label_entries = graphene.List(LangStringEntry)
+    header_image = graphene.Field(Document)
 
     def resolve_homepage_url(self, args, context, info):
         # TODO: Remove this resolver and add URLString to
@@ -77,12 +79,21 @@ class Discussion(SecureObjectType, SQLAlchemyObjectType):
 
         return []
 
+    def resolve_header_image(self, args, context, info):
+        LANDING_PAGE_HEADER_IMAGE = models.AttachmentPurpose.LANDING_PAGE_HEADER_IMAGE.value
+        discussion_id = context.matchdict['discussion_id']
+        discussion = models.Discussion.get(discussion_id)
+        for attachment in discussion.attachments:
+            if attachment.attachmentPurpose == LANDING_PAGE_HEADER_IMAGE:
+                return attachment.document
+
 
 class UpdateDiscussion(graphene.Mutation):
     class Input:
         title_entries = graphene.List(LangStringEntryInput)
         subtitle_entries = graphene.List(LangStringEntryInput)
         button_label_entries = graphene.List(LangStringEntryInput)
+        header_image = graphene.String()
 
     discussion = graphene.Field(lambda: Discussion)
 
@@ -119,6 +130,38 @@ class UpdateDiscussion(graphene.Mutation):
             button_label_entries = args.get('button_label_entries')
             update_langstring_from_input_entries(
                 discussion, 'button_label', button_label_entries)
+
+            # add uploaded image as an attachment to the discussion
+            LANDING_PAGE_HEADER_IMAGE = models.AttachmentPurpose.LANDING_PAGE_HEADER_IMAGE.value
+            image = args.get('header_image')
+            if image is not None:
+                filename = os.path.basename(context.POST[image].filename)
+                mime_type = context.POST[image].type
+                document = models.File(
+                    discussion=discussion,
+                    mime_type=mime_type,
+                    title=filename)
+                document.add_file_data(context.POST[image].file)
+
+                # if there is already an IMAGE, remove it with the
+                # associated document
+                header_images = [
+                    att for att in discussion.attachments
+                    if att.attachmentPurpose == LANDING_PAGE_HEADER_IMAGE
+                ]
+                if header_images:
+                    header_image = header_images[0]
+                    header_image.document.delete_file()
+                    db.delete(header_image.document)
+                    discussion.attachments.remove(header_image)
+
+                db.add(models.DiscussionAttachment(
+                    document=document,
+                    discussion=discussion,
+                    creator_id=context.authenticated_userid,
+                    title=filename,
+                    attachmentPurpose=LANDING_PAGE_HEADER_IMAGE
+                ))
 
         db.flush()
         discussion = cls.get(discussion_id)

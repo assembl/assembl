@@ -2659,7 +2659,8 @@ def test_query_discussion_langstring_fields(discussion, graphql_request):
         }
     }
 
-def test_mutation_update_discussion(graphql_request, discussion):
+
+def test_mutation_update_discussion_langstring_fields(graphql_request, discussion):
     title_entry_en = u"Should we eat tomatoes?"
     title_entry_fr = u"Faut-il manger des tomates ?"
     title_entries = [
@@ -2731,3 +2732,77 @@ mutation myFirstMutation(
 
     assert discussion['buttonLabel'] == button_label_entry_en
     assert discussion['buttonLabelEntries'] == button_label_entries
+
+
+def test_query_discussion_landing_page_image_fields(
+        discussion, graphql_request, test_session, simple_file, moderator_user):
+
+    from assembl.models.attachment import DiscussionAttachment
+    from assembl.models import AttachmentPurpose
+
+    LANDING_PAGE_HEADER_IMAGE = AttachmentPurpose.LANDING_PAGE_HEADER_IMAGE.value
+
+    header_image = DiscussionAttachment(
+        discussion=discussion,
+        document=simple_file,
+        title=u"Landing page header image",
+        creator=moderator_user,
+        attachmentPurpose=LANDING_PAGE_HEADER_IMAGE
+    )
+
+    discussion.db.flush()
+
+    res = schema.execute(u"""query {
+        discussion {
+            headerImage {
+                externalUrl
+                mimeType
+            }
+        }
+    }""", context_value=graphql_request)
+    res_data = json.loads(json.dumps(res.data))
+    res_discussion = res_data['discussion']
+    assert res_discussion['headerImage']['mimeType'] == u'image/png'
+    assert '/documents/' in res_discussion['headerImage']['externalUrl']
+
+    discussion.db.delete(header_image)
+    discussion.db.flush()
+
+
+def test_update_discussion_landing_page_image_fields(graphql_request, discussion):
+    import os
+    from io import BytesIO
+
+    class FieldStorage(object):
+        file = BytesIO(os.urandom(16))
+
+        def __init__(self, filename, type):
+            self.filename = filename
+            self.type = type
+
+    graphql_request.POST['variables.headerImage'] = FieldStorage(
+        u'path/to/new-img.png', 'image/png')
+
+    res = schema.execute(u"""
+mutation updateDiscussion($headerImage:String) {
+    updateDiscussion(
+        headerImage: $headerImage,
+    ) {
+        discussion {
+            headerImage {
+                externalUrl
+                title
+            }
+        }
+    }
+}
+""", context_value=graphql_request, variable_values={"headerImage": u"variables.headerImage"})
+    assert res.data is not None
+
+    assert res.data['updateDiscussion'] is not None
+    assert res.data['updateDiscussion']['discussion'] is not None
+
+    res_discussion = res.data['updateDiscussion']['discussion']
+    assert res_discussion['headerImage'] is not None
+    assert '/documents/' in res_discussion['headerImage']['externalUrl']
+    assert res_discussion['headerImage']['title'] == 'new-img.png'
