@@ -105,3 +105,43 @@
     transition: all 0.2s ease-in;
   }
 }
+
+.mobile-illustration-box {
+  width: calc(100% - 2px);
+
+  .image-box {
+    background-color: $grey2;
+    background-position: top left;
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 100%;
+    position: absolute;
+    width: calc(100% - 2px);
+    z-index: 0;
+  }
+
+  .content-box {
+    color: $white;
+    cursor: pointer;
+    height: 100%;
+    padding: 0 20px;
+    position: absolute;
+    width: calc(100% - 2px);
+    z-index: 4;
+  }
+
+  .color-box {
+    background-color: rgba(0, 0, 0, 0.5);
+    height: 500px;
+    position: absolute;
+    width: calc(100% - 2px);
+    z-index: 1;
+  }
+
+  .box-hyphen {
+    margin: 10px 0 0;
+    position: absolute;
+    z-index: 2;
+    top: 50%;
+  }
+}

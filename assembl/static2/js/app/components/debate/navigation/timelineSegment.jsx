@@ -127,7 +127,7 @@ export class DumbTimelineSegment extends React.Component<*, TimelineSegmentProps
         className={classNames('minimized-timeline', {
           active: active
         })}
-        onMouseOver={!this.isTouchScreenDevice && this.select}
+        onMouseOver={!this.isTouchScreenDevice ? this.select : null}
       >
         {title.entries.filter(entry => locale === entry['@language']).map((entry, index) => (
           <div onClick={onClick} className={timelineClass} key={index}>

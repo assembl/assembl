@@ -4,6 +4,19 @@ import { type RawContentState } from 'draft-js';
 
 export type IdeaMessageColumns = Array<IdeaMessageColumnFragment>;
 
+export type Idea = {
+  id: string,
+  parentId: string,
+  title: string,
+  description: string,
+  img: Object,
+  numChildren: number,
+  numContributors: number,
+  numPosts: number,
+  order: number,
+  ancestors: Array<string>
+};
+
 type Post = PostFragment & {
   messageClassifier: ?string,
   creationDate: string,
@@ -115,7 +128,6 @@ type Extract = {
   extractAction: string,
   body: string
 };
-
 
 type FieldIdentifier = 'EMAIL' | 'FULLNAME' | 'PASSWORD' | 'PASSWORD2' | 'USERNAME' | 'CUSTOM';
 
