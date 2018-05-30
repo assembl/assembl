@@ -2741,6 +2741,7 @@ def test_query_discussion_landing_page_image_fields(
     from assembl.models import AttachmentPurpose
 
     LANDING_PAGE_HEADER_IMAGE = AttachmentPurpose.LANDING_PAGE_HEADER_IMAGE.value
+    LANDING_PAGE_LOGO_IMAGE = AttachmentPurpose.LANDING_PAGE_LOGO_IMAGE.value
 
     header_image = DiscussionAttachment(
         discussion=discussion,
@@ -2748,6 +2749,14 @@ def test_query_discussion_landing_page_image_fields(
         title=u"Landing page header image",
         creator=moderator_user,
         attachmentPurpose=LANDING_PAGE_HEADER_IMAGE
+    )
+
+    logo_image = DiscussionAttachment(
+        discussion=discussion,
+        document=simple_file,
+        title=u"Landing page logo image",
+        creator=moderator_user,
+        attachmentPurpose=LANDING_PAGE_LOGO_IMAGE
     )
 
     discussion.db.flush()
@@ -2758,14 +2767,21 @@ def test_query_discussion_landing_page_image_fields(
                 externalUrl
                 mimeType
             }
+            logoImage {
+                externalUrl
+                mimeType
+            }
         }
     }""", context_value=graphql_request)
     res_data = json.loads(json.dumps(res.data))
     res_discussion = res_data['discussion']
     assert res_discussion['headerImage']['mimeType'] == u'image/png'
     assert '/documents/' in res_discussion['headerImage']['externalUrl']
+    assert res_discussion['logoImage']['mimeType'] == u'image/png'
+    assert '/documents/' in res_discussion['logoImage']['externalUrl']
 
     discussion.db.delete(header_image)
+    discussion.db.delete(logo_image)
     discussion.db.flush()
 
 
@@ -2782,27 +2798,42 @@ def test_update_discussion_landing_page_image_fields(graphql_request, discussion
 
     graphql_request.POST['variables.headerImage'] = FieldStorage(
         u'path/to/new-img.png', 'image/png')
+    graphql_request.POST['variables.logoImage'] = FieldStorage(
+        u'path/to/new-img2.png', 'image/png')
 
     res = schema.execute(u"""
-mutation updateDiscussion($headerImage:String) {
+mutation updateDiscussion(
+    $headerImage:String,
+    $logoImage:String
+) {
     updateDiscussion(
         headerImage: $headerImage,
+        logoImage: $logoImage,
     ) {
         discussion {
             headerImage {
                 externalUrl
                 title
             }
+            logoImage {
+                externalUrl
+                title
+            }
         }
     }
 }
-""", context_value=graphql_request, variable_values={"headerImage": u"variables.headerImage"})
+""", context_value=graphql_request, variable_values={"headerImage": u"variables.headerImage","logoImage": u"variables.logoImage"})
     assert res.data is not None
 
     assert res.data['updateDiscussion'] is not None
     assert res.data['updateDiscussion']['discussion'] is not None
 
     res_discussion = res.data['updateDiscussion']['discussion']
+
     assert res_discussion['headerImage'] is not None
     assert '/documents/' in res_discussion['headerImage']['externalUrl']
     assert res_discussion['headerImage']['title'] == 'new-img.png'
+
+    assert res_discussion['logoImage'] is not None
+    assert '/documents/' in res_discussion['logoImage']['externalUrl']
+    assert res_discussion['logoImage']['title'] == 'new-img2.png'

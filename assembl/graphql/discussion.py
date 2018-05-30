@@ -31,6 +31,7 @@ class Discussion(SecureObjectType, SQLAlchemyObjectType):
     button_label = graphene.String(lang=graphene.String())
     button_label_entries = graphene.List(LangStringEntry)
     header_image = graphene.Field(Document)
+    logo_image = graphene.Field(Document)
 
     def resolve_homepage_url(self, args, context, info):
         # TODO: Remove this resolver and add URLString to
@@ -87,6 +88,14 @@ class Discussion(SecureObjectType, SQLAlchemyObjectType):
             if attachment.attachmentPurpose == LANDING_PAGE_HEADER_IMAGE:
                 return attachment.document
 
+    def resolve_logo_image(self, args, context, info):
+        LANDING_PAGE_LOGO_IMAGE = models.AttachmentPurpose.LANDING_PAGE_LOGO_IMAGE.value
+        discussion_id = context.matchdict['discussion_id']
+        discussion = models.Discussion.get(discussion_id)
+        for attachment in discussion.attachments:
+            if attachment.attachmentPurpose == LANDING_PAGE_LOGO_IMAGE:
+                return attachment.document
+
 
 class UpdateDiscussion(graphene.Mutation):
     class Input:
@@ -94,6 +103,7 @@ class UpdateDiscussion(graphene.Mutation):
         subtitle_entries = graphene.List(LangStringEntryInput)
         button_label_entries = graphene.List(LangStringEntryInput)
         header_image = graphene.String()
+        logo_image = graphene.String()
 
     discussion = graphene.Field(lambda: Discussion)
 
@@ -131,7 +141,7 @@ class UpdateDiscussion(graphene.Mutation):
             update_langstring_from_input_entries(
                 discussion, 'button_label', button_label_entries)
 
-            # add uploaded image as an attachment to the discussion
+            # add uploaded header image as an attachment to the discussion
             LANDING_PAGE_HEADER_IMAGE = models.AttachmentPurpose.LANDING_PAGE_HEADER_IMAGE.value
             image = args.get('header_image')
             if image is not None:
@@ -161,6 +171,38 @@ class UpdateDiscussion(graphene.Mutation):
                     creator_id=context.authenticated_userid,
                     title=filename,
                     attachmentPurpose=LANDING_PAGE_HEADER_IMAGE
+                ))
+
+            # add uploaded logo image as an attachment to the discussion
+            LANDING_PAGE_LOGO_IMAGE = models.AttachmentPurpose.LANDING_PAGE_LOGO_IMAGE.value
+            image = args.get('logo_image')
+            if image is not None:
+                filename = os.path.basename(context.POST[image].filename)
+                mime_type = context.POST[image].type
+                document = models.File(
+                    discussion=discussion,
+                    mime_type=mime_type,
+                    title=filename)
+                document.add_file_data(context.POST[image].file)
+
+                # if there is already an IMAGE, remove it with the
+                # associated document
+                logo_images = [
+                    att for att in discussion.attachments
+                    if att.attachmentPurpose == LANDING_PAGE_LOGO_IMAGE
+                ]
+                if logo_images:
+                    logo_image = logo_images[0]
+                    logo_image.document.delete_file()
+                    db.delete(logo_image.document)
+                    discussion.attachments.remove(logo_image)
+
+                db.add(models.DiscussionAttachment(
+                    document=document,
+                    discussion=discussion,
+                    creator_id=context.authenticated_userid,
+                    title=filename,
+                    attachmentPurpose=LANDING_PAGE_LOGO_IMAGE
                 ))
 
         db.flush()
