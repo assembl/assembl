@@ -1,14 +1,11 @@
 // @flow
 import React from 'react';
-import { Translate } from 'react-redux-i18n';
-import { connect } from 'react-redux';
-import { formatNumber } from '../../../app/utils/globalFunctions';
+import { Translate, Localize } from 'react-redux-i18n';
 
 type StatisticElementProps = {
   iconName: string,
   metricValue: number | string,
-  metricNameTranslateKey: string,
-  lang: string
+  metricNameTranslateKey: string
 };
 
 type StatElements = Array<StatisticElementProps>;
@@ -43,12 +40,14 @@ export const statParticipations = (numParticipations: number) => ({
   metricNameTranslateKey: 'home.participations'
 });
 
-const StatisticElement = ({ metricNameTranslateKey, iconName, metricValue, lang }: StatisticElementProps) => (
+const StatisticElement = ({ metricNameTranslateKey, iconName, metricValue }: StatisticElementProps) => (
   <div className="stat-container">
     <div className="stat-box">
       <div className={`stat-icon assembl-icon-${iconName} white`} />
       <div className="stat">
-        <div className="stat-nb">{formatNumber(metricValue, lang)}</div>
+        <div className="stat-nb">
+          <Localize value={10000} />
+        </div>
         <div className="stat-nb stat-label">
           <Translate value={metricNameTranslateKey} count={metricValue} />
         </div>
@@ -57,17 +56,13 @@ const StatisticElement = ({ metricNameTranslateKey, iconName, metricValue, lang 
   </div>
 );
 
-const mapElementsPropsToComponents = (elemsProps, lang) =>
-  elemsProps.map((elementProps, index) => <StatisticElement key={`stat-${index}`} {...elementProps} lang={lang} />);
+const mapElementsPropsToComponents = elemsProps =>
+  elemsProps.map((elementProps, index) => <StatisticElement key={`stat-${index}`} {...elementProps} />);
 
-export const DumbHeaderStatistics = ({ statElements }: { statElements: StatElements }, { lang }: StatisticElementProps) => (
+const HeaderStatistics = ({ statElements }: { statElements: StatElements }) => (
   <div className="statistic">
-    <div className="intermediary-container">{mapElementsPropsToComponents(statElements, lang)}</div>
+    <div className="intermediary-container">{mapElementsPropsToComponents(statElements)}</div>
   </div>
 );
 
-const mapStateToProps = state => ({
-  lang: state.i18n.locale
-});
-
-export default connect(mapStateToProps)(DumbHeaderStatistics);
+export default HeaderStatistics;

@@ -17,11 +17,6 @@ export const getDiscussionId = () => getInputValue('discussion-id');
 
 export const getDiscussionSlug = () => getInputValue('discussion-slug');
 
-export const formatNumber = (number: number | string, locale: string) => {
-  const separator = locale !== 'en' ? ' ' : ',';
-  return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, separator);
-};
-
 // cache userId to avoid accessing the dom at each permission check
 let userId;
 export const getConnectedUserId = () => {

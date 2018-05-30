@@ -12,7 +12,7 @@ exports[`Question page should match Question with data snapshot 1`] = `
       imgUrl="https://foo.bar/umgurl"
       title="Bar"
     >
-      <Connect(Component)
+      <HeaderStatistics
         statElements={
           Array [
             Object {
