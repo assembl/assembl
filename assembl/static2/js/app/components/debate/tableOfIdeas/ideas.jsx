@@ -93,7 +93,8 @@ class Ideas extends React.Component {
       <section className={classnames('themes-section', 'ideas-section', { 'mobile-ideas-section': isMobile })}>
         <Grid fluid className={classnames('background-grey', { 'no-padding': isMobile })}>
           <div className="max-container">
-            {!isMobile || (isMobile && ideaLevel === 0 && <PageTitle />)}
+            {!isMobile && <PageTitle />}
+            {isMobile && ideaLevel === 0 && <PageTitle />}
             {isMobile &&
               ideaLevel > 0 && (
                 <div className="ideas-back-arrow" onClick={this.goBackToParents}>
