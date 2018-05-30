@@ -17,74 +17,114 @@ type Props = {
   setSelectedIdeas: Function
 };
 
-const IdeasLevelMobile = ({ ideas, identifier, ideaLevel, nbLevel, selectedIdeasId, setSelectedIdeas }: Props) => {
-  const slug = getDiscussionSlug();
-  const isSubLevel = nbLevel > 1 && ideaLevel < nbLevel;
-  const stringMaxLength = (level) => {
-    switch (level) {
-    case 1:
-      return 80;
-    case 2:
-      return 50;
-    case 3:
-      return 30;
-    default:
-      return 30;
-    }
-  };
-  return (
-    <div
-      className={classnames('slider-container', 'mobile-slider-container', {
-        'thumbnails-mobile-slider': isSubLevel
-      })}
-      style={isSubLevel ? { height: '140px' } : null}
-      id={`slider-${ideaLevel}`}
-    >
-      <div
-        className={classnames('slider', { 'thumbnails-slider': isSubLevel })}
-        style={
-          isSubLevel
-            ? { width: (window.innerWidth * 0.6 + APP_CONTAINER_PADDING) * ideas.length - APP_CONTAINER_PADDING }
-            : { width: window.innerWidth * 0.8 * ideas.length }
-        }
-      >
-        {ideas.map((idea, index) => (
-          <Col
-            style={isSubLevel ? { width: window.innerWidth * 0.6, height: '110px' } : { width: window.innerWidth * 0.8 }}
-            className="theme theme-inline"
-            xs={12}
-            md={12}
-            sm={12}
-            key={`ideas-level-mob-${index}`}
-          >
-            <div className="left">
-              <IdeaPreview
-                imgUrl={idea.img ? idea.img.externalUrl : ''}
-                numPosts={idea.numPosts}
-                numContributors={idea.numContributors}
-                numChildren={idea.numChildren}
-                link={`${getRoute('idea', { slug: slug, phase: identifier, themeId: idea.id })}`}
-                title={truncate(idea.title, {
-                  length: stringMaxLength(ideaLevel),
-                  separator: ' ',
-                  omission: '...'
-                })}
-                description={idea.description}
-                ideaId={idea.id}
-                ideaLevel={ideaLevel}
-                selectedIdeasId={selectedIdeasId}
-                ideaIndex={index}
-                setSelectedIdeas={setSelectedIdeas}
-                nbLevel={nbLevel}
-                isMobile
-                ideaPreviewWidth={window.innerWidth * 0.6}
-              />
-            </div>
-          </Col>
-        ))}
-      </div>
-    </div>
-  );
+type State = {
+  sliderWidth: number,
+  previewWidth: number,
+  thumbnailsSliderWidth: number,
+  thumbnailsWidth: number
 };
+
+class IdeasLevelMobile extends React.Component {
+  props: Props;
+
+  state: State;
+
+  constructor(props: Props) {
+    super(props);
+    const { ideas } = this.props;
+    this.state = {
+      sliderWidth: window.innerWidth * 0.8 * ideas.length,
+      thumbnailsSliderWidth: (window.innerWidth * 0.6 + APP_CONTAINER_PADDING) * ideas.length - APP_CONTAINER_PADDING,
+      previewWidth: window.innerWidth * 0.8,
+      thumbnailsWidth: window.innerWidth * 0.6
+    };
+  }
+
+  componentDidMount() {
+    window.addEventListener('resize', this.handleResize);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.handleResize);
+  }
+
+  handleResize = () => {
+    const { ideas } = this.props;
+    this.setState({
+      sliderWidth: window.innerWidth * 0.8 * ideas.length,
+      thumbnailsSliderWidth: (window.innerWidth * 0.6 + APP_CONTAINER_PADDING) * ideas.length - APP_CONTAINER_PADDING,
+      previewWidth: window.innerWidth * 0.8,
+      thumbnailsWidth: window.innerWidth * 0.6
+    });
+  };
+
+  render() {
+    const { ideas, identifier, ideaLevel, nbLevel, selectedIdeasId, setSelectedIdeas } = this.props;
+    const { sliderWidth, thumbnailsSliderWidth, previewWidth, thumbnailsWidth } = this.state;
+    const slug = getDiscussionSlug();
+    const isSubLevel = nbLevel > 1 && ideaLevel < nbLevel;
+    const stringMaxLength = (level) => {
+      switch (level) {
+      case 1:
+        return 80;
+      case 2:
+        return 50;
+      case 3:
+        return 30;
+      default:
+        return 30;
+      }
+    };
+    return (
+      <div
+        className={classnames('slider-container', 'mobile-slider-container', {
+          'thumbnails-mobile-slider': isSubLevel
+        })}
+        style={isSubLevel ? { height: '140px' } : null}
+        id={`slider-${ideaLevel}`}
+      >
+        <div
+          className={classnames('slider', { 'thumbnails-slider': isSubLevel })}
+          style={isSubLevel ? { width: thumbnailsSliderWidth } : { width: sliderWidth }}
+        >
+          {ideas.map((idea, index) => (
+            <Col
+              style={isSubLevel ? { width: thumbnailsWidth, height: '110px' } : { width: previewWidth }}
+              className="theme theme-inline"
+              xs={12}
+              md={12}
+              sm={12}
+              key={`ideas-level-mob-${index}`}
+            >
+              <div className="left">
+                <IdeaPreview
+                  imgUrl={idea.img ? idea.img.externalUrl : ''}
+                  numPosts={idea.numPosts}
+                  numContributors={idea.numContributors}
+                  numChildren={idea.numChildren}
+                  link={`${getRoute('idea', { slug: slug, phase: identifier, themeId: idea.id })}`}
+                  title={truncate(idea.title, {
+                    length: stringMaxLength(ideaLevel),
+                    separator: ' ',
+                    omission: '...'
+                  })}
+                  description={idea.description}
+                  ideaId={idea.id}
+                  ideaLevel={ideaLevel}
+                  selectedIdeasId={selectedIdeasId}
+                  ideaIndex={index}
+                  setSelectedIdeas={setSelectedIdeas}
+                  nbLevel={nbLevel}
+                  isMobile
+                  ideaPreviewWidth={window.innerWidth * 0.6}
+                />
+              </div>
+            </Col>
+          ))}
+        </div>
+      </div>
+    );
+  }
+}
 
 export default IdeasLevelMobile;
