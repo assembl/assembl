@@ -115,7 +115,8 @@
 
   .ideas-back-arrow {
     width: 100%;
-    position: absolute;
+    position: fixed;
+    z-index: 10;
     left: 0;
     right: 0;
     background-color: $grey10;
