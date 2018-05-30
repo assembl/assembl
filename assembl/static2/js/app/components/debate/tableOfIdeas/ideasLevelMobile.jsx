@@ -37,7 +37,7 @@ const IdeasLevelMobile = ({ ideas, identifier, ideaLevel, nbLevel, selectedIdeas
       className={classnames('slider-container', 'mobile-slider-container', {
         'thumbnails-mobile-slider': isSubLevel
       })}
-      style={isSubLevel ? { height: '160px' } : null}
+      style={isSubLevel ? { height: '140px' } : null}
       id={`slider-${ideaLevel}`}
     >
       <div
@@ -50,7 +50,7 @@ const IdeasLevelMobile = ({ ideas, identifier, ideaLevel, nbLevel, selectedIdeas
       >
         {ideas.map((idea, index) => (
           <Col
-            style={isSubLevel ? { width: window.innerWidth * 0.6, height: '130px' } : { width: window.innerWidth * 0.8 }}
+            style={isSubLevel ? { width: window.innerWidth * 0.6, height: '110px' } : { width: window.innerWidth * 0.8 }}
             className="theme theme-inline"
             xs={12}
             md={12}

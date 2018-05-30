@@ -1,5 +1,20 @@
 .themes-section {
   .idea-preview-thumbnails {
+    .light-title-3 {
+      font-size: $font-size-xs;
+      top: 10px !important;
+    }
+
+    .selected-idea-arrow {
+      bottom: 18px;
+
+      .assembl-icon-down-open {
+        &:before {
+          font-size: 28px;
+        }
+      }
+    }
+
     .access-discussion {
       display: none;
     }
