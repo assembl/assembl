@@ -16,7 +16,7 @@ export const statContributions = (numContributions: number): StatisticElementPro
   metricNameTranslateKey: 'home.contribution'
 });
 
-export const statMessages = (numPosts: number) => ({
+export const statMessages = (numPosts: number): StatisticElementProps => ({
   iconName: 'message',
   metricValue: numPosts,
   metricNameTranslateKey: 'home.messages'
