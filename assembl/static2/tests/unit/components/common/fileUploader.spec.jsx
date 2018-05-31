@@ -2,7 +2,6 @@ import React from 'react';
 import renderer from 'react-test-renderer';
 
 import FileUploader from '../../../../js/app/components/common/fileUploader';
-import '../../../helpers/setupTranslations';
 
 describe('FileUploader component', () => {
   it('should render a file uploader for an image file', () => {

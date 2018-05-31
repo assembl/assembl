@@ -4,7 +4,6 @@ import { List } from 'immutable';
 
 import ModulesPreview from '../../../../../js/app/components/administration/landingPage/modulesPreview';
 import { enabledModulesInOrder } from './fakeData';
-import '../../../../helpers/setupTranslations';
 
 describe('ModulesPreview component', () => {
   it('should render a preview of the enabled modules', () => {

@@ -4,7 +4,6 @@ import { List } from 'immutable';
 import { voteProposalsInOrder } from './fakeData';
 
 import { DumbVoteProposalsSection } from '../../../../../js/app/components/administration/voteSession/voteProposalsSection';
-import '../../../../helpers/setupTranslations';
 
 describe('VoteProposalsSection component', () => {
   const addVoteProposalSpy = jest.fn();

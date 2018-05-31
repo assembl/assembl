@@ -3,7 +3,6 @@ import renderer from 'react-test-renderer';
 
 import Proposals from '../../../../js/app/components/voteSession/proposals';
 import * as fakeData from './fakeData';
-import '../../../helpers/setupTranslations';
 
 describe('Proposals component', () => {
   it('should match Proposals snapshot', () => {

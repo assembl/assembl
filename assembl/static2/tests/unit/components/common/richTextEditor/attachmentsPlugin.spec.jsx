@@ -1,7 +1,6 @@
 import { convertFromRaw, convertToRaw, ContentState, Entity } from 'draft-js';
 
 import plugin from '../../../../../js/app/components/common/richTextEditor/attachmentsPlugin';
-import '../../../../helpers/setupTranslations';
 
 // see draft-convert convertFromHTML.js
 let contentState = ContentState.createFromText('');

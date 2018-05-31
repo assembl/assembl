@@ -2,7 +2,6 @@ import React from 'react';
 import renderer from 'react-test-renderer';
 
 import ConfiguredField from '../../../../js/app/components/common/configuredField';
-import '../../../helpers/setupTranslations';
 
 describe('ConfiguredField component', () => {
   it('should match ConfiguredField snapshot (TEXT)', () => {

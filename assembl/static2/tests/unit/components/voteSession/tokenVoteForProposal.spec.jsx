@@ -3,7 +3,6 @@ import ShallowRenderer from 'react-test-renderer/shallow';
 
 import TokenVoteForProposal from '../../../../js/app/components/voteSession/tokenVoteForProposal';
 import * as fakeData from './fakeData';
-import '../../../helpers/setupTranslations';
 
 describe('TokenVoteForProposal component', () => {
   const { proposal1Votes, remainingTokensByCategory, tokenCategories } = fakeData;

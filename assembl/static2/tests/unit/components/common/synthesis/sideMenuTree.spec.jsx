@@ -2,7 +2,6 @@ import React from 'react';
 import ShallowRenderer from 'react-test-renderer/shallow';
 
 import SideMenuTree from '../../../../../js/app/components/synthesis/sideMenuTree';
-import '../../../../helpers/setupTranslations';
 
 describe('SideMenuTree component', () => {
   const indexGenerator = jest.fn(() => {});

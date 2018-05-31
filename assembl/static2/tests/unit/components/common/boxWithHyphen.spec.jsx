@@ -2,7 +2,6 @@ import React from 'react';
 import renderer from 'react-test-renderer';
 
 import BoxWithHyphen from '../../../../js/app/components/common/boxWithHyphen';
-import '../../../helpers/setupTranslations';
 
 describe('BoxWithHyphen component', () => {
   it('should render a box with hyphen with its data', () => {

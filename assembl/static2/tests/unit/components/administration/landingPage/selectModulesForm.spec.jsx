@@ -3,7 +3,6 @@ import ShallowRenderer from 'react-test-renderer/shallow';
 
 import { DumbSelectModulesForm } from '../../../../../js/app/components/administration/landingPage/selectModulesForm';
 import { modulesByIdentifier, modulesTypes } from './fakeData';
-import '../../../../helpers/setupTranslations';
 
 describe('DumbSelectModulesForm component', () => {
   it('should render a form to select the landing page modules', () => {

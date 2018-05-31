@@ -2,7 +2,6 @@ import React from 'react';
 import ShallowRenderer from 'react-test-renderer/shallow';
 
 import { DumbTimelineSegmentMenu } from '../../../../../js/app/components/debate/navigation/timelineSegmentMenu';
-import '../../../../helpers/setupTranslations';
 
 describe('DumbTimelineSegmentMenu component', () => {
   it('should match the DumbTimelineSegmentMenu', () => {

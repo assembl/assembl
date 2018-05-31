@@ -11,7 +11,7 @@ describe('This test concern app container', () => {
         {
           children: [
             {
-              children: [{ children: ['Panel Title'], props: {}, type: 'span' }],
+              children: [{ children: ['Welcome to Assembl community page'], props: {}, type: 'span' }],
               props: { className: 'col-sm-12 col-xs-12' },
               type: 'div'
             }

@@ -2,7 +2,6 @@ import React from 'react';
 import renderer from 'react-test-renderer';
 
 import FormControlWithLabel from '../../../../js/app/components/common/formControlWithLabel';
-import '../../../helpers/setupTranslations';
 
 describe('FormControlWithLabel component', () => {
   const onChangeSpy = jest.fn(() => {});

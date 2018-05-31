@@ -2,7 +2,6 @@ import React from 'react';
 import ShallowRenderer from 'react-test-renderer/shallow';
 
 import { DumbSynthesis } from '../../../js/app/pages/synthesis';
-import '../../helpers/setupTranslations';
 
 describe('Synthesis component', () => {
   it('should match Synthesis snapshot', () => {

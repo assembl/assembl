@@ -5,8 +5,8 @@ exports[`ExportSection component should render an ExportSection component with l
   className="admin-box admin-export-section"
 >
   <SectionTitle
-    annotation="Default Annotation"
-    title="Default Section Title"
+    annotation="You can export all of the data by clicking on the export button"
+    title="Export data"
   />
   <div
     className="admin-content"
@@ -59,8 +59,8 @@ exports[`ExportSection component should render an ExportSection component withou
   className="admin-box admin-export-section"
 >
   <SectionTitle
-    annotation="Default Annotation"
-    title="Default Section Title"
+    annotation="You can export all of the data by clicking on the export button"
+    title="Export data"
   />
   <div
     className="admin-content"

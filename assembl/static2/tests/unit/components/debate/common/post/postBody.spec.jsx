@@ -2,7 +2,6 @@ import React from 'react';
 import ShallowRenderer from 'react-test-renderer/shallow';
 
 import PostBody from '../../../../../../js/app/components/debate/common/post/postBody';
-import '../../../../../helpers/setupTranslations';
 
 describe('PostBody component', () => {
   it('should render a post body', () => {

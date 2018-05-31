@@ -4,7 +4,6 @@ import { Map } from 'immutable';
 
 import AvailableTokens from '../../../../js/app/components/voteSession/availableTokens';
 import { tokenCategories } from './fakeData';
-import '../../../helpers/setupTranslations';
 
 describe('AvailableTokens component', () => {
   it('should match AvailableTokens snapshot (non sticky version)', () => {

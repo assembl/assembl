@@ -3,7 +3,6 @@ import ShallowRenderer from 'react-test-renderer/shallow';
 
 import PostView from '../../../../../../js/app/components/debate/common/post/postView';
 import { postProps } from './index.spec';
-import '../../../../../helpers/setupTranslations';
 
 describe('PostView component', () => {
   it('should render a post in view mode', () => {

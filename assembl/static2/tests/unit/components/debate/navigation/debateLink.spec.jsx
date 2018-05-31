@@ -2,7 +2,6 @@ import React from 'react';
 import ShallowRenderer from 'react-test-renderer/shallow';
 
 import { DumbDebateLink } from '../../../../../js/app/components/debate/navigation/debateLink';
-import '../../../../helpers/setupTranslations';
 
 describe('DebateLink component', () => {
   it('should match the DebateLink', () => {

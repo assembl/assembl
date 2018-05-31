@@ -2,7 +2,6 @@ import React from 'react';
 import ShallowRenderer from 'react-test-renderer/shallow';
 
 import { DumbPost } from '../../../../../../js/app/components/debate/common/post';
-import '../../../../../helpers/setupTranslations';
 
 const handleEditClickSpy = jest.fn();
 const refetchIdeaSpy = jest.fn();

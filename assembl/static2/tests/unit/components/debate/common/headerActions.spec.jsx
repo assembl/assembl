@@ -2,7 +2,6 @@ import React from 'react';
 import renderer from 'react-test-renderer';
 
 import HeaderActions from '../../../../../js/app/components/debate/common/headerActions';
-import '../../../../helpers/setupTranslations';
 
 describe('headerActions component', () => {
   it('should render a headerActions component', () => {

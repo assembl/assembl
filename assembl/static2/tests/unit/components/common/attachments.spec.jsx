@@ -2,7 +2,6 @@ import React from 'react';
 import renderer from 'react-test-renderer';
 
 import Attachments from '../../../../js/app/components/common/attachments';
-import '../../../helpers/setupTranslations';
 
 describe('Attachments component', () => {
   it('should render the list of attachments', () => {

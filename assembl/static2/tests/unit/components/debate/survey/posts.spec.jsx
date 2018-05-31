@@ -3,7 +3,6 @@ import ShallowRenderer from 'react-test-renderer/shallow';
 import { Map } from 'immutable';
 
 import { DumbPosts } from '../../../../../js/app/components/debate/survey/posts';
-import '../../../../helpers/setupTranslations';
 
 describe('FlatList component', () => {
   it('should match Posts with data snapshot', () => {

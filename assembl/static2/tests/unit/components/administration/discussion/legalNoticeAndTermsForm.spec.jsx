@@ -2,7 +2,6 @@ import React from 'react';
 import ShallowRenderer from 'react-test-renderer/shallow';
 
 import { DumbLegalNoticeAndTermsForm } from '../../../../../js/app/components/administration/discussion/legalNoticeAndTermsForm';
-import '../../../../helpers/setupTranslations';
 
 describe('LegalNoticeAndTermsForm dumb component', () => {
   it('should render a form to edit legal notice and terms and conditions', () => {

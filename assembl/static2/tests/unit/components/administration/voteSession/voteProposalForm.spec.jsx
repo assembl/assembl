@@ -3,7 +3,6 @@ import ShallowRenderer from 'react-test-renderer/shallow';
 import { List } from 'immutable';
 
 import { DumbVoteProposalForm } from '../../../../../js/app/components/administration/voteSession/voteProposalForm';
-import '../../../../helpers/setupTranslations';
 
 describe('VoteProposalForm component', () => {
   const markAsToDelete = jest.fn(() => {});

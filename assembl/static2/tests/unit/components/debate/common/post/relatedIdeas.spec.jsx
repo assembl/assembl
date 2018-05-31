@@ -2,7 +2,6 @@ import React from 'react';
 import ShallowRenderer from 'react-test-renderer/shallow';
 
 import RelatedIdeas from '../../../../../../js/app/components/debate/common/post/relatedIdeas';
-import '../../../../../helpers/setupTranslations';
 
 describe('RelatedIdeas component', () => {
   it('should render related ideas', () => {

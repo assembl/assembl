@@ -2,7 +2,6 @@ import React from 'react';
 import renderer from 'react-test-renderer';
 
 import { DumbPageForm } from '../../../../../js/app/components/administration/resourcesCenter/pageForm';
-import '../../../../helpers/setupTranslations';
 
 describe('DumbPageForm component', () => {
   it('should render a form to update the resources center page title and header', () => {

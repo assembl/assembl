@@ -2,7 +2,6 @@ import React from 'react';
 import ShallowRenderer from 'react-test-renderer/shallow';
 
 import SideMenu from '../../../../../js/app/components/synthesis/sideMenu';
-import '../../../../helpers/setupTranslations';
 
 describe('SideMenu component', () => {
   it('should render a SideMenu component', () => {

@@ -7,7 +7,6 @@ import HeaderStatistics, {
   statParticipants,
   statParticipations
 } from '../../../../js/app/components/common/headerStatistics';
-import '../../../helpers/setupTranslations';
 
 describe('HeaderStatistics component', () => {
   it('should match HeaderStatistics snapshot', () => {

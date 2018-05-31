@@ -2,7 +2,6 @@ import React from 'react';
 import { List } from 'immutable';
 import ShallowRenderer from 'react-test-renderer/shallow';
 import { DumbManageSectionsForm } from '../../../../../js/app/components/administration/discussion/manageSectionsForm';
-import '../../../../helpers/setupTranslations';
 
 describe('DumbManageSectionsForm component', () => {
   it('should render a list of forms to edit Assembl sections', () => {

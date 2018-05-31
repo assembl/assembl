@@ -2,7 +2,6 @@ import React from 'react';
 import renderer from 'react-test-renderer';
 
 import Card from '../../../../js/app/components/common/card';
-import '../../../helpers/setupTranslations';
 
 describe('Card component', () => {
   it('should match Card snapshot', () => {

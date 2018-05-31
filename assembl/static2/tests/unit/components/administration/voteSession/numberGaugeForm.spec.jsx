@@ -2,7 +2,6 @@ import React from 'react';
 import ShallowRenderer from 'react-test-renderer/shallow';
 
 import DumbNumberGaugeForm from '../../../../../js/app/components/administration/voteSession/numberGaugeForm';
-import '../../../../helpers/setupTranslations';
 
 describe('DumbNumberGaugeForm component', () => {
   const handleMinChange = jest.fn(() => {});

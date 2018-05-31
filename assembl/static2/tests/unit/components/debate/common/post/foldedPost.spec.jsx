@@ -2,7 +2,6 @@ import React from 'react';
 import ShallowRenderer from 'react-test-renderer/shallow';
 
 import FoldedPost from '../../../../../../js/app/components/debate/common/post/foldedPost';
-import '../../../../../helpers/setupTranslations';
 
 describe('FoldedPost component', () => {
   it('should render a folded post', () => {

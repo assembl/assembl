@@ -2,7 +2,6 @@ import React from 'react';
 import ShallowRenderer from 'react-test-renderer/shallow';
 
 import { DumbMenuItem } from '../../../../../js/app/components/debate/navigation/menuItem';
-import '../../../../helpers/setupTranslations';
 
 describe('DumbMenuItem component', () => {
   it('should match a selected menu item', () => {

@@ -2,7 +2,6 @@ import React from 'react';
 import ShallowRenderer from 'react-test-renderer/shallow';
 
 import { AssemblNavbar, mapSectionToElement } from '../../../../js/app/components/navbar/navbar';
-import '../../../helpers/setupTranslations';
 
 describe('mapSectionToElement function', () => {
   it('should return a SectionLink element that matches the snapshot', () => {

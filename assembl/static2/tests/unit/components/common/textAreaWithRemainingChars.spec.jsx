@@ -2,7 +2,6 @@ import React from 'react';
 import ShallowRenderer from 'react-test-renderer/shallow';
 
 import TestedComponent from '../../../../js/app/components/common/textAreaWithRemainingChars';
-import '../../../helpers/setupTranslations';
 
 describe('TextAreaWithRemainingChars component', () => {
   const onChangeSpy = jest.fn(() => {});
