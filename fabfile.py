@@ -619,6 +619,14 @@ def build_virtualenv_python3():
     """
     Build the virtualenv with Python 3
     """
+    if env.mac and not exists('/usr/local/bin/python3'):
+        # update brew
+        run('ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"')
+        run("brew update")
+        run("brew upgrade")
+        run("brew install python@2")
+        run("brew install python")  # This installs python3
+
     # Don't install this on travis
     if getenv('TRAVIS_COMMIT', None):
         return
@@ -1164,13 +1172,14 @@ def install_basetools():
     if env.mac:
         # Install Homebrew
         if not exists('/usr/local/bin/brew'):
-            run('ruby -e "$(curl -fsSL https://raw.github.com/mxcl/homebrew/go/install)"')
+            run('ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"')
         else:
             run("brew update")
             run("brew upgrade")
         # Standardize on brew python
         if not exists('/usr/local/bin/python2'):
-            run('brew install python')
+            run('brew install python@2')
+            run('brew install python')  # This installs python3
         assert exists('/usr/local/bin/pip2'), "Brew python should come with pip"
         path_pip = run('which pip2')
         assert path_pip == '/usr/local/bin/pip2',\
