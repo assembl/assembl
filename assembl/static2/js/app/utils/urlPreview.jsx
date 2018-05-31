@@ -113,6 +113,9 @@ export const fetchURLMetadata = (url: string, onLoad: Function, onError: ?Functi
       if (ok) {
         onLoad(formatDict(response && response.metadata));
       } else if (onError) onError();
+    })
+    .catch(() => {
+      if (onError) onError();
     });
 };
 
