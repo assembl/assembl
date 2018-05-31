@@ -74,7 +74,7 @@ Edit /etc/opendkim/SigningTable:
 
 # ENDIF
 
-Edit /etc/defaults/opendkim
+Edit /etc/default/opendkim
 Uncomment
     SOCKET="inet:12345@localhost"
 And comment out (if necessary)

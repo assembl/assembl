@@ -124,6 +124,8 @@ and add the following:
     smtpd_tls_session_cache_timeout = 3600s
     tls_random_source = dev:/dev/urandom
 
+Make sure that `relayhost =` is empty
+
 VMM configuration
 -----------------
 
