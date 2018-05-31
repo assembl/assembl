@@ -37,7 +37,7 @@ class URLPreview extends React.Component<URLPreviewProps> {
       <div className="url-container">
         {isContribution ? (
           <div className="url-header">
-            <img src={authorAvatar} className="url-contribution-avatar" alt={authorName} />
+            {authorAvatar && <img src={authorAvatar} className="url-contribution-avatar" alt={authorName} />}
             <a target="_blank" href={url} className="url-contribution-title">
               {title}
             </a>
@@ -46,7 +46,7 @@ class URLPreview extends React.Component<URLPreviewProps> {
         ) : (
           [
             <div key={`${id}url-header`} className="url-header">
-              <img alt="favicon" className="url-header-avatar" src={faviconUrl} />
+              {faviconUrl && <img alt="favicon" className="url-header-avatar" src={faviconUrl} />}
               <span className="url-header-title">{providerName}</span>
             </div>,
             <a key={`${id}url-link`} target="_blank" href={url} className="url-link">
@@ -67,7 +67,7 @@ class URLPreview extends React.Component<URLPreviewProps> {
         </div>
         {isContribution && (
           <div className="url-footer">
-            <img alt="favicon" className="url-footer-avatar" src={faviconUrl} />
+            {faviconUrl && <img alt="favicon" className="url-footer-avatar" src={faviconUrl} />}
             <span className="url-footer-title">{providerName}</span>
           </div>
         )}

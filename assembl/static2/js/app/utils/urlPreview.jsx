@@ -8,7 +8,7 @@ import SketchFabEmbed from '../components/common/urlPreview/sketchFabTheater';
 
 const urlMetadataWebServiceUrl = 'http://0.0.0.0:5000';
 
-type MetadataResponsProps = {
+type MetadataResponseProps = {
   code: string,
   metadata: Object
 };
@@ -80,7 +80,7 @@ export const EMBED_PROVIDERS = {
  * @param {dict: Object | null} The dict to format
  * @returns {Object} Returns a copy of the dict with formatted keys (ex: {first_name: value} -> {firstName: value}).
  */
-function formatDict(dict: Object | null): Object {
+function transformKeysToCamelCase(dict: Object | null): Object {
   const result = {};
   if (!dict) return result;
   const reducer = (accumulator, key) => {
@@ -94,7 +94,7 @@ function formatDict(dict: Object | null): Object {
 }
 
 /**
- * Recuperate the metadata of an URL
+ * Retrieve the metadata of an URL
  * @param {url: string} The source URL
  * @param {onLoad: Function} The function to call when the metadata are loaded successfully
  * @param {onError: ?Function} The function to call when we have an error
@@ -108,10 +108,10 @@ export const fetchURLMetadata = (url: string, onLoad: Function, onError: ?Functi
       }
       return null;
     })
-    .then((response: MetadataResponsProps | null) => {
+    .then((response: MetadataResponseProps | null) => {
       const ok = response && response.code === 'SUCCESS';
       if (ok) {
-        onLoad(formatDict(response && response.metadata));
+        onLoad(transformKeysToCamelCase(response && response.metadata));
       } else if (onError) onError();
     })
     .catch(() => {
@@ -125,13 +125,13 @@ export const fetchURLMetadata = (url: string, onLoad: Function, onError: ?Functi
  * @param {callback: ?Function} Called when the iframe is resized
  */
 export function resizeIframe(id: string, callback: ?Function): void {
-  const ifrm = document.getElementById(id);
-  if (ifrm && ifrm instanceof HTMLIFrameElement) {
-    const doc = ifrm.contentDocument ? ifrm.contentDocument : ifrm.contentWindow && ifrm.contentWindow.document;
+  const iframe = document.getElementById(id);
+  if (iframe && iframe instanceof HTMLIFrameElement) {
+    const doc = iframe.contentDocument ? iframe.contentDocument : iframe.contentWindow && iframe.contentWindow.document;
     if (doc && doc.body) {
       const body = doc.body;
       const height = Math.max(body.scrollHeight, body.offsetHeight);
-      ifrm.style.height = `${height + 50}px`;
+      iframe.style.height = `${height + 50}px`;
       // callback after resize
       if (callback) callback();
       // call resizeIframe again if the subtree of the iframe document is changed

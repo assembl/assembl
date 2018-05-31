@@ -20,13 +20,13 @@ const styles = {
   padding: 0
 };
 
-class Frame extends React.Component<FrameProps, void> {
+class Frame extends React.Component<FrameProps> {
+  id: string;
+
   constructor(props: FrameProps) {
     super(props);
     this.id = `iframe-${props.id}`;
   }
-
-  id = 'iframe';
 
   frameContentDidMount = () => {
     const { afterLoad } = this.props;

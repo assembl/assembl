@@ -1,5 +1,5 @@
 /*
-  Stories for components/common
+  Stories for components/common/urlPreview/frame
 */
 import React from 'react';
 import { storiesOf } from '@storybook/react';

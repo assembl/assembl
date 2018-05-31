@@ -48,12 +48,12 @@ const postBodyReplacementComponents = afterLoad => ({
   a: (attributes) => {
     const embeddedUrl = isSpecialURL(attributes.href);
     const origin = (
-      <a href={attributes.href} className="linkified" target="_blank">
+      <a key={`url-link-${attributes.href}`} href={attributes.href} className="linkified" target="_blank">
         {attributes.href}
       </a>
     );
     if (embeddedUrl) return origin;
-    return [origin, <URLMetadataLoader url={attributes.href} afterLoad={afterLoad} />];
+    return [origin, <URLMetadataLoader key={`url-preview-${attributes.href}`} url={attributes.href} afterLoad={afterLoad} />];
   },
   annotation: attributes => <ExtractInPost id={attributes.id}>{attributes.children}</ExtractInPost>
 });
