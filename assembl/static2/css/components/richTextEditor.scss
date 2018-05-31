@@ -207,16 +207,16 @@
   }
 }
 
+img.attachment-image {
+  width: 100%;
+}
+
 .atomic-block {
   .attachment-document {
     border: solid 1px;
     margin: 3px;
     padding: 3px;
     font-family: $font-family3;
-  }
-
-  img.attachment-image {
-    width: 100%;
   }
 
   img.attachment-icon {
