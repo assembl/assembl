@@ -1,6 +1,6 @@
 // @flow
 import React from 'react';
-import { Translate } from 'react-redux-i18n';
+import { Translate, Localize } from 'react-redux-i18n';
 
 type StatisticElementProps = {
   iconName: string,
@@ -40,14 +40,16 @@ export const statParticipations = (numParticipations: number): StatisticElementP
   metricNameTranslateKey: 'home.participations'
 });
 
-const StatisticElement = (props: StatisticElementProps) => (
+const StatisticElement = ({ metricNameTranslateKey, iconName, metricValue }: StatisticElementProps) => (
   <div className="stat-container">
     <div className="stat-box">
-      <div className={`stat-icon assembl-icon-${props.iconName} white`} />
+      <div className={`stat-icon assembl-icon-${iconName} white`} />
       <div className="stat">
-        <div className="stat-nb">{props.metricValue}</div>
+        <div className="stat-nb">
+          <Localize value={metricValue} />
+        </div>
         <div className="stat-nb stat-label">
-          <Translate value={props.metricNameTranslateKey} count={props.metricValue} />
+          <Translate value={metricNameTranslateKey} count={metricValue} />
         </div>
       </div>
     </div>
@@ -55,7 +57,7 @@ const StatisticElement = (props: StatisticElementProps) => (
 );
 
 const mapElementsPropsToComponents = elemsProps =>
-  elemsProps.map((elementProps, index) => <StatisticElement key={index} {...elementProps} />);
+  elemsProps.map((elementProps, index) => <StatisticElement key={`stat-${index}`} {...elementProps} />);
 
 const HeaderStatistics = ({ statElements }: { statElements: StatElements }) => (
   <div className="statistic">

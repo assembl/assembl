@@ -22,7 +22,12 @@ exports[`HeaderStatistics component should match HeaderStatistics snapshot 1`] =
           <div
             className="stat-nb"
           >
-            3
+            <span
+              className={undefined}
+              style={undefined}
+            >
+              3
+            </span>
           </div>
           <div
             className="stat-nb stat-label"
@@ -52,7 +57,12 @@ exports[`HeaderStatistics component should match HeaderStatistics snapshot 1`] =
           <div
             className="stat-nb"
           >
-            5
+            <span
+              className={undefined}
+              style={undefined}
+            >
+              5
+            </span>
           </div>
           <div
             className="stat-nb stat-label"
@@ -82,7 +92,12 @@ exports[`HeaderStatistics component should match HeaderStatistics snapshot 1`] =
           <div
             className="stat-nb"
           >
-            2
+            <span
+              className={undefined}
+              style={undefined}
+            >
+              2
+            </span>
           </div>
           <div
             className="stat-nb stat-label"
@@ -112,7 +127,12 @@ exports[`HeaderStatistics component should match HeaderStatistics snapshot 1`] =
           <div
             className="stat-nb"
           >
-            27
+            <span
+              className={undefined}
+              style={undefined}
+            >
+              27
+            </span>
           </div>
           <div
             className="stat-nb stat-label"
