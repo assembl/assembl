@@ -1,5 +1,5 @@
 // @flow
-import React from 'react';
+import * as React from 'react';
 import { I18n } from 'react-redux-i18n';
 import { FormGroup } from 'react-bootstrap';
 import FormControlWithLabel from '../../common/formControlWithLabel';

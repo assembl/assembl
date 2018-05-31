@@ -1,5 +1,5 @@
 // @flow
-import React from 'react';
+import * as React from 'react';
 import { Translate, I18n } from 'react-redux-i18n';
 import { convertFromRaw, convertToRaw, Editor, EditorState, RawContentState, RichUtils } from 'draft-js';
 import classNames from 'classnames';
@@ -14,10 +14,10 @@ import attachmentsPlugin from './attachmentsPlugin';
 
 type RichTextEditorProps = {
   rawContentState: RawContentState,
-  handleInputFocus: Function,
+  handleInputFocus?: Function,
   maxLength: number,
-  placeholder: string,
-  textareaRef: Function,
+  placeholder?: string,
+  textareaRef?: Function,
   toolbarPosition: string,
   updateContentState: Function,
   withAttachmentButton: boolean,
@@ -40,17 +40,11 @@ function customBlockRenderer(block) {
   return null;
 }
 
-export default class RichTextEditor extends React.Component<Object, RichTextEditorProps, RichTextEditorState> {
-  editor: HTMLDivElement;
-
-  props: RichTextEditorProps;
-
-  state: RichTextEditorState;
-
-  static defaultProps: Object;
+export default class RichTextEditor extends React.Component<RichTextEditorProps, RichTextEditorState> {
+  editor: ?HTMLDivElement;
 
   static defaultProps = {
-    handleInputFocus: null,
+    handleInputFocus: undefined,
     maxLength: 0,
     toolbarPosition: 'top',
     withAttachmentButton: false,
@@ -164,10 +158,14 @@ export default class RichTextEditor extends React.Component<Object, RichTextEdit
   focusEditor = (): void => {
     // Hacky: Wait to focus the editor so we don't lose selection.
     // The toolbar actions don't work at all without this.
-    setTimeout(() => this.editor.focus(), 50);
+    setTimeout(() => {
+      if (this.editor) {
+        this.editor.focus();
+      }
+    }, 50);
   };
 
-  renderRemainingChars = (): React.Element<*> => {
+  renderRemainingChars = (): React.Element<any> => {
     const { maxLength } = this.props;
     const editorState = this.state.editorState;
     const charCount = this.getCharCount(editorState);
@@ -179,7 +177,7 @@ export default class RichTextEditor extends React.Component<Object, RichTextEdit
     );
   };
 
-  handleReturn = (e: Event): string => {
+  handleReturn = (e: KeyboardEvent): string => {
     // Pressing shift-enter keys creates a new line (<br/>) instead of an new paragraph (<p>)
     // See https://github.com/HubSpot/draft-convert/issues/83
     // For example, this enables to create line returns inside a list item.

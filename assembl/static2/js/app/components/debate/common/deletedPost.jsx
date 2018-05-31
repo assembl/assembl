@@ -1,5 +1,5 @@
 // @flow
-import React from 'react';
+import * as React from 'react';
 import { Translate } from 'react-redux-i18n';
 import { Row, Col } from 'react-bootstrap';
 
@@ -7,11 +7,11 @@ type DeletedByType = 'user' | 'admin';
 
 type DeletedPostProps = {
   id: string,
-  subject: React.Element<*>,
+  subject: React.Element<any>,
   deletedBy: DeletedByType
 };
 
-const DeletedPost = ({ id, subject, deletedBy }: DeletedPostProps): React.Element<*> => (
+const DeletedPost = ({ id, subject, deletedBy }: DeletedPostProps): React.Element<any> => (
   <div className="posts deleted-post" id={id}>
     <div className="box">
       <Row className="post-row">

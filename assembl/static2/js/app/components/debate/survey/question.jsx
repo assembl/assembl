@@ -1,5 +1,5 @@
 // @flow
-import React from 'react';
+import * as React from 'react';
 import { graphql, compose } from 'react-apollo';
 import { connect } from 'react-redux';
 import { Translate, I18n } from 'react-redux-i18n';
@@ -33,11 +33,7 @@ type QuestionState = {
   charCount: number
 };
 
-class Question extends React.Component<void, QuestionProps, QuestionState> {
-  props: QuestionProps;
-
-  state: QuestionState;
-
+class Question extends React.Component<QuestionProps, QuestionState> {
   constructor(props: QuestionProps) {
     super(props);
     this.state = {

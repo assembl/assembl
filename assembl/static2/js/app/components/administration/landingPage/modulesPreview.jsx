@@ -1,5 +1,5 @@
 // @flow
-import React from 'react';
+import * as React from 'react';
 import { List, Map } from 'immutable';
 
 import ModuleBlock from './moduleBlock';

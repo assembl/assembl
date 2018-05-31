@@ -1,5 +1,5 @@
-// @flow
-import React from 'react';
+// @noflow
+import * as React from 'react';
 import get from 'lodash/get';
 import { I18n } from 'react-redux-i18n';
 
@@ -12,7 +12,7 @@ import hashLinkScroll from '../../../utils/hashLinkScroll';
 import { MIN_WIDTH_COLUMN, APP_CONTAINER_MAX_WIDTH } from '../../../constants';
 import { withScreenWidth } from '../../common/screenDimensions';
 
-class ColumnsView extends React.Component {
+class ColumnsView extends React.Component<$FlowFixMeProps> {
   componentDidMount() {
     hashLinkScroll();
   }

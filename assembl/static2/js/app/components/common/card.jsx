@@ -1,15 +1,13 @@
 // @flow
-import React from 'react';
+import * as React from 'react';
 
 type CardProps = {
   className: string,
   imgUrl: string,
-  children: Array<*>
+  children: React.Node
 };
 
-class Card extends React.Component<void, CardProps, void> {
-  props: CardProps;
-
+class Card extends React.Component<CardProps> {
   render() {
     const { className, imgUrl, children } = this.props;
     return (

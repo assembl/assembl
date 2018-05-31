@@ -1,5 +1,5 @@
 // @flow
-import React from 'react';
+import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { connect } from 'react-redux';
 import { Translate, I18n } from 'react-redux-i18n';
@@ -28,14 +28,10 @@ type SignupFormState = {
   checked: boolean
 };
 
-class SignupForm extends React.Component<void, SignupFormProps, SignupFormState> {
-  props: SignupFormProps;
+class SignupForm extends React.Component<SignupFormProps, SignupFormState> {
+  signupHandler: (SyntheticEvent<>) => void;
 
-  state: SignupFormState;
-
-  signupHandler: SyntheticEvent => void;
-
-  handleInput: SyntheticEvent => void;
+  handleInput: (SyntheticInputEvent<HTMLInputElement>) => void;
 
   toggleCheck: () => void;
 

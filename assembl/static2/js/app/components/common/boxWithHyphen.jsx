@@ -1,6 +1,6 @@
 // @flow
 import classnames from 'classnames';
-import React from 'react';
+import * as React from 'react';
 import { Localize } from 'react-redux-i18n';
 
 type BoxProps = {
@@ -37,7 +37,14 @@ const Box = ({ body, date, hyphenStyle, subject, title }: BoxProps) => (
   </div>
 );
 
-class BoxWithHyphen extends React.Component<*, BoxWithHyphenProps, *> {
+class BoxWithHyphen extends React.Component<BoxWithHyphenProps> {
+  static defaultProps = {
+    additionalContainerClassNames: '',
+    date: '',
+    href: '',
+    hyphenStyle: {}
+  };
+
   render() {
     const { additionalContainerClassNames, href, ...otherProps } = this.props;
     const containerClassNames = classnames([additionalContainerClassNames, 'box-with-hyphen']);
@@ -54,12 +61,5 @@ class BoxWithHyphen extends React.Component<*, BoxWithHyphenProps, *> {
     );
   }
 }
-
-BoxWithHyphen.defaultProps = {
-  additionalContainerClassNames: '',
-  date: '',
-  href: '',
-  hyphenStyle: {}
-};
 
 export default BoxWithHyphen;

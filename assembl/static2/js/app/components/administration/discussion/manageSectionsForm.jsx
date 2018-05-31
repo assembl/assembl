@@ -1,5 +1,5 @@
 // @flow
-import React from 'react';
+import * as React from 'react';
 import { connect } from 'react-redux';
 import { I18n } from 'react-redux-i18n';
 import { OverlayTrigger } from 'react-bootstrap';

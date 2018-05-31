@@ -1,18 +1,34 @@
 // @flow
-import React from 'react';
+import * as React from 'react';
 
 import Logo from './Logo';
 import NavigationMenu from './navigationMenu';
 import LanguageMenu, { refWidthUpdate } from './languageMenu';
 import UserMenu from './UserMenu';
 
-export default class FlatNavbar extends React.PureComponent {
-  state: {
-    leftWidth: number,
-    rightWidth: number,
-    languageMenuWidth: number
-  };
+type Props = {
+  elements: React.Node,
+  slug: string,
+  logoSrc: string,
+  connectedUserId: string,
+  currentPhaseIdentifier: string,
+  helpUrl: string,
+  location: string,
+  style: Object,
+  logoLink: string,
+  maxWidth: number,
+  themeId: string,
+  isLargeLogo: boolean,
+  setWidth: number => void
+};
 
+type State = {
+  leftWidth: number,
+  rightWidth: number,
+  languageMenuWidth: number
+};
+
+export default class FlatNavbar extends React.PureComponent<Props, State> {
   static defaultProps = {
     style: {}
   };

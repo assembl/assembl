@@ -1,5 +1,5 @@
 // @flow
-import React from 'react';
+import * as React from 'react';
 import { Grid } from 'react-bootstrap';
 
 import ProposalResults from './proposalResults';

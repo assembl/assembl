@@ -19,28 +19,38 @@ exports[`LegalNoticeAndTermsForm dumb component should render a form to edit leg
         className="form-container"
       >
         <FormControlWithLabel
+          componentClass={undefined}
+          disabled={undefined}
+          formControlProps={undefined}
+          helperText=""
           helperUrl=""
+          id={undefined}
           label="Terms and conditions"
           labelAlwaysVisible={false}
-          name={null}
+          name={undefined}
           onChange={[Function]}
           required={true}
           type="rich-text"
-          validationErrors={null}
+          validationErrors={undefined}
           value=""
         />
         <div
           className="separator"
         />
         <FormControlWithLabel
+          componentClass={undefined}
+          disabled={undefined}
+          formControlProps={undefined}
+          helperText=""
           helperUrl=""
+          id={undefined}
           label="Legal notice"
           labelAlwaysVisible={false}
-          name={null}
+          name={undefined}
           onChange={[Function]}
           required={true}
           type="rich-text"
-          validationErrors={null}
+          validationErrors={undefined}
           value=""
         />
       </div>

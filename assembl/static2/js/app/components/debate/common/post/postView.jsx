@@ -1,7 +1,6 @@
 // @flow
-import React from 'react';
+import * as React from 'react';
 import { Translate, I18n } from 'react-redux-i18n';
-
 import { getDomElementOffset, elementContainsSelection } from '../../../../utils/globalFunctions';
 import Attachments from '../../../common/attachments';
 import ProfileLine from '../../../common/profileLine';
@@ -17,7 +16,7 @@ type Props = PostProps & {
   body: string,
   subject: string,
   handleEditClick: Function,
-  modifiedSubject: React.Element<*>,
+  modifiedSubject: React.Element<any>,
   isHarvesting: boolean
 };
 
@@ -28,14 +27,10 @@ type State = {
   harvestingAnchorPosition: Object
 };
 
-class PostView extends React.PureComponent<void, Props, State> {
-  props: Props;
+class PostView extends React.PureComponent<Props, State> {
+  answerTextarea: ?HTMLTextAreaElement;
 
-  state: State;
-
-  answerTextarea: HTMLTextAreaElement;
-
-  postView: HTMLElement;
+  postView: ?HTMLElement;
 
   constructor(props: Props) {
     super(props);
@@ -50,9 +45,10 @@ class PostView extends React.PureComponent<void, Props, State> {
   handleAnswerClick = () => {
     this.setState({ showAnswerForm: true }, this.props.measureTreeHeight);
     setTimeout(() => {
-      if (!this.answerTextarea) return;
-      const txtareaOffset = getDomElementOffset(this.answerTextarea).top;
-      window.scrollTo({ top: txtareaOffset - this.answerTextarea.clientHeight, left: 0, behavior: 'smooth' });
+      const answerTextarea = this.answerTextarea;
+      if (!answerTextarea) return;
+      const txtareaOffset = getDomElementOffset(answerTextarea).top;
+      window.scrollTo({ top: txtareaOffset - answerTextarea.clientHeight, left: 0, behavior: 'smooth' });
     }, 200);
   };
 
@@ -76,7 +72,9 @@ class PostView extends React.PureComponent<void, Props, State> {
     const selection = document.getSelection();
     const selectionRange = selection ? selection.getRangeAt(0) : null;
     const selectionPositionY = selectionRange ? selectionRange.getBoundingClientRect().top : 0;
+    // $FlowFixMe this.postView may be null
     const anchorPositionX = this.postView.offsetLeft + this.postView.clientWidth / 2;
+    // $FlowFixMe this.postView may be null
     const anchorPositionY = selectionPositionY - this.postView.getBoundingClientRect().top;
     return { x: anchorPositionX, y: anchorPositionY };
   }
@@ -149,7 +147,7 @@ class PostView extends React.PureComponent<void, Props, State> {
 
     const completeLevelArray = fullLevel ? [rowIndex, ...fullLevel.split('-').map(string => Number(string))] : [rowIndex];
 
-    const answerTextareaRef = (el: HTMLTextAreaElement) => {
+    const answerTextareaRef = (el: ?HTMLTextAreaElement) => {
       this.answerTextarea = el;
     };
 

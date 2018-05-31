@@ -20,6 +20,7 @@ const plugin = {
     return undefined;
   },
   entityToHTML: (entity: { data: DocumentFragment }, originalText: string): string => {
+    // $FlowFixMe property `type` is missing in object type
     if (entity.type === ENTITY_TYPE) {
       const { id } = entity.data;
       const externalUrl = entity.data.externalUrl ? entity.data.externalUrl : '';

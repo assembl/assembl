@@ -1,5 +1,5 @@
 // @flow
-import React from 'react';
+import * as React from 'react';
 import { Button, OverlayTrigger } from 'react-bootstrap';
 import range from 'lodash/range';
 import Circle from '../svg/circle';

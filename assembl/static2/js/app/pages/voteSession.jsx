@@ -122,12 +122,8 @@ type FilterNumberGaugeVoteModules = (Array<VoteSpecification>) => Array<NumberGa
 export const filterNumberGaugeVoteModules: FilterNumberGaugeVoteModules = modules =>
   modules.filter(module => module.voteType === 'number_gauge_vote_specification').sort(moduleComparator);
 
-class DumbVoteSession extends React.Component<void, Props, State> {
-  props: Props;
-
-  state: State;
-
-  availableTokensContainerRef: HTMLDivElement;
+class DumbVoteSession extends React.Component<Props, State> {
+  availableTokensContainerRef: ?HTMLDivElement;
 
   constructor(props: Props) {
     super(props);
@@ -157,7 +153,7 @@ class DumbVoteSession extends React.Component<void, Props, State> {
 
   updateWindowWidth = () => {
     this.setState({ windowWidth: window.innerWidth });
-  }
+  };
 
   setMyVotes() {
     const { proposals } = this.props;
@@ -241,7 +237,7 @@ class DumbVoteSession extends React.Component<void, Props, State> {
     return remainingTokensByCategory;
   };
 
-  setAvailableTokensRef = (el: HTMLDivElement) => {
+  setAvailableTokensRef = (el: ?HTMLDivElement) => {
     this.availableTokensContainerRef = el;
   };
 
@@ -364,10 +360,7 @@ class DumbVoteSession extends React.Component<void, Props, State> {
         </Header>
         {!isPhaseCompleted ? (
           <Grid fluid className="background-light">
-            <Section
-              title={instructionsSectionTitle}
-              containerAdditionalClassNames={availableTokensSticky ? ['no-margin'] : null}
-            >
+            <Section title={instructionsSectionTitle} containerAdditionalClassNames={availableTokensSticky ? ['no-margin'] : ''}>
               <Row>
                 <Col
                   mdOffset={!availableTokensSticky ? 3 : null}
@@ -397,10 +390,7 @@ class DumbVoteSession extends React.Component<void, Props, State> {
           </Grid>
         ) : null}
         <Grid fluid className="background-grey">
-          <Section
-            title={propositionsSectionTitleToShow}
-            className={availableTokensSticky ? 'extra-margin-top' : null}
-          >
+          <Section title={propositionsSectionTitleToShow} className={availableTokensSticky ? 'extra-margin-top' : ''}>
             <Row>
               <Col mdOffset={1} md={10} smOffset={1} sm={10}>
                 {!isPhaseCompleted ? (

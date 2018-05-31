@@ -1,5 +1,5 @@
 // @flow
-import React from 'react';
+import * as React from 'react';
 import activeHtml from 'react-active-html';
 import classNames from 'classnames';
 import jQuery from 'jquery';
@@ -19,7 +19,7 @@ type Props = {
   contentLocale: string,
   id: string,
   lang: string,
-  subject: ?React.Element<*>,
+  subject: ?React.Element<any>,
   originalLocale: string,
   translate: boolean,
   translationEnabled: boolean,
@@ -29,7 +29,7 @@ type Props = {
 
 type ExtractInPostProps = {
   id: string,
-  children: React.Children
+  children: React.Node
 };
 
 const ExtractInPost = ({ id, children }: ExtractInPostProps) => (

@@ -1,5 +1,5 @@
 // @flow
-import React from 'react';
+import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { Translate, I18n } from 'react-redux-i18n';
 import { Button } from 'react-bootstrap';
@@ -23,11 +23,7 @@ type State = {
 
 const isEmpty = value => value.length === 0;
 
-class ModifyPasswordForm extends React.Component<void, Props, State> {
-  props: Props;
-
-  state: State;
-
+class ModifyPasswordForm extends React.Component<Props, State> {
   state = {
     disabled: false,
     oldPassword: '',
@@ -35,28 +31,22 @@ class ModifyPasswordForm extends React.Component<void, Props, State> {
     newPassword2: ''
   };
 
-  handleOldPasswordChange = (e: SyntheticEvent) => {
-    if (e.target instanceof HTMLInputElement) {
-      const value = e.target.value;
-      const disabled = isEmpty(value) || isEmpty(this.state.newPassword) || isEmpty(this.state.newPassword2);
-      this.setState({ oldPassword: value, disabled: disabled });
-    }
+  handleOldPasswordChange = (e: SyntheticInputEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    const disabled = isEmpty(value) || isEmpty(this.state.newPassword) || isEmpty(this.state.newPassword2);
+    this.setState({ oldPassword: value, disabled: disabled });
   };
 
-  handleNewPasswordChange = (e: SyntheticEvent) => {
-    if (e.target instanceof HTMLInputElement) {
-      const value = e.target.value;
-      const disabled = isEmpty(this.state.oldPassword) || isEmpty(value) || isEmpty(this.state.newPassword2);
-      this.setState({ newPassword: value, disabled: disabled });
-    }
+  handleNewPasswordChange = (e: SyntheticInputEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    const disabled = isEmpty(this.state.oldPassword) || isEmpty(value) || isEmpty(this.state.newPassword2);
+    this.setState({ newPassword: value, disabled: disabled });
   };
 
-  handleNewPassword2Change = (e: SyntheticEvent) => {
-    if (e.target instanceof HTMLInputElement) {
-      const value = e.target.value;
-      const disabled = isEmpty(this.state.oldPassword) || isEmpty(this.state.newPassword) || isEmpty(value);
-      this.setState({ newPassword2: value, disabled: disabled });
-    }
+  handleNewPassword2Change = (e: SyntheticInputEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    const disabled = isEmpty(this.state.oldPassword) || isEmpty(this.state.newPassword) || isEmpty(value);
+    this.setState({ newPassword2: value, disabled: disabled });
   };
 
   handleSaveClick = () => {

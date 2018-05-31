@@ -32,11 +32,7 @@ type SynthesisState = {
 
 const sideMenuTopPercentage = 15;
 
-export class DumbSynthesis extends React.Component<void, SynthesisProps, SynthesisState> {
-  props: SynthesisProps;
-
-  state: SynthesisState;
-
+export class DumbSynthesis extends React.Component<SynthesisProps, SynthesisState> {
   constructor(props: SynthesisProps) {
     super(props);
     this.state = {

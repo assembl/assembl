@@ -1,5 +1,5 @@
 // @flow
-import React from 'react';
+import * as React from 'react';
 import { Button, FormControl, FormGroup, Modal, Radio } from 'react-bootstrap';
 import { Translate, I18n } from 'react-redux-i18n';
 
@@ -25,11 +25,7 @@ type ChooseContentLocaleFormState = {
   selectedLocale: string
 };
 
-class ChooseContentLocaleForm extends React.Component<*, ChooseContentLocaleFormProps, ChooseContentLocaleFormState> {
-  props: ChooseContentLocaleFormProps;
-
-  state: ChooseContentLocaleFormState;
-
+class ChooseContentLocaleForm extends React.Component<ChooseContentLocaleFormProps, ChooseContentLocaleFormState> {
   constructor() {
     super();
     this.state = {

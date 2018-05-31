@@ -1,5 +1,5 @@
 // @flow
-import React from 'react';
+import * as React from 'react';
 import { Row, Col } from 'react-bootstrap';
 import { I18n } from 'react-redux-i18n';
 import ParticipantsCount from './participantsCount';

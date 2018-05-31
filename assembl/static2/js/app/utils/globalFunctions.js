@@ -199,6 +199,7 @@ export const elementContainsSelection = (el: any) => {
       }
       return true;
     }
+    // $FlowFixMe Property selection is missing in Document
   } else if (sel && sel === document.selection && sel.type !== 'Control') {
     return isOrContains(sel.createRange().parentElement(), el);
   }

@@ -12,30 +12,39 @@ exports[`tokenTypeForm component should render a TokenCategoryForm component 1`]
     className="margin-m"
   >
     <FormControlWithLabel
+      componentClass={undefined}
+      disabled={undefined}
+      formControlProps={undefined}
+      helperText=""
       helperUrl=""
+      id={undefined}
       label="Token title"
       labelAlwaysVisible={false}
-      name={null}
+      name={undefined}
       onChange={[Function]}
       required={true}
       type="text"
-      validationErrors={null}
+      validationErrors={undefined}
       value="En faveur"
     />
     <FormControlWithLabel
+      componentClass={undefined}
+      disabled={undefined}
       formControlProps={
         Object {
           "min": "1",
         }
       }
+      helperText=""
       helperUrl=""
+      id={undefined}
       label="Number of tokens per participant"
       labelAlwaysVisible={false}
-      name={null}
+      name={undefined}
       onChange={undefined}
       required={true}
       type="number"
-      validationErrors={null}
+      validationErrors={undefined}
       value={12}
     />
     <label

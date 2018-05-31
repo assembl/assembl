@@ -1,5 +1,5 @@
 // @flow
-import React from 'react';
+import * as React from 'react';
 import { compose, graphql, withApollo } from 'react-apollo';
 import { Row, Col, FormGroup, Button } from 'react-bootstrap';
 import { Translate, I18n } from 'react-redux-i18n';
@@ -34,11 +34,7 @@ type EditPostFormState = {
   body: RawContentState
 };
 
-class EditPostForm extends React.PureComponent<void, EditPostFormProps, EditPostFormState> {
-  props: EditPostFormProps;
-
-  state: EditPostFormState;
-
+class EditPostForm extends React.PureComponent<EditPostFormProps, EditPostFormState> {
   constructor(props: EditPostFormProps) {
     super(props);
     const { subject } = props;
@@ -49,10 +45,8 @@ class EditPostForm extends React.PureComponent<void, EditPostFormProps, EditPost
     };
   }
 
-  updateSubject = (e: SyntheticEvent): void => {
-    if (e.target instanceof HTMLInputElement) {
-      this.setState({ subject: e.target.value });
-    }
+  updateSubject = (e: SyntheticInputEvent<HTMLInputElement>): void => {
+    this.setState({ subject: e.target.value });
   };
 
   updateBody = (rawBody: RawContentState): void => {

@@ -1,5 +1,5 @@
 // @flow
-import React from 'react';
+import * as React from 'react';
 
 type TokenProps = {
   color: string
@@ -9,11 +9,7 @@ type TokenState = {
   active: boolean
 };
 
-class Token extends React.Component<Object, TokenProps, TokenState> {
-  props: TokenProps;
-
-  state: TokenState;
-
+class Token extends React.Component<TokenProps, TokenState> {
   static defaultProps = {
     color: '#B8E986'
   };

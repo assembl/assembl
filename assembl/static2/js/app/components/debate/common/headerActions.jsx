@@ -1,5 +1,5 @@
 // @flow
-import React from 'react';
+import * as React from 'react';
 import { withRouter } from 'react-router';
 import { Translate } from 'react-redux-i18n';
 import { openShareModal } from '../../../utils/utilityManager';

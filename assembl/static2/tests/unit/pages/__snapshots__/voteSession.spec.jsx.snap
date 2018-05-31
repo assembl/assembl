@@ -35,11 +35,11 @@ exports[`VoteSession component should match VoteSession snapshot 1`] = `
   >
     <Section
       className="themes-section"
-      containerAdditionalClassNames={null}
+      containerAdditionalClassNames=""
       displayIndex={false}
       index={1}
       indexGenerator={[Function]}
-      innerRef={null}
+      innerRef={undefined}
       parents={Array []}
       title="Instructions de la phase de vote"
       translate={false}
@@ -104,12 +104,12 @@ exports[`VoteSession component should match VoteSession snapshot 1`] = `
     fluid={true}
   >
     <Section
-      className={null}
+      className=""
       containerAdditionalClassNames={Array []}
       displayIndex={false}
       index={1}
       indexGenerator={[Function]}
-      innerRef={null}
+      innerRef={undefined}
       parents={Array []}
       title="Vote sur 10 propositions"
       translate={false}
@@ -296,11 +296,11 @@ exports[`VoteSession component should match VoteSession snapshot with empty modu
   >
     <Section
       className="themes-section"
-      containerAdditionalClassNames={null}
+      containerAdditionalClassNames=""
       displayIndex={false}
       index={1}
       indexGenerator={[Function]}
-      innerRef={null}
+      innerRef={undefined}
       parents={Array []}
       title="Instructions de la phase de vote"
       translate={false}
@@ -337,12 +337,12 @@ exports[`VoteSession component should match VoteSession snapshot with empty modu
     fluid={true}
   >
     <Section
-      className={null}
+      className=""
       containerAdditionalClassNames={Array []}
       displayIndex={false}
       index={1}
       indexGenerator={[Function]}
-      innerRef={null}
+      innerRef={undefined}
       parents={Array []}
       title="Vote sur 0 propositions"
       translate={false}

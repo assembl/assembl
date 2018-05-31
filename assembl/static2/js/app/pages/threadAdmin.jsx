@@ -54,9 +54,7 @@ class ThreadAdmin extends React.Component {
             annotation="threadAnnotation"
           />
         )}
-        {!isNaN(currentStep) && (
-          <Navbar currentStep={currentStep} totalSteps={1} phaseIdentifier="thread" />
-        )}
+        {!isNaN(currentStep) && <Navbar currentStep={currentStep} totalSteps={1} phaseIdentifier="thread" />}
       </div>
     );
   }

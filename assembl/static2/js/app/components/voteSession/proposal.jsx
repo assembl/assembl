@@ -1,5 +1,5 @@
 // @flow
-import React from 'react';
+import * as React from 'react';
 import { Button, Col, Row } from 'react-bootstrap';
 import { Translate } from 'react-redux-i18n';
 import { Map } from 'immutable';
@@ -35,11 +35,7 @@ type State = {
   showVotesInProgress: boolean
 };
 
-class Proposal extends React.Component<void, Props, State> {
-  props: Props;
-
-  state: State;
-
+class Proposal extends React.Component<Props, State> {
   constructor() {
     super();
     this.state = {

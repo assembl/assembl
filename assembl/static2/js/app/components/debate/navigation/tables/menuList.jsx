@@ -1,5 +1,5 @@
-// @flow
-import React from 'react';
+// @noflow
+import * as React from 'react';
 import classNames from 'classnames';
 import { Scrollbars } from 'react-custom-scrollbars';
 
@@ -29,7 +29,7 @@ const menuItemHeight = 52;
 
 const menuItemMargin = 10;
 
-class MenuList extends React.Component<*, MenuListProps, MenuListState> {
+class MenuList extends React.Component<MenuListProps, MenuListState> {
   props: MenuListProps;
 
   static defaultProps = {

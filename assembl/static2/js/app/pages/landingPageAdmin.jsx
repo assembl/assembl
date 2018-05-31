@@ -24,11 +24,7 @@ type State = {
   refetching: boolean
 };
 
-class LandingPageAdmin extends React.Component<void, Props, State> {
-  props: Props;
-
-  state: State;
-
+class LandingPageAdmin extends React.Component<Props, State> {
   constructor() {
     super();
     this.state = {

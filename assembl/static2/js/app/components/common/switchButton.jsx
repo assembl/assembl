@@ -1,5 +1,5 @@
 // @flow
-import React from 'react';
+import * as React from 'react';
 
 type Props = {
   checked: boolean,
@@ -8,16 +8,13 @@ type Props = {
   title: string,
   label: string,
   labelRight: string,
-  defaultChecked: boolean,
   disabled: boolean,
   theme: string,
   mode: string,
   onChange: Function
 };
 
-class SwitchButton extends React.Component<Object, Props, any> {
-  static defaultProps: Object;
-
+class SwitchButton extends React.Component<Props> {
   static defaultProps = {
     id: '',
     name: 'switch-button',
@@ -54,7 +51,6 @@ class SwitchButton extends React.Component<Object, Props, any> {
 
     const props = {
       checked: this.props.checked,
-      defaultChecked: this.props.defaultChecked,
       disabled: this.props.disabled,
       onChange: this.props.onChange,
       name: this.props.name,

@@ -1,5 +1,5 @@
 // @flow
-import React from 'react';
+import * as React from 'react';
 
 import { hexToRgb } from '../../../utils/globalFunctions';
 import { COLUMN_OPACITY_GAIN } from '../../../constants';
@@ -13,11 +13,7 @@ type State = {
   activeKey: ?string
 };
 
-export default class TabbedColumns extends React.Component<void, Props, State> {
-  props: Props;
-
-  state: State;
-
+export default class TabbedColumns extends React.Component<Props, State> {
   state = {
     activeKey: null
   };

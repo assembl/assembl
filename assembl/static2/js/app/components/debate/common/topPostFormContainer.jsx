@@ -1,5 +1,5 @@
 // @flow
-import React from 'react';
+import * as React from 'react';
 import { Grid, Row, Col } from 'react-bootstrap';
 import { Translate } from 'react-redux-i18n';
 import classNames from 'classnames';
@@ -21,11 +21,7 @@ type TopPostFormContainerState = {
   topPostFormOffset: number
 };
 
-class TopPostFormContainer extends React.Component<*, TopPostFormContainerProps, TopPostFormContainerState> {
-  props: TopPostFormContainerProps;
-
-  state: TopPostFormContainerState;
-
+class TopPostFormContainer extends React.Component<TopPostFormContainerProps, TopPostFormContainerState> {
   setFormContainerRef: () => void;
 
   setFormPosition: () => void;

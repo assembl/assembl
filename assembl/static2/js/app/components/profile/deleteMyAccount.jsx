@@ -11,13 +11,16 @@ import { getDiscussionSlug } from '../../utils/globalFunctions';
 import deleteUserMutation from '../../graphql/mutations/deleteUser.graphql';
 import userQuery from '../../graphql/userQuery.graphql';
 
-type DeleteMyAccountState = {
+type Props = {
+  id: string,
+  deleteUser: Function
+};
+
+type State = {
   checked: boolean
 };
 
-class DeleteMyAccount extends React.Component<void, *, DeleteMyAccountState> {
-  state: DeleteMyAccountState;
-
+class DeleteMyAccount extends React.Component<Props, State> {
   constructor() {
     super();
     this.state = { checked: false };

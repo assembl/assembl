@@ -1,5 +1,5 @@
 // @flow
-import React from 'react';
+import * as React from 'react';
 
 import BoxWithHyphen from '../../common/boxWithHyphen';
 import PostActions from '../common/postActions';
@@ -32,6 +32,7 @@ const ColumnSynthesis = ({
       <div className="post-left">
         <BoxWithHyphen
           additionalContainerClassNames="column-synthesis"
+          title=""
           subject={synthesisTitle}
           body={synthesisBody}
           hyphenStyle={hyphenStyle}

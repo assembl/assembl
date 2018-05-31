@@ -21,9 +21,7 @@ type SynthesesProps = {
   hasSyntheses: boolean
 };
 
-export class DumbSyntheses extends React.Component<void, SynthesesProps, void> {
-  props: SynthesesProps;
-
+export class DumbSyntheses extends React.Component<SynthesesProps> {
   componentDidMount() {
     const { syntheses, slug } = this.props;
     if (syntheses.length === 1) {

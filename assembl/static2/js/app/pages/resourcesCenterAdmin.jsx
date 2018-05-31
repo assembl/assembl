@@ -47,11 +47,7 @@ type State = {
   refetching: boolean
 };
 
-class ResourcesCenterAdmin extends React.Component<void, Props, State> {
-  props: Props;
-
-  state: State;
-
+class ResourcesCenterAdmin extends React.Component<Props, State> {
   constructor() {
     super();
     this.state = {

@@ -3,7 +3,7 @@
   Note: This is only a helper method for common input types. For more complex actions,
   create unique handlers in the component itself.
   @params component [React] The component in question
-  @params inputEvent [SyntheticEvent] The event that is triggered from the onChange
+  @params inputEvent [SyntheticInputEvent<HTMLInputElement>] The event that is triggered from the onChange
   @returns void
 */
 export default (component, inputEvent) => {

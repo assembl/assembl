@@ -1,5 +1,5 @@
 // @flow
-import React from 'react';
+import * as React from 'react';
 import { Translate } from 'react-redux-i18n';
 import classnames from 'classnames';
 import { SECTION_INDEX_GENERATOR, getIndexesForIdeas } from '../../utils/section';
@@ -11,11 +11,11 @@ type SectionProps = {
   displayIndex: boolean,
   indexGenerator: Function,
   parents: Array<number>,
-  children: Array<*>,
+  children: React.Node,
   className: string,
   translate: boolean,
   innerRef?: Function,
-  id: string
+  id?: string
 };
 
 const level1 = (title, index, translate) => (
@@ -51,9 +51,7 @@ const levelN = (title, index, translate) => (
 
 const LEVELS = [level1, level2, level3];
 
-class Section extends React.Component<Object, SectionProps, void> {
-  props: SectionProps;
-
+class Section extends React.Component<SectionProps> {
   static defaultProps = {
     containerAdditionalClassNames: [],
     index: 1,
@@ -62,7 +60,7 @@ class Section extends React.Component<Object, SectionProps, void> {
     parents: [],
     className: 'themes-section',
     translate: false,
-    innerRef: null
+    innerRef: undefined
   };
 
   getIndexes = () => {

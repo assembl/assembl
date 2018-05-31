@@ -1,5 +1,5 @@
 // @flow
-import React from 'react';
+import * as React from 'react';
 import truncate from 'lodash/truncate';
 import { Col } from 'react-bootstrap';
 import classnames from 'classnames';
@@ -24,11 +24,7 @@ type State = {
   thumbnailsWidth: number
 };
 
-class IdeasLevelMobile extends React.Component {
-  props: Props;
-
-  state: State;
-
+class IdeasLevelMobile extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
     const { ideas } = this.props;

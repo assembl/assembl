@@ -1,5 +1,5 @@
 // @flow
-import React from 'react';
+import * as React from 'react';
 import { Col, Row } from 'react-bootstrap';
 
 import Section from '../common/section';
@@ -23,11 +23,7 @@ type IdeaSynthesisTreeState = {
   node: ?HTMLElement
 };
 
-class IdeaSynthesisTree extends React.Component<void, IdeaSynthesisTreeProps, IdeaSynthesisTreeState> {
-  props: IdeaSynthesisTreeProps;
-
-  state: IdeaSynthesisTreeState;
-
+class IdeaSynthesisTree extends React.Component<IdeaSynthesisTreeProps, IdeaSynthesisTreeState> {
   constructor(props: IdeaSynthesisTreeProps) {
     super(props);
     this.state = {

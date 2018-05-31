@@ -1,5 +1,5 @@
 // @flow
-import React from 'react';
+import * as React from 'react';
 import { FormControl } from 'react-bootstrap';
 import { Translate } from 'react-redux-i18n';
 

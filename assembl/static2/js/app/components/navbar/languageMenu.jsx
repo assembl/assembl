@@ -1,6 +1,5 @@
 // @flow
-
-import React from 'react';
+import * as React from 'react';
 import { connect } from 'react-redux';
 import { setLocale } from 'react-redux-i18n';
 import { compose, graphql } from 'react-apollo';
@@ -16,12 +15,23 @@ export const refWidthUpdate = (setWidth: (width: number) => void) => (ref: ?HTML
   if (ref) setWidth(ref.getBoundingClientRect().width);
 };
 
-class LanguageMenu extends React.Component {
-  state: {
-    availableLocales: Array<string>,
-    preferencesMapByLocale: { [string]: { nativeName: string, name: string, locale: string } }
-  };
+type Props = {
+  changeLanguage: Function,
+  addLanguageToStore: Function,
+  size: number,
+  i18n: Object,
+  style: Object,
+  className: string,
+  setWidth: Function,
+  data: Object
+};
 
+type State = {
+  availableLocales: Array<string>,
+  preferencesMapByLocale: { [string]: { nativeName: string, name: string, locale: string } }
+};
+
+class LanguageMenu extends React.Component<Props, State> {
   static defaultProps = {
     className: ''
   };
@@ -35,18 +45,18 @@ class LanguageMenu extends React.Component {
     this.setAvailableLanguages(this.props);
   }
 
-  componentWillReceiveProps(nextProps) {
+  componentWillReceiveProps(nextProps: Props) {
     this.setAvailableLanguages(nextProps);
   }
 
-  doChangeLanguage(key) {
+  doChangeLanguage(key: string) {
     const { changeLanguage } = this.props;
     document.cookie = `_LOCALE_=${key}; path=/`;
     changeLanguage(key);
     location.reload(true);
   }
 
-  setAvailableLanguages = (props) => {
+  setAvailableLanguages = (props: Props) => {
     const { addLanguageToStore, data, i18n } = props;
     const prefs = data.discussionPreferences.languages;
     const preferencesMapByLocale = {};

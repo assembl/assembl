@@ -1,11 +1,15 @@
 // @flow
-import React from 'react';
+import * as React from 'react';
 
-export default class YoutubeTheater extends React.Component {
-  state: {
-    open: boolean
-  };
+type Props = {
+  videoId: string
+};
 
+type State = {
+  open: boolean
+};
+
+export default class YoutubeTheater extends React.Component<Props, State> {
   timeout: number;
 
   state = {

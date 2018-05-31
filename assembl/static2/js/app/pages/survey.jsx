@@ -63,11 +63,7 @@ type SurveyState = {
   showModal: boolean
 };
 
-class Survey extends React.Component<*, SurveyProps, SurveyState> {
-  props: SurveyProps;
-
-  state: SurveyState;
-
+class Survey extends React.Component<SurveyProps, SurveyState> {
   constructor(props) {
     super(props);
     this.state = {

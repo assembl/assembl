@@ -1,6 +1,5 @@
 // @flow
-import React from 'react';
-
+import * as React from 'react';
 import { isCurrentPhase, getBarPercent, isStepCompleted } from '../../../utils/timeline';
 import TimelineSegment, { type DebateType } from './timelineSegment';
 

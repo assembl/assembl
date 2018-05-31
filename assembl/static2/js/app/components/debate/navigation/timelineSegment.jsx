@@ -1,5 +1,5 @@
 // @flow
-import React from 'react';
+import * as React from 'react';
 import { withApollo, type ApolloClient } from 'react-apollo';
 import { Translate, Localize } from 'react-redux-i18n';
 import { connect } from 'react-redux';
@@ -17,7 +17,8 @@ export const phasesToIgnore = [PHASES.voteSession];
 export type DebateType = {
   debateData: {
     timeline: Timeline,
-    slug: string
+    slug: string,
+    useSocialMedia: boolean
   }
 };
 
@@ -38,7 +39,15 @@ type TimelineSegmentProps = {
   onDeselect: Function
 };
 
-export class DumbTimelineSegment extends React.Component<*, TimelineSegmentProps, *> {
+type TimelineSegmentState = {
+  active: boolean
+};
+
+export class DumbTimelineSegment extends React.Component<TimelineSegmentProps, TimelineSegmentState> {
+  state = {
+    active: false
+  };
+
   componentWillMount() {
     const { phaseIdentifier, title, startDate, endDate, locale, client } = this.props;
     this.isTouchScreenDevice = isMobile.any();

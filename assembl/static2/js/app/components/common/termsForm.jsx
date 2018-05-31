@@ -1,5 +1,5 @@
-// @flow
-import React from 'react';
+// @noflow
+import * as React from 'react';
 import { Translate } from 'react-redux-i18n';
 import { Modal, Button } from 'react-bootstrap';
 import { compose, graphql } from 'react-apollo';
@@ -20,12 +20,8 @@ type TermsFormState = {
   isScrolled: boolean
 };
 
-class DumbTermsForm extends React.Component<*, TermsFormProps, TermsFormState> {
-  props: TermsFormProps;
-
-  state: TermsFormState;
-
-  box: HTMLElement;
+class DumbTermsForm extends React.Component<TermsFormProps, TermsFormState> {
+  box: ?HTMLElement;
 
   handleSubmit: () => void;
 

@@ -1,5 +1,5 @@
 // @flow
-import React from 'react';
+import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { connect } from 'react-redux';
 import { Translate, I18n } from 'react-redux-i18n';
@@ -28,11 +28,7 @@ type PostTranslateState = {
   isTranslated: boolean
 };
 
-class PostTranslate extends React.Component<void, PostTranslateProps, PostTranslateState> {
-  props: PostTranslateProps;
-
-  state: PostTranslateState;
-
+class PostTranslate extends React.Component<PostTranslateProps, PostTranslateState> {
   originalLocaleLabel: '';
 
   constructor() {

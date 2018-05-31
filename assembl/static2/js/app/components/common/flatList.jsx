@@ -1,6 +1,6 @@
 /* eslint-disable no-undef */
 // @flow
-import React from 'react';
+import * as React from 'react';
 import { I18n } from 'react-redux-i18n';
 
 import Loader from './loader';
@@ -19,8 +19,8 @@ type FlatListProps = {
     },
     edges: Array<ItemNode>
   },
-  ListItem: Function | ReactClass<*>,
-  className: string,
+  ListItem: Function | React.ComponentType<*>,
+  className?: string,
   networkStatus: number,
   onEndReachedThreshold: number,
   itemData: Function,
@@ -29,9 +29,7 @@ type FlatListProps = {
   extractItems: Function
 };
 
-class FlatList extends React.Component<*, FlatListProps, void> {
-  props: FlatListProps;
-
+class FlatList extends React.Component<FlatListProps> {
   loading: boolean;
 
   static defaultProps = {

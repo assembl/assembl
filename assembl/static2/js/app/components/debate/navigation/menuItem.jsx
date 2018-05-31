@@ -1,5 +1,5 @@
 // @flow
-import React from 'react';
+import * as React from 'react';
 import { connect } from 'react-redux';
 import classNames from 'classnames';
 
@@ -28,7 +28,7 @@ type MenuItemProps = {
   onMouseLeave: Function
 };
 
-export class DumbMenuItem extends React.Component<*, MenuItemProps, void> {
+export class DumbMenuItem extends React.Component<MenuItemProps> {
   showMenu = () => {
     const { onMouseOver, item } = this.props;
     if (onMouseOver) onMouseOver(item.id);

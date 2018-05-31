@@ -1,6 +1,6 @@
 // @flow
 import classnames from 'classnames';
-import React from 'react';
+import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
 import type { OperationComponent } from 'react-apollo';
 
@@ -24,7 +24,8 @@ const getSubjectPrefixString = fullLevel =>
   );
 
 export type Response = {
-  post: PostQuery
+  post: PostQuery,
+  refetch: () => void
 };
 
 export type Props = {
@@ -56,19 +57,9 @@ type State = {
   mode: 'edit' | 'view'
 };
 
-type DefaultProps = {
-  multiColumns: boolean
-};
-
 type bodyAndSubject = { body: string, subject: string, originalBody: string, originalSubject: string };
 
-export class DumbPost extends React.PureComponent<DefaultProps, Props, State> {
-  defaultProps: DefaultProps;
-
-  props: Props;
-
-  state: State;
-
+export class DumbPost extends React.PureComponent<Props, State> {
   static defaultProps = {
     multiColumns: false
   };

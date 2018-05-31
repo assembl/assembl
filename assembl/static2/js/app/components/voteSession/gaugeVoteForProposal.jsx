@@ -1,23 +1,27 @@
 // @flow
 /* eslint-disable react/no-multi-comp */
-import React from 'react';
+import * as React from 'react';
 import { Translate } from 'react-redux-i18n';
 import Slider from 'rc-slider';
 import Pointer from '../svg/pointer';
 
-type Choice = {
+type Choice = {|
   id: string,
-  label: string,
-  value: number
-};
+  value: number,
+  label: ?string,
+  labelEntries: ?Array<?{|
+    localeCode: string,
+    value: ?string
+  |}>
+|};
 
 type GaugeVoteForProposalProps = {
-  disabled: boolean,
+  disabled?: boolean,
   id: string, // the vote specification id
   proposalId: string,
-  voteForProposal: Function,
+  voteForProposal?: Function,
   instructions: ?string,
-  choices: ?Array<Choice>,
+  choices: ?Array<?Choice>,
   value: number
 };
 
@@ -84,11 +88,7 @@ const handleIcon = (props) => {
   );
 };
 
-class GaugeVoteForProposal extends React.Component<*, GaugeVoteForProposalProps, GaugeVoteForProposalState> {
-  props: GaugeVoteForProposalProps;
-
-  state: GaugeVoteForProposalState;
-
+class GaugeVoteForProposal extends React.Component<GaugeVoteForProposalProps, GaugeVoteForProposalState> {
   onAfterChange: Function;
 
   marks: Object;
@@ -111,7 +111,7 @@ class GaugeVoteForProposal extends React.Component<*, GaugeVoteForProposalProps,
 
     if (props.choices && props.choices.length) {
       const choicesValues = props.choices.reduce((accumulator, item) => {
-        if ('value' in item) {
+        if (item && 'value' in item) {
           return accumulator.concat(item.value);
         }
         return accumulator;
@@ -124,6 +124,9 @@ class GaugeVoteForProposal extends React.Component<*, GaugeVoteForProposalProps,
 
     if (props.choices && props.choices.length) {
       props.choices.forEach((choice) => {
+        if (!choice) {
+          return;
+        }
         this.marks[`${choice.value}`] = {
           style: markStyle,
           label: <div>{choice.label}</div>
@@ -139,7 +142,9 @@ class GaugeVoteForProposal extends React.Component<*, GaugeVoteForProposalProps,
     if (this.inputElement && 'value' in this.inputElement) {
       this.inputElement.value = value;
     }
-    this.props.voteForProposal(this.props.proposalId, this.props.id, value);
+    if (this.props.voteForProposal) {
+      this.props.voteForProposal(this.props.proposalId, this.props.id, value);
+    }
   }
 
   render() {
@@ -175,7 +180,7 @@ class GaugeVoteForProposal extends React.Component<*, GaugeVoteForProposalProps,
 }
 
 type NumberGaugeVoteForProposalProps = {
-  disabled: boolean,
+  disabled?: boolean,
   id: string, // the vote specification id
   instructions: ?string,
   minimum: ?number,
@@ -183,15 +188,11 @@ type NumberGaugeVoteForProposalProps = {
   nbTicks: ?number,
   unit: ?string,
   proposalId: string,
-  voteForProposal: Function,
+  voteForProposal?: Function,
   value: number
 };
 
-class NumberGaugeVoteForProposal extends React.Component<*, NumberGaugeVoteForProposalProps, NumberGaugeVoteForProposalState> {
-  props: NumberGaugeVoteForProposalProps;
-
-  state: NumberGaugeVoteForProposalState;
-
+class NumberGaugeVoteForProposal extends React.Component<NumberGaugeVoteForProposalProps, NumberGaugeVoteForProposalState> {
   onAfterChange: Function;
 
   marks: Object;
@@ -267,7 +268,9 @@ class NumberGaugeVoteForProposal extends React.Component<*, NumberGaugeVoteForPr
     if (this.inputElement && 'value' in this.inputElement) {
       this.inputElement.value = value;
     }
-    this.props.voteForProposal(this.props.proposalId, this.props.id, value);
+    if (this.props.voteForProposal) {
+      this.props.voteForProposal(this.props.proposalId, this.props.id, value);
+    }
   }
 
   render() {

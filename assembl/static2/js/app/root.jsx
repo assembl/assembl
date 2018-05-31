@@ -35,7 +35,6 @@ const DebateCustomHTMLCode = ({ currentRoute, debateData }) => {
   return <div className="debate-custom-html-code" />;
 };
 
-
 /*
   Parent class of all of Assembl. All high level components that require
   to exist in every context should be placed here. Eg. Alert, Modal, etc.

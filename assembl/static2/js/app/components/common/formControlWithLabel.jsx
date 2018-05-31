@@ -5,7 +5,7 @@
     - if there is a value, displays a label
     - if there is no value, put the label in the placeholder
  */
-import React from 'react';
+import * as React from 'react';
 import { ControlLabel, FormGroup, FormControl, HelpBlock } from 'react-bootstrap';
 import { I18n } from 'react-redux-i18n';
 import { type RawContentState } from 'draft-js';
@@ -19,17 +19,17 @@ type FormControlWithLabelProps = {
   required: boolean,
   onChange: Function,
   type: string,
-  disabled: boolean,
+  disabled?: boolean,
   name?: string,
   label: string,
   labelAlwaysVisible: boolean,
-  componentClass: string,
-  formControlProps: Object,
-  id: string,
+  componentClass?: string,
+  formControlProps?: Object,
+  id?: string,
   validationErrors?: Array<ErrorDef>,
   helperUrl?: string,
   helperText: string,
-  children: Array<HTMLOptionElement>
+  children?: React.Node
 };
 
 type FormControlWithLabelState = {
@@ -38,19 +38,21 @@ type FormControlWithLabelState = {
   validationState: ?string
 };
 
-class FormControlWithLabel extends React.Component<Object, FormControlWithLabelProps, FormControlWithLabelState> {
-  props: FormControlWithLabelProps;
-
-  state: FormControlWithLabelState;
-
+class FormControlWithLabel extends React.Component<FormControlWithLabelProps, FormControlWithLabelState> {
   static defaultProps = {
-    name: null,
+    name: undefined,
     labelAlwaysVisible: false,
     type: 'text',
     value: undefined,
     required: false,
-    validationErrors: null,
-    helperUrl: ''
+    validationErrors: undefined,
+    helperUrl: '',
+    componentClass: undefined,
+    formControlProps: undefined,
+    id: undefined,
+    helperText: '',
+    disabled: undefined,
+    children: undefined
   };
 
   constructor(props: FormControlWithLabelProps) {
@@ -112,22 +114,31 @@ class FormControlWithLabel extends React.Component<Object, FormControlWithLabelP
     if (type === 'rich-text') {
       return this.renderRichTextEditor();
     }
+    const additionalProps = formControlProps || {};
+    if (disabled) {
+      additionalProps.disabled = disabled;
+    } else if (disabled !== false) {
+      delete additionalProps.disabled;
+    }
+    if (id) {
+      additionalProps.id = id;
+    }
+    if (componentClass) {
+      additionalProps.componentClass = componentClass;
+    }
 
     const valueToShow = value || (value === 0 ? value : '');
 
     const name = this.props.name ? this.props.name : id;
     return (
       <FormControl
-        componentClass={componentClass}
-        id={id}
         name={name}
         type={type}
         placeholder={this.getLabel()}
         onChange={onChange}
         value={valueToShow}
         onBlur={this.setValidationState}
-        disabled={disabled}
-        {...formControlProps}
+        {...additionalProps}
       >
         {children}
       </FormControl>
@@ -145,7 +156,7 @@ class FormControlWithLabel extends React.Component<Object, FormControlWithLabelP
 
   render() {
     const { id, labelAlwaysVisible, type, value, helperText } = this.props;
-    const displayLabel = labelAlwaysVisible || (type !== 'rich-text' ? (value || (value === 0)) : false);
+    const displayLabel = labelAlwaysVisible || (type !== 'rich-text' ? value || value === 0 : false);
     return (
       <FormGroup validationState={this.state.validationState}>
         {displayLabel ? <ControlLabel htmlFor={id}>{this.getLabel()}</ControlLabel> : null}

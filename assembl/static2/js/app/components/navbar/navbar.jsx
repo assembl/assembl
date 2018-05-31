@@ -1,6 +1,6 @@
-// @flow
+// @noflow
 
-import React from 'react';
+import * as React from 'react';
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
 import { Navbar } from 'react-bootstrap';
@@ -149,11 +149,13 @@ const phaseContext = (timeline, phase) => {
   return 'new';
 };
 
-export class AssemblNavbar extends React.PureComponent {
-  state: {
-    flatWidth: number
-  };
+type AssemblNavbarProps = {};
 
+type AssemblNavbarState = {
+  flatWidth: number
+};
+
+export class AssemblNavbar extends React.PureComponent<AssemblNavbarProps, AssemblNavbarState> {
   setFlatWidth = (newWidth: number) => {
     this.setState({ flatWidth: newWidth });
   };

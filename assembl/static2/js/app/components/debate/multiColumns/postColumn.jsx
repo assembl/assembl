@@ -1,5 +1,5 @@
 // @flow
-import React from 'react';
+import * as React from 'react';
 
 import Tree from '../../common/tree';
 import ColumnHeader from './columnHeader';

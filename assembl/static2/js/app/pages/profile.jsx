@@ -41,12 +41,8 @@ type ProfileState = {
   }
 };
 
-class Profile extends React.PureComponent<*, ProfileProps, ProfileState> {
-  props: ProfileProps;
-
-  state: ProfileState;
-
-  defaultProps: {
+class Profile extends React.PureComponent<ProfileProps, ProfileState> {
+  static defaultProps = {
     creationDate: null
   };
 

@@ -24,6 +24,7 @@ exports[`ColumnSynthesis component should render a folded post 1`] = `
           }
         }
         subject="We need to input the optical SSL microchip!"
+        title=""
       />
     </div>
     <div

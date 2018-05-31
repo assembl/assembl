@@ -1,5 +1,5 @@
 // @flow
-import React from 'react';
+import * as React from 'react';
 import { List, Map } from 'immutable';
 import { connect } from 'react-redux';
 import { Button, Checkbox } from 'react-bootstrap';
@@ -8,10 +8,6 @@ import { Translate } from 'react-redux-i18n';
 import { DumbGaugeForm, getGaugeModuleInfo, type VoteChoice } from './gaugeForm';
 import { createRandomId } from '../../../utils/globalFunctions';
 import { cancelAllDependenciesCustomization, updateVoteModule } from '../../../actions/adminActions/voteSession';
-
-type DefaultProps = {
-  choices: List
-};
 
 type Props = {
   choices: List<VoteChoice>,
@@ -46,11 +42,7 @@ type State = {
   saving: boolean
 };
 
-export class DumbCustomizeGaugeForm extends React.Component<DefaultProps, Props, State> {
-  props: Props;
-
-  state: State;
-
+export class DumbCustomizeGaugeForm extends React.Component<Props, State> {
   static defaultProps = {
     choices: List()
   };
