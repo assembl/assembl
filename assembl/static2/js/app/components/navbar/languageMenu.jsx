@@ -41,7 +41,8 @@ class LanguageMenu extends React.Component {
 
   doChangeLanguage(key) {
     const { changeLanguage } = this.props;
-    document.cookie = `_LOCALE_=${key}; path=/`;
+    const locale = key.replace('-', '_');
+    document.cookie = `_LOCALE_=${locale}; path=/`;
     changeLanguage(key);
     location.reload(true);
   }
@@ -52,10 +53,10 @@ class LanguageMenu extends React.Component {
     const preferencesMapByLocale = {};
     prefs.forEach((p) => {
       if (p.locale === 'zh_Hans') {
-        preferencesMapByLocale.zh_CN = { ...p };
-        preferencesMapByLocale.zh_CN.name = p.name.split(' (')[0]; // shorten the name for chinese
-        preferencesMapByLocale.zh_CN.nativeName = p.nativeName.split(' (')[0];
-        preferencesMapByLocale.zh_CN.locale = 'zh_CN';
+        preferencesMapByLocale['zh-CN'] = { ...p };
+        preferencesMapByLocale['zh-CN'].name = p.name.split(' (')[0]; // shorten the name for chinese
+        preferencesMapByLocale['zh-CN'].nativeName = p.nativeName.split(' (')[0];
+        preferencesMapByLocale['zh-CN'].locale = 'zh-CN';
       } else {
         preferencesMapByLocale[p.locale] = { ...p };
         preferencesMapByLocale[p.locale].name = p.name.split(' (')[0]; // shorten the name for japanese, not need for hiragana
@@ -80,7 +81,7 @@ class LanguageMenu extends React.Component {
     if (this.state.availableLocales.length > 0) {
       return (
         <ul ref={refWidthUpdate(setWidth)} className={`dropdown-${size} uppercase ${className}`} style={style}>
-          <NavDropdown pullRight title={i18n.locale.split('_')[0]} id="nav-dropdown">
+          <NavDropdown pullRight title={i18n.locale.split('-')[0]} id="nav-dropdown">
             <MenuItem key={i18n.locale} className="active">
               {this.getLocaleLabel(i18n.locale)}
             </MenuItem>

@@ -25,12 +25,12 @@ export const buildDebateData = (debateData, prefs, timeline, socialShare) => {
     sortedTimeline.forEach((phase) => {
       get(phase, 'description.entries', []).forEach((entry) => {
         if (entry['@language'] === 'zh_Hans') {
-          entry['@language'] = 'zh_CN'; // eslint-disable-line
+          entry['@language'] = 'zh-CN'; // eslint-disable-line
         }
       });
       get(phase, 'title.entries', []).forEach((entry) => {
         if (entry['@language'] === 'zh_Hans') {
-          entry['@language'] = 'zh_CN'; // eslint-disable-line
+          entry['@language'] = 'zh-CN'; // eslint-disable-line
         }
       });
     });

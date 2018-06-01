@@ -30,7 +30,7 @@ export const getTranslations = () => Translations;
 export const getLocale = (browserLanguage: string): string => {
   let locale;
   if (browserLanguage === 'zh' || browserLanguage === 'zh-CN') {
-    locale = 'zh_CN';
+    locale = 'zh-CN';
   } else {
     locale = browserLanguage.split('-')[0].toLowerCase();
   }
