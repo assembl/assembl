@@ -2599,7 +2599,6 @@ query { discussion { homepageUrl }  }
 def test_query_discussion_langstring_fields(discussion, graphql_request):
     res = schema.execute(u"""query {
         discussion {
-            id
             title
             titleEntries {
                 value
@@ -2622,7 +2621,6 @@ def test_query_discussion_langstring_fields(discussion, graphql_request):
 
     assert res_data == {
         u'discussion': {
-            u'id': u'1',
             u'title': u'Should we eat bananas?',
             u'titleEntries': [
                 {
