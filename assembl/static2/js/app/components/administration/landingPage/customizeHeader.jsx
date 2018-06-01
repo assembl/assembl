@@ -4,7 +4,9 @@ import { I18n, Translate } from 'react-redux-i18n';
 
 import SectionTitle from '../../administration/sectionTitle';
 
-class CustomizeHeader extends React.Component<void, void, void> {
+type Props = {};
+
+class CustomizeHeader extends React.Component<Props> {
   render() {
     return (
       <div className="admin-box">
