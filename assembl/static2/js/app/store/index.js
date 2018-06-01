@@ -16,7 +16,10 @@ export default function createAppStore(initialState) {
     });
   }
   const browserLanguage = navigator.language || navigator.userLanguage;
-  const storedLocale = getCookieItem('_LOCALE_');
+  let storedLocale = getCookieItem('_LOCALE_');
+  if (storedLocale === 'zh_CN') {
+    storedLocale = 'zh-CN';
+  }
   const isLocaleStored = storedLocale !== null;
   const userLocale = isLocaleStored ? storedLocale : getLocale(browserLanguage);
   syncTranslationWithStore(store);

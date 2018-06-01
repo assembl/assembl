@@ -29,7 +29,10 @@ class Objectives extends React.Component {
 
   render() {
     const { debateData } = this.props.debate;
-    const { locale } = this.props.i18n;
+    let { locale } = this.props.i18n;
+    if (locale === 'zh-CN') {
+      locale = 'zh_CN';
+    }
     return (
       <section className="home-section objectives-section">
         <Grid fluid>
