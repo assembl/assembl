@@ -320,7 +320,8 @@ def react_view(request, required_permission=P_READ):
         "get_description": old_context['get_description'],
         "get_landing_page_image": old_context['get_landing_page_image'],
         "private_social_sharing": old_context['private_social_sharing'],
-        "get_topic": old_context['get_topic']
+        "get_topic": old_context['get_topic'],
+        "get_tab_title": old_context['get_tab_title']
     })
     return context
 

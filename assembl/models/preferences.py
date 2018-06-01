@@ -476,6 +476,17 @@ class Preferences(MutableMapping, Base, NamedClassMixin):
             "default": None
         },
 
+        # Title in the tab
+        {
+            "id": "tab_title",
+            "name": _("Tab title"),
+            "value_type": "string",
+            "description": _("Title which appears on the tab, by defailt assembl"),
+            "allow_user_override": None,
+            "modification_permission": P_ADMIN_DISC,
+            "default": ""
+        },
+
         # Discussion Video description
         {
             "id": "video_description",
