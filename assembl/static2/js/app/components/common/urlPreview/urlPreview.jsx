@@ -8,7 +8,7 @@ import Embed from './embed';
 export type URLPreviewProps = {
   id: string,
   url: string,
-  html: string,
+  html: string, // eslint-disable-line react/no-unused-prop-types
   title: string,
   description: string,
   thumbnailUrl: string,
@@ -21,8 +21,10 @@ export type URLPreviewProps = {
 
 class URLPreview extends React.Component<URLPreviewProps> {
   componentDidMount() {
-    const { html, afterLoad } = this.props;
-    if (!html && afterLoad) afterLoad();
+    // const { html, afterLoad } = this.props;
+    // if (!html && afterLoad) afterLoad();
+    const { afterLoad } = this.props;
+    if (afterLoad) afterLoad();
   }
 
   render() {
