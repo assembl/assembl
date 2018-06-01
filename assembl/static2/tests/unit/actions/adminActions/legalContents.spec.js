@@ -1,7 +1,7 @@
-import * as actions from '../../../../js/app/actions/adminActions/legalNoticeAndTerms';
+import * as actions from '../../../../js/app/actions/adminActions/legalContents';
 import * as actionTypes from '../../../../js/app/actions/actionTypes';
 
-describe('legalNoticeAndTerms admin actions', () => {
+describe('legalContents admin actions', () => {
   describe('updateLegalNoticeEntry action', () => {
     const { updateLegalNoticeEntry } = actions;
     it('should return a UPDATE_LEGAL_NOTICE_ENTRY action type', () => {
@@ -28,9 +28,9 @@ describe('legalNoticeAndTerms admin actions', () => {
     });
   });
 
-  describe('updateLegalNoticeAndTerms action', () => {
-    const { updateLegalNoticeAndTerms } = actions;
-    it('should return a UPDATE_LEGAL_NOTICE_AND_TERMS action type', () => {
+  describe('updateLegalContents action', () => {
+    const { updateLegalContents } = actions;
+    it('should return a UPDATE_LEGAL_CONTENTS action type', () => {
       const value = {
         legalNoticeEntries: [
           {
@@ -45,9 +45,9 @@ describe('legalNoticeAndTerms admin actions', () => {
           }
         ]
       };
-      const actual = updateLegalNoticeAndTerms(value);
+      const actual = updateLegalContents(value);
       const expected = {
-        type: actionTypes.UPDATE_LEGAL_NOTICE_AND_TERMS,
+        type: actionTypes.UPDATE_LEGAL_CONTENTS,
         legalNoticeEntries: [
           {
             localeCode: 'fr',

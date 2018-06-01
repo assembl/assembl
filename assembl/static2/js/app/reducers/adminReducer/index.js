@@ -4,7 +4,7 @@ import { combineReducers } from 'redux';
 import type ReduxAction from 'redux';
 
 import { type Action } from '../../actions/actionTypes';
-import legalNoticeAndTerms from './legalNoticeAndTerms';
+import legalContents from './legalContents';
 import resourcesCenter from './resourcesCenter';
 import sections from './adminSections';
 import voteSession from './voteSession';
@@ -230,7 +230,7 @@ const reducers = {
   resourcesCenter: resourcesCenter,
   sections: sections,
   voteSession: voteSession,
-  legalNoticeAndTerms: legalNoticeAndTerms,
+  legalContents: legalContents,
   landingPage: landingPage,
   profileOptions: profileOptions
 };

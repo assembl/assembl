@@ -1,12 +1,12 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`LegalNoticeAndTermsForm dumb component should render a form to edit legal notice and terms and conditions 1`] = `
+exports[`LegalContentsForm dumb component should render a form to edit legal notice and terms and conditions 1`] = `
 <div
   className="admin-box"
 >
   <SectionTitle
     annotation="* Fields are required."
-    title="Terms & Conditions and Legal Notice"
+    title="Legal contents"
   />
   <div
     className="admin-content"
@@ -52,6 +52,44 @@ exports[`LegalNoticeAndTermsForm dumb component should render a form to edit leg
           type="rich-text"
           validationErrors={undefined}
           value=""
+        />
+        <div
+          className="separator"
+        />
+        <FormControlWithLabel
+          componentClass={undefined}
+          disabled={undefined}
+          formControlProps={undefined}
+          helperText=""
+          helperUrl=""
+          id={undefined}
+          label="Privacy policy"
+          labelAlwaysVisible={false}
+          name={undefined}
+          onChange={undefined}
+          required={true}
+          type="rich-text"
+          validationErrors={undefined}
+          value={undefined}
+        />
+        <div
+          className="separator"
+        />
+        <FormControlWithLabel
+          componentClass={undefined}
+          disabled={undefined}
+          formControlProps={undefined}
+          helperText=""
+          helperUrl=""
+          id={undefined}
+          label="Information on cookies"
+          labelAlwaysVisible={false}
+          name={undefined}
+          onChange={undefined}
+          required={true}
+          type="rich-text"
+          validationErrors={undefined}
+          value={undefined}
         />
       </div>
     </Row>

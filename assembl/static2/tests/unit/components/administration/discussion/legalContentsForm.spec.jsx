@@ -1,9 +1,9 @@
 import React from 'react';
 import ShallowRenderer from 'react-test-renderer/shallow';
 
-import { DumbLegalNoticeAndTermsForm } from '../../../../../js/app/components/administration/discussion/legalNoticeAndTermsForm';
+import { DumbLegalContentsForm } from '../../../../../js/app/components/administration/discussion/legalContentsForm';
 
-describe('LegalNoticeAndTermsForm dumb component', () => {
+describe('LegalContentsForm dumb component', () => {
   it('should render a form to edit legal notice and terms and conditions', () => {
     const updateLegalNoticeSpy = jest.fn(() => {});
     const updateTermsAndConditionsSpy = jest.fn(() => {});
@@ -15,7 +15,7 @@ describe('LegalNoticeAndTermsForm dumb component', () => {
       updateTermsAndConditions: updateTermsAndConditionsSpy
     };
     const shallowRenderer = new ShallowRenderer();
-    shallowRenderer.render(<DumbLegalNoticeAndTermsForm {...props} />);
+    shallowRenderer.render(<DumbLegalContentsForm {...props} />);
     const result = shallowRenderer.getRenderOutput();
     expect(result).toMatchSnapshot();
   });

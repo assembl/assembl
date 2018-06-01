@@ -8,7 +8,7 @@ import { type Map } from 'immutable';
 
 import { languagePreferencesHasChanged, updateEditLocale } from '../actions/adminActions';
 import ManageSectionsForm from '../components/administration/discussion/manageSectionsForm';
-import LegalNoticeAndTermsForm from '../components/administration/discussion/legalNoticeAndTermsForm';
+import LegalContentsForm from '../components/administration/discussion/legalContentsForm';
 import LanguageSection from '../components/administration/discussion/languageSection';
 import ManageProfileOptionsForm from '../components/administration/discussion/manageProfileOptionsForm';
 import { displayAlert } from '../utils/utilityManager';
@@ -17,7 +17,7 @@ import SaveButton, { getMutationsPromises, runSerial } from '../components/admin
 import createSectionMutation from '../graphql/mutations/createSection.graphql';
 import updateSectionMutation from '../graphql/mutations/updateSection.graphql';
 import deleteSectionMutation from '../graphql/mutations/deleteSection.graphql';
-import updateLegalNoticeAndTermsMutation from '../graphql/mutations/updateLegalNoticeAndTerms.graphql';
+import updateLegalContentsMutation from '../graphql/mutations/updateLegalContents.graphql';
 import updateDiscussionPreferenceQuery from '../graphql/mutations/updateDiscussionPreference.graphql';
 import getDiscussionPreferenceLanguage from '../graphql/DiscussionPreferenceLanguage.graphql';
 import ProfileFieldsQuery from '../graphql/ProfileFields.graphql';
@@ -59,9 +59,9 @@ type Props = {
     translations: { [string]: string }
   },
   languagePreferenceHasChanged: boolean,
-  legalNoticeAndTerms: Map,
+  legalContents: Map,
   preferences: LanguagePreferencesState,
-  refetchLegalNoticeAndTerms: Function,
+  refetchLegalContents: Function,
   refetchSections: Function,
   resetLanguagePreferenceChanged: Function,
   route: Route,
@@ -70,7 +70,7 @@ type Props = {
   sections: Array<Section>,
   sectionsHaveChanged: boolean,
   updateDiscussionPreference: Function,
-  updateLegalNoticeAndTerms: Function,
+  updateLegalContents: Function,
   updateSection: Function,
   debateId: string,
   createTextField: Function,
@@ -113,7 +113,7 @@ class DiscussionAdmin extends React.Component<Props, State> {
     this.props.languagePreferenceHasChanged ||
     this.props.sectionsHaveChanged ||
     this.props.profileOptionsHasChanged ||
-    this.props.legalNoticeAndTerms.get('_hasChanged');
+    this.props.legalContents.get('_hasChanged');
 
   saveAction = () => {
     const {
@@ -123,15 +123,15 @@ class DiscussionAdmin extends React.Component<Props, State> {
       deleteSection,
       i18n,
       languagePreferenceHasChanged,
-      legalNoticeAndTerms,
+      legalContents,
       preferences,
-      refetchLegalNoticeAndTerms,
+      refetchLegalContents,
       refetchSections,
       resetLanguagePreferenceChanged,
       sections,
       sectionsHaveChanged,
       updateDiscussionPreference,
-      updateLegalNoticeAndTerms,
+      updateLegalContents,
       updateSection,
       createTextField,
       updateTextField,
@@ -186,20 +186,24 @@ class DiscussionAdmin extends React.Component<Props, State> {
         });
     }
 
-    if (legalNoticeAndTerms.get('_hasChanged')) {
-      const legalNoticeEntries = legalNoticeAndTerms.get('legalNoticeEntries').toJS();
-      const termsAndConditionsEntries = legalNoticeAndTerms.get('termsAndConditionsEntries').toJS();
+    if (legalContents.get('_hasChanged')) {
+      const legalNoticeEntries = legalContents.get('legalNoticeEntries').toJS();
+      const termsAndConditionsEntries = legalContents.get('termsAndConditionsEntries').toJS();
+      const cookiesPolicyEntries = legalContents.get('cookiesPolicyEntries').toJS();
+      const privacyPolicyEntries = legalContents.get('privacyPolicyEntries').toJS();
       const payload = {
         variables: {
           legalNoticeEntries: convertEntriesToHTML(legalNoticeEntries),
-          termsAndConditionsEntries: convertEntriesToHTML(termsAndConditionsEntries)
+          termsAndConditionsEntries: convertEntriesToHTML(termsAndConditionsEntries),
+          cookiesPolicyEntries: convertEntriesToHTML(cookiesPolicyEntries),
+          privacyPolicyEntries: convertEntriesToHTML(privacyPolicyEntries)
         }
       };
-      updateLegalNoticeAndTerms(payload)
+      updateLegalContents(payload)
         .then(() => {
           this.setState({ refetching: true }, () => {
-            refetchLegalNoticeAndTerms().then(() => {
-              displayAlert('success', I18n.t('administration.legalNoticeAndTerms.successSave'));
+            refetchLegalContents().then(() => {
+              displayAlert('success', I18n.t('administration.legalContents.successSave'));
               this.setState({ refetching: false });
             });
           });
@@ -248,7 +252,7 @@ class DiscussionAdmin extends React.Component<Props, State> {
         {section === '1' && <LanguageSection {...this.props} />}
         {section === '2' && <ManageSectionsForm {...this.props} />}
         {section === '3' && <ManageProfileOptionsForm />}
-        {section === '4' && <LegalNoticeAndTermsForm {...this.props} />}
+        {section === '4' && <LegalContentsForm {...this.props} />}
       </div>
     );
   }
@@ -259,7 +263,7 @@ const mapStateToProps: MapStateToProps<ReduxState, *, *> = ({
     discussionLanguagePreferences,
     discussionLanguagePreferencesHasChanged,
     editLocale,
-    legalNoticeAndTerms,
+    legalContents,
     sections,
     profileOptions
   },
@@ -298,7 +302,7 @@ const mapStateToProps: MapStateToProps<ReduxState, *, *> = ({
       }) // fix order of sections
       .valueSeq() // convert to array of Map
       .toJS(), // convert to array of objects
-    legalNoticeAndTerms: legalNoticeAndTerms,
+    legalContents: legalContents,
     profileOptionsHasChanged: profileOptionsHasChanged,
     textFields: textFields
   };
@@ -327,8 +331,8 @@ export default compose(
   graphql(updateDiscussionPreferenceQuery, {
     name: 'updateDiscussionPreference'
   }),
-  graphql(updateLegalNoticeAndTermsMutation, {
-    name: 'updateLegalNoticeAndTerms'
+  graphql(updateLegalContentsMutation, {
+    name: 'updateLegalContents'
   }),
   graphql(createTextFieldMutation, {
     name: 'createTextField'

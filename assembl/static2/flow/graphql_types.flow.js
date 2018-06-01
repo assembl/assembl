@@ -289,12 +289,12 @@ export type LandingPageModulesQuery = {|
   |}>
 |};
 
-export type LegalNoticeAndTermsQueryVariables = {|
+export type LegalContentsQueryVariables = {|
   lang?: ?string
 |};
 
-export type LegalNoticeAndTermsQuery = {|
-  legalNoticeAndTerms: ?{|
+export type LegalContentsQuery = {|
+  legalContents: ?{|
     legalNotice: ?string,
     termsAndConditions: ?string,
     legalNoticeEntries: ?Array<?{|
@@ -1765,14 +1765,14 @@ export type updateLandingPageModuleMutation = {|
   |}
 |};
 
-export type UpdateLegalNoticeAndTermsMutationVariables = {|
+export type UpdateLegalContentsMutationVariables = {|
   legalNoticeEntries: Array<?LangStringEntryInput>,
   termsAndConditionsEntries: Array<?LangStringEntryInput>
 |};
 
-export type UpdateLegalNoticeAndTermsMutation = {|
-  updateLegalNoticeAndTerms: ?{|
-    legalNoticeAndTerms: ?{|
+export type UpdateLegalContentsMutation = {|
+  updateLegalContents: ?{|
+    legalContents: ?{|
       legalNoticeEntries: ?Array<?{|
         localeCode: string,
         value: ?string

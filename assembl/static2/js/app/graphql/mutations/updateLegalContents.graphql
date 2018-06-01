@@ -1,0 +1,32 @@
+mutation UpdateLegalContents(
+  $legalNoticeEntries: [LangStringEntryInput]!
+  $termsAndConditionsEntries: [LangStringEntryInput]!
+  $cookiesPolicyEntries: [LangStringEntryInput]!
+  $privacyPolicyEntries: [LangStringEntryInput]!
+) {
+  updateLegalContents(
+    legalNoticeEntries: $legalNoticeEntries
+    termsAndConditionsEntries: $termsAndConditionsEntries
+    cookiesPolicyEntries: $cookiesPolicyEntries
+    privacyPolicyEntries: $privacyPolicyEntries
+  ) {
+    legalContents {
+      legalNoticeEntries {
+        localeCode
+        value
+      }
+      termsAndConditionsEntries {
+        localeCode
+        value
+      }
+      cookiesPolicyEntries {
+        localeCode
+        value
+      }
+      privacyPolicyEntries {
+        localeCode
+        value
+      }
+    }
+  }
+}

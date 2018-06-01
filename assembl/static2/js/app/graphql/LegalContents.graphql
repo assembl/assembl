@@ -1,0 +1,24 @@
+query LegalContents($lang: String) {
+  legalContents {
+    legalNotice(lang: $lang)
+    termsAndConditions(lang: $lang)
+    cookiesPolicy(lang: $lang)
+    privacyPolicy(lang: $lang)
+    legalNoticeEntries {
+      localeCode
+      value
+    }
+    termsAndConditionsEntries {
+      localeCode
+      value
+    }
+    cookiesPolicyEntries {
+      localeCode
+      value
+    }
+    privacyPolicyEntries {
+      localeCode
+      value
+    }
+  }
+}

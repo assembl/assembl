@@ -1,23 +1,25 @@
 import { List, Map } from 'immutable';
 
 import * as actionTypes from '../../../../js/app/actions/actionTypes';
-import legalNoticeAndTerms from '../../../../js/app/reducers/adminReducer/legalNoticeAndTerms';
+import legalContents from '../../../../js/app/reducers/adminReducer/legalContents';
 
-describe('legalNoticeAndTerms admin reducer', () => {
+describe('legalContents admin reducer', () => {
   it('it should return the initial state', () => {
     const action = {};
     const expected = Map({
       _hasChanged: false,
       legalNoticeEntries: List(),
-      termsAndConditionsEntries: List()
+      termsAndConditionsEntries: List(),
+      cookiesPolicyEntries: List(),
+      privacyPolicyEntries: List()
     });
-    expect(legalNoticeAndTerms(undefined, action)).toEqual(expected);
+    expect(legalContents(undefined, action)).toEqual(expected);
   });
 
   it('should return the current state for other actions', () => {
     const action = { type: 'FOOBAR' };
     const oldState = Map();
-    expect(legalNoticeAndTerms(oldState, action)).toEqual(oldState);
+    expect(legalContents(oldState, action)).toEqual(oldState);
   });
 
   it('should handle UPDATE_LEGAL_NOTICE_ENTRY action type', () => {
@@ -29,19 +31,23 @@ describe('legalNoticeAndTerms admin reducer', () => {
     const oldState = Map({
       _hasChanged: false,
       legalNoticeEntries: List.of(Map({ localeCode: 'en', value: 'my legal notice' })),
-      termsAndConditionsEntries: List()
+      termsAndConditionsEntries: List(),
+      cookiesPolicyEntries: List(),
+      privacyPolicyEntries: List()
     });
     const expected = Map({
       _hasChanged: true,
       legalNoticeEntries: List.of(Map({ localeCode: 'en', value: 'foobar' })),
-      termsAndConditionsEntries: List()
+      termsAndConditionsEntries: List(),
+      cookiesPolicyEntries: List(),
+      privacyPolicyEntries: List()
     });
-    expect(legalNoticeAndTerms(oldState, action)).toEqual(expected);
+    expect(legalContents(oldState, action)).toEqual(expected);
   });
 
-  it('should handle UPDATE_LEGAL_NOTICE_AND_TERMS action type', () => {
+  it('should handle UPDATE_LEGAL_CONTENTS action type', () => {
     const action = {
-      type: actionTypes.UPDATE_LEGAL_NOTICE_AND_TERMS,
+      type: actionTypes.UPDATE_LEGAL_CONTENTS,
       legalNoticeEntries: List.of(
         Map({ localeCode: 'en', value: 'My legal notice' }),
         Map({ localeCode: 'fr', value: 'Ma notice légale' })
@@ -49,6 +55,14 @@ describe('legalNoticeAndTerms admin reducer', () => {
       termsAndConditionsEntries: List.of(
         Map({ localeCode: 'en', value: 'My terms and conditions' }),
         Map({ localeCode: 'fr', value: 'Mes conditions générales' })
+      ),
+      cookiesPolicyEntries: List.of(
+        Map({ localeCode: 'en', value: 'My informations on cookies' }),
+        Map({ localeCode: 'fr', value: 'Mes informations sur les cookies' })
+      ),
+      privacyPolicyEntries: List.of(
+        Map({ localeCode: 'en', value: 'My privacy policy' }),
+        Map({ localeCode: 'fr', value: 'Ma politique de protection des données' })
       )
     };
     const oldState = Map({
@@ -65,8 +79,16 @@ describe('legalNoticeAndTerms admin reducer', () => {
       termsAndConditionsEntries: List.of(
         Map({ localeCode: 'en', value: 'My terms and conditions' }),
         Map({ localeCode: 'fr', value: 'Mes conditions générales' })
+      ),
+      cookiesPolicyEntries: List.of(
+        Map({ localeCode: 'en', value: 'My informations on cookies' }),
+        Map({ localeCode: 'fr', value: 'Mes informations sur les cookies' })
+      ),
+      privacyPolicyEntries: List.of(
+        Map({ localeCode: 'en', value: 'My privacy policy' }),
+        Map({ localeCode: 'fr', value: 'Ma politique de protection des données' })
       )
     });
-    expect(legalNoticeAndTerms(oldState, action)).toEqual(expected);
+    expect(legalContents(oldState, action)).toEqual(expected);
   });
 });

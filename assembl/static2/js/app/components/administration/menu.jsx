@@ -41,7 +41,7 @@ class Menu extends React.Component {
             <li>
               <Link to={`${get('administration', slug)}/discussion?section=4`} activeClassName="active">
                 <span>
-                  <Translate value="administration.menu.legalNoticeAndTerms" />
+                  <Translate value="administration.menu.legalContents" />
                 </span>
               </Link>
             </li>

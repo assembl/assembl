@@ -9,7 +9,7 @@ import { updateThematics, displayLanguageMenu } from '../actions/adminActions';
 import { updateResources, updateResourcesCenterPage } from '../actions/adminActions/resourcesCenter';
 import { updateVoteSessionPage, updateVoteModules, updateVoteProposals } from '../actions/adminActions/voteSession';
 import { updateSections } from '../actions/adminActions/adminSections';
-import { updateLegalNoticeAndTerms } from '../actions/adminActions/legalNoticeAndTerms';
+import { updateLegalContents } from '../actions/adminActions/legalContents';
 import { updateLandingPageModules } from '../actions/adminActions/landingPage';
 import { updateTextFields } from '../actions/adminActions/profileOptions';
 import withLoadingIndicator from '../components/common/withLoadingIndicator';
@@ -21,7 +21,7 @@ import ResourcesCenterPage from '../graphql/ResourcesCenterPage.graphql';
 import SectionsQuery from '../graphql/SectionsQuery.graphql';
 import TabsConditionQuery from '../graphql/TabsConditionQuery.graphql';
 import TextFields from '../graphql/TextFields.graphql';
-import LegalNoticeAndTermsQuery from '../graphql/LegalNoticeAndTerms.graphql';
+import LegalContentsQuery from '../graphql/LegalContents.graphql';
 import VoteSessionQuery from '../graphql/VoteSession.graphql';
 import { convertEntriesToRawContentState } from '../utils/draftjs';
 import { getPhaseId } from '../utils/timeline';
@@ -56,7 +56,7 @@ class Administration extends React.Component {
     super(props);
     this.putResourcesCenterInStore = this.putResourcesCenterInStore.bind(this);
     this.putThematicsInStore = this.putThematicsInStore.bind(this);
-    this.putLegalNoticeAndTermsInStore = this.putLegalNoticeAndTermsInStore.bind(this);
+    this.putLegalContentsInStore = this.putLegalContentsInStore.bind(this);
     this.putVoteSessionInStore = this.putVoteSessionInStore.bind(this);
     this.putLandingPageModulesInStore = this.putLandingPageModulesInStore.bind(this);
     this.putTextFieldsInStore = this.putTextFieldsInStore.bind(this);
@@ -72,7 +72,7 @@ class Administration extends React.Component {
     this.putResourcesInStore(this.props.resources);
     this.putThematicsInStore(this.props.data);
     this.putSectionsInStore(this.props.sections);
-    this.putLegalNoticeAndTermsInStore(this.props.legalNoticeAndTerms);
+    this.putLegalContentsInStore(this.props.legalContents);
     this.putVoteSessionInStore(this.props.voteSession);
     this.putVoteModulesInStore(this.props.voteSession);
     this.putVoteProposalsInStore(this.props.voteSession);
@@ -187,16 +187,21 @@ class Administration extends React.Component {
     this.props.updateSections(filteredSections.sections);
   }
 
-  putLegalNoticeAndTermsInStore(legalNoticeAndTerms) {
-    const filtered = filter(LegalNoticeAndTermsQuery, { legalNoticeAndTerms: legalNoticeAndTerms });
-    const lnat = filtered.legalNoticeAndTerms;
-    const convertedLegalNoticeAndTerms = {
-      legalNoticeEntries: lnat.legalNoticeEntries ? convertEntriesToRawContentState(lnat.legalNoticeEntries) : null,
-      termsAndConditionsEntries: lnat.termsAndConditionsEntries
-        ? convertEntriesToRawContentState(lnat.termsAndConditionsEntries)
-        : null
+  putLegalContentsInStore(legalContents) {
+    const filtered = filter(LegalContentsQuery, { legalContents: legalContents });
+    const filteredLegalContents = filtered.legalContents;
+    const convertedLegalContents = {
+      legalNoticeEntries: filteredLegalContents.legalNoticeEntries ?
+        convertEntriesToRawContentState(filteredLegalContents.legalNoticeEntries) : null,
+      termsAndConditionsEntries: filteredLegalContents.termsAndConditionsEntries
+        ? convertEntriesToRawContentState(filteredLegalContents.termsAndConditionsEntries)
+        : null,
+      cookiesPolicy: filteredLegalContents.cookiesPolicyEntries ?
+        convertEntriesToRawContentState(filteredLegalContents.cookiesPolicyEntries) : null,
+      privacyPolicy: filteredLegalContents.privacyPolicyEntries ?
+        convertEntriesToRawContentState(filteredLegalContents.privacyPolicyEntries) : null
     };
-    this.props.updateLegalNoticeAndTerms(convertedLegalNoticeAndTerms);
+    this.props.updateLegalContents(convertedLegalContents);
   }
 
   putLandingPageModulesInStore(landingPageModules) {
@@ -222,7 +227,7 @@ class Administration extends React.Component {
       refetchResourcesCenter,
       refetchTabsConditions,
       refetchSections,
-      refetchLegalNoticeAndTerms,
+      refetchLegalContents,
       refetchVoteSession,
       refetchLandingPageModules,
       refetchTextFields
@@ -239,7 +244,7 @@ class Administration extends React.Component {
         refetchSections: refetchSections,
         refetchResourcesCenter: refetchResourcesCenter,
         refetchLandingPageModules: refetchLandingPageModules,
-        refetchLegalNoticeAndTerms: refetchLegalNoticeAndTerms,
+        refetchLegalContents: refetchLegalContents,
         refetchTextFields: refetchTextFields
       })
     );
@@ -301,7 +306,7 @@ const mapDispatchToProps = dispatch => ({
   updateVoteModules: voteModules => dispatch(updateVoteModules(voteModules)),
   updateVoteSessionPage: voteSession => dispatch(updateVoteSessionPage(voteSession)),
   updateVoteProposals: voteProposals => dispatch(updateVoteProposals(voteProposals)),
-  updateLegalNoticeAndTerms: legalNoticeAndTerms => dispatch(updateLegalNoticeAndTerms(legalNoticeAndTerms)),
+  updateLegalContents: legalContents => dispatch(updateLegalContents(legalContents)),
   displayLanguageMenu: isHidden => dispatch(displayLanguageMenu(isHidden)),
   updateLandingPageModules: landingPageModules => dispatch(updateLandingPageModules(landingPageModules)),
   updateTextFields: textFields => dispatch(updateTextFields(textFields))
@@ -320,8 +325,8 @@ const mergeLoadingAndHasErrors = WrappedComponent => (props) => {
     sectionsLoading,
     tabsConditionsLoading,
     tabsConditionsHasErrors,
-    legalNoticeAndTermsLoading,
-    legalNoticeAndTermsHasErrors,
+    legalContentsLoading,
+    legalContentsHasErrors,
     textFieldsLoading,
     textFieldsHasErrors
   } = props;
@@ -331,7 +336,7 @@ const mergeLoadingAndHasErrors = WrappedComponent => (props) => {
     resourcesHasErrors ||
     resourcesCenterHasErrors ||
     tabsConditionsHasErrors ||
-    legalNoticeAndTermsHasErrors ||
+    legalContentsHasErrors ||
     sectionsHasErrors ||
     props[landingPagePlugin.hasErrors] ||
     textFieldsHasErrors ||
@@ -341,7 +346,7 @@ const mergeLoadingAndHasErrors = WrappedComponent => (props) => {
     resourcesLoading ||
     resourcesCenterLoading ||
     tabsConditionsLoading ||
-    legalNoticeAndTermsLoading ||
+    legalContentsLoading ||
     sectionsLoading ||
     props[landingPagePlugin.loading] ||
     textFieldsLoading ||
@@ -470,24 +475,24 @@ export default compose(
       };
     }
   }),
-  graphql(LegalNoticeAndTermsQuery, {
+  graphql(LegalContentsQuery, {
     props: ({ data }) => {
       if (data.loading) {
         return {
-          legalNoticeAndTermsLoading: true
+          legalContentsLoading: true
         };
       }
       if (data.error) {
         return {
-          legalNoticeAndTermsHasErrors: true
+          legalContentsHasErrors: true
         };
       }
 
       return {
-        legalNoticeAndTermsLoading: data.loading,
-        legalNoticeAndTermsHasErrors: data.error,
-        refetchLegalNoticeAndTerms: data.refetch,
-        legalNoticeAndTerms: data.legalNoticeAndTerms
+        legalContentsLoading: data.loading,
+        legalContentsHasErrors: data.error,
+        refetchLegalContents: data.refetch,
+        legalContents: data.legalContents
       };
     }
   }),
