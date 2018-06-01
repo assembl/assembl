@@ -840,6 +840,8 @@ def updatemaincode(backup=False):
             with cd(path):
                 run('git pull')
 
+            venvcmd_py3('pip install -r ../url_metadata/requirements.txt')
+
 
 @task
 def app_setup():
