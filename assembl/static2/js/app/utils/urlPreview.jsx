@@ -6,7 +6,13 @@ import type { Node } from 'react';
 import YoutubeEmbed from '../components/common/urlPreview/youtubeTheater';
 import SketchFabEmbed from '../components/common/urlPreview/sketchFabTheater';
 
-const urlMetadataWebServiceUrl = 'http://0.0.0.0:5000';
+let urlMetadataWebServiceUrl;
+if (window.location.port) {
+  // if we have a port defined, we are in development mode
+  urlMetadataWebServiceUrl = `${window.location.protocol}//${window.location.hostname}:5000`; // http://localhost:5000
+} else {
+  urlMetadataWebServiceUrl = `${window.location.protocol}//${window.location.hostname}/urlmetadata`;
+}
 
 type MetadataResponseProps = {
   code: string,
