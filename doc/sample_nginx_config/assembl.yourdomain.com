@@ -5,6 +5,10 @@ server {
     return 301 https://$host$request_uri;
 }
 
+upstream urlmetadata {
+    server 127.0.0.1:5000;
+}
+
 server {
     # listen    80;
     # listen   [::]:80;
@@ -53,6 +57,20 @@ server {
         proxy_http_version 1.1;
         proxy_set_header Upgrade $http_upgrade;
         proxy_set_header Connection "upgrade";
+    }
+
+    location /urlmetadata/ {
+        proxy_http_version 1.1;
+        proxy_set_header Host $http_host;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Port $server_port;
+        proxy_set_header X-Request-Start $msec;
+        # we don't want nginx trying to do something clever with
+        # redirects, we set the Host: header above already.
+        proxy_redirect off;
+        rewrite    /urlmetadata/(.*) /$1 break;
+        proxy_pass http://urlmetadata;
     }
 
     location /static {
