@@ -643,7 +643,7 @@ def build_virtualenv_python3():
     if not exists("%(projectpath)s/../url_metadata" % env):
         print cyan("Cloning git repository")
         with cd("%(projectpath)s/.." % env):
-            run('git clone git@github.com:assembl/url_metadata.git')
+            run('git clone git://github.com/assembl/url_metadata.git')
     venvcmd_py3('pip install -r ../url_metadata/requirements.txt')
 
 
