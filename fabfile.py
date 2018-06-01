@@ -626,6 +626,7 @@ def build_virtualenv_python3():
         run("brew upgrade")
         run("brew install python@2")
         run("brew install python")  # This installs python3
+        run('pip3 install virtualenv')
 
     # Don't install this on travis
     if getenv('TRAVIS_COMMIT', None):
@@ -1191,6 +1192,7 @@ def install_basetools():
         assert path_pip == '/usr/local/bin/pip2',\
             "Make sure homebrew is in the bash path, got " + path_pip
         run('pip2 install virtualenv psycopg2 requests jinja2')
+        run('pip3 install virtualenv')
     else:
         sudo('apt-get install -y python-virtualenv python-pip python-psycopg2')
         sudo('apt-get install -y python-requests python-jinja2 git')
