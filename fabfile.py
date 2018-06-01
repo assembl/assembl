@@ -521,7 +521,7 @@ def app_reload():
             venvcmd("supervisorctl update")
             processes = filter_autostart_processes([
                 "celery_imap", "changes_router", "celery_notification_dispatch",
-                "celery_notify", "celery_notify_beat", "source_reader"])
+                "celery_notify", "celery_notify_beat", "source_reader", "urlmetadata"])
             venvcmd("supervisorctl restart " + " ".join(processes))
             if env.uses_uwsgi:
                 venvcmd("supervisorctl restart prod:uwsgi")
@@ -832,6 +832,12 @@ def updatemaincode(backup=False):
             run('git fetch')
             run('git checkout %s' % env.gitbranch)
             run('git pull %s %s' % (env.gitrepo, env.gitbranch))
+
+        path = join(env.projectpath, '..', 'url_metadata')
+        if exists(path):
+            print(cyan('Updating url_metadata Git repository'))
+            with cd(path):
+                run('git pull')
 
 
 @task
