@@ -14,6 +14,8 @@ if (window.location.port) {
   urlMetadataWebServiceUrl = `${window.location.protocol}//${window.location.hostname}/urlmetadata`;
 }
 
+const PICTURES = ['thumbnail', 'thumbnail_url', 'author_avatar', 'favicon_url'];
+
 type MetadataResponseProps = {
   code: string,
   metadata: Object
@@ -88,14 +90,21 @@ export const EMBED_PROVIDERS = {
  */
 function transformKeysToCamelCase(dict: Object | null): Object {
   const result = {};
-  if (!dict) return result;
+  const obj = dict;
+  if (!obj) {
+    return result;
+  }
   const reducer = (accumulator, key) => {
     // key to camelcase
     const newKey = key.replace(/_([a-z])/g, g => g[1].toUpperCase());
-    accumulator[newKey] = dict && dict[key];
+    if (PICTURES.indexOf(key) > -1) {
+      accumulator[newKey] = obj[key] ? `${urlMetadataWebServiceUrl}${obj[key]}` : null;
+    } else {
+      accumulator[newKey] = obj[key];
+    }
     return accumulator;
   };
-  Object.keys(dict).reduce(reducer, result);
+  Object.keys(obj).reduce(reducer, result);
   return result;
 }
 
