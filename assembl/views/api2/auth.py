@@ -456,7 +456,7 @@ def assembl_register_user(request):
         email = EmailString.normalize_email_case(email)
         # Find agent account to avoid duplicates!
         if session.query(AbstractAgentAccount).filter_by(
-                email_ci=email, verified=True).count():
+                email_ci=email).count():
             errors.add_error(localizer.translate(_(
                 "We already have a user with this email.")),
                 ErrorTypes.EXISTING_EMAIL,
