@@ -28,9 +28,11 @@ assembl/locale/*/LC_MESSAGES/*.jed.json
 /lib
 /share
 /venv
+/venvpy3
 /src
 /virtuoso
 /assembl_dumps
+/requirements.txt
 
 # local
 /random.ini

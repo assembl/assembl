@@ -6,9 +6,10 @@ import jQuery from 'jquery';
 import ARange from 'annotator_range'; // eslint-disable-line
 
 import PostTranslate from '../../common/translations/postTranslate';
-import { transformLinksInHtml } from '../../../../utils/linkify';
-import { youtubeRegexp } from '../../../../utils/globalFunctions';
-import YoutubeTheater from '../../../common/youtubeTheater';
+import { transformLinksInHtml /* getUrls */ } from '../../../../utils/linkify';
+import Embed from '../../../common/urlPreview/embed';
+import URLMetadataLoader from '../../../common/urlPreview/urlMetadataLoader';
+import { isSpecialURL } from '../../../../utils/urlPreview';
 
 type Props = {
   body: string,
@@ -24,7 +25,8 @@ type Props = {
   translate: boolean,
   translationEnabled: boolean,
   isHarvesting: boolean,
-  handleMouseUpWhileHarvesting: ?Function
+  handleMouseUpWhileHarvesting: ?Function,
+  measureTreeHeight: ?Function
 };
 
 type ExtractInPostProps = {
@@ -38,18 +40,23 @@ const ExtractInPost = ({ id, children }: ExtractInPostProps) => (
   </span>
 );
 
-const postBodyReplacementComponents = {
-  iframe: (attributes) => {
-    const { src } = attributes;
-    const regexpMatch = src.match(youtubeRegexp);
-    if (regexpMatch) {
-      const videoId = regexpMatch[1];
-      return <YoutubeTheater videoId={videoId} />;
-    }
-    return <iframe title="post-embed" {...attributes} />;
+const postBodyReplacementComponents = afterLoad => ({
+  iframe: attributes => (
+    // the src iframe url is different from the resource url
+    <Embed url={attributes['data-source-url'] || attributes.src} defaultEmbed={<iframe title="post-embed" {...attributes} />} />
+  ),
+  a: (attributes) => {
+    const embeddedUrl = isSpecialURL(attributes.href);
+    const origin = (
+      <a key={`url-link-${attributes.href}`} href={attributes.href} className="linkified" target="_blank">
+        {attributes.href}
+      </a>
+    );
+    if (embeddedUrl) return origin;
+    return [origin, <URLMetadataLoader key={`url-preview-${attributes.href}`} url={attributes.href} afterLoad={afterLoad} />];
   },
   annotation: attributes => <ExtractInPost id={attributes.id}>{attributes.children}</ExtractInPost>
-};
+});
 
 const Html = (props) => {
   const { extracts, rawHtml, divRef, dbId, replacementComponents } = props;
@@ -118,29 +125,49 @@ const PostBody = ({
   translate,
   translationEnabled,
   isHarvesting,
-  handleMouseUpWhileHarvesting
+  handleMouseUpWhileHarvesting,
+  measureTreeHeight
 }: Props) => {
   const divClassNames = classNames('post-body', { 'post-body--is-harvestable': !translate });
   const htmlClassNames = classNames('post-body-content', 'body', {
     'pre-wrap': bodyMimeType === 'text/plain',
     'is-harvesting': isHarvesting
   });
+  // Only non-special URLs (like Youtube or SketchFab) will be transformed
+  // We need to add the URLs previews to the end of each post (See URLMetadataLoader)
+  // const urls = body && [...getUrls(body.replace(/<\/p>/gi, ' </p>'))].filter(url => !isSpecialURL(url));
+  const afterLoad = () => {
+    if (measureTreeHeight) measureTreeHeight(400);
+  };
   return (
     <div className={divClassNames}>
       {translationEnabled ? (
-        <PostTranslate contentLocale={contentLocale} id={id} lang={lang} originalLocale={originalLocale} translate={translate} />
+        <PostTranslate
+          contentLocale={contentLocale}
+          id={id}
+          lang={lang}
+          originalLocale={originalLocale}
+          translate={translate}
+          afterLoad={afterLoad}
+        />
       ) : null}
       {subject && <h3 className="post-body-title dark-title-3">{subject}</h3>}
       {body && (
-        <Html
-          onMouseUp={handleMouseUpWhileHarvesting}
-          rawHtml={transformLinksInHtml(body)}
-          className={htmlClassNames}
-          divRef={bodyDivRef}
-          extracts={extracts}
-          dbId={dbId}
-          replacementComponents={postBodyReplacementComponents}
-        />
+        <div className={htmlClassNames}>
+          <Html
+            onMouseUp={handleMouseUpWhileHarvesting}
+            rawHtml={transformLinksInHtml(body)}
+            divRef={bodyDivRef}
+            extracts={extracts}
+            dbId={dbId}
+            replacementComponents={postBodyReplacementComponents(afterLoad)}
+          />
+          {/* {urls && (
+            <div className="urls-container">
+              {urls.map(url => <URLMetadataLoader key={url} url={url} afterLoad={afterLoad} />)}
+            </div>
+          )} */}
+        </div>
       )}
     </div>
   );

@@ -21,7 +21,8 @@ type PostTranslateProps = {
   originalLocale: string,
   translate: boolean,
   updateById: (value: string) => void,
-  updateByOriginalLocale: (value: string) => void
+  updateByOriginalLocale: (value: string) => void,
+  afterLoad: () => void
 };
 
 type PostTranslateState = {
@@ -125,6 +126,7 @@ class PostTranslate extends React.Component<PostTranslateProps, PostTranslateSta
           </p>
         ) : null}
         <SwitchButton
+          ref={this.props.afterLoad}
           name={`switch-${id}`}
           onChange={this.handleSubmit}
           checked={translate}

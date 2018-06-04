@@ -176,6 +176,7 @@ def generate_ini_files(config, config_fname):
             'autostart_gulp',
             'autostart_webpack',
             'autostart_elasticsearch_server',
+            'autostart_urlmetadata',
             'autostart_uwsgi'):
         vars[var] = config.get('supervisor', var)
 

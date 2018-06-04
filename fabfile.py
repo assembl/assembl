@@ -521,7 +521,7 @@ def app_reload():
             venvcmd("supervisorctl update")
             processes = filter_autostart_processes([
                 "celery_imap", "changes_router", "celery_notification_dispatch",
-                "celery_notify", "celery_notify_beat", "source_reader"])
+                "celery_notify", "celery_notify_beat", "source_reader", "urlmetadata"])
             venvcmd("supervisorctl restart " + " ".join(processes))
             if env.uses_uwsgi:
                 venvcmd("supervisorctl restart prod:uwsgi")
@@ -543,6 +543,19 @@ def venvcmd(cmd, chdir=True, user=None, pty=False, **kwargs):
     if not user:
         user = env.user
     return run(as_venvcmd(cmd, chdir), pty=pty, **kwargs)
+
+
+def as_venvcmd_py3(cmd, chdir=False):
+    cmd = '. %s/bin/activate && %s' % (env.venvpath + 'py3', cmd)
+    if chdir:
+        cmd = 'cd %s && %s' % (env.projectpath, cmd)
+    return cmd
+
+
+def venvcmd_py3(cmd, chdir=True, user=None, pty=False, **kwargs):
+    if not user:
+        user = env.user
+    return run(as_venvcmd_py3(cmd, chdir), pty=pty, **kwargs)
 
 
 def venv_prefix():
@@ -599,6 +612,39 @@ def build_virtualenv():
                     venv_config.set(sec, option, val)
                 with open(vefile, 'w') as f:
                     venv_config.write(f)
+
+
+@task
+def build_virtualenv_python3():
+    """
+    Build the virtualenv with Python 3
+    """
+    if env.mac and not exists('/usr/local/bin/python3'):
+        # update brew
+        run('ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"')
+        run("brew update")
+        run("brew upgrade")
+        run("brew install python@2")
+        run("brew install python")  # This installs python3
+        run('pip3 install virtualenv')
+
+    # Don't install this on travis
+    if getenv('TRAVIS_COMMIT', None):
+        return
+    print(cyan('Creating a fresh virtualenv with Python 3'))
+    assert env.venvpath
+    # This relies on env.venvpath
+    venv3 = env.venvpath + 'py3'
+    if exists(join(venv3, "bin/activate")):
+        print(cyan('The virtualenv seems to already exist, so we don\'t try to create it again'))
+        print(cyan('(otherwise the virtualenv command would produce an error)'))
+        return
+    run('python3 -mvirtualenv --python python3 %s' % venv3)
+    if not exists("%(projectpath)s/../url_metadata" % env):
+        print cyan("Cloning git repository")
+        with cd("%(projectpath)s/.." % env):
+            run('git clone git://github.com/assembl/url_metadata.git')
+    venvcmd_py3('pip install -r ../url_metadata/requirements.txt')
 
 
 def separate_pip_install(package, wrapper=None):
@@ -739,6 +785,7 @@ def bootstrap_from_checkout(backup=False):
     """
     execute(updatemaincode, backup=backup)
     execute(build_virtualenv)
+    execute(build_virtualenv_python3)
     execute(app_update_dependencies, backup=backup)
     execute(app_setup)
     execute(check_and_create_database_user)
@@ -786,6 +833,14 @@ def updatemaincode(backup=False):
             run('git fetch')
             run('git checkout %s' % env.gitbranch)
             run('git pull %s %s' % (env.gitrepo, env.gitbranch))
+
+        path = join(env.projectpath, '..', 'url_metadata')
+        if exists(path):
+            print(cyan('Updating url_metadata Git repository'))
+            with cd(path):
+                run('git pull')
+
+            venvcmd_py3('pip install -r ../url_metadata/requirements.txt')
 
 
 @task
@@ -1126,18 +1181,20 @@ def install_basetools():
     if env.mac:
         # Install Homebrew
         if not exists('/usr/local/bin/brew'):
-            run('ruby -e "$(curl -fsSL https://raw.github.com/mxcl/homebrew/go/install)"')
+            run('ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"')
         else:
             run("brew update")
             run("brew upgrade")
         # Standardize on brew python
         if not exists('/usr/local/bin/python2'):
-            run('brew install python')
+            run('brew install python@2')
+            run('brew install python')  # This installs python3
         assert exists('/usr/local/bin/pip2'), "Brew python should come with pip"
         path_pip = run('which pip2')
         assert path_pip == '/usr/local/bin/pip2',\
             "Make sure homebrew is in the bash path, got " + path_pip
         run('pip2 install virtualenv psycopg2 requests jinja2')
+        run('pip3 install virtualenv')
     else:
         sudo('apt-get install -y python-virtualenv python-pip python-psycopg2')
         sudo('apt-get install -y python-requests python-jinja2 git')

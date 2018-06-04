@@ -5,9 +5,9 @@ import React from 'react';
 import { storiesOf } from '@storybook/react';
 import { Link } from 'react-router';
 
-import Card from '../components/common/card';
-import Loader from '../components/common/loader';
-import SwitchButton from '../components/common/switchButton';
+import Card from '../../../components/common/card';
+import Loader from '../../../components/common/loader';
+import SwitchButton from '../../../components/common/switchButton';
 
 const cardContent = (
   <Link className="content-box">

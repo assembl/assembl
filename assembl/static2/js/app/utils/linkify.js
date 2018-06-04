@@ -2,7 +2,7 @@
 import linkifyHtml from 'linkifyjs/html';
 import * as linkify from 'linkifyjs';
 
-import { youtubeRegexp } from './globalFunctions';
+import { getURLMetadata } from './urlPreview';
 
 type LinkToReplace = {
   dest: string,
@@ -15,6 +15,12 @@ type LinkifyLink = {
   value: string
 };
 
+export function getUrls(html: string): Array<string> {
+  // first, we add spaces before </p> to help linkify
+  const htmlForLinkify = html.replace(/<\/p>/gi, ' </p>');
+  return linkify.find(htmlForLinkify).map((link: LinkifyLink) => link.href);
+}
+
 export function transformLinksInHtml(html: string): string {
   // first, we add spaces before </p> to help linkify
   const htmlForLinkify = html.replace(/<\/p>/gi, ' </p>');
@@ -22,15 +28,11 @@ export function transformLinksInHtml(html: string): string {
     .find(htmlForLinkify)
     .map((link: LinkifyLink) => {
       const url = link.href;
-      const result = url.match(youtubeRegexp);
-
-      if (result) {
-        const videoId = result[1];
-        const embedUrl = `https://www.youtube.com/embed/${videoId}`;
-        const embeddedIFrame = `<div><iframe title="" src="${embedUrl}" frameborder="0" class="embedded-video" allowfullscreen></iframe></div>`; // eslint-disable-line max-len
+      const metadata = getURLMetadata(url);
+      if (metadata) {
         return {
           origin: new RegExp(url.replace(/[-/\\^$*+?.()|[\]{}]/gm, '\\$&'), 'g'),
-          dest: url + embeddedIFrame
+          dest: url + metadata.html
         };
       }
 
