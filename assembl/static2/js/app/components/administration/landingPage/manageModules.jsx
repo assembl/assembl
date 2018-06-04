@@ -35,7 +35,7 @@ export const DumbManageModules = ({
       title={I18n.t('administration.landingPage.manageModules.title')}
       annotation={I18n.t('administration.annotation')}
     />
-    <div className="admin-content form-container">
+    <div className="admin-content form-container" style={{ maxWidth: '700px' }}>
       <p className="admin-paragraph">
         <Translate value="administration.landingPage.manageModules.helper" />
       </p>

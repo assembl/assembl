@@ -8,7 +8,8 @@ import {
   MOVE_LANDING_PAGE_MODULE_DOWN,
   MOVE_LANDING_PAGE_MODULE_UP,
   TOGGLE_LANDING_PAGE_MODULE,
-  UPDATE_LANDING_PAGE_MODULES
+  UPDATE_LANDING_PAGE_MODULES,
+  UPDATE_LANDING_PAGE
 } from '../../actions/actionTypes';
 
 type ModulesHasChangedReducer = (boolean, ReduxAction<Action>) => boolean;
@@ -82,13 +83,68 @@ export const modulesByIdentifier: ModulesByIdentifierReducer = (state = initialS
   }
 };
 
+const initialPage = Map({
+  _hasChanged: false,
+  titleEntries: List(),
+  subtitleEntries: List(),
+  buttonLabelEntries: List(),
+  headerImage: Map({
+    externalUrl: '',
+    mimeType: '',
+    title: ''
+  }),
+  logoImage: Map({
+    externalUrl: '',
+    mimeType: '',
+    title: ''
+  })
+});
+type PageState = Map<string, any>;
+type LandingPageReducer = (PageState, ReduxAction<Action>) => PageState;
+const page: LandingPageReducer = (state = initialPage, action) => {
+  switch (action.type) {
+  case UPDATE_LANDING_PAGE: {
+    let newState = state;
+    if (action.headerImage) {
+      newState = newState
+        .setIn(['headerImage', 'externalUrl'], action.headerImage.externalUrl)
+        .setIn(['headerImage', 'mimeType'], action.headerImage.mimeType);
+    }
+
+    if (action.logoImage) {
+      newState = newState
+        .setIn(['logoImage', 'externalUrl'], action.logoImage.externalUrl)
+        .setIn(['logoImage', 'mimeType'], action.logoImage.mimeType);
+    }
+
+    if (action.titleEntries) {
+      newState = newState.set('titleEntries', fromJS(action.titleEntries));
+    }
+
+    if (action.subtitleEntries) {
+      newState = newState.set('subtitleEntries', fromJS(action.subtitleEntries));
+    }
+
+    if (action.buttonLabelEntries) {
+      newState = newState.set('buttonLabelEntries', fromJS(action.buttonLabelEntries));
+    }
+
+    return newState.set('_hasChanged', false);
+  }
+  default:
+    return state;
+  }
+};
+
 export type LandingPageState = {
+  page: PageState,
   enabledModulesInOrder: EnabledModulesInOrderState,
   modulesByIdentifier: Map<string>,
   modulesHasChanged: boolean
 };
 
 const reducers = {
+  page: page,
   enabledModulesInOrder: enabledModulesInOrder,
   modulesHasChanged: modulesHasChanged,
   modulesByIdentifier: modulesByIdentifier

@@ -24,3 +24,9 @@ export const moveLandingPageModuleDown: moveLandingPageModuleDownAction = module
   moduleTypeIdentifier: moduleTypeIdentifier,
   type: actionTypes.MOVE_LANDING_PAGE_MODULE_DOWN
 });
+
+type updateLandingPageAction = actionTypes.LandingPage => actionTypes.UpdateLandingPage;
+export const updateLandingPage: updateLandingPageAction = landingPage => ({
+  page: landingPage,
+  type: actionTypes.UPDATE_LANDING_PAGE
+});

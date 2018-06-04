@@ -80,6 +80,7 @@ export const MARK_ALL_DEPENDENCIES_AS_CHANGED: 'MARK_ALL_DEPENDENCIES_AS_CHANGED
 export const SET_VALIDATION_ERRORS: 'SET_VALIDATION_ERRORS' = 'SET_VALIDATION_ERRORS';
 export const CANCEL_MODULE_CUSTOMIZATION: 'CANCEL_MODULE_CUSTOMIZATION' = 'CANCEL_MODULE_CUSTOMIZATION';
 export const UPDATE_VOTE_MODULE: 'UPDATE_VOTE_MODULE' = 'UPDATE_VOTE_MODULE';
+export const UPDATE_LANDING_PAGE: 'UPDATE_LANDING_PAGE' = 'UPDATE_LANDING_PAGE';
 
 export type UpdateContentLocaleById = {
   type: typeof UPDATE_CONTENT_LOCALE_BY_ID,
@@ -440,6 +441,18 @@ export type LandingPageModules = Array<LandingPageModuleInfo>;
 export type UpdateLandingPageModules = {
   modules: LandingPageModules,
   type: typeof UPDATE_LANDING_PAGE_MODULES
+};
+
+export type LandingPage = {
+  titleEntries: Array<LangStringEntryInput>,
+  subtitleEntries: Array<LangStringEntryInput>,
+  buttonLabelEntries: Array<LangStringEntryInput>,
+  headerImage: File,
+  logoImage: File
+};
+export type UpdateLandingPage = {
+  page: LandingPage,
+  type: typeof UPDATE_LANDING_PAGE
 };
 
 export type MoveLandingPageModuleUp = {

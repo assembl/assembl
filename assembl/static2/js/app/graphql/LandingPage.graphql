@@ -1,0 +1,27 @@
+query LandingPage($lang: String!) {
+  discussion {
+    titleEntries {
+      localeCode
+      value
+    }
+    title(lang: $lang)
+    subtitleEntries {
+      localeCode
+      value
+    }
+    subtitle(lang: $lang)
+    buttonLabelEntries {
+      localeCode
+      value
+    }
+    buttonLabel(lang: $lang)
+    headerImage {
+      externalUrl
+      mimeType
+    }
+    logoImage {
+      externalUrl
+      mimeType
+    }
+  }
+}

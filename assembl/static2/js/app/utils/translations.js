@@ -670,7 +670,15 @@ const Translations = {
         header: {
           title: "Header",
           helper: "Personnalisez l'apparence du header de la page d'accueil.",
-          titleLabel: "Titre du débat"
+          titleLabel: "Titre du débat",
+          subtitleLabel: "Sous-titre du débat",
+          buttonLabel: "Nom du bouton de renvoi vers le débat",
+          headerImage: "Choisir l'image de font du bandeau",
+          logoImage: "Choisir le logo du débat",
+          headerDescription:
+            "L'image doit avoir une hauteur de 450px de haut et une largeur de 1280px. Le poids ne doit pas dépasser 1Mo.",
+          logoDescription:
+            "Le logo doit avoir une hauteur maximale de 78px et une largeur maximale de 200px. Le poids ne doit pas dépasser 1Mo. Le fond doit être transparent."
         },
         successSave: "Les modules ont été enregistrés avec succès !"
       },

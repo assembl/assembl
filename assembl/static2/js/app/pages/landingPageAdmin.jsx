@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import { type Route, type Router } from 'react-router';
 import { I18n } from 'react-redux-i18n';
 
+import { getEntryValueForLocale } from '../utils/i18n';
 import ManageModules from '../components/administration/landingPage/manageModules';
 import CustomizeHeader from '../components/administration/landingPage/customizeHeader';
 import Navbar from '../components/administration/navbar';
@@ -18,7 +19,8 @@ type Props = {
   refetchLandingPageModules: Function,
   route: Route,
   router: Router,
-  section: string
+  section: string,
+  header: Object // TODO define the shape of the object
 };
 
 type State = {
@@ -86,17 +88,31 @@ class LandingPageAdmin extends React.Component<Props, State> {
   }
 }
 
-const mapStateToProps = ({ admin: { landingPage } }) => ({
-  landingPageModulesHasChanged: landingPage.modulesHasChanged,
-  landingPageModules: landingPage.modulesByIdentifier
-    .map((module) => {
-      const identifier = module.getIn(['moduleType', 'identifier']);
-      const idx = landingPage.enabledModulesInOrder.indexOf(identifier);
-      return module.set('order', idx + 1).set('_isNew', !module.get('existsInDatabase'));
-    })
-    .valueSeq()
-    .toJS()
-});
+const mapStateToProps = ({ admin: { editLocale, landingPage } }) => {
+  const { page } = landingPage;
+  return {
+    landingPageModulesHasChanged: landingPage.modulesHasChanged,
+    landingPageModules: landingPage.modulesByIdentifier
+      .map((module) => {
+        const identifier = module.getIn(['moduleType', 'identifier']);
+        const idx = landingPage.enabledModulesInOrder.indexOf(identifier);
+        return module.set('order', idx + 1).set('_isNew', !module.get('existsInDatabase'));
+      })
+      .valueSeq()
+      .toJS(),
+    header: {
+      title: getEntryValueForLocale(page.get('titleEntries'), editLocale, ''),
+      subtitle: getEntryValueForLocale(page.get('subtitleEntries'), editLocale, ''),
+      buttonLabel: getEntryValueForLocale(page.get('buttonLabelEntries'), editLocale, ''),
+      headerImgMimeType: page.getIn(['headerImage', 'mimeType']),
+      headerImgUrl: page.getIn(['headerImage', 'externalUrl']),
+      headerImgTitle: page.getIn(['headerImage', 'title']),
+      logoImgMimeType: page.getIn(['logoImage', 'mimeType']),
+      logoImgUrl: page.getIn(['logoImage', 'externalUrl']),
+      logoImgTitle: page.getIn(['logoImage', 'title'])
+    }
+  };
+};
 
 export default compose(
   connect(mapStateToProps),
